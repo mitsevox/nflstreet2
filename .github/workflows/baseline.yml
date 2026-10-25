@@ -137,11 +137,26 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_inventory_cache.py -v
-      - name: Measure exact and fuzzy source comparisons
+      - name: Restore main's comparison measurements
         if: steps.validation.outputs.full == 'true'
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: build/matching-cache
+          key: measurement-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ github.sha }}
+          restore-keys: |
+            measurement-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-
+      - name: Measure exact and fuzzy source comparisons
+        id: measure
+        if: steps.validation.outputs.full == 'true'
+        env:
+          # PRs reuse main's measurements by content key; main measures everything fresh,
+          # fails on any cached measurement that disagrees, and then replaces the cache.
+          CACHE_MODE: ${{ github.event_name == 'pull_request' && 'use' || 'audit' }}
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
-            "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol
+            "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol \
+              --measurement-cache build/matching-cache --cache-mode "$CACHE_MODE"
+          python3 -c "import json; print('reused=%d' % json.load(open('build/matching/measurement-cache.json'))['hits'])" >> "$GITHUB_OUTPUT"
           python3 -m unittest discover -s tests -p test_matching.py -v
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_function_compare.py -v
@@ -166,16 +181,19 @@ jobs:
       - name: Verify activity and live receipts on the host
         if: steps.validation.outputs.full == 'true'
         env:
-          LIVE_RECEIPTS: ${{ steps.validation.outputs.receipts }}
+          # A PR proof that main may publish (it reused no measurements) keeps the full re-check.
+          LIVE_RECEIPTS: ${{ steps.validation.outputs.receipts == 'true' || steps.measure.outputs.reused == '0' }}
         run: |
           command -v git
           python3 -m unittest discover -s tests -p test_activity.py -v
           python3 -m unittest discover -s tests -p test_export_progress.py -v
+      # Main may publish a PR's proof only when that proof reused nothing; otherwise main
+      # rebuilds from scratch, which also audits and refreshes the measurement cache.
       - name: Prepare verified publication handoff
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.measure.outputs.reused == '0'
         run: python3 tools/publication.py prepare
       - name: Upload verified publication handoff
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.measure.outputs.reused == '0'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: verified-publication-v1-${{ github.run_attempt }}
@@ -197,6 +215,12 @@ jobs:
             build/analysis/summary.json
             build/analysis/symbols.txt
           key: ${{ steps.inventory-cache.outputs.cache-primary-key }}
+      - name: Save audited comparison measurements
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.validation.outputs.full == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: build/matching-cache
+          key: measurement-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ github.sha }}
       - name: Upload decomp.dev report
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

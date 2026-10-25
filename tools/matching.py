@@ -64,7 +64,7 @@ def score_pair(tool, expected, actual, symbols, kind, directory):
             'fuzzy': size if expected == actual else min(size, size * percent / 100)}
 
 
-def generate(original, source_report, output):
+def generate(original, source_report, output, cache=None):
     output.unlink(missing_ok=True)
     binary = original.read_bytes()
     target = json.loads((ROOT / 'config/GN7E69/baseline.json').read_text())
@@ -129,7 +129,7 @@ def generate(original, source_report, output):
                'build_receipt': {'path': source_report.relative_to(ROOT).as_posix(),
                                  'sha256': source_build.sha256(source_report)}}
     import function_compare
-    payload['candidates'] = function_compare.generate(original, source_report, tool)
+    payload['candidates'] = function_compare.generate(original, source_report, tool, cache)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2) + '\n')
     return payload
@@ -323,9 +323,22 @@ def main():
     parser.add_argument('--original',type=Path,required=True)
     parser.add_argument('--source-report',type=Path,default=ROOT/'build/source/report.json')
     parser.add_argument('--output',type=Path,default=ROOT/'build/matching/report.json')
+    parser.add_argument('--measurement-cache',type=Path,
+                        help='Comparison measurement cache directory (written only by main)')
+    parser.add_argument('--cache-mode',choices=('use','audit'),
+                        help='use: reuse cached measurements; audit: measure fresh, verify and replace the cache')
     args=parser.parse_args()
-    result=generate(args.original,args.source_report,args.output)
+    if (args.measurement_cache is None) != (args.cache_mode is None):
+        parser.error('--measurement-cache and --cache-mode go together')
+    import function_compare
+    cache=function_compare.MeasurementCache(args.measurement_cache,args.cache_mode) if args.cache_mode else None
+    result=generate(args.original,args.source_report,args.output,cache)
     print(f"Measured {sum(e['type']=='function' for e in result['entries'])} compiled functions with objdiff")
+    if cache is not None:
+        stats=cache.finish()
+        (ROOT/'build/matching/measurement-cache.json').write_text(json.dumps(stats)+'\n')
+        print(f"Measurement cache ({stats['mode']}): {stats['hits']} reused, {stats['misses']} measured, "
+              f"{stats['audited']} audited against fresh results")
 
 if __name__=='__main__':
     main()

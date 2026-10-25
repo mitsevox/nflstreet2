@@ -2,12 +2,14 @@
 import bisect
 import concurrent.futures
 import copy
+import hashlib
 import json
 import math
 import os
 import re
 import shutil
 import struct
+import threading
 from pathlib import Path
 
 import source_build as sb
@@ -311,7 +313,87 @@ def configured(root, binary):
     return accepted, units
 
 
-def generate(original, source_report, tool):
+class MeasurementCache:
+    """Comparison measurements reused by content key; only main writes and audits them.
+
+    A measurement is a pure function of the comparison object's bytes, its configured
+    placement, the addresses its symbols resolve to, the linked source it overlaps, the
+    target and the measuring tools; the key binds exactly those. In 'use' mode a hit
+    restores the cached entries and linked outputs, which load() then validates like
+    fresh ones. In 'audit' mode everything is measured fresh, every cached measurement
+    with the same key must be identical, and the fresh set replaces the cache."""
+    VOLATILE = (CONFIG, 'config/GN7E69/units.json', 'config/GN7E69/evidence.tsv')
+
+    def __init__(self, directory, mode):
+        if mode not in ('use', 'audit'):
+            raise ValueError('Measurement cache mode is use or audit')
+        self.directory, self.mode = Path(directory), mode
+        self.fresh = self.directory.with_name(self.directory.name + '.fresh')
+        self.hits = self.misses = self.audited = 0
+        self.lock = threading.Lock()
+        if mode == 'audit':
+            if self.fresh.exists():
+                shutil.rmtree(self.fresh)
+            self.fresh.mkdir(parents=True)
+
+    def key(self, material):
+        return hashlib.sha256(json.dumps(material, sort_keys=True, default=str).encode()).hexdigest()
+
+    @staticmethod
+    def portable(receipt, folder, root):
+        prefix = folder.relative_to(root).as_posix() + '/'
+        if any(not pair['path'].startswith(prefix) for pair in receipt['pairs']):
+            raise ValueError('Comparison output lies outside its unit folder')
+        return {'entries': receipt['entries'],
+                'pairs': [dict(pair, path=pair['path'][len(prefix):]) for pair in receipt['pairs']]}
+
+    def restore(self, key, folder, root):
+        entry = self.directory / key
+        if self.mode != 'use' or not (entry / 'measurement.json').is_file():
+            with self.lock:
+                self.misses += 1
+            return None
+        cached = json.loads((entry / 'measurement.json').read_text())
+        for pair in cached['pairs']:
+            relative = Path(pair['path'])
+            if relative.is_absolute() or '..' in relative.parts:
+                raise ValueError('Invalid cached comparison output path')
+            (folder / relative).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(entry / 'files' / relative, folder / relative)
+        with self.lock:
+            self.hits += 1
+        prefix = folder.relative_to(root).as_posix() + '/'
+        return {'entries': cached['entries'],
+                'pairs': [dict(pair, path=prefix + pair['path']) for pair in cached['pairs']]}
+
+    def record(self, key, folder, root, receipt):
+        if self.mode != 'audit':
+            return
+        measurement = self.portable(receipt, folder, root)
+        files = {pair['path']: (folder / pair['path']).read_bytes() for pair in measurement['pairs']}
+        previous = self.directory / key
+        if (previous / 'measurement.json').is_file():
+            cached = (previous / 'measurement.json').read_text()
+            if cached != json.dumps(measurement) + '\n' or any((previous / 'files' / path).read_bytes() != data
+                                            for path, data in files.items()):
+                raise ValueError(f"Measurement cache disagrees with a fresh measurement of {receipt['source']}")
+            with self.lock:
+                self.audited += 1
+        entry = self.fresh / key
+        for path, data in files.items():
+            (entry / 'files' / path).parent.mkdir(parents=True, exist_ok=True)
+            (entry / 'files' / path).write_bytes(data)
+        (entry / 'measurement.json').write_text(json.dumps(measurement) + '\n')
+
+    def finish(self):
+        if self.mode == 'audit':
+            if self.directory.exists():
+                shutil.rmtree(self.directory)
+            self.fresh.rename(self.directory)
+        return {'mode': self.mode, 'hits': self.hits, 'misses': self.misses, 'audited': self.audited}
+
+
+def generate(original, source_report, tool, cache=None):
     import matching
     root = sb.ROOT
     binary = original.read_bytes()
@@ -348,6 +430,12 @@ def generate(original, source_report, tool):
     def measure(index, unit):
         folder = work / str(index)
         folder.mkdir()
+
+        def receipt(entries, pairs):
+            return {'source': unit['source'], 'sha256': sb.sha256(unit['path']),
+                    'dependencies': unit['dependencies'], 'object': unit['object'].relative_to(root).as_posix(),
+                    'object_sha256': native_hash, 'depfile': unit['depfile'].relative_to(root).as_posix(),
+                    'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs}
         unit['object'] = folder / 'native.o'
         unit['depfile'] = folder / 'native.d'
         sb.compile_unit(unit, compiler, wrapper, sdk, manifest['include_dirs'], comparison=True)
@@ -383,6 +471,22 @@ def generate(original, source_report, tool):
         targets = {f['symbol']: (int(f['address'],16), int(f['address'],16)+f['size'])
                    for u in accepted if u['source'] == unit['source'] for f in u['functions']}
         targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})
+        if cache is not None:
+            rows = [(sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']]
+            key = cache.key({
+                'schema': 1, 'target': target['sha1'], 'object': native_hash,
+                'inputs': {p: sb.sha256(root / p) for p in matching.INPUTS if p not in cache.VOLATILE},
+                'unit': {k: v for k, v in unit.items() if k not in ('path', 'object', 'depfile', 'dependencies')},
+                'references': sorted({(s['name'], addresses.get(s['name']), s['name'] in ambiguous)
+                                      for s in symbols if s['name']}),
+                'targets': sorted(targets.items()),
+                'overlaps': [(left, right) for left, right in accepted_bounds
+                             if any(a < right and left < b for a, b in rows)],
+                'slices': {name: data_slices(unit['source'], placement, accepted_linked)
+                           for name, placement in placements.items() if measured_data(placement)}})
+            restored = cache.restore(key, folder, root)
+            if restored is not None:
+                return receipt(restored['entries'], restored['pairs'])
         entries, pairs = [], []
         for number, row in enumerate(unit['functions']):
             a, b = sb.address(row['start']), sb.address(row['end'])
@@ -466,10 +570,10 @@ def generate(original, source_report, tool):
                 pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
-        return {'source': unit['source'], 'sha256': sb.sha256(unit['path']),
-                'dependencies': unit['dependencies'], 'object': unit['object'].relative_to(root).as_posix(),
-                'object_sha256': native_hash, 'depfile': unit['depfile'].relative_to(root).as_posix(),
-                'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs}
+        result = receipt(entries, pairs)
+        if cache is not None:
+            cache.record(key, folder, root, result)
+        return result
 
     # Each unit compiles, links and scores in its own folder; staging links are shared, so
     # create them first. Results keep configuration order.
