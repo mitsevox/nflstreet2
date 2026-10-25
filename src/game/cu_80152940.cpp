@@ -47,6 +47,8 @@ struct Info_80152940 {
 extern "C" {
 Table_8015005C *fn_801530FC(void);
 Object_80039F5C *fn_8003AC84(int id);
+int fn_801499A8(Class_80148A58 *p, int kind, int team, int index, Object_80039F5C *pPlayer);
+int fn_8022B414(int handle, unsigned int tag, int *pValue);
 
 void fn_80152940(Class_802A2918 *p, int index, Info_80152940 *pInfo)
 {
@@ -71,6 +73,42 @@ unsigned char fn_801529C0(Class_802A2918 *p)
         if (fn_801530FC()->mEntries[i].mUnknown12 != 255) {
             fn_80152940(p, i, &info);
             result = info.mUnknown21;
+            break;
+        }
+    }
+    return result;
+}
+
+int fn_80152A54(Class_802A2918 *p, int kind, int team, int index, Object_80039F5C *pPlayer)
+{
+    Info_80152940 info;
+    int result = 0;
+
+    fn_80152940(p, index, &info);
+    if (info.mpObject != 0) {
+        switch (kind) {
+        case 27:
+            result = info.mUnknown16 + info.mUnknown12;
+            break;
+        case 28:
+        case 29:
+            result = info.mUnknown12;
+            break;
+        case 31:
+            result = 0;
+            break;
+        case 32:
+            fn_8022B414(pPlayer->mUnknown2908, 0x64706467, &result);
+            break;
+        case 18:
+            result = 4 - info.mUnknown21;
+            break;
+        case 17:
+        case 19:
+            result = info.mUnknown4;
+            break;
+        default:
+            result = fn_801499A8(p, kind, team, index, pPlayer);
             break;
         }
     }

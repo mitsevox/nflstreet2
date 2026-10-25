@@ -36068,13 +36068,13 @@
     {
       "source": "src/game/cu_80152940.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #903; two complete functions inside the retained provisional cu_801485B4 survey group: 0x80152940 (called from 0x800565F4, 0x80152570, 0x80152A34, 0x80152AA4, 0x80152BF0, 0x80152FA8 and 0x80180008) fills a 24-byte record from entry r4 of the table reached through member +28 of the Class_802A2918 object of src/game/cu_80152FFC.cpp, and 0x801529C0 (called from 0x8015176C and 0x801526A0) calls it for the first of entries 0-3 whose byte +12 is not 255. Calls 0x801530FC (src/game/cu_801530FC.cpp) and 0x8003AC84 (src/game/cu_8003877C.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801528E0 before and 0x80152A54 onward are not claimed; original bytes stay linked.",
+      "evidence": "Issues #903/#1112; two complete record helpers 0x80152940-0x80152A54 plus slot-30 statistic query 0x80152A54-0x80152B98 (table 0x802A2918, word 0x802A2A0C). Existing record constructor, player and base-query contracts retained. No data owned; full native output measured. Original file/member identities remain unresolved inside cu_801485B4; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80152940",
-          "end": "0x80152A54"
+          "end": "0x80152B98"
         }
       ],
       "functions": [
@@ -36087,6 +36087,11 @@
           "symbol": "fn_801529C0",
           "start": "0x801529C0",
           "end": "0x80152A54"
+        },
+        {
+          "symbol": "fn_80152A54",
+          "start": "0x80152A54",
+          "end": "0x80152B98"
         }
       ]
     },
@@ -36510,13 +36515,13 @@
     {
       "source": "src/game/cu_80151A28.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #961; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2918 (0x80151A28-0x80151B20, word 0x802A292C), which releases the block that the pointer at +28 of the object points to and its table. Calls 0x8016306C, 0x8007F6F8 (include/game/fn_8007F6F8.h), 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20, 0x80149014, 0x801D2BD0 (include/game/fn_801D2B7C.h) and __builtin_delete; the tables 0x802A1DC8, 0x80297CE8 and 0x802A1E38 are referenced through the existing _vt.14Class_802A1DC8, _vt.14Class_80297CE8 and _vt.14Class_802A1E38 externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issues #961/#1112; complete release callback 0x80151A28-0x80151B20 and score comparison helper 0x80151B20-0x80151BCC, inside retained provisional cu_801485B4 grouping. Canonical base and existing score table/class views reused. No data owned; full native output measured; original bytes stay linked and original file/member identities remain unresolved.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80151A28",
-          "end": "0x80151B20"
+          "end": "0x80151BCC"
         }
       ],
       "functions": [
@@ -36524,6 +36529,11 @@
           "symbol": "fn_80151A28",
           "start": "0x80151A28",
           "end": "0x80151B20"
+        },
+        {
+          "symbol": "fn_80151B20",
+          "start": "0x80151B20",
+          "end": "0x80151BCC"
         }
       ]
     },
