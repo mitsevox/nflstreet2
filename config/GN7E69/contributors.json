@@ -30769,8 +30769,8 @@
       "provenance": {
         "pull_request": 1123,
         "merged_via": 1123,
-        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
-        "introduced_blob": "59204a406b9621c3e361c8f4ef4d6949c0875180"
+        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "introduced_blob": "04481c00323fe5a84a568157c809b0f2b8f41113"
       }
     },
     {
@@ -30840,13 +30840,14 @@
         "adampreddy"
       ],
       "functions": [
-        "0x800E586C"
+        "0x800E586C",
+        "0x800E5C00"
       ],
       "provenance": {
         "pull_request": 1123,
         "merged_via": 1123,
-        "commit": "b282a0eb79204d662e87fea0923fb8b3f20b1fd2",
-        "introduced_blob": "49275338371dc5ccb36386f53bf55aecb195edd1"
+        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "introduced_blob": "4a7e318d57ed760db7430852a453938e84dc4f32"
       }
     }
   ],
