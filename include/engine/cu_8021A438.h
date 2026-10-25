@@ -43,6 +43,13 @@ typedef struct Object_8021E688 {
     Entry_8021E688 *pA;        /* 0x0C */
 } Object_8021E688;
 
+/* Two-float point of the curve helpers 0x80222EC4, 0x80222F8C and 0x802233DC
+   (8-byte elements, copied as two words). */
+typedef struct Point_80222EC4 {
+    float mX;
+    float mY;
+} Point_80222EC4;
+
 /* Buffer descriptor: size and text pointer. */
 typedef struct Buffer_80222E54 {
     Uint8 unk_00[0x04];

@@ -134,7 +134,7 @@ typedef struct Node_8022CC6C {
     unsigned char mUnknown3;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
-    unsigned short mUnknown6;
+    short mUnknown6;
     unsigned short mUnknown8;
     char mUnknown10[2];
     struct Node_8022CC6C *mpUnknown12;
@@ -1236,6 +1236,76 @@ void fn_8022CADC(void)
 {
     lbl_803EC054 = 0;
     lbl_803EC058 = 0;
+}
+
+void fn_8022CAEC(Node_8022CC6C **ppHead)
+{
+    Node_8022CC6C *pA;
+    Node_8022CC6C *pB;
+    Node_8022CC6C *pTmp;
+    int swapped;
+    int diff;
+    int remA;
+    int remB;
+
+    if ((*ppHead)->mpUnknown16 == 0) {
+        return;
+    }
+    do {
+        pA = *ppHead;
+        swapped = 0;
+        for (pB = pA->mpUnknown16; pB != 0; pB = pB->mpUnknown16, pA = pA->mpUnknown16) {
+            if (pB->mUnknown6 != pA->mUnknown6) {
+                diff = pB->mUnknown6 - pA->mUnknown6;
+            } else if (pB->mUnknown0 >= pB->mUnknown3 && pA->mUnknown0 >= pA->mUnknown3) {
+                if (pB->mUnknown0 != pA->mUnknown0) {
+                    diff = pB->mUnknown0 - pA->mUnknown0;
+                } else if (pA->mUnknown4 >= 21 && pA->mUnknown4 <= 25) {
+                    if (pB->mUnknown4 >= 21 && pB->mUnknown4 <= 25) {
+                        diff = pB->mUnknown2 - pA->mUnknown2;
+                    } else {
+                        diff = 1;
+                    }
+                } else if (pB->mUnknown4 >= 21 && pB->mUnknown4 <= 25) {
+                    diff = -1;
+                } else {
+                    diff = pB->mUnknown2 - pA->mUnknown2;
+                }
+            } else {
+                remB = pB->mUnknown0 - pB->mUnknown3;
+                remA = pA->mUnknown0 - pA->mUnknown3;
+                if (remB == remA) {
+                    if (pB->mUnknown0 != pA->mUnknown0) {
+                        diff = pB->mUnknown0 - pA->mUnknown0;
+                    } else {
+                        diff = pB->mUnknown2 - pA->mUnknown2;
+                    }
+                } else {
+                    diff = (remB > remA) ? -1 : 1;
+                }
+            }
+            if (diff < 0) {
+                if (pB->mpUnknown12 != 0) {
+                    pB->mpUnknown12->mpUnknown16 = pB->mpUnknown16;
+                }
+                if (pB->mpUnknown16 != 0) {
+                    pB->mpUnknown16->mpUnknown12 = pB->mpUnknown12;
+                }
+                if (pA->mpUnknown12 != 0) {
+                    pA->mpUnknown12->mpUnknown16 = pB;
+                } else {
+                    *ppHead = pB;
+                }
+                pB->mpUnknown12 = pA->mpUnknown12;
+                pA->mpUnknown12 = pB;
+                pB->mpUnknown16 = pA;
+                swapped = 1;
+                pTmp = pA;
+                pA = pB;
+                pB = pTmp;
+            }
+        }
+    } while (swapped == 1);
 }
 
 Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key)

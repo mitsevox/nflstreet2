@@ -27161,6 +27161,110 @@
       ]
     },
     {
+      "source": "src/engine/cu_8022772C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x8022772C-0x802277DC and its literal-pool slice 0x802B2078-0x802B207C (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022772C",
+          "end": "0x802277DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2078",
+          "end": "0x802B207C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8022772C",
+          "start": "0x8022772C",
+          "end": "0x802277DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80227970.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227970-0x80227B04 and its literal-pool slice 0x802B2098-0x802B20A0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80227970",
+          "end": "0x80227B04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2098",
+          "end": "0x802B20A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80227970",
+          "start": "0x80227970",
+          "end": "0x80227B04"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80227B04.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227B04-0x80227C2C and its literal-pool slice 0x802B20A0-0x802B20A8 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80227B04",
+          "end": "0x80227C2C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B20A0",
+          "end": "0x802B20A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80227B04",
+          "start": "0x80227B04",
+          "end": "0x80227C2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80227D6C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227D6C-0x80227E40 and its literal-pool slice 0x802B20BC-0x802B20C0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80227D6C",
+          "end": "0x80227E40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B20BC",
+          "end": "0x802B20C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80227D6C",
+          "start": "0x80227D6C",
+          "end": "0x80227E40"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80228E44.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c), its function and name rows and the exact .sdata data row 0x803EBFA8-0x803EBFB8. Draft comparisons only; original assembly remains linked.",
@@ -27671,6 +27775,11 @@
           "symbol": "fn_8022CADC",
           "start": "0x8022CADC",
           "end": "0x8022CAEC"
+        },
+        {
+          "symbol": "fn_8022CAEC",
+          "start": "0x8022CAEC",
+          "end": "0x8022CC6C"
         },
         {
           "symbol": "fn_8022CC6C",
@@ -44403,6 +44512,32 @@
       ]
     },
     {
+      "source": "src/engine/cu_80221154.c",
+      "profile": "engine_c",
+      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80221154-0x80221198 and their literal-pool slice 0x802B1F6C-0x802B1F70 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80221154",
+          "end": "0x80221198"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1F6C",
+          "end": "0x802B1F70"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80221154",
+          "start": "0x80221154",
+          "end": "0x80221198"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80221198.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80221198-0x80226F9C (src/engine/cu_80221198.c), its function and name rows. Draft comparisons only; original assembly remains linked. The draft bodies compile no static data; the functions that load .rodata constants have no draft body and no data is registered.",
@@ -44804,6 +44939,73 @@
           "symbol": "fn_80226F34",
           "start": "0x80226F34",
           "end": "0x80226F9C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80222EC4.c",
+      "profile": "engine_c",
+      "evidence": "Comparison source fragment of src/engine/cu_80221198.c (evidence.tsv unit row 0x80221198-0x80226F9C): the target function extents 0x80222EC4-0x802233DC and their literal-pool slice 0x802B1FC0-0x802B1FE8 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80222EC4",
+          "end": "0x802233DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1FC0",
+          "end": "0x802B1FE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80222EC4",
+          "start": "0x80222EC4",
+          "end": "0x80222F8C"
+        },
+        {
+          "symbol": "fn_80222F8C",
+          "start": "0x80222F8C",
+          "end": "0x8022306C"
+        },
+        {
+          "symbol": "fn_8022306C",
+          "start": "0x8022306C",
+          "end": "0x80223224"
+        },
+        {
+          "symbol": "fn_80223224",
+          "start": "0x80223224",
+          "end": "0x802233DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802233DC.c",
+      "profile": "engine_c",
+      "evidence": "Comparison source fragment of src/engine/cu_80221198.c (evidence.tsv unit row 0x80221198-0x80226F9C): the target function extents 0x802233DC-0x80223460 and their literal-pool slice 0x802B1FE8-0x802B1FEC (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802233DC",
+          "end": "0x80223460"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1FE8",
+          "end": "0x802B1FEC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802233DC",
+          "start": "0x802233DC",
+          "end": "0x80223460"
         }
       ]
     },
