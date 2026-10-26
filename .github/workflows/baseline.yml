@@ -274,7 +274,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: mitsevox/mitsevox.github.io
-          ref: f91cd53590574ba25ddc77bc4f3ab17857424cdf
+          ref: f972e8b7b053ba4aebe8d7f3cc67859ac6e7416d
           path: build/site-tools
           persist-credentials: false
       - name: Set up site packager runtime

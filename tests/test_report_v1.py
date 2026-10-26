@@ -20,11 +20,12 @@ def leaf(name, address, size, matched, source=None, **extra):
 
 class Fixture(unittest.TestCase):
     def setUp(self):
-        functions = [leaf('fn_80000000', '0x80000000', 8, 8, 'src/a.c', complete=True),
+        functions = [leaf('fn_80000000', '0x80000000', 8, 8, 'src/a.c'),
                      leaf('fn_80000008', '0x80000008', 8, 4, 'src/a.c'),
                      leaf('fn_80000010', '0x80000010', 16, 16, comparison_source='src/b.c')]
         group = dict(name='src/a.c', kind='code', size=32, linked=0, matched=28, fuzzy=28.0,
-                     boundary='likely', scope='game', children=functions)
+                     source='src/a.c', complete=False, boundary='provisional',
+                     scope='mapped-ranges', children=functions)
         self.site = dict(schema=1, revision='a'*40, built_at='2026-10-25T00:00:00+00:00', target='GN7E69',
                          target_sha1='3561e946e9ff785b68692f87d2ba85d81fd2dcf4', baseline='verified',
                          measures=dict(code=dict(total=32, linked=0, matched=28, fuzzy=28.0),
@@ -55,17 +56,36 @@ class Fixture(unittest.TestCase):
 
 
 class MapAndSummary(Fixture):
-    def test_map_keeps_geometry_and_metrics_but_not_project_evidence_fields(self):
-        document = report_v1.map_document(self.site)
+    def test_map_keeps_geometry_metrics_and_evidence_with_declared_types(self):
+        site = copy.deepcopy(self.site)
+        group = site['files'][0]
+        group['children'].append(dict(name='Other bytes in Source bytes', kind='code', size=4, linked=0,
+                                      matched=0, fuzzy=0.0, source='src/a.c', note='x',
+                                      mapped_extents=[dict(start='0x80000020', end='0x80000024')]))
+        group['children'].append(dict(name='Other bytes in Unmapped bytes', kind='code', size=4, linked=0,
+                                      matched=0, fuzzy=0.0,
+                                      mapped_extents=[dict(start='0x80000024', end='0x80000028')]))
+        document = report_v1.map_document(site)
         def fields(items):
             for item in items:
                 yield set(item)
                 yield from fields(item.get('children', []))
-        self.assertEqual(document['schemaVersion'], 1)
-        self.assertTrue(all(keys <= set(report_v1.NODE_FIELDS) for keys in fields(document['files'])))
-        self.assertEqual(document['files'][0]['children'][1]['matched'], 4)
-        self.assertNotIn('source', document['files'][0]['children'][0])
-        self.assertIn('source', self.site['files'][0]['children'][0])  # input untouched
+        self.assertEqual(document['schemaVersion'], 2)
+        allowed = set(report_v1.NODE_FIELDS + report_v1.EVIDENCE_FIELDS)
+        self.assertTrue(all(keys <= allowed for keys in fields(document['files'])))
+        top = document['files'][0]
+        self.assertEqual((top['type'], top['boundary'], top['scope']), ('file', 'provisional', 'mapped-ranges'))
+        self.assertEqual(top['children'][0]['source'], 'src/a.c')
+        self.assertEqual(top['complete'], False)
+        self.assertEqual(top['children'][2]['comparison_source'], 'src/b.c')
+        self.assertEqual(top['children'][1]['matched'], 4)
+        self.assertEqual(top['children'][3]['type'], 'group')
+        self.assertNotIn('note', top['children'][3])
+        self.assertNotIn('type', top['children'][4])  # no evidence, no invented type
+        self.assertEqual(document['files'][1]['type'], 'file')
+        self.assertTrue(document['files'][1]['auto_generated'])
+        self.assertTrue(all('type' not in s for s in document['sections']))
+        self.assertNotIn('type', site['files'][0])  # input untouched
 
     def test_summary_carries_raw_bytes_and_inventories(self):
         summary = report_v1.summary(self.site)
