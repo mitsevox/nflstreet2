@@ -19,9 +19,10 @@ METHODOLOGY = 'nflstreet2-report-v1'
 GENERATION = 1
 ARTIFACT = 'report-v1'
 HISTORY = 'config/GN7E69/report-v1-history.json'
-# report-v1 map nodes accept only these fields; NFL's evidence fields stay in its own report.
+# map-v2 node fields: geometry and metrics, plus the optional per-node evidence NFL records.
 NODE_FIELDS = ('name', 'kind', 'size', 'linked', 'matched', 'fuzzy', 'address', 'mapped_extents',
                'children', 'type', 'function_address', 'original_size')
+EVIDENCE_FIELDS = ('source', 'comparison_source', 'complete', 'auto_generated', 'boundary', 'scope')
 
 
 def encoded(value):
@@ -39,16 +40,20 @@ def summary(site):
             'functions': site['functions'], 'files': site['file_counts']}
 
 
-def node(item):
-    result = {k: item[k] for k in NODE_FIELDS if k in item and k != 'children'}
+def node(item, default_type=None):
+    result = {k: item[k] for k in NODE_FIELDS + EVIDENCE_FIELDS if k in item and k != 'children'}
+    # map-v2 requires an explicit type on any node carrying evidence. Top-level map files are
+    # files; an untyped part of a file that names its source (its "other bytes") is a group.
+    if 'type' not in result and default_type and any(k in result for k in EVIDENCE_FIELDS):
+        result['type'] = default_type
     if item.get('children'):
-        result['children'] = [node(c) for c in item['children']]
+        result['children'] = [node(c, 'group') for c in item['children']]
     return result
 
 
 def map_document(site):
-    return {'schemaVersion': 1, 'sections': [node(s) for s in site['sections']],
-            'files': [node(f) for f in site['files']]}
+    return {'schemaVersion': 2, 'sections': [node(s) for s in site['sections']],
+            'files': [node(f, 'file') for f in site['files']]}
 
 
 def function_id(site, item):
