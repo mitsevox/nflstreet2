@@ -226,7 +226,80 @@ void GXGetLightColor(const GXLightObj* lt_obj, GXColor* color) {
 
 #if defined(DECOMP_COMPARE)
 
+static inline void PushLight(register GXLightObj* lt_obj, register void* dest) {
+    register u32 zero, color;
+    register f32 a0_a1, a2_k0, k1_k2;
+    register f32 px_py, pz_dx, dy_dz;
+#ifdef __MWERKS__  // clang-format off
+	asm {
+		lwz     color, 12(lt_obj)
+		xor     zero, zero, zero
+		psq_l   a0_a1, 16(lt_obj), 0, 0
+		psq_l   a2_k0, 24(lt_obj), 0, 0
+		psq_l   k1_k2, 32(lt_obj), 0, 0
+		psq_l   px_py, 40(lt_obj), 0, 0
+		psq_l   pz_dx, 48(lt_obj), 0, 0
+		psq_l   dy_dz, 56(lt_obj), 0, 0
 
+		stw     zero,  0(dest)
+		stw     zero,  0(dest)
+		stw     zero,  0(dest)
+		stw     color, 0(dest)
+		psq_st  a0_a1, 0(dest), 0, 0
+		psq_st  a2_k0, 0(dest), 0, 0
+		psq_st  k1_k2, 0(dest), 0, 0
+		psq_st  px_py, 0(dest), 0, 0
+		psq_st  pz_dx, 0(dest), 0, 0
+		psq_st  dy_dz, 0(dest), 0, 0
+	}
+#endif  // clang-format on
+}
+
+void GXLoadLightObjImm(GXLightObj* lt_obj, GXLightID light) {
+    u32 addr;
+    u32 idx;
+    __GXLightObjInt_struct* obj;
+
+    ASSERTMSGLINE(568, lt_obj != NULL, "Light Object Pointer is null");
+    obj = (__GXLightObjInt_struct*)lt_obj;
+    CHECK_GXBEGIN(569, "GXLoadLightObjImm");
+
+#if DEBUG
+    idx = ConvLightID2Num(light);
+#else
+    idx = 31 - __cntlzw(light);
+#endif
+
+    ASSERTMSGLINE(575, idx < 8, "GXLoadLightObjImm: Invalid Light Id");
+    idx &= 7;
+
+    addr = idx * 0x10 + 0x600;
+    GX_WRITE_U8(0x10);
+    GX_WRITE_U32(addr | 0xF0000);
+
+#if DEBUG
+    WRITE_SOME_LIGHT_REG1(0, addr);
+    WRITE_SOME_LIGHT_REG1(0, addr + 1);
+    WRITE_SOME_LIGHT_REG1(0, addr + 2);
+    WRITE_SOME_LIGHT_REG1(obj->Color, addr + 3);
+    WRITE_SOME_LIGHT_REG2(obj->a[0], addr + 4);
+    WRITE_SOME_LIGHT_REG2(obj->a[1], addr + 5);
+    WRITE_SOME_LIGHT_REG2(obj->a[2], addr + 6);
+    WRITE_SOME_LIGHT_REG2(obj->k[0], addr + 7);
+    WRITE_SOME_LIGHT_REG2(obj->k[1], addr + 8);
+    WRITE_SOME_LIGHT_REG2(obj->k[2], addr + 9);
+    WRITE_SOME_LIGHT_REG2(obj->lpos[0], addr + 10);
+    WRITE_SOME_LIGHT_REG2(obj->lpos[1], addr + 11);
+    WRITE_SOME_LIGHT_REG2(obj->lpos[2], addr + 12);
+    WRITE_SOME_LIGHT_REG2(obj->ldir[0], addr + 13);
+    WRITE_SOME_LIGHT_REG2(obj->ldir[1], addr + 14);
+    WRITE_SOME_LIGHT_REG2(obj->ldir[2], addr + 15);
+#else
+    PushLight(lt_obj, (void*)GXFIFO_ADDR);
+#endif
+
+    __GXData->bpSentNot = 1;
+}
 
 void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorSrc mat_src, u32 light_mask, GXDiffuseFn diff_fn, GXAttnFn attn_fn) {
     u32 reg;

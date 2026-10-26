@@ -19738,7 +19738,7 @@
     {
       "source": "src/dolphin/gx/GXTransform.c",
       "profile": "dolphin_release",
-      "evidence": "Coherent BFBB eight complete C bodies, whole ASM-dependent APIs left original; no source cut or version-splice; normal comparison",
+      "evidence": "Coherent pinned SDK C bodies for all fifteen target functions, including the paired-single projection/matrix loaders with their inline asm helpers; complete native four-word constant pool; the out-of-line __GXSetProjection removed by the target linker; no source cut or version-splice; normal comparison",
       "sections": [
         {
           "section": ".text",
@@ -19749,7 +19749,7 @@
         {
           "section": ".sdata2",
           "placement": ".data6",
-          "start": "0x803ED9B8",
+          "start": "0x803ED9B0",
           "end": "0x803ED9C0"
         }
       ],
@@ -19793,7 +19793,45 @@
           "symbol": "GXSetClipMode",
           "start": "0x802528B0",
           "end": "0x802528D8"
+        },
+        {
+          "symbol": "GXSetProjection",
+          "start": "0x802523A4",
+          "end": "0x80252448"
+        },
+        {
+          "symbol": "GXSetProjectionv",
+          "start": "0x80252448",
+          "end": "0x802524D4"
+        },
+        {
+          "symbol": "GXGetProjectionv",
+          "start": "0x802524D4",
+          "end": "0x8025251C"
+        },
+        {
+          "symbol": "GXLoadPosMtxImm",
+          "start": "0x8025251C",
+          "end": "0x8025256C"
+        },
+        {
+          "symbol": "GXLoadNrmMtxImm",
+          "start": "0x8025256C",
+          "end": "0x802525BC"
+        },
+        {
+          "symbol": "GXLoadTexMtxImm",
+          "start": "0x802525F0",
+          "end": "0x802526A4"
+        },
+        {
+          "symbol": "GXGetViewportv",
+          "start": "0x802527D4",
+          "end": "0x802527F8"
         }
+      ],
+      "discarded": [
+        "__GXSetProjection"
       ]
     },
     {
@@ -26655,6 +26693,21 @@
           "symbol": "_ExitProcess",
           "start": "0x8023E900",
           "end": "0x8023E920"
+        },
+        {
+          "symbol": "__init_cpp",
+          "start": "0x8023E838",
+          "end": "0x8023E88C"
+        },
+        {
+          "symbol": "abort",
+          "start": "0x8023E88C",
+          "end": "0x8023E8AC"
+        },
+        {
+          "symbol": "exit",
+          "start": "0x8023E8AC",
+          "end": "0x8023E900"
         }
       ]
     },
@@ -26785,9 +26838,49 @@
       ]
     },
     {
+      "source": "src/dolphin/mtx/mtx.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned SDK source prefix: the Unit01 table, C_MTXIdentity (removed by the target linker; its literals 1.0f/0.0f stay at the head of the native constant pool), PSMTXIdentity and PSMTXConcat; later mtx.c routines are absent from the target and are not compiled here; sdk.json mtx.c ownership remains provisional; normal comparison",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024A9EC",
+          "end": "0x8024AAE4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC250",
+          "end": "0x803EC258"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED778",
+          "end": "0x803ED780"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "PSMTXIdentity",
+          "start": "0x8024A9EC",
+          "end": "0x8024AA18"
+        },
+        {
+          "symbol": "PSMTXConcat",
+          "start": "0x8024AA18",
+          "end": "0x8024AAE4"
+        }
+      ],
+      "discarded": [
+        "C_MTXIdentity"
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
-      "evidence": "Complete related C channel bodies, canonical target layouts, fixed comparison guard; unsupported124-byte light loader omitted and remains original. No original source names or entire archive ownership claimed.",
+      "evidence": "Complete related C channel bodies and the dolsdk2004 light loader GXLoadLightObjImm with its PushLight paired-single helper, canonical target layouts, fixed comparison guard; the loader and channel tail remain comparison-only. No original source names or entire archive ownership claimed.",
       "sections": [
         {
           "section": ".text",
@@ -26828,6 +26921,11 @@
           "symbol": "GXSetChanCtrl",
           "start": "0x8024FC84",
           "end": "0x8024FD3C"
+        },
+        {
+          "symbol": "GXLoadLightObjImm",
+          "start": "0x8024F9EC",
+          "end": "0x8024FA68"
         }
       ]
     },
@@ -28202,6 +28300,12 @@
           "placement": ".text",
           "start": "0x8022F428",
           "end": "0x802355E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7120",
+          "end": "0x802B7128"
         }
       ],
       "functions": [
@@ -28834,6 +28938,16 @@
           "symbol": "fn_80235588",
           "start": "0x80235588",
           "end": "0x802355E4"
+        },
+        {
+          "symbol": "fn_8023424C",
+          "start": "0x8023424C",
+          "end": "0x80234394"
+        },
+        {
+          "symbol": "fn_80234394",
+          "start": "0x80234394",
+          "end": "0x80234424"
         }
       ]
     },
@@ -28852,7 +28966,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B71A8",
-          "end": "0x802B71AC"
+          "end": "0x802B7220"
         }
       ],
       "functions": [
@@ -29415,6 +29529,71 @@
           "symbol": "fn_802386DC",
           "start": "0x802386DC",
           "end": "0x8023873C"
+        },
+        {
+          "symbol": "fn_80235D10",
+          "start": "0x80235D10",
+          "end": "0x80235D74"
+        },
+        {
+          "symbol": "fn_80235DD8",
+          "start": "0x80235DD8",
+          "end": "0x80235EB4"
+        },
+        {
+          "symbol": "fn_80235EB4",
+          "start": "0x80235EB4",
+          "end": "0x80235F58"
+        },
+        {
+          "symbol": "fn_80235F58",
+          "start": "0x80235F58",
+          "end": "0x8023608C"
+        },
+        {
+          "symbol": "fn_80236164",
+          "start": "0x80236164",
+          "end": "0x80236258"
+        },
+        {
+          "symbol": "fn_80236408",
+          "start": "0x80236408",
+          "end": "0x802364B4"
+        },
+        {
+          "symbol": "fn_802364B4",
+          "start": "0x802364B4",
+          "end": "0x802365E8"
+        },
+        {
+          "symbol": "fn_802365E8",
+          "start": "0x802365E8",
+          "end": "0x802368D0"
+        },
+        {
+          "symbol": "fn_802368D0",
+          "start": "0x802368D0",
+          "end": "0x80236B4C"
+        },
+        {
+          "symbol": "fn_80236B4C",
+          "start": "0x80236B4C",
+          "end": "0x80236B98"
+        },
+        {
+          "symbol": "fn_80236C10",
+          "start": "0x80236C10",
+          "end": "0x80236DD8"
+        },
+        {
+          "symbol": "fn_80237EE8",
+          "start": "0x80237EE8",
+          "end": "0x80237F98"
+        },
+        {
+          "symbol": "fn_8023808C",
+          "start": "0x8023808C",
+          "end": "0x8023811C"
         }
       ]
     },
@@ -29755,6 +29934,31 @@
           "symbol": "fn_80285A8C",
           "start": "0x80285A8C",
           "end": "0x80285A90"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802898FC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802898FC-0x80289A20: neutral partial file for the inferred grouping; both functions registered; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802898FC",
+          "end": "0x80289A20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802898FC",
+          "start": "0x802898FC",
+          "end": "0x80289928"
+        },
+        {
+          "symbol": "fn_80289928",
+          "start": "0x80289928",
+          "end": "0x80289A04"
         }
       ]
     },
@@ -37681,6 +37885,11 @@
           "symbol": "fn_8027C0D8",
           "start": "0x8027C0D8",
           "end": "0x8027C120"
+        },
+        {
+          "symbol": "fn_80277CF0",
+          "start": "0x80277CF0",
+          "end": "0x80277D88"
         }
       ]
     },
@@ -38002,6 +38211,11 @@
           "symbol": "fn_8027EFA4",
           "start": "0x8027EFA4",
           "end": "0x8027EFAC"
+        },
+        {
+          "symbol": "vfn_34__15Object_8027DAE4ii",
+          "start": "0x8027DC14",
+          "end": "0x8027DCB4"
         }
       ]
     },
@@ -38402,6 +38616,11 @@
           "symbol": "fn_8026A40C",
           "start": "0x8026A40C",
           "end": "0x8026A4D4"
+        },
+        {
+          "symbol": "fn_80266D00",
+          "start": "0x80266D00",
+          "end": "0x80266D0C"
         }
       ]
     },

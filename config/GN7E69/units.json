@@ -1613,6 +1613,18 @@
     "fn_800C02EC__14Class_80297CE8s": {
       "address": "0x800C02EC",
       "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
+    },
+    "GXLoadLightObjImm": {
+      "address": "0x8024F9EC",
+      "evidence": "evidence.tsv external row GXLoadLightObjImm: REL24 calls from 0x80236850, 0x8023686C and 0x80236DC0 reach the light loader body 0x8024F9EC registered for comparison in src/dolphin/gx/GXLight.c."
+    },
+    "_ctors": {
+      "address": "0x802CC668",
+      "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
+    },
+    "_dtors": {
+      "address": "0x802CC670",
+      "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     }
   },
   "units": [
