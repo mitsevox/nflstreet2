@@ -30769,8 +30769,11 @@
       "provenance": {
         "pull_request": 1123,
         "merged_via": 1135,
-        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
-        "introduced_blob": "04481c00323fe5a84a568157c809b0f2b8f41113"
+        "commit": "edf4f948c314f6a62348e9889ae147a0ec00a435",
+        "introduced_blob": "da9aaa1216bd677ed67ab66e4a4e9ded37e2ce24",
+        "original_commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "original_blob": "04481c00323fe5a84a568157c809b0f2b8f41113",
+        "integration_adjustment": "Combined independently reviewed contributions without changing function ownership or original source credit."
       }
     },
     {
@@ -31057,8 +31060,11 @@
       "provenance": {
         "pull_request": 1124,
         "merged_via": 1135,
-        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
-        "introduced_blob": "da70feb3a4e38c6ee448e85d4b9e6dac546a92fa"
+        "commit": "edf4f948c314f6a62348e9889ae147a0ec00a435",
+        "introduced_blob": "84beafeace42e802497f79bafe9788713ea67257",
+        "original_commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "original_blob": "da70feb3a4e38c6ee448e85d4b9e6dac546a92fa",
+        "integration_adjustment": "Combined independently reviewed contributions without changing function ownership or original source credit."
       }
     },
     {
