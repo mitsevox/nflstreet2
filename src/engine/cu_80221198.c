@@ -105,6 +105,17 @@ extern Float32 lbl_802F9FE0[4][4];
 extern Float32 lbl_803A0400[][2];
 extern GXColor lbl_803A1400[];
 
+/* Transform record read by fn_80221198; +0x30 is not accessed and the size is not established. */
+typedef struct Transform_80221198 {
+    Float32 mPosition[3];   /* 0x00 */
+    Float32 mPivot[3];      /* 0x0C */
+    Float32 mRotation[3];   /* 0x18 */
+    Float32 mScale[3];      /* 0x24 */
+    Uint8 unk_30[4];        /* 0x30 */
+    Float32 mMultiply[4];   /* 0x34 */
+    Float32 mScaleColor[4]; /* 0x44 */
+} Transform_80221198;
+
 void fn_80210388(void);
 void fn_80221198(void *p);
 void fn_801CE910(void);
@@ -172,6 +183,29 @@ void fn_80226C40(Object_8021E688 *pObject, Object_802268D4 *pMovie);
 void fn_80226D20(Int32 Width, Int32 Height, Uint8 *pData);
 void fn_80226E4C(Uint8 *pSrc, Int32 x, Int32 y, Uint8 *pTile, Int32 Width, Int32 Height);
 void fn_80226F34(Object_8021E688 *pObject, Int16 a, Int16 b, Object_802268D4 *pMovie);
+
+void fn_80221198(void *p)
+{
+    Transform_80221198 *pXf = p;
+    float aNeg[3];
+
+    fn_801D0470(fn_80228668());
+    fn_801D04C4();
+    fn_801D0C58(pXf->mPosition);
+    fn_801D0C58(pXf->mPivot);
+    if (fn_80221154(pXf->mRotation) != 0) {
+        fn_801D08FC((int)(pXf->mRotation[0] * 46603.38f));
+        fn_801D09EC((int)(pXf->mRotation[1] * 46603.38f));
+        fn_801D0ADC((int)(pXf->mRotation[2] * 46603.38f));
+    }
+    fn_801D0D94(pXf->mScale[0], pXf->mScale[1], pXf->mScale[2]);
+    aNeg[0] = -pXf->mPivot[0];
+    aNeg[1] = -pXf->mPivot[1];
+    aNeg[2] = -pXf->mPivot[2];
+    fn_801D0C58(aNeg);
+    fn_80220DA4(pXf->mMultiply, pXf->mScaleColor);
+    fn_80220CFC(0);
+}
 
 void fn_80221294(void *p)
 {

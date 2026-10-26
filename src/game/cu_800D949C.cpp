@@ -35,7 +35,7 @@ int fn_801C4E98(void *p, const char *name);
 int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *object);
 int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void fn_800D8FFC(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8 *entries, float value);
-int fn_800D78C4(Object_80039F5C *p, int key);
+unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int fn_801BA6B0(Record_800D81C8 *entry);

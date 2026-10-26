@@ -30757,6 +30757,595 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
+    },
+    {
+      "source": "src/game/cu_80032EE8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003319C"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "edf4f948c314f6a62348e9889ae147a0ec00a435",
+        "introduced_blob": "da9aaa1216bd677ed67ab66e4a4e9ded37e2ce24",
+        "original_commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "original_blob": "04481c00323fe5a84a568157c809b0f2b8f41113",
+        "integration_adjustment": "Combined independently reviewed contributions without changing function ownership or original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80051DBC",
+        "0x80051DE8"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "e5af09abc4e6128879f35810042096738af8fbfb"
+      }
+    },
+    {
+      "source": "src/game/cu_800D77F0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D77F0"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "90ce6425e30aaf2b5b52c9a66660bda39b145e34"
+      }
+    },
+    {
+      "source": "src/game/cu_800D78C4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D78C4"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "1e0aff9a5691deaa2e646f684a5cc1ff8f0c94bc"
+      }
+    },
+    {
+      "source": "src/game/cu_800E4EE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E4EE4"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "b282a0eb79204d662e87fea0923fb8b3f20b1fd2",
+        "introduced_blob": "0d2eb8d1dc855d8d4cd7cd61866b8dd92f45575c"
+      }
+    },
+    {
+      "source": "src/game/cu_800E55B8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E586C",
+        "0x800E5C00"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1135,
+        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "introduced_blob": "4a7e318d57ed760db7430852a453938e84dc4f32"
+      }
+    },
+    {
+      "source": "src/engine/cu_801CBC50.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801CBC50",
+        "0x801CBC9C",
+        "0x801CBCD0",
+        "0x801CBD80",
+        "0x801CBE24",
+        "0x801CBE9C",
+        "0x801CBEC8",
+        "0x801CBEF4",
+        "0x801CBFA0",
+        "0x801CBFA8",
+        "0x801CC054",
+        "0x801CC05C",
+        "0x801CC0D0",
+        "0x801CC1DC",
+        "0x801CC280",
+        "0x801CC2E8",
+        "0x801CC350",
+        "0x801CC38C",
+        "0x801CC3C0",
+        "0x801CC490",
+        "0x801CC4DC",
+        "0x801CC4F4",
+        "0x801CC4FC",
+        "0x801CC518",
+        "0x801CC524",
+        "0x801CC558",
+        "0x801CC5B4",
+        "0x801CC604",
+        "0x801CC654",
+        "0x801CC6C4",
+        "0x801CC6F8",
+        "0x801CC6FC",
+        "0x801CC700",
+        "0x801CC740",
+        "0x801CC7FC",
+        "0x801CC820",
+        "0x801CC8AC",
+        "0x801CC96C",
+        "0x801CC974",
+        "0x801CC9A8",
+        "0x801CC9DC",
+        "0x801CC9E4",
+        "0x801CC9E8",
+        "0x801CC9EC",
+        "0x801CCA20"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1135,
+        "commit": "fb1b4d3b72526d696322150921c4078664429335",
+        "introduced_blob": "31a2ba851a208be69c483b736fdd3d43dd96656e"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801C735C",
+        "0x801C73C0"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1135,
+        "commit": "fb1b4d3b72526d696322150921c4078664429335",
+        "introduced_blob": "fbed1091111d1918ce9dea2ae55b09ba08c2b3b0"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C7F70.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801C8298",
+        "0x801C87C0"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1135,
+        "commit": "fb1b4d3b72526d696322150921c4078664429335",
+        "introduced_blob": "6c6e7088cc95c4bb12ec971dfba170e749f6f3d6"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C750C"
+      ],
+      "provenance": {
+        "pull_request": 1013,
+        "merged_via": 1015,
+        "commit": "fb1b4d3b72526d696322150921c4078664429335",
+        "introduced_blob": "fbed1091111d1918ce9dea2ae55b09ba08c2b3b0",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "c9cf1ef659dc4ad4c26263ac08fc5029a9be7435",
+        "integration_adjustment": "Newly exact pre-existing body fn_801C750C originates in contribution 1013; the PR 1125 refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
+      }
+    },
+    {
+      "source": "src/engine/cu_801C7F70.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C8D38"
+      ],
+      "provenance": {
+        "pull_request": 1013,
+        "merged_via": 1015,
+        "commit": "fb1b4d3b72526d696322150921c4078664429335",
+        "introduced_blob": "6c6e7088cc95c4bb12ec971dfba170e749f6f3d6",
+        "original_commit": "a879bb1682bfa22071d08c96b4ec3b32c63ba002",
+        "original_blob": "baa70910c70657b533d46accb5117063affe0487",
+        "integration_adjustment": "Newly exact pre-existing body fn_801C8D38 originates in contribution 1013; the PR 1125 refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
+      }
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023E838",
+        "0x8023E88C"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "397bbb5e31f50b0f3dd40e83632358ad3244abd3",
+        "introduced_blob": "cf49aaf8c44a4dfac8d1e8a90b603cc2c28a86a5"
+      }
+    },
+    {
+      "source": "src/dolphin/mtx/mtx.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8024A9EC",
+        "0x8024AA18"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "b2ee7a085e0819e800f228d835fc6e81347c490a"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8024F9EC"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "0e481f6011d811f005e80cba2b335676a5305ccd"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802523A4",
+        "0x80252448",
+        "0x802524D4",
+        "0x8025251C",
+        "0x8025256C",
+        "0x802525F0",
+        "0x802527D4"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "1dbc854a93382c6062dfde1a01cdb948c8806dba"
+      }
+    },
+    {
+      "source": "src/engine/cu_8022F428.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023424C",
+        "0x80234394"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "edf4f948c314f6a62348e9889ae147a0ec00a435",
+        "introduced_blob": "84beafeace42e802497f79bafe9788713ea67257",
+        "original_commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "original_blob": "da70feb3a4e38c6ee448e85d4b9e6dac546a92fa",
+        "integration_adjustment": "Combined independently reviewed contributions without changing function ownership or original source credit."
+      }
+    },
+    {
+      "source": "src/engine/cu_802355E4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80235D10",
+        "0x80235DD8",
+        "0x80235EB4",
+        "0x80235F58",
+        "0x80236164",
+        "0x80236408",
+        "0x802364B4",
+        "0x802368D0",
+        "0x80236B4C",
+        "0x80237EE8",
+        "0x8023808C"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "d84ab535e94b740275084a8857be7ad820afabd3",
+        "introduced_blob": "009d97a241a3c3a65ecffd51fae3e2cb2fb85ba6"
+      }
+    },
+    {
+      "source": "src/engine/cu_80266A2C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80266D00"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "ec5a81ceb264f4421c71f88efa4363a686e8cfd9"
+      }
+    },
+    {
+      "source": "src/engine/cu_802898FC.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802898FC",
+        "0x80289928"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1135,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "bd639994c88e8e7ce05c142f1d3ff2d8ab60af9c"
+      }
+    },
+    {
+      "source": "src/engine/cu_80213DB0.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80213DB0",
+        "0x80213F18"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "af87b449ea5035cd3386d2a0b1f2cfdf7dba6e5a"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229084.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80229084",
+        "0x8022908C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "34dbf9ac2606a0e1355b1ab63374042c8e0795c0"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022A304",
+        "0x8022AD64",
+        "0x8022B200",
+        "0x8022C0E0",
+        "0x8022C214",
+        "0x8022C410",
+        "0x8022C518",
+        "0x8022EF8C",
+        "0x8022F0D4",
+        "0x8022F294"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "65db8236f263a6466f299c72970d4c0d6bf49a30"
+      }
+    },
+    {
+      "source": "src/engine/cu_80221154.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80221154"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "11c3caa1ae91e6776015cbad990a31f1fe32e18a"
+      }
+    },
+    {
+      "source": "src/engine/cu_80222EC4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80222EC4",
+        "0x80222F8C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "43e448a4a205b1ca4c2f19d3f6530ba5c276343f"
+      }
+    },
+    {
+      "source": "src/engine/cu_8022772C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022772C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "9112b1c5463c73b947c0cdad6c928487ec7d254a"
+      }
+    },
+    {
+      "source": "src/engine/cu_80227970.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80227970"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "c8afbe8caa3052cc207aafb8d2bc250f70b1e062"
+      }
+    },
+    {
+      "source": "src/engine/cu_80227D6C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80227D6C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "18b4c5edc784c783aeb8f350b876535e4f4884f7"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022CAEC"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "65db8236f263a6466f299c72970d4c0d6bf49a30"
+      }
+    },
+    {
+      "source": "src/engine/cu_8020651C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80207448"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "dfd787807e26415d613c375e6db03b33c2f386bd"
+      }
+    },
+    {
+      "source": "src/engine/cu_8021F77C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8021F77C",
+        "0x8021F82C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "dbfaa98708a91f7ac442e7af5479bb6ecbfa8b08"
+      }
+    },
+    {
+      "source": "src/engine/cu_80220D3C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80220D3C",
+        "0x80220DA4"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "87dcda7f51bb1b1258301e9706af44854fdf21ea"
+      }
+    },
+    {
+      "source": "src/engine/cu_80221198.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80221198"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "c1addac0030382c1d248a15fc69a71c028db1874"
+      }
+    },
+    {
+      "source": "src/engine/sound.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801F4770"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1135,
+        "commit": "872254412ea3944aca2779c5e45b4884edf322a6",
+        "introduced_blob": "bc3e1849fad29fd2f5b75f3e08e4e7ba5db06c32"
+      }
     }
   ],
   "target": "GN7E69",

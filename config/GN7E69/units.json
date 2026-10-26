@@ -274,9 +274,9 @@
       "address": "0x801CC96C",
       "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
     },
-    "fn_801CC6FC__14Class_801CC350": {
+    "fn_801CC6FC__14Class_801CC350i": {
       "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350i); descriptive name."
     },
     "_._14Class_801CC350": {
       "address": "0x801CC38C",
@@ -402,6 +402,14 @@
       "address": "0x8025E290",
       "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
     },
+    "__fixsfdi": {
+      "address": "0x8025E80C",
+      "evidence": "evidence.tsv external row for 0x8025E80C (__fixsfdi)."
+    },
+    "__moddi3": {
+      "address": "0x8025EB54",
+      "evidence": "evidence.tsv external row for 0x8025EB54 (__moddi3)."
+    },
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
@@ -497,6 +505,10 @@
     "fn_800C0420__14Class_80297CE8i": {
       "address": "0x800C0420",
       "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__14Class_80297CE8i)."
+    },
+    "fn_800C043C__14Class_80297CE8i": {
+      "address": "0x800C043C",
+      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__14Class_80297CE8i)."
     },
     "vfn_03__14Class_80297C60f": {
       "address": "0x800B9654",
@@ -1609,6 +1621,18 @@
     "fn_800C02EC__14Class_80297CE8s": {
       "address": "0x800C02EC",
       "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
+    },
+    "GXLoadLightObjImm": {
+      "address": "0x8024F9EC",
+      "evidence": "evidence.tsv external row GXLoadLightObjImm: REL24 calls from 0x80236850, 0x8023686C and 0x80236DC0 reach the light loader body 0x8024F9EC registered for comparison in src/dolphin/gx/GXLight.c."
+    },
+    "_ctors": {
+      "address": "0x802CC668",
+      "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
+    },
+    "_dtors": {
+      "address": "0x802CC670",
+      "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     }
   },
   "units": [
@@ -3760,6 +3784,49 @@
           "placement": ".data2",
           "start": "0x80289B94",
           "end": "0x80289B98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80032EE8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/cu_80032EE8.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032EE8",
+          "end": "0x80033490"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AD70",
+          "end": "0x8028AE48"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCBF4",
+          "end": "0x802CCC84"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306B34",
+          "end": "0x80306C64"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A60",
+          "end": "0x80289A64"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BA0",
+          "end": "0x80289BA4"
         }
       ]
     },
@@ -12411,6 +12478,19 @@
           "placement": ".text",
           "start": "0x801C6E5C",
           "end": "0x801C735C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C735C-0x801C7684 (src/engine/cu_801C735C.c) and its function rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C735C",
+          "end": "0x801C7684"
         }
       ]
     },

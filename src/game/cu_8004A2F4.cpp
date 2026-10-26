@@ -2738,7 +2738,7 @@ public:
 };
 
 extern "C" {
-extern Time_801E8C78 lbl_803084B8;
+Time_801E8C78 lbl_803084B8;
 extern unsigned char lbl_803EA534;
 void fn_801E92D0(void *pWorld, Time_801E8C78 *pOldTime, Time_801E8C78 *pNewTime);
 

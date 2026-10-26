@@ -2,7 +2,7 @@
 
 static void (*sCallback)(void *) = 0;
 
-void Module::fn_80025F24() {}
+void Module::fn_80025F24(void *pArg) {}
 
 void Module::fn_80025F28(void *pArg)
 {
@@ -11,5 +11,5 @@ void Module::fn_80025F28(void *pArg)
     }
 }
 
-void Module::fn_80025F5C() {}
-void Module::fn_80025F60() {}
+void Module::fn_80025F5C(void *pArg) {}
+void Module::fn_80025F60(void *pArg) {}

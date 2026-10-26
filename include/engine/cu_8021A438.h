@@ -43,6 +43,13 @@ typedef struct Object_8021E688 {
     Entry_8021E688 *pA;        /* 0x0C */
 } Object_8021E688;
 
+/* Two-float point of the curve helpers 0x80222EC4, 0x80222F8C and 0x802233DC
+   (8-byte elements, copied as two words). */
+typedef struct Point_80222EC4 {
+    float mX;
+    float mY;
+} Point_80222EC4;
+
 /* Buffer descriptor: size and text pointer. */
 typedef struct Buffer_80222E54 {
     Uint8 unk_00[0x04];
@@ -139,8 +146,10 @@ void fn_80220CA4(Int32 a, Int32 b, Int32 c);
 void fn_80220CDC(Int32 a);
 Int32 fn_80220CE4(void);
 void fn_80220CFC(Int32 a);
+void fn_80220DA4(Float32 *pMul, Float32 *pScale);
 void *fn_80220D34(void);
 void fn_80221118(void);
+long long fn_80221154(Float32 *pV);
 
 /* src/engine/cu_80221198.c */
 void fn_80221314(Object_8021E688 *pObject, Int16 a, Int16 b);

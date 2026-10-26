@@ -139,6 +139,7 @@ int fn_8026E388(int handle);
 void fn_8026E8FC(int handle, int a, int b);
 int fn_8026EAC0(int handle, int a, int b);
 int fn_8026EBBC(int handle);
+int fn_8026E4C0(int handle, float degrees, int a);
 int fn_8026ED1C(int a, int b);
 int fn_8026EDC4(int handle);
 int fn_8026EE6C(int a, int b);
@@ -174,6 +175,7 @@ void fn_801F45D4(SndStream_801F44B0 *pStream);
 void fn_801F4638(SndStream_801F44B0 *pStream);
 void fn_801F4678(SndStream_801F44B0 *pStream, int a, int b);
 void fn_801F46F8(SndStream_801F44B0 *pStream, int a);
+int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle);
 void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus);
 int fn_801F48B8(SndStream_801F44B0 *pStream);
 int fn_801F4934(int a, int b);
@@ -610,6 +612,22 @@ void fn_801F46F8(SndStream_801F44B0 *pStream, int a)
         fn_8026EEB0(pStream->mHandle, a);
         SND_UNLOCK();
     }
+}
+
+int fn_801F4770(SndStream_801F44B0 *pStream, unsigned int angle)
+{
+    int result;
+    float degrees;
+
+    degrees = angle / 65536.0f;
+    degrees *= 360.0f;
+    result = 0;
+    if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
+        SND_LOCK();
+        result = fn_8026E4C0(pStream->mHandle, degrees, -1);
+        SND_UNLOCK();
+    }
+    return result;
 }
 
 void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus)

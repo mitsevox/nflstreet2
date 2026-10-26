@@ -13,9 +13,10 @@ typedef struct Record_8027EC7C {
 } Record_8027EC7C;
 
 typedef struct Record_8027E2D0 {
-    unsigned char mUnknown0[0xC];
+    int m0;
+    unsigned char mUnknown4[8];
     int mC;
-    unsigned char mUnknown10[4];
+    int m10;
     int m14;
     int m18;
     void *m1C;
@@ -105,6 +106,7 @@ struct Object_8027DAE4 : Object_8027D6E8 {
     virtual Record_8027E2D0 *vfn_29(void);
     virtual int vfn_33(int key);
     virtual int vfn_32(int key, int mode);
+    virtual int vfn_34(int key, int data);
 };
 
 typedef struct Record_8027EAC0 {
@@ -258,6 +260,24 @@ void fn_8027DAC4(void *p)
     fn_801B2C94(p);
 }
 
+}
+
+int Object_8027DAE4::vfn_34(int key, int data)
+{
+    Record_8027E2D0 *record;
+
+    if (vfn_28(key) != 0) {
+        return -18;
+    }
+    record = vfn_29();
+    if (record == 0) {
+        return -13;
+    }
+    record->m0 = 100;
+    record->mC = key;
+    record->m18 = data;
+    record->m14 = record->m10 = 1;
+    return 0;
 }
 
 int Object_8027DAE4::vfn_13(int value)
