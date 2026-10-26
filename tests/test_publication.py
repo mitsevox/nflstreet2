@@ -167,13 +167,15 @@ class PromotionTests(ReceiptFixture):
             for name,document in self.payloads.items(): z.writestr(name,publication.encoded(document))
         blob=archive.getvalue()
         self.artifact.update(id=30,digest='sha256:'+publication.digest(blob),size_in_bytes=len(blob))
+        report=[dict(id=31,name=publication.REPORT_V1,expired=False,workflow_run=dict(id=20),
+                     digest='sha256:'+'b'*64,created_at='2026-10-05T01:06:00Z')]
         def api(path):
             if path.startswith('commits/'): document=[dict(number=12)]
             elif path=='pulls/12': document=self.pr
             elif path.startswith('actions/workflows/'): document=dict(workflow_runs=[self.run])
             elif path=='actions/runs/20': document=self.run
             elif '/attempts/1/jobs?' in path: document=dict(jobs=self.jobs)
-            elif path.startswith('actions/runs/20/artifacts?'): document=dict(artifacts=[self.artifact])
+            elif path.startswith('actions/runs/20/artifacts?'): document=dict(artifacts=[self.artifact,*report])
             elif path=='actions/artifacts/30/zip': return blob
             elif path=='git/commits/'+self.tested: document=self.commit
             else: raise AssertionError(path)
@@ -182,6 +184,19 @@ class PromotionTests(ReceiptFixture):
         with patch.object(publication,'api',side_effect=api):
             self.assertTrue(publication.select(self.root,self.landed,'pinned-image',output))
         self.assertEqual(json.loads(output.read_text())['provenance']['artifact'],30)
+        self.assertEqual(json.loads(output.read_text())['report_v1'],dict(artifact=31,sha256='b'*64,attempt=1))
+        # Main can cite only the PR's own full report-v1 package; without it, it rebuilds.
+        for change in (dict(expired=True),dict(workflow_run=dict(id=21)),dict(digest=None),
+                       dict(created_at='2026-10-05T01:11:00Z')):
+            with self.subTest(change=change):
+                saved=dict(report[0]);report[0].update(change)
+                with patch.object(publication,'api',side_effect=api):
+                    self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))
+                report[0].clear();report[0].update(saved)
+        report.clear()
+        with patch.object(publication,'api',side_effect=api):
+            self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))
+        report.append(saved)
         self.artifact['name']=publication.ARTIFACT+'-2'
         with patch.object(publication,'api',side_effect=api):
             self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))

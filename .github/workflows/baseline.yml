@@ -218,6 +218,44 @@ jobs:
         run: |
           python3 tools/restore_history.py
           python3 tools/publication.py promote
+      # The shared site imports this package. A PR uploads one only when main may reuse its proof.
+      - name: Prepare report-v1 inputs
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        env:
+          REUSED: ${{ steps.publication.outputs.reused == 'true' }}
+        run: |
+          if [ "$REUSED" = true ]; then
+            python3 tools/report_v1.py --reused-receipt build/publication-receipt.json
+          else
+            python3 tools/report_v1.py
+          fi
+      - name: Check out pinned site report packager
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: mitsevox/mitsevox.github.io
+          ref: f91cd53590574ba25ddc77bc4f3ab17857424cdf
+          path: build/site-tools
+          persist-credentials: false
+      - name: Set up site packager runtime
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+        with:
+          version: '0.12.9'
+      - name: Package and validate report-v1
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        run: |
+          uv run --locked --project build/site-tools python build/site-tools/tools/package_report.py \
+            --input build/report-v1/input --metadata build/report-v1/metadata.json \
+            --policy build/report-v1/policy.json --output build/report-v1/package
+      - name: Upload report-v1 package
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: report-v1
+          path: build/report-v1/package/*.json
+          if-no-files-found: error
+          retention-days: 90
       - name: Save verified inventory metadata
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.inventory-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
