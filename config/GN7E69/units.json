@@ -498,6 +498,10 @@
       "address": "0x800C0420",
       "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__14Class_80297CE8i)."
     },
+    "fn_800C043C__14Class_80297CE8i": {
+      "address": "0x800C043C",
+      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__14Class_80297CE8i)."
+    },
     "vfn_03__14Class_80297C60f": {
       "address": "0x800B9654",
       "evidence": "evidence.tsv external row for 0x800B9654 (vfn_03__14Class_80297C60f)."
@@ -3760,6 +3764,49 @@
           "placement": ".data2",
           "start": "0x80289B94",
           "end": "0x80289B98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80032EE8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/cu_80032EE8.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032EE8",
+          "end": "0x80033490"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AD70",
+          "end": "0x8028AE48"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCBF4",
+          "end": "0x802CCC84"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306B34",
+          "end": "0x80306C64"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A60",
+          "end": "0x80289A64"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BA0",
+          "end": "0x80289BA4"
         }
       ]
     },

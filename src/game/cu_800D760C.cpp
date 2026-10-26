@@ -11,7 +11,7 @@
 
 
 extern "C" {
-unsigned char fn_800D78C4(Object_80039F5C *p, int id);
+unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id);
 void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
 void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
@@ -54,7 +54,7 @@ extern "C" void fn_800D760C(BitStream_t *pStream)
 }
 
 extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
-                            BitStream_t *pStream3)
+                            BitStream_t *pStream3, float t)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned char i = 0; i <= 6; i++) {
@@ -78,7 +78,7 @@ extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStr
 extern "C" void fn_800D782C(Object_80039F5C *p)
 {
     Object_80137ABC *pBall = fn_80137C48(p);
-    int id = fn_801BE648(p->mpUnknown792);
+    unsigned short id = fn_801BE648(p->mpUnknown792);
 
     if (pBall) {
         if (p->mUnknown776) {

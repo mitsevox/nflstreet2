@@ -30757,6 +30757,98 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
+    },
+    {
+      "source": "src/game/cu_80032EE8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003319C"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "introduced_blob": "04481c00323fe5a84a568157c809b0f2b8f41113"
+      }
+    },
+    {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80051DBC",
+        "0x80051DE8"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "e5af09abc4e6128879f35810042096738af8fbfb"
+      }
+    },
+    {
+      "source": "src/game/cu_800D77F0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D77F0"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "90ce6425e30aaf2b5b52c9a66660bda39b145e34"
+      }
+    },
+    {
+      "source": "src/game/cu_800D78C4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D78C4"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "12010b45a66aeb7f010adb0679d0e29703ce0bea",
+        "introduced_blob": "1e0aff9a5691deaa2e646f684a5cc1ff8f0c94bc"
+      }
+    },
+    {
+      "source": "src/game/cu_800E4EE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E4EE4"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "b282a0eb79204d662e87fea0923fb8b3f20b1fd2",
+        "introduced_blob": "0d2eb8d1dc855d8d4cd7cd61866b8dd92f45575c"
+      }
+    },
+    {
+      "source": "src/game/cu_800E55B8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E586C",
+        "0x800E5C00"
+      ],
+      "provenance": {
+        "pull_request": 1123,
+        "merged_via": 1123,
+        "commit": "21bd2cbfe09aebebdf0f95a1b973ac7e98c84e42",
+        "introduced_blob": "4a7e318d57ed760db7430852a453938e84dc4f32"
+      }
     }
   ],
   "target": "GN7E69",
