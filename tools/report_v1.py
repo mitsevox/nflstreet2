@@ -10,6 +10,7 @@ from datetime import datetime
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -116,6 +117,40 @@ def source(provenance):
     if kind == 'verified-source-build':
         return f"nflstreet2 verified-source-build report sha256:{provenance['report_sha256']}"
     raise ValueError('Unknown history provenance')
+
+
+SOURCES = (
+    (r'nflstreet2 workflow-artifact run ([1-9][0-9]*) artifact ([1-9][0-9]*) report sha256:([0-9a-f]{64})',
+     lambda m: {'kind': 'workflow-artifact', 'run': int(m[1]), 'artifact': int(m[2]), 'report_sha256': m[3]}),
+    (r'nflstreet2 verified-source-build report sha256:([0-9a-f]{64})',
+     lambda m: {'kind': 'verified-source-build', 'report_sha256': m[1]}))
+
+
+def provenance_of(text):
+    """Inverse of source(): the recorded execution a measured landed row names."""
+    for pattern, build in SOURCES:
+        match = re.fullmatch(pattern, text)
+        if match:
+            return build(match)
+    raise ValueError('Unknown history source')
+
+
+def history_feed(timeline, target_sha1, revision):
+    """The verified history feed a main report-v1 timeline was projected from."""
+    rows = []
+    for row in timeline['snapshots']:
+        measured = {k: row[k] for k in ('revision', 'built_at', 'code', 'data')}
+        provenance = row['provenance']
+        if provenance['kind'] == 'inherited':
+            if {k: provenance['record'].get(k) for k in measured} != measured:
+                raise ValueError('Inherited history record differs from its row')
+            rows.append(provenance['record'])
+        elif provenance['kind'] == 'measured':
+            rows.append({**measured, 'provenance': provenance_of(provenance['source'])})
+        else:
+            raise ValueError('Unknown history provenance')
+    return {'schema': 1, 'target': 'GN7E69', 'target_sha1': target_sha1, 'revision': revision,
+            'snapshots': rows}
 
 
 def instant(value):

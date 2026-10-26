@@ -4,7 +4,7 @@ A faithful matching decompilation of **NFL Street 2 for the Nintendo GameCube**.
 
 ## Progress
 
-See the [build page](https://mitsevox.github.io/nflstreet2/) for current matching progress and the latest build results.
+See the [build page](https://mitsevox.github.io/games/nflstreet2/) for current matching progress and the latest build results.
 
 ## Target
 
