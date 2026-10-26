@@ -274,9 +274,9 @@
       "address": "0x801CC96C",
       "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
     },
-    "fn_801CC6FC__14Class_801CC350": {
+    "fn_801CC6FC__14Class_801CC350i": {
       "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350i); descriptive name."
     },
     "_._14Class_801CC350": {
       "address": "0x801CC38C",
@@ -12458,6 +12458,19 @@
           "placement": ".text",
           "start": "0x801C6E5C",
           "end": "0x801C735C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C735C-0x801C7684 (src/engine/cu_801C735C.c) and its function rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C735C",
+          "end": "0x801C7684"
         }
       ]
     },

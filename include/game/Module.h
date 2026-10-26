@@ -6,10 +6,10 @@ class ModuleNode {
 public:
     ModuleNode();
     virtual ~ModuleNode();
-    virtual void fn_80025F24() = 0;
+    virtual void fn_80025F24(void *pArg) = 0;
     virtual void fn_80025F28(void *pArg) = 0;
-    virtual void fn_80025F5C() = 0;
-    virtual void fn_80025F60() = 0;
+    virtual void fn_80025F5C(void *pArg) = 0;
+    virtual void fn_80025F60(void *pArg) = 0;
     virtual int Init() = 0;
     virtual int Shutdown() = 0;
     virtual struct ModuleDependency *GetDependencies() = 0;
@@ -17,8 +17,9 @@ public:
     virtual const char *GetName() = 0;
 
     int fn_801CC96C();
+    struct ModuleDependency *fn_801CC974();
+    const char *fn_801CC9A8();
 
-private:
     int mUnknown0;
     int mUnknown4;
     unsigned char mUnknown8;
@@ -27,10 +28,25 @@ private:
 class Module : public ModuleNode {
 public:
     virtual ~Module() {}
-    virtual void fn_80025F24();
+    virtual void fn_80025F24(void *pArg);
     virtual void fn_80025F28(void *pArg);
-    virtual void fn_80025F5C();
-    virtual void fn_80025F60();
+    virtual void fn_80025F5C(void *pArg);
+    virtual void fn_80025F60(void *pArg);
+};
+
+/* Node visitor interface and the counting visitor whose table is 0x802AF410
+   (entry 1 0x801CCA20, entry 2 the destructor 0x801CC9EC). */
+class Visitor_801CC9EC {
+public:
+    virtual void fn_801CCA20(ModuleNode *pNode) = 0;
+};
+
+class Class_801CC9EC : public Visitor_801CC9EC {
+public:
+    virtual void fn_801CCA20(ModuleNode *pNode);
+    virtual ~Class_801CC9EC();
+
+    int mCount;
 };
 
 /* A module table entry holding a target pointer. */

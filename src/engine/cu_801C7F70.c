@@ -26,7 +26,7 @@ static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
 static BinNode_801C7F70 *fn_801C89D4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, unsigned int mode);
 static int fn_801C8C44(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, int b,
                        VisitFn_801C7F70 callback, int direction);
-static int fn_801C8D38(BinTree_801C7F70 *pTree, int force, int enable, float avgLimit, float depthLimit);
+static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float depthLimit, int enable);
 
 static int fn_801C7F70(BinNode_801C7F70 *pNode, int a, int b, VisitFn_801C7F70 callback)
 {
@@ -149,6 +149,21 @@ static BinNode_801C7F70 *fn_801C8224(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
         pParent = &lbl_8037F880;
     }
     return pParent;
+}
+
+void fn_801C8298(BinTree_801C7F70 *pTree, BinNode_801C7F70 **ppNodes, int count)
+{
+    int i;
+
+    pTree->mpRoot = 0;
+    pTree->mBase.mCount = 0;
+    pTree->mMaxDepth = 0;
+    pTree->mTotalDepth = 0;
+    pTree->mAutoOptimize = 0;
+    for (i = 0; i < count; i++) {
+        ppNodes[i]->mFlags = 0x80000000;
+        ppNodes[i]->mDepth = 0;
+    }
 }
 
 static int fn_801C82E0(void *pItem, BinNode_801C7F70 **ppNodes, int *pIndex)
@@ -310,6 +325,15 @@ static BinNode_801C7F70 *fn_801C8770(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
     return pParent;
 }
 
+void fn_801C87C0(BinTree_801C7F70 *pTree)
+{
+    pTree->mpRoot = 0;
+    pTree->mMaxDepth = 0;
+    pTree->mTotalDepth = 0;
+    pTree->mAutoOptimize = 0;
+    pTree->mppScratch = 0;
+}
+
 static int fn_801C87DC(BinTree_801C7F70 *pTree)
 {
     int result = 0;
@@ -366,7 +390,7 @@ static BinNode_801C7F70 *fn_801C8834(BinTree_801C7F70 *pTree, BinNode_801C7F70 *
         }
         pTree->mTotalDepth += depth;
         if (pTree->mAutoOptimize) {
-            fn_801C8D38(pTree, 0, 1, pTree->mAvgLimit, pTree->mDepthLimit);
+            fn_801C8D38(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
         }
     } else {
         pResult = pCur;
@@ -451,7 +475,7 @@ static void fn_801C8AB4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
         pTree->mTotalDepth--;
     }
     if (pTree->mAutoOptimize) {
-        fn_801C8D38(pTree, 0, 1, pTree->mAvgLimit, pTree->mDepthLimit);
+        fn_801C8D38(pTree, pTree->mAvgLimit, 0, pTree->mDepthLimit, 1);
     }
 }
 
@@ -494,7 +518,7 @@ static int fn_801C8C84(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode, int a, 
     return result;
 }
 
-static int fn_801C8D38(BinTree_801C7F70 *pTree, int force, int enable, float avgLimit, float depthLimit)
+static int fn_801C8D38(BinTree_801C7F70 *pTree, float avgLimit, int force, float depthLimit, int enable)
 {
     int result = 5;
     unsigned int count;
