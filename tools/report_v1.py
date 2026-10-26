@@ -112,10 +112,13 @@ def source(provenance):
 
 
 def timeline_document(site, feed, run, attempt):
+    # Rows from the existing verified history keep their exact original record, which the site
+    # requires when a legacy-format report is replaced, and which keeps each row identical in
+    # every later package.
     rows = [{'revision': r['revision'], 'built_at': r['built_at'],
              'code': {'total': r['code']['total'], 'linked': r['code']['linked']},
              'data': {'total': r['data']['total'], 'linked': r['data']['linked']},
-             'provenance': {'kind': 'measured', 'source': source(r['provenance'])}}
+             'provenance': {'kind': 'inherited', 'source': source(r['provenance']), 'record': r}}
             for r in feed['snapshots']]
     if site['revision'] not in {r['revision'] for r in rows}:
         # A PR's tested merge is candidate evidence only; main appends landed revisions.

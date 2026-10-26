@@ -100,8 +100,13 @@ class Timeline(Fixture):
     def test_rows_keep_their_execution_identity_and_never_change_between_runs(self):
         rows = report_v1.timeline_document(self.site, self.feed, 1, 1)['snapshots']
         self.assertEqual([r['provenance'] for r in rows], [
-            dict(kind='measured', source='nflstreet2 workflow-artifact run 5 artifact 6 report sha256:'+'c'*64),
-            dict(kind='measured', source='nflstreet2 verified-source-build report sha256:'+'d'*64)])
+            dict(kind='inherited', record=self.feed['snapshots'][0],
+                 source='nflstreet2 workflow-artifact run 5 artifact 6 report sha256:'+'c'*64),
+            dict(kind='inherited', record=self.feed['snapshots'][1],
+                 source='nflstreet2 verified-source-build report sha256:'+'d'*64)])
+        for row in rows:  # the site's legacy-replacement rule: the record is the accepted row
+            self.assertEqual({k: row['provenance']['record'][k] for k in ('revision', 'built_at', 'code', 'data')},
+                             {k: row[k] for k in ('revision', 'built_at', 'code', 'data')})
         self.assertEqual(rows, report_v1.timeline_document(self.site, self.feed, 2, 3)['snapshots'])
 
     def test_pull_request_merge_is_appended_as_candidate_evidence(self):
