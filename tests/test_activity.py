@@ -15,6 +15,7 @@ import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import activity
 import restore_history
+import report_v1
 import progress
 import check_progress_maps
 import matching
@@ -415,138 +416,136 @@ class ContributorTests(unittest.TestCase):
 
 
 class RestoreTests(unittest.TestCase):
-    def durable_archive(self, document, manifest=None):
-        payload=json.dumps(document).encode()
-        if manifest is None:
-            manifest={'schema':1,'repository':restore_history.REPOSITORY,'revision':document['revision'],
-                      'run':10,'attempt':1,'target_sha1':document['target_sha1'],
-                      'activity_sha256':restore_history.hashlib.sha256(payload).hexdigest()}
+    target='c'*40
+
+    def feed(self, *revisions):
+        rows=[]
+        for n,revision in enumerate(revisions):
+            row=HistoryTests().row(revision,10+n);row['built_at']=f'2026-10-0{n+1}T10:00:00Z'
+            if n%2:row['provenance']={'kind':'verified-source-build','report_sha256':'e'*64}
+            rows.append(row)
+        return dict(HistoryTests().document(rows),target_sha1=self.target,revision=revisions[-1])
+
+    def manifest(self, revision, timeline, schema='timeline-v1', path='timeline.json'):
+        return {'repository':restore_history.REPOSITORY,'revision':revision,'target':{'sha1':self.target},
+                'modules':{'timeline':{'status':'supported','asset':{'path':path,'schema':schema,
+                                                                     'sha256':restore_history.digest(timeline)}}}}
+
+    def package(self, feed, cutover=None):
+        site={'revision':feed['revision'],'built_at':feed['snapshots'][-1]['built_at'],
+              'measures':{k:{'total':100,'linked':10} for k in ('code','data')}}
+        timeline=json.dumps(report_v1.timeline_document(site,feed,1,1,cutover)).encode()
         output=io.BytesIO()
         with zipfile.ZipFile(output,'w') as zipped:
-            zipped.writestr('activity.json',payload)
-            zipped.writestr('manifest.json',json.dumps(manifest))
+            for name in restore_history.PACKAGE:
+                zipped.writestr(name,json.dumps(self.manifest(feed['revision'],timeline)) if name=='manifest.json'
+                                else timeline if name=='timeline.json' else b'{}')
         return output.getvalue()
 
-    def archive(self, document=None):
-        tar_bytes=io.BytesIO()
-        with tarfile.open(fileobj=tar_bytes,mode='w') as tar:
-            if document is not None:
-                content=json.dumps(document).encode();entry=tarfile.TarInfo('./activity.json');entry.size=len(content)
-                tar.addfile(entry,io.BytesIO(content))
-        zipped=io.BytesIO()
-        with zipfile.ZipFile(zipped,'w') as archive:archive.writestr('artifact.tar',tar_bytes.getvalue())
-        return zipped.getvalue()
-
-    def setup_api(self, seed, deployed, archived, expired=False, durable=None, job=None):
-        responses={
-            'deployments?environment=github-pages&per_page=100':[{'id':1,'sha':deployed}],
-            'deployments/1/statuses':[{'state':'success','created_at':'2026-10-03T12:00:00Z',
-               'log_url':'https://github.com/mitsevox/nflstreet2/actions/runs/10/job/20'}],
-            'actions/runs/10':{'head_sha':deployed,'head_branch':'main','event':'push','path':'.github/workflows/baseline.yml'},
-            'actions/runs/10/artifacts?per_page=100':{'artifacts':[{'id':2,'name':'github-pages','expired':expired,'created_at':'2026-10-03T11:00:00Z'}]}}
-        if durable is not None:
-            responses['actions/runs/10/artifacts?per_page=100']['artifacts'].append(
-                {'id':3,'name':'published-history-v1-1','expired':False,'created_at':'2026-10-03T11:01:00Z',
-                 'digest':'sha256:'+restore_history.hashlib.sha256(durable).hexdigest(),'workflow_run':{'id':10}})
-            responses['actions/jobs/20']=job or {'run_id':10,'head_sha':deployed,'conclusion':'success','run_attempt':1}
-        def api(path):
-            if path=='actions/artifacts/2/zip':return self.archive(archived)
-            if path=='actions/artifacts/3/zip':return durable
+    def setup(self, runs, store=None, ancestors=None):
+        responses={'actions/workflows/baseline.yml/runs?branch=main&status=success&per_page=50':
+                   {'workflow_runs':[{'id':r['id']} for r in runs]}}
+        archives={}
+        for run in runs:
+            run.setdefault('head_branch','main');run.setdefault('event','push');run.setdefault('conclusion','success')
+            run.setdefault('path',restore_history.WORKFLOW);run.setdefault('run_attempt',1)
+            run.setdefault('head_repository',{'full_name':restore_history.REPOSITORY})
+            run.setdefault('run_started_at','2026-10-26T01:00:00Z')
+            responses[f"actions/runs/{run['id']}"]=run
+            responses[f"actions/runs/{run['id']}/attempts/1/jobs?per_page=100"]={'jobs':[
+                {'name':'Toolchain baseline','run_attempt':1,'completed_at':'2026-10-26T01:10:00Z'}]}
+            artifacts=[]
+            if 'archive' in run:
+                archives[run['id']]=archive=run.pop('archive')
+                artifacts.append({'id':run['id']+1000,'name':'report-v1','expired':False,'workflow_run':{'id':run['id']},
+                                  'digest':'sha256:'+restore_history.digest(archive),'created_at':'2026-10-26T01:05:00Z'})
+            responses[f"actions/runs/{run['id']}/artifacts?per_page=100"]={'artifacts':artifacts}
+        files={}
+        if store is not None:
+            document,schema=store
+            timeline=json.dumps(document).encode()
+            path='data/nflstreet2/snapshots/x'
+            manifest=json.dumps(self.manifest(document['revision'],timeline,schema,'activity.json')).encode()
+            files={'data/reports.lock.json':json.dumps({'projects':{'nflstreet2':{
+                       'path':path,'revision':document['revision'],'manifestSha256':restore_history.digest(manifest)}}}).encode(),
+                   path+'/manifest.json':manifest,path+'/activity.json':timeline}
+        else:
+            files={'data/reports.lock.json':json.dumps({'projects':{}}).encode()}
+        def api(path, repository=restore_history.REPOSITORY, raw=False):
+            if repository==restore_history.SITE:
+                return files[path.split('?')[0].removeprefix('contents/')]
+            if path.startswith('actions/artifacts/'):
+                return archives[int(path.split('/')[2])-1000]
             return json.dumps(responses[path]).encode()
-        return patch.object(restore_history,'api',side_effect=api)
+        allowed=ancestors
+        return (patch.object(restore_history,'api',side_effect=api),
+                patch.object(restore_history,'is_ancestor',side_effect=lambda root,c,r:allowed is None or c in allowed))
 
-    def test_bootstrap_only_from_audited_pre_feature_deployment(self):
-        seed=HistoryTests().document([HistoryTests().row()])
-        with self.setup_api(seed,'a'*40,None):
-            result,receipt=restore_history.restore(seed)
-            self.assertEqual(result,seed);self.assertEqual(receipt['run'],10)
-        with self.setup_api(seed,'d'*40,None),self.assertRaisesRegex(ValueError,'outside the audited'):
-            restore_history.restore(seed)
+    def restore(self, runs, store=None, ancestors=None):
+        api,ancestor=self.setup(runs,store,ancestors)
+        with api,ancestor:
+            return restore_history.restore(Path('.'),{'target_sha1':self.target},'f'*40)
 
-    def test_restores_deployed_history_and_rejects_stale_or_missing_artifacts(self):
-        seed=HistoryTests().document([HistoryTests().row()])
-        archived=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
-        archived['revision']='d'*40
-        with self.setup_api(seed,'d'*40,archived):
-            result,_=restore_history.restore(seed);self.assertEqual(result,archived)
-        archived['revision']='a'*40
-        with self.setup_api(seed,'d'*40,archived),self.assertRaisesRegex(ValueError,'differs from its published'):
-            restore_history.restore(seed)
-        with self.setup_api(seed,'d'*40,archived,expired=True),self.assertRaisesRegex(ValueError,'unavailable'):
-            restore_history.restore(seed)
+    def test_report_v1_timeline_round_trips_to_the_verified_feed(self):
+        feed=self.feed('a'*40,'b'*40,'d'*40)
+        cutover={'revision':'b'*40,'built_at':feed['snapshots'][1]['built_at']}
+        for cut in (None,cutover):
+            site={'revision':'d'*40,'built_at':feed['snapshots'][-1]['built_at'],
+                  'measures':{k:{'total':100,'linked':10} for k in ('code','data')}}
+            timeline=report_v1.timeline_document(site,feed,1,1,cut)
+            self.assertEqual(report_v1.history_feed(timeline,self.target,'d'*40),feed)
+        with self.assertRaisesRegex(ValueError,'Unknown history source'):
+            report_v1.provenance_of('nflstreet2 pull-request candidate run 1 attempt 1')
 
-    def test_no_successful_deployment_is_not_silent_bootstrap(self):
-        with self.assertRaisesRegex(ValueError,'No successful'):
-            restore_history.published_run([{'id':1}],lambda n:[{'state':'failure'}])
+    def test_merges_the_last_main_package_with_the_site_store(self):
+        own=self.feed('a'*40,'b'*40,'d'*40);store=self.feed('a'*40,'e'*40)
+        document,receipt=self.restore([{'id':7,'head_sha':'d'*40,'archive':self.package(own)}],(store,'nfl-activity-v1'))
+        self.assertEqual({r['revision'] for r in document['snapshots']},{'a'*40,'b'*40,'d'*40,'e'*40})
+        self.assertEqual([r['kind'] for r in receipt['sources']],['main-package','site-store'])
+        self.assertEqual(document['revision'],'d'*40)
 
-    def test_durable_history_restores_after_pages_archive_expires(self):
-        seed=HistoryTests().document([HistoryTests().row()])
-        document=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
-        document['revision']='d'*40
-        with self.setup_api(seed,'d'*40,None,expired=True,durable=self.durable_archive(document)):
-            result,receipt=restore_history.restore(seed)
-            self.assertEqual(result,document)
-            self.assertEqual((receipt['artifact'],receipt['kind']),(3,'durable-history'))
+    def test_skips_runs_without_a_package_or_off_this_history(self):
+        old=self.feed('a'*40)
+        document,receipt=self.restore([{'id':9,'head_sha':'b'*40},{'id':8,'head_sha':'e'*40,'archive':self.package(self.feed('e'*40))},
+                                       {'id':7,'head_sha':'a'*40,'archive':self.package(old)}],ancestors={'a'*40,'b'*40})
+        self.assertEqual(receipt['sources'][0]['run'],7)
+        self.assertEqual(document['snapshots'],old['snapshots'])
 
-    def test_bad_durable_proof_cannot_fall_back_to_valid_pages(self):
-        seed=HistoryTests().document([HistoryTests().row()]);seed['revision']='a'*40
-        manifest={'schema':1,'repository':restore_history.REPOSITORY,'revision':'a'*40,'run':99,
-                  'attempt':1,'target_sha1':seed['target_sha1'],'activity_sha256':'0'*64}
-        with self.setup_api(seed,'a'*40,seed,durable=self.durable_archive(seed,manifest)),self.assertRaisesRegex(ValueError,'manifest'):
-            restore_history.restore(seed)
-        with self.setup_api(seed,'a'*40,seed,durable=self.durable_archive(seed),
-                job={'run_id':10,'head_sha':'a'*40,'conclusion':'success','run_attempt':2}),self.assertRaisesRegex(ValueError,'published attempt'):
-            restore_history.restore(seed)
+    def test_site_store_alone_restores_once_packages_expire(self):
+        store=self.feed('a'*40,'b'*40)
+        document,receipt=self.restore([],(store,'nfl-activity-v1'))
+        self.assertEqual(document['snapshots'],store['snapshots'])
+        site={'revision':'b'*40,'built_at':store['snapshots'][-1]['built_at'],
+              'measures':{k:{'total':100,'linked':10} for k in ('code','data')}}
+        v1=report_v1.timeline_document(site,store,1,1)
+        api,ancestor=self.setup([],(dict(v1,revision='b'*40),'timeline-v1'))
+        with api,ancestor:
+            document,_=restore_history.restore(Path('.'),{'target_sha1':self.target},'f'*40)
+        self.assertEqual(document['snapshots'],store['snapshots'])
 
-    def test_durable_zip_digest_and_entries_are_authenticated(self):
-        document=HistoryTests().document([HistoryTests().row()]);document['revision']='a'*40
-        archive=self.durable_archive(document)
-        artifact={'digest':'sha256:'+'0'*64}
-        with self.assertRaisesRegex(ValueError,'digest'):
-            restore_history.durable_archive(archive,artifact,10,1,'a'*40,document['target_sha1'])
-        output=io.BytesIO()
-        with zipfile.ZipFile(output,'w') as zipped:zipped.writestr('../activity.json',b'{}')
-        archive=output.getvalue();artifact['digest']='sha256:'+restore_history.hashlib.sha256(archive).hexdigest()
-        with self.assertRaisesRegex(ValueError,'entries'):
-            restore_history.durable_archive(archive,artifact,10,1,'a'*40,document['target_sha1'])
+    def test_no_authenticated_source_never_resets_history(self):
+        with self.assertRaisesRegex(ValueError,'cannot reset history'):
+            self.restore([{'id':7,'head_sha':'a'*40}])
 
-    def test_audited_recovery_is_exact_and_preserves_every_snapshot(self):
-        seed=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
-        receipt={'schema':1,'deployment':1,'run':10,'revision':'d'*40,'snapshot_count':2,
-                 'history_sha256':restore_history.hashlib.sha256(restore_history.encoded(seed)).hexdigest()}
-        with self.setup_api(seed,'d'*40,None,expired=True):
-            result,proof=restore_history.restore(seed,receipt)
-            self.assertEqual(result['snapshots'],seed['snapshots']);self.assertEqual(proof['kind'],'audited-recovery')
-        for key,value in [('deployment',2),('run',11),('revision','a'*40),('history_sha256','0'*64),('snapshot_count',1)]:
-            bad=dict(receipt,**{key:value})
-            with self.setup_api(seed,'d'*40,None,expired=True),self.assertRaisesRegex(ValueError,'exact audited recovery'):
-                restore_history.restore(seed,bad)
-
-    def test_prepare_preserves_payload_and_rejects_another_revision(self):
-        document=HistoryTests().document([HistoryTests().row()]);document['revision']='a'*40
-        with tempfile.TemporaryDirectory() as folder:
-            root=Path(folder);(root/'build/site').mkdir(parents=True);(root/'config/GN7E69').mkdir(parents=True)
-            (root/'config/GN7E69/history.json').write_text(json.dumps(document))
-            payload=json.dumps(document).encode();(root/'build/site/activity.json').write_bytes(payload)
-            restore_history.prepare_history(root,'a'*40,10,1)
-            archive=root/'build/activity/archive'
-            self.assertEqual((archive/'activity.json').read_bytes(),payload)
-            manifest=json.loads((archive/'manifest.json').read_text())
-            self.assertEqual(manifest['activity_sha256'],restore_history.hashlib.sha256(payload).hexdigest())
-            with self.assertRaisesRegex(ValueError,'differs from its published'):
-                restore_history.prepare_history(root,'d'*40,10,1)
-
-    def test_historyless_pages_cannot_bypass_exact_recovery(self):
-        seed=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
-        receipt={'schema':1,'deployment':1,'run':10,'revision':'d'*40,'snapshot_count':2,
-                 'history_sha256':restore_history.hashlib.sha256(restore_history.encoded(seed)).hexdigest()}
-        with self.setup_api(seed,'d'*40,None):
-            result,proof=restore_history.restore(seed,receipt)
-            self.assertEqual(result['snapshots'],seed['snapshots']);self.assertEqual(proof['kind'],'audited-recovery')
-        with self.setup_api(seed,'d'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
-            restore_history.restore(seed,dict(receipt,history_sha256='0'*64))
-        with self.setup_api(seed,'a'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
-            restore_history.restore(seed,receipt)
+    def test_tampered_packages_and_store_fail_instead_of_falling_back(self):
+        archive=self.package(self.feed('a'*40))
+        api,ancestor=self.setup([{'id':7,'head_sha':'a'*40,'archive':archive}])
+        with api as mock,ancestor:
+            original=mock.side_effect
+            mock.side_effect=lambda path,*a,**k:original(path,*a,**k)+b'x' if path.startswith('actions/artifacts/') else original(path,*a,**k)
+            with self.assertRaisesRegex(ValueError,'digest or size'):
+                restore_history.restore(Path('.'),{'target_sha1':self.target},'f'*40)
+        with self.assertRaisesRegex(ValueError,'another revision'):
+            self.restore([{'id':7,'head_sha':'b'*40,'archive':archive}])
+        store=self.feed('a'*40)
+        api,ancestor=self.setup([],(store,'nfl-activity-v1'))
+        with api as mock,ancestor:
+            original=mock.side_effect
+            mock.side_effect=lambda path,*a,**k:original(path,*a,**k)+b' ' if path.endswith('manifest.json?ref=report-data') else original(path,*a,**k)
+            with self.assertRaisesRegex(ValueError,'differs from its lock'):
+                restore_history.restore(Path('.'),{'target_sha1':self.target},'f'*40)
+        with self.assertRaisesRegex(ValueError,'outside this revision history'):
+            self.restore([],(store,'nfl-activity-v1'),ancestors=set())
 
 
 class ExactInventoryTests(unittest.TestCase):
