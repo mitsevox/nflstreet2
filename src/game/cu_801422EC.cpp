@@ -119,9 +119,6 @@ void fn_801422EC(Camera_801422EC *pCamera)
         break;
     case 2:
         break;
-    case 3:
-    case 4:
-        return;
     }
 }
 
