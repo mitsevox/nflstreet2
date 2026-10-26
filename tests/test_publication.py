@@ -193,6 +193,14 @@ class PromotionTests(ReceiptFixture):
                 with patch.object(publication,'api',side_effect=api):
                     self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))
                 report[0].clear();report[0].update(saved)
+        # A rerun's earlier attempt left its own copy: only this attempt's upload counts.
+        report.append(dict(saved,id=29,created_at='2026-10-04T01:00:00Z'))
+        with patch.object(publication,'api',side_effect=api):
+            self.assertTrue(publication.select(self.root,self.landed,'pinned-image',output))
+        self.assertEqual(json.loads(output.read_text())['report_v1']['artifact'],31)
+        report[1]['created_at']=saved['created_at']
+        with patch.object(publication,'api',side_effect=api):
+            self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))
         report.clear()
         with patch.object(publication,'api',side_effect=api):
             self.assertFalse(publication.select(self.root,self.landed,'pinned-image',output))

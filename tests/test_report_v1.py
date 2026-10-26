@@ -97,22 +97,42 @@ class Contributors(Fixture):
 
 
 class Timeline(Fixture):
-    def test_rows_keep_their_execution_identity_and_never_change_between_runs(self):
-        rows = report_v1.timeline_document(self.site, self.feed, 1, 1)['snapshots']
+    def test_rows_through_the_cutover_are_inherited_and_later_rows_are_measured(self):
+        rows = report_v1.timeline_document(self.site, self.feed, 1, 1, 'b'*40)['snapshots']
         self.assertEqual([r['provenance'] for r in rows], [
             dict(kind='inherited', record=self.feed['snapshots'][0],
                  source='nflstreet2 workflow-artifact run 5 artifact 6 report sha256:'+'c'*64),
-            dict(kind='inherited', record=self.feed['snapshots'][1],
-                 source='nflstreet2 verified-source-build report sha256:'+'d'*64)])
-        for row in rows:  # the site's legacy-replacement rule: the record is the accepted row
-            self.assertEqual({k: row['provenance']['record'][k] for k in ('revision', 'built_at', 'code', 'data')},
-                             {k: row[k] for k in ('revision', 'built_at', 'code', 'data')})
-        self.assertEqual(rows, report_v1.timeline_document(self.site, self.feed, 2, 3)['snapshots'])
+            dict(kind='measured', source='nflstreet2 verified-source-build report sha256:'+'d'*64)])
+        # The site's legacy-replacement rule: the record is the accepted row.
+        record = rows[0]['provenance']['record']
+        self.assertEqual({k: record[k] for k in ('revision', 'built_at', 'code', 'data')},
+                         {k: rows[0][k] for k in ('revision', 'built_at', 'code', 'data')})
+
+    def test_without_a_cutover_every_row_is_measured(self):
+        rows = report_v1.timeline_document(self.site, self.feed, 1, 1)['snapshots']
+        self.assertEqual([r['provenance']['kind'] for r in rows], ['measured', 'measured'])
+
+    def test_a_row_never_changes_between_runs_or_when_history_grows(self):
+        first = report_v1.timeline_document(self.site, self.feed, 1, 1, 'b'*40)['snapshots']
+        self.assertEqual(first, report_v1.timeline_document(self.site, self.feed, 2, 3, 'b'*40)['snapshots'])
+        feed = copy.deepcopy(self.feed)
+        feed['snapshots'].append(dict(feed['snapshots'][1], revision='e'*40))
+        site = dict(self.site, revision='e'*40)
+        self.assertEqual(report_v1.timeline_document(site, feed, 3, 1, 'b'*40)['snapshots'][:2], first)
+
+    def test_cutover_outside_the_history_fails(self):
+        with self.assertRaisesRegex(ValueError, 'cutover is not in the verified history'):
+            report_v1.timeline_document(self.site, self.feed, 1, 1, 'f'*40)
+
+    def test_committed_history_config_has_no_cutover_until_the_site_switches(self):
+        history = json.loads((ROOT/report_v1.HISTORY).read_text())
+        self.assertEqual(history, dict(schemaVersion=1, inheritedThrough=None))
 
     def test_pull_request_merge_is_appended_as_candidate_evidence(self):
         feed = copy.deepcopy(self.feed); feed['snapshots'].pop()
-        rows = report_v1.timeline_document(self.site, feed, 40, 2)['snapshots']
+        rows = report_v1.timeline_document(self.site, feed, 40, 2, 'b'*40)['snapshots']
         self.assertEqual(rows[-1]['revision'], 'a'*40)
+        self.assertEqual(rows[-1]['provenance']['kind'], 'measured')
         self.assertEqual(rows[-1]['code'], dict(total=32, linked=0))
         self.assertEqual(rows[-1]['provenance']['source'], 'nflstreet2 pull-request candidate run 40 attempt 2')
 

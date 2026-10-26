@@ -17,6 +17,7 @@ WORKFLOW = '.github/workflows/baseline.yml'
 METHODOLOGY = 'nflstreet2-report-v1'
 GENERATION = 1
 ARTIFACT = 'report-v1'
+HISTORY = 'config/GN7E69/report-v1-history.json'
 # report-v1 map nodes accept only these fields; NFL's evidence fields stay in its own report.
 NODE_FIELDS = ('name', 'kind', 'size', 'linked', 'matched', 'fuzzy', 'address', 'mapped_extents',
                'children', 'type', 'function_address', 'original_size')
@@ -111,15 +112,24 @@ def source(provenance):
     raise ValueError('Unknown history provenance')
 
 
-def timeline_document(site, feed, run, attempt):
-    # Rows from the existing verified history keep their exact original record, which the site
-    # requires when a legacy-format report is replaced, and which keeps each row identical in
-    # every later package.
-    rows = [{'revision': r['revision'], 'built_at': r['built_at'],
-             'code': {'total': r['code']['total'], 'linked': r['code']['linked']},
-             'data': {'total': r['data']['total'], 'linked': r['data']['linked']},
-             'provenance': {'kind': 'inherited', 'source': source(r['provenance']), 'record': r}}
-            for r in feed['snapshots']]
+def timeline_document(site, feed, run, attempt, inherited_through=None):
+    # Rows the site accepted through its legacy import, up to the revision pinned in
+    # HISTORY, keep their exact original record, as the site requires when it replaces a legacy
+    # row. Every later row is this producer's own measurement. A row's kind depends only on its
+    # place in the feed, so an accepted row never changes.
+    revisions = [r['revision'] for r in feed['snapshots']]
+    if inherited_through is not None and inherited_through not in revisions:
+        raise ValueError('Inherited history cutover is not in the verified history')
+    cutover = revisions.index(inherited_through) + 1 if inherited_through is not None else 0
+    rows = []
+    for index, r in enumerate(feed['snapshots']):
+        provenance = {'kind': 'measured', 'source': source(r['provenance'])}
+        if index < cutover:
+            provenance.update(kind='inherited', record=r)
+        rows.append({'revision': r['revision'], 'built_at': r['built_at'],
+                     'code': {'total': r['code']['total'], 'linked': r['code']['linked']},
+                     'data': {'total': r['data']['total'], 'linked': r['data']['linked']},
+                     'provenance': provenance})
     if site['revision'] not in {r['revision'] for r in rows}:
         # A PR's tested merge is candidate evidence only; main appends landed revisions.
         rows.append({'revision': site['revision'], 'built_at': site['built_at'],
@@ -144,6 +154,7 @@ def prepare(root, output, environment, run, attempt, receipt=None):
     site = json.loads((root/'build/site/progress.json').read_text())
     feed = json.loads((root/'build/site/activity.json').read_text())
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    history = json.loads((root/HISTORY).read_text())
     revision = git(root, 'rev-parse', 'HEAD')
     if site['revision'] != revision or feed['revision'] != revision or site.get('baseline') != 'verified':
         raise ValueError('Public reports are not this verified revision')
@@ -151,7 +162,7 @@ def prepare(root, output, environment, run, attempt, receipt=None):
     inputs = output/'input'
     inputs.mkdir(parents=True)
     for name, document in (('summary.json', summary(site)), ('map.json', map_document(site)),
-                           ('timeline.json', timeline_document(site, feed, run, attempt)),
+                           ('timeline.json', timeline_document(site, feed, run, attempt, history['inheritedThrough'])),
                            ('contributors.json', contributors_document(site, feed, ledger))):
         (inputs/name).write_bytes(encoded(document))
     metadata = {'project': 'nflstreet2', 'repository': REPOSITORY,

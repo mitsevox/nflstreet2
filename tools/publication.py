@@ -168,13 +168,16 @@ def authenticate(root, revision, environment, pr, run, jobs, artifact, commit, m
 def report_v1_artifact(run, jobs, artifacts):
     """The final PR's full report-v1 package, which a reused main report must cite."""
     baseline = [j for j in jobs if j['name'] == 'Toolchain baseline' and j.get('run_attempt') == run['run_attempt']]
+    if len(baseline) != 1:
+        return None
+    # Only this attempt's uploads count, as on the site, so a rerun keeps its proof.
     matches = [a for a in artifacts if a['name'] == REPORT_V1 and not a['expired']
-               and a.get('workflow_run', {}).get('id') == run['id']]
-    if len(baseline) != 1 or len(matches) != 1:
+               and a.get('workflow_run', {}).get('id') == run['id']
+               and run['run_started_at'] <= a['created_at'] <= baseline[0]['completed_at']]
+    if len(matches) != 1:
         return None
     artifact = matches[0]
-    if not re.fullmatch(r'sha256:[0-9a-f]{64}', artifact.get('digest') or '') \
-            or not run['run_started_at'] <= artifact['created_at'] <= baseline[0]['completed_at']:
+    if not re.fullmatch(r'sha256:[0-9a-f]{64}', artifact.get('digest') or ''):
         return None
     return dict(artifact=artifact['id'], sha256=artifact['digest'].removeprefix('sha256:'),
                 attempt=run['run_attempt'])
