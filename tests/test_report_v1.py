@@ -132,14 +132,24 @@ class ProducerPolicy(unittest.TestCase):
         self.assertIn(f'          name: {report_v1.ARTIFACT}\n', self.workflow)
         self.assertEqual(re.findall(r'(?m)^  (\w+):\n    name: Toolchain baseline$', self.workflow), ['baseline'])
 
-    def test_every_report_v1_step_shares_the_publishable_proof_condition(self):
-        conditions = set()
+    def condition(self, name):
+        block = self.workflow.split('      - name: '+name+'\n', 1)[1].split('      - ', 1)[0]
+        return re.search(r'^        if: (.+)$', block, re.M).group(1)
+
+    def test_every_pull_request_validates_but_only_a_publishable_proof_uploads(self):
         for name in ('Prepare report-v1 inputs', 'Check out pinned site report packager',
-                     'Set up site packager runtime', 'Package and validate report-v1', 'Upload report-v1 package'):
-            block = self.workflow.split('      - name: '+name+'\n', 1)[1].split('      - ', 1)[0]
-            conditions.add(re.search(r'^        if: (.+)$', block, re.M).group(1))
-        self.assertEqual(conditions, {"github.ref == 'refs/heads/main' || "
-                                      "(github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')"})
+                     'Set up site packager runtime', 'Package and validate report-v1'):
+            with self.subTest(name=name):
+                self.assertEqual(self.condition(name),
+                                 "github.ref == 'refs/heads/main' || github.event_name == 'pull_request'")
+        self.assertEqual(self.condition('Upload report-v1 package'),
+                         "github.ref == 'refs/heads/main' || "
+                         "(github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')")
+        self.assertEqual(self.condition('Upload report-v1 package'),
+                         self.condition('Upload verified publication handoff').replace(
+                             "github.event_name == 'pull_request' && steps.measure.outputs.reused == '0'",
+                             "github.ref == 'refs/heads/main' || "
+                             "(github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')"))
 
     def test_environment_is_pinned_and_template_never_approves_workflows(self):
         environment = re.search(r'(?m)^      BUILD_ENVIRONMENT: (\S+)$', self.workflow).group(1)

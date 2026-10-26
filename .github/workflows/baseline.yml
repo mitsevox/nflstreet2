@@ -218,9 +218,10 @@ jobs:
         run: |
           python3 tools/restore_history.py
           python3 tools/publication.py promote
-      # The shared site imports this package. A PR uploads one only when main may reuse its proof.
+      # The shared site imports this package. Every PR validates one; it uploads it only when
+      # main may reuse the PR's proof.
       - name: Prepare report-v1 inputs
-        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         env:
           REUSED: ${{ steps.publication.outputs.reused == 'true' }}
         run: |
@@ -230,7 +231,7 @@ jobs:
             python3 tools/report_v1.py
           fi
       - name: Check out pinned site report packager
-        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: mitsevox/mitsevox.github.io
@@ -238,12 +239,12 @@ jobs:
           path: build/site-tools
           persist-credentials: false
       - name: Set up site packager runtime
-        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
         with:
           version: '0.12.9'
       - name: Package and validate report-v1
-        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         run: |
           uv run --locked --project build/site-tools python build/site-tools/tools/package_report.py \
             --input build/report-v1/input --metadata build/report-v1/metadata.json \
