@@ -6,8 +6,8 @@ extern void fn_801D0544(void);
 extern void fn_801D0664(void *pMtx);
 extern void fn_801D06D4(void *pMtx);
 extern void fn_801D1288(int mode, void *pMtx);
-extern unsigned int fn_80213F18(void *pPoints, int numPoints, f32 (*pMtx)[4], Extent_802144AC *pExtent, void *pArg);
-extern unsigned int fn_80213DB0(void *pPoints, int numPoints, f32 (*pMtx)[4], void *pArg);
+extern unsigned int fn_80213F18(f32 *pPoints, int numPoints, f32 (*pMtx)[4], Extent_802144AC *pExtent, f32 *pDepth);
+extern unsigned int fn_80213DB0(f32 *pPoints, int numPoints, f32 (*pMtx)[4], f32 *pDepth);
 
 extern f32 lbl_8039B580[4][4];
 extern Mtx44 lbl_8039B5C0;

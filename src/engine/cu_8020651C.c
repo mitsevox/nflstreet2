@@ -5,6 +5,7 @@ int fn_802071F8(TDbExpr_801FAA00 *pExpr, unsigned int column, TDbExpr_801FAA00 *
 int fn_802072E8(TDbExpr_801FAA00 *pA, TDbExpr_801FAA00 *pB);
 extern unsigned int lbl_803EBE94;
 extern TDbMemPool_80202B60 lbl_803E968C;
+extern int lbl_802F9B78[];
 
 void fn_8020651C(TDbTable_801FAA00 *pTable, int row)
 {
@@ -382,3 +383,41 @@ int fn_802072E8(TDbExpr_801FAA00 *pA, TDbExpr_801FAA00 *pB)
     }
     return -1;
 }
+
+unsigned char fn_80207448(TDbExpr_801FAA00 *pExpr, unsigned int table, unsigned int *pOtherTable,
+                          TDbExpr_801FAA00 **ppSeek)
+{
+    TDbValue_801FDF28 tmp;
+    unsigned char column;
+
+    column = 0xFF;
+    if (pExpr->mOp != 0x2000A) {
+        if (pExpr->mLeft.mType >= TDB_TYPE_EXPR_TRUNC && pExpr->mLeft.mType <= TDB_TYPE_EXPR_FLOAT) {
+            column = fn_80207448(pExpr->mLeft.mValue.p, table, pOtherTable, ppSeek);
+        }
+        if (column == 0xFF) {
+            if (pExpr->mRight.mType >= TDB_TYPE_EXPR_TRUNC && pExpr->mRight.mType <= TDB_TYPE_EXPR_FLOAT) {
+                column = fn_80207448(pExpr->mRight.mValue.p, table, pOtherTable, ppSeek);
+            }
+            if (column == 0xFF && pExpr->mLeft.mType == TDB_TYPE_COLUMN && pExpr->mRight.mType == TDB_TYPE_COLUMN &&
+                (pExpr->mOp & 0x10000)) {
+                if (table == (pExpr->mRight.mValue.l >> 32)) {
+                    tmp = pExpr->mRight;
+                    pExpr->mRight = pExpr->mLeft;
+                    pExpr->mLeft = tmp;
+                    pExpr->mOp = lbl_802F9B78[pExpr->mOp - 0x10001];
+                    *ppSeek = pExpr;
+                    column = pExpr->mRight.mValue.l;
+                    *pOtherTable = pExpr->mLeft.mValue.l >> 32;
+                }
+                if (table == (pExpr->mLeft.mValue.l >> 32)) {
+                    *ppSeek = pExpr;
+                    column = pExpr->mLeft.mValue.l;
+                    *pOtherTable = pExpr->mRight.mValue.l >> 32;
+                }
+            }
+        }
+    }
+    return column;
+}
+

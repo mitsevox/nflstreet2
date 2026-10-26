@@ -97,6 +97,23 @@ void fn_8020F00C(void)
     fn_801D2BD0(lbl_803EBED0);
 }
 
+unsigned char *fn_8020F030(unsigned int size)
+{
+    unsigned char *p;
+
+    if (lbl_803EBED8 - lbl_803EBED4 > size) {
+        p = lbl_803EBED4;
+    } else {
+        p = lbl_803EBED0;
+    }
+    lbl_803EBED4 = p + size;
+    while ((unsigned int)lbl_803EBED4 & 31) {
+        *lbl_803EBED4 = 0;
+        lbl_803EBED4++;
+    }
+    return p;
+}
+
 void fn_8020F08C(Geom_8020ED10 *pPart, void *pOldBase, void *pNewBase)
 {
     unsigned int i;

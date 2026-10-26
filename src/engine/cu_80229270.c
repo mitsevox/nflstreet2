@@ -7,6 +7,9 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
+#include "engine/t3db.h"
+#include "engine/t3db_cols.h"
+#include "game/fn_8022F478.h"
 
 #include <string.h>
 
@@ -33,6 +36,9 @@ extern int fn_801F8D60(int handle, int a);
 extern int fn_801F8EEC(int handle);
 extern int fn_801F9134(int handle, void **ppData, int a, void *b);
 extern int fn_801F91AC(int handle, int a, int b);
+extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
+extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_801FC5FC *pDevice);
+extern TDbIODevice_801FC5FC lbl_8030199C;
 extern int fn_801F967C(int db, int tbl);
 extern int fn_8020D2D0(int tag, char *pName, int a, int b);
 int fn_8022F384(int key);
@@ -40,11 +46,35 @@ int fn_8022F384(int key);
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
-extern int fn_8022DB20(void);
+int fn_8022DB20(void);
 extern int fn_8022F428(int key);
+extern int fn_8022F4BC(void);
+extern void fn_80231208(void);
+int fn_8022F3D4(int key);
+extern int lbl_803ED6E4[2];
+extern char lbl_802B5D64[];
 extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
 extern char lbl_802B4EA0[];
+extern char lbl_802B4EC4[];
+extern char lbl_802B37E4[];
+extern char lbl_802B3824[];
+int fn_8022C0E0(struct QueryCursor cursor, int a);
+extern int fn_801FA1C0(int ref, unsigned short *pCount);
+extern int fn_80230D8C(int id, int a, int b);
+extern char lbl_802B3610[];
+extern char lbl_802B3698[];
+extern char lbl_802B479C[];
+extern char lbl_802B4828[];
+extern char lbl_802B5CB4[];
+extern char lbl_802B5CF0[];
+extern int fn_801F9014(int db);
+extern char lbl_802B3888[];
+extern char lbl_802B36C4[];
+extern int fn_801F9A90(int db, int tbl);
+extern int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int fn_801F9C68(int db, int tbl, int col);
+int fn_8022ED30(int db, int tbl);
 extern char lbl_802B5A48[];
 extern char lbl_802B5AB0[];
 extern char lbl_802B5ACC[];
@@ -104,7 +134,7 @@ typedef struct Node_8022CC6C {
     unsigned char mUnknown3;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
-    unsigned short mUnknown6;
+    short mUnknown6;
     unsigned short mUnknown8;
     char mUnknown10[2];
     struct Node_8022CC6C *mpUnknown12;
@@ -147,7 +177,50 @@ extern char lbl_802B519C[];
 extern char lbl_802B51BC[];
 extern int lbl_802FA600[];
 extern unsigned short lbl_802FAA1C[];
-extern char lbl_803A2390[];
+typedef struct Entry_803A2390 {
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
+    unsigned short mUnknown6;
+} Entry_803A2390;
+
+typedef struct Record_8022A304 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknownC;
+    unsigned char mUnknownD;
+    unsigned char mUnknownE;
+    char mUnknownF[1];
+    unsigned short mUnknown10;
+    unsigned short mUnknown12;
+    unsigned short mUnknown14;
+    char mUnknown16[2];
+} Record_8022A304;
+
+/* Ends a column list for fn_801F9718. */
+static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
+{
+    pCol->mCol = -1;
+    pCol->mUnk4 = -1;
+    pCol->mUnk0 = 0;
+}
+
+extern Record_8022A304 lbl_802FA180[21];
+extern Record_8022A304 lbl_802FA378[17];
+extern Record_8022A304 lbl_802FA510[10];
+
+typedef struct Callbacks_8022B02C {
+    int (*mpUnknown0)(int a, int b, int c, int d);
+    int (*mpUnknown4)(int a);
+} Callbacks_8022B02C;
+
+typedef struct Callbacks_8022C214 {
+    int (*mpUnknown0)(int a);
+    int (*mpUnknown4)(int a);
+} Callbacks_8022C214;
+
+extern Entry_803A2390 lbl_803A2390[];
 extern char lbl_803A23E8[];
 extern char lbl_803A2474[];
 extern struct QueryCursor lbl_803A25E0;
@@ -164,7 +237,14 @@ extern int (*lbl_803EBFFC)(void **ppData, void *p);
 extern int (*lbl_803EC000)(int a, int b);
 extern int (*lbl_803EC004)(void);
 extern int (*lbl_803EC008)(void);
-extern int lbl_803EC020;
+extern int lbl_803EC020[2];
+extern int *lbl_803EC010[1];
+extern unsigned char lbl_803EC014[1];
+extern TDbCol_801F9718 **lbl_803EC018[1];
+extern unsigned char *lbl_803EC01C[1];
+extern TDbCol_801F9718 *lbl_803EC024[1];
+extern unsigned char lbl_803ED01C[1];
+extern int fn_802311C8(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
 extern int (*lbl_803EC02C)(int a);
 extern unsigned char lbl_803EC030;
@@ -478,6 +558,45 @@ int fn_80229E80(void)
     return 0;
 }
 
+void fn_8022A304(void)
+{
+    unsigned short i;
+
+    for (i = 0; i < 21; i++) {
+        lbl_802FA180[i].mUnknown0 = 31;
+        lbl_802FA180[i].mUnknown4 = 31;
+        lbl_802FA180[i].mUnknown8 = 7;
+        lbl_802FA180[i].mUnknownC = 0;
+        lbl_802FA180[i].mUnknownD = 0;
+        lbl_802FA180[i].mUnknownE = 0;
+        lbl_802FA180[i].mUnknown10 = 0;
+        lbl_802FA180[i].mUnknown12 = 0;
+        lbl_802FA180[i].mUnknown14 = 0;
+    }
+    for (i = 0; i < 17; i++) {
+        lbl_802FA378[i].mUnknown0 = 31;
+        lbl_802FA378[i].mUnknown4 = 31;
+        lbl_802FA378[i].mUnknown8 = 7;
+        lbl_802FA378[i].mUnknownC = 0;
+        lbl_802FA378[i].mUnknownD = 0;
+        lbl_802FA378[i].mUnknownE = 0;
+        lbl_802FA378[i].mUnknown10 = 0;
+        lbl_802FA378[i].mUnknown12 = 0;
+        lbl_802FA378[i].mUnknown14 = 0;
+    }
+    for (i = 0; i < 10; i++) {
+        lbl_802FA510[i].mUnknown0 = 31;
+        lbl_802FA510[i].mUnknown4 = 31;
+        lbl_802FA510[i].mUnknown8 = 7;
+        lbl_802FA510[i].mUnknownC = 0;
+        lbl_802FA510[i].mUnknownD = 0;
+        lbl_802FA510[i].mUnknownE = 0;
+        lbl_802FA510[i].mUnknown10 = 0;
+        lbl_802FA510[i].mUnknown12 = 0;
+        lbl_802FA510[i].mUnknown14 = 0;
+    }
+}
+
 int fn_8022A428(int a)
 {
     return fn_801FCE10(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
@@ -572,6 +691,64 @@ int fn_8022AC80(Object_8022A59C *p)
     return err;
 }
 
+int fn_8022ACEC(int key, int unused, int col, int value, int index)
+{
+    TDbCol_801F9718 aCols[4];
+    int table;
+
+    table = lbl_803EC020[index];
+    aCols[0].mUnk0 = key;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = 0x44494754;
+    aCols[1].mCol = col;
+    aCols[1].mUnk4 = table;
+    aCols[1].mUnk0 = value;
+    fn_801F9718_SetEnd(&aCols[2]);
+    return fn_801F9718(0, table, aCols, 0, 0);
+}
+
+
+int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount)
+{
+    TDbColInfo_801F9AB8 aInfo[254];
+    unsigned int count;
+    int status;
+    int hasP;
+    int hasT;
+    unsigned char n;
+    unsigned char i;
+
+    n = 1;
+    hasP = fn_801F9C68(0, db, 0x44494750) == 0;
+    hasT = fn_801F9C68(0, db, 0x44494754) == 0;
+    count = 254;
+    status = fn_801F9AB8(0, db, aInfo, &count);
+    if (!hasP && !hasT) {
+        n = 0;
+    }
+    if (status == 0) {
+        *ppCols = fn_8022C938((count + 1) * 16, 1);
+        (*ppCols)[0].mCol = -1;
+        for (i = 0; i < count; i++) {
+            if (aInfo[i].mCol == 0x44494750 || aInfo[i].mCol == 0x44494754) {
+                (*ppCols)[0].mUnk4 = db;
+                (*ppCols)[0].mCol = aInfo[i].mCol;
+            } else {
+                (*ppCols)[n].mUnk4 = db;
+                (*ppCols)[n].mCol = aInfo[i].mCol;
+                n++;
+            }
+        }
+        fn_801F9718_SetEnd(&(*ppCols)[n]);
+    }
+    if (status == 0) {
+        *pCount = n;
+    } else {
+        *pCount = 0;
+    }
+    return status;
+}
+
 int fn_8022AEFC(unsigned int value)
 {
     int c = value >> 24;
@@ -593,6 +770,110 @@ int fn_8022AF54(int a, int b)
     return 0;
 }
 
+int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
+{
+    TDbCol_801F9718 aCols[4];
+    int table;
+    int err;
+
+    table = lbl_803EC010[set][index];
+    aCols[0].mUnk0 = key;
+    aCols[0].mUnk4 = table;
+    aCols[0].mCol = 0x44494750;
+    aCols[1].mCol = col;
+    aCols[1].mUnk4 = table;
+    aCols[1].mUnk0 = value;
+    fn_801F9718_SetEnd(&aCols[2]);
+    err = fn_801F9718(0, table, aCols, 0, 0);
+    if (err == 19) {
+        err = fn_8022AF54(set, index);
+        if (err == 0) {
+            err = fn_801F9718(0, table, aCols, 0, 0);
+        }
+    }
+    return err;
+}
+
+
+int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
+{
+    int status = 0;
+    int table;
+    unsigned char i;
+    unsigned char j;
+    unsigned char count;
+
+    for (i = 0; i < 1; i++) {
+        count = lbl_803EC014[i];
+        for (j = 0; j < count; j++) {
+            lbl_803EC018[i][j] = 0;
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        lbl_803EC024[i] = 0;
+    }
+    for (i = 0; i < 1; i++) {
+        count = lbl_803EC014[i];
+        for (j = 0; j < count; j++) {
+            table = lbl_803EC010[i][j];
+            if (fn_801F9A90(0, table) == 0) {
+                status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
+            } else {
+                lbl_803EC018[i][j] = 0;
+                lbl_803EC01C[i][j] = 0;
+            }
+            if (status != 0) {
+                break;
+            }
+        }
+        if (status != 0) {
+            break;
+        }
+    }
+    for (i = 0; i < 1 && status == 0; i++) {
+        table = lbl_803EC020[i];
+        if (fn_801F9A90(0, table) == 0) {
+            status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
+        } else {
+            lbl_803ED01C[i] = 0;
+        }
+    }
+    if (status == 0) {
+        if (pCallbacks != 0) {
+            lbl_803EC028 = pCallbacks->mpUnknown0;
+            lbl_803EC02C = pCallbacks->mpUnknown4;
+        }
+        status = fn_802311C8(0);
+    }
+    return status;
+}
+
+void fn_8022B200(void)
+{
+    unsigned char i;
+    unsigned char j;
+    unsigned char count;
+
+    fn_80231208();
+    for (i = 0; i < 1; i++) {
+        count = lbl_803EC014[i];
+        for (j = 0; j < count; j++) {
+            if (lbl_803EC018[i][j] != 0) {
+                fn_8022C988(lbl_803EC018[i][j]);
+                lbl_803EC018[i][j] = 0;
+            }
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        if (lbl_803EC024[i] != 0) {
+            fn_8022C988(lbl_803EC024[i]);
+            lbl_803EC024[i] = 0;
+        }
+    }
+    lbl_803EC028 = 0;
+    lbl_803EC02C = 0;
+}
+
 int fn_8022BF60(void)
 {
     return 0;
@@ -610,7 +891,7 @@ int fn_8022BF68(void)
         }
     }
     if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020);
+        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020[0]);
     }
     if (err == 0) {
         err = fn_801FCE10(0, lbl_802B35E4);
@@ -647,12 +928,210 @@ int fn_8022C098(int a)
     return err;
 }
 
+int fn_8022C0E0(struct QueryCursor cursor, int a)
+{
+    unsigned short total;
+    int *pIds;
+    int id;
+    int status;
+    unsigned short count;
+    unsigned short i;
+
+    pIds = 0;
+    status = fn_801FA1C0(cursor.mUnknown0, &total);
+    if (status == 0) {
+        pIds = fn_8022C938(total * 4, 0);
+    }
+    count = 0;
+    if (status == 0) {
+        while (status == 0) {
+            status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
+            if (status == 0) {
+                pIds[count] = id;
+                count++;
+            }
+        }
+        if (QUERY_STATUS_ACCEPTED(status) == 1) {
+            status = 0;
+        }
+        if (status == 0) {
+            for (i = 0; i < count; i++) {
+                status = fn_80230D8C(pIds[i], 0, a);
+                if (status != 0) {
+                    break;
+                }
+            }
+        }
+    }
+    if (pIds != 0) {
+        fn_8022C988(pIds);
+    }
+    return status;
+}
+
+int fn_8022C214(Callbacks_8022C214 *pCallbacks)
+{
+    struct QueryCursor cursor;
+    int status = 0;
+    int index;
+    unsigned short a;
+    unsigned short b;
+    unsigned short c;
+    unsigned short d;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    status = fn_801FCE10(0, lbl_802B3698, &cursor);
+    while (status == 0) {
+        status = fn_801FCE10(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
+        if (status == 0) {
+            lbl_803A2390[index].mUnknown0 = a;
+            lbl_803A2390[index].mUnknown2 = b;
+            lbl_803A2390[index].mUnknown4 = c;
+            lbl_803A2390[index].mUnknown6 = d;
+        }
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            status = fn_801FCFA0(&cursor);
+        } else {
+            status = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        fn_801FCFA0(&cursor);
+    }
+    if (status == 0) {
+        status = fn_8022ED30(0, 0x53525054);
+    } else {
+        fn_8022ED30(0, 0x53525054);
+    }
+    lbl_803EC030 = 0;
+    if (status == 0) {
+        lbl_803EC030 = fn_801F9A90(0, 0x53525054) == 0;
+        if (pCallbacks != 0) {
+            lbl_803EC034 = pCallbacks->mpUnknown0;
+            lbl_803EC038 = pCallbacks->mpUnknown4;
+        }
+    }
+    return status;
+}
+
 void fn_8022C3C8(void)
 {
-    fn_801D34D0(lbl_803A2390, 88, 0, 4);
+    fn_801D34D0((char *)lbl_803A2390, 88, 0, 4);
     lbl_803EC030 = 0;
     lbl_803EC034 = 0;
     lbl_803EC038 = 0;
+}
+
+int fn_8022C410(int a)
+{
+    struct QueryCursor cursor;
+    int status = 0;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    status = fn_801FCE10(0, lbl_802B37E4, &cursor, 0);
+    if (status == 0) {
+        status = fn_8022C0E0(cursor, a);
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            status = fn_801FCFA0(&cursor);
+        } else {
+            status = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        fn_801FCFA0(&cursor);
+    }
+    return status;
+}
+
+int fn_8022C518(int a)
+{
+    struct QueryCursor cursor;
+    int status = 0;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    status = fn_801FCE10(0, lbl_802B3824, &cursor, 0, 5, 1);
+    if (status == 0) {
+        status = fn_8022C0E0(cursor, a);
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            status = fn_801FCFA0(&cursor);
+        } else {
+            status = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        fn_801FCFA0(&cursor);
+    }
+    return status;
+}
+
+int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
+{
+    struct QueryCursor cursor;
+    int status = 0;
+    int id;
+    int prev;
+    int next;
+    int last;
+    unsigned short count;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    status = fn_801FCE10(0, lbl_802B3888, db, &cursor, tbl);
+    prev = -1;
+    next = -1;
+    last = 1023;
+    count = 0;
+    while (status == 0 && count < *pCount) {
+        status = fn_801FCE10(0, lbl_802B3610, &cursor, &id);
+        if (status == 0) {
+            if (id > prev + 1) {
+                next = prev + 1;
+                while (status == 0 && next < id && count < *pCount && next <= 1008) {
+                    pIds[count] = next;
+                    count++;
+                    next++;
+                }
+            }
+            last = (next > id) ? next : id;
+            prev = id;
+        }
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            status = fn_801FCFA0(&cursor);
+        } else {
+            status = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        fn_801FCFA0(&cursor);
+    }
+    if (status == 0 && count < *pCount) {
+        next = last + 1;
+        if (last == 1023) {
+            next = 0;
+        }
+        while (count < *pCount && next <= 1008) {
+            pIds[count] = next;
+            count++;
+            next++;
+        }
+    }
+    *pCount = count;
+    return status;
 }
 
 int fn_8022C81C(int a)
@@ -757,6 +1236,76 @@ void fn_8022CADC(void)
 {
     lbl_803EC054 = 0;
     lbl_803EC058 = 0;
+}
+
+void fn_8022CAEC(Node_8022CC6C **ppHead)
+{
+    Node_8022CC6C *pA;
+    Node_8022CC6C *pB;
+    Node_8022CC6C *pTmp;
+    int swapped;
+    int diff;
+    int remA;
+    int remB;
+
+    if ((*ppHead)->mpUnknown16 == 0) {
+        return;
+    }
+    do {
+        pA = *ppHead;
+        swapped = 0;
+        for (pB = pA->mpUnknown16; pB != 0; pB = pB->mpUnknown16, pA = pA->mpUnknown16) {
+            if (pB->mUnknown6 != pA->mUnknown6) {
+                diff = pB->mUnknown6 - pA->mUnknown6;
+            } else if (pB->mUnknown0 >= pB->mUnknown3 && pA->mUnknown0 >= pA->mUnknown3) {
+                if (pB->mUnknown0 != pA->mUnknown0) {
+                    diff = pB->mUnknown0 - pA->mUnknown0;
+                } else if (pA->mUnknown4 >= 21 && pA->mUnknown4 <= 25) {
+                    if (pB->mUnknown4 >= 21 && pB->mUnknown4 <= 25) {
+                        diff = pB->mUnknown2 - pA->mUnknown2;
+                    } else {
+                        diff = 1;
+                    }
+                } else if (pB->mUnknown4 >= 21 && pB->mUnknown4 <= 25) {
+                    diff = -1;
+                } else {
+                    diff = pB->mUnknown2 - pA->mUnknown2;
+                }
+            } else {
+                remB = pB->mUnknown0 - pB->mUnknown3;
+                remA = pA->mUnknown0 - pA->mUnknown3;
+                if (remB == remA) {
+                    if (pB->mUnknown0 != pA->mUnknown0) {
+                        diff = pB->mUnknown0 - pA->mUnknown0;
+                    } else {
+                        diff = pB->mUnknown2 - pA->mUnknown2;
+                    }
+                } else {
+                    diff = (remB > remA) ? -1 : 1;
+                }
+            }
+            if (diff < 0) {
+                if (pB->mpUnknown12 != 0) {
+                    pB->mpUnknown12->mpUnknown16 = pB->mpUnknown16;
+                }
+                if (pB->mpUnknown16 != 0) {
+                    pB->mpUnknown16->mpUnknown12 = pB->mpUnknown12;
+                }
+                if (pA->mpUnknown12 != 0) {
+                    pA->mpUnknown12->mpUnknown16 = pB;
+                } else {
+                    *ppHead = pB;
+                }
+                pB->mpUnknown12 = pA->mpUnknown12;
+                pA->mpUnknown12 = pB;
+                pB->mpUnknown16 = pA;
+                swapped = 1;
+                pTmp = pA;
+                pA = pB;
+                pB = pTmp;
+            }
+        }
+    } while (swapped == 1);
 }
 
 Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key)
@@ -976,6 +1525,35 @@ unsigned short fn_8022D3D4(unsigned char key)
     return value;
 }
 
+int fn_8022D418(int a, int b, int mode)
+{
+    int tblA;
+    int tblB;
+    int status;
+
+    if (mode == 1) {
+        tblA = 0x41474C50;
+        tblB = 0x41474344;
+    } else {
+        tblA = 0x59414C50;
+        tblB = 0x54484344;
+    }
+    lbl_802FA8B0.mUnknown0 = 0;
+    lbl_802FA8B0.mUnknown4 = 0;
+    lbl_802FA8B0.mUnknown8 = -1;
+    lbl_802FA8B0.mUnknown12 = 0;
+    if (a != 1023 && b != 1023) {
+        status = fn_801FCE10(0, lbl_802B479C, &lbl_802FA8B0, tblA, tblB, tblB, tblA, tblA, 0, tblB, tblB);
+    } else {
+        status = fn_801FCE10(0, lbl_802B4828, &lbl_802FA8B0, tblA, tblB, tblB, tblA, tblA, (a != 1023) ? a : b,
+                             tblA, 0, tblB, tblB);
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        status = 0;
+    }
+    return status;
+}
+
 int fn_8022D540(void)
 {
     int result;
@@ -1141,6 +1719,17 @@ void fn_8022DB08(void)
     lbl_803EC06C = 0;
     lbl_803EC070 = 0;
     lbl_803EC074 = 0;
+}
+
+int fn_8022DB20(void)
+{
+    int result;
+
+    result = fn_801FCE10(0, lbl_802B4EC4, 999.99f, 999.99f, 15, 2047, 15, 127, 127, 127, -1, 1023, 63, 63, 4, 3,
+                         255, 1023, 63, 63, 4, 3, 255, 1023, -1, 15, 1023, 15, 0, 0);
+    lbl_803EC07C = 1023;
+    lbl_803EC080 = 1023;
+    return result;
 }
 
 int fn_8022DBF4(int value)
@@ -1467,6 +2056,52 @@ int fn_8022ED30(int db, int tbl)
     return fn_801F967C(db, tbl);
 }
 
+int fn_8022ED50(int db, int a, int b)
+{
+    struct QueryCursor cursor;
+    int tbl;
+    int status = 0;
+    int opened = 0;
+
+    if (fn_801F9014(0x54415453) != 0) {
+        status = fn_8022EC80();
+        opened = status == 0;
+    }
+    if (status == 0) {
+        cursor.mUnknown0 = 0;
+        cursor.mUnknown4 = 0;
+        cursor.mUnknown8 = -1;
+        cursor.mUnknown12 = 0;
+        status = fn_801FCE10(0, lbl_802B5CB4, db, &cursor, a, b, 1);
+        while (status == 0) {
+            status = fn_801FCE10(0, lbl_802B5CF0, &cursor, &tbl);
+            if (status == 0 && fn_801F9A90(db, tbl) != 0) {
+                status = fn_8022ECF4(db, tbl);
+                if (QUERY_STATUS_ACCEPTED(status) == 1) {
+                    status = 0;
+                }
+            }
+        }
+        if (QUERY_STATUS_ACCEPTED(status) == 1) {
+            if (cursor.mUnknown0 != 0) {
+                status = fn_801FCFA0(&cursor);
+            } else {
+                status = 0;
+            }
+        } else if (cursor.mUnknown0 != 0) {
+            fn_801FCFA0(&cursor);
+        }
+    }
+    if (opened == 1) {
+        if (status == 0) {
+            status = fn_8022ECCC();
+        } else {
+            fn_8022ECCC();
+        }
+    }
+    return status;
+}
+
 int fn_8022EF14(const char *pName)
 {
     lbl_803EC0C0 = fn_8022C938(strlen(pName) + 1, 1);
@@ -1478,6 +2113,11 @@ void fn_8022EF60(void)
 {
     fn_8022C988(lbl_803EC0C0);
     lbl_803EC0C0 = 0;
+}
+
+int fn_8022EF8C(int db, int file)
+{
+    return fn_801F9064(db, file, lbl_803EC0C0, 3, &lbl_8030199C);
 }
 
 int fn_8022EFBC(int db, int tbl)
@@ -1513,6 +2153,70 @@ void fn_8022F094(void)
     lbl_803EC0D0 = -1;
     lbl_803EC0D4 = -1;
     lbl_803EC0D8 = 0;
+}
+
+int fn_8022F0D4(void)
+{
+    unsigned char i;
+    int id;
+    int key;
+    int old;
+
+    id = -1;
+    if ((signed char)lbl_803EC0D8 <= 1) {
+        for (i = 0; fn_8022F428(key = lbl_803ED6E4[i]) != -1; i++) {
+        }
+        id = fn_8022EFDC();
+        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
+        lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
+        fn_8020D2D0(key, lbl_803EC0CC, lbl_803EC0D0, 0);
+        lbl_803EC0D8++;
+        old = fn_8022F478(id);
+        fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
+        fn_8022F478(old);
+    }
+    return id;
+}
+
+void fn_8022F1BC(int key)
+{
+    signed char index;
+
+    if (key != -1) {
+        index = fn_8022F384(key);
+        if (index != -1) {
+            lbl_803EC0D8--;
+            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            for (; index < (signed char)lbl_803EC0D8; index++) {
+                lbl_802FB300[index] = lbl_802FB300[index + 1];
+            }
+            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = -1;
+            lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = -1;
+        }
+    }
+}
+
+void fn_8022F294(int key)
+{
+    int index;
+    int id;
+    int old;
+
+    if (key != -1) {
+        index = fn_8022F384(key);
+        if (index != -1) {
+            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            id = fn_8022EFDC();
+            old = fn_8022F478(key);
+            fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
+            lbl_802FB300[index].mUnknown0 = id;
+            if (old == key) {
+                fn_8022F478(id);
+            } else {
+                fn_8022F478(old);
+            }
+        }
+    }
 }
 
 int fn_8022F34C(void)

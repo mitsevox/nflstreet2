@@ -594,11 +594,11 @@ int fn_80230CEC(int a, int b, int c, int key, int e, int f)
     return err;
 }
 
-void fn_802311C8(int handle)
+int fn_802311C8(int handle)
 {
     lbl_803EC0E8 = handle;
     lbl_803EC0E4 = 0x4F434350;
-    fn_801FA68C(fn_8023123C, 0x4F434350);
+    return fn_801FA68C(fn_8023123C, 0x4F434350);
 }
 
 void fn_80231208(void)
