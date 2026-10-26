@@ -159,9 +159,11 @@ class Timeline(Fixture):
         rows = report_v1.timeline_document(self.site, feed, 1, 1, cut)['snapshots']
         self.assertEqual([r['provenance']['kind'] for r in rows], ['inherited', 'measured'])
 
-    def test_committed_history_config_has_no_cutover_until_the_site_switches(self):
+    def test_committed_cutover_is_the_site_frozen_legacy_row(self):
+        # Copied verbatim from the site's frozen legacy selection (run 40253689256, 160 rows).
         history = json.loads((ROOT/report_v1.HISTORY).read_text())
-        self.assertEqual(history, dict(schemaVersion=1, inheritedThrough=None))
+        self.assertEqual(history, dict(schemaVersion=1, inheritedThrough=dict(
+            revision='caec9316e808e72ccbaf79c5ec108d1ac9fa08d0', built_at='2026-10-26T01:23:04.825014+00:00')))
 
     def test_pull_request_merge_is_appended_as_candidate_evidence(self):
         feed = copy.deepcopy(self.feed); feed['snapshots'].pop()
