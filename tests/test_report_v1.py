@@ -97,8 +97,10 @@ class Contributors(Fixture):
 
 
 class Timeline(Fixture):
+    cut = dict(revision='b'*40, built_at='2026-10-01T00:00:00Z')
+
     def test_rows_through_the_cutover_are_inherited_and_later_rows_are_measured(self):
-        rows = report_v1.timeline_document(self.site, self.feed, 1, 1, 'b'*40)['snapshots']
+        rows = report_v1.timeline_document(self.site, self.feed, 1, 1, self.cut)['snapshots']
         self.assertEqual([r['provenance'] for r in rows], [
             dict(kind='inherited', record=self.feed['snapshots'][0],
                  source='nflstreet2 workflow-artifact run 5 artifact 6 report sha256:'+'c'*64),
@@ -113,16 +115,29 @@ class Timeline(Fixture):
         self.assertEqual([r['provenance']['kind'] for r in rows], ['measured', 'measured'])
 
     def test_a_row_never_changes_between_runs_or_when_history_grows(self):
-        first = report_v1.timeline_document(self.site, self.feed, 1, 1, 'b'*40)['snapshots']
-        self.assertEqual(first, report_v1.timeline_document(self.site, self.feed, 2, 3, 'b'*40)['snapshots'])
+        first = report_v1.timeline_document(self.site, self.feed, 1, 1, self.cut)['snapshots']
+        self.assertEqual(first, report_v1.timeline_document(self.site, self.feed, 2, 3, self.cut)['snapshots'])
         feed = copy.deepcopy(self.feed)
         feed['snapshots'].append(dict(feed['snapshots'][1], revision='e'*40))
         site = dict(self.site, revision='e'*40)
-        self.assertEqual(report_v1.timeline_document(site, feed, 3, 1, 'b'*40)['snapshots'][:2], first)
+        self.assertEqual(report_v1.timeline_document(site, feed, 3, 1, self.cut)['snapshots'][:2], first)
 
     def test_cutover_outside_the_history_fails(self):
         with self.assertRaisesRegex(ValueError, 'cutover is not in the verified history'):
-            report_v1.timeline_document(self.site, self.feed, 1, 1, 'f'*40)
+            report_v1.timeline_document(self.site, self.feed, 1, 1,
+                                        dict(revision='f'*40, built_at='2026-10-02T00:00:00Z'))
+        with self.assertRaisesRegex(ValueError, 'cutover differs from the verified history'):
+            report_v1.timeline_document(self.site, self.feed, 1, 1,
+                                        dict(revision='b'*40, built_at='2026-10-02T00:00:00Z'))
+
+    def test_a_seed_history_ending_before_the_cutover_is_all_inherited(self):
+        # PR runs see only the committed seed, which ends before the pinned legacy cutover.
+        cut = dict(revision='f'*40, built_at='2026-10-26T00:00:00Z')
+        rows = report_v1.timeline_document(self.site, self.feed, 1, 1, cut)['snapshots']
+        self.assertEqual([r['provenance']['kind'] for r in rows], ['inherited', 'inherited'])
+        feed = copy.deepcopy(self.feed); feed['snapshots'].pop()
+        rows = report_v1.timeline_document(self.site, feed, 1, 1, cut)['snapshots']
+        self.assertEqual([r['provenance']['kind'] for r in rows], ['inherited', 'measured'])
 
     def test_committed_history_config_has_no_cutover_until_the_site_switches(self):
         history = json.loads((ROOT/report_v1.HISTORY).read_text())
@@ -130,7 +145,7 @@ class Timeline(Fixture):
 
     def test_pull_request_merge_is_appended_as_candidate_evidence(self):
         feed = copy.deepcopy(self.feed); feed['snapshots'].pop()
-        rows = report_v1.timeline_document(self.site, feed, 40, 2, 'b'*40)['snapshots']
+        rows = report_v1.timeline_document(self.site, feed, 40, 2, self.cut)['snapshots']
         self.assertEqual(rows[-1]['revision'], 'a'*40)
         self.assertEqual(rows[-1]['provenance']['kind'], 'measured')
         self.assertEqual(rows[-1]['code'], dict(total=32, linked=0))

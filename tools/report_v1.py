@@ -6,6 +6,7 @@ ledger and, for a reused main publication, the authenticated PR receipt). Packag
 contract's semantic checks run in the site's pinned packager; this tool never measures anything.
 """
 import argparse
+from datetime import datetime
 import json
 import os
 from pathlib import Path
@@ -112,15 +113,28 @@ def source(provenance):
     raise ValueError('Unknown history provenance')
 
 
+def instant(value):
+    return datetime.fromisoformat(value.replace('Z', '+00:00'))
+
+
 def timeline_document(site, feed, run, attempt, inherited_through=None):
-    # Rows the site accepted through its legacy import, up to the revision pinned in
-    # HISTORY, keep their exact original record, as the site requires when it replaces a legacy
-    # row. Every later row is this producer's own measurement. A row's kind depends only on its
-    # place in the feed, so an accepted row never changes.
+    # Rows the site accepted through its legacy import, up to the row pinned in HISTORY, keep
+    # their exact original record, as the site requires when it replaces a legacy row. Every
+    # later row is this producer's own measurement. A row's kind depends only on its place in
+    # the history, so an accepted row never changes.
     revisions = [r['revision'] for r in feed['snapshots']]
-    if inherited_through is not None and inherited_through not in revisions:
-        raise ValueError('Inherited history cutover is not in the verified history')
-    cutover = revisions.index(inherited_through) + 1 if inherited_through is not None else 0
+    cutover = 0
+    if inherited_through is not None:
+        if inherited_through['revision'] in revisions:
+            cutover = revisions.index(inherited_through['revision']) + 1
+            if feed['snapshots'][cutover - 1]['built_at'] != inherited_through['built_at']:
+                raise ValueError('Inherited history cutover differs from the verified history')
+        # A PR's feed is the committed seed, which can end before the cutover; it never extends
+        # past it without containing it.
+        elif all(instant(r['built_at']) < instant(inherited_through['built_at']) for r in feed['snapshots']):
+            cutover = len(revisions)
+        else:
+            raise ValueError('Inherited history cutover is not in the verified history')
     rows = []
     for index, r in enumerate(feed['snapshots']):
         provenance = {'kind': 'measured', 'source': source(r['provenance'])}
