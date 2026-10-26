@@ -256,6 +256,48 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           path: build/site
+      # The shared site imports this package. Every PR validates one; it uploads it only when
+      # main may reuse the PR's proof. It runs last so every existing output is saved first; a
+      # failure here still fails the job and so holds back the Pages deploy.
+      - name: Prepare report-v1 inputs
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+        env:
+          REUSED: ${{ steps.publication.outputs.reused == 'true' }}
+        run: |
+          if [ "$REUSED" = true ]; then
+            python3 tools/report_v1.py --reused-receipt build/publication-receipt.json
+          else
+            python3 tools/report_v1.py
+          fi
+      - name: Check out pinned site report packager
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: mitsevox/mitsevox.github.io
+          ref: f91cd53590574ba25ddc77bc4f3ab17857424cdf
+          path: build/site-tools
+          persist-credentials: false
+      - name: Set up site packager runtime
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+        uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+        with:
+          version: '0.12.9'
+      - name: Package and validate report-v1
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+        run: |
+          uv run --locked --project build/site-tools python build/site-tools/tools/package_report.py \
+            --input build/report-v1/input --metadata build/report-v1/metadata.json \
+            --policy build/report-v1/policy.json --output build/report-v1/package
+      - name: Upload report-v1 package
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && steps.measure.outputs.reused == '0')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: report-v1
+          path: build/report-v1/package/*.json
+          if-no-files-found: error
+          retention-days: 90
+          # The site requires this exact name, so a re-run replaces the earlier attempt's package.
+          overwrite: true
 
   pages:
     name: Publish progress

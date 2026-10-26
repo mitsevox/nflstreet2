@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import zipfile
@@ -21,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY = 'mitsevox/nflstreet2'
 WORKFLOW = '.github/workflows/baseline.yml'
 ARTIFACT = 'verified-publication-v1'
+REPORT_V1 = 'report-v1'
 FILES = {'progress.json', 'compiled.json', 'credits.json', 'manifest.json'}
 MAX_ARCHIVE = 32 * 1024 * 1024
 MAX_PAYLOAD = 80 * 1024 * 1024
@@ -33,6 +35,7 @@ REQUIRED_STEPS = (
     'Verify both progress exports, maps, history and contributor credits',
     'Verify activity and live receipts on the host',
     'Prepare verified publication handoff', 'Upload verified publication handoff',
+    'Prepare report-v1 inputs', 'Package and validate report-v1', 'Upload report-v1 package',
 )
 
 
@@ -162,6 +165,24 @@ def authenticate(root, revision, environment, pr, run, jobs, artifact, commit, m
         raise ValueError('Publication artifact is stale or outside successful attempt')
 
 
+def report_v1_artifact(run, jobs, artifacts):
+    """The final PR's full report-v1 package, which a reused main report must cite."""
+    baseline = [j for j in jobs if j['name'] == 'Toolchain baseline' and j.get('run_attempt') == run['run_attempt']]
+    if len(baseline) != 1:
+        return None
+    # Only this attempt's uploads count, as on the site, so a rerun keeps its proof.
+    matches = [a for a in artifacts if a['name'] == REPORT_V1 and not a['expired']
+               and a.get('workflow_run', {}).get('id') == run['id']
+               and run['run_started_at'] <= a['created_at'] <= baseline[0]['completed_at']]
+    if len(matches) != 1:
+        return None
+    artifact = matches[0]
+    if not re.fullmatch(r'sha256:[0-9a-f]{64}', artifact.get('digest') or ''):
+        return None
+    return dict(artifact=artifact['id'], sha256=artifact['digest'].removeprefix('sha256:'),
+                attempt=run['run_attempt'])
+
+
 def select(root, revision, environment, output):
     """Missing or invalid execution proof falls back; publication checks fail closed."""
     output.unlink(missing_ok=True)
@@ -188,8 +209,11 @@ def select(root, revision, environment, output):
                         authenticate(root, revision, environment, pr, run, jobs, artifact, commit, manifest)
                     except (ValueError, KeyError, TypeError, zipfile.BadZipFile, zlib.error, NotImplementedError, RuntimeError):
                         continue
+                    report = report_v1_artifact(run, jobs, pages(f"actions/runs/{run['id']}/artifacts", 'artifacts'))
+                    if report is None:
+                        continue  # Reuse publishes the original shared-site package; without it, rebuild.
                     output.parent.mkdir(parents=True, exist_ok=True)
-                    output.write_bytes(encoded(dict(manifest=manifest, payloads=payloads,
+                    output.write_bytes(encoded(dict(manifest=manifest, payloads=payloads, report_v1=report,
                         provenance=dict(kind='workflow-artifact', run=run['id'], artifact=artifact['id'],
                                         report_sha256=manifest['files']['compiled.json']))))
                     print(f"Reusing final PR #{pr['number']} proof from run {run['id']} on identical tree")
