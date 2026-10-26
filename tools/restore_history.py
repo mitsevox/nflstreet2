@@ -3,7 +3,7 @@
 
 Two sources are merged: this repository's last successful main package, which is current, and
 the shared site's accepted store, which outlives artifact retention. Every row the site has
-accepted is therefore carried forward, which its import requires.
+accepted must survive unchanged, as its import requires; a disagreement fails.
 """
 import argparse
 import hashlib
@@ -18,7 +18,6 @@ REPOSITORY='mitsevox/nflstreet2'
 SITE='mitsevox/mitsevox.github.io'
 STORE_REF='report-data'
 WORKFLOW='.github/workflows/baseline.yml'
-PACKAGE=('manifest.json','receipt.json','summary.json','map.json','timeline.json','contributors.json')
 LIMIT=32*1024*1024
 
 
@@ -61,12 +60,16 @@ def package(archive, artifact, run, target):
     if len(archive)>LIMIT or artifact.get('digest')!='sha256:'+digest(archive):
         raise ValueError('Report package digest or size is invalid')
     with zipfile.ZipFile(io.BytesIO(archive)) as zipped:
-        entries=zipped.infolist()
-        if sorted(e.filename for e in entries)!=sorted(PACKAGE) or any(
-                e.file_size>LIMIT or ((e.external_attr>>16)&0o170000) not in (0,0o100000) for e in entries):
+        entries={e.filename:e for e in zipped.infolist()}
+        # The site's packager owns the file list; only the manifest and the timeline it names are read.
+        if 'manifest.json' not in entries or any(
+                e.file_size>LIMIT or ((e.external_attr>>16)&0o170000) not in (0,0o100000) for e in entries.values()):
             raise ValueError('Invalid report package entries')
         manifest=json.loads(zipped.read('manifest.json'))
-        timeline=zipped.read('timeline.json')
+        path=manifest.get('modules',{}).get('timeline',{}).get('asset',{}).get('path')
+        if path not in entries:
+            raise ValueError('Invalid report package entries')
+        timeline=zipped.read(path)
     if manifest.get('revision')!=run['head_sha']:
         raise ValueError('Report package belongs to another revision')
     return history(timeline,manifest,target)
@@ -125,6 +128,11 @@ def restore(root, seed, revision):
     if not sources:
         raise ValueError('No authenticated published history; publication cannot reset history')
     rows=activity.merge_history(sources[0],sources[-1] if len(sources)>1 else None)
+    if store is not None:
+        # The site rejects any import that changes a row it accepted, so a disagreement fails here.
+        merged={r['revision']:r for r in rows}
+        if any(merged[r['revision']]!=r for r in store['snapshots']):
+            raise ValueError('Main package history differs from the rows the site accepted')
     document={'schema':1,'target':'GN7E69','target_sha1':target,'revision':sources[0]['revision'],'snapshots':rows}
     return document,{'sources':[r for r in (own_receipt,store_receipt) if r is not None]}
 

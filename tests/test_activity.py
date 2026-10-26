@@ -437,7 +437,7 @@ class RestoreTests(unittest.TestCase):
         timeline=json.dumps(report_v1.timeline_document(site,feed,1,1,cutover)).encode()
         output=io.BytesIO()
         with zipfile.ZipFile(output,'w') as zipped:
-            for name in restore_history.PACKAGE:
+            for name in ('manifest.json','receipt.json','summary.json','map.json','timeline.json','contributors.json'):
                 zipped.writestr(name,json.dumps(self.manifest(feed['revision'],timeline)) if name=='manifest.json'
                                 else timeline if name=='timeline.json' else b'{}')
         return output.getvalue()
@@ -546,6 +546,32 @@ class RestoreTests(unittest.TestCase):
                 restore_history.restore(Path('.'),{'target_sha1':self.target},'f'*40)
         with self.assertRaisesRegex(ValueError,'outside this revision history'):
             self.restore([],(store,'nfl-activity-v1'),ancestors=set())
+
+    def test_main_package_cannot_change_a_row_the_site_accepted(self):
+        own=self.feed('a'*40,'b'*40);store=self.feed('a'*40,'b'*40)
+        store['snapshots'][1]['provenance']={'kind':'verified-source-build','report_sha256':'d'*64}
+        with self.assertRaisesRegex(ValueError,'differs from the rows the site accepted'):
+            self.restore([{'id':7,'head_sha':'b'*40,'archive':self.package(own)}],(store,'nfl-activity-v1'))
+        store=self.feed('a'*40,'b'*40);store['snapshots'][1]['built_at']='2026-10-03T10:00:00Z'
+        with self.assertRaisesRegex(ValueError,'differs from the rows the site accepted'):
+            self.restore([{'id':7,'head_sha':'b'*40,'archive':self.package(own)}],(store,'nfl-activity-v1'))
+
+    def test_package_entries_follow_the_manifest(self):
+        feed=self.feed('a'*40)
+        archive=self.package(feed)
+        output=io.BytesIO()
+        with zipfile.ZipFile(io.BytesIO(archive)) as source,zipfile.ZipFile(output,'w') as zipped:
+            for entry in source.infolist():
+                zipped.writestr(entry.filename,source.read(entry))
+            zipped.writestr('extra.json',b'{}')
+        document,_=self.restore([{'id':7,'head_sha':'a'*40,'archive':output.getvalue()}])
+        self.assertEqual(document['snapshots'],feed['snapshots'])
+        output=io.BytesIO()
+        with zipfile.ZipFile(io.BytesIO(archive)) as source,zipfile.ZipFile(output,'w') as zipped:
+            for entry in source.infolist():
+                if entry.filename!='timeline.json':zipped.writestr(entry.filename,source.read(entry))
+        with self.assertRaisesRegex(ValueError,'Invalid report package entries'):
+            self.restore([{'id':7,'head_sha':'a'*40,'archive':output.getvalue()}])
 
 
 class ExactInventoryTests(unittest.TestCase):
