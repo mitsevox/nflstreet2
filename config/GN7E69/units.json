@@ -13718,6 +13718,25 @@
           "end": "0x801BAD98"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801E8478.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801E8478.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8478",
+          "end": "0x801E8798"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1548",
+          "end": "0x802B1570"
+        }
+      ]
     }
   ]
 }

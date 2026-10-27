@@ -1,31 +1,8 @@
 #include "engine/Body_801E9538.h"
 #include "game/fn_802270D4.h"
 
-extern "C" {
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D06D4(float (*m)[4]);
-}
-
-/* Constraint interface. */
-class Class_801E850C {
-public:
-    virtual void vfn_01() = 0;
-};
-
-/* Point-to-point joint between two bodies. */
-class Class_801E8478 : public Class_801E850C {
-public:
-    Class_801E8478(Body_801E9538 *pBodyA, Body_801E9538 *pBodyB, Vec3_801DE1E0 *pAnchorA,
-                   Vec3_801DE1E0 *pAnchorB);
-    virtual void vfn_01();
-    virtual ~Class_801E8478();
-
-    Body_801E9538 *mpBodyA;
-    Vec3_801DE1E0 mAnchorA;
-    Body_801E9538 *mpBodyB;
-    Vec3_801DE1E0 mAnchorB;
-};
+#include "engine/cu_801E8478.h"
+#include "engine/cu_801D03D0.h"
 
 Class_801E8478::Class_801E8478(Body_801E9538 *pBodyA, Body_801E9538 *pBodyB,
                                Vec3_801DE1E0 *pAnchorA, Vec3_801DE1E0 *pAnchorB)
@@ -55,18 +32,18 @@ void Class_801E8478::vfn_01()
     Vec3_801DE1E0 turnA;
     Vec3_801DE1E0 turnB;
     Vec3_801DE1E0 impulse;
-    float (*pMatrixA)[4];
-    float (*pMatrixB)[4];
-    float (*pInertiaA)[4];
-    float (*pInertiaB)[4];
+    float *pMatrixA;
+    float *pMatrixB;
+    float *pInertiaA;
+    float *pInertiaB;
     float length;
     float invMassA;
     float invMassB;
     float dotA;
 
     fn_801D04C4();
-    pMatrixA = mpBodyA->mUnknown088;
-    pMatrixB = mpBodyB->mUnknown088;
+    pMatrixA = mpBodyA->mUnknown088[0];
+    pMatrixB = mpBodyB->mUnknown088[0];
     fn_801D06D4(pMatrixA);
     fn_80227CC0(&pointA, &mAnchorA);
     fn_801D06D4(pMatrixB);
@@ -82,8 +59,8 @@ void Class_801E8478::vfn_01()
         fn_80227264(&normal, &error, 1.0f / length);
         fn_802276B4(&armA, &pointA, &mpBodyA->mUnknown064);
         fn_802276B4(&armB, &pointB, &mpBodyB->mUnknown064);
-        pInertiaA = mpBodyA->mUnknown0C8;
-        pInertiaB = mpBodyB->mUnknown0C8;
+        pInertiaA = mpBodyA->mUnknown0C8[0];
+        pInertiaB = mpBodyB->mUnknown0C8[0];
         fn_802277DC(&crossA, &armA, &normal);
         fn_802277DC(&crossB, &armB, &normal);
         fn_801D06D4(pInertiaA);

@@ -1,3 +1,4 @@
+#include "engine/TibNew.h"
 #include "game/fn_801D2B7C.h"
 
 void *operator new(unsigned int size, int heap)

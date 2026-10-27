@@ -47372,42 +47372,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E8478.cpp",
-      "profile": "game_cpp",
-      "evidence": "E3 lane draft of the C++ joint class over 0x801E8478-0x801E8798 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1548-0x802B1570 (literal pool and vtable). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E8478",
-          "end": "0x801E8798"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1548",
-          "end": "0x802B1570"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_801E8478P13Body_801E9538T1P13Vec3_801DE1E0T3",
-          "start": "0x801E8478",
-          "end": "0x801E84CC"
-        },
-        {
-          "symbol": "_._14Class_801E8478",
-          "start": "0x801E84CC",
-          "end": "0x801E850C"
-        },
-        {
-          "symbol": "vfn_01__14Class_801E8478",
-          "start": "0x801E850C",
-          "end": "0x801E8798"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801E8798.cpp",
       "profile": "game_cpp",
       "evidence": "E3 lane draft of cu_801E8798.cpp over 0x801E8798-0x801E8C78 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1570-0x802B15F8. Draft comparisons only; original assembly remains linked.",
