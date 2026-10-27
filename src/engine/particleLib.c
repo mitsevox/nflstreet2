@@ -86,8 +86,6 @@ extern Vec3_801DE1E0 lbl_802F94C4;
 extern unsigned char lbl_803EBD58;
 extern float lbl_803ECF4C;
 
-float fn_801CF69C(void *p);
-int fn_801CF6D4(void *p, int range);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);

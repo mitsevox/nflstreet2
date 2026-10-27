@@ -245,8 +245,10 @@ void *fn_801CF5BC(int type, int seed)
     return pStream;
 }
 
-int fn_801CF60C(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSrc)
+int fn_801CF60C(void *pDstHandle, void *pSrcHandle)
 {
+    RandStream_801CEFF0 *pDst = pDstHandle;
+    RandStream_801CEFF0 *pSrc = pSrcHandle;
     int type = pDst->mType;
     int result = 0x40003;
 
@@ -256,8 +258,9 @@ int fn_801CF60C(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSrc)
     return result;
 }
 
-int fn_801CF664(RandStream_801CEFF0 *pStream)
+int fn_801CF664(void *pHandle)
 {
+    RandStream_801CEFF0 *pStream = pHandle;
     return lbl_802F7B00[pStream->mType];
 }
 
@@ -266,12 +269,13 @@ int fn_801CF67C(void *pStream)
     return fn_801D2BD0(pStream);
 }
 
-float fn_801CF69C(RandStream_801CEFF0 *pStream)
+float fn_801CF69C(void *pHandle)
 {
+    RandStream_801CEFF0 *pStream = pHandle;
     return lbl_802F7AF4[pStream->mType](pStream);
 }
 
-unsigned int fn_801CF6D4(RandStream_801CEFF0 *pStream, unsigned int range)
+unsigned int fn_801CF6D4(void *pStream, unsigned int range)
 {
     float value = fn_801CF69C(pStream) * (float)range;
 
