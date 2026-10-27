@@ -43,11 +43,11 @@ typedef struct SkelPose_801C4960 {
     void *mpOutput; /* quaternions or 4x4 matrices */
 } SkelPose_801C4960;
 
-/* Running rotation and position while walking the hierarchy (448 bytes of stack). */
+/* Running rotation and position while walking the hierarchy. */
 typedef struct SkelXform_801C4960 {
     float mQuat[4];
     float mPos[4];
-    float mWork[104];
+    unsigned char mUnknown20[416];
 } SkelXform_801C4960;
 
 #endif

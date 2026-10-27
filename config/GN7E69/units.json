@@ -13718,6 +13718,25 @@
           "end": "0x801BAD98"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C4960.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C4960-0x801C4F64, exact function rows and data row 0x802F48C0-0x802F4980; all twelve functions and the complete 48-entry callback table are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C4960",
+          "end": "0x801C4F64"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F48C0",
+          "end": "0x802F4980"
+        }
+      ]
     }
   ]
 }
