@@ -1,3 +1,4 @@
+#include "engine/t3db.h"
 #include "engine/tdbext.h"
 #include "engine/fn_8022C938.h"
 #include "engine/fn_801F9134.h"
@@ -276,8 +277,6 @@ extern int fn_801EF390(void *pData, int index, int a);
 extern int fn_801EFF80(void *pArchive, int id, void *pDest);
 extern int fn_801F010C(void *pData, int index);
 extern int fn_801F0DB8(void *pData, int index);
-extern int fn_801F8D60(int handle, int a);
-extern int fn_801F8EEC(int handle);
 extern int fn_801F9014(int handle);
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9430(int a, int *pTable4, int *pTable8);

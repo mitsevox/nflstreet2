@@ -36,8 +36,6 @@ extern int lbl_803EC0D0;
 extern int lbl_803EC0D4;
 extern unsigned char lbl_803EC0D8;
 extern Entry_802FB300 lbl_802FB300[];
-extern int fn_801F8D60(int handle, int a);
-extern int fn_801F8EEC(int handle);
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_801FC5FC *pDevice);

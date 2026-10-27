@@ -1,3 +1,4 @@
+#include "engine/t3db.h"
 #include "engine/fn_801F9134.h"
 typedef struct TDbDefault_803E944C {
     int mDb;
@@ -189,7 +190,6 @@ extern void fn_8020353C(TDbPool_803E9654 *pPool);
 extern int fn_8020D194(int a, int size, int *pHeap);
 extern void fn_8020D1A8(int heap);
 extern int fn_8020D1B0(int heap, int size, void *ppOut);
-extern int fn_801F8EEC(int db);
 extern int fn_801F9014(int db);
 extern int fn_801F95C8(void);
 extern int fn_801FC5FC(TDbDb_801F88F0 *pDb, int a, int b);

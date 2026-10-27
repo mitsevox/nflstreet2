@@ -1,3 +1,4 @@
+#include "engine/cu_80228F78.h"
 #include "engine/cu_80229094.h"
 #include "engine/cu_80229270.h"
 #include "game/cu_8007F12C.h"
@@ -77,10 +78,6 @@ void fn_8020D0CC(Record_802CC680 *pRecord);
 void fn_8020D158(void);
 int fn_80228E44(Desc_80228E44 *pDesc);
 int fn_80228F0C(void);
-int fn_80228F78(int a, const char *pName, int b);
-void fn_80228FD8(void);
-void fn_80229010(void);
-void fn_8022905C(void);
 int fn_80229470(void);
 void fn_80229494(void);
 void fn_8022C930(int a);

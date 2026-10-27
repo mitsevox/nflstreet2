@@ -1,3 +1,4 @@
+#include "engine/t3db.h"
 #include "game/fn_801EEB44.h"
 #include "engine/cu_801C2EB4.h"
 #include "engine/cu_80229094.h"
@@ -6,8 +7,6 @@
 #include "engine/tdbiores.h"
 
 extern int fn_801F8CE8(int *pHandle);
-extern int fn_801F8D60(int handle, int a);
-extern int fn_801F8EEC(int handle);
 
 static char *lbl_803EBFC8 = 0;
 static void *lbl_803EBFCC = 0;
