@@ -1,7 +1,7 @@
 #include "engine/fn_8022C938.h"
 #include "engine/cu_801C2EB4.h"
 #include "engine/cu_80228F78.h"
-#include "engine/t3db.h"
+#include "engine/fn_801F8D60.h"
 #include "engine/tdbext.h"
 
 

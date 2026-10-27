@@ -1,6 +1,8 @@
 #ifndef ENGINE_T3DB_H
 #define ENGINE_T3DB_H
 
+#include "engine/fn_801F8D60.h"
+
 #define TDB_COLUMN_ROW 0xFE
 
 typedef enum TDbType_801FDF28 {
@@ -269,17 +271,6 @@ extern TDbMemPool_80202B60 lbl_803E96A8;
 extern int (*lbl_803EBE74)(const char *a, const char *b, int size);
 extern void *lbl_803EBE8C;
 extern TDbQuery_802032D8 *lbl_803EBE90;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int fn_801F8D60(int db, int size);
-int fn_801F8EEC(int db);
-
-#ifdef __cplusplus
-}
-#endif
 
 void fn_801FA870(void);
 int fn_801FA8C8(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size);

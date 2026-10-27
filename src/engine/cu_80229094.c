@@ -1,4 +1,4 @@
-#include "engine/t3db.h"
+#include "engine/fn_801F8D60.h"
 #include "game/fn_801EEB44.h"
 #include "engine/cu_801C2EB4.h"
 #include "engine/cu_80229094.h"

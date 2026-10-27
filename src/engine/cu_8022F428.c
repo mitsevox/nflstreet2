@@ -1,4 +1,4 @@
-#include "engine/t3db.h"
+#include "engine/fn_801F8D60.h"
 #include "engine/tdbext.h"
 #include "engine/fn_8022C938.h"
 #include "engine/fn_801F9134.h"
