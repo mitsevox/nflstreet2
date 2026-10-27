@@ -218,8 +218,9 @@ typedef struct TDbIODevice_801FC5FC {
     int (*mClose)(void *pHandle);
     int (*mRead)(void *pHandle, void *pData, unsigned int size, unsigned int *pDone);
     int (*mWrite)(void *pHandle, void *pData, unsigned int size, unsigned int *pDone);
-    void *mUnknown10;
+    int (*mSeek)(void *pHandle, int offset);
     unsigned int (*mReserve)(unsigned int size);
+    unsigned int mUnknown18;
 } TDbIODevice_801FC5FC;
 
 typedef struct TDbIOStream_801FA8C8 {
