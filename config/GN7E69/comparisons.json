@@ -27572,37 +27572,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228E44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c), its function and name rows and the exact .sdata data row 0x803EBFA8-0x803EBFB8. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228E44",
-          "end": "0x80228F78"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFA8",
-          "end": "0x803EBFB8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80228E44",
-          "start": "0x80228E44",
-          "end": "0x80228F0C"
-        },
-        {
-          "symbol": "fn_80228F0C",
-          "start": "0x80228F0C",
-          "end": "0x80228F78"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80228F78.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084 (src/engine/cu_80228F78.c), its function and name rows and the exact .sdata data row 0x803EBFB8-0x803EBFC4. Draft comparisons only; original assembly remains linked.",
