@@ -25503,11 +25503,11 @@
       "provenance": {
         "pull_request": 1013,
         "merged_via": 1015,
-        "commit": "031e2ebc162ae17ae0b80c89c33acbc584719282",
-        "introduced_blob": "dd835f323877df7fe06f00b0250057bba7d5b969",
+        "commit": "f834672d5d1f935b7ecdf6b8a6b6d07e2b994e96",
+        "introduced_blob": "64cb39f678797ebfe67b6f2ef8808d9b0a14b906",
         "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
         "original_blob": "d18d880f99d8d865b6cb1d29299aa589d75264ae",
-        "integration_adjustment": "Refine the existing fast-state copier to an evidence-supported complete memberwise copy and reconcile the generator callback tables; preserve original source credit for all nineteen functions, including the newly exact 0x801CF048."
+        "integration_adjustment": "Refine the existing fast-state copier to an evidence-supported complete memberwise copy and reconcile the generator callback tables; preserve original source credit for all nineteen functions, including the newly exact 0x801CF048. Canonical wrapper declarations are shared with all existing callers without changing generated code."
       }
     },
     {
