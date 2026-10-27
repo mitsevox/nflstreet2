@@ -47645,62 +47645,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801EADD8.cpp",
-      "profile": "game_cpp",
-      "evidence": "E3 lane draft of the C++ box class over 0x801EADD8-0x801EB488 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1720-0x802B1748 (literal pools and vtable). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EADD8",
-          "end": "0x801EB488"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1720",
-          "end": "0x802B1748"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_801EADD8",
-          "start": "0x801EADD8",
-          "end": "0x801EAE10"
-        },
-        {
-          "symbol": "_._14Class_801EADD8",
-          "start": "0x801EAE10",
-          "end": "0x801EAE44"
-        },
-        {
-          "symbol": "fn_801EAE44__14Class_801EADD8P13Vec3_801DE1E0T1",
-          "start": "0x801EAE44",
-          "end": "0x801EAE7C"
-        },
-        {
-          "symbol": "fn_801EAE7C__14Class_801EADD8P13Vec3_801DE1E0",
-          "start": "0x801EAE7C",
-          "end": "0x801EAEB4"
-        },
-        {
-          "symbol": "fn_801EAEB4__14Class_801EADD8P13Vec3_801DE1E0",
-          "start": "0x801EAEB4",
-          "end": "0x801EAF60"
-        },
-        {
-          "symbol": "fn_801EAF60__14Class_801EADD8PA3_fP14Class_801EADD8",
-          "start": "0x801EAF60",
-          "end": "0x801EB134"
-        },
-        {
-          "symbol": "fn_801EB134__14Class_801EADD8iii",
-          "start": "0x801EB134",
-          "end": "0x801EB488"
-        }
-      ]
-    },
-    {
       "source": "src/engine/llquat.c",
       "profile": "engine_c",
       "evidence": "E3 lane draft of llquat.c over 0x801EB488-0x801EC1B4 (NASCAR 2005 symbol-table size/order match from QuatMultiply at 0x801EB660 through the llquat.c run; see the llquat.c name rows); evidence.tsv function rows and the llquat.c compiler row, plus exact data row 0x802B1748-0x802B179C. The 0x801EB488 file start is an observable anchor (preceding code is C++ with its own .rodata record ending at 0x802B1748). Draft comparisons only; original assembly remains linked.",

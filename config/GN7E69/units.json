@@ -13737,6 +13737,25 @@
           "end": "0x802B1570"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801EADD8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801EADD8.cpp, individual exact function extents, exact literal/vtable range0x802B1720-0x802B1748, and compiler/type/field/source-form records. Complete seven-function class and native sections; original code-file boundaries remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EADD8",
+          "end": "0x801EB488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1720",
+          "end": "0x802B1748"
+        }
+      ]
     }
   ]
 }
