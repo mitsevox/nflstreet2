@@ -1,3 +1,6 @@
+#include "engine/tdbext.h"
+#include "engine/fn_8022C938.h"
+#include "engine/fn_801F9134.h"
 /* Partial source for the engine range 0x8022F428-0x802355E4 (neutral file name). */
 
 #include <dolphin/gx/GXGeometry.h>
@@ -276,7 +279,6 @@ extern int fn_801F0DB8(void *pData, int index);
 extern int fn_801F8D60(int handle, int a);
 extern int fn_801F8EEC(int handle);
 extern int fn_801F9014(int handle);
-extern int fn_801F9134(int handle, void **ppData, int a, void *b);
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9430(int a, int *pTable4, int *pTable8);
 extern int fn_801F9574(void);
@@ -285,7 +287,6 @@ extern int fn_801F9A90(int handle, int table);
 extern int fn_801F9D0C(int handle, int table, int a);
 extern int fn_801FA68C(void *pCallback, int tag);
 extern int fn_801FA740(int tag);
-extern int fn_8020D2D0(int tag, char *pName, int a, int b);
 extern void fn_8020E9D0(void *pDst, void *pSrc, unsigned int size);
 extern void fn_8020EBB0(void *p);
 extern void *fn_8020EC50(void *p, unsigned int tag, void *pOut);
@@ -353,7 +354,6 @@ extern int fn_8022C214(int a);
 extern void fn_8022C3C8(void);
 extern int fn_8022C410(int a);
 extern int fn_8022C518(int a);
-extern void fn_8022C988(void *p);
 extern int fn_8022D154(void);
 extern int fn_8022D1B8(void);
 extern int fn_8022D6E8(void);
@@ -1099,7 +1099,6 @@ int fn_80233588(Block_80233588 *p)
 
 int fn_80233604(void **ppData, void *p)
 {
-    int err = fn_801F9134(0x454D4147, ppData, 3, p);
 
     if (err != 0) {
         return err;

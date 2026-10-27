@@ -1,3 +1,4 @@
+#include "engine/fn_801F9134.h"
 typedef struct TDbDefault_803E944C {
     int mDb;
     int mTbl;
