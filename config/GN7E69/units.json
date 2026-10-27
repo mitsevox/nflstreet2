@@ -13756,6 +13756,25 @@
           "end": "0x802B1748"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8017FB90.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional complete bounded handler unit src/game/cu_8017FB90.cpp at0x8017FB90-0x8017FDF0, exact function extent and scalar data803EB52C-803EB530; neutral name, compiler/source-form/declaration records. All native code/data linked; historical file boundaries/linkage remain unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017FB90",
+          "end": "0x8017FDF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB52C",
+          "end": "0x803EB530"
+        }
+      ]
     }
   ]
 }

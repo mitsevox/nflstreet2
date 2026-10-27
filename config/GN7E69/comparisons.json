@@ -42081,26 +42081,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8017FB90.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017FB90-0x8017FDF0 (cu_8017FB90) and function row 0x8017FB90. The body is a comparison; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8017FB90",
-          "end": "0x8017FDF0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8017FB90",
-          "start": "0x8017FB90",
-          "end": "0x8017FDF0"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_801A7C20.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv candidate unit cu_801A7C20 0x801A7C20-0x801A8620, exact function rows and its readonly float pool 0x802AE898-0x802AE8E0 (byte-identical). fn_801A7C20, fn_801A8548 and fn_801A854C are exact; fn_801A7F10 is a partial body (same size, three loop registers permuted). Original bytes remain linked.",

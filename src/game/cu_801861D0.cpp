@@ -1,3 +1,4 @@
+#include "game/fn_8018631C.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
 #include "game/FELoop.h"
