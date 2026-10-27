@@ -1099,6 +1099,7 @@ int fn_80233588(Block_80233588 *p)
 
 int fn_80233604(void **ppData, void *p)
 {
+    int err = fn_801F9134(0x454D4147, (int)ppData, 3, (int)p);
 
     if (err != 0) {
         return err;
