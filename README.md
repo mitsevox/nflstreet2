@@ -16,7 +16,7 @@ You need your own copy of the game disc. Keep disc images and extracted files ou
 
 1. Place the original at `orig/GN7E69-rev0/sys/main.dol`.
 2. `python3 build.py` builds the reconstructed units in place of their original bytes, analyzes the executable, measures every registered comparison and writes `build/GN7E69-rev0/report.json`. It fails unless the complete executable matches `config/GN7E69-rev0/build.sha1`, and ends with `build/GN7E69-rev0/main.dol: OK`.
-3. `python3 build.py check` relinks the original objects with GNU ld and with SN's ngcld, runs the tool tests that need the toolchain, and checks that the site's publish script accepts the report.
+3. `python3 build.py check` relinks the original objects with GNU ld and with SN's ngcld and runs the tool tests that need the toolchain. That the site's publish script accepts the report is CI's `Check the report` step, on every pull request and push.
 
 The tools are downloaded on first use and checked against the versions and hashes pinned in `tools/baseline-tools.json`, `tools/compiler-tools.json` and `tools/matching-tools.json`. `python3 build.py configure --dtk PATH --binutils DIR --compilers DIR --wibo PATH --objdiff PATH` uses tools already installed instead; the build image does this.
 
