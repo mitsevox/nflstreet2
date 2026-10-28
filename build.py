@@ -70,13 +70,41 @@ def build(target):
 
 def check(target):
     """The checks that need the toolchain: the original-object relinks with GNU ld and with SN's
-    ngcld, and the tool tests that skip on a runner without it."""
+    ngcld, the tool tests that skip on a runner without it, and the publish check."""
     import setup_compiler
     original = ROOT / "orig" / target / "sys/main.dol"
     run("tools/baseline.py", "--original", original)
     compiler, wibo = setup_compiler.setup()
     run("tools/baseline.py", "--original", original, "--sn-linker", compiler / "ngcld.exe", "--wrapper", wibo)
     run("-m", "unittest", "discover", "-s", "tests")
+    publish_check(target)
+
+
+PUBLISH = "https://raw.githubusercontent.com/mitsevox/mitsevox.github.io/main/.github/actions/publish/publish.py"
+
+
+def publish_check(target):
+    """Convert build/<target id>/report.json with the site's publish script (the revision the
+    publish step on main runs) and check the result, without pushing. This report is not
+    dtk-template's, so a pull request proves main can publish it. Credits stay off here: they read
+    the merged pull request, which a pull request's own build does not have yet."""
+    import decomp_report
+    import tempfile
+    import urllib.request
+    report = ROOT / "build" / target / "report.json"
+    if not report.exists():
+        sys.exit(f"{report.relative_to(ROOT)} is missing: run `python3 build.py --target {target}` first")
+    with tempfile.TemporaryDirectory() as work:
+        work = Path(work)
+        with urllib.request.urlopen(PUBLISH, timeout=60) as response:
+            (work / "publish.py").write_bytes(response.read())
+        site = json.loads((ROOT / "config/site.json").read_text())
+        site["contributors"] = False
+        (work / "site.json").write_text(json.dumps(site))
+        run(work / "publish.py", "publish", "--target", target, "--report", report,
+            "--site", work / "site.json", "--repository", os.environ.get("GITHUB_REPOSITORY", "mitsevox/nflstreet2"),
+            "--code-sections", ",".join(decomp_report.CODE_SECTIONS), "--unit-prefix", "",
+            "--output", work / "data", "--dry-run")
 
 
 def main():
