@@ -1,3 +1,4 @@
+#include "engine/fn_801B3234.h"
 #include "engine/cu_801B8C18.h"
 
 struct Data_801B4548 {
@@ -217,7 +218,6 @@ int fn_801B2B58(void);
 void *fn_801B2C40(int size);
 void fn_801B2C94(void *p);
 void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
-int fn_801B3234(int flags);
 unsigned int fn_801B343C(void);
 unsigned int fn_801B3480(unsigned int index, unsigned int flags);
 int fn_801B34DC(unsigned int flags);
@@ -321,7 +321,7 @@ extern "C" void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(
     lbl_803EBB34 = c;
 }
 
-extern "C" int fn_801B3234(int flags)
+extern "C" void *fn_801B3234(int flags)
 {
     Node_801B3FE0 *p = fn_801B4174(flags);
     Class_801B44BC *result;
@@ -329,7 +329,7 @@ extern "C" int fn_801B3234(int flags)
         result = p->mUnknown100;
     else
         result = 0;
-    return (int)result;
+    return result;
 }
 
 extern "C" unsigned int fn_801B343C(void)

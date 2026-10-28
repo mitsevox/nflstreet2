@@ -1,7 +1,14 @@
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "engine/Resource.h"
+#include "engine/sound.h"
+#include "engine/cu_801E0A1C.h"
+#include "engine/fn_801B3234.h"
+
+extern "C" {
+#include "engine/cu_801C665C.h"
+}
 
 /* Item of the first pool of lbl_8039ADB8 (0x10 bytes), keyed by a generated handle;
    holds the fn_801EF390 arguments. */
@@ -20,14 +27,9 @@ struct Item_801E0A3C {
 };
 
 struct State_801E0A5C {
-    void *mpPool0;
+    List_801C68FC *mpPool0;
     int mHandle;
-    void *mpPool8;
-};
-
-struct Desc_801E0AEC {
-    int mHeap;
-    int mCount;
+    List_801C68FC *mpPool8;
 };
 
 struct Config_801E0AEC {
@@ -37,35 +39,6 @@ struct Config_801E0AEC {
     int mUnknown4;
     int mUnknown8;
 };
-
-/* Three words at +0x14 of Desc_801E0DF0, passed by address (laid out as
-   fn_8006DC98 fills them: a pointer and two words). */
-struct Data_801E0DF0 {
-    void *mpData;
-    int mUnknown4;
-    int mUnknown8;
-};
-
-struct Desc_801E0DF0 {
-    int mId;
-    int mUnknown04;
-    int mUnknown08;
-    float mUnknown0C;
-    int mUnknown10;
-    Data_801E0DF0 mUnknown14;
-    int mUnknown20;
-    unsigned char mUnknown24;
-};
-
-struct Info_801E1084;
-
-extern "C" {
-void *fn_801C6A20(void *pool);
-void *fn_801C6B4C(void *pool, void *item);
-void fn_801C6C0C(void *pool, void *item);
-void *fn_801C6C84(void *pool, void *item);
-int fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(void *, int, void *));
-}
 
 /* Abstract allocator interface handed to fn_801B2C18. */
 class Class_801E119C {
@@ -106,19 +79,18 @@ public:
 };
 
 extern "C" {
-extern State_801E0A5C lbl_8039ADB8;
-extern Class_801E10BC *lbl_803EBD60;
-extern unsigned char lbl_803EBD64;
+State_801E0A5C lbl_8039ADB8;
+Class_801E10BC *lbl_803EBD60 = 0;
+unsigned char lbl_803EBD64 = 0;
 
 void fn_801B2C18(Class_801E10BC *pAllocator, Config_801E0AEC *pConfig);
 int fn_801B2B58(void);
 int fn_801B2CDC(int a);
 int fn_801B2F28(int id);
-int fn_801B3234(int a);
 int fn_801B3AD0(int id, Data_801E0DF0 *pData, int a);
-int fn_801B3B7C(int id, int a, float b);
+void *fn_801B3B7C(int id, int a, float b);
 int fn_801B3D28(int id, Data_801E0DF0 *pData, int a);
-int fn_801B3DD8(int id);
+void *fn_801B3DD8(int id);
 void fn_801B45D0(int id, signed char value);
 void fn_801B4728(int a, int b, int c, int d);
 int fn_801B59B0(int id, int a);
@@ -126,14 +98,15 @@ void fn_801B5AB0(int a, unsigned char b);
 int fn_801B5BCC(int id, Info_801E1084 *pInfo);
 void fn_801B5CD0(int a);
 int fn_801B5FC0(int id, int a);
-void *fn_801F44A4(void);
-void fn_801F50C8(void *pEntries, int index);
 void fn_8027D3AC(void);
-void fn_8027ECD8(int a, int b);
+void fn_8027ECD8(void *p, int b);
 void fn_8027ED6C(void);
 
-static int fn_801E0A1C(Item_801E0A1C *pItem, int handle, Item_801E0A1C **ppFound)
+static int fn_801E0A1C(void *p, void *key, void *result)
 {
+    Item_801E0A1C *pItem = (Item_801E0A1C *)p;
+    int handle = (int)key;
+    Item_801E0A1C **ppFound = (Item_801E0A1C **)result;
     if (pItem->mHandle == handle) {
         *ppFound = pItem;
         return 0;
@@ -141,8 +114,11 @@ static int fn_801E0A1C(Item_801E0A1C *pItem, int handle, Item_801E0A1C **ppFound
     return -1;
 }
 
-static int fn_801E0A3C(Item_801E0A3C *pItem, int id, Item_801E0A3C **ppFound)
+static int fn_801E0A3C(void *p, void *key, void *result)
 {
+    Item_801E0A3C *pItem = (Item_801E0A3C *)p;
+    int id = (int)key;
+    Item_801E0A3C **ppFound = (Item_801E0A3C **)result;
     if (pItem->mId == id) {
         *ppFound = pItem;
         return 0;
@@ -158,8 +134,8 @@ static int fn_801E0A5C(void)
     do {
         lbl_8039ADB8.mHandle++;
         pFound = 0;
-        fn_801C6DCC(lbl_8039ADB8.mpPool0, 0, lbl_8039ADB8.mHandle, &pFound,
-                    (int (*)(void *, int, void *))fn_801E0A1C);
+        fn_801C6DCC(lbl_8039ADB8.mpPool0, 0, (void *)lbl_8039ADB8.mHandle, &pFound,
+                    fn_801E0A1C);
     } while (pFound || lbl_8039ADB8.mHandle == -1);
     return handle;
 }
@@ -177,8 +153,8 @@ int fn_801E0AEC(Desc_801E0AEC *pDesc)
     fn_8027ED6C();
     fn_8027D3AC();
     fn_801C1F94(&lbl_8039ADB8, 0, sizeof(lbl_8039ADB8));
-    lbl_8039ADB8.mpPool0 = fn_801C68FC(pDesc->mHeap, 0, 4, sizeof(Item_801E0A1C), 0, 0);
-    lbl_8039ADB8.mpPool8 = fn_801C68FC(pDesc->mHeap, 0, pDesc->mCount, sizeof(Item_801E0A3C), 0, 0);
+    lbl_8039ADB8.mpPool0 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, 4, sizeof(Item_801E0A1C), 0, 0);
+    lbl_8039ADB8.mpPool8 = (List_801C68FC *)fn_801C68FC(pDesc->mHeap, 0, pDesc->mCount, sizeof(Item_801E0A3C), 0, 0);
     if (lbl_8039ADB8.mpPool0 && lbl_8039ADB8.mpPool8) {
         lbl_803EBD64 = 1;
     }
@@ -196,7 +172,7 @@ void fn_801E0BE4(void)
     if (lbl_8039ADB8.mpPool0) {
         pItem = (Item_801E0A1C *)fn_801C6B4C(lbl_8039ADB8.mpPool0, 0);
         while (pItem) {
-            fn_801F010C(pItem->mpData, pItem->mUnknown8);
+            fn_801F010C((Res_801EDC2C *)pItem->mpData, pItem->mUnknown8);
             pItem = (Item_801E0A1C *)fn_801C6C84(lbl_8039ADB8.mpPool0, pItem);
         }
         fn_801C69E4(lbl_8039ADB8.mpPool0);
@@ -218,7 +194,7 @@ int fn_801E0CA8(void *pData, int a, int b)
     if (lbl_803EBD64) {
         pItem = (Item_801E0A1C *)fn_801C6A20(lbl_8039ADB8.mpPool0);
         if (pItem) {
-            id = fn_801EF390(pData, a, b);
+            id = fn_801EF390((Res_801EDC2C *)pData, a, b);
             if (id) {
                 if (fn_801B2CDC(id) >= 0) {
                     pItem->mHandle = fn_801E0A5C();
@@ -228,7 +204,7 @@ int fn_801E0CA8(void *pData, int a, int b)
                     handle = pItem->mHandle;
                     fn_801C6AA4(lbl_8039ADB8.mpPool0, pItem, 0);
                 } else {
-                    fn_801F010C(pData, a);
+                    fn_801F010C((Res_801EDC2C *)pData, a);
                     fn_801C6C0C(lbl_8039ADB8.mpPool0, pItem);
                 }
             }
@@ -244,11 +220,11 @@ int fn_801E0D68(int handle)
 
     if (lbl_803EBD64) {
         pItem = 0;
-        fn_801C6DCC(lbl_8039ADB8.mpPool0, 0, handle, &pItem,
-                    (int (*)(void *, int, void *))fn_801E0A1C);
+        fn_801C6DCC(lbl_8039ADB8.mpPool0, 0, (void *)handle, &pItem,
+                    fn_801E0A1C);
         if (pItem) {
             result = 0;
-            fn_801F010C(pItem->mpData, pItem->mUnknown8);
+            fn_801F010C((Res_801EDC2C *)pItem->mpData, pItem->mUnknown8);
             fn_801C6C0C(lbl_8039ADB8.mpPool0, pItem);
         }
     }
@@ -264,11 +240,11 @@ int fn_801E0DF0(Desc_801E0DF0 *pDesc)
     if (pItem) {
         fn_801C1F94(pItem, 0, sizeof(Item_801E0A3C));
         pItem->mUnknown8 = pDesc->mUnknown24;
-        fn_801F50C8(fn_801F44A4(), pDesc->mUnknown10);
+        fn_801F50C8((SndBankEntry_801F50C8 *)fn_801F44A4(), pDesc->mUnknown10);
         if (pDesc->mUnknown24) {
             result = fn_801B3D28(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown20);
             if (result >= 0) {
-                pItem->mpUnknown4 = (void *)fn_801B3DD8(pDesc->mId);
+                pItem->mpUnknown4 = fn_801B3DD8(pDesc->mId);
                 if (!pItem->mpUnknown4) {
                     result = -1;
                 }
@@ -276,7 +252,7 @@ int fn_801E0DF0(Desc_801E0DF0 *pDesc)
         } else {
             result = fn_801B3AD0(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown04);
             if (result >= 0) {
-                pItem->mpUnknown4 = (void *)fn_801B3B7C(pDesc->mId, pDesc->mUnknown08, pDesc->mUnknown0C);
+                pItem->mpUnknown4 = fn_801B3B7C(pDesc->mId, pDesc->mUnknown08, pDesc->mUnknown0C);
                 if (!pItem->mpUnknown4) {
                     result = -1;
                 }
@@ -297,7 +273,7 @@ int fn_801E0EF8(int id)
     Item_801E0A3C *pItem = 0;
     int result = -1;
 
-    fn_801C6DCC(lbl_8039ADB8.mpPool8, 0, id, &pItem, (int (*)(void *, int, void *))fn_801E0A3C);
+    fn_801C6DCC(lbl_8039ADB8.mpPool8, 0, (void *)id, &pItem, fn_801E0A3C);
     if (pItem) {
         fn_801C6C0C(lbl_8039ADB8.mpPool8, pItem);
         if (fn_801B2F28(id)) {
@@ -339,7 +315,7 @@ void fn_801E1028(int a)
 
 void fn_801E1048(int a, int b)
 {
-    int p = fn_801B3234(a);
+    void *p = fn_801B3234(a);
 
     if (p) {
         fn_8027ECD8(p, b);

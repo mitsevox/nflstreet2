@@ -36,6 +36,7 @@ typedef struct SndBankEntry_801F50C8 {
 } SndBankEntry_801F50C8;
 
 /* sound.cpp */
+void *fn_801F44A4(void);
 StreamFile_801F6D54 *fn_801F5000(const char *pName);
 
 /* llsound.c */

@@ -28,17 +28,17 @@ typedef struct RandSub_801CEFF0 {
     int mTable[56];
 } RandSub_801CEFF0;
 
-extern RandStream_801CEFF0 *(*lbl_802F7AD0[])(int seed);
-extern int (*lbl_802F7AE8[])(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSrc);
-extern float (*lbl_802F7AF4[])(RandStream_801CEFF0 *pStream);
+extern void *(*lbl_802F7AD0[])(int seed);
+extern int (*lbl_802F7AE8[])(void *pDst, void *pSrc);
+extern float (*lbl_802F7AF4[])(void *pStream);
 extern int lbl_802F7B00[];
 
 
-static void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed);
-static void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed);
-static void fn_801CF358(RandSub_801CEFF0 *pStream, int seed);
+static void fn_801CF040(void *pHandle, int seed);
+static void fn_801CF12C(void *pHandle, int seed);
+static void fn_801CF358(void *pHandle, int seed);
 
-static RandFast_801CEFF0 *fn_801CEFF0(unsigned int seed)
+static void *fn_801CEFF0(int seed)
 {
     RandFast_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandFast_801CEFF0), 0, 0);
 
@@ -48,24 +48,30 @@ static RandFast_801CEFF0 *fn_801CEFF0(unsigned int seed)
     return pStream;
 }
 
-static void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed)
+static void fn_801CF040(void *pHandle, int seed)
 {
+    RandFast_801CEFF0 *pStream = pHandle;
     pStream->mSeed = seed;
 }
 
-static int fn_801CF048(RandFast_801CEFF0 *pDst, RandFast_801CEFF0 *pSrc)
+/* Copy state only between streams of the same generator type. */
+static int CopyFastRandomState(void *pDstHandle, void *pSrcHandle)
 {
+    RandFast_801CEFF0 *pDst = pDstHandle;
+    RandFast_801CEFF0 *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
+        pDst->mType = pSrc->mType;
         pDst->mSeed = pSrc->mSeed;
         result = 0;
     }
     return result;
 }
 
-static float fn_801CF074(RandFast_801CEFF0 *pStream)
+static float fn_801CF074(void *pHandle)
 {
+    RandFast_801CEFF0 *pStream = pHandle;
     float value;
 
     pStream->mSeed = pStream->mSeed * 1664525 + 1013904223;
@@ -76,7 +82,7 @@ static float fn_801CF074(RandFast_801CEFF0 *pStream)
     return value;
 }
 
-static RandSlow_801CEFF0 *fn_801CF0DC(int seed)
+static void *fn_801CF0DC(int seed)
 {
     RandSlow_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSlow_801CEFF0), 0, 0);
 
@@ -86,8 +92,9 @@ static RandSlow_801CEFF0 *fn_801CF0DC(int seed)
     return pStream;
 }
 
-static void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed)
+static void fn_801CF12C(void *pHandle, int seed)
 {
+    RandSlow_801CEFF0 *pStream = pHandle;
     int i;
     int k;
 
@@ -107,8 +114,10 @@ static void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed)
     pStream->mY = pStream->mTable[0];
 }
 
-static int fn_801CF1B0(RandSlow_801CEFF0 *pDst, RandSlow_801CEFF0 *pSrc)
+static int fn_801CF1B0(void *pDstHandle, void *pSrcHandle)
 {
+    RandSlow_801CEFF0 *pDst = pDstHandle;
+    RandSlow_801CEFF0 *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
@@ -118,8 +127,9 @@ static int fn_801CF1B0(RandSlow_801CEFF0 *pDst, RandSlow_801CEFF0 *pSrc)
     return result;
 }
 
-static float fn_801CF240(RandSlow_801CEFF0 *pStream)
+static float fn_801CF240(void *pHandle)
 {
+    RandSlow_801CEFF0 *pStream = pHandle;
     int seed = pStream->mSeed;
     int k;
     int j;
@@ -141,7 +151,7 @@ static float fn_801CF240(RandSlow_801CEFF0 *pStream)
     return value;
 }
 
-static RandSub_801CEFF0 *fn_801CF308(int seed)
+static void *fn_801CF308(int seed)
 {
     RandSub_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSub_801CEFF0), 0, 0);
 
@@ -151,8 +161,9 @@ static RandSub_801CEFF0 *fn_801CF308(int seed)
     return pStream;
 }
 
-static void fn_801CF358(RandSub_801CEFF0 *pStream, int seed)
+static void fn_801CF358(void *pHandle, int seed)
 {
+    RandSub_801CEFF0 *pStream = pHandle;
     int mj;
     int mk;
     int i;
@@ -188,8 +199,10 @@ static void fn_801CF358(RandSub_801CEFF0 *pStream, int seed)
     pStream->mInit = 1;
 }
 
-static int fn_801CF498(RandSub_801CEFF0 *pDst, RandSub_801CEFF0 *pSrc)
+static int fn_801CF498(void *pDstHandle, void *pSrcHandle)
 {
+    RandSub_801CEFF0 *pDst = pDstHandle;
+    RandSub_801CEFF0 *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
@@ -199,8 +212,9 @@ static int fn_801CF498(RandSub_801CEFF0 *pDst, RandSub_801CEFF0 *pSrc)
     return result;
 }
 
-static float fn_801CF504(RandSub_801CEFF0 *pStream)
+static float fn_801CF504(void *pHandle)
 {
+    RandSub_801CEFF0 *pStream = pHandle;
     int mj;
     float value;
 
@@ -232,8 +246,10 @@ void *fn_801CF5BC(int type, int seed)
     return pStream;
 }
 
-int fn_801CF60C(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSrc)
+int fn_801CF60C(void *pDstHandle, void *pSrcHandle)
 {
+    RandStream_801CEFF0 *pDst = pDstHandle;
+    RandStream_801CEFF0 *pSrc = pSrcHandle;
     int type = pDst->mType;
     int result = 0x40003;
 
@@ -243,8 +259,9 @@ int fn_801CF60C(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSrc)
     return result;
 }
 
-int fn_801CF664(RandStream_801CEFF0 *pStream)
+int fn_801CF664(void *pHandle)
 {
+    RandStream_801CEFF0 *pStream = pHandle;
     return lbl_802F7B00[pStream->mType];
 }
 
@@ -253,12 +270,13 @@ int fn_801CF67C(void *pStream)
     return fn_801D2BD0(pStream);
 }
 
-float fn_801CF69C(RandStream_801CEFF0 *pStream)
+float fn_801CF69C(void *pHandle)
 {
+    RandStream_801CEFF0 *pStream = pHandle;
     return lbl_802F7AF4[pStream->mType](pStream);
 }
 
-unsigned int fn_801CF6D4(RandStream_801CEFF0 *pStream, unsigned int range)
+unsigned int fn_801CF6D4(void *pStream, unsigned int range)
 {
     float value = fn_801CF69C(pStream) * (float)range;
 
@@ -272,3 +290,23 @@ int fn_801CF7AC(void)
 {
     return OSGetTick();
 }
+
+void *(*lbl_802F7AD0[3])(int seed) = {
+    fn_801CEFF0, fn_801CF0DC, fn_801CF308
+};
+
+void (*lbl_802F7ADC[3])(void *pStream, int seed) = {
+    fn_801CF040, fn_801CF12C, fn_801CF358
+};
+
+int (*lbl_802F7AE8[3])(void *pDst, void *pSrc) = {
+    CopyFastRandomState, fn_801CF1B0, fn_801CF498
+};
+
+float (*lbl_802F7AF4[3])(void *pStream) = {
+    fn_801CF074, fn_801CF240, fn_801CF504
+};
+
+int lbl_802F7B00[3] = {
+    sizeof(RandFast_801CEFF0), sizeof(RandSlow_801CEFF0), sizeof(RandSub_801CEFF0)
+};

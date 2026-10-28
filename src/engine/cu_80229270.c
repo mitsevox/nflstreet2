@@ -1,3 +1,7 @@
+#include "engine/cu_80229094.h"
+#include "engine/tdbext.h"
+#include "engine/fn_8022C938.h"
+#include "engine/fn_801F9134.h"
 #include "engine/cu_80229270.h"
 /* Partial source for the engine range 0x80229270-0x8022F428 (neutral file name). */
 
@@ -32,15 +36,11 @@ extern int lbl_803EC0D0;
 extern int lbl_803EC0D4;
 extern unsigned char lbl_803EC0D8;
 extern Entry_802FB300 lbl_802FB300[];
-extern int fn_801F8D60(int handle, int a);
-extern int fn_801F8EEC(int handle);
-extern int fn_801F9134(int handle, void **ppData, int a, void *b);
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
 extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_801FC5FC *pDevice);
 extern TDbIODevice_801FC5FC lbl_8030199C;
 extern int fn_801F967C(int db, int tbl);
-extern int fn_8020D2D0(int tag, char *pName, int a, int b);
 int fn_8022F384(int key);
 
 extern const unsigned char lbl_802AEF10[];
@@ -143,7 +143,6 @@ typedef struct Node_8022CC6C {
 
 void fn_8022CAEC(Node_8022CC6C **ppHead);
 
-extern unsigned int fn_801CF6D4(void *pStream, unsigned int range);
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
 extern int fn_802303B4(int key, unsigned short *pId);
 extern int fn_80230CC8(unsigned short id);
@@ -276,8 +275,6 @@ int fn_8022BF68(void);
 void fn_8022C894(void);
 void fn_8022C8C4(void);
 int fn_8022C8F0(unsigned int low, unsigned int high);
-void *fn_8022C938(int size, int a);
-void fn_8022C988(void *p);
 void *fn_8022C9A8(void);
 void fn_8022C9B4(void *p);
 void fn_8022CADC(void);
@@ -2003,7 +2000,7 @@ int fn_8022EB10(void)
 
 int fn_8022EB5C(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOps)
 {
-    return fn_801F9134(0x45564153, (void **)pTarget, 0, pOps);
+    return fn_801F9134(0x45564153, (int)pTarget, 0, (int)pOps);
 }
 
 int fn_8022EB94(void *pTarget, struct StreamOps_8002ACB4 *pOps)

@@ -13718,6 +13718,214 @@
           "end": "0x801BAD98"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C4960.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C4960-0x801C4F64, exact function rows and data row 0x802F48C0-0x802F4980; all twelve functions and the complete 48-entry callback table are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C4960",
+          "end": "0x801C4F64"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F48C0",
+          "end": "0x802F4980"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CEFF0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEFF0-0x801CF7CC, exact function extents, readonly data row 0x802AF4F8-0x802AF540 and five complete table data rows 0x802F7AD0-0x802F7B0C; all nineteen functions and data linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEFF0",
+          "end": "0x801CF7CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF4F8",
+          "end": "0x802AF540"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7AD0",
+          "end": "0x802F7B0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiores.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8020D534-0x8020DB34, exact function rows and exact data rows 0x802F9BAC-0x802F9BC8 and 0x802F9BC8-0x802F9BE4; complete twelve-function unit and both operation tables linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D534",
+          "end": "0x8020DB34"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9BAC",
+          "end": "0x802F9BE4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80229094.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270, all six exact function/name rows, complete native .sdata row 0x803EBFC8-0x803EBFD8 and canonical declaration/source-form rows. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229094",
+          "end": "0x80229270"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFC8",
+          "end": "0x803EBFD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80228F78.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084, four function/name rows, complete native .sdata row 0x803EBFB8-0x803EBFC4 and canonical declaration/source-form row. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228F78",
+          "end": "0x80229084"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFB8",
+          "end": "0x803EBFC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8478.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801E8478.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8478",
+          "end": "0x801E8798"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1548",
+          "end": "0x802B1570"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801EADD8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801EADD8.cpp, individual exact function extents, exact literal/vtable range0x802B1720-0x802B1748, and compiler/type/field/source-form records. Complete seven-function class and native sections; original code-file boundaries remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EADD8",
+          "end": "0x801EB488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1720",
+          "end": "0x802B1748"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8017FB90.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional complete bounded handler unit src/game/cu_8017FB90.cpp at0x8017FB90-0x8017FDF0, exact function extent and scalar data803EB52C-803EB530; neutral name, compiler/source-form/declaration records. All native code/data linked; historical file boundaries/linkage remain unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017FB90",
+          "end": "0x8017FDF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB52C",
+          "end": "0x803EB530"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E0A1C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Complete bounded inferred handler, pool state and allocator-vtable grouping; evidence.tsv unit/function/data/type/field rows. Both code-file edges remain provisional; historical shared-file alternatives and other target table users are disclosed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E0A1C",
+          "end": "0x801E11D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1150",
+          "end": "0x802B11C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD60",
+          "end": "0x803EBD68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADB8",
+          "end": "0x8039ADC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80228E44.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78, both exact function/name rows, canonical descriptor and entry access-view rows and exact native .sdata row 0x803EBFA8-0x803EBFB8. Complete file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
+          "end": "0x803EBFB8"
+        }
+      ]
     }
   ]
 }
