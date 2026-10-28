@@ -19,7 +19,7 @@ WORKFLOW = '.github/workflows/baseline.yml'
 METHODOLOGY = 'nflstreet2-report-v1'
 GENERATION = 1
 ARTIFACT = 'report-v1'
-HISTORY = 'config/GN7E69/report-v1-history.json'
+HISTORY = 'config/GN7E69-rev0/report-v1-history.json'
 # map-v2 node fields: geometry and metrics, plus the optional per-node evidence NFL records.
 NODE_FIELDS = ('name', 'kind', 'size', 'linked', 'matched', 'fuzzy', 'address', 'mapped_extents',
                'children', 'type', 'function_address', 'original_size')
@@ -149,7 +149,7 @@ def history_feed(timeline, target_sha1, revision):
             rows.append({**measured, 'provenance': provenance_of(provenance['source'])})
         else:
             raise ValueError('Unknown history provenance')
-    return {'schema': 1, 'target': 'GN7E69', 'target_sha1': target_sha1, 'revision': revision,
+    return {'schema': 1, 'target': 'GN7E69-rev0', 'target_sha1': target_sha1, 'revision': revision,
             'snapshots': rows}
 
 
@@ -194,7 +194,7 @@ def timeline_document(site, feed, run, attempt, inherited_through=None):
 
 
 def policy(root, environment, blob):
-    template = json.loads((root/'config/GN7E69/report-v1-producer.json').read_text())
+    template = json.loads((root/'config/GN7E69-rev0/report-v1-producer.json').read_text())
     if template['tools'] != [{'name': 'build-environment', 'identity': environment}]:
         raise ValueError('Producer policy names another build environment')
     # The packager checks structure against this run's own workflow; the site's approved
@@ -207,7 +207,7 @@ def policy(root, environment, blob):
 def prepare(root, output, environment, run, attempt, receipt=None):
     site = json.loads((root/'build/site/progress.json').read_text())
     feed = json.loads((root/'build/site/activity.json').read_text())
-    ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    ledger = json.loads((root/'config/GN7E69-rev0/contributors.json').read_text())
     history = json.loads((root/HISTORY).read_text())
     revision = git(root, 'rev-parse', 'HEAD')
     if site['revision'] != revision or feed['revision'] != revision or site.get('baseline') != 'verified':

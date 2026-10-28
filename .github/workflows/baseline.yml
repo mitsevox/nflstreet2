@@ -58,7 +58,7 @@ jobs:
           path: |
             build/analysis/summary.json
             build/analysis/symbols.txt
-          key: inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ steps.inventory-inputs.outputs.units }}-${{ hashFiles('tools/**/*.py', 'tools/*.json', 'config/GN7E69/baseline.json', 'config/GN7E69/analysis.json', 'config/GN7E69/sdk.json') }}
+          key: inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ steps.inventory-inputs.outputs.units }}-${{ hashFiles('tools/**/*.py', 'tools/*.json', 'config/GN7E69-rev0/baseline.json', 'config/GN7E69-rev0/analysis.json', 'config/GN7E69-rev0/sdk.json') }}
           restore-keys: |
             inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-
       - name: Verify publication handoff rules
@@ -239,7 +239,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: GN7E69_report
-          path: build/GN7E69/report.json
+          path: build/GN7E69-rev0/report.json
           if-no-files-found: error
       # The shared site imports this package, and main restores published history from it. Every
       # PR validates one; it uploads it only when main may reuse the PR's proof.

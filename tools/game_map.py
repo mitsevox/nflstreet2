@@ -3,7 +3,7 @@
 import csv
 from pathlib import Path
 
-EVIDENCE_PATH = 'config/GN7E69/evidence.tsv'
+EVIDENCE_PATH = 'config/GN7E69-rev0/evidence.tsv'
 
 
 def load(root, sections, authoritative=()):

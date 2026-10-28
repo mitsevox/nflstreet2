@@ -2,7 +2,8 @@
 /GAME VERSIONS/
 /private/
 /reference/
-/orig/
+/orig/*/*
+!/orig/*/.gitkeep
 /build/
 /scratch/
 

@@ -70,7 +70,7 @@ def verify(root, site, decomp, source_units, comparison_site=None, *, authentica
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--site', type=Path, default=ROOT / 'build/site/progress.json')
-    parser.add_argument('--decomp', type=Path, default=ROOT / 'build/GN7E69/report.json')
+    parser.add_argument('--decomp', type=Path, default=ROOT / 'build/GN7E69-rev0/report.json')
     parser.add_argument('--source-report', type=Path, default=ROOT / 'build/source/report.json')
     parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()

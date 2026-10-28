@@ -12,8 +12,8 @@ import sdk_map
 def inputs(root, context):
     paths = set(sdk_map.analysis_inputs(root))
     paths.update(str(path.relative_to(root)) for path in (root / 'tools').rglob('*.py'))
-    paths.update(('config/GN7E69/baseline.json', 'tools/compiler-tools.json'))
-    return {'files': {path: (sdk_map.unit_input_digest(root) if path == 'config/GN7E69/units.json'
+    paths.update(('config/GN7E69-rev0/baseline.json', 'tools/compiler-tools.json'))
+    return {'files': {path: (sdk_map.unit_input_digest(root) if path == 'config/GN7E69-rev0/units.json'
                              else hashlib.sha256((root / path).read_bytes()).hexdigest())
                       for path in sorted(paths)},
             'context': context, 'host': platform.system() + '-' + platform.machine(),
@@ -26,7 +26,7 @@ def reusable(root, directory, original, context):
         summary = json.loads((directory / 'summary.json').read_text())
         if not isinstance(summary, dict):
             return False
-        target = json.loads((root / 'config/GN7E69/baseline.json').read_text())
+        target = json.loads((root / 'config/GN7E69-rev0/baseline.json').read_text())
         return (len(original) == target['size']
                 and hashlib.sha1(original).hexdigest() == target['sha1']
                 and summary.get('target_sha1') == target['sha1']

@@ -1,6 +1,6 @@
 # decomp.dev reporting
 
-The Baseline workflow exports `build/GN7E69/report.json` and uploads it as the
+The Baseline workflow exports `build/GN7E69-rev0/report.json` and uploads it as the
 `GN7E69_report` artifact, independently of the `report-v1` package. After the
 owner merges this integration and a default-branch run succeeds, a repository
 admin can register the project at <https://decomp.dev/manage/new>.

@@ -77,12 +77,12 @@ class PromotionTests(ReceiptFixture):
         self.site['revision']=self.tested;self.credits['revision']=self.tested
         self.payloads={'progress.json':self.site,'credits.json':self.credits,
                        'compiled.json':publication.sanitized(self.source_report)}
-        self.manifest=dict(schema=1,repository=publication.REPOSITORY,target='GN7E69',environment='pinned-image',
+        self.manifest=dict(schema=1,repository=publication.REPOSITORY,target='GN7E69-rev0',environment='pinned-image',
                            tree=tree,revision=self.tested,head=head,base=base,pull_request=12,run=20,attempt=1,
                            workflow_blob=self.git('rev-parse',self.landed+':'+publication.WORKFLOW),files={k:publication.digest(publication.encoded(v)) for k,v in self.payloads.items()})
         self.receipt=dict(manifest=self.manifest,payloads=self.payloads,
                           provenance=dict(kind='workflow-artifact',run=20,artifact=30,report_sha256=self.manifest['files']['compiled.json']))
-        self.previous=dict(schema=1,target='GN7E69',target_sha1=self.target,snapshots=[])
+        self.previous=dict(schema=1,target='GN7E69-rev0',target_sha1=self.target,snapshots=[])
         (self.root/'web').mkdir()
         for name in ('index.html','style.css','progress.js','activity.js','cover.jpg','logo.png'):
             (self.root/'web'/name).write_bytes(b'fixture')

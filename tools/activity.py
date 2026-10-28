@@ -22,7 +22,7 @@ def timestamp(value):
 
 
 def validate_history(data, target_sha1):
-    if data.get('schema') != 1 or data.get('target') != 'GN7E69' or data.get('target_sha1') != target_sha1:
+    if data.get('schema') != 1 or data.get('target') != 'GN7E69-rev0' or data.get('target_sha1') != target_sha1:
         raise ValueError('Foreign progress history')
     rows = data.get('snapshots')
     if not isinstance(rows, list) or len(rows) > 10000:
@@ -66,7 +66,7 @@ def merge_history(seed, previous, current=None):
             if old is None or timestamp(row['built_at']) < timestamp(old['built_at']):
                 combined[row['revision']] = row
     if current is not None:
-        document = {'schema':1, 'target':'GN7E69', 'target_sha1':target, 'snapshots':[current]}
+        document = {'schema':1, 'target':'GN7E69-rev0', 'target_sha1':target, 'snapshots':[current]}
         for row in validate_history(document, target):
             old = combined.get(row['revision'])
             if old and any(old[k] != row[k] for k in ('code', 'data')):
@@ -354,7 +354,7 @@ def merged_source(root, revision, historical_source, source, migration_commit, m
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
     """Credit exact functions; with build=None, run only the ledger and Git checks."""
-    if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69' or \
+    if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69-rev0' or \
             build is not None and build.get('complete') != 'identical':
         raise ValueError('Function credit requires the verified source build')
     profiles = ledger.get('contributors', {})
@@ -480,7 +480,7 @@ def squash_preflight(root, ledger, build, revision, base, exact_inventory=None, 
 
 def ledger_preflight(root, revision, fetch_missing=False, squash_base=None):
     """Every attribution check that needs only Git and the ledger, before anything is built."""
-    ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    ledger = json.loads((root/'config/GN7E69-rev0/contributors.json').read_text())
     contributors(root, ledger, None, revision, fetch_missing)
     if squash_base:
         contributors(root, ledger, None, squash_commit(root, revision, squash_base), fetch_missing)
@@ -493,7 +493,7 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     import progress
     verified = progress.report((source_report.parent/'main.dol').read_bytes(), site['revision'],
                                source_report, root/'build/analysis',
-                               root/'build/matching/report.json' if json.loads((root/'config/GN7E69/comparisons.json').read_text())['units'] else None)
+                               root/'build/matching/report.json' if json.loads((root/'config/GN7E69-rev0/comparisons.json').read_text())['units'] else None)
     if site.get('source') != verified['source'] or site.get('functions') != verified['functions'] or any(
             site['measures'][kind].get(field) != verified['measures'][kind].get(field)
             for kind in ('code','data') for field in ('linked','matched','fuzzy','total')):
@@ -513,7 +513,7 @@ def _export_verified(root, site, source_report, previous=None, append=False, fet
     compiled = {(u['source'],f['address'],f['size']) for u in build['units'] for f in u['functions']}
     if mapped != compiled:
         raise ValueError('Compiler function receipt differs from the verified public inventory')
-    seed = json.loads((root/'config/GN7E69/history.json').read_text())
+    seed = json.loads((root/'config/GN7E69-rev0/history.json').read_text())
     current = None
     if append:
         check_ancestor(root, site['revision'], 'refs/remotes/origin/main')
@@ -526,12 +526,12 @@ def _export_verified(root, site, source_report, previous=None, append=False, fet
     for row in history:
         check_ancestor(root, row['revision'], site['revision'])
     exact = exact_functions(site)
-    ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    ledger = json.loads((root/'config/GN7E69-rev0/contributors.json').read_text())
     credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:
         if squash_preflight(root, ledger, build, site['revision'], squash_base, exact) != credits:
             raise ValueError('Squash preflight changes original source attribution')
-    return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
+    return {'schema':1, 'target':'GN7E69-rev0', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
             'contribution_basis':'exact-functions', 'credited_functions':len(exact),
             'contributors':credits}

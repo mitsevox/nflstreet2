@@ -68,7 +68,7 @@ def main():
     parser.add_argument("--analysis-dir", type=Path)
     parser.add_argument("--comparison-report", type=Path)
     parser.add_argument("--source-report", type=Path, default=progress.ROOT / "build/source/report.json")
-    parser.add_argument("--output", type=Path, default=progress.ROOT / "build/GN7E69/report.json")
+    parser.add_argument("--output", type=Path, default=progress.ROOT / "build/GN7E69-rev0/report.json")
     args = parser.parse_args()
     args.output.unlink(missing_ok=True)
     data = progress.report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)

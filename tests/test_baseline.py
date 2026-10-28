@@ -23,7 +23,7 @@ class RelinkFreshness(unittest.TestCase):
             original = root / "input.dol"
             original.write_bytes(b"test target")
             (build / "main.dol").write_bytes(original.read_bytes())
-            config = root / "config/GN7E69"
+            config = root / "config/GN7E69-rev0"
             config.mkdir(parents=True)
             (config / "baseline.json").write_text(json.dumps({
                 "size": original.stat().st_size,

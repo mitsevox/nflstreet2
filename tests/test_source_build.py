@@ -57,7 +57,7 @@ class Fixture(unittest.TestCase):
         self.binary = synthetic_dol()
         self.sections = sb.target_sections(self.binary, TARGET, {})
         self.manifest = {
-            "schema": 1, "target": "GN7E69", "compiler": "3.9.3", "include_dirs": [],
+            "schema": 1, "target": "GN7E69-rev0", "compiler": "3.9.3", "include_dirs": [],
             "profiles": {"library": {"flags": ["-O2"], "evidence": "library-level locator"}},
             "externals": {},
             "units": [{"source": "src/unit.c", "profile": "library", "evidence": "unit locator",
@@ -560,24 +560,24 @@ class Build(unittest.TestCase):
         root = Path(temporary.name)
         binary = synthetic_dol()
         target = dict(TARGET, size=len(binary), sha1=hashlib.sha1(binary).hexdigest())
-        (root / "config/GN7E69").mkdir(parents=True)
+        (root / "config/GN7E69-rev0").mkdir(parents=True)
         (root / "tools").mkdir()
         (root / "src").mkdir()
-        (root / "config/GN7E69/baseline.json").write_text(json.dumps(target))
-        (root / "config/GN7E69/analysis.json").write_text(json.dumps({"output_sections": {}}))
+        (root / "config/GN7E69-rev0/baseline.json").write_text(json.dumps(target))
+        (root / "config/GN7E69-rev0/analysis.json").write_text(json.dumps({"output_sections": {}}))
         (root / "tools/compiler-tools.json").write_text(json.dumps({"compiler_version": "3.9.3"}))
         (root / "tools/baseline-tools.json").write_text("{}")
         (root / "src/unit.c").write_text("int unit;\n")
-        manifest = {"schema": 1, "target": "GN7E69", "compiler": "3.9.3", "include_dirs": [],
+        manifest = {"schema": 1, "target": "GN7E69-rev0", "compiler": "3.9.3", "include_dirs": [],
                     "profiles": {"library": {"flags": ["-O2"], "evidence": "locator"}}, "externals": {},
                     "units": [{"source": "src/unit.c", "profile": "library", "evidence": "locator",
                                "sections": [{"section": ".text", "placement": ".init",
                                              "start": "0x80003110", "end": "0x80003118"}, *extra]}]
                     if units else []}
-        manifest_path = root / "config/GN7E69/units.json"
+        manifest_path = root / "config/GN7E69-rev0/units.json"
         manifest_path.write_text(json.dumps(manifest))
         if evidence:
-            (root / "config/GN7E69/evidence.tsv").write_text(evidence)
+            (root / "config/GN7E69-rev0/evidence.tsv").write_text(evidence)
         original = root / "main.dol"
         original.write_bytes(binary)
         build = root / "build/source"

@@ -29,7 +29,7 @@ class HistoryTests(unittest.TestCase):
                 'provenance':{'kind':'workflow-artifact','run':1,'artifact':2,'report_sha256':'b'*64}}
 
     def document(self, rows):
-        return {'schema':1,'target':'GN7E69','target_sha1':'c'*40,'snapshots':rows}
+        return {'schema':1,'target':'GN7E69-rev0','target_sha1':'c'*40,'snapshots':rows}
 
     def test_history_merges_seed_previous_and_current_without_duplicate_reruns(self):
         first=self.row();repeat=copy.deepcopy(first);repeat['built_at']='2026-10-03T11:00:00Z'
@@ -70,7 +70,7 @@ class ContributorTests(unittest.TestCase):
         self.commit=git('rev-parse','HEAD');self.blob=git('rev-parse','HEAD:src/test.c')
         self.entry={'source':'src/test.c','contributors':['alice'],'functions':['0x80000000'],
                     'provenance':{'pull_request':1,'merged_via':2,'commit':self.commit,'introduced_blob':self.blob}}
-        self.ledger={'schema':1,'target':'GN7E69','contributors':{'alice':{'id':1},'bob':{'id':2}},'entries':[self.entry]}
+        self.ledger={'schema':1,'target':'GN7E69-rev0','contributors':{'alice':{'id':1},'bob':{'id':2}},'entries':[self.entry]}
         self.build={'complete':'identical','units':[{'source':'src/test.c','functions':[{'address':'0x80000000'}]}]}
 
     def credits(self):
@@ -648,7 +648,7 @@ class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
         summary['candidate_counts']['function'] = 3
         summary['symbols_sha256'] = progress.digest(symbols)
         summary_path.write_text(json.dumps(summary))
-        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence = self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text().replace(
             'function\t0x80003104\t0x8000310C', 'function\t0x80003104\t0x80003108') +
             'function\t0x80003108\t0x8000310C\tfn_80003108\ttarget\texact\texact\tfixture\n')
@@ -686,11 +686,11 @@ class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
             if not path.exists():
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text('fixture '+name)
-        target_path = self.root/'config/GN7E69/baseline.json'
+        target_path = self.root/'config/GN7E69-rev0/baseline.json'
         target = json.loads(target_path.read_text())
         target['sections'] = {'.init':'0x80003100', '.data':'0x80004100', '.bss':'0x80005000'}
         target_path.write_text(json.dumps(target))
-        self.source_report['tools']['config/GN7E69/baseline.json'] = progress.digest(target_path)
+        self.source_report['tools']['config/GN7E69-rev0/baseline.json'] = progress.digest(target_path)
         self.save()
         with patch.object(matching, 'ROOT', self.root):
             payload = {'schema':1, 'target_sha1':self.target, 'inputs':matching.bindings(),
@@ -719,7 +719,7 @@ class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
 
     def test_foreign_revision_cannot_append_history(self):
         bad = copy.deepcopy(self.site); bad['revision'] = '0'*40
-        previous = json.loads((self.root/'config/GN7E69/history.json').read_text())
+        previous = json.loads((self.root/'config/GN7E69-rev0/history.json').read_text())
         with self.assertRaisesRegex(ValueError, 'outside this revision history'):
             self.export(bad, previous=previous, append=True)
 
@@ -737,7 +737,7 @@ class LiveReceiptTests(unittest.TestCase):
         # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
         result = activity.export(root, site, report)
         published = json.loads((site_path.parent/'activity.json').read_text())
-        decomp = json.loads((root/'build/GN7E69/report.json').read_text())
+        decomp = json.loads((root/'build/GN7E69-rev0/report.json').read_text())
         check_progress_maps.verify(root, site, decomp, json.loads(report.read_text())['units'], site)
         self.assertEqual(result['revision'], site['revision'])
         self.assertEqual(result['credited_functions'], site['functions']['exact'])

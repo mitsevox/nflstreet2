@@ -17,7 +17,7 @@ class ProgressBase(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        config = self.root / "config/GN7E69"
+        config = self.root / "config/GN7E69-rev0"
         config.mkdir(parents=True)
         binary = bytearray(0x120)
         for offset, value in ((0, 0x100), (0x48, 0x80003100), (0x90, 16),
@@ -50,7 +50,7 @@ class ProgressTests(ProgressBase):
         binary = bytearray(self.binary)
         struct.pack_into(">I", binary, 0x64, 0x80005008)
         binary = bytes(binary)
-        (self.root / "config/GN7E69/baseline.json").write_text(json.dumps({
+        (self.root / "config/GN7E69-rev0/baseline.json").write_text(json.dumps({
             "size": len(binary), "sha1": hashlib.sha1(binary).hexdigest()}))
         data = progress.report(binary, "a" * 40)
         self.assertEqual(data["measures"]["data"]["total"], 32)
@@ -75,7 +75,7 @@ class SourceReportTests(ProgressBase):
         configured = [{"section": ".text", "placement": ".init", "start": "0x80003104", "end": "0x8000310C"},
                       {"section": ".bss", "placement": ".bss", "start": "0x80005008", "end": "0x8000500C"}]
         manifest = {"schema": 1, "units": [{"source": "src/unit.c", "sections": configured}] if units else []}
-        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest_path = self.root / "config/GN7E69-rev0/units.json"
         manifest_path.write_text(json.dumps(manifest))
         self.report_path = self.root / "build/source/report.json"
         self.report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -101,7 +101,7 @@ class SourceReportTests(ProgressBase):
                              dict(configured[0], kind="code", linked=8, matched=8, status="matched"),
                              dict(configured[1], kind="data", linked=4, matched=4, status="matched")]}]
         self.source_report = {
-            "schema": 1, "target": "GN7E69", "target_sha1": hashlib.sha1(self.binary).hexdigest(),
+            "schema": 1, "target": "GN7E69-rev0", "target_sha1": hashlib.sha1(self.binary).hexdigest(),
             "manifest_sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
             "tools": tools,
             "complete": "identical", "output_sha1": hashlib.sha1(self.binary).hexdigest(),
@@ -193,7 +193,7 @@ class SourceReportTests(ProgressBase):
         self.write_source()
         follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
                     "follows": ".text"}
-        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest_path = self.root / "config/GN7E69-rev0/units.json"
         manifest = json.loads(manifest_path.read_text())
         manifest["units"][0]["sections"].insert(1, follower)
         manifest_path.write_text(json.dumps(manifest))
@@ -202,7 +202,7 @@ class SourceReportTests(ProgressBase):
         unit["sections"].insert(1, dict(follower, kind="code", linked=4, matched=4, status="matched"))
         self.source_report["totals"]["code"] = {"linked": 12, "matched": 12}
         self.save()
-        (self.root / "config/GN7E69/evidence.tsv").write_text(
+        (self.root / "config/GN7E69-rev0/evidence.tsv").write_text(
             "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
             "data\t0x8000310C\t0x80003110\tdata_8000310C\ttarget\texact\texact\tfixture\n")
         data = progress.report(self.binary, "a" * 40, self.report_path)
@@ -220,7 +220,7 @@ class SourceReportTests(ProgressBase):
 
     def test_overlapping_ranges_are_rejected(self):
         self.write_source()
-        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest_path = self.root / "config/GN7E69-rev0/units.json"
         manifest = json.loads(manifest_path.read_text())
         second = dict(manifest["units"][0], source="src/second.c")
         second["sections"] = [dict(manifest["units"][0]["sections"][0])]
@@ -275,7 +275,7 @@ class FunctionInventoryTests(ProgressBase):
                    "symbols_sha256": progress.digest(self.analysis / "symbols.txt"),
                    "inputs": progress.sdk_map.analysis_inputs(self.root)}
         (self.analysis / "summary.json").write_text(json.dumps(summary))
-        (self.root / "config/GN7E69/evidence.tsv").write_text(
+        (self.root / "config/GN7E69-rev0/evidence.tsv").write_text(
             "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
             "function\t0x80003104\t0x8000310C\tfn_80003104\ttarget\texact\texact\tfixture\n"
             "name\t0x80003104\t-\tExample\trelated\t-\t-\tfixture\n"
@@ -291,12 +291,12 @@ class FunctionInventoryTests(ProgressBase):
         summary.update(candidate_counts={"function": 1}, symbols_sha256=progress.digest(symbols))
         (self.analysis / "summary.json").write_text(json.dumps(summary))
         self.without_evidence_function("0x8000310C")
-        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+        with (self.root / "config/GN7E69-rev0/evidence.tsv").open("a") as file:
             file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\texact\texact\tfixture\n")
         return {"type": "function", "kind": "code", "start": "0x8000310C", "end": "0x80003110"}
 
     def inventory_with(self, entries, data_spans=()):
-        target = json.loads((self.root / "config/GN7E69/baseline.json").read_text())
+        target = json.loads((self.root / "config/GN7E69-rev0/baseline.json").read_text())
         return progress.function_inventory(target, [], self.analysis, data_spans=data_spans,
                                            comparison_functions=entries)
 
@@ -335,7 +335,7 @@ class FunctionInventoryTests(ProgressBase):
         self.without_evidence_function("0x8000310C")
         with self.assertRaisesRegex(ValueError, "complete exact boundary"):
             self.inventory_with([entry])
-        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+        with (self.root / "config/GN7E69-rev0/evidence.tsv").open("a") as file:
             file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\tprovisional\topen\tfixture\n")
         with self.assertRaisesRegex(ValueError, "complete exact boundary"):
             self.inventory_with([entry])
@@ -344,7 +344,7 @@ class FunctionInventoryTests(ProgressBase):
         entry = self.supplemental_fixture()
         with self.assertRaisesRegex(ValueError, "overlaps function candidate"):
             self.inventory_with([entry], [(0x8000310C, 0x80003110, "data")])
-        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+        with (self.root / "config/GN7E69-rev0/evidence.tsv").open("a") as file:
             file.write("function\t0x80003108\t0x80003110\tfn_80003108\ttarget\texact\texact\tfixture\n")
         with self.assertRaisesRegex(ValueError, "overlaps an inventory candidate"):
             self.inventory_with([dict(entry, start="0x80003108")])
@@ -361,7 +361,7 @@ class FunctionInventoryTests(ProgressBase):
         """Configure read-only data after the unit's code over 0x8000310C-0x80003110."""
         follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
                     "follows": ".text"}
-        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest_path = self.root / "config/GN7E69-rev0/units.json"
         manifest = json.loads(manifest_path.read_text())
         manifest["units"][0]["sections"].insert(1, follower)
         manifest_path.write_text(json.dumps(manifest))
@@ -372,7 +372,7 @@ class FunctionInventoryTests(ProgressBase):
         self.save()
 
     def without_evidence_function(self, start):
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if not line.startswith(f"function\t{start}\t")) + "\n")
 
@@ -395,7 +395,7 @@ class FunctionInventoryTests(ProgressBase):
                 progress.report(self.binary, "a" * 40, self.report_path, analysis)
 
     def add_data_row(self, edges="exact\texact"):
-        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+        with (self.root / "config/GN7E69-rev0/evidence.tsv").open("a") as file:
             file.write(f"data\t0x8000310C\t0x80003110\tdata_8000310C\ttarget\t{edges}\tfixture\n")
 
     def single_candidate_inventory(self):
@@ -428,7 +428,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_verified_compiler_extent_counts_without_a_separate_function_boundary_row(self):
         self.write_inventory()
-        path=self.root / 'config/GN7E69/evidence.tsv'
+        path=self.root / 'config/GN7E69-rev0/evidence.tsv'
         path.write_text('\n'.join(line for line in path.read_text().splitlines()
                          if not line.startswith('function\t0x80003104')) + '\n')
         data=progress.report(self.binary, 'a'*40, self.report_path, self.analysis)
@@ -452,7 +452,7 @@ class FunctionInventoryTests(ProgressBase):
                 self.write_inventory()
                 self.source_report["units"][0]["functions"][0]["symbol"] = symbol
                 self.save()
-                path = self.root / "config/GN7E69/evidence.tsv"
+                path = self.root / "config/GN7E69-rev0/evidence.tsv"
                 path.write_text("\n".join(line for line in path.read_text().splitlines()
                                            if "\tExample\t" not in line) + "\n")
                 with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
@@ -472,7 +472,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_neutral_compiler_function_can_remain_explicitly_unknown(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
@@ -481,7 +481,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_mangled_address_methods_remain_unknown_in_both_exports(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         self.source_report["units"][0]["functions"][0]["symbol"] = "fn_80003104__8UIScreenFv"
@@ -495,7 +495,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_inherited_virtual_slots_remain_unknown_in_both_exports(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         import decomp_report
@@ -520,7 +520,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_descriptive_virtual_slot_suffix_still_requires_name_evidence(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         for symbol in ("vfn_04Meaning__11SystemGroup", "vfn_1__11SystemGroup", "vfn_100__11SystemGroup"):
@@ -541,7 +541,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_address_suffix_does_not_make_descriptive_methods_neutral(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         self.source_report["units"][0]["functions"][0]["symbol"] = "Method_80003104__8UIScreenFv"
@@ -582,7 +582,7 @@ class FunctionInventoryTests(ProgressBase):
 
     def test_overlapping_evidence_is_rejected_before_counting(self):
         self.write_inventory()
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         with path.open("a") as file:
             file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\texact\texact\tfixture\n")
         path.write_text(path.read_text().replace("0x80003104\t0x8000310C", "0x80003104\t0x80003110"))
@@ -753,7 +753,7 @@ class FileInventoryTests(ProgressBase):
                          {"total": 3, "exact": 0, "named": 2, "basis": "mapped-file-inventory"})
 
     def test_exact_files_require_boundaries_and_all_matched_siblings_not_linked(self):
-        path = self.root / "config/GN7E69/evidence.tsv"
+        path = self.root / "config/GN7E69-rev0/evidence.tsv"
         path.write_text("kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
                         "unit\t0x80003100\t0x80003108\tsrc/game/Player.cpp\ttarget\texact\texact\tfixture\n")
         rows = [{"name": "src/game/Player.cpp", "source": "src/game/Player.cpp", "kind": "code",
@@ -768,7 +768,7 @@ class FileInventoryTests(ProgressBase):
         self.assertEqual(progress.file_inventory(rows)["exact"], 0)
 
     def test_data_only_file_can_be_exact_with_confirmed_unit_boundaries(self):
-        (self.root / "config/GN7E69/evidence.tsv").write_text(
+        (self.root / "config/GN7E69-rev0/evidence.tsv").write_text(
             "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
             "unit\t0x80004100\t0x80004108\tsrc/game/Tables.c\ttarget\texact\texact\tfixture\n")
         rows = [{"name": "src/game/Tables.c", "kind": "data", "size": 8, "matched": 8,

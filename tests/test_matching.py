@@ -17,9 +17,9 @@ class OverlayTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.root = Path(self.directory.name)
-        (self.root / 'config/GN7E69').mkdir(parents=True)
-        (self.root / 'config/GN7E69/units.json').write_text(json.dumps({'units': [{'source': 'accepted.c'}]}))
-        (self.root/'config/GN7E69/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\n')
+        (self.root / 'config/GN7E69-rev0').mkdir(parents=True)
+        (self.root / 'config/GN7E69-rev0/units.json').write_text(json.dumps({'units': [{'source': 'accepted.c'}]}))
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\n')
         self.patch = patch.object(matching, 'ROOT', self.root)
         self.patch.start()
         self.addCleanup(self.patch.stop)
@@ -65,7 +65,7 @@ class OverlayTests(unittest.TestCase):
         measurement['entries'][0].update(start='0x80000000',type='function',matched=8,fuzzy=8)
         result = matching.apply(data,measurement)
         self.assertEqual(result['functions']['exact'],0)
-        (self.root/'config/GN7E69/evidence.tsv').write_text(
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text(
             'kind\tstart\tend\tstart_boundary\tend_boundary\n'
             'function\t0x80000000\t0x80000008\texact\texact\n')
         matching.apply(result,measurement)

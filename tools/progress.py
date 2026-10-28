@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Files the source build trusts; a report is valid only for the same versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
-                 "tools/diagnostic_object.py", "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
+                 "tools/diagnostic_object.py", "config/GN7E69-rev0/baseline.json", "config/GN7E69-rev0/analysis.json")
 
 
 def digest(path):
@@ -31,7 +31,7 @@ def source_ranges(target, source_report):
     source = ROOT / "src"
     files = sorted(p.relative_to(ROOT).as_posix() for p in source.rglob("*") if p.is_file()) \
         if source.exists() else []
-    manifest_path = ROOT / "config/GN7E69/units.json"
+    manifest_path = ROOT / "config/GN7E69-rev0/units.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {"units": []}
     configured = [unit["source"] for unit in manifest.get("units", [])]
     if source_report is None or not source_report.exists():
@@ -39,7 +39,7 @@ def source_ranges(target, source_report):
             raise ValueError("Source units require a measured source-build report")
         return [], 0
     data = json.loads(source_report.read_text())
-    if data.get("schema") != 1 or data.get("target") != "GN7E69" \
+    if data.get("schema") != 1 or data.get("target") != "GN7E69-rev0" \
             or data.get("target_sha1") != target["sha1"]:
         raise ValueError("Measured source-build report is for a different target")
     if data.get("complete") != "identical" or data.get("output_sha1") != target["sha1"]:
@@ -83,7 +83,7 @@ def source_ranges(target, source_report):
     ordered = sorted((start, end) for _, start, end in ranges)
     if any(right[0] < left[1] for left, right in zip(ordered, ordered[1:])):
         raise ValueError("Measured source ranges overlap")
-    comparison_config = ROOT / "config/GN7E69/comparisons.json"
+    comparison_config = ROOT / "config/GN7E69-rev0/comparisons.json"
     drafts = json.loads(comparison_config.read_text())["units"] if comparison_config.exists() else []
     draft_sources = {unit["source"] for unit in drafts}
     unmeasured = [path for path in files if path not in measured and path not in draft_sources]
@@ -165,7 +165,7 @@ def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=(),
         raise ValueError("Function inventory count is inconsistent")
     source_build.check_data_in_code(data_spans, [(start, start + size, f"candidate fn_{start:08X}")
                                                  for start, size in candidates.items()])
-    evidence_path = ROOT / "config/GN7E69/evidence.tsv"
+    evidence_path = ROOT / "config/GN7E69-rev0/evidence.tsv"
     records = []
     if evidence_path.exists():
         with evidence_path.open() as file:
@@ -428,7 +428,7 @@ def remainder(parent, children):
 
 
 def report(binary, revision, source_report=None, analysis_dir=None, comparison_report=None):
-    target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
+    target = json.loads((ROOT / "config/GN7E69-rev0/baseline.json").read_text())
     if len(binary) != target["size"] or hashlib.sha1(binary).hexdigest() != target["sha1"]:
         raise ValueError("Progress requires the verified target executable")
     if not re.fullmatch(r"[0-9a-f]{40}", revision):
@@ -506,14 +506,14 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
     ownership += game_map.load(ROOT, sections, ownership + measured_units)
     data = {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
-            "target": "GN7E69", "target_sha1": target["sha1"],
+            "target": "GN7E69-rev0", "target_sha1": target["sha1"],
             "basis": "executable-sections", "baseline": "verified",
             "source": {"units": unit_count, "report": "measured" if source_report and
                        source_report.exists() else "absent"},
             "functions": functions, "measures": measures, "sections": sections,
             "files": file_map(sections, source_report, function_items,
                               ownership)}
-    comparison_config = ROOT / "config/GN7E69/comparisons.json"
+    comparison_config = ROOT / "config/GN7E69-rev0/comparisons.json"
     if comparison_config.exists() and json.loads(comparison_config.read_text())["units"] and comparison_report is None:
         raise ValueError("Draft source requires a current comparison report")
     if measurement is not None:

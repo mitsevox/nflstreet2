@@ -1,0 +1,11 @@
+{
+ "schema": 1,
+ "slug": "nflstreet2",
+ "title": "NFL Street 2",
+ "shortTitle": "NFL Street 2",
+ "console": "GameCube",
+ "year": "2004",
+ "contributions": {"accepting": true, "guideUrl": "https://github.com/mitsevox/nflstreet2/blob/main/CONTRIBUTING.md"},
+ "artwork": {"cover": "cover.webp", "width": 630, "height": 908},
+ "contributors": true
+}

@@ -108,7 +108,7 @@ class MeasuredDecompReportTests(ProgressBase):
 
     def test_confirmed_whole_file_is_complete(self):
         test_progress.SourceReportTests.write_source(self)
-        (self.root / "config/GN7E69/evidence.tsv").write_text(
+        (self.root / "config/GN7E69-rev0/evidence.tsv").write_text(
             "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
             "unit\t0x80003104\t0x8000310C\tsrc/unit.c\ttarget\texact\texact\tfixture\n")
         report = decomp_report.progress.report(self.binary, "a" * 40, self.report_path)

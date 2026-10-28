@@ -187,7 +187,7 @@ def main():
     parser.add_argument("--cache-context", default="", help="Pinned build environment identity")
     args = parser.parse_args()
     original = args.original.resolve()
-    target_dir = ROOT / "config" / "GN7E69"
+    target_dir = ROOT / "config" / "GN7E69-rev0"
     target = json.loads((target_dir / "baseline.json").read_text())
     plan = json.loads((target_dir / "analysis.json").read_text())
     data = original.read_bytes()

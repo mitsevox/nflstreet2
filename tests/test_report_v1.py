@@ -26,7 +26,7 @@ class Fixture(unittest.TestCase):
         group = dict(name='src/a.c', kind='code', size=32, linked=0, matched=28, fuzzy=28.0,
                      source='src/a.c', complete=False, boundary='provisional',
                      scope='mapped-ranges', children=functions)
-        self.site = dict(schema=1, revision='a'*40, built_at='2026-10-25T00:00:00+00:00', target='GN7E69',
+        self.site = dict(schema=1, revision='a'*40, built_at='2026-10-25T00:00:00+00:00', target='GN7E69-rev0',
                          target_sha1='3561e946e9ff785b68692f87d2ba85d81fd2dcf4', baseline='verified',
                          measures=dict(code=dict(total=32, linked=0, matched=28, fuzzy=28.0),
                                        data=dict(total=4, linked=0, matched=0, fuzzy=0.0)),
@@ -38,7 +38,7 @@ class Fixture(unittest.TestCase):
                                         address='0x80100000')],
                          files=[group, dict(name='.data', kind='data', size=4, linked=0, matched=0, fuzzy=0.0,
                                            address='0x80100000', auto_generated=True)])
-        self.ledger = dict(schema=1, target='GN7E69',
+        self.ledger = dict(schema=1, target='GN7E69-rev0',
                            contributors={'alice': dict(id=7), 'bob': dict(id=9)},
                            entries=[dict(source='src/a.c', functions=['0x80000000', '0x80000008'],
                                          contributors=['alice', 'bob']),
@@ -98,8 +98,8 @@ class MapAndSummary(Fixture):
 class Contributors(Fixture):
     def test_function_ledger_uses_map_identities_and_matches_the_verified_feed(self):
         document = report_v1.contributors_document(self.site, self.feed, self.ledger)
-        self.assertEqual(document['functions'], [dict(id='GN7E69:0x80000000:8', authors=[7, 9]),
-                                                 dict(id='GN7E69:0x80000010:16', authors=[9])])
+        self.assertEqual(document['functions'], [dict(id='GN7E69-rev0:0x80000000:8', authors=[7, 9]),
+                                                 dict(id='GN7E69-rev0:0x80000010:16', authors=[9])])
         self.assertEqual(document['contributors'], [dict(login='bob', id=9, functions=2),
                                                     dict(login='alice', id=7, functions=1)])
         self.assertEqual(document['credited_functions'], 2)
@@ -183,7 +183,7 @@ class ProducerPolicy(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.workflow = (ROOT/report_v1.WORKFLOW).read_text()
-        cls.template = json.loads((ROOT/'config/GN7E69/report-v1-producer.json').read_text())
+        cls.template = json.loads((ROOT/'config/GN7E69-rev0/report-v1-producer.json').read_text())
 
     def test_policy_names_real_single_workflow_steps_and_artifact(self):
         names = re.findall(r'(?m)^      - name: (.+)$', self.workflow)

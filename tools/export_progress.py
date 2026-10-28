@@ -41,7 +41,7 @@ def main():
     parser.add_argument('--squash-base')
     args = parser.parse_args()
     output = ROOT/'build/site'
-    decomp_path = ROOT/'build/GN7E69/report.json'
+    decomp_path = ROOT/'build/GN7E69-rev0/report.json'
     # A failed run cannot leave earlier successful reports available for upload.
     for path in (output/'progress.json', output/'activity.json', decomp_path):
         path.unlink(missing_ok=True)

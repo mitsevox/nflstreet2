@@ -133,7 +133,7 @@ def restore(root, seed, revision):
         merged={r['revision']:r for r in rows}
         if any(merged[r['revision']]!=r for r in store['snapshots']):
             raise ValueError('Main package history differs from the rows the site accepted')
-    document={'schema':1,'target':'GN7E69','target_sha1':target,'revision':sources[0]['revision'],'snapshots':rows}
+    document={'schema':1,'target':'GN7E69-rev0','target_sha1':target,'revision':sources[0]['revision'],'snapshots':rows}
     return document,{'sources':[r for r in (own_receipt,store_receipt) if r is not None]}
 
 
@@ -142,7 +142,7 @@ def main():
     parser.add_argument('--revision',default='HEAD')
     parser.add_argument('--output',type=Path,default=ROOT/'build/activity/previous.json')
     args=parser.parse_args()
-    seed=json.loads((ROOT/'config/GN7E69/history.json').read_text())
+    seed=json.loads((ROOT/'config/GN7E69-rev0/history.json').read_text())
     revision=subprocess.check_output(['git','rev-parse',args.revision],cwd=ROOT,text=True).strip()
     document,receipt=restore(ROOT,seed,revision)
     args.output.parent.mkdir(parents=True,exist_ok=True)

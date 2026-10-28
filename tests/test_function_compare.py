@@ -200,7 +200,7 @@ class ComparisonFixture(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        for name in ('src', 'config/GN7E69', 'tools', 'build/source'):
+        for name in ('src', 'config/GN7E69-rev0', 'tools', 'build/source'):
             (self.root/name).mkdir(parents=True)
         self.source = self.root/'src/unit.c'
         self.source.write_text('int fn_80000000(void) { volatile int x = 1; return x; }\n')
@@ -208,7 +208,7 @@ class ComparisonFixture(unittest.TestCase):
         self.target = {'sha1': matching.hashlib.sha1(self.binary).hexdigest(), 'size': len(self.binary),
                        'entry': '0x80000000', 'sda_base':'0x803F22A0', 'sda2_base':'0x804022A0',
                        'sections': {'.text': '0x80000000'}}
-        self.manifest = {'schema':1, 'target':'GN7E69', 'compiler':'3.9.3', 'include_dirs':[],
+        self.manifest = {'schema':1, 'target':'GN7E69-rev0', 'compiler':'3.9.3', 'include_dirs':[],
                          'profiles':{'test':{'flags':['-O2'], 'evidence':'test fixture'}},
                          'externals':{}, 'units':[]}
         self.unit = {'source':'src/unit.c', 'profile':'test', 'evidence':'test fixture',
@@ -216,9 +216,9 @@ class ComparisonFixture(unittest.TestCase):
                      'functions':[{'symbol':'fn_80000000','start':'0x80000000','end':'0x80000008'}]}
         self.config = {'schema':2, 'units':[self.unit]}
         self.write_config()
-        (self.root/'config/GN7E69/analysis.json').write_text(json.dumps({'output_sections': {'.data5':'.sdata'}}))
-        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
-        (self.root/'config/GN7E69/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
+        (self.root/'config/GN7E69-rev0/analysis.json').write_text(json.dumps({'output_sections': {'.data5':'.sdata'}}))
+        (self.root/'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
             'function\t0x80000000\t0x80000008\texact\texact\tfn_80000000\n')
         (self.root/'build/source/report.json').write_text('{"units": []}')
         shutil.copy(sb.ROOT/'tools/prodg_cc.py', self.root/'tools/prodg_cc.py')
@@ -234,7 +234,7 @@ class ComparisonFixture(unittest.TestCase):
             mocked.start(); self.addCleanup(mocked.stop)
 
     def write_config(self):
-        (self.root/'config/GN7E69/units.json').write_text(json.dumps(self.manifest))
+        (self.root/'config/GN7E69-rev0/units.json').write_text(json.dumps(self.manifest))
         (self.root/function_compare.CONFIG).write_text(json.dumps(self.config))
 
     @staticmethod
@@ -282,7 +282,7 @@ class InPlaceComparisons(ComparisonFixture):
         self.unit['sections'][0]['end'] = '0x80000010'
         self.unit['functions'][0]['end'] = '0x80000010'
         self.write_config()
-        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence = self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text().replace('0x80000008', '0x80000010'))
         receipts=function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
         entries=function_compare.load(receipts,self.binary,self.root)
@@ -324,7 +324,7 @@ class InPlaceComparisons(ComparisonFixture):
         self.manifest['profiles']['test']['source_root'] = {
             'directory':'src', 'file_prefix':'../../../Source', 'evidence':'staged test fixture'}
         self.write_config()
-        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence=self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text() + 'function\t0x80000100\t0x80000108\texact\texact\tfn_80000100\n')
         manifest, units=function_compare.configured(self.root,self.binary)
         unit=units[0]
@@ -353,7 +353,7 @@ class InPlaceComparisons(ComparisonFixture):
         self.binary=self.dol(bytes(0x10));self.original.write_bytes(self.binary)
         self.unit['sections'][0]['end']='0x80000010';self.unit['functions'][0]['end']='0x80000010'
         self.write_config()
-        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence=self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text().replace('0x80000008','0x80000010'))
         manifest, units=function_compare.configured(self.root,self.binary)
         compiler, wrapper=sb.setup_compiler.setup()
@@ -389,7 +389,7 @@ class InPlaceComparisons(ComparisonFixture):
         self.unit['functions'][0]['end']='0x80000040'
         self.unit['functions'].append({'symbol':'fn_80000100','start':'0x80000100','end':'0x80000108'})
         self.write_config()
-        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence=self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text().replace('0x80000008','0x80000040')+
             'function\t0x80000100\t0x80000108\texact\texact\tfn_80000100\n')
         measured=function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
@@ -472,11 +472,11 @@ class InPlaceComparisons(ComparisonFixture):
         binary+=bytes.fromhex('00000001')
         self.binary=bytes(binary);self.original.write_bytes(self.binary)
         self.target['sections']['.data5']='0x803EA2A0'
-        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        (self.root/'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
         self.unit['sections'].append({'section':'.sdata','placement':'.data5',
                                      'start':'0x803EA2A0','end':'0x803EA2A4'})
         self.write_config()
-        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence=self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text()+'data\t0x803EA2A0\t0x803EA2A4\texact\texact\tvalue\n')
         measured=function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
         entries=function_compare.load(measured,self.binary,self.root)
@@ -500,14 +500,14 @@ class InPlaceComparisons(ComparisonFixture):
                     struct.pack_into('>I', binary, offset, value)
                 self.binary = bytes(binary) + data; self.original.write_bytes(self.binary)
                 self.target['sections']['.data3'] = f'0x{start:08X}'
-                (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+                (self.root/'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
                 self.unit['sections'] = [
                     {'section': '.text', 'placement': '.text', 'start': '0x80000000', 'end': '0x8000000C'},
                     {'section': '.rodata', 'placement': '.data3', 'start': f'0x{start:08X}',
                      'end': f'0x{start + len(data):08X}'}]
                 self.unit['functions'][0]['end'] = '0x8000000C'
                 self.write_config()
-                (self.root/'config/GN7E69/evidence.tsv').write_text(
+                (self.root/'config/GN7E69-rev0/evidence.tsv').write_text(
                     'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
                     'function\t0x80000000\t0x8000000C\texact\texact\tfixture\n'
                     f'data\t0x{start:08X}\t0x{start + len(data):08X}\texact\texact\tfixture\n')
@@ -567,7 +567,7 @@ class InPlaceComparisons(ComparisonFixture):
             struct.pack_into('>I', binary, offset, value)
         self.binary = bytes(binary + rodata); self.original.write_bytes(self.binary)
         self.target['sections']['.data3'] = '0x80100000'
-        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        (self.root/'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
         accepted = {'source':'src/unit.c', 'profile':'test', 'evidence':'test fixture', 'sections':[
             {'section':'.text','placement':'.text','start':'0x80000100','end':'0x8000010C'},
             {'section':'.rodata','placement':'.data3','start':'0x8010000C','end':'0x80100014'}]}
@@ -586,7 +586,7 @@ class InPlaceComparisons(ComparisonFixture):
             evidence += ('function\t0x80000200\t0x8000020C\texact\texact\tfn_80000200\n'
                          'data\t0x80100014\t0x8010001C\texact\texact\ttail string\n')
         self.write_config()
-        (self.root/'config/GN7E69/evidence.tsv').write_text(evidence)
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text(evidence)
         manifest, units = function_compare.configured(self.root, self.binary)
         unit = dict(units[0], sections=accepted['sections'])
         compiler, wrapper = sb.setup_compiler.setup()
@@ -673,7 +673,7 @@ class InPlaceComparisons(ComparisonFixture):
         self.partial_data_fixture(linked_rodata=b'linked\0\1')
         with self.assertRaisesRegex(ValueError, 'linked bytes at their native placement'):
             function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
-        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence = self.root/'config/GN7E69-rev0/evidence.tsv'
         evidence.write_text(evidence.read_text().replace('0x8010000C\texact\texact', '0x8010000C\texact\tprovisional'))
         with self.assertRaisesRegex(ValueError, 'evidenced'):
             function_compare.configured(self.root, self.binary)
@@ -857,7 +857,7 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
     """End-to-end draft comparisons with read-only data after code and mapped uninitialized storage."""
 
     def evidence(self, *rows):
-        (self.root/'config/GN7E69/evidence.tsv').write_text(
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text(
             'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n' +
             ''.join(f'{kind}\t0x{a:08X}\t0x{b:08X}\texact\texact\tfixture\n' for kind, a, b in rows))
 
@@ -944,7 +944,7 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
         self.write_binary(bytes.fromhex('800da340806da3447c601a144e800020906da3484e800020'
                                         '803ec5e0803ec5e80000000000000000'), bss=(0x803EC5E0, 12))
         self.target['sections']['.sbss'] = '0x803EC5E0'
-        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        (self.root/'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
         self.unit['sections'] = [{'section': '.text', 'placement': '.text', 'start': '0x80000000', 'end': '0x80000018'},
                                  {'section': '.rodata', 'placement': '.text', 'start': '0x80000018', 'end': '0x80000028',
                                   'follows': '.text'},

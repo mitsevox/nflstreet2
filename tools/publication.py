@@ -93,7 +93,7 @@ def prepare(root, environment, event, output):
         raise ValueError('Foreign contribution repository')
     payloads = {'progress.json': encoded(site), 'compiled.json': encoded(sanitized(build)),
                 'credits.json': encoded(credits)}
-    manifest = dict(schema=1, repository=REPOSITORY, target='GN7E69', environment=environment,
+    manifest = dict(schema=1, repository=REPOSITORY, target='GN7E69-rev0', environment=environment,
                     revision=revision, tree=tree, head=pr['head']['sha'], base=pr['base']['sha'],
                     pull_request=pr['number'], run=int(os.environ['GITHUB_RUN_ID']),
                     attempt=int(os.environ['GITHUB_RUN_ATTEMPT']),
@@ -129,7 +129,7 @@ def authenticate(root, revision, environment, pr, run, jobs, artifact, commit, m
     """Check GitHub-held execution identity separately from downloaded claims."""
     tree = git(root, 'rev-parse', revision+'^{tree}')
     parent = git(root, 'rev-parse', revision+'^')
-    expected = dict(schema=1, repository=REPOSITORY, target='GN7E69', environment=environment,
+    expected = dict(schema=1, repository=REPOSITORY, target='GN7E69-rev0', environment=environment,
                     tree=tree, pull_request=pr['number'], head=pr['head']['sha'], base=parent,
                     run=run['id'], attempt=run['run_attempt'],
                     workflow_blob=git(root, 'rev-parse', revision+':'+WORKFLOW))
@@ -232,9 +232,9 @@ def promote(root, revision, receipt, previous):
     site, build, prior = payloads['progress.json'], payloads['compiled.json'], payloads['credits.json']
     if site['revision'] != manifest['revision'] or prior['revision'] != manifest['revision'] \
             or site.get('baseline') != 'verified' or site['target_sha1'] != build['target_sha1'] \
-            or build['target'] != 'GN7E69' or build['complete'] != 'identical':
+            or build['target'] != 'GN7E69-rev0' or build['complete'] != 'identical':
         raise ValueError('Publication target or verified revision differs')
-    if build['manifest_sha256'] != digest((root/'config/GN7E69/units.json').read_bytes()) \
+    if build['manifest_sha256'] != digest((root/'config/GN7E69-rev0/units.json').read_bytes()) \
             or any(u['source_sha256'] != digest((root/u['source']).read_bytes()) for u in build['units']):
         raise ValueError('Publication source bindings differ')
     def linked(item):
@@ -249,7 +249,7 @@ def promote(root, revision, receipt, previous):
     decomp = decomp_report.objdiff_report(site)
     check_progress_maps.verify(root, site, decomp, build['units'], authenticated_comparisons=True)
     exact = activity.exact_functions(site)
-    ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    ledger = json.loads((root/'config/GN7E69-rev0/contributors.json').read_text())
     credits = activity.contributors(root, ledger, build, revision, True, exact)
     if credits != prior['contributors'] or len(exact) != prior['credited_functions']:
         raise ValueError('Landed original contributor attribution differs from final PR')
@@ -258,20 +258,20 @@ def promote(root, revision, receipt, previous):
     site['built_at'] = datetime.now(timezone.utc).isoformat()
     site['verification'] = {**receipt['provenance'], 'tested_revision': manifest['revision'],
                             'tree': manifest['tree'], 'environment': manifest['environment']}
-    seed = json.loads((root/'config/GN7E69/history.json').read_text())
+    seed = json.loads((root/'config/GN7E69-rev0/history.json').read_text())
     current = dict(revision=revision, built_at=site['built_at'], provenance=receipt['provenance'],
                    **{k: {f: site['measures'][k][f] for f in ('linked', 'total')} for k in ('code', 'data')})
     history = activity.merge_history(seed, previous, current)
     for row in history:
         activity.check_ancestor(root, row['revision'], revision)
-    feed = dict(schema=1, target='GN7E69', target_sha1=site['target_sha1'], revision=revision,
+    feed = dict(schema=1, target='GN7E69-rev0', target_sha1=site['target_sha1'], revision=revision,
                 snapshots=history, contribution_basis='exact-functions',
                 credited_functions=len(exact), contributors=credits)
     output = root/'build/site'
     output.mkdir(parents=True, exist_ok=True)
     for name in ('index.html', 'style.css', 'progress.js', 'activity.js', 'cover.jpg', 'logo.png'):
         shutil.copyfile(root/'web'/name, output/name)
-    decomp_path = root/'build/GN7E69/report.json'
+    decomp_path = root/'build/GN7E69-rev0/report.json'
     decomp_path.parent.mkdir(parents=True, exist_ok=True)
     for path, document in ((output/'progress.json', site), (output/'activity.json', feed),
                            (decomp_path, decomp_report.objdiff_report(site))):
@@ -295,7 +295,7 @@ def main():
             output.write(f"reused={str(reused).lower()}\n")
     else:
         # History/provenance errors are publication failures, never a reason to bypass them.
-        for path in (ROOT/'build/site/progress.json', ROOT/'build/site/activity.json', ROOT/'build/GN7E69/report.json'):
+        for path in (ROOT/'build/site/progress.json', ROOT/'build/site/activity.json', ROOT/'build/GN7E69-rev0/report.json'):
             path.unlink(missing_ok=True)
         promote(ROOT, args.revision, json.loads(receipt.read_text()),
                 json.loads((ROOT/'build/activity/previous.json').read_text()))

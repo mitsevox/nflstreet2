@@ -35,11 +35,11 @@ class ReceiptFixture(ProgressBase):
         self.target = hashlib.sha1(self.binary).hexdigest()
         self.dol = self.report_path.parent/'main.dol'
         self.dol.write_bytes(self.binary)
-        config = self.root/'config/GN7E69'
+        config = self.root/'config/GN7E69-rev0'
         (config/'comparisons.json').write_text(json.dumps({'schema':2, 'units':[]}))
         (config/'history.json').write_text(json.dumps(
-            {'schema':1, 'target':'GN7E69', 'target_sha1':self.target, 'snapshots':[]}))
-        self.ledger = {'schema':1, 'target':'GN7E69', 'contributors':{'alice':{'id':1}},
+            {'schema':1, 'target':'GN7E69-rev0', 'target_sha1':self.target, 'snapshots':[]}))
+        self.ledger = {'schema':1, 'target':'GN7E69-rev0', 'contributors':{'alice':{'id':1}},
             'entries':[{'source':'src/unit.c', 'contributors':['alice'], 'functions':['0x80003104'],
                 'provenance':{'pull_request':1, 'merged_via':1, 'commit':self.revision,
                               'introduced_blob':git('rev-parse', 'HEAD:src/unit.c')}}]}
@@ -93,7 +93,7 @@ class ExportTests(ReceiptFixture):
             self.export(append=True)
         subprocess.run(['git', 'update-ref', 'refs/remotes/origin/main', self.revision],
                        cwd=self.root, check=True)
-        previous = {'schema':1, 'target':'GN7E69', 'target_sha1':self.target, 'snapshots':[]}
+        previous = {'schema':1, 'target':'GN7E69-rev0', 'target_sha1':self.target, 'snapshots':[]}
         site, _, credits = self.export(previous=previous, append=True)
         self.assertEqual(credits['snapshots'][0]['revision'], self.revision)
         self.assertEqual(credits['snapshots'][0]['built_at'], site['built_at'])
