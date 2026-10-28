@@ -64,6 +64,7 @@ def build(target):
     shutil.copyfile(ROOT / "build/source/main.dol", ROOT / path)
     if hashlib.sha1((ROOT / path).read_bytes()).hexdigest() != expected:
         (ROOT / path).unlink()
+        (out / "report.json").unlink(missing_ok=True)
         sys.exit(f"{path}: FAILED (SHA-1 differs from config/{target}/build.sha1)")
     print(f"{path}: OK")
 
@@ -86,8 +87,9 @@ PUBLISH = "https://raw.githubusercontent.com/mitsevox/mitsevox.github.io/main/.g
 def publish_check(target):
     """Convert build/<target id>/report.json with the site's publish script (the revision the
     publish step on main runs) and check the result, without pushing. This report is not
-    dtk-template's, so a pull request proves main can publish it. Credits stay off here: they read
-    the merged pull request, which a pull request's own build does not have yet."""
+    dtk-template's, so a pull request catches a report the publish step would reject. It converts
+    into an empty data tree: merging with the published history is not exercised. Credits stay off
+    here: they read the merged pull request, which a pull request's own build does not have yet."""
     import decomp_report
     import tempfile
     import urllib.request

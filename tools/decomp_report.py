@@ -2,10 +2,12 @@
 """Export verified source-file progress using objdiff's v2 report schema, in the shape the site's
 publish action reads (mitsevox/mitsevox.github.io contract): each unit's sections are its extents,
 named after the executable section that holds them and placed at their address, and the totals
-count functions and exact functions."""
+count functions and exact functions. A function split across two files (a `function-fragment`)
+is not listed in either; its bytes stay in each file's sections."""
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 import progress
@@ -30,6 +32,13 @@ def measures(sections):
 
 
 CODE_SECTIONS = tuple(f"Code section {index}" for index in range(1, 8))
+
+
+def function_percent(child):
+    """objdiff's similarity; only identical bytes reach 100, which the site counts as exact. objdiff
+    can round nonidentical instructions to 100% (tools/matching.py), so those stay just below it."""
+    percent = 100 * child.get("fuzzy", child["matched"]) / child["size"]
+    return percent if child["matched"] == child["size"] else min(percent, math.nextafter(100, 0))
 
 
 def section_name(sections, kind, start, end):
@@ -67,7 +76,7 @@ def objdiff_report(data):
         if source:
             metadata["source_path"] = source
         functions = [{"name": child["name"], "size": str(child["size"]),
-                      "fuzzy_match_percent": 100 * child.get("fuzzy", child["matched"]) / child["size"],
+                      "fuzzy_match_percent": function_percent(child),
                       "metadata": {"virtual_address": str(int(child["address"], 16))}}
                      for item in items for child in item["children"]
                      if child.get("type") == "function"]
@@ -97,6 +106,10 @@ def objdiff_report(data):
     every = [f for u in units for f in u.get("functions", [])]
     totals["total_functions"] = len(every)
     totals["matched_functions"] = sum(1 for f in every if f["fuzzy_match_percent"] >= 100)
+    identical = sum(1 for item in data["files"] for child in item["children"]
+                    if child.get("type") == "function" and child["matched"] == child["size"])
+    if totals["matched_functions"] != identical:
+        raise ValueError(f"{totals['matched_functions']} functions at 100% but {identical} are identical")
     return {"version": 2, "measures": totals, "units": units}
 
 

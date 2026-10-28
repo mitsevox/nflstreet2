@@ -38,6 +38,13 @@ class DecompReportTests(ProgressBase):
         self.assertEqual(data["complete_units"], 0)
         self.assertEqual(data["matched_code_percent"], 100)
 
+    def test_only_identical_functions_reach_100_percent(self):
+        # objdiff can round nonidentical instructions to 100%; matching.py then sets fuzzy == size.
+        rounded = {"name": "f", "size": 8, "matched": 0, "fuzzy": 8, "address": "0x80003104"}
+        identical = {**rounded, "matched": 8}
+        self.assertLess(decomp_report.function_percent(rounded), 100)
+        self.assertEqual(decomp_report.function_percent(identical), 100)
+
     def test_cli_failure_removes_stale_report(self):
         output = self.root / "report.json"
         output.write_text("stale")
