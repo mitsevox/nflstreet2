@@ -16285,7 +16285,7 @@
     {
       "source": "src/game/cu_80134E24.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv source unit, overlay, storage and behavior rows for cu_80134E24; author-only scoped comparisons, original assembly retained. Now starts at 0x801344A0: fn_801344A0-fn_80134C20, .rodata 0x8029FD38-0x8029FD88 and the .data table 0x802DB0F4-0x802DB1D4 moved here from src/game/cu_80132630.cpp (evidence.tsv unit row 0x801344A0-0x80136B1C).",
+      "evidence": "evidence.tsv source unit, overlay, storage and source-form rows for cu_80134E24; author-only scoped comparisons, original assembly retained. Now starts at 0x801344A0: fn_801344A0-fn_80134C20, .rodata 0x8029FD38-0x8029FD88 and the .data table 0x802DB0F4-0x802DB1D4 moved here from src/game/cu_80132630.cpp (evidence.tsv unit row 0x801344A0-0x80136B1C).",
       "sections": [
         {
           "section": ".text",
@@ -42144,7 +42144,7 @@
     {
       "source": "src/engine/cu_801AA640.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), layout rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), linker rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -42364,7 +42364,7 @@
     {
       "source": "src/engine/cu_801AC6B0.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801AD424 (src/engine/cu_801AC6B0.c), layout row 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AD244, 0x801AD2A8 and 0x801AD318 (ends or starts resting on layout) stay in the asm source without a comparison entry, as does 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function). Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801AD424 (src/engine/cu_801AC6B0.c), linker row 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AD244, 0x801AD2A8 and 0x801AD318 (ends or starts resting on layout) stay in the asm source without a comparison entry, as does 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function). Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

@@ -61,16 +61,21 @@ def verify(root, site, decomp, source_units, comparison_site=None, *, authentica
                 or unit['metadata'].get('source_path'):
             raise ValueError('decomp.dev candidate coverage or source credit differs')
     for kind in ('code', 'data'):
-        for exported, measured in (('total', 'total'), ('matched', 'matched'), ('complete', 'linked')):
+        for exported, measured in (('total', 'total'), ('matched', 'matched')):
             if int(decomp['measures'][exported + '_' + kind]) != site['measures'][kind][measured]:
                 raise ValueError('Published maps disagree on executable progress')
+        # Linked in the report means bytes of complete units (objdiff's meaning); progress.json
+        # counts every linked byte, so a partly linked file makes the report's figure smaller.
+        complete = sum(int(u['measures']['total_' + kind]) for u in decomp['units'] if u['metadata']['complete'])
+        if int(decomp['measures']['complete_' + kind]) != complete or complete > site['measures'][kind]['linked']:
+            raise ValueError('Published maps disagree on executable progress')
     return len(expected)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--site', type=Path, default=ROOT / 'build/site/progress.json')
-    parser.add_argument('--decomp', type=Path, default=ROOT / 'build/GN7E69/report.json')
+    parser.add_argument('--decomp', type=Path, default=ROOT / 'build/GN7E69-rev0/report.json')
     parser.add_argument('--source-report', type=Path, default=ROOT / 'build/source/report.json')
     parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()

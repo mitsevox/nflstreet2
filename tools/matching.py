@@ -13,9 +13,9 @@ import baseline
 import source_build
 
 ROOT = source_build.ROOT
-CONFIG = 'config/GN7E69/comparisons.json'
+CONFIG = 'config/GN7E69-rev0/comparisons.json'
 INPUTS = ('tools/matching.py', 'tools/matching-tools.json', CONFIG,
-          'config/GN7E69/units.json', 'config/GN7E69/evidence.tsv', 'tools/function_compare.py', 'tools/diagnostic_object.py', *source_build.TRUSTED_TOOLS)
+          'config/GN7E69-rev0/units.json', 'config/GN7E69-rev0/evidence.tsv', 'tools/function_compare.py', 'tools/diagnostic_object.py', *source_build.TRUSTED_TOOLS)
 
 
 def bindings():
@@ -23,7 +23,7 @@ def bindings():
 
 
 def manifest():
-    return json.loads((ROOT / 'config/GN7E69/units.json').read_text())
+    return json.loads((ROOT / 'config/GN7E69-rev0/units.json').read_text())
 
 
 def score_pair(tool, expected, actual, symbols, kind, directory):
@@ -67,7 +67,7 @@ def score_pair(tool, expected, actual, symbols, kind, directory):
 def generate(original, source_report, output, cache=None, compile_cache=None):
     output.unlink(missing_ok=True)
     binary = original.read_bytes()
-    target = json.loads((ROOT / 'config/GN7E69/baseline.json').read_text())
+    target = json.loads((ROOT / 'config/GN7E69-rev0/baseline.json').read_text())
     if len(binary) != target['size'] or hashlib.sha1(binary).hexdigest() != target['sha1']:
         raise ValueError('Comparison target is not the configured original executable')
     work = ROOT / 'build/matching'
@@ -81,7 +81,7 @@ def generate(original, source_report, output, cache=None, compile_cache=None):
         raise ValueError('Comparison output differs from its build report')
     tool = baseline.get_tool('objdiff', json.loads((ROOT / 'tools/matching-tools.json').read_text()),
                              source_build.baseline_system())
-    accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69/units.json').read_text())['units']}
+    accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69-rev0/units.json').read_text())['units']}
     evidence = {(a, b) for a, b, _ in source_build.function_extents(ROOT)}
     entries = []
     functions = []
@@ -150,7 +150,7 @@ def load(path, target, original):
     if source_build.sha256(receipt_path) != receipt.get('sha256'):
         raise ValueError('Stale comparison build receipt')
     build = json.loads(receipt_path.read_text())
-    expected_manifest = source_build.sha256(ROOT/'config/GN7E69/units.json')
+    expected_manifest = source_build.sha256(ROOT/'config/GN7E69-rev0/units.json')
     if build.get('manifest_sha256') != expected_manifest or build.get('target_sha1') != target['sha1'] or \
         build.get('tools') != {p:source_build.sha256(ROOT/p) for p in source_build.TRUSTED_TOOLS}:
         raise ValueError('Foreign comparison build receipt')
@@ -219,7 +219,7 @@ def load(path, target, original):
 
 def apply(data, measurement):
     """Roll up unlinked comparison credit without changing ownership or linked credit."""
-    accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69/units.json').read_text())['units']}
+    accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69-rev0/units.json').read_text())['units']}
     entries = [e for e in measurement['entries'] if not e.get('linked', e['source'] in accepted)]
     # Index entries by kind and start so each map leaf visits only the entries near it.
     by_kind = {}
@@ -300,7 +300,7 @@ def apply(data, measurement):
             data['measures'][kind][field] = file_sum
     additional_exact = 0
     if data['functions']['total'] is not None:
-        with (ROOT/'config/GN7E69/evidence.tsv').open() as evidence:
+        with (ROOT/'config/GN7E69-rev0/evidence.tsv').open() as evidence:
             exact_bounds = {(int(row['start'],16),int(row['end'],16))
                             for row in csv.DictReader(evidence,delimiter='\t')
                             if row['kind']=='function' and row['start_boundary']==row['end_boundary']=='exact'}

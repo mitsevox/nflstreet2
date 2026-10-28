@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 import matching
+import toolchain
 import decomp_report
 
 
@@ -17,9 +18,9 @@ class OverlayTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.root = Path(self.directory.name)
-        (self.root / 'config/GN7E69').mkdir(parents=True)
-        (self.root / 'config/GN7E69/units.json').write_text(json.dumps({'units': [{'source': 'accepted.c'}]}))
-        (self.root/'config/GN7E69/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\n')
+        (self.root / 'config/GN7E69-rev0').mkdir(parents=True)
+        (self.root / 'config/GN7E69-rev0/units.json').write_text(json.dumps({'units': [{'source': 'accepted.c'}]}))
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text('kind\tstart\tend\tstart_boundary\tend_boundary\n')
         self.patch = patch.object(matching, 'ROOT', self.root)
         self.patch.start()
         self.addCleanup(self.patch.stop)
@@ -30,7 +31,7 @@ class OverlayTests(unittest.TestCase):
                     {'name':'padding','kind':'code','size':8,'linked':0,'matched':0,
                      'mapped_extents':[{'start':'0x80000008','end':'0x80000010'}]}]
         root = {'name':'unit','kind':'code','address':'0x80000000','size':16,'linked':4,'matched':4,
-                'children': children}
+                'mapped_extents':[{'start':'0x80000000','end':'0x80000010'}], 'children': children}
         return {'sections':[copy.deepcopy(root)], 'files':[copy.deepcopy(root)],
                 'functions':{'total':1,'exact':0}, 'measures':{'code':{'total':16,'linked':4,'matched':4},
                                                           'data':{'total':0,'linked':0,'matched':0}}}
@@ -65,7 +66,7 @@ class OverlayTests(unittest.TestCase):
         measurement['entries'][0].update(start='0x80000000',type='function',matched=8,fuzzy=8)
         result = matching.apply(data,measurement)
         self.assertEqual(result['functions']['exact'],0)
-        (self.root/'config/GN7E69/evidence.tsv').write_text(
+        (self.root/'config/GN7E69-rev0/evidence.tsv').write_text(
             'kind\tstart\tend\tstart_boundary\tend_boundary\n'
             'function\t0x80000000\t0x80000008\texact\texact\n')
         matching.apply(result,measurement)
@@ -103,14 +104,14 @@ class OverlayTests(unittest.TestCase):
     def test_both_exports_use_weighted_fuzzy_score(self):
         result = matching.apply(self.data(), self.measurement())
         report = decomp_report.objdiff_report(result)
-        self.assertEqual(report['measures']['complete_code'], '4')
+        self.assertEqual(report['measures']['complete_code'], '0')
         self.assertEqual(report['measures']['matched_code'], '12')
         self.assertEqual(report['measures']['fuzzy_match_percent'], 93.75)
 
 
 class ObjdiffTests(unittest.TestCase):
     def test_real_instruction_and_data_scores(self):
-        tool = matching.ROOT / 'build/baseline/tools/objdiff'
+        tool = toolchain.recorded('objdiff') or matching.ROOT / 'build/baseline/tools/objdiff'
         if not tool.is_file():
             self.skipTest('Pinned objdiff is installed by the matching measurement step')
         lock = json.loads((matching.ROOT/'tools/matching-tools.json').read_text())

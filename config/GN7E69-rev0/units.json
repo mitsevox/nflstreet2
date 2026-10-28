@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "target": "GN7E69",
+  "target": "GN7E69-rev0",
   "compiler": "3.9.3",
   "include_dirs": [
     "include"
@@ -11501,7 +11501,7 @@
     {
       "source": "src/game/cu_80081440.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69/comparisons.json) whose original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
       "sections": [
         {
           "section": ".text",

@@ -15,9 +15,9 @@ class SDKMapTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        (self.root / 'config/GN7E69').mkdir(parents=True)
+        (self.root / 'config/GN7E69-rev0').mkdir(parents=True)
         self.sha1 = hashlib.sha1(b'target').hexdigest()
-        (self.root / 'config/GN7E69/baseline.json').write_text(json.dumps({'sha1': self.sha1}))
+        (self.root / 'config/GN7E69-rev0/baseline.json').write_text(json.dumps({'sha1': self.sha1}))
         self.map = {'schema': 1, 'target_sha1': self.sha1,
                     'coverage': [{'section': '.text', 'start': '0x80001000', 'end': '0x80001020'}],
                     'units': [self.unit('src/dolphin/os/OS.c', '0x80001000', '0x80001010'),
@@ -118,12 +118,12 @@ class SDKMapTests(unittest.TestCase):
 
     def test_analysis_hashes_bind_map_seed_manifest_and_tool(self):
         self.save()
-        for path in sdk_map.BASE_INPUTS + ('tools/sdk_map.py', 'config/GN7E69/units.json'):
+        for path in sdk_map.BASE_INPUTS + ('tools/sdk_map.py', 'config/GN7E69-rev0/units.json'):
             target = self.root / path
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(path)
         before = sdk_map.analysis_inputs(self.root)
-        for path in (sdk_map.MAP_PATH, 'tools/sdk_map.py', 'config/GN7E69/units.json'):
+        for path in (sdk_map.MAP_PATH, 'tools/sdk_map.py', 'config/GN7E69-rev0/units.json'):
             target = self.root / path
             old = target.read_text()
             target.write_text(old + '\n')

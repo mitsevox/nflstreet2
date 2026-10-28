@@ -16,13 +16,13 @@ class InventoryCacheTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        for name in (*sdk_map.BASE_INPUTS, 'config/GN7E69/baseline.json', 'tools/compiler-tools.json'):
+        for name in (*sdk_map.BASE_INPUTS, 'config/GN7E69-rev0/baseline.json', 'tools/compiler-tools.json'):
             path = self.root / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text('{}')
         self.original = b'target fixture'
         self.target = {'size': len(self.original), 'sha1': hashlib.sha1(self.original).hexdigest()}
-        (self.root / 'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        (self.root / 'config/GN7E69-rev0/baseline.json').write_text(json.dumps(self.target))
         self.cache = self.root / 'build/analysis'
         self.cache.mkdir(parents=True)
         (self.cache / 'symbols.txt').write_text('fixture symbols')
@@ -48,7 +48,7 @@ class InventoryCacheTests(unittest.TestCase):
         self.assertFalse(self.reusable())
 
     def test_changed_generation_code_and_seed_inputs_rebuild(self):
-        for name in (*sdk_map.BASE_INPUTS, 'tools/compiler-tools.json', 'config/GN7E69/baseline.json'):
+        for name in (*sdk_map.BASE_INPUTS, 'tools/compiler-tools.json', 'config/GN7E69-rev0/baseline.json'):
             with self.subTest(name=name):
                 path = self.root / name
                 old = path.read_bytes()
@@ -79,19 +79,19 @@ class InventoryCacheTests(unittest.TestCase):
 
     def test_changed_mapping_and_unit_configuration_rebuild(self):
         for name in ('sdk.json', 'units.json'):
-            (self.root / 'config/GN7E69' / name).write_text('{}')
+            (self.root / 'config/GN7E69-rev0' / name).write_text('{}')
         self.summary['inputs'] = sdk_map.analysis_inputs(self.root)
         self.summary['cache_inputs'] = inventory_cache.inputs(self.root, 'pinned-container')
         self.write_summary()
         self.assertTrue(self.reusable())
         for name in ('sdk.json', 'units.json'):
-            path = self.root / 'config/GN7E69' / name
+            path = self.root / 'config/GN7E69-rev0' / name
             path.write_text('{"changed": true}')
             self.assertFalse(self.reusable())
             path.write_text('{}')
 
     def test_game_code_unit_addition_does_not_invalidate_inventory(self):
-        units_path = self.root / 'config/GN7E69/units.json'
+        units_path = self.root / 'config/GN7E69-rev0/units.json'
         units_path.write_text(json.dumps({
             'schema': 2,
             'units': [{'source': 'src/dolphin/os/OS.c', 'sections': [{'placement': '.text', 'section': '.text', 'start': '0x8000', 'end': '0x8010'}]}]
@@ -123,7 +123,7 @@ class LiveInventoryCacheTests(unittest.TestCase):
     def test_generated_inventory_reuses_without_modifying_metadata(self):
         root = Path(__file__).resolve().parents[1]
         directory = root / 'build/analysis'
-        original = Path('/orig/main.dol')
+        original = root / 'orig/GN7E69-rev0/sys/main.dol'
         if not original.exists() or not (directory / 'summary.json').exists():
             self.skipTest('Hosted inventory step supplies the target and generated receipt')
         before = {name: (directory / name).read_bytes() for name in ('summary.json', 'symbols.txt')}

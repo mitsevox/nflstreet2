@@ -31,7 +31,7 @@ LINK_TIMEOUT = 600
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
-                 "tools/diagnostic_object.py", "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
+                 "tools/diagnostic_object.py", "config/GN7E69-rev0/baseline.json", "config/GN7E69-rev0/analysis.json")
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
@@ -165,8 +165,8 @@ def target_sections(binary, target, small_data):
 
 
 def load_manifest(manifest, sections, compiler_version):
-    if manifest.get("schema") != 1 or manifest.get("target") != "GN7E69":
-        raise ValueError("Unit manifest must use schema 1 for target GN7E69")
+    if manifest.get("schema") != 1 or manifest.get("target") != "GN7E69-rev0":
+        raise ValueError("Unit manifest must use schema 1 for target GN7E69-rev0")
     if manifest.get("compiler") != compiler_version:
         raise ValueError("Unit manifest compiler differs from the pinned compiler")
     allowed = {"schema", "target", "compiler", "include_dirs", "profiles", "externals", "units"}
@@ -383,7 +383,7 @@ def fold_object(native, folded, output):
 
 def evidence_rows(root, kind):
     """Bounded rows of one kind in the target's evidence table, as (start, end, subject, edges)."""
-    path = Path(root) / "config/GN7E69/evidence.tsv"
+    path = Path(root) / "config/GN7E69-rev0/evidence.tsv"
     if not path.exists():
         return []
     with path.open() as file:
@@ -940,11 +940,11 @@ def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, compariso
 
 def build(original, manifest_path, report_path, cache=None):
     report_path.unlink(missing_ok=True)
-    target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
+    target = json.loads((ROOT / "config/GN7E69-rev0/baseline.json").read_text())
     binary = original.read_bytes()
     if len(binary) != target["size"] or hashlib.sha1(binary).hexdigest() != target["sha1"]:
         raise RuntimeError("Original executable does not match the configured target")
-    small_data = json.loads((ROOT / "config/GN7E69/analysis.json").read_text())["output_sections"]
+    small_data = json.loads((ROOT / "config/GN7E69-rev0/analysis.json").read_text())["output_sections"]
     sections = target_sections(binary, target, small_data)
     compiler_lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
     manifest_bytes = manifest_path.read_bytes()
@@ -1188,7 +1188,7 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
                          "functions": compiled_functions(unit, objects[unit["source"]])})
-    return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
+    return {"schema": 1, "target": "GN7E69-rev0", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
             "compilers": dict(sorted(compilers.items())),
             "linker": "ngcld (ProDG) via wibo", "complete": "identical" if identical else "mismatch",
@@ -1202,7 +1202,7 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original", type=Path, required=True)
-    parser.add_argument("--manifest", type=Path, default=ROOT / "config/GN7E69/units.json")
+    parser.add_argument("--manifest", type=Path, default=ROOT / "config/GN7E69-rev0/units.json")
     parser.add_argument("--report", type=Path, default=BUILD / "report.json")
     parser.add_argument("--compile-cache", type=Path, help="Compiler output cache directory (written only by main)")
     parser.add_argument("--cache-mode", choices=("use", "audit"),

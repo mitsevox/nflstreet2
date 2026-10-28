@@ -6,13 +6,13 @@ from pathlib import PurePosixPath
 import re
 
 
-MAP_PATH = "config/GN7E69/sdk.json"
+MAP_PATH = "config/GN7E69-rev0/sdk.json"
 BASE_INPUTS = ("tools/analyze.py", "tools/sdk_map.py", "tools/source_build.py",
-               "tools/baseline-tools.json", "config/GN7E69/analysis.json")
+               "tools/baseline-tools.json", "config/GN7E69-rev0/analysis.json")
 
 
 def unit_input_digest(root):
-    path = root / "config/GN7E69/units.json"
+    path = root / "config/GN7E69-rev0/units.json"
     if not path.exists():
         return hashlib.sha256(b"").hexdigest()
     try:
@@ -35,8 +35,8 @@ def analysis_inputs(root):
     if (root / MAP_PATH).exists():
         paths += (MAP_PATH,)
     result = {path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in paths}
-    if (root / "config/GN7E69/units.json").exists():
-        result["config/GN7E69/units.json"] = unit_input_digest(root)
+    if (root / "config/GN7E69-rev0/units.json").exists():
+        result["config/GN7E69-rev0/units.json"] = unit_input_digest(root)
     return result
 
 
@@ -51,7 +51,7 @@ def load(root, sections=None):
     if not path.exists():
         return []
     data = json.loads(path.read_text())
-    target = json.loads((root / "config/GN7E69/baseline.json").read_text())
+    target = json.loads((root / "config/GN7E69-rev0/baseline.json").read_text())
     if data.get("schema") != 1 or data.get("target_sha1") != target["sha1"]:
         raise ValueError("SDK map belongs to a different target")
     units = data.get("units")

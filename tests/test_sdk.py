@@ -40,7 +40,7 @@ class Dependencies(unittest.TestCase):
 
     def test_sdk_profile_is_library_scoped_and_pinned(self):
         sections = source_build.target_sections(synthetic_dol(), TARGET, {})
-        manifest = {"schema": 1, "target": "GN7E69", "compiler": "3.9.3", "include_dirs": [],
+        manifest = {"schema": 1, "target": "GN7E69-rev0", "compiler": "3.9.3", "include_dirs": [],
                     "profiles": {"sdk": {"compiler": "mwcc", "flags": FLAGS, "evidence": "upstream release",
                                          "include_dirs": ["include/libc"]}}, "units": []}
         self.assertEqual(source_build.load_manifest(manifest, sections, "3.9.3")[0], [])
@@ -264,7 +264,7 @@ class LinkerRetention(unittest.TestCase):
 
     def test_retention_metadata_cannot_inject_arguments(self):
         import json
-        manifest = json.loads((ROOT / "config/GN7E69/units.json").read_text())
+        manifest = json.loads((ROOT / "config/GN7E69-rev0/units.json").read_text())
         binary = synthetic_dol()
         # A tiny source range is enough to exercise manifest validation before real placement.
         unit = next(unit for unit in manifest["units"]

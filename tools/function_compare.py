@@ -14,7 +14,7 @@ from pathlib import Path
 import source_build as sb
 import diagnostic_object
 
-CONFIG = 'config/GN7E69/comparisons.json'
+CONFIG = 'config/GN7E69-rev0/comparisons.json'
 
 
 def data_slices(source, placement, linked):
@@ -243,8 +243,8 @@ def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
         raise ValueError('Comparison configuration requires schema 2')
-    accepted = json.loads((root / 'config/GN7E69/units.json').read_text())
-    target = json.loads((root / 'config/GN7E69/baseline.json').read_text())
+    accepted = json.loads((root / 'config/GN7E69-rev0/units.json').read_text())
+    target = json.loads((root / 'config/GN7E69-rev0/baseline.json').read_text())
     sections = sb.target_sections(binary, target, {})
     function_extents = sb.function_extents(root)
     evidence = {(a, b) for a, b, _ in function_extents}
@@ -322,7 +322,7 @@ class MeasurementCache:
     restores the cached entries and linked outputs, which load() then validates like
     fresh ones. In 'audit' mode everything is measured fresh, every cached measurement
     with the same key must be identical, and the fresh set replaces the cache."""
-    VOLATILE = (CONFIG, 'config/GN7E69/units.json', 'config/GN7E69/evidence.tsv')
+    VOLATILE = (CONFIG, 'config/GN7E69-rev0/units.json', 'config/GN7E69-rev0/evidence.tsv')
 
     def __init__(self, directory, mode):
         if mode not in ('use', 'audit'):
@@ -402,8 +402,8 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
     manifest, units = configured(root, binary)
     if not units:
         return []
-    target = json.loads((root / 'config/GN7E69/baseline.json').read_text())
-    target_sections = sb.target_sections(binary, target, json.loads((root/'config/GN7E69/analysis.json').read_text())['output_sections'])
+    target = json.loads((root / 'config/GN7E69-rev0/baseline.json').read_text())
+    target_sections = sb.target_sections(binary, target, json.loads((root/'config/GN7E69-rev0/analysis.json').read_text())['output_sections'])
     accepted = json.loads(source_report.read_text())['units']
     accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
     accepted_linked = linked_ranges(accepted, sb.address)
