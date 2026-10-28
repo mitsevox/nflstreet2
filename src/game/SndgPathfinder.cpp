@@ -1,3 +1,4 @@
+#include "engine/cu_801E0A1C.h"
 #include <string.h>
 #include "game/fn_8009D990.h"
 
@@ -466,24 +467,6 @@ struct Struct_803EA368 {
     int mUnknownD94;
 };
 
-struct Struct_801E0AEC {
-    int mUnknown0;
-    int mUnknown4;
-};
-
-struct Struct_801E0DF0 {
-    int mId;
-    int mUnknown4;
-    int mUnknown8;
-    float mValue;
-    int mUnknown10;
-    void *mpData;
-    int mUnknown18;
-    int mUnknown1C;
-    int mUnknown20;
-    unsigned char mUnknown24;
-};
-
 struct SndgPathfinderState {
     void *mpPool[3];
 };
@@ -584,20 +567,6 @@ void fn_801CE7D0(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
 int fn_801D34D0(void *p, int size, int value, int align);
-int fn_801E0AE4(void);
-int fn_801E0AEC(Struct_801E0AEC *pDesc);
-void fn_801E0BE4(void);
-int fn_801E0CA8(void *pData, int unknown, int c);
-int fn_801E0D68(int handle);
-int fn_801E0DF0(Struct_801E0DF0 *pDesc);
-int fn_801E0EF8(int id);
-int fn_801E0F7C(int id, int unknown);
-int fn_801E0F9C(int id, int unknown);
-void fn_801E0FBC(int id, unsigned int value);
-void fn_801E0FE0(int a, int b, int c);
-void fn_801E1004(int a, int b);
-void fn_801E1028(int a);
-void fn_801E1048(int a, int b);
 int fn_801F0C50(void *a, int b);
 void fn_801F11AC(void *pData, int a);
 void fn_801F3C14(void);
@@ -2644,9 +2613,9 @@ int SndgPathfinder::Init()
     lbl_803EA698->mpPool[1] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     lbl_803EA698->mpPool[2] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     if (fn_801F3E28()) {
-        Struct_801E0AEC desc;
-        desc.mUnknown0 = 1;
-        desc.mUnknown4 = 3;
+        Desc_801E0AEC desc;
+        desc.mHeap = 1;
+        desc.mCount = 3;
         fn_801E0AEC(&desc);
         fn_801B2F18(fn_8006D91C, fn_8006D98C, fn_8006D9FC);
     }
@@ -2688,16 +2657,16 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
 {
     int result = 0;
     if (fn_801E0AE4()) {
-        Struct_801E0DF0 desc;
+        Desc_801E0DF0 desc;
         desc.mUnknown24 = 0;
         desc.mUnknown10 = 0;
-        desc.mUnknown1C = 0;
-        desc.mpData = pData;
-        desc.mUnknown18 = unknown;
+        desc.mUnknown14.mUnknown8 = 0;
+        desc.mUnknown14.mpData = pData;
+        desc.mUnknown14.mUnknown4 = unknown;
         desc.mId = id;
-        desc.mValue = value;
-        desc.mUnknown4 = 1000;
-        desc.mUnknown8 = 2;
+        desc.mUnknown0C = value;
+        desc.mUnknown04 = 1000;
+        desc.mUnknown08 = 2;
         result = fn_801E0DF0(&desc) >= 0;
     }
     return result;

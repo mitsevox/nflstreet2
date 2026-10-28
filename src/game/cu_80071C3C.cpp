@@ -1,3 +1,4 @@
+#include "engine/cu_801E0A1C.h"
 #include "game/Object_8007A334.h"
 #include "game/Query_8008352C.h"
 #include "game/SndgPathfinder.h"
@@ -90,7 +91,6 @@ int fn_8008382C(Object_8007A334 *p);
 void fn_801B3084(int flags, const char *pName, int value);
 unsigned int fn_801C3180(const char *pText);
 void fn_801CE7D0(int a);
-int fn_801E1084(int id, Info_801E1084 *pInfo);
 void *fn_801EEB44(const char *pName, int flags);
 void fn_801EEFAC(void *p);
 int fn_801F3E28(void);
