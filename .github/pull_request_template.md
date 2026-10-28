@@ -8,7 +8,7 @@ Tier (A, B or C), task or issue, affected units or tools, dependencies, and unre
 
 One row per active target. A shared change is safe for a target only when its row is filled from a build of that target.
 
-| Target | Byte-identical | Units touched (Matching state there) | Progress delta (`python3 build.py`) | Evidence rows added |
+| Target | Byte-identical | Units touched (Matching state there) | Progress delta (from the target's report) | Evidence rows added |
 | --- | --- | --- | --- | --- |
 | GN7E69-rev0 | yes / no | | | |
 
