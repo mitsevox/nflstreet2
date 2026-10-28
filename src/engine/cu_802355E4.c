@@ -195,9 +195,6 @@ extern int lbl_803EC13C;
 extern int lbl_803ED028;
 extern int lbl_803ED02C;
 
-extern int fn_801CF60C(void *pDst, void *pSrc);
-extern int fn_801CF664(void *pStream);
-extern unsigned int fn_801CF6D4(void *pStream, unsigned int range);
 extern void fn_8020EBB0(void *p);
 extern void fn_8020F28C(void *p);
 extern void fn_8020F4D0(void *p, void *pData);

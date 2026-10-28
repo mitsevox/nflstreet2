@@ -13737,6 +13737,31 @@
           "end": "0x802F4980"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801CEFF0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEFF0-0x801CF7CC, exact function extents, readonly data row 0x802AF4F8-0x802AF540 and five complete table data rows 0x802F7AD0-0x802F7B0C; all nineteen functions and data linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEFF0",
+          "end": "0x801CF7CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF4F8",
+          "end": "0x802AF540"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7AD0",
+          "end": "0x802F7B0C"
+        }
+      ]
     }
   ]
 }

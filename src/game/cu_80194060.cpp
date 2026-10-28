@@ -65,7 +65,6 @@ void fn_802525BC(int);
 void fn_801CE720(void);
 void fn_801CE774(void);
 extern "C" void GXInitTexPreLoadRegion(GXTexRegion *,int,int,int,int);
-int fn_801CF6D4(void *,int);
 extern "C" void GXInvalidateTexAll(void);
 void fn_801CEA7C(int);
 int fn_801CEA08(void);

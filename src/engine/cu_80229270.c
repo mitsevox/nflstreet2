@@ -143,7 +143,6 @@ typedef struct Node_8022CC6C {
 
 void fn_8022CAEC(Node_8022CC6C **ppHead);
 
-extern unsigned int fn_801CF6D4(void *pStream, unsigned int range);
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
 extern int fn_802303B4(int key, unsigned short *pId);
 extern int fn_80230CC8(unsigned short id);
