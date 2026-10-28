@@ -13907,6 +13907,25 @@
           "end": "0x8039ADC4"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_80228E44.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78, both exact function/name rows, canonical descriptor and entry access-view rows and exact native .sdata row 0x803EBFA8-0x803EBFB8. Complete file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
+          "end": "0x803EBFB8"
+        }
+      ]
     }
   ]
 }

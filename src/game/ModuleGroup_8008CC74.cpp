@@ -1,3 +1,4 @@
+#include "engine/cu_80228E44.h"
 #include "engine/cu_80228F78.h"
 #include "engine/cu_80229094.h"
 #include "engine/cu_80229270.h"
@@ -16,12 +17,6 @@
 struct Desc_801F8A0C {
     int mUnknown0;
     int mUnknown4[9];
-};
-
-/* Argument of fn_80228E44. */
-struct Desc_80228E44 {
-    unsigned short mUnknown0;
-    unsigned char mUnknown2[2];
 };
 
 extern "C" {
@@ -76,8 +71,6 @@ int fn_8020CFB0(int a);
 int fn_8020D048(void);
 void fn_8020D0CC(Record_802CC680 *pRecord);
 void fn_8020D158(void);
-int fn_80228E44(Desc_80228E44 *pDesc);
-int fn_80228F0C(void);
 int fn_80229470(void);
 void fn_80229494(void);
 void fn_8022C930(int a);
