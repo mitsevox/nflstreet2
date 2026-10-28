@@ -13,26 +13,31 @@ import function_compare
 import diagnostic_object
 import matching
 import source_build as sb
+import toolchain
 import decomp_report
 
 
 class ExportSemantics(unittest.TestCase):
     def data(self):
-        return {'files': [
+        def extent(start, size):
+            return [{'start': '0x%08X' % start, 'end': '0x%08X' % (start + size)}]
+        return {'sections': [{'name': 'Code section 1', 'kind': 'code', 'address': '0x80000000', 'size': 120},
+                             {'name': 'Data section 1', 'kind': 'data', 'address': '0x80010000', 'size': 120}],
+                'files': [
             {'name': 'file.c', 'source': 'src/file.c', 'kind': 'code', 'size': 100,
-             'linked': 20, 'matched': 30, 'fuzzy': 40, 'children': []},
+             'linked': 20, 'matched': 30, 'fuzzy': 40, 'children': [], 'mapped_extents': extent(0x80000000, 100)},
             {'name': 'file.c', 'source': 'src/file.c', 'kind': 'data', 'size': 100,
-             'linked': 90, 'matched': 90, 'fuzzy': 95, 'children': []},
+             'linked': 90, 'matched': 90, 'fuzzy': 95, 'children': [], 'mapped_extents': extent(0x80010000, 100)},
             {'name': 'done.c', 'source': 'src/done.c', 'kind': 'code', 'size': 20, 'complete': True,
-             'linked': 20, 'matched': 20, 'fuzzy': 20, 'children': []},
+             'linked': 20, 'matched': 20, 'fuzzy': 20, 'children': [], 'mapped_extents': extent(0x80000064, 20)},
             {'name': 'unmapped', 'kind': 'data', 'size': 20,
-             'linked': 20, 'matched': 20, 'fuzzy': 20, 'children': []}]}
+             'linked': 20, 'matched': 20, 'fuzzy': 20, 'children': [], 'mapped_extents': extent(0x80010064, 20)}]}
 
     def test_code_fuzzy_denominator_is_independent_of_data(self):
         report = decomp_report.objdiff_report(self.data())
         self.assertEqual(report['measures']['fuzzy_match_percent'], 50)
         self.assertEqual(report['measures']['matched_code'], '50')
-        self.assertEqual(report['measures']['complete_code'], '40')
+        self.assertEqual(report['measures']['complete_code'], '20')
         self.assertNotIn('categories', report)
         unit = next(u for u in report['units'] if u['name'] == 'src/file.c')
         self.assertEqual(unit['sections'][1]['fuzzy_match_percent'], 95)
@@ -42,6 +47,7 @@ class ExportSemantics(unittest.TestCase):
         units = {u['name']: u for u in report['units']}
         self.assertFalse(units['src/file.c']['metadata']['complete'])
         self.assertTrue(units['src/done.c']['metadata']['complete'])
+        self.assertTrue(units['src/done.c']['metadata']['confirmed'])
         self.assertFalse(units['unmapped']['metadata']['complete'])
         self.assertEqual(report['measures']['complete_units'], 1)
         self.assertEqual(units['src/done.c']['measures']['complete_units'], 1)
@@ -224,9 +230,11 @@ class ComparisonFixture(unittest.TestCase):
         shutil.copy(sb.ROOT/'tools/prodg_cc.py', self.root/'tools/prodg_cc.py')
         self.original = self.root/'build/original.dol'
         self.original.write_bytes(self.binary)
-        compiler = sb.ROOT/'build/toolchain/ProDG/3.9.3'
-        wrapper = sb.ROOT/'build/toolchain/wibo'
-        self.tool = sb.ROOT/'build/baseline/tools/objdiff'
+        # The build image's tools (build.py configure), else a local download.
+        compilers = toolchain.recorded('compilers')
+        compiler = compilers/'ProDG/3.9.3' if compilers else sb.ROOT/'build/toolchain/ProDG/3.9.3'
+        wrapper = toolchain.recorded('wibo') or sb.ROOT/'build/toolchain/wibo'
+        self.tool = toolchain.recorded('objdiff') or sb.ROOT/'build/baseline/tools/objdiff'
         self.compiler_available = compiler.is_dir() and wrapper.is_file() and self.tool.is_file()
         self.patches = [patch.object(sb, 'ROOT', self.root), patch.object(sb, 'BUILD', self.root/'build/source'),
                         patch.object(sb.setup_compiler, 'setup', return_value=(compiler, wrapper))]

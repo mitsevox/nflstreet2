@@ -61,9 +61,14 @@ def verify(root, site, decomp, source_units, comparison_site=None, *, authentica
                 or unit['metadata'].get('source_path'):
             raise ValueError('decomp.dev candidate coverage or source credit differs')
     for kind in ('code', 'data'):
-        for exported, measured in (('total', 'total'), ('matched', 'matched'), ('complete', 'linked')):
+        for exported, measured in (('total', 'total'), ('matched', 'matched')):
             if int(decomp['measures'][exported + '_' + kind]) != site['measures'][kind][measured]:
                 raise ValueError('Published maps disagree on executable progress')
+        # Linked in the report means bytes of complete units (objdiff's meaning); progress.json
+        # counts every linked byte, so a partly linked file makes the report's figure smaller.
+        complete = sum(int(u['measures']['total_' + kind]) for u in decomp['units'] if u['metadata']['complete'])
+        if int(decomp['measures']['complete_' + kind]) != complete or complete > site['measures'][kind]['linked']:
+            raise ValueError('Published maps disagree on executable progress')
     return len(expected)
 
 

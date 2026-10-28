@@ -21,7 +21,14 @@ class DecompReportTests(ProgressBase):
         self.assertEqual(data["measures"]["complete_data"], "0")
         self.assertEqual(data["measures"]["complete_units"], 0)
         self.assertEqual(data["measures"]["fuzzy_match_percent"], 0)
-        self.assertNotIn("total_functions", data["measures"])
+        self.assertEqual(data["measures"]["total_functions"], sum(len(u.get("functions", [])) for u in data["units"]))
+        self.assertEqual(data["measures"]["matched_functions"], 0)
+        for unit in data["units"]:
+            for section in unit["sections"]:
+                self.assertTrue(section["name"].startswith(("Code section", "Data section", "Uninitialized data")))
+                self.assertTrue(section["metadata"]["virtual_address"].isdigit())
+            data_size = sum(int(s["size"]) for s in unit["sections"] if not s["name"].startswith("Code section"))
+            self.assertEqual(data_size, int(unit["measures"]["total_data"]))
         self.assertTrue(all(u["metadata"]["auto_generated"] for u in data["units"]))
         self.assertNotIn(str(self.root), json.dumps(data))
 
@@ -82,13 +89,13 @@ class MeasuredDecompReportTests(ProgressBase):
         self.assertAlmostEqual(m["matched_data_percent"], 100 * 4 / 48)
         self.assertEqual(m["fuzzy_match_percent"], 50)
         self.assertEqual(m["total_units"], 4)
-        self.assertEqual(m["complete_units"], 0)
+        self.assertEqual(m["complete_units"], 1)
         for kind in ("code", "data"):
             for field in ("total", "matched", "complete"):
                 key = f"{field}_{kind}"
                 self.assertEqual(int(m[key]), sum(int(u["measures"][key]) for u in data["units"]))
 
-    def test_source_unit_combines_code_and_data_without_claiming_provisional_completion(self):
+    def test_source_unit_combines_code_and_data_without_claiming_boundary_confirmation(self):
         test_progress.SourceReportTests.write_source(self)
         data = decomp_report.objdiff_report(
             decomp_report.progress.report(self.binary, "a" * 40, self.report_path))
@@ -96,12 +103,13 @@ class MeasuredDecompReportTests(ProgressBase):
         self.assertEqual(len(sourced), 1)
         unit = sourced[0]
         self.assertEqual(unit["name"], "src/unit.c")
-        self.assertEqual(unit["metadata"], {"source_path": "src/unit.c", "complete": False,
-                                            "auto_generated": False})
+        # Fully linked from the verified source build, but no unit row confirms its boundaries.
+        self.assertEqual(unit["metadata"], {"source_path": "src/unit.c", "complete": True,
+                                            "confirmed": False, "auto_generated": False})
         self.assertEqual(unit["measures"]["total_code"], "8")
         self.assertEqual(unit["measures"]["total_data"], "4")
         self.assertEqual(unit["measures"]["matched_code_percent"], 100)
-        self.assertEqual(unit["measures"]["complete_units"], 0)
+        self.assertEqual(unit["measures"]["complete_units"], 1)
         unknown = [unit for unit in data["units"] if unit["metadata"]["auto_generated"]]
         self.assertEqual(sum(int(unit["measures"]["total_code"]) for unit in unknown), 8)
         self.assertEqual(sum(int(unit["measures"]["total_data"]) for unit in unknown), 44)
@@ -114,7 +122,7 @@ class MeasuredDecompReportTests(ProgressBase):
         report = decomp_report.progress.report(self.binary, "a" * 40, self.report_path)
         data = decomp_report.objdiff_report(report)
         self.assertEqual(data["measures"]["complete_units"], 1)
-        self.assertTrue(next(u for u in data["units"] if u["name"] == "src/unit.c")["metadata"]["complete"])
+        self.assertTrue(next(u for u in data["units"] if u["name"] == "src/unit.c")["metadata"]["confirmed"])
         self.assertEqual(report["file_counts"]["exact"], 1)
 
     def test_function_drilldown_preserves_source_and_unmapped_names(self):

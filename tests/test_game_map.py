@@ -54,7 +54,7 @@ class GameMapTests(unittest.TestCase):
         self.assertEqual(sum(f['size'] for f in before), sum(f['size'] for f in after))
         self.assertEqual([f['name'] for f in after], ['Candidate / cu_a', 'Unmapped / .text'])
         self.assertEqual(after[0]['scope'], 'candidate-ranges')
-        exported = decomp_report.objdiff_report({'files': after})
+        exported = decomp_report.objdiff_report({'sections': [self.section], 'files': after})
         self.assertIn('Candidate / cu_a', [u['name'] for u in exported['units']])
         self.assertEqual(exported['measures']['matched_code'], '0')
         self.assertEqual(exported['measures']['complete_code'], '0')

@@ -9,6 +9,8 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
+import toolchain
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DESTINATION = ROOT / "build" / "toolchain"
@@ -49,6 +51,9 @@ def setup_sdk():
     version = lock.get("sdk_compiler_version")
     if version != "GC/1.2.5n":
         raise RuntimeError("Unsupported pinned SDK compiler")
+    compilers = toolchain.recorded("compilers")
+    if compilers is not None:
+        return compilers / version
     archive = DESTINATION / "compilers.zip"
     fetch(lock["compilers"], archive)
     return extract(archive, version)
@@ -56,6 +61,12 @@ def setup_sdk():
 
 def setup():
     lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    compilers, wibo = toolchain.recorded("compilers"), toolchain.recorded("wibo")
+    if compilers is not None:
+        # The build image's compiler pack and Wibo (build.py configure).
+        if wibo is None:
+            raise RuntimeError("build/toolchain.json records the compilers without Wibo")
+        return compilers / f"ProDG/{lock['compiler_version']}", wibo
     archive = DESTINATION / "compilers.zip"
     fetch(lock["compilers"], archive)
     directory = extract(archive, f"ProDG/{lock['compiler_version']}")

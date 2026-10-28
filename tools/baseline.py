@@ -21,6 +21,11 @@ def digest(path, algorithm):
 
 
 def get_tool(name, lock, system):
+    import toolchain
+    path = toolchain.recorded(name)
+    if path is not None:
+        # The build image's copy (build.py configure); its digest pins it.
+        return path / "powerpc-eabi-ld" if name == "binutils" else path
     spec = lock[name][system]
     archive = BUILD / "tools" / (name + (".zip" if name == "binutils" else ""))
     archive.parent.mkdir(parents=True, exist_ok=True)

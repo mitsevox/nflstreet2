@@ -123,7 +123,7 @@ class LiveInventoryCacheTests(unittest.TestCase):
     def test_generated_inventory_reuses_without_modifying_metadata(self):
         root = Path(__file__).resolve().parents[1]
         directory = root / 'build/analysis'
-        original = Path('/orig/main.dol')
+        original = root / 'orig/GN7E69-rev0/sys/main.dol'
         if not original.exists() or not (directory / 'summary.json').exists():
             self.skipTest('Hosted inventory step supplies the target and generated receipt')
         before = {name: (directory / name).read_bytes() for name in ('summary.json', 'symbols.txt')}
