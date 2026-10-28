@@ -168,7 +168,6 @@ void fn_801F4294(int handle, int a, int value);
 void fn_801F4314(int handle, int value);
 SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index);
 void fn_801F4448(SndSeqInfo_801F438C *pSeq);
-void *fn_801F44A4(void);
 SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank);
 int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b);
 void fn_801F45D4(SndStream_801F44B0 *pStream);

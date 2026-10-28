@@ -1,9 +1,7 @@
 #include "engine/vec.h"
+#include "engine/cu_801D03D0.h"
 
 extern "C" {
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D06D4(float (*m)[4]);
 void fn_801E736C(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);
 }
 
@@ -68,7 +66,7 @@ void Class_801EADD8::fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut)
     float sizeZ;
 
     fn_801D04C4();
-    fn_801D06D4(m);
+    fn_801D06D4(m[0]);
     fn_80227CC0(&corner, &mMin);
     fn_801D0544();
     axisX.x = m[0][0];

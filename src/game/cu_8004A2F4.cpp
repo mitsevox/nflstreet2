@@ -1,3 +1,5 @@
+#include "engine/cu_801E8478.h"
+#include "engine/TibNew.h"
 #include "engine/cu_801B9F00.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
@@ -1807,7 +1809,6 @@ void fn_801E9A44(Body_801E9538 *, void *);
 void fn_801E9AF0(Body_801E9538 *, Vector_80039F5C *, Quat_801EB488 *);
 void fn_801E9F0C(Body_801E9538 *, int);
 void fn_801E2878(void *, Body_801E9538 *);
-void *fn_801E8478(void *, Body_801E9538 *, Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_801E91E0(void *, void *);
 int fn_801C3180(const char *);
 char *fn_801C2EF0(char *, const char *, int);
@@ -2310,12 +2311,12 @@ void fn_8004F754(int handle, Object_80040818 *pObject, int objectIndex)
         lbl_80308F64[lbl_803EA524].mUnknown20 = lbl_803EA520;
         if (fn_8004D4B0(handle, "physics") && fn_8004D508(handle, "constraint")) {
             do {
-                Vector_80039F5C local, world;
-                fn_8004D728(handle, "location", &local.mX);
-                float y = local.mY; local.mY = -local.mZ; local.mZ = y;
+                Vec3_801DE1E0 local, world;
+                fn_8004D728(handle, "location", &local.x);
+                float y = local.y; local.y = -local.z; local.z = y;
                 fn_8022765C(&world, &local, pPos);
                 int index = lbl_803EA52C;
-                lbl_80308F44[index] = fn_801E8478(fn_801D3BD0(36, 0), pBody, lbl_803EC7E4, &local, &world);
+                lbl_80308F44[index] = new (0) Class_801E8478(pBody, lbl_803EC7E4, &local, &world);
                 fn_801E91E0(lbl_803EA50C, lbl_80308F44[lbl_803EA52C]);
                 lbl_803EA52C++;
             } while (fn_8004D560(handle));
