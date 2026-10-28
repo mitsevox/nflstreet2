@@ -54,7 +54,8 @@ static void fn_801CF040(void *pHandle, int seed)
     pStream->mSeed = seed;
 }
 
-static int fn_801CF048(void *pDstHandle, void *pSrcHandle)
+/* Copy state only between streams of the same generator type. */
+static int CopyFastRandomState(void *pDstHandle, void *pSrcHandle)
 {
     RandFast_801CEFF0 *pDst = pDstHandle;
     RandFast_801CEFF0 *pSrc = pSrcHandle;
@@ -299,7 +300,7 @@ void (*lbl_802F7ADC[3])(void *pStream, int seed) = {
 };
 
 int (*lbl_802F7AE8[3])(void *pDst, void *pSrc) = {
-    fn_801CF048, fn_801CF1B0, fn_801CF498
+    CopyFastRandomState, fn_801CF1B0, fn_801CF498
 };
 
 float (*lbl_802F7AF4[3])(void *pStream) = {
