@@ -11,11 +11,11 @@ void fn_801EBEF8(float *pQuat, int z, int y, int x);
 
 int fn_801C4D3C(SkelNode_801C4960 *pNode, void (*callback)(SkelNode_801C4960 *, void *), void *pContext);
 
-static void fn_801C4960(void)
+static void fn_801C4960(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelPose_801C4960 *pPose)
 {
 }
 
-static void fn_801C4964(Skel_801C4960 *pSkel, void *pUnused, SkelPose_801C4960 *pPose)
+static void fn_801C4964(Skel_801C4960 *pSkel, SkelNode_801C4960 *pUnused, SkelPose_801C4960 *pPose)
 {
     SkelEuler_801C4960 *pEulers = pPose->mpLocal;
     float (*pQuats)[4] = pPose->mpOutput;
@@ -64,7 +64,7 @@ static void fn_801C4AC0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelPose
     fn_801D0544();
 }
 
-static void fn_801C4B1C(Skel_801C4960 *pSkel, void *pUnused, SkelPose_801C4960 *pPose)
+static void fn_801C4B1C(Skel_801C4960 *pSkel, SkelNode_801C4960 *pUnused, SkelPose_801C4960 *pPose)
 {
     SkelEuler_801C4960 *pEulers = pPose->mpLocal;
     float (*pQuats)[4] = pPose->mpOutput;
@@ -183,3 +183,18 @@ void fn_801C4F10(Skel_801C4960 *pDst, Skel_801C4960 *pSrc)
         pDst->mRest[i].z = -pSrc->mRest[i].z;
     }
 }
+
+void (*lbl_802F48C0[48])(Skel_801C4960 *, SkelNode_801C4960 *, SkelPose_801C4960 *) = {
+    fn_801C4960, fn_801C4964, fn_801C4960, fn_801C4960,
+    fn_801C4B1C, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4AC0, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4CA0, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+    fn_801C4960, fn_801C4960, fn_801C4960, fn_801C4960,
+};
