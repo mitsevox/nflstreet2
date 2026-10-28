@@ -1,6 +1,8 @@
+#include <string.h>
+#include "engine/tdbiores.h"
+#include "engine/Resource.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/fn_801F7BD4.h"
-#include "game/fn_801EF390.h"
 
 typedef struct ResDesc_8020D534 {
     void *mpArchive;
@@ -30,15 +32,16 @@ typedef struct ResMemFile_8020D924 {
     int mState;
 } ResMemFile_8020D924;
 
-extern unsigned int fn_801F0C50(void *pArchive, int id);
 extern int fn_801EF92C(void *pArchive, int id, void *pData);
 extern int fn_801F1B44(int a, int b, void *pData, unsigned int size, int e);
 
 static void fn_8020D858(ResFile_8020D534 *pFile);
 static void fn_8020D8B4(ResFile_8020D534 *pFile);
 
-static int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDesc_8020D534 *pDesc, int bAnySize)
+static int fn_8020D534(void *pHandle, unsigned int expectedSize, void *pName, int bAnySize)
 {
+    ResFile_8020D534 *pFile = pHandle;
+    ResDesc_8020D534 *pDesc = pName;
     unsigned int size;
 
     if (pFile == 0 || pDesc == 0) {
@@ -56,8 +59,9 @@ static int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDe
     return 0;
 }
 
-static int fn_8020D5D8(ResFile_8020D534 *pFile)
+static int fn_8020D5D8(void *pHandle)
 {
+    ResFile_8020D534 *pFile = pHandle;
     int err = 0;
 
     if (pFile == 0) {
@@ -76,8 +80,9 @@ static int fn_8020D5D8(ResFile_8020D534 *pFile)
     return err;
 }
 
-static int fn_8020D674(ResFile_8020D534 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+static int fn_8020D674(void *pHandle, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
+    ResFile_8020D534 *pFile = pHandle;
     if (pWritten != 0) {
         *pWritten = 0;
     }
@@ -103,8 +108,9 @@ static int fn_8020D674(ResFile_8020D534 *pFile, void *pSrc, unsigned int size, u
     return 0;
 }
 
-static int fn_8020D750(ResFile_8020D534 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
+static int fn_8020D750(void *pHandle, void *pDst, unsigned int size, unsigned int *pRead)
 {
+    ResFile_8020D534 *pFile = pHandle;
     if (pRead != 0) {
         *pRead = 0;
     }
@@ -130,8 +136,9 @@ static int fn_8020D750(ResFile_8020D534 *pFile, void *pDst, unsigned int size, u
     return 0;
 }
 
-static int fn_8020D82C(ResFile_8020D534 *pFile, int offset)
+static int fn_8020D82C(void *pHandle, int offset)
 {
+    ResFile_8020D534 *pFile = pHandle;
     if (pFile == 0) {
         return 3;
     }
@@ -139,7 +146,7 @@ static int fn_8020D82C(ResFile_8020D534 *pFile, int offset)
     return 0;
 }
 
-static int fn_8020D850(void)
+static unsigned int fn_8020D850(unsigned int size)
 {
     return 0;
 }
@@ -167,11 +174,13 @@ static void fn_8020D8B4(ResFile_8020D534 *pFile)
     }
 }
 
-static int fn_8020D924(ResMemFile_8020D924 *pFile, unsigned int size, ResMemDesc_8020D924 *pDesc, void *pExtra)
+static int fn_8020D924(void *pHandle, unsigned int size, void *pName, int mode)
 {
+    ResMemFile_8020D924 *pFile = pHandle;
+    ResMemDesc_8020D924 *pDesc = pName;
     int err = 0;
 
-    if (pFile == 0 || pDesc == 0 || pExtra != 0) {
+    if (pFile == 0 || pDesc == 0 || mode != 0) {
         return 3;
     }
     pFile->mDesc = *pDesc;
@@ -189,8 +198,9 @@ static int fn_8020D924(ResMemFile_8020D924 *pFile, unsigned int size, ResMemDesc
     return err;
 }
 
-static int fn_8020D9D8(ResMemFile_8020D924 *pFile)
+static int fn_8020D9D8(void *pHandle)
 {
+    ResMemFile_8020D924 *pFile = pHandle;
     int err = 0;
 
     if (pFile == 0 || pFile->mpData == 0 || pFile->mState != 2) {
@@ -205,8 +215,9 @@ static int fn_8020D9D8(ResMemFile_8020D924 *pFile)
     return err;
 }
 
-static int fn_8020DA70(ResMemFile_8020D924 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+static int fn_8020DA70(void *pHandle, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
+    ResMemFile_8020D924 *pFile = pHandle;
     if (pWritten != 0) {
         *pWritten = 0;
     }
@@ -227,7 +238,27 @@ static int fn_8020DA70(ResMemFile_8020D924 *pFile, void *pSrc, unsigned int size
     return 0;
 }
 
-static int fn_8020DB2C(void)
+static int fn_8020DB2C(void *pHandle, void *pData, unsigned int size, unsigned int *pDone)
 {
     return 0x24;
 }
+
+TDbIODevice_801FC5FC lbl_802F9BAC = {
+    fn_8020D534,
+    fn_8020D5D8,
+    fn_8020D750,
+    fn_8020D674,
+    fn_8020D82C,
+    fn_8020D850,
+    0x1C
+};
+
+TDbIODevice_801FC5FC lbl_802F9BC8 = {
+    fn_8020D924,
+    fn_8020D9D8,
+    fn_8020DB2C,
+    fn_8020DA70,
+    fn_8020D82C,
+    fn_8020D850,
+    0x1C
+};

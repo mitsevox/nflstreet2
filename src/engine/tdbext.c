@@ -1,3 +1,6 @@
+#include "engine/tdbext.h"
+#include "engine/fn_801F9134.h"
+#include "engine/tdbiores.h"
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -13,14 +16,12 @@ extern int fn_801D2130(Record_802CC680 *pParams);
 extern int fn_801D2570(int handle);
 extern void *fn_801D310C(void *p, int size, int flags, int d);
 extern int fn_801F0F9C(void *pPath);
-extern int fn_801F9134(void *pDb, TdbExtFile_8020D2D0 *pFile, int flags, char *pOps);
 
 extern Record_802CC680 lbl_8039B498;
 extern void *lbl_803EBEA8;
 extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
-extern char lbl_802F9BAC[];
 
 void fn_8020D0CC(Record_802CC680 *pParams)
 {
@@ -90,7 +91,7 @@ void fn_8020D2AC(void *pHeap, void *pMem, int size)
     fn_801D2BD0(pMem);
 }
 
-int fn_8020D2D0(void *pDb, void *pPath, int mode, int flags)
+int fn_8020D2D0(int db, void *pPath, int mode, int flags)
 {
     TdbExtFile_8020D2D0 file;
     int isOpen;
@@ -100,7 +101,7 @@ int fn_8020D2D0(void *pDb, void *pPath, int mode, int flags)
     file.mMode = mode;
     file.mpStream = fn_801EEB44(pPath, 0x2C);
     if (file.mpStream != 0) {
-        err = fn_801F9134(pDb, &file, flags, lbl_802F9BAC);
+        err = fn_801F9134(db, (int)&file, flags, (int)&lbl_802F9BAC);
         if (isOpen == 0) {
             if (err == 0) {
                 if (fn_801EEFAC(file.mpStream)) {

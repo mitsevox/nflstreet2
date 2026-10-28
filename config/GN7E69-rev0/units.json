@@ -13762,6 +13762,63 @@
           "end": "0x802F7B0C"
         }
       ]
+    },
+    {
+      "source": "src/engine/tdbiores.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8020D534-0x8020DB34, exact function rows and exact data rows 0x802F9BAC-0x802F9BC8 and 0x802F9BC8-0x802F9BE4; complete twelve-function unit and both operation tables linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D534",
+          "end": "0x8020DB34"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9BAC",
+          "end": "0x802F9BE4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80229094.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270, all six exact function/name rows, complete native .sdata row 0x803EBFC8-0x803EBFD8 and canonical declaration/source-form rows. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229094",
+          "end": "0x80229270"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFC8",
+          "end": "0x803EBFD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80228F78.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084, four function/name rows, complete native .sdata row 0x803EBFB8-0x803EBFC4 and canonical declaration/source-form row. Complete source file linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228F78",
+          "end": "0x80229084"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFB8",
+          "end": "0x803EBFC4"
+        }
+      ]
     }
   ]
 }

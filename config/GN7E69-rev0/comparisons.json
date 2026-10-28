@@ -27603,47 +27603,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228F78.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084 (src/engine/cu_80228F78.c), its function and name rows and the exact .sdata data row 0x803EBFB8-0x803EBFC4. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228F78",
-          "end": "0x80229084"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFB8",
-          "end": "0x803EBFC4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80228F78",
-          "start": "0x80228F78",
-          "end": "0x80228FD8"
-        },
-        {
-          "symbol": "fn_80228FD8",
-          "start": "0x80228FD8",
-          "end": "0x80229010"
-        },
-        {
-          "symbol": "fn_80229010",
-          "start": "0x80229010",
-          "end": "0x8022905C"
-        },
-        {
-          "symbol": "fn_8022905C",
-          "start": "0x8022905C",
-          "end": "0x80229084"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80229084.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/cu_80229084.c), its compiler row and function and name rows. Draft comparisons only; original assembly remains linked.",
@@ -27665,57 +27624,6 @@
           "symbol": "fn_8022908C",
           "start": "0x8022908C",
           "end": "0x80229094"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80229094.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270 (src/engine/cu_80229094.c), its function and name rows and the exact .sdata data row 0x803EBFC8-0x803EBFD8. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80229094",
-          "end": "0x80229270"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFC8",
-          "end": "0x803EBFD8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80229094",
-          "start": "0x80229094",
-          "end": "0x802290E0"
-        },
-        {
-          "symbol": "fn_802290E0",
-          "start": "0x802290E0",
-          "end": "0x8022910C"
-        },
-        {
-          "symbol": "fn_8022910C",
-          "start": "0x8022910C",
-          "end": "0x80229188"
-        },
-        {
-          "symbol": "fn_80229188",
-          "start": "0x80229188",
-          "end": "0x802291A0"
-        },
-        {
-          "symbol": "fn_802291A0",
-          "start": "0x802291A0",
-          "end": "0x80229210"
-        },
-        {
-          "symbol": "fn_80229210",
-          "start": "0x80229210",
-          "end": "0x80229270"
         }
       ]
     },
@@ -52559,81 +52467,6 @@
           "symbol": "fn_8020D52C",
           "start": "0x8020D52C",
           "end": "0x8020D534"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tdbiores.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020D534-0x8020DB34 (src/engine/tdbiores.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8020D534",
-          "end": "0x8020DB34"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8020D534",
-          "start": "0x8020D534",
-          "end": "0x8020D5D8"
-        },
-        {
-          "symbol": "fn_8020D5D8",
-          "start": "0x8020D5D8",
-          "end": "0x8020D674"
-        },
-        {
-          "symbol": "fn_8020D674",
-          "start": "0x8020D674",
-          "end": "0x8020D750"
-        },
-        {
-          "symbol": "fn_8020D750",
-          "start": "0x8020D750",
-          "end": "0x8020D82C"
-        },
-        {
-          "symbol": "fn_8020D82C",
-          "start": "0x8020D82C",
-          "end": "0x8020D850"
-        },
-        {
-          "symbol": "fn_8020D850",
-          "start": "0x8020D850",
-          "end": "0x8020D858"
-        },
-        {
-          "symbol": "fn_8020D858",
-          "start": "0x8020D858",
-          "end": "0x8020D8B4"
-        },
-        {
-          "symbol": "fn_8020D8B4",
-          "start": "0x8020D8B4",
-          "end": "0x8020D924"
-        },
-        {
-          "symbol": "fn_8020D924",
-          "start": "0x8020D924",
-          "end": "0x8020D9D8"
-        },
-        {
-          "symbol": "fn_8020D9D8",
-          "start": "0x8020D9D8",
-          "end": "0x8020DA70"
-        },
-        {
-          "symbol": "fn_8020DA70",
-          "start": "0x8020DA70",
-          "end": "0x8020DB2C"
-        },
-        {
-          "symbol": "fn_8020DB2C",
-          "start": "0x8020DB2C",
-          "end": "0x8020DB34"
         }
       ]
     },

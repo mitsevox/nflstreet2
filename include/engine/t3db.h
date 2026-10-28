@@ -1,6 +1,8 @@
 #ifndef ENGINE_T3DB_H
 #define ENGINE_T3DB_H
 
+#include "engine/fn_801F8D60.h"
+
 #define TDB_COLUMN_ROW 0xFE
 
 typedef enum TDbType_801FDF28 {
@@ -218,8 +220,9 @@ typedef struct TDbIODevice_801FC5FC {
     int (*mClose)(void *pHandle);
     int (*mRead)(void *pHandle, void *pData, unsigned int size, unsigned int *pDone);
     int (*mWrite)(void *pHandle, void *pData, unsigned int size, unsigned int *pDone);
-    void *mUnknown10;
+    int (*mSeek)(void *pHandle, int offset);
     unsigned int (*mReserve)(unsigned int size);
+    unsigned int mUnknown18;
 } TDbIODevice_801FC5FC;
 
 typedef struct TDbIOStream_801FA8C8 {

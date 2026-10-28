@@ -1,3 +1,5 @@
+#include "engine/fn_801F8D60.h"
+#include "engine/tdbext.h"
 #include <stdio.h>
 
 #include "game/Candidate_8016B364.h"
@@ -18,11 +20,8 @@ void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_801F51DC(int a, void *pBase, int count, int size,
                  int (*pCompare)(Candidate_8016B364 *, Candidate_8016B364 *),
                  void (*pSwap)(Candidate_8016B364 *, Candidate_8016B364 *), int b, int c);
-int fn_801F8D60(int tag, int a);
-int fn_801F8EEC(int tag);
 int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
-int fn_8020D2D0(int tag, char *pName, int a, int b);
 }
 
 static const char *lbl_802D5034[25] = {
