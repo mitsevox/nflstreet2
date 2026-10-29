@@ -1,3 +1,4 @@
+#include "engine/t3db_index.h"
 #include "engine/fn_801F8D60.h"
 #include "engine/fn_801F9134.h"
 typedef struct TDbDefault_803E944C {
@@ -206,7 +207,6 @@ extern void fn_802055CC(int a);
 extern int fn_802075F4(TDbQryBuf_801F9858 *pQry, int a);
 extern int fn_80207988(TDbQryBuf_801F9858 *pQry, int a);
 extern int fn_80207E24(TDbQryBuf_801F9858 *pQry, int a, int b);
-extern int fn_80202E60(TDbTbl_801F88F0 *pTbl, int idx, TDbIdxCol_801F9E84 *pCols, int a, int b);
 extern int fn_802032D8(TDbIdx_801F9E84 *pIdx);
 extern int fn_8020840C(int a, int b, int c, int d, int ref, TDbResult_801F9718 *pRes);
 extern int fn_802088A8(TDbQry_801F89B8 *pQry);
@@ -1092,7 +1092,7 @@ static inline TDbIdx_801F9E84 *FindIdx_801F9E84(TDbIdx_801F9E84 *p, int idx)
     return 0;
 }
 
-int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, int a, int b)
+int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbExpr_801FAA00 *a, int b)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
@@ -1115,7 +1115,7 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, int a, int 
                     return 9;
                 }
             }
-            err = fn_80202E60(pTbl, idx, pCols, a, b);
+            err = CreateDatabaseIndex(pTbl, idx, pCols, a, b);
         }
     }
     return err;

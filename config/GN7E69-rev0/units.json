@@ -14033,6 +14033,19 @@
           "end": "0x803EBEDC"
         }
       ]
+    },
+    {
+      "source": "src/engine/t3db_index.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80201EC8-0x80203444 and target-only function/name/compiler/source-form rows; all seventeen functions and complete native text. No native literal or writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80201EC8",
+          "end": "0x80203444"
+        }
+      ]
     }
   ]
 }

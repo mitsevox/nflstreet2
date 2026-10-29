@@ -2,6 +2,7 @@
 #define ENGINE_T3DB_H
 
 #include "engine/fn_801F8D60.h"
+#include "engine/t3db_index.h"
 
 #define TDB_COLUMN_ROW 0xFE
 
@@ -135,7 +136,7 @@ typedef struct TDbIndex_801FAA00 {
     TDbTable_801FAA00 *mTable;
     struct TDbIndex_801FAA00 *mNext;
     TDbExpr_801FAA00 *mFilter;
-    void *mUserData;
+    int mId;
     TDbMemPool_80202B60 mPool;
     unsigned int mCount;
     unsigned char mFlags;
@@ -252,7 +253,7 @@ typedef struct TDbIOTableHdr_801FAAF8 {
 } TDbIOTableHdr_801FAAF8;
 
 typedef struct TDbIOIndexHdr_801FBC2C {
-    void *mUserData;
+    int mId;
     unsigned char mPartCount;
     unsigned char mAllowDuplicates;
     unsigned char mHasFilter;

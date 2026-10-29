@@ -524,9 +524,11 @@ int fn_80202D34(TDbIndex_801FAA00 *pIndex, int row)
     return err;
 }
 
-int fn_80202E60(TDbTable_801FAA00 *pTable, void *pUserData, TDbIdxColumnDef_801FFFC4 *pDefs, TDbExpr_801FAA00 *pFilter,
-                int unique)
+/* Build an index from rows whose deletion bit is clear. */
+int CreateDatabaseIndex(void *pTableData, int id, void *pDefinitionData, TDbExpr_801FAA00 *pFilter, int unique)
 {
+    TDbTable_801FAA00 *pTable = pTableData;
+    TDbIdxColumnDef_801FFFC4 *pDefs = pDefinitionData;
     int err = 0;
     TDbIndex_801FAA00 *pIndex = 0;
     unsigned char i = 0;
@@ -544,7 +546,13 @@ int fn_80202E60(TDbTable_801FAA00 *pTable, void *pUserData, TDbIdxColumnDef_801F
             fn_8020D1B0(pTable->mDb->mHeap, sizeof(TDbIndex_801FAA00) + (i - 1) * sizeof(TDbIdxPart_80202708), &pIndex);
         pIndex->mFlags = 0;
     }
-    TDbMemNotify_801FC9D4(4, -1, -1);
+    if (lbl_803EBE80) {
+        TDbMemEvent_801FC5FC event;
+        event.mType = 4;
+        event.mUnknown4 = -1;
+        event.mUnknown8 = -1;
+        lbl_803EBE80(&event);
+    }
     if (err == 0) {
         if (pFilter != 0) {
             err = fn_80204EF8(pFilter, &pIndex->mFilter, &pTable, 1, 0);
@@ -557,7 +565,7 @@ int fn_80202E60(TDbTable_801FAA00 *pTable, void *pUserData, TDbIdxColumnDef_801F
                               (pFilter == 0 ? pTable->mCapacity : pTable->mCapacity >> 2) + 5, 100);
             if (err == 0) {
                 pIndex->mLocked = 0;
-                pIndex->mUserData = pUserData;
+                pIndex->mId = id;
                 pIndex->mTable = pTable;
                 pIndex->mCount = 0;
                 pIndex->mDestroyed = 0;
@@ -635,7 +643,7 @@ int fn_802032D8(TDbIndex_801FAA00 *pIndex)
     int err;
 
     if (pIndex->mLocked) {
-        pIndex->mUserData = 0;
+        pIndex->mId = 0;
         pIndex->mDestroyed = 1;
         for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
             if (pQuery->mState == 1 && pQuery->mSource.mIndex == pIndex) {
