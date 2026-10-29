@@ -15,7 +15,7 @@ float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 float fn_801CFFA0(float x);
 
-extern Mtx_801D0110 lbl_803847C0[];
+extern MtxElems_801D05BC lbl_803847C0[];
 
 
 void fn_801D03D0(float *pMatrix)
@@ -99,21 +99,16 @@ void fn_801D058C(float *pDst, float *pA, float *pB)
     fn_8024AA18(pA, pB, pDst);
 }
 
-typedef struct MtxElems_801D05BC {
-    float mElements[16];
-} MtxElems_801D05BC;
-
-void fn_801D05BC(float *pDst, float *pA, float *pB)
+void fn_801D05BC(float *pDst, float *pA, MtxElems_801D05BC *pB)
 {
-    MtxElems_801D05BC *b = (MtxElems_801D05BC *)pB;
     float result[16];
     int i;
     int j;
 
     for (i = 0; i <= 3; i++) {
         for (j = 0; j < 4; j++) {
-            result[j * 4 + i] = b->mElements[i] * pA[j * 4 + 0] + b->mElements[4 + i] * pA[j * 4 + 1] +
-                                b->mElements[8 + i] * pA[j * 4 + 2] + b->mElements[12 + i] * pA[j * 4 + 3];
+            result[j * 4 + i] = pB->mElements[i] * pA[j * 4 + 0] + pB->mElements[4 + i] * pA[j * 4 + 1] +
+                                pB->mElements[8 + i] * pA[j * 4 + 2] + pB->mElements[12 + i] * pA[j * 4 + 3];
         }
     }
     fn_801D0424(pDst, result);
@@ -126,7 +121,7 @@ void fn_801D0664(float *pMatrix)
     fn_801D058C(pCurrent, pCurrent, pMatrix);
 }
 
-void fn_801D069C(float *pMatrix)
+void fn_801D069C(MtxElems_801D05BC *pMatrix)
 {
     float *pCurrent = fn_801D0444();
 
@@ -477,25 +472,25 @@ void fn_801D11F4(int *pAngles, unsigned int order)
 
 void fn_801D1258(int slot, float *pMatrix)
 {
-    fn_801D0424(lbl_803847C0[slot], pMatrix);
+    fn_801D0424(lbl_803847C0[slot].mElements, pMatrix);
 }
 
 void fn_801D1288(int slot, float *pMatrix)
 {
-    fn_801D0424(pMatrix, lbl_803847C0[slot]);
+    fn_801D0424(pMatrix, lbl_803847C0[slot].mElements);
 }
 
 void fn_801D12BC(int slot)
 {
-    fn_801D06D4(lbl_803847C0[slot]);
+    fn_801D06D4(lbl_803847C0[slot].mElements);
 }
 
 void fn_801D12EC(int slot)
 {
-    fn_801D0F80(lbl_803847C0[slot]);
+    fn_801D0F80(lbl_803847C0[slot].mElements);
 }
 
 void fn_801D131C(int slot)
 {
-    fn_801D069C(lbl_803847C0[slot]);
+    fn_801D069C(&lbl_803847C0[slot]);
 }

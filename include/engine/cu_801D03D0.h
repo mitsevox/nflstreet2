@@ -8,6 +8,10 @@
 extern "C" {
 #endif
 
+typedef struct MtxElems_801D05BC {
+    float mElements[16];
+} MtxElems_801D05BC;
+
 void fn_801D03D0(float *pMatrix);
 void fn_801D0424(float *pDst, float *pSrc);
 float *fn_801D0444(void);
@@ -18,9 +22,9 @@ void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0558(void);
 void fn_801D058C(float *pDst, float *pA, float *pB);
-void fn_801D05BC(float *pDst, float *pA, float *pB);
+void fn_801D05BC(float *pDst, float *pA, MtxElems_801D05BC *pB);
 void fn_801D0664(float *pMatrix);
-void fn_801D069C(float *pMatrix);
+void fn_801D069C(MtxElems_801D05BC *pMatrix);
 void fn_801D06D4(float *pMatrix);
 void fn_801D070C(void);
 void fn_801D0710(float *pAxis, int angle);
