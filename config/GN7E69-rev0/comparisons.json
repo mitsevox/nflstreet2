@@ -46422,47 +46422,6 @@
       ]
     },
     {
-      "source": "src/engine/psysEmitter.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of psysEmitter.c over 0x801DFE0C-0x801E01FC (NASCAR 2005 symbol-table size/order match; see the psysEmitter.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1118-0x802B1138. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DFE0C",
-          "end": "0x801E01FC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1118",
-          "end": "0x802B1138"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801DFE0C",
-          "start": "0x801DFE0C",
-          "end": "0x801DFF10"
-        },
-        {
-          "symbol": "fn_801DFF10",
-          "start": "0x801DFF10",
-          "end": "0x801DFFA8"
-        },
-        {
-          "symbol": "fn_801DFFA8",
-          "start": "0x801DFFA8",
-          "end": "0x801E0034"
-        },
-        {
-          "symbol": "fn_801E0034",
-          "start": "0x801E0034",
-          "end": "0x801E01FC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/colorRamp.c",
       "profile": "engine_c",
       "evidence": "E3 lane draft of colorRamp.c over 0x801E052C-0x801E0A1C (NASCAR 2005 symbol-table size/order match; see the colorRamp.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1140-0x802B1148. Draft comparisons only; original assembly remains linked.",

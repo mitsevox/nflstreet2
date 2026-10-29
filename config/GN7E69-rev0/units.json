@@ -14084,6 +14084,25 @@
           "end": "0x802AF168"
         }
       ]
+    },
+    {
+      "source": "src/engine/psysEmitter.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional complete emitter-family unit row0x801DFE0C-0x801E01FC, all four function/name rows, exact native literal data0x802B1118-0x802B1138 and accessed payload/type/source-form rows. Inherited source path, original filename unresolved; unchanged engine_c.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DFE0C",
+          "end": "0x801E01FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1118",
+          "end": "0x802B1138"
+        }
+      ]
     }
   ]
 }

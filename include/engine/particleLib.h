@@ -36,21 +36,21 @@ typedef struct Shape_801DF428 {
     float mUnknown44;
 } Shape_801DF428;
 
-typedef struct ShapeLine_801DFE0C {
+typedef struct Payload1_801DFE0C {
     Vec3_801DE1E0 mUnknown00;
     Vec3_801DE1E0 mUnknown0C;
-} ShapeLine_801DFE0C;
+} Payload1_801DFE0C;
 
-typedef struct ShapeSphere_801DFE0C {
+typedef struct Payload2_801DFE0C {
     Vec3_801DE1E0 mUnknown00;
     float mUnknown0C;
-} ShapeSphere_801DFE0C;
+} Payload2_801DFE0C;
 
 typedef union Emitter_801DFE0C {
     Vec3_801DE1E0 mPoint;
-    ShapeLine_801DFE0C mLine;
-    ShapeSphere_801DFE0C mSphere;
-    Shape_801DF428 mBox;
+    Payload1_801DFE0C mCase1;
+    Payload2_801DFE0C mCase2;
+    Shape_801DF428 mCase3;
 } Emitter_801DFE0C;
 
 /* Plane collision parameters (normal, point, distance). */
