@@ -13945,6 +13945,25 @@
           "end": "0x802AEEE8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C3A44.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C3A44",
+          "end": "0x801C3CE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF0C4",
+          "end": "0x802AF0DC"
+        }
+      ]
     }
   ]
 }

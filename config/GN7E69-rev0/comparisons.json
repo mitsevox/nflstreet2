@@ -50164,67 +50164,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3A44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8 (src/engine/cu_801C3A44.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0C4-0x802AF0DC. Draft comparisons only; the camera.c easing helpers and matrix helpers stay external; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C3A44",
-          "end": "0x801C3CE8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF0C4",
-          "end": "0x802AF0DC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C3A44",
-          "start": "0x801C3A44",
-          "end": "0x801C3AD8"
-        },
-        {
-          "symbol": "fn_801C3AD8",
-          "start": "0x801C3AD8",
-          "end": "0x801C3B74"
-        },
-        {
-          "symbol": "fn_801C3B74",
-          "start": "0x801C3B74",
-          "end": "0x801C3B78"
-        },
-        {
-          "symbol": "fn_801C3B78",
-          "start": "0x801C3B78",
-          "end": "0x801C3C4C"
-        },
-        {
-          "symbol": "fn_801C3C4C",
-          "start": "0x801C3C4C",
-          "end": "0x801C3C6C"
-        },
-        {
-          "symbol": "fn_801C3C6C",
-          "start": "0x801C3C6C",
-          "end": "0x801C3C74"
-        },
-        {
-          "symbol": "fn_801C3C74",
-          "start": "0x801C3C74",
-          "end": "0x801C3C80"
-        },
-        {
-          "symbol": "fn_801C3C80",
-          "start": "0x801C3C80",
-          "end": "0x801C3CE8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C3EFC.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/cu_801C3EFC.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
