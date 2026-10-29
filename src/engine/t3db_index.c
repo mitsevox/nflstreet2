@@ -525,10 +525,9 @@ int fn_80202D34(TDbIndex_801FAA00 *pIndex, int row)
 }
 
 /* Build an index from rows whose deletion bit is clear. */
-int CreateDatabaseIndex(void *pTableData, int id, void *pDefinitionData, TDbExpr_801FAA00 *pFilter, int unique)
+int CreateDatabaseIndex(TDbTable_801FAA00 *pTable, int id, TDbIdxColumnDef_801FFFC4 *pDefs,
+                        TDbExpr_801FAA00 *pFilter, int unique)
 {
-    TDbTable_801FAA00 *pTable = pTableData;
-    TDbIdxColumnDef_801FFFC4 *pDefs = pDefinitionData;
     int err = 0;
     TDbIndex_801FAA00 *pIndex = 0;
     unsigned char i = 0;

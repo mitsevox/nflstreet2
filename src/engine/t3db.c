@@ -1115,7 +1115,8 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbE
                     return 9;
                 }
             }
-            err = CreateDatabaseIndex(pTbl, idx, pCols, a, b);
+            err = CreateDatabaseIndex((struct TDbTable_801FAA00 *)pTbl, idx,
+                                      (struct TDbIdxColumnDef_801FFFC4 *)pCols, a, b);
         }
     }
     return err;
