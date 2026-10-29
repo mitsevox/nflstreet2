@@ -1,8 +1,8 @@
 #include "engine/cu_801B9F00.h"
 
-extern Block_801BD6D4 *lbl_803ED610;
+Block_801BD6D4 *lbl_803ED610;
 
-int fn_801BD3BC(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag);
+int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag);
 
 int fn_801BCF40(Block_801BD6D4 *p)
 {
@@ -116,7 +116,7 @@ void fn_801BD26C(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int key)
 {
     int done;
 
-    fn_801BD3BC(p, pScript, 1);
+    InitializeSequenceState(p, pScript, 1);
     done = 0;
     p->mUnknown8 += p->mUnknownC + p->mUnknownC;
     do {
@@ -162,15 +162,15 @@ void fn_801BD26C(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int key)
     } while (!done);
 }
 
-int fn_801BD3BC(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
+/* Reset playback state and read the first two sequence values. */
+int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
 {
     int result = 0;
-    float rate;
 
     p->mpUnknown0 = pScript;
-    rate = (float)pScript->mUnknown0 * 0.0625f;
-    p->mUnknown4 = rate;
-    if (rate <= 0.0f) {
+    p->mUnknown4 = pScript->mUnknown0;
+    p->mUnknown4 *= 0.0625f;
+    if (p->mUnknown4 <= 0.0f) {
         p->mUnknown4 = 1.0f;
     }
     p->mUnknownC = p->mUnknown4;
@@ -192,7 +192,7 @@ int fn_801BD3BC(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
 
 int fn_801BD4C0(Block_801BD6D4 *p, Anim_801BAB34 *pScript)
 {
-    return fn_801BD3BC(p, pScript, 0);
+    return InitializeSequenceState(p, pScript, 0);
 }
 
 int fn_801BD4E4(Block_801BD6D4 *p, float step)

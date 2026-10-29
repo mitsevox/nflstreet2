@@ -13983,6 +13983,31 @@
           "end": "0x802B1140"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801BCF40.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x801BCF40-0x801BDA30, all seventeen name/function rows, source-form and field records, exact .rodata802AEDC8-802AEE38 and .sbss803ED610-803ED614. Complete unit on unchanged engine_c_fastmath library profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCF40",
+          "end": "0x801BDA30"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC8",
+          "end": "0x802AEE38"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED610",
+          "end": "0x803ED614"
+        }
+      ]
     }
   ]
 }
