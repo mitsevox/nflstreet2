@@ -1,9 +1,9 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern unsigned char *lbl_803EBED0;
-extern unsigned char *lbl_803EBED4;
-extern unsigned char *lbl_803EBED8;
+unsigned char *lbl_803EBED0 = 0;
+unsigned char *lbl_803EBED4 = 0;
+unsigned char *lbl_803EBED8 = 0;
 
 void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
 {
@@ -97,18 +97,21 @@ void fn_8020F00C(void)
     fn_801D2BD0(lbl_803EBED0);
 }
 
-unsigned char *fn_8020F030(unsigned int size)
+/* Reserve scratch bytes, wrapping when the remaining space is not greater than the request. */
+unsigned char *AllocateGeometryScratch(unsigned int size)
 {
     unsigned char *p;
+    unsigned char *cursor;
 
     if (lbl_803EBED8 - lbl_803EBED4 > size) {
         p = lbl_803EBED4;
+        lbl_803EBED4 += size;
     } else {
         p = lbl_803EBED0;
+        lbl_803EBED4 = p + size;
     }
-    lbl_803EBED4 = p + size;
-    while ((unsigned int)lbl_803EBED4 & 31) {
-        *lbl_803EBED4 = 0;
+    while ((unsigned int)(cursor = lbl_803EBED4) & 31) {
+        *cursor = 0;
         lbl_803EBED4++;
     }
     return p;
