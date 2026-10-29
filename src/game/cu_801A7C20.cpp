@@ -119,6 +119,9 @@ void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
     signed char corner = 0;
     float minU = minV;
     signed char corners[4];
+    short delta;
+    unsigned int i;
+    int k;
 
     if (pScroll->mAxis == 1) {
         if (lbl_803EB874) return;
@@ -138,9 +141,8 @@ void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
         } else if (pScroll->mType == 1) {
             step = pScroll->mPeriodV / (pScroll->mDurations[0] * 60.0f);
         }
-        short delta = (short)(step * one);
-        for (unsigned int i = 0; i < pMesh->mCount; i += 4) {
-            int k;
+        delta = (short)(step * one);
+        for (i = 0; i < pMesh->mCount; i += 4) {
             for (k = 0; k < 4; k++) {
                 if (uv[k].u < minU) minU = uv[k].u;
                 if (uv[k].v < minV) minV = uv[k].v;
@@ -178,8 +180,8 @@ void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
         } else if (pScroll->mType == 1) {
             step = pScroll->mPeriodV / (pScroll->mDurations[0] * 60.0f);
         }
-        short delta = (short)(step * one);
-        for (unsigned int i = 0; i < pMesh->mCount; i += 4) {
+        delta = (short)(step * one);
+        for (i = 0; i < pMesh->mCount; i += 4) {
             uv[i].u += delta;
             if (uv[i].u > one) {
                 uv[i].u = delta;
