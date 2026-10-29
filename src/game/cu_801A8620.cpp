@@ -17,6 +17,8 @@ typedef float Mtx44[4][4];
 #include <string.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXCull.h>
+#include <dolphin/gx/GXPixel.h>
 
 struct Texture_801A8D08 { unsigned char mUnknown0[16]; unsigned short mUnknown10; };
 struct Mesh_801A93C0 {
@@ -93,8 +95,6 @@ int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(Object_801A8620 *, int, int);
 int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
 void fn_8024FB58(int, GXColor); void fn_8024FC48(int); void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_80252114(int); void fn_802520E0(int, int, int);
-void fn_8024EB28(int);
 void fn_802525BC(int); void fn_8025251C(Mtx44, int); void fn_8025256C(Mtx44, int);
 int fn_801A8B84(Object_801A8620 *); int fn_801A8C48(Child_801A9430 *);
 int fn_801A9430(Child_801A9430 *, int);
@@ -108,14 +108,14 @@ extern "C" {
 int fn_801A8620(Object_801A8620 *p, int arg)
 {
     GXColor color = {255,255,255,255}; GXColor copy;
-    Mtx44 m1, m2; unsigned char work[0x90]; Vector_80039F5C delta;
+    unsigned char work[0x90]; Mtx44 m1, m2;
     Instance_801A8D9C *s = p->mpUnknown12C;
-    Model_801A8620 *model = s->mUnknownC.mpUnknownC;
     fn_801C657C();
+    Model_801A8620 *model = s->mUnknownC.mpUnknownC;
     int value = fn_801A854C(&s->mUnknown108,p->mpUnknown14C);
     copy=color; fn_8024FB58(0,copy); fn_8024FC48(1);
     fn_8024FC84(0,1,0,0,value,2,2); fn_8024FC84(2,0,0,0,value,0,2);
-    GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); fn_80252114(0); fn_802520E0(1,3,1); fn_8024EB28(1);
+    GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); GXSetZCompLoc(GX_FALSE); GXSetZMode(GX_TRUE,GX_LEQUAL,GX_TRUE); GXSetCullMode(GX_CULL_FRONT);
     fn_80210BD8(2); fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0508();
     fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
     fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC); fn_801D0F80(m1);
@@ -130,13 +130,13 @@ int fn_801A8620(Object_801A8620 *p, int arg)
         fn_80234B20(work,m1,0); fn_80234B80(work); fn_80234DC4(work,0);
         if(!fn_8002D060(lbl_803EA368)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
         if(p->mUnknown140) {
+            Vector_80039F5C delta;
             void *viewport=fn_8002B550(GameVpt::fn_800293A8());
             fn_802276B4(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
             float distance=fn_802270D4(&delta);
-            if(distance>10.0f) {
-                if(distance>25.0f) color.a=0;
-                else color.a=(unsigned char)((float)(unsigned int)color.a*(1.0f-(distance-10.0f)*0.06666667f));
-            } else color.a=255;
+            if(distance<=10.0f) color.a=255;
+            else if(distance<=25.0f) color.a=(unsigned char)((float)(unsigned int)color.a*(1.0f-(distance-10.0f)*0.06666667f));
+            else color.a=0;
             copy=color; fn_8024FB58(4,copy);
         }
         s->mUnknownC.mUnknown5C=1;
@@ -147,7 +147,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                     fn_80210BA4(s->mUnknownC.mpUnknownE8); fn_80234B88(&s->mUnknownC);
                     if(!p->mUnknown138) {
                         p->mUnknown138=1;
-                        if(!model->mUnknown1C) fn_8020F8E0(model);
+                        if(!s->mUnknownC.mpUnknownC->mUnknown1C) fn_8020F8E0(s->mUnknownC.mpUnknownC);
                         fn_80210654(reinterpret_cast<Object_8023417C *>(model));
                         fn_80210724(s->mUnknownC.mpUnknownE0); fn_801D04C4(); fn_801D0558();
                         fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
@@ -156,28 +156,26 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                     fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
                     GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                     if(p->mUnknownE8.mWord&16) {
-                        ModelRef_801A8620 *r=s->mUnknown4.mpUnknown4;
-                        r->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
+                        s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
                         fn_80211350();
-                        r=s->mUnknown4.mpUnknown4;
-                        r->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknownFC*40;
+                        s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknownFC*40;
                     } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
                 } else {
-                    p->mUnknown138=1;fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
+                    p->mUnknown138=1;fn_802337D4(s->mUnknownC.mpUnknownC,s->mUnknownFC,p->mpUnknownDC,0);
                     fn_80234BF4(work,&s->mUnknownC,0);
                 }
             } else fn_80234BF4(work,&s->mUnknownC,0);
         }
     }
     fn_801D0544(); if(p->mpUnknown1E0)fn_801A9430(p->mpUnknown1E0,arg);
-    fn_8024EB28(0); return 0;
+    GXSetCullMode(GX_CULL_NONE); return 0;
 }
 int fn_801A8B0C(const char *name)
 {
     for(int i=0;i<(int)lbl_803EB870;i++) if(!strcmp(name,lbl_803673E0[i]->mUnknown38))return i;
     return -1;
 }
-static const Vector_80039F5C lbl_802AE8F8={0.0f,1.0f,0.0f};
+extern const Vector_80039F5C lbl_802AE8F8={0.0f,1.0f,0.0f};
 int fn_801A8B84(Object_801A8620 *p)
 {
     int result=0;
@@ -204,12 +202,12 @@ int fn_801A8C48(Child_801A9430 *p)
 }
 void fn_801A8D08(Child_801A9430 *p,Object_801A8620 *owner)
 {
-    Cache_801A8D9C *resource=owner->mpUnknown12C->mpUnknown0;
-    unsigned int index=fn_802372EC(1,resource->mpUnknown144->mUnknown10);
+    Instance_801A8D9C *s=owner->mpUnknown12C;
+    unsigned int index=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
     p->mUnknown6C=index;
-    if((unsigned char)index==owner->mUnknownFC && resource->mpUnknown144->mUnknown10>1) {
+    if((unsigned char)index==owner->mUnknownFC && s->mpUnknown0->mpUnknown144->mUnknown10>1) {
         p->mUnknown6C=index+1;
-        if(p->mUnknown6C>=resource->mpUnknown144->mUnknown10) p->mUnknown6C=index-1;
+        if(p->mUnknown6C>=s->mpUnknown0->mpUnknown144->mUnknown10) p->mUnknown6C=index-1;
     }
 }
 void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
@@ -248,7 +246,7 @@ void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
     }
     fn_80211FF0();fn_80212018("model",&s->mpUnknown0->mUnknown14C);
     fn_802100C0(&s->mUnknown4,s->mpUnknown0->mpUnknown148);fn_80211FF0();
-    fn_80234A30(&s->mUnknownC,fn_801C310C(p->mUnknown158,"CROWDGROUP")?0x80:0x40);
+    if(fn_801C310C(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
     fn_80234CF0(&s->mUnknownC,0,&s->mUnknown4);fn_80234DC0(&s->mUnknownC,8);
     fn_80234A94(&s->mUnknownC,&s->mpUnknown0->mUnknown4);
     if(env) {
@@ -304,9 +302,9 @@ void fn_801A93C0(Object_801A8620 *p, void *)
 }
 int fn_801A9430(Child_801A9430 *p,int arg)
 {
-    GXColor color={255,255,255,255},copy;Mtx44 m1,m2;unsigned char work[0x90];
-    Instance_801A8D9C *s=p->mpUnknown50->mpUnknown12C;Model_801A8620 *model=s->mUnknownC.mpUnknownC;
-    fn_801C657C();int value=fn_801A854C(&p->mUnknown60,p->mpUnknown58);
+    Instance_801A8D9C *s=p->mpUnknown50->mpUnknown12C;
+    GXColor color={255,255,255,255},copy;unsigned char work[0x90];Mtx44 m1,m2;
+    fn_801C657C();Model_801A8620 *model=s->mUnknownC.mpUnknownC;int value=fn_801A854C(&p->mUnknown60,p->mpUnknown58);
     copy=color;fn_8024FB58(0,copy);fn_8024FC48(1);
     fn_8024FC84(0,1,0,0,value,2,2);fn_8024FC84(2,0,0,0,value,0,2);
     fn_801D0470(fn_80228668());fn_801D0508();
@@ -324,30 +322,28 @@ int fn_801A9430(Child_801A9430 *p,int arg)
                 fn_80234B88(&s->mUnknownC);fn_80210BA4(s->mUnknownC.mpUnknownE8);
                 if(!p->mpUnknown50->mUnknown138) {
                     p->mpUnknown50->mUnknown138=1;
-                    if(!model->mUnknown1C)fn_8020F8E0(model);
+                    if(!s->mUnknownC.mpUnknownC->mUnknown1C)fn_8020F8E0(s->mUnknownC.mpUnknownC);
                     fn_80210654(reinterpret_cast<Object_8023417C *>(model));fn_80210724(s->mUnknownC.mpUnknownE0);
                     fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                     fn_801D0544();fn_8021126C();GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 }
                 fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
                 if(p->mpUnknown50->mUnknownE8.mWord&16) {
-                    ModelRef_801A8620 *r=s->mUnknown4.mpUnknown4;
-                    r->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknown6C*40;
-                    r=s->mUnknown4.mpUnknown4;
-                    fn_80210814(0,r->mpUnknown0->mpUnknown10->mUnknown0,r->mpUnknown0->mpUnknown10->mpUnknown4);
-                    fn_80211350();r=s->mUnknown4.mpUnknown4;
-                    r->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknown6C*40;
+                    s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknown6C*40;
+                    fn_80210814(0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mUnknown0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4);
+                    fn_80211350();
+                    s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknown6C*40;
                 } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
             } else {
                 if(!p->mpUnknown50->mUnknown138) {
                     fn_801D06D4(m2);p->mpUnknown50->mUnknown138=1;
-                    fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
+                    fn_802337D4(s->mUnknownC.mpUnknownC,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                 }
                 fn_80234BF4(work,&s->mUnknownC,0);
             }
         }
     }
     fn_801D0544();if(p->mpUnknown5C)fn_801A9430(p->mpUnknown5C,arg);
-    fn_8024EB28(0);return 0;
+    GXSetCullMode(GX_CULL_NONE);return 0;
 }
 }
