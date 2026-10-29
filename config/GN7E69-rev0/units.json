@@ -13964,6 +13964,25 @@
           "end": "0x802AF0DC"
         }
       ]
+    },
+    {
+      "source": "src/engine/psysCollision.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional complete unit row 0x801E01FC-0x801E052C, all six function/name rows, native data row 0x802B1138-0x802B1140 and raw-payload field/source-form evidence. Existing engine_c profile unchanged.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E01FC",
+          "end": "0x801E052C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1138",
+          "end": "0x802B1140"
+        }
+      ]
     }
   ]
 }

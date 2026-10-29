@@ -68,6 +68,7 @@ typedef struct Ground_801E0384 {
    parameter file holds three vectors for a plane (read by fn_801DF578); at
    run time the distance computed by fn_801E03F4 replaces the third. */
 typedef union Collision_801E0384 {
+    unsigned int mWord;
     Ground_801E0384 mGround;
     Plane_801E0384 mPlane;
     Vec3_801DE1E0 mParm[3];
@@ -206,7 +207,7 @@ typedef struct Template_801DE1E0 {
 float fn_801DE1B8(void);
 int fn_801DFD40(void);
 void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void fn_801E03F4(PartObj_801DE1E0 *pObj);
 void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
 Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);

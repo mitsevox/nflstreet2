@@ -510,7 +510,7 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown044 = pSrc->mObj.mUnknown044;
     pDst->mUnknown200 = pSrc->mObj.mUnknown200;
     pDst->mCollisionType = pSrc->mObj.mCollisionType;
-    fn_801E0384(pDst, &pSrc->mObj);
+    CopyParticleCollisionPayload(pDst, &pSrc->mObj);
     pDst->mUnknown288 = pSrc->mObj.mUnknown288;
     pDst->mUnknown048 = pSrc->mObj.mUnknown048;
 }

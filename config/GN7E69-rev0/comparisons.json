@@ -46669,57 +46669,6 @@
       ]
     },
     {
-      "source": "src/engine/psysCollision.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of psysCollision.c over 0x801E01FC-0x801E052C (NASCAR 2005 symbol-table size/order match; see the psysCollision.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1138-0x802B1140. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E01FC",
-          "end": "0x801E052C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1138",
-          "end": "0x802B1140"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801E01FC",
-          "start": "0x801E01FC",
-          "end": "0x801E02A4"
-        },
-        {
-          "symbol": "fn_801E02A4",
-          "start": "0x801E02A4",
-          "end": "0x801E0384"
-        },
-        {
-          "symbol": "fn_801E0384",
-          "start": "0x801E0384",
-          "end": "0x801E03F4"
-        },
-        {
-          "symbol": "fn_801E03F4",
-          "start": "0x801E03F4",
-          "end": "0x801E043C"
-        },
-        {
-          "symbol": "fn_801E043C",
-          "start": "0x801E043C",
-          "end": "0x801E0520"
-        },
-        {
-          "symbol": "fn_801E0520",
-          "start": "0x801E0520",
-          "end": "0x801E052C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/colorRamp.c",
       "profile": "engine_c",
       "evidence": "E3 lane draft of colorRamp.c over 0x801E052C-0x801E0A1C (NASCAR 2005 symbol-table size/order match; see the colorRamp.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1140-0x802B1148. Draft comparisons only; original assembly remains linked.",

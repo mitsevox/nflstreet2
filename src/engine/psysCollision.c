@@ -41,13 +41,14 @@ static void fn_801E02A4(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, Ve
     fn_8022765C(&pParticle->mVel, &pParticle->mVel, &bounce);
 }
 
-void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
+/* Copy only the payload selected by the destination collision type. */
+void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
 {
     switch (pDst->mCollisionType) {
     case 0:
         break;
     case 1:
-        pDst->mCollision.mGround = pSrc->mCollision.mGround;
+        pDst->mCollision.mWord = pSrc->mCollision.mWord;
         break;
     case 2:
         pDst->mCollision.mPlane = pSrc->mCollision.mPlane;
