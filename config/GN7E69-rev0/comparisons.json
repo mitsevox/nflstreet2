@@ -49938,47 +49938,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C53A8.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C53A8-0x801C5B9C (src/engine/cu_801C53A8.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF130-0x802AF168. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C53A8",
-          "end": "0x801C5B9C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF130",
-          "end": "0x802AF168"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C53A8",
-          "start": "0x801C53A8",
-          "end": "0x801C53E0"
-        },
-        {
-          "symbol": "fn_801C53E0",
-          "start": "0x801C53E0",
-          "end": "0x801C567C"
-        },
-        {
-          "symbol": "fn_801C567C",
-          "start": "0x801C567C",
-          "end": "0x801C5740"
-        },
-        {
-          "symbol": "fn_801C5740",
-          "start": "0x801C5740",
-          "end": "0x801C5B9C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C665C.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C665C-0x801C6E5C (src/engine/cu_801C665C.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 (.bss) stays external; original assembly remains linked.",

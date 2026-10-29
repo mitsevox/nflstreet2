@@ -14065,6 +14065,25 @@
           "end": "0x802B15F8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C53A8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional four-function unit row0x801C53A8-0x801C5B9C, exact function extents and literal data0x802AF130-0x802AF168, inferred name/type/field and source-form rows. Complete native text2036 and rodata56, no native writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C53A8",
+          "end": "0x801C5B9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF130",
+          "end": "0x802AF168"
+        }
+      ]
     }
   ]
 }

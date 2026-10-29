@@ -1,3 +1,4 @@
+#include "engine/cu_801C53A8.h"
 /* Curve lists: keyed Hermite and Bezier curves evaluated over a time range, with clamp or wrap past the end. */
 
 typedef struct CurveKey_801C5008 {
@@ -30,7 +31,6 @@ typedef struct CurveList_801C5008 {
     void *mpKeys;
 } CurveList_801C5008;
 
-int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *pRoots, float lo, float hi);
 
 float fn_801C52CC(float t, float t0, float a, float b, float c, float d);
 float fn_801C52E0(float t, float t0, float t1, float x0, float x1, float x2, float x3, float y0, float y1, float y2,
@@ -142,7 +142,7 @@ float fn_801C52E0(float t, float t0, float t1, float x0, float x1, float x2, flo
     coef[1] = x1;
     coef[2] = x2;
     coef[3] = x3;
-    if (fn_801C5740(coef, 3, 1, 1, roots, 0.0f, 1.0f) == 1) {
+    if (FindPolynomialRoots(coef, 3, 0.0f, 1, 1.0f, 1, roots) == 1) {
         s = roots[0];
     } else {
         s = 0.0f;
