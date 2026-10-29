@@ -1,6 +1,6 @@
 #include "engine/cu_801B9F00.h"
 
-Block_801BD6D4 *lbl_803ED610;
+static Block_801BD6D4 *lbl_803ED610;
 
 int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag);
 
