@@ -19,6 +19,8 @@ typedef float Mtx44[4][4];
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXPixel.h>
+#include <dolphin/gx/GXLighting.h>
+#include <dolphin/gx/GXTransform.h>
 
 struct Texture_801A8D08 { unsigned char mUnknown0[16]; unsigned short mUnknown10; };
 struct Mesh_801A93C0 {
@@ -94,8 +96,6 @@ int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(Object_801A8620 *, int, int);
 int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
-void fn_8024FB58(int, GXColor); void fn_8024FC48(int); void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_802525BC(int); void fn_8025251C(Mtx44, int); void fn_8025256C(Mtx44, int);
 int fn_801A8B84(Object_801A8620 *); int fn_801A8C48(Child_801A9430 *);
 int fn_801A9430(Child_801A9430 *, int);
 }
@@ -113,8 +113,9 @@ int fn_801A8620(Object_801A8620 *p, int arg)
     fn_801C657C();
     Model_801A8620 *model = s->mUnknownC.mpUnknownC;
     int value = fn_801A854C(&s->mUnknown108,p->mpUnknown14C);
-    copy=color; fn_8024FB58(0,copy); fn_8024FC48(1);
-    fn_8024FC84(0,1,0,0,value,2,2); fn_8024FC84(2,0,0,0,value,0,2);
+    copy=color; GXSetChanMatColor(GX_COLOR0,copy); GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
+    GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
     GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); GXSetZCompLoc(GX_FALSE); GXSetZMode(GX_TRUE,GX_LEQUAL,GX_TRUE); GXSetCullMode(GX_CULL_FRONT);
     fn_80210BD8(2); fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0508();
     fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
@@ -137,7 +138,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
             if(distance<=10.0f) color.a=255;
             else if(distance<=25.0f) color.a=(unsigned char)((float)(unsigned int)color.a*(1.0f-(distance-10.0f)*0.06666667f));
             else color.a=0;
-            copy=color; fn_8024FB58(4,copy);
+            copy=color; GXSetChanMatColor(GX_COLOR0A0,copy);
         }
         s->mUnknownC.mUnknown5C=1;
         unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
@@ -153,7 +154,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                         fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
                         fn_801D0544(); fn_8021126C();
                     }
-                    fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
+                    GXSetCurrentMtx(GX_PNMTX0);GXLoadPosMtxImm(m2,GX_PNMTX0);GXLoadNrmMtxImm(m2,GX_PNMTX0);
                     GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                     if(p->mUnknownE8.mWord&16) {
                         s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
@@ -305,8 +306,9 @@ int fn_801A9430(Child_801A9430 *p,int arg)
     Instance_801A8D9C *s=p->mpUnknown50->mpUnknown12C;
     GXColor color={255,255,255,255},copy;unsigned char work[0x90];Mtx44 m1,m2;
     fn_801C657C();Model_801A8620 *model=s->mUnknownC.mpUnknownC;int value=fn_801A854C(&p->mUnknown60,p->mpUnknown58);
-    copy=color;fn_8024FB58(0,copy);fn_8024FC48(1);
-    fn_8024FC84(0,1,0,0,value,2,2);fn_8024FC84(2,0,0,0,value,0,2);
+    copy=color;GXSetChanMatColor(GX_COLOR0,copy);GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
+    GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
     fn_801D0470(fn_80228668());fn_801D0508();
     fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);fn_801D08FC(0x400000);
     fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m1);
@@ -327,7 +329,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
                     fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                     fn_801D0544();fn_8021126C();GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 }
-                fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
+                GXSetCurrentMtx(GX_PNMTX0);GXLoadPosMtxImm(m2,GX_PNMTX0);GXLoadNrmMtxImm(m2,GX_PNMTX0);
                 if(p->mpUnknown50->mUnknownE8.mWord&16) {
                     s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknown6C*40;
                     fn_80210814(0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mUnknown0,s->mUnknown4.mpUnknown4->mpUnknown0->mpUnknown10->mpUnknown4);
