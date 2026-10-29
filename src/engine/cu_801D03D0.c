@@ -99,16 +99,21 @@ void fn_801D058C(float *pDst, float *pA, float *pB)
     fn_8024AA18(pA, pB, pDst);
 }
 
+typedef struct MtxElems_801D05BC {
+    float mElements[16];
+} MtxElems_801D05BC;
+
 void fn_801D05BC(float *pDst, float *pA, float *pB)
 {
+    MtxElems_801D05BC *b = (MtxElems_801D05BC *)pB;
     float result[16];
     int i;
     int j;
 
     for (i = 0; i <= 3; i++) {
         for (j = 0; j < 4; j++) {
-            result[j * 4 + i] = pA[j * 4 + 0] * pB[i] + pA[j * 4 + 1] * pB[4 + i] + pA[j * 4 + 2] * pB[8 + i] +
-                                pA[j * 4 + 3] * pB[12 + i];
+            result[j * 4 + i] = b->mElements[i] * pA[j * 4 + 0] + b->mElements[4 + i] * pA[j * 4 + 1] +
+                                b->mElements[8 + i] * pA[j * 4 + 2] + b->mElements[12 + i] * pA[j * 4 + 3];
         }
     }
     fn_801D0424(pDst, result);
@@ -149,20 +154,20 @@ void fn_801D0710(float *pAxis, int angle)
     float *pCurrent;
 
     m[0] = t * x * x + c;
-    m[1] = t * x * y - s * z;
-    m[2] = t * x * z + s * y;
-    m[3] = 0.0f;
     m[4] = t * x * y + s * z;
-    m[5] = t * y * y + c;
-    m[6] = t * y * z - s * x;
-    m[7] = 0.0f;
     m[8] = t * x * z - s * y;
+    m[3] = 0.0f;
+    m[1] = t * x * y - s * z;
+    m[5] = t * y * y + c;
     m[9] = t * y * z + s * x;
+    m[7] = 0.0f;
+    m[2] = t * x * z + s * y;
+    m[6] = t * y * z - s * x;
     m[10] = t * z * z + c;
     m[11] = 0.0f;
-    m[12] = 0.0f;
-    m[13] = 0.0f;
     m[14] = 0.0f;
+    m[13] = 0.0f;
+    m[12] = 0.0f;
     m[15] = 1.0f;
     pCurrent = fn_801D0444();
     fn_801D058C(m, pCurrent, m);
@@ -339,15 +344,15 @@ void fn_801D0E94(void)
     float *p = fn_801D0444();
     float t;
 
-    t = p[1];
-    p[1] = p[4];
-    p[4] = t;
-    t = p[2];
-    p[2] = p[8];
-    p[8] = t;
-    t = p[6];
-    p[6] = p[9];
-    p[9] = t;
+    t = p[4];
+    p[4] = p[1];
+    p[1] = t;
+    t = p[8];
+    p[8] = p[2];
+    p[2] = t;
+    t = p[9];
+    p[9] = p[6];
+    p[6] = t;
 }
 
 void fn_801D0EE4(void)
@@ -357,21 +362,21 @@ void fn_801D0EE4(void)
     float t;
 
     fn_801D0F80(m);
-    t = m[1];
-    m[1] = m[4];
-    m[4] = t;
-    t = m[2];
-    m[2] = m[8];
-    m[8] = t;
-    t = m[6];
-    m[6] = m[9];
-    m[9] = t;
+    t = m[4];
+    m[4] = m[1];
+    m[1] = t;
+    t = m[8];
+    m[8] = m[2];
+    m[2] = t;
+    t = m[9];
+    m[9] = m[6];
+    m[6] = t;
     pos[0] = -m[3];
     pos[1] = -m[7];
     pos[2] = -m[11];
-    m[11] = 0.0f;
     m[3] = 0.0f;
     m[7] = 0.0f;
+    m[11] = 0.0f;
     fn_801D06D4(m);
     fn_801D0C58(pos);
 }

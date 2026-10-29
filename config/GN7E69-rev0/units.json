@@ -13926,6 +13926,25 @@
           "end": "0x803EBFB8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801D03D0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D03D0-0x801D134C (src/engine/cu_801D03D0.c), its compiler and source-form rows, its 38 exact function extents and exact data row 0x802AF5F8-0x802AF624.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D03D0",
+          "end": "0x801D134C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF5F8",
+          "end": "0x802AF624"
+        }
+      ]
     }
   ]
 }
