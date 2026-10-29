@@ -121,7 +121,6 @@ void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
     signed char corners[4];
     short delta;
     unsigned int i;
-    int k;
 
     if (pScroll->mAxis == 1) {
         if (lbl_803EB874) return;
@@ -143,6 +142,7 @@ void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
         }
         delta = (short)(step * one);
         for (i = 0; i < pMesh->mCount; i += 4) {
+            int k;
             for (k = 0; k < 4; k++) {
                 if (uv[k].u < minU) minU = uv[k].u;
                 if (uv[k].v < minV) minV = uv[k].v;
