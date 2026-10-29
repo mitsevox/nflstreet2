@@ -813,22 +813,22 @@ static void fn_801DF428(unsigned char **ppData, Emitter_801DFE0C *pDst, unsigned
         fn_801DF2AC(&pData, &pDst->mPoint, noSwap);
         break;
     case 1:
-        fn_801DF2AC(&pData, &pDst->mLine.mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mLine.mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase1.mUnknown00, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase1.mUnknown0C, noSwap);
         break;
     case 2:
-        fn_801DF2AC(&pData, &pDst->mSphere.mUnknown00, noSwap);
-        fn_801DF228(&pData, &pDst->mSphere.mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase2.mUnknown00, noSwap);
+        fn_801DF228(&pData, &pDst->mCase2.mUnknown0C, noSwap);
         break;
     case 3:
-        fn_801DF2AC(&pData, &pDst->mBox.mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mBox.mUnknown0C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mBox.mUnknown18, noSwap);
-        fn_801DF228(&pData, &pDst->mBox.mUnknown24, noSwap);
-        fn_801DF228(&pData, &pDst->mBox.mUnknown28, noSwap);
-        fn_801DF2AC(&pData, &pDst->mBox.mUnknown2C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mBox.mUnknown38, noSwap);
-        fn_801DF228(&pData, &pDst->mBox.mUnknown44, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown00, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown18, noSwap);
+        fn_801DF228(&pData, &pDst->mCase3.mUnknown24, noSwap);
+        fn_801DF228(&pData, &pDst->mCase3.mUnknown28, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown2C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown38, noSwap);
+        fn_801DF228(&pData, &pDst->mCase3.mUnknown44, noSwap);
         break;
     }
     *ppData += 0x100;
