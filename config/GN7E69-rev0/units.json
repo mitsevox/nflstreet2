@@ -14046,6 +14046,25 @@
           "end": "0x80203444"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801E8798.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801E8798-0x801E8C78, ten target function extents and name rows, exact literal/vtable data 0x802B1570-0x802B15F8, and compiler/source-form/type/field rows. Complete native text and rodata; original source-file edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8798",
+          "end": "0x801E8C78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1570",
+          "end": "0x802B15F8"
+        }
+      ]
     }
   ]
 }
