@@ -1,3 +1,4 @@
+#include "engine/fn_801C065C.h"
 #include "engine/cu_801B9F00.h"
 #include "engine/cu_801BA818.h"
 #include "engine/cu_801BFFA8.h"
@@ -113,6 +114,25 @@ void fn_801C02EC(File_801C02EC *file)
         for (k = 0; k < bank->mItemCount; k++)
             bank->mItems[k].mUnknown10 = fn_801C01DC(file, (int)bank->mItems[k].mUnknown10);
     }
+}
+
+/* Queries before the first key return the default value zero. */
+int GetTimedKeyValue(void *p, float time)
+{
+    Frame_801C029C *frame = p;
+    unsigned int count = frame->mKeyCount;
+    unsigned int i = 0;
+    int result = 0;
+
+    while (i < count) {
+        if (time >= frame->mKeys[i].mTime) {
+            result = frame->mKeys[i].mValue;
+            i++;
+        } else {
+            break;
+        }
+    }
+    return result;
 }
 
 void fn_801C06A0(Table_801C06A0 *table)

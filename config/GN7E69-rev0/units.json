@@ -13926,6 +13926,25 @@
           "end": "0x803EBFB8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C01DC.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x801C01DC-0x801C06E8, all nine function/name rows, complete native .rodata row 0x802AEEE0-0x802AEEE8 and source-form/compiler records. Whole source linked; unchanged existing owner-approved profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C01DC",
+          "end": "0x801C06E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE0",
+          "end": "0x802AEEE8"
+        }
+      ]
     }
   ]
 }

@@ -43283,67 +43283,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C01DC.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C01DC-0x801C06E8 (src/engine/cu_801C01DC.c, animseqncr.c), function rows, data row 0x802AEEE0-0x802AEEE8 and compiler row engine_c_fastmath; fn_801C065C is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C01DC",
-          "end": "0x801C06E8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEEE0",
-          "end": "0x802AEEE8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C01DC",
-          "start": "0x801C01DC",
-          "end": "0x801C01E4"
-        },
-        {
-          "symbol": "fn_801C01E4",
-          "start": "0x801C01E4",
-          "end": "0x801C029C"
-        },
-        {
-          "symbol": "fn_801C029C",
-          "start": "0x801C029C",
-          "end": "0x801C02C4"
-        },
-        {
-          "symbol": "fn_801C02C4",
-          "start": "0x801C02C4",
-          "end": "0x801C02CC"
-        },
-        {
-          "symbol": "fn_801C02CC",
-          "start": "0x801C02CC",
-          "end": "0x801C02DC"
-        },
-        {
-          "symbol": "fn_801C02DC",
-          "start": "0x801C02DC",
-          "end": "0x801C02EC"
-        },
-        {
-          "symbol": "fn_801C02EC",
-          "start": "0x801C02EC",
-          "end": "0x801C065C"
-        },
-        {
-          "symbol": "fn_801C06A0",
-          "start": "0x801C06A0",
-          "end": "0x801C06E8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C06E8.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C06E8-0x801C0E04 (src/engine/cu_801C06E8.c, animTexLib.c), function rows, data row 0x802AEEE8-0x802AEF08 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
