@@ -1,4 +1,5 @@
 #include "engine/Record_800D81C8.h"
+#include "engine/cu_801D03D0.h"
 #include "engine/vec.h"
 #include "game/fn_801EBC18.h"
 
@@ -9,7 +10,11 @@ typedef struct Quat_801EB814 {
     float w;
 } Quat_801EB814;
 
-extern unsigned char lbl_803ED6E0[3];
+typedef struct Mtx_801EB8B4 {
+    float mElements[16];
+} Mtx_801EB8B4;
+
+static const unsigned char lbl_803ED6E0[3] = { 1, 2, 0 };
 
 double fabs(double x);
 float fn_80260B1C(float x);
@@ -20,7 +25,6 @@ float fn_801CFDB0(float x);
 int fn_801CFE40(float y, float x);
 float fn_801CFF54(float x);
 float fn_801CFFA0(float x);
-void fn_801D0F80(float (*m)[4]);
 float fn_801EB4EC(Quat_801EB814 *q);
 void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale);
 
@@ -133,7 +137,7 @@ void fn_801EB814(float m[4][4], Quat_801EB814 *q)
     m[2][2] = 1.0f - (xx + yy);
 }
 
-void fn_801EB8B4(float *q, float *m)
+void fn_801EB8B4(float *q, Mtx_801EB8B4 *m)
 {
     float trace;
     float s;
@@ -141,36 +145,36 @@ void fn_801EB8B4(float *q, float *m)
     int j;
     int k;
 
-    trace = m[0] + m[5] + m[10] + 1.0f;
+    trace = m->mElements[0] + m->mElements[5] + m->mElements[10] + 1.0f;
     if (!(trace <= 1e-07f)) {
         s = fn_80260B1C(trace);
         q[3] = s * 0.5f;
         s = 0.5f / s;
-        q[0] = (m[9] - m[6]) * s;
-        q[1] = (m[2] - m[8]) * s;
-        q[2] = (m[4] - m[1]) * s;
+        q[0] = (m->mElements[9] - m->mElements[6]) * s;
+        q[1] = (m->mElements[2] - m->mElements[8]) * s;
+        q[2] = (m->mElements[4] - m->mElements[1]) * s;
     } else {
-        i = m[5] > m[0];
-        if (!(m[10] <= m[i * 4 + i])) {
+        i = m->mElements[5] > m->mElements[0];
+        if (!(m->mElements[10] <= m->mElements[i * 4 + i])) {
             i = 2;
         }
         j = lbl_803ED6E0[i];
         k = lbl_803ED6E0[j];
-        s = fn_80260B1C(m[i * 4 + i] - m[j * 4 + j] + m[k * 4 + k] + 1.0f);
+        s = fn_80260B1C(m->mElements[i * 4 + i] - m->mElements[j * 4 + j] + m->mElements[k * 4 + k] + 1.0f);
         q[i] = s * 0.5f;
         s = 0.5f / s;
-        q[3] = (m[k * 4 + j] - m[j * 4 + k]) * s;
-        q[j] = (m[j * 4 + i] + m[i * 4 + j]) * s;
-        q[k] = (m[k * 4 + i] + m[i * 4 + k]) * s;
+        q[3] = (m->mElements[k * 4 + j] - m->mElements[j * 4 + k]) * s;
+        q[j] = (m->mElements[j * 4 + i] + m->mElements[i * 4 + j]) * s;
+        q[k] = (m->mElements[k * 4 + i] + m->mElements[i * 4 + k]) * s;
     }
 }
 
 void fn_801EBA64(float *q)
 {
-    float m[4][4];
+    Mtx_801EB8B4 m;
 
-    fn_801D0F80(m);
-    fn_801EB8B4(q, m[0]);
+    fn_801D0F80(m.mElements);
+    fn_801EB8B4(q, &m);
 }
 
 void fn_801EBAA0(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_801EB814 *q)
