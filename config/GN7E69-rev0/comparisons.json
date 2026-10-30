@@ -34300,13 +34300,13 @@
     {
       "source": "src/game/cu_8014D210.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #807; two complete bodies 0x8014D210-0x8014D67C inside the retained provisional cu_801485B4 survey group, directly after src/game/cu_8014C868.cpp: the record-value helper fn_8014D210 (called from 0x8014D5FC, 0x8014D63C and 0x8014E934) and the event-kind credit switch fn_8014D298 (registered as the 0x800D7604 callback at 0x8014DE24 and called through 0x803EACC0 at 0x800D1B78). Neither loads a literal, so no readonly range is registered. Original file boundaries and nominal identity unresolved; 0x8014D024, 0x8014D67C and 0x8014D948 excluded; original bytes stay linked.",
+      "evidence": "Three complete bodies within the retained provisional cu_801485B4 survey group. Preserves the two event/record helpers of issue #807 and adds the complete six-player score-row refresh at 0x8014D948-0x8014DA20, called from 0x8014E9A4. Gap 0x8014D67C-0x8014D948 remains unreconstructed. The shared format at 0x802A0DDC and empty string at 0x802A05C8 remain external original-owned; no native initialized data is added. Evidence rows describe the inferred readable name and layouts; original name and file boundaries remain unresolved. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014D210",
-          "end": "0x8014D67C"
+          "end": "0x8014DA20"
         }
       ],
       "functions": [
@@ -34319,6 +34319,11 @@
           "symbol": "fn_8014D298",
           "start": "0x8014D298",
           "end": "0x8014D67C"
+        },
+        {
+          "symbol": "RefreshSixPlayerScoreRows",
+          "start": "0x8014D948",
+          "end": "0x8014DA20"
         }
       ]
     },
@@ -36119,13 +36124,13 @@
     {
       "source": "src/game/cu_80150DFC.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #914; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 5 of the table 0x802A1D20 of src/game/cu_80150848.cpp (0x80150DFC-0x80150E1C, word 0x802A1D4C), replacing the base entry 0x800A05E8 of the table 0x80297AB8 (include/game/Class_80297AB8.h). Calls the base entry 0x800A05E8 (vfn_05__14Class_80297AB8, registered by src/game/cu_800A0134.cpp). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80150AC4 before and 0x80150E1C onward are not claimed; original bytes stay linked.",
+      "evidence": "Two complete bodies within the retained provisional cu_801485B4 survey group. Preserves the issue #914 slot-5 wrapper at 0x80150DFC-0x80150E1C and adds the four-player score-row refresh at 0x801514AC-0x80151598, called from 0x80150D94. Gap 0x80150E1C-0x801514AC remains unreconstructed. Shared strings 0x802A0DDC and 0x802A05C8 remain external original-owned; no native initialized data is added. Readable refresh name is inferred, not an original-name claim. Original signatures and file boundaries remain unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80150DFC",
-          "end": "0x80150E1C"
+          "end": "0x80151598"
         }
       ],
       "functions": [
@@ -36133,6 +36138,11 @@
           "symbol": "fn_80150DFC",
           "start": "0x80150DFC",
           "end": "0x80150E1C"
+        },
+        {
+          "symbol": "RefreshFourPlayerScoreRows",
+          "start": "0x801514AC",
+          "end": "0x80151598"
         }
       ]
     },
