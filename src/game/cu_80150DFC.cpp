@@ -52,8 +52,9 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
             char score[16];
             char name[20];
             fn_801C2EF0(name, fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
-            Entry_8015005C *pEntry = &fn_801530FC()->mEntries[i];
-            fn_801C2D88(score, sizeof(score), lbl_802A0DDC, pEntry->mUnknown8 * 2 + pEntry->mUnknown10);
+            Entry_8015005C *pEntries = fn_801530FC()->mEntries;
+            fn_801C2D88(score, sizeof(score), lbl_802A0DDC,
+                        pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);
             fn_8017E17C(i + 1, name, score, lbl_802A05C8, fn_801530FC()->mEntries[i].mUnknown12);
         } else {
             fn_8017E17C(i + 1, lbl_802A05C8, lbl_802A05C8, lbl_802A05C8, 255);
