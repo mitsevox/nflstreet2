@@ -2,6 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/cu_80136B1C.h"
 #include "engine/cu_801C2EB4.h"
+#include "game/fn_802372EC.h"
 
 struct Record_8014F104 {
     int mUnknown0;
@@ -29,6 +30,16 @@ int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
+void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
+void fn_8003AB08(Object_80039F5C *pPlayer, int value);
+void fn_80227538(float *pOut, int angle, float length);
+float fn_80178A08(void);
+float fn_80178A2C(void);
+extern const float lbl_802A0DB8[];
+extern const float lbl_802A0DBC[];
+extern const float lbl_802A0DC0[];
+extern const float lbl_802A0DC4[];
+extern const float lbl_802A0DD8[];
 
 void fn_8014D210(Object_80039F5C *p, int kind, int value)
 {
@@ -189,6 +200,42 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
                 fn_8017E46C(pSecond, pSecond->mIdBytes[2], pText, value, d);
             }
         }
+    }
+}
+
+// Place one player at the center and the other five within the field bounds.
+void PlaceSixPlayerFormation(void)
+{
+    unsigned int first = fn_802372EC(0, 6);
+    float sectorWidth = lbl_802A0DB8[0];
+    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    fn_800EFE60(0, pPlayer->mpState, pPlayer);
+    fn_8003AB08(pPlayer, 0);
+    pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4[0];
+    pPlayer->mUnknown512.mUnknown4 = (first * 0x2AAAAA + 0xEAAAAB) & 0xFFFFFF;
+    pPlayer->mMotion.mPos.mX = lbl_802A0DBC[0];
+    pPlayer->mMotion.mPos.mY = lbl_802A0DBC[0];
+    pPlayer->mMotion.mFacing = pPlayer->mUnknown512.mUnknown4;
+    pPlayer->mUnknown512.mUnknown8 = pPlayer->mUnknown512.mUnknown4;
+    pPlayer->mUnknown512.mUnknown14 = 1;
+
+    for (unsigned char i = 0; i <= 4; i++) {
+        pPlayer = fn_80039F5C(0, i);
+        fn_800EFE60(0, pPlayer->mpState, pPlayer);
+        fn_8003AB08(pPlayer, 0);
+        unsigned int sector = (i + first) % 6;
+        float radius = fn_802372EC(0, 2) + lbl_802A0DD8[0];
+        float degrees = sector * sectorWidth + fn_802372EC(0, (unsigned int)sectorWidth);
+        fn_80227538(&pPlayer->mMotion.mPos.mX, (int)(degrees * lbl_802A0DC0[0]), radius);
+        pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX < -fn_80178A08() ? -fn_80178A08() :
+            (pPlayer->mMotion.mPos.mX > fn_80178A08() ? fn_80178A08() : pPlayer->mMotion.mPos.mX);
+        pPlayer->mMotion.mPos.mY = pPlayer->mMotion.mPos.mY < -fn_80178A2C() ? -fn_80178A2C() :
+            (pPlayer->mMotion.mPos.mY > fn_80178A2C() ? fn_80178A2C() : pPlayer->mMotion.mPos.mY);
+        pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4[0];
+        pPlayer->mUnknown512.mUnknown4 = ((int)(degrees * lbl_802A0DC0[0]) + 0x800000) & 0xFFFFFF;
+        pPlayer->mMotion.mFacing = pPlayer->mUnknown512.mUnknown4;
+        pPlayer->mUnknown512.mUnknown8 = pPlayer->mUnknown512.mUnknown4;
+        pPlayer->mUnknown512.mUnknown14 = 1;
     }
 }
 
