@@ -14128,6 +14128,43 @@
           "end": "0x803ED6E4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A8620.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A8620-0x801A980C (src/game/cu_801A8620.cpp), its 14 exact function extents, exact data rows 0x802AE8E0-0x802AE958, 0x802AE8F8-0x802AE904, 0x802F3B20-0x802F3B40, 0x803EB870-0x803EB874 and 0x803673E0-0x80367580, and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A8620",
+          "end": "0x801A980C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE8E0",
+          "end": "0x802AE958"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3B20",
+          "end": "0x802F3B40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB870",
+          "end": "0x803EB874"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803673E0",
+          "end": "0x80367580"
+        }
+      ]
     }
   ]
 }
