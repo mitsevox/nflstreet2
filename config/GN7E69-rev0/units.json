@@ -14184,6 +14184,31 @@
           "end": "0x802AE8E0"
         }
       ]
+    },
+    {
+      "source": "src/engine/t3db_expr.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x80203754-0x80205754 (src/engine/t3db_expr.c), its compiler and source-form rows and data rows 0x802B1AF8-0x802B1B90 and 0x802F9948-0x802F9B78; all 78 functions exact, whole file and both data items linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80203754",
+          "end": "0x80205754"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AF8",
+          "end": "0x802B1B90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9948",
+          "end": "0x802F9B78"
+        }
+      ]
     }
   ]
 }
