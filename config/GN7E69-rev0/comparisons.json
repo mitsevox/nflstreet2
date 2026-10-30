@@ -50950,51 +50950,6 @@
       ]
     },
     {
-      "source": "src/engine/tmclusterobj.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 6 drafted bodies, partial: 0x8021353C. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80213444",
-          "end": "0x80213A38"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80213444",
-          "start": "0x80213444",
-          "end": "0x802134AC"
-        },
-        {
-          "symbol": "fn_802134AC",
-          "start": "0x802134AC",
-          "end": "0x802134D0"
-        },
-        {
-          "symbol": "fn_802134D0",
-          "start": "0x802134D0",
-          "end": "0x802134E8"
-        },
-        {
-          "symbol": "fn_802134E8",
-          "start": "0x802134E8",
-          "end": "0x80213504"
-        },
-        {
-          "symbol": "fn_80213504",
-          "start": "0x80213504",
-          "end": "0x8021353C"
-        },
-        {
-          "symbol": "fn_8021353C",
-          "start": "0x8021353C",
-          "end": "0x80213774"
-        }
-      ]
-    },
-    {
       "source": "src/engine/tmclip.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C88-0x802B1C94. 9 drafted bodies. Comparison only; original assembly stays linked.",
