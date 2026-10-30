@@ -35,11 +35,11 @@ void fn_8003AB08(Object_80039F5C *pPlayer, int value);
 void fn_80227538(float *pOut, int angle, float length);
 float fn_80178A08(void);
 float fn_80178A2C(void);
-extern const float lbl_802A0DB8;
-extern const float lbl_802A0DBC;
-extern const float lbl_802A0DC0;
-extern const float lbl_802A0DC4;
-extern const float lbl_802A0DD8;
+extern const float lbl_802A0DB8[];
+extern const float lbl_802A0DBC[];
+extern const float lbl_802A0DC0[];
+extern const float lbl_802A0DC4[];
+extern const float lbl_802A0DD8[];
 
 void fn_8014D210(Object_80039F5C *p, int kind, int value)
 {
@@ -207,33 +207,35 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
 void PlaceSixPlayerFormation(void)
 {
     unsigned int first = fn_802372EC(0, 6);
-    float sectorWidth = lbl_802A0DB8;
+    float sectorWidth = lbl_802A0DB8[0];
     Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
     fn_800EFE60(0, pPlayer->mpState, pPlayer);
     fn_8003AB08(pPlayer, 0);
-    pPlayer->mMotion.mPos.mX = lbl_802A0DBC;
-    pPlayer->mMotion.mPos.mY = lbl_802A0DBC;
-    pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4;
+    pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4[0];
+    pPlayer->mUnknown512.mUnknown4 = (first * 0x2AAAAA + 0xEAAAAB) & 0xFFFFFF;
+    pPlayer->mMotion.mPos.mX = lbl_802A0DBC[0];
+    pPlayer->mMotion.mPos.mY = lbl_802A0DBC[0];
+    pPlayer->mMotion.mFacing = pPlayer->mUnknown512.mUnknown4;
+    pPlayer->mUnknown512.mUnknown8 = pPlayer->mUnknown512.mUnknown4;
     pPlayer->mUnknown512.mUnknown14 = 1;
-    pPlayer->mUnknown512.mUnknown4 = pPlayer->mMotion.mFacing =
-        pPlayer->mUnknown512.mUnknown8 = (first * 0x2AAAAA + 0xEAAAAB) & 0xFFFFFF;
 
     for (unsigned char i = 0; i <= 4; i++) {
         pPlayer = fn_80039F5C(0, i);
         fn_800EFE60(0, pPlayer->mpState, pPlayer);
         fn_8003AB08(pPlayer, 0);
         unsigned int sector = (i + first) % 6;
-        float radius = fn_802372EC(0, 2) + lbl_802A0DD8;
+        float radius = fn_802372EC(0, 2) + lbl_802A0DD8[0];
         float degrees = sector * sectorWidth + fn_802372EC(0, (unsigned int)sectorWidth);
-        fn_80227538(&pPlayer->mMotion.mPos.mX, (int)(degrees * lbl_802A0DC0), radius);
+        fn_80227538(&pPlayer->mMotion.mPos.mX, (int)(degrees * lbl_802A0DC0[0]), radius);
         pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX < -fn_80178A08() ? -fn_80178A08() :
             (pPlayer->mMotion.mPos.mX > fn_80178A08() ? fn_80178A08() : pPlayer->mMotion.mPos.mX);
         pPlayer->mMotion.mPos.mY = pPlayer->mMotion.mPos.mY < -fn_80178A2C() ? -fn_80178A2C() :
             (pPlayer->mMotion.mPos.mY > fn_80178A2C() ? fn_80178A2C() : pPlayer->mMotion.mPos.mY);
-        pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4;
+        pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4[0];
+        pPlayer->mUnknown512.mUnknown4 = ((int)(degrees * lbl_802A0DC0[0]) + 0x800000) & 0xFFFFFF;
+        pPlayer->mMotion.mFacing = pPlayer->mUnknown512.mUnknown4;
+        pPlayer->mUnknown512.mUnknown8 = pPlayer->mUnknown512.mUnknown4;
         pPlayer->mUnknown512.mUnknown14 = 1;
-        pPlayer->mUnknown512.mUnknown4 = pPlayer->mMotion.mFacing =
-            pPlayer->mUnknown512.mUnknown8 = ((int)(degrees * lbl_802A0DC0) + 0x800000) & 0xFFFFFF;
     }
 }
 
