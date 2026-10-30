@@ -34300,13 +34300,19 @@
     {
       "source": "src/game/cu_8014D210.cpp",
       "profile": "game_cpp",
-      "evidence": "Three complete bodies within the retained provisional cu_801485B4 survey group. Preserves the two event/record helpers of issue #807 and adds the complete six-player score-row refresh at 0x8014D948-0x8014DA20, called from 0x8014E9A4. Gap 0x8014D67C-0x8014D948 remains unreconstructed. The shared format at 0x802A0DDC and empty string at 0x802A05C8 remain external original-owned; no native initialized data is added. Evidence rows describe the inferred readable name and layouts; original name and file boundaries remain unresolved. Original bytes stay linked.",
+      "evidence": "Three complete bodies within the retained provisional cu_801485B4 survey group. Preserves the two event/record helpers of issue #807 and adds the complete six-player score-row refresh at 0x8014D948-0x8014DA20, called from 0x8014E9A4. Gap 0x8014D67C-0x8014D948 remains unreconstructed. The shared format at 0x802A0DDC and empty string at 0x802A05C8 remain external original-owned; no native initialized data is added. Evidence rows describe the inferred readable name and layouts; original name and file boundaries remain unresolved. Original bytes stay linked. Adds complete 0x8014D67C-0x8014D948 with target setup behavior, inferred name/type/source-form evidence and native numeric pool 0x802A0DC8-0x802A0DD8. File boundaries remain provisional; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014D210",
           "end": "0x8014DA20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0DC8",
+          "end": "0x802A0DD8"
         }
       ],
       "functions": [
@@ -34319,6 +34325,11 @@
           "symbol": "fn_8014D298",
           "start": "0x8014D298",
           "end": "0x8014D67C"
+        },
+        {
+          "symbol": "PlaceSixPlayerFormation",
+          "start": "0x8014D67C",
+          "end": "0x8014D948"
         },
         {
           "symbol": "RefreshSixPlayerScoreRows",
@@ -36124,13 +36135,19 @@
     {
       "source": "src/game/cu_80150DFC.cpp",
       "profile": "game_cpp",
-      "evidence": "Two complete bodies within the retained provisional cu_801485B4 survey group. Preserves the issue #914 slot-5 wrapper at 0x80150DFC-0x80150E1C and adds the four-player score-row refresh at 0x801514AC-0x80151598, called from 0x80150D94. Gap 0x80150E1C-0x801514AC remains unreconstructed. Shared strings 0x802A0DDC and 0x802A05C8 remain external original-owned; no native initialized data is added. Readable refresh name is inferred, not an original-name claim. Original signatures and file boundaries remain unresolved; original bytes stay linked.",
+      "evidence": "Two complete bodies within the retained provisional cu_801485B4 survey group. Preserves the issue #914 slot-5 wrapper at 0x80150DFC-0x80150E1C and adds the four-player score-row refresh at 0x801514AC-0x80151598, called from 0x80150D94. Gap 0x80150E1C-0x801514AC remains unreconstructed. Shared strings 0x802A0DDC and 0x802A05C8 remain external original-owned; no native initialized data is added. Readable refresh name is inferred, not an original-name claim. Original signatures and file boundaries remain unresolved; original bytes stay linked. Adds complete 0x80150E1C-0x80151010 with target setup behavior, inferred name/type/source-form evidence and native numeric pool 0x802A1358-0x802A1360. File boundaries remain provisional; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80150DFC",
           "end": "0x80151598"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A1358",
+          "end": "0x802A1360"
         }
       ],
       "functions": [
@@ -36138,6 +36155,11 @@
           "symbol": "fn_80150DFC",
           "start": "0x80150DFC",
           "end": "0x80150E1C"
+        },
+        {
+          "symbol": "ResetBallsAndFieldPositions",
+          "start": "0x80150E1C",
+          "end": "0x80151010"
         },
         {
           "symbol": "RefreshFourPlayerScoreRows",
