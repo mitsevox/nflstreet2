@@ -13,14 +13,9 @@
    and the contents of the opaque spans remain unknown. */
 struct Settings_800963EC { unsigned char mUnknown0[0x300]; float mUnknown300; };
 struct Entry_801411B4 { float mUnknown0; unsigned char mUnknown4[4]; unsigned char mUnknown8; };
-struct State_80141210 { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; int mUnknown10,mUnknown14; };
+struct State_80141210 { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; };
 struct Angles_80141210 { int mX,mY,mZ; };
 struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int mUnknown18; };
-struct Mode_801421C4 {
-    void (*mUnknown00)(Camera_8013F738 *pCamera);
-    void (*mUnknown04)(Camera_8013F738 *pCamera);
-    int mUnknown08;
-};
 
 extern "C" {
 float fn_801BFFA0(void);
@@ -294,7 +289,7 @@ extern "C" void fn_80142110(Camera_8013F738 *camera, int event, int argument)
     case 1: fn_80141FA0(camera); break;
     }
 }
-extern "C" void fn_801421C4(Camera_8013F738 *camera)
+extern "C" void fn_801421C4(Camera_8013F738 *camera, Desc_8013C340 *)
 {
     camera->mUnknownDC = fn_80142110;
     camera->mUnknown5C = camera->mUnknown60 = camera->mUnknown64 = 0.2f;
@@ -303,7 +298,9 @@ extern "C" void fn_801421C4(Camera_8013F738 *camera)
     camera->mUnknown80 = camera->mUnknown84 = camera->mUnknown88 = 0xCCCCC;
 }
 extern "C" void fn_80142224(Camera_8013F738 *) {}
-extern "C" Mode_801421C4 lbl_802DCF74 = { fn_801421C4, fn_80142224, 0 };
+extern "C" {
+Mode_8013FD8C lbl_802DCF74 = { fn_801421C4, fn_80142224, 0 };
+}
 extern "C" void fn_80142228(Camera_8013F738 *camera)
 {
     float value=0.08f;
