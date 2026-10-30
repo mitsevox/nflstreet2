@@ -89,3 +89,78 @@
 0x80229188	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
 0x802291A0	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
 0x80229210	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
+0x801C01DC	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C01E4	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C029C	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C02C4	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C02CC	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C02DC	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C02EC	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C06A0	mitsevox	Preserve original exact-source contributor from PR #1002, integrated through #1008; whole-file promotion retains the same function.
+0x801C3A44	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3AD8	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3B74	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3B78	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3C4C	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3C6C	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801C3C74	mitsevox	Preserve original exact-source contributor from PR #1013, integrated through #1015; whole camera-file promotion retains the same function.
+0x801E01FC	mitsevox	Preserve original exact-source contributor from PR #1010; whole collision-file promotion retains the same function.
+0x801E02A4	mitsevox	Preserve original exact-source contributor from PR #1010; whole collision-file promotion retains the same function.
+0x801E03F4	mitsevox	Preserve original exact-source contributor from PR #1010; whole collision-file promotion retains the same function.
+0x801E043C	mitsevox	Preserve original exact-source contributor from PR #1010; whole collision-file promotion retains the same function.
+0x801E0520	mitsevox	Preserve original exact-source contributor from PR #1010; whole collision-file promotion retains the same function.
+0x801BCF40	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BCF98	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD26C	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD4C0	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD4E4	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD60C	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD640	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD660	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD690	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD6D4	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD6DC	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD710	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD758	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD81C	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD910	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x801BD934	mitsevox	Preserve original exact-source contributor from PR #1002 integrated through #1008; complete sequence unit promotion.
+0x8020ED10	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020EDE4	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020EE38	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020EEE8	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020EFC8	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020F00C	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020F08C	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020F178	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x8020F1D8	mitsevox	Preserve original exact-source contributor from PR #1014; comparison integration via #1015.
+0x80201EC8	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80201F9C	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202200	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202298	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x8020232C	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x802023AC	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x802024B0	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x802025C4	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202708	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x802028C0	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x8020299C	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202A84	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202B60	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x80202D34	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x8020325C	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x802032D8	mitsevox	Preserve original exact-source credit from PR #1009, integrated via #1015.
+0x801E8798	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E87B8	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E87D8	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E896C	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E89D8	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E8A68	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E8B10	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E8C00	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801E8C3C	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801C53A8	mitsevox	Preserve original exact-source credit from PR #1013, integrated via #1015.
+0x801C53E0	mitsevox	Preserve original exact-source credit from PR #1013, integrated via #1015.
+0x801C567C	mitsevox	Preserve original exact-source credit from PR #1013, integrated via #1015.
+0x801DFE0C	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.
+0x801DFF10	mitsevox	Preserve original exact-source credit from PR #1010, integrated via #1015.

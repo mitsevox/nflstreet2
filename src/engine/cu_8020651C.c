@@ -160,7 +160,7 @@ int fn_802069BC(TDbTable_801FAA00 *pTable, TDbIdxColumnDef_801FFFC4 *pCols, TDbE
                           (pFilter == 0 ? pTable->mCapacity : pTable->mCapacity >> 2) + 5, 100);
         if (err == 0) {
             pIndex->mLocked = 0;
-            pIndex->mUserData = 0;
+            pIndex->mId = 0;
             pIndex->mTable = pTable;
             pIndex->mCount = 0;
             pIndex->mDestroyed = 1;

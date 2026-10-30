@@ -1,3 +1,5 @@
+#include "engine/cu_801C53A8.h"
+
 /* Polynomials: Horner evaluation and real roots inside an interval (Brent's method on bracketed sign changes). */
 
 typedef struct Poly_801C53A8 {
@@ -98,7 +100,7 @@ iterate:
     return b;
 }
 
-static float fn_801C567C(Poly_801C53A8 *pPoly, float a, float b, float tol)
+static float fn_801C567C(float a, float b, Poly_801C53A8 *pPoly, float tol)
 {
     float fa = fn_801C53A8(pPoly->mpCoef, pPoly->mDegree, a);
     float fb;
@@ -113,11 +115,13 @@ static float fn_801C567C(Poly_801C53A8 *pPoly, float a, float b, float tol)
     return fn_801C53E0(a, b, fa, fb, pPoly, tol);
 }
 
-int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *pRoots, float lo, float hi)
+/* Derivative roots partition the interval into monotonic spans. */
+int FindPolynomialRoots(float *pCoef, int degree, float lo, int includeLo, float hi, int includeHi, float *pRoots)
 {
-    float norm[22];
-    float deriv[22];
-    float extrema[22];
+    float workspace[3][22];
+    float *norm;
+    float *deriv;
+    float *extrema;
     Poly_801C53A8 poly;
     float x1 = 0.0f;
     float f1 = 0.0f;
@@ -131,20 +135,24 @@ int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *p
     int inLo;
     int inHi;
     int skip;
+    int coefficient;
     int i;
 
-    for (i = 0; i < degree + 1; i++) {
-        sum += fn_801C53A8_Abs(pCoef[i]);
+    for (coefficient = 0; coefficient < degree + 1; coefficient++) {
+        sum += fn_801C53A8_Abs(pCoef[coefficient]);
     }
     eps = (fn_801C53A8_Abs(lo) + fn_801C53A8_Abs(hi)) * (float)(degree + 1) * 1.0e-7f;
     if (!(sum > eps)) {
         return -1;
     }
-    for (i = 0; i < degree + 1; i++) {
-        norm[i] = (1.0f / sum) * pCoef[i];
+    norm = workspace[0];
+    deriv = workspace[1];
+    extrema = workspace[2];
+    for (coefficient = 0; coefficient < degree + 1; coefficient++) {
+        norm[coefficient] = (1.0f / sum) * pCoef[coefficient];
     }
-    while (!(fn_801C53A8_Abs(norm[degree]) >= eps)) {
-        degree--;
+    if (!(fn_801C53A8_Abs(norm[degree]) >= eps)) {
+        do { degree--; } while (fn_801C53A8_Abs(norm[degree]) < eps);
     }
     count = 0;
     if (degree == 0) {
@@ -169,15 +177,18 @@ int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *p
     }
     poly.mpCoef = norm;
     poly.mDegree = degree;
-    for (i = 1; i <= degree; i++) {
-        deriv[i - 1] = (float)i * norm[i];
+    for (coefficient = 1; coefficient <= degree; coefficient++) {
+        deriv[coefficient - 1] = (float)coefficient * norm[coefficient];
     }
-    numExtrema = fn_801C5740(deriv, degree - 1, 0, 0, extrema, lo, hi);
+    numExtrema = FindPolynomialRoots(deriv, degree - 1, lo, 0, hi, 0, extrema);
     if (numExtrema == -1) {
         return 0;
     }
     skip = 0;
-    for (i = 0; i <= numExtrema && count <= degree; i++) {
+    for (i = 0; i <= numExtrema; i++) {
+        if (count > degree) {
+            return count;
+        }
         if (i == 0) {
             x0 = lo;
             f0 = fn_801C53A8(norm, degree, x0);
@@ -203,7 +214,7 @@ int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *p
                 skip = 1;
             }
         } else if ((!(f0 >= 0.0f) && f1 > 0.0f) || (!(f0 <= 0.0f) && !(f1 >= 0.0f))) {
-            root = fn_801C567C(&poly, x0, x1, 0.0f);
+            root = fn_801C567C(x0, x1, &poly, 0.0f);
             pRoots[count++] = root;
             if (count > 1 && !(pRoots[count - 2] < pRoots[count - 1] - eps)) {
                 pRoots[count - 2] = (pRoots[count - 2] + pRoots[count - 1]) * 0.5f;

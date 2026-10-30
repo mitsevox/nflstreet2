@@ -1,3 +1,4 @@
+#include "engine/fn_801C065C.h"
 #include "engine/cu_801B9F00.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Object_800D81C8.h"
@@ -1046,7 +1047,6 @@ struct Character_800DF7CC {
 };
 extern "C" {
 float fn_801BFFA0(Object_80039F5C *);
-int fn_801C065C(Frame_800DF7CC *, float);
 Attachment_800DF7CC *fn_80093C08(unsigned short);
 int fn_800943B0(unsigned short);
 void fn_8009134C(unsigned short);
@@ -2259,7 +2259,7 @@ extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, 
     Vector_80039F5C position;
     Angles_801EBC18 angles;
     if (pFrame->mUnknown20 && pFrame->mUnknown20 != 0x4E4F4E45) {
-        if (fn_801C065C(pFrame, time) && !fn_800DF6EC(p)) {
+        if (GetTimedKeyValue(pFrame, time) && !fn_800DF6EC(p)) {
             int joint = !pFrame->mUnknown19 || (pView->mFlags & 8) ? 25 : 19;
             fn_800DF710(p, joint, &position, &angles);
             pAttachments[index].mPos = position;

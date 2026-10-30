@@ -1,3 +1,4 @@
+#include "engine/cu_801C3A44.h"
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
 #include "game/EaseVector_8013C9A4.h"
@@ -41,13 +42,6 @@ void fn_801527B8(void *p, Vector_80039F5C *pOut);
 int fn_801784C4(void);
 void fn_801C3918(void *p, Camera_8013F738 *pCamera);
 void fn_801C3A10(Camera_8013F738 *pCamera, float value);
-void fn_801C3AD8(Camera_8013F738 *pCamera, int a);
-void fn_801C3B74(Camera_8013F738 *pCamera);
-void fn_801C3B78(Camera_8013F738 *pCamera);
-void fn_801C3C4C(void *p, Camera_8013F738 *pCamera);
-void fn_801C3C6C(Camera_8013F738 *pCamera, Vector_80039F5C *pTarget);
-void fn_801C3C74(Camera_8013F738 *pCamera, int a, int b);
-void fn_801C3C80(Camera_8013F738 *pCamera);
 void fn_801C3CE8(Camera_8013F738 *pCamera, int a);
 void fn_801C3D98(Camera_8013F738 *pCamera);
 void fn_801C3D9C(Camera_8013F738 *pCamera);
@@ -533,7 +527,7 @@ void fn_8013C6F0(Camera_8013F738 *pCamera)
     case 1:
         fn_8013BF40(pCamera, angles);
         fn_801C3C74(pCamera, angles[0], angles[1]);
-        fn_801C3C80(pCamera);
+        SnapFocusCameraToTarget(pCamera);
         break;
     case 4:
         break;
