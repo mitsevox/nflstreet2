@@ -196,8 +196,8 @@ extern int fn_801F95C8(void);
 extern int fn_801FC5FC(TDbDb_801F88F0 *pDb, int a, int b);
 extern TDbTbl_801F88F0 *fn_8020BA48(TDbDb_801F88F0 *pDb, int tbl);
 void fn_801F93AC(TDbAsync_801F9228 *pReq);
-extern int TDbBindExpressionTables_80204EF8(TDbTerm_801FA4B0 *pTerm, int *pOut, TDbTbl_801F88F0 **ppTbl, int b, int c);
-extern void TDbEvaluateExpression_802047EC(int a, TDbRowInfo_801FA290 *pInfo, TDbQrySel_801F9858 *pSel, TDbQryRow_801F9858 *pRow);
+extern int _TDbExprPrepare(TDbTerm_801FA4B0 *pTerm, int *pOut, TDbTbl_801F88F0 **ppTbl, int b, int c);
+extern void _TDbExprTest(int a, TDbRowInfo_801FA290 *pInfo, TDbQrySel_801F9858 *pSel, TDbQryRow_801F9858 *pRow);
 extern int fn_80208094(TDbQryBuf_801F9858 *pQry);
 extern int fn_80209E40(TDbQryBuf_801F9858 *pQry, int out);
 extern void fn_8020A3A0(TDbQryBuf_801F9858 *pQry, int out);
@@ -1065,7 +1065,7 @@ int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCou
             qry.mSel.pTbl = pTbl;
             qry.mRow.mUnk14 = 2;
             qry.mUnk0 = 1;
-            TDbBindExpressionTables_80204EF8(pFilter, &qry.mSel.mUnk28, &pTbl, 1, 0);
+            _TDbExprPrepare(pFilter, &qry.mSel.mUnk28, &pTbl, 1, 0);
             err = fn_80207E24(&qry, 0, 0);
             if (err == 0) {
                 for (err = fn_802075F4(&qry, 0); err == 0; err = fn_80207988(&qry, 0)) {
@@ -1257,8 +1257,8 @@ int fn_801FA290(int a, int b, int c, int out)
         if (err == 0) {
             err = fn_802075F4(&qry, 0);
             if (err == 0) {
-                for (TDbEvaluateExpression_802047EC(qry.mUnk4, &info, &qry.mSel, &qry.mRow); info.mUnk8 == 0;
-                     TDbEvaluateExpression_802047EC(qry.mUnk4, &info, &qry.mSel, &qry.mRow)) {
+                for (_TDbExprTest(qry.mUnk4, &info, &qry.mSel, &qry.mRow); info.mUnk8 == 0;
+                     _TDbExprTest(qry.mUnk4, &info, &qry.mSel, &qry.mRow)) {
                     err = fn_80207988(&qry, qry.mUnk0 - 1);
                     if (err != 0) {
                         break;
@@ -1334,7 +1334,7 @@ int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0
     err = fn_80207B8C(a, b, c, &qry);
     if (err == 0) {
         for (i = 0; pCols[i].mCol != -1; i++) {
-            err = TDbBindExpressionTables_80204EF8(&pTerms[i], &handles[i], &qry.mSel.pTbl, qry.mUnk0, 0);
+            err = _TDbExprPrepare(&pTerms[i], &handles[i], &qry.mSel.pTbl, qry.mUnk0, 0);
             if (err != 0) {
                 while (i != 0) {
                     i--;

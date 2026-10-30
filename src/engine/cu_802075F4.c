@@ -43,7 +43,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                     }
                 }
             } else if ((unsigned int)(pSeek->mRight.mType - TDB_TYPE_EXPR_TRUNC) <= 2) {
-                TDbEvaluateExpression_802047EC(pSeek->mRight.mValue.p, &result, pStmt->mTables, pStmt->mRows);
+                _TDbExprTest(pSeek->mRight.mValue.p, &result, pStmt->mTables, pStmt->mRows);
                 *pKey = result.mValue.u;
             } else {
                 *pKey = pSeek->mRight.mValue.u;
@@ -72,7 +72,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                     continue;
                 }
             }
-            TDbEvaluateExpression_802047EC(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
+            _TDbExprTest(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
             if (value.mValue.i != 0) {
                 if (t + 1 < pStmt->mTableCount) {
                     err = fn_802075F4(pStmt, t + 1);
@@ -133,16 +133,16 @@ int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t)
                 pStmt->mNodes[t] = fn_80202200(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
             }
             if (pStmt->mSeekExprs[t] != 0) {
-                TDbEvaluateExpression_802047EC(pStmt->mSeekExprs[t], &value, pStmt->mTables, pStmt->mRows);
+                _TDbExprTest(pStmt->mSeekExprs[t], &value, pStmt->mTables, pStmt->mRows);
                 if (value.mValue.i == 0) {
                     err = 0x17;
                     break;
                 }
                 if (pStmt->mSeekExprs[t] != pStmt->mTableExprs[t]) {
-                    TDbEvaluateExpression_802047EC(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
+                    _TDbExprTest(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
                 }
             } else {
-                TDbEvaluateExpression_802047EC(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
+                _TDbExprTest(pStmt->mTableExprs[t], &value, pStmt->mTables, pStmt->mRows);
             }
             if (value.mValue.i != 0) {
                 if (t + 1 < pStmt->mTableCount) {
@@ -182,7 +182,7 @@ int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_801FAA00 *pWh
         } else {
             pStmt->mJoinType[count] = 2;
         }
-        err = TDbBindExpressionTables_80204EF8(pRefs[count].mExpr, &pStmt->mTableExprs[count], pStmt->mTables, count + 1, 0);
+        err = _TDbExprPrepare(pRefs[count].mExpr, &pStmt->mTableExprs[count], pStmt->mTables, count + 1, 0);
         if (err != 0) {
             pStmt->mTableCount = count;
             break;
@@ -191,7 +191,7 @@ int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_801FAA00 *pWh
     pStmt->mTableCount = count;
     if (err == 0) {
         if (count == 1) {
-            err = TDbBindExpressionTables_80204EF8(pWhere, &pStmt->mWhere, pStmt->mTables, 1, 0);
+            err = _TDbExprPrepare(pWhere, &pStmt->mWhere, pStmt->mTables, 1, 0);
             if (err == 0) {
                 if (pStmt->mTableExprs[0] == 0) {
                     pStmt->mTableExprs[0] = pStmt->mWhere;
@@ -399,7 +399,7 @@ int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
             err = fn_802075F4(pStmt, 0);
             if (err == 0) {
                 do {
-                    TDbEvaluateExpression_802047EC(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
+                    _TDbExprTest(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
                     if (value.mValue.i != 0) {
                         fn_8020651C(pStmt->mTables[0], pStmt->mRows[0]);
                         for (pIndex = pStmt->mTables[0]->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {

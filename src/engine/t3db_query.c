@@ -95,7 +95,7 @@ int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur)
             pTree = &pQIdx->mTree;
             err = fn_802075F4(pQIdx->mStmt, 0);
             while (err == 0) {
-                TDbEvaluateExpression_802047EC(pQIdx->mStmt->mWhere, &result, pQIdx->mStmt->mTables, pQIdx->mStmt->mRows);
+                _TDbExprTest(pQIdx->mStmt->mWhere, &result, pQIdx->mStmt->mTables, pQIdx->mStmt->mRows);
                 if (result.mValue.i != 0) {
                     fn_80206C9C(pQIdx, &pNode);
                     pNode->mColor = 1;

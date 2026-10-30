@@ -399,7 +399,7 @@ int fn_8020299C(TDbIndex_801FAA00 *pIndex, unsigned int rowArg)
     int err;
 
     if (pIndex->mFilter != 0) {
-        TDbEvaluateExpression_802047EC(pIndex->mFilter, &result, &pIndex->mTable, &row);
+        _TDbExprTest(pIndex->mFilter, &result, &pIndex->mTable, &row);
         if (result.mValue.i == 0) {
             return 0;
         }
@@ -451,7 +451,7 @@ int fn_80202B60(TDbIndex_801FAA00 *pIndex, TDbIdxNode_80201EC8 *pNode, unsigned 
         return fn_8020299C(pIndex, row);
     }
     if (pIndex->mFilter != 0) {
-        TDbEvaluateExpression_802047EC(pIndex->mFilter, &result, &pIndex->mTable, &row);
+        _TDbExprTest(pIndex->mFilter, &result, &pIndex->mTable, &row);
         if (result.mValue.i == 0) {
             fn_80206668(pIndex, pNode, 0);
             fn_802025C4(&pIndex->mTree, pNode);
@@ -554,7 +554,7 @@ int CreateDatabaseIndex(TDbTable_801FAA00 *pTable, int id, TDbIdxColumnDef_801FF
     }
     if (err == 0) {
         if (pFilter != 0) {
-            err = TDbBindExpressionTables_80204EF8(pFilter, &pIndex->mFilter, &pTable, 1, 0);
+            err = _TDbExprPrepare(pFilter, &pIndex->mFilter, &pTable, 1, 0);
         } else {
             pIndex->mFilter = 0;
         }
