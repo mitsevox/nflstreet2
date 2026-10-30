@@ -315,8 +315,8 @@ extern void *fn_80212050(void *p);
 extern void *fn_80212074(void *p, int a);
 extern void fn_802134D0(void *p);
 extern void fn_80213504(Joints_802337D4 *pJoints, int a);
-extern void fn_8021353C(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
-extern void fn_80213774(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
+extern void SynthesizeClusterBoneMatrices_8021353C(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
+extern void SynthesizeFlaggedQuaternionBoneMatrices_80213774(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
 extern void fn_80213A38(int a, int b, int c);
 extern void fn_80214140(int a);
 extern void fn_80214184(int a);
@@ -1163,7 +1163,7 @@ void fn_802337D4(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
                 fn_80236F00();
             }
             fn_80213504(pJoints, pSkeleton[1]);
-            fn_8021353C(pJoints, pBones, pSkeleton, pPose);
+            SynthesizeClusterBoneMatrices_8021353C(pJoints, pBones, pSkeleton, pPose);
         }
     }
 }
@@ -1182,7 +1182,7 @@ void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
                 fn_80236F00();
             }
             fn_80213504(pJoints, pSkeleton[1]);
-            fn_80213774(pJoints, pBones, pSkeleton, pPose, pFlags);
+            SynthesizeFlaggedQuaternionBoneMatrices_80213774(pJoints, pBones, pSkeleton, pPose, pFlags);
         }
     }
 }

@@ -62,7 +62,7 @@ struct Object_801A8620 {
     unsigned char mUnknown1DC[4]; Child_801A9430 *mpUnknown1E0;
 };
 
-extern "C" void fn_801A8D08(Child_801A9430 *p, Object_801A8620 *owner);
+extern "C" void ChooseChildTextureFrame_801A8D08(Child_801A9430 *p, Object_801A8620 *owner);
 extern "C" void fn_801A9368(Object_801A8620 *p, int index);
 extern "C" void fn_801A93C0(Object_801A8620 *p, void *);
 

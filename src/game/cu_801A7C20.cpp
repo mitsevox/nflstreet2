@@ -110,7 +110,9 @@ void fn_801A7C20(Mesh_801A7C20 *pMesh, Scroll_801A7C20 *pScroll)
     }
 }
 
-void fn_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
+/* Scroll texture coordinates in 1/4096 units. The V path repeatedly
+   updates the first quad and carries its minima across iterations. */
+void ScrollFixedMeshUVs_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
 {
     float step = 0.0f;
     int one = 0x1000;

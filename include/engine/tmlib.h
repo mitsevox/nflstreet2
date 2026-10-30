@@ -568,8 +568,8 @@ void fn_802134AC(void);
 void fn_802134D0(ClusterObj_80210724 *pObj);
 void fn_802134E8(void);
 void fn_80213504(ClusterObj_80210724 *pObj, int numMatrices);
-void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3]);
-void fn_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3],
+void SynthesizeClusterBoneMatrices_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3]);
+void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3],
                  unsigned char *pFlags);
 
 /* tmchannellist.c */

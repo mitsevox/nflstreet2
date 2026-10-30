@@ -137,7 +137,9 @@ void fn_801EB814(float m[4][4], Quat_801EB814 *q)
     m[2][2] = 1.0f - (xx + yy);
 }
 
-void fn_801EB8B4(float *q, Mtx_801EB8B4 *m)
+/* Recover a quaternion from the rotation entries; the small-trace branch
+   retains the added third diagonal term. */
+void QuatFromMatrix_801EB8B4(float *q, Mtx_801EB8B4 *m)
 {
     float trace;
     float s;
@@ -174,7 +176,7 @@ void fn_801EBA64(float *q)
     Mtx_801EB8B4 m;
 
     fn_801D0F80(m.mElements);
-    fn_801EB8B4(q, &m);
+    QuatFromMatrix_801EB8B4(q, &m);
 }
 
 void fn_801EBAA0(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_801EB814 *q)

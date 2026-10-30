@@ -84,7 +84,9 @@ extern "C" Entry_801411B4 *fn_801411B4(Camera_8013F738 *camera)
     return entry;
 }
 
-extern "C" void fn_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Selection_80141210 *selection, float time)
+/* Sample the selected actor camera curves, scale and transform them
+   into the camera view, and retain the view when no sample is available. */
+extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Selection_80141210 *selection, float time)
 {
     Vector_80039F5C offset, position, result, look, up, projection, base;
     Angles_80141210 angles, resultAngles, rotation;
@@ -155,7 +157,9 @@ extern "C" void fn_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Sele
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
-extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, float time, int mirror)
+/* Build the camera view from the playback sample, applying the optional
+   half-turn to the sampled transform and recording the curve duration. */
+extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, float time, int mirror)
 {
     Vector_80039F5C result, position, base, offset, up, look, projection;
     Angles_80141210 resultAngles, angles, rotation;
@@ -211,7 +215,9 @@ extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, floa
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
-extern "C" void fn_80141E8C(Camera_8013F738 *camera)
+/* Update the selected-character or playback view for modes 10 and 11;
+   character views refresh their scale from the actor settings. */
+extern "C" void UpdateCurveCameraMode_80141E8C(Camera_8013F738 *camera)
 {
     Actor_801C009C *actor;
     switch (camera->mUnknownA0) {
@@ -223,7 +229,7 @@ extern "C" void fn_80141E8C(Camera_8013F738 *camera)
             Settings_800963EC *settings = fn_800963EC(character);
             if (actor->mUnknown8 & 0x200) camera->mUnknownF4 = 1.0f;
             else camera->mUnknownF4 = settings->mUnknown300;
-            fn_80141210(camera, actor, &character->mUnknownE0, entry->mUnknown0);
+            ApplySelectedCameraCurves_80141210(camera, actor, &character->mUnknownE0, entry->mUnknown0);
         }
         break;
     }
@@ -233,13 +239,15 @@ extern "C" void fn_80141E8C(Camera_8013F738 *camera)
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
             if ((playback->mUnknownC & 0x10) && fn_801784C4() != 0) mirror = 1;
             actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
-            fn_80141920(camera, actor, playback->mUnknown24, mirror);
+            ApplyPlaybackCameraCurves_80141920(camera, actor, playback->mUnknown24, mirror);
         }
         break;
     }
     }
 }
-extern "C" void fn_80141FA0(Camera_8013F738 *camera)
+/* Set a preset view or initialize a sampled character/playback view;
+   character views capture the current facing before sampling. */
+extern "C" void InitializeCurveCameraView_80141FA0(Camera_8013F738 *camera)
 {
     if (camera->mUnknownA0 <= 5) {
         fn_8013C478(camera, &lbl_802DCEB0[camera->mUnknownA0].mUnknown0);
@@ -257,7 +265,7 @@ extern "C" void fn_80141FA0(Camera_8013F738 *camera)
             Actor_801C009C *actor = fn_80093BAC(character->mUnknown0, character->mUnknown4);
             if (actor->mUnknown8 & 0x400) camera->mUnknown10C = character->mUnknown14[0]->mMotion.mFacing;
             else camera->mUnknown10C = character->mUnknown14[0]->mMotion.mFacing;
-            fn_80141210(camera, actor, &character->mUnknownE0, entry->mUnknown0);
+            ApplySelectedCameraCurves_80141210(camera, actor, &character->mUnknownE0, entry->mUnknown0);
         }
         break;
     }
@@ -267,13 +275,15 @@ extern "C" void fn_80141FA0(Camera_8013F738 *camera)
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
             if ((playback->mUnknownC & 0x10) && fn_801784C4() != 0) mirror = 1;
             Actor_801C009C *actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
-            fn_80141920(camera, actor, playback->mUnknown24, mirror);
+            ApplyPlaybackCameraCurves_80141920(camera, actor, playback->mUnknown24, mirror);
         }
         break;
     }
     }
 }
-extern "C" void fn_80142110(Camera_8013F738 *camera, int event, int argument)
+/* Dispatch view initialization and updates; event 4 transfers position
+   and angles from the camera named by the event argument. */
+extern "C" void HandleCurveCameraEvent_80142110(Camera_8013F738 *camera, int event, int argument)
 {
     switch (event) {
     case 4:
@@ -285,13 +295,15 @@ extern "C" void fn_80142110(Camera_8013F738 *camera, int event, int argument)
             fn_8013C384(camera, 0, 0, 0);
         }
         break;
-    case 3: fn_80141E8C(camera); break;
-    case 1: fn_80141FA0(camera); break;
+    case 3: UpdateCurveCameraMode_80141E8C(camera); break;
+    case 1: InitializeCurveCameraView_80141FA0(camera); break;
     }
 }
-extern "C" void fn_801421C4(Camera_8013F738 *camera, Desc_8013C340 *)
+/* Install the curve-camera event handler and per-axis movement and
+   angular easing defaults. */
+extern "C" void InitializeCurveCameraMode_801421C4(Camera_8013F738 *camera, Desc_8013C340 *)
 {
-    camera->mUnknownDC = fn_80142110;
+    camera->mUnknownDC = HandleCurveCameraEvent_80142110;
     camera->mUnknown5C = camera->mUnknown60 = camera->mUnknown64 = 0.2f;
     camera->mUnknown68 = camera->mUnknown6C = camera->mUnknown70 = 0.1f;
     camera->mUnknown74 = camera->mUnknown78 = camera->mUnknown7C = 0x199999;
@@ -299,7 +311,7 @@ extern "C" void fn_801421C4(Camera_8013F738 *camera, Desc_8013C340 *)
 }
 extern "C" void fn_80142224(Camera_8013F738 *) {}
 extern "C" {
-Mode_8013FD8C lbl_802DCF74 = { fn_801421C4, fn_80142224, 0 };
+Mode_8013FD8C lbl_802DCF74 = { InitializeCurveCameraMode_801421C4, fn_80142224, 0 };
 }
 extern "C" void fn_80142228(Camera_8013F738 *camera)
 {

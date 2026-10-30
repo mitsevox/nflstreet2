@@ -197,7 +197,7 @@ int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_80205754
         pResult->mCount = 0;
         if (err == 0) {
             for (err = fn_802075F4(pStmt, 0); err == 0; err = fn_80207988(pStmt, pStmt->mTableCount - 1)) {
-                fn_802047EC(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
+                TDbEvaluateExpression_802047EC(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
                 if (value.mValue.i != 0) {
                     pResult->mCount++;
                     fn_8020A3A0(pStmt, pLits);
@@ -246,7 +246,7 @@ int fn_8020AD1C(int unused, TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLits, 
             err = fn_80209E40(pStmt, pLits);
             if (err == 0) {
                 for (err = fn_802075F4(pStmt, 0); err == 0; err = fn_80207988(pStmt, pStmt->mTableCount - 1)) {
-                    fn_802047EC(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
+                    TDbEvaluateExpression_802047EC(pStmt->mWhere, &value, pStmt->mTables, pStmt->mRows);
                     if (value.mValue.i != 0) {
                         pResult->mCount++;
                         fn_80209F34(pStmt, pLits, mask);

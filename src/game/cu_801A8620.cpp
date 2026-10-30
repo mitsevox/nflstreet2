@@ -63,7 +63,7 @@ int fn_8002D060(void *);
 void fn_801C657C(void);
 int fn_801A854C(void *, void *);
 void fn_801A7C20(Mesh_801A93C0 *);
-void fn_801A7F10(Mesh_801A93C0 *);
+void ScrollFixedMeshUVs_801A7F10(Mesh_801A93C0 *);
 void fn_801D0470(int); void fn_801D04C4(void); void fn_801D0508(void);
 void fn_801D0544(void); void fn_801D0558(void); void fn_801D06D4(Mtx44);
 void fn_801D0C58(void *); void fn_801D0860(void *); void fn_801D08FC(int);
@@ -96,8 +96,8 @@ int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(Object_801A8620 *, int, int);
 int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
-int fn_801A8B84(Object_801A8620 *); int fn_801A8C48(Child_801A9430 *);
-int fn_801A9430(Child_801A9430 *, int);
+int CullModelObjectByFacing_801A8B84(Object_801A8620 *); int CullModelChildByFacing_801A8C48(Child_801A9430 *);
+int RenderModelChild_801A9430(Child_801A9430 *, int);
 }
 
 static float lbl_802F3B20[8] = {-3.1f,-1.5f,-2.0f,0.0f,3.9f,1.5f,5.0f,0.0f};
@@ -105,7 +105,9 @@ static Cache_801A8D9C *lbl_803673E0[104];
 static unsigned int lbl_803EB870 = 0;
 
 extern "C" {
-int fn_801A8620(Object_801A8620 *p, int arg)
+/* Render the object and its child chain, sharing prepared model state
+   within this draw and applying the optional distance fade. */
+int RenderModelObject_801A8620(Object_801A8620 *p, int arg)
 {
     GXColor color = {255,255,255,255}; GXColor copy;
     unsigned char work[0x90]; Mtx44 m1, m2;
@@ -124,7 +126,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
     fn_801D08FC(0x400000); fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC);
     fn_801D0F80(m2); fn_8020FA38(0,m2); fn_8020FA8C(0);
     unsigned int flags=fn_80234D4C(lbl_802F3B20,m1,0,0);
-    if(fn_801A8B84(p)) flags|=0x3F;
+    if(CullModelObjectByFacing_801A8B84(p)) flags|=0x3F;
     p->mUnknown138=0;
     if(!(flags&0x3F)) {
         fn_80234AFC(work); fn_80234DC8(work,flags&0xF2000); fn_80234B1C(work);
@@ -168,7 +170,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
             } else fn_80234BF4(work,&s->mUnknownC,0);
         }
     }
-    fn_801D0544(); if(p->mpUnknown1E0)fn_801A9430(p->mpUnknown1E0,arg);
+    fn_801D0544(); if(p->mpUnknown1E0)RenderModelChild_801A9430(p->mpUnknown1E0,arg);
     GXSetCullMode(GX_CULL_NONE); return 0;
 }
 int fn_801A8B0C(const char *name)
@@ -177,7 +179,9 @@ int fn_801A8B0C(const char *name)
     return -1;
 }
 extern const Vector_80039F5C lbl_802AE8F8={0.0f,1.0f,0.0f};
-int fn_801A8B84(Object_801A8620 *p)
+/* Cull frame-based geometry when its transformed axis dotted with the
+   viewport-to-pose direction falls below -0.2. */
+int CullModelObjectByFacing_801A8B84(Object_801A8620 *p)
 {
     int result=0;
     if(p->mUnknownE8.mWord&16) {
@@ -189,7 +193,9 @@ int fn_801A8B84(Object_801A8620 *p)
     }
     return result;
 }
-int fn_801A8C48(Child_801A9430 *p)
+/* Apply the frame-geometry facing test using the child transform and
+   its owner's enable flag. */
+int CullModelChildByFacing_801A8C48(Child_801A9430 *p)
 {
     int result=0;
     if(p->mpUnknown50->mUnknownE8.mWord&16) {
@@ -201,7 +207,9 @@ int fn_801A8C48(Child_801A9430 *p)
     }
     return result;
 }
-void fn_801A8D08(Child_801A9430 *p,Object_801A8620 *owner)
+/* Avoid reusing the owner's frame by choosing an adjacent index when
+   the texture offers more than one frame. */
+void ChooseChildTextureFrame_801A8D08(Child_801A9430 *p,Object_801A8620 *owner)
 {
     Instance_801A8D9C *s=owner->mpUnknown12C;
     unsigned int index=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
@@ -211,7 +219,9 @@ void fn_801A8D08(Child_801A9430 *p,Object_801A8620 *owner)
         if(p->mUnknown6C>=s->mpUnknown0->mpUnknown144->mUnknown10) p->mUnknown6C=index-1;
     }
 }
-void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
+/* Acquire the shared tideRef model cache and initialize this object's
+   render packet, texture binding, and draw callback. */
+void InitializeModelObjectRender_801A8D9C(void *data,int handle,Object_801A8620 *p)
 {
     char name[256],behavior[128];
     fn_8004D5B8(handle,"tideRef",name,256);
@@ -257,7 +267,7 @@ void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
     } else fn_80233BB8(s->mUnknownFC,0,1);
     fn_8004E090(p,0,0);p->mUnknownE8.mWord=1;
     if(fn_8004D5B8(handle,"tideEnvMapRef",name,256))p->mUnknownE8.mWord=2;
-    p->mUnknown14=fn_801A8620;fn_801442FC(&s->mUnknown108);
+    p->mUnknown14=RenderModelObject_801A8620;fn_801442FC(&s->mUnknown108);
 }
 void fn_801A9184(Object_801A8620 *p)
 {
@@ -298,10 +308,12 @@ void fn_801A9368(Object_801A8620 *p,int index)
 void fn_801A93C0(Object_801A8620 *p, void *)
 {
     Mesh_801A93C0 *mesh=&p->mpUnknown12C->mUnknownC.mpUnknown64->mpUnknown8->mUnknown18;
-    if(mesh->mUnknown9==4)fn_801A7C20(mesh);else if(mesh->mUnknown9==3)fn_801A7F10(mesh);
+    if(mesh->mUnknown9==4)fn_801A7C20(mesh);else if(mesh->mUnknown9==3)ScrollFixedMeshUVs_801A7F10(mesh);
     DCFlushRange(mesh->mpUnknown0,mesh->mUnknown4*mesh->mUnknown7);
 }
-int fn_801A9430(Child_801A9430 *p,int arg)
+/* Render one child using its owner's shared model preparation, then
+   continue through the child chain. */
+int RenderModelChild_801A9430(Child_801A9430 *p,int arg)
 {
     Instance_801A8D9C *s=p->mpUnknown50->mpUnknown12C;
     GXColor color={255,255,255,255},copy;unsigned char work[0x90];Mtx44 m1,m2;
@@ -314,7 +326,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
     fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m1);
     fn_801D0544();fn_801D04C4();fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);
     fn_801D08FC(0x400000);fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m2);
-    unsigned int flags=fn_80234D4C(lbl_802F3B20,m1,0,0);if(fn_801A8C48(p))flags|=0x3F;
+    unsigned int flags=fn_80234D4C(lbl_802F3B20,m1,0,0);if(CullModelChildByFacing_801A8C48(p))flags|=0x3F;
     if(!(flags&0x3F)) {
         fn_80234AFC(work);fn_80234DC8(work,flags&0xF2000);fn_80234B1C(work);fn_80234B20(work,m1,0);
         fn_80234B80(work);fn_80234DC4(work,0);s->mUnknownC.mUnknown5C=1;
@@ -345,7 +357,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
             }
         }
     }
-    fn_801D0544();if(p->mpUnknown5C)fn_801A9430(p->mpUnknown5C,arg);
+    fn_801D0544();if(p->mpUnknown5C)RenderModelChild_801A9430(p->mpUnknown5C,arg);
     GXSetCullMode(GX_CULL_NONE);return 0;
 }
 }

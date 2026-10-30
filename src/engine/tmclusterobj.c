@@ -88,7 +88,9 @@ static inline void fn_8021353C_Matrix(Mtx34_80213444 *pParent, Mtx34_80213444 *p
     PSMTXConcat(*pParent, mtx, *pOut);
 }
 
-void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3])
+/* Build the bone hierarchy from pose rotations and positions, optionally
+   blending angles with 12-bit weights, then publish the matrix buffer. */
+void SynthesizeClusterBoneMatrices_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3])
 {
     Mtx34_80213444 *pMatrices = pObj->mpCacheMatrices;
     unsigned int i;
@@ -124,13 +126,15 @@ void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_80213
     }
 }
 
-void fn_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3],
+/* Start with angle-blended matrices, replace flagged bones with
+   quaternion-interpolated rotations, and publish the updated buffer. */
+void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3],
                  unsigned char *pFlags)
 {
     Mtx34_80213444 *pMatrices;
     unsigned int i;
 
-    fn_8021353C(pObj, pPose, pBones, pBlend);
+    SynthesizeClusterBoneMatrices_8021353C(pObj, pPose, pBones, pBlend);
     pMatrices = pObj->mpCacheMatrices;
     if (pMatrices == 0) {
         pMatrices = pObj->mpMatrices;

@@ -263,3 +263,5 @@
 0x80229188	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
 0x802291A0	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
 0x80229210	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
+0x8014D948	lifewillbeokay	Score-row reconstruction made exact in PR #1208; preserve the original contributor through batch integration.
+0x801514AC	lifewillbeokay	Score-row reconstruction made exact in PR #1208; preserve the original contributor through batch integration.

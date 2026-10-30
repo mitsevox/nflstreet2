@@ -19,7 +19,7 @@ void fn_801A980C(Child_801A9430 *p)
 {
     Object_801A8620 *owner = p->mpUnknown50;
     if (owner->mUnknownE8.mWord & 0x10) {
-        fn_801A8D08(p, owner);
+        ChooseChildTextureFrame_801A8D08(p, owner);
     }
 }
 

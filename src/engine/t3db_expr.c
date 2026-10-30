@@ -479,7 +479,9 @@ static TDbOpFunc_802047EC lbl_802F9948[28][5] = {
     { 0, 0, fn_8020467C, fn_80204738, fn_802045F8 },
 };
 
-void fn_802047EC(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_801FAA00 **ppTables,
+/* Resolve row columns and nested conversions before dispatching the
+   typed operator; a missing expression supplies the true value. */
+void TDbEvaluateExpression_802047EC(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_801FAA00 **ppTables,
                  unsigned short *pRows)
 {
     TDbValue_801FDF28 left;
@@ -516,21 +518,21 @@ void fn_802047EC(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_8
         break;
     }
     case TDB_TYPE_EXPR_TRUNC:
-        fn_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
+        TDbEvaluateExpression_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
         if (left.mType == TDB_TYPE_FLOAT) {
             left.mValue.i = (int)left.mValue.f;
         }
         left.mType = TDB_TYPE_UINT;
         break;
     case TDB_TYPE_EXPR_UINT:
-        fn_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
+        TDbEvaluateExpression_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
         if (left.mType == TDB_TYPE_FLOAT) {
             left.mValue.u = (unsigned int)left.mValue.f;
         }
         left.mType = TDB_TYPE_UINT;
         break;
     case TDB_TYPE_EXPR_FLOAT:
-        fn_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
+        TDbEvaluateExpression_802047EC(pExpr->mLeft.mValue.p, &left, ppTables, pRows);
         if (left.mType == TDB_TYPE_INT) {
             left.mValue.f = (float)left.mValue.i;
         } else if (left.mType == TDB_TYPE_UINT) {
@@ -579,21 +581,21 @@ void fn_802047EC(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_8
             right.mValue = pExpr->mRight.mValue;
             break;
         case TDB_TYPE_EXPR_TRUNC:
-            fn_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
+            TDbEvaluateExpression_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
             if (right.mType == TDB_TYPE_FLOAT) {
                 right.mValue.i = (int)right.mValue.f;
             }
             right.mType = TDB_TYPE_UINT;
             break;
         case TDB_TYPE_EXPR_UINT:
-            fn_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
+            TDbEvaluateExpression_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
             if (right.mType == TDB_TYPE_FLOAT) {
                 right.mValue.u = (unsigned int)right.mValue.f;
             }
             right.mType = TDB_TYPE_UINT;
             break;
         case TDB_TYPE_EXPR_FLOAT:
-            fn_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
+            TDbEvaluateExpression_802047EC(pExpr->mRight.mValue.p, &right, ppTables, pRows);
             if (right.mType == TDB_TYPE_INT) {
                 right.mValue.f = (float)right.mValue.i;
             } else if (right.mType == TDB_TYPE_UINT) {
@@ -682,7 +684,9 @@ int fn_80204D14(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst)
     return err;
 }
 
-int fn_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FAA00 **ppTables, int tableCount,
+/* Copy an expression into the supplied table context, resolve column
+   identifiers, and simplify true branches while preparing comparisons. */
+int TDbBindExpressionTables_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FAA00 **ppTables, int tableCount,
                 int flags)
 {
     int err;
@@ -743,7 +747,7 @@ int fn_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FA
     case TDB_TYPE_EXPR_UINT:
     case TDB_TYPE_EXPR_FLOAT:
         (*ppDst)->mLeft.mType = pSrc->mLeft.mType;
-        err = fn_80204EF8(pSrc->mLeft.mValue.p, (TDbExpr_801FAA00 **)&(*ppDst)->mLeft.mValue.p, ppTables, tableCount,
+        err = TDbBindExpressionTables_80204EF8(pSrc->mLeft.mValue.p, (TDbExpr_801FAA00 **)&(*ppDst)->mLeft.mValue.p, ppTables, tableCount,
                           flags);
         if ((*ppDst)->mLeft.mValue.p == 0) {
             leftTrue = 1;
@@ -809,7 +813,7 @@ int fn_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FA
         case TDB_TYPE_EXPR_UINT:
         case TDB_TYPE_EXPR_FLOAT:
             (*ppDst)->mRight.mType = pSrc->mRight.mType;
-            err = fn_80204EF8(pSrc->mRight.mValue.p, (TDbExpr_801FAA00 **)&(*ppDst)->mRight.mValue.p, ppTables,
+            err = TDbBindExpressionTables_80204EF8(pSrc->mRight.mValue.p, (TDbExpr_801FAA00 **)&(*ppDst)->mRight.mValue.p, ppTables,
                               tableCount, flags);
             if ((*ppDst)->mRight.mValue.p == 0) {
                 rightTrue = 1;

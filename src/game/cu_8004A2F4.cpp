@@ -1348,7 +1348,7 @@ void fn_80235630(void *, int); void fn_80235C24(void *, void *);
 void fn_80235D74(void *, int); void fn_802353D8(void *, int); void fn_802353F8(void *, int);
 void fn_80234EA0(void *, int); void fn_801F010C(void *, int);
 void fn_8004E16C(void *, int, Object_80040818 *);
-void fn_801A8D9C(void *, int, Object_801A8620 *);
+void InitializeModelObjectRender_801A8D9C(void *, int, Object_801A8620 *);
 void fn_801A92D0(void *, Object_801A8620 *);
 unsigned int fn_80236398(int);
 void fn_801A5050(int, Vector_80039F5C *, float, float *);
@@ -1667,7 +1667,7 @@ void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
         p->mTypeEC = 2;
         fn_8004E16C(pData, handle, pObject);
         fn_8004D498(handle); fn_8004D4B0(handle, "render");
-        fn_801A8D9C(pData, handle, p);
+        InitializeModelObjectRender_801A8D9C(pData, handle, p);
         fn_8004D498(handle); fn_8004D4B0(handle, "render");
     }
     if (fn_8004D5F0(handle, "bFadeable")) p->mUnknown140 = 1;
