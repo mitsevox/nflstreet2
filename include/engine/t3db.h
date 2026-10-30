@@ -2,6 +2,7 @@
 #define ENGINE_T3DB_H
 
 #include "engine/fn_801F8D60.h"
+#include "engine/t3db_index.h"
 
 #define TDB_COLUMN_ROW 0xFE
 
@@ -135,7 +136,7 @@ typedef struct TDbIndex_801FAA00 {
     TDbTable_801FAA00 *mTable;
     struct TDbIndex_801FAA00 *mNext;
     TDbExpr_801FAA00 *mFilter;
-    void *mUserData;
+    int mId;
     TDbMemPool_80202B60 mPool;
     unsigned int mCount;
     unsigned char mFlags;
@@ -252,7 +253,7 @@ typedef struct TDbIOTableHdr_801FAAF8 {
 } TDbIOTableHdr_801FAAF8;
 
 typedef struct TDbIOIndexHdr_801FBC2C {
-    void *mUserData;
+    int mId;
     unsigned char mPartCount;
     unsigned char mAllowDuplicates;
     unsigned char mHasFilter;
@@ -297,10 +298,10 @@ int fn_8020353C(TDbMemPool_80202B60 *pPool);
 int fn_802035C8(TDbMemPool_80202B60 *pPool);
 int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem);
 void fn_80203744(TDbMemPool_80202B60 *pPool, void *pItem);
-void fn_802047EC(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_801FAA00 **ppTables,
+void _TDbExprTest(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_801FAA00 **ppTables,
                  unsigned short *pRows);
 int fn_80204D14(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst);
-int fn_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FAA00 **ppTables, int tableCount,
+int _TDbExprPrepare(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FAA00 **ppTables, int tableCount,
                 int flags);
 void fn_802055CC(TDbExpr_801FAA00 *pExpr);
 int fn_8020567C(TDbExpr_801FAA00 *pExpr, unsigned long long column);

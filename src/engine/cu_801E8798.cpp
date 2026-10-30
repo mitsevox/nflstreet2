@@ -1,18 +1,17 @@
 #include "engine/Body_801E9538.h"
+#include "engine/TibNew.h"
 
 extern "C" {
 float fn_80260B1C(float x);
-float fn_801E8DBC(void *p);
+float fn_801E8DBC(void *pEnd, void *pStart);
 }
-
-void *operator new[](unsigned int size, int unknown);
 
 /* State vector of a simulated system (defined in another file). */
 class Class_801E8B10 {
 public:
     virtual int vfn_01(float *pState) = 0;
-    virtual int vfn_02(float *pState) = 0;
-    virtual int vfn_03(int a, float *pRate) = 0;
+    virtual void vfn_02(float *pState) = 0;
+    virtual int vfn_03(void *pStart, float *pRate) = 0;
 };
 
 /* Integrator over a system's state vector. */
@@ -20,7 +19,7 @@ class Class_801E8C3C {
 public:
     Class_801E8C3C(Class_801E8B10 *pSystem) : mpSystem(pSystem) {}
     virtual ~Class_801E8C3C() { mpSystem = 0; }
-    virtual int vfn_02(int a, void *pStep) = 0;
+    virtual int vfn_02(void *pStart, void *pStep) = 0;
     virtual void vfn_03() = 0;
 
     Class_801E8B10 *mpSystem;
@@ -31,7 +30,7 @@ class Class_801E89D8 : public Class_801E8C3C {
 public:
     Class_801E89D8(Class_801E8B10 *pSystem, int count);
     virtual ~Class_801E89D8();
-    virtual int vfn_02(int a, void *pStep);
+    virtual int vfn_02(void *pStart, void *pStep);
     virtual void vfn_03();
 
     int mCount;
@@ -51,7 +50,7 @@ class Class_801E87B8 {
 public:
     virtual void vfn_01(Body_801E9538 *pBody) = 0;
     virtual void vfn_02(Body_801E9538 *pBody) = 0;
-    virtual void vfn_03(Body_801E9538 *pBody, float dt) = 0;
+    virtual void UpdateSleepState(Body_801E9538 *pBody, float dt) = 0;
 };
 
 /* Puts slow bodies to sleep and wakes moving ones. */
@@ -60,7 +59,7 @@ public:
     Class_801E8798(float sleepTime, float maxSpeed, Class_801E88BC *pFilter);
     virtual void vfn_01(Body_801E9538 *pBody);
     virtual void vfn_02(Body_801E9538 *pBody);
-    virtual void vfn_03(Body_801E9538 *pBody, float dt);
+    virtual void UpdateSleepState(Body_801E9538 *pBody, float dt);
     int fn_801E896C(Body_801E9538 *pBody);
 
     float mSleepTime;
@@ -85,7 +84,8 @@ void Class_801E8798::vfn_02(Body_801E9538 *pBody)
     pBody->mUserData = 0;
 }
 
-void Class_801E8798::vfn_03(Body_801E9538 *pBody, float dt)
+/* A body must stay below both motion limits before the sleep timer can advance. */
+void Class_801E8798::UpdateSleepState(Body_801E9538 *pBody, float dt)
 {
     int state = pBody->mState;
     float time = 0.0f;
@@ -106,7 +106,8 @@ void Class_801E8798::vfn_03(Body_801E9538 *pBody, float dt)
             maxSpeed = mMaxSpeed;
             if (speedSq > maxSpeed * maxSpeed) {
                 target = maxSpeed * 0.95f;
-                fn_80227264(&vel, &pBody->mUnknown07C, target / fn_80260B1C(speedSq));
+                float speed = fn_80260B1C(speedSq);
+                fn_80227264(&vel, &pBody->mUnknown07C, target / speed);
                 fn_801E9C1C(pBody, &vel);
             }
         }
@@ -158,9 +159,9 @@ Class_801E89D8::~Class_801E89D8()
     mCount = 0;
 }
 
-int Class_801E89D8::vfn_02(int a, void *pStep)
+int Class_801E89D8::vfn_02(void *pStart, void *pStep)
 {
-    float dt = fn_801E8DBC(pStep);
+    float dt = fn_801E8DBC(pStep, pStart);
     int result = mpSystem->vfn_01(mpState);
     unsigned int count;
     unsigned int i;
@@ -169,7 +170,7 @@ int Class_801E89D8::vfn_02(int a, void *pStep)
     float *pNext;
 
     if (result) {
-        count = mpSystem->vfn_03(a, mpRate);
+        count = mpSystem->vfn_03(pStart, mpRate);
         pState = mpState;
         pRate = mpRate;
         pNext = mpNext;

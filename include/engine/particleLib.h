@@ -36,21 +36,21 @@ typedef struct Shape_801DF428 {
     float mUnknown44;
 } Shape_801DF428;
 
-typedef struct ShapeLine_801DFE0C {
+typedef struct Payload1_801DFE0C {
     Vec3_801DE1E0 mUnknown00;
     Vec3_801DE1E0 mUnknown0C;
-} ShapeLine_801DFE0C;
+} Payload1_801DFE0C;
 
-typedef struct ShapeSphere_801DFE0C {
+typedef struct Payload2_801DFE0C {
     Vec3_801DE1E0 mUnknown00;
     float mUnknown0C;
-} ShapeSphere_801DFE0C;
+} Payload2_801DFE0C;
 
 typedef union Emitter_801DFE0C {
     Vec3_801DE1E0 mPoint;
-    ShapeLine_801DFE0C mLine;
-    ShapeSphere_801DFE0C mSphere;
-    Shape_801DF428 mBox;
+    Payload1_801DFE0C mCase1;
+    Payload2_801DFE0C mCase2;
+    Shape_801DF428 mCase3;
 } Emitter_801DFE0C;
 
 /* Plane collision parameters (normal, point, distance). */
@@ -68,6 +68,7 @@ typedef struct Ground_801E0384 {
    parameter file holds three vectors for a plane (read by fn_801DF578); at
    run time the distance computed by fn_801E03F4 replaces the third. */
 typedef union Collision_801E0384 {
+    unsigned int mWord;
     Ground_801E0384 mGround;
     Plane_801E0384 mPlane;
     Vec3_801DE1E0 mParm[3];
@@ -206,7 +207,7 @@ typedef struct Template_801DE1E0 {
 float fn_801DE1B8(void);
 int fn_801DFD40(void);
 void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void fn_801E03F4(PartObj_801DE1E0 *pObj);
 void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
 Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);

@@ -21,12 +21,6 @@ struct Tuning_8013FF28 {
     int mUnknownC;
 };
 
-struct Mode_8013FD8C {
-    void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
-    void (*mUnknown04)(Camera_8013F738 *pCamera);
-    int mUnknown08;
-};
-
 extern "C" {
 int fn_800A34E0(void);
 Camera_8013F738 *fn_8013FA04(int index);

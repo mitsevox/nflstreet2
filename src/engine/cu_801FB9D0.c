@@ -64,7 +64,7 @@ int fn_801FBC2C(TDbIndex_801FAA00 *pIndex, TDbIOStream_801FA8C8 *pStream)
     int err;
 
     memset(&hdr, 0, sizeof(hdr));
-    hdr.mUserData = pIndex->mUserData;
+    hdr.mId = pIndex->mId;
     count = pIndex->mTree.mPartCount;
     hdr.mAllowDuplicates = pIndex->mTree.mAllowDuplicates;
     hdr.mPartCount = count;

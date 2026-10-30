@@ -13926,6 +13926,339 @@
           "end": "0x803EBFB8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801C01DC.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x801C01DC-0x801C06E8, all nine function/name rows, complete native .rodata row 0x802AEEE0-0x802AEEE8 and source-form/compiler records. Whole source linked; unchanged existing owner-approved profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C01DC",
+          "end": "0x801C06E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE0",
+          "end": "0x802AEEE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C3A44.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C3A44",
+          "end": "0x801C3CE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF0C4",
+          "end": "0x802AF0DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/psysCollision.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional complete unit row 0x801E01FC-0x801E052C, all six function/name rows, native data row 0x802B1138-0x802B1140 and raw-payload field/source-form evidence. Existing engine_c profile unchanged.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E01FC",
+          "end": "0x801E052C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1138",
+          "end": "0x802B1140"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BCF40.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x801BCF40-0x801BDA30, all seventeen name/function rows, source-form and field records, exact .rodata802AEDC8-802AEE38 and .sbss803ED610-803ED614. Complete unit on unchanged engine_c_fastmath library profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCF40",
+          "end": "0x801BDA30"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC8",
+          "end": "0x802AEE38"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED610",
+          "end": "0x803ED614"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmgeometry.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole unit row 0x8020ED10-0x8020F28C, ten function/name rows, source-form/type/field evidence and exact .rodata802B1BD8-802B1BE8/.sdata803EBED0-803EBEDC. Complete source on unchanged engine_c profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020ED10",
+          "end": "0x8020F28C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1BD8",
+          "end": "0x802B1BE8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBED0",
+          "end": "0x803EBEDC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_index.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80201EC8-0x80203444 and target-only function/name/compiler/source-form rows; all seventeen functions and complete native text. No native literal or writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80201EC8",
+          "end": "0x80203444"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8798.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801E8798-0x801E8C78, ten target function extents and name rows, exact literal/vtable data 0x802B1570-0x802B15F8, and compiler/source-form/type/field rows. Complete native text and rodata; original source-file edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8798",
+          "end": "0x801E8C78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1570",
+          "end": "0x802B15F8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C53A8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional four-function unit row0x801C53A8-0x801C5B9C, exact function extents and literal data0x802AF130-0x802AF168, inferred name/type/field and source-form rows. Complete native text2036 and rodata56, no native writable section.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C53A8",
+          "end": "0x801C5B9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF130",
+          "end": "0x802AF168"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/psysEmitter.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional complete emitter-family unit row0x801DFE0C-0x801E01FC, all four function/name rows, exact native literal data0x802B1118-0x802B1138 and accessed payload/type/source-form rows. Inherited source path, original filename unresolved; unchanged engine_c.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DFE0C",
+          "end": "0x801E01FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1118",
+          "end": "0x802B1138"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llquat.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801EB488-0x801EC1B4 (src/engine/llquat.c), its compiler row, the 21 exact function rows 0x801EB488-0x801EC1B4, the exact data rows 0x802B1748-0x802B179C (.rodata) and 0x803ED6E0-0x803ED6E4 (.sdata2), the type row Mtx_801EB8B4 and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EB488",
+          "end": "0x801EC1B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1748",
+          "end": "0x802B179C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6E0",
+          "end": "0x803ED6E4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A8620.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A8620-0x801A980C (src/game/cu_801A8620.cpp), its 14 exact function extents, exact data rows 0x802AE8E0-0x802AE958, 0x802AE8F8-0x802AE904, 0x802F3B20-0x802F3B40, 0x803EB870-0x803EB874 and 0x803673E0-0x80367580, and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A8620",
+          "end": "0x801A980C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE8E0",
+          "end": "0x802AE958"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3B20",
+          "end": "0x802F3B40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB870",
+          "end": "0x803EB874"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803673E0",
+          "end": "0x80367580"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A7C20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/cu_801A7C20.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the fn_801A7F10 source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A7C20",
+          "end": "0x801A8620"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE898",
+          "end": "0x802AE8E0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_expr.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x80203754-0x80205754 (src/engine/t3db_expr.c), its compiler and source-form rows and data rows 0x802B1AF8-0x802B1B90 and 0x802F9948-0x802F9B78; all 78 functions exact, whole file and both data items linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80203754",
+          "end": "0x80205754"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AF8",
+          "end": "0x802B1B90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9948",
+          "end": "0x802F9B78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80141210.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8014116C-0x801422C8 (src/game/cu_80141210.cpp), its 12 exact function extents, data rows 0x802A0268-0x802A02B0, 0x802DCEB0-0x802DCF58, 0x802DCF58-0x802DCF74, 0x802DCF74-0x802DCF80 and 0x803EB1F0-0x803EB1F4, and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014116C",
+          "end": "0x801422C8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0268",
+          "end": "0x802A02B0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCEB0",
+          "end": "0x802DCF80"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1F0",
+          "end": "0x803EB1F4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclusterobj.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler and source-form rows, the exact function rows and the exact data row for .rodata 0x802B1C48-0x802B1C58; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213444",
+          "end": "0x80213A38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C48",
+          "end": "0x802B1C58"
+        }
+      ]
     }
   ]
 }

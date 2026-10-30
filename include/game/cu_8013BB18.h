@@ -15,6 +15,14 @@ struct Type_802DBD24 {
     void (*mUnknown08)(void *p, Camera_8013F738 *pCamera);
 };
 
+/* Camera mode record: slot +0 is called by fn_8013C868 with (camera, desc),
+   slot +4 by fn_8013C90C with the camera. */
+struct Mode_8013FD8C {
+    void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
+    void (*mUnknown04)(Camera_8013F738 *pCamera);
+    int mUnknown08;
+};
+
 /* Entry points of src/game/cu_8013BB18.cpp. */
 extern "C" {
 unsigned char fn_8013BB18(Camera_8013F738 *pCamera);
