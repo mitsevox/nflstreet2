@@ -61,12 +61,12 @@ void fn_80213504(ClusterObj_80210724 *pObj, int numMatrices)
 
 /* Builds the local matrix of one bone from its three angles and position and
    concatenates it with the parent's matrix. */
-static inline void fn_80213444_Matrix(Mtx34_80213444 *pParent, Mtx34_80213444 *pOut, int rx, int ry, int rz,
+static inline void fn_8021353C_Matrix(Mtx34_80213444 *pParent, Mtx34_80213444 *pOut, int rx, int ry, int rz,
                                       float *pPos)
 {
     float sx, cx, sy, cy, sz, cz;
     float sxsy, cxsy;
-    f32 mtx[4][4];
+    Mtx44 mtx;
 
     fn_801CFC58(rx, lbl_803E9288, &sx, &cx);
     fn_801CFC58(ry, lbl_803E9288, &sy, &cy);
@@ -115,7 +115,7 @@ void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_80213
             ry += ((pTarget[1] - ry) * pBone->mWeight) >> 12;
             rx += ((pTarget[0] - rx) * pBone->mWeight) >> 12;
         }
-        fn_80213444_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
+        fn_8021353C_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
     }
     if (pObj->mpCacheMatrices != 0) {
         LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
@@ -164,7 +164,7 @@ void fn_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_80213
                 rx = angles.mUnknown0 >> 8;
                 ry = angles.mUnknown4 >> 8;
                 rz = angles.mUnknown8 >> 8;
-                fn_80213444_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
+                fn_8021353C_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
             }
         }
     }
