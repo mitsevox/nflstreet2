@@ -13926,6 +13926,25 @@
           "end": "0x803EBFB8"
         }
       ]
+    },
+    {
+      "source": "src/engine/tmclusterobj.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler and source-form rows, the exact function rows and the exact data row for .rodata 0x802B1C48-0x802B1C58; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213444",
+          "end": "0x80213A38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C48",
+          "end": "0x802B1C58"
+        }
+      ]
     }
   ]
 }
