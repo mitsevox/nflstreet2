@@ -706,9 +706,8 @@ int fn_80204EF8(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FA
         return 2;
     }
     (*ppDst)->mLeft.mValue.l = 0;
-    rightTrue = 0;
-    leftTrue = 0;
     (*ppDst)->mRight.mValue.l = 0;
+    leftTrue = rightTrue = 0;
 
     switch (pSrc->mLeft.mType) {
     case TDB_TYPE_STRING:
