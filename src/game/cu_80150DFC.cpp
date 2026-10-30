@@ -1,3 +1,4 @@
+#include "engine/cu_801C2EB4.h"
 #include "game/Class_80297AB8.h"
 #include "game/Object_80039F5C.h"
 
@@ -33,7 +34,6 @@ public:
 extern "C" {
 Table_8015005C *fn_801530FC(void);
 Object_80039F5C *fn_8003AC84(int id);
-char *fn_801C2EF0(char *pDest, const char *pSource, unsigned int count);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
