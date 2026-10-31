@@ -36,8 +36,10 @@ void SetBodyLinearVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pVelocity)
 // Clear the accumulated force and torque for the next integration step.
 void ClearBodyForces(Body_801E9538 *pBody)
 {
-    pBody->mUnknown120.x = pBody->mUnknown120.y = pBody->mUnknown120.z = 0.0f;
-    pBody->mUnknown12C.x = pBody->mUnknown12C.y = pBody->mUnknown12C.z = 0.0f;
+    Vec3_801DE1E0 &force = pBody->mUnknown120;
+    Vec3_801DE1E0 &torque = pBody->mUnknown12C;
+    force.x = force.y = force.z = 0.0f;
+    torque.x = torque.y = torque.z = 0.0f;
 }
 
 // A force away from the body origin also contributes torque.
@@ -84,6 +86,7 @@ void GetBodyPointVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801D
 // Evaluate the rotational contribution along a direction at a world-space point.
 float ComputeBodyRotationalResponse(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection)
 {
+    float rotationalResponse;
     if (pBody->mState != 0) {
         Vec3_801DE1E0 offset;
         Vec3_801DE1E0 response;
@@ -94,21 +97,27 @@ float ComputeBodyRotationalResponse(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint,
         fn_80227C2C(&response, &response);
         fn_801D0544();
         fn_802277DC(&response, &response, &offset);
-        return fn_80227704(pDirection, &response);
+        rotationalResponse = fn_80227704(pDirection, &response);
+    } else {
+        rotationalResponse = 0.0f;
     }
-    return 0.0f;
+    return rotationalResponse;
 }
 
 // Entering the sleeping state clears both momenta and their derived velocities.
 void SetBodyMotionState(Body_801E9538 *pBody, int state)
 {
-    if (pBody->mState != state) {
+    if (state != pBody->mState) {
         pBody->mState = state;
         if (state == 3) {
-            pBody->mUnknown108.x = pBody->mUnknown108.y = pBody->mUnknown108.z = 0.0f;
-            pBody->mUnknown114.x = pBody->mUnknown114.y = pBody->mUnknown114.z = 0.0f;
-            pBody->mUnknown070.x = pBody->mUnknown070.y = pBody->mUnknown070.z = 0.0f;
-            pBody->mUnknown07C.x = pBody->mUnknown07C.y = pBody->mUnknown07C.z = 0.0f;
+            Vec3_801DE1E0 &linearVelocity = pBody->mUnknown108;
+            Vec3_801DE1E0 &angularVelocity = pBody->mUnknown114;
+            Vec3_801DE1E0 &linearMomentum = pBody->mUnknown070;
+            Vec3_801DE1E0 &angularMomentum = pBody->mUnknown07C;
+            linearVelocity.x = linearVelocity.y = linearVelocity.z = 0.0f;
+            angularVelocity.x = angularVelocity.y = angularVelocity.z = 0.0f;
+            linearMomentum.x = linearMomentum.y = linearMomentum.z = 0.0f;
+            angularMomentum.x = angularMomentum.y = angularMomentum.z = 0.0f;
         }
     }
 }
