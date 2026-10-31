@@ -53190,6 +53190,82 @@
           "end": "0x802832CC"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801E9BB4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Bounded comparison-only fragment of eleven complete rigid-body motion helpers 0x801E9BB4-0x801E9F70 within the larger body area beginning at 0x801E9538. The preceding pose setter ends with blr at 0x801E9BB0; the next function 0x801E9F70 constructs the separately registered broad-phase class. These are function boundaries, not recovered original file edges. Shared Body_801E9538 is refined only within previously opaque spans, preserving every existing offset. Native five-float pool 0x802B16B8-0x802B16CC is measured in full. Earlier body functions and following literals/vtable remain original-owned and outside this fragment. Original class identity/member signatures remain unresolved; free C-linkage definitions retain the existing call ABI and original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E9BB4",
+          "end": "0x801E9F70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B16B8",
+          "end": "0x802B16CC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GetBodyOrientation",
+          "start": "0x801E9BB4",
+          "end": "0x801E9BDC"
+        },
+        {
+          "symbol": "SetBodyLinearMomentum",
+          "start": "0x801E9BDC",
+          "end": "0x801E9C1C"
+        },
+        {
+          "symbol": "SetBodyAngularMomentum",
+          "start": "0x801E9C1C",
+          "end": "0x801E9C5C"
+        },
+        {
+          "symbol": "SetBodyLinearVelocity",
+          "start": "0x801E9C5C",
+          "end": "0x801E9CC4"
+        },
+        {
+          "symbol": "ClearBodyForces",
+          "start": "0x801E9CC4",
+          "end": "0x801E9CF0"
+        },
+        {
+          "symbol": "AddBodyForceAtPoint",
+          "start": "0x801E9CF0",
+          "end": "0x801E9D64"
+        },
+        {
+          "symbol": "ApplyBodyImpulseAtPoint",
+          "start": "0x801E9D64",
+          "end": "0x801E9DE0"
+        },
+        {
+          "symbol": "ApplyBodyAngularImpulse",
+          "start": "0x801E9DE0",
+          "end": "0x801E9E18"
+        },
+        {
+          "symbol": "GetBodyPointVelocity",
+          "start": "0x801E9E18",
+          "end": "0x801E9E70"
+        },
+        {
+          "symbol": "ComputeBodyRotationalResponse",
+          "start": "0x801E9E70",
+          "end": "0x801E9F0C"
+        },
+        {
+          "symbol": "SetBodyMotionState",
+          "start": "0x801E9F0C",
+          "end": "0x801E9F70"
+        }
+      ]
     }
   ]
 }
