@@ -1,5 +1,6 @@
 #include "engine/cu_801E8478.h"
 #include "engine/TibNew.h"
+#include "engine/Collection_801E7034.h"
 #include "engine/cu_801B9F00.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
@@ -1715,18 +1716,6 @@ struct Metadata_8004ED44 {
     short mUnknown22;
 };
 
-class Shape_801E2CB4 {
-public:
-    virtual ~Shape_801E2CB4();
-    virtual void vfn_02(void *pBounds);
-    virtual float vfn_03(Vector_80039F5C *pPoint, const float matrix[4][4],
-                       Vector_80039F5C *pDelta, Vector_80039F5C *pNormal,
-                       Vector_80039F5C *pOut, float *pDistance, float length);
-    float mUnknown0;
-    float mUnknown4;
-    int mUnknown8;
-};
-struct Collection_801E7034 { unsigned int mCount; };
 struct Body_801E9538 {
     char mUnknown0[68];
     float mUnknown68;
@@ -2498,10 +2487,9 @@ Body_801E9538 *fn_801E2C64(void *, void **);
 void fn_801E7208(Collection_801E7034 *, void *, int, int, int);
 void fn_801E7298(Collection_801E7034 *, int, int, int, int);
 void fn_80178370(void);
-void fn_80050960(void);
+void fn_80050960(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int);
 int fn_800AD9B4(void);
 extern unsigned int lbl_803EA538;
-extern void (*lbl_803EBD78)(void);
 
 void fn_800508A0(void)
 {
