@@ -14,9 +14,9 @@ Collection_801E7034::~Collection_801E7034()
     if (mpShapes) {
         delete[] mpShapes;
     }
-    mCount = 0;
     mpShapes = 0;
     mCapacity = 0;
+    mCount = 0;
 }
 
 // The first shape seeds the bounds; later shapes extend them at both corners.
