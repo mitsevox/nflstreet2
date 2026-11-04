@@ -14,8 +14,10 @@ A file is closed (the project's done rule, Lucas 2026-11-04) when:
 - each of those names has an evidence.tsv row at its address that gives it (a name, external or
   data row, or a function row from a related build or SDK signature; a function row of origin
   target or inferred only sets boundaries and never names): the function's address from the
-  build, a label's from its section's linked placement. A label whose section the build did not place one-to-one cannot be located,
-  and counts as not evidenced.
+  build, a label's from its section's linked placement. A label whose section the build did not
+  place one-to-one cannot be located, and counts as not evidenced. Exception (Lucas 2026-11-04): a
+  data label in the imported Nintendo SDK (src/dolphin/) carries the SDK source's own name and
+  needs no row of its own; its functions still do.
 The two reviews are the last part of the rule; they live on the pull requests, so this count is
 what the tools can see: a file it lists as closed still needs its reviews.
 
@@ -34,6 +36,7 @@ import source_build as sb
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
 STT_FUNC, STT_SECTION, STT_FILE = 2, 3, 4
+SDK = 'src/dolphin/'  # The imported Nintendo SDK, built with CodeWarrior.
 
 
 def descriptive_file(source):
@@ -84,12 +87,15 @@ def survey():
     rows = []
     for index, unit in enumerate(report['units']):
         unnamed, unevidenced, total = [], [], 0
+        sdk = unit['source'].startswith(SDK)
         for name, address, function in unit_labels(index, unit):
             total += 1
             readable = naming.demangle(name) or name
             if naming.placeholder(readable) or naming.placeholder(name):
                 unnamed.append(readable)
                 continue
+            if not function and sdk:
+                continue  # SDK data labels keep the SDK source's names (owner rule, 2026-11-04).
             short = naming.base_name(readable)
             names = given.get(address, set()) if address is not None else set()
             if not names & {name, readable, short, short.split('::')[-1]}:
