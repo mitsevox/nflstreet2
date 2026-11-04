@@ -553,19 +553,22 @@ class InPlaceComparisons(ComparisonFixture):
                 with self.assertRaisesRegex(ValueError, 'complete data bytes at configured address'):
                     function_compare.load(altered, self.binary, self.root)
 
-    def partial_data_fixture(self, linked_rodata=b'linked\0\0', middle=False, tail_source=False):
+    def partial_data_fixture(self, linked_rodata=b'linked\0\0', middle=False, tail_source=False,
+                             draft_rodata=b'draft text\0X'):
         """Draft and linked functions share one compiled .rodata; only the unlinked slices are measured.
 
         By default the leading 12 bytes are unlinked. `middle` adds a guarded draft after the linked
         function and registers both slices around the linked bytes. `tail_source` compiles that extra
-        draft while registering only the leading placement, so the compiled section is longer."""
+        draft while registering only the leading placement, so the compiled section is longer. The
+        unlinked slices differ from the compiled data only in padding the exact drafts do not load
+        (`draft_rodata` can make the loaded string itself differ)."""
         tail = middle or tail_source
         self.source.write_text('#if defined(DECOMP_COMPARE)\n'
                                'const char *fn_80000000(void) { return "draft text"; }\n#endif\n'
                                'const char *fn_80000100(void) { return "linked"; }\n' +
                                ('#if defined(DECOMP_COMPARE)\n'
                                 'const char *fn_80000200(void) { return "tail"; }\n#endif\n' if tail else ''))
-        rodata = b'draft TEXT\0\0' + linked_rodata + (b'taiL\0\0\0\0' if middle else b'')
+        rodata = draft_rodata + linked_rodata + (b'tail\0\0\0X' if middle else b'')
         code = (bytes.fromhex('3c608010386300004e800020') + bytes(0xF4) +
                 bytes.fromhex('3c6080103863000c4e800020'))
         if middle:
@@ -637,6 +640,16 @@ class InPlaceComparisons(ComparisonFixture):
         sections, _ = sb.read_elf((self.root/receipts[0]['pairs'][1]['path']).read_bytes())
         section = next(s for s in sections if s['name'] == '.rodata')
         self.assertEqual((section['addr'], section['size']), (0x80100000, 20))
+
+    def test_exact_function_loading_a_different_string_fails(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        # The draft's code is identical, since only the string's address is in it, but the string
+        # it returns is not the original's.
+        self.partial_data_fixture(draft_rodata=b'draft TEXT\0\0')
+        with self.assertRaisesRegex(ValueError, 'exact function fn_80000000 uses .rodata\\+0x0 '
+                                    '\\(0x80100000-0x8010000B\\)'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
 
     def test_partial_data_receipt_rejects_missing_duplicate_and_linked_byte_credit(self):
         if not self.compiler_available:
