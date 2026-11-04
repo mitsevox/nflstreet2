@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
-"""Compile a C/C++ translation unit through isolated ProDG stages."""
+"""Compile a C/C++ translation unit through isolated ProDG stages.
+
+`--dump-dir DIR` keeps cc1's per-pass RTL dumps for the unit in DIR (GCC 2.95's `-d` flags; `--dump`
+picks them, comma-separated, default `-da` for every pass; `-dr,-dl,-dg` for single passes). The
+dumps contain the game's code, so DIR must lie outside the repository or under its ignored build/
+or scratch/ folders. Dumps change nothing in the compiled object."""
 
 import os
+import re
+import shutil
 import signal
 import struct
 import subprocess
@@ -22,10 +29,30 @@ CPP_LANG = {
     "c++": (["-D__GNUG__=2", "-lang-c++", "-D__cplusplus"],
             ["-D_LANGUAGE_C_PLUS_PLUS", "-D__LANGUAGE_C_PLUS_PLUS"]),
 }
-OPTIONS = {"--wrapper", "--dir", "--depfile", "-c", "-o", "-x"}
+OPTIONS = {"--wrapper", "--dir", "--depfile", "-c", "-o", "-x", "--dump-dir", "--dump"}
 CPP_WITH_ARG = {"-I", "-D", "-U", "-isystem", "-include"}
 COMPILER_WITH_ARG = {"-G"}
 STAGE_TIMEOUT = 30
+DUMP_FLAG = re.compile(r"-d[A-Za-z]+")
+ROOT = Path(__file__).resolve().parents[1]
+PRIVATE = ("build", "scratch")
+
+
+def dump_options(options):
+    """Validate the dump options; return (flags, directory) or (None, None)."""
+    if "--dump" in options and "--dump-dir" not in options:
+        raise ValueError("--dump needs --dump-dir")
+    if "--dump-dir" not in options:
+        return None, None
+    flags = options.get("--dump", "-da").split(",")
+    if not all(DUMP_FLAG.fullmatch(flag) for flag in flags):
+        raise ValueError("--dump takes GCC -d flags such as -da or -dl,-dg")
+    directory = Path(options["--dump-dir"]).resolve()
+    if directory.is_relative_to(ROOT.resolve()) and \
+            directory.relative_to(ROOT.resolve()).parts[:1] not in [(name,) for name in PRIVATE]:
+        raise ValueError("--dump-dir must be outside the repository or under build/ or scratch/; "
+                         "dumps contain the game's code")
+    return flags, directory
 
 
 def parse(args):
@@ -34,7 +61,7 @@ def parse(args):
     while i < len(args):
         flag = args[i]
         if flag in OPTIONS | CPP_WITH_ARG | COMPILER_WITH_ARG:
-            if i + 1 == len(args) or args[i + 1].startswith("-"):
+            if i + 1 == len(args) or (args[i + 1].startswith("-") and flag != "--dump"):
                 raise ValueError(f"{flag} requires a value")
             value = args[i + 1]
             if flag in OPTIONS:
@@ -70,6 +97,7 @@ def parse(args):
             raise ValueError("Specify -x c or -x c++ for this source extension")
     if language not in CPP_LANG:
         raise ValueError("Language must be c or c++")
+    dump_options(options)
     return options, cpp_flags, compiler_flags, language
 
 
@@ -101,6 +129,7 @@ def compile_unit(options, cpp_flags, compiler_flags, language):
     output = Path(options["-o"]).resolve()
     depfile = Path(options["--depfile"]).resolve() if "--depfile" in options else None
     wrapper = [str(Path(options["--wrapper"]).resolve())] if "--wrapper" in options else []
+    dump_flags, dump_directory = dump_options(options)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=output.stem + "-", dir=output.parent) as temporary:
         temporary = Path(temporary)
@@ -116,8 +145,10 @@ def compile_unit(options, cpp_flags, compiler_flags, language):
             cpp += ["-MMD", str(dependencies)]
         stage(cpp + cpp_flags + [str(source), "-o", str(preprocessed)], preprocessed)
         compiler = "cc1plus.exe" if language == "c++" else "cc1.exe"
-        stage(wrapper + [str(directory / compiler)] + compiler_flags
+        stage(wrapper + [str(directory / compiler)] + compiler_flags + (dump_flags or [])
               + ["-quiet", str(preprocessed), "-o", str(assembly)], assembly)
+        if dump_flags:
+            keep(temporary, {preprocessed, assembly, dependencies}, dump_directory, output.stem)
         stage(wrapper + [str(directory / "NgcAs.exe"), str(assembly), "-o", str(compiled)], compiled)
         header = compiled.read_bytes()[:20]
         if len(header) != 20 or header[:7] != b"\x7fELF\x01\x02\x01" or struct.unpack_from(">HH", header, 16) != (1, 20):
@@ -131,6 +162,17 @@ def compile_unit(options, cpp_flags, compiler_flags, language):
                 pending.write(dependencies.read_bytes())
             os.replace(pending.name, depfile)
         os.replace(compiled, output)
+
+
+def keep(temporary, inputs, directory, stem):
+    """Move cc1's dump files (named after the preprocessed input) into the dump directory."""
+    dumps = sorted(p for p in temporary.iterdir() if p.is_file() and p not in inputs)
+    if not dumps:
+        raise RuntimeError("cc1 wrote no dump files")
+    directory.mkdir(parents=True, exist_ok=True)
+    for dump in dumps:
+        shutil.copyfile(dump, directory / (stem + dump.name[len(stem):] if dump.name.startswith(stem) else dump.name))
+    shutil.copyfile(temporary / (stem + ".s"), directory / (stem + ".s"))
 
 
 def main():
