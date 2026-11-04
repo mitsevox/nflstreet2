@@ -33,11 +33,16 @@ The project owner is **[mitsevox](https://github.com/mitsevox)**, the sole merge
 | Directory | Purpose |
 | --- | --- |
 | `src/`, `include/` | Reconstructed source and headers; version differences under `#if VERSION_<ID>` (`include/version.h`) |
+| `src/game/` | NFL Street 2's own game code, mostly C++ (front end, gameplay, AI, replay, audio direction, rendering of players and field), 0x800034A0-0x801AA640 |
+| `src/engine/` | EA Tiburon's shared engine and libraries in C and C++ (memory, resources, T3DB database, TM renderer, particles, sound, input, animation, the viewport manager at 0x8002AE90) and the SN and C runtime support code, mostly 0x801AA640-0x8023873C and 0x8025E148-0x80285A90 |
+| `src/dolphin/` | Nintendo's GameCube SDK (OS, DVD, GX, VI, PAD, CARD, AX and the rest), built with CodeWarrior |
+| `src/Common/` | EA code shared across titles under its original `Source/Common` path: the UIStudio menu engine |
+| `docs/` | [subsystems.md](docs/subsystems.md): the map of the executable by area, with file names, ladder rungs and held areas |
 | `config/GN7E69-rev0/` | The target's units, comparisons, analysis inputs, `build.sha1` and `evidence.tsv` |
 | `orig/GN7E69-rev0/` | Where the original goes locally; ignored by Git |
 | `build/` | Generated; ignored |
 | `build.py`, `tools/`, `tests/` | The build entry, the kit tools and the project's own, with their tests |
-| `docs/`, `references/` | Durable project knowledge and reference material from related builds |
+| `references/` | Reference material from related builds |
 
 ## Credits and licenses
 
