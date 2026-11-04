@@ -7,7 +7,7 @@
 #include "engine/fn_801B3234.h"
 
 extern "C" {
-#include "engine/cu_801C665C.h"
+#include "engine/list.h"
 }
 
 /* Item of the first pool of lbl_8039ADB8 (0x10 bytes), keyed by a generated handle;

@@ -1,7 +1,7 @@
 #include <dolphin/mtx.h>
 #include "engine/cu_80227F14.h"
-#include "engine/cu_801C665C.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/list.h"
+#include "engine/llmatrix.h"
 #include "game/fn_801C68FC.h"
 
 typedef struct Entry_80228474 {

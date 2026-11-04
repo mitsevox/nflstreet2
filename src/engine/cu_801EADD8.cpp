@@ -1,5 +1,5 @@
 #include "engine/cu_801EADD8.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 
 extern "C" {
 void fn_801E736C(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);

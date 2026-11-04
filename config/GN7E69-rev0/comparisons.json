@@ -42850,9 +42850,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BE82C.c",
+      "source": "src/engine/animtran.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BE82C-0x801BF090 (src/engine/cu_801BE82C.c, animtran.c), function rows, data row 0x802AEE68-0x802AEEA8 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BE82C-0x801BF090 (src/engine/animtran.c, animtran.c), function rows, data row 0x802AEE68-0x802AEEA8 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -42972,9 +42972,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C06E8.c",
+      "source": "src/engine/animTexLib.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C06E8-0x801C0E04 (src/engine/cu_801C06E8.c, animTexLib.c), function rows, data row 0x802AEEE8-0x802AEF08 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801C06E8-0x801C0E04 (src/engine/animTexLib.c, animTexLib.c), function rows, data row 0x802AEEE8-0x802AEF08 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -43793,9 +43793,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_802805C4.c",
+      "source": "src/engine/lzm.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802805C4-0x802821E8 (src/engine/cu_802805C4.c), its compiler row, function and name rows, and the exact data rows 0x803EC578-0x803EC584 (.sdata) and 0x803ED414-0x803ED420 (.sbss; no bytes, not measured). Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802805C4-0x802821E8 (src/engine/lzm.c), its compiler row, function and name rows, and the exact data rows 0x803EC578-0x803EC584 (.sdata) and 0x803ED414-0x803ED420 (.sbss; no bytes, not measured). Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -47097,9 +47097,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D86B4.cpp",
+      "source": "src/engine/moviercmp.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/cu_801D86B4.cpp), its function rows and the exact .rodata data row 0x802AFF40-0x802AFF68. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C divide 64-bit tick counts through the libgcc helper __divdi3 (units.json external 0x8025E290). The allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
+      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/moviercmp.cpp), its function rows and the exact .rodata data row 0x802AFF40-0x802AFF68. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C divide 64-bit tick counts through the libgcc helper __divdi3 (units.json external 0x8025E290). The allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
       "sections": [
         {
           "section": ".text",
@@ -47374,9 +47374,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DA52C.cpp",
+      "source": "src/engine/maddec.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DA52C-0x801DB058 (src/engine/cu_801DA52C.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file maddec.cpp (C++ linkage: madinit__Fv, discardbits__Fi, getluma__FPCUciPii, MAD_initdecode__FPCUsii, MAD_decodemacroblock__FPCUcN20PUcN23i ...). The bit-reader words 0x803ECF1C-0x803ECF2C, the tables 0x80399110-0x8039A910 and the code tables 0x802B0060/0x802B0650/0x802B0E50/0x802F7BA0 stay extern (lbl_).",
+      "evidence": "evidence.tsv compiler row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file maddec.cpp (C++ linkage: madinit__Fv, discardbits__Fi, getluma__FPCUciPii, MAD_initdecode__FPCUsii, MAD_decodemacroblock__FPCUcN20PUcN23i ...). The bit-reader words 0x803ECF1C-0x803ECF2C, the tables 0x80399110-0x8039A910 and the code tables 0x802B0060/0x802B0650/0x802B0E50/0x802F7BA0 stay extern (lbl_).",
       "sections": [
         {
           "section": ".text",
@@ -49093,9 +49093,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C5008.c",
+      "source": "src/engine/CurveList.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/cu_801C5008.c, CurveList.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/CurveList.c, CurveList.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49139,9 +49139,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C665C.c",
+      "source": "src/engine/list.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C665C-0x801C6E5C (src/engine/cu_801C665C.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 (.bss) stays external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C665C-0x801C6E5C (src/engine/list.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 (.bss) stays external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49239,9 +49239,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C7684.c",
+      "source": "src/engine/splytree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/cu_801C7684.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49319,9 +49319,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C7F70.c",
+      "source": "src/engine/bintree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7F70-0x801C8F14 (src/engine/cu_801C7F70.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF188-0x802AF198. Draft comparisons only; the list-type table 0x803D4FB8 and the static parent node 0x8037F880 stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C7F70-0x801C8F14 (src/engine/bintree.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF188-0x802AF198. Draft comparisons only; the list-type table 0x803D4FB8 and the static parent node 0x8037F880 stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49716,9 +49716,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C8F14.c",
+      "source": "src/engine/fileio.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C8F14-0x801C9DD8 (src/engine/cu_801C8F14.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF198-0x802AF19C. Draft comparisons only; the open-file table, mutex array, configuration block 0x803D51A8, request/async pools, the device table 0x802F4A50 and the llfileio/OS/DS helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF198-0x802AF19C. Draft comparisons only; the open-file table, mutex array, configuration block 0x803D51A8, request/async pools, the device table 0x802F4A50 and the llfileio/OS/DS helpers stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49877,9 +49877,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CB1BC.c",
+      "source": "src/engine/fs_cli.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/cu_801CB1BC.c), its compiler and type rows and exact function rows. Draft comparisons only; the client record 0x803D55E0, the read buffer 0x803D5600, the heap word 0x803EBC34, the thread 0x8037F8C0, its stack 0x8037FC00 and the semaphores 0x80381C00/0x80381C0C stay external; OS semaphore calls use their accepted SDK names, other callees their addresses; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler and type rows and exact function rows. Draft comparisons only; the client record 0x803D55E0, the read buffer 0x803D5600, the heap word 0x803EBC34, the thread 0x8037F8C0, its stack 0x8037FC00 and the semaphores 0x80381C00/0x80381C0C stay external; OS semaphore calls use their accepted SDK names, other callees their addresses; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -49932,9 +49932,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CB5D4.c",
+      "source": "src/engine/filemc.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CB5D4-0x801CBC1C (src/engine/cu_801CB5D4.c), its compiler and type rows and exact function rows. Draft comparisons only; the file record 0x80381C40, the CARD work area 0x803DD600 and all callees stay external (CARD functions by their accepted SDK names where the accepted SDK source defines them, by address otherwise); original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CB5D4-0x801CBC1C (src/engine/filemc.c), its compiler and type rows and exact function rows. Draft comparisons only; the file record 0x80381C40, the CARD work area 0x803DD600 and all callees stay external (CARD functions by their accepted SDK names where the accepted SDK source defines them, by address otherwise); original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -50002,9 +50002,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CCA64.c",
+      "source": "src/engine/Font.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CCA64-0x801CD79C (src/engine/cu_801CCA64.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF490-0x802AF4B0. Draft comparisons only; the font state 0x80383CF0, its mutex 0x80383CD0, the render state 0x803E7600, the initialized flag 0x803EBC58, the list/heap/file/error helpers and the LLFont routines stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CCA64-0x801CD79C (src/engine/Font.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF490-0x802AF4B0. Draft comparisons only; the font state 0x80383CF0, its mutex 0x80383CD0, the render state 0x803E7600, the initialized flag 0x803EBC58, the list/heap/file/error helpers and the LLFont routines stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -50199,9 +50199,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CE1F8.c",
+      "source": "src/engine/llglib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CE1F8-0x801CEC90 (src/engine/cu_801CE1F8.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4D8-0x802AF4E8. Draft comparisons only; the display configuration 0x803E91F8, the render state 0x803E9224, the SDK render-mode tables 0x802F7A4C/0x802F7A88/0x802FE350-0x802FE4B8, the zero source 0x80383DA0, the .sbss/.sdata words and all SDK callees stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CE1F8-0x801CEC90 (src/engine/llglib.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4D8-0x802AF4E8. Draft comparisons only; the display configuration 0x803E91F8, the render state 0x803E9224, the SDK render-mode tables 0x802F7A4C/0x802F7A88/0x802FE350-0x802FE4B8, the zero source 0x80383DA0, the .sbss/.sdata words and all SDK callees stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -50511,9 +50511,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D03D0.c",
+      "source": "src/engine/llmatrix.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801D03D0-0x801D134C (src/engine/cu_801D03D0.c, llmatrix.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF5F8-0x802AF624. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801D03D0-0x801D134C (src/engine/llmatrix.c, llmatrix.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF5F8-0x802AF624. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",

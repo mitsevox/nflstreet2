@@ -1,6 +1,6 @@
 #include "game/cu_8008E978.h"
 #include "game/Frame_800DF7CC.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 
 extern "C" {
 Frame_80141210 *fn_801C02C4(Actor_801C009C *pActor);

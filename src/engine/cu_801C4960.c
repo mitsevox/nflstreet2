@@ -1,6 +1,6 @@
 #include "engine/cu_801C4960.h"
 #include "engine/cu_801C2EB4.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "game/fn_801EBC18.h"
 
 void fn_801EB660(float *pDst, float *pA, float *pB);

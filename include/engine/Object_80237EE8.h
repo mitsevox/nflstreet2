@@ -1,6 +1,6 @@
 #ifndef ENGINE_OBJECT_80237EE8_H
 #define ENGINE_OBJECT_80237EE8_H
-#include "engine/cu_801C665C.h"
+#include "engine/list.h"
 typedef struct Object_80237EE8 {
     int mUnknown0;
     int mUnknown4;

@@ -1,4 +1,4 @@
-#include "engine/cu_801C3A44.h"
+#include "engine/camfocus.h"
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
 #include "game/EaseVector_8013C9A4.h"

@@ -1,6 +1,6 @@
 #include "engine/particleLib.h"
 #include "game/fn_802270D4.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);

@@ -2,7 +2,7 @@
 #include "game/fn_802270D4.h"
 
 #include "engine/cu_801E8478.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 
 Class_801E8478::Class_801E8478(Body_801E9538 *pBodyA, Body_801E9538 *pBodyB,
                                Vec3_801DE1E0 *pAnchorA, Vec3_801DE1E0 *pAnchorB)

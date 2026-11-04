@@ -1,6 +1,6 @@
-#include "engine/cu_801D86B4.h"
+#include "engine/moviercmp.h"
 #include "engine/llmemory.h"
-#include "engine/cu_801DA52C.h"
+#include "engine/maddec.h"
 
 /* Intrusive doubly linked list node; a list head is a node that points at itself when empty. */
 struct Node_801D9A88 {

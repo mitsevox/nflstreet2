@@ -1,7 +1,7 @@
 #ifndef ENGINE_INFO_801D86B4_H
 #define ENGINE_INFO_801D86B4_H
 
-/* Movie player record of src/engine/cu_801D86B4.cpp, shared with C callers. */
+/* Movie player record of src/engine/moviercmp.cpp, shared with C callers. */
 typedef struct Info_801D86B4 {
     struct Video_801D86B4 *mpVideo;
     struct Audio_801D86B4 *mpAudio;
@@ -14,7 +14,7 @@ struct Frame_801D86B4;
 extern "C" {
 #endif
 
-/* src/engine/cu_801D86B4.cpp */
+/* src/engine/moviercmp.cpp */
 void fn_801D8A2C(Info_801D86B4 *pInfo, void *pStream);
 void fn_801D8B54(Info_801D86B4 *pInfo);
 int fn_801D8BC8(Info_801D86B4 *pInfo, void *pStream, int volume);

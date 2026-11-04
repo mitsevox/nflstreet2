@@ -12263,9 +12263,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B9D00.c",
+      "source": "src/engine/anim.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/anim.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12328,9 +12328,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C0E04.c",
+      "source": "src/engine/llanimtexlib.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C0E04-0x801C10E0 (src/engine/cu_801C0E04.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C0E04-0x801C10E0 (src/engine/llanimtexlib.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12347,9 +12347,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C1F54.c",
+      "source": "src/engine/ctype.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C1F54-0x801C1F94 (src/engine/cu_801C1F54.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C1F54-0x801C1F94 (src/engine/ctype.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12386,9 +12386,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C33E8.c",
+      "source": "src/engine/camera.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C33E8-0x801C3A44 (src/engine/cu_801C33E8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C33E8-0x801C3A44 (src/engine/camera.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12405,9 +12405,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3CE8.c",
+      "source": "src/engine/camfree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/cu_801C3CE8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/camfree.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12456,9 +12456,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C6584.c",
+      "source": "src/engine/ds.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C6584-0x801C665C (src/engine/cu_801C6584.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C6584-0x801C665C (src/engine/ds.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12469,9 +12469,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C6E5C.c",
+      "source": "src/engine/linklist.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C6E5C-0x801C735C (src/engine/cu_801C6E5C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C6E5C-0x801C735C (src/engine/linklist.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12482,9 +12482,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C735C.c",
+      "source": "src/engine/node.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C735C-0x801C7684 (src/engine/cu_801C735C.c) and its function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C735C-0x801C7684 (src/engine/node.c) and its function rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12495,9 +12495,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C9DD8.c",
+      "source": "src/engine/llfileio.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C9DD8-0x801CB1BC (src/engine/cu_801C9DD8.c) and its data rows; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C9DD8-0x801CB1BC (src/engine/llfileio.c) and its data rows; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12572,9 +12572,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CF7CC.c",
+      "source": "src/engine/orient.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CF7CC-0x801CF944 (src/engine/cu_801CF7CC.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CF7CC-0x801CF944 (src/engine/orient.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12629,9 +12629,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D0110.c",
+      "source": "src/engine/matrix.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801D0110-0x801D03D0 (src/engine/cu_801D0110.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801D0110-0x801D03D0 (src/engine/matrix.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13739,7 +13739,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEFF0.c",
+      "source": "src/engine/rand.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801CEFF0-0x801CF7CC, exact function extents, readonly data row 0x802AF4F8-0x802AF540 and five complete table data rows 0x802F7AD0-0x802F7B0C; all nineteen functions and data linked.",
       "sections": [
@@ -13947,7 +13947,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3A44.c",
+      "source": "src/engine/camfocus.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C3A44-0x801C3CE8, all eight function/name rows, source-form and field records, and native .rodata data row 0x802AF0C4-0x802AF0DC. Complete source on unchanged engine_c profile.",
       "sections": [
@@ -14067,7 +14067,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C53A8.c",
+      "source": "src/engine/polynomial.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional four-function unit row0x801C53A8-0x801C5B9C, exact function extents and literal data0x802AF130-0x802AF168, inferred name/type/field and source-form rows. Complete native text2036 and rodata56, no native writable section.",
       "sections": [

@@ -10,7 +10,7 @@
 #include <dolphin/gx/GXTransform.h>
 #include "UIStudio/UIStudio.h"
 #include "engine/Resource.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"

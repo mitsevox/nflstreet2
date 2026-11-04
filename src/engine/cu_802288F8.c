@@ -1,8 +1,8 @@
 #include <dolphin/mtx.h>
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXTransform.h>
-#include "engine/cu_801CE1F8.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llglib.h"
+#include "engine/llmatrix.h"
 
 extern float fn_801CFD28(int angle);
 extern int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);

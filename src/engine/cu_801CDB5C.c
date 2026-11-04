@@ -8,10 +8,10 @@
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/os/OSCache.h>
-#include "engine/cu_801CCA64.h"
+#include "engine/Font.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "engine/cu_80227F14.h"
 
 typedef struct FontTexInfo_801CDB5C {
