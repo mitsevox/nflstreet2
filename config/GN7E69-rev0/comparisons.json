@@ -53288,6 +53288,67 @@
           "end": "0x801E9F70"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801E7034.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only grouping of all eight complete bodies at 0x801E7034-0x801E739C: the collection constructor, deleting destructor, five methods and the line callback forwarder. The preceding helper ends at 0x801E7030; the next constructor at 0x801E739C installs a different table. The collection table is 0x802B1480-0x802B1498 and is measured in full. These anchors support a bounded reconstruction, not proven original file edges or original names. No linked promotion; all original bytes remain linked. Shared box/shape declarations reuse accepted contracts.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E7034",
+          "end": "0x801E739C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1480",
+          "end": "0x802B1498"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__19Collection_801E7034Uii",
+          "start": "0x801E7034",
+          "end": "0x801E70A0"
+        },
+        {
+          "symbol": "_._19Collection_801E7034",
+          "start": "0x801E70A0",
+          "end": "0x801E7120"
+        },
+        {
+          "symbol": "AddShape__19Collection_801E7034P14Shape_801E2CB4",
+          "start": "0x801E7120",
+          "end": "0x801E71D0"
+        },
+        {
+          "symbol": "GetShape__19Collection_801E7034Ui",
+          "start": "0x801E71D0",
+          "end": "0x801E71E0"
+        },
+        {
+          "symbol": "UpdateWorldBounds__19Collection_801E7034PA3_f",
+          "start": "0x801E71E0",
+          "end": "0x801E7208"
+        },
+        {
+          "symbol": "DrawShapes__19Collection_801E7034PA3_Cfiii",
+          "start": "0x801E7208",
+          "end": "0x801E7298"
+        },
+        {
+          "symbol": "DrawBounds__19Collection_801E7034iiii",
+          "start": "0x801E7298",
+          "end": "0x801E736C"
+        },
+        {
+          "symbol": "DispatchCollisionDebugLine",
+          "start": "0x801E736C",
+          "end": "0x801E739C"
+        }
+      ]
     }
   ]
 }
