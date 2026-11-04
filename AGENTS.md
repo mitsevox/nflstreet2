@@ -34,3 +34,33 @@ Before calling a shared change safe for every target, an agent has done four thi
 - **Investigation.** Choose by the open question: disassembly, references and Ghidra for what the target does; ProDG RTL dumps for why plausible source compiles differently; a bounded headless-Dolphin trace for runtime behavior. Record the question, tool version, result and remaining uncertainty in the evidence or the review record; keep databases and dumps private.
 - **References.** `references/` holds strings, symbols and an `ANALYSIS.md` per related EA build (NFL Street, NFL Street 3, FIFA 2005, NASCAR 2005, GoldenEye: Rogue Agent, Medal of Honor: European Assault, other NFL Street 2 builds and a prototype). A related build is corroboration, not proof of this target's layout.
 - **Credits are on.** Every exact function is credited (CONTRIBUTING.md, Credits); the credits from the earlier ledger are carried into the data repository unchanged by mitsevox/decomp-data#1.
+- **Where things are.** [docs/subsystems.md](docs/subsystems.md) maps the executable by address range: what each part does in the game, the file names known so far, how many functions block each unlinked file and who holds it. Start there before claiming work, and update its rows in the PR that changes them.
+
+### Files are the unit of work
+
+- **Claim a file, not functions.** A draft PR claims one whole file: a source path such as `src/game/cu_80060948.cpp`, or a survey chunk such as `cu_801AA2FC` that you will turn into one. Its title names the file and the target id. Before claiming, check open PRs and the Holder column of the subsystem map. One file per PR; a lane working several small files may batch them in one PR with CI and reviews at the end. Ranges of functions across files, near-miss sweeps and function-count lanes are not claims. The claim ends when the PR closes.
+- **Pick by the ladder.** The map counts, per area, the unlinked files by how many functions still block them: rung 0 (none, only a boundary decision and a link), rung 1 (one), rung 2 (two or three), rung 3 (four to ten), rung 4 (more than ten). Work rungs 0 to 3 file by file. Rung 4 chunks (among them `cu_8008E978`, `cu_800EFC68` and the large engine C chunks) get no function sweeps: they are split into files first, and each resulting file enters the ladder at its own rung.
+- **A file is closed only when all of these hold.** The file has a descriptive name and a header comment saying what it does in the game. Every function and every label (data symbol) in it is named under the conventions below, including functions that were already exact, with the name's evidence in `evidence.tsv` and never in code comments. Every function is exact, or a documented holdout registered as a partial in `comparisons.json`. Its edges are recorded as `unit` rows. It is linked. Both reviews passed: a hostile record and an accuracy record, each by its own reviewer and posted as its own PR comment. Linking without naming does not close a file; a `cu_` file name or a `fn_`/`lbl_` symbol means the file is still open. This is the definition the files-closed count uses.
+- **Decide candidates; don't leave them.** A survey `Candidate` chunk or `cu_<address>` file is a placeholder. Whoever opens it decides its boundary after real research (likely boundaries are accepted, owner rule of 2026-10-22), gives it a descriptive name as soon as its main subsystem is known, even while its edges are provisional, and records the decision in `evidence.tsv`. Do not create new `cu_` names for ranges that can carry a subsystem name.
+
+### Naming
+
+Name by what the code does, in the style of the studio that wrote it. NFL Street 2 is built on EA Tiburon's framework, and `references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv` (Tiburon, 2004, same compiler, full debug symbols) shows that style; every example below is in it.
+
+| Thing | Convention | Examples from NASCAR 2005 |
+| --- | --- | --- |
+| C++ class | PascalCase; a `C` suffix only when the sibling build shows that class or family with one | `GSFlowManagerC`, `FlowModuleCareerC`, `MemBudgetC` |
+| Method | `Class::Method`, PascalCase | `MemBudgetC::GSGetDependencyList` |
+| Free function | Subsystem prefix, then verb and noun | `CamFreeFloatInit`, `AnimExtnRelocateMotion`, `MemDumpInit`, `RaceManagerPerTickLoop` |
+| C struct | PascalCase with `_t` | `Car_t`, `Vec2_t`, `CamHdr_t`, `AnimFileFormat_t` |
+| File-scope data | `_Subsystem_` plus a Hungarian type letter and a name | `_VptManager_bAllowRearView`, `_AnimFile_pBufferInfo`, `_Phone_iNumUnreadMsgs` |
+| True global | PascalCase or `g_` as the sibling shows for that subsystem | `g_FsResult` |
+| Engine C file | lowercase library prefix | `llsystem.c`, `tmclip.c`, `t3db_table.c`, `animfile.c` |
+| Game C++ file | named for its class or screen; keep the sibling's spelling when the same file exists there | `MsgCustomSchedule.cpp`, `CareerGarageMgr.cpp`, `replayqueue.cpp` |
+
+- A function gets a descriptive name as soon as its behavior can be stated from the code. `fn_`, `lbl_` and `Block_`/`Object_`/`Record_`/`Class_` plus an address are placeholders that stay only while nobody has read the code.
+- Use `Class::Method` when a `this` pointer and a vtable, constructor or destructor establish the class. Until the class is identified, give it a role name (`ReplayCamera`), not an address.
+- Fields: unknown fields stay `unk_0x1C`; known ones are named by use. No invented layouts.
+- A name from this target's own bytes or a matched sibling body has origin `target` or `related`; a name chosen from behavior has origin `inferred`. Name rows say what the code establishes, not what the original was.
+- Rename everywhere in the same change: source, headers, `evidence.tsv` name rows and `units.json` externals.
+- A reviewer checks that the name describes observed behavior, follows this table and carries the right origin; not whether it is the exact original name.
