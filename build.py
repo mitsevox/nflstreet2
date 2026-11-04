@@ -71,7 +71,8 @@ def build(target):
 
 def check(target):
     """The checks that need the toolchain: the original-object relinks with GNU ld and with SN's
-    ngcld, and the tool tests that skip on a runner without it. The report's conversion into the
+    ngcld, the tool tests that skip on a runner without it, and the unit-boundary drift check
+    (tools/boundaries.py --check). The report's conversion into the
     site's contract is CI's `Check the report` step (the site's check-report action, on every
     event), not this command's."""
     import setup_compiler
@@ -80,6 +81,9 @@ def check(target):
     compiler, wibo = setup_compiler.setup()
     run("tools/baseline.py", "--original", original, "--sn-linker", compiler / "ngcld.exe", "--wrapper", wibo)
     run("-m", "unittest", "discover", "-s", "tests")
+    # The committed unit-boundary proposal must equal a fresh run on this tree, after the build's
+    # analysis; `python3 tools/boundaries.py --write` brings it up to date.
+    run("tools/boundaries.py", "--check", "--target", target)
 
 
 def main():
