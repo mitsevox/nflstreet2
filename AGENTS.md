@@ -34,7 +34,7 @@ Before calling a shared change safe for every target, an agent has done four thi
 - **Investigation.** Choose by the open question: disassembly, references and Ghidra for what the target does; ProDG RTL dumps for why plausible source compiles differently; a bounded headless-Dolphin trace for runtime behavior. Record the question, tool version, result and remaining uncertainty in the evidence or the review record; keep databases and dumps private.
 - **References.** `references/` holds strings, symbols and an `ANALYSIS.md` per related EA build (NFL Street, NFL Street 3, FIFA 2005, NASCAR 2005, GoldenEye: Rogue Agent, Medal of Honor: European Assault, other NFL Street 2 builds and a prototype). A related build is corroboration, not proof of this target's layout.
 - **Credits are on.** Every exact function is credited (CONTRIBUTING.md, Credits); the credits from the earlier ledger are carried into the data repository unchanged by mitsevox/decomp-data#1.
-- **Where things are.** [docs/subsystems.md](docs/subsystems.md) maps the executable by address range: what each part does in the game, the file names known so far, how many functions block each unlinked file and who holds it. Start there before choosing work. Live claims are the open draft PRs, not the map.
+- **Where things are.** [docs/subsystems.md](docs/subsystems.md) maps the executable by address range: what each part does in the game, the file names known so far, how many functions block each unlinked file and whether the area is held. Start there before choosing work. Live claims are the open draft PRs, not the map.
 
 ### Files are the unit of work
 

@@ -54,7 +54,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x801C1D84-0x801D134C | Engine core: C library helpers, keyframe evaluation, module nodes, matrix library | `cu_801C1D84`, `cu_801CBC50`, `cu_801D03D0` | 1/7/5/4/0 | 40 KiB | no |
 | 0x801D134C-0x801DD498 | Memory manager, operator new and delete, memory card | `Memory.c`, `llmemory.c`, `MemExtern.c`, `TibNew.cpp`, `memorycard.c` | 0/2/2/5/1 | 44 KiB | no |
 | 0x801DD498-0x801E11D0 | Particle systems | `particleLib.c`, `psysEmitter.c`, `psysCollision.c`, `colorRamp.c` | 0/1/1/1/0 | 12 KiB | no |
-| 0x801E11D0-0x801EB488 | Controllers and input, collision shapes, rigid-body motion | `periph.c`, `llperiph.c`, `PJoyDrvr.c`, `cu_801E7034`, `cu_801E9BB4` | 0/0/1/0/2 | 36 KiB | `cu_801E7034` and `cu_801E9BB4` (PRs #1218, #1217, integrated by draft #1220) |
+| 0x801E11D0-0x801EB488 | Controllers and input, collision shapes, rigid-body motion | `periph.c`, `llperiph.c`, `PJoyDrvr.c`, `cu_801E7034`, `cu_801E9BB4` | 0/0/1/0/2 | 36 KiB | yes: another contributor (`cu_801E7034` and `cu_801E9BB4`, PRs #1218 and #1217, integrated by draft #1220) |
 | 0x801EB488-0x801F3524 | Quaternions, button remapping, the resource system | `llquat.c`, `remap.c`, `Resource.c`, `reswrite.c`, `ResTracker.c`, `resquickload.c`, `rescache.c`, `resloosefile.c` | 0/0/2/2/0 | 25 KiB | no |
 | 0x801F3524-0x801F8878 | Sound, speech and streaming; sorting; system start-up and timers | `sound.cpp`, `Speech.cpp`, `stream.c`, `sort.c`, `system.c`, `llsystem.c` | 0/1/1/3/0 | 19 KiB | no |
 | 0x801F8878-0x8020DB34 | T3DB, the in-game database that every roster, stats and save query runs on | `t3db.c`, `t3db_io.c`, `T3DB_Compiler.c`, `T3DB_Lexer.c`, `t3db_query.c`, `t3db_table.c`, `tdbiores.c` ... | 0/0/4/3/1 | 68 KiB | no |
@@ -65,7 +65,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
-| 0x80003100-0x800034A0 | Boot: `.init` code (the EABI start-up `__ppc_eabi_init.c` itself sits at 0x8023E818 and is counted in the SDK row) | `cu_80003100` | 1/0/0/1/0 | 1 KiB | no |
+| 0x80003100-0x800034A0 | Boot: `.init` code, including the `.init` part of `__ppc_eabi_init.c` (0x80003468-0x8000348C); that file's `.text` (0x8023E818-0x8023E920) is counted in the SDK row | `cu_80003100` | 1/0/0/1/0 | 1 KiB | no |
 | 0x8023873C-0x8025E148 | GameCube SDK built with CodeWarrior: OS, DVD, VI, VM, PAD, AR, AI, MTX, GX, CARD, EXI, SI | `src/dolphin/<library>/*.c` | 6/8/1/5/1 | 42 KiB | no |
 | 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
 | 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `cu_80276DE4`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
