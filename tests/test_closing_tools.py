@@ -104,6 +104,19 @@ class RenameEvidence(unittest.TestCase):
         out = rename.rename_evidence(self.HEADER, rows, 'UISFindRateFnc', 'ScanRateTable', 'Scans the table.', 'inferred')
         self.assertEqual(out, rows + self.rows('name|0x8021A068|-|ScanRateTable|inferred|-|-|Scans the table.'))
 
+    def test_related_rows_are_never_changed(self):
+        rows = self.rows('function|0x80250000|0x80250040|SIRefreshSamplingRate|related|exact|exact|Nintendo SDK reference name.',
+                         'external|0x80250000|-|SIRefreshSamplingRate|related|-|-|BFBB symbol.')
+        out = rename.rename_evidence(self.HEADER, rows, 'SIRefreshSamplingRate', 'RefreshRate', 'Refreshes.', 'inferred')
+        self.assertEqual(out, rows[:1] + self.rows('name|0x80250000|-|RefreshRate|inferred|-|-|Refreshes.') + rows[1:])
+
+    def test_our_descriptive_name_is_superseded(self):
+        rows = self.rows('name|0x80027B5C|-|FELoop::GetDependencies|inferred|-|-|Returns the empty list.')
+        out = rename.rename_evidence(self.HEADER, rows, 'GetDependencies', 'EmptyLinks', 'Returns 0x803EA2E8.', 'inferred')
+        self.assertEqual(out, self.rows('name|0x80027B5C|-|FELoop::EmptyLinks|inferred|-|-|Returns 0x803EA2E8.'))
+        back = rename.rename_evidence(self.HEADER, out, 'EmptyLinks', 'GetDependencies', 'Back.', 'inferred')
+        self.assertEqual(back, self.rows('name|0x80027B5C|-|FELoop::GetDependencies|inferred|-|-|Back.'))
+
     def test_class_rename_adds_type_row(self):
         rows = self.rows('type|-|-|Class_802A6BB0 (include/game/x.h)|inferred|-|-|Base class of Class_80005578.',
                          'name|0x80182A88|-|Class_802A6BB0::Class_802A6BB0|inferred|-|-|Constructor.')

@@ -17,10 +17,11 @@ A rename changes, as whole identifiers:
 Every rename needs --evidence: what the code does that gives NEW, recorded as a `name` row at OLD's
 address (a `type` row for a type), origin `inferred` (or --origin). A `name` row for a neutral label
 (fn_/lbl_/data_/Class_/Block_ plus an address) said the label is not a recovered name, and is
-replaced; a descriptive name row for OLD (a related build's name, say) is kept as the record of that
-claim, and the new row follows it. Evidence describes what the code does and goes in evidence.tsv,
-never in a code comment. NEW must not already be in use. Files named after OLD (for example
-include/game/Class_803EC99C.h) are listed, not moved.
+replaced, as is any name row of ours (origin inferred or target) for OLD; a row from a related build
+or SDK signature is a record of that source's name and is never changed, subject included. Evidence
+describes what the code does and goes in evidence.tsv, never in a code comment. NEW must not already
+be in use in the source or in a row of ours (a related build's name may be taken back). Files named
+after OLD (for example include/game/Class_803EC99C.h) are listed, not moved.
 
 --check compares the names the last source build compiled (build/source/report.json, with
 comparisons.json for registered functions) with evidence.tsv: every function that has a descriptive
@@ -100,10 +101,11 @@ def names(subject, old):
 def rename_evidence(header, rows, old, new, evidence, origin):
     """The evidence rows after renaming OLD to NEW. Subjects are labels and follow the rename; the
     evidence column is a record (it may quote another build's symbol) and is never rewritten. The
-    name is a claim, so it gets its own row with --evidence: a neutral-label name row for OLD is
-    replaced by it; a descriptive name row for OLD stays as the record of that earlier claim (what a
-    related build holds, for example) and the new row follows it; with no name row, the new row
-    goes after the function, data or external row that places OLD, or a type row for a type."""
+    name is a claim, so it gets its own row with --evidence: a name row of ours for OLD (origin
+    inferred or target, neutral labels included) is replaced by it; with no such row, it goes after
+    the row that places OLD, or a type row for a type. A row from a related build or SDK signature
+    (origin related or signature) is a record of what that source calls the thing: it is never
+    changed, subject included, and the new row follows it."""
     index = {name: i for i, name in enumerate(header)}
     kind, start, subject = index['kind'], index['start'], index['subject']
 
@@ -130,13 +132,13 @@ def rename_evidence(header, rows, old, new, evidence, origin):
             after[id(row)] = claim(key[0], row[start], rename_text(row[subject].split()[0], old, new))
     out = []
     for row in rows:
-        neutral = row[kind] == 'name' and names(row[subject], old) and placeholder(old)
-        if neutral:
+        record = row[index['origin']] in ('related', 'signature')
+        if row[kind] == 'name' and names(row[subject], old) and not record:
             if id(row) in after:
-                out.append(after[id(row)])  # The neutral row said "not a name"; the claim replaces it.
+                out.append(after[id(row)])  # Our own earlier claim; the new one supersedes it.
             continue
         renamed = list(row)
-        if not (row[kind] == 'name' and names(row[subject], old)):
+        if not record:
             renamed[subject] = rename_text(row[subject], old, new)
         out.append(renamed)
         if id(row) in after:
@@ -161,7 +163,7 @@ def rename(old, new, evidence, origin, dry_run):
         if renamed != text:
             changes[path] = (text, renamed)
     header, rows = read_evidence()
-    if users or any(used.search(row[3]) for row in rows if len(row) > 3):
+    if users or any(used.search(row[3]) for row in rows if len(row) > 4 and row[4] not in ('related', 'signature')):
         raise SystemExit(f'rename: {new} is already in use ({", ".join(users) or "evidence.tsv"}); pick another name')
     if evidence is None:
         raise SystemExit('rename: give --evidence saying what the code does that gives the new name')
