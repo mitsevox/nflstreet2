@@ -117,6 +117,20 @@ class RenameEvidence(unittest.TestCase):
         back = rename.rename_evidence(self.HEADER, out, 'EmptyLinks', 'GetDependencies', 'Back.', 'inferred')
         self.assertEqual(back, self.rows('name|0x80027B5C|-|FELoop::GetDependencies|inferred|-|-|Back.'))
 
+    def test_record_name_elsewhere_is_in_use(self):
+        rows = self.rows('function|0x801F346C|0x801F34C0|ResLooseFileOpen|related|exact|exact|Related build.',
+                         'function|0x801F34C0|0x801F3524|fn_801F34C0|target|exact|exact|bl target.',
+                         'function|0x80250000|0x80250040|SIRefreshSamplingRate|related|exact|exact|SDK name.',
+                         'name|0x80250000|-|RefreshRate|inferred|-|-|Refreshes.')
+        self.assertTrue(rename.evidence_uses(self.HEADER, rows, 'fn_801F34C0', 'ResLooseFileOpen'))
+        self.assertFalse(rename.evidence_uses(self.HEADER, rows, 'RefreshRate', 'SIRefreshSamplingRate'))
+        self.assertTrue(rename.evidence_uses(self.HEADER, rows, 'fn_801F34C0', 'RefreshRate'))
+
+    def test_target_name_row_is_a_record(self):
+        rows = self.rows('name|0x8009FF00|-|DefPred::GetName|target|-|-|Returns the game string "DefPred".')
+        out = rename.rename_evidence(self.HEADER, rows, 'GetName', 'Label', 'Returns its label.', 'inferred')
+        self.assertEqual(out, rows + self.rows('name|0x8009FF00|-|DefPred::Label|inferred|-|-|Returns its label.'))
+
     def test_class_rename_adds_type_row(self):
         rows = self.rows('type|-|-|Class_802A6BB0 (include/game/x.h)|inferred|-|-|Base class of Class_80005578.',
                          'name|0x80182A88|-|Class_802A6BB0::Class_802A6BB0|inferred|-|-|Constructor.')

@@ -17,11 +17,11 @@ A rename changes, as whole identifiers:
 Every rename needs --evidence: what the code does that gives NEW, recorded as a `name` row at OLD's
 address (a `type` row for a type), origin `inferred` (or --origin). A `name` row for a neutral label
 (fn_/lbl_/data_/Class_/Block_ plus an address) said the label is not a recovered name, and is
-replaced, as is any name row of ours (origin inferred or target) for OLD; a row from a related build
-or SDK signature is a record of that source's name and is never changed, subject included. Evidence
-describes what the code does and goes in evidence.tsv, never in a code comment. NEW must not already
-be in use in the source or in a row of ours (a related build's name may be taken back). Files named
-after OLD (for example include/game/Class_803EC99C.h) are listed, not moved.
+replaced, as is any inferred name row for OLD; a row from a related build or SDK signature, or a name
+row of origin target, is a record of that source's name and is never changed, subject included.
+Evidence describes what the code does and goes in evidence.tsv, never in a code comment. NEW must
+not already be in use, except as a record's name at OLD's own address (a related build's name may be
+taken back). Files named after OLD (for example include/game/Class_803EC99C.h) are listed, not moved.
 
 --check compares the names the last source build compiled (build/source/report.json, with
 comparisons.json for registered functions) with evidence.tsv: every function that has a descriptive
@@ -98,14 +98,30 @@ def names(subject, old):
     return parts[-1] == old and not (len(parts) > 1 and parts[-2] == old)
 
 
+def is_record(row, index):
+    """A row that records what a source other than our own reading calls the thing: any row from a
+    related build or SDK signature, and a name row the target itself proves (origin target, such as
+    a class name the game's own strings carry). A rename never changes one."""
+    origin = row[index['origin']]
+    return origin in ('related', 'signature') or row[index['kind']] == 'name' and origin == 'target'
+
+
+def evidence_uses(header, rows, old, new):
+    """Whether an evidence subject already uses NEW. A record's name is free to take only at OLD's own
+    address (taking a related build's name back); anywhere else two addresses would share it."""
+    index = {name: i for i, name in enumerate(header)}
+    own = {row[index['start']] for row in rows if names(row[index['subject']], old)} - {'-'}
+    return any(word(new).search(row[index['subject']]) for row in rows
+               if not (is_record(row, index) and row[index['start']] in own))
+
+
 def rename_evidence(header, rows, old, new, evidence, origin):
     """The evidence rows after renaming OLD to NEW. Subjects are labels and follow the rename; the
     evidence column is a record (it may quote another build's symbol) and is never rewritten. The
-    name is a claim, so it gets its own row with --evidence: a name row of ours for OLD (origin
-    inferred or target, neutral labels included) is replaced by it; with no such row, it goes after
-    the row that places OLD, or a type row for a type. A row from a related build or SDK signature
-    (origin related or signature) is a record of what that source calls the thing: it is never
-    changed, subject included, and the new row follows it."""
+    name is a claim, so it gets its own row with --evidence: an inferred name row for OLD (neutral
+    labels included) is replaced by it; with no such row, it goes after the row that places OLD, or
+    a type row for a type. A record (is_record) is never changed, subject included, and the new row
+    follows it."""
     index = {name: i for i, name in enumerate(header)}
     kind, start, subject = index['kind'], index['start'], index['subject']
 
@@ -132,7 +148,7 @@ def rename_evidence(header, rows, old, new, evidence, origin):
             after[id(row)] = claim(key[0], row[start], rename_text(row[subject].split()[0], old, new))
     out = []
     for row in rows:
-        record = row[index['origin']] in ('related', 'signature')
+        record = is_record(row, index)
         if row[kind] == 'name' and names(row[subject], old) and not record:
             if id(row) in after:
                 out.append(after[id(row)])  # Our own earlier claim; the new one supersedes it.
@@ -163,7 +179,7 @@ def rename(old, new, evidence, origin, dry_run):
         if renamed != text:
             changes[path] = (text, renamed)
     header, rows = read_evidence()
-    if users or any(used.search(row[3]) for row in rows if len(row) > 4 and row[4] not in ('related', 'signature')):
+    if users or evidence_uses(header, rows, old, new):
         raise SystemExit(f'rename: {new} is already in use ({", ".join(users) or "evidence.tsv"}); pick another name')
     if evidence is None:
         raise SystemExit('rename: give --evidence saying what the code does that gives the new name')
