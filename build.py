@@ -10,7 +10,8 @@
 the scripts download the versions pinned in tools/*-tools.json. The build fails unless the complete
 executable built from source is byte-identical to the original; it ends with
 `build/<target id>/main.dol: OK` and writes build/<target id>/report.json, the report the site's
-publish action reads. The original is read from orig/<target id>/sys/main.dol."""
+publish action reads, then counts the closed files (tools/files_closed.py, build/<target id>/files.tsv).
+The original is read from orig/<target id>/sys/main.dol."""
 import argparse
 import hashlib
 import json
@@ -67,6 +68,8 @@ def build(target):
         (out / "report.json").unlink(missing_ok=True)
         sys.exit(f"{path}: FAILED (SHA-1 differs from config/{target}/build.sha1)")
     print(f"{path}: OK")
+    # The done rule's count: linked, descriptive file name, every function and label named with evidence.
+    run("tools/files_closed.py")
 
 
 def check(target):

@@ -167,6 +167,135 @@ def resolve_undefined(symbols, references, ambiguous, discarded_only=frozenset()
     return resolved
 
 
+# Bytes a D-form load or store moves, by primary opcode: lwz lwzu lbz lbzu stw stwu stb stbu lhz lhzu
+# lha lhau sth sthu lfs lfsu lfd lfdu stfs stfsu stfd stfdu; lmw and stmw (46, 47) move four bytes
+# for each register from rD to r31 (access_width). Any other instruction that carries a low-half
+# relocation (addi, ori) takes the address.
+ACCESS_WIDTH = {32: 4, 33: 4, 34: 1, 35: 1, 36: 4, 37: 4, 38: 1, 39: 1, 40: 2, 41: 2, 42: 2, 43: 2, 44: 2, 45: 2,
+                46: None, 47: None, 48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
+LOW_HALF = {4, 109}  # R_PPC_ADDR16_LO, R_PPC_EMB_SDA21
+HIGH_HALF = {5, 6}  # R_PPC_ADDR16_HI, R_PPC_ADDR16_HA
+STORES = {36, 37, 38, 39, 44, 45, 47, 52, 53, 54, 55}
+VOLATILE = set(range(0, 13))  # r0 and r3-r12 do not survive a call (r1, r2 are never a pool base).
+BLR = 0x4E800020
+
+
+def access_width(word):
+    opcode = word >> 26
+    return 4 * (32 - ((word >> 21) & 31)) if opcode in (46, 47) else ACCESS_WIDTH[opcode]
+
+
+def base_uses(code, at, register):
+    """The (displacement, width) of each D-form access through `register` after the instruction at
+    `at` set it to an address, until an instruction overwrites it, a call clobbers it (a volatile
+    register) or the function returns. None when the address is used any other way (passed on,
+    indexed), or when a branch, or a call that a callee-saved base survives, ends the straight line
+    while the register still holds the address: later loads through it cannot be followed."""
+    uses = []
+    for position in range(at + 4, len(code) - 3, 4):
+        word = struct.unpack_from('>I', code, position)[0]
+        opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
+        if opcode in ACCESS_WIDTH and base == register:
+            displacement = word & 0xFFFF
+            uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
+            if opcode not in STORES and (target == register or opcode == 46 and target <= register):
+                break
+            continue
+        if word == BLR:
+            break
+        if opcode == 18 and word & 1 and register in VOLATILE:  # bl clobbers a volatile base.
+            break
+        if opcode in (16, 18, 19):  # Any other branch: the address may still be used beyond it.
+            return None
+        if register in ((word >> 16) & 31, (word >> 11) & 31) or target == register:
+            return None
+    return uses
+
+
+def own_data_references(native, sections, symbols, section_index=None, offset=0, size=None):
+    """(section name, offset, span) of every relocation target in the object's own initialized
+    data, from the relocations of one function (section_index, offset, size) or, with no section,
+    from every relocation in the object. Span is the bytes, relative to the target, that the load
+    or store at a low-half relocation moves, or that the loads through an address it forms move;
+    None where the code passes the address on or the use is not known."""
+    found = []
+    for relocation_section in sections:
+        if relocation_section['type'] != 4 or (section_index is not None and relocation_section['info'] != section_index):
+            continue
+        for at in range(relocation_section['offset'], relocation_section['offset'] + relocation_section['size'], 12):
+            position, info, addend = struct.unpack_from('>IIi', native, at)
+            if size is not None and not offset <= position < offset + size:
+                continue
+            index = info >> 8
+            if not 0 < index <= len(symbols):
+                raise ValueError('Invalid native relocation symbol')
+            symbol = symbols[index - 1]
+            if symbol['shndx'] in (sb.SHN_UNDEF, sb.SHN_ABS, sb.SHN_COMMON) or symbol['shndx'] >= len(sections):
+                continue
+            owned = next(s for s in sections if s['index'] == symbol['shndx'])
+            if owned['flags'] & sb.SHF_EXECINSTR or not owned['flags'] & sb.SHF_ALLOC or owned['type'] == sb.SHT_NOBITS:
+                continue
+            if section_index is not None and info & 255 in HIGH_HALF:
+                continue  # Its low-half partner carries the use.
+            span = None
+            if section_index is not None and info & 255 in LOW_HALF:
+                code = next(s for s in sections if s['index'] == section_index)
+                body = native[code['offset'] + offset:code['offset'] + offset + size]
+                word = struct.unpack_from('>I', body, (position & ~3) - offset)[0]
+                if word >> 26 in ACCESS_WIDTH:
+                    span = (0, access_width(word))
+                elif word >> 26 == 14:  # addi rD, rA, address@l
+                    uses = base_uses(body, (position & ~3) - offset, (word >> 21) & 31)
+                    if uses:
+                        span = (min(d for d, _ in uses), max(d + w for d, w in uses))
+            found.append((owned['name'], symbol['value'] + addend, span))
+    return found
+
+
+def literal_extent(sections, symbols, every_reference, name, value, span, original):
+    """The data item a reference to (name, value) uses: the sized symbol that holds it; else, for an
+    anonymous literal-pool entry (string and float constants have no symbol of their own), the
+    bytes the function's loads move; for an address passed on, the bytes up to the next symbol, the
+    next referenced offset or the section's end, cut after the first NUL when the original holds a
+    string there. `original` is the original's bytes of the section's placement."""
+    section = next(s for s in sections if s['name'] == name)
+    owned = [s for s in symbols if s['shndx'] == section['index'] and s['type'] in (STT_NOTYPE, STT_OBJECT)
+             and s['name'] and s['size']]
+    holding = [s for s in owned if s['value'] <= value < s['value'] + s['size']]
+    if holding:
+        return min(s['value'] for s in holding), max(s['value'] + s['size'] for s in holding)
+    if span is not None:
+        return value + span[0], value + span[1]
+    following = [s['value'] for s in owned if s['value'] > value]
+    following += [offset for other, offset, _ in every_reference if other == name and offset > value]
+    end = min(following + [section['size']])
+    text = original[value:end]
+    string = text[:text.index(b'\0')] if b'\0' in text else b''
+    # A string: four or more characters before its NUL, mostly printable ASCII (game text also holds
+    # a few bytes above 0x7F), none of them control characters other than tab and line breaks.
+    if len(string) >= 4 and all(c >= 32 or c in (9, 10, 13) for c in string) \
+            and 4 * sum(32 <= c < 127 for c in string) >= 3 * len(string):
+        end = value + len(string) + 1
+    return value, end
+
+
+def check_literals(source, function, references, resolved, binary):
+    """An exact function must load what the original loads: each item of its own file's data that it
+    references must hold the original's bytes at that address. The resolved bytes cannot show a
+    wrong or swapped constant, because the address of an anonymous literal is the same whatever it
+    holds. Every measured data placement the function loads from is linked for this check, including
+    one linked source already holds, because the comparison compile with its drafts is not the one
+    the complete build verifies."""
+    for name, (start, end) in sorted(set(references)):
+        if name not in resolved:
+            raise ValueError(f'{source}: exact function {function} uses {name}, which the constant check did not link')
+        a, data = resolved[name]
+        if sb.dol_bytes(binary, a + start, a + end) != data[start:end]:
+            raise ValueError(f"{source}: exact function {function} uses {name}+0x{start:X} "
+                             f"(0x{a + start:08X}-0x{a + end:08X}), which holds {data[start:end].hex()} "
+                             f"where the original holds {sb.dol_bytes(binary, a + start, a + end).hex()}")
+
+
 def measured_data(placement):
     """Initialized data placements are measured, including read-only data placed after code."""
     return placement['kind'] == 'data' or bool(placement['follows'])
@@ -395,18 +524,9 @@ class MeasurementCache:
         return {'mode': self.mode, 'hits': self.hits, 'misses': self.misses, 'audited': self.audited}
 
 
-def generate(original, source_report, tool, cache=None, compile_cache=None):
-    import matching
-    root = sb.ROOT
-    binary = original.read_bytes()
-    manifest, units = configured(root, binary)
-    if not units:
-        return []
-    target = json.loads((root / 'config/GN7E69-rev0/baseline.json').read_text())
-    target_sections = sb.target_sections(binary, target, json.loads((root/'config/GN7E69-rev0/analysis.json').read_text())['output_sections'])
-    accepted = json.loads(source_report.read_text())['units']
-    accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
-    accepted_linked = linked_ranges(accepted, sb.address)
+def reference_addresses(root, manifest, accepted):
+    """The addresses a comparison object's undefined names resolve to, from the configured
+    externals and the accepted (linked) source build's verified objects, and the ambiguous names."""
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
     accepted_objects = []
     for u in accepted:
@@ -422,7 +542,68 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
-    addresses = comparison_references(externals, data_symbols)
+    return comparison_references(externals, data_symbols), ambiguous
+
+
+def link_function(native, section, symbol, a, functions, targets, placements, addresses, pair, target_sections,
+                  storage, target, compiler, wrapper):
+    """Link one compiled function alone at its target address a, with every reference resolved;
+    return the linked ELF's path, the fragment's symbol name and the function's resolved bytes."""
+    fragment = pair / 'fragment.o'
+    fragment_symbol, references, reference_script = diagnostic_object.fragment(native, section, symbol['value'],
+        symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections, storage)
+    script = pair / 'link.ld'
+    script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n" +
+                      f"{section['name']} 0x{a:08X} : {{ *({section['name']}) }}\n" + '\n'.join(reference_script) + '\n}\n')
+    output = pair / 'resolved.elf'
+    sb.run('comparison link', [str(wrapper), str(compiler / 'ngcld.exe'), '-T', str(script),
+        '-o', str(output), str(fragment), *map(str, references)], pair / 'link.log')
+    linked_sections, linked_symbols = sb.read_elf(output.read_bytes())
+    linked = [s for s in linked_symbols if s['name'] == fragment_symbol and s['type'] == 2]
+    if len(linked) != 1 or linked[0]['value'] != a or linked[0]['size'] != symbol['size']:
+        raise ValueError('Diagnostic link changed comparison function identity')
+    linked_section = next(s for s in linked_sections if s['index'] == linked[0]['shndx'])
+    offset = a - linked_section['addr']
+    return output, fragment_symbol, linked_section['data'][offset:offset + symbol['size']]
+
+
+def link_data(native, section, a, functions, targets, placements, addresses, pair, target_sections, storage,
+              target, compiler, wrapper):
+    """Link one compiled data section alone at its target address a, with every reference resolved;
+    return the linked ELF's path, the fragment's symbol name and the linked section."""
+    name = section['name']
+    data_fragment = pair / ('data' + name + '.o')
+    data_symbol, references, reference_script = diagnostic_object.fragment(native, section, 0, section['size'],
+        a, functions, targets, placements, addresses, data_fragment, target_sections, storage)
+    data_script = pair / ('data' + name + '.ld')
+    data_script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n{name} 0x{a:08X} : {{ *({name}) }}\n" + '\n'.join(reference_script) + '\n}\n')
+    data_output = pair / ('data' + name + '.elf')
+    sb.run('comparison data link', [str(wrapper), str(compiler/'ngcld.exe'), '-T', str(data_script),
+        '-o', str(data_output), str(data_fragment), *map(str, references)], pair/'data-link.log')
+    data_sections, data_symbols = sb.read_elf(data_output.read_bytes())
+    linked_section = next(s for s in data_sections if s['name'] == name)
+    linked_data = [s for s in data_symbols if s['name'] == data_symbol and s['type'] == sb.STT_OBJECT]
+    if len(linked_data) != 1 or linked_data[0]['value'] != a or linked_data[0]['size'] != section['size'] \
+            or linked_data[0]['shndx'] != linked_section['index']:
+        raise ValueError('Diagnostic link changed comparison data identity')
+    if linked_section['addr'] != a or linked_section['size'] != section['size']:
+        raise ValueError('Diagnostic link changed data placement or size')
+    return data_output, data_symbol, linked_section
+
+
+def generate(original, source_report, tool, cache=None, compile_cache=None):
+    import matching
+    root = sb.ROOT
+    binary = original.read_bytes()
+    manifest, units = configured(root, binary)
+    if not units:
+        return []
+    target = json.loads((root / 'config/GN7E69-rev0/baseline.json').read_text())
+    target_sections = sb.target_sections(binary, target, json.loads((root/'config/GN7E69-rev0/analysis.json').read_text())['output_sections'])
+    accepted = json.loads(source_report.read_text())['units']
+    accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
+    accepted_linked = linked_ranges(accepted, sb.address)
+    addresses, ambiguous = reference_addresses(root, manifest, accepted)
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdk() if any(u['compiler'] == 'mwcc' for u in units) else None
     work = root / 'build/matching/candidates'
@@ -490,6 +671,9 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
             if restored is not None:
                 return receipt(restored['entries'], restored['pairs'])
         entries, pairs = [], []
+        native_bytes = unit['object'].read_bytes()
+        every_reference = own_data_references(native_bytes, sections, symbols)
+        loaded, resolved = [], {}
         for number, row in enumerate(unit['functions']):
             a, b = sb.address(row['start']), sb.address(row['end'])
             symbol = functions.get(row['symbol'])
@@ -504,22 +688,8 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
                     raise ValueError('Comparison partially overlaps linked source')
             pair = folder / str(number)
             pair.mkdir()
-            fragment = pair / 'fragment.o'
-            fragment_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, symbol['value'],
-                symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections, storage)
-            script = pair / 'link.ld'
-            script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n" +
-                              f"{section['name']} 0x{a:08X} : {{ *({section['name']}) }}\n" + '\n'.join(reference_script) + '\n}\n')
-            output = pair / 'resolved.elf'
-            sb.run('comparison link', [str(wrapper), str(compiler / 'ngcld.exe'), '-T', str(script),
-                '-o', str(output), str(fragment), *map(str, references)], pair / 'link.log')
-            linked_sections, linked_symbols = sb.read_elf(output.read_bytes())
-            linked = [s for s in linked_symbols if s['name'] == fragment_symbol and s['type'] == 2]
-            if len(linked) != 1 or linked[0]['value'] != a or linked[0]['size'] != symbol['size']:
-                raise ValueError('Diagnostic link changed comparison function identity')
-            linked_section = next(s for s in linked_sections if s['index'] == linked[0]['shndx'])
-            offset = a - linked_section['addr']
-            actual = linked_section['data'][offset:offset + symbol['size']]
+            output, fragment_symbol, actual = link_function(unit['object'].read_bytes(), section, symbol, a, functions,
+                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper)
             expected = sb.dol_bytes(binary, a, b)
             if expected is None or len(actual) != symbol['size']:
                 raise ValueError('Comparison requires complete function bytes')
@@ -527,6 +697,9 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
                 [{'name': 'function', 'value': 0, 'size': b-a, 'type': 2, 'shndx': 1}], 'code', pair)
             if overlaps:
                 continue
+            if expected == actual:
+                loaded.append((row['symbol'], [(name, value, span) for name, value, span in own_data_references(
+                    native_bytes, sections, symbols, section['index'], symbol['value'], symbol['size'])]))
             entries.append(dict(row, **score, type='function', kind='code', source=unit['source'], linked=False))
             pairs.append({'path': output.relative_to(root).as_posix(), 'sha256': sb.sha256(output),
                           'symbol': row['symbol'], 'output_symbol': fragment_symbol, 'start': row['start'], 'end': row['end']})
@@ -539,26 +712,21 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
             if slices != unit['data_slices'][name]:
                 raise ValueError('Linked source differs from configured accepted placements')
             if not slices:
+                # Linked source holds all of this placement, so nothing here is scored; but an exact
+                # draft compiled with DECOMP_COMPARE may load from this compile of it, which the
+                # complete build never sees. Link it for the constant check alone.
+                if any(other == name for _, references in loaded for other, _, _ in references):
+                    check_folder = folder / f'check-{name.lstrip(".")}'
+                    check_folder.mkdir()
+                    resolved[name] = (a, link_data(unit['object'].read_bytes(), section, a, functions, targets,
+                        placements, addresses, check_folder, target_sections, storage, target, compiler, wrapper)[2]['data'])
                 continue
             sliced = slices != [(a, b)]
             if sliced and section['size'] != b - a:
                 raise ValueError('Comparison data with linked bytes must compile to its full target placement')
-            data_fragment = pair / ('data' + name + '.o')
-            data_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, 0, section['size'],
-                a, functions, targets, placements, addresses, data_fragment, target_sections, storage)
-            data_script = pair / ('data' + name + '.ld')
-            data_script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n{name} 0x{a:08X} : {{ *({name}) }}\n" + '\n'.join(reference_script) + '\n}\n')
-            data_output = pair / ('data' + name + '.elf')
-            sb.run('comparison data link', [str(wrapper), str(compiler/'ngcld.exe'), '-T', str(data_script),
-                '-o', str(data_output), str(data_fragment), *map(str, references)], pair/'data-link.log')
-            data_sections, data_symbols = sb.read_elf(data_output.read_bytes())
-            linked_section = next(s for s in data_sections if s['name'] == name)
-            linked_data = [s for s in data_symbols if s['name'] == data_symbol and s['type'] == sb.STT_OBJECT]
-            if len(linked_data) != 1 or linked_data[0]['value'] != a or linked_data[0]['size'] != section['size'] \
-                    or linked_data[0]['shndx'] != linked_section['index']:
-                raise ValueError('Diagnostic link changed comparison data identity')
-            if linked_section['addr'] != a or linked_section['size'] != section['size']:
-                raise ValueError('Diagnostic link changed data placement or size')
+            data_output, data_symbol, linked_section = link_data(unit['object'].read_bytes(), section, a, functions,
+                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper)
+            resolved[name] = (a, linked_section['data'])
             if sliced:
                 check_native_placement(binary, linked_section['data'], a, b, slices)
             for start, end in slices:
@@ -570,6 +738,11 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
                 row = {'symbol': name, 'start': f'0x{start:08X}', 'end': f'0x{end:08X}'}
                 entries.append(dict(row, **score, type='bytes', kind=entry_kind(placement), source=unit['source'], linked=False))
                 pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
+        for function, references in loaded:
+            check_literals(unit['source'], function, [(name, (value, value) if name not in resolved else literal_extent(
+                sections, symbols, every_reference, name, value, span,
+                sb.dol_bytes(binary, resolved[name][0], resolved[name][0] + len(resolved[name][1])) or b''))
+                for name, value, span in references], resolved, binary)
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
         result = receipt(entries, pairs)
