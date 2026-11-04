@@ -144,6 +144,39 @@ class BoundaryTests(unittest.TestCase):
         boundaries.shrink(FakeReferences(calls={4: {1}, 5: {1}}), left, right)
         self.assertEqual((left['last'], right['first']), (3, 6))
 
+    def test_shrink_never_gives_away_a_paired_function(self):
+        left = {'first': 0, 'last': 3, 'claim': ''}
+        right = {'first': 6, 'last': 9, 'claim': ''}
+        boundaries.shrink(FakeReferences(calls={4: {1}, 5: {8}}), left, right, {4: (0, 'gap')})
+        self.assertEqual((left['last'], right['first']), (3, 5))
+
+    def test_pinned_claim_does_not_bridge_unproposed_sibling_units(self):
+        sibling = FakeSibling([A, [500, 504, 508, 512], B], ['a.c', 'mid.c', 'b.c'])
+        target = FakeTarget(A + [8, 12] + B)
+        target.claims = [self.claim(target.start[0], target.end[9])]
+        kept = boundaries.anchors(target, sibling)
+        paired = boundaries.align(target, sibling, kept)
+        units, edges = boundaries.settle(target, sibling, paired, FakeReferences(calls={10: {0}, 11: {0}}), [])
+        self.assertEqual(edges[0]['kind'], 'open')
+        self.assertEqual(units[0]['last'], 9)
+
+    def test_unmarked_unit_needs_marked_neighbours(self):
+        with tempfile.TemporaryDirectory() as folder:
+            symbols = Path(folder) / 'symbols.tsv'
+            symbols.write_text('Address\tSize\tType\tName\n'
+                               '0x00000000\t0\t4\ta.c\n'
+                               '0x80001000\t16\t2\tf\n0x80002000\t16\t2\tg\n0x80003000\t16\t2\th\n'
+                               '0x80004000\t16\t2\ti\n0x80005000\t16\t2\t__start\n')
+            units = Path(folder) / 'compile_units.tsv'
+            units.write_text('start\tend\tsize\tfile\tstart_from\tfunctions\n'
+                             '0x80001000\t0x80002000\t1\ta.c\tgcc2_compiled\t1\n'
+                             '0x80002000\t0x80003000\t1\tb.c\tfirst-function\t1\n'
+                             '0x80003000\t0x80004000\t1\tc.c\tgcc2_compiled\t1\n'
+                             '0x80004000\t0x80006000\t1\td.c\tfirst-function\t1\n')
+            sibling = boundaries.Sibling(symbols, units)
+        self.assertNotIn(1, sibling.unmarked)
+        self.assertIn(3, sibling.unmarked)
+
     def test_neighbours_need_no_occupied_unit_between(self):
         sibling = FakeSibling([[4], [8], [12]], ['a', 'b', 'c'])
         self.assertTrue(boundaries.neighbours(sibling, {'unit': 0}, {'unit': 1}))
@@ -193,7 +226,7 @@ class BoundaryTests(unittest.TestCase):
                 {'Address': '0x00000000', 'Size': '0', 'Type': '4', 'Name': 'two.c'},
                 {'Address': '0x80002000', 'Size': '0', 'Type': '0', 'Name': 'gcc2_compiled.'},
                 {'Address': '0x80003000', 'Size': '16', 'Type': '2', 'Name': '__start'}]
-        self.assertEqual(dict(boundaries.codeless_files(rows, {'one.c', 'two.c'})), {'one.c': ['header.c']})
+        self.assertEqual(dict(boundaries.codeless_files(rows, {'one.c', 'two.c'})), {('one.c', 0): ['header.c']})
 
     def test_edge_into_a_first_function_unit_is_an_upper_bound(self):
         self.sibling.start_from = ['gcc2_compiled', 'first-function']

@@ -1,4 +1,4 @@
-# tools/boundaries.py sha256 e80e49766b1fd608728347f66cddf7c9b6e6e760c14068b994454469c197fe36
+# tools/boundaries.py sha256 5e4060d1904016f2c8ca95910cc054807dede5c095194e3ee58a6cd1cb076eaa
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv sha256 8239595118db009270d0ebd726a7f00513fe8b3b8ad2c32279c03160ee14a04f
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 8bf64f87b8ff52cc1e25f940cd99e2bbbced362c4c7a888d7d21a8a9c6617030
 # Proposed units; a proposal, not an established extent (evidence: one unit-anchor row per run).
@@ -97,20 +97,18 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x802260F8	0x80226498	UIGFmv.c	12	11	15	0	6	-	-
 0x80226498	0x80226F34	LLUIGFmv.c	14	14	16	0	14	-	-
 0x80227F14	0x802287D4	viewport.c	27	21	23	0	14	-	-
-0x802389AC	0x802393A4	OS.c	15	15	15	15	0	-	-
-0x8025E210	0x8025E250	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025E250	0x8025E290	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025E290	0x8025E80C	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025E850	0x8025EA08	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025EA08	0x8025EA64	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025EA64	0x8025EB14	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025EB14	0x8025EB54	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025F088	0x8025F0A8	libgcc2.c	1	1	1	1	0	-	eabi.asm
-0x8025FABC	0x8025FAF8	libgcc2.c	1	1	1	1	0	-	eabi.asm
+0x8025E210	0x8025E250	libgcc2.c	1	1	1	1	0	-	-
+0x8025E250	0x8025E290	libgcc2.c	1	1	1	1	0	-	-
+0x8025E290	0x8025E80C	libgcc2.c	1	1	1	1	0	-	-
+0x8025E850	0x8025EA08	libgcc2.c	1	1	1	1	0	-	-
+0x8025EA08	0x8025EA64	libgcc2.c	1	1	1	1	0	-	-
+0x8025EA64	0x8025EB14	libgcc2.c	1	1	1	1	0	-	-
+0x8025EB14	0x8025EB54	libgcc2.c	1	1	1	1	0	-	-
+0x8025F088	0x8025F0A8	libgcc2.c	1	1	1	1	0	-	-
+0x8025FABC	0x8025FAF8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FAF8	0x8025FBD4	libgcc2.c	4	4	4	0	4	-	eabi.asm
 0x802622DC	0x80262310	vprintf.c	1	1	1	1	0	-	-
-0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	6	-	locale.c
-0x80266AF8	0x80266D00	spchrslv.c	4	4	4	0	4	-	-
+0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	6	-	-
 0x80271D34	0x8027257C	sdspmix.c	7	7	8	0	6	-	-
 0x8027257C	0x802753F0	snddrv.c	40	38	49	0	30	-	-
 0x80278700	0x8027882C	slinklst.c	5	5	5	0	5	-	-

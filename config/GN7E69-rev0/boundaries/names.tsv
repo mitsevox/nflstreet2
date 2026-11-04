@@ -1,4 +1,4 @@
-# tools/boundaries.py sha256 e80e49766b1fd608728347f66cddf7c9b6e6e760c14068b994454469c197fe36
+# tools/boundaries.py sha256 5e4060d1904016f2c8ca95910cc054807dede5c095194e3ee58a6cd1cb076eaa
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv sha256 8239595118db009270d0ebd726a7f00513fe8b3b8ad2c32279c03160ee14a04f
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 8bf64f87b8ff52cc1e25f940cd99e2bbbced362c4c7a888d7d21a8a9c6617030
 # Target functions paired with a sibling function. how: name, size (a size-run anchor) or gap
@@ -1872,21 +1872,21 @@ address	size	sibling_name	how	sibling_file	unit
 0x80238854	8	PPCSetFpNonIEEEMode	name	llviewpt.c	-
 0x8023885C	296	__OSFPRInit	name	llviewpt.c	-
 0x80238984	40	OSGetConsoleType	name	llviewpt.c	-
-0x802389AC	296	ClearArena	name	OS.c	OS.c
-0x80238AD4	60	InquiryCallback	name	OS.c	OS.c
-0x80238B10	984	OSInit	name	OS.c	OS.c
-0x80238EE8	640	OSExceptionInit	name	OS.c	OS.c
-0x80239168	36	__OSDBIntegrator	name	OS.c	OS.c
-0x8023918C	4	__OSDBJump	name	OS.c	OS.c
-0x80239190	28	__OSSetExceptionHandler	name	OS.c	OS.c
-0x802391AC	20	__OSGetExceptionHandler	name	OS.c	OS.c
-0x802391C0	156	OSExceptionVector	name	OS.c	OS.c
-0x8023925C	88	OSDefaultExceptionHandler	name	OS.c	OS.c
-0x802392B4	84	__OSPSInit	name	OS.c	OS.c
-0x80239308	20	__OSGetDIConfig	name	OS.c	OS.c
-0x8023931C	44	OSRegisterVersion	name	OS.c	OS.c
-0x80239348	76	OSInitAlarm	name	OS.c	OS.c
-0x80239394	16	OSCreateAlarm	name	OS.c	OS.c
+0x802389AC	296	ClearArena	name	OS.c	-
+0x80238AD4	60	InquiryCallback	name	OS.c	-
+0x80238B10	984	OSInit	name	OS.c	-
+0x80238EE8	640	OSExceptionInit	name	OS.c	-
+0x80239168	36	__OSDBIntegrator	name	OS.c	-
+0x8023918C	4	__OSDBJump	name	OS.c	-
+0x80239190	28	__OSSetExceptionHandler	name	OS.c	-
+0x802391AC	20	__OSGetExceptionHandler	name	OS.c	-
+0x802391C0	156	OSExceptionVector	name	OS.c	-
+0x8023925C	88	OSDefaultExceptionHandler	name	OS.c	-
+0x802392B4	84	__OSPSInit	name	OS.c	-
+0x80239308	20	__OSGetDIConfig	name	OS.c	-
+0x8023931C	44	OSRegisterVersion	name	OS.c	-
+0x80239348	76	OSInitAlarm	name	OS.c	-
+0x80239394	16	OSCreateAlarm	name	OS.c	-
 0x802393A4	592	InsertAlarm	name	OSAlarm.c	-
 0x802395F4	104	OSSetAlarm	name	OSAlarm.c	-
 0x8023965C	284	OSCancelAlarm	name	OSAlarm.c	-
@@ -2578,10 +2578,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x8026696C	192	memchr	gap	memchr.c	-
 0x80266A88	80	_write	size	dummy.c	-
 0x80266AD8	32	write	size	dummy.c	-
-0x80266AF8	28	iSPCH_GetGlobalMatchParmAddr	size	spchrslv.c	spchrslv.c
-0x80266B14	164	SPCH_ClearMatchParmSettings	size	spchrslv.c	spchrslv.c
-0x80266BB8	256	iSPCH_BindData__FPcUi	size	spchrslv.c	spchrslv.c
-0x80266CB8	72	SPCH_AddEventDB	size	spchrslv.c	spchrslv.c
+0x80266AF8	28	iSPCH_GetGlobalMatchParmAddr	size	spchrslv.c	-
+0x80266B14	164	SPCH_ClearMatchParmSettings	size	spchrslv.c	-
+0x80266BB8	256	iSPCH_BindData__FPcUi	size	spchrslv.c	-
+0x80266CB8	72	SPCH_AddEventDB	size	spchrslv.c	-
 0x8026739C	104	UpdateSetGlobalVariable__FPQ27AemsDef22SetGlobalVariableState	size	saems.c	-
 0x80267404	124	SNDAEMSI_updatecounter__FPQ27AemsDef12COUNTERSTATE	size	saems.c	-
 0x80267480	92	SNDAEMSI_updaterandom__FPQ27AemsDef11RANDOMSTATE	size	saems.c	-

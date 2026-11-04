@@ -18,8 +18,8 @@ cannot be run.
    at its lowest local function (`first-function`), in which case its global functions may start
    earlier, so the edge into it is `at-or-before`. A unit over UNMARKED_FUNCTIONS functions or
    UNMARKED_SIZE bytes is a pile of files whose edges the table does not show, and so is a
-   `first-function` unit after another one (the CodeWarrior SDK run, whose functions the export
-   lists almost all as globals); neither proposes anything. A file with neither a marker nor a local function (the export lists globals apart
+   `first-function` unit unless both its neighbours have markers (the CodeWarrior SDK run, whose
+   functions the export lists almost all as globals); neither proposes anything. A file with neither a marker nor a local function (the export lists globals apart
    from their files) is not in the table: it is reported in the other_files of the unit listed
    before it, and that unit may hold more than one file.
 2. Anchors. A name anchor is a target function whose label equals the name of exactly one sibling
@@ -111,18 +111,19 @@ def read_compile_units(path):
 
 
 def codeless_files(rows, placed):
-    """{placed file: [files listed after it]} for file rows the unit table could not place: no
+    """{(placed file, occurrence): [files listed after it]} for file rows the unit table could not place: no
     marker and no local function. The export lists each file's local symbols file by file, then
     every global from `__start` on, so such a file's code (globals only) may lie in the unit
     listed before it, or nowhere."""
     last = max(i for i, row in enumerate(rows) if row['Type'] == '4')
     globals_from = next(i for i, row in enumerate(rows) if i > last and row['Name'] == '__start')
-    others, current = defaultdict(list), None
+    others, current, seen = defaultdict(list), None, Counter()
     for row in rows[:globals_from]:
         if row['Type'] != '4':
             continue
         if row['Name'] in placed:
-            current = row['Name']
+            current = (row['Name'], seen[row['Name']])
+            seen[row['Name']] += 1
         elif current is not None and row['Name'] not in others[current]:
             others[current].append(row['Name'])
     return others
@@ -149,19 +150,24 @@ class Sibling:
         for unit, size in zip(self.unit, self.size):
             if unit >= 0:
                 self.bytes[unit] += size
-        # A unit without a marker after another unit without one (the CodeWarrior SDK run, where
-        # the export lists almost every function as a global) has no reliable start at all.
+        # A unit without a marker is proposed only between two marked units (memorycard.c inside
+        # TibNew.cpp's range); next to another unmarked unit (the CodeWarrior SDK run, where the
+        # export lists almost every function as a global) neither of its ends is reliable.
         self.unmarked = {u for u in self.counts
                          if self.counts[u] > UNMARKED_FUNCTIONS or self.bytes[u] > UNMARKED_SIZE
                          or (self.start_from[u] != 'gcc2_compiled'
-                             and (u == 0 or self.start_from[u - 1] != 'gcc2_compiled'))}
+                             and not (0 < u < len(units) - 1 and self.start_from[u - 1] == 'gcc2_compiled'
+                                      and self.start_from[u + 1] == 'gcc2_compiled'))}
         names = Counter(self.name)
         self.unique_name = {n: i for i, n in enumerate(self.name) if names[n] == 1}
         others = codeless_files(rows, set(self.unit_files))
-        self.other_files = defaultdict(list)
+        # Repeated names (libgcc2.c) are matched occurrence by occurrence, in address order.
+        self.other_files, seen = defaultdict(list), Counter()
         for unit, name in enumerate(self.unit_files):
-            if others.get(name) and unit in self.counts:
-                self.other_files[unit] = list(others[name])
+            key = (name, seen[name])
+            seen[name] += 1
+            if others.get(key) and unit in self.counts:
+                self.other_files[unit] = list(others[key])
 
     def file(self, unit):
         return self.unit_files[unit] if unit >= 0 else '-'
@@ -533,19 +539,20 @@ def link(references, function, unit):
     return signals
 
 
-def shrink(references, left, right):
+def shrink(references, left, right, paired=()):
     """Give each end of an unpaired gap to the neighbour it alone is linked to. Returns the
-    signals used; a claimed (pinned) unit takes nothing."""
+    signals used; a claimed (pinned) unit takes nothing, and a function the sibling pairs with
+    another unit is never given away."""
     used = set()
     while left['last'] + 1 < right['first']:
         first, last = left['last'] + 1, right['first'] - 1
         a, b = link(references, first, left), link(references, first, right)
-        if left['claim'] != 'exact' and a and not b:
+        if first not in paired and left['claim'] != 'exact' and a and not b:
             left['last'] = first
             used |= a
             continue
         a, b = link(references, last, right), link(references, last, left)
-        if right['claim'] != 'exact' and a and not b:
+        if last not in paired and right['claim'] != 'exact' and a and not b:
             right['first'] = last
             used |= a
             continue
@@ -561,7 +568,7 @@ def text_edges(target, sibling, units, paired, references):
         if pinned and gap == 0:
             edges.append(edge(target, references, left, right, right['first'], 'claimed', sibling=sibling))
             continue
-        if not neighbours(sibling, left, right) and not pinned:
+        if not neighbours(sibling, left, right):
             # Sibling units between them are not proposed here: each side's end stays open.
             edges.append(edge(target, references, left, right, None, 'open', sibling=sibling))
             continue
@@ -574,7 +581,7 @@ def text_edges(target, sibling, units, paired, references):
             continue
         if pinned:
             # Only the unpinned side may move, by shrinking towards the pinned edge.
-            used = shrink(references, left, right)
+            used = shrink(references, left, right, paired)
             closed = left['last'] + 1 == right['first']
             edges.append(edge(target, references, left, right, right['first'] if closed else None,
                               ('calls' if 'calls' in used else 'data') if closed else 'open', sibling=sibling))
@@ -590,7 +597,7 @@ def text_edges(target, sibling, units, paired, references):
         elif len(by_calls) == 1:
             edges.append(edge(target, references, left, right, by_calls[0], 'calls', sibling=sibling))
         else:
-            used = shrink(references, left, right)
+            used = shrink(references, left, right, paired)
             closed = left['last'] + 1 == right['first']
             kind = ('calls' if 'calls' in used else 'data') if closed else 'open'
             edges.append(edge(target, references, left, right, right['first'] if closed else None, kind, sibling=sibling))
@@ -622,6 +629,7 @@ def settle(target, sibling, paired, references, report):
     dropped = set()
     while True:
         units = [u for u in propose_units(target, sibling, paired, members) if u['unit'] not in dropped]
+        del report[:]
         apply_claims(target, units, report)
         edges = text_edges(target, sibling, units, paired, references)
         failing = [u for u in units if u['unit'] is not None and not u['claim']
@@ -799,8 +807,9 @@ def main(argv=None):
     mode.add_argument('--check', action='store_true', help='fail when the committed tables differ')
     mode.add_argument('--calibrate', action='store_true', help='hold-out test against established units')
     args = parser.parse_args(argv)
-    if not (ANALYSIS / 'splits.txt').exists():
-        sys.exit('boundaries: build/analysis/splits.txt missing; run python3 build.py first')
+    if not (ANALYSIS / 'summary.json').exists() or not (ANALYSIS / 'split/obj').is_dir():
+        sys.exit('boundaries: build/analysis is missing or incomplete (no summary.json or split objects); '
+                 'run python3 build.py first')
     if args.calibrate:
         return calibrate(args.target)
     result = run(args.target)

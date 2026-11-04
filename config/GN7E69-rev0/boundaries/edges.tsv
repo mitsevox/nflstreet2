@@ -1,4 +1,4 @@
-# tools/boundaries.py sha256 e80e49766b1fd608728347f66cddf7c9b6e6e760c14068b994454469c197fe36
+# tools/boundaries.py sha256 5e4060d1904016f2c8ca95910cc054807dede5c095194e3ee58a6cd1cb076eaa
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv sha256 8239595118db009270d0ebd726a7f00513fe8b3b8ad2c32279c03160ee14a04f
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 8bf64f87b8ff52cc1e25f940cd99e2bbbced362c4c7a888d7d21a8a9c6617030
 # Text edges: class data, calls, alignment, claimed or open (low-high: the open range).
@@ -97,8 +97,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x80215838	0x802260F8	open	-	-	tmblendop.c	UIGFmv.c
 .text	0x80226498	0x80226498	0x80226498	alignment	0	14	UIGFmv.c	LLUIGFmv.c
 .text	-	0x80226F34	0x80227F14	open	-	-	LLUIGFmv.c	viewport.c
-.text	-	0x802287D4	0x802389AC	open	-	-	viewport.c	OS.c
-.text	-	0x802393A4	0x8025E210	open	-	-	OS.c	libgcc2.c
+.text	-	0x802287D4	0x8025E210	open	-	-	viewport.c	libgcc2.c
 .text	0x8025E250	0x8025E250	0x8025E250	alignment	0	0	libgcc2.c	libgcc2.c
 .text	0x8025E290	0x8025E290	0x8025E290	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025E80C	0x8025E850	open	-	-	libgcc2.c	libgcc2.c
@@ -110,8 +109,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x8025FAF8	0x8025FAF8	0x8025FAF8	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025FBD4	0x802622DC	open	-	-	libgcc2.c	vprintf.c
 .text	-	0x80262310	0x8026247C	open	-	-	vprintf.c	vfprintf.c
-.text	-	0x802645AC	0x80266AF8	open	-	-	vfprintf.c	spchrslv.c
-.text	-	0x80266D00	0x80271D34	open	-	-	spchrslv.c	sdspmix.c
+.text	-	0x802645AC	0x80271D34	open	-	-	vfprintf.c	sdspmix.c
 .text	-	0x8027257C	0x8027257C	open	-	-	sdspmix.c	snddrv.c
 .text	-	0x802753F0	0x80278700	open	-	-	snddrv.c	slinklst.c
 .text	-	0x8027882C	0x8027F0DC	open	-	-	slinklst.c	GCmp.c
