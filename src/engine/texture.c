@@ -1,7 +1,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/fn_801F7BD4.h"
-#include "engine/cu_8027EFAC.h"
+#include "engine/GCmp.h"
 #include "engine/tmlib.h"
 
 typedef struct TexChunk_8020DB34 {

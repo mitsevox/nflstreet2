@@ -1,4 +1,4 @@
-#include "engine/cu_8027EFAC.h"
+#include "engine/GCmp.h"
 #include "game/fn_801D2B7C.h"
 
 /* Red-black tree node in the index-linked array allocated by fn_802805C4;
