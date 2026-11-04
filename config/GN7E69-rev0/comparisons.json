@@ -34114,7 +34114,7 @@
     {
       "source": "src/game/cu_8014BC98.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A0E70 is measured here, including the unresolved trailing context after the native 12-byte emission (follow-up #791 measures 0x802A0E70-0x802A11F4 with src/game/cu_8014E220.cpp). Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked.",
+      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A0DC8 is measured here, including the unresolved trailing context after the native 12-byte emission (follow-up #791 measures 0x802A0E70-0x802A11F4 with src/game/cu_8014E220.cpp). Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked. Newly reconstructed cu_8014D210 measures the adjacent suffix 0x802A0DC8-0x802A0E70; the full previous 400-byte context remains covered, with foreign bytes unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -34126,7 +34126,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A0CE0",
-          "end": "0x802A0E70"
+          "end": "0x802A0DC8"
         }
       ],
       "functions": [
@@ -34300,13 +34300,19 @@
     {
       "source": "src/game/cu_8014D210.cpp",
       "profile": "game_cpp",
-      "evidence": "Three complete bodies within the retained provisional cu_801485B4 survey group. Preserves the two event/record helpers of issue #807 and adds the complete six-player score-row refresh at 0x8014D948-0x8014DA20, called from 0x8014E9A4. Gap 0x8014D67C-0x8014D948 remains unreconstructed. The shared format at 0x802A0DDC and empty string at 0x802A05C8 remain external original-owned; no native initialized data is added. Evidence rows describe the inferred readable name and layouts; original name and file boundaries remain unresolved. Original bytes stay linked.",
+      "evidence": "Bounded comparison-only fragment of four complete bodies inside the larger provisional candidate cu_801485B4. fn_8014D210 is held by no data word and is called from 0x8014D5FC and 0x8014D63C (fn_8014D298) and 0x8014E934 (fn_8014E7D4 of src/game/cu_8014E534.cpp). fn_8014D298 is no bl target and no data word holds it; fn_8014DDCC forms its address (lis/addi at 0x8014DE18/0x8014DE20) and registers it with 0x800D7604 (bl at 0x8014DE24), which stores it in the .sdata word 0x803EACC0; the invoker 0x800D1B3C-0x800D1B78 tests that pointer and calls it with r3-r9 (blrl at 0x800D1B78), as the existing Callback_800D7604 and lbl_803EACC0 rows record. Its parameter list follows the register-compatible Callback_800D7604 view. Start: 0x8014D024 (its 56-byte record swap copies a record with a vtable pointer at +52, table 0x802A1F78) is not claimed; the preceding src/game/cu_8014C868.cpp ends at 0x8014D024. Adds 0x8014D948-0x8014DA20, called from 0x8014E9A4, which submits the six score rows. Adds the complete placement helper 0x8014D67C-0x8014D948, called from 0x8014E27C and 0x8014ECC0, filling the former internal gap. End: 0x8014DA20 begins the next registered fragment. Both shared strings remain external original-owned: 0x802A05C8 inside the readonly context of src/game/cu_80149014.cpp and 0x802A0DDC used by several score-formatting bodies. Native conversion doubles are measured against 0x802A0DC8-0x802A0DD8 within the full 168-byte context ending at 0x802A0E70; numeric pool ordering and trailing foreign context remain unresolved, as the data row records. Other numeric literals remain external original-owned. Original signatures and file boundaries remain unresolved; original assembly remains linked. Unchanged game_cpp profile; inferred names, layouts and source forms have separate evidence rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014D210",
           "end": "0x8014DA20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0DC8",
+          "end": "0x802A0E70"
         }
       ],
       "functions": [
@@ -34319,6 +34325,11 @@
           "symbol": "fn_8014D298",
           "start": "0x8014D298",
           "end": "0x8014D67C"
+        },
+        {
+          "symbol": "PlaceSixPlayerFormation",
+          "start": "0x8014D67C",
+          "end": "0x8014D948"
         },
         {
           "symbol": "RefreshSixPlayerScoreRows",
@@ -36124,13 +36135,19 @@
     {
       "source": "src/game/cu_80150DFC.cpp",
       "profile": "game_cpp",
-      "evidence": "Two complete bodies within the retained provisional cu_801485B4 survey group. Preserves the issue #914 slot-5 wrapper at 0x80150DFC-0x80150E1C and adds the four-player score-row refresh at 0x801514AC-0x80151598, called from 0x80150D94. Gap 0x80150E1C-0x801514AC remains unreconstructed. Shared strings 0x802A0DDC and 0x802A05C8 remain external original-owned; no native initialized data is added. Readable refresh name is inferred, not an original-name claim. Original signatures and file boundaries remain unresolved; original bytes stay linked.",
+      "evidence": "Bounded comparison-only fragment of three complete bodies inside the larger provisional candidate cu_801485B4. fn_80150DFC is slot 5 of the table 0x802A1D20 of src/game/cu_80150848.cpp (word 0x802A1D4C, the only data word holding it), replacing the base entry 0x800A05E8 (base word 0x80297AE4) of the table 0x80297AB8; it is not called directly. Start: 0x80150AC4-0x80150DFC (slot 4 of the same table, word 0x802A1D44, ending with the blr at 0x80150DF8) is not claimed. Adds 0x801514AC-0x80151598, called at 0x80150D94 by the same class's slot-4 update. Adds the complete ball/field-position setup helper 0x80150E1C-0x80151010, called from 0x80151064. The gap 0x80151010-0x801514AC remains unreconstructed; the next registered fragment starts at 0x80151598. Shared format 0x802A0DDC and empty string 0x802A05C8 remain external original-owned. Native conversion bias and three floats are measured against 0x802A1358-0x802A136C; all 24 native bytes, including trailing alignment, remain measured against that 20-byte target range. The original-owned origin floats at 0x802A134C/1350 remain external. The setup loop demonstrates three points at table +92 through +115, refining the provisional table view without changing the existing four-entry accesses. Original class identity, signatures and file boundaries remain unresolved; original assembly remains linked. Unchanged game_cpp profile; inferred names, layouts and source forms have separate evidence rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80150DFC",
           "end": "0x80151598"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A1358",
+          "end": "0x802A136C"
         }
       ],
       "functions": [
@@ -36138,6 +36155,11 @@
           "symbol": "fn_80150DFC",
           "start": "0x80150DFC",
           "end": "0x80150E1C"
+        },
+        {
+          "symbol": "ResetBallsAndFieldPositions",
+          "start": "0x80150E1C",
+          "end": "0x80151010"
         },
         {
           "symbol": "RefreshFourPlayerScoreRows",
