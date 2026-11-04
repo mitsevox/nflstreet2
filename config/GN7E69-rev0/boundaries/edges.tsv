@@ -1,12 +1,13 @@
-# tools/boundaries.py sha256 4e882b845e6c294c23c7eb5d14dab1c4e5e0dd4e763befbc87a956c63dd38088
+# tools/boundaries.py sha256 e80e49766b1fd608728347f66cddf7c9b6e6e760c14068b994454469c197fe36
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv sha256 8239595118db009270d0ebd726a7f00513fe8b3b8ad2c32279c03160ee14a04f
+# sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 8bf64f87b8ff52cc1e25f940cd99e2bbbced362c4c7a888d7d21a8a9c6617030
 # Text edges: class data, calls, alignment, claimed or open (low-high: the open range).
 # Data edges: class data, thin, mixed or conflict; crossing_data holds misplaced items, crossing_calls owned items left/right.
 section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801ADDB4	0x801ADDB4	0x801ADDB4	alignment	0	1	FSasync.c	sndvd.c
 .text	0x801AE3E4	0x801AE3E4	0x801AE3E4	alignment	0	0	sndvd.c	spchevnt.c
 .text	-	0x801AF60C	0x801AF75C	open	-	-	spchevnt.c	spchpick.c
-.text	0x801B1A3C	0x801B1A3C	0x801B1A3C	alignment	1	4	spchpick.c	spchrand.c
+.text	0x801B1A3C	0x801B1A3C	0x801B1A3C	at-or-before	1	4	spchpick.c	spchrand.c
 .text	-	0x801B1CFC	0x801B8C18	open	-	-	spchrand.c	smemhigh.cpp
 .text	-	0x801B9CAC	0x801B9D00	open	-	-	smemhigh.cpp	anim.c
 .text	0x801B9F00	0x801B9F00	0x801B9F00	alignment	0	4	anim.c	animchan.c
@@ -31,12 +32,12 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801C7F70	0x801C7F70	0x801C7F70	alignment	1	0	splytree.c	bintree.c
 .text	-	0x801C8F14	0x801C8F14	open	-	-	bintree.c	fileio.c
 .text	0x801C9DD8	0x801C9DD8	0x801C9DD8	alignment	7	11	fileio.c	llfileio.c
-.text	0x801CB1BC	0x801CB1BC	0x801CB1BC	alignment	1	6	llfileio.c	llFileioFont.c
-.text	0x801CB5D4	0x801CB5D4	0x801CB5D4	data	0	0	llFileioFont.c	filemc.c
+.text	0x801CB1BC	0x801CB1BC	0x801CB1BC	alignment	1	6	llfileio.c	fs_cli.c
+.text	0x801CB5D4	0x801CB5D4	0x801CB5D4	at-or-before	0	0	fs_cli.c	filemc.c
 .text	-	0x801CBC1C	0x801CCA64	open	-	-	filemc.c	Font.c
 .text	-	0x801CD79C	0x801CE1F8	open	-	-	Font.c	llglib.c
 .text	-	0x801CEC90	0x801CEFF0	open	-	-	llglib.c	rand.c
-.text	0x801CF7CC	0x801CF7CC	0x801CF7CC	alignment	0	0	rand.c	orient.c
+.text	0x801CF7CC	0x801CF7CC	0x801CF7CC	at-or-before	0	0	rand.c	orient.c
 .text	-	0x801CF944	0x801CF998	open	-	-	orient.c	llangle.c
 .text	-	0x801CFF34	0x801D0110	open	-	-	llangle.c	matrix.c
 .text	0x801D03D0	0x801D03D0	0x801D03D0	alignment	0	4	matrix.c	llmatrix.c
@@ -96,7 +97,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x80215838	0x802260F8	open	-	-	tmblendop.c	UIGFmv.c
 .text	0x80226498	0x80226498	0x80226498	alignment	0	14	UIGFmv.c	LLUIGFmv.c
 .text	-	0x80226F34	0x80227F14	open	-	-	LLUIGFmv.c	viewport.c
-.text	-	0x802287D4	0x8025E210	open	-	-	viewport.c	libgcc2.c
+.text	-	0x802287D4	0x802389AC	open	-	-	viewport.c	OS.c
+.text	-	0x802393A4	0x8025E210	open	-	-	OS.c	libgcc2.c
 .text	0x8025E250	0x8025E250	0x8025E250	alignment	0	0	libgcc2.c	libgcc2.c
 .text	0x8025E290	0x8025E290	0x8025E290	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025E80C	0x8025E850	open	-	-	libgcc2.c	libgcc2.c
@@ -119,14 +121,14 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x802805C4	0x802805C4	0x802805C4	alignment	0	0	none.c	lzm.c
 .text	0x802821E8	0x802821E8	0x802821E8	alignment	0	0	lzm.c	lzh.c
 .bss	-	0x8037E2A4	0x8037E794	thin	0	1/2	spchpick.c	spchrand.c
-.bss	-	0x80381C40	0x80381C40	data	0	3/3	llFileioFont.c	filemc.c
+.bss	-	0x80381C40	0x80381C40	data	0	3/3	fs_cli.c	filemc.c
 .bss	-	0x80384BC0	0x80384BC0	thin	0	1/1	llmatrix.c	Memory.c
 .bss	-	0x8039B53C	0x8039B53C	thin	0	1/1	tmshaderlib.c	tmtexlib.c
 .bss	-	0x8039B720	0x8039B720	data	0	2/6	tmblend.c	tmblendchannel.c
 .bss	-	-	0x803D5010	mixed	1	1/1	splytree.c	bintree.c
 .bss	-	0x803D55B0	0x803D55B0	mixed	1	5/1	fileio.c	llfileio.c
-.bss	-	0x803D55B1	0x803D55E0	thin	0	1/3	llfileio.c	llFileioFont.c
-.bss	-	0x803DD600	0x803DD600	thin	0	3/1	llFileioFont.c	filemc.c
+.bss	-	0x803D55B1	0x803D55E0	thin	0	1/3	llfileio.c	fs_cli.c
+.bss	-	0x803DD600	0x803DD600	thin	0	3/1	fs_cli.c	filemc.c
 .rodata	-	0x802AEEA4	0x802AEEA8	data	0	11/9	animtran.c	animwgt.c
 .rodata	-	0x802AF0C4	0x802AF0C4	data	0	3/6	camera.c	camfocus.c
 .rodata	-	0x802AF0DC	0x802AF0DC	data	0	6/4	camfocus.c	camfree.c

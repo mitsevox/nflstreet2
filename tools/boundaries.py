@@ -13,13 +13,15 @@ where each file's code starts. The sibling's executable is not kept, so function
 names and sizes, never by code, and the wiki's callee check (refuse a pair whose callees differ)
 cannot be run.
 
-1. Sibling units. A unit starts at every `gcc2_compiled.` marker and, inside a marked unit, at the
-   first function listed after a file row that has no marker (memorycard.c inside TibNew.cpp's
-   range). A unit over UNMARKED_FUNCTIONS functions or UNMARKED_SIZE bytes is a pile of files whose
-   edges the table does not show (the CodeWarrior SDK run has no markers, and its file rows do not
-   follow its code); it proposes nothing. A file row with neither a marker nor a function listed
-   after it (the table lists global functions apart from their file) cannot be placed: it is
-   reported in the unit's other_files, and that unit may hold more than one file.
+1. Sibling units come from the committed table `compile_units.tsv` (tools/sibling_tables.py
+   nascar-units): a unit starts at its file's `gcc2_compiled.` marker or, for a file without one,
+   at its lowest local function (`first-function`), in which case its global functions may start
+   earlier, so the edge into it is `at-or-before`. A unit over UNMARKED_FUNCTIONS functions or
+   UNMARKED_SIZE bytes is a pile of files whose edges the table does not show, and so is a
+   `first-function` unit after another one (the CodeWarrior SDK run, whose functions the export
+   lists almost all as globals); neither proposes anything. A file with neither a marker nor a local function (the export lists globals apart
+   from their files) is not in the table: it is reported in the other_files of the unit listed
+   before it, and that unit may hold more than one file.
 2. Anchors. A name anchor is a target function whose label equals the name of exactly one sibling
    function of the same size, unless the label came from this script's alignment (its `name` row
    starts with POSITIONAL_PHRASE). A size anchor is a run of RUN consecutive functions whose sizes
@@ -72,6 +74,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SIBLING = ROOT / 'references/NASCAR 2005/DOL-GN4E-USA/symbols/symbols.tsv'
+COMPILE_UNITS = ROOT / 'references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv'
 ANALYSIS = ROOT / 'build/analysis'
 OUTPUT = 'boundaries'
 TABLES = ('units.tsv', 'edges.tsv', 'names.tsv')
@@ -99,49 +102,42 @@ def digest(path):
 
 # ---------------------------------------------------------------- inputs
 
-def sibling_unit_starts(rows):
-    """{address: file name} where a sibling unit starts. Every `gcc2_compiled.` marker starts one.
-    Inside a marked unit that is not a pile, the first function listed after a file row with no
-    marker of its own starts another (memorycard.c inside TibNew.cpp's marked range, say). A pile
-    (the CodeWarrior SDK run, which has no markers at all) keeps no inner starts: the order of its
-    file rows does not follow its code, so it proposes nothing."""
-    markers, last_file = {}, None
-    for row in rows:
-        if row['Type'] == '4':
-            last_file = row['Name']
-        elif row['Name'] == 'gcc2_compiled.':
-            markers.setdefault(int(row['Address'], 16), last_file)
-    order = sorted(markers)
-    functions = sorted({(int(r['Address'], 16), int(r['Size'])) for r in rows if r['Type'] == '2' and int(r['Size']) > 0})
-    count, size = Counter(), Counter()
-    for address, length in functions:
-        unit = bisect.bisect_right(order, address) - 1
-        count[unit] += 1
-        size[unit] += length
-    piles = {u for u in count if u >= 0 and (count[u] > UNMARKED_FUNCTIONS or size[u] > UNMARKED_SIZE)}
-    starts, last_file, waiting = dict(markers), None, False
-    for row in rows:
-        if row['Type'] == '4':
-            last_file, waiting = row['Name'], True
-        elif row['Name'] == 'gcc2_compiled.':
-            waiting = False
-        elif waiting and row['Type'] == '2' and int(row['Size']) > 0:
-            address = int(row['Address'], 16)
-            unit = bisect.bisect_right(order, address) - 1
-            if unit >= 0 and unit not in piles and address not in starts:
-                starts[address] = last_file
-            waiting = False
-    return starts
+def read_compile_units(path):
+    """compile_units.tsv (tools/sibling_tables.py nascar-units) -> [(start, file, start_from)]"""
+    lines = [l for l in Path(path).read_text().splitlines() if l and not l.startswith('#')]
+    header = lines[0].split('\t')
+    rows = [dict(zip(header, l.split('\t'))) for l in lines[1:]]
+    return [(int(r['start'], 16), r['file'], r['start_from']) for r in rows]
+
+
+def codeless_files(rows, placed):
+    """{placed file: [files listed after it]} for file rows the unit table could not place: no
+    marker and no local function. The export lists each file's local symbols file by file, then
+    every global from `__start` on, so such a file's code (globals only) may lie in the unit
+    listed before it, or nowhere."""
+    last = max(i for i, row in enumerate(rows) if row['Type'] == '4')
+    globals_from = next(i for i, row in enumerate(rows) if i > last and row['Name'] == '__start')
+    others, current = defaultdict(list), None
+    for row in rows[:globals_from]:
+        if row['Type'] != '4':
+            continue
+        if row['Name'] in placed:
+            current = row['Name']
+        elif current is not None and row['Name'] not in others[current]:
+            others[current].append(row['Name'])
+    return others
 
 
 class Sibling:
-    """Functions of the sibling build in address order, each with its unit (-1 before the first)."""
+    """Functions of the sibling build in address order, each with its unit (-1 before the first).
+    Units come from the committed compile-unit table; functions and sizes from the symbol table."""
 
-    def __init__(self, path):
+    def __init__(self, path, units_path=None):
         rows = list(csv.DictReader(open(path, newline=''), delimiter='\t'))
-        starts = sibling_unit_starts(rows)
-        self.unit_starts = sorted(starts)
-        self.unit_files = [starts[a] for a in self.unit_starts]
+        units = read_compile_units(units_path or COMPILE_UNITS)
+        self.unit_starts = [u[0] for u in units]
+        self.unit_files = [u[1] for u in units]
+        self.start_from = [u[2] for u in units]
         functions = sorted({(int(r['Address'], 16), int(r['Size']), r['Name'])
                             for r in rows if r['Type'] == '2' and int(r['Size']) > 0})
         self.address = [f[0] for f in functions]
@@ -153,31 +149,19 @@ class Sibling:
         for unit, size in zip(self.unit, self.size):
             if unit >= 0:
                 self.bytes[unit] += size
+        # A unit without a marker after another unit without one (the CodeWarrior SDK run, where
+        # the export lists almost every function as a global) has no reliable start at all.
         self.unmarked = {u for u in self.counts
-                         if self.counts[u] > UNMARKED_FUNCTIONS or self.bytes[u] > UNMARKED_SIZE}
+                         if self.counts[u] > UNMARKED_FUNCTIONS or self.bytes[u] > UNMARKED_SIZE
+                         or (self.start_from[u] != 'gcc2_compiled'
+                             and (u == 0 or self.start_from[u - 1] != 'gcc2_compiled'))}
         names = Counter(self.name)
         self.unique_name = {n: i for i, n in enumerate(self.name) if names[n] == 1}
-        # File rows with no start of their own, listed after a unit's start and before the next
-        # (less the next unit's own file row): their code may lie anywhere in that unit, since
-        # the table lists a file's global functions apart from the file.
+        others = codeless_files(rows, set(self.unit_files))
         self.other_files = defaultdict(list)
-        current, seen = None, []
-        for row in rows:
-            if row['Type'] == '4':
-                seen.append(row['Name'])
-                continue
-            address = int(row['Address'], 16)
-            if address in starts and (row['Name'] == 'gcc2_compiled.' or row['Type'] == '2') \
-                    and starts[address] == (seen[-1] if seen else None):
-                if current is not None:
-                    for name in seen[:-1]:
-                        if name != self.unit_files[current] and name not in self.other_files[current]:
-                            self.other_files[current].append(name)
-                current, seen = self.unit_starts.index(address), []
-        if current is not None:
-            for name in seen:
-                if name != self.unit_files[current] and name not in self.other_files[current]:
-                    self.other_files[current].append(name)
+        for unit, name in enumerate(self.unit_files):
+            if others.get(name) and unit in self.counts:
+                self.other_files[unit] = list(others[name])
 
     def file(self, unit):
         return self.unit_files[unit] if unit >= 0 else '-'
@@ -575,25 +559,25 @@ def text_edges(target, sibling, units, paired, references):
         pinned = left['claim'] == 'exact' or right['claim'] == 'exact'
         gap = right['first'] - left['last'] - 1
         if pinned and gap == 0:
-            edges.append(edge(target, references, left, right, right['first'], 'claimed'))
+            edges.append(edge(target, references, left, right, right['first'], 'claimed', sibling=sibling))
             continue
         if not neighbours(sibling, left, right) and not pinned:
             # Sibling units between them are not proposed here: each side's end stays open.
-            edges.append(edge(target, references, left, right, None, 'open'))
+            edges.append(edge(target, references, left, right, None, 'open', sibling=sibling))
             continue
         if gap == 0:
             cut = right['first']
             scores = {c: crossing(references, left['first'], c, right['last'])[0]
                       for c in range(max(cut - WINDOW, left['first'] + 1), min(cut + WINDOW, right['last']) + 1)}
             unique = all(scores[cut] < v for c, v in scores.items() if c != cut) and len(scores) > 1
-            edges.append(edge(target, references, left, right, cut, 'data' if unique else 'alignment'))
+            edges.append(edge(target, references, left, right, cut, 'data' if unique else 'alignment', sibling=sibling))
             continue
         if pinned:
             # Only the unpinned side may move, by shrinking towards the pinned edge.
             used = shrink(references, left, right)
             closed = left['last'] + 1 == right['first']
             edges.append(edge(target, references, left, right, right['first'] if closed else None,
-                              ('calls' if 'calls' in used else 'data') if closed else 'open'))
+                              ('calls' if 'calls' in used else 'data') if closed else 'open', sibling=sibling))
             continue
         candidates = list(range(left['last'] + 1, right['first'] + 1))
         scores = {c: crossing(references, left['first'], c, right['last']) for c in candidates}
@@ -602,18 +586,23 @@ def text_edges(target, sibling, units, paired, references):
         fewest = min(scores[c][1] for c in tied)
         by_calls = [c for c in tied if scores[c][1] == fewest]
         if len(tied) == 1:
-            edges.append(edge(target, references, left, right, tied[0], 'data'))
+            edges.append(edge(target, references, left, right, tied[0], 'data', sibling=sibling))
         elif len(by_calls) == 1:
-            edges.append(edge(target, references, left, right, by_calls[0], 'calls'))
+            edges.append(edge(target, references, left, right, by_calls[0], 'calls', sibling=sibling))
         else:
             used = shrink(references, left, right)
             closed = left['last'] + 1 == right['first']
             kind = ('calls' if 'calls' in used else 'data') if closed else 'open'
-            edges.append(edge(target, references, left, right, right['first'] if closed else None, kind))
+            edges.append(edge(target, references, left, right, right['first'] if closed else None, kind, sibling=sibling))
     return edges
 
 
-def edge(target, references, left, right, cut, kind):
+def edge(target, references, left, right, cut, kind, sibling=None):
+    if cut is not None and kind in ('data', 'alignment', 'calls') and sibling is not None \
+            and right['unit'] is not None and sibling.start_from[right['unit']] != 'gcc2_compiled':
+        # The right unit's sibling start is its lowest local function: its global functions may
+        # come first, so the true edge is at or before this cut.
+        kind = 'at-or-before'
     if cut is not None:
         left['last'] = cut - 1
         right['first'] = cut
@@ -708,8 +697,9 @@ def hexa(value):
 def tables(result):
     sibling, target = result['sibling'], result['target']
     members = unit_members(sibling, result['paired'])
-    header = ('# tools/boundaries.py sha256 %s\n# sibling %s sha256 %s\n'
-              % (digest(__file__), SIBLING.relative_to(ROOT).as_posix(), digest(SIBLING)))
+    header = ('# tools/boundaries.py sha256 %s\n# sibling %s sha256 %s\n# sibling %s sha256 %s\n'
+              % (digest(__file__), SIBLING.relative_to(ROOT).as_posix(), digest(SIBLING),
+                 COMPILE_UNITS.relative_to(ROOT).as_posix(), digest(COMPILE_UNITS)))
     units = [header + '# Proposed units; a proposal, not an established extent (evidence: one unit-anchor row per run).\n'
              'start\tend\tsibling_file\tfunctions\tpaired\tsibling_functions\tname_anchors\tsize_anchors\tclaim\tother_files']
     holder = {}

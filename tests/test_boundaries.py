@@ -25,6 +25,7 @@ class FakeSibling:
         for unit, size in zip(self.unit, self.size):
             self.bytes[unit] += size
         self.other_files = defaultdict(list)
+        self.start_from = ['gcc2_compiled'] * len(units)
 
     def file(self, unit):
         return self.unit_files[unit] if unit >= 0 else '-'
@@ -185,16 +186,26 @@ class BoundaryTests(unittest.TestCase):
         rows = boundaries.data_edges(units, edges, references)
         self.assertEqual([(r['kind'], r['misplaced']) for r in rows], [('thin', 0), ('thin', 0)])
 
-    def test_sibling_starts_from_markers_and_file_rows(self):
+    def test_codeless_files_follow_the_unit_listed_before(self):
         rows = [{'Address': '0x00000000', 'Size': '0', 'Type': '4', 'Name': 'one.c'},
                 {'Address': '0x80001000', 'Size': '0', 'Type': '0', 'Name': 'gcc2_compiled.'},
-                {'Address': '0x80001000', 'Size': '16', 'Type': '2', 'Name': 'f'},
+                {'Address': '0x00000000', 'Size': '0', 'Type': '4', 'Name': 'header.c'},
                 {'Address': '0x00000000', 'Size': '0', 'Type': '4', 'Name': 'two.c'},
-                {'Address': '0x80001040', 'Size': '16', 'Type': '2', 'Name': '_g'},
-                {'Address': '0x00000000', 'Size': '0', 'Type': '4', 'Name': 'three.c'},
-                {'Address': '0x80002000', 'Size': '0', 'Type': '0', 'Name': 'gcc2_compiled.'}]
-        self.assertEqual(boundaries.sibling_unit_starts(rows),
-                         {0x80001000: 'one.c', 0x80001040: 'two.c', 0x80002000: 'three.c'})
+                {'Address': '0x80002000', 'Size': '0', 'Type': '0', 'Name': 'gcc2_compiled.'},
+                {'Address': '0x80003000', 'Size': '16', 'Type': '2', 'Name': '__start'}]
+        self.assertEqual(dict(boundaries.codeless_files(rows, {'one.c', 'two.c'})), {'one.c': ['header.c']})
+
+    def test_edge_into_a_first_function_unit_is_an_upper_bound(self):
+        self.sibling.start_from = ['gcc2_compiled', 'first-function']
+        _, _, edges = self.proposal(self.target)
+        self.assertEqual((edges[0]['kind'], edges[0]['address']), ('at-or-before', self.target.start[10]))
+
+    def test_compile_unit_table(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'compile_units.tsv'
+            path.write_text('# header\nstart\tend\tsize\tfile\tstart_from\tfunctions\n'
+                            '0x80001000\t0x80001040\t64\tone.c\tgcc2_compiled\t1\n')
+            self.assertEqual(boundaries.read_compile_units(path), [(0x80001000, 'one.c', 'gcc2_compiled')])
 
     def test_strings_are_not_data_items(self):
         with tempfile.TemporaryDirectory() as folder:
