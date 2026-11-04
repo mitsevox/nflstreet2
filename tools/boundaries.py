@@ -46,7 +46,8 @@ cannot be run.
    Across unpaired functions, each cut is scored by crossing data items, then crossing calls
    (`data`, `calls`); with no unique winner the gap shrinks from both ends, an unpaired function
    joining the neighbour it alone calls, is called by or shares data with (`calls` or `data` by the
-   signal that closed it), and what remains is `open`. An edge of a claimed unit never moves.
+   signal that closed it), and what remains is `open`. A gap holding a function the sibling pairs
+   with a third unit is left `open`. A claimed unit never grows beyond its row.
 6. Data edges, between the same neighbouring units, per data section and per original-object region
    of that section (the analysis splits a section where other objects or the uninitialised commons
    sit; each region holds the units in order). An item belongs to a unit when no function outside
@@ -541,18 +542,18 @@ def link(references, function, unit):
 
 def shrink(references, left, right, paired=()):
     """Give each end of an unpaired gap to the neighbour it alone is linked to. Returns the
-    signals used; a claimed (pinned) unit takes nothing, and a function the sibling pairs with
-    another unit is never given away."""
+    signals used; a claimed unit takes nothing, and a function the sibling pairs with another unit
+    is never given away."""
     used = set()
     while left['last'] + 1 < right['first']:
         first, last = left['last'] + 1, right['first'] - 1
         a, b = link(references, first, left), link(references, first, right)
-        if first not in paired and left['claim'] != 'exact' and a and not b:
+        if first not in paired and not left['claim'] and a and not b:
             left['last'] = first
             used |= a
             continue
         a, b = link(references, last, right), link(references, last, left)
-        if last not in paired and right['claim'] != 'exact' and a and not b:
+        if last not in paired and not right['claim'] and a and not b:
             right['first'] = last
             used |= a
             continue
@@ -579,8 +580,12 @@ def text_edges(target, sibling, units, paired, references):
             unique = all(scores[cut] < v for c, v in scores.items() if c != cut) and len(scores) > 1
             edges.append(edge(target, references, left, right, cut, 'data' if unique else 'alignment', sibling=sibling))
             continue
-        if pinned:
-            # Only the unpinned side may move, by shrinking towards the pinned edge.
+        if any(i in paired for i in range(left['last'] + 1, right['first'])):
+            # The gap holds a function the sibling pairs with a third unit: a wall, not ours to cut.
+            edges.append(edge(target, references, left, right, None, 'open', sibling=sibling))
+            continue
+        if left['claim'] or right['claim']:
+            # A claimed unit holds exactly its row: only the other side may move, by shrinking.
             used = shrink(references, left, right, paired)
             closed = left['last'] + 1 == right['first']
             edges.append(edge(target, references, left, right, right['first'] if closed else None,

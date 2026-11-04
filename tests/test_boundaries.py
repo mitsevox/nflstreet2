@@ -160,6 +160,17 @@ class BoundaryTests(unittest.TestCase):
         self.assertEqual(edges[0]['kind'], 'open')
         self.assertEqual(units[0]['last'], 9)
 
+    def test_provisional_claim_neither_grows_nor_lets_a_unit_cross_a_paired_gap(self):
+        sibling = FakeSibling([A, [500, 504, 508, 512], B], ['a.c', 'mid.c', 'b.c'])
+        # One function of mid.c is paired by a gap alignment in the target; a claim covers b.c.
+        target = FakeTarget(A + [8] + B)
+        kept = boundaries.anchors(target, sibling)
+        paired = boundaries.align(target, sibling, kept)
+        paired[10] = (20, 'gap')
+        target.claims = [self.claim(target.start[11], target.end[20], ('provisional', 'provisional'))]
+        units, edges = boundaries.settle(target, sibling, paired, FakeReferences(calls={10: {0}}), [])
+        self.assertEqual(units[0]['last'], 9)
+
     def test_unmarked_unit_needs_marked_neighbours(self):
         with tempfile.TemporaryDirectory() as folder:
             symbols = Path(folder) / 'symbols.tsv'
