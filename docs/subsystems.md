@@ -47,7 +47,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
-| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `cu_801AD57C` | 0/1/1/1/1 | 15 KiB | no |
+| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
 | 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `cu_801AE3E4` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
 | 0x801B9D00-0x801C1D84 | Animation C library | `anim.c`, `animtran.c`, `animTexLib.c`, `llanimtexlib.c`, `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
