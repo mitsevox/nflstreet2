@@ -244,9 +244,10 @@ def ps2_map(directory):
     original = ROOT / 'orig' / TARGET / 'sys/main.dol'
     dol = Dol(original.read_bytes())
     ps2 = Ps2(directory)
-    extents = sorted((int(row[1], 16), int(row[2], 16)) for row in
+    # A function can have more than one boundary row (32 starts do); each extent is one function.
+    extents = sorted({(int(row[1], 16), int(row[2], 16)) for row in
                      (line.split('\t') for line in (ROOT / f'config/{TARGET}/evidence.tsv').read_text().splitlines()[1:])
-                     if row[0] == 'function')
+                     if row[0] == 'function'})
     gc = [(start, end, *gc_function(dol, start, end)) for start, end in extents]
     pf = ps2.functions()
     gc_index = {g[0]: i for i, g in enumerate(gc)}

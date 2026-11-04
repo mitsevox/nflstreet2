@@ -10,23 +10,27 @@ check that the recorded names agree.
 A rename changes, as whole identifiers:
 - src/ and include/: every use of OLD (code and comments).
 - config/<target>/evidence.tsv: OLD in the subject column (also as `Class::OLD` or `OLD::member`) and
-  in the evidence text, and GCC 2.95 mangled spellings that carry it (`OLD__14Class_8000ABCD`,
-  `fn_8000ABCD__<len>OLD`), whose length prefix is rewritten.
+  GCC 2.95 mangled spellings that carry it (`OLD__14Class_8000ABCD`, `fn_8000ABCD__<len>OLD`), whose
+  length prefix is rewritten. The evidence column is a record and is never rewritten.
 - config/<target>/units.json (externals, link_roots, folded) and comparisons.json (function, storage
   and discarded symbols): the same, mangled spellings included.
-A `name` row for a neutral label (fn_/lbl_/data_/Class_/Block_ plus an address) says the label is not
-a recovered name, so renaming one needs --evidence: the row is replaced by a `name` row for NEW,
-origin `inferred` (or --origin), with that text. Evidence describes what the code does and goes in
-evidence.tsv, never in a code comment. NEW must not already be in use. Files named after OLD (for
-example include/game/Class_803EC99C.h) are listed, not moved.
+Every rename needs --evidence: what the code does that gives NEW, recorded as a `name` row at OLD's
+address (a `type` row for a type), origin `inferred` (or --origin). A `name` row for a neutral label
+(fn_/lbl_/data_/Class_/Block_ plus an address) said the label is not a recovered name, and is
+replaced; a descriptive name row for OLD (a related build's name, say) is kept as the record of that
+claim, and the new row follows it. Evidence describes what the code does and goes in evidence.tsv,
+never in a code comment. NEW must not already be in use. Files named after OLD (for example
+include/game/Class_803EC99C.h) are listed, not moved.
 
 --check compares the names the last source build compiled (build/source/report.json, with
 comparisons.json for registered functions) with evidence.tsv: every function that has a descriptive
-compiled name needs a `name`, `external`, `function` or `data` row at its address that gives that name (unqualified,
-`Class::name` or mangled), and every units.json external needs a row with its name at its address.
+compiled name needs a `name` or `external` row at its address that gives that name (unqualified,
+`Class::name` or mangled; a `function` row from a related build or SDK signature counts too), and every
+units.json external needs a row with its name at its address.
 Exit 1 lists each disagreement.
 """
 import argparse
+import difflib
 import hashlib
 import json
 from pathlib import Path
@@ -65,7 +69,9 @@ def source_files():
 
 def rename_json(value, old, new):
     if isinstance(value, dict):
-        return {rename_text(k, old, new) if k != 'evidence' else k: rename_json(v, old, new) for k, v in value.items()}
+        # An `evidence` value is a record, as in evidence.tsv, and keeps its text.
+        return {k if k == 'evidence' else rename_text(k, old, new): v if k == 'evidence' else rename_json(v, old, new)
+                for k, v in value.items()}
     if isinstance(value, list):
         return [rename_json(v, old, new) for v in value]
     if isinstance(value, str):
@@ -80,6 +86,62 @@ def read_evidence():
 
 def write_evidence(header, rows):
     return ''.join('\t'.join(row) + '\n' for row in [header] + rows)
+
+
+def names(subject, old):
+    """Whether an evidence subject names OLD itself (not a member of it or a thing qualified by it):
+    `OLD`, `Class::OLD`, a mangled `OLD__...`, with or without a trailing note. A constructor or
+    destructor of class OLD (`OLD::OLD`, `OLD::~OLD`) is a member, named by the class's type row."""
+    first = subject.split()[0] if subject.split() else subject
+    parts = (demangle(first) or first).split('::')
+    return parts[-1] == old and not (len(parts) > 1 and parts[-2] == old)
+
+
+def rename_evidence(header, rows, old, new, evidence, origin):
+    """The evidence rows after renaming OLD to NEW. Subjects are labels and follow the rename; the
+    evidence column is a record (it may quote another build's symbol) and is never rewritten. The
+    name is a claim, so it gets its own row with --evidence: a neutral-label name row for OLD is
+    replaced by it; a descriptive name row for OLD stays as the record of that earlier claim (what a
+    related build holds, for example) and the new row follows it; with no name row, the new row
+    goes after the function, data or external row that places OLD, or a type row for a type."""
+    index = {name: i for i, name in enumerate(header)}
+    kind, start, subject = index['kind'], index['start'], index['subject']
+
+    def claim(row_kind, at, label):
+        row = ['-'] * len(header)
+        row[kind], row[start], row[subject] = row_kind, at, label
+        row[index['origin']], row[index['evidence']] = origin, evidence
+        return row
+
+    located = [r for r in rows if r[kind] == 'name' and names(r[subject], old)]
+    if not located:
+        located = [r for r in rows if r[kind] in ('function', 'data', 'external') and r[start] != '-'
+                   and names(r[subject], old)]
+    if not located:
+        located = [r for r in rows if r[kind] == 'type' and r[subject].split()[:1] == [old]]
+    if not located:
+        raise SystemExit(f'rename: no name, function, data, external or type row in evidence.tsv records {old}; '
+                         'add the row that places it first')
+    after, seen = {}, set()
+    for row in located:
+        key = (row[kind] if row[kind] == 'type' else 'name', row[start])
+        if key not in seen:
+            seen.add(key)
+            after[id(row)] = claim(key[0], row[start], rename_text(row[subject].split()[0], old, new))
+    out = []
+    for row in rows:
+        neutral = row[kind] == 'name' and names(row[subject], old) and placeholder(old)
+        if neutral:
+            if id(row) in after:
+                out.append(after[id(row)])  # The neutral row said "not a name"; the claim replaces it.
+            continue
+        renamed = list(row)
+        if not (row[kind] == 'name' and names(row[subject], old)):
+            renamed[subject] = rename_text(row[subject], old, new)
+        out.append(renamed)
+        if id(row) in after:
+            out.append(after[id(row)])
+    return out
 
 
 def rename(old, new, evidence, origin, dry_run):
@@ -101,24 +163,9 @@ def rename(old, new, evidence, origin, dry_run):
     header, rows = read_evidence()
     if users or any(used.search(row[3]) for row in rows if len(row) > 3):
         raise SystemExit(f'rename: {new} is already in use ({", ".join(users) or "evidence.tsv"}); pick another name')
-    index = {name: i for i, name in enumerate(header)}
-    out, replaced = [], 0
-    for row in rows:
-        subject = row[index['subject']]
-        if row[index['kind']] == 'name' and subject == old and placeholder(old):
-            if evidence is None:
-                raise SystemExit(f'rename: {old} has a neutral-label name row; give --evidence saying what the code does')
-            replaced += 1
-            if replaced > 1:
-                continue  # One name row per address is enough; the neutral rows all said "not a name".
-            row = list(row)
-            row[index['subject']], row[index['origin']], row[index['evidence']] = new, origin, evidence
-        else:
-            row = [rename_text(cell, old, new) if column in ('subject', 'evidence') else cell
-                   for column, cell in zip(header, row)]
-            if row[index['kind']] == 'name' and row[index['subject']] == new and evidence is not None:
-                row[index['origin']], row[index['evidence']] = origin, evidence
-        out.append(row)
+    if evidence is None:
+        raise SystemExit('rename: give --evidence saying what the code does that gives the new name')
+    out = rename_evidence(header, rows, old, new, evidence, origin)
     evidence_text = (CONFIG / 'evidence.tsv').read_text()
     new_evidence = write_evidence(header, out)
     if new_evidence != evidence_text:
@@ -132,9 +179,9 @@ def rename(old, new, evidence, origin, dry_run):
     if not changes:
         raise SystemExit(f'rename: {old} appears nowhere')
     for path, (before, after) in changes.items():
-        count = sum(a != b for a, b in zip(before.splitlines(), after.splitlines())) + \
-            abs(len(before.splitlines()) - len(after.splitlines()))
-        print(f'{path.relative_to(ROOT).as_posix()}: {count} line(s)')
+        count = sum(1 for line in difflib.unified_diff(before.splitlines(), after.splitlines(), n=0, lineterm='')
+                    if line[:1] in '+-' and line[:3] not in ('+++', '---'))
+        print(f'{path.relative_to(ROOT).as_posix()}: {count} line(s) removed or added')
     named = [p.relative_to(ROOT).as_posix() for p in source_files() if old in p.stem]
     if named:
         print(f'Files named after {old} (not moved): ' + ', '.join(named))
@@ -182,7 +229,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('old', nargs='?')
     parser.add_argument('new', nargs='?')
-    parser.add_argument('--evidence', help='what the code does that gives the name (replaces the name row text)')
+    parser.add_argument('--evidence', required=False,
+                        help='what the code does that gives the new name (required for a rename)')
     parser.add_argument('--origin', default='inferred', choices=('inferred', 'related', 'signature', 'target'))
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--check', action='store_true')

@@ -11,9 +11,10 @@ A file is closed (the project's done rule, Lucas 2026-11-04) when:
   name, classes included (a method of Class_803EC99C is not named); compiler-generated symbols
   (gcc2_compiled., _GLOBAL_.I/D wrappers, __static_initialization_and_destruction_0, numbered
   unnamed statics, CodeWarrior's @123 literals) are left out;
-- each of those names has an evidence.tsv row at its address that gives it (name, function,
-  external or data row): the function's address from the build, a label's from its section's
-  linked placement. A label whose section the build did not place one-to-one cannot be located,
+- each of those names has an evidence.tsv row at its address that gives it (a name, external or
+  data row, or a function row from a related build or SDK signature; a function row of origin
+  target or inferred only sets boundaries and never names): the function's address from the
+  build, a label's from its section's linked placement. A label whose section the build did not place one-to-one cannot be located,
   and counts as not evidenced.
 The two reviews are the last part of the rule; they live on the pull requests, so this count is
 what the tools can see: a file it lists as closed still needs its reviews.

@@ -168,31 +168,45 @@ def resolve_undefined(symbols, references, ambiguous, discarded_only=frozenset()
 
 
 # Bytes a D-form load or store moves, by primary opcode: lwz lwzu lbz lbzu stw stwu stb stbu lhz lhzu
-# lha lhau sth sthu lmw stmw lfs lfsu lfd lfdu stfs stfsu stfd stfdu. Any other instruction that
-# carries a low-half relocation (addi, ori) takes the address.
+# lha lhau sth sthu lfs lfsu lfd lfdu stfs stfsu stfd stfdu; lmw and stmw (46, 47) move four bytes
+# for each register from rD to r31 (access_width). Any other instruction that carries a low-half
+# relocation (addi, ori) takes the address.
 ACCESS_WIDTH = {32: 4, 33: 4, 34: 1, 35: 1, 36: 4, 37: 4, 38: 1, 39: 1, 40: 2, 41: 2, 42: 2, 43: 2, 44: 2, 45: 2,
-                48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
+                46: None, 47: None, 48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
 LOW_HALF = {4, 109}  # R_PPC_ADDR16_LO, R_PPC_EMB_SDA21
 HIGH_HALF = {5, 6}  # R_PPC_ADDR16_HI, R_PPC_ADDR16_HA
 STORES = {36, 37, 38, 39, 44, 45, 47, 52, 53, 54, 55}
+VOLATILE = set(range(0, 13))  # r0 and r3-r12 do not survive a call (r1, r2 are never a pool base).
+BLR = 0x4E800020
+
+
+def access_width(word):
+    opcode = word >> 26
+    return 4 * (32 - ((word >> 21) & 31)) if opcode in (46, 47) else ACCESS_WIDTH[opcode]
 
 
 def base_uses(code, at, register):
     """The (displacement, width) of each D-form access through `register` after the instruction at
-    `at` set it to an address, until an instruction overwrites it, a call clobbers it or the code
-    leaves the straight line. None when the address is used any other way (passed on, indexed)."""
+    `at` set it to an address, until an instruction overwrites it, a call clobbers it (a volatile
+    register) or the function returns. None when the address is used any other way (passed on,
+    indexed), or when a branch, or a call that a callee-saved base survives, ends the straight line
+    while the register still holds the address: later loads through it cannot be followed."""
     uses = []
     for position in range(at + 4, len(code) - 3, 4):
         word = struct.unpack_from('>I', code, position)[0]
         opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
         if opcode in ACCESS_WIDTH and base == register:
             displacement = word & 0xFFFF
-            uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, ACCESS_WIDTH[opcode]))
-            if opcode not in STORES and target == register:
+            uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
+            if opcode not in STORES and (target == register or opcode == 46 and target <= register):
                 break
             continue
-        if opcode in (16, 18, 19):  # bc, b, bclr/bcctr: the straight line ends.
+        if word == BLR:
             break
+        if opcode == 18 and word & 1 and register in VOLATILE:  # bl clobbers a volatile base.
+            break
+        if opcode in (16, 18, 19):  # Any other branch: the address may still be used beyond it.
+            return None
         if register in ((word >> 16) & 31, (word >> 11) & 31) or target == register:
             return None
     return uses
@@ -229,7 +243,7 @@ def own_data_references(native, sections, symbols, section_index=None, offset=0,
                 body = native[code['offset'] + offset:code['offset'] + offset + size]
                 word = struct.unpack_from('>I', body, (position & ~3) - offset)[0]
                 if word >> 26 in ACCESS_WIDTH:
-                    span = (0, ACCESS_WIDTH[word >> 26])
+                    span = (0, access_width(word))
                 elif word >> 26 == 14:  # addi rD, rA, address@l
                     uses = base_uses(body, (position & ~3) - offset, (word >> 21) & 31)
                     if uses:
@@ -269,10 +283,12 @@ def check_literals(source, function, references, resolved, binary):
     """An exact function must load what the original loads: each item of its own file's data that it
     references must hold the original's bytes at that address. The resolved bytes cannot show a
     wrong or swapped constant, because the address of an anonymous literal is the same whatever it
-    holds. Only data still outside linked source is checked; the complete build verifies the rest."""
+    holds. Every measured data placement the function loads from is linked for this check, including
+    one linked source already holds, because the comparison compile with its drafts is not the one
+    the complete build verifies."""
     for name, (start, end) in sorted(set(references)):
         if name not in resolved:
-            continue
+            raise ValueError(f'{source}: exact function {function} uses {name}, which the constant check did not link')
         a, data = resolved[name]
         if sb.dol_bytes(binary, a + start, a + end) != data[start:end]:
             raise ValueError(f"{source}: exact function {function} uses {name}+0x{start:X} "
@@ -696,6 +712,14 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
             if slices != unit['data_slices'][name]:
                 raise ValueError('Linked source differs from configured accepted placements')
             if not slices:
+                # Linked source holds all of this placement, so nothing here is scored; but an exact
+                # draft compiled with DECOMP_COMPARE may load from this compile of it, which the
+                # complete build never sees. Link it for the constant check alone.
+                if any(other == name for _, references in loaded for other, _, _ in references):
+                    check_folder = folder / f'check-{name.lstrip(".")}'
+                    check_folder.mkdir()
+                    resolved[name] = (a, link_data(unit['object'].read_bytes(), section, a, functions, targets,
+                        placements, addresses, check_folder, target_sections, storage, target, compiler, wrapper)[2]['data'])
                 continue
             sliced = slices != [(a, b)]
             if sliced and section['size'] != b - a:
@@ -715,9 +739,10 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
                 entries.append(dict(row, **score, type='bytes', kind=entry_kind(placement), source=unit['source'], linked=False))
                 pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
         for function, references in loaded:
-            check_literals(unit['source'], function, [(name, literal_extent(sections, symbols, every_reference, name, value,
-                span, sb.dol_bytes(binary, resolved[name][0], resolved[name][0] + len(resolved[name][1])) or b''))
-                for name, value, span in references if name in resolved], resolved, binary)
+            check_literals(unit['source'], function, [(name, (value, value) if name not in resolved else literal_extent(
+                sections, symbols, every_reference, name, value, span,
+                sb.dol_bytes(binary, resolved[name][0], resolved[name][0] + len(resolved[name][1])) or b''))
+                for name, value, span in references], resolved, binary)
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
         result = receipt(entries, pairs)

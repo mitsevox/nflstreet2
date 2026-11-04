@@ -41,15 +41,20 @@ def demangle(symbol):
 
 
 def evidence_names(evidence_path):
-    """{address: names} from the evidence rows that can name a thing at an address: name, function,
-    external and data rows. A subject may carry a note (`WriteCallback (src/dolphin/card/CARDDir.c)`,
-    `__piReg storage`), so each of its words counts as well as the whole."""
+    """{address: names} from the evidence rows that give a name at an address: `name` and `external`
+    rows; `data` rows (a data object's extent and name); and `function` rows only where they come from
+    a related build or SDK signature (a donor body whose name it carries). A `function` row of origin
+    target or inferred establishes boundaries, not a name, so it never counts: renaming its label
+    would otherwise name the function with no evidence. A subject may carry a note (`WriteCallback
+    (src/dolphin/card/CARDDir.c)`, `__piReg storage`), so each of its words counts as well as the whole."""
     given = {}
     lines = evidence_path.read_text().splitlines()
     header = lines[0].split('\t')
-    kind, start, subject = header.index('kind'), header.index('start'), header.index('subject')
+    kind, start, subject, origin = (header.index(c) for c in ('kind', 'start', 'subject', 'origin'))
     for line in lines[1:]:
         row = line.split('\t')
-        if row[kind] in ('name', 'external', 'function', 'data') and row[start] != '-':
+        if row[start] == '-':
+            continue
+        if row[kind] in ('name', 'external', 'data') or row[kind] == 'function' and row[origin] in ('related', 'signature'):
             given.setdefault(int(row[start], 16), set()).update({row[subject], *row[subject].split()})
     return given

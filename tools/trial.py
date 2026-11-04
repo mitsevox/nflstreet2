@@ -25,6 +25,7 @@ import sys
 
 import function_compare as fc
 import matching
+import prodg_cc
 import source_build as sb
 import baseline
 
@@ -87,7 +88,8 @@ def main():
     parser.add_argument('--diff', action='store_true', help='print the instruction diff of each function that differs')
     parser.add_argument('--dump', type=Path, metavar='DIR', help="keep cc1's RTL dumps here (ProDG files only; "
                         'outside the repository or under build/ or scratch/)')
-    parser.add_argument('--dump-flags', default='-da', help='GCC -d flags for --dump, comma-separated (default -da)')
+    parser.add_argument('--dump-flags', default='-da', help='GCC -d flags for --dump, comma-separated, with or '
+                        'without the dash: da (the default) or dl,dg; with dashes, write --dump-flags=-dl,-dg')
     args = parser.parse_args()
 
     original = ROOT / 'orig' / TARGET / 'sys/main.dol'
@@ -107,7 +109,13 @@ def main():
     if args.dump:
         if unit['compiler'] != 'prodg':
             raise SystemExit('trial: --dump needs a ProDG file; CodeWarrior has no RTL dump flags')
-        unit['flags'] = unit['flags'] + ['--dump-dir', str(args.dump.resolve()), '--dump', args.dump_flags]
+        flags = ','.join(f if f.startswith('-') else '-' + f for f in args.dump_flags.split(','))
+        dump = ['--dump-dir', str(args.dump.resolve()), '--dump', flags]
+        try:  # The wrapper's own checks, before compiling, so a refusal names its reason.
+            prodg_cc.dump_options(prodg_cc.parse(dump + ['-c', 'x.c', '-o', 'x.o', '--dir', '.'])[0])
+        except ValueError as error:
+            raise SystemExit(f'trial: {error}')
+        unit['flags'] = unit['flags'] + dump
     manifest = json.loads((ROOT / f'config/{TARGET}/units.json').read_text())
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdk() if unit['compiler'] == 'mwcc' else None

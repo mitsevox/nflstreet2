@@ -75,8 +75,63 @@ class Rename(unittest.TestCase):
                 'units': [{'source': 'src/game/cu_80181330.cpp', 'symbol': 'Class_802A6BB0'}]}
         renamed = rename.rename_json(data, 'Class_802A6BB0', 'MenuTable')
         self.assertEqual(list(renamed['externals']), ['vfn_03__9MenuTableiPiT2'])
-        self.assertEqual(renamed['externals']['vfn_03__9MenuTableiPiT2']['evidence'], 'type row MenuTable.')
+        # An evidence value is a record and keeps its text.
+        self.assertEqual(renamed['externals']['vfn_03__9MenuTableiPiT2']['evidence'], 'type row Class_802A6BB0.')
         self.assertEqual(renamed['units'][0]['symbol'], 'MenuTable')
+
+
+class RenameEvidence(unittest.TestCase):
+    HEADER = ['kind', 'start', 'end', 'subject', 'origin', 'start_boundary', 'end_boundary', 'evidence']
+
+    def rows(self, *rows):
+        return [row.split('|') for row in rows]
+
+    def test_boundary_row_only_gets_a_name_row(self):
+        rows = self.rows('function|0x801F34C0|0x801F3524|fn_801F34C0|target|exact|exact|bl target from 0x801F1548.')
+        out = rename.rename_evidence(self.HEADER, rows, 'fn_801F34C0', 'HashString', 'Hashes a string.', 'inferred')
+        self.assertEqual(out, self.rows('function|0x801F34C0|0x801F3524|HashString|target|exact|exact|bl target from 0x801F1548.',
+                                        'name|0x801F34C0|-|HashString|inferred|-|-|Hashes a string.'))
+
+    def test_neutral_row_is_replaced(self):
+        rows = self.rows('name|0x800D0408|-|fn_800D0408|inferred|-|-|Neutral address label.',
+                         'function|0x800D0408|0x800D0420|fn_800D0408|target|exact|exact|Called by fn_800D0408 users.')
+        out = rename.rename_evidence(self.HEADER, rows, 'fn_800D0408', 'IsReady', 'Returns state +10.', 'inferred')
+        self.assertEqual(out, self.rows('name|0x800D0408|-|IsReady|inferred|-|-|Returns state +10.',
+                                        'function|0x800D0408|0x800D0420|IsReady|target|exact|exact|Called by fn_800D0408 users.'))
+
+    def test_related_name_is_kept_as_record(self):
+        rows = self.rows('name|0x8021A068|-|UISFindRateFnc|related|-|-|Madden STABS: Uint32 UISFindRateFnc(UISInfoT*)')
+        out = rename.rename_evidence(self.HEADER, rows, 'UISFindRateFnc', 'ScanRateTable', 'Scans the table.', 'inferred')
+        self.assertEqual(out, rows + self.rows('name|0x8021A068|-|ScanRateTable|inferred|-|-|Scans the table.'))
+
+    def test_class_rename_adds_type_row(self):
+        rows = self.rows('type|-|-|Class_802A6BB0 (include/game/x.h)|inferred|-|-|Base class of Class_80005578.',
+                         'name|0x80182A88|-|Class_802A6BB0::Class_802A6BB0|inferred|-|-|Constructor.')
+        out = rename.rename_evidence(self.HEADER, rows, 'Class_802A6BB0', 'MenuTable', 'Owns the menu.', 'inferred')
+        self.assertEqual(out, self.rows('type|-|-|MenuTable (include/game/x.h)|inferred|-|-|Base class of Class_80005578.',
+                                        'type|-|-|MenuTable|inferred|-|-|Owns the menu.',
+                                        'name|0x80182A88|-|MenuTable::MenuTable|inferred|-|-|Constructor.'))
+
+    def test_unrecorded_name_is_refused(self):
+        with self.assertRaises(SystemExit):
+            rename.rename_evidence(self.HEADER, [], 'fn_80000000', 'Thing', 'x', 'inferred')
+
+
+class EvidenceNames(unittest.TestCase):
+    def test_boundary_rows_do_not_name(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'evidence.tsv'
+            path.write_text('\t'.join(RenameEvidence.HEADER) + '\n' + ''.join('\t'.join(row.split('|')) + '\n' for row in (
+                'function|0x80000010|0x80000020|HashString|target|exact|exact|bl target.',
+                'function|0x80000030|0x80000040|CARDGetBlock|related|exact|exact|SDK donor body.',
+                'name|0x80000050|-|Update|inferred|-|-|Updates.',
+                'data|0x80000060|0x80000064|__piReg storage|related|exact|exact|SDK.')))
+            given = naming.evidence_names(path)
+        self.assertNotIn(0x80000010, given)
+        self.assertIn('CARDGetBlock', given[0x80000030])
+        self.assertIn('Update', given[0x80000050])
+        self.assertIn('__piReg', given[0x80000060])
 
 
 class ConstantCheck(unittest.TestCase):
@@ -87,6 +142,16 @@ class ConstantCheck(unittest.TestCase):
         self.assertIsNone(function_compare.base_uses(passed, 0, 9))
         overwritten = ppc(addi(9, 9, 0x10), lfs(1, 9, 0), (32 << 26) | (9 << 21) | (9 << 16), lfs(2, 9, 4))
         self.assertEqual(function_compare.base_uses(overwritten, 0, 9), [(0, 4), (0, 4)])
+        branch = (16 << 26) | (12 << 21) | (2 << 16) | 8  # beq +8
+        call = (18 << 26) | 0x100 | 1  # bl
+        # A callee-saved base outlives a branch or a call: later loads cannot be followed.
+        self.assertIsNone(function_compare.base_uses(ppc(addi(31, 9, 0), lfs(1, 31, 0), branch, lfs(2, 31, 4), 0x4E800020), 0, 31))
+        self.assertIsNone(function_compare.base_uses(ppc(addi(31, 9, 0), lfs(1, 31, 0), call, lfs(2, 31, 4)), 0, 31))
+        # A volatile base does not survive a call; the function's return ends the scan.
+        self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lfs(1, 9, 0), call, lfs(2, 9, 4)), 0, 9), [(0, 4)])
+        self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lfs(1, 9, 0), 0x4E800020, lfs(2, 9, 4)), 0, 9), [(0, 4)])
+        lmw = (46 << 26) | (29 << 21) | (9 << 16) | 8  # lmw r29, 8(r9): three words
+        self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lmw), 0, 9), [(8, 12)])
 
     def test_extent(self):
         sections = [{'name': '.rodata', 'index': 1, 'size': 0x20}]
@@ -139,6 +204,7 @@ class SiblingTables(unittest.TestCase):
         self.assertEqual(lines[0], 'gc_start\tgc_end\tps2_start\tps2_end')
         starts = [int(line.split('\t')[0], 16) for line in lines[1:]]
         self.assertEqual(starts, sorted(starts))
+        self.assertEqual(len(starts), len(set(starts)), 'one row per GameCube function')
 
 
 if __name__ == '__main__':
