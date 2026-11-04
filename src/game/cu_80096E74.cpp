@@ -1,6 +1,6 @@
 #include "game/Item_80097440.h"
 #include <string.h>
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "engine/vec.h"
 
 extern "C" {

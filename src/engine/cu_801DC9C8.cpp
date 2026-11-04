@@ -1,4 +1,4 @@
-#include "engine/cu_801D86B4.h"
+#include "engine/moviercmp.h"
 
 /* VP6 chunk identifiers: 'MVhd' (header), 'MV0F' and 'MV0K' (frames). */
 

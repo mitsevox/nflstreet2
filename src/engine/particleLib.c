@@ -1,6 +1,6 @@
 #include <string.h>
 #include "engine/particleLib.h"
-#include "engine/cu_801C06E8.h"
+#include "engine/animTexLib.h"
 #include "game/cu_801CF5BC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"

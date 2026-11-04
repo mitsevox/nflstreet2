@@ -7,14 +7,14 @@
 #include <dolphin/os/OSCache.h>
 #include <string.h>
 #include "engine/cu_80227F14.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "engine/vec.h"
 #include "game/cu_801CF5BC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include "game/Object_80235588.h"
 
-#include "engine/cu_801C665C.h"
+#include "engine/list.h"
 #include "engine/llmemory.h"
 #include "game/fn_801C68FC.h"
 

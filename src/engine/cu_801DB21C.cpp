@@ -1,4 +1,4 @@
-#include "engine/cu_801DA52C.h"
+#include "engine/maddec.h"
 
 extern "C" {
 void fn_801DB21C(int *pIn, int *pOut);

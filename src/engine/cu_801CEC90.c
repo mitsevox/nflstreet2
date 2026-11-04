@@ -3,7 +3,7 @@
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/vi/vifuncs.h>
-#include "engine/cu_801CE1F8.h"
+#include "engine/llglib.h"
 #include "engine/cu_801CEC90.h"
 
 typedef struct RenderMark_801CEC90 {

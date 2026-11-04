@@ -1,4 +1,4 @@
-#include "engine/cu_801DA52C.h"
+#include "engine/maddec.h"
 
 extern unsigned char *lbl_803ECF1C;
 extern unsigned int lbl_803ECF20;

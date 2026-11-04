@@ -7,7 +7,7 @@
 #include <string.h>
 #include "game/cu_801962CC.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801C06E8.h"
+#include "engine/animTexLib.h"
 
 /* Header of the emitter list built by fn_801444D8 and filled by fn_80144EDC. */
 struct List_803EB230 {

@@ -1,4 +1,4 @@
-#include "engine/cu_801D86B4.h"
+#include "engine/moviercmp.h"
 #include "engine/cu_801DB7D4.h"
 #include "engine/fn_801CEA08.h"
 

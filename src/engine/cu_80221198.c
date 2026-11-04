@@ -10,8 +10,8 @@
 #include <dolphin/os/OSCache.h>
 #include "engine/Info_801D86B4.h"
 #include "engine/cu_801C2EB4.h"
-#include "engine/cu_801CCA64.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/Font.h"
+#include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
 #include "engine/cu_80227F14.h"
 #include "engine/sound.h"

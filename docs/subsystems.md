@@ -50,9 +50,9 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `cu_801AD57C` | 0/1/1/1/1 | 15 KiB | no |
 | 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `cu_801AE3E4` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
-| 0x801B9D00-0x801C1D84 | Animation C library | `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
-| 0x801C1D84-0x801D134C | Engine core: C library helpers, keyframe evaluation, module nodes, matrix library | `cu_801C1D84`, `cu_801CBC50`, `cu_801D03D0` | 1/7/5/4/0 | 40 KiB | no |
-| 0x801D134C-0x801DD498 | Memory manager, operator new and delete, memory card | `Memory.c`, `llmemory.c`, `MemExtern.c`, `TibNew.cpp`, `memorycard.c` | 0/2/2/5/1 | 44 KiB | no |
+| 0x801B9D00-0x801C1D84 | Animation C library | `anim.c`, `animtran.c`, `animTexLib.c`, `llanimtexlib.c`, `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
+| 0x801C1D84-0x801D134C | Engine core: C library helpers, keyframe evaluation, module nodes, matrix library | `ctype.c`, `camera.c`, `camfocus.c`, `camfree.c`, `CurveList.c`, `polynomial.c`, `ds.c`, `list.c`, `linklist.c`, `node.c`, `splytree.c`, `bintree.c`, `fileio.c`, `llfileio.c`, `fs_cli.c`, `filemc.c`, `Font.c`, `llglib.c`, `rand.c`, `orient.c`, `matrix.c`, `llmatrix.c`, `cu_801C1D84`, `cu_801CBC50` | 1/7/5/4/0 | 40 KiB | no |
+| 0x801D134C-0x801DD498 | Memory manager, operator new and delete, memory card | `Memory.c`, `llmemory.c`, `MemExtern.c`, `TibNew.cpp`, `memorycard.c`, `moviercmp.cpp`, `maddec.cpp` | 0/2/2/5/1 | 44 KiB | no |
 | 0x801DD498-0x801E11D0 | Particle systems | `particleLib.c`, `psysEmitter.c`, `psysCollision.c`, `colorRamp.c` | 0/1/1/1/0 | 12 KiB | no |
 | 0x801E11D0-0x801EB488 | Controllers and input, collision shapes, rigid-body motion | `periph.c`, `llperiph.c`, `PJoyDrvr.c`, `cu_801E7034`, `cu_801E9BB4` | 0/0/1/0/2 | 36 KiB | no |
 | 0x801EB488-0x801F3524 | Quaternions, button remapping, the resource system | `llquat.c`, `remap.c`, `Resource.c`, `reswrite.c`, `ResTracker.c`, `resquickload.c`, `rescache.c`, `resloosefile.c` | 0/0/2/2/0 | 25 KiB | no |
@@ -69,7 +69,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x8023873C-0x8025E148 | GameCube SDK built with CodeWarrior: OS, DVD, VI, VM, PAD, AR, AI, MTX, GX, CARD, EXI, SI | `src/dolphin/<library>/*.c` | 6/8/1/5/1 | 42 KiB | no |
 | 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
 | 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `cu_80276DE4`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
-| 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `cu_8027EFAC`, `cu_802805C4`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
+| 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `cu_8027EFAC`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
 | 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c` | 1/1/0/0/0 | 2 KiB | no |
 
 The site also lists 136,828 bytes (134 KiB) of code that no chunk owns yet (`Unmapped / Code section 2`, 62 non-exact functions); the structure pass assigns it to files.

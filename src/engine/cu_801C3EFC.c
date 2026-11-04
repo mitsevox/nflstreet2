@@ -2,7 +2,7 @@
 
 #include "engine/cu_801C4960.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801D03D0.h"
+#include "engine/llmatrix.h"
 #include "game/fn_801EBC18.h"
 #include "game/fn_802270D4.h"
 
