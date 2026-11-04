@@ -3,21 +3,22 @@
 
 #include "engine/vec.h"
 
-/* Rigid body of the unit at 0x801E9538 (not drafted); only the fields the
-   joint and sleep-controller code use are named. */
+/* Accessed fields of the rigid body used by motion helpers, joints and sleep control. */
 typedef struct Body_801E9538 {
     char mUnknown000[0x44];
     float mUnknown044;
     float mUnknown048;
-    char mUnknown04C[0x64 - 0x4C];
+    char mUnknown04C[0x54 - 0x4C];
+    Vec4_801DE1E0 mUnknown054;
     Vec3_801DE1E0 mUnknown064;
-    char mUnknown070[0x7C - 0x70];
+    Vec3_801DE1E0 mUnknown070;
     Vec3_801DE1E0 mUnknown07C;
     float mUnknown088[4][4];
     float mUnknown0C8[4][4];
     Vec3_801DE1E0 mUnknown108;
     Vec3_801DE1E0 mUnknown114;
-    char mUnknown120[0x138 - 0x120];
+    Vec3_801DE1E0 mUnknown120;
+    Vec3_801DE1E0 mUnknown12C;
     int mState;
     int mUnknown13C;
     int mUserData;

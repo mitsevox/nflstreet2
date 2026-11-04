@@ -265,3 +265,23 @@
 0x80229210	adampreddy	Preserve original exact-source contributor from PR #689; unit integration from #1147.
 0x8014D948	lifewillbeokay	Score-row reconstruction made exact in PR #1208; preserve the original contributor through batch integration.
 0x801514AC	lifewillbeokay	Score-row reconstruction made exact in PR #1208; preserve the original contributor through batch integration.
+0x80150E1C	lifewillbeokay	Original body PR #1216 (26fc9ec5672dbbf366314b3c2141159a2ec3766e); source src/game/cu_80150DFC.cpp blob 6557402928e89322d127b8c902bfa64e37acd365; merged_via #1220.
+0x801E9BB4	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9BDC	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9C1C	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9C5C	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9CC4	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9CF0	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9D64	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9DE0	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9E18	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9E70	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E9F0C	lifewillbeokay	Original body PR #1217 (48320031c3c89f0efdc0b4db35a534e6b818b614); source src/engine/cu_801E9BB4.cpp blob 10d128a977976e041e02fb5049226ac76ceb202a; merged_via #1220.
+0x801E7034	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E70A0	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E7120	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E71D0	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E71E0	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E7208	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E7298	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801E736C	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
