@@ -2,8 +2,8 @@
 #define ENGINE_SPCHLIB_H
 
 /* Declarations shared by the files of the speech (play-by-play commentary) library:
-   spchevnt.c, the start-up file cu_801AF60C.c, spchpick.c, spchrand.c and the rules and banks
-   file cu_801B1CFC.c. */
+   spchevnt.c, the start-up file cu_801AF60C.cpp, spchpick.c, spchrand.c and the rules and banks
+   file cu_801B1CFC.cpp. */
 
 #include <stdarg.h>
 
