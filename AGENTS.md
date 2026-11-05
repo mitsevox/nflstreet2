@@ -58,13 +58,14 @@ Do these steps in order, all in the file's one PR. Matching and linking are not 
 
 ### What counts as evidence
 
-Nothing about the original source is deterministic, so evidence is judged by its origin (config/README.md), and a reviewer applies these rules to every name, type, field and boundary:
+Nothing about the original source is deterministic. This target's evidence regime is B, sibling debug data (wiki: Evidence, What counts as evidence); [config/GN7E69-rev0/README.md](config/GN7E69-rev0/README.md) declares it with the inventory of what exists under `references/`. Reviewers apply these rules, which follow the kit's wording:
 
-1. An `inferred` claim is accepted when its reason is written in its evidence row and nothing in the target contradicts it. "Not enough evidence" is not a finding.
-2. To reject an inferred claim, the reviewer shows something concrete: a contradicting load, store, caller or data item, or a better-supported alternative.
-3. `related` evidence (another game, another build, another title's debug data) is corroboration. It is never proof and never required.
-4. `target` evidence stays strict: only strings, symbols and bytes in this build.
-5. A verdict on an inferred name is "fine" or "wrong, because ...". Preferring another name is a note, not a `FIX`.
+1. An `inferred` name or edge is accepted when its reason is written in its evidence row and nothing in the target contradicts it (reasoned and uncontradicted).
+2. For an inferred name or edge, 'not enough evidence' alone is not a finding: a rejection names a contradicting observation, an alternative the target supports better, a row that gives no reason, or an edge graded `exact` that its evidence does not establish; a reviewer who prefers another name or edge without one records a note, not a `FIX`.
+3. The eased bar covers inferred names and edges only. Type and field rows still cite the loads and stores that show each offset.
+4. Accepting an inferred edge does not decide its grade: an edge is `exact` only when evidence establishes it; otherwise it stays `provisional`.
+5. `related` evidence (another game, another build or revision of this game, another title's debug data) is corroboration. It is never proof and never required.
+6. `target` evidence stays strict: strings, symbols, debug information or bytes of this build only.
 
 ### Naming
 

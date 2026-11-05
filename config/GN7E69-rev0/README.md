@@ -2,6 +2,8 @@
 
 Curated name and boundary claims belong in [evidence.tsv](evidence.tsv), using the [evidence format](../README.md). The table does not apply symbols or splits to this baseline.
 
+Evidence regime: B (sibling debug data), with the inventory that justifies it (wiki: Evidence, What counts as evidence). This build has no debug data: its symbols and DWARF sections were stripped (`references/NFL Street 2/DOL-GN7E-USA/ANALYSIS.md`). Related builds that keep debug data, all `related` evidence: NASCAR 2005 (`references/NASCAR 2005/DOL-GN4E-USA/`, Tiburon, same compiler, DWARF 1 and a full symbol table), GoldenEye: Rogue Agent and Medal of Honor: European Assault (DWARF 1 builds under `references/`), FIFA Soccer 2005 and UEFA Champions League 2004-2005 (SN linker-map debug builds), the NFL Street 2 Xbox prototype `NFLBig.xbe` (`references/NFL Street 2/prototype/`, symbols of another revision of this game) and the unstripped online overlays of the NFL Street and NFL Street 3 PS2 builds.
+
 `baseline.json` records the DOL's section addresses, entry point, complete size, and hash. Section names are toolkit placeholders, not recovered original names or compilation-unit boundaries. The small-data bases are loaded into r13 and r2 at `0x80003108`–`0x80003114` in the target entry code.
 
 The baseline splits the original executable into relocatable objects, links them with GNU binutils, converts the ELF back to DOL, and compares every output byte with the verified target. This demonstrates a working original-object relink, not the original compiler or linker identity, recovered source, or matching progress.

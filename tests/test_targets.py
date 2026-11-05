@@ -94,7 +94,7 @@ class Targets(unittest.TestCase):
             git('switch','-q','--detach',new);git('merge','-q','--no-ff','-m','test merge','pr');on_new=git('rev-parse','HEAD')
             changed=lambda b,h:git('diff','--name-only',b,h).split()
             pr=lambda base:{'base':{'sha':base},'head':{'sha':tip}}
-            # base.sha one commit behind a merge built on the branch tip (n100f#114's case).
+            # base.sha one commit behind a merge built on the branch tip.
             self.assertEqual(pr_base(pr(old),on_new,tmp),new)
             self.assertEqual(changed(pr_base(pr(old),on_new,tmp),on_new),['docs/b.md'])
             self.assertIn('config/GAME01-rev0/evidence.tsv',changed(old,on_new))  # what the old diff saw
@@ -115,6 +115,12 @@ class Targets(unittest.TestCase):
             self.assertTrue(all(line.startswith('adopted ') for line in scaffold(first,root)))
             (root/'config'/first/'evidence.tsv').write_text('\t'.join(COLUMNS)+'\nname\t-\t-\tx\tinferred\t-\t-\te\n')
             with self.assertRaises(SystemExit):scaffold(first,root)
+
+    def test_new_target_readme_asks_for_the_evidence_regime(self):
+        import tools.new_target as new_target
+        target={'id':'GAME01-rev0','label':'GAME01','region':'USA','revision':'0','sha1':'a'*40,'status':'active'}
+        readme=new_target.files(target,'sys/main.dol')['config/GAME01-rev0/README.md']
+        self.assertIn('Evidence regime: PARAMETER (A own debug data, B sibling debug data, or C the binary only)',readme)
 
     def test_new_target_adopts_the_placeholder_of_a_target_listed_but_not_built(self):
         # A planned or archived target holds config/<id>/README.md (prose) and orig/<id>/.gitkeep
