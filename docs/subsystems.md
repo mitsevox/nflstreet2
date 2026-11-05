@@ -68,7 +68,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x80003100-0x800034A0 | Boot: `.init` code, including the `.init` part of `__ppc_eabi_init.c` (0x80003468-0x8000348C); that file's `.text` (0x8023E818-0x8023E920) is counted in the SDK row | `cu_80003100` | 1/0/0/1/0 | 1 KiB | no |
 | 0x8023873C-0x8025E148 | GameCube SDK built with CodeWarrior: OS, DVD, VI, VM, PAD, AR, AI, MTX, GX, CARD, EXI, SI | `src/dolphin/<library>/*.c` | 6/8/1/5/1 | 42 KiB | no |
 | 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `vprintf.c`, `vfprintf.c` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
-| 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `sdspmix.c`, `snddrv.c`, `cu_802753F0`, `cu_80276DE4`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
+| 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `sdspmix.c`, `snddrv.c`, `cu_802753F0`, `cu_80276DE4`, `slinklst.c`, `saramman.c`, `supmutpf.c`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
 | 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `date.c`, `GCmp.c`, `huff.c`, `rle.c`, `none.c`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
 | 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c` | 1/1/0/0/0 | 2 KiB | no |
 
