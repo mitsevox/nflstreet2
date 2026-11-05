@@ -30,8 +30,9 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
-# A `Closes:` line, also as a list item, quote or heading and in bold or italics.
-LINE = re.compile(r'^[ \t>#*_-]*[*_]*Closes[*_]*[ \t]*:[*_]*[ \t]*(.*)$', re.IGNORECASE)
+# A `Closes:` line, also as a list item, quote or heading, in bold or italics, or with the keyword
+# in inline code.
+LINE = re.compile(r'^[ \t>#*_`-]*Closes[*_`]*[ \t]*:[*_`]*[ \t]*(.*)$', re.IGNORECASE)
 MENTION = re.compile(r'\bcloses[*_]*\s*:', re.IGNORECASE)
 COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
 
