@@ -11,7 +11,7 @@ struct Object_8003DEC4;
 struct Entry_802F3488 {
     const char *mpName;
     unsigned char mUnknown4;
-    TexFilterDesc_t mUnknown8;
+    TMTexFilterDesc_t mUnknown8;
 };
 
 extern "C" {

@@ -5,14 +5,14 @@
    passes the words +0 and +4, the float +8, the bytes +0x10 and +0x11 and the
    word +0xC to fn_80212234, which hands them to GXInitTexObjLOD as min/mag
    filter, LOD bias, bias clamp, edge LOD and max anisotropy. */
-typedef struct TexFilterDesc_t {
+typedef struct TMTexFilterDesc_t {
     int mMinFilter;
     int mMagFilter;
     float mLodBias;
     int mMaxAniso;
     unsigned char mbBiasClamp;
     unsigned char mbEdgeLod;
-} TexFilterDesc_t;
+} TMTexFilterDesc_t;
 
 /* Wrap descriptor read by fn_80212374 through fn_802121D0; fn_80212374
    passes its two words to GXInitTexObjWrapMode as the S and T wrap modes. */
@@ -26,7 +26,7 @@ typedef struct TexLib_802119C4 TexLib_802119C4;
 #ifdef __cplusplus
 extern "C" {
 #endif
-void fn_8021216C(TexLib_802119C4 *pLib, TexFilterDesc_t *pDesc);
+void fn_8021216C(TexLib_802119C4 *pLib, TMTexFilterDesc_t *pDesc);
 void fn_802121D0(TexLib_802119C4 *pLib, TexWrapDesc_80212374 *pDesc);
 #ifdef __cplusplus
 }

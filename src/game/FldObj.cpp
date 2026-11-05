@@ -82,7 +82,7 @@ static FldObjLayerDesc_t _FldObj_aLayers[5] = {
 static FldObjLinePass_t _FldObj_aLinePasses[1] = {
     { { 0.0f, 0.0f, 0.0f }, 1.0f },
 };
-static TexFilterDesc_t _FldObj_TexFilter = { 5, 1, -4.0f, 0, 0, 1 };
+static TMTexFilterDesc_t _FldObj_TexFilter = { 5, 1, -4.0f, 0, 0, 1 };
 static int _FldObj_iItem = 0;
 static float _FldObj_fDegradeScale;
 
