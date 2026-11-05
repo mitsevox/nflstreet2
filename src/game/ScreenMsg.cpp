@@ -448,44 +448,44 @@ extern "C" int TutorialScreen0Msg(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void ScreenMsgDispatch(unsigned int id, int kind, int group, int count, Arg_8018399C *pArgs,
+extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int count, Arg_8018399C *pArgs,
                             int *pResult)
 {
     int handled = 0;
 
-    switch (kind) {
+    switch (group) {
     case 0:
-        handled = fn_8000F870(group, id, pArgs, count, pResult);
+        handled = fn_8000F870(screen, id, pArgs, count, pResult);
         break;
     case 13:
-        handled = fn_8001BB20(group, id, pArgs, count, pResult);
+        handled = fn_8001BB20(screen, id, pArgs, count, pResult);
         break;
     case 11:
-        handled = fn_8001D180(group, id, pArgs, count, pResult);
+        handled = fn_8001D180(screen, id, pArgs, count, pResult);
         break;
     case 6:
-        handled = fn_8001D2D8(group, id, pArgs, count, pResult);
+        handled = fn_8001D2D8(screen, id, pArgs, count, pResult);
         break;
     case 3:
-        handled = fn_80059664(group, id, pArgs, count, pResult);
+        handled = fn_80059664(screen, id, pArgs, count, pResult);
         break;
     case 1:
-        handled = PopupScreenMsg(group, id, pArgs, count, pResult);
+        handled = PopupScreenMsg(screen, id, pArgs, count, pResult);
         break;
     case 5:
-        handled = fn_8001F120(group, id, pArgs, count, pResult);
+        handled = fn_8001F120(screen, id, pArgs, count, pResult);
         break;
     case 2:
-        handled = fn_8017F6A8(group, id, pArgs, count, pResult);
+        handled = fn_8017F6A8(screen, id, pArgs, count, pResult);
         break;
     case 7:
-        handled = TutorialScreenMsg(group, id, pArgs, count, pResult);
+        handled = TutorialScreenMsg(screen, id, pArgs, count, pResult);
         break;
     case 12:
-        handled = fn_8001D0F4(group, id, pArgs, count, pResult);
+        handled = fn_8001D0F4(screen, id, pArgs, count, pResult);
         break;
     case 8:
-        handled = fn_8001F074(group, id, pArgs, count, pResult);
+        handled = fn_8001F074(screen, id, pArgs, count, pResult);
         break;
     }
     if (handled == 0) {
