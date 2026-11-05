@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/cu_8003EC04.h"
 
-/* The part of an Ball_t entry that the block snapshot saves,
+/* The part of a Ball_t entry that the block snapshot saves,
    restores and checksums. */
 struct BallState_t {
     Record_8003EC04 *mpRecord;

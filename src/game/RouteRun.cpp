@@ -1,5 +1,5 @@
 /* Player state that runs a player toward a target heading and distance, steering around
-   teammates, walls and the sidelines, watching the ball carrier, and starting a sidestep move
+   defenders, walls and the sidelines, watching the ball carrier, and starting a sidestep move
    when the player is open. */
 
 #include <math.h>
@@ -71,7 +71,7 @@ static float _RouteRun_fAvoidConeDeg = 40.0f;
 static float _RouteRun_fAvoidTurnDeg = 30.0f;
 static float _RouteRun_fAvoidTurnWideDeg = 50.0f;
 
-extern "C" int RouteRunAvoidTeammates(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBlock)
 {
     int angle = pBlock->mUnknown16;
     int found = 0;
@@ -140,7 +140,7 @@ extern "C" int RouteRunAvoidTeammates(Object_80039F5C *p, RouteRunBlock_t *pBloc
     return found;
 }
 
-extern "C" int RouteRunSidestepTeammate(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBlock)
 {
     int angle = pBlock->mUnknown16;
     Object_80039F5C *pBest = 0;
@@ -352,8 +352,8 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if (!RouteRunSidestepTeammate(p, pBlock)) {
-        RouteRunAvoidTeammates(p, pBlock);
+    if (!RouteRunSidestepDefender(p, pBlock)) {
+        RouteRunAvoidDefenders(p, pBlock);
     }
     RouteRunAvoidWalls(p, pBlock);
     result = fn_800FD41C(p);
