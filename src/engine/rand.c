@@ -28,9 +28,9 @@ typedef struct RandSub_t {
     int mTable[56];
 } RandSub_t;
 
-extern void *(*_MathRand_aInitFuncs[])(int seed);
-extern int (*_MathRand_aCopyFuncs[])(void *pDst, void *pSrc);
-extern float (*_MathRand_aGetFuncs[])(void *pStream);
+extern void *(*_MathRand_InitFunc[])(int seed);
+extern int (*_MathRand_CopyFunc[])(void *pDst, void *pSrc);
+extern float (*_MathRand_Func[])(void *pStream);
 extern int _MathRand_Size[];
 
 
@@ -238,7 +238,7 @@ static float _MathRandSubtractive(void *pHandle)
 
 void *MathNewRandomStream(int type, int seed)
 {
-    RandStream_t *pStream = _MathRand_aInitFuncs[type](seed);
+    RandStream_t *pStream = _MathRand_InitFunc[type](seed);
 
     if (pStream) {
         pStream->mType = type;
@@ -254,7 +254,7 @@ int MathCopyRandomStream(void *pDstHandle, void *pSrcHandle)
     int result = 0x40003;
 
     if (pDst && pSrc) {
-        result = _MathRand_aCopyFuncs[type](pDst, pSrc);
+        result = _MathRand_CopyFunc[type](pDst, pSrc);
     }
     return result;
 }
@@ -273,7 +273,7 @@ int MathDelRandomStream(void *pStream)
 float MathGetRandom(void *pHandle)
 {
     RandStream_t *pStream = pHandle;
-    return _MathRand_aGetFuncs[pStream->mType](pStream);
+    return _MathRand_Func[pStream->mType](pStream);
 }
 
 unsigned int MathGetRandomRange(void *pStream, unsigned int range)
@@ -291,19 +291,19 @@ int MathGetRandomSeed(void)
     return OSGetTick();
 }
 
-void *(*_MathRand_aInitFuncs[3])(int seed) = {
+void *(*_MathRand_InitFunc[3])(int seed) = {
     _MathRandInitFastLinear, _MathRandInitSlowLinear, _MathRandInitSubtractive
 };
 
-void (*_MathRand_aResetFuncs[3])(void *pStream, int seed) = {
+void (*_MathRand_ResetFunc[3])(void *pStream, int seed) = {
     _MathRandResetFastLinear, _MathRandResetSlowLinear, _MathRandResetSubtractive
 };
 
-int (*_MathRand_aCopyFuncs[3])(void *pDst, void *pSrc) = {
+int (*_MathRand_CopyFunc[3])(void *pDst, void *pSrc) = {
     _MathRandCopyFastLinear, _MathRandCopySlowLinear, _MathRandCopySubtractive
 };
 
-float (*_MathRand_aGetFuncs[3])(void *pStream) = {
+float (*_MathRand_Func[3])(void *pStream) = {
     _MathRandFastLinear, _MathRandSlowLinear, _MathRandSubtractive
 };
 
