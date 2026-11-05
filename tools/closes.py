@@ -17,8 +17,9 @@ pull_request types, which leave out `edited`, as for tools/tier.py's Tier line).
 added or changed after the last push is checked only by the next push, so push after editing it,
 and the owner's clearance confirms the final body against the final run. Running the check on body
 edits would need either a second workflow, which the site's scaffold check rejects (validate.yml is
-the only one), or `edited` runs of validate.yml, whose skipped or cancelled jobs would replace the
-push run's required check results on the same commit.
+the only one), or `edited` runs of validate.yml. Those are safe only when they run the whole
+pipeline (a skipped job's result would replace the push run's on the same commit), which costs a
+full build for every body edit; that is the owner's call.
 """
 import argparse
 import json
@@ -29,15 +30,25 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
-LINE = re.compile(r'^\s*\**Closes\**\s*:\s*(.*)$', re.IGNORECASE | re.MULTILINE)
+# A `Closes:` line, also as a list item, quote or heading and in bold or italics.
+LINE = re.compile(r'^[ \t>#*_-]*[*_]*Closes[*_]*[ \t]*:[*_]*[ \t]*(.*)$', re.IGNORECASE)
+MENTION = re.compile(r'\bcloses[*_]*\s*:', re.IGNORECASE)
+COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
 
 
 def claimed(body):
-    """The source paths a PR body's `Closes:` lines name, in order; [] when none."""
+    """The source paths a PR body's `Closes:` lines name, in order; [] when none. Text inside HTML
+    comments (the template's example) and in inline code is ignored. A line that mentions `closes:`
+    in any other form is refused rather than skipped, so a claim can never pass unchecked."""
     files = []
-    for match in LINE.finditer(body or ''):
+    for line in COMMENT.sub('', body or '').splitlines():
+        match = LINE.match(line)
+        if match is None:
+            if MENTION.search(re.sub(r'`[^`]*`', '', line)):  # Inline code is a mention, not a claim.
+                raise ValueError(f'cannot read this Closes line; write it as `Closes: <path>, <path>`: {line.strip()}')
+            continue
         for item in re.split(r'[,\s]+', match[1].strip()):
-            item = item.strip('`*')
+            item = item.strip('`*_')
             if item and item.lower() not in ('none', '-', 'n/a'):
                 files.append(item)
     return files
@@ -82,7 +93,10 @@ def main():
     else:
         print('closes: not a pull request, nothing to check')
         return 0
-    files = claimed(body)
+    try:
+        files = claimed(body)
+    except ValueError as error:
+        sys.exit(f'closes: {error}')
     if not files:
         print('closes: the PR closes no file')
         return 0

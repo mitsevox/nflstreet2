@@ -228,6 +228,14 @@ class Closes(unittest.TestCase):
                          ['src/engine/hash.c', 'src/game/FELoop.cpp'])
         self.assertEqual(closes.claimed('**Closes:** none'), [])
         self.assertEqual(closes.claimed('Tier C, no files'), [])
+        for form in ('- Closes: src/a.c', '* Closes: src/a.c', '> Closes: src/a.c', '_Closes:_ src/a.c',
+                     '## Closes: src/a.c', '**Closes**: src/a.c', 'closes: src/a.c'):
+            self.assertEqual(closes.claimed(form), ['src/a.c'], form)
+        self.assertEqual(closes.claimed('Fixes #12. Closes #123.'), [])
+        self.assertEqual(closes.claimed('<!-- e.g. `Closes: src/x.c` -->\nCloses: none'), [])
+        self.assertEqual(closes.claimed('- A body line `Closes: <path>` fails CI unless the file is closed.'), [])
+        with self.assertRaises(ValueError):
+            closes.claimed('This PR closes: src/a.c')
 
     def test_check(self):
         import tempfile
