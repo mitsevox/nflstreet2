@@ -12,18 +12,18 @@ typedef struct TdbExtFile_8020D2D0 {
 } TdbExtFile_8020D2D0;
 
 extern unsigned char fn_801D2700(int handle);
-extern int fn_801D2130(MemPoolDesc *pParams);
+extern int fn_801D2130(MemPoolDesc_t *pParams);
 extern int fn_801D2570(int handle);
 extern void *fn_801D310C(void *p, int size, int flags, int d);
 extern int fn_801F0F9C(void *pPath);
 
-extern MemPoolDesc lbl_8039B498;
+extern MemPoolDesc_t lbl_8039B498;
 extern void *lbl_803EBEA8;
 extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
 
-void fn_8020D0CC(MemPoolDesc *pParams)
+void fn_8020D0CC(MemPoolDesc_t *pParams)
 {
     lbl_8039B498 = *pParams;
     lbl_803EBEAD = fn_801D2700(pParams->mUnknown8);

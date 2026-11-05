@@ -69,7 +69,7 @@ int fn_801FC9D4(int a, int b, int c, int d, int e);
 void fn_801FCD04(void);
 int fn_8020CFB0(int a);
 int fn_8020D048(void);
-void fn_8020D0CC(MemPoolDesc *pRecord);
+void fn_8020D0CC(MemPoolDesc_t *pRecord);
 void fn_8020D158(void);
 int fn_80229470(void);
 void fn_80229494(void);
@@ -188,7 +188,7 @@ const char *Db::GetName() { return "Db"; }
 
 int Db::Init()
 {
-    MemPoolDesc *record = MemPoolGetDesc(2);
+    MemPoolDesc_t *record = MemPoolGetDesc(2);
     Desc_801F8A0C desc;
 
     fn_8022C930(32);

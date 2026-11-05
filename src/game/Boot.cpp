@@ -237,14 +237,14 @@ void BootHandleReset(void)
 /* Sets the base (+12) and size (+16) words of the eight memory records. */
 void BootSetupMemPools(void)
 {
-    MemPoolDesc *pState = MemPoolGetDesc(4);
-    MemPoolDesc *pDb = MemPoolGetDesc(2);
-    MemPoolDesc *pMain = MemPoolGetDesc(1);
-    MemPoolDesc *pDebug = MemPoolGetDesc(8);
-    MemPoolDesc *pMisc = MemPoolGetDesc(0x20);
-    MemPoolDesc *pAuxRam = MemPoolGetDesc(0x10);
-    MemPoolDesc *pUnload = MemPoolGetDesc(0x40);
-    MemPoolDesc *pSound = MemPoolGetDesc(0x100);
+    MemPoolDesc_t *pState = MemPoolGetDesc(4);
+    MemPoolDesc_t *pDb = MemPoolGetDesc(2);
+    MemPoolDesc_t *pMain = MemPoolGetDesc(1);
+    MemPoolDesc_t *pDebug = MemPoolGetDesc(8);
+    MemPoolDesc_t *pMisc = MemPoolGetDesc(0x20);
+    MemPoolDesc_t *pAuxRam = MemPoolGetDesc(0x10);
+    MemPoolDesc_t *pUnload = MemPoolGetDesc(0x40);
+    MemPoolDesc_t *pSound = MemPoolGetDesc(0x100);
     unsigned int limit = 0x1800000;
     int lo = (int)OSGetArenaLo();
     int hi = (int)OSGetArenaHi();

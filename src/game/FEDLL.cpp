@@ -4,7 +4,7 @@
 extern "C" {
 extern char lbl_800034A0[];
 
-int fn_801D2130(MemPoolDesc *pObject);
+int fn_801D2130(MemPoolDesc_t *pObject);
 int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int fn_801D2570(int id);
 void fn_80088E8C(char *pStart, char *pEnd);
@@ -34,7 +34,7 @@ int FEDLL::Init()
    0x40 to fn_801D2130. */
 int FEDLL::Shutdown()
 {
-    MemPoolDesc *pObject = MemPoolGetDesc(0x40);
+    MemPoolDesc_t *pObject = MemPoolGetDesc(0x40);
     pObject->mUnknown10 = (char *)ChallengeGoalCheckMargin - lbl_800034A0;
     fn_80088EC8(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
     pObject->mUnknown10 = 0x209C0;

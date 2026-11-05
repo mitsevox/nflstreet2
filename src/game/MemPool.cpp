@@ -2,7 +2,7 @@
 
 #include "game/MemPoolDesc.h"
 
-static MemPoolDesc _MemPool_aDesc[8] = {
+static MemPoolDesc_t _MemPool_aDesc[8] = {
     { "MAIN", 1, 0, 0, 0x200A00 },
     { "DB", 2, 0, 0x104000, 0x80A00 },
     { "DEBUG", 8, 0, 0, 0x200A00 },
@@ -15,9 +15,9 @@ static MemPoolDesc _MemPool_aDesc[8] = {
 
 extern "C" {
 
-MemPoolDesc *MemPoolGetDesc(unsigned int id)
+MemPoolDesc_t *MemPoolGetDesc(unsigned int id)
 {
-    MemPoolDesc *pRecord = 0;
+    MemPoolDesc_t *pRecord = 0;
 
     switch (id) {
     case 1:

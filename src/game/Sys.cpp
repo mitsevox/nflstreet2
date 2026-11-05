@@ -4,7 +4,7 @@
 /* Argument of fn_801D2054. */
 struct Object_801D2054 {
     char mLogName[64];
-    MemPoolDesc *mpArena;
+    MemPoolDesc_t *mpArena;
 };
 
 /* Argument of fn_801F7824. */
@@ -24,7 +24,7 @@ void ArenaSetupInit(void);
 void ArenaSetupShutdown(void);
 int fn_801D2054(Object_801D2054 *pConfig);
 int fn_801D20C8(void);
-int fn_801D2130(MemPoolDesc *pArena);
+int fn_801D2130(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
 int fn_801D3B0C(int id, int a, int base, int size, int b, int c);
@@ -52,9 +52,9 @@ const char *Sys::GetName() { return "Sys"; }
 
 int Sys::Init()
 {
-    MemPoolDesc *pDb;
-    MemPoolDesc *pDebug;
-    MemPoolDesc *pAuxRam;
+    MemPoolDesc_t *pDb;
+    MemPoolDesc_t *pDebug;
+    MemPoolDesc_t *pAuxRam;
 
     fn_801C6584();
     ArenaSetupInit();
