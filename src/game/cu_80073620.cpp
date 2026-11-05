@@ -1,4 +1,4 @@
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 void fn_800742A0(int index);

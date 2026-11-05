@@ -1,7 +1,7 @@
-#ifndef ENGINE_CU_801AE3E4_H
-#define ENGINE_CU_801AE3E4_H
+#ifndef ENGINE_SPCHEVNT_H
+#define ENGINE_SPCHEVNT_H
 
-/* Declarations of src/engine/cu_801AE3E4.cpp used by several game units. */
+/* Declarations of src/engine/spchevnt.c used by several game units. */
 extern "C" {
 extern int (*lbl_803EBB10)(int, int, ...);
 

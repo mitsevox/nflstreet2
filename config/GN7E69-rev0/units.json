@@ -155,6 +155,18 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B91A0: bounded C++ lookup/synchronization group. ProDG 3.9.3 -O2 -G0 reproduces ten functions, including all scalar-global access helpers. Original references to 8037E820/824 and 802F4838 use absolute lis/load/store pairs rather than SDA; the globals lie outside SDA range. Default -G8 and -G4 emit incompatible SDA relocations for these scalar declarations. -O1 changes wrapper/dispatch bodies; -Os changes lookup body sizes. -O3 is indistinguishable on this candidate, and the exact original compiler version and small-data threshold below four bytes are unresolved. One profile applies to the entire source; no per-function override or changes to accepted profiles."
+    },
+    "speech_cxx": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x801AE3E4-0x801B2AD4 (speech_cxx): the speech library files carry NASCAR 2005's .c names (spchevnt.c, spchpick.c, spchrand.c), and NASCAR's symbols for those files are C++-mangled (iSPCH_SearchEventDat__FP7VoxDatai in spchevnt.c, iSPCH_EACseedrandom__FUi in spchrand.c), so the original build compiled them as C++. The flags are game_cpp's, measured on the former single file src/engine/cu_801AE3E4.cpp (evidence.tsv compiler row 0x801AE3E4-0x801B2AD4, game_cpp): C++ front end for its gcc 2.95 virtual calls, default -G 8 for its r13 small-data accesses."
     }
   },
   "externals": {

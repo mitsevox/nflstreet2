@@ -1,5 +1,5 @@
 #include "game/Object_8017886C.h"
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 int fn_8006F0D8(void);
