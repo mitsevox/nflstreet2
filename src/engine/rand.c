@@ -1,7 +1,7 @@
 /* Random-number streams (linear congruential, shuffled minimal-standard and subtractive generators). */
 
 #include <dolphin/os.h>
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 
 typedef struct RandStream_t {

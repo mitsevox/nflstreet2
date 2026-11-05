@@ -1,5 +1,5 @@
 #include "game/cu_80003C94.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 
 static void *lbl_803EB8D8 = 0;
 

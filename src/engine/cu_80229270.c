@@ -7,7 +7,7 @@
 
 #include "engine/Funcs_802FB3BC.h"
 #include "engine/llmemory.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"

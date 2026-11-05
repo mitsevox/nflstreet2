@@ -2,7 +2,7 @@
 #include "game/fn_801EF390.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8007F828.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>

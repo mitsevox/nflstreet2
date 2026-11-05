@@ -1,7 +1,7 @@
 #include <string.h>
 #include "engine/particleLib.h"
 #include "engine/animTexLib.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 

@@ -9,7 +9,7 @@
 #include "engine/cu_80227F14.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include "game/Object_80235588.h"

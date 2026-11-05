@@ -1,5 +1,5 @@
-#ifndef GAME_CU_801CF5BC_H
-#define GAME_CU_801CF5BC_H
+#ifndef ENGINE_RAND_H
+#define ENGINE_RAND_H
 
 #ifdef __cplusplus
 extern "C" {
