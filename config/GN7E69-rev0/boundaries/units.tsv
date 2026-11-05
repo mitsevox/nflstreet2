@@ -3,12 +3,6 @@
 # sibling references/NASCAR 2005/DOL-GN4E-USA/symbols/compile_units.tsv sha256 9da005d2c9fa45e5e30e3a395d806cb882a2c71ceb2f88fa9367ccb0e34fde00
 # Proposed units; a proposal, not an established extent (evidence: one unit-anchor row per run).
 start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anchors	claim	other_files
-0x801AD57C	0x801ADDB4	FSasync.c	13	13	13	0	13	-	-
-0x801ADDB4	0x801AE3E4	sndvd.c	12	10	11	0	10	-	spchdata.c
-0x801AE3E4	0x801AF60C	spchevnt.c	46	46	46	0	44	-	-
-0x801AF75C	0x801B1A3C	spchpick.c	56	56	67	0	47	-	-
-0x801B1A3C	0x801B1CFC	spchrand.c	5	5	5	0	5	-	-
-0x801B8C18	0x801B9CAC	smemhigh.cpp	40	40	42	0	39	-	sdata.c
 0x801B9D00	0x801B9F00	anim.c	11	11	11	0	11	-	-
 0x801B9F00	0x801BA720	animchan.c	16	13	13	0	9	-	-
 0x801BE82C	0x801BF090	animtran.c	5	5	5	0	5	-	-
