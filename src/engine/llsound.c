@@ -1,3 +1,6 @@
+/* Low-level sound bank memory: moves or trims a loaded sound bank into the sound heap and selects
+   the sound driver memory range for a bank. */
+
 #include "engine/sound.h"
 #include "game/fn_801D2B7C.h"
 
@@ -8,7 +11,7 @@ extern void fn_8026B4D8(int a, int b);
 
 extern int lbl_803EBE18;
 
-void fn_801F5034(SndBankInfo_801F3524 *pBank, int move)
+void SndllResolveBank(SndBankInfo_801F3524 *pBank, int move)
 {
     void *pData;
 
@@ -23,12 +26,12 @@ void fn_801F5034(SndBankInfo_801F3524 *pBank, int move)
     pBank->pData = pData;
 }
 
-void fn_801F50C8(SndBankEntry_801F50C8 *pEntries, int index)
+void SndSetHeap(SndBankEntry_801F50C8 *pEntries, int index)
 {
     fn_8026B4D8(pEntries[index].mUnk4, pEntries[index].mUnk8);
 }
 
-void fn_801F50F8(int heap)
+void SndSetAllocHeap(int heap)
 {
     lbl_803EBE18 = heap;
 }

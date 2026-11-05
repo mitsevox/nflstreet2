@@ -18,8 +18,8 @@ int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
-int fn_801EC314(int a, int b, int count, char *p);
-float fn_801EC418(int a, int b, char *p);
+int RemapSetupEntries(int a, int b, int count, char *p);
+float RemapCheckEntry(int a, int b, char *p);
 int fn_8023790C(void);
 }
 
@@ -137,10 +137,10 @@ void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
             fn_80026C5C(pPrevious, pCurrent);
         }
         for (i = 0; i <= 22; i++) {
-            pCurrent->mValue[i] = fn_801EC418(slot, i, pState + 8);
+            pCurrent->mValue[i] = RemapCheckEntry(slot, i, pState + 8);
         }
         for (; i <= 32; i++) {
-            step = (unsigned int)((fn_80026BE8(fn_801EC418(slot, i, pState + 8)) + 1.0001f) * 7.0f);
+            step = (unsigned int)((fn_80026BE8(RemapCheckEntry(slot, i, pState + 8)) + 1.0001f) * 7.0f);
             Dequantize(&pCurrent->mValue[i], step);
         }
         step = (unsigned int)((fn_80026BB0(slot) + 1.0001f) * 7.0f);
@@ -159,11 +159,11 @@ void fn_80027114(int slot, int index)
 {
     switch (fn_801E19B4(fn_801C6458(slot, 0)) >> 16) {
     case 2:
-        fn_801EC314(slot, 0, 34, lbl_802CC770[index]);
+        RemapSetupEntries(slot, 0, 34, lbl_802CC770[index]);
         break;
     case 1:
     default:
-        fn_801EC314(slot, 0, 34, lbl_802CC760[index]);
+        RemapSetupEntries(slot, 0, 34, lbl_802CC760[index]);
         break;
     }
 }

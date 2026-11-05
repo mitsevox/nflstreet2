@@ -4980,7 +4980,7 @@ int fn_801650BC(Record_80067338 *pRecord);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_801650FC(Record_80067338 *pRecord);
 void fn_800A5A88(void *p);
-void fn_801F51DC(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
+void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), int b, int c);
 
 void fn_80119020(void);
@@ -5857,10 +5857,10 @@ void fn_8011FCA4(void)
 {
     int count = fn_80178D70(fn_80178320());
 
-    fn_801F51DC(1, lbl_803EB09C->mpUnknown0, count, 1, fn_8011FA78, fn_8011FBA8, 0, 0);
-    fn_801F51DC(1, lbl_803EB09C->mpUnknown4, count, 1, fn_8011FAFC, fn_8011FBA8, 0, 0);
+    SortArray(1, lbl_803EB09C->mpUnknown0, count, 1, fn_8011FA78, fn_8011FBA8, 0, 0);
+    SortArray(1, lbl_803EB09C->mpUnknown4, count, 1, fn_8011FAFC, fn_8011FBA8, 0, 0);
     fn_8011FBE0();
-    fn_801F51DC(1, lbl_803EB09C->mpUnknown8, count, sizeof(Entry_8011FBE0), fn_8011FB80, fn_8011FBBC, 0, 1);
+    SortArray(1, lbl_803EB09C->mpUnknown8, count, sizeof(Entry_8011FBE0), fn_8011FB80, fn_8011FBBC, 0, 1);
 }
 
 int fn_8011FD64(unsigned short index)
@@ -6151,7 +6151,7 @@ float fn_80125004(Object_80039F5C *p, int kind, int index)
     Directions_8012430C values;
 
     fn_8012430C(&values, kind, p);
-    fn_801F51DC(0, values.mCost, 8, sizeof(float), fn_80123254, 0, 0, -2);
+    SortArray(0, values.mCost, 8, sizeof(float), fn_80123254, 0, 0, -2);
     return values.mCost[index];
 }
 

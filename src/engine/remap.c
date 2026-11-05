@@ -1,3 +1,6 @@
+/* Controller remapping tables: each table maps game actions to combinations of pad buttons and analog
+   axes, and RemapCheckEntry turns the current pad input into a float value for one action. */
+
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "engine/remap.h"
@@ -17,7 +20,7 @@ extern unsigned char lbl_803EBD6C[8];
 void *fn_801C1FBC();
 int fn_801D34D0(void *p, unsigned int size, int value, int flags);
 
-int fn_801EC1B4(unsigned int numTables, unsigned int numEntries, unsigned int numInputs)
+int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numInputs)
 {
     int err = 0;
 
@@ -49,7 +52,7 @@ int fn_801EC1B4(unsigned int numTables, unsigned int numEntries, unsigned int nu
     return err;
 }
 
-int fn_801EC298(void)
+int RemapShutdown(void)
 {
     int err = 0;
 
@@ -68,7 +71,7 @@ int fn_801EC298(void)
     return err;
 }
 
-int fn_801EC314(unsigned int table, unsigned int start, unsigned int count, void *pData)
+int RemapSetupEntries(unsigned int table, unsigned int start, unsigned int count, void *pData)
 {
     int err = 0;
 
@@ -82,18 +85,18 @@ int fn_801EC314(unsigned int table, unsigned int start, unsigned int count, void
     return err;
 }
 
-int fn_801EC3B8(unsigned int dst, unsigned int src)
+int RemapCopyTable(unsigned int dst, unsigned int src)
 {
     int err = 0x180003;
 
     if (src < lbl_803ECF58 && dst < lbl_803ECF58) {
-        fn_801EC314(dst, 0, lbl_803ECF5C, lbl_803ECF6C + src * lbl_803ECF64);
+        RemapSetupEntries(dst, 0, lbl_803ECF5C, lbl_803ECF6C + src * lbl_803ECF64);
         err = 0;
     }
     return err;
 }
 
-float fn_801EC418(unsigned int table, unsigned int entry, unsigned char *pInputs)
+float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pInputs)
 {
     int err = 0;
     float result = 0.0f;

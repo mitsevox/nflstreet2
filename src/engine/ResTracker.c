@@ -1,3 +1,6 @@
+/* Resource tracker: a debug log of every resource file opened and loaded (name, index, sizes, sync or
+   async, time), with labels marking game screens, kept in a memory buffer. */
+
 #include "engine/Resource.h"
 #include "engine/system.h"
 #include "game/fn_801D2B7C.h"
@@ -53,7 +56,7 @@ extern char lbl_802B1944[];
 extern char lbl_802B1954[];
 extern char lbl_802B1994[];
 
-static int fn_801F2310(void)
+static int _ResTrackIsPaused(void)
 {
     if (lbl_803EBDCC > 0) {
         return 1;
@@ -61,7 +64,7 @@ static int fn_801F2310(void)
     return 0;
 }
 
-void fn_801F2328(int heap)
+void ResTrackInit(int heap)
 {
     lbl_803EBDC4 = 0;
     lbl_803EBDBC = fn_801D2BB0(heap, lbl_803EBDB8, 0, 0);
@@ -71,13 +74,13 @@ void fn_801F2328(int heap)
     lbl_803EBDD1 = 1;
 }
 
-void fn_801F23B8(int heap, int size)
+void ResTrackInitSize(int heap, int size)
 {
     lbl_803EBDB8 = size;
-    fn_801F2328(heap);
+    ResTrackInit(heap);
 }
 
-void fn_801F23DC(unsigned int type, void *pData)
+void ResTrackResource(unsigned int type, void *pData)
 {
     ResTrackLoad_801F23DC *pLoad;
     Res_801EDC2C *pRes;
@@ -112,7 +115,7 @@ void fn_801F23DC(unsigned int type, void *pData)
                 switch (type) {
                 case 0: {
                     char mode;
-                    if (fn_801F2310() == 0) {
+                    if (_ResTrackIsPaused() == 0) {
                         mode = ((ResTrackOpen_801F23DC *)pData)->mMode;
                     } else {
                         mode = 'i';
@@ -127,7 +130,7 @@ void fn_801F23DC(unsigned int type, void *pData)
                 case 2: {
                     char mode;
                     pRes = pLoad->pRes;
-                    if (fn_801F2310() == 0) {
+                    if (_ResTrackIsPaused() == 0) {
                         mode = pLoad->mMode;
                     } else {
                         mode = 'i';
@@ -158,7 +161,7 @@ void fn_801F23DC(unsigned int type, void *pData)
     }
 }
 
-void fn_801F2694(int enable)
+void ResTrackEnable(int enable)
 {
     lbl_803EBDD0 = enable;
     if (enable == 1) {
@@ -175,12 +178,12 @@ void fn_801F2694(int enable)
     }
 }
 
-void fn_801F2790(int tide)
+void ResTrackSetTideCompatible(int tide)
 {
     lbl_803EBDC8 = tide;
 }
 
-void fn_801F2798(char *pLabel)
+void ResTrackLabel(char *pLabel)
 {
     if (lbl_803EBDD0 == 1 && lbl_803EBDD1 == 1 &&
         lbl_803EBDBC - lbl_803EBDC0 < lbl_803EBDB8 - 100 && lbl_803EBDC8 == 0) {
@@ -188,12 +191,12 @@ void fn_801F2798(char *pLabel)
     }
 }
 
-void fn_801F282C(void)
+void ResTrackPause(void)
 {
     lbl_803EBDCC++;
 }
 
-void fn_801F283C(void)
+void ResTrackResume(void)
 {
     lbl_803EBDCC--;
 }

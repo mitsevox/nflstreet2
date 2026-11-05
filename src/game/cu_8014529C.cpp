@@ -1,7 +1,7 @@
 #include "game/Event_801459F0.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_80136B1C.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {

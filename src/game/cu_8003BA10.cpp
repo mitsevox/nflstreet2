@@ -109,8 +109,8 @@ void fn_80048EDC();
 void fn_8003D988(int, int *, int);
 void fn_80160C10();
 int fn_8003D378(int, int);
-void fn_801F282C();
-void fn_801F283C();
+void ResTrackPause();
+void ResTrackResume();
 int fn_801F7C88();
 void *fn_801D2B7C(int, int, int);
 void fn_8015EE74();
@@ -638,7 +638,7 @@ void fn_8003D2E0() {
 }
 int fn_8003D378(int owner, int mode) {
   Object_8008044C object;
-  fn_801F282C();
+  ResTrackPause();
   lbl_803EA430 = (Object_8003DEC4 **)fn_801D2B7C(lbl_803EA434 * 4, 0, 0);
   int result = fn_801F7C88();
   if (lbl_803EA430) {
@@ -754,7 +754,7 @@ int fn_8003D378(int owner, int mode) {
     }
     fn_8008056C(&object);
   }
-  fn_801F283C();
+  ResTrackResume();
   return result;
 }
 void fn_8003D958() {

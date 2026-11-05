@@ -95,9 +95,9 @@ void fn_801D3470(void *pAddr, char *pOut, int size);
 int fn_801C2FE4(const char *pA, const char *pB);
 void *fn_801C9B94(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
                   void (*pBlock)(int, char *, int, void *), int blockSize);
-Decomp_801EC760 *fn_8027F7B0(int codec, int mode, ResBuf_801EC914 *pIn, ResBuf_801EC914 *pOut);
-unsigned int fn_8027F880(Decomp_801EC760 *pDecomp);
-void fn_8027F910(Decomp_801EC760 *pDecomp);
+Decomp_801EC760 *GCmpBlockStart(int codec, int mode, ResBuf_801EC914 *pIn, ResBuf_801EC914 *pOut);
+unsigned int GCmpBlockProcess(Decomp_801EC760 *pDecomp);
+void GCmpBlockStop(Decomp_801EC760 *pDecomp);
 extern int fn_801ECC70(Res_801EDC2C *pRes, unsigned int index, unsigned int *pBuffer);
 extern int fn_801ED634(Res_801EDC2C *pRes, unsigned int index, void *pBuffer, int heap, int a, ResDone_801EFAD8 pDone, void *pUser, int mode);
 extern int fn_801EDDF8(Res_801EDC2C *pRes, char *pName);
@@ -107,14 +107,14 @@ int fn_801F08FC(Res_801EDC2C *pRes);
 static void fn_801EE91C(Res_801EDC2C *pRes);
 extern void *memset();
 extern void *memcpy();
-extern int fn_8027F0DC(int a);
-extern int fn_8027F77C(int codec);
-extern void fn_8027FAB8(const char *pName);
-extern void fn_8027F3A4(int codec, ResBuf_801EC914 *pSrc, ResBuf_801EC914 *pDst);
+extern int GCmpInit(int a);
+extern int GCmpIsBlockCodec(int codec);
+extern void GCmpSetLabel(const char *pName);
+extern void GCmpDecompress(int codec, ResBuf_801EC914 *pSrc, ResBuf_801EC914 *pDst);
 extern void fn_80239CEC(void *p, unsigned int size);
 extern char lbl_802F9508[];
-extern int fn_8027F21C(void);
-extern int fn_8027F2C0(void);
+extern int GCmpShutdown(void);
+extern int GCmpIsActive(void);
 
 void fn_801F1230(Res_801EDC2C *pRes, unsigned int flags);
 void fn_801F12B4(unsigned int time);
@@ -179,7 +179,7 @@ static void fn_801EC760(int size, char *pData, int unused, void *pArg)
         fn_801D3470(pReq->pBuffer, info, sizeof(info));
         fn_801D339C(pReq->mUnk1C);
         fn_801D3318(pReq->mUnk1C, info);
-        lbl_803ECF70 = fn_8027F7B0(pRes->pBlocks[index].mUnk0, 1, &lbl_8039AE14, &lbl_8039AE30);
+        lbl_803ECF70 = GCmpBlockStart(pRes->pBlocks[index].mUnk0, 1, &lbl_8039AE14, &lbl_8039AE30);
         fn_801D342C(pReq->mUnk1C);
         lbl_803ECF78 = pReq;
     }
@@ -189,9 +189,9 @@ static void fn_801EC760(int size, char *pData, int unused, void *pArg)
     }
     lbl_803ECF70->pSrc->mSize = size;
     lbl_803ECF70->pSrc->mPos = 0;
-    fn_8027F880(lbl_803ECF70);
+    GCmpBlockProcess(lbl_803ECF70);
     if (lbl_803ECF70->pSrc->mDone) {
-        fn_8027F910(lbl_803ECF70);
+        GCmpBlockStop(lbl_803ECF70);
         lbl_803ECF70 = 0;
     }
 }
@@ -266,7 +266,7 @@ static void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
         if (lbl_803EBD9C != 0 && pReq->pRes->mCacheHandle >= 0 && pReq->mCache != 0) {
             fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mUnk28, pReq->pBuffer, pReq->mUnk10);
         }
-        if (codec != 0 && fn_8027F77C(codec) == 0) {
+        if (codec != 0 && GCmpIsBlockCodec(codec) == 0) {
             memset((void *)&src, 0, 0x1C);
             memset((void *)&dst, 0, 0x1C);
             src.mSize = pReq->mUnk10;
@@ -274,9 +274,9 @@ static void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
             memcpy(src.pData, pReq->pBuffer, src.mSize);
             dst.mSize = pReq->mUnk14;
             dst.pData = pReq->pBuffer;
-            fn_8027FAB8(lbl_802F9508);
-            fn_8027F3A4(codec, &src, &dst);
-            fn_8027FAB8(0);
+            GCmpSetLabel(lbl_802F9508);
+            GCmpDecompress(codec, &src, &dst);
+            GCmpSetLabel(0);
             fn_801D2BD0(src.pData);
         }
         if (pReq->mNoStore == 0) {
@@ -298,7 +298,7 @@ static void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
     }
     track[0] = pRes;
     track[1] = (void *)index;
-    fn_801F23DC(3, track);
+    ResTrackResource(3, track);
     fn_801F8014(&lbl_803E92FC);
     lbl_803EBD84--;
     fn_801F809C(&lbl_803E92FC);
@@ -419,7 +419,7 @@ static void *fn_801EE700(Res_801EDC2C *pRes, unsigned int index, int heap, unsig
     void *p;
 
     *pBuffer = 0;
-    if (lbl_803EBDAC != 0 && fn_801F33F0(pRes, index, &size) != 0) {
+    if (lbl_803EBDAC != 0 && ResLooseFileGetSize(pRes, index, &size) != 0) {
         if (pRes->pDir[index].mUnk4 < size) {
             fn_801C3284(name, pRes->pName, 0xB);
             sprintf(name + strlen(name), lbl_802B17F0, index);
@@ -475,8 +475,8 @@ int fn_801EE970(int heap)
     int err;
 
     err = 0;
-    if (fn_8027F2C0() == 0) {
-        fn_8027F0DC(0);
+    if (GCmpIsActive() == 0) {
+        GCmpInit(0);
     }
     if (lbl_803EBD80 == 0) {
         fn_801F7FA8(&lbl_803E931C);
@@ -523,8 +523,8 @@ int fn_801EEA60(void)
     } else {
         err = 0xF0002;
     }
-    if (fn_8027F2C0() != 0) {
-        fn_8027F21C();
+    if (GCmpIsActive() != 0) {
+        GCmpShutdown();
     }
     fn_801F7BD4(err);
     return err;
@@ -1176,10 +1176,10 @@ int fn_801F0A8C(Res_801EDC2C *pRes, char *pName)
     } else {
         switch (pHash->mType) {
         case 1:
-            hash = fn_801F1538(pName, strlen(pName), pRes->pHashParams);
+            hash = ProcHashHSH1(pName, strlen(pName), pRes->pHashParams);
             break;
         case 2:
-            hash = fn_801F155C((unsigned char *)pName, strlen(pName), pRes->pHashParams);
+            hash = ProcHashHSH2((unsigned char *)pName, strlen(pName), pRes->pHashParams);
             break;
         default:
             index = -1;
@@ -1233,7 +1233,7 @@ unsigned int fn_801F0C50(Res_801EDC2C *pRes, unsigned int index)
         err = 0xF0005;
     } else if (index >= pRes->mNumRes) {
         err = 0xF0006;
-    } else if (lbl_803EBDAC == 0 || fn_801F33F0(pRes, index, &size) == 0) {
+    } else if (lbl_803EBDAC == 0 || ResLooseFileGetSize(pRes, index, &size) == 0) {
         fn_801EC650(pRes, index, &offset, &prevSize, &size);
     }
     fn_801F809C(&lbl_803E931C);

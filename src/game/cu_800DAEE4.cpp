@@ -723,7 +723,7 @@ extern "C" void fn_800DC578(void)
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_80094488.h"
 #include <math.h>
 
@@ -2236,7 +2236,7 @@ extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos
 {
     float rot[4];
     fn_8009BFD0(p, pPos, rot);
-    fn_801EBC18(pAngles, rot);
+    QuatToEuler(pAngles, rot);
 }
 
 extern "C" void fn_800DF750(Object_80137ABC *pBall, Vector_80039F5C *pPos, int *pAngles)

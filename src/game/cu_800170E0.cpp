@@ -134,7 +134,7 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801C302C(const char *s1, const char *s2, int n);
-void fn_801F51DC(int a, void *pBase, int count, int size, int (*pCompare)(Entry_803EBA0C *, Entry_803EBA0C *), int b,
+void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(Entry_803EBA0C *, Entry_803EBA0C *), int b,
                  int c, int d);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
@@ -760,7 +760,7 @@ void fn_800186CC(void)
     int j;
     int count;
 
-    fn_801F51DC(1, lbl_803EBA0C, lbl_803EBA10, sizeof(Entry_803EBA0C), fn_8001869C, 0, 0, 1);
+    SortArray(1, lbl_803EBA0C, lbl_803EBA10, sizeof(Entry_803EBA0C), fn_8001869C, 0, 0, 1);
     for (i = 0; i < 7; i++) {
         lbl_8036B1C0[i] = lbl_803EBA10;
     }
@@ -783,7 +783,7 @@ void fn_800186CC(void)
     for (i = 0; i < 7; i++) {
         count = fn_80017208(i);
         if (count) {
-            fn_801F51DC(1, &lbl_803EBA0C[lbl_8036B1C0[i]], count, sizeof(Entry_803EBA0C), fn_8001859C, 0, 0, 1);
+            SortArray(1, &lbl_803EBA0C[lbl_8036B1C0[i]], count, sizeof(Entry_803EBA0C), fn_8001859C, 0, 0, 1);
         }
     }
 }

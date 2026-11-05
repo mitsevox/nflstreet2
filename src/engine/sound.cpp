@@ -206,7 +206,7 @@ static void fn_801F3544(SndBankInfo_801F3524 *pBank)
 {
     pBank->mState = 0;
     if (!(pBank->mFlags & 2)) {
-        fn_801F5034(pBank, 1);
+        SndllResolveBank(pBank, 1);
     }
     pBank->mLoaded = 1;
     if (pBank->pCallback != 0) {
@@ -245,7 +245,7 @@ static void fn_801F35B4(void)
                 pBank->mState = 1;
                 fn_801EFAD8(pBank->pRes, pBank->mIndex, 1, pData, 100, fn_801F35A8, pBank);
             } else {
-                fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
+                SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
                 fn_8026A870(&pBank->mHandle, pBank->pData);
             }
         }
@@ -271,13 +271,13 @@ static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigne
     pBank->pData = pData;
     DCFlushRange(pData, length);
     fn_801EFF80((Res_801EDC2C *)pRes, index, pData);
-    fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
+    SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
     fn_8026A4D4(&pBank->mHandle, pData);
     pBank->mLoaded = 1;
     pBank->mState = 0;
     if (!(pBank->mFlags & 2)) {
-        fn_801F5034(pBank, 0);
+        SndllResolveBank(pBank, 0);
     }
     return pBank;
 }
@@ -558,7 +558,7 @@ SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank)
     if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
+    SndSetHeap(lbl_8039AE8C.pBankTable, bank);
     pStream = (SndStream_801F44B0 *)fn_801C6A20(lbl_8039AE8C.pStreamList);
     fn_801C6AA4(lbl_8039AE8C.pStreamList, pStream, 0);
     fn_8026CA50(&opts);
@@ -720,7 +720,7 @@ int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank)
 
     result = 0;
     if (SND_READY()) {
-        fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
+        SndSetHeap(lbl_8039AE8C.pBankTable, bank);
         lbl_8039AE8C.pAemsSystem = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
         fn_801EF7BC(pRes, index, lbl_8039AE8C.pAemsSystem);
         result = fn_801B91A0(lbl_8039AE8C.pAemsSystem);
@@ -794,7 +794,7 @@ SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Re
         pBank = (SndAemsBankInfo_801F4D00 *)fn_801C6A20(lbl_8039AE8C.pAemsBankList);
         fn_801C6AA4(lbl_8039AE8C.pAemsBankList, pBank, 0);
         pBank->mBank = bank;
-        fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
+        SndSetHeap(lbl_8039AE8C.pBankTable, bank);
         size = fn_801F0C50(pRes, index);
         pBank->pData = fn_801D2BB0(1, size, 0, 0);
         DCFlushRange(pBank->pData, size);

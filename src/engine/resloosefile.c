@@ -1,3 +1,6 @@
+/* Loose resource files: builds the "looseres\<resource>\<index>" path of a resource entry stored
+   as a separate file on disk, and checks whether it exists, gets its size and opens it. */
+
 #include "engine/Resource.h"
 
 extern int sprintf(char *buffer, const char *format, ...);
@@ -13,7 +16,7 @@ extern char lbl_803E933C[];
 extern Res_801EDC2C *lbl_803EBDE8;
 extern int lbl_803EBDEC;
 
-static void fn_801F3308(Res_801EDC2C *pFile, int index)
+static void _ResLooseFileGetName(Res_801EDC2C *pFile, int index)
 {
     char name[5];
     char *p;
@@ -30,18 +33,18 @@ static void fn_801F3308(Res_801EDC2C *pFile, int index)
     lbl_803EBDEC = index;
 }
 
-int fn_801F33B8(Res_801EDC2C *pFile, int index)
+int ResLooseFileExists(Res_801EDC2C *pFile, int index)
 {
-    fn_801F3308(pFile, index);
+    _ResLooseFileGetName(pFile, index);
     return fn_801C9910(lbl_803E933C, 0x2C) == 0;
 }
 
-int fn_801F33F0(Res_801EDC2C *pFile, unsigned int index, unsigned int *pSize)
+int ResLooseFileGetSize(Res_801EDC2C *pFile, unsigned int index, unsigned int *pSize)
 {
     int result = 1;
     int handle;
 
-    fn_801F3308(pFile, index);
+    _ResLooseFileGetName(pFile, index);
     if (fn_801C9910(lbl_803E933C, 0x2C) == 0) {
         handle = fn_801C96E4(lbl_803E933C, 0x2C);
         if (handle >= 0) {
@@ -56,11 +59,11 @@ int fn_801F33F0(Res_801EDC2C *pFile, unsigned int index, unsigned int *pSize)
     return result;
 }
 
-int fn_801F346C(Res_801EDC2C *pFile, int index)
+int ResLooseFileOpen(Res_801EDC2C *pFile, int index)
 {
     int handle;
 
-    fn_801F3308(pFile, index);
+    _ResLooseFileGetName(pFile, index);
     if (fn_801C9910(lbl_803E933C, 0x2C) == 0) {
         handle = fn_801C96E4(lbl_803E933C, 0x2C);
     } else {

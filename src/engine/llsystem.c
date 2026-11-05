@@ -12,9 +12,9 @@ extern void fn_801CE2B8(int a);
 extern void fn_801CAB30(void);
 extern void fn_80239ED4(void);
 extern int fn_801CE1E8(void);
-extern int fn_8027EFAC(int year);
-extern int fn_8027F000(int year);
-extern int fn_8027F030(int month, int year);
+extern int DateIsYearLeap(int year);
+extern int DateGetNumDaysInYear(int year);
+extern int DateGetNumDaysInMonth(int month, int year);
 extern float fn_80260FE8(float x);
 
 extern int lbl_803EBE50;
@@ -221,10 +221,10 @@ void fn_801F8248(void)
     while (days >= daysInYear) {
         days -= daysInYear;
         lbl_8039B430.mYear++;
-        daysInYear = fn_8027EFAC(lbl_8039B430.mYear) ? 366 : 365;
+        daysInYear = DateIsYearLeap(lbl_8039B430.mYear) ? 366 : 365;
     }
     lbl_8039B430.mYear += 2000;
-    aDays[2] = fn_8027EFAC(lbl_8039B430.mYear) ? 29 : 28;
+    aDays[2] = DateIsYearLeap(lbl_8039B430.mYear) ? 29 : 28;
     month = 1;
     while (days >= aDays[month]) {
         days -= aDays[month++];
@@ -235,10 +235,10 @@ void fn_801F8248(void)
     lbl_803EBE58 = 0;
     lbl_803EBE5C = 0;
     for (year = 1970; year < lbl_8039B430.mYear; year++) {
-        lbl_803EBE5C += fn_8027F000(year) * 86400;
+        lbl_803EBE5C += DateGetNumDaysInYear(year) * 86400;
     }
     for (m = 1; m < lbl_8039B430.mMonth; m++) {
-        lbl_803EBE5C += fn_8027F030(m, lbl_8039B430.mYear) * 86400;
+        lbl_803EBE5C += DateGetNumDaysInMonth(m, lbl_8039B430.mYear) * 86400;
     }
     lbl_803EBE5C = lbl_803EBE5C + (lbl_8039B430.mDays - 1) * 86400 + lbl_8039B430.mHours * 3600 + lbl_8039B430.mMinutes * 60 + lbl_8039B430.mSeconds;
     OSRestoreInterrupts(enabled);
@@ -280,7 +280,7 @@ void fn_801F8574(void)
                         days = 30;
                         break;
                     case 2:
-                        days = fn_8027EFAC(lbl_8039B430.mYear) ? 29 : 28;
+                        days = DateIsYearLeap(lbl_8039B430.mYear) ? 29 : 28;
                         break;
                     case 1:
                     case 3:

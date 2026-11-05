@@ -1,14 +1,16 @@
+/* Run-length codec for the compression library, with '!' as the escape byte for runs. */
+
 #include <string.h>
 #include "engine/GCmp.h"
 
 extern void *fn_801D310C(void *allocation, int size, int c, int d);
 
-void *fn_802802A0(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_RLECoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
 {
     return 0;
 }
 
-int fn_802802A8(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _RLECoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
 {
     unsigned char *pIn = pSrc->mpData;
     unsigned int size = pSrc->mSize;
@@ -57,16 +59,16 @@ int fn_802802A8(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 1;
 }
 
-void fn_802803F8(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _RLECoStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
 {
 }
 
-void *fn_802803FC(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_RLEDecStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
 {
     return 0;
 }
 
-int fn_80280404(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _RLEDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
 {
     unsigned char *pIn = pSrc->mpData;
     unsigned int size = pSrc->mSize;
@@ -105,6 +107,6 @@ int fn_80280404(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 1;
 }
 
-void fn_80280500(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _RLEDecStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
 {
 }

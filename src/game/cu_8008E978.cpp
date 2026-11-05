@@ -90,7 +90,7 @@
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/Block_800B0CFC.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
 #include "game/fn_801EEB44.h"
@@ -16011,7 +16011,7 @@ int fn_80168E00(int team, int index, unsigned char *pOut);
 unsigned short fn_801BE648(void *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
-void fn_801F51DC(int a, void *pBase, int count, int size,
+void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(Entry_800C3130 *, Entry_800C3130 *),
                  void (*pSwap)(Entry_800C3130 *, Entry_800C3130 *), int b, int c);
 
@@ -17185,7 +17185,7 @@ extern "C" void fn_800C3170(void)
     unsigned int i;
 
     for (i = 0; i < 3; i++) {
-        fn_801F51DC(1, lbl_8030FF40[i], lbl_802D9E90[i], sizeof(Entry_800C3130), fn_800C2F94, fn_800C2FB8, 0, 0);
+        SortArray(1, lbl_8030FF40[i], lbl_802D9E90[i], sizeof(Entry_800C3130), fn_800C2F94, fn_800C2FB8, 0, 0);
     }
 }
 

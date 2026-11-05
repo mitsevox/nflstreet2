@@ -25,7 +25,7 @@ void fn_800735E4(void);
 int fn_800A350C(void);
 void fn_800B1670(void (*pCallback)(void *));
 int fn_800C8704(int *pA, int *pB);
-void fn_801F2798(const char *pText);
+void ResTrackLabel(const char *pText);
 
 extern Struct_8006C2C8 lbl_802D6228;
 }
@@ -72,9 +72,9 @@ extern "C" void fn_80073478(void)
     fn_8007342C();
     fn_8006EC24();
     fn_800710C8();
-    fn_801F2798("SpchIGInitStart");
+    ResTrackLabel("SpchIGInitStart");
     fn_8007355C();
-    fn_801F2798("SpchIGInitFinish");
+    ResTrackLabel("SpchIGInitFinish");
 }
 
 extern "C" void fn_80073528(void)

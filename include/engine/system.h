@@ -35,10 +35,10 @@ void fn_801F7AE8(void);
 unsigned int fn_801F7B14(void);
 
 /* mutex.c */
-struct OSMutex *fn_801F773C(void);
-void fn_801F7764(struct OSMutex *pMutex);
-void fn_801F778C(struct OSMutex *pMutex);
-void fn_801F77B4(struct OSMutex *pMutex);
+struct OSMutex *_StreamMUTEX_alloc(void);
+void _StreamMUTEX_free(struct OSMutex *pMutex);
+void _StreamMUTEX_lock(struct OSMutex *pMutex);
+void _StreamMUTEX_unlock(struct OSMutex *pMutex);
 
 /* llsystem.c */
 int fn_801F7E90(void);

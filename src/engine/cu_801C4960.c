@@ -1,13 +1,13 @@
 #include "engine/cu_801C4960.h"
 #include "engine/cu_801C2EB4.h"
 #include "engine/llmatrix.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 
-void fn_801EB660(float *pDst, float *pA, float *pB);
-void fn_801EB814(float *pMatrix, float *pQuat);
-void fn_801EBA64(float *pQuat);
-void fn_801EBAA0(float *pDst, float *pVec, float *pQuat);
-void fn_801EBEF8(float *pQuat, int z, int y, int x);
+void QuatMultiply(float *pDst, float *pA, float *pB);
+void QuatToMatrix(float *pMatrix, float *pQuat);
+void QuatFromMat(float *pQuat);
+void QuatTranslate(float *pDst, float *pVec, float *pQuat);
+void QuatFromEuler(float *pQuat, int z, int y, int x);
 
 int fn_801C4D3C(SkelNode_801C4960 *pNode, void (*callback)(SkelNode_801C4960 *, void *), void *pContext);
 
@@ -22,7 +22,7 @@ static void fn_801C4964(Skel_801C4960 *pSkel, SkelNode_801C4960 *pUnused, SkelPo
     int i;
 
     for (i = 0; i < pSkel->mNumJoints; i++) {
-        fn_801EBEF8(pQuats[i], pEulers[i].z, pEulers[i].y, pEulers[i].x);
+        QuatFromEuler(pQuats[i], pEulers[i].z, pEulers[i].y, pEulers[i].x);
     }
 }
 
@@ -72,7 +72,7 @@ static void fn_801C4B1C(Skel_801C4960 *pSkel, SkelNode_801C4960 *pUnused, SkelPo
     int i;
 
     for (i = 0; i < pSkel->mNumJoints; i++) {
-        fn_801EBC18(&angles, pQuats[i]);
+        QuatToEuler(&angles, pQuats[i]);
         pEulers[i].x = angles.mUnknown0;
         pEulers[i].y = angles.mUnknown4;
         pEulers[i].z = angles.mUnknown8;
@@ -88,12 +88,12 @@ static int fn_801C4BA0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelXform
 
     while (last < pNode->mId) {
         joint = pNode->mJoint;
-        fn_801EBAA0(pXform->mPos, pSkel->mPos[joint], pXform->mQuat);
-        fn_801EB660(pXform->mQuat, pXform->mQuat, pQuats[joint]);
+        QuatTranslate(pXform->mPos, pSkel->mPos[joint], pXform->mQuat);
+        QuatMultiply(pXform->mQuat, pXform->mQuat, pQuats[joint]);
         pMatrices[joint][3] = pXform->mPos[0];
         pMatrices[joint][7] = pXform->mPos[1];
         pMatrices[joint][11] = pXform->mPos[2];
-        fn_801EB814(pMatrices[joint], pXform->mQuat);
+        QuatToMatrix(pMatrices[joint], pXform->mQuat);
         if (pNode->mNumChildren > 1) {
             for (i = 0; i < pNode->mNumChildren; i++) {
                 last = fn_801C4BA0(pSkel, pNode, pXform, pQuats, pMatrices);
@@ -110,7 +110,7 @@ static void fn_801C4CA0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelPose
 {
     SkelXform_801C4960 xform;
 
-    fn_801EBA64(xform.mQuat);
+    QuatFromMat(xform.mQuat);
     fn_801D0FB8(xform.mPos);
     fn_801C4BA0(pSkel, pNode, &xform, pPose->mpLocal, pPose->mpOutput);
 }

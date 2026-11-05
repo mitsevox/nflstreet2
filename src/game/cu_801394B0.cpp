@@ -8,7 +8,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_80227638.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_802270D4.h"
 
 /* One of the four 100-byte records that the player object's +792 pointer
@@ -66,7 +66,7 @@ void fn_801D09EC(int a);
 void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0FB8(float *p);
-void fn_801EBA64(Quat_801EB488 *pRot);
+void QuatFromMat(Quat_801EB488 *pRot);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -82,15 +82,15 @@ void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB
 void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227490(Vector_80039F5C *pOut, Vector_80039F5C *pIn, int a, int b, int c);
-void fn_801EB488(Quat_801EB488 *pRot);
-float fn_801EB4AC(Quat_801EB488 *pRot);
-void fn_801EB52C(Quat_801EB488 *pOut, Quat_801EB488 *pIn);
-void fn_801EB660(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
-void fn_801EB61C(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
-void fn_801EB700(Quat_801EB488 *pOut, Quat_801EB488 *pIn);
-void fn_801EBBA4(Quat_801EB488 *pOut, Vector_80039F5C *pAxis, int angle);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
+void QuatIdentity(Quat_801EB488 *pRot);
+float QuatLength(Quat_801EB488 *pRot);
+void QuatNormalize(Quat_801EB488 *pOut, Quat_801EB488 *pIn);
+void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
+void QuatSubtract(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
+void QuatInverse(Quat_801EB488 *pOut, Quat_801EB488 *pIn);
+void QuatFromAxisAngle(Quat_801EB488 *pOut, Vector_80039F5C *pAxis, int angle);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 int fn_8013AD78(Object_80137ABC *pBall);
 void fn_8013AD9C(Object_80137ABC *pBall, int a);
@@ -288,8 +288,8 @@ void fn_80139A80(Vector_80039F5C *pV, Quat_801EB488 *pRot)
     int angle = (int)(fn_802270D4(pV) * 2670176.75f);
 
     fn_802271F0(&axis, pV);
-    fn_801EBBA4(pRot, &axis, angle);
-    fn_801EB52C(pRot, pRot);
+    QuatFromAxisAngle(pRot, &axis, angle);
+    QuatNormalize(pRot, pRot);
 }
 
 void fn_80139AF0(Object_80137ABC *pBall, float dt)
@@ -311,22 +311,22 @@ void fn_80139AF0(Object_80137ABC *pBall, float dt)
         angles[2] = fn_801CFE40(v.mY, v.mX) + 0x400000;
         fn_80227490(&v, &v, -angles[2], 0, 0);
         angles[0] = fn_801CFE40(v.mZ, v.mY);
-        fn_801EBEF8(&pBall->mState.mUnknown18, angles[2], 0, angles[0]);
+        QuatFromEuler(&pBall->mState.mUnknown18, angles[2], 0, angles[0]);
         if (pBall->mState.mUnknownD0 == 2) {
-            fn_801EBEF8(&tilt, 0, 0xFFC00000, 0x400000);
+            QuatFromEuler(&tilt, 0, 0xFFC00000, 0x400000);
         } else {
-            fn_801EBEF8(&tilt, 0, 0xFFC00000, 0xFFC00000);
+            QuatFromEuler(&tilt, 0, 0xFFC00000, 0xFFC00000);
         }
-        fn_801EB660(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &tilt);
+        QuatMultiply(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &tilt);
         pBall->mState.mUnknownD8 = (pBall->mState.mUnknownD8 + pBall->mState.mUnknownD4) & 0xFFFFFF;
         v.mX = 0.0f;
         v.mY = pBall->mState.mUnknownDC * 0.5f;
         v.mZ = 1.0f;
         fn_802271F0(&v, &v);
-        fn_801EBBA4(&roll, &v, pBall->mState.mUnknownD8);
-        fn_801EB660(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &roll);
-        fn_801EB700(&tilt, &pBall->mState.mUnknown34);
-        fn_801EB660(&pBall->mState.mUnknown60, &pBall->mState.mUnknown18, &tilt);
+        QuatFromAxisAngle(&roll, &v, pBall->mState.mUnknownD8);
+        QuatMultiply(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &roll);
+        QuatInverse(&tilt, &pBall->mState.mUnknown34);
+        QuatMultiply(&pBall->mState.mUnknown60, &pBall->mState.mUnknown18, &tilt);
         break;
     case 3: {
         float tiltAngle;
@@ -335,43 +335,43 @@ void fn_80139AF0(Object_80137ABC *pBall, float dt)
         v.mY = pBall->mState.mUnknown54.mY;
         v.mZ = pBall->mState.mUnknown54.mZ;
         angles[2] = fn_801CFE40(v.mY, v.mX) + 0x400000;
-        fn_801EBEF8(&pBall->mState.mUnknown18, angles[2], 0, 0);
+        QuatFromEuler(&pBall->mState.mUnknown18, angles[2], 0, 0);
         tiltAngle = (int)(pBall->mState.mUnknownDC * 466033.0f) - 0x400000;
-        fn_801EBEF8(&tilt, 0, 0x400000, (int)tiltAngle);
-        fn_801EB660(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &tilt);
+        QuatFromEuler(&tilt, 0, 0x400000, (int)tiltAngle);
+        QuatMultiply(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &tilt);
         pBall->mState.mUnknownD8 = (pBall->mState.mUnknownD8 + pBall->mState.mUnknownD4) & 0xFFFFFF;
         v.mX = pBall->mState.mUnknownDC * 0.5f;
         v.mY = 1.0f;
         v.mZ = 0.0f;
         fn_802271F0(&v, &v);
-        fn_801EBBA4(&roll, &v, pBall->mState.mUnknownD8);
-        fn_801EB660(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &roll);
-        fn_801EB700(&tilt, &pBall->mState.mUnknown34);
-        fn_801EB660(&pBall->mState.mUnknown60, &pBall->mState.mUnknown18, &tilt);
+        QuatFromAxisAngle(&roll, &v, pBall->mState.mUnknownD8);
+        QuatMultiply(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18, &roll);
+        QuatInverse(&tilt, &pBall->mState.mUnknown34);
+        QuatMultiply(&pBall->mState.mUnknown60, &pBall->mState.mUnknown18, &tilt);
         break;
     }
     case 0:
     default:
         fn_80227264(&pBall->mState.mUnknown88, &pBall->mState.mUnknown88, 0.30666667f);
         fn_80139A80(&pBall->mState.mUnknown88, &spin);
-        fn_801EB660(&pBall->mState.mUnknown60, &spin, &pBall->mState.mUnknown60);
-        fn_801EB488(&rest);
-        fn_801EB61C(&rest, &rest, &pBall->mState.mUnknown60);
-        size = fn_801EB4AC(&rest);
+        QuatMultiply(&pBall->mState.mUnknown60, &spin, &pBall->mState.mUnknown60);
+        QuatIdentity(&rest);
+        QuatSubtract(&rest, &rest, &pBall->mState.mUnknown60);
+        size = QuatLength(&rest);
         if (size > 0.5f) {
-            fn_801EB488(&rest);
-            fn_801EC048(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, (size - 0.5f) / size);
+            QuatIdentity(&rest);
+            QuatSlerp(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, (size - 0.5f) / size);
         }
         if (fn_80139630(pBall)) {
-            fn_801EB488(&rest);
-            fn_801EC048(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, 0.8f);
+            QuatIdentity(&rest);
+            QuatSlerp(&pBall->mState.mUnknown60, &pBall->mState.mUnknown60, &rest, 0.8f);
         }
         tilt.mX = pBall->mState.mUnknown18.mX;
         tilt.mY = pBall->mState.mUnknown18.mY;
         tilt.mZ = pBall->mState.mUnknown18.mZ;
         tilt.mW = pBall->mState.mUnknown18.mW;
-        fn_801EB660(&tilt, &pBall->mState.mUnknown60, &tilt);
-        fn_801EB52C(&tilt, &tilt);
+        QuatMultiply(&tilt, &pBall->mState.mUnknown60, &tilt);
+        QuatNormalize(&tilt, &tilt);
         pBall->mState.mUnknown18.mX = tilt.mX;
         pBall->mState.mUnknown18.mY = tilt.mY;
         pBall->mState.mUnknown18.mZ = tilt.mZ;
@@ -414,16 +414,16 @@ void fn_8013A048(Quat_801EB488 *pOut, Quat_801EB488 *pIn, int flip)
     Quat_801EB488 rot;
 
     if (flip) {
-        fn_801EBEF8(&turn, 0x800000, 0, 0);
-        fn_801EB660(pOut, &turn, pIn);
+        QuatFromEuler(&turn, 0x800000, 0, 0);
+        QuatMultiply(pOut, &turn, pIn);
     } else {
         pOut->mX = pIn->mX;
         pOut->mY = pIn->mY;
         pOut->mZ = pIn->mZ;
         pOut->mW = pIn->mW;
     }
-    fn_801EBEF8(&rot, 0x400000, 0, 0x400000);
-    fn_801EB660(pOut, pOut, &rot);
+    QuatFromEuler(&rot, 0x400000, 0, 0x400000);
+    QuatMultiply(pOut, pOut, &rot);
 }
 
 void fn_8013A0EC(Object_80137ABC *pBall, float dt)
@@ -436,7 +436,7 @@ void fn_8013A0EC(Object_80137ABC *pBall, float dt)
             fabsf(pBall->mState.mUnknown54.mY) < limit) {
             ClearVector(&pBall->mState.mUnknown54);
             ClearVector(&pBall->mState.mUnknown70);
-            fn_801EB488(&pBall->mState.mUnknown60);
+            QuatIdentity(&pBall->mState.mUnknown60);
             ClearVector(&pBall->mState.mUnknown88);
             ClearVector(&pBall->mState.mUnknown7C);
         }
@@ -485,7 +485,7 @@ void fn_8013A2F4(Object_80137ABC *pBall, int mode, float spin, float rate)
         pBall->mState.mUnknownDC = spin;
         pBall->mState.mUnknownD4 = -(int)(rate * 279620.28f);
         if (mode == 3) {
-            fn_801EBC18(&angles, &pBall->mState.mUnknown18.mX);
+            QuatToEuler(&angles, &pBall->mState.mUnknown18.mX);
             pBall->mState.mUnknownD8 = angles.mUnknown0;
         } else {
             pBall->mState.mUnknownD8 = 0x800000;
@@ -576,12 +576,12 @@ void fn_8013A72C(Object_80137ABC *pBall, float dt)
     Block_80170E64 *pBlock = fn_8013825C(pBall);
 
     fn_8009BFD0(pHolder, &pBall->mState.mPos, &rot);
-    fn_801EBEF8(&turn, 0, 0, 0xFFC00000);
-    fn_801EB660(&rot, &rot, &turn);
-    fn_801EB52C(&rot, &rot);
-    fn_801EBEF8(&turn, 0xFFC00000, 0, 0);
-    fn_801EB660(&pBall->mState.mUnknown18, &rot, &turn);
-    fn_801EB52C(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18);
+    QuatFromEuler(&turn, 0, 0, 0xFFC00000);
+    QuatMultiply(&rot, &rot, &turn);
+    QuatNormalize(&rot, &rot);
+    QuatFromEuler(&turn, 0xFFC00000, 0, 0);
+    QuatMultiply(&pBall->mState.mUnknown18, &rot, &turn);
+    QuatNormalize(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18);
     fn_800423F8(pHolderBlock, &pBlock->mUnknown4, &pBlock->mUnknown108);
     fn_802276B4(&pBall->mState.mUnknown54, &pBall->mState.mPos, &pBall->mState.mUnknown28);
     if (dt != 0.0f) {
@@ -616,13 +616,13 @@ void fn_8013A910(Object_80137ABC *pBall, int *pAngles)
     Vector_80039F5C low;
     int index;
 
-    fn_801EBEF8(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
+    QuatFromEuler(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
     pBall->mState.mPos.mZ = 0.0f;
     fn_80139400(pBall, &low, &index);
     pBall->mState.mPos.mZ = -low.mZ;
     ClearVector(&pBall->mState.mUnknown54);
     ClearVector(&pBall->mState.mUnknown70);
-    fn_801EB488(&pBall->mState.mUnknown60);
+    QuatIdentity(&pBall->mState.mUnknown60);
     pBall->mState.mUnknown28 = pBall->mState.mPos;
     pBall->mState.mUnknown34 = pBall->mState.mUnknown18;
 }
@@ -1030,13 +1030,13 @@ void fn_8013B734(Object_80137ABC *pBall, float dt)
     fn_801D0ADC(angles[2]);
     fn_801D08FC((angles[0] + 0x400000) & 0xFFFFFF);
     fn_801D0FB8(&pBall->mState.mPos.mX);
-    fn_801EBA64(&pBall->mState.mUnknown18);
+    QuatFromMat(&pBall->mState.mUnknown18);
     fn_801D0544();
     if (fn_801784C4()) {
         pBall->mState.mPos.mX = -pBall->mState.mPos.mX;
         pBall->mState.mPos.mY = -pBall->mState.mPos.mY;
-        fn_801EBEF8(&turn, 0x800000, 0, 0);
-        fn_801EB660(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
+        QuatFromEuler(&turn, 0x800000, 0, 0);
+        QuatMultiply(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
     }
 }
 

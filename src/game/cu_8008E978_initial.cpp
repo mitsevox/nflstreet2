@@ -96,7 +96,7 @@ int fn_800DBAF0(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *,int);
 void fn_8009D00C(void *,int *);
 void fn_80042380(Object_8003DEC4 *,int,float *,int *);
-void fn_801EBEF8(Quat_801EB488 *,int,int,int);
+void QuatFromEuler(Quat_801EB488 *,int,int,int);
 void fn_800943D8(void);
 void fn_80147840(Object_8003DEC4 *);
 void fn_800D0D00(Object_80039F5C *);
@@ -231,7 +231,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             short effect=(short)(fn_801BD910()-1);
             float position[4];int angles[3];Quat_801EB488 rotation;
             fn_80042380((Object_8003DEC4 *)p->mpUnknown4,lbl_802D7154[bone],position,angles);
-            fn_801EBEF8(&rotation,angles[2],angles[1],angles[0]);
+            QuatFromEuler(&rotation,angles[2],angles[1],angles[0]);
             fn_80145EFC(lbl_802D71CC[effect],position,&rotation.mX,0);
             return 1;
         }

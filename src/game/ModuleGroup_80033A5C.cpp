@@ -28,7 +28,7 @@ void fn_8018A40C(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-void fn_801F2798(const char *pText);
+void ResTrackLabel(const char *pText);
 int fn_801F2C54(const char *pName, int unknown);
 int fn_801F2CD4(const char *pName);
 void fn_802371B0(int unknown, int seed);
@@ -154,10 +154,10 @@ int Qkl::Init()
     char text[24];
 
     if (fn_80033124(lbl_80306B34)) {
-        fn_801F2798("FELoopEnterStart");
+        ResTrackLabel("FELoopEnterStart");
     } else {
         fn_801C2E18(text, "GameLoopEnterStart%d", fn_800A3444());
-        fn_801F2798(text);
+        ResTrackLabel(text);
     }
 
     if (fn_80033124(lbl_80306B34)) {
@@ -177,10 +177,10 @@ int Qkl::Shutdown()
     mFileName.mText[0] = 0;
 
     if (fn_80033124(lbl_80306B34)) {
-        fn_801F2798("FELoopEnterFinish");
+        ResTrackLabel("FELoopEnterFinish");
     } else {
         fn_801C2E18(text, "GameLoopEnterFinish%d", fn_800A3444());
-        fn_801F2798(text);
+        ResTrackLabel(text);
     }
     return 1;
 }

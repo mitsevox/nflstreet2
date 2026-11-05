@@ -2,11 +2,11 @@
 #include <dolphin/mtx.h>
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 
 extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
-void fn_801EBEF8(float *pQuat, int z, int y, int x);
-void fn_801EC048(float *pOut, float *pA, float *pB, float t);
+void QuatFromEuler(float *pQuat, int z, int y, int x);
+void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 
 extern unsigned char lbl_803E9288[];
 
@@ -160,11 +160,11 @@ void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj,
                 int parent = pBone->mParent;
                 unsigned int weight;
 
-                fn_801EBEF8(targetQuat, pTarget[2] << 8, pTarget[1] << 8, pTarget[0] << 8);
-                fn_801EBEF8(poseQuat, rz << 8, ry << 8, rx << 8);
+                QuatFromEuler(targetQuat, pTarget[2] << 8, pTarget[1] << 8, pTarget[0] << 8);
+                QuatFromEuler(poseQuat, rz << 8, ry << 8, rx << 8);
                 weight = pBone->mWeight;
-                fn_801EC048(quat, targetQuat, poseQuat, weight / 4096.0f);
-                fn_801EBC18(&angles, quat);
+                QuatSlerp(quat, targetQuat, poseQuat, weight / 4096.0f);
+                QuatToEuler(&angles, quat);
                 rx = angles.mUnknown0 >> 8;
                 ry = angles.mUnknown4 >> 8;
                 rz = angles.mUnknown8 >> 8;

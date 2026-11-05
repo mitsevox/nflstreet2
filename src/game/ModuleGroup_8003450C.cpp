@@ -176,7 +176,7 @@ void fn_801A4650(Object_80228224 *pObject);
 void fn_801A4E9C(void);
 void fn_801A4FB0(void);
 int fn_801F0F18(int a);
-void fn_801F2798(const char *pText);
+void ResTrackLabel(const char *pText);
 void fn_80228E18(void);
 void fn_802363B0(Object_80228224 *pObject);
 void fn_802363E0(Object_80228224 *pObject);
@@ -339,18 +339,18 @@ int BigObj::Init()
 {
     unsigned short count = fn_800543B4() + 1;
 
-    fn_801F2798("BigObjSetupBigObjectsStart");
+    ResTrackLabel("BigObjSetupBigObjectsStart");
     fn_80040558(count, GameObjList::fn_80028BB4());
-    fn_801F2798("BigObjSetupBigObjectsFinish");
-    fn_801F2798("BObjInfoStateInitStart");
+    ResTrackLabel("BigObjSetupBigObjectsFinish");
+    ResTrackLabel("BObjInfoStateInitStart");
     fn_800413F0(104, 10);
-    fn_801F2798("BObjInfoStateInitFinish");
-    fn_801F2798("GenObjSetupAnimationsStart");
+    ResTrackLabel("BObjInfoStateInitFinish");
+    ResTrackLabel("GenObjSetupAnimationsStart");
     fn_8004A9FC();
-    fn_801F2798("GenObjSetupAnimationsFinish");
-    fn_801F2798("BigObjAddAllObjectsStart");
+    ResTrackLabel("GenObjSetupAnimationsFinish");
+    ResTrackLabel("BigObjAddAllObjectsStart");
     fn_80040C90(GameObjList::fn_80028BB4());
-    fn_801F2798("BigObjAddAllObjectsFinish");
+    ResTrackLabel("BigObjAddAllObjectsFinish");
     return 1;
 }
 
@@ -543,16 +543,16 @@ const char *Env::GetName() { return "Env"; }
 
 int Env::Init()
 {
-    fn_801F2798("EnvMgrInitStart");
+    ResTrackLabel("EnvMgrInitStart");
     fn_800A2F48();
-    fn_801F2798("EnvMgrInitFinish");
+    ResTrackLabel("EnvMgrInitFinish");
     fn_801615EC((void *)GameObjList::fn_80028BB4());
-    fn_801F2798("EnvObjAddObjTypeStart");
+    ResTrackLabel("EnvObjAddObjTypeStart");
     fn_800463FC(GameObjList::fn_80028BB4());
-    fn_801F2798("EnvObjAddObjTypeFinish");
-    fn_801F2798("FldObjAddObjTypeStart");
+    ResTrackLabel("EnvObjAddObjTypeFinish");
+    ResTrackLabel("FldObjAddObjTypeStart");
     fn_8019B25C(GameObjList::fn_80028BB4());
-    fn_801F2798("FldObjAddObjTypeFinish");
+    ResTrackLabel("FldObjAddObjTypeFinish");
     fn_80043AE4();
     fn_800C47EC(lbl_803EA554);
     fn_8004787C();
@@ -968,7 +968,7 @@ const char *Plyr::GetName() { return "Plyr"; }
 
 int Plyr::Init()
 {
-    fn_801F2798("PlyrObjsInitStart");
+    ResTrackLabel("PlyrObjsInitStart");
     fn_80160874(14);
     fn_80160A80();
     fn_8015E654(1);
@@ -976,10 +976,10 @@ int Plyr::Init()
     fn_8015E950(1, 1);
     fn_8003DA94(14, GameObjList::fn_80028BB4(), 0);
     fn_8015E994();
-    fn_801F2798("PlyrObjsInitFinish");
-    fn_801F2798("PlaStateInitStart");
+    ResTrackLabel("PlyrObjsInitFinish");
+    ResTrackLabel("PlaStateInitStart");
     fn_800397D0(14);
-    fn_801F2798("PlaStateInitFinish");
+    ResTrackLabel("PlaStateInitFinish");
     fn_80039A1C();
     fn_801A4650(GameVpt::fn_800293A8());
     fn_8004FF8C();
@@ -1277,9 +1277,9 @@ const char *Statics::GetName() { return "Statics"; }
 
 int Statics::Init()
 {
-    fn_801F2798("StaticModelInitStart");
+    ResTrackLabel("StaticModelInitStart");
     fn_800C46B0(GameObjList::fn_80028BB4());
-    fn_801F2798("StaticModelInitFinish");
+    ResTrackLabel("StaticModelInitFinish");
     return 1;
 }
 
