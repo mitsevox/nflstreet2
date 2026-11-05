@@ -164,6 +164,12 @@ def target_sections(binary, target, small_data):
     return sections
 
 
+def language_flags(profile):
+    """The wrapper's -x option for a profile that sets its language; the flags are then part of
+    every unit's flags, so the compile cache key and the report record it."""
+    return ["-x", profile["language"]] if "language" in profile else []
+
+
 def load_manifest(manifest, sections, compiler_version):
     if manifest.get("schema") != 1 or manifest.get("target") != "GN7E69-rev0":
         raise ValueError("Unit manifest must use schema 1 for target GN7E69-rev0")
@@ -176,13 +182,18 @@ def load_manifest(manifest, sections, compiler_version):
         repository_path(directory)
     profiles = manifest.get("profiles", {})
     for name, profile in profiles.items():
-        if set(profile) - {"source_root", "compiler", "include_dirs"} != {"flags", "evidence"} or not profile["evidence"].strip():
+        if set(profile) - {"source_root", "compiler", "include_dirs", "language"} != {"flags", "evidence"} \
+                or not profile["evidence"].strip():
             raise ValueError(f"Profile {name} needs flags, an evidence locator and optionally source_root")
         if "source_root" in profile:
             source_root(profile["source_root"])
         compiler = profile.get("compiler", "prodg")
         if compiler not in {"prodg", "mwcc"}:
             raise ValueError(f"Profile {name} uses an unsupported compiler")
+        # "language" sets the front end for every unit of the profile (ProDG -x), for files whose
+        # name does not give it, such as a .c file the original build compiled as C++.
+        if "language" in profile and (compiler != "prodg" or profile["language"] not in prodg_cc.CPP_LANG):
+            raise ValueError(f"Profile {name} language must be c or c++ for the ProDG compiler")
         for directory in profile.get("include_dirs", []):
             repository_path(directory)
         flags = profile["flags"]
@@ -272,7 +283,8 @@ def load_manifest(manifest, sections, compiler_version):
                 raise ValueError(f"Unit {unit['source']} is outside its profile's source root {directory}")
             compile_path = f"{prefix}/{relative.as_posix()}"
         units.append({"source": unit["source"], "path": source, "profile": unit["profile"],
-                      "flags": profiles[unit["profile"]]["flags"], "sections": placed,
+                      "flags": language_flags(profiles[unit["profile"]]) + profiles[unit["profile"]]["flags"],
+                      "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path, "link_roots": roots,

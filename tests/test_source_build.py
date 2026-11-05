@@ -103,6 +103,21 @@ class TargetAndManifest(Fixture):
             with self.subTest(flags=flags), self.assertRaises(ValueError):
                 self.load(manifest)
 
+    def test_profile_language_sets_the_front_end(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["profiles"]["library"]["language"] = "c++"
+        units, _, _ = self.load(manifest)
+        self.assertEqual(units[0]["flags"], ["-x", "c++", "-O2"])
+        for profile in ({"language": "c++ "}, {"language": "objc"}, {"language": "c", "compiler": "mwcc"}):
+            manifest = copy.deepcopy(self.manifest)
+            manifest["profiles"]["library"].update(profile)
+            with self.subTest(profile=profile), self.assertRaisesRegex(ValueError, "language"):
+                self.load(manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["profiles"]["library"]["flags"] = ["-x", "c++", "-O2"]
+        with self.assertRaisesRegex(ValueError, "wrapper options"):
+            self.load(manifest)
+
     def test_ranges_must_fit_and_not_overlap(self):
         manifest = copy.deepcopy(self.manifest)
         manifest["units"][0]["sections"][0]["end"] = "0x80003148"
