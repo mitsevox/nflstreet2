@@ -1,7 +1,7 @@
 #include "game/fn_80178D18.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 int fn_8006F0D8(void);

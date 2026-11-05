@@ -1,34 +1,13 @@
-/* Partial source for the C library range 0x802622DC-0x80264424 (neutral file name). */
+/* Partial source for vfprintf.c (C library): the formatted-output engine and its number
+   conversion helpers. */
 
 #include "engine/fn_80266AD8.h"
+#include "engine/Reent_802622DC.h"
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
 
-typedef struct File_80262B5C
-{
-  char mUnknown0[92];
-  void *mUnknown5C;
-} File_80262B5C;
-
-typedef struct Exit_80262310
-{
-  struct Exit_80262310 *mUnknown0;
-  int mUnknown4;
-  void (*mUnknown8[32]) (void);
-} Exit_80262310;
-
-typedef struct Reent_802622DC
-{
-  char mUnknown0[8];
-  File_80262B5C *mUnknown8;
-  char mUnknownC[316];
-  Exit_80262310 *mUnknown148;
-  Exit_80262310 mUnknown14C;
-} Reent_802622DC;
-
-extern Reent_802622DC *lbl_803EC56C;
 extern char lbl_802FF4B0[];
 extern char lbl_803A6ACC[];
 extern int lbl_803EC548;
@@ -36,65 +15,11 @@ extern char *lbl_803EC54C;
 
 extern int fn_80262C34 (void *data, File_80262B5C *fp, const char *fmt, va_list ap);
 extern int fn_80264680 ();
-extern void *fn_80262440 (size_t size);
 extern double fn_80265D2C (double x);
 extern double fn_80265EA0 (double x, double y);
 extern char lbl_803A6A28[];
 
-int fn_80262B5C (File_80262B5C *fp, const char *fmt, va_list ap);
 void fn_802624D8 (char *s);
-
-int
-vprintf (const char *fmt, va_list ap)
-{
-  return fn_80262B5C (lbl_803EC56C->mUnknown8, fmt, ap);
-}
-
-int
-atexit (void (*fn) (void))
-{
-  Exit_80262310 *p;
-
-  if ((p = lbl_803EC56C->mUnknown148) == NULL)
-    lbl_803EC56C->mUnknown148 = p = &lbl_803EC56C->mUnknown14C;
-  if (p->mUnknown4 >= 32)
-    {
-      if ((p = (Exit_80262310 *) fn_80262440 (sizeof *p)) == NULL)
-	return -1;
-      p->mUnknown4 = 0;
-      p->mUnknown0 = lbl_803EC56C->mUnknown148;
-      lbl_803EC56C->mUnknown148 = p;
-    }
-  p->mUnknown8[p->mUnknown4++] = fn;
-  return 0;
-}
-
-void *
-fn_802623A8 (const void *key, const void *base, size_t count, size_t size,
-	     int (*compare) (const void *, const void *))
-{
-  void *p;
-  size_t lo = 0;
-  size_t hi = count;
-  size_t mid;
-  int cmp;
-
-  if (count == 0 || size == 0)
-    return NULL;
-  while (lo < hi)
-    {
-      mid = (lo + hi) / 2;
-      p = (void *) ((char *) base + mid * size);
-      cmp = compare (key, p);
-      if (cmp < 0)
-	hi = mid;
-      else if (cmp > 0)
-	lo = mid + 1;
-      else
-	return p;
-    }
-  return NULL;
-}
 
 int
 fn_8026247C (char *s, int n)
@@ -386,4 +311,54 @@ fn_80262B5C (File_80262B5C *fp, const char *fmt, va_list ap)
 	}
     }
   return fn_80264680 (fp->mUnknown5C, fp, fmt, ap);
+}
+
+char *fn_80264424(char *dst, char *start, char *end, int *pLen)
+{
+    int len = end - start + 10;
+    char *buf = __builtin_alloca(len);
+    char *q = buf + len - 1;
+    char *dot;
+    char *p;
+    int state;
+    int count = 0;
+
+    if (dst == 0 || start == 0 || end == 0)
+        return 0;
+
+    state = 0;
+    p = start;
+    dot = end;
+    while (p <= end && state != 2) {
+        switch (*p) {
+        case '.':
+            dot = p;
+            if (state == 0)
+                state = 1;
+            break;
+        case 'E':
+        case 'e':
+            state = 2;
+            break;
+        }
+        p++;
+    }
+    if (state == 2)
+        return start;
+
+    for (p = end; p > start; p--) {
+        *q-- = *p;
+        if (p <= dot) {
+            if (count % 3 == 0 && count != 0) {
+                *q-- = ',';
+                len++;
+            }
+            count++;
+        }
+    }
+    *q = *p;
+    len -= 10;
+    memcpy(dst, q, len);
+    *pLen = len;
+    return dst;
 }

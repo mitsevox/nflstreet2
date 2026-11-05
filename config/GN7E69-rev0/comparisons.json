@@ -29874,21 +29874,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_802622DC.c",
+      "source": "src/engine/vprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80262310 (src/engine/vprintf.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. Draft comparison only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802622DC",
-          "end": "0x80264424"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7538",
-          "end": "0x802B7578"
+          "end": "0x80262310"
         }
       ],
       "functions": [
@@ -29896,7 +29890,22 @@
           "symbol": "vprintf",
           "start": "0x802622DC",
           "end": "0x80262310"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80262310.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80262310-0x8026247C (src/engine/cu_80262310.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. 0x80262440 is not registered. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80262310",
+          "end": "0x8026247C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "atexit",
           "start": "0x80262310",
@@ -29906,7 +29915,28 @@
           "symbol": "fn_802623A8",
           "start": "0x802623A8",
           "end": "0x80262440"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vfprintf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8026247C-0x802645AC (src/engine/vfprintf.c), the compiler rows 0x802622DC-0x80264424 and 0x80264424-0x80266A2C, the source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. 0x80262C34 is not registered. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026247C",
+          "end": "0x802645AC"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7538",
+          "end": "0x802B7578"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8026247C",
           "start": "0x8026247C",
@@ -29936,6 +29966,11 @@
           "symbol": "fn_80262B5C",
           "start": "0x80262B5C",
           "end": "0x80262C34"
+        },
+        {
+          "symbol": "fn_80264424",
+          "start": "0x80264424",
+          "end": "0x802645AC"
         }
       ]
     },
@@ -36972,13 +37007,13 @@
     {
       "source": "src/engine/cu_802714A8.cpp",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x802714A8-0x80276DE4 (src/engine/cu_802714A8.cpp), its compiler row, individual exact function extents and name rows, and the exact data rows for the vtables 0x802B7AB0-0x802B7AF0 and 0x802C19A8-0x802C19E8. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802714A8-0x80271D34 (src/engine/cu_802714A8.cpp), the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function; the two class vtables are this file's. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802714A8",
-          "end": "0x80276DE4"
+          "end": "0x80271D34"
         },
         {
           "section": ".gnu.linkonce.d._vt.14Class_80271640",
@@ -37053,7 +37088,22 @@
           "symbol": "_._14Class_80271B74",
           "start": "0x80271B74",
           "end": "0x80271BD4"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sdspmix.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80271D34-0x8027257C (src/engine/sdspmix.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80271D34",
+          "end": "0x8027257C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80271D34",
           "start": "0x80271D34",
@@ -37088,7 +37138,22 @@
           "symbol": "fn_80272150",
           "start": "0x80272150",
           "end": "0x8027257C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/snddrv.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027257C",
+          "end": "0x802753F0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8027257C",
           "start": "0x8027257C",
@@ -37270,6 +37335,41 @@
           "end": "0x802753F0"
         },
         {
+          "symbol": "fn_80273040",
+          "start": "0x80273040",
+          "end": "0x80273264"
+        },
+        {
+          "symbol": "fn_802739F8",
+          "start": "0x802739F8",
+          "end": "0x80273D7C"
+        },
+        {
+          "symbol": "fn_80274464",
+          "start": "0x80274464",
+          "end": "0x8027474C"
+        },
+        {
+          "symbol": "fn_80273DF8",
+          "start": "0x80273DF8",
+          "end": "0x80274304"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802753F0.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x802753F0-0x80276DE4 (src/engine/cu_802753F0.cpp), the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802753F0",
+          "end": "0x80276DE4"
+        }
+      ],
+      "functions": [
+        {
           "symbol": "fn_802753F0",
           "start": "0x802753F0",
           "end": "0x80275404"
@@ -37350,21 +37450,6 @@
           "end": "0x80276B7C"
         },
         {
-          "symbol": "fn_80273040",
-          "start": "0x80273040",
-          "end": "0x80273264"
-        },
-        {
-          "symbol": "fn_802739F8",
-          "start": "0x802739F8",
-          "end": "0x80273D7C"
-        },
-        {
-          "symbol": "fn_80274464",
-          "start": "0x80274464",
-          "end": "0x8027474C"
-        },
-        {
           "symbol": "fn_8027555C",
           "start": "0x8027555C",
           "end": "0x802755E0"
@@ -37378,30 +37463,19 @@
           "symbol": "fn_80275F80",
           "start": "0x80275F80",
           "end": "0x80276194"
-        },
-        {
-          "symbol": "fn_80273DF8",
-          "start": "0x80273DF8",
-          "end": "0x80274304"
         }
       ]
     },
     {
       "source": "src/engine/cu_80276DE4.cpp",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x80276DE4-0x8027CF9C (src/engine/cu_80276DE4.cpp), its compiler row, individual exact function extents and name rows. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80276DE4-0x80278700 (src/engine/cu_80276DE4.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80276DE4",
-          "end": "0x8027CF9C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802C21F0",
-          "end": "0x802C21F4"
+          "end": "0x80278700"
         }
       ],
       "functions": [
@@ -37476,6 +37550,26 @@
           "end": "0x80278598"
         },
         {
+          "symbol": "fn_80277CF0",
+          "start": "0x80277CF0",
+          "end": "0x80277D88"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/slinklst.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80278700-0x8027882C (src/engine/slinklst.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278700",
+          "end": "0x8027882C"
+        }
+      ],
+      "functions": [
+        {
           "symbol": "fn_80278700",
           "start": "0x80278700",
           "end": "0x80278714"
@@ -37499,7 +37593,22 @@
           "symbol": "fn_802787CC",
           "start": "0x802787CC",
           "end": "0x8027882C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8027882C.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x8027882C-0x8027981C (src/engine/cu_8027882C.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027882C",
+          "end": "0x8027981C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8027882C",
           "start": "0x8027882C",
@@ -37579,7 +37688,22 @@
           "symbol": "fn_8027980C",
           "start": "0x8027980C",
           "end": "0x8027981C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/saramman.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8027981C-0x80279BC0 (src/engine/saramman.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027981C",
+          "end": "0x80279BC0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8027981C",
           "start": "0x8027981C",
@@ -37599,7 +37723,28 @@
           "symbol": "fn_80279910",
           "start": "0x80279910",
           "end": "0x80279960"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80279BC0.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x80279BC0-0x8027AEE4 (src/engine/cu_80279BC0.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function; the exact .rodata data row 0x802C21F0-0x802C21F4 (used by 0x8027A21C). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80279BC0",
+          "end": "0x8027AEE4"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C21F0",
+          "end": "0x802C21F4"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80279BC0",
           "start": "0x80279BC0",
@@ -37734,7 +37879,22 @@
           "symbol": "fn_8027AE04",
           "start": "0x8027AE04",
           "end": "0x8027AEE4"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/supmutpf.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x8027AEE4-0x8027B1F8 (src/engine/supmutpf.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027AEE4",
+          "end": "0x8027B1F8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8027AEE4",
           "start": "0x8027AEE4",
@@ -37749,7 +37909,22 @@
           "symbol": "fn_8027B168",
           "start": "0x8027B168",
           "end": "0x8027B1F8"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8027B1F8.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x8027B1F8-0x8027CF9C (src/engine/cu_8027B1F8.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027B1F8",
+          "end": "0x8027CF9C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8027B328",
           "start": "0x8027B328",
@@ -37844,11 +38019,6 @@
           "symbol": "fn_8027C0D8",
           "start": "0x8027C0D8",
           "end": "0x8027C120"
-        },
-        {
-          "symbol": "fn_80277CF0",
-          "start": "0x80277CF0",
-          "end": "0x80277D88"
         }
       ]
     },
@@ -38179,23 +38349,18 @@
       ]
     },
     {
-      "source": "src/engine/cu_80264424.c",
+      "source": "src/engine/cu_802645AC.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80264424-0x80266A2C (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the two draft bodies. The drafts define no static data. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802645AC-0x80266A2C (src/engine/cu_802645AC.c), the compiler row 0x80264424-0x80266A2C, its source-form row, and the exact whole-function row and neutral name row of the draft body. The draft defines no static data. Draft comparison only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80264424",
+          "start": "0x802645AC",
           "end": "0x80266A2C"
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80264424",
-          "start": "0x80264424",
-          "end": "0x802645AC"
-        },
         {
           "symbol": "fn_8026696C",
           "start": "0x8026696C",
@@ -43103,15 +43268,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AE3E4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801AE3E4-0x801B2AD4 (src/engine/cu_801AE3E4.cpp), its compiler, source-form, type and external rows, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "source": "src/engine/spchevnt.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x801AE3E4-0x801AF60C (src/engine/spchevnt.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AE3E4",
-          "end": "0x801B2AD4"
+          "end": "0x801AF60C"
         }
       ],
       "functions": [
@@ -43344,7 +43509,22 @@
           "symbol": "fn_801AF5E4",
           "start": "0x801AF5E4",
           "end": "0x801AF60C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AF60C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/cu_801AF60C.cpp), the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AF60C",
+          "end": "0x801AF75C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801AF60C",
           "start": "0x801AF60C",
@@ -43364,7 +43544,22 @@
           "symbol": "fn_801AF718",
           "start": "0x801AF718",
           "end": "0x801AF75C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spchpick.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x801AF75C-0x801B1A3C (src/engine/spchpick.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AF75C",
+          "end": "0x801B1A3C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801AF75C",
           "start": "0x801AF75C",
@@ -43644,7 +43839,22 @@
           "symbol": "fn_801B1934",
           "start": "0x801B1934",
           "end": "0x801B1A3C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/spchrand.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B1A3C",
+          "end": "0x801B1CFC"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B1A3C",
           "start": "0x801B1A3C",
@@ -43669,7 +43879,22 @@
           "symbol": "fn_801B1C1C",
           "start": "0x801B1C1C",
           "end": "0x801B1CFC"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801B1CFC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801B1CFC-0x801B2AD4 (src/engine/cu_801B1CFC.cpp), the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B1CFC",
+          "end": "0x801B2AD4"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801B1CFC",
           "start": "0x801B1CFC",

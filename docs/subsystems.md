@@ -48,7 +48,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
 | 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
-| 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `cu_801AE3E4` | 0/0/0/0/1 | 18 KiB | no |
+| 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `spchevnt.c`, `cu_801AF60C`, `spchpick.c`, `spchrand.c`, `cu_801B1CFC` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
 | 0x801B9D00-0x801C1D84 | Animation C library | `anim.c`, `animtran.c`, `animTexLib.c`, `llanimtexlib.c`, `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
 | 0x801C1D84-0x801D134C | Engine core: C library helpers, keyframe evaluation, module nodes, matrix library | `ctype.c`, `camera.c`, `camfocus.c`, `camfree.c`, `CurveList.c`, `polynomial.c`, `ds.c`, `list.c`, `linklist.c`, `node.c`, `splytree.c`, `bintree.c`, `fileio.c`, `llfileio.c`, `fs_cli.c`, `filemc.c`, `Font.c`, `llglib.c`, `rand.c`, `orient.c`, `matrix.c`, `llmatrix.c`, `cu_801C1D84`, `cu_801CBC50` | 1/7/5/4/0 | 40 KiB | no |
@@ -67,8 +67,8 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | --- | --- | --- | --- | --- | --- |
 | 0x80003100-0x800034A0 | Boot: `.init` code, including the `.init` part of `__ppc_eabi_init.c` (0x80003468-0x8000348C); that file's `.text` (0x8023E818-0x8023E920) is counted in the SDK row | `cu_80003100` | 1/0/0/1/0 | 1 KiB | no |
 | 0x8023873C-0x8025E148 | GameCube SDK built with CodeWarrior: OS, DVD, VI, VM, PAD, AR, AI, MTX, GX, CARD, EXI, SI | `src/dolphin/<library>/*.c` | 6/8/1/5/1 | 42 KiB | no |
-| 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
-| 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `cu_80276DE4`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
+| 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `vprintf.c`, `vfprintf.c` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
+| 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `sdspmix.c`, `snddrv.c`, `cu_802753F0`, `cu_80276DE4`, `slinklst.c`, `cu_8027882C`, `saramman.c`, `cu_80279BC0`, `supmutpf.c`, `cu_8027B1F8`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
 | 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `date.c`, `GCmp.c`, `huff.c`, `rle.c`, `none.c`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
 | 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c` | 1/1/0/0/0 | 2 KiB | no |
 

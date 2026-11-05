@@ -1,4 +1,4 @@
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 void fn_80075550(int *pResult, int value);

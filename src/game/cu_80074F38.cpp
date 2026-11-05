@@ -1,6 +1,6 @@
 #include "game/fn_80178D18.h"
 #include "game/Object_80039F5C.h"
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 void fn_80075550(int *pResult, int value);

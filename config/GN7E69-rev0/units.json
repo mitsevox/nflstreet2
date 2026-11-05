@@ -155,6 +155,29 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B91A0: bounded C++ lookup/synchronization group. ProDG 3.9.3 -O2 -G0 reproduces ten functions, including all scalar-global access helpers. Original references to 8037E820/824 and 802F4838 use absolute lis/load/store pairs rather than SDA; the globals lie outside SDA range. Default -G8 and -G4 emit incompatible SDA relocations for these scalar declarations. -O1 changes wrapper/dispatch bodies; -Os changes lookup body sizes. -O3 is indistinguishable on this candidate, and the exact original compiler version and small-data threshold below four bytes are unresolved. One profile applies to the entire source; no per-function override or changes to accepted profiles."
+    },
+    "speech_cxx": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x801AE3E4-0x801B2AD4 (speech_cxx): the speech library files carry NASCAR 2005's .c names (spchevnt.c, spchpick.c, spchrand.c), and NASCAR's symbols for those files are C++-mangled for 11 of 46, 36 of 67 and 3 of 5 functions, the rest unmangled as extern \"C\" declarations would be (iSPCH_SearchEventDat__FP7VoxDatai in spchevnt.c, iSPCH_EACseedrandom__FUi in spchrand.c), so the original build compiled them as C++. The flags are game_cpp's, measured on the former single file src/engine/cu_801AE3E4.cpp (evidence.tsv compiler row 0x801AE3E4-0x801B2AD4, game_cpp): C++ front end for its gcc 2.95 virtual calls, default -G 8 for its r13 small-data accesses."
+    },
+    "sound_cxx": {
+      "flags": [
+        "-O2",
+        "-G0"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "evidence.tsv compiler row 0x802714A8-0x8027CF9C (sound_cxx): the sound files sdspmix.c, snddrv.c, slinklst.c, saramman.c and supmutpf.c carry NASCAR 2005's .c names, and NASCAR's symbols for every function of those files are C++-mangled (SNDDRV_DSPMixerSetAuxBus__FP6_AXVPBUsi in sdspmix.c, SNDPLATFORM_stop__Fi in snddrv.c, SNDLINKI_push__FP11SNDLINKLISTP11SNDLINKNODE in slinklst.c, SNDARAM_alloc__Fi in saramman.c, SFILTER_unpackmtpf__FPviT0T0i in supmutpf.c), so the original build compiled them as C++. The flags are engine_cpp_nosda's, measured on the former files src/engine/cu_802714A8.cpp and src/engine/cu_80276DE4.cpp (their compiler rows): no r13 or r2 access in the range, and default -G8 would turn absolute word accesses into SDA relocations."
     }
   },
   "externals": {

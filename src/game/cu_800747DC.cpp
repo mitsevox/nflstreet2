@@ -1,4 +1,4 @@
-#include "engine/cu_801AE3E4.h"
+#include "engine/spchevnt.h"
 
 extern "C" {
 int fn_800745BC(int side);
