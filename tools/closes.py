@@ -11,6 +11,14 @@ linked, descriptive file name, every function and label named with an evidence r
 is not closed fails the check with what keeps it open. The rest of the done rule (header comment,
 naming conventions, unit rows, both reviews) is the reviewers' to confirm, as AGENTS.md says.
 Outside pull requests the check passes.
+
+The check reads the body CI was started with, on each push (validate.yml runs on GitHub's default
+pull_request types, which leave out `edited`, as for tools/tier.py's Tier line). A `Closes:` line
+added or changed after the last push is checked only by the next push, so push after editing it,
+and the owner's clearance confirms the final body against the final run. Running the check on body
+edits would need either a second workflow, which the site's scaffold check rejects (validate.yml is
+the only one), or `edited` runs of validate.yml, whose skipped or cancelled jobs would replace the
+push run's required check results on the same commit.
 """
 import argparse
 import json
