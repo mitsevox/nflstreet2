@@ -48,7 +48,7 @@ int fn_800D0B90(Object_80039F5C *p);
 int fn_80101B7C(Object_80039F5C *p);
 int fn_801CFFD0(int a, int b);
 float fn_801CFFA0(float value);
-void fn_801BD81C(void *p, float value);
+void AnimSeqSetSpeed(void *p, float value);
 void fn_80156C78(int index, int value);
 void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
 }
@@ -181,7 +181,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     }
     pChannels = p->mpUnknown800;
     if (pRequest->mUnknown1D != 4 && fn_801BE648(p->mpUnknown792) != 0xEB) {
-        fn_801BD81C(&pChannels[anim].mUnknown4C, fn_801CFFA0(lbl_803EAEC0));
+        AnimSeqSetSpeed(&pChannels[anim].mUnknown4C, fn_801CFFA0(lbl_803EAEC0));
     }
     if (pRequest->mUnknownAByte != 15) {
         switch (p->mpState->mUnknown1) {

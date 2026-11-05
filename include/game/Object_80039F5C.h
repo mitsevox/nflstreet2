@@ -415,10 +415,10 @@ struct Object_80039F5C {
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
-    Object_801BA03C *mpUnknown796;
+    AnimHeader_t *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
     void *mpUnknown804;
-    Object_801BA03C *mpUnknown808;
+    AnimHeader_t *mpUnknown808;
     Record_800D81C8 *mpUnknown812;
     char mUnknown816[192];
     union {

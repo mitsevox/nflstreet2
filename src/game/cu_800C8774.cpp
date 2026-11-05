@@ -90,8 +90,8 @@ int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_801BA6B0(Record_800D81C8 *pRecord);
 void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
-float fn_801BD660(void *p, int key);
-void fn_801BD81C(void *p, float value);
+float AnimSeqGetOpcodeTime(void *p, int key);
+void AnimSeqSetSpeed(void *p, float value);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 unsigned short fn_801BE648(void *p);
@@ -461,7 +461,7 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
         fn_801BA6BC(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = 1.0f;
-    fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC68));
+    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC68));
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
     desired = lbl_803EAC58;
@@ -508,7 +508,7 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
         fn_801BA6BC(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = lbl_803EAC60;
-    fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC6C));
+    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC6C));
     pTurn->mScale = lbl_803EAC6C;
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
@@ -848,7 +848,7 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
                     Point_8017886C delta;
                     float remaining;
 
-                    remaining = fn_801BD660(pRecord->mUnknown4C.mpUnknown0, 0xC004) * (1.0f / pTurn->mScale)
+                    remaining = AnimSeqGetOpcodeTime(pRecord->mUnknown4C.mpUnknown0, 0xC004) * (1.0f / pTurn->mScale)
                                 - pRecord->mUnknown4C.mUnknown8;
                     pTurn->mUnknown10 = frames;
                     origin.mX = pRecord->mUnknown24.mUnknown0;

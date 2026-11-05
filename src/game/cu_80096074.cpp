@@ -3,7 +3,7 @@
 #include "game/fn_802270D4.h"
 
 extern "C" {
-Frame_80141210 *fn_801C02C4(Actor_801C009C *pActor);
+Frame_80141210 *AnimSeqncrGetFirstPlayerPtr(Actor_801C009C *pActor);
 int fn_8009422C(void);
 int fn_800AD9B4(void);
 float fn_80178A08(void);
@@ -47,7 +47,7 @@ extern "C" int fn_80096074(Params_80092E54 *pRequest, int flag)
         range = 100000.0f;
     }
     pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-    pFrame = fn_801C02C4(pActor);
+    pFrame = AnimSeqncrGetFirstPlayerPtr(pActor);
     pHeld = pRequest->mUnknown14[0];
     if (pHeld == 0) {
         Object_80039F5C *list[24];

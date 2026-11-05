@@ -4,7 +4,7 @@
 
 extern "C" {
 int fn_801CFFD0(int a, int b);
-float fn_801BD660(void *p, int key);
+float AnimSeqGetOpcodeTime(void *p, int key);
 }
 
 extern "C" void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock)
@@ -21,7 +21,7 @@ extern "C" void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock)
         if (((pMove->mUnknown8 - facing) & 0xFFFFFF) > 0x800000) {
             turn = -turn;
         }
-        float frames = fn_801BD660(p->mpUnknown800[pBlock->mUnknown4Word].mUnknown4C.mpUnknown0, 0xC006);
+        float frames = AnimSeqGetOpcodeTime(p->mpUnknown800[pBlock->mUnknown4Word].mUnknown4C.mpUnknown0, 0xC006);
         pBlock->mUnknown24Float -= 1.0f;
         turn = (int)(turn / frames);
         pBlock->mUnknown0Word = turn;

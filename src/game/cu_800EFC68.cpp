@@ -698,7 +698,7 @@ int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0C0C(Object_80039F5C *p, int a);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
-void fn_801BD81C(void *p, float value);
+void AnimSeqSetSpeed(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800B83A0(Object_80039F5C *p);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);

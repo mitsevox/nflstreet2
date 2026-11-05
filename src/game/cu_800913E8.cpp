@@ -1,12 +1,12 @@
 #include "game/cu_8008E978.h"
 #include "game/Camera_8013F738.h"
-#include "engine/Sample_801C009C.h"
+#include "engine/AnimSeqCamSample.h"
 
 extern "C" {
 Camera_8013F738 *fn_8013FA04(int index);
-Sample_801C009C *fn_801C00F8(Actor_801C009C *);
-Sample_801C009C *fn_801C009C(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
-float fn_801C5278(float, Curve_801C02EC *, int);
+AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
+AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
+float fn_801C5278(float, AnimSeqCamCurve_t *, int);
 void fn_80227384(void *pOut, void *pIn, int angle);
 }
 
@@ -26,12 +26,12 @@ extern "C" int fn_800913E8(Vector_80039F5C *pOut, Character_80093BCC *pCharacter
         scale = p->mUnknown768;
     }
     if (pSelection->mUnknown0 != 0) {
-        Sample_801C009C *pSample;
+        AnimSeqCamSample_t *pSample;
 
         if (pSelection->mUnknown4.mWord == -1 || pSelection->mUnknown8.mWord == -1) {
-            pSample = fn_801C00F8(pActor);
+            pSample = AnimSeqCamFindFirstCamera(pActor);
         } else {
-            pSample = fn_801C009C(pActor, 1, pSelection->mUnknown4.mParts[1], pSelection->mUnknown8.mParts[1]);
+            pSample = AnimSeqCamFindCamera(pActor, 1, pSelection->mUnknown4.mParts[1], pSelection->mUnknown8.mParts[1]);
         }
         if (pSample != 0) {
             pOut->mX = fn_801C5278(time, &pSample->mCurves[0], 0) * scale;

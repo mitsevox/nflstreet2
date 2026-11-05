@@ -47,8 +47,8 @@ void fn_80191200(void);
 void fn_80191224(void);
 void fn_801912A4(void);
 void fn_80194794(void);
-void fn_801C1710(int a);
-void fn_801C17BC(void);
+void ResStreamInit(int a);
+void ResStreamShutdown(void);
 int fn_801C34F8(int a, int b, void *p, int c);
 int fn_801C35B8(void);
 int fn_801C4F64(void);
@@ -95,13 +95,13 @@ const char *ARes::GetName() { return "ARes"; }
 
 int ARes::Init()
 {
-    fn_801C1710(1);
+    ResStreamInit(1);
     return 1;
 }
 
 int ARes::Shutdown()
 {
-    fn_801C17BC();
+    ResStreamShutdown();
     return 1;
 }
 

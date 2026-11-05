@@ -1656,6 +1656,106 @@
     "_dtors": {
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
+    },
+    "_Anim_ModuleActive": {
+      "address": "0x803EBB78",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB78 (target extent, related name)."
+    },
+    "_Anim_pUserOpcodeCallback": {
+      "address": "0x803EBB7C",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB7C (target extent, related name)."
+    },
+    "_Anim_pUserOpcodeSkipCallback": {
+      "address": "0x803EBB80",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB80 (target extent, related name)."
+    },
+    "_Anim_SeqVersion": {
+      "address": "0x803EBB84",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB84 (target extent, related name)."
+    },
+    "_Anim_UserDataStackPosition": {
+      "address": "0x803ECEB4",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB4 (target extent, related name)."
+    },
+    "_Anim_UserStateStackPosition": {
+      "address": "0x803ECEB5",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB5 (target extent, related name)."
+    },
+    "_Anim_pCurrentUserData": {
+      "address": "0x8037E840",
+      "evidence": "evidence.tsv data/name rows for 0x8037E840 (target extent, related name)."
+    },
+    "_Anim_UserCallbackState": {
+      "address": "0x8037E84C",
+      "evidence": "evidence.tsv data/name rows for 0x8037E84C (target extent, related name)."
+    },
+    "_AnimCache_NumObjTypes": {
+      "address": "0x803ED618",
+      "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, inferred name)."
+    },
+    "_AnimCache_Heap": {
+      "address": "0x803ED61C",
+      "evidence": "evidence.tsv data/name rows for 0x803ED61C (target extent, inferred name)."
+    },
+    "_AnimCache_pObjTypeCache": {
+      "address": "0x803ED620",
+      "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, inferred name)."
+    },
+    "_AnimCache_ModuleActive": {
+      "address": "0x803EBBA8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBA8 (target extent, inferred name)."
+    },
+    "_AnimFrameCache_CustomFunc": {
+      "address": "0x803ECEC0",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEC0 (target extent, related name)."
+    },
+    "_AnimSequencer_ModuleActive": {
+      "address": "0x803EBBAC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBAC (target extent, inferred name)."
+    },
+    "_AnimSequencer_fFrameRate": {
+      "address": "0x803EBBB0",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB0 (target extent, inferred name)."
+    },
+    "_uLastGroupIndex": {
+      "address": "0x803EBBB4",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB4 (target extent, related name)."
+    },
+    "_uLastSubGroupIndex": {
+      "address": "0x803EBBB6",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB6 (target extent, related name)."
+    },
+    "_uLastIndex": {
+      "address": "0x803EBBB8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB8 (target extent, related name)."
+    },
+    "_pLastSeq": {
+      "address": "0x803EBBBC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBBC (target extent, related name)."
+    },
+    "_ResStream_Lock": {
+      "address": "0x803D4F98",
+      "evidence": "evidence.tsv data/name rows for 0x803D4F98 (target extent, inferred name)."
+    },
+    "_ResStream_iNumStreams": {
+      "address": "0x803EBBC0",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC0 (target extent, inferred name)."
+    },
+    "_ResStream_pStreams": {
+      "address": "0x803EBBC4",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC4 (target extent, inferred name)."
+    },
+    "_ResStream_bShutdown": {
+      "address": "0x803EBBC8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC8 (target extent, inferred name)."
+    },
+    "_ResStream_iNumPending": {
+      "address": "0x803EBBCC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBCC (target extent, inferred name)."
+    },
+    "_AnimFile_RelocateFunc": {
+      "address": "0x803ECEB8",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB8 (target extent, related name)."
     }
   },
   "units": [
@@ -12299,9 +12399,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF5E8.c",
+      "source": "src/engine/animcache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/animcache.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12312,9 +12412,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF94C.c",
+      "source": "src/engine/animframecache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/cu_801BF94C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/animframecache.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12325,9 +12425,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BFEF8.c",
+      "source": "src/engine/AnimSequencer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/cu_801BFEF8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12338,9 +12438,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BFFA8.c",
+      "source": "src/engine/AnimSeqCamera.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/cu_801BFFA8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/AnimSeqCamera.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13596,9 +13696,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C10E0.c",
+      "source": "src/engine/resstream.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/resstream.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13782,9 +13882,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BA818.c",
+      "source": "src/engine/animemot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/cu_801BA818.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/animemot.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -14003,7 +14103,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C01DC.c",
+      "source": "src/engine/animseqncr.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x801C01DC-0x801C06E8, all nine function/name rows, complete native .rodata row 0x802AEEE0-0x802AEEE8 and source-form/compiler records. Whole source linked; unchanged existing owner-approved profile.",
       "sections": [
@@ -14060,7 +14160,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BCF40.c",
+      "source": "src/engine/animseq.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x801BCF40-0x801BDA30, all seventeen name/function rows, source-form and field records, exact .rodata802AEDC8-802AEE38 and .sbss803ED610-803ED614. Complete unit on unchanged engine_c_fastmath library profile.",
       "sections": [

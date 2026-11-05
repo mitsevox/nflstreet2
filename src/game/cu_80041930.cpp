@@ -32,7 +32,7 @@ void fn_8019F044(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
 void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
+void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 int fn_801BBE5C(int a, int b);
 void fn_801CF8A8(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
@@ -262,13 +262,13 @@ void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         value = ReadBitStream(pStreamB, 16);
         ReadBitStream(pStreamA, 32);
         weight = ReadBitStream(pStreamB, 32);
-        blend.mUnknown4[0].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
             ReadBitStream(pStreamA, 16);
             value = ReadBitStream(pStreamB, 16);
-            blend.mUnknown4[1].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
             ReadBitStream(pStreamA, 16);

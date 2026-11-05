@@ -84,7 +84,7 @@ void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_80178A08(void);
 float fn_80178A44(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
-void fn_801BD81C(void *p, float value);
+void AnimSeqSetSpeed(void *p, float value);
 float fn_801CFFA0(float value);
 extern float lbl_803EA2C4;
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
@@ -120,7 +120,7 @@ void fn_800D4EC0(int value);
 int fn_80100024(Object_80039F5C *p, int angle, int mode);
 void fn_801016A4(Object_80039F5C *p, unsigned char *pKind, Point_8017886C *pPoint, unsigned int *pAngle);
 void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *pPoint);
-float fn_801BD6D4(Block_801BD6D4 *p);
+float AnimSeqGetTime(AnimSeq_t *p);
 }
 
 extern float lbl_803EAEC4;
@@ -274,7 +274,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             }
             pState->mUnknown0 = fn_801BA2A8(pData, pEntries, pList->mItems[index].mUnknown0,
                                             pList->mItems[index].mUnknown2, animation, p, 1.0f);
-            fn_801BD81C(&pEntries[pState->mUnknown0].mUnknown4C, fn_801CFFA0(lbl_803EAEC4));
+            AnimSeqSetSpeed(&pEntries[pState->mUnknown0].mUnknown4C, fn_801CFFA0(lbl_803EAEC4));
         }
         break;
     }
@@ -282,7 +282,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
         break;
     case 2:
         if (fn_801BE648(p->mpUnknown792) == animation) {
-            float time = fn_801BD6D4(&p->mpUnknown800[pState->mUnknown0].mUnknown4C);
+            float time = AnimSeqGetTime(&p->mpUnknown800[pState->mUnknown0].mUnknown4C);
             float previous = pState->mUnknown32;
 
             pState->mUnknown32 = time;

@@ -77,8 +77,8 @@ int fn_801481B0(void);
 void fn_801483C8(void);
 int fn_801486A0(void);
 int fn_80178320(void);
-float fn_801BD660(void *p, int key);
-float fn_801BD690(Block_801BD6D4 *p, int key);
+float AnimSeqGetOpcodeTime(void *p, int key);
+float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -1108,9 +1108,9 @@ extern "C" int fn_8012CCA0(Object_80039F5C *p)
 
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 153)) {
         int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 153, 0);
-        float start = fn_801BD690(&p->mpUnknown800[index].mUnknown4C, 0xC004);
+        float start = AnimSeqGetTimeToOpcode(&p->mpUnknown800[index].mUnknown4C, 0xC004);
 
-        result = (int)(fn_801BD660(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC004) - start);
+        result = (int)(AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC004) - start);
     }
     return result;
 }

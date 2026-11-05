@@ -14,25 +14,25 @@ typedef struct AnimGroupHeaderView {
     int count;
 } AnimGroupHeaderView;
 
-typedef struct Anims_801BAB34 {
+typedef struct AnimFileAnims_t {
     int mCount;
-    Anim_801BAB34 *mAnims[1];
-} Anims_801BAB34;
+    AnimScript_t *mAnims[1];
+} AnimFileAnims_t;
 
-typedef struct StateAnim_801BAB88 {
+typedef struct AnimFileStateAnim_t {
     unsigned short mId;
     unsigned char mUnknown2[2];
-    Anim_801BAB34 *mpAnim;
-} StateAnim_801BAB88;
+    AnimScript_t *mpAnim;
+} AnimFileStateAnim_t;
 
-typedef struct StateAnims_801BAB88 {
+typedef struct AnimFileStateAnims_t {
     unsigned short mCount;
     unsigned short mUnknown2;
-    StateAnim_801BAB88 mEntries[1];
-} StateAnims_801BAB88;
+    AnimFileStateAnim_t mEntries[1];
+} AnimFileStateAnims_t;
 
 /* Transition rule; fn_801BEFA4 matches it against the current and next state. */
-typedef struct StateTran_801BAC1C {
+typedef struct AnimFileStateTran_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     unsigned short mUnknown4;
@@ -40,34 +40,34 @@ typedef struct StateTran_801BAC1C {
     unsigned short mUnknown8;
     unsigned char mUnknownA[2];
     struct Transition_801BEFA4 *mpUnknownC;
-} StateTran_801BAC1C;
+} AnimFileStateTran_t;
 
-typedef struct StateTrans_801BAC1C {
+typedef struct AnimFileStateTrans_t {
     int mCount;
-    StateTran_801BAC1C mEntries[1];
-} StateTrans_801BAC1C;
+    AnimFileStateTran_t mEntries[1];
+} AnimFileStateTrans_t;
 
-typedef struct State_801BAB48 {
+typedef struct AnimFileState_t {
     unsigned short mId;
     unsigned char mUnknown2[2];
-    StateAnims_801BAB88 *mpAnims;
+    AnimFileStateAnims_t *mpAnims;
     void *mpUnknown8;
-    StateTrans_801BAC1C *mpTrans;
-} State_801BAB48;
+    AnimFileStateTrans_t *mpTrans;
+} AnimFileState_t;
 
-typedef struct States_801BAB48 {
+typedef struct AnimFileStates_t {
     int mCount;
-    State_801BAB48 mStates[1];
-} States_801BAB48;
+    AnimFileState_t mStates[1];
+} AnimFileStates_t;
 
-/* Animation file header; offsets are relocated in place by fn_801BA850. */
+/* Animation file header; offsets are relocated in place by AnimFileRelocate. */
 typedef struct AnimFileFormat_t {
     unsigned short objectType;
     unsigned short fileNum;
     unsigned short motionCount;
     unsigned short flags;
-    States_801BAB48 *states;
-    Anims_801BAB34 *anims;
+    AnimFileStates_t *states;
+    AnimFileAnims_t *anims;
     char **motion;
     Record_8019D8AC *compress;
     AnimGroupHeaderView *groups;

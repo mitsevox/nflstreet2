@@ -15,7 +15,7 @@ struct State_800E4264 {
 extern "C" {
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_801CFFD0(int a, int b);
-float fn_801BD690(void *p, int key);
+float AnimSeqGetTimeToOpcode(void *p, int key);
 }
 
 extern "C" int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
@@ -39,7 +39,7 @@ extern "C" int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRe
                 int channel = fn_801BA5A8(p->mpUnknown796, pChannels, 189, 0);
                 pState->mUnknown64 = pChannels[channel].mUnknown48;
                 if (pState->mUnknown64 == 0.0f) {
-                    pState->mUnknown64 = fn_801BD690(&pChannels[channel].mUnknown4C, 0xC004);
+                    pState->mUnknown64 = AnimSeqGetTimeToOpcode(&pChannels[channel].mUnknown4C, 0xC004);
                     if (pState->mUnknown64 == 0.0f) {
                         break;
                     }

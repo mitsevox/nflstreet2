@@ -134,7 +134,7 @@ void fn_800B2BC0(Object_800B26B0 *pMotion);
 void fn_8009BEA8(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void fn_8016D9D0(Object_8016D8B0 *pObject);
-void fn_801B9EDC(void *p, int a, int b, int c);
+void AnimInitHeader(void *p, int a, int b, int c);
 void fn_801B9FEC(void *p, void *q);
 void fn_801BA03C(void *a, void *b, float f, Object_80039F5C *p);
 int fn_801BC7C0(void *a, void *b, void *c);
@@ -455,7 +455,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     p->mUnknown9[2] = index < (unsigned int)fn_80178D70(team);
     p->mpState = &pPlayer->mObject.mQueue[0];
     p->mpUnknown792 = pPlayer->mObject.mUnknown1244 + 1252;
-    p->mpUnknown796 = (Object_801BA03C *)pPlayer->mObject.mUnknown1244;
+    p->mpUnknown796 = (AnimHeader_t *)pPlayer->mObject.mUnknown1244;
     p->mpUnknown800 = (Record_800D81C8 *)(pPlayer->mObject.mUnknown1244 + 12);
     p->mpUnknown804 = pPlayer->mUnknown3604;
     p->mpUnknown808 = &pPlayer->mUnknown3096;
@@ -1264,14 +1264,14 @@ extern "C" void fn_8003AB40(Object_80039F5C *p)
     Player_8003877C *pPlayer = (Player_8003877C *)p;
     unsigned int i;
 
-    fn_801B9EDC(p->mUnknown1244, 0, 1, 10);
+    AnimInitHeader(p->mUnknown1244, 0, 1, 10);
     fn_801B9FEC(p->mUnknown1244, p->mUnknown1244 + 12);
     fn_801BE040(p->mUnknown1244 + 1252);
-    fn_801B9EDC(&pPlayer->mUnknown3096, 2, 3, 4);
+    AnimInitHeader(&pPlayer->mUnknown3096, 2, 3, 4);
     fn_801B9FEC(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
     fn_801BE040(pPlayer->mUnknown3604);
     for (i = 0; i <= 1; i++) {
-        fn_801B9EDC(&pPlayer->mUnknown4008[i], 0, 4, 2);
+        AnimInitHeader(&pPlayer->mUnknown4008[i], 0, 4, 2);
         fn_801B9FEC(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
         fn_801BE040(pPlayer->mUnknown4528[i]);
     }

@@ -1,10 +1,14 @@
+/* Animation sequence player: steps through an animation's frame script (frames,
+   loops, speed changes and game-defined opcodes) and answers timing questions
+   such as its length or the time left until a given opcode. */
+
 #include "engine/cu_801B9F00.h"
 
-static Block_801BD6D4 *lbl_803ED610;
+static AnimSeq_t *_AnimSeq_pCurrentSeq;
 
-int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag);
+int _AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript, int flag);
 
-int fn_801BCF40(Block_801BD6D4 *p)
+int _GetOpcodeParameter(AnimSeq_t *p)
 {
     unsigned short word = p->mpUnknown0->mUnknown4[p->mUnknown18];
     int value;
@@ -22,7 +26,7 @@ int fn_801BCF40(Block_801BD6D4 *p)
     return value;
 }
 
-unsigned short fn_801BCF98(Block_801BD6D4 *p, float step, int flag)
+unsigned short _ParseForFrame(AnimSeq_t *p, float step, int flag)
 {
     unsigned short result = 0xFFFF;
     int done = 0;
@@ -53,7 +57,7 @@ unsigned short fn_801BCF98(Block_801BD6D4 *p, float step, int flag)
                     p->mUnknown20[p->mUnknown1F - 1].mUnknown4 = p->mUnknown8 + step;
                     break;
                 case 0x8003: {
-                    unsigned short count = fn_801BCF40(p);
+                    unsigned short count = _GetOpcodeParameter(p);
 
                     if (p->mUnknown20[p->mUnknown1F - 1].mUnknown2 == 0) {
                         p->mUnknown20[p->mUnknown1F - 1].mUnknown2 = count;
@@ -70,7 +74,7 @@ unsigned short fn_801BCF98(Block_801BD6D4 *p, float step, int flag)
                     break;
                 }
                 case 0x8004:
-                    p->mUnknownC += fn_801BCF40(p) * 0.0625f;
+                    p->mUnknownC += _GetOpcodeParameter(p) * 0.0625f;
                     break;
                 case 0x8005:
                     p->mUnknown1E |= 9;
@@ -89,11 +93,11 @@ unsigned short fn_801BCF98(Block_801BD6D4 *p, float step, int flag)
             } else {
                 int handled;
 
-                lbl_803ED610 = p;
+                _AnimSeq_pCurrentSeq = p;
                 if (flag == 0) {
-                    handled = fn_801B9D00(op);
+                    handled = _AnimDoUserOpcodeCallback(op);
                 } else {
-                    handled = fn_801B9D50(op);
+                    handled = _AnimDoUserOpcodeSkipCallback(op);
                 }
                 if (!handled) {
                     if (op & 0x1000) {
@@ -112,11 +116,11 @@ unsigned short fn_801BCF98(Block_801BD6D4 *p, float step, int flag)
     return result;
 }
 
-void fn_801BD26C(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int key)
+void _AnimSeqParseToEnd(AnimSeq_t *p, AnimScript_t *pScript, int key)
 {
     int done;
 
-    InitializeSequenceState(p, pScript, 1);
+    _AnimSeqStart(p, pScript, 1);
     done = 0;
     p->mUnknown8 += p->mUnknownC + p->mUnknownC;
     do {
@@ -152,8 +156,8 @@ void fn_801BD26C(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int key)
                     break;
                 }
             } else {
-                lbl_803ED610 = p;
-                fn_801B9D50(op);
+                _AnimSeq_pCurrentSeq = p;
+                _AnimDoUserOpcodeSkipCallback(op);
             }
         } else {
             p->mUnknown8 += p->mUnknownC;
@@ -163,7 +167,7 @@ void fn_801BD26C(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int key)
 }
 
 /* Reset playback state and read the first two sequence values. */
-int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
+int _AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript, int flag)
 {
     int result = 0;
 
@@ -180,8 +184,8 @@ int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
     p->mUnknown1A = 0xFFFF;
     p->mUnknown1F = 0;
     p->mUnknown1E = 0;
-    p->mUnknown10 = fn_801BCF98(p, 0.0f, flag);
-    p->mUnknown12 = fn_801BCF98(p, 0.0f, flag);
+    p->mUnknown10 = _ParseForFrame(p, 0.0f, flag);
+    p->mUnknown12 = _ParseForFrame(p, 0.0f, flag);
     p->mUnknown14 = 0.0f;
     if (p->mUnknown12 == 0xFFFF) {
         p->mUnknown12 = p->mUnknown10;
@@ -190,12 +194,12 @@ int InitializeSequenceState(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
     return result;
 }
 
-int fn_801BD4C0(Block_801BD6D4 *p, Anim_801BAB34 *pScript)
+int AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript)
 {
-    return InitializeSequenceState(p, pScript, 0);
+    return _AnimSeqStart(p, pScript, 0);
 }
 
-int fn_801BD4E4(Block_801BD6D4 *p, float step)
+int AnimSeqGrow(AnimSeq_t *p, float step)
 {
     float remaining = p->mUnknownC;
     int result = 0;
@@ -204,7 +208,7 @@ int fn_801BD4E4(Block_801BD6D4 *p, float step)
     if (p->mUnknownC < 0.0f) {
         while (p->mUnknownC < 0.0f && !result) {
             p->mUnknown10 = p->mUnknown12;
-            p->mUnknown12 = fn_801BCF98(p, remaining, 0);
+            p->mUnknown12 = _ParseForFrame(p, remaining, 0);
             if (p->mUnknown12 == 0xFFFF) {
                 p->mUnknown12 = p->mUnknown10;
                 result = 1;
@@ -224,51 +228,51 @@ int fn_801BD4E4(Block_801BD6D4 *p, float step)
     return result;
 }
 
-float fn_801BD60C(Anim_801BAB34 *pScript)
+float AnimSeqGetLife(AnimScript_t *pScript)
 {
-    Block_801BD6D4 state;
+    AnimSeq_t state;
 
-    fn_801BD26C(&state, pScript, 0xFFFF);
+    _AnimSeqParseToEnd(&state, pScript, 0xFFFF);
     return state.mUnknown8;
 }
 
-float fn_801BD660(Anim_801BAB34 *pScript, int key);
+float AnimSeqGetOpcodeTime(AnimScript_t *pScript, int key);
 
-float fn_801BD640(Anim_801BAB34 *pScript, int key)
+float AnimSeqGetKeyTime(AnimScript_t *pScript, int key)
 {
-    return fn_801BD660(pScript, key);
+    return AnimSeqGetOpcodeTime(pScript, key);
 }
 
-float fn_801BD660(Anim_801BAB34 *pScript, int key)
+float AnimSeqGetOpcodeTime(AnimScript_t *pScript, int key)
 {
-    Block_801BD6D4 state;
+    AnimSeq_t state;
 
-    fn_801BD26C(&state, pScript, key);
+    _AnimSeqParseToEnd(&state, pScript, key);
     return state.mUnknown8;
 }
 
-float fn_801BD690(Block_801BD6D4 *p, int key)
+float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key)
 {
-    Block_801BD6D4 state;
+    AnimSeq_t state;
 
-    fn_801BD26C(&state, p->mpUnknown0, key);
+    _AnimSeqParseToEnd(&state, p->mpUnknown0, key);
     return state.mUnknown8 - p->mUnknown8;
 }
 
-float fn_801BD6D4(Block_801BD6D4 *p)
+float AnimSeqGetTime(AnimSeq_t *p)
 {
     return p->mUnknown8;
 }
 
-unsigned short fn_801BD6DC(Anim_801BAB34 *pScript)
+unsigned short AnimSeqGetNumFrames(AnimScript_t *pScript)
 {
-    Block_801BD6D4 state;
+    AnimSeq_t state;
 
-    fn_801BD26C(&state, pScript, 0xFFFF);
+    _AnimSeqParseToEnd(&state, pScript, 0xFFFF);
     return state.mUnknown1A;
 }
 
-void fn_801BD710(Block_801BD6D4 *p, float rate)
+void AnimSeqSetRate(AnimSeq_t *p, float rate)
 {
     if (p->mUnknown4 != 0.0f) {
         p->mUnknownC = p->mUnknownC * rate / p->mUnknown4;
@@ -280,33 +284,33 @@ void fn_801BD710(Block_801BD6D4 *p, float rate)
     p->mUnknown4 = rate;
 }
 
-void fn_801BD758(Block_801BD6D4 *p, float seconds)
+void AnimSeqSetDuration(AnimSeq_t *p, float seconds)
 {
     if (p->mUnknown1A == 0xFFFF) {
-        p->mUnknown1A = fn_801BD6DC(p->mpUnknown0);
+        p->mUnknown1A = AnimSeqGetNumFrames(p->mpUnknown0);
     }
     seconds *= 60.0f;
-    fn_801BD710(p, p->mUnknown1A != 0.0f ? seconds / (float)p->mUnknown1A : 0.0f);
+    AnimSeqSetRate(p, p->mUnknown1A != 0.0f ? seconds / (float)p->mUnknown1A : 0.0f);
 }
 
-void fn_801BD81C(Block_801BD6D4 *p, float scale)
+void AnimSeqSetSpeed(AnimSeq_t *p, float scale)
 {
     float rate;
 
     if (p->mUnknown1A == 0xFFFF) {
-        p->mUnknown1A = fn_801BD6DC(p->mpUnknown0);
+        p->mUnknown1A = AnimSeqGetNumFrames(p->mpUnknown0);
     }
     rate = p->mUnknown1A * (float)p->mpUnknown0->mUnknown0 * 0.0625f;
     rate *= scale;
-    fn_801BD710(p, p->mUnknown1A != 0.0f ? rate / (float)p->mUnknown1A : 0.0f);
+    AnimSeqSetRate(p, p->mUnknown1A != 0.0f ? rate / (float)p->mUnknown1A : 0.0f);
 }
 
-int fn_801BD910(void)
+int AnimSeqGetOpcodeParameter(void)
 {
-    return fn_801BCF40(lbl_803ED610);
+    return _GetOpcodeParameter(_AnimSeq_pCurrentSeq);
 }
 
-int fn_801BD934(Block_801BD6D4 *p, Anim_801BAB34 *pScript, unsigned short key)
+int AnimSeqHasOpcode(AnimSeq_t *p, AnimScript_t *pScript, unsigned short key)
 {
     int found = 0;
     int done = 0;
@@ -343,9 +347,9 @@ int fn_801BD934(Block_801BD6D4 *p, Anim_801BAB34 *pScript, unsigned short key)
                     break;
                 }
             } else {
-                lbl_803ED610 = p;
+                _AnimSeq_pCurrentSeq = p;
                 if (!found) {
-                    fn_801B9D50(op);
+                    _AnimDoUserOpcodeSkipCallback(op);
                 }
             }
         }

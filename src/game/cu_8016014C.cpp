@@ -33,13 +33,13 @@ void fn_8004625C(void *p, int id, unsigned char *pColors);
 int fn_80049D04(int index);
 unsigned char fn_80054D24(int index);
 void fn_8015D254(int index);
-int fn_801C1870(int a, int b, unsigned int size, int count,
+int ResStreamOpen(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
-void fn_801C1950(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
-void fn_801C1B1C(int loader, void *pData);
-void fn_801C1B90(int loader, void *pData);
-void fn_801C1C1C(int loader);
-void fn_801C1C98(int loader);
+void ResStreamQueueRead(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
+void ResStreamHoldBuffer(int loader, void *pData);
+void ResStreamReleaseBuffer(int loader, void *pData);
+void ResStreamReleaseAllBuffers(int loader);
+void ResStreamClose(int loader);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C3084(const char *pString, int c);
@@ -120,7 +120,7 @@ void fn_80161494(int player, int slot);
 
 void fn_8016014C(int loader, void *pData, TextureSlot_802E6D68 *pSlot)
 {
-    fn_801C1B1C(loader, pData);
+    ResStreamHoldBuffer(loader, pData);
     pSlot->mpData = pData;
     pSlot->mReceived = 1;
 }
@@ -149,14 +149,14 @@ void fn_80160188(void)
                         if (slot == 4) {
                             fn_80161494(player, 4);
                         }
-                        fn_801C1B90(sLoader, sSlots[player][slot].mpData);
+                        ResStreamReleaseBuffer(sLoader, sSlots[player][slot].mpData);
                         sSlots[player][slot].mpData = 0;
                         sSlots[player][slot].mDirty = 0;
                         sPending--;
                         sSlots[player][slot].mRequested = 0;
                         sSlots[player][slot].mReceived = 0;
                     } else {
-                        fn_801C1B90(sLoader, sSlots[player][slot].mpData);
+                        ResStreamReleaseBuffer(sLoader, sSlots[player][slot].mpData);
                         sSlots[player][slot].mpData = 0;
                         sSlots[player][slot].mReceived = 0;
                         sPending--;
@@ -251,7 +251,7 @@ void fn_8016032C(void)
         sSlots[player][slot].mRequested = 1;
         sSlots[player][slot].mReceived = 0;
         sPending++;
-        fn_801C1950(sLoader, sArchive, sSlots[player][slot].mId, &sSlots[player][slot]);
+        ResStreamQueueRead(sLoader, sArchive, sSlots[player][slot].mId, &sSlots[player][slot]);
         if (sPending == 1) {
             return;
         }
@@ -408,7 +408,7 @@ void fn_80160C10(void)
     unsigned int player;
     unsigned int i;
 
-    sLoader = fn_801C1870(1, 1, sMaxSize, 100, fn_8016014C);
+    sLoader = ResStreamOpen(1, 1, sMaxSize, 100, fn_8016014C);
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
             fn_802347EC(sTextures[player][i], &sTextureDescs[player][i], 6, 0);
@@ -504,8 +504,8 @@ void fn_80160F98(void)
     unsigned int player;
     unsigned int i;
 
-    fn_801C1C1C(sLoader);
-    fn_801C1C98(sLoader);
+    ResStreamReleaseAllBuffers(sLoader);
+    ResStreamClose(sLoader);
     sPending = 0;
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {

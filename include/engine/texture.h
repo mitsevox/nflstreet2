@@ -4,7 +4,7 @@
 /* Texture record of src/engine/texture.c: filled by the load handlers that
    fn_8020DFD8 dispatches to, created by fn_8020E064 and released by
    fn_8020E258. +0x10 is the TLUT format fn_8020E064 stores and
-   fn_801C0E04 passes to GXInitTlutObj. */
+   _LLAnimTexBuildTexCoords passes to GXInitTlutObj. */
 typedef struct Texture_8020DB34 {
     unsigned short mWidth;
     unsigned short mHeight;

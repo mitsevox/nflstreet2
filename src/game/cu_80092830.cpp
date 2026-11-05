@@ -5,7 +5,7 @@
 #include "game/fn_800AD9B4.h"
 
 struct Class_80297C60;
-struct Sample_801C009C;
+struct AnimSeqCamSample_t;
 
 extern "C" {
 void fn_80028DD0(float value);
@@ -43,8 +43,8 @@ void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 void fn_8015A0D0(int value);
 void fn_8015C254(int a);
 void fn_8017DC08(void);
-Sample_801C009C *fn_801C009C(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
-Sample_801C009C *fn_801C00F8(Actor_801C009C *);
+AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
+AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 }
 
 extern unsigned char lbl_803EA8BD;
@@ -62,8 +62,8 @@ extern Type_803EA368 *lbl_803EA368;
    ready, clear the frame counter 0x803EA8D0. 1: count frames, start
    fn_800655B8 once, then wait for fn_80096304 (kind 1 counts as ready) and,
    when fn_800AD9B4 was 4 on entry, until the frame counter exceeds 120; when
-   fn_801C009C finds no sample for the +0xE0 selection, clear its two ids and
-   keep +0xE0 set only if fn_801C00F8 returns a fallback sample; then go to 2
+   AnimSeqCamFindCamera finds no sample for the +0xE0 selection, clear its two ids and
+   keep +0xE0 set only if AnimSeqCamFindFirstCamera returns a fallback sample; then go to 2
    (flag 1, via fn_80091240), 3 (kind other than 1 with fn_800AD9B4 4, or
    fn_800AD9B4 2; starts fn_8005BE5C) or 4. 2: wait for fn_8009637C, then 3 or
    4 the same way; like 1, kind 1 counts as ready. 3: in those modes wait for
@@ -121,8 +121,8 @@ extern "C" int fn_80092830(int index)
         }
         fn_8009BA10(0);
         if (pCharacter->mUnknownE0.mUnknown0 != 0 &&
-            fn_801C009C(pActor, 1, pCharacter->mUnknownE0.mUnknown4.mParts[1], pCharacter->mUnknownE0.mUnknown8.mParts[1]) == 0) {
-            Sample_801C009C *pSample = fn_801C00F8(pActor);
+            AnimSeqCamFindCamera(pActor, 1, pCharacter->mUnknownE0.mUnknown4.mParts[1], pCharacter->mUnknownE0.mUnknown8.mParts[1]) == 0) {
+            AnimSeqCamSample_t *pSample = AnimSeqCamFindFirstCamera(pActor);
 
             pCharacter->mUnknownE0.mUnknown4.mWord = -1;
             pCharacter->mUnknownE0.mUnknown8.mWord = -1;

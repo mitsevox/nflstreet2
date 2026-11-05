@@ -5,7 +5,7 @@
 
 extern "C" {
 Object_80039F5C *fn_800963EC(Character_80093BCC *pCharacter);
-int fn_801C01B8(void);
+int AnimSeqCamGetFileNum(void);
 Camera_8013F738 *fn_8013FA04(int index);
 float fn_800921B0(Object_80039F5C *p, Camera_8013F738 *pCamera);
 int fn_80027DF0(void);
@@ -28,7 +28,7 @@ extern "C" void fn_800921E8(int index, int active)
         Object_80039F5C *pTarget = fn_800963EC(pCharacter);
 
         fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
-        if (fn_801C01B8() == 0) {
+        if (AnimSeqCamGetFileNum() == 0) {
             pCamera = fn_8013FA04(2);
         }
         distance = fn_800921B0(pTarget, pCamera);

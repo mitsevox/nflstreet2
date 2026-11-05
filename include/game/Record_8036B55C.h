@@ -53,14 +53,14 @@ struct Record_8036B55C {
     char mUnknown816[192];
     int mUnknown1008;
     char mUnknown1012[232];
-    Object_801BA03C mUnknown1244;
+    AnimHeader_t mUnknown1244;
     char mUnknown1256[1240];
     char mUnknown2496[552];
     char mUnknown3048[48];
-    Object_801BA03C mUnknown3096;
+    AnimHeader_t mUnknown3096;
     char mUnknown3108[496];
     char mUnknown3604[404];
-    Object_801BA03C mUnknown4008[2];
+    AnimHeader_t mUnknown4008[2];
     char mUnknown4032[2][248];
     char mUnknown4528[2][404];
 };

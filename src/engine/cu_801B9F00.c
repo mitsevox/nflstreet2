@@ -1,6 +1,6 @@
 #include "engine/cu_801B9F00.h"
 
-int fn_801B9F00(Object_801BA03C *pList, Record_800D81C8 *pChannels)
+int fn_801B9F00(AnimHeader_t *pList, Record_800D81C8 *pChannels)
 {
     unsigned short count = pList->mUnknown4;
     unsigned char pass;
@@ -28,7 +28,7 @@ int fn_801B9F00(Object_801BA03C *pList, Record_800D81C8 *pChannels)
     return selected;
 }
 
-void fn_801B9FEC(Object_801BA03C *pList, Record_800D81C8 *pChannels)
+void fn_801B9FEC(AnimHeader_t *pList, Record_800D81C8 *pChannels)
 {
     unsigned char state = 4;
     int i;
@@ -42,7 +42,7 @@ void fn_801B9FEC(Object_801BA03C *pList, Record_800D81C8 *pChannels)
     }
 }
 
-void fn_801BA03C(Object_801BA03C *pList, Record_800D81C8 *pChannels, float time, void *pUser)
+void fn_801BA03C(AnimHeader_t *pList, Record_800D81C8 *pChannels, float time, void *pUser)
 {
     int i;
     int active;

@@ -223,7 +223,7 @@ void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787A0(void);
-float fn_801BD660(void *p, int key);
+float AnimSeqGetOpcodeTime(void *p, int key);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 float fn_80178A08(void);
 float fn_80178A44(void);
@@ -279,7 +279,7 @@ int fn_800EEA20(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 Point_8017886C fn_8017808C(void);
 float fn_80178A2C(void);
-void fn_801BD81C(void *p, float value);
+void AnimSeqSetSpeed(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800A7EF4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
@@ -1543,8 +1543,8 @@ extern "C" int fn_800EAC9C(Object_80039F5C *p) {
     int animation = fn_801BE648(p->mpUnknown792);
     int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
     if (index != 0xFFFF) {
-        float start = fn_801BD660(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC001);
-        result = start < fn_801BD660(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0x8000);
+        float start = AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC001);
+        result = start < AnimSeqGetOpcodeTime(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0x8000);
     }
     return result;
 }
@@ -3351,7 +3351,7 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
             if (fn_800CA5CC(p, 11, 1))
                 speed *= fn_800CA9B4(12, p);
             Record_800D81C8 *pEntry = &pRecords[entry];
-            fn_801BD81C(&pEntry->mUnknown4C, fn_801CFFA0(speed));
+            AnimSeqSetSpeed(&pEntry->mUnknown4C, fn_801CFFA0(speed));
             pEntry->mUnknown2C = lbl_803EAE08;
             fn_800D0C0C(p, 0);
         }
@@ -3436,7 +3436,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
         if (fn_800CA5CC(p, 11, 1))
             speed *= fn_800CA9B4(12, p);
         Record_800D81C8 *pRecord = &pRecords[index];
-        fn_801BD81C(&pRecord->mUnknown4C, fn_801CFFA0(speed));
+        AnimSeqSetSpeed(&pRecord->mUnknown4C, fn_801CFFA0(speed));
         pRecord->mUnknown2C = lbl_803EAE08;
     }
 }

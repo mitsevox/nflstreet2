@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int GetTimedKeyValue(void *p, float time);
+int AnimSeqncrGetKeyValue(void *p, float time);
 
 #ifdef __cplusplus
 }
