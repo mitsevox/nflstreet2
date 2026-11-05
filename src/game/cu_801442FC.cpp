@@ -1,5 +1,5 @@
 #include "engine/cu_80227F14.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_801442FC.h"
 
@@ -31,7 +31,7 @@ int fn_80144310(Tracker_801442FC *pTracker, Object_80144310 *pSource, float *pDi
         }
     }
     if (pTracker->mId != -1) {
-        Object_8005438C *pObject = fn_8005438C(pTracker->mId);
+        LevelMarker_t *pObject = LevelGetMarker(pTracker->mId);
         Vector_80039F5C direction;
         float scale;
         unsigned int count = pTracker->mCount;

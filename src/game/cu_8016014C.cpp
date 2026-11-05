@@ -29,9 +29,9 @@ struct SortEntry_80160CDC {
 };
 
 extern "C" {
-void fn_8004625C(void *p, int id, unsigned char *pColors);
-int fn_80049D04(int index);
-unsigned char fn_80054D24(int index);
+void PlaDynClutApplyColors(void *p, int id, unsigned char *pColors);
+int PlayerLookShowsHair(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_8015D254(int index);
 int fn_801C1870(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
@@ -141,7 +141,7 @@ void fn_80160188(void)
                         if (sSlots[player][slot].mPalette != -1) {
                             int index = fn_8020E52C(sSlots[player][slot].mpData, 0)->mUnknown8;
 
-                            fn_8004625C(fn_8020E5F8(sSlots[player][slot].mpData, index),
+                            PlaDynClutApplyColors(fn_8020E5F8(sSlots[player][slot].mpData, index),
                                         sSlots[player][slot].mPalette, sColors[player]);
                         }
                         fn_801A4B28(sTextures[player][slot], sSlots[player][slot].mpData,
@@ -217,7 +217,7 @@ void fn_8016032C(void)
             if (sSlots[player][slot].mPalette != -1) {
                 int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(fn_8020E5F8(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -239,7 +239,7 @@ void fn_8016032C(void)
             if (sSlots[player][slot].mPalette != -1) {
                 int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(fn_8020E5F8(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -265,11 +265,11 @@ void fn_8016061C(int player, int slot, void *pData, int shared)
         fn_8020E2B0(pData);
     }
     fn_801A4B28(sTextures[player][slot], pData, sSizes[slot]);
-    if (slot == 4 && fn_80049D04(player)) {
+    if (slot == 4 && PlayerLookShowsHair(player)) {
         fn_80161494(player, 4);
     }
     if (sSlots[player][slot].mPalette != -1) {
-        fn_8004625C(fn_8020E5F8(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
+        PlaDynClutApplyColors(fn_8020E5F8(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
                     sColors[player]);
     }
     sSlots[player][slot].mRequested = sSlots[player][slot].mReceived =
@@ -587,7 +587,7 @@ void fn_801611BC(int player, const char *pName, int force)
     if (id == -1) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     }
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         fn_80160E94(player, 5, id, -1, force);
@@ -600,7 +600,7 @@ int fn_8016128C(int index)
     char name[32];
     int id;
 
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;

@@ -1,8 +1,8 @@
 #include "game/Object_80039F5C.h"
 #include "game/Block_800DE3B0.h"
 #include "game/Command_800CEE74.h"
-#include "game/Level_80054130.h"
-#include "game/Record_803EA558.h"
+#include "game/LevelData.h"
+#include "game/LevelWallInfo.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801BE60C.h"
@@ -171,14 +171,14 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                 (pInfo->mUnknown56Byte == 0 && p->mUnknown1008.mUnknown0 == 8)) {
                 int direction;
                 unsigned int count;
-                Record_80054130 *pRow;
+                LevelWall_t *pRow;
                 float height;
                 unsigned char i;
 
                 fn_800CE804(pCommand, pTable, pTable->mEntries[entry].mUnknown2);
                 direction = fn_801CFE40(pCommand->mVector0.mY, pCommand->mVector0.mX);
-                count = (unsigned short)fn_80054130()->mUnknown136;
-                pRow = fn_80054130()->mUnknown140;
+                count = (unsigned short)LevelGetData()->mUnknown136;
+                pRow = LevelGetData()->mUnknown140;
                 height = pCommand->mUnknown12.mZ;
                 pCommand->mUnknown12.mZ = 0.0f;
                 for (i = 0; i < count; i++, pRow++) {
@@ -186,17 +186,17 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     int turn;
                     float limit;
 
-                    if (lbl_803EA558[i].mUnknown0 <= 1.0f) {
+                    if (_Level_pWallInfo[i].mUnknown0 <= 1.0f) {
                         continue;
                     }
-                    angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
+                    angle = fn_801784C4() ? _Level_pWallInfo[i].mUnknown8 : _Level_pWallInfo[i].mUnknown4;
                     if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EABD8 * 46603.37890625f)) {
                         continue;
                     }
                     a.mZ = 0.0f;
                     point.mZ = 0.0f;
                     b.mZ = 0.0f;
-                    fn_800541AC(pRow, &a, &b);
+                    LevelGetWallBase(pRow, &a, &b);
                     turn = (angle - direction) & 0xFFFFFF;
                     if (turn > 0x800000) {
                         turn -= 0x1000000;

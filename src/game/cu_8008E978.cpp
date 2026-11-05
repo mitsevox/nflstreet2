@@ -3,8 +3,8 @@
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
-#include "game/Record_803EA558.h"
-#include "game/Level_80054130.h"
+#include "game/LevelWallInfo.h"
+#include "game/LevelData.h"
 #include "game/cu_80142BB4.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
@@ -49,7 +49,7 @@
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_8018EC68.h"
@@ -95,7 +95,7 @@
 #include "game/Item_80097440.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
@@ -702,9 +702,9 @@ extern "C" void fn_8009134C(int index)
 extern "C" void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p, Vector_80039F5C *pOut, int *pAngle);
 extern "C" void fn_800B267C(Object_800B26B0 *pMotion);
 extern "C" int fn_801784C4(void);
-extern "C" Object_80041904 *fn_800400C4(Block_80170E64 *pBlock);
+extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock);
 
-extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEntry, Object_80041904 *pBall)
+extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEntry, BigObjInst *pBall)
 {
     Vector_80039F5C pos;
     int angle;
@@ -736,14 +736,14 @@ extern "C" void fn_80091644(int index)
 
     for (; i < pActor->mUnknown6; i++) {
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
-            Object_80041904 *pBall = fn_800400C4(fn_8013825C(fn_801374BC()));
+            BigObjInst *pBall = fn_800400C4(fn_8013825C(fn_801374BC()));
 
             fn_80091578(pCharacter, &pActor->mpUnknown20[i], pBall);
         }
     }
 }
 
-extern "C" int fn_8004AF94(Object_80041904 *pBall, int a, int b, int c, unsigned char index);
+extern "C" int fn_8004AF94(BigObjInst *pBall, int a, int b, int c, unsigned char index);
 extern "C" void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
 
 extern "C" int fn_800916E0(int index)
@@ -775,7 +775,7 @@ extern "C" void fn_800917A4(int index)
             Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
 
             if (pBlock->mUnknown680 != 0xFFFF) {
-                Extra_8004149C *pExtra = pBlock->mpUnknown676->mUnknown428;
+                BigObjPhysics_t *pExtra = pBlock->mpUnknown676->mUnknown428;
 
                 fn_801BA384((Object_801BA03C *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
                             pBlock->mUnknown680);
@@ -2812,7 +2812,7 @@ void fn_801469A0(void);
 void fn_800540E0(void);
 int fn_801486A0(void);
 void fn_80146E78(void);
-void fn_8005412C(void);
+void LevelUpdate(void);
 void fn_800A2B40(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
 void fn_80144E38(Object_80144CE0 *pObject);
@@ -2930,7 +2930,7 @@ void *fn_800C47C4(void);
 int fn_801F0A8C(void *pArchive, char *pName);
 void fn_80145100(int type, int index);
 
-extern Level_80054130 *lbl_803EA554;
+extern LevelData_t *_Level_pData;
 }
 
 extern "C" void fn_800A2D2C(void)
@@ -2948,16 +2948,16 @@ extern "C" void fn_800A2D2C(void)
         lbl_8030E6E8.mUnknown8B4[j] = 0;
     }
     lbl_8030E6E8.mUnknown8B4[7] = 1;
-    for (i = 0; i < lbl_803EA554->mUnknown48; i++) {
+    for (i = 0; i < _Level_pData->mUnknown48; i++) {
         unsigned char count = 0;
 
-        for (unsigned char k = 0; k < lbl_803EA554->mUnknown96; k++) {
-            if (lbl_803EA554->mUnknown100[k].mUnknown24Bytes[1] == i) {
+        for (unsigned char k = 0; k < _Level_pData->mUnknown96; k++) {
+            if (_Level_pData->mUnknown100[k].mUnknown24Bytes[1] == i) {
                 count++;
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &lbl_803EA554->mUnknown52[i * 24]));
+        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &_Level_pData->mUnknown52[i * 24]));
     }
 }
 
@@ -2984,7 +2984,7 @@ extern "C" void fn_800A30B8(void)
 extern "C" void fn_800A3120(float value)
 {
     fn_80146E78();
-    fn_8005412C();
+    LevelUpdate();
     fn_800A2B40();
     if (lbl_8030E6DC.mpCallback8 != 0) {
         lbl_8030E6DC.mpCallback8(value);
@@ -3515,7 +3515,7 @@ void fn_80046E30(int handle);
 void fn_80163DD0(int handle);
 void fn_80043D68(void);
 void fn_8019B320(int handle);
-void fn_80046504(int handle);
+void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
 void fn_800C442C(void);
 void fn_80046FD0(void);
@@ -3525,7 +3525,7 @@ void fn_80163300(int handle);
 void fn_80030FD8(int handle);
 void fn_801480B0(void *pOwner);
 void fn_8019B368(void);
-void fn_8004659C(void);
+void EnvObjUpdateFades(void);
 void fn_8016172C(void);
 void fn_80047050(void);
 void fn_80162794(void);
@@ -3603,7 +3603,7 @@ extern "C" void fn_800C471C(int handle)
 {
     fn_80043D68();
     fn_8019B320(handle);
-    fn_80046504(handle);
+    EnvObjRemoveObjType(handle);
     fn_800B8538();
     fn_800C442C();
     fn_80046FD0();
@@ -3617,7 +3617,7 @@ extern "C" void fn_800C471C(int handle)
 extern "C" void fn_800C478C(float dt)
 {
     fn_8019B368();
-    fn_8004659C();
+    EnvObjUpdateFades();
     fn_8016172C();
     fn_80047050();
     fn_80162794();
@@ -4731,7 +4731,7 @@ extern "C" void fn_800CA4A8(void)
 }
 
 extern "C" {
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 unsigned int fn_8017F584(void);
 int fn_800A7F1C(int team);
 float fn_800AE998(void);
@@ -4785,7 +4785,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
         }
         if (fn_800A7EA4(team) == 2
             || (p == fn_80137B88(fn_801374BC()) && fn_800A7F1C(team) == 2 && fn_8013BA58(fn_801374BC(), 0) != 0)
-            || (fn_80054D24(22) != 0 && fn_8017F584() == 0)) {
+            || (CheatFlagsIsSet(22) != 0 && fn_8017F584() == 0)) {
             cost = 0;
         } else {
             cost = fn_800C955C(p, kind);
@@ -7204,7 +7204,7 @@ void fn_80168640(int team, int kind);
 void fn_800B31B0(int a);
 void fn_800B34BC(void);
 void fn_80238680(int handle, int value);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_801677F4(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
@@ -8284,16 +8284,16 @@ extern "C" void fn_800B4434(void)
 
 extern "C" void fn_800B4448(Settings_800B4448 *p)
 {
-    if (fn_80054D24(0x28) != 0) {
+    if (CheatFlagsIsSet(0x28) != 0) {
         p->mUnknown10 = 0xFF;
     }
-    if (fn_80054D24(0x29) != 0) {
+    if (CheatFlagsIsSet(0x29) != 0) {
         p->mUnknownC = 0xFF;
     }
-    if (fn_80054D24(0x2A) != 0) {
+    if (CheatFlagsIsSet(0x2A) != 0) {
         p->mUnknown14 = 0xFF;
     }
-    if (fn_80054D24(0x2B) != 0) {
+    if (CheatFlagsIsSet(0x2B) != 0) {
         p->mUnknown0 = p->mUnknown4 = 0;
     }
 }
@@ -8949,7 +8949,7 @@ void fn_800BB840(int a, int b, int c);
 void fn_800BB8D4(void);
 void fn_800BBCF0(Record_800BAE7C *p);
 void fn_800BBDE0(void);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 unsigned char fn_800744A8(void);
 void fn_80092F98(int handle);
 void fn_80093348(int handle);
@@ -9003,7 +9003,7 @@ extern "C" void fn_800BBE98(void);
 
 extern "C" void fn_800BAF7C(void)
 {
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013F3FC();
     if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
         fn_800BBE98();
@@ -9347,7 +9347,7 @@ extern "C" void fn_800BBE98(void)
     fn_80096E1C();
     lbl_803EC98C->mUnknown8 = -1;
     lbl_803EC98C->mUnknownC = -1;
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013825C(fn_801374BC())->mUnknown20 &= ~2;
     fn_8013825C(fn_801374BC())->mUnknown20 |= 1;
     fn_800941B8();
@@ -9550,7 +9550,7 @@ struct Block_800ABD1C {
 };
 
 extern "C" {
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -9594,8 +9594,8 @@ void fn_800CA228(void);
 int fn_800BA6F8(void);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
-Set_8003EE6C *fn_8003A078(void);
-Set_8003EE6C *fn_801442F0(void);
+CollideSet_t *fn_8003A078(void);
+CollideSet_t *fn_801442F0(void);
 void fn_80039C64(void);
 void fn_8005122C(float dt);
 void fn_80039CB0(float dt);
@@ -9648,7 +9648,7 @@ extern "C" void fn_800AA124(void)
         p = fn_80039F5C(1, i)->mpUnknown4;
         p->mUnknown20 |= 1;
     }
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
 }
 
 extern "C" void fn_800AA1B0(int a, int b)
@@ -10430,12 +10430,12 @@ void Class_80297B90::vfn_04(float dt)
             fn_80047874(0);
             fn_8004730C(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
-                fn_8004A230(0);
+                PlayerObjSetDrawReady(0);
             }
             fn_800282DC();
             break;
         }
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         fn_80195EFC(6, 60, 0, 0);
         lbl_803EAA88->mUnknown4 = 17;
     case 17:
@@ -10495,7 +10495,7 @@ extern "C" void fn_800ABA0C(void)
             fn_800EFE60(0, p->mpState, p);
         }
     }
-    fn_8004A230(0);
+    PlayerObjSetDrawReady(0);
 }
 
 extern "C" void fn_800ABA90(void)
@@ -10853,7 +10853,7 @@ extern "C" void fn_800AD418(float dt)
 extern "C" void fn_800AD4B8(float dt)
 {
     fn_800C3170();
-    fn_8004183C();
+    BigObjInstTickAll();
     fn_800CA14C();
     fn_800398B4();
     fn_800CA228();
@@ -10865,7 +10865,7 @@ extern "C" void fn_800AD4B8(float dt)
 
 extern "C" void fn_800AD50C(float dt)
 {
-    fn_80041664();
+    BigObjInstSyncAll();
     fn_80039B2C(dt);
     fn_80039A38(dt);
     fn_80137758(dt);
@@ -10876,8 +10876,8 @@ extern "C" void fn_800AD550(float dt)
     int mode = fn_800AD9B4();
 
     if (mode != 5 && mode != 1 && mode != 6 && mode != 7) {
-        fn_8003F04C(fn_8003A078());
-        fn_8003F04C(fn_801442F0());
+        CollideSetUpdate(fn_8003A078());
+        CollideSetUpdate(fn_801442F0());
         fn_80039C64();
     }
     fn_8005122C(dt);
@@ -10886,7 +10886,7 @@ extern "C" void fn_800AD550(float dt)
 
 extern "C" void fn_800AD5C0(float dt)
 {
-    fn_800416CC(dt);
+    BigObjInstSimulateAll(dt);
     fn_80039CB0(dt);
     fn_80039D08(dt);
     fn_801BF8DC();
@@ -17400,7 +17400,7 @@ void Class_80297BF8::vfn_10(float dt)
         lbl_803EABA3 = state;
     } else if (fn_800AE980() == 0) {
         fn_800AE988();
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         vfn_11(dt);
         fn_800941B8();
     }
@@ -17414,7 +17414,7 @@ void Class_80297BF8::vfn_11(float dt)
 void Class_80297BF8::vfn_04(float dt)
 {
     if (fn_800BA71C() == 1) {
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         while (fn_8017D064(7) != 0) {
             fn_8017CFB4(7);
         }
@@ -18369,13 +18369,13 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
     fn_800CE804(pRecord, &table.mTable, 0);
     int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
-    unsigned int count = (unsigned short)fn_80054130()->mUnknown136;
-    Record_80054130 *pRow = fn_80054130()->mUnknown140;
+    unsigned int count = (unsigned short)LevelGetData()->mUnknown136;
+    LevelWall_t *pRow = LevelGetData()->mUnknown140;
     float height = pRecord->mUnknown12.mZ;
     pRecord->mUnknown12.mZ = 0.0f;
     for (unsigned char i = 0; i < count; i++, pRow++) {
-        if (lbl_803EA558[i].mUnknown0 <= 1.0f) continue;
-        int angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
+        if (_Level_pWallInfo[i].mUnknown0 <= 1.0f) continue;
+        int angle = fn_801784C4() ? _Level_pWallInfo[i].mUnknown8 : _Level_pWallInfo[i].mUnknown4;
         if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
         Vector_80039F5C point;
         Vector_80039F5C a;
@@ -18383,7 +18383,7 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
         point.mZ = 0.0f;
         b.mZ = 0.0f;
         a.mZ = 0.0f;
-        fn_800541AC(pRow, &a, &b);
+        LevelGetWallBase(pRow, &a, &b);
         int difference = (angle - direction) & 0xFFFFFF;
         if (difference > 0x800000) difference -= 0x1000000;
         Vector_80039F5C delta;
@@ -18467,7 +18467,7 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     Point_8017886C b;
     Object_80039F5C *pA;
     Play_800CCEBC *pPlay;
-    Record_80054130 *pRows;
+    LevelWall_t *pRows;
     unsigned int count;
     unsigned char index;
     unsigned char i;
@@ -18485,10 +18485,10 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     start.mY = pA->mMotion.mPos.mY;
     start.mZ = pA->mMotion.mPos.mZ;
     fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
-    count = (unsigned char)fn_80054130()->mUnknown136;
-    pRows = fn_80054130()->mUnknown140;
+    count = (unsigned char)LevelGetData()->mUnknown136;
+    pRows = LevelGetData()->mUnknown140;
     for (i = 0; i < count; i++, pRows++) {
-        fn_800541AC(pRows, &a, &b);
+        LevelGetWallBase(pRows, &a, &b);
         if (fn_800E0F48(&start, &end, &a, &b)) {
             result = 1;
             break;

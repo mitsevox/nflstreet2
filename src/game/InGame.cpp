@@ -11,7 +11,7 @@
 #include "game/InGame.h"
 #include "game/ModuleGroup_80033A5C.h"
 #include "game/TimeScale.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
 #include "game/cu_80067C10.h"
@@ -47,7 +47,7 @@ void fn_800726B8(void);
 void fn_800728F8(void);
 void fn_80072C90(int a, int b);
 void fn_80085A7C(void);
-void fn_80085AA0(int a, Record_8003B6BC *pRecord0, int b, Record_8003B6BC *pRecord1);
+void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void fn_80089754(void);
 void fn_8008FE5C(int a);
 void fn_80099568(int a);
@@ -248,8 +248,8 @@ int fn_80028310()
 
 int InGame::Init()
 {
-    Record_8003B6BC record0;
-    Record_8003B6BC record1;
+    DepthChartSide_t record0;
+    DepthChartSide_t record1;
     int a;
     int b;
     int result;
@@ -270,8 +270,8 @@ int InGame::Init()
     fn_801C6280(-1, 1, (void *)fn_80027FE0);
     sUnknown803EC5F4 = 1;
     fn_800C8704(&a, &b);
-    fn_8003B6BC(0, &record0);
-    fn_8003B6BC(1, &record1);
+    DepthChartGetSide(0, &record0);
+    DepthChartGetSide(1, &record1);
     fn_80085AA0(a, &record0, b, &record1);
     fn_80173C2C();
     fn_80173D10();

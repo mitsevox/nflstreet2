@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003E214.h"
+#include "game/AutoDepth.h"
 
 struct States_802A2DB8 {
     char mUnknown0[0x20];
@@ -43,14 +43,14 @@ int fn_8014B898(Class_80148A58 *p, int team)
 
 void fn_8014B8D4(Class_80148A58 *p, int value, int *pList, int *pIds)
 {
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
     fn_8014A6A0(pList, pIds, 3);
     fn_8014A8D8(pList, pIds, 3);
 }
 
 void fn_8014B930(Class_80148A58 *p, int value, int *pList, int *pIds, int count, int slot)
 {
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
     int first = pList[0];
     switch (slot) {
     case 0:

@@ -9,7 +9,7 @@
 #include "engine/cu_801BA818.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_80040818.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_801444D8.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8003108C.h"
@@ -82,7 +82,7 @@ int fn_801F0C50(void *, int);
 extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
-Object_80041904 *fn_800400C4(Block_80170E64 *);
+BigObjInst *fn_800400C4(Block_80170E64 *);
 int fn_801BA5A8(Object_801BA03C *,Record_800D81C8 *,unsigned short,int);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_800518E0(Object_80039F5C *);
@@ -155,7 +155,7 @@ extern "C" void fn_8008EB18(int id,int flag,void *data)
 extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
 {
     Object_80039F5C *p=(Object_80039F5C *)object;
-    Object_80041904 *placed=(Object_80041904 *)object;
+    BigObjInst *placed=(BigObjInst *)object;
     int mode=0;
     if(!fn_80027DF0() && object==fn_800400C4(fn_8013825C(fn_801374BC()))) return 1;
     void *collection;

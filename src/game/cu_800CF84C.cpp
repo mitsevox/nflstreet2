@@ -45,7 +45,7 @@ struct Pair_802DA864 {
 extern "C" {
 extern void *lbl_803EB688;
 
-void fn_8004A230(int a);
+void PlayerObjSetDrawReady(int a);
 void fn_80064EFC(int a, int b, int c);
 void fn_800655B8(void);
 int fn_8006560C(void);
@@ -143,7 +143,7 @@ void fn_800CF91C(void)
         lbl_803EAC98->mUnknown24 = -1;
     }
     fn_800CF8C0();
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_801383E4(1);
     fn_800CF8C4();
     fn_80195EFC(1, 20, 0x808080, 0);
@@ -364,7 +364,7 @@ void Class_803EC99C::fn_800CFFC4(float f)
     unsigned short a = 0;
     unsigned short b = 0;
 
-    fn_8004A230(0);
+    PlayerObjSetDrawReady(0);
     switch (lbl_803EAC98->mState) {
     case 0:
         lbl_803EACA2 = 0;
@@ -432,7 +432,7 @@ void Class_803EC99C::fn_800CFFC4(float f)
         lbl_803EAC98->mUnknown32++;
         if (fn_800CF874()) {
             if (fn_80092784(lbl_803EAC98->mUnknown20)) {
-                fn_8004A230(0);
+                PlayerObjSetDrawReady(0);
                 fn_801383E4(0);
             }
         } else {

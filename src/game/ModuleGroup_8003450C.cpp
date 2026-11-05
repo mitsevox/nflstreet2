@@ -7,8 +7,8 @@
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
-#include "game/cu_8003EC04.h"
-#include "game/cu_80041210.h"
+#include "game/Collide.h"
+#include "game/BigObjInst.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80178D18.h"
@@ -17,7 +17,7 @@
 extern "C" {
 extern char lbl_8030C070[];
 extern void *lbl_803EA368;
-extern void *lbl_803EA554;
+extern void *_Level_pData;
 
 void fn_8002B1E4(void);
 void fn_8002B2D0(void);
@@ -40,12 +40,12 @@ void fn_80043AE4(void);
 void fn_80044378(void);
 void fn_80044B2C(int a);
 void fn_80044B50(void);
-void fn_800463FC(int a);
+void EnvObjAddObjType(int a);
 void fn_8004787C(void);
 void fn_8004A9FC(void);
 void fn_8004FF8C(void);
 void fn_800502C0(void);
-int fn_800543B4(void);
+int LevelGetObjectCount(void);
 void fn_8006E710(void);
 void fn_8006E760(void);
 void fn_8006E78C(void);
@@ -337,13 +337,13 @@ const char *BigObj::GetName() { return "BigObj"; }
 
 int BigObj::Init()
 {
-    unsigned short count = fn_800543B4() + 1;
+    unsigned short count = LevelGetObjectCount() + 1;
 
     fn_801F2798("BigObjSetupBigObjectsStart");
     fn_80040558(count, GameObjList::fn_80028BB4());
     fn_801F2798("BigObjSetupBigObjectsFinish");
     fn_801F2798("BObjInfoStateInitStart");
-    fn_800413F0(104, 10);
+    BigObjInstInit(104, 10);
     fn_801F2798("BObjInfoStateInitFinish");
     fn_801F2798("GenObjSetupAnimationsStart");
     fn_8004A9FC();
@@ -356,7 +356,7 @@ int BigObj::Init()
 
 int BigObj::Shutdown()
 {
-    fn_80041490();
+    BigObjInstShutdown();
     fn_80228E18();
     fn_800405F0(GameObjList::fn_80028BB4());
     return 1;
@@ -465,14 +465,14 @@ const char *Cld::GetName() { return "Cld"; }
 
 int Cld::Init()
 {
-    fn_8003ED30(100);
+    CollideInit(100);
     fn_80142B0C();
     return 1;
 }
 
 int Cld::Shutdown()
 {
-    fn_8003EDB8();
+    CollideShutdown();
     fn_80142B68();
     return 1;
 }
@@ -548,13 +548,13 @@ int Env::Init()
     fn_801F2798("EnvMgrInitFinish");
     fn_801615EC((void *)GameObjList::fn_80028BB4());
     fn_801F2798("EnvObjAddObjTypeStart");
-    fn_800463FC(GameObjList::fn_80028BB4());
+    EnvObjAddObjType(GameObjList::fn_80028BB4());
     fn_801F2798("EnvObjAddObjTypeFinish");
     fn_801F2798("FldObjAddObjTypeStart");
     fn_8019B25C(GameObjList::fn_80028BB4());
     fn_801F2798("FldObjAddObjTypeFinish");
     fn_80043AE4();
-    fn_800C47EC(lbl_803EA554);
+    fn_800C47EC(_Level_pData);
     fn_8004787C();
     fn_80178B5C();
     return 1;

@@ -121,7 +121,7 @@ Block_80170E64 *fn_80040F28(Vector_80039F5C *pPos, float *pDist);
 void fn_80042F4C(int a);
 void fn_800443B8(void);
 void fn_80044460(void);
-void fn_8004659C(void);
+void EnvObjUpdateFades(void);
 void fn_80047050(void);
 void fn_800655B8(void);
 void fn_800655D0(void);
@@ -593,7 +593,7 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
     }
     lbl_803EA358 += p->mUnknownD88;
     if (lbl_803EA358 > 60) {
-        fn_8004659C();
+        EnvObjUpdateFades();
         fn_801478A8();
         lbl_803EA358 = 0;
     }
@@ -651,7 +651,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
                 lbl_803EA358 -= p->mUnknownD88;
             }
             if (lbl_803EA358 > 60) {
-                fn_8004659C();
+                EnvObjUpdateFades();
                 fn_801478A8();
                 lbl_803EA358 = 0;
             }

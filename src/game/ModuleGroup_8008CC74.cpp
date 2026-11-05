@@ -31,8 +31,8 @@ void fn_800297D0(void);
 void fn_80029C2C(int a, int b, int c);
 void fn_8002A1D4(int a, int b, char *pText);
 void fn_8002A5F0(int a, char *pText, int b);
-void fn_800460DC(void);
-void fn_800461E0(void);
+void PlaDynClutOpen(void);
+void PlaDynClutUnload(void);
 void fn_8007272C(void);
 void fn_80072890(void);
 void fn_8008A88C(void);
@@ -444,7 +444,7 @@ int SysPreLoad::Init()
 
 int SysPreLoad::Shutdown()
 {
-    fn_800461E0();
+    PlaDynClutUnload();
     fn_8008A8D0();
     fn_8015E714();
     fn_8015E65C();
@@ -453,7 +453,7 @@ int SysPreLoad::Shutdown()
 
 void SysPreLoad::fn_8008D4A8()
 {
-    fn_800460DC();
+    PlaDynClutOpen();
     fn_8015E548();
     fn_8015E620(14, 1);
     fn_8015E684();

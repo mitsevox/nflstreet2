@@ -1,9 +1,9 @@
 #include "game/Block_8030E6E8.h"
 #include "game/Camera_8013F738.h"
 #include "game/fn_801EEB44.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/cu_801444D8.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 
 extern "C" {
 Camera_8013F738 *fn_8013FA04(int index);
@@ -173,10 +173,10 @@ void fn_801D0544(void);
 void fn_801D0BCC(int z, int y, int x);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float m[4][4]);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 unsigned int fn_8017F584(void);
 
-extern Level_80054130 *lbl_803EA554;
+extern LevelData_t *_Level_pData;
 
 extern char lbl_802EBFB4[];
 extern Vector_80039F5C lbl_802D7C70[];
@@ -317,8 +317,8 @@ extern "C" void fn_800A3170(void)
     Args_80144CE0 args;
     unsigned char i;
 
-    for (i = 0; i < lbl_803EA554->mUnknown96; i++) {
-        Entry_80054130 *pEntry = &lbl_803EA554->mUnknown100[i];
+    for (i = 0; i < _Level_pData->mUnknown96; i++) {
+        LevelPlacement_t *pEntry = &_Level_pData->mUnknown100[i];
 
         fn_801D03D0(m[0]);
         m[0][3] = 0.0f;
@@ -335,17 +335,17 @@ extern "C" void fn_800A3170(void)
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
         args.mUnknown00 = pEntry->mUnknown24 + 8;
-        Source_80144CE0 *pSource = (Source_80144CE0 *)fn_80054138(pEntry->mUnknown0);
+        Source_80144CE0 *pSource = (Source_80144CE0 *)LevelFindArea(pEntry->mUnknown0);
         lbl_8030E6E8.mpUnknownBC[i] = fn_80144CE0(&args, 0, pSource);
     }
 }
 
 extern "C" float fn_800A32E4(void)
 {
-    if (fn_80054D24(27) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(27) != 0 && fn_8017F584() == 0) {
         return 10.0f;
     }
-    if (fn_80054D24(26) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(26) != 0 && fn_8017F584() == 0) {
         return lbl_8030E6E8.mUnknown2C * 2.0;
     }
     return lbl_8030E6E8.mFloat38;

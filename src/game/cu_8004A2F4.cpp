@@ -12,13 +12,13 @@
 #include <math.h>
 #include <string.h>
 
-#include "game/Node_80041904.h"
+#include "game/BigObjNode.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_80040818.h"
 #include "game/InGame.h"
 #include "game/bitstream.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8008E978.h"
 #include "game/cu_80136B1C.h"
@@ -86,7 +86,7 @@ struct Frame_801C02CC {
 };
 
 typedef int (*Handler_803084C4)(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b,
-                                Object_80041904 *pObject, int skip);
+                                BigObjInst *pObject, int skip);
 
 /* Handler set registered with fn_801BE030: a count and the handler array. */
 struct Table_803EA4D0 {
@@ -98,7 +98,7 @@ extern "C" {
 extern float lbl_803EA2C4;
 extern Table_803EA4D0 lbl_803EA4D0;
 extern unsigned char lbl_803EA4DC[8];
-extern Object_80041904 *lbl_803EA4E4;
+extern BigObjInst *lbl_803EA4E4;
 extern NameId_8004B020 lbl_802D47DC[];
 extern NameId_8004B020 lbl_802D48A8[];
 extern NameId_8004B020 lbl_802CFE34[85];
@@ -120,9 +120,9 @@ struct Hitter_8004C844 {
     float mUnknown508;
 };
 
-typedef void (*Loader_8004C684)(int handle, Object_80041904 *pObject);
+typedef void (*Loader_8004C684)(int handle, BigObjInst *pObject);
 
-extern Callback_80041904 lbl_802CFCEC[8];
+extern BigObjBehaviorFunc lbl_802CFCEC[8];
 extern Loader_8004C684 lbl_802CFD0C[8];
 extern void (*lbl_802CFD98[3])(Object_80040818 *pOwner);
 extern int lbl_8030865C[8];
@@ -161,7 +161,7 @@ int fn_800C47C4(void);
 void fn_80145100(int type, int index);
 char *fn_801C2EB4(char *pDst, const char *pSrc);
 int fn_801F0A8C(int set, const char *pName);
-void fn_8004CBEC(void *pData, float t, Object_80041904 *pObject, Object_80040818 *pOwner);
+void fn_8004CBEC(void *pData, float t, BigObjInst *pObject, Object_80040818 *pOwner);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
 unsigned short fn_801BE648(void *p);
 void fn_8004CE6C(Object_80040818 *pOwner);
@@ -172,14 +172,14 @@ void fn_80051724(Object_80040818 *pOwner, float *p);
 void fn_80051810(Object_80040818 *pOwner, float value);
 void fn_80051880(Object_80040818 *pOwner, float value);
 void fn_80051B3C(Object_80040818 *pOwner, float *pPos);
-void fn_8005415C(int a, int b);
+void LevelSetSurface(int a, int b);
 int fn_800A3444(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
 void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
                  unsigned char a);
-void fn_801A9F98(Extra_8004149C *pExtra, Object_80040818 *pItem, int a, int b);
+void fn_801A9F98(BigObjPhysics_t *pExtra, Object_80040818 *pItem, int a, int b);
 void fn_801AA124(Object_80040818 *pItem, void *a, int b, void *c);
 short *fn_801AA220(int count);
 void fn_801B9FEC(void *p, void *q);
@@ -224,7 +224,7 @@ void fn_8004A2F4(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count)
 int fn_8004A6EC(VariantTable_8004A6EC *pTable, unsigned char *pKey);
 int fn_8004A7A8(VariantTable_8004A6EC *pTable, unsigned char *pKey);
 
-int fn_8004A474(VariantTable_8004A6EC *pTable, void *a, void *b, Object_80041904 *pObject, unsigned short c)
+int fn_8004A474(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pObject, unsigned short c)
 {
     int index = fn_8004A6EC(pTable, &pObject->mUnknown428->mUnknown1704);
 
@@ -234,7 +234,7 @@ int fn_8004A474(VariantTable_8004A6EC *pTable, void *a, void *b, Object_80041904
     return 0;
 }
 
-int fn_8004A4F0(VariantTable_8004A6EC *pTable, void *a, void *b, Object_80041904 *pObject, unsigned short c)
+int fn_8004A4F0(VariantTable_8004A6EC *pTable, void *a, void *b, BigObjInst *pObject, unsigned short c)
 {
     int index = fn_8004A7A8(pTable, &pObject->mUnknown428->mUnknown1704);
 
@@ -244,7 +244,7 @@ int fn_8004A4F0(VariantTable_8004A6EC *pTable, void *a, void *b, Object_80041904
     return 0;
 }
 
-int fn_8004A56C(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, Object_80041904 *pObject, int skip)
+int fn_8004A56C(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, BigObjInst *pObject, int skip)
 {
     if (!skip) {
         fn_8004A474(pTable, a, b, pObject, c);
@@ -252,7 +252,7 @@ int fn_8004A56C(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
     return 0;
 }
 
-int fn_8004A5AC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, Object_80041904 *pObject, int skip)
+int fn_8004A5AC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, BigObjInst *pObject, int skip)
 {
     if (!skip) {
         fn_8004A4F0(pTable, a, b, pObject, c);
@@ -260,10 +260,10 @@ int fn_8004A5AC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
     return 0;
 }
 
-int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, Object_80041904 *pObject, int skip)
+int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *b, BigObjInst *pObject, int skip)
 {
     if (!skip) {
-        Extra_8004149C *pExtra = pObject->mUnknown428;
+        BigObjPhysics_t *pExtra = pObject->mUnknown428;
         unsigned char b0 = pExtra->mUnknown1704;
         unsigned char b1 = pExtra->mUnknown1705;
         unsigned char b2 = pExtra->mUnknown1706;
@@ -351,11 +351,11 @@ void fn_8004A870(Handler_803084C4 *pHandlers, unsigned int count)
     pHandlers[101] = fn_8004A5EC;
 }
 
-void fn_8004A8C4(Extra_8004149C *pExtra, Object_80040818 *pItem, int a) { fn_801A9F98(pExtra, pItem, a, 0); }
+void fn_8004A8C4(BigObjPhysics_t *pExtra, Object_80040818 *pItem, int a) { fn_801A9F98(pExtra, pItem, a, 0); }
 
 void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c) { fn_801AA124(pItem, a, b, c); }
 
-void fn_8004A908(Object_80041904 *pObject, int index)
+void fn_8004A908(BigObjInst *pObject, int index)
 {
     Skeleton_80041930 *pSkeleton = fn_800410B8(index);
 
@@ -413,7 +413,7 @@ void fn_8004AA34(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count)
     fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
-void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
+void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     short values1[192];
@@ -508,17 +508,17 @@ void fn_8004AD3C(int a)
     }
 }
 
-void fn_8004AF84(Extra_8004149C *pExtra) { pExtra->mUnknown1708 &= ~0x78; }
+void fn_8004AF84(BigObjPhysics_t *pExtra) { pExtra->mUnknown1708 &= ~0x78; }
 
 /* Clears flag bits 0x78 of the Extra block and restarts its fn_801BE068 entry. */
-static inline void Restart_801BE068(Object_80041904 *pObject, unsigned short key, float value)
+static inline void Restart_801BE068(BigObjInst *pObject, unsigned short key, float value)
 {
     fn_8004AF84(pObject->mUnknown428);
     fn_801BE068(pObject->mUnknown428->mUnknown1300, pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60,
                 key, value, pObject);
 }
 
-void fn_8004AF94(Object_80041904 *pObject, unsigned char b1, unsigned char b0, unsigned char b3,
+void fn_8004AF94(BigObjInst *pObject, unsigned char b1, unsigned char b0, unsigned char b3,
                  unsigned char b2)
 {
     pObject->mUnknown428->mUnknown50 = 10;
@@ -544,7 +544,7 @@ int fn_8004B020(const char *pName, NameId_8004B020 *pTable)
 void fn_8004B088(Object_80040818 *pObject)
 {
     Flags_800411C8 *pFlags;
-    Node_80041904 *pNode;
+    BigObjNode_t *pNode;
 
     pObject->mUnknown472->mUnknown8 = pObject->mUnknown472->mUnknown112;
     pObject->mUnknown472->mUnknown12 = pObject->mUnknown472->mUnknown116;
@@ -605,9 +605,9 @@ void fn_8004B1A0(Object_80040818 *pObject)
     }
 }
 
-int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
+int fn_8004B354(BigObjInst *pObject, Object_80040818 *pOwner, int mode)
 {
-    Extra_8004149C *pExtra = pObject->mUnknown428;
+    BigObjPhysics_t *pExtra = pObject->mUnknown428;
 
     if (mode == 0) {
         if (pObject->mUnknown196 != -1) {
@@ -682,7 +682,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         if (pObject->mUnknown380) {
             Vector_80039F5C pos;
             float t;
-            Node_80041904 *pNode;
+            BigObjNode_t *pNode;
 
             pObject->mUnknown380 = 0;
             pos.mX = pObject->mUnknown360.mX;
@@ -724,7 +724,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                         }
                     }
                     if (pNode->mUnknown100 != 15) {
-                        fn_8005415C(pNode->mUnknown96, pNode->mUnknown100);
+                        LevelSetSurface(pNode->mUnknown96, pNode->mUnknown100);
                         pNode->mUnknown100 = 15;
                     }
                     if (pNode->mUnknown68) {
@@ -764,7 +764,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                 pos.mY = -pos.mY;
             }
             if (pObject->mUnknown200.mActive) {
-                Cycle_80041904 *pCycle = &pObject->mUnknown200;
+                BigObjCycle_t *pCycle = &pObject->mUnknown200;
 
                 pCycle->mTime += lbl_803EA2C4 * (1.0f / 60.0f);
                 switch (pCycle->mPhase) {
@@ -812,7 +812,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
     return 1;
 }
 
-void fn_8004BA44(int handle, Object_80041904 *pObject)
+void fn_8004BA44(int handle, BigObjInst *pObject)
 {
     char text[64];
     char state[64];
@@ -866,14 +866,14 @@ void fn_8004BA44(int handle, Object_80041904 *pObject)
     fn_8004D860(handle, position);
 }
 
-void fn_8004BD20(int handle, Object_80041904 *pObject)
+void fn_8004BD20(int handle, BigObjInst *pObject)
 {
     char text[64];
     char state[64];
     int position = fn_8004D84C(handle);
-    Node_80041904 *pNode = (Node_80041904 *)fn_801D2B7C(sizeof(Node_80041904), 0, 0);
+    BigObjNode_t *pNode = (BigObjNode_t *)fn_801D2B7C(sizeof(BigObjNode_t), 0, 0);
 
-    fn_801C1F94(pNode, 0, sizeof(Node_80041904));
+    fn_801C1F94(pNode, 0, sizeof(BigObjNode_t));
     pNode->mpNext = pObject->mUnknown312;
     pNode->mUnknown108 = -1;
     pNode->mUnknown112 = 0.0f;
@@ -1064,7 +1064,7 @@ unsigned short fn_8004C4AC(const char *pName)
     return 0;
 }
 
-void fn_8004C518(int handle, Object_80041904 *pObject)
+void fn_8004C518(int handle, BigObjInst *pObject)
 {
     char text[32];
 
@@ -1108,7 +1108,7 @@ int fn_8004C5E0(int type)
     return result;
 }
 
-void fn_8004C684(int handle, Object_80041904 *pObject)
+void fn_8004C684(int handle, BigObjInst *pObject)
 {
     char type[32];
     char reset[32];
@@ -1141,13 +1141,13 @@ void fn_8004C684(int handle, Object_80041904 *pObject)
     pObject->mUnknown380 = 0;
 }
 
-void fn_8004C7B8(Object_80041904 *pObject)
+void fn_8004C7B8(BigObjInst *pObject)
 {
-    Node_80041904 *pNode = pObject->mUnknown312;
+    BigObjNode_t *pNode = pObject->mUnknown312;
 
     while (pNode) {
         Emitter_8004BD20 *pEmitter = pNode->mUnknown128;
-        Node_80041904 *pFreeNode;
+        BigObjNode_t *pFreeNode;
 
         while (pEmitter) {
             Emitter_8004BD20 *pFree = pEmitter;
@@ -1172,7 +1172,7 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
 {
     int fire = 1;
     unsigned int time = fn_800289A8();
-    Object_80041904 *pObject = pItem->mUnknown472;
+    BigObjInst *pObject = pItem->mUnknown472;
     unsigned char i;
 
     for (i = 0; i < 3; i++) {
@@ -1237,7 +1237,7 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
 void fn_8004CAA8(Object_80040818 *pItem, float *pPos, float *pDir, const char *pName, int type,
                  Hitter_8004C844 *pHitter)
 {
-    Object_80041904 *pObject = pItem->mUnknown472;
+    BigObjInst *pObject = pItem->mUnknown472;
     Object_80040818 **ppLinked = pObject->mUnknown152;
     float strength = 0.0f;
     unsigned int i;
@@ -1358,7 +1358,7 @@ void fn_8004D068(int);
 int fn_8004D994(const char *);
 void fn_8004DA0C(void *, int, Object_80040818 *);
 
-void fn_8004CBEC(void *pData, float time, Object_80041904 *pObject, Object_80040818 *pOwner)
+void fn_8004CBEC(void *pData, float time, BigObjInst *pObject, Object_80040818 *pOwner)
 {
     Emitter_8004BD20 *p = (Emitter_8004BD20 *)pData;
     while (p) {
@@ -1409,7 +1409,7 @@ void fn_8004CBEC(void *pData, float time, Object_80041904 *pObject, Object_80040
 
 void fn_8004CE6C(Object_80040818 *pOwner)
 {
-    Node_80041904 *p = pOwner->mUnknown472->mUnknown312;
+    BigObjNode_t *p = pOwner->mUnknown472->mUnknown312;
     while (p) {
         if (p->mUnknown116 && p->mUnknown120 && --p->mUnknown120 == 0)
             fn_8004E090(pOwner, p->mUnknown104, p->mUnknown108);
@@ -1419,8 +1419,8 @@ void fn_8004CE6C(Object_80040818 *pOwner)
 
 void fn_8004CEE8(Child_801A9430 *p)
 {
-    Object_80041904 *pObject = p->mpObject54;
-    Extra_8004149C *pExtra = pObject->mUnknown428;
+    BigObjInst *pObject = p->mpObject54;
+    BigObjPhysics_t *pExtra = pObject->mUnknown428;
     if (pExtra) {
         if (pExtra->mUnknown32) {
             p->mAngle4C = (p->mAngle4C + pExtra->mWord36) & 0xFFFFFF;
@@ -1494,7 +1494,7 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
             pLast->mpUnknown5C = p;
         }
     }
-    p->mpUnknown58 = fn_80054138(&pDesc->mUnknown132.mUnknown4);
+    p->mpUnknown58 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
     lbl_803EC7D0++;
     p->mUnknown6C = 0;
     fn_801A980C(p);
@@ -1579,7 +1579,7 @@ int fn_8004D874(Object_801A8620 *p, int mode)
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
         int context = fn_801C657C();
-        Object_80041904 *pPose = (Object_80041904 *)p->mpUnknown1D8;
+        BigObjInst *pPose = (BigObjInst *)p->mpUnknown1D8;
         if (p->mFlagF0) fn_801A9368(p, (int)pPose->mUnknown200.mStep);
         if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
         int index = fn_80228668();
@@ -2103,7 +2103,7 @@ void fn_8004F20C(void)
     }
 }
 
-void fn_8004F2D0(int handle, Collection_801E7034 *pSet, Object_80041904 *pObject,
+void fn_8004F2D0(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce, float radius)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2114,7 +2114,7 @@ void fn_8004F2D0(int handle, Collection_801E7034 *pSet, Object_80041904 *pObject
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F3A4(int handle, Collection_801E7034 *pSet, Object_80041904 *pObject,
+void fn_8004F3A4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pA, Vector_80039F5C *pB, float friction, float bounce)
 {
     float y = pA->mY; pA->mY = -pA->mZ; pA->mZ = y;
@@ -2129,7 +2129,7 @@ void fn_8004F3A4(int handle, Collection_801E7034 *pSet, Object_80041904 *pObject
     index = lbl_803EA528++;
     fn_801E7120(pSet, lbl_8030883C[index]);
 }
-void fn_8004F4B4(int handle, Collection_801E7034 *pSet, Object_80041904 *pObject,
+void fn_8004F4B4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
                  Vector_80039F5C *pPoint, float friction, float bounce, float radius)
 {
     float y = pPoint->mY; pPoint->mY = -pPoint->mZ; pPoint->mZ = y;
@@ -2183,7 +2183,7 @@ void fn_8004F710(Metadata_8004ED44 *p)
 }
 void fn_8004F754(int handle, Object_80040818 *pObject, int objectIndex)
 {
-    Object_80041904 *pState = pObject->mUnknown472;
+    BigObjInst *pState = pObject->mUnknown472;
     float mass = 0.0f;
     pState->mUnknown382 = 0;
     pState->mUnknown408 = 0.0f;

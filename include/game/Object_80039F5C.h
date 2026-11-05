@@ -5,7 +5,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Pose_80041930.h"
 
-struct Area_80054138;
+struct LevelSurface_t;
 
 struct Block_800CC180 {
     unsigned short mUnknown0;
@@ -40,7 +40,7 @@ struct Quat_801EB488 {
     float mW;
 };
 
-struct Object_80041904;
+struct BigObjInst;
 
 struct Rig_800C8860;
 
@@ -79,9 +79,9 @@ struct Block_80170E64 {
     Quat_801EB488 mUnknown136;
     unsigned char mUnknown152;
     char mUnknown153[507];
-    Area_80054138 *mUnknown660;
+    LevelSurface_t *mUnknown660;
     char mUnknown664[12];
-    Object_80041904 *mpUnknown676;
+    BigObjInst *mpUnknown676;
     int mUnknown680;
     /* fn_80093410 reads a spot from +920/+936; the size is not established. */
     char mUnknown684[236];
@@ -411,7 +411,7 @@ struct Object_80039F5C {
         short mUnknown778;
         unsigned short mUnknown778Unsigned;
     };
-    Area_80054138 *mpUnknown780;
+    LevelSurface_t *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;

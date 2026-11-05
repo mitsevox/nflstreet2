@@ -1,5 +1,5 @@
 #include "game/cu_80089330.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
@@ -28,7 +28,7 @@ void fn_80089330(float *pCapsuleA, float *pCapsuleB, unsigned int index)
     }
 }
 
-int fn_800893F0(Record_8003EC04 *pA, Record_8003EC04 *pB)
+int fn_800893F0(CollideObject_t *pA, CollideObject_t *pB)
 {
     float t;
     float d;
@@ -64,7 +64,7 @@ int fn_80089464(float *pSphereA, float *pSphereB)
     return d <= r * r;
 }
 
-void fn_800894B8(Plane_800894B8 *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
+void fn_800894B8(Plane_800894B8 *pPlane, CollideObject_t *pA, CollideObject_t *pB)
 {
     float delta[3];
 

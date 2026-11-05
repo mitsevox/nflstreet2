@@ -3,7 +3,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
 #include "game/Input_800B6D34.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800EA284.h"
@@ -284,7 +284,7 @@ float fn_801CFFA0(float value);
 int fn_800A7EF4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
-float fn_8005429C(Record_80054130 *pRecord);
+float LevelGetWallHeight(LevelWall_t *pRecord);
 void fn_800EF538(Object_80039F5C *p);
 void fn_800FF598(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
 int fn_800B5FEC(Object_80039F5C *p);
@@ -1410,7 +1410,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
     int index = 0;
     if (!fn_800C4184(p))
         return;
-    if (fn_80054130()->mUnknown136) {
+    if (LevelGetData()->mUnknown136) {
         if (fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EADB0)
             nearX = 1;
         else if (fabsf(p->mMotion.mPos.mY) > fn_80178A44() - lbl_803EADB0)
@@ -3322,9 +3322,9 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
     int unused;
     fn_800CEE74(&command, p, 0, 0, 0, kind, flag);
     int index = fn_800C3BEC(p, &command, &value, &unused);
-    Record_80054130 *pRecord = &fn_80054130()->mUnknown140[p->mUnknown1160.mUnknown28];
+    LevelWall_t *pRecord = &LevelGetData()->mUnknown140[p->mUnknown1160.mUnknown28];
     if (kind == 228) {
-        if (index == -1 || (p->mUnknown1008.mUnknown0 == 3 && fn_8005429C(pRecord) < 5.0f)) {
+        if (index == -1 || (p->mUnknown1008.mUnknown0 == 3 && LevelGetWallHeight(pRecord) < 5.0f)) {
             p->mUnknown1008.mUnknown0 = 2;
             index = fn_800C3BEC(p, &command, &value, &unused);
         }

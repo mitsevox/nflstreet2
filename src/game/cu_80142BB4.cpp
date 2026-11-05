@@ -477,7 +477,7 @@ void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB)
     }
 }
 
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, ContactList_8030BD74 *pContacts)
+void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB, ContactList_8030BD74 *pContacts)
 {
     Body_80142D98 bodyA;
     Body_80142D98 bodyB;

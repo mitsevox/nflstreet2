@@ -10,7 +10,7 @@ struct Pose_801A8B84;
 struct Env_801A8D9C;
 struct Object_801A8620;
 struct Object_80040818;
-struct Object_80041904;
+struct BigObjInst;
 struct Instance_8004DA0C;
 struct Cache_8004E16C;
 
@@ -27,7 +27,7 @@ struct Child_801A9430 {
         struct { Quat_801EB488 mRotation3C; int mAngle4C; };
     };
     union { Object_801A8620 *mpUnknown50; Object_80040818 *mpOwner50; };
-    union { unsigned char mUnknown54[4]; Object_80041904 *mpObject54; };
+    union { unsigned char mUnknown54[4]; BigObjInst *mpObject54; };
     void *mpUnknown58; Child_801A9430 *mpUnknown5C;
     union {
         Vector_80039F5C mUnknown60;

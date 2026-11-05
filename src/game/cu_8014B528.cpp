@@ -74,7 +74,7 @@ void fn_800B9598(Class_80297C60 *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(Class_802A56E8 *pObject);
 void fn_8014ABE4(void *p, int team);
-unsigned char fn_8003B560(int group, int index, int *pValue);
+unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
 int fn_800808F8(Object_8008044C *pObject);
 
@@ -112,17 +112,17 @@ void fn_8014B528(Class_802A2DB8 *p)
         desc.mUnknown12 = 0;
         desc.mUnknown8 = i;
         fn_8008040C(&cursor, &desc);
-        if (fn_8003B560(i, 0, &id)) {
+        if (DepthChartGetEntry(i, 0, &id)) {
             fn_800809FC(&cursor, id, 0);
             id = fn_800808F8(&cursor);
         }
         p->mpUnknown1C->mUnknown20[i][0] = id;
-        if (fn_8003B560(i, 2, &id)) {
+        if (DepthChartGetEntry(i, 2, &id)) {
             fn_800809FC(&cursor, id, 0);
             id = fn_800808F8(&cursor);
         }
         p->mpUnknown1C->mUnknown20[i][1] = id;
-        if (fn_8003B560(i, 3, &id)) {
+        if (DepthChartGetEntry(i, 3, &id)) {
             fn_800809FC(&cursor, id, 0);
             id = fn_800808F8(&cursor);
         }

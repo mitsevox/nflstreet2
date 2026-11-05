@@ -1,7 +1,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
-#include "game/cu_8003AEA8.h"
+#include "game/DepthChart.h"
 #include "game/cu_8018EC68.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8018BE68.h"
@@ -485,7 +485,7 @@ int fn_80061390(int digt)
     fn_80060354(lbl_803EA5EC, list);
     list[7] = 0x7FFF;
     fn_80060410(0, list);
-    fn_8003B3F8(0, list, 4);
+    DepthChartAutoFill(0, list, 4);
     fn_80084A8C(digt, list, 0, 7);
     return digt;
 }
@@ -508,7 +508,7 @@ int fn_80061408(int digt)
     }
     list[7] = 0x7FFF;
     fn_80060410(1, list);
-    fn_8003B3F8(1, list, 4);
+    DepthChartAutoFill(1, list, 4);
     fn_80061274(1, &picks.mUnknown0, 1, lbl_803EA5F0);
     fn_80084A8C(digt, list, 1, 7);
     return digt;
@@ -517,12 +517,12 @@ int fn_80061408(int digt)
 
 void fn_80061520(int dit1, int dit2, int lvlt)
 {
-    fn_8003B6F0(1);
+    DepthChartLoad(1);
     dit2 = fn_80061408(dit2);
     lbl_8030A3A4.mDit1 = fn_80061390(dit1);
     lbl_8030A3A4.mDit2 = dit2;
     lbl_8030A3A4.mLvlt = lvlt;
-    fn_8003B8BC();
+    DepthChartSave();
 }
 
 void fn_80061584(void)

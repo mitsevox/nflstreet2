@@ -46,9 +46,9 @@ void fn_801790D0(int team, float a, float b);
 void fn_8017833C(int team);
 void fn_8017E430(void);
 void fn_80157514(void);
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
@@ -142,7 +142,7 @@ void fn_8014AC88(void *p)
 
 void fn_8014AD24(void *p, float dt)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         fn_800BCB18(p, dt);
     }
 }
@@ -150,7 +150,7 @@ void fn_8014AD24(void *p, float dt)
 void fn_8014AD70(void)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("2 Minute Challenge", lbl_803EB2B0, "|^Done");
+        MsgBoxShow("2 Minute Challenge", lbl_803EB2B0, "|^Done");
     }
 }
 
@@ -327,6 +327,6 @@ extern "C"
 void fn_801507E0(Class_802A1DC8 *p)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("Jump Ball Battle", lbl_803EB2E4, "|^Done");
+        MsgBoxShow("Jump Ball Battle", lbl_803EB2E4, "|^Done");
     }
 }

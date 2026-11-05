@@ -37,8 +37,8 @@ int fn_80033144(void *p);
 void fn_8000FCD4(int a);
 void fn_80047670(int handle);
 void fn_80047698(void);
-void fn_800545C0(void);
-void fn_800545E8(void);
+void InGameStateReset(void);
+void InGameStateClearActive(void);
 void fn_80064690(void);
 void fn_8006CA84(int a);
 void fn_8013CF98(void);
@@ -639,7 +639,7 @@ void fn_80189F68(void)
         fn_80047670(lbl_803EB64C);
         fn_8017CED4((unsigned int)(lbl_803EA2C4 * 16.666668f));
         fn_8018AFD8(0);
-        fn_800545C0();
+        InGameStateReset();
         fn_8017F264();
     }
     fn_80220D04();
@@ -728,7 +728,7 @@ void fn_8018A40C(void)
     } else if (fn_8002894C()) {
         fn_80047698();
         fn_8017CFAC();
-        fn_800545E8();
+        InGameStateClearActive();
         fn_8017F284();
     }
     if (fn_80027DF0()) {

@@ -1,11 +1,11 @@
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/Class_8002373C.h"
 #include "game/Class_802938C0.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_80047E28.h"
+#include "game/PlayerLook.h"
 #include "game/cu_8015C25C.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
@@ -48,7 +48,7 @@ void fn_800233F0(Object_8007A334 *pCursor, int type);
 void fn_80023498(Object_8007A334 *pCursor);
 void fn_800234B8(Object_8007A334 *pCursor, char *pBuffer, int size);
 int fn_800234EC(Object_8007A334 *pCursor);
-void fn_80048F6C(int index, const char *pName);
+void PlayerLookSetName(int index, const char *pName);
 void fn_8007A098(int index, char *pBuffer, int size);
 int fn_8007A43C(Object_8007A334 *pObject);
 void fn_8007CC50(Object_8007A334 *pObject);
@@ -521,7 +521,7 @@ static Object_8007A334 lbl_80369DDC;
 static Object_8007A334 lbl_80369E08;
 static Class_802938C0 lbl_80369E34;
 static Entry_80369E64 lbl_80369E64[15];
-static Block_80307980 lbl_8036A170;
+static FaceFeatures_t lbl_8036A170;
 static unsigned short lbl_8036A198[21];
 static int lbl_803ECD5C;
 
@@ -666,7 +666,7 @@ static unsigned int fn_800059EC(int value, int *pTable, unsigned int count)
 static void fn_80005A24(int id)
 {
     Object_8008044C object;
-    Block_80307980 block;
+    FaceFeatures_t block;
     FMCAPPORTValues values;
     FMCAPPORTText text60;
     FMCAPPORTText text20;
@@ -697,7 +697,7 @@ static void fn_80005A24(int id)
     color18 = fn_800810E0(&object);
     color19 = fn_80081134(&object);
     fn_80082138(&object, &block);
-    fn_80046804(&block, &values);
+    FaceMorphBuildWeights(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
     fn_8016139C(value6E, &unknown52, &unknown56);
     unknown8 = fn_8016128C(value72 + 1);
@@ -717,16 +717,16 @@ static void fn_80005BE4(int index, int value)
 
     lbl_8036A170.mUnknown0[index] = value;
     if (index == 3) {
-        fn_80049B78(0, lbl_8036A170.mUnknown0[index]);
-        fn_80049B78(1, lbl_8036A170.mUnknown0[index]);
+        PlayerLookSetHeadType(0, lbl_8036A170.mUnknown0[index]);
+        PlayerLookSetHeadType(1, lbl_8036A170.mUnknown0[index]);
     }
-    fn_80046804(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-    fn_80046804(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-    fn_80049F10(0, &lbl_8036A170);
-    fn_80049F10(1, &lbl_8036A170);
-    flag = fn_80046898(&lbl_8036A170);
-    fn_80049BD8(0, flag);
-    fn_80049BD8(1, flag);
+    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
+    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
+    PlayerLookSetFeatures(0, &lbl_8036A170);
+    PlayerLookSetFeatures(1, &lbl_8036A170);
+    flag = FaceMorphIsAllowed(&lbl_8036A170);
+    PlayerLookSetFaceFlag(0, flag);
+    PlayerLookSetFaceFlag(1, flag);
     fn_8015D180(fn_80022D78(), 15);
     fn_80022D6C();
 }
@@ -735,17 +735,17 @@ static void fn_80005CAC(int value)
 {
     int flag;
 
-    fn_80049B48(0, value);
-    fn_80049B48(1, value);
+    PlayerLookSetFace(0, value);
+    PlayerLookSetFace(1, value);
     lbl_80369E34.fn_801900D4(value, 0);
     lbl_8036A170.mUnknown0[0] = lbl_80369E34.fn_801901A4();
-    fn_80046804(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-    fn_80046804(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-    fn_80049F10(0, &lbl_8036A170);
-    fn_80049F10(1, &lbl_8036A170);
-    flag = fn_80046898(&lbl_8036A170);
-    fn_80049BD8(0, flag);
-    fn_80049BD8(1, flag);
+    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
+    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
+    PlayerLookSetFeatures(0, &lbl_8036A170);
+    PlayerLookSetFeatures(1, &lbl_8036A170);
+    flag = FaceMorphIsAllowed(&lbl_8036A170);
+    PlayerLookSetFaceFlag(0, flag);
+    PlayerLookSetFaceFlag(1, flag);
     fn_8015D180(fn_80022D78(), 15);
     fn_80022D6C();
 }
@@ -764,12 +764,12 @@ static int fn_80005D88(unsigned int value)
     if (lbl_803ECD5C != mode) {
         lbl_803ECD5C = mode;
         lbl_8036A170.mUnknown0[9] = mode;
-        fn_80049BA8(1, mode);
-        fn_80049BA8(0, mode);
-        fn_80046804(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-        fn_80046804(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-        fn_80049F10(0, &lbl_8036A170);
-        fn_80049F10(1, &lbl_8036A170);
+        PlayerLookSetBodyType(1, mode);
+        PlayerLookSetBodyType(0, mode);
+        FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
+        FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
+        PlayerLookSetFeatures(0, &lbl_8036A170);
+        PlayerLookSetFeatures(1, &lbl_8036A170);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     }
@@ -778,8 +778,8 @@ static int fn_80005D88(unsigned int value)
 
 static void fn_80005E64(int value)
 {
-    fn_80049B90(0, value);
-    fn_80049B90(1, value);
+    PlayerLookSetHair(0, value);
+    PlayerLookSetHair(1, value);
     fn_8015D180(fn_80022D78(), 15);
     fn_80022D6C();
 }
@@ -1252,8 +1252,8 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
             break;
         }
     } else if (mUnknown8 == 3) {
-        fn_80049BF0(0, fn_8008125C(fn_80182DC8()));
-        fn_80049BF0(1, fn_8008125C(fn_80182DC8()));
+        PlayerLookSetNumber(0, fn_8008125C(fn_80182DC8()));
+        PlayerLookSetNumber(1, fn_8008125C(fn_80182DC8()));
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     }
@@ -1266,8 +1266,8 @@ void Class_80009D88::vfn_03(int index)
     case 2:
         break;
     case 3:
-        fn_80049BF0(0, index);
-        fn_80049BF0(1, index);
+        PlayerLookSetNumber(0, index);
+        PlayerLookSetNumber(1, index);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1341,8 +1341,8 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
         fn_80182E34(label2);
         fn_800809C4(fn_80182DC8(), lbl_803EB928, 0);
         fn_80080A9C(fn_80182DC8(), name, 31);
-        fn_80048F6C(0, name);
-        fn_80048F6C(1, name);
+        PlayerLookSetName(0, name);
+        PlayerLookSetName(1, name);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1411,8 +1411,8 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             fn_80005E64(fn_80080E98(fn_80182DC8()));
             break;
         case 1:
-            fn_80049D34(0, fn_800810E0(fn_80182DC8()));
-            fn_80049D34(1, fn_800810E0(fn_80182DC8()));
+            PlayerLookSetHairColor(0, fn_800810E0(fn_80182DC8()));
+            PlayerLookSetHairColor(1, fn_800810E0(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
             break;
@@ -1420,14 +1420,14 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             fn_80005CAC(fn_80082280(fn_80182DC8()));
             break;
         case 3:
-            fn_80049D50(0, fn_80081134(fn_80182DC8()));
-            fn_80049D50(1, fn_80081134(fn_80182DC8()));
+            PlayerLookSetFacialHairColor(0, fn_80081134(fn_80182DC8()));
+            PlayerLookSetFacialHairColor(1, fn_80081134(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
             break;
         case 4:
-            fn_80049B60(0, fn_800822D4(fn_80182DC8()));
-            fn_80049B60(1, fn_800822D4(fn_80182DC8()));
+            PlayerLookSetBrow(0, fn_800822D4(fn_80182DC8()));
+            PlayerLookSetBrow(1, fn_800822D4(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
             break;
@@ -1445,8 +1445,8 @@ void Class_80009E48::vfn_03(int index)
         fn_80005E64(fn_8007CD50(&lbl_80369DDC));
         break;
     case 1:
-        fn_80049D34(0, index);
-        fn_80049D34(1, index);
+        PlayerLookSetHairColor(0, index);
+        PlayerLookSetHairColor(1, index);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1455,14 +1455,14 @@ void Class_80009E48::vfn_03(int index)
         fn_80005CAC(lbl_80369E34.fn_80190120());
         break;
     case 3:
-        fn_80049D50(0, index);
-        fn_80049D50(1, index);
+        PlayerLookSetFacialHairColor(0, index);
+        PlayerLookSetFacialHairColor(1, index);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
     case 4:
-        fn_80049B60(0, index);
-        fn_80049B60(1, index);
+        PlayerLookSetBrow(0, index);
+        PlayerLookSetBrow(1, index);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1520,19 +1520,19 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
 
             lbl_8036A170.mUnknown0[pRange->mSlot] = a + pRange->mOffset;
             fn_80082334(fn_80182DC8(), &lbl_8036A170);
-            fn_80049F10(0, &lbl_8036A170);
-            fn_80049F10(1, &lbl_8036A170);
+            PlayerLookSetFeatures(0, &lbl_8036A170);
+            PlayerLookSetFeatures(1, &lbl_8036A170);
         }
     } else {
         if (mUnknown8 == 8) {
-            fn_80049C20(0, fn_80080E48(fn_80182DC8()));
-            fn_80049C20(1, fn_80080E48(fn_80182DC8()));
+            PlayerLookSetPlex(0, fn_80080E48(fn_80182DC8()));
+            PlayerLookSetPlex(1, fn_80080E48(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
         } else {
             fn_80082138(fn_80182DC8(), &lbl_8036A170);
-            fn_80049F10(0, &lbl_8036A170);
-            fn_80049F10(1, &lbl_8036A170);
+            PlayerLookSetFeatures(0, &lbl_8036A170);
+            PlayerLookSetFeatures(1, &lbl_8036A170);
             int slot = fn_80008E3C()->GetRange(mUnknown8)->mSlot;
 
             fn_80005BE4(slot, lbl_8036A170.mUnknown0[slot]);
@@ -1545,8 +1545,8 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
 void Class_80009E08::vfn_03(int index)
 {
     if (mUnknown8 == 8) {
-        fn_80049C20(0, index);
-        fn_80049C20(1, index);
+        PlayerLookSetPlex(0, index);
+        PlayerLookSetPlex(1, index);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     } else {
@@ -1617,13 +1617,13 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
         }
     } else {
         if (type == 3) {
-            fn_80049B30(0, fn_80081E3C(fn_80182DC8()) + 1);
-            fn_80049B30(1, fn_80081E3C(fn_80182DC8()) + 1);
+            PlayerLookSetSkin(0, fn_80081E3C(fn_80182DC8()) + 1);
+            PlayerLookSetSkin(1, fn_80081E3C(fn_80182DC8()) + 1);
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
         } else {
-            fn_80049D6C(0, type, fn_80005EB4(&info, type));
-            fn_80049D6C(1, type, fn_80005EB4(&info, type));
+            PlayerLookSetPartVariant(0, type, fn_80005EB4(&info, type));
+            PlayerLookSetPartVariant(1, type, fn_80005EB4(&info, type));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
         }
@@ -1636,8 +1636,8 @@ void Class_80009DC8::vfn_03(int index)
     int type = lbl_800094FC[mUnknown8];
 
     if (type == 3) {
-        fn_80049B30(0, index + 1);
-        fn_80049B30(1, index + 1);
+        PlayerLookSetSkin(0, index + 1);
+        PlayerLookSetSkin(1, index + 1);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     } else {
@@ -1648,8 +1648,8 @@ void Class_80009DC8::vfn_03(int index)
         fn_80087938(fn_80087B5C(type), &cursor, index, 0);
         value = fn_800234EC(&cursor);
         fn_80023498(&cursor);
-        fn_80049D6C(0, type, value);
-        fn_80049D6C(1, type, value);
+        PlayerLookSetPartVariant(0, type, value);
+        PlayerLookSetPartVariant(1, type, value);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     }

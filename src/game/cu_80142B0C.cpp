@@ -1,14 +1,14 @@
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 
 struct Entry_802DCF9C {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
-    Callback_802DCF9C mpUnknown4;
+    CollideUpdateFunc mpUnknown4;
 };
 
 extern "C" {
-void fn_8003A628(Record_8003EC04 *pRecord);
-void fn_801380DC(Record_8003EC04 *pRecord);
+void fn_8003A628(CollideObject_t *pRecord);
+void fn_801380DC(CollideObject_t *pRecord);
 
 static Entry_802DCF9C lbl_802DCF9C[6] = {
     { 0, 11, fn_8003A628 },
@@ -24,7 +24,7 @@ void fn_80142B0C()
     unsigned char i;
 
     for (i = 0; i < 6; i++) {
-        fn_8003EDD8(lbl_802DCF9C[i].mUnknown0, lbl_802DCF9C[i].mUnknown1, lbl_802DCF9C[i].mpUnknown4);
+        CollideRegisterType(lbl_802DCF9C[i].mUnknown0, lbl_802DCF9C[i].mUnknown1, lbl_802DCF9C[i].mpUnknown4);
     }
 }
 
@@ -33,7 +33,7 @@ void fn_80142B68()
     unsigned char i;
 
     for (i = 0; i < 6; i++) {
-        fn_8003EE00(lbl_802DCF9C[i].mUnknown0);
+        CollideUnregisterType(lbl_802DCF9C[i].mUnknown0);
     }
 }
 }

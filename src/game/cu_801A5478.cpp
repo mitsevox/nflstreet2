@@ -7,8 +7,8 @@
 #include "game/Entry_802F394C.h"
 
 
-/* Item of the type-6 pool of src/game/cu_80046340.cpp. */
-struct Object_80046340 {
+/* Item of the type-6 pool of src/game/EnvObj.cpp. */
+struct EnvObj {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown10[4];
@@ -20,10 +20,10 @@ struct Object_80046340 {
     char mUnknownE64[0x30];
 };
 
-/* Item of the type-25 pool of src/game/cu_80046340.cpp. */
-struct Object_800463D8 {
+/* Item of the type-25 pool of src/game/EnvObj.cpp. */
+struct EnvObjOverlay {
     char mUnknown0[0x14];
-    Object_80046340 *mpUnknown14;
+    EnvObj *mpUnknown14;
 };
 
 struct View_8002B550 {
@@ -198,7 +198,7 @@ void fn_801A5780(void)
     fn_80236EC0(1);
 }
 
-void fn_801A582C(Object_80046340 *pObject)
+void fn_801A582C(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -290,7 +290,7 @@ void fn_801A582C(Object_80046340 *pObject)
     pObject->mUnknown14 = 0;
 }
 
-void fn_801A5CA4(Object_80046340 *pObject)
+void fn_801A5CA4(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -302,9 +302,9 @@ void fn_801A5CA4(Object_80046340 *pObject)
     }
 }
 
-int fn_801A5D0C(Object_800463D8 *pOwner)
+int fn_801A5D0C(EnvObjOverlay *pOwner)
 {
-    Object_80046340 *pObject = pOwner->mpUnknown14;
+    EnvObj *pObject = pOwner->mpUnknown14;
     int handle = fn_801C657C();
     float alpha = 0.1f;
 
@@ -335,7 +335,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
     return 0;
 }
 
-int fn_801A5E90(Object_80046340 *pObject)
+int fn_801A5E90(EnvObj *pObject)
 {
     int handle = fn_801C657C();
     unsigned int i;

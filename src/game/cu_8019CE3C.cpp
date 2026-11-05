@@ -44,7 +44,7 @@ struct Object_8019CE3C {
 
 extern "C" {
 int fn_80027DF0(void);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 int fn_801486A0(void);
 void fn_801A5434(void *p, int a);
 void fn_801D04C4(void);
@@ -179,7 +179,7 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     if (!(result & 63)) {
         fn_801D04C4();
         fn_801D0664(pObject->mUnknown20);
-        if (fn_80054D24(33) || fn_80054D24(34)) {
+        if (CheatFlagsIsSet(33) || CheatFlagsIsSet(34)) {
             if (!fn_8017F584()) {
                 fn_801D0CFC(1.5f);
             }

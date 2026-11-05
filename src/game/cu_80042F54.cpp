@@ -8,7 +8,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_802372EC.h"
@@ -555,12 +555,12 @@ void fn_80043DD8(void)
 
         for (int i = 0; i < lbl_803EA49C[type]; i++) {
             Vector_80039F5C pos;
-            Area_80054138 *pArea;
+            LevelSurface_t *pArea;
 
             pos.mX = (fn_80237260(1) * 2.0f - 1.0f) * width;
             pos.mY = (fn_80237260(1) * 2.0f - 1.0f) * length;
             pos.mZ = 0.0f;
-            pArea = fn_80054138(&pos.mX);
+            pArea = LevelFindArea(&pos.mX);
             if (pArea) {
                 Divot *p = fn_80044580(type);
 

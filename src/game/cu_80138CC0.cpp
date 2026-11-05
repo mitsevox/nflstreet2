@@ -73,7 +73,7 @@ int fn_80138E20(Vector_80039F5C *pPos, Segment_80138CC0 *pA, Segment_80138CC0 *p
     return first;
 }
 
-float fn_80138F64(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit)
+float fn_80138F64(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit)
 {
     Segment_80138CC0 seg;
     Segment_80138CC0 *pSeg;

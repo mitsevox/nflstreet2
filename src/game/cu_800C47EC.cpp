@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 #include "game/fn_801C1F94.h"
 
 extern "C" {
@@ -18,7 +18,7 @@ extern float lbl_803EABEC;
 extern float lbl_803EABF0;
 }
 
-extern "C" void fn_800C47EC(Level_80054130 *pLevel)
+extern "C" void fn_800C47EC(LevelData_t *pLevel)
 {
     unsigned int counts[14];
     unsigned int i;

@@ -215,11 +215,11 @@ void fn_80022D6C(void);
 void fn_800225F4(int index, unsigned int value);
 void fn_80022680(int index, int a, int b);
 void fn_80022E40(int a, int b);
-void fn_80048FD0(int a, int b);
-void fn_800490A0(int index, int a, int b);
-void fn_80049B00(int a, int b);
-void fn_80049B90(int a, int b);
-void fn_80049D6C(int a, unsigned int b, int c);
+void PlayerLookSetLogo(int a, int b);
+void PlayerLookSetGear(int index, int a, int b);
+void PlayerLookSetFrontDecalKind(int a, int b);
+void PlayerLookSetHair(int a, int b);
+void PlayerLookSetPartVariant(int a, unsigned int b, int c);
 void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BB04(Object_8007A334 *pObject);
 int fn_8007BB4C(Object_8007A334 *pObject, int a, int b);
@@ -752,14 +752,14 @@ static void fn_8000E834(Record_8036AD78 *pRecord)
     for (i = 0; i <= 13; i++) {
         fn_80022E40(i, pRecord->mUnknown0[i]);
     }
-    fn_80049B90(0, lbl_803ECE30);
-    fn_80049B90(1, lbl_803ECE30);
+    PlayerLookSetHair(0, lbl_803ECE30);
+    PlayerLookSetHair(1, lbl_803ECE30);
     for (i = 0; i <= 2; i++) {
-        fn_80049D6C(0, i, 0);
-        fn_80049D6C(1, i, 0);
+        PlayerLookSetPartVariant(0, i, 0);
+        PlayerLookSetPartVariant(1, i, 0);
     }
-    fn_80049B00(0, 0);
-    fn_80049B00(1, 0);
+    PlayerLookSetFrontDecalKind(0, 0);
+    PlayerLookSetFrontDecalKind(1, 0);
 }
 
 static void fn_8000E8FC(int index, int value)
@@ -798,27 +798,27 @@ static void fn_8000E8FC(int index, int value)
         switch (index) {
         case 14:
             value += 6;
-            fn_80049B00(0, value);
-            fn_80049B00(1, value);
+            PlayerLookSetFrontDecalKind(0, value);
+            PlayerLookSetFrontDecalKind(1, value);
             break;
         case 15:
             lbl_803EB948 = value + 45;
-            fn_80048FD0(0, value + 45);
-            fn_80048FD0(1, lbl_803EB948);
-            fn_80049B00(0, 5);
-            fn_80049B00(1, 5);
+            PlayerLookSetLogo(0, value + 45);
+            PlayerLookSetLogo(1, lbl_803EB948);
+            PlayerLookSetFrontDecalKind(0, 5);
+            PlayerLookSetFrontDecalKind(1, 5);
             break;
         case 18:
-            fn_80049B90(0, value);
-            fn_80049B90(1, value);
+            PlayerLookSetHair(0, value);
+            PlayerLookSetHair(1, value);
             break;
         case 19:
-            fn_800490A0(0, 10, 0);
-            fn_800490A0(1, 10, 0);
+            PlayerLookSetGear(0, 10, 0);
+            PlayerLookSetGear(1, 10, 0);
         case 20:
         case 21:
-            fn_80049D6C(0, fn_80087BA0(index), value);
-            fn_80049D6C(1, fn_80087BA0(index), value);
+            PlayerLookSetPartVariant(0, fn_80087BA0(index), value);
+            PlayerLookSetPartVariant(1, fn_80087BA0(index), value);
             break;
         }
     }

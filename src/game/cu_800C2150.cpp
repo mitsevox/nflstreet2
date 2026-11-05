@@ -4,8 +4,8 @@
 #include "game/Class_80297C60.h"
 #include "game/Command_800CEE74.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Level_80054130.h"
-#include "game/Record_803EA558.h"
+#include "game/LevelData.h"
+#include "game/LevelWallInfo.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80064864.h"
 #include "game/fn_8017F584.h"
@@ -45,8 +45,8 @@ void fn_8009D888(int index, int value);
 void fn_8009D964(int index, int value);
 void fn_800B9BAC(Class_80297C60 *p);
 void fn_800CC448(void);
-void fn_800545C0(void);
-void fn_800545E8(void);
+void InGameStateReset(void);
+void InGameStateClearActive(void);
 void fn_80139204(void);
 void fn_8013F97C(int a);
 void fn_8013FA58(int a, int b);
@@ -413,8 +413,8 @@ extern "C" void fn_800C34B0(void)
         fn_801FCE10(0, "delete from 'MAGI'\n");
         fn_8017F284();
         fn_8017F264();
-        fn_800545E8();
-        fn_800545C0();
+        InGameStateClearActive();
+        InGameStateReset();
         fn_8006563C();
         fn_80162780(0, 0);
     }
@@ -440,7 +440,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
     float distance;
     float factor;
     unsigned int count;
-    Record_80054130 *pRow;
+    LevelWall_t *pRow;
     unsigned char i;
 
     if (fn_80178A08() - fabsf(pPoint->mX) < 2.0f) {
@@ -450,13 +450,13 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
     start.mY = p->mMotion.mPos.mY;
     start.mZ = p->mMotion.mPos.mZ;
     fn_800CEED8(key, index, pRecord, p, pPoint, angle, &end, &outAngle, &value);
-    count = (unsigned char)fn_80054130()->mUnknown136;
-    pRow = fn_80054130()->mUnknown140;
+    count = (unsigned char)LevelGetData()->mUnknown136;
+    pRow = LevelGetData()->mUnknown140;
     for (i = 0; i < count; i++, pRow++) {
         if (i == skip) {
             continue;
         }
-        fn_800541AC(pRow, &a, &b);
+        LevelGetWallBase(pRow, &a, &b);
         b.mZ = 0.0f;
         a.mZ = 0.0f;
         if (key == 224 || key == 235) {
@@ -466,7 +466,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
                 float limit;
 
                 fn_80227970(&a, &b, &end, &closest, &distance, &factor);
-                limit = lbl_803EA558[i].mUnknown0 < 3.0f ? 2.0f : 1.0f;
+                limit = _Level_pWallInfo[i].mUnknown0 < 3.0f ? 2.0f : 1.0f;
                 if (distance < limit) {
                     result = 1;
                     break;

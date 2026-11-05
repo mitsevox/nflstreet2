@@ -3,8 +3,8 @@
 #include "game/Object_8007A334.h"
 #include "game/Query_8008352C.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8003E214.h"
-#include "game/fn_8003B6BC.h"
+#include "game/AutoDepth.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
@@ -53,7 +53,7 @@ static int lbl_802D6B54[14] = {
     0x4C4C4450, 0x524C4450, 0x46424C50, 0x42424C50, 0x4C424450, 0x43424450, 0x52424450,
 };
 
-static Record_8003E214 *lbl_803EA7E8 = 0;
+static AutoDepthPlayer_t *lbl_803EA7E8 = 0;
 static int lbl_803EC86C;
 
 extern "C" {
@@ -619,12 +619,12 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
     fn_801D34D0(excluded, sizeof(excluded), 0xFF, 4);
     pList[size] = 0x7FFF;
     lbl_803EC86C = fn_802372EC(0, 5);
-    fn_8003E710(lbl_803EC86C, pList, &lbl_803EA7E8);
+    AutoDepthBuild(lbl_803EC86C, pList, &lbl_803EA7E8);
     for (i = 0; i < count; i++) {
         int id;
         int category;
 
-        fn_8003EB2C(lbl_803EA7E8, pList, excluded, &id, &category);
+        AutoDepthSelect(lbl_803EA7E8, pList, excluded, &id, &category);
         pIds[i] = id;
         excluded[i] = category;
         for (j = 0; j < size; j++) {
@@ -634,7 +634,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
             }
         }
     }
-    fn_8003E8B8(&lbl_803EA7E8);
+    AutoDepthFree(&lbl_803EA7E8);
     memcpy(pOut, pIds, count * 4);
     fn_801D2BD0(pList);
     fn_801D2BD0(pIds);
@@ -644,13 +644,13 @@ void fn_80084DAC(int team, int *pIds, unsigned int count);
 
 void fn_80084A8C(int team, int *pList, int side, int count)
 {
-    Record_8003B6BC record;
+    DepthChartSide_t record;
     Object_8007A334 query;
     Object_8008044C cursor;
     int i;
 
     fn_8003DE74(side, pList);
-    fn_8003B6BC(side, &record);
+    DepthChartGetSide(side, &record);
     fn_80084DAC(team, record.mUnknown, count);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
@@ -677,13 +677,13 @@ void fn_80084A8C(int team, int *pList, int side, int count)
 
 void fn_80084C24(int team, int *pList, int side, int count)
 {
-    Record_8003B6BC record;
+    DepthChartSide_t record;
     Object_8007A334 query;
     Object_8008044C cursor;
     int i;
 
     fn_8003DE74(side, pList);
-    fn_8003B6BC(side, &record);
+    DepthChartGetSide(side, &record);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
     int type = fn_8008400C(&query);

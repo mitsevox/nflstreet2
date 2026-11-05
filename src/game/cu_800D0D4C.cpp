@@ -255,7 +255,7 @@ void fn_8017C8DC(unsigned short, int);
 void fn_8017C908(unsigned short, int);
 void fn_8017C98C(unsigned short, int);
 
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800A7A0C(int team);
 int fn_800A8444(int team);
@@ -2706,9 +2706,9 @@ extern "C" void fn_800D7438(void) {
 
     lbl_803EACD0 = 20000;
     if (fn_8017F584() == 0) {
-        if (fn_80054D24(28)) {
+        if (CheatFlagsIsSet(28)) {
             lbl_803EACD0 = 10000;
-        } else if (fn_80054D24(29)) {
+        } else if (CheatFlagsIsSet(29)) {
             lbl_803EACD0 = 2000;
         }
     }

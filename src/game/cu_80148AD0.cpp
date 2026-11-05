@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003E214.h"
+#include "game/AutoDepth.h"
 #include "game/cu_80067C10.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
@@ -8,9 +8,9 @@
 extern "C" {
 int fn_80178AE0(void);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
-void fn_80148D20(Record_8003E214 *pRecords, int *pValues,
+void fn_80148D20(AutoDepthPlayer_t *pRecords, int *pValues,
                  Object_8007A334 *pQuery);
-void fn_80148DFC(Record_8003E214 *pRecords, int count, int *pExcluded,
+void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *pExcluded,
                  int *pId, int *pCategory);
 
 int fn_80148AD0(Class_80148A58 *)
@@ -41,20 +41,20 @@ int fn_80148AF0(Class_80148A58 *, int)
 void fn_80148AF8(Class_80148A58 *p)
 {
     if (p->mState.mCount && p->mState.mpRecords) {
-        fn_8003EBC4(fn_80148D20);
-        fn_8003EBE4(fn_80148DFC);
+        AutoDepthSetRateCallback(fn_80148D20);
+        AutoDepthSetSelectCallback(fn_80148DFC);
     }
 }
 
 void fn_80148B44(Class_80148A58 *, int value, int *pList, int *pIds)
 {
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
 }
 
 void fn_80148B70(Class_80148A58 *, int value, int *pList, int *pIds,
                  int, int)
 {
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
 }
 
 int fn_80148B9C(Class_80148A58 *)

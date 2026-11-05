@@ -2,11 +2,11 @@
 #include "game/FELoop.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8003AEA8.h"
-#include "game/cu_8003E214.h"
+#include "game/DepthChart.h"
+#include "game/AutoDepth.h"
 #include "game/cu_8007C9D4.h"
 #include "game/cu_80181330.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
@@ -59,21 +59,21 @@ struct Object_803EBA20 {
     int mUnknown48;
 };
 
-/* Pointer list read by fn_8003B234 (src/game/cu_8003AEA8.cpp). */
-struct Pair_8003AEA8;
+/* Pointer list read by DepthChartGetSideNames (src/game/DepthChart.cpp). */
+struct DepthChartText_t;
 
 extern "C" {
 void fn_80015D28(int id);
 void fn_80023024(int a);
-void fn_8003B0F8(int group, int kind, int slot, int code, int a, int b);
-void fn_8003B1F4(int group);
-void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs);
-void fn_8003B2D0(int group, int kind, int slot);
-int fn_8003B360(int group);
+void DepthChartCyclePending(int group, int kind, int slot, int code, int a, int b);
+void DepthChartRevertSide(int group);
+void DepthChartGetSideNames(int group, int kind, DepthChartText_t **pPairs);
+void DepthChartSwapPending(int group, int kind, int slot);
+int DepthChartCommit(int group);
 void fn_8003DE74(unsigned char side, int *pList);
-int fn_800551D8(unsigned char a);
-void fn_800551E0(unsigned char a, int b, char *pText, int length);
-void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
+int DepthChartScreenIsSideShown(unsigned char a);
+void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
+void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 float fn_8005F754(void);
 int fn_8005FC7C(void);
 void fn_8005FCF8(int *pA, int *pB);
@@ -157,7 +157,7 @@ Table_803EBA08 *lbl_803EBA08 = 0;
 Entry_803EBA0C *lbl_803EBA0C = 0;
 int lbl_803EBA10 = 0;
 int lbl_803EBA14 = 0;
-Record_8003E214 *lbl_803EBA18 = 0;
+AutoDepthPlayer_t *lbl_803EBA18 = 0;
 unsigned char lbl_803EBA1C = 0;
 Object_803EBA20 *lbl_803EBA20 = 0;
 VetsRow_8018EC68 *lbl_803EBA24 = 0;
@@ -220,7 +220,7 @@ void fn_800170E0(void)
             list[n++] = lbl_803EBA0C[i].mId;
         }
         list[n] = 0x7FFF;
-        fn_8003E710(lbl_803ECE58[side], list, &lbl_803EBA18);
+        AutoDepthBuild(lbl_803ECE58[side], list, &lbl_803EBA18);
         fn_801D2BD0(list);
     }
 }
@@ -228,7 +228,7 @@ void fn_800170E0(void)
 void fn_800171D0(void)
 {
     if (lbl_803EBA18) {
-        fn_8003E8B8(&lbl_803EBA18);
+        AutoDepthFree(&lbl_803EBA18);
         lbl_803EBA18 = 0;
     }
 }
@@ -283,7 +283,7 @@ void fn_80017330(int team)
     int list[8];
     fn_80018AF0(team);
     fn_80018B60(team, list);
-    fn_8003B3F8(team, list, lbl_803ECE58[team]);
+    DepthChartAutoFill(team, list, lbl_803ECE58[team]);
 }
 
 int fn_80017380(int teamId)
@@ -1243,7 +1243,7 @@ int fn_80019848(int *pController, int *pCount)
                 if (lbl_803EBA0C[i].mSlot >= 0) {
                     int excluded = 0xFF;
                     lbl_803EBA0C[i].mUnknown10 =
-                        fn_8003EA28(lbl_803EBA18, &excluded, lbl_803EBA0C[i].mId);
+                        AutoDepthGetBestSlot(lbl_803EBA18, &excluded, lbl_803EBA0C[i].mId);
                 }
             }
         }
@@ -1259,7 +1259,7 @@ int fn_80019848(int *pController, int *pCount)
         }
     }
 
-    fn_8003B6F0(fn_801801B4() == 1);
+    DepthChartLoad(fn_801801B4() == 1);
     return 0;
 }
 
@@ -1285,7 +1285,7 @@ void fn_80019AD4(void)
                 fn_80061B90(lbl_8036B1F0[team], digp[team]);
             }
         } else {
-            Record_8003B6BC records[8];
+            DepthChartSide_t records[8];
 
             for (i = 0; i < lbl_803EBA10; i++) {
                 if (lbl_803EBA0C[i].mSlot >= 0) {
@@ -1294,8 +1294,8 @@ void fn_80019AD4(void)
             }
             fn_8003DE74(0, digp[0]);
             fn_8003DE74(1, digp[1]);
-            fn_8003B6BC(0, &records[0]);
-            fn_8003B6BC(1, &records[1]);
+            DepthChartGetSide(0, &records[0]);
+            DepthChartGetSide(1, &records[1]);
             if (lbl_803EBA1C) {
                 fn_80018CA4(&lbl_8036B1D0[0], records[0].mUnknown, "Team Two");
                 fn_80018CA4(&lbl_8036B1D0[1], records[1].mUnknown, "Team One");
@@ -1332,7 +1332,7 @@ void fn_80019AD4(void)
     fn_800188CC();
     fn_8008056C(&lbl_8036B168);
     fn_80083F68(&lbl_8036B194);
-    fn_8003B8BC();
+    DepthChartSave();
     if (fn_801801B4() == 0) {
         fn_8001B228();
     }
@@ -1344,20 +1344,20 @@ void fn_80019AD4(void)
     } else {
         fn_8018807C(0);
     }
-    fn_8003EBC4(0);
-    fn_8003EBE4(0);
+    AutoDepthSetRateCallback(0);
+    AutoDepthSetSelectCallback(0);
     fn_80019828();
     lbl_803EBA20 = 0;
 }
 
 void fn_80019E74(int group, int kind, int slot, int code, int a, int b)
 {
-    fn_8003B0F8(group, kind, slot, code, a, b);
+    DepthChartCyclePending(group, kind, slot, code, a, b);
 }
 
 void fn_80019E94(int group)
 {
-    fn_8003B1F4(group);
+    DepthChartRevertSide(group);
 }
 
 int fn_80019EB4(int team)
@@ -1704,19 +1704,19 @@ void fn_8001A9A8(int team, int slot, int *pId)
     }
 }
 
-void fn_8001AA2C(int group, int kind, Pair_8003AEA8 **pPairs)
+void fn_8001AA2C(int group, int kind, DepthChartText_t **pPairs)
 {
-    fn_8003B234(group, kind, pPairs);
+    DepthChartGetSideNames(group, kind, pPairs);
 }
 
 void fn_8001AA4C(int group, int kind, int slot)
 {
-    fn_8003B2D0(group, kind, slot);
+    DepthChartSwapPending(group, kind, slot);
 }
 
 void fn_8001AA6C(int group)
 {
-    fn_8003B360(group);
+    DepthChartCommit(group);
 }
 
 void fn_8001AA8C(int id, int *pSlot)
@@ -1792,7 +1792,7 @@ int fn_8001AC48(int *pGroupDelta, int *pResult)
     allowed[allowedCount] = 0xFF;
     pList[count] = 0x7FFF;
 
-    fn_8003EB2C(lbl_803EBA18, pList, allowed, &id, &category);
+    AutoDepthSelect(lbl_803EBA18, pList, allowed, &id, &category);
     fn_801D2BD0(pList);
 
     unsigned char group = lbl_803EBA08->mUnknown17;
@@ -2013,7 +2013,7 @@ int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_8001A9A8(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
         break;
     case 0x80000007:
-        fn_8001AA2C(pArgs[0].i, pArgs[1].i, (Pair_8003AEA8 **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
+        fn_8001AA2C(pArgs[0].i, pArgs[1].i, (DepthChartText_t **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
         break;
     case 0x80000008:
         fn_8001AA4C(pArgs[0].i, pArgs[1].i, pArgs[2].i);
@@ -2045,15 +2045,15 @@ int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_8001B15C(lbl_803EBA08->mUnknown19, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
         break;
     case 0x147:
-        *pResult = fn_800551D8(pArgs[0].i);
+        *pResult = DepthChartScreenIsSideShown(pArgs[0].i);
         break;
     case 0x149:
-        fn_800551E0(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
+        DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
         *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
         break;
     case 0x14A: {
         int *pList = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
-        fn_80055230(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
+        DepthChartScreenGetSpot(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
                     pArgs[2].pParams->mLength);
         break;
     }

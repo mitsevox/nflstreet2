@@ -2,8 +2,8 @@
 #include "game/fn_8021D7B8.h"
 #include "game/fn_801FCE10.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003AEA8.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChart.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_801C1F94.h"
@@ -275,13 +275,13 @@ void *operator new(unsigned int size, int unknown);
 
 extern "C" {
 void fn_8003A450(void);
-void fn_8003B1F4(int group);
-void fn_8003B688(int group, int *values);
+void DepthChartRevertSide(int group);
+void DepthChartSetSide(int group, int *values);
 void fn_800406C0(int a);
 void fn_8004730C(int a);
 void fn_80047874(unsigned char enable);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
-int fn_80054568(void);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
+int MsgBoxIsClosed(void);
 void fn_80057F28(void);
 void fn_800582D0(void);
 void fn_8005BF18(void);
@@ -551,7 +551,7 @@ void fn_801564DC(int index, int value)
 
 void fn_8015651C(void)
 {
-    Record_8003B6BC records[2];
+    DepthChartSide_t records[2];
     int list[8];
     int home;
     int away;
@@ -564,11 +564,11 @@ void fn_8015651C(void)
             list[i] = fn_80039F5C((unsigned char)team, i)->mUnknown2908;
         }
         list[7] = 0x7FFF;
-        fn_8003B3F8(team, list, 4);
-        fn_8003B1F4(team);
+        DepthChartAutoFill(team, list, 4);
+        DepthChartRevertSide(team);
     }
-    fn_8003B6BC(0, &records[0]);
-    fn_8003B6BC(1, &records[1]);
+    DepthChartGetSide(0, &records[0]);
+    DepthChartGetSide(1, &records[1]);
     fn_801FCE10(0, "delete from 'AGCD'\n");
     /* 0x41474344 is 'AGCD', the table cleared by the query above. */
     fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
@@ -585,8 +585,8 @@ void fn_8015651C(void)
         fn_801FCE10(0, "select 'DIOP' into \x85 from 'YALP' where 'DIGP' = \x85 and 'DIGT' = \x85\n",
                     &records[1].mUnknown[i], records[1].mUnknown[i], away);
     }
-    fn_8003B688(0, records[0].mUnknown);
-    fn_8003B688(1, records[1].mUnknown);
+    DepthChartSetSide(0, records[0].mUnknown);
+    DepthChartSetSide(1, records[1].mUnknown);
 }
 
 void fn_801566DC(unsigned char value)
@@ -1760,7 +1760,7 @@ void Class_802A3A48::fn_80158C04()
     }
     if (fn_80156D14()) {
         if (fn_801569C8(fn_801568F0()) == 0) {
-            fn_800544A4("Tutorial Results", lbl_802DF0E8, "|^Done");
+            MsgBoxShow("Tutorial Results", lbl_802DF0E8, "|^Done");
             mUnknown12 = 0;
         } else {
             char text[256];
@@ -1770,16 +1770,16 @@ void Class_802A3A48::fn_80158C04()
             pName = fn_801568F8()->vfn_09();
             if (pName == 0) pName = "";
             fn_801C2D88(text, 255, "%s\n\n%s", lbl_802DF140, pName);
-            fn_800544A4("Tutorial Results", text, "|^Done");
+            MsgBoxShow("Tutorial Results", text, "|^Done");
         }
         mUnknown8 = 0;
         fn_801566DC(1);
     } else {
         mUnknown12 = 1;
         if (mUnknown8 > 2) {
-            fn_800544A4("Tutorial Results", lbl_802DF100, "|^Retry|Quit|Skip to Next Section");
+            MsgBoxShow("Tutorial Results", lbl_802DF100, "|^Retry|Quit|Skip to Next Section");
         } else {
-            fn_800544A4("Tutorial Results", lbl_802DF100, "|^Retry|Quit");
+            MsgBoxShow("Tutorial Results", lbl_802DF100, "|^Retry|Quit");
         }
     }
 }
@@ -1807,7 +1807,7 @@ void Class_802A3B80::vfn_04(float dt)
     if (id == 1) {
         busy = other == 2;
     }
-    if (!busy && fn_80054568()) {
+    if (!busy && MsgBoxIsClosed()) {
         int choice = fn_801801D0();
 
         if (choice == 2) {
@@ -1817,7 +1817,7 @@ void Class_802A3B80::vfn_04(float dt)
                 fn_800282DC();
             } else {
                 mUnknown4 = choice;
-                fn_800544A4("Tutorial Results", lbl_802DF120, "|^No|Yes");
+                MsgBoxShow("Tutorial Results", lbl_802DF120, "|^No|Yes");
             }
         } else {
             Class_80297BF8::vfn_04(dt);
@@ -1841,14 +1841,14 @@ void Class_802A3B80::vfn_06()
             fn_801574DC(0);
             if (fn_80157550()) {
                 fn_801C2E18(text, "%s\n\nDo you want to continue?", pInfo);
-                fn_800544A4("Tutorial Information", text, "|^Continue|Quit");
+                MsgBoxShow("Tutorial Information", text, "|^Continue|Quit");
             } else {
-                fn_800544A4("Tutorial Information", pInfo, "|^Done");
+                MsgBoxShow("Tutorial Information", pInfo, "|^Done");
             }
         }
     } else {
         fn_801574DC(0);
-        fn_800544A4("Tutorial Information", "Back for more?", "|^Done");
+        MsgBoxShow("Tutorial Information", "Back for more?", "|^Done");
     }
 }
 
@@ -2062,7 +2062,7 @@ void Class_802A3A48::vfn_04(float dt)
                     lbl_803EB325 = 0;
                 }
             }
-        } else if (fn_80054568()) {
+        } else if (MsgBoxIsClosed()) {
             if (mUnknown12 != 0) {
                 switch (fn_801801D0()) {
                 case 1:
@@ -2075,7 +2075,7 @@ void Class_802A3A48::vfn_04(float dt)
                 case 2:
                     if (mUnknown12 == 1) {
                         mUnknown12 = 2;
-                        fn_800544A4("Tutorial Results", lbl_802DF120, "|^No|Yes");
+                        MsgBoxShow("Tutorial Results", lbl_802DF120, "|^No|Yes");
                     } else {
                         fn_80194F1C(1);
                         fn_80072C90(0xFA, 0);
@@ -2102,7 +2102,7 @@ void Class_802A3A48::vfn_04(float dt)
                             pInfo = "";
                         }
                         fn_801C2D88(text, 0xFF, "%s\n\n%s", lbl_802DF140, pInfo);
-                        fn_800544A4("Tutorial Results", text, "|^Done");
+                        MsgBoxShow("Tutorial Results", text, "|^Done");
                     }
                     break;
                 }

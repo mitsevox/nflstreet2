@@ -27,7 +27,7 @@ struct Object_8008AAF8 {
 extern "C" {
 Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
-void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
+void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *fn_80160C08(void);
 void fn_80199BD4(Object_8008A9F8 *pObject);
 void fn_801A4690(int a);
@@ -111,7 +111,7 @@ void fn_8008A2E0(Object_8008A9F8 *pObject)
             fn_8020E2B0(pData);
             id = pObject->mUnknown28[i];
             if (id != -1) {
-                fn_8004625C(fn_8020E5F8(pData, fn_8020E52C(pData, 0)->mUnknown8), id,
+                PlaDynClutApplyColors(fn_8020E5F8(pData, fn_8020E52C(pData, 0)->mUnknown8), id,
                             &pObject->mText264[i]);
             }
         } else {

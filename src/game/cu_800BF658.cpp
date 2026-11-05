@@ -69,7 +69,7 @@ void fn_8017885C(void);
 void fn_800BD958(void);
 void fn_800771D8(void);
 void fn_801378C0(void);
-unsigned char fn_800545F4(unsigned char value);
+unsigned char InGameStateSetActive(unsigned char value);
 void fn_80025C88(int flag);
 void fn_800A87E8(void);
 void fn_80094DF0(void);
@@ -154,7 +154,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_800771C0();
     fn_800ABE00();
     vfn_09();
-    fn_800545F4(1);
+    InGameStateSetActive(1);
     if ((fn_8009D86C() == 2 || fn_8009D86C() > 3) && fn_8009D990(1) <= 120 && fn_8009D990(1) != 0
         && fn_8002892C() == 0) {
         fn_8017F324(0);
@@ -319,7 +319,7 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800771D8();
     lbl_803EABA8->mUnknown40 = 0;
     fn_801378C0();
-    fn_800545F4(0);
+    InGameStateSetActive(0);
     fn_80025C88(0);
     fn_800A87E8();
     fn_80094DF0();

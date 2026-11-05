@@ -54,7 +54,7 @@ struct Record_800B4DE4 {
 };
 
 extern "C" {
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
@@ -127,11 +127,11 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
     fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
     pOut->mUnknown20 = values[13];
     if (fn_8017F584() == 0) {
-        if (fn_80054D24(30) || fn_80054D24(34)) {
+        if (CheatFlagsIsSet(30) || CheatFlagsIsSet(34)) {
             pOut->mUnknown0 = (float)values[1] * 0.33;
-        } else if (fn_80054D24(31)) {
+        } else if (CheatFlagsIsSet(31)) {
             pOut->mUnknown0 = (float)values[1] * 1.5;
-        } else if (fn_80054D24(44)) {
+        } else if (CheatFlagsIsSet(44)) {
             pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
         } else {
             pOut->mUnknown0 = (float)values[1];

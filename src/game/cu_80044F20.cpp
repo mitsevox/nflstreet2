@@ -104,7 +104,7 @@ static inline void BlendRange(unsigned short *pData, int format, const ColorEntr
 }
 
 extern "C" {
-void fn_80044F20(void *pData, Entry_80046004 *pEntry)
+void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
 {
     void *pNode;
     void *pFirst;
@@ -130,7 +130,7 @@ void fn_80044F20(void *pData, Entry_80046004 *pEntry)
     }
 }
 
-ColorPalette *fn_80045020(Palettes_8004605C *pPalettes, int colorNum)
+ColorPalette *fn_80045020(PlaDynClutPalettes_t *pPalettes, int colorNum)
 {
     ColorPalette *pPalette = 0;
 
@@ -159,7 +159,7 @@ void fn_800450A8(void *p, State_80045084 *pState)
     GXFlush();
 }
 
-void fn_800450D8(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)
+void fn_800450D8(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -194,7 +194,7 @@ void fn_800452F8(ColorEntry *pEntry, State_80045084 *pState)
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045524(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)
+void fn_80045524(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -205,7 +205,7 @@ void fn_80045524(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045714(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)
+void fn_80045714(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -240,7 +240,7 @@ void fn_80045B30(ColorEntry *pEntry, State_80045084 *pState)
     BlendRange(pData, format, pEntry, &from, &to);
 }
 
-void fn_80045D5C(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)
+void fn_80045D5C(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
 {
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
@@ -254,7 +254,7 @@ void fn_80045D5C(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *
     }
 }
 
-void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)
+void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes)
 {
     switch (pEntry->mMode) {
     case 0:

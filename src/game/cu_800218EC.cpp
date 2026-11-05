@@ -56,7 +56,7 @@ void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int b);
 void fn_80042530(Object_8003DEC4 *pObject, int a);
 void fn_80042928(Object_8003DEC4 *pObject);
-void fn_800490A0(int index, int a, int b);
+void PlayerLookSetGear(int index, int a, int b);
 void fn_80089A84(Record_8036B55C *pRecord, unsigned int a);
 void fn_8008A248(void);
 void fn_8008FCB4(int a);
@@ -288,7 +288,7 @@ static void fn_80021F60(int index, float a, float b, float c, float d)
     fn_801D12EC(6);
     fn_801D0544();
     fn_80234424(0);
-    fn_8004A1A8(pObject, 1);
+    PlayerObjUpdate(pObject, 1);
     if (lbl_803EBAC5 ? index == lbl_803ECE8C : index == 0) {
         if (fn_8015D2E8(pObject)) {
             fn_8003FBF0(lbl_803EBAC8, 1);
@@ -653,7 +653,7 @@ void fn_80022D88(void)
 
 void fn_80022E40(int a, int b)
 {
-    fn_800490A0(lbl_803ECE8C, a, b);
-    fn_800490A0(lbl_803ECE90, a, b);
+    PlayerLookSetGear(lbl_803ECE8C, a, b);
+    PlayerLookSetGear(lbl_803ECE90, a, b);
 }
 }

@@ -2,7 +2,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_80233EAC.h"
 #include "game/cu_8015D3EC.h"
-#include "game/cu_80047E28.h"
+#include "game/PlayerLook.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 
@@ -820,7 +820,7 @@ void fn_8015E994(void)
     }
 }
 
-void fn_8015E9F4(int index, Ids_8015F6E8 *pIds)
+void fn_8015E9F4(int index, PlayerHeadIds_t *pIds)
 {
     ModelLod_802DF190 *pLods;
 
@@ -986,7 +986,7 @@ void fn_8015EF10(void)
     }
 }
 
-void fn_8015F068(int index, Ids_8015F6E8 *pIds)
+void fn_8015F068(int index, PlayerHeadIds_t *pIds)
 {
     ModelLod_802DF190 *pLods;
 
@@ -1151,7 +1151,7 @@ void fn_8015F638(int style, int shape, int hat, int *pIds)
     pIds[1] = pIds[0] + 1;
 }
 
-void fn_8015F6E8(const char *pName, int style, int shape, int hat, Ids_8015F6E8 *pIds)
+void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds_t *pIds)
 {
     char name[62];
     char *p;
@@ -1212,7 +1212,7 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
     }
 }
 
-void fn_8015F958(int index, Ids_8015F6E8 *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
 {
     ModelLod_802DF190 *pLods;
 

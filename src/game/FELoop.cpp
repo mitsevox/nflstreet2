@@ -7,7 +7,7 @@
 #include "game/cu_80003F10.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8007C9D4.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -73,7 +73,7 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_802297B0(void);
-int fn_80232FD4(Record_8003B6BC *pRecord0, Record_8003B6BC *pRecord1);
+int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
 static unsigned char sUnknown803EA2D8 = 0;
@@ -301,15 +301,15 @@ void FELoop::fn_800279AC()
 void fn_80027A20()
 {
     if (sUnknown803EC5F0) {
-        Record_8003B6BC record0;
-        Record_8003B6BC record1;
+        DepthChartSide_t record0;
+        DepthChartSide_t record1;
 
         sUnknown803EC5F0 = 0;
         fn_8001B228();
         fn_800731D0(1);
-        fn_8003B6BC(0, &record0);
+        DepthChartGetSide(0, &record0);
         fn_800731D0(1);
-        fn_8003B6BC(1, &record1);
+        DepthChartGetSide(1, &record1);
         fn_800731D0(1);
         fn_80232FD4(&record0, &record1);
         fn_800731D0(1);

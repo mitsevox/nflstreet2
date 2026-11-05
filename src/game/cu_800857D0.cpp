@@ -1,5 +1,5 @@
 #include "game/fn_801FCE10.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 
 extern "C" {
 int fn_80168ED0(int a);
@@ -82,11 +82,11 @@ void fn_80085A7C(void)
     fn_800850E8();
 }
 
-void fn_80085AA0(int firstTeam, Record_8003B6BC *pFirst, int secondTeam,
-                Record_8003B6BC *pSecond)
+void fn_80085AA0(int firstTeam, DepthChartSide_t *pFirst, int secondTeam,
+                DepthChartSide_t *pSecond)
 {
-    Record_8003B6BC first;
-    Record_8003B6BC second;
+    DepthChartSide_t first;
+    DepthChartSide_t second;
     for (int i = 0; i < 14; i++) {
         first.mUnknown[i] = pFirst->mUnknown[i];
         second.mUnknown[i] = pSecond->mUnknown[i];

@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003E214.h"
+#include "game/AutoDepth.h"
 #include "game/fn_80178D18.h"
 
 class Class_802A27F0 : public Class_80148A58 {
@@ -28,7 +28,7 @@ void fn_80154638(Class_802A27F0 *p, int value, int *pList, int *pIds, unsigned i
     int first;
     unsigned char i;
 
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
     first = pList[0];
     if (fn_80178D70(0) == 1) {
         for (i = 0; i <= 6; i++) {

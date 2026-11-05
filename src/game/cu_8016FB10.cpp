@@ -65,7 +65,7 @@ extern float lbl_803ECB08;
 double fabs(double);
 
 void fn_8003AB08(Object_80039F5C *p, int a);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_80053A70(Object_80039F5C *p);
 void fn_8006F0B8(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
@@ -1018,7 +1018,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
         && ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) && !p->mUnknown1219) {
         forced = 1;
     }
-    if (fn_80054D24(0x17) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x17) && !fn_8017F584()) {
         forced = 1;
     }
     if (!fn_800A7EB8(p->mId >> 8 & 0xFF) && pTackler && fn_800A851C(pTackler->mId >> 8 & 0xFF, pTackler)) {
@@ -1041,7 +1041,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
                 eligible = 0;
             }
         }
-        if (fn_80054D24(0x18) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
             forced = 0;
             eligible = 0;
         }
@@ -1691,7 +1691,7 @@ int fn_8017319C(Object_80039F5C *p)
         return 0;
     }
     handoff = fn_801383A0(fn_801374BC());
-    if (fn_80054D24(0x18) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
         return 0;
     }
     if (fn_800D0B90(p)) {

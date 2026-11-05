@@ -2,8 +2,8 @@
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
-#include "game/Record_803EA558.h"
-#include "game/Level_80054130.h"
+#include "game/LevelWallInfo.h"
+#include "game/LevelData.h"
 #include "game/cu_80142BB4.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
@@ -38,7 +38,7 @@
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
@@ -62,7 +62,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
@@ -636,7 +636,7 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
     Query_800CE770 query;
     int result = 0;
 
-    if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
+    if (fn_801BE648(p->mpUnknown792) != 196 && LevelGetData()->mUnknown136 != 0
         && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
         fn_800CE770(&query);
         query.mpUnknown0 = p;
@@ -661,7 +661,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
     Query_800CE770 query;
     int result = 0;
 
-    if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
+    if (fn_801BE648(p->mpUnknown792) != 196 && LevelGetData()->mUnknown136 != 0
         && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
         fn_800CE770(&query);
         query.mpUnknown0 = p;

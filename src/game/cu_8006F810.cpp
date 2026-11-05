@@ -2,7 +2,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/Block_800C9D6C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
 #include "game/SndgCrowd.h"
@@ -261,7 +261,7 @@ void fn_8006F850(Record_80067CA8 *p)
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((Area_80054138 *)pose->mUnknown972)->mSurface;
+        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int id = fn_80071BDC(surface);
         if (fn_80137B40() == player) {
             int volume = fn_8006CC90(id) * 2;
@@ -295,7 +295,7 @@ void fn_8006F850(Record_80067CA8 *p)
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((Area_80054138 *)pose->mUnknown972)->mSurface;
+        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int state = fn_800A3444();
         lbl_803EA6D1 = (lbl_803EA6D1 + 1) % 2;
         fn_8006C854(fn_80071B08(state, surface) + lbl_803EA6D1, &p->mPos);

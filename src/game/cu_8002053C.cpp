@@ -8,8 +8,8 @@ int fn_801869F0(void);
 int fn_80186DF0(signed char *pIndices, int length);
 int fn_80186A10(int index, char *pText);
 void fn_80186ED8(signed char index);
-void fn_80054964(signed char db, int id);
-void fn_80054628(signed char db, int id);
+void CheatEffectRemove(signed char db, int id);
+void CheatEffectApply(signed char db, int id);
 
 void fn_8002053C(int control)
 {
@@ -134,11 +134,11 @@ void fn_80020870(int value, int *pResult)
     int changed;
     if (fn_801908A0(result)) {
         fn_801909E4(result);
-        fn_80054964(lbl_803EBAA0, result);
+        CheatEffectRemove(lbl_803EBAA0, result);
         changed = 0;
     } else {
         fn_8019094C(result);
-        fn_80054628(lbl_803EBAA0, result);
+        CheatEffectApply(lbl_803EBAA0, result);
         fn_80020718(result);
         changed = 1;
     }

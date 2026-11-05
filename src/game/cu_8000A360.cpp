@@ -27,16 +27,16 @@ unsigned char fn_80023A3C(int index, int a);
 void fn_80023B08(int index, int a);
 int fn_80023BBC(int index, int a);
 int fn_80023CA4(int index, int a);
-int fn_800489F4(unsigned int type);
-int fn_80048ACC(int type);
-void fn_80048FA0(int index, int value);
-void fn_80048FB8(int index, int value);
-void fn_80049AD0(int index, unsigned char value);
-void fn_80049AE8(int index, unsigned char value);
-void fn_80049B00(int index, int value);
-void fn_80049B18(int index, unsigned char value);
-void fn_80049DD0(int index, unsigned char value);
-void fn_80049DE8(int index, unsigned char value);
+int PlayerLookMapHatKind(unsigned int type);
+int PlayerLookItemKeepsLogo(int type);
+void PlayerLookSetHeadDecalColors(int index, int value);
+void PlayerLookSetDecalColors(int index, int value);
+void PlayerLookSetHatStyle(int index, unsigned char value);
+void PlayerLookSetHeadDecalKind(int index, unsigned char value);
+void PlayerLookSetFrontDecalKind(int index, int value);
+void PlayerLookSetBackDecalKind(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsA(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsB(int index, unsigned char value);
 int fn_8007A43C(Object_8007A334 *pObject);
 void fn_8007BA88(Object_8007A334 *pCursor, int value);
 void fn_8007BB04(Object_8007A334 *pCursor);
@@ -597,7 +597,7 @@ static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
     fn_8007BA88(&cursor, 0);
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[0], 0);
     fn_8007BC34(&cursor, &row);
-    type = fn_800489F4(row.mUnknown64);
+    type = PlayerLookMapHatKind(row.mUnknown64);
     fn_8007BB04(&cursor);
     if (pFlag) {
         *pFlag = row.mUnknown76;
@@ -645,7 +645,7 @@ static int fn_8000AC98()
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[10], 0);
     fn_8007BC34(&cursor, &row);
     fn_8007BB04(&cursor);
-    return fn_80048ACC(row.mUnknown64);
+    return PlayerLookItemKeepsLogo(row.mUnknown64);
 }
 
 static int fn_8000AD18()
@@ -1272,13 +1272,13 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
             fn_80022E40(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
         }
         if (lbl_803ECDD0 == 0) {
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
         }
-        fn_80049DD0(0, lbl_8036A280.mUnknown00);
-        fn_80049DD0(1, lbl_8036A280.mUnknown00);
-        fn_80049DE8(0, lbl_8036A280.mUnknown01);
-        fn_80049DE8(1, lbl_8036A280.mUnknown01);
+        PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+        PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     }
@@ -1322,14 +1322,14 @@ void Class_8000D980::vfn_03(int index)
     if (lbl_803ECDD0 == 0) {
         unsigned char value = fn_8000AE7C(lbl_8036A280.mUnknown02);
 
-        fn_80049AD0(0, value);
-        fn_80049AD0(1, value);
+        PlayerLookSetHatStyle(0, value);
+        PlayerLookSetHatStyle(1, value);
     }
     fn_80182F24(&lbl_8036A280);
-    fn_80049DD0(0, lbl_8036A280.mUnknown00);
-    fn_80049DD0(1, lbl_8036A280.mUnknown00);
-    fn_80049DE8(0, lbl_8036A280.mUnknown01);
-    fn_80049DE8(1, lbl_8036A280.mUnknown01);
+    PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+    PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
     fn_8015D180(fn_80022D78(), 15);
     fn_80022D6C();
 }
@@ -1405,12 +1405,12 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 0:
-            fn_80048FA0(0, lbl_8036A280.mUnknown0D);
-            fn_80048FA0(1, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(0, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(1, lbl_8036A280.mUnknown0D);
             break;
         case 9:
-            fn_80048FB8(0, lbl_8036A280.mUnknown0C);
-            fn_80048FB8(1, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(0, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(1, lbl_8036A280.mUnknown0C);
             break;
         }
         fn_8015D180(fn_80022D78(), 15);
@@ -1428,12 +1428,12 @@ void Class_8000D940::vfn_03(int index)
     value = fn_80084158(&lbl_8036A254) - 1;
     switch (mUnknown8) {
     case 0:
-        fn_80048FA0(0, value);
-        fn_80048FA0(1, value);
+        PlayerLookSetHeadDecalColors(0, value);
+        PlayerLookSetHeadDecalColors(1, value);
         break;
     case 9:
-        fn_80048FB8(0, value);
-        fn_80048FB8(1, value);
+        PlayerLookSetDecalColors(0, value);
+        PlayerLookSetDecalColors(1, value);
         break;
     }
     fn_8015D180(fn_80022D78(), 15);
@@ -1504,12 +1504,12 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
             break;
         case 2:
-            fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-            fn_80049AE8(1, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
             break;
         }
         fn_8015D180(fn_80022D78(), 15);
@@ -1524,8 +1524,8 @@ void Class_8000D900::vfn_03(int index)
     case 1:
         if (fn_8000ADB4()) {
             lbl_8036A280.mUnknown02 = fn_8000AE0C(index);
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
         }
@@ -1536,8 +1536,8 @@ void Class_8000D900::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown0B = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-        fn_80049AE8(1, lbl_8036A280.mUnknown0B);
+        PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+        PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1615,12 +1615,12 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049B00(0, lbl_8036A280.mUnknown09);
-            fn_80049B00(1, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
             break;
         case 2:
-            fn_80049B18(0, lbl_8036A280.mUnknown0A);
-            fn_80049B18(1, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
             break;
         }
         fn_8015D180(fn_80022D78(), 15);
@@ -1638,8 +1638,8 @@ void Class_8000D8C0::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown09 = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B00(0, lbl_8036A280.mUnknown09);
-        fn_80049B00(1, lbl_8036A280.mUnknown09);
+        PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+        PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;
@@ -1649,8 +1649,8 @@ void Class_8000D8C0::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown0A = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B18(0, lbl_8036A280.mUnknown0A);
-        fn_80049B18(1, lbl_8036A280.mUnknown0A);
+        PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+        PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
         break;

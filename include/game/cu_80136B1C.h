@@ -2,12 +2,12 @@
 #define GAME_CU_80136B1C_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 
 /* The part of an Object_80137ABC entry that the block snapshot saves,
    restores and checksums. */
 struct State_80137ABC {
-    Record_8003EC04 *mpRecord;
+    CollideObject_t *mpRecord;
     unsigned int mFlags;
     Vector_80039F5C mPos;
     Quat_801EB488 mUnknown18;
@@ -58,7 +58,7 @@ struct Object_80137ABC {
 struct Header_80137F98 {
     unsigned char mCount;
     unsigned char mCurrent;
-    Set_8003EE6C *mpRecords;
+    CollideSet_t *mpRecords;
 };
 
 /* Allocated with room for mCount entries. */
@@ -111,9 +111,9 @@ int fn_80137F90(Object_80137ABC *pBall);
 void fn_80137F98(int count);
 int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 int fn_801380AC(Object_80137ABC *pBall, float *pOut);
-void fn_801380DC(Record_8003EC04 *pRecord);
+void fn_801380DC(CollideObject_t *pRecord);
 Block_80170E64 *fn_8013825C(Object_80137ABC *pBall);
-Set_8003EE6C *fn_80138264(void);
+CollideSet_t *fn_80138264(void);
 void fn_80138270(void);
 void fn_80138398(Object_80137ABC *pBall, int value);
 int fn_801383A0(Object_80137ABC *pBall);

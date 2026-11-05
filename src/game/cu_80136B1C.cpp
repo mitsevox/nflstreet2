@@ -6,11 +6,11 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_80238174.h"
 
 extern "C" {
-Set_8003EE6C *fn_8003A078(void);
+CollideSet_t *fn_8003A078(void);
 void fn_8003FAC4(int a);
 void fn_8003FB2C(void);
 Block_80170E64 *fn_8003FB54(int a, Block_80170E64 *pFirst, int b, int c, int d);
@@ -33,8 +33,8 @@ void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_80089330 *pContact, unsigned char sub, Vector_80039F5C *pPos);
 void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
-float fn_80138F64(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
-Set_8003EE6C *fn_801442F0(void);
+float fn_80138F64(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
+CollideSet_t *fn_801442F0(void);
 void fn_80145DE4(int a, Object_80137ABC *pBall);
 int fn_801486A0(void);
 void fn_801D0470(int a);
@@ -61,7 +61,7 @@ int fn_80136B1C(void *p, int value)
     Set_80137F98 *pSet = (Set_80137F98 *)p;
     int i;
 
-    pSet->mHeader.mpRecords = fn_8003EE6C(pSet->mHeader.mCount, pSet->mHeader.mCount);
+    pSet->mHeader.mpRecords = CollideSetCreate(pSet->mHeader.mCount, pSet->mHeader.mCount);
     for (i = 0; i < pSet->mHeader.mCount; i++) {
         Object_80137ABC *pBall = &pSet->mEntries[i];
 
@@ -82,7 +82,7 @@ int fn_80136B1C(void *p, int value)
         pBall->mState.mUnknownE4 = 0;
         pBall->mState.mUnknownE8 = 1.0f;
         pBall->mState.mUnknownEC = 1.0f;
-        pBall->mState.mpRecord = fn_8003EFB8(pSet->mHeader.mpRecords, 1, i);
+        pBall->mState.mpRecord = CollideSetAddObject(pSet->mHeader.mpRecords, 1, i);
     }
     return 0;
 }
@@ -120,8 +120,8 @@ int fn_80136D20(void *p, void *q)
                 Object_80137ABC *pBallA = &pA->mEntries[i];
                 Object_80137ABC *pBallB = &pB->mEntries[i];
 
-                result |= fn_8003F4E8((Record_8003EC04 *)((char *)pBallA->mState.mpRecord + ((char *)pA - (char *)sSet)),
-                                      (Record_8003EC04 *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)sSet)),
+                result |= CollideCompareObjects((CollideObject_t *)((char *)pBallA->mState.mpRecord + ((char *)pA - (char *)sSet)),
+                                      (CollideObject_t *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)sSet)),
                                       pBallA->mState.mpRecord);
                 result |= pBallA->mpUnknown00 != pBallB->mpUnknown00;
                 result |= fn_80238258(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(State_80137ABC) - 4);
@@ -151,19 +151,19 @@ int fn_80136E78(void *p, int value)
 int fn_80136EB0(void *p, void *pBuffer)
 {
     Set_80137F98 *pSet = (Set_80137F98 *)p;
-    Set_8003EE6C *pRecords;
+    CollideSet_t *pRecords;
     short i;
 
     memcpy(pBuffer, pSet, sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC));
     pRecords = pSet->mHeader.mpRecords;
     pBuffer = (char *)pBuffer + sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC);
-    memcpy(pBuffer, pRecords, sizeof(Set_8003EE6C));
-    pBuffer = (char *)pBuffer + sizeof(Set_8003EE6C);
-    memcpy(pBuffer, pRecords->mpUnknown0, pRecords->mUnknown4 * sizeof(Record_8003EC04));
-    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(Record_8003EC04);
+    memcpy(pBuffer, pRecords, sizeof(CollideSet_t));
+    pBuffer = (char *)pBuffer + sizeof(CollideSet_t);
+    memcpy(pBuffer, pRecords->mpUnknown0, pRecords->mUnknown4 * sizeof(CollideObject_t));
+    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(CollideObject_t);
     for (i = 0; i < 2; i++) {
-        memcpy(pBuffer, pRecords->mpUnknown14[i], pRecords->mUnknownC * sizeof(Sub_8003EC54));
-        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(Sub_8003EC54);
+        memcpy(pBuffer, pRecords->mpUnknown14[i], pRecords->mUnknownC * sizeof(CollideShape_t));
+        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(CollideShape_t);
     }
     return 1;
 }
@@ -173,7 +173,7 @@ int fn_80136F7C(void *p, void *pBuffer)
 {
     Set_80137F98 *pSet = (Set_80137F98 *)p;
     Set_80137F98 *pSaved = (Set_80137F98 *)pBuffer;
-    Set_8003EE6C *pRecords;
+    CollideSet_t *pRecords;
     Object_80137ABC *pSrc;
     Object_80137ABC *pDst;
     short i;
@@ -187,25 +187,25 @@ int fn_80136F7C(void *p, void *pBuffer)
         pSrc++;
     }
     pRecords = pSet->mHeader.mpRecords;
-    pBuffer = (char *)pSrc + sizeof(Set_8003EE6C);
-    memcpy(pRecords->mpUnknown0, pBuffer, pRecords->mUnknown4 * sizeof(Record_8003EC04));
-    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(Record_8003EC04);
+    pBuffer = (char *)pSrc + sizeof(CollideSet_t);
+    memcpy(pRecords->mpUnknown0, pBuffer, pRecords->mUnknown4 * sizeof(CollideObject_t));
+    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(CollideObject_t);
     for (i = 0; i < 2; i++) {
-        memcpy(pRecords->mpUnknown14[i], pBuffer, pRecords->mUnknownC * sizeof(Sub_8003EC54));
-        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(Sub_8003EC54);
+        memcpy(pRecords->mpUnknown14[i], pBuffer, pRecords->mUnknownC * sizeof(CollideShape_t));
+        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(CollideShape_t);
     }
     return 1;
 }
 
 int fn_801370A4(void *p)
 {
-    Set_8003EE6C *pRecords = sSet->mHeader.mpRecords;
+    CollideSet_t *pRecords = sSet->mHeader.mpRecords;
 
-    return sizeof(Set_80137F98) + (sSet->mHeader.mCount - 1) * sizeof(Object_80137ABC) + sizeof(Set_8003EE6C)
-         + pRecords->mUnknown4 * sizeof(Record_8003EC04) + pRecords->mUnknownC * sizeof(Sub_8003EC54) * 2;
+    return sizeof(Set_80137F98) + (sSet->mHeader.mCount - 1) * sizeof(Object_80137ABC) + sizeof(CollideSet_t)
+         + pRecords->mUnknown4 * sizeof(CollideObject_t) + pRecords->mUnknownC * sizeof(CollideShape_t) * 2;
 }
 
-void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 *pContacts)
+void fn_801370D8(CollideObject_t *pA, CollideObject_t *pB, ContactList_8030BD74 *pContacts)
 {
     Object_80137ABC *pBall;
     Object_80039F5C *p;
@@ -223,7 +223,7 @@ void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 
     int i;
 
     if (pA->mUnknown2E == 0) {
-        Record_8003EC04 *pTemp = pA;
+        CollideObject_t *pTemp = pA;
         swapped = 1;
         pA = pB;
         pB = pTemp;
@@ -412,13 +412,13 @@ void fn_80137758(float step)
 
 void fn_801377C4(float step)
 {
-    Set_8003EE6C *pRecords;
+    CollideSet_t *pRecords;
     unsigned int i;
 
-    fn_8003F04C(sSet->mHeader.mpRecords);
-    fn_8003F0AC(fn_8003A078(), sSet->mHeader.mpRecords);
+    CollideSetUpdate(sSet->mHeader.mpRecords);
+    CollideSetTest(fn_8003A078(), sSet->mHeader.mpRecords);
     pRecords = sSet->mHeader.mpRecords;
-    fn_8003F0AC(pRecords, fn_801442F0());
+    CollideSetTest(pRecords, fn_801442F0());
     for (i = 0; i < sSet->mHeader.mCount; i++) {
         fn_8013A6A8(&sSet->mEntries[i], step);
     }
@@ -592,7 +592,7 @@ void fn_80137D74(Object_80137ABC *pBall, Vector_80039F5C *pPos)
     pBall->mState.mPos.mX = pPos->mX;
     pBall->mState.mPos.mY = pPos->mY;
     pBall->mState.mPos.mZ = pPos->mZ;
-    pBall->mpUnknown00->mUnknown660 = fn_80054138(&pBall->mpUnknown00->mUnknown4.mX);
+    pBall->mpUnknown00->mUnknown660 = LevelFindArea(&pBall->mpUnknown00->mUnknown4.mX);
 }
 
 /* The entry position, raised to the higher capsule end of its record. */
@@ -604,7 +604,7 @@ void fn_80137DC8(Object_80137ABC *pBall, Vector_80039F5C *pOut)
     pOut->mY = pBall->mState.mPos.mY;
     pOut->mZ = pBall->mState.mPos.mZ;
     for (i = 0; i < 1; i++) {
-        Sub_8003EC54 *pSub = &pBall->mState.mpRecord->mpUnknown20[i];
+        CollideShape_t *pSub = &pBall->mState.mpRecord->mpUnknown20[i];
 
         if (pSub->mUnknown14 > pOut->mY) {
             pOut->mX = pSub->mUnknown10;
@@ -689,7 +689,7 @@ void fn_80137F98(int count)
     void *pHandle;
     Set_80137F98 *pSet;
 
-    fn_8003EE2C(0, 1, fn_801370D8);
+    CollideSetPairCallback(0, 1, fn_801370D8);
     pHandle = fn_80238174(0, (void **)&sSet, sizeof(Set_80137F98) + (count - 1) * sizeof(Object_80137ABC), 10, 0x62616C6C);
     fn_80238234(pHandle, fn_80136B1C, fn_80136E78, fn_80136CB0, fn_80136D20);
     fn_80238248(pHandle, fn_80136EB0, fn_801370A4, fn_80136F7C);
@@ -728,11 +728,11 @@ int fn_801380AC(Object_80137ABC *pBall, float *pOut)
 }
 
 /* Places the record's capsules along the entry's rotated axis. */
-void fn_801380DC(Record_8003EC04 *pRecord)
+void fn_801380DC(CollideObject_t *pRecord)
 {
     Object_80137ABC *pBall = fn_80137ABC(pRecord->mUnknown28);
     Vector_80039F5C *pPos = &pBall->mState.mPos;
-    Sub_8003EC54 *pSub;
+    CollideShape_t *pSub;
     unsigned char i;
 
     fn_8013825C(pBall);
@@ -760,7 +760,7 @@ void fn_801380DC(Record_8003EC04 *pRecord)
     if (!(pRecord->mUnknown2C & 2)) {
         pRecord->mUnknown18 = 0.8333334f;
         for (i = 0; i < 1; i++) {
-            Sub_8003EC54 *pPair = &pRecord->mpUnknown24[i];
+            CollideShape_t *pPair = &pRecord->mpUnknown24[i];
 
             pSub = &pRecord->mpUnknown20[i];
             pSub->mUnknown1C = 0.0972613543f;
@@ -777,7 +777,7 @@ Block_80170E64 *fn_8013825C(Object_80137ABC *pBall)
     return pBall->mpUnknown00;
 }
 
-Set_8003EE6C *fn_80138264(void)
+CollideSet_t *fn_80138264(void)
 {
     return sSet->mHeader.mpRecords;
 }

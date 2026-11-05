@@ -25,7 +25,7 @@ extern "C" {
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 Object_80039F5C *fn_8005A8AC(int index);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 void fn_80092F98(int handle);
 int fn_80092830(int handle);
 float fn_80178A2C(void);
@@ -65,7 +65,7 @@ extern "C" void fn_800ABAF0(void)
     pObject0->mMotion.mPos.mX = 0.0f;
     pObject1->mMotion.mPos.mY = 0.75f;
     pObject0->mMotion.mPos.mY = 0.75f;
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_80092F98(lbl_803EAA88->mUnknownC);
     lbl_803EAA88->mUnknown8 = lbl_803EAA88->mUnknownC;
     lbl_803EAA88->mUnknownC = -1;

@@ -1,4 +1,4 @@
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_8008044C.h"
 #include "game/Request_802329F0.h"
@@ -282,7 +282,7 @@ void fn_8018BB24(int index, int value)
     fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", 7, id);
 
     Object_8008044C object;
-    Block_80307980 block;
+    FaceFeatures_t block;
     FMCAPPORTValues values;
     FMCAPPORTText text60;
     FMCAPPORTText text20;
@@ -301,7 +301,7 @@ void fn_8018BB24(int index, int value)
     unsigned int color18 = fn_800810E0(&object);
     unsigned int color19 = fn_80081134(&object);
     fn_80082138(&object, &block);
-    fn_80046804(&block, &values);
+    FaceMorphBuildWeights(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
     fn_8016139C(value6E, &unknown52, &unknown56);
     int unknown8 = fn_8016128C(value72 + 1);
@@ -343,7 +343,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
         fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
         Object_8008044C object;
-        Block_80307980 block;
+        FaceFeatures_t block;
         FMCAPPORTValues values;
         FMCAPPORTText text60, text20;
         int resultIds[2], unknown52, unknown56;
@@ -358,7 +358,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         unsigned int color18 = fn_800810E0(&object);
         unsigned int color19 = fn_80081134(&object);
         fn_80082138(&object, &block);
-        fn_80046804(&block, &values);
+        FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
         fn_8016139C(value6E, &unknown52, &unknown56);
         int unknown8 = fn_8016128C(value72 + 1);

@@ -5,8 +5,8 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8003AEA8.h"
-#include "game/cu_8003E214.h"
+#include "game/DepthChart.h"
+#include "game/AutoDepth.h"
 #include "game/cu_8018EC68.h"
 #include "game/FELoop.h"
 #include "game/fn_80061AD4.h"
@@ -80,7 +80,7 @@ void fn_8001B828(void);
 void fn_80010150(int a);
 void fn_800731D0(int a);
 Object_80039F5C *fn_8003AD2C(int id);
-int fn_8003B4A4(int group, int *list, int value, int a, int b);
+int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
 unsigned char fn_8007B090(int a);
 void fn_8007B684(int id);
 void fn_8007B6D4(void);
@@ -401,7 +401,7 @@ int fn_8005DC10(void)
     fn_80060354(lbl_803EA5C8, list);
     list[7] = 0x7FFF;
     fn_80060410(0, list);
-    fn_8003B3F8(0, list, 4);
+    DepthChartAutoFill(0, list, 4);
     fn_80084C24(0x21, list, 0, 7);
     fn_80083DE4(0x21);
     return 0x21;
@@ -452,7 +452,7 @@ int fn_8005DD6C(int *pTeam, int *pCopy)
     fn_8005DB9C(team, list, lbl_802D4D40.mUnknown2, 7, fn_8005DB3C());
     list[7] = 0x7FFF;
     fn_80060410(0, list);
-    fn_8003B3F8(0, list, 4);
+    DepthChartAutoFill(0, list, 4);
     fn_80084A8C(team, list, 0, 7);
     fn_80083DE4(team);
     if (pCopy && count) {
@@ -519,7 +519,7 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
         list[7] = 0x7FFF;
         fn_80060410(1, list);
         fn_800809C4(lbl_803EA5CC, lbl_802D4D40.mUnknown2, 0);
-        fn_8003B4A4(1, list, 4, (unsigned char)count, fn_80080ECC(lbl_803EA5CC));
+        DepthChartAutoFillEx(1, list, 4, (unsigned char)count, fn_80080ECC(lbl_803EA5CC));
         fn_8005E010(1, ids, count, lbl_803EA5CC, 0);
         fn_80084A8C(team, list, 1, 7);
         fn_80083DE4(team);
@@ -551,7 +551,7 @@ void fn_8005E360(void)
     int awayTeam;
     int homeTeam;
 
-    fn_8003B6F0(1);
+    DepthChartLoad(1);
     count = 0;
     fn_801D34D0(list, sizeof(list), 0x7FFF, 4);
     home = fn_8005E014(&homeTeam, list, &count);
@@ -567,7 +567,7 @@ void fn_8005E360(void)
     lbl_8030A1A0.mAway = away;
     lbl_8030A1A0.mHome = home;
     lbl_8030A1A0.mUnknown8 = 0;
-    fn_8003B8BC();
+    DepthChartSave();
 }
 
 void fn_8005E43C(void)
@@ -576,8 +576,8 @@ void fn_8005E43C(void)
         fn_80148AF8(fn_80148A58());
     }
     fn_8005E360();
-    fn_8003EBC4(0);
-    fn_8003EBE4(0);
+    AutoDepthSetRateCallback(0);
+    AutoDepthSetSelectCallback(0);
     fn_80015D28(lbl_803EA5C8->mDive);
     fn_801FCE10(0, "use 'EMAG' update 'YALP' set 'ITGT' = \x82 where 'DIOP' = \x82\n", 0x21, 0x1FF);
 }

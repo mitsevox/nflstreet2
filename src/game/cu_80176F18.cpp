@@ -5,11 +5,11 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8007C9D4.h"
 #include "game/cu_80136B1C.h"
@@ -104,7 +104,7 @@ extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
 int fn_80025708(void);
-Set_8003EE6C *fn_8003A078(void);
+CollideSet_t *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
 void fn_8006F0B8(int a);
@@ -142,7 +142,7 @@ void fn_8011F574(void);
 void fn_80120618(void);
 void fn_8013FAC0(void);
 void fn_8013FB44(void);
-Set_8003EE6C *fn_801442F0(void);
+CollideSet_t *fn_801442F0(void);
 int fn_801486A0(void);
 int fn_801650DC(Record_80067338 *pRecord);
 void fn_8016F7F8(void);
@@ -398,16 +398,16 @@ extern "C" void fn_8017710C(void)
 {
     unsigned char count = 0;
 
-    if (fn_80054130()) {
+    if (LevelGetData()) {
         unsigned char i;
-        unsigned char total = fn_80054130()->mUnknown136;
-        Record_80054130 *pRecord = fn_80054130()->mUnknown140;
+        unsigned char total = LevelGetData()->mUnknown136;
+        LevelWall_t *pRecord = LevelGetData()->mUnknown140;
 
         for (i = 0; i < total; i++, pRecord++) {
             Point_8017886C a;
             Point_8017886C b;
 
-            fn_800541AC(pRecord, &a, &b);
+            LevelGetWallBase(pRecord, &a, &b);
             if (fn_801784C4()) {
                 Negate(a);
                 Negate(b);
@@ -803,9 +803,9 @@ extern "C" void fn_80177E6C(int a, int flip)
     }
     fn_8003A090();
     fn_80138270();
-    fn_8003F60C(fn_8003A078());
-    fn_8003F60C(fn_801442F0());
-    fn_8003F60C(fn_80138264());
+    CollideSetMirror(fn_8003A078());
+    CollideSetMirror(fn_801442F0());
+    CollideSetMirror(fn_80138264());
     fn_8013FAC0();
     if (lbl_803EB444->mUnknown39 == 0) {
         lbl_803EB444->mUnknown39 = 1;

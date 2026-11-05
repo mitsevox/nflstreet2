@@ -11,7 +11,7 @@ void fn_800221CC(int);
 void fn_80022328(void);
 void fn_80022FF0(void);
 void fn_80023048(void);
-void fn_8004613C(void);
+void PlaDynClutLoad(void);
 void fn_8008FBA0(void);
 void fn_8015E654(int);
 void fn_8015E6C4(void);
@@ -127,7 +127,7 @@ int FMMainFEInit::Init()
         sFirstInit = 0;
         gSysPreLoad.fn_8008D4A8();
         fn_801F2798("DynClutInitStart");
-        fn_8004613C();
+        PlaDynClutLoad();
         fn_801F2798("DynClutInitFinish");
         fn_8008FBA0();
     }

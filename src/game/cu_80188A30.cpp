@@ -15,7 +15,7 @@ struct Record_80221BAC {
     void *mpUnknown20;
 };
 
-/* Local block passed to fn_8004625C by fn_80188A60. */
+/* Local block passed to PlaDynClutApplyColors by fn_80188A60. */
 struct Desc_8004625C {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
@@ -36,7 +36,7 @@ void fn_80083E1C(Object_8007A334 *pObject, int a);
 int fn_800841AC(Object_8007A334 *pObject);
 int fn_800841D8(Object_8007A334 *pObject);
 int fn_80084204(Object_8007A334 *pObject);
-void fn_8004625C(Desc_8004625C *pDesc, int id, FMCAPPORTText *pText);
+void PlaDynClutApplyColors(Desc_8004625C *pDesc, int id, FMCAPPORTText *pText);
 void fn_801CE910(void);
 void *fn_8021EA44(int index);
 int fn_8021E2B4(void *pObject, int a, int b);
@@ -90,7 +90,7 @@ void fn_80188A60(int id, int a, int b, int c, const unsigned char *pColor)
     text.mChars[20] = pColor[0];
     text.mChars[21] = pColor[1];
     text.mChars[22] = pColor[2];
-    fn_8004625C(&desc, c, &text);
+    PlaDynClutApplyColors(&desc, c, &text);
     pDst = fn_80220BFC(5, id);
     fn_801CE910();
     memcpy(pDst, buffer, desc.mUnknown4);

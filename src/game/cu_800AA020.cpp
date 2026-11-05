@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_80178D18.h"
 
-extern "C" void fn_8004A230(unsigned char value);
+extern "C" void PlayerObjSetDrawReady(unsigned char value);
 
 extern "C" void fn_800AA020(void)
 {
@@ -32,5 +32,5 @@ extern "C" void fn_800AA020(void)
         pBlock->mUnknown4.mX = 55.0f;
         pBlock->mUnknown20 &= ~1;
     }
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
 }

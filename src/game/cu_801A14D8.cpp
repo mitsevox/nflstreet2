@@ -1,5 +1,5 @@
 #include "engine/cu_80227F14.h"
-#include "game/Init_8004A040.h"
+#include "game/PlayerObjInit.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_8015C25C.h"
@@ -175,10 +175,10 @@ void *fn_80028BB4(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
-int fn_80049D04(int index);
-unsigned char fn_80049D1C(int index);
-unsigned char fn_8004A238(void);
-unsigned char fn_80054D24(int index);
+int PlayerLookShowsHair(int index);
+unsigned char PlayerLookHidesHead(int index);
+unsigned char PlayerObjIsDrawReady(void);
+unsigned char CheatFlagsIsSet(int index);
 int fn_800A2624(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ADDD8(Element_80041BF8 *pElements, int index);
@@ -468,7 +468,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     fn_801A1D80(pPlayer, light);
     fn_80234BF4(0, &pPlayer->mUnknown1164[11], 0);
     fn_80234BF4(0, &pPlayer->mUnknown1164[9], 0);
-    if (!fn_80049D04(pPlayer->mUnknown4971)) {
+    if (!PlayerLookShowsHair(pPlayer->mUnknown4971)) {
         fn_80210BD8(1);
     }
     if (pPlayer->mUnknown20 & 8) {
@@ -478,7 +478,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     }
     fn_80210CC4(0.0f, depth);
     fn_80234BF4(0, &pPlayer->mUnknown1164[6], 0);
-    if (!fn_80049D04(pPlayer->mUnknown4971)) {
+    if (!PlayerLookShowsHair(pPlayer->mUnknown4971)) {
         fn_80210BD8(2);
     }
     fn_80234BF4(0, &pPlayer->mUnknown1164[1], 0);
@@ -633,7 +633,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
         fn_802337D4(pPlayer->mUnknown1164[0].mpUnknown12, &pPlayer->mUnknown4064[0], pPose, 0xE0000000);
     }
     fn_802337D4(pPlayer->mUnknown1164[4].mpUnknown12, &pPlayer->mUnknown4064[1], pPose, 0xE0000000);
-    if (fn_80054D24(0x20) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
         for (i = 1; i < pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mUnknown4; i++) {
             if (pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
                 for (j = 0; j < 12; j++) {
@@ -646,7 +646,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
     }
     if (pPlayer->mUnknown1164[7].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[7].mpUnknown12, &pPlayer->mUnknown4064[3], pPose, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -668,7 +668,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
     }
     if (pPlayer->mUnknown1164[9].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[9].mpUnknown12, &pPlayer->mUnknown4064[4], pPose, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -733,7 +733,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
         pHat[7] = pPose[61];
         pHat[8] = pPose[62];
         fn_802337D4(pPlayer->mUnknown1164[11].mpUnknown12, &pPlayer->mUnknown4064[5], pHat, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -774,7 +774,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
                 apHands[k][1] = pJoint[1];
                 apHands[k][2] = pJoint[2];
                 fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
-                if (fn_80054D24(0x20) && !fn_8017F584()) {
+                if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
                     if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                         for (j = 0; j < 12; j++) {
                             if (j != 3 && j != 7 && j != 11) {
@@ -815,7 +815,7 @@ unsigned int fn_801A28E8(Object_8003DEC4 *pPlayer)
     if (!(pPlayer->mUnknown20 & 1)) {
         flags |= 1;
     }
-    if (!fn_8004A238()) {
+    if (!PlayerObjIsDrawReady()) {
         flags |= 1;
     }
     if (flags & 1) {
@@ -865,7 +865,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
         values[pPlayer->mUnknown4972 + 1] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[6] = 0x1000;
         }
     } else {
@@ -874,7 +874,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
         fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[7] = 0x1000;
         }
     }
@@ -1491,7 +1491,7 @@ void fn_801A472C(void)
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
         values[pPlayer->mUnknown4972 + 1] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[6] = 0x1000;
         }
         a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
@@ -1523,7 +1523,7 @@ void fn_801A472C(void)
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[7] = 0x1000;
         }
         fn_80233760(&pPlayer->mUnknown1024[0], values, 37);

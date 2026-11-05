@@ -236,20 +236,20 @@ void fn_800655B8(void);
 int fn_80025B18(int *pResults, char (*pText)[64]);
 void fn_80178B1C(int a);
 void fn_80065638(int value);
-void fn_8003B8BC(void);
-void fn_8003B234(int group, int kind, int *pList);
-void fn_8003B0F8(int group, int kind, int slot, int code, char *pText, int length);
-void fn_8003B6F0(int reset);
-void fn_8003B1F4(int group);
+void DepthChartSave(void);
+void DepthChartGetSideNames(int group, int kind, int *pList);
+void DepthChartCyclePending(int group, int kind, int slot, int code, char *pText, int length);
+void DepthChartLoad(int reset);
+void DepthChartRevertSide(int group);
 void fn_800656AC(unsigned char value);
 void fn_80065664(unsigned char value);
 int fn_8002C9A8(void *p, int msg, int value);
 int fn_8002D228(void *p);
 int fn_80156704(void);
-int fn_800551D8(unsigned char a);
-void fn_800551E0(unsigned char a, int b, char *pText, int length);
+int DepthChartScreenIsSideShown(unsigned char a);
+void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 int fn_80178D70(int team);
-void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
+void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int fn_80186010(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80063910(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80056444(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
@@ -1407,18 +1407,18 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         break;
     case 0x80000015:
         fn_80065638(1);
-        fn_8003B8BC();
+        DepthChartSave();
         break;
     case 0x8000000A:
-        fn_8003B234(pArgs[0].i, pArgs[1].i, (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
+        DepthChartGetSideNames(pArgs[0].i, pArgs[1].i, (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
         break;
     case 0x8000000B:
-        fn_8003B0F8(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[4].pParams->mpText,
+        DepthChartCyclePending(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[4].pParams->mpText,
                     pArgs[4].pParams->mLength);
         break;
     case 0x8000000C:
-        fn_8003B6F0(0);
-        fn_8003B1F4(pArgs[0].i);
+        DepthChartLoad(0);
+        DepthChartRevertSide(pArgs[0].i);
         break;
     case 0x80000012:
         *pResult = fn_80058EF4(pArgs[0].i);
@@ -1475,15 +1475,15 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         *pResult = fn_80156704();
         break;
     case 0x147:
-        *pResult = fn_800551D8(pArgs[0].i);
+        *pResult = DepthChartScreenIsSideShown(pArgs[0].i);
         break;
     case 0x149:
-        fn_800551E0(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
+        DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
         *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
         break;
     case 0x14A: {
         int *pList = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
-        fn_80055230(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
+        DepthChartScreenGetSpot(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
                     pArgs[2].pParams->mLength);
         break;
     }
@@ -2226,8 +2226,8 @@ int fn_8002568C(void);
 int fn_8002B5B0(void);
 int fn_800A8F94(void);
 int fn_800A8EA4(int team);
-struct Args_80055540;
-int fn_80055540(int,Args_80055540 *);
+struct TeamPairArgs_t;
+int TeamPairHandleMessage(int,TeamPairArgs_t *);
 void fn_80064F58(unsigned short,unsigned short,int,unsigned int,int *,int);
 int fn_80178EE0(int team);
 int fn_80178EA0(int team);
@@ -2295,7 +2295,7 @@ int fn_8005BFDC(int group,unsigned int id,Arg_8018399C *p,int unused,int *result
         if(lbl_803EA5AC==2) {lbl_803EA5AC=3;return 1;}
     } else {
         switch(group) {
-        case 9:return fn_80055540(id,(Args_80055540 *)p);
+        case 9:return TeamPairHandleMessage(id,(TeamPairArgs_t *)p);
         case 12:if(id==0x80000003) {*result=fn_800A8EA4(fn_800A8F94())==2;}return 1;
         case 23:return 1;
         }

@@ -51,7 +51,7 @@ struct Block_800BC538 {
 extern "C" {
 int fn_80025708(void);
 void fn_8003E174(int a);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 void fn_80065814(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_8009D888(int index, int value);
@@ -97,7 +97,7 @@ void Class_80297BF8::vfn_03()
     fn_80173404();
     if (fn_800C1E40() != 0) {
         fn_8009D964(2, 0);
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
     }
     fn_8009D888(2, 0);
     fn_800CC448();
@@ -116,7 +116,7 @@ void Class_80297BF8::vfn_03()
         pBlock->mUnknown28 = 0;
         lbl_803EAB95 = 0;
         if (fn_800BA6F8() == 0) {
-            fn_8004A230(0);
+            PlayerObjSetDrawReady(0);
         }
         fn_801383E4(1);
         lbl_803EAB94 = 0;

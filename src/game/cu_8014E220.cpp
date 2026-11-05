@@ -29,7 +29,7 @@ extern char *lbl_803EB2D4;
 extern const char lbl_802A0B74[];
 
 int fn_800C1E40(void);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 Object_80039F5C *fn_8003AC84(int id);
@@ -40,7 +40,7 @@ void fn_8013F97C(int a);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_80141164(float value);
 void fn_8014D67C(void);
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 void fn_800BCB18(void *p, float dt);
 void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *p, int port);
@@ -79,7 +79,7 @@ void fn_8014E244(void *p)
 
 void fn_8014E290(void *p, float dt)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         fn_800BCB18(p, dt);
     }
 }
@@ -143,7 +143,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
 void fn_8014E2DC(void *p)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("Crush the Carrier", lbl_803EB2D4, lbl_802A0B74);
+        MsgBoxShow("Crush the Carrier", lbl_803EB2D4, lbl_802A0B74);
     }
 }
 }

@@ -1,7 +1,7 @@
 #ifndef GAME_CU_80089330_H
 #define GAME_CU_80089330_H
 
-struct Record_8003EC04;
+struct CollideObject_t;
 
 /* One contact produced by fn_80089330: a point and the two sub-record indices. */
 struct Contact_80089330 {
@@ -33,9 +33,9 @@ struct Plane_800894B8 {
 
 extern "C" {
 void fn_80089330(float *pCapsuleA, float *pCapsuleB, unsigned int index);
-int fn_800893F0(Record_8003EC04 *pA, Record_8003EC04 *pB);
+int fn_800893F0(CollideObject_t *pA, CollideObject_t *pB);
 int fn_80089464(float *pSphereA, float *pSphereB);
-void fn_800894B8(Plane_800894B8 *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB);
+void fn_800894B8(Plane_800894B8 *pPlane, CollideObject_t *pA, CollideObject_t *pB);
 int fn_80089514(Plane_800894B8 *pPlane, float *pCapsule);
 void fn_8008959C(Contact_80089330 *pContacts, int capacity);
 ContactList_8030BD74 *fn_800895B8(void);

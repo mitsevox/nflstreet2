@@ -72,7 +72,7 @@ void fn_801DD320(int handle, int item);
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 
 extern "C" {
 unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
@@ -398,7 +398,7 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
         fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
         fn_801EC048(&pBlock->mUnknown108, &rot1, &rot0, t);
     }
-    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4.mX);
+    pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);
     if (changed0 | changed1) {
         fn_80030CA4(pObject0, pObject1);
     }
@@ -409,12 +409,12 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
     }
 }
 
-extern "C" void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked)
+extern "C" void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked)
 {
     pBlock->mpUnknown676 = pLinked;
 }
 
-extern "C" Object_80041904 *fn_800400C4(Block_80170E64 *pBlock)
+extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock)
 {
     return pBlock->mpUnknown676;
 }

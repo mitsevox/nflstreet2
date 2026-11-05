@@ -66,7 +66,7 @@ unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_80025708(void);
 void fn_8003A3F4(int a, int index);
 void fn_8003E174(int a);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 int fn_80074638(void);
 int fn_80076F40(int index);
 void fn_800941B8(void);
@@ -200,7 +200,7 @@ void Class_80297BF8::vfn_05()
         vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013F9B8();
     fn_800CC560(0);
     fn_8010A220();
