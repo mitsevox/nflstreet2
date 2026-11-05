@@ -1,7 +1,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_801EF390.h"
 
-struct EnvObject {
+struct EnvObj {
     char mUnknown0[4];
     float mUnknown4;
     float mUnknown8;
@@ -15,9 +15,9 @@ struct EnvObject {
     unsigned char mUnknownE64[48];
 };
 
-struct EnvOverlayObj {
+struct EnvObjOverlay {
     char mUnknown0[0x14];
-    EnvObject *mpUnknown14;
+    EnvObj *mpUnknown14;
 };
 
 extern "C" {
@@ -26,8 +26,8 @@ int fn_800A3374(void);
 int fn_80146EDC(unsigned int index);
 float fn_80146F0C(unsigned int index);
 float fn_80146F40(unsigned int index);
-void EnvLayersInit(EnvObject *pObject);
-void EnvLayersFree(EnvObject *pObject);
+void EnvLayersInit(EnvObj *pObject);
+void EnvLayersFree(EnvObj *pObject);
 int EnvDrawOverlay(void *pObject);
 int EnvDraw(void *pObject);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
@@ -42,8 +42,8 @@ void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
 }
 
-static EnvObject *lbl_803EA4B0 = 0;
-static EnvOverlayObj *lbl_803EA4B4 = 0;
+static EnvObj *lbl_803EA4B0 = 0;
+static EnvObjOverlay *lbl_803EA4B4 = 0;
 
 extern "C" {
 void fn_80046340(void)
@@ -51,7 +51,7 @@ void fn_80046340(void)
     void *pData = fn_800A336C();
     int index = fn_800A3374();
     int handle = fn_801EF390(pData, index, 1);
-    EnvObject *pObject;
+    EnvObj *pObject;
 
     fn_80235DB8(handle);
     pObject = lbl_803EA4B0;
@@ -75,14 +75,14 @@ int fn_800463D8(void *pObject)
 
 void fn_800463FC(int handle)
 {
-    EnvObject *pObject;
+    EnvObj *pObject;
 
-    fn_801DCF0C(6, sizeof(EnvObject), 1, 0, 0);
-    fn_801DCF0C(25, sizeof(EnvOverlayObj), 1, 0, 0);
+    fn_801DCF0C(6, sizeof(EnvObj), 1, 0, 0);
+    fn_801DCF0C(25, sizeof(EnvObjOverlay), 1, 0, 0);
     fn_801DD0C8(handle, 6, 0, fn_800463B4);
-    lbl_803EA4B0 = (EnvObject *)fn_801DD268(handle, 6, 0, 0);
+    lbl_803EA4B0 = (EnvObj *)fn_801DD268(handle, 6, 0, 0);
     fn_801DD0C8(handle, 25, 0, fn_800463D8);
-    lbl_803EA4B4 = (EnvOverlayObj *)fn_801DD268(handle, 25, 0, 0);
+    lbl_803EA4B4 = (EnvObjOverlay *)fn_801DD268(handle, 25, 0, 0);
     fn_801DD3AC(handle, lbl_803EA4B0, 4);
     lbl_803EA4B4->mpUnknown14 = lbl_803EA4B0;
     fn_801DD3AC(handle, lbl_803EA4B4, 12);

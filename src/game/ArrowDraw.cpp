@@ -70,7 +70,7 @@ void ArrowGetColor(ArrowPath *pTrail, unsigned int index, unsigned char *pColor)
 }
 
 /* Draws one quad of the ribbon at height 0 in the given colour. */
-static inline void DrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC,
+static inline void _ArrowDrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC,
                             Vector_80039F5C *pD, unsigned char *pColor)
 {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -127,13 +127,13 @@ int ArrowDrawSegment(int unused, ArrowPath *pTrail, unsigned int index, Vector_8
             fn_80227930(&b0, &right1, &right0, (i * 2) / 29.0f);
             fn_80227930(&a1, &left1, &left0, (i * 2 + 1) / 29.0f);
             fn_80227930(&b1, &right1, &right0, (i * 2 + 1) / 29.0f);
-            DrawQuad(&a1, &a0, &b0, &b1, color);
+            _ArrowDrawQuad(&a1, &a0, &b0, &b1, color);
         }
     } else {
-        DrawQuad(&left1, &left0, &right0, &right1, color);
+        _ArrowDrawQuad(&left1, &left0, &right0, &right1, color);
     }
     if (index < pTrail->mCount - 1) {
-        DrawQuad(&left1, pLeft, pRight, &right1, color);
+        _ArrowDrawQuad(&left1, pLeft, pRight, &right1, color);
     }
     pLeft->mX = left0.mX;
     pLeft->mY = left0.mY;
@@ -173,7 +173,7 @@ int ArrowDrawHead(int unused, ArrowPath *pTrail, unsigned int index)
     fn_8022765C(&left, &pTrail->mpPoints[index], &direction);
     fn_802276B4(&right, &pTrail->mpPoints[index], &direction);
     pPoints = pTrail->mpPoints;
-    DrawQuad(&left, &tip, &right, &pPoints[index], color);
+    _ArrowDrawQuad(&left, &tip, &right, &pPoints[index], color);
     return 0;
 }
 
@@ -206,7 +206,7 @@ int ArrowDrawBlockEnd(int unused, ArrowPath *pTrail, unsigned int index)
     side.mZ = 0.0f;
     fn_8022765C(&corner3, &base, &side);
     fn_8022765C(&corner2, &pTrail->mpPoints[index], &side);
-    DrawQuad(&corner0, &corner1, &corner3, &corner2, color);
+    _ArrowDrawQuad(&corner0, &corner1, &corner3, &corner2, color);
     return 0;
 }
 

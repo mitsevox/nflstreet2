@@ -59,7 +59,7 @@ struct DynObjInstance {
     unsigned char mUnknownFC[12]; Tracker_801442FC mUnknown108;
 };
 struct DynObjPose { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
-struct DynObjEnvMap { void *mpUnknown0; };
+struct DynObjSkeletonRef { void *mpUnknown0; };
 extern "C" {
 extern void *lbl_803EA368;
 int fn_8002D060(void *);
@@ -231,7 +231,7 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
     int index=DynObjFindCache(name),hasBehavior=0;
     p->mpUnknown12C=static_cast<DynObjInstance *>(fn_801D2B7C(0x110,0,0));
     fn_801C1F94(p->mpUnknown12C,0,0x110);
-    DynObjInstance *s=p->mpUnknown12C;DynObjEnvMap *env=p->mpUnknown130;
+    DynObjInstance *s=p->mpUnknown12C;DynObjSkeletonRef *skel=p->mpUnknown130;
     fn_8004D498(handle);fn_8004D4B0(handle,"render");
     if(fn_8004D508(handle,"clut"))hasBehavior=fn_8004D5B8(handle,"tideRef",behavior,128);
     if(index!=-1) {s->mpUnknown0=_DynObj_apCaches[index];s->mpUnknown0->mUnknown138++;}
@@ -263,9 +263,9 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
     if(fn_801C310C(p->mUnknown158,"CROWDGROUP"))fn_80234A30(&s->mUnknownC,0x80);else fn_80234A30(&s->mUnknownC,0x40);
     fn_80234CF0(&s->mUnknownC,0,&s->mUnknown4);fn_80234DC0(&s->mUnknownC,8);
     fn_80234A94(&s->mUnknownC,&s->mpUnknown0->mUnknown4);
-    if(env) {
-        fn_8020F824(&s->mpUnknown0->mUnknown4,env->mpUnknown0);
-        fn_80233BB8(s->mUnknownFC,0x100,1);fn_80233BDC(s->mUnknownFC,env->mpUnknown0);
+    if(skel) {
+        fn_8020F824(&s->mpUnknown0->mUnknown4,skel->mpUnknown0);
+        fn_80233BB8(s->mUnknownFC,0x100,1);fn_80233BDC(s->mUnknownFC,skel->mpUnknown0);
         fn_80234CA4(&s->mUnknownC,s->mUnknownFC);
     } else fn_80233BB8(s->mUnknownFC,0,1);
     fn_8004E090(p,0,0);p->mUnknownE8.mWord=1;

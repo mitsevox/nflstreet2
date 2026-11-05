@@ -11707,9 +11707,9 @@
       ]
     },
     {
-      "source": "src/game/PlyrIconShutdown.cpp",
+      "source": "src/game/cu_801A1338.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A1338-0x801A133C (src/game/PlyrIconShutdown.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A1338-0x801A133C (src/game/cu_801A1338.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -14244,7 +14244,7 @@
     {
       "source": "src/game/UVScroll.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/UVScroll.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the fn_801A7F10 source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/UVScroll.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the UVScrollFixed source-form rows.",
       "sections": [
         {
           "section": ".text",

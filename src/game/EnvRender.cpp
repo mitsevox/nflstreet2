@@ -10,7 +10,7 @@
 
 
 /* Item of the type-6 pool of src/game/cu_80046340.cpp. */
-struct EnvObject {
+struct EnvObj {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown10[4];
@@ -23,9 +23,9 @@ struct EnvObject {
 };
 
 /* Item of the type-25 pool of src/game/cu_80046340.cpp. */
-struct EnvOverlayObj {
+struct EnvObjOverlay {
     char mUnknown0[0x14];
-    EnvObject *mpUnknown14;
+    EnvObj *mpUnknown14;
 };
 
 struct EnvViewport {
@@ -200,7 +200,7 @@ void EnvApplyFog(void)
     fn_80236EC0(1);
 }
 
-void EnvLayersInit(EnvObject *pObject)
+void EnvLayersInit(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -292,7 +292,7 @@ void EnvLayersInit(EnvObject *pObject)
     pObject->mUnknown14 = 0;
 }
 
-void EnvLayersFree(EnvObject *pObject)
+void EnvLayersFree(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -304,9 +304,9 @@ void EnvLayersFree(EnvObject *pObject)
     }
 }
 
-int EnvDrawOverlay(EnvOverlayObj *pOwner)
+int EnvDrawOverlay(EnvObjOverlay *pOwner)
 {
-    EnvObject *pObject = pOwner->mpUnknown14;
+    EnvObj *pObject = pOwner->mpUnknown14;
     int handle = fn_801C657C();
     float alpha = 0.1f;
 
@@ -337,7 +337,7 @@ int EnvDrawOverlay(EnvOverlayObj *pOwner)
     return 0;
 }
 
-int EnvDraw(EnvObject *pObject)
+int EnvDraw(EnvObj *pObject)
 {
     int handle = fn_801C657C();
     unsigned int i;

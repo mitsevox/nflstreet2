@@ -79,7 +79,7 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 }
 
 static float _BallRender_afCullBox[8] = { -0.5f, -0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f };
-static BallModelLod _BallRender_aModelLods = { 0.00390625f, 1500, 0, 13, { 0 }, 500, { 0 }, 14, { 0 }, 0xFFFF };
+static BallModelLod _BallRender_ModelLods = { 0.00390625f, 1500, 0, 13, { 0 }, 500, { 0 }, 14, { 0 }, 0xFFFF };
 static BallTexLib _BallRender_aTexLibs[2];
 static Object_80233EAC _BallRender_Model;
 static unsigned char _BallRender_abTexLibLoaded[2] = { 0, 0 };
@@ -96,7 +96,7 @@ void BallRenderInit(BallRenderObj *pObject)
         fn_80211E08(&_BallRender_aTexLibs[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
         _BallRender_abTexLibLoaded[1] = 1;
     }
-    fn_80233D64(&_BallRender_Model, &_BallRender_aModelLods, "BALL", 0, pObject->mpUnknown18, 0);
+    fn_80233D64(&_BallRender_Model, &_BallRender_ModelLods, "BALL", 0, pObject->mpUnknown18, 0);
 }
 
 void BallRenderShutdown(BallRenderObj *pObject)
