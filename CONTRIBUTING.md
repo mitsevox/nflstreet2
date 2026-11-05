@@ -26,6 +26,8 @@ What protects matching integrity, in order: CI proves the complete executable of
 6. **Review.** Tier A: an independent reviewer interprets the scoped functions with the proposed names and comments withheld, reconciles that interpretation with the submission and posts an `Accuracy:` record; then a fresh reviewer applies the hostile checklist and posts a `Hostile:` record. Tier B: the hostile record only. Tier C: none. Resolve every finding by fixing it or providing evidence.
 7. **Submit for the owner's decision.** Required CI passes on the final revision with no unexplained regression; the records cover that revision and name the targets they checked.
 
+In this repository the loop works one whole file at a time, and a file is not finished when it matches and links. AGENTS.md, "Closing a file", gives the seven steps every file PR follows in order: match every function, link the file, name and place the file, name every function, label and type, give each name, type and boundary its evidence row, work the file to `closed` in `build/GN7E69-rev0/files.tsv`, then the two reviews. All seven happen in the same PR, and the owner's rule asks for both the accuracy and the hostile record on it whatever tier the table above would give. Until a file closes, a function nobody has read may keep its address label (step 4 above); closing the file names it.
+
 Partial reconstructed functions may be committed, submitted and merged before reaching 100% byte equality. A measured mismatch alone is not a review failure. Review source fidelity, evidence and comparison integrity separately from completeness; document mismatches and open questions.
 
 A version difference lives in the shared file under `#if VERSION_<DEFINE>` (`include/version.h` states the rule). When a function would carry three or more blocks, or more than about a third of its lines inside blocks, write the whole function once per variant under one function-level `#if`, in the same file. A unit that matches on some targets only is `Object(MatchingFor("<id>"), ...)`; a unit absent from a target is absent from that target's `splits.txt`.
@@ -62,9 +64,9 @@ Review all submitted reconstructed functions, including partial ones:
 | Compiler settings | Compiler and flags have evidence at the appropriate scope. Inspect per-function overrides and verify evidence and owner approval for any exception. |
 | Types and layouts | Declarations reflect available evidence, including sizes, offsets, signatures and shared ownership. Unknowns are explicit; no fabricated layouts or match-only substitutes. |
 | Provenance and licence | Imported code names its source repository, pinned commit and licence in `CREDITS.md` ("no licence" is stated, not omitted); a licence that requires its text has it under `licenses/`; copyright and licence notices in imported files are intact. Check the source repository itself, not only the PR's claim. |
-| Names | Provenance supports original-name claims. Inferred names describe what the code establishes without presenting guesses as recovered facts. |
+| Names | Provenance supports original-name claims. Inferred names are reasoned in their evidence rows, uncontradicted by the target and not presented as recovered facts, to the target's declared evidence regime; a rejection names a contradicting observation, a better-supported name, or a row that gives no reason. |
 | Comments | Comments clarify meaning and readability without obvious narration, speculation, compiler explanations or process notes. Absence of an unnecessary comment is not a failure. |
-| Unit boundaries | Splits and code/data ownership have evidence. Provisional boundaries are identified; no artificial fragmentation or grouping to inflate progress. |
+| Unit boundaries | Splits and code/data ownership are supported to the target's declared evidence regime. Provisional boundaries are identified; no artificial fragmentation or grouping to inflate progress; a rejection names a contradicting observation, a better-supported edge, a row that gives no reason, or an `exact` grade its evidence does not establish. |
 | Comparison integrity | No patched output, excluded comparisons, altered symbol ranges or misleading categories conceal mismatches. Partial and linked results remain distinct. |
 | Validation | Required checks cover the reviewed revision, complete target output, unit code/data and regressions against the base revision. No substituted scores or unverified success claims. |
 
@@ -77,6 +79,8 @@ After fixes, apply the delta recheck rules above. In the final record, cite the 
 ## Review records
 
 Post each pass as a separate PR comment. The first line is `Revision: FULL_COMMIT_SHA`, the second `Targets: <ids checked>`, the third the verdict: `Accuracy: PASS` or `Accuracy: N/A - <reason>` for the accuracy pass, `Hostile: SHIP`, `Hostile: FIX`, `Hostile: REDO` or `Hostile: BLOCKED` for the hostile pass. Each header occurs once, outside quotes and code fences. Then the reviewer's identity and prior involvement, the scope, the evidence used, the findings and their resolution. A record covering one target never reads as covering another. Do not write a successful record before the review happens.
+
+For an inferred name or edge, 'not enough evidence' alone is not a finding: a rejection names a contradicting observation, an alternative the target supports better, a row that gives no reason, or an edge graded `exact` that its evidence does not establish; a reviewer who prefers another name or edge without one records a note, not a `FIX`.
 
 **Rechecks.** After fixes, the reviewer checks each prior finding, the correction and its affected behavior, declarations, callers, boundaries and evidence, and carries unchanged coverage forward by linking the earlier record and its revision. A replacement reviewer may continue from that record. A full restart needs a concrete reason that invalidates coverage across the PR; a localized defect is not one.
 
