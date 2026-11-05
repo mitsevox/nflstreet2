@@ -118,6 +118,10 @@ jobs:
         run: |
           python3 build.py --target "$TARGET_ID"
           echo "measured-at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+      - name: Check the files the PR closes
+        # Pull requests only: each file named on the body's `Closes:` line must be closed in this
+        # build (tools/files_closed.py, build/<target id>/files.tsv).
+        run: python3 tools/closes.py
       - name: Check the report
         # Every event: the report converts into the site's contract and passes its checks with the
         # code the publish step runs on main, into an empty tree, without credits or a credential.

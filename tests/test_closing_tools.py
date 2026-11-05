@@ -7,6 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
+import closes
 import function_compare
 import naming
 import prodg_cc
@@ -219,6 +220,64 @@ class DumpFlag(unittest.TestCase):
                       ('--dump-dir', '/tmp/d', '--dump', '-O2'), ('--dump', '-da')):
             with self.assertRaises(ValueError, msg=extra):
                 prodg_cc.parse(self.options(*extra))
+
+
+class Closes(unittest.TestCase):
+    def test_claimed(self):
+        self.assertEqual(closes.claimed('Tier C\nCloses: `src/engine/hash.c`, src/game/FELoop.cpp\n'),
+                         ['src/engine/hash.c', 'src/game/FELoop.cpp'])
+        self.assertEqual(closes.claimed('**Closes:** none'), [])
+        self.assertEqual(closes.claimed('Tier C, no files'), [])
+        for form in ('- Closes: src/a.c', '* Closes: src/a.c', '> Closes: src/a.c', '_Closes:_ src/a.c',
+                     '**Closes:** src/a.c', 'closes: src/a.c', 'Closes: **src/a.c**', '**Closes**: src/a.c'):
+            self.assertEqual(closes.claimed(form), ['src/a.c'], form)
+        # Any other form that names a file is refused, never skipped.
+        for form in ('## Closes: src/a.c', '**`Closes`** : src/a.c', '`Closes:` src/a.c', '`Closes`: src/a.c',
+                     '**`Closes:`** src/a.c', '_`Closes:`_ src/a.c', '`Closes:` "src/a.c"', '`Closes:` [src/a.c](u)',
+                     '`Closes:` hash.c', '`Closes:` src/a', '`Closes :` src/a.c', '` Closes:` src/a.c',
+                     '`Closes: ` src/a.c', 'This PR closes: src/a.c',
+                     '- **`Closes:` check:** with `Closes: src/engine/hash.c` exits 1.',
+                     # A bare keyword would leave files on the lines below it unchecked.
+                     'Closes:\n- src/a.c', '**Closes:**\n\nsrc/a.c', 'Closes:\n`src/a.c`', 'Closes: ``'):
+            with self.assertRaises(ValueError, msg=form):
+                closes.claimed(form)
+        # Prose that names no file is a mention, as PR #1226's body and the template have it.
+        for prose in ('Fixes #12. Closes #123.', '<!-- e.g. `Closes: src/x.c` -->\nCloses: none',
+                      '- A body line `Closes: <path>` fails CI unless the file is closed.',
+                      '- **`tools/closes.py` + CI step** ("Check the files the PR closes", in the target job):',
+                      '  - A PR body line `Closes: <path>[, <path>]` fails CI unless every named file is closed.',
+                      '  - `Closes: none`, no line, or a run that is not a pull request all pass.',
+                      '  - Locally: `python3 tools/closes.py --body FILE`.',
+                      '- **PR template:** a `Closes:` line with a comment saying what it checks.',
+                      '- **Tests:** new tests cover the `Closes:` parsing and checking, and `mark_closed`.',
+                      '`Closes:` the hash file'):
+            self.assertEqual(closes.claimed(prose), [], prose)
+
+    def test_check(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            table = Path(folder) / 'files.tsv'
+            table.write_text('source\tlinked\tfile_named\tlabels\tplaceholders\tunevidenced\tclosed\texamples\n'
+                             'src/engine/hash.c\tyes\tyes\t1\t0\t0\tyes\t\n'
+                             'src/game/cu_80060948.cpp\tpartly\tno\t9\t4\t0\tno\tfn_80060A9C\n')
+            self.assertEqual(closes.check(['src/engine/hash.c'], table), [])
+            problems = closes.check(['src/game/cu_80060948.cpp', 'src/x.c'], table)
+        self.assertIn('not wholly linked', problems[0])
+        self.assertIn('4 placeholder name(s)', problems[0])
+        self.assertIn('not a source file', problems[1])
+
+
+class MarkClosed(unittest.TestCase):
+    def test_every_unit_carries_the_flag(self):
+        import export_progress
+        decomp = {'units': [{'metadata': {'source_path': 'src/engine/hash.c'}},
+                            {'metadata': {'source_path': 'src/game/cu_80060948.cpp'}},
+                            {'metadata': {'auto_generated': True}}]}
+        export_progress.mark_closed(decomp, [{'source': 'src/engine/hash.c', 'closed': True},
+                                             {'source': 'src/game/cu_80060948.cpp', 'closed': False}])
+        self.assertEqual([u['metadata']['closed'] for u in decomp['units']], [True, False, False])
+        with self.assertRaises(ValueError):
+            export_progress.mark_closed(decomp, [{'source': 'src/missing.c', 'closed': True}])
 
 
 class SiblingTables(unittest.TestCase):
