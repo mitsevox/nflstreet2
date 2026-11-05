@@ -14,12 +14,6 @@ typedef struct VptInitBlock_t {
 
 typedef void (*VptCallbackFuncT)(Viewport_t *pObject);
 
-/* Argument of VramInit. */
-typedef struct VramInitBlock_t {
-    unsigned short mUnknown0;
-    unsigned char mUnknown2[2];
-} VramInitBlock_t;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -60,8 +54,6 @@ void VptSetUpRender(Viewport_t *pObject);
 void VptTrashObject(int handle);
 void VptFlushObjectTrash(void);
 void VptFlushObjectTrashSync(void);
-int VramInit(VramInitBlock_t *pDesc);
-int VramShutdown(void);
 
 #ifdef __cplusplus
 }

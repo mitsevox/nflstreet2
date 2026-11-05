@@ -5997,13 +5997,13 @@
     {
       "source": "src/engine/llviewpt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802287D4-0x80228F78 (src/engine/llviewpt.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x802287D4-0x80228E44 (src/engine/llviewpt.c) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802287D4",
-          "end": "0x80228F78"
+          "end": "0x80228E44"
         },
         {
           "section": ".rodata",
@@ -6015,6 +6015,25 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EBFA0",
+          "end": "0x803EBFA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vram.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/vram.c) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
           "end": "0x803EBFB8"
         }
       ]

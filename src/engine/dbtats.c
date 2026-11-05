@@ -1,5 +1,5 @@
 /*
- * Loads the game's main T3DB database, the one its queries address as 'TATS'. At start-up the
+ * Loads the T3DB database that the game's queries address as 'TATS'. At start-up the
  * DbGame module gives it the database size, the file to load it from (template.dat) and a load
  * mode; it then creates the database and fills it from that file, and destroys it at shutdown.
  */
