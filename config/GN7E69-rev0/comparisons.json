@@ -37559,7 +37559,7 @@
     {
       "source": "src/engine/slinklst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80278700-0x8027882C (src/engine/slinklst.c), the sound_cxx compiler row 0x802714A8-0x80276DE4, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80278700-0x8027882C (src/engine/slinklst.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -37694,7 +37694,7 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027981C-0x80279BC0 (src/engine/saramman.c), the sound_cxx compiler row 0x802714A8-0x80276DE4, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8027981C-0x80279BC0 (src/engine/saramman.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -37885,7 +37885,7 @@
     {
       "source": "src/engine/supmutpf.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027AEE4-0x8027B1F8 (src/engine/supmutpf.c), the sound_cxx compiler row 0x802714A8-0x80276DE4, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8027AEE4-0x8027B1F8 (src/engine/supmutpf.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",

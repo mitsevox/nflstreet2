@@ -146,11 +146,6 @@ void fn_8027A9FC(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027AB00(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027AC08(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027AE04(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B168(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B328(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B464(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027B7B0(Node_80279D90 *node, Params_80275F80 *params);
-void fn_8027BA6C(Node_80279D90 *node, Params_80275F80 *params);
 
 void fn_8027A7FC(void)
 {
