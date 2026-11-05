@@ -1,5 +1,5 @@
 /* Effect drawing helpers: begin and end hooks around the particle pass, loading and freeing the
-   animated particle textures, and full-screen colour tints used for screen fades and flashes. */
+   animated particle textures, and full-screen colour tints. */
 #include <dolphin/gx/GXPixel.h>
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>

@@ -37,7 +37,7 @@ void fn_801F8248(void);
 int fn_801F8868(int (*pCallback)());
 }
 
-static MemInitParams_t sMemoryConfig = { "memory.log" };
+static MemInitParams_t _Sys_MemInitParams = { "memory.log" };
 static void *sDependencies[] = { 0 };
 Sys gSys;
 
@@ -60,8 +60,8 @@ int Sys::Init()
 
     fn_801C6584();
     fn_80025E00();
-    sMemoryConfig.mpArena = fn_80025E50(1);
-    fn_801D2054(&sMemoryConfig);
+    _Sys_MemInitParams.mpArena = fn_80025E50(1);
+    fn_801D2054(&_Sys_MemInitParams);
     fn_801D2130(fn_80025E50(0x20));
     fn_801D2130(fn_80025E50(0x100));
     pDb = fn_80025E50(2);
