@@ -25,11 +25,11 @@ struct Palette_803654DC {
 extern "C" {
 int fn_800C47C4(void);
 Mtx44Ptr fn_801D0444(void);
-void fn_80210388(void);
-void fn_80211E08(Element_8019FBEC *pElement, int a);
-void fn_80211EFC(Element_8019FBEC *pElement);
-Texture_80365470 *fn_802120E4(Element_8019FBEC *pElement, int a);
-Palette_803654DC *fn_80212124(Element_8019FBEC *pElement, int a, int b);
+void TMRenderReset(void);
+void TMTexLibLoad(Element_8019FBEC *pElement, int a);
+void TMTexLibUnload(Element_8019FBEC *pElement);
+Texture_80365470 *TMTexLibGetTexture(Element_8019FBEC *pElement, int a);
+Palette_803654DC *TMTexLibGetClut(Element_8019FBEC *pElement, int a, int b);
 int fn_80236EC0(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
@@ -58,14 +58,14 @@ void fn_8019FBEC(void)
     int i;
 
     lbl_803EB7D4 = fn_801EF390((void *)fn_800C47C4(), 4, 1);
-    fn_80211E08(&lbl_80365448, lbl_803EB7D4);
+    TMTexLibLoad(&lbl_80365448, lbl_803EB7D4);
     for (i = 0; i < 3; i++) {
-        lbl_80365470[i] = fn_802120E4(&lbl_80365448, 0xFF000000 + i);
+        lbl_80365470[i] = TMTexLibGetTexture(&lbl_80365448, 0xFF000000 + i);
         GXInitTexObjCI(&lbl_8036547C[i], GXGetTexObjData(lbl_80365470[i]), lbl_80365470[i]->mUnknown24,
                     lbl_80365470[i]->mUnknown26, 9, 0, 0, 0, 0);
     }
     for (i = 0; i < 3; i++) {
-        lbl_803654DC[i] = fn_80212124(&lbl_80365448, 0xFF000000, i);
+        lbl_803654DC[i] = TMTexLibGetClut(&lbl_80365448, 0xFF000000, i);
         GXInitTlutObj(&lbl_803654E8[i], GXGetTlutObjData(lbl_803654DC[i]->mUnknown4),
                     GXGetTlutObjFmt(lbl_803654DC[i]->mUnknown4), GXGetTlutObjNumEntries(lbl_803654DC[i]->mUnknown4));
     }
@@ -74,7 +74,7 @@ void fn_8019FBEC(void)
 
 void fn_8019FD38(void)
 {
-    fn_80211EFC(&lbl_80365448);
+    TMTexLibUnload(&lbl_80365448);
     lbl_803EB7D4 = 0;
     fn_801F010C((void *)fn_800C47C4(), 4);
     lbl_803EB7D0 = 0;
@@ -84,7 +84,7 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
 {
     int value = fn_80236EC0(0);
 
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);

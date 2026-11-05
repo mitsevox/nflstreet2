@@ -1,7 +1,7 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/Font_8019BE30.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/cu_801A4AD4.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -137,11 +137,11 @@ void fn_80160188(void)
             if (sSlots[player][slot].mDirty) {
                 if (sSlots[player][slot].mReceived) {
                     if (sSlots[player][slot].mRequested) {
-                        fn_8020E2B0(sSlots[player][slot].mpData);
+                        TexMipmapRelocate(sSlots[player][slot].mpData);
                         if (sSlots[player][slot].mPalette != -1) {
-                            int index = fn_8020E52C(sSlots[player][slot].mpData, 0)->mUnknown8;
+                            int index = TexGetMaterialByIndex(sSlots[player][slot].mpData, 0)->mUnknown8;
 
-                            fn_8004625C(fn_8020E5F8(sSlots[player][slot].mpData, index),
+                            fn_8004625C(TexGetPaletteByIndex(sSlots[player][slot].mpData, index),
                                         sSlots[player][slot].mPalette, sColors[player]);
                         }
                         fn_801A4B28(sTextures[player][slot], sSlots[player][slot].mpData,
@@ -213,11 +213,11 @@ void fn_8016032C(void)
         }
         if (other < sPlayerCount) {
             fn_801A4B28(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                fn_8004625C(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -235,11 +235,11 @@ void fn_8016032C(void)
         }
         if (other < 32) {
             fn_801A4B28(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                fn_8004625C(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -262,14 +262,14 @@ void fn_8016061C(int player, int slot, void *pData, int shared)
 {
     if (!shared) {
         fn_801EFF80(sArchive, sSlots[player][slot].mId, pData);
-        fn_8020E2B0(pData);
+        TexMipmapRelocate(pData);
     }
     fn_801A4B28(sTextures[player][slot], pData, sSizes[slot]);
     if (slot == 4 && fn_80049D04(player)) {
         fn_80161494(player, 4);
     }
     if (sSlots[player][slot].mPalette != -1) {
-        fn_8004625C(fn_8020E5F8(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
+        fn_8004625C(TexGetPaletteByIndex(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
                     sColors[player]);
     }
     sSlots[player][slot].mRequested = sSlots[player][slot].mReceived =
@@ -376,7 +376,7 @@ void fn_80160A80(void)
             fn_801C1FBC(sTextures[player][i], pDest, size);
         }
         for (player = 0; player < sPlayerCount; player++) {
-            fn_8020E2B0(sTextures[player][i]);
+            TexMipmapRelocate(sTextures[player][i]);
         }
     }
 }

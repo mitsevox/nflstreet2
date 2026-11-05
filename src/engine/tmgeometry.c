@@ -1,11 +1,15 @@
+/* TM renderer geometry: relocates a model's Geom chunk, groups its nodes by vertex format,
+   remaps node materials, grows bounding extents from vertex positions and runs the ring buffer
+   that geometry submission takes its per-frame vertex channel data from. */
+
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-unsigned char *lbl_803EBED0 = 0;
-unsigned char *lbl_803EBED4 = 0;
-unsigned char *lbl_803EBED8 = 0;
+unsigned char *_TMGeom_ChannelBuffer = 0;
+unsigned char *_TMGeom_BufferPosition = 0;
+unsigned char *_TMGeom_BufferEnd = 0;
 
-void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
+void TMGeomExtentAddS16Points(Extent_802144AC *pExtent, short *pPoints, int count)
 {
     float scale = 1.0f / 32768.0f;
 
@@ -15,7 +19,7 @@ void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
     }
 }
 
-void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count)
+void TMGeomExtentAddF32Points(Extent_802144AC *pExtent, float *pPoints, int count)
 {
     for (; count > 0; count--) {
         fn_802144D8(pExtent, pPoints[0], pPoints[1], pPoints[2]);
@@ -23,10 +27,10 @@ void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count)
     }
 }
 
-static int fn_8020EE38(Geom_8020ED10 *pPart, GeomNode_8020ED10 *pNodeA, GeomNode_8020ED10 *pNodeB)
+static int _TMGeometryIsSameFormat(TMGeom_t *pPart, TMGeomNode_t *pNodeA, TMGeomNode_t *pNodeB)
 {
-    GeomAttr_8020ED10 *pAttrA;
-    GeomAttr_8020ED10 *pAttrB;
+    TMGeomAttr_t *pAttrA;
+    TMGeomAttr_t *pAttrB;
     int i;
 
     if (pNodeA->mNumAttrs != pNodeB->mNumAttrs) {
@@ -51,10 +55,10 @@ static int fn_8020EE38(Geom_8020ED10 *pPart, GeomNode_8020ED10 *pNodeA, GeomNode
     return 1;
 }
 
-static void fn_8020EEE8(Geom_8020ED10 *pPart)
+static void _TMGeometryHashFormat(TMGeom_t *pPart)
 {
-    GeomNode_8020ED10 *apFormats[32];
-    GeomNode_8020ED10 *pNode;
+    TMGeomNode_t *apFormats[32];
+    TMGeomNode_t *pNode;
     unsigned int i;
     int numFormats;
     int j;
@@ -64,7 +68,7 @@ static void fn_8020EEE8(Geom_8020ED10 *pPart)
         for (i = 0; i < pPart->mNumNodes; i++) {
             pNode = &pPart->mpNodes[i];
             for (j = 0; j < numFormats; j++) {
-                if (fn_8020EE38(pPart, apFormats[j], pNode)) {
+                if (_TMGeometryIsSameFormat(pPart, apFormats[j], pNode)) {
                     break;
                 }
             }
@@ -82,64 +86,64 @@ static void fn_8020EEE8(Geom_8020ED10 *pPart)
     }
 }
 
-void fn_8020EFC8(int size)
+void TMGeomInitChannelBuffer(int size)
 {
     unsigned char *p;
 
     p = fn_801D2B7C(size, 0, 0);
-    lbl_803EBED0 = p;
-    lbl_803EBED4 = p;
-    lbl_803EBED8 = p + size;
+    _TMGeom_ChannelBuffer = p;
+    _TMGeom_BufferPosition = p;
+    _TMGeom_BufferEnd = p + size;
 }
 
-void fn_8020F00C(void)
+void TMGeomFreeChannelBuffer(void)
 {
-    fn_801D2BD0(lbl_803EBED0);
+    fn_801D2BD0(_TMGeom_ChannelBuffer);
 }
 
 /* Reserve scratch bytes, wrapping when the remaining space is not greater than the request. */
-unsigned char *AllocateGeometryScratch(unsigned int size)
+unsigned char *TMGeomAllocChannelBuffer(unsigned int size)
 {
     unsigned char *p;
     unsigned char *cursor;
 
-    if (lbl_803EBED8 - lbl_803EBED4 > size) {
-        p = lbl_803EBED4;
-        lbl_803EBED4 += size;
+    if (_TMGeom_BufferEnd - _TMGeom_BufferPosition > size) {
+        p = _TMGeom_BufferPosition;
+        _TMGeom_BufferPosition += size;
     } else {
-        p = lbl_803EBED0;
-        lbl_803EBED4 = p + size;
+        p = _TMGeom_ChannelBuffer;
+        _TMGeom_BufferPosition = p + size;
     }
-    while ((unsigned int)(cursor = lbl_803EBED4) & 31) {
+    while ((unsigned int)(cursor = _TMGeom_BufferPosition) & 31) {
         *cursor = 0;
-        lbl_803EBED4++;
+        _TMGeom_BufferPosition++;
     }
     return p;
 }
 
-void fn_8020F08C(Geom_8020ED10 *pPart, void *pOldBase, void *pNewBase)
+void TMGeomRelocateChunk(TMGeom_t *pPart, void *pOldBase, void *pNewBase)
 {
     unsigned int i;
 
-    pPart->mpNodes = fn_8020EB94(pPart->mpNodes, pOldBase, pNewBase);
-    pPart->mpAttrs = fn_8020EB94(pPart->mpAttrs, pOldBase, pNewBase);
+    pPart->mpNodes = TMModelResRelocatePtr(pPart->mpNodes, pOldBase, pNewBase);
+    pPart->mpAttrs = TMModelResRelocatePtr(pPart->mpAttrs, pOldBase, pNewBase);
     for (i = 0; i < pPart->mNumNodes; i++) {
-        GeomNode_8020ED10 *pNode = &pPart->mpNodes[i];
+        TMGeomNode_t *pNode = &pPart->mpNodes[i];
 
-        pNode->mpData = fn_8020EB94(pNode->mpData, pOldBase, pNewBase);
+        pNode->mpData = TMModelResRelocatePtr(pNode->mpData, pOldBase, pNewBase);
     }
     for (i = 0; i < pPart->mNumAttrs; i++) {
-        GeomAttr_8020ED10 *pAttr = &pPart->mpAttrs[i];
+        TMGeomAttr_t *pAttr = &pPart->mpAttrs[i];
 
-        pAttr->mpData = fn_8020EB94(pAttr->mpData, pOldBase, pNewBase);
+        pAttr->mpData = TMModelResRelocatePtr(pAttr->mpData, pOldBase, pNewBase);
     }
-    pPart->mpUnknown14 = fn_8020EB94(pPart->mpUnknown14, pOldBase, pNewBase);
-    fn_8020EEE8(pPart);
+    pPart->mpUnknown14 = TMModelResRelocatePtr(pPart->mpUnknown14, pOldBase, pNewBase);
+    _TMGeometryHashFormat(pPart);
 }
 
-void fn_8020F178(Geom_8020ED10 *pPart, unsigned short *pRemap, int numMaterials)
+void TMGeometryRemapMaterials(TMGeom_t *pPart, unsigned short *pRemap, int numMaterials)
 {
-    GeomNode_8020ED10 *pNode;
+    TMGeomNode_t *pNode;
     unsigned int i;
 
     for (i = 0; i < pPart->mNumNodes; i++) {
@@ -152,10 +156,10 @@ void fn_8020F178(Geom_8020ED10 *pPart, unsigned short *pRemap, int numMaterials)
     }
 }
 
-void fn_8020F1D8(Geom_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent)
+void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, Extent_802144AC *pExtent)
 {
-    GeomNode_8020ED10 *pNode;
-    GeomAttr_8020ED10 *pAttr;
+    TMGeomNode_t *pNode;
+    TMGeomAttr_t *pAttr;
     int i;
 
     pNode = &pPart->mpNodes[nodeIndex];
@@ -164,10 +168,10 @@ void fn_8020F1D8(Geom_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent)
         if (pAttr->mType == 9) {
             switch (pAttr->mCompType) {
             case 3:
-                fn_8020ED10(pExtent, pAttr->mpData, pAttr->mCount);
+                TMGeomExtentAddS16Points(pExtent, pAttr->mpData, pAttr->mCount);
                 break;
             case 4:
-                fn_8020EDE4(pExtent, pAttr->mpData, pAttr->mCount);
+                TMGeomExtentAddF32Points(pExtent, pAttr->mpData, pAttr->mCount);
                 break;
             }
         }

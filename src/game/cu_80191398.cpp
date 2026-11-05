@@ -11,7 +11,7 @@
 
 extern "C" {
 void fn_801D0F80(Mtx44 m);
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
@@ -204,7 +204,7 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
         int count;
         char ch;
 
-        fn_80210388();
+        TMRenderReset();
         count = 0;
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

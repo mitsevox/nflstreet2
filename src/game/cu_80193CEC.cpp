@@ -2,7 +2,7 @@
 #include "game/Callees_801D57E0.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801EF390.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/cu_80193CEC.h"
 
 struct Header_80193D48 {
@@ -41,10 +41,10 @@ void fn_80193D44(void)
 void fn_80193D48(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
 {
     Resource_80193D48 *pResource = (Resource_80193D48 *)fn_801EF390(pData, index, 1);
-    Object_8020E560 *pEntry;
+    TexFileImage_t *pEntry;
 
-    fn_8020E2B0(pResource);
-    pEntry = fn_8020E560(pResource, pResource->mpUnknown14->mUnknown4);
+    TexMipmapRelocate(pResource);
+    pEntry = TexGetTextureByIndex(pResource, pResource->mpUnknown14->mUnknown4);
     *pOut = pEntry->mUnknown8;
     if (pOptional) {
         *pOptional = pEntry->mpUnknownC;

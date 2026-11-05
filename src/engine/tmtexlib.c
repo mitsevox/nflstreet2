@@ -1,45 +1,48 @@
+/* TM renderer texture libraries: turns a loaded texture file into GX textures and palettes looked
+   up by name, keeps a registry of libraries, and lets the game replace a library's textures. */
+
 #include "engine/tmlib.h"
 
-extern Registry_8021283C lbl_8039B53C;
+extern TMRegistry_t lbl_8039B53C;
 
-static void fn_802119C4(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex, int count, int bInit)
+static void _TMTexLibInitTexNodes(TMTexLib_t *pLib, TexFileHeader_t *pTex, int count, int bInit)
 {
-    Object_8020E52C *pMaterial;
-    TexNode_802119C4 *pNode;
+    TexFileMaterial_t *pMaterial;
+    TMTexNode_t *pNode;
     const char *pName;
     int i;
 
     for (i = 0; i < count; i++) {
         pNode = &pLib->mpTexNodes[i];
-        pMaterial = fn_8020E52C(pTex, i);
-        pName = fn_8020E53C(pTex, i);
+        pMaterial = TexGetMaterialByIndex(pTex, i);
+        pName = TexGetMaterialNameByIndex(pTex, i);
         pNode->mpName = pName;
         pNode->mTextureIndex = i;
         pNode->mpLib = pLib;
         pNode->mFirstClut = pMaterial->mUnknown8;
         pNode->mNumCluts = pMaterial->mUnknown0;
         pNode->mUnknownE = -1;
-        fn_80212940(&pLib->mRegistry, i, pName, pNode);
+        TMRegistrySetEntry(&pLib->mRegistry, i, pName, pNode);
     }
 }
 
-static void fn_80211A74(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex, int count, int bInit)
+static void _TMTexLibInitCluts(TMTexLib_t *pLib, TexFileHeader_t *pTex, int count, int bInit)
 {
-    Object_8020E5F8 *pPalette;
+    TexFilePalette_t *pPalette;
     int numEntries;
     int i;
 
     for (i = 0; i < count; i++) {
-        pPalette = fn_8020E5F8(pTex, i);
+        pPalette = TexGetPaletteByIndex(pTex, i);
         numEntries = 16;
         if (pPalette->mUnknown4 > 0x7F) {
             numEntries = 256;
         }
-        fn_80212534(&pLib->mpCluts[i], pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
+        TMTextureClutNew(&pLib->mpCluts[i], pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
     }
 }
 
-void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut)
+void TMTexLibSetClutData(TMTexLib_t *pLib, TexFilePalette_t *pPalette, int clutIndex, TMClut_t *pClut)
 {
     int numEntries;
 
@@ -48,144 +51,144 @@ void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex
         numEntries = 256;
     }
     if (pClut == 0) {
-        fn_80212534(&pLib->mpCluts[clutIndex], pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
+        TMTextureClutNew(&pLib->mpCluts[clutIndex], pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
     } else {
-        fn_80212534(pClut, pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
+        TMTextureClutNew(pClut, pPalette->mpUnknown8, pPalette->mUnknown2, numEntries, pPalette->mUnknown4);
     }
 }
 
-void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex)
+void TMTexLibSetTextureData(TexFileHeader_t *pTex, TMTexLib_t *pLib, int materialIndex, TexFileImage_t *pTexture, int textureIndex, int clutIndex)
 {
-    Object_8020E52C *pMaterial;
-    Clut_80212534 *pClut;
+    TexFileMaterial_t *pMaterial;
+    TMClut_t *pClut;
     const char *pName;
 
     pMaterial = &pTex->mpMaterials[materialIndex];
-    pName = fn_8020E53C(pTex, materialIndex);
+    pName = TexGetMaterialNameByIndex(pTex, materialIndex);
     if (pMaterial->mUnknown0 != 0) {
         pClut = &pLib->mpCluts[clutIndex];
     } else {
         pClut = 0;
     }
-    fn_8021242C(&pLib->mpTextures[textureIndex], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
-    fn_802126BC(&pLib->mpTextures[textureIndex], pName);
+    TMTextureSetTexData(&pLib->mpTextures[textureIndex], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
+    TMTextureSetTexName(&pLib->mpTextures[textureIndex], pName);
 }
 
-static void fn_80211C08(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex, int count, int bInit)
+static void _TMTexLibInitTextures(TMTexLib_t *pLib, TexFileHeader_t *pTex, int count, int bInit)
 {
-    Object_8020E52C *pMaterial;
-    Object_8020E560 *pTexture;
-    Clut_80212534 *pClut;
+    TexFileMaterial_t *pMaterial;
+    TexFileImage_t *pTexture;
+    TMClut_t *pClut;
     const char *pName;
     int i;
 
     for (i = 0; i < count; i++) {
-        pMaterial = fn_8020E52C(pTex, i);
-        pName = fn_8020E53C(pTex, i);
-        pTexture = fn_8020E560(pTex, pMaterial->mUnknown4);
+        pMaterial = TexGetMaterialByIndex(pTex, i);
+        pName = TexGetMaterialNameByIndex(pTex, i);
+        pTexture = TexGetTextureByIndex(pTex, pMaterial->mUnknown4);
         if (pMaterial->mUnknown0 != 0) {
             pClut = &pLib->mpCluts[pMaterial->mUnknown8];
         } else {
             pClut = 0;
         }
         if (bInit) {
-            fn_8021239C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
+            TMTextureTexNew(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
         } else {
-            fn_8021242C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
+            TMTextureSetTexData(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
         }
-        fn_802126BC(&pLib->mpTextures[i], pName);
+        TMTextureSetTexName(&pLib->mpTextures[i], pName);
     }
 }
 
-void fn_80211D24(TexLib_802119C4 *pLib, int numTexNodes, int numTextures, int numCluts)
+void TMTexLibAlloc(TMTexLib_t *pLib, int numTexNodes, int numTextures, int numCluts)
 {
     pLib->mNumTexNodes = numTexNodes;
-    pLib->mpTexNodes = fn_802127D0(numTexNodes, sizeof(TexNode_802119C4));
+    pLib->mpTexNodes = TMMemAllocArray(numTexNodes, sizeof(TMTexNode_t));
     pLib->mNumTextures = numTextures;
-    pLib->mpTextures = fn_802127D0(numTextures, sizeof(Texture_80212234));
+    pLib->mpTextures = TMMemAllocArray(numTextures, sizeof(TMTexture_t));
     pLib->mNumCluts = numCluts;
-    pLib->mpCluts = fn_802127D0(numCluts, sizeof(Clut_80212534));
-    fn_80212850(&pLib->mRegistry, numTexNodes, 0, 0);
+    pLib->mpCluts = TMMemAllocArray(numCluts, sizeof(TMClut_t));
+    TMRegistryAlloc(&pLib->mRegistry, numTexNodes, 0, 0);
 }
 
-void fn_80211DA8(TexLib_802119C4 *pLib)
+void TMTexLibFree(TMTexLib_t *pLib)
 {
-    fn_802128A8(&pLib->mRegistry);
-    fn_80212814(pLib->mpTexNodes);
+    TMRegistryFree(&pLib->mRegistry);
+    TMMemFreeArray(pLib->mpTexNodes);
     pLib->mpTexNodes = 0;
     pLib->mNumTexNodes = 0;
-    fn_80212814(pLib->mpTextures);
+    TMMemFreeArray(pLib->mpTextures);
     pLib->mpTextures = 0;
     pLib->mNumTextures = 0;
-    fn_80212814(pLib->mpCluts);
+    TMMemFreeArray(pLib->mpCluts);
     pLib->mpCluts = 0;
     pLib->mNumCluts = 0;
 }
 
-void fn_80211E08(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex)
+void TMTexLibLoad(TMTexLib_t *pLib, TexFileHeader_t *pTex)
 {
     int numMaterials;
     int numPalettes;
 
     if (pTex == 0) {
-        fn_80211D24(pLib, 0, 0, 0);
+        TMTexLibAlloc(pLib, 0, 0, 0);
         return;
     }
-    fn_8020E2B0(pTex);
-    numMaterials = fn_8020E51C(pTex);
-    numPalettes = fn_8020E524(pTex);
-    fn_80211D24(pLib, numMaterials, numMaterials, numPalettes);
-    fn_80211A74(pLib, pTex, numPalettes, 1);
-    fn_802119C4(pLib, pTex, numMaterials, 1);
-    fn_80211C08(pLib, pTex, numMaterials, 1);
+    TexMipmapRelocate(pTex);
+    numMaterials = TexGetNumMaterials(pTex);
+    numPalettes = TexGetNumPalettes(pTex);
+    TMTexLibAlloc(pLib, numMaterials, numMaterials, numPalettes);
+    _TMTexLibInitCluts(pLib, pTex, numPalettes, 1);
+    _TMTexLibInitTexNodes(pLib, pTex, numMaterials, 1);
+    _TMTexLibInitTextures(pLib, pTex, numMaterials, 1);
 }
 
-void fn_80211EBC(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex)
+void TMTexLibReplaceTexture(TexFileHeader_t *pTex, TMTexLib_t *pLib, int materialIndex, TexFileImage_t *pTexture, int textureIndex, int clutIndex)
 {
-    fn_80211B64(pTex, pLib, materialIndex, pTexture, textureIndex, clutIndex);
+    TMTexLibSetTextureData(pTex, pLib, materialIndex, pTexture, textureIndex, clutIndex);
 }
 
-void fn_80211EDC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut)
+void TMTexLibReplaceClut(TMTexLib_t *pLib, TexFilePalette_t *pPalette, int clutIndex, TMClut_t *pClut)
 {
-    fn_80211AFC(pLib, pPalette, clutIndex, pClut);
+    TMTexLibSetClutData(pLib, pPalette, clutIndex, pClut);
 }
 
-void fn_80211EFC(TexLib_802119C4 *pLib)
+void TMTexLibUnload(TMTexLib_t *pLib)
 {
     int i;
 
     for (i = 0; i < pLib->mNumTextures; i++) {
-        fn_80212530(&pLib->mpTextures[i]);
+        TMTextureTexDelete(&pLib->mpTextures[i]);
     }
     for (i = 0; i < pLib->mNumCluts; i++) {
-        fn_80212654(&pLib->mpCluts[i]);
+        TMTextureClutDelete(&pLib->mpCluts[i]);
     }
-    fn_80211DA8(pLib);
+    TMTexLibFree(pLib);
 }
 
-void fn_80211F94(int maxLibs)
+void TMTexLibRegistryInit(int maxLibs)
 {
-    fn_80212850(&lbl_8039B53C, maxLibs, 1, 1);
+    TMRegistryAlloc(&lbl_8039B53C, maxLibs, 1, 1);
 }
 
-void fn_80211FC8(void)
+void TMTexLibRegistryShutdown(void)
 {
-    fn_802128A8(&lbl_8039B53C);
+    TMRegistryFree(&lbl_8039B53C);
 }
 
-void fn_80211FF0(void)
+void TMTexLibRegistryReset(void)
 {
-    fn_802128DC(&lbl_8039B53C);
+    TMRegistryReset(&lbl_8039B53C);
 }
 
-void fn_80212018(const char *pName, TexLib_802119C4 *pLib)
+void TMTexLibRegister(const char *pName, TMTexLib_t *pLib)
 {
     if (pLib != 0) {
-        fn_8021295C(&lbl_8039B53C, pName, pLib);
+        TMRegistryAddEntry(&lbl_8039B53C, pName, pLib);
     }
 }
 
-Texture_80212234 *fn_80212050(TexNode_802119C4 *pNode)
+TMTexture_t *TMTexLibGetTextureByTexNode(TMTexNode_t *pNode)
 {
     if (pNode != 0) {
         return &pNode->mpLib->mpTextures[pNode->mTextureIndex];
@@ -193,9 +196,9 @@ Texture_80212234 *fn_80212050(TexNode_802119C4 *pNode)
     return 0;
 }
 
-Clut_80212534 *fn_80212074(TexNode_802119C4 *pNode, int index)
+TMClut_t *TMTexLibGetClutByTexNode(TMTexNode_t *pNode, int index)
 {
-    TexLib_802119C4 *pLib;
+    TMTexLib_t *pLib;
 
     if (pNode != 0) {
         pLib = pNode->mpLib;
@@ -207,54 +210,54 @@ Clut_80212534 *fn_80212074(TexNode_802119C4 *pNode, int index)
     return 0;
 }
 
-TexNode_802119C4 *fn_802120AC(TexLib_802119C4 *pLib, const char *pName)
+TMTexNode_t *TMTexLibGetTexNode(TMTexLib_t *pLib, const char *pName)
 {
     if (pLib != 0) {
-        return fn_80212C60(&pLib->mRegistry, pName);
+        return TMRegistryGetDataByName(&pLib->mRegistry, pName);
     }
-    return fn_80212BDC(&lbl_8039B53C, pName);
+    return TMRegistrySearchPath(&lbl_8039B53C, pName);
 }
 
-Texture_80212234 *fn_802120E4(TexLib_802119C4 *pLib, const char *pName)
+TMTexture_t *TMTexLibGetTexture(TMTexLib_t *pLib, const char *pName)
 {
-    TexNode_802119C4 *pNode;
-    Texture_80212234 *pTexture;
+    TMTexNode_t *pNode;
+    TMTexture_t *pTexture;
 
     pTexture = 0;
-    pNode = fn_802120AC(pLib, pName);
+    pNode = TMTexLibGetTexNode(pLib, pName);
     if (pNode != 0) {
-        pTexture = fn_80212050(pNode);
+        pTexture = TMTexLibGetTextureByTexNode(pNode);
     }
     return pTexture;
 }
 
-Clut_80212534 *fn_80212124(TexLib_802119C4 *pLib, const char *pName, int index)
+TMClut_t *TMTexLibGetClut(TMTexLib_t *pLib, const char *pName, int index)
 {
-    TexNode_802119C4 *pNode;
-    Clut_80212534 *pClut;
+    TMTexNode_t *pNode;
+    TMClut_t *pClut;
 
     pClut = 0;
-    pNode = fn_802120AC(pLib, pName);
+    pNode = TMTexLibGetTexNode(pLib, pName);
     if (pNode != 0) {
-        pClut = fn_80212074(pNode, index);
+        pClut = TMTexLibGetClutByTexNode(pNode, index);
     }
     return pClut;
 }
 
-void fn_8021216C(TexLib_802119C4 *pLib, Desc_802EE9E4 *pDesc)
+void TMTexLibSetFilterParm(TMTexLib_t *pLib, TMTexFilterDesc_t *pDesc)
 {
     int i;
 
     for (i = 0; i < pLib->mNumTextures; i++) {
-        fn_80212310(&pLib->mpTextures[i], pDesc);
+        TMTextureSetFilterParm(&pLib->mpTextures[i], pDesc);
     }
 }
 
-void fn_802121D0(TexLib_802119C4 *pLib, TexWrapDesc_80212374 *pDesc)
+void TMTexLibSetWrapParm(TMTexLib_t *pLib, TMTexWrapDesc_t *pDesc)
 {
     int i;
 
     for (i = 0; i < pLib->mNumTextures; i++) {
-        fn_80212374(&pLib->mpTextures[i], pDesc);
+        TMTextureSetWrapParm(&pLib->mpTextures[i], pDesc);
     }
 }

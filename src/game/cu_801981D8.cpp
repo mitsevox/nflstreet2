@@ -7,7 +7,7 @@ extern "C" {
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0F80(Mtx44 m);
-void fn_80210388(void);
+void TMRenderReset(void);
 int fn_80236EC0(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
@@ -25,7 +25,7 @@ void fn_801981D8(void *p, int value)
 {
     Mtx44 mtx;
 
-    fn_80210388();
+    TMRenderReset();
     fn_802525BC(0);
     fn_801D0508();
     fn_801D0F80(mtx);

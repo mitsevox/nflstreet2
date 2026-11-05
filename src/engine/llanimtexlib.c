@@ -23,14 +23,14 @@ void fn_801C0E04(Texture_801C0928 *texture)
     }
 }
 
-void fn_801C0F64(int data, Texture_8020DB34 *image)
+void fn_801C0F64(int data, Texture_t *image)
 {
-    fn_8020DFD8((void *)data, image);
+    TexCreate((void *)data, image);
 }
 
-void fn_801C0F84(Texture_8020DB34 *image)
+void fn_801C0F84(Texture_t *image)
 {
-    fn_8020E258(image);
+    TexDelete(image);
 }
 
 void fn_801C0FA4(Texture_801C0928 *texture)

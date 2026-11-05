@@ -58,14 +58,14 @@ void fn_801D0544(void);
 void fn_801D0ADC(int a);
 void fn_801DF064(float *pColor, Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
 float fn_801DF184(Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
-void fn_8021077C(int a);
-void fn_80210BD8(int a);
-void fn_802117C8(Table_80212850 *pTable, int count);
-void fn_802117F0(Table_80212850 *pTable);
-int fn_80211860(Table_80212850 *pTable, Shader_80196480 *pShader, void (*pSetup)(void));
-void fn_80211928(const char *pName, Table_80212850 *pTable);
-void fn_80211958(const char *pName);
-int fn_80211984(const char *pName);
+void TMRenderBindShader(int a);
+void TMRenderSetBlendMode(int a);
+void TMShaderLibAlloc(Table_80212850 *pTable, int count);
+void TMShaderLibFree(Table_80212850 *pTable);
+int TMShaderLibAddShader(Table_80212850 *pTable, Shader_80196480 *pShader, void (*pSetup)(void));
+void TMShaderLibRegister(const char *pName, Table_80212850 *pTable);
+void TMShaderLibUnregister(const char *pName);
+int TMShaderLibGetShader(const char *pName);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
@@ -97,17 +97,17 @@ void fn_801962CC(int mode)
 {
     switch (mode) {
     case 0:
-        fn_80210BD8(2);
+        TMRenderSetBlendMode(2);
         break;
     case 1:
-        fn_80210BD8(6);
+        TMRenderSetBlendMode(6);
         break;
     case 2:
-        fn_80210BD8(0);
+        TMRenderSetBlendMode(0);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_INVSRCCLR, GX_LO_NOOP);
         break;
     default:
-        fn_80210BD8(6);
+        TMRenderSetBlendMode(6);
         break;
     }
 }
@@ -136,18 +136,18 @@ void fn_80196414(void)
 void fn_80196480(int a)
 {
     lbl_803EB740 = 1;
-    fn_802117C8(&lbl_80365188, 2);
-    fn_80211860(&lbl_80365188, &lbl_802EDDC0.mShader, fn_80196414);
-    fn_80211860(&lbl_80365188, &lbl_802EDDA4, fn_8019634C);
-    fn_80211928("Particles", &lbl_80365188);
-    lbl_803EB744 = fn_80211984("ParticleOnePass");
-    lbl_803EB748 = fn_80211984("ParticleFlat");
+    TMShaderLibAlloc(&lbl_80365188, 2);
+    TMShaderLibAddShader(&lbl_80365188, &lbl_802EDDC0.mShader, fn_80196414);
+    TMShaderLibAddShader(&lbl_80365188, &lbl_802EDDA4, fn_8019634C);
+    TMShaderLibRegister("Particles", &lbl_80365188);
+    lbl_803EB744 = TMShaderLibGetShader("ParticleOnePass");
+    lbl_803EB748 = TMShaderLibGetShader("ParticleFlat");
 }
 
 void fn_8019651C(void)
 {
-    fn_80211958("Particles");
-    fn_802117F0(&lbl_80365188);
+    TMShaderLibUnregister("Particles");
+    TMShaderLibFree(&lbl_80365188);
     lbl_803EB740 = 0;
     lbl_803EB744 = 0;
     lbl_803EB748 = 0;
@@ -172,7 +172,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
         if (pEmitter->mUnknown45 && pTexture) {
             GXLoadTlut(&pTexture->mTlutObj, 0);
             GXLoadTexObj(&pTexture->mTexObj, 0);
-            fn_8021077C(lbl_803EB744);
+            TMRenderBindShader(lbl_803EB744);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -213,7 +213,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
                 fn_801D0544();
             }
         } else {
-            fn_8021077C(lbl_803EB748);
+            TMRenderBindShader(lbl_803EB748);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);

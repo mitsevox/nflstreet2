@@ -10,12 +10,12 @@ const char *Tex::GetName() { return "Tex"; }
 
 int Tex::Init()
 {
-    fn_8020DE8C(1, 1, 1);
+    TexInit(1, 1, 1);
     return 1;
 }
 
 int Tex::Shutdown()
 {
-    fn_8020DF44();
+    TexShutdown();
     return 1;
 }

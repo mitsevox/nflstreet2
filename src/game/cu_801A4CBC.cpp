@@ -32,7 +32,7 @@ void fn_801D0664(Mtx44 m);
 void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(Mtx44 m);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
 void *fn_80236384(int a);
@@ -159,7 +159,7 @@ void fn_801A5104(void)
         unsigned short i;
         int cursor = fn_801CECDC(fn_801CECCC(2));
 
-        fn_80210388();
+        TMRenderReset();
         GXSetCullMode(GX_CULL_NONE);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXSetZCompLoc(GX_DISABLE);

@@ -11,7 +11,7 @@ void fn_80215838(TexXFormDef_80215838 *pDef, void *pOldBase, void *pNewBase)
     for (i = 0; i < pDef->mNumEntries; i++) {
         TexXFormEntry_80215838 *pEntry = &pDef->maEntries[i];
 
-        pEntry->mpName = fn_8020EB94((void *)pEntry->mpName, pOldBase, pNewBase);
+        pEntry->mpName = TMModelResRelocatePtr((void *)pEntry->mpName, pOldBase, pNewBase);
     }
 }
 

@@ -53,7 +53,7 @@ void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80163358 *
 int fn_801DD268(int handle, int type, int a, int *pDesc);
 void fn_801DD320(int handle, Object_80163358 *pObject);
 void fn_801DD3AC(int handle, Object_80163358 *pObject, int a);
-void fn_80210814(int a, int b, int c);
+void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
 void fn_802355E4(void *p);
@@ -174,7 +174,7 @@ int fn_8016345C(Object_80163358 *pObject)
 {
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-        fn_80210814(0, 0, 0);
+        TMRenderBindTexture(0, 0, 0);
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
                 if (fn_801486A0() == 1 && fn_801374D4() == i) {

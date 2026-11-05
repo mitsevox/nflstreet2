@@ -53,8 +53,8 @@ void fn_801D0D94(float, float, float);
 void fn_801D12BC(int);
 int fn_801CFE40(float, float);
 void fn_80227E40(void *, void *);
-void fn_80210814(int, int, int);
-void fn_80210CC4(float, float);
+void TMRenderBindTexture(int, int, int);
+void TMRenderSetZRange(float, float);
 void fn_802520E0(int, int, int);
 void fn_802353D8(void *, int);
 void fn_80235588(void *, int);
@@ -236,14 +236,14 @@ int fn_80161B38(Object_801618D8 *item) {
         }
         if (valid == 1) {
             fn_802520E0(1, 3, 0);
-            fn_80210814(0, 0, 0);
+            TMRenderBindTexture(0, 0, 0);
             if (item->mUnknown28 == 6) {
                 fn_80235740(item->mUnknown3C, fn_801C657C());
-                fn_80210CC4(0.0f, 0.0f);
+                TMRenderSetZRange(0.0f, 0.0f);
                 fn_801D0470(fn_80228668());
                 fn_801D0544();
                 fn_80235764(item->mUnknown3C, fn_801C657C());
-                fn_80210CC4(0.0f, 1.0f);
+                TMRenderSetZRange(0.0f, 1.0f);
             } else {
                 if (extra)
                     fn_80235740(extra->mUnknown3C, fn_801C657C());

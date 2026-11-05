@@ -45,7 +45,7 @@ void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *p);
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353F8(Object_80235588 *p, int flags);
 void fn_80235510(Object_80235588 *p, int a);
@@ -114,7 +114,7 @@ void fn_801A5568(Instance_801614D0 *pInstance, int unused)
 {
     int handle = fn_801C657C();
 
-    fn_80210388();
+    TMRenderReset();
     fn_80235C90(&pInstance->mUnknown48, 0, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);

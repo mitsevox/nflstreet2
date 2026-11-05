@@ -5,9 +5,9 @@ void fn_802160A0(Swap_802160A0 *pSwap, void *pOldBase, void *pNewBase)
     unsigned short i;
     unsigned short j;
 
-    pSwap->mpSlots = fn_8020EB94(pSwap->mpSlots, pOldBase, pNewBase);
-    pSwap->mpStates = fn_8020EB94(pSwap->mpStates, pOldBase, pNewBase);
-    pSwap->mpNodeIndices = fn_8020EB94(pSwap->mpNodeIndices, pOldBase, pNewBase);
+    pSwap->mpSlots = TMModelResRelocatePtr(pSwap->mpSlots, pOldBase, pNewBase);
+    pSwap->mpStates = TMModelResRelocatePtr(pSwap->mpStates, pOldBase, pNewBase);
+    pSwap->mpNodeIndices = TMModelResRelocatePtr(pSwap->mpNodeIndices, pOldBase, pNewBase);
     for (i = 0; i < pSwap->mNumSlots; i++) {
         SwapSlot_802160A0 *pSlot = fn_8021616C(pSwap, i);
 

@@ -1,5 +1,5 @@
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/Font_8019BE30.h"
 
 /* 0x50-byte object set up by 0x80233CF0, which stores its second argument at
@@ -22,17 +22,17 @@ struct TextureEntry1C_801A1400 {
 };
 
 /* Partial view of the texture data returned by 0x80161094: the entry tables
-   at +0x18 (fn_8020E560) and +0x1C (fn_8020E5F8). */
+   at +0x18 (TexGetTextureByIndex) and +0x1C (TexGetPaletteByIndex). */
 struct Texture_801A1400 {
     char mUnknown0[0x18];
-    Object_8020E560 *mpUnknown18;
+    TexFileImage_t *mpUnknown18;
     TextureEntry1C_801A1400 *mpUnknown1C;
 };
 
 extern "C" {
 
 unsigned char *fn_80161094(int player, int slot);
-void fn_8020F824(void *, void *);
+void TMModelRemapClusters(void *, void *);
 void fn_80233CF0(void *pInstance, void *pModel, void *p);
 
 void fn_801A13A8(Instance_801A13A8 *pInstance)
@@ -47,7 +47,7 @@ void fn_801A13B4(Instance_801A13A8 *pInstance, Instance_801A13A8 *pSource, void 
 
 void fn_801A13D8(Instance_801A13A8 *pInstance, void *p)
 {
-    fn_8020F824(pInstance->mUnknown1C, p);
+    TMModelRemapClusters(pInstance->mUnknown1C, p);
 }
 
 void fn_801A13FC(void)

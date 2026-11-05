@@ -31,11 +31,11 @@ struct Record_801987F4 {
 };
 
 extern "C" {
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_8024FC48(int a);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
 void fn_801D0470(int a);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -160,7 +160,7 @@ void fn_8019837C(Element_8019837C *p, float *position, int angle)
 
 void fn_801985FC(void)
 {
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -173,7 +173,7 @@ void fn_801985FC(void)
     fn_8024FC48(1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    fn_80210BD8(2);
+    TMRenderSetBlendMode(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
@@ -193,13 +193,13 @@ void fn_801985FC(void)
                         (int)(record->mUnknownC * 46603.379f));
         }
     }
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
 }
 
 void fn_801987F4(void)
 {
     GXColor color = {128, 128, 128, 128};
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -213,12 +213,12 @@ void fn_801987F4(void)
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    fn_80210BD8(6);
+    TMRenderSetBlendMode(6);
     GXSetNumTevStages(1);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     GXSetZCompLoc(GX_FALSE);
-    fn_80210CC4(0.0f, 0.9999f);
+    TMRenderSetZRange(0.0f, 0.9999f);
     fn_801D0470(fn_80228668());
     fn_801D0508();
     fn_801D131C(3);
@@ -244,7 +244,7 @@ void fn_801987F4(void)
             GXTexCoord2f32(lbl_802EDF14[j][0], lbl_802EDF14[j][1]);
         }
     }
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
 }
 
 unsigned int fn_80198B24(float x, float y)

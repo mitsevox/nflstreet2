@@ -51,20 +51,20 @@ void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0CFC(float a);
-void fn_8020FA38(int a, void *b);
-void fn_802100C0(void *p, void *q);
-void fn_80210114(void *p);
-void fn_80210388(void);
-void fn_80210654(Object_8023417C *pObject);
-void fn_80210BA4(void *p);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
-void fn_80210D10(int a, int b, int c);
+void TMXform(int a, void *b);
+void TMMaterialListAllocDefs(void *p, void *q);
+void TMMaterialListFree(void *p);
+void TMRenderReset(void);
+void TMRenderBindModel(Object_8023417C *pObject);
+void TMRenderBindMaterialList(void *p);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
+void TMRenderSetZMode(int a, int b, int c);
 void fn_80211350(void);
-void fn_80211E08(Element_8019CE3C *pElement, int a);
-void fn_80211EFC(Element_8019CE3C *pElement);
-void fn_80211FF0(void);
-void fn_80212018(const char *pName, Element_8019CE3C *pElement);
+void TMTexLibLoad(Element_8019CE3C *pElement, int a);
+void TMTexLibUnload(Element_8019CE3C *pElement);
+void TMTexLibRegistryReset(void);
+void TMTexLibRegister(const char *pName, Element_8019CE3C *pElement);
 void fn_80233D64(Object_80233EAC *pObject, Desc_80233D64 *pDesc, const char *pName, int a,
                  void *pData, void *p);
 unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
@@ -86,11 +86,11 @@ void fn_8019CE3C(Object_8019CE3C *pObject)
 {
     int value;
 
-    fn_80211E08(&lbl_803653E4[0], fn_801EF390(pObject->mpUnknown18, 15, 1));
+    TMTexLibLoad(&lbl_803653E4[0], fn_801EF390(pObject->mpUnknown18, 15, 1));
     lbl_803EB7C0[0] = 1;
     value = fn_801486A0();
     if (value == 1) {
-        fn_80211E08(&lbl_803653E4[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
+        TMTexLibLoad(&lbl_803653E4[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
         lbl_803EB7C0[1] = 1;
     }
     fn_80233D64(&lbl_80365434, &lbl_802F2594, "BALL", 0, pObject->mpUnknown18, 0);
@@ -99,10 +99,10 @@ void fn_8019CE3C(Object_8019CE3C *pObject)
 void fn_8019CEE8(Object_8019CE3C *pObject)
 {
     fn_80233FCC(&lbl_80365434);
-    fn_80211EFC(&lbl_803653E4[0]);
+    TMTexLibUnload(&lbl_803653E4[0]);
     lbl_803EB7C0[0] = 0;
     if (lbl_803EB7C0[1] != 0) {
-        fn_80211EFC(&lbl_803653E4[1]);
+        TMTexLibUnload(&lbl_803653E4[1]);
         lbl_803EB7C0[1] = 0;
     }
     fn_801F010C(pObject->mpUnknown18, 15);
@@ -113,15 +113,15 @@ void fn_8019CF5C(Object_8019CE3C *pObject, int index)
     Object_8023417C *pResult;
 
     pObject->mUnknown28C = 1.0f;
-    fn_80211FF0();
-    fn_80212018("model", &lbl_803653E4[index]);
+    TMTexLibRegistryReset();
+    TMTexLibRegister("model", &lbl_803653E4[index]);
     pResult = fn_8023417C(&lbl_80365434, 0);
-    fn_802100C0(pObject->mUnknown284, pResult->mpUnknown18);
+    TMMaterialListAllocDefs(pObject->mUnknown284, pResult->mpUnknown18);
 }
 
 void fn_8019CFD0(Object_8019CE3C *pObject)
 {
-    fn_80210114(pObject->mUnknown284);
+    TMMaterialListFree(pObject->mUnknown284);
 }
 
 void fn_8019CFF4(Object_8019CE3C *pObject)
@@ -139,7 +139,7 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     Object_8023417C *pResult;
 
     pUnknown = fn_80236384(0);
-    fn_80210388();
+    TMRenderReset();
     x = y = z = 1.0f;
     if (pObject->mpUnknown294 != 0) {
         x = pObject->mpUnknown294->mUnknownC;
@@ -174,8 +174,8 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     } else {
         pResult = fn_8023417C(&lbl_80365434, fn_80234144(&lbl_80365434, buffer));
     }
-    fn_80210654(pResult);
-    fn_80210BA4(pObject->mUnknown284);
+    TMRenderBindModel(pResult);
+    TMRenderBindMaterialList(pObject->mUnknown284);
     if (!(result & 63)) {
         fn_801D04C4();
         fn_801D0664(pObject->mUnknown20);
@@ -184,10 +184,10 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
                 fn_801D0CFC(1.5f);
             }
         }
-        fn_8020FA38(0, 0);
-        fn_80210BD8(2);
+        TMXform(0, 0);
+        TMRenderSetBlendMode(2);
         fn_80211350();
-        fn_80210BD8(1);
+        TMRenderSetBlendMode(1);
         fn_801D0544();
     }
     if (!(pObject->mUnknown14 & 2)) {
@@ -195,8 +195,8 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     } else {
         fn_801A5434(pObject->mUnknown4, 0);
     }
-    fn_80210D10(1, 3, 1);
-    fn_80210CC4(0.0f, 1.0f);
-    fn_80210BD8(1);
+    TMRenderSetZMode(1, 3, 1);
+    TMRenderSetZRange(0.0f, 1.0f);
+    TMRenderSetBlendMode(1);
 }
 }

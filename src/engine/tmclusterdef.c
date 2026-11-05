@@ -2,7 +2,7 @@
 
 void fn_80213384(ClusterDef_80213384 *pDef, void *pOldBase, void *pNewBase)
 {
-    pDef->mpEntries = fn_8020EB94(pDef->mpEntries, pOldBase, pNewBase);
+    pDef->mpEntries = TMModelResRelocatePtr(pDef->mpEntries, pOldBase, pNewBase);
 }
 
 void fn_802133B8(ClusterDef_80213384 *pDef, short *pRemap)

@@ -2,7 +2,7 @@
 #define ENGINE_GCMP_H
 
 /* Stream buffer of the codec layer in src/engine/GCmp.c: +0 data,
-   +4 size, +8 position and the byte flag +0x18 used there. fn_8020E6A0 sets
+   +4 size, +8 position and the byte flag +0x18 used there. TexDecompressTexture sets
    up a 0x20-byte source buffer for fn_8027F3A4 with the image width and
    height at +0xC/+0xE and the bit depth 16 at +0x16. */
 typedef struct Buffer_8027F9AC {

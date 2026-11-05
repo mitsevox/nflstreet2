@@ -1,3 +1,6 @@
+/* TM renderer state: start and end of each frame and viewport, the default GX pipeline, and
+   binding of models, shaders, textures with their palettes, materials, blend and depth modes. */
+
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXLighting.h>
@@ -9,17 +12,17 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern Texture_80212234 lbl_8039B4B0;
+extern TMTexture_t lbl_8039B4B0;
 extern GXTlutObj lbl_8039B4E0;
 extern GXTlutObj lbl_8039B508;
 extern int lbl_802F9C08[4];
 extern unsigned char lbl_803EBEF0;
-extern Texture_80212234 *lbl_803EBEF4;
+extern TMTexture_t *lbl_803EBEF4;
 extern void *lbl_803EBEF8;
 extern void *lbl_803EBEFC;
 extern unsigned char lbl_803EBF00;
 
-void fn_80210298(void)
+void TMRenderDisable32BitIndirectCluts(void)
 {
     if (lbl_803EBF00) {
         fn_801D2BD0(lbl_803EBEF8);
@@ -30,23 +33,23 @@ void fn_80210298(void)
     }
 }
 
-void fn_802102E8(void)
+void TMRenderInit(void)
 {
-    fn_80212658(&lbl_8039B4B0);
-    fn_80210368(&lbl_8039B4B0);
-    fn_80210388();
+    TMTextureMakeNullTexture(&lbl_8039B4B0);
+    TMRenderSetDefaultTexture(&lbl_8039B4B0);
+    TMRenderReset();
     lbl_803EBEF0 = 1;
 }
 
-void fn_8021032C(void)
+void TMRenderShutdown(void)
 {
-    fn_80212530(&lbl_8039B4B0);
+    TMTextureTexDelete(&lbl_8039B4B0);
     lbl_803EBEF0 = 0;
     lbl_803EBEF4 = 0;
-    fn_80210298();
+    TMRenderDisable32BitIndirectCluts();
 }
 
-void fn_80210368(Texture_80212234 *pTexture)
+void TMRenderSetDefaultTexture(TMTexture_t *pTexture)
 {
     if (pTexture != 0) {
         lbl_803EBEF4 = pTexture;
@@ -55,12 +58,12 @@ void fn_80210368(Texture_80212234 *pTexture)
     }
 }
 
-void fn_80210388(void)
+void TMRenderReset(void)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
-    fn_80210654(0);
-    fn_80210BA4(0);
+    TMRenderBindModel(0);
+    TMRenderBindMaterialList(0);
     pState->mpMaterial = 0;
     pState->mpShader = 0;
     pState->mNumHooks = 0;
@@ -68,13 +71,13 @@ void fn_80210388(void)
     pState->mBindFunc = 0;
 }
 
-void fn_802103DC(void)
+void TMRenderBeginFrame(void)
 {
     GXColor ambColor = {0xC0, 0xC0, 0xC0, 0xFF};
     GXColor matColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-    fn_80210388();
-    fn_80210BD8(1);
+    TMRenderReset();
+    TMRenderSetBlendMode(1);
     GXSetCullMode(GX_CULL_NONE);
     GXSetDither(GX_FALSE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
@@ -101,25 +104,25 @@ void fn_802103DC(void)
     GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetCurrentMtx(GX_PNMTX0);
     fn_802134E8();
-    fn_8021077C(0);
+    TMRenderBindShader(0);
     fn_80215B74();
 }
 
-void fn_80210608(void)
+void TMRenderBeginViewport(void)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     GXGetViewportv(&pState->mViewport.mLeft);
 }
 
-void fn_80210634(void)
+void TMRenderEndFrame(void)
 {
     fn_80215B78();
 }
 
-void fn_80210654(Model_8020F28C *pModel)
+void TMRenderBindModel(TMModel_t *pModel)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     if (pModel != 0) {
         if (lbl_803E96E8.mpGeom != pModel->mpGeom) {
@@ -133,7 +136,7 @@ void fn_80210654(Model_8020F28C *pModel)
         pState->mpFade = pModel->mpFade;
         pState->mpExtn = pModel->mpExtn;
         pState->mpSkel = pModel->mpSkel;
-        fn_80210BB0(pModel->mpTxfm);
+        TMRenderBindTexXformList(pModel->mpTxfm);
     } else {
         lbl_803E96E8.mpGeom = 0;
         pState->mpSwap = 0;
@@ -143,13 +146,13 @@ void fn_80210654(Model_8020F28C *pModel)
         pState->mpFade = 0;
         pState->mpExtn = 0;
         pState->mpSkel = 0;
-        fn_80210BB0(0);
+        TMRenderBindTexXformList(0);
         pState->mUnknown60 = -1;
     }
     pState->mLod = 0;
 }
 
-void fn_80210724(ClusterObj_80210724 *pClusterObj)
+void TMRenderBindClusterObj(TMClusterObj_t *pClusterObj)
 {
     lbl_803E96E8.mpClusterObj = pClusterObj;
     if (pClusterObj != 0) {
@@ -158,15 +161,15 @@ void fn_80210724(ClusterObj_80210724 *pClusterObj)
     }
 }
 
-void fn_8021077C(Shader_80211638 *pShader)
+void TMRenderBindShader(TMShader_t *pShader)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     if (pShader == 0) {
-        pShader = fn_80211984(0);
+        pShader = TMShaderLibGetShader(0);
     }
     if (pShader != pState->mpShader) {
-        Shader_80211638 *pOld = pState->mpShader;
+        TMShader_t *pOld = pState->mpShader;
 
         pState->mBindFunc = 0;
         if (pOld != 0 && pOld->mUnbindFunc != 0) {
@@ -180,7 +183,7 @@ void fn_8021077C(Shader_80211638 *pShader)
     }
 }
 
-void fn_80210814(GXTexMapID id, Texture_80212234 *pTexture, Clut_80212534 *pClut)
+void TMRenderBindTexture(GXTexMapID id, TMTexture_t *pTexture, TMClut_t *pClut)
 {
     if (pTexture != 0) {
         if (pClut != 0) {
@@ -213,31 +216,31 @@ void fn_80210814(GXTexMapID id, Texture_80212234 *pTexture, Clut_80212534 *pClut
             GXInitTexObjTlut(&pTexture->mObj, id);
         }
     } else if (lbl_803EBEF4 != 0) {
-        fn_80210814(id, lbl_803EBEF4, 0);
+        TMRenderBindTexture(id, lbl_803EBEF4, 0);
     }
 }
 
-void fn_80210970(Material_8020FAAC *pMaterial)
+void TMRenderBindMaterial(TMMaterial_t *pMaterial)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     if (pMaterial == pState->mpMaterial) {
         return;
     }
     if (pMaterial != 0) {
-        Shader_80211638 *pShader = pMaterial->mpShader;
+        TMShader_t *pShader = pMaterial->mpShader;
 
-        fn_8021077C(pShader);
+        TMRenderBindShader(pShader);
         if (pState->mBindFunc == 0) {
             int i;
             int j;
 
             for (i = 0; i < pShader->mNumTextures; i++) {
-                fn_80210814(i, pMaterial->mpParms[i].mpTexture, pMaterial->mpParms[i].mpClut);
+                TMRenderBindTexture(i, pMaterial->mpParms[i].mpTexture, pMaterial->mpParms[i].mpClut);
             }
             for (j = 0; j < pShader->mNumConsts; j++) {
-                ShaderParmDef_80211638 *pParm = &pShader->mpFirstConst[j];
-                MaterialConst_8020FAAC *pValue = &pMaterial->maConsts[pParm->mUnknown11];
+                TMShaderParmDef_t *pParm = &pShader->mpFirstConst[j];
+                TMMaterialConst_t *pValue = &pMaterial->maConsts[pParm->mUnknown11];
 
                 switch (pParm->mType) {
                 case 2:
@@ -274,24 +277,24 @@ void fn_80210970(Material_8020FAAC *pMaterial)
             pState->mBindFunc(pMaterial);
         }
     } else {
-        fn_8021077C(0);
+        TMRenderBindShader(0);
     }
     pState->mpMaterial = pMaterial;
 }
 
-void fn_80210B6C(int index)
+void TMRenderBindMaterialIndex(int index)
 {
     if (lbl_803E96E8.mpMaterialList != 0) {
-        fn_80210970(fn_80210184(lbl_803E96E8.mpMaterialList, index));
+        TMRenderBindMaterial(TMMaterialListGetMaterial(lbl_803E96E8.mpMaterialList, index));
     }
 }
 
-void fn_80210BA4(MaterialList_8020FF34 *pList)
+void TMRenderBindMaterialList(TMMaterialList_t *pList)
 {
     lbl_803E96E8.mpMaterialList = pList;
 }
 
-void fn_80210BB0(void *pTexXForm)
+void TMRenderBindTexXformList(void *pTexXForm)
 {
     lbl_803E96E8.mpTexXForm = pTexXForm;
     lbl_802F9C08[0] = -2;
@@ -300,9 +303,9 @@ void fn_80210BB0(void *pTexXForm)
     lbl_802F9C08[3] = -2;
 }
 
-void fn_80210BD8(unsigned int mode)
+void TMRenderSetBlendMode(unsigned int mode)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     if (mode != pState->mBlendMode) {
         switch (mode) {
@@ -329,10 +332,10 @@ void fn_80210BD8(unsigned int mode)
     }
 }
 
-void fn_80210CC4(float nearZ, float farZ)
+void TMRenderSetZRange(float nearZ, float farZ)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
-    RenderViewport_80210298 *pViewport;
+    TMRenderState_t *pState = &lbl_803E96E8;
+    TMRenderViewport_t *pViewport;
 
     pState->mViewport.mNear = nearZ;
     pState->mViewport.mFar = farZ;
@@ -341,7 +344,7 @@ void fn_80210CC4(float nearZ, float farZ)
                   pViewport->mFar);
 }
 
-void fn_80210D10(GXBool compareEnable, GXCompare func, GXBool updateEnable)
+void TMRenderSetZMode(GXBool compareEnable, GXCompare func, GXBool updateEnable)
 {
     GXSetZMode(compareEnable, func, updateEnable);
 }

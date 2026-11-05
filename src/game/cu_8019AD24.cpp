@@ -1,6 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_801EF390.h"
-#include "game/fn_8021216C.h"
+#include "engine/tmtexlib.h"
 #include "game/Object_80235588.h"
 
 struct Element_8019AD5C {
@@ -80,7 +80,7 @@ static Entry_802EE948 lbl_802EE948[5] = {
 static Record_802EE9D4 lbl_802EE9D4[1] = {
     { { 0.0f, 0.0f, 0.0f }, 1.0f },
 };
-static Desc_802EE9E4 lbl_802EE9E4 = { 5, 1, -4.0f, 0, 0, 1 };
+static TMTexFilterDesc_t lbl_802EE9E4 = { 5, 1, -4.0f, 0, 0, 1 };
 static int lbl_803EB7B0 = 0;
 static float lbl_803ECBF0;
 
@@ -104,7 +104,7 @@ void fn_8019AD5C(Object_8019AD5C *pObject, int *pArgs)
         pObject->mUnknown4AC[i] = fn_8019AD24(pObject->mpUnknown14, pObject->mUnknown18[i]);
         fn_80234DFC(pObject->mUnknown4AC[i], &pObject->mUnknown4C0[i], 0, 0, lbl_802EE948[i].mpName,
                     lbl_802EE948[i].mUnknown4);
-        fn_8021216C((TexLib_802119C4 *)&pObject->mUnknown4C0[i], &lbl_802EE9E4);
+        TMTexLibSetFilterParm((TMTexLib_t *)&pObject->mUnknown4C0[i], &lbl_802EE9E4);
         fn_80235588(&pObject->mUnknown2C[i], 6);
         fn_80235630(&pObject->mUnknown2C[i], pObject->mUnknown4AC[i]);
         fn_80235B6C(&pObject->mUnknown2C[i], &pObject->mUnknown4C0[i], 1);

@@ -37,9 +37,9 @@ extern "C" {
 int fn_801CFC14(int angle, float *pFirst, float *pSecond);
 float fn_801CFF54(float value);
 void fn_801D0F80(Mtx44 m);
-void fn_80210388(void);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
+void TMRenderReset(void);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
 void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pV);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227538(Pair_8017055C *pOut, int angle, float length);
@@ -282,7 +282,7 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
     if (pTrail->mCount == 0) {
         return;
     }
-    fn_80210388();
+    TMRenderReset();
     fn_8019CAC4(pTrail);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -306,9 +306,9 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     } else {
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-        fn_80210CC4(0.01f, 0.01f);
+        TMRenderSetZRange(0.01f, 0.01f);
     }
-    fn_80210BD8(2);
+    TMRenderSetBlendMode(2);
     state = fn_80236EC0(0);
     if (pTrail->mType == 0) {
         fn_8019C4F4(0, pTrail, pTrail->mCount - 1);
@@ -323,8 +323,8 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
         fn_8019C044(0, pTrail, i, &left, &right);
     }
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-    fn_80210CC4(0.0f, 1.0f);
-    fn_80210BD8(1);
+    TMRenderSetZRange(0.0f, 1.0f);
+    TMRenderSetBlendMode(1);
     fn_80236EC0(state);
 }
 }

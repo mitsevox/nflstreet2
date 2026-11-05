@@ -287,14 +287,14 @@ void fn_8019BD88(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
 
 void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index)
 {
-    fn_8020DFD8((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
+    TexCreate((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
     fn_8019BD88(pFont, pDesc);
     fn_801F010C(p, index);
 }
 
 void fn_8019BE94(Font_8019BE30 *pFont)
 {
-    fn_8020E258(&pFont->mTexture);
+    TexDelete(&pFont->mTexture);
     fn_801D2BD0(pFont->mpGlyphs);
 }
 }

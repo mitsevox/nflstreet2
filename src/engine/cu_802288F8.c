@@ -11,7 +11,7 @@ extern int fn_801DD200(int handle, int b);
 extern void fn_801DD2B8(int a);
 extern void fn_801DD3F0(int handle);
 extern int fn_801DD474(int handle, int b);
-extern void fn_80210608(void);
+extern void TMRenderBeginViewport(void);
 
 static int lbl_803EBFA0 = 0;
 static int lbl_803EBFA4 = 0;
@@ -115,7 +115,7 @@ void fn_80228B74(Object_80228224 *pObject)
     fn_801D12EC(4);
     fn_801D0544();
     fn_802287D4(pObject);
-    fn_80210608();
+    TMRenderBeginViewport();
 }
 
 void fn_80228D58(int handle)

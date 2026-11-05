@@ -28,7 +28,7 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80030D50 *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, Object_80030D50 *pObject);
 void fn_801DD3AC(int handle, Object_80030D50 *pObject, int b);
-void fn_80210814(int a, int b, int c);
+void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
 void fn_802355E4(void *p);
@@ -84,7 +84,7 @@ int fn_80030E58(Object_80030D50 *pObject)
         fn_801D0470(fn_80228668());
         fn_801D0544();
         fn_80235C90(pObject->mUnknown28, fn_801C657C(), 0.25f, 0.25f, 0.75f, 1.0f);
-        fn_80210814(0, 0, 0);
+        TMRenderBindTexture(0, 0, 0);
         fn_80235764(pObject->mUnknown28, fn_801C657C());
     }
     return 0;

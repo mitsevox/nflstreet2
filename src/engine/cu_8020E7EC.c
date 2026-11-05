@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/tmlib.h"
 
-void fn_8020E7EC(Texture_8020DB34 *pTex)
+void fn_8020E7EC(Texture_t *pTex)
 {
     int bpp;
     int size;

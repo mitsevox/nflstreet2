@@ -2,16 +2,16 @@
 #define GAME_CU_801A4AD4_H
 
 #include "game/FMCAPPORT.h"
-#include "game/fn_8021216C.h"
+#include "engine/tmtexlib.h"
 
 struct Object_8003DEC4;
 
 /* Entry of the table walked by fn_801A4C1C: a texture name looked up with
-   fn_802345F8, a flag, and the descriptor passed to fn_8021216C. */
+   fn_802345F8, a flag, and the descriptor passed to TMTexLibSetFilterParm. */
 struct Entry_802F3488 {
     const char *mpName;
     unsigned char mUnknown4;
-    Desc_802EE9E4 mUnknown8;
+    TMTexFilterDesc_t mUnknown8;
 };
 
 extern "C" {

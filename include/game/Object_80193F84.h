@@ -6,7 +6,7 @@
 struct Object_80193F84 {
     int mUnknown0;
     int mUnknown4;
-    Texture_8020DB34 mTexture;
+    Texture_t mTexture;
     unsigned char mUnknown28;
     int mUnknown2C;
     int mUnknown30;

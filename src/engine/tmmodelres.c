@@ -1,13 +1,16 @@
+/* TM renderer model resources: the list of chunk types (Info, Geom, Matl, Skel ...) a model file
+   can hold, relocation of a loaded model file's chunks, and lookup of a chunk by tag. */
+
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
 extern int lbl_803ECFC4;
-extern ChunkDef_8020EA18 *lbl_803ECFC8;
+extern TMChunkDef_t *lbl_803ECFC8;
 extern unsigned int lbl_803ECFCC;
 
-static ChunkDef_8020EA18 *fn_8020EA18(int tag)
+static TMChunkDef_t *_TMModelResGetChunkDef(int tag)
 {
-    ChunkDef_8020EA18 *pDef;
+    TMChunkDef_t *pDef;
     unsigned int i;
 
     pDef = 0;
@@ -20,12 +23,12 @@ static ChunkDef_8020EA18 *fn_8020EA18(int tag)
     return pDef;
 }
 
-static void fn_8020EA78(Chunk_8020EA18 *pChunk, ChunkDef_8020EA18 *pDef, ModelRes_8020EA18 *pRes)
+static void _TMModelResRelocateChunk(TMChunk_t *pChunk, TMChunkDef_t *pDef, TMModelRes_t *pRes)
 {
     if (pDef != 0) {
         if (pChunk->mSize != 0) {
             if (pDef->mVersion == pChunk->mVersion) {
-                pChunk->mpData = fn_8020EB94(pChunk->mpData, 0, pRes);
+                pChunk->mpData = TMModelResRelocatePtr(pChunk->mpData, 0, pRes);
                 if (pDef->mRelocate != 0) {
                     pDef->mRelocate(pChunk->mpData, 0, pRes);
                 }
@@ -38,14 +41,14 @@ static void fn_8020EA78(Chunk_8020EA18 *pChunk, ChunkDef_8020EA18 *pDef, ModelRe
     }
 }
 
-void fn_8020EB08(int maxChunkTypes)
+void TMModelResInit(int maxChunkTypes)
 {
     lbl_803ECFC4 = maxChunkTypes;
-    lbl_803ECFC8 = fn_801D2B7C(maxChunkTypes * sizeof(ChunkDef_8020EA18), 0, 0);
+    lbl_803ECFC8 = fn_801D2B7C(maxChunkTypes * sizeof(TMChunkDef_t), 0, 0);
     lbl_803ECFCC = 0;
 }
 
-void fn_8020EB48(int tag, ChunkRelocFunc_8020EA18 relocate, int version)
+void TMModelResAddChunkType(int tag, TMChunkRelocFunc_t relocate, int version)
 {
     lbl_803ECFC8[lbl_803ECFCC].mTag = tag;
     lbl_803ECFC8[lbl_803ECFCC].mVersion = version;
@@ -53,12 +56,12 @@ void fn_8020EB48(int tag, ChunkRelocFunc_8020EA18 relocate, int version)
     lbl_803ECFCC++;
 }
 
-void fn_8020EB70(void)
+void TMModelResShutdown(void)
 {
     fn_801D2BD0(lbl_803ECFC8);
 }
 
-void *fn_8020EB94(void *p, void *pOldBase, void *pNewBase)
+void *TMModelResRelocatePtr(void *p, void *pOldBase, void *pNewBase)
 {
     void *pResult;
 
@@ -69,18 +72,18 @@ void *fn_8020EB94(void *p, void *pOldBase, void *pNewBase)
     return pResult;
 }
 
-void fn_8020EBB0(ModelRes_8020EA18 *pRes)
+void TMModelResRelocate(TMModelRes_t *pRes)
 {
-    Chunk_8020EA18 *pChunks;
-    ChunkDef_8020EA18 *pDef;
+    TMChunk_t *pChunks;
+    TMChunkDef_t *pDef;
     unsigned int i;
 
     if (pRes->mbRelocated != 1) {
-        pChunks = fn_8020EB94((void *)(unsigned int)pRes->mChunkOffset, 0, pRes);
+        pChunks = TMModelResRelocatePtr((void *)(unsigned int)pRes->mChunkOffset, 0, pRes);
         for (i = 0; i < pRes->mNumChunks; i++) {
-            pDef = fn_8020EA18(pChunks[i].mTag);
+            pDef = _TMModelResGetChunkDef(pChunks[i].mTag);
             if (pChunks[i].mbRelocated == 0) {
-                fn_8020EA78(&pChunks[i], pDef, pRes);
+                _TMModelResRelocateChunk(&pChunks[i], pDef, pRes);
                 pChunks[i].mbRelocated = 1;
             }
         }
@@ -88,13 +91,13 @@ void fn_8020EBB0(ModelRes_8020EA18 *pRes)
     }
 }
 
-void *fn_8020EC50(ModelRes_8020EA18 *pRes, int tag, Chunk_8020EA18 **ppChunk)
+void *TMModelResGetChunk(TMModelRes_t *pRes, int tag, TMChunk_t **ppChunk)
 {
-    Chunk_8020EA18 *pChunks;
+    TMChunk_t *pChunks;
     void *pData;
     int i;
 
-    pChunks = fn_8020EB94((void *)(unsigned int)pRes->mChunkOffset, 0, pRes);
+    pChunks = TMModelResRelocatePtr((void *)(unsigned int)pRes->mChunkOffset, 0, pRes);
     pData = 0;
     for (i = 0; i < pRes->mNumChunks; i++) {
         if (pChunks[i].mTag == tag && pChunks[i].mSize != 0) {
