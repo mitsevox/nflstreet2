@@ -26,7 +26,7 @@ struct Triple_802EDF8C {
 /* Argument of fn_802338D4: a halfword-triple table at +0x30 and an output buffer at +0x34. */
 struct Object_802338D4 {
     char mUnknown0[48];
-    SkeletonJointTriple *mpUnknown48;
+    SkeletonJointTriple_t *mpUnknown48;
     Matrix_80198C54 *mpUnknown52;
 };
 
@@ -49,34 +49,30 @@ void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
 int PortraitGetSkeletonParam(int index);
-void AddImage(ColorQuantizer *pObject, void *pImage, int width, int height);
-void BuildPalette(ColorQuantizer *pObject, void *pOut, void *p, int *pCount);
-int GetLeafCount(ColorQuantizer *pObject);
-void MapImage(ColorQuantizer *pObject, void *pImage, int width, int height, void *pOut);
-void fn_80210214(ModelPartBinding *pObject, void *p);
+void fn_80210214(ModelPartBinding_t *pObject, void *p);
 void fn_80210388(void);
 void fn_80210BD8(int a);
 void fn_80210CC4(float a, float b);
 void fn_80211FF0(void);
 void fn_80212018(const char *pName, void *p);
-void fn_802337D4(void *a, void *b, SkeletonJointTriple *pTriples, unsigned int c);
+void fn_802337D4(void *a, void *b, SkeletonJointTriple_t *pTriples, unsigned int c);
 void fn_802338D4(Object_802338D4 *pObject, Skeleton_80041930 *pData, Matrix_80198C54 *pOut);
-void fn_80233BB8(SkeletonPose *pObject, int a, int b);
-void fn_80233BD8(SkeletonPose *pObject);
-void fn_80233BDC(SkeletonPose *pObject, Skeleton_80041930 *pData);
+void fn_80233BB8(SkeletonPose_t *pObject, int a, int b);
+void fn_80233BD8(SkeletonPose_t *pObject);
+void fn_80233BDC(SkeletonPose_t *pObject, Skeleton_80041930 *pData);
 void fn_80233CBC(void *pObject, int a, int b);
-void fn_8023465C(ModelPartBinding *pObject, Object_8023417C *pModel, ModelTexSlot *pDesc);
-void fn_8023488C(ModelPartBinding *pObject, int a);
-void fn_802348AC(ModelPartBinding *pObject);
-void fn_80234A30(ModelDrawObject *pObject, int a);
-void fn_80234A90(ModelDrawObject *pObject);
-void fn_80234A94(ModelDrawObject *pObject, void *p);
-void fn_80234AD8(ModelDrawObject *pObject, void *p);
-void fn_80234BF4(int a, ModelDrawObject *pObject, int b);
-void fn_80234CA4(ModelDrawObject *pObject, SkeletonPose *p);
-void fn_80234CAC(ModelDrawObject *pObject, void *p);
-void fn_80234CF0(ModelDrawObject *pObject, int a, ModelPartBinding *p);
-void fn_80234DC0(ModelDrawObject *pObject, int a);
+void fn_8023465C(ModelPartBinding_t *pObject, Object_8023417C *pModel, ModelTexSlot_t *pDesc);
+void fn_8023488C(ModelPartBinding_t *pObject, int a);
+void fn_802348AC(ModelPartBinding_t *pObject);
+void fn_80234A30(ModelDrawObject_t *pObject, int a);
+void fn_80234A90(ModelDrawObject_t *pObject);
+void fn_80234A94(ModelDrawObject_t *pObject, void *p);
+void fn_80234AD8(ModelDrawObject_t *pObject, void *p);
+void fn_80234BF4(int a, ModelDrawObject_t *pObject, int b);
+void fn_80234CA4(ModelDrawObject_t *pObject, SkeletonPose_t *p);
+void fn_80234CAC(ModelDrawObject_t *pObject, void *p);
+void fn_80234CF0(ModelDrawObject_t *pObject, int a, ModelPartBinding_t *p);
+void fn_80234DC0(ModelDrawObject_t *pObject, int a);
 int fn_80236B98(int a, float x, float y, float z);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
@@ -102,7 +98,7 @@ static void *lbl_803ECBE4;
 
 extern "C" {
 
-void fn_80198C54(ModelDrawObject *pObject, unsigned int index)
+void fn_80198C54(ModelDrawObject_t *pObject, unsigned int index)
 {
     if (pObject->mpUnknown12 != 0) {
         switch (index) {
@@ -132,7 +128,7 @@ void fn_80198D60(void **ppBuffer)
     *ppBuffer = 0;
 }
 
-void fn_80198D98(PortraitJob *pObject)
+void fn_80198D98(PortraitJob_t *pObject)
 {
     unsigned int i;
     unsigned int j;
@@ -163,7 +159,7 @@ void fn_80198D98(PortraitJob *pObject)
     }
 }
 
-void fn_80198EE0(PortraitJob *pObject)
+void fn_80198EE0(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -172,12 +168,12 @@ void fn_80198EE0(PortraitJob *pObject)
     }
 }
 
-void fn_80198F24(PortraitJob *pObject)
+void fn_80198F24(PortraitJob_t *pObject)
 {
     Object_8023417C *pResult = fn_8015E2FC(0, 0, 0);
-    ModelPartBinding *pUnknown612 = &pObject->mUnknown612;
+    ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
     void *pElement = pObject->mUnknown384[0].mpUnknown24;
-    ModelTexSlot *pDescs = pObject->mUnknown384;
+    ModelTexSlot_t *pDescs = pObject->mUnknown384;
 
     fn_80211FF0();
     fn_80212018("capport", pElement);
@@ -187,12 +183,12 @@ void fn_80198F24(PortraitJob *pObject)
     fn_80211FF0();
 }
 
-void fn_80198FAC(PortraitJob *pObject)
+void fn_80198FAC(PortraitJob_t *pObject)
 {
     fn_802348AC(&pObject->mUnknown612);
 }
 
-void fn_80198FD0(PortraitJob *pObject)
+void fn_80198FD0(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -201,7 +197,7 @@ void fn_80198FD0(PortraitJob *pObject)
     }
 }
 
-void fn_80199018(PortraitJob *pObject)
+void fn_80199018(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -210,15 +206,15 @@ void fn_80199018(PortraitJob *pObject)
     }
 }
 
-void fn_8019905C(PortraitJob *pObject)
+void fn_8019905C(PortraitJob_t *pObject)
 {
     Object_802338D4 desc;
     Matrix_80198C54 matrices[40];
-    SkeletonJointTriple triples[19];
+    SkeletonJointTriple_t triples[19];
     Skeleton_80041930 *pData0;
     Skeleton_80041930 *pData1;
     unsigned int i;
-    ModelPartBinding *pUnknown612 = &pObject->mUnknown612;
+    ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
 
     fn_801D0508();
     fn_801D0C58(&lbl_802EDF8C);
@@ -233,8 +229,8 @@ void fn_8019905C(PortraitJob *pObject)
     pData0 = PortraitGetSkeleton(0);
     pData1 = PortraitGetSkeleton(1);
     for (i = 0; i <= 2; i++) {
-        ModelDrawObject *pElement = &pObject->mUnknown620[i];
-        SkeletonPose *pUnknown588 = 0;
+        ModelDrawObject_t *pElement = &pObject->mUnknown620[i];
+        SkeletonPose_t *pUnknown588 = 0;
 
         switch (i) {
         case 0:
@@ -286,7 +282,7 @@ void fn_8019905C(PortraitJob *pObject)
     fn_801D0544();
 }
 
-void fn_8019930C(PortraitJob *pObject)
+void fn_8019930C(PortraitJob_t *pObject)
 {
     unsigned int *pOut;
     unsigned int y;
@@ -410,7 +406,7 @@ void fn_8019979C(void)
     fn_801D0544();
 }
 
-void fn_80199838(PortraitJob *pObject)
+void fn_80199838(PortraitJob_t *pObject)
 {
     int mask;
 
@@ -433,7 +429,7 @@ void fn_80199838(PortraitJob *pObject)
     fn_8019969C();
 }
 
-void fn_80199968(PortraitJob *pObject)
+void fn_80199968(PortraitJob_t *pObject)
 {
     fn_80198CFC(&lbl_803ECBE4);
     fn_80198D98(pObject);
@@ -441,7 +437,7 @@ void fn_80199968(PortraitJob *pObject)
     fn_80198FD0(pObject);
 }
 
-void fn_801999B0(PortraitJob *pObject)
+void fn_801999B0(PortraitJob_t *pObject)
 {
     fn_80199018(pObject);
     fn_80198FAC(pObject);
@@ -449,7 +445,7 @@ void fn_801999B0(PortraitJob *pObject)
     fn_80198D60(&lbl_803ECBE4);
 }
 
-void fn_801999F4(PortraitJob *pObject)
+void fn_801999F4(PortraitJob_t *pObject)
 {
     fn_8019905C(pObject);
     fn_801996F4();
@@ -515,7 +511,7 @@ void fn_80199B68(unsigned char (*pColors)[4], unsigned short *pOut, unsigned int
     }
 }
 
-void fn_80199BD4(PortraitJob *pObject)
+void fn_80199BD4(PortraitJob_t *pObject)
 {
     void **ppImage = &lbl_803ECBE4;
     unsigned char (*pColors)[4];

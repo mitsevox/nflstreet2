@@ -20,7 +20,7 @@ unsigned int ColorQuantizerTexelOffset(unsigned int x, unsigned int y, unsigned 
 
 }
 
-void ColorQuantizer::AddColor(ColorQuantizerNode **ppNode, unsigned int color, int level, int link)
+void ColorQuantizer::AddColor(ColorQuantizerNode_t **ppNode, unsigned int color, int level, int link)
 {
     if (*ppNode == 0) {
         *ppNode = NewNode(level, link);
@@ -37,10 +37,10 @@ void ColorQuantizer::AddColor(ColorQuantizerNode **ppNode, unsigned int color, i
 
 void ColorQuantizer::ReduceTree()
 {
-    ColorQuantizerNode *pNode;
-    ColorQuantizerNode *pNext;
-    ColorQuantizerNode *pPrev;
-    ColorQuantizerNode *pChild;
+    ColorQuantizerNode_t *pNode;
+    ColorQuantizerNode_t *pNext;
+    ColorQuantizerNode_t *pPrev;
+    ColorQuantizerNode_t *pChild;
     unsigned int children;
     unsigned int i;
     unsigned int level;
@@ -79,7 +79,7 @@ void ColorQuantizer::ReduceTree()
     mLeafCount -= children - 1;
 }
 
-unsigned int ColorQuantizer::GetNodeColor(ColorQuantizerNode *pNode)
+unsigned int ColorQuantizer::GetNodeColor(ColorQuantizerNode_t *pNode)
 {
     unsigned int c12 = pNode->mSum12 / pNode->mCount;
     unsigned int c16 = pNode->mSum16 / pNode->mCount;
@@ -92,7 +92,7 @@ unsigned int ColorQuantizer::GetNodeColor(ColorQuantizerNode *pNode)
     return color;
 }
 
-void ColorQuantizer::FindPaletteIndex(unsigned int color, unsigned char *pOut, int level, ColorQuantizerNode *pNode)
+void ColorQuantizer::FindPaletteIndex(unsigned int color, unsigned char *pOut, int level, ColorQuantizerNode_t *pNode)
 {
     if (pNode == 0) {
         pNode = mpRoot;
@@ -100,16 +100,16 @@ void ColorQuantizer::FindPaletteIndex(unsigned int color, unsigned char *pOut, i
     if (pNode->mIsLeaf == 1) {
         *pOut = pNode->mIndex;
     } else {
-        ColorQuantizerNode *pChild = pNode->mpChildren[GetChildIndex(level, color)];
+        ColorQuantizerNode_t *pChild = pNode->mpChildren[GetChildIndex(level, color)];
 
         FindPaletteIndex(color, pOut, level + 1, pChild);
     }
 }
 
-ColorQuantizerNode *ColorQuantizer::FindSmallestNode(ColorQuantizerNode *pList)
+ColorQuantizerNode_t *ColorQuantizer::FindSmallestNode(ColorQuantizerNode_t *pList)
 {
-    ColorQuantizerNode *pBest = pList;
-    ColorQuantizerNode *pNode;
+    ColorQuantizerNode_t *pBest = pList;
+    ColorQuantizerNode_t *pNode;
 
     for (pNode = pList; pNode != 0; pNode = pNode->mpNext) {
         if (pNode->mCount < pBest->mCount) {
@@ -119,11 +119,11 @@ ColorQuantizerNode *ColorQuantizer::FindSmallestNode(ColorQuantizerNode *pList)
     return pBest;
 }
 
-ColorQuantizerNode *ColorQuantizer::NewNode(int level, int link)
+ColorQuantizerNode_t *ColorQuantizer::NewNode(int level, int link)
 {
-    ColorQuantizerNode *pNode = (ColorQuantizerNode *)fn_801C75F0(mpPool);
+    ColorQuantizerNode_t *pNode = (ColorQuantizerNode_t *)fn_801C75F0(mpPool);
 
-    memset(pNode, 0, sizeof(ColorQuantizerNode));
+    memset(pNode, 0, sizeof(ColorQuantizerNode_t));
     if (level == 7) {
         pNode->mIsLeaf = 1;
         mLeafCount++;
@@ -140,7 +140,7 @@ ColorQuantizerNode *ColorQuantizer::NewNode(int level, int link)
     return pNode;
 }
 
-void ColorQuantizer::FreeNode(ColorQuantizerNode *pNode)
+void ColorQuantizer::FreeNode(ColorQuantizerNode_t *pNode)
 {
     fn_801C7650(mpPool, pNode);
 }
@@ -171,7 +171,7 @@ void ColorQuantizer::AddImage(unsigned int *pImage, unsigned int width, unsigned
     }
 }
 
-void ColorQuantizer::BuildPalette(unsigned int *pPalette, ColorQuantizerNode *pNode, int *pIndex)
+void ColorQuantizer::BuildPalette(unsigned int *pPalette, ColorQuantizerNode_t *pNode, int *pIndex)
 {
     int index = 0;
     unsigned int i;
@@ -217,7 +217,7 @@ ColorQuantizer::ColorQuantizer()
     mpRoot = 0;
     mLeafCount = 0;
     mpPool = 0;
-    mpPool = fn_801C750C(1, 1601, sizeof(ColorQuantizerNode), 0);
+    mpPool = fn_801C750C(1, 1601, sizeof(ColorQuantizerNode_t), 0);
     memset(mpLists, 0, sizeof(mpLists));
 }
 

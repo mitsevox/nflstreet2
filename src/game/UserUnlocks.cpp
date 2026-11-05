@@ -4,12 +4,12 @@
 
 #include "game/Key_8007A334.h"
 #include "game/Object_8007A334.h"
-#include "game/UnlockItem.h"
+#include "game/UnlockItem_t.h"
 #include "game/cu_8002ACB4.h"
 
-/* State of the stream table _ChecksumCRC32_Type: the result word passed to the
+/* State of the stream table gChecksumCRC32StreamType: the result word passed to the
    open operation. */
-struct ChecksumCRC32Stream {
+struct ChecksumCRC32Stream_t {
     unsigned int *mpResult;
 };
 
@@ -36,7 +36,7 @@ void UnlockStatusSet(Object_8007A334 *pCursor, int index, int value);
 void UnlockListOpen(Object_8007A334 *pCursor, int mode, unsigned char value);
 void UnlockListClose(Object_8007A334 *pCursor);
 int UnlockListSeek(Object_8007A334 *pCursor, int a, int key, int *pResult);
-void UnlockListReadItem(Object_8007A334 *pCursor, UnlockItem *pRecord);
+void UnlockListReadItem(Object_8007A334 *pCursor, UnlockItem_t *pRecord);
 unsigned char UnlockListGetIndex(Object_8007A334 *pCursor);
 }
 
@@ -189,7 +189,7 @@ int UnlockListSeek(Object_8007A334 *pCursor, int a, int key, int *pResult)
     return fn_8007A7F4(pCursor, 0x51464653, key, a, pResult);
 }
 
-void UnlockListReadItem(Object_8007A334 *pCursor, UnlockItem *pRecord)
+void UnlockListReadItem(Object_8007A334 *pCursor, UnlockItem_t *pRecord)
 {
     pRecord->mIndex = fn_8007A98C(pCursor, 0x49464653);
     fn_8007AA3C(pCursor, 0x44464653, (int)pRecord->mName, sizeof(pRecord->mName));
@@ -204,9 +204,9 @@ unsigned char UnlockListGetIndex(Object_8007A334 *pCursor)
     return fn_8007A98C(pCursor, 0x49464653);
 }
 
-static int _ChecksumCRC32_Start(void *pStream, int a, int target, unsigned char reading)
+static int _ChecksumCRC32StreamStart(void *pStream, int a, int target, unsigned char reading)
 {
-    ChecksumCRC32Stream *pState = (ChecksumCRC32Stream *)pStream;
+    ChecksumCRC32Stream_t *pState = (ChecksumCRC32Stream_t *)pStream;
     int result = 0;
 
     pState->mpResult = (unsigned int *)target;
@@ -218,9 +218,9 @@ static int _ChecksumCRC32_Start(void *pStream, int a, int target, unsigned char 
     return result;
 }
 
-static int _ChecksumCRC32_Stop(void *pStream)
+static int _ChecksumCRC32StreamStop(void *pStream)
 {
-    ChecksumCRC32Stream *pState = (ChecksumCRC32Stream *)pStream;
+    ChecksumCRC32Stream_t *pState = (ChecksumCRC32Stream_t *)pStream;
 
     if (pState->mpResult == 0) {
         return 3;
@@ -229,9 +229,9 @@ static int _ChecksumCRC32_Stop(void *pStream)
     return 0;
 }
 
-static int _ChecksumCRC32_CalculateBuffer(void *pStream, void *pData, unsigned int size, unsigned int *pDone)
+static int _ChecksumCRC32StreamWrite(void *pStream, void *pData, unsigned int size, unsigned int *pDone)
 {
-    ChecksumCRC32Stream *pState = (ChecksumCRC32Stream *)pStream;
+    ChecksumCRC32Stream_t *pState = (ChecksumCRC32Stream_t *)pStream;
     int result = 3;
 
     if (pState->mpResult != 0) {
@@ -242,18 +242,18 @@ static int _ChecksumCRC32_CalculateBuffer(void *pStream, void *pData, unsigned i
     return result;
 }
 
-static int _ChecksumCRC32_Read(void *pStream, void *pData, unsigned int size, unsigned int *pDone)
+static int _ChecksumCRC32StreamRead(void *pStream, void *pData, unsigned int size, unsigned int *pDone)
 {
     return 3;
 }
 
-static int _ChecksumCRC32_GetSize(unsigned int size)
+static int _ChecksumCRC32StreamNoOp(unsigned int size)
 {
     return 0;
 }
 
-StreamOps_8002ACB4 _ChecksumCRC32_Type = {
-    _ChecksumCRC32_Start, _ChecksumCRC32_Stop, _ChecksumCRC32_Read, _ChecksumCRC32_CalculateBuffer, 0, _ChecksumCRC32_GetSize, 4,
+StreamOps_8002ACB4 gChecksumCRC32StreamType = {
+    _ChecksumCRC32StreamStart, _ChecksumCRC32StreamStop, _ChecksumCRC32StreamRead, _ChecksumCRC32StreamWrite, 0, _ChecksumCRC32StreamNoOp, 4,
 };
 
 }

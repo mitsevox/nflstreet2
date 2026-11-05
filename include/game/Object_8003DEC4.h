@@ -202,7 +202,7 @@ struct Object_8003DEC4 {
         Slot_801A3284 *mUnknown1160;
         Part_8003DEC4 mUnknown1164[12];
         char mUnknown4044[16];
-        ModelTexSlot *mUnknown4060;
+        ModelTexSlot_t *mUnknown4060;
         Joints_8003DEC4 mUnknown4064[6];
         Joints_8003DEC4 mUnknown4136[2];
         char mUnknown4160[24];

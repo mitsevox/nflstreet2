@@ -181,7 +181,7 @@ extern unsigned char lbl_803EA3F0, lbl_803EA3F1, lbl_803EA3F2;
 extern float lbl_803EA3F4;
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB,
-                 CollideContactList *pContacts);
+                 CollideContactList_t *pContacts);
 void fn_80194C5C(int channel, int level, int duration);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
@@ -480,7 +480,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     fn_800C3130(pObject, 1, team * fn_8003DEBC() + index, 2);
 }
 
-extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, CollideContactList *pContacts)
+extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, CollideContactList_t *pContacts)
 {
     Object_80039F5C *a = fn_8009BCE8(&pA->mUnknown28);
     Object_80039F5C *b = fn_8009BCE8(&pB->mUnknown28);

@@ -12,16 +12,16 @@
 #include "game/cu_8015D3EC.h"
 #include "game/Object_8020E52C.h"
 
-struct PortraitSlot {
+struct PortraitSlot_t {
     unsigned char mUsed;
     unsigned char mValue;
 };
 
-struct PortraitSlotTable {
-    PortraitSlot mSlots[18];
+struct PortraitSlotTable_t {
+    PortraitSlot_t mSlots[18];
 };
 
-struct PortraitImageRequest {
+struct PortraitImageRequest_t {
     int mUnknown0[3];
     void *mpUnknown12;
     int mUnknown16;
@@ -33,20 +33,20 @@ Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
 void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
 void *fn_80160C08(void);
-void fn_80199BD4(PortraitJob *pObject);
+void fn_80199BD4(PortraitJob_t *pObject);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0C50(void *pArchive, int id);
-void fn_80221BE8(void (*pCallback)(int, unsigned int, PortraitImageRequest *));
+void fn_80221BE8(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 void fn_802336C4(void *pObject, Object_8023417C *pModel, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
-void fn_802347EC(void *pData, ModelTexSlot *pDesc, int a, int b);
-void fn_80234844(ModelTexSlot *pDesc);
+void fn_802347EC(void *pData, ModelTexSlot_t *pDesc, int a, int b);
+void fn_80234844(ModelTexSlot_t *pDesc);
 
 extern char lbl_802EC038[];
 extern char lbl_802EC044[];
@@ -54,7 +54,7 @@ extern char lbl_802EC050[];
 extern char lbl_802EC080[];
 }
 
-static PortraitSlotTable *_Portrait_pSlots = 0;
+static PortraitSlotTable_t *_Portrait_pSlots = 0;
 static Skeleton_80041930 *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
 static int _Portrait_aiSkeletonParam[2] = { 15, 32 };
 static const char *_Portrait_apszArchives[2] = { lbl_802EC038, lbl_802EC044 };
@@ -68,8 +68,8 @@ extern "C" {
 int PortraitIsReady(void);
 void PortraitFreeSlot(int id);
 void PortraitFreeAllSlots(void);
-void PortraitReadImage(unsigned int id, PortraitImageRequest *pObject);
-void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest *pObject);
+void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject);
+void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest_t *pObject);
 
 void PortraitInitHook(void)
 {
@@ -93,7 +93,7 @@ void PortraitClearSlots(void)
     }
 }
 
-void PortraitLoadParts(PortraitJob *pObject)
+void PortraitLoadParts(PortraitJob_t *pObject)
 {
     unsigned int i;
     void *pArchive = fn_80160C08();
@@ -123,10 +123,10 @@ void PortraitLoadParts(PortraitJob *pObject)
         }
     }
 
-    ModelTexSlot *pDescs = pObject->mUnknown384;
+    ModelTexSlot_t *pDescs = pObject->mUnknown384;
     const char *names[4] = { "HEAD", "FACIALHAIR", "HAIR" };
     for (i = 0; i < 4; i++) {
-        memset(&pDescs[i], 0, sizeof(ModelTexSlot));
+        memset(&pDescs[i], 0, sizeof(ModelTexSlot_t));
         if (i != 3) {
             if (pObject->mpUnknown368[i] == 0) {
                 pDescs[i].mpName = (char *)fn_801D2B7C(15, 0, 0);
@@ -149,7 +149,7 @@ void PortraitLoadParts(PortraitJob *pObject)
     }
 }
 
-void PortraitFreeParts(PortraitJob *pObject)
+void PortraitFreeParts(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -168,7 +168,7 @@ void PortraitFreeParts(PortraitJob *pObject)
     }
 }
 
-void PortraitLoadModels(PortraitJob *pObject)
+void PortraitLoadModels(PortraitJob_t *pObject)
 {
     short values[53];
     unsigned int i;
@@ -212,7 +212,7 @@ void PortraitLoadModels(PortraitJob *pObject)
     fn_801A46BC();
 }
 
-void PortraitFreeModels(PortraitJob *pObject)
+void PortraitFreeModels(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -232,7 +232,7 @@ int PortraitIsReady(void)
     return 1;
 }
 
-void *PortraitGetModel(PortraitJob *pObject, int index)
+void *PortraitGetModel(PortraitJob_t *pObject, int index)
 {
     if (index != 0) {
         return fn_8023417C(&_Portrait_aModels[index], 0);
@@ -253,7 +253,7 @@ int PortraitGetSkeletonParam(int index)
 void PortraitSystemInit(void)
 {
     PortraitInitHook();
-    _Portrait_pSlots = (PortraitSlotTable *)fn_801D2B7C(sizeof(PortraitSlotTable), 4, 0);
+    _Portrait_pSlots = (PortraitSlotTable_t *)fn_801D2B7C(sizeof(PortraitSlotTable_t), 4, 0);
     PortraitClearSlots();
     fn_80221BE8(_PortraitDbCallback);
 }
@@ -315,40 +315,40 @@ void PortraitFreeAllSlots(void)
     }
 }
 
-void PortraitJobAllocImage(PortraitJob *pObject)
+void PortraitJobAllocImage(PortraitJob_t *pObject)
 {
     pObject->mpUnknown4 = fn_801D2B7C(0x20000, 0, 0);
     pObject->mpUnknown8 = fn_801D2B7C(0x400, 0, 0);
 }
 
-void PortraitJobLoad(PortraitJob *pObject)
+void PortraitJobLoad(PortraitJob_t *pObject)
 {
     PortraitLoadParts(pObject);
     PortraitLoadModels(pObject);
 }
 
-int PortraitJobIsLoaded(PortraitJob *pObject)
+int PortraitJobIsLoaded(PortraitJob_t *pObject)
 {
     return PortraitIsReady();
 }
 
-void PortraitJobUnload(PortraitJob *pObject)
+void PortraitJobUnload(PortraitJob_t *pObject)
 {
     PortraitFreeParts(pObject);
     PortraitFreeModels(pObject);
 }
 
-void PortraitJobQuantize(PortraitJob *pObject)
+void PortraitJobQuantize(PortraitJob_t *pObject)
 {
     fn_80199BD4(pObject);
 }
 
-int PortraitJobIsDone(PortraitJob *pObject)
+int PortraitJobIsDone(PortraitJob_t *pObject)
 {
     return 1;
 }
 
-void PortraitReadImage(unsigned int id, PortraitImageRequest *pObject)
+void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject)
 {
     if (pObject != 0 && id >= 0x277) {
         void *pUnknown12 = pObject->mpUnknown12;
@@ -363,7 +363,7 @@ void PortraitReadImage(unsigned int id, PortraitImageRequest *pObject)
     }
 }
 
-void PortraitJobSave(PortraitJob *pObject)
+void PortraitJobSave(PortraitJob_t *pObject)
 {
     void *pUnknown4 = pObject->mpUnknown4;
     void *pUnknown8 = pObject->mpUnknown8;
@@ -376,7 +376,7 @@ void PortraitJobSave(PortraitJob *pObject)
     fn_801D2BD0(pUnknown8);
 }
 
-void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest *pObject)
+void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest_t *pObject)
 {
     if (type == 10) {
         PortraitReadImage(id, pObject);

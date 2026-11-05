@@ -18,12 +18,11 @@ int fn_801CFFD0(int a, int b);
 extern float lbl_803ECB0C;
 extern float lbl_803ECB10;
 
-/* PlayerMoveAnimUpdateStand, PlayerMoveAnimUpdateHold, PlayerMoveAnimUpdateMove, PlayerMoveAnimUpdateKeep, PlayerMoveAnimUpdateLimited,
-   PlayerMoveAnimUpdateDefault and PlayerMoveAnimUpdateSpecial are words of the .data table 0x80297D68, which
-   fn_8008E978 indexes by the byte +14 of the record at +512. PlayerMoveAnimCheckReverse,
-   PlayerMoveAnimSelectCarrier and PlayerMoveAnimSelectTurn are called from PlayerMoveAnimUpdateMove, and PlayerMoveAnimWantsReverse
-   from PlayerMoveAnimCheckReverse. The 16-bit keys are the values fn_801BE648 returns
-   and fn_801BE068 takes. */
+/* The PlayerMoveAnimUpdate* functions are the movement-state handlers: the player's
+   movement state picks one each update. PlayerMoveAnimUpdateMove chooses its animation
+   with PlayerMoveAnimSelectByHeading or PlayerMoveAnimSelectTurn and checks for a
+   reversal with PlayerMoveAnimCheckReverse. The keys are animation ids, the ones the
+   animation player reports and starts. */
 
 extern "C" int PlayerMoveAnimWantsReverse(Object_80039F5C *p, int key)
 {
@@ -57,7 +56,7 @@ extern "C" int PlayerMoveAnimCheckReverse(Object_80039F5C *p, unsigned short key
     return result;
 }
 
-extern "C" int PlayerMoveAnimSelectCarrier(Object_80039F5C *p, int diff, unsigned short *pKey)
+extern "C" int PlayerMoveAnimSelectByHeading(Object_80039F5C *p, int diff, unsigned short *pKey)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -232,7 +231,7 @@ extern "C" void PlayerMoveAnimUpdateMove(Object_80039F5C *p)
         pNext->mUnknown8 = pCur->mUnknown4;
         pNext->mUnknown0 = pCur->mUnknown0;
     } else if (fn_800DC080(p)) {
-        changed = PlayerMoveAnimSelectCarrier(p, diff, &key);
+        changed = PlayerMoveAnimSelectByHeading(p, diff, &key);
     } else {
         int flag = pCur->mUnknown15 == 4 || pCur->mUnknown15 == 5;
         if (flag && pCur->mUnknown0 == 0.0f) {

@@ -1,5 +1,5 @@
 #include "game/Object_8007A334.h"
-#include "game/UnlockItem.h"
+#include "game/UnlockItem_t.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"
@@ -24,7 +24,7 @@ void UnlockStatusSet(Object_8007A334 *pObject, int index, int a);
 void UnlockListOpen(Object_8007A334 *pObject, int a, unsigned char b);
 void UnlockListClose(Object_8007A334 *pObject);
 int UnlockListSeek(Object_8007A334 *pObject, int a, int key, int *pResult);
-void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem *pRecord);
+void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem_t *pRecord);
 unsigned char UnlockListGetIndex(Object_8007A334 *pObject);
 int fn_801486A0(void);
 int fn_801869F0(void);
@@ -50,7 +50,7 @@ int lbl_802CCB94[6] = {22, 23, 29, 26, 27, 24};
 extern "C" {
 int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entry_80306620 *pEntry, int db)
 {
-    UnlockItem record;
+    UnlockItem_t record;
 
     if (UnlockListSeek(pCursor, 0, key, 0) == 0) {
         return 0;
@@ -69,7 +69,7 @@ int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entr
 
 void fn_8003159C(Object_8007A334 *pCursor, Object_8007A334 *pOther, signed char pad)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     Object_8007A334 object;
     Entry_80306620 *pEntry;
     unsigned int count;
@@ -133,7 +133,7 @@ void fn_80031724(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 
 void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     Entry_80306620 *pEntry;
     unsigned int value;
 
@@ -159,7 +159,7 @@ void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 
 void fn_80031940(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int key, int value)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     Entry_80306620 *pEntry;
 
     if (UnlockListSeek(pCursor, 0, key, 0)) {
@@ -222,7 +222,7 @@ void fn_80031A54(void)
 
 void fn_80031C28(void)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     Object_8007A334 other;
     Object_8007A334 cursor;
     Entry_80306620 *pEntry;
@@ -258,7 +258,7 @@ void fn_80031C28(void)
 
 void fn_80031DC8(void)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     Object_8007A334 other;
     Object_8007A334 cursor;
     Entry_80306620 *pEntry;

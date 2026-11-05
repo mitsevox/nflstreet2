@@ -82,7 +82,7 @@ struct Stats_803EB9E8 {
 };
 
 /* Record filled by UnlockListReadItem. */
-struct UnlockItem {
+struct UnlockItem_t {
     signed char mIndex;
     char mName[147];
     int mUnknown94;
@@ -180,7 +180,7 @@ void UnlockStatusClose(Object_8007A334 *pObject);
 int UnlockStatusGet(Object_8007A334 *pObject, int index);
 void UnlockListOpen(Object_8007A334 *pObject, int a, unsigned char b);
 void UnlockListClose(Object_8007A334 *pObject);
-void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem *pRecord);
+void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem_t *pRecord);
 void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -3689,7 +3689,7 @@ void fn_80016B60(int control, char *pText, int *pResult)
 
 void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)
 {
-    UnlockItem record;
+    UnlockItem_t record;
     fn_8007A600(lbl_803EBA00, index);
     UnlockListReadItem(lbl_803EBA00, &record);
     fn_801C2E18(pText, record.mName);

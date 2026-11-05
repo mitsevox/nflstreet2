@@ -11,7 +11,7 @@ void fn_802271F0(float *pOut, float *pIn);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 }
 
-static CollideContactList _Collide_ContactList;
+static CollideContactList_t _Collide_ContactList;
 
 void CollideAddCapsuleContact(float *pCapsuleA, float *pCapsuleB, unsigned int index)
 {
@@ -67,7 +67,7 @@ int CollideTestSpheres(float *pSphereA, float *pSphereB)
     return d <= r * r;
 }
 
-void CollideMakeSplitPlane(CollidePlane *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
+void CollideMakeSplitPlane(CollidePlane_t *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
 {
     float delta[3];
 
@@ -76,7 +76,7 @@ void CollideMakeSplitPlane(CollidePlane *pPlane, Record_8003EC04 *pA, Record_800
     fn_80227930(&pPlane->mUnknown0, &pA->mUnknown0, &pB->mUnknown0, 0.5f);
 }
 
-int CollideCapsuleInFront(CollidePlane *pPlane, float *pCapsule)
+int CollideCapsuleReachesPlane(CollidePlane_t *pPlane, float *pCapsule)
 {
     float d0 = (pCapsule[0] - pPlane->mUnknown0) * pPlane->mUnknown10 + (pCapsule[1] - pPlane->mUnknown4) * pPlane->mUnknown14 + (pCapsule[2] - pPlane->mUnknown8) * pPlane->mUnknown18;
     float d1 = (pCapsule[4] - pPlane->mUnknown0) * pPlane->mUnknown10 + (pCapsule[5] - pPlane->mUnknown4) * pPlane->mUnknown14 + (pCapsule[6] - pPlane->mUnknown8) * pPlane->mUnknown18;
@@ -88,14 +88,14 @@ int CollideCapsuleInFront(CollidePlane *pPlane, float *pCapsule)
     return result;
 }
 
-void CollideContactsBegin(CollideContact *pContacts, int capacity)
+void CollideContactsBegin(CollideContact_t *pContacts, int capacity)
 {
     _Collide_ContactList.mCount = 0;
     _Collide_ContactList.mCapacity = capacity;
     _Collide_ContactList.mpContacts = pContacts;
 }
 
-CollideContactList *CollideGetContacts(void)
+CollideContactList_t *CollideGetContacts(void)
 {
     return &_Collide_ContactList;
 }

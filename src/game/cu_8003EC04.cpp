@@ -191,10 +191,10 @@ extern "C" void fn_8003F0AC(Set_8003EE6C *pA, Set_8003EE6C *pB)
 
 extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
 {
-    CollideContact contacts[128];
-    CollidePlane plane;
+    CollideContact_t contacts[128];
+    CollidePlane_t plane;
     unsigned char hit[16];
-    CollideContactList *pContacts = 0;
+    CollideContactList_t *pContacts = 0;
     Sub_8003EC54 *pSubsA = pA->mpUnknown20;
     Sub_8003EC54 *pSubsB = pB->mpUnknown20;
     int detail = 1;
@@ -231,7 +231,7 @@ extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
             CollideMakeSplitPlane(&plane, pA, pB);
             for (i = 0; i < countA; i++) {
                 hit[i] = 0;
-                if (CollideCapsuleInFront(&plane, &pSubsA[i].mUnknown10)) {
+                if (CollideCapsuleReachesPlane(&plane, &pSubsA[i].mUnknown10)) {
                     hit[i] = 1;
                     for (j = 0; j < countB; j++) {
                         if (CollideTestSpheres(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
@@ -244,7 +244,7 @@ extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
             plane.mUnknown14 = -plane.mUnknown14;
             plane.mUnknown18 = -plane.mUnknown18;
             for (j = 0; j < countB; j++) {
-                if (CollideCapsuleInFront(&plane, &pSubsB[j].mUnknown10)) {
+                if (CollideCapsuleReachesPlane(&plane, &pSubsB[j].mUnknown10)) {
                     for (i = 0; i < countA; i++) {
                         if (hit[i] == 0 && CollideTestSpheres(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
                             CollideAddCapsuleContact(&pSubsA[i].mUnknown10, &pSubsB[j].mUnknown10, (j << 8) | i);

@@ -18,7 +18,7 @@
 #include "engine/remap.h"
 
 /* Argument of fn_801F8A0C and fn_801F8A54. */
-struct DbInitDesc {
+struct DbInitDesc_t {
     int mUnknown0;
     int mUnknown4[9];
 };
@@ -64,8 +64,8 @@ int fn_801CEF48(void);
 int fn_801CEFA0(void);
 int fn_801F512C(void);
 int fn_801F518C(void);
-void fn_801F8A0C(DbInitDesc *pDesc);
-int fn_801F8A54(DbInitDesc *pDesc);
+void fn_801F8A0C(DbInitDesc_t *pDesc);
+int fn_801F8A54(DbInitDesc_t *pDesc);
 void fn_801F8C64(void);
 int fn_801F9430(int a, int *pTable4, int *pTable8);
 int fn_801F9574(void);
@@ -193,7 +193,7 @@ const char *Db::GetName() { return "Db"; }
 int Db::Init()
 {
     Record_802CC680 *record = fn_80025E50(2);
-    DbInitDesc desc;
+    DbInitDesc_t desc;
 
     fn_8022C930(32);
     fn_8020D0CC(record);

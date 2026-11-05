@@ -2,7 +2,7 @@
 #define GAME_UNLOCKITEM_H
 
 /* Record filled by UnlockListReadItem. */
-struct UnlockItem {
+struct UnlockItem_t {
     signed char mIndex;
     char mName[132];
     int mUnknown136;

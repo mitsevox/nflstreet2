@@ -20,16 +20,16 @@ void fn_801DD3AC(int handle, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_80187DD8(int a);
 void fn_80187E08(int a, const char *pText, int b, int c);
-void PortraitJobAllocImage(PortraitJob *pObject);
-void PortraitJobLoad(PortraitJob *pObject);
-int PortraitJobIsLoaded(PortraitJob *pObject);
-void PortraitJobUnload(PortraitJob *pObject);
-void PortraitJobQuantize(PortraitJob *pObject);
-int PortraitJobIsDone(PortraitJob *pObject);
-void PortraitJobSave(PortraitJob *pObject);
-void fn_80199968(PortraitJob *pObject);
-void fn_801999B0(PortraitJob *pObject);
-void fn_801999F4(PortraitJob *pObject);
+void PortraitJobAllocImage(PortraitJob_t *pObject);
+void PortraitJobLoad(PortraitJob_t *pObject);
+int PortraitJobIsLoaded(PortraitJob_t *pObject);
+void PortraitJobUnload(PortraitJob_t *pObject);
+void PortraitJobQuantize(PortraitJob_t *pObject);
+int PortraitJobIsDone(PortraitJob_t *pObject);
+void PortraitJobSave(PortraitJob_t *pObject);
+void fn_80199968(PortraitJob_t *pObject);
+void fn_801999B0(PortraitJob_t *pObject);
+void fn_801999F4(PortraitJob_t *pObject);
 }
 
 static const char *sName = "FMCAPPORT";
@@ -141,7 +141,7 @@ void FMCAPPORT::Start()
 void FMCAPPORT::Update()
 {
     FMCAPPORTState *state = mpState.mp;
-    PortraitJob *object = &state->mObject;
+    PortraitJob_t *object = &state->mObject;
 
     switch (state->mState) {
     case 0:

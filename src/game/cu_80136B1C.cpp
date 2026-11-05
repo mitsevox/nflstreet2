@@ -31,7 +31,7 @@ void fn_8013B874(Object_80137ABC *pBall, float step);
 void fn_8013B96C(Object_80137ABC *pBall, float step);
 void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, CollideContact *pContact, unsigned char sub, Vector_80039F5C *pPos);
+void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub, Vector_80039F5C *pPos);
 void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
 float fn_80138F64(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
 Set_8003EE6C *fn_801442F0(void);
@@ -205,7 +205,7 @@ int fn_801370A4(void *p)
          + pRecords->mUnknown4 * sizeof(Record_8003EC04) + pRecords->mUnknownC * sizeof(Sub_8003EC54) * 2;
 }
 
-void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, CollideContactList *pContacts)
+void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, CollideContactList_t *pContacts)
 {
     Object_80137ABC *pBall;
     Object_80039F5C *p;

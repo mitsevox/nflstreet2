@@ -55,7 +55,7 @@ extern "C" int fn_801385A8(Object_80137ABC *pBall)
 }
 
 extern "C" void fn_80138690(Object_80137ABC *pBall, Vector_80039F5C *pCenter, Vector_80039F5C *pDir,
-                            CollideContact *pContact, int push, float value)
+                            CollideContact_t *pContact, int push, float value)
 {
     float x = pBall->mState.mUnknown54.mX;
     float y = pBall->mState.mUnknown54.mY;
@@ -139,7 +139,7 @@ extern "C" void fn_80138880(Vector_80039F5C *pOut, Object_80039F5C *p, Vector_80
     fn_802271F0(pOut, pOut);
 }
 
-extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, CollideContact *pContact, unsigned char sub,
+extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub,
                             Vector_80039F5C *pPos)
 {
     Segment_80142C5C ball;
