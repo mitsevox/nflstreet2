@@ -15,8 +15,8 @@ void fn_80072D98(unsigned int delay);
 void fn_80073094(void);
 extern const char lbl_8028AD04[];
 extern char lbl_8030C070[];
-extern FlowStageEntry lbl_802CCBBC[];
-extern FlowTransitionEntry lbl_802CCBDC[];
+extern FlowStageEntry_t lbl_802CCBBC[];
+extern FlowTransitionEntry_t lbl_802CCBDC[];
 }
 
 extern LoadingFEToInGame gLoadingFEToInGame;
@@ -186,9 +186,9 @@ static ModuleDependency lbl_803EC680[] = {
     0,
 };
 
-const char *Class_800325E8::GetName() { return lbl_8028AD04; }
-FlowStageEntry *Class_800325E8::GSGetStageList() { return lbl_802CCBBC; }
-FlowTransitionEntry *Class_800325E8::GSGetTransitionList() { return lbl_802CCBDC; }
+const char *Class_800325E8::GSGetGroupName() { return lbl_8028AD04; }
+FlowStageEntry_t *Class_800325E8::GSGetStageList() { return lbl_802CCBBC; }
+FlowTransitionEntry_t *Class_800325E8::GSGetTransitionList() { return lbl_802CCBDC; }
 
 ModuleDependency *Class_800325E8::GSGetStageModuleList(int id)
 {

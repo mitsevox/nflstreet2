@@ -299,27 +299,27 @@
     },
     "fn_801CC6FC__10FlowGroupCi": {
       "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350i); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__10FlowGroupCi); descriptive name."
     },
     "_._10FlowGroupC": {
       "address": "0x801CC38C",
-      "evidence": "evidence.tsv external row for 0x801CC38C (_._14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC38C (_._10FlowGroupC); descriptive name."
     },
     "fn_801CC6F8__10FlowGroupC": {
       "address": "0x801CC6F8",
-      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__10FlowGroupC); descriptive name."
     },
     "__10FlowGroupC": {
       "address": "0x801CC350",
-      "evidence": "evidence.tsv external row for 0x801CC350 (__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC350 (__10FlowGroupC); descriptive name."
     },
     "_._12FlowManagerC": {
       "address": "0x801CBC9C",
-      "evidence": "evidence.tsv external row for 0x801CBC9C (_._14Class_801CBC50); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CBC9C (_._12FlowManagerC); descriptive name."
     },
     "__12FlowManagerC": {
       "address": "0x801CBC50",
-      "evidence": "evidence.tsv external row for 0x801CBC50 (__14Class_801CBC50); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CBC50 (__12FlowManagerC); descriptive name."
     },
     "__14Class_801B8D9C": {
       "address": "0x801B8D9C",
@@ -1135,23 +1135,23 @@
     },
     "fn_801CBD80__12FlowManagerCii": {
       "address": "0x801CBD80",
-      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
     },
     "fn_801CBE24__12FlowManagerCi": {
       "address": "0x801CBE24",
-      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
     },
     "fn_801CBE9C__12FlowManagerCi": {
       "address": "0x801CBE9C",
-      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
     },
     "fn_801CBEC8__12FlowManagerCi": {
       "address": "0x801CBEC8",
-      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
     },
     "fn_801CBEF4__12FlowManagerCii": {
       "address": "0x801CBEF4",
-      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
     },
     "__14Block_80156400": {
       "address": "0x80156400",
@@ -1662,7 +1662,7 @@
     {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/cu_80003C94.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -2193,7 +2193,7 @@
     {
       "source": "src/game/GameModules.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80033A5C-0x8003450C (src/game/ModuleGroup_80033A5C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80033A5C-0x8003450C (src/game/GameModules.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -3776,7 +3776,7 @@
     {
       "source": "src/game/gsflowman.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/cu_80032340.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/gsflowman.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -3813,7 +3813,7 @@
     {
       "source": "src/game/MainFEGroup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/cu_80032EE8.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/MainFEGroup.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -6811,7 +6811,7 @@
     {
       "source": "src/game/DemoLaunch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/DemoLaunch.cpp) and its data/source-form rows.",
       "link_roots": {
         "symbols": [
           "DemoLaunchSetFlag",
@@ -8482,7 +8482,7 @@
     {
       "source": "src/game/ReplayCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80030D50-0x8003108C (src/game/cu_80030D50.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80030D50-0x8003108C (src/game/ReplayCursor.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -9589,7 +9589,7 @@
     {
       "source": "src/game/FeatAwards.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/cu_800314E0.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/FeatAwards.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",

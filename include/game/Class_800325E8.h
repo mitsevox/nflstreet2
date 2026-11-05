@@ -7,9 +7,9 @@ class Class_800325E8 : public FlowGroupC {
 public:
     virtual void GSProcess();
     virtual int GSTransition(int a, int id);
-    virtual const char *GetName();
-    virtual FlowStageEntry *GSGetStageList();
-    virtual FlowTransitionEntry *GSGetTransitionList();
+    virtual const char *GSGetGroupName();
+    virtual FlowStageEntry_t *GSGetStageList();
+    virtual FlowTransitionEntry_t *GSGetTransitionList();
     virtual ModuleDependency *GSGetStageModuleList(int id);
 };
 

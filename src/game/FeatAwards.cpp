@@ -42,7 +42,7 @@ int fn_8022F4BC(void);
 int fn_80190394(void);
 }
 
-FeatAward *_Feat_apAwarded[100];
+FeatAward_t *_Feat_apAwarded[100];
 unsigned int _Feat_uAwardedCount = 0;
 char _Feat_abEAGameSave[6];
 
@@ -52,7 +52,7 @@ char _Feat_aszEAGameCode[6][8] = {"GNNE-69", "GXBE-69", "GUGE-69", "GNQE-69", "G
 int _Feat_aiEAGameKey[6] = {22, 23, 29, 26, 27, 24};
 
 extern "C" {
-int FeatAwardByKey(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, FeatAward *pEntry, int db)
+int FeatAwardByKey(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, FeatAward_t *pEntry, int db)
 {
     Record_80088CE0 record;
 
@@ -67,7 +67,7 @@ int FeatAwardByKey(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, F
     fn_8008880C(db, record.mUnknown148);
     fn_801C2E18(pEntry->mName, record.mName);
     fn_80186A10(fn_80186B38(db), pEntry->mText);
-    pEntry->mUnknown164 = record.mUnknown148;
+    pEntry->mCredits = record.mUnknown148;
     return 1;
 }
 
@@ -75,7 +75,7 @@ void FeatAwardStatFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, signe
 {
     Record_80088CE0 record;
     Object_8007A334 object;
-    FeatAward *pEntry;
+    FeatAward_t *pEntry;
     unsigned int count;
 
     if (fn_8007A444(pCursor)) {
@@ -91,11 +91,11 @@ void FeatAwardStatFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, signe
                 if (count >= record.mUnknown144) {
                     fn_80088A3C(pOther, 1);
                     fn_8008880C(fn_8022F358(pad), record.mUnknown148);
-                    pEntry = (FeatAward *)fn_801D2B7C(168, 0, 0);
+                    pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(pad, pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
             }
@@ -106,7 +106,7 @@ void FeatAwardStatFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, signe
 
 void FeatAwardModeFeat(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 {
-    FeatAward entry;
+    FeatAward_t entry;
     int mode;
     int index;
     int key;
@@ -127,10 +127,10 @@ void FeatAwardModeFeat(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db
         return;
     }
     if (FeatAwardByKey(pCursor, pOther, key, &entry, db)) {
-        _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward *)fn_801D2B7C(168, 0, 0);
+        _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
         fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
-        _Feat_apAwarded[_Feat_uAwardedCount]->mUnknown164 = entry.mUnknown164;
+        _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
         _Feat_uAwardedCount++;
     }
 }
@@ -138,7 +138,7 @@ void FeatAwardModeFeat(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db
 void FeatAwardSettingFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 {
     Record_80088CE0 record;
-    FeatAward *pEntry;
+    FeatAward_t *pEntry;
     unsigned int value;
 
     value = fn_8007F828(1);
@@ -149,11 +149,11 @@ void FeatAwardSettingFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, in
                 if (value >= record.mUnknown144) {
                     fn_80088A3C(pOther, 1);
                     fn_8008880C(db, record.mUnknown148);
-                    pEntry = (FeatAward *)fn_801D2B7C(168, 0, 0);
+                    pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
             }
@@ -164,7 +164,7 @@ void FeatAwardSettingFeats(Object_8007A334 *pCursor, Object_8007A334 *pOther, in
 void FeatAwardValueFeat(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int key, int value)
 {
     Record_80088CE0 record;
-    FeatAward *pEntry;
+    FeatAward_t *pEntry;
 
     if (fn_80088CAC(pCursor, 0, key, 0)) {
         do {
@@ -173,11 +173,11 @@ void FeatAwardValueFeat(Object_8007A334 *pCursor, Object_8007A334 *pOther, int d
                 if (fn_80088A74(pOther, fn_80088D84(pCursor)) == 0) {
                     fn_80088A3C(pOther, 1);
                     fn_8008880C(db, record.mUnknown148);
-                    pEntry = (FeatAward *)fn_801D2B7C(168, 0, 0);
+                    pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
                 return;
@@ -229,7 +229,7 @@ void FeatAwardEAGameSaveFeats(void)
     Record_80088CE0 record;
     Object_8007A334 other;
     Object_8007A334 cursor;
-    FeatAward *pEntry;
+    FeatAward_t *pEntry;
     int i;
     int j;
     int db;
@@ -246,11 +246,11 @@ void FeatAwardEAGameSaveFeats(void)
                     fn_80088CE0(&cursor, &record);
                     fn_80088A3C(&other, 1);
                     fn_8008880C(db, record.mUnknown148);
-                    pEntry = (FeatAward *)fn_801D2B7C(168, 0, 0);
+                    pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
                 fn_80088A1C(&other);
@@ -265,7 +265,7 @@ void FeatAwardNewUserFeats(void)
     Record_80088CE0 record;
     Object_8007A334 other;
     Object_8007A334 cursor;
-    FeatAward *pEntry;
+    FeatAward_t *pEntry;
     int db;
 
     db = fn_8022F4BC();
@@ -275,11 +275,11 @@ void FeatAwardNewUserFeats(void)
         fn_80088CE0(&cursor, &record);
         fn_80088AC8(&other, record.mIndex, 1);
         fn_8008880C(db, record.mUnknown148);
-        pEntry = (FeatAward *)fn_801D2B7C(168, 0, 0);
+        pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
         fn_801C2E18(pEntry->mName, record.mName);
         fn_80186A10(fn_8022F384(db), pEntry->mText);
-        pEntry->mUnknown164 = record.mUnknown148;
+        pEntry->mCredits = record.mUnknown148;
         _Feat_uAwardedCount++;
         fn_80088A1C(&other);
         fn_80088C8C(&cursor);
@@ -291,7 +291,7 @@ void FeatAwardAllUsersFeat(void)
 {
     Object_8007A334 cursor;
     Object_8007A334 other;
-    FeatAward entry;
+    FeatAward_t entry;
     unsigned char i;
     int db;
 
@@ -300,10 +300,10 @@ void FeatAwardAllUsersFeat(void)
         db = fn_8022F358(i);
         fn_8008898C(&other, db);
         if (FeatAwardByKey(&cursor, &other, 38, &entry, db)) {
-            _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward *)fn_801D2B7C(168, 0, 0);
+            _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
             fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
             fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
-            _Feat_apAwarded[_Feat_uAwardedCount]->mUnknown164 = entry.mUnknown164;
+            _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
             _Feat_uAwardedCount++;
         }
         fn_80088A1C(&other);
@@ -316,12 +316,12 @@ unsigned int FeatGetAwardedCount(void)
     return _Feat_uAwardedCount;
 }
 
-void FeatGetAwarded(int index, FeatAward *pEntry)
+void FeatGetAwarded(int index, FeatAward_t *pEntry)
 {
     if (index <= 100) {
         fn_801C2E18(pEntry->mName, _Feat_apAwarded[index]->mName);
         fn_801C2E18(pEntry->mText, _Feat_apAwarded[index]->mText);
-        pEntry->mUnknown164 = _Feat_apAwarded[index]->mUnknown164;
+        pEntry->mCredits = _Feat_apAwarded[index]->mCredits;
     }
 }
 
@@ -335,7 +335,7 @@ void FeatClearAwarded(void)
     _Feat_uAwardedCount = 0;
 }
 
-int FeatAwardCurrentUserModeFeat(FeatAward *pEntry)
+int FeatAwardCurrentUserModeFeat(FeatAward_t *pEntry)
 {
     int result = 0;
     Object_8007A334 cursor;

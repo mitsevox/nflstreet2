@@ -4,15 +4,15 @@
 #include "game/Module.h"
 
 /* Element of the table returned by GSGetStageList; the table ends with mId -1. */
-struct FlowStageEntry {
+struct FlowStageEntry_t {
     int mId;
     const char *mpName;
 };
 
 /* Element of the table returned by GSGetTransitionList; the table ends with -1, -1. */
-struct FlowTransitionEntry {
-    int mUnknown0;
-    int mUnknown4;
+struct FlowTransitionEntry_t {
+    int mFromId;
+    int mToId;
 };
 
 class FlowGroupC {
@@ -22,10 +22,10 @@ public:
     virtual void GSProcess() = 0;
     /* Called by 0x801CC654 with the word at +4 and that function's argument. */
     virtual int GSTransition(int a, int id) = 0;
-    virtual FlowStageEntry *GSGetStageList() = 0;
-    virtual FlowTransitionEntry *GSGetTransitionList() = 0;
+    virtual FlowStageEntry_t *GSGetStageList() = 0;
+    virtual FlowTransitionEntry_t *GSGetTransitionList() = 0;
     virtual ModuleDependency *GSGetStageModuleList(int id) = 0;
-    virtual const char *GetName() = 0;
+    virtual const char *GSGetGroupName() = 0;
     virtual void fn_801CC6F8();
     virtual void fn_801CC6FC(int id);
 
@@ -43,8 +43,8 @@ public:
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     int mId;
-    FlowStageEntry *mpRecords;
-    FlowTransitionEntry *mpLinks;
+    FlowStageEntry_t *mpRecords;
+    FlowTransitionEntry_t *mpLinks;
     int mRecordCount;
     int mLinkCount;
     int mOverrideId;
@@ -60,20 +60,20 @@ class DebugGroup : public FlowGroupC {
 public:
     virtual void GSProcess();
     virtual int GSTransition(int a, int id);
-    virtual FlowStageEntry *GSGetStageList();
-    virtual FlowTransitionEntry *GSGetTransitionList();
+    virtual FlowStageEntry_t *GSGetStageList();
+    virtual FlowTransitionEntry_t *GSGetTransitionList();
     virtual ModuleDependency *GSGetStageModuleList(int id);
-    virtual const char *GetName();
+    virtual const char *GSGetGroupName();
 };
 
 class SystemGroup : public FlowGroupC {
 public:
     virtual void GSProcess();
     virtual int GSTransition(int a, int id);
-    virtual FlowStageEntry *GSGetStageList();
-    virtual FlowTransitionEntry *GSGetTransitionList();
+    virtual FlowStageEntry_t *GSGetStageList();
+    virtual FlowTransitionEntry_t *GSGetTransitionList();
     virtual ModuleDependency *GSGetStageModuleList(int id);
-    virtual const char *GetName();
+    virtual const char *GSGetGroupName();
 };
 
 extern DebugGroup gDebugGroup;

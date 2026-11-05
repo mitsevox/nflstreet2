@@ -251,7 +251,7 @@ void FlowGroupC::fn_801CC3C0()
     while (mpRecords[mRecordCount].mId != -1) {
         mRecordCount++;
     }
-    while (mpLinks[mLinkCount].mUnknown0 != -1) {
+    while (mpLinks[mLinkCount].mFromId != -1) {
         mLinkCount++;
     }
     mUnknown0 = 1;
@@ -334,7 +334,7 @@ int FlowGroupC::fn_801CC654(int id)
 
 const char *FlowGroupC::fn_801CC6C4()
 {
-    return GetName();
+    return GSGetGroupName();
 }
 
 void FlowGroupC::fn_801CC6F8()

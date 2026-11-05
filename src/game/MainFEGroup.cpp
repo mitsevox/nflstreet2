@@ -3,21 +3,13 @@
    it allows, the modules each stage needs, and the per-frame step that
    moves the front end from one stage to the next. */
 #include "game/FlowGroupC.h"
+#include "game/MainFEGroup.h"
 #include "game/FlowManagerC.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/GameState.h"
 #include "game/GameModules.h"
 
-class MainFEGroup : public FlowGroupC {
-public:
-    virtual void GSProcess();
-    virtual int GSTransition(int a, int b);
-    virtual FlowStageEntry *GSGetStageList();
-    virtual FlowTransitionEntry *GSGetTransitionList();
-    virtual ModuleDependency *GSGetStageModuleList(int id);
-    virtual const char *GetName();
-};
 
 extern "C" {
 void fn_800245DC(void);
@@ -26,8 +18,8 @@ void fn_80072C90(unsigned int delay, int wait);
 void fn_80072D98(unsigned int delay);
 void fn_80187C5C(unsigned char a);
 extern const char _MainFEGroup_szName[];
-extern FlowStageEntry _MainFEGroup_aStages[];
-extern FlowTransitionEntry _MainFEGroup_aTransitions[];
+extern FlowStageEntry_t _MainFEGroup_aStages[];
+extern FlowTransitionEntry_t _MainFEGroup_aTransitions[];
 extern ModuleDependency _MainFEGroup_aFirstStartModules[];
 extern ModuleDependency _MainFEGroup_aFirstStartCompleteModules[];
 extern ModuleDependency _MainFEGroup_aLoadingModules[];
@@ -36,7 +28,7 @@ extern ModuleDependency _MainFEGroup_aOnlineModules[];
 extern ModuleDependency _MainFEGroup_aExitModules[];
 }
 
-FlowStageEntry _MainFEGroup_aStages[] = {
+FlowStageEntry_t _MainFEGroup_aStages[] = {
     { 9, "FE Loading" },
     { 7, "FE FirstStart" },
     { 8, "FE FirstStartComplete" },
@@ -47,7 +39,7 @@ FlowStageEntry _MainFEGroup_aStages[] = {
     { -1, 0 },
 };
 
-FlowTransitionEntry _MainFEGroup_aTransitions[] = {
+FlowTransitionEntry_t _MainFEGroup_aTransitions[] = {
     { 7, 8 },
     { 8, 9 },
     { 9, 10 },
@@ -161,9 +153,9 @@ ModuleDependency _MainFEGroup_aExitModules[] = {
     0,
 };
 
-const char *MainFEGroup::GetName() { return _MainFEGroup_szName; }
-FlowStageEntry *MainFEGroup::GSGetStageList() { return _MainFEGroup_aStages; }
-FlowTransitionEntry *MainFEGroup::GSGetTransitionList() { return _MainFEGroup_aTransitions; }
+const char *MainFEGroup::GSGetGroupName() { return _MainFEGroup_szName; }
+FlowStageEntry_t *MainFEGroup::GSGetStageList() { return _MainFEGroup_aStages; }
+FlowTransitionEntry_t *MainFEGroup::GSGetTransitionList() { return _MainFEGroup_aTransitions; }
 
 ModuleDependency *MainFEGroup::GSGetStageModuleList(int id)
 {

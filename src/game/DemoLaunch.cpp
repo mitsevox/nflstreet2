@@ -9,8 +9,8 @@
 static unsigned char _DemoLaunch_bFlag = 0;
 
 /* Five 64-byte buffers that FillDemoLaunchPaths fills with executable
-   paths; the field labels are neutral. */
-struct DemoLaunchPaths {
+   paths. */
+struct DemoLaunchPaths_t {
     char mPath0[64];
     char mPath1[64];
     char mPath2[64];
@@ -35,7 +35,7 @@ extern "C" int DemoLaunchIsAllowed(void)
 
 void FillDemoLaunchPaths(int mode)
 {
-    DemoLaunchPaths paths;
+    DemoLaunchPaths_t paths;
 
     if (mode == 0) {
         strncpy(paths.mPath0, "D:\\MADDEN05\\Madden05.xbe", 64);

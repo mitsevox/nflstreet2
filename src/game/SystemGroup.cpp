@@ -6,10 +6,10 @@
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
 
-static FlowStageEntry sStages[] = { { 0, "System Stage" }, { -1, 0 } };
-static FlowTransitionEntry sRecords[] = { { -1, -1 } };
+static FlowStageEntry_t _SystemGroup_aStages[] = { { 0, "System Stage" }, { -1, 0 } };
+static FlowTransitionEntry_t _SystemGroup_aTransitions[] = { { -1, -1 } };
 SystemGroup gSystemGroup;
-static ModuleDependency sModules[] = {
+static ModuleDependency _SystemGroup_aModules[] = {
     &gSys,
     &gFileIO,
     &gRes,
@@ -44,14 +44,14 @@ static ModuleDependency sModules[] = {
     0
 };
 
-const char *SystemGroup::GetName() { return "System Group"; }
-FlowStageEntry *SystemGroup::GSGetStageList() { return sStages; }
-FlowTransitionEntry *SystemGroup::GSGetTransitionList() { return sRecords; }
+const char *SystemGroup::GSGetGroupName() { return "System Group"; }
+FlowStageEntry_t *SystemGroup::GSGetStageList() { return _SystemGroup_aStages; }
+FlowTransitionEntry_t *SystemGroup::GSGetTransitionList() { return _SystemGroup_aTransitions; }
 
 ModuleDependency *SystemGroup::GSGetStageModuleList(int id)
 {
     if (id == 0) {
-        return sModules;
+        return _SystemGroup_aModules;
     }
     return 0;
 }

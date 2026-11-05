@@ -8,13 +8,13 @@
    single instance is kept in _ReplayCursor_pObject. */
 struct ReplayCursor_t {
     int mUnknown0;
-    float mUnknown4[3];
+    float mPos[3];
     int mUnknown16;
     void *mUnknown20;
     int mUnknown24;
     unsigned char mUnknown28[192];
     int mUnknown220;
-    unsigned char mUnknown224;
+    unsigned char mbVisible;
 };
 
 extern "C" {
@@ -48,10 +48,10 @@ static ReplayCursor_t *_ReplayCursor_pObject = 0;
 extern "C" {
 void ReplayCursorObjInit(ReplayCursor_t *pObject, int *pArgs)
 {
-    pObject->mUnknown4[0] = 0.0f;
-    pObject->mUnknown4[1] = 0.0f;
-    pObject->mUnknown4[2] = 0.01f;
-    pObject->mUnknown224 = 0;
+    pObject->mPos[0] = 0.0f;
+    pObject->mPos[1] = 0.0f;
+    pObject->mPos[2] = 0.01f;
+    pObject->mbVisible = 0;
     pObject->mUnknown20 = (void *)pArgs[0];
     pObject->mUnknown24 = pArgs[1];
     pObject->mUnknown220 = fn_801EF390(pObject->mUnknown20, pObject->mUnknown24, 1);
@@ -76,11 +76,11 @@ int ReplayCursorObjDraw(ReplayCursor_t *pObject)
 {
     float v[3];
 
-    if (pObject->mUnknown220 != 0 && pObject->mUnknown224 == 1) {
+    if (pObject->mUnknown220 != 0 && pObject->mbVisible == 1) {
         fn_801D0470(fn_80228668());
         fn_801D04C4();
-        v[0] = pObject->mUnknown4[0];
-        v[1] = pObject->mUnknown4[1];
+        v[0] = pObject->mPos[0];
+        v[1] = pObject->mPos[1];
         v[2] = 0.0f;
         fn_801D0C58(v);
         fn_80235740(pObject->mUnknown28, fn_801C657C());
@@ -122,9 +122,9 @@ void ReplayCursorSetPos(const float *pValue, int)
     if (pObject == 0) {
         return;
     }
-    pObject->mUnknown4[0] = pValue[0];
-    pObject->mUnknown4[1] = pValue[1];
-    pObject->mUnknown4[2] = pValue[2];
+    pObject->mPos[0] = pValue[0];
+    pObject->mPos[1] = pValue[1];
+    pObject->mPos[2] = pValue[2];
 }
 
 void ReplayCursorSetVisible(unsigned char value)
@@ -134,7 +134,7 @@ void ReplayCursorSetVisible(unsigned char value)
     if (pObject == 0) {
         return;
     }
-    pObject->mUnknown224 = value;
+    pObject->mbVisible = value;
 }
 
 int ReplayCursorGetPos(float *pValue)
@@ -142,11 +142,11 @@ int ReplayCursorGetPos(float *pValue)
     ReplayCursor_t *pObject = _ReplayCursor_pObject;
     int result = 0;
 
-    if (pObject->mUnknown224 != 0) {
+    if (pObject->mbVisible != 0) {
         result = 1;
-        pValue[0] = pObject->mUnknown4[0];
-        pValue[1] = pObject->mUnknown4[1];
-        pValue[2] = pObject->mUnknown4[2];
+        pValue[0] = pObject->mPos[0];
+        pValue[1] = pObject->mPos[1];
+        pValue[2] = pObject->mPos[2];
     }
     return result;
 }

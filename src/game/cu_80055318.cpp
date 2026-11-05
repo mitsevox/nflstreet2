@@ -20,7 +20,7 @@ static int lbl_803EC7E8;
 
 int fn_80055318(int mode, char *pName, char *pText, int *pValue)
 {
-    FeatAward entry;
+    FeatAward_t entry;
 
     switch (mode) {
     case 0:
@@ -37,7 +37,7 @@ int fn_80055318(int mode, char *pName, char *pText, int *pValue)
             sprintf(pName, entry.mName);
         }
         sprintf(pText, entry.mText);
-        *pValue = entry.mUnknown164;
+        *pValue = entry.mCredits;
         lbl_803EC7E8++;
         return 1;
     }
@@ -45,7 +45,7 @@ int fn_80055318(int mode, char *pName, char *pText, int *pValue)
         if (FeatAwardCurrentUserModeFeat(&entry) == 1) {
             sprintf(pName, entry.mName);
             sprintf(pText, entry.mText);
-            *pValue = entry.mUnknown164;
+            *pValue = entry.mCredits;
             return 1;
         }
         break;

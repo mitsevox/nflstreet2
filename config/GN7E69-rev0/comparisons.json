@@ -15427,7 +15427,7 @@
       ],
       "functions": [
         {
-          "symbol": "GetName__14Class_800325E8",
+          "symbol": "GSGetGroupName__14Class_800325E8",
           "start": "0x800325E8",
           "end": "0x800325F4"
         },
@@ -15467,12 +15467,12 @@
           "end": "0x80032E90"
         },
         {
-          "symbol": "_GLOBAL_.I.GetName__14Class_800325E8",
+          "symbol": "_GLOBAL_.I.GSGetGroupName__14Class_800325E8",
           "start": "0x80032E90",
           "end": "0x80032EBC"
         },
         {
-          "symbol": "_GLOBAL_.D.GetName__14Class_800325E8",
+          "symbol": "_GLOBAL_.D.GSGetGroupName__14Class_800325E8",
           "start": "0x80032EBC",
           "end": "0x80032EE8"
         }

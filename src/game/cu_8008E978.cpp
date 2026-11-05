@@ -10191,7 +10191,7 @@ extern "C" void fn_800AB190(void *p)
 }
 
 extern "C" {
-extern FeatAward lbl_8030F45C;
+extern FeatAward_t lbl_8030F45C;
 extern Entry_80219044 lbl_8030F504;
 extern Entry_80219044 lbl_8030F510;
 extern unsigned char lbl_803EAA9A;
@@ -10212,7 +10212,7 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         lbl_8030F510.mLength = fn_801C3180(lbl_8030F45C.mText);
         args[0] = (int)&lbl_8030F504;
         args[1] = (int)&lbl_8030F510;
-        args[2] = lbl_8030F45C.mUnknown164;
+        args[2] = lbl_8030F45C.mCredits;
         fn_80064F58(1, 20, -1, 3, args, 1);
         lbl_803EAA9C++;
     } else {

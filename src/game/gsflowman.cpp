@@ -4,10 +4,8 @@
 #include "game/FlowManagerC.h"
 #include "game/FlowGroupC.h"
 #include "game/Class_800325E8.h"
+#include "game/MainFEGroup.h"
 
-extern "C" {
-extern char gMainFEGroup[];
-}
 
 GSFlowManagerC gGSFlowManager;
 
@@ -21,7 +19,7 @@ void *GSFlowManagerC::GSCreateGroup(int index)
     case 1:
         return &lbl_803068B4;
     case 2:
-        return gMainFEGroup;
+        return &gMainFEGroup;
     case 3:
         return &gDebugGroup;
     }
