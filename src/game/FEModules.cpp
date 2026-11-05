@@ -27,7 +27,7 @@ void fn_801681A8(void);
 void fn_80168210(void);
 void fn_801684B8(int);
 void fn_8017F664(void);
-void fn_8019B5D4(void);
+void LevelLightsSelectFrontEnd(void);
 void fn_801F2798(const char *);
 }
 
@@ -131,7 +131,7 @@ int FMMainFEInit::Init()
         fn_801F2798("DynClutInitFinish");
         fn_8008FBA0();
     }
-    fn_8019B5D4();
+    LevelLightsSelectFrontEnd();
     return 1;
 }
 

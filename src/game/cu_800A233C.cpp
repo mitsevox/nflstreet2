@@ -162,7 +162,7 @@ void fn_8007B6D4(void);
 void fn_800A29AC(void);
 void fn_800A29D8(int mode);
 void fn_800A2D2C(void);
-Entry_802F394C *fn_801A566C(int index);
+EnvFogSettings *EnvGetFogSettings(int index);
 void fn_8005406C(void);
 void *fn_800C47C4(void);
 void fn_801464D0(void *owner);
@@ -285,7 +285,7 @@ extern "C" void fn_800A2F48(void)
     fn_8007B684(lbl_8030E6E8.mUnknown0);
     fn_800A2848();
     fn_800A29AC();
-    lbl_8030E6E8.mpUnknown8C0 = fn_801A566C(lbl_8030E6E8.mUnknown0);
+    lbl_8030E6E8.mpUnknown8C0 = EnvGetFogSettings(lbl_8030E6E8.mUnknown0);
     lbl_8030E6DC.mpCallback0 = 0;
     lbl_8030E6DC.mpCallback4 = 0;
     lbl_8030E6DC.mpCallback8 = 0;

@@ -40,7 +40,7 @@ extern "C" {
 void fn_80044114(void);
 void *fn_800A336C(void);
 int fn_800A3398(void);
-void fn_801A5104(void);
+void SimpShadowDrawAll(void);
 int fn_801C657C(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
@@ -200,7 +200,7 @@ int fn_8019B174(Object_8019AD5C *pObject)
     fn_8019AF7C(pObject, 4, 0, 1.0f);
     fn_8019B088(pObject, 1.0f, 0);
     fn_801D0544();
-    fn_801A5104();
+    SimpShadowDrawAll();
     return 0;
 }
 

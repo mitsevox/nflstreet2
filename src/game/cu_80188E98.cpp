@@ -68,8 +68,8 @@ unsigned char fn_8018AFE8(void);
 void fn_80191378(Object_80228224 *pObject);
 void fn_80196174(Object_80228224 *pObject, int a);
 void fn_80196204(void);
-void fn_801A139C(void);
-void fn_801A6730(void);
+void PlyrIconQueueReset(void);
+void UISResListSetup(void);
 void *fn_801C3610(int a, int b);
 void fn_801C3640(void *p);
 void fn_801C3A10(void *p, float a);
@@ -213,7 +213,7 @@ int fn_80189004(int a, int b)
     if (a == lbl_803EB650) {
         if (lbl_803EB688 && (lbl_803EB680 & 1)) {
             fn_8021992C(lbl_803EB688, b);
-            fn_801A139C();
+            PlyrIconQueueReset();
         }
         if (lbl_803EB690 && (lbl_803EB680 & 2)) {
             fn_8021992C(lbl_803EB690, b);
@@ -584,7 +584,7 @@ void fn_80189F68(void)
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 15;
     desc.mUnknown8 = lbl_803EB698;
-    fn_801A6730();
+    UISResListSetup();
     fn_8021EF6C(fn_80189F64);
     if (!flag) {
         fn_80188E98();

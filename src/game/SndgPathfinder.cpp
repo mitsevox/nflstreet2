@@ -4,7 +4,7 @@
 
 #include "game/SndgPathfinder.h"
 #include "game/Camera_8013F738.h"
-#include "game/Class_801B8D9C.h"
+#include "game/CsisClassHandle.h"
 #include "engine/cu_801B8C18.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80067C10.h"
@@ -27,7 +27,7 @@ struct Vec2 {
 };
 
 extern "C" {
-int fn_801B8DA8(Class_801B8D9C *list, Struct_803EB878 *desc);
+int fn_801B8DA8(CsisClassHandle *list, Struct_803EB878 *desc);
 
 extern Struct_803EB878 lbl_803EB878;
 extern Struct_803EB878 lbl_803EB888;
@@ -40,7 +40,7 @@ extern Struct_803EB878 lbl_803EB8B8;
 extern Struct_803EB878 lbl_803EB8C0;
 }
 
-static inline int AddSound(Class_801B8D9C *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
+static inline int AddSound(CsisClassHandle *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
 {
     int err = fn_801B95AC(list, params, handle);
     if (err < 0) {
@@ -103,7 +103,7 @@ struct Sound0 : SoundObject {
         mUnknownC = 0;
         mUnknown10 = 0;
         SetPan(pan);
-        AddSound(&lbl_803ECC54, &lbl_803EB878, &mUnknown4, &mHandle);
+        AddSound(&gSndgBallThrow, &lbl_803EB878, &mUnknown4, &mHandle);
     }
 
     ~Sound0()
@@ -148,7 +148,7 @@ struct SoundVP : SoundObject {
         mPan = pan;
     }
 
-    SoundVP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, unsigned short pan)
+    SoundVP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, unsigned short pan)
     {
         SetVolume(volume);
         SetPan(pan);
@@ -204,7 +204,7 @@ struct SoundVFP : SoundObject {
         mPan = pan;
     }
 
-    SoundVFP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
+    SoundVFP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
     {
         SetVolume(volume);
         SetUnknown8(f);
@@ -267,7 +267,7 @@ struct Sound3 : SoundObject {
         SetVolume(volume);
         SetPan(pan);
         SetMode(mode);
-        AddSound(&lbl_803ECC64, &lbl_803EB888, &mVolume, &mHandle);
+        AddSound(&gSndgFan, &lbl_803EB888, &mVolume, &mHandle);
     }
 
     ~Sound3()
@@ -1403,7 +1403,7 @@ extern "C" void fn_800696A4(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(5);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound1[index] = new SoundVFP(&lbl_803ECC9C, &lbl_803EB8C0, volume, (int)f, pan);
+        lbl_803EA67C->mSound1[index] = new SoundVFP(&gSndgIdleVehicle, &lbl_803EB8C0, volume, (int)f, pan);
         lbl_803EA67C->mSound1[index]->Commit();
     }
 }
@@ -1415,7 +1415,7 @@ extern "C" void fn_80069858(int index, Vector_80039F5C *pPos, void *pObject)
         short unk = 0;
         unsigned int volume = SoundVolume(6);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound2[index] = new SoundVP(&lbl_803ECC94, &lbl_803EB8B8, volume, pan);
+        lbl_803EA67C->mSound2[index] = new SoundVP(&gSndgIdleIdleTruck, &lbl_803EB8B8, volume, pan);
         lbl_803EA67C->mSound2[index]->Commit();
     }
 }
@@ -1441,7 +1441,7 @@ extern "C" void fn_80069B4C(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(8);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound4[index] = new SoundVFP(&lbl_803ECC6C, &lbl_803EB890, volume, (int)f, pan);
+        lbl_803EA67C->mSound4[index] = new SoundVFP(&gSndgIdleBus, &lbl_803EB890, volume, (int)f, pan);
         lbl_803EA67C->mSound4[index]->Commit();
     }
 }
@@ -1454,7 +1454,7 @@ extern "C" void fn_80069D00(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(9);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound5[index] = new SoundVFP(&lbl_803ECC84, &lbl_803EB8A8, volume, (int)f, pan);
+        lbl_803EA67C->mSound5[index] = new SoundVFP(&gSndgIdlePolice, &lbl_803EB8A8, volume, (int)f, pan);
         lbl_803EA67C->mSound5[index]->Commit();
     }
 }
@@ -1467,7 +1467,7 @@ extern "C" void fn_80069EB4(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(10);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound6[index] = new SoundVFP(&lbl_803ECC8C, &lbl_803EB8B0, volume, (int)f, pan);
+        lbl_803EA67C->mSound6[index] = new SoundVFP(&gSndgIdleGolfCart, &lbl_803EB8B0, volume, (int)f, pan);
         lbl_803EA67C->mSound6[index]->Commit();
     }
 }
@@ -1480,7 +1480,7 @@ extern "C" void fn_8006A068(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(11);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound7[index] = new SoundVFP(&lbl_803ECC7C, &lbl_803EB8A0, volume, (int)f, pan);
+        lbl_803EA67C->mSound7[index] = new SoundVFP(&gSndgIdleTruck, &lbl_803EB8A0, volume, (int)f, pan);
         lbl_803EA67C->mSound7[index]->Commit();
     }
 }
@@ -1492,7 +1492,7 @@ extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
         short unk = 0;
         unsigned int volume = SoundVolume(12);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound8[index] = new SoundVP(&lbl_803ECC74, &lbl_803EB898, volume, pan);
+        lbl_803EA67C->mSound8[index] = new SoundVP(&gSndgIdleTrain, &lbl_803EB898, volume, pan);
         lbl_803EA67C->mSound8[index]->Commit();
     }
 }

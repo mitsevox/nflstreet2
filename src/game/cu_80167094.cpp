@@ -23,9 +23,9 @@ void fn_8018A8C8(int);
 int fn_8017F60C(void);
 int fn_801486A0(void);
 int fn_800BA6F8(void);
-void fn_801A133C(float, float, void *, unsigned char);
+void PlyrIconQueueAdd(float, float, void *, unsigned char);
 void fn_8018A908(void (*)(int, float, float, float, float));
-void fn_801A1338(void);
+void PlyrIconShutdown(void);
 int fn_801F1520(int);
 void fn_801A1240(int);
 void fn_801A12E8(void);
@@ -93,29 +93,29 @@ void fn_801673A0(int code, float x, float y, float, float)
         flag = 0;
     }
     switch ((unsigned int)code) {
-    case 0: fn_801A133C(x, y, &lbl_8032858C[1][0], lbl_80328570[1][0]); break;
-    case 1: fn_801A133C(x, y, &lbl_8032858C[1][1], lbl_80328570[1][1]); break;
+    case 0: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][0], lbl_80328570[1][0]); break;
+    case 1: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][1], lbl_80328570[1][1]); break;
     case 4:
-        if (flag) { fn_801A133C(x, y, &lbl_8032858C[1][4], lbl_80328570[1][4]); break; }
-    case 2: fn_801A133C(x, y, &lbl_8032858C[1][2], lbl_80328570[1][2]); break;
+        if (flag) { PlyrIconQueueAdd(x, y, &lbl_8032858C[1][4], lbl_80328570[1][4]); break; }
+    case 2: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][2], lbl_80328570[1][2]); break;
     case 5:
-        if (flag) { fn_801A133C(x, y, &lbl_8032858C[1][5], lbl_80328570[1][5]); break; }
-    case 3: fn_801A133C(x, y, &lbl_8032858C[1][3], lbl_80328570[1][3]); break;
-    case 6: fn_801A133C(x, y, &lbl_8032858C[1][6], lbl_80328570[1][6]); break;
-    case 7: fn_801A133C(x, y, &lbl_8032858C[1][7], lbl_80328570[1][7]); break;
+        if (flag) { PlyrIconQueueAdd(x, y, &lbl_8032858C[1][5], lbl_80328570[1][5]); break; }
+    case 3: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][3], lbl_80328570[1][3]); break;
+    case 6: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][6], lbl_80328570[1][6]); break;
+    case 7: PlyrIconQueueAdd(x, y, &lbl_8032858C[1][7], lbl_80328570[1][7]); break;
     case 10: if (flag) goto case14;
-    case 8: fn_801A133C(x, y, &lbl_8032858C[0][0], lbl_80328570[0][0]); break;
+    case 8: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][0], lbl_80328570[0][0]); break;
     case 11: if (flag) goto case15;
-    case 9: fn_801A133C(x, y, &lbl_8032858C[0][1], lbl_80328570[0][1]); break;
-    case 12: fn_801A133C(x, y, &lbl_8032858C[0][4], lbl_80328570[0][4]); break;
-    case 13: fn_801A133C(x, y, &lbl_8032858C[0][5], lbl_80328570[0][5]); break;
+    case 9: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][1], lbl_80328570[0][1]); break;
+    case 12: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][4], lbl_80328570[0][4]); break;
+    case 13: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][5], lbl_80328570[0][5]); break;
     case 14:
-        if (flag) { fn_801A133C(x, y, &lbl_8032858C[0][6], lbl_80328570[0][6]); break; }
-    case14: fn_801A133C(x, y, &lbl_8032858C[0][2], lbl_80328570[0][2]); break;
+        if (flag) { PlyrIconQueueAdd(x, y, &lbl_8032858C[0][6], lbl_80328570[0][6]); break; }
+    case14: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][2], lbl_80328570[0][2]); break;
     case 15:
-        if (flag) { fn_801A133C(x, y, &lbl_8032858C[0][7], lbl_80328570[0][7]); break; }
-    case15: fn_801A133C(x, y, &lbl_8032858C[0][3], lbl_80328570[0][3]); break;
-    default: fn_801A133C(x, y, &lbl_8032858C[2][code - 16], lbl_80328570[2][code - 16]); break;
+        if (flag) { PlyrIconQueueAdd(x, y, &lbl_8032858C[0][7], lbl_80328570[0][7]); break; }
+    case15: PlyrIconQueueAdd(x, y, &lbl_8032858C[0][3], lbl_80328570[0][3]); break;
+    default: PlyrIconQueueAdd(x, y, &lbl_8032858C[2][code - 16], lbl_80328570[2][code - 16]); break;
     }
 }
 
@@ -137,7 +137,7 @@ void fn_80167794(signed char group, int value, int index)
 void fn_801677F4(void)
 {
     fn_8018A908(0);
-    fn_801A1338();
+    PlyrIconShutdown();
 }
 void fn_8016781C(int value)
 {

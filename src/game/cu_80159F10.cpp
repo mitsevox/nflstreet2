@@ -1,5 +1,5 @@
 #include "game/cu_80159F10.h"
-#include "game/cu_8019FBEC.h"
+#include "game/PassIconTex.h"
 #include <math.h>
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
@@ -70,7 +70,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
             fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14[0]);
             pInstance->mUnknown20 = fn_801481B0() ? 1.0f : 0.4f;
             fn_801D0CFC(scale);
-            fn_8019FD80(pInstance);
+            PassIconTexDraw(pInstance);
             fn_801D0470(fn_80228668());
             fn_801D0544();
         }
@@ -91,14 +91,14 @@ extern "C" void fn_8015A110(void *pOwner)
 {
     fn_801DCF0C(12, 36, 3, fn_80159F10, fn_80159F70);
     fn_801DD0C8((int)pOwner, 12, 0, fn_80159F74);
-    fn_8019FBEC();
+    PassIconTexLoad();
     lbl_803ECA5C = 1;
 }
 
 extern "C" void fn_8015A17C(void)
 {
     fn_80228E18();
-    fn_8019FD38();
+    PassIconTexFree();
     fn_801DCF8C(12);
 }
 

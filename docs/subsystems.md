@@ -39,7 +39,7 @@ NFL Street 2's own code: the front end, game modes, gameplay, replay and the ren
 | 0x80167A8C-0x80181330 | Playbook, team database, ball-strip calls ("Gimme That!"), scramble rules, button mashing | `cu_80167A8C` (playbook), `cu_8016FB10`, `cu_80176F18` (ScrmRule), `cu_8017D0E0` | 0/1/3/1/1 | 53 KiB | no |
 | 0x80181330-0x80190A7C | Edit team and edit player screens, save game, memory card screens, widescreen aspect, story team | `cu_80181330`, `cu_80187AD4`, `cu_80188E98` (aspect and camera set-up), `cu_8018B0BC` | 1/5/1/2/0 | 27 KiB | no |
 | 0x80190A7C-0x801A1400 | Animation extension and bit stream, memory card messages, particle and field-line rendering, ball model, on-field markers; system modules | `animextn.cpp`, `bitstream.cpp`, `cu_80191948`, `cu_801962CC`, `cu_8019AD24`, `cu_801A0088`, `FileIO.cpp`, `GRender.cpp`, `GLIB.cpp`, `Render.cpp`, `Snd.cpp`, `Sys.cpp` | 1/1/4/3/0 | 31 KiB | no |
-| 0x801A1400-0x801AA640 | Player head, face and hair rendering, body parts, simple shadows, model and crowd rendering | `cu_801A14D8`, `cu_801A4AD4`, `cu_801A8620` | 0/1/1/2/0 | 21 KiB | no |
+| 0x801A1400-0x801AA640 | Player head, face and hair rendering, body parts, simple shadows, model and crowd rendering | `cu_801A14D8`, `PlyrTex.cpp`, `DynObjRender.cpp` | 0/1/1/2/0 | 21 KiB | no |
 
 ## Libraries and EA engine (`src/engine/`, `src/Common/`)
 

@@ -55,7 +55,7 @@ void fn_8016130C(int index, int a, int b, int c, int d);
 void fn_801613F0(void);
 void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
 void fn_801A472C(void);
-void fn_801A4AD4(Object_8003DEC4 *pPlayer);
+void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
 int fn_8007CB6C(int index);
@@ -566,7 +566,7 @@ extern "C" void fn_8015D254(int index)
         return;
     }
     pEntry->mUnknownF9 = 1;
-    fn_801A4AD4(fn_8003DEC4(current));
+    PlyrTexRequestNameplate(fn_8003DEC4(current));
     lbl_803EB32C->mCurrent = 2;
     if (!pEntry->mUnknownFC && pEntry->mUnknownFD) {
         lbl_803EB32C->mUnknown251[current] = 1;

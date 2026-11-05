@@ -6,7 +6,7 @@
 #include "game/fn_80233CBC.h"
 #include "game/Desc_800408E4.h"
 #include "game/Record_8031B6F8.h"
-#include "game/cu_801A8620.h"
+#include "game/DynObjRender.h"
 #include "game/Object_80235588.h"
 #include "game/fn_801EBC18.h"
 #include <math.h>
@@ -177,7 +177,7 @@ int fn_800A3444(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
+void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
                  unsigned char a);
 void fn_801A9F98(Extra_8004149C *pExtra, Object_80040818 *pItem, int a, int b);
 void fn_801AA124(Object_80040818 *pItem, void *a, int b, void *c);
@@ -437,14 +437,14 @@ void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, BitStream_t
     }
     if (!pStream2) {
         if (!pStream3) {
-            fn_8019EC88(&pObject->mUnknown172, &pose1, 0, 0, t, 0);
+            AnimBlendPose(&pObject->mUnknown172, &pose1, 0, 0, t, 0);
         } else {
-            fn_8019EC88(&pObject->mUnknown172, &pose1, 0, &pose3, t, 0);
+            AnimBlendPose(&pObject->mUnknown172, &pose1, 0, &pose3, t, 0);
         }
     } else if (!pStream3) {
-        fn_8019EC88(&pObject->mUnknown172, &pose1, &pose2, 0, t, 0);
+        AnimBlendPose(&pObject->mUnknown172, &pose1, &pose2, 0, t, 0);
     } else {
-        fn_8019EC88(&pObject->mUnknown172, &pose1, &pose2, &pose3, t, 0);
+        AnimBlendPose(&pObject->mUnknown172, &pose1, &pose2, &pose3, t, 0);
     }
 }
 
@@ -1297,7 +1297,7 @@ struct Instance_8004DA0C {
 };
 
 extern "C" {
-extern Child_801A9430 **lbl_803EA4F4;
+extern DynObjChild **lbl_803EA4F4;
 extern Parser_8004D3A8 *lbl_803EA4F8;
 extern unsigned short lbl_803EC7D0;
 extern unsigned short lbl_803EC7D2;
@@ -1320,13 +1320,13 @@ void fn_80227490(void *, void *, int, int, int);
 int fn_801CFFD0(int, int);
 int fn_801DCF0C(int, int, int, void *, void *);
 int fn_801DCF8C(int);
-void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
-Child_801A9430 *fn_801DD268(int, int, int, Desc_800408E4 *);
-void fn_801DD320(int, Child_801A9430 *);
-void fn_80228D58(Child_801A9430 *); void fn_80228DD4(void); void fn_80228E18(void);
+void fn_801DD0C8(int, int, int, int (*)(DynObjChild *));
+DynObjChild *fn_801DD268(int, int, int, Desc_800408E4 *);
+void fn_801DD320(int, DynObjChild *);
+void fn_80228D58(DynObjChild *); void fn_80228DD4(void); void fn_80228E18(void);
 int fn_801F7C88(void);
 Object_80040818 *fn_8004113C(int, unsigned int);
-void fn_801A980C(Child_801A9430 *);
+void fn_801A980C(DynObjChild *);
 void *fn_801EF7BC(void *, int, char *);
 int fn_801F0C50(void *, int);
 void *fn_80216860(void *, const char *);
@@ -1338,7 +1338,7 @@ float fn_802171DC(void *, const char *, float);
 int fn_8021743C(void *, const char *, float *, int);
 int fn_8002D060(void *);
 int fn_801C657C(void);
-void fn_801A8548(Object_801A8620 *, int);
+void DynObjDrawEnvMap(DynObj *, int);
 int fn_80228668(void);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235740(void *, int); void fn_80235764(void *, int);
@@ -1349,11 +1349,11 @@ void fn_80235630(void *, int); void fn_80235C24(void *, void *);
 void fn_80235D74(void *, int); void fn_802353D8(void *, int); void fn_802353F8(void *, int);
 void fn_80234EA0(void *, int); void fn_801F010C(void *, int);
 void fn_8004E16C(void *, int, Object_80040818 *);
-void InitializeModelObjectRender_801A8D9C(void *, int, Object_801A8620 *);
-void fn_801A92D0(void *, Object_801A8620 *);
+void DynObjRenderInit(void *, int, DynObj *);
+void DynObjLoadAnimPal(void *, DynObj *);
 unsigned int fn_80236398(int);
-void fn_801A5050(int, Vector_80039F5C *, float, float *);
-int fn_8004D2F8(Child_801A9430 *);
+void SimpShadowAdd(int, Vector_80039F5C *, float, float *);
+int fn_8004D2F8(DynObjChild *);
 void fn_8004D068(int);
 int fn_8004D994(const char *);
 void fn_8004DA0C(void *, int, Object_80040818 *);
@@ -1417,7 +1417,7 @@ void fn_8004CE6C(Object_80040818 *pOwner)
     }
 }
 
-void fn_8004CEE8(Child_801A9430 *p)
+void fn_8004CEE8(DynObjChild *p)
 {
     Object_80041904 *pObject = p->mpObject54;
     Extra_8004149C *pExtra = pObject->mUnknown428;
@@ -1443,7 +1443,7 @@ void fn_8004CFCC(int handle, int count)
 {
     fn_801DCF0C(31, 112, count, 0, 0);
     if (handle) fn_801DD0C8(handle, 31, 0, fn_8004D2F8);
-    lbl_803EA4F4 = (Child_801A9430 **)fn_801D2B7C(count * 4, 0, 0);
+    lbl_803EA4F4 = (DynObjChild **)fn_801D2B7C(count * 4, 0, 0);
     fn_801C1F94(lbl_803EA4F4, 0, count * 4);
     fn_801F7C88();
     lbl_803EC7D0 = 0;
@@ -1468,7 +1468,7 @@ void fn_8004D118(int handle) { fn_8004D068(handle); fn_80228E18(); fn_801DCF8C(3
 
 void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
 {
-    Child_801A9430 *p = fn_801DD268(handle, 31, 0, pDesc);
+    DynObjChild *p = fn_801DD268(handle, 31, 0, pDesc);
     lbl_803EA4F4[lbl_803EC7D0] = p;
     fn_801442FC(&p->mTracker60);
     p->mWord68 = 0;
@@ -1487,7 +1487,7 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
         p->mpObject54 = 0;
     } else {
         p->mpObject54 = p->mpOwner50->mUnknown472;
-        Child_801A9430 *pLast = (Child_801A9430 *)p->mpOwner50->mUnknown480;
+        DynObjChild *pLast = (DynObjChild *)p->mpOwner50->mUnknown480;
         if (!pLast) p->mpOwner50->mUnknown480 = (int)p;
         else {
             while (pLast->mpUnknown5C) pLast = pLast->mpUnknown5C;
@@ -1500,7 +1500,7 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
     fn_801A980C(p);
 }
 
-int fn_8004D2F8(Child_801A9430 *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
+int fn_8004D2F8(DynObjChild *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
 
 int fn_8004D334(const char *pName)
 {
@@ -1571,7 +1571,7 @@ void fn_8004D818(void) { fn_801D2BD0(lbl_803EA4F8); lbl_803EA4F8 = 0; fn_801D2BD
 int fn_8004D84C(int handle) { return (int)lbl_803EA4F8[handle].mpCursor; }
 void fn_8004D860(int handle, int position) { lbl_803EA4F8[handle].mpCursor = (void *)position; }
 
-int fn_8004D874(Object_801A8620 *p, int mode)
+int fn_8004D874(DynObj *p, int mode)
 {
     Instance_8004DA0C *pInstance = p->mpRender12C;
     unsigned char flag;
@@ -1580,8 +1580,8 @@ int fn_8004D874(Object_801A8620 *p, int mode)
     if (flag) {
         int context = fn_801C657C();
         Object_80041904 *pPose = (Object_80041904 *)p->mpUnknown1D8;
-        if (p->mFlagF0) fn_801A9368(p, (int)pPose->mUnknown200.mStep);
-        if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
+        if (p->mFlagF0) DynObjSetAnimPalFrame(p, (int)pPose->mUnknown200.mStep);
+        if (pPose->mUnknown224 == 1) DynObjScrollUVs(p, &pPose->mUnknown224);
         int index = fn_80228668();
         Object_80235588 *pRender = &pInstance->mRender;
         fn_801D0470(index); fn_801D04C4();
@@ -1589,7 +1589,7 @@ int fn_8004D874(Object_801A8620 *p, int mode)
         fn_80235C90(pRender, context, 0.5f, 0.5f, 0.5f, 0.51f);
         fn_80235740(pRender, context); fn_801D0544(); fn_80235764(pRender, context);
     }
-    if (p->mUnknownE8.mWord & 2) fn_801A8548(p, mode);
+    if (p->mUnknownE8.mWord & 2) DynObjDrawEnvMap(p, mode);
     return 0;
 }
 
@@ -1602,7 +1602,7 @@ int fn_8004D994(const char *pName)
 
 void fn_8004DA0C(void *pData, int handle, Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     char name[256];
     fn_8004D5B8(handle, "tideRef", name, 256);
     int index = fn_8004D994(name);
@@ -1636,7 +1636,7 @@ void fn_8004DA0C(void *pData, int handle, Object_80040818 *pObject)
 
 void fn_8004DC08(Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     Instance_8004DA0C *pInstance = p->mpRender12C;
     fn_802355E4(&pInstance->mRender);
     pInstance->mpCache->mReferences--;
@@ -1650,7 +1650,7 @@ void fn_8004DC08(Object_80040818 *pObject)
 
 void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     char type[32]; char name[128];
     p->mpUnknownA8 = pData;
     fn_8004D498(handle);
@@ -1668,7 +1668,7 @@ void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
         p->mTypeEC = 2;
         fn_8004E16C(pData, handle, pObject);
         fn_8004D498(handle); fn_8004D4B0(handle, "render");
-        InitializeModelObjectRender_801A8D9C(pData, handle, p);
+        DynObjRenderInit(pData, handle, p);
         fn_8004D498(handle); fn_8004D4B0(handle, "render");
     }
     if (fn_8004D5F0(handle, "bFadeable")) p->mUnknown140 = 1;
@@ -1683,14 +1683,14 @@ void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
         color[2] = ((packed >> 16) & 0xFF) * 0.0078125f;
         color[3] = (packed >> 24) * 0.0078125f;
         if (size == 0.0f) size = 2.0f;
-        fn_801A5050(0, &p->mUnknown4, size, color);
+        SimpShadowAdd(0, &p->mUnknown4, size, color);
     }
     fn_8004D498(handle);
     if (fn_8004D4B0(handle, "animPal")) {
         p->mFlagF0 = 1;
         fn_8004D5B8(handle, "tideRef", name, 128);
         p->mUnknownF4 = fn_801F0A8C((int)pData, name);
-        fn_801A92D0(pData, p);
+        DynObjLoadAnimPal(pData, p);
     } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
 }
 }
@@ -1761,8 +1761,8 @@ extern int lbl_803EA52C;
 extern unsigned int lbl_803EA530;
 extern Body_801E9538 *lbl_803EC7E0;
 extern Body_801E9538 *lbl_803EC7E4;
-void fn_801A9184(Object_801A8620 *);
-void fn_801A9224(void); void fn_801A925C(void); void fn_801A932C(Object_801A8620 *);
+void DynObjRenderShutdown(DynObj *);
+void DynObjCacheReset(void); void DynObjCacheFree(void); void DynObjFreeAnimPal(DynObj *);
 int fn_801C20A0(const char *, ...);
 void fn_801C4DEC(int);
 int fn_801C4E98(Skeleton_80041930 *, const char *);
@@ -1805,21 +1805,21 @@ void fn_8004E2B4(Object_80040818 *);
 
 void fn_8004DF68(Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     if (p->mTypeEC == 1) fn_8004DC08(pObject);
-    else if (p->mTypeEC == 2) { fn_801A9184(p); fn_8004E2B4(pObject); }
+    else if (p->mTypeEC == 2) { DynObjRenderShutdown(p); fn_8004E2B4(pObject); }
     else fn_8004E2B4(pObject);
-    if (p->mFlagF0) fn_801A932C(p);
+    if (p->mFlagF0) DynObjFreeAnimPal(p);
 }
 void fn_8004DFDC(void)
 {
     lbl_803EA4FC = 0;
     fn_801C1F94(lbl_8030869C, 0, 0x1A0);
-    fn_801A9224();
+    DynObjCacheReset();
 }
 void fn_8004E018(void)
 {
-    fn_801A925C();
+    DynObjCacheFree();
     for (unsigned int i = 0; i < lbl_803EA4FC; i++) fn_801D2BD0(lbl_8030869C[i]);
     fn_801C1F94(lbl_8030869C, 0, 0x1A0);
     lbl_803EA4FC = 0;
@@ -1841,7 +1841,7 @@ int fn_8004E0F4(const char *pName)
 }
 void fn_8004E16C(void *pData, int handle, Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     char name[256];
     if (!fn_8004D508(handle, "skeleton") || !fn_8004D5B8(handle, "tideRef", name, 256)) {
         p->mpSkeleton130 = 0;
@@ -1868,7 +1868,7 @@ void fn_8004E16C(void *pData, int handle, Object_80040818 *pObject)
 }
 void fn_8004E2B4(Object_80040818 *pObject)
 {
-    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    DynObj *p = (DynObj *)pObject;
     Cache_8004E16C *pCache = p->mpSkeleton130;
     if (pCache) {
         pCache->mReferences--;

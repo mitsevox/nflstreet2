@@ -171,10 +171,10 @@ void fn_80188B78(int a, int b);
 void fn_80188E14(void);
 void fn_80188E8C(void);
 void fn_8019B25C(int a);
-void fn_8019B43C(void);
+void LevelLightsInit(void);
 void fn_801A4650(Object_80228224 *pObject);
-void fn_801A4E9C(void);
-void fn_801A4FB0(void);
+void SimpShadowInit(void);
+void SimpShadowShutdown(void);
 int fn_801F0F18(int a);
 void fn_801F2798(const char *pText);
 void fn_80228E18(void);
@@ -743,7 +743,7 @@ const char *Light::GetName() { return "Light"; }
 int Light::Init()
 {
     fn_802363B0(GameVpt::fn_800293A8());
-    fn_8019B43C();
+    LevelLightsInit();
     return 1;
 }
 
@@ -1202,13 +1202,13 @@ const char *SimpShadow::GetName() { return "SimpShadow"; }
 
 int SimpShadow::Init()
 {
-    fn_801A4E9C();
+    SimpShadowInit();
     return 1;
 }
 
 int SimpShadow::Shutdown()
 {
-    fn_801A4FB0();
+    SimpShadowShutdown();
     return 1;
 }
 

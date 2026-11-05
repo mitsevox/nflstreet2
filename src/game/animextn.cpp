@@ -1,6 +1,6 @@
 #include <dolphin/types.h>
 #include "game/AnimFileFormat.h"
-#include "game/Frame_8019D3B8.h"
+#include "game/AnimFrameHeader.h"
 
 extern "C" {
 void *fn_801D2BB0(int a, int size, int c, int d);
@@ -55,13 +55,13 @@ void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
 
 void _AnimExtnRelocateCompressTable(AnimFileFormat_t *file)
 {
-    Record_8019D8AC *table;
+    AnimQuantContext *table;
     if (file->flags & 1) {
         if (file->flags & 4) {
             file->compress = 0;
             for (int i = 0; i < (int)file->groups->count; ++i) {
                 if (file->groupMotion[i].compress) {
-                    table = (Record_8019D8AC *)((char *)file + (unsigned int)file->groupMotion[i].compress);
+                    table = (AnimQuantContext *)((char *)file + (unsigned int)file->groupMotion[i].compress);
                     file->groupMotion[i].compress = table;
                     table->mUnknown4.mUnknown0 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown0);
                     table->mUnknown4.mUnknown4 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown4);
@@ -71,7 +71,7 @@ void _AnimExtnRelocateCompressTable(AnimFileFormat_t *file)
                 }
             }
         } else {
-            table = (Record_8019D8AC *)((char *)file + (unsigned int)file->compress);
+            table = (AnimQuantContext *)((char *)file + (unsigned int)file->compress);
             file->compress = table;
             table->mUnknown4.mUnknown0 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown0);
             table->mUnknown4.mUnknown4 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown4);
@@ -103,9 +103,9 @@ extern "C" void fn_80190E08(AnimFileFormat_t *file, int a, unsigned char *destin
     fn_801C1E78(buffer, (void *)(source & ~31), 0xC0);
     if (file->flags & 1) {
         if (file->flags & 4)
-            fn_8019ED4C(destination, (unsigned char *)source, file->groupMotion[group].compress, 0);
+            AnimDecompressFrame(destination, (unsigned char *)source, file->groupMotion[group].compress, 0);
         else
-            fn_8019ED4C(destination, (unsigned char *)buffer + offset, file->compress, 0);
+            AnimDecompressFrame(destination, (unsigned char *)buffer + offset, file->compress, 0);
     } else {
         fn_801C1FBC(destination, buffer + offset, size);
     }
