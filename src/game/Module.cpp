@@ -2,14 +2,14 @@
 
 #include "game/Module.h"
 
-static void (*sCallback)(void *) = 0;
+static void (*_Module_pPostStartCallback)(void *) = 0;
 
 void Module::GSPreModuleStart(void *pArg) {}
 
 void Module::GSPostModuleStart(void *pArg)
 {
-    if (sCallback) {
-        sCallback(pArg);
+    if (_Module_pPostStartCallback) {
+        _Module_pPostStartCallback(pArg);
     }
 }
 

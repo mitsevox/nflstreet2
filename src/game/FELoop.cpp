@@ -82,7 +82,7 @@ static unsigned char _FELoop_uResumeMode = 0;
 static unsigned char _FELoop_bResume = 0;
 static unsigned int _FELoop_uIdleFrames = 0;
 static unsigned char _FELoop_bIdleTimeout = 0;
-static FELoopCallback sCallback = 0;
+static FELoopCallback _FELoop_pFrameCallback = 0;
 static void *sDependencies[] = { 0 };
 static unsigned char _FELoop_bVisited = 0;
 static unsigned int _FELoop_uModeType;
@@ -388,8 +388,8 @@ unsigned char FELoop::Update()
         fn_801CAF24();
         fn_8006CA84(1);
         fn_801CE82C();
-        if (sCallback) {
-            sCallback();
+        if (_FELoop_pFrameCallback) {
+            _FELoop_pFrameCallback();
         }
         if (fn_80010194() || fn_80015F2C()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
@@ -458,7 +458,7 @@ unsigned char FELoopWasVisited()
 
 void FELoopSetFrameCallback(FELoopCallback pCallback)
 {
-    sCallback = pCallback;
+    _FELoop_pFrameCallback = pCallback;
 }
 
 void FELoopResetIdle()

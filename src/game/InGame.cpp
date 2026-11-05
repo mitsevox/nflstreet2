@@ -129,12 +129,12 @@ struct EngineParamWords {
 
 static unsigned char _InGame_bCancelRequest = 0;
 /* Called by Update when non-null. */
-static void (*sCallback)() = 0;
+static void (*_InGame_pFrameCallback)() = 0;
 static unsigned char _InGame_bDemo = 0;
 static unsigned int _InGame_uIdleFrames = 0;
 static unsigned char _InGame_bIdle = 0;
 static unsigned char _InGame_bRunning;
-static int _InGame_uFrameCount;
+static int _InGame_iFrameCount;
 static int _InGame_iPauseCount;
 static int _InGame_bInputPaused;
 
@@ -257,7 +257,7 @@ int InGame::Init()
     int result;
 
     result = 0;
-    _InGame_uFrameCount = 0;
+    _InGame_iFrameCount = 0;
     _InGame_uIdleFrames = 0;
     _InGame_bIdle = 0;
     fn_8007F394(1);
@@ -351,7 +351,7 @@ unsigned char InGame::Update()
     fn_80194E04();
     TimeScaleUpdate();
     if (_InGame_iPauseCount == 0) {
-        _InGame_uFrameCount++;
+        _InGame_iFrameCount++;
         fn_80237830(1);
     }
     while ((count = fn_802378C8()) != 0) {
@@ -383,8 +383,8 @@ unsigned char InGame::Update()
     fn_801CE82C();
     fn_802285CC();
     fn_80236F34();
-    if (sCallback) {
-        sCallback();
+    if (_InGame_pFrameCallback) {
+        _InGame_pFrameCallback();
     }
     if (!_InGame_bRunning) {
         if (fn_800A937C() || fn_800A9680()) {
@@ -485,5 +485,5 @@ int InGameIsPlaying()
 
 int InGameGetFrameCount()
 {
-    return _InGame_uFrameCount;
+    return _InGame_iFrameCount;
 }

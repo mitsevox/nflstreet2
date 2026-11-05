@@ -44,14 +44,14 @@ struct CardStreamOps {
     unsigned int mUnknown18;
 };
 
-static unsigned int sPollCount = 0;
+static unsigned int _CardStream_uPollCount = 0;
 
 extern "C" {
 static void _CardStreamYield(void)
 {
-    if (++sPollCount > 2) {
+    if (++_CardStream_uPollCount > 2) {
         OSYieldThread();
-        sPollCount = 0;
+        _CardStream_uPollCount = 0;
     }
 }
 }
@@ -95,7 +95,7 @@ static int _CardStreamFillToEnd(CardStream *pStream)
         } else {
             fn_801D6E10(buffer, count);
         }
-        sPollCount = 0;
+        _CardStream_uPollCount = 0;
         while (!fn_801D6EA0(&failed)) {
             if (failed) {
                 result = 0x24;
@@ -146,7 +146,7 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
         return 3;
     }
     fn_801D6E10(pData, size);
-    sPollCount = 0;
+    _CardStream_uPollCount = 0;
     while (!fn_801D6EA0(&failed)) {
         if (failed) {
             result = 0x24;
@@ -173,7 +173,7 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
         return 3;
     }
     fn_801D6E54(pData, size);
-    sPollCount = 0;
+    _CardStream_uPollCount = 0;
     while (!fn_801D6EA0(&failed)) {
         if (failed) {
             result = 0x24;

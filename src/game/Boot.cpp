@@ -45,7 +45,7 @@ void fn_801D9360(int a, int b, int c, int (*pCallback)(int), int d);
 int fn_801D9494(void (*pCallback)(void));
 void fn_801DA46C(void);
 int fn_801E15D0(int a);
-int fn_801E17D0(int a, struct PerDeviceData *pState);
+int fn_801E17D0(int a, struct PerDeviceData_t *pState);
 int fn_801E194C(void);
 int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
@@ -55,7 +55,7 @@ int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
 void fn_801F6AC8(int a, int b, int c, int d, int e);
 void fn_801F6B84(int a);
 int fn_801F6CE8(int a, int b);
-int fn_801F6D54(int a, struct MovieStreamDesc *pDesc, int b, int c);
+int fn_801F6D54(int a, struct MovieStreamDesc_t *pDesc, int b, int c);
 int fn_801F8758(int a);
 void fn_801F8768(void);
 void fn_801F87FC(int a);
@@ -69,13 +69,13 @@ int fn_8024151C(void);
 }
 
 /* Filled by fn_801E17D0; the byte array at +8 is indexed by lbl_803ED5EC + 1. */
-struct PerDeviceData {
+struct PerDeviceData_t {
     unsigned char mUnknown0[8];
     unsigned char mUnknown8[24];
 };
 
 /* Second argument of fn_801F6D54. */
-struct MovieStreamDesc {
+struct MovieStreamDesc_t {
     void *mpUnknown0;
     int mUnknown4;
 };
@@ -127,7 +127,7 @@ static void _BootDelay(void)
 static void _BootProgressiveCheck(void)
 {
     unsigned int i = 0;
-    PerDeviceData *pState = (PerDeviceData *)fn_801D2B7C(fn_801E194C(), 0, 0);
+    PerDeviceData_t *pState = (PerDeviceData_t *)fn_801D2B7C(fn_801E194C(), 0, 0);
     int found = fn_8023CF60() == 1;
 
     for (; !found && i < 4; i++) {
@@ -283,8 +283,8 @@ void BootShutdownMemPools(void)
 
 static void _BootCheckMovieAbort(int a)
 {
-    PerDeviceData state;
-    PerDeviceData *pState = &state;
+    PerDeviceData_t state;
+    PerDeviceData_t *pState = &state;
     unsigned int i;
     int status;
 
@@ -323,7 +323,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     int handle;
     int unknown0;
     int unknown1;
-    MovieStreamDesc desc;
+    MovieStreamDesc_t desc;
     int frameBuffer;
     int height;
 

@@ -1,20 +1,20 @@
-/* Sets up the memory pools when the game arena is created and releases them when it is destroyed. */
+/* Lays out the memory pools in the OS arena when the system module starts and releases them when it shuts down. */
 
 extern "C" {
 void BootSetupMemPools(void);
 void BootShutdownMemPools(void);
 }
 
-static unsigned char sInitialized = 0;
+static unsigned char _ArenaSetup_bInitialized = 0;
 
 extern "C" void ArenaSetupInit(void)
 {
-    sInitialized = 1;
+    _ArenaSetup_bInitialized = 1;
     BootSetupMemPools();
 }
 
 extern "C" void ArenaSetupShutdown(void)
 {
     BootShutdownMemPools();
-    sInitialized = 0;
+    _ArenaSetup_bInitialized = 0;
 }

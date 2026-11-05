@@ -4,7 +4,7 @@
 #include "game/fn_801FCE10.h"
 
 /* Record filled by PlayerRecordRead; PlayerSavePrepare allocates and clears 0x100 bytes for it. */
-struct PlayerRecord {
+struct PlayerRecord_t {
     int mUnknown0;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -92,7 +92,7 @@ struct PlayerRecord {
 extern "C" {
 int PlayerRecordRead(int id, void *pBuffer)
 {
-    PlayerRecord *pRecord = (PlayerRecord *)pBuffer;
+    PlayerRecord_t *pRecord = (PlayerRecord_t *)pBuffer;
     int found = 0;
     int result = fn_801FCE10(0,
         "use 'TATS' select 'EGAP' into \x83 and "

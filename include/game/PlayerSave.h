@@ -2,7 +2,7 @@
 #define GAME_PLAYERSAVE_H
 
 /* Seven-word stream operation table, the shape of the CardStream table at 0x802F46C4. */
-struct SaveStreamOps {
+struct SaveStreamOps_t {
     int (*mpOpen)(void *pStream, int a, int target, unsigned char reading);
     int (*mpClose)(void *pStream);
     int (*mpRead)(void *pStream, void *pData, unsigned int size, unsigned int *pDone);
@@ -12,7 +12,7 @@ struct SaveStreamOps {
     unsigned int mUnknown18;
 };
 
-struct SaveRequest {
+struct SaveRequest_t {
     char mUnknown0[12];
     int mTarget;
     unsigned char mUnknown10;
@@ -20,7 +20,7 @@ struct SaveRequest {
 
 /* src/game/PlayerSave.cpp */
 extern "C" {
-int PlayerSaveOnSave(SaveRequest *pRequest, SaveStreamOps *pOps);
+int PlayerSaveOnSave(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 void PlayerSaveFree(void);
 int PlayerSavePrepare(int a, int b);
 }

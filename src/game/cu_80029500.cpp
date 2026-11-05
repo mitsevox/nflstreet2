@@ -48,7 +48,7 @@ struct SaveComment {
 
 extern "C" {
 
-extern SaveStreamOps lbl_802D6C24;
+extern SaveStreamOps_t lbl_802D6C24;
 extern char lbl_802EBE50[];
 
 void fn_801D646C(void);
@@ -60,7 +60,7 @@ void fn_801D64EC(void);
 int fn_801F0C50(void *, int);
 int fn_801D8618(int, unsigned int, int);
 int fn_801D8658(int, unsigned int, int);
-void fn_8022F698(SaveRequest *, SaveStreamOps *);
+void fn_8022F698(SaveRequest_t *, SaveStreamOps_t *);
 int fn_801D6844(void);
 void fn_801D6B4C(char *, int);
 int fn_801D673C(int);
@@ -200,7 +200,7 @@ int fn_80029890(int type)
 
 int fn_800298E8(int type, int index)
 {
-    SaveRequest request;
+    SaveRequest_t request;
     int result = -1;
 
     request.mUnknown10 = 0;

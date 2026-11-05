@@ -10,15 +10,15 @@ void fn_80228474(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
 int fn_80029890(int type);
 void fn_8022F478(void);
-int fn_8022F698(SaveRequest *pRequest, SaveStreamOps *pOps);
+int fn_8022F698(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
 void fn_8002A5A0(int *pType, void *pSlot);
 int fn_8002A2A4(int a, int b);
 void fn_8022F1BC(void);
 void fn_80029DCC(int a, int b);
 int fn_8022F0D4(void);
-int PlayerSaveOnLoad(SaveRequest *pRequest, SaveStreamOps *pOps);
-int fn_8022F5E4(SaveRequest *pRequest, SaveStreamOps *pOps);
-int fn_8022EB5C(CardStreamTarget *pTarget, SaveStreamOps *pOps);
+int PlayerSaveOnLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
+int fn_8022F5E4(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
+int fn_8022EB5C(CardStreamTarget *pTarget, SaveStreamOps_t *pOps);
 
 int fn_8022F53C(int a);
 int fn_8022F4BC(void);
@@ -44,7 +44,7 @@ void fn_80029E10(int a, int b);
 void fn_802284EC(int a, void *b);
 void fn_8002A804(void);
 
-extern SaveStreamOps gCardStreamOps;
+extern SaveStreamOps_t gCardStreamOps;
 }
 
 extern "C" {
@@ -62,7 +62,7 @@ void fn_800034D0(void)
 
 void fn_800034FC(void)
 {
-    SaveRequest req;
+    SaveRequest_t req;
     char slot[4];
     int type;
 
@@ -105,7 +105,7 @@ void fn_800034FC(void)
 
 void fn_80003620(void)
 {
-    SaveRequest req;
+    SaveRequest_t req;
     char slot[4];
     int type;
     int handle = 0;

@@ -11,7 +11,7 @@
 
 /* Result list sent with message 0x80000083: a two-word header followed by
    the four results copied by ChallengeSendGoalList. */
-struct ChallengeGoalResults {
+struct ChallengeGoalResults_t {
     int mUnknown0;
     int mUnknown4;
     int mResults[4];
@@ -44,7 +44,7 @@ int fn_8022B7A4(int handle, int tag, void *pValue);
 static int _Challenge_iMode = 3;
 static Entry_80219044 _Challenge_aGoalEntries[4];
 static char _Challenge_aszGoalText[4][64];
-static ChallengeGoalResults _Challenge_GoalResults;
+static ChallengeGoalResults_t _Challenge_GoalResults;
 
 int ChallengeGoalCheckWinner(int side);
 

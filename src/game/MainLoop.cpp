@@ -14,7 +14,7 @@ int fn_801F3D2C(void);
 }
 
 /* Set by MainLoopQuit; ends the loop in MainLoopRun. */
-static unsigned char sDone = 0;
+static unsigned char _MainLoop_bDone = 0;
 float gFrameTimeScale = 1.0f;
 
 void MainLoopUpdate(void)
@@ -34,7 +34,7 @@ void MainLoopRun(void)
     pObject->fn_801CBD80(0, -1);
     pObject->fn_801CBD80(2, 7);
 
-    while (!sDone) {
+    while (!_MainLoop_bDone) {
         MainLoopUpdate();
     }
 
@@ -46,5 +46,5 @@ void MainLoopRun(void)
 
 void MainLoopQuit(void)
 {
-    sDone = 1;
+    _MainLoop_bDone = 1;
 }

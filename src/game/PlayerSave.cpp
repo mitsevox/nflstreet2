@@ -13,7 +13,7 @@ int PlayerRecordRead(int a, void *pBuffer);
 static void *_PlayerSave_pBuffer = 0;
 static void *_PlayerSave_pRecord = 0;
 
-int PlayerSaveWrite(int target, SaveStreamOps *pOps)
+int PlayerSaveWrite(int target, SaveStreamOps_t *pOps)
 {
     char stream[0x80];
     unsigned int done;
@@ -32,7 +32,7 @@ int PlayerSaveWrite(int target, SaveStreamOps *pOps)
     return result;
 }
 
-int PlayerSaveOnSave(SaveRequest *pRequest, SaveStreamOps *pOps)
+int PlayerSaveOnSave(SaveRequest_t *pRequest, SaveStreamOps_t *pOps)
 {
     int result;
 
@@ -44,7 +44,7 @@ int PlayerSaveOnSave(SaveRequest *pRequest, SaveStreamOps *pOps)
     return result;
 }
 
-int PlayerSaveOnLoad(SaveRequest *pRequest, SaveStreamOps *pOps)
+int PlayerSaveOnLoad(SaveRequest_t *pRequest, SaveStreamOps_t *pOps)
 {
     return 0xFFFF;
 }

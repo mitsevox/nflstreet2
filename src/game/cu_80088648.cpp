@@ -248,7 +248,7 @@ static int fn_80088E84(unsigned int size)
     return 0;
 }
 
-SaveStreamOps lbl_802D6C24 = {
+SaveStreamOps_t lbl_802D6C24 = {
     fn_80088DB0, fn_80088DF4, fn_80088E7C, fn_80088E2C, 0, fn_80088E84, 4,
 };
 

@@ -18,7 +18,7 @@
 #include <string.h>
 
 struct CardStreamTarget;
-struct SaveStreamOps;
+struct SaveStreamOps_t;
 #include "engine/Entry_802FB300.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
@@ -1998,12 +1998,12 @@ int fn_8022EB10(void)
     return result;
 }
 
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps *pOps)
+int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps)
 {
     return fn_801F9134(0x45564153, (int)pTarget, 0, (int)pOps);
 }
 
-int fn_8022EB94(void *pTarget, struct SaveStreamOps *pOps)
+int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps)
 {
     return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
 }
