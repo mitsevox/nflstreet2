@@ -47,7 +47,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
-| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `cu_801AD57C` | 0/1/1/1/1 | 15 KiB | no |
+| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
 | 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `cu_801AE3E4` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
 | 0x801B9D00-0x801C1D84 | Animation C library | `anim.c`, `animtran.c`, `animTexLib.c`, `llanimtexlib.c`, `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
@@ -69,7 +69,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x8023873C-0x8025E148 | GameCube SDK built with CodeWarrior: OS, DVD, VI, VM, PAD, AR, AI, MTX, GX, CARD, EXI, SI | `src/dolphin/<library>/*.c` | 6/8/1/5/1 | 42 KiB | no |
 | 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard I/O and strings | `cu_8025E148` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
 | 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state; what they decode is not read yet | `cu_802714A8`, `cu_80276DE4`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
-| 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `cu_8027EFAC`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
+| 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `date.c`, `GCmp.c`, `huff.c`, `rle.c`, `none.c`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
 | 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c` | 1/1/0/0/0 | 2 KiB | no |
 
 The site also lists 136,828 bytes (134 KiB) of code that no chunk owns yet (`Unmapped / Code section 2`, 62 non-exact functions); the structure pass assigns it to files.

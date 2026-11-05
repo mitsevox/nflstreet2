@@ -42200,21 +42200,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AD57C.c",
+      "source": "src/engine/FSasync.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801AE3E4 (src/engine/cu_801AD57C.c), function rows, data row 0x802AEA00-0x802AEA18, compiler and source-form rows. State globals 0x802CC580-0x802CC651 and 0x802C2A5C stay external. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), function rows, compiler and source-form rows. State globals 0x802CC580-0x802CC5E0 stay external. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AD57C",
-          "end": "0x801AE3E4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA00",
-          "end": "0x802AEA18"
+          "end": "0x801ADDB4"
         }
       ],
       "functions": [
@@ -42282,7 +42276,28 @@
           "symbol": "fn_801ADD44",
           "start": "0x801ADD44",
           "end": "0x801ADDB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sndvd.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801ADDB4-0x801AE3E4 (src/engine/sndvd.c), function rows, data row 0x802AEA00-0x802AEA18, compiler and source-form rows. State globals 0x802CC5E0-0x802CC651 and 0x802C2A5C stay external. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801ADDB4",
+          "end": "0x801AE3E4"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA00",
+          "end": "0x802AEA18"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801ADDB4",
           "start": "0x801ADDB4",
