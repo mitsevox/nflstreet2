@@ -109,7 +109,7 @@ extern const char _PlaTex_szAwayFormat[] = "PLATEX_%s_AWAY_%s";
 extern const char _PlaTex_szHeavyFormat[] = "PLATEX_%s_HEAVY_%s";
 extern const char _PlaTex_szFormat[] = "PLATEX_%s_%s";
 
-void PlaTexSetNumberIds(int *pIds, int part, PlayerLook_t *pRecord)
+void PlaTexSetArmArtIds(int *pIds, int part, PlayerLook_t *pRecord)
 {
     switch (part) {
     case 11:
@@ -155,7 +155,7 @@ void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
             fn_801C2D88(name, sizeof(name), "PLATEX_%s_%s%02d", lbl_802CF020[i], lbl_802CF010[pRecord->mUnknown78], pRecord->mUnknown72);
         }
         pIds[i] = fn_80161048(name);
-        PlaTexSetNumberIds(pIds, i, pRecord);
+        PlaTexSetArmArtIds(pIds, i, pRecord);
     }
 }
 

@@ -466,7 +466,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
                 float limit;
 
                 fn_80227970(&a, &b, &end, &closest, &distance, &factor);
-                limit = _Level_pWallInfo[i].mUnknown0 < 3.0f ? 2.0f : 1.0f;
+                limit = gLevelWallInfo[i].mUnknown0 < 3.0f ? 2.0f : 1.0f;
                 if (distance < limit) {
                     result = 1;
                     break;

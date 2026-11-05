@@ -176,7 +176,7 @@ void fn_801D0F80(float m[4][4]);
 unsigned char CheatFlagsIsSet(int index);
 unsigned int fn_8017F584(void);
 
-extern LevelData_t *_Level_pData;
+extern LevelData_t *gLevelData;
 
 extern char lbl_802EBFB4[];
 extern Vector_80039F5C lbl_802D7C70[];
@@ -317,8 +317,8 @@ extern "C" void fn_800A3170(void)
     Args_80144CE0 args;
     unsigned char i;
 
-    for (i = 0; i < _Level_pData->mUnknown96; i++) {
-        LevelPlacement_t *pEntry = &_Level_pData->mUnknown100[i];
+    for (i = 0; i < gLevelData->mUnknown96; i++) {
+        LevelPlacement_t *pEntry = &gLevelData->mUnknown100[i];
 
         fn_801D03D0(m[0]);
         m[0][3] = 0.0f;

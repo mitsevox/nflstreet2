@@ -17,7 +17,7 @@
 extern "C" {
 extern char lbl_8030C070[];
 extern void *lbl_803EA368;
-extern void *_Level_pData;
+extern void *gLevelData;
 
 void fn_8002B1E4(void);
 void fn_8002B2D0(void);
@@ -554,7 +554,7 @@ int Env::Init()
     fn_8019B25C(GameObjList::fn_80028BB4());
     fn_801F2798("FldObjAddObjTypeFinish");
     fn_80043AE4();
-    fn_800C47EC(_Level_pData);
+    fn_800C47EC(gLevelData);
     fn_8004787C();
     fn_80178B5C();
     return 1;

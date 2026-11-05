@@ -232,7 +232,7 @@ Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
 void fn_801477F0(Object_8003DEC4 *pObject);
 /* Callback registered by PlayerObjAddObjType through fn_801DD0C8; its second
    argument is not read. */
-int PlayerObjUpdate(Object_8003DEC4 *pObject, int unused);
+int PlayerObjDraw(Object_8003DEC4 *pObject, int unused);
 }
 
 #endif

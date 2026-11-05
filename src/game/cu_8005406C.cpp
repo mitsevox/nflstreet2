@@ -23,14 +23,14 @@ void LevelFreeWallInfo(void);
 
 extern float lbl_8028DEAC[];
 Object_8005406C *lbl_803EA550 = 0;
-extern Object_8005406C *_Level_pData;
+extern Object_8005406C *gLevelData;
 
 void fn_8005406C(void)
 {
-    lbl_803EA550 = _Level_pData = (Object_8005406C *)fn_801EF390(fn_800A336C(), fn_800A3380(), 1);
+    lbl_803EA550 = gLevelData = (Object_8005406C *)fn_801EF390(fn_800A336C(), fn_800A3380(), 1);
     LevelMeshRelocate();
-    fn_80227264(fn_800A3438(), &_Level_pData->mScale, lbl_8028DEAC[0]);
-    LevelMeshPostLoad(_Level_pData);
+    fn_80227264(fn_800A3438(), &gLevelData->mScale, lbl_8028DEAC[0]);
+    LevelMeshPostLoad(gLevelData);
     LevelBuildWallInfo();
 }
 
@@ -38,7 +38,7 @@ void fn_800540E0(void)
 {
     LevelFreeWallInfo();
     fn_801F010C(fn_800A336C(), fn_800A3380());
-    _Level_pData = 0;
+    gLevelData = 0;
     lbl_803EA550 = 0;
 }
 }

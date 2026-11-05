@@ -2930,7 +2930,7 @@ void *fn_800C47C4(void);
 int fn_801F0A8C(void *pArchive, char *pName);
 void fn_80145100(int type, int index);
 
-extern LevelData_t *_Level_pData;
+extern LevelData_t *gLevelData;
 }
 
 extern "C" void fn_800A2D2C(void)
@@ -2948,16 +2948,16 @@ extern "C" void fn_800A2D2C(void)
         lbl_8030E6E8.mUnknown8B4[j] = 0;
     }
     lbl_8030E6E8.mUnknown8B4[7] = 1;
-    for (i = 0; i < _Level_pData->mUnknown48; i++) {
+    for (i = 0; i < gLevelData->mUnknown48; i++) {
         unsigned char count = 0;
 
-        for (unsigned char k = 0; k < _Level_pData->mUnknown96; k++) {
-            if (_Level_pData->mUnknown100[k].mUnknown24Bytes[1] == i) {
+        for (unsigned char k = 0; k < gLevelData->mUnknown96; k++) {
+            if (gLevelData->mUnknown100[k].mUnknown24Bytes[1] == i) {
                 count++;
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &_Level_pData->mUnknown52[i * 24]));
+        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -18374,8 +18374,8 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     float height = pRecord->mUnknown12.mZ;
     pRecord->mUnknown12.mZ = 0.0f;
     for (unsigned char i = 0; i < count; i++, pRow++) {
-        if (_Level_pWallInfo[i].mUnknown0 <= 1.0f) continue;
-        int angle = fn_801784C4() ? _Level_pWallInfo[i].mUnknown8 : _Level_pWallInfo[i].mUnknown4;
+        if (gLevelWallInfo[i].mUnknown0 <= 1.0f) continue;
+        int angle = fn_801784C4() ? gLevelWallInfo[i].mUnknown8 : gLevelWallInfo[i].mUnknown4;
         if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
         Vector_80039F5C point;
         Vector_80039F5C a;

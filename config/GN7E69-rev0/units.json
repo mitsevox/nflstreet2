@@ -181,6 +181,14 @@
     }
   },
   "externals": {
+    "gPlayerLooks": {
+      "address": "0x803078E8",
+      "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
+    },
+    "gPlayerLookBonuses": {
+      "address": "0x80308368",
+      "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
+    },
     "RuntimeErrorFnc": {
       "address": "0x803EBF30",
       "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."

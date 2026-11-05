@@ -15,7 +15,7 @@ extern "C" {
 float fn_80227704(LevelPoint_t *pA, LevelPoint_t *pB);
 void fn_802277DC(LevelPoint_t *pOut, LevelPoint_t *pA, LevelPoint_t *pB);
 
-extern LevelData_t *_Level_pData;
+extern LevelData_t *gLevelData;
 
 void LevelMeshPostLoad(LevelData_t *pLevel)
 {
@@ -102,7 +102,7 @@ int LevelMeshInArea(LevelArea_t *pEntry, LevelPoint_t *pPoint)
     LevelPoint_t a;
     LevelPoint_t b;
     LevelPoint_t c;
-    LevelData_t *pLevel = _Level_pData;
+    LevelData_t *pLevel = gLevelData;
 
     a.mX = pLevel->mUnknown20[pEntry->mVertex[0]].mX;
     a.mY = pLevel->mUnknown20[pEntry->mVertex[0]].mY;
@@ -121,7 +121,7 @@ int LevelMeshInArea(LevelArea_t *pEntry, LevelPoint_t *pPoint)
 
 LevelArea_t *LevelMeshFindArea(float *pPos, int value)
 {
-    LevelAreaNode_t *pNode = _Level_pData->mUnknown160;
+    LevelAreaNode_t *pNode = gLevelData->mUnknown160;
     while (pNode->mCount == 0) {
         if (pNode->mAxis == 0) {
             if (pPos[0] > pNode->mSplit) {
@@ -138,7 +138,7 @@ LevelArea_t *LevelMeshFindArea(float *pPos, int value)
         }
     }
     for (unsigned int i = 0; i < pNode->mCount; i++) {
-        LevelArea_t *pEntry = &_Level_pData->mUnknown28[pNode->mpIndices[i]];
+        LevelArea_t *pEntry = &gLevelData->mUnknown28[pNode->mpIndices[i]];
         if (LevelMeshInArea(pEntry, (LevelPoint_t *)pPos)) {
             return pEntry;
         }

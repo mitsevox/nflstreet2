@@ -26,8 +26,8 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
 extern void *lbl_803EB688;
 
-LevelData_t *_Level_pData = 0;
-LevelWallInfo_t *_Level_pWallInfo = 0;
+LevelData_t *gLevelData = 0;
+LevelWallInfo_t *gLevelWallInfo = 0;
 MsgBoxText_t *_MsgBox_apText[3];
 MsgBoxText_t _MsgBox_aText[3];
 
@@ -37,7 +37,7 @@ void LevelUpdate(void)
 
 LevelData_t *LevelGetData(void)
 {
-    return _Level_pData;
+    return gLevelData;
 }
 
 LevelSurface_t *LevelFindArea(float *pPos)
@@ -49,9 +49,9 @@ void LevelSetSurface(int id, int value)
 {
     unsigned int i;
 
-    for (i = 0; i < _Level_pData->mUnknown24; i++) {
-        if (_Level_pData->mUnknown28[i].mUnknown32 == id) {
-            _Level_pData->mUnknown28[i].mUnknown8 = value;
+    for (i = 0; i < gLevelData->mUnknown24; i++) {
+        if (gLevelData->mUnknown28[i].mUnknown32 == id) {
+            gLevelData->mUnknown28[i].mUnknown8 = value;
         }
     }
 }
@@ -134,15 +134,15 @@ LevelMarker_t *LevelGetMarker(int id)
 {
     LevelMarker_t *pEntry = 0;
 
-    if (id < _Level_pData->mUnknown152) {
-        pEntry = &_Level_pData->mUnknown156[id];
+    if (id < gLevelData->mUnknown152) {
+        pEntry = &gLevelData->mUnknown156[id];
     }
     return pEntry;
 }
 
 int LevelGetObjectCount(void)
 {
-    LevelData_t *pLevel = _Level_pData;
+    LevelData_t *pLevel = gLevelData;
     int total = 0;
 
     if (pLevel != 0) {
@@ -157,21 +157,21 @@ void LevelBuildWallInfo(void)
     unsigned int count = LevelGetData()->mUnknown136;
     LevelWall_t *pRecord = LevelGetData()->mUnknown140;
 
-    _Level_pWallInfo = (LevelWallInfo_t *)fn_801D2BB0(1, count * 12, 0, 0);
+    gLevelWallInfo = (LevelWallInfo_t *)fn_801D2BB0(1, count * 12, 0, 0);
     for (; i < count; i++, pRecord++) {
         int angle;
 
-        _Level_pWallInfo[i].mUnknown0 = LevelGetWallHeight(pRecord);
+        gLevelWallInfo[i].mUnknown0 = LevelGetWallHeight(pRecord);
         angle = fn_801CFE40(pRecord->mUnknown0.mY, pRecord->mUnknown0.mX);
-        _Level_pWallInfo[i].mUnknown4 = angle;
-        _Level_pWallInfo[i].mUnknown8 = (angle + 0x800000) & 0xFFFFFF;
+        gLevelWallInfo[i].mUnknown4 = angle;
+        gLevelWallInfo[i].mUnknown8 = (angle + 0x800000) & 0xFFFFFF;
     }
 }
 
 void LevelFreeWallInfo(void)
 {
-    fn_801D2BD0(_Level_pWallInfo);
-    _Level_pWallInfo = 0;
+    fn_801D2BD0(gLevelWallInfo);
+    gLevelWallInfo = 0;
 }
 
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons)

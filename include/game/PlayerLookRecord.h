@@ -4,7 +4,7 @@
 #include "game/FaceFeatures.h"
 #include "game/Object_8008044C.h"
 
-/* Element of lbl_803078E8 (14 records of 0xC0 bytes). */
+/* Element of gPlayerLooks (14 records of 0xC0 bytes). */
 struct PlayerLook_t {
     char mName[32];
     Info_80307908 mInfo;

@@ -288,7 +288,7 @@ static void fn_80021F60(int index, float a, float b, float c, float d)
     fn_801D12EC(6);
     fn_801D0544();
     fn_80234424(0);
-    PlayerObjUpdate(pObject, 1);
+    PlayerObjDraw(pObject, 1);
     if (lbl_803EBAC5 ? index == lbl_803ECE8C : index == 0) {
         if (fn_8015D2E8(pObject)) {
             fn_8003FBF0(lbl_803EBAC8, 1);

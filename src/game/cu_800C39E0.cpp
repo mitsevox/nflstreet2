@@ -186,10 +186,10 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     int turn;
                     float limit;
 
-                    if (_Level_pWallInfo[i].mUnknown0 <= 1.0f) {
+                    if (gLevelWallInfo[i].mUnknown0 <= 1.0f) {
                         continue;
                     }
-                    angle = fn_801784C4() ? _Level_pWallInfo[i].mUnknown8 : _Level_pWallInfo[i].mUnknown4;
+                    angle = fn_801784C4() ? gLevelWallInfo[i].mUnknown8 : gLevelWallInfo[i].mUnknown4;
                     if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EABD8 * 46603.37890625f)) {
                         continue;
                     }
