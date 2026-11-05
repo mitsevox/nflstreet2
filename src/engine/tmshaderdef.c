@@ -1,6 +1,8 @@
+/* Shader definitions of the TM model renderer: finds a named parameter in a shader definition. */
+
 #include "engine/tmlib.h"
 
-ShaderParmDef_80211638 *fn_80212CB4(ShaderDef_80211638 *pDef, const char *pName, int type)
+ShaderParmDef_80211638 *TMShaderDefGetParmByName(ShaderDef_80211638 *pDef, const char *pName, int type)
 {
     ShaderParmDef_80211638 *pParms;
     int i;

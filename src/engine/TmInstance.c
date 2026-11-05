@@ -1,16 +1,19 @@
+/* Model instance and instance-region definitions inside loaded chunks: pointer relocation
+   after loading. */
+
 #include "engine/tmlib.h"
 
-void fn_80215C14(Instance_80215C14 *pInst, void *pOldBase, void *pNewBase)
+void TMInstanceDefRelocateChunk(TMInstanceDef_t *pInst, void *pOldBase, void *pNewBase)
 {
     pInst->mpUnknown8 = fn_8020EB94(pInst->mpUnknown8, pOldBase, pNewBase);
     pInst->mpUnknown4 = fn_8020EB94(pInst->mpUnknown4, pOldBase, pNewBase);
     pInst->mpTarget = fn_8020EB94(pInst->mpTarget, pOldBase, pNewBase);
     pInst->mpTarget->mpData = fn_8020EB94(pInst->mpTarget->mpData, pOldBase, pNewBase);
     pInst->mpSkel = fn_8020EB94(pInst->mpSkel, pOldBase, pNewBase);
-    fn_80215E5C(pInst->mpSkel, pOldBase, pNewBase);
+    TMSkelRelocateChunk(pInst->mpSkel, pOldBase, pNewBase);
 }
 
-void fn_80215CB0(RenderInst_80215CB0 *pInst, void *pOldBase, void *pNewBase)
+void TMInstanceRegionDefRelocateChunk(TMInstanceRegionDef_t *pInst, void *pOldBase, void *pNewBase)
 {
     unsigned int i;
     unsigned int j;
@@ -18,7 +21,7 @@ void fn_80215CB0(RenderInst_80215CB0 *pInst, void *pOldBase, void *pNewBase)
     pInst->mpEntries = fn_8020EB94(pInst->mpEntries, pOldBase, pNewBase);
     i = pInst->mNumEntries;
     while (i-- > 0) {
-        RenderInstEntry_80215CB0 *pEntry = &pInst->mpEntries[i];
+        TMInstanceRegionEntry_t *pEntry = &pInst->mpEntries[i];
 
         j = 4;
         while (j-- > 0) {

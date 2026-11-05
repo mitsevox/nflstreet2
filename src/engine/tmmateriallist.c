@@ -49,7 +49,7 @@ void fn_80210054(MaterialList_8020FF34 *pList, unsigned int numMaterials)
     }
 }
 
-void fn_802100C0(MaterialList_8020FF34 *pList, MaterialLib_80213228 *pLib)
+void fn_802100C0(MaterialList_8020FF34 *pList, TMMaterialDefList_t *pLib)
 {
     if (pLib != 0) {
         fn_80210054(pList, pLib->mNumMaterials);
@@ -93,7 +93,7 @@ void fn_802101B0(MaterialList_8020FF34 *pList, int index)
     }
 }
 
-void fn_80210214(MaterialList_8020FF34 *pList, MaterialLib_80213228 *pLib)
+void fn_80210214(MaterialList_8020FF34 *pList, TMMaterialDefList_t *pLib)
 {
     unsigned int i;
     unsigned int count;

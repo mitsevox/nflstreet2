@@ -100,9 +100,9 @@ void fn_802103DC(void)
     GXSetTexCoordGen(GX_TEXCOORD6, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetCurrentMtx(GX_PNMTX0);
-    fn_802134E8();
+    TMClusterObjResetMatrices();
     fn_8021077C(0);
-    fn_80215B74();
+    TMProfBeginFrame();
 }
 
 void fn_80210608(void)
@@ -114,7 +114,7 @@ void fn_80210608(void)
 
 void fn_80210634(void)
 {
-    fn_80215B78();
+    TMProfEndFrame();
 }
 
 void fn_80210654(Model_8020F28C *pModel)
@@ -172,7 +172,7 @@ void fn_8021077C(Shader_80211638 *pShader)
         if (pOld != 0 && pOld->mUnbindFunc != 0) {
             pOld->mUnbindFunc(pOld);
         }
-        fn_80213224(pShader->mpDef->mUnknown14);
+        TMShaderCodeLoad(pShader->mpDef->mUnknown14);
         if (pShader->mBindFunc != 0) {
             pShader->mBindFunc(pShader);
         }

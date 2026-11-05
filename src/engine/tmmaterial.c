@@ -14,7 +14,7 @@ static int fn_8020FAAC(Material_8020FAAC *pMaterial, const char *pName)
     }
     index = -1;
     if (pMaterial->mpShader->mpDef != 0) {
-        ShaderParmDef_80211638 *pParm = fn_80212CB4(pMaterial->mpShader->mpDef, pName, 1);
+        ShaderParmDef_80211638 *pParm = TMShaderDefGetParmByName(pMaterial->mpShader->mpDef, pName, 1);
 
         if (pParm != 0) {
             index = pParm->mIndex;
@@ -135,7 +135,7 @@ void fn_8020FE3C(Shader_80211638 *pShader)
     }
 }
 
-void fn_8020FE78(MaterialDef_80213228 *pDef)
+void fn_8020FE78(TMMaterialDef_t *pDef)
 {
     Material_8020FAAC *pMaterial = lbl_803EBEE0;
     int i;
@@ -145,7 +145,7 @@ void fn_8020FE78(MaterialDef_80213228 *pDef)
         for (i = 0; i < pDef->mNumTextures; i++) {
             Texture_80212234 *pTexture = fn_802120E4(0, pDef->mapTextureNames[i]);
             Clut_80212534 *pClut = fn_80212124(0, pDef->mapTextureNames[i], 0);
-            int xform = fn_802158A4(pDef->mapTextureNames[i]);
+            int xform = TMTexXformFind(pDef->mapTextureNames[i]);
 
             pMaterial->mpParms[i].mpTexture = pTexture;
             pMaterial->mpParms[i].mpClut = pClut;

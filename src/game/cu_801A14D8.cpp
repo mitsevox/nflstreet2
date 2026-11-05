@@ -243,16 +243,16 @@ void fn_80211FF0(void);
 void fn_80212018(const char *pName, void *p);
 int fn_802120E4(void *p, unsigned int color);
 int fn_80212124(void *p, unsigned int color, int a);
-void fn_80214554(void *p, int a, int b);
-void fn_802145B0(void *p);
-void fn_802145F4(void *p);
-int fn_80214600(void *p);
-int fn_802149E8(float *p, int a);
-void fn_80214A7C(void *p);
-void fn_80214AC8(void);
-void fn_80214B20(void);
-void fn_80214B6C(Record_8020F2C4 *pDst, Record_8020F2C4 *pSrc);
-int fn_80214CB4(void);
+void TMBufferNew(void *p, int a, int b);
+void TMBufferDelete(void *p);
+void TMBufferReset(void *p);
+int TMBufferGetFreeSpace(void *p);
+int TMBlendSetWeightsFloat(float *p, int a);
+void TMBlendBegin(void *p);
+void TMBlendFlushBuffer(void);
+void TMBlendEnd(void);
+void TMBlendBindModel2(Record_8020F2C4 *pDst, Record_8020F2C4 *pSrc);
+int TMBlendGeomAll(void);
 void fn_80227930(Vector_801A1650 *pOut, float *pA, float *pB, float t);
 void fn_802336C4(void *p, void *q, int a);
 void fn_80233728(void *p);
@@ -337,7 +337,7 @@ void fn_801A15C4(Object_80228224 *pObject)
 {
     unsigned int i;
 
-    fn_802145F4(lbl_80365D88);
+    TMBufferReset(lbl_80365D88);
     fn_8020F89C(&lbl_80365D54);
     for (i = 0; i < lbl_803ECC04; i++) {
         Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
@@ -585,13 +585,13 @@ int fn_801A201C(Object_8003DEC4 *pPlayer)
 {
     int result = 0;
 
-    if (fn_80214600(lbl_80365D88) > 0xCE3 && fn_802149E8(pPlayer->mUnknown820, pPlayer->mUnknown816) > 0) {
+    if (TMBufferGetFreeSpace(lbl_80365D88) > 0xCE3 && TMBlendSetWeightsFloat(pPlayer->mUnknown820, pPlayer->mUnknown816) > 0) {
         result = 1;
-        fn_80214A7C(lbl_80365D88);
-        fn_80214B6C(&pPlayer->mUnknown1024[0].mUnknown16, &lbl_80365D54);
-        fn_80214CB4();
-        fn_80214B20();
-        fn_80214AC8();
+        TMBlendBegin(lbl_80365D88);
+        TMBlendBindModel2(&pPlayer->mUnknown1024[0].mUnknown16, &lbl_80365D54);
+        TMBlendGeomAll();
+        TMBlendEnd();
+        TMBlendFlushBuffer();
     }
     return result;
 }
@@ -909,7 +909,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
     if (lbl_80365D54.mUnknown0 == 0) {
         fn_8020F2C4(&lbl_80365D54, &pPlayer->mUnknown1024[0].mUnknown16);
         fn_8020F8E0(&lbl_80365D54);
-        fn_80214554(lbl_80365D88, 0x7404, 0x20);
+        TMBufferNew(lbl_80365D88, 0x7404, 0x20);
     }
     fn_8015E9F4(pPlayer->mUnknown4970, &pPlayer->mUnknown996);
     fn_8015EB4C(pPlayer->mUnknown4970, pPlayer->mUnknown1004);
@@ -1079,7 +1079,7 @@ void fn_801A3520(void)
     fn_802341B8();
     fn_8020F92C(&lbl_80365D54);
     lbl_80365D54.mUnknown0 = 0;
-    fn_802145B0(lbl_80365D88);
+    TMBufferDelete(lbl_80365D88);
     fn_801A1578();
     if (lbl_803ECC00) {
         fn_802284EC(lbl_803ECC00, fn_801A15C4);

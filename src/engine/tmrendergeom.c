@@ -4,12 +4,12 @@
 #include <dolphin/gx/GXDispList.h>
 #include "engine/tmlib.h"
 
-static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
+static void fn_80210D30(GeomNode_8020ED10 *pNode, TMChannelList_t *pList)
 {
     RenderState_80210298 *pState = &lbl_803E96E8;
 
     if (pNode->mFormatIndex != pState->mUnknown60) {
-        fn_80215A14(pList);
+        TMChannelListSubmit_DFA(pList);
         if (pNode->mFlags & 1) {
             GXSetVtxDesc(GX_VA_PNMTXIDX, GX_DIRECT);
         }
@@ -17,7 +17,7 @@ static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
             pState->mUnknown60 = pNode->mFormatIndex;
         }
     } else {
-        fn_80215B00(pList);
+        TMChannelListSubmit_A(pList);
     }
     GXCallDisplayList(pNode->mpData, pNode->mDisplayListSize << 5);
     if (pNode->mFlags & 1) {
@@ -27,7 +27,7 @@ static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
 
 static void fn_80211138(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode)
 {
-    ChannelList_8021592C list;
+    TMChannelList_t list;
     GeomNode_8020ED10 *pLod;
 
     fn_80210B6C(pNode->mMaterial);
@@ -35,7 +35,7 @@ static void fn_80211138(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode)
     if (pState->mLod != 0 && pNode->mNumLods >= pState->mLod) {
         pLod = &pNode[pState->mLod];
     }
-    fn_8021592C(&list, pLod, pState->mpGeom->mpAttrs, pState->mpChannels);
+    TMChannelListBuild(&list, pLod, pState->mpGeom->mpAttrs, pState->mpChannels);
     if (pState->mNumHooks == 0) {
         if (pNode->mFlags & 8) {
             unsigned int i;
@@ -104,10 +104,10 @@ void fn_80211350(void)
 
 void fn_802113C0(int state, int arg)
 {
-    Swap_802160A0 *pSwap = lbl_803E96E8.mpSwap;
+    TMSwapDef_t *pSwap = lbl_803E96E8.mpSwap;
 
     if (pSwap != 0) {
-        SwapState_802160A0 *pSwapState = fn_80216190(pSwap, state, arg);
+        TMSwapState_t *pSwapState = TMSwapGetState(pSwap, state, arg);
 
         if (pSwapState != 0) {
             fn_802112DC(&pSwap->mpNodeIndices[pSwapState->mFirstNode], pSwapState->mNumNodes);

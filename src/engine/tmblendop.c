@@ -1,6 +1,9 @@
+/* Per-format operations for geometry blending: widen vertex attributes (float, 16-bit,
+   8-bit) to fixed point, accumulate weighted targets and narrow the result back. */
+
 #include "engine/tmlib.h"
 
-static void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
+static void _TMBlendOpAccumulate_3s16(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -16,7 +19,7 @@ static void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight
     }
 }
 
-static void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
+static void _TMBlendOpAccumulate_3s16C(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -32,7 +35,7 @@ static void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight
     }
 }
 
-static void fn_80215020(int *pAccum, short *pSrc, unsigned int count)
+static void _TMBlendOpAccumulateInterp_4s16C(int *pAccum, short *pSrc, unsigned int count)
 {
     for (; count != 0; count--) {
         int *pDst = &pAccum[pSrc[4] * 3];
@@ -51,7 +54,7 @@ static void fn_80215020(int *pAccum, short *pSrc, unsigned int count)
     }
 }
 
-static void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac)
+static void _TMBlendOpExtract_3s16(int *pDst, short *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -68,7 +71,7 @@ static void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac)
     }
 }
 
-static void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac)
+static void _TMBlendOpExtract_3f32(int *pDst, float *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -85,7 +88,7 @@ static void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac)
     }
 }
 
-static void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac)
+static void _TMBlendOpIntract_3f32(float *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -102,7 +105,7 @@ static void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac)
     }
 }
 
-static void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac)
+static void _TMBlendOpIntract_3s16(short *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -134,7 +137,7 @@ static void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac)
     }
 }
 
-static void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
+static void _TMBlendOpAccumulate_3s8(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -150,7 +153,7 @@ static void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int 
     }
 }
 
-static void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
+static void _TMBlendOpAccumulate_3s8C(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -166,7 +169,7 @@ static void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int 
     }
 }
 
-static void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count)
+static void _TMBlendOpAccumulateInterp_4s8C(int *pAccum, signed char *pSrc, unsigned int count)
 {
     for (; count != 0; count--) {
         int *pDst = &pAccum[*(short *)&pSrc[4] * 3];
@@ -185,7 +188,7 @@ static void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count)
     }
 }
 
-static void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int frac)
+static void _TMBlendOpExtract_3s8(int *pDst, signed char *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -202,7 +205,7 @@ static void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int fr
     }
 }
 
-static void fn_802154BC(signed char *pDst, int *pSrc, unsigned int count, int frac)
+static void _TMBlendOpIntract_3s8(signed char *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -234,35 +237,35 @@ static void fn_802154BC(signed char *pDst, int *pSrc, unsigned int count, int fr
     }
 }
 
-unsigned int fn_80215554(int dstId, int srcId, int weight)
+unsigned int TMBlendOpAccumulate(int dstId, int srcId, int weight)
 {
-    BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
-    BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
+    TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
+    TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
     GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
 
     if (pAttr->mbDelta) {
         switch (pAttr->mCompType) {
         case 3:
-            fn_80215020((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount);
+            _TMBlendOpAccumulateInterp_4s16C((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount);
             break;
         case 1:
-            fn_802153D0((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount);
+            _TMBlendOpAccumulateInterp_4s8C((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount);
             break;
         }
     } else {
         switch (pAttr->mCompType) {
         case 3:
             if (pAttr->mStride == 6) {
-                fn_80214F58((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
+                _TMBlendOpAccumulate_3s16((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
             } else if (pAttr->mStride == 8) {
-                fn_80214FB8((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
+                _TMBlendOpAccumulate_3s16C((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
             }
             break;
         case 1:
             if (pAttr->mStride == 3) {
-                fn_802152F0((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
+                _TMBlendOpAccumulate_3s8((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
             } else if (pAttr->mStride == 6) {
-                fn_8021535C((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
+                _TMBlendOpAccumulate_3s8C((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, weight, pAttr->mFrac);
             }
             break;
         case 4:
@@ -272,41 +275,41 @@ unsigned int fn_80215554(int dstId, int srcId, int weight)
     return pAttr->mCount;
 }
 
-void fn_80215694(int dstId, int srcId)
+void TMBlendOpExtract(int dstId, int srcId)
 {
-    BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
-    BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
+    TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
+    TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
     GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:
-        fn_802150F0((int *)pDst->mpCursor, (float *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpExtract_3f32((int *)pDst->mpCursor, (float *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     case 3:
-        fn_802150AC((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpExtract_3s16((int *)pDst->mpCursor, (short *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     case 1:
-        fn_8021546C((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpExtract_3s8((int *)pDst->mpCursor, (signed char *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     }
     pDst->mSize = pAttr->mCount * 12;
 }
 
-void fn_8021574C(int dstId, int srcId)
+void TMBlendOpIntract(int dstId, int srcId)
 {
-    BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
-    BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
+    TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
+    TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
     GeomAttr_8020ED10 *pAttr = pDst->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:
-        fn_80215190((float *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpIntract_3f32((float *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     case 3:
-        fn_80215258((short *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpIntract_3s16((short *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     case 1:
-        fn_802154BC((signed char *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
+        _TMBlendOpIntract_3s8((signed char *)pDst->mpCursor, (int *)pSrc->mpCursor, pAttr->mCount, pAttr->mFrac);
         break;
     }
     pDst->mSize = pAttr->mCount * 6;

@@ -103,20 +103,20 @@ void fn_8020F5F0(int maxChunkTypes)
 {
     fn_8020EB08(maxChunkTypes);
     fn_8020EB48('Info', 0, 1);
-    fn_8020EB48('Lite', (ChunkRelocFunc_8020EA18)fn_802146C8, 0);
-    fn_8020EB48('Matl', (ChunkRelocFunc_8020EA18)fn_80213228, 1);
+    fn_8020EB48('Lite', (ChunkRelocFunc_8020EA18)TMLightDefRelocateChunk, 0);
+    fn_8020EB48('Matl', (ChunkRelocFunc_8020EA18)TMMaterialDefRelocateChunk, 1);
     fn_8020EB48('Text', 0, 0);
-    fn_8020EB48('Skel', (ChunkRelocFunc_8020EA18)fn_80215E5C, 1);
+    fn_8020EB48('Skel', (ChunkRelocFunc_8020EA18)TMSkelRelocateChunk, 1);
     fn_8020EB48('Geom', (ChunkRelocFunc_8020EA18)fn_8020F08C, 2);
-    fn_8020EB48('Extn', (ChunkRelocFunc_8020EA18)fn_80215804, 0);
-    fn_8020EB48('Swap', (ChunkRelocFunc_8020EA18)fn_802160A0, 0);
-    fn_8020EB48('Clst', (ChunkRelocFunc_8020EA18)fn_80213384, 0);
-    fn_8020EB48('Txfm', (ChunkRelocFunc_8020EA18)fn_80215838, 1);
-    fn_8020EB48('Inst', (ChunkRelocFunc_8020EA18)fn_80215C14, 1);
-    fn_8020EB48('Rint', (ChunkRelocFunc_8020EA18)fn_80215CB0, 1);
+    fn_8020EB48('Extn', (ChunkRelocFunc_8020EA18)TMExtentsDefRelocateChunk, 0);
+    fn_8020EB48('Swap', (ChunkRelocFunc_8020EA18)TMSwapRelocateChunk, 0);
+    fn_8020EB48('Clst', (ChunkRelocFunc_8020EA18)TMClusterDefRelocateChunk, 0);
+    fn_8020EB48('Txfm', (ChunkRelocFunc_8020EA18)TMTexXformRelocateChunk, 1);
+    fn_8020EB48('Inst', (ChunkRelocFunc_8020EA18)TMInstanceDefRelocateChunk, 1);
+    fn_8020EB48('Rint', (ChunkRelocFunc_8020EA18)TMInstanceRegionDefRelocateChunk, 1);
     fn_8020EB48('Fade', 0, 0);
-    fn_8020EB48('DInf', (ChunkRelocFunc_8020EA18)fn_80215B7C, 1);
-    fn_8020EB48('MAnm', (ChunkRelocFunc_8020EA18)fn_80215DC0, 1);
+    fn_8020EB48('DInf', (ChunkRelocFunc_8020EA18)TMDebugInfoRelocateChunk, 1);
+    fn_8020EB48('MAnm', (ChunkRelocFunc_8020EA18)TMMorphAnimRelocate, 1);
 }
 
 void fn_8020F76C(void)
@@ -124,15 +124,15 @@ void fn_8020F76C(void)
     fn_8020EB70();
 }
 
-void fn_8020F78C(Model_8020F28C *pModel, MaterialLib_80213228 *pMatLib)
+void fn_8020F78C(Model_8020F28C *pModel, TMMaterialDefList_t *pMatLib)
 {
-    MaterialLib_80213228 *pOld = pModel->mpMatl;
+    TMMaterialDefList_t *pOld = pModel->mpMatl;
     int numMaterials = pOld->mNumMaterials;
     unsigned short *pRemap = fn_802127D0(numMaterials, 2);
     int i;
 
     for (i = 0; i < numMaterials; i++) {
-        pRemap[i] = fn_8021330C(pMatLib, pOld->mpMaterials[i].mpName);
+        pRemap[i] = TMMaterialDefGetIndexByName(pMatLib, pOld->mpMaterials[i].mpName);
     }
     fn_8020F178(pModel->mpGeom, pRemap, numMaterials);
     fn_80212814(pRemap);
@@ -142,11 +142,11 @@ void fn_8020F78C(Model_8020F28C *pModel, MaterialLib_80213228 *pMatLib)
 void fn_8020F824(Model_8020F28C *pModel, void *pOther)
 {
     if (pModel->mpSkel != 0 && pModel->mpClst != 0) {
-        short *pRemap = fn_80215EE0(pModel->mpSkel, pOther);
+        short *pRemap = TMSkelBuildRemapTable(pModel->mpSkel, pOther);
 
         if (pRemap != 0) {
-            fn_802133B8(pModel->mpClst, pRemap);
-            fn_80215F78(pModel->mpSkel, pRemap);
+            TMClusterDefRemap(pModel->mpClst, pRemap);
+            TMSkelRemapNodes(pModel->mpSkel, pRemap);
             fn_80212814(pRemap);
         }
         pModel->mpSkel->mpNames = 0;
@@ -184,7 +184,7 @@ void fn_8020F92C(Model_8020F28C *pModel)
 void fn_8020F96C(Model_8020F28C *pModel, Extent_802144AC *pExtent, int state, int arg)
 {
     Geom_8020ED10 *pGeom = pModel->mpGeom;
-    Swap_802160A0 *pSwap = pModel->mpSwap;
+    TMSwapDef_t *pSwap = pModel->mpSwap;
 
     if (state == -1 || pSwap == 0) {
         unsigned int i;
@@ -193,7 +193,7 @@ void fn_8020F96C(Model_8020F28C *pModel, Extent_802144AC *pExtent, int state, in
             fn_8020F1D8(pGeom, i, pExtent);
         }
     } else {
-        SwapState_802160A0 *pState = fn_80216190(pSwap, state, arg);
+        TMSwapState_t *pState = TMSwapGetState(pSwap, state, arg);
 
         if (pState != 0) {
             int i;

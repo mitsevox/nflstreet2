@@ -1,9 +1,12 @@
+/* Renderer profiling hooks called at the start and end of each frame; they do nothing in this
+   game. */
+
 #include "engine/tmlib.h"
 
-void fn_80215B74(void)
+void TMProfBeginFrame(void)
 {
 }
 
-void fn_80215B78(void)
+void TMProfEndFrame(void)
 {
 }
