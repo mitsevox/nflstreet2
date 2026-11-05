@@ -811,22 +811,31 @@ def main(argv=None):
     mode.add_argument('--write', action='store_true', help='update the committed tables')
     mode.add_argument('--check', action='store_true', help='fail when the committed tables differ')
     mode.add_argument('--calibrate', action='store_true', help='hold-out test against established units')
+    mode.add_argument('--game', action='store_true',
+                      help="same-game mode summary (tools/boundaries_game.py) and the current rows it contradicts")
     args = parser.parse_args(argv)
     if not (ANALYSIS / 'summary.json').exists() or not (ANALYSIS / 'split/obj').is_dir():
         sys.exit('boundaries: build/analysis is missing or incomplete (no summary.json or split objects); '
                  'run python3 build.py first')
     if args.calibrate:
         return calibrate(args.target)
+    import boundaries_game
+    if args.game:
+        for line in boundaries_game.summary(boundaries_game.run(args.target), args.target):
+            print(line)
+        return 0
     result = run(args.target)
     for line in result['report']:
         print('boundaries: ' + line, file=sys.stderr)
     produced = tables(result)
+    if args.target in boundaries_game.GAME_RANGE:
+        produced.update(boundaries_game.tables(boundaries_game.run(args.target)))
     directory = ROOT / 'config' / args.target / OUTPUT
     if args.write:
         directory.mkdir(exist_ok=True)
         for name, text in produced.items():
             (directory / name).write_text(text)
-        print('boundaries: wrote %s' % ', '.join((directory / n).relative_to(ROOT).as_posix() for n in TABLES))
+        print('boundaries: wrote %s' % ', '.join((directory / n).relative_to(ROOT).as_posix() for n in produced))
         return 0
     if args.check:
         stale = [n for n, text in produced.items()
