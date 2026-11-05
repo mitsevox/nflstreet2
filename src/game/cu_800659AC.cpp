@@ -466,7 +466,7 @@ int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e)
     int result = fn_801F8D60(id, 0x80000);
 
     if (result == 0) {
-        result = fn_8020D2D0(id, lbl_802EBDF8, a, 0);
+        result = TDbExtLoadFromResource(id, lbl_802EBDF8, a, 0);
     }
     return result;
 }

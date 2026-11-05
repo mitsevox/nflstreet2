@@ -3,16 +3,16 @@
 
 unsigned int lbl_802F9548[256] = { 0 };
 
-extern int fn_8020C5C8(TDbTable_801FAA00 *pTable, int count);
-int fn_801FAEDC(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int skip);
-int fn_801FB5C0(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int mode);
+extern int fn_8020C5C8(TDbTable_t *pTable, int count);
+int fn_801FAEDC(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream, int skip);
+int fn_801FB5C0(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream, int mode);
 
-static inline unsigned short TDbTableFree_801FAAF8(TDbTable_801FAA00 *pTable)
+static inline unsigned short TDbTableFree_801FAAF8(TDbTable_t *pTable)
 {
     return pTable->mCapacity - pTable->mRowCount;
 }
 
-static inline void TDbRowSetBit_801FAEDC(TDbTable_801FAA00 *pTable, unsigned int row)
+static inline void TDbRowSetBit_801FAEDC(TDbTable_t *pTable, unsigned int row)
 {
     unsigned char *pRow = pTable->mRows + pTable->mRowSize * row;
     unsigned int bit = pTable->mDeletedBit;
@@ -74,9 +74,9 @@ int fn_801FA964(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size)
 
 unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut)
 {
-    TDbTable_801FAA00 *pTable;
-    TDbIndex_801FAA00 *pIndex;
-    TDbExpr_801FAA00 *pFilter;
+    TDbTable_t *pTable;
+    TDbIndex_t *pIndex;
+    TDbExpr_t *pFilter;
     unsigned int size;
     unsigned int pad;
 
@@ -87,7 +87,7 @@ unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut)
             pOut[1] = size;
             pOut += 2;
             size += 0x24;
-            size += pTable->mColumnCount * sizeof(TDbColumn_801FAA00);
+            size += pTable->mColumnCount * sizeof(TDbColumn_t);
             size += pTable->mCapacity * pTable->mRowSize;
             for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
                 if (pIndex->mDestroyed == 0) {
@@ -95,7 +95,7 @@ unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut)
                     size += pIndex->mTree.mPartCount * 8;
                     pFilter = pIndex->mFilter;
                     if (pFilter != 0) {
-                        size += sizeof(TDbExpr_801FAA00);
+                        size += sizeof(TDbExpr_t);
                         if (pFilter->mLeft.mType <= TDB_TYPE_BINARY) {
                             size += pFilter->mLeft.mSize;
                         }
@@ -118,10 +118,10 @@ unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut)
     return size;
 }
 
-int fn_801FAAF8(TDbTable_801FAA00 *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unused, TDbIOStream_801FA8C8 *pStream)
+int fn_801FAAF8(TDbTable_t *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unused, TDbIOStream_801FA8C8 *pStream)
 {
-    TDbColumn_801FAA00 columns[0xFE];
-    TDbIndex_801FAA00 *pIndex;
+    TDbColumn_t columns[0xFE];
+    TDbIndex_t *pIndex;
     unsigned short count;
     unsigned short remaining;
     int appended;
@@ -141,8 +141,8 @@ int fn_801FAAF8(TDbTable_801FAA00 *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unu
     if (pTable->mColumnCount != pHdr->mColumnCount) {
         return 0x18;
     }
-    err = fn_801FA964(pStream, columns, pTable->mColumnCount * sizeof(TDbColumn_801FAA00));
-    if (err == 0 && memcmp(pTable->mColumns, columns, pTable->mColumnCount * sizeof(TDbColumn_801FAA00)) != 0) {
+    err = fn_801FA964(pStream, columns, pTable->mColumnCount * sizeof(TDbColumn_t));
+    if (err == 0 && memcmp(pTable->mColumns, columns, pTable->mColumnCount * sizeof(TDbColumn_t)) != 0) {
         err = 0x18;
     }
     if ((pHdr->mFlags & 0x18) == 0x18) {
@@ -198,7 +198,7 @@ int fn_801FAAF8(TDbTable_801FAA00 *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unu
         for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
             for (count = pTable->mRowCount - count; count < pTable->mRowCount; count++) {
                 if (!TDbRowBit_801FAAF8(pTable, count)) {
-                    err = fn_8020299C(pIndex, count);
+                    err = _TDbIndexRowAdd(pIndex, count);
                     if (err != 0) {
                         return err;
                     }
@@ -221,11 +221,11 @@ int fn_801FAAF8(TDbTable_801FAA00 *pTable, TDbIOTableHdr_801FAAF8 *pHdr, int unu
     return err;
 }
 
-int fn_801FAEDC(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int skip)
+int fn_801FAEDC(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream, int skip)
 {
     unsigned char buffer[0x2000];
     unsigned char *pRow;
-    TDbIndex_801FAA00 *pIndex;
+    TDbIndex_t *pIndex;
     unsigned short row;
     int reused;
     int err;
@@ -258,14 +258,14 @@ int fn_801FAEDC(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int sk
         if (!skip) {
             if (err == 0) {
                 for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
-                    err = fn_8020299C(pIndex, row);
+                    err = _TDbIndexRowAdd(pIndex, row);
                     if (err != 0) {
                         break;
                     }
                 }
                 if (err != 0) {
                     for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
-                        fn_80202D34(pIndex, row);
+                        _TDbIndexRowDelete(pIndex, row);
                     }
                 }
             }

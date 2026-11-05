@@ -1,6 +1,6 @@
 #include "engine/t3db.h"
 
-int fn_80203444(TDbMemPool_80202B60 *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
+int fn_80203444(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
                 unsigned short growCount)
 {
     TDbMemBlock_80203444 *pBlock;
@@ -16,7 +16,7 @@ int fn_80203444(TDbMemPool_80202B60 *pPool, void *pHeap, unsigned int itemSize, 
     pPool->mItemSize = itemSize;
     pPool->mCount = count;
     TDbMemNotify_801FC9D4(0, -1, -1);
-    err = fn_8020D1B0(pHeap, count * itemSize + sizeof(TDbMemBlock_80203444), &pBlock);
+    err = TDbExtMemAlloc(pHeap, count * itemSize + sizeof(TDbMemBlock_80203444), &pBlock);
     TDbMemNotify_801FC9D4(4, -1, -1);
     if (err != 0) {
         return err;
@@ -28,7 +28,7 @@ int fn_80203444(TDbMemPool_80202B60 *pPool, void *pHeap, unsigned int itemSize, 
     return 0;
 }
 
-int fn_8020353C(TDbMemPool_80202B60 *pPool)
+int fn_8020353C(TDbMemPool_t *pPool)
 {
     TDbMemBlock_80203444 *pBlock;
     TDbMemBlock_80203444 *pNext;
@@ -38,21 +38,21 @@ int fn_8020353C(TDbMemPool_80202B60 *pPool)
     pPool->mNext = 0;
     pPool->mRemaining = 0;
     while ((pNext = pBlock->mNext) != 0) {
-        fn_8020D2AC(pPool->mHeap, pBlock, pPool->mItemSize * pPool->mGrowCount + sizeof(TDbMemBlock_80203444));
+        TDbExtMemFree(pPool->mHeap, pBlock, pPool->mItemSize * pPool->mGrowCount + sizeof(TDbMemBlock_80203444));
         pBlock = pNext;
     }
-    fn_8020D2AC(pPool->mHeap, pBlock, pPool->mItemSize * pPool->mCount + sizeof(TDbMemBlock_80203444));
+    TDbExtMemFree(pPool->mHeap, pBlock, pPool->mItemSize * pPool->mCount + sizeof(TDbMemBlock_80203444));
     pPool->mBlocks = 0;
     return 0;
 }
 
-int fn_802035C8(TDbMemPool_80202B60 *pPool)
+int fn_802035C8(TDbMemPool_t *pPool)
 {
     fn_8020353C(pPool);
     return fn_80203444(pPool, pPool->mHeap, pPool->mItemSize, pPool->mCount, pPool->mGrowCount);
 }
 
-int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem)
+int fn_8020360C(TDbMemPool_t *pPool, void *ppItem)
 {
     TDbMemBlock_80203444 *pBlock;
     int err;
@@ -67,7 +67,7 @@ int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem)
             return 2;
         }
         TDbMemNotify_801FC9D4(0, -1, -1);
-        err = fn_8020D1B0(pPool->mHeap, pPool->mGrowCount * pPool->mItemSize + sizeof(TDbMemBlock_80203444), &pBlock);
+        err = TDbExtMemAlloc(pPool->mHeap, pPool->mGrowCount * pPool->mItemSize + sizeof(TDbMemBlock_80203444), &pBlock);
         if (err) {
             *(void **)ppItem = 0;
             return err;
@@ -84,7 +84,7 @@ int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem)
     return 0;
 }
 
-void fn_80203744(TDbMemPool_80202B60 *pPool, void *pItem)
+void fn_80203744(TDbMemPool_t *pPool, void *pItem)
 {
     *(void **)pItem = pPool->mFree;
     pPool->mFree = pItem;

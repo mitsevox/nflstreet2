@@ -1,6 +1,9 @@
+/* T3DB helper that packs a list of table/column literals into the 64-bit column references the
+   query code works with. */
+
 #include "engine/t3db.h"
 
-void fn_8020CCBC(TDbLitRef_80205754 *pLits, unsigned long long *pOut)
+void TDbUtilFillTableColRefsForTableColLits(TDbLitRef_t *pLits, unsigned long long *pOut)
 {
     unsigned char i = 0;
 

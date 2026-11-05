@@ -7,7 +7,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
-#include "game/Record_802CC680.h"
+#include "game/MemHeapDesc_t.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8015D3EC.h"
 #include "engine/periph.h"
@@ -67,10 +67,10 @@ int fn_801F9430(int a, int *pTable4, int *pTable8);
 int fn_801F9574(void);
 int fn_801FC9D4(int a, int b, int c, int d, int e);
 void fn_801FCD04(void);
-int fn_8020CFB0(int a);
-int fn_8020D048(void);
-void fn_8020D0CC(Record_802CC680 *pRecord);
-void fn_8020D158(void);
+int TaskInit(int a);
+int TaskShutdown(void);
+void TDbExtInit(MemHeapDesc_t *pRecord);
+void TDbExtShutdown(void);
 int fn_80229470(void);
 void fn_80229494(void);
 void fn_8022C930(int a);
@@ -188,11 +188,11 @@ const char *Db::GetName() { return "Db"; }
 
 int Db::Init()
 {
-    Record_802CC680 *record = fn_80025E50(2);
+    MemHeapDesc_t *record = fn_80025E50(2);
     Desc_801F8A0C desc;
 
     fn_8022C930(32);
-    fn_8020D0CC(record);
+    TDbExtInit(record);
     fn_801F8A0C(&desc);
     desc.mUnknown0 = record->mUnknown10;
     fn_801F8A54(&desc);
@@ -204,7 +204,7 @@ int Db::Shutdown()
 {
     fn_801FCD04();
     fn_801F8C64();
-    fn_8020D158();
+    TDbExtShutdown();
     return 1;
 }
 
@@ -470,13 +470,13 @@ const char *Task::GetName() { return "Task"; }
 
 int Task::Init()
 {
-    fn_8020CFB0(10);
+    TaskInit(10);
     return 1;
 }
 
 int Task::Shutdown()
 {
-    fn_8020D048();
+    TaskShutdown();
     return 1;
 }
 

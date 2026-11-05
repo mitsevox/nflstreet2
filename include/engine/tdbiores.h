@@ -6,8 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern TDbIODevice_801FC5FC lbl_802F9BAC;
-extern TDbIODevice_801FC5FC lbl_802F9BC8;
+extern TDbIODevice_t tdbioresCallback;
+extern TDbIODevice_t tdbioreswriteCallback;
 #ifdef __cplusplus
 }
 #endif

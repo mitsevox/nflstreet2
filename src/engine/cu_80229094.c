@@ -77,7 +77,7 @@ int fn_80229210(int a, int *pOut)
     int *pState = &lbl_803EBFD0;
 
     *pState = a;
-    err = fn_801F9134(lbl_803EBFD4, (int)&lbl_803EBFCC, 0, (int)&lbl_802F9BAC);
+    err = fn_801F9134(lbl_803EBFD4, (int)&lbl_803EBFCC, 0, (int)&tdbioresCallback);
     *pState = -1;
     *pOut = err != 0 ? -1 : lbl_803EBFD4;
     return err;

@@ -3,37 +3,37 @@
 
 
 
-int fn_801FB9D0(TDbExpr_801FAA00 *pExpr, TDbIOStream_801FA8C8 *pStream, int release)
+int fn_801FB9D0(TDbExpr_t *pExpr, TDbIOStream_801FA8C8 *pStream, int release)
 {
     int err;
 
-    err = fn_801FA964(pStream, pExpr, sizeof(TDbExpr_801FAA00));
+    err = fn_801FA964(pStream, pExpr, sizeof(TDbExpr_t));
     if (err == 0) {
         if (pExpr->mLeft.mType <= TDB_TYPE_BINARY) {
-            err = fn_8020D1B0(lbl_803EBE8C, pExpr->mLeft.mSize, &pExpr->mLeft.mValue.p);
+            err = TDbExtMemAlloc(lbl_803EBE8C, pExpr->mLeft.mSize, &pExpr->mLeft.mValue.p);
             if (err == 0) {
                 err = fn_801FA964(pStream, pExpr->mLeft.mValue.p, pExpr->mLeft.mSize);
             }
             if (release) {
-                fn_8020D2AC(lbl_803EBE8C, pExpr->mLeft.mValue.p, pExpr->mRight.mSize);
+                TDbExtMemFree(lbl_803EBE8C, pExpr->mLeft.mValue.p, pExpr->mRight.mSize);
             }
         }
         if (pExpr->mRight.mType <= TDB_TYPE_BINARY && err == 0) {
-            err = fn_8020D1B0(lbl_803EBE8C, pExpr->mRight.mSize, &pExpr->mRight.mValue.p);
+            err = TDbExtMemAlloc(lbl_803EBE8C, pExpr->mRight.mSize, &pExpr->mRight.mValue.p);
             if (err == 0) {
                 err = fn_801FA964(pStream, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
             }
             if (release) {
-                fn_8020D2AC(lbl_803EBE8C, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
+                TDbExtMemFree(lbl_803EBE8C, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
             }
         }
     }
     return err;
 }
 
-int fn_801FBAC4(TDbTable_801FAA00 *pTable, TDbExpr_801FAA00 *pExpr, TDbIOStream_801FA8C8 *pStream)
+int fn_801FBAC4(TDbTable_t *pTable, TDbExpr_t *pExpr, TDbIOStream_801FA8C8 *pStream)
 {
-    TDbExpr_801FAA00 expr;
+    TDbExpr_t expr;
     int err;
 
     expr = *pExpr;
@@ -55,7 +55,7 @@ int fn_801FBAC4(TDbTable_801FAA00 *pTable, TDbExpr_801FAA00 *pExpr, TDbIOStream_
     return err;
 }
 
-int fn_801FBC2C(TDbIndex_801FAA00 *pIndex, TDbIOStream_801FA8C8 *pStream)
+int fn_801FBC2C(TDbIndex_t *pIndex, TDbIOStream_801FA8C8 *pStream)
 {
     TDbIOIndexHdr_801FBC2C hdr;
     TDbIOIndexPart_801FBC2C part;
@@ -86,12 +86,12 @@ int fn_801FBC2C(TDbIndex_801FAA00 *pIndex, TDbIOStream_801FA8C8 *pStream)
     return err;
 }
 
-int fn_801FBD2C(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream)
+int fn_801FBD2C(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream)
 {
     TDbIOTableHdr_801FAAF8 hdr;
     unsigned int done;
     unsigned char pad[8];
-    TDbIndex_801FAA00 *pIndex;
+    TDbIndex_t *pIndex;
     int rows;
     int err;
 
@@ -133,7 +133,7 @@ int fn_801FBD2C(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream)
     }
     pStream->mCrcB = -1;
     if (err == 0) {
-        err = fn_801FA8C8(pStream, pTable->mColumns, pTable->mColumnCount * sizeof(TDbColumn_801FAA00));
+        err = fn_801FA8C8(pStream, pTable->mColumns, pTable->mColumnCount * sizeof(TDbColumn_t));
     }
     if (rows == 1 && err == 0 && pTable->mCapacity != 0) {
         err = fn_801FA8C8(pStream, pTable->mRows, pTable->mRowSize * pTable->mCapacity);

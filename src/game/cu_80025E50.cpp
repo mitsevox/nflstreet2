@@ -1,6 +1,6 @@
-#include "game/Record_802CC680.h"
+#include "game/MemHeapDesc_t.h"
 
-static Record_802CC680 lbl_802CC680[8] = {
+static MemHeapDesc_t lbl_802CC680[8] = {
     { "MAIN", 1, 0, 0, 0x200A00 },
     { "DB", 2, 0, 0x104000, 0x80A00 },
     { "DEBUG", 8, 0, 0, 0x200A00 },
@@ -13,9 +13,9 @@ static Record_802CC680 lbl_802CC680[8] = {
 
 extern "C" {
 
-Record_802CC680 *fn_80025E50(unsigned int id)
+MemHeapDesc_t *fn_80025E50(unsigned int id)
 {
-    Record_802CC680 *pRecord = 0;
+    MemHeapDesc_t *pRecord = 0;
 
     switch (id) {
     case 1:

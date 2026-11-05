@@ -1,10 +1,10 @@
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemHeapDesc_t.h"
 
 extern "C" {
 extern char lbl_800034A0[];
 
-int fn_801D2130(Record_802CC680 *pObject);
+int fn_801D2130(MemHeapDesc_t *pObject);
 int fn_80024B20(int side, int limit, int flag);
 int fn_801D2570(int id);
 void fn_80088E8C(char *pStart, char *pEnd);
@@ -34,7 +34,7 @@ int FEDLL::Init()
    0x40 to fn_801D2130. */
 int FEDLL::Shutdown()
 {
-    Record_802CC680 *pObject = fn_80025E50(0x40);
+    MemHeapDesc_t *pObject = fn_80025E50(0x40);
     pObject->mUnknown10 = (char *)fn_80024B20 - lbl_800034A0;
     fn_80088EC8(lbl_800034A0, (char *)fn_80024B20);
     pObject->mUnknown10 = 0x209C0;

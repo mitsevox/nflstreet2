@@ -31,7 +31,7 @@ int fn_80229010(void)
     int err = fn_801F8D60(0x54415453, lbl_803EBFB8);
 
     if (err == 0) {
-        err = fn_8020D2D0(0x54415453, lbl_803EBFBC, lbl_803EBFC0, 0);
+        err = TDbExtLoadFromResource(0x54415453, lbl_803EBFBC, lbl_803EBFC0, 0);
     }
     return err;
 }

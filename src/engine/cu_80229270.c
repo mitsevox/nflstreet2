@@ -38,8 +38,8 @@ extern unsigned char lbl_803EC0D8;
 extern Entry_802FB300 lbl_802FB300[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_801FC5FC *pDevice);
-extern TDbIODevice_801FC5FC lbl_8030199C;
+extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern TDbIODevice_t lbl_8030199C;
 extern int fn_801F967C(int db, int tbl);
 int fn_8022F384(int key);
 
@@ -1993,7 +1993,7 @@ int fn_8022EB10(void)
 {
     int result = fn_801F8D60(0x45564153, lbl_803EC0A0);
     if (result == 0) {
-        result = fn_8020D2D0(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
+        result = TDbExtLoadFromResource(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
     }
     return result;
 }
@@ -2033,7 +2033,7 @@ int fn_8022EC80(void)
 {
     int result = fn_801F8D60(0x54415453, lbl_803EC0B0);
     if (result == 0) {
-        result = fn_8020D2D0(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
+        result = TDbExtLoadFromResource(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
     }
     return result;
 }
@@ -2166,7 +2166,7 @@ int fn_8022F0D4(void)
         id = fn_8022EFDC();
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
-        fn_8020D2D0(key, lbl_803EC0CC, lbl_803EC0D0, 0);
+        TDbExtLoadFromResource(key, lbl_803EC0CC, lbl_803EC0D0, 0);
         lbl_803EC0D8++;
         old = fn_8022F478(id);
         fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
@@ -2183,7 +2183,7 @@ void fn_8022F1BC(int key)
         index = fn_8022F384(key);
         if (index != -1) {
             lbl_803EC0D8--;
-            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
             for (; index < (signed char)lbl_803EC0D8; index++) {
                 lbl_802FB300[index] = lbl_802FB300[index + 1];
             }
@@ -2202,7 +2202,7 @@ void fn_8022F294(int key)
     if (key != -1) {
         index = fn_8022F384(key);
         if (index != -1) {
-            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
             id = fn_8022EFDC();
             old = fn_8022F478(key);
             fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);

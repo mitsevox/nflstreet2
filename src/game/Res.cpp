@@ -1,5 +1,5 @@
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemHeapDesc_t.h"
 
 extern "C" {
 

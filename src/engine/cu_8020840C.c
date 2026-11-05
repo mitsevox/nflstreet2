@@ -2,15 +2,15 @@
 #include "engine/t3db.h"
 #include "engine/t3db_table.h"
 
-extern TDbMemPool_80202B60 lbl_803E9670;
+extern TDbMemPool_t lbl_803E9670;
 extern TDbHandler_8020A660 lbl_803E95DC[15];
 
-int fn_802087D4(TDbQuery_802032D8 *pQuery)
+int fn_802087D4(TDbQuery_t *pQuery)
 {
     if (lbl_803EBE90 == pQuery) {
         lbl_803EBE90 = pQuery->mNext;
     } else {
-        TDbQuery_802032D8 *pPrev = lbl_803EBE90;
+        TDbQuery_t *pPrev = lbl_803EBE90;
 
         while (pPrev->mNext != pQuery) {
             pPrev = pPrev->mNext;
@@ -19,7 +19,7 @@ int fn_802087D4(TDbQuery_802032D8 *pQuery)
     }
     if (pQuery->mState == 2) {
         if (--pQuery->mSource.mIndex->mLocked == 0) {
-            fn_802032D8(pQuery->mSource.mIndex);
+            _TDbIndexDestroy(pQuery->mSource.mIndex);
         }
     } else if (pQuery->mState == 1) {
         pQuery->mSource.mIndex->mLocked--;
@@ -30,7 +30,7 @@ int fn_802087D4(TDbQuery_802032D8 *pQuery)
     return 0;
 }
 
-int fn_802088A8(TDbQuery_802032D8 *pQuery, unsigned short *pCount)
+int fn_802088A8(TDbQuery_t *pQuery, unsigned short *pCount)
 {
     switch (pQuery->mState) {
     case 0:
@@ -47,7 +47,7 @@ int fn_802088A8(TDbQuery_802032D8 *pQuery, unsigned short *pCount)
     return 0;
 }
 
-int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
+int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLit)
 {
     for (; pLit->mId != -1; pLit++) {
         unsigned int j;
@@ -75,7 +75,7 @@ int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
     return 0;
 }
 
-void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
+void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLit)
 {
     for (; pLit->mId != -1; pLit++) {
         unsigned int j;
@@ -92,7 +92,7 @@ void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
         }
         row = pStmt->mRows[j];
         if (row != 0xFFFF) {
-            TDbTable_801FAA00 *pTable = pStmt->mTables[j];
+            TDbTable_t *pTable = pStmt->mTables[j];
 
             TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[pLit->mColumn], pTable->mRows + row * pTable->mRowSize, pLit);
             if (pStmt->mTables[j]->mColumns[pLit->mColumn].mType == 0) {
@@ -106,7 +106,7 @@ void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
 
 void fn_8020A540(void)
 {
-    TDbQuery_802032D8 *pQuery;
+    TDbQuery_t *pQuery;
 
     for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
         switch (pQuery->mState) {
@@ -126,7 +126,7 @@ void fn_8020A540(void)
 
 void fn_8020A5A8(void)
 {
-    TDbQuery_802032D8 *pQuery;
+    TDbQuery_t *pQuery;
 
     for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
         if (pQuery->mCallback == 0) {
@@ -153,10 +153,10 @@ void fn_8020A5A8(void)
     }
 }
 
-int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_80205754 *pLits, int user, TDbResult_8020AD1C *pResult)
+int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_t *pLits, int user, TDbResult_8020AD1C *pResult)
 {
     unsigned char saved[0x100];
-    TDbValue_801FDF28 value;
+    TDbValue_t value;
     unsigned int mask[8];
     unsigned char bEmit;
     TDbHandlerFn_8020A660 pFn;
@@ -226,10 +226,10 @@ int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_80205754
     return err;
 }
 
-int fn_8020AD1C(int unused, TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLits, int bFirstOnly, TDbResult_8020AD1C *pResult)
+int fn_8020AD1C(int unused, TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, int bFirstOnly, TDbResult_8020AD1C *pResult)
 {
     unsigned int mask[8];
-    TDbValue_801FDF28 value;
+    TDbValue_t value;
     int err = 0;
 
     memset(mask, 0, sizeof(mask));

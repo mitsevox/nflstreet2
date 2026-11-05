@@ -1,10 +1,10 @@
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemHeapDesc_t.h"
 
 /* Argument of fn_801D2054. */
 struct Object_801D2054 {
     char mLogName[64];
-    Record_802CC680 *mpArena;
+    MemHeapDesc_t *mpArena;
 };
 
 /* Argument of fn_801F7824. */
@@ -24,7 +24,7 @@ void fn_80025E00(void);
 void fn_80025E28(void);
 int fn_801D2054(Object_801D2054 *pConfig);
 int fn_801D20C8(void);
-int fn_801D2130(Record_802CC680 *pArena);
+int fn_801D2130(MemHeapDesc_t *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
 int fn_801D3B0C(int id, int a, int base, int size, int b, int c);
@@ -52,9 +52,9 @@ const char *Sys::GetName() { return "Sys"; }
 
 int Sys::Init()
 {
-    Record_802CC680 *pDb;
-    Record_802CC680 *pDebug;
-    Record_802CC680 *pAuxRam;
+    MemHeapDesc_t *pDb;
+    MemHeapDesc_t *pDebug;
+    MemHeapDesc_t *pAuxRam;
 
     fn_801C6584();
     fn_80025E00();

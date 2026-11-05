@@ -6,7 +6,7 @@
 
 #define TDB_COLUMN_ROW 0xFE
 
-typedef enum TDbType_801FDF28 {
+typedef enum TDbType_t {
     TDB_TYPE_STRING = 0,
     TDB_TYPE_BINARY = 1,
     TDB_TYPE_INT = 2,
@@ -19,10 +19,10 @@ typedef enum TDbType_801FDF28 {
     TDB_TYPE_EXPR_TRUNC = 10,
     TDB_TYPE_EXPR_UINT = 11,
     TDB_TYPE_EXPR_FLOAT = 12
-} TDbType_801FDF28;
+} TDbType_t;
 
-typedef struct TDbValue_801FDF28 {
-    TDbType_801FDF28 mType;
+typedef struct TDbValue_t {
+    TDbType_t mType;
     unsigned int mSize;
     union {
         int i;
@@ -32,32 +32,32 @@ typedef struct TDbValue_801FDF28 {
         void *p;
         unsigned long long l;
     } mValue;
-} TDbValue_801FDF28;
+} TDbValue_t;
 
-typedef struct TDbExpr_801FAA00 {
-    TDbValue_801FDF28 mLeft;
-    TDbValue_801FDF28 mRight;
+typedef struct TDbExpr_t {
+    TDbValue_t mLeft;
+    TDbValue_t mRight;
     int mOp;
-} TDbExpr_801FAA00;
+} TDbExpr_t;
 
-typedef struct TDbColumn_801FAA00 {
-    TDbType_801FDF28 mType;
+typedef struct TDbColumn_t {
+    TDbType_t mType;
     unsigned int mBitOffset;
     unsigned int mUnknown8;
     unsigned int mBitCount;
-} TDbColumn_801FAA00;
+} TDbColumn_t;
 
 typedef struct TDbDatabase_801FAA00 {
     unsigned char mUnknown0[0x4];
-    struct TDbTable_801FAA00 *mTables;
+    struct TDbTable_t *mTables;
     void *mUnknown8;
     void *mHeap;
 } TDbDatabase_801FAA00;
 
-typedef struct TDbTable_801FAA00 {
+typedef struct TDbTable_t {
     TDbDatabase_801FAA00 *mDb;
-    struct TDbTable_801FAA00 *mNext;
-    struct TDbIndex_801FAA00 *mIndexes;
+    struct TDbTable_t *mNext;
+    struct TDbIndex_t *mIndexes;
     void *mUnknownC;
     void *mUnknown10;
     unsigned char *mRows;
@@ -75,21 +75,21 @@ typedef struct TDbTable_801FAA00 {
     unsigned short mUnknown48;
     unsigned char mColumnCount;
     unsigned char mUnknown4B;
-    TDbColumn_801FAA00 mColumns[1];
-} TDbTable_801FAA00;
+    TDbColumn_t mColumns[1];
+} TDbTable_t;
 
-typedef struct TDbMemEvent_801FC5FC {
+typedef struct TDbMemEvent_t {
     int mType;
     int mUnknown4;
     int mUnknown8;
-} TDbMemEvent_801FC5FC;
+} TDbMemEvent_t;
 
 typedef struct TDbMemBlock_80203444 {
     struct TDbMemBlock_80203444 *mNext;
     int mUnknown4;
 } TDbMemBlock_80203444;
 
-typedef struct TDbMemPool_80202B60 {
+typedef struct TDbMemPool_t {
     void *mFree;
     TDbMemBlock_80203444 *mBlocks;
     unsigned char *mNext;
@@ -98,62 +98,62 @@ typedef struct TDbMemPool_80202B60 {
     unsigned short mRemaining;
     unsigned short mCount;
     unsigned short mGrowCount;
-} TDbMemPool_80202B60;
+} TDbMemPool_t;
 
-typedef struct TDbIdxNode_80201EC8 {
-    struct TDbIdxNode_80201EC8 *mChild[2];
-    struct TDbIdxNode_80201EC8 *mParent;
+typedef struct TDbIdxNode_t {
+    struct TDbIdxNode_t *mChild[2];
+    struct TDbIdxNode_t *mParent;
     short mColor;
     unsigned int mRow;
     unsigned int mKey[1];
-} TDbIdxNode_80201EC8;
+} TDbIdxNode_t;
 
-typedef struct TDbIdxPart_80202708 {
-    TDbTable_801FAA00 *mTable;
+typedef struct TDbIdxPart_t {
+    TDbTable_t *mTable;
     unsigned char mUnknown4;
     unsigned char mColumn;
     unsigned char mAscending;
     unsigned char mUnknown7;
     unsigned int mUnknown8;
-} TDbIdxPart_80202708;
+} TDbIdxPart_t;
 
-typedef struct TDbIdxTree_80201EC8 {
-    TDbIdxNode_80201EC8 *mRoot;
+typedef struct TDbIdxTree_t {
+    TDbIdxNode_t *mRoot;
     unsigned char mAllowDuplicates;
     unsigned char mPartCount;
     unsigned char mUnknown6[2];
-    TDbIdxPart_80202708 mParts[1];
-} TDbIdxTree_80201EC8;
+    TDbIdxPart_t mParts[1];
+} TDbIdxTree_t;
 
-typedef struct TDbIdxColumnDef_801FFFC4 {
+typedef struct TDbIdxColumnDef_t {
     unsigned int mTableId;
     int mId;
     int mDescending;
     unsigned char mColumn;
-} TDbIdxColumnDef_801FFFC4;
+} TDbIdxColumnDef_t;
 
-typedef struct TDbIndex_801FAA00 {
-    TDbTable_801FAA00 *mTable;
-    struct TDbIndex_801FAA00 *mNext;
-    TDbExpr_801FAA00 *mFilter;
+typedef struct TDbIndex_t {
+    TDbTable_t *mTable;
+    struct TDbIndex_t *mNext;
+    TDbExpr_t *mFilter;
     int mId;
-    TDbMemPool_80202B60 mPool;
+    TDbMemPool_t mPool;
     unsigned int mCount;
     unsigned char mFlags;
     unsigned char mLocked;
     unsigned char mDirty;
     unsigned char mDestroyed;
-    TDbIdxTree_80201EC8 mTree;
-} TDbIndex_801FAA00;
+    TDbIdxTree_t mTree;
+} TDbIndex_t;
 
 typedef struct TDbStmt_80205754 {
     unsigned int mTableCount;
-    TDbExpr_801FAA00 *mWhere;
-    TDbTable_801FAA00 *mTables[10];
-    TDbExpr_801FAA00 *mTableExprs[10];
-    TDbIndex_801FAA00 *mIndexes[10];
-    TDbExpr_801FAA00 *mSeekExprs[10];
-    TDbIdxNode_80201EC8 *mNodes[10];
+    TDbExpr_t *mWhere;
+    TDbTable_t *mTables[10];
+    TDbExpr_t *mTableExprs[10];
+    TDbIndex_t *mIndexes[10];
+    TDbExpr_t *mSeekExprs[10];
+    TDbIdxNode_t *mNodes[10];
     unsigned int mJoinTables[10];
     unsigned short mRows[10];
     unsigned int mJoinType[10];
@@ -162,38 +162,38 @@ typedef struct TDbStmt_80205754 {
 typedef struct TDbSQLTableRef_801FDC18 {
     unsigned int mId;
     unsigned int mJoinType;
-    TDbExpr_801FAA00 *mExpr;
+    TDbExpr_t *mExpr;
 } TDbSQLTableRef_801FDC18;
 
-typedef struct TDbLitRef_80205754 {
+typedef struct TDbLitRef_t {
     unsigned int mUnknown0;
     unsigned int mTableId;
     int mId;
     unsigned int mColumn;
-} TDbLitRef_80205754;
+} TDbLitRef_t;
 
 typedef struct TDbQIdx_80205880 {
     TDbStmt_80205754 *mStmt;
     unsigned int mCount;
-    TDbMemPool_80202B60 mPool;
-    TDbMemPool_80202B60 mKeyPool;
+    TDbMemPool_t mPool;
+    TDbMemPool_t mKeyPool;
     unsigned char mDirty;
-    TDbIdxTree_80201EC8 mTree;
+    TDbIdxTree_t mTree;
 } TDbQIdx_80205880;
 
-typedef struct TDbQuery_802032D8 {
+typedef struct TDbQuery_t {
     TDbDatabase_801FAA00 *mDb;
-    struct TDbQuery_802032D8 *mNext;
+    struct TDbQuery_t *mNext;
     void (*mCallback)(int arg);
     int mCallbackArg;
     union {
-        TDbTable_801FAA00 *mTable;
-        TDbIndex_801FAA00 *mIndex;
+        TDbTable_t *mTable;
+        TDbIndex_t *mIndex;
         TDbQIdx_80205880 *mQIdx;
     } mSource;
-    TDbIdxNode_80201EC8 *mCur;
+    TDbIdxNode_t *mCur;
     unsigned int mState;
-} TDbQuery_802032D8;
+} TDbQuery_t;
 
 typedef struct TDbResult_8020AD1C {
     unsigned short mCount;
@@ -216,7 +216,7 @@ typedef struct TDbLexer_801FCE10 {
     unsigned int mBufUsed;
 } TDbLexer_801FCE10;
 
-typedef struct TDbIODevice_801FC5FC {
+typedef struct TDbIODevice_t {
     int (*mOpen)(void *pHandle, unsigned int size, void *pName, int mode);
     int (*mClose)(void *pHandle);
     int (*mRead)(void *pHandle, void *pData, unsigned int size, unsigned int *pDone);
@@ -224,12 +224,12 @@ typedef struct TDbIODevice_801FC5FC {
     int (*mSeek)(void *pHandle, int offset);
     unsigned int (*mReserve)(unsigned int size);
     unsigned int mUnknown18;
-} TDbIODevice_801FC5FC;
+} TDbIODevice_t;
 
 typedef struct TDbIOStream_801FA8C8 {
     unsigned int mCrcA;
     unsigned int mCrcB;
-    TDbIODevice_801FC5FC *mDevice;
+    TDbIODevice_t *mDevice;
     unsigned char mUnknownC;
     unsigned int mSize;
     unsigned int mEnd;
@@ -265,68 +265,68 @@ typedef struct TDbIOIndexPart_801FBC2C {
     unsigned int mAscending;
 } TDbIOIndexPart_801FBC2C;
 
-extern void (*lbl_803EBE80)(TDbMemEvent_801FC5FC *pEvent);
+extern void (*lbl_803EBE80)(TDbMemEvent_t *pEvent);
 extern unsigned int lbl_802F9548[256];
-extern TDbMemPool_80202B60 lbl_803E9654;
-extern TDbMemPool_80202B60 lbl_803E96A8;
+extern TDbMemPool_t lbl_803E9654;
+extern TDbMemPool_t lbl_803E96A8;
 extern int (*lbl_803EBE74)(const char *a, const char *b, int size);
 extern void *lbl_803EBE8C;
-extern TDbQuery_802032D8 *lbl_803EBE90;
+extern TDbQuery_t *lbl_803EBE90;
 
 void fn_801FA870(void);
 int fn_801FA8C8(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size);
 int fn_801FA964(TDbIOStream_801FA8C8 *pStream, void *pData, unsigned int size);
 unsigned int fn_801FAA00(TDbDatabase_801FAA00 *pDb, unsigned int *pOut);
-int fn_801FBD2C(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream);
+int fn_801FBD2C(TDbTable_t *pTable, TDbIOStream_801FA8C8 *pStream);
 unsigned int fn_801FC950(void *pData, unsigned int size, unsigned int crc);
 void fn_802009B0(TDbLexer_801FCE10 *pLexer, unsigned int start);
 char *fn_80201C70(TDbLexer_801FCE10 *pLexer, char *p);
-void fn_80201D94(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue,
+void _TDbDataGetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue,
                  int isSigned);
-TDbIdxNode_80201EC8 *fn_80201EC8(TDbIdxTree_80201EC8 *pTree, unsigned int *pKey);
-TDbIdxNode_80201EC8 *fn_80201F9C(TDbIdxTree_80201EC8 *pTree, unsigned int *pKey, unsigned int mode);
-TDbIdxNode_80201EC8 *fn_80202200(TDbIdxTree_80201EC8 *pTree, TDbIdxNode_80201EC8 *pNode);
-TDbIdxNode_80201EC8 *fn_80202298(TDbIdxTree_80201EC8 *pTree, TDbIdxNode_80201EC8 *pNode);
-int fn_802024B0(TDbIdxTree_80201EC8 *pTree, TDbIdxNode_80201EC8 *pNode, TDbIdxNode_80201EC8 *pStart);
-TDbIdxNode_80201EC8 *fn_802025C4(TDbIdxTree_80201EC8 *pTree, TDbIdxNode_80201EC8 *pNode);
-int fn_8020299C(TDbIndex_801FAA00 *pIndex, unsigned int row);
-int fn_80202D34(TDbIndex_801FAA00 *pIndex, int row);
-int fn_802032D8(TDbIndex_801FAA00 *pIndex);
-int fn_80203444(TDbMemPool_80202B60 *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
+TDbIdxNode_t *_TDbIdxSeekClosest(TDbIdxTree_t *pTree, unsigned int *pKey);
+TDbIdxNode_t *_TDbIdxSeek(TDbIdxTree_t *pTree, unsigned int *pKey, unsigned int mode);
+TDbIdxNode_t *_TDbIdxTreeMoveRight(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode);
+TDbIdxNode_t *_TDbIdxTreeMoveLeft(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode);
+int _TDbIdxTreeInsert(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode, TDbIdxNode_t *pStart);
+TDbIdxNode_t *_TDbIdxTreeDelete(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode);
+int _TDbIndexRowAdd(TDbIndex_t *pIndex, unsigned int row);
+int _TDbIndexRowDelete(TDbIndex_t *pIndex, int row);
+int _TDbIndexDestroy(TDbIndex_t *pIndex);
+int fn_80203444(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
                 unsigned short growCount);
-int fn_8020353C(TDbMemPool_80202B60 *pPool);
-int fn_802035C8(TDbMemPool_80202B60 *pPool);
-int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem);
-void fn_80203744(TDbMemPool_80202B60 *pPool, void *pItem);
-void _TDbExprTest(TDbExpr_801FAA00 *pExpr, TDbValue_801FDF28 *pResult, TDbTable_801FAA00 **ppTables,
+int fn_8020353C(TDbMemPool_t *pPool);
+int fn_802035C8(TDbMemPool_t *pPool);
+int fn_8020360C(TDbMemPool_t *pPool, void *ppItem);
+void fn_80203744(TDbMemPool_t *pPool, void *pItem);
+void _TDbExprTest(TDbExpr_t *pExpr, TDbValue_t *pResult, TDbTable_t **ppTables,
                  unsigned short *pRows);
-int fn_80204D14(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst);
-int _TDbExprPrepare(TDbExpr_801FAA00 *pSrc, TDbExpr_801FAA00 **ppDst, TDbTable_801FAA00 **ppTables, int tableCount,
+int _TDbExprCopy(TDbExpr_t *pSrc, TDbExpr_t **ppDst);
+int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, int tableCount,
                 int flags);
-void fn_802055CC(TDbExpr_801FAA00 *pExpr);
-int fn_8020567C(TDbExpr_801FAA00 *pExpr, unsigned long long column);
-void fn_80205C44(TDbTable_801FAA00 *pTable, int row);
-void fn_8020651C(TDbTable_801FAA00 *pTable, int row);
-void fn_80206668(TDbIndex_801FAA00 *pIndex, TDbIdxNode_80201EC8 *pOld, TDbIdxNode_80201EC8 *pNew);
-unsigned int fn_80206708(TDbIndex_801FAA00 *pIndex, TDbStmt_80205754 *pStmt, unsigned int table, int column,
-                         TDbExpr_801FAA00 *pExpr);
-unsigned int fn_802067D4(TDbIndex_801FAA00 *pIndex, TDbExpr_801FAA00 *pExpr, TDbIdxColumnDef_801FFFC4 *pCols,
-                         TDbExpr_801FAA00 **ppSeek);
-int fn_802069BC(TDbTable_801FAA00 *pTable, TDbIdxColumnDef_801FFFC4 *pCols, TDbExpr_801FAA00 *pFilter,
-                TDbIndex_801FAA00 **ppIndex);
-void fn_80206C9C(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppNode);
+void _TDbExprFree(TDbExpr_t *pExpr);
+int _TDbExprFindTableCol(TDbExpr_t *pExpr, unsigned long long column);
+void fn_80205C44(TDbTable_t *pTable, int row);
+void fn_8020651C(TDbTable_t *pTable, int row);
+void fn_80206668(TDbIndex_t *pIndex, TDbIdxNode_t *pOld, TDbIdxNode_t *pNew);
+unsigned int fn_80206708(TDbIndex_t *pIndex, TDbStmt_80205754 *pStmt, unsigned int table, int column,
+                         TDbExpr_t *pExpr);
+unsigned int fn_802067D4(TDbIndex_t *pIndex, TDbExpr_t *pExpr, TDbIdxColumnDef_t *pCols,
+                         TDbExpr_t **ppSeek);
+int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter,
+                TDbIndex_t **ppIndex);
+void fn_80206C9C(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppNode);
 void fn_80206E4C(TDbQIdx_80205880 *pQIdx);
 int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t);
 int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t);
 void fn_80207DB4(TDbStmt_80205754 *pStmt);
 int fn_80208094(TDbStmt_80205754 *pStmt);
-unsigned char fn_8020B97C(TDbTable_801FAA00 *pTable, int id);
-int fn_8020D1B0(void *pHeap, int size, void *ppMem);
-void fn_8020D2AC(void *pHeap, void *pMem, int size);
+unsigned char fn_8020B97C(TDbTable_t *pTable, int id);
+int TDbExtMemAlloc(void *pHeap, int size, void *ppMem);
+void TDbExtMemFree(void *pHeap, void *pMem, int size);
 
 static inline void TDbMemNotify_801FC9D4(int type, int a, int b)
 {
-    TDbMemEvent_801FC5FC event;
+    TDbMemEvent_t event;
 
     if (lbl_803EBE80) {
         event.mType = type;
@@ -336,7 +336,7 @@ static inline void TDbMemNotify_801FC9D4(int type, int a, int b)
     }
 }
 
-static inline unsigned char TDbRowBit_801FAAF8(TDbTable_801FAA00 *pTable, unsigned int row)
+static inline unsigned char TDbRowBit_801FAAF8(TDbTable_t *pTable, unsigned int row)
 {
     unsigned char *pRow = pTable->mRows + pTable->mRowSize * row;
     unsigned int bit = pTable->mDeletedBit;
@@ -347,7 +347,7 @@ static inline unsigned char TDbRowBit_801FAAF8(TDbTable_801FAA00 *pTable, unsign
     return 1;
 }
 
-static inline unsigned int TDbStmtTableSlot_80205C44(TDbStmt_80205754 *pStmt, TDbTable_801FAA00 *pTable)
+static inline unsigned int TDbStmtTableSlot_80205C44(TDbStmt_80205754 *pStmt, TDbTable_t *pTable)
 {
     unsigned int i;
 
