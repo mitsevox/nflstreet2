@@ -32,7 +32,7 @@ void fn_8001BB84(int *pCount, int *pValue)
         }
         lbl_803EBA4C = 15;
         lbl_803EBA48 = 1;
-        fn_80027EA0();
+        FELoopResetIdle();
         if (fn_801801B4() == 0) {
             fn_801485C0();
         }

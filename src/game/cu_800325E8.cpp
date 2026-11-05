@@ -10,7 +10,7 @@
 
 
 extern "C" {
-void fn_80025F20(int a);
+void MemPoolRelease(int a);
 void fn_80072D98(unsigned int delay);
 void fn_80073094(void);
 extern const char lbl_8028AD04[];
@@ -214,13 +214,13 @@ void Class_800325E8::vfn_02()
             p->fn_801CBEF4(1, 5);
             break;
         case 5:
-            if (!gInGame.fn_8002854C()) {
+            if (!gInGame.Update()) {
                 p->fn_801CBEF4(1, 6);
             }
             break;
         case 6:
             p->fn_801CBE24(1);
-            fn_80025F20(1);
+            MemPoolRelease(1);
             p->fn_801CBD80(2, -1);
             break;
         }
@@ -231,7 +231,7 @@ int Class_800325E8::vfn_03(int a, int id)
 {
     switch (id) {
     case 5:
-        if (!fn_80027E90()) {
+        if (!FELoopWasVisited()) {
             fn_80072AA8();
             fn_80072F90();
         } else {
@@ -239,7 +239,7 @@ int Class_800325E8::vfn_03(int a, int id)
         }
         break;
     case 6:
-        if (!fn_80027E90()) {
+        if (!FELoopWasVisited()) {
             fn_80073094();
         }
         break;

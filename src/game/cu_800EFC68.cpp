@@ -702,7 +702,7 @@ void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800B83A0(Object_80039F5C *p);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 float fn_80178A08(void);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);

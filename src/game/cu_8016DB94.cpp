@@ -47,8 +47,8 @@ struct State_8016EC40 {
 extern "C" {
 extern float lbl_803ECB08;
 
-int fn_800254E8(Object_800785C0 *pRecord, int a, int b);
-int fn_80025708(void);
+int ChallengeHasGoalType(Object_800785C0 *pRecord, int a, int b);
+int ChallengeIsActive(void);
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
 void fn_80039AA8(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
@@ -454,7 +454,7 @@ extern "C" void fn_8016E498(void)
     fn_80120618();
     fn_800C9FC0();
     fn_800CA3C4();
-    if (fn_80025708() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D9D8(4) == 0) {
+    if (ChallengeIsActive() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D9D8(4) == 0) {
         fn_8009D888(4, 0);
     }
     fn_800B2630();
@@ -498,7 +498,7 @@ extern "C" int fn_8016E764(void)
     } else if (fn_8017886C()->mUnknown1D == -2 || fn_8013BA58(fn_801374BC(), 0) == 6 || !allowed) {
         Object_800785C0 *pRecord = fn_800785C0();
 
-        if (fn_80025708() != 0 && pRecord->mUnknown1A4 != 0 && fn_800254E8(pRecord, 55, 0) != 0 &&
+        if (ChallengeIsActive() != 0 && pRecord->mUnknown1A4 != 0 && ChallengeHasGoalType(pRecord, 55, 0) != 0 &&
             fn_801787DC(0) < fn_801787DC(1)) {
             result = 1;
         }
@@ -767,13 +767,13 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             if (fn_80177F70() != 6) {
                 if (fn_801787DC(p->mIdBytes[2]) + 6 < value) {
                     fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
-                } else if (!fn_80025708()) {
+                } else if (!ChallengeIsActive()) {
                     fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             } else {
                 if (fn_801787DC(p->mIdBytes[2]) + 2 < value) {
                     fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
-                } else if (!fn_80025708()) {
+                } else if (!ChallengeIsActive()) {
                     fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             }
@@ -842,13 +842,13 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     if (fn_80177F70() != 6) {
                         if (fn_801787DC(p->mIdBytes[2]) + 6 < value) {
                             fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
-                        } else if (!fn_80025708()) {
+                        } else if (!ChallengeIsActive()) {
                             fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     } else {
                         if (fn_801787DC(p->mIdBytes[2]) + 2 < value) {
                             fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
-                        } else if (!fn_80025708()) {
+                        } else if (!ChallengeIsActive()) {
                             fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     }

@@ -7,7 +7,7 @@
 extern "C" {
 void fn_80004504(unsigned char id);
 void fn_8000FCD4(int a);
-void fn_800256F8(int value);
+void ChallengeSetMode(int value);
 void fn_80077F24(void);
 Object_8007A334 *fn_80077F94(void);
 void fn_800780C0(Object_8007A334 *pObject, unsigned char id, int *pResult);
@@ -63,7 +63,7 @@ void fn_8001E780(int *pA, int *pB, int *pC)
     *pC = 50;
     *pA = lbl_803EBA78;
     *pB = lbl_803EBA7C;
-    fn_800256F8(3);
+    ChallengeSetMode(3);
     fn_801801E8(1);
     if (fn_801835A0()) {
         fn_801834DC();

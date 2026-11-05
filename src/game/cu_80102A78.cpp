@@ -86,7 +86,7 @@ float fn_80178A44(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 float fn_801CFB94(int angle);
 }
@@ -343,11 +343,11 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         }
         break;
     case 8:
-        speed = lbl_803EA2C4 * 0.27f;
+        speed = gFrameTimeScale * 0.27f;
         pEvent->mUnknown8 = (int)pTarget;
         break;
     default:
-        speed = lbl_803EA2C4 * 0.37f;
+        speed = gFrameTimeScale * 0.37f;
         pEvent->mUnknown8 = 0;
         break;
     }
@@ -489,7 +489,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         break;
     }
     case 3:
-        speed = lbl_803EA2C4 * 0.37f;
+        speed = gFrameTimeScale * 0.37f;
         if (pRecord->mUnknownAByte != 15) {
             Object_80039F5C *pReceiver = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
 
@@ -528,7 +528,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         fn_8013AD04(pBall, &target, 1, spin, side);
         break;
     case 8:
-        speed = lbl_803EA2C4 * 0.27f;
+        speed = gFrameTimeScale * 0.27f;
         if (fn_801486A0() == 1) {
             fn_80152068(fn_801374E0(pBall), &target);
         }
@@ -662,7 +662,7 @@ extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short 
         * (lbl_803EAE94 - lbl_803EAE98) + lbl_803EAE98;
     result = spread * (factor * (lbl_803EAE8C - base)) + base;
     result *= 1.1f;
-    result *= lbl_803EA2C4;
+    result *= gFrameTimeScale;
     if ((p->mFlags & 0x4000) && fn_8011E188() < lbl_803EAE9C && result > lbl_803EAE90) {
         result = lbl_803EAE90;
     }
@@ -704,7 +704,7 @@ extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_
     if (running) {
         runSpeed += (fn_8016D9F4(p, 1.0f, 1.0f) - runSpeed) * fn_801CFB18(angle);
     }
-    runSpeed /= lbl_803EA2C4;
+    runSpeed /= gFrameTimeScale;
     if (runSpeed >= ballSpeed) {
         pOut->mX = pos.mX;
         pOut->mY = pos.mY;
@@ -718,7 +718,7 @@ extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_
     } else {
         closing = ballSpeed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(turn) / ballSpeed)) + runSpeed * fn_801CFB94(turn);
     }
-    time = distance / closing / lbl_803EA2C4;
+    time = distance / closing / gFrameTimeScale;
     pOut->mX = pos.mX;
     pOut->mY = pos.mY;
     fn_8022732C(pOut, &velocity, time);

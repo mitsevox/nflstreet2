@@ -883,7 +883,7 @@ Point_8017886C fn_80177FFC(int team);
 int fn_801CFE40(float y, float x);
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_8003E174(int a);
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
@@ -1063,7 +1063,7 @@ int fn_801BBCC8(int state, unsigned int slot);
 extern "C" int fn_8013BA58(Object_80137ABC *, int);
 extern "C" void fn_800ADBC0(Object_80039F5C *, int, int, int);
 extern "C" void fn_8016DBE4(Object_80039F5C *);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6[2]; Entry_800DE51C mEntries[1]; };
 extern "C" {
@@ -1566,7 +1566,7 @@ extern "C" int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA,
 extern "C" int fn_800DD780(Object_80039F5C *p, int value, unsigned short key)
 {
     int result = 1;
-    if (fn_8002894C()) {
+    if (InGameIsPlaying()) {
         unsigned char i;
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
@@ -1689,17 +1689,17 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
     fn_802372EC(0, total);
     unsigned short old = pRecord->mUnknown14;
     Record_800D81C8 *pEntries = (Record_800D81C8 *)pB;
-    if (old != 0xFFFF && !fn_80027DF0()) {
+    if (old != 0xFFFF && !FELoopIsMainFEActive()) {
         fn_801BF4A8(&pEntries[old].mUnknown30, 10, -1.0f, 0.0f);
     }
     p->mFlags &= ~4;
     pRecord->mUnknown14 = fn_801BA2A8(pA, pB, pTable->mEntries[chosen].mUnknown0, pTable->mEntries[chosen].mUnknown2, key, pOther, 1.0f);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
     }
     unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
     pRecord->mUnknown10 = pInfo[6];
-    if (old != 0xFFFF && !fn_80027DF0()) {
+    if (old != 0xFFFF && !FELoopIsMainFEActive()) {
         fn_801BF4A8(&pEntries[(unsigned short)pRecord->mUnknown14].mUnknown30, 16, 0.0f, 1.0f);
     }
 }
@@ -2361,7 +2361,7 @@ extern "C" int fn_800DFD90(Object_80039F5C *p)
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
     fn_8003E174(1);
     p->mpUnknown4->mUnknown20 &= ~0x80;
-    if (!fn_80027DF0() && fn_800AD9B4() == 7) {
+    if (!FELoopIsMainFEActive() && fn_800AD9B4() == 7) {
         return 0;
     }
     if (!(pActor->mUnknown8 & 0x40)) {
@@ -2398,7 +2398,7 @@ extern "C" int fn_800DFED0(Object_80039F5C *p)
     fn_800DF9FC(p, pCharacter, (unsigned int)pBlock->mUnknown0);
     fn_800DF7CC(p, pCharacter, pAttachments, pFrame, pBlock->mUnknown9, (unsigned int)pBlock->mUnknown0);
     if (fn_800943B0(pBlock->mUnknown8)) return 0;
-    pBlock->mUnknown0 += lbl_803EA2C4;
+    pBlock->mUnknown0 += gFrameTimeScale;
     if (!(pBlock->mUnknown0 <= pBlock->mUnknown4) && !pBlock->mUnknown13) {
         fn_8009134C(pBlock->mUnknown8);
         p->mpUnknown4->mUnknown20 &= ~0x1000;

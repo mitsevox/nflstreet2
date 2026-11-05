@@ -1,4 +1,4 @@
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8017F264.h"
@@ -165,8 +165,8 @@ void fn_80064908(void)
     lbl_8030A478.mState = 0;
     lbl_8030A478.mUnknown0 = fn_800AD9B4();
     if (lbl_8030A478.mUnknown132) {
-        fn_80027230(lbl_8030A478.mHandlers);
-        fn_80027358(-1);
+        PadInputRestoreHandlers(lbl_8030A478.mHandlers);
+        PadInputResetSlot(-1);
         lbl_8030A478.mUnknown132 = 0;
     }
 }
@@ -265,7 +265,7 @@ int fn_80064B94(void)
 
 int fn_80064BF8(void)
 {
-    if (!fn_80028310() && fn_800AD9B4() != 1) {
+    if (!InGameIsStopped() && fn_800AD9B4() != 1) {
         if ((fn_800C1E40() && fn_800AD9B4() == 7) || fn_800AD9B4() != 7) {
             if (lbl_8030A478.mUnknown136 != -1) {
                 fn_80096D14(lbl_8030A478.mUnknown136);
@@ -292,7 +292,7 @@ void fn_80064CD4(void)
     unsigned int i;
     int enabled = 1;
 
-    if (lbl_803EA638 && !fn_80028310()) {
+    if (lbl_803EA638 && !InGameIsStopped()) {
         for (i = 0; i < 1; i++) {
             if (lbl_803EA638[i]) {
                 unsigned short a;
@@ -396,9 +396,9 @@ void fn_80064F58(unsigned short a, unsigned short b, int c, unsigned int count, 
     lbl_803EA63E = fn_8017F2EC(0);
     lbl_803EA63C = fn_8017F2DC(2);
     lbl_8030A478.mUnknown0 = fn_800AD9B4();
-    fn_800271D4(lbl_8030A478.mHandlers);
+    PadInputSaveHandlers(lbl_8030A478.mHandlers);
     lbl_8030A478.mUnknown132 = 1;
-    fn_800271A4();
+    PadInputSetDefaultHandler();
     if (!keep) {
         fn_800649AC();
         lbl_803EA646 = fn_8016278C();
@@ -407,7 +407,7 @@ void fn_80064F58(unsigned short a, unsigned short b, int c, unsigned int count, 
     if (fn_8002D060(lbl_803EA368)) {
         fn_8002D198(lbl_803EA368);
     }
-    fn_8002885C();
+    InGamePause();
     lbl_803EA63F = fn_80194F24();
     fn_80194CBC();
     if (lbl_8030A478.mId == 0x10002 || lbl_8030A478.mId == 0x30001) {
@@ -484,10 +484,10 @@ void fn_800652DC(void)
         lbl_803EA647 = 0;
     }
     fn_800655D0();
-    fn_80027230(lbl_8030A478.mHandlers);
-    fn_80027358(-1);
+    PadInputRestoreHandlers(lbl_8030A478.mHandlers);
+    PadInputResetSlot(-1);
     lbl_8030A478.mUnknown132 = 0;
-    fn_800288B0();
+    InGameResume();
     fn_80194DB8();
     fn_80194D20();
     fn_80194F1C(lbl_803EA63F);
@@ -519,7 +519,7 @@ void fn_800652DC(void)
     fn_8017F2DC(lbl_803EA63C);
     fn_80064CCC();
     if (fn_800BF718(1)) {
-        int busy = fn_80028310() || lbl_803EA64B || lbl_803EA64C || lbl_803EA648;
+        int busy = InGameIsStopped() || lbl_803EA64B || lbl_803EA64C || lbl_803EA648;
 
         if (busy) {
             fn_800BF6CC(1);

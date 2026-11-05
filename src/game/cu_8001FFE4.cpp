@@ -26,7 +26,7 @@ void fn_80010200(int value);
 void fn_80011600(int a, int b, int c);
 void fn_80014294(int a, int b);
 void fn_80015D28(int a);
-void fn_80027E18(unsigned char value);
+void FELoopSetResume(unsigned char value);
 int fn_800231B0(Object_8007A334 *pObject, int a, int *pResult);
 int fn_800231E8(Object_8007A334 *pObject);
 int fn_80023210(Object_8007A334 *pObject);
@@ -169,7 +169,7 @@ void fn_80020328(void)
         fn_80011600(-1, fn_8000FCCC(), value);
         fn_80186F30(fn_8022F384(fn_80088640()), 1);
         fn_80014294(0x36, 0x21);
-        fn_80027E18(1);
+        FELoopSetResume(1);
         unsigned int id = fn_801568F0();
         if (fn_80088224(id)) {
             fn_80156734(0);

@@ -134,7 +134,7 @@ int RenderModelObject_801A8620(Object_801A8620 *p, int arg)
         if(!fn_8002D060(lbl_803EA368)) fn_80233CBC(&s->mUnknownC.mUnknown10[4],0,p->mUnknown13C);
         if(p->mUnknown140) {
             Vector_80039F5C delta;
-            void *viewport=fn_8002B550(GameVpt::fn_800293A8());
+            void *viewport=VptManagerGetCurrentCamera(GameVpt::GetViewport());
             fn_802276B4(&delta,&p->mUnknown4,static_cast<unsigned char *>(viewport)+4);
             float distance=fn_802270D4(&delta);
             if(distance<=10.0f) color.a=255;
@@ -186,7 +186,7 @@ int CullModelObjectByFacing_801A8B84(Object_801A8620 *p)
     int result=0;
     if(p->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=lbl_802AE8F8;
-        void *viewport=fn_8002B550(0);fn_801D0508();fn_801D0860(&p->mpUnknown1D8->mUnknown60);
+        void *viewport=VptManagerGetCurrentCamera(0);fn_801D0508();fn_801D0860(&p->mpUnknown1D8->mUnknown60);
         fn_80227C2C(&axis,&axis);fn_801D0544();
         fn_802276B4(&delta,&p->mpUnknown1D8->mUnknown8,static_cast<unsigned char *>(viewport)+4);
         fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;
@@ -200,7 +200,7 @@ int CullModelChildByFacing_801A8C48(Child_801A9430 *p)
     int result=0;
     if(p->mpUnknown50->mUnknownE8.mWord&16) {
         Vector_80039F5C delta,axis=lbl_802AE8F8;
-        void *viewport=fn_8002B550(0);fn_801D0508();fn_801D0860(&p->mUnknown3C);
+        void *viewport=VptManagerGetCurrentCamera(0);fn_801D0508();fn_801D0860(&p->mUnknown3C);
         fn_80227C2C(&axis,&axis);fn_801D0544();
         fn_802276B4(&delta,&p->mUnknown30,static_cast<unsigned char *>(viewport)+4);
         fn_802271F0(&delta,&delta);result=fn_80227704(&delta,&axis)<-0.2f;

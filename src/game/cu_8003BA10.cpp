@@ -137,7 +137,7 @@ void fn_80160CDC();
 int fn_800A3420();
 void fn_80049E6C();
 void fn_801613F0();
-int fn_80027DF0();
+int FELoopIsMainFEActive();
 void fn_80161498();
 void fn_80228D58(void *);
 void fn_80228DD4();
@@ -816,7 +816,7 @@ int fn_8003DA94(int count, int owner, int mode) {
       fn_80049E6C();
   } else
     fn_801613F0();
-  if (!fn_80027DF0())
+  if (!FELoopIsMainFEActive())
     fn_80161498();
   return result;
 }
@@ -863,7 +863,7 @@ int fn_8003DCC0(int owner) {
   lbl_803EA434 = 0;
   fn_80160F98();
   fn_80048F34();
-  if (fn_80027DF0() && fn_80160C08())
+  if (FELoopIsMainFEActive() && fn_80160C08())
     fn_80161498();
   return result;
 }

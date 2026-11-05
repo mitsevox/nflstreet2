@@ -53,7 +53,7 @@ void fn_80156C78(int index, int value);
 void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
 }
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EC9E8;
 extern float lbl_803EAEC0;
 
@@ -131,7 +131,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
                 break;
             case 0x4A:
             default:
-                if (p->mMotion.mUnknown28 > 40.0f / (210.0f / lbl_803EA2C4) * 0.25f) {
+                if (p->mMotion.mUnknown28 > 40.0f / (210.0f / gFrameTimeScale) * 0.25f) {
                     if (fn_800CA5CC(p, 5, 1) != 0) {
                         mode = 5;
                     } else if (p->mUnknown2913 == 1

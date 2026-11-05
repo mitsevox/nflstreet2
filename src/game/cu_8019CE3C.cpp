@@ -43,7 +43,7 @@ struct Object_8019CE3C {
 };
 
 extern "C" {
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 unsigned char fn_80054D24(int index);
 int fn_801486A0(void);
 void fn_801A5434(void *p, int a);
@@ -169,7 +169,7 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
         pObject->mUnknown14 &= ~8;
         result = 63;
     }
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         pResult = fn_8023417C(&lbl_80365434, 0);
     } else {
         pResult = fn_8023417C(&lbl_80365434, fn_80234144(&lbl_80365434, buffer));

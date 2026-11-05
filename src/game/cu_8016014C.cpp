@@ -292,12 +292,12 @@ void fn_801607F0(int mode)
     int saved0 = 0;
     int saved1 = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         saved0 = fn_801F1520(mode);
         saved1 = fn_801C9DC8(mode);
     }
     sArchive = fn_801EEB44(lbl_802EC080, 44);
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         fn_801F1520(saved0);
         fn_801C9DC8(saved1);
     }

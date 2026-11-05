@@ -49,7 +49,7 @@ struct Block_800BC538 {
 };
 
 extern "C" {
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003E174(int a);
 void fn_8004A230(unsigned char value);
 void fn_80065814(void);
@@ -127,7 +127,7 @@ void Class_80297BF8::vfn_03()
         fn_800BBB4C(this);
         lbl_803EAB94 = 1;
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_800BBB4C(this);
     }
     if (practice) {
@@ -140,7 +140,7 @@ void Class_80297BF8::vfn_03()
     if (fn_800C1E40() == 0) {
         fn_8017D5D8();
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         if (fn_800785C0()->mUnknown1C3 != 0) {
             fn_800D4164(0, 0.5f, 0);
             fn_800A7B5C();

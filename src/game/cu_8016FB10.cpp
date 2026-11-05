@@ -195,8 +195,8 @@ int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
 int fn_801385A8(void *pBall);
-int fn_80025708(void);
-void fn_8002572C(void);
+int ChallengeIsActive(void);
+void ChallengePostOutcome(void);
 Object_80039F5C *fn_8009BCE8(int *pRef);
 int fn_8009D558(int a);
 void fn_8009D818(int state);
@@ -1752,8 +1752,8 @@ void fn_80173324(unsigned int a)
             fn_801735B4(0x10);
             fn_801735D8(0x100);
             fn_800B9B9C(lbl_803EAB84);
-            if (fn_80025708()) {
-                fn_8002572C();
+            if (ChallengeIsActive()) {
+                ChallengePostOutcome();
             }
         }
     }
@@ -1781,7 +1781,7 @@ void fn_80173404(void)
         break;
     case 4:
         fn_8017F584();
-        if (fn_80178AE0() == 2 && !fn_80025708()) {
+        if (fn_80178AE0() == 2 && !ChallengeIsActive()) {
             fn_801735B4(0x40);
             state = 5;
             fn_80173298(2, 2);

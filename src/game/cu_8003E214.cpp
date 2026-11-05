@@ -163,7 +163,7 @@ void fn_8003E710(int value, int *list, Record_8003E214 **pRecords)
     }
     fn_80085020(&first);
     fn_80085080(&first, value, 0);
-    fn_8008044C(&second, 0, fn_80027DF0() ? 0x54415453 : 0x454D4147);
+    fn_8008044C(&second, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     int i = 0;
     while (list[i] != 32767) i++;
     lbl_803EC780 = i;

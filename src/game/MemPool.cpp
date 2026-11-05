@@ -1,6 +1,8 @@
-#include "game/Record_802CC680.h"
+/* The table of named memory pools (MAIN, DB, STATE, SOUND and others) and the lookup of a pool by its id. */
 
-static Record_802CC680 lbl_802CC680[8] = {
+#include "game/MemPoolDesc.h"
+
+static MemPoolDesc _MemPool_aDesc[8] = {
     { "MAIN", 1, 0, 0, 0x200A00 },
     { "DB", 2, 0, 0x104000, 0x80A00 },
     { "DEBUG", 8, 0, 0, 0x200A00 },
@@ -13,40 +15,40 @@ static Record_802CC680 lbl_802CC680[8] = {
 
 extern "C" {
 
-Record_802CC680 *fn_80025E50(unsigned int id)
+MemPoolDesc *MemPoolGetDesc(unsigned int id)
 {
-    Record_802CC680 *pRecord = 0;
+    MemPoolDesc *pRecord = 0;
 
     switch (id) {
     case 1:
-        pRecord = &lbl_802CC680[0];
+        pRecord = &_MemPool_aDesc[0];
         break;
     case 2:
-        pRecord = &lbl_802CC680[1];
+        pRecord = &_MemPool_aDesc[1];
         break;
     case 8:
-        pRecord = &lbl_802CC680[2];
+        pRecord = &_MemPool_aDesc[2];
         break;
     case 4:
-        pRecord = &lbl_802CC680[3];
+        pRecord = &_MemPool_aDesc[3];
         break;
     case 0x20:
-        pRecord = &lbl_802CC680[4];
+        pRecord = &_MemPool_aDesc[4];
         break;
     case 0x10:
-        pRecord = &lbl_802CC680[5];
+        pRecord = &_MemPool_aDesc[5];
         break;
     case 0x100:
-        pRecord = &lbl_802CC680[6];
+        pRecord = &_MemPool_aDesc[6];
         break;
     case 0x40:
-        pRecord = &lbl_802CC680[7];
+        pRecord = &_MemPool_aDesc[7];
         break;
     }
     return pRecord;
 }
 
-void fn_80025F20(int a)
+void MemPoolRelease(int a)
 {
 }
 

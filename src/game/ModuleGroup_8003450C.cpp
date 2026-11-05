@@ -19,8 +19,8 @@ extern char lbl_8030C070[];
 extern void *lbl_803EA368;
 extern void *lbl_803EA554;
 
-void fn_8002B1E4(void);
-void fn_8002B2D0(void);
+void VptManagerInit(void);
+void VptManagerShutdown(void);
 void *fn_8002C8C0(void);
 void fn_8002C964(void *p);
 void fn_80030B30(void);
@@ -230,8 +230,8 @@ const char *Arrow::GetName() { return "Arrow"; }
 
 int Arrow::Init()
 {
-    fn_8015C064(GameObjList::fn_80028BB4());
-    fn_80044B2C(GameObjList::fn_80028BB4());
+    fn_8015C064(GameObjList::GetListHandle());
+    fn_80044B2C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -297,15 +297,15 @@ int Ball::Init()
         mode = 3;
     }
     fn_80137F98(mode);
-    fn_80137588(GameObjList::fn_80028BB4());
+    fn_80137588(GameObjList::GetListHandle());
     fn_800502C0();
-    fn_80040B88(GameObjList::fn_80028BB4());
+    fn_80040B88(GameObjList::GetListHandle());
     return 1;
 }
 
 int Ball::Shutdown()
 {
-    fn_8013764C(GameObjList::fn_80028BB4());
+    fn_8013764C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -340,7 +340,7 @@ int BigObj::Init()
     unsigned short count = fn_800543B4() + 1;
 
     fn_801F2798("BigObjSetupBigObjectsStart");
-    fn_80040558(count, GameObjList::fn_80028BB4());
+    fn_80040558(count, GameObjList::GetListHandle());
     fn_801F2798("BigObjSetupBigObjectsFinish");
     fn_801F2798("BObjInfoStateInitStart");
     fn_800413F0(104, 10);
@@ -349,7 +349,7 @@ int BigObj::Init()
     fn_8004A9FC();
     fn_801F2798("GenObjSetupAnimationsFinish");
     fn_801F2798("BigObjAddAllObjectsStart");
-    fn_80040C90(GameObjList::fn_80028BB4());
+    fn_80040C90(GameObjList::GetListHandle());
     fn_801F2798("BigObjAddAllObjectsFinish");
     return 1;
 }
@@ -358,7 +358,7 @@ int BigObj::Shutdown()
 {
     fn_80041490();
     fn_80228E18();
-    fn_800405F0(GameObjList::fn_80028BB4());
+    fn_800405F0(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -390,7 +390,7 @@ const char *CamGame::GetName() { return "CamGame"; }
 
 int CamGame::Init()
 {
-    fn_8013F8D4(GameVpt::fn_800293A8());
+    fn_8013F8D4(GameVpt::GetViewport());
     return 1;
 }
 
@@ -546,12 +546,12 @@ int Env::Init()
     fn_801F2798("EnvMgrInitStart");
     fn_800A2F48();
     fn_801F2798("EnvMgrInitFinish");
-    fn_801615EC((void *)GameObjList::fn_80028BB4());
+    fn_801615EC((void *)GameObjList::GetListHandle());
     fn_801F2798("EnvObjAddObjTypeStart");
-    fn_800463FC(GameObjList::fn_80028BB4());
+    fn_800463FC(GameObjList::GetListHandle());
     fn_801F2798("EnvObjAddObjTypeFinish");
     fn_801F2798("FldObjAddObjTypeStart");
-    fn_8019B25C(GameObjList::fn_80028BB4());
+    fn_8019B25C(GameObjList::GetListHandle());
     fn_801F2798("FldObjAddObjTypeFinish");
     fn_80043AE4();
     fn_800C47EC(lbl_803EA554);
@@ -563,7 +563,7 @@ int Env::Init()
 int Env::Shutdown()
 {
     fn_800A30B8();
-    fn_801616C0((void *)GameObjList::fn_80028BB4());
+    fn_801616C0((void *)GameObjList::GetListHandle());
     return 1;
 }
 
@@ -742,14 +742,14 @@ const char *Light::GetName() { return "Light"; }
 
 int Light::Init()
 {
-    fn_802363B0(GameVpt::fn_800293A8());
+    fn_802363B0(GameVpt::GetViewport());
     fn_8019B43C();
     return 1;
 }
 
 int Light::Shutdown()
 {
-    fn_802363E0(GameVpt::fn_800293A8());
+    fn_802363E0(GameVpt::GetViewport());
     return 1;
 }
 
@@ -800,13 +800,13 @@ const char *Particles::GetName() { return "Particles"; }
 
 int Particles::Init()
 {
-    fn_80144B50(GameObjList::fn_80028BB4());
+    fn_80144B50(GameObjList::GetListHandle());
     return 1;
 }
 
 int Particles::Shutdown()
 {
-    fn_80144C6C(GameObjList::fn_80028BB4());
+    fn_80144C6C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -915,7 +915,7 @@ void PlayBook::fn_8003549C(int flag)
     int f;
 
     fn_800C8704(&a, &b);
-    if (fn_8002892C()) {
+    if (InGameIsDemo()) {
         c = 59;
         d = 59;
         e = 59;
@@ -974,14 +974,14 @@ int Plyr::Init()
     fn_8015E654(1);
     fn_8015E6C4();
     fn_8015E950(1, 1);
-    fn_8003DA94(14, GameObjList::fn_80028BB4(), 0);
+    fn_8003DA94(14, GameObjList::GetListHandle(), 0);
     fn_8015E994();
     fn_801F2798("PlyrObjsInitFinish");
     fn_801F2798("PlaStateInitStart");
     fn_800397D0(14);
     fn_801F2798("PlaStateInitFinish");
     fn_80039A1C();
-    fn_801A4650(GameVpt::fn_800293A8());
+    fn_801A4650(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
 }
@@ -989,7 +989,7 @@ int Plyr::Init()
 int Plyr::Shutdown()
 {
     fn_80039890();
-    fn_8003DCC0(GameObjList::fn_80028BB4());
+    fn_8003DCC0(GameObjList::GetListHandle());
     fn_8015E6C8();
     fn_80160B6C();
     return 1;
@@ -1098,7 +1098,7 @@ const char *Replay::GetName() { return "Replay"; }
 
 int Replay::Init()
 {
-    GameState::fn_8002900C();
+    GameState::GetStore();
     lbl_803EA368 = fn_8002C8C0();
     return 1;
 }
@@ -1148,13 +1148,13 @@ const char *ScreenTint::GetName() { return "ScreenTint"; }
 
 int ScreenTint::Init()
 {
-    fn_80147AE4(GameObjList::fn_80028BB4());
+    fn_80147AE4(GameObjList::GetListHandle());
     return 1;
 }
 
 int ScreenTint::Shutdown()
 {
-    fn_80147BA8(GameObjList::fn_80028BB4());
+    fn_80147BA8(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1278,7 +1278,7 @@ const char *Statics::GetName() { return "Statics"; }
 int Statics::Init()
 {
     fn_801F2798("StaticModelInitStart");
-    fn_800C46B0(GameObjList::fn_80028BB4());
+    fn_800C46B0(GameObjList::GetListHandle());
     fn_801F2798("StaticModelInitFinish");
     return 1;
 }
@@ -1286,7 +1286,7 @@ int Statics::Init()
 int Statics::Shutdown()
 {
     fn_80228E18();
-    fn_800C471C(GameObjList::fn_80028BB4());
+    fn_800C471C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1421,13 +1421,13 @@ const char *VptMgr::GetName() { return "VptMgr"; }
 
 int VptMgr::Init()
 {
-    fn_8002B1E4();
+    VptManagerInit();
     return 1;
 }
 
 int VptMgr::Shutdown()
 {
-    fn_8002B2D0();
+    VptManagerShutdown();
     return 1;
 }
 

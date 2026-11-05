@@ -12,7 +12,7 @@ struct Init_80159F10 {
 };
 
 extern "C" {
-int fn_8002B5A8(void);
+int VptManagerGetPassIcons(void);
 int fn_8006560C(void);
 int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
@@ -80,7 +80,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 
 extern "C" void fn_8015A0D0(int value)
 {
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         lbl_803ECA5C = value;
     } else {
         lbl_803ECA5C = 0;

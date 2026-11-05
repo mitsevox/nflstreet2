@@ -84,7 +84,7 @@ void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 }
 
 extern "C" {
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 unsigned int fn_80236398(int a);
 void fn_8019CE3C(Object_8003F768 *p);
 void fn_8019CF5C(Object_8003F768 *p, int index);
@@ -214,7 +214,7 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     color[1] = ((packed >> 8) & 255) * 0.0078125f;
     color[2] = ((packed >> 16) & 255) * 0.0078125f;
     color[3] = (packed >> 24) * 0.0078125f;
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         fn_801A5050(1, &p->mUnknown4, 0.4f, color);
     }
     p->mUnknown692 = pInit->mUnknown12;

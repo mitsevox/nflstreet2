@@ -189,8 +189,8 @@ void fn_801A5780(void)
     } else {
         fn_80236DE0(0);
     }
-    if (fn_8002894C()) {
-        fn_80236DD8(GameVpt::fn_800293A8());
+    if (InGameIsPlaying()) {
+        fn_80236DD8(GameVpt::GetViewport());
     }
     fn_80236E2C(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
     fn_80236E04(pEntry->mUnknown0, pEntry->mUnknown4);
@@ -311,7 +311,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
     fn_801D0470(fn_80228668());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
-    fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
+    fn_80235D78(&((View_8002B550 *)VptManagerGetCurrentCamera(0))->mUnknown4);
     if (fn_80147E80(1) == 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
         fn_80235764(&pObject->mUnknown24[0], handle);
@@ -343,7 +343,7 @@ int fn_801A5E90(Object_80046340 *pObject)
     fn_801D0470(fn_80228668());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
-    fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
+    fn_80235D78(&((View_8002B550 *)VptManagerGetCurrentCamera(0))->mUnknown4);
     fn_80235740(&pObject->mUnknown24[4], handle);
     fn_80235764(&pObject->mUnknown24[4], handle);
     fn_80235740(&pObject->mUnknown24[1], handle);

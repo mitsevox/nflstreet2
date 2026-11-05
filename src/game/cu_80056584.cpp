@@ -186,9 +186,9 @@ void fn_800B4434(void);
 void fn_800B3C54(void);
 int fn_80188030(int value);
 void fn_80168D74(unsigned char team);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 int fn_801485D4(void);
-int fn_80028310(void);
+int InGameIsStopped(void);
 int fn_8006560C(void);
 unsigned char fn_8002D060(void *p);
 void fn_80179144(int a);
@@ -216,15 +216,15 @@ int fn_80065650(void);
 int fn_801C6458(int a, int b);
 int fn_800B6644(int index);
 unsigned int fn_8017F584(void);
-void fn_8002B5D0(int a, int b);
+void ChallengeRecordResult(int a, int b);
 void fn_80047874(unsigned char enable);
 void fn_8004730C(unsigned char enabled);
-void fn_800282DC(void);
+void InGameStop(void);
 unsigned char fn_8006569C(void);
 void fn_80067DB8(int type, void *pPos, int a, int b, int c);
 int fn_8006562C(void);
 int fn_800AD9B4(void);
-void fn_80025C88(int flag);
+void ChallengeSendGoalList(int flag);
 void fn_80148154(void);
 void fn_801483C8(void);
 void fn_80067D4C(int type, void *pPos);
@@ -233,7 +233,7 @@ void fn_8009D8CC(int index);
 void fn_800AE988(void);
 void fn_800656A4(unsigned char value);
 void fn_800655B8(void);
-int fn_80025B18(int *pResults, char (*pText)[64]);
+int ChallengeGetGoalTexts(int *pResults, char (*pText)[64]);
 void fn_80178B1C(int a);
 void fn_80065638(int value);
 void fn_8003B8BC(void);
@@ -614,7 +614,7 @@ void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, in
     fn_800B3C54();
     *pMode = fn_8009D990(3);
     *pType = -1;
-    if (fn_80025708() && fn_800B65A0(fn_80178308()) != 0xFF) {
+    if (ChallengeIsActive() && fn_800B65A0(fn_80178308()) != 0xFF) {
         if (fn_800785C0()->mUnknown1B0 != 0) {
             switch (fn_800785C0()->mUnknown1B0) {
             case 1:
@@ -649,7 +649,7 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
 {
     int count = fn_80179138();
 
-    if (fn_80028310() == 0) {
+    if (InGameIsStopped() == 0) {
         if (fn_8006560C() == 0 && fn_8002D060(lbl_803EA368) == 0) {
             if (count == 0 && fn_80177F70() == 6) {
                 count = 1;
@@ -1288,11 +1288,11 @@ void fn_80058DA0(void)
     fn_800652A8();
     if (lbl_803EA59C) {
         if (fn_8017F584() == 6) {
-            fn_8002B5D0(1, 7);
+            ChallengeRecordResult(1, 7);
         }
         fn_80047874(0);
         fn_8004730C(0);
-        fn_800282DC();
+        InGameStop();
     } else {
         fn_80067DB8(0x72, 0, fn_8006569C(), 0, 0);
         if (fn_8006562C() != 5) {
@@ -1300,7 +1300,7 @@ void fn_80058DA0(void)
             fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
         }
         if (fn_8017F584() == 6 && fn_800AD9B4() == 2) {
-            fn_80025C88(1);
+            ChallengeSendGoalList(1);
         }
     }
 }
@@ -1344,12 +1344,12 @@ void fn_80058EFC(int *pCount, Params_80005284 *pName, Params_80005284 *pText0, P
 
     fn_801C2EF0(pName->mpText, pRecord->mUnknownCB, pName->mLength);
     fn_801C2EF0(pTeam->mpText, pRecord->mUnknown1, pTeam->mLength);
-    *pCount = fn_80025B18(results, names);
+    *pCount = ChallengeGetGoalTexts(results, names);
     for (unsigned char i = 0; i <= 3; i++) {
         fn_801C3284(texts[i]->mpText, names[i], texts[i]->mLength);
         pResults[i] = results[i];
     }
-    fn_80025C88(0);
+    ChallengeSendGoalList(0);
 }
 
 void fn_80058FDC(int a)
@@ -1433,7 +1433,7 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         *pResult = -1;
         break;
     case 0x80000014:
-        *pResult = fn_80025708();
+        *pResult = ChallengeIsActive();
         break;
     case 0x80000005:
         fn_80058EFC(pArgs[0].pi, pArgs[1].pParams, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams,
@@ -1670,15 +1670,15 @@ Record_80067338 *fn_8016898C(int team,int index);
 int fn_800AEBA0(void);
 int fn_80178E4C(void);
 int fn_800AF078(int team);
-int fn_8002892C(void);
+int InGameIsDemo(void);
 Object_80039F5C *fn_8003AC84(int id);
 int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
 void fn_80080A34(Object_8008044C *pObject,char *pText,int size);
 void fn_8017833C(int enabled);
 void fn_80178354(int enabled);
 void fn_800C1E50(void);
-int fn_80025718(void);
-int fn_80025508(void);
+int ChallengeIsPairingGame(void);
+int ChallengeEvaluateGoals(void);
 int fn_80178AE0(void);
 void *fn_8022F4BC(void);
 void *fn_80186B38(void *p);
@@ -1702,11 +1702,11 @@ int fn_80078AE0(int id);
 void fn_8007E274(int key);
 void fn_8007E8A8(int a,int value);
 int fn_800C8818(int team);
-void fn_8002B714(void);
+void TeamFilterSet(void);
 void fn_8007E738(int value);
 void fn_8007BF60(int value);
 int fn_8007984C(Object_800785C0 *pRecord);
-int fn_8002B5C8(void);
+int ChallengeBonusGet(void);
 void fn_80077F24(void);
 
 void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast);
@@ -1742,7 +1742,7 @@ void fn_8005B9FC(int *pResult,Params_80005284 **pNames);
 
 void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
 {
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         if (fn_800785C0()->mUnknown1C3) { fn_800D4164(0, lbl_803ED6A4, 0); fn_800A7B5C(); }
         if (fn_800785C0()->mUnknown1C2) { fn_800D4164(1, lbl_803ED6A4, 0); fn_800A7B5C(); }
     }
@@ -1864,13 +1864,13 @@ int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
     case 0x80000005: fn_80059F54(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000006: fn_80059F80(pArgs[0].pParams->mpText,0,0,0); break;
     case 0x80000007:
-        if (fn_80025708()) *pResult = fn_800785C0()->mUnknown1A4;
+        if (ChallengeIsActive()) *pResult = fn_800785C0()->mUnknown1A4;
         else {int mode = fn_801486A0(); *pResult = mode == 2 || mode == 4 ? 1 : fn_80178C24();}
         break;
     case 0x80000008:
         ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[0] = fn_800AF078(0);
         ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[1] = fn_800AF078(1);
-        *pArgs[1].pi = fn_8002892C() != 0;
+        *pArgs[1].pi = InGameIsDemo() != 0;
         ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[0] = 0;
         ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[1] = 0;
         ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[0] = 1.0f;
@@ -2031,7 +2031,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
 {
     fn_800C1E50();fn_80059020();
     int enabled=0;
-    if(!fn_8017F60C() && (!fn_80025718() || fn_80025508())) {
+    if(!fn_8017F60C() && (!ChallengeIsPairingGame() || ChallengeEvaluateGoals())) {
         enabled=1;
         if(fn_8017F584()==7 || fn_8017F584()==10) {
             if(fn_800B65A0(fn_80178AE0())!=255) enabled=0;
@@ -2146,7 +2146,7 @@ void fn_8005B838(int kind,int value)
     case 1:fn_80078BB8(fn_80078B94()+value);break;
     case 2:fn_8007E274(fn_80078AE0(value));break;
     case 3:fn_8007E8A8(0,value);break;
-    case 4:fn_800C8818(0);fn_8002B714();break;
+    case 4:fn_800C8818(0);TeamFilterSet();break;
     case 5:fn_8007E738(value);break;
     case 6:break;
     case 7:fn_8007E8A8(1,value);break;
@@ -2165,7 +2165,7 @@ int fn_8005B908(Params_80005284 **pText)
             }
         }
     } else {
-        int index=fn_8002B5C8();
+        int index=ChallengeBonusGet();
         if(index<3) {
             result=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
             fn_8005B838(p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
@@ -2222,8 +2222,8 @@ extern "C" {
 void fn_8005F8B4(Args_8005F8B4 *p);
 void fn_8005F8F0(void);
 void fn_8005F900(int *pHome);
-int fn_8002568C(void);
-int fn_8002B5B0(void);
+int ChallengeEvaluateBonus(void);
+int GameOutcomeGet(void);
 int fn_800A8F94(void);
 int fn_800A8EA4(int team);
 struct Args_80055540;
@@ -2249,14 +2249,14 @@ void fn_8005BB50(Arg_8018399C *p,int *a,int *b) {fn_8005BA64(p);*a=0;*b=0;}
 int fn_8005BB8C(void) {
     int value=0;
     if(!lbl_803EA5A8) {
-        if(fn_8007984C(fn_800785C0())) {switch(fn_8002B5C8()) {case 0:value=1;break;case 1:value=2;break;case 2:value=3;break;}}
+        if(fn_8007984C(fn_800785C0())) {switch(ChallengeBonusGet()) {case 0:value=1;break;case 1:value=2;break;case 2:value=3;break;}}
     }
     return value;
 }
 void fn_8005BC10(int value) {
-    if(!fn_8005900C()) {int a=fn_80025508();int b=fn_8002568C();fn_8002B5D0(a,b);}
-    else {fn_8002B5D0(0,0);fn_80059020();}
-    int args[2];args[0]=fn_8002B5B0()==0;args[1]=value;
+    if(!fn_8005900C()) {int a=ChallengeEvaluateGoals();int b=ChallengeEvaluateBonus();ChallengeRecordResult(a,b);}
+    else {ChallengeRecordResult(0,0);fn_80059020();}
+    int args[2];args[0]=GameOutcomeGet()==0;args[1]=value;
     fn_80064F58(3,10,-1,2,args,0);
 }
 int fn_8005BCA8(unsigned int id,Arg_8018399C *p,int unused,int *result) {

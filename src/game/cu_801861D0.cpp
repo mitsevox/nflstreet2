@@ -37,7 +37,7 @@ extern "C" {
 void fn_801861D0(int a, unsigned char b)
 {
     lbl_803EB5DA = 0;
-    if (lbl_803EB5D8 == 0 && fn_80028310() == 0) {
+    if (lbl_803EB5D8 == 0 && InGameIsStopped() == 0) {
         fn_80067D4C(0x72, 0);
     } else {
         fn_8006C854(0x78, 0);
@@ -88,7 +88,7 @@ int fn_80186324(unsigned int id, Params_80186324 *pParams, int c, int *pResult)
         lbl_803EB5D9 = pParams->mUnknown0;
         lbl_803EB5DA = 1;
         if (lbl_803EB5D9 == 0) {
-            if (fn_80027DF0() != 0 || fn_8006565C() != 0) {
+            if (FELoopIsMainFEActive() != 0 || fn_8006565C() != 0) {
                 lbl_803EB5D8 = 1;
                 fn_8006C854(0x77, 0);
             } else {

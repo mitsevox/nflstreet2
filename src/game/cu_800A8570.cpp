@@ -147,7 +147,7 @@ int fn_800A8468(int team);
 void fn_800A981C(void);
 void fn_800A9854(void);
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern unsigned char lbl_803EAA84;
 extern unsigned char lbl_803EAA85;
 extern Block_8030F42C lbl_8030F42C;
@@ -186,12 +186,12 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         for (step = 0; step <= 19; step++) {
             fn_800398B4();
             fn_801376B8(1.0f);
-            fn_80039CB0(lbl_803EA2C4);
-            fn_80039D08(lbl_803EA2C4);
-            fn_80039B2C(lbl_803EA2C4);
-            fn_80039A38(lbl_803EA2C4);
-            fn_80137758(lbl_803EA2C4);
-            fn_801377C4(lbl_803EA2C4);
+            fn_80039CB0(gFrameTimeScale);
+            fn_80039D08(gFrameTimeScale);
+            fn_80039B2C(gFrameTimeScale);
+            fn_80039A38(gFrameTimeScale);
+            fn_80137758(gFrameTimeScale);
+            fn_801377C4(gFrameTimeScale);
         }
         if (fn_80156704()) {
             fn_801574DC(1);

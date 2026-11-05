@@ -26,7 +26,7 @@ static int lbl_802D4F5C[21] = {
 
 void fn_80063650(void)
 {
-    fn_80027DF0();
+    FELoopIsMainFEActive();
     lbl_803EA620 = fn_8007F828(6);
 }
 
@@ -61,7 +61,7 @@ void fn_80063730(int id, int flag)
     switch (id) {
     case 5:
         if (flag != 0 && fn_8007F828(9) != 0) {
-            if (fn_80027DF0() != 0) {
+            if (FELoopIsMainFEActive() != 0) {
                 for (i = 0; i < 8; i++) {
                     if (fn_801E195C(fn_801C6458(i, 0)) == 2) {
                         fn_80194C5C(i, 127, 20);

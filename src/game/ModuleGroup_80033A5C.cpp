@@ -45,7 +45,7 @@ const char *AnimData::GetName() { return "AnimData"; }
 int AnimData::Init()
 {
     mData.mp = fn_801EEB44(lbl_802EBDBC, 44);
-    fn_8002894C();
+    InGameIsPlaying();
     return 1;
 }
 
@@ -126,9 +126,9 @@ const char *MemAudit::GetName() { return "MemAudit"; }
 
 int MemAudit::Init()
 {
-    if (fn_8002894C()) {
+    if (InGameIsPlaying()) {
         sLoopName = "GameLoop";
-    } else if (fn_80027DF0()) {
+    } else if (FELoopIsMainFEActive()) {
         sLoopName = "FELoop";
     } else {
         sLoopName = "unknown";
@@ -196,7 +196,7 @@ int ScrmRule::Init()
 {
     fn_800A1A58();
     fn_801779D8();
-    if (!fn_80027DF0()) {
+    if (!FELoopIsMainFEActive()) {
         int csag;
         int cshg;
 

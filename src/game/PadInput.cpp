@@ -1,8 +1,10 @@
+/* Controller input: reads each pad into 34 remapped stick and button values per frame and saves or restores the pad handlers. */
+
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 
-struct PadState_801E17D0;
+struct PerDeviceData;
 
 extern "C" {
 extern char lbl_802EC198[];
@@ -12,7 +14,7 @@ extern char lbl_802EC330[];
 int fn_801C6280(int a, int b, void *p);
 int fn_801C6458(int a, int b);
 int fn_801E15D0(int a);
-int fn_801E17D0(int a, PadState_801E17D0 *pState);
+int fn_801E17D0(int a, PerDeviceData *pState);
 int fn_801E194C(void);
 int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
@@ -23,25 +25,25 @@ float fn_801EC418(int a, int b, char *p);
 int fn_8023790C(void);
 }
 
-static char *lbl_802CC760[4] = {lbl_802EC198, lbl_802EC198, lbl_802EC198, lbl_802EC198};
-static char *lbl_802CC770[4] = {lbl_802EC264, lbl_802EC264, lbl_802EC264, lbl_802EC264};
-static unsigned char lbl_80306564[10];
+static char *_PadInput_apRemapStandard[4] = {lbl_802EC198, lbl_802EC198, lbl_802EC198, lbl_802EC198};
+static char *_PadInput_apRemapType2[4] = {lbl_802EC264, lbl_802EC264, lbl_802EC264, lbl_802EC264};
+static unsigned char _PadInput_abResetSlot[10];
 static char *sPadState = 0;
 static int (*sCallback)();
 
 extern "C" {
 
-float fn_80026BB0(int slot)
+float PadInputGetCallbackAxis(int slot)
 {
     int value = 0;
 
     if (sCallback) {
         value = sCallback();
     }
-    return fn_80027294(value);
+    return PadInputAxisFromFixed(value);
 }
 
-float fn_80026BE8(float x)
+float PadInputSnapAxis(float x)
 {
     float magnitude = x < 0.0f ? -x : x;
 
@@ -80,12 +82,12 @@ static float DequantizeStep(unsigned int step)
     return value;
 }
 
-void fn_80026C5C(InputValues *pDst, InputValues *pSrc)
+void PadInputCopyValues(InputValues *pDst, InputValues *pSrc)
 {
     *pDst = *pSrc;
 }
 
-int fn_80026CC4(int handle)
+int PadInputIsDeviceReady(int handle)
 {
     int ready = 0;
 
@@ -99,24 +101,24 @@ int fn_80026CC4(int handle)
     return 1;
 }
 
-int fn_80026D50(void)
+int PadInputInit(void)
 {
     int i;
 
     sPadState = (char *)fn_801D2B7C(fn_801E194C(), 0, 0);
     for (i = 0; i < 10; i++) {
-        lbl_80306564[i] = 0;
+        _PadInput_abResetSlot[i] = 0;
     }
     return 34;
 }
 
-void fn_80026DA8(void)
+void PadInputShutdown(void)
 {
     fn_801D2BD0(sPadState);
     sPadState = 0;
 }
 
-void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
+void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
 {
     char *pState = sPadState;
     unsigned int i;
@@ -126,28 +128,28 @@ void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
 
     fn_8023790C();
     handle = fn_801C6458(slot, 0);
-    ready = fn_80026CC4(handle);
+    ready = PadInputIsDeviceReady(handle);
     if (ready) {
-        fn_801E17D0(handle, (PadState_801E17D0 *)pState);
+        fn_801E17D0(handle, (PerDeviceData *)pState);
     } else {
         fn_801C1F94(pState, 0, 12);
     }
     if (ready) {
-        if (!lbl_80306564[slot]) {
-            fn_80026C5C(pPrevious, pCurrent);
+        if (!_PadInput_abResetSlot[slot]) {
+            PadInputCopyValues(pPrevious, pCurrent);
         }
         for (i = 0; i <= 22; i++) {
             pCurrent->mValue[i] = fn_801EC418(slot, i, pState + 8);
         }
         for (; i <= 32; i++) {
-            step = (unsigned int)((fn_80026BE8(fn_801EC418(slot, i, pState + 8)) + 1.0001f) * 7.0f);
+            step = (unsigned int)((PadInputSnapAxis(fn_801EC418(slot, i, pState + 8)) + 1.0001f) * 7.0f);
             Dequantize(&pCurrent->mValue[i], step);
         }
-        step = (unsigned int)((fn_80026BB0(slot) + 1.0001f) * 7.0f);
+        step = (unsigned int)((PadInputGetCallbackAxis(slot) + 1.0001f) * 7.0f);
         Dequantize(&pCurrent->mValue[33], step);
-        if (lbl_80306564[slot]) {
-            fn_80026C5C(pPrevious, pCurrent);
-            lbl_80306564[slot] = 0;
+        if (_PadInput_abResetSlot[slot]) {
+            PadInputCopyValues(pPrevious, pCurrent);
+            _PadInput_abResetSlot[slot] = 0;
         }
     } else {
         *pPrevious = *pCurrent;
@@ -155,25 +157,25 @@ void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
     }
 }
 
-void fn_80027114(int slot, int index)
+void PadInputSetupRemap(int slot, int index)
 {
     switch (fn_801E19B4(fn_801C6458(slot, 0)) >> 16) {
     case 2:
-        fn_801EC314(slot, 0, 34, lbl_802CC770[index]);
+        fn_801EC314(slot, 0, 34, _PadInput_apRemapType2[index]);
         break;
     case 1:
     default:
-        fn_801EC314(slot, 0, 34, lbl_802CC760[index]);
+        fn_801EC314(slot, 0, 34, _PadInput_apRemapStandard[index]);
         break;
     }
 }
 
-void fn_800271A4(void)
+void PadInputSetDefaultHandler(void)
 {
     fn_801C6280(-1, 3, lbl_802EC330);
 }
 
-void fn_800271D4(void **pHandlers)
+void PadInputSaveHandlers(void **pHandlers)
 {
     unsigned int i;
 
@@ -183,7 +185,7 @@ void fn_800271D4(void **pHandlers)
     }
 }
 
-void fn_80027230(void **pHandlers)
+void PadInputRestoreHandlers(void **pHandlers)
 {
     unsigned int i;
 
@@ -193,17 +195,17 @@ void fn_80027230(void **pHandlers)
     }
 }
 
-void fn_8002728C(int (*pCallback)())
+void PadInputSetAxisCallback(int (*pCallback)())
 {
     sCallback = pCallback;
 }
 
-float fn_80027294(int value)
+float PadInputAxisFromFixed(int value)
 {
     return (float)((value + 0x7FFFF) & 0xFFFFFF) * (1.0f / 16777216.0f) * 2.0f - 1.0f;
 }
 
-int fn_800272EC(float x)
+int PadInputAxisToFixed(float x)
 {
     if (x < -1.0f) {
         x = -1.0f;
@@ -216,25 +218,25 @@ int fn_800272EC(float x)
     return (int)x & 0xFFFFFF;
 }
 
-void fn_80027358(int slot)
+void PadInputResetSlot(int slot)
 {
     unsigned int i;
 
     if (slot == -1) {
         for (i = 0; i < 10; i++) {
-            lbl_80306564[i] = 1;
+            _PadInput_abResetSlot[i] = 1;
         }
     } else {
-        lbl_80306564[slot] = 1;
+        _PadInput_abResetSlot[slot] = 1;
     }
 }
 
-char *fn_8002739C(void)
+char *PadInputGetDeviceData(void)
 {
     return sPadState;
 }
 
-int fn_800273A4(void)
+int PadInputGetValueCount(void)
 {
     return 34;
 }

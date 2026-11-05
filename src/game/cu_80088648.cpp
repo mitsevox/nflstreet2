@@ -1,7 +1,7 @@
 #include "game/Key_8007A334.h"
 #include "game/Object_8007A334.h"
 #include "game/Record_80088CE0.h"
-#include "game/cu_8002ACB4.h"
+#include "game/PlayerSave.h"
 
 /* State of the stream table lbl_802D6C24: the result word passed to the
    open operation. */
@@ -248,7 +248,7 @@ static int fn_80088E84(unsigned int size)
     return 0;
 }
 
-StreamOps_8002ACB4 lbl_802D6C24 = {
+SaveStreamOps lbl_802D6C24 = {
     fn_80088DB0, fn_80088DF4, fn_80088E7C, fn_80088E2C, 0, fn_80088E84, 4,
 };
 

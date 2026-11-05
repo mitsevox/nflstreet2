@@ -73,8 +73,8 @@ void fn_80063C2C(const char *pSource, int count);
 int fn_80063C7C(int a, char *pText, int length);
 int fn_801C2FE4(char *pText0, char *pText1);
 int fn_801C31B0(char *pText0, char *pText1);
-int fn_80025708(void);
-int fn_80025718(void);
+int ChallengeIsActive(void);
+int ChallengeIsPairingGame(void);
 int fn_8017F60C(void);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
 int fn_8008400C(Object_8007A334 *pObject);
@@ -183,7 +183,7 @@ int fn_8017FF98(void)
 {
     int result = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         Info_80152940 info;
 
         switch (fn_801486A0()) {
@@ -223,7 +223,7 @@ int fn_801800D0(void)
 {
     int result = -1;
 
-    if (fn_80027DF0() != 0) {
+    if (FELoopIsMainFEActive() != 0) {
         Object_8007A334 cursor;
         int searching = 1;
 
@@ -386,7 +386,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
     case 0x21: {
         int value = fn_8007F828(12);
 
-        if (value == 1 && fn_80027DF0() != 0) {
+        if (value == 1 && FELoopIsMainFEActive() != 0) {
             pResult->i = value;
         } else {
             pResult->i = 0;
@@ -394,7 +394,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     }
     case 0x26:
-        if (lbl_803EB544 != 0 || fn_8002892C() != 0 || (lbl_803EB540 != 0 && fn_80062A60() != 0)) {
+        if (lbl_803EB544 != 0 || InGameIsDemo() != 0 || (lbl_803EB540 != 0 && fn_80062A60() != 0)) {
             pResult->i = 1;
         } else {
             pResult->i = 0;
@@ -417,10 +417,10 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = fn_801C31B0(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x104:
-        pResult->i = fn_80025708();
+        pResult->i = ChallengeIsActive();
         break;
     case 0x105:
-        pResult->i = fn_80025718();
+        pResult->i = ChallengeIsPairingGame();
         break;
     case 0xE0:
         pResult->i = fn_8017F60C();
@@ -478,8 +478,8 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = 0xFF;
         break;
     case 0xF5:
-        fn_80028920();
-        fn_80027AD8(0, -1, -1, -2, -2, -2);
+        InGameSetDemo();
+        FELoopConfigureEntry(0, -1, -1, -2, -2, -2);
         break;
     case 0x134:
         pResult->i = fn_8007F828(20) != 0;
@@ -595,7 +595,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     *pStatus = 0;
     *pTeam = fn_80188DF0(-1);
     mode = fn_8017F584();
-    result = fn_80027DF0();
+    result = FELoopIsMainFEActive();
     if (mode == 7) {
         if (result) {
             fn_8007A334(&cursor, 0x4D414554, 0x44494754, 0, 0, 0x54415453);
@@ -695,7 +695,7 @@ int fn_80180EF8(int id)
     Object_8008044C cursor;
     int result = 0;
 
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_8008044C(&cursor, 0, 0x54415453);
     } else {
         fn_8008040C(&cursor, 0);

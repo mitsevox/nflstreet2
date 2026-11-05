@@ -1,3 +1,5 @@
+/* Memory-card streams: the open, close, read and write operations the save code uses to move save data to and from the card, keeping a CRC-32 of the bytes transferred. */
+
 #include <dolphin/os.h>
 extern "C" {
 void *memset(void *pDest, int value, unsigned int size);
@@ -45,7 +47,7 @@ struct CardStreamOps {
 static unsigned int sPollCount = 0;
 
 extern "C" {
-static void fn_80023E08(void)
+static void _CardStreamYield(void)
 {
     if (++sPollCount > 2) {
         OSYieldThread();
@@ -74,7 +76,7 @@ static int CardStreamOpen(CardStream *pStream, int unused, CardStreamTarget *pTa
 
 /* Transfers the bytes left before the end: zeros when writing, discarded when reading. */
 extern "C" {
-static int fn_80023EAC(CardStream *pStream)
+static int _CardStreamFillToEnd(CardStream *pStream)
 {
     int result = 0;
     unsigned int size = pStream->mSize;
@@ -100,7 +102,7 @@ static int fn_80023EAC(CardStream *pStream)
                 break;
             }
             fn_801D6F58();
-            fn_80023E08();
+            _CardStreamYield();
         }
         if (failed) {
             break;
@@ -128,7 +130,7 @@ static int CardStreamClose(CardStream *pStream)
     } else {
         fn_800896EC(&pStream->mpTarget->mChecksum);
         if (pStream->mFillToEnd) {
-            result = fn_80023EAC(pStream);
+            result = _CardStreamFillToEnd(pStream);
         }
     }
     return result;
@@ -151,7 +153,7 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
             break;
         }
         fn_801D6F58();
-        fn_80023E08();
+        _CardStreamYield();
     }
     if (!failed) {
         fn_800896A8(pData, size);
@@ -178,7 +180,7 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
             break;
         }
         fn_801D6F58();
-        fn_80023E08();
+        _CardStreamYield();
     }
     if (!failed) {
         fn_800896A8(pData, size);
@@ -189,12 +191,12 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
 }
 
 extern "C" {
-static int fn_800241D8(unsigned int size)
+static int _CardStreamPrepare(unsigned int size)
 {
     return 0;
 }
 }
 
 CardStreamOps gCardStreamOps = {
-    CardStreamOpen, CardStreamClose, CardStreamRead, CardStreamWrite, 0, fn_800241D8, 16,
+    CardStreamOpen, CardStreamClose, CardStreamRead, CardStreamWrite, 0, _CardStreamPrepare, 16,
 };

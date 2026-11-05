@@ -36,7 +36,7 @@ void fn_801EC048(float *pOut, float *pA, float *pB, float t);
 void fn_80227264(void *pOut, void *pV, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 void fn_8005272C(int handle, Object_80041904 *pObject);
 int fn_800527FC(Object_80041904 *pObject, int a, int mode);
@@ -151,7 +151,7 @@ int fn_800529CC(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         pOwner->mUnknown472->mUnknown12 = pFrom[1];
         pOwner->mUnknown472->mUnknown16 = pFrom[2];
         float time = fn_802270D4(step) / pNode->mUnknown4;
-        float rate = lbl_803EA2C4 * 60.0f;
+        float rate = gFrameTimeScale * 60.0f;
         pData->mUnknown16 = pData->mUnknown12 = (int)(time * rate);
         fn_80227264(step, step, 1.0f / (float)pData->mUnknown12);
         pOwner->mUnknown472->mUnknown48 = step[0];

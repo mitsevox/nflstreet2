@@ -86,8 +86,8 @@ void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                  unsigned int size, const char *pName);
-int fn_80028934(void);
-int fn_8002894C(void);
+int InGameIsPaused(void);
+int InGameIsPlaying(void);
 int fn_8002D060(void *p);
 void fn_8003F66C(void *p);
 void fn_8003F6B0(void *p);
@@ -579,7 +579,7 @@ void fn_80043DD8(void)
 
 void fn_80043F50(void)
 {
-    if (fn_8002D060(lbl_803EA368) || fn_80028934()) {
+    if (fn_8002D060(lbl_803EA368) || InGameIsPaused()) {
         return;
     }
     for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
@@ -757,7 +757,7 @@ Divot *fn_80044580(int type)
 {
     Divot *p = 0;
 
-    if (fn_8002894C() && !fn_8002D060(lbl_803EA368)) {
+    if (InGameIsPlaying() && !fn_8002D060(lbl_803EA368)) {
         if (lbl_803EC790[type] < fn_80044518(type)) {
             int n;
 

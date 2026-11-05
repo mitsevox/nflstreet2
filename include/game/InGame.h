@@ -11,20 +11,20 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    unsigned char fn_8002854C();
+    unsigned char Update();
 };
 
 extern "C" {
-void fn_800282DC(void);
-int fn_80028310(void);
-void fn_8002885C(void);
-void fn_800288B0(void);
-void fn_80028918(int unknown);
-void fn_80028920(void);
-unsigned char fn_8002892C(void);
-int fn_80028934(void);
-int fn_8002894C(void);
-int fn_800289A8(void);
+void InGameStop(void);
+int InGameIsStopped(void);
+void InGamePause(void);
+void InGameResume(void);
+void InGameSetInputPaused(int unknown);
+void InGameSetDemo(void);
+unsigned char InGameIsDemo(void);
+int InGameIsPaused(void);
+int InGameIsPlaying(void);
+int InGameGetFrameCount(void);
 }
 
 extern InGame gInGame;

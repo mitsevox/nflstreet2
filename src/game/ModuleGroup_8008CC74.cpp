@@ -7,8 +7,8 @@
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
-#include "game/Record_802CC680.h"
-#include "game/cu_80026BB0.h"
+#include "game/MemPoolDesc.h"
+#include "game/PadInput.h"
 #include "game/cu_8015D3EC.h"
 #include "engine/periph.h"
 #include "engine/remap.h"
@@ -69,7 +69,7 @@ int fn_801FC9D4(int a, int b, int c, int d, int e);
 void fn_801FCD04(void);
 int fn_8020CFB0(int a);
 int fn_8020D048(void);
-void fn_8020D0CC(Record_802CC680 *pRecord);
+void fn_8020D0CC(MemPoolDesc *pRecord);
 void fn_8020D158(void);
 int fn_80229470(void);
 void fn_80229494(void);
@@ -132,7 +132,7 @@ static void fn_8008CD58()
 
     for (i = 0; i < count; i++) {
         fn_801C6280(i, 0, i);
-        fn_80027114(i, 0);
+        PadInputSetupRemap(i, 0);
         fn_801C6280(i, 4, 1);
     }
 }
@@ -147,9 +147,9 @@ const char *Context::GetName() { return "Context"; }
 
 int Context::Init()
 {
-    fn_801C5E24(10, fn_800273A4());
-    fn_800271A4();
-    fn_801C6280(-1, 2, (int)fn_80026DD4);
+    fn_801C5E24(10, PadInputGetValueCount());
+    PadInputSetDefaultHandler();
+    fn_801C6280(-1, 2, (int)PadInputRead);
     fn_8008CD58();
     return 1;
 }
@@ -188,7 +188,7 @@ const char *Db::GetName() { return "Db"; }
 
 int Db::Init()
 {
-    Record_802CC680 *record = fn_80025E50(2);
+    MemPoolDesc *record = MemPoolGetDesc(2);
     Desc_801F8A0C desc;
 
     fn_8022C930(32);
@@ -286,13 +286,13 @@ const char *Event::GetName() { return "Event"; }
 
 int Event::Init()
 {
-    fn_80026D50();
+    PadInputInit();
     return 1;
 }
 
 int Event::Shutdown()
 {
-    fn_80026DA8();
+    PadInputShutdown();
     return 1;
 }
 
@@ -400,7 +400,7 @@ const char *Remap::GetName() { return "Remap"; }
 
 int Remap::Init()
 {
-    fn_801EC1B4(10, fn_800273A4(), 3);
+    fn_801EC1B4(10, PadInputGetValueCount(), 3);
     return 1;
 }
 

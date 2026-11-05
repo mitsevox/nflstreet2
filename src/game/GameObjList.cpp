@@ -1,3 +1,5 @@
+/* The GameObjList module: creates and frees the game object list. */
+
 #include "game/GameObjList.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -30,7 +32,7 @@ int GameObjList::Shutdown()
     return 1;
 }
 
-int GameObjList::fn_80028BB4()
+int GameObjList::GetListHandle()
 {
     return gGameObjList.mpState.mp->mUnknown0;
 }

@@ -217,10 +217,10 @@ extern unsigned char lbl_803EC9CC[2];
 extern unsigned char lbl_803EC9D0[2];
 extern void *lbl_803EB688;
 
-int fn_80025708(void);
+int ChallengeIsActive(void);
 struct Object_800785C0;
 Object_800785C0 *fn_800785C0(void);
-int fn_800254E8(Object_800785C0 *, int, int *);
+int ChallengeHasGoalType(Object_800785C0 *, int, int *);
 void fn_800A20D0(int, signed char);
 float fn_800A32B4(void);
 void fn_800A72B4(void);
@@ -901,9 +901,9 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         }
     }
     fn_800D2F9C(0, fn_800D2EB0(0)); fn_800D2F9C(1, fn_800D2EB0(1));
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         Object_800785C0 *object = fn_800785C0();
-        if (fn_800254E8(object, 20, 0) || fn_800254E8(object, 31, 0)) flag = 1;
+        if (ChallengeHasGoalType(object, 20, 0) || ChallengeHasGoalType(object, 31, 0)) flag = 1;
     }
     if ((lbl_803EACD4->mUnknown1F13 == 0 || flag) && fn_800A8740() == 0) { fn_800A72B4(); fn_800A7B5C(); }
     fn_800D1634(0, lbl_803EACD4->mUnknown1A70, 0, 1); fn_800D1634(1, lbl_803EACD4->mUnknown1A74, 0, 1);
@@ -1118,7 +1118,7 @@ extern "C" void fn_800D3294(int team, unsigned int value) {
     } else {
         percent = value * 100 / limit;
     }
-    if (fn_80025708() == 0 && fn_801486A0() != 5) {
+    if (ChallengeIsActive() == 0 && fn_801486A0() != 5) {
         if (fn_800A84C8() != 0 && fn_800A8444((unsigned char)team) != 0) {
             fn_800D1D84(team, 107, percent);
         } else {
@@ -1487,7 +1487,7 @@ extern "C" void fn_800D421C(int side, int value) {
     }
     if (lbl_803EACD8 == 2 && fn_801788D8(&limit) == 1 && value >= limit) {
         lbl_803EACD8 = side;
-        if (fn_80025708() == 0) {
+        if (ChallengeIsActive() == 0) {
             fn_80067DB8(94, 0, lbl_803EACD8, 0, 0);
             fn_80178370();
         }

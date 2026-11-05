@@ -52,7 +52,7 @@ int fn_800D9B0C(Object_80039F5C *, int, int);
 int fn_800D9A10(void *, Block_801BE60C *, Object_80039F5C *, Object_80039F5C *, int);
 int fn_800D9C40(Object_80039F5C *);
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 int fn_80178308(void);
 int fn_800D91E0(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
@@ -430,7 +430,7 @@ int fn_800DA7AC(Object_801BBD5C *pObject, float value)
 {
     int index = 0;
     while (index < (int)(pObject->mCount - 2)) {
-        float end = pObject->mValues[index + 1].mValue * lbl_803EA2C4;
+        float end = pObject->mValues[index + 1].mValue * gFrameTimeScale;
         if (!(fabsf(end) >= 0.000001f)) end = 0.0f;
         if (!(end <= value)) break;
         index++;
@@ -474,8 +474,8 @@ void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F
 float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
                   float value)
 {
-    float start = pObject->mUnknown24[index].mUnknown4 * lbl_803EA2C4;
-    float ratio = (value - start) / (pObject->mUnknown24[index + 1].mUnknown4 * lbl_803EA2C4 - start);
+    float start = pObject->mUnknown24[index].mUnknown4 * gFrameTimeScale;
+    float ratio = (value - start) / (pObject->mUnknown24[index + 1].mUnknown4 * gFrameTimeScale - start);
     float t = ratio < 0.0f ? 0.0f : (ratio > 1.0f ? 1.0f : ratio);
 
     pObject->mUnknown24[index + 1].mUnknown0 = fabsf(pObject->mUnknown24[index + 1].mUnknown0);

@@ -13,8 +13,8 @@ struct Layout_802F4598 {
 };
 
 extern "C" {
-int fn_8002B70C(void);
-void fn_8002B714(int value);
+int TeamFilterGet(void);
+void TeamFilterSet(int value);
 void fn_80022398(void);
 void fn_800223C0(void);
 void fn_800223E4(int index, float x, float y, float z);
@@ -326,7 +326,7 @@ int fn_8001DCFC(void)
         if (lbl_803ECE88 != 0) {
             id = lbl_803ECE80;
         } else {
-            id = fn_8002B70C();
+            id = TeamFilterGet();
         }
         lbl_803ECE74 = &lbl_8036B2B0;
     }
@@ -370,7 +370,7 @@ unsigned char fn_8001DD9C(void)
 
         lbl_803ECE88 = 0;
         lbl_803ECE78 = fn_8018D890(lbl_803ECE7C, 0);
-        desc.mUnknown8 = fn_8002B70C();
+        desc.mUnknown8 = TeamFilterGet();
         desc.mUnknown4 = 1;
         desc.mUnknown0 = 2;
         fn_8008044C(&lbl_8036B2B0, &desc, 0x54415453);
@@ -482,7 +482,7 @@ void fn_8001E204(void)
         fn_8018D8EC(lbl_803ECE7C, lbl_803ECE78);
         fn_8018C48C(0x54415453);
     }
-    fn_8002B714(1023);
+    TeamFilterSet(1023);
     lbl_803EBA68 = 0;
 }
 

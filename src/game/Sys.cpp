@@ -1,10 +1,10 @@
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemPoolDesc.h"
 
 /* Argument of fn_801D2054. */
 struct Object_801D2054 {
     char mLogName[64];
-    Record_802CC680 *mpArena;
+    MemPoolDesc *mpArena;
 };
 
 /* Argument of fn_801F7824. */
@@ -20,11 +20,11 @@ extern "C" {
 int fn_80185274(void);
 int fn_801C6584(void);
 int fn_801C65E4(void);
-void fn_80025E00(void);
-void fn_80025E28(void);
+void ArenaSetupInit(void);
+void ArenaSetupShutdown(void);
 int fn_801D2054(Object_801D2054 *pConfig);
 int fn_801D20C8(void);
-int fn_801D2130(Record_802CC680 *pArena);
+int fn_801D2130(MemPoolDesc *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
 int fn_801D3B0C(int id, int a, int base, int size, int b, int c);
@@ -52,24 +52,24 @@ const char *Sys::GetName() { return "Sys"; }
 
 int Sys::Init()
 {
-    Record_802CC680 *pDb;
-    Record_802CC680 *pDebug;
-    Record_802CC680 *pAuxRam;
+    MemPoolDesc *pDb;
+    MemPoolDesc *pDebug;
+    MemPoolDesc *pAuxRam;
 
     fn_801C6584();
-    fn_80025E00();
-    sMemoryConfig.mpArena = fn_80025E50(1);
+    ArenaSetupInit();
+    sMemoryConfig.mpArena = MemPoolGetDesc(1);
     fn_801D2054(&sMemoryConfig);
-    fn_801D2130(fn_80025E50(0x20));
-    fn_801D2130(fn_80025E50(0x100));
-    pDb = fn_80025E50(2);
+    fn_801D2130(MemPoolGetDesc(0x20));
+    fn_801D2130(MemPoolGetDesc(0x100));
+    pDb = MemPoolGetDesc(2);
     fn_80245514(pDb->mUnknownC, pDb->mUnknown10);
-    fn_801D2130(fn_80025E50(2));
-    pDebug = fn_80025E50(8);
+    fn_801D2130(MemPoolGetDesc(2));
+    pDebug = MemPoolGetDesc(8);
     if (pDebug->mUnknown10 != 0) {
         fn_801D2130(pDebug);
     }
-    pAuxRam = fn_80025E50(0x10);
+    pAuxRam = MemPoolGetDesc(0x10);
     fn_801D3B0C(0x10, 1, pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);
     fn_801D277C(1);
     Object_801F7824 desc(1, 0, 1);
@@ -82,13 +82,13 @@ int Sys::Init()
 int Sys::Shutdown()
 {
     fn_801F79C0();
-    if (fn_80025E50(8)->mUnknown10 != 0) {
+    if (MemPoolGetDesc(8)->mUnknown10 != 0) {
         fn_801D2570(8);
     }
     fn_801D2570(2);
     fn_801D2570(0x20);
     fn_801D20C8();
-    fn_80025E28();
+    ArenaSetupShutdown();
     fn_801C65E4();
     return 1;
 }

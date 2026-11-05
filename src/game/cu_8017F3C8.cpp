@@ -29,7 +29,7 @@ void fn_8017F3C8(int a, int b, int c)
     lbl_803EB4B8 = -1;
     lbl_803ECB44 = a;
     fn_800655B8();
-    fn_80028918(1);
+    InGameSetInputPaused(1);
     fn_8018A798(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
 }
 
@@ -44,7 +44,7 @@ void fn_8017F444(void)
     fn_8018A7A0();
     lbl_803ECB40 = 0;
     if (lbl_803ECB44 != 0xFFFF) {
-        fn_80028918(0);
+        InGameSetInputPaused(0);
         fn_800655D0();
     }
 }

@@ -157,7 +157,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
     Object_80039F5C *p=(Object_80039F5C *)object;
     Object_80041904 *placed=(Object_80041904 *)object;
     int mode=0;
-    if(!fn_80027DF0() && object==fn_800400C4(fn_8013825C(fn_801374BC()))) return 1;
+    if(!FELoopIsMainFEActive() && object==fn_800400C4(fn_8013825C(fn_801374BC()))) return 1;
     void *collection;
     if(event>=0xD000 && event<=0xD005) collection=placed->mUnknown428->mUnknown1300;
     else collection=p->mpUnknown792;

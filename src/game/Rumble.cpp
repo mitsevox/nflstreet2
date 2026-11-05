@@ -16,7 +16,7 @@ const char *Rumble::GetName() { return "Rumble"; }
 
 int Rumble::Init()
 {
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_80194D70();
     } else {
         fn_80194D20();

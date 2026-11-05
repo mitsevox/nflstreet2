@@ -169,7 +169,7 @@ int fn_801CFFD0(int a, int b);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern unsigned char lbl_803EAF50;
 extern unsigned char lbl_803EAF51;
 extern float lbl_803ECB08;
@@ -491,11 +491,11 @@ extern "C" int fn_801102A4(Object_80039F5C *p)
 
         ahead.mX = pOther->mMotion.mPos.mX;
         ahead.mY = pOther->mMotion.mPos.mY;
-        fn_8022732C(&ahead, &pOther->mMotion.mUnknown40, 15.0f / lbl_803EA2C4);
+        fn_8022732C(&ahead, &pOther->mMotion.mUnknown40, 15.0f / gFrameTimeScale);
         fn_80227690(&ahead, &ahead, &pMotion->mPos);
         distance = fn_802270A4(&ahead);
         if (!(pOther->mFlags & 0x800)) {
-            if (distance < pOther->mMotion.mUnknown28 * (45.0f / lbl_803EA2C4)) {
+            if (distance < pOther->mMotion.mUnknown28 * (45.0f / gFrameTimeScale)) {
                 Point_8017886C delta;
                 int heading = fn_801CFE40(pOther->mMotion.mUnknown44, pOther->mMotion.mUnknown40);
 

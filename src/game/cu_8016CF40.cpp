@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 void fn_800B26B0(Object_800B26B0 *pObject);
 void fn_800B26E0(Object_800B26B0 *pObject);
@@ -37,14 +37,14 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 
 static unsigned short lbl_803EB428 = 30;
 
-float lbl_803ECB04 = 40.0f / (210.0f / lbl_803EA2C4);
+float lbl_803ECB04 = 40.0f / (210.0f / gFrameTimeScale);
 float lbl_803ECB08 = lbl_803ECB04;
 float lbl_803ECB0C = lbl_803ECB04;
 float lbl_803ECB10 = lbl_803ECB04;
 static float lbl_803ECB14 = lbl_803ECB04 * 0.15f;
-static float lbl_803ECB18 = lbl_803EA2C4 * 0.0125f;
-static float lbl_803ECB1C = lbl_803EA2C4 * 0.009f;
-static float lbl_803ECB20 = lbl_803EA2C4 * 0.0036f;
+static float lbl_803ECB18 = gFrameTimeScale * 0.0125f;
+static float lbl_803ECB1C = gFrameTimeScale * 0.009f;
+static float lbl_803ECB20 = gFrameTimeScale * 0.0036f;
 
 static void (*const lbl_802A4E08[])(Object_80039F5C *) = {
     fn_8016CEEC, fn_8016C3FC, fn_8016C434, fn_8016C70C, fn_8016CA50, fn_8016BE10,

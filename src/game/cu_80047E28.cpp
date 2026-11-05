@@ -618,7 +618,7 @@ extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
 
 extern "C" void fn_80048EDC(void)
 {
-    fn_8008044C(&lbl_80307720, 0, fn_80027DF0() ? 0x54415453 : 0x454D4147);
+    fn_8008044C(&lbl_80307720, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     fn_80081CDC();
     fn_8007BA48(&lbl_8030774C);
 }
@@ -810,7 +810,7 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
 {
     int flag = 1;
 
-    if (fn_80027DF0() && fn_8001E4F4() && fn_8005FC7C()) {
+    if (FELoopIsMainFEActive() && fn_8001E4F4() && fn_8005FC7C()) {
         Object_8007A334 cursor;
 
         fn_8007A334(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
@@ -818,7 +818,7 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
         fn_8007A3C4(&cursor);
-    } else if ((fn_80027DF0() && (fn_801835A0() || fn_800624B0())) || !fn_801486A0()) {
+    } else if ((FELoopIsMainFEActive() && (fn_801835A0() || fn_800624B0())) || !fn_801486A0()) {
         flag = 1;
     } else if (fn_8007CB6C(2) == 0) {
         flag = mode <= 6;

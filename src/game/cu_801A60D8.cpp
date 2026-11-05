@@ -132,9 +132,9 @@ void fn_801A6730(void)
     desc.mUnknown8 = 1;
     fn_8021EA34(1, fn_8021DEFC(&desc));
     fn_801A60D8();
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_801A6180();
-    } else if (fn_8002894C()) {
+    } else if (InGameIsPlaying()) {
         fn_801A63E8();
     }
 }

@@ -1,5 +1,5 @@
 #include "game/Object_8007A334.h"
-#include "game/cu_8002ACB4.h"
+#include "game/PlayerSave.h"
 #include "game/fn_800624B0.h"
 #include "game/fn_8018BE68.h"
 #include "game/fn_801D2B7C.h"
@@ -103,7 +103,7 @@ void fn_80062000(void)
 void fn_8006204C(void)
 {
     fn_80185264(1);
-    fn_8002ADE0(lbl_803EC7FC, lbl_803EC7F8);
+    PlayerSavePrepare(lbl_803EC7FC, lbl_803EC7F8);
 }
 
 void fn_80062080(int enable)
@@ -169,7 +169,7 @@ void fn_80062160(int *pId)
 void fn_80062308(void)
 {
     if (lbl_803EA600) {
-        fn_8002ADAC();
+        PlayerSaveFree();
         fn_800223C0();
         if (fn_80183950() == 0) {
             fn_8018C48C(0x54415453);

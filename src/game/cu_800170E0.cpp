@@ -1323,7 +1323,7 @@ void fn_80019AD4(void)
                 }
             }
         }
-        fn_80027E18(1);
+        FELoopSetResume(1);
     } else if (fn_801801B4() == 0) {
         fn_8018C48C(0x54415453);
         fn_8018C48C(0x454D4147);

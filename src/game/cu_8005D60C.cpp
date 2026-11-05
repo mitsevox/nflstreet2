@@ -999,7 +999,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
     lbl_803EA5C8 = 0;
     lbl_803EA5B8 = 1;
     lbl_803EA5D4 = fn_8005F754();
-    fn_80027EA0();
+    FELoopResetIdle();
 }
 
 void fn_8005F13C(int state, int screen)
@@ -1009,7 +1009,7 @@ void fn_8005F13C(int state, int screen)
         if (fn_801801B4() == 0) {
             fn_8005D818();
         } else if (fn_801801B4() == 1 && lbl_803EA5C8) {
-            fn_80027E18(1);
+            FELoopSetResume(1);
             fn_8005E4A8();
         }
         fn_8005D60C();
@@ -1064,7 +1064,7 @@ void fn_8005F29C(void)
         }
     }
     fn_8005F24C(dive, 0);
-    fn_80027E18(1);
+    FELoopSetResume(1);
     fn_8005E4A8();
     fn_8005D60C();
 }

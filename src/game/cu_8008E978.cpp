@@ -102,7 +102,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
@@ -193,7 +193,7 @@ int fn_80094374(int index);
 Object_80039F5C *fn_8003AD2C(int id);
 int fn_801485D4(void);
 int fn_80178AE0(void);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 int fn_80177F7C(void);
 void fn_80093410(int handle);
 void fn_80094BC4(Entry_80094BC4 *p);
@@ -274,7 +274,7 @@ extern Record_80093E4C lbl_802D7808[];
 extern int lbl_802D7974[5][5];
 extern Vector_80039F5C lbl_8030C0B4[];
 extern Params_80092E54 lbl_8030C184;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 /* -1-terminated roster slot lists fn_80095370 picks by position code. */
 extern int lbl_803EA8E0[2];
 extern int lbl_803EA8E8[2];
@@ -640,7 +640,7 @@ extern "C" Actor_801C009C *fn_80091240(int index)
     return fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 }
 
-extern "C" int fn_80027DF0(void);
+extern "C" int FELoopIsMainFEActive(void);
 extern "C" void fn_80162780(int a, int b);
 extern "C" void fn_8013F97C(int a);
 extern "C" void fn_8013FB44(void);
@@ -658,7 +658,7 @@ extern "C" void fn_8009126C(int index)
         pCharacter->mUnknownDC[0] = 0;
     }
     selected = pCharacter->mUnknownE0.mUnknown0;
-    if (fn_80027DF0() == 0 && selected != 0) {
+    if (FELoopIsMainFEActive() == 0 && selected != 0) {
         Object_80039F5C *p;
         Camera_8013F738 *pCamera;
         int ref;
@@ -869,7 +869,7 @@ extern "C" int fn_80091D34(void)
 {
     unsigned char result = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         switch (fn_800AD9B4()) {
         case 4:
             result = fn_800B9B18(lbl_803EAB84) != 0;
@@ -1531,7 +1531,7 @@ extern "C" int fn_800944A4(int kind)
 {
     int result = 1;
 
-    if ((fn_801485D4() != 0 && fn_80148A58()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || fn_80025708() != 0) {
+    if ((fn_801485D4() != 0 && fn_80148A58()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || ChallengeIsActive() != 0) {
         result = 0;
     } else if (kind != 14) {
         if ((kind == 1 && fn_80177F7C() != 4) || lbl_802D79D8[kind] == 0) {
@@ -2341,7 +2341,7 @@ extern "C" int fn_8009637C(int index)
     int result = 1;
 
     fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
-    if (pCharacter->mUnknownE0.mUnknown0 == 0 && fn_80027DF0() == 0 && fn_800AD9B4() == 4) {
+    if (pCharacter->mUnknownE0.mUnknown0 == 0 && FELoopIsMainFEActive() == 0 && fn_800AD9B4() == 4) {
         result = fn_8009B9BC() == 0;
     }
     return result;
@@ -2571,7 +2571,7 @@ extern "C" int fn_80096B1C(int index)
         if (fn_80096794() != 0 || fn_8009679C(index) == 0) {
             pPlayback->mUnknown10 = 3;
         } else {
-            float step = lbl_803EA2C4;
+            float step = gFrameTimeScale;
 
             pPlayback->mUnknown24 += step;
             break;
@@ -4903,7 +4903,7 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     }
     if (result) {
         fn_8002C9A8(lbl_803EA368, 3, 0);
-        if (fn_8002892C() == 0) {
+        if (InGameIsDemo() == 0) {
             fn_801E15D0(fn_801C6458(lbl_803EA990, 0));
         }
         if (fn_801E195C(fn_801C6458(lbl_803EA990, 0)) == 2) {
@@ -5025,7 +5025,7 @@ extern "C" int fn_8009B4C8(int)
             }
         }
     }
-    if (fn_80025708() && result == 0) {
+    if (ChallengeIsActive() && result == 0) {
         fn_8009D944(4);
     }
     return result;
@@ -5170,7 +5170,7 @@ extern "C" void fn_8009BA10(int value)
     args[1] = value;
     args[3] = (int)&lbl_8030E6D0;
     lbl_8030E6D0.mLength = fn_801C3180(lbl_803EA994);
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
     lbl_803EA99B = value;
@@ -5211,7 +5211,7 @@ extern "C" void fn_8009BBD8(int value)
 {
     if (fn_8009B448(value, 1)) {
         lbl_803EA984[1]->mUnknown4.mUnknown127 = 1;
-        if (fn_80025708()) {
+        if (ChallengeIsActive()) {
             fn_8009D924(4);
         }
     } else {
@@ -7897,7 +7897,7 @@ void Class_80297B50::vfn_03()
     lbl_803EAB28 = -1;
     fn_8009D888(3, vfn_06());
     fn_8009D924(3);
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_8009D924(4);
     }
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && fn_8019623C(0x23000) != 0) {
@@ -8141,7 +8141,7 @@ void Class_80297B50::vfn_05()
 {
     fn_8009D944(1);
     fn_8009D944(0);
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_8009D944(4);
     }
     if (lbl_803EAB34->mUnknown42 == 1) {
@@ -9566,7 +9566,7 @@ void fn_800940F0(int handle);
 void fn_80093348(int handle);
 void fn_8013FB44(void);
 int fn_800737B8(void);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8017DC08(void);
 int fn_80059004(void);
 void fn_80059014(void);
@@ -9838,7 +9838,7 @@ extern Table_800AA80C *lbl_803EAAA0;
 
 extern "C" void fn_800AA720(Class_80297B90 *p)
 {
-    if (fn_80025708() == 1 || p->vfn_11() != 0
+    if (ChallengeIsActive() == 1 || p->vfn_11() != 0
         || (fn_80178AE0() == 2 && fn_801787DC(0) == fn_801787DC(1))) {
         lbl_803EAA88->mUnknown4 = 3;
     } else {
@@ -9994,7 +9994,7 @@ extern Class_80297B90 lbl_803EC904;
 
 void Class_80297B90::vfn_06()
 {
-    if (fn_80025708() == 0) {
+    if (ChallengeIsActive() == 0) {
         fn_800731D0(0);
         fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
         fn_8021D7B8(lbl_803EB688, 0x80000035, 0, 0);
@@ -10003,7 +10003,7 @@ void Class_80297B90::vfn_06()
 
 void Class_80297B90::vfn_07()
 {
-    if (fn_80025708() == 0) {
+    if (ChallengeIsActive() == 0) {
         fn_8006C854(119, 0);
         fn_8021D7B8(lbl_803EB688, 0x80000034, 0, 0);
         fn_8021956C(lbl_803EB688, 3, 5, 1);
@@ -10022,7 +10022,7 @@ void Class_80297B90::vfn_09()
 
 int Class_80297B90::vfn_10()
 {
-    return fn_80025708();
+    return ChallengeIsActive();
 }
 
 int Class_80297B90::vfn_11()
@@ -10063,7 +10063,7 @@ void Class_80297B90::vfn_03()
     fn_80067D4C(131, 0);
     fn_8002C9A8(lbl_803EA368, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
-    lbl_803EAA88->mUnknown15 = fn_8002892C();
+    lbl_803EAA88->mUnknown15 = InGameIsDemo();
     lbl_803EAA88->mUnknown16 = lbl_803EAA88->mUnknownC = lbl_803EAA88->mUnknown8 = -1;
     lbl_803EAA88->mUnknown17 = 0;
     fn_800AA720(this);
@@ -10145,7 +10145,7 @@ extern "C" int fn_800AAF38(void *p, float dt)
 
 extern "C" int fn_800AAFEC(void *p, float dt)
 {
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         lbl_803EAA88->mUnknown4 = 16;
         fn_8017DC08();
         if (fn_80059004() != 0) {
@@ -10259,7 +10259,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 extern "C" {
 void fn_8004730C(unsigned char enabled);
 void fn_80072C90(unsigned int delay, int wait);
-void fn_800282DC(void);
+void InGameStop(void);
 VetsRow_8018EC68 *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
 int fn_80157080(void);
@@ -10304,11 +10304,11 @@ void Class_80297B90::vfn_04(float dt)
         lbl_803EAA88->mUnknown4 = 4;
     case 4:
         fn_8006CAEC();
-        if (fn_8002892C() != 0) {
+        if (InGameIsDemo() != 0) {
             fn_80047874(0);
             fn_8004730C(0);
             fn_80072C90(250, 1);
-            fn_800282DC();
+            InGameStop();
             break;
         }
         vfn_07();
@@ -10432,7 +10432,7 @@ void Class_80297B90::vfn_04(float dt)
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 fn_8004A230(0);
             }
-            fn_800282DC();
+            InGameStop();
             break;
         }
         fn_8004A230(1);
@@ -10446,7 +10446,7 @@ void Class_80297B90::vfn_04(float dt)
             fn_801CE720();
             fn_801CE774();
             fn_80072C90(250, 1);
-            fn_800282DC();
+            InGameStop();
         }
         break;
     }
@@ -10551,7 +10551,7 @@ extern "C" void fn_800ABD80(void)
 
 extern "C" unsigned int fn_800ABDA4(int team)
 {
-    if (fn_8002892C() != 0) {
+    if (InGameIsDemo() != 0) {
         return 1;
     }
     if (fn_800B65A0(team) != 255) {
@@ -10816,7 +10816,7 @@ extern "C" void fn_800AD3A8(float dt)
             fn_801C60BC(i);
         }
     }
-    fn_8002B270();
+    VptManagerRestoreCamera();
     fn_800BA574();
 }
 
@@ -11283,7 +11283,7 @@ extern "C" void fn_800AE138(unsigned int index)
 {
     int side = -1;
 
-    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
         return;
     }
     switch (lbl_802D82E0[index].mUnknown10) {
@@ -11401,12 +11401,12 @@ extern "C" void fn_800AE380(void)
     if (fn_80178AE0() != 2) {
         lbl_803EAAE8 = 0;
     }
-    if (fn_80025708() != 0
+    if (ChallengeIsActive() != 0
         && (fn_80059004() != 0
-            || (fn_80025708() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
+            || (ChallengeIsActive() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
         lbl_803EAAE8 = 0;
     }
-    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
         lbl_803EAAE8 = 0;
     }
     if (lbl_803EAAEC == 3) {
@@ -12780,10 +12780,10 @@ void fn_8017C25C(int value);
 int fn_80178C24(void);
 int fn_8009D9A8(int index);
 int fn_8009D86C(void);
-int fn_80025640(int *pResult);
-int fn_80025718(void);
+int ChallengeIsDecided(int *pResult);
+int ChallengeIsPairingGame(void);
 int fn_8005900C(void);
-void fn_8002B5D0(int a, int b);
+void ChallengeRecordResult(int a, int b);
 int fn_800B9A90(Class_80297C60 *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
@@ -12905,7 +12905,7 @@ extern "C" int fn_8009D558(unsigned int time)
     if (lbl_803EA9A8->mEntries[5].mUnknown0 == 1) {
         fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         int mode = fn_800AD9B4();
 
         if (lbl_803EA9A8->mEntries[4].mUnknown0 == 1) {
@@ -12920,10 +12920,10 @@ extern "C" int fn_8009D558(unsigned int time)
             }
         }
         if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && fn_801735C8(0x10) == 0
-            && fn_80025640(0) != 0) {
+            && ChallengeIsDecided(0) != 0) {
             flags |= 1;
         }
-    } else if (fn_80025718() != 0) {
+    } else if (ChallengeIsPairingGame() != 0) {
         int done = fn_8005900C();
         int value;
 
@@ -12937,9 +12937,9 @@ extern "C" int fn_8009D558(unsigned int time)
             }
         }
         value = 0;
-        if (done != 0 || fn_80025640(&value) != 0) {
+        if (done != 0 || ChallengeIsDecided(&value) != 0) {
             flags |= 1;
-            fn_8002B5D0(value, 7);
+            ChallengeRecordResult(value, 7);
         }
     }
     if (fn_8009D86C() == 5 && fn_801787DC(0) != fn_801787DC(1)) {
@@ -13629,8 +13629,8 @@ void Class_80297AB8::vfn_02()
 void Class_80297AB8::vfn_05()
 {
     fn_80148154();
-    fn_80027230(lbl_803EA9E8);
-    fn_80027358(-1);
+    PadInputRestoreHandlers(lbl_803EA9E8);
+    PadInputResetSlot(-1);
     fn_800A61A8();
 }
 
@@ -15634,7 +15634,7 @@ extern "C" int fn_800B898C(void *p, void *q)
 }
 
 extern "C" {
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003A450(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
@@ -15666,7 +15666,7 @@ int Class_80297C60::vfn_13(int busy)
 
     if ((lbl_803EAB78->mSequence.mUnknown100 == 0 || lbl_803EAB78->mUnknown148 != 0) && busy == 0
         && fn_8002D060(lbl_803EA368) == 0) {
-        if (fn_80025708() == 0 || lbl_803EAB78->mUnknown148 == 0) {
+        if (ChallengeIsActive() == 0 || lbl_803EAB78->mUnknown148 == 0) {
             result = 1;
             if (fn_800AE978() != 0 || fn_800AE980() != 0 || fn_8009B9A8(1) != 0 || fn_8009B9A8(0) != 0
                 || fn_8013F9F8() == 3) {
@@ -15703,7 +15703,7 @@ void Class_80297C60::vfn_14(float dt)
         }
         if (lbl_803EAB78->mUnknown159[0] == 0) {
             fn_801783D0(0x15, 0);
-            if (fn_80025708() == 0 || fn_8009D990(4) != 0) {
+            if (ChallengeIsActive() == 0 || fn_8009D990(4) != 0) {
                 fn_800AD910(5, dt);
             }
         } else {
@@ -15729,7 +15729,7 @@ extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
         if (lbl_803EA368->mUnknownD90 != 0) {
-            if (fn_800A2160() == 0 || fn_8002892C() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
+            if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
                 || fn_8002E950(0) == 0) {
                 return;
             }
@@ -15839,7 +15839,7 @@ void Class_80297C60::vfn_04(float dt)
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
     }
-    if (fn_80025708() != 0 && fn_8009D990(4) == 0) {
+    if (ChallengeIsActive() != 0 && fn_8009D990(4) == 0) {
         vfn_15();
     }
     if (lbl_803EAB78->mUnknown14C != 0) {
@@ -15998,7 +15998,7 @@ int fn_800A9648(void);
 void fn_800BD35C(void);
 void fn_8003A3F4(int a, int index);
 int fn_80156704(void);
-int fn_80025ACC(void);
+int ChallengeHasRecordFlag(void);
 void fn_800AE904(int a);
 int fn_800AE980(void);
 void fn_8017CBFC(int a);
@@ -16188,7 +16188,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         fn_801C6280(index, 3, lbl_802ECD44);
         fn_8017DDDC(team);
         if (team == away) {
-            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            lbl_803EABA8->mUnknownAC = InGameGetFrameCount();
             lbl_803EABA8->mUnknownAB = 1;
         }
     }
@@ -16641,7 +16641,7 @@ extern "C" int fn_800BF824(void)
     int result = 0;
 
     if (lbl_803EABA8->mUnknownB8 > 30) {
-        if (fn_80156704() == 0 && fn_801485D4() == 0 && fn_80025ACC() != 0) {
+        if (fn_80156704() == 0 && fn_801485D4() == 0 && ChallengeHasRecordFlag() != 0) {
             fn_800AE904(3);
         }
         lbl_803EABA8->mUnknownB8 = -1;
@@ -16704,7 +16704,7 @@ extern "C" void fn_800BF9DC(Class_80297CE8 *p)
         }
         lbl_803EABA8->mUnknownB4 = -1;
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         if (fn_800785C0()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
             fn_800A7514(0);
         }
@@ -16861,7 +16861,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
         } else {
             lbl_803EABA8->mSlots[team].mUnknown0 = 2;
             fn_801C6280(a, 3, lbl_802ECD44);
-            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            lbl_803EABA8->mUnknownAC = InGameGetFrameCount();
             lbl_803EABA8->mUnknownAB = 1;
         }
     }
@@ -16870,7 +16870,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
 extern "C" int fn_800C05F4(void)
 {
     if (lbl_803EABA8->mUnknownAB != 0) {
-        if (fn_800289A8() >= lbl_803EABA8->mUnknownAC + 15) {
+        if (InGameGetFrameCount() >= lbl_803EABA8->mUnknownAC + 15) {
             lbl_803EABA8->mUnknownAC = 0;
             lbl_803EABA8->mUnknownAB = 0;
             return 0;
@@ -17193,7 +17193,7 @@ extern "C" void fn_800C3610(float value)
 {
     if (lbl_803EABD4 != 0) {
         lbl_803EABD4 = 0;
-        fn_8002885C();
+        InGamePause();
     } else {
         while (fn_8017D064(7) != 0) {
             fn_8017CFB4(7);
@@ -17392,7 +17392,7 @@ void Class_80297BF8::vfn_10(float dt)
 {
     int state;
 
-    if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && fn_8002892C() == 0 &&
+    if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
         fn_8017F60C() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
         (state = fn_8007F828(14)) == 1) {
         vfn_07();
@@ -18599,7 +18599,7 @@ void Class_80297AB8::vfn_03()
     fn_80194F1C(1);
     fn_800CC448();
     fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
-    fn_800271D4(lbl_803EA9E8);
+    PadInputSaveHandlers(lbl_803EA9E8);
     fn_801C6280(-1, 3, lbl_802EC880);
     fn_8006F0C8(127);
     fn_80074DF8(0);
@@ -18661,7 +18661,7 @@ extern "C" void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1,
         }
     }
 }
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 DefPred gDefPred;
 
@@ -18672,16 +18672,16 @@ Class_80297C60 lbl_803EC90C;
 Class_80297BF8 lbl_803EC910;
 Class_80297CE8 lbl_803EC914;
 
-float lbl_803EC918 = 100.0f / lbl_803EA2C4;
+float lbl_803EC918 = 100.0f / gFrameTimeScale;
 
 unsigned int lbl_8030C084[12] = {
-    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    (unsigned int)(gFrameTimeScale * 5416666.5f),
     200000000,
     150000000,
     150000000,
     100000000,
     100000000,
-    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    (unsigned int)(gFrameTimeScale * 5416666.5f),
     0,
     100000000,
     200000000,

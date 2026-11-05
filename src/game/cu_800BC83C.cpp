@@ -61,9 +61,9 @@ struct Block_800BC538 {
 };
 
 extern "C" {
-unsigned char fn_8002892C(void);
+unsigned char InGameIsDemo(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003A3F4(int a, int index);
 void fn_8003E174(int a);
 void fn_8004A230(unsigned char value);
@@ -195,7 +195,7 @@ void Class_80297BF8::vfn_09(float dt)
 
 void Class_80297BF8::vfn_05()
 {
-    if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
+    if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || fn_8017F60C() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
         vfn_07();
     }
@@ -204,7 +204,7 @@ void Class_80297BF8::vfn_05()
     fn_8013F9B8();
     fn_800CC560(0);
     fn_8010A220();
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         Point_8017886C pos = {0.0f, 0.0f};
         int spot = fn_800785C0()->mUnknown1C0;
 
@@ -262,7 +262,7 @@ void Class_80297BF8::vfn_05()
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
     fn_8017DBCC();
-    if (fn_800C1E40() == 0 && fn_80025708() == 0 && fn_8019623C(0x23000) != 0) {
+    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(5, 100, 0, 0);
     }
 }

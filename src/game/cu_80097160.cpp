@@ -22,7 +22,7 @@ void fn_80227638(void *, void *, void *);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 extern Block_80099630 *lbl_803EC92C;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 }
 
 extern "C" int fn_80097160(Object_80039F5C *p, float duration)
@@ -86,7 +86,7 @@ extern "C" int fn_8009780C(Object_80039F5C *p, Object_80137ABC *pBall)
     float rate;
 
     fn_80137EFC(pBall, &velocity);
-    rate = lbl_803EA2C4;
+    rate = gFrameTimeScale;
     return __builtin_fabsf(velocity.mZ / rate + 0.0029814816f) > 1e-07f;
 }
 

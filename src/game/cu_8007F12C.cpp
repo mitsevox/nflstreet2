@@ -247,7 +247,7 @@ int fn_8007F828(int id)
     if ((unsigned int)id <= 22) {
         if (fn_8017F584() == 8) {
             override = 1;
-            if (fn_80027DF0() != 0 && lbl_803EB688 != 0) {
+            if (FELoopIsMainFEActive() != 0 && lbl_803EB688 != 0) {
                 unsigned short state;
                 unsigned short other;
 

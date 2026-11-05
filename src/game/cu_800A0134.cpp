@@ -310,7 +310,7 @@ int fn_800D42CC(void);
 int fn_801783AC(int);
 int fn_801788D8(int *);
 int fn_801787DC(int);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 }
 
 extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
@@ -379,7 +379,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                     break;
                 case 0:
                     if((unsigned int)(fn_801787DC(fn_80178360())+2)<(unsigned int)count)fn_80067DB8(0x5C,0,fn_80178348(),0,0);
-                    else if(!fn_80025708())fn_80067DB8(0x5E,0,fn_80178360(),0,0);
+                    else if(!ChallengeIsActive())fn_80067DB8(0x5E,0,fn_80178360(),0,0);
                     break;
                 }
             } else {
@@ -573,7 +573,7 @@ extern "C" void fn_800A1FEC(Object_8017886C *result,Object_8017886C *value)
     Point_8017886C pos=result->mUnknown08;
     fn_8017813C(pos);
     if(fn_800B2320())fn_800B2564(result,value);
-    if(!fn_80025708() || fn_8009D990(4)) {
+    if(!ChallengeIsActive() || fn_8009D990(4)) {
         step=(Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
         step->mUnknownC=45.0f;
         fn_800B9A6C(lbl_803EAB84,step);

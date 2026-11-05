@@ -12,7 +12,7 @@ extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int
 {
     switch (id) {
     case 0xC3:
-        fn_800282DC();
+        InGameStop();
         fn_800652A8();
         break;
     case 0xBF:

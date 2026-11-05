@@ -30,7 +30,7 @@ struct Object_800400C4 {
     int mUnknown20;
 };
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 extern "C" {
 Object_800400C4 *fn_800400C4(Block_80170E64 *pBlock);
@@ -693,7 +693,7 @@ void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, flo
     pBall->mState.mUnknown48.mY = pTarget->mY;
     pBall->mState.mUnknown48.mZ = pTarget->mZ;
     fn_802276B4(&delta, pTarget, &pBall->mState.mPos);
-    time = fn_802270A4(&delta) / speed * lbl_803EA2C4;
+    time = fn_802270A4(&delta) / speed * gFrameTimeScale;
     delta.mZ += 0.0029814816f * time * time * 0.5f;
     fn_80227264(&pBall->mState.mUnknown54, &delta, 1.0f / time);
     fn_8013A2F4(pBall, mode, spin, rate);

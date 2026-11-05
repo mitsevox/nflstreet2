@@ -108,7 +108,7 @@ extern float lbl_802DA69C[];
 extern unsigned int lbl_8030C084[];
 extern Table_80089904 lbl_80317AF4;
 extern Table_80089904 lbl_803186D8;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EAC2C;
 extern float lbl_803EAC30;
 extern float lbl_803EAC34;
@@ -308,14 +308,14 @@ extern "C" void fn_800C9E4C(unsigned char count0, unsigned char count1)
         lbl_803EAC3C->mEntries[0][i].mUnknown4 = 1000000000;
         lbl_803EAC3C->mEntries[0][i].mUnknown14 = 1000000000;
         lbl_803EAC3C->mEntries[0][i].mRef = 0;
-        lbl_803EAC3C->mEntries[0][i].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+        lbl_803EAC3C->mEntries[0][i].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
         lbl_803EAC3C->mEntries[0][i].mUnknown8 = -1;
         lbl_803EAC3C->mEntries[0][i].mUnknown10 = 0;
         lbl_803EAC3C->mEntries[0][i].mUnknown11 = lbl_803EAC3C->mEntries[0][i].mUnknown12 = 0;
         lbl_803EAC3C->mEntries[1][i].mUnknown4 = 1000000000;
         lbl_803EAC3C->mEntries[1][i].mUnknown14 = 1000000000;
         lbl_803EAC3C->mEntries[1][i].mRef = 0;
-        lbl_803EAC3C->mEntries[1][i].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+        lbl_803EAC3C->mEntries[1][i].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
         lbl_803EAC3C->mEntries[1][i].mUnknown8 = -1;
         lbl_803EAC3C->mEntries[1][i].mUnknown10 = 0;
         lbl_803EAC3C->mEntries[1][i].mUnknown11 = lbl_803EAC3C->mEntries[1][i].mUnknown12 = 0;
@@ -338,7 +338,7 @@ extern "C" void fn_800C9FC0(void)
                 lbl_803EAC3C->mEntries[team][j].mUnknownC = 0;
             } else {
                 lbl_803EAC3C->mEntries[team][j].mUnknown4 = fn_800ACBFC(team);
-                lbl_803EAC3C->mEntries[team][j].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+                lbl_803EAC3C->mEntries[team][j].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
             }
             lbl_803EAC3C->mEntries[team][j].mUnknown14 = lbl_803EAC3C->mEntries[team][j].mUnknown4;
             lbl_803EAC3C->mEntries[team][j].mRef = 0;

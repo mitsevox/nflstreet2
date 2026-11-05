@@ -1,3 +1,5 @@
+/* The GameVpt module: creates the game's 3D viewport and sets its projection. */
+
 #include "game/fn_8007F828.h"
 #include "game/GameObjList.h"
 #include "game/GameVpt.h"
@@ -44,7 +46,7 @@ int GameVpt::Init()
     mpState.mp->mpObject = fn_80228224(&desc);
     fn_802286D8(mpState.mp->mpObject, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
     fn_80228780(mpState.mp->mpObject, 4.0f);
-    fn_802286CC(mpState.mp->mpObject, GameObjList::fn_80028BB4(), 0);
+    fn_802286CC(mpState.mp->mpObject, GameObjList::GetListHandle(), 0);
     return 1;
 }
 
@@ -56,7 +58,7 @@ int GameVpt::Shutdown()
     return 1;
 }
 
-Object_80228224 *GameVpt::fn_800293A8()
+Object_80228224 *GameVpt::GetViewport()
 {
     return gGameVpt.mpState.mp->mpObject;
 }

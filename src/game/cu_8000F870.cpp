@@ -108,9 +108,9 @@ void fn_800235DC(void);
 void fn_80023634(int *pCount);
 void fn_80023684(char *pDest, int count);
 void fn_800236B0(int *pValue);
-int fn_80025708(void);
-int fn_80025718(void);
-unsigned char fn_8002892C(void);
+int ChallengeIsActive(void);
+int ChallengeIsPairingGame(void);
+unsigned char InGameIsDemo(void);
 void fn_8003B0F8(int group, int kind, int slot, int code, int a, int b);
 void fn_8003B1F4(int group);
 void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs);
@@ -396,19 +396,19 @@ void fn_8000FA0C(void)
             fn_801834DC();
         }
         fn_80183934();
-        if (!fn_80027E90()) {
-            fn_80027E88(1);
+        if (!FELoopWasVisited()) {
+            FELoopSetVisited(1);
         }
         fn_8018C48C(0x54415453);
         fn_8018C48C(0x454D4147);
-        fn_80027EA0();
+        FELoopResetIdle();
         if (fn_8007CAE4()) {
             fn_8007CAB4();
         }
         if (fn_802294F4()) {
             fn_80229554();
         }
-        if (fn_80187C64() && !fn_801869F0() && !fn_80027EAC()) {
+        if (fn_80187C64() && !fn_801869F0() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
         }
     }
@@ -567,7 +567,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     case 0x80000001:
         if (lbl_803EB950) {
             fn_801834DC();
-            fn_80027EA0();
+            FELoopResetIdle();
             lbl_803EB950 = 0;
         }
         fn_8000FA0C();
@@ -628,7 +628,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_801C2EF0(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
         break;
     case 0x8000000F:
-        fn_80027EB4(0);
+        FELoopCheckDemoLaunch(0);
         break;
     case 0x80000010:
         *pResult = lbl_803EB964;
@@ -656,10 +656,10 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 
 void fn_80010150(int mode)
 {
-    unsigned char saved = fn_80027E90();
+    unsigned char saved = FELoopWasVisited();
     fn_8000FA0C();
     fn_8000FAD0(mode);
-    fn_80027E88(saved);
+    FELoopSetVisited(saved);
 }
 
 int fn_80010194(void)
@@ -713,7 +713,7 @@ void fn_80010208(void)
         fn_800103A4(1);
         lbl_803EB96A = state;
     }
-    if (fn_80025708() || fn_80025718()) {
+    if (ChallengeIsActive() || ChallengeIsPairingGame()) {
         lbl_803EB96A = fn_8007CB6C(2);
     }
 }
@@ -1848,7 +1848,7 @@ void fn_80012834(unsigned char side)
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = lbl_803EB97C[side];
-    fn_8008044C(pObject, &desc, fn_80027DF0() ? 0x54415453 : 0x454D4147);
+    fn_8008044C(pObject, &desc, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     lbl_803EB9A0[side] = -1;
 }
 
@@ -1897,7 +1897,7 @@ static inline void GetRow(int team, int list, int row, int *pOut)
 
 void fn_800128E8(unsigned char team)
 {
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (lbl_803EB9AC[team]) {
             unsigned char i;
 
@@ -2226,7 +2226,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
                 pArgs[1].i = fn_8018F228(fn_80186B38(fn_8022F4BC()));
             }
         }
-        if (fn_8017F584() == 6 && fn_80025708()) {
+        if (fn_8017F584() == 6 && ChallengeIsActive()) {
             Object_8007A334 query;
             int team;
 
@@ -2796,7 +2796,7 @@ void fn_80014AA8(int team, int id)
     lbl_803EB97C[team] = id;
     fn_80012710(team);
     fn_80012834(team);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (lbl_803EB9AC[team]) {
             int index = fn_80186F7C(team);
             if (index == -1) {
@@ -2895,14 +2895,14 @@ void fn_80014B98(void)
 
     if (fn_801801B4() == 1) {
         if (fn_8017F584() == 6 && lbl_803EB99C) {
-            if (fn_80025708()) {
+            if (ChallengeIsActive()) {
                 fn_80015D28(fn_800785C0()->mUnknown1BC);
             } else {
                 fn_80015D28(fn_800A3444());
             }
             fn_8001ED90(1);
         }
-        fn_80027E18(1);
+        FELoopSetResume(1);
     }
     if (fn_801801B4() == 0) {
         fn_8018807C(0);
@@ -3191,7 +3191,7 @@ void fn_80015B0C(int id, int unused)
 {
     if (fn_801801B4() == 1) {
         fn_800A2F3C(id);
-        fn_80027A20();
+        FELoopStartGame();
     } else if (fn_801486A0() != 15) {
         fn_8001B228();
     }
@@ -3283,7 +3283,7 @@ int fn_80015E24(unsigned int index)
 void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 1;
-    fn_80027E88(0);
+    FELoopSetVisited(0);
     fn_80073094();
     fn_80062A58(0);
 }
@@ -3291,7 +3291,7 @@ void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
 void fn_80015E80(Arg_8018399C *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 0;
-    if (!fn_8002892C()) {
+    if (!InGameIsDemo()) {
         fn_80072AA8();
         fn_80072F90();
     }

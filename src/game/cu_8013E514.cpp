@@ -87,7 +87,7 @@ unsigned char lbl_803EB1D4 = 0;
 ScriptCamera_8013E514 *lbl_803EB1D8 = 0;
 State_8013E574 *lbl_803EB1DC = 0;
 unsigned char lbl_803EB1E0 = 0;
-int fn_80028310(void);
+int InGameIsStopped(void);
 void fn_800A3B5C(void);
 int fn_800AD9B4(void);
 void fn_8013F97C(int);
@@ -121,7 +121,7 @@ extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
 }
 extern "C" void fn_8013E538(void)
 {
-    if (fn_80028310() == 0) fn_8013F300();
+    if (InGameIsStopped() == 0) fn_8013F300();
     lbl_803EB1D8 = 0;
     lbl_803EB1E0 = 0;
     lbl_803EB1DC = 0;

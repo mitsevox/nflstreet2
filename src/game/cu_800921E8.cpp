@@ -8,7 +8,7 @@ Object_80039F5C *fn_800963EC(Character_80093BCC *pCharacter);
 int fn_801C01B8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 float fn_800921B0(Object_80039F5C *p, Camera_8013F738 *pCamera);
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 }
 
 /* Updates bit 0 of every player's +4 block flags. With active set, players
@@ -33,7 +33,7 @@ extern "C" void fn_800921E8(int index, int active)
         }
         distance = fn_800921B0(pTarget, pCamera);
     }
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         for (side = 0; side <= 1; side++) {
             unsigned int count = fn_80178D18((unsigned char)side);
             unsigned int i;

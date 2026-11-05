@@ -253,7 +253,7 @@ void fn_801A6FC8(float *matrix, Bounds_801A6FC8 *bounds, float a, float b) {
 }
 void fn_801A7170(Bounds_801A6FC8 *bounds, float *matrix,
                  Vector_80039F5C *position) {
-  View_801A7170 *view = (View_801A7170 *)fn_8002B550(0);
+  View_801A7170 *view = (View_801A7170 *)VptManagerGetCurrentCamera(0);
   Object_80228224 *object = view->mUnknown28;
   position->mX = view->mUnknown4.mX;
   position->mY = view->mUnknown4.mY;

@@ -103,7 +103,7 @@ struct Baseline_802E9ADC {
 extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
-int fn_80025708(void);
+int ChallengeIsActive(void);
 Set_8003EE6C *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
@@ -463,7 +463,7 @@ int Class_802A56E8::vfn_02()
 
 void Class_802A56E8::vfn_03(int team)
 {
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         fn_8009D8CC(4);
         fn_8009D964(4, 0);
     } else {
@@ -546,7 +546,7 @@ int Class_802A56E8::vfn_14()
 {
     int result = 1;
 
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         result = fn_800785C0()->mUnknown1B0 == 0;
     }
     return result;
@@ -556,7 +556,7 @@ int Class_802A56E8::vfn_15()
 {
     int result = 1;
 
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         result = fn_800785C0()->mUnknown1B4 == 0;
     }
     return result;
@@ -659,7 +659,7 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown0C.mX = 0.0f;
     pState->mUnknown0C.mY = 0.0f;
     pState->mUnknownB0 = pState->mUnknown38 = fn_8007CB6C(2);
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         pState->mUnknown3C = fn_800785C0()->mUnknown1AC;
         pState->mUnknown3E = fn_800785C0()->mUnknown1A8;
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
@@ -677,7 +677,7 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown3B = 0;
     pState->mUnknownB2 = 0;
     pState->mUnknownB1 = 0;
-    if (!fn_80027DF0()) {
+    if (!FELoopIsMainFEActive()) {
         fn_8007B684(fn_800A3444());
         if (fn_8007B974() == 1) {
             pState->mUnknown39 = 1;

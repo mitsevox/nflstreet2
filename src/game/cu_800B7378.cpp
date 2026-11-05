@@ -53,7 +53,7 @@ struct Block_800B95B4 {
     int mUnknown164;
 };
 
-struct Desc_802345C4 {
+struct EngineParamWords {
     int mUnknown0;
     int mUnknown4;
 };
@@ -146,7 +146,7 @@ int fn_801CFFD0(int a, int b);
 float fn_8022710C(void *pV);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022E558(void);
-void fn_802345C4(Desc_802345C4 *pDesc, int count);
+void fn_802345C4(EngineParamWords *pDesc, int count);
 
 extern unsigned char lbl_803EAB64;
 extern unsigned char lbl_803EAB65;
@@ -381,7 +381,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
         break;
     case 9:
         if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
-            && fn_8002892C() == 0 && fn_80028934() == 0 && fn_8017F48C() == 0 && fn_80065864() == 0
+            && InGameIsDemo() == 0 && InGameIsPaused() == 0 && fn_8017F48C() == 0 && fn_80065864() == 0
             && fn_800655F8() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
             if (fn_8002D228(lbl_803EA368) != 0) {
@@ -591,7 +591,7 @@ void Class_80297C60::vfn_03(float dt)
     lbl_803EAB78->mUnknown160 = 1;
     lbl_803EAB78->mUnknown164 = 2;
     vfn_07();
-    Desc_802345C4 desc = { 3, 14 };
+    EngineParamWords desc = { 3, 14 };
     fn_802345C4(&desc, 2);
     fn_801789F8();
     lbl_803EAB80 = -1;

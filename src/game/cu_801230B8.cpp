@@ -51,7 +51,7 @@ int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget,
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue, float *pOther);
 extern float lbl_803ECB08;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EC9E8;
 typedef void (*Score_8012430C)(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *);
 extern Score_8012430C const lbl_8029F584[7];
@@ -1105,7 +1105,7 @@ int fn_80125E20(Object_80039F5C *p)
 void fn_80125EC8(int a, int b)
 {
     if (b == 65535 && a != 0) {
-        float value = 210.0f / lbl_803EA2C4;
+        float value = 210.0f / gFrameTimeScale;
         lbl_803EC9E8 = (40.0f / value) * 0.25f;
     }
 }

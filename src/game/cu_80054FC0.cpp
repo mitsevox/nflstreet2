@@ -4,7 +4,7 @@
 extern "C" {
 void fn_8001ED80(int value);
 int fn_8001ED88(void);
-int fn_8002B70C(void);
+int TeamFilterGet(void);
 void fn_80077F24(void);
 int fn_80082414(int index);
 int fn_80085428(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
@@ -17,7 +17,7 @@ int fn_8022F4BC(void);
 void fn_80054FC0(int *pResult)
 {
     if (fn_8018D720(fn_8022F384(fn_8022F4BC()))) {
-        if (fn_8002B70C() != 0x3FF) {
+        if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
         } else if (fn_8001ED88() == 6) {
             fn_8001ED80(4);

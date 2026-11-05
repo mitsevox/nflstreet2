@@ -64,7 +64,7 @@ extern "C" {
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 extern char lbl_802EBF88[];
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 int fn_801486A0(void);
 void fn_8006CA84(int a);
 void fn_8006DDB4(int a, int b, unsigned int c);
@@ -399,7 +399,7 @@ void fn_80072424(void)
 void fn_800724F4(void)
 {
     Object_8007A334 cursor;
-    if ((!fn_80027DF0() && !lbl_803EA709) || !lbl_803EA700 || lbl_803EA704->mUnknown124) {
+    if ((!FELoopIsMainFEActive() && !lbl_803EA709) || !lbl_803EA700 || lbl_803EA704->mUnknown124) {
         lbl_803EA709 = 1;
     } else {
         unsigned short a, b;
@@ -442,7 +442,7 @@ void fn_800726B8(void)
 {
     if (lbl_803EA709) {
         int ready = 0;
-        if (fn_80027DF0() || !fn_801486A0() || fn_801486A0() == 1 || fn_800AD9B4() != 3) {
+        if (FELoopIsMainFEActive() || !fn_801486A0() || fn_801486A0() == 1 || fn_800AD9B4() != 3) {
             ready = 1;
         }
         if (ready) {
@@ -603,7 +603,7 @@ void fn_80072C90(unsigned int delay, int wait)
         if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
             fn_8006DDB4(0x11000001, 0, delay);
         }
-        if (fn_80027DF0() && lbl_803EB690) {
+        if (FELoopIsMainFEActive() && lbl_803EB690) {
             fn_8021D7B8(lbl_803EB690, 0x80000003, 0, 0);
         }
         if (wait) {
@@ -704,7 +704,7 @@ void fn_80073094(void)
             }
             lbl_803EA704->mUnknown124 = 0;
             lbl_803EA704->mUnknown123 = 0;
-            if (fn_80027DF0() && lbl_803EB690) {
+            if (FELoopIsMainFEActive() && lbl_803EB690) {
                 fn_8021D7B8(lbl_803EB690, 0x80000003, 0, 0);
             }
         }

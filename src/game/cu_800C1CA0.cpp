@@ -13,7 +13,7 @@ int fn_801784C4(void);
 float fn_80178A2C(void);
 float fn_80178A5C(void);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-void fn_8002B71C(void);
+void GameSetupInit(void);
 void fn_8002D274(Type_803EA368 *p);
 void fn_8003A4DC(void);
 void fn_800406C0(unsigned int flags);
@@ -74,7 +74,7 @@ extern "C" void fn_800C1CA0(void)
     fn_8022DD4C(0);
     fn_8022DD80(0);
     if (fn_8017F584() == 6) {
-        fn_8002B71C();
+        GameSetupInit();
     } else {
         fn_80177B7C(team);
     }

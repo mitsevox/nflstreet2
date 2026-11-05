@@ -384,12 +384,12 @@ int fn_801CC820(ModuleNode *pNode, unsigned char flags)
 {
     int result;
 
-    pNode->fn_80025F24(pNode);
+    pNode->GSPreModuleStart(pNode);
     result = pNode->Init();
     if (result == 1) {
         pNode->mUnknown8 = result;
     }
-    pNode->fn_80025F28(pNode);
+    pNode->GSPostModuleStart(pNode);
     return result;
 }
 
@@ -398,7 +398,7 @@ int fn_801CC8AC(ModuleNode *pNode, unsigned char flags)
     int result;
 
     if (--pNode->mUnknown4 == 0) {
-        pNode->fn_80025F5C(pNode);
+        pNode->GSPreModuleStop(pNode);
         if (pNode->mUnknown8 == 1) {
             result = pNode->Shutdown();
         } else {
@@ -407,7 +407,7 @@ int fn_801CC8AC(ModuleNode *pNode, unsigned char flags)
         if (result == 1) {
             pNode->mUnknown8 = 0;
         }
-        pNode->fn_80025F60(pNode);
+        pNode->GSPostModuleStop(pNode);
     } else {
         result = 1;
     }
@@ -442,11 +442,11 @@ void fn_801CC9E8()
 {
 }
 
-Class_801CC9EC::~Class_801CC9EC()
+ModuleCounter::~ModuleCounter()
 {
 }
 
-void Class_801CC9EC::fn_801CCA20(ModuleNode *pNode)
+void ModuleCounter::fn_801CCA20(ModuleNode *pNode)
 {
     if (pNode->fn_801CC96C() == 0) {
         mCount++;

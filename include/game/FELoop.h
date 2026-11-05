@@ -11,25 +11,25 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void fn_800279AC();
-    unsigned char fn_80027C58();
+    void Boot();
+    unsigned char Update();
 };
 
 typedef void (*FELoopCallback)();
 
 extern "C" {
-void fn_80027A20(void);
-void fn_80027AD8(int a, int b, int c, int d, int e, int f);
-int fn_80027DF0(void);
-void fn_80027E18(unsigned char value);
-void fn_80027E34(unsigned char value);
-void fn_80027E3C(void);
-void fn_80027E88(unsigned char value);
-unsigned char fn_80027E90(void);
-void fn_80027E98(FELoopCallback pCallback);
-void fn_80027EA0(void);
-unsigned char fn_80027EAC(void);
-void fn_80027EB4(int a);
+void FELoopStartGame(void);
+void FELoopConfigureEntry(int a, int b, int c, int d, int e, int f);
+int FELoopIsMainFEActive(void);
+void FELoopSetResume(unsigned char value);
+void FELoopSetResumeMode(unsigned char value);
+void FELoopRefreshModeType(void);
+void FELoopSetVisited(unsigned char value);
+unsigned char FELoopWasVisited(void);
+void FELoopSetFrameCallback(FELoopCallback pCallback);
+void FELoopResetIdle(void);
+unsigned char FELoopIsIdleTimedOut(void);
+void FELoopCheckDemoLaunch(int a);
 }
 
 extern FELoop gFELoop;

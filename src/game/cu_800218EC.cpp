@@ -39,7 +39,7 @@ struct Record_8037D92C {
 };
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern void *lbl_803EB688;
 
 void fn_8003AB40(Record_8036B55C *pRecord);
@@ -301,7 +301,7 @@ static void fn_80021F60(int index, float a, float b, float c, float d)
 
 static void fn_80022078(int index, float a, float b, float c, float d)
 {
-    unsigned int step = (unsigned int)lbl_803EA2C4;
+    unsigned int step = (unsigned int)gFrameTimeScale;
     int i = index;
 
     if (lbl_803EBAC5) {

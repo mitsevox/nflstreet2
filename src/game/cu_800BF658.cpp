@@ -1,10 +1,10 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Class_80297CE8.h"
 #include "game/fn_800B65A0.h"
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 #include "game/cu_80067C10.h"
 
-struct Desc_802345C4 {
+struct EngineParamWords {
     int mUnknown0;
     int mUnknown4;
 };
@@ -29,7 +29,7 @@ void fn_8009E01C(void);
 void fn_8007454C(int side);
 void fn_800771C0(void);
 void fn_800ABE00(void);
-unsigned char fn_8002892C(void);
+unsigned char InGameIsDemo(void);
 unsigned char fn_8017F324(unsigned char value);
 unsigned char fn_8017F334(unsigned char value);
 unsigned char fn_8017F384(unsigned char value);
@@ -70,7 +70,7 @@ void fn_800BD958(void);
 void fn_800771D8(void);
 void fn_801378C0(void);
 unsigned char fn_800545F4(unsigned char value);
-void fn_80025C88(int flag);
+void ChallengeSendGoalList(int flag);
 void fn_800A87E8(void);
 void fn_80094DF0(void);
 int fn_8009D86C(void);
@@ -89,7 +89,7 @@ unsigned char fn_801478F0(unsigned char a);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_800BD2F8(int team);
-void fn_802345C4(Desc_802345C4 *pDesc, int count);
+void fn_802345C4(EngineParamWords *pDesc, int count);
 
 extern float lbl_803EABAC[2];
 extern unsigned char lbl_803EABB4;
@@ -156,7 +156,7 @@ void Class_80297CE8::vfn_04(float dt)
     vfn_09();
     fn_800545F4(1);
     if ((fn_8009D86C() == 2 || fn_8009D86C() > 3) && fn_8009D990(1) <= 120 && fn_8009D990(1) != 0
-        && fn_8002892C() == 0) {
+        && InGameIsDemo() == 0) {
         fn_8017F324(0);
         fn_8017F334(0);
         fn_8017F384(1);
@@ -189,7 +189,7 @@ void Class_80297CE8::vfn_04(float dt)
     vfn_10();
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
-    fn_800271D4(lbl_803EABA8->mUnknown48);
+    PadInputSaveHandlers(lbl_803EABA8->mUnknown48);
     fn_801C6280(-1, 3, lbl_802ECD44);
     for (i = 0; i <= 1; i++) {
         Slot_800BFAD0 *pSlot = &lbl_803EABA8->mSlots[i];
@@ -243,7 +243,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_801789F8();
     fn_800BF4B8();
     fn_801383E4(1);
-    Desc_802345C4 desc = { 0, 14 };
+    EngineParamWords desc = { 0, 14 };
     fn_802345C4(&desc, 2);
     fn_80067D4C(115, 0);
     fn_800C9BB0();
@@ -259,7 +259,7 @@ void Class_80297CE8::vfn_04(float dt)
             fn_8017D9D8(i);
         }
     }
-    fn_80025C88(1);
+    ChallengeSendGoalList(1);
     lbl_803EABA8->mUnknownAC = 0;
     lbl_803EABA8->mUnknownAB = 0;
     fn_8017885C();
@@ -297,7 +297,7 @@ void Class_80297CE8::vfn_05(float dt)
         fn_800BF72C(this, dt);
     }
     if (fn_8016EA68() != 0) {
-        Desc_802345C4 desc = { 0, 14 };
+        EngineParamWords desc = { 0, 14 };
         fn_802345C4(&desc, 2);
     }
     if (lbl_803EABA8->mUnknownB8 != -1) {
@@ -320,15 +320,15 @@ void Class_80297CE8::vfn_06(float dt)
     lbl_803EABA8->mUnknown40 = 0;
     fn_801378C0();
     fn_800545F4(0);
-    fn_80025C88(0);
+    ChallengeSendGoalList(0);
     fn_800A87E8();
     fn_80094DF0();
     if ((fn_8009D86C() != 2 && fn_8009D86C() <= 3) || fn_8009D990(1) > 120 || fn_8009D990(1) == 0) {
         fn_8017F2DC(0);
     }
     fn_800AFE20(fn_800BE4C8);
-    fn_80027230(lbl_803EABA8->mUnknown48);
-    fn_80027358(-1);
+    PadInputRestoreHandlers(lbl_803EABA8->mUnknown48);
+    PadInputResetSlot(-1);
     fn_800B0DA4();
     fn_800BD568(0);
     fn_800BD568(1);
@@ -346,6 +346,6 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800BD2F8(fn_80178308());
     fn_800BD2F8(fn_80178320());
     lbl_803EABA8->mUnknownC5 = 0;
-    Desc_802345C4 desc = { 0, 14 };
+    EngineParamWords desc = { 0, 14 };
     fn_802345C4(&desc, 2);
 }

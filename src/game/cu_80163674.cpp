@@ -7,7 +7,7 @@
 extern "C" {
 Cache_80188688 *lbl_803EB3A4 = 0;
 extern char *lbl_802EAD10[];
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 int fn_801C657C(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
@@ -54,7 +54,7 @@ void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc)
         fn_80235630(&pObject->mUnknown48, pObject->mUnknown14);
         fn_80234DFC(pObject->mUnknown14, pObject->mUnknown18, 0, 0, "UISModel", 0);
         fn_80235C24(&pObject->mUnknown48, pObject->mUnknown18);
-        if (fn_80027DF0()) {
+        if (FELoopIsMainFEActive()) {
             if (pObject->mUnknown1CE == 26) {
                 fn_80235D10(&pObject->mUnknown48, 15000.0f);
                 fn_802353E8(&pObject->mUnknown48, 0x4000);

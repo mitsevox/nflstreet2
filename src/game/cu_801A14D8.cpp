@@ -5,6 +5,7 @@
 #include "game/cu_8015C25C.h"
 #include "game/cu_801A4AD4.h"
 #include "game/fn_8017F584.h"
+#include "game/GameObjList.h"
 
 #include <dolphin/gx/GXVert.h>
 #include <string.h>
@@ -167,11 +168,10 @@ extern unsigned char lbl_803EB818;
 extern Ref_803EB81C lbl_803EB81C[1];
 extern unsigned char lbl_803EB824;
 extern unsigned char lbl_803EB825;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
-int fn_8002894C(void);
-int fn_80027DF0(void);
-void *fn_80028BB4(void);
+int InGameIsPlaying(void);
+int FELoopIsMainFEActive(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
@@ -316,7 +316,7 @@ void fn_801A14D8(void)
 {
     void *p = fn_801F0C50(fn_80160C08(), 0);
 
-    lbl_803ECC10 = fn_801D2BB0(fn_8002894C() ? 0x40 : 1, p, 2, 0);
+    lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
     fn_801EF7BC(fn_80160C08(), 0, lbl_803ECC10);
     fn_80211E08(lbl_80365D98, lbl_803ECC10);
     lbl_803ECC08 = fn_802120E4(lbl_80365D98, 0xFF000000);
@@ -327,7 +327,7 @@ void fn_801A1578(void)
 {
     fn_80211EFC(lbl_80365D98);
     fn_801D2BD0(lbl_803ECC10);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_801F010C(fn_80160C08(), 0);
         fn_80161498();
     }
@@ -346,7 +346,7 @@ void fn_801A15C4(Object_80228224 *pObject)
             continue;
         }
         if (pPlayer->mUnknown20 & 0x20000) {
-            fn_801DD3AC(fn_80028BB4(), pPlayer, 11);
+            fn_801DD3AC((void *)GameObjList::GetListHandle(), pPlayer, 11);
         }
     }
 }
@@ -575,7 +575,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
         index++;
         index &= 1;
     }
-    fn_80147860(pPlayer, lbl_803EA2C4);
+    fn_80147860(pPlayer, gFrameTimeScale);
     fn_80210BD8(1);
     fn_80210CC4(0.0f, 1.0f);
     fn_8024EB28(0);

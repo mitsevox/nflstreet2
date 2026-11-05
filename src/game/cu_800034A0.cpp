@@ -1,7 +1,7 @@
 #include "engine/cu_80229270.h"
 #include "game/fn_801D2B7C.h"
 #include "game/cu_800034A0.h"
-#include "game/cu_8002ACB4.h"
+#include "game/PlayerSave.h"
 
 extern "C" {
 void *fn_801D2B7C(int size, int a, int b);
@@ -10,15 +10,15 @@ void fn_80228474(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
 int fn_80029890(int type);
 void fn_8022F478(void);
-int fn_8022F698(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
+int fn_8022F698(SaveRequest *pRequest, SaveStreamOps *pOps);
 void fn_8002A5A0(int *pType, void *pSlot);
 int fn_8002A2A4(int a, int b);
 void fn_8022F1BC(void);
 void fn_80029DCC(int a, int b);
 int fn_8022F0D4(void);
-int fn_8002ADA0(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
-int fn_8022F5E4(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
-int fn_8022EB5C(CardStreamTarget *pTarget, StreamOps_8002ACB4 *pOps);
+int PlayerSaveOnLoad(SaveRequest *pRequest, SaveStreamOps *pOps);
+int fn_8022F5E4(SaveRequest *pRequest, SaveStreamOps *pOps);
+int fn_8022EB5C(CardStreamTarget *pTarget, SaveStreamOps *pOps);
 
 int fn_8022F53C(int a);
 int fn_8022F4BC(void);
@@ -44,7 +44,7 @@ void fn_80029E10(int a, int b);
 void fn_802284EC(int a, void *b);
 void fn_8002A804(void);
 
-extern StreamOps_8002ACB4 gCardStreamOps;
+extern SaveStreamOps gCardStreamOps;
 }
 
 extern "C" {
@@ -62,7 +62,7 @@ void fn_800034D0(void)
 
 void fn_800034FC(void)
 {
-    Request_8002AD64 req;
+    SaveRequest req;
     char slot[4];
     int type;
 
@@ -98,14 +98,14 @@ void fn_800034FC(void)
     case 3:
         fn_8022F358(slot[3]);
         fn_8022F478();
-        fn_8002AD64(&req, &gCardStreamOps);
+        PlayerSaveOnSave(&req, &gCardStreamOps);
         break;
     }
 }
 
 void fn_80003620(void)
 {
-    Request_8002AD64 req;
+    SaveRequest req;
     char slot[4];
     int type;
     int handle = 0;
@@ -153,7 +153,7 @@ void fn_80003620(void)
         }
         if (fn_8022F0D4() != -1) {
             fn_8022F478();
-            handle = fn_8002ADA0(&req, &gCardStreamOps);
+            handle = PlayerSaveOnLoad(&req, &gCardStreamOps);
         }
         break;
     }

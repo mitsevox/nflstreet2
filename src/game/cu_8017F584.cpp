@@ -20,7 +20,7 @@ unsigned int fn_8017F584(void)
             if (fn_801FCE10(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value) != 0) {
                 value = cached;
             }
-            if (fn_8002894C() != 0) {
+            if (InGameIsPlaying() != 0) {
                 lbl_803EB4C0 = value;
             }
         } else {

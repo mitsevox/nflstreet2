@@ -95,7 +95,7 @@ struct Table_803EA4D0 {
 };
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern Table_803EA4D0 lbl_803EA4D0;
 extern unsigned char lbl_803EA4DC[8];
 extern Object_80041904 *lbl_803EA4E4;
@@ -766,7 +766,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
             if (pObject->mUnknown200.mActive) {
                 Cycle_80041904 *pCycle = &pObject->mUnknown200;
 
-                pCycle->mTime += lbl_803EA2C4 * (1.0f / 60.0f);
+                pCycle->mTime += gFrameTimeScale * (1.0f / 60.0f);
                 switch (pCycle->mPhase) {
                 case 0:
                     if (pCycle->mTime >= pCycle->mUnknown4) {
@@ -901,7 +901,7 @@ void fn_8004BD20(int handle, Object_80041904 *pObject)
             pNode->mUnknown108 = fn_8004C270(text, state);
         }
         {
-            float rate = lbl_803EA2C4;
+            float rate = gFrameTimeScale;
 
             pNode->mUnknown116 = (unsigned int)(60.0f / rate * fn_8004D624(handle, "delay"));
         }
@@ -1171,7 +1171,7 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
                  Hitter_8004C844 *pHitter)
 {
     int fire = 1;
-    unsigned int time = fn_800289A8();
+    unsigned int time = InGameGetFrameCount();
     Object_80041904 *pObject = pItem->mUnknown472;
     unsigned char i;
 
@@ -2497,7 +2497,7 @@ void fn_800508A0(void)
         Object_80137ABC *pBall = fn_801374BC();
         if (fn_800AD9B4() == 3 && fn_80178508(&pBall->mState.mPos, 0, 1) > 2) {
             unsigned int previous = lbl_803EA530++;
-            if (!((float)previous <= lbl_803EA2C4 * 45.0f)) {
+            if (!((float)previous <= gFrameTimeScale * 45.0f)) {
                 lbl_803EA530 = 0;
                 fn_80178370();
             }

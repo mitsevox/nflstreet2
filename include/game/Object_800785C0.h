@@ -11,8 +11,8 @@ struct Entry_80079864 {
 };
 
 /* 12-byte entry of the four-entry list at +452 of Object_800785C0:
-   fn_800257B4 dispatches on mType and passes mValue to the selected test,
-   and fn_80025B18 skips entries whose mUnknown8 is zero. */
+   ChallengeEvaluateGoal dispatches on mType and passes mValue to the selected test,
+   and ChallengeGetGoalTexts skips entries whose mUnknown8 is zero. */
 struct Entry_800257B4 {
     int mType;
     unsigned int mValue;

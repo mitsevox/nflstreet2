@@ -73,8 +73,8 @@ extern "C" {
 void fn_800CC560(int a);
 void fn_800FF6D8(Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
-void fn_80028918(int unknown);
-int fn_80027DF0(void);
+void InGameSetInputPaused(int unknown);
+int FELoopIsMainFEActive(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps);
 void fn_8013CD58(Interp_8013CC14 *pInterp, int steps);
@@ -456,7 +456,7 @@ int fn_8017ED6C(void)
 
 void fn_8017EF20(void)
 {
-    fn_80028918(0);
+    InGameSetInputPaused(0);
     fn_8017EB58(fn_8009BCE8(&lbl_803EB498->mRefs0[0]));
     fn_8017EB58(fn_8009BCE8(&lbl_803EB498->mRefs0[1]));
     fn_8017EB58(fn_8009BCE8(&lbl_803EB498->mRefs0[2]));
@@ -482,7 +482,7 @@ void fn_8017EFB4(void)
     } else if (fn_801784C4() == 0) {
         fn_80177E6C(1, 1);
     }
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         fn_8022DDB4(0x53544347, &lbl_803EB498->mUnknown40);
     }
 }

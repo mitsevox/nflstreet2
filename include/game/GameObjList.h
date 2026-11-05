@@ -20,7 +20,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    static int fn_80028BB4();
+    static int GetListHandle();
 
 private:
     GameObjListStatePtr mpState;

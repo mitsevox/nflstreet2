@@ -103,13 +103,13 @@ extern void *lbl_803EB688;
 
 double fabs(double);
 
-void fn_80026DD4(void);
-void fn_800271D4(void **pHandlers);
-void fn_80027230(void **pHandlers);
-void fn_80027358(int slot);
-void fn_8002885C(void);
-void fn_800288B0(void);
-unsigned char fn_8002892C(void);
+void PadInputRead(void);
+void PadInputSaveHandlers(void **pHandlers);
+void PadInputRestoreHandlers(void **pHandlers);
+void PadInputResetSlot(int slot);
+void InGamePause(void);
+void InGameResume(void);
+unsigned char InGameIsDemo(void);
 void fn_80031018(const float *pValue, int a);
 void fn_80031040(unsigned char value);
 void fn_8003A5A8(void);
@@ -679,7 +679,7 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             p->mUnknownD94 |= 0x800000;
         } else {
             fn_8006C854(0x77, 0);
-            fn_8002885C();
+            InGamePause();
             fn_800655B8();
             fn_8002B960(&p->mUnknown6B8);
             fn_8002BAF4(&p->mUnknown000);
@@ -755,7 +755,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
             fn_800308E8(p);
             p->mUnknownD8C = -1;
             p->mUnknownD90 = 2;
-            fn_800288B0();
+            InGameResume();
             fn_800655D0();
         }
         if (p->mUnknownD94 & 0x2000000) {
@@ -764,7 +764,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
         }
         fn_8002C800(p);
         pCamera = p->mpUnknownDA0;
-        fn_8002FA04(pCamera, fn_8002B550(GameVpt::fn_800293A8()) == p->mpUnknownDA0);
+        fn_8002FA04(pCamera, VptManagerGetCurrentCamera(GameVpt::GetViewport()) == p->mpUnknownDA0);
         p->mpUnknownDA0 = 0;
         fn_8017F2EC(lbl_803EA35C);
         fn_8017F2DC(lbl_803EA35D);
@@ -815,10 +815,10 @@ extern "C" void fn_8002C6E0(Type_803EA368 *p, int delta)
 
 extern "C" void fn_8002C75C(Type_803EA368 *p)
 {
-    fn_800271D4(p->mUnknownDA8);
-    if (!fn_8002892C() && p->mUnknownD8C != -1) {
+    PadInputSaveHandlers(p->mUnknownDA8);
+    if (!InGameIsDemo() && p->mUnknownD8C != -1) {
         fn_801C6280(9, 0, fn_801C6458(p->mUnknownD8C, 0));
-        fn_801C6280(9, 2, (int)fn_80026DD4);
+        fn_801C6280(9, 2, (int)PadInputRead);
         fn_801C6280(9, 4, 1);
         fn_801C6280(-1, 3, (int)lbl_802EC330);
         fn_801EC3B8(9, p->mUnknownD8C);
@@ -827,9 +827,9 @@ extern "C" void fn_8002C75C(Type_803EA368 *p)
 
 extern "C" void fn_8002C800(Type_803EA368 *p)
 {
-    fn_80027230(p->mUnknownDA8);
-    fn_80027358(-1);
-    if (!fn_8002892C()) {
+    PadInputRestoreHandlers(p->mUnknownDA8);
+    PadInputResetSlot(-1);
+    if (!InGameIsDemo()) {
         fn_801C6280(9, 4, 0);
     }
 }
@@ -2348,7 +2348,7 @@ extern "C" Camera_8013F738 *fn_8002F61C(Type_8002FDB4 *pDesc)
 
 extern "C" void fn_8002F71C(Camera_8013F738 *pCamera)
 {
-    fn_8002B2D4(0, pCamera, 0, 0);
+    VptManagerPushCamera(0, pCamera, 0, 0);
 }
 
 extern "C" void fn_8002F74C(Camera_8013F738 *pCamera)
@@ -2395,7 +2395,7 @@ extern "C" void fn_8002F9D8(Camera_8013F738 *pCamera)
 extern "C" void fn_8002FA04(Camera_8013F738 *pCamera, int detach)
 {
     if (detach) {
-        fn_8002B3DC(0, pCamera);
+        VptManagerPopCamera(0, pCamera);
     }
     fn_801C3640(pCamera);
     fn_80031040(0);

@@ -708,7 +708,7 @@ void fn_80156900(unsigned int count, unsigned int total)
 
 void fn_80156928(void)
 {
-    unsigned int time = fn_800289A8();
+    unsigned int time = InGameGetFrameCount();
 
     lbl_803ECA40 = time;
     if (lbl_803ECA48 != 0) {
@@ -721,7 +721,7 @@ void fn_80156928(void)
 unsigned char fn_80156960(void)
 {
     if (lbl_803ECA44 != 0) {
-        if (fn_800289A8() >= lbl_803ECA44) {
+        if (InGameGetFrameCount() >= lbl_803ECA44) {
             fn_80156928();
             lbl_803ECA4C ^= 1;
         }
@@ -1814,7 +1814,7 @@ void Class_802A3B80::vfn_04(float dt)
             if (mUnknown4 == 2) {
                 fn_80194F1C(1);
                 fn_80072C90(0xFA, 0);
-                fn_800282DC();
+                InGameStop();
             } else {
                 mUnknown4 = choice;
                 fn_800544A4("Tutorial Results", lbl_802DF120, "|^No|Yes");
@@ -2081,7 +2081,7 @@ void Class_802A3A48::vfn_04(float dt)
                         fn_80072C90(0xFA, 0);
                         fn_80047874(0);
                         fn_8004730C(0);
-                        fn_800282DC();
+                        InGameStop();
                         mUnknown12 = 0;
                     }
                     break;
@@ -2179,7 +2179,7 @@ void Class_802A3A48::vfn_14(float dt)
     if (mUnknown4 != 0) {
         if (!fn_80157080()) {
             fn_80072C90(0xFA, 0);
-            fn_800282DC();
+            InGameStop();
         }
     } else {
         fn_800AD910(2, dt);

@@ -256,7 +256,7 @@ float fn_80227890(void *pA, void *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue,
                  float *pOther);
 float fn_80237260(int stream);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EAF60;
 extern float lbl_803EAF64;
 extern float lbl_803EAF68;
@@ -742,7 +742,7 @@ extern "C" int fn_80113498(Object_80039F5C *p)
     Timer_8010FD94 *pTimer = (Timer_8010FD94 *)&p->mUnknown336;
 
     if (p->mFlags & 0x4000) {
-        pTimer->mUnknown0 += (unsigned int)lbl_803EA2C4;
+        pTimer->mUnknown0 += (unsigned int)gFrameTimeScale;
     } else {
         result = 1;
     }

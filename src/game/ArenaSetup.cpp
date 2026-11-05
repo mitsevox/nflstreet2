@@ -1,18 +1,20 @@
+/* Sets up the memory pools when the game arena is created and releases them when it is destroyed. */
+
 extern "C" {
-void fn_800246C0(void);
-void fn_80024820(void);
+void BootSetupMemPools(void);
+void BootShutdownMemPools(void);
 }
 
 static unsigned char sInitialized = 0;
 
-extern "C" void fn_80025E00(void)
+extern "C" void ArenaSetupInit(void)
 {
     sInitialized = 1;
-    fn_800246C0();
+    BootSetupMemPools();
 }
 
-extern "C" void fn_80025E28(void)
+extern "C" void ArenaSetupShutdown(void)
 {
-    fn_80024820();
+    BootShutdownMemPools();
     sInitialized = 0;
 }

@@ -33,7 +33,7 @@ void fn_800E1778(Object_80039F5C *p);
 int fn_800B146C(void);
 Object_800670B4 *fn_80168708(int team);
 float fn_80237260(int stream);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 int fn_80178320(void);
 Point_8017886C fn_80177FE0(void);
 float fn_80178A08(void);
@@ -300,7 +300,7 @@ int fn_800E6984(Object_80039F5C *p)
 int fn_800E6F48(Object_80039F5C *p)
 {
     unsigned char value = p->mpState->mUnknown1;
-    unsigned int frames = (unsigned int)(60.0f / lbl_803EA2C4);
+    unsigned int frames = (unsigned int)(60.0f / gFrameTimeScale);
     p->mUnknown336 = (value >> 5) * frames + (int)((value & 31) * 0.032258063554763794f * 60.0f);
     if (!fn_800B146C()) {
         p->mUnknown512.mUnknown14 = 1;

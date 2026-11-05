@@ -28,7 +28,7 @@ extern QuadPoint_801A0614 lbl_802F2894[4];
 extern Mtx44 lbl_802F28F4;
 extern unsigned char lbl_803EB7DC[];
 int fn_800BA6F8(void);
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 int fn_80177F70(void);
 float fn_80178298(void);
 float fn_80178A2C(void);
@@ -237,7 +237,7 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 {
     State_80167094 *s=(State_80167094 *)input;GXColor c={255,255,255,255};float pos[3]={x,y,0.0f};Mtx44 m;
     fn_801A0E2C();Point_8017886C point=fn_80177FE0();
-    if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!fn_80027DF0())fn_80178298();}
+    if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
     fn_8024FA68(4,c);fn_801D0470(fn_80228668());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);fn_80252034(1,4,5,5);
     fn_801D0F80(m);fn_8025251C(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);

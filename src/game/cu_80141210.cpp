@@ -37,7 +37,7 @@ int fn_801CFE40(float,float); float fn_80260B1C(float);
 void fn_8014116C(float,float,float,Vector_80039F5C *,State_80141210 *,Actor_801C009C *);
 void fn_8014118C(Angles_80141210 *,State_80141210 *,Actor_801C009C *,int,int,int);
 Entry_801411B4 *fn_801411B4(Camera_8013F738 *);
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 void fn_801C3990(Camera_8013F738 *,float,float);
 Settings_800963EC *fn_800963EC(Character_80093BCC *);
 int fn_801784C4(void);
@@ -152,7 +152,7 @@ extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Acto
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
     fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    if (lbl_803EB1F0 && FELoopIsMainFEActive()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
@@ -210,7 +210,7 @@ extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Acto
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
     fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    if (lbl_803EB1F0 && FELoopIsMainFEActive()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }

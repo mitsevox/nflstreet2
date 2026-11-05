@@ -27,11 +27,11 @@ struct State_803ECA00 {
 typedef void (*CameraFunc_8013F85C)(Camera_8013F738 *pCamera, int a, int b, int c);
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
-int fn_8002B2D4(void *pObject, void *pItem, int (*a)(void *, void *), int (*b)(void *, void *));
-int fn_8002B3DC(void *pObject, void *pItem);
-int fn_8002B494(void *pObject, void *pItem, void *pOther);
+int VptManagerPushCamera(void *pObject, void *pItem, int (*a)(void *, void *), int (*b)(void *, void *));
+int VptManagerPopCamera(void *pObject, void *pItem);
+int VptManagerReplaceCamera(void *pObject, void *pItem, void *pOther);
 void fn_800AD9C0(float value);
 void fn_80141164(float value);
 int fn_80178308(void);
@@ -60,7 +60,7 @@ int fn_8013F460(void *p, int value)
     pState->mSet.mpCameras[3] = 0;
     fn_8013F7C0(pState, 3, 17);
     pState->mSet.mCurrent = 0;
-    fn_8002B2D4(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent], 0, 0);
+    VptManagerPushCamera(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent], 0, 0);
     fn_80141164(0.0f);
     return 0;
 }
@@ -70,7 +70,7 @@ int fn_8013F4F0(void *p, int value)
     State_803ECA00 *pState = (State_803ECA00 *)p;
     int i;
 
-    fn_8002B3DC(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent]);
+    VptManagerPopCamera(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent]);
     for (i = 0; i < 4; i++) {
         if (pState->mSet.mpCameras[i] != 0) {
             fn_8013F820(pState, i);
@@ -134,7 +134,7 @@ int fn_8013F730(void *p)
 void fn_8013F738(State_803ECA00 *pState, int index)
 {
     if (index != pState->mSet.mCurrent) {
-        fn_8002B494(pState->mpObject, lbl_803ECA00->mSet.mpCameras[lbl_803ECA00->mSet.mCurrent], lbl_803ECA00->mSet.mpCameras[index]);
+        VptManagerReplaceCamera(pState->mpObject, lbl_803ECA00->mSet.mpCameras[lbl_803ECA00->mSet.mCurrent], lbl_803ECA00->mSet.mpCameras[index]);
         pState->mSet.mCurrent = index;
         fn_8013C824(pState->mSet.mpCameras[index], 4, index);
         fn_8013C2B4(pState->mSet.mpCameras[index], 0, 0, 0);
@@ -190,7 +190,7 @@ void fn_8013F9B8(void)
 {
     State_803ECA00 *pState = lbl_803ECA00;
 
-    fn_8002B2D4(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent], 0, 0);
+    VptManagerPushCamera(pState->mpObject, pState->mSet.mpCameras[pState->mSet.mCurrent], 0, 0);
 }
 
 int fn_8013F9F8(void)
@@ -241,7 +241,7 @@ void fn_8013FB44(void)
     State_803ECA00 *pState = lbl_803ECA00;
 
     if (pState != 0 && pState->mSet.mUnknown14 != 0) {
-        fn_800AD9C0(lbl_803EA2C4 * 30.0f);
+        fn_800AD9C0(gFrameTimeScale * 30.0f);
         pState->mSet.mUnknown14 = 0;
     }
     fn_8013F85C(fn_8013C680, 1, 0, 0);
@@ -260,7 +260,7 @@ void fn_8013FBB4(int index, int id)
     fn_8013F7C0(lbl_803ECA00, index, id);
     Camera_8013F738 *pNew = fn_8013FA04(index);
     if (index == lbl_803ECA00->mSet.mCurrent) {
-        fn_8002B494(lbl_803ECA00->mpObject, pOld, pNew);
+        VptManagerReplaceCamera(lbl_803ECA00->mpObject, pOld, pNew);
     }
     pNew->mUnknown94 = flags;
     fn_8013C384(pNew, a8, b0, b4);
