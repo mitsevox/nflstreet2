@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Item_800476DC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/Input_800B6D34.h"
@@ -60,7 +60,7 @@ char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
 void fn_800476CC(Item_800476DC *p, const char *name);
 void fn_8009BD88(Object_80039F5C *p, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
@@ -74,7 +74,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 void fn_80227264(void *pOut, void *pV, float scale);
 void fn_80227350(void *pOut, void *pV, float scale);
@@ -215,14 +215,14 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
 extern "C" void fn_800B5764(Vector_80039F5C *pOut)
 {
     pOut->mX = pOut->mY = 0.0f;
-    Object_80039F5C *pOwner = fn_80137BEC();
+    Object_80039F5C *pOwner = BallGetCurrentTarget();
     float height;
     if (pOwner) {
         height = (pOwner->mUnknown2900 * 0.027777778f + 1.159353f) * 0.5f;
     } else {
         height = 1.65f;
     }
-    fn_8013AA00(fn_801374BC(), height, 0, pOut);
+    fn_8013AA00(BallGetCurrent(), height, 0, pOut);
 }
 
 extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPos, Vector_80039F5C *pVel, int carried)
@@ -239,7 +239,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
     unsigned short i;
 
     if (carried) {
-        pCarrier = fn_80137AD0(fn_801374BC());
+        pCarrier = BallGetHolder(BallGetCurrent());
     }
     pos.mX = pPos->mX;
     pos.mY = pPos->mY;
@@ -249,7 +249,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
         fn_8022732C(&pos, &vel, lbl_803EAB44);
     } else {
         fn_800B5764((Vector_80039F5C *)&pos);
-        Object_80039F5C *pReceiver = fn_80137B88(fn_801374BC());
+        Object_80039F5C *pReceiver = BallGetTarget(BallGetCurrent());
 
         if (pReceiver != 0) {
             pTarget = fn_800FB9D4(pReceiver);
@@ -471,15 +471,15 @@ extern "C" void fn_800B6988(int index)
         Vector_80039F5C target;
         Vector_80039F5C pos;
         Object_80039F5C *p;
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
         Object_80039F5C *pCarrier;
         int ballState;
 
         fn_80156C78(0x24, 1);
         p = fn_800B6544(index);
-        pBall = fn_801374BC();
-        fn_8013BA58(pBall, &ballState);
-        pCarrier = fn_80137AD0(pBall);
+        pBall = BallGetCurrent();
+        BallStateGet(pBall, &ballState);
+        pCarrier = BallGetHolder(pBall);
         if (pCarrier != 0) {
             pos.mX = pCarrier->mMotion.mPos.mX;
             pos.mY = pCarrier->mMotion.mPos.mY;
@@ -487,14 +487,14 @@ extern "C" void fn_800B6988(int index)
             vel.mY = pCarrier->mMotion.mUnknown44;
             vel.mZ = pCarrier->mMotion.mUnknown48;
         } else {
-            fn_80137D58(pBall, &pos);
-            fn_80137EC4(pBall, &vel);
-            if (fn_80138064(pBall, &target) != 0) {
+            BallGetPosition(pBall, &pos);
+            BallGetVelocity(pBall, &vel);
+            if (BallGetLandingPoint(pBall, &target) != 0) {
                 Object_80039F5C *pReceiver;
 
                 fn_80227264(&pos, &pos, 1.0f - 0.8f);
                 fn_80227350(&pos, &target, 0.8f);
-                pReceiver = fn_80137B88(pBall);
+                pReceiver = BallGetTarget(pBall);
                 if (p->mIdBytes[2] == fn_80178308() && pReceiver != 0 && pReceiver->mUnknown8 == 0xFF
                     && !fn_801783AC(11) && !fn_801783AC(12) && !fn_801783AC(24)) {
                     pNew = pReceiver;
@@ -509,12 +509,12 @@ extern "C" void fn_800B6988(int index)
 
             fn_800B6658(p);
             fn_800B6714(pNew, index);
-            if (fn_8013BA58(fn_801374BC(), &state) == 5 && state == 1) {
+            if (BallStateGet(BallGetCurrent(), &state) == 5 && state == 1) {
                 Message_800F01CC message;
 
                 memset(&message, 0, sizeof(message));
                 message.mId = 0x39;
-                message.mUnknown1[0] = fn_801374E0(fn_801374BC());
+                message.mUnknown1[0] = BallGetIndex(BallGetCurrent());
                 fn_8003AB28(pNew, &message, 0);
             }
         }

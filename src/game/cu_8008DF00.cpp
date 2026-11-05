@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801BE60C.h"
 
 extern "C" {
@@ -106,7 +106,7 @@ extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
     }
     diff = fn_801CFFD0(pCur->mUnknown4, pCur->mUnknown8);
 
-    if (fn_80137B40() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
+    if (BallGetCurrentHolder() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
         if (diff <= 0x56C16B) {
             if (flag || p->mUnknown492 <= lbl_803ECB0C) {
                 if (p->mIdBytes[2] == fn_80178320() || flag) {

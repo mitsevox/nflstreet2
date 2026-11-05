@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 extern "C" {
@@ -71,7 +71,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     if (fn_800D0B90(pOther)) {
         result = 0;
     }
-    if (fn_80137B40() != pOther) {
+    if (BallGetCurrentHolder() != pOther) {
         result = 0;
     }
     if (fn_801CFFD0(pOther->mMotion.mFacing, 0x400000) > (int)(lbl_803EABFC * 46603.37890625f)) {

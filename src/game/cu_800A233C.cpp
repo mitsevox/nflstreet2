@@ -1,13 +1,13 @@
 #include "game/Block_8030E6E8.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_80054138.h"
 #include "game/cu_801444D8.h"
 #include "game/Level_80054130.h"
 
 extern "C" {
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_8013F9F8(void);
+GameCamera_t *CamGameGetCamera(int index);
+int CamGameGetCurrentSlot(void);
 unsigned char fn_8002FA84(void);
 unsigned char fn_80140DB4(void);
 int fn_801784C4(void);
@@ -117,7 +117,7 @@ extern "C" void fn_800A25BC(void)
 
 extern "C" int fn_800A262C(void)
 {
-    if (fn_8013FA04(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && fn_8013F9F8() == 0
+    if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
         && fn_8002FA84() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
@@ -128,7 +128,7 @@ extern "C" int fn_800A262C(void)
 
 extern "C" int fn_800A26C4(void)
 {
-    if (fn_8013FA04(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && fn_8013F9F8() == 0
+    if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
         && fn_8002FA84() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
@@ -150,9 +150,9 @@ int fn_8007B974(void);
 int fn_800A33B0(void);
 float fn_80237260(int stream);
 int fn_801CFFD0(int a, int b);
-void fn_80147D4C(int index, unsigned char value);
-void fn_80147D60(int index, int value);
-void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
+void ScreenTintSetActive(int index, unsigned char value);
+void ScreenTintSetMode(int index, int value);
+void ScreenTintFadeTo(int index, unsigned int color, float value, unsigned int count);
 
 extern unsigned char lbl_802D7D90[][4];
 extern int lbl_802D7DC0[];
@@ -274,10 +274,10 @@ extern "C" void fn_800A2B40(void)
 
 extern "C" void fn_800A2E80(int index, int count)
 {
-    fn_80147D4C(0, 1);
-    fn_80147D74(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],
+    ScreenTintSetActive(0, 1);
+    ScreenTintFadeTo(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],
                 (unsigned int)lbl_802D7D90[index][3] * (1.0f / 255.0f), count);
-    fn_80147D60(0, lbl_802D7DC0[index]);
+    ScreenTintSetMode(0, lbl_802D7DC0[index]);
 }
 
 extern "C" void fn_800A2F48(void)

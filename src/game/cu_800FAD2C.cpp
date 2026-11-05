@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
@@ -125,7 +125,7 @@ extern "C" void fn_800FB314(void) {
                     fn_800FBF74(pB, (Object_80039F5C *)pB->mpState);
                     xA = pA->mMotion.mPos.mX;
                     xB = pB->mMotion.mPos.mX;
-                    if (!fn_80137B40()) {
+                    if (!BallGetCurrentHolder()) {
                         Point_8017886C goal = fn_80177FE0();
                     }
                     int time = 0;

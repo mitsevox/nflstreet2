@@ -1698,7 +1698,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8013141C.cpp",
+      "source": "src/game/OptionRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/cu_8013141C.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
       "sections": [
@@ -5816,7 +5816,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80147E94.cpp",
+      "source": "src/game/PassIconState.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80147E94-0x80147F2C (src/game/cu_80147E94.cpp) and its data rows.",
       "sections": [
@@ -6399,7 +6399,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80142B0C.cpp",
+      "source": "src/game/CollTypes.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80142B0C-0x80142BB4 (src/game/cu_80142B0C.cpp) and its data rows.",
       "sections": [
@@ -6511,7 +6511,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8013F460.cpp",
+      "source": "src/game/camgame.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013F460-0x8013FC58 (src/game/cu_8013F460.cpp) and its data rows.",
       "sections": [
@@ -6536,7 +6536,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8013FC58.cpp",
+      "source": "src/game/campreset.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013FC58-0x8013FF84 (src/game/cu_8013FC58.cpp) and its data rows.",
       "sections": [
@@ -7394,7 +7394,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8013B874.cpp",
+      "source": "src/game/BallState.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013B874-0x8013BB18 (src/game/cu_8013B874.cpp) and its data rows.",
       "sections": [
@@ -7540,7 +7540,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801459F0.cpp",
+      "source": "src/game/ParticleEvents.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801459F0-0x80146134 (src/game/cu_801459F0.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -7571,7 +7571,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80147F2C.cpp",
+      "source": "src/game/PassIcons.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80147F2C-0x80148424 (src/game/cu_80147F2C.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -7639,7 +7639,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80136B1C.cpp",
+      "source": "src/game/Ball.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80136B1C-0x80138590 (src/game/cu_80136B1C.cpp) and its data rows.",
       "sections": [
@@ -7670,7 +7670,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80138590.cpp",
+      "source": "src/game/BallCollide.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80138590-0x80138CC0 (src/game/cu_80138590.cpp) and its data rows.",
       "sections": [
@@ -7933,7 +7933,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80139308.cpp",
+      "source": "src/game/BallRest.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80139308-0x801394B0 (src/game/cu_80139308.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
@@ -8758,7 +8758,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80145224.cpp",
+      "source": "src/game/GroundPulse.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/cu_80145224.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -8783,7 +8783,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8014529C.cpp",
+      "source": "src/game/ParticleEventTypes.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8014529C-0x801459F0 (src/game/cu_8014529C.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -8989,7 +8989,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80147AE4.cpp",
+      "source": "src/game/ScreenTint.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/cu_80147AE4.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
@@ -9512,7 +9512,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80138CC0.cpp",
+      "source": "src/game/BallSweep.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
       "sections": [
@@ -9981,7 +9981,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801422C8.cpp",
+      "source": "src/game/camballmode.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/cu_801422C8.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -10241,7 +10241,7 @@
       }
     },
     {
-      "source": "src/game/cu_80130494.cpp",
+      "source": "src/game/RouteRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/cu_80130494.cpp) and its data rows.",
       "sections": [
@@ -10616,7 +10616,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801390D0.cpp",
+      "source": "src/game/BallPlace.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/cu_801390D0.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -10705,7 +10705,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801442FC.cpp",
+      "source": "src/game/LightTracker.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/cu_801442FC.cpp) and its .rodata row.",
       "sections": [
@@ -14286,7 +14286,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80141210.cpp",
+      "source": "src/game/camcurve.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8014116C-0x801422C8 (src/game/cu_80141210.cpp), its 12 exact function extents, data rows 0x802A0268-0x802A02B0, 0x802DCEB0-0x802DCF58, 0x802DCF58-0x802DCF74, 0x802DCF74-0x802DCF80 and 0x803EB1F0-0x803EB1F4, and its source-form rows.",
       "sections": [

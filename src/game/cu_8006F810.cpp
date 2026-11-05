@@ -8,7 +8,7 @@
 #include "game/SndgCrowd.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
@@ -263,7 +263,7 @@ void fn_8006F850(Record_80067CA8 *p)
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
         if (pose && pose->mUnknown972) surface = ((Area_80054138 *)pose->mUnknown972)->mSurface;
         int id = fn_80071BDC(surface);
-        if (fn_80137B40() == player) {
+        if (BallGetCurrentHolder() == player) {
             int volume = fn_8006CC90(id) * 2;
             if (volume > 127) volume = 127;
             else volume = fn_8006CC90(id) * 2;
@@ -587,7 +587,7 @@ void fn_8006F850(Record_80067CA8 *p)
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
                 Point_8017886C point = fn_80177FE0();
-                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(fn_8016871C(fn_80178348()))) eligible = fn_80137B40() == player;
+                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(fn_8016871C(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
             }
             if (eligible) fn_8006F394(8, player->mIdBytes[2]);
         }
@@ -783,13 +783,13 @@ void fn_8007134C(void)
     fn_8006C548(16, other, 0);
 }
 
-void fn_80071458(Object_80039F5C *p, Object_80137ABC *ball)
+void fn_80071458(Object_80039F5C *p, Ball_t *ball)
 {
     Vector_80039F5C pos, velocity;
     Point_8017886C delta;
-    fn_80137D58(ball, &pos);
+    BallGetPosition(ball, &pos);
     int nearby = 0;
-    fn_80137EC4(ball, &velocity);
+    BallGetVelocity(ball, &velocity);
     if (p->mIdBytes[3] == 1) {
         fn_80227690(&delta, &pos, &p->mMotion);
         nearby = fn_802270A4(&delta) < 0.3f;
@@ -797,10 +797,10 @@ void fn_80071458(Object_80039F5C *p, Object_80137ABC *ball)
     fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
-void fn_80071540(int *value, Object_80137ABC *ball)
+void fn_80071540(int *value, Ball_t *ball)
 {
     Vector_80039F5C pos;
-    fn_80137D58(ball, &pos);
+    BallGetPosition(ball, &pos);
     fn_80067E3C(29, &pos, *value, 0, 0, ball->mState.mIndex);
 }
 

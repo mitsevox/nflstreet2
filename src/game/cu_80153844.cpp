@@ -2,7 +2,7 @@
 #include "game/Class_80297BF8.h"
 #include "game/Class_80297CE8.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80178D18.h"
@@ -53,9 +53,9 @@ int fn_800C1E40(void);
 void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
 Rules_801531C4 *fn_80155128(Class_80148A58 *p);
 int fn_80054568(void);
-void fn_8013FA8C(int a);
-void fn_8013F97C(int a);
-Camera_8013F738 *fn_8013FA04(int index);
+void CamGameSetModeAll(int a);
+void CamGameSelectCamera(int a);
+GameCamera_t *CamGameGetCamera(int index);
 void fn_80141164(float value);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -63,7 +63,7 @@ void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
 unsigned int fn_80153328(Class_802A1930 *p);
 void fn_8017D7C4(const char *pText);
-void fn_80139274(void);
+void BallResetToSpot(void);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 unsigned char fn_8007AFDC(int team);
 int fn_800B65D0(int team);
@@ -85,9 +85,9 @@ void fn_80153844(Class_802A1930 *p, int team)
 void fn_801538C8(Class_802A1BC8 *p)
 {
     p->Class_80297BF8::vfn_05();
-    fn_8013FA8C(1);
-    fn_8013F97C(0);
-    fn_8013C6F0(fn_8013FA04(5));
+    CamGameSetModeAll(1);
+    CamGameSelectCamera(0);
+    fn_8013C6F0(CamGameGetCamera(5));
     fn_80141164(2.5f);
 }
 
@@ -137,11 +137,11 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     } else {
         lbl_803EABA4->fn_800C02EC(39);
     }
-    fn_80139274();
-    Object_80137ABC *pBall = fn_801374BC();
+    BallResetToSpot();
+    Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
-    fn_80137D58(pBall, &pos);
-    fn_80137A04(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGetPosition(pBall, &pos);
+    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
 }
 
 void fn_80153BBC(Class_802A1B58 *p)

@@ -6,7 +6,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/Record_8036B55C.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
@@ -19,7 +19,7 @@ extern unsigned char lbl_802DA888[];
 struct Key_800DA6AC { unsigned short mUnknown0; unsigned short mUnknown2; };
 extern Key_800DA6AC lbl_802DA8AC[4];
 int fn_801486A0(void);
-int fn_801481B0(void);
+int PassIconsAreShown(void);
 int fn_801787A0(void);
 int fn_800D0B90(Object_80039F5C *p);
 unsigned char fn_800D0B98(Object_80039F5C *p);
@@ -70,7 +70,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
         result = 2;
         goto finish;
     }
-    if (pOther == p || (fn_801486A0() == 1 && fn_80137C48(p))) {
+    if (pOther == p || (fn_801486A0() == 1 && BallFindHeldBy(p))) {
         switch (p->mUnknown528.mUnknown15) {
         case 10: case 11: result = 34; goto finish;
         case 20: case 21:
@@ -105,7 +105,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
                 if (fn_801CFFD0(direction, 0) < (int)(angle * 46603.37890625f)) result = 6;
                 if (!(p->mMotion.mUnknown28 > 0.0000001f)) result = 9;
             }
-        } else if (fn_801481B0() || !(p->mFlags & 0x400)) {
+        } else if (PassIconsAreShown() || !(p->mFlags & 0x400)) {
             result = p->mUnknown2913 ? 22 : 23;
         }
         goto finish;
@@ -162,7 +162,7 @@ int fn_800D9A10(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, Object_8003
         second = fn_800D949C(p, pOther, team, flag, result);
     } else {
         first = 2;
-        second = fn_80137C48(p) ? 1 : 2;
+        second = BallFindHeldBy(p) ? 1 : 2;
     }
     if (pBlock->mUnknown3C != first || pBlock->mUnknown3D != second) {
         pBlock->mUnknown3C = first;
@@ -200,7 +200,7 @@ int fn_800D9B0C(Object_80039F5C *p, int check, int value)
         case 18:
             return 0;
         }
-        if (fn_80137C48(p) == 0) {
+        if (BallFindHeldBy(p) == 0) {
             if (check != 0 && fn_800AD9B4() != 2) {
                 value = fn_802372EC(0, 100) < 50;
             }
@@ -232,7 +232,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         int mode = fn_800D9B0C(p, 1, 0);
-        Object_80039F5C *other = fn_80137B40();
+        Object_80039F5C *other = BallGetCurrentHolder();
         int team = fn_80178308();
         int flag = fn_800AD9B4() == 3 ? 0 : 1;
         block->mUnknown3C = fn_800D91E0(p, team, flag, &value);
@@ -287,7 +287,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     }
     case 2: {
         if (fn_801BE648(p->mpUnknown792) != key) return 0;
-        Object_80039F5C *other = fn_80137B40();
+        Object_80039F5C *other = BallGetCurrentHolder();
         if ((signed char)block->mUnknown3A[1] <= 0) {
             int mode = fn_801BA6B0(&entries[block->mUnknown0]);
             unsigned char changed = fn_800D9A10(table, block, p, other, mode);

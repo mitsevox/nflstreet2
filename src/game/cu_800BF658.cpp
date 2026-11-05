@@ -35,7 +35,7 @@ unsigned char fn_8017F334(unsigned char value);
 unsigned char fn_8017F384(unsigned char value);
 void fn_8015C254(int value);
 void fn_8015A0D0(int value);
-void fn_80145EB8(void);
+void ParticlesResetEvents(void);
 void fn_8010A220(void);
 void fn_8009DE9C(void);
 int fn_801486A0(void);
@@ -56,7 +56,7 @@ int fn_800BA6F8(void);
 void fn_8009D888(int index, int value);
 void fn_801789F8(void);
 void fn_800BF4B8(void);
-void fn_801383E4(int on);
+void BallsSetVisible(int on);
 void fn_800C9BB0(void);
 int fn_800A8488(int team);
 int fn_800A8444(int team);
@@ -68,7 +68,7 @@ void fn_8017D9D8(int team);
 void fn_8017885C(void);
 void fn_800BD958(void);
 void fn_800771D8(void);
-void fn_801378C0(void);
+void BallsResetScales(void);
 unsigned char fn_800545F4(unsigned char value);
 void fn_80025C88(int flag);
 void fn_800A87E8(void);
@@ -83,8 +83,8 @@ void fn_800BD568(int index);
 void fn_8017CFB4(int index);
 void fn_800AEF38(int team);
 void fn_8017E01C(int index);
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 unsigned char fn_801478F0(unsigned char a);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -166,10 +166,10 @@ void Class_80297CE8::vfn_04(float dt)
     if (fn_8017F2DC(1) == 1) {
         fn_8017F384(1);
     }
-    fn_80148154();
+    PassIconsHide();
     fn_8015C254(1);
     fn_8015A0D0(1);
-    fn_80145EB8();
+    ParticlesResetEvents();
     fn_8010A220();
     fn_8009DE9C();
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
@@ -224,7 +224,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_800BF174();
     fn_8003A3F4(0, 0);
     fn_8003A3F4(0, 1);
-    fn_801483C8();
+    PassIconsClearReplayFlag();
     fn_800BF3F4(fn_80178308());
     fn_800BF3F4(fn_80178320());
     fn_800BD99C(fn_80178308());
@@ -242,7 +242,7 @@ void Class_80297CE8::vfn_04(float dt)
     }
     fn_801789F8();
     fn_800BF4B8();
-    fn_801383E4(1);
+    BallsSetVisible(1);
     Desc_802345C4 desc = { 0, 14 };
     fn_802345C4(&desc, 2);
     fn_80067D4C(115, 0);
@@ -318,7 +318,7 @@ void Class_80297CE8::vfn_06(float dt)
 {
     fn_800771D8();
     lbl_803EABA8->mUnknown40 = 0;
-    fn_801378C0();
+    BallsResetScales();
     fn_800545F4(0);
     fn_80025C88(0);
     fn_800A87E8();
@@ -340,8 +340,8 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800AEF38(1);
     fn_8017E01C(0);
     fn_8017E01C(1);
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_801478F0(1);
     fn_800BD2F8(fn_80178308());
     fn_800BD2F8(fn_80178320());

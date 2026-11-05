@@ -19,8 +19,8 @@ int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther);
 unsigned char fn_8011EE18(Object_80039F5C *p, Object_80039F5C *pCarrier);
 int fn_8011EFD4(void *p, void *q);
 int fn_8011F1CC(void);
-Object_80039F5C *fn_80137B40(void);
-unsigned char fn_801383C8(void);
+Object_80039F5C *BallGetCurrentHolder(void);
+unsigned char BallsGetCount(void);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
@@ -33,7 +33,7 @@ int fn_8011EC68(Object_80039F5C *p, Object_80039F5C *pOther)
     int result = 0;
     Object_80039F5C *pCarrier;
 
-    if (fn_8011A994(p, pOther) && (pCarrier = fn_80137B40()) != 0) {
+    if (fn_8011A994(p, pOther) && (pCarrier = BallGetCurrentHolder()) != 0) {
         Point_8017886C delta;
         int angle;
 
@@ -119,7 +119,7 @@ unsigned char fn_8011EE18(Object_80039F5C *p, Object_80039F5C *pCarrier)
 
 void fn_8011F0D8(void)
 {
-    unsigned char count = fn_801383C8();
+    unsigned char count = BallsGetCount();
     void *pHandle = fn_80238174(0, (void **)&lbl_803EB098, 576 + count * sizeof(Record_8011F4F8), 0, 0x70696E66);
     State_803EB098 *pState;
 

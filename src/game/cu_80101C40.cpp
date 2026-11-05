@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -83,7 +83,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         return 1;
     }
     pState = (State_800FDA58 *)&p->mUnknown336;
-    pState->mUnknown3Byte = fn_801374E0(fn_80137C48(p));
+    pState->mUnknown3Byte = BallGetIndex(BallFindHeldBy(p));
     pRequest = fn_8011F4F8(pState->mUnknown3Byte);
     p->mFlags &= ~0x1000;
     p->mFlags &= ~4;

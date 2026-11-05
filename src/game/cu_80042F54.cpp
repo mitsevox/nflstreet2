@@ -98,7 +98,7 @@ void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *fn_800A336C(void);
 int fn_800A33A4(void);
 int fn_800C4E18(Object_80039F5C *pPlayer);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
@@ -350,7 +350,7 @@ void fn_800435B4(Divot *p)
 {
     p->mActive = 0;
     if (lbl_803EC79C < DIVOT_MAX_RECORDS) {
-        if (p->mpOwner == fn_80137B40() || fn_80237260(1) < 0.75f) {
+        if (p->mpOwner == BallGetCurrentHolder() || fn_80237260(1) < 0.75f) {
             p->mAngle = (p->mAngle + 0xC00000) & 0xFFFFFF;
             p->mActive = 1;
             p->mAlpha = p->mAlphaMax;

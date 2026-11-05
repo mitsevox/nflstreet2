@@ -1,6 +1,6 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802270D4.h"
 
@@ -162,7 +162,7 @@ extern "C" int fn_800F9024(Object_80039F5C *p) {
         if (delta.mY < -7.0f && fn_8009E9A4() != 1) {
             return 0;
         }
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         if ((p->mpState->mUnknown2 & 1) == 0) {
             if (pOther->mMotion.mPos.mX > ball.mX) {
                 float lo = pOther->mMotion.mPos.mX - lbl_803EAE50;

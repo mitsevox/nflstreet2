@@ -1,4 +1,4 @@
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/cu_801A8620.h"
 
 #include <math.h>
@@ -210,7 +210,7 @@ void fn_801A8548(Object_801A8620 *, int)
 {
 }
 
-int fn_801A854C(Tracker_801442FC *pTracker, Object_80144310 *pSource)
+int fn_801A854C(LightTracker_t *pTracker, LightSource_t *pSource)
 {
     float direction[4];
     float scale[3];
@@ -221,7 +221,7 @@ int fn_801A854C(Tracker_801442FC *pTracker, Object_80144310 *pSource)
         z = pSource->mUnknown14;
     }
     int light = fn_80236B98(0, x, y, z);
-    if (fn_80144310(pTracker, pSource, direction, scale)) {
+    if (LightTrackerUpdate(pTracker, pSource, direction, scale)) {
         scale[0] *= x;
         scale[1] *= y;
         scale[2] *= z;

@@ -4,7 +4,7 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
@@ -112,10 +112,10 @@ unsigned char fn_800C0658(void);
 int fn_800C1E40(void);
 void fn_800CC560(int a);
 void fn_8010A220(void);
-void fn_80139274(void);
-void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
-void fn_8013F9B8(void);
-Camera_8013F738 *fn_8013FA04(int index);
+void BallResetToSpot(void);
+void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+void CamGamePushCurrentCamera(void);
+GameCamera_t *CamGameGetCamera(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80156704(void);
@@ -201,7 +201,7 @@ void Class_80297BF8::vfn_05()
     }
     lbl_803EC98C->mUnknown32 = 0;
     fn_8004A230(1);
-    fn_8013F9B8();
+    CamGamePushCurrentCamera();
     fn_800CC560(0);
     fn_8010A220();
     if (fn_80025708() != 0) {
@@ -235,7 +235,7 @@ void Class_80297BF8::vfn_05()
     if (fn_800BA6F8() != 0) {
         fn_800BAAE4();
     } else {
-        fn_80139274();
+        BallResetToSpot();
     }
     fn_800AFE20(fn_800BB694);
     fn_80067D4C(0x6e, 0);
@@ -255,7 +255,7 @@ void Class_80297BF8::vfn_05()
     lbl_803EC98C->mUnknown31 = 0;
     lbl_803EC98C->mUnknown28 = 0;
     lbl_803EAB95 = 0;
-    fn_801383E4(1);
+    BallsSetVisible(1);
     fn_800BB5DC();
     fn_8003E174(1);
     if (lbl_803EC98C->mUnknown8 != -1) {
@@ -363,7 +363,7 @@ extern "C" float fn_800BD190(void)
 
 extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
 {
-    Camera_8013F738 *pCamera = fn_8013FA04(5);
+    GameCamera_t *pCamera = CamGameGetCamera(5);
     int result = 0;
     float value;
 

@@ -1,18 +1,21 @@
+/* Keeps the lists of particle events and spawned effects, runs them every frame and frees
+   the finished ones. */
+
 #include <dolphin/mtx.h>
 #include "game/cu_801444D8.h"
-#include "game/Event_801459F0.h"
-#include "game/cu_80136B1C.h"
+#include "game/ParticleEvent.h"
+#include "game/Ball.h"
 #include "game/fn_801C68FC.h"
-#include "game/Object_80146094.h"
+#include "game/ParticleTrail.h"
 #include "game/fn_801EBC18.h"
 
-/* One 0x44-byte entry of the pool at lbl_803EB254. */
-struct Entry_80145EFC {
+/* One 0x44-byte entry of the pool at _Particles_pSpawnPool. */
+struct ParticleSpawn_t {
     Mtx44 mMatrix;
     Object_80144CE0 *mUnknown40;
 };
 
-struct Object_803ECA10 {
+struct ParticleBallTrail_t {
     char mPad000[0x39C];
     float mUnknown39C;
     float mUnknown3A0;
@@ -20,10 +23,10 @@ struct Object_803ECA10 {
 };
 
 extern "C" {
-void fn_80145224(void);
+void GroundPulseUpdate(void);
 void fn_80146FCC(void);
 void fn_80146FD8(void);
-void fn_80146FDC(Object_80146094 *pObject);
+void fn_80146FDC(ParticleTrailSet_t *pObject);
 void fn_801475F4(void);
 void fn_801478A8(void);
 void *fn_801C6A20(void *pool);
@@ -38,36 +41,36 @@ void fn_801D0BCC(int a, int b, int c);
 void fn_801D0C58(void *a);
 void fn_801D0F80(Mtx44 m);
 
-extern unsigned char lbl_803EB249;
+extern unsigned char gParticles_bInit;
 }
 
-static void *lbl_803EB24C = 0;
-static int lbl_803EB250 = 0;
-static void *lbl_803EB254 = 0;
-static Object_803ECA10 *lbl_803ECA10[2];
+static void *_Particles_pEventPool = 0;
+static int _Particles_iSpare = 0;
+static void *_Particles_pSpawnPool = 0;
+static ParticleBallTrail_t *_Particles_pBallTrails[2];
 
 extern "C" {
 
-static int fn_801459F0(void *pItem, void *pContext)
+static int _ParticleEventUpdate(void *pItem, void *pContext)
 {
-    Event_801459F0 *pEvent = (Event_801459F0 *)pItem;
+    ParticleEvent_t *pEvent = (ParticleEvent_t *)pItem;
 
     if (pEvent->mType != 7) {
         switch (pEvent->mType) {
         case 0:
-            fn_80145314(pEvent);
+            ParticleEventFootstep(pEvent);
             break;
         case 1:
-            fn_801455F8(pEvent);
+            ParticleEventBodyTrail(pEvent);
             break;
         case 4:
-            fn_801454DC(pEvent);
+            ParticleEventAttached(pEvent);
             break;
         case 2:
-            fn_80145798(pEvent);
+            ParticleEventBodyImpact(pEvent);
             break;
         case 5:
-            fn_801458C8(pEvent);
+            ParticleEventBallBounce(pEvent);
             break;
         }
         Object_80144CE0 *pObject = pEvent->mUnknown18;
@@ -79,9 +82,9 @@ static int fn_801459F0(void *pItem, void *pContext)
     return 1;
 }
 
-static int fn_80145AC0(void *pItem, void *pContext)
+static int _ParticleEventStop(void *pItem, void *pContext)
 {
-    Event_801459F0 *pEvent = (Event_801459F0 *)pItem;
+    ParticleEvent_t *pEvent = (ParticleEvent_t *)pItem;
 
     if (pEvent->mType != 7) {
         pEvent->mUnknown04 = 0;
@@ -100,9 +103,9 @@ static int fn_80145AC0(void *pItem, void *pContext)
     return 1;
 }
 
-static int fn_80145B40(void *pItem, void *pContext)
+static int _ParticleEventReset(void *pItem, void *pContext)
 {
-    Event_801459F0 *pEvent = (Event_801459F0 *)pItem;
+    ParticleEvent_t *pEvent = (ParticleEvent_t *)pItem;
 
     if (pEvent->mType != 7) {
         pEvent->mUnknown04 = 0;
@@ -110,29 +113,29 @@ static int fn_80145B40(void *pItem, void *pContext)
     return 1;
 }
 
-static void fn_80145B5C(void)
+static void _ParticlesFollowBall(void)
 {
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     unsigned int i;
 
     for (i = 0; i < 2; i++) {
-        if (lbl_803ECA10[i] != 0) {
-            lbl_803ECA10[i]->mUnknown39C = pBall->mState.mUnknown54.mX;
-            lbl_803ECA10[i]->mUnknown3A0 = pBall->mState.mUnknown54.mY;
-            lbl_803ECA10[i]->mUnknown3A4 = pBall->mState.mUnknown54.mZ;
+        if (_Particles_pBallTrails[i] != 0) {
+            _Particles_pBallTrails[i]->mUnknown39C = pBall->mState.mUnknown54.mX;
+            _Particles_pBallTrails[i]->mUnknown3A0 = pBall->mState.mUnknown54.mY;
+            _Particles_pBallTrails[i]->mUnknown3A4 = pBall->mState.mUnknown54.mZ;
         }
     }
 }
 
-static void fn_80145BC8(void)
+static void _ParticlesFreeFinished(void)
 {
-    Entry_80145EFC *pDone[64];
+    ParticleSpawn_t *pDone[64];
     unsigned int count = 0;
     unsigned int i;
-    Entry_80145EFC *pEntry;
+    ParticleSpawn_t *pEntry;
 
-    for (pEntry = (Entry_80145EFC *)fn_801C6B4C(lbl_803EB254, 0); pEntry != 0;
-         pEntry = (Entry_80145EFC *)fn_801C6C84(lbl_803EB254, pEntry)) {
+    for (pEntry = (ParticleSpawn_t *)fn_801C6B4C(_Particles_pSpawnPool, 0); pEntry != 0;
+         pEntry = (ParticleSpawn_t *)fn_801C6C84(_Particles_pSpawnPool, pEntry)) {
         Object_80144CE0 *pObject = pEntry->mUnknown40;
         if (pObject == 0) {
             pDone[count++] = pEntry;
@@ -142,40 +145,40 @@ static void fn_80145BC8(void)
         }
     }
     for (i = 0; i < count; i++) {
-        fn_801C6C0C(lbl_803EB254, pDone[i]);
+        fn_801C6C0C(_Particles_pSpawnPool, pDone[i]);
     }
 }
 
-void fn_80145C88(void)
+void ParticlesInit(void)
 {
     unsigned int i;
 
     for (i = 0; i < 2; i++) {
-        lbl_803ECA10[i] = 0;
+        _Particles_pBallTrails[i] = 0;
     }
-    lbl_803EB24C = fn_801C68FC(1, 0, 75, sizeof(Event_801459F0), 0, 0);
-    lbl_803EB254 = fn_801C68FC(1, 0, 64, sizeof(Entry_80145EFC), 0, 0);
+    _Particles_pEventPool = fn_801C68FC(1, 0, 75, sizeof(ParticleEvent_t), 0, 0);
+    _Particles_pSpawnPool = fn_801C68FC(1, 0, 64, sizeof(ParticleSpawn_t), 0, 0);
     fn_80146FCC();
-    lbl_803EB249 = 1;
+    gParticles_bInit = 1;
 }
 
-void fn_80145D0C(void)
+void ParticlesShutdown(void)
 {
-    if (lbl_803EB24C != 0) {
-        fn_801C69E4(lbl_803EB24C);
-        lbl_803EB24C = 0;
+    if (_Particles_pEventPool != 0) {
+        fn_801C69E4(_Particles_pEventPool);
+        _Particles_pEventPool = 0;
     }
-    if (lbl_803EB254 != 0) {
-        fn_801C69E4(lbl_803EB254);
-        lbl_803EB254 = 0;
+    if (_Particles_pSpawnPool != 0) {
+        fn_801C69E4(_Particles_pSpawnPool);
+        _Particles_pSpawnPool = 0;
     }
     fn_80146FD8();
-    lbl_803EB249 = 0;
+    gParticles_bInit = 0;
 }
 
-void fn_80145D64(int type, float (*pMatrix)[4][4], Object_80039F5C *pPlayer, int c)
+void ParticlesAddPlayerEvent(int type, float (*pMatrix)[4][4], Object_80039F5C *pPlayer, int c)
 {
-    Event_801459F0 *pEvent = (Event_801459F0 *)fn_801C6A20(lbl_803EB24C);
+    ParticleEvent_t *pEvent = (ParticleEvent_t *)fn_801C6A20(_Particles_pEventPool);
 
     if (pEvent != 0) {
         pEvent->mType = type;
@@ -186,13 +189,13 @@ void fn_80145D64(int type, float (*pMatrix)[4][4], Object_80039F5C *pPlayer, int
         pEvent->mUnknown10 = 0;
         pEvent->mUnknown14 = c;
         pEvent->mUnknown1C = 21;
-        fn_801C6AA4(lbl_803EB24C, pEvent, 0);
+        fn_801C6AA4(_Particles_pEventPool, pEvent, 0);
     }
 }
 
-void fn_80145DE4(int type, Object_80137ABC *pBall)
+void ParticlesAddBallEvent(int type, Ball_t *pBall)
 {
-    Event_801459F0 *pEvent = (Event_801459F0 *)fn_801C6A20(lbl_803EB24C);
+    ParticleEvent_t *pEvent = (ParticleEvent_t *)fn_801C6A20(_Particles_pEventPool);
 
     if (pEvent != 0) {
         pEvent->mType = type;
@@ -203,38 +206,38 @@ void fn_80145DE4(int type, Object_80137ABC *pBall)
         pEvent->mUnknown10 = pBall;
         pEvent->mUnknown14 = 0;
         pEvent->mUnknown1C = 21;
-        fn_801C6AA4(lbl_803EB24C, pEvent, 0);
+        fn_801C6AA4(_Particles_pEventPool, pEvent, 0);
     }
 }
 
-void fn_80145E64(void)
+void ParticlesProcess(void)
 {
-    if (lbl_803EB24C != 0) {
-        fn_801C6D34(lbl_803EB24C, 0, 0, 0, fn_801459F0, 1);
+    if (_Particles_pEventPool != 0) {
+        fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventUpdate, 1);
     }
-    fn_80145BC8();
-    fn_80145B5C();
+    _ParticlesFreeFinished();
+    _ParticlesFollowBall();
     fn_801478A8();
-    fn_80145224();
+    GroundPulseUpdate();
 }
 
-void fn_80145EB8(void)
+void ParticlesResetEvents(void)
 {
-    if (lbl_803EB24C != 0) {
-        fn_801C6D34(lbl_803EB24C, 0, 0, 0, fn_80145B40, 1);
+    if (_Particles_pEventPool != 0) {
+        fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventReset, 1);
     }
 }
 
-void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
+void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
 {
     Args_80144CE0 args;
     Mtx44 m;
-    Entry_80145EFC *pEntry;
+    ParticleSpawn_t *pEntry;
 
-    if (lbl_803EB254 == 0) {
+    if (_Particles_pSpawnPool == 0) {
         return;
     }
-    pEntry = (Entry_80145EFC *)fn_801C6A20(lbl_803EB254);
+    pEntry = (ParticleSpawn_t *)fn_801C6A20(_Particles_pSpawnPool);
     if (pEntry == 0) {
         return;
     }
@@ -256,31 +259,31 @@ void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
     args.mUnknown08 = &m;
     args.mUnknown00 = a;
     pEntry->mUnknown40 = fn_80144CE0(&args, 0, pSource);
-    fn_801C6AA4(lbl_803EB254, pEntry, 0);
+    fn_801C6AA4(_Particles_pSpawnPool, pEntry, 0);
 }
 
-void fn_80145FE4(void)
+void ParticlesStopOnEnter(void)
 {
-    if (lbl_803EB24C != 0) {
-        fn_801C6D34(lbl_803EB24C, 0, 0, 0, fn_80145AC0, 1);
+    if (_Particles_pEventPool != 0) {
+        fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventStop, 1);
     }
     fn_801475F4();
 }
 
-void fn_8014602C(void)
+void ParticlesFlush(void)
 {
-    fn_80145BC8();
+    _ParticlesFreeFinished();
 }
 
-void fn_8014604C(void)
+void ParticlesStopOnLeave(void)
 {
-    if (lbl_803EB24C != 0) {
-        fn_801C6D34(lbl_803EB24C, 0, 0, 0, fn_80145AC0, 1);
+    if (_Particles_pEventPool != 0) {
+        fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventStop, 1);
     }
     fn_801475F4();
 }
 
-void fn_80146094(Object_80146094 *pObject)
+void ParticleTrailReset(ParticleTrailSet_t *pObject)
 {
     pObject->mUnknown568 = 0;
     pObject->mUnknown57C = 0;
@@ -296,7 +299,7 @@ void fn_80146094(Object_80146094 *pObject)
     pObject->mUnknown594 = 1.0f;
 }
 
-void fn_801460FC(Object_80146094 *pObject, float a, float b, float c)
+void ParticleTrailSetTint(ParticleTrailSet_t *pObject, float a, float b, float c)
 {
     pObject->mUnknown568 = 1;
     pObject->mUnknown56C = a;
@@ -304,7 +307,7 @@ void fn_801460FC(Object_80146094 *pObject, float a, float b, float c)
     pObject->mUnknown574 = c;
 }
 
-void fn_80146114(Object_80146094 *pObject)
+void ParticleTrailClearTint(ParticleTrailSet_t *pObject)
 {
     pObject->mUnknown568 = 0;
     pObject->mUnknown56C = 1.0f;

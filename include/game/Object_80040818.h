@@ -3,7 +3,7 @@
 
 #include "game/Object_8003DEC4.h"
 #include "game/cu_80041210.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80054138.h"
 
 struct Model_8004E0CC {

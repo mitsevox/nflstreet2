@@ -2,7 +2,7 @@
 #define GAME_CU_801A8620_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 
 struct Texture_801A8D08;
 struct Instance_801A8D9C;
@@ -31,7 +31,7 @@ struct Child_801A9430 {
     void *mpUnknown58; Child_801A9430 *mpUnknown5C;
     union {
         Vector_80039F5C mUnknown60;
-        struct { Tracker_801442FC mTracker60; int mWord68; };
+        struct { LightTracker_t mTracker60; int mWord68; };
     };
     unsigned char mUnknown6C;
 };

@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include <math.h>
 
@@ -94,6 +94,6 @@ extern "C" int fn_8011B2A4(Entry_8011AFCC *pEntry)
             return 0;
         }
     }
-    fn_80138064(fn_801374BC(), &ball);
+    BallGetLandingPoint(BallGetCurrent(), &ball);
     return pMotion->mPos.mY - ball.mY >= -15.0f;
 }

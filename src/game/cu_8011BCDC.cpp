@@ -39,7 +39,7 @@ float fn_802270A4(void *p);
 int fn_801CFFD0(int a, int b);
 float fn_801CFB94(int angle);
 int fn_801783AC(int bit);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int fn_8011F1A4(void);
 int fn_8011F1CC(void);
@@ -134,7 +134,7 @@ float fn_8011BCDC(Entry_8011AFCC *pEntry, Entry_8011AFCC *pTarget, Pair_8011BAE0
             } else if (across > 8.0f) {
                 return 0.0f;
             }
-            if (fn_80137B40() != 0 && !(fn_80137B40()->mFlags & 0x8000)) {
+            if (BallGetCurrentHolder() != 0 && !(BallGetCurrentHolder()->mFlags & 0x8000)) {
                 int close = fabsf(pTarget->mpUnknown60->mMotion.mPos.mY - fn_80177FE0().mY) <= 1.5f
                             && fabsf(pTarget->mpUnknown60->mMotion.mPos.mX - fn_80177FE0().mX) <= 3.0f;
 

@@ -5,7 +5,7 @@
 #include "game/Object_800DA8D8.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800AD9B4.h"
@@ -51,14 +51,14 @@ extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRe
     switch (phase) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        unsigned char side = p == fn_80137B40() ? 1 : 2;
+        unsigned char side = p == BallGetCurrentHolder() ? 1 : 2;
         int i = fn_8009C56C(pTable, &side);
         fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         if (index >= 0) {
             pPayload->mEntry = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
                                            pTable->mEntries[index].mUnknown2, key, p, 1.0f);
-            if (fn_80137C48(p) && p->mUnknown776 == 1) {
+            if (BallFindHeldBy(p) && p->mUnknown776 == 1) {
                 Record_800D81C8 *pEntry = &pEntries[pPayload->mEntry];
                 fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
             }

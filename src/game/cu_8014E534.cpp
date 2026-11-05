@@ -4,7 +4,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801C1F94.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 struct State_802A2020 {
     char mUnknown0[4];
@@ -65,7 +65,7 @@ void fn_8014D210(Object_80039F5C *p, int a, int b);
 int fn_8009D990(int index);
 void fn_80177C44(int value);
 void fn_8014D948(void *p);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
 void fn_8009D8CC(int index);
 int fn_801783AC(int bit);
@@ -143,11 +143,11 @@ void fn_8014E534(State_802A2020 *p)
 void fn_8014E7D4(State_802A2020 *p, float dt)
 {
     Vector_80039F5C pos;
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     if (pCarrier) {
         if (!p->mUnknown4) {
             p->mUnknown4 = 1;
-            fn_80137D58(fn_801374BC(), &pos);
+            BallGetPosition(BallGetCurrent(), &pos);
             Record_800B15FC *pRecord = fn_800B15FC();
             pRecord->mUnknown14 = 3;
             pRecord->mUnknownC = pos.mX;
@@ -168,7 +168,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
     fn_800A050C(p, dt);
     fn_800B14E4();
     if (fn_801787A0() == 0) {
-        fn_80137D58(fn_801374BC(), &pos);
+        BallGetPosition(BallGetCurrent(), &pos);
         if (pCarrier) {
             if (fn_80178508(&pCarrier->mMotion, 0, 0) > 2) {
                 fn_801783D0(3, 1);
@@ -193,11 +193,11 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
     }
     fn_80148A58()->vfn_15();
     fn_8014D948(p);
-    if (fn_8013BA58(fn_801374BC(), 0) == 1 && !lbl_803EB2E0) {
+    if (BallStateGet(BallGetCurrent(), 0) == 1 && !lbl_803EB2E0) {
         int time = fn_8009D990(1);
-        lbl_803EB2E0 = fn_80137B40();
+        lbl_803EB2E0 = BallGetCurrentHolder();
         lbl_803EB2DC = time;
-    } else if (fn_8013BA58(fn_801374BC(), 0) != 1 && lbl_803EB2E0) {
+    } else if (BallStateGet(BallGetCurrent(), 0) != 1 && lbl_803EB2E0) {
         unsigned int time = lbl_803EB2DC - fn_8009D990(1);
         Object_80039F5C *pPlayer = lbl_803EB2E0;
         fn_8014F4D8(fn_80148A58(), pPlayer, 8, time);
@@ -214,7 +214,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
 void fn_8014EA90(State_802A1F90 *p, float dt)
 {
     Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
-    p->mpUnknown4 = fn_80137B40();
+    p->mpUnknown4 = BallGetCurrentHolder();
     p->mUnknown12 = 0;
     fn_8009D8CC(1);
     if (fn_8009D990(1)) {
@@ -234,7 +234,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
             p->mpUnknown4 = p->mpUnknown8;
             if (!p->mpUnknown8) {
                 Vector_80039F5C pos;
-                fn_80137D58(fn_801374BC(), &pos);
+                BallGetPosition(BallGetCurrent(), &pos);
                 float best = 3.4028235e38f;
                 for (unsigned short i = 0; i <= 4; i++) {
                     Object_80039F5C *pOther = fn_80039F5C(0, i);

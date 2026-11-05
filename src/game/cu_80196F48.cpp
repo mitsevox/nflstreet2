@@ -1,6 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/Effects_80146134.h"
-#include "game/Object_80146094.h"
+#include "game/ParticleTrail.h"
 #include "game/Object_8020E52C.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_8007F828.h"
@@ -105,7 +105,7 @@ void fn_80196F48(void *position, float scale)
     fn_80210BD8(1);
 }
 
-void fn_8019723C(Object_80146094 *p)
+void fn_8019723C(ParticleTrailSet_t *p)
 {
     if (!fn_80147900()) return;
     Mtx44 matrix;

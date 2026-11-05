@@ -1,7 +1,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801EF390.h"
 #include "game/Object_80233EAC.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 
@@ -34,12 +34,12 @@ struct Object_8019CE3C {
     char mUnknown284[8];
     float mUnknown28C;
     char mUnknown290[4];
-    Object_80144310 *mpUnknown294;
+    LightSource_t *mpUnknown294;
     float mUnknown298;
     float mUnknown29C;
     float mUnknown2A0;
     char mUnknown2A4[8];
-    Tracker_801442FC mUnknown2AC;
+    LightTracker_t mUnknown2AC;
 };
 
 extern "C" {
@@ -153,7 +153,7 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     }
     color.a = pObject->mUnknown28C * 128.0f;
     mask = fn_80236B98(4, x, y, z);
-    if (fn_80144310(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
+    if (LightTrackerUpdate(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
         unknown38[0] *= x;
         unknown38[1] *= y;
         unknown38[2] *= z;

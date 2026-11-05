@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
@@ -60,7 +60,7 @@ extern float lbl_803EAE48;
 
 extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
-        Object_80137ABC *pBall = fn_801374BC();
+        Ball_t *pBall = BallGetCurrent();
         Vector_80039F5C *pPos = &p->mMotion.mPos;
         Block_800F8A88 *pBlock = (Block_800F8A88 *)&p->mUnknown336;
         Point_8017886C origin;
@@ -218,7 +218,7 @@ extern "C" void fn_800F88E4(Object_80039F5C *p, Object_80039F5C *pTarget) {
         Vector_80039F5C ball;
         int right;
 
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         right = pTarget->mMotion.mPos.mX > ball.mX;
         *pTheirs &= ~1;
         *pMine &= ~1;

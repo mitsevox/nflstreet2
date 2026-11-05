@@ -12,7 +12,7 @@
 #include "game/cu_8003EC04.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8007C9D4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
@@ -140,8 +140,8 @@ void fn_800D5F1C(Object_80039F5C *p, int a, int b);
 void fn_8011DF90(void);
 void fn_8011F574(void);
 void fn_80120618(void);
-void fn_8013FAC0(void);
-void fn_8013FB44(void);
+void CamGameSuspendAll(void);
+void CamGameResumeAll(void);
 Set_8003EE6C *fn_801442F0(void);
 int fn_801486A0(void);
 int fn_801650DC(Record_80067338 *pRecord);
@@ -605,7 +605,7 @@ void Class_802A56E8::vfn_19()
         fn_800B1508();
         fn_800A8954(0x16, fn_80178308(), 0);
         fn_800535FC();
-        pPlayer = fn_80137B40();
+        pPlayer = BallGetCurrentHolder();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
             fn_800D5F1C(pPlayer, fn_800D0B90(pPlayer), 0xFF);
         }
@@ -802,11 +802,11 @@ extern "C" void fn_80177E6C(int a, int flip)
         FlipSides();
     }
     fn_8003A090();
-    fn_80138270();
+    BallsMirror();
     fn_8003F60C(fn_8003A078());
     fn_8003F60C(fn_801442F0());
-    fn_8003F60C(fn_80138264());
-    fn_8013FAC0();
+    fn_8003F60C(BallGetCollRecords());
+    CamGameSuspendAll();
     if (lbl_803EB444->mUnknown39 == 0) {
         lbl_803EB444->mUnknown39 = 1;
     } else {
@@ -814,7 +814,7 @@ extern "C" void fn_80177E6C(int a, int flip)
     }
     fn_800B1584(0x1E, 0);
     if (a) {
-        fn_8013FB44();
+        CamGameResumeAll();
     }
 }
 
@@ -1432,7 +1432,7 @@ extern "C" void fn_8017916C(void)
     if (kind == 1 || kind == 2) {
         float offset;
         Point_8017886C pos;
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
         Vector_80039F5C ballPos;
 
         if (kind == 1) {
@@ -1443,12 +1443,12 @@ extern "C" void fn_8017916C(void)
         pos.mX = 0.0f;
         pos.mY = fn_80178A2C() - offset;
         fn_801780A8(pos);
-        pBall = fn_801374BC();
-        fn_8013791C(pBall, 6, 0);
+        pBall = BallGetCurrent();
+        BallReleaseStill(pBall, 6, 0);
         ballPos.mX = pos.mX;
         ballPos.mY = pos.mY;
         ballPos.mZ = 0.0f;
-        fn_80137D74(pBall, &ballPos);
+        BallSetPosition(pBall, &ballPos);
         lbl_803EB444->mUnknown3E0 = 1;
     }
 }

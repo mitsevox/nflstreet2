@@ -71,12 +71,12 @@ void fn_800BCF7C(void *p);
 int fn_800C1E40(void);
 void fn_800C1E50(void);
 int fn_800C8704(int *pA, int *pB);
-void fn_80139168(void);
+void BallsPark(void);
 void fn_8013CF98(void);
-void fn_8013FC58(void);
-int fn_8013FCD4();
+void CamGameApplyUserCamera(void);
+int CamGameGetSideYaw();
 void fn_80144EDC(float a);
-void fn_80145E64(float a);
+void ParticlesProcess(float a);
 void fn_80173C2C(void);
 void fn_80173D10(void);
 void fn_80176C58(void);
@@ -277,10 +277,10 @@ int InGame::Init()
     fn_80173D10();
     fn_80176C58();
     fn_80176C90();
-    fn_80139168();
+    BallsPark();
     sUnknown803EC5FC = 0;
     fn_80028918(0);
-    fn_8002728C(fn_8013FCD4);
+    fn_8002728C(CamGameGetSideYaw);
     fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
     fn_80057F28();
     if (result) {
@@ -295,12 +295,12 @@ int InGame::Init()
     fn_80187C0C();
     fn_8005BF18();
     if (!fn_800BA6F8()) {
-        fn_8013FC58();
+        CamGameApplyUserCamera();
         if (!result && !fn_800C1E40()) {
             fn_800BCF7C(lbl_803EAB90);
         }
     } else {
-        fn_8013FC58();
+        CamGameApplyUserCamera();
     }
     if (fn_8002892C()) {
         fn_801C6280(-1, 2, (void *)fn_80028140);
@@ -366,7 +366,7 @@ unsigned char InGame::fn_8002854C()
     fn_80065194();
     fn_8002CF34(lbl_803EA368);
     if (!fn_8002D060(lbl_803EA368)) {
-        fn_80145E64(lbl_803EA2C4);
+        ParticlesProcess(lbl_803EA2C4);
         fn_80144EDC(lbl_803EA2C4);
         fn_800A3120(lbl_803EA2C4);
     }

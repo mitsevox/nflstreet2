@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Query_800CE770.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8022781C.h"
 #include "game/Move_8011AB38.h"
 
@@ -155,7 +155,7 @@ extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther)
 
     fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
     if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), pOther->mMotion.mFacing) > (int)(lbl_803EB08C * 46603.38f)) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         if (pCarrier != 0 && fn_8022781C(&pOther->mMotion.mPos, &pCarrier->mMotion.mPos) > lbl_803EB090) {
             return 0;

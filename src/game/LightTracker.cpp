@@ -1,7 +1,10 @@
+/* Keeps track of which level light shines on an object and fades it in and out when it
+   changes. */
+
 #include "engine/cu_80227F14.h"
 #include "game/Level_80054130.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 
 extern "C" {
 void fn_801D0470(int a);
@@ -11,13 +14,13 @@ void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
 extern "C" {
 
-void fn_801442FC(Tracker_801442FC *pTracker)
+void LightTrackerReset(LightTracker_t *pTracker)
 {
     pTracker->mId = -1;
     pTracker->mCount = 0;
 }
 
-int fn_80144310(Tracker_801442FC *pTracker, Object_80144310 *pSource, float *pDirection, float *pScaled)
+int LightTrackerUpdate(LightTracker_t *pTracker, LightSource_t *pSource, float *pDirection, float *pScaled)
 {
     if (pSource != 0 && pSource->mUnknown1C != -1) {
         pTracker->mId = pSource->mUnknown1C;
@@ -57,7 +60,7 @@ int fn_80144310(Tracker_801442FC *pTracker, Object_80144310 *pSource, float *pDi
     return pTracker->mId != -1;
 }
 
-void fn_801444A0(Tracker_801442FC *pTracker, Object_80144310 *pSource)
+void LightTrackerSnap(LightTracker_t *pTracker, LightSource_t *pSource)
 {
     if (pSource != 0 && pSource->mUnknown1C != -1) {
         pTracker->mId = pSource->mUnknown1C;

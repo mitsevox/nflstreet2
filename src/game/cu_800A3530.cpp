@@ -20,7 +20,7 @@ extern int lbl_803EC93C;
 extern int lbl_803EC940;
 void fn_8009BD60(Object_80039F5C *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801CFFD0(int from, int to);
 extern float lbl_802D7EA4[];
 extern float lbl_802D7ED0[];
@@ -233,8 +233,8 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
                     && turn < (int)(lbl_803EAA0C * 46603.38f)
                     && (pTarget->mMode == 4 || pTarget->mMode == 5))
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
-                else if (pTarget->mMode == 2 && fn_80137B40() != 0
-                         && fn_8022781C(&p->mMotion, &fn_80137B40()->mMotion) < 6.0f
+                else if (pTarget->mMode == 2 && BallGetCurrentHolder() != 0
+                         && fn_8022781C(&p->mMotion, &BallGetCurrentHolder()->mMotion) < 6.0f
                          && (p->mpState->mId == 2 || p->mpState->mId == 30))
                     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
                 else

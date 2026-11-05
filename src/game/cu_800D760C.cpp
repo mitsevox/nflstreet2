@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Object_801BC084.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/bitstream.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801BA2A8.h"
@@ -77,7 +77,7 @@ extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStr
 
 extern "C" void fn_800D782C(Object_80039F5C *p)
 {
-    Object_80137ABC *pBall = fn_80137C48(p);
+    Ball_t *pBall = BallFindHeldBy(p);
     unsigned short id = fn_801BE648(p->mpUnknown792);
 
     if (pBall) {
@@ -114,7 +114,7 @@ extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
 
-    if (pState->mUnknown5 == 3 && fn_80137B40() && pState->mUnknown11) {
+    if (pState->mUnknown5 == 3 && BallGetCurrentHolder() && pState->mUnknown11) {
         float count = pBlock->mUnknownCHalf;
         unsigned char saved = p->mUnknown512.mUnknown14;
         p->mUnknown512.mUnknown14 = 6;

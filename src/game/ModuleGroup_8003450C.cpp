@@ -10,7 +10,7 @@
 #include "game/cu_8003EC04.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80064864.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801FCE10.h"
 
@@ -116,18 +116,18 @@ void fn_8011F0D8(void);
 void fn_8011F174(void);
 void fn_8012055C(int a);
 void fn_8012060C(void);
-void fn_8013F8D4(void *pObject);
-void fn_80142B0C(void);
-void fn_80142B68(void);
+void CamGameStart(void *pObject);
+void CollTypesRegister(void);
+void CollTypesUnregister(void);
 void fn_80144264(void);
 void fn_80144B50(int a);
 void fn_80144C6C(int a);
 void fn_8014512C(void);
-void fn_80145C88(void);
-void fn_80145D0C(void);
-void fn_80147AE4(int a);
-void fn_80147BA8(int a);
-void fn_80147EAC(void);
+void ParticlesInit(void);
+void ParticlesShutdown(void);
+void ScreenTintInit(int a);
+void ScreenTintShutdown(int a);
+void PassIconStateStart(void);
 int fn_801485D4(void);
 int fn_801485F4(void);
 void fn_80148644(void);
@@ -296,8 +296,8 @@ int Ball::Init()
     if (fn_801486A0() == 1) {
         mode = 3;
     }
-    fn_80137F98(mode);
-    fn_80137588(GameObjList::fn_80028BB4());
+    BallsStart(mode);
+    BallsCreateModels(GameObjList::fn_80028BB4());
     fn_800502C0();
     fn_80040B88(GameObjList::fn_80028BB4());
     return 1;
@@ -305,7 +305,7 @@ int Ball::Init()
 
 int Ball::Shutdown()
 {
-    fn_8013764C(GameObjList::fn_80028BB4());
+    BallsDestroyModels(GameObjList::fn_80028BB4());
     return 1;
 }
 
@@ -390,7 +390,7 @@ const char *CamGame::GetName() { return "CamGame"; }
 
 int CamGame::Init()
 {
-    fn_8013F8D4(GameVpt::fn_800293A8());
+    CamGameStart(GameVpt::fn_800293A8());
     return 1;
 }
 
@@ -466,14 +466,14 @@ const char *Cld::GetName() { return "Cld"; }
 int Cld::Init()
 {
     fn_8003ED30(100);
-    fn_80142B0C();
+    CollTypesRegister();
     return 1;
 }
 
 int Cld::Shutdown()
 {
     fn_8003EDB8();
-    fn_80142B68();
+    CollTypesUnregister();
     return 1;
 }
 
@@ -524,13 +524,13 @@ const char *Effects::GetName() { return "Effects"; }
 
 int Effects::Init()
 {
-    fn_80145C88();
+    ParticlesInit();
     return 1;
 }
 
 int Effects::Shutdown()
 {
-    fn_80145D0C();
+    ParticlesShutdown();
     return 1;
 }
 
@@ -595,7 +595,7 @@ const char *GameIntf::GetName() { return "GameIntf"; }
 
 int GameIntf::Init()
 {
-    fn_80147EAC();
+    PassIconStateStart();
     return 1;
 }
 
@@ -1121,7 +1121,7 @@ const char *ReplayFrame::GetName() { return "ReplayFrame"; }
 int ReplayFrame::Init()
 {
     fn_80030BC0(0);
-    fn_8013740C();
+    BallsReplayRegister();
     fn_80162D78();
     fn_8003E118();
     fn_800410FC();
@@ -1148,13 +1148,13 @@ const char *ScreenTint::GetName() { return "ScreenTint"; }
 
 int ScreenTint::Init()
 {
-    fn_80147AE4(GameObjList::fn_80028BB4());
+    ScreenTintInit(GameObjList::fn_80028BB4());
     return 1;
 }
 
 int ScreenTint::Shutdown()
 {
-    fn_80147BA8(GameObjList::fn_80028BB4());
+    ScreenTintShutdown(GameObjList::fn_80028BB4());
     return 1;
 }
 

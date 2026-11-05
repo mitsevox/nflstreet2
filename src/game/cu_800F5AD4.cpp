@@ -4,7 +4,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Lookup_8012078C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
@@ -25,7 +25,7 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 float fn_8011F4D4(void);
 int fn_8011F1CC(void);
 int fn_801783AC(int bit);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_80178320(void);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -72,7 +72,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     int flag;
 
     if (fn_8011F1CC()) {
-        if (fn_801783AC(13) || fn_8013BA58(fn_801374BC(), 0) == 4) {
+        if (fn_801783AC(13) || BallStateGet(BallGetCurrent(), 0) == 4) {
             return 1;
         }
         delta = fn_80177FE0();
@@ -87,19 +87,19 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
             }
         }
     }
-    pHolder = fn_80137B40();
+    pHolder = BallGetCurrentHolder();
     if (!pHolder) {
         Vector_80039F5C velocity;
         Vector_80039F5C ballPos;
 
-        if (fn_8013BA58(fn_801374BC(), 0) == 3) {
-            fn_80137EC4(fn_801374BC(), &velocity);
-            fn_80137D58(fn_801374BC(), &ballPos);
+        if (BallStateGet(BallGetCurrent(), 0) == 3) {
+            BallGetVelocity(BallGetCurrent(), &velocity);
+            BallGetPosition(BallGetCurrent(), &ballPos);
             fn_80227690(&delta, &p->mMotion.mPos, &ballPos);
             if (fn_801CFFD0(fn_801CFE40(velocity.mY, velocity.mX), delta.Heading()) <= 0x1FFFFF) {
                 return 0;
             }
-            pHolder = fn_80137BEC();
+            pHolder = BallGetCurrentTarget();
         }
         if (!pHolder) {
             return 0;

@@ -9,11 +9,11 @@
 #include "game/fn_800AD9B4.h"
 #include "game/Object_8017886C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -159,7 +159,7 @@ Set_8003EE6C *fn_801442F0(void);
 extern "C" {
 int fn_801C4E98(void *p, const char *pName);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
-void fn_80145D64(int type, int a, int b, int c);
+void ParticlesAddPlayerEvent(int type, int a, int b, int c);
 void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsigned char team, unsigned char index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8009C158(Object_80039F5C *p, int a);
@@ -202,9 +202,9 @@ void fn_801BA784(void *pDest, void *pSrc);
 void fn_8009C0B8(void *pDest, void *pSrc);
 int fn_8016278C(void);
 Object_80039F5C *fn_80163064(void);
-int fn_801481B0(void);
-int fn_801481DC(void);
-int fn_80148208(int index, int force);
+int PassIconsAreShown(void);
+int PassIconsAreLocked(void);
+int PassIconGetSlot(int index, int force);
 int fn_800B65A0(int team);
 int fn_801787A0(void);
 void fn_800F1700(void);
@@ -252,10 +252,10 @@ extern "C" void fn_8003845C(Object_80039F5C *p)
 {
     float (*pMatrix)[4][4] = &((Object_8003DEC4 *)p->mpUnknown4)->mUnknown908;
 
-    fn_80145D64(0, (int)pMatrix, (int)p, 8);
-    fn_80145D64(0, (int)pMatrix, (int)p, 4);
-    fn_80145D64(2, (int)pMatrix, (int)p, 10);
-    fn_80145D64(1, (int)pMatrix, (int)p, 13);
+    ParticlesAddPlayerEvent(0, (int)pMatrix, (int)p, 8);
+    ParticlesAddPlayerEvent(0, (int)pMatrix, (int)p, 4);
+    ParticlesAddPlayerEvent(2, (int)pMatrix, (int)p, 10);
+    ParticlesAddPlayerEvent(1, (int)pMatrix, (int)p, 13);
 }
 
 extern "C" int fn_800384DC(Manager_803EA3F8 *pManager)
@@ -320,8 +320,8 @@ extern "C" int fn_80038650(Manager_803EA3F8 *pManager, int flags)
                 }
                 fn_8009C370(p);
                 fn_80042270(p);
-                fn_801444A0(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
-                            (Object_80144310 *)pObject->mUnknown972);
+                LightTrackerSnap(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
+                            (LightSource_t *)pObject->mUnknown972);
             }
         }
     }
@@ -614,13 +614,13 @@ extern "C" void fn_8003962C(Object_80039F5C *p, int flag)
     pState[28] = value;
     if (flag == 0 && (lbl_803EABA4->fn_800C0420(0) || lbl_803EABA4->fn_800C0420(1))
         && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && fn_8016278C() == 1
-        && (((Block_8003A1EC *)p->mpUnknown4)->mFlags & 1) && fn_801481B0() && fn_80178308() == p->mIdBytes[2]) {
+        && (((Block_8003A1EC *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && fn_80178308() == p->mIdBytes[2]) {
         unsigned char i;
 
         for (i = 0; i <= 2; i++) {
-            int pad = fn_80148208(i, 1);
+            int pad = PassIconGetSlot(i, 1);
 
-            if (pad == 0xFF && fn_801481DC() == 0) {
+            if (pad == 0xFF && PassIconsAreLocked() == 0) {
                 continue;
             }
             if (pad == p->mIdBytes[1]) {
@@ -713,7 +713,7 @@ extern "C" void fn_800398B4(void)
         fn_8003924C(p);
         fn_8003962C(p, active);
     }
-    fn_800C7D44(fn_80137B40());
+    fn_800C7D44(BallGetCurrentHolder());
     fn_8011E13C();
 }
 

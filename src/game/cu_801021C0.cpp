@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -42,7 +42,7 @@ int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 extern float lbl_803ECB08;
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80148108(int mode);
+void PassIconsShow(int mode);
 }
 
 struct State_801021C0 {
@@ -90,7 +90,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
             fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
             fn_800D4D84(p);
             if (p->mFlags & 0x4000) {
-                fn_80148108(0);
+                PassIconsShow(0);
             }
         }
         if (p->mFlags & 4) {

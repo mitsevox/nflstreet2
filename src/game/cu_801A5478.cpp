@@ -32,7 +32,7 @@ struct View_8002B550 {
 };
 
 extern "C" {
-unsigned char fn_80147E80(int index);
+unsigned char ScreenTintIsActive(int index);
 void fn_801985FC(void);
 void fn_801A5780(void);
 void fn_801987F4(void);
@@ -312,7 +312,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
     fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
-    if (fn_80147E80(1) == 0) {
+    if (ScreenTintIsActive(1) == 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
         fn_80235764(&pObject->mUnknown24[0], handle);
         fn_80235740(&pObject->mUnknown24[8], handle);
@@ -365,7 +365,7 @@ int fn_801A5E90(Object_80046340 *pObject)
         fn_80235740(&pObject->mUnknown24[5], handle);
         fn_80235764(&pObject->mUnknown24[5], handle);
     }
-    if (fn_80147E80(1) != 0) {
+    if (ScreenTintIsActive(1) != 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
         fn_80235764(&pObject->mUnknown24[0], handle);
         fn_80235740(&pObject->mUnknown24[8], handle);

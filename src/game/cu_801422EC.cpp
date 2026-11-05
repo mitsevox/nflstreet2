@@ -1,5 +1,5 @@
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 
 struct CameraState_801422EC {
@@ -53,7 +53,7 @@ struct Joint_802DCF8C {
 };
 
 extern "C" {
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 float fn_8013CEF4(float *pFrom, float *pTo, int *pAngles);
 int fn_80177F70(void);
 Point_8017886C fn_80177FE0(void);
@@ -96,12 +96,12 @@ extern "C" {
 void fn_801422EC(Camera_801422EC *pCamera)
 {
     CameraState_801422EC *pState = &pCamera->mUnknownF8;
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C ballPos;
     int info[2];
 
-    fn_80137D58(pBall, &ballPos);
-    fn_8013BA58(pBall, info);
+    BallGetPosition(pBall, &ballPos);
+    BallStateGet(pBall, info);
     pState->mUnknown68 = fn_80177FE0();
     pState->mUnknown70 = fn_80178298();
     pState->mUnknown74 = fn_80177F70();
@@ -128,7 +128,7 @@ void fn_801423D0(Camera_801422EC *pCamera)
     int a = 0;
     int replay = fn_800AD9B4() == 3;
     int changed;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Object_80039F5C *pPlayer;
     Vector_80039F5C ballPos;
     Vector_80039F5C mirrored;
@@ -139,11 +139,11 @@ void fn_801423D0(Camera_801422EC *pCamera)
     int *pAngles;
     float *pFrom;
 
-    pBall = fn_801374BC();
-    fn_8013BA58(pBall, info);
-    pPlayer = fn_80137AD0(pBall);
+    pBall = BallGetCurrent();
+    BallStateGet(pBall, info);
+    pPlayer = BallGetHolder(pBall);
     fn_80177F70();
-    fn_80137D58(pBall, &ballPos);
+    BallGetPosition(pBall, &ballPos);
     lbl_803EB1FC = a;
     changed = 0;
     mode = 0;

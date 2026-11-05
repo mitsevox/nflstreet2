@@ -9,7 +9,7 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Record_800A0624.h"
 #include "game/Block_8030E6E8.h"
 
@@ -142,7 +142,7 @@ void Class_80297AB8::vfn_04(float dt)
         fn_8009E138();
         fn_800A615C();
         fn_800718A0();
-        fn_80137B40();
+        BallGetCurrentHolder();
         fn_8016EC40();
     }
     fn_8003A3F4(0,0);
@@ -315,7 +315,7 @@ int fn_80025708(void);
 
 extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
 {
-    Object_80039F5C *ballPlayer=fn_80137B40();
+    Object_80039F5C *ballPlayer=BallGetCurrentHolder();
     bool removed=false,process=true;
     int previous=fn_80177F70();
     Point_8017886C point=fn_80177FE0();
@@ -448,8 +448,8 @@ extern "C" void fn_800A1738(Object_8017886C *out)
         } else if((out->mUnknown18&0x18000)==0x8000)lbl_802D7C64[0].mUnknown0=12;
         else {
             Vector_80039F5C pos;
-            fn_80137D58(fn_801374BC(),&pos);
-            if(fn_80137B40()==fn_80039F5C(fn_80178348(),0) && pos.mX>-fn_80178A08() && pos.mX<fn_80178A08() &&
+            BallGetPosition(BallGetCurrent(),&pos);
+            if(BallGetCurrentHolder()==fn_80039F5C(fn_80178348(),0) && pos.mX>-fn_80178A08() && pos.mX<fn_80178A08() &&
                 pos.mY<fn_80177FE0().mY)lbl_802D7C64[0].mUnknown0=8;
             else lbl_802D7C64[0].mUnknown0=7;
         }
@@ -527,7 +527,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
             int score=fn_800C8774(fn_80178308());
             if(score>=fn_8007F828(1)) {
                 Vector_80039F5C pos={0};
-                fn_80137D58(fn_801374BC(),&pos);
+                BallGetPosition(BallGetCurrent(),&pos);
                 fn_80067DB8(0x5E,&pos,fn_80178308(),0,0);
             }
         }

@@ -21,7 +21,7 @@
 #include "game/cu_80041210.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8008E978.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801C1F94.h"
@@ -739,7 +739,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                     fn_8004CBEC(pNode->mUnknown128, t, pObject, pOwner);
                     count = (unsigned int)pNode->mUnknown112;
                 } else {
-                    Object_80137ABC *pBall = fn_801374BC();
+                    Ball_t *pBall = BallGetCurrent();
 
                     if (pBall) {
                         count = pBall->mState.mIndex;
@@ -1206,7 +1206,7 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
     pObject->mUnknown352 = pDir[1];
     pObject->mUnknown356 = pDir[2];
     if (pObject->mUnknown381) {
-        pObject->mUnknown372 = fn_802270D4((char *)fn_801374BC() + 0x54);
+        pObject->mUnknown372 = fn_802270D4((char *)BallGetCurrent() + 0x54);
     } else if (fn_80051680(type)) {
         if (pHitter) {
             pObject->mUnknown372 = pHitter->mUnknown508 * pHitter->mUnknown452;
@@ -1390,7 +1390,7 @@ void fn_8004CBEC(void *pData, float time, Object_80041904 *pObject, Object_80040
                 position.mZ = pObject->mUnknown16;
                 fn_8022765C(&position, &position, &offset);
             }
-            fn_80145EFC(p->mUnknown0, &position.mX, &rotation.mX, (Source_80144CE0 *)pOwner->mUnknown332);
+            ParticlesSpawnAt(p->mUnknown0, &position.mX, &rotation.mX, (Source_80144CE0 *)pOwner->mUnknown332);
             Record_8031B6F8 record;
             record.mId = p->mUnknown0;
             record.mPos[0] = position.mX;
@@ -1470,7 +1470,7 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
 {
     Child_801A9430 *p = fn_801DD268(handle, 31, 0, pDesc);
     lbl_803EA4F4[lbl_803EC7D0] = p;
-    fn_801442FC(&p->mTracker60);
+    LightTrackerReset(&p->mTracker60);
     p->mWord68 = 0;
     p->mUnknown14.mX = pDesc->mUnknown132.mUnknown4;
     p->mUnknown14.mY = pDesc->mUnknown132.mUnknown8;
@@ -1777,9 +1777,9 @@ void fn_80178718(Object_80039F5C *);
 void fn_800E954C(Object_80039F5C *, int, int *, int, int *);
 int fn_800EAC9C(Object_80039F5C *);
 float fn_8016D9F4(Object_80039F5C *, float, float);
-int fn_8013BA58(Object_80137ABC *, int *);
+int BallStateGet(Ball_t *, int *);
 int fn_80178508(void *, int, int);
-void fn_80139294(Object_80137ABC *, Vector_80039F5C *, Vector_80039F5C *);
+void BallApplyImpulse(Ball_t *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_801783D0(int, int);
 void fn_801E9CC4(Body_801E9538 *);
 void fn_801E9CF0(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
@@ -1999,13 +1999,13 @@ void fn_8004E4D0(Body_801E9538 *pBody, unsigned int index, Body_801E9538 *pOther
 
 void fn_8004EA80(Vector_80039F5C *pImpulse)
 {
-    Object_80137ABC *pBall = fn_801374BC();
-    if (fn_8013BA58(pBall, 0) != 1) {
+    Ball_t *pBall = BallGetCurrent();
+    if (BallStateGet(pBall, 0) != 1) {
         Vector_80039F5C position, impulse, noise;
-        fn_80137D58(pBall, &position);
+        BallGetPosition(pBall, &position);
         impulse = *pImpulse;
         if (fn_801784C4()) { impulse.mX = -impulse.mX; impulse.mY = -impulse.mY; }
-        if (fn_8013BA58(pBall, 0) == 4) {
+        if (BallStateGet(pBall, 0) == 4) {
             float scale;
             if (!(fn_802270D4(&impulse) <= 30.0f)) scale = 4.15f;
             else scale = 5.0f;
@@ -2027,8 +2027,8 @@ void fn_8004EA80(Vector_80039F5C *pImpulse)
         if (impulse.mZ * pBall->mState.mUnknown54.mZ >= 0.0f) impulse.mZ = 0.0f;
         else position.mZ = pBall->mState.mUnknown28.mZ;
         fn_8022765C(&impulse, &impulse, &noise);
-        fn_80139294(pBall, &impulse, (Vector_80039F5C *)&pBall->mState);
-        fn_80137D74(pBall, &position);
+        BallApplyImpulse(pBall, &impulse, (Vector_80039F5C *)&pBall->mState);
+        BallSetPosition(pBall, &position);
         fn_801783D0(24, 1);
     }
 }
@@ -2364,7 +2364,7 @@ void fn_8004FF8C(void)
 void fn_800502C0(void)
 {
     Vector_80039F5C position = {0.0f, 0.0f, 3.0f};
-    fn_8013825C(fn_801374BC());
+    BallGetModel(BallGetCurrent());
     Vector_80039F5C inertia;
     inertia.mX = 0.12f * 0.12f * 0.25f + 0.2f * 0.2f * 0.083333336f;
     inertia.mY = inertia.mX;
@@ -2494,7 +2494,7 @@ extern unsigned int lbl_803EA538;
 void fn_800508A0(void)
 {
     if (lbl_803EA530) {
-        Object_80137ABC *pBall = fn_801374BC();
+        Ball_t *pBall = BallGetCurrent();
         if (fn_800AD9B4() == 3 && fn_80178508(&pBall->mState.mPos, 0, 1) > 2) {
             unsigned int previous = lbl_803EA530++;
             if (!((float)previous <= lbl_803EA2C4 * 45.0f)) {
@@ -2550,13 +2550,13 @@ void fn_80050964(void)
 
 void fn_80050CCC(void)
 {
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C zero = {0.0f, 0.0f, 0.0f};
     Vector_80039F5C velocity, position;
     Body_801E9538 *pBody = lbl_803EC7E0;
-    fn_80137EC4(pBall, &velocity);
+    BallGetVelocity(pBall, &velocity);
     fn_80227264(&velocity, &velocity, 60.0f);
-    fn_80137D58(pBall, &position);
+    BallGetPosition(pBall, &position);
     if (fn_801784C4()) {
         velocity.mX = -velocity.mX; velocity.mY = -velocity.mY;
         position.mX = -position.mX; position.mY = -position.mY;

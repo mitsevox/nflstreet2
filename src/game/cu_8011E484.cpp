@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 extern "C" {
 
@@ -48,7 +48,7 @@ int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther)
             case 26:
                 break;
             default:
-                if (!(pOther->mFlags & 0x800) && !fn_80137C48(p)) {
+                if (!(pOther->mFlags & 0x800) && !BallFindHeldBy(p)) {
                     Point_8017886C delta;
                     int angle;
                     int both;

@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_802A56E8.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -51,7 +51,7 @@ int fn_8015310C(Class_802A2918 *p)
     int result = 1;
     unsigned char i;
 
-    for (i = 0; i < fn_801383C8(); i++) {
+    for (i = 0; i < BallsGetCount(); i++) {
         if (p->mUnknown44[i] == 0) {
             result = 0;
             break;

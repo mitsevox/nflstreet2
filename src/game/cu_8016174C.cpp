@@ -37,7 +37,7 @@ extern Object_801618D8 *lbl_803EB38C, *lbl_803EB390;
 extern unsigned char lbl_803EB394, lbl_803EB395, lbl_803EB396, lbl_803EB397;
 extern Object_80039F5C *lbl_803EB398;
 extern int lbl_803ECAEC;
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
 int fn_80188030(int);
 int fn_801C657C(void);
@@ -85,7 +85,7 @@ void fn_80163020(void);
 
 Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
     Object_801618D8 *item = lbl_802E9780[index];
-    Object_80039F5C *current = fn_80137B40(), *player = 0;
+    Object_80039F5C *current = BallGetCurrentHolder(), *player = 0;
     if (item && (fn_800B65A0(0) != 255 || fn_800B65A0(1) != 255)) {
         if (index != 8) {
             if (item->mUnknown2C != -1) {
@@ -454,7 +454,7 @@ unsigned char fn_8016278C(void) {
     return lbl_803EB394;
 }
 void fn_80162794(void) {
-    Object_80039F5C *current = fn_80137B40();
+    Object_80039F5C *current = BallGetCurrentHolder();
     lbl_803EB38C->mUnknown20 &= ~2;
     for (unsigned char i = 0; i < 9; ++i) {
         Object_801618D8 *item = lbl_802E9780[i], *other = lbl_802E97C8[i];

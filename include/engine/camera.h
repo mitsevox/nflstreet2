@@ -1,12 +1,12 @@
 #ifndef ENGINE_CAMERA_H
 #define ENGINE_CAMERA_H
 
-#include "game/CameraHeader_8013F628.h"
+#include "game/CamHdr.h"
 #include "game/Object_80228224.h"
 
 /* Common camera header; each camera type extends it. */
 typedef struct Cam_801C33E8 {
-    CameraHeader_8013F628 mHeader;
+    CamHdr_t mHeader;
     Object_80228224 *mpViewport;
 } Cam_801C33E8;
 

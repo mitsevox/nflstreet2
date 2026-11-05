@@ -20,7 +20,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -99,8 +99,8 @@ struct State_80102664 {
 
 extern "C" void fn_80156C78(int a, int b);
 extern "C" {
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 }
 
 struct State_80102A78 {
@@ -130,7 +130,7 @@ void fn_800B1584(int a, const float *pPos);
 void fn_800D7534(int team);
 void fn_801783D0(int bit, int on);
 void fn_80099568(int kind);
-void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
+void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 void fn_80101064(Object_80039F5C *p);
 }
 
@@ -144,12 +144,12 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
 void fn_80076D5C(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
-int fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
+int fn_80100370(Ball_t *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
 void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
-void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,
+void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,
                  float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
-void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
+void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int fn_80156C8C(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
@@ -302,8 +302,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
 {
     int result[2] = {0, 0};
     Object_80039F5C *pTarget = 0;
-    Object_80137ABC *pBall = fn_80137C48(p);
-    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(pBall));
+    Ball_t *pBall = BallFindHeldBy(p);
+    Record_8011F4F8 *pRecord = fn_8011F4F8(BallGetIndex(pBall));
     Record_800B15FC *pEvent;
     Vector_80039F5C ball;
     Vector_80039F5C delta;
@@ -315,10 +315,10 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     int side;
 
     fn_800A8954(5, p->mIdBytes[2], p);
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_800B260C(0);
-    fn_8013791C(pBall, 4, 0);
+    BallReleaseStill(pBall, 4, 0);
     pEvent = fn_800B15FC();
     if (fn_80156C8C(0x20000000) == 0) {
         fn_80156C78(42, 1);
@@ -433,7 +433,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         target.mX = target.mX < -(fn_80178A08() + 3.0f) ? -(fn_80178A08() + 3.0f) : target.mX;
         target.mY = target.mY > fn_80178A44() + 2.5f ? fn_80178A44() + 2.5f : target.mY;
         pPos = &p->mMotion.mPos;
-        fn_80137D58(pBall, &ball);
+        BallGetPosition(pBall, &ball);
         if (fn_800A7F1C(p->mIdBytes[2]) != 2) {
             if (pRecord->mUnknown10 != 0) {
                 Point_8017886C offset;
@@ -475,9 +475,9 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         target.mX = target.mX < 1.0f - fn_80178A08() ? 1.0f - fn_80178A08()
             : (target.mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : target.mX);
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
-        fn_80137BC0(pBall, pTarget);
+        BallSetTarget(pBall, pTarget);
         fn_80076D5C(pTarget->mId);
-        fn_80137EC4(pBall, &velocity);
+        BallGetVelocity(pBall, &velocity);
         if (velocity.mY < 0.0f) {
             fn_801783D0(1, 1);
         } else {
@@ -516,7 +516,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         target.mZ = 0.0f;
         fn_80099568(1);
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
-        fn_80137BC0(pBall, 0);
+        BallSetTarget(pBall, 0);
         fn_80101064(p);
         fn_80176838(p);
         fn_801783D0(13, 1);
@@ -530,10 +530,10 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 8:
         speed = lbl_803EA2C4 * 0.27f;
         if (fn_801486A0() == 1) {
-            fn_80152068(fn_801374E0(pBall), &target);
+            fn_80152068(BallGetIndex(pBall), &target);
         }
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
-        fn_80137BC0(pBall, 0);
+        BallSetTarget(pBall, 0);
         fn_80101064(p);
         fn_801783D0(13, 1);
         break;
@@ -545,13 +545,13 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
 extern "C" void fn_801039D8(Object_80039F5C *p)
 {
     Object_80039F5C *pTarget = 0;
-    Object_80137ABC *pBall = fn_80137C48(p);
-    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(pBall));
+    Ball_t *pBall = BallFindHeldBy(p);
+    Record_8011F4F8 *pRecord = fn_8011F4F8(BallGetIndex(pBall));
     Record_800B15FC *pEvent;
     Vector_80039F5C velocity;
 
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_800B260C(0);
     pEvent = fn_800B15FC();
     fn_8009BD2C(p, &pEvent->mUnknown0);
@@ -586,15 +586,15 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     fn_800B1584(56, 0);
     fn_801783D0(23, 1);
     fn_800310C0(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
-    fn_80137EC4(pBall, &velocity);
+    BallGetVelocity(pBall, &velocity);
     velocity.mX = velocity.mX < -0.2f ? -0.2f : (velocity.mX > 0.2f ? 0.2f : velocity.mX);
     velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);
     velocity.mZ = velocity.mZ < -0.1f ? -0.1f : (velocity.mZ > 0.15f ? 0.15f : velocity.mZ);
-    fn_80137EE0(pBall, &velocity);
+    BallSetVelocity(pBall, &velocity);
     fn_80099568(1);
-    fn_801379B4(pBall, 4, 0);
+    BallRelease(pBall, 4, 0);
     fn_8013AD04(pBall, &velocity, 1, 2.0f, 1.0f);
-    fn_80137BC0(pBall, pTarget);
+    BallSetTarget(pBall, pTarget);
     if (velocity.mY < 0.0f) {
         fn_801783D0(1, 1);
     } else {
@@ -607,7 +607,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
 
 extern "C" int fn_80103CB0(Object_80039F5C *p)
 {
-    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(fn_80137C48(p)));
+    Record_8011F4F8 *pRecord = fn_8011F4F8(BallGetIndex(BallFindHeldBy(p)));
 
     switch (pRecord->mUnknown1D) {
     case 4:
@@ -630,7 +630,7 @@ extern "C" int fn_80103CB0(Object_80039F5C *p)
 extern "C" int fn_80103D6C(Object_80039F5C *p)
 {
     int result = 0;
-    Object_80039F5C *pOther = fn_80137B40();
+    Object_80039F5C *pOther = BallGetCurrentHolder();
 
     if (pOther != 0) {
         State_80039F5C *pState = pOther->mpState;
@@ -651,7 +651,7 @@ extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short 
     float base;
     float result;
 
-    fn_8011F4F8(fn_801374E0(fn_801374BC()));
+    fn_8011F4F8(BallGetIndex(BallGetCurrent()));
     fn_802276B4(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
     distance = fn_802270A4(&delta);
     fn_801CFE40(delta.mY, delta.mX);
@@ -669,7 +669,7 @@ extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short 
     return result;
 }
 
-extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed,
+extern "C" void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed,
                             int angle, float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p)
 {
     Vector_80039F5C ball;
@@ -697,7 +697,7 @@ extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_
     if (speed > fn_800C49EC(lbl_803ECB08)) {
         speed = fn_800C49EC(lbl_803ECB08);
     }
-    fn_80137D58(pBall, &ball);
+    BallGetPosition(pBall, &ball);
     runSpeed = speed;
     fn_802276B4(&ball, &ball, &pos);
     distance = fn_802270A4(&ball);

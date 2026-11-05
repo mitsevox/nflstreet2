@@ -202,7 +202,7 @@ void fn_8015FFA8(void *a, void *b);
 void *fn_80160C08(void);
 Desc_802347EC *fn_8016102C(int player);
 void fn_80161498(void);
-void fn_8019723C(Object_80146094 *p);
+void fn_8019723C(ParticleTrailSet_t *p);
 void fn_801A1400(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
 void fn_801C657C(void);
@@ -304,7 +304,7 @@ void fn_802525F0(float (*pMatrix)[4], int id, int type);
 int fn_801A1C10(Object_8003DEC4 *pPlayer);
 void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag);
 int fn_801A201C(Object_8003DEC4 *pPlayer);
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], ParticleTrailSet_t *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod);
 void fn_801A32AC(int id, float sx, float sy, float tx, float ty);
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB);
@@ -360,12 +360,12 @@ void fn_801A15C4(Object_80228224 *pObject)
    +0x19A8 is 12. */
 int fn_801A1650(Object_8003DEC4 *pPlayer)
 {
-    Object_80146094 *pData = &pPlayer->mUnknown5188;
+    ParticleTrailSet_t *pData = &pPlayer->mUnknown5188;
     float r = 1.0f;
     float g = r;
     float b = r;
     int flash = 0;
-    Object_80144310 *pSource;
+    LightSource_t *pSource;
     int light;
     float block[4];
     Vector_801A1650 scale;
@@ -374,7 +374,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
     if (pPlayer->mUnknown20 & 0x20000) {
         flash = pData->mUnknown564 == 12.0f;
     }
-    pSource = (Object_80144310 *)pPlayer->mUnknown972;
+    pSource = (LightSource_t *)pPlayer->mUnknown972;
     if (pSource) {
         if (pSource->mUnknownC != pData->mUnknown580 || pSource->mUnknown10 != pData->mUnknown584 ||
             pSource->mUnknown14 != pData->mUnknown588) {
@@ -424,7 +424,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b = color.z;
     }
     light = fn_80236B98(1, r, g, b);
-    if (fn_80144310(&pPlayer->mUnknown4960, (Object_80144310 *)pPlayer->mUnknown972, block, &scale.x)) {
+    if (LightTrackerUpdate(&pPlayer->mUnknown4960, (LightSource_t *)pPlayer->mUnknown972, block, &scale.x)) {
         scale.x *= r;
         scale.y *= g;
         scale.z *= b;
@@ -596,7 +596,7 @@ int fn_801A201C(Object_8003DEC4 *pPlayer)
     return result;
 }
 
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], ParticleTrailSet_t *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod)
 {
     float scale = 1.5f;
@@ -1106,7 +1106,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4971 = pInit->mUnknown5A;
     pPlayer->mUnknown4970 = pInit->mUnknown59;
     pPlayer->mUnknown4972 = pInit->mUnknown5B;
-    fn_801442FC(&pPlayer->mUnknown4960);
+    LightTrackerReset(&pPlayer->mUnknown4960);
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
     fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);

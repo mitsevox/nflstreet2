@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_801442FC.h"
-#include "game/cu_80136B1C.h"
+#include "game/LightTracker.h"
+#include "game/Ball.h"
 
 /* Partial comparison source for the inferred grouping 0x8003F66C-0x800400CC.
    Not a recovered original file. The original assembly stays linked; only the
@@ -46,11 +46,11 @@ struct Object_8003F768 {
     float mUnknown652;
     unsigned char mUnknown656;
     char mUnknown657[3];
-    Object_80144310 *mpUnknown660;
+    LightSource_t *mpUnknown660;
     char mUnknown664[12];
     int mUnknown676;
     int mUnknown680;
-    Tracker_801442FC mUnknown684;
+    LightTracker_t mUnknown684;
     int mUnknown692;
 };
 
@@ -195,7 +195,7 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     p->mpUnknown660 = 0;
     p->mUnknown676 = 0;
     p->mUnknown680 = 0xFFFF;
-    fn_801442FC(&p->mUnknown684);
+    LightTrackerReset(&p->mUnknown684);
     p->mUnknown20 |= 1;
     p->mUnknown652 = 1.0f;
     if (pInit->mpUnknown8 == 0) {
@@ -316,8 +316,8 @@ extern "C" int fn_8003FC68(void)
 
 extern "C" void fn_8003FC70(Block_80170E64 *pBlock, BitStream_t *pStream)
 {
-    int index = fn_80137534(pBlock);
-    Object_80039F5C *pObject = fn_80137AD0(fn_80137ABC(index));
+    int index = BallFindByModel(pBlock);
+    Object_80039F5C *pObject = BallGetHolder(BallGet(index));
     int changed = index == fn_80030CB8();
     fn_80191068(pStream, changed, 1);
     if (changed == 1 && pObject != 0) {

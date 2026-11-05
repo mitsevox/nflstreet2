@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -32,7 +32,7 @@ extern "C" int fn_800E73D4(Object_80039F5C *p)
 extern "C" int fn_800E745C(Object_80039F5C *p)
 {
     int result = 1;
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     if (pCarrier) {
         Point_8017886C delta;
         fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);

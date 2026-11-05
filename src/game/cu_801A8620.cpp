@@ -5,7 +5,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8020E52C.h"
 #include "game/Object_80233EAC.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
@@ -53,7 +53,7 @@ struct Packet_801A8620 {
 struct Instance_801A8D9C {
     Cache_801A8D9C *mpUnknown0; Context_801A8620 mUnknown4;
     Packet_801A8620 mUnknownC; unsigned char mUnknownF8[4];
-    unsigned char mUnknownFC[12]; Tracker_801442FC mUnknown108;
+    unsigned char mUnknownFC[12]; LightTracker_t mUnknown108;
 };
 struct Pose_801A8B84 { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct Env_801A8D9C { void *mpUnknown0; };
@@ -267,7 +267,7 @@ void InitializeModelObjectRender_801A8D9C(void *data,int handle,Object_801A8620 
     } else fn_80233BB8(s->mUnknownFC,0,1);
     fn_8004E090(p,0,0);p->mUnknownE8.mWord=1;
     if(fn_8004D5B8(handle,"tideEnvMapRef",name,256))p->mUnknownE8.mWord=2;
-    p->mUnknown14=RenderModelObject_801A8620;fn_801442FC(&s->mUnknown108);
+    p->mUnknown14=RenderModelObject_801A8620;LightTrackerReset(&s->mUnknown108);
 }
 void fn_801A9184(Object_801A8620 *p)
 {

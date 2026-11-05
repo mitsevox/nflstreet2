@@ -1,5 +1,5 @@
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_800AD9B4.h"
 
@@ -7,7 +7,7 @@
 
 extern "C" {
 void fn_800BA7E8(float x, float y);
-Camera_8013F738 *fn_8013FA04(int index);
+GameCamera_t *CamGameGetCamera(int index);
 void fn_80178370(void);
 int fn_801784C4(void);
 float fn_80178A2C(void);
@@ -33,8 +33,8 @@ void fn_800B63B0(void);
 void fn_800D6F08(void);
 void fn_800D7158(void);
 void fn_8013F3FC(void);
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 void fn_8016BA80(void);
 void fn_801735D8(unsigned int mask);
 void fn_80173C1C(void);
@@ -116,19 +116,19 @@ extern "C" void fn_800C1CA0(void)
     fn_8009D8CC(5);
     fn_8009D8CC(0);
     fn_8017D4AC();
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_80073328(0);
     lbl_803EABB9 = 0;
 }
 
 extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
 {
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     Point_8017886C delta;
 
-    fn_80137D58(pBall, &pos);
+    BallGetPosition(pBall, &pos);
     delta.mX = 0.0f;
     delta.mY = 0.0f;
     const float step = 0.16f;
@@ -159,10 +159,10 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
         delta.mX = -delta.mX;
         delta.mY = -delta.mY;
     }
-    fn_80227384(&delta, &delta, (0x1000000 - fn_8013FA04(0)->mHeader.mUnknown14[2]) & 0xFFFFFF);
+    fn_80227384(&delta, &delta, (0x1000000 - CamGameGetCamera(0)->mHeader.mUnknown14[2]) & 0xFFFFFF);
     pos.mX += delta.mX;
     pos.mY += delta.mY;
     pos.mX = CLAMP(pos.mX, -fn_80178A5C(), fn_80178A5C());
     pos.mY = CLAMP(pos.mY, 0.33f - fn_80178A2C(), fn_80178A2C() - 0.33f);
-    fn_80137D74(pBall, &pos);
+    BallSetPosition(pBall, &pos);
 }

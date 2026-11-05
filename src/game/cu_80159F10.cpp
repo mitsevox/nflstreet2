@@ -2,7 +2,7 @@
 #include "game/cu_8019FBEC.h"
 #include <math.h>
 #include "engine/cu_80227F14.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Object_80039F5C.h"
 
 struct Init_80159F10 {
@@ -14,11 +14,11 @@ struct Init_80159F10 {
 extern "C" {
 int fn_8002B5A8(void);
 int fn_8006560C(void);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_801481B0(void);
-int fn_8014830C(int index, Vector_80039F5C *pOut);
-int fn_801483F8(void);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+int PassIconsAreShown(void);
+int PassIconGetPosition(int index, Vector_80039F5C *pOut);
+int PassIconsWereShown(void);
 float fn_80178A44(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
@@ -52,14 +52,14 @@ extern "C" void fn_80159F70(void) {}
 
 extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 {
-    if ((fn_801481B0() == 1 || fn_801483F8() == 1) && lbl_803ECA5C == 1 && fn_8006560C() == 0) {
+    if ((PassIconsAreShown() == 1 || PassIconsWereShown() == 1) && lbl_803ECA5C == 1 && fn_8006560C() == 0) {
         Vector_80039F5C *pPos = &pInstance->mUnknown04;
-        if (fn_8014830C(pInstance->mUnknown1C, pPos) == 1) {
-            Camera_8013F738 *pCamera;
+        if (PassIconGetPosition(pInstance->mUnknown1C, pPos) == 1) {
+            GameCamera_t *pCamera;
             float scale = 1.0f;
             Vector_80039F5C pos;
 
-            pCamera = fn_8013FA04(fn_8013F9F8());
+            pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
             scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
             fn_801D0470(fn_80228668());
             fn_801D04C4();
@@ -68,7 +68,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
             fn_801D0C58(&pos);
             fn_801D0ADC(-pCamera->mHeader.mUnknown14[2]);
             fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14[0]);
-            pInstance->mUnknown20 = fn_801481B0() ? 1.0f : 0.4f;
+            pInstance->mUnknown20 = PassIconsAreShown() ? 1.0f : 0.4f;
             fn_801D0CFC(scale);
             fn_8019FD80(pInstance);
             fn_801D0470(fn_80228668());

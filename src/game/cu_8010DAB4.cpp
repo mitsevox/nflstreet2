@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -60,7 +60,7 @@ int fn_80178320(void);
 int fn_801783AC(int flag);
 int fn_801787A0(void);
 int fn_8011F1A4(void);
-int fn_8013BA58(Object_80137ABC *p, int *pArg);
+int BallStateGet(Ball_t *p, int *pArg);
 int fn_801CFFD0(int a, int b);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -72,9 +72,9 @@ extern float lbl_803ECB08;
 
 
 extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     Object_800B26B0 *pMotion = &p->mMotion;
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     int open = fn_80177F70() == 0;
     int ahead = open;
     int last;
@@ -84,12 +84,12 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
     Point_8017886C target;
 
     pOut->mUnknown22 = 0;
-    if (!pCarrier && fn_8013BA58(pBall, 0) == 3) pCarrier = fn_80137B88(pBall);
+    if (!pCarrier && BallStateGet(pBall, 0) == 3) pCarrier = BallGetTarget(pBall);
     if (pCarrier) {
         Object_800B26B0 *pCarrierMotion = &pCarrier->mMotion;
 
         if (pCarrier->mpState->mId == 1) {
-            fn_80137D58(fn_801374BC(), &ballPos);
+            BallGetPosition(BallGetCurrent(), &ballPos);
             if (pCarrier->mMotion.mPos.mX < pMotion->mPos.mX) {
                 target.mX = pCarrier->mMotion.mPos.mX + 3.0f;
             } else {
@@ -158,17 +158,17 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
             pOut->mSpeed = pMotion->mUnknown28 / lbl_803ECB08;
         } else {
             pOut->mSpeed = 0.72f;
-            if (!fn_80138064(pBall, &ballPos)) {
-                fn_80137D58(pBall, &ballPos);
+            if (!BallGetLandingPoint(pBall, &ballPos)) {
+                BallGetPosition(pBall, &ballPos);
                 vel.mX = vel.mY = vel.mZ = 0.0f;
             } else {
-                fn_80137EC4(pBall, &vel);
-                if (fn_8013BA58(pBall, 0) == 4) pOut->mSpeed = 0.4f;
+                BallGetVelocity(pBall, &vel);
+                if (BallStateGet(pBall, 0) == 4) pOut->mSpeed = 0.4f;
             }
             if (open && vel.mZ < 0.0f) {
                 ballPos.mX = (ballPos.mX + pMotion->mPos.mX) * 0.5f;
                 ballPos.mY += 8.0f;
-            } else if (fn_8013BA58(pBall, 0) == 4) {
+            } else if (BallStateGet(pBall, 0) == 4) {
                 ballPos.mX = (ballPos.mX + pMotion->mPos.mX) * 0.5f;
                 ballPos.mY += 4.0f;
             } else {

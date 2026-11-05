@@ -3,7 +3,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801C1F94.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 struct Aim_801327F4 {
     char mUnknown0[8];
@@ -51,8 +51,8 @@ void fn_80227690(void *, void *, void *);
 float fn_802270A4(void *);
 int fn_80120794(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int, float);
 int fn_8011F32C(void);
-Object_80039F5C *fn_80137BEC(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentTarget(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801783AC(int);
 int fn_8011F2F8(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
@@ -118,7 +118,7 @@ int fn_80132A4C(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *othe
             (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000)
             return 1;
     } else {
-        Object_80039F5C *entry = fn_80137BEC();
+        Object_80039F5C *entry = BallGetCurrentTarget();
         if (entry) {
             fn_80227690(delta, &other->mMotion.mPos, &entry->mMotion.mPos);
             otherAngle = fn_801CFE40(delta[1], delta[0]);
@@ -200,7 +200,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
     if (rating > 510) rating = 510;
     signed char scaled = (unsigned int)rating >> 1;
     s->mUnknown19 = (255 - scaled) >> 6;
-    Object_80039F5C *ball = fn_80137B40();
+    Object_80039F5C *ball = BallGetCurrentHolder();
     if (s->mUnknown1B & 1) {
         float nearest = 999.0f;
         for (unsigned char i = 0; i <= 2; ++i) {
@@ -233,9 +233,9 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             reference[1] = location.mY;
         }
     } else {
-        ball = fn_80137BEC();
+        ball = BallGetCurrentTarget();
         if (ball) location = ball->mMotion.mPos;
-        else fn_80137D58(fn_801374BC(), &location);
+        else BallGetPosition(BallGetCurrent(), &location);
         reference[0] = location.mX;
         reference[1] = location.mY;
     }
@@ -386,7 +386,7 @@ void fn_801339E4(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
 
 void fn_80133BB4(Object_80039F5C *p, Object_80039F5C *other)
 {
-    if (other && fn_801783AC(13) && !fn_801783AC(0) && !fn_80137B40() && fn_8011F2F8()) {
+    if (other && fn_801783AC(13) && !fn_801783AC(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
         Point_8017886C point = fn_80177FE0();
         if (!(other->mMotion.mPos.mY - point.mY >= 2.5f))
             p->mUnknown1137 = 1;
@@ -448,7 +448,7 @@ int fn_80133C50(Object_80039F5C *p)
 
 int fn_80133EE8(Object_80039F5C *p)
 {
-    Object_80039F5C *ball = fn_80137B40();
+    Object_80039F5C *ball = BallGetCurrentHolder();
     Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
     int post = 0;
     if (p == ball) {

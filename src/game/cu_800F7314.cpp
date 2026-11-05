@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 /* View of the block at player +336 (same layout as Block_800F8A88 in
@@ -53,7 +53,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
     float speed = 0.0f;
 
     if (p && pOther && pOut) {
-        Object_80137ABC *pBall = fn_801374BC();
+        Ball_t *pBall = BallGetCurrent();
         Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C toBall;
         Block_800F7314 *pBlock = (Block_800F7314 *)&p->mUnknown336;
@@ -155,7 +155,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         int heading;
         int direction;
 
-        fn_80227690(&toBall, &fn_801374BC()->mState.mPos, pPos);
+        fn_80227690(&toBall, &BallGetCurrent()->mState.mPos, pPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         fn_80227690(&toSpot, &spot, pPos);
         fn_800F70D0(p, pOther, &spot, pOut);

@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Input_800B6D34.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8022781C.h"
 #include "game/Class_80297BF8.h"
@@ -85,7 +85,7 @@ void fn_800B64C4(void);
 int fn_800B6644(int index);
 void fn_800B6988(int index);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
-int fn_800B7248(Input_800B6D34 *pInput, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pTarget);
+int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_800B7370(Object_80039F5C *p, Input_800B6D34 *pInput);
 void fn_800B86A4(int index);
 void *fn_800B9A44(Class_80297C60 *p);
@@ -115,11 +115,11 @@ int fn_800F2C1C(Object_80039F5C *p, int a);
 int fn_801133FC(Object_80039F5C *p, int a, int b);
 int fn_8011F1CC(void);
 int fn_80125510(Object_80039F5C *p, int a);
-int fn_8013BA58(Object_80137ABC *p, int *pOut);
+int BallStateGet(Ball_t *p, int *pOut);
 void fn_8013F3FC(void);
 unsigned char fn_801478F0(unsigned char a);
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 void fn_8016DA98(Object_80039F5C *p);
@@ -168,7 +168,7 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
     int result = 0;
     int minAngle = (int)(lbl_803EAB64 * 46603.379f);
     int maxAngle = (int)(lbl_803EAB65 * 46603.379f);
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     int angleSlack;
     int rangeSlack;
     Vector_80039F5C delta;
@@ -207,16 +207,16 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
 extern "C" int fn_800B78DC(Object_80039F5C *p)
 {
     unsigned char index = 0;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Object_80039F5C *pCarrier;
     Input_800B6D34 input;
     int state;
 
     if (fn_801486A0() == 1 && fn_801520C4(p, &index) != 0) {
-        pBall = fn_80137ABC(index);
+        pBall = BallGet(index);
     } else {
-        index = fn_801374D4();
-        pBall = fn_801374BC();
+        index = BallGetCurrentIndex();
+        pBall = BallGetCurrent();
     }
     fn_800B6D34(p, &input);
     if (fn_800B7378(p) != 0) {
@@ -233,15 +233,15 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         int loose = 0;
         int dive = 0;
 
-        if ((fn_801783AC(11) != 0 || fn_801783AC(12) != 0) && fn_8013BA58(pBall, 0) == 4
-            && fn_80137AD0(pBall) == 0) {
+        if ((fn_801783AC(11) != 0 || fn_801783AC(12) != 0) && BallStateGet(pBall, 0) == 4
+            && BallGetHolder(pBall) == 0) {
             loose = 1;
         }
         if ((input.mUnknown96 & 1) && p->mUnknown1032 != 4 && p->mUnknown1032 != 6) {
             dive = 1;
         }
         if (loose || !dive) {
-            if (fn_8013BA58(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0) {
+            if (BallStateGet(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0) {
                 goto handled;
             }
             if (!dive ? fn_800E815C(p, 0, 0) : fn_800E1350(p)) {
@@ -254,10 +254,10 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
     if (input.mUnknown92 & 4) {
         int pass = 0;
 
-        state = fn_8013BA58(pBall, 0);
+        state = BallStateGet(pBall, 0);
         switch (state) {
         case 1:
-            pCarrier = fn_80137AD0(pBall);
+            pCarrier = BallGetHolder(pBall);
             if (pCarrier->mpState->mId == 15) {
                 pass = fn_8022781C(&pCarrier->mMotion, &p->mMotion) > 5.0f;
             }
@@ -280,7 +280,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
             }
         } else {
             if (fn_8011F1CC() != 0) {
-                pCarrier = fn_80137AD0(pBall);
+                pCarrier = BallGetHolder(pBall);
                 if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
                     fn_8022781C(&pCarrier->mMotion, &p->mMotion);
                 }
@@ -294,7 +294,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         return 0;
     }
     if ((input.mUnknown93 & 0x20)
-        && (fn_8013BA58(pBall, 0) == 5 || fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2)
+        && (BallStateGet(pBall, 0) == 5 || fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2)
         && fn_80125510(p, 0) != 0) {
     handled:
         p->mFlags |= 0x4000;
@@ -576,8 +576,8 @@ void Class_80297C60::vfn_03(float dt)
         fn_800AFDD4(fn_800B876C);
     }
     fn_80067D4C(123, 0);
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     if (fn_8002D0AC(lbl_803EA368)) {
         fn_800310C0(lbl_803EA368, 37, 0, &pos, 0);
     }

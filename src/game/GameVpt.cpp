@@ -7,7 +7,7 @@ void *operator new(unsigned int size, int unknown);
 
 extern "C" {
 
-void fn_801422C0(int a);
+void CamCurveSetNarrowFov(int a);
 int fn_801CEA08(void);
 int fn_801CEA14(void);
 int fn_801CEB4C(void);
@@ -35,11 +35,11 @@ int GameVpt::Init()
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
-        fn_801422C0(1);
+        CamCurveSetNarrowFov(1);
     } else {
         desc.mUnknown16 = fn_801CEA14();
         desc.mUnknown18 = fn_801CEA08();
-        fn_801422C0(0);
+        CamCurveSetNarrowFov(0);
     }
     mpState.mp->mpObject = fn_80228224(&desc);
     fn_802286D8(mpState.mp->mpObject, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);

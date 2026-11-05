@@ -3,12 +3,12 @@
 #include "game/fn_8009D990.h"
 
 #include "game/SndgPathfinder.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Class_801B8D9C.h"
 #include "engine/cu_801B8C18.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C68FC.h"
@@ -542,9 +542,9 @@ int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800AD9B4(void);
 int fn_800BA6F8(void);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_8013FD0C(int index);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+int CamGameGetHeading(int index);
 unsigned int fn_801568F0(void);
 int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
@@ -1251,14 +1251,14 @@ extern "C" void fn_80068E00(void)
 extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan)
 {
     Vector_80039F5C position;
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
     int angle;
 
-    pCamera = fn_8013FA04(fn_8013F9F8());
+    pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
     position.mX = pCamera->mHeader.mUnknown04[0];
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
-    angle = fn_8013FD0C(fn_8013F9F8());
+    angle = CamGameGetHeading(CamGameGetCurrentSlot());
     if (fn_801784C4()) {
         angle = (angle + 0x800000) & 0xFFFFFF;
         position.mX = -position.mX;
@@ -1270,9 +1270,9 @@ extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *
 extern "C" float fn_80068F70(Vector_80039F5C *pPos)
 {
     Vector_80039F5C position;
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
 
-    pCamera = fn_8013FA04(fn_8013F9F8());
+    pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
     position.mX = pCamera->mHeader.mUnknown04[0];
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
@@ -1303,9 +1303,9 @@ extern "C" int fn_80068FE8(Sound0 *pEntry, void *pObject, int index, int init)
     float distance;
     int result;
 
-    fn_80137D58((Object_80137ABC *)pObject, &position);
+    BallGetPosition((Ball_t *)pObject, &position);
     height = position.mZ;
-    fn_80138064((Object_80137ABC *)pObject, &other);
+    BallGetLandingPoint((Ball_t *)pObject, &other);
     result = 1;
     distance = fn_8022785C(&position, &other);
     if (init) {
@@ -2231,7 +2231,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
         if (p->mUnknown10.mValue > 0x50000) {
             if (p->mUnknown10.mValue > 0x200000) {
                 int id = 15;
-                Object_80137ABC *pBall = fn_801374BC();
+                Ball_t *pBall = BallGetCurrent();
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
                     id = pBall->mpUnknown00->mUnknown660->mSurface;
                 }
@@ -2243,7 +2243,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
         break;
     case 0x20: {
         Vector_80039F5C vec;
-        fn_80137EC4((Object_80137ABC *)p->mUnknown10.mpObject, &vec);
+        BallGetVelocity((Ball_t *)p->mUnknown10.mpObject, &vec);
         if (fn_802270D4(&vec) > 0.42f) {
             fn_800717E0(&p->mPos);
         }
@@ -2286,7 +2286,7 @@ extern "C" void fn_8006CE84(Record_80067CA8 *p)
 extern "C" void fn_8006CEC8(Struct_8030A688 *src)
 {
     if (fn_8002D060(lbl_803EA368) == 0) {
-        Camera_8013F738 *obj = fn_8013FA04(fn_8013F9F8());
+        GameCamera_t *obj = CamGameGetCamera(CamGameGetCurrentSlot());
         int angle;
 
         src->mOrigin.mX = obj->mHeader.mUnknown04[0];
@@ -2296,13 +2296,13 @@ extern "C" void fn_8006CEC8(Struct_8030A688 *src)
             src->mOrigin.mX = -src->mOrigin.mX;
             src->mOrigin.mY = -src->mOrigin.mY;
         }
-        angle = fn_8013FD0C(fn_8013F9F8());
+        angle = CamGameGetHeading(CamGameGetCurrentSlot());
         if (fn_801784C4()) {
             angle = (angle + 0x800000) & 0xFFFFFF;
         }
         src->mAngle = angle;
     } else if (fn_80031054(&src->mOrigin.mX) == 0) {
-        Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+        Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
         src->mOrigin.mX = pBlock->mUnknown4.mX;
         src->mOrigin.mY = pBlock->mUnknown4.mY;
@@ -2820,7 +2820,7 @@ extern "C" void fn_8006E148(Record_80067CA8 *pEvent)
 {
     switch (pEvent->mType) {
     case 0x1F:
-        fn_80137D58(fn_801374BC(), &lbl_803EA69C->mUnknown24);
+        BallGetPosition(BallGetCurrent(), &lbl_803EA69C->mUnknown24);
         break;
     case 0x8E:
         lbl_803EA69C->mFlags |= 1;

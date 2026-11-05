@@ -6,7 +6,7 @@
 #include "game/Level_80054130.h"
 #include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -396,7 +396,7 @@ void fn_80040B88(int handle)
     desc.mUnknown180 = 0;
     index = lbl_803EC784;
     fn_800408E4(&desc, handle);
-    fn_800400BC(fn_8013825C(fn_801374BC()), fn_80040F18(index)->mUnknown472);
+    fn_800400BC(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
     fn_8004D818();
     fn_801EEFAC(desc.mUnknown160);
 }

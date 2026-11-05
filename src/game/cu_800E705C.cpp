@@ -1,10 +1,10 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 
 extern "C" {
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801787A0(void);
 int fn_801783AC(int bit);
 int fn_801486A0(void);
@@ -16,18 +16,18 @@ extern float lbl_803EAD50;
 
 int fn_800E705C(Object_80039F5C *p)
 {
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (p->mIdBytes[3] == 1 && p->mUnknown1032 == 4) return 1;
-    Object_80137ABC *ball = fn_801374BC();
-    if (fn_8013BA58(ball, 0) == 4 && p == fn_80137B88(ball)) {
+    Ball_t *ball = BallGetCurrent();
+    if (BallStateGet(ball, 0) == 4 && p == BallGetTarget(ball)) {
         Message_800F01CC message;
         fn_801C1F94(&message, 0, 4);
         message.mId = 23;
-        message.mUnknown1[0] = fn_801374E0(ball);
+        message.mUnknown1[0] = BallGetIndex(ball);
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if (!fn_801787A0() && fn_80137B40() && fn_801783AC(0) &&
+    if (!fn_801787A0() && BallGetCurrentHolder() && fn_801783AC(0) &&
         fn_801486A0() != 0 && fn_801486A0() != 1 && fn_801486A0() != 2) {
         Message_800F01CC message;
         fn_801C1F94(&message, 0, 4);

@@ -79,7 +79,7 @@ void fn_80196AF0(void);
 void fn_80196B20(void);
 void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData);
 void fn_80196BD4(int *pValues);
-void fn_80145264(void);
+void GroundPulseDraw(void);
 void fn_801A762C(void);
 void fn_801A7778(void);
 void fn_801A7784(float rate);
@@ -275,7 +275,7 @@ void fn_801447E8(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
         fn_80030304(pStream1, record.mRot, 12, 1024.0f);
         record.mpSource = (Source_80144CE0 *)(unsigned int)ReadBitStream(pStream1, 32);
         if (lbl_803EB240[0] != last.mUnknown0 || lbl_803EB240[1] != last.mUnknown1) {
-            fn_80145EFC(record.mId, record.mPos, record.mRot, record.mpSource);
+            ParticlesSpawnAt(record.mId, record.mPos, record.mRot, record.mpSource);
         }
         ReadBitStream(pStream0, 16);
         fn_800301C4(pStream0, record.mPos, 16, 256.0f);
@@ -419,7 +419,7 @@ int fn_80144E64(void *pContext)
             fn_80196564(*ppList++, 1);
         }
         fn_80196B20();
-        fn_80145264();
+        GroundPulseDraw();
         fn_801A7880();
     }
     return 0;

@@ -2,12 +2,12 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 extern "C" {
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 int fn_801CFFD0(int a, int b);
-int fn_8013BA58(Object_80137ABC *p, int *pArg);
+int BallStateGet(Ball_t *p, int *pArg);
 
 void fn_8016C70C(Object_80039F5C *p)
 {
@@ -145,7 +145,7 @@ int fn_8016CDD4(Object_80039F5C *p)
         result = 1;
     } else if (third == 0xFFFF) {
         if (fourth != 0xFFFF) {
-            if (p->mpState->mId != 68 || fn_8013BA58(fn_801374BC(), 0) != 3) {
+            if (p->mpState->mId != 68 || BallStateGet(BallGetCurrent(), 0) != 3) {
                 result = 1;
             }
         }

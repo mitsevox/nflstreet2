@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/ModuleGroup_80033A5C.h"
 #include "game/FELoop.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801D2B7C.h"
@@ -157,7 +157,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
     Object_80039F5C *p=(Object_80039F5C *)object;
     Object_80041904 *placed=(Object_80041904 *)object;
     int mode=0;
-    if(!fn_80027DF0() && object==fn_800400C4(fn_8013825C(fn_801374BC()))) return 1;
+    if(!fn_80027DF0() && object==fn_800400C4(BallGetModel(BallGetCurrent()))) return 1;
     void *collection;
     if(event>=0xD000 && event<=0xD005) collection=placed->mUnknown428->mUnknown1300;
     else collection=p->mpUnknown792;
@@ -232,7 +232,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             float position[4];int angles[3];Quat_801EB488 rotation;
             fn_80042380((Object_8003DEC4 *)p->mpUnknown4,lbl_802D7154[bone],position,angles);
             fn_801EBEF8(&rotation,angles[2],angles[1],angles[0]);
-            fn_80145EFC(lbl_802D71CC[effect],position,&rotation.mX,0);
+            ParticlesSpawnAt(lbl_802D71CC[effect],position,&rotation.mX,0);
             return 1;
         }
         case 0xC01E:

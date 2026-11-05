@@ -2,7 +2,7 @@
 #include "game/Frame_8019D3B8.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Record_8019D8AC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 

@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800F06F4.h"
 #include "game/Class_80297C60.h"
@@ -327,7 +327,7 @@ void fn_8014C308(State_802A23A8 *p, float dt)
         if (clear || fn_801783AC(13) || fn_801783AC(1)) {
             fn_8009D8CC(5);
         }
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
         int special = 0;
         if (pCarrier) {
             special = pCarrier->mpState->mId == 16;

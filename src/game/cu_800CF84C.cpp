@@ -63,8 +63,8 @@ void fn_800AFE20(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
 void fn_800B43C8(void);
 void fn_800CC560(int a);
-void fn_801383E4(int a);
-void fn_80139274(void);
+void BallsSetVisible(int a);
+void BallResetToSpot(void);
 void fn_80162780(int a, int b);
 void fn_80168C40(void);
 void fn_8016DCD4(int a);
@@ -144,7 +144,7 @@ void fn_800CF91C(void)
     }
     fn_800CF8C0();
     fn_8004A230(1);
-    fn_801383E4(1);
+    BallsSetVisible(1);
     fn_800CF8C4();
     fn_80195EFC(1, 20, 0x808080, 0);
 }
@@ -433,7 +433,7 @@ void Class_803EC99C::fn_800CFFC4(float f)
         if (fn_800CF874()) {
             if (fn_80092784(lbl_803EAC98->mUnknown20)) {
                 fn_8004A230(0);
-                fn_801383E4(0);
+                BallsSetVisible(0);
             }
         } else {
             lbl_803EACA0++;
@@ -461,10 +461,10 @@ void Class_803EC99C::fn_800CFFC4(float f)
             case 3:
                 fn_8017F048();
                 fn_800AD910(5, f);
-                fn_80139274();
+                BallResetToSpot();
                 break;
             default:
-                fn_80139274();
+                BallResetToSpot();
                 fn_800AD910(5, f);
                 break;
             }

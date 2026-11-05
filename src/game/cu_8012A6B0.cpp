@@ -1,5 +1,5 @@
 #include "engine/cu_801B9F00.h"
-#include "game/Control_80132090.h"
+#include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
@@ -8,7 +8,7 @@
 #include "game/Table_80089904.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80177FE0.h"
@@ -64,17 +64,17 @@ unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
 void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
-void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl);
+void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
 void fn_8012CFA0(Object_80039F5C *p);
 void fn_8012D258(Object_80039F5C *p);
 void fn_8012D4FC(Object_80039F5C *p, int mode);
-void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *pControl, int *pMode, Entry_801230B8 *pEntry);
-int fn_8012FC08(Object_80039F5C *p, Control_80132090 *pControl);
-int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl);
-void fn_8013FA8C(int a);
-void fn_80148154(void);
-int fn_801481B0(void);
-void fn_801483C8(void);
+void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *pControl, int *pMode, Entry_801230B8 *pEntry);
+int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *pControl);
+int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl);
+void CamGameSetModeAll(int a);
+void PassIconsHide(void);
+int PassIconsAreShown(void);
+void PassIconsClearReplayFlag(void);
 int fn_801486A0(void);
 int fn_80178320(void);
 float fn_801BD660(void *p, int key);
@@ -117,8 +117,8 @@ int fn_800E885C(Object_80039F5C *p);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 void fn_800D4948(void);
 int fn_80111090(Object_80039F5C *p, int a);
-int fn_8013BA70(Object_80137ABC *p, int *pOut);
-int fn_8013BA58(Object_80137ABC *p, int *pOut);
+int BallStateGetPrev(Ball_t *p, int *pOut);
+int BallStateGet(Ball_t *p, int *pOut);
 float fn_80260FE8(float a);
 float fn_80260E24(float a);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
@@ -129,7 +129,7 @@ int fn_80178BA4(int team);
 int fn_800D0B90(Object_80039F5C *p);
 float fn_801CFB94(int angle);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, Vector_80039F5C *pOut);
-int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pOut, Object_80039F5C *pOther);
+int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pOut, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8011F59C(int a);
@@ -233,13 +233,13 @@ int fn_8012CCA0(Object_80039F5C *p);
 void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
 float fn_8012CD60(Object_80039F5C *p, float value);
 int fn_8012CE60(Object_80039F5C *p);
-void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl);
+void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
 void fn_8012CFA0(Object_80039F5C *p);
 int fn_8012D1E4(Object_80039F5C *p);
 void fn_8012D258(Object_80039F5C *p);
 void fn_8012D4FC(Object_80039F5C *p, int mode);
-void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *pMode, Entry_801230B8 *entry);
-void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *control, int);
+void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry);
+void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *control, int);
 int fn_8012E590(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn, int, float distance);
 int fn_8012EA14(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -250,17 +250,17 @@ int fn_8012F11C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, int a, i
 int fn_8012F2E0(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b, int c, float d);
 int fn_8012F2E8(Object_80039F5C *p, Object_80039F5C *pUnused, int a, int b, int c, float d);
 int fn_8012F524(Object_80039F5C *p);
-void fn_8012F5A0(Object_80039F5C *p, Control_80132090 *control, Block_8012F5A0 *block);
-void fn_8012F89C(Object_80039F5C *p, Control_80132090 *control, int mode);
+void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block);
+void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int mode);
 int fn_8012FA64(Object_80039F5C *p);
-int fn_8012FC08(Object_80039F5C *p, Control_80132090 *control);
-int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl);
+int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *control);
+int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl);
 int fn_8012FEAC(Object_80039F5C *p);
 int fn_8012FF30(Object_80039F5C *p);
 int fn_8012FF5C(Object_80039F5C *p);
 int fn_8013028C(Object_80039F5C *p);
 int fn_80130318(Object_80039F5C *p);
-void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl);
+void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl);
 }
 
 #ifdef DECOMP_COMPARE
@@ -287,7 +287,7 @@ extern "C" int fn_8012A6B0(Object_80039F5C *p)
         result = 0;
     }
     if (!(p->mMotion.mUnknown28 >= fn_8016D9F4(p, 0.14f, 1.0f))) {
-        Object_80039F5C *pOther = fn_80137B40();
+        Object_80039F5C *pOther = BallGetCurrentHolder();
 
         if (pOther && pOther->mpState->mId == 15) {
             result = 0;
@@ -302,7 +302,7 @@ extern "C" int fn_8012A824(Object_80039F5C *p, float a, float b)
 {
     Point_8017886C delta = {0.0f, 0.0f};
     State_8012A824 *state = (State_8012A824 *)&p->mUnknown336;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     unsigned char count = 0;
     int tracking = 0;
     int angle = 0;
@@ -408,7 +408,7 @@ extern "C" int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower,
             }
         }
     }
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
         float width = fn_80178A08();
         width += width;
@@ -535,7 +535,7 @@ extern "C" int fn_8012B3EC(Object_80039F5C *p)
             result = fn_80103D6C(p);
             if (!result) {
                 unsigned char a, b;
-                if (fn_800C13A0(p, &a, &b) > 1 && fn_80137B40()) {
+                if (fn_800C13A0(p, &a, &b) > 1 && BallGetCurrentHolder()) {
                     if (!(fabsf(fn_80178A08() - p->mMotion.mPos.mX) >= 9.0f)) {
                         state->mUnknown28 = result;
                     }
@@ -556,7 +556,7 @@ extern "C" int fn_8012B654(Object_80039F5C *p)
 {
     State_8012A824 *state = (State_8012A824 *)&p->mUnknown336;
     p->mFlags |= 0x80000000;
-    fn_801374BC();
+    BallGetCurrent();
     fn_8010A2DC(p, 0, -1);
     if (p->mFlags & 0x4000) {
         return fn_80112928(p) != 0;
@@ -568,7 +568,7 @@ extern "C" int fn_8012B654(Object_80039F5C *p)
         }
     }
     Message_800F01CC message;
-    if (fn_80137B40() && fn_801783AC(0)) {
+    if (BallGetCurrentHolder() && fn_801783AC(0)) {
         fn_801C1F94(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, p->mpState, &message, p);
@@ -578,7 +578,7 @@ extern "C" int fn_8012B654(Object_80039F5C *p)
     state->mUnknown24 -= 2;
     if (state->mUnknown24 < 0 || !(fabsf(p->mMotion.mPos.mX) <= fn_80178A08() - 4.0f)) {
         int available = 0;
-        if (fn_80137B40() && fn_80103D6C(p)) {
+        if (BallGetCurrentHolder() && fn_80103D6C(p)) {
             unsigned char first, second;
             available = fn_800C13A0(p, &first, &second) <= 1;
         }
@@ -678,7 +678,7 @@ extern "C" void fn_8012BB6C(float *pA, float *pB)
         }
         break;
     }
-    Object_80039F5C *pOther = fn_80137B40();
+    Object_80039F5C *pOther = BallGetCurrentHolder();
 
     if (pOther) {
         *pA = pOther->mMotion.mPos.mY + 30.0f;
@@ -731,7 +731,7 @@ extern "C" int fn_8012BE28(Object_80039F5C *p)
 {
     State_8012BCC8 *state = (State_8012BCC8 *)&p->mUnknown336;
     Point_8017886C ball = fn_80177FE0();
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (fn_8009FB60(p)) {
         return 1;
     }
@@ -806,12 +806,12 @@ extern "C" int fn_8012BE28(Object_80039F5C *p)
     p->mUnknown512.mUnknown8 = state->mUnknown12;
     p->mUnknown512.mUnknown0 = 1.0f;
     p->mUnknown512.mUnknown4 = state->mUnknown12;
-    Object_80137ABC *pBall = fn_801374BC();
-    if (fn_8013BA58(pBall, 0) == 4) {
-        fn_80137D58(pBall, &delta);
+    Ball_t *pBall = BallGetCurrent();
+    if (BallStateGet(pBall, 0) == 4) {
+        BallGetPosition(pBall, &delta);
         if (!(delta.mZ >= 3.3f)) {
             Vector_80039F5C direction;
-            fn_80137EC4(pBall, &direction);
+            BallGetVelocity(pBall, &direction);
             fn_80227690(&delta, &p->mMotion.mPos, &delta);
             int directionAngle = fn_801CFE40(direction.mY, direction.mX);
             int deltaAngle = fn_801CFE40(delta.mY, delta.mX);
@@ -1166,7 +1166,7 @@ extern "C" int fn_8012CE60(Object_80039F5C *p)
 }
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     Vector_80039F5C position = p->mMotion.mPos;
     Vector_80039F5C previous = p->mMotion.mUnknown12;
@@ -1185,7 +1185,7 @@ extern "C" void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl)
 #ifdef DECOMP_COMPARE
 extern "C" void fn_8012CFA0(Object_80039F5C *p)
 {
-    float *values = ((Control_80132090 *)&p->mUnknown336)->mValues.mCost;
+    float *values = ((OptionRunControl_t *)&p->mUnknown336)->mValues.mCost;
 
     if (fn_80177F70() == 0) {
         int team = fn_80178320();
@@ -1249,7 +1249,7 @@ extern "C" int fn_8012D1E4(Object_80039F5C *p)
 #ifdef DECOMP_COMPARE
 extern "C" void fn_8012D258(Object_80039F5C *p)
 {
-    Control_80132090 *control = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *control = (OptionRunControl_t *)&p->mUnknown336;
     float distance = 0.0f;
 
     if (fn_8012D1E4(p) && (!fn_80178BA4(p->mIdBytes[2]) || fn_8007F828(14) == 1)
@@ -1302,7 +1302,7 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
 #ifdef DECOMP_COMPARE
 extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
 {
-    Control_80132090 *control = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *control = (OptionRunControl_t *)&p->mUnknown336;
     Object_80039F5C *other = (Object_80039F5C *)mode;
     unsigned char index = control->mUnknown48;
     int angle = control->mUnknown44;
@@ -1377,7 +1377,7 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
 #endif
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *pMode, Entry_801230B8 *entry)
+extern "C" void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry)
 {
     int firstAngle = 0, secondAngle = 0;
     float limit;
@@ -1493,7 +1493,7 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *
 #endif
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *control, int)
+extern "C" void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *control, int)
 {
     int angle = control->mUnknown44;
     if (fn_801486A0()) {
@@ -1866,7 +1866,7 @@ extern "C" int fn_8012F2E8(Object_80039F5C *p, Object_80039F5C *pUnused, int a, 
     Vector_80039F5C aim;
     int result = 0;
     Object_80039F5C *other = fn_80105384(p, 1, &aim);
-    int valid = fn_80132630(p, &aim, other);
+    int valid = OptionRunCanPitchTo(p, &aim, other);
 
     if (other && valid && fn_801066D0(p, other, 9) && !(p->mMotion.mPos.mY <= ball.mY)) {
         if (!(other->mRatings[4] <= p->mRatings[4] * lbl_803EB11C)) {
@@ -1925,7 +1925,7 @@ extern "C" int fn_8012F524(Object_80039F5C *p)
 }
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012F5A0(Object_80039F5C *p, Control_80132090 *control, Block_8012F5A0 *block)
+extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block)
 {
     if (fn_801787A0()) return;
     block->mUnknown0 = (signed char)(((unsigned char *)&block->mUnknown0)[1] - 1);
@@ -1983,7 +1983,7 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, Control_80132090 *control, Block
 #endif
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012F89C(Object_80039F5C *p, Control_80132090 *control, int mode)
+extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int mode)
 {
     float distance = 0.0f;
     Object_80039F5C *other = (Object_80039F5C *)control->mUnknown0;
@@ -2055,17 +2055,17 @@ extern "C" int fn_8012FA64(Object_80039F5C *p)
 #endif
 
 #ifdef DECOMP_COMPARE
-extern "C" int fn_8012FC08(Object_80039F5C *p, Control_80132090 *control)
+extern "C" int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *control)
 {
     int result = 0;
 
     if (p && control && control->mUnknown56.mUnknown2) {
-        if (!control->mUnknown54 && fn_8013BA70(fn_801374BC(), 0) == 4) {
-            control->mUnknown54 = fn_80137F88(fn_801374BC());
+        if (!control->mUnknown54 && BallStateGetPrev(BallGetCurrent(), 0) == 4) {
+            control->mUnknown54 = BallGetStateFrames(BallGetCurrent());
         }
         unsigned char previous = control->mUnknown54;
 
-        if (fn_8013BA58(fn_801374BC(), 0) == 1
+        if (BallStateGet(BallGetCurrent(), 0) == 1
             && (fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 1.5f
                 || !(p->mMotion.mPos.mY <= fn_80178A44() - 1.5f))) {
             int facing = p->mMotion.mFacing;
@@ -2075,7 +2075,7 @@ extern "C" int fn_8012FC08(Object_80039F5C *p, Control_80132090 *control)
                 || ((unsigned int)(facing - 0x600001) <= 0x3FFFFE && p->mMotion.mPos.mX < 0.0f)
                 || ((unsigned int)(facing - 0x200001) <= 0x3FFFFE
                     && !(p->mMotion.mPos.mY <= fn_80178A44() - 1.5f))) {
-                if ((unsigned int)fn_80137F88(fn_801374BC()) < (unsigned int)(previous + 25)
+                if ((unsigned int)BallGetStateFrames(BallGetCurrent()) < (unsigned int)(previous + 25)
                     || control->mUnknown56.mUnknown3) {
                     result = 1;
                     control->mUnknown55++;
@@ -2099,11 +2099,11 @@ extern "C" int fn_8012FC08(Object_80039F5C *p, Control_80132090 *control)
 #endif
 
 #ifdef DECOMP_COMPARE
-extern "C" int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     int result = 0;
 
-    if (p && pControl && fn_80137B40() == p) {
+    if (p && pControl && BallGetCurrentHolder() == p) {
         float distance;
         Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2], &distance, 0x200000,
                                            1.5f, p->mMotion.mFacing, 1.0f);
@@ -2122,18 +2122,18 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl)
 
 extern "C" int fn_8012FEAC(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
     fn_80130338(p, pControl);
     fn_80031404(p);
     if (fn_800AD9B4() == 3) {
         pControl->mUnknown0 = fn_8012FA64(p);
-        if (fn_80137B40() == p) {
-            if (fn_801481B0()) {
-                fn_8013FA8C(1);
+        if (BallGetCurrentHolder() == p) {
+            if (PassIconsAreShown()) {
+                CamGameSetModeAll(1);
             }
-            fn_80148154();
-            fn_801483C8();
+            PassIconsHide();
+            PassIconsClearReplayFlag();
         }
         return 0;
     }
@@ -2149,13 +2149,13 @@ extern "C" int fn_8012FF30(Object_80039F5C *p)
 extern "C" int fn_8012FF5C(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
     Plan_80121264 plan;
     Message_800F01CC message;
     int mode = 0;
 
     fn_800B8344(p);
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         fn_8012CEF4(p, pControl);
         fn_800D5A6C(0, 0, 0);
         fn_800A3B58(p, 2, 0);
@@ -2163,7 +2163,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
         fn_801C1F94(&message, 0, 4);
         if (fn_801486A0() == 0) {
             message.mId = 57;
-            message.mUnknown1[0] = fn_801374D4();
+            message.mUnknown1[0] = BallGetCurrentIndex();
         } else {
             message.mId = 33;
         }
@@ -2241,7 +2241,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
 
 extern "C" int fn_8013028C(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
     pControl->mUnknown44 = 0x400000;
     pControl->mUnknown52 = 0;
@@ -2257,7 +2257,7 @@ extern "C" int fn_80130318(Object_80039F5C *p)
     return fn_800B76E8(p);
 }
 
-extern "C" void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     pControl->mUnknown36 = fn_80177FE0().mY;
     pControl->mUnknown44 = 0;

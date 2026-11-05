@@ -1,6 +1,6 @@
 #include <dolphin/gx/GXPixel.h>
 #include "engine/cu_80227F14.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8013AD94.h"
@@ -35,7 +35,7 @@ extern State_802E989C lbl_802E989C;
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_801784C4(void);
 int fn_801C657C(void);
@@ -73,16 +73,16 @@ int fn_8016345C(Object_80163358 *pObject);
 void fn_80163074(int index)
 {
     Entry_802E98A0 *pEntry = &lbl_802E989C.mEntries[index];
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
 
     pEntry->mEnabled = 0;
-    pBall = fn_80137ABC(index);
-    fn_8013BA58(pBall, 0);
+    pBall = BallGet(index);
+    BallStateGet(pBall, 0);
     if (fn_800BA6F8() != 0 && fn_800BA864() != 0) {
-        fn_80137D58(pBall, &pEntry->mPosition);
+        BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
-               && fn_8013AD94(pBall) != 0 && fn_80138064(pBall, &pEntry->mPosition) != 0) {
+               && fn_8013AD94(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;
@@ -94,7 +94,7 @@ void fn_80163074(int index)
         Vector_80039F5C ball;
         float height;
 
-        fn_80137D58(pBall, &ball);
+        BallGetPosition(pBall, &ball);
         height = ball.mZ;
         if (height <= 3.0f) {
             pEntry->mScale = 1.0f;
@@ -177,7 +177,7 @@ int fn_8016345C(Object_80163358 *pObject)
         fn_80210814(0, 0, 0);
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
-                if (fn_801486A0() == 1 && fn_801374D4() == i) {
+                if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
                     fn_80235C90(pObject->mUnknown18, fn_801C657C(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {

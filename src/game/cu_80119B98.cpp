@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Query_800CE770.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801248D4.h"
 #include "game/fn_80178D18.h"
 
@@ -33,10 +33,10 @@ extern "C" void fn_80119B98(void)
     count = fn_80178D70(team);
     for (; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
 
         fn_800CA5CC(p, 8, 0);
-        pBall = fn_80137C48(p);
+        pBall = BallFindHeldBy(p);
         if (pBall == 0 && p->mUnknown1032 == 7) {
             Object_80039F5C *pA = fn_8009BCE8(&p->mUnknown1036);
             Object_80039F5C *pB = fn_8009BCE8(&p->mUnknown1040);

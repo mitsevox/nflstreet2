@@ -1,7 +1,7 @@
 #include "game/State_800E4494.h"
 #include "game/State_803EB098.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_8016871C.h"
@@ -147,11 +147,11 @@ int fn_800E5C00(Object_80039F5C *p, int value)
     Vector_80039F5C ball;
     int result = 1;
 
-    if (fn_80137B40()) {
-        ball.mX = fn_80137B40()->mMotion.mPos.mX;
-        ball.mY = fn_80137B40()->mMotion.mPos.mY;
+    if (BallGetCurrentHolder()) {
+        ball.mX = BallGetCurrentHolder()->mMotion.mPos.mX;
+        ball.mY = BallGetCurrentHolder()->mMotion.mPos.mY;
     } else {
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
     }
     int heading = p->mUnknown512.mUnknown4;
     unsigned int turn = (p->mMotion.mFacing - heading) & 0xFFFFFF;
@@ -231,7 +231,7 @@ int fn_800E5EA4(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA
     if (fn_800A7F58(p->mIdBytes[2]) == 0) {
         return 0;
     }
-    Object_80039F5C *pBall = fn_80137B40();
+    Object_80039F5C *pBall = BallGetCurrentHolder();
     int defense = (int)(float)pOther->mRatings[7];
     int offense = p->mRatings[9];
     int facing = 0;

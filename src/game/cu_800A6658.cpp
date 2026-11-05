@@ -26,9 +26,9 @@ void fn_800A8F70(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_800A92E4(void);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
-void fn_80146114(Object_80146094 *p);
+void ParticleTrailClearTint(ParticleTrailSet_t *p);
 void fn_80147840(Object_8003DEC4 *p);
-void fn_801460FC(Object_80146094 *p, float a, float b, float c);
+void ParticleTrailSetTint(ParticleTrailSet_t *p, float a, float b, float c);
 int fn_80178320(void);
 int fn_8007C7E8(Object_8007A334 *pCursor, int key, int *pResult);
 void fn_8007C84C(Object_8007A334 *pCursor, Block_800A70F4 *pOut);
@@ -135,13 +135,13 @@ extern "C" void fn_800A680C(int team)
         if (lbl_8030F404[team][i] != pair[i]) {
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_80146114(&pObject->mUnknown5188);
+                ParticleTrailClearTint(&pObject->mUnknown5188);
                 fn_80147840(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_801460FC(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
+                ParticleTrailSetTint(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
             }
         }
     }
@@ -179,13 +179,13 @@ extern "C" void fn_800A69BC(int team)
         if (lbl_8030F404[team][i] != pair[i]) {
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_80146114(&pObject->mUnknown5188);
+                ParticleTrailClearTint(&pObject->mUnknown5188);
                 fn_80147840(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_801460FC(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
+                ParticleTrailSetTint(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
             }
         }
     }

@@ -17,7 +17,7 @@ int fn_800DC080(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_8016BDCC(Object_80039F5C *p);
 void fn_8016BE10(Object_80039F5C *p);
 void fn_8016C3FC(Object_80039F5C *p);
@@ -142,7 +142,7 @@ void fn_8016D344(Object_80039F5C *p)
     float delta[2];
     float distance;
 
-    if (fn_801CFFD0(0x400000, p->mMotion.mFacing) < 0x355555 && p == fn_80137B40()) {
+    if (fn_801CFFD0(0x400000, p->mMotion.mFacing) < 0x355555 && p == BallGetCurrentHolder()) {
         int team = fn_80178308();
         Object_80039F5C *pOther = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), 0x355555, &distance, 0);
 
@@ -218,7 +218,7 @@ void fn_8016D4D8(Object_80039F5C *p)
         pInput->mUnknown15 = pRequest->mUnknown15;
         pInput->mUnknown0 = pInput->mUnknown0 <= 1.0f ? pInput->mUnknown0 : 1.0f;
         pRequest->mUnknown0 = pInput->mUnknown0;
-        if (p == fn_80137B40()) {
+        if (p == BallGetCurrentHolder()) {
             pInput->mUnknown0 = pInput->mUnknown0 <= 0.98f ? pInput->mUnknown0 : 0.98f;
             pRequest->mUnknown0 = pInput->mUnknown0;
             if (pInput->mUnknown15 == 1) {

@@ -6,7 +6,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_80178D18.h"
@@ -148,7 +148,7 @@ void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011F1CC(void);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80156C78(int a, int b);
 Object_800670B4 *fn_80168708(int team);
@@ -231,16 +231,16 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
 extern "C" int fn_8010F654(Object_80039F5C *p)
 {
     int result = 0;
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     State_8010F43C *pState = (State_8010F43C *)&p->mUnknown336;
     Block_8011E240 *pBlock = &p->mBlock1032;
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     Object_80039F5C *pOther;
     Message_800F01CC message;
     Vector_80039F5C ballPos;
     float minutes;
 
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         fn_8011E3EC(p, 0);
         result = 1;
         fn_8011E240(p);
@@ -257,12 +257,12 @@ extern "C" int fn_8010F654(Object_80039F5C *p)
     } else if (fn_8009FB60(p)) {
         result = 1;
     } else {
-        if (fn_8013BA58(pBall, 0) == 5 && fn_800AD9B4() == 3) {
-            fn_80137D58(fn_801374BC(), &ballPos);
+        if (BallStateGet(pBall, 0) == 5 && fn_800AD9B4() == 3) {
+            BallGetPosition(BallGetCurrent(), &ballPos);
             if (fn_8022785C(&ballPos, &p->mMotion.mPos) < 3.0f) {
                 fn_801C1F94(&message, 0, 4);
                 message.mId = 57;
-                message.mUnknown1[0] = fn_801374D4();
+                message.mUnknown1[0] = BallGetCurrentIndex();
                 fn_800F053C(0, p->mpState, &message, p);
                 return result;
             }
@@ -419,7 +419,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 0;
         p->mUnknown9[0] = 1;
         p->mFlags &= ~4;
-        if (fn_80137C48(p) == 0) {
+        if (BallFindHeldBy(p) == 0) {
             fn_8009BD60(p);
             key = p->mpState->mUnknown1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
@@ -785,7 +785,7 @@ extern "C" int fn_801113DC(Object_80039F5C *p)
     pState = (State_801113DC *)&p->mUnknown336;
     pState->mUnknown0 = 255;
     pState->mUnknown4 = 0.0f;
-    pState->mUnknown12 = fn_80137C48(p) != 0;
+    pState->mUnknown12 = BallFindHeldBy(p) != 0;
     pState->mpUnknown16 = fn_8009BCE8(&p->mUnknown560.mUnknown40);
     fn_800DB520(pState->mUnknown20, p, fn_8017876C(), pState->mUnknown4);
     fn_8009BD60(p);

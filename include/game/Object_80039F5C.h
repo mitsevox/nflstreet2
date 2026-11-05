@@ -51,7 +51,7 @@ struct Model_800C8860 {
     char mUnknown52[4];
 };
 
-/* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
+/* Block at +4 of the player object; the entries of src/game/Ball.cpp
    hold one at +0. */
 struct Block_80170E64 {
     char mUnknown0[4];

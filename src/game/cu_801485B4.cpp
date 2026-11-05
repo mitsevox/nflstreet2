@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 
 struct Record_80148424;
@@ -90,11 +90,11 @@ void fn_801487C0(int team, unsigned char begin)
 
 void fn_80148814(Object_80039F5C *p)
 {
-    Object_80137ABC *pBall = fn_80137C48(p);
+    Ball_t *pBall = BallFindHeldBy(p);
     if (pBall) {
         Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
-        fn_80137EE0(pBall, &velocity);
-        fn_8013791C(pBall, 5, 0);
+        BallSetVelocity(pBall, &velocity);
+        BallReleaseStill(pBall, 5, 0);
     }
     p->mMotion.mPos.mY = -100.0f;
     p->mMotion.mPos.mX = -100.0f;

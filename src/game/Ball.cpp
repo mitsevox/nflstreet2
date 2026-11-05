@@ -1,7 +1,10 @@
+/* The game balls: the saved 'ball' block of ball entries, their models and replay channel,
+   who holds, targets and last touched each ball, and the per-frame ball loops. */
+
 #include <math.h>
 #include <string.h>
 
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/cu_80089330.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
@@ -22,20 +25,20 @@ void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int
 void fn_80076D7C(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
-void fn_8013A440(Object_80137ABC *pBall);
-void fn_8013A6A8(Object_80137ABC *pBall, float step);
-void fn_8013A72C(Object_80137ABC *pBall, float value);
-void fn_8013AB24(Object_80137ABC *pBall);
-void fn_8013ABE0(Object_80137ABC *pBall);
-void fn_8013B874(Object_80137ABC *pBall, float step);
-void fn_8013B96C(Object_80137ABC *pBall, float step);
-void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_80089330 *pContact, unsigned char sub, Vector_80039F5C *pPos);
+void fn_8013A440(Ball_t *pBall);
+void fn_8013A6A8(Ball_t *pBall, float step);
+void fn_8013A72C(Ball_t *pBall, float value);
+void fn_8013AB24(Ball_t *pBall);
+void fn_8013ABE0(Ball_t *pBall);
+void BallStateUpdate(Ball_t *pBall, float step);
+void BallStateMove(Ball_t *pBall, float step);
+void BallStateChange(Ball_t *pBall, int a, int b);
+int BallStateGet(Ball_t *pBall, int *pOut);
+void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, Contact_80089330 *pContact, unsigned char sub, Vector_80039F5C *pPos);
 void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
-float fn_80138F64(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Object_80137ABC *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
+float BallSweepToPart(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
 Set_8003EE6C *fn_801442F0(void);
-void fn_80145DE4(int a, Object_80137ABC *pBall);
+void ParticlesAddBallEvent(int a, Ball_t *pBall);
 int fn_801486A0(void);
 void fn_801D0470(int a);
 void fn_801D0494(void);
@@ -51,21 +54,21 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 }
 
-static Set_80137F98 *sSet = 0;
+static BallBlock_t *sSet = 0;
 static int sEntrySize;
 
 extern "C" {
 
-int fn_80136B1C(void *p, int value)
+int BallBlockInit(void *p, int value)
 {
-    Set_80137F98 *pSet = (Set_80137F98 *)p;
+    BallBlock_t *pSet = (BallBlock_t *)p;
     int i;
 
     pSet->mHeader.mpRecords = fn_8003EE6C(pSet->mHeader.mCount, pSet->mHeader.mCount);
     for (i = 0; i < pSet->mHeader.mCount; i++) {
-        Object_80137ABC *pBall = &pSet->mEntries[i];
+        Ball_t *pBall = &pSet->mEntries[i];
 
-        fn_801D34D0(pBall, sizeof(Object_80137ABC), 0, 4);
+        fn_801D34D0(pBall, sizeof(Ball_t), 0, 4);
         pBall->mState.mIndex = i;
         pBall->mState.mState = 0;
         pBall->mState.mStateArg = 0;
@@ -87,13 +90,13 @@ int fn_80136B1C(void *p, int value)
     return 0;
 }
 
-int fn_80136CB0(void *p, int value)
+int BallBlockSyncModels(void *p, int value)
 {
-    Set_80137F98 *pSet = (Set_80137F98 *)p;
+    BallBlock_t *pSet = (BallBlock_t *)p;
     unsigned int i;
 
     for (i = 0; i < pSet->mHeader.mCount; i++) {
-        Object_80137ABC *pBall = &pSet->mEntries[i];
+        Ball_t *pBall = &pSet->mEntries[i];
 
         if (pBall->mpUnknown00) {
             fn_8013A440(pBall);
@@ -104,10 +107,10 @@ int fn_80136CB0(void *p, int value)
 
 /* Compares two copies of the block, or returns a checksum of one. Record
    pointers are rebased from the live block to each copy. */
-int fn_80136D20(void *p, void *q)
+int BallBlockCompare(void *p, void *q)
 {
-    Set_80137F98 *pA = (Set_80137F98 *)p;
-    Set_80137F98 *pB = (Set_80137F98 *)q;
+    BallBlock_t *pA = (BallBlock_t *)p;
+    BallBlock_t *pB = (BallBlock_t *)q;
     int result;
     int i;
 
@@ -117,28 +120,28 @@ int fn_80136D20(void *p, void *q)
         result |= pA->mHeader.mCurrent != pB->mHeader.mCurrent;
         if (!result) {
             for (i = 0; i < pA->mHeader.mCount; i++) {
-                Object_80137ABC *pBallA = &pA->mEntries[i];
-                Object_80137ABC *pBallB = &pB->mEntries[i];
+                Ball_t *pBallA = &pA->mEntries[i];
+                Ball_t *pBallB = &pB->mEntries[i];
 
                 result |= fn_8003F4E8((Record_8003EC04 *)((char *)pBallA->mState.mpRecord + ((char *)pA - (char *)sSet)),
                                       (Record_8003EC04 *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)sSet)),
                                       pBallA->mState.mpRecord);
                 result |= pBallA->mpUnknown00 != pBallB->mpUnknown00;
-                result |= fn_80238258(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(State_80137ABC) - 4);
+                result |= fn_80238258(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(BallState_t) - 4);
             }
         }
     } else {
-        result = fn_80238278(pA, sizeof(Header_80137F98), 0);
+        result = fn_80238278(pA, sizeof(BallBlockHeader_t), 0);
         for (i = 0; i < pA->mHeader.mCount; i++) {
-            result = fn_80238278(&pA->mEntries[i].mState, sizeof(State_80137ABC), result);
+            result = fn_80238278(&pA->mEntries[i].mState, sizeof(BallState_t), result);
         }
     }
     return result;
 }
 
-int fn_80136E78(void *p, int value)
+int BallBlockShutdown(void *p, int value)
 {
-    Set_80137F98 *pSet = (Set_80137F98 *)p;
+    BallBlock_t *pSet = (BallBlock_t *)p;
     int i;
 
     for (i = 0; i < pSet->mHeader.mCount; i++) {
@@ -148,15 +151,15 @@ int fn_80136E78(void *p, int value)
 }
 
 /* Saves the block followed by its record set, records and sub-records. */
-int fn_80136EB0(void *p, void *pBuffer)
+int BallBlockSave(void *p, void *pBuffer)
 {
-    Set_80137F98 *pSet = (Set_80137F98 *)p;
+    BallBlock_t *pSet = (BallBlock_t *)p;
     Set_8003EE6C *pRecords;
     short i;
 
-    memcpy(pBuffer, pSet, sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC));
+    memcpy(pBuffer, pSet, sizeof(BallBlock_t) + (pSet->mHeader.mCount - 1) * sizeof(Ball_t));
     pRecords = pSet->mHeader.mpRecords;
-    pBuffer = (char *)pBuffer + sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC);
+    pBuffer = (char *)pBuffer + sizeof(BallBlock_t) + (pSet->mHeader.mCount - 1) * sizeof(Ball_t);
     memcpy(pBuffer, pRecords, sizeof(Set_8003EE6C));
     pBuffer = (char *)pBuffer + sizeof(Set_8003EE6C);
     memcpy(pBuffer, pRecords->mpUnknown0, pRecords->mUnknown4 * sizeof(Record_8003EC04));
@@ -168,17 +171,17 @@ int fn_80136EB0(void *p, void *pBuffer)
     return 1;
 }
 
-/* Restores what fn_80136EB0 saved, keeping each entry's first word. */
-int fn_80136F7C(void *p, void *pBuffer)
+/* Restores what BallBlockSave saved, keeping each entry's first word. */
+int BallBlockRestore(void *p, void *pBuffer)
 {
-    Set_80137F98 *pSet = (Set_80137F98 *)p;
-    Set_80137F98 *pSaved = (Set_80137F98 *)pBuffer;
+    BallBlock_t *pSet = (BallBlock_t *)p;
+    BallBlock_t *pSaved = (BallBlock_t *)pBuffer;
     Set_8003EE6C *pRecords;
-    Object_80137ABC *pSrc;
-    Object_80137ABC *pDst;
+    Ball_t *pSrc;
+    Ball_t *pDst;
     short i;
 
-    memcpy(&pSet->mHeader, &pSaved->mHeader, sizeof(Header_80137F98));
+    memcpy(&pSet->mHeader, &pSaved->mHeader, sizeof(BallBlockHeader_t));
     pSrc = pSaved->mEntries;
     pDst = pSet->mEntries;
     for (i = 0; i < pSet->mHeader.mCount; i++) {
@@ -197,17 +200,17 @@ int fn_80136F7C(void *p, void *pBuffer)
     return 1;
 }
 
-int fn_801370A4(void *p)
+int BallBlockGetSaveSize(void *p)
 {
     Set_8003EE6C *pRecords = sSet->mHeader.mpRecords;
 
-    return sizeof(Set_80137F98) + (sSet->mHeader.mCount - 1) * sizeof(Object_80137ABC) + sizeof(Set_8003EE6C)
+    return sizeof(BallBlock_t) + (sSet->mHeader.mCount - 1) * sizeof(Ball_t) + sizeof(Set_8003EE6C)
          + pRecords->mUnknown4 * sizeof(Record_8003EC04) + pRecords->mUnknownC * sizeof(Sub_8003EC54) * 2;
 }
 
-void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 *pContacts)
+void BallCollidePlayer(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 *pContacts)
 {
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Object_80039F5C *p;
     Vector_80039F5C bestPos;
     Vector_80039F5C pos;
@@ -230,12 +233,12 @@ void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 
     } else {
         swapped = 0;
     }
-    pBall = fn_80137ABC(pA->mUnknown28);
+    pBall = BallGet(pA->mUnknown28);
     p = fn_8009BCE8(&pB->mUnknown28);
     if (p->mFlags & 0x10) {
         return;
     }
-    state = fn_8013BA58(pBall, 0);
+    state = BallStateGet(pBall, 0);
     if (state == 2 && p->mpState->mId != 0x38) {
         return;
     }
@@ -255,7 +258,7 @@ void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 
         } else {
             sub = pContacts->mpContacts[i].mUnknownD;
         }
-        dist = fn_80138F64(pA, pB, sub, pBall, &pos, &hit);
+        dist = BallSweepToPart(pA, pB, sub, pBall, &pos, &hit);
         if (hit) {
             hits++;
         }
@@ -275,14 +278,14 @@ void fn_801370D8(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 
             } else {
                 sub = pContacts->mpContacts[i].mUnknownD;
             }
-            fn_801389D4(pBall, p, &pContacts->mpContacts[i], sub, &bestPos);
+            BallHitPlayerPart(pBall, p, &pContacts->mpContacts[i], sub, &bestPos);
         }
     } else {
-        fn_801389D4(pBall, p, &pContacts->mpContacts[best], bestSub, &bestPos);
+        BallHitPlayerPart(pBall, p, &pContacts->mpContacts[best], bestSub, &bestPos);
     }
 }
 
-void fn_80137314(int a)
+void BallsReplayRecord(int a)
 {
     unsigned int i;
 
@@ -291,7 +294,7 @@ void fn_80137314(int a)
     }
 }
 
-void fn_8013737C(int a, int b, int c, int d, float e)
+void BallsReplayPlayback(int a, int b, int c, int d, float e)
 {
     unsigned int i;
 
@@ -300,15 +303,15 @@ void fn_8013737C(int a, int b, int c, int d, float e)
     }
 }
 
-void fn_8013740C(void)
+void BallsReplayRegister(void)
 {
     sEntrySize = fn_8003FC68();
-    fn_80030ACC(fn_80137314, fn_8013737C, sEntrySize * sSet->mHeader.mCount, "Balls");
+    fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, sEntrySize * sSet->mHeader.mCount, "Balls");
 }
 
-void fn_8013745C(unsigned char index)
+void BallSetCurrent(unsigned char index)
 {
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
 
     if (pBall) {
         pBall->mState.mFlags &= ~1;
@@ -317,17 +320,17 @@ void fn_8013745C(unsigned char index)
     sSet->mEntries[index].mState.mFlags |= 1;
 }
 
-Object_80137ABC *fn_801374BC(void)
+Ball_t *BallGetCurrent(void)
 {
     return &sSet->mEntries[sSet->mHeader.mCurrent];
 }
 
-unsigned char fn_801374D4(void)
+unsigned char BallGetCurrentIndex(void)
 {
     return sSet->mHeader.mCurrent;
 }
 
-unsigned char fn_801374E0(Object_80137ABC *pBall)
+unsigned char BallGetIndex(Ball_t *pBall)
 {
     unsigned char i;
 
@@ -339,7 +342,7 @@ unsigned char fn_801374E0(Object_80137ABC *pBall)
     return i;
 }
 
-unsigned char fn_80137534(Block_80170E64 *pBlock)
+unsigned char BallFindByModel(Block_80170E64 *pBlock)
 {
     unsigned char i;
 
@@ -351,9 +354,9 @@ unsigned char fn_80137534(Block_80170E64 *pBlock)
     return i;
 }
 
-void fn_80137588(int a)
+void BallsCreateModels(int a)
 {
-    Object_80137ABC *pBalls;
+    Ball_t *pBalls;
     Block_80170E64 *pFirst = 0;
     unsigned int i;
 
@@ -373,11 +376,11 @@ void fn_80137588(int a)
             pFirst = pBalls->mpUnknown00;
         }
     }
-    fn_8013745C(0);
-    fn_80145DE4(5, fn_801374BC());
+    BallSetCurrent(0);
+    ParticlesAddBallEvent(5, BallGetCurrent());
 }
 
-void fn_8013764C(int a)
+void BallsDestroyModels(int a)
 {
     unsigned int i;
 
@@ -387,30 +390,30 @@ void fn_8013764C(int a)
     fn_8003FB2C();
 }
 
-void fn_801376B8(float step)
+void BallsProcessMotion(float step)
 {
     unsigned int i;
 
     for (i = 0; i < sSet->mHeader.mCount; i++) {
-        Object_80039F5C *p = fn_80137AD0(&sSet->mEntries[i]);
+        Object_80039F5C *p = BallGetHolder(&sSet->mEntries[i]);
 
         if (p && (p->mpUnknown4->mUnknown20 & 1) == 0) {
-            fn_80138440(&sSet->mEntries[i], 0);
+            BallSetVisible(&sSet->mEntries[i], 0);
         }
-        fn_8013B96C(&sSet->mEntries[i], step);
+        BallStateMove(&sSet->mEntries[i], step);
     }
 }
 
-void fn_80137758(float step)
+void BallsProcessStates(float step)
 {
     unsigned int i;
 
     for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8013B874(&sSet->mEntries[i], step);
+        BallStateUpdate(&sSet->mEntries[i], step);
     }
 }
 
-void fn_801377C4(float step)
+void BallsProcessCollision(float step)
 {
     Set_8003EE6C *pRecords;
     unsigned int i;
@@ -424,7 +427,7 @@ void fn_801377C4(float step)
     }
 }
 
-void fn_80137864(float step)
+void BallsSyncModels(float step)
 {
     unsigned int i;
 
@@ -433,7 +436,7 @@ void fn_80137864(float step)
     }
 }
 
-void fn_801378C0(void)
+void BallsResetScales(void)
 {
     int i;
 
@@ -442,12 +445,12 @@ void fn_801378C0(void)
     }
 }
 
-void fn_8013791C(Object_80137ABC *pBall, int a, int b)
+void BallReleaseStill(Ball_t *pBall, int a, int b)
 {
     if (fn_801486A0() == 0 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 4)) {
         return;
     }
-    fn_8013B9C0(pBall, a, b);
+    BallStateChange(pBall, a, b);
     {
         Vector_80039F5C *pVector = &pBall->mState.mUnknown54;
 
@@ -461,9 +464,9 @@ void fn_8013791C(Object_80137ABC *pBall, int a, int b)
     fn_8009BD2C(0, &pBall->mState.mUnknownB4);
 }
 
-void fn_801379B4(Object_80137ABC *pBall, int a, int b)
+void BallRelease(Ball_t *pBall, int a, int b)
 {
-    fn_8013B9C0(pBall, a, b);
+    BallStateChange(pBall, a, b);
     {
         Vector_80039F5C *pVector = &pBall->mState.mUnknown7C;
 
@@ -472,14 +475,14 @@ void fn_801379B4(Object_80137ABC *pBall, int a, int b)
     fn_8009BD2C(0, &pBall->mState.mUnknownB4);
 }
 
-void fn_80137A04(Object_80137ABC *pBall, Object_80039F5C *p)
+void BallGiveToPlayer(Ball_t *pBall, Object_80039F5C *p)
 {
     p->mFlags &= ~0x04000000;
     fn_8009BD2C(0, &pBall->mState.mUnknownCC);
     fn_8009BD2C(0, &pBall->mState.mUnknownC8);
     fn_8009BD2C(p, &pBall->mState.mUnknownB4);
     fn_8009BD2C(p, &pBall->mState.mUnknownB8);
-    fn_8013B9C0(pBall, 1, 0);
+    BallStateChange(pBall, 1, 0);
     if (fn_800AD9B4() == 3) {
         fn_80076D7C(p->mId);
     }
@@ -492,12 +495,12 @@ void fn_80137A04(Object_80137ABC *pBall, Object_80039F5C *p)
     }
 }
 
-Object_80137ABC *fn_80137ABC(int index)
+Ball_t *BallGet(int index)
 {
     return &sSet->mEntries[index];
 }
 
-Object_80039F5C *fn_80137AD0(Object_80137ABC *pBall)
+Object_80039F5C *BallGetHolder(Ball_t *pBall)
 {
     Object_80039F5C *p = 0;
 
@@ -507,7 +510,7 @@ Object_80039F5C *fn_80137AD0(Object_80137ABC *pBall)
     return p;
 }
 
-Object_80039F5C *fn_80137B08(Object_80137ABC *pBall)
+Object_80039F5C *BallGetLastHolder(Ball_t *pBall)
 {
     Object_80039F5C *p = 0;
 
@@ -517,17 +520,17 @@ Object_80039F5C *fn_80137B08(Object_80137ABC *pBall)
     return p;
 }
 
-Object_80039F5C *fn_80137B40(void)
+Object_80039F5C *BallGetCurrentHolder(void)
 {
-    return fn_80137AD0(fn_801374BC());
+    return BallGetHolder(BallGetCurrent());
 }
 
-Object_80039F5C *fn_80137B64(void)
+Object_80039F5C *BallGetCurrentLastHolder(void)
 {
-    return fn_80137B08(fn_801374BC());
+    return BallGetLastHolder(BallGetCurrent());
 }
 
-Object_80039F5C *fn_80137B88(Object_80137ABC *pBall)
+Object_80039F5C *BallGetTarget(Ball_t *pBall)
 {
     Object_80039F5C *p = 0;
 
@@ -537,22 +540,22 @@ Object_80039F5C *fn_80137B88(Object_80137ABC *pBall)
     return p;
 }
 
-void fn_80137BC0(Object_80137ABC *pBall, Object_80039F5C *p)
+void BallSetTarget(Ball_t *pBall, Object_80039F5C *p)
 {
     fn_8009BD2C(p, &pBall->mState.mUnknownC8);
 }
 
-Object_80039F5C *fn_80137BEC(void)
+Object_80039F5C *BallGetCurrentTarget(void)
 {
-    return fn_80137B88(fn_801374BC());
+    return BallGetTarget(BallGetCurrent());
 }
 
-void fn_80137C10(Object_80039F5C *p)
+void BallSetCurrentTarget(Object_80039F5C *p)
 {
-    fn_8009BD2C(p, &fn_801374BC()->mState.mUnknownC8);
+    fn_8009BD2C(p, &BallGetCurrent()->mState.mUnknownC8);
 }
 
-Object_80137ABC *fn_80137C48(Object_80039F5C *p)
+Ball_t *BallFindHeldBy(Object_80039F5C *p)
 {
     unsigned char i;
 
@@ -566,7 +569,7 @@ Object_80137ABC *fn_80137C48(Object_80039F5C *p)
     return 0;
 }
 
-Object_80137ABC *fn_80137CD0(Object_80039F5C *p)
+Ball_t *BallFindTargeting(Object_80039F5C *p)
 {
     unsigned char i;
 
@@ -580,14 +583,14 @@ Object_80137ABC *fn_80137CD0(Object_80039F5C *p)
     return 0;
 }
 
-void fn_80137D58(Object_80137ABC *pBall, Vector_80039F5C *pOut)
+void BallGetPosition(Ball_t *pBall, Vector_80039F5C *pOut)
 {
     pOut->mX = pBall->mState.mPos.mX;
     pOut->mY = pBall->mState.mPos.mY;
     pOut->mZ = pBall->mState.mPos.mZ;
 }
 
-void fn_80137D74(Object_80137ABC *pBall, Vector_80039F5C *pPos)
+void BallSetPosition(Ball_t *pBall, Vector_80039F5C *pPos)
 {
     pBall->mState.mPos.mX = pPos->mX;
     pBall->mState.mPos.mY = pPos->mY;
@@ -596,7 +599,7 @@ void fn_80137D74(Object_80137ABC *pBall, Vector_80039F5C *pPos)
 }
 
 /* The entry position, raised to the higher capsule end of its record. */
-void fn_80137DC8(Object_80137ABC *pBall, Vector_80039F5C *pOut)
+void BallGetTopPosition(Ball_t *pBall, Vector_80039F5C *pOut)
 {
     unsigned char i;
 
@@ -620,40 +623,40 @@ void fn_80137DC8(Object_80137ABC *pBall, Vector_80039F5C *pOut)
     pOut->mY += 0.0972613543f;
 }
 
-void fn_80137E74(Object_80137ABC *pBall, Vector_80039F5C *p)
+void BallSetPrevPosition(Ball_t *pBall, Vector_80039F5C *p)
 {
     pBall->mState.mUnknown28.mX = p->mX;
     pBall->mState.mUnknown28.mY = p->mY;
     pBall->mState.mUnknown28.mZ = p->mZ;
 }
 
-void fn_80137E90(Object_80137ABC *pBall, int *pAngles)
+void BallSetRotation(Ball_t *pBall, int *pAngles)
 {
     fn_801EBEF8(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
 }
 
-void fn_80137EC4(Object_80137ABC *pBall, Vector_80039F5C *pOut)
+void BallGetVelocity(Ball_t *pBall, Vector_80039F5C *pOut)
 {
     pOut->mX = pBall->mState.mUnknown54.mX;
     pOut->mY = pBall->mState.mUnknown54.mY;
     pOut->mZ = pBall->mState.mUnknown54.mZ;
 }
 
-void fn_80137EE0(Object_80137ABC *pBall, Vector_80039F5C *p)
+void BallSetVelocity(Ball_t *pBall, Vector_80039F5C *p)
 {
     pBall->mState.mUnknown54.mX = p->mX;
     pBall->mState.mUnknown54.mY = p->mY;
     pBall->mState.mUnknown54.mZ = p->mZ;
 }
 
-void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut)
+void BallGetSpin(Ball_t *pBall, Vector_80039F5C *pOut)
 {
     pOut->mX = pBall->mState.mUnknown70.mX;
     pOut->mY = pBall->mState.mUnknown70.mY;
     pOut->mZ = pBall->mState.mUnknown70.mZ;
 }
 
-void fn_80137F18(Object_80137ABC *pBall)
+void BallClearSpin(Ball_t *pBall)
 {
     {
         Vector_80039F5C *pVector = &pBall->mState.mUnknown70;
@@ -673,33 +676,33 @@ void fn_80137F18(Object_80137ABC *pBall)
     }
 }
 
-int fn_80137F88(Object_80137ABC *pBall)
+int BallGetStateFrames(Ball_t *pBall)
 {
     return pBall->mState.mUnknownBC;
 }
 
-int fn_80137F90(Object_80137ABC *pBall)
+int BallGetStateStartTick(Ball_t *pBall)
 {
     return pBall->mState.mUnknownC0;
 }
 
 /* Allocates the block for count entries and registers its callbacks. */
-void fn_80137F98(int count)
+void BallsStart(int count)
 {
     void *pHandle;
-    Set_80137F98 *pSet;
+    BallBlock_t *pSet;
 
-    fn_8003EE2C(0, 1, fn_801370D8);
-    pHandle = fn_80238174(0, (void **)&sSet, sizeof(Set_80137F98) + (count - 1) * sizeof(Object_80137ABC), 10, 0x62616C6C);
-    fn_80238234(pHandle, fn_80136B1C, fn_80136E78, fn_80136CB0, fn_80136D20);
-    fn_80238248(pHandle, fn_80136EB0, fn_801370A4, fn_80136F7C);
-    pSet = (Set_80137F98 *)fn_8023816C(pHandle);
-    fn_801D34D0(pSet, sizeof(Set_80137F98), 0, 4);
+    fn_8003EE2C(0, 1, BallCollidePlayer);
+    pHandle = fn_80238174(0, (void **)&sSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
+    fn_80238234(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
+    fn_80238248(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
+    pSet = (BallBlock_t *)fn_8023816C(pHandle);
+    fn_801D34D0(pSet, sizeof(BallBlock_t), 0, 4);
     pSet->mHeader.mCount = count;
     fn_802381E0(pHandle);
 }
 
-int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut)
+int BallGetLandingPoint(Ball_t *pBall, Vector_80039F5C *pOut)
 {
     int result = 0;
 
@@ -712,7 +715,7 @@ int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut)
     return result;
 }
 
-int fn_801380AC(Object_80137ABC *pBall, float *pOut)
+int BallGetLandingTime(Ball_t *pBall, float *pOut)
 {
     int result = 0;
     float value;
@@ -728,14 +731,14 @@ int fn_801380AC(Object_80137ABC *pBall, float *pOut)
 }
 
 /* Places the record's capsules along the entry's rotated axis. */
-void fn_801380DC(Record_8003EC04 *pRecord)
+void BallUpdateCollRecord(Record_8003EC04 *pRecord)
 {
-    Object_80137ABC *pBall = fn_80137ABC(pRecord->mUnknown28);
+    Ball_t *pBall = BallGet(pRecord->mUnknown28);
     Vector_80039F5C *pPos = &pBall->mState.mPos;
     Sub_8003EC54 *pSub;
     unsigned char i;
 
-    fn_8013825C(pBall);
+    BallGetModel(pBall);
     pRecord->mUnknown0 = pBall->mState.mPos.mX;
     pRecord->mUnknown4 = pBall->mState.mPos.mY;
     pRecord->mUnknown8 = pBall->mState.mPos.mZ;
@@ -772,26 +775,26 @@ void fn_801380DC(Record_8003EC04 *pRecord)
     }
 }
 
-Block_80170E64 *fn_8013825C(Object_80137ABC *pBall)
+Block_80170E64 *BallGetModel(Ball_t *pBall)
 {
     return pBall->mpUnknown00;
 }
 
-Set_8003EE6C *fn_80138264(void)
+Set_8003EE6C *BallGetCollRecords(void)
 {
     return sSet->mHeader.mpRecords;
 }
 
 /* Mirrors every entry: negates the X and Y of its vectors and turns its
    rotations by half a turn. */
-void fn_80138270(void)
+void BallsMirror(void)
 {
-    Set_80137F98 *pSet = sSet;
+    BallBlock_t *pSet = sSet;
     Quat_801EB488 turn;
     int i;
 
     for (i = 0; i < pSet->mHeader.mCount; i++) {
-        Object_80137ABC *pBall = &pSet->mEntries[i];
+        Ball_t *pBall = &pSet->mEntries[i];
 
         pBall->mState.mPos.mX = -pBall->mState.mPos.mX;
         pBall->mState.mPos.mY = -pBall->mState.mPos.mY;
@@ -811,27 +814,27 @@ void fn_80138270(void)
     }
 }
 
-void fn_80138398(Object_80137ABC *pBall, int value)
+void BallSetTransferKind(Ball_t *pBall, int value)
 {
     pBall->mState.mUnknownC4 = value;
 }
 
-int fn_801383A0(Object_80137ABC *pBall)
+int BallGetTransferKind(Ball_t *pBall)
 {
     return pBall->mState.mUnknownC4;
 }
 
-int fn_801383A8(Object_80137ABC *pBall)
+int BallGetLastToucher(Ball_t *pBall)
 {
     return pBall->mState.mUnknownCC;
 }
 
-int fn_801383B0(void)
+int BallsExist(void)
 {
     return sSet != 0;
 }
 
-unsigned char fn_801383C8(void)
+unsigned char BallsGetCount(void)
 {
     unsigned char count;
 
@@ -843,9 +846,9 @@ unsigned char fn_801383C8(void)
     return count;
 }
 
-void fn_801383E4(int on)
+void BallsSetVisible(int on)
 {
-    Set_80137F98 *pSet = sSet;
+    BallBlock_t *pSet = sSet;
     int i;
 
     if (!pSet) {
@@ -862,7 +865,7 @@ void fn_801383E4(int on)
     }
 }
 
-void fn_80138440(Object_80137ABC *pBall, int on)
+void BallSetVisible(Ball_t *pBall, int on)
 {
     Block_80170E64 *pBlock = pBall->mpUnknown00;
 
@@ -873,18 +876,18 @@ void fn_80138440(Object_80137ABC *pBall, int on)
     }
 }
 
-unsigned char fn_8013846C(Object_80137ABC *pBall)
+unsigned char BallIsVisible(Ball_t *pBall)
 {
     return pBall->mpUnknown00->mUnknown20 & 1;
 }
 
 /* Copies the decaying value at +0xF0 into the Z of the vector at +0x54 and,
    when the X and Y are both near zero, gives them a random heading. */
-void fn_8013847C(Object_80137ABC *pBall, int decay)
+void BallKickUp(Ball_t *pBall, int decay)
 {
     Vector_80039F5C vector;
 
-    fn_80137EC4(pBall, &vector);
+    BallGetVelocity(pBall, &vector);
     vector.mZ = pBall->mState.mUnknownF0;
     if (decay) {
         pBall->mState.mUnknownF0 -= 0.03f;
@@ -895,6 +898,6 @@ void fn_8013847C(Object_80137ABC *pBall, int decay)
 
         fn_80227538(&vector, (int)(degrees * 46603.38f), 0.075f);
     }
-    fn_80137EE0(pBall, &vector);
+    BallSetVelocity(pBall, &vector);
 }
 }

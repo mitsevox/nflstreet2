@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -42,7 +42,7 @@
    fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
    the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -53,9 +53,9 @@ extern "C" {
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 }
 
 extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
@@ -64,7 +64,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
     int angle;
     float distance;
     float strength;
-    Object_80039F5C *pOther = fn_80137B88(pInfo->mpUnknown0);
+    Object_80039F5C *pOther = BallGetTarget(pInfo->mpUnknown0);
 
     if (pOther == 0) {
         return;
@@ -86,7 +86,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
             strength = distance / 8.0f;
             strength = 1.0f - strength;
         }
-        if (fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x1FFFFF && fn_8013BA58(pInfo->mpUnknown0, 0) == 4) {
+        if (fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x1FFFFF && BallStateGet(pInfo->mpUnknown0, 0) == 4) {
             fn_80227690(&delta, &pInfo->mUnknown16, &pMotion->mPos);
             angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
         }
@@ -104,9 +104,9 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
 }
 
 extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index) {
-    pInfo->mpUnknown0 = fn_80137ABC(index);
-    fn_80138064(pInfo->mpUnknown0, &pInfo->mUnknown4);
+    pInfo->mpUnknown0 = BallGet(index);
+    BallGetLandingPoint(pInfo->mpUnknown0, &pInfo->mUnknown4);
     fn_8013AA00(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
-    fn_80137EC4(pInfo->mpUnknown0, &pInfo->mUnknown28);
-    fn_80137D58(pInfo->mpUnknown0, &pInfo->mUnknown16);
+    BallGetVelocity(pInfo->mpUnknown0, &pInfo->mUnknown28);
+    BallGetPosition(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }

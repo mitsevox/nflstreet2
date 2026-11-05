@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801C1F94.h"
@@ -46,7 +46,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     Message_800F01CC message;
     Vector_80039F5C ball;
     int update = 0;
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
     fn_8010A2DC(p, 0, -1);
     state->mUnknown0++;
@@ -69,7 +69,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
             }
         } else {
             state->mUnknown12 = 0.1f;
-            fn_80137D58(fn_801374BC(), &ball);
+            BallGetPosition(BallGetCurrent(), &ball);
             fn_80227690(&ball, &ball, &p->mMotion.mPos);
             state->mUnknown4 = fn_801CFE40(ball.mY, ball.mX);
             if (((fn_801CFE40(ball.mY, ball.mX) - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {

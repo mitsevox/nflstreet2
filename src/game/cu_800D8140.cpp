@@ -8,7 +8,7 @@
 extern "C" {
 float fn_800C4A2C(Object_800D81C8 *p);
 void fn_80044854(Object_800D81C8 *p, State_800D8140 *pState);
-Object_800D81C8 *fn_80137B40(void);
+Object_800D81C8 *BallGetCurrentHolder(void);
 int fn_801784C4(void);
 int fn_801787A0(void);
 float fn_801BD660(void *p, int key);
@@ -119,7 +119,7 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
             flag = 0;
         }
         if (!(pOther->mUnknownC & 0x800)) return;
-        if (flag && fn_80137B40() != pOther) return;
+        if (flag && BallGetCurrentHolder() != pOther) return;
         float time = fn_801BD6D4(pBlock);
         float value = time / pBlock->mUnknown4;
         if (!p->mUnknown14) {
@@ -184,7 +184,7 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
                 pState->mUnknown0.mUnknown4 = p->mUnknown0.mUnknown4;
             }
         }
-        if ((pOther->mUnknownC & 8) && fn_80137B40() == pOther && !fn_801787A0()) {
+        if ((pOther->mUnknownC & 8) && BallGetCurrentHolder() == pOther && !fn_801787A0()) {
             pState->mUnknown8 = p->mUnknown8;
             pState->mUnknownC = p->mUnknownC;
             pState->mUnknown14 = 1;

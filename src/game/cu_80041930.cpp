@@ -3,7 +3,7 @@
 #include "game/Object_801BC084.h"
 #include "game/Record_8036B55C.h"
 #include "game/bitstream.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"

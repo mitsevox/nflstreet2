@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/fn_80178D18.h"
 #include "engine/cu_80227F14.h"
 #include "game/Class_80148A58.h"
@@ -37,7 +37,7 @@ struct Block_800BC538 {
 extern "C" {
 void fn_80093410(int handle);
 void fn_800940F0(int handle);
-Camera_8013F738 *fn_8013FA04(int index);
+GameCamera_t *CamGameGetCamera(int index);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
@@ -81,7 +81,7 @@ extern "C" void fn_800BB458(void)
 
 extern "C" void fn_800BB504(void)
 {
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
 
     fn_801F0F18(0);
     if (lbl_803EC98C->mUnknown20 != -1) {
@@ -99,7 +99,7 @@ extern "C" void fn_800BB504(void)
         lbl_803EC98C->mUnknown1C = -1;
     }
     fn_800BB458();
-    pCamera = fn_8013FA04(2);
+    pCamera = CamGameGetCamera(2);
     if (pCamera->mUnknown28 != 0) {
         fn_802286D8((Object_80228224 *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
     }
