@@ -1,31 +1,36 @@
 """Same-game mode of tools/boundaries.py: file-edge evidence for this game's own code.
 
-    python3 tools/boundaries.py --game [--target ID]   print the summary and the current rows it contradicts
+    python3 tools/boundaries.py --game [--target ID]   summary, agreement checks and the current rows it contradicts
 
 The NASCAR 2005 alignment (tools/boundaries.py) covers the EA engine libraries only: below them is
 football code that no sibling with symbols shares. Here the evidence comes from this target and
-from the PS2 release of the same game (SLUS_211.18: the same ProDG GCC family, the same link
-order, no string merging across files). The run covers GAME_RANGE and reports, per cut between two
-consecutive functions, what decides it. A cut is one of:
+from the PS2 release of the same game (SLUS_211.18: the same ProDG GCC family, nearly the same
+function order (17 inversions among 7,261 mapped game functions), no string merging across files).
+The run covers GAME_RANGE and classifies each cut between two consecutive functions. Nothing here
+establishes an extent: the tables are proposals, and a closing PR decides its own file's edges.
 
-- an **edge**, when a signal proves a file ends there:
-  - `static-init`: a function listed in .ctors (a C++ file's static initialiser) is the last
-    function of its file, or the second last when the next function calls the same callee (the
-    destructor twin GCC emits beside it). Calibration on this target: all 71 such edges coincide
-    with an existing unit edge, and none is tied by the signals below.
+- **edge**, evidence that a file ends at the cut:
+  - `static-init`: a function listed in the .ctors/.dtors lists (a C++ file's static initialiser
+    or finaliser) is the last function of its file, or the second last when the next function
+    calls the same callees (the twin GCC emits beside it). Support from outside this target: in
+    NASCAR 2005, whose symbols name every file, all 172 `_GLOBAL_.I.` functions are followed in
+    their file only by other `_GLOBAL_` functions. On this target the 71 edges are current unit
+    edges, but those rows cite the same signal, so that agreement is not independent.
   - `tag`: a file-name string such as "ASSIGN.C" that no function loads, at the head of a file's
-    .data, names the file that starts between the last function owning .data before it and the
-    first function owning .data after it. When that range holds exactly one untied cut, the edge
-    is that cut; otherwise the range is reported with the name.
+    .data, names the file that starts between the highest function owning .data before it and the
+    lowest owning .data after it. When that range holds exactly one untied cut, the edge is that
+    cut; otherwise the range is reported with the name.
   - `strings`: two PS2 copies of the same literal sit in two different files, so some cut between
     their users is an edge; when exactly one untied cut lies between two such users, it is the edge.
-- **tied**, when a signal proves the functions on both sides are in one file:
-  - `string-copy`: GC functions whose PS2 counterparts load the same PS2 copy of a literal are in
-    one file. A copy counts only when the reference is to the start of the string, the copy is in
-    .rodata or .sdata (a .data string is a named array), its users do not straddle a `static-init`
-    edge (a named global), and the GC build agrees: every user loads one GC .rodata copy of the
-    same text, and no user of another PS2 copy loads that GC copy (this build keeps a copy per file
-    too). Every copy of a text that fails one test is dropped.
+- **tied**, evidence that the functions on both sides are in one file:
+  - `string-copy`: GC functions whose PS2 counterparts load the same PS2 copy of a literal. A copy
+    counts only when the reference is to the start of the string, the copy is in .rodata or .sdata
+    (a .data string is a named array), its users do not straddle a `static-init` edge, and the GC
+    build agrees: every user loads one GC .rodata copy of the same text, and no user of another PS2
+    copy loads that GC copy (this build keeps a copy per file too). Every copy of a text that fails
+    one test is dropped. Neither build tells a literal from a named `const char[]` used by several
+    files, so a copy whose users lie more than WINDOW functions apart ties a cut only where the
+    copies of at least two different texts cover it.
   - `data-order`: within a file the linker keeps its data together, so a data item owned by a
     function left of the cut that sits above an item owned by a function right of it, in the same
     section, ties the cut. An item is owned when exactly one function references it; the pair must
@@ -33,24 +38,29 @@ consecutive functions, what decides it. A cut is one of:
     another file but used by one function here otherwise gives false ties: without the window
     every static-init edge is tied). .sdata2 is a merged pool and is left out.
   - `ps2-data-order`: the same test on the PS2 side, on the whole literals the PS2 code loads.
-  - `rodata-padding`: each file's .rodata starts 8-aligned, so a .rodata item that starts 4 bytes
-    past an 8-byte boundary is in the same file as the item before it; both must be owned and not
-    text (the rule fails on strings, which are byte-aligned). Calibration: none of the 573 ties
-    between different functions straddles a `static-init` edge. The same rule fails on .data,
-    .sdata, .bss and .sbss (11 to 15 straddles), so it is not used there.
 - **open**, when neither.
 
-An **atom** is a maximal run of functions joined by tied cuts: it cannot be split. A **span** is a
-run of atoms between two edges (or the ends of GAME_RANGE). The class hints are reported, never
-used to decide: a GCC vtable (two zero words, then 8-byte entries ending in a function pointer)
-whose methods appear in no other vtable groups those methods; the span from the first to the last
-is one class's code, usually one file in Tiburon's code, but a class can be split over files.
+Not used: .rodata (or any section) alignment. ProDG aligns a file's .rodata to 4 or 8 by its
+contents (102 of 186 compiled game objects use 4), so an item 4 past an 8-byte boundary can start a
+file.
+
+`--game` prints, besides the summary, how many tie pairs join two different linked objects of the
+current build and how many tied cuts are current unit edges. These are agreement checks against
+rows that are themselves mostly provisional, not a known answer; the only `exact` unit edges in the
+game range are listed with their state.
+
+An **atom** is a maximal run of functions joined by tied cuts. A **span** is a run of atoms
+between two edges (or the ends of GAME_RANGE). The class hints are reported, never used to decide:
+a GCC vtable (two zero words, then 8-byte entries ending in a function pointer) whose methods
+appear in no other vtable groups those methods; the span from the first to the last is one class's
+code, usually one file in Tiburon's code, but a class can be split over files.
 
 Outputs, config/<target>/boundaries/: game_spans.tsv, game_edges.tsv and game_atoms.tsv
-(committed, checked for drift like the engine tables) and, printed by --game only, the current unit rows whose edges lie
-inside an atom. Inputs: evidence.tsv (function extents), the analysis python3 build.py writes to
-build/analysis/, the original main.dol (for .ctors, vtables, tag strings and .rodata bytes) and
-references/NFL Street 2/SLUS-21118/ps2-strings.tsv (tools/sibling_tables.py ps2-strings)."""
+(committed, checked for drift like the engine tables). Inputs: evidence.tsv (function extents),
+the analysis python3 build.py writes to build/analysis/, the original main.dol (for .ctors,
+vtables and tag strings) and references/NFL Street 2/SLUS-21118/ps2-strings.tsv
+(tools/sibling_tables.py ps2-strings, from the private SLUS_211.18 and the GC-to-PS2 map; CI
+cannot regenerate it, so it is refreshed by hand when the map is)."""
 import bisect
 import csv
 import hashlib
@@ -220,7 +230,7 @@ def cstring(dol, address):
 
 
 def string_copies(target, rows, edges, low, high, gc_copies):
-    """(ties [(first function, last function)], separators [(first cut, last cut)], dropped texts):
+    """(ties [(first function, last function, text)], separators [(first cut, last cut)], dropped texts):
     see the module docstring. A PS2 copy counts only when all its GC users load one GC .rodata copy
     of the same text, which no user of another PS2 copy loads (the GC build keeps a copy per file
     too); a text with any copy that fails is dropped."""
@@ -245,13 +255,27 @@ def string_copies(target, rows, edges, low, high, gc_copies):
             continue
         for row, users in by_copy.values():
             if len(users) > 1:
-                ties.append((users[0], users[-1]))
+                ties.append((users[0], users[-1], text))
         if len(by_copy) > 1:
             sequence = sorted((u, address) for address, (_, users) in by_copy.items() for u in users)
             for (a, copy_a), (b, copy_b) in zip(sequence, sequence[1:]):
                 if copy_a != copy_b and a != b:
                     separators.append((a + 1, b))
     return ties, separators, dropped
+
+
+def copy_tied_cuts(copy_ties, window=WINDOW):
+    """The cuts string copies tie: copy_ties is [(first function, last function, text)]. A copy
+    whose users lie at most window functions apart ties its cuts; a wider one only cuts that wide
+    copies of at least two different texts cover."""
+    tied, wide = set(), defaultdict(set)
+    for lo, hi, text in copy_ties:
+        for cut in range(lo + 1, hi + 1):
+            if hi - lo <= window:
+                tied.add(cut)
+            else:
+                wide[cut].add(text)
+    return tied | {cut for cut, texts in wide.items() if len(texts) >= 2}
 
 
 def order_ties(pairs, window=WINDOW, span=SPAN):
@@ -284,26 +308,6 @@ def ps2_data_order(target, rows, low, high):
         if len(row['users']) == 1 and row['unmapped'] == 0 and row['at_start'] and low <= row['users'][0] < high:
             groups[row['section']].append((target.index(row['users'][0]), row['address']))
     return order_ties(groups)
-
-
-def text_like(raw):
-    return bool(raw) and sum(32 <= c < 127 for c in raw) / len(raw) > 0.5
-
-
-def rodata_padding(owners, owned, dol, low_index, high_index):
-    """[(first function, last function)] tied by an owned .rodata item starting 4 past an 8-byte
-    boundary right after another owned item."""
-    ordered = sorted((owners.items[k][0], k) for k in owned if owners.items[k][2] == '.data3')
-    ties = []
-    for (a0, k0), (a1, k1) in zip(ordered, ordered[1:]):
-        if a1 % 8 != 4 or k1 != k0 + 1 or owners.items[k0][4] or owners.items[k1][4]:
-            continue
-        if text_like(dol.read(a0, a1 - a0)):
-            continue
-        first, last = sorted((owned[k0], owned[k1]))
-        if first != last and low_index <= first < high_index:
-            ties.append((first, last))
-    return ties
 
 
 # ------------------------------------------------------------------- hints
@@ -390,17 +394,12 @@ def run(target_id):
     ties = defaultdict(set)
     copy_ties, copy_separators, dropped = string_copies(target, rows, edges, low, high,
                                                          gc_string_copies(owners, dol))
-    for lo, hi in copy_ties:
-        for cut in range(lo + 1, hi + 1):
-            ties[cut].add('string-copy')
+    for cut in copy_tied_cuts(copy_ties):
+        ties[cut].add('string-copy')
     for name, found in (('data-order', data_order(owners, owned)),
                         ('ps2-data-order', ps2_data_order(target, rows, low, high))):
         for cut in found:
             ties[cut].add(name)
-    padding = rodata_padding(owners, owned, dol, first, last)
-    for lo, hi in padding:
-        for cut in range(lo + 1, hi + 1):
-            ties[cut].add('rodata-padding')
     ties = {cut: signals for cut, signals in ties.items() if first < cut < last}
     tags = tag_ranges(target, dol, owners, owned)
     separators = [(lo, hi, 'strings', '-') for lo, hi in copy_separators]
@@ -494,6 +493,27 @@ def summary(result, target_id):
     placed = Counter(kind for cut, kind in result['edges'].items()
                      if result['target'].start[cut] in current)
     lines.append('edges that are a current unit edge: %s of %s' % (dict(placed), dict(Counter(result['edges'].values()))))
+    import json
+    linked = set()
+    for unit in json.loads((ROOT / 'config' / target_id / 'units.json').read_text())['units']:
+        for section in unit['sections']:
+            if section['section'] == '.text':
+                linked.update((int(section['start'], 16), int(section['end'], 16)))
+    target = result['target']
+    at_object = Counter(signal for cut, signals in result['ties'].items() if target.start[cut] in linked
+                        for signal in signals)
+    lines.append('tied cuts at a linked object edge of the current build, by signal: %s (of %d linked edges '
+                 'in the range)' % (dict(at_object), sum(1 for a in linked if result['low'] < a < result['high'])))
+    rows = csv.DictReader(open(ROOT / 'config' / target_id / 'evidence.tsv', newline=''), delimiter='\t')
+    exact = sorted({int(r[c], 16) for r in rows if r['kind'] == 'unit'
+                    for c, b in (('start', 'start_boundary'), ('end', 'end_boundary')) if r[b] == 'exact'
+                    and result['low'] < int(r[c], 16) < result['high']})
+    states = []
+    for address in exact:
+        cut = target.index(address)
+        state = result['edges'].get(cut) or ','.join(sorted(result['ties'].get(cut, ()))) or 'open'
+        states.append('%s %s' % (boundaries.hexa(address), state))
+    lines.append('exact unit edges in the range: %s' % ('; '.join(states) or 'none'))
     found = contradicted(result, target_id)
     lines.append('current unit-row edges inside an atom: %d' % len(found))
     for address, subject, boundary, signals in found:

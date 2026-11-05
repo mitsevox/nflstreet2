@@ -99,7 +99,7 @@ class StringCopies(unittest.TestCase):
         rows = [self.row(0x100, [1, 3]), self.row(0x200, [6])]
         ties, separators, dropped = game.string_copies(self.target, rows, {}, self.low, self.high,
                                                        self.gc({1: 0xA, 3: 0xA, 6: 0xB}))
-        self.assertEqual((ties, separators, dropped), ([(1, 3)], [(4, 6)], set()))
+        self.assertEqual((ties, separators, dropped), ([(1, 3, 't1')], [(4, 6)], set()))
 
     def test_gc_disagreement_drops_the_text(self):
         rows = [self.row(0x100, [1, 3])]
@@ -115,22 +115,14 @@ class StringCopies(unittest.TestCase):
             self.assertEqual(dropped, {'t1'})
 
 
-class RodataPadding(unittest.TestCase):
-    def test_item_four_past_an_eight_byte_boundary_joins_the_previous_owner(self):
-        base = 0x80001000
-        items = [(base, 4, '.data3', 'a', False), (base + 4, 4, '.data3', 'b', False),
-                 (base + 8, 4, '.data3', 'c', False)]
-        dol = FakeDol(base, b'\0\0\0\1' * 3)
-        owners = FakeOwners(items)
-        owned = {0: 2, 1: 5, 2: 7}
-        # 0x...004 starts 4 past a boundary: functions 2 and 5 tied; 0x...008 is aligned: no tie.
-        self.assertEqual(game.rodata_padding(owners, owned, dol, 0, 10), [(2, 5)])
-
-    def test_text_before_does_not_count(self):
-        base = 0x80001000
-        items = [(base, 4, '.data3', 'a', False), (base + 4, 4, '.data3', 'b', False)]
-        owners = FakeOwners(items)
-        self.assertEqual(game.rodata_padding(owners, {0: 2, 1: 5}, FakeDol(base, b'abc\0' * 2), 0, 10), [])
+class CopyTiedCuts(unittest.TestCase):
+    def test_narrow_copies_tie_wide_ones_need_two_texts(self):
+        # One narrow copy (functions 1-3) ties cuts 2 and 3; one text over 10-40 alone ties nothing,
+        # a second text over 20-30 makes cuts 21-30 tied.
+        self.assertEqual(game.copy_tied_cuts([(1, 3, 'a')], window=16), {2, 3})
+        self.assertEqual(game.copy_tied_cuts([(10, 40, 'a')], window=16), set())
+        self.assertEqual(game.copy_tied_cuts([(10, 40, 'a'), (20, 50, 'b')], window=16), set(range(21, 41)))
+        self.assertEqual(game.copy_tied_cuts([(10, 40, 'a'), (10, 40, 'a')], window=16), set())
 
 
 class Combine(unittest.TestCase):

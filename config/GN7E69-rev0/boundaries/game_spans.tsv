@@ -1,4 +1,4 @@
-# tools/boundaries_game.py sha256 3c993d3256a095ddceac8bc9cdbd8c3653667f2ca2771f63bdfd9bd7a898ca13
+# tools/boundaries_game.py sha256 0d9f85c79137401480f8e696e8ac763e1303860149a35eec263a56055b091cb9
 # input references/NFL Street 2/SLUS-21118/ps2-strings.tsv sha256 00b5b1d03702609f27d8b147b1ef14d72c52df5e545b2b6882c98f840dadd89f
 # Spans between proven edges; a proposal. start_class/end_class: static-init, tag, strings or range
 # (the end of the game range). atoms: unsplittable runs inside; open: atom ends no signal decides;
@@ -23,9 +23,9 @@ start	end	functions	start_class	end_class	name	atoms	open	tied	required
 0x80026AD0	0x80027FE0	56	static-init	static-init	-	56	55	0	0
 0x80027FE0	0x80028AE4	27	static-init	static-init	-	27	26	0	0
 0x80028AE4	0x80028CF4	10	static-init	static-init	-	10	9	0	0
-0x80028CF4	0x80029224	21	static-init	static-init	-	20	19	1	0
+0x80028CF4	0x80029224	21	static-init	static-init	-	21	20	0	0
 0x80029224	0x80029500	10	static-init	static-init	-	10	9	0	0
-0x80029500	0x800324B0	242	static-init	static-init	-	195	194	47	1
+0x80029500	0x800324B0	242	static-init	static-init	-	220	219	22	1
 0x800324B0	0x800325E8	10	static-init	static-init	-	10	9	0	0
 0x800325E8	0x80032EE8	10	static-init	static-init	-	10	9	0	0
 0x80032EE8	0x80033490	12	static-init	static-init	-	12	11	0	0
@@ -35,21 +35,21 @@ start	end	functions	start_class	end_class	name	atoms	open	tied	required
 0x80033A5C	0x8003450C	59	static-init	static-init	-	59	58	0	0
 0x8003450C	0x80038194	367	static-init	static-init	-	367	366	0	0
 0x80038194	0x8003830C	9	static-init	static-init	-	9	8	0	0
-0x8003830C	0x8003BA00	77	static-init	static-init	-	46	45	31	0
-0x8003BA00	0x8004A2F4	346	static-init	static-init	-	254	253	92	0
-0x8004A2F4	0x80051E14	121	static-init	static-init	-	25	24	96	0
-0x80051E14	0x8005D60C	193	static-init	static-init	-	157	156	36	0
-0x8005D60C	0x80060948	69	static-init	static-init	-	64	63	5	0
+0x8003830C	0x8003BA00	77	static-init	static-init	-	77	76	0	0
+0x8003BA00	0x8004A2F4	346	static-init	static-init	-	337	336	9	0
+0x8004A2F4	0x80051E14	121	static-init	static-init	-	49	48	72	0
+0x80051E14	0x8005D60C	193	static-init	static-init	-	168	167	25	0
+0x8005D60C	0x80060948	69	static-init	static-init	-	69	68	0	0
 0x80060948	0x80061F04	42	static-init	static-init	-	42	41	0	0
-0x80061F04	0x8006F1F4	343	static-init	static-init	-	219	218	124	0
+0x80061F04	0x8006F1F4	343	static-init	static-init	-	290	289	53	0
 0x8006F1F4	0x8006F54C	11	static-init	static-init	-	11	10	0	0
-0x8006F54C	0x80079CD8	253	static-init	static-init	-	181	180	72	0
+0x8006F54C	0x80079CD8	253	static-init	static-init	-	196	195	57	0
 0x80079CD8	0x8007A24C	12	static-init	static-init	-	12	11	0	0
 0x8007A24C	0x8007BA48	62	static-init	static-init	-	62	61	0	0
 0x8007BA48	0x8007CC50	33	static-init	static-init	-	13	12	20	0
 0x8007CC50	0x8007FA48	70	static-init	static-init	-	60	59	10	0
 0x8007FA48	0x800834CC	109	static-init	static-init	-	89	88	20	0
-0x800834CC	0x8008B974	300	static-init	static-init	-	262	261	38	0
+0x800834CC	0x8008B974	300	static-init	static-init	-	266	265	34	0
 0x8008B974	0x8008BB30	9	static-init	static-init	-	9	8	0	0
 0x8008BB30	0x8008BCF0	9	static-init	static-init	-	9	8	0	0
 0x8008BCF0	0x8008BE68	9	static-init	static-init	-	9	8	0	0
@@ -57,22 +57,22 @@ start	end	functions	start_class	end_class	name	atoms	open	tied	required
 0x8008BFE4	0x8008CA8C	20	static-init	static-init	-	18	17	2	0
 0x8008CA8C	0x8008CC74	9	static-init	static-init	-	9	8	0	0
 0x8008CC74	0x8008DF00	114	static-init	static-init	-	113	112	1	0
-0x8008DF00	0x800CF84C	1412	static-init	static-init	-	495	494	917	0
+0x8008DF00	0x800CF84C	1412	static-init	static-init	-	1255	1254	157	0
 0x800CF84C	0x800D0474	23	static-init	static-init	-	23	22	0	0
-0x800D0474	0x80125F3C	1023	static-init	static-init	-	468	467	555	1
-0x80125F3C	0x801564DC	953	static-init	static-init	-	480	479	473	0
+0x800D0474	0x80125F3C	1023	static-init	static-init	-	884	883	139	1
+0x80125F3C	0x801564DC	953	static-init	static-init	-	785	784	168	0
 0x801564DC	0x80159F10	116	static-init	static-init	-	94	93	22	0
-0x80159F10	0x8016C70C	396	static-init	static-init	-	252	251	144	0
-0x8016C70C	0x8016DB94	17	static-init	static-init	-	8	7	9	0
-0x8016DB94	0x8017CB40	312	static-init	static-init	-	243	242	69	0
-0x8017CB40	0x8017F7B0	107	static-init	static-init	-	98	97	9	0
+0x80159F10	0x8016C70C	396	static-init	static-init	-	353	352	43	0
+0x8016C70C	0x8016DB94	17	static-init	static-init	-	11	10	6	0
+0x8016DB94	0x8017CB40	312	static-init	static-init	-	312	311	0	0
+0x8017CB40	0x8017F7B0	107	static-init	static-init	-	107	106	0	0
 0x8017F7B0	0x8018422C	158	static-init	static-init	-	132	131	26	0
-0x8018422C	0x8018EA3C	311	static-init	static-init	-	268	267	43	0
-0x8018EA3C	0x80199FA4	225	static-init	static-init	-	186	185	39	0
+0x8018422C	0x8018EA3C	311	static-init	static-init	-	286	285	25	0
+0x8018EA3C	0x80199FA4	225	static-init	static-init	-	208	207	17	0
 0x80199FA4	0x8019A110	9	static-init	static-init	-	9	8	0	0
 0x8019A110	0x8019A2B4	9	static-init	static-init	-	9	8	0	0
 0x8019A2B4	0x8019A4F0	9	static-init	static-init	-	9	8	0	0
 0x8019A4F0	0x8019A70C	9	static-init	static-init	-	9	8	0	0
 0x8019A70C	0x8019A9A0	10	static-init	static-init	-	10	9	0	0
-0x8019A9A0	0x801AA2FC	226	static-init	static-init	-	160	159	66	0
+0x8019A9A0	0x801AA2FC	226	static-init	static-init	-	180	179	46	0
 0x801AA2FC	0x801AA640	3	static-init	range	-	3	2	0	0
