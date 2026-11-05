@@ -47,7 +47,7 @@ extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 
 static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
-static GCmpCodec_t **_GCmp_ppTypes;
+static GCmpCodec_t **_GCmpTypes;
 extern char lbl_803018A8[];
 extern GCmpCodec_t lbl_803018C8;
 extern GCmpCodec_t lbl_803018F0;
@@ -62,16 +62,16 @@ int GCmpInit(int count)
 
     if (_GCmpModuleActive == 0) {
         _GCmpNumTypes = count + 6;
-        _GCmp_ppTypes = fn_801D2BB0(1, _GCmpNumTypes * 4, 0, 0);
+        _GCmpTypes = fn_801D2BB0(1, _GCmpNumTypes * 4, 0, 0);
         GCmpRegisterType(0, &lbl_80301918);
         GCmpRegisterType(1, &lbl_803018F0);
         GCmpRegisterType(2, &lbl_803018C8);
         GCmpRegisterType(3, &lbl_80301940);
         GCmpRegisterType(5, &lbl_80301968);
-        _GCmp_ppTypes[4] = 0;
+        _GCmpTypes[4] = 0;
         for (i = 0; i <= 5 && err == 0; i++) {
-            if (_GCmp_ppTypes[i] != 0 && _GCmp_ppTypes[i]->mpStartup != 0) {
-                err = _GCmp_ppTypes[i]->mpStartup();
+            if (_GCmpTypes[i] != 0 && _GCmpTypes[i]->mpStartup != 0) {
+                err = _GCmpTypes[i]->mpStartup();
             }
         }
         while (count--) {
@@ -92,11 +92,11 @@ int GCmpShutdown(void)
 
     if (_GCmpModuleActive) {
         for (i = 0; i <= 5 && err == 0; i++) {
-            if (_GCmp_ppTypes[i] != 0 && _GCmp_ppTypes[i]->mpShutdown != 0) {
-                err = _GCmp_ppTypes[i]->mpShutdown();
+            if (_GCmpTypes[i] != 0 && _GCmpTypes[i]->mpShutdown != 0) {
+                err = _GCmpTypes[i]->mpShutdown();
             }
         }
-        fn_801D2BD0(_GCmp_ppTypes);
+        fn_801D2BD0(_GCmpTypes);
         _GCmpModuleActive = 0;
     } else {
         err = 0x150002;
@@ -112,7 +112,7 @@ int GCmpIsActive(void)
 
 int GCmpRegisterType(int index, GCmpCodec_t *pCodec)
 {
-    _GCmp_ppTypes[index] = pCodec;
+    _GCmpTypes[index] = pCodec;
     return 0;
 }
 
@@ -188,7 +188,7 @@ GCmpStream_t *GCmpStart(int mode, int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *p
             }
             pStream->mpSrc->mUnknown18 = 1;
             pStream->mpDst->mUnknown18 = 0;
-            pStream->mpState = _GCmp_ppTypes[pStream->mCodec]->mpEncodeInit(pStream->mpSrc, pStream->mpDst);
+            pStream->mpState = _GCmpTypes[pStream->mCodec]->mpEncodeInit(pStream->mpSrc, pStream->mpDst);
             break;
         case 1:
             pStream->mpDst->mUnknown18 = 1;
@@ -204,7 +204,7 @@ GCmpStream_t *GCmpStart(int mode, int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *p
                 }
             }
             pStream->mpSrc->mUnknown18 = 1;
-            pStream->mpState = _GCmp_ppTypes[pStream->mCodec]->mpDecodeInit(pStream->mpSrc, pStream->mpDst);
+            pStream->mpState = _GCmpTypes[pStream->mCodec]->mpDecodeInit(pStream->mpSrc, pStream->mpDst);
             break;
         }
     }
@@ -215,11 +215,11 @@ void GCmpProcess(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
-        pStream->mStatus = _GCmp_ppTypes[pStream->mCodec]->mpEncodeRun(pStream->mpSrc, pStream->mpDst,
+        pStream->mStatus = _GCmpTypes[pStream->mCodec]->mpEncodeRun(pStream->mpSrc, pStream->mpDst,
                                                                       pStream->mpState);
         break;
     case 1:
-        pStream->mStatus = _GCmp_ppTypes[pStream->mCodec]->mpDecodeRun(pStream->mpSrc, pStream->mpDst,
+        pStream->mStatus = _GCmpTypes[pStream->mCodec]->mpDecodeRun(pStream->mpSrc, pStream->mpDst,
                                                                       pStream->mpState);
         break;
     }
@@ -229,10 +229,10 @@ void GCmpStop(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
-        _GCmp_ppTypes[pStream->mCodec]->mpEncodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
+        _GCmpTypes[pStream->mCodec]->mpEncodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
         break;
     case 1:
-        _GCmp_ppTypes[pStream->mCodec]->mpDecodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
+        _GCmpTypes[pStream->mCodec]->mpDecodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
         break;
     }
     pStream->mpDst->mSize = pStream->mpDst->mPos;
@@ -246,8 +246,8 @@ int GCmpIsBlockCodec(int index)
 {
     GCmpCodec_t *pCodec;
 
-    if (_GCmp_ppTypes != 0) {
-        pCodec = _GCmp_ppTypes[index];
+    if (_GCmpTypes != 0) {
+        pCodec = _GCmpTypes[index];
         if (pCodec != 0 && (pCodec->mFlags & 2)) {
             return 1;
         }
@@ -271,10 +271,10 @@ GCmpStream_t *GCmpBlockStart(int codec, int mode, GCmpBuffer_t *pSrc, GCmpBuffer
         pStream->mpState = 0;
         switch (mode) {
         case 0:
-            pStream->mpState = _GCmp_ppTypes[codec]->mpEncodeInit(pStream->mpSrc, pStream->mpDst);
+            pStream->mpState = _GCmpTypes[codec]->mpEncodeInit(pStream->mpSrc, pStream->mpDst);
             break;
         case 1:
-            pStream->mpState = _GCmp_ppTypes[codec]->mpDecodeInit(pStream->mpSrc, pStream->mpDst);
+            pStream->mpState = _GCmpTypes[codec]->mpDecodeInit(pStream->mpSrc, pStream->mpDst);
             break;
         }
     }
@@ -285,11 +285,11 @@ unsigned int GCmpBlockProcess(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
-        pStream->mStatus = _GCmp_ppTypes[pStream->mCodec]->mpEncodeRun(pStream->mpSrc, pStream->mpDst,
+        pStream->mStatus = _GCmpTypes[pStream->mCodec]->mpEncodeRun(pStream->mpSrc, pStream->mpDst,
                                                                       pStream->mpState);
         break;
     case 1:
-        pStream->mStatus = _GCmp_ppTypes[pStream->mCodec]->mpDecodeRun(pStream->mpSrc, pStream->mpDst,
+        pStream->mStatus = _GCmpTypes[pStream->mCodec]->mpDecodeRun(pStream->mpSrc, pStream->mpDst,
                                                                       pStream->mpState);
         break;
     }
@@ -300,10 +300,10 @@ void GCmpBlockStop(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
-        _GCmp_ppTypes[pStream->mCodec]->mpEncodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
+        _GCmpTypes[pStream->mCodec]->mpEncodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
         break;
     case 1:
-        _GCmp_ppTypes[pStream->mCodec]->mpDecodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
+        _GCmpTypes[pStream->mCodec]->mpDecodeEnd(pStream->mpSrc, pStream->mpDst, pStream->mpState);
         break;
     }
     fn_801D2BD0(pStream);

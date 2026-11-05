@@ -1,5 +1,5 @@
 /* Resource tracker: a debug log of every resource file opened and loaded (name, index, sizes, sync or
-   async, time), with labels marking game screens, kept in a memory buffer. */
+   async, time), with labels marking the start and finish of loading phases, kept in a memory buffer. */
 
 #include "engine/Resource.h"
 #include "engine/system.h"
