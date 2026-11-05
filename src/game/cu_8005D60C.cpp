@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_8005FC84.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
@@ -82,13 +82,13 @@ void fn_800731D0(int a);
 Object_80039F5C *fn_8003AD2C(int id);
 int fn_8003B4A4(int group, int *list, int value, int a, int b);
 unsigned char fn_8007B090(int a);
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
-void fn_8007B8A4(char *pDest, int count);
+void EnvSelect(int id);
+void EnvRelease(void);
+void EnvGetUIName(char *pDest, int count);
 void fn_8007B14C(int pad, int id);
 void fn_80073210(int frames);
-void fn_8007CAEC(int index, int value);
-int fn_8007CB6C(int index);
+void GameInfoSet(int index, int value);
+int GameInfoGet(int index);
 int fn_80080CB0(Object_8008044C *pObject);
 int fn_80080ECC(Object_8008044C *pObject);
 unsigned int fn_800812B0(Object_8008044C *pObject, int index);
@@ -107,10 +107,10 @@ int fn_800860E8(int vlxe);
 int fn_8008611C(int vlxe, char *pName, int size);
 int fn_80086154(void);
 int fn_80086174(void);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
-void fn_80087C5C(Object_8007A334 *pObject, int index, int value);
-int fn_80087C8C(Object_8007A334 *pObject, unsigned int index);
+void fn_80087BE4(DbCursor *pObject, int index);
+void fn_80087C3C(DbCursor *pObject);
+void fn_80087C5C(DbCursor *pObject, int index, int value);
+int fn_80087C8C(DbCursor *pObject, unsigned int index);
 void fn_8008880C(int db, int id);
 void fn_801485B4(void);
 int fn_801485D4(void);
@@ -122,18 +122,18 @@ void fn_80183368(int mode, int value);
 void fn_80186F30(signed char a, int b);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_80188DF0(int a);
-void fn_8018B9D4(Object_8007A334 *pCursor, int index);
-void fn_8018BA2C(Object_8007A334 *pCursor);
+void fn_8018B9D4(DbCursor *pCursor, int index);
+void fn_8018BA2C(DbCursor *pCursor);
 int fn_8018BDFC(int index, int a, int *pIds, int *pCount);
-int fn_8018C1E0(Object_8007A334 *pCursor);
+int fn_8018C1E0(DbCursor *pCursor);
 void fn_8018C48C(int tag);
 void fn_8018E474(int index);
 void fn_8018E55C(int index);
-void fn_8018E11C(Object_8007A334 *pCursor, int index);
-void fn_8018E174(Object_8007A334 *pCursor);
-int fn_8018E194(Object_8007A334 *pCursor, int row, char *pBuffer, int size);
-int fn_8018E20C(Object_8007A334 *pCursor, int row, char *pBuffer, int size);
-int fn_8018E284(Object_8007A334 *pCursor, int row, char *pName, int size);
+void fn_8018E11C(DbCursor *pCursor, int index);
+void fn_8018E174(DbCursor *pCursor);
+int fn_8018E194(DbCursor *pCursor, int row, char *pBuffer, int size);
+int fn_8018E20C(DbCursor *pCursor, int row, char *pBuffer, int size);
+int fn_8018E284(DbCursor *pCursor, int row, char *pName, int size);
 int fn_8018E344(int index);
 void fn_8018E390(int index, int value);
 void fn_8018E7A0(int index, int value);
@@ -153,7 +153,7 @@ char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
-int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
+int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F384(int a);
@@ -166,7 +166,7 @@ int fn_80178AE0(void);
 }
 
 Object_8008044C lbl_8030A0E4;
-Object_8007A334 lbl_8030A110;
+DbCursor lbl_8030A110;
 VetsRow_8018EC68 lbl_8030A13C;
 extern Settings_8031BDD4 lbl_8031BDD4;
 
@@ -181,7 +181,7 @@ int lbl_803EA5C0 = 4;
 int lbl_803EA5C4 = 0;
 VetsRow_8018EC68 *lbl_803EA5C8 = 0;
 Object_8008044C *lbl_803EA5CC = 0;
-Object_8007A334 *lbl_803EA5D0 = 0;
+DbCursor *lbl_803EA5D0 = 0;
 float lbl_803EA5D4 = 0.0f;
 int lbl_803EA5D8 = -1;
 int lbl_803EA5DC = -1;
@@ -243,7 +243,7 @@ void fn_8005D6EC(void)
 
 void fn_8005D764(int set)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int value;
 
     fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
@@ -588,7 +588,7 @@ void fn_8005E4A8(void)
 
     fn_80011600(-1, fn_8000FCCC(), b);
     fn_80186F30(lbl_802D4D40.mIndex, 1);
-    fn_8007CAEC(2, 1);
+    GameInfoSet(2, 1);
     fn_8005DA7C(0, lbl_803EA5C8->mPes[1] >= 0 ? lbl_803EA5C8->mPes[1] : 2);
     fn_80073210(90);
     int ites = lbl_803EA5C8->mItes;
@@ -907,9 +907,9 @@ void fn_8005ECA0(void)
     if (fn_8005EBF0(lbl_803EA5C8->mDive)) {
         int dive = fn_8005EB20(0);
         if (dive != 12) {
-            fn_8007B684(dive);
-            fn_8007B8A4(hero, 33);
-            fn_8007B6D4();
+            EnvSelect(dive);
+            EnvGetUIName(hero, 33);
+            EnvRelease();
             length = fn_801C3180(lbl_8030A1E4);
         }
     }
@@ -1101,18 +1101,18 @@ int fn_8005F394(int screen)
 
 int fn_8005F3E4(int *pResult)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned char color[4];
     int value = 0;
 
     *pResult = fn_80188DF0(-1);
     fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
-    if (fn_8007A410(&cursor) > 0) {
+    if (DbCursorGetRowCount(&cursor) > 0) {
         value = fn_8018C1E0(&cursor);
-        if (fn_8007A98C(&cursor, 0x4C445443) == 0) {
-            color[0] = fn_8007A98C(&cursor, 0x31434D54);
-            color[1] = fn_8007A98C(&cursor, 0x32434D54);
-            color[2] = fn_8007A98C(&cursor, 0x33434D54);
+        if (DbCursorGetInt(&cursor, 0x4C445443) == 0) {
+            color[0] = DbCursorGetInt(&cursor, 0x31434D54);
+            color[1] = DbCursorGetInt(&cursor, 0x32434D54);
+            color[2] = DbCursorGetInt(&cursor, 0x33434D54);
             fn_80188CBC(0, 4, value, 0xAC, color);
             *pResult = fn_80188DF0(0);
         }
@@ -1123,7 +1123,7 @@ int fn_8005F3E4(int *pResult)
 
 void fn_8005F4EC(char *pName, int size)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     char buffer[64];
     unsigned int last = size - 1;
     unsigned int length;
@@ -1165,13 +1165,13 @@ done:
 
 void fn_8005F664(char *pName, int size)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int last = size - 1;
 
     *pName = 0;
     fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
-    if (fn_8007A410(&cursor) > 0) {
-        fn_8007A600(&cursor, 0);
+    if (DbCursorGetRowCount(&cursor) > 0) {
+        DbCursorSeek(&cursor, 0);
         fn_8007AA3C(&cursor, 0x414E4454, (int)pName, last);
     }
     fn_8018BA2C(&cursor);
@@ -1413,7 +1413,7 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
         fn_8008044C(&object, 0, 0x54415453);
         for (i = 0; i <= 12; i++) {
             if (fn_800809C4(&object, ids[i], 0)) {
-                *pOut++ = fn_8007A98C(&object, 0x49544754);
+                *pOut++ = DbCursorGetInt(&object, 0x49544754);
             }
         }
         fn_8008056C(&object);
@@ -1427,15 +1427,15 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
                 ids[0], ids[1], ids[2], ids[3], ids[4], ids[5], ids[6], ids[7], ids[8], ids[9], ids[10], ids[11], ids[12]);
     fn_801FCE10(0, "use 'TATS' select count(*) into \x82 from \x8c\n", &count, lbl_803EA5D8);
     {
-        Object_8007A334 cursor;
-        if (fn_8007CB6C(2) == 0) {
+        DbCursor cursor;
+        if (GameInfoGet(2) == 0) {
             secondSide = 1;
             firstSide = 0;
         } else {
             secondSide = 0;
             firstSide = 1;
         }
-        fn_8007A334(&cursor, lbl_803EA5D8, 0x44494750, 0, 0, 0x54415453);
+        DbCursorOpen(&cursor, lbl_803EA5D8, 0x44494750, 0, 0, 0x54415453);
         for (i = 1; i <= 6; i++) {
             if (fn_800809C4((Object_8008044C *)&cursor, pSecond[i], 0)) {
                 fn_80081F50((Object_8008044C *)&cursor, secondSide, 1);
@@ -1446,7 +1446,7 @@ void fn_8005FCF8(int *pFirst, int *pSecond)
                 fn_80081F50((Object_8008044C *)&cursor, firstSide, 1);
             }
         }
-        fn_8007A3C4(&cursor);
+        DbCursorClose(&cursor);
     }
     if (lbl_803EA5DC != -1) {
         fn_801F967C(0x54415453, lbl_803EA5DC);

@@ -1,5 +1,5 @@
 #include "game/Class_80297BF8.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/cu_80136B1C.h"
 
 struct Slot_800BAE7C {
@@ -141,11 +141,11 @@ void Class_80297BF8::vfn_03()
         fn_8017D5D8();
     }
     if (fn_80025708() != 0) {
-        if (fn_800785C0()->mUnknown1C3 != 0) {
+        if (ChalGetCurrent()->mUnknown1C3 != 0) {
             fn_800D4164(0, 0.5f, 0);
             fn_800A7B5C();
         }
-        if (fn_800785C0()->mUnknown1C2 != 0) {
+        if (ChalGetCurrent()->mUnknown1C2 != 0) {
             fn_800D4164(1, 0.5f, 0);
             fn_800A7B5C();
         }

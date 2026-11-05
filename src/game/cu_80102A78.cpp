@@ -141,7 +141,7 @@ extern Type_803EA368 *lbl_803EA368;
 extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 extern "C" {
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
-void fn_80076D5C(int id);
+void SpchIGSetPassTarget(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
 int fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
@@ -476,7 +476,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
             : (target.mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : target.mX);
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
         fn_80137BC0(pBall, pTarget);
-        fn_80076D5C(pTarget->mId);
+        SpchIGSetPassTarget(pTarget->mId);
         fn_80137EC4(pBall, &velocity);
         if (velocity.mY < 0.0f) {
             fn_801783D0(1, 1);

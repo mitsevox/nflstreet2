@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_8002ACB4.h"
 #include "game/fn_800624B0.h"
 #include "game/fn_8018BE68.h"
@@ -39,9 +39,9 @@ void fn_80022580(int index, int a, int b);
 void fn_80022680(int index, int a, int b);
 void fn_80022730(int index, int value);
 void fn_80061DDC(void);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 int fn_80183950(void);
 void fn_80185264(unsigned char value);
 unsigned char fn_8018526C(void);
@@ -148,7 +148,7 @@ void fn_80062160(int *pId)
         fn_80062000();
         lbl_803EC7FD = fn_8018526C();
         if (fn_8018C0E8(lbl_803EC7FC, pId)) {
-            Object_8007A334 cursor;
+            DbCursor cursor;
             fn_80083E40(&cursor, 0, 0x54415453);
             fn_80084034(&cursor, *pId, 0);
             if (!fn_80084438(&cursor)) {

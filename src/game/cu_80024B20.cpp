@@ -1,5 +1,5 @@
 #include "game/Entry_80219044.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/cu_80067C10.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
@@ -18,16 +18,16 @@ struct Results_8037E088 {
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_800254E8(Object_800785C0 *pRecord, int type, int *pValue);
+int fn_800254E8(Challenge_t *pRecord, int type, int *pValue);
 int fn_80025708(void);
-int fn_800257B4(int side, Object_800785C0 *pRecord, int index);
-unsigned char fn_800254B4(Object_800785C0 *pRecord);
+int fn_800257B4(int side, Challenge_t *pRecord, int index);
+unsigned char fn_800254B4(Challenge_t *pRecord);
 
-void fn_80078C50(int type, unsigned int value, char *pText, int size);
-int fn_800796B8(int side, Object_800785C0 *pRecord, int index, int *pResult);
-int fn_80079758(int side, Info_8007984C *pInfo);
-int fn_800797F4(Object_800785C0 *pRecord, int type, int *pValue);
-int fn_8007984C(Object_800785C0 *pRecord);
+void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size);
+int ChalCheckGoal(int side, Challenge_t *pRecord, int index, int *pResult);
+int ChalCheckMedalGoal(int side, ChalMedalGoal_t *pInfo);
+int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
+int ChalHasMedalGoal(Challenge_t *pRecord);
 int fn_800A7E40(unsigned char side);
 int fn_800D41F8(int side);
 unsigned char fn_80174160(void);
@@ -185,7 +185,7 @@ int fn_80024EFC(int side, unsigned int value)
     if (own > value) {
         return 1;
     }
-    if (fn_800785C0()->mUnknown1A4 != 0 && fn_800254B4(fn_800785C0()) == 1) {
+    if (ChalGetCurrent()->mUnknown1A4 != 0 && fn_800254B4(ChalGetCurrent()) == 1) {
         if (fn_8009D990(4) == 0) {
             return 0;
         }
@@ -242,7 +242,7 @@ int fn_8002509C(int side, int value)
         return 2;
     }
     if (own > other) {
-        if (fn_800785C0()->mUnknown1A4 != 0) {
+        if (ChalGetCurrent()->mUnknown1A4 != 0) {
             if (fn_8009D990(4) == 0) {
                 return 0;
             }
@@ -329,7 +329,7 @@ int fn_8002544C(int side, unsigned int value)
     return a - b > value;
 }
 
-unsigned char fn_800254B4(Object_800785C0 *pRecord)
+unsigned char fn_800254B4(Challenge_t *pRecord)
 {
     unsigned char count = 0;
     int i;
@@ -342,9 +342,9 @@ unsigned char fn_800254B4(Object_800785C0 *pRecord)
     return count;
 }
 
-int fn_800254E8(Object_800785C0 *pRecord, int type, int *pValue)
+int fn_800254E8(Challenge_t *pRecord, int type, int *pValue)
 {
-    return fn_800797F4(pRecord, type, pValue);
+    return ChalFindGoalValue(pRecord, type, pValue);
 }
 
 int fn_80025508(void)
@@ -352,9 +352,9 @@ int fn_80025508(void)
     int counts[4];
 
     if (fn_80025708()) {
-        Object_800785C0 *pRecord = fn_800785C0();
+        Challenge_t *pRecord = ChalGetCurrent();
         int result = 7;
-        int active = fn_8007984C(pRecord);
+        int active = ChalHasMedalGoal(pRecord);
         int side = fn_800B65A0(0) == 0xFF;
         int i;
 
@@ -363,7 +363,7 @@ int fn_80025508(void)
             counts[fn_800257B4(side, pRecord, i)]++;
         }
         if (active) {
-            result = fn_80079758(side, &pRecord->mUnknown20C);
+            result = ChalCheckMedalGoal(side, &pRecord->mUnknown20C);
         }
         if (counts[1] > 0) {
             return 1;
@@ -409,10 +409,10 @@ int fn_8002568C(void)
     int result = 7;
 
     if (fn_80025708()) {
-        Object_800785C0 *pRecord = fn_800785C0();
+        Challenge_t *pRecord = ChalGetCurrent();
 
-        if (fn_8007984C(pRecord)) {
-            result = fn_80079758(fn_800B65A0(0) == 0xFF, &pRecord->mUnknown20C);
+        if (ChalHasMedalGoal(pRecord)) {
+            result = ChalCheckMedalGoal(fn_800B65A0(0) == 0xFF, &pRecord->mUnknown20C);
         }
     }
     return result;
@@ -451,14 +451,14 @@ void fn_8002572C(void)
     }
 }
 
-int fn_800257B4(int side, Object_800785C0 *pRecord, int index)
+int fn_800257B4(int side, Challenge_t *pRecord, int index)
 {
     int result = 2;
     int type = pRecord->mUnknown1C4[index].mType;
     int value = pRecord->mUnknown1C4[index].mValue;
     int opposite = side == 0;
 
-    if (fn_800796B8(side, pRecord, index, &result) == 0) {
+    if (ChalCheckGoal(side, pRecord, index, &result) == 0) {
         switch (type) {
         case 1:
             if (fn_800254E8(pRecord, 2, 0)) {
@@ -546,7 +546,7 @@ int fn_80025ACC(void)
 {
     int result = 0;
 
-    if (fn_80025708() && fn_800785C0()->mUnknown1C3 != 0) {
+    if (fn_80025708() && ChalGetCurrent()->mUnknown1C3 != 0) {
         result = 1;
     }
     return result;
@@ -555,20 +555,20 @@ int fn_80025ACC(void)
 int fn_80025B18(int *pResults, char (*pText)[64])
 {
     unsigned char i;
-    Object_800785C0 *pRecord;
+    Challenge_t *pRecord;
     int count;
 
     for (i = 0; i <= 3; i++) {
         pText[i][0] = 0;
         pResults[i] = -1;
     }
-    pRecord = fn_800785C0();
+    pRecord = ChalGetCurrent();
     count = 0;
     for (i = 0; i <= 3; i++) {
-        Entry_800257B4 *pEntry = &pRecord->mUnknown1C4[i];
+        ChalGoal_t *pEntry = &pRecord->mUnknown1C4[i];
 
         if (pEntry->mType != 0 && pEntry->mUnknown8 != 0) {
-            fn_80078C50(pEntry->mType, pEntry->mValue, pText[count], 64);
+            ChalFormatGoalProgress(pEntry->mType, pEntry->mValue, pText[count], 64);
             switch (pEntry->mType) {
             case 6:
             case 7:

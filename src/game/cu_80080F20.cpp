@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include <string.h>
 
@@ -12,22 +12,22 @@ static int lbl_802D69E0[4] = { 0x31544753, 0x32544753, 0x33544753, 0x34544753 };
 
 int fn_800808F8(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494750);
+    return DbCursorGetInt(pObject, 0x44494750);
 }
 
 int fn_80080920(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494F50);
+    return DbCursorGetInt(pObject, 0x44494F50);
 }
 
 int fn_80080948(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494754);
+    return DbCursorGetInt(pObject, 0x44494754);
 }
 
 int fn_80080970(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x49544754);
+    return DbCursorGetInt(pObject, 0x49544754);
 }
 
 void fn_80080998(Object_8008044C *pObject, int value)
@@ -37,28 +37,28 @@ void fn_80080998(Object_8008044C *pObject, int value)
 
 int fn_800809C4(Object_8008044C *pObject, int a, int *pResult)
 {
-    return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494750, a, 0, pResult);
+    return DbCursorFindInt((DbCursor *)pObject, 0x44494750, a, 0, pResult);
 }
 
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult)
 {
-    return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494F50, a, 0, pResult);
+    return DbCursorFindInt((DbCursor *)pObject, 0x44494F50, a, 0, pResult);
 }
 
 void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4650, (int)pBuffer, size);
+    fn_8007AA3C((DbCursor *)pObject, 0x414E4650, (int)pBuffer, size);
 }
 
 void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4C50, (int)pBuffer, size);
+    fn_8007AA3C((DbCursor *)pObject, 0x414E4C50, (int)pBuffer, size);
 }
 
 /* The 0x4E4B4E50 text, or the upper-cased fn_80080A68 text when it is empty. */
 void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((Object_8007A334 *)pObject, 0x4E4B4E50, (int)pBuffer, size);
+    fn_8007AA3C((DbCursor *)pObject, 0x4E4B4E50, (int)pBuffer, size);
     if (strlen(pBuffer) == 0) {
         fn_80080A68(pObject, pBuffer, size);
         fn_801C32CC(pBuffer);
@@ -128,17 +128,17 @@ void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
 
 int fn_80080CB0(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x59545250);
+    return DbCursorGetInt(pObject, 0x59545250);
 }
 
 int fn_80080CD8(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x4C494C50) != 0;
+    return DbCursorGetInt(pObject, 0x4C494C50) != 0;
 }
 
 int fn_80080D10(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x50585350);
+    return DbCursorGetInt(pObject, 0x50585350);
 }
 
 /* Only the A-Z bytes of the upper-cased fn_80080A68 text followed by the
@@ -172,29 +172,29 @@ int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size)
 
 int fn_80080E20(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x54425950);
+    return DbCursorGetInt(pObject, 0x54425950);
 }
 
 int fn_80080E48(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x58454C50);
+    return DbCursorGetInt(pObject, 0x58454C50);
 }
 
 int fn_80080E70(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x54484C50);
+    return DbCursorGetInt(pObject, 0x54484C50);
 }
 
 int fn_80080E98(Object_8008044C *pObject)
 {
-    int value = fn_8007A98C(pObject, 0x52414850);
+    int value = DbCursorGetInt(pObject, 0x52414850);
     if (value == 63) value = 0;
     return value;
 }
 
 int fn_80080ECC(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x4F504250);
+    return DbCursorGetInt(pObject, 0x4F504250);
 }
 
 void fn_80080EF4(Object_8008044C *pObject, int value)
@@ -204,12 +204,12 @@ void fn_80080EF4(Object_8008044C *pObject, int value)
 
 int fn_80080F20(void *pObject)
 {
-    return fn_8007A98C(pObject, 0x4E535050);
+    return DbCursorGetInt(pObject, 0x4E535050);
 }
 
 int fn_80080F48(void *pObject, int index)
 {
-    return fn_8007A98C(pObject, lbl_802D69E0[index]);
+    return DbCursorGetInt(pObject, lbl_802D69E0[index]);
 }
 
 void fn_80080F78(void *pObject, int value)
@@ -227,7 +227,7 @@ void fn_80080FD4(Object_8008044C *pObject, int value)
     fn_8007ABA4(pObject, 0x52414850, value);
 }
 
-void fn_80081000(Object_8007A334 *pObject, int index)
+void fn_80081000(DbCursor *pObject, int index)
 {
     fn_8007ABA4(pObject, 0x54425950, index);
     fn_8007AA90(pObject, 0x544C4650, lbl_80293968[index]);
@@ -250,7 +250,7 @@ void fn_800810B4(Object_8008044C *pObject, int value)
 
 int fn_800810E0(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x31414850);
+    return DbCursorGetInt(pObject, 0x31414850);
 }
 
 void fn_80081108(Object_8008044C *pObject, int value)
@@ -260,7 +260,7 @@ void fn_80081108(Object_8008044C *pObject, int value)
 
 int fn_80081134(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x43484650);
+    return DbCursorGetInt(pObject, 0x43484650);
 }
 
 void fn_8008115C(Object_8008044C *pObject, int value)
@@ -270,7 +270,7 @@ void fn_8008115C(Object_8008044C *pObject, int value)
 
 int fn_80081188(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x54475750) + 160;
+    return DbCursorGetInt(pObject, 0x54475750) + 160;
 }
 
 void fn_800811B4(Object_8008044C *pObject, int value)
@@ -280,12 +280,12 @@ void fn_800811B4(Object_8008044C *pObject, int value)
 
 int fn_800811E0(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x54474850);
+    return DbCursorGetInt(pObject, 0x54474850);
 }
 
 int fn_80081208(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x4E414850);
+    return DbCursorGetInt(pObject, 0x4E414850);
 }
 
 void fn_80081230(Object_8008044C *pObject, int value)
@@ -295,7 +295,7 @@ void fn_80081230(Object_8008044C *pObject, int value)
 
 int fn_8008125C(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x4E454A50);
+    return DbCursorGetInt(pObject, 0x4E454A50);
 }
 
 void fn_80081284(Object_8008044C *pObject, int value)

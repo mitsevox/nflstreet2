@@ -1,7 +1,7 @@
 #include <string.h>
 #include "game/Object_80039F5C.h"
 #include "game/Entry_80219044.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8017DD68.h"
 #include "game/fn_8007F828.h"
@@ -194,8 +194,8 @@ void fn_8017D4AC(void)
     fn_8017E620(0, 0);
     fn_8017E620(1, 0);
     if (fn_80025708()) {
-        fn_8017D6B8(0, fn_800785C0()->mUnknown1AC);
-        fn_8017D6B8(1, fn_800785C0()->mUnknown1A8);
+        fn_8017D6B8(0, ChalGetCurrent()->mUnknown1AC);
+        fn_8017D6B8(1, ChalGetCurrent()->mUnknown1A8);
     } else {
         fn_8017D6B8(0, 0);
         fn_8017D6B8(1, 0);

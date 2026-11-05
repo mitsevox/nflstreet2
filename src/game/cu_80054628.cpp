@@ -6,20 +6,20 @@ void fn_8006059C(int index);
 void fn_80060674(int index);
 void fn_80061D64(int index);
 void fn_80061DA0(int index);
-unsigned int fn_80078800(void);
-void fn_80078844(int value);
-void fn_80078C04(signed char db, int value);
-void fn_8007B5A8(int index, int id, int value);
-void fn_8007B5FC(int index);
-void fn_8007B640(int index);
-void fn_8007E3D4(signed char db);
-void fn_8007E474(signed char db);
-void fn_8007E954(signed char db, int index);
-void fn_8007EA04(signed char db, int index);
-void fn_8007ECBC(int db, int id);
-void fn_8007ED50(int db, int id);
-void fn_8007EDE4(int db);
-void fn_8007EE70(int db);
+unsigned int ChalGetPoints(void);
+void ChalAddPoints(int value);
+void ChalSetDevPointsForSlot(signed char db, int value);
+void EnvSetLocked(int index, int id, int value);
+void EnvUnlockBonus(int index);
+void EnvLockBonus(int index);
+void GearUnlockAll(signed char db);
+void GearLockAll(signed char db);
+void PlaybookUnlockAll(signed char db, int index);
+void PlaybookResetOrder(signed char db, int index);
+void TeamUnlock(int db, int id);
+void TeamLock(int db, int id);
+void TeamUnlockAll(int db);
+void TeamLockAll(int db);
 void fn_80082688(int db);
 void fn_8008274C(int db);
 int fn_800881B8(void);
@@ -40,61 +40,61 @@ void fn_80054628(signed char db, int id)
 {
     switch (id) {
     case 1:
-        fn_8007B5FC(db);
+        EnvUnlockBonus(db);
         break;
     case 2:
         fn_80082688(db);
         break;
     case 3:
-        fn_8007E3D4(db);
+        GearUnlockAll(db);
         break;
     case 4:
-        fn_8007EDE4(db);
+        TeamUnlockAll(db);
         break;
     case 5:
-        fn_8007E954(db, 0);
-        fn_8007E954(db, 1);
+        PlaybookUnlockAll(db, 0);
+        PlaybookUnlockAll(db, 1);
         break;
     case 9:
-        fn_8007ECBC(db, 43);
+        TeamUnlock(db, 43);
         break;
     case 10:
-        fn_8007ECBC(db, 40);
+        TeamUnlock(db, 40);
         break;
     case 11:
-        fn_8007ECBC(db, 41);
+        TeamUnlock(db, 41);
         break;
     case 12:
-        fn_8007ECBC(db, 42);
+        TeamUnlock(db, 42);
         break;
     case 13:
-        fn_8007ECBC(db, 39);
+        TeamUnlock(db, 39);
         break;
     case 14:
-        fn_8007ECBC(db, 36);
+        TeamUnlock(db, 36);
         break;
     case 15:
-        fn_8007ECBC(db, 37);
+        TeamUnlock(db, 37);
         break;
     case 16:
-        fn_8007ECBC(db, 38);
+        TeamUnlock(db, 38);
         break;
     case 19:
-        fn_8007ECBC(db, 33);
+        TeamUnlock(db, 33);
         break;
     case 20:
-        fn_8007ECBC(db, 44);
+        TeamUnlock(db, 44);
         break;
     case 18:
-        fn_8007ECBC(db, 34);
-        fn_8007B5A8(db, 11, 0);
+        TeamUnlock(db, 34);
+        EnvSetLocked(db, 11, 0);
         break;
     case 21:
-        fn_8007B5A8(db, 10, 0);
+        EnvSetLocked(db, 10, 0);
         break;
     case 6:
         fn_8018E428(db, 999999);
-        fn_80078C04(db, 999999);
+        ChalSetDevPointsForSlot(db, 999999);
         break;
     case 7:
         fn_8008879C(fn_8022F358(db), 9999999);
@@ -123,11 +123,11 @@ void fn_80054628(signed char db, int id)
         fn_8006059C(db);
         break;
     case 49: {
-        unsigned int value = fn_80078800();
+        unsigned int value = ChalGetPoints();
         if (value) {
-            fn_80078844(-value);
+            ChalAddPoints(-value);
         } else {
-            fn_80078844(1);
+            ChalAddPoints(1);
         }
         break;
     }
@@ -149,73 +149,73 @@ void fn_80054964(signed char db, int id)
 {
     switch (id) {
     case 1:
-        fn_8007B640(db);
+        EnvLockBonus(db);
         break;
     case 2:
         fn_8008274C(db);
         break;
     case 3:
-        fn_8007E474(db);
+        GearLockAll(db);
         break;
     case 4:
-        fn_8007EE70(db);
+        TeamLockAll(db);
         break;
     case 5:
-        fn_8007EA04(db, 0);
-        fn_8007EA04(db, 1);
+        PlaybookResetOrder(db, 0);
+        PlaybookResetOrder(db, 1);
         break;
     case 9:
-        fn_8007ED50(db, 43);
+        TeamLock(db, 43);
         break;
     case 10:
-        fn_8007ED50(db, 40);
+        TeamLock(db, 40);
         break;
     case 11:
-        fn_8007ED50(db, 41);
+        TeamLock(db, 41);
         break;
     case 12:
-        fn_8007ED50(db, 42);
+        TeamLock(db, 42);
         break;
     case 13:
-        fn_8007ED50(db, 39);
+        TeamLock(db, 39);
         break;
     case 14:
-        fn_8007ED50(db, 36);
+        TeamLock(db, 36);
         break;
     case 15:
-        fn_8007ED50(db, 37);
+        TeamLock(db, 37);
         break;
     case 16:
-        fn_8007ED50(db, 38);
+        TeamLock(db, 38);
         break;
     case 18: {
         int handle = fn_8022F3D4(fn_8022F358(db));
         Class_8018FD64 cursor;
         cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
         if (cursor.Class_8018FD64::fn_8018FF9C(0x504C5555) != 0x3FF) {
-            fn_8007ED50(db, 34);
+            TeamLock(db, 34);
         }
         if (fn_8018F3D8(db) != -1) {
-            fn_8007B5A8(db, 11, 1);
+            EnvSetLocked(db, 11, 1);
         }
         break;
     }
     case 19:
         fn_80088638(fn_8022F358(db));
         if (fn_800881B8() == 0) {
-            fn_8007ED50(db, 33);
+            TeamLock(db, 33);
         }
         fn_80088638(-1);
         break;
     case 20:
-        fn_8007ED50(db, 44);
+        TeamLock(db, 44);
         break;
     case 21:
-        fn_8007B5A8(db, 10, 1);
+        EnvSetLocked(db, 10, 1);
         break;
     case 6:
         fn_8018E428(db, 0);
-        fn_80078C04(db, 0);
+        ChalSetDevPointsForSlot(db, 0);
         break;
     case 7:
         fn_8008879C(fn_8022F358(db), 0);

@@ -1,7 +1,7 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
 extern "C" {
-int fn_8007A934(Object_8007A334 *pObject, int key);
+int DbCursorGetValue(DbCursor *pObject, int key);
 }
 
 static int lbl_802D6BD8[15] = {
@@ -12,12 +12,12 @@ static int lbl_802D6BD8[15] = {
     0x42475355, 0x54424755, 0x43535355
 };
 
-extern "C" void fn_80087C5C(Object_8007A334 *pObject, unsigned int index, int value)
+extern "C" void fn_80087C5C(DbCursor *pObject, unsigned int index, int value)
 {
     fn_8007AA90(pObject, lbl_802D6BD8[index], value);
 }
 
-extern "C" int fn_80087C8C(Object_8007A334 *pObject, unsigned int index)
+extern "C" int fn_80087C8C(DbCursor *pObject, unsigned int index)
 {
-    return fn_8007A934(pObject, lbl_802D6BD8[index]);
+    return DbCursorGetValue(pObject, lbl_802D6BD8[index]);
 }

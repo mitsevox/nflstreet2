@@ -1,6 +1,6 @@
 #include "game/Record_803EB25C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/PaletteColor.h"
 
 /* Three bytes read by fn_800840A4. */
@@ -19,8 +19,8 @@ struct Args_801476C8 {
 
 extern "C" {
 int fn_8003DEB4(void);
-void fn_80083E1C(Object_8007A334 *pObject, int a);
-void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
+void fn_80083E1C(DbCursor *pObject, int a);
+void fn_800840A4(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
 int fn_800C8744(int team);
 int fn_80188030(int a);
@@ -237,7 +237,7 @@ void fn_801475F4(void)
 
 void fn_801476C8(Args_801476C8 *pArgs)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Rgb_800840A4 rgb;
     PaletteColor color;
     Object_8003DEC4 *pObject = pArgs->mUnknown4;
@@ -247,7 +247,7 @@ void fn_801476C8(Args_801476C8 *pArgs)
     fn_80084034(&cursor, id, 0);
     fn_800840A4(&cursor, &rgb);
     fn_80083F68(&cursor);
-    fn_8007A068(rgb.mUnknown0, &color);
+    DbColPalGetPrimaryColor(rgb.mUnknown0, &color);
     pObject->mUnknown5188.mUnknown250.mUnknown0 = color.r / 255.0f;
     pObject->mUnknown5188.mUnknown250.mUnknown4 = color.g / 255.0f;
     pObject->mUnknown5188.mUnknown250.mUnknown8 = color.b / 255.0f;

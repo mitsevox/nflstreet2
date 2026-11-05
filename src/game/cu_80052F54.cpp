@@ -110,8 +110,8 @@ void fn_8004CBEC(void *, Container_80053258 *, Object_80053674 *, float);
 void fn_8004E090(Object_80053674 *, int, int);
 void fn_8005D2C8(int);
 void fn_80067E3C(int, void *, int, int, int, int);
-void fn_8007ECBC(int, int);
-void fn_80083E1C(Object_8007A334 *, int);
+void TeamUnlock(int, int);
+void fn_80083E1C(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 void fn_800D6D7C(Object_80039F5C *, unsigned int, int);
 int fn_800A3444(void);
@@ -230,7 +230,7 @@ void fn_80052F54(Args_80052F54 *pArgs)
             lbl_803EA540 = bit;
             if (value == 0x3FF) {
                 fn_8005D2C8(1);
-                fn_8007ECBC(fn_8022F384(fn_8022F4BC()), 34);
+                TeamUnlock(fn_8022F384(fn_8022F4BC()), 34);
             }
         }
     }
@@ -252,7 +252,7 @@ int fn_80053084(Args_80052F54 *pArgs)
 
 void fn_800530E8(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80083E1C(&cursor, 0);
     for (int i = 0; i <= 1; i++) {
         int id, team;

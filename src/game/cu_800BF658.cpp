@@ -21,13 +21,13 @@ int fn_800BF824(void);
 int fn_800BF8A8(Class_80297CE8 *p);
 void fn_800BF9DC(Class_80297CE8 *p);
 void fn_800BE798(Class_80297CE8 *p);
-void fn_800771DC(void);
+void SpchIGUpdatePreSnap(void);
 void fn_8017D678(void);
 int fn_8016EA68(void);
 void fn_800B0E18(void);
 void fn_8009E01C(void);
-void fn_8007454C(int side);
-void fn_800771C0(void);
+void SpchIGPickTeamPlayer(int side);
+void SpchIGResetPreSnap(void);
 void fn_800ABE00(void);
 unsigned char fn_8002892C(void);
 unsigned char fn_8017F324(unsigned char value);
@@ -67,7 +67,7 @@ void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
 void fn_8017D9D8(int team);
 void fn_8017885C(void);
 void fn_800BD958(void);
-void fn_800771D8(void);
+void SpchIGEndPreSnap(void);
 void fn_801378C0(void);
 unsigned char fn_800545F4(unsigned char value);
 void fn_80025C88(int flag);
@@ -149,9 +149,9 @@ void Class_80297CE8::vfn_04(float dt)
     unsigned char i;
 
     lbl_803EABB4 = 0;
-    fn_8007454C(0);
-    fn_8007454C(1);
-    fn_800771C0();
+    SpchIGPickTeamPlayer(0);
+    SpchIGPickTeamPlayer(1);
+    SpchIGResetPreSnap();
     fn_800ABE00();
     vfn_09();
     fn_800545F4(1);
@@ -281,7 +281,7 @@ void Class_80297CE8::vfn_05(float dt)
     if (fn_800BF824() != 0) {
         return;
     }
-    fn_800771DC();
+    SpchIGUpdatePreSnap();
     fn_8017D678();
     if (fn_800BF8A8(this) == 0 && lbl_803EABA8->mUnknownB8 == -1) {
         fn_800BF9DC(this);
@@ -316,7 +316,7 @@ void Class_80297CE8::vfn_05(float dt)
 
 void Class_80297CE8::vfn_06(float dt)
 {
-    fn_800771D8();
+    SpchIGEndPreSnap();
     lbl_803EABA8->mUnknown40 = 0;
     fn_801378C0();
     fn_800545F4(0);

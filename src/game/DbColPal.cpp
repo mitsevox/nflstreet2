@@ -1,9 +1,12 @@
+/* Loads the team colour palettes (four RGB colours each) from the CPAL and CPHR database tables at
+   startup and hands out a palette, its primary colour or its name by palette index. */
+
 #include "game/Module.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/PaletteColor.h"
 
 static void *sDependencies[] = { 0 };
-static ColumnValue_802D6424 sRecord[14] = {
+static DbColumnValue sRecord[14] = {
     { 0, 0x4C415043, 0x494C5043, 0 },
     { 0, 0x4C415043, 0x44525043, 0 },
     { 0, 0x4C415043, 0x52475043, 0 },
@@ -28,12 +31,12 @@ const char *DbColPal::GetName() { return "DbColPal"; }
 
 int DbColPal::Init()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int args[8] = { 0x52485043, 0x494C5043, 0, 0, -1, -1, 3, 0 };
     unsigned char index;
 
-    fn_8007A334(&cursor, 0x4C415043, 0x494C5043, 0, 0, 0x54415453);
-    if (fn_8007A444(&cursor)) {
+    DbCursorOpen(&cursor, 0x4C415043, 0x494C5043, 0, 0, 0x54415453);
+    if (DbCursorFirst(&cursor)) {
         do {
             cursor.Read(sRecord);
             index = sRecord[0].mValue;
@@ -49,12 +52,12 @@ int DbColPal::Init()
             sPalettes[index].mColors[3].r = sRecord[10].mValue;
             sPalettes[index].mColors[3].g = sRecord[11].mValue;
             sPalettes[index].mColors[3].b = sRecord[12].mValue;
-        } while (fn_8007A510(&cursor));
+        } while (DbCursorNext(&cursor));
     }
-    fn_8007A3C4(&cursor);
+    DbCursorClose(&cursor);
 
-    fn_8007A334(&cursor, 0x52485043, 0x494C5043, args, 0, 0x54415453);
-    if (fn_8007A444(&cursor)) {
+    DbCursorOpen(&cursor, 0x52485043, 0x494C5043, args, 0, 0x54415453);
+    if (DbCursorFirst(&cursor)) {
         do {
             cursor.Read(sRecord);
             index = sRecord[0].mValue;
@@ -70,16 +73,16 @@ int DbColPal::Init()
             sPalettes[(unsigned char)(index + 128)].mColors[3].r = sRecord[10].mValue;
             sPalettes[(unsigned char)(index + 128)].mColors[3].g = sRecord[11].mValue;
             sPalettes[(unsigned char)(index + 128)].mColors[3].b = sRecord[12].mValue;
-        } while (fn_8007A510(&cursor));
+        } while (DbCursorNext(&cursor));
     }
-    fn_8007A3C4(&cursor);
+    DbCursorClose(&cursor);
     return 1;
 }
 
 int DbColPal::Shutdown() { return 1; }
 
 extern "C" {
-void fn_80079FBC(int index, ColorPalette *pPalette)
+void DbColPalGetPalette(int index, ColorPalette *pPalette)
 {
     pPalette->mColors[0].r = sPalettes[index].mColors[0].r;
     pPalette->mColors[0].g = sPalettes[index].mColors[0].g;
@@ -95,20 +98,20 @@ void fn_80079FBC(int index, ColorPalette *pPalette)
     pPalette->mColors[3].b = sPalettes[index].mColors[3].b;
 }
 
-void fn_8007A068(unsigned char index, PaletteColor *pColor)
+void DbColPalGetPrimaryColor(unsigned char index, PaletteColor *pColor)
 {
     pColor->r = sPalettes[index].mColors[0].r;
     pColor->g = sPalettes[index].mColors[0].g;
     pColor->b = sPalettes[index].mColors[0].b;
 }
 
-void fn_8007A098(int index, char *pBuffer, int size)
+void DbColPalGetPaletteName(int index, char *pBuffer, int size)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
-    fn_8007A334(&cursor, 0x52485043, 0x494C5043, 0, 0, 0x54415453);
-    fn_8007A7F4(&cursor, 0x494C5043, index, 0, 0);
+    DbCursorOpen(&cursor, 0x52485043, 0x494C5043, 0, 0, 0x54415453);
+    DbCursorFindInt(&cursor, 0x494C5043, index, 0, 0);
     fn_8007AA3C(&cursor, 0x44435043, (int)pBuffer, size);
-    fn_8007A3C4(&cursor);
+    DbCursorClose(&cursor);
 }
 }

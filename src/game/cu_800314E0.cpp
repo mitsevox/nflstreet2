@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Record_80088CE0.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
@@ -10,22 +10,22 @@ extern "C" {
 int fn_800A3444(void);
 int fn_800D41F8(int side);
 int fn_800D7550(int a, unsigned int b);
-void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
-int fn_80083FE4(Object_8007A334 *pObject);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
-int fn_80087C8C(Object_8007A334 *pObject, unsigned int index);
+void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
+int fn_80083FE4(DbCursor *pObject);
+void fn_80087BE4(DbCursor *pObject, int index);
+void fn_80087C3C(DbCursor *pObject);
+int fn_80087C8C(DbCursor *pObject, unsigned int index);
 void fn_8008880C(int db, int id);
-void fn_8008898C(Object_8007A334 *pObject, int db);
-void fn_80088A1C(Object_8007A334 *pObject);
-void fn_80088A3C(Object_8007A334 *pObject, int a);
-int fn_80088A74(Object_8007A334 *pObject, int index);
-void fn_80088AC8(Object_8007A334 *pObject, int index, int a);
-void fn_80088B24(Object_8007A334 *pObject, int a, unsigned char b);
-void fn_80088C8C(Object_8007A334 *pObject);
-int fn_80088CAC(Object_8007A334 *pObject, int a, int key, int *pResult);
-void fn_80088CE0(Object_8007A334 *pObject, Record_80088CE0 *pRecord);
-unsigned char fn_80088D84(Object_8007A334 *pObject);
+void fn_8008898C(DbCursor *pObject, int db);
+void fn_80088A1C(DbCursor *pObject);
+void fn_80088A3C(DbCursor *pObject, int a);
+int fn_80088A74(DbCursor *pObject, int index);
+void fn_80088AC8(DbCursor *pObject, int index, int a);
+void fn_80088B24(DbCursor *pObject, int a, unsigned char b);
+void fn_80088C8C(DbCursor *pObject);
+int fn_80088CAC(DbCursor *pObject, int a, int key, int *pResult);
+void fn_80088CE0(DbCursor *pObject, Record_80088CE0 *pRecord);
+unsigned char fn_80088D84(DbCursor *pObject);
 int fn_801486A0(void);
 int fn_801869F0(void);
 int fn_80186A10(int index, char *pText);
@@ -48,7 +48,7 @@ char lbl_802CCB64[6][8] = {"GNNE-69", "GXBE-69", "GUGE-69", "GNQE-69", "GCUE-69"
 int lbl_802CCB94[6] = {22, 23, 29, 26, 27, 24};
 
 extern "C" {
-int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entry_80306620 *pEntry, int db)
+int fn_800314E0(DbCursor *pCursor, DbCursor *pOther, int key, Entry_80306620 *pEntry, int db)
 {
     Record_80088CE0 record;
 
@@ -67,14 +67,14 @@ int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entr
     return 1;
 }
 
-void fn_8003159C(Object_8007A334 *pCursor, Object_8007A334 *pOther, signed char pad)
+void fn_8003159C(DbCursor *pCursor, DbCursor *pOther, signed char pad)
 {
     Record_80088CE0 record;
-    Object_8007A334 object;
+    DbCursor object;
     Entry_80306620 *pEntry;
     unsigned int count;
 
-    if (fn_8007A444(pCursor)) {
+    if (DbCursorFirst(pCursor)) {
         fn_80087BE4(&object, pad);
         do {
             if (fn_80088A74(pOther, fn_80088D84(pCursor)) == 0) {
@@ -95,12 +95,12 @@ void fn_8003159C(Object_8007A334 *pCursor, Object_8007A334 *pOther, signed char 
                     lbl_803EA3A0++;
                 }
             }
-        } while (fn_8007A510(pCursor));
+        } while (DbCursorNext(pCursor));
         fn_80087C3C(&object);
     }
 }
 
-void fn_80031724(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
+void fn_80031724(DbCursor *pCursor, DbCursor *pOther, int db)
 {
     Entry_80306620 entry;
     int mode;
@@ -131,7 +131,7 @@ void fn_80031724(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
     }
 }
 
-void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
+void fn_80031828(DbCursor *pCursor, DbCursor *pOther, int db)
 {
     Record_80088CE0 record;
     Entry_80306620 *pEntry;
@@ -157,7 +157,7 @@ void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
     }
 }
 
-void fn_80031940(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int key, int value)
+void fn_80031940(DbCursor *pCursor, DbCursor *pOther, int db, int key, int value)
 {
     Record_80088CE0 record;
     Entry_80306620 *pEntry;
@@ -184,9 +184,9 @@ void fn_80031940(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int 
 
 void fn_80031A54(void)
 {
-    Object_8007A334 other;
-    Object_8007A334 cursor;
-    Object_8007A334 query;
+    DbCursor other;
+    DbCursor cursor;
+    DbCursor query;
     unsigned char i;
     signed char pad;
     int db;
@@ -223,8 +223,8 @@ void fn_80031A54(void)
 void fn_80031C28(void)
 {
     Record_80088CE0 record;
-    Object_8007A334 other;
-    Object_8007A334 cursor;
+    DbCursor other;
+    DbCursor cursor;
     Entry_80306620 *pEntry;
     int i;
     int j;
@@ -259,8 +259,8 @@ void fn_80031C28(void)
 void fn_80031DC8(void)
 {
     Record_80088CE0 record;
-    Object_8007A334 other;
-    Object_8007A334 cursor;
+    DbCursor other;
+    DbCursor cursor;
     Entry_80306620 *pEntry;
     int db;
 
@@ -285,8 +285,8 @@ void fn_80031DC8(void)
 
 void fn_80031EFC(void)
 {
-    Object_8007A334 cursor;
-    Object_8007A334 other;
+    DbCursor cursor;
+    DbCursor other;
     Entry_80306620 entry;
     unsigned char i;
     int db;
@@ -334,8 +334,8 @@ void fn_800320B0(void)
 int fn_80032110(Entry_80306620 *pEntry)
 {
     int result = 0;
-    Object_8007A334 cursor;
-    Object_8007A334 other;
+    DbCursor cursor;
+    DbCursor other;
     int db;
     int mode;
     int key;

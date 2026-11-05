@@ -6,12 +6,12 @@
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
 #include "game/Level_80054130.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_8003EC04.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_8007F828.h"
@@ -108,9 +108,9 @@ Set_8003EE6C *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
 void fn_8006F0B8(int a);
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
-int fn_8007B974(void);
+void EnvSelect(int id);
+void EnvRelease(void);
+int EnvIsENVFSet(void);
 void fn_80093C3C(int index, short value, Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D8CC(int index);
@@ -547,7 +547,7 @@ int Class_802A56E8::vfn_14()
     int result = 1;
 
     if (fn_80025708()) {
-        result = fn_800785C0()->mUnknown1B0 == 0;
+        result = ChalGetCurrent()->mUnknown1B0 == 0;
     }
     return result;
 }
@@ -557,7 +557,7 @@ int Class_802A56E8::vfn_15()
     int result = 1;
 
     if (fn_80025708()) {
-        result = fn_800785C0()->mUnknown1B4 == 0;
+        result = ChalGetCurrent()->mUnknown1B4 == 0;
     }
     return result;
 }
@@ -658,12 +658,12 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown08 = 0.0f;
     pState->mUnknown0C.mX = 0.0f;
     pState->mUnknown0C.mY = 0.0f;
-    pState->mUnknownB0 = pState->mUnknown38 = fn_8007CB6C(2);
+    pState->mUnknownB0 = pState->mUnknown38 = GameInfoGet(2);
     if (fn_80025708()) {
-        pState->mUnknown3C = fn_800785C0()->mUnknown1AC;
-        pState->mUnknown3E = fn_800785C0()->mUnknown1A8;
+        pState->mUnknown3C = ChalGetCurrent()->mUnknown1AC;
+        pState->mUnknown3E = ChalGetCurrent()->mUnknown1A8;
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
-        pState->mUnknown30 = fn_800785C0()->mUnknown1C1;
+        pState->mUnknown30 = ChalGetCurrent()->mUnknown1C1;
     } else {
         pState->mUnknown30 = 1;
         pState->mUnknown3C = 0;
@@ -678,13 +678,13 @@ extern "C" void fn_801779D8(void)
     pState->mUnknownB2 = 0;
     pState->mUnknownB1 = 0;
     if (!fn_80027DF0()) {
-        fn_8007B684(fn_800A3444());
-        if (fn_8007B974() == 1) {
+        EnvSelect(fn_800A3444());
+        if (EnvIsENVFSet() == 1) {
             pState->mUnknown39 = 1;
         } else {
             pState->mUnknown39 = 0;
         }
-        fn_8007B6D4();
+        EnvRelease();
     } else {
         pState->mUnknown39 = 0;
     }

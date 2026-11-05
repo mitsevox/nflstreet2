@@ -1,5 +1,5 @@
 #include "engine/cu_801E0A1C.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Query_8008352C.h"
 #include "game/SndgPathfinder.h"
 #include "game/fn_801D2B7C.h"
@@ -74,20 +74,20 @@ void fn_8006DF2C(int a);
 void fn_8006DF6C(int a);
 void fn_8006DFA8(void (*callback)(int, int));
 void fn_8006E010(void (*callback)(int, int));
-void fn_8007B358(Object_8007A334 *p);
-void fn_8007B3AC(Object_8007A334 *p);
-void fn_8007B3CC(Object_8007A334 *p, int id, int *pResult);
-void fn_8007B42C(Object_8007A334 *p, char *pBuffer, int size);
-void fn_8007B460(Object_8007A334 *p, char *pBuffer, int size);
-void fn_8007B494(Object_8007A334 *p, char *pBuffer, int size);
-void fn_8008352C(Object_8007A334 *p, Query_8008352C *pQuery);
-void fn_800835D0(Object_8007A334 *p);
-void fn_80083644(Object_8007A334 *p);
-int fn_800836A4(Object_8007A334 *p, int a, int b, int c);
-int fn_800837B8(Object_8007A334 *p);
-unsigned char fn_800837D8(Object_8007A334 *p);
-int fn_80083804(Object_8007A334 *p);
-int fn_8008382C(Object_8007A334 *p);
+void fn_8007B358(DbCursor *p);
+void fn_8007B3AC(DbCursor *p);
+void fn_8007B3CC(DbCursor *p, int id, int *pResult);
+void fn_8007B42C(DbCursor *p, char *pBuffer, int size);
+void fn_8007B460(DbCursor *p, char *pBuffer, int size);
+void fn_8007B494(DbCursor *p, char *pBuffer, int size);
+void fn_8008352C(DbCursor *p, Query_8008352C *pQuery);
+void fn_800835D0(DbCursor *p);
+void fn_80083644(DbCursor *p);
+int fn_800836A4(DbCursor *p, int a, int b, int c);
+int fn_800837B8(DbCursor *p);
+unsigned char fn_800837D8(DbCursor *p);
+int fn_80083804(DbCursor *p);
+int fn_8008382C(DbCursor *p);
 void fn_801B3084(int flags, const char *pName, int value);
 unsigned int fn_801C3180(const char *pText);
 void fn_801CE7D0(int a);
@@ -331,7 +331,7 @@ int fn_8007224C(int value)
 
 void fn_80072298(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned int i = 0;
     lbl_803EA704->mUnknown120 = 0;
     fn_8008352C(&cursor, 0);
@@ -378,14 +378,14 @@ int fn_800723DC(void)
 void fn_80072424(void)
 {
     if (!lbl_803EA704->mUnknown126) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         Query_8008352C query;
         query.mUnknown0 = 1;
         query.mUnknown4 = 0;
         query.mUnknown8 = 0;
         fn_8008352C(&cursor, &query);
         if (fn_800837B8(&cursor)) {
-            fn_8007A600(&cursor, fn_800723DC());
+            DbCursorSeek(&cursor, fn_800723DC());
             lbl_803EA704->mUnknown122 = fn_800837D8(&cursor);
             lbl_803EA704->mUnknown28 = fn_80083804(&cursor);
             lbl_803EA704->mUnknown2C = fn_8008382C(&cursor);
@@ -398,7 +398,7 @@ void fn_80072424(void)
 
 void fn_800724F4(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     if ((!fn_80027DF0() && !lbl_803EA709) || !lbl_803EA700 || lbl_803EA704->mUnknown124) {
         lbl_803EA709 = 1;
     } else {
@@ -464,7 +464,7 @@ void fn_8007272C(void)
     lbl_803EA704->mUnknown122 = 1;
     lbl_803EA704->mUnknown11C = 19;
     lbl_803EA704->mUnknown127 = 1;
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_8008352C(&cursor, 0);
     lbl_803EA704->mUnknown12A = fn_800837B8(&cursor);
     if (lbl_803EA704->mUnknown12A) {
@@ -673,7 +673,7 @@ void fn_80072F90(void)
             fn_80072F04();
             int next = 1;
             if (lbl_803EA704->mUnknown123) {
-                Object_8007A334 cursor;
+                DbCursor cursor;
                 fn_8008352C(&cursor, 0);
                 if (fn_800836A4(&cursor, lbl_803EA704->mUnknown122, lbl_803EA704->mUnknown28,
                                lbl_803EA704->mUnknown2C)) {

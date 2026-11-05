@@ -5,7 +5,7 @@ extern "C" {
 void fn_8001ED80(int value);
 int fn_8001ED88(void);
 int fn_8002B70C(void);
-void fn_80077F24(void);
+void ChalCloseCursors(void);
 int fn_80082414(int index);
 int fn_80085428(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void fn_80183920(int mode, int value);
@@ -29,7 +29,7 @@ void fn_80054FC0(int *pResult)
         *pResult = 404;
         fn_80183920(0, 0x3FF);
     }
-    fn_80077F24();
+    ChalCloseCursors();
 }
 
 int fn_80055058(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)

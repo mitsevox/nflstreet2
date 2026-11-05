@@ -1,7 +1,7 @@
 #ifndef GAME_CU_8003E214_H
 #define GAME_CU_8003E214_H
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
 struct Record_8003E214 {
     int id;
@@ -11,7 +11,7 @@ struct Record_8003E214 {
     int category;
 };
 
-typedef void (*Update_8003E214)(Record_8003E214 *, int *, Object_8007A334 *);
+typedef void (*Update_8003E214)(Record_8003E214 *, int *, DbCursor *);
 typedef void (*Select_8003E214)(Record_8003E214 *, int, int *, int *, int *);
 
 extern "C" {
@@ -21,7 +21,7 @@ void fn_8003E294(int category, int *ids, unsigned int *values);
 void fn_8003E3FC(int id, unsigned char excluded);
 void fn_8003E454(unsigned char excluded);
 void fn_8003E48C(int *list);
-void fn_8003E4E0(Record_8003E214 *record, int *values, Object_8007A334 *query);
+void fn_8003E4E0(Record_8003E214 *record, int *values, DbCursor *query);
 void fn_8003E5E0(Record_8003E214 *records, int count, int *excluded, int *id, int *category);
 void fn_8003E710(int value, int *list, Record_8003E214 **pRecords);
 void fn_8003E8B8(Record_8003E214 **pRecords);

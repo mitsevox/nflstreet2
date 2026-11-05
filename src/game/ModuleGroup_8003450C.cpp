@@ -49,8 +49,8 @@ int fn_800543B4(void);
 void fn_8006E710(void);
 void fn_8006E760(void);
 void fn_8006E78C(void);
-void fn_80073478(void);
-void fn_80073528(void);
+void SndgIGInitAudio(void);
+void SndgIGShutdownAudio(void);
 unsigned char fn_8007AFDC(int a);
 void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
@@ -1221,13 +1221,13 @@ const char *SndgIG::GetName() { return "SndgIG"; }
 
 int SndgIG::Init()
 {
-    fn_80073478();
+    SndgIGInitAudio();
     return 1;
 }
 
 int SndgIG::Shutdown()
 {
-    fn_80073528();
+    SndgIGShutdownAudio();
     return 1;
 }
 

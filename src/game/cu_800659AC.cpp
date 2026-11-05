@@ -3,9 +3,9 @@
 #include <stdio.h>
 
 #include "game/Candidate_8016B364.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/QueryStatus.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 #include "game/Team_80167A8C.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
@@ -20,7 +20,7 @@ void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_801F51DC(int a, void *pBase, int count, int size,
                  int (*pCompare)(Candidate_8016B364 *, Candidate_8016B364 *),
                  void (*pSwap)(Candidate_8016B364 *, Candidate_8016B364 *), int b, int c);
-int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, void *pSort, int *pCursor,
+int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
 }
 
@@ -47,11 +47,11 @@ const char *GetPositionString(int index)
 
 void fn_800659AC(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
-    Object_80023BBC filter;
-    Object_80023BBC orderFilter;
-    Object_80023BBC keyFilter;
-    Table_8007E020 tables[2] = { { 0x54534250 }, { -1 } };
-    ColumnValue_802D6424 columns[4] = {
+    DbFilter filter;
+    DbFilter orderFilter;
+    DbFilter keyFilter;
+    DbQueryTable tables[2] = { { 0x54534250 }, { -1 } };
+    DbColumnValue columns[4] = {
         { 0, 0x54534250, 0x656D616E },
         { 0, 0x54534250, 0x54534250 },
         { 0, 0x54534250, 0x4C544553 },
@@ -72,9 +72,9 @@ void fn_800659AC(int tag, int key, int index, Team_80167A8C *pTeam, Object_80067
 
 void fn_80065B50(int tag, int key, Object_8006719C *pObject)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x4C544553 }, { -1 } };
-    ColumnValue_802D6424 columns[7] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x4C544553 }, { -1 } };
+    DbColumnValue columns[7] = {
         { 0, 0x4C544553, 0x4D524F46 },
         { 0, 0x4C544553, 0x4E544F4D },
         { 0, 0x4C544553, 0x6F736F70 },
@@ -97,9 +97,9 @@ void fn_80065B50(int tag, int key, Object_8006719C *pObject)
 
 void fn_80065CAC(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x50544553 }, { -1 } };
-    ColumnValue_802D6424 columns[12] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x50544553 }, { -1 } };
+    DbColumnValue columns[12] = {
         { 0, 0x54534250, 0x50544553 },
         { 0, 0x54534250, 0x736F5044 },
         { 0, 0x54534250, 0x736F5045 },
@@ -170,9 +170,9 @@ void fn_80065CAC(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObjec
 
 void fn_80066000(int tag, int index, int key, Object_8006719C *pObject)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x47544553 }, { -1 } };
-    ColumnValue_802D6424 columns[11] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x47544553 }, { -1 } };
+    DbColumnValue columns[11] = {
         { 0, 0x47544553, 0x5F464753 },
         { 0, 0x47544553, 0x5F5F5F78 },
         { 0, 0x47544553, 0x5F5F5F79 },
@@ -229,9 +229,9 @@ void fn_80066000(int tag, int index, int key, Object_8006719C *pObject)
 
 void fn_80066318(int tag, int key, Object_8006719C *pObject)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x00464753 }, { -1 } };
-    ColumnValue_802D6424 columns[4] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x00464753 }, { -1 } };
+    DbColumnValue columns[4] = {
         { 0, 0x00464753, 0x656D616E },
         { 0, 0x00464753, 0x5F464753 },
         { 0, 0x00464753, 0x746C6664 },
@@ -271,11 +271,11 @@ void fn_80066318(int tag, int key, Object_8006719C *pObject)
 
 void fn_80066560(int tag, int key, int index, Record_80067338 *pRecord)
 {
-    Object_80023BBC filter;
-    Object_80023BBC keyFilter;
-    Object_80023BBC orderFilter;
-    Table_8007E020 tables[2] = { { 0x4C504250 }, { -1 } };
-    ColumnValue_802D6424 columns[4] = {
+    DbFilter filter;
+    DbFilter keyFilter;
+    DbFilter orderFilter;
+    DbQueryTable tables[2] = { { 0x4C504250 }, { -1 } };
+    DbColumnValue columns[4] = {
         { 0, 0x4C504250, 0x4C594C50 },
         { 0, 0x4C504250, 0x4C504250 },
         { 0, 0x4C504250, 0x5F64726F },
@@ -296,9 +296,9 @@ void fn_80066560(int tag, int key, int index, Record_80067338 *pRecord)
 
 int fn_80066704(int tag, int key, Record_80067338 *pRecord)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x4C594C50 }, { -1 } };
-    ColumnValue_802D6424 columns[9] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x4C594C50 }, { -1 } };
+    DbColumnValue columns[9] = {
         { 0, 0x4C594C50, 0x656D616E },
         { 0, 0x4C594C50, 0x6E746F6D },
         { 0, 0x4C594C50, 0x736F7076 },
@@ -355,9 +355,9 @@ void fn_80066844(int tag, int key, unsigned int kind, Record_80067338 *pRecord)
 
 void fn_800668E4(int tag, int key, Record_80067338 *pRecord)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x44524C50 }, { -1 } };
-    ColumnValue_802D6424 columns[2] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x44524C50 }, { -1 } };
+    DbColumnValue columns[2] = {
         { 0, 0x44524C50, 0x656C6F68 },
         { 0, -1, -1 }
     };
@@ -370,9 +370,9 @@ void fn_800668E4(int tag, int key, Record_80067338 *pRecord)
 
 void fn_80066A0C(int tag, int key, Record_80067338 *pRecord)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x44504C50 }, { -1 } };
-    ColumnValue_802D6424 columns[7] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x44504C50 }, { -1 } };
+    DbColumnValue columns[7] = {
         { 0, 0x44504C50, 0x31766372 },
         { 0, 0x44504C50, 0x31726570 },
         { 0, 0x44504C50, 0x32766372 },
@@ -395,9 +395,9 @@ void fn_80066A0C(int tag, int key, Record_80067338 *pRecord)
 
 void fn_80066B6C(int tag, int key, Record_80067338 *pRecord)
 {
-    Object_80023BBC filter;
-    Table_8007E020 tables[2] = { { 0x4D434C50 }, { -1 } };
-    ColumnValue_802D6424 columns[16] = {
+    DbFilter filter;
+    DbQueryTable tables[2] = { { 0x4D434C50 }, { -1 } };
+    DbColumnValue columns[16] = {
         { 0, 0x4D434C50, 0x31796C70 },
         { 0, 0x4D434C50, 0x32796C70 },
         { 0, 0x4D434C50, 0x33796C70 },
@@ -559,7 +559,7 @@ void fn_80066DE8(int tag, int key, Record_80067338 *pRecord, int flag)
 
 unsigned short fn_80067038(int tag, int kind)
 {
-    Object_80023BBC filter;
+    DbFilter filter;
     unsigned short count;
 
     filter.mUnknown32 = 0x10003;
@@ -606,7 +606,7 @@ int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject)
 
 unsigned short fn_80067120(int tag, int key)
 {
-    Object_80023BBC filter;
+    DbFilter filter;
     unsigned short count;
 
     filter.mUnknown32 = 0x10003;
@@ -644,7 +644,7 @@ void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObjec
 
 unsigned short fn_800672BC(int tag, int key)
 {
-    Object_80023BBC filter;
+    DbFilter filter;
     unsigned short count;
 
     filter.mUnknown32 = 0x10003;
@@ -826,11 +826,11 @@ void fn_80067640(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
 int fn_80067690(int team, int tag, int kind)
 {
     Candidate_8016B364 list[225];
-    Object_80023BBC kindFilter;
-    Object_80023BBC joinFilter;
-    Object_80023BBC lylpFilter;
-    Table_8007E020 tables[4];
-    ColumnValue_802D6424 columns[5] = {
+    DbFilter kindFilter;
+    DbFilter joinFilter;
+    DbFilter lylpFilter;
+    DbQueryTable tables[4];
+    DbColumnValue columns[5] = {
         { 0, 0x4C504250, 0x4C504250 },
         { 0, 0x4C594C50, 0x54594C50 },
         { 0, 0x49414250, 0x74637270 },
@@ -909,11 +909,11 @@ void fn_80067A4C(int team, int tag, int kind, int *pResult)
 
 int fn_80067A8C(int tag, int a, int b)
 {
-    Object_80023BBC filter;
-    Object_80023BBC kindFilter;
-    Object_80023BBC lpbpFilter;
-    Table_8007E020 tables[2] = { { 0x49414250 }, { -1 } };
-    ColumnValue_802D6424 columns[2] = {
+    DbFilter filter;
+    DbFilter kindFilter;
+    DbFilter lpbpFilter;
+    DbQueryTable tables[2] = { { 0x49414250 }, { -1 } };
+    DbColumnValue columns[2] = {
         { 0, 0x49414250, 0x4C504250 },
         { 0, -1, -1 }
     };

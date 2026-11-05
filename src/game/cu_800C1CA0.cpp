@@ -20,9 +20,9 @@ void fn_800406C0(unsigned int flags);
 void fn_800588E0(void);
 void fn_80071C34(int value);
 void fn_80073328(int resume);
-void fn_80073764(void);
-unsigned char fn_800737C0(void);
-void fn_80074250(int index);
+void SpchIGEndSceneLine(void);
+unsigned char SpchIGIsSceneLineActive(void);
+void SpchIGResumeChannel(int index);
 void fn_8009D8CC(int index);
 void fn_800A7A0C(int team);
 void fn_800A7E68(void);
@@ -84,12 +84,12 @@ extern "C" void fn_800C1CA0(void)
     fn_800D6F08();
     fn_800D7158();
     fn_80071C34(0);
-    if (fn_800737C0()) {
-        fn_80073764();
+    if (SpchIGIsSceneLineActive()) {
+        SpchIGEndSceneLine();
     }
-    fn_80074250(0);
-    fn_80074250(1);
-    fn_80074250(2);
+    SpchIGResumeChannel(0);
+    SpchIGResumeChannel(1);
+    SpchIGResumeChannel(2);
     fn_80162780(0, 0);
     fn_8013F3FC();
     if (fn_800A8740() == 0) {

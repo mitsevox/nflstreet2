@@ -2,7 +2,7 @@
 #include "game/Block_80307980.h"
 #include "game/FELoop.h"
 #include "game/Item_800476DC.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Init_8004A040.h"
 #include "game/Object_8008044C.h"
@@ -59,12 +59,12 @@ void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
 unsigned char fn_80054D24(int index);
 int fn_8005FC7C(void);
-void fn_8007BA48(Object_8007A334 *pObject);
-void fn_8007BA88(Object_8007A334 *pObject, int a);
-void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
+void fn_8007BA48(DbCursor *pObject);
+void fn_8007BA88(DbCursor *pObject, int a);
+void fn_8007BB04(DbCursor *pObject);
+int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
 int fn_8007BF14(int index);
-int fn_8007CB6C(int index);
+int GameInfoGet(int index);
 int fn_80080970(Object_8008044C *pObject);
 void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080CB0(Object_8008044C *pObject);
@@ -81,7 +81,7 @@ int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
+void fn_800840A4(DbCursor *pObject, void *pBuffer);
 void fn_80146094(Object_80146094 *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, Ids_8015F6E8 *pIds);
 void fn_8015FFC8(int player, int key, int value);
@@ -105,23 +105,23 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, i
 }
 
 static Object_8008044C lbl_80307720;
-static Object_8007A334 lbl_8030774C;
+static DbCursor lbl_8030774C;
 
 extern "C" void fn_80047E28(int index)
 {
     int a = 0;
     int b;
     int c;
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     fn_8007BA88(&cursor, 11);
-    a = fn_8007A410(&cursor);
+    a = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     fn_8007BA88(&cursor, 12);
-    b = fn_8007A410(&cursor);
+    b = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     fn_8007BA88(&cursor, 1);
-    c = fn_8007A410(&cursor);
+    c = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     int x = fn_802372EC(0, a - 1) + 1;
     int y = fn_802372EC(0, b);
@@ -454,8 +454,8 @@ extern "C" void fn_80048704(Row_8007BC34 *pRow, Info_80307908 *pInfo, unsigned c
 
 extern "C" void fn_80048894(int index, unsigned char *pColors, unsigned char flag)
 {
-    Object_8007A334 cursor;
-    Query_80083E40 query;
+    DbCursor cursor;
+    TeamQuery query;
     Rgb_800840A4 rgb;
 
     query.mUnknown8 = index + 1;
@@ -471,8 +471,8 @@ extern "C" void fn_80048894(int index, unsigned char *pColors, unsigned char fla
 
 extern "C" void fn_80048950(int index, unsigned char *pColors, unsigned char flag)
 {
-    Object_8007A334 cursor;
-    Query_80083E40 query;
+    DbCursor cursor;
+    TeamQuery query;
     Rgb_800840A4 rgb;
 
     query.mUnknown8 = index + 1;
@@ -571,7 +571,7 @@ extern "C" void fn_80048C40(int *pId, int *pPalette, int a, int b)
 
 extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Block_80307980 block;
     int value;
     unsigned char *pColors = lbl_803078E8[index].mUnknown7A;
@@ -811,16 +811,16 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
     int flag = 1;
 
     if (fn_80027DF0() && fn_8001E4F4() && fn_8005FC7C()) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
 
-        fn_8007A334(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
+        DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
         if (fn_800809C4((Object_8008044C *)&cursor, id, 0)) {
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
-        fn_8007A3C4(&cursor);
+        DbCursorClose(&cursor);
     } else if ((fn_80027DF0() && (fn_801835A0() || fn_800624B0())) || !fn_801486A0()) {
         flag = 1;
-    } else if (fn_8007CB6C(2) == 0) {
+    } else if (GameInfoGet(2) == 0) {
         flag = mode <= 6;
     } else {
         flag = mode > 6;

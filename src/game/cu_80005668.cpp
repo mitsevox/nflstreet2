@@ -3,7 +3,7 @@
 #include "game/Class_802938C0.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80047E28.h"
 #include "game/cu_8015C25C.h"
@@ -39,22 +39,22 @@ int fn_80022D80(void);
 void fn_80022D88(void);
 void fn_800230D8();
 void fn_800230F8();
-void fn_800232C8(Object_8007A334 *pObject);
-void fn_8002333C(Object_8007A334 *pObject);
-void fn_8002335C(Object_8007A334 *pCursor, int value, int *pResult);
-void fn_80023394(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_800233C8(Object_8007A334 *pCursor);
-void fn_800233F0(Object_8007A334 *pCursor, int type);
-void fn_80023498(Object_8007A334 *pCursor);
-void fn_800234B8(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_800234EC(Object_8007A334 *pCursor);
+void fn_800232C8(DbCursor *pObject);
+void fn_8002333C(DbCursor *pObject);
+void fn_8002335C(DbCursor *pCursor, int value, int *pResult);
+void fn_80023394(DbCursor *pCursor, char *pBuffer, int size);
+int fn_800233C8(DbCursor *pCursor);
+void fn_800233F0(DbCursor *pCursor, int type);
+void fn_80023498(DbCursor *pCursor);
+void fn_800234B8(DbCursor *pCursor, char *pBuffer, int size);
+int fn_800234EC(DbCursor *pCursor);
 void fn_80048F6C(int index, const char *pName);
-void fn_8007A098(int index, char *pBuffer, int size);
-int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007CC50(Object_8007A334 *pObject);
-void fn_8007CCC4(Object_8007A334 *pObject);
-void fn_8007CD1C(Object_8007A334 *pObject, char *pBuffer, int size);
-int fn_8007CD50(Object_8007A334 *pObject);
+void DbColPalGetPaletteName(int index, char *pBuffer, int size);
+int DbCursorGetRow(DbCursor *pObject);
+void HairListOpen(DbCursor *pObject);
+void HairListClose(DbCursor *pObject);
+void HairListGetName(DbCursor *pObject, char *pBuffer, int size);
+int HairListGetId(DbCursor *pObject);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080920(Object_8008044C *pObject);
 void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size);
@@ -94,18 +94,18 @@ int fn_80082280(Object_8008044C *pObject);
 void fn_800822A8(Object_8008044C *pObject, int value);
 int fn_800822D4(Object_8008044C *pObject);
 void fn_80082308(Object_8008044C *pObject, int value);
-int fn_80087938(int table, Object_8007A334 *pObject, int index, int *pResult);
-int fn_800879E8(int table, Object_8007A334 *pObject);
-void fn_80087A30(int table, Object_8007A334 *pObject);
-int fn_80087A78(int table, Object_8007A334 *pObject, int value, int *pIndex);
-int fn_80087B00(int table, Object_8007A334 *pObject);
+int fn_80087938(int table, DbCursor *pObject, int index, int *pResult);
+int fn_800879E8(int table, DbCursor *pObject);
+void fn_80087A30(int table, DbCursor *pObject);
+int fn_80087A78(int table, DbCursor *pObject, int value, int *pIndex);
+int fn_80087B00(int table, DbCursor *pObject);
 int fn_80087B5C(int type);
 void fn_8015D224(int index);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
 void fn_80180FA4(const char *pText);
-Object_8007A334 *fn_80182DBC(void);
+DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
@@ -517,8 +517,8 @@ static void fn_80008860();
 static void fn_800088E8(int value);
 static int fn_80008978(int key, int index);
 
-static Object_8007A334 lbl_80369DDC;
-static Object_8007A334 lbl_80369E08;
+static DbCursor lbl_80369DDC;
+static DbCursor lbl_80369E08;
 static Class_802938C0 lbl_80369E34;
 static Entry_80369E64 lbl_80369E64[15];
 static Block_80307980 lbl_8036A170;
@@ -872,7 +872,7 @@ void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
     fn_80182E34(buffer);
     fn_80182DD4("");
     fn_80182E04("");
-    *pCount = fn_8007A410((Object_8007A334 *)fn_80182DC8());
+    *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
     if (fn_80005668()) {
         (*pCount)++;
     }
@@ -881,7 +881,7 @@ void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
         index--;
     }
     if (index >= 0) {
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
         int id = fn_800808F8(fn_80182DC8());
 
         if (lbl_803EB928 != id || a == 1) {
@@ -953,7 +953,7 @@ void Class_8000A108::vfn_04(int index, int *pId)
         index--;
     }
     if (index >= 0) {
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
         *pId = fn_800808F8(fn_80182DC8());
     } else {
         *pId = 0x7FFF;
@@ -973,7 +973,7 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
             pEntry->mUnknown41 = 1;
         }
         value = fn_80080D10(fn_80182DC8());
-        pEntry->mUnknown36 = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        pEntry->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
         if (fn_80005668()) {
             pEntry->mUnknown36++;
         }
@@ -1385,7 +1385,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 0:
             fn_80087938(0x12, &lbl_80369DDC, a, 0);
             fn_80087A30(0x12, &lbl_80369DDC);
-            fn_80080FD4(fn_80182DC8(), fn_8007CD50(&lbl_80369DDC));
+            fn_80080FD4(fn_80182DC8(), HairListGetId(&lbl_80369DDC));
             break;
         case 1:
             fn_800810B4(fn_80182DC8(), a);
@@ -1442,7 +1442,7 @@ void Class_80009E48::vfn_03(int index)
     switch (mUnknown8) {
     case 0:
         fn_80087938(0x12, &lbl_80369DDC, index, 0);
-        fn_80005E64(fn_8007CD50(&lbl_80369DDC));
+        fn_80005E64(HairListGetId(&lbl_80369DDC));
         break;
     case 1:
         fn_80049D34(0, index);
@@ -1477,12 +1477,12 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
     case 0:
         fn_80087938(0x12, &lbl_80369DDC, index, 0);
         pOut->mUnknown40 = fn_800879E8(0x12, &lbl_80369DDC);
-        fn_8007CD1C(&lbl_80369DDC, name, 26);
+        HairListGetName(&lbl_80369DDC, name, 26);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 1:
     case 3:
-        fn_8007A098(index, name, 21);
+        DbColPalGetPaletteName(index, name, 21);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 2:
@@ -1582,7 +1582,7 @@ void Class_80009DC8::vfn_01(int a, int *pCount, int *pOut)
         *pCount = 12;
         *pOut = fn_80081E3C(fn_80182DC8());
     } else {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         Info_80307908 info;
         int key;
 
@@ -1606,7 +1606,7 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
         if (type == 3) {
             fn_8008105C(fn_80182DC8(), a);
         } else {
-            Object_8007A334 cursor;
+            DbCursor cursor;
 
             fn_800233F0(&cursor, type);
             fn_80087938(fn_80087B5C(type), &cursor, a, 0);
@@ -1641,7 +1641,7 @@ void Class_80009DC8::vfn_03(int index)
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     } else {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         int value;
 
         fn_800233F0(&cursor, type);
@@ -1662,7 +1662,7 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
     if (type == 3) {
         fn_801C2D88(pOut->mName, 22, "Skin Tone %d", index + 1);
     } else {
-        Object_8007A334 cursor;
+        DbCursor cursor;
 
         fn_800233F0(&cursor, type);
         fn_80087938(fn_80087B5C(type), &cursor, index, 0);
@@ -1676,14 +1676,14 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
 void Class_80009C88::vfn_01(int a, int *pCount, int *pOut)
 {
     fn_8002335C(&lbl_80369E08, fn_80080F48(fn_80182DC8(), mUnknown8), pOut);
-    *pCount = fn_8007A410(&lbl_80369E08);
+    *pCount = DbCursorGetRowCount(&lbl_80369E08);
 }
 
 int Class_80009C88::vfn_02(int a, int b, void **pOut)
 {
     fn_80183740(0);
     if (b == 0) {
-        fn_8007A600(&lbl_80369E08, a);
+        DbCursorSeek(&lbl_80369E08, a);
         fn_80080FA4(fn_80182DC8(), mUnknown8, fn_800233C8(&lbl_80369E08));
     }
     return -1;
@@ -1691,14 +1691,14 @@ int Class_80009C88::vfn_02(int a, int b, void **pOut)
 
 void Class_80009C88::vfn_03(int index)
 {
-    fn_8007A600(&lbl_80369E08, index);
+    DbCursorSeek(&lbl_80369E08, index);
     fn_800225F4(0, (unsigned short)(fn_800233C8(&lbl_80369E08) + 31));
     fn_800225F4(1, (unsigned short)(fn_800233C8(&lbl_80369E08) + 31));
 }
 
 void Class_80009C88::vfn_05(int index, Entry_80182CC8 *pOut)
 {
-    fn_8007A600(&lbl_80369E08, index);
+    DbCursorSeek(&lbl_80369E08, index);
     fn_80023394(&lbl_80369E08, pOut->mName, 22);
 }
 
@@ -2007,9 +2007,9 @@ static void fn_800087BC()
     lbl_803EB928 = 0x7FFF;
     fn_801835C8();
     fn_800230D8();
-    fn_8007CC50(&lbl_80369DDC);
+    HairListOpen(&lbl_80369DDC);
     fn_800232C8(&lbl_80369E08);
-    fn_8007A444((Object_8007A334 *)fn_80182DC8());
+    DbCursorFirst((DbCursor *)fn_80182DC8());
     if (fn_80183950()) {
         if (fn_80183948() != 3) {
             lbl_803EB928 = 0;
@@ -2026,7 +2026,7 @@ static void fn_80008860()
 {
     fn_80183704();
     fn_800230F8();
-    fn_8007CCC4(&lbl_80369DDC);
+    HairListClose(&lbl_80369DDC);
     fn_8002333C(&lbl_80369E08);
     if (lbl_803EB934) {
         fn_8022EFBC(0, 0x434C4B53);

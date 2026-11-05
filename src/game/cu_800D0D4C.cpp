@@ -2,7 +2,7 @@
 #include <math.h>
 #include "game/cu_8017DD68.h"
 #include "game/fn_800D4164.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
@@ -218,9 +218,9 @@ extern unsigned char lbl_803EC9D0[2];
 extern void *lbl_803EB688;
 
 int fn_80025708(void);
-struct Object_800785C0;
-Object_800785C0 *fn_800785C0(void);
-int fn_800254E8(Object_800785C0 *, int, int *);
+struct Challenge_t;
+Challenge_t *ChalGetCurrent(void);
+int fn_800254E8(Challenge_t *, int, int *);
 void fn_800A20D0(int, signed char);
 float fn_800A32B4(void);
 void fn_800A72B4(void);
@@ -234,10 +234,10 @@ void fn_8017E3CC(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
 void fn_8008880C(int, unsigned int);
-void fn_8018FB4C(Object_8007A334 *, int);
-void fn_8018FBC8(Object_8007A334 *);
-int fn_8018FBE8(Object_8007A334 *, int);
-void fn_8018FC1C(Object_8007A334 *, Record_8018FC1C *);
+void fn_8018FB4C(DbCursor *, int);
+void fn_8018FBC8(DbCursor *);
+int fn_8018FBE8(DbCursor *, int);
+void fn_8018FC1C(DbCursor *, Record_8018FC1C *);
 void fn_8017C5A0(unsigned short, int);
 void fn_8017C5CC(unsigned short, int);
 void fn_8017C5F8(unsigned short, int);
@@ -902,7 +902,7 @@ extern "C" void fn_800D2378(int id, int team, int count) {
     }
     fn_800D2F9C(0, fn_800D2EB0(0)); fn_800D2F9C(1, fn_800D2EB0(1));
     if (fn_80025708()) {
-        Object_800785C0 *object = fn_800785C0();
+        Challenge_t *object = ChalGetCurrent();
         if (fn_800254E8(object, 20, 0) || fn_800254E8(object, 31, 0)) flag = 1;
     }
     if ((lbl_803EACD4->mUnknown1F13 == 0 || flag) && fn_800A8740() == 0) { fn_800A72B4(); fn_800A7B5C(); }
@@ -2645,7 +2645,7 @@ extern "C" void fn_800D7158(void) {
         if (lbl_803EACC8 != 1) { lbl_803EACC8 = 1; changed = 1; }
     } else if (lbl_803EACC8 != 0) { lbl_803EACC8 = 0; changed = 1; }
     if (changed) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         fn_8018FB4C(&cursor, lbl_803EACC8);
         for (int i = 0; i <= 126; i++) {
             if (fn_8018FBE8(&cursor, i)) fn_8018FC1C(&cursor, &lbl_803EACD4->mUnknown0[i]);

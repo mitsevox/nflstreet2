@@ -6,7 +6,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/cu_80003F10.h"
 #include "game/cu_80026BB0.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
@@ -313,7 +313,7 @@ void fn_80027A20()
         fn_800731D0(1);
         fn_80232FD4(&record0, &record1);
         fn_800731D0(1);
-        fn_8007CA28();
+        GameInfoRead();
         fn_8021956C(lbl_803EB690, 1, 5, 1);
         fn_800731D0(1);
         lbl_803067B0.fn_801CBEF4(2, 12);
@@ -436,8 +436,8 @@ void fn_80027E3C()
 {
     fn_80027E18(0);
     if (fn_802294F4() == 1) {
-        if (fn_8007CAE4()) {
-            fn_8007CAB4();
+        if (GameInfoIsInitialized()) {
+            GameInfoShutdown();
         }
         fn_80229554();
     }

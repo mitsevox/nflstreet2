@@ -2,7 +2,7 @@
 #include "game/Desc_80169DF8.h"
 #include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
@@ -29,10 +29,10 @@ void fn_800674E0(int tag, int a, int *pResult);
 void fn_800675B4(int tag, int a, int b);
 void fn_80067A4C(int team, int tag, int kind, int *pResult);
 int fn_80067A8C(int tag, int a, int b);
-void fn_80087CBC(Object_8007A334 *pCursor);
-void fn_80087CFC(Object_8007A334 *pCursor);
-int fn_80087D1C(Object_8007A334 *pCursor, int key);
-unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
+void fn_80087CBC(DbCursor *pCursor);
+void fn_80087CFC(DbCursor *pCursor);
+int fn_80087D1C(DbCursor *pCursor, int key);
+unsigned char fn_80087DA4(DbCursor *pCursor, int column);
 unsigned char fn_8008973C(int index);
 void fn_800B508C(unsigned char index);
 int fn_800BA6F8(void);
@@ -357,7 +357,7 @@ void fn_80168210(void)
 void fn_80168264(void)
 {
     if (fn_80178E10()) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         unsigned int key;
 
         fn_80087CBC(&cursor);

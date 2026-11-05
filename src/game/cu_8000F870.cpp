@@ -2,9 +2,9 @@
 
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/Request_802329F0.h"
 #include "game/cu_8003AEA8.h"
 #include "game/cu_8003E214.h"
@@ -128,32 +128,32 @@ void fn_80062A58(unsigned char a);
 void fn_8006CA18(int index, int a, unsigned char volume);
 void fn_80073094(void);
 void fn_800731D0(int a);
-int fn_8007A43C(Object_8007A334 *pObject);
-int fn_8007A4A4(Object_8007A334 *pObject);
-int fn_8007A588(Object_8007A334 *pObject);
-int fn_8007A934(Object_8007A334 *pObject, int key);
+int DbCursorGetRow(DbCursor *pObject);
+int DbCursorLast(DbCursor *pObject);
+int DbCursorPrev(DbCursor *pObject);
+int DbCursorGetValue(DbCursor *pObject, int key);
 int fn_8007AF84(int team);
-int fn_8007B518(int index, int id);
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
-void fn_8007B6FC(int *pA, int *pB);
-void fn_8007B8A4(char *pDest, int count);
-void fn_8007B904(int a, int b);
-void fn_8007B93C(int a, int b);
-void fn_8007C9D4(void);
-void fn_8007CAB4(void);
-unsigned char fn_8007CAE4(void);
-void fn_8007CAEC(int index, int value);
-int fn_8007CB6C(int index);
-void fn_8007D4E8(void);
-void fn_8007D52C(void);
-int fn_8007D5A0(int type, int value, int column, char *pText, int size);
-void fn_8007DB74(int a, int b);
-int fn_8007DBB4(int a);
-void fn_8007DDC0(int a);
-void fn_8007EBDC(Object_8007A334 *pObject, int db);
-void fn_8007EC34(Object_8007A334 *pObject);
-int fn_8007EC54(Object_8007A334 *pObject, int id);
+int EnvIsLocked(int index, int id);
+void EnvSelect(int id);
+void EnvRelease(void);
+void EnvGetPictures(int *pA, int *pB);
+void EnvGetUIName(char *pDest, int count);
+void EnvGetEVLO(int a, int b);
+void EnvGetEVDE(int a, int b);
+void GameInfoInit(void);
+void GameInfoShutdown(void);
+unsigned char GameInfoIsInitialized(void);
+void GameInfoSet(int index, int value);
+int GameInfoGet(int index);
+void RecordsBegin(void);
+void RecordsEnd(void);
+int RecordsGetText(int type, int value, int column, char *pText, int size);
+void RecordsSeekRow(int a, int b);
+int RecordsGetValue(int a);
+void RecordsSetSharedRanks(int a);
+void TeamLockOpen(DbCursor *pObject, int db);
+void TeamLockClose(DbCursor *pObject);
+int TeamLockIsHidden(DbCursor *pObject, int id);
 int fn_800808F8(Object_8008044C *pObject);
 void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
@@ -161,26 +161,26 @@ int fn_80080D10(Object_8008044C *pObject);
 int fn_80081188(Object_8008044C *pObject);
 int fn_800812E0(Object_8008044C *pObject, int index);
 void fn_80082558(int a, int b);
-void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
-int fn_80083FBC(Object_8007A334 *pObject);
-int fn_8008406C(Object_8007A334 *pObject, int id, int *pResult);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
-int fn_800842E8(Object_8007A334 *pObject);
-int fn_80084310(Object_8007A334 *pObject);
-int fn_80084338(Object_8007A334 *pObject);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
-int fn_80087C8C(Object_8007A334 *pObject, unsigned int index);
+void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
+int fn_80083FBC(DbCursor *pObject);
+int fn_8008406C(DbCursor *pObject, int id, int *pResult);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
+int fn_800842E8(DbCursor *pObject);
+int fn_80084310(DbCursor *pObject);
+int fn_80084338(DbCursor *pObject);
+void fn_80087BE4(DbCursor *pObject, int index);
+void fn_80087C3C(DbCursor *pObject);
+int fn_80087C8C(DbCursor *pObject, unsigned int index);
 unsigned int fn_800886BC(int a);
 int fn_8008872C(int a);
-void fn_80088950(Object_8007A334 *pObject, int index);
-void fn_80088A1C(Object_8007A334 *pObject);
-int fn_80088A74(Object_8007A334 *pObject, int index);
-void fn_80088B24(Object_8007A334 *pObject, int a, unsigned char b);
-void fn_80088C8C(Object_8007A334 *pObject);
-void fn_80088CE0(Object_8007A334 *pObject, Record_80088CE0 *pRecord);
+void fn_80088950(DbCursor *pObject, int index);
+void fn_80088A1C(DbCursor *pObject);
+int fn_80088A74(DbCursor *pObject, int index);
+void fn_80088B24(DbCursor *pObject, int a, unsigned char b);
+void fn_80088C8C(DbCursor *pObject);
+void fn_80088CE0(DbCursor *pObject, Record_80088CE0 *pRecord);
 void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -260,7 +260,7 @@ int fn_800103A4(int force);
 void fn_80010B78(void);
 int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_80011AA8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-void fn_80011D9C(Object_8007A334 *pObject, int side);
+void fn_80011D9C(DbCursor *pObject, int side);
 int fn_80011FA0(int side, int id);
 int fn_80012244(int side);
 int fn_80014260(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
@@ -342,8 +342,8 @@ unsigned char lbl_803EB9FB = 0;
 signed char lbl_803EB9FC = -1;
 signed char lbl_803EB9FD = 0;
 signed char lbl_803EB9FE = 0;
-Object_8007A334 *lbl_803EBA00 = 0;
-Object_8007A334 *lbl_803EBA04 = 0;
+DbCursor *lbl_803EBA00 = 0;
+DbCursor *lbl_803EBA04 = 0;
 
 unsigned char lbl_803ECE38[8];
 unsigned char lbl_803ECE40[4];
@@ -352,7 +352,7 @@ Pair_803ECE48 lbl_803ECE48;
 int **lbl_803ECE4C;
 int lbl_803ECE50[2];
 
-Object_8007A334 lbl_8036ADB0[2];
+DbCursor lbl_8036ADB0[2];
 Object_8008044C lbl_8036AE08[2];
 Roster_8036AE60 lbl_8036AE60[2];
 Scroll_8036B0E8 lbl_8036B0E8[2];
@@ -402,8 +402,8 @@ void fn_8000FA0C(void)
         fn_8018C48C(0x54415453);
         fn_8018C48C(0x454D4147);
         fn_80027EA0();
-        if (fn_8007CAE4()) {
-            fn_8007CAB4();
+        if (GameInfoIsInitialized()) {
+            GameInfoShutdown();
         }
         if (fn_802294F4()) {
             fn_80229554();
@@ -466,7 +466,7 @@ void fn_8000FAD0(int mode)
             case 2:
             case 6:
                 fn_802329F0(&request);
-                fn_8007C9D4();
+                GameInfoInit();
                 if (lbl_803EB958) {
                     fn_801FCE10(0, "update 'FNIG' set 'YTPG' = \x82\n", lbl_803EB95C);
                 }
@@ -484,7 +484,7 @@ void fn_8000FAD0(int mode)
                 fn_802329F0(&request);
                 fn_800731D0(1);
                 fn_800731D0(0);
-                fn_8007C9D4();
+                GameInfoInit();
                 fn_800731D0(0);
                 fn_80229438(0x544E464F, 2);
                 fn_800731D0(0);
@@ -714,7 +714,7 @@ void fn_80010208(void)
         lbl_803EB96A = state;
     }
     if (fn_80025708() || fn_80025718()) {
-        lbl_803EB96A = fn_8007CB6C(2);
+        lbl_803EB96A = GameInfoGet(2);
     }
 }
 
@@ -1016,7 +1016,7 @@ void fn_80010914(void)
             }
         }
     }
-    fn_8007CAEC(2, lbl_803EB96A);
+    GameInfoSet(2, lbl_803EB96A);
     fn_8006CA18(0x8F, 0x32, 0);
     if (fn_801801B4() == 1) {
         fn_8018807C(1);
@@ -1509,7 +1509,7 @@ void fn_800119CC(int type, int value, int column, char *pOut, int size, int *pFo
     } else {
         value = fn_80015E24(value);
     }
-    if (fn_8007D5A0(type, value, lbl_802F41C8[type][column], text, 32)) {
+    if (RecordsGetText(type, value, lbl_802F41C8[type][column], text, 32)) {
         *pFound = 1;
     } else {
         *pFound = 0;
@@ -1521,12 +1521,12 @@ int fn_80011AA8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_8007D4E8();
-        fn_8007DDC0(1);
+        RecordsBegin();
+        RecordsSetSharedRanks(1);
         lbl_803EB970 = 1;
         break;
     case 0x80000002:
-        fn_8007D52C();
+        RecordsEnd();
         lbl_803EB970 = 0;
         break;
     case 0x80000003:
@@ -1539,7 +1539,7 @@ int fn_80011AA8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     return 1;
 }
 
-void fn_80011B60(Object_8007A334 *pObject, int index, int saved)
+void fn_80011B60(DbCursor *pObject, int index, int saved)
 {
     int found = 0;
 
@@ -1555,7 +1555,7 @@ void fn_80011B60(Object_8007A334 *pObject, int index, int saved)
         }
         if (!found) {
             if (!fn_8008406C(pObject, index, 0)) {
-                fn_8007A444(pObject);
+                DbCursorFirst(pObject);
                 fn_80011D9C(pObject, index);
             }
         }
@@ -1578,35 +1578,35 @@ unsigned char fn_80011C1C(unsigned char pad)
     return 0;
 }
 
-void fn_80011CB0(Object_8007A334 *pObject)
+void fn_80011CB0(DbCursor *pObject)
 {
-    if (!fn_8007A588(pObject)) {
-        fn_8007A4A4(pObject);
+    if (!DbCursorPrev(pObject)) {
+        DbCursorLast(pObject);
     }
 }
 
-void fn_80011CEC(Object_8007A334 *pObject)
+void fn_80011CEC(DbCursor *pObject)
 {
-    if (!fn_8007A510(pObject)) {
-        fn_8007A444(pObject);
+    if (!DbCursorNext(pObject)) {
+        DbCursorFirst(pObject);
     }
 }
 
-unsigned char fn_80011D28(Object_8007A334 *pObject, int side)
+unsigned char fn_80011D28(DbCursor *pObject, int side)
 {
     unsigned char count = 0;
 
-    if (fn_8007A444(pObject)) {
+    if (DbCursorFirst(pObject)) {
         do {
             if (!fn_80011FA0(side, fn_80083FBC(pObject))) {
                 count++;
             }
-        } while (fn_8007A510(pObject));
+        } while (DbCursorNext(pObject));
     }
     return count;
 }
 
-void fn_80011D9C(Object_8007A334 *pObject, int side)
+void fn_80011D9C(DbCursor *pObject, int side)
 {
     do {
         unsigned int i = 0;
@@ -1632,7 +1632,7 @@ void fn_80011E34(int side)
 
 void fn_80011EBC(int side, int id, char *pName, int size, int *pA, int *pB, int *pC, int *pFree)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     fn_80083E1C(&cursor, 0);
     fn_80084034(&cursor, id, 0);
@@ -1655,21 +1655,21 @@ int fn_80011FA0(int side, int id)
     int otherDb = fn_80186F7C(!side);
 
     if (db != -1) {
-        Object_8007A334 cursor;
-        fn_8007EBDC(&cursor, db);
-        result = fn_8007EC54(&cursor, id);
-        fn_8007EC34(&cursor);
+        DbCursor cursor;
+        TeamLockOpen(&cursor, db);
+        result = TeamLockIsHidden(&cursor, id);
+        TeamLockClose(&cursor);
     } else if (otherDb != -1 && !fn_8007AF84(side)) {
-        Object_8007A334 cursor;
-        fn_8007EBDC(&cursor, otherDb);
-        result = fn_8007EC54(&cursor, id);
-        fn_8007EC34(&cursor);
+        DbCursor cursor;
+        TeamLockOpen(&cursor, otherDb);
+        result = TeamLockIsHidden(&cursor, id);
+        TeamLockClose(&cursor);
     } else {
-        Object_8007A334 *pObject = &lbl_8036ADB0[side];
-        int position = fn_8007A43C(pObject);
+        DbCursor *pObject = &lbl_8036ADB0[side];
+        int position = DbCursorGetRow(pObject);
         fn_80084034(pObject, id, 0);
-        result = !fn_8007A934(pObject, 0x53495654);
-        fn_8007A600(pObject, position);
+        result = !DbCursorGetValue(pObject, 0x53495654);
+        DbCursorSeek(pObject, position);
     }
     return result;
 }
@@ -1702,22 +1702,22 @@ void fn_800121BC(int side, int *pIds, int count)
 {
     int i = 0;
 
-    if (fn_8007A444(&lbl_8036ADB0[side])) {
+    if (DbCursorFirst(&lbl_8036ADB0[side])) {
         do {
             pIds[i++] = fn_80083FBC(&lbl_8036ADB0[side]);
-        } while (fn_8007A510(&lbl_8036ADB0[side]));
+        } while (DbCursorNext(&lbl_8036ADB0[side]));
     }
-    fn_8007A444(&lbl_8036ADB0[side]);
+    DbCursorFirst(&lbl_8036ADB0[side]);
 }
 
 int fn_80012244(int side)
 {
-    return fn_8007A410(&lbl_8036ADB0[side]);
+    return DbCursorGetRowCount(&lbl_8036ADB0[side]);
 }
 
 void fn_80012274(int side, int index, int *pId, char *pName, int size)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     *pId = lbl_803EB994[side][index];
     fn_80083E1C(&cursor, 0);
@@ -1802,10 +1802,10 @@ void fn_80012634(int side)
         desc.mUnknown4 = 1;
         desc.mUnknown8 = lbl_803EB97C[side];
         fn_8008044C(&list, &desc, 0x54415453);
-        if (fn_8007A444((Object_8007A334 *)&list)) {
+        if (DbCursorFirst((DbCursor *)&list)) {
             do {
                 fn_8021E72C(pList, 10, fn_80080D10(&list));
-            } while (fn_8007A510((Object_8007A334 *)&list));
+            } while (DbCursorNext((DbCursor *)&list));
         }
         fn_8008056C(&list);
     }
@@ -1820,10 +1820,10 @@ void fn_80012710(int side)
     desc.mUnknown4 = 1;
     desc.mUnknown8 = lbl_803EB97C[side];
     fn_8008044C(&list, &desc, 0x54415453);
-    if (fn_8007A444((Object_8007A334 *)&list)) {
+    if (DbCursorFirst((DbCursor *)&list)) {
         do {
             fn_8021E2B4(pList, 10, fn_80080D10(&list));
-        } while (fn_8007A510((Object_8007A334 *)&list));
+        } while (DbCursorNext((DbCursor *)&list));
     }
     fn_8008056C(&list);
 }
@@ -1877,7 +1877,7 @@ static inline int NextRow(int list, int row)
 static inline void GetRow(int team, int list, int row, int *pOut)
 {
     if (row != -1) {
-        fn_8007A600((Object_8007A334 *)&lbl_8036AE08[list], row);
+        DbCursorSeek((DbCursor *)&lbl_8036AE08[list], row);
         int id = fn_800808F8(&lbl_8036AE08[list]);
         int i;
 
@@ -1909,10 +1909,10 @@ void fn_800128E8(unsigned char team)
             }
             lbl_8036AE60[team].mUnknown140 = 0x7FFF;
         }
-        if (fn_8007A444((Object_8007A334 *)&lbl_8036AE08[team])) {
+        if (DbCursorFirst((DbCursor *)&lbl_8036AE08[team])) {
             do {
                 fn_80081F50(&lbl_8036AE08[team], team, 0);
-            } while (fn_8007A510((Object_8007A334 *)&lbl_8036AE08[team]));
+            } while (DbCursorNext((DbCursor *)&lbl_8036AE08[team]));
         }
         lbl_803EB9CC = 1;
     } else {
@@ -1930,12 +1930,12 @@ void fn_80012A14(unsigned char team)
 {
     int i;
 
-    lbl_803ECE50[team] = fn_8007A410((Object_8007A334 *)&lbl_8036AE08[team]);
-    fn_8007A444((Object_8007A334 *)&lbl_8036AE08[team]);
+    lbl_803ECE50[team] = DbCursorGetRowCount((DbCursor *)&lbl_8036AE08[team]);
+    DbCursorFirst((DbCursor *)&lbl_8036AE08[team]);
     for (i = 0; i < lbl_803ECE50[team]; i++) {
         lbl_8036AE60[team].mEntries[i].mId = fn_800808F8(&lbl_8036AE08[team]);
         lbl_8036AE60[team].mEntries[i].mIndex = i;
-        fn_8007A510((Object_8007A334 *)&lbl_8036AE08[team]);
+        DbCursorNext((DbCursor *)&lbl_8036AE08[team]);
     }
 }
 
@@ -1999,7 +1999,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
     }
     row = ResolveRow(list, row);
     if (row != -1) {
-        fn_8007A600((Object_8007A334 *)&lbl_8036AE08[list], row);
+        DbCursorSeek((DbCursor *)&lbl_8036AE08[list], row);
         fn_800127E4(list, pName, nameLength, 0);
         fn_8017F670(fn_80080ECC(&lbl_8036AE08[list]), pRole);
         if (pValues) {
@@ -2227,7 +2227,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
             }
         }
         if (fn_8017F584() == 6 && fn_80025708()) {
-            Object_8007A334 query;
+            DbCursor query;
             int team;
 
             fn_80083E40(&query, 0, 0x54415453);
@@ -2375,18 +2375,18 @@ int fn_80013CCC(int *pCount, int *pA, int *pB, int *pC)
     if (fn_801835A0()) {
         fn_801834DC();
     }
-    Query_80083E40 query;
+    TeamQuery query;
     query.mUnknown0 = 1;
     query.mUnknown4 = 3;
     fn_80083E40(&lbl_8036ADB0[1], &query, 0x54415453);
     *pA = 0;
-    *pCount = fn_8007A410(&lbl_8036ADB0[1]);
+    *pCount = DbCursorGetRowCount(&lbl_8036ADB0[1]);
     return 0;
 }
 
 void fn_80013D74(void)
 {
-    Object_8007A334 *pQuery = &lbl_8036ADB0[1];
+    DbCursor *pQuery = &lbl_8036ADB0[1];
 
     if (pQuery->mUnknown0) {
         fn_80083F68(pQuery);
@@ -2401,7 +2401,7 @@ void fn_80013D74(void)
 void fn_80013DCC(int mode, int id, char *pName, int nameLength, int *pA, int *pB, int *pC, int *pMode)
 {
     if (mode == 1) {
-        Object_8007A334 query;
+        DbCursor query;
 
         fn_80083E40(&query, 0, 0x54415453);
         fn_80084034(&query, id, 0);
@@ -2420,16 +2420,16 @@ void fn_80013DCC(int mode, int id, char *pName, int nameLength, int *pA, int *pB
 
 void fn_80013EAC(int mode, int row, int *pId, char *pName, int nameLength)
 {
-    Object_8007A334 query;
+    DbCursor query;
 
     if (mode == 1) {
-        int current = fn_8007A43C(&lbl_8036ADB0[1]);
+        int current = DbCursorGetRow(&lbl_8036ADB0[1]);
 
-        fn_8007A600(&lbl_8036ADB0[1], row);
+        DbCursorSeek(&lbl_8036ADB0[1], row);
         *pId = fn_80083FBC(&lbl_8036ADB0[1]);
         fn_80083F88(&lbl_8036ADB0[1], pName, nameLength);
         if (current != -1) {
-            fn_8007A600(&lbl_8036ADB0[1], current);
+            DbCursorSeek(&lbl_8036ADB0[1], current);
         }
     }
 }
@@ -2599,7 +2599,7 @@ void fn_8001442C(void)
 
 int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 {
-    Query_80083E40 query;
+    TeamQuery query;
     Pair_80014430 pair = { 0, 0 };
     unsigned char color[3];
     int mode;
@@ -2731,7 +2731,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         if (lbl_803EB9A8 == 0x6B) {
             fn_80084034(&lbl_8036ADB0[0], lbl_803EB97C[0], 0);
         } else {
-            fn_8007A444(&lbl_8036ADB0[0]);
+            DbCursorFirst(&lbl_8036ADB0[0]);
         }
     } else {
         fn_80011B60(&lbl_8036ADB0[0], 0, pair.mUnknown0);
@@ -2751,7 +2751,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
             lbl_803EB97C[1] = lbl_803EB97C[0];
             fn_80084034(&lbl_8036ADB0[1], lbl_803EB97C[0], 0);
         } else {
-            fn_8007A444(&lbl_8036ADB0[1]);
+            DbCursorFirst(&lbl_8036ADB0[1]);
             lbl_803EB97C[1] = fn_80083FBC(&lbl_8036ADB0[1]);
         }
     } else {
@@ -2834,21 +2834,21 @@ void fn_80014B98(void)
     if (fn_801801B4() == 1) {
         id0 = lbl_803EB97C[0];
         fn_80084034(&lbl_8036ADB0[0], id0, 0);
-        value0 = fn_8007A98C(&lbl_8036ADB0[0], 0x49524454);
+        value0 = DbCursorGetInt(&lbl_8036ADB0[0], 0x49524454);
         id1 = lbl_803EB97C[1];
         fn_80084034(&lbl_8036ADB0[1], id1, 0);
-        value1 = fn_8007A98C(&lbl_8036ADB0[1], 0x49524454);
+        value1 = DbCursorGetInt(&lbl_8036ADB0[1], 0x49524454);
     }
     if (lbl_8036ADB0[0].mUnknown0) {
         fn_80083F68(&lbl_8036ADB0[0]);
     }
-    Object_8007A334 *pCursor = &lbl_8036ADB0[1];
+    DbCursor *pCursor = &lbl_8036ADB0[1];
     if (pCursor->mUnknown0) {
         fn_80083F68(pCursor);
     }
     if (fn_801801B4() == 1) {
-        fn_8007CAEC(0, id0);
-        fn_8007CAEC(1, id1);
+        GameInfoSet(0, id0);
+        GameInfoSet(1, id1);
         fn_8022A508(0, id0, id0, 0, value0);
         fn_8022A508(1, id1, id1, 0, value1);
         fn_8022DC7C(0);
@@ -2896,7 +2896,7 @@ void fn_80014B98(void)
     if (fn_801801B4() == 1) {
         if (fn_8017F584() == 6 && lbl_803EB99C) {
             if (fn_80025708()) {
-                fn_80015D28(fn_800785C0()->mUnknown1BC);
+                fn_80015D28(ChalGetCurrent()->mUnknown1BC);
             } else {
                 fn_80015D28(fn_800A3444());
             }
@@ -2970,7 +2970,7 @@ void fn_800150FC(int team, int index, char *pBuffer, int size)
 
     index = ResolveRow(side, index);
     if (index != -1) {
-        fn_8007A600((Object_8007A334 *)&lbl_8036AE08[side], index);
+        DbCursorSeek((DbCursor *)&lbl_8036AE08[side], index);
         fn_800127E4(side, pBuffer, size, 1);
     } else {
         fn_801C3284(pBuffer, " ", size + 1);
@@ -3092,26 +3092,26 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
                  int textSize, int *pA, int *pB, int *pFlag)
 {
     if (!lbl_803EB9DC[index].mValid) {
-        fn_8007B684(lbl_802F43A8[index]);
-        fn_8007B8A4(pName, nameSize);
-        fn_8007B904((int)pTeam, teamSize);
-        fn_8007B93C((int)pText, textSize);
-        fn_8007B6FC(&lbl_803EB9DC[index].mUnknownAC, &lbl_803EB9DC[index].mUnknownB0);
-        fn_8007B6D4();
-        fn_8007D4E8();
-        fn_8007DB74(6, lbl_802F43A8[index]);
-        lbl_803EB9DC[index].mUnknownA8 = fn_8007DBB4(5);
-        fn_8007D52C();
+        EnvSelect(lbl_802F43A8[index]);
+        EnvGetUIName(pName, nameSize);
+        EnvGetEVLO((int)pTeam, teamSize);
+        EnvGetEVDE((int)pText, textSize);
+        EnvGetPictures(&lbl_803EB9DC[index].mUnknownAC, &lbl_803EB9DC[index].mUnknownB0);
+        EnvRelease();
+        RecordsBegin();
+        RecordsSeekRow(6, lbl_802F43A8[index]);
+        lbl_803EB9DC[index].mUnknownA8 = RecordsGetValue(5);
+        RecordsEnd();
         if (lbl_803EB9E5) {
             int index0 = fn_80186F7C(0);
             int index1 = fn_80186F7C(1);
             *pFlag = 1;
             fn_8022F4BC();
             if (index0 != -1) {
-                *pFlag = fn_8007B518(index0, lbl_802F43A8[index]);
+                *pFlag = EnvIsLocked(index0, lbl_802F43A8[index]);
             }
             if (index1 != -1 && *pFlag == 1) {
-                *pFlag = fn_8007B518(index1, lbl_802F43A8[index]);
+                *pFlag = EnvIsLocked(index1, lbl_802F43A8[index]);
             }
             if (index0 == -1 && index1 == -1) {
                 if (lbl_802F43A8[index] == 10 || lbl_802F43A8[index] == 11) {
@@ -3348,7 +3348,7 @@ int fn_80015F90(int control)
 
 void fn_80016038(void)
 {
-    Object_8007A334 query;
+    DbCursor query;
     if (lbl_803EB9E7 != -1) {
         fn_80087BE4(&query, lbl_803EB9E7);
         lbl_803EB9E8->mValues[0] = fn_80087C8C(&query, 10);
@@ -3630,7 +3630,7 @@ void fn_80016A08(int *pCount)
 {
     lbl_803EB9FE = fn_801869F0();
     *pCount = lbl_803EB9FE;
-    lbl_803EBA00 = new (0) Object_8007A334;
+    lbl_803EBA00 = new (0) DbCursor;
     if (lbl_803EB9FE > 0) {
         signed char indices[2];
         unsigned char auxiliary[2];
@@ -3641,7 +3641,7 @@ void fn_80016A08(int *pCount)
             }
         }
         lbl_803EB9FC = indices[0];
-        lbl_803EBA04 = new (0) Object_8007A334;
+        lbl_803EBA04 = new (0) DbCursor;
     } else {
         lbl_803EB9FC = -1;
     }
@@ -3690,7 +3690,7 @@ void fn_80016B60(int control, char *pText, int *pResult)
 void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)
 {
     Record_80088CE0 record;
-    fn_8007A600(lbl_803EBA00, index);
+    DbCursorSeek(lbl_803EBA00, index);
     fn_80088CE0(lbl_803EBA00, &record);
     fn_801C2E18(pText, record.mName);
     char *pDot = fn_801C3084(pText, '.');
@@ -3726,7 +3726,7 @@ void fn_80016D14(int control, char *pText, int size, int *pResult)
     }
     fn_80088B24(lbl_803EBA00, 1, lbl_803EB9FD);
     fn_801C3284(pText, lbl_802F43E4[lbl_803EB9FD], size);
-    *pResult = fn_8007A410(lbl_803EBA00);
+    *pResult = DbCursorGetRowCount(lbl_803EBA00);
 }
 
 int fn_80016DF4(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)

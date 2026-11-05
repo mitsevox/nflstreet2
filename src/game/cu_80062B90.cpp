@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801C1F94.h"
@@ -16,26 +16,26 @@ struct Record_80062B90 {
 
 extern "C" {
 int fn_80183360(void);
-void fn_80079974(int, short *, short *);
+void ChalGetTournamentScore(int, short *, short *);
 float fn_80237260(int stream);
-void fn_80079898(int, int, int);
-void fn_80079A50(int *, int);
-void fn_80079B2C(int *, int);
+void ChalSetTournamentScore(int, int, int);
+void ChalSaveTournamentTeams(int *, int);
+void ChalLoadTournamentTeams(int *, int);
 void fn_801834DC();
 void fn_80183368(int, int);
-Object_8007A334 *fn_80182DBC(void);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+DbCursor *fn_80182DBC(void);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 void fn_80188CBC(int, int, int, int, char *);
-int fn_800788A4();
-void fn_800788E8(int);
+int ChalGetTournamentSlot();
+void ChalSetTournamentSlot(int);
 int fn_801801B4();
 int fn_801801BC();
-void fn_80077F24();
+void ChalCloseCursors();
 void fn_8000FCD4(int a);
 void fn_8000473C(int, int);
-int fn_80078934();
+int ChalGetTournamentWon();
 int fn_801787DC(int a);
 }
 
@@ -141,7 +141,7 @@ extern "C" void fn_80062D54()
                 p->mUnknown0[k] = fn_80062C24(base + j);
             }
         }
-        fn_80079974(i, &p->mUnknown4[1], &p->mUnknown4[0]);
+        ChalGetTournamentScore(i, &p->mUnknown4[1], &p->mUnknown4[0]);
     }
 }
 
@@ -184,7 +184,7 @@ extern "C" void fn_80062F94()
             fn_80062E34(i, score);
             p->mUnknown4[0] = score[0];
             p->mUnknown4[1] = score[1];
-            fn_80079898(i, score[1], score[0]);
+            ChalSetTournamentScore(i, score[1], score[0]);
         }
     }
 }
@@ -218,12 +218,12 @@ extern "C" void fn_800630A4()
 
 extern "C" void fn_80063118()
 {
-    fn_80079A50(lbl_802D4ED8, 32);
+    ChalSaveTournamentTeams(lbl_802D4ED8, 32);
 }
 
 extern "C" void fn_80063144()
 {
-    fn_80079B2C(lbl_802D4ED8, 32);
+    ChalLoadTournamentTeams(lbl_802D4ED8, 32);
 }
 
 extern "C" void fn_80063170(int *pIndex)
@@ -238,10 +238,10 @@ extern "C" void fn_80063170(int *pIndex)
         values[2] = fn_80084204(fn_80182DBC());
         fn_80188CBC(0, 4, fn_80084158(fn_80182DBC()), 172, values);
     }
-    lbl_803EA614 = fn_800788A4();
+    lbl_803EA614 = ChalGetTournamentSlot();
     if (lbl_803EA614 == -1) {
         lbl_803EA614 = fn_802372EC(1, 32);
-        fn_800788E8(lbl_803EA614);
+        ChalSetTournamentSlot(lbl_803EA614);
         fn_800630A4();
         fn_80063118();
     } else {
@@ -272,7 +272,7 @@ extern "C" void fn_80063278(int value)
         team = fn_80062BE4(opponent);
     }
     fn_80063078();
-    fn_80077F24();
+    ChalCloseCursors();
     fn_801834DC();
     if (active) {
         fn_8000FCD4(value);
@@ -301,7 +301,7 @@ extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA
             fn_801C3284(names[i].mUnknown0->mpText, "TBD", names[i].mUnknown0->mLength);
         } else {
             *ids[i] = fn_80062BE4(team);
-            Object_8007A334 object;
+            DbCursor object;
             fn_80083E40(&object, 0, 0x54415453);
             fn_80084034(&object, *ids[i], 0);
             fn_80083F88(&object, name, 18);
@@ -322,7 +322,7 @@ extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA
 
 extern "C" void fn_800634B4(int *p)
 {
-    *p = fn_80078934();
+    *p = ChalGetTournamentWon();
 }
 
 extern "C" int fn_800634E4()
@@ -340,7 +340,7 @@ extern "C" void fn_800634F8()
         score[0] = fn_801787DC(1);
         score[1] = fn_801787DC(0);
     }
-    fn_80079898(lbl_803EA618, score[1], score[0]);
+    ChalSetTournamentScore(lbl_803EA618, score[1], score[0]);
     fn_80063034();
     fn_80062F94();
     fn_80063078();

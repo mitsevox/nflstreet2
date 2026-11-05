@@ -1,6 +1,6 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Class_80297BF8.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
@@ -67,8 +67,8 @@ int fn_80025708(void);
 void fn_8003A3F4(int a, int index);
 void fn_8003E174(int a);
 void fn_8004A230(unsigned char value);
-int fn_80074638(void);
-int fn_80076F40(int index);
+int SpchIGIsNarratorIdle(void);
+int SpchIGGetTeamSceneSpeaker(int index);
 void fn_800941B8(void);
 float fn_80094454(int handle);
 void fn_8009D8CC(int index);
@@ -206,7 +206,7 @@ void Class_80297BF8::vfn_05()
     fn_8010A220();
     if (fn_80025708() != 0) {
         Point_8017886C pos = {0.0f, 0.0f};
-        int spot = fn_800785C0()->mUnknown1C0;
+        int spot = ChalGetCurrent()->mUnknown1C0;
 
         if (spot != -1) {
             if (spot < 50) {
@@ -219,8 +219,8 @@ void Class_80297BF8::vfn_05()
         }
         fn_801780A8(pos);
         fn_801782B0();
-        if (fn_800785C0()->mUnknown1A4 != 0) {
-            fn_8009D964(4, fn_800785C0()->mUnknown1A4);
+        if (ChalGetCurrent()->mUnknown1A4 != 0) {
+            fn_8009D964(4, ChalGetCurrent()->mUnknown1A4);
             fn_8009D8CC(4);
         }
     } else {
@@ -239,10 +239,10 @@ void Class_80297BF8::vfn_05()
     }
     fn_800AFE20(fn_800BB694);
     fn_80067D4C(0x6e, 0);
-    if (fn_80076F40(0) != 0) {
+    if (SpchIGGetTeamSceneSpeaker(0) != 0) {
         fn_80067DB8(0x6d, 0, 0, 0, 0);
     }
-    if (fn_80076F40(1) != 0) {
+    if (SpchIGGetTeamSceneSpeaker(1) != 0) {
         fn_80067DB8(0x6d, 0, 1, 0, 0);
     }
     lbl_803EABA0 = 0;
@@ -471,7 +471,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             int blocked = 0;
 
             if (fn_80156704() != 0) {
-                blocked = fn_80074638() == 0;
+                blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
                 fn_800A7514(side);

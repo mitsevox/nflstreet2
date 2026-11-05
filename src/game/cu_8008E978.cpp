@@ -78,7 +78,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -106,9 +106,9 @@
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/Block_800BFAD0.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_800A3530.h"
 #include "game/Player_8003877C.h"
 
@@ -6648,7 +6648,7 @@ extern "C" int fn_800A8740(void)
 extern "C" {
 void fn_80147840(Object_8003DEC4 *pObject);
 void fn_800A8570(void);
-int fn_800737B8(void);
+int SpchIGGetSceneSpeaker(void);
 }
 
 extern "C" void fn_800A87E8(void)
@@ -6659,7 +6659,7 @@ extern "C" void fn_800A87E8(void)
         fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[0])->mpUnknown4);
         fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
         fn_80093410(lbl_803EC95C);
-        if (fn_800737B8() != 0) {
+        if (SpchIGGetSceneSpeaker() != 0) {
             fn_80067E3C(130, 0, 0, 0, 0, 0);
         }
         lbl_803EC95C = -1;
@@ -8950,7 +8950,7 @@ void fn_800BB8D4(void);
 void fn_800BBCF0(Record_800BAE7C *p);
 void fn_800BBDE0(void);
 void fn_8004A230(unsigned char value);
-unsigned char fn_800744A8(void);
+unsigned char SpchIGIsEnabled(void);
 void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_800940F0(int handle);
@@ -9032,9 +9032,9 @@ extern "C" int fn_800BB050(int value)
 {
     int result = 0;
 
-    if (fn_801F3E28() && fn_800744A8() && value == 0) {
+    if (fn_801F3E28() && SpchIGIsEnabled() && value == 0) {
         result = 1;
-    } else if (!(fn_801F3E28() && fn_800744A8()) && value == 0) {
+    } else if (!(fn_801F3E28() && SpchIGIsEnabled()) && value == 0) {
         result = 1;
     }
     return result;
@@ -9565,7 +9565,7 @@ void fn_80092F98(int handle);
 void fn_800940F0(int handle);
 void fn_80093348(int handle);
 void fn_8013FB44(void);
-int fn_800737B8(void);
+int SpchIGGetSceneSpeaker(void);
 int fn_80025708(void);
 void fn_8017DC08(void);
 int fn_80059004(void);
@@ -9826,7 +9826,7 @@ extern "C" void fn_800AA648(Entry_800AA80C *pEntries, int index)
 
 extern "C" void fn_800AA6D8(Entry_800AA80C *pEntries, int index)
 {
-    if (fn_800737B8() != 0) {
+    if (SpchIGGetSceneSpeaker() != 0) {
         fn_80067E3C(109, 0, 0, 0, 0, 0);
     }
     fn_800A9F64();
@@ -11403,7 +11403,7 @@ extern "C" void fn_800AE380(void)
     }
     if (fn_80025708() != 0
         && (fn_80059004() != 0
-            || (fn_80025708() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
+            || (fn_80025708() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
         lbl_803EAAE8 = 0;
     }
     if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
@@ -15810,7 +15810,7 @@ void Class_80297C60::vfn_02()
 }
 
 extern "C" {
-void fn_8007617C(void);
+void SpchIGFlushPlayResult(void);
 void fn_800BAAE4(void);
 void fn_800C4460(Sequence_800C4460 *p);
 void fn_800C4568(Sequence_800C4460 *p);
@@ -15824,7 +15824,7 @@ extern int lbl_803EAB80;
 }
 
 extern "C" {
-void fn_800761B0(void);
+void SpchIGUpdatePlayResult(void);
 void fn_800C45C0(Sequence_800C4460 *p, float dt);
 void fn_8017D678(void);
 }
@@ -15834,7 +15834,7 @@ void Class_80297C60::vfn_04(float dt)
     int finished;
 
     fn_8017D678();
-    fn_800761B0();
+    SpchIGUpdatePlayResult();
     vfn_10(dt);
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
@@ -15862,7 +15862,7 @@ void Class_80297C60::vfn_04(float dt)
 
 void Class_80297C60::vfn_05()
 {
-    fn_8007617C();
+    SpchIGFlushPlayResult();
     fn_800B14E4();
     fn_8009BA10(0);
     fn_800B8028();
@@ -15983,7 +15983,7 @@ Object_80039F5C *fn_800B6544(int index);
 void fn_800B6868(int a, int b, int c, int d);
 void fn_80148108(int mode);
 int fn_801481B0(void);
-int fn_800744FC(void);
+int SpchIGAreChannelsIdle(void);
 void fn_80162780(int a, int b);
 int fn_8011F32C(void);
 int fn_8011F228(void);
@@ -16030,7 +16030,7 @@ extern Record_800C432C lbl_803103F0[10];
 }
 
 extern "C" {
-int fn_80074638(void);
+int SpchIGIsNarratorIdle(void);
 void fn_80168A14(int team);
 int fn_80178E4C(void);
 void fn_8017DFA8(int index);
@@ -16095,7 +16095,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             int blocked = 0;
 
             if (fn_80156704() != 0) {
-                blocked = fn_80074638() == 0;
+                blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
                 done = 1;
@@ -16327,7 +16327,7 @@ extern "C" void fn_800BEC1C(int a, int index)
 
 extern "C" void fn_800BAD1C(void);
 extern "C" void fn_800BADD4(void);
-extern "C" void fn_80074358(int index);
+extern "C" void SpchIGPurgeChannel(int index);
 extern "C" int fn_8016EA68(void);
 extern "C" void fn_8016E008(int team);
 extern "C" void fn_800BD958(void);
@@ -16342,7 +16342,7 @@ extern "C" void fn_800BED54(unsigned char index)
         }
         break;
     case 1:
-        if (fn_800744FC() != 0) {
+        if (SpchIGAreChannelsIdle() != 0) {
             fn_800BACF4();
             lbl_803EABA8->mUnknownBC = 2;
         }
@@ -16353,7 +16353,7 @@ extern "C" void fn_800BED54(unsigned char index)
         }
         break;
     case 3:
-        if (fn_800744FC() != 0) {
+        if (SpchIGAreChannelsIdle() != 0) {
             fn_800BAD1C();
             lbl_803EABA8->mUnknownBC = 4;
         }
@@ -16368,7 +16368,7 @@ extern "C" void fn_800BED54(unsigned char index)
         unsigned int i;
 
         for (i = 0; i <= 2; i++) {
-            fn_80074358(i);
+            SpchIGPurgeChannel(i);
         }
         fn_800BADD4();
         fn_8013C824(fn_8013FA04(5), 10, 0);
@@ -16413,7 +16413,7 @@ extern "C" void fn_800BEFAC(int index)
     case 0:
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
-        } else if (fn_800744FC() != 0) {
+        } else if (SpchIGAreChannelsIdle() != 0) {
             lbl_803EABA8->mUnknownBC = 1;
             lbl_803EABA8->mSlots[index].mUnknown8 = 30;
         }
@@ -16421,7 +16421,7 @@ extern "C" void fn_800BEFAC(int index)
     case 1:
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
-        } else if (fn_800744FC() != 0) {
+        } else if (SpchIGAreChannelsIdle() != 0) {
             fn_80162780(1, 1);
             lbl_803EABA8->mUnknownC6 = state;
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
@@ -16705,10 +16705,10 @@ extern "C" void fn_800BF9DC(Class_80297CE8 *p)
         lbl_803EABA8->mUnknownB4 = -1;
     }
     if (fn_80025708() != 0) {
-        if (fn_800785C0()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
+        if (ChalGetCurrent()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
             fn_800A7514(0);
         }
-        if (fn_800785C0()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
+        if (ChalGetCurrent()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
             fn_800A7514(1);
         }
     }
@@ -18573,19 +18573,19 @@ extern "C" {
 void fn_80173D10(void);
 int fn_801C6280(int a, int b, void *p);
 void fn_8006F0C8(int value);
-void fn_80074DF8(int value);
-void fn_80074E90(int value);
-void fn_80074F28(int value);
-void fn_80076D4C(int value);
-void fn_80076D5C(int value);
-void fn_80076D6C(int value);
-void fn_80076D7C(int value);
-void fn_80076D8C(int value);
-void fn_80076D9C(int value);
-void fn_80075058(int value);
-void fn_800750F0(int value);
-void fn_80075188(int value);
-void fn_80076DAC(int value);
+void SpchIGSetWallTacklePlayer(int value);
+void SpchIGSetReceiverOpenPlayer(int value);
+void SpchIGSetStylingPlayer(int value);
+void SpchIGSetTackler(int value);
+void SpchIGSetPassTarget(int value);
+void SpchIGSetPassCatcher(int value);
+void SpchIGSetBallCarrier(int value);
+void SpchIGSetTurnoverPlayer(int value);
+void SpchIGSetScorer(int value);
+void SpchIGSetMissedCatchPlayer(int value);
+void SpchIGSetStruggleCarrier(int value);
+void SpchIGSetStruggleTackler(int value);
+void SpchIGSetDownedCarrier(int value);
 extern char lbl_802EC880[];
 }
 
@@ -18602,19 +18602,19 @@ void Class_80297AB8::vfn_03()
     fn_800271D4(lbl_803EA9E8);
     fn_801C6280(-1, 3, lbl_802EC880);
     fn_8006F0C8(127);
-    fn_80074DF8(0);
-    fn_80074E90(0);
-    fn_80074F28(0);
-    fn_80076D4C(0);
-    fn_80076D5C(0);
-    fn_80076D6C(0);
-    fn_80076D7C(0);
-    fn_80076D8C(0);
-    fn_80076D9C(0);
-    fn_80075058(0);
-    fn_800750F0(0);
-    fn_80075188(0);
-    fn_80076DAC(0);
+    SpchIGSetWallTacklePlayer(0);
+    SpchIGSetReceiverOpenPlayer(0);
+    SpchIGSetStylingPlayer(0);
+    SpchIGSetTackler(0);
+    SpchIGSetPassTarget(0);
+    SpchIGSetPassCatcher(0);
+    SpchIGSetBallCarrier(0);
+    SpchIGSetTurnoverPlayer(0);
+    SpchIGSetScorer(0);
+    SpchIGSetMissedCatchPlayer(0);
+    SpchIGSetStruggleCarrier(0);
+    SpchIGSetStruggleTackler(0);
+    SpchIGSetDownedCarrier(0);
     fn_800A2184();
 }
 

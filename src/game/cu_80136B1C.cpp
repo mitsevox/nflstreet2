@@ -19,7 +19,7 @@ int fn_8003FC68(void);
 void fn_8003FC70(Block_80170E64 *pBlock, int a);
 void fn_8003FE90(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
 void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
-void fn_80076D7C(int id);
+void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
 void fn_8013A440(Object_80137ABC *pBall);
@@ -481,7 +481,7 @@ void fn_80137A04(Object_80137ABC *pBall, Object_80039F5C *p)
     fn_8009BD2C(p, &pBall->mState.mUnknownB8);
     fn_8013B9C0(pBall, 1, 0);
     if (fn_800AD9B4() == 3) {
-        fn_80076D7C(p->mId);
+        SpchIGSetBallCarrier(p->mId);
     }
     pBall->mState.mUnknownD0 = 0;
     fn_8013A72C(pBall, 0.0f);

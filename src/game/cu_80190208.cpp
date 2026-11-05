@@ -1,5 +1,5 @@
 #include "game/cu_80190208.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 #include <string.h>
@@ -7,22 +7,22 @@
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
-int fn_8007A934(Object_8007A334 *pObject, int key);
+int DbCursorGetValue(DbCursor *pObject, int key);
 char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 }
 
 static signed char sIndex = -1;
 
 extern "C" {
-void fn_80190208(Object_8007A334 *pObject, int index)
+void fn_80190208(DbCursor *pObject, int index)
 {
-    fn_8007A334(pObject, 0x53544843, 0x58494843, 0, 0,
+    DbCursorOpen(pObject, 0x53544843, 0x58494843, 0, 0,
                 fn_8022F3D4(fn_8022F358(index)));
 }
 
-int fn_80190260(Object_8007A334 *pObject)
+int fn_80190260(DbCursor *pObject)
 {
-    return fn_8007A3C4(pObject);
+    return DbCursorClose(pObject);
 }
 
 void fn_80190280(int index)
@@ -140,11 +140,11 @@ int fn_801905E0(int index, int *pId, char *pName, int count, int *pEnabled)
 
 unsigned char fn_80190768(int id)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int value = 0;
     fn_80190208(&cursor, sIndex);
-    if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
-        value = fn_8007A934(&cursor, 0x4C554843);
+    if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
+        value = DbCursorGetValue(&cursor, 0x4C554843);
     }
     fn_80190260(&cursor);
     return value;
@@ -152,9 +152,9 @@ unsigned char fn_80190768(int id)
 
 int fn_80190808(int id)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80190208(&cursor, sIndex);
-    if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
+    if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4C554843, 1);
     }
     return fn_80190260(&cursor);
@@ -162,11 +162,11 @@ int fn_80190808(int id)
 
 int fn_801908A0(int id)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int value = 0;
     fn_80190208(&cursor, sIndex);
-    if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
-        value = fn_8007A934(&cursor, 0x4E454843);
+    if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
+        value = DbCursorGetValue(&cursor, 0x4E454843);
     }
     fn_80190260(&cursor);
     if (value) return 1;
@@ -175,9 +175,9 @@ int fn_801908A0(int id)
 
 int fn_8019094C(int id)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80190208(&cursor, sIndex);
-    if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
+    if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4E454843, 1);
     }
     return fn_80190260(&cursor);
@@ -185,9 +185,9 @@ int fn_8019094C(int id)
 
 int fn_801909E4(int id)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80190208(&cursor, sIndex);
-    if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
+    if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4E454843, 0);
     }
     return fn_80190260(&cursor);

@@ -1,5 +1,5 @@
 #include "game/Class_80148A58.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
@@ -40,8 +40,8 @@ extern "C" {
 void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
 void fn_8001B828(void);
-void fn_8007AEE8(Object_8007A334 *pObject);
-void fn_8007AF14(Object_8007A334 *pObject);
+void fn_8007AEE8(DbCursor *pObject);
+void fn_8007AF14(DbCursor *pObject);
 unsigned char fn_8007AFDC(int a);
 int fn_80082414(int index);
 int fn_801486A0(void);
@@ -243,7 +243,7 @@ void fn_8001C440(void)
     fn_8018D7E0();
     fn_8018C230(0, 1);
     {
-        Object_8007A334 object;
+        DbCursor object;
 
         fn_8007AEE8(&object);
         lbl_803EBA58->mUnknown324 = fn_8007AFDC(0);

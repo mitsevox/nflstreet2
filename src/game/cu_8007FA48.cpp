@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Record_80082B18.h"
 #include "game/Query_8007F19C.h"
@@ -141,36 +141,36 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
    wrappers use the common query entry point with this caller's object. */
 extern "C" void fn_8007FE04(Object_8008044C *p, void *arg, int flags)
 {
-    fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, 0, flags);
+    DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, 0, flags);
 }
 extern "C" void fn_8007FE40(Object_8008044C *p, void *arg, int selector, int flags)
 {
-    Object_80023BBC node;
+    DbFilter node;
     node.Set(6, 0x59414C5044494754LL, 3, selector);
-    fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
+    DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
 extern "C" void fn_8007FEB8(Object_8008044C *p, void *arg, int flags)
 {
-    Object_80023BBC node;
+    DbFilter node;
     node.Set(6, 0x59414C5047494C50LL, 3, 1);
-    fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
+    DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
 extern "C" void fn_8007FF30(Object_8008044C *p, void *arg, int selector, int flags)
 {
-    Object_80023BBC node;
+    DbFilter node;
     node.Set(6, 0x59414C5059545250LL, 3, selector);
-    fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
+    DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
 extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int value, int flags)
 {
-    Object_80023BBC root, left, right;
+    DbFilter root, left, right;
     root.Set(11, &left, &right);
     left.Set(6, 0x59414C5044494754LL, 3, selector);
     right.SetUnknown32(6, 0x59414C5044494750LL, 3, 0x10006);
     right.mUnknown16.mValue.mInt = value;
-    fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, &root, flags);
+    DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &root, flags);
 }
-extern "C" void fn_80080084(int value, int handle, int table, ColumnValue_802D6424 *columns)
+extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *columns)
 {
     Result_8007F19C result;
     Table_8007F19C tables[2];
@@ -204,7 +204,7 @@ extern "C" void fn_80080138(int selector, int index, int mode)
     }
     Table_8007F19C tables[2];
     Expression_8007F19C node;
-    ColumnValue_802D6424 columns[24];
+    DbColumnValue columns[24];
     for (int i = 0; i < 22; ++i) columns[i].Set(from, lbl_802D68D0[i], 0);
     columns[22].Set(from, 0x44494750, 0);
     columns[23].SetEnd();
@@ -264,7 +264,7 @@ extern "C" void fn_8008044C(Object_8008044C *p, Desc_8008044C *desc, int tag)
 }
 extern "C" void fn_8008056C(Object_8008044C *p)
 {
-    fn_8007A3C4(reinterpret_cast<Object_8007A334 *>(p));
+    DbCursorClose(reinterpret_cast<DbCursor *>(p));
 }
 
 extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, int mode)

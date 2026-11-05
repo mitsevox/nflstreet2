@@ -1,5 +1,5 @@
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_80233EAC.h"
 #include "game/cu_8015D3EC.h"
 #include "game/cu_80047E28.h"
@@ -18,10 +18,10 @@ struct QueueEntry_8031C098 {
 #define NO_MODEL 0xFFFF
 
 extern "C" {
-void fn_8007CC50(Object_8007A334 *pObject);
-void fn_8007CCC4(Object_8007A334 *pObject);
-void fn_8007CCE4(Object_8007A334 *pObject, int id, int *pResult);
-int fn_8007CD78(Object_8007A334 *pObject);
+void HairListOpen(DbCursor *pObject);
+void HairListClose(DbCursor *pObject);
+void HairListFind(DbCursor *pObject, int id, int *pResult);
+int HairListGetModel(DbCursor *pObject);
 void fn_801A13A8(ModelLod_802DF190 *pLod);
 void fn_801A13B4(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, Skeleton_80041930 *pSkeleton);
 void fn_801A13D8(ModelLod_802DF190 *pLod, Skeleton_80041930 *pSkeleton);
@@ -1137,12 +1137,12 @@ int fn_8015F5BC(const char *pName)
 
 void fn_8015F638(int style, int shape, int hat, int *pIds)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
-    fn_8007CC50(&cursor);
-    fn_8007CCE4(&cursor, style, 0);
-    style = fn_8007CD78(&cursor);
-    fn_8007CCC4(&cursor);
+    HairListOpen(&cursor);
+    HairListFind(&cursor, style, 0);
+    style = HairListGetModel(&cursor);
+    HairListClose(&cursor);
     style = style * 28 + shape * 4;
     pIds[0] = style + 1;
     if (hat) {

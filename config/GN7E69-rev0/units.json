@@ -2240,9 +2240,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007A3C4.cpp",
+      "source": "src/game/DbCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/cu_8007A3C4.cpp) and its type, source-form and function rows.",
+      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/DbCursor.cpp) and its type, source-form and function rows.",
       "sections": [
         {
           "section": ".text",
@@ -5231,9 +5231,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074D70.cpp",
+      "source": "src/game/SpchIGWallTackle.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074D70-0x80074E08 (src/game/cu_80074D70.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074D70-0x80074E08 (src/game/SpchIGWallTackle.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5250,9 +5250,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074684.cpp",
+      "source": "src/game/SpchIGTutorial.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074684-0x800747DC (src/game/cu_80074684.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074684-0x800747DC (src/game/SpchIGTutorial.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5269,9 +5269,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074E08.cpp",
+      "source": "src/game/SpchIGReceiverOpen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074E08-0x80074EA0 (src/game/cu_80074E08.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074E08-0x80074EA0 (src/game/SpchIGReceiverOpen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5288,9 +5288,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074EA0.cpp",
+      "source": "src/game/SpchIGStyling.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074EA0-0x80074F38 (src/game/cu_80074EA0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074EA0-0x80074F38 (src/game/SpchIGStyling.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5307,9 +5307,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074F38.cpp",
+      "source": "src/game/SpchIGMissedCatch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074F38-0x80075068 (src/game/cu_80074F38.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074F38-0x80075068 (src/game/SpchIGMissedCatch.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5332,9 +5332,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075068.cpp",
+      "source": "src/game/SpchIGStruggleCarrier.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075068-0x80075100 (src/game/cu_80075068.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80075068-0x80075100 (src/game/SpchIGStruggleCarrier.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5351,9 +5351,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075100.cpp",
+      "source": "src/game/SpchIGStruggleTackler.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075100-0x80075198 (src/game/cu_80075100.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80075100-0x80075198 (src/game/SpchIGStruggleTackler.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5621,9 +5621,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007355C.cpp",
+      "source": "src/game/SpchIGInit.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007355C-0x80073620 (src/game/cu_8007355C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007355C-0x80073620 (src/game/SpchIGInit.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5640,9 +5640,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80073620.cpp",
+      "source": "src/game/SpchIGSceneLine.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80073620-0x80073830 (src/game/cu_80073620.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80073620-0x80073830 (src/game/SpchIGSceneLine.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -6922,9 +6922,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800756E8.cpp",
+      "source": "src/game/SpchIGPlayResult.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/cu_800756E8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/SpchIGPlayResult.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -6947,7 +6947,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80076DB4.cpp",
+      "source": "src/game/SpchIGTeamScene.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80076DB4-0x80076F6C and its data, compiler and source-form rows.",
       "sections": [
@@ -7053,9 +7053,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007B4C8.cpp",
+      "source": "src/game/EnvDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/cu_8007B4C8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/EnvDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7090,9 +7090,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80073830.cpp",
+      "source": "src/game/SpchIGSystem.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/cu_80073830.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/SpchIGSystem.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7158,9 +7158,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007C9D4.cpp",
+      "source": "src/game/GameInfo.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007C9D4-0x8007CC50 (src/game/cu_8007C9D4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007C9D4-0x8007CC50 (src/game/GameInfo.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7201,9 +7201,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007C7E8.cpp",
+      "source": "src/game/GamebreakerDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007C7E8-0x8007C9D4 (src/game/cu_8007C7E8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007C7E8-0x8007C9D4 (src/game/GamebreakerDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7770,9 +7770,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80076F6C.cpp",
+      "source": "src/game/SpchIGPreSnap.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80076F6C-0x800775F0 (src/game/cu_80076F6C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80076F6C-0x800775F0 (src/game/SpchIGPreSnap.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7795,9 +7795,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800775F0.cpp",
+      "source": "src/game/ChalGoal.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/cu_800775F0.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/ChalGoal.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7808,9 +7808,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80077A24.cpp",
+      "source": "src/game/Challenge.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/cu_80077A24.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/cu_800775F0.cpp (0x800775F0-0x80077A24).",
+      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/Challenge.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/ChalGoal.cpp (0x800775F0-0x80077A24).",
       "sections": [
         {
           "section": ".text",
@@ -9643,9 +9643,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007EEFC.cpp",
+      "source": "src/game/LogoList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007EEFC-0x8007F12C (src/game/cu_8007EEFC.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007EEFC-0x8007F12C (src/game/LogoList.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9674,9 +9674,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007E514.cpp",
+      "source": "src/game/ProfileUnlocks.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007E514-0x8007EEFC (src/game/cu_8007E514.cpp), its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007E514-0x8007EEFC (src/game/ProfileUnlocks.cpp), its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9699,9 +9699,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007DDC8.cpp",
+      "source": "src/game/GearLock.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007DDC8-0x8007E514 (src/game/cu_8007DDC8.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007DDC8-0x8007E514 (src/game/GearLock.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9718,9 +9718,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007CC50.cpp",
+      "source": "src/game/HairList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/cu_8007CC50.cpp), its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/HairList.cpp), its type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9731,9 +9731,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007CDA0.cpp",
+      "source": "src/game/Records.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007CDA0-0x8007DDC8 (src/game/cu_8007CDA0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007CDA0-0x8007DDC8 (src/game/Records.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -10969,9 +10969,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007342C.cpp",
+      "source": "src/game/SndgIGSystem.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/cu_8007342C.cpp) and its .rodata and .sbss rows.",
+      "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/SndgIGSystem.cpp) and its .rodata and .sbss rows.",
       "sections": [
         {
           "section": ".text",
@@ -11425,9 +11425,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800747DC.cpp",
+      "source": "src/game/SpchIGPlays.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800747DC-0x80074D70 (src/game/cu_800747DC.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800747DC-0x80074D70 (src/game/SpchIGPlays.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11438,9 +11438,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007A24C.cpp",
+      "source": "src/game/DbCursorOpen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/cu_8007A24C.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/DbCursorOpen.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11483,9 +11483,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075198.cpp",
+      "source": "src/game/SpchIGContext.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/cu_80075198.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/SpchIGContext.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",

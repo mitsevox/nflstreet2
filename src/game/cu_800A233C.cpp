@@ -139,14 +139,14 @@ extern "C" int fn_800A26C4(void)
 
 extern "C" {
 int fn_800A2760(void);
-int fn_8007B754(void);
-float fn_8007B784(void);
-float fn_8007B7B4(void);
-float fn_8007B7E4(void);
-float fn_8007B814(void);
-int fn_8007B844(void);
-float fn_8007B874(void);
-int fn_8007B974(void);
+int EnvGetEVTL(void);
+float EnvGetEVPL(void);
+float EnvGetEVPF(void);
+float EnvGetEVWD(void);
+float EnvGetEVWL(void);
+int EnvGetEVDS(void);
+float EnvGetEVED(void);
+int EnvIsENVFSet(void);
 int fn_800A33B0(void);
 float fn_80237260(int stream);
 int fn_801CFFD0(int a, int b);
@@ -157,8 +157,8 @@ void fn_80147D74(int index, unsigned int color, float value, unsigned int count)
 extern unsigned char lbl_802D7D90[][4];
 extern int lbl_802D7DC0[];
 
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
+void EnvSelect(int id);
+void EnvRelease(void);
 void fn_800A29AC(void);
 void fn_800A29D8(int mode);
 void fn_800A2D2C(void);
@@ -197,14 +197,14 @@ extern "C" void fn_800A2848(void)
     lbl_8030E6E8.mUnknownA = first + 3;
     lbl_8030E6E8.mUnknownC = first + 8;
     lbl_8030E6E8.mUnknownE = first + 9;
-    lbl_8030E6E8.mUnknown40 = fn_8007B754();
-    lbl_8030E6E8.mUnknown4C = fn_8007B784();
-    lbl_8030E6E8.mUnknown50 = fn_8007B7B4();
-    lbl_8030E6E8.mUnknown54 = (int)(fn_8007B7E4() * 46603.379f);
-    lbl_8030E6E8.mUnknown58 = fn_8007B814();
-    lbl_8030E6E8.mUnknown64 = fn_8007B844();
-    lbl_8030E6E8.mUnknown68 = fn_8007B874();
-    lbl_8030E6E8.mUnknown3C = fn_8007B974();
+    lbl_8030E6E8.mUnknown40 = EnvGetEVTL();
+    lbl_8030E6E8.mUnknown4C = EnvGetEVPL();
+    lbl_8030E6E8.mUnknown50 = EnvGetEVPF();
+    lbl_8030E6E8.mUnknown54 = (int)(EnvGetEVWD() * 46603.379f);
+    lbl_8030E6E8.mUnknown58 = EnvGetEVWL();
+    lbl_8030E6E8.mUnknown64 = EnvGetEVDS();
+    lbl_8030E6E8.mUnknown68 = EnvGetEVED();
+    lbl_8030E6E8.mUnknown3C = EnvIsENVFSet();
     switch (lbl_8030E6E8.mUnknown40) {
     case 0:
         lbl_8030E6E8.mUnknown44 = 31;
@@ -282,7 +282,7 @@ extern "C" void fn_800A2E80(int index, int count)
 
 extern "C" void fn_800A2F48(void)
 {
-    fn_8007B684(lbl_8030E6E8.mUnknown0);
+    EnvSelect(lbl_8030E6E8.mUnknown0);
     fn_800A2848();
     fn_800A29AC();
     lbl_8030E6E8.mpUnknown8C0 = fn_801A566C(lbl_8030E6E8.mUnknown0);
@@ -307,7 +307,7 @@ extern "C" void fn_800A2F48(void)
     }
     lbl_8030E6E8.mpUnknown8C8 = lbl_802D7DF0[lbl_8030E6E8.mUnknown0];
     fn_800A2E80(lbl_8030E6E8.mUnknown0, 1);
-    fn_8007B6D4();
+    EnvRelease();
     lbl_803EA9F0 = 1;
 }
 

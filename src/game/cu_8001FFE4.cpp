@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_8021D7B8.h"
 
 struct Buffer_80020170 {
@@ -27,16 +27,16 @@ void fn_80011600(int a, int b, int c);
 void fn_80014294(int a, int b);
 void fn_80015D28(int a);
 void fn_80027E18(unsigned char value);
-int fn_800231B0(Object_8007A334 *pObject, int a, int *pResult);
-int fn_800231E8(Object_8007A334 *pObject);
-int fn_80023210(Object_8007A334 *pObject);
-int fn_80023238(Object_8007A334 *pObject);
-void fn_80023260(Object_8007A334 *pObject, char *pData, int size);
-void fn_80023294(Object_8007A334 *pObject, char *pData, int size);
-void fn_8007EBDC(Object_8007A334 *pObject, int db);
-void fn_8007EC34(Object_8007A334 *pObject);
-int fn_8007EC54(Object_8007A334 *pObject, int a);
-void fn_8007ECBC(int db, int a);
+int fn_800231B0(DbCursor *pObject, int a, int *pResult);
+int fn_800231E8(DbCursor *pObject);
+int fn_80023210(DbCursor *pObject);
+int fn_80023238(DbCursor *pObject);
+void fn_80023260(DbCursor *pObject, char *pData, int size);
+void fn_80023294(DbCursor *pObject, char *pData, int size);
+void TeamLockOpen(DbCursor *pObject, int db);
+void TeamLockClose(DbCursor *pObject);
+int TeamLockIsHidden(DbCursor *pObject, int a);
+void TeamUnlock(int db, int a);
 unsigned char fn_80087F70(void);
 unsigned char fn_80087FD0(void);
 int fn_80088068(int id);
@@ -65,7 +65,7 @@ void fn_80020328(void);
 void fn_80020410(void);
 }
 
-static Object_8007A334 lbl_8036B334;
+static DbCursor lbl_8036B334;
 static unsigned char lbl_803EBA98 = 0;
 static unsigned char lbl_803EBA99 = 0;
 
@@ -187,14 +187,14 @@ void fn_80020328(void)
 
 void fn_80020410(void)
 {
-    Object_8007A334 object;
+    DbCursor object;
 
     int db = fn_8022F384(fn_8022F4BC());
-    fn_8007EBDC(&object, db);
-    int found = fn_8007EC54(&object, 0x21);
-    fn_8007EC34(&object);
+    TeamLockOpen(&object, db);
+    int found = TeamLockIsHidden(&object, 0x21);
+    TeamLockClose(&object);
     if (fn_800881B8() && found) {
-        fn_8007ECBC(db, 0x21);
+        TeamUnlock(db, 0x21);
     }
 }
 }

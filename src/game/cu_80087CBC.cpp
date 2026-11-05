@@ -1,20 +1,20 @@
 #include <stdio.h>
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-int fn_8007A934(Object_8007A334 *pObject, int key);
+int DbCursorGetValue(DbCursor *pObject, int key);
 int fn_80168ED0(int a);
 int fn_801C302C(const char *s1, const char *s2, int n);
 
-void fn_80087CBC(Object_8007A334 *pCursor);
-void fn_80087CFC(Object_8007A334 *pCursor);
-int fn_80087D1C(Object_8007A334 *pCursor, int key);
-unsigned char fn_80087D50(Object_8007A334 *pCursor);
-int fn_80087D7C(Object_8007A334 *pCursor);
-unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
+void fn_80087CBC(DbCursor *pCursor);
+void fn_80087CFC(DbCursor *pCursor);
+int fn_80087D1C(DbCursor *pCursor, int key);
+unsigned char fn_80087D50(DbCursor *pCursor);
+int fn_80087D7C(DbCursor *pCursor);
+unsigned char fn_80087DA4(DbCursor *pCursor, int column);
 }
 
 static int lbl_802D6C14[4] = {
@@ -23,32 +23,32 @@ static int lbl_802D6C14[4] = {
 
 extern "C" {
 
-void fn_80087CBC(Object_8007A334 *pCursor)
+void fn_80087CBC(DbCursor *pCursor)
 {
-    fn_8007A334(pCursor, 0x49445541, 0x4F464C50, 0, 0, 0x54415453);
+    DbCursorOpen(pCursor, 0x49445541, 0x4F464C50, 0, 0, 0x54415453);
 }
 
-void fn_80087CFC(Object_8007A334 *pCursor)
+void fn_80087CFC(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
-int fn_80087D1C(Object_8007A334 *pCursor, int key)
+int fn_80087D1C(DbCursor *pCursor, int key)
 {
-    return fn_8007A894(pCursor, 0x4F464C50, key, 0, 0);
+    return DbCursorFindValue(pCursor, 0x4F464C50, key, 0, 0);
 }
 
-unsigned char fn_80087D50(Object_8007A334 *pCursor)
+unsigned char fn_80087D50(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x4F494650);
+    return DbCursorGetInt(pCursor, 0x4F494650);
 }
 
-int fn_80087D7C(Object_8007A334 *pCursor)
+int fn_80087D7C(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x44494250);
+    return DbCursorGetInt(pCursor, 0x44494250);
 }
 
-unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column)
+unsigned char fn_80087DA4(DbCursor *pCursor, int column)
 {
     Object_800670B4 object;
     Record_80067338 record;
@@ -75,7 +75,7 @@ unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column)
         }
     }
     if (match) {
-        signed char number = fn_8007A934(pCursor, lbl_802D6C14[column]);
+        signed char number = DbCursorGetValue(pCursor, lbl_802D6C14[column]);
 
         sprintf(text, "%02d", number);
         fn_800670B4(tag, mode, 0, &object);

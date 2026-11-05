@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
@@ -25,7 +25,7 @@ int fn_8005FC7C(void);
 void fn_80060278(void);
 int fn_800602D8(void);
 int fn_800602E0(void);
-int fn_80078934();
+int ChalGetTournamentWon();
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080920(Object_8008044C *pObject);
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
@@ -34,9 +34,9 @@ void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080D10(Object_8008044C *pObject);
 int fn_80081188(Object_8008044C *pObject);
 int fn_800812E0(Object_8008044C *pObject, int a);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 void fn_8015CCB4(int value);
 void fn_8017F670(int a, char *pText);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
@@ -94,10 +94,10 @@ static unsigned char lbl_803ECE89;
 extern "C" {
 void fn_8001D314(int *pCount, int *pId, Arg_8018399C text)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     char name[18];
 
-    *pCount = fn_8007A410((Object_8007A334 *)&lbl_8036B308);
+    *pCount = DbCursorGetRowCount((DbCursor *)&lbl_8036B308);
     *pId = lbl_803ECE78;
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, lbl_803ECE78, 0);
@@ -110,7 +110,7 @@ void fn_8001D3D0(int index, int *pId, Arg_8018399C text, Arg_8018399C label)
 {
     char name[27];
 
-    if (fn_8007A600((Object_8007A334 *)&lbl_8036B308, index)) {
+    if (DbCursorSeek((DbCursor *)&lbl_8036B308, index)) {
         *pId = fn_800808F8(&lbl_8036B308);
         fn_80080B08(&lbl_8036B308, name, 27);
         fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
@@ -144,25 +144,25 @@ void fn_8001D4D4(void)
 {
     void *pList = fn_8021EA44(1);
 
-    if (fn_8007A444((Object_8007A334 *)&lbl_8036B2B0)) {
+    if (DbCursorFirst((DbCursor *)&lbl_8036B2B0)) {
         do {
             fn_8021E2B4(pList, 10, fn_80080D10(&lbl_8036B2B0));
-        } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2B0));
+        } while (DbCursorNext((DbCursor *)&lbl_8036B2B0));
     }
-    fn_8007A444((Object_8007A334 *)&lbl_8036B2B0);
+    DbCursorFirst((DbCursor *)&lbl_8036B2B0);
     if (lbl_803ECE89 == 0) {
-        if (fn_8007A444((Object_8007A334 *)&lbl_8036B2DC)) {
+        if (DbCursorFirst((DbCursor *)&lbl_8036B2DC)) {
             do {
                 fn_8021E2B4(pList, 10, fn_80080D10(&lbl_8036B2DC));
-            } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2DC));
+            } while (DbCursorNext((DbCursor *)&lbl_8036B2DC));
         }
-        fn_8007A444((Object_8007A334 *)&lbl_8036B2DC);
+        DbCursorFirst((DbCursor *)&lbl_8036B2DC);
     }
 }
 
 void fn_8001D5A8(int db)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     QueryResult result;
     Desc_8008044C desc;
     int ids[13] = { -1 };
@@ -188,17 +188,17 @@ void fn_8001D5A8(int db)
     fn_8008044C(&lbl_8036B308, &desc, 0x54415453);
     fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &lbl_803ECE84,
                 lbl_803ECE78);
-    rows = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
+    rows = DbCursorGetRowCount((DbCursor *)&lbl_8036B2DC);
     lbl_803ECE89 = rows == 0;
     lbl_803ECE70 = rows == 6;
     value = fn_800602D8();
-    fn_8007A334(&cursor, value, 0x44494750, 0, 0, 0x54415453);
-    n = fn_8007A410(&cursor);
+    DbCursorOpen(&cursor, value, 0x44494750, 0, 0, 0x54415453);
+    n = DbCursorGetRowCount(&cursor);
     fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
     n = count;
     fn_8022C628(0x54415453, 0x4D414554, &lbl_803ECE80, &teamCount);
     for (i = 0; i < n; i++) {
-        if (fn_8007A600(&cursor, i)) {
+        if (DbCursorSeek(&cursor, i)) {
             fn_8007ABA4(&cursor, 0x44494F50, ids[i]);
             fn_8007AA90(&cursor, 0x44494F50, -1);
             fn_8007ABA4(&cursor, 0x44494750, ids[i]);
@@ -206,7 +206,7 @@ void fn_8001D5A8(int db)
         }
     }
     fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
-    fn_8007A3C4(&cursor);
+    DbCursorClose(&cursor);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = lbl_803ECE80;
@@ -225,16 +225,16 @@ void fn_8001D930(void)
 {
     void *pList = fn_8021EA44(1);
 
-    if (fn_8007A444((Object_8007A334 *)&lbl_8036B2B0)) {
+    if (DbCursorFirst((DbCursor *)&lbl_8036B2B0)) {
         do {
             fn_8021E72C(pList, 10, fn_80080D10(&lbl_8036B2B0));
-        } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2B0));
+        } while (DbCursorNext((DbCursor *)&lbl_8036B2B0));
     }
     if (lbl_803ECE89 == 0) {
-        if (fn_8007A444((Object_8007A334 *)&lbl_8036B2DC)) {
+        if (DbCursorFirst((DbCursor *)&lbl_8036B2DC)) {
             do {
                 fn_8021E72C(pList, 10, fn_80080D10(&lbl_8036B2DC));
-            } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2DC));
+            } while (DbCursorNext((DbCursor *)&lbl_8036B2DC));
         }
     }
 }
@@ -267,7 +267,7 @@ void fn_8001D9EC(int direction)
     } else if (lbl_803ECE68 >= lbl_803ECE64) {
         lbl_803ECE68 = 0;
     }
-    fn_8007A600((Object_8007A334 *)lbl_803ECE74, lbl_803ECE68);
+    DbCursorSeek((DbCursor *)lbl_803ECE74, lbl_803ECE68);
     lbl_803ECE6C = fn_800808F8(lbl_803ECE74);
     fn_80022680(0, lbl_803ECE6C, 0);
 }
@@ -330,7 +330,7 @@ int fn_8001DCFC(void)
         }
         lbl_803ECE74 = &lbl_8036B2B0;
     }
-    lbl_803ECE64 = fn_8007A410((Object_8007A334 *)lbl_803ECE74);
+    lbl_803ECE64 = DbCursorGetRowCount((DbCursor *)lbl_803ECE74);
     lbl_803ECE68 = 0;
     fn_8001D9EC(4);
     return id;
@@ -361,9 +361,9 @@ unsigned char fn_8001DD9C(void)
         fn_8001D5A8(lbl_803ECE7C);
     } else {
         Desc_8008044C desc;
-        Object_80023BBC node;
-        Object_80023BBC left;
-        Object_80023BBC right;
+        DbFilter node;
+        DbFilter left;
+        DbFilter right;
         int count;
         int rows;
         int i;
@@ -378,32 +378,32 @@ unsigned char fn_8001DD9C(void)
         left.Set(6, 0x59414C5044494754LL, 3, lbl_803ECE78);
         right.SetUnknown32(6, 0x59414C5044494F50LL, 3, 0x10006);
         right.mUnknown16.mValue.mInt = 32756;
-        fn_8007A334((Object_8007A334 *)&lbl_8036B2DC, 0x59414C50, 0x44494750, lbl_802F45AC, &node, 0x54415453);
+        DbCursorOpen((DbCursor *)&lbl_8036B2DC, 0x59414C50, 0x44494750, lbl_802F45AC, &node, 0x54415453);
         desc.mUnknown12 = 0;
         desc.mUnknown4 = 1;
         desc.mUnknown8 = lbl_803ECE78;
         desc.mUnknown0 = 2;
         fn_8008044C(&lbl_8036B308, &desc, 0x54415453);
-        count = fn_8007A410((Object_8007A334 *)&lbl_8036B2B0);
+        count = DbCursorGetRowCount((DbCursor *)&lbl_8036B2B0);
         lbl_803ECE89 = count == 0;
-        rows = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
+        rows = DbCursorGetRowCount((DbCursor *)&lbl_8036B2DC);
         if (rows == 15) {
             lbl_803ECE70 = 1;
         } else if (rows <= 13) {
             lbl_803ECE70 = 0;
         } else {
             lbl_803ECE70 = 1;
-            fn_8007A444((Object_8007A334 *)&lbl_8036B2DC);
+            DbCursorFirst((DbCursor *)&lbl_8036B2DC);
             for (i = 0; i < count; i++) {
                 if (fn_80080920(&lbl_8036B2DC) == 32756) {
                     lbl_803ECE70 = 0;
                     break;
                 }
-                fn_8007A510((Object_8007A334 *)&lbl_8036B2DC);
+                DbCursorNext((DbCursor *)&lbl_8036B2DC);
             }
-            fn_8007A444((Object_8007A334 *)&lbl_8036B2DC);
+            DbCursorFirst((DbCursor *)&lbl_8036B2DC);
         }
-        fn_80078934();
+        ChalGetTournamentWon();
         fn_8001D4D4();
     }
     fn_80022398();
@@ -412,7 +412,7 @@ unsigned char fn_8001DD9C(void)
     fn_80022730(0, lbl_802F4598.mValue);
     lbl_803EBA68 = 1;
     lbl_803EBA6C = 0;
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, lbl_803ECE78, 0);
     if (fn_80084438(&cursor) == 0) {

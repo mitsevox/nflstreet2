@@ -84,7 +84,7 @@ void fn_8004625C(void *p, int id, const unsigned char *pPaletteIndices)
     palettes.mpColorNums = indices;
     for (int i = 0; i < 25; i++) {
         palettes.mpColorNums[i] = i;
-        fn_80079FBC(pPaletteIndices[i], &palettes.mpPalettes[i]);
+        DbColPalGetPalette(pPaletteIndices[i], &palettes.mpPalettes[i]);
     }
     fn_8004605C(p, &lbl_803EC7B0[id], &palettes);
 }

@@ -1,14 +1,14 @@
 #include "game/Object_80039F5C.h"
-#include "game/Object_8007A334.h"
-#include "game/Object_800785C0.h"
+#include "game/DbCursor.h"
+#include "game/Challenge.h"
 #include "game/Block_800A70F4.h"
 #include "game/cu_80067C10.h"
 
-struct Record_8007C84C;
+struct GamebreakerRecord;
 
 extern "C" {
-int fn_8007C7E8(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007C84C(Object_8007A334 *pCursor, Record_8007C84C *pOut);
+int GamebreakerFind(DbCursor *pCursor, int key, int *pResult);
+void GamebreakerRead(DbCursor *pCursor, GamebreakerRecord *pOut);
 void fn_800A6658(int team);
 void fn_800A6CB0(int id);
 void fn_800A6DA4(void);
@@ -31,7 +31,7 @@ extern int lbl_802D7EFC[][3];
 
 extern "C" void fn_800A7B5C(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int row;
     int quiet = 0;
     unsigned char team;
@@ -49,15 +49,15 @@ extern "C" void fn_800A7B5C(void)
             if (fn_80177F70() != 6) {
                 fn_80178308();
             }
-            fn_8007A308(&cursor, 'KRBG', 'DIBG');
+            DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
             fn_800A6658(team);
             if (team == fn_80178308()) {
-                fn_8007C7E8(&cursor, 0, &row);
+                GamebreakerFind(&cursor, 0, &row);
             } else {
-                fn_8007C7E8(&cursor, 1, &row);
+                GamebreakerFind(&cursor, 1, &row);
             }
-            fn_8007C84C(&cursor, (Record_8007C84C *)lbl_803EC954[team]);
-            fn_8007A3C4(&cursor);
+            GamebreakerRead(&cursor, (GamebreakerRecord *)lbl_803EC954[team]);
+            DbCursorClose(&cursor);
             lbl_803EC954[team]->mUnknown10 = 10000;
             if (lbl_803EC95C == -1) {
                 fn_800A6DA4();
@@ -78,8 +78,8 @@ extern "C" void fn_800A7B5C(void)
             fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
             if (fn_80025708() != 0 &&
-                ((team == 0 && fn_800785C0()->mUnknown1C3 != 0) ||
-                 (team == 1 && fn_800785C0()->mUnknown1C2 != 0))) {
+                ((team == 0 && ChalGetCurrent()->mUnknown1C3 != 0) ||
+                 (team == 1 && ChalGetCurrent()->mUnknown1C2 != 0))) {
                 quiet = 1;
             }
             if (!quiet) {

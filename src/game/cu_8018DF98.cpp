@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "game/fn_801FCE10.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_8018EC68.h"
 
 extern "C" {
@@ -16,7 +16,7 @@ int fn_80086BA4(int index);
 int fn_80086A64(void);
 int fn_80086994(void);
 int fn_80086B50(void);
-void fn_8018B8B0(Object_8007A334 *pCursor);
+void fn_8018B8B0(DbCursor *pCursor);
 
 void fn_8018E55C(int index);
 void fn_8018E7A0(int index, int value);
@@ -54,9 +54,9 @@ void fn_8018E02C(int index, int mask, int set)
     fn_801FCE10(0, "use \x8c update 'TADS' set 'GLFS' = \x85\n", db, flags);
 }
 
-static int fn_8018E0B0(Object_8007A334 *pCursor)
+static int fn_8018E0B0(DbCursor *pCursor)
 {
-    return fn_8007A410(pCursor) == 0;
+    return DbCursorGetRowCount(pCursor) == 0;
 }
 
 int fn_8018E0D8(int n)
@@ -72,17 +72,17 @@ int fn_8018E0D8(int n)
     return 0;
 }
 
-void fn_8018E11C(Object_8007A334 *pCursor, int index)
+void fn_8018E11C(DbCursor *pCursor, int index)
 {
-    fn_8007A334(pCursor, 0x59505453, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x59505453, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
 }
 
-void fn_8018E174(Object_8007A334 *pCursor)
+void fn_8018E174(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
-int fn_8018E194(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
+int fn_8018E194(DbCursor *pCursor, int row, char *pBuffer, int size)
 {
     int ok;
 
@@ -90,14 +90,14 @@ int fn_8018E194(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
         *pBuffer = 0;
         ok = 0;
     } else {
-        fn_8007A600(pCursor, row);
+        DbCursorSeek(pCursor, row);
         fn_8007AA3C(pCursor, 0x414E4650, (int)pBuffer, size);
         ok = 1;
     }
     return ok;
 }
 
-int fn_8018E20C(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
+int fn_8018E20C(DbCursor *pCursor, int row, char *pBuffer, int size)
 {
     int ok;
 
@@ -105,7 +105,7 @@ int fn_8018E20C(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
         *pBuffer = 0;
         ok = 0;
     } else {
-        fn_8007A600(pCursor, row);
+        DbCursorSeek(pCursor, row);
         fn_8007AA3C(pCursor, 0x414E4C50, (int)pBuffer, size);
         ok = 1;
     }
@@ -114,7 +114,7 @@ int fn_8018E20C(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
 
 /* Writes the 'ANLP' text of the row, preceded by the first character of its
    'ANFP' text and ". " when that text is not empty. */
-int fn_8018E284(Object_8007A334 *pCursor, int row, char *pName, int size)
+int fn_8018E284(DbCursor *pCursor, int row, char *pName, int size)
 {
     char first[12];
     char last[15];
@@ -182,7 +182,7 @@ void fn_8018E474(int index)
    and 'CETS' state and rewrites the defaults of the 'DIGP' 0 row. */
 static void ResetYptsTadsCetsTables(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int index = fn_8022F384(fn_8022F4BC());
 
     fn_801FCE10(0, "use \x8c delete from 'YPTS' where 'DIGP' > 0\n", fn_8022F3D4(fn_8022F4BC()));
@@ -193,7 +193,7 @@ static void ResetYptsTadsCetsTables(void)
     fn_8018E7A0(index, 1);
     fn_8018E828(index, -1);
     fn_8018E11C(&cursor, index);
-    if (fn_8007A7F4(&cursor, 0x44494750, 0, 0, 0)) {
+    if (DbCursorFindInt(&cursor, 0x44494750, 0, 0, 0)) {
         fn_8018B8B0(&cursor);
     }
     fn_8018E174(&cursor);

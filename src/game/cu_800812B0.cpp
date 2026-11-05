@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 
 extern "C" {
@@ -11,7 +11,7 @@ static int lbl_802D6928[10] = {
 
 int fn_800812B0(Object_8008044C *pObject, int index)
 {
-    return fn_8007A98C(pObject, lbl_802D6928[index]);
+    return DbCursorGetInt(pObject, lbl_802D6928[index]);
 }
 
 int fn_800812E0(Object_8008044C *pObject, int index)
@@ -33,8 +33,8 @@ void fn_8008135C(Object_8008044C *pObject, int index, int value)
 
 void fn_8008138C(Object_8008044C *pObject, int *pValues)
 {
-    ColumnValue_802D6424 columns[11];
-    ColumnValue_802D6424 *pColumns = columns;
+    DbColumnValue columns[11];
+    DbColumnValue *pColumns = columns;
     int i;
 
     for (i = 0; i < 10; i++) {

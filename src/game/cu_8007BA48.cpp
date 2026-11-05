@@ -2,23 +2,23 @@
 
 #include "game/fn_801FCE10.h"
 #include "game/Class_8018FD64Inline.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
-#include "game/Key_8007A334.h"
+#include "game/DbSortKey.h"
 
 extern "C" {
 int fn_8022F384(int a);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
-void fn_8007DDC8(Object_8007A334 *pCursor, int index);
-void fn_8007DE20(Object_8007A334 *pCursor);
-int fn_8007DEE0(Object_8007A334 *pCursor, int key);
-int fn_8007DF4C(int key);
-void fn_8007E274(int key);
-void fn_8007E324(int key);
-void fn_8018DF20(Object_8007A334 *pCursor, int index);
-void fn_8018DF78(Object_8007A334 *pCursor);
+void GearLockOpen(DbCursor *pCursor, int index);
+void GearLockClose(DbCursor *pCursor);
+int GearLockIsLocked(DbCursor *pCursor, int key);
+int GearIsLocked(int key);
+void GearUnlock(int key);
+void GearLock(int key);
+void fn_8018DF20(DbCursor *pCursor, int index);
+void fn_8018DF78(DbCursor *pCursor);
 char *fn_801C3084(const char *pString, int c);
 }
 
@@ -42,44 +42,44 @@ static int sShortColumnTags[10] = {
 static int sIndexA[14] = { 0, 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12 };
 static int sIndexB[13] = { 0, 1, 2, 3, 4, 5, 14, 8, 9, 10, 11, 12, 13 };
 
-static Key_8007A334 sKeys[2] = {
+static DbSortKey sKeys[2] = {
     { 0x52414547, 0x44494547, 0, 0 },
     { -1, -1, 3, 0 },
 };
 
 extern "C" {
 
-void fn_8007BA48(Object_8007A334 *pCursor)
+void fn_8007BA48(DbCursor *pCursor)
 {
-    fn_8007A334(pCursor, 0x52414547, 0x594B5047, 0, 0, 0x54415453);
+    DbCursorOpen(pCursor, 0x52414547, 0x594B5047, 0, 0, 0x54415453);
 }
 
-void fn_8007BA88(Object_8007A334 *pCursor, int value)
+void fn_8007BA88(DbCursor *pCursor, int value)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
 
     arg.Set(6, 0x5241454749545247LL, 3, value);
-    fn_8007A334(pCursor, 0x52414547, 0x594B5047, sKeys, &arg, 0x54415453);
+    DbCursorOpen(pCursor, 0x52414547, 0x594B5047, sKeys, &arg, 0x54415453);
 }
 
-void fn_8007BB04(Object_8007A334 *pCursor)
+void fn_8007BB04(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
-int fn_8007BB24(Object_8007A334 *pCursor)
+int fn_8007BB24(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x594B5047);
+    return DbCursorGetInt(pCursor, 0x594B5047);
 }
 
-int fn_8007BB4C(Object_8007A334 *pCursor, int key, int *pResult)
+int fn_8007BB4C(DbCursor *pCursor, int key, int *pResult)
 {
-    return fn_8007A7F4(pCursor, 0x594B5047, key, 0, pResult);
+    return DbCursorFindInt(pCursor, 0x594B5047, key, 0, pResult);
 }
 
-int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult)
+int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult)
 {
-    ColumnValue_802D6424 list[3];
+    DbColumnValue list[3];
 
     list[0].Set(0x52414547, 0x44494547);
     list[0].mValue = b;
@@ -87,17 +87,17 @@ int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult)
     list[1].mValue = a;
     list[2].Set(-1, -1);
     list[2].mValue = 0;
-    return fn_8007A690(pCursor, list, 0, pResult);
+    return DbCursorFindRow(pCursor, list, 0, pResult);
 }
 
-int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult)
+int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult)
 {
-    return fn_8007A7F4(pCursor, 0x44494547, key, 0, pResult);
+    return DbCursorFindInt(pCursor, 0x44494547, key, 0, pResult);
 }
 
-void fn_8007BC34(Object_8007A334 *pCursor, Row_8007BC34 *pOut)
+void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pOut)
 {
-    ColumnValue_802D6424 list[34];
+    DbColumnValue list[34];
     char *pSpace;
     int i;
 
@@ -136,29 +136,29 @@ void fn_8007BC34(Object_8007A334 *pCursor, Row_8007BC34 *pOut)
     }
 }
 
-unsigned int fn_8007BDF8(Object_8007A334 *pCursor)
+unsigned int fn_8007BDF8(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x49535247);
+    return DbCursorGetInt(pCursor, 0x49535247);
 }
 
-void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size)
+void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size)
 {
     fn_8007AA3C(pCursor, 0x4D4E5247, (int)pBuffer, size);
 }
 
-int fn_8007BE54(Object_8007A334 *pCursor)
+int fn_8007BE54(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x44494547);
+    return DbCursorGetInt(pCursor, 0x44494547);
 }
 
-int fn_8007BE7C(Object_8007A334 *pCursor)
+int fn_8007BE7C(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x49545247);
+    return DbCursorGetInt(pCursor, 0x49545247);
 }
 
-int fn_8007BEA4(Object_8007A334 *pCursor)
+int fn_8007BEA4(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x49545347);
+    return DbCursorGetInt(pCursor, 0x49545347);
 }
 
 int fn_8007BECC(int a, int b)
@@ -180,9 +180,9 @@ int fn_8007BF28(int index)
     return sIndexB[index];
 }
 
-int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
+int fn_8007C690(DbCursor *pCursor, short *pOut);
 
-int fn_8007BF3C(Object_8007A334 *pCursor)
+int fn_8007BF3C(DbCursor *pCursor)
 {
     return fn_8007C690(pCursor, 0);
 }
@@ -197,10 +197,10 @@ void fn_8007BF60(int id)
     if (cursor.fn_8018FF54(0x49544947, id, 0, 0)) {
         int count = cursor.fn_8018FF78(0x4C504947);
         int next = count + 1;
-        Key_8007A334 keys[2];
-        Object_80023BBC both;
-        Object_80023BBC first;
-        Object_80023BBC second;
+        DbSortKey keys[2];
+        DbFilter both;
+        DbFilter first;
+        DbFilter second;
         int oldKeys[2];
         unsigned char fresh[2];
         int newKeys[2];
@@ -224,9 +224,9 @@ void fn_8007BF60(int id)
             rows.fn_8018FDEC(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
                 oldKeys[i] = rows.fn_8018FF78(0x594B5047);
-                fresh[i] = !fn_8007DF4C(oldKeys[i]);
+                fresh[i] = !GearIsLocked(oldKeys[i]);
                 if (fresh[i]) {
-                    fn_8007E324(oldKeys[i]);
+                    GearLock(oldKeys[i]);
                 }
                 rows.fn_8018FEC4();
             }
@@ -240,7 +240,7 @@ void fn_8007BF60(int id)
             for (i = 0; i < 2; i++) {
                 newKeys[i] = rows.fn_8018FF78(0x594B5047);
                 if (fresh[i]) {
-                    fn_8007E274(newKeys[i]);
+                    GearUnlock(newKeys[i]);
                 }
                 rows.fn_8018FEC4();
             }
@@ -256,11 +256,11 @@ void fn_8007BF60(int id)
             newIds[i] = rows.fn_8018FF78(0x44494547);
         }
         {
-            Object_8007A334 teams;
+            DbCursor teams;
             Info_80307908 record;
 
             fn_8018DF20(&teams, index);
-            if (fn_8007A444(&teams)) {
+            if (DbCursorFirst(&teams)) {
                 do {
                     fn_800817CC((Object_8008044C *)&teams, &record);
                     for (i = 0; i < 14; i++) {
@@ -273,7 +273,7 @@ void fn_8007BF60(int id)
                         }
                     }
                     fn_8008199C((Object_8008044C *)&teams, &record);
-                } while (fn_8007A510(&teams));
+                } while (DbCursorNext(&teams));
             }
             fn_8018DF78(&teams);
         }
@@ -306,10 +306,10 @@ int fn_8007C46C(int key)
 int fn_8007C538(int id)
 {
     int result = 0;
-    Object_80023BBC arg;
-    Object_8007A334 keys;
+    DbFilter arg;
+    DbCursor keys;
 
-    fn_8007DDC8(&keys, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&keys, fn_8022F384(fn_8022F4BC()));
     arg.Set(6, 0x5049524749544947LL, 2, id);
     {
         Class_8018FD64 rows;
@@ -317,12 +317,12 @@ int fn_8007C538(int id)
 
         rows.fn_8018FDEC(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
         for (more = rows.fn_8018FE7C(); more; more = rows.fn_8018FEC4()) {
-            if (!fn_8007DEE0(&keys, rows.fn_8018FF9C(0x594B5047))) {
+            if (!GearLockIsLocked(&keys, rows.fn_8018FF9C(0x594B5047))) {
                 result = 1;
                 break;
             }
         }
-        fn_8007DE20(&keys);
+        GearLockClose(&keys);
     }
     return result;
 }
@@ -332,10 +332,10 @@ int fn_8007C67C(Row_8007BC34 *pRow)
     return pRow->mUnknown64 == 5;
 }
 
-int fn_8007C690(Object_8007A334 *pCursor, short *pOut)
+int fn_8007C690(DbCursor *pCursor, short *pOut)
 {
     int result = 0;
-    Object_80023BBC arg;
+    DbFilter arg;
     int i;
 
     arg.Set(6, 0x50495247594B5047LL, 2, fn_8007BB24(pCursor));
