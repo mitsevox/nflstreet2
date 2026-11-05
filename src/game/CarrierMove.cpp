@@ -1,6 +1,7 @@
 /* Ball-carrier move state. While the ball is live the ball carrier can do a
-   move when a defender is near; this file decides whether he
-   may, starts the player state for it, and runs that state: its start, each
+   move: the controlling player starts it with a button, and the computer
+   starts it when a defender is near. This file decides whether he may,
+   starts the player state for it, and runs that state: its start, each
    frame, its end and its button input. */
 
 #include "game/Record_800DB60C.h"

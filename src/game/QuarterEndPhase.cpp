@@ -1,7 +1,7 @@
 /* End-of-quarter game phase. When a quarter ends the game switches to this
    phase: it shows a quarter-end screen element and waits (an input event can cut
    it short), plays the list of quarter-end clips one after another while the
-   next one loads, may wait on a message request, and then moves the game on
+   next one loads, may wait on a request, and then moves the game on
    to the next phase, chosen by the game period. */
 
 #include "game/fn_80195EFC.h"
@@ -94,7 +94,7 @@ static QuarterEndPhase _QuarterEnd_Phase;
 QuarterEndPhase *gQuarterEndPhase = &_QuarterEnd_Phase;
 static unsigned char _QuarterEnd_uClipIndex = 0;
 static unsigned char _QuarterEnd_uBufferIndex = 0;
-static unsigned char _QuarterEnd_bPromptShown = 0;
+static unsigned char _QuarterEnd_bElementShown = 0;
 static void *_QuarterEnd_apClipBuffers[1];
 static QuarterEndClipVariant_t _QuarterEnd_aClipVariants[3] = { { 1, 0 }, { 1, 1 }, { 2, 0 } };
 
@@ -339,7 +339,7 @@ void QuarterEndStartVenueEffect(void)
     _QuarterEnd_pState->mUnknown12 = fn_80096A58(&params);
 }
 
-void QuarterEndModeTwoStub(void) {}
+void QuarterEndPeriodTwoStub(void) {}
 }
 
 void QuarterEndPhase::InitState()
@@ -373,7 +373,7 @@ void QuarterEndPhase::OnUpdate(float f)
     fn_8004A230(0);
     switch (_QuarterEnd_pState->mState) {
     case 0:
-        _QuarterEnd_bPromptShown = 0;
+        _QuarterEnd_bElementShown = 0;
         fn_80219650(lbl_803EB688, &a, &b);
         if (a == 3 && b == 2) {
             break;
@@ -388,7 +388,7 @@ void QuarterEndPhase::OnUpdate(float f)
             break;
         case 2:
             _QuarterEnd_pState->mUnknown11 = 1;
-            QuarterEndModeTwoStub();
+            QuarterEndPeriodTwoStub();
             break;
         default:
             _QuarterEnd_pState->mUnknown11 = 0;
@@ -424,13 +424,13 @@ void QuarterEndPhase::OnUpdate(float f)
     case 1:
         _QuarterEnd_pState->mUnknown8++;
         fn_80096B1C(_QuarterEnd_pState->mUnknown12);
-        if (_QuarterEnd_bPromptShown == 0 && _QuarterEnd_pState->mUnknown8 > 59) {
+        if (_QuarterEnd_bElementShown == 0 && _QuarterEnd_pState->mUnknown8 > 59) {
             fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
-            _QuarterEnd_bPromptShown = 1;
+            _QuarterEnd_bElementShown = 1;
         }
         if (_QuarterEnd_pState->mUnknown8 > 600) {
             fn_8021956C(lbl_803EB688, 3, 5, 1);
-            _QuarterEnd_bPromptShown = 0;
+            _QuarterEnd_bElementShown = 0;
             QuarterEndEndWait();
         }
         break;
@@ -475,9 +475,9 @@ void QuarterEndPhase::OnUpdate(float f)
                 break;
             }
         } else {
-            if (_QuarterEnd_bPromptShown) {
+            if (_QuarterEnd_bElementShown) {
                 fn_8021956C(lbl_803EB688, 3, 5, 1);
-                _QuarterEnd_bPromptShown = 0;
+                _QuarterEnd_bElementShown = 0;
             }
             fn_800AD910(7, 0.0f);
         }
