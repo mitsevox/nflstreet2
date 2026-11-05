@@ -1,5 +1,5 @@
 #include "game/Object_8007A334.h"
-#include "game/UnlockItem_t.h"
+#include "game/UnlockItem.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"

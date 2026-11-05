@@ -4,7 +4,7 @@
 
 #include "game/Key_8007A334.h"
 #include "game/Object_8007A334.h"
-#include "game/UnlockItem_t.h"
+#include "game/UnlockItem.h"
 #include "game/cu_8002ACB4.h"
 
 /* State of the stream table gChecksumCRC32StreamType: the result word passed to the
