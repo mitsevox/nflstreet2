@@ -1,5 +1,5 @@
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
 extern "C" {
 extern char lbl_80306DFC[];
@@ -18,7 +18,7 @@ const char *Celebration::GetName() { return "Celebration"; }
 
 int Celebration::Init()
 {
-    fn_8009B720(gAnimData.fn_80033AF8());
+    fn_8009B720(gAnimData.GetArchive());
     return 1;
 }
 

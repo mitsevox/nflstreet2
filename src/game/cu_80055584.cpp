@@ -53,7 +53,7 @@ int fn_80178EE0(unsigned char side);
 unsigned int fn_801787DC(unsigned char side);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
-int fn_80032288(int side);
+int FeatAwardGameCredits(int side);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 void fn_8018F52C(Object_8007A334 *pObject, int a);
@@ -294,7 +294,7 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
         if (fn_8017F60C()) {
             pStats[side][14] = 0;
         } else {
-            pStats[side][14] = fn_80032288(side);
+            pStats[side][14] = FeatAwardGameCredits(side);
         }
     }
     if (fn_8017F584() == 8) {

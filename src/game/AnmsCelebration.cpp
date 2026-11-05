@@ -1,5 +1,5 @@
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
 extern "C" {
 
@@ -20,7 +20,7 @@ const char *AnmsCelebration::GetName() { return "AnmsCelebration"; }
 int AnmsCelebration::Init()
 {
     fn_800925F0();
-    fn_80093684(gAnimData.fn_80033AF8());
+    fn_80093684(gAnimData.GetArchive());
     return 1;
 }
 

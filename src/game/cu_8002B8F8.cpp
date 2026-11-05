@@ -110,8 +110,8 @@ void fn_80027358(int slot);
 void fn_8002885C(void);
 void fn_800288B0(void);
 unsigned char fn_8002892C(void);
-void fn_80031018(const float *pValue, int a);
-void fn_80031040(unsigned char value);
+void ReplayCursorSetPos(const float *pValue, int a);
+void ReplayCursorSetVisible(unsigned char value);
 void fn_8003A5A8(void);
 void fn_8003A5E8(void);
 void fn_8003AC10(void);
@@ -1120,7 +1120,7 @@ extern "C" void fn_8002CFF4(Type_803EA368 *p)
     args.mUnknown08 = 1;
     p->mUnknownD84 = fn_801F7ABC();
     p->mUnknownD94 = (p->mUnknownD94 | 0x10000) & ~0x40;
-    fn_80031040(0);
+    ReplayCursorSetVisible(0);
     fn_8002C300(p, &args);
 }
 
@@ -2264,7 +2264,7 @@ extern "C" void fn_8002F26C(Camera_8013F738 *pCamera, unsigned int input, float 
                     lbl_803EC620 = pTarget;
                     lbl_803EC624 = fn_801F7ABC();
                     lbl_803EC628 = flag;
-                    fn_80031040(0);
+                    ReplayCursorSetVisible(0);
                 }
             } else {
                 fn_8002ED48(&offset, input, amount * 0.15f);
@@ -2280,7 +2280,7 @@ extern "C" void fn_8002F26C(Camera_8013F738 *pCamera, unsigned int input, float 
             fn_8002ED48(&offset, input, step);
             fn_80227638(&lbl_8030660C.mPos, &lbl_8030660C.mPos, &offset);
             lbl_803EC620 = 0;
-            fn_80031040(1);
+            ReplayCursorSetVisible(1);
         }
     }
 }
@@ -2325,7 +2325,7 @@ extern "C" Camera_8013F738 *fn_8002F61C(Type_8002FDB4 *pDesc)
         fn_8002F71C(pCamera);
     }
     lbl_803EC630 = pCamera->mUnknown30;
-    fn_80031040(0);
+    ReplayCursorSetVisible(0);
     pBase = (CameraType1_802F4884 *)pCamera;
     pBase->mUnknown90 = 0x200000;
     pBase->mUnknown88 = 0x400000;
@@ -2363,7 +2363,7 @@ extern "C" void fn_8002F74C(Camera_8013F738 *pCamera)
             lbl_8030660C.mPos.mY = clamped.mY;
             lbl_803EC620 = 0;
             lbl_803EC628 = 0;
-            fn_80031040(1);
+            ReplayCursorSetVisible(1);
         }
     }
     fn_8002EC28();
@@ -2378,7 +2378,7 @@ extern "C" void fn_8002F74C(Camera_8013F738 *pCamera)
     }
     fn_8002F1E0(pCamera);
     fn_8002D2E4(&lbl_8030660C, &lbl_803EC620);
-    fn_80031018(&lbl_8030660C.mPos.mX, 0);
+    ReplayCursorSetPos(&lbl_8030660C.mPos.mX, 0);
     fn_8013C2B4(pCamera, 0, 0, 0);
     lbl_803EC61C = pCamera->mUnknown38;
     if (!lbl_803EC634) {
@@ -2398,7 +2398,7 @@ extern "C" void fn_8002FA04(Camera_8013F738 *pCamera, int detach)
         fn_8002B3DC(0, pCamera);
     }
     fn_801C3640(pCamera);
-    fn_80031040(0);
+    ReplayCursorSetVisible(0);
     if (fn_8019623C(0x23000)) {
         fn_80195EFC(1, 15, 0x808080, 0);
     }

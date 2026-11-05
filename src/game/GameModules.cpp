@@ -1,3 +1,8 @@
+/* Nine small modules the front-end and in-game groups list: AnimData and
+   StaData (each opens a data archive), Audmon, GRand (seeds the game
+   random numbers), IGMisc (in-game data archive), MemAudit (records
+   which loop is running), Qkl (opens the loop's .qkl file), ScrmRule and
+   UIS. Each gives its dependencies and name and has Init and Shutdown. */
 #include "game/FELoop.h"
 #include "game/cu_801CF5BC.h"
 #include "game/InGame.h"
@@ -5,17 +10,17 @@
 #include "game/fn_801FCE10.h"
 #include "game/cu_80067C10.h"
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 extern char lbl_802EBDBC[];
 extern char lbl_802EBDF8[];
 extern char lbl_802EBFC0[];
 extern char lbl_803EB6F0[];
 extern char lbl_803EB6F8[];
 
-int fn_80033124(void *pObject);
+int MainFEGroupIsStarted(void *pObject);
 void fn_800A1A58(void);
 void fn_800A1A80(void);
 int fn_800A3444(void);
@@ -56,7 +61,7 @@ int AnimData::Shutdown()
     return 1;
 }
 
-void *AnimData::fn_80033AF8() { return mData.mp; }
+void *AnimData::GetArchive() { return mData.mp; }
 
 static ModuleDependency sAudmonDependencies[] = { &gGameState, 0 };
 Audmon gAudmon;
@@ -153,14 +158,14 @@ int Qkl::Init()
 {
     char text[24];
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(gMainFEGroup)) {
         fn_801F2798("FELoopEnterStart");
     } else {
         fn_801C2E18(text, "GameLoopEnterStart%d", fn_800A3444());
         fn_801F2798(text);
     }
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(gMainFEGroup)) {
         fn_801C2EF0(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
     } else {
         fn_801C2D88(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
@@ -176,7 +181,7 @@ int Qkl::Shutdown()
     fn_801F2CD4(mFileName.mText);
     mFileName.mText[0] = 0;
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(gMainFEGroup)) {
         fn_801F2798("FELoopEnterFinish");
     } else {
         fn_801C2E18(text, "GameLoopEnterFinish%d", fn_800A3444());
@@ -235,7 +240,7 @@ int StaData::Shutdown()
     return 1;
 }
 
-void *StaData::fn_80033FD4() { return mData.mp; }
+void *StaData::GetArchive() { return mData.mp; }
 
 static ModuleDependency sUISDependencies[] = { &gGRender, 0 };
 UIS gUIS;

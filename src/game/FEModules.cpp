@@ -1,8 +1,8 @@
 #include "game/Module.h"
-#include "game/cu_80003C94.h"
+#include "game/StatGen.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
 extern "C" {
 extern char lbl_803071E8[];
@@ -149,13 +149,13 @@ const char *StatGen::GetName() { return "StatGen"; }
 
 int StatGen::Init()
 {
-    fn_80003C94();
+    StatGenCreateRandomStream();
     return 1;
 }
 
 int StatGen::Shutdown()
 {
-    fn_80003CC4();
+    StatGenDestroyRandomStream();
     return 1;
 }
 

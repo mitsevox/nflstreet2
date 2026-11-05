@@ -24,7 +24,7 @@ struct Record_80362FC0 {
 };
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 extern char lbl_802EBE5C[];
 extern char lbl_802EBE78[];
 extern char lbl_802EBE98[];
@@ -33,7 +33,7 @@ extern float lbl_803EA2C4;
 double fabs(double);
 
 void fn_80024654(void);
-int fn_80033144(void *p);
+int MainFEGroupIsFirstStart(void *p);
 void fn_8000FCD4(int a);
 void fn_80047670(int handle);
 void fn_80047698(void);
@@ -575,7 +575,7 @@ void fn_80189F68(void)
 {
     Desc_80188688 desc;
     int i;
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
     int result = 0;
 
     lbl_803EB680 = 0;
@@ -719,7 +719,7 @@ void fn_8018A390(void)
 
 void fn_8018A40C(void)
 {
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
 
     if (fn_80027DF0()) {
         if (!flag) {

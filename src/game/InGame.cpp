@@ -1,7 +1,7 @@
 #include "game/cu_8007F12C.h"
 #include "engine/cu_80227F14.h"
 #include "game/cu_80026BB0.h"
-#include "game/Class_801CBC50.h"
+#include "game/FlowManagerC.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
 #include "game/fn_8007F828.h"
@@ -9,7 +9,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801FCE10.h"
 #include "game/InGame.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/TimeScale.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80191804.h"
@@ -473,7 +473,7 @@ int fn_80028934()
 int fn_8002894C()
 {
     int result = 0;
-    Class_803067B0 *p = &lbl_803067B0;
+    GSFlowManagerC *p = &gGSFlowManager;
 
     if (p->fn_801CBE9C(1)) {
         result = !p->fn_801CBE9C(3);

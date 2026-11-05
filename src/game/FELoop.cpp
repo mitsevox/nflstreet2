@@ -1,10 +1,10 @@
 #include "game/cu_8007F12C.h"
 #include "game/fn_80072AA8.h"
 #include "engine/cu_80227F14.h"
-#include "game/Class_801CBC50.h"
+#include "game/FlowManagerC.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
-#include "game/cu_80003F10.h"
+#include "game/DemoLaunch.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8007C9D4.h"
 #include "game/fn_8003B6BC.h"
@@ -16,7 +16,7 @@
 #include "game/fn_8021D7B8.h"
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 extern float lbl_803EA2C4;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
@@ -33,7 +33,7 @@ void fn_80022778(void);
 void fn_800244E4(void);
 void fn_80024560(void);
 void fn_80024608(void);
-int fn_80033124(void *p);
+int MainFEGroupIsStarted(void *p);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
@@ -246,8 +246,8 @@ static void fn_800277A8(int mode)
         fn_80027684();
         break;
     default:
-        if (fn_80003F18()) {
-            fn_80003F10(0);
+        if (DemoLaunchIsFlagSet()) {
+            DemoLaunchSetFlag(0);
         }
         fn_800273AC();
         break;
@@ -316,7 +316,7 @@ void fn_80027A20()
         fn_8007CA28();
         fn_8021956C(lbl_803EB690, 1, 5, 1);
         fn_800731D0(1);
-        lbl_803067B0.fn_801CBEF4(2, 12);
+        gGSFlowManager.fn_801CBEF4(2, 12);
     }
 }
 
@@ -415,7 +415,7 @@ int FELoop::Shutdown()
 
 int fn_80027DF0()
 {
-    return fn_80033124(lbl_80306B34);
+    return MainFEGroupIsStarted(gMainFEGroup);
 }
 
 void fn_80027E18(unsigned char value)
@@ -472,6 +472,6 @@ unsigned char fn_80027EAC()
 void fn_80027EB4(int a)
 {
     if (sUnknown803EC5F0) {
-        fn_80003F30();
+        DemoLaunchIsAllowed();
     }
 }

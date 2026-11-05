@@ -10,7 +10,7 @@ struct Desc_8021DEFC {
 };
 
 extern "C" {
-int fn_80033144(void *p);
+int MainFEGroupIsFirstStart(void *p);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
 void *fn_8021DEFC(Desc_8021DEFC *pDesc);
@@ -38,7 +38,7 @@ extern char lbl_802EBF48[];
 extern char lbl_802EBF58[];
 extern char lbl_802EBF68[];
 extern char lbl_802EBF78[];
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 
 extern "C" {
 void fn_801A60D8(void)
@@ -53,7 +53,7 @@ void fn_801A60D8(void)
 
 void fn_801A6180(void)
 {
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
     void *pList = fn_8021EA44(1);
 
     if (flag == 0) {

@@ -33,7 +33,7 @@
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -51,7 +51,7 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80041210.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_800314E0.h"
+#include "game/FeatAwards.h"
 #include "game/cu_8018EC68.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8017F584.h"
@@ -3508,7 +3508,7 @@ void fn_800B852C(void);
 void fn_80043DD8(void);
 void fn_801624D0(void *arg);
 void fn_80163274(int handle);
-void fn_80030F38(int handle);
+void ReplayCursorCreate(int handle);
 void fn_80148048(void *pOwner);
 void fn_800C4410(int value);
 void fn_80046E30(int handle);
@@ -3522,7 +3522,7 @@ void fn_80046FD0(void);
 void fn_80163E54(int handle);
 void fn_801626A4(void *arg);
 void fn_80163300(int handle);
-void fn_80030FD8(int handle);
+void ReplayCursorDestroy(int handle);
 void fn_801480B0(void *pOwner);
 void fn_8019B368(void);
 void fn_8004659C(void);
@@ -3592,7 +3592,7 @@ extern "C" void fn_800C46B0(int handle)
     fn_80043DD8();
     fn_801624D0((void *)handle);
     fn_80163274(handle);
-    fn_80030F38(handle);
+    ReplayCursorCreate(handle);
     fn_80148048((void *)handle);
     fn_800C4410(0);
     fn_80046E30(handle);
@@ -3610,7 +3610,7 @@ extern "C" void fn_800C471C(int handle)
     fn_80163E54(handle);
     fn_801626A4((void *)handle);
     fn_80163300(handle);
-    fn_80030FD8(handle);
+    ReplayCursorDestroy(handle);
     fn_801480B0((void *)handle);
 }
 
@@ -3627,7 +3627,7 @@ extern "C" void fn_800C478C(float dt)
 
 extern "C" void *fn_800C47C4(void)
 {
-    return gStaData.fn_80033FD4();
+    return gStaData.GetArchive();
 }
 
 extern "C" float fn_800C48CC(int index, float value)
@@ -9573,7 +9573,7 @@ void fn_80059014(void);
 void fn_800C1CA0(void);
 void fn_8009D964(int index, int value);
 void fn_8005BC10(int a);
-void fn_80031A54(void);
+void FeatAwardAfterGame(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 unsigned char fn_8005B3CC(void);
 Object_80039F5C *fn_8005A8AC(int index);
@@ -10187,11 +10187,11 @@ extern "C" int fn_800AB138(Class_80297B90 *p, float dt)
 extern "C" void fn_800AB190(void *p)
 {
     lbl_803EAA9C = 0;
-    fn_80031A54();
+    FeatAwardAfterGame();
 }
 
 extern "C" {
-extern Entry_80306620 lbl_8030F45C;
+extern FeatAward lbl_8030F45C;
 extern Entry_80219044 lbl_8030F504;
 extern Entry_80219044 lbl_8030F510;
 extern unsigned char lbl_803EAA9A;
@@ -10201,11 +10201,11 @@ extern "C" int fn_800AB1B8(void *p, float dt)
 {
     int result = 0;
 
-    if (lbl_803EAA9C < fn_8003203C()) {
+    if (lbl_803EAA9C < FeatGetAwardedCount()) {
         int args[3];
 
         result = 1;
-        fn_80032044(lbl_803EAA9C, &lbl_8030F45C);
+        FeatGetAwarded(lbl_803EAA9C, &lbl_8030F45C);
         lbl_8030F504.mpText = lbl_8030F45C.mName;
         lbl_8030F504.mLength = fn_801C3180(lbl_8030F45C.mName);
         lbl_8030F510.mpText = lbl_8030F45C.mText;
@@ -10216,7 +10216,7 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         fn_80064F58(1, 20, -1, 3, args, 1);
         lbl_803EAA9C++;
     } else {
-        fn_800320B0();
+        FeatClearAwarded();
         lbl_803EAA9A = 0;
         lbl_803EAA9C = 0;
         fn_8021956C(lbl_803EB688, 1, 20, 1);

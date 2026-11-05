@@ -1,9 +1,13 @@
-#include "game/Class_801CC350.h"
+/* The system flow group: a single system stage that starts the core
+   engine and game modules (system, files, resources, fonts, rendering,
+   sound, database, memory card, input and the rest) the other groups
+   rely on. */
+#include "game/FlowGroupC.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
 
-static Record_802CCBAC sStages[] = { { 0, "System Stage" }, { -1, 0 } };
-static Record_803EA3A8 sRecords[] = { { -1, -1 } };
+static FlowStageEntry sStages[] = { { 0, "System Stage" }, { -1, 0 } };
+static FlowTransitionEntry sRecords[] = { { -1, -1 } };
 SystemGroup gSystemGroup;
 static ModuleDependency sModules[] = {
     &gSys,
@@ -41,10 +45,10 @@ static ModuleDependency sModules[] = {
 };
 
 const char *SystemGroup::GetName() { return "System Group"; }
-Record_802CCBAC *SystemGroup::vfn_04() { return sStages; }
-Record_803EA3A8 *SystemGroup::vfn_05() { return sRecords; }
+FlowStageEntry *SystemGroup::GSGetStageList() { return sStages; }
+FlowTransitionEntry *SystemGroup::GSGetTransitionList() { return sRecords; }
 
-ModuleDependency *SystemGroup::vfn_06(int id)
+ModuleDependency *SystemGroup::GSGetStageModuleList(int id)
 {
     if (id == 0) {
         return sModules;
@@ -52,5 +56,5 @@ ModuleDependency *SystemGroup::vfn_06(int id)
     return 0;
 }
 
-void SystemGroup::vfn_02() {}
-int SystemGroup::vfn_03(int a, int id) { return 1; }
+void SystemGroup::GSProcess() {}
+int SystemGroup::GSTransition(int a, int id) { return 1; }

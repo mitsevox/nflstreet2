@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/FELoop.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801BE60C.h"
@@ -356,7 +356,7 @@ extern "C" void fn_8008FBA0(void)
     fn_801B9DEC(1);fn_801BFEF8(60.0f);
     AnimData *pModule=&gAnimData;
     fn_801CC7FC(pModule);fn_801CC820(pModule,0);
-    lbl_802D713C.mpArchive=pModule->fn_80033AF8();
+    lbl_802D713C.mpArchive=pModule->GetArchive();
     fn_801B9EEC(fn_8008EBBC,fn_8008F78C);
     fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(fn_80190DCC);
     fn_801BB2D8(&lbl_802D713C);fn_801F0F18(0);
@@ -367,8 +367,8 @@ extern "C" void fn_8008FBA0(void)
 }
 extern "C" void fn_8008FCB4(int flag)
 {
-    if(flag) lbl_802D713C.mpArchive=gAnimData.fn_80033AF8();
-    else lbl_802D70D0.mpArchive=gAnimData.fn_80033AF8();
+    if(flag) lbl_802D713C.mpArchive=gAnimData.GetArchive();
+    else lbl_802D70D0.mpArchive=gAnimData.GetArchive();
     fn_801B9DEC(1);fn_801BFEF8(60.0f);
     fn_801B9EEC(fn_8008EBBC,fn_8008F78C);
     fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(fn_80190DCC);

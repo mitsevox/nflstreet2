@@ -1,8 +1,12 @@
-#include "game/cu_80003F10.h"
+/* Demo-disc launch support carried over from the other consoles: a flag
+   the front-end loop clears, a launch check that always says no on
+   GameCube, and the Madden 05 demo executable paths the PS2 and Xbox
+   versions launch (the copy routine is not linked into this game). */
+#include "game/DemoLaunch.h"
 
 #include <string.h>
 
-static unsigned char lbl_803EB8E8 = 0;
+static unsigned char _DemoLaunch_bFlag = 0;
 
 /* Five 64-byte buffers that FillDemoLaunchPaths fills with executable
    paths; the field labels are neutral. */
@@ -14,17 +18,17 @@ struct DemoLaunchPaths {
     char mPath4[64];
 };
 
-extern "C" void fn_80003F10(unsigned char value)
+extern "C" void DemoLaunchSetFlag(unsigned char value)
 {
-    lbl_803EB8E8 = value;
+    _DemoLaunch_bFlag = value;
 }
 
-extern "C" bool fn_80003F18(void)
+extern "C" bool DemoLaunchIsFlagSet(void)
 {
-    return lbl_803EB8E8 != 0;
+    return _DemoLaunch_bFlag != 0;
 }
 
-extern "C" int fn_80003F30(void)
+extern "C" int DemoLaunchIsAllowed(void)
 {
     return 0;
 }

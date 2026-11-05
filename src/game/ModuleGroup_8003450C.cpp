@@ -3,7 +3,7 @@
 #include "game/GameState.h"
 #include "game/GameVpt.h"
 #include "game/InGame.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
@@ -408,7 +408,7 @@ const char *CamScript::GetName() { return "CamScript"; }
 
 int CamScript::Init()
 {
-    fn_80096954(gAnimData.fn_80033AF8());
+    fn_80096954(gAnimData.GetArchive());
     return 1;
 }
 

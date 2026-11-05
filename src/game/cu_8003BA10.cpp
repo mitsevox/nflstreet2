@@ -2,7 +2,7 @@
 #include "game/Block_80307980.h"
 #include "game/Init_8004A040.h"
 #include "game/Item_800476DC.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
@@ -603,35 +603,35 @@ void fn_8003D0C8(int mode) {
   fn_800ADE6C();
 }
 void fn_8003D12C() {
-  lbl_803EA41C = fn_801EF390(gAnimData.fn_80033AF8(), 57, 1);
+  lbl_803EA41C = fn_801EF390(gAnimData.GetArchive(), 57, 1);
   fn_801C4DEC(lbl_803EA41C);
   fn_8003CC68(lbl_803EA41C);
   for (int i = 0; i < 3; ++i) {
     lbl_802CCD98[i] = (short)lbl_803EA41C->mUnknown1040[15][i] * 16;
     lbl_802CCD8C[i] = (short)lbl_803EA41C->mUnknown1040[21][i] * 16;
   }
-  lbl_803EA420[0] = fn_801EF390(gAnimData.fn_80033AF8(), 58, 1);
+  lbl_803EA420[0] = fn_801EF390(gAnimData.GetArchive(), 58, 1);
   fn_801C4DEC(lbl_803EA420[0]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[0] + 16))[i] = 0.0f;
-  lbl_803EA420[1] = fn_801EF390(gAnimData.fn_80033AF8(), 59, 1);
+  lbl_803EA420[1] = fn_801EF390(gAnimData.GetArchive(), 59, 1);
   fn_801C4DEC(lbl_803EA420[1]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[1] + 16))[i] = 0.0f;
   fn_801C4F10(lbl_803EA420[0], lbl_803EA420[1]);
-  lbl_803EA428 = fn_801EF390(gAnimData.fn_80033AF8(), 61, 1);
+  lbl_803EA428 = fn_801EF390(gAnimData.GetArchive(), 61, 1);
   fn_801C4DEC(lbl_803EA428);
   fn_8003CD1C(lbl_803EA428);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA428 + 16))[i] = 0.0f;
-  lbl_803EA42C = fn_801EF390(gAnimData.fn_80033AF8(), 62, 1);
+  lbl_803EA42C = fn_801EF390(gAnimData.GetArchive(), 62, 1);
   fn_801C4DEC(lbl_803EA42C);
   fn_8003CDF8(lbl_803EA42C);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA42C + 16))[i] = 0.0f;
 }
 void fn_8003D2E0() {
-  fn_800AF630(gAnimData.fn_80033AF8(), 60, 1, 32);
+  fn_800AF630(gAnimData.GetArchive(), 60, 1, 32);
   fn_800AF790(0, lbl_803EA41C, "low_torso", "neckhi", 0);
   fn_800AF790(1, lbl_803EA41C, "lshoulder", "lwrist", 1);
   fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
@@ -853,9 +853,9 @@ int fn_8003DCC0(int owner) {
   }
   fn_8004A118();
   fn_800AF71C();
-  fn_801F010C(gAnimData.fn_80033AF8(), 57);
-  fn_801F010C(gAnimData.fn_80033AF8(), 58);
-  fn_801F010C(gAnimData.fn_80033AF8(), 59);
+  fn_801F010C(gAnimData.GetArchive(), 57);
+  fn_801F010C(gAnimData.GetArchive(), 58);
+  fn_801F010C(gAnimData.GetArchive(), 59);
   fn_8004A1FC(0);
   fn_801DCF8C(29);
   fn_801DCF8C(30);

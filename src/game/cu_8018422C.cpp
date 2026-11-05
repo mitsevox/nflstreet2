@@ -36,9 +36,9 @@ int fn_801D46E8(int slot);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
 int fn_801F7ABC(void);
 void fn_801F8838(void);
-void fn_80032220(void);
-void fn_80032240(short a);
-void fn_80032250(short a, char *pBuf);
+void FeatClearEAGameSaves(void);
+void FeatSetEAGameSave(short a);
+void FeatGetEAGameCode(short a, char *pBuf);
 unsigned int fn_80029838(int a);
 int fn_80029B48(int a);
 void fn_80029E6C(int a, int b);
@@ -91,7 +91,7 @@ void fn_80184234(int a, int *pB, int *pC)
     fn_801D65B4(0);
     fn_801D654C(1);
     fn_801D6714(0);
-    fn_80032220();
+    FeatClearEAGameSaves();
     if (lbl_803EB590 != 0) {
         lbl_803EB590(a, &unused);
     }
@@ -330,7 +330,7 @@ void fn_801849D4(int a)
     if (a <= 5) {
         char name[8];
 
-        fn_80032250(a, name);
+        FeatGetEAGameCode(a, name);
         fn_801D685C(name, 1);
         fn_801D6650(10);
     }
@@ -358,7 +358,7 @@ int fn_80184A7C(int a)
 void fn_80184A90(int a, int b)
 {
     if (b > 0) {
-        fn_80032240(a);
+        FeatSetEAGameSave(a);
     }
 }
 

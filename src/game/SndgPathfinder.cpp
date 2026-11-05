@@ -486,7 +486,7 @@ void fn_800300D4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030490(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
-int fn_80031054(float *pValue);
+int ReplayCursorGetPos(float *pValue);
 void fn_8006F344(unsigned char value);
 void fn_8006F850(Record_80067CA8 *pEvent);
 void fn_80070C40(Record_80067CA8 *pEvent);
@@ -2301,7 +2301,7 @@ extern "C" void fn_8006CEC8(Struct_8030A688 *src)
             angle = (angle + 0x800000) & 0xFFFFFF;
         }
         src->mAngle = angle;
-    } else if (fn_80031054(&src->mOrigin.mX) == 0) {
+    } else if (ReplayCursorGetPos(&src->mOrigin.mX) == 0) {
         Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
 
         src->mOrigin.mX = pBlock->mUnknown4.mX;

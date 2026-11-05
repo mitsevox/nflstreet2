@@ -1,15 +1,16 @@
-#include "game/Class_801CC350.h"
+/* The debug flow group: a single debug stage that runs the debug module. */
+#include "game/FlowGroupC.h"
 
-static Record_802CCBAC sStages[] = { { 30, "Debug Stage" }, { -1, 0 } };
-static Record_803EA3A8 sRecords[] = { { -1, -1 } };
+static FlowStageEntry sStages[] = { { 30, "Debug Stage" }, { -1, 0 } };
+static FlowTransitionEntry sRecords[] = { { -1, -1 } };
 DebugGroup gDebugGroup;
 static ModuleDependency sModules[] = { &gDebug, 0 };
 
 const char *DebugGroup::GetName() { return "Debug Group"; }
-Record_802CCBAC *DebugGroup::vfn_04() { return sStages; }
-Record_803EA3A8 *DebugGroup::vfn_05() { return sRecords; }
+FlowStageEntry *DebugGroup::GSGetStageList() { return sStages; }
+FlowTransitionEntry *DebugGroup::GSGetTransitionList() { return sRecords; }
 
-ModuleDependency *DebugGroup::vfn_06(int id)
+ModuleDependency *DebugGroup::GSGetStageModuleList(int id)
 {
     if (id == 30) {
         return sModules;
@@ -17,5 +18,5 @@ ModuleDependency *DebugGroup::vfn_06(int id)
     return 0;
 }
 
-void DebugGroup::vfn_02() {}
-int DebugGroup::vfn_03(int a, int id) { return 1; }
+void DebugGroup::GSProcess() {}
+int DebugGroup::GSTransition(int a, int id) { return 1; }
