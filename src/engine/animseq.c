@@ -4,7 +4,7 @@
 
 #include "engine/cu_801B9F00.h"
 
-static AnimSeq_t *_AnimSeq_pCurrentSeq;
+static AnimSeq_t *_AnimSeq_CurrentInfo;
 
 int _AnimSeqStart(AnimSeq_t *p, AnimScript_t *pScript, int flag);
 
@@ -93,7 +93,7 @@ unsigned short _ParseForFrame(AnimSeq_t *p, float step, int flag)
             } else {
                 int handled;
 
-                _AnimSeq_pCurrentSeq = p;
+                _AnimSeq_CurrentInfo = p;
                 if (flag == 0) {
                     handled = _AnimDoUserOpcodeCallback(op);
                 } else {
@@ -156,7 +156,7 @@ void _AnimSeqParseToEnd(AnimSeq_t *p, AnimScript_t *pScript, int key)
                     break;
                 }
             } else {
-                _AnimSeq_pCurrentSeq = p;
+                _AnimSeq_CurrentInfo = p;
                 _AnimDoUserOpcodeSkipCallback(op);
             }
         } else {
@@ -307,7 +307,7 @@ void AnimSeqSetSpeed(AnimSeq_t *p, float scale)
 
 int AnimSeqGetOpcodeParameter(void)
 {
-    return _GetOpcodeParameter(_AnimSeq_pCurrentSeq);
+    return _GetOpcodeParameter(_AnimSeq_CurrentInfo);
 }
 
 int AnimSeqHasOpcode(AnimSeq_t *p, AnimScript_t *pScript, unsigned short key)
@@ -347,7 +347,7 @@ int AnimSeqHasOpcode(AnimSeq_t *p, AnimScript_t *pScript, unsigned short key)
                     break;
                 }
             } else {
-                _AnimSeq_pCurrentSeq = p;
+                _AnimSeq_CurrentInfo = p;
                 if (!found) {
                     _AnimDoUserOpcodeSkipCallback(op);
                 }

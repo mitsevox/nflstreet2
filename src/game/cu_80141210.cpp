@@ -18,7 +18,7 @@ struct Angles_80141210 { int mX,mY,mZ; };
 struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int mUnknown18; };
 
 extern "C" {
-float AnimSequencerGetFrameRate(void);
+float AnimSequencerGetTicksPerSecond(void);
 AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
 float fn_801C5278(float,AnimSeqCamCurve_t *,int);
@@ -94,7 +94,7 @@ extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Acto
     Vector_80039F5C direction;
     float qx[4], qy[4], qz[4];
     AnimSeqCamSample_t *sample;
-    float t = time / AnimSequencerGetFrameRate();
+    float t = time / AnimSequencerGetTicksPerSecond();
 
     fn_801D04C4(); fn_801D0558(); fn_801D0F80(matrix); fn_801D0544();
     if (!selection->mUnknown0) return;
@@ -166,10 +166,10 @@ extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Acto
     float matrix[4][4];
     float qx[4], qy[4], qz[4];
     Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
-    float t = time / AnimSequencerGetFrameRate();
+    float t = time / AnimSequencerGetTicksPerSecond();
     AnimSeqCamSample_t *sample = AnimSeqCamFindCamera(actor, playback->mUnknown14.mParts[1], playback->mUnknown18.mParts[1], playback->mUnknown1C.mParts[1]);
     if (!sample) return;
-    playback->mUnknown20 = (sample->mCurves[0].mUnknown8 - sample->mCurves[0].mUnknown4) * AnimSequencerGetFrameRate();
+    playback->mUnknown20 = (sample->mCurves[0].mUnknown8 - sample->mCurves[0].mUnknown4) * AnimSequencerGetTicksPerSecond();
     base.mX = sample->mUnknown0[0]; base.mY = -sample->mUnknown0[2]; base.mZ = sample->mUnknown0[1];
     offset.mX = fn_801C5278(t, &sample->mCurves[11], 0);
     offset.mY = -fn_801C5278(t, &sample->mCurves[9], 0);

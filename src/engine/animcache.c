@@ -14,37 +14,37 @@ typedef struct AnimCacheObjType_t {
     AnimCacheStateInfo_t *mPairsB;
 } AnimCacheObjType_t;
 
-extern unsigned int _AnimCache_NumObjTypes;
-extern int _AnimCache_Heap;
-extern AnimCacheObjType_t *_AnimCache_pObjTypeCache;
-extern unsigned char _AnimCache_ModuleActive;
+extern unsigned int _AnimCache_nCaches;
+extern int _AnimCache_MemoryHeap;
+extern AnimCacheObjType_t *_AnimCache_pCaches;
+extern unsigned char _AnimCache_Initialized;
 
 void AnimCacheClearObjectType(unsigned int index);
 
 void AnimCacheInit(int heap, unsigned int count)
 {
-    _AnimCache_Heap = heap;
-    _AnimCache_NumObjTypes = count;
-    _AnimCache_pObjTypeCache = fn_801D2BB0(heap, count * sizeof(AnimCacheObjType_t), 0, 0);
-    memset(_AnimCache_pObjTypeCache, 0, count * sizeof(AnimCacheObjType_t));
-    _AnimCache_ModuleActive = 1;
+    _AnimCache_MemoryHeap = heap;
+    _AnimCache_nCaches = count;
+    _AnimCache_pCaches = fn_801D2BB0(heap, count * sizeof(AnimCacheObjType_t), 0, 0);
+    memset(_AnimCache_pCaches, 0, count * sizeof(AnimCacheObjType_t));
+    _AnimCache_Initialized = 1;
 }
 
 void AnimCacheShutdown(void)
 {
     unsigned int i;
 
-    for (i = 0; i < _AnimCache_NumObjTypes; i++)
+    for (i = 0; i < _AnimCache_nCaches; i++)
         AnimCacheClearObjectType(i);
-    fn_801D2BD0(_AnimCache_pObjTypeCache);
-    _AnimCache_pObjTypeCache = 0;
-    _AnimCache_NumObjTypes = 0;
-    _AnimCache_ModuleActive = 0;
+    fn_801D2BD0(_AnimCache_pCaches);
+    _AnimCache_pCaches = 0;
+    _AnimCache_nCaches = 0;
+    _AnimCache_Initialized = 0;
 }
 
 static inline AnimCacheObjType_t *GetEntry(unsigned int index)
 {
-    return index < _AnimCache_NumObjTypes ? &_AnimCache_pObjTypeCache[index] : 0;
+    return index < _AnimCache_nCaches ? &_AnimCache_pCaches[index] : 0;
 }
 
 void AnimCacheSetUpObjectType(unsigned int index, unsigned int countA, unsigned int countB)
@@ -57,7 +57,7 @@ void AnimCacheSetUpObjectType(unsigned int index, unsigned int countA, unsigned 
         entry->mCountA = countA;
         entry->mCountB = countB;
         entry->mId = index;
-        entry->mPairsA = fn_801D2BB0(_AnimCache_Heap, (countA + countB) * sizeof(AnimCacheStateInfo_t), 0, 0);
+        entry->mPairsA = fn_801D2BB0(_AnimCache_MemoryHeap, (countA + countB) * sizeof(AnimCacheStateInfo_t), 0, 0);
         entry->mPairsB = entry->mPairsA + countA;
         AnimCacheInvalidate(index);
     }
@@ -116,8 +116,8 @@ void AnimCacheUpdate(void)
 {
     unsigned int i;
 
-    for (i = 0; i < _AnimCache_NumObjTypes; i++) {
-        AnimCacheObjType_t *entry = &_AnimCache_pObjTypeCache[i];
+    for (i = 0; i < _AnimCache_nCaches; i++) {
+        AnimCacheObjType_t *entry = &_AnimCache_pCaches[i];
         if (entry->mDirty) {
             fn_801BBB54(i);
             entry->mDirty = 0;

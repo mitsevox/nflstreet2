@@ -32,7 +32,7 @@ typedef struct Handlers_801BDA30 {
     Handler_801BDA30 *mpUnknown4;
 } Handlers_801BDA30;
 
-/* Transition data a AnimFileStateTran_t rule points at. */
+/* Transition data an AnimFileStateTran_t rule points at. */
 typedef struct Transition_801BEFA4 {
     unsigned char mUnknown0[4];
     unsigned short mUnknown4;

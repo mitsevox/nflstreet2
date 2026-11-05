@@ -1689,21 +1689,21 @@
       "address": "0x8037E84C",
       "evidence": "evidence.tsv data/name rows for 0x8037E84C (target extent, related name)."
     },
-    "_AnimCache_NumObjTypes": {
+    "_AnimCache_nCaches": {
       "address": "0x803ED618",
-      "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, related name)."
     },
-    "_AnimCache_Heap": {
+    "_AnimCache_MemoryHeap": {
       "address": "0x803ED61C",
-      "evidence": "evidence.tsv data/name rows for 0x803ED61C (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803ED61C (target extent, related name)."
     },
-    "_AnimCache_pObjTypeCache": {
+    "_AnimCache_pCaches": {
       "address": "0x803ED620",
-      "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, related name)."
     },
-    "_AnimCache_ModuleActive": {
+    "_AnimCache_Initialized": {
       "address": "0x803EBBA8",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBA8 (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803EBBA8 (target extent, related name)."
     },
     "_AnimFrameCache_CustomFunc": {
       "address": "0x803ECEC0",
@@ -1711,11 +1711,11 @@
     },
     "_AnimSequencer_ModuleActive": {
       "address": "0x803EBBAC",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBAC (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803EBBAC (target extent, related name)."
     },
-    "_AnimSequencer_fFrameRate": {
+    "_AnimSequencer_fTicksPerSecond": {
       "address": "0x803EBBB0",
-      "evidence": "evidence.tsv data/name rows for 0x803EBBB0 (target extent, inferred name)."
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB0 (target extent, related name)."
     },
     "_uLastGroupIndex": {
       "address": "0x803EBBB4",

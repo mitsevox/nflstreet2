@@ -6,7 +6,7 @@
 #include "engine/fn_801F7BD4.h"
 
 extern unsigned char _AnimSequencer_ModuleActive;
-extern float _AnimSequencer_fFrameRate;
+extern float _AnimSequencer_fTicksPerSecond;
 
 int AnimSequencerInit(float rate)
 {
@@ -15,7 +15,7 @@ int AnimSequencerInit(float rate)
     if (_AnimSequencer_ModuleActive)
         err = 0x1D0001;
     else {
-        _AnimSequencer_fFrameRate = rate;
+        _AnimSequencer_fTicksPerSecond = rate;
         _AnimSequencer_ModuleActive = 1;
     }
     fn_801F7BD4(err);
@@ -34,7 +34,7 @@ int AnimSequencerShutdown(void)
     return err;
 }
 
-float AnimSequencerGetFrameRate(void)
+float AnimSequencerGetTicksPerSecond(void)
 {
-    return _AnimSequencer_fFrameRate;
+    return _AnimSequencer_fTicksPerSecond;
 }

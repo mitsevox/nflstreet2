@@ -1046,7 +1046,7 @@ struct Character_800DF7CC {
     char mUnknown24[92]; Object_80137ABC *mpBall[1];
 };
 extern "C" {
-float AnimSequencerGetFrameRate(Object_80039F5C *);
+float AnimSequencerGetTicksPerSecond(Object_80039F5C *);
 Attachment_800DF7CC *fn_80093C08(unsigned short);
 int fn_800943B0(unsigned short);
 void fn_8009134C(unsigned short);
@@ -2253,7 +2253,7 @@ extern "C" void fn_800DF750(Object_80137ABC *pBall, Vector_80039F5C *pPos, int *
 
 extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, Attachment_800DF7CC *pAttachments, Frame_800DF7CC *pFrame, int index, unsigned int frame)
 {
-    float time = (float)frame / AnimSequencerGetFrameRate(p);
+    float time = (float)frame / AnimSequencerGetTicksPerSecond(p);
     Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
     fn_80093BAC(pView->mUnknown0, pView->mUnknown4);
     Vector_80039F5C position;

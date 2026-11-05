@@ -76,7 +76,7 @@ extern "C" {
 #endif
 int AnimSequencerInit(float rate);
 int AnimSequencerShutdown(void);
-float AnimSequencerGetFrameRate(void);
+float AnimSequencerGetTicksPerSecond(void);
 void AnimSeqCamResetLast(void);
 void AnimSeqCamSetLast(AnimSeqncrBank_t *bank, unsigned short group, unsigned short sample, unsigned short index);
 AnimSeqCamGroup_t *AnimSeqCamFindGroup(AnimSeqncrBank_t *bank, unsigned short id);

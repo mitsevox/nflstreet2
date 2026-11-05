@@ -23,7 +23,7 @@ float AnimSeqncrGetLength(AnimSeqncrBank_t *bank)
         AnimSeqncrPlayer_t *frame = AnimSeqncrGetPlayerPtr(bank, i);
         AnimFileFormat_t *file = fn_801BC084(fn_801BBE5C(frame->mUnknown2A | 0x4000, frame->mUnknownE));
         if (file != 0) {
-            float length = AnimSeqGetLife(AnimFileGetAnimation(file, 0)) / AnimSequencerGetFrameRate();
+            float length = AnimSeqGetLife(AnimFileGetAnimation(file, 0)) / AnimSequencerGetTicksPerSecond();
             if (length > result)
                 result = length;
         }
