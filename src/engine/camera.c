@@ -1,7 +1,7 @@
 /* Camera manager: typed cameras in an object pool, attached to viewports, with angle and value easing helpers. */
 
 #include "engine/camera.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801C3660.h"
 #include "engine/llmatrix.h"
@@ -9,7 +9,7 @@
 typedef struct CamFuncs_801C33E8 {
     void (*mpAdd)(Cam_801C33E8 *pCam);
     void (*mpDelete)(Cam_801C33E8 *pCam);
-    void (*mpProcess)(Object_80228224 *pViewport, Cam_801C33E8 *pCam);
+    void (*mpProcess)(Viewport_t *pViewport, Cam_801C33E8 *pCam);
 } CamFuncs_801C33E8;
 
 typedef struct CamType_801C33E8 {
@@ -49,7 +49,7 @@ static void fn_801C3448(Cam_801C33E8 *pCam)
     lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpDelete(pCam);
 }
 
-static void fn_801C3480(Object_80228224 *pViewport, void *pArg)
+static void fn_801C3480(Viewport_t *pViewport, void *pArg)
 {
     Cam_801C33E8 *pCam = pArg;
 
@@ -108,20 +108,20 @@ void fn_801C3640(Cam_801C33E8 *pCam)
     fn_801DD2B8(pCam);
 }
 
-void fn_801C3660(Object_80228224 *pViewport, void *pArg)
+void fn_801C3660(Viewport_t *pViewport, void *pArg)
 {
     Cam_801C33E8 *pCam = pArg;
 
-    fn_802286A8(pViewport, fn_801C3480, pCam);
+    VptSetCamera(pViewport, fn_801C3480, pCam);
     pCam->mpViewport = pViewport;
     fn_801C3990(pCam, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24);
 }
 
-void fn_801C36B0(Object_80228224 *pViewport, Cam_801C33E8 *pCam)
+void fn_801C36B0(Viewport_t *pViewport, Cam_801C33E8 *pCam)
 {
-    if (pCam || (pCam = fn_802286B4(pViewport))) {
-        if (pCam == fn_802286B4(pViewport)) {
-            fn_802286BC(pViewport);
+    if (pCam || (pCam = VptGetCamera(pViewport))) {
+        if (pCam == VptGetCamera(pViewport)) {
+            VptRemoveCamera(pViewport);
             pCam->mpViewport = 0;
         }
     }
@@ -210,7 +210,7 @@ void fn_801C3918(void *pUnused, Cam_801C33E8 *pCam)
 {
     float pos[3];
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0494();
     fn_801D08FC(pCam->mHeader.mUnknown14[0]);
     fn_801D09EC(pCam->mHeader.mUnknown14[1]);
@@ -226,21 +226,21 @@ void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect)
     pCam->mHeader.mUnknown20 = fov;
     pCam->mHeader.mUnknown24 = aspect;
     if (pCam->mpViewport) {
-        fn_802286D8(pCam->mpViewport, fov, aspect, pCam->mpViewport->mUnknown232, pCam->mpViewport->mUnknown236);
+        VptSetPerspective(pCam->mpViewport, fov, aspect, pCam->mpViewport->mUnknown232, pCam->mpViewport->mUnknown236);
     }
 }
 
 void fn_801C39D0(Cam_801C33E8 *pCam, float n)
 {
     if (pCam->mpViewport) {
-        fn_802286D8(pCam->mpViewport, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24, n, pCam->mpViewport->mUnknown236);
+        VptSetPerspective(pCam->mpViewport, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24, n, pCam->mpViewport->mUnknown236);
     }
 }
 
 void fn_801C3A10(Cam_801C33E8 *pCam, float scale)
 {
     if (pCam->mpViewport) {
-        fn_80228780(pCam->mpViewport, scale);
+        VptSetZScale(pCam->mpViewport, scale);
     }
 }
 

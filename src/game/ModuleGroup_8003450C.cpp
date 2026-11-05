@@ -172,14 +172,14 @@ void fn_80188E14(void);
 void fn_80188E8C(void);
 void fn_8019B25C(int a);
 void fn_8019B43C(void);
-void fn_801A4650(Object_80228224 *pObject);
+void fn_801A4650(Viewport_t *pObject);
 void fn_801A4E9C(void);
 void fn_801A4FB0(void);
 int fn_801F0F18(int a);
 void fn_801F2798(const char *pText);
-void fn_80228E18(void);
-void fn_802363B0(Object_80228224 *pObject);
-void fn_802363E0(Object_80228224 *pObject);
+void VptFlushObjectTrashSync(void);
+void fn_802363B0(Viewport_t *pObject);
+void fn_802363E0(Viewport_t *pObject);
 }
 
 static ModuleDependency sAnimintfDependencies[] = { &gAnimData, &gGameState, 0 };
@@ -357,7 +357,7 @@ int BigObj::Init()
 int BigObj::Shutdown()
 {
     fn_80041490();
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_800405F0(GameObjList::fn_80028BB4());
     return 1;
 }
@@ -1285,7 +1285,7 @@ int Statics::Init()
 
 int Statics::Shutdown()
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_800C471C(GameObjList::fn_80028BB4());
     return 1;
 }
@@ -1407,7 +1407,7 @@ int ColorStyle::Init()
 
 int ColorStyle::Shutdown()
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_80188E8C();
     return 1;
 }

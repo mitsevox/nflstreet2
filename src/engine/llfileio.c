@@ -24,7 +24,7 @@ typedef struct FontPos_801C9DD8 {
 #include "engine/cu_801C2EB4.h"
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 extern FileEntry_801C8F14 *lbl_803EBC24;
 extern Lock_801F8014 *lbl_803EBC28;
@@ -540,7 +540,7 @@ void fn_801CAB30(void)
         fn_801CEA7C(1);
         fn_801CE908(0);
         fn_801CE2B8(0);
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D0508();
         fn_801D0D94(0.0014705883f, -0.002232143f, 1.0f);
         do {

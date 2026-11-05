@@ -1,6 +1,6 @@
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXCull.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_801882B4.h"
 #include "game/cu_80163674.h"
 
@@ -104,7 +104,7 @@ void fn_801638F0(Object_80163788 *pObject)
 int fn_80163954(Object_80163788 *pObject, int value)
 {
     int context = fn_801C657C();
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown19C);
     fn_801D08FC(pObject->mUnknown1A8);
@@ -131,7 +131,7 @@ int fn_80163954(Object_80163788 *pObject, int value)
             fn_802353E8(&pObject->mUnknown48, 0x100);
             GXSetCullMode(GX_CULL_NONE);
         }
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D0544();
     }
     return 0;
@@ -191,7 +191,7 @@ int fn_80163C30(void *pHandle, int count)
 
 void fn_80163CD0(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(19);
     fn_80188728(lbl_803EB3A4);
     lbl_803EB3A4 = 0;

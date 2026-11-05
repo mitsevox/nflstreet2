@@ -100,8 +100,8 @@ void fn_801DD0C8(int, int, int, int (*)(Object_8015C244 *));
 Object_8015C244 *fn_801DD268(int, int, int, void *);
 void fn_801DD3AC(int, Object_8015C244 *, int);
 void fn_801DD320(int, Object_8015C244 *);
-void fn_80228D58(int);
-void fn_80228E18(void);
+void VptTrashObject(int);
+void VptFlushObjectTrashSync(void);
 void fn_8015BCAC(Object_8015C244 *);
 int fn_8015BF28(Object_8015C244 *, unsigned char *);
 
@@ -542,7 +542,7 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
 
 void fn_8015BFAC(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(14);
 }
 
@@ -557,7 +557,7 @@ void fn_8015C024(Object_8015C244 *p)
 {
     if (p) {
         fn_801DD320(lbl_803ECA60, p);
-        fn_80228D58((int)p);
+        VptTrashObject((int)p);
     }
 }
 

@@ -3,8 +3,8 @@
 extern "C" {
 extern char lbl_802CC750[];
 
-int fn_802280B0(void *);
-int fn_80228194(void);
+int VptInit(void *);
+int VptShutdown(void);
 }
 
 static ModuleDependency sDependencies[] = { &gSys, &gMat, &gObj, 0 };
@@ -16,12 +16,12 @@ const char *Vpt::GetName() { return "Vpt"; }
 
 int Vpt::Init()
 {
-    fn_802280B0(lbl_802CC750);
+    VptInit(lbl_802CC750);
     return 1;
 }
 
 int Vpt::Shutdown()
 {
-    fn_80228194();
+    VptShutdown();
     return 1;
 }

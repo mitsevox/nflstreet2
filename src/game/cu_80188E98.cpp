@@ -6,10 +6,10 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801C3660.h"
 #include "game/fn_801D2B7C.h"
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 
 extern "C" {
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 }
 
 /* One of the eight 56-byte records at 0x80362FC0. */
@@ -65,8 +65,8 @@ void fn_8018AD78(void);
 void fn_8018AFD0(int a);
 unsigned char fn_8018AFD8(unsigned char value);
 unsigned char fn_8018AFE8(void);
-void fn_80191378(Object_80228224 *pObject);
-void fn_80196174(Object_80228224 *pObject, int a);
+void fn_80191378(Viewport_t *pObject);
+void fn_80196174(Viewport_t *pObject, int a);
 void fn_80196204(void);
 void fn_801A139C(void);
 void fn_801A6730(void);
@@ -126,21 +126,21 @@ void fn_802212C8(void);
 void fn_80222220(void);
 void fn_80223460(void);
 void fn_80225654(void);
-void fn_802363B0(Object_80228224 *pObject);
-void fn_802363E0(Object_80228224 *pObject);
+void fn_802363B0(Viewport_t *pObject);
+void fn_802363E0(Viewport_t *pObject);
 int fn_80236EC0(int a);
 }
 
 static Cache_80188688 *lbl_803EB640 = 0;
-static Object_80228224 *lbl_803EB644 = 0;
+static Viewport_t *lbl_803EB644 = 0;
 static void *lbl_803EB648 = 0;
 static int lbl_803EB64C = 0;
 static int lbl_803EB650 = 0;
-static Object_80228224 *lbl_803EB654 = 0;
+static Viewport_t *lbl_803EB654 = 0;
 static void *lbl_803EB658 = 0;
 static int lbl_803EB65C = 0;
 static int lbl_803EB660 = 0;
-static Object_80228224 *lbl_803EB664 = 0;
+static Viewport_t *lbl_803EB664 = 0;
 static void *lbl_803EB668 = 0;
 static int lbl_803EB66C = 0;
 static int lbl_803EB670 = 0;
@@ -449,19 +449,19 @@ void fn_801897BC(void)
     fn_801892F0();
 }
 
-void fn_801897DC(Object_80228224 *pObject)
+void fn_801897DC(Viewport_t *pObject)
 {
     float near = 0.1f;
     float far = 1500.0f;
 
-    fn_802286D8(pObject, 45.0f, fn_8013D050(), near, far);
+    VptSetPerspective(pObject, 45.0f, fn_8013D050(), near, far);
 }
 
 void fn_80189844(void) {}
 
 void fn_80189848(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -474,10 +474,10 @@ void fn_80189848(void)
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB644 = fn_80228224(&desc);
+    lbl_803EB644 = VptOpen(&desc);
     fn_801897DC(lbl_803EB644);
     lbl_803EB644->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB644, 0.0f, 0.0f, 0.0f);
+    VptSetEraseColor(lbl_803EB644, 0.0f, 0.0f, 0.0f);
     lbl_803EB648 = fn_801C3610(0, 0);
     fn_801C3ED0(lbl_803EB648, 0, 0x800000, 0x800000);
     fn_801C3EA4(lbl_803EB648, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
@@ -487,10 +487,10 @@ void fn_80189848(void)
     } else {
         fn_801C3A10(lbl_803EB648, 4.0f);
     }
-    fn_80228474(lbl_803EB644, 2, fn_80191378, 31);
+    VptSetCallback(lbl_803EB644, 2, fn_80191378, 31);
     lbl_803EB64C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB64C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB644, lbl_803EB64C, 0);
+    VptSetObjectList(lbl_803EB644, lbl_803EB64C, 0);
     lbl_803EB650 = fn_801DD268(lbl_803EB64C, 21, 0, 0);
     if (!fn_80027DF0()) {
         fn_80196174(lbl_803EB644, 0);
@@ -503,7 +503,7 @@ void fn_80189848(void)
 
 void fn_80189ADC(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -516,10 +516,10 @@ void fn_80189ADC(void)
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB654 = fn_80228224(&desc);
+    lbl_803EB654 = VptOpen(&desc);
     fn_801897DC(lbl_803EB654);
     lbl_803EB654->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB654, 0.0f, 0.0f, 0.0f);
+    VptSetEraseColor(lbl_803EB654, 0.0f, 0.0f, 0.0f);
     lbl_803EB658 = fn_801C3610(0, 0);
     fn_801C3ED0(lbl_803EB658, 0, 0x800000, 0x800000);
     fn_801C3EA4(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
@@ -527,7 +527,7 @@ void fn_80189ADC(void)
     fn_801C3A10(lbl_803EB658, 4.0f);
     lbl_803EB65C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB65C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB654, lbl_803EB65C, 0);
+    VptSetObjectList(lbl_803EB654, lbl_803EB65C, 0);
     lbl_803EB660 = fn_801DD268(lbl_803EB65C, 21, 0, 0);
     lbl_803EB690 = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
     fn_802188D4(lbl_803EB690, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
@@ -537,7 +537,7 @@ void fn_80189ADC(void)
 
 void fn_80189D20(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -550,10 +550,10 @@ void fn_80189D20(void)
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB664 = fn_80228224(&desc);
+    lbl_803EB664 = VptOpen(&desc);
     fn_801897DC(lbl_803EB664);
     lbl_803EB664->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB664, 0.0f, 0.0f, 0.0f);
+    VptSetEraseColor(lbl_803EB664, 0.0f, 0.0f, 0.0f);
     lbl_803EB668 = fn_801C3610(0, 0);
     fn_801C3ED0(lbl_803EB668, 0, 0x800000, 0x800000);
     fn_801C3EA4(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
@@ -561,7 +561,7 @@ void fn_80189D20(void)
     fn_801C3A10(lbl_803EB668, 4.0f);
     lbl_803EB66C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB66C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB664, lbl_803EB66C, 0);
+    VptSetObjectList(lbl_803EB664, lbl_803EB66C, 0);
     lbl_803EB670 = fn_801DD268(lbl_803EB66C, 21, 0, 0);
     lbl_803EB68C = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
     fn_802188D4(lbl_803EB68C, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
@@ -670,16 +670,16 @@ void fn_8018A274(void)
     if (!fn_80027DF0()) {
         fn_80196204();
     }
-    fn_802284EC(lbl_803EB644, fn_80191378);
+    VptRemoveCallback(lbl_803EB644, fn_80191378);
     fn_801DD320(lbl_803EB64C, lbl_803EB650);
-    fn_80228D58(lbl_803EB650);
-    fn_80228E18();
+    VptTrashObject(lbl_803EB650);
+    VptFlushObjectTrashSync();
     lbl_803EB650 = 0;
     fn_801DD0E8(lbl_803EB64C);
     lbl_803EB64C = 0;
     fn_801C3640(lbl_803EB648);
     lbl_803EB648 = 0;
-    fn_802283FC(lbl_803EB644);
+    VptClose(lbl_803EB644);
     lbl_803EB644 = 0;
 }
 
@@ -689,14 +689,14 @@ void fn_8018A314(void)
     fn_801D2BD0(lbl_803EB690);
     lbl_803EB690 = 0;
     fn_801DD320(lbl_803EB65C, lbl_803EB660);
-    fn_80228D58(lbl_803EB660);
-    fn_80228E18();
+    VptTrashObject(lbl_803EB660);
+    VptFlushObjectTrashSync();
     lbl_803EB660 = 0;
     fn_801DD0E8(lbl_803EB65C);
     lbl_803EB65C = 0;
     fn_801C3640(lbl_803EB658);
     lbl_803EB658 = 0;
-    fn_802283FC(lbl_803EB654);
+    VptClose(lbl_803EB654);
     lbl_803EB654 = 0;
 }
 
@@ -706,14 +706,14 @@ void fn_8018A390(void)
     fn_801D2BD0(lbl_803EB68C);
     lbl_803EB68C = 0;
     fn_801DD320(lbl_803EB66C, lbl_803EB670);
-    fn_80228D58(lbl_803EB670);
-    fn_80228E18();
+    VptTrashObject(lbl_803EB670);
+    VptFlushObjectTrashSync();
     lbl_803EB670 = 0;
     fn_801DD0E8(lbl_803EB66C);
     lbl_803EB66C = 0;
     fn_801C3640(lbl_803EB668);
     lbl_803EB668 = 0;
-    fn_802283FC(lbl_803EB664);
+    VptClose(lbl_803EB664);
     lbl_803EB664 = 0;
 }
 
@@ -843,17 +843,17 @@ int fn_8018A7A0(void)
 
 void fn_8018A7B0(void)
 {
-    if (!fn_8022863C()) {
+    if (!VptIsProcessing()) {
         if (fn_80027DF0()) {
             fn_80024654();
         }
-        fn_802285CC();
+        VptProcessViewports();
         fn_8006CA84(1);
         fn_801CE82C();
     }
 }
 
-void fn_8018A7F8(Object_80228224 *pObject, int mode)
+void fn_8018A7F8(Viewport_t *pObject, int mode)
 {
     float aspect = 4.0f / 3.0f;
 
@@ -865,10 +865,10 @@ void fn_8018A7F8(Object_80228224 *pObject, int mode)
         aspect = 16.0f / 9.0f;
         break;
     }
-    fn_802286D8(pObject, 45.0f, aspect, 0.1f, 1500.0f);
+    VptSetPerspective(pObject, 45.0f, aspect, 0.1f, 1500.0f);
 }
 
-Object_80228224 *fn_8018A854(void)
+Viewport_t *fn_8018A854(void)
 {
     return lbl_803EB644;
 }

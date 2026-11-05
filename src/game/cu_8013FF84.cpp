@@ -6,7 +6,7 @@
 #include "game/fn_80227638.h"
 #include "game/Team_80167A8C.h"
 #include <math.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Lookup_8012078C.h"
 
 struct Vector_8013FF84 { float mX,mY,mZ; };
@@ -197,7 +197,7 @@ unsigned char fn_80140504(Camera_8013F738 *camera)
         Vector_8013FF84 point;
         fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
         float z = point.mZ;
-        fn_801D0470(fn_80228668());fn_801D0508();fn_801D0C58(&zero);
+        fn_801D0470(VptGetMatrixStack());fn_801D0508();fn_801D0C58(&zero);
         fn_801D0ADC(-(int)(camera->mUnknownE0*46603.37890625f));
         fn_801D08FC(0x400000);
         Vector_8013FF84 offset = {0.0f,0.0f,fn_802270A4(&state->mUnknown20)};

@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_801EF390.h"
 #include "game/Instance_801614D0.h"
 
@@ -79,8 +79,8 @@ void fn_801616C0(void *pOwner)
         fn_801A553C(pItem);
         fn_801615A0(lbl_803EB380);
         fn_801DD320((int)pOwner, (int)pItem);
-        fn_80228D58((int)pItem);
-        fn_80228E18();
+        VptTrashObject((int)pItem);
+        VptFlushObjectTrashSync();
         fn_801DCF8C(13);
         lbl_803EB380 = 0;
     }

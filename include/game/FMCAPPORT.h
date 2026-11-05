@@ -3,7 +3,7 @@
 
 #include "game/Class_8008B284.h"
 #include "game/Module.h"
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 
 struct FMCAPPORTText {
     char mChars[25];
@@ -90,7 +90,7 @@ struct FMCAPPORTState {
     int mCount;
     FMCAPPORTEntry mEntries[8];
     Object_8008A9F8 mObject;
-    Object_80228224 *mUnknown4088;
+    Viewport_t *mUnknown4088;
     int mUnknown4092;
     int mUnknown4096;
 };

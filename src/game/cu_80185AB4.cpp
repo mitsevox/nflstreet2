@@ -1,6 +1,6 @@
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 #include "game/fn_80063A0C.h"
 #include "game/fn_80072AA8.h"
 #include "game/fn_8007F6F8.h"
@@ -33,8 +33,8 @@ void fn_80074358(int a);
 int fn_800744C8(int index);
 int fn_800745D4(unsigned int index);
 void fn_8013CF98(void);
-void fn_8018A7F8(Object_80228224 *pObject, int mode);
-Object_80228224 *fn_8018A854(void);
+void fn_8018A7F8(Viewport_t *pObject, int mode);
+Viewport_t *fn_8018A854(void);
 int fn_801F48B8(int handle);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 

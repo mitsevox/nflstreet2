@@ -1,5 +1,5 @@
 #include <dolphin/gx/GXPixel.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_80193F84.h"
 #include "game/fn_801D2B7C.h"
@@ -178,7 +178,7 @@ void fn_801A5104(void)
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         GXLoadTexObj(&lbl_80366680, 0);
         fn_801D04C4();
         fn_801D0664((float (*)[4])fn_80236384(0));

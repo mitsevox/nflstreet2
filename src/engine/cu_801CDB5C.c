@@ -12,7 +12,7 @@
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 typedef struct FontTexInfo_801CDB5C {
     unsigned short mWidth;
@@ -43,7 +43,7 @@ int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, flo
     count = 0;
     fn_801CD3E4(pFont, pText, flags, maxWidth, pQuads, &count);
     if (count) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
         fn_801D0C58(pPos);
         fn_801D0F80(mtx[0]);

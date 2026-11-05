@@ -1,6 +1,6 @@
 #include "game/cu_8007F12C.h"
 #include "game/fn_80072AA8.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Class_801CBC50.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
@@ -382,7 +382,7 @@ unsigned char FELoop::fn_80027C58()
     }
     fn_80194E04();
     if (flag) {
-        fn_802285CC();
+        VptProcessViewports();
         fn_801CAF24();
         fn_8006CA84(1);
         fn_801CE82C();

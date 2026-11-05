@@ -68,7 +68,7 @@ int fn_801DCF8C(int type);
 void fn_801DD320(int handle, int item);
 }
 
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
@@ -267,7 +267,7 @@ extern "C" void fn_8003FAC4(int owner)
 
 extern "C" void fn_8003FB2C(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(3);
 }
 
@@ -288,14 +288,14 @@ extern "C" void fn_8003FBB4(int handle, int item)
 {
     if (item) {
         fn_801DD320(handle, item);
-        fn_80228D58(item);
+        VptTrashObject(item);
     }
 }
 
 extern "C" int fn_8003FBF0(Object_8003F768 *p)
 {
     if (p->mUnknown20 & 1) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
         fn_801D0508();
         fn_801D0C58(&p->mUnknown4.mX);

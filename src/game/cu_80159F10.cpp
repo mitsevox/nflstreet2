@@ -1,7 +1,7 @@
 #include "game/cu_80159F10.h"
 #include "game/cu_8019FBEC.h"
 #include <math.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Camera_8013F738.h"
 #include "game/Object_80039F5C.h"
 
@@ -61,7 +61,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 
             pCamera = fn_8013FA04(fn_8013F9F8());
             scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D04C4();
             pos = *pPos;
             pos.mZ += scale * 0.5;
@@ -71,7 +71,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
             pInstance->mUnknown20 = fn_801481B0() ? 1.0f : 0.4f;
             fn_801D0CFC(scale);
             fn_8019FD80(pInstance);
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D0544();
         }
     }
@@ -97,7 +97,7 @@ extern "C" void fn_8015A110(void *pOwner)
 
 extern "C" void fn_8015A17C(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_8019FD38();
     fn_801DCF8C(12);
 }
@@ -119,7 +119,7 @@ extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
 {
     if (pItem != 0) {
         fn_801DD320((int)pOwner, (int)pItem);
-        fn_80228D58((int)pItem);
+        VptTrashObject((int)pItem);
     }
 }
 

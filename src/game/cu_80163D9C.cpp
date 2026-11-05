@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 extern "C" {
 void fn_80146DC4(int a);
@@ -33,8 +33,8 @@ void fn_80163DD0(int handle)
 void fn_80163E54(int handle)
 {
     fn_801DD320(handle, lbl_803ECAF0);
-    fn_80228D58(lbl_803ECAF0);
-    fn_80228E18();
+    VptTrashObject(lbl_803ECAF0);
+    VptFlushObjectTrashSync();
     fn_801DCF8C(26);
     lbl_803ECAF0 = 0;
 }

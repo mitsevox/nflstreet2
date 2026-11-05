@@ -110,8 +110,8 @@ void fn_801E0520(Object_80144CE0 *pObject);
 void *fn_801EF7BC(void *pArchive, int file, void *pBuffer);
 int fn_801F010C(void *pArchive, int file);
 int fn_801F0C50(void *pArchive, int file);
-void fn_80228D58(int handle);
-void fn_80228E18(void);
+void VptTrashObject(int handle);
+void VptFlushObjectTrashSync(void);
 
 void fn_801444D8(void);
 void fn_80144564(void);
@@ -353,8 +353,8 @@ void fn_80144C6C(int handle)
     fn_80144564();
     fn_8019651C();
     fn_801DD320(handle, lbl_803EB238);
-    fn_80228D58(lbl_803EB238);
-    fn_80228E18();
+    VptTrashObject(lbl_803EB238);
+    VptFlushObjectTrashSync();
     fn_801DCF8C(22);
     lbl_803EB228 = 0;
 }

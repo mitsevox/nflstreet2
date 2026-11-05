@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_8021216C.h"
 #include "game/Object_80235588.h"
@@ -186,7 +186,7 @@ int fn_8019B174(Object_8019AD5C *pObject)
 {
     unsigned int i;
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
     fn_8019AF7C(pObject, 0, 0, 1.0f);
@@ -224,9 +224,9 @@ void fn_8019B320(int handle)
 {
     if (lbl_803EB7B0 != 0) {
         fn_801DD320(handle, lbl_803EB7B0);
-        fn_80228D58(lbl_803EB7B0);
+        VptTrashObject(lbl_803EB7B0);
     }
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(7);
     lbl_803EB7B0 = 0;
 }

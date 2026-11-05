@@ -1,5 +1,5 @@
 #include <string.h>
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 #include "game/fn_800AD9B4.h"
 #include "game/Camera_8013F738.h"
 #include "game/cu_8013BB18.h"
@@ -90,8 +90,8 @@ int fn_8013F56C(void *p, void *pBuffer)
 
     memcpy(pBuffer, p, sizeof(State_803ECA00));
     pBuffer = (char *)pBuffer + sizeof(State_803ECA00);
-    memcpy(pBuffer, pState->mpObject, sizeof(Object_80228224));
-    pBuffer = (char *)pBuffer + sizeof(Object_80228224);
+    memcpy(pBuffer, pState->mpObject, sizeof(Viewport_t));
+    pBuffer = (char *)pBuffer + sizeof(Viewport_t);
     for (short i = 0; i < 4; i++) {
         memcpy(pBuffer, pState->mSet.mpCameras[i], sizeof(CameraSave_8013F56C));
         pBuffer = (char *)pBuffer + sizeof(CameraSave_8013F56C);
@@ -100,12 +100,12 @@ int fn_8013F56C(void *p, void *pBuffer)
 }
 
 /* Restores an object from a saved copy, keeping its word at +72. */
-void fn_8013F5F4(Object_80228224 *pObject, char *pBuffer)
+void fn_8013F5F4(Viewport_t *pObject, char *pBuffer)
 {
     int saved = pObject->mUnknown72;
     char *pDst = (char *)pObject;
 
-    for (short n = sizeof(Object_80228224); n > 0; n--) {
+    for (short n = sizeof(Viewport_t); n > 0; n--) {
         *pDst++ = *pBuffer++;
     }
     pObject->mUnknown72 = saved;
@@ -117,8 +117,8 @@ int fn_8013F628(void *p, void *pBuffer)
 
     pState->mSet = ((State_803ECA00 *)pBuffer)->mSet;
     pBuffer = (char *)pBuffer + sizeof(State_803ECA00);
-    fn_8013F5F4((Object_80228224 *)pState->mpObject, (char *)pBuffer);
-    pBuffer = (char *)pBuffer + sizeof(Object_80228224);
+    fn_8013F5F4((Viewport_t *)pState->mpObject, (char *)pBuffer);
+    pBuffer = (char *)pBuffer + sizeof(Viewport_t);
     CameraSave_8013F56C *pSaved = (CameraSave_8013F56C *)pBuffer;
     for (short i = 0; i < 4; i++, pSaved++) {
         pState->mSet.mpCameras[i]->mHeader = pSaved->mHeader;
@@ -128,7 +128,7 @@ int fn_8013F628(void *p, void *pBuffer)
 
 int fn_8013F730(void *p)
 {
-    return sizeof(State_803ECA00) + sizeof(Object_80228224) + 4 * sizeof(CameraSave_8013F56C);
+    return sizeof(State_803ECA00) + sizeof(Viewport_t) + 4 * sizeof(CameraSave_8013F56C);
 }
 
 void fn_8013F738(State_803ECA00 *pState, int index)

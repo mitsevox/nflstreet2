@@ -1,6 +1,6 @@
 #include <dolphin/gx/GXFrameBuffer.h>
 #include "game/fn_80195EFC.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
@@ -13,7 +13,7 @@
 struct State_80194FE8 {
     int mUnknown0;
     unsigned int mUnknown4, mUnknown8;
-    Object_80228224 *mUnknownC;
+    Viewport_t *mUnknownC;
     unsigned char mUnknown10[4];
     unsigned int mUnknown14;
     float mUnknown18, mUnknown1C;
@@ -326,14 +326,14 @@ void fn_80195E0C(void) {
     fn_802520E0(1, 3, 1);
     fn_802528B0(0);
 }
-void fn_80195E64(Object_80228224 *) {
+void fn_80195E64(Viewport_t *) {
     Callback_80195E64 callback = lbl_802EDCF4[lbl_802EDCD0.mUnknown0];
     if (callback)
         callback(&lbl_802EDCD0, 2, lbl_802EDCD0.mUnknown14);
 }
-void fn_80195EB4(Object_80228224 *) {
+void fn_80195EB4(Viewport_t *) {
     fn_80195558(lbl_803ECBB0, lbl_803ECBB4);
-    fn_802284EC(lbl_802EDCD0.mUnknownC, fn_80195EB4);
+    VptRemoveCallback(lbl_802EDCD0.mUnknownC, fn_80195EB4);
 }
 void fn_80195EFC(int mode, unsigned int duration, unsigned int color, void (*notify)(int, float)) {
     fn_80196130();
@@ -348,7 +348,7 @@ void fn_80195EFC(int mode, unsigned int duration, unsigned int color, void (*not
 void fn_80195F80(void) {
     State_80194FE8 *state = &lbl_802EDCD0;
     if (lbl_803ECBB8) {
-        fn_80228474(state->mUnknownC, 2, fn_80195EB4, 0);
+        VptSetCallback(state->mUnknownC, 2, fn_80195EB4, 0);
         lbl_803ECBB8 = 0;
     }
     Callback_80195E64 callback = lbl_802EDCF4[state->mUnknown0];
@@ -360,7 +360,7 @@ void fn_80195F80(void) {
             }
             if (state->mUnknown20)
                 state->mUnknown20(0, 0.0f);
-            fn_80228474(state->mUnknownC, 2, fn_80195E64, 0);
+            VptSetCallback(state->mUnknownC, 2, fn_80195E64, 0);
         }
         if (state->mUnknown4 < state->mUnknown8) {
             callback(state, 1, state->mUnknown14);
@@ -368,7 +368,7 @@ void fn_80195F80(void) {
                 state->mUnknown20(1, (float)state->mUnknown4 / (float)state->mUnknown8);
             ++state->mUnknown4;
         } else {
-            fn_802284EC(state->mUnknownC, fn_80195E64);
+            VptRemoveCallback(state->mUnknownC, fn_80195E64);
             callback(state, 3, state->mUnknown14);
             if (state->mUnknown20)
                 state->mUnknown20(3, 1.0f);
@@ -382,7 +382,7 @@ void fn_80196130(void) {
     }
     lbl_803ECBB8 = 0;
 }
-void fn_80196174(Object_80228224 *object) {
+void fn_80196174(Viewport_t *object) {
     lbl_802EDCD0.mUnknown4 = 0;
     lbl_802EDCD0.mUnknown8 = 0;
     lbl_802EDCD0.mUnknownC = object;
