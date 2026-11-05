@@ -28,9 +28,9 @@ def export(dol, revision, source_report, analysis_dir, comparison_report, closed
 
 def mark_closed(decomp, rows):
     """Each unit's metadata.closed: the project's done rule as tools/files_closed.py measures it
-    (linked, descriptive file name, every function and label named with evidence). The site does
-    not read it yet: its Files exact counts units that are complete and not auto-generated. The
-    owner's site agent has the change that makes a producer's flag, set on every unit, the count."""
+    (linked, descriptive file name, every function and label named with evidence). The site shows
+    it as its own Closed row on the Files card, beside Exact, Named and Total, which keep their
+    meaning; it needs the flag on every unit or none, and a closed unit must be named and complete."""
     closed = {row['source'] for row in rows if row['closed']}
     for unit in decomp['units']:
         unit['metadata']['closed'] = unit['metadata'].get('source_path') in closed
