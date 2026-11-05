@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Block_801BE60C.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
@@ -42,8 +42,8 @@ int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
 float fn_801CFFA0(float value);
 void fn_801BD81C(void *p, float value);
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int key);
-void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, Record_8036B55C *record, Record_800D81C8 *entries);
+void fn_800DA6AC(FEPlyrModel_t *record, Record_800D81C8 *entries, int key);
+void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, FEPlyrModel_t *record, Record_800D81C8 *entries);
 void fn_800DA8D8(Object_800DA8D8 *, Block_801BE60C *, Object_80039F5C *, int, int, unsigned short, void *, Record_800D81C8 *, unsigned char);
 void fn_800DAC78(Block_801BE60C *, float, float);
 void fn_800DAC88(Block_801BE60C *, void *, Record_800D81C8 *);
@@ -222,7 +222,7 @@ int fn_800D9C40(Object_80039F5C *p)
     return result;
 }
 
-int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *record,
+int fn_800D9C80(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries, Object_80039F5C *p, int phase)
 {
     unsigned char value = 0;
@@ -378,7 +378,7 @@ unsigned char fn_800DA53C(unsigned short index)
     return lbl_802DA888[index];
 }
 
-int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *record,
+int fn_800DA54C(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries, Object_80039F5C *p, int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
@@ -405,7 +405,7 @@ int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     return 0;
 }
 
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int)
+void fn_800DA6AC(FEPlyrModel_t *record, Record_800D81C8 *entries, int)
 {
     for (unsigned int i = 0; i <= 3; i++) {
         unsigned int count = fn_801BA568((Object_801BA03C *)record, entries, lbl_802DA8AC[i].mUnknown2);
@@ -439,7 +439,7 @@ int fn_800DA7AC(Object_801BBD5C *pObject, float value)
 }
 
 void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p,
-                 int value, int index, int key, Record_8036B55C *record,
+                 int value, int index, int key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries)
 {
     fn_800DA6AC(record, entries, key);

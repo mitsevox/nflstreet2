@@ -6,7 +6,7 @@
 
 #include "engine/cu_80227F14.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8015C25C.h"
 #include "game/fn_8007F828.h"
@@ -48,14 +48,14 @@ extern "C" {
 extern float lbl_803EA2C4;
 extern void *lbl_803EB688;
 
-void fn_8003AB40(Record_8036B55C *pRecord);
+void fn_8003AB40(FEPlyrModel_t *pRecord);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E174(int a);
 void fn_8003FAC4(int a);
 void fn_8003FB2C(void);
 int fn_8003FBF0(FEPlyrScene_t *pObject, int a);
-void fn_80042270(Record_8036B55C *pRecord);
+void fn_80042270(FEPlyrModel_t *pRecord);
 void fn_800423F8(Object_8003DEC4 *pObject, void *a, void *b);
 void fn_800424C0(Object_8003DEC4 *pObject, int a);
 void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
@@ -63,34 +63,34 @@ void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int b);
 void fn_80042530(Object_8003DEC4 *pObject, int a);
 void fn_80042928(Object_8003DEC4 *pObject);
 void fn_800490A0(int index, int a, int b);
-void fn_80089A84(Record_8036B55C *pRecord, unsigned int a);
+void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int a);
 void fn_8008A248(void);
 void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FE60(void);
 void fn_8008FED4(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
-void fn_8009CDEC(Record_8036B55C *pRecord);
+void fn_8009CDEC(FEPlyrModel_t *pRecord);
 int fn_800ADD7C(void *pObject, unsigned int a);
 int fn_800ADEFC(void *pObject, unsigned int a);
 void fn_800B267C(Object_800B267C *pObject);
 void fn_800B26E0(Object_800B267C *pObject);
 void fn_800B2A14(Object_800B267C *pObject, unsigned char *a);
 int fn_800C47C4(void);
-void fn_800D7A0C(Record_8036B55C *pRecord, int a);
+void fn_800D7A0C(FEPlyrModel_t *pRecord, int a);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 struct State_80039F5C;
-void fn_800EFFA0(int a, State_80039F5C *pQueue, Record_8036B55C *pRecord, int c);
+void fn_800EFFA0(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
 void fn_80161168(void);
 void fn_8016D8B0(void *pObject);
 void fn_8018A8C8(int a);
 void fn_8018A908(void (*pCallback)(int, float, float, float, float));
-void fn_801BA03C(Object_801BA03C *pObject, void *a, float b, Record_8036B55C *pRecord);
+void fn_801BA03C(Object_801BA03C *pObject, void *a, float b, FEPlyrModel_t *pRecord);
 int fn_801BC7C0(Object_801BA03C *pObject, void *a, void *b);
 int fn_801BCA74(Object_801BA03C *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(Object_801BA03C *pObject, void *a, int b, void *c, int d, int e);
-void fn_801BE420(void *a, Object_801BA03C *pObject, void *b, Record_8036B55C *pRecord, float c);
+void fn_801BE420(void *a, Object_801BA03C *pObject, void *b, FEPlyrModel_t *pRecord, float c);
 void fn_801CE9E0(int a);
 float fn_801CFD28(int a);
 int fn_801CFFF0(int a, int b, float c);
@@ -115,7 +115,7 @@ void fn_80234424(int a);
 static Object_8008044C _FEPlyr_PlayerCursor;
 /* Matrix built by fn_80228AD4 and passed to fn_801D1258. */
 static float _FEPlyr_Projection[4][4];
-static Record_8036B55C _FEPlyr_aModels[14];
+static FEPlyrModel_t _FEPlyr_aModels[14];
 /* Current values; FEPlyrUpdateMoves interpolates them from _FEPlyr_aMoveFrom towards
    _FEPlyr_aMoveTo by the factor in _FEPlyr_afMoveTime. */
 static FEPlyrPlacement_t _FEPlyr_aPlacement[14];
@@ -144,13 +144,13 @@ static void _FEPlyrStopMove(int index);
 static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
 {
     FEPlyrPlacement_t *pState = &_FEPlyr_aPlacement[index];
-    Record_8036B55C *pRecord;
+    FEPlyrModel_t *pRecord;
 
     memset(pState, 0, sizeof(FEPlyrPlacement_t));
     pState->mUnknown16 = 1.0f;
     pState->mUnknown24 = 72;
     pRecord = &_FEPlyr_aModels[index];
-    memset(pRecord, 0, sizeof(Record_8036B55C));
+    memset(pRecord, 0, sizeof(FEPlyrModel_t));
     pRecord->mUnknown4 = pObject;
     fn_8003AB40(pRecord);
     fn_800B267C(&pRecord->mUnknown424);
@@ -171,7 +171,7 @@ static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
     FEPlyrPlayAnim(index, 82, 0);
 }
 
-static void _FEPlyrUpdatePartAnims(Record_8036B55C *pRecord, Object_8003DEC4 *pObject, float step)
+static void _FEPlyrUpdatePartAnims(FEPlyrModel_t *pRecord, Object_8003DEC4 *pObject, float step)
 {
     unsigned int i;
 
@@ -189,7 +189,7 @@ static void _FEPlyrUpdatePartAnims(Record_8036B55C *pRecord, Object_8003DEC4 *pO
     }
 }
 
-static void _FEPlyrUpdateAnims(Record_8036B55C *pRecord, float step)
+static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
 {
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     int result;
@@ -230,7 +230,7 @@ static void _FEPlyrBuildTransform(Object_8003DEC4 *pObject);
 static void _FEPlyrUpdateModel(int index, unsigned int step)
 {
     FEPlyrPlacement_t *pState = &_FEPlyr_aPlacement[index];
-    Record_8036B55C *pRecord = &_FEPlyr_aModels[index];
+    FEPlyrModel_t *pRecord = &_FEPlyr_aModels[index];
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
 
     pObject->mUnknown24 = pState->mUnknown16 * (float)pState->mUnknown24 * (1.0f / 72.0f);
@@ -277,7 +277,7 @@ static void _FEPlyrBuildTransform(Object_8003DEC4 *pObject)
 
 static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
 {
-    Record_8036B55C *pRecord = &_FEPlyr_aModels[index];
+    FEPlyrModel_t *pRecord = &_FEPlyr_aModels[index];
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     float projection[4][4];
     float view[4][4];
@@ -325,7 +325,7 @@ static void _FEPlyrRender(int index, float a, float b, float c, float d)
 
 static void _FEPlyrSetHoldFlag(int index, int enable)
 {
-    Record_8036B55C *pRecord;
+    FEPlyrModel_t *pRecord;
     Object_8003DEC4 *pObject;
 
     if (index < 0 || index >= _FEPlyr_iCount) {
@@ -438,7 +438,7 @@ void FEPlyrSetScale(int index, float scale)
 
 void FEPlyrPlayAnim(int index, int a, int b)
 {
-    Record_8036B55C *pRecord;
+    FEPlyrModel_t *pRecord;
 
     _FEPlyrSetHoldFlag(index, 0);
     pRecord = &_FEPlyr_aModels[index];
@@ -450,7 +450,7 @@ void FEPlyrPlayAnim(int index, int a, int b)
 
 void FEPlyrSetPose(int index, unsigned int value)
 {
-    Record_8036B55C *pRecord = &_FEPlyr_aModels[index];
+    FEPlyrModel_t *pRecord = &_FEPlyr_aModels[index];
 
     if (value > 30) {
         _FEPlyr_pScene->mUnknown20 |= 1;
@@ -645,8 +645,8 @@ int FEPlyrGetFrontIndex(void)
 
 void FEPlyrPlayPairAnim(void)
 {
-    Record_8036B55C *pFirst = &_FEPlyr_aModels[_FEPlyr_iFrontIndex];
-    Record_8036B55C *pSecond = &_FEPlyr_aModels[_FEPlyr_iBackIndex];
+    FEPlyrModel_t *pFirst = &_FEPlyr_aModels[_FEPlyr_iFrontIndex];
+    FEPlyrModel_t *pSecond = &_FEPlyr_aModels[_FEPlyr_iBackIndex];
 
     FEPlyrPlayAnim(_FEPlyr_iFrontIndex, 214, 0);
     FEPlyrPlayAnim(_FEPlyr_iBackIndex, 214, 0);

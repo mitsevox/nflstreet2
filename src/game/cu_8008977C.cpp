@@ -1,4 +1,4 @@
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_801BBD5C.h"
 #include "game/fn_801BA2A8.h"
@@ -38,7 +38,7 @@ static unsigned char sSelect = 1;
 static int sLast = -1;
 
 extern "C" {
-int fn_8008977C(Record_8036B55C *pRecord, Table_80089904 *pTable, unsigned int value)
+int fn_8008977C(FEPlyrModel_t *pRecord, Table_80089904 *pTable, unsigned int value)
 {
     unsigned char values[4];
     int best = -1;
@@ -70,7 +70,7 @@ int fn_8008977C(Record_8036B55C *pRecord, Table_80089904 *pTable, unsigned int v
     return best;
 }
 
-int fn_80089904(Record_8036B55C *pRecord, Table_80089904 *pTable,
+int fn_80089904(FEPlyrModel_t *pRecord, Table_80089904 *pTable,
                 unsigned int value, int type)
 {
     int result = -1;
@@ -118,7 +118,7 @@ int fn_80089904(Record_8036B55C *pRecord, Table_80089904 *pTable,
     return result;
 }
 
-void fn_80089A84(Record_8036B55C *pRecord, unsigned int value)
+void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int value)
 {
     int index = pRecord->mUnknown1;
     Transition_80089A84 previous;
@@ -221,7 +221,7 @@ void fn_80089A84(Record_8036B55C *pRecord, unsigned int value)
 }
 
 int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
-                Record_8036B55C *pRecord, unsigned int phase)
+                FEPlyrModel_t *pRecord, unsigned int phase)
 {
     int index = pRecord->mUnknown1;
     signed char choice;

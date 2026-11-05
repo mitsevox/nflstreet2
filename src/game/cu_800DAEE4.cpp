@@ -937,7 +937,7 @@ void fn_80227384(void *pOut, void *p, int angle);
 extern float lbl_803EAD20;
 
 #include "game/Object_800DA8D8.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 struct Record_800DC6F4 {
     int mUnknown0, mUnknown4;
     unsigned char mUnknown8, mUnknown9, mUnknown10;
@@ -953,7 +953,7 @@ extern "C" {
 Object_801BBD5C *fn_801BBD5C(unsigned short key, unsigned short id);
 int fn_801BA2D0(void *pA, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
 void fn_801BA418(void *pA, Record_800D81C8 *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
-void fn_800DA814(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, Record_8036B55C *pA, Record_800D81C8 *pEntries);
+void fn_800DA814(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, Record_800D81C8 *pEntries);
 void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, Record_800D81C8 *pEntries, unsigned char flag);
 void fn_800DAC78(Block_801BE60C *p, float a, float b);
 void fn_800DAC88(Block_801BE60C *p, void *pA, Record_800D81C8 *pEntries);
@@ -1318,7 +1318,7 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
         int index = fn_800DC674(pObject, p);
         pRecord->mUnknown4 = 1.0f;
         unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
-        fn_800DA814((Object_800DA8D8 *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, (Record_8036B55C *)pA, pEntries);
+        fn_800DA814((Object_800DA8D8 *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
         pRecord->mUnknown12 = index;
         fn_800DC6A8(pObject, p, index, pRecord, (int)pEntries);
         pRecord->mUnknown16 = 0;

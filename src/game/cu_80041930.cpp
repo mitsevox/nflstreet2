@@ -1,7 +1,7 @@
 #include "game/Frame_8019D3B8.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_801BC084.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/bitstream.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
@@ -311,7 +311,7 @@ void fn_80042208(Object_8003DEC4 *pObject)
 
 void fn_80042310(Object_8003DEC4 *pObject);
 
-void fn_80042270(Record_8036B55C *pRecord)
+void fn_80042270(FEPlyrModel_t *pRecord)
 {
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     Object_800B267C *pMotion = &pRecord->mUnknown424;
