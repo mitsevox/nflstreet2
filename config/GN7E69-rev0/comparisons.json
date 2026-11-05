@@ -42202,7 +42202,7 @@
     {
       "source": "src/engine/FSasync.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), function rows, compiler and source-form rows. State globals 0x802CC580-0x802CC5C0 stay external. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), function rows, compiler and source-form rows. State globals 0x802CC580-0x802CC5E0 stay external. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

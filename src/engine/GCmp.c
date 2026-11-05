@@ -1,5 +1,39 @@
 #include "engine/GCmp.h"
 
+typedef void *(*CodecInit_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst);
+typedef int (*CodecRun_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState);
+typedef void (*CodecEnd_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState);
+
+/* 40-byte codec descriptor registered through fn_8027F2D8. */
+typedef struct Codec_8027F2D8 {
+    unsigned int mTag;
+    unsigned int mFlags;
+    CodecInit_8027F2D8 mpEncodeInit;
+    CodecRun_8027F2D8 mpEncodeRun;
+    CodecEnd_8027F2D8 mpEncodeEnd;
+    CodecInit_8027F2D8 mpDecodeInit;
+    CodecRun_8027F2D8 mpDecodeRun;
+    CodecEnd_8027F2D8 mpDecodeEnd;
+    int (*mpStartup)(void);
+    int (*mpShutdown)(void);
+} Codec_8027F2D8;
+
+/* 28-byte stream record allocated by fn_8027F45C and fn_8027F7B0. */
+typedef struct Stream_8027F45C {
+    Buffer_8027F9AC *mpSrc;
+    Buffer_8027F9AC *mpDst;
+    void *mpState;
+    int mMode;
+    int mCodec;
+    unsigned int mStatus;
+    unsigned char mOwnsDst;
+} Stream_8027F45C;
+
+int fn_8027F2D8(int index, Codec_8027F2D8 *pCodec);
+Stream_8027F45C *fn_8027F45C(int mode, int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst);
+void fn_8027F61C(Stream_8027F45C *pStream);
+void fn_8027F6A8(Stream_8027F45C *pStream);
+
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
 extern void *fn_801D310C(void *allocation, int size, int c, int d);
