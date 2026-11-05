@@ -70,12 +70,15 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801FA870	0x801FA870	0x801FA870	alignment	3	3	t3db.c	t3db_io.c
 .text	0x801FC9D4	0x801FC9D4	0x801FC9D4	data	2	0	t3db_io.c	T3DB_Compiler.c
 .text	0x802009B0	0x802009B0	0x802009B0	alignment	0	23	T3DB_Compiler.c	T3DB_Lexer.c
-.text	-	0x80201D94	0x80201EC8	open	-	-	T3DB_Lexer.c	t3db_index.c
+.text	0x80201D94	0x80201D94	0x80201D94	alignment	0	0	T3DB_Lexer.c	t3db_bitdata.c
+.text	0x80201EC8	0x80201EC8	0x80201EC8	alignment	0	1	t3db_bitdata.c	t3db_index.c
 .text	0x80203444	0x80203444	0x80203444	alignment	1	16	t3db_index.c	t3db_mem.c
 .text	0x80203754	0x80203754	0x80203754	alignment	0	4	t3db_mem.c	t3db_expr.c
 .text	0x80205754	0x80205754	0x80205754	alignment	2	12	t3db_expr.c	t3db_query.c
 .text	0x8020B564	0x8020B564	0x8020B564	alignment	2	11	t3db_query.c	t3db_table.c
-.text	-	0x8020CD2C	0x8020D0CC	open	-	-	t3db_table.c	tdbext.c
+.text	0x8020CD2C	0x8020CD2C	0x8020CD2C	alignment	0	5	t3db_table.c	t3db_blob.c
+.text	0x8020CEC4	0x8020CEC4	0x8020CEC4	alignment	0	0	t3db_blob.c	t3db_data.c
+.text	-	0x8020CFA0	0x8020D0CC	open	-	-	t3db_data.c	tdbext.c
 .text	-	0x8020D2D0	0x8020D388	open	-	-	tdbext.c	tdbiomem.c
 .text	0x8020D534	0x8020D534	0x8020D534	alignment	0	0	tdbiomem.c	tdbiores.c
 .text	0x8020DB34	0x8020DB34	0x8020DB34	alignment	0	0	tdbiores.c	texture.c
