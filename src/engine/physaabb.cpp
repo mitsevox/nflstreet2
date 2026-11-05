@@ -1,11 +1,14 @@
-#include "engine/cu_801EADD8.h"
+/* Rigid-body physics: axis-aligned bounding boxes for collision shapes, which can be grown by
+   points, moved by a matrix and drawn for debugging. */
+
+#include "engine/physaabb.h"
 #include "engine/llmatrix.h"
 
 extern "C" {
 void fn_801E736C(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);
 }
 
-Class_801EADD8::Class_801EADD8()
+BoundingBox::BoundingBox()
 {
     Vec3_801DE1E0 *pMax = &mMax;
 
@@ -13,23 +16,23 @@ Class_801EADD8::Class_801EADD8()
     pMax->x = pMax->y = pMax->z = 0.0f;
 }
 
-Class_801EADD8::~Class_801EADD8()
+BoundingBox::~BoundingBox()
 {
 }
 
-void Class_801EADD8::fn_801EAE44(Vec3_801DE1E0 *pMin, Vec3_801DE1E0 *pMax)
+void BoundingBox::SetBounds(Vec3_801DE1E0 *pMin, Vec3_801DE1E0 *pMax)
 {
     mMin = *pMin;
     mMax = *pMax;
 }
 
-void Class_801EADD8::fn_801EAE7C(Vec3_801DE1E0 *pPoint)
+void BoundingBox::SetToPoint(Vec3_801DE1E0 *pPoint)
 {
     mMin = *pPoint;
     mMax = *pPoint;
 }
 
-void Class_801EADD8::fn_801EAEB4(Vec3_801DE1E0 *pPoint)
+void BoundingBox::ExtendToPoint(Vec3_801DE1E0 *pPoint)
 {
     mMin.x = pPoint->x <= mMin.x ? pPoint->x : mMin.x;
     mMin.y = pPoint->y <= mMin.y ? pPoint->y : mMin.y;
@@ -39,7 +42,7 @@ void Class_801EADD8::fn_801EAEB4(Vec3_801DE1E0 *pPoint)
     mMax.z = pPoint->z >= mMax.z ? pPoint->z : mMax.z;
 }
 
-void Class_801EADD8::fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut)
+void BoundingBox::TransformBox(float (*m)[4], BoundingBox *pOut)
 {
     Vec3_801DE1E0 axisX;
     Vec3_801DE1E0 axisY;
@@ -69,24 +72,24 @@ void Class_801EADD8::fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut)
     fn_80227264(&axisX, &axisX, sizeX);
     fn_80227264(&axisY, &axisY, sizeY);
     fn_80227264(&axisZ, &axisZ, sizeZ);
-    pOut->fn_801EAE7C(&corner);
+    pOut->SetToPoint(&corner);
     fn_8022765C(&point, &corner, &axisX);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
     fn_8022765C(&point, &point, &axisY);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
     fn_8022765C(&point, &corner, &axisY);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
     fn_8022765C(&corner, &corner, &axisZ);
-    pOut->fn_801EAEB4(&corner);
+    pOut->ExtendToPoint(&corner);
     fn_8022765C(&point, &corner, &axisX);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
     fn_8022765C(&point, &point, &axisY);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
     fn_8022765C(&point, &corner, &axisY);
-    pOut->fn_801EAEB4(&point);
+    pOut->ExtendToPoint(&point);
 }
 
-void Class_801EADD8::fn_801EB134(int a, int b, int c)
+void BoundingBox::DrawDebug(int a, int b, int c)
 {
     Vec3_801DE1E0 axisX;
     Vec3_801DE1E0 axisY;

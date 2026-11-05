@@ -16,8 +16,8 @@ int fn_801E17D0(int a, PadState_801E17D0 *pState);
 int fn_801E194C(void);
 int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
-void fn_801E1C38(unsigned char a);
-int fn_801E1CE0(unsigned char a);
+void PerCheckConnectSingle(unsigned char a);
+int PerIsDeviceConnected(unsigned char a);
 int fn_801EC314(int a, int b, int count, char *p);
 float fn_801EC418(int a, int b, char *p);
 int fn_8023790C(void);
@@ -89,8 +89,8 @@ int fn_80026CC4(int handle)
 {
     int ready = 0;
 
-    fn_801E1C38(handle);
-    if (fn_801E1CE0(handle)) {
+    PerCheckConnectSingle(handle);
+    if (PerIsDeviceConnected(handle)) {
         ready = fn_801E15D0(handle) == 0;
     }
     if (!ready || fn_801E195C(handle) != 2 || !(fn_801E19B4(handle) >> 16)) {

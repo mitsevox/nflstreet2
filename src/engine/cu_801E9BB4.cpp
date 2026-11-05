@@ -1,31 +1,31 @@
-#include "engine/Body_801E9538.h"
+#include "engine/rigidbody.h"
 #include "engine/llmatrix.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
 
 // Supply the quaternion pose to callers that synchronize the visible object.
-void GetBodyOrientation(Body_801E9538 *pBody, Vec4_801DE1E0 *pOrientation)
+void GetBodyOrientation(RigidBody_t *pBody, Vec4_801DE1E0 *pOrientation)
 {
     *pOrientation = pBody->mUnknown054;
 }
 
 // Rebuild derived motion after replacing linear momentum.
-void SetBodyLinearMomentum(Body_801E9538 *pBody, Vec3_801DE1E0 *pMomentum)
+void SetBodyLinearMomentum(RigidBody_t *pBody, Vec3_801DE1E0 *pMomentum)
 {
     pBody->mUnknown070 = *pMomentum;
     fn_801E987C(pBody);
 }
 
 // Rebuild derived motion after replacing angular momentum.
-void SetBodyAngularMomentum(Body_801E9538 *pBody, Vec3_801DE1E0 *pMomentum)
+void SetBodyAngularMomentum(RigidBody_t *pBody, Vec3_801DE1E0 *pMomentum)
 {
     pBody->mUnknown07C = *pMomentum;
     fn_801E987C(pBody);
 }
 
 // A body with zero inverse mass cannot acquire linear momentum this way.
-void SetBodyLinearVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pVelocity)
+void SetBodyLinearVelocity(RigidBody_t *pBody, Vec3_801DE1E0 *pVelocity)
 {
     if (pBody->mUnknown044 != 0.0f) {
         pBody->mUnknown108 = *pVelocity;
@@ -34,7 +34,7 @@ void SetBodyLinearVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pVelocity)
 }
 
 // Clear the accumulated force and torque for the next integration step.
-void ClearBodyForces(Body_801E9538 *pBody)
+void ClearBodyForces(RigidBody_t *pBody)
 {
     Vec3_801DE1E0 &force = pBody->mUnknown120;
     Vec3_801DE1E0 &torque = pBody->mUnknown12C;
@@ -43,7 +43,7 @@ void ClearBodyForces(Body_801E9538 *pBody)
 }
 
 // A force away from the body origin also contributes torque.
-void AddBodyForceAtPoint(Body_801E9538 *pBody, Vec3_801DE1E0 *pForce, Vec3_801DE1E0 *pPoint)
+void AddBodyForceAtPoint(RigidBody_t *pBody, Vec3_801DE1E0 *pForce, Vec3_801DE1E0 *pPoint)
 {
     Vec3_801DE1E0 offset;
     Vec3_801DE1E0 torque;
@@ -54,7 +54,7 @@ void AddBodyForceAtPoint(Body_801E9538 *pBody, Vec3_801DE1E0 *pForce, Vec3_801DE
 }
 
 // Only states above one accept impulse changes to linear and angular momentum.
-void ApplyBodyImpulseAtPoint(Body_801E9538 *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint)
+void ApplyBodyImpulseAtPoint(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint)
 {
     if ((unsigned int)pBody->mState > 1) {
         Vec3_801DE1E0 offset;
@@ -67,7 +67,7 @@ void ApplyBodyImpulseAtPoint(Body_801E9538 *pBody, Vec3_801DE1E0 *pImpulse, Vec3
 }
 
 // Apply a pure angular impulse under the same state gate as a point impulse.
-void ApplyBodyAngularImpulse(Body_801E9538 *pBody, Vec3_801DE1E0 *pImpulse)
+void ApplyBodyAngularImpulse(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse)
 {
     if ((unsigned int)pBody->mState > 1) {
         fn_8022765C(&pBody->mUnknown07C, &pBody->mUnknown07C, pImpulse);
@@ -75,7 +75,7 @@ void ApplyBodyAngularImpulse(Body_801E9538 *pBody, Vec3_801DE1E0 *pImpulse)
 }
 
 // Point velocity combines translation with rotation about the body origin.
-void GetBodyPointVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVelocity)
+void GetBodyPointVelocity(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVelocity)
 {
     Vec3_801DE1E0 offset;
     fn_802276B4(&offset, pPoint, &pBody->mUnknown064);
@@ -84,7 +84,7 @@ void GetBodyPointVelocity(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801D
 }
 
 // Evaluate the rotational contribution along a direction at a world-space point.
-float ComputeBodyRotationalResponse(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection)
+float ComputeBodyRotationalResponse(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pDirection)
 {
     float rotationalResponse;
     if (pBody->mState != 0) {
@@ -105,7 +105,7 @@ float ComputeBodyRotationalResponse(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint,
 }
 
 // Entering the sleeping state clears both momenta and their derived velocities.
-void SetBodyMotionState(Body_801E9538 *pBody, int state)
+void SetBodyMotionState(RigidBody_t *pBody, int state)
 {
     if (state != pBody->mState) {
         pBody->mState = state;

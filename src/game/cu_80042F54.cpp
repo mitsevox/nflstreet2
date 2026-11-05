@@ -117,9 +117,9 @@ int fn_801C333C(const char *pString);
 void fn_801CE910(void);
 void fn_801D0470(int a);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
 int fn_801F0A8C(void *pData, char *pName);
 void *fn_80216860(int handle, const char *pName);
 void *fn_80216BFC(void *pNode, const char *pName);
@@ -915,14 +915,14 @@ int fn_80044A7C(void *p)
 
 void fn_80044AB0(void)
 {
-    fn_801DCF0C(16, 0x60, 40, fn_800449EC, fn_80044A38);
-    fn_801DD0C8(lbl_803EA4A4, 16, 0, fn_80044A7C);
+    ObjNewType_(16, 0x60, 40, fn_800449EC, fn_80044A38);
+    ObjSetListObjFunc(lbl_803EA4A4, 16, 0, fn_80044A7C);
 }
 
 void fn_80044B04(void)
 {
     fn_80228E18();
-    fn_801DCF8C(16);
+    ObjDelType(16);
 }
 
 void fn_80044B2C(int handle)

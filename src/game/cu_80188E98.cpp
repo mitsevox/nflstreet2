@@ -89,13 +89,13 @@ void fn_801CECDC(int a);
 float fn_801CFD28(int a);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-int fn_801DCF8C(int a);
-int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(int, int));
-void fn_801DD0E8(int handle);
-int fn_801DD268(int handle, int a, int b, int c);
-void fn_801DD320(int handle, int a);
+int ObjNewType_(int a, int b, int c, void (*pA)(), void (*pB)());
+int ObjDelType(int a);
+int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(int, int));
+void ObjDelList(int handle);
+int ObjNewInList(int handle, int a, int b, int c);
+void ObjRemoveFromList(int handle, int a);
 int fn_802188A0(int a, int b, int c, int d, int e, int f);
 void fn_802188D4(void *p, int a, int b, int c, int d, int e, int f, unsigned int g);
 void fn_80218A34(void *p);
@@ -488,10 +488,10 @@ void fn_80189848(void)
         fn_801C3A10(lbl_803EB648, 4.0f);
     }
     fn_80228474(lbl_803EB644, 2, fn_80191378, 31);
-    lbl_803EB64C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB64C, 21, 0, fn_80189004);
+    lbl_803EB64C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB64C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB644, lbl_803EB64C, 0);
-    lbl_803EB650 = fn_801DD268(lbl_803EB64C, 21, 0, 0);
+    lbl_803EB650 = ObjNewInList(lbl_803EB64C, 21, 0, 0);
     if (!fn_80027DF0()) {
         fn_80196174(lbl_803EB644, 0);
     }
@@ -525,10 +525,10 @@ void fn_80189ADC(void)
     fn_801C3EA4(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
     fn_801C3660(lbl_803EB654, lbl_803EB658);
     fn_801C3A10(lbl_803EB658, 4.0f);
-    lbl_803EB65C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB65C, 21, 0, fn_80189004);
+    lbl_803EB65C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB65C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB654, lbl_803EB65C, 0);
-    lbl_803EB660 = fn_801DD268(lbl_803EB65C, 21, 0, 0);
+    lbl_803EB660 = ObjNewInList(lbl_803EB65C, 21, 0, 0);
     lbl_803EB690 = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
     fn_802188D4(lbl_803EB690, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
     fn_80188ED4(lbl_803EB690);
@@ -559,10 +559,10 @@ void fn_80189D20(void)
     fn_801C3EA4(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
     fn_801C3660(lbl_803EB664, lbl_803EB668);
     fn_801C3A10(lbl_803EB668, 4.0f);
-    lbl_803EB66C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB66C, 21, 0, fn_80189004);
+    lbl_803EB66C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB66C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB664, lbl_803EB66C, 0);
-    lbl_803EB670 = fn_801DD268(lbl_803EB66C, 21, 0, 0);
+    lbl_803EB670 = ObjNewInList(lbl_803EB66C, 21, 0, 0);
     lbl_803EB68C = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
     fn_802188D4(lbl_803EB68C, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
     fn_80188ED4(lbl_803EB68C);
@@ -580,7 +580,7 @@ void fn_80189F68(void)
 
     lbl_803EB680 = 0;
     fn_8021D880(fn_80188EA0);
-    fn_801DCF0C(21, 20, 4, fn_80188EA4, fn_80188EA8);
+    ObjNewType_(21, 20, 4, fn_80188EA4, fn_80188EA8);
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 15;
     desc.mUnknown8 = lbl_803EB698;
@@ -671,11 +671,11 @@ void fn_8018A274(void)
         fn_80196204();
     }
     fn_802284EC(lbl_803EB644, fn_80191378);
-    fn_801DD320(lbl_803EB64C, lbl_803EB650);
+    ObjRemoveFromList(lbl_803EB64C, lbl_803EB650);
     fn_80228D58(lbl_803EB650);
     fn_80228E18();
     lbl_803EB650 = 0;
-    fn_801DD0E8(lbl_803EB64C);
+    ObjDelList(lbl_803EB64C);
     lbl_803EB64C = 0;
     fn_801C3640(lbl_803EB648);
     lbl_803EB648 = 0;
@@ -688,11 +688,11 @@ void fn_8018A314(void)
     fn_80218A34(lbl_803EB690);
     fn_801D2BD0(lbl_803EB690);
     lbl_803EB690 = 0;
-    fn_801DD320(lbl_803EB65C, lbl_803EB660);
+    ObjRemoveFromList(lbl_803EB65C, lbl_803EB660);
     fn_80228D58(lbl_803EB660);
     fn_80228E18();
     lbl_803EB660 = 0;
-    fn_801DD0E8(lbl_803EB65C);
+    ObjDelList(lbl_803EB65C);
     lbl_803EB65C = 0;
     fn_801C3640(lbl_803EB658);
     lbl_803EB658 = 0;
@@ -705,11 +705,11 @@ void fn_8018A390(void)
     fn_80218A34(lbl_803EB68C);
     fn_801D2BD0(lbl_803EB68C);
     lbl_803EB68C = 0;
-    fn_801DD320(lbl_803EB66C, lbl_803EB670);
+    ObjRemoveFromList(lbl_803EB66C, lbl_803EB670);
     fn_80228D58(lbl_803EB670);
     fn_80228E18();
     lbl_803EB670 = 0;
-    fn_801DD0E8(lbl_803EB66C);
+    ObjDelList(lbl_803EB66C);
     lbl_803EB66C = 0;
     fn_801C3640(lbl_803EB668);
     lbl_803EB668 = 0;
@@ -740,7 +740,7 @@ void fn_8018A40C(void)
     fn_8018AB3C();
     fn_80188728(lbl_803EB640);
     lbl_803EB640 = 0;
-    fn_801DCF8C(21);
+    ObjDelType(21);
 }
 
 void fn_8018A4B4(int a)

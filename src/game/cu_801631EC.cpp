@@ -45,14 +45,14 @@ void fn_801D0544(void);
 void fn_801D08FC(int a);
 void fn_801D0C58(void *p);
 void fn_801D0CFC(float a);
-int fn_801DCF0C(int type, int size, int count,
+int ObjNewType_(int type, int size, int count,
                 void (*pCreate)(Object_80163358 *, int *),
                 void (*pDestroy)(Object_80163358 *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
-int fn_801DD268(int handle, int type, int a, int *pDesc);
-void fn_801DD320(int handle, Object_80163358 *pObject);
-void fn_801DD3AC(int handle, Object_80163358 *pObject, int a);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
+int ObjNewInList(int handle, int type, int a, int *pDesc);
+void ObjRemoveFromList(int handle, Object_80163358 *pObject);
+void ObjSetPriority(int handle, Object_80163358 *pObject, int a);
 void fn_80210814(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
@@ -110,14 +110,14 @@ void fn_80163074(int index)
 
 void fn_801631EC(int handle)
 {
-    fn_801DCF0C(18, sizeof(Object_80163358), 1, fn_80163358, fn_80163414);
-    fn_801DD0C8(handle, 18, 0, fn_8016345C);
+    ObjNewType_(18, sizeof(Object_80163358), 1, fn_80163358, fn_80163414);
+    ObjSetListObjFunc(handle, 18, 0, fn_8016345C);
 }
 
 void fn_8016324C(void)
 {
     fn_80228E18();
-    fn_801DCF8C(18);
+    ObjDelType(18);
 }
 
 void fn_80163274(int handle)
@@ -132,14 +132,14 @@ void fn_80163274(int handle)
     } else {
         lbl_802E989C.mCount = 1;
     }
-    lbl_802E989C.mpObject = (Object_80163358 *)fn_801DD268(handle, 18, 0, &desc);
-    fn_801DD3AC(handle, lbl_802E989C.mpObject, 3);
+    lbl_802E989C.mpObject = (Object_80163358 *)ObjNewInList(handle, 18, 0, &desc);
+    ObjSetPriority(handle, lbl_802E989C.mpObject, 3);
 }
 
 void fn_80163300(int handle)
 {
     if (lbl_802E989C.mpObject != 0) {
-        fn_801DD320(handle, lbl_802E989C.mpObject);
+        ObjRemoveFromList(handle, lbl_802E989C.mpObject);
         fn_80228D58((int)lbl_802E989C.mpObject);
         lbl_802E989C.mpObject = 0;
     }

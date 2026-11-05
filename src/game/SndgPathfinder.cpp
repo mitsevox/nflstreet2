@@ -1,4 +1,4 @@
-#include "engine/cu_801E0A1C.h"
+#include "engine/pathfinder.h"
 #include <string.h>
 #include "game/fn_8009D990.h"
 
@@ -2613,10 +2613,10 @@ int SndgPathfinder::Init()
     lbl_803EA698->mpPool[1] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     lbl_803EA698->mpPool[2] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     if (fn_801F3E28()) {
-        Desc_801E0AEC desc;
+        PathfinderInitDesc_t desc;
         desc.mHeap = 1;
         desc.mCount = 3;
-        fn_801E0AEC(&desc);
+        PathfinderInit(&desc);
         fn_801B2F18(fn_8006D91C, fn_8006D98C, fn_8006D9FC);
     }
     return 1;
@@ -2625,7 +2625,7 @@ int SndgPathfinder::Init()
 int SndgPathfinder::Shutdown()
 {
     if (fn_801F3E28()) {
-        fn_801E0BE4();
+        PathfinderShutdown();
     }
     fn_801C69E4(lbl_803EA698->mpPool[0]);
     fn_801C69E4(lbl_803EA698->mpPool[1]);
@@ -2638,8 +2638,8 @@ int SndgPathfinder::Shutdown()
 extern "C" int fn_8006DBF8(void *pData, int unknown)
 {
     int result = -1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0CA8(pData, unknown, 1);
+    if (PathfinderIsInit()) {
+        result = PathfinderLoadMap(pData, unknown, 1);
     }
     return result;
 }
@@ -2647,8 +2647,8 @@ extern "C" int fn_8006DBF8(void *pData, int unknown)
 extern "C" int fn_8006DC4C(int handle)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        result = fn_801E0D68(handle) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderUnloadMap(handle) >= 0;
     }
     return result;
 }
@@ -2656,8 +2656,8 @@ extern "C" int fn_8006DC4C(int handle)
 extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        Desc_801E0DF0 desc;
+    if (PathfinderIsInit()) {
+        PathfinderTrackDesc_t desc;
         desc.mUnknown24 = 0;
         desc.mUnknown10 = 0;
         desc.mUnknown14.mUnknown8 = 0;
@@ -2667,7 +2667,7 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
         desc.mUnknown0C = value;
         desc.mUnknown04 = 1000;
         desc.mUnknown08 = 2;
-        result = fn_801E0DF0(&desc) >= 0;
+        result = PathfinderCreateTrack(&desc) >= 0;
     }
     return result;
 }
@@ -2675,31 +2675,31 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
 extern "C" int fn_8006DD24(int id)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        result = fn_801E0EF8(id) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderDestroyTrack(id) >= 0;
     }
     return result;
 }
 
 extern "C" void fn_8006DD70(int id, unsigned int value)
 {
-    if (fn_801E0AE4()) {
-        fn_801E0FBC(id, value);
+    if (PathfinderIsInit()) {
+        PathfinderSetVolume(id, value);
     }
 }
 
 extern "C" void fn_8006DDB4(int a, int b, int c)
 {
-    if (fn_801E0AE4()) {
-        fn_801E0FE0(a, b, c);
+    if (PathfinderIsInit()) {
+        PathfinderFade(a, b, c);
     }
 }
 
 extern "C" int fn_8006DE00(int id, int unknown)
 {
     int result = 1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0F9C(id, unknown) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderEvent(id, unknown) >= 0;
     }
     return result;
 }
@@ -2707,37 +2707,37 @@ extern "C" int fn_8006DE00(int id, int unknown)
 extern "C" int fn_8006DE54(int id, int unknown)
 {
     int result = 1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0F7C(id, unknown) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderControl(id, unknown) >= 0;
     }
     return result;
 }
 
 extern "C" void fn_8006DEA8(int a, int b)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1048(a, b);
+    if (PathfinderIsInit()) {
+        PathfinderSetStreamValue(a, b);
     }
 }
 
 extern "C" void fn_8006DEEC(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1004(a, 1);
+    if (PathfinderIsInit()) {
+        PathfinderPause(a, 1);
     }
 }
 
 extern "C" void fn_8006DF2C(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1004(a, 0);
+    if (PathfinderIsInit()) {
+        PathfinderPause(a, 0);
     }
 }
 
 extern "C" void fn_8006DF6C(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1028(a);
+    if (PathfinderIsInit()) {
+        PathfinderStop(a);
     }
 }
 

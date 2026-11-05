@@ -7,7 +7,7 @@
 typedef struct Init_802280B0 {
     int mUnknown0;            /* element count of the 248-byte object pool */
     int mUnknown4;            /* element count of the 16-byte callback pool */
-    unsigned short mUnknown8; /* passed to fn_801DCFF0 when nonzero */
+    unsigned short mUnknown8; /* passed to ObjNewList when nonzero */
     unsigned char mUnknown10;
     unsigned char mUnknown11;
 } Init_802280B0;

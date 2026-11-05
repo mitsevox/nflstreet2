@@ -26,7 +26,7 @@ int fn_801E15D0(int a);
 unsigned int fn_801E1954();
 int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
-void fn_801E1C38(unsigned char a);
+void PerCheckConnectSingle(unsigned char a);
 unsigned int fn_801D6CB8(int, int);
 void fn_80021504(int, int *);
 void fn_8002153C();
@@ -66,7 +66,7 @@ extern "C" void fn_800213F0(int *pFound)
     int found = 0;
     unsigned int count = fn_801E1954();
     for (unsigned int i = 0; i < count; ++i) {
-        fn_801E1C38(i);
+        PerCheckConnectSingle(i);
         if (fn_801E19B4(i) >> 16) {
             fn_801E15D0(i);
             if (fn_801E19B4(i) & 0x800) {

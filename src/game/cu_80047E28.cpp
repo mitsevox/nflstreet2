@@ -99,9 +99,9 @@ void fn_801A4AD4(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040 *), void (*pB)(Object_8003DEC4 *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
+int ObjNewType_(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040 *), void (*pB)(Object_8003DEC4 *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
 }
 
 static Object_8008044C lbl_80307720;
@@ -1165,9 +1165,9 @@ extern "C" void fn_8004A118(void)
 
 extern "C" void fn_8004A140(int owner, int type, int count)
 {
-    fn_801DCF0C(type, 0x19F0, count, fn_8004A040, fn_8004A0AC);
+    ObjNewType_(type, 0x19F0, count, fn_8004A040, fn_8004A0AC);
     if (owner) {
-        fn_801DD0C8(owner, type, 0, fn_8004A1A8);
+        ObjSetListObjFunc(owner, type, 0, fn_8004A1A8);
     }
 }
 
@@ -1185,7 +1185,7 @@ extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
 extern "C" void fn_8004A1FC(int type)
 {
     fn_80228E18();
-    fn_801DCF8C(type);
+    ObjDelType(type);
 }
 
 extern "C" void fn_8004A230(unsigned char value)

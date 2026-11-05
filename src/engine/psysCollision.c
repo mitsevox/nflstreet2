@@ -1,7 +1,10 @@
+/* Particle collisions: bounces particles off the ground or a plane, plus extra collision
+   entries a particle system can carry. */
+
 #include "engine/particleLib.h"
 
 
-static void fn_801E01FC(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float height)
+static void _calcGroundCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float height)
 {
     if (fn_801DFD40() == 0) {
         if (pParticle->mPos.y >= height) {
@@ -20,7 +23,7 @@ static void fn_801E01FC(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, fl
     }
 }
 
-static void fn_801E02A4(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, Vec3_801DE1E0 *pNormal, float distance)
+static void _calcPlaneCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, Vec3_801DE1E0 *pNormal, float distance)
 {
     Vec3_801DE1E0 push;
     Vec3_801DE1E0 bounce;
@@ -42,7 +45,7 @@ static void fn_801E02A4(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, Ve
 }
 
 /* Copy only the payload selected by the destination collision type. */
-void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
+void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
 {
     switch (pDst->mCollisionType) {
     case 0:
@@ -56,9 +59,9 @@ void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc
     }
 }
 
-void fn_801E03F4(PartObj_801DE1E0 *pObj)
+void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj)
 {
-    Plane_801E0384 *pPlane;
+    PsysColPlane_t *pPlane;
 
     if (pObj->mCollisionType == 2) {
         pPlane = &pObj->mCollision.mPlane;
@@ -66,37 +69,37 @@ void fn_801E03F4(PartObj_801DE1E0 *pObj)
     }
 }
 
-void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
+void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
 {
     unsigned char i;
-    Plane_801E0384 *pPlane;
-    ColExt_801E043C *pExt;
+    PsysColPlane_t *pPlane;
+    PsysColExt_t *pExt;
 
     switch (pObj->mCollisionType) {
     case 0:
         break;
     case 1:
-        fn_801E01FC(pObj, pParticle, pObj->mCollision.mGround.mHeight);
+        _calcGroundCollision(pObj, pParticle, pObj->mCollision.mGround.mHeight);
         break;
     case 2:
         pPlane = &pObj->mCollision.mPlane;
-        fn_801E02A4(pObj, pParticle, &pPlane->mNormal, pPlane->mDistance);
+        _calcPlaneCollision(pObj, pParticle, &pPlane->mNormal, pPlane->mDistance);
         break;
     }
     for (i = 0; i < pObj->mColExtCount; i++) {
         pExt = &pObj->mColExt[i];
         switch (pExt->mType) {
         case 1:
-            fn_801E01FC(pObj, pParticle, pExt->mData.mHeight);
+            _calcGroundCollision(pObj, pParticle, pExt->mData.mHeight);
             break;
         case 2:
-            fn_801E02A4(pObj, pParticle, &pExt->mData.mPlane.mNormal, pExt->mData.mPlane.mDistance);
+            _calcPlaneCollision(pObj, pParticle, &pExt->mData.mPlane.mNormal, pExt->mData.mPlane.mDistance);
             break;
         }
     }
 }
 
-void fn_801E0520(PartObj_801DE1E0 *pObj)
+void PsysColExtClearAll(PartObj_801DE1E0 *pObj)
 {
     pObj->mColExtCount = 0;
 }

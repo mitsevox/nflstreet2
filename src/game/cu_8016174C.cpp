@@ -69,12 +69,12 @@ void fn_80235D74(void *, int);
 void fn_80235DB8(int);
 int fn_80039F8C(Object_80039F5C *);
 int fn_801784C4(void);
-int fn_801DCF0C(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
-int fn_801DCF8C(int);
-int fn_801DD0C8(void *, int, int, int (*)(Object_801618D8 *));
-int fn_801DD268(void *, int, int, void *);
-void fn_801DD3AC(void *, int, int);
-void fn_801DD320(void *, int);
+int ObjNewType_(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
+int ObjDelType(int);
+int ObjSetListObjFunc(void *, int, int, int (*)(Object_801618D8 *));
+int ObjNewInList(void *, int, int, void *);
+void ObjSetPriority(void *, int, int);
+void ObjRemoveFromList(void *, int);
 void *fn_800C47C4(void);
 void fn_80030ACC(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int,
@@ -370,24 +370,24 @@ void fn_801621B8(void) {
     }
 }
 void fn_8016239C(void *arg) {
-    fn_801DCF0C(8, 264, 34, fn_801618D8, fn_80161A34);
-    fn_801DD0C8(arg, 8, 0, fn_80161B38);
+    ObjNewType_(8, 264, 34, fn_801618D8, fn_80161A34);
+    ObjSetListObjFunc(arg, 8, 0, fn_80161B38);
     lbl_803EB398 = 0;
 }
 void fn_80162404(void) {
     fn_80228E18();
-    fn_801DCF8C(8);
+    ObjDelType(8);
     lbl_803EB398 = 0;
 }
 Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void *data, int mode) {
     Desc_801618D8 desc = {data, mode, index, shared};
-    int handle = fn_801DD268(arg, 8, 0, &desc);
-    fn_801DD3AC(arg, handle, 3);
+    int handle = ObjNewInList(arg, 8, 0, &desc);
+    ObjSetPriority(arg, handle, 3);
     return (Object_801618D8 *)handle;
 }
 void fn_80162494(void *arg, Object_801618D8 *item) {
     if (item) {
-        fn_801DD320(arg, (int)item);
+        ObjRemoveFromList(arg, (int)item);
         fn_80228D58((int)item);
     }
 }

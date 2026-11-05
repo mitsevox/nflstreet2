@@ -123,11 +123,11 @@ int fn_801E1478(Desc_801E1478 *pDesc)
             err = fn_801E11E8(pDesc->mppDrivers);
             if (err == 0) {
                 lbl_803ED660 = pDesc->mNumDevices;
-                err = fn_801E1A20(pDesc->mpUnknown14);
+                err = PerSystemInit(pDesc->mpUnknown14);
                 if (err == 0) {
                     lbl_803ECF50 = pDesc->mpUnknown0C;
                     lbl_803EBD68 = 1;
-                    err = fn_801E1AB4();
+                    err = PerRegisterDevices();
                 }
             }
         }
@@ -146,7 +146,7 @@ int fn_801E153C(void)
     if (lbl_803EBD68) {
         fn_801F8014(&lbl_8039ADC4);
         fn_801E173C();
-        fn_801E1A80();
+        PerSystemShutdown();
         fn_801E1444();
         fn_801E12CC();
         fn_801F809C(&lbl_8039ADC4);

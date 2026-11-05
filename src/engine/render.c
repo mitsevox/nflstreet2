@@ -1,4 +1,7 @@
-#include "engine/cu_801DB7D4.h"
+/* Movie frame output: remembers where on screen the movie is drawn and copies each decoded
+   frame into the frame buffer. */
+
+#include "engine/render.h"
 #include "engine/fn_801CEA08.h"
 
 extern void fn_801CE82C(void);
@@ -15,13 +18,13 @@ extern int lbl_803ECF40;
 extern int lbl_803ECF44;
 extern int lbl_803ECF48;
 
-void fn_801DB7D4(void)
+void yuvrenderrestore(void)
 {
 }
 
-void fn_801DB7D8(int x, int y, int width, int height, int unknown4, int unused)
+void yuvrenderinit(int x, int y, int width, int height, int unknown4, int unused)
 {
-    fn_801DB7D4();
+    yuvrenderrestore();
     lbl_803ECF30 = -1;
     lbl_803ECF34 = x;
     lbl_803ECF38 = y;
@@ -31,7 +34,7 @@ void fn_801DB7D8(int x, int y, int width, int height, int unknown4, int unused)
     lbl_803ECF48 = 2;
 }
 
-void fn_801DB838(unsigned char **ppPlanes)
+void yuvrenderDoubleYLines(unsigned char **ppPlanes)
 {
     int pitch;
     int frameBuffer;
@@ -42,7 +45,7 @@ void fn_801DB838(unsigned char **ppPlanes)
     fn_801DB900(ppPlanes, lbl_803ECF34, lbl_803ECF38, pitch, lbl_803ECF3C, lbl_803ECF40, frameBuffer);
 }
 
-void fn_801DB89C(unsigned char **ppPlanes)
+void yuvrenderVP6YLines(unsigned char **ppPlanes)
 {
     int pitch;
     int frameBuffer;

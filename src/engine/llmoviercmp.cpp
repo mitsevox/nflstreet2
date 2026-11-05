@@ -1,5 +1,9 @@
+/* Low-level side of movie playback: centres the movie picture on the screen, hands each
+   decoded frame's Y/U/V planes to the YUV renderer, and stops the movie stream when the
+   disc drive reports an error. */
+
 #include "engine/moviercmp.h"
-#include "engine/cu_801DB7D4.h"
+#include "engine/render.h"
 #include "engine/fn_801CEA08.h"
 
 extern "C" {
@@ -9,7 +13,7 @@ int DVDGetDriveStatus(void);
 
 extern unsigned char lbl_803EBD4C;
 
-void fn_801D94A0(Shape_801D94A0 *pShape)
+void MovieRcmpRenderInit(Shape_t *pShape)
 {
     int width = pShape->mWidth;
     int height = pShape->mHeight;
@@ -17,10 +21,10 @@ void fn_801D94A0(Shape_801D94A0 *pShape)
     int screenHeight = fn_801CEC84();
     int x = screenWidth / 2 - width / 2;
     if (height != 0x1C0) { height <<= 1; }
-    fn_801DB7D8(x, (screenHeight / 2 - height / 2) & ~1, width, height, 0, 0);
+    yuvrenderinit(x, (screenHeight / 2 - height / 2) & ~1, width, height, 0, 0);
 }
 
-void fn_801D9538(Shape_801D94A0 *pShape, int type)
+void MovieRcmpRenderShape(Shape_t *pShape, int type)
 {
     unsigned char *pPlanes[3];
     unsigned char *pData;
@@ -34,15 +38,15 @@ void fn_801D9538(Shape_801D94A0 *pShape, int type)
     pPlanes[1] = pData + pShape->mWidth * pShape->mHeight;
     pPlanes[2] = pPlanes[1] + (pShape->mWidth / 2) * (pShape->mHeight / 2);
     if (lbl_803EBD4C != 0) {
-        fn_801DB838(pPlanes);
+        yuvrenderDoubleYLines(pPlanes);
     } else if (type == 4 || type == 5) {
-        fn_801DB89C(pPlanes);
+        yuvrenderVP6YLines(pPlanes);
     } else {
-        fn_801DB838(pPlanes);
+        yuvrenderDoubleYLines(pPlanes);
     }
 }
 
-int fn_801D95E4(void *pInfo, void *pChunk)
+int MovieRcmpHandleChunk(void *pInfo, void *pChunk)
 {
     if (pChunk == 0) {
         int status = DVDGetDriveStatus();

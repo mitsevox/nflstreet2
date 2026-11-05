@@ -58,7 +58,7 @@ void fn_801D8704(Audio_801D86B4 *pAudio)
     }
 }
 
-Shape_801D94A0 *fn_801D8770(void *pFrame)
+Shape_t *fn_801D8770(void *pFrame)
 {
     return ((Frame_801D86B4 *)pFrame)->mpShape;
 }
@@ -74,20 +74,20 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
     *ppChunk = 0;
     do {
         pHeader = (unsigned char *)fn_801F73D4(pStream);
-        if (fn_801D95E4(pInfo, pHeader) == 0) {
+        if (MovieRcmpHandleChunk(pInfo, pHeader) == 0) {
             return;
         }
         fn_801D8704(pInfo->mpAudio);
         if (pHeader != 0) {
             int id = *(int *)pHeader;
 
-            if (fn_801DA4F8(id) != 0) {
+            if (MAD_CODEC_is_chunk_for_codec(id) != 0) {
                 codec = 2;
             }
-            if (fn_801DC9E0(id) != 0) {
+            if (VP6_CODEC_is_chunk_for_codec(id) != 0) {
                 codec = 5;
             }
-            if (fn_801DC9C8(id) != 0) {
+            if (VP6_CODEC_is_head_chunk_for_codec(id) != 0) {
                 codec = 4;
             }
             pInfo->mCodec = codec;
@@ -334,7 +334,7 @@ void fn_801D9290(Info_801D86B4 *pInfo, Frame_801D86B4 *pFrame)
 
 void fn_801D92B8(Frame_801D86B4 *pFrame, unsigned char **ppY, unsigned char **ppU, unsigned char **ppV)
 {
-    Shape_801D94A0 *pShape = pFrame->mpShape;
+    Shape_t *pShape = pFrame->mpShape;
     unsigned char *pData;
 
     if (pShape->mFlags & 0x10000000) {
@@ -349,7 +349,7 @@ void fn_801D92B8(Frame_801D86B4 *pFrame, unsigned char **ppY, unsigned char **pp
 
 void fn_801D9320(Frame_801D86B4 *pFrame, int *pWidth, int *pHeight)
 {
-    Shape_801D94A0 *pShape = fn_801D8770(pFrame);
+    Shape_t *pShape = fn_801D8770(pFrame);
 
     *pWidth = pShape->mWidth;
     *pHeight = pShape->mHeight;
@@ -363,17 +363,17 @@ void fn_801D9360(void *pStream, void *pAudioStream, int volume, int (*pCallback)
     fn_801D8A2C(&info, pStream);
     pFrame = fn_801D923C(&info, 0);
     if (pFrame != 0) {
-        Shape_801D94A0 *pShape = fn_801D8770(pFrame);
+        Shape_t *pShape = fn_801D8770(pFrame);
 
-        fn_801D94A0(pShape);
-        fn_801D9538(pShape, info.mCodec);
+        MovieRcmpRenderInit(pShape);
+        MovieRcmpRenderShape(pShape, info.mCodec);
         fn_801D9290(&info, pFrame);
         fn_801D8BC8(&info, pAudioStream, volume);
         do {
             if (fn_801D900C(&info) != 0) {
                 pFrame = fn_801D923C(&info, fn_801D9224(&info));
                 if (pFrame != 0) {
-                    fn_801D9538(fn_801D8770(pFrame), info.mCodec);
+                    MovieRcmpRenderShape(fn_801D8770(pFrame), info.mCodec);
                     fn_801D9290(&info, pFrame);
                 }
             }

@@ -1,7 +1,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_801EF390.h"
 
-/* 228-byte object allocated through fn_801DCF0C by fn_80030F38; a single
+/* 228-byte object allocated through ObjNewType_ by fn_80030F38; a single
    instance is kept in sObject. */
 struct Object_80030D50 {
     int mUnknown0;
@@ -21,13 +21,13 @@ void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *a);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80030D50 *, int *),
+int ObjNewType_(int a, int size, int c, void (*pInit)(Object_80030D50 *, int *),
                 void (*pRelease)(Object_80030D50 *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80030D50 *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, Object_80030D50 *pObject);
-void fn_801DD3AC(int handle, Object_80030D50 *pObject, int b);
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_80030D50 *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, Object_80030D50 *pObject);
+void ObjSetPriority(int handle, Object_80030D50 *pObject, int b);
 void fn_80210814(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
@@ -94,22 +94,22 @@ void fn_80030F38(int handle)
 {
     int desc[2];
 
-    fn_801DCF0C(10, sizeof(Object_80030D50), 1, fn_80030D50, fn_80030DFC);
-    fn_801DD0C8(handle, 10, 0, fn_80030E58);
+    ObjNewType_(10, sizeof(Object_80030D50), 1, fn_80030D50, fn_80030DFC);
+    ObjSetListObjFunc(handle, 10, 0, fn_80030E58);
     desc[0] = fn_800C47C4();
     desc[1] = 7;
-    sObject = (Object_80030D50 *)fn_801DD268(handle, 10, 0, desc);
-    fn_801DD3AC(handle, sObject, 3);
+    sObject = (Object_80030D50 *)ObjNewInList(handle, 10, 0, desc);
+    ObjSetPriority(handle, sObject, 3);
 }
 
 void fn_80030FD8(int handle)
 {
     if (sObject != 0) {
-        fn_801DD320(handle, sObject);
+        ObjRemoveFromList(handle, sObject);
         fn_80228D58((int)sObject);
     }
     fn_80228E18();
-    fn_801DCF8C(10);
+    ObjDelType(10);
 }
 
 void fn_80031018(const float *pValue, int)

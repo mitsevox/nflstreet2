@@ -1,4 +1,4 @@
-#include "engine/cu_801E0A1C.h"
+#include "engine/pathfinder.h"
 #include "game/Object_8007A334.h"
 #include "game/Query_8008352C.h"
 #include "game/SndgPathfinder.h"
@@ -53,7 +53,7 @@ struct Calendar_801F81F4 {
     char mUnknown0[12];
 };
 
-struct Info_801E1084 {
+struct PathfinderStatus_t {
     int mUnknown0;
     char mUnknown4[44];
     int mUnknown30;
@@ -747,8 +747,8 @@ void fn_800731D0(int draw)
 
 void fn_80073210(int frames)
 {
-    Info_801E1084 info;
-    fn_801E1084(0x11000001, &info);
+    PathfinderStatus_t info;
+    PathfinderGetStatus(0x11000001, &info);
     if (lbl_803EA704 && fn_801F3E28() && info.mUnknown0 >= 0 && lbl_803EA704->mUnknown122) {
         int count = 0;
         int previous = info.mUnknown30;
@@ -761,7 +761,7 @@ void fn_80073210(int frames)
                 ++count;
                 fn_800731D0(1);
                 previous = info.mUnknown30;
-                fn_801E1084(0x11000001, &info);
+                PathfinderGetStatus(0x11000001, &info);
                 if (lbl_803EA704->mUnknown124 || info.mUnknown30 > previous) {
                     break;
                 }

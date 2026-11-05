@@ -1,4 +1,4 @@
-#include "engine/cu_801E8478.h"
+#include "engine/physconstraint.h"
 #include "engine/TibNew.h"
 #include "engine/Collection_801E7034.h"
 #include "engine/cu_801B9F00.h"
@@ -1318,11 +1318,11 @@ void fn_8022765C(void *, void *, void *);
 void fn_802276B4(void *, void *, void *);
 void fn_80227490(void *, void *, int, int, int);
 int fn_801CFFD0(int, int);
-int fn_801DCF0C(int, int, int, void *, void *);
-int fn_801DCF8C(int);
-void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
-Child_801A9430 *fn_801DD268(int, int, int, Desc_800408E4 *);
-void fn_801DD320(int, Child_801A9430 *);
+int ObjNewType_(int, int, int, void *, void *);
+int ObjDelType(int);
+void ObjSetListObjFunc(int, int, int, int (*)(Child_801A9430 *));
+Child_801A9430 *ObjNewInList(int, int, int, Desc_800408E4 *);
+void ObjRemoveFromList(int, Child_801A9430 *);
 void fn_80228D58(Child_801A9430 *); void fn_80228DD4(void); void fn_80228E18(void);
 int fn_801F7C88(void);
 Object_80040818 *fn_8004113C(int, unsigned int);
@@ -1441,8 +1441,8 @@ void fn_8004CEE8(Child_801A9430 *p)
 
 void fn_8004CFCC(int handle, int count)
 {
-    fn_801DCF0C(31, 112, count, 0, 0);
-    if (handle) fn_801DD0C8(handle, 31, 0, fn_8004D2F8);
+    ObjNewType_(31, 112, count, 0, 0);
+    if (handle) ObjSetListObjFunc(handle, 31, 0, fn_8004D2F8);
     lbl_803EA4F4 = (Child_801A9430 **)fn_801D2B7C(count * 4, 0, 0);
     fn_801C1F94(lbl_803EA4F4, 0, count * 4);
     fn_801F7C88();
@@ -1454,7 +1454,7 @@ void fn_8004D068(int handle)
 {
     if (lbl_803EA4F4) {
         for (unsigned short i = 0; i < lbl_803EC7D0; i++) {
-            fn_801DD320(handle, lbl_803EA4F4[i]);
+            ObjRemoveFromList(handle, lbl_803EA4F4[i]);
             fn_80228D58(lbl_803EA4F4[i]);
         }
         fn_80228DD4();
@@ -1464,11 +1464,11 @@ void fn_8004D068(int handle)
 }
 
 void fn_8004D0F4(int handle) { fn_8004CFCC(handle, 64); }
-void fn_8004D118(int handle) { fn_8004D068(handle); fn_80228E18(); fn_801DCF8C(31); }
+void fn_8004D118(int handle) { fn_8004D068(handle); fn_80228E18(); ObjDelType(31); }
 
 void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
 {
-    Child_801A9430 *p = fn_801DD268(handle, 31, 0, pDesc);
+    Child_801A9430 *p = ObjNewInList(handle, 31, 0, pDesc);
     lbl_803EA4F4[lbl_803EC7D0] = p;
     fn_801442FC(&p->mTracker60);
     p->mWord68 = 0;
@@ -1716,7 +1716,7 @@ struct Metadata_8004ED44 {
     short mUnknown22;
 };
 
-struct Body_801E9538 {
+struct RigidBody_t {
     char mUnknown0[68];
     float mUnknown68;
     char mUnknown72[4];
@@ -1747,8 +1747,8 @@ extern Cache_8004E16C *lbl_802D4974[];
 extern Shape_801E2CB4 *lbl_8030883C[];
 extern Shape_801E2CB4 *lbl_80308AD4[];
 extern Vector_80039F5C *lbl_80308B0C[];
-extern Body_801E9538 *lbl_80308D0C[];
-extern Body_801E9538 *lbl_80308F0C[];
+extern RigidBody_t *lbl_80308D0C[];
+extern RigidBody_t *lbl_80308F0C[];
 extern void *lbl_80308F44[];
 extern Metadata_8004ED44 lbl_80308F64[];
 extern void *lbl_803EA50C;
@@ -1759,8 +1759,8 @@ extern int lbl_803EA524;
 extern int lbl_803EA528;
 extern int lbl_803EA52C;
 extern unsigned int lbl_803EA530;
-extern Body_801E9538 *lbl_803EC7E0;
-extern Body_801E9538 *lbl_803EC7E4;
+extern RigidBody_t *lbl_803EC7E0;
+extern RigidBody_t *lbl_803EC7E4;
 void fn_801A9184(Object_801A8620 *);
 void fn_801A9224(void); void fn_801A925C(void); void fn_801A932C(Object_801A8620 *);
 int fn_801C20A0(const char *, ...);
@@ -1768,7 +1768,7 @@ void fn_801C4DEC(int);
 int fn_801C4E98(Skeleton_80041930 *, const char *);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
 Shape_801E2CB4 *fn_801E71D0(Collection_801E7034 *, unsigned int);
-void fn_801E9E18(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
+void fn_801E9E18(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_802273E8(void *, void *, int, int, int);
 void fn_802271A4(void *, void *);
 void fn_80227264(void *, void *, float);
@@ -1781,23 +1781,23 @@ int fn_8013BA58(Object_80137ABC *, int *);
 int fn_80178508(void *, int, int);
 void fn_80139294(Object_80137ABC *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_801783D0(int, int);
-void fn_801E9CC4(Body_801E9538 *);
-void fn_801E9CF0(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
+void fn_801E9CC4(RigidBody_t *);
+void fn_801E9CF0(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
 void *fn_801D3BD0(unsigned int, int);
 Shape_801E2CB4 *fn_801E3144(void *, Vector_80039F5C *, Vector_80039F5C *, float, float, float);
 Shape_801E2CB4 *fn_801E4088(void *, Vector_80039F5C *, float, float, float, float, float);
 Shape_801E2CB4 *fn_801E3DD8(void *, Vector_80039F5C *, float, float, float);
 Collection_801E7034 *fn_801E7034(void *, int, int);
 void fn_801E7120(Collection_801E7034 *, Shape_801E2CB4 *);
-Body_801E9538 *fn_801E9538(void *, Vector_80039F5C *, Collection_801E7034 *, Metadata_8004ED44 *, float, float);
-void fn_801E9C1C(Body_801E9538 *, Vector_80039F5C *);
-void fn_801E9BDC(Body_801E9538 *, Vector_80039F5C *);
-void fn_801E9C5C(Body_801E9538 *, Vector_80039F5C *);
-void fn_801E99DC(Body_801E9538 *, Vector_80039F5C *);
-void fn_801E9A44(Body_801E9538 *, void *);
-void fn_801E9AF0(Body_801E9538 *, Vector_80039F5C *, Quat_801EB488 *);
-void fn_801E9F0C(Body_801E9538 *, int);
-void fn_801E2878(void *, Body_801E9538 *);
+RigidBody_t *fn_801E9538(void *, Vector_80039F5C *, Collection_801E7034 *, Metadata_8004ED44 *, float, float);
+void fn_801E9C1C(RigidBody_t *, Vector_80039F5C *);
+void fn_801E9BDC(RigidBody_t *, Vector_80039F5C *);
+void fn_801E9C5C(RigidBody_t *, Vector_80039F5C *);
+void fn_801E99DC(RigidBody_t *, Vector_80039F5C *);
+void fn_801E9A44(RigidBody_t *, void *);
+void fn_801E9AF0(RigidBody_t *, Vector_80039F5C *, Quat_801EB488 *);
+void fn_801E9F0C(RigidBody_t *, int);
+void fn_801E2878(void *, RigidBody_t *);
 void fn_801E91E0(void *, void *);
 int fn_801C3180(const char *);
 char *fn_801C2EF0(char *, const char *, int);
@@ -1901,14 +1901,14 @@ void fn_8004E3CC(Object_80040818 *pObject, int *pAngles)
         pAngles[2] = p[2] << 8;
     }
 }
-int fn_8004E468(void *unused, Body_801E9538 *pA, Body_801E9538 *pB)
+int fn_8004E468(void *unused, RigidBody_t *pA, RigidBody_t *pB)
 {
     if (!(pA->mpMetadata->mUnknown2 & 1) || !(pB->mpMetadata->mUnknown2 & 1)) return 1;
     if (pA->mKind == 2 || pB->mKind == 2 || pA->mKind == 1 || pB->mKind == 1) return 0;
     return 1;
 }
 
-void fn_8004E4D0(Body_801E9538 *pBody, unsigned int index, Body_801E9538 *pOther,
+void fn_8004E4D0(RigidBody_t *pBody, unsigned int index, RigidBody_t *pOther,
                  unsigned int otherIndex, unsigned int count, Contact_8004ED44 *pContacts, float step)
 {
     Object_80039F5C *p = fn_8003E0C8(pBody->mpMetadata->mpBlock);
@@ -2033,7 +2033,7 @@ void fn_8004EA80(Vector_80039F5C *pImpulse)
     }
 }
 
-int fn_8004ED44(void *unused, Body_801E9538 *pA, Body_801E9538 *pB, unsigned int count,
+int fn_8004ED44(void *unused, RigidBody_t *pA, RigidBody_t *pB, unsigned int count,
                 Contact_8004ED44 *pContacts, float step)
 {
     unsigned char a = pA->mpMetadata->mKind;
@@ -2052,7 +2052,7 @@ int fn_8004ED44(void *unused, Body_801E9538 *pA, Body_801E9538 *pB, unsigned int
     return 0;
 }
 
-void fn_8004EE18(void *unused, Body_801E9538 *pA, int indexA, Body_801E9538 *pB, int indexB,
+void fn_8004EE18(void *unused, RigidBody_t *pA, int indexA, RigidBody_t *pB, int indexB,
                  Vector_80039F5C *pPosA, Vector_80039F5C *pPosB, Vector_80039F5C *pNormal)
 {
     Metadata_8004ED44 *a = pA->mpMetadata;
@@ -2092,7 +2092,7 @@ void fn_8004EE18(void *unused, Body_801E9538 *pA, int indexA, Body_801E9538 *pB,
 void fn_8004F20C(void)
 {
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        Body_801E9538 *p = lbl_80308D0C[i];
+        RigidBody_t *p = lbl_80308D0C[i];
         if (p->mKind == 2) {
             Vector_80039F5C force;
             force.mX = force.mY = 0.0f;
@@ -2241,7 +2241,7 @@ void fn_8004F754(int handle, Object_80040818 *pObject, int objectIndex)
         }
         fn_8004D498(handle);
         Vector_80039F5C inertia, velocity, acceleration;
-        Body_801E9538 *pBody;
+        RigidBody_t *pBody;
         Metadata_8004ED44 *pMetadata = &lbl_80308F64[lbl_803EA524];
         if (!fn_8004D4B0(handle, "physics")) {
             inertia.mX = inertia.mZ = 0.6640654802322388f;
@@ -2305,7 +2305,7 @@ void fn_8004F754(int handle, Object_80040818 *pObject, int objectIndex)
                 float y = local.y; local.y = -local.z; local.z = y;
                 fn_8022765C(&world, &local, pPos);
                 int index = lbl_803EA52C;
-                lbl_80308F44[index] = new (0) Class_801E8478(pBody, lbl_803EC7E4, &local, &world);
+                lbl_80308F44[index] = new (0) PointConstraint(pBody, lbl_803EC7E4, &local, &world);
                 fn_801E91E0(lbl_803EA50C, lbl_80308F44[lbl_803EA52C]);
                 lbl_803EA52C++;
             } while (fn_8004D560(handle));
@@ -2345,7 +2345,7 @@ void fn_8004FF8C(void)
             pMetadata->mUnknown20 = 0xFFFF;
             pMetadata->mType = lbl_803EA524;
             pMetadata->mUnknown22 = slot;
-            Body_801E9538 *pBody = fn_801E9538(fn_801D3BD0(328, 0), &inertia, pSet, pMetadata, 150.0f, 0.4f);
+            RigidBody_t *pBody = fn_801E9538(fn_801D3BD0(328, 0), &inertia, pSet, pMetadata, 150.0f, 0.4f);
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C force = {0.0f, 0.0f, 0.0f};
             Quat_801EB488 rotation;
@@ -2381,7 +2381,7 @@ void fn_800502C0(void)
     pMetadata->mUnknown2 = 1;
     pMetadata->mUnknown20 = 0xFFFF;
     pMetadata->mType = lbl_803EA524;
-    Body_801E9538 *pBody = fn_801E9538(fn_801D3BD0(328, 0), &inertia, pSet, pMetadata, 1.0f, 0.4f);
+    RigidBody_t *pBody = fn_801E9538(fn_801D3BD0(328, 0), &inertia, pSet, pMetadata, 1.0f, 0.4f);
     Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
     Vector_80039F5C force = {0.0f, 0.0f, 0.0f};
     fn_801E99DC(pBody, &position);
@@ -2396,8 +2396,8 @@ void fn_800502C0(void)
     lbl_803EA524++;
 }
 
-void fn_801E9D64(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
-void fn_801E9DE0(Body_801E9538 *, Vector_80039F5C *);
+void fn_801E9D64(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
+void fn_801E9DE0(RigidBody_t *, Vector_80039F5C *);
 
 unsigned char fn_8005164C(int type)
 {
@@ -2421,14 +2421,14 @@ void fn_800516B4(int id, float *pA, float *pB)
 }
 void fn_800516E4(int id)
 {
-    Body_801E9538 *pBody = lbl_80308D0C[id];
+    RigidBody_t *pBody = lbl_80308D0C[id];
     if (pBody->mKind) fn_801E9F0C(pBody, 3);
 }
 void fn_80051724(Object_80040818 *pOwner, float *p)
 {
     Flags_800411C8 *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody_t *pBody = lbl_80308D0C[pFlags->mUnknown20];
         Vector_80039F5C *pPos = &pBody->mUnknown100;
         if (pPos->mZ < 1.0f && p[2] < 0.0f) {
             Vector_80039F5C velocity;
@@ -2446,7 +2446,7 @@ void fn_80051810(Object_80040818 *pOwner, float value)
 {
     Flags_800411C8 *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody_t *pBody = lbl_80308D0C[pFlags->mUnknown20];
         Vector_80039F5C impulse;
         fn_80227264(&impulse, &pBody->mUnknown264, -value);
         impulse.mZ = 0.0f;
@@ -2457,7 +2457,7 @@ void fn_80051880(Object_80040818 *pOwner, float value)
 {
     Flags_800411C8 *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody_t *pBody = lbl_80308D0C[pFlags->mUnknown20];
         Vector_80039F5C velocity;
         fn_80227264(&velocity, &pBody->mUnknown124, -value);
         fn_801E9DE0(pBody, &velocity);
@@ -2467,14 +2467,14 @@ void fn_80051B3C(Object_80040818 *pOwner, float *pPos)
 {
     Flags_800411C8 *pFlags = pOwner->mUnknown476;
     if (pFlags) {
-        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        RigidBody_t *pBody = lbl_80308D0C[pFlags->mUnknown20];
         if (pBody->mKind) fn_801E99DC(pBody, (Vector_80039F5C *)pPos);
     }
 }
 int fn_80051DB4(void) { return 1; }
 
 
-void fn_801E9BB4(Body_801E9538 *, Quat_801EB488 *);
+void fn_801E9BB4(RigidBody_t *, Quat_801EB488 *);
 int fn_802275D8(void *, void *, float);
 int fn_801EB5A0(void *, void *, float);
 void fn_802271F0(void *, void *);
@@ -2483,7 +2483,7 @@ void fn_801E3610(Shape_801E2CB4 *, void *, void *, void *, void *);
 void fn_801E501C(Shape_801E2CB4 *, void *, void *, void *, void *);
 void fn_801E3710(Shape_801E2CB4 *, void *, void *, void *, void *, void *, void *);
 void *fn_801E2C3C(void *);
-Body_801E9538 *fn_801E2C64(void *, void **);
+RigidBody_t *fn_801E2C64(void *, void **);
 void fn_801E7208(Collection_801E7034 *, void *, int, int, int);
 void fn_801E7298(Collection_801E7034 *, int, int, int, int);
 void fn_80178370(void);
@@ -2509,7 +2509,7 @@ void fn_80050964(void)
 {
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
-            Body_801E9538 *pBody = lbl_80308F0C[team * 7 + index];
+            RigidBody_t *pBody = lbl_80308F0C[team * 7 + index];
             Object_80039F5C *pPlayer = fn_8003E0C8(pBody->mpMetadata->mpBlock);
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C a, b, c, direction;
@@ -2553,7 +2553,7 @@ void fn_80050CCC(void)
     Object_80137ABC *pBall = fn_801374BC();
     Vector_80039F5C zero = {0.0f, 0.0f, 0.0f};
     Vector_80039F5C velocity, position;
-    Body_801E9538 *pBody = lbl_803EC7E0;
+    RigidBody_t *pBody = lbl_803EC7E0;
     fn_80137EC4(pBall, &velocity);
     fn_80227264(&velocity, &velocity, 60.0f);
     fn_80137D58(pBall, &position);
@@ -2569,7 +2569,7 @@ void fn_80050CCC(void)
 void fn_80050DA0(void)
 {
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        Body_801E9538 *pBody = lbl_80308D0C[i];
+        RigidBody_t *pBody = lbl_80308D0C[i];
         if (!pBody) continue;
         Metadata_8004ED44 *pMetadata = pBody->mpMetadata;
         if (pMetadata->mKind == 3) {
@@ -2604,7 +2604,7 @@ void fn_80050F14(void)
     fn_801D0508();
     lbl_803EBD78 = fn_80050960;
     void *cursor = fn_801E2C3C(lbl_803EA514);
-    Body_801E9538 *pBody;
+    RigidBody_t *pBody;
     while ((pBody = fn_801E2C64(lbl_803EA514, &cursor)) != 0) {
         Collection_801E7034 *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
@@ -2649,7 +2649,7 @@ void fn_80050F14(void)
 void fn_80051B88(Point_8017886C *pCenter, float radius)
 {
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
-        Body_801E9538 *pBody = lbl_80308D0C[i];
+        RigidBody_t *pBody = lbl_80308D0C[i];
         if (!pBody || pBody->mpMetadata->mKind != 3) continue;
         Vector_80039F5C from = pBody->mUnknown100;
         Vector_80039F5C position = from;
@@ -2680,7 +2680,7 @@ void fn_800518E0(Object_80039F5C *pPlayer)
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA524; i++) {
         Metadata_8004ED44 *pMetadata = &lbl_80308F64[i];
         if (pMetadata->mKind == 4 || pMetadata->mKind == 2) {
-            Body_801E9538 *pBody = lbl_80308D0C[(short)pMetadata->mUnknown20];
+            RigidBody_t *pBody = lbl_80308D0C[(short)pMetadata->mUnknown20];
             unsigned int count = pBody->mpShapes->mCount;
             for (unsigned int j = 0; j < count; j++) {
                 if (!(nearest <= 0.75f)) {

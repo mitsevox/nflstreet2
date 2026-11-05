@@ -86,12 +86,12 @@ void fn_8003BA00();
 void fn_8003BA04();
 void fn_8003BA08();
 void fn_8003BA0C();
-void fn_801DCF0C(int, int, int, void (*)(), void (*)());
-void fn_801DD0C8(int, int, int, int (*)(void));
-void *fn_801DD268(int, int, int, void *);
-void *fn_801DD168(int, int, void *);
-void fn_801DD3AC(int, void *, int);
-void fn_801DD320(int, void *);
+void ObjNewType_(int, int, int, void (*)(), void (*)());
+void ObjSetListObjFunc(int, int, int, int (*)(void));
+void *ObjNewInList(int, int, int, void *);
+void *ObjNew(int, int, void *);
+void ObjSetPriority(int, void *, int);
+void ObjRemoveFromList(int, void *);
 int fn_8003CBFC();
 int fn_8003CC20();
 int fn_8003CC44();
@@ -147,7 +147,7 @@ void fn_8004A118();
 void fn_800AF71C();
 void fn_801F010C(void *, int);
 void fn_8004A1FC(int);
-int fn_801DCF8C(int);
+int ObjDelType(int);
 void fn_80160F98();
 void fn_80048F34();
 int fn_80160C08();
@@ -719,13 +719,13 @@ int fn_8003D378(int owner, int mode) {
       fn_80046804(&block, &init.mUnknown5C);
       if (owner) {
         lbl_803EA430[index] =
-            (Object_8003DEC4 *)fn_801DD268(owner, 0, 0, &init);
-        fn_801DD3AC(owner, lbl_803EA430[index], 10);
+            (Object_8003DEC4 *)ObjNewInList(owner, 0, 0, &init);
+        ObjSetPriority(owner, lbl_803EA430[index], 10);
         lbl_803EA430[index]->mUnknown988 =
             fn_800475FC(init.mUnknown57 * 7 + init.mUnknown58);
         fn_800476CC(lbl_803EA430[index]->mUnknown988, " ");
       } else {
-        lbl_803EA430[index] = (Object_8003DEC4 *)fn_801DD168(0, 0, &init);
+        lbl_803EA430[index] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
         lbl_803EA430[index]->mUnknown988 = 0;
       }
       if (lbl_803EA410 && lbl_803EA414) {
@@ -779,23 +779,23 @@ void fn_8003D988(int value, int *out, int mode) {
 }
 int fn_8003DA8C() { return 13; }
 int fn_8003DA94(int count, int owner, int mode) {
-  fn_801DCF0C(29, 20, 1, fn_8003BA00, fn_8003BA08);
+  ObjNewType_(29, 20, 1, fn_8003BA00, fn_8003BA08);
   if (owner) {
-    fn_801DD0C8(owner, 29, 0, fn_8003CBFC);
-    lbl_803EA410 = fn_801DD268(owner, 29, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA410, 2);
+    ObjSetListObjFunc(owner, 29, 0, fn_8003CBFC);
+    lbl_803EA410 = ObjNewInList(owner, 29, 0, 0);
+    ObjSetPriority(owner, lbl_803EA410, 2);
   }
-  fn_801DCF0C(30, 20, 1, fn_8003BA00, fn_8003BA08);
+  ObjNewType_(30, 20, 1, fn_8003BA00, fn_8003BA08);
   if (owner) {
-    fn_801DD0C8(owner, 30, 0, fn_8003CC20);
-    lbl_803EA414 = fn_801DD268(owner, 30, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA414, 7);
+    ObjSetListObjFunc(owner, 30, 0, fn_8003CC20);
+    lbl_803EA414 = ObjNewInList(owner, 30, 0, 0);
+    ObjSetPriority(owner, lbl_803EA414, 7);
   }
-  fn_801DCF0C(27, 20, 1, fn_8003BA04, fn_8003BA0C);
+  ObjNewType_(27, 20, 1, fn_8003BA04, fn_8003BA0C);
   if (owner) {
-    fn_801DD0C8(owner, 27, 0, fn_8003CC44);
-    lbl_803EA418 = fn_801DD268(owner, 27, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA418, 13);
+    ObjSetListObjFunc(owner, 27, 0, fn_8003CC44);
+    lbl_803EA418 = ObjNewInList(owner, 27, 0, 0);
+    ObjSetPriority(owner, lbl_803EA418, 13);
   }
   fn_8004A140(owner, 0, count);
   lbl_803EA436 = (unsigned int)count >> 1;
@@ -822,19 +822,19 @@ int fn_8003DA94(int count, int owner, int mode) {
 }
 int fn_8003DCC0(int owner) {
   if (lbl_803EA410) {
-    fn_801DD320(owner, lbl_803EA410);
+    ObjRemoveFromList(owner, lbl_803EA410);
     fn_80228D58(lbl_803EA410);
     fn_80228DD4();
     lbl_803EA410 = 0;
   }
   if (lbl_803EA414) {
-    fn_801DD320(owner, lbl_803EA414);
+    ObjRemoveFromList(owner, lbl_803EA414);
     fn_80228D58(lbl_803EA414);
     fn_80228DD4();
     lbl_803EA414 = 0;
   }
   if (lbl_803EA418) {
-    fn_801DD320(owner, lbl_803EA418);
+    ObjRemoveFromList(owner, lbl_803EA418);
     fn_80228D58(lbl_803EA418);
     fn_80228DD4();
     lbl_803EA418 = 0;
@@ -843,7 +843,7 @@ int fn_8003DCC0(int owner) {
     for (int i = 0; i < lbl_803EA434; ++i) {
       if (owner) {
         fn_80047630(lbl_803EA430[i]->mUnknown988);
-        fn_801DD320(owner, lbl_803EA430[i]);
+        ObjRemoveFromList(owner, lbl_803EA430[i]);
       }
       fn_80228D58(lbl_803EA430[i]);
     }
@@ -857,9 +857,9 @@ int fn_8003DCC0(int owner) {
   fn_801F010C(gAnimData.fn_80033AF8(), 58);
   fn_801F010C(gAnimData.fn_80033AF8(), 59);
   fn_8004A1FC(0);
-  fn_801DCF8C(29);
-  fn_801DCF8C(30);
-  int result = fn_801DCF8C(27);
+  ObjDelType(29);
+  ObjDelType(30);
+  int result = ObjDelType(27);
   lbl_803EA434 = 0;
   fn_80160F98();
   fn_80048F34();

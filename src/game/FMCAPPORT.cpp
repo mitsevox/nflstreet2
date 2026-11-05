@@ -5,14 +5,14 @@
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-int fn_801DCF8C(int a);
-int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)());
-void fn_801DD0E8(int handle);
-int fn_801DD268(int handle, int a, int b, int c);
-void fn_801DD320(int handle, int a);
-void fn_801DD3AC(int handle, int a, int b);
+int ObjNewType_(int a, int b, int c, void (*pA)(), void (*pB)());
+int ObjDelType(int a);
+int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)());
+void ObjDelList(int handle);
+int ObjNewInList(int handle, int a, int b, int c);
+void ObjRemoveFromList(int handle, int a);
+void ObjSetPriority(int handle, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_80187DD8(int a);
 void fn_80187E08(int a, const char *pText, int b, int c);
@@ -66,21 +66,21 @@ void FMCAPPORT::fn_8008C0EC()
 
 void FMCAPPORT::fn_8008C12C()
 {
-    fn_801DCF0C(32, 20, 1, 0, 0);
-    mpState.mp->mUnknown4092 = fn_801DCFF0(1, 1, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(mpState.mp->mUnknown4092, 32, 0, fn_8008BFE4);
+    ObjNewType_(32, 20, 1, 0, 0);
+    mpState.mp->mUnknown4092 = ObjNewList(1, 1, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(mpState.mp->mUnknown4092, 32, 0, fn_8008BFE4);
     fn_802286CC(mpState.mp->mUnknown4088, mpState.mp->mUnknown4092, 0);
-    mpState.mp->mUnknown4096 = fn_801DD268(mpState.mp->mUnknown4092, 32, 0, 0);
-    fn_801DD3AC(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
+    mpState.mp->mUnknown4096 = ObjNewInList(mpState.mp->mUnknown4092, 32, 0, 0);
+    ObjSetPriority(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
 }
 
 void FMCAPPORT::fn_8008C1FC()
 {
-    fn_801DD320(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
+    ObjRemoveFromList(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
     fn_80228D58(mpState.mp->mUnknown4096);
     fn_80228E18();
-    fn_801DD0E8(mpState.mp->mUnknown4092);
-    fn_801DCF8C(32);
+    ObjDelList(mpState.mp->mUnknown4092);
+    ObjDelType(32);
     mpState.mp->mUnknown4096 = 0;
     mpState.mp->mUnknown4092 = 0;
 }

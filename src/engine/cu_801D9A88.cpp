@@ -95,7 +95,7 @@ extern "C" MadFrame_801D9A88 *fn_801D9AA8(MadFrame_801D9A88 *pFrame, unsigned in
 {
     pFrame->mRefs = 0;
     pFrame->mUnknown0 = 1;
-    pFrame->mpShape = (Shape_801D94A0 *)lbl_80399100.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
+    pFrame->mpShape = (Shape_t *)lbl_80399100.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
                                                            lbl_80399100.mFlags);
     fn_801D34D0((char *)pFrame->mpShape, 0x10, 0, 4);
     pFrame->mpShape->mUnknown0[0] = 0x6C;
@@ -149,7 +149,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
     int y;
 
     if (mpLast != 0) {
-        Shape_801D94A0 *pShape = mpLast->mpShape;
+        Shape_t *pShape = mpLast->mpShape;
 
         if (pShape->mFlags & 0x10000000) {
             pRefY = (unsigned char *)pShape + pShape->mOffset;

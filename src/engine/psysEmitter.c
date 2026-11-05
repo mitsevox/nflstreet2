@@ -1,3 +1,6 @@
+/* Particle emitters: copies an emitter's settings and picks the start position and direction
+   of each new particle (point, directed, cone or line emitters). */
+
 #include "engine/particleLib.h"
 #include "game/fn_802270D4.h"
 #include "engine/llmatrix.h"
@@ -6,7 +9,7 @@ float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFD78(float value);
 
-void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
+void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
 {
     switch (pDst->mEmitterType) {
     case 0:
@@ -24,11 +27,11 @@ void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
     }
 }
 
-void fn_801DFF10(PartObj_801DE1E0 *pObj)
+void EmitterPrecalcDependantVals(PartObj_801DE1E0 *pObj)
 {
     Vec3_801DE1E0 side;
     Vec3_801DE1E0 dir;
-    Shape_801DF428 *pCase3;
+    EmitterLine_t *pCase3;
 
     if (pObj->mEmitterType == 3) {
         pCase3 = &pObj->mEmitter.mCase3;
@@ -42,7 +45,7 @@ void fn_801DFF10(PartObj_801DE1E0 *pObj)
 }
 
 /* Fixed-origin modes use their first vector; mode 3 samples its two endpoints. */
-void SampleEmitterPosition(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
+void EmitterGetNewPos(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
 {
     switch (pObj->mEmitterType) {
     case 0: {
@@ -73,11 +76,11 @@ void SampleEmitterPosition(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
 }
 
 /* Mode 2 scales the polar angle without scaling the azimuth draw. */
-void SampleEmitterDirection(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
+void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
 {
-    Payload1_801DFE0C *pCase1;
-    Payload2_801DFE0C *pCase2;
-    Shape_801DF428 *pCase3;
+    EmitterDirected_t *pCase1;
+    EmitterCone_t *pCase2;
+    EmitterLine_t *pCase3;
 
     switch (pObj->mEmitterType) {
     case 0: {

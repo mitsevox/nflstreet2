@@ -27,12 +27,12 @@ void fn_801D08FC(int a);
 void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0CFC(float a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
-int fn_801DD268(int handle, int a, int b, Init_80159F10 *pInit);
-void fn_801DD320(int handle, int a);
-void fn_801DD3AC(int handle, int a, int b);
+int ObjNewType_(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
+int ObjNewInList(int handle, int a, int b, Init_80159F10 *pInit);
+void ObjRemoveFromList(int handle, int a);
+void ObjSetPriority(int handle, int a, int b);
 }
 
 static unsigned char lbl_803ECA5C;
@@ -89,8 +89,8 @@ extern "C" void fn_8015A0D0(int value)
 
 extern "C" void fn_8015A110(void *pOwner)
 {
-    fn_801DCF0C(12, 36, 3, fn_80159F10, fn_80159F70);
-    fn_801DD0C8((int)pOwner, 12, 0, fn_80159F74);
+    ObjNewType_(12, 36, 3, fn_80159F10, fn_80159F70);
+    ObjSetListObjFunc((int)pOwner, 12, 0, fn_80159F74);
     fn_8019FBEC();
     lbl_803ECA5C = 1;
 }
@@ -99,7 +99,7 @@ extern "C" void fn_8015A17C(void)
 {
     fn_80228E18();
     fn_8019FD38();
-    fn_801DCF8C(12);
+    ObjDelType(12);
 }
 
 extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, int b)
@@ -110,15 +110,15 @@ extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, 
     init.mUnknown0 = a;
     init.mUnknown4 = b;
     init.mUnknown8 = c;
-    pItem = (Instance_80159F10 *)fn_801DD268((int)pOwner, 12, 0, &init);
-    fn_801DD3AC((int)pOwner, (int)pItem, 11);
+    pItem = (Instance_80159F10 *)ObjNewInList((int)pOwner, 12, 0, &init);
+    ObjSetPriority((int)pOwner, (int)pItem, 11);
     return pItem;
 }
 
 extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
 {
     if (pItem != 0) {
-        fn_801DD320((int)pOwner, (int)pItem);
+        ObjRemoveFromList((int)pOwner, (int)pItem);
         fn_80228D58((int)pItem);
     }
 }

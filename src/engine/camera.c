@@ -24,10 +24,10 @@ extern unsigned char lbl_803ECECD;
 extern CamType_801C33E8 *lbl_803ECED0;
 extern float lbl_803ECED4;
 
-int fn_801DCF0C(int type, unsigned int size, int count, void (*pAdd)(Cam_801C33E8 *), void (*pDelete)(Cam_801C33E8 *));
-int fn_801DCF8C(int type);
-Cam_801C33E8 *fn_801DD168(int type, int a, int b);
-void fn_801DD2B8(Cam_801C33E8 *pCam);
+int ObjNewType_(int type, unsigned int size, int count, void (*pAdd)(Cam_801C33E8 *), void (*pDelete)(Cam_801C33E8 *));
+int ObjDelType(int type);
+Cam_801C33E8 *ObjNew(int type, int a, int b);
+void ObjDel(Cam_801C33E8 *pCam);
 
 void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect);
 
@@ -75,7 +75,7 @@ int fn_801C34F8(int count, int numTypes, CamType_801C33E8 *pTypes, int type)
                 maxSize = pTypes[i].mSize;
             }
         }
-        error = fn_801DCF0C(type, maxSize, count, fn_801C33E8, fn_801C3448);
+        error = ObjNewType_(type, maxSize, count, fn_801C33E8, fn_801C3448);
         lbl_803EBBD4 = 1;
     } else {
         error = 0xB0001;
@@ -89,7 +89,7 @@ int fn_801C35B8(void)
     int error = 0;
 
     if (lbl_803EBBD4) {
-        fn_801DCF8C(lbl_803ECECC);
+        ObjDelType(lbl_803ECECC);
         lbl_803EBBD4 = 0;
     } else {
         error = 0xB0002;
@@ -100,12 +100,12 @@ int fn_801C35B8(void)
 
 Cam_801C33E8 *fn_801C3610(int a, int b)
 {
-    return fn_801DD168(lbl_803ECECC, a, b);
+    return ObjNew(lbl_803ECECC, a, b);
 }
 
 void fn_801C3640(Cam_801C33E8 *pCam)
 {
-    fn_801DD2B8(pCam);
+    ObjDel(pCam);
 }
 
 void fn_801C3660(Object_80228224 *pViewport, void *pArg)

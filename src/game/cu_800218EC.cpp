@@ -8,7 +8,7 @@
 #include "game/fn_801BE60C.h"
 #include <string.h>
 
-/* Object returned by fn_801DD168. */
+/* Object returned by ObjNew. */
 struct Object_801DD168 {
     char mUnknown0[4];
     char mUnknown4[16];
@@ -17,7 +17,7 @@ struct Object_801DD168 {
     char mUnknown108[4];
 };
 
-/* Third argument of fn_801DD168. */
+/* Third argument of ObjNew. */
 struct Desc_801DD168 {
     int mUnknown0;
     int mUnknown4;
@@ -101,7 +101,7 @@ void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
-Object_801DD168 *fn_801DD168(int a, int b, Desc_801DD168 *pDesc);
+Object_801DD168 *ObjNew(int a, int b, Desc_801DD168 *pDesc);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_80234424(int a);
 }
@@ -363,7 +363,7 @@ void fn_800221CC(int count)
     desc.mUnknown0 = fn_800C47C4();
     desc.mUnknown8 = 0;
     desc.mUnknown12 = 0;
-    pView = fn_801DD168(3, 0, &desc);
+    pView = ObjNew(3, 0, &desc);
     lbl_803EBAC8 = pView;
     pView->mUnknown20 = (pView->mUnknown20 | 2) & ~1;
     lbl_803EBAC4 = 1;

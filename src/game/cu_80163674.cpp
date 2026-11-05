@@ -17,9 +17,9 @@ void fn_801D09EC(int);
 void fn_801D0ADC(int);
 void fn_801D0C58(void *);
 void fn_801D0D94(float, float, float);
-int fn_801DCF0C(int, int, int, void (*)(Object_80163788 *, Desc_80163788 *), void (*)(Object_80163788 *));
-int fn_801DCF8C(int);
-int fn_801DD0C8(void *, int, int, int (*)(Object_80163788 *, int));
+int ObjNewType_(int, int, int, void (*)(Object_80163788 *, Desc_80163788 *), void (*)(Object_80163788 *));
+int ObjDelType(int);
+int ObjSetListObjFunc(void *, int, int, int (*)(Object_80163788 *, int));
 void fn_80234DFC(int, void *, int, int, const char *, int);
 void fn_80234EA0(void *, int);
 void fn_80234EEC(void *, int, void *, unsigned char);
@@ -173,9 +173,9 @@ int fn_80163BCC(Object_80163788 *pObject)
 
 int fn_80163C30(void *pHandle, int count)
 {
-    int result = fn_801DCF0C(19, sizeof(Object_80163788), count, fn_80163788, fn_801638F0);
+    int result = ObjNewType_(19, sizeof(Object_80163788), count, fn_80163788, fn_801638F0);
     if (pHandle) {
-        result = fn_801DD0C8(pHandle, 19, 0, fn_80163954);
+        result = ObjSetListObjFunc(pHandle, 19, 0, fn_80163954);
     }
     if (!lbl_803EB3A4) {
         Desc_80188688 desc;
@@ -192,7 +192,7 @@ int fn_80163C30(void *pHandle, int count)
 void fn_80163CD0(void)
 {
     fn_80228E18();
-    fn_801DCF8C(19);
+    ObjDelType(19);
     fn_80188728(lbl_803EB3A4);
     lbl_803EB3A4 = 0;
 }

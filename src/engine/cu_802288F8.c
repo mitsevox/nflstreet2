@@ -5,12 +5,12 @@
 #include "engine/llmatrix.h"
 
 extern float fn_801CFD28(int angle);
-extern int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-extern void fn_801DD0E8(int handle);
-extern int fn_801DD200(int handle, int b);
-extern void fn_801DD2B8(int a);
-extern void fn_801DD3F0(int handle);
-extern int fn_801DD474(int handle, int b);
+extern int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+extern void ObjDelList(int handle);
+extern int ObjAddToList(int handle, int b);
+extern void ObjDel(int a);
+extern void ObjClearList(int handle);
+extern int ObjGetListInfo(int handle, int b);
 extern void fn_80210608(void);
 
 static int lbl_803EBFA0 = 0;
@@ -19,7 +19,7 @@ static int lbl_803EBFA4 = 0;
 int fn_802288F8(Init_802280B0 *pInit)
 {
     if (pInit->mUnknown8) {
-        lbl_803EBFA0 = fn_801DCFF0(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
+        lbl_803EBFA0 = ObjNewList(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
     }
     return 0;
 }
@@ -27,7 +27,7 @@ int fn_802288F8(Init_802280B0 *pInit)
 int fn_80228948(void)
 {
     if (lbl_803EBFA0) {
-        fn_801DD0E8(lbl_803EBFA0);
+        ObjDelList(lbl_803EBFA0);
     }
     return 0;
 }
@@ -121,15 +121,15 @@ void fn_80228B74(Object_80228224 *pObject)
 void fn_80228D58(int handle)
 {
     if (lbl_803EBFA0) {
-        if (fn_801DD474(lbl_803EBFA0, 0) == 0) {
+        if (ObjGetListInfo(lbl_803EBFA0, 0) == 0) {
             fn_80228E18();
         }
-        if (fn_801DD200(lbl_803EBFA0, handle)) {
-            fn_801DD2B8(handle);
+        if (ObjAddToList(lbl_803EBFA0, handle)) {
+            ObjDel(handle);
         }
         lbl_803EBFA4 = 2;
     } else {
-        fn_801DD2B8(handle);
+        ObjDel(handle);
     }
 }
 
@@ -137,7 +137,7 @@ void fn_80228DD4(void)
 {
     if (lbl_803EBFA0) {
         if (lbl_803EBFA4 <= 0) {
-            fn_801DD3F0(lbl_803EBFA0);
+            ObjClearList(lbl_803EBFA0);
         } else {
             lbl_803EBFA4--;
         }

@@ -25,7 +25,7 @@ extern float fn_801CFD28(int angle);
 extern void fn_801CEC48(int a, int b, int c, int d);
 extern int fn_801D0290(unsigned int a, unsigned int b);
 extern int fn_801D0310(unsigned int a);
-extern void fn_801DD140(int handle, int a, int b);
+extern void ObjProcessListFunc(int handle, int a, int b);
 extern void fn_801F7BD4(int err);
 extern int fn_801F7C88(void);
 extern void fn_801F8768(void);
@@ -242,7 +242,7 @@ void fn_80228530(Object_80228224 *pObject)
 void fn_80228594(Object_80228224 *pObject)
 {
     if (pObject->mUnknown72) {
-        fn_801DD140(pObject->mUnknown72, 1, pObject->mUnknown69);
+        ObjProcessListFunc(pObject->mUnknown72, 1, pObject->mUnknown69);
     }
 }
 

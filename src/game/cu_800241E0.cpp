@@ -47,8 +47,8 @@ int fn_801E17D0(int a, struct PadState_801E17D0 *pState);
 int fn_801E194C(void);
 int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
-void fn_801E1C38(unsigned char a);
-int fn_801E1CE0(unsigned char a);
+void PerCheckConnectSingle(unsigned char a);
+int PerIsDeviceConnected(unsigned char a);
 int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
 void fn_801F6AC8(int a, int b, int c, int d, int e);
 void fn_801F6B84(int a);
@@ -287,8 +287,8 @@ static void fn_80024840(int a)
     int status;
 
     for (i = 0; i < 4; i++) {
-        fn_801E1C38(i);
-        if (fn_801E1CE0(i)) {
+        PerCheckConnectSingle(i);
+        if (PerIsDeviceConnected(i)) {
             fn_801E15D0(i);
             if (fn_801E19B4(i) >> 16 && fn_801E195C(i) == 2 && a == 1) {
                 fn_801E17D0(i, pState);

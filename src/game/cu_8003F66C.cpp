@@ -64,8 +64,8 @@ struct Init_8003F768 {
 extern "C" {
 void fn_8019CEE8(Object_8003F768 *p);
 void fn_8019CFD0(Object_8003F768 *p);
-int fn_801DCF8C(int type);
-void fn_801DD320(int handle, int item);
+int ObjDelType(int type);
+void ObjRemoveFromList(int handle, int item);
 }
 
 #include "engine/cu_80227F14.h"
@@ -104,12 +104,12 @@ void fn_801D0C58(float *p);
 void fn_801D0860(Quat_801EB488 *p);
 void fn_801D0F80(float (*p)[4]);
 void fn_801D0544(void);
-void fn_801DCF0C(int type, int size, int count,
+void ObjNewType_(int type, int size, int count,
                  void (*pInit)(Object_8003F768 *, Init_8003F768 *),
                  void (*pDestroy)(Object_8003F768 *));
-void fn_801DD0C8(int owner, int type, int a, int (*pCallback)(Object_8003F768 *));
-Object_8003F768 *fn_801DD268(int owner, int type, int a, Init_8003F768 *pInit);
-void fn_801DD3AC(int owner, Object_8003F768 *p, int flags);
+void ObjSetListObjFunc(int owner, int type, int a, int (*pCallback)(Object_8003F768 *));
+Object_8003F768 *ObjNewInList(int owner, int type, int a, Init_8003F768 *pInit);
+void ObjSetPriority(int owner, Object_8003F768 *p, int flags);
 int fn_8003FBF0(Object_8003F768 *p);
 }
 
@@ -259,16 +259,16 @@ extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos
 
 extern "C" void fn_8003FAC4(int owner)
 {
-    fn_801DCF0C(3, 0x2B8, 3, fn_8003F768, fn_8003F91C);
+    ObjNewType_(3, 0x2B8, 3, fn_8003F768, fn_8003F91C);
     if (owner != 0) {
-        fn_801DD0C8(owner, 3, 0, fn_8003FBF0);
+        ObjSetListObjFunc(owner, 3, 0, fn_8003FBF0);
     }
 }
 
 extern "C" void fn_8003FB2C(void)
 {
     fn_80228E18();
-    fn_801DCF8C(3);
+    ObjDelType(3);
 }
 
 extern "C" Block_80170E64 *fn_8003FB54(int owner, Block_80170E64 *pFirst,
@@ -279,15 +279,15 @@ extern "C" Block_80170E64 *fn_8003FB54(int owner, Block_80170E64 *pFirst,
     init.mUnknown4 = b;
     init.mpUnknown8 = (Object_8003F768 *)pFirst;
     init.mUnknown12 = index;
-    Object_8003F768 *p = fn_801DD268(owner, 3, 0, &init);
-    fn_801DD3AC(owner, p, 8);
+    Object_8003F768 *p = ObjNewInList(owner, 3, 0, &init);
+    ObjSetPriority(owner, p, 8);
     return (Block_80170E64 *)p;
 }
 
 extern "C" void fn_8003FBB4(int handle, int item)
 {
     if (item) {
-        fn_801DD320(handle, item);
+        ObjRemoveFromList(handle, item);
         fn_80228D58(item);
     }
 }

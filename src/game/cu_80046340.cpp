@@ -30,12 +30,12 @@ void fn_801A582C(Object_80046340 *pObject);
 void fn_801A5CA4(Object_80046340 *pObject);
 int fn_801A5D0C(void *pObject);
 int fn_801A5E90(void *pObject);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, void *pItem);
-void fn_801DD3AC(int handle, void *pItem, int b);
+int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, void *pItem);
+void ObjSetPriority(int handle, void *pItem, int b);
 void fn_80234DCC(int a, void *p, const char *pName, int b);
 void fn_80234EA0(void *p, int a);
 void fn_80235C90(void *p, int a, float b, float c, float d, float e);
@@ -77,15 +77,15 @@ void fn_800463FC(int handle)
 {
     Object_80046340 *pObject;
 
-    fn_801DCF0C(6, sizeof(Object_80046340), 1, 0, 0);
-    fn_801DCF0C(25, sizeof(Object_800463D8), 1, 0, 0);
-    fn_801DD0C8(handle, 6, 0, fn_800463B4);
-    lbl_803EA4B0 = (Object_80046340 *)fn_801DD268(handle, 6, 0, 0);
-    fn_801DD0C8(handle, 25, 0, fn_800463D8);
-    lbl_803EA4B4 = (Object_800463D8 *)fn_801DD268(handle, 25, 0, 0);
-    fn_801DD3AC(handle, lbl_803EA4B0, 4);
+    ObjNewType_(6, sizeof(Object_80046340), 1, 0, 0);
+    ObjNewType_(25, sizeof(Object_800463D8), 1, 0, 0);
+    ObjSetListObjFunc(handle, 6, 0, fn_800463B4);
+    lbl_803EA4B0 = (Object_80046340 *)ObjNewInList(handle, 6, 0, 0);
+    ObjSetListObjFunc(handle, 25, 0, fn_800463D8);
+    lbl_803EA4B4 = (Object_800463D8 *)ObjNewInList(handle, 25, 0, 0);
+    ObjSetPriority(handle, lbl_803EA4B0, 4);
     lbl_803EA4B4->mpUnknown14 = lbl_803EA4B0;
-    fn_801DD3AC(handle, lbl_803EA4B4, 12);
+    ObjSetPriority(handle, lbl_803EA4B4, 12);
     fn_80046340();
     pObject = lbl_803EA4B0;
     pObject->mUnknownC = pObject->mUnknown8 = pObject->mUnknown4 = 0.0f;
@@ -97,14 +97,14 @@ void fn_80046504(int handle)
     fn_801A5CA4(lbl_803EA4B0);
     fn_80234EA0(lbl_803EA4B0->mUnknownE64, 1);
     fn_801F010C(lbl_803EA4B0->mpUnknown18, lbl_803EA4B0->mUnknown1C);
-    fn_801DD320(handle, lbl_803EA4B0);
+    ObjRemoveFromList(handle, lbl_803EA4B0);
     fn_80228D58((int)lbl_803EA4B0);
-    fn_801DD320(handle, lbl_803EA4B4);
+    ObjRemoveFromList(handle, lbl_803EA4B4);
     fn_80228D58((int)lbl_803EA4B4);
     fn_80228E18();
-    fn_801DCF8C(6);
+    ObjDelType(6);
     lbl_803EA4B0 = 0;
-    fn_801DCF8C(25);
+    ObjDelType(25);
     lbl_803EA4B4 = 0;
 }
 

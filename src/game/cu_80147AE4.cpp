@@ -19,13 +19,13 @@ extern "C" {
 void fn_80196EF8(int a, unsigned int color, float value);
 void fn_80196F20(int a, unsigned int color, float value);
 int fn_801CECCC(int index);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80147AE4 *, int *),
+int ObjNewType_(int a, int size, int c, void (*pInit)(Object_80147AE4 *, int *),
                 void (*pRelease)(Object_80147AE4 *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80147AE4 *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, Object_80147AE4 *pObject);
-void fn_801DD3AC(int handle, Object_80147AE4 *pObject, unsigned short b);
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_80147AE4 *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, Object_80147AE4 *pObject);
+void ObjSetPriority(int handle, Object_80147AE4 *pObject, unsigned short b);
 }
 
 static int lbl_803EB28C[2] = { 15, 15 };
@@ -38,11 +38,11 @@ void fn_80147AE4(int handle)
 {
     unsigned int i;
 
-    fn_801DCF0C(20, sizeof(Object_80147AE4), 2, 0, 0);
-    fn_801DD0C8(handle, 20, 0, fn_80147C14);
+    ObjNewType_(20, sizeof(Object_80147AE4), 2, 0, 0);
+    ObjSetListObjFunc(handle, 20, 0, fn_80147C14);
     for (i = 0; i < 2; i++) {
-        lbl_803ECA1C[i] = (Object_80147AE4 *)fn_801DD268(handle, 20, 0, 0);
-        fn_801DD3AC(handle, lbl_803ECA1C[i], lbl_803EB28C[i]);
+        lbl_803ECA1C[i] = (Object_80147AE4 *)ObjNewInList(handle, 20, 0, 0);
+        ObjSetPriority(handle, lbl_803ECA1C[i], lbl_803EB28C[i]);
         lbl_803ECA1C[i]->mUnknown30 = 1;
         lbl_803ECA1C[i]->mUnknown32 = i;
         lbl_803ECA1C[i]->mUnknown2C = 1;
@@ -54,12 +54,12 @@ void fn_80147BA8(int handle)
     unsigned int i;
 
     for (i = 0; i < 2; i++) {
-        fn_801DD320(handle, lbl_803ECA1C[i]);
+        ObjRemoveFromList(handle, lbl_803ECA1C[i]);
         fn_80228D58((int)lbl_803ECA1C[i]);
         lbl_803ECA1C[i] = 0;
     }
     fn_80228E18();
-    fn_801DCF8C(20);
+    ObjDelType(20);
 }
 
 int fn_80147C14(Object_80147AE4 *pObject)

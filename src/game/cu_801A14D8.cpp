@@ -218,7 +218,7 @@ void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(float (*pMatrix)[4]);
 int fn_801D2BB0(int a, void *p, int b, int c);
 void fn_801D2BD0(int handle);
-void fn_801DD3AC(void *a, Object_8003DEC4 *pPlayer, int b);
+void ObjSetPriority(void *a, Object_8003DEC4 *pPlayer, int b);
 void fn_801EF7BC(void *a, int b, int c);
 void fn_801F010C(void *a, int b);
 void *fn_801F0C50(void *a, int b);
@@ -346,7 +346,7 @@ void fn_801A15C4(Object_80228224 *pObject)
             continue;
         }
         if (pPlayer->mUnknown20 & 0x20000) {
-            fn_801DD3AC(fn_80028BB4(), pPlayer, 11);
+            ObjSetPriority(fn_80028BB4(), pPlayer, 11);
         }
     }
 }

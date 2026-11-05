@@ -108,8 +108,8 @@ void fn_801CE910(void);
 void fn_801D6F58(void);
 int fn_801E15D0(int a);
 int fn_801E17D0(int a, char *p);
-void fn_801E1C38(unsigned char a);
-int fn_801E1CE0(unsigned char a);
+void PerCheckConnectSingle(unsigned char a);
+int PerIsDeviceConnected(unsigned char a);
 float fn_801EC418(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
@@ -189,8 +189,8 @@ static void fn_80028140(int a, InputValues *pPrevious, InputValues *pCurrent)
     p = fn_8002739C();
     count = fn_800273A4();
     handle = fn_801C6458(a, 0);
-    fn_801E1C38(handle);
-    if (fn_801E1CE0(handle)) {
+    PerCheckConnectSingle(handle);
+    if (PerIsDeviceConnected(handle)) {
         fn_801E15D0(handle);
         fn_801E17D0(handle, p);
         fn_800282B8();

@@ -25,7 +25,7 @@ typedef struct RampParm_801E071C {
 } RampParm_801E071C;
 
 /* Emitter shape parameters (0x48 bytes at +0xF4 of a particle system). */
-typedef struct Shape_801DF428 {
+typedef struct EmitterLine_t {
     Vec3_801DE1E0 mUnknown00;
     Vec3_801DE1E0 mUnknown0C;
     Vec3_801DE1E0 mUnknown18;
@@ -34,48 +34,48 @@ typedef struct Shape_801DF428 {
     Vec3_801DE1E0 mUnknown2C;
     Vec3_801DE1E0 mUnknown38;
     float mUnknown44;
-} Shape_801DF428;
+} EmitterLine_t;
 
-typedef struct Payload1_801DFE0C {
+typedef struct EmitterDirected_t {
     Vec3_801DE1E0 mUnknown00;
     Vec3_801DE1E0 mUnknown0C;
-} Payload1_801DFE0C;
+} EmitterDirected_t;
 
-typedef struct Payload2_801DFE0C {
+typedef struct EmitterCone_t {
     Vec3_801DE1E0 mUnknown00;
     float mUnknown0C;
-} Payload2_801DFE0C;
+} EmitterCone_t;
 
-typedef union Emitter_801DFE0C {
+typedef union EmitterParms_t {
     Vec3_801DE1E0 mPoint;
-    Payload1_801DFE0C mCase1;
-    Payload2_801DFE0C mCase2;
-    Shape_801DF428 mCase3;
-} Emitter_801DFE0C;
+    EmitterDirected_t mCase1;
+    EmitterCone_t mCase2;
+    EmitterLine_t mCase3;
+} EmitterParms_t;
 
 /* Plane collision parameters (normal, point, distance). */
-typedef struct Plane_801E0384 {
+typedef struct PsysColPlane_t {
     Vec3_801DE1E0 mNormal;
     Vec3_801DE1E0 mPoint;
     float mDistance;
-} Plane_801E0384;
+} PsysColPlane_t;
 
-typedef struct Ground_801E0384 {
+typedef struct PsysColGround_t {
     float mHeight;
-} Ground_801E0384;
+} PsysColGround_t;
 
 /* Collision parameters (0x24 bytes at +0x208 of a particle system). A
    parameter file holds three vectors for a plane (read by fn_801DF578); at
-   run time the distance computed by fn_801E03F4 replaces the third. */
-typedef union Collision_801E0384 {
+   run time the distance computed by PsysColPrecalcDependantVals replaces the third. */
+typedef union PsysColParms_t {
     unsigned int mWord;
-    Ground_801E0384 mGround;
-    Plane_801E0384 mPlane;
+    PsysColGround_t mGround;
+    PsysColPlane_t mPlane;
     Vec3_801DE1E0 mParm[3];
-} Collision_801E0384;
+} PsysColParms_t;
 
 /* Extra collision entry (0x14 bytes at +0x2B8 of a particle system). */
-typedef struct ColExt_801E043C {
+typedef struct PsysColExt_t {
     int mType;
     union {
         float mHeight;
@@ -84,7 +84,7 @@ typedef struct ColExt_801E043C {
             float mDistance;
         } mPlane;
     } mData;
-} ColExt_801E043C;
+} PsysColExt_t;
 
 /* Particle record (0x54 bytes). */
 typedef struct Particle_801DE1E0 {
@@ -159,14 +159,14 @@ typedef struct PartObj_801DE1E0 {
     float mUnknown0E8;
     float mUnknown0EC;
     unsigned int mEmitterType;
-    Emitter_801DFE0C mEmitter;
+    EmitterParms_t mEmitter;
     char mPad13C[0x1F4 - 0x13C];
     float mUnknown1F4;
     float mUnknown1F8;
     float mUnknown1FC;
     float mUnknown200;
     unsigned int mCollisionType;
-    Collision_801E0384 mCollision;
+    PsysColParms_t mCollision;
     char mPad22C[0x288 - 0x22C];
     float mUnknown288;
     char mUnknown28C[0x20];
@@ -176,7 +176,7 @@ typedef struct PartObj_801DE1E0 {
     unsigned char mUnknown2B5;
     unsigned char mUnknown2B6;
     unsigned char mColExtCount;
-    ColExt_801E043C mColExt[8];
+    PsysColExt_t mColExt[8];
     unsigned short mUnknown358;
     unsigned char mUnknown35A;
     unsigned char mUnknown35B;
@@ -206,10 +206,10 @@ typedef struct Template_801DE1E0 {
 /* Calls between the files of the particle library. */
 float fn_801DE1B8(void);
 int fn_801DFD40(void);
-void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void CopyParticleCollisionPayload(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void fn_801E03F4(PartObj_801DE1E0 *pObj);
-void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
+void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj);
+void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
 Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
 
 #endif

@@ -52,12 +52,12 @@ void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float (*pMatrix)[4]);
-int fn_801DCF0C(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*callback)(Item_800469EC *));
-Item_800469EC *fn_801DD268(int handle, int type, int a, int *pInit);
-void fn_801DD320(int handle, Item_800469EC *p);
-void fn_801DD3AC(int handle, Item_800469EC *p, int a);
+int ObjNewType_(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(Item_800469EC *));
+Item_800469EC *ObjNewInList(int handle, int type, int a, int *pInit);
+void ObjRemoveFromList(int handle, Item_800469EC *p);
+void ObjSetPriority(int handle, Item_800469EC *p, int a);
 void fn_80210388(void);
 void fn_80210814(int a, int b, int c);
 void fn_80210CC4(float a, float b);
@@ -181,11 +181,11 @@ void fn_80046DEC(Item_800469EC *p, int enabled)
 void fn_80046E30(int handle)
 {
     lbl_803EC7B8 = handle;
-    fn_801DCF0C(17, 0x128, 5, 0, 0);
-    fn_801DD0C8(lbl_803EC7B8, 17, 0, fn_800469EC);
+    ObjNewType_(17, 0x128, 5, 0, 0);
+    ObjSetListObjFunc(lbl_803EC7B8, 17, 0, fn_800469EC);
     for (int i = 0; i <= 4; ++i) {
         lbl_803EC7C4[i] = 1;
-        Item_800469EC *p = fn_801DD268(lbl_803EC7B8, 17, 0, 0);
+        Item_800469EC *p = ObjNewInList(lbl_803EC7B8, 17, 0, 0);
         lbl_803078D4[i] = p;
         switch (i) {
         case 0:
@@ -215,7 +215,7 @@ void fn_80046E30(int handle)
         fn_80211E08(p->mUnknownF8, fn_801EF390(fn_800C47C4(), 17, 1));
         p->mUnknown120 = fn_802120E4(p->mUnknownF8, 0xFF000000);
         p->mUnknown124 = fn_80212124(p->mUnknownF8, 0xFF000000, 0);
-        fn_801DD3AC(handle, p, 3);
+        ObjSetPriority(handle, p, 3);
     }
 }
 
@@ -223,12 +223,12 @@ void fn_80046FD0(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
         fn_80211EFC(lbl_803078D4[i]->mUnknownF8);
-        fn_801DD320(lbl_803EC7B8, lbl_803078D4[i]);
+        ObjRemoveFromList(lbl_803EC7B8, lbl_803078D4[i]);
         fn_80228D58((int)lbl_803078D4[i]);
         lbl_803078D4[i] = 0;
     }
     fn_80228E18();
-    fn_801DCF8C(17);
+    ObjDelType(17);
     lbl_803EC7B8 = 0;
 }
 

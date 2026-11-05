@@ -1,10 +1,10 @@
-#ifndef ENGINE_BODY_801E9538_H
-#define ENGINE_BODY_801E9538_H
+#ifndef ENGINE_RIGIDBODY_H
+#define ENGINE_RIGIDBODY_H
 
 #include "engine/vec.h"
 
 /* Accessed fields of the rigid body used by motion helpers, joints and sleep control. */
-typedef struct Body_801E9538 {
+typedef struct RigidBody_t {
     char mUnknown000[0x44];
     float mUnknown044;
     float mUnknown048;
@@ -22,16 +22,16 @@ typedef struct Body_801E9538 {
     int mState;
     int mUnknown13C;
     int mUserData;
-} Body_801E9538;
+} RigidBody_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-void fn_801E987C(Body_801E9538 *pBody);
-void fn_801E9C1C(Body_801E9538 *pBody, Vec3_801DE1E0 *pVel);
-void fn_801E9D64(Body_801E9538 *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
-void fn_801E9E18(Body_801E9538 *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
-void fn_801E9F0C(Body_801E9538 *pBody, int state);
+void fn_801E987C(RigidBody_t *pBody);
+void fn_801E9C1C(RigidBody_t *pBody, Vec3_801DE1E0 *pVel);
+void fn_801E9D64(RigidBody_t *pBody, Vec3_801DE1E0 *pImpulse, Vec3_801DE1E0 *pPoint);
+void fn_801E9E18(RigidBody_t *pBody, Vec3_801DE1E0 *pPoint, Vec3_801DE1E0 *pVel);
+void fn_801E9F0C(RigidBody_t *pBody, int state);
 #ifdef __cplusplus
 }
 #endif

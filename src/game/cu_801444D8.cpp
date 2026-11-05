@@ -91,12 +91,12 @@ void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0F80(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801DCF0C(int type, int size, int count, void *pCreate, void *pDestroy);
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(void *));
-int fn_801DD268(int handle, int type, int a, void *pInit);
-void fn_801DD320(int handle, int item);
-void fn_801DD3AC(int handle, int item, int a);
+int ObjNewType_(int type, int size, int count, void *pCreate, void *pDestroy);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(void *));
+int ObjNewInList(int handle, int type, int a, void *pInit);
+void ObjRemoveFromList(int handle, int item);
+void ObjSetPriority(int handle, int item, int a);
 void fn_801DE1E0(Desc_802DCFF8 *pDesc);
 void fn_801DE410(void);
 void fn_801DE4F8(unsigned short a);
@@ -106,7 +106,7 @@ Object_80144CE0 *fn_801DEEF8(unsigned short handle);
 void fn_801DEF18(Object_80144CE0 *pObject);
 void fn_801DF620(void *pDesc, void *pData, int a);
 Manager_801DFD34 *fn_801DFD34(void);
-void fn_801E0520(Object_80144CE0 *pObject);
+void PsysColExtClearAll(Object_80144CE0 *pObject);
 void *fn_801EF7BC(void *pArchive, int file, void *pBuffer);
 int fn_801F010C(void *pArchive, int file);
 int fn_801F0C50(void *pArchive, int file);
@@ -332,10 +332,10 @@ void fn_80144B50(int handle)
     fn_80144660();
     fn_801444D8();
     fn_80196480(1200);
-    fn_801DCF0C(22, 20, 1, 0, 0);
-    fn_801DD0C8(handle, 22, 0, fn_80144E64);
-    lbl_803EB238 = fn_801DD268(handle, 22, 0, 0);
-    fn_801DD3AC(handle, lbl_803EB238, 12);
+    ObjNewType_(22, 20, 1, 0, 0);
+    ObjSetListObjFunc(handle, 22, 0, fn_80144E64);
+    lbl_803EB238 = ObjNewInList(handle, 22, 0, 0);
+    ObjSetPriority(handle, lbl_803EB238, 12);
     lbl_803EB228 = 1;
     fn_801A762C();
     fn_800A3170();
@@ -352,10 +352,10 @@ void fn_80144C6C(int handle)
     fn_801C07DC();
     fn_80144564();
     fn_8019651C();
-    fn_801DD320(handle, lbl_803EB238);
+    ObjRemoveFromList(handle, lbl_803EB238);
     fn_80228D58(lbl_803EB238);
     fn_80228E18();
-    fn_801DCF8C(22);
+    ObjDelType(22);
     lbl_803EB228 = 0;
 }
 
@@ -394,7 +394,7 @@ Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSour
         fn_801D0F80(pObject->mUnknown35C);
         fn_801D0544();
         pObject->mUnknown03C = 1;
-        fn_801E0520(pObject);
+        PsysColExtClearAll(pObject);
     }
     return pObject;
 }

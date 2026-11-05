@@ -48,13 +48,13 @@ void fn_80053A1C(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
-int fn_801DCF0C(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
+int ObjNewType_(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
                 void (*pRelease)(Object_80040818 *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
-Object_80040818 *fn_801DD268(int handle, int type, int a, Desc_800408E4 *pDesc);
-void fn_801DD320(int handle, Object_80040818 *pObject);
-void fn_801DD3AC(int handle, Object_80040818 *pObject, int a);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
+Object_80040818 *ObjNewInList(int handle, int type, int a, Desc_800408E4 *pDesc);
+void ObjRemoveFromList(int handle, Object_80040818 *pObject);
+void ObjSetPriority(int handle, Object_80040818 *pObject, int a);
 void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int fn_801F1520(int value);
@@ -235,7 +235,7 @@ void fn_800405F0(int handle)
             if (pLinked->mUnknown184 != 0) {
                 pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
             }
-            fn_801DD320(handle, lbl_803EA480[i]);
+            ObjRemoveFromList(handle, lbl_803EA480[i]);
             fn_80228D58(lbl_803EA480[i]);
         }
         fn_80228DD4();
@@ -275,16 +275,16 @@ void fn_800406C0(unsigned int flags)
 
 void fn_80040788(int handle, int count)
 {
-    fn_801DCF0C(28, sizeof(Object_80040818), count, fn_80040818, fn_80040884);
+    ObjNewType_(28, sizeof(Object_80040818), count, fn_80040818, fn_80040884);
     if (handle != 0) {
-        fn_801DD0C8(handle, 28, 0, fn_800408A4);
+        ObjSetListObjFunc(handle, 28, 0, fn_800408A4);
     }
 }
 
 void fn_800407F0(void)
 {
     fn_80228E18();
-    fn_801DCF8C(28);
+    ObjDelType(28);
 }
 
 void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc)
@@ -323,8 +323,8 @@ void fn_800408E4(Desc_800408E4 *pDesc, int handle)
     if (pDesc->mUnknown168 == -1) {
         return;
     }
-    lbl_803EA480[lbl_803EC784] = fn_801DD268(handle, 28, 0, pDesc);
-    fn_801DD3AC(handle, lbl_803EA480[lbl_803EC784], 6);
+    lbl_803EA480[lbl_803EC784] = ObjNewInList(handle, 28, 0, pDesc);
+    ObjSetPriority(handle, lbl_803EA480[lbl_803EC784], 6);
     fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, lbl_803EA480[lbl_803EC784]);
     if (fn_801C310C(pDesc->mName, "CROWD") != 0) {
         lbl_803EA480[lbl_803EC784]->mUnknown232_27 = 1;
