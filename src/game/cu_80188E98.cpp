@@ -65,7 +65,7 @@ void fn_8018AD78(void);
 void fn_8018AFD0(int a);
 unsigned char fn_8018AFD8(unsigned char value);
 unsigned char fn_8018AFE8(void);
-void fn_80191378(Object_80228224 *pObject);
+void DbgScreenRenderCallback(Object_80228224 *pObject);
 void fn_80196174(Object_80228224 *pObject, int a);
 void fn_80196204(void);
 void fn_801A139C(void);
@@ -487,7 +487,7 @@ void fn_80189848(void)
     } else {
         fn_801C3A10(lbl_803EB648, 4.0f);
     }
-    fn_80228474(lbl_803EB644, 2, fn_80191378, 31);
+    fn_80228474(lbl_803EB644, 2, DbgScreenRenderCallback, 31);
     lbl_803EB64C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB64C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB644, lbl_803EB64C, 0);
@@ -670,7 +670,7 @@ void fn_8018A274(void)
     if (!fn_80027DF0()) {
         fn_80196204();
     }
-    fn_802284EC(lbl_803EB644, fn_80191378);
+    fn_802284EC(lbl_803EB644, DbgScreenRenderCallback);
     fn_801DD320(lbl_803EB64C, lbl_803EB650);
     fn_80228D58(lbl_803EB650);
     fn_80228E18();

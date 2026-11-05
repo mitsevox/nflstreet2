@@ -3,7 +3,7 @@
 #include "engine/cu_80229094.h"
 #include "engine/cu_80229270.h"
 #include "game/cu_8007F12C.h"
-#include "game/cu_80191398.h"
+#include "game/DbgFont.h"
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
@@ -43,9 +43,9 @@ void fn_8015E65C(void);
 void fn_8015E684(void);
 void fn_8015E714(void);
 void fn_801607F0(int a);
-void fn_80191200(void);
-void fn_80191224(void);
-void fn_801912A4(void);
+void DbgPrintEnable(void);
+void DbgPrintDisable(void);
+void DbgScreenClear(void);
 void fn_80194794(void);
 void fn_801C1710(int a);
 void fn_801C17BC(void);
@@ -264,16 +264,16 @@ const char *DbgPrint::GetName() { return "DbgPrint"; }
 
 int DbgPrint::Init()
 {
-    fn_80191414();
-    fn_80191200();
-    fn_801912A4();
+    DbgFontInit();
+    DbgPrintEnable();
+    DbgScreenClear();
     return 1;
 }
 
 int DbgPrint::Shutdown()
 {
-    fn_80191418();
-    fn_80191224();
+    DbgFontShutdown();
+    DbgPrintDisable();
     return 1;
 }
 

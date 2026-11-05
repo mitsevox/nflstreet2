@@ -3514,7 +3514,7 @@ void fn_800C4410(int value);
 void fn_80046E30(int handle);
 void fn_80163DD0(int handle);
 void fn_80043D68(void);
-void fn_8019B320(int handle);
+void FldObjRemoveObjType(int handle);
 void fn_80046504(int handle);
 void fn_800B8538(void);
 void fn_800C442C(void);
@@ -3602,7 +3602,7 @@ extern "C" void fn_800C46B0(int handle)
 extern "C" void fn_800C471C(int handle)
 {
     fn_80043D68();
-    fn_8019B320(handle);
+    FldObjRemoveObjType(handle);
     fn_80046504(handle);
     fn_800B8538();
     fn_800C442C();
@@ -4737,7 +4737,7 @@ int fn_800A7F1C(int team);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_80147598(void *pObject, int bit, unsigned int slot, unsigned char flag);
-void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
+void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 
 extern unsigned char lbl_803EAC40;
 extern unsigned char lbl_803EAC41;
@@ -4820,7 +4820,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
                 int duration = lbl_803EAC40 + lbl_803EAC41;
 
                 fn_80067DB8(15, &p->mMotion.mPos, 1, 0, 0);
-                fn_80194F2C(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
+                RumbleStartPulse(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
             }
         }
     }
@@ -11243,9 +11243,9 @@ void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
 
-unsigned char fn_80194F24(void);
-void fn_80194F1C(unsigned char enabled);
-void fn_80194C5C(int a, int b, int c);
+unsigned char RumbleIsEnabled(void);
+void RumbleEnable(unsigned char enabled);
+void RumbleStart(int a, int b, int c);
 int fn_801C6458(int a, int b);
 int fn_801E195C(int a);
 void fn_8017DDDC(int index);
@@ -11423,19 +11423,19 @@ extern "C" void fn_800AE380(void)
 
 extern "C" void fn_800AE65C(void)
 {
-    unsigned char saved = fn_80194F24();
+    unsigned char saved = RumbleIsEnabled();
 
-    fn_80194F1C(1);
+    RumbleEnable(1);
     if (fn_8007F828(9) != 0) {
         unsigned int i;
 
         for (i = 0; i <= 9; i++) {
             if (fn_801E195C(fn_801C6458(i, 0)) == 2 && fn_800B6644(i) != 255) {
-                fn_80194C5C(i, 127, 20);
+                RumbleStart(i, 127, 20);
             }
         }
     }
-    fn_80194F1C(saved);
+    RumbleEnable(saved);
 }
 
 extern "C" void fn_800AE6F0(void)
@@ -12805,7 +12805,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
 int fn_800A1C50(void);
 void fn_800A1C74(Object_8017886C *a, Object_8017886C *b);
-void fn_80194F1C(unsigned char enabled);
+void RumbleEnable(unsigned char enabled);
 int fn_800C8774(int team);
 int fn_801787DC(int team);
 void fn_801787FC(int team, short value);
@@ -13671,7 +13671,7 @@ extern "C" void fn_800A14A8(void *context)
 {
     Pair_800A14A8 *p=(Pair_800A14A8 *)context;
     fn_800A1C74(p->mpFirst, p->mpSecond);
-    fn_80194F1C(0);
+    RumbleEnable(0);
     fn_80067D4C(124, 0);
 }
 
@@ -18596,7 +18596,7 @@ void Class_80297AB8::vfn_03()
     }
     fn_800B6408();
     fn_800B8608();
-    fn_80194F1C(1);
+    RumbleEnable(1);
     fn_800CC448();
     fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
     fn_800271D4(lbl_803EA9E8);

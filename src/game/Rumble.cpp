@@ -2,9 +2,9 @@
 #include "game/Module.h"
 
 extern "C" {
-void fn_80194D20(void);
-void fn_80194D70(void);
-void fn_80194DB8(void);
+void RumbleInit(void);
+void RumbleInitAllPorts(void);
+void RumbleShutdown(void);
 }
 
 static void *sDependencies[] = { 0 };
@@ -17,15 +17,15 @@ const char *Rumble::GetName() { return "Rumble"; }
 int Rumble::Init()
 {
     if (fn_80027DF0()) {
-        fn_80194D70();
+        RumbleInitAllPorts();
     } else {
-        fn_80194D20();
+        RumbleInit();
     }
     return 1;
 }
 
 int Rumble::Shutdown()
 {
-    fn_80194DB8();
+    RumbleShutdown();
     return 1;
 }

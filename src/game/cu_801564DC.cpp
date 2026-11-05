@@ -382,8 +382,8 @@ void fn_8017D6B8(int a, int b);
 void fn_8017D9D8(int a);
 void fn_8017DB44(void);
 int fn_801801D0(void);
-void fn_80194CBC(void);
-void fn_80194F1C(unsigned char enabled);
+void RumbleStopAll(void);
+void RumbleEnable(unsigned char enabled);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char * fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -1812,7 +1812,7 @@ void Class_802A3B80::vfn_04(float dt)
 
         if (choice == 2) {
             if (mUnknown4 == 2) {
-                fn_80194F1C(1);
+                RumbleEnable(1);
                 fn_80072C90(0xFA, 0);
                 fn_800282DC();
             } else {
@@ -2032,8 +2032,8 @@ void Class_802A3A48::vfn_04(float dt)
                 mUnknown6--;
             }
         } else {
-            fn_80194F1C(0);
-            fn_80194CBC();
+            RumbleEnable(0);
+            RumbleStopAll();
             fn_8006F824(1);
             fn_80158C04();
             mUnknown5 = 1;
@@ -2069,7 +2069,7 @@ void Class_802A3A48::vfn_04(float dt)
                     mUnknown8++;
                     fn_801566DC(0);
                     mUnknown12 = 0;
-                    fn_80194F1C(1);
+                    RumbleEnable(1);
                     vfn_15();
                     break;
                 case 2:
@@ -2077,7 +2077,7 @@ void Class_802A3A48::vfn_04(float dt)
                         mUnknown12 = 2;
                         fn_800544A4("Tutorial Results", lbl_802DF120, "|^No|Yes");
                     } else {
-                        fn_80194F1C(1);
+                        RumbleEnable(1);
                         fn_80072C90(0xFA, 0);
                         fn_80047874(0);
                         fn_8004730C(0);

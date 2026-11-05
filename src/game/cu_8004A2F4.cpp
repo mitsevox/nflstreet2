@@ -148,7 +148,7 @@ int fn_8004D4B0(int handle, const char *pKey);
 int fn_8004D508(int handle, const char *pKey);
 unsigned char fn_8005164C(int type);
 int fn_80051680(int type);
-void fn_80194C5C(int a, int b, int c);
+void RumbleStart(int a, int b, int c);
 int fn_8004D560(int handle);
 int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
 int fn_8004D5F0(int handle, const char *pKey);
@@ -1227,7 +1227,7 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
             if (volume > hi) {
                 volume = hi;
             }
-            fn_80194C5C(pHitter->mChannel, (unsigned char)(int)volume, lbl_803EA4DA);
+            RumbleStart(pHitter->mChannel, (unsigned char)(int)volume, lbl_803EA4DA);
         }
     } else {
         pObject->mUnknown376 = 0;

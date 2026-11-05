@@ -1,3 +1,6 @@
+/* Animation file extension: after an animation file loads, fixes up its compression tables and moves
+   its motion data out to auxiliary RAM; when a player animation needs a motion it is read back from
+   auxiliary RAM (and decompressed) through a small staging buffer, and the copy is freed on unload. */
 #include <dolphin/types.h>
 #include "game/AnimFileFormat.h"
 #include "game/Frame_8019D3B8.h"
@@ -89,13 +92,13 @@ void AnimExtnRelocateFile(AnimFileFormat_t *file)
         _AnimExtnRelocateMotion(file);
 }
 
-extern "C" void fn_80190DCC(AnimFileFormat_t *file)
+extern "C" void AnimExtnFreeFile(AnimFileFormat_t *file)
 {
     if ((file->flags & 0x200) && file->motion[0])
         fn_801D2BD0(file->motion[0]);
 }
 
-extern "C" void fn_80190E08(AnimFileFormat_t *file, int a, unsigned char *destination, unsigned int source, unsigned int size, int group)
+extern "C" void AnimExtnReadMotion(AnimFileFormat_t *file, int a, unsigned char *destination, unsigned int source, unsigned int size, int group)
 {
     char *buffer = AnimExtn_ARamTransferBuffer[AnimExtn_iCurrBuffer];
     AnimExtn_iCurrBuffer = AnimExtn_iCurrBuffer == 0;

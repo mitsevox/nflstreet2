@@ -1,7 +1,7 @@
 #include <dolphin/gx/GXPixel.h>
 #include "engine/cu_80227F14.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_80193F84.h"
+#include "game/ResTexture.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -49,7 +49,7 @@ void fn_802525BC(int a);
 extern int lbl_803EBC98;
 
 static Entry_801A5050 *lbl_803664C0[96];
-static Object_80193F84 lbl_80366640[1];
+static ResTexture lbl_80366640[1];
 static GXTexObj lbl_80366680;
 static int lbl_803EB830[1] = { 0 };
 static unsigned short lbl_803EB834 = 0;
@@ -105,8 +105,8 @@ void fn_801A4E9C(void)
         lbl_803664C0[i] = &lbl_803EB838[i];
     }
     for (i = 0; i < 1; i++) {
-        fn_80193F84(&lbl_80366640[i]);
-        fn_80193EF0(&lbl_80366640[i], 0, fn_800C47C4(), lbl_803EB830[i], "LLSimpShadow");
+        ResTextureClear(&lbl_80366640[i]);
+        ResTextureOpen(&lbl_80366640[i], 0, fn_800C47C4(), lbl_803EB830[i], "LLSimpShadow");
     }
     lbl_803EB834 = 0;
     lbl_803EB83C = 1;
@@ -121,7 +121,7 @@ void fn_801A4FB0(void)
 
     for (i = 0; i < 1; i++) {
         if (lbl_80366640[i].mUnknown28 != 0) {
-            fn_80193F2C(&lbl_80366640[i]);
+            ResTextureClose(&lbl_80366640[i]);
         }
     }
     for (i = 0; i < 96; i++) {

@@ -105,12 +105,12 @@ void fn_8018A4B4(int a);
 void fn_8018A798(int value);
 void fn_8018A7A0(void);
 void fn_8018AFD8(unsigned char value);
-void fn_80194CBC(void);
-void fn_80194D20(void);
-void fn_80194D70(void);
-void fn_80194DB8(void);
-void fn_80194F1C(int a);
-unsigned char fn_80194F24(void);
+void RumbleStopAll(void);
+void RumbleInit(void);
+void RumbleInitAllPorts(void);
+void RumbleShutdown(void);
+void RumbleEnable(int a);
+unsigned char RumbleIsEnabled(void);
 int fn_8019626C(void);
 void fn_801F5D0C(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
@@ -408,12 +408,12 @@ void fn_80064F58(unsigned short a, unsigned short b, int c, unsigned int count, 
         fn_8002D198(lbl_803EA368);
     }
     fn_8002885C();
-    lbl_803EA63F = fn_80194F24();
-    fn_80194CBC();
+    lbl_803EA63F = RumbleIsEnabled();
+    RumbleStopAll();
     if (lbl_8030A478.mId == 0x10002 || lbl_8030A478.mId == 0x30001) {
         fn_80064864();
-        fn_80194DB8();
-        fn_80194D70();
+        RumbleShutdown();
+        RumbleInitAllPorts();
     }
     if (lbl_8030A478.mUnknown0 == 2) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
@@ -488,9 +488,9 @@ void fn_800652DC(void)
     fn_80027358(-1);
     lbl_8030A478.mUnknown132 = 0;
     fn_800288B0();
-    fn_80194DB8();
-    fn_80194D20();
-    fn_80194F1C(lbl_803EA63F);
+    RumbleShutdown();
+    RumbleInit();
+    RumbleEnable(lbl_803EA63F);
     fn_8017EFB0();
     fn_800ABD80();
     fn_800B22E0();

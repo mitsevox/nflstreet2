@@ -198,9 +198,9 @@ void fn_800B41BC(int a, int b, int c);
 int fn_80085A34(int formation, int team);
 void fn_800B4184(int a);
 int fn_800B65D0(int team);
-unsigned char fn_80194F24(void);
-void fn_80194F1C(unsigned char enabled);
-void fn_80194C5C(int a, int b, int c);
+unsigned char RumbleIsEnabled(void);
+void RumbleEnable(unsigned char enabled);
+void RumbleStart(int a, int b, int c);
 void fn_801678CC(int group);
 int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
 unsigned short fn_800672BC(int tag, int handle);
@@ -743,10 +743,10 @@ int fn_800577DC(int side, int a, int *pPos)
             pad = fn_800B65D0(1);
         }
         if (pad != 0xFF) {
-            unsigned char enabled = fn_80194F24();
-            fn_80194F1C(1);
-            fn_80194C5C(pad, lbl_803EA599, lbl_803EA59A);
-            fn_80194F1C(enabled);
+            unsigned char enabled = RumbleIsEnabled();
+            RumbleEnable(1);
+            RumbleStart(pad, lbl_803EA599, lbl_803EA59A);
+            RumbleEnable(enabled);
         }
     }
     return ok;

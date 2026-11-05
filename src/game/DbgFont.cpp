@@ -1,3 +1,5 @@
+/* The debug font: a built-in 8x8 pixel character set and the routine that draws strings with it
+   directly on screen in a chosen colour. */
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
@@ -6,7 +8,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXBump.h>
-#include "game/cu_80191398.h"
+#include "game/DbgFont.h"
 #include <dolphin/gx/GXTev.h>
 
 extern "C" {
@@ -21,7 +23,7 @@ void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
 
-static unsigned char lbl_802EB720[1652] ATTRIBUTE_ALIGN(32) = {
+static unsigned char _DbgFont_aTexels[1652] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x0F, 0xF0, 0x00, 0x00, 0x0F, 0xF0, 0x00,
@@ -161,45 +163,45 @@ static unsigned char lbl_802EB720[1652] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0xFF, 0x00, 0x00, 0x0F, 0xF0, 0x00, 0x00, 0xFF, 0x00, 0x00,
     0x0F, 0xF0, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
 };
-static GXColor lbl_803EB6E8 = { 200, 200, 200, 255 };
-static unsigned short lbl_803EB6EC = 0;
+static GXColor _DbgFont_Color = { 200, 200, 200, 255 };
+static unsigned short _DbgFont_bEnabled = 0;
 
 extern "C" {
-void fn_80191398(void)
+void DbgFontLoadTexture(void)
 {
     GXTexObj obj;
 
-    GXInitTexObj(&obj, lbl_802EB720, 64, 96, 0, 0, 0, 0);
+    GXInitTexObj(&obj, _DbgFont_aTexels, 64, 96, 0, 0, 0, 0);
     GXInitTexObjLOD(&obj, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(&obj, 0);
 }
 
-void fn_80191414(void)
+void DbgFontInit(void)
 {
 }
 
-void fn_80191418(void)
+void DbgFontShutdown(void)
 {
 }
 
-void fn_8019141C(unsigned short value)
+void DbgFontSetEnabled(unsigned short value)
 {
-    lbl_803EB6EC = value;
+    _DbgFont_bEnabled = value;
 }
 
-void fn_80191424(unsigned char r, unsigned char g, unsigned char b)
+void DbgFontSetColor(unsigned char r, unsigned char g, unsigned char b)
 {
-    lbl_803EB6E8.r = r;
-    lbl_803EB6E8.g = g;
-    lbl_803EB6E8.b = b;
-    lbl_803EB6E8.a = 255;
+    _DbgFont_Color.r = r;
+    _DbgFont_Color.g = g;
+    _DbgFont_Color.b = b;
+    _DbgFont_Color.a = 255;
 }
 
-int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
+int DbgFontPrint(int x, unsigned short y, int c, char *pText, int e)
 {
     char *p = pText;
 
-    if (lbl_803EB6EC == 1) {
+    if (_DbgFont_bEnabled == 1) {
         Mtx44 m;
         int count;
         char ch;
@@ -230,7 +232,7 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
         fn_801D0F80(m);
         fn_8025251C(m, 0);
         fn_802525BC(0);
-        fn_80191398();
+        DbgFontLoadTexture();
         for (;;) {
             ch = *p++;
             if ((unsigned int)(ch - ' ') < 96) {
@@ -255,16 +257,16 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
                     float t1 = ((row + 1) * 8) / 96.0f;
 
                     GXPosition3s16(x0, y0, 0);
-                    GXColor4u8(lbl_803EB6E8.r, lbl_803EB6E8.g, lbl_803EB6E8.b, lbl_803EB6E8.a);
+                    GXColor4u8(_DbgFont_Color.r, _DbgFont_Color.g, _DbgFont_Color.b, _DbgFont_Color.a);
                     GXTexCoord2f32(s0, t0);
                     GXPosition3s16(x1, y0, 0);
-                    GXColor4u8(lbl_803EB6E8.r, lbl_803EB6E8.g, lbl_803EB6E8.b, lbl_803EB6E8.a);
+                    GXColor4u8(_DbgFont_Color.r, _DbgFont_Color.g, _DbgFont_Color.b, _DbgFont_Color.a);
                     GXTexCoord2f32(s1, t0);
                     GXPosition3s16(x1, y1, 0);
-                    GXColor4u8(lbl_803EB6E8.r, lbl_803EB6E8.g, lbl_803EB6E8.b, lbl_803EB6E8.a);
+                    GXColor4u8(_DbgFont_Color.r, _DbgFont_Color.g, _DbgFont_Color.b, _DbgFont_Color.a);
                     GXTexCoord2f32(s1, t1);
                     GXPosition3s16(x0, y1, 0);
-                    GXColor4u8(lbl_803EB6E8.r, lbl_803EB6E8.g, lbl_803EB6E8.b, lbl_803EB6E8.a);
+                    GXColor4u8(_DbgFont_Color.r, _DbgFont_Color.g, _DbgFont_Color.b, _DbgFont_Color.a);
                     GXTexCoord2f32(s0, t1);
                 }
                 count = 0;

@@ -1,23 +1,25 @@
+/* Memory card helpers for the front end: maps a request to its save type and writes a size as
+   "N block(s)" for the memory card messages; also an event hook and start/stop hooks that do nothing. */
 #include <string.h>
-#include "game/fn_80191804.h"
+#include "game/MemCardUtil.h"
 
 extern "C" {
 
 void fn_8017F49C(int value, char *pOut, int size);
 
-void fn_80191804(int a, int b, float c)
+void MemCardUtilHandleEvent(int a, int b, float c)
 {
 }
 
-void fn_80191808(void)
+void MemCardUtilInit(void)
 {
 }
 
-void fn_8019180C(void)
+void MemCardUtilShutdown(void)
 {
 }
 
-int fn_80191810(int value)
+int MemCardUtilGetSaveType(int value)
 {
     switch (value) {
     case 1:
@@ -40,7 +42,7 @@ int fn_80191810(int value)
 /* Writes a byte count as a number of 8 KB blocks, rounded up, followed by
    " block" or " blocks" and pText when one is given; a negative count
    writes a blank. */
-void fn_80191868(int value, char *pOut, int size, int unused, const char *pText)
+void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const char *pText)
 {
     int blocks;
 

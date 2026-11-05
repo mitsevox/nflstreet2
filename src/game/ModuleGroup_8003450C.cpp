@@ -170,7 +170,7 @@ void fn_8017EBF0(void);
 void fn_80188B78(int a, int b);
 void fn_80188E14(void);
 void fn_80188E8C(void);
-void fn_8019B25C(int a);
+void FldObjAddObjType(int a);
 void fn_8019B43C(void);
 void fn_801A4650(Object_80228224 *pObject);
 void fn_801A4E9C(void);
@@ -551,7 +551,7 @@ int Env::Init()
     fn_800463FC(GameObjList::fn_80028BB4());
     fn_801F2798("EnvObjAddObjTypeFinish");
     fn_801F2798("FldObjAddObjTypeStart");
-    fn_8019B25C(GameObjList::fn_80028BB4());
+    FldObjAddObjType(GameObjList::fn_80028BB4());
     fn_801F2798("FldObjAddObjTypeFinish");
     fn_80043AE4();
     fn_800C47EC(lbl_803EA554);

@@ -55,8 +55,8 @@ void fn_801BFCB0(void (*)(AnimFileFormat_t *,int,unsigned char *,unsigned int,un
 void fn_801BFCB8(void);
 void *fn_801BFCC4(int, int);
 void fn_801BFD48(void *);
-void fn_80190E08(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int);
-void fn_80190DCC(AnimFileFormat_t *);
+void AnimExtnReadMotion(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int);
+void AnimExtnFreeFile(AnimFileFormat_t *);
 int fn_801B9DEC(unsigned int mode);
 int fn_801BFEF8(float rate);
 void fn_801CC7FC(void *);
@@ -314,7 +314,7 @@ extern "C" void fn_8008F940(void)
 }
 extern "C" void fn_8008F978(void)
 {
-    fn_801BFCB0(fn_80190E08);
+    fn_801BFCB0(AnimExtnReadMotion);
     lbl_803EC91C=fn_801BFCC4(256,178);
     lbl_803EC920=fn_801BFCC4(20,178);
 }
@@ -358,7 +358,7 @@ extern "C" void fn_8008FBA0(void)
     fn_801CC7FC(pModule);fn_801CC820(pModule,0);
     lbl_802D713C.mpArchive=pModule->fn_80033AF8();
     fn_801B9EEC(fn_8008EBBC,fn_8008F78C);
-    fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(fn_80190DCC);
+    fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
     fn_801BB2D8(&lbl_802D713C);fn_801F0F18(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
@@ -371,7 +371,7 @@ extern "C" void fn_8008FCB4(int flag)
     else lbl_802D70D0.mpArchive=gAnimData.fn_80033AF8();
     fn_801B9DEC(1);fn_801BFEF8(60.0f);
     fn_801B9EEC(fn_8008EBBC,fn_8008F78C);
-    fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(fn_80190DCC);
+    fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
     fn_8008F978();fn_801BF2B0(4);
     if(flag) fn_801BB2D8(&lbl_802D713C);else fn_801BB2D8(&lbl_802D70D0);
     fn_801BDF90(11);fn_8008F940();

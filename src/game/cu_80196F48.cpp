@@ -41,7 +41,7 @@ void fn_80146B40(Vector_80146134 *, Vector_80146134 *);
 int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEA14(void);
-unsigned int fn_80198B24(float, float);
+unsigned int FieldMarkerReadDepth(float, float);
 int fn_8020E51C(void *);
 int fn_8020E524(void *);
 void fn_8021239C(void *, void *, int, int, int, int, int, int);
@@ -384,7 +384,7 @@ void fn_80197FDC(void *unused, Entry_80146C4C *p)
                 int height = fn_801CEC74();
                 projected[1] *= (float)height / (float)fn_801CEA14();
             }
-            if (value > fn_80198B24(projected[0], projected[1]) || !fn_80146BA8((Vector_80146134 *)projected)) p->mUnknown11 = 0;
+            if (value > FieldMarkerReadDepth(projected[0], projected[1]) || !fn_80146BA8((Vector_80146134 *)projected)) p->mUnknown11 = 0;
             else p->mUnknown11 = 1;
         } else {
             p->mUnknown11 = 0;

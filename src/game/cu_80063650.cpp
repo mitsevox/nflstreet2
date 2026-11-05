@@ -12,7 +12,7 @@ extern void *lbl_803EB688;
 
 int fn_801C6458(int a, int b);
 int fn_801E195C(int a);
-void fn_80194C5C(int a, int b, int c);
+void RumbleStart(int a, int b, int c);
 int fn_800B6644(int a);
 void fn_80185F4C(int a, int b);
 Object_80228224 *fn_8018A854(void);
@@ -64,13 +64,13 @@ void fn_80063730(int id, int flag)
             if (fn_80027DF0() != 0) {
                 for (i = 0; i < 8; i++) {
                     if (fn_801E195C(fn_801C6458(i, 0)) == 2) {
-                        fn_80194C5C(i, 127, 20);
+                        RumbleStart(i, 127, 20);
                     }
                 }
             } else {
                 for (i = 0; i < 10; i++) {
                     if (fn_801E195C(fn_801C6458(i, 0)) == 2 && fn_800B6644(i) != 255) {
-                        fn_80194C5C(i, 127, 20);
+                        RumbleStart(i, 127, 20);
                     }
                 }
             }

@@ -5,7 +5,7 @@
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
 #include "game/cu_8002ACB4.h"
-#include "game/cu_80193CEC.h"
+#include "game/MemCardCallbacks.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
@@ -53,7 +53,7 @@ extern char lbl_802EBE50[];
 
 void fn_801D646C(void);
 void fn_801D6938(SaveFileDesc *, int);
-void fn_801D6924(int (*)(char *, int, Comment_80193CEC *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
+void fn_801D6924(int (*)(char *, int, MemCardComment *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
 int fn_801D5824(int, int);
 void fn_801D6904(int, int);
 void fn_801D64EC(void);
@@ -110,7 +110,7 @@ extern "C" {
 
 void fn_80029500(int type, unsigned char **pOptional, unsigned int *pOut)
 {
-    fn_80193D48(lbl_803EA320, lbl_802CC780[type].mUnknown4, pOptional, pOut);
+    MemCardGetIcon(lbl_803EA320, lbl_802CC780[type].mUnknown4, pOptional, pOut);
 }
 
 void fn_80029544(int type)
@@ -168,7 +168,7 @@ void fn_800296B0(void)
         }
     }
     fn_801D6938(lbl_802CC7E0, 4);
-    fn_801D6924(fn_80193CEC, fn_80193D44, fn_80029500, fn_80029544);
+    fn_801D6924(MemCardGetNameFromComment, MemCardNullCallback, fn_80029500, fn_80029544);
     fn_801D685C("GN7E-69", 0);
     fn_801D5824(1, 0x8000);
     fn_801D6904(1, 1);

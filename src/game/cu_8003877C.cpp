@@ -182,7 +182,7 @@ extern float lbl_803EA3F4;
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB,
                  ContactList_8030BD74 *pContacts);
-void fn_80194C5C(int channel, int level, int duration);
+void RumbleStart(int channel, int level, int duration);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
@@ -505,7 +505,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
             if (level > limit) {
                 level = limit;
             }
-            fn_80194C5C(a->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(a->mUnknown8, (unsigned char)level, lbl_803EA3F2);
         }
         if (b->mUnknown8 != 0xFF) {
             unsigned int limit = lbl_803EA3F0;
@@ -514,7 +514,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
             if (level > limit) {
                 level = limit;
             }
-            fn_80194C5C(b->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(b->mUnknown8, (unsigned char)level, lbl_803EA3F2);
         }
     }
 }

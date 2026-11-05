@@ -1,19 +1,22 @@
+/* Callbacks the memory card manager uses for NFL Street 2 saves: the save name taken from a save
+   comment, the save icon image from icons.dat, and the files and blocks a new save of each type
+   needs. */
 #include <string.h>
 #include "game/Callees_801D57E0.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801EF390.h"
 #include "game/Object_8020E52C.h"
-#include "game/cu_80193CEC.h"
+#include "game/MemCardCallbacks.h"
 
-struct Header_80193D48 {
+struct IconResourceHeader {
     char mUnknown0[4];
     unsigned short mUnknown4;
 };
 
 /* Object returned by fn_801EF390. */
-struct Resource_80193D48 {
+struct IconResource {
     char mUnknown0[0x14];
-    Header_80193D48 *mpUnknown14;
+    IconResourceHeader *mpUnknown14;
 };
 
 extern "C" {
@@ -23,7 +26,7 @@ unsigned int fn_80029838(int type);
 
 /* Copies the text after the last '-' of the comment; returns 1 when the
    comment has no '-'. */
-int fn_80193CEC(char *pOut, int unused, Comment_80193CEC *pComment)
+int MemCardGetNameFromComment(char *pOut, int unused, MemCardComment *pComment)
 {
     char *p = strrchr(pComment->mUnknown20, '-');
 
@@ -34,13 +37,13 @@ int fn_80193CEC(char *pOut, int unused, Comment_80193CEC *pComment)
     return 0;
 }
 
-void fn_80193D44(void)
+void MemCardNullCallback(void)
 {
 }
 
-void fn_80193D48(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
+void MemCardGetIcon(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
 {
-    Resource_80193D48 *pResource = (Resource_80193D48 *)fn_801EF390(pData, index, 1);
+    IconResource *pResource = (IconResource *)fn_801EF390(pData, index, 1);
     Object_8020E560 *pEntry;
 
     fn_8020E2B0(pResource);
@@ -55,7 +58,7 @@ void fn_80193D48(void *pData, int index, unsigned char **pOptional, unsigned int
 
 /* For each of the three save types, counts its first slot whose
    fn_801D6B74 flag is clear and adds that type's fn_80029838 size. */
-void fn_80193DC4(int *pFiles, int *pBlocks)
+void MemCardGetNewSaveSpace(int *pFiles, int *pBlocks)
 {
     int files = *pFiles;
     int blocks = *pBlocks;

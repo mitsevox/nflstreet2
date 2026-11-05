@@ -11,7 +11,7 @@
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
-#include "game/fn_80191804.h"
+#include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
 
@@ -57,7 +57,7 @@ void fn_80188E14(void);
 void fn_80188E8C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A740(void);
-void fn_80194E04(void);
+void RumbleProcess(void);
 int fn_801C601C(int a);
 int fn_801C60BC(int a);
 int fn_801C6280(int a, int b, void *pValue);
@@ -260,7 +260,7 @@ static void fn_800278B8(int a, int b, float c)
     if (b == 0x46) {
         sUnknown803EC5F0 = 0;
     }
-    fn_80191804(a, b, c);
+    MemCardUtilHandleEvent(a, b, c);
     if (!gFMCAPPORT.IsBusy()) {
         fn_8018A4BC(a, b, c);
     }
@@ -380,7 +380,7 @@ unsigned char FELoop::fn_80027C58()
     if (a == 0 && b == 7) {
         fn_8001442C();
     }
-    fn_80194E04();
+    RumbleProcess();
     if (flag) {
         fn_802285CC();
         fn_801CAF24();
