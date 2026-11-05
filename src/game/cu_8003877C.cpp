@@ -210,7 +210,7 @@ int fn_801787A0(void);
 void fn_800F1700(void);
 void fn_800C11B8(void);
 void fn_800C845C(void);
-void fn_800D0A38(void);
+void PlayerMoveTickAll(void);
 void fn_800C8330(Object_80039F5C *p);
 void fn_800C7794(Object_80039F5C *p);
 void fn_800EA6F0(Object_80039F5C *p);
@@ -683,7 +683,7 @@ extern "C" void fn_800398B4(void)
     fn_800F1700();
     fn_800C11B8();
     fn_800C845C();
-    fn_800D0A38();
+    PlayerMoveTickAll();
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
         int active;

@@ -67,7 +67,7 @@ int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 float fn_801CFB18(int angle);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
-int fn_800EF8E8(Object_80039F5C *p, int a);
+int CarrierMoveStart(Object_80039F5C *p, int a);
 void fn_800D4948(void);
 float fn_80178A2C(void);
 int fn_80178308(void);
@@ -196,7 +196,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         angle = fn_801CFE40(delta.mY, delta.mX);
         turn = fn_801CFFD0(angle, pMotion->mFacing);
         fn_801CFFD0((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
-        if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && fn_800EF8E8(p, mode) != 0) {
+        if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && CarrierMoveStart(p, mode) != 0) {
             return 1;
         }
     }
@@ -209,7 +209,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
             return 1;
         }
     }
-    return fn_800EF8E8(p, mode);
+    return CarrierMoveStart(p, mode);
 }
 
 extern "C" void fn_800B5764(Vector_80039F5C *pOut)

@@ -40,7 +40,7 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 }
 
 /* Bytes +0 and +1 of the player block at +336 as fn_80105898 and
@@ -94,7 +94,7 @@ struct Block_800F3344 {
     unsigned int mUnknown16;
 };
 extern "C" {
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_80178308(void);
@@ -270,7 +270,7 @@ extern "C" void fn_80104D98(Object_80039F5C *p)
         Point_8017886C dir;
 
         animation = pRecord->mUnknown4 != 10 ? 135 : 177;
-        if (animation == 135 && fn_800D0B90(p) != 0) {
+        if (animation == 135 && PlayerMoveGetKind(p) != 0) {
             animation = 191;
         }
         pRecord->mUnknown5 = 6;
@@ -552,7 +552,7 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
         kind = 6;
     }
     if (p->mpState->mUnknown2 == 9 || p->mpState->mUnknown2 == 11) {
-        fn_800D6914(fn_800D0B90(p) != 0, p);
+        fn_800D6914(PlayerMoveGetKind(p) != 0, p);
     }
     fn_80106678(pRecord, pTarget, kind, p->mpState->mUnknown2);
     pState->mUnknown0 = 2;
@@ -824,7 +824,7 @@ extern "C" int fn_801064A4(Object_80039F5C *p, int a) {
         result = 1;
         fn_801C1F94(&message, 0, 4);
         message.mId = 25;
-        fn_800D0BF4(p, a, 25);
+        PlayerMoveBegin(p, a, 25);
         message.mUnknown1[0] = pTarget->mIdBytes[1];
         message.mUnknown1[1] = 11;
         fn_800F00D4(0, p->mpState, &message, p);

@@ -30,8 +30,8 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue,
                  float *pOther);
 void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
-void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
-void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
+void AnimMomentumInit(AnimMomentum_t *pState, Object_80039F5C *p, int value);
+void AnimMomentumUpdate(AnimMomentum_t *pState, Object_80039F5C *p);
 void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 int fn_801784C4(void);
@@ -79,7 +79,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
             fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
             pBlock->mUnknown1F = fn_801BA6B0(&pEntries[pBlock->mUnknown1D]);
         }
-        fn_800D8140(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
+        AnimMomentumInit(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
         pBlock->mUnknown1E = fn_801784C4();
         break;
     }
@@ -92,7 +92,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
                 fn_800DF654(p, (Block_801BE60C *)pBlock);
             }
             fn_800DEC10(p, pBlock);
-            fn_800D81C8(&pBlock->mUnknown20, p);
+            AnimMomentumUpdate(&pBlock->mUnknown20, p);
         }
         break;
     case 1:

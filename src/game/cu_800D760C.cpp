@@ -1,7 +1,7 @@
 #include "game/State_800D7A4C.h"
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_801BC084.h"
 #include "game/cu_80136B1C.h"
 #include "game/bitstream.h"
@@ -17,8 +17,8 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
-void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
-void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
+void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
+void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 int fn_80178320(void);
 
@@ -202,7 +202,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
             pBlock->mUnknownE[i] = 0;
         }
         p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = scale;
-        fn_800D8140(&pBlock->mUnknown28, (Object_800D81C8 *)p, pBlock->mUnknown4Word);
+        AnimMomentumInit(&pBlock->mUnknown28, (AnimMomentumActor_t *)p, pBlock->mUnknown4Word);
         fn_800D7A4C(p, pBlock);
         if (pState->mUnknown5 == 3) {
             fn_800AE7F0(6, fn_80178320(), p);
@@ -229,7 +229,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
                     pBlock->mUnknownCHalf = 0;
                 }
             }
-            fn_800D81C8(&pBlock->mUnknown28, (Object_800D81C8 *)p);
+            AnimMomentumUpdate(&pBlock->mUnknown28, (AnimMomentumActor_t *)p);
             if (p->mFlags & 1) {
                 p->mFlags &= ~1;
             }

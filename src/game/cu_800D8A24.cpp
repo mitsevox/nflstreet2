@@ -1,7 +1,7 @@
 #include <string.h>
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_800DA8D8.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
@@ -16,8 +16,8 @@ int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_801BA6B0(Record_800D81C8 *pEntry);
 void fn_801BA6BC(Record_800D81C8 *pEntry, int value);
-void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
-void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
+void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
+void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_800C0464(void *p);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
@@ -32,15 +32,15 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 
 extern void *lbl_803EABA4;
 
-int fn_800D0B90(Object_80039F5C *p);
-int fn_800D0D1C(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
+int PlayerMoveIsVariantPending(Object_80039F5C *p);
 }
 
 /* Payload that fn_801BE60C returns for this handler's key: the entry index
-   chosen by fn_801BA2A8 and the state fn_800D8140 and fn_800D81C8 update. */
+   chosen by fn_801BA2A8 and the state AnimMomentumInit and AnimMomentumUpdate update. */
 struct Payload_800D8A24 {
     int mEntry;
-    State_800D8140 mState;
+    AnimMomentum_t mState;
 };
 
 extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
@@ -62,14 +62,14 @@ extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRe
                 Record_800D81C8 *pEntry = &pEntries[pPayload->mEntry];
                 fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
             }
-            fn_800D8140(&pPayload->mState, (Object_800D81C8 *)p, pPayload->mEntry);
+            AnimMomentumInit(&pPayload->mState, (AnimMomentumActor_t *)p, pPayload->mEntry);
         }
         break;
     }
     case 1:
         break;
     case 2:
-        fn_800D81C8(&pPayload->mState, (Object_800D81C8 *)p);
+        AnimMomentumUpdate(&pPayload->mState, (AnimMomentumActor_t *)p);
         break;
     }
     return 0;
@@ -306,7 +306,7 @@ extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *p
                     default: result = 13; break;
                     }
                 }
-                if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && fn_800D0B90(p) == 2 && !fn_800D0D1C(p)) {
+                if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && PlayerMoveGetKind(p) == 2 && !PlayerMoveIsVariantPending(p)) {
                     result = 1;
                 }
             } else if (p->mUnknown1032 == 4) {

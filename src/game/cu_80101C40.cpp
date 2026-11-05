@@ -44,7 +44,7 @@ int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800A2190(int bit);
 void fn_8009BD60(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_80101B7C(Object_80039F5C *p);
 int fn_801CFFD0(int a, int b);
 float fn_801CFFA0(float value);
@@ -112,12 +112,12 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         pRequest->mUnknown14 = pRequest->mUnknown18 = 0.0f;
         pRequest->mUnknown1C[0] = 0;
     }
-    kind = fn_800D0B90(p);
+    kind = PlayerMoveGetKind(p);
     hasBall = kind;
     fn_8009BD60(p);
     p->mFlags &= ~4;
     if (p->mpState->mUnknown1 != 2 && p->mpState->mUnknown1 != 5) {
-        if (fn_801BE648(p->mpUnknown792) == 0xDE && fn_800D0B90(p) == 0) {
+        if (fn_801BE648(p->mpUnknown792) == 0xDE && PlayerMoveGetKind(p) == 0) {
             mode = 8;
         } else if (p->mMotion.mUnknown28 > lbl_803EC9E8) {
             switch (fn_801BE648(p->mpUnknown792)) {

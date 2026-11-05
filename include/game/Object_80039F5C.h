@@ -1,7 +1,7 @@
 #ifndef GAME_OBJECT_80039F5C_H
 #define GAME_OBJECT_80039F5C_H
 
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Message_800F01CC.h"
 #include "game/Pose_80041930.h"
 
@@ -227,8 +227,8 @@ struct Object_800CE674 {
 /* 124-byte entry of the array that +800 points to. */
 typedef Record_800D81C8 Entry_800EAC9C;
 
-/* 12-byte block at +1228; fn_800D0B90 returns its first word. */
-struct Block_800D0B90 {
+/* 12-byte block at +1228; PlayerMoveGetKind returns its first word. */
+struct PlayerMove_t {
     int mUnknown0;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -468,7 +468,7 @@ struct Object_80039F5C {
         Block_800C8330 mUnknown1160Wide;
     };
     Object_80039F5C *mpUnknown1224;
-    Block_800D0B90 mUnknown1228;
+    PlayerMove_t mUnknown1228;
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;

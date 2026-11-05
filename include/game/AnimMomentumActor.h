@@ -1,10 +1,11 @@
-#ifndef GAME_OBJECT_800D81C8_H
-#define GAME_OBJECT_800D81C8_H
+#ifndef GAME_ANIMMOMENTUMACTOR_H
+#define GAME_ANIMMOMENTUMACTOR_H
 
 #include "engine/Record_800D81C8.h"
 
-/* Partial view of the object that fn_8009BCE8 decodes a packed reference to. */
-struct Object_800D81C8 {
+/* Partial view of the player whose momentum src/game/AnimMomentum.cpp carries
+   into an animation; fn_8009BCE8 decodes its packed partner reference. */
+struct AnimMomentumActor_t {
     char mUnknown0[12];
     unsigned int mUnknownC;
     char mUnknown10[320];

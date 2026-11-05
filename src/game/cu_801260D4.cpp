@@ -35,7 +35,7 @@ int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_800A5DD0(Object_80039F5C *p);
 int fn_800AC980(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 int fn_800E1584(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -884,7 +884,7 @@ extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Ve
     pOut->mY = dir.mY;
     pOut->mZ = dir.mZ;
     dx = fabsf(target.mX - pMotion->mPos.mX);
-    if (pCarrier != 0 && lbl_803EB0D8 != 0 && fn_800D0B90(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
+    if (pCarrier != 0 && lbl_803EB0D8 != 0 && PlayerMoveGetKind(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
         && dx > lbl_803EB10C) {
         int angle = fn_801CFFD0(fn_801CFE40(dir.mY, dir.mX), 0x400000);
         float scale;

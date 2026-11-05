@@ -128,7 +128,7 @@ int fn_800BAA24(void);
 int fn_800C4B6C(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D4FBC(Object_80039F5C *p, int flag);
 void fn_800D5704(Object_80039F5C *p);
 void fn_800D6D08(Object_80039F5C *p);
@@ -468,7 +468,7 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     }
     p->mUnknown1008.mUnknown0 = 4;
     p->mUnknown1008.mUnknown1 = side;
-    if (fn_800D0B90(p)) {
+    if (PlayerMoveGetKind(p)) {
         p->mUnknown1008.mUnknown2 = 1;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 188, 1.0f, p);
         fn_80156C78(8, 1);

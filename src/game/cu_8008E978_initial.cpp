@@ -99,7 +99,7 @@ void fn_80042380(Object_8003DEC4 *,int,float *,int *);
 void fn_801EBEF8(Quat_801EB488 *,int,int,int);
 void fn_800943D8(void);
 void fn_80147840(Object_8003DEC4 *);
-void fn_800D0D00(Object_80039F5C *);
+void PlayerMoveClear(Object_80039F5C *);
 void fn_800A9B54(unsigned int,Object_80039F5C *);
 void fn_80028DF8(float,float);
 float fn_8009C630(Object_80039F5C *,unsigned int);
@@ -244,7 +244,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             return 1;
         case 0xC020:fn_800943D8();return 1;
         case 0xC022:fn_80147840((Object_8003DEC4 *)p->mpUnknown4);return 1;
-        case 0xC023:if(fn_801BD910()==1) fn_800D0D00(p);return 1;
+        case 0xC023:if(fn_801BD910()==1) PlayerMoveClear(p);return 1;
         case 0xC024: {
             unsigned int effect=(unsigned int)fn_801BD910()-1;
             if(effect<=26) fn_800A9B54(effect,p);return 1;

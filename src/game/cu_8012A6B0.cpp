@@ -2,7 +2,7 @@
 #include "game/Control_80132090.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_8017886C.h"
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
@@ -45,9 +45,9 @@ int fn_800ABDA4(int team);
 short fn_800ACC80(Object_80039F5C *p, short value);
 int fn_800B76E8(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
-void fn_800D058C(Object_80039F5C *p);
-void fn_800D0660(Object_80039F5C *p, unsigned char *pOut);
-int fn_800D0694(Object_80039F5C *p);
+void PlayerMoveUpdateRun(Object_80039F5C *p);
+void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
+int PlayerMoveTryStartRun(Object_80039F5C *p);
 int fn_800D5A6C(int a, int b, int c);
 int fn_8009AD30(Object_80039F5C *p, int value);
 void fn_800D6CC0(Object_80039F5C *p);
@@ -104,8 +104,8 @@ void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
-int fn_800EF8E8(Object_80039F5C *p, int a);
-int fn_800EFC34(Object_80039F5C *p, Object_80039F5C *pOther);
+int CarrierMoveStart(Object_80039F5C *p, int a);
+int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800C4D54(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
 int fn_8011F1CC(void);
@@ -126,7 +126,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
 int fn_8011F32C(void);
 int fn_80178308(void);
 int fn_80178BA4(int team);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 float fn_801CFB94(int angle);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, Vector_80039F5C *pOut);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pOut, Object_80039F5C *pOther);
@@ -1253,7 +1253,7 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
     float distance = 0.0f;
 
     if (fn_8012D1E4(p) && (!fn_80178BA4(p->mIdBytes[2]) || fn_8007F828(14) == 1)
-        && fn_800D0B90(p)) {
+        && PlayerMoveGetKind(p)) {
         Point_8017886C delta;
         int team = fn_80178320();
         Object_80039F5C *other = fn_801244F0(p, team, 0, fn_80178D18(fn_80178320()), &distance, 0);
@@ -1788,11 +1788,11 @@ extern "C" int fn_8012EE90(Object_80039F5C *p, Object_80039F5C *pOther, int a, i
     if (!(fn_80178A68(&p->mMotion.mPos) >= 4.0f)) {
         if (!(distance > 5.0f) && angle <= 0x3FFFFF
             && fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x38E38D
-            && fn_800EF8E8(p, 4)) {
+            && CarrierMoveStart(p, 4)) {
             return 1;
         }
     } else if (!(distance > 2.5f) && angle <= 0x11C71B && (pOther->mFlags & 0x800)
-               && fn_800EF8E8(p, fn_800EFC34(p, pOther))) {
+               && CarrierMoveStart(p, CarrierMovePickKind(p, pOther))) {
         return 1;
     }
     return 0;
@@ -1976,7 +1976,7 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, Control_80132090 *control, Block
         if (!(fn_80237260(0) >= 0.5f)) {
             fn_800F22D8(p, 4, 1, 4);
         } else {
-            fn_800EF8E8(p, 4);
+            CarrierMoveStart(p, 4);
         }
     }
 }
@@ -2201,11 +2201,11 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
             pControl->mUnknown0 = fn_8012FA64(p);
             fn_8012F89C(p, pControl, mode);
             if (pControl->mUnknown56.mUnknown6) {
-                fn_800D0694(p);
+                PlayerMoveTryStartRun(p);
             }
         }
-        fn_800D058C(p);
-        fn_800D0660(p, &pControl->mUnknown52);
+        PlayerMoveUpdateRun(p);
+        PlayerMoveGetRunMode(p, &pControl->mUnknown52);
         p->mUnknown512.mUnknown15 = pControl->mUnknown52;
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pControl->mUnknown44;
@@ -2219,9 +2219,9 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
         }
         fn_8012F5A0(p, pControl, &pControl->mUnknown56);
     } else {
-        if (fn_800D0694(p)) {
-            fn_800D058C(p);
-            fn_800D0660(p, &pControl->mUnknown52);
+        if (PlayerMoveTryStartRun(p)) {
+            PlayerMoveUpdateRun(p);
+            PlayerMoveGetRunMode(p, &pControl->mUnknown52);
             p->mUnknown512.mUnknown15 = pControl->mUnknown52;
         }
         if (p->mFlags & 0x400000) {

@@ -39,7 +39,7 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 }
 
 struct Entry_801018B4 {
@@ -70,7 +70,7 @@ struct List_801018B4 {
     Item_801018B4 mItems[1];
 };
 extern "C" {
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
@@ -250,7 +250,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             failed = 1;
         }
         if (failed) {
-            fn_800D0BF4(p, 0, 0);
+            PlayerMoveBegin(p, 0, 0);
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, 1.0f, p);
         } else if (index != -1) {
             fn_800D4EC0(pEntry->mUnknown7);
@@ -338,7 +338,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         }
         speed = fn_80103DD8(p, pTarget, &pRecord->mUnknown8, pRecord->mUnknown0);
         pEvent->mUnknown8 = (int)pTarget;
-        if (fn_800D0B90(p) != 0) {
+        if (PlayerMoveGetKind(p) != 0) {
             fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         break;
@@ -565,12 +565,12 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     case 7:
         pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
         pEvent->mUnknown8 = (int)pTarget;
-        if (fn_800D0B90(p) != 0) {
+        if (PlayerMoveGetKind(p) != 0) {
             fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         break;
     case 8:
-        if (fn_800D0B90(p) != 0) {
+        if (PlayerMoveGetKind(p) != 0) {
             fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         pEvent->mUnknown8 = (int)pTarget;

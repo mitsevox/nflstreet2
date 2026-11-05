@@ -192,7 +192,7 @@ void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
 int fn_800CE690(Object_800CE674 *p);
 float fn_800CE73C(Object_800CE674 *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D640C(Object_80039F5C *p);
 void fn_800D6E98(int team);
 void fn_800D7A18(Object_80039F5C *p);
@@ -869,7 +869,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     State_80039F5C *pState;
 
     p->mUnknown9[0] = 1;
-    if (fn_800D0B90(p) != 0 && fn_800D0B90(p) != 4 && fn_801BE648(p->mpUnknown792) != 227) {
+    if (PlayerMoveGetKind(p) != 0 && PlayerMoveGetKind(p) != 4 && fn_801BE648(p->mpUnknown792) != 227) {
         state->mUnknown24 = 1;
     } else {
         state->mUnknown24 = 0;

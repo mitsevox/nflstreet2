@@ -98,7 +98,7 @@ float fn_800AC7E0(int team, float value);
 void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D44A8(float a);
 void fn_800D4A70(Object_80039F5C *p);
 void fn_800D4BF0(Object_80039F5C *p, int team);
@@ -1063,7 +1063,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
                 ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
                 angle = fn_801CFFD0(ballAngle, fn_801CFE40(toTackler.mY, toTackler.mX));
             }
-            style = fn_800D0B90(p);
+            style = PlayerMoveGetKind(p);
             styling = style == 1 || style == 2;
             if (!styling && p->mpState->mId == 0x10) {
                 styling = p->mUnknown360;
@@ -1243,7 +1243,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
     if ((p->mId >> 8 & 0xFF) == fn_80178308()) {
         if (result == 4) {
             int special = fn_801BE648(p->mpUnknown792) == 0xE1;
-            fn_800D65A4(fn_800E0EF0(p), special, fn_800D0B90(p));
+            fn_800D65A4(fn_800E0EF0(p), special, PlayerMoveGetKind(p));
             fn_800A8954(7, p->mId >> 8 & 0xFF, p);
         }
         if (result == 3 && fn_8011F518()) {
@@ -1694,7 +1694,7 @@ int fn_8017319C(Object_80039F5C *p)
     if (fn_80054D24(0x18) && !fn_8017F584()) {
         return 0;
     }
-    if (fn_800D0B90(p)) {
+    if (PlayerMoveGetKind(p)) {
         down = 1;
     }
     if (down && fn_800A7EB8(p->mIdBytes[2]) != 2 && !fn_801787A0() && fn_80137B40() == p && handoff == 0) {

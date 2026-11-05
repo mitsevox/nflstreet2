@@ -23,7 +23,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
-#include "game/Class_803EC99C.h"
+#include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
@@ -113,7 +113,7 @@ int fn_800CD2B4(int kind, Object_80039F5C *p);
 int fn_800CD35C(int mode, Object_80039F5C *p);
 int fn_800CE438(Query_800CE770 *pQuery);
 int fn_800CF090(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D4748(Object_80039F5C *p);
 void fn_800D4FBC(Object_80039F5C *p, int flag);
 void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag);
@@ -807,7 +807,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
                 fn_80067E3C(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
                 fn_800310C0(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
-                fn_800D60BC(p, fn_800D0B90(p), 255);
+                fn_800D60BC(p, PlayerMoveGetKind(p), 255);
             } else {
                 fn_800D4748(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
@@ -894,7 +894,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     if (chance != 0 && !fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p)) {
         chance = 100;
     }
-    blocked = fn_800D0B90(pOther);
+    blocked = PlayerMoveGetKind(pOther);
     if (fn_800C769C(p, pOther)) {
         roll = p->mUnknown1222;
     } else {
@@ -1037,7 +1037,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
             chance = 0;
         }
     }
-    blocked = fn_800D0B90(p);
+    blocked = PlayerMoveGetKind(p);
     if (chance == 0) {
         return;
     }

@@ -236,8 +236,8 @@ void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState);
 int fn_8011E8A4(Object_80039F5C *p);
 int fn_800B7E60(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0C0C(Object_80039F5C *p, int a);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveSetResult(Object_80039F5C *p, int a);
 extern float lbl_803EAF30;
 extern unsigned short lbl_803EAF5E;
 }
@@ -510,7 +510,7 @@ struct State_801045BC {
 extern "C" {
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -626,7 +626,7 @@ unsigned int fn_80178D18(int team);
 int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
-int fn_800EF8E8(Object_80039F5C *p, int a);
+int CarrierMoveStart(Object_80039F5C *p, int a);
 int fn_800AD0E4(int team);
 int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
 int fn_800C53D8(Object_80039F5C *p);
@@ -637,7 +637,7 @@ int fn_801787A0(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D4E68(unsigned char a);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
@@ -694,8 +694,8 @@ int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0C0C(Object_80039F5C *p, int a);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveSetResult(Object_80039F5C *p, int a);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
@@ -1251,7 +1251,7 @@ extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
                 a = fn_800F21E0(p, pOther, distance);
             }
         }
-        fn_800D0BF4(p, c, 34);
+        PlayerMoveBegin(p, c, 34);
         result = 1;
         memset(&message, 0, 4);
         message.mId = 34;
@@ -2908,7 +2908,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
     Message_800F01CC message;
 
     p->mUnknown512.mUnknown14 = 0;
-    fn_800D0BF4(p, d, 15);
+    PlayerMoveBegin(p, d, 15);
     fn_801C1F94(&message, 0, 4);
     message.mId = 15;
     message.mUnknown1[0] = kind;
@@ -2935,7 +2935,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         fn_800F05E4(0, p->mpState, &message, p);
         break;
     default:
-        fn_800D4E68(fn_800D0B90(p));
+        fn_800D4E68(PlayerMoveGetKind(p));
         fn_8013FA8C(3);
         fn_800F053C(0, p->mpState, &message, p);
         fn_801C1F94(&message, 0, 4);
@@ -3041,7 +3041,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
                         fn_801024FC(p, 4, index, 0, d);
                     } else {
                         fn_801024FC(p, 0, index, 0, d);
-                        if (fn_800D0B90(p) == 0) {
+                        if (PlayerMoveGetKind(p) == 0) {
                             switch (i) {
                             case 0:
                                 fn_80156C78(26, 1);
@@ -3876,11 +3876,11 @@ extern "C" unsigned short fn_8011067C(Table_8010B738 *pTable, Object_80039F5C *p
             pBlock->mUnknown24 = -pBlock->mUnknown24;
         }
         pBlock->mUnknown12 = pFound->mUnknown24 / pBlock->mUnknown16;
-        if (fn_800D0B90(p)) {
+        if (PlayerMoveGetKind(p)) {
             pRecord = pTable->mEntries[index].mpRecord;
-            fn_800D0C0C(p, pRecord->mUnknown7);
+            PlayerMoveSetResult(p, pRecord->mUnknown7);
         } else {
-            fn_800D0C0C(p, 0);
+            PlayerMoveSetResult(p, 0);
         }
     } else {
         index = 0;
@@ -3901,7 +3901,7 @@ extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
             a = 2;
         }
         result = 1;
-        fn_800D0BF4(p, c, 35);
+        PlayerMoveBegin(p, c, 35);
         fn_801C1F94(&message, 0, 4);
         message.mId = 35;
         message.mUnknown1[0] = a;
@@ -4200,7 +4200,7 @@ extern "C" int fn_80112F8C(Object_80039F5C *p)
             flag = 1;
         }
         if (((input.mUnknown92 & 1) && fn_800E815C(p, 0, flag) != 0) ||
-            ((input.mUnknown93 & 4) && fn_800EF8E8(p, flag) != 0)) {
+            ((input.mUnknown93 & 4) && CarrierMoveStart(p, flag) != 0)) {
             p->mFlags |= 0x4000;
             return 0;
         }

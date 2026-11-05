@@ -24,7 +24,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
-#include "game/Class_803EC99C.h"
+#include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"

@@ -32,7 +32,7 @@ int fn_801CFFD0(int, int);
 int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CBB00(Object_80039F5C *, int, Point_8017886C, int, int);
-void fn_800E3C30(Object_80039F5C *);
+void PlayerReleaseJointCtrls(Object_80039F5C *);
 int fn_800E2F20(Object_80039F5C *, Point_8017886C *, float);
 void fn_800E4120(Object_80039F5C *, State_800E2FE4 *, int, float);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
@@ -40,8 +40,8 @@ int fn_80178320(void);
 int fn_80178308(void);
 int fn_80124CE4(Object_80039F5C *, int, void *, int, float, int, float);
 int fn_800E1870(Object_80039F5C *);
-void fn_800E3AE8(Object_80039F5C *, int, int);
-int fn_800E3A34(Object_80039F5C *, Point_8017886C *);
+void PlayerPathStartSideAnim(Object_80039F5C *, int, int);
+int PlayerPathIsLaneClear(Object_80039F5C *, Point_8017886C *);
 
 void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   State_800E2FE4 *state = (State_800E2FE4 *)&player->mUnknown336;
@@ -64,7 +64,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   }
   if ((!(distance <= 0.65f) && !state->mUnknown24) ||
       (!(distance <= lbl_803EAD44) && state->mUnknown24) || state->mUnknown3) {
-    fn_800E3C30(player);
+    PlayerReleaseJointCtrls(player);
     int facing = fn_801CFE40(delta.mY, delta.mX);
     if (fn_800E2F20(player, target, distance)) {
       fn_800E4120(player, state, facing,
@@ -213,25 +213,25 @@ void fn_800E36DC(Object_80039F5C *player) {
   }
   case 3: {
     if (fn_801BE648(player->mpUnknown792) != 28) {
-      fn_800E3AE8(player, 1, 1);
+      PlayerPathStartSideAnim(player, 1, 1);
       break;
     }
     int change = 0;
     if (player->mFlags & 4) {
       player->mFlags &= ~4u;
       change = 1;
-    } else if (fn_800E3A34(player, &state->mUnknown4[state->mUnknown14]) != 1 ||
+    } else if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) != 1 ||
                !(player->mMotion.mPos.mY >=
                  state->mUnknown4[state->mUnknown14].mY + 0.3f))
       change = 1;
     if (change == 1) {
-      fn_800E3AE8(player, 8, 1);
+      PlayerPathStartSideAnim(player, 8, 1);
       state->mUnknown1E = 1;
     }
     break;
   }
   case 2: {
-    if (fn_800E3A34(player, &state->mUnknown4[state->mUnknown14]) == 1) {
+    if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) == 1) {
       Point_8017886C delta;
       fn_80227690(&delta, &state->mUnknown4[state->mUnknown14],
                   &player->mMotion.mPos);
@@ -242,7 +242,7 @@ void fn_800E36DC(Object_80039F5C *player) {
             !(player->mMotion.mPos.mY >=
               lbl_803EAD38 * 0.5f +
                   (fn_80177FFC(player->mIdBytes[2]).mY + 0.15625f))) {
-          fn_800E3AE8(player, 1, 2);
+          PlayerPathStartSideAnim(player, 1, 2);
           state->mUnknown1E = 1;
         } else {
           player->mUnknown512.mUnknown15 = 28;
@@ -256,11 +256,11 @@ void fn_800E36DC(Object_80039F5C *player) {
         point.mY -= 5.0f;
         fn_80227690(&delta, &point, &player->mMotion.mPos);
         state->mUnknown38 = fn_801CFE40(delta.mY, delta.mX);
-        fn_800E3AE8(player, 1, 2);
+        PlayerPathStartSideAnim(player, 1, 2);
         state->mUnknown1E = 1;
       }
     } else {
-      fn_800E3AE8(player, 1, 1);
+      PlayerPathStartSideAnim(player, 1, 1);
       state->mUnknown1E = 1;
     }
     break;
@@ -268,7 +268,7 @@ void fn_800E36DC(Object_80039F5C *player) {
   case 1:
     if (player->mFlags & 4) {
       player->mFlags &= ~4u;
-      fn_800E3AE8(player, 8, 1);
+      PlayerPathStartSideAnim(player, 8, 1);
     }
     break;
   }

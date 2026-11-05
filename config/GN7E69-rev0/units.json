@@ -1729,9 +1729,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800D0474.cpp",
+      "source": "src/game/PlayerMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/cu_800D0474.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
+      "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/PlayerMove.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -3035,9 +3035,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800E3A34.cpp",
+      "source": "src/game/PlayerPathHelpers.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/cu_800E3A34.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
+      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/PlayerPathHelpers.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
       "sections": [
         {
           "section": ".text",
@@ -6337,9 +6337,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800CF84C.cpp",
+      "source": "src/game/QuarterEndPhase.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800CF84C-0x800D0474 (src/game/cu_800CF84C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800CF84C-0x800D0474 (src/game/QuarterEndPhase.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6561,9 +6561,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800D8140.cpp",
+      "source": "src/game/AnimMomentum.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800D8140-0x800D8A24 (src/game/cu_800D8140.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800D8140-0x800D8A24 (src/game/AnimMomentum.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -12134,9 +12134,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800EF834.cpp",
+      "source": "src/game/CarrierMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/cu_800EF834.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF7C-0x8029DF88.",
       "sections": [
         {
           "section": ".text",

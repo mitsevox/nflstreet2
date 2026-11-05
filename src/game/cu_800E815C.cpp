@@ -16,7 +16,7 @@ float fn_802270A4(void *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *message, Object_80039F5C *p);
 extern unsigned char lbl_803EAD68[5];
 
@@ -56,7 +56,7 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
         kind = 4;
     }
     if (choice == 0) choice = fn_802372EC(0, 3) + 1;
-    fn_800D0BF4(p, mode, 12);
+    PlayerMoveBegin(p, mode, 12);
     message.mUnknown1[0] = kind;
     message.mUnknown1[1] = choice;
     message.mUnknown1[2] = mode == 0 ? 0 : lbl_803EAD68[fn_802372EC(0, 5)];

@@ -29,7 +29,7 @@
 #include "game/Entry_800B206C.h"
 #include "game/Block_800B21D0.h"
 #include "game/Entry_80219044.h"
-#include "game/Class_803EC99C.h"
+#include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
@@ -3547,7 +3547,7 @@ int fn_801486A0(void);
 int fn_801783AC(int bit);
 int fn_8011F1CC(void);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
@@ -3836,7 +3836,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
         pOther = fn_8009BCE8(&pSource->mUnknown40);
     }
     if (pOther != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pOther, p)) {
-        if (fn_800D0B90(p) || (pOther != 0 && fn_800E1554(pOther))) {
+        if (PlayerMoveGetKind(p) || (pOther != 0 && fn_800E1554(pOther))) {
             return 0;
         }
         if (fn_800A7F30(p->mIdBytes[2]) == 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
@@ -4801,7 +4801,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
                     if (!(fn_800C9CF0(team, i) > fn_800AE998())) {
                         fn_800AE7F0(4, team, 0);
                     }
-                    if (fn_800D0B90(p) == 0) {
+                    if (PlayerMoveGetKind(p) == 0) {
                         fn_80156C78(0, 1);
                     }
                 }
@@ -10923,7 +10923,7 @@ extern "C" void fn_800AD634(float dt)
     lbl_803EA9E4->vfn_01();
     lbl_803EAB84->vfn_01();
     lbl_803EAB38->vfn_01();
-    lbl_803EAC9C->fn_800CFEFC();
+    gQuarterEndPhase->InitState();
     lbl_803EAA8C->vfn_01();
     fn_800B175C();
     fn_800CB504();
@@ -10948,7 +10948,7 @@ extern "C" void fn_800AD888(float dt)
 
 extern "C" void fn_800AD910(int mode, float dt)
 {
-    unsigned char busy = lbl_803EAC9C->fn_800D0408();
+    unsigned char busy = gQuarterEndPhase->IsWaiting();
 
     if (!busy) {
         void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
@@ -14686,17 +14686,17 @@ extern "C" void fn_800CF714(float dt)
 
 extern "C" void fn_800CF74C(float dt)
 {
-    lbl_803EAC9C->fn_800CFF4C();
+    gQuarterEndPhase->OnEnter();
 }
 
 extern "C" void fn_800CF784(float dt)
 {
-    lbl_803EAC9C->fn_800CFFC4(dt);
+    gQuarterEndPhase->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF7BC(float dt)
 {
-    lbl_803EAC9C->fn_800D0394();
+    gQuarterEndPhase->OnExit();
 }
 
 /* One of the 196-byte records of the array fn_800B8544 allocates. */
@@ -15268,7 +15268,7 @@ extern "C" {
 int fn_800B54D4(Object_80039F5C *p, int mode);
 int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
 int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E8098(Object_80039F5C *p, int a);
 int fn_80111090(Object_80039F5C *p, int a);
 void fn_8016DA98(Object_80039F5C *p);
@@ -15284,7 +15284,7 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
         if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
             mode = 4;
         }
-        if (fn_800D0B90(p) == 0 && (input.mUnknown95 & 8)) {
+        if (PlayerMoveGetKind(p) == 0 && (input.mUnknown95 & 8)) {
             p->mFlags |= 0x4000;
             if (fn_800CA5CC(p, 0, 1) != 0) {
                 if ((unsigned int)(p->mUnknown528.mUnknown15 - 10) <= 1) {

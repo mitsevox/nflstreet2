@@ -1,3 +1,10 @@
+/* Player move record. Every player keeps a small record of the special move
+   he is doing: which kind of move, the player state it belongs to, the
+   variant chosen with the stick (or at random for computer players) and the
+   result reported when the move resolves, which is passed to the
+   move-event classifiers. This file also starts the button-held running move of the
+   ball carrier and resets the records each frame when a player changes state. */
+
 #include <math.h>
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
@@ -31,12 +38,12 @@ extern float lbl_803EACB4;
 extern float lbl_803EACB8;
 extern unsigned char lbl_803EACBC;
 
-void fn_800D0660(Object_80039F5C *p, unsigned char *pOut);
-int fn_800D0B90(Object_80039F5C *p);
-int fn_800D0D1C(Object_80039F5C *p);
+void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
+int PlayerMoveGetKind(Object_80039F5C *p);
+int PlayerMoveIsVariantPending(Object_80039F5C *p);
 }
 
-extern "C" unsigned char fn_800D0474(Object_80039F5C *p)
+extern "C" unsigned char PlayerMoveStickVariant(Object_80039F5C *p)
 {
     Input_800B6D34 input;
 
@@ -60,7 +67,7 @@ extern "C" unsigned char fn_800D0474(Object_80039F5C *p)
     return result;
 }
 
-extern "C" unsigned char fn_800D0550(void)
+extern "C" unsigned char PlayerMoveRandomVariant(void)
 {
     unsigned int i = fn_802372EC(0, 4);
 
@@ -70,9 +77,9 @@ extern "C" unsigned char fn_800D0550(void)
     return lbl_803EACAC[i];
 }
 
-extern "C" void fn_800D058C(Object_80039F5C *p)
+extern "C" void PlayerMoveUpdateRun(Object_80039F5C *p)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
 
     if (pBlock->mUnknown0 == 2) {
         if (pBlock->mUnknown5 == 0) {
@@ -87,7 +94,7 @@ extern "C" void fn_800D058C(Object_80039F5C *p)
         int active = pBlock->mUnknown0 == 2;
         unsigned char mode;
 
-        fn_800D0660(p, &mode);
+        PlayerMoveGetRunMode(p, &mode);
         if (pBlock->mUnknown0 == 2) {
             fn_800D5A6C(active, 2, pBlock->mUnknown4);
         }
@@ -95,9 +102,9 @@ extern "C" void fn_800D058C(Object_80039F5C *p)
     fn_800A3B58(p, 6, 0);
 }
 
-extern "C" void fn_800D0660(Object_80039F5C *p, unsigned char *pOut)
+extern "C" void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
 
     if (pBlock->mUnknown0 != 2) {
         return;
@@ -109,12 +116,12 @@ extern "C" void fn_800D0660(Object_80039F5C *p, unsigned char *pOut)
     }
 }
 
-extern "C" int fn_800D0694(Object_80039F5C *p)
+extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
 {
     int result = 0;
     Object_800B26B0 *pMotion = &p->mMotion;
     fn_80177FE0();
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
     unsigned char enable = 0;
     int held = 0;
     unsigned char id = p->mpState->mId;
@@ -135,18 +142,18 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
                 result = 1;
                 if (enable == 2) {
                     if (special) {
-                        unsigned char value = fn_800D0474(p);
+                        unsigned char value = PlayerMoveStickVariant(p);
                         if (value != pBlock->mUnknown4) {
-                            if (!fn_800D0D1C(p)) {
+                            if (!PlayerMoveIsVariantPending(p)) {
                                 pBlock->mUnknown11 = lbl_803EACAB;
                             }
                             pBlock->mUnknown10 = value;
-                        } else if (!fn_800D0D1C(p)) {
+                        } else if (!PlayerMoveIsVariantPending(p)) {
                             pBlock->mUnknown4 = value;
                         }
                     } else {
-                        pBlock->mUnknown4 = fn_800D0550();
-                        pBlock->mUnknown4 = fn_800D0474(p);
+                        pBlock->mUnknown4 = PlayerMoveRandomVariant();
+                        pBlock->mUnknown4 = PlayerMoveStickVariant(p);
                     }
                     pBlock->mUnknown0 = 2;
                     pBlock->mUnknown8 = p->mpState->mId;
@@ -194,7 +201,7 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
                             held = 1;
                         }
                         state = 2;
-                        value = fn_800D0550();
+                        value = PlayerMoveRandomVariant();
                         break;
                     }
                     if (special) {
@@ -234,13 +241,13 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800D0A38(void)
+extern "C" void PlayerMoveTickAll(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         unsigned int count = fn_80178D18(team);
         for (unsigned char i = 0; i < count; i++) {
             Object_80039F5C *pPlayer = fn_80039F5C(team, i);
-            Block_800D0B90 *pBlock = &pPlayer->mUnknown1228;
+            PlayerMove_t *pBlock = &pPlayer->mUnknown1228;
             if (pBlock->mUnknown11 != 0) {
                 if (--pBlock->mUnknown11 == 0 && pBlock->mUnknown0 == 2) {
                     pBlock->mUnknown4 = pBlock->mUnknown10;
@@ -256,13 +263,13 @@ extern "C" void fn_800D0A38(void)
     }
 }
 
-extern "C" void fn_800D0B08(void)
+extern "C" void PlayerMoveResetAll(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         unsigned int count = fn_80178D18(team);
         for (unsigned char i = 0; i < count; i++) {
             Object_80039F5C *pPlayer = fn_80039F5C(team, i);
-            Block_800D0B90 *pBlock = &pPlayer->mUnknown1228;
+            PlayerMove_t *pBlock = &pPlayer->mUnknown1228;
             pBlock->mUnknown0 = 0;
             pBlock->mUnknown8 = 0;
             pBlock->mUnknown9 = 255;
@@ -271,16 +278,16 @@ extern "C" void fn_800D0B08(void)
     }
 }
 
-extern "C" int fn_800D0B90(Object_80039F5C *p)
+extern "C" int PlayerMoveGetKind(Object_80039F5C *p)
 {
     return p->mUnknown1228.mUnknown0;
 }
 
-extern "C" int fn_800D0B98(Object_80039F5C *p)
+extern "C" int PlayerMoveGetRunVariant(Object_80039F5C *p)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
 
-    if (!fn_800D0D1C(p)) {
+    if (!PlayerMoveIsVariantPending(p)) {
         unsigned char id = p->mpState->mId;
         if (id == 1 || id == 91) {
             return pBlock->mUnknown4;
@@ -289,56 +296,56 @@ extern "C" int fn_800D0B98(Object_80039F5C *p)
     return 32;
 }
 
-extern "C" void fn_800D0BF4(Object_80039F5C *p, int a, int b)
+extern "C" void PlayerMoveBegin(Object_80039F5C *p, int a, int b)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
 
     pBlock->mUnknown0 = a;
     pBlock->mUnknown8 = b;
     pBlock->mUnknown9 = 255;
 }
 
-extern "C" void fn_800D0C0C(Object_80039F5C *p, int a)
+extern "C" void PlayerMoveSetResult(Object_80039F5C *p, int a)
 {
     unsigned char value = 255;
 
     if (p) {
-        Block_800D0B90 *pBlock = &p->mUnknown1228;
+        PlayerMove_t *pBlock = &p->mUnknown1228;
         if (a != 0) {
             value = a - 1;
         }
         switch (p->mpState->mId) {
         case 12:
-            if (fn_800D0B90(p) != 4) {
-                fn_800D5F1C(p, fn_800D0B90(p), value);
+            if (PlayerMoveGetKind(p) != 4) {
+                fn_800D5F1C(p, PlayerMoveGetKind(p), value);
             }
             break;
         case 36:
-            fn_800D60BC(p, fn_800D0B90(p), value);
+            fn_800D60BC(p, PlayerMoveGetKind(p), value);
             break;
         case 34:
-            fn_800D5054(p, fn_800D0B90(p));
+            fn_800D5054(p, PlayerMoveGetKind(p));
             break;
         case 35:
-            fn_800D5494(p, fn_800D0B90(p), value);
+            fn_800D5494(p, PlayerMoveGetKind(p), value);
             break;
         }
         pBlock->mUnknown9 = value;
     }
 }
 
-extern "C" void fn_800D0D00(Object_80039F5C *p)
+extern "C" void PlayerMoveClear(Object_80039F5C *p)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
 
     pBlock->mUnknown0 = 0;
     pBlock->mUnknown8 = 0;
     pBlock->mUnknown9 = 255;
 }
 
-extern "C" int fn_800D0D1C(Object_80039F5C *p)
+extern "C" int PlayerMoveIsVariantPending(Object_80039F5C *p)
 {
-    Block_800D0B90 *pBlock = &p->mUnknown1228;
+    PlayerMove_t *pBlock = &p->mUnknown1228;
     int result = 0;
 
     if (pBlock->mUnknown0 == 2 && pBlock->mUnknown11 != 0) {
