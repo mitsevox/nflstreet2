@@ -30,11 +30,13 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
-# The claim: a line that starts with `Closes:` (also as a list item or quote, or in bold or italics),
-# followed by source paths separated by commas, or `none`.
-LINE = re.compile(r'^[ \t]*(?:[-*>][ \t]+)?(?:\*\*|__|\*|_)?Closes:(?:\*\*|__|\*|_)?[ \t]*(?P<rest>.*)$',
+# The claim: a line that starts with `Closes:` (also as a list item or quote, or in bold or italics,
+# with the colon inside or outside the marks), followed on the same line by source paths separated by
+# commas, or `none`. A claim line with nothing after the keyword is refused (files listed below it
+# would otherwise go unchecked).
+LINE = re.compile(r'^[ \t]*(?:[-*>][ \t]+)?(?:\*\*|__|\*|_)?Closes(?:\*\*|__|\*|_)?:(?:\*\*|__|\*|_)?[ \t]*(?P<rest>.*)$',
                   re.IGNORECASE)
-MENTION = re.compile(r'closes\W{0,3}:', re.IGNORECASE)
+MENTION = re.compile(r'closes\W{0,8}:', re.IGNORECASE)
 PATHLIKE = re.compile(r'[\w.-]*/[\w./-]*\w|\b[\w-]+\.(?:c|cc|cp|cpp|h|hpp|inc|s)\b', re.IGNORECASE)
 COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
 
@@ -55,6 +57,9 @@ def claimed(body):
                 raise ValueError(f'cannot read this Closes line; put the claim on its own line as '
                                  f'`Closes: <path>, <path>` and no file names on other lines with `Closes:`: {line.strip()}')
             continue
+        if not match['rest'].strip(' \t`*_'):
+            raise ValueError(f'this Closes line names nothing; put the files on the same line, separated by '
+                             f'commas, or write `Closes: none`: {line.strip()}')
         for item in re.split(r'[,\s]+', match['rest'].strip()):
             item = item.strip('`*_')
             if item and item.lower() not in ('none', '-', 'n/a'):

@@ -229,14 +229,16 @@ class Closes(unittest.TestCase):
         self.assertEqual(closes.claimed('**Closes:** none'), [])
         self.assertEqual(closes.claimed('Tier C, no files'), [])
         for form in ('- Closes: src/a.c', '* Closes: src/a.c', '> Closes: src/a.c', '_Closes:_ src/a.c',
-                     '**Closes:** src/a.c', 'closes: src/a.c', 'Closes: **src/a.c**'):
+                     '**Closes:** src/a.c', 'closes: src/a.c', 'Closes: **src/a.c**', '**Closes**: src/a.c'):
             self.assertEqual(closes.claimed(form), ['src/a.c'], form)
         # Any other form that names a file is refused, never skipped.
-        for form in ('## Closes: src/a.c', '**Closes**: src/a.c', '`Closes:` src/a.c', '`Closes`: src/a.c',
+        for form in ('## Closes: src/a.c', '**`Closes`** : src/a.c', '`Closes:` src/a.c', '`Closes`: src/a.c',
                      '**`Closes:`** src/a.c', '_`Closes:`_ src/a.c', '`Closes:` "src/a.c"', '`Closes:` [src/a.c](u)',
                      '`Closes:` hash.c', '`Closes:` src/a', '`Closes :` src/a.c', '` Closes:` src/a.c',
                      '`Closes: ` src/a.c', 'This PR closes: src/a.c',
-                     '- **`Closes:` check:** with `Closes: src/engine/hash.c` exits 1.'):
+                     '- **`Closes:` check:** with `Closes: src/engine/hash.c` exits 1.',
+                     # A bare keyword would leave files on the lines below it unchecked.
+                     'Closes:\n- src/a.c', '**Closes:**\n\nsrc/a.c', 'Closes:\n`src/a.c`', 'Closes: ``'):
             with self.assertRaises(ValueError, msg=form):
                 closes.claimed(form)
         # Prose that names no file is a mention, as PR #1226's body and the template have it.

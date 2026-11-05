@@ -3,7 +3,7 @@
 Tier (A, B or C), task or issue, affected units or tools, dependencies, and unresolved work.
 
 Closes: none
-<!-- A PR that finishes files names them here, e.g. `Closes: src/engine/hash.c, src/game/FELoop.cpp`. CI fails unless each is closed in this build (tools/files_closed.py: linked, descriptive file name, every function and label named with an evidence row); the header comment, naming conventions, unit rows and both reviews are checked by the reviewers. CI reads this line at each push, not on a body edit: push after adding or changing it. Keep the claim on a line of its own that starts with `Closes:`; any other line that pairs `closes:` with a file name fails the check; close an issue with `Closes #123`, without the colon. -->
+<!-- A PR that finishes files names them here, e.g. `Closes: src/engine/hash.c, src/game/FELoop.cpp`. CI fails unless each is closed in this build (tools/files_closed.py: linked, descriptive file name, every function and label named with an evidence row); the header comment, naming conventions, unit rows and both reviews are checked by the reviewers. CI reads this line at each push, not on a body edit: push after adding or changing it. Keep the claim on a line of its own that starts with `Closes:`, with every file on that line; any other line that pairs `closes:` with a file name fails the check; close an issue with `Closes #123`, without the colon. -->
 
 <!-- Where contributors are on, a line `Credits: @login, @login` names who made this PR's functions exact; without it the PR author is credited. -->
 
