@@ -29874,21 +29874,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_802622DC.c",
+      "source": "src/engine/vprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80262310 (src/engine/vprintf.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. Draft comparison only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802622DC",
-          "end": "0x80264424"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7538",
-          "end": "0x802B7578"
+          "end": "0x80262310"
         }
       ],
       "functions": [
@@ -29896,7 +29890,22 @@
           "symbol": "vprintf",
           "start": "0x802622DC",
           "end": "0x80262310"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80262310.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80262310-0x8026247C (src/engine/cu_80262310.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. 0x80262440 is not registered. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80262310",
+          "end": "0x8026247C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "atexit",
           "start": "0x80262310",
@@ -29906,7 +29915,28 @@
           "symbol": "fn_802623A8",
           "start": "0x802623A8",
           "end": "0x80262440"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vfprintf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8026247C-0x802645AC (src/engine/vfprintf.c), the compiler rows 0x802622DC-0x80264424 and 0x80264424-0x80266A2C, the source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. 0x80262C34 is not registered. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026247C",
+          "end": "0x802645AC"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7538",
+          "end": "0x802B7578"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8026247C",
           "start": "0x8026247C",
@@ -29936,6 +29966,11 @@
           "symbol": "fn_80262B5C",
           "start": "0x80262B5C",
           "end": "0x80262C34"
+        },
+        {
+          "symbol": "fn_80264424",
+          "start": "0x80264424",
+          "end": "0x802645AC"
         }
       ]
     },
@@ -38179,23 +38214,18 @@
       ]
     },
     {
-      "source": "src/engine/cu_80264424.c",
+      "source": "src/engine/cu_802645AC.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80264424-0x80266A2C (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the two draft bodies. The drafts define no static data. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802645AC-0x80266A2C (src/engine/cu_802645AC.c), the compiler row 0x80264424-0x80266A2C, its source-form row, and the exact whole-function row and neutral name row of the draft body. The draft defines no static data. Draft comparison only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80264424",
+          "start": "0x802645AC",
           "end": "0x80266A2C"
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80264424",
-          "start": "0x80264424",
-          "end": "0x802645AC"
-        },
         {
           "symbol": "fn_8026696C",
           "start": "0x8026696C",
