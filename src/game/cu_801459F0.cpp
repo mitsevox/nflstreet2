@@ -243,7 +243,7 @@ void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
     fn_801D0508();
     fn_801D0C58(pPos);
     if (pRot != 0) {
-        Angles_801EBC18 v;
+        QuatEulerAngles_t v;
         QuatToEuler(&v, pRot);
 
         fn_801D0BCC(v.mUnknown8, v.mUnknown4, v.mUnknown0);

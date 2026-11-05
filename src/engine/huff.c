@@ -5,25 +5,25 @@
 #include "game/fn_801C68FC.h"
 
 /* 12-byte tree node. */
-typedef struct Node_8027FB7C {
+typedef struct HuffNode_t {
     unsigned char mSymbol;
-    struct Node_8027FB7C *mpLeft;
-    struct Node_8027FB7C *mpRight;
-} Node_8027FB7C;
+    struct HuffNode_t *mpLeft;
+    struct HuffNode_t *mpRight;
+} HuffNode_t;
 
 /* Pool item ordered by _InsertSortByFreq. */
-typedef struct Item_8027FB2C {
+typedef struct HuffItem_t {
     int mCount;
-    Node_8027FB7C *mpNode;
-} Item_8027FB2C;
+    HuffNode_t *mpNode;
+} HuffItem_t;
 
 /* 12-byte coder state allocated by _HuffCoStart and _HuffDecStart. */
-typedef struct State_8027FD64 {
-    Node_8027FB7C *mpRoot;
+typedef struct HuffState_t {
+    HuffNode_t *mpRoot;
     unsigned char mBits;
     unsigned char mBitCount;
     int mRemaining;
-} State_8027FD64;
+} HuffState_t;
 
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
@@ -37,25 +37,25 @@ extern int fn_801C6DCC(void *pool, void *start, void *key, void *pFound,
 
 int _InsertSortByFreq(void *a, void *b)
 {
-    Item_8027FB2C *pA = a;
-    Item_8027FB2C *pB = b;
+    HuffItem_t *pA = a;
+    HuffItem_t *pB = b;
 
     return pA->mCount - pB->mCount;
 }
 
 int _SearchForSymbol(void *item, void *key, void *pFound)
 {
-    Item_8027FB2C *pItem = item;
-    Node_8027FB7C *pNode = pItem->mpNode;
+    HuffItem_t *pItem = item;
+    HuffNode_t *pNode = pItem->mpNode;
 
     if (pNode->mpLeft == 0 && pNode->mpRight == 0 && pNode->mSymbol == *(unsigned char *)key) {
-        *(Item_8027FB2C **)pFound = pItem;
+        *(HuffItem_t **)pFound = pItem;
         return 0;
     }
     return -1;
 }
 
-int _IsSymbolInTree(Node_8027FB7C *pNode, int symbol)
+int _IsSymbolInTree(HuffNode_t *pNode, int symbol)
 {
     if (pNode->mpLeft == 0 && pNode->mpRight == 0) {
         return pNode->mSymbol == symbol;
@@ -66,15 +66,15 @@ int _IsSymbolInTree(Node_8027FB7C *pNode, int symbol)
     return 0;
 }
 
-Node_8027FB7C *_BuildTree(void *pool)
+HuffNode_t *_BuildTree(void *pool)
 {
-    Item_8027FB2C *pItem;
-    Item_8027FB2C *pChild;
-    Node_8027FB7C *pRoot;
+    HuffItem_t *pItem;
+    HuffItem_t *pChild;
+    HuffNode_t *pRoot;
 
     while (fn_801C6880(pool, 3) > 1) {
         pItem = fn_801C6A20(pool);
-        pItem->mpNode = fn_801D2BB0(1, sizeof(Node_8027FB7C), 0, 0);
+        pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
         pChild = fn_801C6B4C(pool, 0);
         pItem->mpNode->mpLeft = pChild->mpNode;
         pItem->mCount = pChild->mCount;
@@ -92,7 +92,7 @@ Node_8027FB7C *_BuildTree(void *pool)
     return pRoot;
 }
 
-void _DestroyTree(Node_8027FB7C *pNode)
+void _DestroyTree(HuffNode_t *pNode)
 {
     if (pNode->mpLeft != 0) {
         _DestroyTree(pNode->mpLeft);
@@ -103,17 +103,17 @@ void _DestroyTree(Node_8027FB7C *pNode)
     fn_801D2BD0(pNode);
 }
 
-State_8027FD64 *_HuffCoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+HuffState_t *_HuffCoStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
-    Item_8027FB2C *pItem = 0;
+    HuffItem_t *pItem = 0;
     unsigned char symbol;
     unsigned short count;
-    State_8027FD64 *pState;
+    HuffState_t *pState;
     void *pool;
     int index;
 
-    pState = fn_801D2BB0(1, sizeof(State_8027FD64), 0, 0);
-    pool = fn_801C68FC(1, 0, 2056, sizeof(Item_8027FB2C), _InsertSortByFreq, 0);
+    pState = fn_801D2BB0(1, sizeof(HuffState_t), 0, 0);
+    pool = fn_801C68FC(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
     while (GCmpRead(pSrc, &symbol, 1)) {
         pItem = 0;
         if (fn_801C6DCC(pool, 0, &symbol, &pItem, _SearchForSymbol) == 2) {
@@ -123,7 +123,7 @@ State_8027FD64 *_HuffCoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
         } else {
             pItem = fn_801C6A20(pool);
             pItem->mCount = 1;
-            pItem->mpNode = fn_801D2BB0(1, sizeof(Node_8027FB7C), 0, 0);
+            pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
             pItem->mpNode->mSymbol = symbol;
             pItem->mpNode->mpLeft = pItem->mpNode->mpRight = 0;
             fn_801C6AA4(pool, pItem, 0);
@@ -146,10 +146,10 @@ State_8027FD64 *_HuffCoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return pState;
 }
 
-int _HuffCoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 *pState)
+int _HuffCoProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, HuffState_t *pState)
 {
     unsigned char symbol;
-    Node_8027FB7C *pNode;
+    HuffNode_t *pNode;
 
     if (GCmpRead(pSrc, &symbol, 1) != 0) {
         pNode = pState->mpRoot;
@@ -171,7 +171,7 @@ int _HuffCoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 
     return 1;
 }
 
-void _HuffCoStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 *pState)
+void _HuffCoStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, HuffState_t *pState)
 {
     if (pState->mBitCount != 0) {
         GCmpWrite(pDst, &pState->mBits, 1);
@@ -180,21 +180,21 @@ void _HuffCoStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 *p
     fn_801D2BD0(pState);
 }
 
-State_8027FD64 *_HuffDecStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+HuffState_t *_HuffDecStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     unsigned short count;
     unsigned int i = 0;
-    State_8027FD64 *pState;
+    HuffState_t *pState;
     void *pool;
-    Item_8027FB2C *pItem;
+    HuffItem_t *pItem;
 
-    pState = fn_801D2BB0(1, sizeof(State_8027FD64), 0, 0);
-    pool = fn_801C68FC(1, 0, 2056, sizeof(Item_8027FB2C), _InsertSortByFreq, 0);
+    pState = fn_801D2BB0(1, sizeof(HuffState_t), 0, 0);
+    pool = fn_801C68FC(1, 0, 2056, sizeof(HuffItem_t), _InsertSortByFreq, 0);
     GCmpRead(pSrc, &pState->mRemaining, 4);
     GCmpRead(pSrc, &count, 2);
     for (; i < count; i++) {
         pItem = fn_801C6A20(pool);
-        pItem->mpNode = fn_801D2BB0(1, sizeof(Node_8027FB7C), 0, 0);
+        pItem->mpNode = fn_801D2BB0(1, sizeof(HuffNode_t), 0, 0);
         GCmpRead(pSrc, pItem->mpNode, 1);
         pItem->mCount = i;
         pItem->mpNode->mpLeft = pItem->mpNode->mpRight = 0;
@@ -207,9 +207,9 @@ State_8027FD64 *_HuffDecStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return pState;
 }
 
-int _HuffDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 *pState)
+int _HuffDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, HuffState_t *pState)
 {
-    Node_8027FB7C *pNode = pState->mpRoot;
+    HuffNode_t *pNode = pState->mpRoot;
 
     while (pNode->mpLeft != 0 || pNode->mpRight != 0) {
         if (pState->mBitCount == 0) {
@@ -228,7 +228,7 @@ int _HuffDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64
     return --pState->mRemaining == 0;
 }
 
-void _HuffDecStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, State_8027FD64 *pState)
+void _HuffDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, HuffState_t *pState)
 {
     _DestroyTree(pState->mpRoot);
     fn_801D2BD0(pState);

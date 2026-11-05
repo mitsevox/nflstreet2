@@ -477,7 +477,7 @@ float fn_8013A2D8(Object_80137ABC *pBall, int index)
 
 void fn_8013A2F4(Object_80137ABC *pBall, int mode, float spin, float rate)
 {
-    Angles_801EBC18 angles;
+    QuatEulerAngles_t angles;
 
     fn_8013AD9C(pBall, mode);
     pBall->mState.mUnknownE0 = 0.0f;

@@ -26,7 +26,7 @@ void SndllResolveBank(SndBankInfo_801F3524 *pBank, int move)
     pBank->pData = pData;
 }
 
-void SndSetHeap(SndBankEntry_801F50C8 *pEntries, int index)
+void SndSetHeap(SndBankHeap_t *pEntries, int index)
 {
     fn_8026B4D8(pEntries[index].mUnk4, pEntries[index].mUnk8);
 }

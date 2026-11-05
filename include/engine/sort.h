@@ -5,11 +5,11 @@
 extern "C" {
 #endif
 
-typedef void (*SortFunc_801F51DC)(void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
+typedef void (*SortFunc_t)(void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
                                   void (*pSwap)(void *, void *), void *pTemp, int flags);
 
 /* sort.c */
-void SortAddSortType(int type, SortFunc_801F51DC pSort);
+void SortAddSortType(int type, SortFunc_t pSort);
 
 /* bubble.c */
 void SortInitBubbleModule(void);

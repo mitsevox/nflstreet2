@@ -4,39 +4,39 @@
 
 #include "engine/GCmp.h"
 
-typedef void *(*CodecInit_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst);
-typedef int (*CodecRun_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState);
-typedef void (*CodecEnd_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState);
+typedef void *(*GCmpCodecInitFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
+typedef int (*GCmpCodecRunFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
+typedef void (*GCmpCodecEndFunc_t)(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState);
 
 /* 40-byte codec descriptor registered through GCmpRegisterType. */
-typedef struct Codec_8027F2D8 {
+typedef struct GCmpCodec_t {
     unsigned int mTag;
     unsigned int mFlags;
-    CodecInit_8027F2D8 mpEncodeInit;
-    CodecRun_8027F2D8 mpEncodeRun;
-    CodecEnd_8027F2D8 mpEncodeEnd;
-    CodecInit_8027F2D8 mpDecodeInit;
-    CodecRun_8027F2D8 mpDecodeRun;
-    CodecEnd_8027F2D8 mpDecodeEnd;
+    GCmpCodecInitFunc_t mpEncodeInit;
+    GCmpCodecRunFunc_t mpEncodeRun;
+    GCmpCodecEndFunc_t mpEncodeEnd;
+    GCmpCodecInitFunc_t mpDecodeInit;
+    GCmpCodecRunFunc_t mpDecodeRun;
+    GCmpCodecEndFunc_t mpDecodeEnd;
     int (*mpStartup)(void);
     int (*mpShutdown)(void);
-} Codec_8027F2D8;
+} GCmpCodec_t;
 
 /* 28-byte stream record allocated by GCmpStart and GCmpBlockStart. */
-typedef struct Stream_8027F45C {
-    Buffer_8027F9AC *mpSrc;
-    Buffer_8027F9AC *mpDst;
+typedef struct GCmpStream_t {
+    GCmpBuffer_t *mpSrc;
+    GCmpBuffer_t *mpDst;
     void *mpState;
     int mMode;
     int mCodec;
     unsigned int mStatus;
     unsigned char mOwnsDst;
-} Stream_8027F45C;
+} GCmpStream_t;
 
-int GCmpRegisterType(int index, Codec_8027F2D8 *pCodec);
-Stream_8027F45C *GCmpStart(int mode, int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst);
-void GCmpProcess(Stream_8027F45C *pStream);
-void GCmpStop(Stream_8027F45C *pStream);
+int GCmpRegisterType(int index, GCmpCodec_t *pCodec);
+GCmpStream_t *GCmpStart(int mode, int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst);
+void GCmpProcess(GCmpStream_t *pStream);
+void GCmpStop(GCmpStream_t *pStream);
 
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
@@ -47,13 +47,13 @@ extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 
 static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
-static Codec_8027F2D8 **_GCmp_ppTypes;
+static GCmpCodec_t **_GCmp_ppTypes;
 extern char lbl_803018A8[];
-extern Codec_8027F2D8 lbl_803018C8;
-extern Codec_8027F2D8 lbl_803018F0;
-extern Codec_8027F2D8 lbl_80301918;
-extern Codec_8027F2D8 lbl_80301940;
-extern Codec_8027F2D8 lbl_80301968;
+extern GCmpCodec_t lbl_803018C8;
+extern GCmpCodec_t lbl_803018F0;
+extern GCmpCodec_t lbl_80301918;
+extern GCmpCodec_t lbl_80301940;
+extern GCmpCodec_t lbl_80301968;
 
 int GCmpInit(int count)
 {
@@ -110,15 +110,15 @@ int GCmpIsActive(void)
     return _GCmpModuleActive != 0;
 }
 
-int GCmpRegisterType(int index, Codec_8027F2D8 *pCodec)
+int GCmpRegisterType(int index, GCmpCodec_t *pCodec)
 {
     _GCmp_ppTypes[index] = pCodec;
     return 0;
 }
 
-void GCmpCompress(int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void GCmpCompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
-    Stream_8027F45C *pStream = GCmpStart(0, codec, pSrc, pDst);
+    GCmpStream_t *pStream = GCmpStart(0, codec, pSrc, pDst);
 
     if (pStream->mStatus == 0) {
         do {
@@ -140,9 +140,9 @@ void GCmpCompress(int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     GCmpStop(pStream);
 }
 
-void GCmpDecompress(int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void GCmpDecompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
-    Stream_8027F45C *pStream = GCmpStart(1, codec, pSrc, pDst);
+    GCmpStream_t *pStream = GCmpStart(1, codec, pSrc, pDst);
 
     if (pStream->mStatus == 0) {
         do {
@@ -164,9 +164,9 @@ void GCmpDecompress(int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     GCmpStop(pStream);
 }
 
-Stream_8027F45C *GCmpStart(int mode, int codec, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+GCmpStream_t *GCmpStart(int mode, int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
-    Stream_8027F45C *pStream = fn_801D2BB0(1, sizeof(Stream_8027F45C), 4, 0);
+    GCmpStream_t *pStream = fn_801D2BB0(1, sizeof(GCmpStream_t), 4, 0);
     unsigned int size;
 
     if (pStream != 0) {
@@ -211,7 +211,7 @@ Stream_8027F45C *GCmpStart(int mode, int codec, Buffer_8027F9AC *pSrc, Buffer_80
     return pStream;
 }
 
-void GCmpProcess(Stream_8027F45C *pStream)
+void GCmpProcess(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
@@ -225,7 +225,7 @@ void GCmpProcess(Stream_8027F45C *pStream)
     }
 }
 
-void GCmpStop(Stream_8027F45C *pStream)
+void GCmpStop(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
@@ -244,7 +244,7 @@ void GCmpStop(Stream_8027F45C *pStream)
 
 int GCmpIsBlockCodec(int index)
 {
-    Codec_8027F2D8 *pCodec;
+    GCmpCodec_t *pCodec;
 
     if (_GCmp_ppTypes != 0) {
         pCodec = _GCmp_ppTypes[index];
@@ -255,9 +255,9 @@ int GCmpIsBlockCodec(int index)
     return 0;
 }
 
-Stream_8027F45C *GCmpBlockStart(int codec, int mode, Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+GCmpStream_t *GCmpBlockStart(int codec, int mode, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
-    Stream_8027F45C *pStream = fn_801D2BB0(1, sizeof(Stream_8027F45C), 0, 0);
+    GCmpStream_t *pStream = fn_801D2BB0(1, sizeof(GCmpStream_t), 0, 0);
 
     if (pStream != 0) {
         pStream->mpSrc = pSrc;
@@ -281,7 +281,7 @@ Stream_8027F45C *GCmpBlockStart(int codec, int mode, Buffer_8027F9AC *pSrc, Buff
     return pStream;
 }
 
-unsigned int GCmpBlockProcess(Stream_8027F45C *pStream)
+unsigned int GCmpBlockProcess(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
@@ -296,7 +296,7 @@ unsigned int GCmpBlockProcess(Stream_8027F45C *pStream)
     return pStream->mStatus;
 }
 
-void GCmpBlockStop(Stream_8027F45C *pStream)
+void GCmpBlockStop(GCmpStream_t *pStream)
 {
     switch (pStream->mMode) {
     case 0:
@@ -309,7 +309,7 @@ void GCmpBlockStop(Stream_8027F45C *pStream)
     fn_801D2BD0(pStream);
 }
 
-int GCmpRead(Buffer_8027F9AC *pBuffer, void *pOut, unsigned int size)
+int GCmpRead(GCmpBuffer_t *pBuffer, void *pOut, unsigned int size)
 {
     unsigned char *pDst = pOut;
 
@@ -322,7 +322,7 @@ int GCmpRead(Buffer_8027F9AC *pBuffer, void *pOut, unsigned int size)
     return 1;
 }
 
-int GCmpWrite(Buffer_8027F9AC *pBuffer, void *pIn, unsigned int size)
+int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size)
 {
     unsigned char *pSrc = pIn;
 

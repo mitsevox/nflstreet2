@@ -16,12 +16,12 @@ extern int lbl_803EBDCC;
 extern unsigned char lbl_803EBDD0;
 extern unsigned char lbl_803EBDD1;
 
-typedef struct ResTrackOpen_801F23DC {
+typedef struct ResTrackOpenInfo_t {
     char *pName;
     char mMode;
-} ResTrackOpen_801F23DC;
+} ResTrackOpenInfo_t;
 
-typedef struct ResTrackLoad_801F23DC {
+typedef struct ResTrackLoadInfo_t {
     Res_801EDC2C *pRes;
     int mIndex;
     int mOffset;
@@ -29,7 +29,7 @@ typedef struct ResTrackLoad_801F23DC {
     int mFullSize;
     unsigned char mAsync;
     char mMode;
-} ResTrackLoad_801F23DC;
+} ResTrackLoadInfo_t;
 
 extern char lbl_802B1828[];
 extern char lbl_802B1834[];
@@ -82,7 +82,7 @@ void ResTrackInitSize(int heap, int size)
 
 void ResTrackResource(unsigned int type, void *pData)
 {
-    ResTrackLoad_801F23DC *pLoad;
+    ResTrackLoadInfo_t *pLoad;
     Res_801EDC2C *pRes;
     char *pMem;
     char *pName;
@@ -94,12 +94,12 @@ void ResTrackResource(unsigned int type, void *pData)
             if (lbl_803EBDC8 != 0) {
                 switch (type) {
                 case 0:
-                    pName = ((ResTrackOpen_801F23DC *)pData)->pName;
+                    pName = ((ResTrackOpenInfo_t *)pData)->pName;
                     index = -1;
                     break;
                 case 2:
-                    pRes = ((ResTrackLoad_801F23DC *)pData)->pRes;
-                    index = ((ResTrackLoad_801F23DC *)pData)->mIndex;
+                    pRes = ((ResTrackLoadInfo_t *)pData)->pRes;
+                    index = ((ResTrackLoadInfo_t *)pData)->mIndex;
                     pName = pRes->pName;
                     break;
                 default:
@@ -116,11 +116,11 @@ void ResTrackResource(unsigned int type, void *pData)
                 case 0: {
                     char mode;
                     if (_ResTrackIsPaused() == 0) {
-                        mode = ((ResTrackOpen_801F23DC *)pData)->mMode;
+                        mode = ((ResTrackOpenInfo_t *)pData)->mMode;
                     } else {
                         mode = 'i';
                     }
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B1864, mode, fn_801F7ABC(), ((ResTrackOpen_801F23DC *)pData)->pName);
+                    lbl_803EBDBC += sprintf(pMem, lbl_802B1864, mode, fn_801F7ABC(), ((ResTrackOpenInfo_t *)pData)->pName);
                     break;
                 }
                 case 1:

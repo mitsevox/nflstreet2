@@ -1039,7 +1039,7 @@ int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pPoint);
 #include "game/Command_800CEE74.h"
 struct Entry_800DE51C { unsigned short mUnknown0; unsigned char mUnknown2; char mUnknown3[17]; };
 #include "game/Frame_800DF7CC.h"
-struct Attachment_800DF7CC { Vector_80039F5C mPos; Angles_801EBC18 mAngles; int mFrame; };
+struct Attachment_800DF7CC { Vector_80039F5C mPos; QuatEulerAngles_t mAngles; int mFrame; };
 struct Character_800DF7CC {
     int mUnknown0, mUnknown4; unsigned int mFlags;
     char mUnknown12[8]; struct Flags { char mUnknown0[12]; unsigned int mUnknown12; } *mpUnknown20;
@@ -1122,7 +1122,7 @@ extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle
 extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 extern "C" int fn_800DF6EC(Object_80039F5C *p);
-extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, Angles_801EBC18 *pAngles);
+extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles);
 extern "C" void fn_800DF750(Object_80137ABC *pBall, Vector_80039F5C *pPos, int *pAngles);
 extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, Attachment_800DF7CC *pAttachments, Frame_800DF7CC *pFrame, int index, unsigned int frame);
 extern "C" void fn_800DF9FC(Object_80039F5C *p, void *pRecord, unsigned int value);
@@ -2232,7 +2232,7 @@ extern "C" int fn_800DF6EC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, Angles_801EBC18 *pAngles)
+extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
     float rot[4];
     fn_8009BFD0(p, pPos, rot);
@@ -2257,7 +2257,7 @@ extern "C" void fn_800DF7CC(Object_80039F5C *p, Character_80093BCC *pCharacter, 
     Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
     fn_80093BAC(pView->mUnknown0, pView->mUnknown4);
     Vector_80039F5C position;
-    Angles_801EBC18 angles;
+    QuatEulerAngles_t angles;
     if (pFrame->mUnknown20 && pFrame->mUnknown20 != 0x4E4F4E45) {
         if (GetTimedKeyValue(pFrame, time) && !fn_800DF6EC(p)) {
             int joint = !pFrame->mUnknown19 || (pView->mFlags & 8) ? 25 : 19;

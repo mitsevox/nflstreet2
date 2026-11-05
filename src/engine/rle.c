@@ -5,12 +5,12 @@
 
 extern void *fn_801D310C(void *allocation, int size, int c, int d);
 
-void *_RLECoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_RLECoStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-int _RLECoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _RLECoProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     unsigned char *pIn = pSrc->mpData;
     unsigned int size = pSrc->mSize;
@@ -59,16 +59,16 @@ int _RLECoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 1;
 }
 
-void _RLECoStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _RLECoStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
 
-void *_RLEDecStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_RLEDecStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-int _RLEDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _RLEDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     unsigned char *pIn = pSrc->mpData;
     unsigned int size = pSrc->mSize;
@@ -107,6 +107,6 @@ int _RLEDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 1;
 }
 
-void _RLEDecStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _RLEDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }

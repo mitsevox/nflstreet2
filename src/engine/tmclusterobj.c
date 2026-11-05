@@ -152,7 +152,7 @@ void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj,
                 float targetQuat[4];
                 float poseQuat[4];
                 float quat[4];
-                Angles_801EBC18 angles;
+                QuatEulerAngles_t angles;
                 int rz = pPose->mpRotations[index][2];
                 int ry = pPose->mpRotations[index][1];
                 int rx = pPose->mpRotations[index][0];

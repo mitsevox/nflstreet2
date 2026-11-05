@@ -4,12 +4,12 @@
 #include "engine/sort.h"
 #include "engine/system.h"
 
-typedef struct SortType_803E943C {
-    SortFunc_801F51DC pSort;
+typedef struct SortInterface_t {
+    SortFunc_t pSort;
     unsigned char bActive;
-} SortType_803E943C;
+} SortInterface_t;
 
-extern SortType_803E943C lbl_803E943C[2];
+extern SortInterface_t lbl_803E943C[2];
 extern unsigned char lbl_803EBE20;
 
 static void _SortInitInterface(void)
@@ -56,7 +56,7 @@ void SortArray(int type, void *pBase, unsigned int count, int size, int (*pCompa
     lbl_803E943C[type].pSort(pBase, count, size, pCompare, pSwap, pTemp, flags);
 }
 
-void SortAddSortType(int type, SortFunc_801F51DC pSort)
+void SortAddSortType(int type, SortFunc_t pSort)
 {
     lbl_803E943C[type].pSort = pSort;
     lbl_803E943C[type].bActive = 1;

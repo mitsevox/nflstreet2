@@ -1424,7 +1424,7 @@ void fn_8004CEE8(Child_801A9430 *p)
     if (pExtra) {
         if (pExtra->mUnknown32) {
             p->mAngle4C = (p->mAngle4C + pExtra->mWord36) & 0xFFFFFF;
-            Angles_801EBC18 angles;
+            QuatEulerAngles_t angles;
             QuatToEuler(&angles, &p->mRotation3C.mX);
             angles.mUnknown8 = p->mAngle4C + 0x400000;
             QuatFromEuler(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
@@ -2513,7 +2513,7 @@ void fn_80050964(void)
             Object_80039F5C *pPlayer = fn_8003E0C8(pBody->mpMetadata->mpBlock);
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C a, b, c, direction;
-            Angles_801EBC18 angles;
+            QuatEulerAngles_t angles;
             Quat_801EB488 rotation, oldRotation;
             fn_8009BF5C(pPlayer, 0, &a, &angles);
             fn_8009BF5C(pPlayer, 4, &b, 0);

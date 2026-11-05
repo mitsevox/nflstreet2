@@ -84,7 +84,7 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
 
     if (joint != -1) {
         float (*m)[4] = pBlock->mUnknown44.mUnknown52[joint];
-        Angles_801EBC18 angles;
+        QuatEulerAngles_t angles;
 
         fn_801D04C4();
         fn_801D06D4(p->mUnknown640);

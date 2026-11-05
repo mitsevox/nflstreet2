@@ -70,7 +70,7 @@ struct SndState_8039AE8C {
     void *pAemsBankList;
     void *pSeqList;
     void *pStreamList;
-    SndBankEntry_801F50C8 *pBankTable;
+    SndBankHeap_t *pBankTable;
     void *pAemsSystem;
     void *pAemsStreams;
     int mUnk28;

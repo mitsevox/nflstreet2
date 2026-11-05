@@ -104,7 +104,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float q[4];
     float cur[4];
     int angles[32][3];
-    Angles_801EBC18 euler;
+    QuatEulerAngles_t euler;
     Skel_801C4960 *pSkel;
     SkelEuler_801C4960 *pRest;
     Limit_801C3EFC *pLimit;

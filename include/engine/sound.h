@@ -29,11 +29,11 @@ typedef struct SndBankInfo_801F3524 {
 } SndBankInfo_801F3524;
 
 /* Bank table entry (12 bytes). */
-typedef struct SndBankEntry_801F50C8 {
+typedef struct SndBankHeap_t {
     int mUnk0;
     int mUnk4;
     int mUnk8;
-} SndBankEntry_801F50C8;
+} SndBankHeap_t;
 
 /* sound.cpp */
 void *fn_801F44A4(void);
@@ -41,7 +41,7 @@ StreamFile_801F6D54 *fn_801F5000(const char *pName);
 
 /* llsound.c */
 void SndllResolveBank(SndBankInfo_801F3524 *pBank, int move);
-void SndSetHeap(SndBankEntry_801F50C8 *pEntries, int index);
+void SndSetHeap(SndBankHeap_t *pEntries, int index);
 
 #ifdef __cplusplus
 }

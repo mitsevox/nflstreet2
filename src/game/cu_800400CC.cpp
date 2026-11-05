@@ -346,7 +346,7 @@ void fn_80040A70(Object_80041904 *pLinked, int index)
 
     if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mUnknown32 != 0 || pLinked->mUnknown428->mUnknown33 != 0)) {
         fn_800B2A14(&pLinked->mUnknown8, &pLinked->mUnknown428->mUnknown32);
-        Angles_801EBC18 angles;
+        QuatEulerAngles_t angles;
         QuatToEuler(&angles, &pLinked->mUnknown96);
         angles.mUnknown8 = pLinked->mUnknown32 + 0x400000;
         QuatFromEuler(&pObject->mRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);

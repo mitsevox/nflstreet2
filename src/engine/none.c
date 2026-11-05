@@ -2,12 +2,12 @@
 
 #include "engine/GCmp.h"
 
-void *_NONECoStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_NONECoStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-int _NONECoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _NONECoProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     unsigned char value;
 
@@ -18,16 +18,16 @@ int _NONECoProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 0;
 }
 
-void _NONECoStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _NONECoStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
 
-void *_NONEDecStart(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *_NONEDecStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-int _NONEDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+int _NONEDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     unsigned char value;
 
@@ -38,6 +38,6 @@ int _NONEDecProcess(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
     return 0;
 }
 
-void _NONEDecStop(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void _NONEDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }

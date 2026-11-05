@@ -68,7 +68,7 @@ static void fn_801C4B1C(Skel_801C4960 *pSkel, SkelNode_801C4960 *pUnused, SkelPo
 {
     SkelEuler_801C4960 *pEulers = pPose->mpLocal;
     float (*pQuats)[4] = pPose->mpOutput;
-    Angles_801EBC18 angles;
+    QuatEulerAngles_t angles;
     int i;
 
     for (i = 0; i < pSkel->mNumJoints; i++) {
