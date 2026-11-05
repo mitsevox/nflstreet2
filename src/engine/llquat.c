@@ -23,8 +23,8 @@ void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);
 float fn_801CFB74(float x);
 float fn_801CFDB0(float x);
 int fn_801CFE40(float y, float x);
-float fn_801CFF54(float x);
-float fn_801CFFA0(float x);
+float MathInvSqrt(float x);
+float MathInverse(float x);
 float fn_801EB4EC(Quat_801EB814 *q);
 void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale);
 
@@ -41,7 +41,7 @@ float fn_801EB4AC(Quat_801EB814 *q)
 
 float fn_801EB4EC(Quat_801EB814 *q)
 {
-    return fn_801CFF54(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
+    return MathInvSqrt(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
 void fn_801EB52C(Quat_801EB814 *pOut, Quat_801EB814 *q)
@@ -233,7 +233,7 @@ void fn_801EBC18(Angles_801EBC18 *pOut, float *pRot)
     float r;
 
     if (!((float)fabs(cosY) <= 1e-07f)) {
-        r = fn_801CFFA0(cosY);
+        r = MathInverse(cosY);
         r = r + r;
         sinX = (y * z + w * x) * r;
         cosX = (0.5f - xx - yy) * r;
@@ -268,7 +268,7 @@ void fn_801EBD8C(Triple_801BCA74 *pOut, Quat_801EB814 *q)
     float r;
 
     if (!((float)fabs(cosZ) <= 1e-07f)) {
-        r = fn_801CFFA0(cosZ);
+        r = MathInverse(cosZ);
         r = r + r;
         sinX = (w * x - y * z) * r;
         cosX = (0.5f - xx - zz) * r;

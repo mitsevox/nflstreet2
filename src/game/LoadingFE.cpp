@@ -5,7 +5,7 @@ extern "C" {
 void fn_8013CF98(void);
 void fn_80194858(int);
 void fn_80194AEC(int);
-void fn_801C3A3C(float);
+void CamSetDefaultAspect(float);
 int fn_801CEB4C(void);
 }
 
@@ -24,7 +24,7 @@ int LoadingFE::Init()
         fn_80194858(1);
     } else {
         if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
-            fn_801C3A3C(4.0f / 3.0f);
+            CamSetDefaultAspect(4.0f / 3.0f);
         } else {
             fn_8013CF98();
         }

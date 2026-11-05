@@ -40,7 +40,7 @@ int fn_801486A0(void);
 void fn_801D0470(int a);
 void fn_801D0494(void);
 void fn_801D0860(Quat_801EB488 *pRot);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_801EB488(Quat_801EB488 *pRot);
 void fn_801EB660(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
 void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
@@ -65,7 +65,7 @@ int fn_80136B1C(void *p, int value)
     for (i = 0; i < pSet->mHeader.mCount; i++) {
         Object_80137ABC *pBall = &pSet->mEntries[i];
 
-        fn_801D34D0(pBall, sizeof(Object_80137ABC), 0, 4);
+        MemFill(pBall, sizeof(Object_80137ABC), 0, 4);
         pBall->mState.mIndex = i;
         pBall->mState.mState = 0;
         pBall->mState.mStateArg = 0;
@@ -694,7 +694,7 @@ void fn_80137F98(int count)
     fn_80238234(pHandle, fn_80136B1C, fn_80136E78, fn_80136CB0, fn_80136D20);
     fn_80238248(pHandle, fn_80136EB0, fn_801370A4, fn_80136F7C);
     pSet = (Set_80137F98 *)fn_8023816C(pHandle);
-    fn_801D34D0(pSet, sizeof(Set_80137F98), 0, 4);
+    MemFill(pSet, sizeof(Set_80137F98), 0, 4);
     pSet->mHeader.mCount = count;
     fn_802381E0(pHandle);
 }

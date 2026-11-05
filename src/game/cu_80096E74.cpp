@@ -4,7 +4,7 @@
 #include "engine/vec.h"
 
 extern "C" {
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles);
 void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 int fn_8023790C(void);
@@ -40,8 +40,8 @@ extern "C" void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pOut, Data_8009
         strcpy(shoulder, "lshoulder");
         strcpy(wrist, "lwrist");
     }
-    fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, wrist), &wristPos, &angles);
-    fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, shoulder), &shoulderPos, &angles);
+    fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, wrist), &wristPos, &angles);
+    fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, shoulder), &shoulderPos, &angles);
     now = fn_8023790C() + 2;
     t = (float)(pData->mUnknown0 - now) / lbl_803EA934;
     t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
@@ -77,7 +77,7 @@ extern "C" unsigned char *fn_8009CD00(Object_80039F5C *p,
         pName = "rwrist";
         side = 2;
     }
-    fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, pName), &pos, &angles);
+    fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, pName), &pos, &angles);
     fn_801D04C4();
     fn_801D06D4(p->mUnknown704[0]);
     fn_80227CC0(&pos, &pos);

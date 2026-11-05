@@ -18,8 +18,8 @@ struct Object_801F7824 {
 
 extern "C" {
 int fn_80185274(void);
-int fn_801C6584(void);
-int fn_801C65E4(void);
+int DSInit(void);
+int DSShutdown(void);
 void fn_80025E00(void);
 void fn_80025E28(void);
 int fn_801D2054(Object_801D2054 *pConfig);
@@ -56,7 +56,7 @@ int Sys::Init()
     Record_802CC680 *pDebug;
     Record_802CC680 *pAuxRam;
 
-    fn_801C6584();
+    DSInit();
     fn_80025E00();
     sMemoryConfig.mpArena = fn_80025E50(1);
     fn_801D2054(&sMemoryConfig);
@@ -89,6 +89,6 @@ int Sys::Shutdown()
     fn_801D2570(0x20);
     fn_801D20C8();
     fn_80025E28();
-    fn_801C65E4();
+    DSShutdown();
     return 1;
 }

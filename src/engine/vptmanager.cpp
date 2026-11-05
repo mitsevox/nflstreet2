@@ -1,7 +1,7 @@
 #include <string.h>
 #include "engine/cu_80227F14.h"
 #include "game/fn_80238174.h"
-#include "game/fn_801C3660.h"
+#include "game/CamAddCameraToViewport.h"
 #include "game/fn_801C68FC.h"
 
 struct Record_8002AE90 {
@@ -17,7 +17,7 @@ void fn_801C6BC0(void *, Record_8002AE90 *);
 void fn_801C6C0C(void *, void *);
 void *fn_801C6C84(void *, void *);
 int fn_801C6DCC(void *, void *, void *, Record_8002AE90 **, int (*)(Record_8002AE90 *,void *,Record_8002AE90 **));
-void fn_801C36B0(Object_80228224 *, void *);
+void CamRemoveCameraFromViewport(Object_80228224 *, void *);
 static State_8002AE90 *lbl_803EA348 = 0;
 
 int fn_8002AE90(void *p, int a) {
@@ -36,14 +36,14 @@ int fn_8002AEE4(void *p,int a) {
 int fn_8002AF24(State_8002AE90 *s,Record_8002AE90 *r) {
     int result=1;
     if(r->mpCallback4) result=r->mpCallback4(s->mpObject,r->mpObject);
-    else fn_801C3660(s->mpObject,r->mpObject);
+    else CamAddCameraToViewport(s->mpObject,r->mpObject);
     return result;
 }
 int fn_8002AF80(State_8002AE90 *s,Record_8002AE90 *r) {
     int result=1;
     if(r->mpCallback8) result=r->mpCallback8(s->mpObject,r->mpObject);
     else {
-        fn_801C36B0(s->mpObject,r->mpObject);
+        CamRemoveCameraFromViewport(s->mpObject,r->mpObject);
         if(fn_802286B4(s->mpObject)) result=0;
     }
     return result;
@@ -97,7 +97,7 @@ void fn_8002B1E4() {
 void fn_8002B270() {
     State_8002AE90 *s=fn_8002B02C(0);
     Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
-    if(r && fn_802286B4(s->mpObject)!=r->mpObject) fn_801C3660(s->mpObject,r->mpObject);
+    if(r && fn_802286B4(s->mpObject)!=r->mpObject) CamAddCameraToViewport(s->mpObject,r->mpObject);
 }
 void fn_8002B2D0() {}
 int fn_8002B2D4(Object_80228224 *p,void *obj,int (*a)(Object_80228224 *,void *),int (*b)(Object_80228224 *,void *)) {

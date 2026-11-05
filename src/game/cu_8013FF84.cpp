@@ -61,12 +61,12 @@ void fn_8013FF28(Camera_8013F738 *, int);
 unsigned int fn_802372EC(unsigned int,unsigned int);
 void fn_8022765C(void *,void *,void *);
 int fn_801CFDD0(float);
-void fn_801C3E54(Camera_8013F738 *);
+void CamFreeClearVelocity(Camera_8013F738 *);
 int fn_800AD9B4(void);
 int fn_801784C4(void);
 void fn_8013C2B4(void *,int,int,int);
 void fn_8013C6F0(Camera_8013F738 *);
-void fn_801CF810(void *,void *,void *,float);
+void Orient3Lerp(void *,void *,void *,float);
 void fn_8013C4BC(Camera_8013F738 *,void *,int);
 void fn_80227930(void *,void *,void *,float);
 void fn_801D0470(int);
@@ -87,7 +87,7 @@ int fn_80178308(void);
 void fn_8003A130(void *,float *,int);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
-void fn_801CF910(void *,void *,void *);
+void Orient3Add(void *,void *,void *);
 int fn_80178320(void);
 void fn_8013C438(Camera_8013F738 *);
 void fn_8013C384(void *,int,int,int);
@@ -159,7 +159,7 @@ void fn_801403CC(Camera_8013F738 *camera)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     camera->mUnknownE5 = lbl_803EB1E8 = 0;
-    fn_801C3E54(camera);
+    CamFreeClearVelocity(camera);
     if (fn_800AD9B4() == 3) {
         camera->mUnknownE0 = 180.0f;
         camera->mUnknownE4 = 1;
@@ -191,7 +191,7 @@ unsigned char fn_80140504(Camera_8013F738 *camera)
         float blend = fabsf(camera->mUnknownE0-180.0f)*0.0055555557f;
         if (blend < 0.0f) blend = 0.0f; else if (blend > 1.0f) blend = 1.0f;
         Angles_8013FF84 angles;
-        fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
+        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
         angles.mZ = (int)(camera->mUnknownE0*46603.37890625f);
         fn_8013C4BC(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         Vector_8013FF84 point;
@@ -209,7 +209,7 @@ unsigned char fn_80140504(Camera_8013F738 *camera)
         fn_8013C6F0(camera);
     } else {
         camera->mUnknownE4 = 0;
-        fn_801C3E54(camera);
+        CamFreeClearVelocity(camera);
         fn_8013FA8C(1);
         camera->mUnknown94 |= 0x10;
     }
@@ -255,7 +255,7 @@ void fn_80140708(Camera_8013F738 *camera)
                 else if (state->mUnknown38 > 1.0f) state->mUnknown38 = 1.0f;
             } else state->mUnknown38 = 1.0f;
             fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
-            fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
+            Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
             if (special) goto apply;
         }
         if (fn_801783AC(0)) {
@@ -268,7 +268,7 @@ void fn_80140708(Camera_8013F738 *camera)
         }
         if (fn_800BA6F8() && fn_800BAA24()) blend = 0.0f;
         fn_80227930(&point,&lbl_803ECA04[1],&lbl_803ECA04[camera->mUnknownA0],blend);
-        fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
+        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
     apply:
         if (gameMode != 2) fn_80140270(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
@@ -279,7 +279,7 @@ void fn_80140708(Camera_8013F738 *camera)
             offset.mX = (int)(mode->mUnknown30.mX*46603.37890625f);
             offset.mY = (int)(mode->mUnknown30.mY*46603.37890625f);
             offset.mZ = (int)(mode->mUnknown30.mZ*46603.37890625f);
-            fn_801CF910(&angles,&angles,&offset);
+            Orient3Add(&angles,&angles,&offset);
         }
         if (fn_801486A0() == 2) {
             Mode_8013FF84 *mode = &lbl_802DC718[camera->mUnknown9C];
@@ -289,7 +289,7 @@ void fn_80140708(Camera_8013F738 *camera)
             offset.mX = (int)(mode->mUnknown60.mX*46603.37890625f);
             offset.mY = (int)(mode->mUnknown60.mY*46603.37890625f);
             offset.mZ = (int)(mode->mUnknown60.mZ*46603.37890625f);
-            fn_801CF910(&angles,&angles,&offset);
+            Orient3Add(&angles,&angles,&offset);
         } else if (!fn_8007F828(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
             Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mpUnknown4);
@@ -336,7 +336,7 @@ void fn_80140EA0(Camera_8013F738 *camera)
     state->mUnknown2C.mX = camera->mUnknownD0;
     state->mUnknown2C.mY = camera->mUnknownD4;
     state->mUnknown2C.mZ = camera->mUnknownD8;
-    fn_801C3E54(camera);
+    CamFreeClearVelocity(camera);
     lbl_802DBEBC.mUnknown0 = 0;
     switch (camera->mUnknownA0) {
     case 1:

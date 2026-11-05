@@ -199,11 +199,11 @@ char *fn_80199CC4(int index, int size);
 char *fn_80199CF0(int index, int size);
 void fn_80199D58(int count, int size);
 void fn_80199DB0(void);
-void *fn_801C3610(int a, Desc_8013C340 *pDesc);
-void fn_801C3640(void *pCamera);
-void fn_801C39D0(Camera_8013F738 *pCamera, float value);
-int fn_801C6280(int a, int b, int c);
-int fn_801C6458(int a, int b);
+void *CamCreate(int a, Desc_8013C340 *pDesc);
+void CamDestroy(void *pCamera);
+void CamSetNearPlane(Camera_8013F738 *pCamera, float value);
+int ConSetChannelInfo(int a, int b, int c);
+int ConGetChannelInfo(int a, int b);
 void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
@@ -817,10 +817,10 @@ extern "C" void fn_8002C75C(Type_803EA368 *p)
 {
     fn_800271D4(p->mUnknownDA8);
     if (!fn_8002892C() && p->mUnknownD8C != -1) {
-        fn_801C6280(9, 0, fn_801C6458(p->mUnknownD8C, 0));
-        fn_801C6280(9, 2, (int)fn_80026DD4);
-        fn_801C6280(9, 4, 1);
-        fn_801C6280(-1, 3, (int)lbl_802EC330);
+        ConSetChannelInfo(9, 0, ConGetChannelInfo(p->mUnknownD8C, 0));
+        ConSetChannelInfo(9, 2, (int)fn_80026DD4);
+        ConSetChannelInfo(9, 4, 1);
+        ConSetChannelInfo(-1, 3, (int)lbl_802EC330);
         fn_801EC3B8(9, p->mUnknownD8C);
     }
 }
@@ -830,7 +830,7 @@ extern "C" void fn_8002C800(Type_803EA368 *p)
     fn_80027230(p->mUnknownDA8);
     fn_80027358(-1);
     if (!fn_8002892C()) {
-        fn_801C6280(9, 4, 0);
+        ConSetChannelInfo(9, 4, 0);
     }
 }
 
@@ -874,7 +874,7 @@ extern "C" Type_803EA368 *fn_8002C8C0(void)
     p->mUnknownD98 = -1;
     lbl_803EC614 = 0;
     memset(p->mUnknown148C, 0, sizeof(p->mUnknown148C));
-    fn_801C6280(9, 4, 0);
+    ConSetChannelInfo(9, 4, 0);
     return p;
 }
 
@@ -2007,7 +2007,7 @@ extern "C" Camera_8013F738 *fn_8002EA78(Type_8002FDB4 *pDesc)
         desc.mUnknown04 = 13;
         break;
     }
-    pCamera = (Camera_8013F738 *)fn_801C3610(3, &desc);
+    pCamera = (Camera_8013F738 *)CamCreate(3, &desc);
     pCamera->mUnknownF5C = 0;
     if (fn_8002D2D8()) {
         lbl_803EC634 = 1;
@@ -2339,7 +2339,7 @@ extern "C" Camera_8013F738 *fn_8002F61C(Type_8002FDB4 *pDesc)
     pBase->mUnknown84 = 0x400000;
     pBase->mUnknown7C = 0.3f;
     pBase->mUnknown80 = 0.2f;
-    fn_801C39D0(pCamera, 0.1f);
+    CamSetNearPlane(pCamera, 0.1f);
     pCamera->mUnknown94 |= 4;
     lbl_803EA384 = 1;
     fn_8002EED0();
@@ -2397,7 +2397,7 @@ extern "C" void fn_8002FA04(Camera_8013F738 *pCamera, int detach)
     if (detach) {
         fn_8002B3DC(0, pCamera);
     }
-    fn_801C3640(pCamera);
+    CamDestroy(pCamera);
     fn_80031040(0);
     if (fn_8019623C(0x23000)) {
         fn_80195EFC(1, 15, 0x808080, 0);

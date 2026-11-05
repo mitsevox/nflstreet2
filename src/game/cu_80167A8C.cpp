@@ -52,7 +52,7 @@ float fn_80178A2C(void);
 int fn_80178E10(void);
 void fn_80179144(int a);
 void fn_8017916C(void);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_801F9FA4(int tag, int index, int column);
 int fn_801FA038(int tag, int index, int column);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -348,7 +348,7 @@ void fn_801681A8(void)
 void fn_80168210(void)
 {
     if (lbl_803ECAF4) {
-        fn_801D34D0(lbl_803ECAF4, sizeof(Object_80167A8C), 0, 4);
+        MemFill(lbl_803ECAF4, sizeof(Object_80167A8C), 0, 4);
         lbl_803ECAF4->mUnknown4[1].mUnknown4 = lbl_803ECAF4->mUnknown4[1].mUnknown0 =
             lbl_803ECAF4->mUnknown4[0].mUnknown4 = lbl_803ECAF4->mUnknown4[0].mUnknown0 = -1;
     }

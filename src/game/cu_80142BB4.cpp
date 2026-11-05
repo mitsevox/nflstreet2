@@ -6,7 +6,7 @@ extern float lbl_803ECB08;
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-void fn_801D0370(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
+void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void fn_801D0470(int mode);
 void fn_801D0494(void);
 void fn_801D0E94(void);
@@ -120,7 +120,7 @@ void fn_80142D98(Body_80142D98 *pBody, Vector_80039F5C *pNormal, float restituti
     up.mZ = 1.0f;
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pBody->mUnknown0, &pBody->mUnknown0);
     pBody->mUnknown12.mX = pBody->mUnknown0.mX * 0.5f;
     pBody->mUnknown12.mY = pBody->mUnknown0.mY * 0.5f;
@@ -185,7 +185,7 @@ void fn_80142FF8(Body_80142D98 *pA, Body_80142D98 *pB, Vector_80039F5C *pNormal,
     fn_802271F0(pNormal, pNormal);
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pA->mUnknown0, &pA->mUnknown0);
     fn_80227C2C(&pB->mUnknown0, &pB->mUnknown0);
     pA->mUnknown12.mX = pA->mUnknown0.mX;
@@ -222,7 +222,7 @@ void fn_80143150(Vector_80039F5C *pOut, Vector_80039F5C *pNormal, float scale)
     up.mZ = 1.0f;
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     v.mX = fn_80237260(0) - 0.5f;
     v.mY = fn_80237260(0) - 0.5f;
     v.mZ = fn_80237260(0) * 0.5f;

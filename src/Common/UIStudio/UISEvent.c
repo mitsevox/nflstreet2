@@ -74,7 +74,7 @@ void UISLoadRateFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlInfoT *pCont
     pRateFnc->pControlInfo = pControlInfo;
     pRateFnc->RateFncID = RateFncID;
     pRateFnc->pFnc = pFnc;
-    switch (fn_801CE1E8()) {
+    switch (GlibGetTvMode()) {
     case 1:
         pRateFnc->MSRate = MSRate * 60 / 50;
         break;

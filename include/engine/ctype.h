@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-int fn_801C1F54(int c);
+int toupper(int c);
 
 #ifdef __cplusplus
 }

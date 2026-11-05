@@ -11,7 +11,7 @@ struct State_803ECA0C {
 };
 
 extern "C" {
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 int fn_80238278(const void *p, int size, int seed);
 
 int fn_80143F40(void *p, int value);
@@ -24,7 +24,7 @@ int fn_80143F40(void *p, int value)
 {
     State_803ECA0C *pState = (State_803ECA0C *)p;
 
-    fn_801D34D0(pState, sizeof(State_803ECA0C), 0, 4);
+    MemFill(pState, sizeof(State_803ECA0C), 0, 4);
     lbl_803EB220 = 0;
     pState->mpSet = 0;
     pState->mpValues = 0;

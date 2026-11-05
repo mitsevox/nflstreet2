@@ -22,7 +22,7 @@ float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
 int fn_801783AC(int bit);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 
 extern unsigned char lbl_803EACAB;
 extern unsigned char lbl_803EACAC[4];
@@ -169,7 +169,7 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
             }
             if (fn_800B65A0(p->mIdBytes[2]) == 255) {
                 int ok = 0;
-                if (special || (pMotion->mUnknown28 != 0.0f && fn_801CFFD0(pMotion->mUnknown32, 0x400000) <= 0x3FFFFF)) {
+                if (special || (pMotion->mUnknown28 != 0.0f && MathAngleDiff(pMotion->mUnknown32, 0x400000) <= 0x3FFFFF)) {
                     ok = 1;
                 }
                 enable = ok & fn_801783AC(0);

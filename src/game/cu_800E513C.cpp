@@ -26,7 +26,7 @@ int fn_800E1870(Object_80039F5C *p);
 void fn_800E3AE8(Object_80039F5C *p, int a, int b);
 void fn_800E4120(Object_80039F5C *p, State_800E513C *pState, int heading, float speed);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 extern float lbl_803EAD4C;
 }
@@ -90,7 +90,7 @@ extern "C" int fn_800E513C(Object_80039F5C *p)
             heading -= 0x800000;
         }
         heading &= 0xFFFFFF;
-        int turn = fn_801CFFD0(heading, p->mMotion.mFacing);
+        int turn = MathAngleDiff(heading, p->mMotion.mFacing);
         if (turn > 0x56C16B && speed > 0.6f) {
             speed = 0.6f;
         }
@@ -116,7 +116,7 @@ extern "C" int fn_800E513C(Object_80039F5C *p)
         }
     } else if (fn_801BE648(p->mpUnknown792) == 189 && (p->mFlags & 4)) {
         p->mFlags &= ~4;
-        if (fn_801CFFD0(p->mMotion.mFacing, 0xC00000) > 0xAAAAA) {
+        if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) > 0xAAAAA) {
             fn_800E3AE8(p, 8, 1);
         } else if (pState->mUnknown3 != 0 || fn_800E1870(p)) {
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);

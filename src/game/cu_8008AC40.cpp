@@ -3,10 +3,10 @@
 
 extern "C" {
 
-Pool_801C750C *fn_801C750C(int a, int count, int size, void *pMemory);
-int fn_801C75B8(Pool_801C750C *pPool);
-void *fn_801C75F0(Pool_801C750C *pPool);
-void fn_801C7650(Pool_801C750C *pPool, void *pElement);
+Pool_801C750C *DSNewNodeHandler(int a, int count, int size, void *pMemory);
+int DSDelNodeHandler(Pool_801C750C *pPool);
+void *DSNewNode(Pool_801C750C *pPool);
+void DSDelNode(Pool_801C750C *pPool, void *pElement);
 
 /* Byte offset of element (x, y) in a buffer of 8x4-byte tiles laid out
    tilesPerRow to a row. */
@@ -118,7 +118,7 @@ Node_8008AF90 *Class_8008B284::fn_8008AF5C(Node_8008AF90 *pList)
 
 Node_8008AF90 *Class_8008B284::fn_8008AF90(int level, int link)
 {
-    Node_8008AF90 *pNode = (Node_8008AF90 *)fn_801C75F0(mpPool);
+    Node_8008AF90 *pNode = (Node_8008AF90 *)DSNewNode(mpPool);
 
     memset(pNode, 0, sizeof(Node_8008AF90));
     if (level == 7) {
@@ -139,7 +139,7 @@ Node_8008AF90 *Class_8008B284::fn_8008AF90(int level, int link)
 
 void Class_8008B284::fn_8008B030(Node_8008AF90 *pNode)
 {
-    fn_801C7650(mpPool, pNode);
+    DSDelNode(mpPool, pNode);
 }
 
 int Class_8008B284::fn_8008B054(int level, unsigned int color)
@@ -214,11 +214,11 @@ Class_8008B284::Class_8008B284()
     mpRoot = 0;
     mLeafCount = 0;
     mpPool = 0;
-    mpPool = fn_801C750C(1, 1601, sizeof(Node_8008AF90), 0);
+    mpPool = DSNewNodeHandler(1, 1601, sizeof(Node_8008AF90), 0);
     memset(mpLists, 0, sizeof(mpLists));
 }
 
 Class_8008B284::~Class_8008B284()
 {
-    fn_801C75B8(mpPool);
+    DSDelNodeHandler(mpPool);
 }

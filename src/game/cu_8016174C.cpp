@@ -40,7 +40,7 @@ extern int lbl_803ECAEC;
 Object_80039F5C *fn_80137B40(void);
 Object_80039F5C *fn_800B6544(int);
 int fn_80188030(int);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -165,7 +165,7 @@ void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
     out->mUnknown104 = in->mUnknown104;
 }
 void fn_80161AD4(void *render, int index) {
-    int context = fn_801C657C();
+    int context = ConGetCurrentContext();
     float *color = lbl_802E97EC[index];
     fn_80235C90(render, context, color[0], color[1], color[2], color[3]);
 }
@@ -238,23 +238,23 @@ int fn_80161B38(Object_801618D8 *item) {
             fn_802520E0(1, 3, 0);
             fn_80210814(0, 0, 0);
             if (item->mUnknown28 == 6) {
-                fn_80235740(item->mUnknown3C, fn_801C657C());
+                fn_80235740(item->mUnknown3C, ConGetCurrentContext());
                 fn_80210CC4(0.0f, 0.0f);
                 fn_801D0470(fn_80228668());
                 fn_801D0544();
-                fn_80235764(item->mUnknown3C, fn_801C657C());
+                fn_80235764(item->mUnknown3C, ConGetCurrentContext());
                 fn_80210CC4(0.0f, 1.0f);
             } else {
                 if (extra)
-                    fn_80235740(extra->mUnknown3C, fn_801C657C());
+                    fn_80235740(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235740(item->mUnknown3C, fn_801C657C());
+                    fn_80235740(item->mUnknown3C, ConGetCurrentContext());
                 fn_801D0470(fn_80228668());
                 fn_801D0544();
                 if (extra)
-                    fn_80235764(extra->mUnknown3C, fn_801C657C());
+                    fn_80235764(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235764(item->mUnknown3C, fn_801C657C());
+                    fn_80235764(item->mUnknown3C, ConGetCurrentContext());
             }
         } else {
             fn_801D0470(fn_80228668());

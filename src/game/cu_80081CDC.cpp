@@ -21,7 +21,7 @@ void fn_80080874(int which);
 int fn_800808F8(Object_8008044C *pObject);
 void fn_800731D0(int a);
 int fn_80186F7C(unsigned char index);
-int fn_801C1F54(int c);
+int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022EF8C(int a, int tag);
@@ -512,7 +512,7 @@ void fn_80082C64(Record_80082B18 *pRecord)
     fn_801FCE10(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
-            pUpper[i] = fn_801C1F54(pLast[i]);
+            pUpper[i] = toupper(pLast[i]);
         }
     }
 }

@@ -49,15 +49,15 @@ void fn_801912A4(void);
 void fn_80194794(void);
 void fn_801C1710(int a);
 void fn_801C17BC(void);
-int fn_801C34F8(int a, int b, void *p, int c);
-int fn_801C35B8(void);
-int fn_801C4F64(void);
-int fn_801C4FB8(void);
-int fn_801C5E24(int a, int b);
-int fn_801C5F9C(void);
-int fn_801C6280(int a, int b, int c);
-int fn_801CEF48(void);
-int fn_801CEFA0(void);
+int CamInit(int a, int b, void *p, int c);
+int CamShutdown(void);
+int CurveInit(void);
+int CurveShutdown(void);
+int ConInit(int a, int b);
+int ConShutdown(void);
+int ConSetChannelInfo(int a, int b, int c);
+int MathInit(void);
+int MathShutdown(void);
 int fn_801F512C(void);
 int fn_801F518C(void);
 void fn_801F8A0C(Desc_801F8A0C *pDesc);
@@ -114,13 +114,13 @@ const char *Cam::GetName() { return "Cam"; }
 
 int Cam::Init()
 {
-    fn_801C34F8(12, 5, lbl_802DBD7C, 2);
+    CamInit(12, 5, lbl_802DBD7C, 2);
     return 1;
 }
 
 int Cam::Shutdown()
 {
-    fn_801C35B8();
+    CamShutdown();
     return 1;
 }
 
@@ -131,9 +131,9 @@ static void fn_8008CD58()
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        fn_801C6280(i, 0, i);
+        ConSetChannelInfo(i, 0, i);
         fn_80027114(i, 0);
-        fn_801C6280(i, 4, 1);
+        ConSetChannelInfo(i, 4, 1);
     }
 }
 }
@@ -147,16 +147,16 @@ const char *Context::GetName() { return "Context"; }
 
 int Context::Init()
 {
-    fn_801C5E24(10, fn_800273A4());
+    ConInit(10, fn_800273A4());
     fn_800271A4();
-    fn_801C6280(-1, 2, (int)fn_80026DD4);
+    ConSetChannelInfo(-1, 2, (int)fn_80026DD4);
     fn_8008CD58();
     return 1;
 }
 
 int Context::Shutdown()
 {
-    fn_801C5F9C();
+    ConShutdown();
     return 1;
 }
 
@@ -169,13 +169,13 @@ const char *Curve::GetName() { return "Curve"; }
 
 int Curve::Init()
 {
-    fn_801C4F64();
+    CurveInit();
     return 1;
 }
 
 int Curve::Shutdown()
 {
-    fn_801C4FB8();
+    CurveShutdown();
     return 1;
 }
 
@@ -323,13 +323,13 @@ const char *Math::GetName() { return "Math"; }
 
 int Math::Init()
 {
-    fn_801CEF48();
+    MathInit();
     return 1;
 }
 
 int Math::Shutdown()
 {
-    fn_801CEFA0();
+    MathShutdown();
     return 1;
 }
 

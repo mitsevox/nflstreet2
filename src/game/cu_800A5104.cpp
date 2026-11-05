@@ -17,7 +17,7 @@ float fn_80237260(int stream);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
 float fn_802270A4(void *pV);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_8016B9EC(void);
 int fn_800A7ECC(int team);
 int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
@@ -69,7 +69,7 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
                     fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
                     angle = fn_801CFE40(delta.mY, delta.mX);
                     distance = fn_802270A4(&delta);
-                    if (fn_801CFFD0(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
+                    if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
                         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                         angle = fn_801CFE40(delta.mY, delta.mX);
                         if (distance < 6.0f) {
@@ -86,7 +86,7 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
                     fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
                     angle = fn_801CFE40(delta.mY, delta.mX);
                     distance = fn_802270A4(&delta);
-                    if (fn_801CFFD0(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
+                    if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0x1FFFFF) {
                         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                         angle = fn_801CFE40(delta.mY, delta.mX);
                         if (distance < 6.0f) {

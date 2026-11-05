@@ -142,7 +142,7 @@ unsigned char fn_8017F48C(void);
 unsigned short fn_801BE648(void *p);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_8022710C(void *pV);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022E558(void);
@@ -187,7 +187,7 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
             && fn_801BE648(pCarrier->mpUnknown792) != 0x4D && (unsigned int)pCarrier->mMotion.mFacing <= 0x800000) {
             fn_80227690(&delta, &p->mMotion, &pCarrier->mMotion);
             angle = fn_801CFE40(delta.mY, delta.mX);
-            if (fn_801CFFD0(pCarrier->mMotion.mFacing, 0) <= 0x3FFFFF) {
+            if (MathAngleDiff(pCarrier->mMotion.mFacing, 0) <= 0x3FFFFF) {
                 minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 699050.0f);
                 maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 1398101.0f);
             } else {

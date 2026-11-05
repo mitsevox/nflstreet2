@@ -17,7 +17,7 @@ typedef struct Anim_801BCA74 {
     Entry_801BCA74 mUnknown4[1];
 } Anim_801BCA74;
 
-void fn_801CF8A8(int *pOut, int a, int b, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
 
 int fn_801BCA74(Object_801BA03C *pObject, Record_800D81C8 *pRecords, Anim_801BCA74 *pAnim, int *pOut, int key, int all)
 {
@@ -74,7 +74,7 @@ int fn_801BCA74(Object_801BA03C *pObject, Record_800D81C8 *pRecords, Anim_801BCA
                     apply = 1;
                 }
                 if (apply) {
-                    fn_801CF8A8(&value, blend, value, weight);
+                    OrientLerpAngle(&value, blend, value, weight);
                 }
             }
         }

@@ -43,7 +43,7 @@ float fn_8016B938(void);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
@@ -252,7 +252,7 @@ int fn_800E5EA4(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA
         fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
         int angle = fn_801CFE40(delta.mY, delta.mX);
         fn_80227690(&delta, (Point_8017886C *)&pBall->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
-        int turn = fn_801CFFD0(angle, fn_801CFE40(delta.mY, delta.mX));
+        int turn = MathAngleDiff(angle, fn_801CFE40(delta.mY, delta.mX));
         if (turn <= 0x3FFFFF) {
             defense -= (int)(defense * (fn_801CFB18(turn) * 0.5f));
         } else {

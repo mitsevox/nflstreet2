@@ -28,10 +28,10 @@ int fn_800D91D8(void);
 int fn_800DC080(Object_80039F5C *p);
 int fn_800D9078(Object_80039F5C *p, int flag);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 Point_8017886C fn_80177FFC(int team);
 void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scratch);
-int fn_801C4E98(void *p, const char *name);
+int CharSkelGetJointByName(void *p, const char *name);
 int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *object);
 int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void fn_800D8FFC(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8 *entries, float value);
@@ -40,7 +40,7 @@ void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
-float fn_801CFFA0(float value);
+float MathInverse(float value);
 void fn_801BD81C(void *p, float value);
 void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int key);
 void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, Record_8036B55C *record, Record_800D81C8 *entries);
@@ -98,11 +98,11 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
             if (p->mUnknown2913 == 0) {
                 int angle = block->mUnknown3D == 9 ? 95 : 85;
                 result = 6;
-                if (fn_801CFFD0(direction, 0) < (int)(angle * 46603.37890625f)) result = 9;
+                if (MathAngleDiff(direction, 0) < (int)(angle * 46603.37890625f)) result = 9;
             } else {
                 int angle = block->mUnknown3D == 9 ? 85 : 95;
                 result = 9;
-                if (fn_801CFFD0(direction, 0) < (int)(angle * 46603.37890625f)) result = 6;
+                if (MathAngleDiff(direction, 0) < (int)(angle * 46603.37890625f)) result = 6;
                 if (!(p->mMotion.mUnknown28 > 0.0000001f)) result = 9;
             }
         } else if (fn_801481B0() || !(p->mFlags & 0x400)) {
@@ -129,7 +129,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
     default: result = fn_800D9188() ? 20 : 2; break;
     }
     if (p->mUnknown528.mUnknown14 == 9) result = fn_800D9188() ? 20 : 2;
-    if (p->mpState->mId == 42 && fn_801CFFD0(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
+    if (p->mpState->mId == 42 && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
         if (!(p->mMotion.mPos.mY - point.mY >= 6.0f)) {
             result = 15;
@@ -247,8 +247,8 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
         block->mUnknown20.mUnknown8Bytes[0] = 255;
         Vector_80039F5C left, right;
         int scratch[3];
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
         if (mode) {
             fn_801BA6BC(&entries[block->mUnknown0], 1);
             fn_801BA6BC(&entries[block->mUnknown1], 1);
@@ -362,7 +362,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
         return 0;
     default: return 0;
     }
-    if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
+    if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
         fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, -block->mUnknown20.mUnknownC);
     else fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, block->mUnknown20.mUnknownC);
     return 0;
@@ -392,13 +392,13 @@ int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
                                          table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0 = entry;
         if (block->mUnknown2 == 2 && p->mUnknown528.mUnknown0 != 0.0f)
-            fn_801BD81C(&entries[(unsigned char)entry].mUnknown4C, fn_801CFFA0(p->mUnknown528.mUnknown0));
+            fn_801BD81C(&entries[(unsigned char)entry].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0));
         break;
     }
     case 2:
         if (block->mUnknown2 == 2 && p->mUnknown528.mUnknown0 != 0.0f) {
             p->mpUnknown800[block->mUnknown0].mUnknownC = p->mUnknown528.mUnknown8;
-            fn_801BD81C(&entries[block->mUnknown0].mUnknown4C, fn_801CFFA0(p->mUnknown528.mUnknown0));
+            fn_801BD81C(&entries[block->mUnknown0].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0));
         }
         break;
     }
@@ -566,8 +566,8 @@ int fn_800DAE4C(Object_80039F5C *p)
 {
     Vector_80039F5C left, right;
     int scratch[3];
-    fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
-    fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
+    fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
+    fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
     int result = 1;
     if (!(left.mZ >= right.mZ)) result = 2;
     return result;

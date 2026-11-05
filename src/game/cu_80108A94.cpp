@@ -108,7 +108,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 float fn_800ACB8C(int team);
 void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 extern float lbl_803ECB08;
 }
 
@@ -120,8 +120,8 @@ extern "C" void fn_80108A94(Object_80039F5C *p, Points_800F3A6C *pInfo) {
             pBlock->mUnknown48 = 12;
         }
         if (pBlock->mUnknown60 == 1 && pBlock->mUnknown44 >= 0.72f && pBlock->mUnknown36 == pBlock->mUnknown40 &&
-            fn_801CFFD0(p->mMotion.mFacing, pBlock->mUnknown36) <= 0xE38E2 &&
-            fn_801CFFD0(p->mMotion.mUnknown32, pBlock->mUnknown36) <= 0xE38E2) {
+            MathAngleDiff(p->mMotion.mFacing, pBlock->mUnknown36) <= 0xE38E2 &&
+            MathAngleDiff(p->mMotion.mUnknown32, pBlock->mUnknown36) <= 0xE38E2) {
             pBlock->mUnknown48 = 1;
         }
         p->mUnknown512.mUnknown14 = 3;
@@ -131,8 +131,8 @@ extern "C" void fn_80108A94(Object_80039F5C *p, Points_800F3A6C *pInfo) {
     }
     p->mUnknown512.mUnknown15 = pBlock->mUnknown48;
     if (pBlock->mUnknown40 == pBlock->mUnknown36 && p->mMotion.mUnknown28 > lbl_803ECB08 * 0.05f &&
-        fn_801CFFD0(p->mMotion.mUnknown32, pBlock->mUnknown40) > 0x2E38E3 &&
-        fn_801CFFD0(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
+        MathAngleDiff(p->mMotion.mUnknown32, pBlock->mUnknown40) > 0x2E38E3 &&
+        MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         pBlock->mUnknown44 = 0.0f;
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = pBlock->mUnknown36;
@@ -223,7 +223,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
 
         fn_80227690(&toTarget, &pInfo->mUnknown16, &pOther->mMotion.mPos);
         fn_80227690(&toPlayer, &p->mMotion.mPos, &pOther->mMotion.mPos);
-        if (fn_801CFFD0(toPlayer.Heading(), toTarget.Heading()) > 0x355555) {
+        if (MathAngleDiff(toPlayer.Heading(), toTarget.Heading()) > 0x355555) {
             Block_800F4A74 *pOtherBlock = (Block_800F4A74 *)&pOther->mUnknown336;
 
             if (pOtherBlock->mUnknown0 < pOtherBlock->mUnknown16 && pBlock->mUnknown49 == 3) {

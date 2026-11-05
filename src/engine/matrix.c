@@ -6,21 +6,21 @@
 #include "engine/llmatrix.h"
 
 extern unsigned char lbl_803EBCB4;
-extern MatStack_801D0110 *lbl_803EBCB8;
+extern MatStack_t *lbl_803EBCB8;
 extern unsigned int lbl_803EBCBC;
 
 void fn_802277DC(float *pOut, float *pA, float *pB);
 void fn_802271F0(float *pOut, float *p);
 int fn_80227040(float *pA, float *pB);
 
-int fn_801D0310(unsigned int index);
+int MatDelStack(unsigned int index);
 
-MatStack_801D0110 *fn_801D0110(unsigned int index)
+MatStack_t *MatGetStackPtrFromIndex(unsigned int index)
 {
     return index < lbl_803EBCBC ? &lbl_803EBCB8[index] : 0;
 }
 
-int fn_801D0134(int numStacks)
+int MatInit(int numStacks)
 {
     int result = 0;
     int count;
@@ -28,7 +28,7 @@ int fn_801D0134(int numStacks)
 
     if (!lbl_803EBCB4) {
         count = numStacks + 8;
-        lbl_803EBCB8 = fn_801D2BB0(1, count * sizeof(MatStack_801D0110), 0, 0);
+        lbl_803EBCB8 = fn_801D2BB0(1, count * sizeof(MatStack_t), 0, 0);
         if (lbl_803EBCB8) {
             for (i = 0; i < count; i++) {
                 lbl_803EBCB8[i].mDepth = 0;
@@ -48,7 +48,7 @@ int fn_801D0134(int numStacks)
     return result;
 }
 
-int fn_801D01EC(void)
+int MatShutdown(void)
 {
     int result = 0;
     unsigned int i;
@@ -56,7 +56,7 @@ int fn_801D01EC(void)
     if (lbl_803EBCB4) {
         for (i = 0; i < lbl_803EBCBC; i++) {
             if (lbl_803EBCB8[i].mDepth) {
-                fn_801D0310(i);
+                MatDelStack(i);
             }
         }
         result = fn_801D2BD0(lbl_803EBCB8);
@@ -70,10 +70,10 @@ int fn_801D01EC(void)
     return result;
 }
 
-int fn_801D0290(unsigned int index, unsigned int depth)
+int MatNewStack(unsigned int index, unsigned int depth)
 {
-    MatStack_801D0110 *pStack = fn_801D0110(index);
-    Mtx_801D0110 *pMatrices = fn_801D2BB0(1, depth * sizeof(Mtx_801D0110), 0, 0);
+    MatStack_t *pStack = MatGetStackPtrFromIndex(index);
+    MatMatrix_t *pMatrices = fn_801D2BB0(1, depth * sizeof(MatMatrix_t), 0, 0);
     int result;
 
     if (pMatrices) {
@@ -89,9 +89,9 @@ int fn_801D0290(unsigned int index, unsigned int depth)
     return result;
 }
 
-int fn_801D0310(unsigned int index)
+int MatDelStack(unsigned int index)
 {
-    MatStack_801D0110 *pStack = fn_801D0110(index);
+    MatStack_t *pStack = MatGetStackPtrFromIndex(index);
     int result = fn_801D2BD0(pStack->mpMatrices);
 
     if (!result) {
@@ -105,7 +105,7 @@ int fn_801D0310(unsigned int index)
     return result;
 }
 
-void fn_801D0370(float *pFrom, float *pTo)
+void MatRotVecToVec(float *pFrom, float *pTo)
 {
     float axis[4];
 

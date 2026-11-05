@@ -62,7 +62,7 @@ unsigned int fn_802372EC(int, unsigned int);
 int fn_801C2FE4(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
-void fn_801D34D0(void *, unsigned int, int, int);
+void MemFill(void *, unsigned int, int, int);
 void fn_80197E64(void);
 void fn_80197E68(void);
 void fn_80197E6C(void *);
@@ -169,7 +169,7 @@ void fn_801464D0(void *owner)
     lbl_803EB264 = (Entry_80146C4C *)fn_801D2B7C(7840, 0, 0);
     lbl_803EB268 = (Subrecord_80146134 *)fn_801D2B7C(960, 0, 0);
     lbl_803EB258 = 1;
-    fn_801D34D0(lbl_803EB264, 7840, 0, 1); fn_801D34D0(lbl_803EB268, 960, 0, 1);
+    MemFill(lbl_803EB264, 7840, 0, 1); MemFill(lbl_803EB268, 960, 0, 1);
     for (int i = 0; i < 11; ++i) {
         lbl_8031B88C[i].mUnknown0 = owner; lbl_8031B88C[i].mUnknown4 = lbl_802DD170[i];
         lbl_8031B88C[i].mUnknownC = 0; lbl_8031B88C[i].mUnknown8 = 0;

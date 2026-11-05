@@ -7,7 +7,7 @@ extern "C" {
 float fn_8022781C(void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800ACD04(Object_80039F5C *p);
 int fn_801783AC(int bit);
 int fn_80178320(void);
@@ -36,8 +36,8 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
     Point_8017886C origin = fn_80177FE0();
     if (!(point.mY >= origin.mY) && !fn_801783AC(0)) limit *= (int)lbl_803EAD7C;
     int step;
-    if (fn_801CFFD0(heading, p->mMotion.mFacing) <= limit)
-        step = fn_801CFFD0(heading, p->mMotion.mFacing);
+    if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
+        step = MathAngleDiff(heading, p->mMotion.mFacing);
     else step = limit;
     int facing;
     if (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000)

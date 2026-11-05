@@ -61,9 +61,9 @@ float fn_80178298(void);
 int fn_801784C4(void);
 void fn_8017CFB4(int a);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-int fn_801C370C(int *pValue, int *pVel, int target, int a, int b);
-int fn_801C384C(float *pValue, float *pVel, float target, float a, float b);
-void fn_801C3990(Camera_801422EC *pCamera, float a, float b);
+int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
+int CamLerp(float *pValue, float *pVel, float target, float a, float b);
+void CamSetFieldOfView(Camera_801422EC *pCamera, float a, float b);
 int fn_801CFE40(float y, float x);
 
 void fn_801422EC(Camera_801422EC *pCamera);
@@ -263,10 +263,10 @@ void fn_801427E0(Camera_801422EC *pCamera, int smooth)
         b = 0.007f;
     }
     if (!smooth || (pState->mUnknown30 != pState->mUnknown34
-        && fn_801C384C(&pState->mUnknown30, &pState->mUnknown38, pState->mUnknown34, a, b))) {
+        && CamLerp(&pState->mUnknown30, &pState->mUnknown38, pState->mUnknown34, a, b))) {
         pState->mUnknown30 = pState->mUnknown34;
     }
-    fn_801C3990(pCamera, pState->mUnknown30, pCamera->mUnknown24);
+    CamSetFieldOfView(pCamera, pState->mUnknown30, pCamera->mUnknown24);
 }
 
 void fn_80142884(Object_80039F5C *pPlayer, Vector_80039F5C *pOut, float t)
@@ -296,9 +296,9 @@ void fn_8014294C(Camera_801422EC *pCamera, int *pAngles, int snap)
     pAngles[1] &= 0xFFFFFF;
     pAngles[2] &= 0xFFFFFF;
     if (snap) {
-        fn_801C370C(&pCamera->mUnknown14, &pCamera->mUnknown50, pAngles[0], pCamera->mUnknown74, pCamera->mUnknown80);
-        fn_801C370C(&pCamera->mUnknown18, &pCamera->mUnknown54, pAngles[1], pCamera->mUnknown78, pCamera->mUnknown84);
-        fn_801C370C(&pCamera->mUnknown1C, &pCamera->mUnknown58, pAngles[2], pCamera->mUnknown7C, pCamera->mUnknown88);
+        CamRLerp(&pCamera->mUnknown14, &pCamera->mUnknown50, pAngles[0], pCamera->mUnknown74, pCamera->mUnknown80);
+        CamRLerp(&pCamera->mUnknown18, &pCamera->mUnknown54, pAngles[1], pCamera->mUnknown78, pCamera->mUnknown84);
+        CamRLerp(&pCamera->mUnknown1C, &pCamera->mUnknown58, pAngles[2], pCamera->mUnknown7C, pCamera->mUnknown88);
     } else {
         pCamera->mUnknown14 = pAngles[0];
         pCamera->mUnknown18 = pAngles[1];

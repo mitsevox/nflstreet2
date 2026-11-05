@@ -237,10 +237,10 @@ void fn_80194794(void)
     fn_8019424C(&lbl_80364FF4,1.0f,1.0f);
     GXInitTexPreLoadRegion(&lbl_80365038[0],0,0x60000,0,0);
     GXInitTexPreLoadRegion(&lbl_80365038[1],0x60000,0x20000,0,0);
-    void *p = fn_801CF5BC(0,fn_801CF7AC());
-    lbl_803EB72C[2] = fn_801CF6D4(p,2);
-    lbl_803EB72C[3] = fn_801CF6D4(p,40) + 4;
-    fn_801CF67C(p);
+    void *p = MathNewRandomStream(0,MathGetRandomSeed());
+    lbl_803EB72C[2] = MathGetRandomRange(p,2);
+    lbl_803EB72C[3] = MathGetRandomRange(p,40) + 4;
+    MathDelRandomStream(p);
 }
 void fn_80194858(int mode)
 {

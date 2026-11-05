@@ -3,12 +3,12 @@
 void fn_801CF998(void);
 float fn_80260B1C(float x);
 
-void fn_801CFF34(void)
+void MathLLInit(void)
 {
     fn_801CF998();
 }
 
-float fn_801CFF54(float x)
+float MathInvSqrt(float x)
 {
     float s = fn_80260B1C(x);
     float result;
@@ -21,7 +21,7 @@ float fn_801CFF54(float x)
     return result;
 }
 
-float fn_801CFFA0(float x)
+float MathInverse(float x)
 {
     float result = 0.0f;
 

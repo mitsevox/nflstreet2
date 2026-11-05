@@ -17,7 +17,7 @@
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80178A08(void);
 float fn_80178A44(void);
@@ -37,11 +37,11 @@ extern "C" int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther) {
         Point_8017886C delta;
 
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) < 0xAAAAA
-            && (fn_801CFFD0(p->mMotion.mFacing, 0xC00000) < 0x400000 || fn_802270A4(&delta) < 2.0f)) {
+        if (MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) < 0xAAAAA
+            && (MathAngleDiff(p->mMotion.mFacing, 0xC00000) < 0x400000 || fn_802270A4(&delta) < 2.0f)) {
             result = 1;
         }
-        if (result && fn_801CFFD0(p->mMotion.mFacing, 0x400000) < 0x155555) {
+        if (result && MathAngleDiff(p->mMotion.mFacing, 0x400000) < 0x155555) {
             result = 0;
         }
         if (result && !(p->mMotion.mPos.mY < fn_80178A44() - 5.0f)) {
@@ -75,7 +75,7 @@ extern "C" int fn_800F69C0(int angle, Object_80039F5C *p) {
 
                 fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
                 direction = fn_801CFE40(delta.mY, delta.mX);
-                if (fn_801CFFD0(direction, result) < (int)(lbl_803EAE30 * 46603.38f)) {
+                if (MathAngleDiff(direction, result) < (int)(lbl_803EAE30 * 46603.38f)) {
                     found = 1;
                     result += (int)(lbl_803EAE38 * 46603.38f);
                 }

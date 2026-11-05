@@ -12,7 +12,7 @@ extern "C" int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_80178320(void);
 int fn_80099510(Object_80039F5C *p);
@@ -129,7 +129,7 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, i
     fn_80138064(pBall, &delta);
     fn_80227690(&delta, &delta, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX);
-    if (fn_801CFFD0(p->mMotion.mFacing, angle) <= 0xAAAA9) {
+    if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0xAAAA9) {
         p->mMotion.mFacing = angle & 0xFFFFFF;
     } else {
         angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;

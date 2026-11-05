@@ -81,8 +81,8 @@ unsigned char fn_8006CC90(int id);
 unsigned char fn_8006CC48(void);
 void fn_8006F54C(void);
 int fn_800A3444(void);
-int fn_801CB120(void);
-void fn_801CAF24(void);
+int FileHostCheckActive(void);
+void FileDebugProcess(void);
 void fn_801F4B20(void);
 int fn_801F41A0(int handle);
 unsigned int fn_801F7ABC(void);
@@ -734,7 +734,7 @@ void fn_800711E0(void)
             }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(3)) {
-                    if (fn_801CB120()) fn_801CAF24();
+                    if (FileHostCheckActive()) FileDebugProcess();
                     fn_801F4B20();
                 }
             }
@@ -747,7 +747,7 @@ void fn_800711E0(void)
             }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(4)) {
-                    if (fn_801CB120()) fn_801CAF24();
+                    if (FileHostCheckActive()) FileDebugProcess();
                     fn_801F4B20();
                 }
             }

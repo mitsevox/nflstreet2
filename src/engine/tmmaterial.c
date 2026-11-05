@@ -1,6 +1,6 @@
 #include "engine/tmlib.h"
 
-extern int fn_801C74C8(Pool_801C750C *pPool, int a);
+extern int DSGetNodeHandlerStat(Pool_801C750C *pPool, int a);
 
 extern Pool_801C750C *lbl_803E96C4[9];
 extern Material_8020FAAC *lbl_803EBEE0;
@@ -34,11 +34,11 @@ static void fn_8020FB14(Material_8020FAAC *pMaterial)
     }
     if (numTextures > 0) {
         for (numParms = numTextures; numParms <= 8; numParms++) {
-            if (lbl_803E96C4[numParms] != 0 && fn_801C74C8(lbl_803E96C4[numParms], 0) != 0) {
+            if (lbl_803E96C4[numParms] != 0 && DSGetNodeHandlerStat(lbl_803E96C4[numParms], 0) != 0) {
                 break;
             }
         }
-        pParms = fn_801C75F0(lbl_803E96C4[numParms]);
+        pParms = DSNewNode(lbl_803E96C4[numParms]);
         memset(pParms, 0, numParms * sizeof(MaterialParm_8020FAAC));
         if (pMaterial->mNumParms > 0) {
             memcpy(pParms, pMaterial->mpParms,
@@ -48,7 +48,7 @@ static void fn_8020FB14(Material_8020FAAC *pMaterial)
         }
     }
     if (pMaterial->mNumParms > 0) {
-        fn_801C7650(lbl_803E96C4[pMaterial->mNumParms], pMaterial->mpParms);
+        DSDelNode(lbl_803E96C4[pMaterial->mNumParms], pMaterial->mpParms);
     }
     pMaterial->mNumParms = numParms;
     pMaterial->mpParms = pParms;
@@ -61,7 +61,7 @@ void fn_8020FC1C(int *pPoolSizes)
     memset(lbl_803E96C4, 0, sizeof(lbl_803E96C4));
     for (i = 0; i <= 8; i++) {
         if (pPoolSizes[i] > 0) {
-            lbl_803E96C4[i] = fn_801C750C(1, pPoolSizes[i], (i + 1) * sizeof(MaterialParm_8020FAAC), 0);
+            lbl_803E96C4[i] = DSNewNodeHandler(1, pPoolSizes[i], (i + 1) * sizeof(MaterialParm_8020FAAC), 0);
         }
     }
 }

@@ -134,7 +134,7 @@ void fn_8017DBCC(void);
 void fn_8017DD68(int index);
 int fn_8017F60C(void);
 int fn_8019623C(int id);
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 int fn_801F0F18(int a);
 
 extern unsigned char lbl_802ED104[];
@@ -462,7 +462,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (fn_80178E10() != 0 && fn_8002D060(lbl_803EA368) == 0 && fn_800BA6F8() == 0 &&
             fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
             lbl_803EABA8->mSlots[side].mUnknown0 = 1;
-            fn_801C6280(index, 3, lbl_802ED104);
+            ConSetChannelInfo(index, 3, lbl_802ED104);
             fn_8017DD68(side);
         }
         break;

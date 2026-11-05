@@ -38,7 +38,7 @@ int fn_800C47C4(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_801784C4(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -178,10 +178,10 @@ int fn_8016345C(Object_80163358 *pObject)
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
                 if (fn_801486A0() == 1 && fn_801374D4() == i) {
-                    fn_80235C90(pObject->mUnknown18, fn_801C657C(),
+                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {
-                    fn_80235C90(pObject->mUnknown18, fn_801C657C(),
+                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
                 fn_801D0470(fn_80228668());
@@ -189,10 +189,10 @@ int fn_8016345C(Object_80163358 *pObject)
                 fn_801D0C58(&lbl_802E989C.mEntries[i].mPosition);
                 fn_801D08FC(0x400000);
                 fn_801D0CFC(lbl_802E989C.mEntries[i].mScale);
-                fn_80235740(pObject->mUnknown18, fn_801C657C());
+                fn_80235740(pObject->mUnknown18, ConGetCurrentContext());
                 fn_801D0470(fn_80228668());
                 fn_801D0544();
-                fn_80235764(pObject->mUnknown18, fn_801C657C());
+                fn_80235764(pObject->mUnknown18, ConGetCurrentContext());
             }
         }
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

@@ -1317,7 +1317,7 @@ void fn_80227C2C(void *, void *);
 void fn_8022765C(void *, void *, void *);
 void fn_802276B4(void *, void *, void *);
 void fn_80227490(void *, void *, int, int, int);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 int fn_801DCF0C(int, int, int, void *, void *);
 int fn_801DCF8C(int);
 void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
@@ -1337,7 +1337,7 @@ int fn_80217070(void *, const char *, int);
 float fn_802171DC(void *, const char *, float);
 int fn_8021743C(void *, const char *, float *, int);
 int fn_8002D060(void *);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801A8548(Object_801A8620 *, int);
 int fn_80228668(void);
 void fn_80235C90(void *, int, float, float, float, float);
@@ -1429,7 +1429,7 @@ void fn_8004CEE8(Child_801A9430 *p)
             angles.mUnknown8 = p->mAngle4C + 0x400000;
             fn_801EBEF8(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
         }
-        int angle = fn_801CFFD0(p->mAngle4C, pObject->mUnknown32);
+        int angle = MathAngleDiff(p->mAngle4C, pObject->mUnknown32);
         if (pExtra->mUnknown33) {
             Vector_80039F5C delta;
             fn_802276B4(&delta, &pObject->mUnknown8, pObject->mUnknown20);
@@ -1578,7 +1578,7 @@ int fn_8004D874(Object_801A8620 *p, int mode)
     if (fn_8002D060(lbl_803EA368)) flag = p->mUnknownE8.mBytes[3] & 4;
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
-        int context = fn_801C657C();
+        int context = ConGetCurrentContext();
         Object_80041904 *pPose = (Object_80041904 *)p->mpUnknown1D8;
         if (p->mFlagF0) fn_801A9368(p, (int)pPose->mUnknown200.mStep);
         if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
@@ -1763,9 +1763,9 @@ extern Body_801E9538 *lbl_803EC7E0;
 extern Body_801E9538 *lbl_803EC7E4;
 void fn_801A9184(Object_801A8620 *);
 void fn_801A9224(void); void fn_801A925C(void); void fn_801A932C(Object_801A8620 *);
-int fn_801C20A0(const char *, ...);
-void fn_801C4DEC(int);
-int fn_801C4E98(Skeleton_80041930 *, const char *);
+int DebugPrintf(const char *, ...);
+void CharRelocateSkeleton(int);
+int CharSkelGetJointByName(Skeleton_80041930 *, const char *);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
 Shape_801E2CB4 *fn_801E71D0(Collection_801E7034 *, unsigned int);
 void fn_801E9E18(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
@@ -1857,8 +1857,8 @@ void fn_8004E16C(void *pData, int handle, Object_80040818 *pObject)
             pCache->mReferences = 1;
             pCache->mId = fn_801F0A8C((int)pData, name);
             pCache->mHandle = fn_801EF390(pData, pCache->mId, 1);
-            fn_801C20A0("Loading Object Skeleton\n");
-            fn_801C4DEC(pCache->mHandle);
+            DebugPrintf("Loading Object Skeleton\n");
+            CharRelocateSkeleton(pCache->mHandle);
         } else {
             Cache_8004E16C *pCache = lbl_802D4974[index];
             pCache->mReferences++;
@@ -1893,8 +1893,8 @@ void fn_8004E3CC(Object_80040818 *pObject, int *pAngles)
 {
     Skeleton_80041930 *pSkeleton = fn_800410E0(pObject);
     if (pSkeleton) {
-        int index = fn_801C4E98(pSkeleton, "main");
-        if (index == -1) index = fn_801C4E98(pSkeleton, "Main");
+        int index = CharSkelGetJointByName(pSkeleton, "main");
+        if (index == -1) index = CharSkelGetJointByName(pSkeleton, "Main");
         short *p = &pObject->mpUnknown220[index * 3];
         pAngles[0] = p[0] << 8;
         pAngles[1] = p[1] << 8;
@@ -1983,7 +1983,7 @@ void fn_8004E4D0(Body_801E9538 *pBody, unsigned int index, Body_801E9538 *pOther
                 break;
             }
             if (!(fabsf(normal.mZ) >= 0.8f)) {
-                if (fn_801CFFD0(p->mMotion.mUnknown32, facing) <= 0x200000) {
+                if (MathAngleDiff(p->mMotion.mUnknown32, facing) <= 0x200000) {
                     p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
                     p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
                     p->mUnknown512.mUnknown0 = 0.0f;

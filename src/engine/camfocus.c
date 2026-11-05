@@ -6,8 +6,8 @@
 #include "engine/llmatrix.h"
 #include "engine/cu_80227F14.h"
 
-typedef struct CamFocus_801C3A44 {
-    Cam_801C33E8 mCam;
+typedef struct CamFocus_t {
+    Cam_t mCam;
     float *mpTarget;
     float mDist;
     int mDestAngle[2];
@@ -20,29 +20,29 @@ typedef struct CamFocus_801C3A44 {
     float mAccelFactors[4];
     int mAngleSpeedFactors[2];
     int mAngleAccelFactors[2];
-} CamFocus_801C3A44;
+} CamFocus_t;
 
-static inline void fn_801C3A44_ZeroF(float *pVec)
+static inline void _CamFocusZeroVec3f(float *pVec)
 {
     pVec[2] = 0.0f;
     pVec[1] = 0.0f;
     pVec[0] = 0.0f;
 }
 
-static inline void fn_801C3A44_ZeroI(int *pVec)
+static inline void _CamFocusZeroVec3i(int *pVec)
 {
     pVec[2] = 0;
     pVec[1] = 0;
     pVec[0] = 0;
 }
 
-static inline void fn_801C3A44_ZeroI2(int *pVec)
+static inline void _CamFocusZeroVec2i(int *pVec)
 {
     pVec[1] = 0;
     pVec[0] = 0;
 }
 
-static void fn_801C3A44(CamFocus_801C3A44 *pCam)
+static void _CamFocusUpdate(CamFocus_t *pCam)
 {
     float offset[3];
     float focus[3];
@@ -62,67 +62,67 @@ static void fn_801C3A44(CamFocus_801C3A44 *pCam)
     fn_801D0544();
 }
 
-void fn_801C3AD8(void *camera, int unused)
+void CamFocusAdd(void *camera, int unused)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
-    fn_801C3A44_ZeroF(pCam->mCam.mHeader.mUnknown04);
-    fn_801C3A44_ZeroI(pCam->mCam.mHeader.mUnknown14);
+    _CamFocusZeroVec3f(pCam->mCam.mHeader.mUnknown04);
+    _CamFocusZeroVec3i(pCam->mCam.mHeader.mUnknown14);
     pCam->mDist = pCam->mCurDist = 4.0f;
-    fn_801C3A44_ZeroI2(pCam->mDestAngle);
+    _CamFocusZeroVec2i(pCam->mDestAngle);
     pCam->mSpeedFactors[3] = pCam->mSpeedFactors[2] = pCam->mSpeedFactors[1] = pCam->mSpeedFactors[0] = 0.2f;
     pCam->mAccelFactors[3] = pCam->mAccelFactors[2] = pCam->mAccelFactors[1] = pCam->mAccelFactors[0] = 0.1f;
     pCam->mAngleSpeedFactors[0] = pCam->mAngleSpeedFactors[1] = 0x199999;
     pCam->mAngleAccelFactors[0] = pCam->mAngleAccelFactors[1] = 0xCCCCC;
 }
 
-void fn_801C3B74(void *camera)
+void CamFocusDelete(void *camera)
 {
 }
 
-void fn_801C3B78(void *camera)
+void CamFocusProcess(void *camera)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
     if (pCam->mpTarget) {
-        fn_801C384C(&pCam->mFocus[0], &pCam->mFocusSpeed[0], pCam->mpTarget[0], pCam->mSpeedFactors[0], pCam->mAccelFactors[0]);
-        fn_801C384C(&pCam->mFocus[1], &pCam->mFocusSpeed[1], pCam->mpTarget[1], pCam->mSpeedFactors[1], pCam->mAccelFactors[1]);
-        fn_801C384C(&pCam->mFocus[2], &pCam->mFocusSpeed[2], pCam->mpTarget[2], pCam->mSpeedFactors[2], pCam->mAccelFactors[2]);
-        fn_801C384C(&pCam->mCurDist, &pCam->mDistSpeed, pCam->mDist, pCam->mSpeedFactors[3], pCam->mAccelFactors[3]);
-        fn_801C370C(&pCam->mCam.mHeader.mUnknown14[0], &pCam->mAngleSpeed[0], pCam->mDestAngle[0], pCam->mAngleSpeedFactors[0],
+        CamLerp(&pCam->mFocus[0], &pCam->mFocusSpeed[0], pCam->mpTarget[0], pCam->mSpeedFactors[0], pCam->mAccelFactors[0]);
+        CamLerp(&pCam->mFocus[1], &pCam->mFocusSpeed[1], pCam->mpTarget[1], pCam->mSpeedFactors[1], pCam->mAccelFactors[1]);
+        CamLerp(&pCam->mFocus[2], &pCam->mFocusSpeed[2], pCam->mpTarget[2], pCam->mSpeedFactors[2], pCam->mAccelFactors[2]);
+        CamLerp(&pCam->mCurDist, &pCam->mDistSpeed, pCam->mDist, pCam->mSpeedFactors[3], pCam->mAccelFactors[3]);
+        CamRLerp(&pCam->mCam.mHeader.mUnknown14[0], &pCam->mAngleSpeed[0], pCam->mDestAngle[0], pCam->mAngleSpeedFactors[0],
                     pCam->mAngleAccelFactors[0]);
-        fn_801C370C(&pCam->mCam.mHeader.mUnknown14[2], &pCam->mAngleSpeed[1], pCam->mDestAngle[1], pCam->mAngleSpeedFactors[1],
+        CamRLerp(&pCam->mCam.mHeader.mUnknown14[2], &pCam->mAngleSpeed[1], pCam->mDestAngle[1], pCam->mAngleSpeedFactors[1],
                     pCam->mAngleAccelFactors[1]);
-        fn_801C3A44(pCam);
+        _CamFocusUpdate(pCam);
     }
 }
 
-void fn_801C3C4C(void *pViewport, void *camera)
+void CamFocusUpdate(void *pViewport, void *camera)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
-    fn_801C3918(pViewport, &pCam->mCam);
+    CamConvertHdrToMatrix(pViewport, &pCam->mCam);
 }
 
-void fn_801C3C6C(void *camera, void *pTarget)
+void CamFocusSetTarget(void *camera, void *pTarget)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
     pCam->mpTarget = pTarget;
 }
 
-void fn_801C3C74(void *camera, int angleX, int angleZ)
+void CamFocusMoveAngle(void *camera, int angleX, int angleZ)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
     pCam->mDestAngle[0] = angleX;
     pCam->mDestAngle[1] = angleZ;
 }
 
 /* Snap the focus state without recomputing the camera transform. */
-void SnapFocusCameraToTarget(void *camera)
+void CamFocusWarpToDest(void *camera)
 {
-    CamFocus_801C3A44 *pCam = camera;
+    CamFocus_t *pCam = camera;
 
     if (pCam->mpTarget) {
         float *speed = pCam->mFocusSpeed;

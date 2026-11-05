@@ -8,7 +8,7 @@ extern "C" {
 Cache_80188688 *lbl_803EB3A4 = 0;
 extern char *lbl_802EAD10[];
 int fn_80027DF0(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -103,7 +103,7 @@ void fn_801638F0(Object_80163788 *pObject)
 
 int fn_80163954(Object_80163788 *pObject, int value)
 {
-    int context = fn_801C657C();
+    int context = ConGetCurrentContext();
     fn_801D0470(fn_80228668());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown19C);

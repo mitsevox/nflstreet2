@@ -1,3 +1,5 @@
+/* Character case conversion (toupper, tolower) over the engine's character-class table. */
+
 #include "engine/ctype.h"
 #include <ctype.h>
 
@@ -5,7 +7,7 @@ extern const unsigned char lbl_802AEF10[];
 
 #define CTYPE(c) ((lbl_802AEF10 + 1)[(unsigned char)(c)])
 
-int fn_801C1F54(int c)
+int toupper(int c)
 {
     if (CTYPE(c) & 2) {
         c -= 'a' - 'A';

@@ -23,15 +23,15 @@ struct Entry_801A5050 {
 
 extern "C" {
 int fn_800C47C4(void);
-int fn_801CECCC(int index);
-int fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+int GlibRenderSelectBin(int a);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(Mtx44 m);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_80210388(void);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
@@ -100,7 +100,7 @@ void fn_801A4E9C(void)
     unsigned short i;
 
     lbl_803EB838 = (Entry_801A5050 *)fn_801D2B7C(96 * sizeof(Entry_801A5050), 0, 0);
-    fn_801D34D0(lbl_803EB838, 96 * sizeof(Entry_801A5050), 0, 1);
+    MemFill(lbl_803EB838, 96 * sizeof(Entry_801A5050), 0, 1);
     for (i = 0; i < 96; i++) {
         lbl_803664C0[i] = &lbl_803EB838[i];
     }
@@ -157,7 +157,7 @@ void fn_801A5104(void)
 
     if (lbl_803ECC18 != 0) {
         unsigned short i;
-        int cursor = fn_801CECDC(fn_801CECCC(2));
+        int cursor = GlibRenderSelectBin(GlibRenderGetBin(2));
 
         fn_80210388();
         GXSetCullMode(GX_CULL_NONE);

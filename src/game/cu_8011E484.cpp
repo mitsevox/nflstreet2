@@ -9,7 +9,7 @@ extern "C" {
 int fn_801787A0(void);
 unsigned short fn_801BE648(void *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 float fn_801CFB94(int angle);
 int fn_8011DBE0(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -56,7 +56,7 @@ int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther)
 
                     fn_80227690(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
                     angle = fn_801CFE40(delta.mY, delta.mX);
-                    if ((p->mFlags & 0x4000) && fn_801CFFD0(p->mUnknown512.mUnknown4, angle) > 0x600000) {
+                    if ((p->mFlags & 0x4000) && MathAngleDiff(p->mUnknown512.mUnknown4, angle) > 0x600000) {
                         return 0;
                     }
                     both = 0;
@@ -67,11 +67,11 @@ int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther)
                     if (both) {
                         limit = 0x2E38E3;
                     }
-                    if (fn_801CFFD0(pMotion->mFacing + fn_800C8BAC(p, 0), angle) < limit) {
+                    if (MathAngleDiff(pMotion->mFacing + fn_800C8BAC(p, 0), angle) < limit) {
                         angle = (angle + 0x800000) & 0xFFFFFF;
-                        if ((!pOther->mUnknown512.mUnknown14 || fn_801CFFD0(pOther->mUnknown512.mUnknown4, angle) <= 0x5C71C6)
+                        if ((!pOther->mUnknown512.mUnknown14 || MathAngleDiff(pOther->mUnknown512.mUnknown4, angle) <= 0x5C71C6)
                             && fn_8022781C(&pMotion->mPos, &pOther->mMotion.mPos) < 2.1f) {
-                            int difference = fn_801CFFD0(pMotion->mFacing + fn_800C8BAC(p, 0),
+                            int difference = MathAngleDiff(pMotion->mFacing + fn_800C8BAC(p, 0),
                                                          pOther->mMotion.mFacing + fn_800C8BAC(pOther, 0));
                             Vector_80039F5C joint;
                             Vector_80039F5C otherJoint;

@@ -87,7 +87,7 @@ int fn_801BCCAC(Object_801BA03C *pObject, void *a, int b, void *c, int d, int e)
 void fn_801BE420(void *a, Object_801BA03C *pObject, void *b, Record_8036B55C *pRecord, float c);
 void fn_801CE9E0(int a);
 float fn_801CFD28(int a);
-int fn_801CFFF0(int a, int b, float c);
+int MathRLerp(int a, int b, float c);
 void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0508(void);
@@ -554,7 +554,7 @@ int fn_800229D8(void)
             lbl_8037D92C[i].mUnknown8 = lbl_8037DAEC[i].mUnknown8 + (lbl_8037DCAC[i].mUnknown8 - lbl_8037DAEC[i].mUnknown8) * t;
             lbl_8037D92C[i].mUnknown16 = lbl_8037DAEC[i].mUnknown16 + (lbl_8037DCAC[i].mUnknown16 - lbl_8037DAEC[i].mUnknown16) * t;
             lbl_8037D92C[i].mUnknown20 = lbl_8037DAEC[i].mUnknown20 + (lbl_8037DCAC[i].mUnknown20 - lbl_8037DAEC[i].mUnknown20) * t;
-            lbl_8037D92C[i].mUnknown12 = fn_801CFFF0(lbl_8037DAEC[i].mUnknown12, lbl_8037DCAC[i].mUnknown12, t);
+            lbl_8037D92C[i].mUnknown12 = MathRLerp(lbl_8037DAEC[i].mUnknown12, lbl_8037DCAC[i].mUnknown12, t);
             lbl_8037DE6C[i] += 0.05f;
         } else {
             lbl_8037D92C[i].mUnknown0 = lbl_8037DCAC[i].mUnknown0;

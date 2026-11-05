@@ -99,7 +99,7 @@ void fn_8017CFB0(unsigned short, unsigned short, int, int);
 void fn_8017CFB4(int);
 void fn_80187DD0(unsigned short);
 int fn_8019623C(int);
-void fn_801C3990(void *, float, float);
+void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
 void fn_8013EDE4(Camera_8013F738 *, int);
@@ -166,7 +166,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
-    fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
+    CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
     fn_802270D4(&v);
 }
 extern "C" void fn_8013E75C(ScriptCamera_8013E514 *p)
@@ -202,7 +202,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
     fn_802270D4(&v);
-    fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
+    CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
 }
 extern "C" void fn_8013E940(ScriptCamera_8013E514 *) {}
 extern "C" Record_8013E944 *fn_8013E944(State_8013E574 *p)

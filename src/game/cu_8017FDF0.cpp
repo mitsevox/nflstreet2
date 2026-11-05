@@ -52,7 +52,7 @@ void fn_8007AEE8(Object_8007A334 *pObject);
 void fn_8007AF14(Object_8007A334 *pObject);
 int fn_8007AF34(Object_8007A334 *pObject);
 int fn_8007AF5C(Object_8007A334 *pObject);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B81A4(void);
 float fn_80237260(int stream);
@@ -232,7 +232,7 @@ int fn_801800D0(void)
         for (int found = fn_8007A444(&cursor); found && searching; found = fn_8007A510(&cursor)) {
             result = fn_8007AF34(&cursor);
             fn_8007AF5C(&cursor);
-            searching = fn_801E195C(fn_801C6458(result, 0)) == 2;
+            searching = fn_801E195C(ConGetChannelInfo(result, 0)) == 2;
         }
         fn_8007AF14(&cursor);
         if (searching) {
@@ -472,7 +472,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = fn_801800D0();
         break;
     case 0x13A:
-        pResult->i = fn_801E195C(fn_801C6458(pArgs[0].i, 0)) == 2;
+        pResult->i = fn_801E195C(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
         break;
     case 0x19C:
         pResult->i = 0xFF;

@@ -1,7 +1,7 @@
 #include "game/fn_8007F828.h"
 
 extern "C" {
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E1884(int channel, void *state);
 }
 
@@ -68,7 +68,7 @@ void fn_80194BD8(void)
 
 void fn_80194C5C(int channel, int level, int duration)
 {
-    int port = fn_801C6458(channel, 0);
+    int port = ConGetChannelInfo(channel, 0);
 
     if (sEnabled && sPortActive[port]) {
         fn_80194B6C(port, 1, level, duration);
@@ -171,7 +171,7 @@ unsigned char fn_80194F24(void)
 
 void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force)
 {
-    int port = fn_801C6458(channel, 0);
+    int port = ConGetChannelInfo(channel, 0);
 
     if ((sEnabled || force) && sPortActive[port]) {
         Motor_803650A8 *m = &sPorts[port].mMotor[0];

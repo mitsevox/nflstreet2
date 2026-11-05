@@ -686,7 +686,7 @@ int fn_801D2570(int ident)
                 fn_801D2BD0(pStart);
             }
             if (ownsMemory) {
-                fn_801D34CC(pStart);
+                MemFreeMemLL(pStart);
             }
         } else {
             ppLink = &pHeap->mpNext;

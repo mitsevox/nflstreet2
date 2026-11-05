@@ -164,8 +164,8 @@ void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 float fn_801BD690(Block_801BD6D4 *p, int key);
 void fn_801BD81C(void *p, float value);
 int fn_801CFE40(float y, float x);
-float fn_801CFFA0(float value);
-int fn_801CFFD0(int a, int b);
+float MathInverse(float value);
+int MathAngleDiff(int a, int b);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -424,7 +424,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
             key = p->mpState->mUnknown1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
             target = p->mpState->mUnknown2 << 16;
-            if (fn_801CFFD0(target, p->mMotion.mFacing) > 0xB60B && fn_801BA568(p->mpUnknown796, p->mpUnknown800, key)) {
+            if (MathAngleDiff(target, p->mMotion.mFacing) > 0xB60B && fn_801BA568(p->mpUnknown796, p->mpUnknown800, key)) {
                 pEntries = p->mpUnknown800;
                 index = fn_801BA5A8(p->mpUnknown796, pEntries, key, 0);
                 pTimer->mUnknown4 = pEntries[index].mUnknown48;
@@ -433,7 +433,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
                 }
                 if (pTimer->mUnknown4 != 0.0f) {
                     pTimer->mUnknown4 = pTimer->mUnknown4 > 75.0f ? 75.0f : pTimer->mUnknown4;
-                    pTimer->mUnknown0 = (int)(fn_801CFFD0(target, p->mMotion.mFacing) / pTimer->mUnknown4);
+                    pTimer->mUnknown0 = (int)(MathAngleDiff(target, p->mMotion.mFacing) / pTimer->mUnknown4);
                     if (((p->mMotion.mFacing - target) & 0xFFFFFF) <= 0x7FFFFF) {
                         pTimer->mUnknown0 = -pTimer->mUnknown0;
                     }
@@ -717,7 +717,7 @@ extern "C" int fn_80110C70(Table_8010B738 *pTable, unsigned short key, void *pA,
         } else {
             pBlock->mUnknown32 = (p->mMotion.mFacing + angle) & 0xFFFFFF;
         }
-        fn_801BD81C(&pEntries[pBlock->mUnknown8].mUnknown4C, fn_801CFFA0(pBlock->mUnknown16));
+        fn_801BD81C(&pEntries[pBlock->mUnknown8].mUnknown4C, MathInverse(pBlock->mUnknown16));
         pEntries[pBlock->mUnknown8].mUnknown2C = pBlock->mUnknown20;
         pBlock->mUnknown28 = (int)(pBlock->mUnknown24 / pBlock->mUnknown12);
         pRecord = pTable->mEntries[index].mpRecord;

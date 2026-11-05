@@ -60,7 +60,7 @@ struct Env_801A8D9C { void *mpUnknown0; };
 extern "C" {
 extern void *lbl_803EA368;
 int fn_8002D060(void *);
-void fn_801C657C(void);
+void ConGetCurrentContext(void);
 int fn_801A854C(void *, void *);
 void fn_801A7C20(Mesh_801A93C0 *);
 void ScrollFixedMeshUVs_801A7F10(Mesh_801A93C0 *);
@@ -112,7 +112,7 @@ int RenderModelObject_801A8620(Object_801A8620 *p, int arg)
     GXColor color = {255,255,255,255}; GXColor copy;
     unsigned char work[0x90]; Mtx44 m1, m2;
     Instance_801A8D9C *s = p->mpUnknown12C;
-    fn_801C657C();
+    ConGetCurrentContext();
     Model_801A8620 *model = s->mUnknownC.mpUnknownC;
     int value = fn_801A854C(&s->mUnknown108,p->mpUnknown14C);
     copy=color; GXSetChanMatColor(GX_COLOR0,copy); GXSetNumChans(1);
@@ -317,7 +317,7 @@ int RenderModelChild_801A9430(Child_801A9430 *p,int arg)
 {
     Instance_801A8D9C *s=p->mpUnknown50->mpUnknown12C;
     GXColor color={255,255,255,255},copy;unsigned char work[0x90];Mtx44 m1,m2;
-    fn_801C657C();Model_801A8620 *model=s->mUnknownC.mpUnknownC;int value=fn_801A854C(&p->mUnknown60,p->mpUnknown58);
+    ConGetCurrentContext();Model_801A8620 *model=s->mUnknownC.mpUnknownC;int value=fn_801A854C(&p->mUnknown60,p->mpUnknown58);
     copy=color;GXSetChanMatColor(GX_COLOR0,copy);GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
     GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);

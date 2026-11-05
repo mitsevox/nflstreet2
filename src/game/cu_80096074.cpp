@@ -7,7 +7,7 @@ Frame_80141210 *fn_801C02C4(Actor_801C009C *pActor);
 int fn_8009422C(void);
 int fn_800AD9B4(void);
 float fn_80178A08(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
@@ -21,7 +21,7 @@ int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *pActor, Obje
    request has a 'BALL' frame, a new pick is dropped unless fn_80137C48 (on
    the player) or fn_8009422C holds. Unless request flag 0x40 is set, a new
    pick is also dropped when fn_800AD9B4 returns 4 and it is a kind 1 player
-   whose x is past +/-fn_80178A08 with fn_801CFFD0 of its facing against 0
+   whose x is past +/-fn_80178A08 with MathAngleDiff of its facing against 0
    or 0x800000 under 0x400000, or when the frame has a nonzero offset and
    the player is at least range (30, or 100000 with flag 4 or fn_8009422C)
    from the frame's 2-D offset. The pick is stored back in the request. A
@@ -63,8 +63,8 @@ extern "C" int fn_80096074(Params_80092E54 *pRequest, int flag)
             }
             if (found == 0 || fn_80137C48(p) != 0 || fn_8009422C() != 0) {
                 if (!(pRequest->mUnknown8 & 0x40) && fn_800AD9B4() == 4 && p != 0 && p->mIdBytes[3] == 1) {
-                    if ((p->mMotion.mPos.mX > fn_80178A08() && fn_801CFFD0(p->mMotion.mFacing, 0) < 0x400000) ||
-                        (p->mMotion.mPos.mX < -fn_80178A08() && fn_801CFFD0(p->mMotion.mFacing, 0x800000) < 0x400000)) {
+                    if ((p->mMotion.mPos.mX > fn_80178A08() && MathAngleDiff(p->mMotion.mFacing, 0) < 0x400000) ||
+                        (p->mMotion.mPos.mX < -fn_80178A08() && MathAngleDiff(p->mMotion.mFacing, 0x800000) < 0x400000)) {
                         p = 0;
                     }
                 }

@@ -11,8 +11,8 @@ void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count);
 void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
 void fn_801A6838(short *pOut, short *pA, int count, short *pOffset, short *pScale);
 float fn_801BE5D0(void *p, unsigned short index);
-void fn_801CF810(int *pOut, int *pA, int *pB, float t);
-void fn_801CF8A8(int *pOut, int a, int b, float t);
+void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 
 void fn_801A980C(Child_801A9430 *p)
@@ -197,7 +197,7 @@ void fn_801A9F98(Extra_8004149C *unused, Object_80040818 *pObject, int blend, in
             pPair = &pContext->mUnknown4;
         }
         fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
-        fn_801CF8A8(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
+        OrientLerpAngle(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
         if (pContext != 0) {
             fn_801A67DC(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,
                         pPair->mUnknown0, pPair->mUnknown4);
@@ -221,7 +221,7 @@ void fn_801AA124(Object_80040818 *pObject, void *items, int count, void *p)
         if (pItems[i].mUnknown1 != 0 && pItems[i].mUnknown48 == 0.0f) {
             weight = fn_801BE5D0(p, pItems[i].mUnknown8) * pItems[i].mUnknown30;
             total += weight;
-            fn_801CF810(angles, pItems[i].mUnknown10, angles, weight / total);
+            Orient3Lerp(angles, pItems[i].mUnknown10, angles, weight / total);
         }
     }
     pObject->mUnknown172.mUnknown32 = angles[1];

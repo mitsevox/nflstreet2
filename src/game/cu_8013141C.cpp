@@ -50,7 +50,7 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 int fn_801783AC(int bit);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
 float fn_80237260(int stream);
@@ -149,7 +149,7 @@ extern "C" int fn_8013164C(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     if (result) {
         fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-        if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mFacing) > 0x400000) {
+        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mFacing) > 0x400000) {
             result = 0;
         }
     }
@@ -201,7 +201,7 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
             rating *= 0.5f;
             chance = rating * 0.08f + 0.02f;
 
-            if (fn_80237260(0) <= chance && fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x4E38E2) {
+            if (fn_80237260(0) <= chance && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x4E38E2) {
                 result = 5;
             }
         }
@@ -233,7 +233,7 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
                 if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
                     fn_80132630(p, &pTarget->mMotion.mPos, 0)) {
                     result = 2;
-                } else if (fn_801CFFD0(fn_801231E4(p, 0x400000), 0x400000) <= 0x71C70) {
+                } else if (MathAngleDiff(fn_801231E4(p, 0x400000), 0x400000) <= 0x71C70) {
                     result = 4;
                 }
             }
@@ -602,7 +602,7 @@ extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_800
             allowed = 0;
         if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= lbl_803EB144))
             allowed = 0;
-        if (fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * (16777216.0f / 360.0f)))
+        if (MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * (16777216.0f / 360.0f)))
             allowed = 0;
     }
     return allowed;

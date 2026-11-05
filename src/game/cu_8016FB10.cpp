@@ -173,9 +173,9 @@ int fn_8017D064(int a);
 void fn_8017D0A4(int a, int b, const char *pText);
 void fn_8017D7C4(const char *pText);
 void fn_8017D844(const char *pText);
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227538(Pair_8017055C *pOut, int angle, float length);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -270,8 +270,8 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
 
         pOut->mX = 0.0f;
         pOut->mY = p->mMotion.mPos.mY;
-        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lball"), &left, 0);
-        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rball"), &right, 0);
+        fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lball"), &left, 0);
+        fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rball"), &right, 0);
         if (a == 0) {
             limit = p->mUnknown768 * 0.1275f;
         } else {
@@ -317,8 +317,8 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
             if (leftHit || rightDown) {
                 handoff = 4;
             } else {
-                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lknee"), &left, 0);
-                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rknee"), &right, 0);
+                fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lknee"), &left, 0);
+                fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rknee"), &right, 0);
                 if (left.mZ <= 0.18f) {
                     handoff = 4;
                     if (fabsf(left.mX) > fabsf(pOut->mX)) {
@@ -563,7 +563,7 @@ void fn_8017055C(Object_80039F5C *p, int *pFlags, int *pAngle, int move, int han
 
             *pAngle = ballAngle - backAngle;
             *pAngle += fn_8009A2EC(handle);
-            *pAngle = fn_801CFFD0(*pAngle, 0);
+            *pAngle = MathAngleDiff(*pAngle, 0);
         } else {
             *pFlags = 0x100;
         }
@@ -571,7 +571,7 @@ void fn_8017055C(Object_80039F5C *p, int *pFlags, int *pAngle, int move, int han
     case 0x44:
         if ((fn_80178320() != (p->mId >> 8 & 0xFF) || fn_801783AC(0)) && p->mpState->mUnknown2 == 1) {
             *pFlags = 0x10;
-            *pAngle = fn_801CFFD0(fn_801CFE40(velocity.mY, velocity.mX) + 0x800000, p->mMotion.mFacing);
+            *pAngle = MathAngleDiff(fn_801CFE40(velocity.mY, velocity.mX) + 0x800000, p->mMotion.mFacing);
         } else {
             *pFlags = 0x100;
         }
@@ -733,10 +733,10 @@ int fn_80170E64(void *pUnused, Object_80039F5C *p, int right)
     Vector_80039F5C b;
 
     if (right) {
-        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rwrist"), &wrist, 0);
+        fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rwrist"), &wrist, 0);
         fn_8009BFF8(p, &a, &b, 0x12);
     } else {
-        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lwrist"), &wrist, 0);
+        fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &wrist, 0);
         fn_8009BFF8(p, &a, &b, 0x18);
     }
     if (fn_802278D0(&wrist, &a) > 0.09f) {
@@ -946,7 +946,7 @@ void fn_80171450(Object_80039F5C *p)
                     toBall.mZ = 0.0f;
                     fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
                     ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
-                    if (fn_801CFFD0(ballAngle, fn_801CFE40(toHitter.mY, toHitter.mX)) <= 0x300000) {
+                    if (MathAngleDiff(ballAngle, fn_801CFE40(toHitter.mY, toHitter.mX)) <= 0x300000) {
                         chance *= 3.0f;
                     }
                 }
@@ -1061,7 +1061,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
                 toBall.mZ = 0.0f;
                 fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
                 ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
-                angle = fn_801CFFD0(ballAngle, fn_801CFE40(toTackler.mY, toTackler.mX));
+                angle = MathAngleDiff(ballAngle, fn_801CFE40(toTackler.mY, toTackler.mX));
             }
             style = fn_800D0B90(p);
             styling = style == 1 || style == 2;
@@ -1086,7 +1086,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
 
                 if (p->mMotion.mPos.mY < fn_80177FE0().mY) {
                     behind = 1;
-                } else if (fn_801CFFD0(p->mMotion.mFacing, pTackler->mMotion.mFacing) > 0x200000) {
+                } else if (MathAngleDiff(p->mMotion.mFacing, pTackler->mMotion.mFacing) > 0x200000) {
                     behind = 1;
                 }
                 if (behind) {
@@ -1100,7 +1100,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
             if (p->mFlags & 0x10000000) {
                 if (p->mMotion.mPos.mY < fn_80177FE0().mY) {
                     if (p->mpState->mId == 0x10 && !p->mUnknown1219
-                        && fn_801CFFD0(p->mMotion.mFacing, pTackler->mMotion.mFacing) <= 0x2AAAA9) {
+                        && MathAngleDiff(p->mMotion.mFacing, pTackler->mMotion.mFacing) <= 0x2AAAA9) {
                         chance += 10;
                     }
                 }

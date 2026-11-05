@@ -7,7 +7,7 @@ int fn_800C4B6C(Object_80039F5C *p);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int fn_800DC080(Object_80039F5C *p);
 int fn_80178320(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 }
 
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
@@ -29,8 +29,8 @@ extern "C" int fn_8008DF00(Object_80039F5C *p, int key)
     int result = 0;
 
     if (key == 74 && pNext->mUnknown0 != 0.0f
-        && fn_801CFFD0(pMotion->mFacing, pNext->mUnknown8) > 0x5FFFFF) {
-        int diff = fn_801CFFD0(pMotion->mUnknown32, pNext->mUnknown4);
+        && MathAngleDiff(pMotion->mFacing, pNext->mUnknown8) > 0x5FFFFF) {
+        int diff = MathAngleDiff(pMotion->mUnknown32, pNext->mUnknown4);
         unsigned char team = p->mIdBytes[2];
 
         if (diff > 0x755555 && team == fn_80178320() && pMotion->mUnknown28 >= 0.05f
@@ -73,7 +73,7 @@ extern "C" int fn_8008E040(Object_80039F5C *p, int diff, unsigned short *pKey)
                 pCur->mUnknown8 = p->mMotion.mFacing;
                 pCur->mUnknown0 = 0.0f;
             }
-            if (fn_801CFFD0(pCur->mUnknown4, pNext->mUnknown4) > 0x400000) {
+            if (MathAngleDiff(pCur->mUnknown4, pNext->mUnknown4) > 0x400000) {
                 result = 1;
             }
             pNext->mUnknown14 = pCur->mUnknown14;
@@ -104,7 +104,7 @@ extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
     if (flag) {
         pCur->mUnknown8 = 0xC00000;
     }
-    diff = fn_801CFFD0(pCur->mUnknown4, pCur->mUnknown8);
+    diff = MathAngleDiff(pCur->mUnknown4, pCur->mUnknown8);
 
     if (fn_80137B40() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
         if (diff <= 0x56C16B) {
@@ -220,7 +220,7 @@ extern "C" void fn_8008E598(Object_80039F5C *p)
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
     unsigned short key = fn_801BE648(p->mpUnknown792);
-    int diff = fn_801CFFD0(pCur->mUnknown4, pCur->mUnknown8);
+    int diff = MathAngleDiff(pCur->mUnknown4, pCur->mUnknown8);
 
     if (p->mIdBytes[3] == 2) {
         pNext->mUnknown14 = 1;

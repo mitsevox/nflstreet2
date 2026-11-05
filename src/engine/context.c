@@ -5,40 +5,40 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
 
-typedef struct ConEntry_801C5B9C {
+typedef struct ConEntry_t {
     unsigned int mId;
     unsigned short mFlags;
     unsigned short mIndex;
     float mDeadZone;
     float mScale;
     float mInvDeadZone;
-} ConEntry_801C5B9C;
+} ConEntry_t;
 
-typedef void (*ConCallback_801C5B9C)(unsigned int channel, unsigned int id, float value);
-typedef void (*ConUpdate_801C5B9C)(unsigned int channel, float *pPrev, float *pCur);
+typedef void (*ConCallback_t)(unsigned int channel, unsigned int id, float value);
+typedef void (*ConUpdate_t)(unsigned int channel, float *pPrev, float *pCur);
 
-typedef struct ConChannel_801C5B9C {
+typedef struct ConChannel_t {
     unsigned int mFlags;
     int mMapping;
-    ConEntry_801C5B9C *mpEntries;
-    ConCallback_801C5B9C mpCallback;
-    ConUpdate_801C5B9C mpUpdate;
+    ConEntry_t *mpEntries;
+    ConCallback_t mpCallback;
+    ConUpdate_t mpUpdate;
     float *mpCur;
     float *mpPrev;
-} ConChannel_801C5B9C;
+} ConChannel_t;
 
 extern unsigned char lbl_803EBBEC;
-extern ConChannel_801C5B9C *lbl_803EBBF0;
-extern ConCallback_801C5B9C lbl_803EBBF4;
+extern ConChannel_t *lbl_803EBBF0;
+extern ConCallback_t lbl_803EBBF4;
 extern unsigned int lbl_803ECED8;
 extern unsigned int lbl_803ECEDC;
 extern char *lbl_803ECEE0;
 extern int lbl_803ED624;
 extern Lock_801F8014 lbl_8037F860;
 
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 
-static void fn_801C5B9C(unsigned int channel)
+static void _ConClearChannel(unsigned int channel)
 {
     if (lbl_803EBBEC && lbl_803EBBF0) {
         fn_801C1F94(lbl_803EBBF0[channel].mpCur, 0, lbl_803ECEDC);
@@ -46,14 +46,14 @@ static void fn_801C5B9C(unsigned int channel)
     }
 }
 
-static void fn_801C5C08(unsigned int channel)
+static void _ConUpdateChannel(unsigned int channel)
 {
     if ((lbl_803EBBF0[channel].mFlags & 1) && lbl_803EBBF0[channel].mpUpdate) {
         lbl_803EBBF0[channel].mpUpdate(channel, lbl_803EBBF0[channel].mpPrev, lbl_803EBBF0[channel].mpCur);
     }
 }
 
-static void fn_801C5C58(ConEntry_801C5B9C *pEntry)
+static void _ConPatchInverseDeadZone(ConEntry_t *pEntry)
 {
     while (pEntry->mFlags != 0x8000) {
         pEntry->mInvDeadZone = pEntry->mDeadZone != 0.0f ? 1.0f / (1.0f - pEntry->mDeadZone) : 0.0f;
@@ -61,12 +61,12 @@ static void fn_801C5C58(ConEntry_801C5B9C *pEntry)
     }
 }
 
-static inline float fn_801C5B9C_Abs(float x)
+static inline float _ConAbs(float x)
 {
     return __builtin_fabs(x);
 }
 
-static float fn_801C5CB8(ConEntry_801C5B9C *pEntry, int mapping, float *pValues, unsigned char *pActive)
+static float _ConProcessContextEntry(ConEntry_t *pEntry, int mapping, float *pValues, unsigned char *pActive)
 {
     float value;
     float deadZone;
@@ -76,7 +76,7 @@ static float fn_801C5CB8(ConEntry_801C5B9C *pEntry, int mapping, float *pValues,
     deadZone = pEntry->mDeadZone;
     value = pValues[pEntry->mIndex];
     if (!(deadZone <= 0.0f)) {
-        if (!(fn_801C5B9C_Abs(value) > deadZone)) {
+        if (!(_ConAbs(value) > deadZone)) {
             value = 0.0f;
         } else {
             offset = deadZone;
@@ -118,7 +118,7 @@ static float fn_801C5CB8(ConEntry_801C5B9C *pEntry, int mapping, float *pValues,
     return value;
 }
 
-int fn_801C5E24(unsigned int count, int size)
+int ConInit(unsigned int count, int size)
 {
     int error = 0;
     unsigned int i;
@@ -128,7 +128,7 @@ int fn_801C5E24(unsigned int count, int size)
         fn_801F8014(&lbl_8037F860);
         lbl_803EBBF4 = 0;
         lbl_803ECED8 = count;
-        lbl_803EBBF0 = fn_801D2BB0(1, count * sizeof(ConChannel_801C5B9C), 0, 0);
+        lbl_803EBBF0 = fn_801D2BB0(1, count * sizeof(ConChannel_t), 0, 0);
         if (!lbl_803EBBF0) {
             error = fn_801F7C88();
         } else {
@@ -138,8 +138,8 @@ int fn_801C5E24(unsigned int count, int size)
                 fn_801D2BD0(lbl_803EBBF0);
                 error = fn_801F7C88();
             } else {
-                fn_801D34D0(lbl_803ECEE0, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 4);
-                fn_801D34D0(lbl_803EBBF0, count * sizeof(ConChannel_801C5B9C), 0, 4);
+                MemFill(lbl_803ECEE0, count * (lbl_803ECEDC + lbl_803ECEDC), 0, 4);
+                MemFill(lbl_803EBBF0, count * sizeof(ConChannel_t), 0, 4);
                 for (i = 0; i < lbl_803ECED8; i++) {
                     lbl_803EBBF0[i].mpCur = (float *)(lbl_803ECEE0 + i * (lbl_803ECEDC + lbl_803ECEDC));
                     lbl_803EBBF0[i].mpPrev = (float *)(lbl_803ECEE0 + i * (lbl_803ECEDC + lbl_803ECEDC) + lbl_803ECEDC);
@@ -160,7 +160,7 @@ int fn_801C5E24(unsigned int count, int size)
     return error;
 }
 
-int fn_801C5F9C(void)
+int ConShutdown(void)
 {
     int error = 0;
 
@@ -179,17 +179,17 @@ int fn_801C5F9C(void)
     return error;
 }
 
-int fn_801C601C(unsigned int channel)
+int ConUpdateChannel(unsigned int channel)
 {
     int error = 0;
 
     if (!lbl_803EBBEC) {
         error = 0x1A0002;
     } else if (channel < lbl_803ECED8) {
-        fn_801C5C08(channel);
+        _ConUpdateChannel(channel);
     } else if (channel == (unsigned int)-1) {
         for (channel = 0; channel < lbl_803ECED8; channel++) {
-            fn_801C5C08(channel);
+            _ConUpdateChannel(channel);
         }
     } else {
         error = 0x1A0003;
@@ -198,13 +198,13 @@ int fn_801C601C(unsigned int channel)
     return error;
 }
 
-int fn_801C60BC(unsigned int channel)
+int ConProcessChannel(unsigned int channel)
 {
     int error = 0;
     unsigned char active = 0;
     unsigned char prevActive = 0;
-    ConEntry_801C5B9C *pEntry;
-    ConCallback_801C5B9C callback;
+    ConEntry_t *pEntry;
+    ConCallback_t callback;
     int mapping;
     float *pCur;
     float *pPrev;
@@ -221,10 +221,10 @@ int fn_801C60BC(unsigned int channel)
         callback = lbl_803EBBF0[channel].mpCallback;
         if (pEntry && (lbl_803EBBF0[channel].mFlags & 1)) {
             while (!(pEntry->mFlags & 0x8000)) {
-                value = fn_801C5CB8(pEntry, mapping, pCur, &active);
+                value = _ConProcessContextEntry(pEntry, mapping, pCur, &active);
                 if (active == 1) {
                     if (pEntry->mFlags & 8) {
-                        prevValue = fn_801C5CB8(pEntry, mapping, pPrev, &prevActive);
+                        prevValue = _ConProcessContextEntry(pEntry, mapping, pPrev, &prevActive);
                         if (prevActive == 1 && prevValue == value) {
                             active = 0;
                         }
@@ -245,7 +245,7 @@ int fn_801C60BC(unsigned int channel)
         }
     } else if (channel == (unsigned int)-1) {
         for (channel = 0; channel < lbl_803ECED8; channel++) {
-            if ((error = fn_801C60BC(channel)) != 0) {
+            if ((error = ConProcessChannel(channel)) != 0) {
                 break;
             }
         }
@@ -256,7 +256,7 @@ int fn_801C60BC(unsigned int channel)
     return error;
 }
 
-int fn_801C6280(unsigned int channel, unsigned int type, unsigned int value)
+int ConSetChannelInfo(unsigned int channel, unsigned int type, unsigned int value)
 {
     int error = 0;
 
@@ -266,13 +266,13 @@ int fn_801C6280(unsigned int channel, unsigned int type, unsigned int value)
         switch (type) {
         case 0:
             lbl_803EBBF0[channel].mMapping = value;
-            fn_801C5B9C(channel);
+            _ConClearChannel(channel);
             break;
         case 1:
-            lbl_803EBBF0[channel].mpCallback = (ConCallback_801C5B9C)value;
+            lbl_803EBBF0[channel].mpCallback = (ConCallback_t)value;
             break;
         case 2:
-            lbl_803EBBF0[channel].mpUpdate = (ConUpdate_801C5B9C)value;
+            lbl_803EBBF0[channel].mpUpdate = (ConUpdate_t)value;
             break;
         case 4:
             if (!value) {
@@ -280,11 +280,11 @@ int fn_801C6280(unsigned int channel, unsigned int type, unsigned int value)
             } else {
                 lbl_803EBBF0[channel].mFlags |= 1;
             }
-            fn_801C5B9C(channel);
+            _ConClearChannel(channel);
             break;
         case 3:
-            lbl_803EBBF0[channel].mpEntries = (ConEntry_801C5B9C *)value;
-            fn_801C5C58((ConEntry_801C5B9C *)value);
+            lbl_803EBBF0[channel].mpEntries = (ConEntry_t *)value;
+            _ConPatchInverseDeadZone((ConEntry_t *)value);
             break;
         case 5:
             if (!value) {
@@ -300,7 +300,7 @@ int fn_801C6280(unsigned int channel, unsigned int type, unsigned int value)
     } else if (channel == (unsigned int)-1) {
         for (channel = 0; channel < lbl_803ECED8; channel++) {
             if (!(lbl_803EBBF0[channel].mFlags & 0x100)) {
-                if ((error = fn_801C6280(channel, type, value)) != 0) {
+                if ((error = ConSetChannelInfo(channel, type, value)) != 0) {
                     break;
                 }
             }
@@ -312,7 +312,7 @@ int fn_801C6280(unsigned int channel, unsigned int type, unsigned int value)
     return error;
 }
 
-unsigned int fn_801C6458(unsigned int channel, unsigned int type)
+unsigned int ConGetChannelInfo(unsigned int channel, unsigned int type)
 {
     unsigned int value = 0;
     int error = 0;
@@ -354,7 +354,7 @@ unsigned int fn_801C6458(unsigned int channel, unsigned int type)
     return value;
 }
 
-int fn_801C657C(void)
+int ConGetCurrentContext(void)
 {
     return lbl_803ED624;
 }

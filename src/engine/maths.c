@@ -4,14 +4,14 @@
 
 extern unsigned char lbl_803EBCB0;
 
-void fn_801CFF34(void);
+void MathLLInit(void);
 
-int fn_801CEF48(void)
+int MathInit(void)
 {
     int result = 0;
 
     if (!lbl_803EBCB0) {
-        fn_801CFF34();
+        MathLLInit();
         lbl_803EBCB0 = 1;
     } else {
         result = 0x40001;
@@ -20,7 +20,7 @@ int fn_801CEF48(void)
     return result;
 }
 
-int fn_801CEFA0(void)
+int MathShutdown(void)
 {
     int result = 0;
 

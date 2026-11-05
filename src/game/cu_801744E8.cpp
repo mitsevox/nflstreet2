@@ -46,7 +46,7 @@ int fn_800B2600(void);
 void fn_800B260C(short);
 float fn_800B2618(int);
 int fn_801CFE40(float, float);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 void fn_80227690(void *, void *, void *);
 int fn_8013BA58(void *, int *);
 int fn_80177C38(void);
@@ -64,7 +64,7 @@ void fn_80178370(void);
 int fn_800BA6F8(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 float fn_802270A4(void *);
 void fn_8017419C(float *value, Object_80039F5C *, int) {
   unsigned int factor = 127;
@@ -564,7 +564,7 @@ void fn_801757A4(Object_80039F5C *a, float valueA, int angleA,
     flag = 1;
   }
   if ((zeroState && !flag) ||
-      fn_801CFFD0(a->mUnknown512.mUnknown4, angleA) > limit) {
+      MathAngleDiff(a->mUnknown512.mUnknown4, angleA) > limit) {
     if (!(valueA > valueB) && !fn_80175E3C(a, b, context) &&
         a->mpState->mId != 28) {
       selected = 1;
@@ -581,7 +581,7 @@ void fn_801757A4(Object_80039F5C *a, float valueA, int angleA,
     }
     if (b->mUnknown512.mUnknown0 == 0.0f ||
         (!(b->mUnknown512.mUnknown0 >= 0.5f) && !flag) ||
-        fn_801CFFD0(b->mUnknown512.mUnknown4, angleB) > limit) {
+        MathAngleDiff(b->mUnknown512.mUnknown4, angleB) > limit) {
       if (!(valueB > valueA) && !fn_80175E3C(b, a, context) &&
           b->mpState->mId != 28)
         fn_801760B4(4, b, a);
@@ -632,9 +632,9 @@ float fn_80175B88(float value) {
 }
 float fn_80175BF8(float value, Object_80039F5C *a, Object_80039F5C *b) {
   float adjusted = value;
-  if (fn_801CFFD0(a->mMotion.mUnknown32, b->mMotion.mUnknown32) <= 0x200000)
+  if (MathAngleDiff(a->mMotion.mUnknown32, b->mMotion.mUnknown32) <= 0x200000)
     adjusted *= 0.8f;
-  if (fn_801CFFD0(a->mMotion.mUnknown32, b->mMotion.mUnknown32) > 0x5FFFFF)
+  if (MathAngleDiff(a->mMotion.mUnknown32, b->mMotion.mUnknown32) > 0x5FFFFF)
     adjusted = value * 1.25f;
   return adjusted;
 }
@@ -675,8 +675,8 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
   fn_80138064(fn_801374BC(), &point);
   point.mZ = 0.0f;
   int reject = 0;
-  if (fn_801CFFD0(toward, a->mMotion.mUnknown32) <= 0x2AAAA9)
-    reject = fn_801CFFD0(toward, a->mMotion.mFacing) <= 0x2AAAA9;
+  if (MathAngleDiff(toward, a->mMotion.mUnknown32) <= 0x2AAAA9)
+    reject = MathAngleDiff(toward, a->mMotion.mFacing) <= 0x2AAAA9;
   if (!reject) {
     struct View {
       unsigned char pad[16];
@@ -695,7 +695,7 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
       }
       fn_80227690(&delta, &point, &b->mMotion.mPos);
       int direction = fn_801CFE40(delta.mY, delta.mX);
-      if (fn_801CFFD0(away, direction) > 0x200000)
+      if (MathAngleDiff(away, direction) > 0x200000)
         reject = 1;
     }
   }
@@ -826,7 +826,7 @@ void fn_80176630(void) {
       for (unsigned short j = 0; j <= 4; j++) {
         Vector_80039F5C pos, dir;
         int joint =
-            fn_801C4E98(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
+            CharSkelGetJointByName(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
         fn_8009BF5C(player, joint, &pos, &dir);
         if (!(pos.mY >= line.mY + 0.15625f)) {
           fn_800B2370(player, 2, 0, 1.0f);

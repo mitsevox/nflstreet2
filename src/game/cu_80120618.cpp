@@ -15,7 +15,7 @@ float fn_80178A2C(void);
 float fn_801CFB18(int angle);
 int fn_801CFDD0(float value);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80237260(int stream);
@@ -88,8 +88,8 @@ int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80
     fn_80227690(&delta, pA, pB);
     toAngle = fn_801CFE40(delta.mY, delta.mX);
     backAngle = (toAngle + 0x800000) & 0xFFFFFF;
-    diff = fn_801CFFD0(dirAngle, toAngle);
-    opposite = fn_801CFFD0(0x800000, diff);
+    diff = MathAngleDiff(dirAngle, toAngle);
+    opposite = MathAngleDiff(0x800000, diff);
     wide = diff > 0x400000;
     if (minSpeed < 1e-7f) {
         minSpeed = 1e-7f;

@@ -82,9 +82,9 @@ extern void *fn_801C6A20(void *pPool);
 extern void fn_801C6C0C(void *pPool, void *pItem);
 extern int fn_801C6DCC(void *pPool, void *pStart, void *pKey, void *pFound, int (*pMatch)(void *, void *, void *));
 extern char *fn_801C3284(char *pDst, const char *pSrc, int n);
-extern int fn_801CA648(int file, int offset, void *pBuffer, int size);
-extern void fn_801CA834(int handle);
-extern int fn_801CB120(void);
+extern int FilePerformWrite(int file, int offset, void *pBuffer, int size);
+extern void FileAsyncWaitStream(int handle);
+extern int FileHostCheckActive(void);
 extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
 extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
@@ -341,8 +341,8 @@ static inline void WaitLoad_801EF390(Res_801EDC2C *pRes, unsigned int index, int
             if (lbl_803EBD94 != 0 && elapsed > 0x4650) {
                 lbl_803EBD94(type);
             }
-            if (fn_801CB120() != 0) {
-                fn_801CA834(pRes->mFile);
+            if (FileHostCheckActive() != 0) {
+                FileAsyncWaitStream(pRes->mFile);
             } else {
                 fn_801F81AC();
             }
@@ -942,7 +942,7 @@ int fn_801EF92C(Res_801EDC2C *pRes, unsigned int index, void *pBuffer)
             if (size != prevSize) {
                 err = 0xF000C;
             } else if (pRes->mState != 2 && pRes->mState != 3) {
-                err = fn_801CA648(pRes->mFile, offset + pRes->mBaseOffset, pBuffer, size);
+                err = FilePerformWrite(pRes->mFile, offset + pRes->mBaseOffset, pBuffer, size);
             } else {
                 memcpy((void *)(pRes->mBaseAddr + pRes->mBaseOffset + fn_801EC6C4(pRes, index)), pBuffer, size);
             }

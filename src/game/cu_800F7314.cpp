@@ -24,7 +24,7 @@ struct Block_800F7314 {
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_801CFB18(int angle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
@@ -70,7 +70,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_800F6B2C(p, pOut);
         heading = fn_801CFE40(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
-        if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
+        if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && MathAngleDiff(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
             && fn_802270A4(&toSpot) < 2.0f) {
             pOut->mY = 0.0f;
             pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
@@ -78,7 +78,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
         } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
-            if (fn_801CFFD0(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
+            if (MathAngleDiff(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
                 pBlock->mUnknown8 = (toBall.Heading() + 0x400000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.25f;
             } else {
@@ -87,11 +87,11 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = toBall.Heading();
             pBlock->mUnknown24 = 0;
-        } else if (fn_801CFFD0(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
+        } else if (MathAngleDiff(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
             int facing = pOther->mMotion.mUnknown32;
             Point_8017886C flat;
 
-            if (fn_801CFFD0(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
+            if (MathAngleDiff(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
                 int delta = (facing - direction) & 0xFFFFFF;
                 direction = facing - 0x200000;
                 if (delta > 0x800000) {
@@ -109,7 +109,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown12 = speed;
             pBlock->mUnknown12 = speed > 1.0f ? 1.0f : speed;
-            if (fn_801CFFD0(pBlock->mUnknown8, p->mMotion.mUnknown32) < 0xAAAAA) {
+            if (MathAngleDiff(pBlock->mUnknown8, p->mMotion.mUnknown32) < 0xAAAAA) {
                 pBlock->mUnknown24 = 1;
             } else {
                 pBlock->mUnknown24 = 0;
@@ -120,7 +120,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             pBlock->mUnknown8 = direction;
             pBlock->mUnknown4 = 0xC00000;
             near = fn_800F6878(p, pOther);
-            if (near || fn_801CFFD0(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
+            if (near || MathAngleDiff(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
                 if (pBall->mState.mPos.mX > pOther->mMotion.mPos.mX) {
                     pBlock->mUnknown8 = 0x31C71C;
                     pBlock->mUnknown4 = 0x31C71C;
@@ -131,7 +131,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 pBlock->mUnknown24 = 1;
                 pBlock->mUnknown12 = 1.0f;
             } else {
-                if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) <= 0x11C71B
+                if (MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x11C71B
                     && fabsf(p->mMotion.mPos.mX - pOther->mMotion.mPos.mX) < lbl_803EAE2C
                     && p->mMotion.mPos.mY > pOther->mMotion.mPos.mY + 2.0f) {
                     pBlock->mUnknown23 = 1;
@@ -163,7 +163,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_800F6B2C(p, pOut);
         heading = fn_801CFE40(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
-        if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
+        if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && MathAngleDiff(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
             && fn_802270A4(&toSpot) < 2.0f) {
             pOut->mY = 0.0f;
             pBlock->mUnknown24 = 0;
@@ -171,7 +171,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
         } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
-            if (fn_801CFFD0(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
+            if (MathAngleDiff(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
                 pBlock->mUnknown8 = (toBall.Heading() + 0x800000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.25f;
             } else {
@@ -180,12 +180,12 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = toBall.Heading();
             pBlock->mUnknown24 = 0;
-        } else if (fn_801CFFD0(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
+        } else if (MathAngleDiff(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
             int facing = pOther->mMotion.mUnknown32;
             Point_8017886C flat;
             float speed;
 
-            if (fn_801CFFD0(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
+            if (MathAngleDiff(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
                 int delta = (facing - direction) & 0xFFFFFF;
                 direction = facing - 0x200000;
                 if (delta > 0x800000) {
@@ -203,7 +203,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown12 = speed;
             pBlock->mUnknown12 = speed > 1.0f ? 1.0f : speed;
-            if (fn_801CFFD0(pBlock->mUnknown8, p->mMotion.mUnknown32) < 0xAAAAA) {
+            if (MathAngleDiff(pBlock->mUnknown8, p->mMotion.mUnknown32) < 0xAAAAA) {
                 pBlock->mUnknown24 = 1;
             } else {
                 pBlock->mUnknown24 = 0;
@@ -240,12 +240,12 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
             fn_8012CD4C(pOther, &spot);
             angle = fn_8012CAB4(pOther) & 0xFFFFFF;
-            if (fn_801CFFD0(angle, 0) < 0x200000) {
+            if (MathAngleDiff(angle, 0) < 0x200000) {
                 side = 1.0f;
-            } else if (fn_801CFFD0(angle, 0x800000) < 0x200000) {
+            } else if (MathAngleDiff(angle, 0x800000) < 0x200000) {
                 side = -1.0f;
             } else {
-                int diff = fn_801CFFD0(angle, 0x400000);
+                int diff = MathAngleDiff(angle, 0x400000);
 
                 if (diff < 0x200000) {
                     if (p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) {
@@ -259,7 +259,7 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                     }
                     lift = 1.0f;
                 } else {
-                    diff = fn_801CFFD0(angle, 0xC00000);
+                    diff = MathAngleDiff(angle, 0xC00000);
                     if (diff < 0x200000) {
                         if (p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) {
                             side = 1.0f;
@@ -273,7 +273,7 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                     }
                 }
             }
-            if ((unsigned int)(pOther->mpState->mUnknown2 - 8) <= 1 && fn_801CFFD0(angle, 0x400000) < 0x1C71C7) {
+            if ((unsigned int)(pOther->mpState->mUnknown2 - 8) <= 1 && MathAngleDiff(angle, 0x400000) < 0x1C71C7) {
                 side = 0.0f;
                 lift = 2.0f;
             }
@@ -285,7 +285,7 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 pBlock->mUnknown8 = fn_801CFE40(pOut->mY, pOut->mX);
                 pBlock->mUnknown24 = 0;
                 pBlock->mUnknown12 = 0.66f;
-                if (fn_801CFFD0(angle, 0xC00000) < 0x200000) {
+                if (MathAngleDiff(angle, 0xC00000) < 0x200000) {
                     pBlock->mUnknown4 = toOther.Heading();
                 } else {
                     pBlock->mUnknown4 = pBlock->mUnknown8;
@@ -299,8 +299,8 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 pBlock->mUnknown12 = 0.66f;
                 pBlock->mUnknown24 = 0;
             }
-        } else if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0) < 0x1C71C7
-                   || fn_801CFFD0(pOther->mMotion.mUnknown32, 0x800000) < 0x1C71C7) {
+        } else if (MathAngleDiff(pOther->mMotion.mUnknown32, 0) < 0x1C71C7
+                   || MathAngleDiff(pOther->mMotion.mUnknown32, 0x800000) < 0x1C71C7) {
             fn_800F7798(p, pOther, pOut);
         } else {
             fn_800F7314(p, pOther, pOut);
@@ -322,7 +322,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_80227690(&fromOther, pPos, &pOther->mMotion.mPos);
         pBlock = (Block_800F7314 *)&p->mUnknown336;
         origin = fn_80177FE0();
-        if ((fn_801CFFD0(pOther->mMotion.mUnknown32, fromOther.Heading()) < 0xE38E3 && fn_802270A4(&toOther) < 12.0f
+        if ((MathAngleDiff(pOther->mMotion.mUnknown32, fromOther.Heading()) < 0xE38E3 && fn_802270A4(&toOther) < 12.0f
              && (pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f
                  || fabsf(pOther->mMotion.mPos.mY - origin.mY) < 2.5f))
             || pOther->mpState->mId == 0x34) {
@@ -345,7 +345,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         pBlock->mUnknown8 = angle;
         pBlock->mUnknown12 = 1.0f;
         pBlock->mUnknown4 = angle;
-        if (fn_801CFFD0(p->mMotion.mFacing, angle) < 0xAAAAA) {
+        if (MathAngleDiff(p->mMotion.mFacing, angle) < 0xAAAAA) {
             pBlock->mUnknown24 = 1;
         } else {
             pBlock->mUnknown24 = 0;

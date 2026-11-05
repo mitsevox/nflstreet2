@@ -47,7 +47,7 @@ void fn_800AEEDC(int team);
 void fn_8016F6A4(void);
 void fn_8011F3A8(void);
 void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 void fn_800BF07C(void);
 void fn_800BF174(void);
 void fn_800BF3F4(int team);
@@ -60,7 +60,7 @@ void fn_801383E4(int on);
 void fn_800C9BB0(void);
 int fn_800A8488(int team);
 int fn_800A8444(int team);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B6644(int index);
 void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
@@ -190,7 +190,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
     fn_800271D4(lbl_803EABA8->mUnknown48);
-    fn_801C6280(-1, 3, lbl_802ECD44);
+    ConSetChannelInfo(-1, 3, lbl_802ECD44);
     for (i = 0; i <= 1; i++) {
         Slot_800BFAD0 *pSlot = &lbl_803EABA8->mSlots[i];
 
@@ -252,7 +252,7 @@ void Class_80297CE8::vfn_04(float dt)
             unsigned int j;
 
             for (j = 0; j <= 9; j++) {
-                if (fn_801E195C(fn_801C6458(j, 0)) == 2 && fn_800B6644(j) == i) {
+                if (fn_801E195C(ConGetChannelInfo(j, 0)) == 2 && fn_800B6644(j) == i) {
                     fn_80194F2C(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
                 }
             }

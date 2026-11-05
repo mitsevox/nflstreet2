@@ -38,12 +38,12 @@ void fn_8014116C(float,float,float,Vector_80039F5C *,State_80141210 *,Actor_801C
 void fn_8014118C(Angles_80141210 *,State_80141210 *,Actor_801C009C *,int,int,int);
 Entry_801411B4 *fn_801411B4(Camera_8013F738 *);
 int fn_80027DF0(void);
-void fn_801C3990(Camera_8013F738 *,float,float);
+void CamSetFieldOfView(Camera_8013F738 *,float,float);
 Settings_800963EC *fn_800963EC(Character_80093BCC *);
 int fn_801784C4(void);
 Camera_8013F738 *fn_8013FA04(int);
-void fn_801C3EA4(Camera_8013F738 *,float,float,float);
-void fn_801C3ED0(Camera_8013F738 *,int,int,int);
+void CamFreeSetPos(Camera_8013F738 *,float,float,float);
+void CamFreeSetAngle(Camera_8013F738 *,int,int,int);
 float fn_800BD190(void *); float fn_800AB9EC(void *);
 void fn_80142228(Camera_8013F738 *);
 }
@@ -152,8 +152,8 @@ extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Acto
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
     fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
-    else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
+    if (lbl_803EB1F0 && fn_80027DF0()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
@@ -210,8 +210,8 @@ extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Acto
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
     fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
     fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
-    else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
+    if (lbl_803EB1F0 && fn_80027DF0()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
     fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
@@ -290,8 +290,8 @@ extern "C" void HandleCurveCameraEvent_80142110(Camera_8013F738 *camera, int eve
         if (argument != -1) {
             Camera_8013F738 *other = fn_8013FA04(argument);
             float *position = other->mHeader.mUnknown04;
-            fn_801C3EA4(camera, position[0], position[1], position[2]);
-            fn_801C3ED0(camera, other->mHeader.mUnknown14[0], other->mHeader.mUnknown14[1], other->mHeader.mUnknown14[2]);
+            CamFreeSetPos(camera, position[0], position[1], position[2]);
+            CamFreeSetAngle(camera, other->mHeader.mUnknown14[0], other->mHeader.mUnknown14[1], other->mHeader.mUnknown14[2]);
             fn_8013C384(camera, 0, 0, 0);
         }
         break;

@@ -522,7 +522,7 @@ int fn_802299FC(void)
 
 int fn_80229A70(void)
 {
-    return fn_801D34D0(lbl_803A1C60, 1092, 0, 4);
+    return MemFill(lbl_803A1C60, 1092, 0, 4);
 }
 
 float fn_80229C98(int index)
@@ -1017,7 +1017,7 @@ int fn_8022C214(Callbacks_8022C214 *pCallbacks)
 
 void fn_8022C3C8(void)
 {
-    fn_801D34D0((char *)lbl_803A2390, 88, 0, 4);
+    MemFill((char *)lbl_803A2390, 88, 0, 4);
     lbl_803EC030 = 0;
     lbl_803EC034 = 0;
     lbl_803EC038 = 0;
@@ -1149,19 +1149,19 @@ int fn_8022C858(int a)
 
 void fn_8022C894(void)
 {
-    lbl_803EC040 = fn_801CF5BC(0, fn_801CF7AC());
+    lbl_803EC040 = MathNewRandomStream(0, MathGetRandomSeed());
 }
 
 void fn_8022C8C4(void)
 {
-    fn_801CF67C(lbl_803EC040);
+    MathDelRandomStream(lbl_803EC040);
     lbl_803EC040 = 0;
 }
 
 int fn_8022C8F0(unsigned int low, unsigned int high)
 {
     if (low < high) {
-        return low + fn_801CF6D4(lbl_803EC040, high - low);
+        return low + MathGetRandomRange(lbl_803EC040, high - low);
     }
     return low;
 }

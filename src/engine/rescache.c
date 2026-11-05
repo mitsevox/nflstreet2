@@ -17,10 +17,10 @@ extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(in
 extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9C0C(int handle, void *pBuffer, int size, int priority,
                        void (*pCallback)(int, int, void *), void *pContext);
-extern void fn_801CA834(int handle);
-extern int fn_801CB148(char handle);
-extern int fn_801CB1AC(int device);
-extern int fn_801CB1B4(int handle, int value);
+extern void FileAsyncWaitStream(int handle);
+extern int FileGetSize(char handle);
+extern int FileCompareModificationTime(int device);
+extern int FileSetLength(int handle, int value);
 
 extern char lbl_802B19A4[];
 extern unsigned char lbl_803EBDE0;
@@ -52,7 +52,7 @@ void fn_801F2EE0(Res_801EDC2C *pFile, char *pName)
     int size;
     int file;
 
-    if (fn_801CB148(pFile->mFile) > 0x10B07600) {
+    if (FileGetSize(pFile->mFile) > 0x10B07600) {
         pFile->mCacheHandle = -1;
         return;
     }
@@ -60,11 +60,11 @@ void fn_801F2EE0(Res_801EDC2C *pFile, char *pName)
     pFile->mCacheHandle = handle;
     if (handle < 0) {
         invalid = 1;
-    } else if (fn_801CB1AC(pFile->mFile) == 1) {
+    } else if (FileCompareModificationTime(pFile->mFile) == 1) {
         invalid = 1;
         fn_801C97F0(pFile->mCacheHandle);
         pFile->mCacheHandle = -1;
-    } else if (fn_801CB148(pFile->mFile) != fn_801CB148(pFile->mCacheHandle)) {
+    } else if (FileGetSize(pFile->mFile) != FileGetSize(pFile->mCacheHandle)) {
         invalid = 1;
     }
     if (invalid) {
@@ -73,7 +73,7 @@ void fn_801F2EE0(Res_801EDC2C *pFile, char *pName)
         if (handle < 0) {
             return;
         }
-        if (fn_801CB1B4(handle, fn_801CB148(pFile->mFile)) == 0) {
+        if (FileSetLength(handle, FileGetSize(pFile->mFile)) == 0) {
             pFile->pCache = fn_801D2BB0(1, pFile->mNumRes * 4, 0, 0);
             if (pFile->pCache != 0) {
                 memset(pFile->pCache, 0, pFile->mNumRes * 4);
@@ -113,7 +113,7 @@ void fn_801F3104(Res_801EDC2C *pFile)
     char name[128];
     int handle = 0;
 
-    fn_801CA834(pFile->mCacheHandle);
+    FileAsyncWaitStream(pFile->mCacheHandle);
     sprintf(name, lbl_802B19A4, pFile->pName);
     name[127] = 0;
     handle = fn_801C96E4(name, lbl_803EBDE4 | 0x20);

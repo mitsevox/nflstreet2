@@ -113,7 +113,7 @@ void fn_8019FB7C(int type);
 void fn_8019FBB4(int type);
 char *fn_801C3084(const char *pString, int c);
 int fn_801C3214(const char *pA, const char *pB, int n);
-int fn_801C333C(const char *pString);
+int atoi(const char *pString);
 void fn_801CE910(void);
 void fn_801D0470(int a);
 void *fn_801D2BB0(int a, int size, int c, int d);
@@ -990,8 +990,8 @@ void fn_80044C88(void *pNode, ColorEntry *pEntry)
     } else {
         pTo = text;
     }
-    pEntry->mFrom = fn_801C333C(text);
-    pEntry->mTo = fn_801C333C(pTo);
+    pEntry->mFrom = atoi(text);
+    pEntry->mTo = atoi(pTo);
     fn_80216F3C(pNode, "type", text, 15, 0);
     if (fn_801C3214(text, "set", 15) == 0) {
         if (pEntry->mColor == 0xFF) {

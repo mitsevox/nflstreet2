@@ -79,7 +79,7 @@ struct Result_801076F0 {
 };
 
 extern "C" {
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 }
 
 extern "C" void fn_80108954(Object_80039F5C *p, Object_80039F5C *pOther, Result_801076F0 *pInfo) {
@@ -87,14 +87,14 @@ extern "C" void fn_80108954(Object_80039F5C *p, Object_80039F5C *pOther, Result_
 
     if (pOther != 0 && pBlock->mUnknown49 == 3) {
         pBlock->mUnknown53 = 1;
-        if (pBlock->mUnknown44 <= 0.7f && fn_801CFFD0(pInfo->mUnknown20, p->mMotion.mUnknown32) > 0x78E38E) {
+        if (pBlock->mUnknown44 <= 0.7f && MathAngleDiff(pInfo->mUnknown20, p->mMotion.mUnknown32) > 0x78E38E) {
             pBlock->mUnknown52 = 1;
         }
         if (pBlock->mUnknown57 != 0 ||
             (pBlock->mUnknown61 != 0 && pBlock->mUnknown54 != 0 && pInfo->mUnknown40 < 2.0f)) {
             pBlock->mUnknown57 = 1;
             pBlock->mUnknown40 = (pInfo->mUnknown20 + 0x800000) & 0xFFFFFF;
-            if (fn_801CFFD0(p->mMotion.mFacing, pBlock->mUnknown40) > 0xAAAAA) {
+            if (MathAngleDiff(p->mMotion.mFacing, pBlock->mUnknown40) > 0xAAAAA) {
                 pBlock->mUnknown36 = pInfo->mUnknown20;
             } else {
                 pBlock->mUnknown48 = 12;
@@ -102,7 +102,7 @@ extern "C" void fn_80108954(Object_80039F5C *p, Object_80039F5C *pOther, Result_
         }
     }
     if (pOther != 0 && pOther->mpState->mId == 28 &&
-        fn_801CFFD0(pInfo->mUnknown20 + 0x800000, p->mMotion.mFacing) <= 0x471C71) {
+        MathAngleDiff(pInfo->mUnknown20 + 0x800000, p->mMotion.mFacing) <= 0x471C71) {
         pBlock->mUnknown53 = 1;
     }
 }

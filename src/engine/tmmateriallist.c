@@ -5,7 +5,7 @@ extern Pool_801C750C *lbl_803EBEE8;
 static Material_8020FAAC *fn_8020FF34(Material_8020FAAC *pMaterial)
 {
     if (pMaterial == 0) {
-        pMaterial = fn_801C75F0(lbl_803EBEE8);
+        pMaterial = DSNewNode(lbl_803EBEE8);
         pMaterial->mRefCount = 0;
         pMaterial->mNumParms = 0;
         pMaterial->mpParms = 0;
@@ -20,21 +20,21 @@ static void fn_8020FF90(Material_8020FAAC *pMaterial)
     if (pMaterial != 0) {
         if (--pMaterial->mRefCount <= 0) {
             fn_8020FCA0(pMaterial);
-            fn_801C7650(lbl_803EBEE8, pMaterial);
+            DSDelNode(lbl_803EBEE8, pMaterial);
         }
     }
 }
 
 void fn_8020FFE4(int maxMaterials)
 {
-    lbl_803EBEE8 = fn_801C750C(1, maxMaterials, sizeof(Material_8020FAAC), 0);
+    lbl_803EBEE8 = DSNewNodeHandler(1, maxMaterials, sizeof(Material_8020FAAC), 0);
     fn_8020FD40(0);
 }
 
 void fn_80210020(void)
 {
     fn_8020FD40(0);
-    fn_801C75B8(lbl_803EBEE8);
+    DSDelNodeHandler(lbl_803EBEE8);
     lbl_803EBEE8 = 0;
 }
 

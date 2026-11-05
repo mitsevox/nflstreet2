@@ -112,7 +112,7 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 void fn_8017CFB4(int index);
 void fn_8017DA9C(int team);
-void fn_801C3E54(Camera_8013F738 *pCamera);
+void CamFreeClearVelocity(Camera_8013F738 *pCamera);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_800A8408(int team);
 int fn_800A8444(int team);
@@ -142,7 +142,7 @@ void fn_8017C934(unsigned short team, int value);
 void fn_8017C960(unsigned short team, int value);
 int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 float fn_8016FAB4(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 
 void fn_8016DBE4(Object_80039F5C *p);
 void fn_8016DF34(Object_80039F5C *p);
@@ -471,7 +471,7 @@ extern "C" void fn_8016E498(void)
 
         if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             fn_8013FA8C(2);
-            fn_801C3E54(pCamera);
+            CamFreeClearVelocity(pCamera);
         }
     }
     fn_800B82AC(fn_80178320());
@@ -939,7 +939,7 @@ extern "C" void fn_8016F780(void)
         Object_80039F5C *p = fn_80137B40();
 
         if (p != 0 && p->mIdBytes[3] == 1 && p->mUnknown512.mUnknown14 != 0 &&
-            fn_801CFFD0(p->mUnknown512.mUnknown4, 0x400000) > 0x400000) {
+            MathAngleDiff(p->mUnknown512.mUnknown4, 0x400000) > 0x400000) {
             fn_8016F99C();
         }
     }

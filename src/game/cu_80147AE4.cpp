@@ -18,7 +18,7 @@ struct Object_80147AE4 {
 extern "C" {
 void fn_80196EF8(int a, unsigned int color, float value);
 void fn_80196F20(int a, unsigned int color, float value);
-int fn_801CECCC(int index);
+int GlibRenderGetBin(int index);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80147AE4 *, int *),
                 void (*pRelease)(Object_80147AE4 *));
 int fn_801DCF8C(int a);
@@ -84,7 +84,7 @@ int fn_80147C14(Object_80147AE4 *pObject)
                 }
             }
         }
-        result = fn_801CECCC(lbl_803EB28C[pObject->mUnknown32]);
+        result = GlibRenderGetBin(lbl_803EB28C[pObject->mUnknown32]);
         switch (pObject->mUnknown2C) {
         case 0:
             fn_80196EF8(result, color, value);

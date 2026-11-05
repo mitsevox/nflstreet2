@@ -1,6 +1,6 @@
 #include "engine/tmlib.h"
 
-extern int fn_801C4E98(void *pSkel, const char *pName);
+extern int CharSkelGetJointByName(void *pSkel, const char *pName);
 
 void fn_80215E5C(Skeleton_80215E5C *pSkel, void *pOldBase, void *pNewBase)
 {
@@ -20,7 +20,7 @@ short *fn_80215EE0(Skeleton_80215E5C *pSkel, void *pOther)
     if (pSkel != 0 && pSkel->mpNames != 0) {
         pRemap = fn_802127D0(pSkel->mNumBones, 2);
         for (i = 0; i < pSkel->mNumBones; i++) {
-            pRemap[i] = fn_801C4E98(pOther, pSkel->mpNames[i]);
+            pRemap[i] = CharSkelGetJointByName(pOther, pSkel->mpNames[i]);
         }
     }
     return pRemap;

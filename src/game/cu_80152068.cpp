@@ -27,7 +27,7 @@ Table_8015005C *fn_801530FC(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 float fn_802373C8(int selector, float first, float last);
 void fn_80227690(void *pOut, void *pA, void *pB);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex);
 
 void fn_80152068(int index, Vector_80039F5C *pOut)
@@ -98,7 +98,7 @@ int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
             fn_80138064(pBall, &position);
             fn_80227690(&delta, &position, &p->mMotion.mPos);
             int direction = delta.Heading();
-            float score = fn_801CFFD0(direction, p->mUnknown512.mUnknown4);
+            float score = MathAngleDiff(direction, p->mUnknown512.mUnknown4);
             score *= 0.00000011920928955078125f;
             score = 1.0f - score;
             score *= 5.0f;

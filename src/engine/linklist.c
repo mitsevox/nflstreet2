@@ -1,15 +1,18 @@
+/* Doubly linked list type of the data-structure library: insert, sorted add, lookup, removal and
+   traversal, registered as list type 0. */
+
 #include "engine/list.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
 
 
-typedef int (*SearchFn_801C7234)(void *, void *, void *);
+typedef int (*LinkSearchFn_t)(void *, void *, void *);
 
 #define LINK_NODE_SIZE (lbl_803D4FB8[0].mNodeSize)
 
-static void fn_801C6E5C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
+static void _DSListInsertLinkAtHead(LinkList_t *pList, LinkNode_t *pNode)
 {
-    LinkNode_801C6E5C *pHead = pList->mpHead;
+    LinkNode_t *pHead = pList->mpHead;
 
     pList->mpHead = pNode;
     pNode->mpNext = pHead;
@@ -17,9 +20,9 @@ static void fn_801C6E5C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
     pHead->mpPrev = pNode;
 }
 
-static void fn_801C6E7C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
+static void _DSListInsertLinkAtTail(LinkList_t *pList, LinkNode_t *pNode)
 {
-    LinkNode_801C6E5C *pTail = pList->mpTail;
+    LinkNode_t *pTail = pList->mpTail;
 
     pList->mpTail = pNode;
     pNode->mpNext = 0;
@@ -27,9 +30,9 @@ static void fn_801C6E7C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
     pTail->mpNext = pNode;
 }
 
-static void fn_801C6E9C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pBefore, LinkNode_801C6E5C *pNode)
+static void _DSListInsertLink(LinkList_t *pList, LinkNode_t *pBefore, LinkNode_t *pNode)
 {
-    LinkNode_801C6E5C *pPrev = pBefore->mpPrev;
+    LinkNode_t *pPrev = pBefore->mpPrev;
 
     pNode->mpPrev = pPrev;
     pPrev->mpNext = pNode;
@@ -37,7 +40,7 @@ static void fn_801C6E9C(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pBefore, Li
     pBefore->mpPrev = pNode;
 }
 
-static void fn_801C6EB4(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pBefore, LinkNode_801C6E5C *pNode)
+static void _DSListInsertLinkedNode(LinkList_t *pList, LinkNode_t *pBefore, LinkNode_t *pNode)
 {
     if (pList->mpHead == 0) {
         pList->mpTail = pNode;
@@ -45,22 +48,22 @@ static void fn_801C6EB4(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pBefore, Li
         pNode->mpPrev = 0;
         pNode->mpNext = 0;
     } else if (pBefore == pList->mpHead) {
-        fn_801C6E5C(pList, pNode);
+        _DSListInsertLinkAtHead(pList, pNode);
     } else if (pBefore == 0) {
-        fn_801C6E7C(pList, pNode);
+        _DSListInsertLinkAtTail(pList, pNode);
     } else {
-        fn_801C6E9C(pList, pBefore, pNode);
+        _DSListInsertLink(pList, pBefore, pNode);
     }
     pList->mBase.mCount++;
 }
 
-static void fn_801C6F40(LinkList_801C6E5C *pList)
+static void _DSListInitLinkedList(LinkList_t *pList)
 {
     pList->mpHead = 0;
     pList->mpTail = 0;
 }
 
-static int fn_801C6F50(LinkList_801C6E5C *pList)
+static int _DSListDelLinkedList(LinkList_t *pList)
 {
     int result = 0;
 
@@ -70,11 +73,11 @@ static int fn_801C6F50(LinkList_801C6E5C *pList)
     return result;
 }
 
-static LinkNode_801C6E5C *fn_801C6F88(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, int mode)
+static LinkNode_t *_DSListAddLinkedNode(LinkList_t *pList, LinkNode_t *pNode, int mode)
 {
-    LinkNode_801C6E5C *pResult = pNode;
+    LinkNode_t *pResult = pNode;
     void *pItem;
-    LinkNode_801C6E5C *pCur;
+    LinkNode_t *pCur;
     void *pCurItem;
     int cmp = 1;
 
@@ -88,21 +91,21 @@ static LinkNode_801C6E5C *fn_801C6F88(LinkList_801C6E5C *pList, LinkNode_801C6E5
         }
     }
     if (mode != 1 || cmp != 0) {
-        fn_801C6EB4(pList, pCur, pNode);
+        _DSListInsertLinkedNode(pList, pCur, pNode);
     } else {
         pResult = pCur;
     }
     return pResult;
 }
 
-static void fn_801C7080(LinkNode_801C6E5C *pNode, int size)
+static void _DSListInitLinkedNode(LinkNode_t *pNode, int size)
 {
     fn_801C1F94(pNode, 0, size);
 }
 
-static LinkNode_801C6E5C *fn_801C70A8(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, unsigned int mode)
+static LinkNode_t *_DSListGetLinkedNode(LinkList_t *pList, LinkNode_t *pNode, unsigned int mode)
 {
-    LinkNode_801C6E5C *pResult = pNode;
+    LinkNode_t *pResult = pNode;
 
     switch (mode) {
     case 0:
@@ -119,13 +122,13 @@ static LinkNode_801C6E5C *fn_801C70A8(LinkList_801C6E5C *pList, LinkNode_801C6E5
         pResult = pNode->mpNext;
         break;
     default:
-        pResult = pNode ? (LinkNode_801C6E5C *)((char *)pNode - LINK_NODE_SIZE) : 0;
+        pResult = pNode ? (LinkNode_t *)((char *)pNode - LINK_NODE_SIZE) : 0;
         break;
     }
     return pResult;
 }
 
-static void fn_801C7128(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
+static void _DSListRemoveLinkedNode(LinkList_t *pList, LinkNode_t *pNode)
 {
     if (pList->mpHead == pNode) {
         pList->mpHead = pNode->mpNext;
@@ -142,10 +145,10 @@ static void fn_801C7128(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
     pList->mBase.mCount--;
 }
 
-static int fn_801C7188(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, void *pCtx, void *pArg,
+static int _DSListTraverseLinkedList(LinkList_t *pList, LinkNode_t *pNode, void *pCtx, void *pArg,
                        ListVisitFn_801C6D34 callback, int direction)
 {
-    LinkNode_801C6E5C *pNext;
+    LinkNode_t *pNext;
     int result = 1;
 
     while (pNode && result) {
@@ -160,10 +163,10 @@ static int fn_801C7188(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, void 
     return result == 0 ? 4 : 0;
 }
 
-static int fn_801C7234(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, void *a, void *b,
-                       SearchFn_801C7234 callback)
+static int _DSListSearchLinkedList(LinkList_t *pList, LinkNode_t *pNode, void *a, void *b,
+                       LinkSearchFn_t callback)
 {
-    LinkNode_801C6E5C *pNext;
+    LinkNode_t *pNext;
     int result = -1;
 
     while (pNode && result < 0) {
@@ -174,19 +177,19 @@ static int fn_801C7234(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, void 
     return result == 0 ? 2 : 3;
 }
 
-static int fn_801C72C8(LinkList_801C6E5C *pList)
+static int _DSListOptimizeLinkedList(LinkList_t *pList)
 {
     return 5;
 }
 
-void fn_801C72D0(void)
+void DSListInitLinkedModule(void)
 {
-    fn_801C67AC(0, (void (*)(List_801C68FC *))fn_801C6F40, (int (*)(List_801C68FC *))fn_801C6F50,
-                (void (*)(Node_801C6A20 *, int))fn_801C7080,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C6F88,
-                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C70A8,
-                (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C7128,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C7188,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C7234,
-                (void (*)(List_801C68FC *))fn_801C72C8, sizeof(LinkList_801C6E5C), sizeof(LinkNode_801C6E5C));
+    fn_801C67AC(0, (void (*)(List_801C68FC *))_DSListInitLinkedList, (int (*)(List_801C68FC *))_DSListDelLinkedList,
+                (void (*)(Node_801C6A20 *, int))_DSListInitLinkedNode,
+                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListAddLinkedNode,
+                (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) _DSListGetLinkedNode,
+                (void (*)(List_801C68FC *, Node_801C6A20 *))_DSListRemoveLinkedNode,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))_DSListTraverseLinkedList,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))_DSListSearchLinkedList,
+                (void (*)(List_801C68FC *))_DSListOptimizeLinkedList, sizeof(LinkList_t), sizeof(LinkNode_t));
 }

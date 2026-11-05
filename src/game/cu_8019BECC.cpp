@@ -35,7 +35,7 @@ struct Vertex_8019C8C0 {
 
 extern "C" {
 int fn_801CFC14(int angle, float *pFirst, float *pSecond);
-float fn_801CFF54(float value);
+float MathInvSqrt(float value);
 void fn_801D0F80(Mtx44 m);
 void fn_80210388(void);
 void fn_80210BD8(int a);
@@ -242,7 +242,7 @@ int fn_8019C8C0(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     for (angle = 0.0f; angle <= steps; angle += 1.0f) {
         phase = angle * 360.0f / steps * (16777216.0f / 360.0f);
         fn_801CFC14(phase, &first, &second);
-        radius = b * a * fn_801CFF54(a * a * second * second + b * b * first * first);
+        radius = b * a * MathInvSqrt(a * a * second * second + b * b * first * first);
         fn_80227538(&vertex.mXY, phase + offset, radius);
         fn_80227638(&vertex.mXY, &vertex.mXY, &center);
         GXPosition3f32(vertex.mXY.mX, vertex.mXY.mY, vertex.mZ);

@@ -4,7 +4,7 @@
 #include "game/InGame.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
-#include "game/fn_801C3660.h"
+#include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
 #include "game/Object_80228224.h"
 
@@ -70,11 +70,11 @@ void fn_80196174(Object_80228224 *pObject, int a);
 void fn_80196204(void);
 void fn_801A139C(void);
 void fn_801A6730(void);
-void *fn_801C3610(int a, int b);
-void fn_801C3640(void *p);
-void fn_801C3A10(void *p, float a);
-void fn_801C3EA4(void *p, float a, float b, float c);
-void fn_801C3ED0(void *p, int a, int b, int c);
+void *CamCreate(int a, int b);
+void CamDestroy(void *p);
+void CamSetZScale(void *p, float a);
+void CamFreeSetPos(void *p, float a, float b, float c);
+void CamFreeSetAngle(void *p, int a, int b, int c);
 void fn_801CD2A4(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
@@ -84,8 +84,8 @@ int fn_801CEA14(void);
 int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEC7C(void);
-int fn_801CECCC(int index);
-void fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+void GlibRenderSelectBin(int a);
 float fn_801CFD28(int a);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
@@ -478,14 +478,14 @@ void fn_80189848(void)
     fn_801897DC(lbl_803EB644);
     lbl_803EB644->mUnknown28 &= ~1;
     fn_8022864C(lbl_803EB644, 0.0f, 0.0f, 0.0f);
-    lbl_803EB648 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB648, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB648, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB644, lbl_803EB648);
+    lbl_803EB648 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB648, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB648, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB644, lbl_803EB648);
     if (fn_80027DF0()) {
-        fn_801C3A10(lbl_803EB648, 1.0f);
+        CamSetZScale(lbl_803EB648, 1.0f);
     } else {
-        fn_801C3A10(lbl_803EB648, 4.0f);
+        CamSetZScale(lbl_803EB648, 4.0f);
     }
     fn_80228474(lbl_803EB644, 2, fn_80191378, 31);
     lbl_803EB64C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
@@ -520,11 +520,11 @@ void fn_80189ADC(void)
     fn_801897DC(lbl_803EB654);
     lbl_803EB654->mUnknown28 &= ~1;
     fn_8022864C(lbl_803EB654, 0.0f, 0.0f, 0.0f);
-    lbl_803EB658 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB658, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB654, lbl_803EB658);
-    fn_801C3A10(lbl_803EB658, 4.0f);
+    lbl_803EB658 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB658, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB654, lbl_803EB658);
+    CamSetZScale(lbl_803EB658, 4.0f);
     lbl_803EB65C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB65C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB654, lbl_803EB65C, 0);
@@ -554,11 +554,11 @@ void fn_80189D20(void)
     fn_801897DC(lbl_803EB664);
     lbl_803EB664->mUnknown28 &= ~1;
     fn_8022864C(lbl_803EB664, 0.0f, 0.0f, 0.0f);
-    lbl_803EB668 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB668, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB664, lbl_803EB668);
-    fn_801C3A10(lbl_803EB668, 4.0f);
+    lbl_803EB668 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB668, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB664, lbl_803EB668);
+    CamSetZScale(lbl_803EB668, 4.0f);
     lbl_803EB66C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(lbl_803EB66C, 21, 0, fn_80189004);
     fn_802286CC(lbl_803EB664, lbl_803EB66C, 0);
@@ -677,7 +677,7 @@ void fn_8018A274(void)
     lbl_803EB650 = 0;
     fn_801DD0E8(lbl_803EB64C);
     lbl_803EB64C = 0;
-    fn_801C3640(lbl_803EB648);
+    CamDestroy(lbl_803EB648);
     lbl_803EB648 = 0;
     fn_802283FC(lbl_803EB644);
     lbl_803EB644 = 0;
@@ -694,7 +694,7 @@ void fn_8018A314(void)
     lbl_803EB660 = 0;
     fn_801DD0E8(lbl_803EB65C);
     lbl_803EB65C = 0;
-    fn_801C3640(lbl_803EB658);
+    CamDestroy(lbl_803EB658);
     lbl_803EB658 = 0;
     fn_802283FC(lbl_803EB654);
     lbl_803EB654 = 0;
@@ -711,7 +711,7 @@ void fn_8018A390(void)
     lbl_803EB670 = 0;
     fn_801DD0E8(lbl_803EB66C);
     lbl_803EB66C = 0;
-    fn_801C3640(lbl_803EB668);
+    CamDestroy(lbl_803EB668);
     lbl_803EB668 = 0;
     fn_802283FC(lbl_803EB664);
     lbl_803EB664 = 0;
@@ -903,6 +903,6 @@ void fn_8018A8C8(int a)
 {
     fn_80220CDC(a);
     fn_80220CFC(a);
-    fn_801CECDC(fn_801CECCC(14));
+    GlibRenderSelectBin(GlibRenderGetBin(14));
 }
 }

@@ -42,12 +42,12 @@ const char *fn_8020E53C(TexHeader_8020E2B0 *pTex, unsigned short index);
 extern int lbl_803EBEBC;
 
 void fn_801D0F80(Mtx44 mtx);
-void fn_801D34D0(void *p, unsigned int size, int c, int d);
+void MemFill(void *p, unsigned int size, int c, int d);
 
-Pool_801C750C *fn_801C750C(int a, int count, int size, void *pMemory);
-int fn_801C75B8(Pool_801C750C *pPool);
-void *fn_801C75F0(Pool_801C750C *pPool);
-void fn_801C7650(Pool_801C750C *pPool, void *pElement);
+Pool_801C750C *DSNewNodeHandler(int a, int count, int size, void *pMemory);
+int DSDelNodeHandler(Pool_801C750C *pPool);
+void *DSNewNode(Pool_801C750C *pPool);
+void DSDelNode(Pool_801C750C *pPool, void *pElement);
 
 typedef struct RegistryEntry_8021283C {
     const char *mpName;

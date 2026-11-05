@@ -73,7 +73,7 @@ extern "C" {
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_801486A0(void);
@@ -85,7 +85,7 @@ float fn_80178A08(void);
 float fn_80178A44(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_801BD81C(void *p, float value);
-float fn_801CFFA0(float value);
+float MathInverse(float value);
 extern float lbl_803EA2C4;
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 float fn_801CFB94(int angle);
@@ -274,7 +274,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             }
             pState->mUnknown0 = fn_801BA2A8(pData, pEntries, pList->mItems[index].mUnknown0,
                                             pList->mItems[index].mUnknown2, animation, p, 1.0f);
-            fn_801BD81C(&pEntries[pState->mUnknown0].mUnknown4C, fn_801CFFA0(lbl_803EAEC4));
+            fn_801BD81C(&pEntries[pState->mUnknown0].mUnknown4C, MathInverse(lbl_803EAEC4));
         }
         break;
     }
@@ -509,7 +509,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         } else {
             target.mX = fn_80178A08() + 14.0f;
             target.mY = fn_80177FE0().mY + 10.0f;
-            if (fn_801CFFD0(p->mMotion.mFacing, 0) > 0x400000) {
+            if (MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000) {
                 target.mX = -target.mX;
             }
         }
@@ -686,7 +686,7 @@ extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_
     int turn;
 
     pOut->mX = pOut->mY = pOut->mZ = 0.0f;
-    behind = pos.mY < fn_80177FE0().mY + 13.0f && fn_801CFFD0(angle, 0xC00000) <= 0x271C70;
+    behind = pos.mY < fn_80177FE0().mY + 13.0f && MathAngleDiff(angle, 0xC00000) <= 0x271C70;
     if (behind) {
         pOut->mX = pos.mX;
         pOut->mY = pos.mY;
@@ -711,9 +711,9 @@ extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_
         pOut->mZ = 1.3f;
         return;
     }
-    turn = fn_801CFFD0(angle, fn_801CFE40(ball.mY, ball.mX));
+    turn = MathAngleDiff(angle, fn_801CFE40(ball.mY, ball.mX));
     if (turn > 0x400000) {
-        turn = fn_801CFFD0(0x800000, turn);
+        turn = MathAngleDiff(0x800000, turn);
         closing = ballSpeed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(turn) / ballSpeed)) - runSpeed * fn_801CFB94(turn);
     } else {
         closing = ballSpeed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(turn) / ballSpeed)) + runSpeed * fn_801CFB94(turn);

@@ -1,14 +1,14 @@
 #ifndef ENGINE_MATRIX_H
 #define ENGINE_MATRIX_H
 
-typedef float Mtx_801D0110[16];
+typedef float MatMatrix_t[16];
 
-typedef struct MatStack_801D0110 {
+typedef struct MatStack_t {
     unsigned int mDepth;
     int mTop;
-    Mtx_801D0110 *mpMatrices;
-} MatStack_801D0110;
+    MatMatrix_t *mpMatrices;
+} MatStack_t;
 
-MatStack_801D0110 *fn_801D0110(unsigned int index);
+MatStack_t *MatGetStackPtrFromIndex(unsigned int index);
 
 #endif

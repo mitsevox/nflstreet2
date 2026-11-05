@@ -7,7 +7,7 @@ extern "C" {
 int fn_80120A50(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC);
 int fn_801218EC(Point_8017886C *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry)
@@ -26,7 +26,7 @@ int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry
     if (pEntry->mUnknown24 < 0.55f && !((pEntry->mpUnknown0->mUnknown36 | pEntry->mpUnknown4->mUnknown36) & 4)) {
         return 0;
     }
-    if (fn_801CFFD0(p->mMotion.mFacing, pEntry->mUnknown16) > 0x51C71C) {
+    if (MathAngleDiff(p->mMotion.mFacing, pEntry->mUnknown16) > 0x51C71C) {
         return 0;
     }
     pPos = (Point_8017886C *)&p->mMotion.mPos;
@@ -39,10 +39,10 @@ int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry
         delta.mY = pNear->mUnknown8.mY;
         fn_80227690(&delta, &delta, pPos);
         angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-        if (fn_801CFFD0(pEntry->mUnknown16, 0x400000) < fn_801CFFD0(angle, 0x400000)) {
+        if (MathAngleDiff(pEntry->mUnknown16, 0x400000) < MathAngleDiff(angle, 0x400000)) {
             return 0;
         }
-        if (fn_801CFFD0(pEntry->mUnknown16, angle) <= 0x4FA4E) {
+        if (MathAngleDiff(pEntry->mUnknown16, angle) <= 0x4FA4E) {
             return 0;
         }
     }

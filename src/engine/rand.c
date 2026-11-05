@@ -4,61 +4,61 @@
 #include "game/cu_801CF5BC.h"
 #include "game/fn_801D2B7C.h"
 
-typedef struct RandStream_801CEFF0 {
+typedef struct RandStream_t {
     int mType;
-} RandStream_801CEFF0;
+} RandStream_t;
 
-typedef struct RandFast_801CEFF0 {
+typedef struct RandFast_t {
     int mType;
     unsigned int mSeed;
-} RandFast_801CEFF0;
+} RandFast_t;
 
-typedef struct RandSlow_801CEFF0 {
+typedef struct RandSlow_t {
     int mType;
     int mY;
     int mTable[32];
     int mSeed;
-} RandSlow_801CEFF0;
+} RandSlow_t;
 
-typedef struct RandSub_801CEFF0 {
+typedef struct RandSub_t {
     int mType;
     int mNext;
     int mNextP;
     int mInit;
     int mTable[56];
-} RandSub_801CEFF0;
+} RandSub_t;
 
-extern void *(*lbl_802F7AD0[])(int seed);
-extern int (*lbl_802F7AE8[])(void *pDst, void *pSrc);
-extern float (*lbl_802F7AF4[])(void *pStream);
-extern int lbl_802F7B00[];
+extern void *(*_MathRand_aInitFuncs[])(int seed);
+extern int (*_MathRand_aCopyFuncs[])(void *pDst, void *pSrc);
+extern float (*_MathRand_aGetFuncs[])(void *pStream);
+extern int _MathRand_Size[];
 
 
-static void fn_801CF040(void *pHandle, int seed);
-static void fn_801CF12C(void *pHandle, int seed);
-static void fn_801CF358(void *pHandle, int seed);
+static void _MathRandResetFastLinear(void *pHandle, int seed);
+static void _MathRandResetSlowLinear(void *pHandle, int seed);
+static void _MathRandResetSubtractive(void *pHandle, int seed);
 
-static void *fn_801CEFF0(int seed)
+static void *_MathRandInitFastLinear(int seed)
 {
-    RandFast_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandFast_801CEFF0), 0, 0);
+    RandFast_t *pStream = fn_801D2B7C(sizeof(RandFast_t), 0, 0);
 
     if (pStream) {
-        fn_801CF040(pStream, seed);
+        _MathRandResetFastLinear(pStream, seed);
     }
     return pStream;
 }
 
-static void fn_801CF040(void *pHandle, int seed)
+static void _MathRandResetFastLinear(void *pHandle, int seed)
 {
-    RandFast_801CEFF0 *pStream = pHandle;
+    RandFast_t *pStream = pHandle;
     pStream->mSeed = seed;
 }
 
 /* Copy state only between streams of the same generator type. */
-static int CopyFastRandomState(void *pDstHandle, void *pSrcHandle)
+static int _MathRandCopyFastLinear(void *pDstHandle, void *pSrcHandle)
 {
-    RandFast_801CEFF0 *pDst = pDstHandle;
-    RandFast_801CEFF0 *pSrc = pSrcHandle;
+    RandFast_t *pDst = pDstHandle;
+    RandFast_t *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
@@ -69,9 +69,9 @@ static int CopyFastRandomState(void *pDstHandle, void *pSrcHandle)
     return result;
 }
 
-static float fn_801CF074(void *pHandle)
+static float _MathRandFastLinear(void *pHandle)
 {
-    RandFast_801CEFF0 *pStream = pHandle;
+    RandFast_t *pStream = pHandle;
     float value;
 
     pStream->mSeed = pStream->mSeed * 1664525 + 1013904223;
@@ -82,19 +82,19 @@ static float fn_801CF074(void *pHandle)
     return value;
 }
 
-static void *fn_801CF0DC(int seed)
+static void *_MathRandInitSlowLinear(int seed)
 {
-    RandSlow_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSlow_801CEFF0), 0, 0);
+    RandSlow_t *pStream = fn_801D2B7C(sizeof(RandSlow_t), 0, 0);
 
     if (pStream) {
-        fn_801CF12C(pStream, seed);
+        _MathRandResetSlowLinear(pStream, seed);
     }
     return pStream;
 }
 
-static void fn_801CF12C(void *pHandle, int seed)
+static void _MathRandResetSlowLinear(void *pHandle, int seed)
 {
-    RandSlow_801CEFF0 *pStream = pHandle;
+    RandSlow_t *pStream = pHandle;
     int i;
     int k;
 
@@ -114,10 +114,10 @@ static void fn_801CF12C(void *pHandle, int seed)
     pStream->mY = pStream->mTable[0];
 }
 
-static int fn_801CF1B0(void *pDstHandle, void *pSrcHandle)
+static int _MathRandCopySlowLinear(void *pDstHandle, void *pSrcHandle)
 {
-    RandSlow_801CEFF0 *pDst = pDstHandle;
-    RandSlow_801CEFF0 *pSrc = pSrcHandle;
+    RandSlow_t *pDst = pDstHandle;
+    RandSlow_t *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
@@ -127,9 +127,9 @@ static int fn_801CF1B0(void *pDstHandle, void *pSrcHandle)
     return result;
 }
 
-static float fn_801CF240(void *pHandle)
+static float _MathRandSlowLinear(void *pHandle)
 {
-    RandSlow_801CEFF0 *pStream = pHandle;
+    RandSlow_t *pStream = pHandle;
     int seed = pStream->mSeed;
     int k;
     int j;
@@ -151,19 +151,19 @@ static float fn_801CF240(void *pHandle)
     return value;
 }
 
-static void *fn_801CF308(int seed)
+static void *_MathRandInitSubtractive(int seed)
 {
-    RandSub_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSub_801CEFF0), 0, 0);
+    RandSub_t *pStream = fn_801D2B7C(sizeof(RandSub_t), 0, 0);
 
     if (pStream) {
-        fn_801CF358(pStream, seed);
+        _MathRandResetSubtractive(pStream, seed);
     }
     return pStream;
 }
 
-static void fn_801CF358(void *pHandle, int seed)
+static void _MathRandResetSubtractive(void *pHandle, int seed)
 {
-    RandSub_801CEFF0 *pStream = pHandle;
+    RandSub_t *pStream = pHandle;
     int mj;
     int mk;
     int i;
@@ -199,10 +199,10 @@ static void fn_801CF358(void *pHandle, int seed)
     pStream->mInit = 1;
 }
 
-static int fn_801CF498(void *pDstHandle, void *pSrcHandle)
+static int _MathRandCopySubtractive(void *pDstHandle, void *pSrcHandle)
 {
-    RandSub_801CEFF0 *pDst = pDstHandle;
-    RandSub_801CEFF0 *pSrc = pSrcHandle;
+    RandSub_t *pDst = pDstHandle;
+    RandSub_t *pSrc = pSrcHandle;
     int result = 0x40003;
 
     if (pDst->mType == pSrc->mType) {
@@ -212,9 +212,9 @@ static int fn_801CF498(void *pDstHandle, void *pSrcHandle)
     return result;
 }
 
-static float fn_801CF504(void *pHandle)
+static float _MathRandSubtractive(void *pHandle)
 {
-    RandSub_801CEFF0 *pStream = pHandle;
+    RandSub_t *pStream = pHandle;
     int mj;
     float value;
 
@@ -236,9 +236,9 @@ static float fn_801CF504(void *pHandle)
     return value;
 }
 
-void *fn_801CF5BC(int type, int seed)
+void *MathNewRandomStream(int type, int seed)
 {
-    RandStream_801CEFF0 *pStream = lbl_802F7AD0[type](seed);
+    RandStream_t *pStream = _MathRand_aInitFuncs[type](seed);
 
     if (pStream) {
         pStream->mType = type;
@@ -246,39 +246,39 @@ void *fn_801CF5BC(int type, int seed)
     return pStream;
 }
 
-int fn_801CF60C(void *pDstHandle, void *pSrcHandle)
+int MathCopyRandomStream(void *pDstHandle, void *pSrcHandle)
 {
-    RandStream_801CEFF0 *pDst = pDstHandle;
-    RandStream_801CEFF0 *pSrc = pSrcHandle;
+    RandStream_t *pDst = pDstHandle;
+    RandStream_t *pSrc = pSrcHandle;
     int type = pDst->mType;
     int result = 0x40003;
 
     if (pDst && pSrc) {
-        result = lbl_802F7AE8[type](pDst, pSrc);
+        result = _MathRand_aCopyFuncs[type](pDst, pSrc);
     }
     return result;
 }
 
-int fn_801CF664(void *pHandle)
+int MathGetRandomStreamSize(void *pHandle)
 {
-    RandStream_801CEFF0 *pStream = pHandle;
-    return lbl_802F7B00[pStream->mType];
+    RandStream_t *pStream = pHandle;
+    return _MathRand_Size[pStream->mType];
 }
 
-int fn_801CF67C(void *pStream)
+int MathDelRandomStream(void *pStream)
 {
     return fn_801D2BD0(pStream);
 }
 
-float fn_801CF69C(void *pHandle)
+float MathGetRandom(void *pHandle)
 {
-    RandStream_801CEFF0 *pStream = pHandle;
-    return lbl_802F7AF4[pStream->mType](pStream);
+    RandStream_t *pStream = pHandle;
+    return _MathRand_aGetFuncs[pStream->mType](pStream);
 }
 
-unsigned int fn_801CF6D4(void *pStream, unsigned int range)
+unsigned int MathGetRandomRange(void *pStream, unsigned int range)
 {
-    float value = fn_801CF69C(pStream) * (float)range;
+    float value = MathGetRandom(pStream) * (float)range;
 
     if ((unsigned int)value >= range) {
         value = 0.0f;
@@ -286,27 +286,27 @@ unsigned int fn_801CF6D4(void *pStream, unsigned int range)
     return (unsigned int)value;
 }
 
-int fn_801CF7AC(void)
+int MathGetRandomSeed(void)
 {
     return OSGetTick();
 }
 
-void *(*lbl_802F7AD0[3])(int seed) = {
-    fn_801CEFF0, fn_801CF0DC, fn_801CF308
+void *(*_MathRand_aInitFuncs[3])(int seed) = {
+    _MathRandInitFastLinear, _MathRandInitSlowLinear, _MathRandInitSubtractive
 };
 
-void (*lbl_802F7ADC[3])(void *pStream, int seed) = {
-    fn_801CF040, fn_801CF12C, fn_801CF358
+void (*_MathRand_aResetFuncs[3])(void *pStream, int seed) = {
+    _MathRandResetFastLinear, _MathRandResetSlowLinear, _MathRandResetSubtractive
 };
 
-int (*lbl_802F7AE8[3])(void *pDst, void *pSrc) = {
-    CopyFastRandomState, fn_801CF1B0, fn_801CF498
+int (*_MathRand_aCopyFuncs[3])(void *pDst, void *pSrc) = {
+    _MathRandCopyFastLinear, _MathRandCopySlowLinear, _MathRandCopySubtractive
 };
 
-float (*lbl_802F7AF4[3])(void *pStream) = {
-    fn_801CF074, fn_801CF240, fn_801CF504
+float (*_MathRand_aGetFuncs[3])(void *pStream) = {
+    _MathRandFastLinear, _MathRandSlowLinear, _MathRandSubtractive
 };
 
-int lbl_802F7B00[3] = {
-    sizeof(RandFast_801CEFF0), sizeof(RandSlow_801CEFF0), sizeof(RandSub_801CEFF0)
+int _MathRand_Size[3] = {
+    sizeof(RandFast_t), sizeof(RandSlow_t), sizeof(RandSub_t)
 };

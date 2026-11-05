@@ -9,7 +9,7 @@ extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
 extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern int fn_801CA648(int handle, int pos, void *pBuffer, int size);
+extern int FilePerformWrite(int handle, int pos, void *pBuffer, int size);
 void *fn_801C1F94();
 
 typedef struct Node_803B795C
@@ -1145,7 +1145,7 @@ int fn_802858BC(File_80285808 *pFile, void *pBuffer, int size, int *pCount)
 
     if (pFile->mHandle < 0)
         return 3;
-    count = fn_801CA648(pFile->mHandle, pFile->mPosition, pBuffer, size);
+    count = FilePerformWrite(pFile->mHandle, pFile->mPosition, pBuffer, size);
     if (count < 0)
     {
         *pCount = 0;

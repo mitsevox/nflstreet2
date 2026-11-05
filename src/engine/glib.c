@@ -1,4 +1,4 @@
-/* Graphics library front end: init/shutdown guards and a context word. */
+/* Graphics library front end: init/shutdown guards and the TV mode word (1 selects 50 Hz frame timing). */
 
 #include "engine/llglib.h"
 #include "engine/fn_801F7BD4.h"
@@ -9,7 +9,7 @@ extern int lbl_803EBC64;
 int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig);
 int fn_801CE718(void);
 
-int fn_801CE138(GlibConfig_801CE1F8 *pConfig)
+int GlibInit(GlibConfig_801CE1F8 *pConfig)
 {
     int result;
 
@@ -23,7 +23,7 @@ int fn_801CE138(GlibConfig_801CE1F8 *pConfig)
     return result;
 }
 
-int fn_801CE190(void)
+int GlibShutdown(void)
 {
     int result;
 
@@ -37,12 +37,12 @@ int fn_801CE190(void)
     return result;
 }
 
-int fn_801CE1E8(void)
+int GlibGetTvMode(void)
 {
     return lbl_803EBC64;
 }
 
-void fn_801CE1F0(int value)
+void GlibSetTvMode(int value)
 {
     lbl_803EBC64 = value;
 }

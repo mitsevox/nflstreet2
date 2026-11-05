@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 
-extern int fn_801D34D0(void *dest, int size, int value, int width);
+extern int MemFill(void *dest, int size, int value, int width);
 extern char *strcpy();
 extern int strcmp();
 
@@ -15,9 +15,9 @@ void fn_801C06E8(TextureConfig_801C06E8 *config)
     lbl_802F4870.mCapacity = config->mCapacity;
     fn_801C10D8(lbl_802F4870.mUnknown10);
     lbl_802F4870.mTextures = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 0);
-    fn_801D34D0(lbl_802F4870.mTextures, lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 1);
+    MemFill(lbl_802F4870.mTextures, lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 1);
     lbl_802F4870.mPool = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 0);
-    fn_801D34D0(lbl_802F4870.mPool, lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 1);
+    MemFill(lbl_802F4870.mPool, lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 1);
     pool = lbl_802F4870.mPool;
     for (i = 0; i < lbl_802F4870.mCapacity; i++)
         lbl_802F4870.mTextures[i] = &pool[i];
@@ -66,7 +66,7 @@ void fn_801C089C(Texture_801C0928 *texture)
 
 void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc)
 {
-    fn_801D34D0(texture, sizeof(Texture_801C0928), 0, 1);
+    MemFill(texture, sizeof(Texture_801C0928), 0, 1);
     strcpy(texture->mName, desc->mName);
     texture->mAnimated = desc->mAnimated;
     texture->mFrameCount = desc->mFrameCount;

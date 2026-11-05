@@ -58,11 +58,11 @@ void fn_80188E8C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A740(void);
 void fn_80194E04(void);
-int fn_801C601C(int a);
-int fn_801C60BC(int a);
-int fn_801C6280(int a, int b, void *pValue);
-void fn_801C3A3C(float a);
-void fn_801CAF24(void);
+int ConUpdateChannel(int a);
+int ConProcessChannel(int a);
+int ConSetChannelInfo(int a, int b, void *pValue);
+void CamSetDefaultAspect(float a);
+void FileDebugProcess(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 int fn_801CEB4C(void);
@@ -273,14 +273,14 @@ static void fn_800278B8(int a, int b, float c)
 
 static void fn_80027950()
 {
-    fn_801C6280(-1, 1, (void *)fn_800278B8);
+    ConSetChannelInfo(-1, 1, (void *)fn_800278B8);
     fn_800271A4();
     fn_8007F374();
     fn_80024560();
     fn_8007F328(0);
     fn_8006EC24();
     fn_80072AA8();
-    fn_801C6280(-1, 1, 0);
+    ConSetChannelInfo(-1, 1, 0);
 }
 
 void FELoop::fn_800279AC()
@@ -289,7 +289,7 @@ void FELoop::fn_800279AC()
     fn_80027950();
     fn_80187FDC();
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
-        fn_801C3A3C(4.0f / 3.0f);
+        CamSetDefaultAspect(4.0f / 3.0f);
     } else {
         fn_8013CF98();
     }
@@ -339,7 +339,7 @@ const char *FELoop::GetName() { return "FELoop"; }
 int FELoop::Init()
 {
     fn_8018807C(0);
-    fn_801C6280(-1, 1, (void *)fn_800278B8);
+    ConSetChannelInfo(-1, 1, (void *)fn_800278B8);
     fn_800271A4();
     fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
     fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
@@ -370,8 +370,8 @@ unsigned char FELoop::fn_80027C58()
     fn_80024608();
     fn_8018A740();
     fn_801D6F58();
-    fn_801C601C(-1);
-    fn_801C60BC(-1);
+    ConUpdateChannel(-1);
+    ConProcessChannel(-1);
     fn_80022778();
     fn_8003E1F0();
     fn_8015CDA4();
@@ -383,7 +383,7 @@ unsigned char FELoop::fn_80027C58()
     fn_80194E04();
     if (flag) {
         fn_802285CC();
-        fn_801CAF24();
+        FileDebugProcess();
         fn_8006CA84(1);
         fn_801CE82C();
         if (sCallback) {
@@ -407,7 +407,7 @@ int FELoop::Shutdown()
     fn_80066DC8(0x31544250, 0);
     fn_80066DC8(0x31444250, 0);
     fn_8009418C();
-    fn_801C6280(-1, 1, 0);
+    ConSetChannelInfo(-1, 1, 0);
     sUnknown803EA2DC = 0;
     sUnknown803EA2E0 = 0;
     return 1;

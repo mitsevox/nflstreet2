@@ -28,9 +28,9 @@ int fn_80185274(void);
 void fn_8018A740(void);
 int fn_801C1D54(void);
 void fn_801C1D84(void);
-int fn_801C601C(int a);
-int fn_801C60BC(int a);
-void fn_801CAF24(void);
+int ConUpdateChannel(int a);
+int ConProcessChannel(int a);
+void FileDebugProcess(void);
 void fn_801CE248(int a);
 void fn_801CE82C(void);
 int fn_801CE944(int a);
@@ -98,11 +98,11 @@ static void fn_800241E0(void *p, unsigned short a, unsigned short b, int unused)
 
     while (current == a) {
         fn_8018A740();
-        fn_801C601C(-1);
-        fn_801C60BC(-1);
+        ConUpdateChannel(-1);
+        ConProcessChannel(-1);
         fn_801D6F58();
         fn_802285CC();
-        fn_801CAF24();
+        FileDebugProcess();
         fn_801CE82C();
         fn_80219650(p, &current, &other);
     }
@@ -113,10 +113,10 @@ static void fn_8002425C(void)
     unsigned int i;
 
     for (i = 0; i < 60; i++) {
-        fn_801C601C(-1);
-        fn_801C60BC(-1);
+        ConUpdateChannel(-1);
+        ConProcessChannel(-1);
         fn_802285CC();
-        fn_801CAF24();
+        FileDebugProcess();
         fn_801CE82C();
     }
 }

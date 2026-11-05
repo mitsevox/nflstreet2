@@ -51,7 +51,7 @@ struct Points_800F3A6C {
 };
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
@@ -73,7 +73,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
     fn_80227690(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
     angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
     distance = fn_802270A4(&delta);
-    if (fn_801CFFD0(angle, pMotion->mFacing) > 0x555554 && distance >= 3.5f) {
+    if (MathAngleDiff(angle, pMotion->mFacing) > 0x555554 && distance >= 3.5f) {
         return;
     }
     strength = 0.0f;
@@ -86,7 +86,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
             strength = distance / 8.0f;
             strength = 1.0f - strength;
         }
-        if (fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x1FFFFF && fn_8013BA58(pInfo->mpUnknown0, 0) == 4) {
+        if (MathAngleDiff(pMotion->mFacing, 0x400000) <= 0x1FFFFF && fn_8013BA58(pInfo->mpUnknown0, 0) == 4) {
             fn_80227690(&delta, &pInfo->mUnknown16, &pMotion->mPos);
             angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
         }

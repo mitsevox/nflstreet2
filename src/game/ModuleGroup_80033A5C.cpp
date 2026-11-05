@@ -86,7 +86,7 @@ const char *GRand::GetName() { return "GRand"; }
 
 int GRand::Init()
 {
-    fn_802371B0(2, fn_801CF7AC());
+    fn_802371B0(2, MathGetRandomSeed());
     return 1;
 }
 

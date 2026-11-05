@@ -9,9 +9,9 @@
 typedef int (*SysResetCallback_801F8868)(void);
 
 extern void fn_801CE2B8(int a);
-extern void fn_801CAB30(void);
+extern void FileAsyncCheckError(void);
 extern void fn_80239ED4(void);
-extern int fn_801CE1E8(void);
+extern int GlibGetTvMode(void);
 extern int fn_8027EFAC(int year);
 extern int fn_8027F000(int year);
 extern int fn_8027F030(int month, int year);
@@ -182,7 +182,7 @@ void fn_801F8174(OSMutex **ppMutex)
 void fn_801F81AC(void)
 {
     fn_801F8768();
-    fn_801CAB30();
+    FileAsyncCheckError();
     OSYieldThread();
 }
 
@@ -251,7 +251,7 @@ void fn_801F8574(void)
     unsigned int days;
 
     lbl_803EBE58++;
-    switch (fn_801CE1E8()) {
+    switch (GlibGetTvMode()) {
     case 1:
         ms = lbl_803EBE58 * 20;
         break;

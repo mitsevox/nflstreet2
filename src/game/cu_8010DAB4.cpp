@@ -61,7 +61,7 @@ int fn_801783AC(int flag);
 int fn_801787A0(void);
 int fn_8011F1A4(void);
 int fn_8013BA58(Object_80137ABC *p, int *pArg);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut);
@@ -127,9 +127,9 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
         if (pMotion->mPos.mY < pCarrierMotion->mPos.mY || fabsf(pCarrierMotion->mPos.mX - pMotion->mPos.mX) > 8.0f) {
             if (pOut->mHeading <= 0x7FFFFF) {
                 if (pOut->mHeading <= 0x3FFFFF) {
-                    pOut->mHeading += fn_801CFFD0(pOut->mHeading, 0x400000) / 3;
+                    pOut->mHeading += MathAngleDiff(pOut->mHeading, 0x400000) / 3;
                 } else {
-                    pOut->mHeading -= fn_801CFFD0(pOut->mHeading, 0x400000) / 3;
+                    pOut->mHeading -= MathAngleDiff(pOut->mHeading, 0x400000) / 3;
                 }
             }
             pOut->mSpeed = 0.72f;
@@ -138,7 +138,7 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
             pOut->mSpeed = 0.72f;
         }
         pMate = fn_80039F5C(fn_80178320(), fn_8012078C()->mpUnknown4[0]);
-        if (p->mMotion.mPos.mY > pMate->mMotion.mPos.mY && fn_801CFFD0(pOut->mHeading, 0x400000) <= 0x3FFFFF) {
+        if (p->mMotion.mPos.mY > pMate->mMotion.mPos.mY && MathAngleDiff(pOut->mHeading, 0x400000) <= 0x3FFFFF) {
             target.mX = pCarrierMotion->mPos.mX;
             target.mX = CLAMP(target.mX, 2.0f - fn_80178A08(), fn_80178A08() - 2.0f);
             target.mY = pMate->mMotion.mPos.mY;

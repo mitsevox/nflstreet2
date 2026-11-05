@@ -31,7 +31,7 @@ void fn_8016CF00(Object_80039F5C *p);
 int fn_80178308(void);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
@@ -73,7 +73,7 @@ void fn_8016CF40(Object_80039F5C *p)
     int reverse = 0;
     Object_8016D8B0 *pInput = &p->mUnknown528;
     Object_800B26B0 *pMotion = &p->mMotion;
-    int turn = fn_801CFFD0(pInput->mUnknown4, pInput->mUnknown8);
+    int turn = MathAngleDiff(pInput->mUnknown4, pInput->mUnknown8);
     float sign = 1.0f;
     float speed;
     float limit;
@@ -142,7 +142,7 @@ void fn_8016D344(Object_80039F5C *p)
     float delta[2];
     float distance;
 
-    if (fn_801CFFD0(0x400000, p->mMotion.mFacing) < 0x355555 && p == fn_80137B40()) {
+    if (MathAngleDiff(0x400000, p->mMotion.mFacing) < 0x355555 && p == fn_80137B40()) {
         int team = fn_80178308();
         Object_80039F5C *pOther = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), 0x355555, &distance, 0);
 
@@ -151,7 +151,7 @@ void fn_8016D344(Object_80039F5C *p)
 
             fn_80227690(delta, &pOther->mMotion, &p->mMotion);
             angle = fn_801CFE40(delta[1], delta[0]);
-            if (distance < 2.0f - fn_801CFFD0(angle, p->mMotion.mFacing) / 3495253.0f &&
+            if (distance < 2.0f - MathAngleDiff(angle, p->mMotion.mFacing) / 3495253.0f &&
                 fn_80124714(p, pOther, 0)) {
                 if (((angle - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF) {
                     if (p->mUnknown776 == 2) {
@@ -184,7 +184,7 @@ void fn_8016D4D8(Object_80039F5C *p)
     if (pRequest->mUnknown15 == 0 || pInput->mUnknown12 == lbl_803EB428) {
         if (p->mFlags & 0x4000) {
             if (pInput->mUnknown12 != 0) {
-                if (fn_801CFFD0(pMotion->mUnknown32, pRequest->mUnknown4) <= 0x11C71B) {
+                if (MathAngleDiff(pMotion->mUnknown32, pRequest->mUnknown4) <= 0x11C71B) {
                     pInput->mUnknown12--;
                     pRequest->mUnknown15 = 1;
                 } else {
@@ -377,6 +377,6 @@ void fn_8016DA98(Object_80039F5C *p)
 
 int fn_8016DAA4(Object_80039F5C *p)
 {
-    return fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x200000;
+    return MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x200000;
 }
 }

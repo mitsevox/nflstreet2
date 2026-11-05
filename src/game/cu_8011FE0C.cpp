@@ -14,7 +14,7 @@ int fn_801486A0(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 void fn_8011FE0C(void)
@@ -172,7 +172,7 @@ void fn_80120384(void)
     angle = fn_801CFE40(velocity.mY, velocity.mX);
     for (i = 0; i < count; i++) {
         fn_80227690(&delta, &fn_80039F5C(fn_80178320(), i)->mMotion.mPos, &pos);
-        if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x238E38) {
+        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x238E38) {
             lbl_803EB09C->mpUnknown12[i] = 0;
         }
     }

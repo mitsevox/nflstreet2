@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-void *fn_801D34C4(unsigned int size);
-void fn_801D34CC(void *pAddr);
-int fn_801D34D0(char *pDst, unsigned int size, int value, unsigned int width);
+void *MemGetMemLL(unsigned int size);
+void MemFreeMemLL(void *pAddr);
+int MemFill(char *pDst, unsigned int size, int value, unsigned int width);
 
 #ifdef __cplusplus
 }

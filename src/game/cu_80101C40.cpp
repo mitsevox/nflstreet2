@@ -46,8 +46,8 @@ void fn_800A2190(int bit);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800D0B90(Object_80039F5C *p);
 int fn_80101B7C(Object_80039F5C *p);
-int fn_801CFFD0(int a, int b);
-float fn_801CFFA0(float value);
+int MathAngleDiff(int a, int b);
+float MathInverse(float value);
 void fn_801BD81C(void *p, float value);
 void fn_80156C78(int index, int value);
 void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
@@ -122,7 +122,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         } else if (p->mMotion.mUnknown28 > lbl_803EC9E8) {
             switch (fn_801BE648(p->mpUnknown792)) {
             case 0x54:
-                if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
+                if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
                     && p->mMotion.mUnknown32 > 0x238E39 && p->mMotion.mUnknown32 <= 0x58E38D) {
                     mode = 2;
                 } else {
@@ -135,10 +135,10 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
                     if (fn_800CA5CC(p, 5, 1) != 0) {
                         mode = 5;
                     } else if (p->mUnknown2913 == 1
-                               && fn_801CFFD0(p->mMotion.mUnknown32, 0) <= 0x2AAAA9) {
+                               && MathAngleDiff(p->mMotion.mUnknown32, 0) <= 0x2AAAA9) {
                         mode = 5;
                     } else if (p->mUnknown2913 == 0
-                               && fn_801CFFD0(p->mMotion.mUnknown32, 0x800000) <= 0x2AAAA9) {
+                               && MathAngleDiff(p->mMotion.mUnknown32, 0x800000) <= 0x2AAAA9) {
                         mode = 5;
                     } else {
                         mode = 2;
@@ -181,7 +181,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     }
     pChannels = p->mpUnknown800;
     if (pRequest->mUnknown1D != 4 && fn_801BE648(p->mpUnknown792) != 0xEB) {
-        fn_801BD81C(&pChannels[anim].mUnknown4C, fn_801CFFA0(lbl_803EAEC0));
+        fn_801BD81C(&pChannels[anim].mUnknown4C, MathInverse(lbl_803EAEC0));
     }
     if (pRequest->mUnknownAByte != 15) {
         switch (p->mpState->mUnknown1) {

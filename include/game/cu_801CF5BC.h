@@ -5,13 +5,13 @@
 extern "C" {
 #endif
 
-void *fn_801CF5BC(int, int);
-int fn_801CF60C(void *, void *);
-int fn_801CF664(void *);
-int fn_801CF67C(void *);
-float fn_801CF69C(void *);
-unsigned int fn_801CF6D4(void *, unsigned int);
-int fn_801CF7AC(void);
+void *MathNewRandomStream(int, int);
+int MathCopyRandomStream(void *, void *);
+int MathGetRandomStreamSize(void *);
+int MathDelRandomStream(void *);
+float MathGetRandom(void *);
+unsigned int MathGetRandomRange(void *, unsigned int);
+int MathGetRandomSeed(void);
 
 #ifdef __cplusplus
 }

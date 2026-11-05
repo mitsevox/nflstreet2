@@ -41,7 +41,7 @@ void fn_80044114(void);
 void *fn_800A336C(void);
 int fn_800A3398(void);
 void fn_801A5104(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -142,7 +142,7 @@ void fn_8019AF7C(Object_8019AD5C *pObject, int index, void *pPos, float scale)
     int handle;
 
     if (pObject->mUnknown4AC[index] != 0 && lbl_802EE948[index].mUnknown19 != 0) {
-        handle = fn_801C657C();
+        handle = ConGetCurrentContext();
         if (pPos != 0) {
             fn_801D04C4();
             fn_801D0C58(pPos);
@@ -165,7 +165,7 @@ void fn_8019B088(Object_8019AD5C *pObject, float scale, void *pPos)
     int handle;
 
     if (pObject->mUnknown4AC[4] != 0 && lbl_802EE948[4].mUnknown19 != 0) {
-        handle = fn_801C657C();
+        handle = ConGetCurrentContext();
         if (pPos != 0) {
             fn_801D04C4();
             fn_801D0C58(pPos);

@@ -6,7 +6,7 @@
 
 extern "C" {
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_8013BA58(Object_80137ABC *p, int *pArg);
 
 void fn_8016C70C(Object_80039F5C *p)
@@ -32,7 +32,7 @@ void fn_8016C70C(Object_80039F5C *p)
     if (fn_801BE648(p->mpUnknown792) == 84) {
         limit = 0xAAAAA;
     }
-    int difference = fn_801CFFD0(requested, pMotion->mFacing);
+    int difference = MathAngleDiff(requested, pMotion->mFacing);
     if (difference != 0 && difference > limit) {
         if (((requested - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
             limit = -limit;
@@ -42,7 +42,7 @@ void fn_8016C70C(Object_80039F5C *p)
         pControl->mUnknown8 = pMotion->mFacing = requested;
     }
     if (p->mUnknown545 == 0) {
-        difference = fn_801CFFD0(pControl->mUnknown8, requested);
+        difference = MathAngleDiff(pControl->mUnknown8, requested);
         if (difference > 0x200000 && pMotion->mUnknown28 > pMotion->mUnknown36 * 0.5f) {
             pMotion->mUnknown52 -= (pMotion->mUnknown52 + pMotion->mUnknown52)
                                   * difference * 0.00000011920928955078125f;
@@ -87,7 +87,7 @@ void fn_8016CA50(Object_80039F5C *p)
     } else {
         limit = 0x70A3D;
     }
-    int difference = fn_801CFFD0(p->mUnknown512.mUnknown8, pMotion->mFacing);
+    int difference = MathAngleDiff(p->mUnknown512.mUnknown8, pMotion->mFacing);
     if (difference != 0 && difference > limit) {
         if (((p->mUnknown512.mUnknown8 - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
             limit = -limit;
@@ -107,7 +107,7 @@ void fn_8016CA50(Object_80039F5C *p)
         pControl->mUnknown8 = p->mUnknown512.mUnknown8;
     }
     if (p->mUnknown545 == 0) {
-        difference = fn_801CFFD0(pControl->mUnknown8, p->mUnknown512.mUnknown8);
+        difference = MathAngleDiff(pControl->mUnknown8, p->mUnknown512.mUnknown8);
         if (difference > 0x200000 && pMotion->mUnknown28 > pMotion->mUnknown36 * 0.5f) {
             pMotion->mUnknown52 -= (pMotion->mUnknown52 + pMotion->mUnknown52)
                                   * difference * 0.00000011920928955078125f;

@@ -98,11 +98,11 @@ void fn_80194F1C(int a);
 void fn_80195F80(void);
 void fn_80196130(void);
 void fn_8019A9A0(int a, int b, float c);
-int fn_801C601C(int a);
-int fn_801C60BC(int a);
-int fn_801C6280(int a, int b, void *pValue);
-int fn_801C6458(int a, int b);
-void fn_801CAF24(void);
+int ConUpdateChannel(int a);
+int ConProcessChannel(int a);
+int ConSetChannelInfo(int a, int b, void *pValue);
+int ConGetChannelInfo(int a, int b);
+void FileDebugProcess(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 void fn_801D6F58(void);
@@ -188,7 +188,7 @@ static void fn_80028140(int a, InputValues *pPrevious, InputValues *pCurrent)
     fn_80026DD4(a, pPrevious, pCurrent);
     p = fn_8002739C();
     count = fn_800273A4();
-    handle = fn_801C6458(a, 0);
+    handle = ConGetChannelInfo(a, 0);
     fn_801E1C38(handle);
     if (fn_801E1CE0(handle)) {
         fn_801E15D0(handle);
@@ -225,7 +225,7 @@ static void fn_80028244()
         fn_80194F1C(1);
     }
     fn_800282DC();
-    fn_801C6280(-1, 2, (void *)fn_80026DD4);
+    ConSetChannelInfo(-1, 2, (void *)fn_80026DD4);
 }
 
 static void fn_800282B8() {}
@@ -267,7 +267,7 @@ int InGame::Init()
     fn_800A216C(1);
     fn_800AE8B4();
     fn_8002B598();
-    fn_801C6280(-1, 1, (void *)fn_80027FE0);
+    ConSetChannelInfo(-1, 1, (void *)fn_80027FE0);
     sUnknown803EC5F4 = 1;
     fn_800C8704(&a, &b);
     fn_8003B6BC(0, &record0);
@@ -303,7 +303,7 @@ int InGame::Init()
         fn_8013FC58();
     }
     if (fn_8002892C()) {
-        fn_801C6280(-1, 2, (void *)fn_80028140);
+        ConSetChannelInfo(-1, 2, (void *)fn_80028140);
     }
     fn_80194AEC(0);
     fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
@@ -360,8 +360,8 @@ unsigned char InGame::fn_8002854C()
         fn_8017CEDC(value);
     }
     if (!handled) {
-        fn_801C601C(-1);
-        fn_801C60BC(-1);
+        ConUpdateChannel(-1);
+        ConProcessChannel(-1);
     }
     fn_80065194();
     fn_8002CF34(lbl_803EA368);
@@ -370,7 +370,7 @@ unsigned char InGame::fn_8002854C()
         fn_80144EDC(lbl_803EA2C4);
         fn_800A3120(lbl_803EA2C4);
     }
-    fn_801CAF24();
+    FileDebugProcess();
     fn_8003E1F0();
     fn_80043F50();
     fn_800A7F6C();
@@ -421,7 +421,7 @@ int InGame::Shutdown()
     fn_800AB944(lbl_803EAA8C);
     fn_80089754();
     fn_8019180C();
-    fn_801C6280(-1, 2, (void *)fn_80026DD4);
+    ConSetChannelInfo(-1, 2, (void *)fn_80026DD4);
     fn_8017F664();
     fn_80062A58(sUnknown803EA2F8);
     sUnknown803EA2F8 = 0;

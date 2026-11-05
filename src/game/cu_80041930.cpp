@@ -34,7 +34,7 @@ void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
 void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 int fn_801BBE5C(int a, int b);
-void fn_801CF8A8(int *pOut, int a, int b, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
 void fn_801D0494(void);
 void fn_801D04C4(void);
@@ -665,7 +665,7 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
     fn_80227930(pObject->mUnknown4, posA, posB, t);
     angleB = (int)(ReadBitStream(pStreamB, 12) << 52 >> 40) & 0xFFF000;
     angleA = (int)(ReadBitStream(pStreamA, 12) << 52 >> 40) & 0xFFF000;
-    fn_801CF8A8(&pObject->mUnknown36, angleA, angleB, t);
+    OrientLerpAngle(&pObject->mUnknown36, angleA, angleB, t);
 
     if (!pStreamC) {
         if (!pStreamD) {

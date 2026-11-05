@@ -205,7 +205,7 @@ void fn_80161498(void);
 void fn_8019723C(Object_80146094 *p);
 void fn_801A1400(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
-void fn_801C657C(void);
+void ConGetCurrentContext(void);
 void fn_801D0470(void);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -1198,7 +1198,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
         lbl_803EB7F0 = 1;
     }
     flags = fn_801A28E8(pPlayer);
-    fn_801C657C();
+    ConGetCurrentContext();
     fn_80228668();
     fn_801D0470();
     lod = pPlayer->mUnknown4216.mUnknown0;

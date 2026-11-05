@@ -54,7 +54,7 @@ struct Steer_8010DAB4 {
 extern "C" {
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
 float fn_801CFB94(int angle);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
@@ -102,7 +102,7 @@ extern "C" void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
                 second = toward.Heading();
                 if ((((first - second) & 0xFFFFFF) <= 0x7FFFFF && ((pOut->mHeading - second) & 0xFFFFFF) <= 0x7FFFFF) ||
                     (((first - second) & 0xFFFFFF) > 0x800000 && ((pOut->mHeading - second) & 0xFFFFFF) > 0x800000)) {
-                    if (fn_801CFFD0(first - second, 0) > fn_801CFFD0(pOut->mHeading - second, 0)) between = 1;
+                    if (MathAngleDiff(first - second, 0) > MathAngleDiff(pOut->mHeading - second, 0)) between = 1;
                 }
             } else {
                 aim.mX = pOther->mMotion.mPos.mX;
@@ -115,31 +115,31 @@ extern "C" void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
             heading = toward.Heading();
             scale = distance * 0.4f;
             if (scale > 1.0f) scale = 1.0f;
-            if (fn_801CFFD0(heading, pOut->mHeading) <= 0x271C70) {
+            if (MathAngleDiff(heading, pOut->mHeading) <= 0x271C70) {
                 if (((heading - pOut->mHeading) & 0xFFFFFF) > 0x800000) {
                     turn = (int)((1.0f - scale) * 3728270.0f);
                     if (pair && between) {
                         if (((first - heading) & 0xFFFFFF) <= 0x7FFFFF) {
-                            turn += fn_801CFFD0(first, pOut->mHeading);
+                            turn += MathAngleDiff(first, pOut->mHeading);
                         } else {
-                            turn += fn_801CFFD0(second, pOut->mHeading);
+                            turn += MathAngleDiff(second, pOut->mHeading);
                         }
                     }
                 } else {
                     turn = (int)-((1.0f - scale) * 3728270.0f);
                     if (pair && between) {
                         if (((first - heading) & 0xFFFFFF) > 0x800000) {
-                            turn -= fn_801CFFD0(first, pOut->mHeading);
+                            turn -= MathAngleDiff(first, pOut->mHeading);
                         } else {
-                            turn -= fn_801CFFD0(second, pOut->mHeading);
+                            turn -= MathAngleDiff(second, pOut->mHeading);
                         }
                     }
                 }
-                off = fn_801CFFD0(pOut->mHeading + turn, pMotion->mFacing);
+                off = MathAngleDiff(pOut->mHeading + turn, pMotion->mFacing);
                 if (off > 0x11C71C) {
                     pOut->mSpeed = fn_801CFB94(off / 2) * 0.72f;
                     pOut->mUnknown22 = 0;
-                } else if (distance < 2.1f && fn_801CFFD0(heading, pMotion->mFacing) <= 0x1FFFFF) {
+                } else if (distance < 2.1f && MathAngleDiff(heading, pMotion->mFacing) <= 0x1FFFFF) {
                     pOut->mUnknown22 = 0;
                 }
             }

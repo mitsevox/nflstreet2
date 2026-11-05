@@ -10,7 +10,7 @@
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 void fn_80194C5C(int a, int b, int c);
 int fn_800B6644(int a);
@@ -63,13 +63,13 @@ void fn_80063730(int id, int flag)
         if (flag != 0 && fn_8007F828(9) != 0) {
             if (fn_80027DF0() != 0) {
                 for (i = 0; i < 8; i++) {
-                    if (fn_801E195C(fn_801C6458(i, 0)) == 2) {
+                    if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
                         fn_80194C5C(i, 127, 20);
                     }
                 }
             } else {
                 for (i = 0; i < 10; i++) {
-                    if (fn_801E195C(fn_801C6458(i, 0)) == 2 && fn_800B6644(i) != 255) {
+                    if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
                         fn_80194C5C(i, 127, 20);
                     }
                 }

@@ -90,7 +90,7 @@ void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
 void fn_8012CB98(int, unsigned char, int, void *);
 int fn_8012CB50(void *);
@@ -256,8 +256,8 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
     unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
     int angle = index != 0xffff ? p->mpUnknown76[index * 4 + 2] << 17 : 0x400000;
     int turn;
-    if (fn_801CFFD0(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
-    else if (fn_801CFFD0(angle, 0) > 0x400000) turn = angle + 0x400000;
+    if (MathAngleDiff(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
+    else if (MathAngleDiff(angle, 0) > 0x400000) turn = angle + 0x400000;
     else turn = pPoint->mX < fn_80177FE0().mX ? 0x800000 : 0;
     float point[3];
     fn_80227538(point, turn, length);
@@ -391,7 +391,7 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         target.mY = origin.mY;
         fn_80227690(&target, &target, &point);
         int angle = fn_801CFE40(target.mY, target.mX);
-        if (fn_801CFFD0(angle, 0x400000) > 0x3fffff) break;
+        if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
         float length = fn_802270A4(&target);
         fn_8015A588(p, 0, pPoint, &length, &angle);
         break;

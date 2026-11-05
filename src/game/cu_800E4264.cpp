@@ -14,7 +14,7 @@ struct State_800E4264 {
 
 extern "C" {
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_801BD690(void *p, int key);
 }
 
@@ -32,7 +32,7 @@ extern "C" int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRe
                         pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         }
         int heading = pState->mUnknown56;
-        if (fn_801CFFD0(heading, p->mMotion.mFacing) > 46603) {
+        if (MathAngleDiff(heading, p->mMotion.mFacing) > 46603) {
             fn_801BE760(p->mpUnknown792, key, 1);
             if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 189)) {
                 Record_800D81C8 *pChannels = p->mpUnknown800;
@@ -45,7 +45,7 @@ extern "C" int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRe
                     }
                 }
                 pState->mUnknown64 = pState->mUnknown64 > 50.0f ? 50.0f : pState->mUnknown64;
-                pState->mUnknown60 = (int)(fn_801CFFD0(heading, p->mMotion.mFacing) / pState->mUnknown64);
+                pState->mUnknown60 = (int)(MathAngleDiff(heading, p->mMotion.mFacing) / pState->mUnknown64);
                 if (((p->mMotion.mFacing - heading) & 0xFFFFFF) <= 0x7FFFFF) {
                     pState->mUnknown60 = -pState->mUnknown60;
                 }

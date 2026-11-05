@@ -40,7 +40,7 @@ int fn_800A262C(void);
 int fn_800A26C4(void);
 int fn_800A34B0(void);
 int fn_800A34BC(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -112,7 +112,7 @@ void fn_801A553C(Instance_801614D0 *pInstance)
 
 void fn_801A5568(Instance_801614D0 *pInstance, int unused)
 {
-    int handle = fn_801C657C();
+    int handle = ConGetCurrentContext();
 
     fn_80210388();
     fn_80235C90(&pInstance->mUnknown48, 0, 0.5f, 0.5f, 0.5f, 0.51f);
@@ -305,7 +305,7 @@ void fn_801A5CA4(Object_80046340 *pObject)
 int fn_801A5D0C(Object_800463D8 *pOwner)
 {
     Object_80046340 *pObject = pOwner->mpUnknown14;
-    int handle = fn_801C657C();
+    int handle = ConGetCurrentContext();
     float alpha = 0.1f;
 
     fn_801D0470(fn_80228668());
@@ -337,7 +337,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
 
 int fn_801A5E90(Object_80046340 *pObject)
 {
-    int handle = fn_801C657C();
+    int handle = ConGetCurrentContext();
     unsigned int i;
 
     fn_801D0470(fn_80228668());

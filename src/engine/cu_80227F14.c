@@ -17,14 +17,14 @@ typedef struct Match_80228474 {
     int mUnknown8;
 } Match_80228474;
 
-extern void fn_801CAB30(void);
+extern void FileAsyncCheckError(void);
 extern void fn_801CE720(void);
 extern void fn_801CE774(void);
 extern int fn_801CEA14(void);
 extern float fn_801CFD28(int angle);
 extern void fn_801CEC48(int a, int b, int c, int d);
-extern int fn_801D0290(unsigned int a, unsigned int b);
-extern int fn_801D0310(unsigned int a);
+extern int MatNewStack(unsigned int a, unsigned int b);
+extern int MatDelStack(unsigned int a);
 extern void fn_801DD140(int handle, int a, int b);
 extern void fn_801F7BD4(int err);
 extern int fn_801F7C88(void);
@@ -109,7 +109,7 @@ int fn_802280B0(Init_802280B0 *pInit)
         if ((lbl_803EBF94 = fn_801C68FC(1, 0, pInit->mUnknown0, sizeof(Object_80228224), fn_80228018, 0)) != 0
             && (lbl_803EBF98 = fn_801C68FC(1, 0, pInit->mUnknown4, sizeof(Entry_80228474), fn_80227F14, 0)) != 0) {
             lbl_803ED670 = pInit->mUnknown10;
-            err = fn_801D0290(pInit->mUnknown10, pInit->mUnknown11);
+            err = MatNewStack(pInit->mUnknown10, pInit->mUnknown11);
             if (err == 0) {
                 err = fn_802288F8(pInit);
             }
@@ -139,7 +139,7 @@ int fn_80228194(void)
             fn_801C69E4(lbl_803EBF98);
             lbl_803EBF98 = 0;
         }
-        fn_801D0310(lbl_803ED670);
+        MatDelStack(lbl_803ED670);
         err = fn_80228948();
         lbl_803EBF90 = 0;
     } else {
@@ -248,7 +248,7 @@ void fn_80228594(Object_80228224 *pObject)
 
 void fn_802285CC(void)
 {
-    fn_801CAB30();
+    FileAsyncCheckError();
     fn_801F8768();
     if (!lbl_803EBF9C) {
         fn_801CE720();

@@ -43,7 +43,7 @@ extern const char lbl_802EBDBC[];
 extern float lbl_803ECB0C;
 extern float lbl_803ECB10;
 int fn_8008DFF8(Object_80039F5C *, unsigned short);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 int fn_801BB608(void *, void *);
 int fn_801BB638(int, void *);
 int fn_801BB65C(int, void *);
@@ -117,7 +117,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
     unsigned short key=fn_801BE648(p->mpUnknown792);
     Object_8016D8B0 *current=&p->mUnknown512;
     Object_8016D8B0 *next=&p->mUnknown528;
-    int difference=fn_801CFFD0(current->mUnknown4,current->mUnknown8);
+    int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;

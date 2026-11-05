@@ -213,7 +213,7 @@ int fn_800BA6F8(void);
 char *fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_800588F8(int a, int b);
 int fn_80065650(void);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_800B6644(int index);
 unsigned int fn_8017F584(void);
 void fn_8002B5D0(int a, int b);
@@ -1259,7 +1259,7 @@ void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
     int value = 0;
     fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
     if (pad != -1) {
-        fn_801C2E18(pText, "Pause - Controller Socket %d", fn_801C6458(pad, 0) + 1);
+        fn_801C2E18(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
         int active = 1;
         if (fn_800B6644(pad) == 0) {
             active = 0;

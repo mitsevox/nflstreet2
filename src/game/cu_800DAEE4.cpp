@@ -33,7 +33,7 @@ unsigned int fn_800ABDA4(int team);
 unsigned char fn_8011F59C(int index);
 void fn_8011F5AC(int index);
 
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
@@ -59,7 +59,7 @@ extern "C" int fn_800DAEE4(Object_80039F5C *p)
             result = 2;
         }
     } else {
-        int angle = fn_801CFFD0(p->mMotion.mFacing, 0);
+        int angle = MathAngleDiff(p->mMotion.mFacing, 0);
         result = 2;
         if (angle <= 0x3FFFFF) {
             result = 1;
@@ -433,8 +433,8 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float value, void *
 
 
 void fn_801BE760(void *p, unsigned short key, unsigned short flags);
-float fn_801CFFA0(float value);
-int fn_801CFFD0(int a, int b);
+float MathInverse(float value);
+int MathAngleDiff(int a, int b);
 }
 
 static unsigned int lbl_803EAD1C = 0;
@@ -473,7 +473,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
     if (fn_801BE648(p->mpUnknown792) != 217 || value > 0.0f) {
         if (value <= 0.0f) {
             lbl_803EAD1C++;
-            if (fn_801CFFD0(p->mMotion.mFacing, dir) > 0x400000) {
+            if (MathAngleDiff(p->mMotion.mFacing, dir) > 0x400000) {
                 if (lbl_803EAD1C > 15) {
                     int base = 0x800000;
                     if (p->mUnknown2913 == 0) {
@@ -511,7 +511,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
         }
         result = fn_800DC080(p);
         if (result == 1 && p->mUnknown512.mUnknown15 != 1) {
-            if (fn_801CFFD0(angle, -0x38E38E) <= 0x155554) {
+            if (MathAngleDiff(angle, -0x38E38E) <= 0x155554) {
                 if (p->mUnknown2913 == 0) {
                     int facing = p->mMotion.mFacing & 0xFFFFFF;
                     if (facing >= 0x6E38E4 && facing <= 0xC38E38
@@ -669,7 +669,7 @@ extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
         for (i = 0; i < pList->mCount; i++) {
             Object_800DC36C *pObject = pList->mEntries[i].mpUnknown4;
             if (pObject->mUnknown36 == side
-                && fn_801CFFD0(pObject->mUnknown40, p->mUnknown512.mUnknown4) <= 0x400000) {
+                && MathAngleDiff(pObject->mUnknown40, p->mUnknown512.mUnknown4) <= 0x400000) {
                 break;
             }
         }
@@ -687,11 +687,11 @@ extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
                  + (p->mMotion.mFacing - pBlock->mUnknown4Word)) & 0xFFFFFF;
             pBlock->mUnknown4Word = p->mMotion.mFacing;
         }
-        fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, fn_801CFFA0(fn_800C495C(p, 1.0f)));
+        fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(fn_800C495C(p, 1.0f)));
         if (fn_800A7EF4(p->mIdBytes[2]) == 2) {
-            fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, fn_801CFFA0(2.0f));
+            fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(2.0f));
         } else if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
-            fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, fn_801CFFA0(0.5f));
+            fn_801BD81C(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(0.5f));
         }
         break;
     }
@@ -860,7 +860,7 @@ Object_800670B4 *fn_80168708(int team);
 void fn_80171DB0(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801CFE08(float value);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -931,7 +931,7 @@ struct State_800DE3B0 {
 };
 extern "C" {
 void fn_801BD81C(void *p, float value);
-float fn_801CFFA0(float value);
+float MathInverse(float value);
 void fn_80227384(void *pOut, void *p, int angle);
 }
 extern float lbl_803EAD20;
@@ -1169,7 +1169,7 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint);
 extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
 {
     Object_8016D8B0 *pBlock = &p->mUnknown512;
-    int delta = fn_801CFFD0(pBlock->mUnknown4, pBlock->mUnknown8);
+    int delta = MathAngleDiff(pBlock->mUnknown4, pBlock->mUnknown8);
     int angle;
     int result;
     if (((pBlock->mUnknown4 - pBlock->mUnknown8) & 0xFFFFFF) > 0x800000) {
@@ -1187,7 +1187,7 @@ extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
 extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p)
 {
     float value = p->mMotion.mUnknown28;
-    if (fn_801CFFD0((p->mMotion.mUnknown32 - p->mMotion.mFacing) & 0xFFFFFF, pObject->mUnknown20) > 0x400000) {
+    if (MathAngleDiff((p->mMotion.mUnknown32 - p->mMotion.mFacing) & 0xFFFFFF, pObject->mUnknown20) > 0x400000) {
         value = -value;
     }
     return value;
@@ -1233,7 +1233,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
         unsigned char entry = fn_801BA2A8(pA, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         pRecord->mUnknown0 = entry;
         pRecord->mUnknown4 = -1;
-        fn_801BD81C(&pEntries[entry].mUnknown4C, fn_801CFFA0(p->mUnknown528.mUnknown0 + 0.2799999713897705f));
+        fn_801BD81C(&pEntries[entry].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0 + 0.2799999713897705f));
         break;
     }
     case 2: {
@@ -1299,7 +1299,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
                 rate = 0.65f;
             }
         }
-        fn_801BD81C(&pEntries[pRecord->mUnknown0].mUnknown4C, fn_801CFFA0(rate));
+        fn_801BD81C(&pEntries[pRecord->mUnknown0].mUnknown4C, MathInverse(rate));
         p->mpUnknown800[pRecord->mUnknown0].mUnknown2C = 1.5f;
         break;
     }
@@ -1790,7 +1790,7 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
     *pAngle = 0;
     *pTime = 1.0f;
     *pRate = 1.0f;
-    int difference = fn_801CFFD0(facing, desired);
+    int difference = MathAngleDiff(facing, desired);
     int direction = ((desired - facing) & 0xFFFFFF) > 0x800000 ? -1 : 1;
     Info_800DDF34 *pChosen = 0;
     unsigned int chosen = 0;
@@ -1814,7 +1814,7 @@ extern "C" unsigned short fn_800DDF34(Table_80089904 *pTable, Object_80039F5C *p
         }
         *pRate *= p->mUnknown512.mUnknown0;
         int magnitude = pChosen->mUnknown12 < 0 ? -pChosen->mUnknown12 : pChosen->mUnknown12;
-        *pAngle = fn_801CFFD0(magnitude, difference);
+        *pAngle = MathAngleDiff(magnitude, difference);
         if ((((facing + pChosen->mUnknown12) & 0xFFFFFF) - desired & 0xFFFFFF) <= 0x7FFFFF) {
             *pAngle = -*pAngle;
         }
@@ -1840,7 +1840,7 @@ extern "C" int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA,
         int index = fn_800DDF34(pTable, p, key, &angle, &time, &rate);
         int entry = fn_801BA2A8(pA, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         pRecord->mUnknown0 = entry;
-        fn_801BD81C(&pEntries[entry].mUnknown4C, fn_801CFFA0(rate));
+        fn_801BD81C(&pEntries[entry].mUnknown4C, MathInverse(rate));
         pRecord->mUnknown4 = (int)((float)angle / time);
         p->mFlags &= ~4;
         break;
@@ -2000,7 +2000,7 @@ extern "C" void fn_800DE910(Object_80039F5C *p, Block_800DE3B0 *pBlock)
     p->mMotion.mPos.mX = (delta.mUnknown0 - p->mMotion.mPos.mX) * pBlock->mUnknown0 + p->mMotion.mPos.mX;
     p->mMotion.mPos.mY = (delta.mUnknown4 - p->mMotion.mPos.mY) * pBlock->mUnknown0 + p->mMotion.mPos.mY;
     int desired = (pBlock->mUnknown14 + pEntry->mUnknown1C) & 0xFFFFFF;
-    int angle = (int)((float)fn_801CFFD0(desired, p->mMotion.mFacing) * pBlock->mUnknown0);
+    int angle = (int)((float)MathAngleDiff(desired, p->mMotion.mFacing) * pBlock->mUnknown0);
     if (((p->mMotion.mFacing - desired) & 0xFFFFFF) <= 0x7FFFFF) {
         p->mMotion.mFacing = (p->mMotion.mFacing - angle) & 0xFFFFFF;
         pEntry->mUnknownC = (pEntry->mUnknownC - angle) & 0xFFFFFF;
@@ -2164,11 +2164,11 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
             }
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown336);
             float rate = p->mpState->mId == 16 ? fn_80114EE4(p, pOther) : fn_80114EE4(pOther, p);
-            fn_801BD81C(&pEntries[pBlock->mUnknown1D].mUnknown4C, fn_801CFFA0(rate));
+            fn_801BD81C(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate));
         } else if (!excluded && p->mUnknown512.mUnknown14 == 5) {
             float rate = p->mUnknown512.mUnknown0 + 0.8f;
             if (!(rate <= 1.2f)) rate = 1.2f;
-            fn_801BD81C(&pEntries[pBlock->mUnknown1D].mUnknown4C, fn_801CFFA0(rate));
+            fn_801BD81C(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate));
         }
         fn_800DE51C(p, pBlock, first);
         if (pBlock->mUnknown1F) {
@@ -2485,7 +2485,7 @@ extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
         pBlock->mUnknown4 = p->mMotion.mFacing;
         float y = fabsf(p->mMotion.mPos.mY);
         if (!(y <= fn_80178A2C())) {
-            pBlock->mUnknown4 = fn_801CFFD0(p->mMotion.mFacing, 0) > 0x400000 ? 0x800000 : 0;
+            pBlock->mUnknown4 = MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000 ? 0x800000 : 0;
         }
         p->mUnknown512.mUnknown14 = 10;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown4;
@@ -2906,7 +2906,7 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
     float angle = 10.0f;
     int result = 0;
     Object_80039F5C *pOther = fn_80137B40();
-    if (pOther && fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
+    if (pOther && MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
         int special = 0;
         fn_800ACDE4(p, &chance, &angle);
         if (fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
@@ -2915,14 +2915,14 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
         }
         if (special) {
             if (!(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
-                fn_801CFFD0(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
+                MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
                 !(fn_80237260(0) >= chance) && fn_800E1350(p)) {
                 result = 1;
             }
         } else {
             if (!(p->mMotion.mPos.mY >= pOther->mMotion.mPos.mY) &&
                 !(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
-                fn_801CFFD0(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
+                MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
                 !(fn_80237260(0) >= 0.1f) && fn_800E1350(p)) {
                 result = 1;
             }
@@ -3377,7 +3377,7 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint)
             delta.mY = p->mMotion.mPos.mY;
             fn_80227690(&delta, &delta, &p->mMotion.mPos);
             int angle = fn_801CFE40(delta.mY, delta.mX);
-            result = (unsigned int)(fn_801CFFD0(p->mMotion.mFacing, angle) - 0x271C72) <= 0x31C71B;
+            result = (unsigned int)(MathAngleDiff(p->mMotion.mFacing, angle) - 0x271C72) <= 0x31C71B;
         }
     }
     return result;

@@ -99,7 +99,7 @@ void fn_801D2130(ObjType_801DE1E0 *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
 int fn_801DCF8C(unsigned char heap);
 void *fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
@@ -125,11 +125,11 @@ void fn_801DFD4C(void);
 
 static void fn_801DD498(void)
 {
-    fn_801D34D0(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
+    MemFill(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
     lbl_8039ADAC.mpUsed = fn_801D2B7C(lbl_8039AD10.mPoolCount, 0, 0);
-    fn_801D34D0(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
+    MemFill(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
     lbl_8039ADAC.mpPools = fn_801D2B7C(lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 0);
-    fn_801D34D0(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
+    MemFill(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
 }
 
 static void fn_801DD534(void)
@@ -341,7 +341,7 @@ static void fn_801DE114(PartObj_801DE1E0 *pObj)
 
 float fn_801DE1B8(void)
 {
-    return fn_801CF69C(lbl_8039AD10.mpRandom);
+    return MathGetRandom(lbl_8039AD10.mpRandom);
 }
 
 void fn_801DE1E0(Desc_801DE1E0 *pDesc)
@@ -356,8 +356,8 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     lbl_8039AD10.mUnknown16 = pDesc->mUnknown24;
     lbl_8039AD10.mUnknown14 = pDesc->mUnknown08;
     lbl_8039AD10.mUnknown10 = 1.0f / (unsigned int)lbl_8039AD10.mUnknown14;
-    lbl_8039AD10.mUnknown84 = fn_801CF7AC();
-    lbl_8039AD10.mpRandom = fn_801CF5BC(0, lbl_8039AD10.mUnknown84);
+    lbl_8039AD10.mUnknown84 = MathGetRandomSeed();
+    lbl_8039AD10.mpRandom = MathNewRandomStream(0, lbl_8039AD10.mUnknown84);
     lbl_8039AD10.mPoolCount = pDesc->mUnknown18;
     fn_801DCF0C(lbl_8039AD10.mUnknown00, sizeof(PartObj_801DE1E0), pDesc->mUnknown04,
                 (void (*)())fn_801DE7F4, (void (*)())fn_801DEA50);
@@ -408,7 +408,7 @@ void fn_801DE410(void)
     fn_801DFD4C();
     fn_801DD0E8(pState->mpUnknown04);
     fn_801DCF8C(pState->mUnknown00);
-    fn_801CF67C(pState->mpRandom);
+    MathDelRandomStream(pState->mpRandom);
     if (pState->mUnknown64) {
         fn_801D2570(pState->mHeap);
     }
@@ -546,9 +546,9 @@ static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
         pObj->mMax = lbl_8039AD10.mUnknown62;
     }
     pObj->mppParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 0);
-    fn_801D34D0(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
+    MemFill(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
     pObj->mpParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0), 0, 0);
-    fn_801D34D0(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
+    MemFill(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
     for (i = 0; i < pObj->mMax; i++) {
         pObj->mppParticles[i] = &pObj->mpParticles[i];
     }
@@ -881,10 +881,10 @@ void fn_801DFD4C(void)
 
 static float fn_801DFDB8(void)
 {
-    return fn_801CF69C(lbl_8039AD10.mpRandom);
+    return MathGetRandom(lbl_8039AD10.mpRandom);
 }
 
 static int fn_801DFDE0(int range)
 {
-    return fn_801CF6D4(lbl_8039AD10.mpRandom, range);
+    return MathGetRandomRange(lbl_8039AD10.mpRandom, range);
 }
