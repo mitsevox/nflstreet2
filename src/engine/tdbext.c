@@ -7,7 +7,7 @@
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
-#include "game/MemHeapDesc_t.h"
+#include "game/Record_802CC680.h"
 
 typedef struct TDbExtResRef_t {
     void *mpStream;
@@ -15,18 +15,18 @@ typedef struct TDbExtResRef_t {
 } TDbExtResRef_t;
 
 extern unsigned char fn_801D2700(int handle);
-extern int fn_801D2130(MemHeapDesc_t *pParams);
+extern int fn_801D2130(Record_802CC680 *pParams);
 extern int fn_801D2570(int handle);
 extern void *fn_801D310C(void *p, int size, int flags, int d);
 extern int fn_801F0F9C(void *pPath);
 
-extern MemHeapDesc_t lbl_8039B498;
+extern Record_802CC680 lbl_8039B498;
 extern void *lbl_803EBEA8;
 extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
 
-void TDbExtInit(MemHeapDesc_t *pParams)
+void TDbExtInit(Record_802CC680 *pParams)
 {
     lbl_8039B498 = *pParams;
     lbl_803EBEAD = fn_801D2700(pParams->mUnknown8);

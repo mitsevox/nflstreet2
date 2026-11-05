@@ -7,7 +7,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgPathfinder.h"
-#include "game/MemHeapDesc_t.h"
+#include "game/Record_802CC680.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8015D3EC.h"
 #include "engine/periph.h"
@@ -69,7 +69,7 @@ int fn_801FC9D4(int a, int b, int c, int d, int e);
 void fn_801FCD04(void);
 int TaskInit(int a);
 int TaskShutdown(void);
-void TDbExtInit(MemHeapDesc_t *pRecord);
+void TDbExtInit(Record_802CC680 *pRecord);
 void TDbExtShutdown(void);
 int fn_80229470(void);
 void fn_80229494(void);
@@ -188,7 +188,7 @@ const char *Db::GetName() { return "Db"; }
 
 int Db::Init()
 {
-    MemHeapDesc_t *record = fn_80025E50(2);
+    Record_802CC680 *record = fn_80025E50(2);
     Desc_801F8A0C desc;
 
     fn_8022C930(32);

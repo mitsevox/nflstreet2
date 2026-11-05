@@ -2,7 +2,7 @@
 #define GAME_GAMESTATE_H
 
 #include "game/Module.h"
-#include "game/MemHeapDesc_t.h"
+#include "game/Record_802CC680.h"
 
 /* Object returned by fn_80237EE8. */
 #include "engine/Object_80237EE8.h"

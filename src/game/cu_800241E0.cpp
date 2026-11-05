@@ -8,7 +8,7 @@
 #include <string.h>
 #include <dolphin/os/OSResetSW.h>
 
-#include "game/MemHeapDesc_t.h"
+#include "game/Record_802CC680.h"
 #include <dolphin/os.h>
 
 extern "C" {
@@ -235,14 +235,14 @@ void fn_80024654(void)
 /* Sets the base (+12) and size (+16) words of the eight memory records. */
 void fn_800246C0(void)
 {
-    MemHeapDesc_t *pState = fn_80025E50(4);
-    MemHeapDesc_t *pDb = fn_80025E50(2);
-    MemHeapDesc_t *pMain = fn_80025E50(1);
-    MemHeapDesc_t *pDebug = fn_80025E50(8);
-    MemHeapDesc_t *pMisc = fn_80025E50(0x20);
-    MemHeapDesc_t *pAuxRam = fn_80025E50(0x10);
-    MemHeapDesc_t *pUnload = fn_80025E50(0x40);
-    MemHeapDesc_t *pSound = fn_80025E50(0x100);
+    Record_802CC680 *pState = fn_80025E50(4);
+    Record_802CC680 *pDb = fn_80025E50(2);
+    Record_802CC680 *pMain = fn_80025E50(1);
+    Record_802CC680 *pDebug = fn_80025E50(8);
+    Record_802CC680 *pMisc = fn_80025E50(0x20);
+    Record_802CC680 *pAuxRam = fn_80025E50(0x10);
+    Record_802CC680 *pUnload = fn_80025E50(0x40);
+    Record_802CC680 *pSound = fn_80025E50(0x100);
     unsigned int limit = 0x1800000;
     int lo = (int)OSGetArenaLo();
     int hi = (int)OSGetArenaHi();
