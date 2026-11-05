@@ -1,4 +1,4 @@
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_8017F584.h"
 #include "game/SndgCrowd.h"
 
@@ -58,7 +58,7 @@ extern "C" void fn_80073478(void)
 {
     fn_8006C2C8(&lbl_802D6228);
     lbl_803EC844 = 0;
-    fn_80067C70();
+    AudmonEventStartInGame();
     fn_800B1670(fn_80071594);
     fn_8006D188(fn_8017F584() == 11);
     fn_8006B664();

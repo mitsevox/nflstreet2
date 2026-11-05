@@ -39,7 +39,7 @@ void fn_80047670(int handle);
 void fn_80047698(void);
 void fn_800545C0(void);
 void fn_800545E8(void);
-void fn_80064690(void);
+void ScreenMsgDispatch(void);
 void fn_8006CA84(int a);
 void fn_8013CF98(void);
 float fn_8013D050(void);
@@ -184,7 +184,7 @@ void fn_80188ED4(void *p)
 {
     fn_80218AB0(p, fn_801890F0, fn_80189164);
     fn_80218AC4(p, fn_802212C8);
-    fn_80218AA8(p, fn_80064690);
+    fn_80218AA8(p, ScreenMsgDispatch);
     fn_80218ABC(p, fn_801891A8);
     fn_80218ACC(p, fn_801897BC);
     fn_80218AD4(p, 0, fn_8021EFD8);

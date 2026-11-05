@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Entry_80219044.h"
 #include "game/Object_800785C0.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8017DD68.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
@@ -282,7 +282,7 @@ void fn_8017D7C4(const char *pText)
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x8000000C, 1, args);
-    fn_80067D4C(0x13, 0);
+    AudmonEventPost(0x13, 0);
 }
 
 void fn_8017D844(const char *pText)
@@ -294,7 +294,7 @@ void fn_8017D844(const char *pText)
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
-    fn_80067D4C(0x13, 0);
+    AudmonEventPost(0x13, 0);
 }
 
 void fn_8017D8C4(int a, int b, unsigned char c)

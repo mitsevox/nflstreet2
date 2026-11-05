@@ -1,7 +1,7 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801EF390.h"
 #include "engine/cu_80227F14.h"
@@ -109,7 +109,7 @@ float fn_80046920(Item_800469EC *p)
 int fn_800469EC(Item_800469EC *p)
 {
     if (fn_80177F70() && !fn_800BA6F8() && !fn_8002D060(lbl_803EA368) &&
-        lbl_803EC7C4[p->mUnknownF4] == 1 && !fn_8006560C() && fn_800AD9B4() != 7) {
+        lbl_803EC7C4[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
             float scale = fn_80046920(p);

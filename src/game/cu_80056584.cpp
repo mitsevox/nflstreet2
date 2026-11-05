@@ -153,7 +153,7 @@ int fn_80180EF8(int id);
 int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
 void fn_80187D10(void);
 void fn_800C1CA0(void);
-void fn_800652A8(void);
+void PauseRequestClose(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80179138(void);
@@ -189,7 +189,7 @@ void fn_80168D74(unsigned char team);
 int fn_80025708(void);
 int fn_801485D4(void);
 int fn_80028310(void);
-int fn_8006560C(void);
+int PauseIsOpen(void);
 unsigned char fn_8002D060(void *p);
 void fn_80179144(int a);
 void fn_8017916C(void);
@@ -212,7 +212,7 @@ int fn_801C302C(const char *s1, const char *s2, int n);
 int fn_800BA6F8(void);
 char *fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_800588F8(int a, int b);
-int fn_80065650(void);
+int PauseGetValue(void);
 int fn_801C6458(int a, int b);
 int fn_800B6644(int index);
 unsigned int fn_8017F584(void);
@@ -220,29 +220,29 @@ void fn_8002B5D0(int a, int b);
 void fn_80047874(unsigned char enable);
 void fn_8004730C(unsigned char enabled);
 void fn_800282DC(void);
-unsigned char fn_8006569C(void);
-void fn_80067DB8(int type, void *pPos, int a, int b, int c);
-int fn_8006562C(void);
+unsigned char PauseGetQuitFlag(void);
+void AudmonEventPostArgs(int type, void *pPos, int a, int b, int c);
+int PauseGetSavedMode(void);
 int fn_800AD9B4(void);
 void fn_80025C88(int flag);
 void fn_80148154(void);
 void fn_801483C8(void);
-void fn_80067D4C(int type, void *pPos);
+void AudmonEventPost(int type, void *pPos);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_8009D8CC(int index);
 void fn_800AE988(void);
-void fn_800656A4(unsigned char value);
-void fn_800655B8(void);
+void PauseSetSavedRumble(unsigned char value);
+void PauseBlock(void);
 int fn_80025B18(int *pResults, char (*pText)[64]);
 void fn_80178B1C(int a);
-void fn_80065638(int value);
+void PauseNullHook(int value);
 void fn_8003B8BC(void);
 void fn_8003B234(int group, int kind, int *pList);
 void fn_8003B0F8(int group, int kind, int slot, int code, char *pText, int length);
 void fn_8003B6F0(int reset);
 void fn_8003B1F4(int group);
-void fn_800656AC(unsigned char value);
-void fn_80065664(unsigned char value);
+void PauseSetAltAction(unsigned char value);
+void PauseSetQuitFlag(unsigned char value);
 int fn_8002C9A8(void *p, int msg, int value);
 int fn_8002D228(void *p);
 int fn_80156704(void);
@@ -251,7 +251,7 @@ void fn_800551E0(unsigned char a, int b, char *pText, int length);
 int fn_80178D70(int team);
 void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int fn_80186010(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_80063910(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int OptionsScreenMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80056444(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
@@ -337,7 +337,7 @@ int fn_800566F0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         if (pArgs[0].i == 1) {
             fn_800C1CA0();
         }
-        fn_800652A8();
+        PauseRequestClose();
         break;
     case 0x80000004:
         break;
@@ -650,7 +650,7 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
     int count = fn_80179138();
 
     if (fn_80028310() == 0) {
-        if (fn_8006560C() == 0 && fn_8002D060(lbl_803EA368) == 0) {
+        if (PauseIsOpen() == 0 && fn_8002D060(lbl_803EA368) == 0) {
             if (count == 0 && fn_80177F70() == 6) {
                 count = 1;
                 fn_80179144(1);
@@ -1255,7 +1255,7 @@ void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
     lbl_803EA59C = 0;
     lbl_803EA59D = 0;
     lbl_803EA59E = 0;
-    int pad = fn_80065650();
+    int pad = PauseGetValue();
     int value = 0;
     fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
     if (pad != -1) {
@@ -1285,7 +1285,7 @@ void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
 
 void fn_80058DA0(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     if (lbl_803EA59C) {
         if (fn_8017F584() == 6) {
             fn_8002B5D0(1, 7);
@@ -1294,8 +1294,8 @@ void fn_80058DA0(void)
         fn_8004730C(0);
         fn_800282DC();
     } else {
-        fn_80067DB8(0x72, 0, fn_8006569C(), 0, 0);
-        if (fn_8006562C() != 5) {
+        AudmonEventPostArgs(0x72, 0, PauseGetQuitFlag(), 0, 0);
+        if (PauseGetSavedMode() != 5) {
             int value = 1;
             fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
         }
@@ -1314,7 +1314,7 @@ void fn_80058E68(void)
     lbl_803EA59C = 1;
     fn_80148154();
     fn_801483C8();
-    fn_80067D4C(0x72, 0);
+    AudmonEventPost(0x72, 0);
     fn_80072C90(250, 0);
 }
 
@@ -1324,8 +1324,8 @@ void fn_80058EAC(void)
     fn_8009D8CC(4);
     fn_8009D964(4, 0);
     fn_800AE988();
-    fn_800656A4(0);
-    fn_800655B8();
+    PauseSetSavedRumble(0);
+    PauseBlock();
 }
 
 int fn_80058EF4(int a)
@@ -1406,7 +1406,7 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         fn_80058FDC(1);
         break;
     case 0x80000015:
-        fn_80065638(1);
+        PauseNullHook(1);
         fn_8003B8BC();
         break;
     case 0x8000000A:
@@ -1455,12 +1455,12 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
                     pArgs[8].pParams->mLength, pArgs[9].pParams->mpText, pArgs[9].pParams->mLength);
         break;
     case 0x80000019:
-        fn_800656AC(1);
+        PauseSetAltAction(1);
         break;
     case 0x8000001A: {
         int mode = fn_800AD9B4();
         if (mode == 2 || mode == 4 || mode == 5) {
-            fn_80065664(1);
+            PauseSetQuitFlag(1);
         }
         break;
     }
@@ -1499,21 +1499,21 @@ int fn_800594F4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
     switch (id) {
     case 0x80000001:
         fn_80186010(0x80000001, 0, 0, 0);
-        fn_80063910(0x80000001, 0, 0, 0);
+        OptionsScreenMsg(0x80000001, 0, 0, 0);
         break;
     case 0x80000002:
-        fn_80063910(0x80000002, 0, 0, 0);
+        OptionsScreenMsg(0x80000002, 0, 0, 0);
         fn_80186010(0x80000002, 0, 0, 0);
         break;
     case 0x80000005:
         fn_80186010(0x80000003, pArgs, unused, pResult);
-        fn_80063910(0x80000005, pArgs, unused, pResult);
+        OptionsScreenMsg(0x80000005, pArgs, unused, pResult);
         break;
     case 0x80000006:
-        fn_80063910(0x80000003, pArgs, unused, pResult);
+        OptionsScreenMsg(0x80000003, pArgs, unused, pResult);
         break;
     case 0x80000007:
-        fn_80063910(0x80000004, pArgs, unused, pResult);
+        OptionsScreenMsg(0x80000004, pArgs, unused, pResult);
         break;
     default:
         return 0;
@@ -1682,7 +1682,7 @@ int fn_80025508(void);
 int fn_80178AE0(void);
 void *fn_8022F4BC(void);
 void *fn_80186B38(void *p);
-int fn_8006270C(void);
+int GauntletScreenGetSelection(void);
 void fn_8018F340(void *p,int id);
 void fn_8018F4C4(void *p);
 int fn_8018F288(void *p,int id);
@@ -2065,7 +2065,7 @@ void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
     if(fn_8017F584()==8) {
         if(score1>score0) {
             void *p=fn_80186B38(fn_8022F4BC());
-            fn_8018F340(p,fn_8006270C());
+            fn_8018F340(p,GauntletScreenGetSelection());
             fn_8018F4C4(fn_80186B38(fn_8022F4BC()));
             *pResult=1;
             if(fn_8018F288(fn_80186B38(fn_8022F4BC()),34)) *pResult=3;
@@ -2114,7 +2114,7 @@ void fn_8005B55C(int *pResult)
     Object_8007A334 query;
     fn_80083E1C(&query,0);fn_8008406C(&query,1,0);*pResult=fn_80083FBC(&query);fn_80083F68(&query);fn_800C1E50();
 }
-void fn_8005B5D8(int clear) {fn_800652A8();if(clear) fn_800C1CA0();}
+void fn_8005B5D8(int clear) {PauseRequestClose();if(clear) fn_800C1CA0();}
 void fn_8005B610(char *pText,int size,int id)
 {
     Object_8007A334 query;char name[24];
@@ -2228,7 +2228,7 @@ int fn_800A8F94(void);
 int fn_800A8EA4(int team);
 struct Args_80055540;
 int fn_80055540(int,Args_80055540 *);
-void fn_80064F58(unsigned short,unsigned short,int,unsigned int,int *,int);
+void PauseOpenScreenArgs(unsigned short,unsigned short,int,unsigned int,int *,int);
 int fn_80178EE0(int team);
 int fn_80178EA0(int team);
 int fn_80155130(Class_80148A58 *,int,int);
@@ -2257,7 +2257,7 @@ void fn_8005BC10(int value) {
     if(!fn_8005900C()) {int a=fn_80025508();int b=fn_8002568C();fn_8002B5D0(a,b);}
     else {fn_8002B5D0(0,0);fn_80059020();}
     int args[2];args[0]=fn_8002B5B0()==0;args[1]=value;
-    fn_80064F58(3,10,-1,2,args,0);
+    PauseOpenScreenArgs(3,10,-1,2,args,0);
 }
 int fn_8005BCA8(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
@@ -2308,7 +2308,7 @@ int fn_8005C0C0(unsigned int id,Arg_8018399C *,int,int *) {
     if(lbl_803EA5B4) {
         fn_800C1CA0();if(fn_8017F584()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
     }
-    fn_800652A8();return 1;
+    PauseRequestClose();return 1;
 }
 void fn_8005C144(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
 void fn_8005C1A4(int team,unsigned char index,int *color) {
@@ -2328,7 +2328,7 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
 }
 int fn_8005C338(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:fn_80187D10();if(p[0].i==1)fn_800C1CA0();fn_800652A8();break;
+    case 0x80000001:fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000002:fn_8005C144((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
     case 0x80000003:fn_8005C1A4((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
     case 0x80000004:*result=fn_8005C1F4((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,(unsigned char)p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,(unsigned char)p[4].pParams->mLength,(unsigned char)p[5].pParams->mLength);break;
@@ -2360,7 +2360,7 @@ int fn_8005C6EC(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
     case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,(unsigned char)p[8].pParams->mLength,result);fn_801C2EF0(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);fn_801C2EF0(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
     case 0x80000002:*result=6;break;
-    case 0x80000003:fn_80187D10();if(p[0].i==1)fn_800C1CA0();fn_800652A8();break;
+    case 0x80000003:fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000004:break;
     default:return 0;
     }return 1;
@@ -2377,7 +2377,7 @@ int fn_8005C994(unsigned int id,Arg_8018399C *p,int unused,int *result) {
         fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[n+1]->mpText,texts[n+2]->mpText,texts[n+3]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[n+1]->mLength);
         n=*p[5].pi;texts=(Params_80005284 **)p[5].pi;
         fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();fn_800652A8();}else if(id!=0x80000001)return 0;
+    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }
 void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
@@ -2393,7 +2393,7 @@ int fn_8005CC50(unsigned int id,Arg_8018399C *p,int unused,int *result) {
         fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
         int n=*p[7].pi;Params_80005284 **texts=(Params_80005284 **)p[7].pi;
         fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();fn_800652A8();}else if(id!=0x80000001)return 0;
+    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }
 void fn_8005CD8C(int team,int *other,char *text,int size) {
@@ -2421,7 +2421,7 @@ void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int
 }
 int fn_8005D1E4(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:if(p[0].i==1)fn_800C1CA0();fn_800652A8();break;
+    case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000002:fn_8005CD8C((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(fn_80148A58(),(unsigned char)p[0].i);break;
     case 0x80000003:fn_8005CE10((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
     default:return 0;
@@ -2438,7 +2438,7 @@ int fn_8005D2D0(unsigned int id,Arg_8018399C *p,int unused,int *result) {
         fn_801C2D88(text,size,"You have unlocked\n%s for\nthe Pickup Pool!%s",name,extra);break;
     }
     case 0x80000002:break;
-    case 0x80000003:fn_800652A8();break;
+    case 0x80000003:PauseRequestClose();break;
     default:return 0;
     }return 1;
 }

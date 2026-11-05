@@ -13,7 +13,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Input_800B6D34.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
@@ -766,7 +766,7 @@ void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800B83A0(Object_80039F5C *p);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern float lbl_803EA2C4;
 float fn_80178A08(void);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -1199,7 +1199,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
             pEntry->mUnknown2C = speed;
             fn_800D0C0C(p, 0);
         }
-        fn_80067E3C(48, &p->mMotion.mPos, p->mId, 0, 0, 0);
+        AudmonEventPostId(48, &p->mMotion.mPos, p->mId, 0, 0, 0);
         p->mFlags |= 8;
     } else {
         fn_800D0BF4(p, 1, 34);
@@ -1349,7 +1349,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
         }
         p->mUnknown512.mUnknown14 = 0;
         pBlock->mUnknown6 = 2;
-        fn_80067E3C(97, &pMotion->mPos, p->mId, p->mpState->mId, 0, 0);
+        AudmonEventPostId(97, &pMotion->mPos, p->mId, p->mpState->mId, 0, 0);
         break;
     case 2:
         if (p->mFlags & 1) {

@@ -1,6 +1,6 @@
 #include "game/Entry_80219044.h"
 #include "game/Object_800785C0.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8021D7B8.h"
@@ -444,9 +444,9 @@ void fn_8002572C(void)
 
     if (fn_80025640(&result)) {
         if (result == 0) {
-            fn_80067DB8(0x5E, 0, fn_800B65A0(0) == 0xFF, 0, 0);
+            AudmonEventPostArgs(0x5E, 0, fn_800B65A0(0) == 0xFF, 0, 0);
         } else if (result == 1) {
-            fn_80067DB8(0x5D, 0, fn_80178348(), 0, 0);
+            AudmonEventPostArgs(0x5D, 0, fn_80178348(), 0, 0);
         }
     }
 }

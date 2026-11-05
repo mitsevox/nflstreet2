@@ -16,7 +16,7 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
@@ -160,7 +160,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
             if (fn_80101B7C(p) != 0) {
                 anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xEB, 0);
                 p->mFlags |= 8;
-                fn_80067E3C(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                AudmonEventPostId(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 fn_800A2190(0);
             } else {
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);

@@ -1,3 +1,7 @@
+/* 32-team knockout bracket: seeds the teams, builds the games round by round,
+   simulates the scores of the other teams' games, records the player's result
+   and answers the bracket screen's queries. */
+
 #include "game/Object_8007A334.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
@@ -5,11 +9,11 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
 
-struct Name_80063330 {
+struct BracketNameArg_t {
     Params_80005284 *mUnknown0;
 };
 
-struct Record_80062B90 {
+struct BracketGame_t {
     short mUnknown0[2];
     short mUnknown4[2];
 };
@@ -39,43 +43,43 @@ int fn_80078934();
 int fn_801787DC(int a);
 }
 
-static Record_80062B90 *lbl_803EA610 = 0;
-static int lbl_803EA614 = -1;
-static int lbl_803EA618 = -1;
-static int lbl_803EA61C = 0;
-static int lbl_802D4ED8[33] = {
+static BracketGame_t *_TournBracket_pGames = 0;
+static int _TournBracket_iUserSeed = -1;
+static int _TournBracket_iCurGame = -1;
+static int _TournBracket_iUserSide = 0;
+static int _TournBracket_aiSeedTeams[33] = {
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
     17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 30, 31,
     34,
 };
 
-extern "C" Record_80062B90 *fn_80062B90(int index)
+extern "C" BracketGame_t *TournBracketGetGame(int index)
 {
-    return &lbl_803EA610[index];
+    return &_TournBracket_pGames[index];
 }
 
-extern "C" int fn_80062BA0(int index)
+extern "C" int TournBracketIsPlayed(int index)
 {
-    Record_80062B90 *p = fn_80062B90(index);
+    BracketGame_t *p = TournBracketGetGame(index);
     return p->mUnknown4[1] != 0 || p->mUnknown4[0] != 0;
 }
 
-extern "C" int fn_80062BE4(int index)
+extern "C" int TournBracketGetTeam(int index)
 {
     int result;
-    if (index == lbl_803EA614) {
+    if (index == _TournBracket_iUserSeed) {
         result = fn_80183360();
     } else {
-        result = lbl_802D4ED8[index];
+        result = _TournBracket_aiSeedTeams[index];
     }
     return result;
 }
 
-extern "C" int fn_80062C24(int index)
+extern "C" int TournBracketGetWinner(int index)
 {
     int result = -1;
-    if (fn_80062BA0(index)) {
-        Record_80062B90 *p = fn_80062B90(index);
+    if (TournBracketIsPlayed(index)) {
+        BracketGame_t *p = TournBracketGetGame(index);
         if (p->mUnknown4[1] > p->mUnknown4[0]) {
             result = p->mUnknown0[1];
         } else {
@@ -85,7 +89,7 @@ extern "C" int fn_80062C24(int index)
     return result;
 }
 
-extern "C" int fn_80062C84(int index)
+extern "C" int TournBracketGetRound(int index)
 {
     int count = 16;
     int result = 1;
@@ -101,19 +105,19 @@ extern "C" int fn_80062C84(int index)
     return result;
 }
 
-extern "C" int fn_80062CC8(int *pSide)
+extern "C" int TournBracketFindUserGame(int *pSide)
 {
     int i;
     *pSide = 2;
     for (i = 0; i <= 31; i++) {
-        int played = fn_80062BA0(i);
+        int played = TournBracketIsPlayed(i);
         if (!played) {
-            Record_80062B90 *p = fn_80062B90(i);
-            if (p->mUnknown0[1] == lbl_803EA614) {
+            BracketGame_t *p = TournBracketGetGame(i);
+            if (p->mUnknown0[1] == _TournBracket_iUserSeed) {
                 *pSide = 1;
                 break;
             }
-            if (p->mUnknown0[0] == lbl_803EA614) {
+            if (p->mUnknown0[0] == _TournBracket_iUserSeed) {
                 *pSide = 0;
                 break;
             }
@@ -122,30 +126,30 @@ extern "C" int fn_80062CC8(int *pSide)
     return i;
 }
 
-extern "C" void fn_80062D54()
+extern "C" void TournBracketBuild()
 {
     int i;
     for (i = 0; i <= 31; i++) {
-        Record_80062B90 *p = fn_80062B90(i);
+        BracketGame_t *p = TournBracketGetGame(i);
         if (i <= 15) {
             p->mUnknown0[1] = i * 2;
             p->mUnknown0[0] = i * 2 + 1;
         } else if (i == 31) {
             p->mUnknown0[0] = 32;
-            p->mUnknown0[1] = fn_80062C24(30);
+            p->mUnknown0[1] = TournBracketGetWinner(30);
         } else {
             int j;
             int base = i * 2 - 32;
             for (j = 0; j <= 1; j++) {
                 int k = !j;
-                p->mUnknown0[k] = fn_80062C24(base + j);
+                p->mUnknown0[k] = TournBracketGetWinner(base + j);
             }
         }
         fn_80079974(i, &p->mUnknown4[1], &p->mUnknown4[0]);
     }
 }
 
-extern "C" void fn_80062E34(int index, short *score)
+extern "C" void TournBracketSimScore(int index, short *score)
 {
     int count = 0;
     int side = 1;
@@ -173,15 +177,15 @@ extern "C" void fn_80062E34(int index, short *score)
     }
 }
 
-extern "C" void fn_80062F94()
+extern "C" void TournBracketSimRound()
 {
     short score[2];
-    int round = fn_80062C84(lbl_803EA618);
+    int round = TournBracketGetRound(_TournBracket_iCurGame);
     int i;
     for (i = 0; i <= 30; i++) {
-        if (fn_80062C84(i) == round && !fn_80062BA0(i)) {
-            Record_80062B90 *p = fn_80062B90(i);
-            fn_80062E34(i, score);
+        if (TournBracketGetRound(i) == round && !TournBracketIsPlayed(i)) {
+            BracketGame_t *p = TournBracketGetGame(i);
+            TournBracketSimScore(i, score);
             p->mUnknown4[0] = score[0];
             p->mUnknown4[1] = score[1];
             fn_80079898(i, score[1], score[0]);
@@ -189,44 +193,44 @@ extern "C" void fn_80062F94()
     }
 }
 
-extern "C" void fn_80063034()
+extern "C" void TournBracketCreate()
 {
-    lbl_803EA610 = (Record_80062B90 *)fn_801D2B7C(256, 0, 0);
-    fn_801C1F94(lbl_803EA610, 0, 256);
-    fn_80062D54();
+    _TournBracket_pGames = (BracketGame_t *)fn_801D2B7C(256, 0, 0);
+    fn_801C1F94(_TournBracket_pGames, 0, 256);
+    TournBracketBuild();
 }
 
-extern "C" void fn_80063078()
+extern "C" void TournBracketDestroy()
 {
-    fn_801D2BD0(lbl_803EA610);
-    lbl_803EA610 = 0;
+    fn_801D2BD0(_TournBracket_pGames);
+    _TournBracket_pGames = 0;
 }
 
-extern "C" void fn_800630A4()
+extern "C" void TournBracketShuffleSeeds()
 {
     int i;
     for (i = 0; i <= 2; i++) {
         int j;
         for (j = 0; j < 32; j++) {
             int k = fn_802372EC(1, 32);
-            int value = lbl_802D4ED8[j];
-            lbl_802D4ED8[j] = lbl_802D4ED8[k];
-            lbl_802D4ED8[k] = value;
+            int value = _TournBracket_aiSeedTeams[j];
+            _TournBracket_aiSeedTeams[j] = _TournBracket_aiSeedTeams[k];
+            _TournBracket_aiSeedTeams[k] = value;
         }
     }
 }
 
-extern "C" void fn_80063118()
+extern "C" void TournBracketSaveSeeds()
 {
-    fn_80079A50(lbl_802D4ED8, 32);
+    fn_80079A50(_TournBracket_aiSeedTeams, 32);
 }
 
-extern "C" void fn_80063144()
+extern "C" void TournBracketLoadSeeds()
 {
-    fn_80079B2C(lbl_802D4ED8, 32);
+    fn_80079B2C(_TournBracket_aiSeedTeams, 32);
 }
 
-extern "C" void fn_80063170(int *pIndex)
+extern "C" void TournBracketEnter(int *pIndex)
 {
     int i;
     fn_801834DC();
@@ -238,27 +242,27 @@ extern "C" void fn_80063170(int *pIndex)
         values[2] = fn_80084204(fn_80182DBC());
         fn_80188CBC(0, 4, fn_80084158(fn_80182DBC()), 172, values);
     }
-    lbl_803EA614 = fn_800788A4();
-    if (lbl_803EA614 == -1) {
-        lbl_803EA614 = fn_802372EC(1, 32);
-        fn_800788E8(lbl_803EA614);
-        fn_800630A4();
-        fn_80063118();
+    _TournBracket_iUserSeed = fn_800788A4();
+    if (_TournBracket_iUserSeed == -1) {
+        _TournBracket_iUserSeed = fn_802372EC(1, 32);
+        fn_800788E8(_TournBracket_iUserSeed);
+        TournBracketShuffleSeeds();
+        TournBracketSaveSeeds();
     } else {
-        fn_80063144();
+        TournBracketLoadSeeds();
     }
-    fn_80063034();
+    TournBracketCreate();
     i = 31;
     do {
-        Record_80062B90 *p = fn_80062B90(i);
-        if (p != 0 && (p->mUnknown0[0] == lbl_803EA614 || p->mUnknown0[1] == lbl_803EA614)) {
+        BracketGame_t *p = TournBracketGetGame(i);
+        if (p != 0 && (p->mUnknown0[0] == _TournBracket_iUserSeed || p->mUnknown0[1] == _TournBracket_iUserSeed)) {
             *pIndex = i;
             break;
         }
     } while (--i >= 0);
 }
 
-extern "C" void fn_80063278(int value)
+extern "C" void TournBracketPlayNext(int value)
 {
     int team = -1;
     int active = 0;
@@ -267,11 +271,11 @@ extern "C" void fn_80063278(int value)
     }
     if (active) {
         char opponent;
-        lbl_803EA618 = fn_80062CC8(&lbl_803EA61C);
-        opponent = fn_80062B90(lbl_803EA618)->mUnknown0[!lbl_803EA61C];
-        team = fn_80062BE4(opponent);
+        _TournBracket_iCurGame = TournBracketFindUserGame(&_TournBracket_iUserSide);
+        opponent = TournBracketGetGame(_TournBracket_iCurGame)->mUnknown0[!_TournBracket_iUserSide];
+        team = TournBracketGetTeam(opponent);
     }
-    fn_80063078();
+    TournBracketDestroy();
     fn_80077F24();
     fn_801834DC();
     if (active) {
@@ -280,12 +284,12 @@ extern "C" void fn_80063278(int value)
     }
 }
 
-extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA, Name_80063330 nameB,
+extern "C" void TournBracketGetGameInfo(int index, int *pIdA, int *pIdB, BracketNameArg_t nameA, BracketNameArg_t nameB,
                             int *pScoreA, int *pScoreB, int *pResult)
 {
     int *ids[2];
-    Name_80063330 names[2];
-    Record_80062B90 *p;
+    BracketNameArg_t names[2];
+    BracketGame_t *p;
     int i;
     char name[24];
 
@@ -293,14 +297,14 @@ extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA
     ids[0] = pIdB;
     ids[1] = pIdA;
     names[1] = nameA;
-    p = fn_80062B90(index);
+    p = TournBracketGetGame(index);
     for (i = 0; i < 2; i++) {
         int team = p->mUnknown0[i];
         if (team == -1) {
             *ids[i] = team;
             fn_801C3284(names[i].mUnknown0->mpText, "TBD", names[i].mUnknown0->mLength);
         } else {
-            *ids[i] = fn_80062BE4(team);
+            *ids[i] = TournBracketGetTeam(team);
             Object_8007A334 object;
             fn_80083E40(&object, 0, 0x54415453);
             fn_80084034(&object, *ids[i], 0);
@@ -311,7 +315,7 @@ extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA
     }
     *pScoreA = p->mUnknown4[1];
     *pScoreB = p->mUnknown4[0];
-    if (!fn_80062BA0(index)) {
+    if (!TournBracketIsPlayed(index)) {
         *pResult = -1;
     } else if (*pScoreA > *pScoreB) {
         *pResult = 1;
@@ -320,63 +324,63 @@ extern "C" void fn_80063330(int index, int *pIdA, int *pIdB, Name_80063330 nameA
     }
 }
 
-extern "C" void fn_800634B4(int *p)
+extern "C" void TournBracketGetState(int *p)
 {
     *p = fn_80078934();
 }
 
-extern "C" int fn_800634E4()
+extern "C" int TournBracketIsFinal()
 {
-    return lbl_803EA618 == 31;
+    return _TournBracket_iCurGame == 31;
 }
 
-extern "C" void fn_800634F8()
+extern "C" void TournBracketRecordResult()
 {
     short score[2];
-    if (lbl_803EA61C == 1) {
+    if (_TournBracket_iUserSide == 1) {
         score[1] = fn_801787DC(1);
         score[0] = fn_801787DC(0);
     } else {
         score[0] = fn_801787DC(1);
         score[1] = fn_801787DC(0);
     }
-    fn_80079898(lbl_803EA618, score[1], score[0]);
-    fn_80063034();
-    fn_80062F94();
-    fn_80063078();
+    fn_80079898(_TournBracket_iCurGame, score[1], score[0]);
+    TournBracketCreate();
+    TournBracketSimRound();
+    TournBracketDestroy();
 }
 
-union Word_80063578 {
+union BracketMsgWord_t {
     int mValue;
     int *mpValue;
 };
 
-struct Params_80063578 {
-    Word_80063578 mUnknown0;
+struct BracketMsgArgs_t {
+    BracketMsgWord_t mUnknown0;
     int *mpUnknown4;
     int *mpUnknown8;
-    Name_80063330 mUnknown12;
-    Name_80063330 mUnknown16;
+    BracketNameArg_t mUnknown12;
+    BracketNameArg_t mUnknown16;
     int *mpUnknown20;
     int *mpUnknown24;
     int *mpUnknown28;
 };
 
-extern "C" int fn_80063578(unsigned int id, Params_80063578 *p)
+extern "C" int TournBracketMsg(unsigned int id, BracketMsgArgs_t *p)
 {
     switch (id) {
     case 0x80000002:
-        fn_80063170(p->mUnknown0.mpValue);
+        TournBracketEnter(p->mUnknown0.mpValue);
         break;
     case 0x80000003:
-        fn_80063278(p->mUnknown0.mValue);
+        TournBracketPlayNext(p->mUnknown0.mValue);
         break;
     case 0x80000001:
-        fn_80063330(p->mUnknown0.mValue, p->mpUnknown4, p->mpUnknown8, p->mUnknown12, p->mUnknown16,
+        TournBracketGetGameInfo(p->mUnknown0.mValue, p->mpUnknown4, p->mpUnknown8, p->mUnknown12, p->mUnknown16,
                     p->mpUnknown20, p->mpUnknown24, p->mpUnknown28);
         break;
     case 0x80000004:
-        fn_800634B4(p->mUnknown0.mpValue);
+        TournBracketGetState(p->mUnknown0.mpValue);
         break;
     default:
         return 0;

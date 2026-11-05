@@ -4,7 +4,7 @@
 #include "game/Object_8008044C.h"
 #include "game/cu_8003E214.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8007F6F8.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
@@ -94,7 +94,7 @@ void fn_8014C8AC(void *p, float dt)
 
 void fn_8014C954(void)
 {
-    fn_80064EFC(3, 24, -1);
+    PauseOpenScreen(3, 24, -1);
 }
 
 void fn_8014C980(void)

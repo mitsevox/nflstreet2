@@ -55,8 +55,8 @@
 #include "game/cu_8018EC68.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8017F584.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
@@ -136,9 +136,9 @@ struct Header_80094B78 {
     unsigned char mUnknown4[10];
 };
 
-/* Row table searched by fn_800680A8 (laid out as in cu_80067F18.cpp):
+/* Row table searched by CondTableFindRows (laid out as in CondTable.cpp):
    mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
-struct Table_800680A8 {
+struct CondTable_t {
     char mUnknown0[4];
     int mUnknown4;
     unsigned int mUnknown8;
@@ -146,7 +146,7 @@ struct Table_800680A8 {
     unsigned int mUnknown10;
 };
 
-/* The four halfwords at mUnknownC of a Table_800680A8 row that
+/* The four halfwords at mUnknownC of a CondTable_t row that
    fn_80094B34 tests. */
 struct Cell_80094B34 {
     unsigned short mUnknown0[3];
@@ -224,7 +224,7 @@ int fn_80178308(void);
 int fn_8009313C(Params_80092E54 *pRequest);
 int fn_80096074(Params_80092E54 *pRequest, int flag);
 void fn_80092538(void);
-int fn_80094B34(Table_800680A8 *pTable, int index);
+int fn_80094B34(CondTable_t *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
 unsigned char fn_80178348(void);
 int fn_80178360(void);
@@ -243,7 +243,7 @@ void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800944A4(int kind);
 int fn_800948E4(Object_8017886C *p);
-unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max);
+unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, CondTable_t *pTable, unsigned short **ppOut, unsigned int max);
 void fn_80094B78(Header_80094B78 *p);
 
 extern unsigned char lbl_803EA8BC;
@@ -491,7 +491,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                             if (type == 1) {
                                 fn_800B9B64(lbl_803EAB84, 0, (unsigned char)(id >> 8));
                                 lbl_803EC924->mUnknown80.mUnknownE4F[0] = type;
-                                fn_80067E3C(128, &p->mMotion.mPos, p->mId, pRequest->mRequest.mUnknownC, 0, 0);
+                                AudmonEventPostId(128, &p->mMotion.mPos, p->mId, pRequest->mRequest.mUnknownC, 0, 0);
                             }
                         }
                     }
@@ -1141,7 +1141,7 @@ extern "C" void fn_80093684(void *p)
         fn_801C1F94(&pBlock->mUnknown80.mCharacters[i], 0, sizeof(Character_80093BCC));
         pBlock->mUnknown80.mCharacters[i].mUnknown0 = -1;
     }
-    pBlock->mpUnknown0 = (Table_800680A8 *)fn_801EF390(p, 2, 1);
+    pBlock->mpUnknown0 = (CondTable_t *)fn_801EF390(p, 2, 1);
     for (j = 0; j < 66; j++) {
         lbl_802D73B8[j].mUnknownC = 0;
     }
@@ -1419,7 +1419,7 @@ extern "C" void fn_8009418C(void)
 extern "C" void fn_800941B8(void)
 {
     if (lbl_803EA8BE) {
-        fn_800655D0();
+        PauseUnblock();
         lbl_803EA8BE = 0;
     }
 }
@@ -1509,11 +1509,11 @@ extern "C" int fn_800943D0(void)
 extern "C" void fn_800943D8(void)
 {
     if (fn_800AD9B4() == 1) {
-        fn_80067DB8(108, 0, fn_800BD1BC(lbl_803EAB90), 0, 0);
+        AudmonEventPostArgs(108, 0, fn_800BD1BC(lbl_803EAB90), 0, 0);
     } else if (fn_800AD9B4() == 7) {
-        fn_80067DB8(108, 0, fn_800ABCDC(), 0, 0);
+        AudmonEventPostArgs(108, 0, fn_800ABCDC(), 0, 0);
     } else {
-        fn_80067E3C(129, 0, 0, 0, 0, 0);
+        AudmonEventPostId(129, 0, 0, 0, 0, 0);
     }
 }
 
@@ -1634,7 +1634,7 @@ extern "C" void fn_80094608(unsigned char value)
 }
 
 extern "C" int fn_800947C4(Object_8017886C *p);
-extern "C" unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
+extern "C" unsigned int CondTableFindRows(CondTable_t *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
                                     int (*pCallback)(unsigned int index, int operand, int value, unsigned short *pRow));
 
 extern "C" int fn_800947C4(Object_8017886C *p)
@@ -1684,13 +1684,13 @@ extern "C" void fn_80094A9C(short *pValues, Object_8017886C *p)
     pValues[1] = fn_800948E4(p);
 }
 
-extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max)
+extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, CondTable_t *pTable, unsigned short **ppOut, unsigned int max)
 {
     fn_80094A9C(pValues, p);
-    return fn_800680A8(pTable, pValues, ppOut, max, fn_80094698);
+    return CondTableFindRows(pTable, pValues, ppOut, max, fn_80094698);
 }
 
-extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
+extern "C" int fn_80094B34(CondTable_t *pTable, int index)
 {
     unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4);
     int result = -1;
@@ -3414,7 +3414,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
 
         if ((p->mFlags & 0x4000) == 0 && fn_800A554C(p, pTarget, pOther, kind)
             && fn_800A4E8C(p, pOther, kind, level)) {
-            fn_80067E3C(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
                 fn_800D5900(4);
             } else if (kind == 5) {
@@ -4815,11 +4815,11 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
             lbl_803EAC3C->mEntries[team][i].mUnknown10 = 2;
             if ((p->mFlags & 0x4000) == 0) {
                 lbl_803EAC3C->mEntries[team][i].mUnknown12 = (int)lbl_803EC918;
-                fn_80067DB8(15, &p->mMotion.mPos, 0, 0, 0);
+                AudmonEventPostArgs(15, &p->mMotion.mPos, 0, 0, 0);
             } else {
                 int duration = lbl_803EAC40 + lbl_803EAC41;
 
-                fn_80067DB8(15, &p->mMotion.mPos, 1, 0, 0);
+                AudmonEventPostArgs(15, &p->mMotion.mPos, 1, 0, 0);
                 fn_80194F2C(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
             }
         }
@@ -4921,18 +4921,18 @@ extern "C" int fn_8009B288(unsigned int *pState)
 
     switch (*pState) {
     case 0:
-        fn_80067D4C(126, 0);
+        AudmonEventPost(126, 0);
         if (fn_8005BE5C(0) == 0) {
             fn_8005BF18();
             fn_8005BE5C(0);
         }
-        fn_800655B8();
+        PauseBlock();
         *pState = 1;
         break;
     case 1:
         if (fn_8005BFD4() == 1) {
-            if (fn_800655F8() == 0) {
-                fn_800655D0();
+            if (PauseIsUnblocked() == 0) {
+                PauseUnblock();
             }
             fn_8005BF5C();
             fn_8002CFF4(lbl_803EA368);
@@ -6315,9 +6315,9 @@ extern "C" void fn_800A7A0C(int team)
     if (lbl_803EC954[team]->mUnknown68 != 0) {
         lbl_803EAA2C[lbl_803EC954[team]->mUnknown8](team);
         if (lbl_803EC954[team]->mUnknown68 == 2) {
-            fn_80067DB8(12, 0, 0, 0, 0);
+            AudmonEventPostArgs(12, 0, 0, 0, 0);
         } else if (lbl_803EC954[team == 0]->mUnknown68 == 0) {
-            fn_80067DB8(9, 0, team, 0, 0);
+            AudmonEventPostArgs(9, 0, team, 0, 0);
         }
     }
     lbl_803EC954[team]->mUnknown68 = 0;
@@ -6497,11 +6497,11 @@ extern "C" int fn_800A7FE0(void)
         if (pCharacter->mUnknownE0.mUnknown8.mWord == 0) {
             (pCharacter->mUnknown14[0])->mpUnknown4->mUnknown20 |= 0x400;
             p = pCharacter->mUnknown14[0];
-            fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][1], 0, 0);
+            AudmonEventPostId(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][1], 0, 0);
         } else {
             (pCharacter->mUnknown14[1])->mpUnknown4->mUnknown20 |= 0x400;
             p = pCharacter->mUnknown14[1];
-            fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
+            AudmonEventPostId(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
         }
         lbl_803EAA4E = fn_801478F0(0);
     } else {
@@ -6660,7 +6660,7 @@ extern "C" void fn_800A87E8(void)
         fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
         fn_80093410(lbl_803EC95C);
         if (fn_800737B8() != 0) {
-            fn_80067E3C(130, 0, 0, 0, 0, 0);
+            AudmonEventPostId(130, 0, 0, 0, 0, 0);
         }
         lbl_803EC95C = -1;
         if (((lbl_803EC954[0]->mUnknown6C == 1 || lbl_803EC954[0]->mUnknown6C == 2) &&
@@ -7100,7 +7100,7 @@ extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
         fn_801783D0(1, 1);
         pRecord->mUnknown14 = 8;
         fn_800B1508();
-        fn_80067E3C(30, &p->mMotion.mPos, p->mId, 1, 1, 0);
+        AudmonEventPostId(30, &p->mMotion.mPos, p->mId, 1, 1, 0);
         break;
     case 25:
         pRecord->mUnknown14 = 4;
@@ -7244,7 +7244,7 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
-void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c);
+void AudmonEventPostArgs(int type, Vector_80039F5C *pPos, int a, int b, int c);
 
 extern int lbl_803EAB18;
 extern int *lbl_803EAB1C;
@@ -7725,7 +7725,7 @@ extern "C" void fn_800B30C8(void)
         fn_802195E4(lbl_803EB688, 3, 2);
     }
     lbl_803EAB34->mUnknown8 |= 1;
-    fn_800655D0();
+    PauseUnblock();
 }
 
 extern "C" void fn_800B31B0(int a)
@@ -7903,7 +7903,7 @@ void Class_80297B50::vfn_03()
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(1, 20, 0x808080, 0);
     }
-    fn_800655B8();
+    PauseBlock();
     if (fn_800BA6F8() != 0 && fn_800BA71C() == 1) {
         fn_800B8028();
     }
@@ -7957,7 +7957,7 @@ void Class_80297B50::vfn_03()
     fn_8010A220();
     fn_8016DCD4(team);
     fn_8016DCD4(other);
-    fn_80067DB8(111, 0, team, 0, 0);
+    AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
@@ -7992,7 +7992,7 @@ void Class_80297B50::vfn_03()
 
 extern "C" void fn_800B3AF4(void)
 {
-    fn_800655B8();
+    PauseBlock();
     fn_801783D0(21, 0);
     fn_80148154();
     int team = fn_80178308();
@@ -8005,7 +8005,7 @@ extern "C" void fn_800B3AF4(void)
         lbl_803EAB34->mUnknown10 = 0;
     }
     if (fn_800B65A0(team) == 0xFF && fn_800B65A0(other) == 0xFF) {
-        fn_800655D0();
+        PauseUnblock();
     } else {
         if (fn_800B65A0(team) == 0xFF) {
             fn_801687E4(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
@@ -8014,11 +8014,11 @@ extern "C" void fn_800B3AF4(void)
         if (fn_801486A0() != 2) {
             fn_800B3078();
         } else {
-            fn_800655D0();
+            PauseUnblock();
         }
     }
     fn_800B3074();
-    fn_80067DB8(111, 0, team, 0, 0);
+    AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
@@ -8049,7 +8049,7 @@ void Class_80297B50::vfn_04(float dt)
         arg.i = count;
         fn_8021D7B8(lbl_803EB688, 0x80000007, 1, &arg);
         if (count <= 5) {
-            fn_80067D4C(20, 0);
+            AudmonEventPost(20, 0);
         }
     }
     fn_80058688();
@@ -8146,7 +8146,7 @@ void Class_80297B50::vfn_05()
     }
     if (lbl_803EAB34->mUnknown42 == 1) {
         fn_800B4184(1);
-        fn_80067DB8(0x70, 0, fn_80178308(), 0, 0);
+        AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
     }
     fn_800BA72C();
     fn_801689AC(0);
@@ -8167,14 +8167,14 @@ extern "C" void fn_800B40D8(unsigned char value)
 extern "C" void fn_800B410C(void)
 {
     if (lbl_803EAB34->mUnknown42 == 1) {
-        fn_800655B8();
+        PauseBlock();
         if (lbl_803EAB34->mUnknown8 & 1) {
             fn_800B31B0(0);
         }
         fn_801677F4();
         lbl_803EAB34->mUnknown42 = 0;
-        fn_800655D0();
-        fn_80067DB8(0x70, 0, fn_80178308(), 0, 0);
+        PauseUnblock();
+        AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
     }
 }
 
@@ -9317,7 +9317,7 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
                 if (!(lbl_803EC98C->mUnknown2A & 0x80)) {
                     fn_80094048(key, &pA, &pB);
                 }
-                fn_80067E3C(107, &pA->mMotion.mPos, pA->mId, key, lbl_803EAB95 & 1, pB != 0 ? pB->mId : 0);
+                AudmonEventPostId(107, &pA->mMotion.mPos, pA->mId, key, lbl_803EAB95 & 1, pB != 0 ? pB->mId : 0);
                 p[lbl_803EAB95].mUnknown44 = 1;
             }
         }
@@ -9400,7 +9400,7 @@ extern "C" void fn_800BBF18(void)
         } else {
             fn_800BAF7C();
         }
-        fn_800655D0();
+        PauseUnblock();
         if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
             for (i = 0; i < fn_80040F10(); i++) {
                 Object_80040818 *pObject = fn_80040F18(i);
@@ -9630,8 +9630,8 @@ extern "C" void fn_800A9F64(void)
         fn_80093410(lbl_803EAA88->mUnknownC);
         lbl_803EAA88->mUnknownC = -1;
     }
-    fn_80067DB8(109, 0, 0, 0, 0);
-    fn_80067DB8(109, 0, 1, 0, 0);
+    AudmonEventPostArgs(109, 0, 0, 0, 0);
+    AudmonEventPostArgs(109, 0, 1, 0, 0);
 }
 
 extern "C" void fn_800AA124(void)
@@ -9806,7 +9806,7 @@ extern "C" void fn_800AA510(Entry_800AA80C *pEntries, int index)
         fn_80094048(key, &pObject, &pOther);
     }
     if (pObject != 0 && key != -1) {
-        fn_80067E3C(107, &pObject->mMotion.mPos, pObject->mId, key, lbl_803EAA90 & 1,
+        AudmonEventPostId(107, &pObject->mMotion.mPos, pObject->mId, key, lbl_803EAA90 & 1,
                     pOther != 0 ? pOther->mId : 0);
     }
 }
@@ -9827,7 +9827,7 @@ extern "C" void fn_800AA648(Entry_800AA80C *pEntries, int index)
 extern "C" void fn_800AA6D8(Entry_800AA80C *pEntries, int index)
 {
     if (fn_800737B8() != 0) {
-        fn_80067E3C(109, 0, 0, 0, 0, 0);
+        AudmonEventPostId(109, 0, 0, 0, 0, 0);
     }
     fn_800A9F64();
 }
@@ -10012,7 +10012,7 @@ void Class_80297B90::vfn_07()
 
 void Class_80297B90::vfn_08()
 {
-    fn_80064EFC(3, 6, -1);
+    PauseOpenScreen(3, 6, -1);
 }
 
 void Class_80297B90::vfn_09()
@@ -10060,7 +10060,7 @@ void Class_80297B90::vfn_03()
     lbl_803EAA99 = 0;
     lbl_803EAA88->mUnknown10 = 0;
     fn_800AFDD4(fn_800AA93C);
-    fn_80067D4C(131, 0);
+    AudmonEventPost(131, 0);
     fn_8002C9A8(lbl_803EA368, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
     lbl_803EAA88->mUnknown15 = fn_8002892C();
@@ -10177,7 +10177,7 @@ extern "C" int fn_800AB138(Class_80297B90 *p, float dt)
 {
     int result = 1;
 
-    if (fn_8006560C() == 0) {
+    if (PauseIsOpen() == 0) {
         result = 0;
         p->vfn_09();
     }
@@ -10213,7 +10213,7 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         args[0] = (int)&lbl_8030F504;
         args[1] = (int)&lbl_8030F510;
         args[2] = lbl_8030F45C.mUnknown164;
-        fn_80064F58(1, 20, -1, 3, args, 1);
+        PauseOpenScreenArgs(1, 20, -1, 3, args, 1);
         lbl_803EAA9C++;
     } else {
         fn_800320B0();
@@ -11299,49 +11299,49 @@ extern "C" void fn_800AE138(unsigned int index)
     lbl_803EAAE9 = 1;
     switch (index) {
     case 0:
-        fn_80064EFC(7, 14, side);
+        PauseOpenScreen(7, 14, side);
         break;
     case 1:
-        fn_80064EFC(7, 11, side);
+        PauseOpenScreen(7, 11, side);
         break;
     case 2:
-        fn_80064EFC(7, 10, side);
+        PauseOpenScreen(7, 10, side);
         break;
     case 3:
-        fn_80064EFC(7, 13, side);
+        PauseOpenScreen(7, 13, side);
         break;
     case 4:
-        fn_80064EFC(7, 0, side);
+        PauseOpenScreen(7, 0, side);
         break;
     case 5:
-        fn_80064EFC(7, 1, side);
+        PauseOpenScreen(7, 1, side);
         break;
     case 8:
-        fn_80064EFC(7, 2, side);
+        PauseOpenScreen(7, 2, side);
         break;
     case 6:
-        fn_80064EFC(7, 4, side);
+        PauseOpenScreen(7, 4, side);
         break;
     case 7:
-        fn_80064EFC(7, 5, side);
+        PauseOpenScreen(7, 5, side);
         break;
     case 9:
-        fn_80064EFC(7, 6, side);
+        PauseOpenScreen(7, 6, side);
         break;
     case 10:
-        fn_80064EFC(7, 7, side);
+        PauseOpenScreen(7, 7, side);
         break;
     case 11:
-        fn_80064EFC(7, 8, side);
+        PauseOpenScreen(7, 8, side);
         break;
     case 12:
-        fn_80064EFC(7, 9, side);
+        PauseOpenScreen(7, 9, side);
         break;
     case 13:
-        fn_80064EFC(7, 12, side);
+        PauseOpenScreen(7, 12, side);
         break;
     case 14:
-        fn_80064EFC(7, 15, side);
+        PauseOpenScreen(7, 15, side);
         break;
     default:
         lbl_803EAAE9 = 0;
@@ -13588,12 +13588,12 @@ extern "C" void fn_800A0230(void)
     case 1:
     case 4:
     case 6:
-        fn_80067D4C(25, 0);
+        AudmonEventPost(25, 0);
         break;
     case 2:
     case 5:
     case 7:
-        fn_80067D4C(26, 0);
+        AudmonEventPost(26, 0);
         break;
     }
 }
@@ -13672,7 +13672,7 @@ extern "C" void fn_800A14A8(void *context)
     Pair_800A14A8 *p=(Pair_800A14A8 *)context;
     fn_800A1C74(p->mpFirst, p->mpSecond);
     fn_80194F1C(0);
-    fn_80067D4C(124, 0);
+    AudmonEventPost(124, 0);
 }
 
 extern "C" void fn_800A14E4(Object_8017886C *pResult, unsigned char update)
@@ -15130,7 +15130,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
             if (mode != 2 && mode != 3) {
                 index = fn_800B51D8(pTeam, index, mode);
             }
-            fn_80067DB8(16, 0, team, 0, 0);
+            AudmonEventPostArgs(16, 0, team, 0, 0);
         } else {
             index = 0;
         }
@@ -15878,7 +15878,7 @@ void Class_80297C60::vfn_05()
         fn_800BAAE4();
     }
     fn_8017CFB4(7);
-    fn_80067D4C(125, 0);
+    AudmonEventPost(125, 0);
     lbl_803EAB78->mUnknown148 = 0;
     fn_8017DBCC();
     fn_800A8F70();
@@ -16140,12 +16140,12 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             if (team != away) {
                 p = fn_80039FE8(team, 0, 0);
                 if (p != 0) {
-                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                    AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             } else {
                 p = fn_80039F5C(team, fn_802372EC(1, fn_8003A06C()));
                 if (p != 0) {
-                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                    AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             }
             fn_80168908(team, action);
@@ -16163,7 +16163,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         }
         fn_8003A3F4(0, team);
         fn_8009FFD4();
-        fn_80067D4C(0x18, 0);
+        AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
             Object_800670B4 *pTeam = fn_80168708(t);
             unsigned int count = fn_80178D18(t);
@@ -16852,7 +16852,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
     if (handled) {
         fn_8009FFD4();
         fn_800A02FC();
-        fn_80067D4C(24, 0);
+        AudmonEventPost(24, 0);
         fn_8017E01C(team);
         if (kind == 108) {
             lbl_803EABA8->mSlots[team].mUnknown0 = 1;
@@ -17371,7 +17371,7 @@ void fn_80164A64(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
 int fn_8006D884(int idx);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA3;
 void fn_800BD1C8(Record_800BAE7C *pRecords);
@@ -17466,7 +17466,7 @@ extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
             if ((lbl_803EC98C->mUnknown2A & 0x80) == 0) {
                 fn_80094048(handle, &pA, &pB);
             }
-            fn_80067E3C(0x6b, &pA->mMotion.mPos, pA->mId, handle, (lbl_803EAB95 + 1) & 1,
+            AudmonEventPostId(0x6b, &pA->mMotion.mPos, pA->mId, handle, (lbl_803EAB95 + 1) & 1,
                         pB != 0 ? pB->mId : 0);
             pRecords[lbl_803EAB95 + 1].mUnknown44 = 1;
             lbl_803EABA0 = 1;
@@ -17652,7 +17652,7 @@ extern "C" void fn_800BDA7C(void)
 {
     if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E928() != 0) {
         if (--lbl_803EABA8->mUnknownA0 <= 0) {
-            fn_80067D4C(0x76, 0);
+            AudmonEventPost(0x76, 0);
             lbl_803EABA8->mUnknownA0 = fn_802372EC(0, 120) + 60;
             if (fn_802372EC(0, 100) <= 24) {
                 lbl_803EABA8->mUnknown98++;

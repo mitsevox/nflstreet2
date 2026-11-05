@@ -1,4 +1,9 @@
-#include "game/cu_80064864.h"
+/* Menu message routing: the callback the menu system calls for every screen
+   message, which passes it to the handler of the screen's group; the handlers
+   of the tutorial popup screens; and the character set a text entry box
+   offers. */
+
+#include "game/PauseMenu.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 
@@ -11,31 +16,31 @@ int fn_8001D2D8(int group, unsigned int id, Arg_8018399C *pArgs, int count, int 
 int fn_8001F074(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_8001F120(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_80059664(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_80063AA8(int kind, int id, void *pArgs, int c, int *pResult);
+int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult);
 int fn_8017F6A8(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 void fn_800AE65C(void);
 void fn_800AE988(void);
-int fn_80063F04(int id, void *pArgs, int count, int *pResult);
-int fn_80063F84(int id, void *pArgs, int count, int *pResult);
-int fn_80064004(int id, void *pArgs, int count, int *pResult);
-int fn_80064084(int id, void *pArgs, int count, int *pResult);
-int fn_80064104(int id, void *pArgs, int count, int *pResult);
-int fn_80064184(int id, void *pArgs, int count, int *pResult);
-int fn_80064204(int id, void *pArgs, int count, int *pResult);
-int fn_80064294(int id, void *pArgs, int count, int *pResult);
-int fn_80064334(int id, void *pArgs, int count, int *pResult);
-int fn_800643B4(int id, void *pArgs, int count, int *pResult);
-int fn_80064434(int id, void *pArgs, int count, int *pResult);
-int fn_800644B4(int id, void *pArgs, int count, int *pResult);
-int fn_80064534(int id, void *pArgs, int count, int *pResult);
-int fn_800645B4(int id, void *pArgs, int count, int *pResult);
-int fn_80064634(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen13Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen12Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen2Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen1Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen8Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen5Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen15Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen10Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen11Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen7Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen9Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen14Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen6Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen4Msg(int id, void *pArgs, int count, int *pResult);
+int TutorialScreen0Msg(int id, void *pArgs, int count, int *pResult);
 }
 
 /* Copies the character list for the given type into pText and returns the
    list's length, limited to length. */
-extern "C" int fn_80063C7C(int type, char *pText, int length)
+extern "C" int TextEntryGetCharSet(int type, char *pText, int length)
 {
     unsigned int count;
 
@@ -63,13 +68,13 @@ extern "C" int fn_80063C7C(int type, char *pText, int length)
     return count;
 }
 
-extern "C" int fn_80063D48(int id, void *pArgs, int count, int *pResult)
+extern "C" int PopupScreen20Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         break;
     case 0x80000002:
-        fn_800652A8();
+        PauseRequestClose();
         break;
     default:
         return 0;
@@ -77,62 +82,62 @@ extern "C" int fn_80063D48(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" int fn_80063D94(int kind, int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreenMsg(int kind, int id, void *pArgs, int count, int *pResult)
 {
     switch (kind) {
     case 0:
-        return fn_80064634(id, pArgs, count, pResult);
+        return TutorialScreen0Msg(id, pArgs, count, pResult);
     case 1:
-        return fn_80064084(id, pArgs, count, pResult);
+        return TutorialScreen1Msg(id, pArgs, count, pResult);
     case 2:
-        return fn_80064004(id, pArgs, count, pResult);
+        return TutorialScreen2Msg(id, pArgs, count, pResult);
     case 11:
-        return fn_80064334(id, pArgs, count, pResult);
+        return TutorialScreen11Msg(id, pArgs, count, pResult);
     case 10:
-        return fn_80064294(id, pArgs, count, pResult);
+        return TutorialScreen10Msg(id, pArgs, count, pResult);
     case 13:
-        return fn_80063F04(id, pArgs, count, pResult);
+        return TutorialScreen13Msg(id, pArgs, count, pResult);
     case 12:
-        return fn_80063F84(id, pArgs, count, pResult);
+        return TutorialScreen12Msg(id, pArgs, count, pResult);
     case 7:
-        return fn_800643B4(id, pArgs, count, pResult);
+        return TutorialScreen7Msg(id, pArgs, count, pResult);
     case 9:
-        return fn_80064434(id, pArgs, count, pResult);
+        return TutorialScreen9Msg(id, pArgs, count, pResult);
     case 8:
-        return fn_80064104(id, pArgs, count, pResult);
+        return TutorialScreen8Msg(id, pArgs, count, pResult);
     case 6:
-        return fn_80064534(id, pArgs, count, pResult);
+        return TutorialScreen6Msg(id, pArgs, count, pResult);
     case 5:
-        return fn_80064184(id, pArgs, count, pResult);
+        return TutorialScreen5Msg(id, pArgs, count, pResult);
     case 4:
-        return fn_800645B4(id, pArgs, count, pResult);
+        return TutorialScreen4Msg(id, pArgs, count, pResult);
     case 14:
-        return fn_800644B4(id, pArgs, count, pResult);
+        return TutorialScreen14Msg(id, pArgs, count, pResult);
     case 15:
-        return fn_80064204(id, pArgs, count, pResult);
+        return TutorialScreen15Msg(id, pArgs, count, pResult);
     }
     return 0;
 }
 
-extern "C" void fn_80063EC0(void)
+extern "C" void TutorialScreen13Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" void fn_80063EE4(void)
+extern "C" void TutorialScreen13Enter(void)
 {
     fn_800AE65C();
 }
 
-extern "C" int fn_80063F04(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen13Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80063EE4();
+        TutorialScreen13Enter();
         break;
     case 0x80000002:
-        fn_80063EC0();
+        TutorialScreen13Exit();
         break;
     default:
         return 0;
@@ -140,41 +145,20 @@ extern "C" int fn_80063F04(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80063F60(void)
+extern "C" void TutorialScreen12Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80063F84(int id, void *pArgs, int count, int *pResult)
-{
-    switch (id) {
-    case 0x80000001:
-        fn_800AE65C();
-        break;
-    case 0x80000002:
-        fn_80063F60();
-        break;
-    default:
-        return 0;
-    }
-    return 1;
-}
-
-extern "C" void fn_80063FE0(void)
-{
-    fn_800652A8();
-    fn_800AE988();
-}
-
-extern "C" int fn_80064004(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen12Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80063FE0();
+        TutorialScreen12Exit();
         break;
     default:
         return 0;
@@ -182,20 +166,20 @@ extern "C" int fn_80064004(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064060(void)
+extern "C" void TutorialScreen2Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064084(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen2Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064060();
+        TutorialScreen2Exit();
         break;
     default:
         return 0;
@@ -203,20 +187,20 @@ extern "C" int fn_80064084(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_800640E0(void)
+extern "C" void TutorialScreen1Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064104(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen1Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_800640E0();
+        TutorialScreen1Exit();
         break;
     default:
         return 0;
@@ -224,20 +208,20 @@ extern "C" int fn_80064104(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064160(void)
+extern "C" void TutorialScreen8Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064184(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen8Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064160();
+        TutorialScreen8Exit();
         break;
     default:
         return 0;
@@ -245,19 +229,40 @@ extern "C" int fn_80064184(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_800641E0(void)
+extern "C" void TutorialScreen5Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064204(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen5Msg(int id, void *pArgs, int count, int *pResult)
+{
+    switch (id) {
+    case 0x80000001:
+        fn_800AE65C();
+        break;
+    case 0x80000002:
+        TutorialScreen5Exit();
+        break;
+    default:
+        return 0;
+    }
+    return 1;
+}
+
+extern "C" void TutorialScreen15Exit(void)
+{
+    PauseRequestClose();
+    fn_800AE988();
+}
+
+extern "C" int TutorialScreen15Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         break;
     case 0x80000002:
-        fn_800641E0();
+        TutorialScreen15Exit();
         break;
     default:
         return 0;
@@ -265,25 +270,25 @@ extern "C" int fn_80064204(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064250(void)
+extern "C" void TutorialScreen10Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" void fn_80064274(void)
+extern "C" void TutorialScreen10Enter(void)
 {
     fn_800AE65C();
 }
 
-extern "C" int fn_80064294(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen10Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80064274();
+        TutorialScreen10Enter();
         break;
     case 0x80000002:
-        fn_80064250();
+        TutorialScreen10Exit();
         break;
     default:
         return 0;
@@ -291,25 +296,25 @@ extern "C" int fn_80064294(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_800642F0(void)
+extern "C" void TutorialScreen11Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" void fn_80064314(void)
+extern "C" void TutorialScreen11Enter(void)
 {
     fn_800AE65C();
 }
 
-extern "C" int fn_80064334(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen11Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80064314();
+        TutorialScreen11Enter();
         break;
     case 0x80000002:
-        fn_800642F0();
+        TutorialScreen11Exit();
         break;
     default:
         return 0;
@@ -317,20 +322,20 @@ extern "C" int fn_80064334(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064390(void)
+extern "C" void TutorialScreen7Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_800643B4(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen7Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064390();
+        TutorialScreen7Exit();
         break;
     default:
         return 0;
@@ -338,20 +343,20 @@ extern "C" int fn_800643B4(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064410(void)
+extern "C" void TutorialScreen9Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064434(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen9Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064410();
+        TutorialScreen9Exit();
         break;
     default:
         return 0;
@@ -359,20 +364,20 @@ extern "C" int fn_80064434(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064490(void)
+extern "C" void TutorialScreen14Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_800644B4(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen14Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064490();
+        TutorialScreen14Exit();
         break;
     default:
         return 0;
@@ -380,20 +385,20 @@ extern "C" int fn_800644B4(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064510(void)
+extern "C" void TutorialScreen6Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064534(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen6Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064510();
+        TutorialScreen6Exit();
         break;
     default:
         return 0;
@@ -401,20 +406,20 @@ extern "C" int fn_80064534(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064590(void)
+extern "C" void TutorialScreen4Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_800645B4(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen4Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064590();
+        TutorialScreen4Exit();
         break;
     default:
         return 0;
@@ -422,20 +427,20 @@ extern "C" int fn_800645B4(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064610(void)
+extern "C" void TutorialScreen0Exit(void)
 {
-    fn_800652A8();
+    PauseRequestClose();
     fn_800AE988();
 }
 
-extern "C" int fn_80064634(int id, void *pArgs, int count, int *pResult)
+extern "C" int TutorialScreen0Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         fn_800AE65C();
         break;
     case 0x80000002:
-        fn_80064610();
+        TutorialScreen0Exit();
         break;
     default:
         return 0;
@@ -443,7 +448,7 @@ extern "C" int fn_80064634(int id, void *pArgs, int count, int *pResult)
     return 1;
 }
 
-extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg_8018399C *pArgs,
+extern "C" void ScreenMsgDispatch(unsigned int id, int kind, int group, int count, Arg_8018399C *pArgs,
                             int *pResult)
 {
     int handled = 0;
@@ -465,7 +470,7 @@ extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg
         handled = fn_80059664(group, id, pArgs, count, pResult);
         break;
     case 1:
-        handled = fn_80063AA8(group, id, pArgs, count, pResult);
+        handled = PopupScreenMsg(group, id, pArgs, count, pResult);
         break;
     case 5:
         handled = fn_8001F120(group, id, pArgs, count, pResult);
@@ -474,7 +479,7 @@ extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg
         handled = fn_8017F6A8(group, id, pArgs, count, pResult);
         break;
     case 7:
-        handled = fn_80063D94(group, id, pArgs, count, pResult);
+        handled = TutorialScreenMsg(group, id, pArgs, count, pResult);
         break;
     case 12:
         handled = fn_8001D0F4(group, id, pArgs, count, pResult);

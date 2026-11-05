@@ -38,7 +38,7 @@ void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
 int fn_80061CAC(void);
-void fn_80062A58(unsigned char a);
+void MemCardScreenSetFlag(unsigned char a);
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
 void fn_8006CA84(int a);
@@ -266,7 +266,7 @@ static void fn_800278B8(int a, int b, float c)
     }
     fn_8018A740();
     if (b != 0x8F) {
-        fn_80062A58(0);
+        MemCardScreenSetFlag(0);
         sUnknown803EA2DC = 0;
     }
 }

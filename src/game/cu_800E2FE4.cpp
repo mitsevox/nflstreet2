@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801BE60C.h"
@@ -273,6 +273,6 @@ void fn_800E36DC(Object_80039F5C *player) {
     break;
   }
   if (state->mUnknown1E >= 2 && state->mUnknown1E <= 3)
-    fn_80067E3C(119, &player->mMotion.mPos, player->mId, 0, 0, 0);
+    AudmonEventPostId(119, &player->mMotion.mPos, player->mId, 0, 0, 0);
 }
 }

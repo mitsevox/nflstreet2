@@ -8,7 +8,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/Record_800A0624.h"
 #include "game/Block_8030E6E8.h"
@@ -333,7 +333,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                     } else if(!(out->mUnknown18&0x84)) {
                         if(previous==4) {
                             fn_80093C3C(1,4,0);out->mUnknown04=1;out->mUnknown18|=0x844;
-                            if(fn_800D42CC()==2)fn_80067DB8(0x5D,0,fn_80178348(),0,0);
+                            if(fn_800D42CC()==2)AudmonEventPostArgs(0x5D,0,fn_80178348(),0,0);
                             if(fn_8007F828(14)==1)out->mUnknown18|=0x80;
                             if(fn_801486A0()==4)out->mUnknown18|=0x80;
                         } else out->mUnknown04=previous+1;
@@ -350,7 +350,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
             } else if(previous==6) {
                 if(out->mUnknown1D==3)out->mUnknown1D=1;
                 else if(out->mUnknown08.mY>fn_80178A2C() || (ballPlayer && ballPlayer->mFlags&0x800000))out->mUnknown1D=2;
-                else if(fn_800D42CC()==2)fn_80067DB8(0x5B,0,fn_80178348(),0,0);
+                else if(fn_800D42CC()==2)AudmonEventPostArgs(0x5B,0,fn_80178348(),0,0);
                 if(!(out->mUnknown08.mY>=-fn_80178A2C()))out->mUnknown08.mY=0.0f;
                 out->mUnknown04=1;out->mUnknown18|=0xC0;
                 if(fn_80177C38()==1 || fn_80177C38()==3)out->mUnknown18&=~4;
@@ -375,11 +375,11 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                 int count=0;
                 switch(fn_801788D8(&count)) {
                 case 1:
-                    if(fn_800D42CC()==2)fn_80067DB8(0x5C,0,fn_80178348(),0,0);
+                    if(fn_800D42CC()==2)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
                     break;
                 case 0:
-                    if((unsigned int)(fn_801787DC(fn_80178360())+2)<(unsigned int)count)fn_80067DB8(0x5C,0,fn_80178348(),0,0);
-                    else if(!fn_80025708())fn_80067DB8(0x5E,0,fn_80178360(),0,0);
+                    if((unsigned int)(fn_801787DC(fn_80178360())+2)<(unsigned int)count)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
+                    else if(!fn_80025708())AudmonEventPostArgs(0x5E,0,fn_80178360(),0,0);
                     break;
                 }
             } else {
@@ -491,7 +491,7 @@ void fn_800B9A9C(Class_80297C60 *);
 void fn_801789F8(void);
 void fn_8016BAAC(void);
 int fn_800539F8(void);
-void fn_80064EFC(int,int,int);
+void PauseOpenScreen(int,int,int);
 void fn_800AE380(void);
 unsigned int fn_800B2314(void);
 void fn_8009BA9C(Object_8017886C *);
@@ -528,7 +528,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
             if(score>=fn_8007F828(1)) {
                 Vector_80039F5C pos={0};
                 fn_80137D58(fn_801374BC(),&pos);
-                fn_80067DB8(0x5E,&pos,fn_80178308(),0,0);
+                AudmonEventPostArgs(0x5E,&pos,fn_80178308(),0,0);
             }
         }
         fn_80178F90();fn_800D6F08();
@@ -556,7 +556,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(fn_800BA6F8())fn_800BAAE4();
         fn_80173A50(result);fn_800B14E4();fn_800B2304();fn_800B9A9C(lbl_803EAB84);
         fn_801789F8();fn_8016BAAC();
-        if(fn_800539F8())fn_80064EFC(3,22,-1);
+        if(fn_800539F8())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C(result);
         else fn_8002C9A8(lbl_803EA368,3,0);

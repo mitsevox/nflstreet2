@@ -11,7 +11,7 @@
 #include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
 #include "game/cu_801444D8.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 
 struct Entry_802D71D8 {
@@ -180,7 +180,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             p->mUnknown1240.mUnknown0=(short)fn_801BD910();
             p->mUnknown1240.mUnknown2=(signed char)fn_801BD910();
             if(p->mUnknown1240.mUnknown2==7) {
-                fn_800518E0(p);fn_80067E3C(46,&p->mMotion.mPos,p->mId,0,0,0);
+                fn_800518E0(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
             } else {
                 fn_800C8688(p,0,p->mUnknown1240.mUnknown0,0);
                 if(fn_800C8694(p) && p->mpState->mId==16) p->mFlags|=0x10000;
@@ -239,8 +239,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
             fn_8003145C(p,fn_801BD910());return 1;
         case 0xC01F:
-            if(fn_801BD910()==1) fn_80067E3C(43,&p->mMotion.mPos,p->mId,0,0,0);
-            else fn_80067E3C(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
+            if(fn_801BD910()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);
+            else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
             return 1;
         case 0xC020:fn_800943D8();return 1;
         case 0xC022:fn_80147840((Object_8003DEC4 *)p->mpUnknown4);return 1;

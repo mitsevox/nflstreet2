@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Block_800AD634.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 
 extern "C" {
@@ -200,7 +200,7 @@ extern "C" void fn_800AD31C(float dt)
         if (p->mUnknownC <= 0.0f) {
             fn_8002C9A8(lbl_803EA368, 5, 0);
             p->mUnknown8 = 0;
-            fn_800655D0();
+            PauseUnblock();
         } else {
             p->mUnknownC -= dt;
         }

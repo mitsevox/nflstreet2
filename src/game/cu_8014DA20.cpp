@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_801C1F94.h"
 
 struct Record_8014F104 {
@@ -80,7 +80,7 @@ void fn_8014DB24(void *p, float dt)
 
 void fn_8014DBCC(void)
 {
-    fn_80064EFC(3, 18, -1);
+    PauseOpenScreen(3, 18, -1);
 }
 
 void fn_8014DBF8(void)
@@ -120,7 +120,7 @@ void fn_8014DD04(void)
 
 void fn_8014DD2C(void *p, int team)
 {
-    int pad = fn_80065650();
+    int pad = PauseGetValue();
     unsigned short i;
     int value = fn_8014F104(fn_80148A58())->mpUnknown34[0].mUnknown4 + 1;
     for (i = 0; i <= 5; i++) {

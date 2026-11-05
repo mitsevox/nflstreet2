@@ -4,7 +4,7 @@
 #include "game/Object_80040818.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_80227638.h"
@@ -492,7 +492,7 @@ void fn_8013A2F4(Object_80137ABC *pBall, int mode, float spin, float rate)
         }
     }
     if (pBall->mState.mState == 4) {
-        fn_80067DB8(0x20, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
+        AudmonEventPostArgs(0x20, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
     }
 }
 
@@ -544,7 +544,7 @@ void fn_8013A494(Object_80137ABC *pBall, float dt)
     fn_80139294(pBall, &force, &pBall->mState.mUnknown94);
     pBall->mState.mPos.mZ -= pBall->mState.mUnknown94.mZ;
     pBall->mState.mUnknownE0 = 0.0f;
-    fn_80067DB8(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
+    AudmonEventPostArgs(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
 }
 
 void fn_8013A64C(Object_80137ABC *pBall, float dt)
@@ -821,7 +821,7 @@ void fn_8013AFE8(Object_80137ABC *pBall)
 void fn_8013B024(Object_80137ABC *pBall)
 {
     fn_8013A9F0(pBall);
-    fn_80067DB8(0x22, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
+    AudmonEventPostArgs(0x22, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
 }
 
 void fn_8013B068(Object_80137ABC *pBall)
@@ -858,7 +858,7 @@ void fn_8013B198(Object_80137ABC *pBall, float dt)
 void fn_8013B1E4(Object_80137ABC *pBall, float dt)
 {
     fn_8013A64C(pBall, dt);
-    fn_80067DB8(0x21, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
+    AudmonEventPostArgs(0x21, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
     fn_80172FB0(pBall);
 }
 
@@ -934,7 +934,7 @@ int fn_8013B3EC(Object_80137ABC *pBall, void *pData, unsigned int type)
                 pRecord->mUnknown10 = p->mMotion.mPos.mY;
                 pRecord->mUnknown14 = 8;
                 fn_800B1508();
-                fn_80067E3C(0x1E, &p->mMotion.mPos, p->mId, 1, 1, 0);
+                AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 1, 1, 0);
                 port = fn_800B65A0(p->mIdBytes[2]);
                 if (port != 0xFF && !(p->mFlags & 0x400) && fn_801486A0() != 0 && fn_801486A0() != 1) {
                     fn_800B6714(p, port);

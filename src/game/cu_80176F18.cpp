@@ -10,7 +10,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_8003EC04.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8007C9D4.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8003108C.h"
@@ -1861,7 +1861,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         }
                         handled = 1;
                         result = 1;
-                        fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                        AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                         fn_8006F0B8(1);
                         fn_801794B4(pRecord->mUnknown0, 0x706F7374, (int)(pRecord->mUnknown10 - startY));
                         fn_801794B4(pRecord->mUnknown0, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
@@ -1873,7 +1873,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                     }
                     if (!handled) {
                         fn_80093C3C(1, 13, fn_8009BCE8(&receiver));
-                        fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                        AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                         fn_8006F0B8(2);
                         fn_8017937C(receiver, 0x6C746467, 1);
                     }
@@ -1909,7 +1909,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             if (mode != 6) {
                 fn_80173EE0(0, startY, 0, carrier, 0);
                 if (dpFlag) {
-                    fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                    AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                 }
             }
             break;
@@ -2182,7 +2182,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 fn_801794B4(pRecord->mUnknown0, 0x70447374, 1);
             }
             if (pRecord->mUnknown4 == 1) {
-                fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
             }
             break;
         }

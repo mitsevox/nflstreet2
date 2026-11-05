@@ -970,7 +970,7 @@ struct Record_800DD2E8 {
 };
 
 #include "game/Input_800B6D34.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 struct Item_800E0694 {
     char mUnknown0[4];
     unsigned char mUnknown4;
@@ -2588,8 +2588,8 @@ extern "C" void fn_800E0694(Object_80039F5C *p, int handle, int index)
     fn_80099F04(p, handle, index);
     p->mUnknown1160.mUnknown53 = 1;
     fn_800A2190(1);
-    fn_80067E3C(49, &p->mMotion.mPos, p->mId, 0, 0, 0);
-    fn_80067E3C(54, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    AudmonEventPostId(49, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    AudmonEventPostId(54, &p->mMotion.mPos, p->mId, 0, 0, 0);
 }
 
 extern "C" void fn_800E0818(int a, Vector_80039F5C *pOut, unsigned char *pIndex)

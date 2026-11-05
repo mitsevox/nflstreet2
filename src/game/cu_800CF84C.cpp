@@ -46,9 +46,9 @@ extern "C" {
 extern void *lbl_803EB688;
 
 void fn_8004A230(int a);
-void fn_80064EFC(int a, int b, int c);
-void fn_800655B8(void);
-int fn_8006560C(void);
+void PauseOpenScreen(int a, int b, int c);
+void PauseBlock(void);
+int PauseIsOpen(void);
 int fn_80092784(unsigned char index);
 int fn_80092830(int handle);
 void fn_80092F98(int handle);
@@ -212,7 +212,7 @@ void fn_800CFBCC(void)
     fn_800AFE20(fn_800CFD08);
     if (lbl_803EAC98->mUnknown11) {
         if (fn_8009D86C() != 6) {
-            fn_80064EFC(3, 1, -1);
+            PauseOpenScreen(3, 1, -1);
             lbl_803EAC98->mState = 3;
         } else {
             lbl_803EAC98->mState = 4;
@@ -392,7 +392,7 @@ void Class_803EC99C::fn_800CFFC4(float f)
             lbl_803EAC98->mUnknown11 = 0;
         }
         if (lbl_803EAC98->mUnknown11 == 1) {
-            fn_800655B8();
+            PauseBlock();
         }
         lbl_803EAC98->mUnknown8 = 0;
         lbl_803EAC98->mUnknown10 = 1;
@@ -447,7 +447,7 @@ void Class_803EC99C::fn_800CFFC4(float f)
         }
         break;
     case 3:
-        if (fn_8006560C() == 0) {
+        if (PauseIsOpen() == 0) {
             fn_80162780(1, 1);
             lbl_803EAC98->mState = 4;
         }

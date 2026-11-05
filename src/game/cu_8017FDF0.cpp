@@ -67,10 +67,10 @@ void fn_80186A44(signed char a);
 int fn_8022F358(int index);
 void fn_80186F30(signed char a, int b);
 void fn_80186F8C(int a);
-unsigned char fn_80062A60(void);
-int fn_80063BE4(char *pDest, int count);
-void fn_80063C2C(const char *pSource, int count);
-int fn_80063C7C(int a, char *pText, int length);
+unsigned char MemCardScreenGetFlag(void);
+int UserStringGet(char *pDest, int count);
+void UserStringSet(const char *pSource, int count);
+int TextEntryGetCharSet(int a, char *pText, int length);
 int fn_801C2FE4(char *pText0, char *pText1);
 int fn_801C31B0(char *pText0, char *pText1);
 int fn_80025708(void);
@@ -84,7 +84,7 @@ void fn_80010150(int a);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
 void fn_8018A8C0(unsigned char value);
-int fn_80065650(void);
+int PauseGetValue(void);
 int fn_8022F384(int a);
 void *fn_8021EA44(int index);
 void *fn_8021E984(void *p, int a);
@@ -394,7 +394,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     }
     case 0x26:
-        if (lbl_803EB544 != 0 || fn_8002892C() != 0 || (lbl_803EB540 != 0 && fn_80062A60() != 0)) {
+        if (lbl_803EB544 != 0 || fn_8002892C() != 0 || (lbl_803EB540 != 0 && MemCardScreenGetFlag() != 0)) {
             pResult->i = 1;
         } else {
             pResult->i = 0;
@@ -402,13 +402,13 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     case 0x3A:
     case 0x3C:
-        pResult->i = fn_80063BE4(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
+        pResult->i = UserStringGet(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
         break;
     case 0x3B:
-        fn_80063C2C(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
+        UserStringSet(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
         break;
     case 0x3D:
-        pResult->i = fn_80063C7C(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
+        pResult->i = TextEntryGetCharSet(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
         break;
     case 0x109:
         pResult->i = fn_801C2FE4(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
@@ -453,10 +453,10 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         fn_8018A8C0(pArgs[0].i == 1);
         break;
     case 0x107:
-        if (fn_80065650() == -1) {
+        if (PauseGetValue() == -1) {
             pResult->i = -1;
         } else {
-            pResult->i = fn_80065650();
+            pResult->i = PauseGetValue();
         }
         break;
     case 0x122:

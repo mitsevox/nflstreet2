@@ -2,7 +2,7 @@
 #include "game/Class_80297CE8.h"
 #include "game/fn_800B65A0.h"
 #include "game/cu_80026BB0.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 
 struct Desc_802345C4 {
     int mUnknown0;
@@ -245,7 +245,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_801383E4(1);
     Desc_802345C4 desc = { 0, 14 };
     fn_802345C4(&desc, 2);
-    fn_80067D4C(115, 0);
+    AudmonEventPost(115, 0);
     fn_800C9BB0();
     for (i = 0; i <= 1; i++) {
         if (fn_800A8488(i) && !fn_800A8444(i)) {
@@ -288,7 +288,7 @@ void Class_80297CE8::vfn_05(float dt)
         if (lbl_803EABA8->mUnknownC5 == 0) {
             lbl_803EABA8->mUnknownC5 = fn_8016EA68() != 0 && lbl_803EABA8->mUnknownC6 != 0;
             if (lbl_803EABA8->mUnknownC5 != 0) {
-                fn_80067D4C(117, 0);
+                AudmonEventPost(117, 0);
             }
         }
         fn_800B0E18();

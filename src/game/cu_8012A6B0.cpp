@@ -6,7 +6,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
@@ -895,7 +895,7 @@ extern "C" void fn_8012C5A8(Object_80039F5C *p, int value)
     Message_800F01CC message;
     int team;
 
-    fn_80067E3C(38, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    AudmonEventPostId(38, &p->mMotion.mPos, p->mId, 0, 0, 0);
     fn_800D6CC0(p);
     fn_801C1F94(&message, 0, 4);
     message.mId = 20;

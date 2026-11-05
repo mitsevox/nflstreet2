@@ -4,7 +4,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Class_80297C60.h"
@@ -880,7 +880,7 @@ int fn_801712D0(void *pBall, Object_80039F5C *p)
         fn_80071458(p, pBall);
         Object_80039F5C *pPasser = fn_80137B64();
 
-        fn_80067E3C(0x1E, &p->mMotion.mPos, p->mId, 0, (p->mId >> 8 & 0xFF) == (pPasser->mId >> 8 & 0xFF), 0);
+        AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 0, (p->mId >> 8 & 0xFF) == (pPasser->mId >> 8 & 0xFF), 0);
         fn_80172154(p, pBall);
         fn_801726F8(p);
     } else {
@@ -1171,7 +1171,7 @@ void fn_80171E30(void)
         fn_800A8954(0x10, pForcer->mId >> 8 & 0xFF, pForcer);
     }
     fn_800B1508();
-    fn_80067E3C(0x68, &pos, pCarrier->mId, 0, 0, 0);
+    AudmonEventPostId(0x68, &pos, pCarrier->mId, 0, 0, 0);
     fn_800A8954(0xE, pCarrier->mId >> 8 & 0xFF, pCarrier);
     fn_801783D0(0x14, 1);
     fn_8013B9C0(pBall, 5, 1);
@@ -1214,7 +1214,7 @@ void fn_80171E30(void)
 
 void fn_801720B4(Object_80039F5C *p)
 {
-    fn_80067E3C(0x69, &p->mMotion.mPos, p->mId, (p->mId >> 8 & 0xFF) == fn_80178308(), 0, 0);
+    AudmonEventPostId(0x69, &p->mMotion.mPos, p->mId, (p->mId >> 8 & 0xFF) == fn_80178308(), 0, 0);
     if (!fn_801787A0() && (p->mId >> 8 & 0xFF) == fn_80178320()) {
         fn_800A8954(0xF, p->mId >> 8 & 0xFF, p);
     }
@@ -1278,7 +1278,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
                 }
                 fn_800A8954(9, p->mId >> 8 & 0xFF, p);
                 if (fn_801BE648(p->mpUnknown792) == 0xE1) {
-                    fn_80067E3C(0x37, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
+                    AudmonEventPostId(0x37, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
                 }
                 fn_801726F8(p);
             } else if (result == 3) {
@@ -1586,7 +1586,7 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
                 if (pCarrier && !fn_801383A0(pBall)) {
                     fn_8009BD2C(pCarrier, &pRecord->mUnknown0);
                     if (pCarrier->mMotion.mPos.mY > -fn_80178A2C() && pCarrier->mMotion.mPos.mY < fn_80178A2C()) {
-                        fn_80067E3C(0x2A, &pCarrier->mMotion.mPos, pCarrier->mId, 0, 0, 0);
+                        AudmonEventPostId(0x2A, &pCarrier->mMotion.mPos, pCarrier->mId, 0, 0, 0);
                     }
                 } else {
                     fn_8009BD2C(0, &pRecord->mUnknown0);
@@ -1658,7 +1658,7 @@ void fn_80172FB0(Object_80172FB0 *pEvent)
                 pRecord->mUnknown14 = 0x24;
                 fn_800B1508();
             }
-            fn_80067E3C(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
+            AudmonEventPostId(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
             fn_800A8954(8, pEvent->mUnknownCC >> 8 & 0xFF, fn_8009BCE8(&pEvent->mUnknownCC));
         } else {
             if (!fn_801783AC(0xB) && !fn_801783AC(0xC)) {
@@ -1671,7 +1671,7 @@ void fn_80172FB0(Object_80172FB0 *pEvent)
                 fn_800B1508();
                 fn_800310C0(lbl_803EA368, 0x26, pTackler, &pTackler->mMotion.mPos, &pTackler->mMotion.mFacing);
             }
-            fn_80067E3C(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
+            AudmonEventPostId(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
             fn_800A8954(8, pEvent->mUnknownCC >> 8 & 0xFF, fn_8009BCE8(&pEvent->mUnknownCC));
             fn_800D6724(pTackler);
         }

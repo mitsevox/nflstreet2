@@ -18,7 +18,7 @@ void fn_8004E090(Object_80040818 *pItem, int a, int b);
 Object_80040818 *fn_8004117C(int key);
 void fn_800411C8(Object_80040818 *pItem);
 void fn_800411EC(Object_80040818 *pItem);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_801784C4(void);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
 unsigned short fn_801BE648(void *p);
@@ -100,7 +100,7 @@ int fn_80051E14(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
                         fn_8004E090(pItem, pNode->mUnknown104, pNode->mUnknown108);
                     }
                     if (pNode->mUnknown92) {
-                        fn_80067E3C(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
+                        AudmonEventPostId(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
                                     pObject->mUnknown381, 0);
                     }
                     fn_8004CBEC(pNode->mUnknown128, value, pObject, pItem);
@@ -216,7 +216,7 @@ int fn_80052440(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
                         fn_8004CBEC(pNode->mUnknown128, pObject->mUnknown372, pObject, pItem);
                     }
                     if (pNode->mUnknown92) {
-                        fn_80067E3C(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
+                        AudmonEventPostId(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)value,
                                     pObject->mUnknown381, 0);
                     }
                     break;

@@ -12,7 +12,7 @@
 #include "game/cu_801442FC.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
@@ -497,7 +497,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
         fn_801438EC(a, pA, b, pB, pContacts);
     }
     if (a->mUnknown560.mUnknown28 > 1e-7f || b->mUnknown560.mUnknown28 > 1e-7f) {
-        fn_80067DB8(35, &a->mMotion.mPos, (int)a, (int)b, 0);
+        AudmonEventPostArgs(35, &a->mMotion.mPos, (int)a, (int)b, 0);
         if (a->mUnknown8 != 0xFF) {
             unsigned int limit = lbl_803EA3F0;
             unsigned int level = (unsigned int)(lbl_803EA3F4 * a->mUnknown560.mUnknown28 + lbl_803EA3F1);
@@ -690,7 +690,7 @@ extern "C" void fn_800398B4(void)
 
         if (p->mFlags & 0x800) {
             if (p->mFlags & 0x08000000) {
-                fn_80067E3C(36, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                AudmonEventPostId(36, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 p->mFlags &= ~0x08000000;
             }
         } else if (!(p->mFlags & 0x08000000)) {

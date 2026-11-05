@@ -2,8 +2,8 @@
 #include "game/Class_80297BF8.h"
 #include "game/Object_800785C0.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
@@ -151,10 +151,10 @@ void Class_80297BF8::vfn_08(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
-    if (fn_800655F8() == 0) {
-        fn_800655D0();
+    if (PauseIsUnblocked() == 0) {
+        PauseUnblock();
     }
-    fn_800655B8();
+    PauseBlock();
     if (lbl_803EAB94 == 0) {
         fn_800BBF18();
     }
@@ -238,12 +238,12 @@ void Class_80297BF8::vfn_05()
         fn_80139274();
     }
     fn_800AFE20(fn_800BB694);
-    fn_80067D4C(0x6e, 0);
+    AudmonEventPost(0x6e, 0);
     if (fn_80076F40(0) != 0) {
-        fn_80067DB8(0x6d, 0, 0, 0, 0);
+        AudmonEventPostArgs(0x6d, 0, 0, 0, 0);
     }
     if (fn_80076F40(1) != 0) {
-        fn_80067DB8(0x6d, 0, 1, 0, 0);
+        AudmonEventPostArgs(0x6d, 0, 1, 0, 0);
     }
     lbl_803EABA0 = 0;
     fn_801789F8();

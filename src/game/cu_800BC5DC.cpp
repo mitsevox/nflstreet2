@@ -52,7 +52,7 @@ extern "C" {
 int fn_80025708(void);
 void fn_8003E174(int a);
 void fn_8004A230(unsigned char value);
-void fn_80065814(void);
+void PauseRequestCancel(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_8009D888(int index, int value);
 void fn_8009D964(int index, int value);
@@ -90,7 +90,7 @@ void Class_80297BF8::vfn_03()
     int practice;
     unsigned char i;
 
-    fn_80065814();
+    PauseRequestCancel();
     lbl_803EC98C->mUnknown32 = 0;
     practice = fn_801568F0() <= 4;
     fn_800BA674();

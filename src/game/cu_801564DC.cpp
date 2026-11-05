@@ -11,11 +11,11 @@
 #include "game/fn_801801F0.h"
 #include "game/ModuleGroup_8003450C.h"
 #include "game/SndgCrowd.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/Camera_8013F738.h"
 #include "game/Class_80148A58.h"
 #include "game/InGame.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80218FC4.h"
@@ -286,7 +286,7 @@ void fn_80057F28(void);
 void fn_800582D0(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
-void fn_80065814(void);
+void PauseRequestCancel(void);
 void fn_8006BCC8(int type);
 void fn_8006EA04(int channel, unsigned int level);
 void fn_8006EC24(void);
@@ -1063,7 +1063,7 @@ int fn_80157080(void)
         gPlayBook.fn_800355FC();
         fn_80057F28();
         fn_800AD910(1, 0.0f);
-        fn_800655E8();
+        PauseClearBlocks();
         fn_8006BCC8(3);
         fn_80072F04();
         fn_8006F394(3, 0);
@@ -1088,9 +1088,9 @@ void fn_801574DC(int value)
 void fn_80157514(void)
 {
     if (fn_8017F584() == 11) {
-        fn_80065814();
-        if (fn_800655F8() == 0) {
-            fn_800655D0();
+        PauseRequestCancel();
+        if (PauseIsUnblocked() == 0) {
+            PauseUnblock();
         }
     }
 }
@@ -1751,7 +1751,7 @@ void fn_80158BB4(unsigned int mask)
 
 void Class_802A3A48::fn_80158C04()
 {
-    fn_800655B8();
+    PauseBlock();
     Step_802DEC08 *pRecord = fn_801568F8()->vfn_07();
     fn_801801F0(1);
     if (fn_80156C8C(pRecord->mMask)) {
@@ -1793,7 +1793,7 @@ void Class_802A3B80::vfn_03()
     fn_800D7520(1);
     mUnknown4 = 1;
     fn_80158AA8();
-    fn_800655B8();
+    PauseBlock();
 }
 
 void Class_802A3B80::vfn_04(float dt)
@@ -1876,7 +1876,7 @@ void Class_802A3B10::vfn_04(float dt)
     start.mX = 0.0f;
     start.mY = fn_80157000();
     if (fn_801566E4()) {
-        fn_80067DB8(0x85, 0, fn_801568F0(), fn_801568E8(), 0);
+        AudmonEventPostArgs(0x85, 0, fn_801568F0(), fn_801568E8(), 0);
         fn_800731D0(1);
     }
     fn_801780A8(start);
@@ -1907,9 +1907,9 @@ void Class_802A3B10::vfn_04(float dt)
     args[0] = 0;
     fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
     fn_80156E9C(fn_801568F8()->vfn_07()->mPrompts, 1, 0);
-    fn_80065814();
-    if (!fn_800655F8()) {
-        fn_800655D0();
+    PauseRequestCancel();
+    if (!PauseIsUnblocked()) {
+        PauseUnblock();
     }
     fn_8015844C(1);
 }
@@ -2018,9 +2018,9 @@ void Class_802A3A48::vfn_04(float dt)
         if (mUnknown6 > 0) {
             if (mUnknown6 == 2) {
                 if (fn_80156D14()) {
-                    fn_80067DB8(0x86, 0, 0, 0, 0);
+                    AudmonEventPostArgs(0x86, 0, 0, 0, 0);
                 } else {
-                    fn_80067DB8(0x87, 0, 0, 0, 0);
+                    AudmonEventPostArgs(0x87, 0, 0, 0, 0);
                 }
                 mUnknown6--;
             } else if (mUnknown6 == 1) {
@@ -2086,7 +2086,7 @@ void Class_802A3A48::vfn_04(float dt)
                     }
                     break;
                 case 3:
-                    fn_80067DB8(0x88, 0, 0, 0, 0);
+                    AudmonEventPostArgs(0x88, 0, 0, 0, 0);
                     mUnknown8 = 0;
                     fn_801566DC(1);
                     if (!fn_801569C8(fn_801568F0())) {

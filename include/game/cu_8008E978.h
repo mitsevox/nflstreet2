@@ -42,7 +42,7 @@ struct Character_80093BCC : Params_80092E54 {
     int mUnknown38C;
 };
 
-struct Table_800680A8;
+struct CondTable_t;
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -72,7 +72,7 @@ struct Block_800920EC {
 
 /* Allocated through fn_80238174 under the id 'anms' (fn_800925F0). */
 struct Block_800925F0 {
-    Table_800680A8 *mpUnknown0;
+    CondTable_t *mpUnknown0;
     Entry_80094238 mEntries[6];
     void *mpUnknown7C;
     Block_800920EC mUnknown80;

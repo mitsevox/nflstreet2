@@ -6,7 +6,7 @@
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
@@ -1006,7 +1006,7 @@ extern "C" void fn_800D2E50(void) {
     lbl_803EACD4->mUnknown1EDA = 0;
     lbl_803EACD4->mUnknown1EDB = 0;
     lbl_803EACD4->mUnknown1F44 = 0;
-    fn_80067D4C(122, 0);
+    AudmonEventPost(122, 0);
 }
 
 extern "C" int fn_800D2EB0(int a) {
@@ -1449,11 +1449,11 @@ extern "C" void fn_800D3FBC(int side, int value, int arg) {
         }
         if (fn_800A8F84(side) == 0 || value < *(side == 0 ? &lbl_803EACD4->mUnknown1A70 : &lbl_803EACD4->mUnknown1A74)) {
             if (value == 0 && fn_800D3F08(side) > 0) {
-                fn_80067DB8(6, 0, side, 0, 0);
+                AudmonEventPostArgs(6, 0, side, 0, 0);
             }
             if (value == lbl_803EACD0 && fn_800D3F08(side) < lbl_803EACD0) {
                 lbl_803EACD4->mUnknown2064[side] = 1;
-                fn_80067DB8(5, 0, side, 0, 0);
+                AudmonEventPostArgs(5, 0, side, 0, 0);
             }
             if (value < *(side == 0 ? &lbl_803EACD4->mUnknown1A70 : &lbl_803EACD4->mUnknown1A74)) {
                 fn_800D1634(side, value, arg, 0);
@@ -1488,7 +1488,7 @@ extern "C" void fn_800D421C(int side, int value) {
     if (lbl_803EACD8 == 2 && fn_801788D8(&limit) == 1 && value >= limit) {
         lbl_803EACD8 = side;
         if (fn_80025708() == 0) {
-            fn_80067DB8(94, 0, lbl_803EACD8, 0, 0);
+            AudmonEventPostArgs(94, 0, lbl_803EACD8, 0, 0);
             fn_80178370();
         }
     }
@@ -2126,7 +2126,7 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
                     lbl_803EACD4->mUnknown1F34 = value;
                     lbl_803EACD4->mUnknown1F38 = scaled;
                     fn_800D2378(64, fn_80137B40()->mIdBytes[2], lbl_803EACD4->mUnknown1F2C);
-                    if (lbl_803EACD4->mUnknown1F34 > 499) fn_80067D4C(121, 0);
+                    if (lbl_803EACD4->mUnknown1F34 > 499) AudmonEventPost(121, 0);
                 }
                 if (lbl_803EACD4->mUnknown206C) {
                     float distance = (float)fabs(lbl_803EACD4->mpUnknown1F40->mMotion.mPos.mX) + 6.0f;
@@ -2616,7 +2616,7 @@ extern "C" void fn_800D6F3C(Record_800B15FC *pRecord) {
     }
 }
 
-extern "C" void fn_800D70CC(Record_80067CA8 *pRecord) {
+extern "C" void fn_800D70CC(AudmonEvent_t *pRecord) {
     switch (pRecord->mType) {
     case 37:
         fn_800D0D48(96);

@@ -1,28 +1,31 @@
+/* Popup screens: routes the popup group's messages to their screen handlers,
+   and handles the progressive-scan popup that switches the video mode. */
+
 extern "C" {
 int fn_80020C44(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_80020DC0(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_800211B4(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_800212C8(int id, void *pArgs, int c, int *pResult);
 int fn_800217AC(unsigned int id, void *pArgs, int c, int *pResult);
-int fn_80063A30(int id, int *pArgs, int c, int *pResult);
-int fn_80063D48(int id, void *pArgs, int c, int *pResult);
+int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult);
+int PopupScreen20Msg(int id, void *pArgs, int c, int *pResult);
 int fn_80186324(unsigned int id, void *pArgs, int c, int *pResult);
 void fn_801CEB58(int a);
 void fn_8023CFD0(int a);
 }
 
-static int lbl_803EA628 = 0;
+static int _ProgressivePopup_bOn = 0;
 
-extern "C" int fn_80063A30(int id, int *pArgs, int c, int *pResult)
+extern "C" int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         if (*pArgs == 1) {
-            lbl_803EA628 = *pArgs;
+            _ProgressivePopup_bOn = *pArgs;
             fn_8023CFD0(1);
             fn_801CEB58(1);
         } else {
-            lbl_803EA628 = 0;
+            _ProgressivePopup_bOn = 0;
             fn_8023CFD0(0);
         }
         break;
@@ -32,12 +35,12 @@ extern "C" int fn_80063A30(int id, int *pArgs, int c, int *pResult)
     return 1;
 }
 
-extern "C" int fn_80063AA0(void)
+extern "C" int ProgressivePopupIsOn(void)
 {
-    return (unsigned char)lbl_803EA628;
+    return (unsigned char)_ProgressivePopup_bOn;
 }
 
-extern "C" int fn_80063AA8(int kind, int id, void *pArgs, int c, int *pResult)
+extern "C" int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult)
 {
     switch (kind) {
     case 2:
@@ -53,9 +56,9 @@ extern "C" int fn_80063AA8(int kind, int id, void *pArgs, int c, int *pResult)
     case 13:
         return fn_80020C44(id, pArgs, c, pResult);
     case 14:
-        return fn_80063A30(id, (int *)pArgs, c, pResult);
+        return ProgressivePopupMsg(id, (int *)pArgs, c, pResult);
     case 20:
-        return fn_80063D48(id, pArgs, c, pResult);
+        return PopupScreen20Msg(id, pArgs, c, pResult);
     }
     return 0;
 }

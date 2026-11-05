@@ -5722,9 +5722,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063BE4.cpp",
+      "source": "src/game/UserString.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/UserString.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5747,9 +5747,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063C7C.cpp",
+      "source": "src/game/ScreenMsg.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/cu_80063C7C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/ScreenMsg.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -6418,9 +6418,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063650.cpp",
+      "source": "src/game/OptionsScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063650-0x80063A30 (src/game/cu_80063650.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063650-0x80063A30 (src/game/OptionsScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6443,9 +6443,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800625DC.cpp",
+      "source": "src/game/GauntletScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800625DC-0x80062810 (src/game/cu_800625DC.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800625DC-0x80062810 (src/game/GauntletScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7220,9 +7220,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80067C10.cpp",
+      "source": "src/game/AudmonEvent.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80067C10-0x80067F18 (src/game/cu_80067C10.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80067C10-0x80067F18 (src/game/AudmonEvent.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7276,9 +7276,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80062810.cpp",
+      "source": "src/game/MemCardScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80062810-0x80062B90 (src/game/cu_80062810.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80062810-0x80062B90 (src/game/MemCardScreen.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7307,9 +7307,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80062B90.cpp",
+      "source": "src/game/TournamentBracket.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80062B90-0x80063650 (src/game/cu_80062B90.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80062B90-0x80063650 (src/game/TournamentBracket.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7509,9 +7509,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80064864.cpp",
+      "source": "src/game/PauseMenu.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80064864-0x800656EC (src/game/cu_80064864.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80064864-0x800656EC (src/game/PauseMenu.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8288,9 +8288,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800656EC.cpp",
+      "source": "src/game/PauseRequest.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_800656EC.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/PauseRequest.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
@@ -8443,9 +8443,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80061F04.cpp",
+      "source": "src/game/StoryPlayerScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061F04-0x800625DC (src/game/cu_80061F04.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80061F04-0x800625DC (src/game/StoryPlayerScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -9138,9 +9138,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80067F18.cpp",
+      "source": "src/game/CondTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/cu_80067F18.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/CondTable.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10648,9 +10648,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063A30.cpp",
+      "source": "src/game/PopupScreens.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063A30-0x80063BE4 (src/game/cu_80063A30.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063A30-0x80063BE4 (src/game/PopupScreens.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",

@@ -6,7 +6,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80177FE0.h"
@@ -969,7 +969,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         p->mFlags &= ~1;
         if (fn_801787A0() == 0) {
             if (state->mUnknown56 == 5) {
-                fn_80067E3C(61, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
+                AudmonEventPostId(61, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
                 fn_800D6E98(fn_80178320());
                 fn_80171E30();
                 fn_801720B4(pOther);
@@ -1091,7 +1091,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 state->mUnknown28 = 0;
             }
         } else {
-            fn_80067E3C(45, &pOther->mMotion.mPos, pOther->mId, 0, 0, 0);
+            AudmonEventPostId(45, &pOther->mMotion.mPos, pOther->mId, 0, 0, 0);
         }
         if (state->mUnknown26 == 0) {
             Object_80137ABC *pHeld = fn_80137C48(p);
@@ -1108,12 +1108,12 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     }
     if (state->mUnknown59 == 0 && pOtherState != 0 && state->mUnknown20 != 0xFF && pOtherState->mUnknown4 != 0xFF) {
         speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
-        fn_80067E3C(37, &p->mMotion.mPos, p->mId, (unsigned int)speed, state->mUnknown20, pOtherState->mUnknown4);
+        AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)speed, state->mUnknown20, pOtherState->mUnknown4);
         state->mUnknown59 = 1;
         fn_800A3B58(p, 1, 1);
         speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
         if (speed > lbl_803ECB08 * 100621.12f * 0.75 && fn_80137B40() == p) {
-            fn_80067D4C(100, 0);
+            AudmonEventPost(100, 0);
         }
     }
     if (fn_801787A0() != 0 && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {

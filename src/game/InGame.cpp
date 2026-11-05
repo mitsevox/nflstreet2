@@ -14,7 +14,7 @@
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include <dolphin/os.h>
 
 extern "C" {
@@ -36,11 +36,11 @@ void fn_80043F50(void);
 void fn_80057F28(void);
 void fn_800582D0(void);
 void fn_8005BF18(void);
-void fn_80062A58(unsigned char a);
-void fn_80065194(void);
-void fn_800652A8(void);
-int fn_8006560C(void);
-void fn_8006587C(int a, int b, float c);
+void MemCardScreenSetFlag(unsigned char a);
+void PauseUpdate(void);
+void PauseRequestClose(void);
+int PauseIsOpen(void);
+void PauseRequestHandleInput(int a, int b, float c);
 void fn_80066D5C(void);
 void fn_8006CA84(int a);
 void fn_800726B8(void);
@@ -149,7 +149,7 @@ static void fn_80027FE0(int a, int b, float c)
         fn_8019A9A0(a, b, c);
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
-            fn_8006587C(a, b, c);
+            PauseRequestHandleInput(a, b, c);
             if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
                 fn_8018A4BC(a, b, c);
             } else {
@@ -163,13 +163,13 @@ static void fn_80027FE0(int a, int b, float c)
             fn_8002CBB0(lbl_803EA368, a, c, b);
         }
     }
-    if (!fn_8006560C() || fn_8002D060(lbl_803EA368) || b == 0x8F) {
-        fn_8006560C();
+    if (!PauseIsOpen() || fn_8002D060(lbl_803EA368) || b == 0x8F) {
+        PauseIsOpen();
     } else {
         fn_8018A740();
     }
     if (sUnknown803EA2F0 == 1) {
-        fn_800652A8();
+        PauseRequestClose();
         sUnknown803EA2F0 = 0;
     }
 }
@@ -236,7 +236,7 @@ const char *InGame::GetName() { return "InGame"; }
 
 void fn_800282DC()
 {
-    fn_80067D4C(0x84, 0);
+    AudmonEventPost(0x84, 0);
     fn_800C1E50();
     sUnknown803EC5F4 = 0;
 }
@@ -311,7 +311,7 @@ int InGame::Init()
     fn_802345C4(&desc, 2);
     fn_8018A6C4(1, 3);
     fn_8018A6C4(1, 0);
-    fn_80067D4C(0x6A, 0);
+    AudmonEventPost(0x6A, 0);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
     return sUnknown803EC5F4;
 }
@@ -363,7 +363,7 @@ unsigned char InGame::fn_8002854C()
         fn_801C601C(-1);
         fn_801C60BC(-1);
     }
-    fn_80065194();
+    PauseUpdate();
     fn_8002CF34(lbl_803EA368);
     if (!fn_8002D060(lbl_803EA368)) {
         fn_80145E64(lbl_803EA2C4);
@@ -415,7 +415,7 @@ int InGame::Shutdown()
     fn_8007F394(0);
     fn_8002728C(0);
     fn_80196130();
-    fn_80065194();
+    PauseUpdate();
     fn_801CE910();
     fn_800582D0();
     fn_800AB944(lbl_803EAA8C);
@@ -423,7 +423,7 @@ int InGame::Shutdown()
     fn_8019180C();
     fn_801C6280(-1, 2, (void *)fn_80026DD4);
     fn_8017F664();
-    fn_80062A58(sUnknown803EA2F8);
+    MemCardScreenSetFlag(sUnknown803EA2F8);
     sUnknown803EA2F8 = 0;
     return 1;
 }

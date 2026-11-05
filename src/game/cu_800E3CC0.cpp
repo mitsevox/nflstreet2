@@ -11,7 +11,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_800DB60C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -1143,7 +1143,7 @@ extern "C" int fn_800E9B84(Object_80039F5C *p, int kind) {
         Object_800B26B0 *pMotion = &p->mMotion;
         float angle;
         unsigned char value;
-        fn_80067E3C(38, &pMotion->mPos, p->mId, 0, 0, 0);
+        AudmonEventPostId(38, &pMotion->mPos, p->mId, 0, 0, 0);
         fn_800D6CC0(p);
         fn_801C1F94(&message, 0, 4);
         message.mId = 10;
@@ -2777,7 +2777,7 @@ extern "C" void fn_800EDB48(Object_80039F5C *p, Object_80039F5C *pOther, Object_
                 pRecord->mUnknown10 = pOther->mMotion.mPos.mY;
                 pRecord->mUnknown14 = 8;
                 fn_800B1508();
-                fn_80067E3C(30, &pOther->mMotion.mPos, pOther->mId, 1, 1, 0);
+                AudmonEventPostId(30, &pOther->mMotion.mPos, pOther->mId, 1, 1, 0);
                 break;
             }
             }
@@ -3356,14 +3356,14 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
             fn_800D0C0C(p, 0);
         }
         if (kind != 230) {
-            fn_80067E3C(51, &p->mMotion.mPos, p->mId, 0, 0, 0);
-            fn_80067E3C(56, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(51, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(56, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         p->mFlags |= 8;
     } else {
         fn_800D0BF4(p, 1, 36);
         fn_800EF538(p);
-        fn_80067E3C(59, &p->mMotion.mPos, p->mId, 0, 0, 0);
+        AudmonEventPostId(59, &p->mMotion.mPos, p->mId, 0, 0, 0);
     }
 }
 

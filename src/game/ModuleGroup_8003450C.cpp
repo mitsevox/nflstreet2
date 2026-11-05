@@ -9,7 +9,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/cu_8003EC04.h"
 #include "game/cu_80041210.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801FCE10.h"
@@ -819,13 +819,13 @@ const char *Pause::GetName() { return "Pause"; }
 
 int Pause::Init()
 {
-    fn_80064E18();
+    PauseInit();
     return 1;
 }
 
 int Pause::Shutdown()
 {
-    fn_80064EA4();
+    PauseShutdown();
     return 1;
 }
 

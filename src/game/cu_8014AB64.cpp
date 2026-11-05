@@ -3,7 +3,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_802372EC.h"
 #include <string.h>
@@ -166,7 +166,7 @@ void fn_8014ADB0(void *p, float dt)
 
 void fn_8014AE58(void)
 {
-    fn_80064EFC(3, 17, -1);
+    PauseOpenScreen(3, 17, -1);
 }
 
 void fn_8014AE84(void)

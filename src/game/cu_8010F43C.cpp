@@ -5,7 +5,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
 #include "game/Team_80167A8C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80163E94.h"
@@ -609,7 +609,7 @@ extern "C" int fn_801109A4(Object_80039F5C *p)
     case 1:
         fn_801100E8(p);
         p->mUnknown512.mUnknown14 = 0;
-        fn_80067E3C(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
+        AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
         pState->mUnknown12 = 3;
         break;
     case 2:

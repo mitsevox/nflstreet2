@@ -1,5 +1,5 @@
-#include "game/Block_80063910.h"
-#include "game/fn_80063A0C.h"
+#include "game/OptionsScreenMsg.h"
+#include "game/OptionsScreen.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80072AA8.h"
@@ -13,7 +13,7 @@ void fn_80020A34(void)
 
 void fn_80020A58(unsigned int index, int value)
 {
-    int id = fn_80063A0C(index);
+    int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
         fn_8007F6F8(id, value);
@@ -23,7 +23,7 @@ void fn_80020A58(unsigned int index, int value)
 int fn_80020A94(unsigned int index)
 {
     int result = 0;
-    int id = fn_80063A0C(index);
+    int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
         result = fn_8007F828(id);
@@ -34,7 +34,7 @@ int fn_80020A94(unsigned int index)
 void fn_80020AD4(void) {}
 void fn_80020AD8(void) {}
 
-int fn_80020ADC(unsigned int id, Block_80063910 *pBlock, int unused, int *pResult)
+int fn_80020ADC(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

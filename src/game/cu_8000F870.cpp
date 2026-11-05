@@ -123,8 +123,8 @@ void fn_80054CFC(void);
 int fn_800551D8(unsigned char a);
 void fn_800551E0(unsigned char a, int b, char *pText, int length);
 void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
-int fn_8006270C(void);
-void fn_80062A58(unsigned char a);
+int GauntletScreenGetSelection(void);
+void MemCardScreenSetFlag(unsigned char a);
 void fn_8006CA18(int index, int a, unsigned char volume);
 void fn_80073094(void);
 void fn_800731D0(int a);
@@ -1686,7 +1686,7 @@ void fn_800120C8(int side, int *pIndex)
                     *pIndex = i;
                     return;
                 }
-            } else if (lbl_803EB994[0][i] == fn_8006270C()) {
+            } else if (lbl_803EB994[0][i] == GauntletScreenGetSelection()) {
                 *pIndex = i;
                 return;
             }
@@ -2216,7 +2216,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         break;
     case 0x80000006:
         if (fn_8017F584() == 8 && pArgs[0].i == 0) {
-            fn_80014AA8(0, fn_8006270C());
+            fn_80014AA8(0, GauntletScreenGetSelection());
             break;
         }
         if (fn_8017F584() == 8 && fn_801801B4() == 1) {
@@ -2242,7 +2242,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_80014AA8(pArgs[0].i, pArgs[1].i);
         break;
     case 0x80000016:
-        *pResult = fn_8006270C();
+        *pResult = GauntletScreenGetSelection();
         break;
     case 0x80000017:
         *pResult = fn_8018F228(fn_80186B38(fn_8022F4BC()));
@@ -3285,7 +3285,7 @@ void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
     lbl_803EB9E6 = 1;
     fn_80027E88(0);
     fn_80073094();
-    fn_80062A58(0);
+    MemCardScreenSetFlag(0);
 }
 
 void fn_80015E80(Arg_8018399C *pArgs, int count, int *pResult)

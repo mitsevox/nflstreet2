@@ -71,7 +71,7 @@ void fn_8009D8CC(int index);
 int fn_801783AC(int bit);
 unsigned int fn_802372EC(int a, int b);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
-void fn_800655B8(void);
+void PauseBlock(void);
 int fn_8005BE5C(int value);
 void fn_800B9654(void *p, float dt);
 void fn_800B9998(void *p);
@@ -252,7 +252,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
             p->mUnknown12 = 0;
         }
         if (p->mUnknown12) {
-            fn_800655B8();
+            PauseBlock();
             fn_8005BE5C(2);
         }
     }

@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802372EC.h"
@@ -154,7 +154,7 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
                 pBlock->mUnknown5 = 0;
                 p->mFlags |= 0x4000;
                 if (!special) {
-                    fn_80067E3C(39, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                    AudmonEventPostId(39, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 }
             } else {
                 pBlock->mUnknown0 = 0;
@@ -219,7 +219,7 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
                         pBlock->mUnknown0 = state;
                         pBlock->mUnknown8 = p->mpState->mId;
                         if (!special) {
-                            fn_80067E3C(39, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                            AudmonEventPostId(39, &p->mMotion.mPos, p->mId, 0, 0, 0);
                         }
                     }
                 }

@@ -1,6 +1,10 @@
+/* Condition tables: each row carries coded tests (equal, greater, less, not
+   equal, random, custom); finds the rows whose tests all pass for a set of
+   values. */
+
 #include "game/fn_802372EC.h"
 
-struct Table_800680A8 {
+struct CondTable_t {
     char mUnknown0[4];
     int mUnknown4;
     unsigned int mUnknown8;
@@ -8,12 +12,12 @@ struct Table_800680A8 {
     unsigned int mUnknown10;
 };
 
-typedef int (*Callback_800680A8)(unsigned int index, int operand, int value, unsigned short *pRow);
+typedef int (*CondTableTestFn_t)(unsigned int index, int operand, int value, unsigned short *pRow);
 
-static Callback_800680A8 lbl_803EA678 = 0;
+static CondTableTestFn_t _CondTable_pfnTest = 0;
 
 extern "C" {
-int fn_80067F18(int index, unsigned short code, short value, unsigned short *pRow)
+int CondTableTestCode(int index, unsigned short code, short value, unsigned short *pRow)
 {
     int result = 0;
     int operand = code << 19;
@@ -44,8 +48,8 @@ int fn_80067F18(int index, unsigned short code, short value, unsigned short *pRo
         }
         break;
     case 0x8000:
-        if (lbl_803EA678 != 0) {
-            result = lbl_803EA678(index, operand, value, pRow);
+        if (_CondTable_pfnTest != 0) {
+            result = _CondTable_pfnTest(index, operand, value, pRow);
         } else if (value == operand) {
             result = 1;
         }
@@ -59,13 +63,13 @@ int fn_80067F18(int index, unsigned short code, short value, unsigned short *pRo
     return result;
 }
 
-int fn_80068030(unsigned int count, unsigned short *pCodes, short *pValues, unsigned short *pRow)
+int CondTableTestRow(unsigned int count, unsigned short *pCodes, short *pValues, unsigned short *pRow)
 {
     int result = 1;
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        if (!fn_80067F18(i, *pCodes, *pValues, pRow)) {
+        if (!CondTableTestCode(i, *pCodes, *pValues, pRow)) {
             result = 0;
             break;
         }
@@ -75,16 +79,16 @@ int fn_80068030(unsigned int count, unsigned short *pCodes, short *pValues, unsi
     return result;
 }
 
-unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
-                         Callback_800680A8 pCallback)
+unsigned int CondTableFindRows(CondTable_t *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
+                         CondTableTestFn_t pCallback)
 {
     unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4);
     unsigned int found = 0;
     unsigned int i;
 
-    lbl_803EA678 = pCallback;
+    _CondTable_pfnTest = pCallback;
     for (i = 0; i < pTable->mUnknown8; i++) {
-        if (fn_80068030(pTable->mUnknown10, pRow + pTable->mUnknownC, pValues, pRow)) {
+        if (CondTableTestRow(pTable->mUnknown10, pRow + pTable->mUnknownC, pValues, pRow)) {
             ppOut[found] = pRow;
             if (++found >= max) {
                 break;

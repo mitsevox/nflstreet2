@@ -23,7 +23,7 @@ extern unsigned char lbl_803EBD70;
 extern int lbl_803ED5EC;
 
 int fn_80024B20(int side, int limit, int flag);
-int fn_80063AA0(void);
+int ProgressivePopupIsOn(void);
 int fn_80185274(void);
 void fn_8018A740(void);
 int fn_801C1D54(void);
@@ -150,7 +150,7 @@ static void fn_800242AC(void)
         lbl_8037DF34[0].mpText = lbl_803EBAE0;
         lbl_8037DF34[0].mLength = strlen(lbl_8037DF34[0].mpText) + 1;
         lbl_8037DF34[1].mUnknown0 = 0;
-        if (fn_80063AA0() == 1) {
+        if (ProgressivePopupIsOn() == 1) {
             lbl_8037DF34[1].mpText = lbl_802F46E0;
         } else {
             lbl_8037DF34[1].mpText = lbl_802F4714;

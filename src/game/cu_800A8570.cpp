@@ -3,7 +3,7 @@
 #include "game/Block_800A70F4.h"
 #include "game/Block_8030F42C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/fn_800D4164.h"
@@ -73,7 +73,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             fn_800A636C(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
-                fn_80067D4C(14, &p->mMotion.mPos);
+                AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
         if (isUser) {
@@ -102,7 +102,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             fn_800A636C(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
-                fn_80067D4C(14, &p->mMotion.mPos);
+                AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
         if (!isUser) {
@@ -202,7 +202,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         fn_8013FB44();
         fn_8017DBCC();
         if (fn_800A8468(0) || fn_800A8468(1)) {
-            fn_80067DB8(13, 0, 0, 0, 0);
+            AudmonEventPostArgs(13, 0, 0, 0, 0);
         }
     }
 }

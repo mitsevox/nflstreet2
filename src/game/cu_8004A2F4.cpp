@@ -19,7 +19,7 @@
 #include "game/InGame.h"
 #include "game/bitstream.h"
 #include "game/cu_80041210.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8008E978.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
@@ -748,7 +748,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                     }
                 }
                 if (pNode->mUnknown92) {
-                    fn_80067E3C(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)t, pObject->mUnknown381,
+                    AudmonEventPostId(pNode->mUnknown92, &pos, pObject->mUnknown376, (unsigned int)t, pObject->mUnknown381,
                                 count);
                 }
                 break;
@@ -805,7 +805,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                 }
             }
             if (pObject->mUnknown308) {
-                fn_80067D4C(pObject->mUnknown308, &pos);
+                AudmonEventPost(pObject->mUnknown308, &pos);
             }
         }
     }

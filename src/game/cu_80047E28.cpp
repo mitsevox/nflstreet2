@@ -10,7 +10,7 @@
 #include "game/Row_8007BC34.h"
 #include "game/cu_80047E28.h"
 #include "game/cu_800478DC.h"
-#include "game/fn_800624B0.h"
+#include "game/StoryPlayerScreen.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
@@ -818,7 +818,7 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
         fn_8007A3C4(&cursor);
-    } else if ((fn_80027DF0() && (fn_801835A0() || fn_800624B0())) || !fn_801486A0()) {
+    } else if ((fn_80027DF0() && (fn_801835A0() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
         flag = 1;
     } else if (fn_8007CB6C(2) == 0) {
         flag = mode <= 6;

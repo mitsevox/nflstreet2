@@ -1,5 +1,5 @@
 #include "game/SndgPathfinder.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 
 extern "C" {
 int fn_8006B810(int type, unsigned int index);
@@ -47,7 +47,7 @@ void fn_8006F5EC(int type, int mode, Vector_80039F5C *pPos, void *pObject, int i
     }
 }
 
-void fn_8006F6A0(int type, Record_80067CA8 *p)
+void fn_8006F6A0(int type, AudmonEvent_t *p)
 {
     Struct_8006BBC4 *pInfo = (Struct_8006BBC4 *)p->mUnknown14;
     float limit = fn_8006BE3C(type);

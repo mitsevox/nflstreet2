@@ -93,8 +93,8 @@ void fn_8003F66C(void *p);
 void fn_8003F6B0(void *p);
 void fn_8003F6B4(void *p, void *pData, int a);
 void fn_8003F744(void *p);
-int fn_8006560C(void);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+int PauseIsOpen(void);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *fn_800A336C(void);
 int fn_800A33A4(void);
 int fn_800C4E18(Object_80039F5C *pPlayer);
@@ -853,9 +853,9 @@ void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0)
         if (fn_80227890(pPos, pLast) >= 0.65f * 0.65f) {
             pLast[0] = pPos->mX;
             pLast[1] = pPos->mY;
-            if (!fn_8006560C()) {
+            if (!PauseIsOpen()) {
                 if (*pSkip == 0) {
-                    fn_80067E3C(0x58, pPos, pPlayer->mId, 0, 0, 0);
+                    AudmonEventPostId(0x58, pPos, pPlayer->mId, 0, 0, 0);
                 } else {
                     *pSkip = 0;
                 }

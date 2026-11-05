@@ -19,7 +19,7 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
@@ -701,7 +701,7 @@ void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800B83A0(Object_80039F5C *p);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern float lbl_803EA2C4;
 float fn_80178A08(void);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -2336,7 +2336,7 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
     pBlock->mUnknown36 = 0;
     fn_800FC290(p, pBlock, target);
     p->mUnknown512.mUnknown14 = 0;
-    fn_80067E3C(120, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    AudmonEventPostId(120, &p->mMotion.mPos, p->mId, 0, 0, 0);
     p->mFlags &= ~0x40000;
     p->mFlags |= 0x10;
     p->mFlags |= 0x20000000;
@@ -4568,7 +4568,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
     pOtherState->mUnknown14 = result;
     state->mUnknown56 = result;
     if (result != 1) {
-        fn_80067DB8(102, &p->mMotion.mPos, result, 0, 0);
+        AudmonEventPostArgs(102, &p->mMotion.mPos, result, 0, 0);
         fn_8017D9B0(p->mId, pOther->mId);
         if (result == 2) {
             fn_800D47D4(0, p);
@@ -4601,7 +4601,7 @@ extern "C" void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther)
     p->mUnknown392 = 4;
     ((State_80113AAC *)&pOther->mUnknown336)->mUnknown14 = 4;
     fn_800D6EDC();
-    fn_80067DB8(101, &p->mMotion.mPos, p->mId, pOther->mId, 0);
+    AudmonEventPostArgs(101, &p->mMotion.mPos, p->mId, pOther->mId, 0);
     if (!(pOther->mFlags & 0x400) && fn_801486A0() != 0) {
         int port = fn_800B65A0(pOther->mIdBytes[2]);
         if (port != 255) {
@@ -4631,7 +4631,7 @@ extern "C" void fn_80114DF4(Object_80039F5C *p)
         pOther->mpState->mUnknown3[0] = 255;
         fn_800E98A4(pOther, p);
         fn_80143EBC(p, pOther);
-        fn_80067DB8(102, &p->mMotion.mPos, 0, 0, 0);
+        AudmonEventPostArgs(102, &p->mMotion.mPos, 0, 0, 0);
         fn_8017D9B0(p->mId, pOther->mId);
     }
 }

@@ -4,7 +4,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80040818.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 
 struct Record_800BAE7C;
@@ -46,7 +46,7 @@ int fn_801F0F18(int a);
 void fn_8004A230(unsigned char value);
 int fn_80040F10(void);
 void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
-int fn_800655F8(void);
+int PauseIsUnblocked(void);
 void fn_80074358(int index);
 void fn_800941B8(void);
 int fn_800B6644(int index);
@@ -142,8 +142,8 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     fn_80074358(1);
     if (fn_800BA6F8() == 0) {
         fn_800BBE98();
-        if (fn_800655F8() == 0) {
-            fn_800655D0();
+        if (PauseIsUnblocked() == 0) {
+            PauseUnblock();
         }
     } else {
         lbl_803EAB94 = 1;

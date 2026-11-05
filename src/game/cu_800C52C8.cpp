@@ -40,8 +40,8 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80041210.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
@@ -649,7 +649,7 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
         result = fn_800CE2B8(&query);
     }
     if (result != 0) {
-        fn_80067DB8(44, &p->mMotion.mPos, 0, 0, 0);
+        AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
         fn_8006F0B8(8);
         p->mUnknown1219 = 0;
     }
@@ -676,7 +676,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
     if (result != 0) {
         fn_800D4748(p);
         fn_800A8954(13, p->mIdBytes[2], p);
-        fn_80067DB8(44, &p->mMotion.mPos, 0, 0, 0);
+        AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
         fn_8006F0B8(8);
         p->mUnknown1219 = 1;
     }
@@ -804,7 +804,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
             if (types[i] == 5 || types[i] == 6) {
                 fn_800D4FBC(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
-                fn_80067E3C(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
+                AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
                 fn_800310C0(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
                 fn_800D60BC(p, fn_800D0B90(p), 255);
@@ -1103,7 +1103,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                 fn_800C561C(p, key);
                 fn_800C51DC(p, pOther);
                 fn_801718E8(p, pOther);
-                fn_80067E3C(37, &p->mMotion.mPos, p->mId, (unsigned int)p->mUnknown560.mUnknown28,
+                AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)p->mUnknown560.mUnknown28,
                             p->mUnknown560.mUnknown54, p->mUnknown560.mUnknown55);
                 fn_800A3B58(p, 1, 0);
             }

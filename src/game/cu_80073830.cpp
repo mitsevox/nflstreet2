@@ -1,4 +1,4 @@
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -61,7 +61,7 @@ void fn_8006D684(int idx, unsigned char percent);
 void fn_8006D6F4(int a, int b, int c);
 void fn_8006D758(int a, Vector_80039F5C *pPos);
 void fn_8006EA04(int a, unsigned char b);
-void fn_8006ECB4(Record_80067CA8 *pRecord);
+void fn_8006ECB4(AudmonEvent_t *pRecord);
 void fn_8006F0C8(int a);
 int fn_800737B8(void);
 unsigned char fn_800737C0(void);
@@ -386,7 +386,7 @@ extern "C" void fn_80073EE4(void)
     fn_80073DA8(&lbl_802D63DC, 1);
     fn_801F5CCC(fn_80073D9C, fn_80073DA4);
     fn_8006F0C8(127);
-    fn_80067EC8(fn_8006ECB4);
+    AudmonEventAddListener(fn_8006ECB4);
     lbl_803EA720 = 1;
     lbl_803EA721 = 1;
 }
@@ -477,7 +477,7 @@ extern "C" void fn_80074190(void)
 {
     lbl_803EA720 = 0;
     lbl_803EA722 = 0;
-    fn_80067EF0(fn_8006ECB4);
+    AudmonEventRemoveListener(fn_8006ECB4);
     fn_801F5D0C();
     fn_801F5C34();
     if (lbl_8030AAA8.mpUnknown8 != 0) {

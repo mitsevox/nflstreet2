@@ -13,7 +13,7 @@ struct Init_80159F10 {
 
 extern "C" {
 int fn_8002B5A8(void);
-int fn_8006560C(void);
+int PauseIsOpen(void);
 int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 int fn_801481B0(void);
@@ -52,7 +52,7 @@ extern "C" void fn_80159F70(void) {}
 
 extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 {
-    if ((fn_801481B0() == 1 || fn_801483F8() == 1) && lbl_803ECA5C == 1 && fn_8006560C() == 0) {
+    if ((fn_801481B0() == 1 || fn_801483F8() == 1) && lbl_803ECA5C == 1 && PauseIsOpen() == 0) {
         Vector_80039F5C *pPos = &pInstance->mUnknown04;
         if (fn_8014830C(pInstance->mUnknown1C, pPos) == 1) {
             Camera_8013F738 *pCamera;

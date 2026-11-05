@@ -9,7 +9,7 @@
 #include "game/Record_8011F518.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8016871C.h"
@@ -113,7 +113,7 @@ float fn_80178A2C(void);
 void fn_8017CFB4(int index);
 void fn_8017DA9C(int team);
 void fn_801C3E54(Camera_8013F738 *pCamera);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_800A8408(int team);
 int fn_800A8444(int team);
 int fn_800A8F84(int team);
@@ -317,7 +317,7 @@ extern "C" void fn_8016E064(void)
     }
     p = fn_8009BCE8(&pRecord->mUnknown0);
     if (p != 0) {
-        fn_80067DB8(27, &p->mMotion.mPos, p->mpState->mUnknown2 == 8, 0, 0);
+        AudmonEventPostArgs(27, &p->mMotion.mPos, p->mpState->mUnknown2 == 8, 0, 0);
     }
     fn_800B1508();
 }
@@ -413,7 +413,7 @@ extern "C" void fn_8016E498(void)
     fn_8017DA9C(fn_80178320());
     fn_800B14E4();
     fn_80044264();
-    fn_80067CCC();
+    AudmonEventClear();
     fn_800AD910(3, 0.0f);
     fn_8011F3A8();
     fn_80137C10(0);
@@ -744,7 +744,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                         break;
                     case 4:
                         if (((State_8016EC40 *)&p->mUnknown336)->mUnknown19 != 0) {
-                            fn_80067E3C(52, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                            AudmonEventPostId(52, &p->mMotion.mPos, p->mId, 0, 0, 0);
                             fn_8017C960(p->mIdBytes[2], 1);
                         }
                         break;
@@ -761,37 +761,37 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             }
         }
         fn_801783D0(9, 1);
-        fn_80067E3C(95, &ballPos, p->mId, 0, 0, 0);
+        AudmonEventPostId(95, &ballPos, p->mId, 0, 0, 0);
         switch (fn_801788D8(&value)) {
         case 0:
             if (fn_80177F70() != 6) {
                 if (fn_801787DC(p->mIdBytes[2]) + 6 < value) {
-                    fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                 } else if (!fn_80025708()) {
-                    fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(94, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             } else {
                 if (fn_801787DC(p->mIdBytes[2]) + 2 < value) {
-                    fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                 } else if (!fn_80025708()) {
-                    fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(94, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             }
             break;
         case 1:
             if (fn_80177F70() != 6) {
                 if (fn_800D42CC() == 2) {
-                    fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             } else {
                 if (fn_800D42CC() == 2) {
-                    fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
+                    AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             }
             break;
         case 2:
             if (fn_801486A0() == 2) {
-                fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
+                AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
             }
             break;
         }
@@ -836,31 +836,31 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                                     : 0.5f - fn_80178A08();
 
                 fn_801783D0(9, 1);
-                fn_80067E3C(95, &ballPos, p->mId, 0, 0, 0);
+                AudmonEventPostId(95, &ballPos, p->mId, 0, 0, 0);
                 switch (fn_801788D8(&value)) {
                 case 0:
                     if (fn_80177F70() != 6) {
                         if (fn_801787DC(p->mIdBytes[2]) + 6 < value) {
-                            fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                         } else if (!fn_80025708()) {
-                            fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(94, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     } else {
                         if (fn_801787DC(p->mIdBytes[2]) + 2 < value) {
-                            fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                         } else if (!fn_80025708()) {
-                            fn_80067DB8(94, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(94, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     }
                     break;
                 case 1:
                     if (fn_80177F70() != 6) {
                         if (fn_800D42CC() == 2) {
-                            fn_80067DB8(89, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     } else {
                         if (fn_800D42CC() == 2) {
-                            fn_80067DB8(90, &ballPos, p->mIdBytes[2], 0, 0);
+                            AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     }
                     break;

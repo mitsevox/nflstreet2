@@ -91,7 +91,7 @@ void fn_801CF910(void *,void *,void *);
 int fn_80178320(void);
 void fn_8013C438(Camera_8013F738 *);
 void fn_8013C384(void *,int,int,int);
-void fn_80067D4C(int,int);
+void AudmonEventPost(int,int);
 void fn_80140DBC(Camera_8013F738 *,int,int);
 void fn_80140EA0(Camera_8013F738 *);
 
@@ -380,7 +380,7 @@ void fn_801410F4(unsigned int index)
         lbl_802DBEBC.mUnknownC = 0;
         lbl_802DBEBC.mUnknown4 = index;
         lbl_802DBEBC.mUnknown8 = 100;
-        fn_80067D4C(17,0);
+        AudmonEventPost(17,0);
     }
 }
 void fn_80141164(float amount) { lbl_803ECA08 = amount; }

@@ -1,5 +1,5 @@
 #include "engine/cu_80227F14.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
@@ -76,7 +76,7 @@ int fn_800473AC(Item_800476DC *pInstance)
     if (lbl_803EA4C8 && fn_8007F828(17)) {
         int mode = fn_800AD9B4();
         if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
-            mode != 7 && !fn_8006560C() && !fn_800A9680()) {
+            mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];
             Quad_801CD308 value;

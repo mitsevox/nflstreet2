@@ -62,7 +62,7 @@ void fn_8018F6C0(Object_8007A334 *pObject, int index, int delta);
 int fn_80178AE0(void);
 unsigned int fn_8009D990(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void fn_800652A8(void);
+void PauseRequestClose(void);
 }
 
 extern "C" void fn_80055584(void)
@@ -343,7 +343,7 @@ extern "C" int fn_80056444(unsigned int id, Args_80056444 *pArgs)
         fn_80055B2C((unsigned char *)pArgs->mpArray0);
         break;
     case 0x80000003:
-        fn_800652A8();
+        PauseRequestClose();
         break;
     case 0x80000004:
         fn_80055E8C(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1));

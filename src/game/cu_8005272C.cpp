@@ -2,7 +2,7 @@
 
 #include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801D2B7C.h"
 
@@ -172,7 +172,7 @@ int fn_800529CC(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
     }
     if (!done && pObject->mUnknown308 != 0 && fn_80041928() % 9 == pObject->mUnknown310) {
         int index = fn_80052678(pOwner);
-        fn_80067DB8(pObject->mUnknown308, &pos, 2, (int)pNode, index);
+        AudmonEventPostArgs(pObject->mUnknown308, &pos, 2, (int)pNode, index);
     }
     return 1;
 }

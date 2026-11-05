@@ -109,7 +109,7 @@ int fn_80177C38(void);
 void fn_8004CBEC(void *, Container_80053258 *, Object_80053674 *, float);
 void fn_8004E090(Object_80053674 *, int, int);
 void fn_8005D2C8(int);
-void fn_80067E3C(int, void *, int, int, int, int);
+void AudmonEventPostId(int, void *, int, int, int, int);
 void fn_8007ECBC(int, int);
 void fn_80083E1C(Object_8007A334 *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
@@ -342,7 +342,7 @@ void fn_80053258(Args_80052F54 *pArgs)
     pObject->mUnknownE8 |= 1;
     Object_80039F5C *pPlayer = fn_8009BCE8(pRef);
     if (pPlayer) {
-        fn_80067E3C(53, &pPlayer->mMotion, *pRef, 0, 0, 0);
+        AudmonEventPostId(53, &pPlayer->mMotion, *pRef, 0, 0, 0);
     }
 }
 

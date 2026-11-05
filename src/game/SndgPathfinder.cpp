@@ -7,7 +7,7 @@
 #include "game/Class_801B8D9C.h"
 #include "engine/cu_801B8C18.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_8017F584.h"
@@ -488,8 +488,8 @@ void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, voi
                  const char *pName);
 int fn_80031054(float *pValue);
 void fn_8006F344(unsigned char value);
-void fn_8006F850(Record_80067CA8 *pEvent);
-void fn_80070C40(Record_80067CA8 *pEvent);
+void fn_8006F850(AudmonEvent_t *pEvent);
+void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
 int fn_80071BA0(int a, int b);
 void fn_800728F8(void);
@@ -688,8 +688,8 @@ unsigned char fn_8006CC48(void);
 int fn_8006CC54(int index);
 unsigned char fn_8006CC90(int index);
 void fn_8006CCA8(float value);
-void fn_8006CCD0(Record_80067CA8 *p);
-void fn_8006CE84(Record_80067CA8 *p);
+void fn_8006CCD0(AudmonEvent_t *p);
+void fn_8006CE84(AudmonEvent_t *p);
 void fn_8006CEC8(Struct_8030A688 *src);
 void fn_8006CF9C(Vector_80039F5C *origin, Vector_80039F5C *pos, unsigned short *pan, short *span);
 void fn_8006D0F8(void);
@@ -725,7 +725,7 @@ void fn_8006E010(int value);
 void fn_8006E08C(void);
 void fn_8006E0DC(int unknown);
 void fn_8006E134(int flags);
-void fn_8006E148(Record_80067CA8 *pEvent);
+void fn_8006E148(AudmonEvent_t *pEvent);
 int fn_8006E25C(void);
 void fn_8006E2A8(void);
 void fn_8006E308(Struct_8030A518Entry *pEntry);
@@ -743,7 +743,7 @@ void fn_8006E918(void);
 void fn_8006E924(int unknown);
 void fn_8006EA04(unsigned int index, unsigned int value);
 void fn_8006EC24(void);
-void fn_8006ECB4(Record_80067CA8 *pEvent);
+void fn_8006ECB4(AudmonEvent_t *pEvent);
 void fn_8006F0B8(int flags);
 void fn_8006F0C8(int flags);
 int fn_8006F0D8(void);
@@ -2224,7 +2224,7 @@ extern "C" void fn_8006CCA8(float value)
     lbl_803EA690 = (int)(value * 4096.0f);
 }
 
-extern "C" void fn_8006CCD0(Record_80067CA8 *p)
+extern "C" void fn_8006CCD0(AudmonEvent_t *p)
 {
     switch (p->mType) {
     case 0x1F:
@@ -2275,7 +2275,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
     }
 }
 
-extern "C" void fn_8006CE84(Record_80067CA8 *p)
+extern "C" void fn_8006CE84(AudmonEvent_t *p)
 {
     fn_8006CCD0(p);
     fn_8006F850(p);
@@ -2816,7 +2816,7 @@ extern "C" void fn_8006E134(int flags)
     lbl_803EA69C->mFlags |= flags;
 }
 
-extern "C" void fn_8006E148(Record_80067CA8 *pEvent)
+extern "C" void fn_8006E148(AudmonEvent_t *pEvent)
 {
     switch (pEvent->mType) {
     case 0x1F:
@@ -3125,7 +3125,7 @@ extern "C" void fn_8006EC24(void)
     }
 }
 
-extern "C" void fn_8006ECB4(Record_80067CA8 *pEvent)
+extern "C" void fn_8006ECB4(AudmonEvent_t *pEvent)
 {
     if (!fn_800BA6F8() && fn_800744A8()) {
         if (fn_8017F584() == 11 && fn_801568F0() <= 4) {

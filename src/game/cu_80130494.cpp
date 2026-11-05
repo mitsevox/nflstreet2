@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Level_80054130.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_800F06F4.h"
@@ -396,7 +396,7 @@ extern "C" int fn_80130F88(Object_80039F5C *p)
                     side = fn_801CFFD0(p->mMotion.mFacing, dir + 0x400000) <= 0x3FFFFF;
                     pBlock->mUnknown34 = side ? 19 : 18;
                     pBlock->mUnknown32 = fn_802372EC(0, 40) + 40;
-                    fn_80067E3C(98, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                    AudmonEventPostId(98, &p->mMotion.mPos, p->mId, 0, 0, 0);
                     pBlock->mUnknown60 = 1;
                     pBlock->mUnknown61 = 1;
                 }

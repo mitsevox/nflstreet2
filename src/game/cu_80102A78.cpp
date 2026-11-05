@@ -17,7 +17,7 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
@@ -339,7 +339,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         speed = fn_80103DD8(p, pTarget, &pRecord->mUnknown8, pRecord->mUnknown0);
         pEvent->mUnknown8 = (int)pTarget;
         if (fn_800D0B90(p) != 0) {
-            fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         break;
     case 8:
@@ -566,12 +566,12 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
         pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
         pEvent->mUnknown8 = (int)pTarget;
         if (fn_800D0B90(p) != 0) {
-            fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         break;
     case 8:
         if (fn_800D0B90(p) != 0) {
-            fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
         }
         pEvent->mUnknown8 = (int)pTarget;
         break;

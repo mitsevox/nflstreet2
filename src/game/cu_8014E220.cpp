@@ -55,12 +55,12 @@ void fn_8013FA58(int a, int b);
 void fn_800D0B08(void);
 void fn_800B14E4(void);
 void fn_80044264(void);
-void fn_80067CCC(void);
+void AudmonEventClear(void);
 void fn_80173614(void);
 void fn_800C9FC0(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
-void fn_800655D0(void);
+void PauseUnblock(void);
 
 void fn_8014E220(void *p, float dt)
 {
@@ -126,7 +126,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         fn_800D0B08();
         fn_800B14E4();
         fn_80044264();
-        fn_80067CCC();
+        AudmonEventClear();
         fn_80173614();
         fn_800C9FC0();
         fn_80148A58()->vfn_15();
@@ -134,7 +134,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
     if (fn_8005BFD4() == 3 || fn_8005BFD4() == 4) {
         if (fn_8005BFD4() != 4) {
             fn_8005BF18();
-            fn_800655D0();
+            PauseUnblock();
         }
         fn_800AD910(3, dt);
     }
