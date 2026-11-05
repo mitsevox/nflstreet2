@@ -2,6 +2,9 @@
 
 Tier (A, B or C), task or issue, affected units or tools, dependencies, and unresolved work.
 
+Closes: none
+<!-- A PR that finishes files names them here, e.g. `Closes: src/engine/hash.c, src/game/FELoop.cpp`. CI fails unless each is closed in this build (tools/files_closed.py: linked, descriptive file name, every function and label named with an evidence row); the header comment, naming conventions, unit rows and both reviews are checked by the reviewers. -->
+
 <!-- Where contributors are on, a line `Credits: @login, @login` names who made this PR's functions exact; without it the PR author is credited. -->
 
 ## Targets

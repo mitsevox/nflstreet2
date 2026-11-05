@@ -78,8 +78,8 @@ def unit_labels(index, unit):
     return found
 
 
-def survey():
-    report = json.loads((ROOT / 'build/source/report.json').read_text())
+def survey(source_report=ROOT / 'build/source/report.json'):
+    report = json.loads(Path(source_report).read_text())
     if report.get('complete') != 'identical':
         raise ValueError('build/source/report.json is not a verified build; run python3 build.py')
     comparisons = {u['source'] for u in json.loads((ROOT / f'config/{TARGET}/comparisons.json').read_text())['units']}

@@ -9,18 +9,33 @@ from pathlib import Path
 
 import check_progress_maps
 import decomp_report
+import files_closed
 import progress
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def export(dol, revision, source_report, analysis_dir, comparison_report):
+def export(dol, revision, source_report, analysis_dir, comparison_report, closed_rows=None):
     site = progress.report(dol.read_bytes(), revision, source_report,
                            analysis_dir, comparison_report)
     decomp = decomp_report.objdiff_report(site)
     build = json.loads(source_report.read_text())
     check_progress_maps.verify(ROOT, site, decomp, build['units'], site)
+    if closed_rows is not None:
+        mark_closed(decomp, closed_rows)
     return site, decomp
+
+
+def mark_closed(decomp, rows):
+    """Each unit's metadata.closed: the project's done rule as tools/files_closed.py measures it
+    (linked, descriptive file name, every function and label named with evidence). The site counts
+    a producer's closed units as its exact files when every unit carries the flag."""
+    closed = {row['source'] for row in rows if row['closed']}
+    for unit in decomp['units']:
+        unit['metadata']['closed'] = unit['metadata'].get('source_path') in closed
+    marked = sum(unit['metadata']['closed'] for unit in decomp['units'])
+    if marked != len(closed):
+        raise ValueError(f'{len(closed)} files are closed but {marked} report units carry them')
 
 
 def main():
@@ -35,12 +50,13 @@ def main():
     # A failed run cannot leave an earlier successful report behind.
     args.output.unlink(missing_ok=True)
     site, decomp = export(args.dol, args.revision, args.source_report,
-                          args.analysis_dir, args.comparison_report)
+                          args.analysis_dir, args.comparison_report, files_closed.survey(args.source_report))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(decomp, indent=2)+'\n')
     m = decomp['measures']
     print(f"Verified the progress maps at {args.revision}: {m['matched_functions']} of "
-          f"{m['total_functions']} functions exact")
+          f"{m['total_functions']} functions exact, "
+          f"{sum(u['metadata']['closed'] for u in decomp['units'])} of {m['total_units']} files closed")
 
 
 if __name__ == '__main__':
