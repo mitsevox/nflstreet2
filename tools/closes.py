@@ -30,11 +30,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
-# A `Closes:` line, also as a list item, quote or heading, in bold or italics, or with the keyword
-# in inline code.
-LINE = re.compile(r'^[ \t>#*_`-]*Closes[*_`]*[ \t]*:[*_`]*[ \t]*(.*)$', re.IGNORECASE)
+# A `Closes:` line, also as a list item, quote or heading and in bold or italics. The keyword may
+# be in inline code (`Closes:` or `Closes`:) only when a source path or `none` follows it; otherwise
+# a code-formatted keyword is a mention of the syntax, as in prose about this check.
+LINE = re.compile(r'^[ \t>#*_-]*(?:(?P<code>`Closes`[ \t]*:|`Closes:`)|[*_]*Closes[*_]*[ \t]*:[*_]*)[ \t]*(?P<rest>.*)$',
+                  re.IGNORECASE)
 MENTION = re.compile(r'\bcloses[*_]*\s*:', re.IGNORECASE)
 COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
+PATH = re.compile(r'`?(?:none|[\w.-]+(?:/[\w.-]+)+\.\w+)`?[,\s]*', re.IGNORECASE)
 
 
 def claimed(body):
@@ -44,11 +47,13 @@ def claimed(body):
     files = []
     for line in COMMENT.sub('', body or '').splitlines():
         match = LINE.match(line)
+        if match and match['code'] and not PATH.match(match['rest']):
+            match = None  # `Closes:` followed by words: a mention of the syntax, not a claim.
         if match is None:
             if MENTION.search(re.sub(r'`[^`]*`', '', line)):  # Inline code is a mention, not a claim.
                 raise ValueError(f'cannot read this Closes line; write it as `Closes: <path>, <path>`: {line.strip()}')
             continue
-        for item in re.split(r'[,\s]+', match[1].strip()):
+        for item in re.split(r'[,\s]+', match['rest'].strip()):
             item = item.strip('`*_')
             if item and item.lower() not in ('none', '-', 'n/a'):
                 files.append(item)

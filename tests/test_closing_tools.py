@@ -235,6 +235,17 @@ class Closes(unittest.TestCase):
         self.assertEqual(closes.claimed('Fixes #12. Closes #123.'), [])
         self.assertEqual(closes.claimed('<!-- e.g. `Closes: src/x.c` -->\nCloses: none'), [])
         self.assertEqual(closes.claimed('- A body line `Closes: <path>` fails CI unless the file is closed.'), [])
+        # Prose about the check, as PR #1226's own body has it: mentions, not claims.
+        for prose in ('- **`tools/closes.py` + CI step** ("Check the files the PR closes", in the target job):',
+                      '  - A PR body line `Closes: <path>[, <path>]` fails CI unless every named file is closed.',
+                      '  - `Closes: none`, no line, or a run that is not a pull request all pass.',
+                      '  - Locally: `python3 tools/closes.py --body FILE`.',
+                      '- **PR template:** a `Closes:` line with a comment saying what it checks.',
+                      '- **`Closes:` check:** `tools/closes.py --body` with `Closes: src/engine/hash.c` exits 1.',
+                      '- **Tests:** new tests cover the `Closes:` parsing and checking, and `mark_closed`.'):
+            self.assertEqual(closes.claimed(prose), [], prose)
+        self.assertEqual(closes.claimed('`Closes:` `src/a.c`, src/b.cpp'), ['src/a.c', 'src/b.cpp'])
+        self.assertEqual(closes.claimed('`Closes:` none'), [])
         with self.assertRaises(ValueError):
             closes.claimed('This PR closes: src/a.c')
 
