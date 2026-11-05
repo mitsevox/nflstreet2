@@ -1,10 +1,16 @@
+/* Street Event setup: the screen that sets up the chosen Street Event before play.
+   It builds the option rows for the event (game type, timer or rounds, play-to,
+   player count), lets the player switch the player-pool groups on and off (NFL
+   players, legends, created and randomized players) and hands the choices to the
+   game when the screen closes. */
+
 #include "game/Class_80148A58.h"
 #include "game/Object_8007A334.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 
-struct Toggle_8001BF24 {
+struct StreetEventPoolToggle_t {
     int mValue;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -12,7 +18,7 @@ struct Toggle_8001BF24 {
     int mUnknown8;
 };
 
-struct Option_8001BF24 {
+struct StreetEventOption_t {
     char **mppItems;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -22,14 +28,14 @@ struct Option_8001BF24 {
     char mDescription[71];
 };
 
-struct State_8001BF24 {
-    Toggle_8001BF24 mToggles[4];
-    Option_8001BF24 mOptions[3];
+struct StreetEventSetup_t {
+    StreetEventPoolToggle_t mToggles[4];
+    StreetEventOption_t mOptions[3];
     unsigned char mUnknown324;
     unsigned char mUnknown325;
 };
 
-struct Settings_8031BDD4 {
+struct MiniGameSettings_t {
     char mUnknown0[32];
     int mUnknown32;
     int mUnknown36;
@@ -53,66 +59,66 @@ void fn_8018D7E0(void);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 char *fn_801C3084(const char *pString, int c);
 
-extern Settings_8031BDD4 lbl_8031BDD4;
+extern MiniGameSettings_t lbl_8031BDD4;
 extern int lbl_802A11F4[];
 extern char *lbl_803EB2E8;
 
-void fn_8001C138(State_8001BF24 *pState);
-void fn_8001CA3C(Option_8001BF24 *pOption, const char *pName, const char *pItems, const char *pDescription,
+void MsgStreetEventSetupFreeOptions(StreetEventSetup_t *pState);
+void MsgStreetEventSetupSetOption(StreetEventOption_t *pOption, const char *pName, const char *pItems, const char *pDescription,
                  unsigned char flag);
 }
 
-static State_8001BF24 *lbl_803EBA58 = 0;
-static int lbl_803EBA5C = 14;
+static StreetEventSetup_t *_MsgStreetEventSetup_pState = 0;
+static int _MsgStreetEventSetup_iMinPool = 14;
 
 extern "C" {
-void fn_8001BF24(void)
+void MsgStreetEventSetupCountPool(void)
 {
-    lbl_803EBA58->mToggles[0].mUnknown8 = fn_80082414(0);
-    lbl_803EBA58->mToggles[1].mUnknown8 = fn_80082414(1);
-    lbl_803EBA58->mToggles[2].mUnknown8 = fn_80082414(3);
-    lbl_803EBA58->mToggles[3].mUnknown8 = fn_80082414(2);
+    _MsgStreetEventSetup_pState->mToggles[0].mUnknown8 = fn_80082414(0);
+    _MsgStreetEventSetup_pState->mToggles[1].mUnknown8 = fn_80082414(1);
+    _MsgStreetEventSetup_pState->mToggles[2].mUnknown8 = fn_80082414(3);
+    _MsgStreetEventSetup_pState->mToggles[3].mUnknown8 = fn_80082414(2);
 }
 
-void fn_8001BF80(State_8001BF24 *pState)
+void MsgStreetEventSetupBuildOptions(StreetEventSetup_t *pState)
 {
     int count;
 
-    fn_8001CA3C(&pState->mOptions[0], 0, 0, 0, 0);
-    fn_8001CA3C(&pState->mOptions[1], 0, 0, 0, 0);
-    fn_8001CA3C(&pState->mOptions[2], 0, 0, 0, 0);
+    MsgStreetEventSetupSetOption(&pState->mOptions[0], 0, 0, 0, 0);
+    MsgStreetEventSetupSetOption(&pState->mOptions[1], 0, 0, 0, 0);
+    MsgStreetEventSetupSetOption(&pState->mOptions[2], 0, 0, 0, 0);
     count = 3;
     switch (fn_801486A0()) {
     case 1:
-        fn_8001CA3C(&pState->mOptions[0], "Game Type", "Single Round|^Elimination",
+        MsgStreetEventSetupSetOption(&pState->mOptions[0], "Game Type", "Single Round|^Elimination",
                     "Play a single round or multiple rounds with Elimination.", 0);
-        fn_8001CA3C(&pState->mOptions[1], "Play To", lbl_803EB2E8,
+        MsgStreetEventSetupSetOption(&pState->mOptions[1], "Play To", lbl_803EB2E8,
                     "Select the length of the Street Event, or play to score.", 0);
-        lbl_803EBA5C = 7;
+        _MsgStreetEventSetup_iMinPool = 7;
         break;
     case 0:
-        fn_8001CA3C(&pState->mOptions[0], "Timer", "3 Minutes|^5 Minutes|8 Minutes|10 Minutes",
+        MsgStreetEventSetupSetOption(&pState->mOptions[0], "Timer", "3 Minutes|^5 Minutes|8 Minutes|10 Minutes",
                     "Select the Length of the Street Event.", 0);
         count = 2;
-        lbl_803EBA5C = 6;
+        _MsgStreetEventSetup_iMinPool = 6;
         break;
     case 2:
-        fn_8001CA3C(&pState->mOptions[0], "Game Type",
+        MsgStreetEventSetupSetOption(&pState->mOptions[0], "Game Type",
                     (pState->mUnknown324 <= 1 && pState->mUnknown325 <= 1) ? "2 on 2|^1 on 1" : "2 on 2",
                     "Select the Game Type for the Street Event.", 0);
-        fn_8001CA3C(&pState->mOptions[1], "Rounds", "5 Rounds|^10 Rounds|15 Rounds|20 Rounds",
+        MsgStreetEventSetupSetOption(&pState->mOptions[1], "Rounds", "5 Rounds|^10 Rounds|15 Rounds|20 Rounds",
                     "Select the Number of Rounds for the Street Event.", 0);
-        lbl_803EBA5C = 2;
+        _MsgStreetEventSetup_iMinPool = 2;
         break;
     case 3:
     case 4:
         break;
     }
-    fn_8001CA3C(&pState->mOptions[count - 1], "Player Count", "^40 Random|All Players",
+    MsgStreetEventSetupSetOption(&pState->mOptions[count - 1], "Player Count", "^40 Random|All Players",
                 "Choose the number of players to put in the pool.", 0);
 }
 
-void fn_8001C138(State_8001BF24 *pState)
+void MsgStreetEventSetupFreeOptions(StreetEventSetup_t *pState)
 {
     unsigned char i;
     unsigned char j;
@@ -127,7 +133,7 @@ void fn_8001C138(State_8001BF24 *pState)
     }
 }
 
-void fn_8001C1D0(State_8001BF24 *pState)
+void MsgStreetEventSetupInitPool(StreetEventSetup_t *pState)
 {
     pState->mToggles[0].mValue = 1;
     pState->mToggles[1].mValue = 2;
@@ -141,27 +147,27 @@ void fn_8001C1D0(State_8001BF24 *pState)
     pState->mToggles[1].mUnknown4 = 0;
     pState->mToggles[2].mUnknown4 = 0;
     pState->mToggles[3].mUnknown4 = 0;
-    if (lbl_803EBA58->mToggles[0].mUnknown8 != 0) {
-        lbl_803EBA58->mToggles[0].mUnknown6 = 0;
+    if (_MsgStreetEventSetup_pState->mToggles[0].mUnknown8 != 0) {
+        _MsgStreetEventSetup_pState->mToggles[0].mUnknown6 = 0;
     } else {
-        lbl_803EBA58->mToggles[0].mUnknown6 = 1;
-        lbl_803EBA58->mToggles[0].mUnknown4 = 0;
+        _MsgStreetEventSetup_pState->mToggles[0].mUnknown6 = 1;
+        _MsgStreetEventSetup_pState->mToggles[0].mUnknown4 = 0;
     }
-    if (lbl_803EBA58->mToggles[1].mUnknown8 != 0) {
-        lbl_803EBA58->mToggles[1].mUnknown6 = 0;
+    if (_MsgStreetEventSetup_pState->mToggles[1].mUnknown8 != 0) {
+        _MsgStreetEventSetup_pState->mToggles[1].mUnknown6 = 0;
     } else {
-        lbl_803EBA58->mToggles[1].mUnknown6 = 1;
-        lbl_803EBA58->mToggles[1].mUnknown4 = 0;
+        _MsgStreetEventSetup_pState->mToggles[1].mUnknown6 = 1;
+        _MsgStreetEventSetup_pState->mToggles[1].mUnknown4 = 0;
     }
-    if (lbl_803EBA58->mToggles[2].mUnknown8 != 0) {
-        lbl_803EBA58->mToggles[2].mUnknown6 = 0;
+    if (_MsgStreetEventSetup_pState->mToggles[2].mUnknown8 != 0) {
+        _MsgStreetEventSetup_pState->mToggles[2].mUnknown6 = 0;
     } else {
-        lbl_803EBA58->mToggles[2].mUnknown6 = 1;
-        lbl_803EBA58->mToggles[2].mUnknown4 = 0;
+        _MsgStreetEventSetup_pState->mToggles[2].mUnknown6 = 1;
+        _MsgStreetEventSetup_pState->mToggles[2].mUnknown4 = 0;
     }
 }
 
-void fn_8001C294(State_8001BF24 *pState)
+void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
 {
     switch (fn_801486A0()) {
     case 1:
@@ -233,30 +239,30 @@ void fn_8001C294(State_8001BF24 *pState)
     case 4:
         break;
     }
-    fn_8001C138(pState);
+    MsgStreetEventSetupFreeOptions(pState);
 }
 
-void fn_8001C440(void)
+void MsgStreetEventSetupInit(void)
 {
-    lbl_803EBA58 = (State_8001BF24 *)fn_801D2B7C(sizeof(State_8001BF24), 0, 0);
-    fn_801C1F94(lbl_803EBA58, 0, sizeof(State_8001BF24));
+    _MsgStreetEventSetup_pState = (StreetEventSetup_t *)fn_801D2B7C(sizeof(StreetEventSetup_t), 0, 0);
+    fn_801C1F94(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
     fn_8018D7E0();
     fn_8018C230(0, 1);
     {
         Object_8007A334 object;
 
         fn_8007AEE8(&object);
-        lbl_803EBA58->mUnknown324 = fn_8007AFDC(0);
-        lbl_803EBA58->mUnknown325 = fn_8007AFDC(1);
+        _MsgStreetEventSetup_pState->mUnknown324 = fn_8007AFDC(0);
+        _MsgStreetEventSetup_pState->mUnknown325 = fn_8007AFDC(1);
         fn_8007AF14(&object);
     }
-    lbl_803EBA5C = 14;
-    fn_8001BF24();
-    fn_8001C1D0(lbl_803EBA58);
-    fn_8001BF80(lbl_803EBA58);
+    _MsgStreetEventSetup_iMinPool = 14;
+    MsgStreetEventSetupCountPool();
+    MsgStreetEventSetupInitPool(_MsgStreetEventSetup_pState);
+    MsgStreetEventSetupBuildOptions(_MsgStreetEventSetup_pState);
 }
 
-void fn_8001C504(void)
+void MsgStreetEventSetupShutdown(void)
 {
     int mask = 0;
     int count = 3;
@@ -264,41 +270,41 @@ void fn_8001C504(void)
     int i;
 
     for (i = 0; i < 4; i++) {
-        if (lbl_803EBA58->mToggles[i].mUnknown4 != 0) {
-            mask |= lbl_803EBA58->mToggles[i].mValue;
+        if (_MsgStreetEventSetup_pState->mToggles[i].mUnknown4 != 0) {
+            mask |= _MsgStreetEventSetup_pState->mToggles[i].mValue;
         }
     }
     if (fn_801486A0() == 0) {
         count = 2;
     }
     mode = 0;
-    if (lbl_803EBA58->mOptions[count - 1].mSelection != 0) {
-        mode = lbl_803EBA58->mOptions[count - 1].mSelection == 1 ? 2 : 0;
+    if (_MsgStreetEventSetup_pState->mOptions[count - 1].mSelection != 0) {
+        mode = _MsgStreetEventSetup_pState->mOptions[count - 1].mSelection == 1 ? 2 : 0;
     }
     fn_8001B330(mask);
-    fn_8001B260(mode, lbl_803EBA5C);
+    fn_8001B260(mode, _MsgStreetEventSetup_iMinPool);
     fn_8001B828();
-    fn_8001C294(lbl_803EBA58);
+    MsgStreetEventSetupApplyOptions(_MsgStreetEventSetup_pState);
     if (fn_801801B4() == 0) {
         fn_8018C48C(0x54415453);
     }
-    fn_801D2BD0(lbl_803EBA58);
-    lbl_803EBA58 = 0;
+    fn_801D2BD0(_MsgStreetEventSetup_pState);
+    _MsgStreetEventSetup_pState = 0;
 }
 
-void fn_8001C5EC(int index, int *pEnabled, Arg_8018399C text, int *pState)
+void MsgStreetEventSetupGetRow(int index, int *pEnabled, Arg_8018399C text, int *pState)
 {
     int selectable = 1;
 
     if (index >= 1 && index <= 3) {
-        *pEnabled = lbl_803EBA58->mOptions[index - 1].mUnknown5;
-        if (lbl_803EBA58->mOptions[index - 1].mUnknown5 != 0) {
-            fn_801C2EF0(text.pParams->mpText, lbl_803EBA58->mOptions[index - 1].mName, text.pParams->mLength);
+        *pEnabled = _MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5;
+        if (_MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5 != 0) {
+            fn_801C2EF0(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mName, text.pParams->mLength);
         }
-        selectable = lbl_803EBA58->mOptions[index - 1].mCount > 1;
+        selectable = _MsgStreetEventSetup_pState->mOptions[index - 1].mCount > 1;
     } else if (index >= 4 && index <= 7) {
-        *pEnabled = lbl_803EBA58->mToggles[index - 4].mUnknown5;
-        if (lbl_803EBA58->mToggles[index - 4].mUnknown5 != 0) {
+        *pEnabled = _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown5;
+        if (_MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown5 != 0) {
             const char *pName = index == 4   ? "NFL Players"
                                 : index == 5 ? "NFL Legends"
                                 : index == 6 ? "Created"
@@ -309,64 +315,64 @@ void fn_8001C5EC(int index, int *pEnabled, Arg_8018399C text, int *pState)
         }
     }
     *pState = 0;
-    if (!selectable || (index >= 4 && index <= 7 && lbl_803EBA58->mToggles[index - 4].mUnknown6 != 0)) {
+    if (!selectable || (index >= 4 && index <= 7 && _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown6 != 0)) {
         *pState = 2;
     }
 }
 
-int fn_8001C75C(int index, int direction, Arg_8018399C text)
+int MsgStreetEventSetupChangeRow(int index, int direction, Arg_8018399C text)
 {
     int changed = 0;
     Params_80005284 *pText = text.pParams;
 
-    if (index >= 1 && index <= 3 ? lbl_803EBA58->mOptions[index - 1].mUnknown5 != 0
-                                 : index >= 4 && index <= 7 && lbl_803EBA58->mToggles[index - 4].mUnknown5 != 0) {
+    if (index >= 1 && index <= 3 ? _MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown5 != 0
+                                 : index >= 4 && index <= 7 && _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown5 != 0) {
         switch (direction) {
         case 0:
             break;
         case 3:
             if (index >= 1 && index <= 3) {
-                if (lbl_803EBA58->mOptions[index - 1].mSelection == 0) {
-                    lbl_803EBA58->mOptions[index - 1].mSelection = lbl_803EBA58->mOptions[index - 1].mCount - 1;
+                if (_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection == 0) {
+                    _MsgStreetEventSetup_pState->mOptions[index - 1].mSelection = _MsgStreetEventSetup_pState->mOptions[index - 1].mCount - 1;
                 } else {
-                    lbl_803EBA58->mOptions[index - 1].mSelection--;
+                    _MsgStreetEventSetup_pState->mOptions[index - 1].mSelection--;
                 }
             } else if (index >= 4 && index <= 7) {
-                lbl_803EBA58->mToggles[index - 4].mUnknown4 = !lbl_803EBA58->mToggles[index - 4].mUnknown4;
+                _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4 = !_MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4;
             }
             break;
         case 1:
             if (index >= 1 && index <= 3) {
-                if (lbl_803EBA58->mOptions[index - 1].mSelection == lbl_803EBA58->mOptions[index - 1].mCount - 1) {
-                    lbl_803EBA58->mOptions[index - 1].mSelection = 0;
+                if (_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection == _MsgStreetEventSetup_pState->mOptions[index - 1].mCount - 1) {
+                    _MsgStreetEventSetup_pState->mOptions[index - 1].mSelection = 0;
                 } else {
-                    lbl_803EBA58->mOptions[index - 1].mSelection++;
+                    _MsgStreetEventSetup_pState->mOptions[index - 1].mSelection++;
                 }
             } else if (index >= 4 && index <= 7) {
-                lbl_803EBA58->mToggles[index - 4].mUnknown4 = !lbl_803EBA58->mToggles[index - 4].mUnknown4;
+                _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4 = !_MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4;
             }
             break;
         }
         if (index >= 1 && index <= 3) {
-            if (lbl_803EBA58->mOptions[index - 1].mUnknown4 != 0) {
-                fn_8001C138(lbl_803EBA58);
+            if (_MsgStreetEventSetup_pState->mOptions[index - 1].mUnknown4 != 0) {
+                MsgStreetEventSetupFreeOptions(_MsgStreetEventSetup_pState);
                 changed = 1;
-                fn_8001BF80(lbl_803EBA58);
+                MsgStreetEventSetupBuildOptions(_MsgStreetEventSetup_pState);
             }
-            fn_801C2EF0(pText->mpText, lbl_803EBA58->mOptions[index - 1].mppItems[lbl_803EBA58->mOptions[index - 1].mSelection],
+            fn_801C2EF0(pText->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mppItems[_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection],
                         pText->mLength);
             if (fn_801486A0() == 2 && index == 1) {
-                switch (lbl_803EBA58->mOptions[0].mSelection) {
+                switch (_MsgStreetEventSetup_pState->mOptions[0].mSelection) {
                 case 0:
-                    lbl_803EBA5C = 4;
+                    _MsgStreetEventSetup_iMinPool = 4;
                     break;
                 case 1:
-                    lbl_803EBA5C = 2;
+                    _MsgStreetEventSetup_iMinPool = 2;
                     break;
                 }
             }
         } else if (index >= 4 && index <= 7) {
-            const char *pValue = lbl_803EBA58->mToggles[index - 4].mUnknown4 ? "On" : "Off";
+            const char *pValue = _MsgStreetEventSetup_pState->mToggles[index - 4].mUnknown4 ? "On" : "Off";
 
             fn_801C2EF0(pText->mpText, pValue, pText->mLength);
         }
@@ -374,10 +380,10 @@ int fn_8001C75C(int index, int direction, Arg_8018399C text)
     return changed;
 }
 
-void fn_8001C980(int index, Arg_8018399C text)
+void MsgStreetEventSetupGetHelp(int index, Arg_8018399C text)
 {
     if (index >= 1 && index <= 3) {
-        fn_801C2EF0(text.pParams->mpText, lbl_803EBA58->mOptions[index - 1].mDescription, text.pParams->mLength);
+        fn_801C2EF0(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mDescription, text.pParams->mLength);
     } else if (index >= 4 && index <= 7) {
         const char *pDescription = index == 4   ? "Allow/Disallow NFL Players in the Selection Pool."
                                    : index == 5 ? "Allow/Disallow NFL Legends in the Selection Pool."
@@ -389,7 +395,7 @@ void fn_8001C980(int index, Arg_8018399C text)
     }
 }
 
-void fn_8001CA3C(Option_8001BF24 *pOption, const char *pName, const char *pItems, const char *pDescription,
+void MsgStreetEventSetupSetOption(StreetEventOption_t *pOption, const char *pName, const char *pItems, const char *pDescription,
                  unsigned char flag)
 {
     if (pName != 0) {
@@ -439,7 +445,7 @@ void fn_8001CA3C(Option_8001BF24 *pOption, const char *pName, const char *pItems
     pOption->mUnknown4 = flag;
 }
 
-int fn_8001CBE8(void)
+int MsgStreetEventSetupHasEnoughPlayers(void)
 {
     unsigned int total;
     int count = 3;
@@ -448,21 +454,21 @@ int fn_8001CBE8(void)
         count = 2;
     }
     total = 0;
-    if (lbl_803EBA58->mToggles[0].mUnknown4 != 0) {
-        total = lbl_803EBA58->mToggles[0].mUnknown8;
+    if (_MsgStreetEventSetup_pState->mToggles[0].mUnknown4 != 0) {
+        total = _MsgStreetEventSetup_pState->mToggles[0].mUnknown8;
     }
-    if (lbl_803EBA58->mToggles[1].mUnknown4 != 0) {
-        total += lbl_803EBA58->mToggles[1].mUnknown8;
+    if (_MsgStreetEventSetup_pState->mToggles[1].mUnknown4 != 0) {
+        total += _MsgStreetEventSetup_pState->mToggles[1].mUnknown8;
     }
-    if (lbl_803EBA58->mToggles[2].mUnknown4 != 0) {
-        total += lbl_803EBA58->mToggles[2].mUnknown8;
+    if (_MsgStreetEventSetup_pState->mToggles[2].mUnknown4 != 0) {
+        total += _MsgStreetEventSetup_pState->mToggles[2].mUnknown8;
     }
-    if (lbl_803EBA58->mToggles[3].mUnknown4 != 0) {
-        total += lbl_803EBA58->mToggles[3].mUnknown8;
+    if (_MsgStreetEventSetup_pState->mToggles[3].mUnknown4 != 0) {
+        total += _MsgStreetEventSetup_pState->mToggles[3].mUnknown8;
     }
-    switch (lbl_803EBA58->mOptions[count - 1].mSelection) {
+    switch (_MsgStreetEventSetup_pState->mOptions[count - 1].mSelection) {
     case 1:
-        total = total >= lbl_803EBA5C;
+        total = total >= _MsgStreetEventSetup_iMinPool;
         break;
     case 0:
     default:
@@ -472,26 +478,26 @@ int fn_8001CBE8(void)
     return total;
 }
 
-int fn_8001CCB4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgStreetEventSetupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_8001C440();
+        MsgStreetEventSetupInit();
         break;
     case 0x80000002:
-        fn_8001C504();
+        MsgStreetEventSetupShutdown();
         break;
     case 0x80000003:
-        fn_8001C5EC(pArgs[0].i, pArgs[1].pi, pArgs[2], pArgs[3].pi);
+        MsgStreetEventSetupGetRow(pArgs[0].i, pArgs[1].pi, pArgs[2], pArgs[3].pi);
         break;
     case 0x80000004:
-        *pResult = fn_8001C75C(pArgs[0].i, pArgs[1].i, pArgs[2]);
+        *pResult = MsgStreetEventSetupChangeRow(pArgs[0].i, pArgs[1].i, pArgs[2]);
         break;
     case 0x80000005:
-        fn_8001C980(pArgs[0].i, pArgs[1]);
+        MsgStreetEventSetupGetHelp(pArgs[0].i, pArgs[1]);
         break;
     case 0x80000006:
-        *pResult = fn_8001CBE8();
+        *pResult = MsgStreetEventSetupHasEnoughPlayers();
         break;
     default:
         return 0;

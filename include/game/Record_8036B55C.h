@@ -18,7 +18,7 @@ struct Object_800B267C {
     float mUnknown36;
 };
 
-/* Element of lbl_8036B55C. */
+/* Element of _FEPlyr_aModels. */
 struct Record_8036B55C {
     char mUnknown0[1];
     unsigned char mUnknown1;

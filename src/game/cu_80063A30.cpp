@@ -1,9 +1,9 @@
 extern "C" {
-int fn_80020C44(unsigned int id, void *pArgs, int c, int *pResult);
-int fn_80020DC0(unsigned int id, void *pArgs, int c, int *pResult);
-int fn_800211B4(unsigned int id, void *pArgs, int c, int *pResult);
-int fn_800212C8(int id, void *pArgs, int c, int *pResult);
-int fn_800217AC(unsigned int id, void *pArgs, int c, int *pResult);
+int MsgPlaybookStyleHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
+int MsgProfileListHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
+int MsgMemCardLoadHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
+int MsgNameEntryHandleMessage(int id, void *pArgs, int c, int *pResult);
+int MsgMemCardScanHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_80063A30(int id, int *pArgs, int c, int *pResult);
 int fn_80063D48(int id, void *pArgs, int c, int *pResult);
 int fn_80186324(unsigned int id, void *pArgs, int c, int *pResult);
@@ -43,15 +43,15 @@ extern "C" int fn_80063AA8(int kind, int id, void *pArgs, int c, int *pResult)
     case 2:
         return fn_80186324(id, pArgs, c, pResult);
     case 4:
-        return fn_800217AC(id, pArgs, c, pResult);
+        return MsgMemCardScanHandleMessage(id, pArgs, c, pResult);
     case 1:
-        return fn_800212C8(id, pArgs, c, pResult);
+        return MsgNameEntryHandleMessage(id, pArgs, c, pResult);
     case 6:
-        return fn_800211B4(id, pArgs, c, pResult);
+        return MsgMemCardLoadHandleMessage(id, pArgs, c, pResult);
     case 11:
-        return fn_80020DC0(id, pArgs, c, pResult);
+        return MsgProfileListHandleMessage(id, pArgs, c, pResult);
     case 13:
-        return fn_80020C44(id, pArgs, c, pResult);
+        return MsgPlaybookStyleHandleMessage(id, pArgs, c, pResult);
     case 14:
         return fn_80063A30(id, (int *)pArgs, c, pResult);
     case 20:

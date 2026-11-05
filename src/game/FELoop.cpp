@@ -29,7 +29,7 @@ void fn_8001442C(void);
 void fn_80015D28(int a);
 int fn_80015F2C(void);
 void fn_8001B228(void);
-void fn_80022778(void);
+void FEPlyrUpdate(void);
 void fn_800244E4(void);
 void fn_80024560(void);
 void fn_80024608(void);
@@ -372,7 +372,7 @@ unsigned char FELoop::fn_80027C58()
     fn_801D6F58();
     fn_801C601C(-1);
     fn_801C60BC(-1);
-    fn_80022778();
+    FEPlyrUpdate();
     fn_8003E1F0();
     fn_8015CDA4();
     gFMCAPPORT.Update();

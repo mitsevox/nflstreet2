@@ -1,20 +1,24 @@
+/* Tutorial menu: lists the tutorial lessons with their titles, descriptions and the
+   current profile's progress, starts the chosen lesson and records when every
+   lesson has been completed. */
+
 #include "game/Object_8007A334.h"
 #include "game/fn_8021D7B8.h"
 
-struct Buffer_80020170 {
+struct TutorialText_t {
     char mUnknown0[4];
     int mUnknown4;
     char *mUnknown8;
 };
 
-struct BufferRef_80020170 {
-    Buffer_80020170 *mUnknown0;
+struct TutorialTextRef_t {
+    TutorialText_t *mUnknown0;
 };
 
-struct Params_80020170 {
+struct TutorialArgs_t {
     int mUnknown0;
-    BufferRef_80020170 mUnknown4;
-    BufferRef_80020170 mUnknown8;
+    TutorialTextRef_t mUnknown4;
+    TutorialTextRef_t mUnknown8;
     int *mUnknown12;
     int *mUnknown16;
 };
@@ -27,12 +31,12 @@ void fn_80011600(int a, int b, int c);
 void fn_80014294(int a, int b);
 void fn_80015D28(int a);
 void fn_80027E18(unsigned char value);
-int fn_800231B0(Object_8007A334 *pObject, int a, int *pResult);
-int fn_800231E8(Object_8007A334 *pObject);
-int fn_80023210(Object_8007A334 *pObject);
-int fn_80023238(Object_8007A334 *pObject);
-void fn_80023260(Object_8007A334 *pObject, char *pData, int size);
-void fn_80023294(Object_8007A334 *pObject, char *pData, int size);
+int LessonTableSeek(Object_8007A334 *pObject, int a, int *pResult);
+int LessonTableGetCILM(Object_8007A334 *pObject);
+int LessonTableGetCISM(Object_8007A334 *pObject);
+int LessonTableGetDIRM(Object_8007A334 *pObject);
+void LessonTableGetTitle(Object_8007A334 *pObject, char *pData, int size);
+void LessonTableGetDescription(Object_8007A334 *pObject, char *pData, int size);
 void fn_8007EBDC(Object_8007A334 *pObject, int db);
 void fn_8007EC34(Object_8007A334 *pObject);
 int fn_8007EC54(Object_8007A334 *pObject, int a);
@@ -61,51 +65,51 @@ int fn_8022F4BC(void);
 int fn_8000FCCC(void);
 int fn_8000FCDC(void);
 
-void fn_80020328(void);
-void fn_80020410(void);
+void MsgTutorialBeginLesson(void);
+void MsgTutorialCheckCompletion(void);
 }
 
-static Object_8007A334 lbl_8036B334;
-static unsigned char lbl_803EBA98 = 0;
-static unsigned char lbl_803EBA99 = 0;
+static Object_8007A334 _MsgTutorial_LessonCursor;
+static unsigned char _MsgTutorial_cFirstLesson = 0;
+static unsigned char _MsgTutorial_bDatabaseSet = 0;
 
 extern "C" {
-void fn_8001FFE4(void)
+void MsgTutorialInit(void)
 {
     fn_801566EC();
     fn_80087F70();
-    if (!lbl_803EBA99) {
+    if (!_MsgTutorial_bDatabaseSet) {
         if (fn_8022F4BC() != -1) {
             fn_80088638(fn_8022F4BC());
-            lbl_803EBA99 = 1;
+            _MsgTutorial_bDatabaseSet = 1;
         }
     } else {
         fn_8022F478(fn_80088640());
     }
 }
 
-void fn_8002003C(void)
+void MsgTutorialShutdown(void)
 {
     fn_801566F8();
     fn_80087FD0();
 }
 
-int fn_80020060(int index)
+int MsgTutorialGetLessonStatus(int index)
 {
-    fn_800231B0(&lbl_8036B334, index + lbl_803EBA98, 0);
-    return fn_80023210(&lbl_8036B334);
+    LessonTableSeek(&_MsgTutorial_LessonCursor, index + _MsgTutorial_cFirstLesson, 0);
+    return LessonTableGetCISM(&_MsgTutorial_LessonCursor);
 }
 
-void fn_800200A4(int index, BufferRef_80020170 first, BufferRef_80020170 second, int *pResult0, int *pResult1)
+void MsgTutorialGetLessonInfo(int index, TutorialTextRef_t first, TutorialTextRef_t second, int *pResult0, int *pResult1)
 {
-    fn_800231B0(&lbl_8036B334, index + lbl_803EBA98, 0);
-    fn_80023260(&lbl_8036B334, first.mUnknown0->mUnknown8, first.mUnknown0->mUnknown4 + 1);
-    fn_80023294(&lbl_8036B334, second.mUnknown0->mUnknown8, second.mUnknown0->mUnknown4 + 1);
-    *pResult0 = fn_800231E8(&lbl_8036B334);
-    *pResult1 = fn_80023238(&lbl_8036B334);
+    LessonTableSeek(&_MsgTutorial_LessonCursor, index + _MsgTutorial_cFirstLesson, 0);
+    LessonTableGetTitle(&_MsgTutorial_LessonCursor, first.mUnknown0->mUnknown8, first.mUnknown0->mUnknown4 + 1);
+    LessonTableGetDescription(&_MsgTutorial_LessonCursor, second.mUnknown0->mUnknown8, second.mUnknown0->mUnknown4 + 1);
+    *pResult0 = LessonTableGetCILM(&_MsgTutorial_LessonCursor);
+    *pResult1 = LessonTableGetDIRM(&_MsgTutorial_LessonCursor);
 }
 
-void fn_80020130(int value)
+void MsgTutorialPostLessonEvent(int value)
 {
     if (value != -1) {
         fn_801801C4(value);
@@ -113,25 +117,25 @@ void fn_80020130(int value)
     fn_8021D7B8(lbl_803EB688, 0x80000036, 0, 0);
 }
 
-int fn_80020170(unsigned int id, Params_80020170 *pParams, int unused, int *pResult)
+int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_8001FFE4();
+        MsgTutorialInit();
         break;
     case 0x80000002:
-        fn_8002003C();
-        fn_80020328();
+        MsgTutorialShutdown();
+        MsgTutorialBeginLesson();
         break;
     case 0x80000003:
-        *pResult = fn_80020060(pParams->mUnknown0);
+        *pResult = MsgTutorialGetLessonStatus(pParams->mUnknown0);
         break;
     case 0x80000004:
-        fn_800200A4(pParams->mUnknown0, pParams->mUnknown4, pParams->mUnknown8, pParams->mUnknown12,
+        MsgTutorialGetLessonInfo(pParams->mUnknown0, pParams->mUnknown4, pParams->mUnknown8, pParams->mUnknown12,
                     pParams->mUnknown16);
         break;
     case 0x80000005:
-        fn_80020130(pParams->mUnknown0);
+        MsgTutorialPostLessonEvent(pParams->mUnknown0);
         break;
     case 0x80000007:
         fn_8015672C(pParams->mUnknown0);
@@ -142,7 +146,7 @@ int fn_80020170(unsigned int id, Params_80020170 *pParams, int unused, int *pRes
         break;
     case 0x80000008:
         *pResult = fn_800881B8();
-        fn_80020410();
+        MsgTutorialCheckCompletion();
         break;
     case 0x80000009:
         *pResult = fn_80088628();
@@ -156,15 +160,15 @@ int fn_80020170(unsigned int id, Params_80020170 *pParams, int unused, int *pRes
     return 1;
 }
 
-void fn_80020328(void)
+void MsgTutorialBeginLesson(void)
 {
     int state = fn_801801B4();
 
     if (state == 1) {
         int value = fn_8000FCDC();
-        if (!lbl_803EBA99) {
+        if (!_MsgTutorial_bDatabaseSet) {
             fn_80088638(fn_8022F4BC());
-            lbl_803EBA99 = state;
+            _MsgTutorial_bDatabaseSet = state;
         }
         fn_80011600(-1, fn_8000FCCC(), value);
         fn_80186F30(fn_8022F384(fn_80088640()), 1);
@@ -181,11 +185,11 @@ void fn_80020328(void)
         fn_80015D28(4);
     } else {
         fn_80088638(-1);
-        lbl_803EBA99 = 0;
+        _MsgTutorial_bDatabaseSet = 0;
     }
 }
 
-void fn_80020410(void)
+void MsgTutorialCheckCompletion(void)
 {
     Object_8007A334 object;
 

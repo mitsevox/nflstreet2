@@ -209,12 +209,12 @@ inline Class_8000F540 *fn_8000EE2C()
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_80022D78(void);
-int fn_80022D80(void);
-void fn_80022D6C(void);
-void fn_800225F4(int index, unsigned int value);
-void fn_80022680(int index, int a, int b);
-void fn_80022E40(int a, int b);
+int FEPlyrGetBackIndex(void);
+int FEPlyrGetFrontIndex(void);
+void FEPlyrRequestSwap(void);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrSetPairSlot(int a, int b);
 void fn_80048FD0(int a, int b);
 void fn_800490A0(int index, int a, int b);
 void fn_80049B00(int a, int b);
@@ -316,8 +316,8 @@ int Class_8000F500::vfn_02(int a, int b, void **pOut)
     int result = -1;
 
     fn_8000E834(&lbl_8036AD78);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
     fn_800876C0();
     fn_8000EC44()->mUnknown0 = 0;
     fn_80183740(0);
@@ -391,8 +391,8 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         value = fn_800808F8(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
         fn_800809C4(fn_80182DC8(), value, 0);
-        fn_80022680(fn_80022D78(), value, 1);
-        fn_80022680(fn_80022D80(), value, 1);
+        FEPlyrSetPlayer(FEPlyrGetBackIndex(), value, 1);
+        FEPlyrSetPlayer(FEPlyrGetFrontIndex(), value, 1);
         fn_8015D38C(0);
     }
     *pCount = 7;
@@ -604,8 +604,8 @@ int Class_8000F460::vfn_02(int a, int b, void **pOut)
             result = 1;
             pItems->mUnknown8 = 10;
             fn_8000EC44()->mUnknown4 = 10;
-            fn_800225F4(0, 8);
-            fn_800225F4(1, 8);
+            FEPlyrSetPose(0, 8);
+            FEPlyrSetPose(1, 8);
             break;
         case 5:
             pItems = fn_8000ED34();
@@ -613,8 +613,8 @@ int Class_8000F460::vfn_02(int a, int b, void **pOut)
             result = 1;
             pItems->mUnknown8 = 11;
             fn_8000EC44()->mUnknown4 = 11;
-            fn_800225F4(0, 8);
-            fn_800225F4(1, 8);
+            FEPlyrSetPose(0, 8);
+            FEPlyrSetPose(1, 8);
             break;
         case 6:
             pItems = fn_8000ED34();
@@ -750,7 +750,7 @@ static void fn_8000E834(Record_8036AD78 *pRecord)
     int i;
 
     for (i = 0; i <= 13; i++) {
-        fn_80022E40(i, pRecord->mUnknown0[i]);
+        FEPlyrSetPairSlot(i, pRecord->mUnknown0[i]);
     }
     fn_80049B90(0, lbl_803ECE30);
     fn_80049B90(1, lbl_803ECE30);
@@ -780,19 +780,19 @@ static void fn_8000E8FC(int index, int value)
         fn_8007BB04(&object);
         if (c == 14) {
             if (b == 6) {
-                fn_80022E40(6, a);
-                fn_80022E40(7, a);
+                FEPlyrSetPairSlot(6, a);
+                FEPlyrSetPairSlot(7, a);
             }
         } else {
             switch (b) {
             case 12:
-                fn_80022E40(12, 1);
+                FEPlyrSetPairSlot(12, 1);
                 break;
             case 2:
-                fn_80022E40(10, lbl_803EB94C);
+                FEPlyrSetPairSlot(10, lbl_803EB94C);
                 break;
             }
-            fn_80022E40(c, a);
+            FEPlyrSetPairSlot(c, a);
         }
     } else {
         switch (index) {
@@ -822,8 +822,8 @@ static void fn_8000E8FC(int index, int value)
             break;
         }
     }
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 Class_8000F540 *fn_8000EB3C()

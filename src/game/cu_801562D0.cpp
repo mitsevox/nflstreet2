@@ -3,7 +3,7 @@
 class Class_802A1E38 : public Class_802A56E8 {
 };
 
-struct Settings_8031BDD4 {
+struct MiniGameSettings_t {
     char mUnknown0[32];
     int mUnknown32;
     int mUnknown36;
@@ -11,7 +11,7 @@ struct Settings_8031BDD4 {
 };
 
 extern "C" {
-extern Settings_8031BDD4 lbl_8031BDD4;
+extern MiniGameSettings_t lbl_8031BDD4;
 
 int fn_801562D0(Class_802A1E38 *p)
 {

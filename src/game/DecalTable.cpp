@@ -1,3 +1,7 @@
+/* Decals in the player's profile: counts the unlocked and the new decals, gives
+   their names and list order, and clears the new flag once the gear menu has shown
+   one. */
+
 #include "game/fn_801FCE10.h"
 #include "game/Object_8007A334.h"
 #include "game/QueryStatus.h"
@@ -7,11 +11,11 @@ int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 }
 
-static int lbl_802F4684[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
-static int lbl_802F46A4[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
+static int _Decal_aFindSort[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
+static int _Decal_aIndexSort[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
 
 extern "C" {
-int fn_800238A0(int index)
+int DecalCountUnlocked(int index)
 {
     int count;
     int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
@@ -23,7 +27,7 @@ int fn_800238A0(int index)
     return 0;
 }
 
-int fn_80023914(int index)
+int DecalCountNew(int index)
 {
     int count;
     int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
@@ -35,7 +39,7 @@ int fn_80023914(int index)
     return 0;
 }
 
-void fn_80023988(int a, char *pBuffer, int size)
+void DecalGetName(int a, char *pBuffer, int size)
 {
     Object_8007A334 cursor;
 
@@ -45,7 +49,7 @@ void fn_80023988(int a, char *pBuffer, int size)
     fn_8007A3C4(&cursor);
 }
 
-unsigned char fn_80023A3C(int index, int a)
+unsigned char DecalIsNew(int index, int a)
 {
     Object_8007A334 cursor;
     unsigned char result = 0;
@@ -58,7 +62,7 @@ unsigned char fn_80023A3C(int index, int a)
     return result;
 }
 
-void fn_80023B08(int index, int a)
+void DecalClearNew(int index, int a)
 {
     Object_8007A334 cursor;
 
@@ -69,7 +73,7 @@ void fn_80023B08(int index, int a)
     fn_8007A3C4(&cursor);
 }
 
-int fn_80023BBC(int index, int a)
+int DecalFindIndex(int index, int a)
 {
     Object_8007A334 cursor;
     int value;
@@ -79,7 +83,7 @@ int fn_80023BBC(int index, int a)
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);
     arg.mUnknown16.mValue.mInt = 0;
-    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F4684, &arg, handle);
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, _Decal_aFindSort, &arg, handle);
     found = fn_8007A7F4(&cursor, 0x494C4344, a, 0, &value);
     fn_8007A3C4(&cursor);
     if (found) {
@@ -88,7 +92,7 @@ int fn_80023BBC(int index, int a)
     return -1;
 }
 
-int fn_80023CA4(int index, int a)
+int DecalGetIdAt(int index, int a)
 {
     int result = 0x1F;
     Object_8007A334 cursor;
@@ -97,7 +101,7 @@ int fn_80023CA4(int index, int a)
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);
     arg.mUnknown16.mValue.mInt = 0;
-    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F46A4, &arg, handle);
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, _Decal_aIndexSort, &arg, handle);
     if (fn_8007A600(&cursor, a)) {
         result = fn_8007A98C(&cursor, 0x494C4344);
     }

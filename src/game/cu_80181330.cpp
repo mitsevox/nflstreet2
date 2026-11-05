@@ -50,19 +50,19 @@ int fn_8000EB80(void);
 void fn_8000EBA4(int a);
 int fn_8000EC14(void);
 int fn_8000EC38(void);
-void fn_80022398(void);
-void fn_800223C0(void);
-void fn_800223E4(int index, float x, float y, float z);
-void fn_800224A4(int index, float angle);
-void fn_80022534(int index, float scale);
-void fn_80022580(int index, int a, int b);
-void fn_800225F4(int index, unsigned int value);
-void fn_80022730(int index, int a);
-void fn_80022870(int index, float x, float y, float z, float angle, float scale, int flag);
-int fn_800229D8(void);
-float fn_80022BA0(float a);
-void fn_80022D0C(int a);
-unsigned char fn_80022D3C(unsigned char enable, int a, int b);
+void FEPlyrShow(void);
+void FEPlyrHide(void);
+void FEPlyrSetPosition(int index, float x, float y, float z);
+void FEPlyrSetAngle(int index, float angle);
+void FEPlyrSetScale(int index, float scale);
+void FEPlyrPlayAnim(int index, int a, int b);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPriority(int index, int a);
+void FEPlyrMoveTo(int index, float x, float y, float z, float angle, float scale, int flag);
+int FEPlyrUpdateMoves(void);
+float FEPlyrSpin(float a);
+void FEPlyrResetPose(int a);
+unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b);
 void fn_80029CE0(int a, int b);
 void fn_8005F29C(void);
 void fn_80077F24(void);
@@ -436,7 +436,7 @@ void fn_80181828(int a)
         break;
     }
     fn_80181330();
-    fn_80022D0C(0);
+    FEPlyrResetPose(0);
     fn_801831A4();
     fn_8018300C();
     fn_80182E64(0xFF);
@@ -1318,28 +1318,28 @@ void fn_801835C0(int a)
 
 void fn_801835C8(void)
 {
-    fn_80022398();
-    fn_80022D3C(1, 0, 1);
-    fn_80022D0C(0);
-    fn_80022D0C(1);
-    fn_80022580(0, 0xD6, 0);
-    fn_80022580(1, 0xD6, 0);
-    fn_800225F4(0, 2);
-    fn_800225F4(1, 2);
-    fn_800223E4(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
-    fn_800223E4(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
-    fn_80022534(0, fn_80183734()->mUnknown16);
-    fn_80022534(1, fn_80183734()->mUnknown16);
-    fn_80022730(0, fn_80183734()->mUnknown20);
-    fn_80022730(1, fn_80183734()->mUnknown20);
-    fn_800224A4(0, 0.0f);
-    fn_800224A4(1, 0.0f);
+    FEPlyrShow();
+    FEPlyrSetPairMode(1, 0, 1);
+    FEPlyrResetPose(0);
+    FEPlyrResetPose(1);
+    FEPlyrPlayAnim(0, 0xD6, 0);
+    FEPlyrPlayAnim(1, 0xD6, 0);
+    FEPlyrSetPose(0, 2);
+    FEPlyrSetPose(1, 2);
+    FEPlyrSetPosition(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
+    FEPlyrSetPosition(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
+    FEPlyrSetScale(0, fn_80183734()->mUnknown16);
+    FEPlyrSetScale(1, fn_80183734()->mUnknown16);
+    FEPlyrSetPriority(0, fn_80183734()->mUnknown20);
+    FEPlyrSetPriority(1, fn_80183734()->mUnknown20);
+    FEPlyrSetAngle(0, 0.0f);
+    FEPlyrSetAngle(1, 0.0f);
 }
 
 void fn_80183704(void)
 {
-    fn_80022D3C(0, 0, 1);
-    fn_800223C0();
+    FEPlyrSetPairMode(0, 0, 1);
+    FEPlyrHide();
 }
 
 Layout_802EA9E0 *fn_80183734(void)
@@ -1350,19 +1350,19 @@ Layout_802EA9E0 *fn_80183734(void)
 void fn_80183740(const Layout_802EA9E0 *pOffset)
 {
     if (!pOffset) {
-        fn_80022870(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
+        FEPlyrMoveTo(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
                     fn_80183734()->mUnknown12, fn_80183734()->mUnknown16, fn_80183734()->mUnknown24);
-        fn_80022870(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
+        FEPlyrMoveTo(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
                     fn_80183734()->mUnknown12, fn_80183734()->mUnknown16, fn_80183734()->mUnknown24);
-        fn_800225F4(0, 2);
-        fn_800225F4(1, 2);
+        FEPlyrSetPose(0, 2);
+        FEPlyrSetPose(1, 2);
     } else {
-        fn_80022870(0, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
+        FEPlyrMoveTo(0, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
                     fn_80183734()->mUnknown4 + pOffset->mUnknown4,
                     fn_80183734()->mUnknown8 + pOffset->mUnknown8,
                     fn_80183734()->mUnknown12 + pOffset->mUnknown12,
                     fn_80183734()->mUnknown16 + pOffset->mUnknown16, pOffset->mUnknown24);
-        fn_80022870(1, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
+        FEPlyrMoveTo(1, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
                     fn_80183734()->mUnknown4 + pOffset->mUnknown4,
                     fn_80183734()->mUnknown8 + pOffset->mUnknown8,
                     fn_80183734()->mUnknown12 + pOffset->mUnknown12,
@@ -1484,11 +1484,11 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         fn_8018260C(pArgs[0].i, pArgs[1]);
         break;
     case 0xCC:
-        pResult->i = fn_800229D8();
+        pResult->i = FEPlyrUpdateMoves();
         break;
     case 0x128:
         if (lbl_803EB56C == 0x384 || lbl_803EB56C == 0x71) {
-            pResult->f = fn_80022BA0(pArgs[0].f);
+            pResult->f = FEPlyrSpin(pArgs[0].f);
         }
         break;
     case 0x10A:
@@ -1578,8 +1578,8 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         fn_80182A60();
         break;
     case 0x12F:
-        fn_80022534(0, 0.0f);
-        fn_80022534(1, 0.0f);
+        FEPlyrSetScale(0, 0.0f);
+        FEPlyrSetScale(1, 0.0f);
         break;
     case 0x92:
         pResult->i = lbl_803EB56C;

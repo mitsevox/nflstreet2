@@ -21,7 +21,7 @@ int fn_801F9980(int handle, int *pTable);
 int fn_801F9A90(int a, int tag);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_801F9BB4(int handle, int table, int column, int *pInfo);
-void fn_80023024(int a);
+void FESndUpdate(int a);
 int fn_8007A43C(Object_8007A334 *pObject);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 void fn_8007CAEC(int index, int value);
@@ -596,13 +596,13 @@ void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total
             for (j = 0; j < n; j++) {
                 prev = pOut[k] = fn_80082AB0(pIds[k], a, prev);
                 k++;
-                fn_80023024(1);
+                FESndUpdate(1);
             }
         }
     }
     while (k < total) {
         prev = pOut[k++] = fn_80082A64(a, prev);
-        fn_80023024(1);
+        FESndUpdate(1);
     }
     fn_800829D8();
 }

@@ -46,7 +46,7 @@ struct State_803EB32C {
 };
 
 extern "C" {
-void fn_80023024(int a);
+void FESndUpdate(int a);
 void fn_8003E194(int index, int value);
 void fn_8015FFC8(int player, int key, int value);
 void fn_8016118C(void);
@@ -327,7 +327,7 @@ extern "C" void fn_8015CB18(int wait)
             if (count > 4) {
                 count = 0;
                 if (wait) {
-                    fn_80023024(1);
+                    FESndUpdate(1);
                 }
             }
         }

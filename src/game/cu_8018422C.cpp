@@ -5,7 +5,7 @@
 #include "game/cu_8018422C.h"
 #include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
-#include "game/Record_80021154.h"
+#include "game/TextRecord.h"
 #include "game/fn_80191948.h"
 #include "game/cu_8017F90C.h"
 
@@ -472,7 +472,7 @@ void fn_80184E7C(int a, int b)
     }
 }
 
-void fn_80184ED0(Record_80021154 *pRecord)
+void fn_80184ED0(TextRecord_t *pRecord)
 {
     char name[32];
 
@@ -540,7 +540,7 @@ int fn_80185038(int *pSlot)
     return 1;
 }
 
-void fn_801850CC(int a, Record_80021154 *pRecord)
+void fn_801850CC(int a, TextRecord_t *pRecord)
 {
     fn_801D57E0(a, pRecord->mUnknown8, pRecord->mUnknown4);
 }
@@ -573,7 +573,7 @@ void fn_80185170(int a, int b)
     fn_801D67E4(name, 0);
 }
 
-void fn_801851A4(Callbacks_802F462C *pCallbacks)
+void fn_801851A4(MemCardListCallbacks_t *pCallbacks)
 {
     lbl_803EB590 = pCallbacks->mUnknown0;
     lbl_803EB594 = pCallbacks->mUnknown4;
@@ -834,7 +834,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         fn_80029D28(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 34:
-        fn_80184ED0((Record_80021154 *)pParams->mUnknown0);
+        fn_80184ED0((TextRecord_t *)pParams->mUnknown0);
         break;
     case 318:
         fn_80185170(pParams->mUnknown0, pParams->mUnknown4);
@@ -854,7 +854,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         *pResult = fn_80185038((int *)pParams->mUnknown0);
         break;
     case 186:
-        fn_801850CC(pParams->mUnknown0, (Record_80021154 *)pParams->mUnknown4);
+        fn_801850CC(pParams->mUnknown0, (TextRecord_t *)pParams->mUnknown4);
         break;
     case 159:
         fn_80184F60(pParams->mUnknown0, pParams->mUnknown4);

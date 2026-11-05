@@ -1,14 +1,17 @@
+/* Profile list: fills the front end's list with the saved player profiles, most
+   recently used first, and makes the chosen profile current. */
+
 #include <string.h>
-#include "game/Record_80021154.h"
+#include "game/TextRecord.h"
 #include "game/fn_8022F478.h"
 
-union Word_80020DC0 {
+union ProfileListWord_t {
     int mUnknown0;
-    Record_80021154 *mpRecord;
+    TextRecord_t *mpRecord;
 };
 
-union Args_80020DC0 {
-    Word_80020DC0 *mpWords[3];
+union ProfileListArgs_t {
+    ProfileListWord_t *mpWords[3];
     signed char mUnknown0[4];
 };
 
@@ -17,7 +20,7 @@ int fn_80186DF0(signed char *pIndices, int length);
 int fn_80186A10(int index, char *pText);
 int fn_8022F358(int index);
 
-void fn_80020CF8(Word_80020DC0 *pRecords, Word_80020DC0 *pFlags, Word_80020DC0 *pIndices)
+void MsgProfileListFill(ProfileListWord_t *pRecords, ProfileListWord_t *pFlags, ProfileListWord_t *pIndices)
 {
     char text[64];
     signed char indices[4];
@@ -30,7 +33,7 @@ void fn_80020CF8(Word_80020DC0 *pRecords, Word_80020DC0 *pFlags, Word_80020DC0 *
     for (i = 0; i < 4; ++i) {
         if (indices[i] != -1) {
             fn_80186A10(indices[i], text);
-            Record_80021154 *pRecord = pRecords[count].mpRecord;
+            TextRecord_t *pRecord = pRecords[count].mpRecord;
             strncpy(pRecord->mUnknown8, text, pRecord->mUnknown4);
             pFlags[count].mUnknown0 = 1;
             pIndices[count].mUnknown0 = indices[i];
@@ -39,20 +42,20 @@ void fn_80020CF8(Word_80020DC0 *pRecords, Word_80020DC0 *pFlags, Word_80020DC0 *
     }
 }
 
-int fn_80020DC0(unsigned int id, Args_80020DC0 *pArgs)
+int MsgProfileListHandleMessage(unsigned int id, ProfileListArgs_t *pArgs)
 {
     switch (id) {
     case 0x80000001:
         break;
     case 0x80000002:
     {
-        Word_80020DC0 *pRecords = pArgs->mpWords[0];
-        Word_80020DC0 *pFlags = pArgs->mpWords[1];
-        Word_80020DC0 *pIndices = pArgs->mpWords[2];
+        ProfileListWord_t *pRecords = pArgs->mpWords[0];
+        ProfileListWord_t *pFlags = pArgs->mpWords[1];
+        ProfileListWord_t *pIndices = pArgs->mpWords[2];
         int recordsOffset = pRecords[0].mUnknown0 + 1;
         int flagsOffset = pFlags[0].mUnknown0 + 1;
         int indicesOffset = pIndices[0].mUnknown0 + 1;
-        fn_80020CF8(pRecords + recordsOffset, pFlags + flagsOffset, pIndices + indicesOffset);
+        MsgProfileListFill(pRecords + recordsOffset, pFlags + flagsOffset, pIndices + indicesOffset);
         break;
     }
     case 0x80000003:

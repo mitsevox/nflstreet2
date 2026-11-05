@@ -3,7 +3,7 @@
 
 extern "C" {
 
-void fn_80023048(void);
+void FESndShutdown(void);
 int fn_801CC7FC(ModuleNode *pNode);
 int fn_801CC820(ModuleNode *pNode, unsigned char flags);
 int fn_801CC8AC(ModuleNode *pNode, unsigned char flags);
@@ -36,7 +36,7 @@ void fn_80026AF8(void)
         fn_80026AD0();
     }
 
-    fn_80023048();
+    FESndShutdown();
     fn_801F3D2C();
     fn_801D64EC();
     fn_801CC8AC(&gSys, 0);

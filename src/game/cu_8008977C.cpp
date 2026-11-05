@@ -18,7 +18,7 @@ struct Transition_80089A84 {
 };
 
 extern "C" {
-void fn_800225F4(int index, unsigned int value);
+void FEPlyrSetPose(int index, unsigned int value);
 unsigned char fn_800DA53C(unsigned short index);
 Object_8008044C *fn_80182DC8(void);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
@@ -257,8 +257,8 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
             if (sCountdown != 0) {
                 --sCountdown;
             } else if (sWaiting != 0) {
-                fn_800225F4(0, 16);
-                fn_800225F4(1, 16);
+                FEPlyrSetPose(0, 16);
+                FEPlyrSetPose(1, 16);
             } else {
                 sCountdown = (fn_802372EC(0, 5) + 10) * 120;
                 sWaiting = 1;

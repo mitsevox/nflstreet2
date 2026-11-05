@@ -1,5 +1,5 @@
 #include "game/Block_80307980.h"
-#include "game/Class_8002373C.h"
+#include "game/AppearanceNameTable.h"
 #include "game/Class_802938C0.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
@@ -30,24 +30,24 @@ struct Entry_80369E64 {
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-void fn_800225F4(int index, unsigned int value);
-void fn_80022680(int index, int a, int b);
-void fn_80022760(int index, unsigned int value);
-void fn_80022D6C(void);
-int fn_80022D78(void);
-int fn_80022D80(void);
-void fn_80022D88(void);
-void fn_800230D8();
-void fn_800230F8();
-void fn_800232C8(Object_8007A334 *pObject);
-void fn_8002333C(Object_8007A334 *pObject);
-void fn_8002335C(Object_8007A334 *pCursor, int value, int *pResult);
-void fn_80023394(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_800233C8(Object_8007A334 *pCursor);
-void fn_800233F0(Object_8007A334 *pCursor, int type);
-void fn_80023498(Object_8007A334 *pCursor);
-void fn_800234B8(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_800234EC(Object_8007A334 *pCursor);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrSetHeight(int index, unsigned int value);
+void FEPlyrRequestSwap(void);
+int FEPlyrGetBackIndex(void);
+int FEPlyrGetFrontIndex(void);
+void FEPlyrPlayPairAnim(void);
+void FaceTableOpen();
+void FaceTableClose();
+void PoseTableOpen(Object_8007A334 *pObject);
+void PoseTableClose(Object_8007A334 *pObject);
+void PoseTableSeek(Object_8007A334 *pCursor, int value, int *pResult);
+void PoseTableGetName(Object_8007A334 *pCursor, char *pBuffer, int size);
+int PoseTableGetNumber(Object_8007A334 *pCursor);
+void TattooTableOpen(Object_8007A334 *pCursor, int type);
+void TattooTableClose(Object_8007A334 *pCursor);
+void TattooTableGetName(Object_8007A334 *pCursor, char *pBuffer, int size);
+int TattooTableGetId(Object_8007A334 *pCursor);
 void fn_80048F6C(int index, const char *pName);
 void fn_8007A098(int index, char *pBuffer, int size);
 int fn_8007A43C(Object_8007A334 *pObject);
@@ -223,7 +223,7 @@ const Entry_80182CC8 lbl_8000944C[] = {
 };
 
 /* Part of each Class_80009DC8 entry: 3 selects the skin tone; 0-2 are the
-   fn_800233F0 tattoo types (right arm, left arm, back). */
+   TattooTableOpen tattoo types (right arm, left arm, back). */
 const int lbl_800094FC[] = { 3, 2, 1, 0 };
 
 const Entry_80182CC8 lbl_8000950C[] = {
@@ -437,7 +437,7 @@ public:
 
     char mUnknown4[4];
     int mUnknown8;
-    Class_8002373C *mUnknown12;
+    AppearanceNameTable *mUnknown12;
 };
 
 class Class_80009DC8 : public Class_80184190 {
@@ -727,8 +727,8 @@ static void fn_80005BE4(int index, int value)
     flag = fn_80046898(&lbl_8036A170);
     fn_80049BD8(0, flag);
     fn_80049BD8(1, flag);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 static void fn_80005CAC(int value)
@@ -746,8 +746,8 @@ static void fn_80005CAC(int value)
     flag = fn_80046898(&lbl_8036A170);
     fn_80049BD8(0, flag);
     fn_80049BD8(1, flag);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 static int fn_80005D88(unsigned int value)
@@ -770,8 +770,8 @@ static int fn_80005D88(unsigned int value)
         fn_80046804(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
         fn_80049F10(0, &lbl_8036A170);
         fn_80049F10(1, &lbl_8036A170);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return mode;
 }
@@ -780,8 +780,8 @@ static void fn_80005E64(int value)
 {
     fn_80049B90(0, value);
     fn_80049B90(1, value);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 static unsigned char fn_80005EB4(Info_80307908 *pInfo, int part)
@@ -890,7 +890,7 @@ void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
             } else {
                 lbl_803EB928 = id;
             }
-            fn_80022680(fn_80022D80(), lbl_803EB928, 1);
+            FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803EB928, 1);
         }
     } else {
         lbl_803EB928 = 0x7FFF;
@@ -922,7 +922,7 @@ void Class_8000A108::vfn_03(int index)
         int position;
 
         fn_800809C4(fn_80182DC8(), index, 0);
-        fn_80022680(fn_80022D80(), index, 0);
+        FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
         lbl_803EB928 = index;
         position = fn_80080ECC(fn_80182DC8());
         lbl_803EB938 = lbl_802F4108[position];
@@ -942,7 +942,7 @@ void Class_8000A108::vfn_03(int index)
         fn_80182E64(0xFF);
         fn_80182E70(-1);
         fn_80182E7C(-1);
-        fn_8015D224(fn_80022D80());
+        fn_8015D224(FEPlyrGetFrontIndex());
     }
     fn_80183740(0);
 }
@@ -993,7 +993,7 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
             fn_801C3284(pEntry->mName, "Continue", 22);
         }
     }
-    fn_80022D88();
+    FEPlyrPlayPairAnim();
 }
 
 void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
@@ -1002,7 +1002,7 @@ void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
     if (fn_80080920(fn_80182DC8()) != 0x7FFF) {
         *pValue = 3;
     }
-    fn_80022680(fn_80022D78(), lbl_803EB928, 1);
+    FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803EB928, 1);
     fn_8015D38C(0);
     if (lbl_803EB92C) {
         fn_8000CF24();
@@ -1254,8 +1254,8 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
     } else if (mUnknown8 == 3) {
         fn_80049BF0(0, fn_8008125C(fn_80182DC8()));
         fn_80049BF0(1, fn_8008125C(fn_80182DC8()));
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return -1;
 }
@@ -1268,14 +1268,14 @@ void Class_80009D88::vfn_03(int index)
     case 3:
         fn_80049BF0(0, index);
         fn_80049BF0(1, index);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     case 4:
         break;
     case 5:
-        fn_800225F4(0, lbl_803EB910[index]);
-        fn_800225F4(1, lbl_803EB910[index]);
+        FEPlyrSetPose(0, lbl_803EB910[index]);
+        FEPlyrSetPose(1, lbl_803EB910[index]);
         break;
     }
 }
@@ -1343,12 +1343,12 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
         fn_80080A9C(fn_80182DC8(), name, 31);
         fn_80048F6C(0, name);
         fn_80048F6C(1, name);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
-    fn_800225F4(0, 24);
-    fn_800225F4(1, 24);
+    FEPlyrSetPose(0, 24);
+    FEPlyrSetPose(1, 24);
 }
 
 void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
@@ -1393,13 +1393,13 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 2:
             lbl_80369E34.fn_8018FF0C(a);
             fn_800822A8(fn_80182DC8(), lbl_80369E34.fn_80190120());
-            fn_800225F4(0, 26);
-            fn_800225F4(1, 26);
+            FEPlyrSetPose(0, 26);
+            FEPlyrSetPose(1, 26);
             break;
         case 3:
             fn_80081108(fn_80182DC8(), a);
-            fn_800225F4(0, 26);
-            fn_800225F4(1, 26);
+            FEPlyrSetPose(0, 26);
+            FEPlyrSetPose(1, 26);
             break;
         case 4:
             fn_80082308(fn_80182DC8(), a);
@@ -1413,8 +1413,8 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 1:
             fn_80049D34(0, fn_800810E0(fn_80182DC8()));
             fn_80049D34(1, fn_800810E0(fn_80182DC8()));
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
             break;
         case 2:
             fn_80005CAC(fn_80082280(fn_80182DC8()));
@@ -1422,14 +1422,14 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 3:
             fn_80049D50(0, fn_80081134(fn_80182DC8()));
             fn_80049D50(1, fn_80081134(fn_80182DC8()));
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
             break;
         case 4:
             fn_80049B60(0, fn_800822D4(fn_80182DC8()));
             fn_80049B60(1, fn_800822D4(fn_80182DC8()));
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
             break;
         }
     }
@@ -1447,8 +1447,8 @@ void Class_80009E48::vfn_03(int index)
     case 1:
         fn_80049D34(0, index);
         fn_80049D34(1, index);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     case 2:
         lbl_80369E34.fn_8018FF0C(index);
@@ -1457,14 +1457,14 @@ void Class_80009E48::vfn_03(int index)
     case 3:
         fn_80049D50(0, index);
         fn_80049D50(1, index);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     case 4:
         fn_80049B60(0, index);
         fn_80049B60(1, index);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
 }
@@ -1498,7 +1498,7 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void Class_80009E08::vfn_01(int a, int *pCount, int *pOut)
 {
-    mUnknown12 = new (0) Class_8002373C;
+    mUnknown12 = new (0) AppearanceNameTable;
     if (mUnknown8 == 8) {
         *pOut = fn_80080E48(fn_80182DC8());
         *pCount = 5;
@@ -1527,8 +1527,8 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
         if (mUnknown8 == 8) {
             fn_80049C20(0, fn_80080E48(fn_80182DC8()));
             fn_80049C20(1, fn_80080E48(fn_80182DC8()));
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
         } else {
             fn_80082138(fn_80182DC8(), &lbl_8036A170);
             fn_80049F10(0, &lbl_8036A170);
@@ -1547,8 +1547,8 @@ void Class_80009E08::vfn_03(int index)
     if (mUnknown8 == 8) {
         fn_80049C20(0, index);
         fn_80049C20(1, index);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     } else {
         const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
 
@@ -1568,7 +1568,7 @@ void Class_80009E08::vfn_05(int index, Entry_80182CC8 *pOut)
         if (mUnknown8 == 0) {
             fn_801C3284(pOut->mName, lbl_802F40A0[index + pRange->mOffset], 22);
         } else {
-            mUnknown12->fn_80023820(index + pRange->mOffset, (int)name, 31);
+            mUnknown12->GetItemName(index + pRange->mOffset, (int)name, 31);
             fn_801C3284(pOut->mName, name, 22);
         }
     }
@@ -1587,11 +1587,11 @@ void Class_80009DC8::vfn_01(int a, int *pCount, int *pOut)
         int key;
 
         fn_800817CC(fn_80182DC8(), &info);
-        fn_800233F0(&cursor, type);
+        TattooTableOpen(&cursor, type);
         key = fn_80087B5C(type);
         fn_80087A78(key, &cursor, fn_80005EB4(&info, type), pOut);
         *pCount = fn_80087B00(fn_80087B5C(type), &cursor);
-        fn_80023498(&cursor);
+        TattooTableClose(&cursor);
     }
 }
 
@@ -1608,24 +1608,24 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
         } else {
             Object_8007A334 cursor;
 
-            fn_800233F0(&cursor, type);
+            TattooTableOpen(&cursor, type);
             fn_80087938(fn_80087B5C(type), &cursor, a, 0);
             fn_80087A30(fn_80087B5C(type), &cursor);
-            fn_80005EF8(&info, type, fn_800234EC(&cursor));
-            fn_80023498(&cursor);
+            fn_80005EF8(&info, type, TattooTableGetId(&cursor));
+            TattooTableClose(&cursor);
             fn_8008199C(fn_80182DC8(), &info);
         }
     } else {
         if (type == 3) {
             fn_80049B30(0, fn_80081E3C(fn_80182DC8()) + 1);
             fn_80049B30(1, fn_80081E3C(fn_80182DC8()) + 1);
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
         } else {
             fn_80049D6C(0, type, fn_80005EB4(&info, type));
             fn_80049D6C(1, type, fn_80005EB4(&info, type));
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
         }
     }
     return -1;
@@ -1638,20 +1638,20 @@ void Class_80009DC8::vfn_03(int index)
     if (type == 3) {
         fn_80049B30(0, index + 1);
         fn_80049B30(1, index + 1);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     } else {
         Object_8007A334 cursor;
         int value;
 
-        fn_800233F0(&cursor, type);
+        TattooTableOpen(&cursor, type);
         fn_80087938(fn_80087B5C(type), &cursor, index, 0);
-        value = fn_800234EC(&cursor);
-        fn_80023498(&cursor);
+        value = TattooTableGetId(&cursor);
+        TattooTableClose(&cursor);
         fn_80049D6C(0, type, value);
         fn_80049D6C(1, type, value);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
 }
 
@@ -1664,18 +1664,18 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
     } else {
         Object_8007A334 cursor;
 
-        fn_800233F0(&cursor, type);
+        TattooTableOpen(&cursor, type);
         fn_80087938(fn_80087B5C(type), &cursor, index, 0);
         pOut->mUnknown40 = fn_800879E8(fn_80087B5C(type), &cursor);
-        fn_800234B8(&cursor, pOut->mName, 22);
-        fn_800234EC(&cursor);
-        fn_80023498(&cursor);
+        TattooTableGetName(&cursor, pOut->mName, 22);
+        TattooTableGetId(&cursor);
+        TattooTableClose(&cursor);
     }
 }
 
 void Class_80009C88::vfn_01(int a, int *pCount, int *pOut)
 {
-    fn_8002335C(&lbl_80369E08, fn_80080F48(fn_80182DC8(), mUnknown8), pOut);
+    PoseTableSeek(&lbl_80369E08, fn_80080F48(fn_80182DC8(), mUnknown8), pOut);
     *pCount = fn_8007A410(&lbl_80369E08);
 }
 
@@ -1684,7 +1684,7 @@ int Class_80009C88::vfn_02(int a, int b, void **pOut)
     fn_80183740(0);
     if (b == 0) {
         fn_8007A600(&lbl_80369E08, a);
-        fn_80080FA4(fn_80182DC8(), mUnknown8, fn_800233C8(&lbl_80369E08));
+        fn_80080FA4(fn_80182DC8(), mUnknown8, PoseTableGetNumber(&lbl_80369E08));
     }
     return -1;
 }
@@ -1692,14 +1692,14 @@ int Class_80009C88::vfn_02(int a, int b, void **pOut)
 void Class_80009C88::vfn_03(int index)
 {
     fn_8007A600(&lbl_80369E08, index);
-    fn_800225F4(0, (unsigned short)(fn_800233C8(&lbl_80369E08) + 31));
-    fn_800225F4(1, (unsigned short)(fn_800233C8(&lbl_80369E08) + 31));
+    FEPlyrSetPose(0, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
+    FEPlyrSetPose(1, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
 }
 
 void Class_80009C88::vfn_05(int index, Entry_80182CC8 *pOut)
 {
     fn_8007A600(&lbl_80369E08, index);
-    fn_80023394(&lbl_80369E08, pOut->mName, 22);
+    PoseTableGetName(&lbl_80369E08, pOut->mName, 22);
 }
 
 void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
@@ -1788,15 +1788,15 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
 
             if (cost <= fn_80008914()) {
                 if (b > fn_80183220()) {
-                    fn_800225F4(0, 6);
-                    fn_800225F4(1, 6);
+                    FEPlyrSetPose(0, 6);
+                    FEPlyrSetPose(1, 6);
                 } else if (b < fn_80183220()) {
-                    fn_800225F4(0, 5);
-                    fn_800225F4(1, 5);
+                    FEPlyrSetPose(0, 5);
+                    FEPlyrSetPose(1, 5);
                 }
-                fn_80022760(0, b);
+                FEPlyrSetHeight(0, b);
                 result = 1;
-                fn_80022760(1, b);
+                FEPlyrSetHeight(1, b);
                 lbl_803EB924 = cost;
                 if (b < 84) {
                     lbl_803EB930 = fn_80005904(b, b + 1);
@@ -1816,9 +1816,9 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
             cost = fn_80005980(fn_80183228(), b);
 
             if (cost <= fn_80008914()) {
-                fn_800225F4(0, 3);
+                FEPlyrSetPose(0, 3);
                 result = 1;
-                fn_800225F4(1, 3);
+                FEPlyrSetPose(1, 3);
                 fn_80005D88(b);
                 lbl_803EB924 = cost;
                 if (b < 380) {
@@ -1886,17 +1886,17 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
         case 10:
             fn_80008914();
             fn_800088E8(lbl_803EB924);
-            fn_80022760(0, c);
-            fn_80022760(1, c);
+            FEPlyrSetHeight(0, c);
+            FEPlyrSetHeight(1, c);
             fn_800811B4(fn_80182DC8(), c);
             if (c == 84) {
-                fn_800225F4(0, 22);
+                FEPlyrSetPose(0, 22);
                 played = 1;
-                fn_800225F4(1, 22);
+                FEPlyrSetPose(1, 22);
             } else if (c >= 79 && c <= 83) {
-                fn_800225F4(0, 23);
+                FEPlyrSetPose(0, 23);
                 played = 1;
-                fn_800225F4(1, 23);
+                FEPlyrSetPose(1, 23);
             }
             break;
         case 11: {
@@ -1908,17 +1908,17 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             fn_80081000(fn_80182DC8(), build);
             fn_8008115C(fn_80182DC8(), c);
             if (c > 379) {
-                fn_800225F4(0, 21);
+                FEPlyrSetPose(0, 21);
                 played = 1;
-                fn_800225F4(1, 21);
+                FEPlyrSetPose(1, 21);
             } else if (c > 294) {
-                fn_800225F4(0, 28);
+                FEPlyrSetPose(0, 28);
                 played = 1;
-                fn_800225F4(1, 28);
+                FEPlyrSetPose(1, 28);
             } else if (c > 229) {
-                fn_800225F4(0, 27);
+                FEPlyrSetPose(0, 27);
                 played = 1;
-                fn_800225F4(1, 27);
+                FEPlyrSetPose(1, 27);
             }
             break;
         }
@@ -1929,17 +1929,17 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
 
             if (fraction > value * 0.01f) {
                 if (fraction >= 0.5 && fraction < 0.75) {
-                    fn_800225F4(0, 17);
+                    FEPlyrSetPose(0, 17);
                     played = 1;
-                    fn_800225F4(1, 17);
+                    FEPlyrSetPose(1, 17);
                 } else if (fraction >= 0.75 && fraction <= 0.99) {
-                    fn_800225F4(0, 18);
+                    FEPlyrSetPose(0, 18);
                     played = 1;
-                    fn_800225F4(1, 18);
+                    FEPlyrSetPose(1, 18);
                 } else if (fraction == 1.0) {
-                    fn_800225F4(0, 19);
+                    FEPlyrSetPose(0, 19);
                     played = 1;
-                    fn_800225F4(1, 19);
+                    FEPlyrSetPose(1, 19);
                 }
             }
             fn_80008914();
@@ -1955,8 +1955,8 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
     } else {
         switch (a) {
         case 10:
-            fn_80022760(0, fn_800811E0(fn_80182DC8()));
-            fn_80022760(1, fn_800811E0(fn_80182DC8()));
+            FEPlyrSetHeight(0, fn_800811E0(fn_80182DC8()));
+            FEPlyrSetHeight(1, fn_800811E0(fn_80182DC8()));
             break;
         case 11:
             fn_80005D88(fn_80081188(fn_80182DC8()));
@@ -1968,9 +1968,9 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             break;
         }
         }
-        fn_800225F4(0, 20);
+        FEPlyrSetPose(0, 20);
         played = 1;
-        fn_800225F4(1, 20);
+        FEPlyrSetPose(1, 20);
     }
     fn_80182E70(fn_800811E0(fn_80182DC8()));
     fn_80182E7C(fn_80081188(fn_80182DC8()));
@@ -2006,9 +2006,9 @@ static void fn_800087BC()
     fn_801835C0(0x71);
     lbl_803EB928 = 0x7FFF;
     fn_801835C8();
-    fn_800230D8();
+    FaceTableOpen();
     fn_8007CC50(&lbl_80369DDC);
-    fn_800232C8(&lbl_80369E08);
+    PoseTableOpen(&lbl_80369E08);
     fn_8007A444((Object_8007A334 *)fn_80182DC8());
     if (fn_80183950()) {
         if (fn_80183948() != 3) {
@@ -2025,9 +2025,9 @@ static void fn_800087BC()
 static void fn_80008860()
 {
     fn_80183704();
-    fn_800230F8();
+    FaceTableClose();
     fn_8007CCC4(&lbl_80369DDC);
-    fn_8002333C(&lbl_80369E08);
+    PoseTableClose(&lbl_80369E08);
     if (lbl_803EB934) {
         fn_8022EFBC(0, 0x434C4B53);
         lbl_803EB934 = 0;

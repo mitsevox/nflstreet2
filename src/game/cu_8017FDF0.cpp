@@ -58,7 +58,7 @@ int fn_800B81A4(void);
 float fn_80237260(int stream);
 int fn_80188030(int a);
 int fn_80188044(int a);
-void fn_80022680(int index, int a, int b);
+void FEPlyrSetPlayer(int index, int a, int b);
 int fn_80187F44(char *pText0, int length0, char *pText1, int length1, char *pText2, int length2, char *pText3, int length3);
 int fn_801D6850(void);
 void fn_801880B4(char *pText, int length);
@@ -335,7 +335,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = fn_80180EF8(pArgs[0].i);
         break;
     case 0xE:
-        fn_80022680(pArgs[1].i, pArgs[0].i, 0);
+        FEPlyrSetPlayer(pArgs[1].i, pArgs[0].i, 0);
         break;
     case 0x5E:
         fn_801801F0(pArgs[0].i);

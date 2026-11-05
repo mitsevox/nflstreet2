@@ -7,10 +7,10 @@
 extern "C" {
 extern char lbl_803071E8[];
 
-void fn_800221CC(int);
-void fn_80022328(void);
-void fn_80022FF0(void);
-void fn_80023048(void);
+void FEPlyrInit(int);
+void FEPlyrShutdown(void);
+void FESndInit(void);
+void FESndShutdown(void);
 void fn_8004613C(void);
 void fn_8008FBA0(void);
 void fn_8015E654(int);
@@ -75,17 +75,17 @@ int FEPlyr::Init()
     if (sFirstInit) {
         sFirstInit = 0;
         fn_8015F35C();
-        fn_800221CC(2);
+        FEPlyrInit(2);
         fn_8015F388();
     } else {
-        fn_800221CC(2);
+        FEPlyrInit(2);
     }
     return 1;
 }
 
 int FEPlyr::Shutdown()
 {
-    fn_80022328();
+    FEPlyrShutdown();
     fn_8015E994();
     fn_8015E6C8();
     fn_80160B6C();
@@ -101,13 +101,13 @@ const char *FESnd::GetName() { return "FESnd"; }
 
 int FESnd::Init()
 {
-    fn_80022FF0();
+    FESndInit();
     return 1;
 }
 
 int FESnd::Shutdown()
 {
-    fn_80023048();
+    FESndShutdown();
     return 1;
 }
 

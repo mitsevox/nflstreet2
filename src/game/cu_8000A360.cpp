@@ -14,19 +14,19 @@ struct Entry_8036A2C8 {
 };
 
 extern "C" {
-void fn_800225F4(int index, unsigned int value);
-void fn_80022680(int index, int a, int b);
-void fn_80022D6C(void);
-int fn_80022D78(void);
-int fn_80022D80(void);
-void fn_80022E40(int a, int b);
-int fn_800238A0(int index);
-int fn_80023914(int index);
-void fn_80023988(int a, char *pBuffer, int size);
-unsigned char fn_80023A3C(int index, int a);
-void fn_80023B08(int index, int a);
-int fn_80023BBC(int index, int a);
-int fn_80023CA4(int index, int a);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrRequestSwap(void);
+int FEPlyrGetBackIndex(void);
+int FEPlyrGetFrontIndex(void);
+void FEPlyrSetPairSlot(int a, int b);
+int DecalCountUnlocked(int index);
+int DecalCountNew(int index);
+void DecalGetName(int a, char *pBuffer, int size);
+unsigned char DecalIsNew(int index, int a);
+void DecalClearNew(int index, int a);
+int DecalFindIndex(int index, int a);
+int DecalGetIdAt(int index, int a);
 int fn_800489F4(unsigned int type);
 int fn_80048ACC(int type);
 void fn_80048FA0(int index, int value);
@@ -177,7 +177,7 @@ static const unsigned short lbl_8000DCBC[] = { 2, 2, 14, 11, 11, 12, 8, 12, 15, 
 
 static inline bool AnyDecalFlagged()
 {
-    return fn_80023914(fn_80183354()) != 0;
+    return DecalCountNew(fn_80183354()) != 0;
 }
 
 class Class_8000DBF0 : public Class_80184190 {
@@ -759,7 +759,7 @@ void Class_8000DBA0::vfn_01(int a, int *pCount, int *pOut)
     Class_802A6B60::vfn_01(a, pCount, pOut);
     fn_80183740(0);
     if (!lbl_803EB940) {
-        fn_80022680(fn_80022D78(), lbl_803ECDDC, 1);
+        FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803ECDDC, 1);
         fn_8015D38C(0);
     }
 }
@@ -833,7 +833,7 @@ void Class_8000DBF0::vfn_01(int a, int *pCount, int *pOut)
     *pCount = fn_8007A410((Object_8007A334 *)fn_80182DC8()) + 1;
     fn_8007A444((Object_8007A334 *)fn_80182DC8());
     lbl_803ECDDC = fn_800808F8(fn_80182DC8());
-    fn_80022680(fn_80022D80(), lbl_803ECDDC, 1);
+    FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803ECDDC, 1);
 }
 
 int Class_8000DBF0::vfn_02(int a, int b, void **pOut)
@@ -855,7 +855,7 @@ void Class_8000DBF0::vfn_03(int index)
 
         fn_800809C4(fn_80182DC8(), index, 0);
         lbl_803ECDDC = index;
-        fn_80022680(fn_80022D80(), index, 0);
+        FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
         fn_801832B0(buffer, 27);
         fn_80182DD4(buffer);
         fn_80182ED0();
@@ -1266,10 +1266,10 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         if (fn_8007BF14(lbl_803ECDD0) == 6) {
-            fn_80022E40(6, lbl_8036A280.mValues[6]);
-            fn_80022E40(7, lbl_8036A280.mValues[7]);
+            FEPlyrSetPairSlot(6, lbl_8036A280.mValues[6]);
+            FEPlyrSetPairSlot(7, lbl_8036A280.mValues[7]);
         } else {
-            fn_80022E40(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
+            FEPlyrSetPairSlot(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
         }
         if (lbl_803ECDD0 == 0) {
             fn_80049AD0(0, lbl_8036A280.mUnknown02);
@@ -1279,16 +1279,16 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
         fn_80049DD0(1, lbl_8036A280.mUnknown00);
         fn_80049DE8(0, lbl_8036A280.mUnknown01);
         fn_80049DE8(1, lbl_8036A280.mUnknown01);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     fn_801831A4();
     fn_8018300C();
     fn_801831E8(0);
     fn_80182ED0();
     fn_8000A7B0();
-    fn_800225F4(0, 2);
-    fn_800225F4(1, 2);
+    FEPlyrSetPose(0, 2);
+    FEPlyrSetPose(1, 2);
     return result;
 }
 
@@ -1298,8 +1298,8 @@ void Class_8000D980::vfn_03(int index)
     int item;
     int type;
 
-    fn_800225F4(0, lbl_8000DCBC[lbl_803ECDD0]);
-    fn_800225F4(1, lbl_8000DCBC[lbl_803ECDD0]);
+    FEPlyrSetPose(0, lbl_8000DCBC[lbl_803ECDD0]);
+    FEPlyrSetPose(1, lbl_8000DCBC[lbl_803ECDD0]);
     item = index;
     type = fn_8007BF14(lbl_803ECDD0);
     if (fn_8000A8B4(type) && item != 0) {
@@ -1314,10 +1314,10 @@ void Class_8000D980::vfn_03(int index)
         fn_8000A970(type, side, lbl_8036A2C8[item].mId);
     }
     if (type == 6) {
-        fn_80022E40(6, lbl_8036A280.mValues[6]);
-        fn_80022E40(7, lbl_8036A280.mValues[7]);
+        FEPlyrSetPairSlot(6, lbl_8036A280.mValues[6]);
+        FEPlyrSetPairSlot(7, lbl_8036A280.mValues[7]);
     } else {
-        fn_80022E40(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
+        FEPlyrSetPairSlot(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
     }
     if (lbl_803ECDD0 == 0) {
         unsigned char value = fn_8000AE7C(lbl_8036A280.mUnknown02);
@@ -1330,8 +1330,8 @@ void Class_8000D980::vfn_03(int index)
     fn_80049DD0(1, lbl_8036A280.mUnknown00);
     fn_80049DE8(0, lbl_8036A280.mUnknown01);
     fn_80049DE8(1, lbl_8036A280.mUnknown01);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
@@ -1413,8 +1413,8 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
             fn_80048FB8(1, lbl_8036A280.mUnknown0C);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     fn_80083F68(&lbl_8036A254);
     return result;
@@ -1436,8 +1436,8 @@ void Class_8000D940::vfn_03(int index)
         fn_80048FB8(1, value);
         break;
     }
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 void Class_8000D940::vfn_05(int index, Entry_80182CC8 *pOut)
@@ -1485,9 +1485,9 @@ void Class_8000D900::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown0B - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown0B - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     }
@@ -1498,7 +1498,7 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
     if (b == 0) {
         fn_8008199C(fn_80182DC8(), &lbl_8036A280);
         if (mUnknown8 == 2 && lbl_8036A280.mUnknown0B > 5) {
-            fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown0B - 6);
+            DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown0B - 6);
         }
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
@@ -1512,8 +1512,8 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
             fn_80049AE8(1, lbl_8036A280.mUnknown0B);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return -1;
 }
@@ -1526,20 +1526,20 @@ void Class_8000D900::vfn_03(int index)
             lbl_8036A280.mUnknown02 = fn_8000AE0C(index);
             fn_80049AD0(0, lbl_8036A280.mUnknown02);
             fn_80049AD0(1, lbl_8036A280.mUnknown02);
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
         }
         break;
     case 2:
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown0B = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown0B = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown0B = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
         fn_80049AE8(0, lbl_8036A280.mUnknown0B);
         fn_80049AE8(1, lbl_8036A280.mUnknown0B);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
 }
@@ -1556,10 +1556,10 @@ void Class_8000D900::vfn_05(int index, Entry_80182CC8 *pOut)
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     }
@@ -1576,9 +1576,9 @@ void Class_8000D8C0::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown09 - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown09 - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     case 2: {
@@ -1587,9 +1587,9 @@ void Class_8000D8C0::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown0A - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown0A - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     }
@@ -1602,12 +1602,12 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
         switch (mUnknown8) {
         case 1:
             if (lbl_8036A280.mUnknown09 > 5) {
-                fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown09 - 6);
+                DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown09 - 6);
             }
             break;
         case 2:
             if (lbl_8036A280.mUnknown0A > 5) {
-                fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown0A - 6);
+                DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown0A - 6);
             }
             break;
         }
@@ -1623,8 +1623,8 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
             fn_80049B18(1, lbl_8036A280.mUnknown0A);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return -1;
 }
@@ -1636,23 +1636,23 @@ void Class_8000D8C0::vfn_03(int index)
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown09 = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown09 = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown09 = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
         fn_80049B00(0, lbl_8036A280.mUnknown09);
         fn_80049B00(1, lbl_8036A280.mUnknown09);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     case 2:
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown0A = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown0A = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown0A = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
         fn_80049B18(0, lbl_8036A280.mUnknown0A);
         fn_80049B18(1, lbl_8036A280.mUnknown0A);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
 }
@@ -1664,20 +1664,20 @@ void Class_8000D8C0::vfn_05(int index, Entry_80182CC8 *pOut)
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     case 2:
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     }

@@ -17,7 +17,7 @@ static unsigned char lbl_803EA608 = 0;
 static int lbl_803EA60C = 2;
 static int lbl_803EC804;
 static int lbl_803EC808;
-static Callbacks_802F462C lbl_802D4EC4 = {
+static MemCardListCallbacks_t lbl_802D4EC4 = {
     fn_80062840, fn_80062910, fn_8006291C, 0, 0
 };
 
