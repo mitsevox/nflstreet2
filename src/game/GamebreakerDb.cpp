@@ -4,7 +4,7 @@
 #include "game/DbCursor.h"
 
 /* Values copied out of one fetched row by GamebreakerRead. */
-struct GamebreakerRecord {
+struct GamebreakerRecord_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -38,7 +38,7 @@ struct GamebreakerRecord {
     unsigned char mUnknown80;
 };
 
-static int sColumnTags[31] = {
+static int _Gamebreaker_aColumnTags[31] = {
     0x44494247, 0x50544247, 0x52494247, 0x52444247, 0x4C564247, 0x4C504247,
     0x54504247, 0x4E444247, 0x31304D47, 0x31324D47, 0x33304D47, 0x34304D47,
     0x35304D47, 0x36304D47, 0x37304D47, 0x38304D47, 0x39304D47, 0x30314D47,
@@ -60,13 +60,13 @@ int GamebreakerFind(DbCursor *pCursor, int key, int *pResult)
     return DbCursorFindRow(pCursor, list, 0, pResult);
 }
 
-void GamebreakerRead(DbCursor *pCursor, GamebreakerRecord *pOut)
+void GamebreakerRead(DbCursor *pCursor, GamebreakerRecord_t *pOut)
 {
     DbColumnValue list[32];
     int i;
 
     for (i = 0; i < 31; i++) {
-        list[i].Set(0x4B524247, sColumnTags[i]);
+        list[i].Set(0x4B524247, _Gamebreaker_aColumnTags[i]);
         list[i].mValue = 0;
     }
     list[31].Set(-1, -1);

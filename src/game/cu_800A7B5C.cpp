@@ -4,11 +4,11 @@
 #include "game/Block_800A70F4.h"
 #include "game/cu_80067C10.h"
 
-struct GamebreakerRecord;
+struct GamebreakerRecord_t;
 
 extern "C" {
 int GamebreakerFind(DbCursor *pCursor, int key, int *pResult);
-void GamebreakerRead(DbCursor *pCursor, GamebreakerRecord *pOut);
+void GamebreakerRead(DbCursor *pCursor, GamebreakerRecord_t *pOut);
 void fn_800A6658(int team);
 void fn_800A6CB0(int id);
 void fn_800A6DA4(void);
@@ -56,7 +56,7 @@ extern "C" void fn_800A7B5C(void)
             } else {
                 GamebreakerFind(&cursor, 1, &row);
             }
-            GamebreakerRead(&cursor, (GamebreakerRecord *)lbl_803EC954[team]);
+            GamebreakerRead(&cursor, (GamebreakerRecord_t *)lbl_803EC954[team]);
             DbCursorClose(&cursor);
             lbl_803EC954[team]->mUnknown10 = 10000;
             if (lbl_803EC95C == -1) {

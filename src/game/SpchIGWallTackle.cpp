@@ -1,5 +1,5 @@
-/* Commentary for a ball carrier driven into a wall in a tackle: remembers the player and has the
-   commentator call it. */
+/* Commentary for a tackle into a wall: remembers the player involved (the line is spoken in the
+   defence bank, so most likely the tackler) and has the commentator call it. */
 
 #include "engine/spchevnt.h"
 

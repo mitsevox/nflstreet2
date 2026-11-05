@@ -343,7 +343,7 @@ extern "C" void SpchIGSayHighlightHitCatch(void)
     }
 }
 
-extern "C" void SpchIGSayHighlightPlayerAction(void)
+extern "C" void SpchIGSayHighlightPass(void)
 {
     int result;
 
@@ -530,7 +530,7 @@ extern "C" void SpchIGSayPlayResult(void)
     }
     case 14:
         if (fn_80178348() == _SpchIG_bResultSide) {
-            SpchIGSayHighlightPlayerAction();
+            SpchIGSayHighlightPass();
         }
         break;
     case 13:

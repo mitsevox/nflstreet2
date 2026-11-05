@@ -7,7 +7,7 @@
 
 #include "game/fn_801FCE10.h"
 
-struct RecordsRow {
+struct RecordsRow_t {
     char mUnknown0[20];
     int mUnknown20;
     int mUnknown24;
@@ -57,13 +57,13 @@ int RecordsGetValue(int a);
 void RecordsSetSharedRanks(int a);
 }
 
-static int sColumnTypes[24] = {
+static int _Records_aColumnTypes[24] = {
     24, 2, 3, 4, 5, 6, 24, 9, 7, 8, 10, 11,
     12, 13, 14, 15, 17, 18, 22, 22, 22, 22, 23, 19
 };
 
-static RecordsRow sRecord;
-static QueryCursor sCursor;
+static RecordsRow_t _Records_sRow;
+static QueryCursor _Records_sCursor;
 static int _Records_iCategory = -1;
 static int _Records_iRow;
 static int _Records_iRowCount;
@@ -114,27 +114,27 @@ void RecordsOpenCategory(int type)
     QueryResult result;
     int tag = -1;
     if (_Records_iCategory != -1) {
-        if (sCursor.mUnknown0) {
-            fn_801FCFA0(&sCursor);
+        if (_Records_sCursor.mUnknown0) {
+            fn_801FCFA0(&_Records_sCursor);
         }
         _Records_iCategory = -1;
     }
-    sCursor.mUnknown0 = 0;
-    sCursor.mUnknown4 = 0;
-    sCursor.mUnknown8 = -1;
-    sCursor.mUnknown12 = 0;
+    _Records_sCursor.mUnknown0 = 0;
+    _Records_sCursor.mUnknown4 = 0;
+    _Records_sCursor.mUnknown8 = -1;
+    _Records_sCursor.mUnknown12 = 0;
     if (type == 6) {
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'DFSH'.'KTFH' into \x82 and 'DFSH'.'KUFH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'DFSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'DFSH'.'KUFH' order by 'DFSH'.'DIVE' asc\n",
-                    &sCursor, &sRecord.mUnknown32, &sRecord.mUnknown108, sRecord.mUnknown0);
+                    &_Records_sCursor, &_Records_sRow.mUnknown32, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 4) {
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KTSH'.'TPTH' into \x82 and 'KTSH'.'KUTH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'KTSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'KTSH'.'KUTH' order by 'KTSH'.'TPTH' desc and 'RCSH'.'KUSH' asc\n",
-                    &sCursor, &sRecord.mUnknown32, &sRecord.mUnknown108, sRecord.mUnknown0);
+                    &_Records_sCursor, &_Records_sRow.mUnknown32, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 2) {
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'SWSH'.'SWWH' into \x82 and 'SWSH'.'KUWH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'SWSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'SWSH'.'KUWH' order by 'SWSH'.'SWWH' desc and 'RCSH'.'KUSH' asc\n",
-                    &sCursor, &sRecord.mUnknown24, &sRecord.mUnknown108, sRecord.mUnknown0);
+                    &_Records_sCursor, &_Records_sRow.mUnknown24, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type == 0) {
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'HCSH'.'KUCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'HCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'HCSH'.'KUCH' order by 'KPCH' desc\n",
-                    &sCursor, &sRecord.mUnknown108, sRecord.mUnknown0);
+                    &_Records_sCursor, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else if (type >= 18 && type <= 21) {
         int count = 5;
         switch (type) {
@@ -151,10 +151,10 @@ void RecordsOpenCategory(int type)
             break;
         }
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'CCSH'.'SRCH' into \x82 and 'CCSH'.'UCCH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'CCSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'CCSH'.'UCCH' where 'CCSH'.'TRCH' = \x83 order by 'CCSH'.'SRCH' desc\n",
-                    &sCursor, &sRecord.mUnknown96, &sRecord.mUnknown108, sRecord.mUnknown0, count);
+                    &_Records_sCursor, &_Records_sRow.mUnknown96, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0, count);
     } else if (type == 22) {
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'BJSH'.'SJSH' into \x82 and 'BJSH'.'UBJH' into \x82 and 'RCSH'.'KUSH' into \x88 from 'BJSH' inner join 'RCSH' on 'RCSH'.'KPSH' = 'BJSH'.'UBJH' order by 'BJSH'.'SJSH' desc\n",
-                    &sCursor, &sRecord.mUnknown100, &sRecord.mUnknown108, sRecord.mUnknown0);
+                    &_Records_sCursor, &_Records_sRow.mUnknown100, &_Records_sRow.mUnknown108, _Records_sRow.mUnknown0);
     } else {
         switch (type) {
         case 1:
@@ -208,11 +208,11 @@ void RecordsOpenCategory(int type)
             break;
         }
         fn_801FCE10(&result, "use 'EVAS' declare \x8a fastcursor for select 'KUSH' into \x88 and 'WGSH' into \x82 and 'PTSH' into \x82 and 'TPSH' into \x82 and 'TRSH' into \x82 and 'TDSH' into \x82 and 'TSSH' into \x82 and 'CISH' into \x82 and 'RFSH' into \x82 and 'GTSH' into \x82 and '2TSH' into \x82 and 'TTSH' into \x82 and 'KSSH' into \x82 and 'WQSH' into \x82 and 'WOSH' into \x82 and 'LOSH' into \x82 and 'SOSH' into \x82 and 'AOSH' into \x82 and 'CSSH' into \x82 from 'RCSH' order by \x8c desc and 'KUSH' asc\n",
-                    &sCursor, sRecord.mUnknown0, &sRecord.mUnknown20, &sRecord.mUnknown28,
-                    &sRecord.mUnknown40, &sRecord.mUnknown44, &sRecord.mUnknown48, &sRecord.mUnknown52,
-                    &sRecord.mUnknown56, &sRecord.mUnknown60, &sRecord.mUnknown64, &sRecord.mUnknown68,
-                    &sRecord.mUnknown36, &sRecord.mUnknown72, &sRecord.mUnknown76, &sRecord.mUnknown80,
-                    &sRecord.mUnknown84, &sRecord.mUnknown88, &sRecord.mUnknown92, &sRecord.mUnknown104, tag);
+                    &_Records_sCursor, _Records_sRow.mUnknown0, &_Records_sRow.mUnknown20, &_Records_sRow.mUnknown28,
+                    &_Records_sRow.mUnknown40, &_Records_sRow.mUnknown44, &_Records_sRow.mUnknown48, &_Records_sRow.mUnknown52,
+                    &_Records_sRow.mUnknown56, &_Records_sRow.mUnknown60, &_Records_sRow.mUnknown64, &_Records_sRow.mUnknown68,
+                    &_Records_sRow.mUnknown36, &_Records_sRow.mUnknown72, &_Records_sRow.mUnknown76, &_Records_sRow.mUnknown80,
+                    &_Records_sRow.mUnknown84, &_Records_sRow.mUnknown88, &_Records_sRow.mUnknown92, &_Records_sRow.mUnknown104, tag);
     }
     _Records_iCategory = type;
     _Records_iRowCount = result.mUnknown0;
@@ -229,8 +229,8 @@ void RecordsSelectCategory(int type)
 void RecordsFetchRow(int row)
 {
     QueryResult result;
-    sCursor.mUnknown4 = row;
-    fn_801FCE10(&result, "fetch from \x8a\n", &sCursor);
+    _Records_sCursor.mUnknown4 = row;
+    fn_801FCE10(&result, "fetch from \x8a\n", &_Records_sCursor);
     _Records_iRow = row;
 }
 
@@ -242,7 +242,7 @@ int RecordsFormatColumn(int column, int row, char *pText, int size)
         sprintf(pText, "%d", RecordsGetRank(row));
         break;
     case 1: {
-        sprintf(pText, sRecord.mUnknown0);
+        sprintf(pText, _Records_sRow.mUnknown0);
         int i = strlen(pText) - 1;
         while (pText[i] == ' ' && i > 0) {
             pText[i] = 0;
@@ -292,12 +292,12 @@ int RecordsGetRank(int row)
 {
     int result = row + 1;
     if (_Records_bSharedRanks != 0) {
-        if (sColumnTypes[_Records_iCategory] != 24) {
+        if (_Records_aColumnTypes[_Records_iCategory] != 24) {
             if (row == 0) {
-                _Records_iRankValue = RecordsGetValue(sColumnTypes[_Records_iCategory]);
+                _Records_iRankValue = RecordsGetValue(_Records_aColumnTypes[_Records_iCategory]);
                 _Records_iRank = 1;
-            } else if (RecordsGetValue(sColumnTypes[_Records_iCategory]) != _Records_iRankValue) {
-                _Records_iRankValue = RecordsGetValue(sColumnTypes[_Records_iCategory]);
+            } else if (RecordsGetValue(_Records_aColumnTypes[_Records_iCategory]) != _Records_iRankValue) {
+                _Records_iRankValue = RecordsGetValue(_Records_aColumnTypes[_Records_iCategory]);
                 _Records_iRank = result;
             }
             result = _Records_iRank;
@@ -317,8 +317,8 @@ void RecordsBegin(void)
 void RecordsEnd(void)
 {
     if (_Records_iCategory != -1) {
-        if (sCursor.mUnknown0) {
-            fn_801FCFA0(&sCursor);
+        if (_Records_sCursor.mUnknown0) {
+            fn_801FCFA0(&_Records_sCursor);
         }
         _Records_iCategory = -1;
     }
@@ -367,13 +367,13 @@ void RecordsPrune(void)
         case 21:
             for (count = 0, status = 0; status == 0 && count <= 9; count++) {
                 RecordsFetchRow(count);
-                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KPSH' = \x82\n", sRecord.mUnknown108);
+                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KPSH' = \x82\n", _Records_sRow.mUnknown108);
             }
             break;
         default:
             for (count = 0, status = 0; status == 0 && count <= 9; count++) {
                 RecordsFetchRow(count);
-                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KUSH' = \x88\n", sRecord.mUnknown0);
+                status = fn_801FCE10(&result, "use 'EVAS' update 'RCSH' set 'UFSH' = 1 where 'KUSH' = \x88\n", _Records_sRow.mUnknown0);
             }
             break;
         }
@@ -478,71 +478,71 @@ int RecordsGetValue(int a)
     case 1:
         break;
     case 2:
-        value = sRecord.mUnknown20;
+        value = _Records_sRow.mUnknown20;
         break;
     case 3:
-        value = sRecord.mUnknown24;
+        value = _Records_sRow.mUnknown24;
         break;
     case 4:
-        value = sRecord.mUnknown28;
+        value = _Records_sRow.mUnknown28;
         break;
     case 5:
-        value = sRecord.mUnknown32;
+        value = _Records_sRow.mUnknown32;
         break;
     case 6:
-        value = sRecord.mUnknown36;
+        value = _Records_sRow.mUnknown36;
         break;
     case 7:
-        value = sRecord.mUnknown40;
+        value = _Records_sRow.mUnknown40;
         break;
     case 8:
-        value = sRecord.mUnknown44;
+        value = _Records_sRow.mUnknown44;
         break;
     case 9:
-        value = sRecord.mUnknown104;
+        value = _Records_sRow.mUnknown104;
         break;
     case 10:
-        value = sRecord.mUnknown48;
+        value = _Records_sRow.mUnknown48;
         break;
     case 11:
-        value = sRecord.mUnknown52;
+        value = _Records_sRow.mUnknown52;
         break;
     case 12:
-        value = sRecord.mUnknown56;
+        value = _Records_sRow.mUnknown56;
         break;
     case 13:
-        value = sRecord.mUnknown60;
+        value = _Records_sRow.mUnknown60;
         break;
     case 14:
-        value = sRecord.mUnknown64;
+        value = _Records_sRow.mUnknown64;
         break;
     case 15:
-        value = sRecord.mUnknown68;
+        value = _Records_sRow.mUnknown68;
         break;
     case 16:
         break;
     case 17:
-        value = sRecord.mUnknown72;
+        value = _Records_sRow.mUnknown72;
         break;
     case 18:
-        value = sRecord.mUnknown76;
+        value = _Records_sRow.mUnknown76;
         break;
     case 19:
-        value = sRecord.mUnknown80;
+        value = _Records_sRow.mUnknown80;
         break;
     case 20:
-        value = sRecord.mUnknown84;
+        value = _Records_sRow.mUnknown84;
         break;
     case 21:
-        if (sRecord.mUnknown92 != 0) {
-            value = sRecord.mUnknown88 * 100 / sRecord.mUnknown92;
+        if (_Records_sRow.mUnknown92 != 0) {
+            value = _Records_sRow.mUnknown88 * 100 / _Records_sRow.mUnknown92;
         }
         break;
     case 22:
-        value = sRecord.mUnknown96;
+        value = _Records_sRow.mUnknown96;
         break;
     case 23:
-        value = sRecord.mUnknown100;
+        value = _Records_sRow.mUnknown100;
         break;
     case 24:
         break;

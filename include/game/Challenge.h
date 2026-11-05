@@ -30,8 +30,8 @@ struct ChalMedalGoal_t {
     char mUnknown26[2];
 };
 
-/* Record that ChalReadRecord clears and fills; ChalGetCurrent returns the one at
-   0x8030AE64. Only the accessed fields are declared. */
+/* Record that ChalReadRecord clears and fills; ChalGetCurrent returns the challenge
+   being played (_Chal_sCurrent). Only the accessed fields are declared. */
 struct Challenge_t {
     unsigned char mUnknown0;
     char mUnknown1[202];

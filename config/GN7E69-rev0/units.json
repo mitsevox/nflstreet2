@@ -7795,27 +7795,14 @@
       ]
     },
     {
-      "source": "src/game/ChalGoal.cpp",
+      "source": "src/game/Challenge.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/ChalGoal.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800775F0-0x80079CD8 (src/game/Challenge.cpp), its exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800775F0",
-          "end": "0x80077A24"
-        }
-      ]
-    },
-    {
-      "source": "src/game/Challenge.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/Challenge.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/ChalGoal.cpp (0x800775F0-0x80077A24).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80077A24",
           "end": "0x80079CD8"
         },
         {
