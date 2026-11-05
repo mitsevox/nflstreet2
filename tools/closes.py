@@ -30,28 +30,30 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
-# A `Closes:` line, also as a list item, quote or heading and in bold or italics. The keyword may
-# be in inline code (`Closes:` or `Closes`:) only when a source path or `none` follows it; otherwise
-# a code-formatted keyword is a mention of the syntax, as in prose about this check.
-LINE = re.compile(r'^[ \t>#*_-]*(?:(?P<code>`Closes`[ \t]*:|`Closes:`)|[*_]*Closes[*_]*[ \t]*:[*_]*)[ \t]*(?P<rest>.*)$',
+# The claim: a line that starts with `Closes:` (also as a list item or quote, or in bold or italics),
+# followed by source paths separated by commas, or `none`.
+LINE = re.compile(r'^[ \t]*(?:[-*>][ \t]+)?(?:\*\*|__|\*|_)?Closes:(?:\*\*|__|\*|_)?[ \t]*(?P<rest>.*)$',
                   re.IGNORECASE)
-MENTION = re.compile(r'\bcloses[*_]*\s*:', re.IGNORECASE)
+MENTION = re.compile(r'closes\W{0,3}:', re.IGNORECASE)
+PATHLIKE = re.compile(r'[\w.-]*/[\w./-]*\w|\b[\w-]+\.(?:c|cc|cp|cpp|h|hpp|inc|s)\b', re.IGNORECASE)
 COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
-PATH = re.compile(r'`?(?:none|[\w.-]+(?:/[\w.-]+)+\.\w+)`?[,\s]*', re.IGNORECASE)
 
 
 def claimed(body):
-    """The source paths a PR body's `Closes:` lines name, in order; [] when none. Text inside HTML
-    comments (the template's example) and in inline code is ignored. A line that mentions `closes:`
-    in any other form is refused rather than skipped, so a claim can never pass unchecked."""
+    """The source paths a PR body's `Closes:` lines name, in order; [] when none. HTML comments (the
+    template's example) are ignored. Any other line that has `Closes:` in some other form (in code,
+    a heading, odd spacing) followed by anything that looks like a file is refused, not skipped, so
+    a claim cannot pass unchecked; a line that names no file (`Closes: <path>` describing the syntax)
+    is a mention and is ignored."""
     files = []
     for line in COMMENT.sub('', body or '').splitlines():
         match = LINE.match(line)
-        if match and match['code'] and not PATH.match(match['rest']):
-            match = None  # `Closes:` followed by words: a mention of the syntax, not a claim.
         if match is None:
-            if MENTION.search(re.sub(r'`[^`]*`', '', line)):  # Inline code is a mention, not a claim.
-                raise ValueError(f'cannot read this Closes line; write it as `Closes: <path>, <path>`: {line.strip()}')
+            plain = re.sub(r'[`*_"\[\]()]', ' ', line)
+            mention = MENTION.search(plain)
+            if mention and PATHLIKE.search(plain[mention.end():]):
+                raise ValueError(f'cannot read this Closes line; put the claim on its own line as '
+                                 f'`Closes: <path>, <path>` and no file names on other lines with `Closes:`: {line.strip()}')
             continue
         for item in re.split(r'[,\s]+', match['rest'].strip()):
             item = item.strip('`*_')

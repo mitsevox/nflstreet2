@@ -229,25 +229,27 @@ class Closes(unittest.TestCase):
         self.assertEqual(closes.claimed('**Closes:** none'), [])
         self.assertEqual(closes.claimed('Tier C, no files'), [])
         for form in ('- Closes: src/a.c', '* Closes: src/a.c', '> Closes: src/a.c', '_Closes:_ src/a.c',
-                     '## Closes: src/a.c', '**Closes**: src/a.c', 'closes: src/a.c', '`Closes:` src/a.c',
-                     '`Closes`: src/a.c'):
+                     '**Closes:** src/a.c', 'closes: src/a.c', 'Closes: **src/a.c**'):
             self.assertEqual(closes.claimed(form), ['src/a.c'], form)
-        self.assertEqual(closes.claimed('Fixes #12. Closes #123.'), [])
-        self.assertEqual(closes.claimed('<!-- e.g. `Closes: src/x.c` -->\nCloses: none'), [])
-        self.assertEqual(closes.claimed('- A body line `Closes: <path>` fails CI unless the file is closed.'), [])
-        # Prose about the check, as PR #1226's own body has it: mentions, not claims.
-        for prose in ('- **`tools/closes.py` + CI step** ("Check the files the PR closes", in the target job):',
+        # Any other form that names a file is refused, never skipped.
+        for form in ('## Closes: src/a.c', '**Closes**: src/a.c', '`Closes:` src/a.c', '`Closes`: src/a.c',
+                     '**`Closes:`** src/a.c', '_`Closes:`_ src/a.c', '`Closes:` "src/a.c"', '`Closes:` [src/a.c](u)',
+                     '`Closes:` hash.c', '`Closes:` src/a', '`Closes :` src/a.c', '` Closes:` src/a.c',
+                     '`Closes: ` src/a.c', 'This PR closes: src/a.c',
+                     '- **`Closes:` check:** with `Closes: src/engine/hash.c` exits 1.'):
+            with self.assertRaises(ValueError, msg=form):
+                closes.claimed(form)
+        # Prose that names no file is a mention, as PR #1226's body and the template have it.
+        for prose in ('Fixes #12. Closes #123.', '<!-- e.g. `Closes: src/x.c` -->\nCloses: none',
+                      '- A body line `Closes: <path>` fails CI unless the file is closed.',
+                      '- **`tools/closes.py` + CI step** ("Check the files the PR closes", in the target job):',
                       '  - A PR body line `Closes: <path>[, <path>]` fails CI unless every named file is closed.',
                       '  - `Closes: none`, no line, or a run that is not a pull request all pass.',
                       '  - Locally: `python3 tools/closes.py --body FILE`.',
                       '- **PR template:** a `Closes:` line with a comment saying what it checks.',
-                      '- **`Closes:` check:** `tools/closes.py --body` with `Closes: src/engine/hash.c` exits 1.',
-                      '- **Tests:** new tests cover the `Closes:` parsing and checking, and `mark_closed`.'):
+                      '- **Tests:** new tests cover the `Closes:` parsing and checking, and `mark_closed`.',
+                      '`Closes:` the hash file'):
             self.assertEqual(closes.claimed(prose), [], prose)
-        self.assertEqual(closes.claimed('`Closes:` `src/a.c`, src/b.cpp'), ['src/a.c', 'src/b.cpp'])
-        self.assertEqual(closes.claimed('`Closes:` none'), [])
-        with self.assertRaises(ValueError):
-            closes.claimed('This PR closes: src/a.c')
 
     def test_check(self):
         import tempfile
