@@ -81,8 +81,8 @@ struct Stats_803EB9E8 {
     char mName[16];
 };
 
-/* Record filled by fn_80088CE0. */
-struct Record_80088CE0 {
+/* Record filled by UnlockListReadItem. */
+struct UnlockItem {
     signed char mIndex;
     char mName[147];
     int mUnknown94;
@@ -154,12 +154,12 @@ void fn_8007DDC0(int a);
 void fn_8007EBDC(Object_8007A334 *pObject, int db);
 void fn_8007EC34(Object_8007A334 *pObject);
 int fn_8007EC54(Object_8007A334 *pObject, int id);
-int fn_800808F8(Object_8008044C *pObject);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_80081188(Object_8008044C *pObject);
-int fn_800812E0(Object_8008044C *pObject, int index);
+int PlayerDbGetId(Object_8008044C *pObject);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetWeight(Object_8008044C *pObject);
+int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index);
 void fn_80082558(int a, int b);
 void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
 int fn_80083FBC(Object_8007A334 *pObject);
@@ -170,17 +170,17 @@ int fn_80084204(Object_8007A334 *pObject);
 int fn_800842E8(Object_8007A334 *pObject);
 int fn_80084310(Object_8007A334 *pObject);
 int fn_80084338(Object_8007A334 *pObject);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
-int fn_80087C8C(Object_8007A334 *pObject, unsigned int index);
-unsigned int fn_800886BC(int a);
-int fn_8008872C(int a);
-void fn_80088950(Object_8007A334 *pObject, int index);
-void fn_80088A1C(Object_8007A334 *pObject);
-int fn_80088A74(Object_8007A334 *pObject, int index);
-void fn_80088B24(Object_8007A334 *pObject, int a, unsigned char b);
-void fn_80088C8C(Object_8007A334 *pObject);
-void fn_80088CE0(Object_8007A334 *pObject, Record_80088CE0 *pRecord);
+void UserStatsOpen(Object_8007A334 *pObject, int index);
+void UserStatsClose(Object_8007A334 *pObject);
+int UserStatsGet(Object_8007A334 *pObject, unsigned int index);
+unsigned int UserInfoGetPoints(int a);
+int UserInfoGetTotalPoints(int a);
+void UnlockStatusOpen(Object_8007A334 *pObject, int index);
+void UnlockStatusClose(Object_8007A334 *pObject);
+int UnlockStatusGet(Object_8007A334 *pObject, int index);
+void UnlockListOpen(Object_8007A334 *pObject, int a, unsigned char b);
+void UnlockListClose(Object_8007A334 *pObject);
+void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem *pRecord);
 void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -1755,23 +1755,23 @@ void fn_80012310(int side, int direction, int *pId, char *pName, int nameSize, i
         *pId = lbl_8036AE60[side].mEntries[found].mId;
         pPosition[0] = lbl_803EB9A0[side] + 1;
         pPosition[1] = lbl_803ECE50[side];
-        fn_800809C4(pObject, *pId, &result);
-        fn_80080B08(pObject, pName, nameSize);
-        fn_8017F670(fn_80080ECC(pObject), pRole);
+        PlayerDbSeekId(pObject, *pId, &result);
+        PlayerDbGetShortName(pObject, pName, nameSize);
+        fn_8017F670(PlayerDbGetPbpo(pObject), pRole);
         if (pStats) {
-            pStats[0] = fn_800812E0(pObject, 6);
-            pStats[1] = fn_800812E0(pObject, 4);
-            pStats[2] = fn_800812E0(pObject, 7);
-            pStats[3] = fn_800812E0(pObject, 0);
-            pStats[4] = fn_800812E0(pObject, 3);
-            pStats[5] = fn_800812E0(pObject, 2);
-            pStats[6] = fn_800812E0(pObject, 1);
-            pStats[7] = fn_800812E0(pObject, 5);
-            pStats[8] = fn_800812E0(pObject, 8);
-            pStats[9] = fn_800812E0(pObject, 9);
+            pStats[0] = PlayerDbGetBoostedRating(pObject, 6);
+            pStats[1] = PlayerDbGetBoostedRating(pObject, 4);
+            pStats[2] = PlayerDbGetBoostedRating(pObject, 7);
+            pStats[3] = PlayerDbGetBoostedRating(pObject, 0);
+            pStats[4] = PlayerDbGetBoostedRating(pObject, 3);
+            pStats[5] = PlayerDbGetBoostedRating(pObject, 2);
+            pStats[6] = PlayerDbGetBoostedRating(pObject, 1);
+            pStats[7] = PlayerDbGetBoostedRating(pObject, 5);
+            pStats[8] = PlayerDbGetBoostedRating(pObject, 8);
+            pStats[9] = PlayerDbGetBoostedRating(pObject, 9);
         }
-        unsigned int height = fn_800811E0(pObject);
-        int weight = fn_80081188(pObject);
+        unsigned int height = PlayerDbGetHeight(pObject);
+        int weight = PlayerDbGetWeight(pObject);
         fn_801C2D88(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
         fn_801C2D88(pWeight, weightSize, "%d lbs", weight);
         if (lbl_8036AE60[side].mEntries[found].mSlot >= 0) {
@@ -1804,7 +1804,7 @@ void fn_80012634(int side)
         fn_8008044C(&list, &desc, 0x54415453);
         if (fn_8007A444((Object_8007A334 *)&list)) {
             do {
-                fn_8021E72C(pList, 10, fn_80080D10(&list));
+                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&list));
             } while (fn_8007A510((Object_8007A334 *)&list));
         }
         fn_8008056C(&list);
@@ -1822,7 +1822,7 @@ void fn_80012710(int side)
     fn_8008044C(&list, &desc, 0x54415453);
     if (fn_8007A444((Object_8007A334 *)&list)) {
         do {
-            fn_8021E2B4(pList, 10, fn_80080D10(&list));
+            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&list));
         } while (fn_8007A510((Object_8007A334 *)&list));
     }
     fn_8008056C(&list);
@@ -1831,9 +1831,9 @@ void fn_80012710(int side)
 void fn_800127E4(int side, char *pBuffer, int size, int full)
 {
     if (full) {
-        fn_80080B08(&lbl_8036AE08[side], pBuffer, size);
+        PlayerDbGetShortName(&lbl_8036AE08[side], pBuffer, size);
     } else {
-        fn_80080BEC(&lbl_8036AE08[side], pBuffer, size);
+        PlayerDbGetFullName(&lbl_8036AE08[side], pBuffer, size);
     }
 }
 
@@ -1878,7 +1878,7 @@ static inline void GetRow(int team, int list, int row, int *pOut)
 {
     if (row != -1) {
         fn_8007A600((Object_8007A334 *)&lbl_8036AE08[list], row);
-        int id = fn_800808F8(&lbl_8036AE08[list]);
+        int id = PlayerDbGetId(&lbl_8036AE08[list]);
         int i;
 
         pOut[0] = id;
@@ -1933,7 +1933,7 @@ void fn_80012A14(unsigned char team)
     lbl_803ECE50[team] = fn_8007A410((Object_8007A334 *)&lbl_8036AE08[team]);
     fn_8007A444((Object_8007A334 *)&lbl_8036AE08[team]);
     for (i = 0; i < lbl_803ECE50[team]; i++) {
-        lbl_8036AE60[team].mEntries[i].mId = fn_800808F8(&lbl_8036AE08[team]);
+        lbl_8036AE60[team].mEntries[i].mId = PlayerDbGetId(&lbl_8036AE08[team]);
         lbl_8036AE60[team].mEntries[i].mIndex = i;
         fn_8007A510((Object_8007A334 *)&lbl_8036AE08[team]);
     }
@@ -2001,7 +2001,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
     if (row != -1) {
         fn_8007A600((Object_8007A334 *)&lbl_8036AE08[list], row);
         fn_800127E4(list, pName, nameLength, 0);
-        fn_8017F670(fn_80080ECC(&lbl_8036AE08[list]), pRole);
+        fn_8017F670(PlayerDbGetPbpo(&lbl_8036AE08[list]), pRole);
         if (pValues) {
             int values[10];
 
@@ -2873,10 +2873,10 @@ void fn_80014B98(void)
         fn_8003B6BC(0, &records[0]);
         fn_8003B6BC(1, &records[1]);
         for (unsigned char i = 0; i <= 6; i++) {
-            fn_800809C4(&lbl_8036AE08[0], records[0].mUnknown[i], 0);
+            PlayerDbSeekId(&lbl_8036AE08[0], records[0].mUnknown[i], 0);
             fn_80081F50(&lbl_8036AE08[0], 0, 1);
             ids[0][i] = lbl_8036AE60[0].mEntries[i].mId;
-            fn_800809C4(&lbl_8036AE08[1], records[1].mUnknown[i], 0);
+            PlayerDbSeekId(&lbl_8036AE08[1], records[1].mUnknown[i], 0);
             fn_80081F50(&lbl_8036AE08[1], 1, 1);
             ids[1][i] = lbl_8036AE60[1].mEntries[i].mId;
         }
@@ -3043,7 +3043,7 @@ void fn_80015420(int team, int *pIndex)
             break;
         }
     }
-    fn_800809C4(&lbl_8036AE08[side], lbl_8036AE60[side].mUnknown140, &lbl_8036B0E8[side].mTop);
+    PlayerDbSeekId(&lbl_8036AE08[side], lbl_8036AE60[side].mUnknown140, &lbl_8036B0E8[side].mTop);
     if (lbl_8036B0E8[side].mTop == 0) {
         lbl_8036B0E8[side].mTop = -1;
     } else {
@@ -3350,24 +3350,24 @@ void fn_80016038(void)
 {
     Object_8007A334 query;
     if (lbl_803EB9E7 != -1) {
-        fn_80087BE4(&query, lbl_803EB9E7);
-        lbl_803EB9E8->mValues[0] = fn_80087C8C(&query, 10);
-        lbl_803EB9E8->mValues[1] = fn_80087C8C(&query, 11);
-        lbl_803EB9E8->mValues[4] = fn_80087C8C(&query, 3);
-        lbl_803EB9E8->mValues[3] = fn_80087C8C(&query, 4);
-        lbl_803EB9E8->mValues[5] = fn_80087C8C(&query, 5);
+        UserStatsOpen(&query, lbl_803EB9E7);
+        lbl_803EB9E8->mValues[0] = UserStatsGet(&query, 10);
+        lbl_803EB9E8->mValues[1] = UserStatsGet(&query, 11);
+        lbl_803EB9E8->mValues[4] = UserStatsGet(&query, 3);
+        lbl_803EB9E8->mValues[3] = UserStatsGet(&query, 4);
+        lbl_803EB9E8->mValues[5] = UserStatsGet(&query, 5);
         lbl_803EB9E8->mValues[2] = lbl_803EB9E8->mValues[3] + lbl_803EB9E8->mValues[4] + lbl_803EB9E8->mValues[5];
-        lbl_803EB9E8->mValues[6] = fn_80087C8C(&query, 8);
-        lbl_803EB9E8->mValues[7] = fn_80087C8C(&query, 9);
-        lbl_803EB9E8->mValues[8] = fn_80087C8C(&query, 6);
-        lbl_803EB9E8->mValues[9] = fn_80087C8C(&query, 7);
-        lbl_803EB9E8->mValues[10] = fn_80087C8C(&query, 12);
-        lbl_803EB9E8->mValues[11] = fn_80087C8C(&query, 13);
-        lbl_803EB9E8->mValues[12] = fn_8008872C(fn_8022F358(lbl_803EB9E7));
-        lbl_803EB9E8->mUnknown34 = fn_80087C8C(&query, 0);
-        lbl_803EB9E8->mUnknown38 = fn_80087C8C(&query, 1);
-        lbl_803EB9E8->mStreak = fn_80087C8C(&query, 2);
-        fn_80087C3C(&query);
+        lbl_803EB9E8->mValues[6] = UserStatsGet(&query, 8);
+        lbl_803EB9E8->mValues[7] = UserStatsGet(&query, 9);
+        lbl_803EB9E8->mValues[8] = UserStatsGet(&query, 6);
+        lbl_803EB9E8->mValues[9] = UserStatsGet(&query, 7);
+        lbl_803EB9E8->mValues[10] = UserStatsGet(&query, 12);
+        lbl_803EB9E8->mValues[11] = UserStatsGet(&query, 13);
+        lbl_803EB9E8->mValues[12] = UserInfoGetTotalPoints(fn_8022F358(lbl_803EB9E7));
+        lbl_803EB9E8->mUnknown34 = UserStatsGet(&query, 0);
+        lbl_803EB9E8->mUnknown38 = UserStatsGet(&query, 1);
+        lbl_803EB9E8->mStreak = UserStatsGet(&query, 2);
+        UserStatsClose(&query);
         fn_80186A10(lbl_803EB9E7, lbl_803EB9E8->mName);
     } else {
         for (unsigned char i = 0; i <= 12; i++) {
@@ -3650,12 +3650,12 @@ void fn_80016A08(int *pCount)
 void fn_80016AF4(void)
 {
     if (lbl_803EBA00) {
-        fn_80088C8C(lbl_803EBA00);
+        UnlockListClose(lbl_803EBA00);
         delete lbl_803EBA00;
         lbl_803EBA00 = 0;
     }
     if (lbl_803EBA04) {
-        fn_80088A1C(lbl_803EBA04);
+        UnlockStatusClose(lbl_803EBA04);
         delete lbl_803EBA04;
         lbl_803EBA04 = 0;
     }
@@ -3680,25 +3680,25 @@ void fn_80016B60(int control, char *pText, int *pResult)
         }
     }
     if (lbl_803EBA04->mUnknown0) {
-        fn_80088A1C(lbl_803EBA04);
+        UnlockStatusClose(lbl_803EBA04);
     }
-    fn_80088950(lbl_803EBA04, lbl_803EB9FC);
+    UnlockStatusOpen(lbl_803EBA04, lbl_803EB9FC);
     fn_80186A10(lbl_803EB9FC, pText);
-    *pResult = fn_800886BC(fn_8022F358(lbl_803EB9FC));
+    *pResult = UserInfoGetPoints(fn_8022F358(lbl_803EB9FC));
 }
 
 void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     fn_8007A600(lbl_803EBA00, index);
-    fn_80088CE0(lbl_803EBA00, &record);
+    UnlockListReadItem(lbl_803EBA00, &record);
     fn_801C2E18(pText, record.mName);
     char *pDot = fn_801C3084(pText, '.');
     if (pDot) {
         pDot[1] = 0;
     }
     *pUnknown94 = record.mUnknown94;
-    if (lbl_803EB9FC != -1 && fn_80088A74(lbl_803EBA04, record.mIndex) != 0) {
+    if (lbl_803EB9FC != -1 && UnlockStatusGet(lbl_803EBA04, record.mIndex) != 0) {
         *pFlag = 1;
     } else {
         *pFlag = 0;
@@ -3722,9 +3722,9 @@ void fn_80016D14(int control, char *pText, int size, int *pResult)
         break;
     }
     if (lbl_803EBA00->mUnknown0) {
-        fn_80088C8C(lbl_803EBA00);
+        UnlockListClose(lbl_803EBA00);
     }
-    fn_80088B24(lbl_803EBA00, 1, lbl_803EB9FD);
+    UnlockListOpen(lbl_803EBA00, 1, lbl_803EB9FD);
     fn_801C3284(pText, lbl_802F43E4[lbl_803EB9FD], size);
     *pResult = fn_8007A410(lbl_803EBA00);
 }

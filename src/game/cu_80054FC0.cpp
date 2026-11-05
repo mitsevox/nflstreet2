@@ -7,7 +7,7 @@ int fn_8001ED88(void);
 int fn_8002B70C(void);
 void fn_80077F24(void);
 int fn_80082414(int index);
-int fn_80085428(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
+int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void fn_80183920(int mode, int value);
 int fn_8018D720(int a);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -106,7 +106,7 @@ void fn_80055230(unsigned char side, int unused, int index, float *pX, float *pY
 {
     int value;
 
-    fn_80085428(side, index, pX, pY, &value, pLabel, labelSize);
+    FormationSlotGetInfo(side, index, pX, pY, &value, pLabel, labelSize);
     fn_8003AED8(side != 0, index, value);
 }
 

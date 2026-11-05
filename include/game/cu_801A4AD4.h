@@ -17,9 +17,9 @@ struct Entry_802F3488 {
 extern "C" {
 void fn_801A4AD4(Object_8003DEC4 *pPlayer);
 void *fn_801A4AE4(int player);
-void fn_801A4B08(Desc_802347EC *pDesc);
+void fn_801A4B08(ModelTexSlot *pDesc);
 void fn_801A4B28(void *pDest, void *pSrc, unsigned int size);
-void fn_801A4C1C(Desc_802347EC *pDescs, Entry_802F3488 *pEntries);
+void fn_801A4C1C(ModelTexSlot *pDescs, Entry_802F3488 *pEntries);
 }
 
 #endif

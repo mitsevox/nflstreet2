@@ -79,7 +79,7 @@ int fn_8017F60C(void);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
 int fn_8008400C(Object_8007A334 *pObject);
 int fn_80084360(Object_8007A334 *pObject);
-int fn_80080D10(Object_8008044C *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
@@ -700,8 +700,8 @@ int fn_80180EF8(int id)
     } else {
         fn_8008040C(&cursor, 0);
     }
-    if (fn_800809C4(&cursor, id, 0)) {
-        result = fn_80080D10(&cursor);
+    if (PlayerDbSeekId(&cursor, id, 0)) {
+        result = PlayerDbGetPortraitId(&cursor);
     }
     fn_8008056C(&cursor);
     return result;

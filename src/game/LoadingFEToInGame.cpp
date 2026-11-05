@@ -1,4 +1,4 @@
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 
 extern "C" {
 void fn_80194858(int);

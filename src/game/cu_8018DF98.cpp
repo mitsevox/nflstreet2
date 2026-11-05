@@ -12,10 +12,10 @@ int fn_8022F4BC(void);
 void fn_8018C48C(int tag);
 int fn_8018BA4C(void);
 void fn_8018BB24(int index, int a);
-int fn_80086BA4(int index);
-int fn_80086A64(void);
-int fn_80086994(void);
-int fn_80086B50(void);
+int TournamentOpen(int index);
+int TournamentClearMatches(void);
+int TournamentClearPlayers(void);
+int TournamentClose(void);
 void fn_8018B8B0(Object_8007A334 *pCursor);
 
 void fn_8018E55C(int index);
@@ -197,10 +197,10 @@ static void ResetYptsTadsCetsTables(void)
         fn_8018B8B0(&cursor);
     }
     fn_8018E174(&cursor);
-    fn_80086BA4(index);
-    fn_80086A64();
-    fn_80086994();
-    fn_80086B50();
+    TournamentOpen(index);
+    TournamentClearMatches();
+    TournamentClearPlayers();
+    TournamentClose();
 }
 
 int fn_8018E4B4(void)
@@ -217,10 +217,10 @@ int fn_8018E4B4(void)
     fn_8018E474(index);
     fn_8018E7A0(index, 1);
     fn_8018E828(index, -1);
-    fn_80086BA4(index);
-    fn_80086A64();
-    fn_80086994();
-    fn_80086B50();
+    TournamentOpen(index);
+    TournamentClearMatches();
+    TournamentClearPlayers();
+    TournamentClose();
     return result;
 }
 

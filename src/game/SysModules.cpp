@@ -1,3 +1,7 @@
+/* The system modules registered at start-up: resources, camera, context, curves, the
+   database and game database, debug print, events, loading, maths, memory card,
+   peripherals, remapping, sorting, preloading, tasks, video memory and front-end music. */
+
 #include "engine/cu_80228E44.h"
 #include "engine/cu_80228F78.h"
 #include "engine/cu_80229094.h"
@@ -5,7 +9,7 @@
 #include "game/cu_8007F12C.h"
 #include "game/cu_80191398.h"
 #include "game/fn_801EEB44.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 #include "game/SndgPathfinder.h"
 #include "game/Record_802CC680.h"
 #include "game/cu_80026BB0.h"
@@ -14,7 +18,7 @@
 #include "engine/remap.h"
 
 /* Argument of fn_801F8A0C and fn_801F8A54. */
-struct Desc_801F8A0C {
+struct DbInitDesc {
     int mUnknown0;
     int mUnknown4[9];
 };
@@ -35,8 +39,8 @@ void fn_800460DC(void);
 void fn_800461E0(void);
 void fn_8007272C(void);
 void fn_80072890(void);
-void fn_8008A88C(void);
-void fn_8008A8D0(void);
+void PortraitSystemInit(void);
+void PortraitSystemShutdown(void);
 void fn_8008FAA8(void);
 void fn_8015E548(void);
 void fn_8015E65C(void);
@@ -60,8 +64,8 @@ int fn_801CEF48(void);
 int fn_801CEFA0(void);
 int fn_801F512C(void);
 int fn_801F518C(void);
-void fn_801F8A0C(Desc_801F8A0C *pDesc);
-int fn_801F8A54(Desc_801F8A0C *pDesc);
+void fn_801F8A0C(DbInitDesc *pDesc);
+int fn_801F8A54(DbInitDesc *pDesc);
 void fn_801F8C64(void);
 int fn_801F9430(int a, int *pTable4, int *pTable8);
 int fn_801F9574(void);
@@ -125,7 +129,7 @@ int Cam::Shutdown()
 }
 
 extern "C" {
-static void fn_8008CD58()
+static void _ContextResetPorts()
 {
     unsigned int count = 4;
     unsigned int i;
@@ -150,7 +154,7 @@ int Context::Init()
     fn_801C5E24(10, fn_800273A4());
     fn_800271A4();
     fn_801C6280(-1, 2, (int)fn_80026DD4);
-    fn_8008CD58();
+    _ContextResetPorts();
     return 1;
 }
 
@@ -189,7 +193,7 @@ const char *Db::GetName() { return "Db"; }
 int Db::Init()
 {
     Record_802CC680 *record = fn_80025E50(2);
-    Desc_801F8A0C desc;
+    DbInitDesc desc;
 
     fn_8022C930(32);
     fn_8020D0CC(record);
@@ -208,8 +212,8 @@ int Db::Shutdown()
     return 1;
 }
 
-static int sDbGameTable_802D7064[] = { 0x45564153, 0x45564153, -1 };
-static int sDbGameTable_802D7070[] = { 0x54504F53, 0x54504F47, -1 };
+static int _DbGame_aSaveTags[] = { 0x45564153, 0x45564153, -1 };
+static int _DbGame_aOptionTables[] = { 0x54504F53, 0x54504F47, -1 };
 static ModuleDependency sDbGameDependencies[] = { &gSys, &gRes, &gDb, 0 };
 DbGame gDbGame;
 
@@ -232,7 +236,7 @@ int DbGame::Init()
     fn_8022F028(0x3000, lbl_802EBE24, 5);
     fn_8022F4C4();
     fn_80229094(lbl_802EBE40);
-    fn_801F9430(0x54415453, sDbGameTable_802D7070, sDbGameTable_802D7064);
+    fn_801F9430(0x54415453, _DbGame_aOptionTables, _DbGame_aSaveTags);
     fn_8007F328(1);
     fn_801EEFAC(data);
     return 1;
@@ -362,14 +366,14 @@ static Driver_801E11E8 *sPeriphEntries[] = { &lbl_802F94D0, 0 };
 static int sPeriphCounter = 0;
 
 extern "C" {
-static int fn_8008D2CC()
+static int _PeriphNextId()
 {
     return sPeriphCounter++;
 }
 }
 
-static int sPeriphUnknown[2];
-static Desc_801E1478 sPeriphDesc = { 4, 16, 16, fn_8008D2CC, sPeriphEntries, sPeriphUnknown };
+static int sPeriphState[2];
+static Desc_801E1478 sPeriphDesc = { 4, 16, 16, _PeriphNextId, sPeriphEntries, sPeriphState };
 static ModuleDependency sPeriphDependencies[] = { &gSys, 0 };
 Periph gPeriph;
 
@@ -379,8 +383,8 @@ const char *Periph::GetName() { return "Periph"; }
 
 int Periph::Init()
 {
-    sPeriphUnknown[0] = 0;
-    sPeriphUnknown[1] = 0;
+    sPeriphState[0] = 0;
+    sPeriphState[1] = 0;
     fn_801E1478(&sPeriphDesc);
     return 1;
 }
@@ -445,19 +449,19 @@ int SysPreLoad::Init()
 int SysPreLoad::Shutdown()
 {
     fn_800461E0();
-    fn_8008A8D0();
+    PortraitSystemShutdown();
     fn_8015E714();
     fn_8015E65C();
     return 1;
 }
 
-void SysPreLoad::fn_8008D4A8()
+void SysPreLoad::LoadSystems()
 {
     fn_800460DC();
     fn_8015E548();
     fn_8015E620(14, 1);
     fn_8015E684();
-    fn_8008A88C();
+    PortraitSystemInit();
     fn_801607F0(4);
 }
 

@@ -22,9 +22,9 @@ void fn_8007EDE4(int db);
 void fn_8007EE70(int db);
 void fn_80082688(int db);
 void fn_8008274C(int db);
-int fn_800881B8(void);
-void fn_80088638(int db);
-void fn_8008879C(int handle, int value);
+int TutorialAllComplete(void);
+void TutorialSetProfileDb(int db);
+void UserInfoSetPoints(int handle, int value);
 int fn_80186B38(int db);
 void fn_8018E428(int index, int value);
 void fn_8018F340(int a, int b);
@@ -97,7 +97,7 @@ void fn_80054628(signed char db, int id)
         fn_80078C04(db, 999999);
         break;
     case 7:
-        fn_8008879C(fn_8022F358(db), 9999999);
+        UserInfoSetPoints(fn_8022F358(db), 9999999);
         break;
     case 8: {
         int saved = fn_8022F4BC();
@@ -201,11 +201,11 @@ void fn_80054964(signed char db, int id)
         break;
     }
     case 19:
-        fn_80088638(fn_8022F358(db));
-        if (fn_800881B8() == 0) {
+        TutorialSetProfileDb(fn_8022F358(db));
+        if (TutorialAllComplete() == 0) {
             fn_8007ED50(db, 33);
         }
-        fn_80088638(-1);
+        TutorialSetProfileDb(-1);
         break;
     case 20:
         fn_8007ED50(db, 44);
@@ -218,7 +218,7 @@ void fn_80054964(signed char db, int id)
         fn_80078C04(db, 0);
         break;
     case 7:
-        fn_8008879C(fn_8022F358(db), 0);
+        UserInfoSetPoints(fn_8022F358(db), 0);
         break;
     case 8:
         fn_80060674(db);

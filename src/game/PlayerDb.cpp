@@ -1,3 +1,7 @@
+/* Player records in the game database: read and write the columns of a player row
+   (ids, team, names, appearance, height and weight) through an open player cursor, and
+   build the short, full and letters-only forms of a player's name. */
+
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include <string.h>
@@ -8,66 +12,66 @@ extern const int lbl_80293968[];
 char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 char *fn_801C32CC(char *pText);
 
-static int lbl_802D69E0[4] = { 0x31544753, 0x32544753, 0x33544753, 0x34544753 };
+static int _PlayerDb_aSgtColumns[4] = { 0x31544753, 0x32544753, 0x33544753, 0x34544753 };
 
-int fn_800808F8(Object_8008044C *pObject)
+int PlayerDbGetId(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x44494750);
 }
 
-int fn_80080920(Object_8008044C *pObject)
+int PlayerDbGetOriginalId(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x44494F50);
 }
 
-int fn_80080948(Object_8008044C *pObject)
+int PlayerDbGetTeamId(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x44494754);
 }
 
-int fn_80080970(Object_8008044C *pObject)
+int PlayerDbGetTeamIndex(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x49544754);
 }
 
-void fn_80080998(Object_8008044C *pObject, int value)
+void PlayerDbSetTeamIndex(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x49544754, value);
 }
 
-int fn_800809C4(Object_8008044C *pObject, int a, int *pResult)
+int PlayerDbSeekId(Object_8008044C *pObject, int a, int *pResult)
 {
     return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494750, a, 0, pResult);
 }
 
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult)
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult)
 {
     return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494F50, a, 0, pResult);
 }
 
-void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size)
+void PlayerDbGetFirstName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4650, (int)pBuffer, size);
 }
 
-void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size)
+void PlayerDbGetLastName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4C50, (int)pBuffer, size);
 }
 
-/* The 0x4E4B4E50 text, or the upper-cased fn_80080A68 text when it is empty. */
-void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size)
+/* The 0x4E4B4E50 text, or the upper-cased PlayerDbGetLastName text when it is empty. */
+void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size)
 {
     fn_8007AA3C((Object_8007A334 *)pObject, 0x4E4B4E50, (int)pBuffer, size);
     if (strlen(pBuffer) == 0) {
-        fn_80080A68(pObject, pBuffer, size);
+        PlayerDbGetLastName(pObject, pBuffer, size);
         fn_801C32CC(pBuffer);
     }
 }
 
-/* The first non-space character of the fn_80080A34 text and ". ", then the
-   fn_80080A68 text, ending at size. */
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
+/* The first non-space character of the PlayerDbGetFirstName text and ". ", then the
+   PlayerDbGetLastName text, ending at size. */
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     char first[16];
     char last[16];
@@ -76,11 +80,11 @@ void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
     unsigned int lastLength;
     unsigned int total;
 
-    fn_80080A34(pObject, first, 12);
+    PlayerDbGetFirstName(pObject, first, 12);
     pFirst = first;
     while (*pFirst == ' ') pFirst++;
     length = strlen(pFirst);
-    fn_80080A68(pObject, last, 15);
+    PlayerDbGetLastName(pObject, last, 15);
     lastLength = strlen(last);
     if (length) {
         pBuffer[0] = *pFirst;
@@ -98,8 +102,8 @@ void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
     pBuffer[total] = 0;
 }
 
-/* The fn_80080A34 text, a space, then the fn_80080A68 text, ending at size. */
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
+/* The PlayerDbGetFirstName text, a space, then the PlayerDbGetLastName text, ending at size. */
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     char first[16];
     char last[16];
@@ -107,9 +111,9 @@ void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
     unsigned int lastLength;
     unsigned int total;
 
-    fn_80080A34(pObject, first, 12);
+    PlayerDbGetFirstName(pObject, first, 12);
     length = strlen(first);
-    fn_80080A68(pObject, last, 15);
+    PlayerDbGetLastName(pObject, last, 15);
     lastLength = strlen(last);
     if (length) {
         strcpy(pBuffer, first);
@@ -126,35 +130,35 @@ void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
     pBuffer[total] = 0;
 }
 
-int fn_80080CB0(Object_8008044C *pObject)
+int PlayerDbGetPrty(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x59545250);
 }
 
-int fn_80080CD8(Object_8008044C *pObject)
+int PlayerDbHasPlil(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x4C494C50) != 0;
 }
 
-int fn_80080D10(Object_8008044C *pObject)
+int PlayerDbGetPortraitId(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x50585350);
 }
 
-/* Only the A-Z bytes of the upper-cased fn_80080A68 text followed by the
-   fn_80080A34 text. Returns 0 with an empty buffer when fn_80080CB0 is
+/* Only the A-Z bytes of the upper-cased PlayerDbGetLastName text followed by the
+   PlayerDbGetFirstName text. Returns 0 with an empty buffer when PlayerDbGetPrty is
    non-zero. */
-int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size)
+int PlayerDbGetNameKey(Object_8008044C *pObject, char *pBuffer, int size)
 {
     char first[16];
     char *pDest;
     char *pSource;
     int result = 1;
 
-    if (fn_80080CB0(pObject) == 0) {
+    if (PlayerDbGetPrty(pObject) == 0) {
         pBuffer[0] = 0;
-        fn_80080A68(pObject, pBuffer, 15);
-        fn_80080A34(pObject, first, 12);
+        PlayerDbGetLastName(pObject, pBuffer, 15);
+        PlayerDbGetFirstName(pObject, first, 12);
         fn_801C2F88(pBuffer, first, size);
         fn_801C32CC(pBuffer);
         pDest = pBuffer;
@@ -170,135 +174,135 @@ int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size)
     return result;
 }
 
-int fn_80080E20(Object_8008044C *pObject)
+int PlayerDbGetPybt(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x54425950);
 }
 
-int fn_80080E48(Object_8008044C *pObject)
+int PlayerDbGetPlex(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x58454C50);
 }
 
-int fn_80080E70(Object_8008044C *pObject)
+int PlayerDbGetPlht(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x54484C50);
 }
 
-int fn_80080E98(Object_8008044C *pObject)
+int PlayerDbGetHairStyle(Object_8008044C *pObject)
 {
     int value = fn_8007A98C(pObject, 0x52414850);
     if (value == 63) value = 0;
     return value;
 }
 
-int fn_80080ECC(Object_8008044C *pObject)
+int PlayerDbGetPbpo(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x4F504250);
 }
 
-void fn_80080EF4(Object_8008044C *pObject, int value)
+void PlayerDbSetPbpo(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x4F504250, value);
 }
 
-int fn_80080F20(void *pObject)
+int PlayerDbGetPpsn(void *pObject)
 {
     return fn_8007A98C(pObject, 0x4E535050);
 }
 
-int fn_80080F48(void *pObject, int index)
+int PlayerDbGetSgt(void *pObject, int index)
 {
-    return fn_8007A98C(pObject, lbl_802D69E0[index]);
+    return fn_8007A98C(pObject, _PlayerDb_aSgtColumns[index]);
 }
 
-void fn_80080F78(void *pObject, int value)
+void PlayerDbSetPpsn(void *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x4E535050, value);
 }
 
-void fn_80080FA4(void *pObject, int index, int value)
+void PlayerDbSetSgt(void *pObject, int index, int value)
 {
-    fn_8007ABA4(pObject, lbl_802D69E0[index], value);
+    fn_8007ABA4(pObject, _PlayerDb_aSgtColumns[index], value);
 }
 
-void fn_80080FD4(Object_8008044C *pObject, int value)
+void PlayerDbSetHairStyle(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x52414850, value);
 }
 
-void fn_80081000(Object_8007A334 *pObject, int index)
+void PlayerDbSetPybt(Object_8007A334 *pObject, int index)
 {
     fn_8007ABA4(pObject, 0x54425950, index);
     fn_8007AA90(pObject, 0x544C4650, lbl_80293968[index]);
 }
 
-void fn_8008105C(Object_8008044C *pObject, int value)
+void PlayerDbSetSkinTone(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x494B5350, value);
 }
 
-void fn_80081088(Object_8008044C *pObject, int value)
+void PlayerDbSetPlex(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x58454C50, value);
 }
 
-void fn_800810B4(Object_8008044C *pObject, int value)
+void PlayerDbSetHairColor(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x31414850, value);
 }
 
-int fn_800810E0(Object_8008044C *pObject)
+int PlayerDbGetHairColor(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x31414850);
 }
 
-void fn_80081108(Object_8008044C *pObject, int value)
+void PlayerDbSetFacialHairColor(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x43484650, value);
 }
 
-int fn_80081134(Object_8008044C *pObject)
+int PlayerDbGetFacialHairColor(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x43484650);
 }
 
-void fn_8008115C(Object_8008044C *pObject, int value)
+void PlayerDbSetWeight(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x54475750, value - 160);
 }
 
-int fn_80081188(Object_8008044C *pObject)
+int PlayerDbGetWeight(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x54475750) + 160;
 }
 
-void fn_800811B4(Object_8008044C *pObject, int value)
+void PlayerDbSetHeight(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x54474850, value);
 }
 
-int fn_800811E0(Object_8008044C *pObject)
+int PlayerDbGetHeight(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x54474850);
 }
 
-int fn_80081208(Object_8008044C *pObject)
+int PlayerDbGetPhan(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x4E414850);
 }
 
-void fn_80081230(Object_8008044C *pObject, int value)
+void PlayerDbSetPhan(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x4E414850, value);
 }
 
-int fn_8008125C(Object_8008044C *pObject)
+int PlayerDbGetPjen(Object_8008044C *pObject)
 {
     return fn_8007A98C(pObject, 0x4E454A50);
 }
 
-void fn_80081284(Object_8008044C *pObject, int value)
+void PlayerDbSetPjen(Object_8008044C *pObject, int value)
 {
     fn_8007ABA4(pObject, 0x4E454A50, value);
 }

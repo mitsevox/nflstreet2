@@ -1,4 +1,7 @@
-#include "game/cu_80089330.h"
+/* Player collision tests: cylinder, sphere and capsule overlap checks, the plane between
+   two players, and the list of contact points the detailed test fills. */
+
+#include "game/CollideContacts.h"
 #include "game/cu_8003EC04.h"
 #include "game/fn_802270D4.h"
 
@@ -8,9 +11,9 @@ void fn_802271F0(float *pOut, float *pIn);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 }
 
-static ContactList_8030BD74 lbl_8030BD74;
+static CollideContactList _Collide_ContactList;
 
-void fn_80089330(float *pCapsuleA, float *pCapsuleB, unsigned int index)
+void CollideAddCapsuleContact(float *pCapsuleA, float *pCapsuleB, unsigned int index)
 {
     float point[3];
     float radius = pCapsuleA[3] + pCapsuleB[3];
@@ -18,17 +21,17 @@ void fn_80089330(float *pCapsuleA, float *pCapsuleB, unsigned int index)
 
     radius = radius * radius;
     if (fn_80088FFC(pCapsuleA, pCapsuleA + 4, pCapsuleB, pCapsuleB + 4, point) < radius) {
-        n = lbl_8030BD74.mCount;
-        lbl_8030BD74.mpContacts[n].mUnknown0 = point[0];
-        lbl_8030BD74.mpContacts[n].mUnknown4 = point[1];
-        lbl_8030BD74.mpContacts[n].mUnknown8 = point[2];
-        lbl_8030BD74.mpContacts[n].mUnknownC = index;
-        lbl_8030BD74.mpContacts[n].mUnknownD = index >> 8;
-        lbl_8030BD74.mCount = n + 1;
+        n = _Collide_ContactList.mCount;
+        _Collide_ContactList.mpContacts[n].mUnknown0 = point[0];
+        _Collide_ContactList.mpContacts[n].mUnknown4 = point[1];
+        _Collide_ContactList.mpContacts[n].mUnknown8 = point[2];
+        _Collide_ContactList.mpContacts[n].mUnknownC = index;
+        _Collide_ContactList.mpContacts[n].mUnknownD = index >> 8;
+        _Collide_ContactList.mCount = n + 1;
     }
 }
 
-int fn_800893F0(Record_8003EC04 *pA, Record_8003EC04 *pB)
+int CollideTestCylinders(Record_8003EC04 *pA, Record_8003EC04 *pB)
 {
     float t;
     float d;
@@ -48,7 +51,7 @@ int fn_800893F0(Record_8003EC04 *pA, Record_8003EC04 *pB)
     return 0;
 }
 
-int fn_80089464(float *pSphereA, float *pSphereB)
+int CollideTestSpheres(float *pSphereA, float *pSphereB)
 {
     float t;
     float d;
@@ -64,7 +67,7 @@ int fn_80089464(float *pSphereA, float *pSphereB)
     return d <= r * r;
 }
 
-void fn_800894B8(Plane_800894B8 *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
+void CollideMakeSplitPlane(CollidePlane *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
 {
     float delta[3];
 
@@ -73,7 +76,7 @@ void fn_800894B8(Plane_800894B8 *pPlane, Record_8003EC04 *pA, Record_8003EC04 *p
     fn_80227930(&pPlane->mUnknown0, &pA->mUnknown0, &pB->mUnknown0, 0.5f);
 }
 
-int fn_80089514(Plane_800894B8 *pPlane, float *pCapsule)
+int CollideCapsuleInFront(CollidePlane *pPlane, float *pCapsule)
 {
     float d0 = (pCapsule[0] - pPlane->mUnknown0) * pPlane->mUnknown10 + (pCapsule[1] - pPlane->mUnknown4) * pPlane->mUnknown14 + (pCapsule[2] - pPlane->mUnknown8) * pPlane->mUnknown18;
     float d1 = (pCapsule[4] - pPlane->mUnknown0) * pPlane->mUnknown10 + (pCapsule[5] - pPlane->mUnknown4) * pPlane->mUnknown14 + (pCapsule[6] - pPlane->mUnknown8) * pPlane->mUnknown18;
@@ -85,33 +88,33 @@ int fn_80089514(Plane_800894B8 *pPlane, float *pCapsule)
     return result;
 }
 
-void fn_8008959C(Contact_80089330 *pContacts, int capacity)
+void CollideContactsBegin(CollideContact *pContacts, int capacity)
 {
-    lbl_8030BD74.mCount = 0;
-    lbl_8030BD74.mCapacity = capacity;
-    lbl_8030BD74.mpContacts = pContacts;
+    _Collide_ContactList.mCount = 0;
+    _Collide_ContactList.mCapacity = capacity;
+    _Collide_ContactList.mpContacts = pContacts;
 }
 
-ContactList_8030BD74 *fn_800895B8(void)
+CollideContactList *CollideGetContacts(void)
 {
-    return &lbl_8030BD74;
+    return &_Collide_ContactList;
 }
 
-void fn_800895C4(void)
+void CollideContactsEnd(void)
 {
-    lbl_8030BD74.mCount = 0;
-    lbl_8030BD74.mCapacity = 0;
-    lbl_8030BD74.mpContacts = 0;
+    _Collide_ContactList.mCount = 0;
+    _Collide_ContactList.mCapacity = 0;
+    _Collide_ContactList.mpContacts = 0;
 }
 
-void fn_800895E0(void)
-{
-}
-
-void fn_800895E4(void)
+void CollideContactsStub0(void)
 {
 }
 
-void fn_800895E8(void)
+void CollideContactsStub1(void)
+{
+}
+
+void CollideContactsStub2(void)
 {
 }

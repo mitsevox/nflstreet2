@@ -55,8 +55,8 @@ void fn_8007DE20(Object_8007A334 *pObject);
 void fn_8007DE40(Object_8007A334 *pObject, int key, unsigned char *pA, unsigned char *pB);
 void fn_8007DFC4(Object_8007A334 *pObject, int id);
 int fn_8007E020(int type, int a, int b);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080D10(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 Object_8007A334 *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
@@ -349,7 +349,7 @@ static void fn_8000A360(int id, int index)
         int row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
         Info_80307908 info;
 
-        fn_800809C4(fn_80182DC8(), id, 0);
+        PlayerDbSeekId(fn_80182DC8(), id, 0);
         fn_800817CC(fn_80182DC8(), &info);
         fn_8007BBFC(&lbl_8036A1FC, 0, 0);
         if (fn_8007BF28(type) != 14) {
@@ -376,7 +376,7 @@ static int fn_8000A434(int type, int value)
             int id;
 
             fn_800817CC(fn_80182DC8(), &info);
-            id = fn_800808F8(fn_80182DC8());
+            id = PlayerDbGetId(fn_80182DC8());
             if (fn_8007BF28(type) != 14) {
                 if (info.mValues[fn_8007BF28(type)] == value) {
                     result = id;
@@ -397,7 +397,7 @@ static void fn_8000A528()
     int type = fn_8007BE7C(&lbl_8036A1FC);
     int id = fn_8007BE54(&lbl_8036A1FC);
     int unique = fn_8007BF3C(&lbl_8036A1FC);
-    int current = fn_800808F8(fn_80182DC8());
+    int current = PlayerDbGetId(fn_80182DC8());
     int owner = fn_8000A434(type, id);
 
     if (unique && owner != -1 && owner != current) {
@@ -832,7 +832,7 @@ void Class_8000DBF0::vfn_01(int a, int *pCount, int *pOut)
     fn_80182E04("");
     *pCount = fn_8007A410((Object_8007A334 *)fn_80182DC8()) + 1;
     fn_8007A444((Object_8007A334 *)fn_80182DC8());
-    lbl_803ECDDC = fn_800808F8(fn_80182DC8());
+    lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
     fn_80022680(fn_80022D80(), lbl_803ECDDC, 1);
 }
 
@@ -841,7 +841,7 @@ int Class_8000DBF0::vfn_02(int a, int b, void **pOut)
     char buffer[27];
 
     *pOut = fn_8000D140();
-    fn_800809C4(fn_80182DC8(), a, 0);
+    PlayerDbSeekId(fn_80182DC8(), a, 0);
     fn_801832B0(buffer, 27);
     fn_80182E34(buffer);
     fn_800817CC(fn_80182DC8(), &lbl_8036A280);
@@ -853,7 +853,7 @@ void Class_8000DBF0::vfn_03(int index)
     if (index != 0x7FFF) {
         char buffer[27];
 
-        fn_800809C4(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
         lbl_803ECDDC = index;
         fn_80022680(fn_80022D80(), index, 0);
         fn_801832B0(buffer, 27);
@@ -870,7 +870,7 @@ void Class_8000DBF0::vfn_04(int index, int *pOut)
         *pOut = 0x7FFF;
     } else {
         fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
-        *pOut = fn_800808F8(fn_80182DC8());
+        *pOut = PlayerDbGetId(fn_80182DC8());
     }
 }
 
@@ -882,8 +882,8 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
     if (index != 0x7FFF) {
         int value;
 
-        fn_800809C4(fn_80182DC8(), index, 0);
-        value = fn_80080D10(fn_80182DC8());
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
+        value = PlayerDbGetPortraitId(fn_80182DC8());
         pOut->mUnknown36 = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
@@ -1690,7 +1690,7 @@ void fn_8000CEB4(int a)
     if (a == 0) {
         fn_801835C8();
     } else {
-        lbl_803ECDDC = fn_800808F8(fn_80182DC8());
+        lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
     }
 }

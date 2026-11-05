@@ -65,15 +65,15 @@ void fn_8007BB04(Object_8007A334 *pObject);
 int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
 int fn_8007BF14(int index);
 int fn_8007CB6C(int index);
-int fn_80080970(Object_8008044C *pObject);
-void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080CB0(Object_8008044C *pObject);
-int fn_80080E48(Object_8008044C *pObject);
-int fn_80080E70(Object_8008044C *pObject);
-int fn_80080E98(Object_8008044C *pObject);
-int fn_8008125C(Object_8008044C *pObject);
+int PlayerDbGetTeamIndex(Object_8008044C *pObject);
+void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPrty(Object_8008044C *pObject);
+int PlayerDbGetPlex(Object_8008044C *pObject);
+int PlayerDbGetPlht(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
+int PlayerDbGetPjen(Object_8008044C *pObject);
 void fn_80081440(Object_8008044C *pObject, short *pValues);
-void fn_80081C10(Object_8008044C *pObject, unsigned char *p);
+void PlayerDbReadHairColors(Object_8008044C *pObject, unsigned char *p);
 void fn_80081CDC(void);
 void fn_80081D24(void);
 int fn_80081D4C(Object_8008044C *pObject, unsigned char *p);
@@ -577,8 +577,8 @@ extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
     unsigned char *pColors = lbl_803078E8[index].mUnknown7A;
     Record_803078E8 *pRecord;
 
-    fn_800809C4(&lbl_80307720, id, 0);
-    value = fn_80080970(&lbl_80307720);
+    PlayerDbSeekId(&lbl_80307720, id, 0);
+    value = PlayerDbGetTeamIndex(&lbl_80307720);
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, value, 0);
     fn_800840A4(&cursor, &pColors[20]);
@@ -590,17 +590,17 @@ extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
         fn_80047E28(index);
     }
     pRecord = &lbl_803078E8[index];
-    fn_80080A9C(&lbl_80307720, pRecord->mName, 31);
+    PlayerDbGetNickname(&lbl_80307720, pRecord->mName, 31);
     pRecord->mUnknown72 = fn_80081E3C(&lbl_80307720) + 1;
     pRecord->mUnknown73 = fn_80082280(&lbl_80307720);
     pRecord->mUnknown74 = fn_800822D4(&lbl_80307720);
-    pRecord->mUnknown6C = fn_80080E70(&lbl_80307720);
-    pRecord->mUnknown6E = fn_80080E98(&lbl_80307720);
-    pRecord->mUnknown77 = fn_8008125C(&lbl_80307720);
+    pRecord->mUnknown6C = PlayerDbGetPlht(&lbl_80307720);
+    pRecord->mUnknown6E = PlayerDbGetHairStyle(&lbl_80307720);
+    pRecord->mUnknown77 = PlayerDbGetPjen(&lbl_80307720);
     pRecord->mUnknown93 = flag;
-    pRecord->mUnknown78 = fn_80080E20(&lbl_80307720);
-    pRecord->mUnknown76 = fn_80080E48(&lbl_80307720);
-    if (fn_80080CB0(&lbl_80307720)) {
+    pRecord->mUnknown78 = PlayerDbGetPybt(&lbl_80307720);
+    pRecord->mUnknown76 = PlayerDbGetPlex(&lbl_80307720);
+    if (PlayerDbGetPrty(&lbl_80307720)) {
         fn_80082138(&lbl_80307720, &block);
         fn_80049F10(index, &block);
         pRecord->mInfo.mUnknown03 = fn_80046898(&block);
@@ -609,7 +609,7 @@ extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
     }
     lbl_803078E8[index].mUnknown70 = fn_80048AFC(index);
     lbl_803078E8[index].mUnknown75 = fn_80048B84(index);
-    fn_80081C10(&lbl_80307720, &pColors[18]);
+    PlayerDbReadHairColors(&lbl_80307720, &pColors[18]);
     if (!fn_80081D4C(&lbl_80307720, pColors)) {
         fn_800478DC(pColors);
         fn_8004795C(pColors, lbl_803078E8[index].mUnknown93);
@@ -657,7 +657,7 @@ extern "C" void fn_80048FE8(int index, int unused, int id)
 
     fn_8008040C(&cursor, 0);
     lbl_80308368[index].mId = id;
-    if (fn_800809C4(&cursor, id, 0)) {
+    if (PlayerDbSeekId(&cursor, id, 0)) {
         fn_80081440(&cursor, lbl_80308368[index].mValues);
     } else {
         for (i = 9; i >= 0; i--) {
@@ -814,7 +814,7 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
         Object_8007A334 cursor;
 
         fn_8007A334(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
-        if (fn_800809C4((Object_8008044C *)&cursor, id, 0)) {
+        if (PlayerDbSeekId((Object_8008044C *)&cursor, id, 0)) {
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
         fn_8007A3C4(&cursor);

@@ -2325,8 +2325,8 @@ void fn_8004FF8C(void)
             Object_80039F5C *pPlayer = fn_80039F5C(team, index);
             Block_80170E64 *pBlock = pPlayer->mpUnknown4;
             Object_8003DEC4 *pModel = (Object_8003DEC4 *)pBlock;
-            fn_800809C4(&query, pModel->mUnknown4956, 0);
-            float scale = fn_800811E0(&query) * 0.02631579f;
+            PlayerDbSeekId(&query, pModel->mUnknown4956, 0);
+            float scale = PlayerDbGetHeight(&query) * 0.02631579f;
             int slot = team * 7 + index;
             Vector_80039F5C a = {0.0f, scale * 0.5f, 0.0f};
             Vector_80039F5C b = {0.0f, -a.mY, 0.0f};

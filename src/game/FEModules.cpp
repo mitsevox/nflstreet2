@@ -1,6 +1,6 @@
 #include "game/Module.h"
 #include "game/cu_80003C94.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 #include "game/GameState.h"
 #include "game/ModuleGroup_80033A5C.h"
 
@@ -125,7 +125,7 @@ int FMMainFEInit::Init()
     fn_8017F664();
     if (sFirstInit) {
         sFirstInit = 0;
-        gSysPreLoad.fn_8008D4A8();
+        gSysPreLoad.LoadSystems();
         fn_801F2798("DynClutInitStart");
         fn_8004613C();
         fn_801F2798("DynClutInitFinish");

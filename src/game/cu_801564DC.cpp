@@ -298,15 +298,15 @@ void fn_800731D0(int a);
 void fn_800744C0(unsigned char value);
 int fn_80074638(void);
 int fn_80085A34(int formation, int team);
-unsigned char fn_80087F10(void);
-unsigned char fn_8008801C(void);
-int fn_80088068(int id);
-void fn_800880D0(unsigned int id, unsigned int count);
-int fn_80088224(int id);
-unsigned int fn_80088390(int a, int b, int flag);
-unsigned int fn_8008849C(int a, int b, int flag);
-int fn_800885A8(int a, int b);
-float fn_800885E8(int a, int b);
+unsigned char TutorialDbOpenPlays(void);
+unsigned char TutorialDbClosePlays(void);
+int TutorialGetStepCount(int id);
+void TutorialSetStepCount(unsigned int id, unsigned int count);
+int TutorialIsComplete(int id);
+unsigned int TutorialGetPlayIndex(int a, int b, int flag);
+unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag);
+int TutorialGetStepSide(int a, int b);
+float TutorialGetStepOffset(int a, int b);
 void fn_8009B924(void);
 void fn_8009D888(int index, int a);
 void fn_8009D8CC(int index);
@@ -659,7 +659,7 @@ void fn_8015673C(void)
     lbl_803EB300->vfn_01();
     lbl_803EB310 = fn_8007F828(0);
     fn_8007F6F8(0, 0);
-    fn_80087F10();
+    TutorialDbOpenPlays();
     fn_80156734(step);
     fn_801566DC(1);
 }
@@ -668,7 +668,7 @@ void fn_80156854(void)
 {
     lbl_803EB300->vfn_02();
     lbl_803EB300 = 0;
-    fn_8008801C();
+    TutorialDbClosePlays();
     fn_8007F6F8(14, lbl_803EB314);
     lbl_803EB314 = 0;
     fn_80178F20(0);
@@ -747,8 +747,8 @@ int fn_801569C8(unsigned int lesson)
     unsigned int step = fn_801568E8() + 1;
     unsigned int count = 0;
 
-    fn_800880D0(lesson, step);
-    step = fn_80088068(lesson);
+    TutorialSetStepCount(lesson, step);
+    step = TutorialGetStepCount(lesson);
     switch (lesson) {
     case 0:
         count = 7;
@@ -764,7 +764,7 @@ int fn_801569C8(unsigned int lesson)
         count = 9;
         break;
     }
-    if (step == 0 && fn_80088224(lesson) != 0) {
+    if (step == 0 && TutorialIsComplete(lesson) != 0) {
         if (fn_801568E8() + 1 >= count) {
             done = 1;
         } else {
@@ -789,9 +789,9 @@ void fn_80156AB0(void)
             fn_800EFE60(0, pObject->mQueue, pObject);
         }
     }
-    side = fn_800885A8(fn_801568F0(), fn_801568E8());
-    b = fn_8008849C(fn_801568F0(), fn_801568E8(), side);
-    a = fn_80088390(fn_801568F0(), fn_801568E8(), side);
+    side = TutorialGetStepSide(fn_801568F0(), fn_801568E8());
+    b = TutorialGetOtherPlayIndex(fn_801568F0(), fn_801568E8(), side);
+    a = TutorialGetPlayIndex(fn_801568F0(), fn_801568E8(), side);
     if (side == 1) {
         fn_8017833C(0);
         fn_80168640(0, 1);
@@ -919,7 +919,7 @@ void fn_80156F30(void)
 float fn_80157000(void)
 {
     float base = fn_80178A2C();
-    float offset = fn_800885E8(fn_801568F0(), fn_801568E8());
+    float offset = TutorialGetStepOffset(fn_801568F0(), fn_801568E8());
 
     if (offset >= base + base) {
         offset = base + base;

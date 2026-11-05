@@ -80,8 +80,8 @@ void fn_800AF630(void *, int, int, int);
 void fn_800AF790(int, Skeleton_80041930 *, const char *, const char *, int);
 void fn_8015F484(Skeleton_80041930 *, Skeleton_80041930 **, Skeleton_80041930 *,
                  Skeleton_80041930 *);
-int fn_800809FC(Object_8008044C *, int, int *);
-int fn_800808F8(Object_8008044C *);
+int PlayerDbSeekOriginalId(Object_8008044C *, int, int *);
+int PlayerDbGetId(Object_8008044C *);
 void fn_8003BA00();
 void fn_8003BA04();
 void fn_8003BA08();
@@ -115,15 +115,15 @@ int fn_801F7C88();
 void *fn_801D2B7C(int, int, int);
 void fn_8015EE74();
 void fn_8015EF10();
-int fn_80080D38(Object_8008044C *, char *, int);
+int PlayerDbGetNameKey(Object_8008044C *, char *, int);
 int fn_8015F5BC(const char *);
 void fn_8015F068(int, Ids_8015F6E8 *);
 void fn_8015F124(int, int);
 void fn_8015F1D4(int, int);
 void fn_8015F298(int, int);
-void fn_80080A9C(Object_8008044C *, char *, int);
+void PlayerDbGetNickname(Object_8008044C *, char *, int);
 void fn_80048FE8(unsigned char, unsigned char, int);
-int fn_80080E48(Object_8008044C *);
+int PlayerDbGetPlex(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
 int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);
@@ -655,9 +655,9 @@ int fn_8003D378(int owner, int mode) {
     unsigned int order[14], keys[14];
     for (unsigned int i = 0; i < lbl_803EA434; ++i) {
       unsigned char team = mode ? 0 : (unsigned char)(i / lbl_803EA436);
-      fn_800809C4(&object, lbl_802CCDA4[i], 0);
+      PlayerDbSeekId(&object, lbl_802CCDA4[i], 0);
       char name[28];
-      int hasName = fn_80080D38(&object, name, 27);
+      int hasName = PlayerDbGetNameKey(&object, name, 27);
       fn_800496A0(i, i, team, lbl_802CCDA4[i]);
       order[i] = i;
       int a = fn_80049888(i), b = fn_800499A8(i);
@@ -694,13 +694,13 @@ int fn_8003D378(int owner, int mode) {
       init.mUnknown59 = index;
       init.mUnknown5A = index;
       init.mInit.mUnknown18 = lbl_802CCDA4[index];
-      fn_800809C4(&object, init.mInit.mUnknown18, 0);
-      fn_80080A9C(&object, init.mUnknown38, 31);
+      PlayerDbSeekId(&object, init.mInit.mUnknown18, 0);
+      PlayerDbGetNickname(&object, init.mUnknown38, 31);
       if (!mode)
         fn_80048FE8(init.mUnknown5A, init.mUnknown57, init.mInit.mUnknown18);
       char name[28];
-      int hasName = fn_80080D38(&object, name, 27);
-      int value = fn_80080E20(&object);
+      int hasName = PlayerDbGetNameKey(&object, name, 27);
+      int value = PlayerDbGetPybt(&object);
       if (hasName) {
         init.mUnknown1C = fn_8015F5BC(name);
         fn_80049E00(init.mUnknown5A, init.mUnknown1C == 65535 ? 0 : name,
@@ -713,7 +713,7 @@ int fn_8003D378(int owner, int mode) {
       init.mUnknown28 = fn_80049888(init.mUnknown5A);
       init.mUnknown2C = fn_800499A8(init.mUnknown5A);
       init.mUnknown34 = value;
-      init.mUnknown5B = fn_80080E48(&object);
+      init.mUnknown5B = PlayerDbGetPlex(&object);
       Block_80307980 block;
       fn_80082138(&object, &block);
       fn_80046804(&block, &init.mUnknown5C);
@@ -768,8 +768,8 @@ void fn_8003D988(int value, int *out, int mode) {
     desc.mUnknown8 = value;
     fn_8008044C(&object, &desc, 0x454D4147);
     for (unsigned int i = 0; i < lbl_803EA436; ++i) {
-      fn_800809FC(&object, out[i], 0);
-      out[i] = fn_800808F8(&object);
+      PlayerDbSeekOriginalId(&object, out[i], 0);
+      out[i] = PlayerDbGetId(&object);
     }
     fn_8008056C(&object);
   } else {

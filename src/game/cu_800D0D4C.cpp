@@ -233,7 +233,7 @@ int fn_801787DC(int);
 void fn_8017E3CC(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
-void fn_8008880C(int, unsigned int);
+void UserInfoAddPoints(int, unsigned int);
 void fn_8018FB4C(Object_8007A334 *, int);
 void fn_8018FBC8(Object_8007A334 *);
 int fn_8018FBE8(Object_8007A334 *, int);
@@ -2745,7 +2745,7 @@ extern "C" unsigned int fn_800D7550(int side, unsigned int value) {
     unsigned int result = 0;
     if (index != -1) {
         result = (unsigned int)((float)value * lbl_803EACCC);
-        fn_8008880C(fn_8022F358(index), result);
+        UserInfoAddPoints(fn_8022F358(index), result);
     }
     return result;
 }

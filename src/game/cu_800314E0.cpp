@@ -1,5 +1,5 @@
 #include "game/Object_8007A334.h"
-#include "game/Record_80088CE0.h"
+#include "game/UnlockItem.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"
@@ -12,20 +12,20 @@ int fn_800D41F8(int side);
 int fn_800D7550(int a, unsigned int b);
 void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
 int fn_80083FE4(Object_8007A334 *pObject);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
-int fn_80087C8C(Object_8007A334 *pObject, unsigned int index);
-void fn_8008880C(int db, int id);
-void fn_8008898C(Object_8007A334 *pObject, int db);
-void fn_80088A1C(Object_8007A334 *pObject);
-void fn_80088A3C(Object_8007A334 *pObject, int a);
-int fn_80088A74(Object_8007A334 *pObject, int index);
-void fn_80088AC8(Object_8007A334 *pObject, int index, int a);
-void fn_80088B24(Object_8007A334 *pObject, int a, unsigned char b);
-void fn_80088C8C(Object_8007A334 *pObject);
-int fn_80088CAC(Object_8007A334 *pObject, int a, int key, int *pResult);
-void fn_80088CE0(Object_8007A334 *pObject, Record_80088CE0 *pRecord);
-unsigned char fn_80088D84(Object_8007A334 *pObject);
+void UserStatsOpen(Object_8007A334 *pObject, int index);
+void UserStatsClose(Object_8007A334 *pObject);
+int UserStatsGet(Object_8007A334 *pObject, unsigned int index);
+void UserInfoAddPoints(int db, int id);
+void UnlockStatusOpenDb(Object_8007A334 *pObject, int db);
+void UnlockStatusClose(Object_8007A334 *pObject);
+void UnlockStatusSetCurrent(Object_8007A334 *pObject, int a);
+int UnlockStatusGet(Object_8007A334 *pObject, int index);
+void UnlockStatusSet(Object_8007A334 *pObject, int index, int a);
+void UnlockListOpen(Object_8007A334 *pObject, int a, unsigned char b);
+void UnlockListClose(Object_8007A334 *pObject);
+int UnlockListSeek(Object_8007A334 *pObject, int a, int key, int *pResult);
+void UnlockListReadItem(Object_8007A334 *pObject, UnlockItem *pRecord);
+unsigned char UnlockListGetIndex(Object_8007A334 *pObject);
 int fn_801486A0(void);
 int fn_801869F0(void);
 int fn_80186A10(int index, char *pText);
@@ -50,17 +50,17 @@ int lbl_802CCB94[6] = {22, 23, 29, 26, 27, 24};
 extern "C" {
 int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entry_80306620 *pEntry, int db)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
 
-    if (fn_80088CAC(pCursor, 0, key, 0) == 0) {
+    if (UnlockListSeek(pCursor, 0, key, 0) == 0) {
         return 0;
     }
-    if (fn_80088A74(pOther, fn_80088D84(pCursor)) != 0) {
+    if (UnlockStatusGet(pOther, UnlockListGetIndex(pCursor)) != 0) {
         return 0;
     }
-    fn_80088A3C(pOther, 1);
-    fn_80088CE0(pCursor, &record);
-    fn_8008880C(db, record.mUnknown148);
+    UnlockStatusSetCurrent(pOther, 1);
+    UnlockListReadItem(pCursor, &record);
+    UserInfoAddPoints(db, record.mUnknown148);
     fn_801C2E18(pEntry->mName, record.mName);
     fn_80186A10(fn_80186B38(db), pEntry->mText);
     pEntry->mUnknown164 = record.mUnknown148;
@@ -69,24 +69,24 @@ int fn_800314E0(Object_8007A334 *pCursor, Object_8007A334 *pOther, int key, Entr
 
 void fn_8003159C(Object_8007A334 *pCursor, Object_8007A334 *pOther, signed char pad)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     Object_8007A334 object;
     Entry_80306620 *pEntry;
     unsigned int count;
 
     if (fn_8007A444(pCursor)) {
-        fn_80087BE4(&object, pad);
+        UserStatsOpen(&object, pad);
         do {
-            if (fn_80088A74(pOther, fn_80088D84(pCursor)) == 0) {
-                fn_80088CE0(pCursor, &record);
+            if (UnlockStatusGet(pOther, UnlockListGetIndex(pCursor)) == 0) {
+                UnlockListReadItem(pCursor, &record);
                 if (record.mUnknown140 == 4) {
-                    count = fn_80087C8C(&object, 4) + fn_80087C8C(&object, 3) + fn_80087C8C(&object, 5);
+                    count = UserStatsGet(&object, 4) + UserStatsGet(&object, 3) + UserStatsGet(&object, 5);
                 } else {
-                    count = fn_80087C8C(&object, lbl_802CCB18[record.mUnknown140]);
+                    count = UserStatsGet(&object, lbl_802CCB18[record.mUnknown140]);
                 }
                 if (count >= record.mUnknown144) {
-                    fn_80088A3C(pOther, 1);
-                    fn_8008880C(fn_8022F358(pad), record.mUnknown148);
+                    UnlockStatusSetCurrent(pOther, 1);
+                    UserInfoAddPoints(fn_8022F358(pad), record.mUnknown148);
                     pEntry = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
                     lbl_80306620[lbl_803EA3A0] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
@@ -96,7 +96,7 @@ void fn_8003159C(Object_8007A334 *pCursor, Object_8007A334 *pOther, signed char 
                 }
             }
         } while (fn_8007A510(pCursor));
-        fn_80087C3C(&object);
+        UserStatsClose(&object);
     }
 }
 
@@ -133,18 +133,18 @@ void fn_80031724(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 
 void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     Entry_80306620 *pEntry;
     unsigned int value;
 
     value = fn_8007F828(1);
-    if (fn_80088CAC(pCursor, 0, 37, 0)) {
+    if (UnlockListSeek(pCursor, 0, 37, 0)) {
         do {
-            if (fn_80088A74(pOther, fn_80088D84(pCursor)) == 0) {
-                fn_80088CE0(pCursor, &record);
+            if (UnlockStatusGet(pOther, UnlockListGetIndex(pCursor)) == 0) {
+                UnlockListReadItem(pCursor, &record);
                 if (value >= record.mUnknown144) {
-                    fn_80088A3C(pOther, 1);
-                    fn_8008880C(db, record.mUnknown148);
+                    UnlockStatusSetCurrent(pOther, 1);
+                    UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
                     lbl_80306620[lbl_803EA3A0] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
@@ -153,22 +153,22 @@ void fn_80031828(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db)
                     lbl_803EA3A0++;
                 }
             }
-        } while (fn_80088CAC(pCursor, 1, 37, 0) == 1);
+        } while (UnlockListSeek(pCursor, 1, 37, 0) == 1);
     }
 }
 
 void fn_80031940(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int key, int value)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     Entry_80306620 *pEntry;
 
-    if (fn_80088CAC(pCursor, 0, key, 0)) {
+    if (UnlockListSeek(pCursor, 0, key, 0)) {
         do {
-            fn_80088CE0(pCursor, &record);
+            UnlockListReadItem(pCursor, &record);
             if (record.mUnknown144 == value) {
-                if (fn_80088A74(pOther, fn_80088D84(pCursor)) == 0) {
-                    fn_80088A3C(pOther, 1);
-                    fn_8008880C(db, record.mUnknown148);
+                if (UnlockStatusGet(pOther, UnlockListGetIndex(pCursor)) == 0) {
+                    UnlockStatusSetCurrent(pOther, 1);
+                    UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
                     lbl_80306620[lbl_803EA3A0] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
@@ -178,7 +178,7 @@ void fn_80031940(Object_8007A334 *pCursor, Object_8007A334 *pOther, int db, int 
                 }
                 return;
             }
-        } while (fn_80088CAC(pCursor, 1, key, 0) == 1);
+        } while (UnlockListSeek(pCursor, 1, key, 0) == 1);
     }
 }
 
@@ -197,11 +197,11 @@ void fn_80031A54(void)
             continue;
         }
         db = fn_8022F358(pad);
-        fn_8008898C(&other, db);
-        fn_80088B24(&cursor, 1, 0);
+        UnlockStatusOpenDb(&other, db);
+        UnlockListOpen(&cursor, 1, 0);
         fn_8003159C(&cursor, &other, pad);
-        fn_80088C8C(&cursor);
-        fn_80088B24(&cursor, 0, 0);
+        UnlockListClose(&cursor);
+        UnlockListOpen(&cursor, 0, 0);
         fn_80031724(&cursor, &other, db);
         if (fn_8017F584() == 0) {
             fn_80083E1C(&query, 0);
@@ -215,14 +215,14 @@ void fn_80031A54(void)
             fn_80031940(&cursor, &other, db, 36, fn_800A3444());
             fn_80083F68(&query);
         }
-        fn_80088C8C(&cursor);
-        fn_80088A1C(&other);
+        UnlockListClose(&cursor);
+        UnlockStatusClose(&other);
     }
 }
 
 void fn_80031C28(void)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     Object_8007A334 other;
     Object_8007A334 cursor;
     Entry_80306620 *pEntry;
@@ -231,17 +231,17 @@ void fn_80031C28(void)
     int db;
     int index;
 
-    fn_80088B24(&cursor, 0, 0);
+    UnlockListOpen(&cursor, 0, 0);
     for (i = 0; i <= 5; i++) {
-        if (lbl_803EC670[i] == 1 && fn_80088CAC(&cursor, 0, lbl_802CCB94[i], 0) == 1) {
+        if (lbl_803EC670[i] == 1 && UnlockListSeek(&cursor, 0, lbl_802CCB94[i], 0) == 1) {
             for (j = 0; j < fn_801869F0(); j++) {
                 db = fn_8022F358(j);
-                index = fn_80088D84(&cursor);
-                fn_8008898C(&other, db);
-                if (fn_80088A74(&other, index) == 0) {
-                    fn_80088CE0(&cursor, &record);
-                    fn_80088A3C(&other, 1);
-                    fn_8008880C(db, record.mUnknown148);
+                index = UnlockListGetIndex(&cursor);
+                UnlockStatusOpenDb(&other, db);
+                if (UnlockStatusGet(&other, index) == 0) {
+                    UnlockListReadItem(&cursor, &record);
+                    UnlockStatusSetCurrent(&other, 1);
+                    UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
                     lbl_80306620[lbl_803EA3A0] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
@@ -249,36 +249,36 @@ void fn_80031C28(void)
                     pEntry->mUnknown164 = record.mUnknown148;
                     lbl_803EA3A0++;
                 }
-                fn_80088A1C(&other);
+                UnlockStatusClose(&other);
             }
         }
     }
-    fn_80088C8C(&cursor);
+    UnlockListClose(&cursor);
 }
 
 void fn_80031DC8(void)
 {
-    Record_80088CE0 record;
+    UnlockItem record;
     Object_8007A334 other;
     Object_8007A334 cursor;
     Entry_80306620 *pEntry;
     int db;
 
     db = fn_8022F4BC();
-    fn_8008898C(&other, db);
-    fn_80088B24(&cursor, 0, 0);
-    if (fn_80088CAC(&cursor, 0, 39, 0)) {
-        fn_80088CE0(&cursor, &record);
-        fn_80088AC8(&other, record.mIndex, 1);
-        fn_8008880C(db, record.mUnknown148);
+    UnlockStatusOpenDb(&other, db);
+    UnlockListOpen(&cursor, 0, 0);
+    if (UnlockListSeek(&cursor, 0, 39, 0)) {
+        UnlockListReadItem(&cursor, &record);
+        UnlockStatusSet(&other, record.mIndex, 1);
+        UserInfoAddPoints(db, record.mUnknown148);
         pEntry = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
         lbl_80306620[lbl_803EA3A0] = pEntry;
         fn_801C2E18(pEntry->mName, record.mName);
         fn_80186A10(fn_8022F384(db), pEntry->mText);
         pEntry->mUnknown164 = record.mUnknown148;
         lbl_803EA3A0++;
-        fn_80088A1C(&other);
-        fn_80088C8C(&cursor);
+        UnlockStatusClose(&other);
+        UnlockListClose(&cursor);
         fn_80031C28();
     }
 }
@@ -291,10 +291,10 @@ void fn_80031EFC(void)
     unsigned char i;
     int db;
 
-    fn_80088B24(&cursor, 0, 0);
+    UnlockListOpen(&cursor, 0, 0);
     for (i = 0; i < fn_801869F0(); i++) {
         db = fn_8022F358(i);
-        fn_8008898C(&other, db);
+        UnlockStatusOpenDb(&other, db);
         if (fn_800314E0(&cursor, &other, 38, &entry, db)) {
             lbl_80306620[lbl_803EA3A0] = (Entry_80306620 *)fn_801D2B7C(168, 0, 0);
             fn_801C2E18(lbl_80306620[lbl_803EA3A0]->mName, entry.mName);
@@ -302,9 +302,9 @@ void fn_80031EFC(void)
             lbl_80306620[lbl_803EA3A0]->mUnknown164 = entry.mUnknown164;
             lbl_803EA3A0++;
         }
-        fn_80088A1C(&other);
+        UnlockStatusClose(&other);
     }
-    fn_80088C8C(&cursor);
+    UnlockListClose(&cursor);
 }
 
 unsigned int fn_8003203C(void)
@@ -342,8 +342,8 @@ int fn_80032110(Entry_80306620 *pEntry)
 
     db = fn_8022F4BC();
 
-    fn_80088B24(&cursor, 0, 0);
-    fn_8008898C(&other, db);
+    UnlockListOpen(&cursor, 0, 0);
+    UnlockStatusOpenDb(&other, db);
     mode = fn_8017F584();
     switch (mode) {
     case 6:
@@ -364,8 +364,8 @@ int fn_80032110(Entry_80306620 *pEntry)
         break;
     }
     result = fn_800314E0(&cursor, &other, key, pEntry, db);
-    fn_80088C8C(&cursor);
-    fn_80088A1C(&other);
+    UnlockListClose(&cursor);
+    UnlockStatusClose(&other);
     return result;
 }
 

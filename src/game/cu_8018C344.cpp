@@ -6,8 +6,8 @@ int fn_8022F3D4(int handle);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_801F9014(int handle);
-void fn_8008A9BC(void);
-int fn_80086ACC(int *pList);
+void PortraitFreeAllSlots(void);
+int TournamentGetTeamList(int *pList);
 
 void fn_8018C344(int database, int firstTable, int secondTable,
                 int *pFirstCopy, int *pSecondCopy)
@@ -38,7 +38,7 @@ void fn_8018C48C(int handle)
     int teams[8];
     int team;
     if (fn_801F9014(handle) == 0) {
-        fn_8008A9BC();
+        PortraitFreeAllSlots();
         int status = fn_801FCE10(0, "use \x8c declare \x8a cursor for select 'DIGT' from 'MAET' where 'PYTT' = \x82 or 'PYTT' = \x82\n", handle, &cursor, 6, 5);
         while (status == 0) {
             status = fn_801FCE10(0, "fetch from \x8a 'DIGT' into \x85\n", &cursor, &team);
@@ -70,7 +70,7 @@ void fn_8018C48C(int handle)
                 }
             }
         }
-        int count = fn_80086ACC(teams);
+        int count = TournamentGetTeamList(teams);
         for (int i = 0; i < count; i++) {
             fn_8018C438(0x54415453, teams[i]);
         }

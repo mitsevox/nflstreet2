@@ -169,10 +169,10 @@ void fn_8003E710(int value, int *list, Record_8003E214 **pRecords)
     lbl_803EC780 = i;
     *records = (Record_8003E214 *)fn_801D2B7C(i * sizeof(Record_8003E214), 0, 0);
     for (i = 0; i < lbl_803EC780; i++) {
-        fn_800809C4(&second, list[i], 0);
+        PlayerDbSeekId(&second, list[i], 0);
         (*records)[i].id = list[i];
         (*records)[i].excluded = 0;
-        (*records)[i].category = fn_80080ECC(&second);
+        (*records)[i].category = PlayerDbGetPbpo(&second);
         fn_80081788(&second, values);
         lbl_803EA444(&(*records)[i], values, &first);
         fn_801F4B20();

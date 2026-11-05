@@ -1673,7 +1673,7 @@ int fn_800AF078(int team);
 int fn_8002892C(void);
 Object_80039F5C *fn_8003AC84(int id);
 int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
-void fn_80080A34(Object_8008044C *pObject,char *pText,int size);
+void PlayerDbGetFirstName(Object_8008044C *pObject,char *pText,int size);
 void fn_8017833C(int enabled);
 void fn_80178354(int enabled);
 void fn_800C1E50(void);
@@ -1994,11 +1994,11 @@ void fn_8005AB04(int team, Arg_8018399C *pNames, int *pValues)
 void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
 {
     int key;
-    fn_800809C4(&lbl_80309F98,lbl_80309FC4[team].mUnknown4,&key);
+    PlayerDbSeekId(&lbl_80309F98,lbl_80309FC4[team].mUnknown4,&key);
     *pId=fn_800C8744(team);
     char first[16],last[16];
-    fn_80080A34(&lbl_80309F98,first,12); fn_801C2EF0(pFirst,first,firstSize);
-    fn_80080A68(&lbl_80309F98,last,15); fn_801C2EF0(pLast,last,lastSize);
+    PlayerDbGetFirstName(&lbl_80309F98,first,12); fn_801C2EF0(pFirst,first,firstSize);
+    PlayerDbGetLastName(&lbl_80309F98,last,15); fn_801C2EF0(pLast,last,lastSize);
 }
 void fn_8005ACC8(void) {fn_8008056C(&lbl_80309F98);}
 void fn_8005ACF0(int team)

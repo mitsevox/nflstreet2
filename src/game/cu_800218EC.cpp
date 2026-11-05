@@ -463,12 +463,12 @@ void fn_80022680(int index, int a, int b)
     Object_8003DEC4 *pObject = fn_8003DEC4(index);
     char buffer[28];
 
-    fn_800809C4(&lbl_8036B4F0, a, 0);
+    PlayerDbSeekId(&lbl_8036B4F0, a, 0);
     pObject->mUnknown4956 = a;
-    pObject->mUnknown4968 = fn_80080948(&lbl_8036B4F0);
-    fn_80080D38(&lbl_8036B4F0, buffer, 27);
-    fn_80080E20(&lbl_8036B4F0);
-    fn_80022760(index, fn_800811E0(&lbl_8036B4F0));
+    pObject->mUnknown4968 = PlayerDbGetTeamId(&lbl_8036B4F0);
+    PlayerDbGetNameKey(&lbl_8036B4F0, buffer, 27);
+    PlayerDbGetPybt(&lbl_8036B4F0);
+    fn_80022760(index, PlayerDbGetHeight(&lbl_8036B4F0));
     if (fn_8015CD9C()) {
         fn_8015D060(index, buffer, lbl_802F4654[index], b);
     }

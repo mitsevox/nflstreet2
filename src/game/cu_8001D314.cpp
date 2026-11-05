@@ -26,14 +26,14 @@ void fn_80060278(void);
 int fn_800602D8(void);
 int fn_800602E0(void);
 int fn_80078934();
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080920(Object_8008044C *pObject);
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_80081188(Object_8008044C *pObject);
-int fn_800812E0(Object_8008044C *pObject, int a);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetOriginalId(Object_8008044C *pObject);
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetWeight(Object_8008044C *pObject);
+int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
 int fn_800841AC(Object_8007A334 *pObject);
 int fn_800841D8(Object_8007A334 *pObject);
 int fn_80084204(Object_8007A334 *pObject);
@@ -111,10 +111,10 @@ void fn_8001D3D0(int index, int *pId, Arg_8018399C text, Arg_8018399C label)
     char name[27];
 
     if (fn_8007A600((Object_8007A334 *)&lbl_8036B308, index)) {
-        *pId = fn_800808F8(&lbl_8036B308);
-        fn_80080B08(&lbl_8036B308, name, 27);
+        *pId = PlayerDbGetId(&lbl_8036B308);
+        PlayerDbGetShortName(&lbl_8036B308, name, 27);
         fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
-        fn_8017F670(fn_80080ECC(&lbl_8036B308), label.pParams->mpText);
+        fn_8017F670(PlayerDbGetPbpo(&lbl_8036B308), label.pParams->mpText);
     } else {
         *pId = -1;
     }
@@ -146,14 +146,14 @@ void fn_8001D4D4(void)
 
     if (fn_8007A444((Object_8007A334 *)&lbl_8036B2B0)) {
         do {
-            fn_8021E2B4(pList, 10, fn_80080D10(&lbl_8036B2B0));
+            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&lbl_8036B2B0));
         } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2B0));
     }
     fn_8007A444((Object_8007A334 *)&lbl_8036B2B0);
     if (lbl_803ECE89 == 0) {
         if (fn_8007A444((Object_8007A334 *)&lbl_8036B2DC)) {
             do {
-                fn_8021E2B4(pList, 10, fn_80080D10(&lbl_8036B2DC));
+                fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&lbl_8036B2DC));
             } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2DC));
         }
         fn_8007A444((Object_8007A334 *)&lbl_8036B2DC);
@@ -227,13 +227,13 @@ void fn_8001D930(void)
 
     if (fn_8007A444((Object_8007A334 *)&lbl_8036B2B0)) {
         do {
-            fn_8021E72C(pList, 10, fn_80080D10(&lbl_8036B2B0));
+            fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&lbl_8036B2B0));
         } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2B0));
     }
     if (lbl_803ECE89 == 0) {
         if (fn_8007A444((Object_8007A334 *)&lbl_8036B2DC)) {
             do {
-                fn_8021E72C(pList, 10, fn_80080D10(&lbl_8036B2DC));
+                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&lbl_8036B2DC));
             } while (fn_8007A510((Object_8007A334 *)&lbl_8036B2DC));
         }
     }
@@ -268,7 +268,7 @@ void fn_8001D9EC(int direction)
         lbl_803ECE68 = 0;
     }
     fn_8007A600((Object_8007A334 *)lbl_803ECE74, lbl_803ECE68);
-    lbl_803ECE6C = fn_800808F8(lbl_803ECE74);
+    lbl_803ECE6C = PlayerDbGetId(lbl_803ECE74);
     fn_80022680(0, lbl_803ECE6C, 0);
 }
 
@@ -278,41 +278,41 @@ void fn_8001DAB0(int *pId, int *pFlag, int *pPosition, int *pValues)
     pPosition[1] = lbl_803ECE64;
     *pId = lbl_803ECE6C;
     *pFlag = 0;
-    if (lbl_803EBA6C == 0 && lbl_803ECE88 == 0 && fn_800809FC(&lbl_8036B2DC, *pId, 0)) {
+    if (lbl_803EBA6C == 0 && lbl_803ECE88 == 0 && PlayerDbSeekOriginalId(&lbl_8036B2DC, *pId, 0)) {
         *pFlag = 1;
     }
-    pValues[0] = fn_800812E0(lbl_803ECE74, 6);
-    pValues[1] = fn_800812E0(lbl_803ECE74, 4);
-    pValues[2] = fn_800812E0(lbl_803ECE74, 7);
-    pValues[3] = fn_800812E0(lbl_803ECE74, 0);
-    pValues[4] = fn_800812E0(lbl_803ECE74, 3);
-    pValues[5] = fn_800812E0(lbl_803ECE74, 2);
-    pValues[6] = fn_800812E0(lbl_803ECE74, 1);
-    pValues[7] = fn_800812E0(lbl_803ECE74, 5);
-    pValues[8] = fn_800812E0(lbl_803ECE74, 8);
-    pValues[9] = fn_800812E0(lbl_803ECE74, 9);
+    pValues[0] = PlayerDbGetBoostedRating(lbl_803ECE74, 6);
+    pValues[1] = PlayerDbGetBoostedRating(lbl_803ECE74, 4);
+    pValues[2] = PlayerDbGetBoostedRating(lbl_803ECE74, 7);
+    pValues[3] = PlayerDbGetBoostedRating(lbl_803ECE74, 0);
+    pValues[4] = PlayerDbGetBoostedRating(lbl_803ECE74, 3);
+    pValues[5] = PlayerDbGetBoostedRating(lbl_803ECE74, 2);
+    pValues[6] = PlayerDbGetBoostedRating(lbl_803ECE74, 1);
+    pValues[7] = PlayerDbGetBoostedRating(lbl_803ECE74, 5);
+    pValues[8] = PlayerDbGetBoostedRating(lbl_803ECE74, 8);
+    pValues[9] = PlayerDbGetBoostedRating(lbl_803ECE74, 9);
 }
 
 void fn_8001DBDC(char *pBuffer, int size)
 {
-    fn_80080BEC(lbl_803ECE74, pBuffer, size);
+    PlayerDbGetFullName(lbl_803ECE74, pBuffer, size);
 }
 
 void fn_8001DC0C(char *pText, int size)
 {
-    fn_8017F670(fn_80080ECC(lbl_803ECE74), pText);
+    fn_8017F670(PlayerDbGetPbpo(lbl_803ECE74), pText);
 }
 
 void fn_8001DC44(char *pBuffer, int size)
 {
-    unsigned int height = fn_800811E0(lbl_803ECE74);
+    unsigned int height = PlayerDbGetHeight(lbl_803ECE74);
 
     fn_801C2D88(pBuffer, size, "%d ft %d in", height / 12, height % 12);
 }
 
 void fn_8001DCAC(char *pBuffer, int size)
 {
-    fn_801C2D88(pBuffer, size, "%d lbs", fn_80081188(lbl_803ECE74));
+    fn_801C2D88(pBuffer, size, "%d lbs", PlayerDbGetWeight(lbl_803ECE74));
 }
 
 int fn_8001DCFC(void)
@@ -395,7 +395,7 @@ unsigned char fn_8001DD9C(void)
             lbl_803ECE70 = 1;
             fn_8007A444((Object_8007A334 *)&lbl_8036B2DC);
             for (i = 0; i < count; i++) {
-                if (fn_80080920(&lbl_8036B2DC) == 32756) {
+                if (PlayerDbGetOriginalId(&lbl_8036B2DC) == 32756) {
                     lbl_803ECE70 = 0;
                     break;
                 }
@@ -448,7 +448,7 @@ void fn_8001E16C(void)
         int found = 0;
 
         if (lbl_803ECE88 == 0) {
-            found = fn_800809FC(&lbl_8036B2DC, lbl_803EBA64, 0);
+            found = PlayerDbSeekOriginalId(&lbl_8036B2DC, lbl_803EBA64, 0);
         }
         if (!found) {
             if (lbl_803ECE88 != 0) {

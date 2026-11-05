@@ -7,9 +7,9 @@
 #include <string.h>
 
 extern "C" {
-Desc_802347EC *fn_8016102C(int player);
-Desc_802347EC *fn_802345F8(Desc_802347EC *pDescs, const char *pName);
-void fn_80234844(Desc_802347EC *pDesc);
+ModelTexSlot *fn_8016102C(int player);
+ModelTexSlot *fn_802345F8(ModelTexSlot *pDescs, const char *pName);
+void fn_80234844(ModelTexSlot *pDesc);
 void fn_80239D1C(void *p, unsigned int size);
 }
 
@@ -60,7 +60,7 @@ void *fn_801A4AE4(int player)
     return fn_8016102C(player)->mpUnknown24;
 }
 
-void fn_801A4B08(Desc_802347EC *pDesc)
+void fn_801A4B08(ModelTexSlot *pDesc)
 {
     fn_80234844(pDesc);
 }
@@ -92,7 +92,7 @@ void fn_801A4B28(void *pDest, void *pSrc, unsigned int size)
 
 /* Applies each entry of pEntries (lbl_802F3488 when null) to the texture of
    the same name in pDescs. */
-void fn_801A4C1C(Desc_802347EC *pDescs, Entry_802F3488 *pEntries)
+void fn_801A4C1C(ModelTexSlot *pDescs, Entry_802F3488 *pEntries)
 {
     int i;
 
@@ -100,7 +100,7 @@ void fn_801A4C1C(Desc_802347EC *pDescs, Entry_802F3488 *pEntries)
         pEntries = lbl_802F3488;
     }
     for (i = 0; pEntries[i].mpName; i++) {
-        Desc_802347EC *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
+        ModelTexSlot *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
 
         if (pEntries[i].mUnknown4) {
             TexWrapDesc_80212374 pair = { 0, 0 };

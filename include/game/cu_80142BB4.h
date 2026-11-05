@@ -2,7 +2,7 @@
 #define GAME_CU_80142BB4_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_80089330.h"
+#include "game/CollideContacts.h"
 
 /* One axis of a collision: an input value, two results written by
    fn_80142BB4/fn_80142BE4, and the weight read as +0xC.
@@ -43,11 +43,11 @@ void fn_80143360(Object_80039F5C *p, Object_80039F5C *pOther, float *pImpulse);
 float fn_80143464(Block_80170374 *pBlock, Vector_80039F5C *pImpulse, Vector_80039F5C *pPoint, Vector_80039F5C *pCentre);
 unsigned int fn_80143540(int part);
 void fn_8014359C(Block_80170374 *pBlock, int part, int otherPart);
-void fn_80143668(Contact_80089330 *pContact, Contact_80143668 *pState, int second);
+void fn_80143668(CollideContact *pContact, Contact_80143668 *pState, int second);
 int fn_80143718(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8014377C(ContactList_8030BD74 *pContacts, unsigned int partA, unsigned int partB);
+int fn_8014377C(CollideContactList *pContacts, unsigned int partA, unsigned int partB);
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, ContactList_8030BD74 *pContacts);
+void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, CollideContactList *pContacts);
 void fn_80143D3C(Block_80170374 *pBlock);
 void fn_80143DC4(Object_80039F5C *p);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);

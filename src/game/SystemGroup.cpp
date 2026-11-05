@@ -1,5 +1,5 @@
 #include "game/Class_801CC350.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 #include "game/SndgPathfinder.h"
 
 static Record_802CCBAC sStages[] = { { 0, "System Stage" }, { -1, 0 } };

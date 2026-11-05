@@ -42,7 +42,7 @@ extern void *lbl_803EC920;
 extern const char lbl_802EBDBC[];
 extern float lbl_803ECB0C;
 extern float lbl_803ECB10;
-int fn_8008DFF8(Object_80039F5C *, unsigned short);
+int PlayerMoveAnimCheckReverse(Object_80039F5C *, unsigned short);
 int fn_801CFFD0(int, int);
 int fn_801BB608(void *, void *);
 int fn_801BB638(int, void *);
@@ -139,7 +139,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown8=current->mUnknown8;
         next->mUnknown0=current->mUnknown0;
     }
-    if(!fn_8008DFF8(p,key) && fn_801BE648(p->mpUnknown792)!=key)
+    if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)
         fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
 }
 

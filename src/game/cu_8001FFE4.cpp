@@ -37,15 +37,15 @@ void fn_8007EBDC(Object_8007A334 *pObject, int db);
 void fn_8007EC34(Object_8007A334 *pObject);
 int fn_8007EC54(Object_8007A334 *pObject, int a);
 void fn_8007ECBC(int db, int a);
-unsigned char fn_80087F70(void);
-unsigned char fn_80087FD0(void);
-int fn_80088068(int id);
-int fn_800881B8(void);
-int fn_80088224(int id);
-void fn_80088338(int id, char *pDest, int count);
-unsigned char fn_80088628(void);
-void fn_80088638(int db);
-int fn_80088640(void);
+unsigned char TutorialDbOpenInfo(void);
+unsigned char TutorialDbCloseInfo(void);
+int TutorialGetStepCount(int id);
+int TutorialAllComplete(void);
+int TutorialIsComplete(int id);
+void TutorialGetDescription(int id, char *pDest, int count);
+unsigned char TutorialTakeAllCompleteFlag(void);
+void TutorialSetProfileDb(int db);
+int TutorialGetProfileDb(void);
 void fn_801566EC(void);
 void fn_801566F8(void);
 void fn_80156724(int value);
@@ -73,21 +73,21 @@ extern "C" {
 void fn_8001FFE4(void)
 {
     fn_801566EC();
-    fn_80087F70();
+    TutorialDbOpenInfo();
     if (!lbl_803EBA99) {
         if (fn_8022F4BC() != -1) {
-            fn_80088638(fn_8022F4BC());
+            TutorialSetProfileDb(fn_8022F4BC());
             lbl_803EBA99 = 1;
         }
     } else {
-        fn_8022F478(fn_80088640());
+        fn_8022F478(TutorialGetProfileDb());
     }
 }
 
 void fn_8002003C(void)
 {
     fn_801566F8();
-    fn_80087FD0();
+    TutorialDbCloseInfo();
 }
 
 int fn_80020060(int index)
@@ -137,15 +137,15 @@ int fn_80020170(unsigned int id, Params_80020170 *pParams, int unused, int *pRes
         fn_8015672C(pParams->mUnknown0);
         break;
     case 0x80000006:
-        fn_80088338(pParams->mUnknown0, pParams->mUnknown4.mUnknown0->mUnknown8, pParams->mUnknown4.mUnknown0->mUnknown4);
-        *pParams->mUnknown16 = fn_80088224(pParams->mUnknown0);
+        TutorialGetDescription(pParams->mUnknown0, pParams->mUnknown4.mUnknown0->mUnknown8, pParams->mUnknown4.mUnknown0->mUnknown4);
+        *pParams->mUnknown16 = TutorialIsComplete(pParams->mUnknown0);
         break;
     case 0x80000008:
-        *pResult = fn_800881B8();
+        *pResult = TutorialAllComplete();
         fn_80020410();
         break;
     case 0x80000009:
-        *pResult = fn_80088628();
+        *pResult = TutorialTakeAllCompleteFlag();
         break;
     case 0x8000000A:
         fn_80010200(600);
@@ -163,24 +163,24 @@ void fn_80020328(void)
     if (state == 1) {
         int value = fn_8000FCDC();
         if (!lbl_803EBA99) {
-            fn_80088638(fn_8022F4BC());
+            TutorialSetProfileDb(fn_8022F4BC());
             lbl_803EBA99 = state;
         }
         fn_80011600(-1, fn_8000FCCC(), value);
-        fn_80186F30(fn_8022F384(fn_80088640()), 1);
+        fn_80186F30(fn_8022F384(TutorialGetProfileDb()), 1);
         fn_80014294(0x36, 0x21);
         fn_80027E18(1);
         unsigned int id = fn_801568F0();
-        if (fn_80088224(id)) {
+        if (TutorialIsComplete(id)) {
             fn_80156734(0);
             fn_80156724(0);
         } else {
-            fn_80156734(fn_80088068(id));
-            fn_80156724(fn_80088068(id));
+            fn_80156734(TutorialGetStepCount(id));
+            fn_80156724(TutorialGetStepCount(id));
         }
         fn_80015D28(4);
     } else {
-        fn_80088638(-1);
+        TutorialSetProfileDb(-1);
         lbl_803EBA99 = 0;
     }
 }
@@ -193,7 +193,7 @@ void fn_80020410(void)
     fn_8007EBDC(&object, db);
     int found = fn_8007EC54(&object, 0x21);
     fn_8007EC34(&object);
-    if (fn_800881B8() && found) {
+    if (TutorialAllComplete() && found) {
         fn_8007ECBC(db, 0x21);
     }
 }

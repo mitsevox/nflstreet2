@@ -4,7 +4,7 @@
 #include "game/GameVpt.h"
 #include "game/InGame.h"
 #include "game/ModuleGroup_80033A5C.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
 #include "game/cu_8003EC04.h"

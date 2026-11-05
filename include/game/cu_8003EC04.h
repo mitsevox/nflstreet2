@@ -1,7 +1,7 @@
 #ifndef GAME_CU_8003EC04_H
 #define GAME_CU_8003EC04_H
 
-#include "game/cu_80089330.h"
+#include "game/CollideContacts.h"
 
 /* Collision sub-record: centre and radius at +0..+12, capsule endpoints at
    +16..+24 and +32..+40, and capsule radius at +28. */
@@ -50,7 +50,7 @@ struct Set_8003EE6C {
 };
 
 typedef void (*Callback_802DCF9C)(Record_8003EC04 *pRecord);
-typedef void (*Callback_8003EE2C)(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 *pContacts);
+typedef void (*Callback_8003EE2C)(Record_8003EC04 *pA, Record_8003EC04 *pB, CollideContactList *pContacts);
 
 extern "C" {
 void fn_8003EC04(Record_8003EC04 *pRecord);

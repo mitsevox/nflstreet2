@@ -61,7 +61,7 @@ extern "C" void fn_8003ED30(int value)
     unsigned int i;
     unsigned int j;
 
-    fn_800895C4();
+    CollideContactsEnd();
     for (i = 0; i < 8; i++) {
         lbl_803075E0[i].mUnknown0 = 0;
         lbl_803075E0[i].mUnknown1 = 0;
@@ -76,7 +76,7 @@ extern "C" void fn_8003ED30(int value)
 
 extern "C" void fn_8003EDB8(void)
 {
-    fn_800895E0();
+    CollideContactsStub0();
 }
 
 extern "C" void fn_8003EDD8(unsigned char type, unsigned char count, Callback_802DCF9C pCallback)
@@ -171,7 +171,7 @@ extern "C" void fn_8003F0AC(Set_8003EE6C *pA, Set_8003EE6C *pB)
     unsigned int j;
 
     if (pA && pB) {
-        fn_800895E4();
+        CollideContactsStub1();
         if (pA == pB) {
             for (i = 0; i < pA->mUnknown8; i++) {
                 for (j = i + 1; j < pA->mUnknown8; j++) {
@@ -185,16 +185,16 @@ extern "C" void fn_8003F0AC(Set_8003EE6C *pA, Set_8003EE6C *pB)
                 }
             }
         }
-        fn_800895E8();
+        CollideContactsStub2();
     }
 }
 
 extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
 {
-    Contact_80089330 contacts[128];
-    Plane_800894B8 plane;
+    CollideContact contacts[128];
+    CollidePlane plane;
     unsigned char hit[16];
-    ContactList_8030BD74 *pContacts = 0;
+    CollideContactList *pContacts = 0;
     Sub_8003EC54 *pSubsA = pA->mpUnknown20;
     Sub_8003EC54 *pSubsB = pB->mpUnknown20;
     int detail = 1;
@@ -223,19 +223,19 @@ extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
             detail = 0;
         }
     }
-    if (fn_800893F0(pA, pB)) {
+    if (CollideTestCylinders(pA, pB)) {
         if (pSubsA && pSubsB && detail) {
-            fn_8008959C(contacts, 128);
+            CollideContactsBegin(contacts, 128);
             countA = pA->mUnknown2F;
             countB = pB->mUnknown2F;
-            fn_800894B8(&plane, pA, pB);
+            CollideMakeSplitPlane(&plane, pA, pB);
             for (i = 0; i < countA; i++) {
                 hit[i] = 0;
-                if (fn_80089514(&plane, &pSubsA[i].mUnknown10)) {
+                if (CollideCapsuleInFront(&plane, &pSubsA[i].mUnknown10)) {
                     hit[i] = 1;
                     for (j = 0; j < countB; j++) {
-                        if (fn_80089464(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
-                            fn_80089330(&pSubsA[i].mUnknown10, &pSubsB[j].mUnknown10, (j << 8) | i);
+                        if (CollideTestSpheres(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
+                            CollideAddCapsuleContact(&pSubsA[i].mUnknown10, &pSubsB[j].mUnknown10, (j << 8) | i);
                         }
                     }
                 }
@@ -244,15 +244,15 @@ extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
             plane.mUnknown14 = -plane.mUnknown14;
             plane.mUnknown18 = -plane.mUnknown18;
             for (j = 0; j < countB; j++) {
-                if (fn_80089514(&plane, &pSubsB[j].mUnknown10)) {
+                if (CollideCapsuleInFront(&plane, &pSubsB[j].mUnknown10)) {
                     for (i = 0; i < countA; i++) {
-                        if (hit[i] == 0 && fn_80089464(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
-                            fn_80089330(&pSubsA[i].mUnknown10, &pSubsB[j].mUnknown10, (j << 8) | i);
+                        if (hit[i] == 0 && CollideTestSpheres(&pSubsA[i].mUnknown0, &pSubsB[j].mUnknown0)) {
+                            CollideAddCapsuleContact(&pSubsA[i].mUnknown10, &pSubsB[j].mUnknown10, (j << 8) | i);
                         }
                     }
                 }
             }
-            pContacts = fn_800895B8();
+            pContacts = CollideGetContacts();
         }
         if (pContacts == 0 || pContacts->mCount > 0) {
             lbl_80307620[pA->mUnknown2E][pB->mUnknown2E](pA, pB, pContacts);

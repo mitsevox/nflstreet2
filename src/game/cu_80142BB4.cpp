@@ -392,7 +392,7 @@ void fn_8014359C(Block_80170374 *pBlock, int part, int otherPart)
     }
 }
 
-void fn_80143668(Contact_80089330 *pContact, Contact_80143668 *pState, int second)
+void fn_80143668(CollideContact *pContact, Contact_80143668 *pState, int second)
 {
     unsigned char part;
     unsigned char otherPart;
@@ -433,7 +433,7 @@ int fn_80143718(Object_80039F5C *p, Object_80039F5C *pOther)
     return 0;
 }
 
-int fn_8014377C(ContactList_8030BD74 *pContacts, unsigned int partA, unsigned int partB)
+int fn_8014377C(CollideContactList *pContacts, unsigned int partA, unsigned int partB)
 {
     int result = 0;
 
@@ -477,7 +477,7 @@ void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB)
     }
 }
 
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, ContactList_8030BD74 *pContacts)
+void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, CollideContactList *pContacts)
 {
     Body_80142D98 bodyA;
     Body_80142D98 bodyB;
@@ -490,7 +490,7 @@ void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C
     float totalB[2];
     float deltaA[2];
     float deltaB[2];
-    Contact_80089330 *pContact;
+    CollideContact *pContact;
     float restitution;
     int i;
 

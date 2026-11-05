@@ -229,8 +229,8 @@ int fn_8007BECC(int a, const char *pName);
 int fn_8007BF28(int index);
 void fn_8007CC50(Object_8007A334 *pObject);
 void fn_8007CCC4(Object_8007A334 *pObject);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080E98(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int fn_800872E8(int a);
 int fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
 int fn_8008736C(int a, int b);
@@ -238,8 +238,8 @@ void fn_80087600(int a, int b);
 int fn_800876C0(void);
 int fn_80087704(void);
 int fn_80087BA0(int index);
-unsigned int fn_800886BC(int a);
-void fn_800888D0(int a, int b);
+unsigned int UserInfoGetPoints(int a);
+void UserInfoSpendPoints(int a, int b);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
@@ -345,7 +345,7 @@ void Class_8000F500::vfn_05(int id, Entry_80182CC8 *pOut)
 
         pOut->mUnknown40 = 0;
         fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || fn_800886BC(fn_8022F4BC()) < price) {
+        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(fn_8022F4BC()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -388,9 +388,9 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         fn_801835C8();
         fn_8007CC50(&fn_8000EC44()->mUnknown16);
         fn_8007A444((Object_8007A334 *)fn_80182DC8());
-        value = fn_800808F8(fn_80182DC8());
+        value = PlayerDbGetId(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
-        fn_800809C4(fn_80182DC8(), value, 0);
+        PlayerDbSeekId(fn_80182DC8(), value, 0);
         fn_80022680(fn_80022D78(), value, 1);
         fn_80022680(fn_80022D80(), value, 1);
         fn_8015D38C(0);
@@ -741,7 +741,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mValues[11];
     pOut->mUnknown0[12] = record.mValues[12];
     pOut->mUnknown0[13] = record.mValues[13];
-    lbl_803ECE30 = fn_80080E98(fn_80182DC8());
+    lbl_803ECE30 = PlayerDbGetHairStyle(fn_80182DC8());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
@@ -833,7 +833,7 @@ Class_8000F540 *fn_8000EB3C()
 
 unsigned int fn_8000EB5C()
 {
-    return fn_800886BC(fn_8022F4BC());
+    return UserInfoGetPoints(fn_8022F4BC());
 }
 
 int fn_8000EB80()
@@ -850,7 +850,7 @@ void fn_8000EBA4(int id)
     fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
     fn_8000EC44()->mUnknown8 = 1;
     fn_80087600(fn_8000EC44()->mUnknown4, item);
-    fn_800888D0(fn_8022F4BC(), price);
+    UserInfoSpendPoints(fn_8022F4BC(), price);
 }
 
 unsigned char fn_8000EC14()

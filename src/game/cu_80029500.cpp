@@ -48,7 +48,7 @@ struct SaveComment {
 
 extern "C" {
 
-extern StreamOps_8002ACB4 lbl_802D6C24;
+extern StreamOps_8002ACB4 _ChecksumCRC32_Type;
 extern char lbl_802EBE50[];
 
 void fn_801D646C(void);
@@ -208,14 +208,14 @@ int fn_800298E8(int type, int index)
     switch (type) {
     case 3:
         fn_8022F478(fn_8022F358((signed char)index));
-        fn_8002AD64(&request, &lbl_802D6C24);
+        fn_8002AD64(&request, &_ChecksumCRC32_Type);
         break;
     case 2:
         fn_8022F478(fn_8022F358((signed char)index));
-        fn_8022F698(&request, &lbl_802D6C24);
+        fn_8022F698(&request, &_ChecksumCRC32_Type);
         break;
     case 1:
-        fn_8022EB94(&result, &lbl_802D6C24);
+        fn_8022EB94(&result, &_ChecksumCRC32_Type);
         break;
     }
     return result;

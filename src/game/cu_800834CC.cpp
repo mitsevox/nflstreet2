@@ -669,7 +669,7 @@ void fn_80084A8C(int team, int *pList, int side, int count)
     }
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
-        fn_800809C4(&cursor, record.mUnknown[i], 0);
+        PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);
@@ -701,7 +701,7 @@ void fn_80084C24(int team, int *pList, int side, int count)
     }
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
-        fn_800809C4(&cursor, record.mUnknown[i], 0);
+        PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);

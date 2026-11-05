@@ -6760,8 +6760,8 @@ extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
 
 extern "C" {
 Team_80167A8C *fn_80168EBC(int team);
-int *fn_80085744(int formation, int team);
-int fn_8008576C(int value, int firstHalf);
+int *FormationLineupFetchUser(int formation, int team);
+int FormationLineupFindSlot(int value, int firstHalf);
 
 extern unsigned int lbl_802D7FF4[14];
 extern unsigned int lbl_802D802C[14];
@@ -6780,10 +6780,10 @@ extern "C" void fn_800A9018(unsigned int step)
         unsigned int j = 0;
         unsigned int count = fn_80178D18((unsigned char)i);
 
-        fn_80085744(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
+        FormationLineupFetchUser(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
             Object_80039F5C *p = fn_80039F5C((unsigned char)i, j);
-            int slot = fn_8008576C(p->mUnknown2908, isOffense);
+            int slot = FormationLineupFindSlot(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
                 if (lbl_8030F42C.mUnknown0 == 7) {
@@ -9475,9 +9475,9 @@ extern "C" void fn_800BC190(int index, int value)
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 0;
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mTeamWord = sides[i];
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject = fn_800BBB84(position, lbl_803EC98C->mpUnknown10, index, i);
-        fn_800809C4(&reader, ((Object_8003DEC4 *)lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mpUnknown4)->mUnknown4956, 0);
+        PlayerDbSeekId(&reader, ((Object_8003DEC4 *)lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mpUnknown4)->mUnknown4956, 0);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2912 = fn_80081E3C(&reader);
-        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = fn_80080E20(&reader);
+        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = PlayerDbGetPybt(&reader);
     }
     fn_8008056C(&reader);
     lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 31;

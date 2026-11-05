@@ -82,7 +82,7 @@ int fn_80089904(Record_8036B55C *pRecord, Table_80089904 *pTable,
             result = fn_8008977C(pRecord, pTable, value);
             sLast = result;
         } else {
-            int current = fn_80080E20(fn_80182DC8());
+            int current = PlayerDbGetPybt(fn_80182DC8());
             for (int i = 0; i < pTable->mCount; i++) {
                 unsigned short score = 0;
                 Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;

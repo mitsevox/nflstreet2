@@ -48,7 +48,7 @@ void fn_800728F8(void);
 void fn_80072C90(int a, int b);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, Record_8003B6BC *pRecord0, int b, Record_8003B6BC *pRecord1);
-void fn_80089754(void);
+void PlaybookSideClearAll(void);
 void fn_8008FE5C(int a);
 void fn_80099568(int a);
 void fn_800A216C(int a);
@@ -419,7 +419,7 @@ int InGame::Shutdown()
     fn_801CE910();
     fn_800582D0();
     fn_800AB944(lbl_803EAA8C);
-    fn_80089754();
+    PlaybookSideClearAll();
     fn_8019180C();
     fn_801C6280(-1, 2, (void *)fn_80026DD4);
     fn_8017F664();

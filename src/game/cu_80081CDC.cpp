@@ -18,7 +18,7 @@ int fn_8007FC70(int a, int b, int mode, int c);
 void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
-int fn_800808F8(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
 void fn_800731D0(int a);
 int fn_80186F7C(unsigned char index);
 int fn_801C1F54(int c);
@@ -60,7 +60,7 @@ int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
 {
     int found = 0;
 
-    if (fn_8007A7F4(&lbl_8030BC2C, 0x44494750, fn_800808F8(pObject), 0, 0)) {
+    if (fn_8007A7F4(&lbl_8030BC2C, 0x44494750, PlayerDbGetId(pObject), 0, 0)) {
         ColumnValue_802D6424 columns[19];
         int i;
 
@@ -169,7 +169,7 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
     if (found) {
         fn_8007A600(pCursor, position);
         if (pResult) {
-            *pResult = fn_800808F8(pObject);
+            *pResult = PlayerDbGetId(pObject);
         }
         if (pPosition) {
             *pPosition = position;

@@ -26,7 +26,7 @@ int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80029D74(int type, int index);
 void fn_80029CE0(int type, int index);
-int fn_8008A900(int value, int group);
+int PortraitAllocSlot(int value, int group);
 void fn_8018B6F0(int index);
 
 void fn_8018B014(int handle)
@@ -171,7 +171,7 @@ void fn_8018B6F0(int index)
             fn_801FCE10(0, "fetch from \x8a\n", &cursor);
             fn_801FCE10(0, "use \x8c select 'YTRP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &ytrp, player);
             if (ytrp == 1) {
-                int pxsp = fn_8008A900((unsigned char)index, 1);
+                int pxsp = PortraitAllocSlot((unsigned char)index, 1);
                 fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPTS' where 'DIGP' = \x82\n", handle, &oldPxsp, player);
                 fn_801FCE10(0, "use \x8c update 'YPTS' set 'PXSP' = \x85 where 'DIGP' = \x82\n", handle, pxsp, player);
                 fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, pxsp, oldPxsp);
@@ -192,7 +192,7 @@ int fn_80186F7C(unsigned char index);
 int fn_8018E874(int index, int n);
 int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
 int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8008135C(Object_8008044C *pObject, int index, int value);
+void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int fn_8022F4BC(void);
 int fn_8022F384(int a);
 void fn_8018E7A0(int index, int value);
@@ -202,14 +202,14 @@ void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082AE4(int a, int b);
 int fn_8022C8F0(unsigned int low, unsigned int high);
-int fn_80080E98(Object_8008044C *pObject);
-int fn_80080E70(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
+int PlayerDbGetPlht(Object_8008044C *pObject);
 int fn_80081E3C(Object_8008044C *pObject);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-int fn_80080E48(Object_8008044C *pObject);
-int fn_800810E0(Object_8008044C *pObject);
-int fn_80081134(Object_8008044C *pObject);
+int PlayerDbGetPlex(Object_8008044C *pObject);
+int PlayerDbGetHairColor(Object_8008044C *pObject);
+int PlayerDbGetFacialHairColor(Object_8008044C *pObject);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
@@ -217,7 +217,7 @@ void fn_8016139C(int a, int *pId, int *pPalette);
 void fn_8018B8B0(Object_8008044C *pObject)
 {
     for (int i = 0; i < 10; i++) {
-        fn_8008135C(pObject, lbl_802EAE30[i], 1);
+        PlayerDbSetRating(pObject, lbl_802EAE30[i], 1);
     }
     fn_8007AA90((Object_8007A334 *)pObject, 0x44494F50, -1);
     fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 0x41);
@@ -231,7 +231,7 @@ void fn_8018B950(int id)
 {
     Object_8008044C object;
     fn_8008044C(&object, 0, 0x54415453);
-    if (fn_800809C4(&object, id, 0)) fn_8018B8B0(&object);
+    if (PlayerDbSeekId(&object, id, 0)) fn_8018B8B0(&object);
     fn_8008056C(&object);
 }
 
@@ -291,15 +291,15 @@ void fn_8018BB24(int index, int value)
     int unknown56;
 
     fn_8008044C(&object, 0, 0x54415453);
-    fn_800809C4(&object, id, 0);
-    int value6E = fn_80080E98(&object);
-    int value6C = fn_80080E70(&object);
+    PlayerDbSeekId(&object, id, 0);
+    int value6E = PlayerDbGetHairStyle(&object);
+    int value6C = PlayerDbGetPlht(&object);
     int value72 = fn_80081E3C(&object);
     int value73 = fn_80082280(&object);
     int value74 = fn_800822D4(&object);
-    int value76 = fn_80080E48(&object);
-    unsigned int color18 = fn_800810E0(&object);
-    unsigned int color19 = fn_80081134(&object);
+    int value76 = PlayerDbGetPlex(&object);
+    unsigned int color18 = PlayerDbGetHairColor(&object);
+    unsigned int color19 = PlayerDbGetFacialHairColor(&object);
     fn_80082138(&object, &block);
     fn_80046804(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
@@ -348,15 +348,15 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         FMCAPPORTText text60, text20;
         int resultIds[2], unknown52, unknown56;
         fn_8008044C(&object, 0, 0x54415453);
-        fn_800809C4(&object, ids[i], 0);
-        int value6E = fn_80080E98(&object);
-        int value6C = fn_80080E70(&object);
+        PlayerDbSeekId(&object, ids[i], 0);
+        int value6E = PlayerDbGetHairStyle(&object);
+        int value6C = PlayerDbGetPlht(&object);
         int value72 = fn_80081E3C(&object);
         int value73 = fn_80082280(&object);
         int value74 = fn_800822D4(&object);
-        int value76 = fn_80080E48(&object);
-        unsigned int color18 = fn_800810E0(&object);
-        unsigned int color19 = fn_80081134(&object);
+        int value76 = PlayerDbGetPlex(&object);
+        unsigned int color18 = PlayerDbGetHairColor(&object);
+        unsigned int color19 = PlayerDbGetFacialHairColor(&object);
         fn_80082138(&object, &block);
         fn_80046804(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);

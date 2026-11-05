@@ -55,37 +55,37 @@ void fn_8007CC50(Object_8007A334 *pObject);
 void fn_8007CCC4(Object_8007A334 *pObject);
 void fn_8007CD1C(Object_8007A334 *pObject, char *pBuffer, int size);
 int fn_8007CD50(Object_8007A334 *pObject);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080920(Object_8008044C *pObject);
-void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080CD8(Object_8008044C *pObject);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_80080E48(Object_8008044C *pObject);
-int fn_80080E70(Object_8008044C *pObject);
-int fn_80080E98(Object_8008044C *pObject);
-void fn_80080EF4(Object_8008044C *pObject, int value);
-int fn_80080F20(void *pObject);
-int fn_80080F48(void *pObject, int index);
-void fn_80080F78(void *pObject, int value);
-void fn_80080FA4(void *pObject, int index, int value);
-void fn_80080FD4(Object_8008044C *pObject, int value);
-void fn_80081000(Object_8008044C *pObject, int value);
-void fn_8008105C(Object_8008044C *pObject, int value);
-void fn_80081088(Object_8008044C *pObject, int value);
-void fn_800810B4(Object_8008044C *pObject, int value);
-int fn_800810E0(Object_8008044C *pObject);
-void fn_80081108(Object_8008044C *pObject, int value);
-int fn_80081134(Object_8008044C *pObject);
-void fn_8008115C(Object_8008044C *pObject, int value);
-int fn_80081188(Object_8008044C *pObject);
-void fn_800811B4(Object_8008044C *pObject, int value);
-int fn_80081208(Object_8008044C *pObject);
-void fn_80081230(Object_8008044C *pObject, int value);
-int fn_8008125C(Object_8008044C *pObject);
-void fn_80081284(Object_8008044C *pObject, int value);
-int fn_800812B0(Object_8008044C *pObject, int index);
-void fn_8008135C(Object_8008044C *pObject, int index, int value);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetOriginalId(Object_8008044C *pObject);
+void PlayerDbGetFirstName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbHasPlil(Object_8008044C *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetPlex(Object_8008044C *pObject);
+int PlayerDbGetPlht(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
+void PlayerDbSetPbpo(Object_8008044C *pObject, int value);
+int PlayerDbGetPpsn(void *pObject);
+int PlayerDbGetSgt(void *pObject, int index);
+void PlayerDbSetPpsn(void *pObject, int value);
+void PlayerDbSetSgt(void *pObject, int index, int value);
+void PlayerDbSetHairStyle(Object_8008044C *pObject, int value);
+void PlayerDbSetPybt(Object_8008044C *pObject, int value);
+void PlayerDbSetSkinTone(Object_8008044C *pObject, int value);
+void PlayerDbSetPlex(Object_8008044C *pObject, int value);
+void PlayerDbSetHairColor(Object_8008044C *pObject, int value);
+int PlayerDbGetHairColor(Object_8008044C *pObject);
+void PlayerDbSetFacialHairColor(Object_8008044C *pObject, int value);
+int PlayerDbGetFacialHairColor(Object_8008044C *pObject);
+void PlayerDbSetWeight(Object_8008044C *pObject, int value);
+int PlayerDbGetWeight(Object_8008044C *pObject);
+void PlayerDbSetHeight(Object_8008044C *pObject, int value);
+int PlayerDbGetPhan(Object_8008044C *pObject);
+void PlayerDbSetPhan(Object_8008044C *pObject, int value);
+int PlayerDbGetPjen(Object_8008044C *pObject);
+void PlayerDbSetPjen(Object_8008044C *pObject, int value);
+int PlayerDbGetRating(Object_8008044C *pObject, int index);
+void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 int fn_80081E3C(Object_8008044C *pObject);
 void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size);
@@ -275,7 +275,7 @@ static const char *lbl_803EB918[] = { "Right", "Left" };
 static const char *lbl_802F40D0[] = { "QB", "RB", "WR", "OL", "DL", "LB", "DB" };
 static int lbl_802F40EC[7] = { 0, 1, 2, 4, 7, 9, 11 };
 
-/* Value stored to lbl_803EB938 for each result of fn_80080ECC. */
+/* Value stored to lbl_803EB938 for each result of PlayerDbGetPbpo. */
 static int lbl_802F4108[] = { 0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6 };
 
 /* Enabled byte of each top-level entry: lbl_803ED6D4 while fn_80183950 is
@@ -686,16 +686,16 @@ static void fn_80005A24(int id)
     unsigned int color19;
 
     fn_8008044C(&object, 0, 0x54415453);
-    fn_800809C4(&object, id, 0);
-    entryId = fn_80080D10(&object);
-    value6E = fn_80080E98(&object);
-    value6C = fn_80080E70(&object);
+    PlayerDbSeekId(&object, id, 0);
+    entryId = PlayerDbGetPortraitId(&object);
+    value6E = PlayerDbGetHairStyle(&object);
+    value6C = PlayerDbGetPlht(&object);
     value72 = fn_80081E3C(&object);
     value73 = fn_80082280(&object);
     value74 = fn_800822D4(&object);
-    value76 = fn_80080E48(&object);
-    color18 = fn_800810E0(&object);
-    color19 = fn_80081134(&object);
+    value76 = PlayerDbGetPlex(&object);
+    color18 = PlayerDbGetHairColor(&object);
+    color19 = PlayerDbGetFacialHairColor(&object);
     fn_80082138(&object, &block);
     fn_80046804(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
@@ -882,11 +882,11 @@ void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
     }
     if (index >= 0) {
         fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
-        int id = fn_800808F8(fn_80182DC8());
+        int id = PlayerDbGetId(fn_80182DC8());
 
         if (lbl_803EB928 != id || a == 1) {
             if (lbl_803EB928 != 0x7FFF) {
-                fn_800809C4(fn_80182DC8(), lbl_803EB928, pValue);
+                PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, pValue);
             } else {
                 lbl_803EB928 = id;
             }
@@ -908,7 +908,7 @@ int Class_8000A108::vfn_02(int a, int b, void **ppResult)
         char buffer[27];
 
         *ppResult = fn_80008C64();
-        fn_800809C4(fn_80182DC8(), a, 0);
+        PlayerDbSeekId(fn_80182DC8(), a, 0);
         fn_801832B0(buffer, 27);
         fn_80182E34(buffer);
     }
@@ -921,14 +921,14 @@ void Class_8000A108::vfn_03(int index)
         char buffer[27];
         int position;
 
-        fn_800809C4(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
         fn_80022680(fn_80022D80(), index, 0);
         lbl_803EB928 = index;
-        position = fn_80080ECC(fn_80182DC8());
+        position = PlayerDbGetPbpo(fn_80182DC8());
         lbl_803EB938 = lbl_802F4108[position];
         fn_80182E64(position);
-        fn_80182E70(fn_800811E0(fn_80182DC8()));
-        fn_80182E7C(fn_80081188(fn_80182DC8()));
+        fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
+        fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
         fn_801832B0(buffer, 27);
         fn_80182DD4(buffer);
         fn_80182ED0();
@@ -954,7 +954,7 @@ void Class_8000A108::vfn_04(int index, int *pId)
     }
     if (index >= 0) {
         fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
-        *pId = fn_800808F8(fn_80182DC8());
+        *pId = PlayerDbGetId(fn_80182DC8());
     } else {
         *pId = 0x7FFF;
     }
@@ -968,17 +968,17 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
     if (index != 0x7FFF) {
         int value;
 
-        fn_800809C4(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
         if (fn_80183950() && index == 0) {
             pEntry->mUnknown41 = 1;
         }
-        value = fn_80080D10(fn_80182DC8());
+        value = PlayerDbGetPortraitId(fn_80182DC8());
         pEntry->mUnknown36 = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
         if (fn_80005668()) {
             pEntry->mUnknown36++;
         }
         pEntry->mId = index;
-        pEntry->mUnknown30 = fn_80080CD8(fn_80182DC8()) == 0;
+        pEntry->mUnknown30 = PlayerDbHasPlil(fn_80182DC8()) == 0;
         pEntry->mUnknown4 = 0;
         pEntry->mUnknown32 = value | 0xA0000;
         fn_801832B0(buffer, 27);
@@ -999,7 +999,7 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
 void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
 {
     Class_802A6B60::vfn_01(a, pCount, pValue);
-    if (fn_80080920(fn_80182DC8()) != 0x7FFF) {
+    if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
         *pValue = 3;
     }
     fn_80022680(fn_80022D78(), lbl_803EB928, 1);
@@ -1050,11 +1050,11 @@ void Class_8000A0B8::vfn_05(int index, Entry_80182CC8 *pEntry)
 {
     Class_802A6B60::vfn_05(index, pEntry);
     if (fn_80183950()) {
-        if (fn_800808F8(fn_80182DC8()) != 0) {
+        if (PlayerDbGetId(fn_80182DC8()) != 0) {
             pEntry->mUnknown30 = lbl_803ED6D4[index];
             return;
         }
-    } else if (fn_80080920(fn_80182DC8()) != 0x7FFF) {
+    } else if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
         pEntry->mUnknown30 = lbl_803ED6D0[index];
         return;
     }
@@ -1214,19 +1214,19 @@ void Class_80009D88::vfn_01(int a, int *pCount, int *pOut)
 {
     switch (mUnknown8) {
     case 2:
-        *pOut = fn_800057C0(fn_80080ECC(fn_80182DC8()));
+        *pOut = fn_800057C0(PlayerDbGetPbpo(fn_80182DC8()));
         *pCount = 7;
         break;
     case 5:
-        *pOut = fn_800059EC(fn_80080F20(fn_80182DC8()), lbl_802F4094, 3);
+        *pOut = fn_800059EC(PlayerDbGetPpsn(fn_80182DC8()), lbl_802F4094, 3);
         *pCount = 3;
         break;
     case 3:
-        *pOut = fn_8008125C(fn_80182DC8());
+        *pOut = PlayerDbGetPjen(fn_80182DC8());
         *pCount = 100;
         break;
     case 4:
-        *pOut = fn_80081208(fn_80182DC8());
+        *pOut = PlayerDbGetPhan(fn_80182DC8());
         *pCount = 2;
         break;
     }
@@ -1238,22 +1238,22 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
     if (b == 0) {
         switch (mUnknown8) {
         case 2:
-            fn_80080EF4(fn_80182DC8(), fn_80005868(a));
+            PlayerDbSetPbpo(fn_80182DC8(), fn_80005868(a));
             fn_80182E64(fn_80005868(a));
             break;
         case 3:
-            fn_80081284(fn_80182DC8(), a);
+            PlayerDbSetPjen(fn_80182DC8(), a);
             break;
         case 5:
-            fn_80080F78(fn_80182DC8(), lbl_802F4094[a]);
+            PlayerDbSetPpsn(fn_80182DC8(), lbl_802F4094[a]);
             break;
         case 4:
-            fn_80081230(fn_80182DC8(), a);
+            PlayerDbSetPhan(fn_80182DC8(), a);
             break;
         }
     } else if (mUnknown8 == 3) {
-        fn_80049BF0(0, fn_8008125C(fn_80182DC8()));
-        fn_80049BF0(1, fn_8008125C(fn_80182DC8()));
+        fn_80049BF0(0, PlayerDbGetPjen(fn_80182DC8()));
+        fn_80049BF0(1, PlayerDbGetPjen(fn_80182DC8()));
         fn_8015D180(fn_80022D78(), 15);
         fn_80022D6C();
     }
@@ -1307,12 +1307,12 @@ void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
     switch (a) {
     case 0:
         *pResult = 1;
-        fn_80080A34(fn_80182DC8(), buffer, 12);
+        PlayerDbGetFirstName(fn_80182DC8(), buffer, 12);
         fn_801C3284(pParams->mpText, buffer, pParams->mLength + 1);
         break;
     case 1:
         *pResult = 2;
-        fn_80080A68(fn_80182DC8(), buffer2, 15);
+        PlayerDbGetLastName(fn_80182DC8(), buffer2, 15);
         fn_801C3284(pParams->mpText, buffer2, pParams->mLength + 1);
         break;
     }
@@ -1332,15 +1332,15 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
         fn_80081E64(fn_80182DC8(), buffer, 12);
         fn_801832B0(label, 27);
         fn_80182E34(label);
-        fn_800809C4(fn_80182DC8(), lbl_803EB928, 0);
+        PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, 0);
         break;
     case 1:
         fn_801C3284(buffer, pParams->mpText, 15);
         fn_80081E98(fn_80182DC8(), buffer, 15);
         fn_801832B0(label2, 27);
         fn_80182E34(label2);
-        fn_800809C4(fn_80182DC8(), lbl_803EB928, 0);
-        fn_80080A9C(fn_80182DC8(), name, 31);
+        PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, 0);
+        PlayerDbGetNickname(fn_80182DC8(), name, 31);
         fn_80048F6C(0, name);
         fn_80048F6C(1, name);
         fn_8015D180(fn_80022D78(), 15);
@@ -1356,11 +1356,11 @@ void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
     lbl_80369E34.fn_80190098();
     switch (mUnknown8) {
     case 0:
-        fn_80087A78(0x12, &lbl_80369DDC, fn_80080E98(fn_80182DC8()), pOut);
+        fn_80087A78(0x12, &lbl_80369DDC, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
         *pCount = fn_80087B00(0x12, &lbl_80369DDC);
         break;
     case 1:
-        *pOut = fn_800810E0(fn_80182DC8());
+        *pOut = PlayerDbGetHairColor(fn_80182DC8());
         *pCount = 12;
         break;
     case 2:
@@ -1368,7 +1368,7 @@ void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
         *pCount = lbl_80369E34.fn_8018FE34();
         break;
     case 3:
-        *pOut = fn_80081134(fn_80182DC8());
+        *pOut = PlayerDbGetFacialHairColor(fn_80182DC8());
         *pCount = 12;
         break;
     case 4:
@@ -1385,10 +1385,10 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 0:
             fn_80087938(0x12, &lbl_80369DDC, a, 0);
             fn_80087A30(0x12, &lbl_80369DDC);
-            fn_80080FD4(fn_80182DC8(), fn_8007CD50(&lbl_80369DDC));
+            PlayerDbSetHairStyle(fn_80182DC8(), fn_8007CD50(&lbl_80369DDC));
             break;
         case 1:
-            fn_800810B4(fn_80182DC8(), a);
+            PlayerDbSetHairColor(fn_80182DC8(), a);
             break;
         case 2:
             lbl_80369E34.fn_8018FF0C(a);
@@ -1397,7 +1397,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             fn_800225F4(1, 26);
             break;
         case 3:
-            fn_80081108(fn_80182DC8(), a);
+            PlayerDbSetFacialHairColor(fn_80182DC8(), a);
             fn_800225F4(0, 26);
             fn_800225F4(1, 26);
             break;
@@ -1408,11 +1408,11 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
     } else {
         switch (mUnknown8) {
         case 0:
-            fn_80005E64(fn_80080E98(fn_80182DC8()));
+            fn_80005E64(PlayerDbGetHairStyle(fn_80182DC8()));
             break;
         case 1:
-            fn_80049D34(0, fn_800810E0(fn_80182DC8()));
-            fn_80049D34(1, fn_800810E0(fn_80182DC8()));
+            fn_80049D34(0, PlayerDbGetHairColor(fn_80182DC8()));
+            fn_80049D34(1, PlayerDbGetHairColor(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
             break;
@@ -1420,8 +1420,8 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             fn_80005CAC(fn_80082280(fn_80182DC8()));
             break;
         case 3:
-            fn_80049D50(0, fn_80081134(fn_80182DC8()));
-            fn_80049D50(1, fn_80081134(fn_80182DC8()));
+            fn_80049D50(0, PlayerDbGetFacialHairColor(fn_80182DC8()));
+            fn_80049D50(1, PlayerDbGetFacialHairColor(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
             break;
@@ -1500,7 +1500,7 @@ void Class_80009E08::vfn_01(int a, int *pCount, int *pOut)
 {
     mUnknown12 = new (0) Class_8002373C;
     if (mUnknown8 == 8) {
-        *pOut = fn_80080E48(fn_80182DC8());
+        *pOut = PlayerDbGetPlex(fn_80182DC8());
         *pCount = 5;
     } else {
         const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
@@ -1514,7 +1514,7 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
 {
     if (b == 0) {
         if (mUnknown8 == 8) {
-            fn_80081088(fn_80182DC8(), a);
+            PlayerDbSetPlex(fn_80182DC8(), a);
         } else {
             const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
 
@@ -1525,8 +1525,8 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
         }
     } else {
         if (mUnknown8 == 8) {
-            fn_80049C20(0, fn_80080E48(fn_80182DC8()));
-            fn_80049C20(1, fn_80080E48(fn_80182DC8()));
+            fn_80049C20(0, PlayerDbGetPlex(fn_80182DC8()));
+            fn_80049C20(1, PlayerDbGetPlex(fn_80182DC8()));
             fn_8015D180(fn_80022D78(), 15);
             fn_80022D6C();
         } else {
@@ -1604,7 +1604,7 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
 
     if (b == 0) {
         if (type == 3) {
-            fn_8008105C(fn_80182DC8(), a);
+            PlayerDbSetSkinTone(fn_80182DC8(), a);
         } else {
             Object_8007A334 cursor;
 
@@ -1675,7 +1675,7 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void Class_80009C88::vfn_01(int a, int *pCount, int *pOut)
 {
-    fn_8002335C(&lbl_80369E08, fn_80080F48(fn_80182DC8(), mUnknown8), pOut);
+    fn_8002335C(&lbl_80369E08, PlayerDbGetSgt(fn_80182DC8(), mUnknown8), pOut);
     *pCount = fn_8007A410(&lbl_80369E08);
 }
 
@@ -1684,7 +1684,7 @@ int Class_80009C88::vfn_02(int a, int b, void **pOut)
     fn_80183740(0);
     if (b == 0) {
         fn_8007A600(&lbl_80369E08, a);
-        fn_80080FA4(fn_80182DC8(), mUnknown8, fn_800233C8(&lbl_80369E08));
+        PlayerDbSetSgt(fn_80182DC8(), mUnknown8, fn_800233C8(&lbl_80369E08));
     }
     return -1;
 }
@@ -1719,9 +1719,9 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
     case 10:
         *pMin = 65;
         *pMax = 84;
-        *pE = fn_800811E0(fn_80182DC8());
-        fn_80008750(fn_800808F8(fn_80182DC8()), 10, *pE);
-        *pD = fn_80008978(fn_800808F8(fn_80182DC8()), 10);
+        *pE = PlayerDbGetHeight(fn_80182DC8());
+        fn_80008750(PlayerDbGetId(fn_80182DC8()), 10, *pE);
+        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), 10);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Shorter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Taller");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d ft %d in", *pE / 12, *pE % 12);
@@ -1734,10 +1734,10 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
     case 11:
         *pMin = 160;
         *pMax = 380;
-        *pE = fn_80081188(fn_80182DC8());
-        fn_80008750(fn_800808F8(fn_80182DC8()), 11, *pE);
-        *pD = fn_80008978(fn_800808F8(fn_80182DC8()), 11);
-        lbl_803ECD5C = fn_80080E20(fn_80182DC8());
+        *pE = PlayerDbGetWeight(fn_80182DC8());
+        fn_80008750(PlayerDbGetId(fn_80182DC8()), 11, *pE);
+        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), 11);
+        lbl_803ECD5C = PlayerDbGetPybt(fn_80182DC8());
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Lighter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Heavier");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d lbs", *pE);
@@ -1752,7 +1752,7 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
 
         *pMin = 0;
         *pMax = 20;
-        level = fn_800812B0(fn_80182DC8(), fn_80183238(a));
+        level = PlayerDbGetRating(fn_80182DC8(), fn_80183238(a));
         *pE = level / 5;
         if (level < 100) {
             if (level == 1) {
@@ -1763,8 +1763,8 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
         } else {
             lbl_803EB930 = 0;
         }
-        fn_80008750(fn_800808F8(fn_80182DC8()), a, *pE);
-        *pD = fn_80008978(fn_800808F8(fn_80182DC8()), a);
+        fn_80008750(PlayerDbGetId(fn_80182DC8()), a, *pE);
+        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), a);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Worse");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Better");
         fn_801C2D88(pValue->mpText, pValue->mLength, "Level %d", *pE);
@@ -1888,7 +1888,7 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             fn_800088E8(lbl_803EB924);
             fn_80022760(0, c);
             fn_80022760(1, c);
-            fn_800811B4(fn_80182DC8(), c);
+            PlayerDbSetHeight(fn_80182DC8(), c);
             if (c == 84) {
                 fn_800225F4(0, 22);
                 played = 1;
@@ -1905,8 +1905,8 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             fn_80008914();
             fn_800088E8(lbl_803EB924);
             build = fn_80005D88(c);
-            fn_80081000(fn_80182DC8(), build);
-            fn_8008115C(fn_80182DC8(), c);
+            PlayerDbSetPybt(fn_80182DC8(), build);
+            PlayerDbSetWeight(fn_80182DC8(), c);
             if (c > 379) {
                 fn_800225F4(0, 21);
                 played = 1;
@@ -1924,7 +1924,7 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
         }
         default: {
             float fraction = c * 0.05f;
-            unsigned int value = fn_800812B0(fn_80182DC8(), fn_80183238(a));
+            unsigned int value = PlayerDbGetRating(fn_80182DC8(), fn_80183238(a));
             int level;
 
             if (fraction > value * 0.01f) {
@@ -1948,23 +1948,23 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             if (level == 0) {
                 level = 1;
             }
-            fn_8008135C(fn_80182DC8(), fn_80183238(a), level);
+            PlayerDbSetRating(fn_80182DC8(), fn_80183238(a), level);
             break;
         }
         }
     } else {
         switch (a) {
         case 10:
-            fn_80022760(0, fn_800811E0(fn_80182DC8()));
-            fn_80022760(1, fn_800811E0(fn_80182DC8()));
+            fn_80022760(0, PlayerDbGetHeight(fn_80182DC8()));
+            fn_80022760(1, PlayerDbGetHeight(fn_80182DC8()));
             break;
         case 11:
-            fn_80005D88(fn_80081188(fn_80182DC8()));
+            fn_80005D88(PlayerDbGetWeight(fn_80182DC8()));
             break;
         default: {
             int index = fn_80183238(a);
 
-            fn_80182F60(index, fn_800812B0(fn_80182DC8(), index));
+            fn_80182F60(index, PlayerDbGetRating(fn_80182DC8(), index));
             break;
         }
         }
@@ -1972,8 +1972,8 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
         played = 1;
         fn_800225F4(1, 20);
     }
-    fn_80182E70(fn_800811E0(fn_80182DC8()));
-    fn_80182E7C(fn_80081188(fn_80182DC8()));
+    fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
+    fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
     fn_8018300C();
     lbl_803EB924 = 0;
     if (!played) {
@@ -2107,17 +2107,17 @@ extern "C" void fn_800089E0(int a)
     int i;
     int value = fn_80005868(a);
 
-    fn_80080EF4(fn_80182DC8(), value);
+    PlayerDbSetPbpo(fn_80182DC8(), value);
     for (i = 0; i <= 11; i++) {
         switch (i) {
         case 10:
-            fn_800811B4(fn_80182DC8(), lbl_8000A20C[a][i]);
+            PlayerDbSetHeight(fn_80182DC8(), lbl_8000A20C[a][i]);
             break;
         case 11:
-            fn_8008115C(fn_80182DC8(), lbl_8000A20C[a][i]);
+            PlayerDbSetWeight(fn_80182DC8(), lbl_8000A20C[a][i]);
             break;
         default:
-            fn_8008135C(fn_80182DC8(), fn_80183238(i), lbl_8000A20C[a][i]);
+            PlayerDbSetRating(fn_80182DC8(), fn_80183238(i), lbl_8000A20C[a][i]);
             break;
         }
     }

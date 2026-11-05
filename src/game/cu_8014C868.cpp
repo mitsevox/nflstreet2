@@ -71,8 +71,8 @@ unsigned char fn_8003B560(int group, int index, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
 int fn_8014A1B8(Class_80148A58 *p, int kind, int team);
 unsigned short fn_800D3EB0(int team, int index);
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-int fn_800808F8(Object_8008044C *pObject);
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
+int PlayerDbGetId(Object_8008044C *pObject);
 
 void fn_8014C868(void)
 {
@@ -167,23 +167,23 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
     int value = 0;
     fn_8008040C(&cursor, 0);
     if (fn_8003B560(team, 0, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[0] = id;
     if (fn_8003B560(team, 2, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[1] = id;
     if (fn_8003B560(team, 3, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[2] = id;
     if (fn_8003B560(team, 1, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[3] = id;
     fn_8008056C(&cursor);
