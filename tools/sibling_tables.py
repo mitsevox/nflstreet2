@@ -11,7 +11,13 @@
         elf-metadata.json (the build repository's reference/ps2/slus_211_18); the original is read
         from orig/<target>/sys/main.dol and the function extents from evidence.tsv.
 
-Both write a header of `#` lines naming this script's hash and every input's hash, so a table can be
+    python3 tools/sibling_tables.py ps2-strings --ps2 DIR
+        references/NFL Street 2/SLUS-21118/ps2-strings.tsv: every string the PS2 release's code
+        loads, with its PS2 address and section, whether the reference is to the string's first
+        byte, a hash of its text (the text itself is not published) and the GC functions (by the
+        committed GC-to-PS2 map) that load it. tools/boundaries.py --game reads it.
+
+All write a header of `#` lines naming this script's hash and every input's hash, so a table can be
 traced to the run that made it. `--check` compares instead of writing and exits 1 on a difference.
 
 NASCAR units: a type-4 symbol names a source file; the `gcc2_compiled.` label that follows it is the
@@ -46,6 +52,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = 'GN7E69-rev0'
 NASCAR = ROOT / 'references/NASCAR 2005/DOL-GN4E-USA/symbols'
 PS2_MAP = ROOT / 'references/NFL Street 2/SLUS-21118/gc-to-ps2-functions.tsv'
+PS2_STRINGS = ROOT / 'references/NFL Street 2/SLUS-21118/ps2-strings.tsv'
 R13 = 0x803F22A0  # This target's _SDA_BASE_ (config/<target>/baseline.json sda_base).
 PS2_GP = 0x513AF0
 
@@ -325,15 +332,53 @@ def ps2_map(directory):
     return PS2_MAP, header(inputs) + '\n'.join(rows) + '\n'
 
 
+def ps2_strings(directory):
+    """One row per PS2 string that a PS2 function loads: address, section, at_start (1 when the
+    byte before it is NUL, so the reference is to a whole string and not into one), text (the first
+    12 hex digits of the SHA-256 of its text), users (the GC functions mapped to its PS2 loaders,
+    by gc_start) and unmapped (how many of its PS2 loaders the map does not pair)."""
+    ps2 = Ps2(directory)
+    functions = ps2.functions()
+    index = {p[0]: i for i, p in enumerate(functions)}
+    to_gc = {}
+    for line in PS2_MAP.read_text().splitlines():
+        if line.startswith('#') or line.startswith('gc_start'):
+            continue
+        gc_start, _, ps2_start, _ = line.split('\t')
+        to_gc[index[int(ps2_start, 16)]] = int(gc_start, 16)
+    loaders = collections.defaultdict(set)
+    for i, (_, _, _, references) in enumerate(functions):
+        for target in references:
+            loaders[target].add(i)
+    rows = ['ps2_address\tsection\tat_start\ttext\tusers\tunmapped']
+    for target in sorted(loaders):
+        text = cstring(ps2.read, target)
+        if not text or len(text) < 2:
+            continue
+        users = sorted(to_gc[i] for i in loaders[target] if i in to_gc)
+        if not users:
+            continue
+        section = next(name for name, start, length, _ in ps2.sections if start <= target < start + length)
+        before = ps2.read(target - 1, 1)
+        rows.append('0x%X\t%s\t%d\t%s\t%s\t%d' % (
+            target, section, 1 if before is not None and before[0] == 0 else 0,
+            sha256(text.encode())[:12], ','.join('0x%08X' % u for u in users),
+            sum(1 for i in loaders[target] if i not in to_gc)))
+    inputs = [('SLUS_211.18', sha256(ps2.data)),
+              (PS2_MAP.relative_to(ROOT).as_posix(), sha256(PS2_MAP.read_bytes()))]
+    return PS2_STRINGS, header(inputs) + '\n'.join(rows) + '\n'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('table', choices=('nascar-units', 'ps2-map'))
+    parser.add_argument('table', choices=('nascar-units', 'ps2-map', 'ps2-strings'))
     parser.add_argument('--ps2', type=Path, help='folder with the private SLUS_211.18 and elf-metadata.json')
     parser.add_argument('--check', action='store_true', help='compare with the committed table instead of writing')
     args = parser.parse_args()
-    if args.table == 'ps2-map' and args.ps2 is None:
-        parser.error('ps2-map needs --ps2')
-    path, text = nascar_units() if args.table == 'nascar-units' else ps2_map(args.ps2)
+    if args.table != 'nascar-units' and args.ps2 is None:
+        parser.error('%s needs --ps2' % args.table)
+    path, text = {'nascar-units': nascar_units, 'ps2-map': lambda: ps2_map(args.ps2),
+                  'ps2-strings': lambda: ps2_strings(args.ps2)}[args.table]()
     if args.check:
         same = path.is_file() and path.read_text() == text
         print(f"{path.relative_to(ROOT)}: {'up to date' if same else 'differs; run without --check to rewrite it'}")

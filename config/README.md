@@ -4,7 +4,12 @@
 holds the game's presentation and `config/ci-targets.json` maps changed paths to the targets they affect.
 Each target's build inputs live in `config/<target id>/`: for a decomp-toolkit project these are
 `config.yml`, `splits.txt`, `symbols.txt` and `build.sha1`. Symbol and split files are toolkit inputs, not
-recovered names or source boundaries; claims about either belong in `evidence.tsv`.
+recovered names or source boundaries; claims about either belong in `evidence.tsv`. Each target's `README.md`
+declares its evidence regime (A own debug data, B sibling debug data, C the binary only) with the inventory
+that justifies it; reviewers hold `inferred` names and edges to that regime: reasoned in the evidence
+column and uncontradicted by the target. The regime decides whether an inferred edge is accepted, not its grade:
+an edge is `exact` only when evidence establishes it. Type and field rows still cite the loads and stores that show
+each offset.
 
 ## Evidence records
 
@@ -48,3 +53,12 @@ signature claims. A local absolute path or an unexplained score is insufficient.
 These records describe evidence, not matching progress or approval. Changes to executable symbols and unit
 splits require corresponding evidence and the contribution review passes. Review findings, tested revisions
 and the owner's acceptance remain in the PR.
+
+## Constant check exceptions
+
+`tools/literal_check.py` compares every function the progress report counts as exact. A function it
+cannot compare, because of a limit of the check rather than of the source, is listed in
+`config/<target id>/literal_exceptions.tsv`: a header line `unit`, `function`, `reason`, then one
+tab-separated row per function, none empty. Reviewers treat a row like an evidence row. The check fails
+on a listed function that it compares again or that is no longer exact, so the file only holds current
+limits.
