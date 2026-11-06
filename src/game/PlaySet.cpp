@@ -145,7 +145,7 @@ Object_80039F5C *PlaySetGetKeyPlayer(Object_800670B4 *pObject)
     return fn_80039F5C(fn_80178308(), pObject->mUnknown8.mUnknownE);
 }
 
-void PlaySetNotifyRoleMates(Object_80039F5C *p)
+void PlaySetPointToRoleMate(Object_80039F5C *p)
 {
     Message_800F01CC msg;
     int post = 0;

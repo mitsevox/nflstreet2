@@ -1,5 +1,5 @@
 /* Player model switches: sets and reads the per-part switch values that choose which
-   pieces of a player model (gear, numbers, accessories) are shown. */
+   pieces of a player model are shown. */
 
 #include "game/Object_8003DEC4.h"
 #include "game/fn_80233CBC.h"

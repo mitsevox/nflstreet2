@@ -69,7 +69,7 @@ void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
         }
-        PlaySetNotifyRoleMates(p);
+        PlaySetPointToRoleMate(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 9;
         msg.mUnknown1[0] = side == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
@@ -113,7 +113,7 @@ void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 7;
         fn_800F03D8(0, p->mpState, &msg, p);
-        PlaySetNotifyRoleMates(p);
+        PlaySetPointToRoleMate(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 87;
         msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;

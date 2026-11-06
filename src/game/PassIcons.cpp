@@ -155,7 +155,7 @@ int PassIconGetPosition(int index, Vector_80039F5C *pOut)
             pOut->mY = -pOut->mY;
         }
         pOut->mZ += _PassIcon_fHeight;
-        PassIconObjSetStyle(_PassIcon_pIcons[index], 2);
+        PassIconObjSetPalette(_PassIcon_pIcons[index], 2);
         result = 1;
     }
     return result;

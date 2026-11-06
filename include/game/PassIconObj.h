@@ -20,7 +20,7 @@ void PassIconObjRegister(void *pOwner);
 void PassIconObjUnregister(void);
 PassIconObj_t *PassIconObjNew(void *pOwner, unsigned char value, int a, int b);
 void PassIconObjDelete(void *pOwner, PassIconObj_t *pItem);
-void PassIconObjSetStyle(PassIconObj_t *pItem, unsigned char value);
+void PassIconObjSetPalette(PassIconObj_t *pItem, unsigned char value);
 }
 
 #endif

@@ -11,7 +11,7 @@ int PlaySetGetNextOrder(Object_800670B4 *pObject, unsigned char index);
 int PlaySetGetPrevOrder(Object_800670B4 *pObject, unsigned char index);
 void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 Object_80039F5C *PlaySetGetKeyPlayer(Object_800670B4 *pObject);
-void PlaySetNotifyRoleMates(Object_80039F5C *p);
+void PlaySetPointToRoleMate(Object_80039F5C *p);
 }
 
 #endif

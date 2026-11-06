@@ -1,6 +1,6 @@
 /* Pass icons: the button icons drawn above each eligible receiver while the player
    chooses a pass. One small object per receiver is kept in the object list and drawn
-   at the receiver's position, scaled with the camera height. */
+   at the receiver's position, scaled by its distance from the camera along the field. */
 
 #include "game/PassIconObj.h"
 #include "game/PassIconTex.h"
@@ -49,7 +49,7 @@ extern "C" void PassIconObjInit(PassIconObj_t *pInstance, const PassIconObjDesc_
     pInstance->mUnknown14 = pInit->mUnknown0;
     pInstance->mUnknown18 = pInit->mUnknown4;
     pInstance->mUnknown1C = pInit->mUnknown8;
-    PassIconObjSetStyle(pInstance, 2);
+    PassIconObjSetPalette(pInstance, 2);
 }
 
 extern "C" void PassIconObjFree(void) {}
@@ -127,7 +127,7 @@ extern "C" void PassIconObjDelete(void *pOwner, PassIconObj_t *pItem)
     }
 }
 
-extern "C" void PassIconObjSetStyle(PassIconObj_t *pInstance, unsigned char value)
+extern "C" void PassIconObjSetPalette(PassIconObj_t *pInstance, unsigned char value)
 {
     pInstance->mUnknown1D = value;
 }

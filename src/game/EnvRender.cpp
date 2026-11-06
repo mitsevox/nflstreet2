@@ -5,7 +5,7 @@
 #include "game/GameVpt.h"
 #include "game/InGame.h"
 #include "game/Object_80039F5C.h"
-#include "game/EnvSkyObj.h"
+#include "game/skyobj.h"
 #include "game/EnvFogSettings.h"
 
 

@@ -1,5 +1,5 @@
-#ifndef GAME_ENVSKYOBJ_H
-#define GAME_ENVSKYOBJ_H
+#ifndef GAME_SKYOBJ_H
+#define GAME_SKYOBJ_H
 
 #include "game/Object_80039F5C.h"
 #include "game/Object_80235588.h"

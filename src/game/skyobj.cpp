@@ -3,7 +3,7 @@
 
 #include "engine/viewport.h"
 #include "game/fn_801EF390.h"
-#include "game/EnvSkyObj.h"
+#include "game/skyobj.h"
 
 extern "C" {
 void *fn_800A336C(void);
