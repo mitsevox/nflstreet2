@@ -37883,36 +37883,6 @@
       ]
     },
     {
-      "source": "src/engine/supmutpf.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8027AEE4-0x8027B1F8 (src/engine/supmutpf.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8027AEE4",
-          "end": "0x8027B1F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8027AEE4",
-          "start": "0x8027AEE4",
-          "end": "0x8027B13C"
-        },
-        {
-          "symbol": "fn_8027B13C",
-          "start": "0x8027B13C",
-          "end": "0x8027B168"
-        },
-        {
-          "symbol": "fn_8027B168",
-          "start": "0x8027B168",
-          "end": "0x8027B1F8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_8027B1F8.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv provisional unit row 0x8027B1F8-0x8027CF9C (src/engine/cu_8027B1F8.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

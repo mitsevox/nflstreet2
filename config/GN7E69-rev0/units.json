@@ -14466,6 +14466,19 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/engine/supmutpf.c",
+      "profile": "sound_cxx",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027AEE4",
+          "end": "0x8027B1F8"
+        }
+      ],
+      "evidence": "evidence.tsv complete 788-byte supmutpf.c unit, three function/name rows and owned decoder layout/fields; whole file linked with provisional edges."
     }
   ]
 }
