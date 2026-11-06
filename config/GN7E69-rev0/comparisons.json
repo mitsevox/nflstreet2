@@ -5062,7 +5062,7 @@
     {
       "source": "src/game/StoryData.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the cu_8018DF98 draft source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the StoryData draft functions source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
       "sections": [
         {
           "section": ".text",

@@ -1,7 +1,7 @@
 /* Controller selection screen: answers the screen's messages that open and close it
    (with its sounds), print a controller's port number, and say whether a controller is
    the current one or is plugged in. */
-#include "game/CtrlSel.h"
+#include "game/MsgController.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/FELoop.h"

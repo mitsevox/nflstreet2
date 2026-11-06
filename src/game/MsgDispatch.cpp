@@ -107,7 +107,7 @@ int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused,
             pA[i] = i + base;
             pB[i] = 0;
         }
-        mask = cursor.GetColumnValue(0x504C5555);
+        mask = cursor.GetColumnInt(0x504C5555);
         for (i = base; i <= 9; i++) {
             if (mask & (1 << i)) {
                 pB[i - base] = 0;
@@ -138,7 +138,7 @@ int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused,
             int index;
 
             cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-            mask = cursor.GetColumnValue(0x504C5555);
+            mask = cursor.GetColumnInt(0x504C5555);
             index = _MsgUnlockList_iSelection;
             if (index >= 0 && index <= 9 && !(mask & (1 << index))) {
                 do {

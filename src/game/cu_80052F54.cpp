@@ -222,10 +222,10 @@ void fn_80052F54(Args_80052F54 *pArgs)
         int bit = 1 << index;
         DbTableCursor cursor;
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-        int value = cursor.DbTableCursor::GetColumnValue(0x504C5555);
+        int value = cursor.DbTableCursor::GetColumnInt(0x504C5555);
         if (!(value & bit)) {
             value |= bit;
-            cursor.DbTableCursor::SetColumnValue(0x504C5555, value);
+            cursor.DbTableCursor::SetColumnInt(0x504C5555, value);
             lbl_803EA544 = 1;
             lbl_803EA540 = bit;
             if (value == 0x3FF) {

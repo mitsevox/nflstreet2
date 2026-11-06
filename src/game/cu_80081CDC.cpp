@@ -298,7 +298,7 @@ int fn_8008257C(int count, unsigned int *pOut)
             DbTableCursor cursor;
 
             cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-            *pOut |= cursor.GetColumnValue(0x504C5555);
+            *pOut |= cursor.GetColumnInt(0x504C5555);
         }
     }
     for (i = 0; i < 10; i++) {
@@ -322,7 +322,7 @@ void fn_80082688(int db)
         DbTableCursor cursor;
 
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-        cursor.SetColumnValue(0x504C5555, mask);
+        cursor.SetColumnInt(0x504C5555, mask);
     }
 }
 
@@ -333,7 +333,7 @@ void fn_8008274C(int db)
     DbTableCursor cursor;
 
     cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-    cursor.SetColumnValue(0x504C5555, mask);
+    cursor.SetColumnInt(0x504C5555, mask);
 }
 
 int fn_800827EC(int id, unsigned int value)

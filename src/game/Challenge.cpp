@@ -113,21 +113,21 @@ void ChalOpenProgress(DbCursor *pObject, int value)
 }
 
 /* Reads a row for id (tags 0x444D4843 and 0x54415453 passed to
-   OpenTable) into pInfo; mUnknown0 is 0 when FindColumnValue finds no row. */
+   OpenTable) into pInfo; mUnknown0 is 0 when FindColumnInt finds no row. */
 void ChalReadMedalGoal(int id, ChalMedalGoal_t *pInfo)
 {
     DbTableCursor cursor;
 
     cursor.OpenTable(0x444D4843, -1, 0, 0, 0x54415453);
-    if (cursor.FindColumnValue(0x44494843, id, 0, 0)) {
-        pInfo->mUnknown0 = cursor.GetColumnValue(0x41514843);
-        pInfo->mUnknown4[0] = cursor.GetColumnValue(0x41505143);
-        pInfo->mUnknown4[1] = cursor.GetColumnValue(0x42505143);
-        pInfo->mUnknown4[2] = cursor.GetColumnValue(0x43505143);
-        pInfo->mUnknown1C = cursor.GetColumnValue(0x54524843);
-        pInfo->mUnknown20[0] = cursor.GetColumnValue(0x56524843);
-        pInfo->mUnknown20[1] = cursor.GetColumnValue(0x32564843);
-        pInfo->mUnknown20[2] = cursor.GetColumnValue(0x33564843);
+    if (cursor.FindColumnInt(0x44494843, id, 0, 0)) {
+        pInfo->mUnknown0 = cursor.GetColumnInt(0x41514843);
+        pInfo->mUnknown4[0] = cursor.GetColumnInt(0x41505143);
+        pInfo->mUnknown4[1] = cursor.GetColumnInt(0x42505143);
+        pInfo->mUnknown4[2] = cursor.GetColumnInt(0x43505143);
+        pInfo->mUnknown1C = cursor.GetColumnInt(0x54524843);
+        pInfo->mUnknown20[0] = cursor.GetColumnInt(0x56524843);
+        pInfo->mUnknown20[1] = cursor.GetColumnInt(0x32564843);
+        pInfo->mUnknown20[2] = cursor.GetColumnInt(0x33564843);
     } else {
         pInfo->mUnknown0 = 0;
     }
@@ -1160,9 +1160,9 @@ void ChalSetTournamentScore(int id, int a, int b)
     DbTableCursor cursor;
 
     cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
-    cursor.FindColumnInt(0x4D475443, id, 0, 0);
-    cursor.SetColumnInt(0x31535443, a);
-    cursor.SetColumnInt(0x32535443, b);
+    cursor.FindColumnValue(0x4D475443, id, 0, 0);
+    cursor.SetColumnValue(0x31535443, a);
+    cursor.SetColumnValue(0x32535443, b);
 }
 
 void ChalGetTournamentScore(int id, short *pA, short *pB)
@@ -1171,9 +1171,9 @@ void ChalGetTournamentScore(int id, short *pA, short *pB)
     DbTableCursor cursor;
 
     cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
-    cursor.FindColumnInt(0x4D475443, id, 0, 0);
-    *pA = cursor.GetColumnInt(0x31535443);
-    *pB = cursor.GetColumnInt(0x32535443);
+    cursor.FindColumnValue(0x4D475443, id, 0, 0);
+    *pA = cursor.GetColumnValue(0x31535443);
+    *pB = cursor.GetColumnValue(0x32535443);
 }
 
 void ChalSaveTournamentTeams(int *pValues, int count)
@@ -1184,8 +1184,8 @@ void ChalSaveTournamentTeams(int *pValues, int count)
 
     cursor.OpenTable(0x4C545443, 0x44524F54, 0, 0, handle);
     for (i = 0; i < count; i++) {
-        cursor.FindColumnInt(0x44524F54, i, 0, 0);
-        cursor.SetColumnInt(0x44494754, pValues[i]);
+        cursor.FindColumnValue(0x44524F54, i, 0, 0);
+        cursor.SetColumnValue(0x44494754, pValues[i]);
     }
 }
 
@@ -1197,8 +1197,8 @@ void ChalLoadTournamentTeams(int *pValues, int count)
 
     cursor.OpenTable(0x4C545443, 0x44524F54, 0, 0, handle);
     for (i = 0; i < count; i++) {
-        cursor.FindColumnInt(0x44524F54, i, 0, 0);
-        pValues[i] = cursor.GetColumnInt(0x44494754);
+        cursor.FindColumnValue(0x44524F54, i, 0, 0);
+        pValues[i] = cursor.GetColumnValue(0x44494754);
     }
 }
 

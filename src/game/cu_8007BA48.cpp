@@ -194,8 +194,8 @@ void fn_8007BF60(int id)
     DbTableCursor cursor;
 
     cursor.OpenTable(0x4C504947, 0x49544947, 0, 0, handle);
-    if (cursor.FindColumnInt(0x49544947, id, 0, 0)) {
-        int count = cursor.GetColumnInt(0x4C504947);
+    if (cursor.FindColumnValue(0x49544947, id, 0, 0)) {
+        int count = cursor.GetColumnValue(0x4C504947);
         int next = count + 1;
         DbSortKey keys[2];
         DbFilter both;
@@ -210,7 +210,7 @@ void fn_8007BF60(int id)
         int i;
         int j;
 
-        cursor.SetColumnInt(0x4C504947, next);
+        cursor.SetColumnValue(0x4C504947, next);
         keys[0].Set(0x50495247, 0x47504947, 0);
         keys[1].Set(-1, -1, 3);
         both.Set(11, &first, &second);
@@ -223,7 +223,7 @@ void fn_8007BF60(int id)
 
             rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
-                oldKeys[i] = rows.GetColumnInt(0x594B5047);
+                oldKeys[i] = rows.GetColumnValue(0x594B5047);
                 fresh[i] = !GearIsLocked(oldKeys[i]);
                 if (fresh[i]) {
                     GearLock(oldKeys[i]);
@@ -238,7 +238,7 @@ void fn_8007BF60(int id)
 
             rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
-                newKeys[i] = rows.GetColumnInt(0x594B5047);
+                newKeys[i] = rows.GetColumnValue(0x594B5047);
                 if (fresh[i]) {
                     GearUnlock(newKeys[i]);
                 }
@@ -249,11 +249,11 @@ void fn_8007BF60(int id)
             DbTableCursor rows;
 
             rows.OpenTable(0x52414547, 0x594B5047, 0, 0, 0x54415453);
-            rows.FindColumnInt(0x594B5047, oldKeys[i], 0, 0);
-            types[i] = rows.GetColumnInt(0x49545247);
-            oldIds[i] = rows.GetColumnInt(0x44494547);
-            rows.FindColumnInt(0x594B5047, newKeys[i], 0, 0);
-            newIds[i] = rows.GetColumnInt(0x44494547);
+            rows.FindColumnValue(0x594B5047, oldKeys[i], 0, 0);
+            types[i] = rows.GetColumnValue(0x49545247);
+            oldIds[i] = rows.GetColumnValue(0x44494547);
+            rows.FindColumnValue(0x594B5047, newKeys[i], 0, 0);
+            newIds[i] = rows.GetColumnValue(0x44494547);
         }
         {
             DbCursor teams;
@@ -317,7 +317,7 @@ int fn_8007C538(int id)
 
         rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
         for (more = rows.MoveFirst(); more; more = rows.MoveNext()) {
-            if (!GearLockIsLocked(&keys, rows.GetColumnValue(0x594B5047))) {
+            if (!GearLockIsLocked(&keys, rows.GetColumnInt(0x594B5047))) {
                 result = 1;
                 break;
             }
@@ -343,10 +343,10 @@ int fn_8007C690(DbCursor *pCursor, short *pOut)
         DbTableCursor rows;
 
         rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
-        if (rows.GetRowCount() > 0 && rows.GetColumnInt(0x49544947) > 0) {
+        if (rows.GetRowCount() > 0 && rows.GetColumnValue(0x49544947) > 0) {
             if (pOut) {
                 for (i = 0; i < 10; i++) {
-                    pOut[i] = rows.GetColumnInt(sShortColumnTags[i]);
+                    pOut[i] = rows.GetColumnValue(sShortColumnTags[i]);
                 }
             }
             result = 1;

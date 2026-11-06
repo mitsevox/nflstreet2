@@ -1,4 +1,4 @@
-#include "game/CtrlSel.h"
+#include "game/MsgController.h"
 #include "game/cu_8017F90C.h"
 #include "game/InGame.h"
 #include "game/PauseMenu.h"

@@ -59,22 +59,22 @@ int DbTableCursor::MoveToRow(int a)
     return DbCursorSeek(&mObject, a);
 }
 
-int DbTableCursor::FindColumnValue(int a, int b, int c, int *pResult)
+int DbTableCursor::FindColumnInt(int a, int b, int c, int *pResult)
 {
     return DbCursorFindInt(&mObject, a, b, c, pResult);
 }
 
-int DbTableCursor::FindColumnInt(int a, int b, int c, int *pResult)
+int DbTableCursor::FindColumnValue(int a, int b, int c, int *pResult)
 {
     return DbCursorFindValue(&mObject, a, b, c, pResult);
 }
 
-int DbTableCursor::GetColumnInt(int column)
+int DbTableCursor::GetColumnValue(int column)
 {
     return DbCursorGetValue(&mObject, column);
 }
 
-int DbTableCursor::GetColumnValue(int column)
+int DbTableCursor::GetColumnInt(int column)
 {
     return DbCursorGetInt(&mObject, column);
 }
@@ -89,12 +89,12 @@ void DbTableCursor::GetColumnString(int a, int b, int c)
     fn_8007AA3C(&mObject, a, b, c);
 }
 
-void DbTableCursor::SetColumnInt(int column, int value)
+void DbTableCursor::SetColumnValue(int column, int value)
 {
     fn_8007AA90(&mObject, column, value);
 }
 
-void DbTableCursor::SetColumnValue(int column, int value)
+void DbTableCursor::SetColumnInt(int column, int value)
 {
     fn_8007ABA4(&mObject, column, value);
 }
@@ -116,12 +116,12 @@ void FchrCursor::OpenFchrTable()
 
 int FchrCursor::FindFchrRow(int id, int *pResult)
 {
-    return FindColumnInt(0x48464650, id, 0, pResult);
+    return FindColumnValue(0x48464650, id, 0, pResult);
 }
 
 int FchrCursor::GetFchrPffh()
 {
-    return GetColumnInt(0x48464650);
+    return GetColumnValue(0x48464650);
 }
 
 void FchrCursor::GetFchrFhdcText(char *pBuffer, int size)
@@ -131,7 +131,7 @@ void FchrCursor::GetFchrFhdcText(char *pBuffer, int size)
 
 int FchrCursor::GetFchrFhstCode()
 {
-    switch (GetColumnInt(0x54534846)) {
+    switch (GetColumnValue(0x54534846)) {
     case 0:
         return 106;
     case 1:

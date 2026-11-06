@@ -1,5 +1,5 @@
-#ifndef GAME_CTRL_SEL_H
-#define GAME_CTRL_SEL_H
+#ifndef GAME_MSG_CONTROLLER_H
+#define GAME_MSG_CONTROLLER_H
 
 #ifdef __cplusplus
 extern "C" {

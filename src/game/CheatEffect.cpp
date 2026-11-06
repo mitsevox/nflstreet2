@@ -193,7 +193,7 @@ void CheatEffectRemove(signed char db, int id)
         int handle = fn_8022F3D4(fn_8022F358(db));
         DbTableCursor cursor;
         cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
-        if (cursor.DbTableCursor::GetColumnValue(0x504C5555) != 0x3FF) {
+        if (cursor.DbTableCursor::GetColumnInt(0x504C5555) != 0x3FF) {
             TeamLock(db, 34);
         }
         if (GauntletGetTeamsLeft(db) != -1) {
