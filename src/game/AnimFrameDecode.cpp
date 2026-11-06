@@ -1,10 +1,13 @@
-#include "game/Frame_8019D3B8.h"
+/* Animation frame decoding: reads compressed frame headers, unpacks the
+   bit-packed channels of a frame and dequantizes channel values; also copies
+   raw (uncompressed) frames into a pose. */
+#include "game/AnimFrameHeader.h"
 #include "game/bitstream.h"
 #include <string.h>
 
 extern "C" {
 
-void fn_8019D2EC(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mirrored)
+void AnimCopyRawFrame(Pose_80041930 *pose, AnimBlendEntry *entry, int mirrored)
 {
     unsigned char *encoded = (unsigned char *)entry->mpUnknown40;
     unsigned int count = encoded[0];
@@ -24,17 +27,17 @@ void fn_8019D2EC(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mirrored)
     }
 }
 
-short *fn_8019D3B8(Frame_8019D3B8 *header, void *encoded)
+short *AnimReadFrameHeader(AnimFrameHeader *header, void *encoded)
 {
     unsigned char *bytes = (unsigned char *)encoded;
     unsigned int first = bytes[0];
     unsigned int optional = first >> 6;
     header->flags = bytes[1];
     header->count = first & 0x3F;
-    Block_8019D3B8 aligned;
+    AnimFrameHeaderCopy aligned;
     short *read;
     if ((unsigned int)encoded & 1) {
-        aligned = *(Block_8019D3B8 *)encoded;
+        aligned = *(AnimFrameHeaderCopy *)encoded;
         read = (short *)&aligned;
     } else {
         read = (short *)encoded;
@@ -64,7 +67,7 @@ short *fn_8019D3B8(Frame_8019D3B8 *header, void *encoded)
     return (short *)(bytes + ((char *)read - (char *)start));
 }
 
-int fn_8019D4EC(unsigned char *encoded)
+int AnimGetFrameHeaderSize(unsigned char *encoded)
 {
     unsigned int optional = encoded[0] >> 6;
     int size = 10;
@@ -75,7 +78,7 @@ int fn_8019D4EC(unsigned char *encoded)
     return size;
 }
 
-void fn_8019D514(short *destination, short *source, Record_8019D8AC *context, int mirrored)
+void AnimUnpackFrameBits(short *destination, short *source, AnimQuantContext *context, int mirrored)
 {
     BitStream_t stream;
     OpenBitStream(&stream, source, kBitStreamRead);
@@ -124,7 +127,7 @@ void fn_8019D514(short *destination, short *source, Record_8019D8AC *context, in
     CloseBitStream(&stream);
 }
 
-int fn_8019D800(int value, int index, int component, void *pContext, Pair_8019D800 *pPair)
+int AnimDequantize(int value, int index, int component, void *pContext, AnimQuantTables *pPair)
 {
     if (pContext) {
         component += index * 3;

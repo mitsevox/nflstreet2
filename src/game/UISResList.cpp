@@ -1,9 +1,11 @@
+/* UI resource lists: the uis_*.dat packages loaded for the front end and
+   for in-game screens, with the team logos. */
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Object_8007A334.h"
 #include "game/cu_8007C9D4.h"
 
-struct Desc_8021DEFC {
+struct UISResListDesc {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -13,7 +15,7 @@ extern "C" {
 int fn_80033144(void *p);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
-void *fn_8021DEFC(Desc_8021DEFC *pDesc);
+void *fn_8021DEFC(UISResListDesc *pDesc);
 void fn_8021E050(void *pList, int index, const char *pName, int a, int b);
 void fn_8021E0B0(void *pList, int index, const char *pName, int a, int b, int c);
 int fn_8021E504(void *pList, int index, int value);
@@ -41,7 +43,7 @@ extern char lbl_802EBF78[];
 extern char lbl_80306B34[];
 
 extern "C" {
-void fn_801A60D8(void)
+void UISResListAddCommon(void)
 {
     void *pList = fn_8021EA44(1);
 
@@ -51,7 +53,7 @@ void fn_801A60D8(void)
     fn_8021E0B0(pList, 5, lbl_802EBEC8, 1, 0, 65);
 }
 
-void fn_801A6180(void)
+void UISResListAddFrontEnd(void)
 {
     int flag = fn_80033144(lbl_80306B34);
     void *pList = fn_8021EA44(1);
@@ -78,7 +80,7 @@ void fn_801A6180(void)
     fn_8021E0B0(pList, 20, lbl_802EBF78, 1, 0, 180);
 }
 
-void fn_801A63E8(void)
+void UISResListAddInGame(void)
 {
     Object_8007A334 cursor;
     int first = 0;
@@ -123,19 +125,19 @@ void fn_801A63E8(void)
     fn_8021E504(pList, 4, 0);
 }
 
-void fn_801A6730(void)
+void UISResListSetup(void)
 {
-    Desc_8021DEFC desc;
+    UISResListDesc desc;
 
     desc.mUnknown0 = 21;
     desc.mUnknown4 = 21;
     desc.mUnknown8 = 1;
     fn_8021EA34(1, fn_8021DEFC(&desc));
-    fn_801A60D8();
+    UISResListAddCommon();
     if (fn_80027DF0()) {
-        fn_801A6180();
+        UISResListAddFrontEnd();
     } else if (fn_8002894C()) {
-        fn_801A63E8();
+        UISResListAddInGame();
     }
 }
 }

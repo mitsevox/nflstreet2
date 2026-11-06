@@ -1,8 +1,8 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
-#include "game/Font_8019BE30.h"
+#include "game/BmFont.h"
 #include "game/Object_8020E52C.h"
-#include "game/cu_801A4AD4.h"
+#include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8017F584.h"
@@ -93,14 +93,14 @@ static TextureSlot_802E6D68 sSlots[14][32] = {
     TEXTURE_SLOT_IDS, TEXTURE_SLOT_IDS,
 };
 
-static FontDesc_8019BE30 sFontDesc = {
+static BmFontDesc sFontDesc = {
     67, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,-#'.", 32, 32, 16, 3,
 };
 
 static unsigned char *sTextures[14][32];
 static unsigned char sColors[14][25];
 static unsigned int sSizes[32];
-static Font_8019BE30 sFont;
+static BmFont sFont;
 
 static unsigned char sInitialized = 0;
 static void *sArchive = 0;
@@ -144,7 +144,7 @@ void fn_80160188(void)
                             fn_8004625C(fn_8020E5F8(sSlots[player][slot].mpData, index),
                                         sSlots[player][slot].mPalette, sColors[player]);
                         }
-                        fn_801A4B28(sTextures[player][slot], sSlots[player][slot].mpData,
+                        PlyrTexCopy(sTextures[player][slot], sSlots[player][slot].mpData,
                                     sSizes[slot]);
                         if (slot == 4) {
                             fn_80161494(player, 4);
@@ -212,7 +212,7 @@ void fn_8016032C(void)
             }
         }
         if (other < sPlayerCount) {
-            fn_801A4B28(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
+            PlyrTexCopy(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
             fn_8020E2B0(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
                 int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
@@ -234,7 +234,7 @@ void fn_8016032C(void)
             }
         }
         if (other < 32) {
-            fn_801A4B28(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
+            PlyrTexCopy(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
             fn_8020E2B0(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
                 int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
@@ -264,7 +264,7 @@ void fn_8016061C(int player, int slot, void *pData, int shared)
         fn_801EFF80(sArchive, sSlots[player][slot].mId, pData);
         fn_8020E2B0(pData);
     }
-    fn_801A4B28(sTextures[player][slot], pData, sSizes[slot]);
+    PlyrTexCopy(sTextures[player][slot], pData, sSizes[slot]);
     if (slot == 4 && fn_80049D04(player)) {
         fn_80161494(player, 4);
     }
@@ -356,7 +356,7 @@ void fn_80160874(unsigned int count)
 
     saved0 = fn_801F1520(4);
     saved1 = fn_801C9DC8(4);
-    fn_8019BE30(&sFont, &sFontDesc, sArchive, 1);
+    BmFontLoad(&sFont, &sFontDesc, sArchive, 1);
     fn_801F1520(saved0);
     fn_801C9DC8(saved1);
 }
@@ -395,7 +395,7 @@ void fn_80160B6C(void)
         }
     }
     fn_801D2BD0(sTextures[0][0]);
-    fn_8019BE94(&sFont);
+    BmFontFree(&sFont);
 }
 
 void *fn_80160C08(void)
@@ -509,7 +509,7 @@ void fn_80160F98(void)
     sPending = 0;
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
-            fn_801A4B08(&sTextureDescs[player][i]);
+            PlyrTexFreeDesc(&sTextureDescs[player][i]);
         }
     }
 }
@@ -670,7 +670,7 @@ void fn_80161498(void)
     sArchive = 0;
 }
 
-Font_8019BE30 *fn_801614C4(void)
+BmFont *fn_801614C4(void)
 {
     return &sFont;
 }

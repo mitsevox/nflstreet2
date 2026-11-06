@@ -36,11 +36,11 @@ extern Callback_803EBF40 *lbl_803EBF40;
 extern Callback_803EBF44 *lbl_803EBF44;
 
 /* 12-byte argument of fn_8021DEFC. */
-typedef struct Desc_8021DEFC {
+typedef struct UISResListDesc {
     Int32 NumA;     /* 0x00 */
     Int32 NumB;     /* 0x04 */
     Int32 unk_08;   /* 0x08 */
-} Desc_8021DEFC;
+} UISResListDesc;
 
 /* A colour that is also compared as one word. */
 typedef union ColorWord_80220988 {
@@ -815,7 +815,7 @@ Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item)
     return Result;
 }
 
-Object_8021E688 *fn_8021DEFC(Desc_8021DEFC *pDesc)
+Object_8021E688 *fn_8021DEFC(UISResListDesc *pDesc)
 {
     Int32 Size;
     Object_8021E688 *pObject;

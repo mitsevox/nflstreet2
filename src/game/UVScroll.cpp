@@ -1,5 +1,7 @@
+/* Texture scrolling of world objects (UVs advanced per frame in float or
+   fixed point) and the lighting set-up for dynamic objects. */
 #include "game/cu_801442FC.h"
-#include "game/cu_801A8620.h"
+#include "game/DynObjRender.h"
 
 #include <math.h>
 
@@ -11,29 +13,29 @@ int fn_8002D060(void *p);
 int fn_8002D150(void *p);
 }
 
-struct UV_801A7C20 {
+struct UVScrollUV {
     float u;
     float v;
 };
 
-struct Mesh_801A7C20 {
-    UV_801A7C20 *mpUVs;
+struct UVScrollMesh {
+    UVScrollUV *mpUVs;
     unsigned short mCount;
 };
 
-struct FixedUV_801A7F10 {
+struct UVScrollFixedUV {
     short u;
     short v;
 };
 
-struct FixedMesh_801A7F10 {
-    FixedUV_801A7F10 *mpUVs;
+struct UVScrollFixedMesh {
+    UVScrollFixedUV *mpUVs;
     unsigned short mCount;
 };
 
 /* Texture-scroll settings: frame lengths in seconds, then per-axis scroll
    values whose meaning depends on the scroll type. */
-struct Scroll_801A7C20 {
+struct UVScrollState {
     int mUnknown0;
     float mDurations[11];
     unsigned int mPeriodV;
@@ -47,9 +49,9 @@ struct Scroll_801A7C20 {
 };
 
 extern "C" {
-void fn_801A7C20(Mesh_801A7C20 *pMesh, Scroll_801A7C20 *pScroll)
+void UVScrollFloat(UVScrollMesh *pMesh, UVScrollState *pScroll)
 {
-    UV_801A7C20 *uv = pMesh->mpUVs;
+    UVScrollUV *uv = pMesh->mpUVs;
     float step = 0.0f;
     if (pScroll->mAxis == 1) {
         if (pScroll->mType == 0) {
@@ -112,12 +114,12 @@ void fn_801A7C20(Mesh_801A7C20 *pMesh, Scroll_801A7C20 *pScroll)
 
 /* Scroll texture coordinates in 1/4096 units. The V path repeatedly
    updates the first quad and carries its minima across iterations. */
-void ScrollFixedMeshUVs_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pScroll)
+void UVScrollFixed(UVScrollFixedMesh *pMesh, UVScrollState *pScroll)
 {
     float step = 0.0f;
     int one = 0x1000;
     float minV = one * 2;
-    FixedUV_801A7F10 *uv = pMesh->mpUVs;
+    UVScrollFixedUV *uv = pMesh->mpUVs;
     signed char corner = 0;
     float minU = minV;
     signed char corners[4];
@@ -206,11 +208,11 @@ void ScrollFixedMeshUVs_801A7F10(FixedMesh_801A7F10 *pMesh, Scroll_801A7C20 *pSc
 int fn_80236B98(int a, float x, float y, float z);
 void fn_80236C10(int a, float *pScale, float *pDirection);
 
-void fn_801A8548(Object_801A8620 *, int)
+void DynObjDrawEnvMap(DynObj *, int)
 {
 }
 
-int fn_801A854C(Tracker_801442FC *pTracker, Object_80144310 *pSource)
+int DynObjSetupLight(Tracker_801442FC *pTracker, Object_80144310 *pSource)
 {
     float direction[4];
     float scale[3];

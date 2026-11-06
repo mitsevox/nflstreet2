@@ -1,8 +1,10 @@
+/* Fixed-point helpers for animation channels: 4.12 lerps between channel
+   arrays and the 1.15 scale-and-offset dequantization. */
 extern "C" {
 
 /* pOut[i] = pB[i] + (pA[i] - pB[i]) * weight, with a 4.12 fixed-point
    weight; pOut may be pA. */
-void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count)
+void AnimLerpFixed(short *pOut, short *pA, short *pB, int weight, int count)
 {
     int i;
 
@@ -14,9 +16,9 @@ void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count)
     }
 }
 
-/* As fn_801A679C, with each pA[i] first scaled by pScale[i] (1.15 fixed
+/* As AnimLerpFixed, with each pA[i] first scaled by pScale[i] (1.15 fixed
    point) and offset by pOffset[i]. */
-void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset,
+void AnimLerpFixedScaled(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset,
                  short *pScale)
 {
     int i;
@@ -33,7 +35,7 @@ void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short
 
 /* pOut[i] = pOffset[i] + pA[i] * pScale[i], with a 1.15 fixed-point scale;
    pOut may be pA. */
-void fn_801A6838(short *pOut, short *pA, int count, short *pOffset, short *pScale)
+void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pScale)
 {
     int i;
 

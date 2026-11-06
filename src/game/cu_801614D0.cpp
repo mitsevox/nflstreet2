@@ -26,7 +26,7 @@ int fn_801614D0(void)
 int fn_801614F4(Instance_801614D0 *pInstance, int a)
 {
     if (fn_801614D0()) {
-        fn_801A5568(pInstance, a);
+        EnvSkyDraw(pInstance, a);
     }
     return 0;
 }
@@ -65,7 +65,7 @@ void fn_801615EC(void *pOwner)
             pItem->mUnknown4.mZ = pItem->mUnknown4.mY = pItem->mUnknown4.mX = 0.0f;
             pItem->mUnknown1C8 = fn_800A338C();
             fn_8016153C(pItem);
-            fn_801A5478(pItem);
+            EnvSkyInit(pItem);
         }
     }
     lbl_803EB380 = pItem;
@@ -76,7 +76,7 @@ void fn_801616C0(void *pOwner)
     Instance_801614D0 *pItem = lbl_803EB380;
 
     if (pItem != 0) {
-        fn_801A553C(pItem);
+        EnvSkyShutdown(pItem);
         fn_801615A0(lbl_803EB380);
         fn_801DD320((int)pOwner, (int)pItem);
         VptTrashObject((int)pItem);

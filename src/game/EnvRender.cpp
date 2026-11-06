@@ -1,14 +1,16 @@
+/* Level environment rendering: the sky object's layers, the level fog
+   settings and the "Environment" model with its layered draw passes. */
 #include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/GameVpt.h"
 #include "game/InGame.h"
 #include "game/Object_80039F5C.h"
 #include "game/Instance_801614D0.h"
-#include "game/Entry_802F394C.h"
+#include "game/EnvFogSettings.h"
 
 
-/* Item of the type-6 pool of src/game/cu_80046340.cpp. */
-struct Object_80046340 {
+/* Item of the type-6 pool of src/game/EnvObj.cpp. */
+struct EnvObj {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown10[4];
@@ -20,32 +22,32 @@ struct Object_80046340 {
     char mUnknownE64[0x30];
 };
 
-/* Item of the type-25 pool of src/game/cu_80046340.cpp. */
-struct Object_800463D8 {
+/* Item of the type-25 pool of src/game/EnvObj.cpp. */
+struct EnvObjOverlay {
     char mUnknown0[0x14];
-    Object_80046340 *mpUnknown14;
+    EnvObj *mpUnknown14;
 };
 
-struct View_8002B550 {
+struct EnvViewport {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
 };
 
 extern "C" {
-unsigned char fn_80147E80(int index);
+unsigned char ScreenTintIsActive(int index);
 void FieldMarkerDrawBeams(void);
-void fn_801A5780(void);
+void EnvApplyFog(void);
 void FieldMarkerDrawArrows(void);
 int fn_800A262C(void);
 int fn_800A26C4(void);
 int fn_800A34B0(void);
 int fn_800A34BC(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *p);
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_802353D8(Object_80235588 *p, int flags);
 void fn_802353F8(Object_80235588 *p, int flags);
 void fn_80235510(Object_80235588 *p, int a);
@@ -68,7 +70,7 @@ int fn_80236EC0(int a);
 void fn_80236EFC(float a);
 }
 
-static Entry_802F394C lbl_802F394C[12] = {
+static EnvFogSettings _EnvRender_aFogSettings[12] = {
     { 350.0f, 4000.0f, 4, 0.45f, 0xBEA0A0 },
     { 55.0f, 600.0f, 4, 0.12f, 0x453D3D },
     { 350.0f, 4000.0f, 4, 0.6f, 0xD2CC60 },
@@ -82,10 +84,10 @@ static Entry_802F394C lbl_802F394C[12] = {
     { 35.0f, 2000.0f, 5, 0.4f, 0xD4A895 },
     { 30.0f, 1600.0f, 5, 0.3f, 0x846039 },
 };
-static float lbl_803EB840 = 0.0001f;
+static float _EnvRender_fLayer3Value = 0.0001f;
 
 extern "C" {
-void fn_801A5478(Instance_801614D0 *pInstance)
+void EnvSkyInit(Instance_801614D0 *pInstance)
 {
     Object_80235588 *pLayer = &pInstance->mUnknown48;
     int handle = pInstance->mUnknown14;
@@ -101,20 +103,20 @@ void fn_801A5478(Instance_801614D0 *pInstance)
     fn_80235B6C(&pInstance->mUnknown108, pElement, 1);
     fn_802353F8(&pInstance->mUnknown108, 0x2000000);
     fn_802353D8(&pInstance->mUnknown108, 0x40020A);
-    fn_801A5780();
+    EnvApplyFog();
 }
 
-void fn_801A553C(Instance_801614D0 *pInstance)
+void EnvSkyShutdown(Instance_801614D0 *pInstance)
 {
     fn_80236DE0(0);
     fn_80236EC0(0);
 }
 
-void fn_801A5568(Instance_801614D0 *pInstance, int unused)
+void EnvSkyDraw(Instance_801614D0 *pInstance, int unused)
 {
-    int handle = fn_801C657C();
+    int handle = ConGetCurrentContext();
 
-    fn_80210388();
+    TMRenderReset();
     fn_80235C90(&pInstance->mUnknown48, 0, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);
@@ -130,57 +132,57 @@ void fn_801A5568(Instance_801614D0 *pInstance, int unused)
     fn_801D0544();
 }
 
-Entry_802F394C *fn_801A566C(int index)
+EnvFogSettings *EnvGetFogSettings(int index)
 {
-    Entry_802F394C *pEntry;
+    EnvFogSettings *pEntry;
 
     switch (index) {
     case 0:
-        pEntry = &lbl_802F394C[0];
+        pEntry = &_EnvRender_aFogSettings[0];
         break;
     case 2:
-        pEntry = &lbl_802F394C[1];
+        pEntry = &_EnvRender_aFogSettings[1];
         break;
     case 3:
-        pEntry = &lbl_802F394C[2];
+        pEntry = &_EnvRender_aFogSettings[2];
         break;
     case 1:
-        pEntry = &lbl_802F394C[3];
+        pEntry = &_EnvRender_aFogSettings[3];
         break;
     case 7:
-        pEntry = &lbl_802F394C[4];
+        pEntry = &_EnvRender_aFogSettings[4];
         break;
     case 6:
-        pEntry = &lbl_802F394C[5];
+        pEntry = &_EnvRender_aFogSettings[5];
         break;
     case 8:
-        pEntry = &lbl_802F394C[6];
+        pEntry = &_EnvRender_aFogSettings[6];
         break;
     case 9:
-        pEntry = &lbl_802F394C[7];
+        pEntry = &_EnvRender_aFogSettings[7];
         break;
     case 4:
-        pEntry = &lbl_802F394C[9];
+        pEntry = &_EnvRender_aFogSettings[9];
         break;
     case 5:
-        pEntry = &lbl_802F394C[8];
+        pEntry = &_EnvRender_aFogSettings[8];
         break;
     case 10:
-        pEntry = &lbl_802F394C[10];
+        pEntry = &_EnvRender_aFogSettings[10];
         break;
     case 11:
-        pEntry = &lbl_802F394C[11];
+        pEntry = &_EnvRender_aFogSettings[11];
         break;
     default:
-        pEntry = &lbl_802F394C[0];
+        pEntry = &_EnvRender_aFogSettings[0];
         break;
     }
     return pEntry;
 }
 
-void fn_801A5780(void)
+void EnvApplyFog(void)
 {
-    Entry_802F394C *pEntry = fn_800A34EC();
+    EnvFogSettings *pEntry = fn_800A34EC();
     unsigned int color = fn_800A3410() & 0xFFFFFF;
     float density = fn_800A3400();
 
@@ -189,8 +191,8 @@ void fn_801A5780(void)
     } else {
         fn_80236DE0(0);
     }
-    if (fn_8002894C()) {
-        fn_80236DD8(GameVpt::fn_800293A8());
+    if (InGameIsPlaying()) {
+        fn_80236DD8(GameVpt::GetViewport());
     }
     fn_80236E2C(color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF);
     fn_80236E04(pEntry->mUnknown0, pEntry->mUnknown4);
@@ -198,7 +200,7 @@ void fn_801A5780(void)
     fn_80236EC0(1);
 }
 
-void fn_801A582C(Object_80046340 *pObject)
+void EnvLayersInit(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -290,7 +292,7 @@ void fn_801A582C(Object_80046340 *pObject)
     pObject->mUnknown14 = 0;
 }
 
-void fn_801A5CA4(Object_80046340 *pObject)
+void EnvLayersFree(EnvObj *pObject)
 {
     unsigned int i;
 
@@ -302,17 +304,17 @@ void fn_801A5CA4(Object_80046340 *pObject)
     }
 }
 
-int fn_801A5D0C(Object_800463D8 *pOwner)
+int EnvDrawOverlay(EnvObjOverlay *pOwner)
 {
-    Object_80046340 *pObject = pOwner->mpUnknown14;
-    int handle = fn_801C657C();
+    EnvObj *pObject = pOwner->mpUnknown14;
+    int handle = ConGetCurrentContext();
     float alpha = 0.1f;
 
     fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
-    fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
-    if (fn_80147E80(1) == 0) {
+    fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
+    if (ScreenTintIsActive(1) == 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
         fn_80235764(&pObject->mUnknown24[0], handle);
         fn_80235740(&pObject->mUnknown24[8], handle);
@@ -335,22 +337,22 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
     return 0;
 }
 
-int fn_801A5E90(Object_80046340 *pObject)
+int EnvDraw(EnvObj *pObject)
 {
-    int handle = fn_801C657C();
+    int handle = ConGetCurrentContext();
     unsigned int i;
 
     fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
-    fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
+    fn_80235D78(&((EnvViewport *)VptManagerGetCurrentCamera(0))->mUnknown4);
     fn_80235740(&pObject->mUnknown24[4], handle);
     fn_80235764(&pObject->mUnknown24[4], handle);
     fn_80235740(&pObject->mUnknown24[1], handle);
     fn_80235764(&pObject->mUnknown24[1], handle);
     fn_80235740(&pObject->mUnknown24[2], handle);
     fn_80235764(&pObject->mUnknown24[2], handle);
-    fn_80235D10(&pObject->mUnknown24[3], lbl_803EB840);
+    fn_80235D10(&pObject->mUnknown24[3], _EnvRender_fLayer3Value);
     fn_80235740(&pObject->mUnknown24[3], handle);
     fn_80235764(&pObject->mUnknown24[3], handle);
     if (!fn_800A262C()) {
@@ -365,7 +367,7 @@ int fn_801A5E90(Object_80046340 *pObject)
         fn_80235740(&pObject->mUnknown24[5], handle);
         fn_80235764(&pObject->mUnknown24[5], handle);
     }
-    if (fn_80147E80(1) != 0) {
+    if (ScreenTintIsActive(1) != 0) {
         fn_80235740(&pObject->mUnknown24[0], handle);
         fn_80235764(&pObject->mUnknown24[0], handle);
         fn_80235740(&pObject->mUnknown24[8], handle);

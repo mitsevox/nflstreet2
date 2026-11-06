@@ -1,18 +1,21 @@
-#include "game/Item_8019F044.h"
-#include "game/Frame_8019D3B8.h"
+/* Animation blending for players: interpolates bone angles and whole poses,
+   decodes and mixes the weighted entries of a blend list into the player's
+   pose, blends 64-value weight sets and builds the pose's bone matrices. */
+#include "game/AnimRootItem.h"
+#include "game/AnimFrameHeader.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Record_8019D8AC.h"
-#include "game/cu_80136B1C.h"
+#include "game/AnimQuantContext.h"
+#include "game/Ball.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
 
 extern "C" {
-void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count);
-void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
-void fn_801A6838(short *pOut, short *pA, int count, short *pOffset, short *pScale);
+void AnimLerpFixed(short *pOut, short *pA, short *pB, int weight, int count);
+void AnimLerpFixedScaled(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
+void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pScale);
 float fn_801BE5D0(void *p, unsigned short index);
-void fn_801CF810(int *pOut, int *pA, int *pB, float t);
-void fn_801CF8A8(int *pOut, int a, int b, float t);
+void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D09EC(int a);
@@ -24,8 +27,8 @@ void fn_80227930(float *pOut, float *pA, float *pB, float t);
 void fn_802338D4(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton, unsigned int flags);
 }
 
-static unsigned char lbl_803EB7C8 = 1;
-static unsigned char lbl_803EB7C9 = 1;
+static unsigned char _AnimBlend_bInterpBones = 1;
+static unsigned char _AnimBlend_bWrapAngles = 1;
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
@@ -35,7 +38,7 @@ extern "C" {
    otherwise a cubic using pPrev and pNext, when given, for the tangents.
    On the cubic path, a pFrom or pNext angle shifted by 2*pi to follow the
    wrap at pi is written back. */
-void fn_8019E530(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
+void AnimInterpAngles(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
 {
     float tangent0[3];
     float tangent1[3];
@@ -58,7 +61,7 @@ void fn_8019E530(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
     for (i = 0; i < 3; i++) {
         if (ABS(pFrom[i] - pTo[i]) <= 0x71C) {
             spline[i] = 0;
-            fn_801A679C(&pTo[i], &pTo[i], &pFrom[i], (int)(t * 4095.0f), 1);
+            AnimLerpFixed(&pTo[i], &pTo[i], &pFrom[i], (int)(t * 4095.0f), 1);
         }
         wrapped[0] = wrapped[1] = wrapped[2] = 0;
         from[i] = pFrom[i] * 9.5873802e-5f;
@@ -71,7 +74,7 @@ void fn_8019E530(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
         if (!noNext) {
             next[i] = pNext[i] * 9.5873802e-5f;
         }
-        if (lbl_803EB7C9) {
+        if (_AnimBlend_bWrapAngles) {
             if (!noPrev) {
                 if (diff > 3.1415927f) {
                     wrapped[0] = 1;
@@ -129,7 +132,7 @@ void fn_8019E530(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
     }
 }
 
-void fn_8019EA2C(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
+void AnimBlendPoseAngles(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
                  unsigned char a)
 {
     Quat_801EB488 rotA;
@@ -141,50 +144,50 @@ void fn_8019EA2C(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, P
     QuatFromEulerYZX(&rot, pOut->mUnknown32, pOut->mUnknown48[2] << 8, pOut->mUnknown48[0] << 8);
     QuatSlerp(&rot, &rot, &rotA, t);
     QuatToEulerYZX(angles, &rot);
-    if (lbl_803EB7C8) {
+    if (_AnimBlend_bInterpBones) {
         for (i = 1; i < pOut->mUnknown4; i++) {
             if (pPrev != 0 && pNext != 0) {
-                fn_8019E530(pPrev->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3,
+                AnimInterpAngles(pPrev->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3,
                             pNext->mUnknown48 + i * 3, t);
             } else if (pPrev == 0 && pNext != 0) {
-                fn_8019E530(0, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, pNext->mUnknown48 + i * 3, t);
+                AnimInterpAngles(0, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, pNext->mUnknown48 + i * 3, t);
             } else if (pPrev != 0 && pNext == 0) {
-                fn_8019E530(pPrev->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, 0, t);
+                AnimInterpAngles(pPrev->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, 0, t);
             } else {
                 int weight = (int)(t * 4095.0f);
 
-                fn_801A679C(pOut->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, weight, 1);
-                fn_801A679C(pOut->mUnknown48 + i * 3 + 1, pOut->mUnknown48 + i * 3 + 1, pA->mUnknown48 + i * 3 + 1,
+                AnimLerpFixed(pOut->mUnknown48 + i * 3, pOut->mUnknown48 + i * 3, pA->mUnknown48 + i * 3, weight, 1);
+                AnimLerpFixed(pOut->mUnknown48 + i * 3 + 1, pOut->mUnknown48 + i * 3 + 1, pA->mUnknown48 + i * 3 + 1,
                             weight, 1);
-                fn_801A679C(pOut->mUnknown48 + i * 3 + 2, pOut->mUnknown48 + i * 3 + 2, pA->mUnknown48 + i * 3 + 2,
+                AnimLerpFixed(pOut->mUnknown48 + i * 3 + 2, pOut->mUnknown48 + i * 3 + 2, pA->mUnknown48 + i * 3 + 2,
                             weight, 1);
             }
         }
     } else {
-        fn_801A679C(pOut->mUnknown48, pOut->mUnknown48, pA->mUnknown48, (int)(t * 4095.0f), pOut->mUnknown4 * 3);
+        AnimLerpFixed(pOut->mUnknown48, pOut->mUnknown48, pA->mUnknown48, (int)(t * 4095.0f), pOut->mUnknown4 * 3);
     }
     pOut->mUnknown32 = angles[1];
     pOut->mUnknown48[0] = angles[0] >> 8;
     pOut->mUnknown48[2] = angles[2] >> 8;
 }
 
-void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
+void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
                  unsigned char a)
 {
     fn_80227930(pOut->mUnknown8, pOut->mUnknown8, pA->mUnknown8, t);
     fn_80227930(pOut->mUnknown20, pOut->mUnknown20, pA->mUnknown20, t);
-    fn_801CF810(pOut->mUnknown36, pOut->mUnknown36, pA->mUnknown36, t);
-    fn_8019EA2C(pOut, pA, pPrev, pNext, t, a);
+    Orient3Lerp(pOut->mUnknown36, pOut->mUnknown36, pA->mUnknown36, t);
+    AnimBlendPoseAngles(pOut, pA, pPrev, pNext, t, a);
 }
 
-short *fn_8019ED20(int count)
+short *AnimAllocPoseChannels(int count)
 {
     return (short *)fn_801D2B7C(64 * 3 * sizeof(short), 0, 0);
 }
 
-void fn_8019ED4C(unsigned char *pDestination, unsigned char *pSource, Record_8019D8AC *pContext, int mirrored)
+void AnimDecompressFrame(unsigned char *pDestination, unsigned char *pSource, AnimQuantContext *pContext, int mirrored)
 {
-    Pair_8019D800 *pPair;
+    AnimQuantTables *pPair;
     int size;
 
     if (mirrored) {
@@ -192,23 +195,23 @@ void fn_8019ED4C(unsigned char *pDestination, unsigned char *pSource, Record_801
     } else {
         pPair = &pContext->mUnknown4;
     }
-    size = fn_8019D4EC(pSource);
+    size = AnimGetFrameHeaderSize(pSource);
     memcpy(pDestination, pSource, size);
     pDestination += size;
-    fn_8019D514((short *)pDestination, (short *)(pSource + size), pContext, mirrored);
-    fn_801A6838((short *)pDestination, (short *)pDestination, pContext->mUnknown0, pPair->mUnknown0,
+    AnimUnpackFrameBits((short *)pDestination, (short *)(pSource + size), pContext, mirrored);
+    AnimScaleFixed((short *)pDestination, (short *)pDestination, pContext->mUnknown0, pPair->mUnknown0,
                 pPair->mUnknown4);
 }
 
-void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
+void AnimBlendEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, int count)
 {
     Pose_80041930 pose;
     short samples[64 * 3];
     Pose_80041930 *pPose = &pObject->mUnknown44;
     unsigned int entries = pBlend->mUnknown0;
-    BlendEntry_8019EDDC *pEntry;
-    Record_8019D8AC *pContext;
-    Pair_8019D800 *pPair;
+    AnimBlendEntry *pEntry;
+    AnimQuantContext *pContext;
+    AnimQuantTables *pPair;
     unsigned int values;
     float scale;
     float weight;
@@ -230,7 +233,7 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
         pPair = &pContext->mUnknown4;
     }
     if (pContext != 0) {
-        fn_801A6838(pPose->mUnknown48, pPose->mUnknown48, values, pPair->mUnknown0, pPair->mUnknown4);
+        AnimScaleFixed(pPose->mUnknown48, pPose->mUnknown48, values, pPair->mUnknown0, pPair->mUnknown4);
     }
     for (i = 1; i < entries; i++) {
         pEntry = &pBlend->mUnknown4[i];
@@ -245,13 +248,13 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
         }
         fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
         fn_80227930(pPose->mUnknown20, pose.mUnknown20, pPose->mUnknown20, weight);
-        fn_801CF810(pPose->mUnknown36, pose.mUnknown36, pPose->mUnknown36, weight);
-        fn_801CF8A8(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
+        Orient3Lerp(pPose->mUnknown36, pose.mUnknown36, pPose->mUnknown36, weight);
+        OrientLerpAngle(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
         if (pContext != 0) {
-            fn_801A67DC(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,
+            AnimLerpFixedScaled(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,
                         pPair->mUnknown0, pPair->mUnknown4);
         } else {
-            fn_801A679C(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values);
+            AnimLerpFixed(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values);
         }
     }
     pPose->mUnknown6 = -1;
@@ -272,7 +275,7 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
     }
 }
 
-void fn_8019F044(Object_8003DEC4 *pObject, Item_8019F044 *pItems, unsigned short count, void *p)
+void AnimBlendRootAngles(Object_8003DEC4 *pObject, AnimRootItem *pItems, unsigned short count, void *p)
 {
     int angles[3];
     float total = 0.0f;
@@ -285,7 +288,7 @@ void fn_8019F044(Object_8003DEC4 *pObject, Item_8019F044 *pItems, unsigned short
         if (pItems[i].mUnknown1 != 0 && pItems[i].mUnknown48 == 0.0f) {
             weight = fn_801BE5D0(p, pItems[i].mUnknown8) * pItems[i].mUnknown30;
             total += weight;
-            fn_801CF810(angles, pItems[i].mUnknown10, angles, weight / total);
+            Orient3Lerp(angles, pItems[i].mUnknown10, angles, weight / total);
         }
     }
     pObject->mUnknown44.mUnknown32 = angles[1];
@@ -305,13 +308,13 @@ void fn_8019F044(Object_8003DEC4 *pObject, Item_8019F044 *pItems, unsigned short
     }
 }
 
-void fn_8019F1F0(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, unsigned int index, int count)
+void AnimBlendRawEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, unsigned int index, int count)
 {
     Pose_80041930 pose;
     short samples[32 * 3];
     Pose_80041930 *pPose = &pObject->mUnknown116[index].mUnknown12;
     unsigned int entries = pBlend->mUnknown0;
-    BlendEntry_8019EDDC *pEntry;
+    AnimBlendEntry *pEntry;
     unsigned int values;
     int mirrored;
     float weight;
@@ -327,15 +330,15 @@ void fn_8019F1F0(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, unsigned int 
     if (pEntry->mUnknown8 & 1) {
         mirrored = 1;
     }
-    fn_8019D2EC(pPose, pEntry, mirrored);
+    AnimCopyRawFrame(pPose, pEntry, mirrored);
     for (i = 1; i < entries; i++) {
         weight = 1.0f - pBlend->mUnknown4[i].mUnknown4;
-        fn_8019D2EC(&pose, &pBlend->mUnknown4[i], mirrored);
-        fn_801A679C(pPose->mUnknown48, pPose->mUnknown48, pose.mUnknown48, (int)(weight * 4095.0f), values);
+        AnimCopyRawFrame(&pose, &pBlend->mUnknown4[i], mirrored);
+        AnimLerpFixed(pPose->mUnknown48, pPose->mUnknown48, pose.mUnknown48, (int)(weight * 4095.0f), values);
     }
 }
 
-void fn_8019F2F4(float *pValues)
+void AnimClearWeights(float *pValues)
 {
     int i;
 
@@ -344,14 +347,14 @@ void fn_8019F2F4(float *pValues)
     }
 }
 
-void fn_8019F318(float *pValues, BlendEntry_8019EDDC *pEntry)
+void AnimReadWeights(float *pValues, AnimBlendEntry *pEntry)
 {
     unsigned short *pData = (unsigned short *)pEntry->mpUnknown40;
     unsigned int i;
     unsigned int index;
     unsigned int level;
 
-    fn_8019F2F4(pValues);
+    AnimClearWeights(pValues);
     for (i = 0; i < pData[0]; i++) {
         index = pData[i + 1] & 0x3F;
         level = pData[i + 1] >> 6;
@@ -362,7 +365,7 @@ void fn_8019F318(float *pValues, BlendEntry_8019EDDC *pEntry)
     }
 }
 
-void fn_8019F3CC(float *pOut, float *pIn, int count, float t)
+void AnimLerpFloats(float *pOut, float *pIn, int count, float t)
 {
     while (count--) {
         *pOut = (*pIn - *pOut) * t + *pOut;
@@ -371,7 +374,7 @@ void fn_8019F3CC(float *pOut, float *pIn, int count, float t)
     }
 }
 
-void fn_8019F404(float *pValues, Blend_8019EDDC *pBlend)
+void AnimBlendWeights(float *pValues, AnimBlendList *pBlend)
 {
     float values[64];
     unsigned int entries = pBlend->mUnknown0;
@@ -380,19 +383,19 @@ void fn_8019F404(float *pValues, Blend_8019EDDC *pBlend)
     if (entries == 0) {
         return;
     }
-    fn_8019F318(pValues, &pBlend->mUnknown4[0]);
+    AnimReadWeights(pValues, &pBlend->mUnknown4[0]);
     for (i = 1; i < entries; i++) {
-        fn_8019F318(values, &pBlend->mUnknown4[i]);
-        fn_8019F3CC(pValues, values, 64, pBlend->mUnknown4[i].mUnknown4);
+        AnimReadWeights(values, &pBlend->mUnknown4[i]);
+        AnimLerpFloats(pValues, values, 64, pBlend->mUnknown4[i].mUnknown4);
     }
 }
 
-void fn_8019F48C(float *pValues)
+void AnimResetWeights(float *pValues)
 {
-    fn_8019F2F4(pValues);
+    AnimClearWeights(pValues);
 }
 
-void fn_8019F4AC(Object_8003DEC4 *pObject)
+void AnimBuildPoseMatrices(Object_8003DEC4 *pObject)
 {
     fn_801D0508();
     if (!(pObject->mUnknown20 & 0x2000)) {

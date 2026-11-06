@@ -1,3 +1,5 @@
+/* Simple shadows (SimpShadow module): a pool of textured blob shadows under
+   objects, added by position, shown or hidden, and drawn in one pass. */
 #include <dolphin/gx/GXPixel.h>
 #include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
@@ -10,7 +12,7 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 
-struct Entry_801A5050 {
+struct SimpShadowEntry {
     int mUnknown0;
     Vector_80039F5C *mpUnknown4;
     float mUnknown8;
@@ -23,16 +25,16 @@ struct Entry_801A5050 {
 
 extern "C" {
 int fn_800C47C4(void);
-int fn_801CECCC(int index);
-int fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+int GlibRenderSelectBin(int a);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(Mtx44 m);
-int fn_801D34D0(void *pDest, int size, int value, int width);
-void fn_80210388(void);
+int MemFill(void *pDest, int size, int value, int width);
+void TMRenderReset(void);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
 void *fn_80236384(int a);
@@ -48,17 +50,17 @@ void fn_802525BC(int a);
 
 extern int lbl_803EBC98;
 
-static Entry_801A5050 *lbl_803664C0[96];
-static ResTexture lbl_80366640[1];
-static GXTexObj lbl_80366680;
-static int lbl_803EB830[1] = { 0 };
-static unsigned short lbl_803EB834 = 0;
-static Entry_801A5050 *lbl_803EB838 = 0;
-static unsigned char lbl_803EB83C = 0;
-static unsigned char lbl_803ECC18;
+static SimpShadowEntry *_SimpShadow_apEntries[96];
+static ResTexture _SimpShadow_aTextures[1];
+static GXTexObj _SimpShadow_TexObj;
+static int _SimpShadow_aiTextureIds[1] = { 0 };
+static unsigned short _SimpShadow_uCount = 0;
+static SimpShadowEntry *_SimpShadow_pPool = 0;
+static unsigned char _SimpShadow_bInit = 0;
+static unsigned char _SimpShadow_bEnabled;
 
 extern "C" {
-int fn_801A4CBC(int a, Entry_801A5050 *pEntry, Vector_80039F5C *pScale)
+int SimpShadowDrawQuad(int a, SimpShadowEntry *pEntry, Vector_80039F5C *pScale)
 {
     Vector_80039F5C pts[4];
     Vector_80039F5C *pPos = pEntry->mpUnknown4;
@@ -95,48 +97,48 @@ int fn_801A4CBC(int a, Entry_801A5050 *pEntry, Vector_80039F5C *pScale)
     return a;
 }
 
-void fn_801A4E9C(void)
+void SimpShadowInit(void)
 {
     unsigned short i;
 
-    lbl_803EB838 = (Entry_801A5050 *)fn_801D2B7C(96 * sizeof(Entry_801A5050), 0, 0);
-    fn_801D34D0(lbl_803EB838, 96 * sizeof(Entry_801A5050), 0, 1);
+    _SimpShadow_pPool = (SimpShadowEntry *)fn_801D2B7C(96 * sizeof(SimpShadowEntry), 0, 0);
+    MemFill(_SimpShadow_pPool, 96 * sizeof(SimpShadowEntry), 0, 1);
     for (i = 0; i < 96; i++) {
-        lbl_803664C0[i] = &lbl_803EB838[i];
+        _SimpShadow_apEntries[i] = &_SimpShadow_pPool[i];
     }
     for (i = 0; i < 1; i++) {
-        ResTextureClear(&lbl_80366640[i]);
-        ResTextureOpen(&lbl_80366640[i], 0, fn_800C47C4(), lbl_803EB830[i], "LLSimpShadow");
+        ResTextureClear(&_SimpShadow_aTextures[i]);
+        ResTextureOpen(&_SimpShadow_aTextures[i], 0, fn_800C47C4(), _SimpShadow_aiTextureIds[i], "LLSimpShadow");
     }
-    lbl_803EB834 = 0;
-    lbl_803EB83C = 1;
-    lbl_803ECC18 = 1;
-    GXInitTexObj(&lbl_80366680, lbl_80366640[0].mTexture.mpImage, lbl_80366640[0].mTexture.mWidth,
-                lbl_80366640[0].mTexture.mHeight, lbl_80366640[0].mTexture.mFormat, 0, 0, 0);
+    _SimpShadow_uCount = 0;
+    _SimpShadow_bInit = 1;
+    _SimpShadow_bEnabled = 1;
+    GXInitTexObj(&_SimpShadow_TexObj, _SimpShadow_aTextures[0].mTexture.mpImage, _SimpShadow_aTextures[0].mTexture.mWidth,
+                _SimpShadow_aTextures[0].mTexture.mHeight, _SimpShadow_aTextures[0].mTexture.mFormat, 0, 0, 0);
 }
 
-void fn_801A4FB0(void)
+void SimpShadowShutdown(void)
 {
     unsigned short i;
 
     for (i = 0; i < 1; i++) {
-        if (lbl_80366640[i].mUnknown28 != 0) {
-            ResTextureClose(&lbl_80366640[i]);
+        if (_SimpShadow_aTextures[i].mUnknown28 != 0) {
+            ResTextureClose(&_SimpShadow_aTextures[i]);
         }
     }
     for (i = 0; i < 96; i++) {
-        lbl_803664C0[i] = 0;
+        _SimpShadow_apEntries[i] = 0;
     }
-    fn_801D2BD0(lbl_803EB838);
-    lbl_803EB838 = 0;
-    lbl_803EB83C = 0;
-    lbl_803EB834 = 0;
-    lbl_803ECC18 = 0;
+    fn_801D2BD0(_SimpShadow_pPool);
+    _SimpShadow_pPool = 0;
+    _SimpShadow_bInit = 0;
+    _SimpShadow_uCount = 0;
+    _SimpShadow_bEnabled = 0;
 }
 
-void fn_801A5050(int a, Vector_80039F5C *p, float b, float *pColor)
+void SimpShadowAdd(int a, Vector_80039F5C *p, float b, float *pColor)
 {
-    Entry_801A5050 *pEntry = lbl_803664C0[lbl_803EB834];
+    SimpShadowEntry *pEntry = _SimpShadow_apEntries[_SimpShadow_uCount];
 
     pEntry->mUnknown0 = a;
     pEntry->mpUnknown4 = p;
@@ -146,20 +148,20 @@ void fn_801A5050(int a, Vector_80039F5C *p, float b, float *pColor)
     pEntry->mUnknownD = (unsigned char)(pColor[2] * 255.0f);
     pEntry->mUnknownF = (unsigned char)(pColor[3] * 255.0f);
     pEntry->mUnknown10 = 1;
-    lbl_803EB834++;
+    _SimpShadow_uCount++;
 }
 
-void fn_801A5104(void)
+void SimpShadowDrawAll(void)
 {
     Mtx44 mtx;
     Vector_80039F5C scale;
     GXColor color = { 128, 128, 128, 255 };
 
-    if (lbl_803ECC18 != 0) {
+    if (_SimpShadow_bEnabled != 0) {
         unsigned short i;
-        int cursor = fn_801CECDC(fn_801CECCC(2));
+        int cursor = GlibRenderSelectBin(GlibRenderGetBin(2));
 
-        fn_80210388();
+        TMRenderReset();
         GXSetCullMode(GX_CULL_NONE);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXSetZCompLoc(GX_DISABLE);
@@ -179,7 +181,7 @@ void fn_801A5104(void)
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         fn_801D0470(VptGetMatrixStack());
-        GXLoadTexObj(&lbl_80366680, 0);
+        GXLoadTexObj(&_SimpShadow_TexObj, 0);
         fn_801D04C4();
         fn_801D0664((float (*)[4])fn_80236384(0));
         fn_80236408(0, &scale);
@@ -190,9 +192,9 @@ void fn_801A5104(void)
         fn_8025251C(mtx, 0);
         fn_802525BC(0);
         fn_801D0544();
-        for (i = 0; i < lbl_803EB834; i++) {
-            if (lbl_803664C0[i]->mUnknown10 != 0 && lbl_803664C0[i]->mUnknown0 == 0) {
-                cursor = fn_801A4CBC(cursor, lbl_803664C0[i], &scale);
+        for (i = 0; i < _SimpShadow_uCount; i++) {
+            if (_SimpShadow_apEntries[i]->mUnknown10 != 0 && _SimpShadow_apEntries[i]->mUnknown0 == 0) {
+                cursor = SimpShadowDrawQuad(cursor, _SimpShadow_apEntries[i], &scale);
             }
         }
         fn_801D04C4();
@@ -202,9 +204,9 @@ void fn_801A5104(void)
         fn_802525BC(0);
         fn_801D0544();
         scale.mY = scale.mX = 0.5f;
-        for (i = 0; i < lbl_803EB834; i++) {
-            if (lbl_803664C0[i]->mUnknown10 != 0 && lbl_803664C0[i]->mUnknown0 == 1) {
-                cursor = fn_801A4CBC(cursor, lbl_803664C0[i], &scale);
+        for (i = 0; i < _SimpShadow_uCount; i++) {
+            if (_SimpShadow_apEntries[i]->mUnknown10 != 0 && _SimpShadow_apEntries[i]->mUnknown0 == 1) {
+                cursor = SimpShadowDrawQuad(cursor, _SimpShadow_apEntries[i], &scale);
             }
         }
         lbl_803EBC98 = cursor;
@@ -213,13 +215,13 @@ void fn_801A5104(void)
     }
 }
 
-void fn_801A5434(void *p, int value)
+void SimpShadowSetVisible(void *p, int value)
 {
     unsigned int i;
 
-    for (i = 0; i < lbl_803EB834; i++) {
-        if (lbl_803664C0[i]->mpUnknown4 == p) {
-            lbl_803664C0[i]->mUnknown10 = value;
+    for (i = 0; i < _SimpShadow_uCount; i++) {
+        if (_SimpShadow_apEntries[i]->mpUnknown4 == p) {
+            _SimpShadow_apEntries[i]->mUnknown10 = value;
         }
     }
 }

@@ -1,7 +1,7 @@
 #ifndef ENGINE_CU_801B8C18_H
 #define ENGINE_CU_801B8C18_H
 
-class Class_801B8D9C;
+class CsisClassHandle;
 
 struct Struct_803EB878 {
     const char *mName;
@@ -144,13 +144,13 @@ extern "C" {
 extern Class_8037E820 lbl_8037E820;
 
 int fn_801B8D4C(Handle_801B8C60 *handle);
-int fn_801B8EDC(Class_801B8D9C *handle);
+int fn_801B8EDC(CsisClassHandle *handle);
 int fn_801B9018(Handle_801B8F2C *handle);
 void fn_801B9068(Object_801B9068 *object, void *params);
 int fn_801B90CC(Allocator **out);
 int fn_801B9148(void);
 int fn_801B9174(void);
-int fn_801B95AC(Class_801B8D9C *handle, void *params, Object_801B9068 **out);
+int fn_801B95AC(CsisClassHandle *handle, void *params, Object_801B9068 **out);
 int fn_801B96E4(Object_801B9068 *object);
 int fn_801B983C(Object_801B9068 *object, void *params);
 }

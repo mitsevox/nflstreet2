@@ -78,8 +78,8 @@ void fn_8022765C(void *, void *, void *);
 void fn_801D0664(void *);
 void fn_80214184(int);
 unsigned int fn_8021445C(void *, void *, int);
-void fn_801A6924(unsigned int);
-void fn_801A6870(unsigned int);
+void WeatherDrawLines(unsigned int);
+void WeatherDrawQuads(unsigned int);
 int fn_800A33B8(void);
 int fn_800A3444(void);
 float fn_800A33C4(void);
@@ -341,9 +341,9 @@ void fn_801A74BC(float x, float y, float z) {
       for (unsigned int i = 0; i < lbl_803ECC28; ++i, ++offset) {
         fn_801A6E78(0);
         if (lbl_803ECC34 == 2)
-          fn_801A6924(lbl_803EB858);
+          WeatherDrawLines(lbl_803EB858);
         else
-          fn_801A6870(lbl_803EB858);
+          WeatherDrawQuads(lbl_803EB858);
         if (lbl_803ECC34 == 1)
           fn_801D0ADC(lbl_803EB854);
         else
@@ -352,9 +352,9 @@ void fn_801A74BC(float x, float y, float z) {
     } else {
       fn_801A6E78(0);
       if (lbl_803ECC34 == 2)
-        fn_801A6924(lbl_803EB858);
+        WeatherDrawLines(lbl_803EB858);
       else
-        fn_801A6870(lbl_803EB858);
+        WeatherDrawQuads(lbl_803EB858);
     }
     ++lbl_803ECC2C;
   }
@@ -362,7 +362,7 @@ void fn_801A74BC(float x, float y, float z) {
   if (!flags && !(z > 0.0f)) {
     fn_801A6CF8(1);
     fn_801A6E78(1);
-    fn_801A6870(lbl_803EB858);
+    WeatherDrawQuads(lbl_803EB858);
   }
   fn_801D0544();
 }

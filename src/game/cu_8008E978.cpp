@@ -105,7 +105,7 @@
 #include "game/cu_80026BB0.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
-#include "game/Entry_802F394C.h"
+#include "game/EnvFogSettings.h"
 #include "game/Object_800785C0.h"
 #include "game/Block_800BFAD0.h"
 #include "game/Object_8007A334.h"
@@ -3144,7 +3144,7 @@ extern "C" int fn_800A34E0(void)
     return lbl_8030E6E8.mUnknown8C4;
 }
 
-extern "C" Entry_802F394C *fn_800A34EC(void)
+extern "C" EnvFogSettings *fn_800A34EC(void)
 {
     return lbl_8030E6E8.mpUnknown8C0;
 }
@@ -3524,7 +3524,7 @@ void fn_801626A4(void *arg);
 void fn_80163300(int handle);
 void fn_80030FD8(int handle);
 void fn_801480B0(void *pOwner);
-void fn_8019B368(void);
+void LightDirUpdate(void);
 void fn_8004659C(void);
 void fn_8016172C(void);
 void fn_80047050(void);
@@ -3616,7 +3616,7 @@ extern "C" void fn_800C471C(int handle)
 
 extern "C" void fn_800C478C(float dt)
 {
-    fn_8019B368();
+    LightDirUpdate();
     fn_8004659C();
     fn_8016172C();
     fn_80047050();

@@ -1,3 +1,6 @@
+/* Turf divot rendering: per divot type, loads the variant textures and draws
+   each divot as a faded, rotated and scaled textured quad; dispatchers route
+   the divot code's events to the type's handlers. */
 #include <dolphin/gx/GXPixel.h>
 #include "game/fn_801EF390.h"
 #include "game/fn_801D2B7C.h"
@@ -8,17 +11,17 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 
-/* 48-byte element; fn_8019F508 fills one per entry of the handler set. */
-struct Element_8019F508 {
+/* 48-byte element; DivotRenderLoadType fills one per entry of the handler set. */
+struct DivotTexLib {
     char mUnknown0[0x28];
     int mUnknown28;
     int mUnknown2C;
 };
 
-struct Object_8019F874;
+struct DivotOwnerView;
 
 /* Object passed to the per-object handlers; +0x68 selects its handler set. */
-struct Object_8019FA8C {
+struct DivotDrawView {
     char mUnknown0[0xC];
     float mUnknownC;
     float mUnknown10;
@@ -27,15 +30,15 @@ struct Object_8019FA8C {
     int mUnknown30;
     float mUnknown34;
     char mUnknown38[0x18];
-    Object_8019F874 *mpUnknown50;
+    DivotOwnerView *mpUnknown50;
     char mUnknown54[0xC];
-    Element_8019F508 *mpUnknown60;
+    DivotTexLib *mpUnknown60;
     char mUnknown64[4];
     int mUnknown68;
     int mUnknown6C;
 };
 
-struct Object_8019F874 {
+struct DivotOwnerView {
     char mUnknown0[0xB];
     unsigned char mUnknownB;
 };
@@ -44,10 +47,10 @@ extern "C" {
 int fn_80044528(int index);
 int fn_80044544(void);
 int fn_80044564(int index, int i);
-void fn_80211E08(Element_8019F508 *pElement, int a);
-void fn_80211EFC(Element_8019F508 *pElement);
-int fn_802120E4(Element_8019F508 *pElement, int a);
-int fn_80212124(Element_8019F508 *pElement, int a, int b);
+void fn_80211E08(DivotTexLib *pElement, int a);
+void fn_80211EFC(DivotTexLib *pElement);
+int fn_802120E4(DivotTexLib *pElement, int a);
+int fn_80212124(DivotTexLib *pElement, int a, int b);
 void fn_80210388(void);
 void fn_80210814(int a, int b, int c);
 void fn_80210CC4(float a, float b);
@@ -65,18 +68,18 @@ void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(Mtx44 m);
 }
 
-static Element_8019F508 *lbl_803ECBF4[1];
-static unsigned char lbl_803ECBF8;
+static DivotTexLib *_DivotRender_apTexLibs[1];
+static unsigned char _DivotRender_bSavedFog;
 
 extern "C" {
-void fn_8019F508(int index)
+void DivotRenderLoadType(int index)
 {
     if (fn_80044528(index) > 0) {
         int i = 0;
-        Element_8019F508 *pElement;
+        DivotTexLib *pElement;
         int handle;
 
-        pElement = lbl_803ECBF4[index] = (Element_8019F508 *)fn_801D2B7C(fn_80044528(index) * sizeof(Element_8019F508), 0, 0);
+        pElement = _DivotRender_apTexLibs[index] = (DivotTexLib *)fn_801D2B7C(fn_80044528(index) * sizeof(DivotTexLib), 0, 0);
         handle = fn_80044544();
         for (; i < fn_80044528(index); i++) {
             fn_80211E08(pElement, fn_801EF390((void *)handle, fn_80044564(index, i), 1));
@@ -87,10 +90,10 @@ void fn_8019F508(int index)
     }
 }
 
-void fn_8019F5D8(int index)
+void DivotRenderFreeType(int index)
 {
     if (fn_80044528(index) > 0) {
-        Element_8019F508 *pElements = lbl_803ECBF4[index];
+        DivotTexLib *pElements = _DivotRender_apTexLibs[index];
         int i;
 
         for (i = 0; i < fn_80044528(index); i++) {
@@ -98,31 +101,31 @@ void fn_8019F5D8(int index)
             fn_801F010C((void *)fn_80044544(), fn_80044564(index, i));
         }
         fn_801D2BD0(pElements);
-        lbl_803ECBF4[index] = 0;
+        _DivotRender_apTexLibs[index] = 0;
     }
 }
 
-void fn_8019F678(Object_8019FA8C *pObject)
+void DivotRenderPlace(DivotDrawView *pObject)
 {
-    pObject->mpUnknown60 = &lbl_803ECBF4[pObject->mUnknown68][pObject->mUnknown6C];
+    pObject->mpUnknown60 = &_DivotRender_apTexLibs[pObject->mUnknown68][pObject->mUnknown6C];
 }
 
-void fn_8019F69C(Object_8019FA8C *pObject)
+void DivotRenderRemove(DivotDrawView *pObject)
 {
     pObject->mpUnknown60 = 0;
 }
 
-void fn_8019F6A8(Object_8019FA8C *pObject)
+void DivotRenderRefresh(DivotDrawView *pObject)
 {
-    pObject->mpUnknown60 = &lbl_803ECBF4[pObject->mUnknown68][pObject->mUnknown6C];
+    pObject->mpUnknown60 = &_DivotRender_apTexLibs[pObject->mUnknown68][pObject->mUnknown6C];
 }
 
-void fn_8019F6CC(int index)
+void DivotRenderBegin(int index)
 {
     GXColor color = { 255, 255, 255, 255 };
 
     fn_80210388();
-    lbl_803ECBF8 = fn_80236EC0(1);
+    _DivotRender_bSavedFog = fn_80236EC0(1);
     GXSetCullMode(GX_CULL_NONE);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     GXSetZCompLoc(GX_DISABLE);
@@ -143,14 +146,14 @@ void fn_8019F6CC(int index)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-void fn_8019F82C(int index)
+void DivotRenderEnd(int index)
 {
     fn_80210CC4(0.0f, 1.0f);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-    fn_80236EC0(lbl_803ECBF8);
+    fn_80236EC0(_DivotRender_bSavedFog);
 }
 
-void fn_8019F874(Object_8019FA8C *pObject)
+void DivotRenderDrawOne(DivotDrawView *pObject)
 {
     Mtx44 mtx;
     GXColor color = { 255, 255, 255, 255 };
@@ -192,67 +195,67 @@ void fn_8019F874(Object_8019FA8C *pObject)
 }
 }
 
-struct HandlerSet_802F2714 {
+struct DivotRenderHandlers {
     void (*mpUnknown0)(int index);
     void (*mpUnknown4)(int index);
-    void (*mpUnknown8)(Object_8019FA8C *pObject);
-    void (*mpUnknownC)(Object_8019FA8C *pObject);
-    void (*mpUnknown10)(Object_8019FA8C *pObject);
+    void (*mpUnknown8)(DivotDrawView *pObject);
+    void (*mpUnknownC)(DivotDrawView *pObject);
+    void (*mpUnknown10)(DivotDrawView *pObject);
     void (*mpUnknown14)(int index);
     void (*mpUnknown18)(int index);
-    void (*mpUnknown1C)(Object_8019FA8C *pObject);
+    void (*mpUnknown1C)(DivotDrawView *pObject);
 };
 
-static HandlerSet_802F2714 lbl_802F2714[] = {
-    { fn_8019F508, fn_8019F5D8, fn_8019F678, fn_8019F69C, fn_8019F6A8, fn_8019F6CC, fn_8019F82C, fn_8019F874 },
+static DivotRenderHandlers _DivotRender_aHandlers[] = {
+    { DivotRenderLoadType, DivotRenderFreeType, DivotRenderPlace, DivotRenderRemove, DivotRenderRefresh, DivotRenderBegin, DivotRenderEnd, DivotRenderDrawOne },
 };
 
 extern "C" {
-void fn_8019F9F0(void)
+void DivotRenderLoadAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < sizeof(lbl_802F2714) / sizeof(lbl_802F2714[0]); i++) {
-        lbl_802F2714[i].mpUnknown0(i);
+    for (i = 0; i < sizeof(_DivotRender_aHandlers) / sizeof(_DivotRender_aHandlers[0]); i++) {
+        _DivotRender_aHandlers[i].mpUnknown0(i);
     }
 }
 
-void fn_8019FA3C(void)
+void DivotRenderFreeAll(void)
 {
     unsigned int i;
 
-    for (i = 0; i < sizeof(lbl_802F2714) / sizeof(lbl_802F2714[0]); i++) {
-        lbl_802F2714[i].mpUnknown4(i);
+    for (i = 0; i < sizeof(_DivotRender_aHandlers) / sizeof(_DivotRender_aHandlers[0]); i++) {
+        _DivotRender_aHandlers[i].mpUnknown4(i);
     }
 }
 
-void fn_8019FA8C(Object_8019FA8C *pObject)
+void DivotRenderOnPlace(DivotDrawView *pObject)
 {
-    lbl_802F2714[pObject->mUnknown68].mpUnknown8(pObject);
+    _DivotRender_aHandlers[pObject->mUnknown68].mpUnknown8(pObject);
 }
 
-void fn_8019FAC8(Object_8019FA8C *pObject)
+void DivotRenderOnRemove(DivotDrawView *pObject)
 {
-    lbl_802F2714[pObject->mUnknown68].mpUnknownC(pObject);
+    _DivotRender_aHandlers[pObject->mUnknown68].mpUnknownC(pObject);
 }
 
-void fn_8019FB04(Object_8019FA8C *pObject)
+void DivotRenderOnRefresh(DivotDrawView *pObject)
 {
-    lbl_802F2714[pObject->mUnknown68].mpUnknown10(pObject);
+    _DivotRender_aHandlers[pObject->mUnknown68].mpUnknown10(pObject);
 }
 
-void fn_8019FB40(Object_8019FA8C *pObject)
+void DivotRenderOnDraw(DivotDrawView *pObject)
 {
-    lbl_802F2714[pObject->mUnknown68].mpUnknown1C(pObject);
+    _DivotRender_aHandlers[pObject->mUnknown68].mpUnknown1C(pObject);
 }
 
-void fn_8019FB7C(int index)
+void DivotRenderBeginType(int index)
 {
-    lbl_802F2714[index].mpUnknown14(index);
+    _DivotRender_aHandlers[index].mpUnknown14(index);
 }
 
-void fn_8019FBB4(int index)
+void DivotRenderEndType(int index)
 {
-    lbl_802F2714[index].mpUnknown18(index);
+    _DivotRender_aHandlers[index].mpUnknown18(index);
 }
 }

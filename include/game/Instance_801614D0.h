@@ -18,9 +18,9 @@ struct Instance_801614D0 {
 };
 
 extern "C" {
-void fn_801A5478(Instance_801614D0 *pInstance);
-void fn_801A553C(Instance_801614D0 *pInstance);
-void fn_801A5568(Instance_801614D0 *pInstance, int unused);
+void EnvSkyInit(Instance_801614D0 *pInstance);
+void EnvSkyShutdown(Instance_801614D0 *pInstance);
+void EnvSkyDraw(Instance_801614D0 *pInstance, int unused);
 }
 
 #endif

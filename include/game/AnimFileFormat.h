@@ -2,12 +2,12 @@
 #define GAME_ANIMFILEFORMAT_H
 
 #include "engine/Record_800D81C8.h"
-#include "game/Record_8019D8AC.h"
+#include "game/AnimQuantContext.h"
 
 typedef struct AnimMotionGroupView {
     int count;
     char **motion;
-    Record_8019D8AC *compress;
+    AnimQuantContext *compress;
 } AnimMotionGroupView;
 
 typedef struct AnimGroupHeaderView {
@@ -69,7 +69,7 @@ typedef struct AnimFileFormat_t {
     AnimFileStates_t *states;
     AnimFileAnims_t *anims;
     char **motion;
-    Record_8019D8AC *compress;
+    AnimQuantContext *compress;
     AnimGroupHeaderView *groups;
     AnimMotionGroupView *groupMotion;
 } AnimFileFormat_t;

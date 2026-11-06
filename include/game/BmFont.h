@@ -1,12 +1,12 @@
-#ifndef GAME_FONT_8019BE30_H
-#define GAME_FONT_8019BE30_H
+#ifndef GAME_BMFONT_H
+#define GAME_BMFONT_H
 
 #include "engine/texture.h"
 
 /* Descriptor of a bitmap font: the characters of the font texture in order,
    the glyph row height (+0xC), the advance of characters without a glyph
    (+0x10) and the gap after each glyph (+0x14). */
-struct FontDesc_8019BE30 {
+struct BmFontDesc {
     int mCount;
     const char *mpChars;
     int mUnknown8;
@@ -16,16 +16,16 @@ struct FontDesc_8019BE30 {
 };
 
 /* One glyph: a rectangle of the font texture's 8-bit pixels. */
-struct Glyph_8019BE30 {
+struct BmGlyph {
     unsigned char mWidth;
     unsigned char mHeight;
     unsigned short mStride;
     unsigned char *mpPixels;
 };
 
-struct Font_8019BE30 {
+struct BmFont {
     unsigned int mCount;
-    Glyph_8019BE30 *mpGlyphs;
+    BmGlyph *mpGlyphs;
     unsigned int mSpaceWidth;
     unsigned int mSpacing;
     unsigned char mBorder;
@@ -36,10 +36,10 @@ struct Font_8019BE30 {
 };
 
 extern "C" {
-unsigned int fn_8019BC50(Font_8019BE30 *pFont, unsigned char *pDest, const unsigned char *pString);
-void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index);
-void fn_8019BE94(Font_8019BE30 *pFont);
-Font_8019BE30 *fn_801614C4(void);
+unsigned int BmFontRenderString(BmFont *pFont, unsigned char *pDest, const unsigned char *pString);
+void BmFontLoad(BmFont *pFont, BmFontDesc *pDesc, void *p, int index);
+void BmFontFree(BmFont *pFont);
+BmFont *fn_801614C4(void);
 }
 
 #endif

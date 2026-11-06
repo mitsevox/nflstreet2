@@ -62,8 +62,8 @@ struct Init_8003F768 {
 };
 
 extern "C" {
-void fn_8019CEE8(Object_8003F768 *p);
-void fn_8019CFD0(Object_8003F768 *p);
+void BallRenderShutdown(Object_8003F768 *p);
+void BallRenderDetach(Object_8003F768 *p);
 int fn_801DCF8C(int type);
 void fn_801DD320(int handle, int item);
 }
@@ -86,10 +86,10 @@ void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 extern "C" {
 int fn_80027DF0(void);
 unsigned int fn_80236398(int a);
-void fn_8019CE3C(Object_8003F768 *p);
-void fn_8019CF5C(Object_8003F768 *p, int index);
-void fn_8019CFF4(Object_8003F768 *p);
-void fn_801A5050(int a, Vector_80039F5C *pPos, float value, float *pColor);
+void BallRenderInit(Object_8003F768 *p);
+void BallRenderAttach(Object_8003F768 *p, int index);
+void BallRenderDraw(Object_8003F768 *p);
+void SimpShadowAdd(int a, Vector_80039F5C *pPos, float value, float *pColor);
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
@@ -203,7 +203,7 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
         p->mUnknown28 = pInit->mUnknown4;
         p->mUnknown156 = 0;
         p->mUnknown160 = 0;
-        fn_8019CE3C(p);
+        BallRenderInit(p);
     } else {
         p->mUnknown20 |= 4;
         p->mUnknown156 = pInit->mpUnknown8->mUnknown156;
@@ -215,17 +215,17 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     color[2] = ((packed >> 16) & 255) * 0.0078125f;
     color[3] = (packed >> 24) * 0.0078125f;
     if (fn_80027DF0() == 0) {
-        fn_801A5050(1, &p->mUnknown4, 0.4f, color);
+        SimpShadowAdd(1, &p->mUnknown4, 0.4f, color);
     }
     p->mUnknown692 = pInit->mUnknown12;
-    fn_8019CF5C(p, pInit->mUnknown12);
+    BallRenderAttach(p, pInit->mUnknown12);
 }
 
 extern "C" void fn_8003F91C(Object_8003F768 *p)
 {
-    fn_8019CFD0(p);
+    BallRenderDetach(p);
     if (!(p->mUnknown20 & 4)) {
-        fn_8019CEE8(p);
+        BallRenderShutdown(p);
     }
 }
 
@@ -302,7 +302,7 @@ extern "C" int fn_8003FBF0(Object_8003F768 *p)
         fn_801D0860(&p->mUnknown108);
         fn_801D0F80(p->mUnknown32);
         fn_801D0544();
-        fn_8019CFF4(p);
+        BallRenderDraw(p);
         p->mUnknown656 = 0;
         fn_801D0544();
     }

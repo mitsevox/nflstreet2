@@ -85,7 +85,7 @@ void fn_8003F6F0(void *, void *);
 void fn_8003F6C8(void *, unsigned char, unsigned char, unsigned char);
 void fn_8003F744(void *);
 void fn_8003F754(void *, int, int, float, float);
-void fn_8019CBC0(void *);
+void ArrowDraw(void *);
 void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
@@ -109,7 +109,7 @@ int fn_8015A39C(Object_8015C244 *p)
 {
     if (p->mUnknown80 && lbl_803ECA68 == 1) {
         fn_8015BCAC(p);
-        fn_8019CBC0(p->mUnknown20);
+        ArrowDraw(p->mUnknown20);
     }
     return 0;
 }

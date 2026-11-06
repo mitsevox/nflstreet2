@@ -321,9 +321,9 @@
       "address": "0x801CBC50",
       "evidence": "evidence.tsv external row for 0x801CBC50 (__14Class_801CBC50); descriptive name."
     },
-    "__14Class_801B8D9C": {
+    "__15CsisClassHandle": {
       "address": "0x801B8D9C",
-      "evidence": "evidence.tsv external row for 0x801B8D9C (__14Class_801B8D9C); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801B8D9C (__15CsisClassHandle); descriptive name."
     },
     "__GXData": {
       "address": "0x803ED840",
@@ -4016,9 +4016,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801AA24C.cpp",
+      "source": "src/game/SndgHandles.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/cu_801AA24C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/SndgHandles.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",

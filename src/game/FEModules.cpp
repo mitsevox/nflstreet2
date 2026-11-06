@@ -1,17 +1,17 @@
 #include "game/Module.h"
-#include "game/cu_80003C94.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/StatGen.h"
+#include "game/SysModules.h"
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
 extern "C" {
 extern char lbl_803071E8[];
 
-void fn_800221CC(int);
-void fn_80022328(void);
-void fn_80022FF0(void);
-void fn_80023048(void);
-void fn_8004613C(void);
+void FEPlyrInit(int);
+void FEPlyrShutdown(void);
+void FESndInit(void);
+void FESndShutdown(void);
+void PlaDynClutLoad(void);
 void fn_8008FBA0(void);
 void fn_8015E654(int);
 void fn_8015E6C4(void);
@@ -27,7 +27,7 @@ void fn_801681A8(void);
 void fn_80168210(void);
 void fn_801684B8(int);
 void fn_8017F664(void);
-void fn_8019B5D4(void);
+void LevelLightsSelectFrontEnd(void);
 void ResTrackLabel(const char *);
 }
 
@@ -75,17 +75,17 @@ int FEPlyr::Init()
     if (sFirstInit) {
         sFirstInit = 0;
         fn_8015F35C();
-        fn_800221CC(2);
+        FEPlyrInit(2);
         fn_8015F388();
     } else {
-        fn_800221CC(2);
+        FEPlyrInit(2);
     }
     return 1;
 }
 
 int FEPlyr::Shutdown()
 {
-    fn_80022328();
+    FEPlyrShutdown();
     fn_8015E994();
     fn_8015E6C8();
     fn_80160B6C();
@@ -101,13 +101,13 @@ const char *FESnd::GetName() { return "FESnd"; }
 
 int FESnd::Init()
 {
-    fn_80022FF0();
+    FESndInit();
     return 1;
 }
 
 int FESnd::Shutdown()
 {
-    fn_80023048();
+    FESndShutdown();
     return 1;
 }
 
@@ -125,13 +125,13 @@ int FMMainFEInit::Init()
     fn_8017F664();
     if (sFirstInit) {
         sFirstInit = 0;
-        gSysPreLoad.fn_8008D4A8();
+        gSysPreLoad.LoadSystems();
         ResTrackLabel("DynClutInitStart");
-        fn_8004613C();
+        PlaDynClutLoad();
         ResTrackLabel("DynClutInitFinish");
         fn_8008FBA0();
     }
-    fn_8019B5D4();
+    LevelLightsSelectFrontEnd();
     return 1;
 }
 
@@ -149,13 +149,13 @@ const char *StatGen::GetName() { return "StatGen"; }
 
 int StatGen::Init()
 {
-    fn_80003C94();
+    StatGenCreateRandomStream();
     return 1;
 }
 
 int StatGen::Shutdown()
 {
-    fn_80003CC4();
+    StatGenDestroyRandomStream();
     return 1;
 }
 

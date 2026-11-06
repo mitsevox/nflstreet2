@@ -8,7 +8,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_802372EC.h"
@@ -86,40 +86,40 @@ void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                  unsigned int size, const char *pName);
-int fn_80028934(void);
-int fn_8002894C(void);
+int InGameIsPaused(void);
+int InGameIsPlaying(void);
 int fn_8002D060(void *p);
 void fn_8003F66C(void *p);
 void fn_8003F6B0(void *p);
 void fn_8003F6B4(void *p, void *pData, int a);
 void fn_8003F744(void *p);
-int fn_8006560C(void);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+int PauseIsOpen(void);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *fn_800A336C(void);
 int fn_800A33A4(void);
 int fn_800C4E18(Object_80039F5C *pPlayer);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-void fn_8019CBC0(void *p);
-void fn_8019F9F0(void);
-void fn_8019FA3C(void);
-void fn_8019FA8C(Divot *p);
-void fn_8019FAC8(Divot *p);
-void fn_8019FB04(Divot *p);
-void fn_8019FB40(Divot *p);
-void fn_8019FB7C(int type);
-void fn_8019FBB4(int type);
+void ArrowDraw(void *p);
+void DivotRenderLoadAll(void);
+void DivotRenderFreeAll(void);
+void DivotRenderOnPlace(Divot *p);
+void DivotRenderOnRemove(Divot *p);
+void DivotRenderOnRefresh(Divot *p);
+void DivotRenderOnDraw(Divot *p);
+void DivotRenderBeginType(int type);
+void DivotRenderEndType(int type);
 char *fn_801C3084(const char *pString, int c);
 int fn_801C3214(const char *pA, const char *pB, int n);
-int fn_801C333C(const char *pString);
+int atoi(const char *pString);
 void fn_801CE910(void);
 void fn_801D0470(int a);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
 int fn_801F0A8C(void *pData, char *pName);
 void *fn_80216860(int handle, const char *pName);
 void *fn_80216BFC(void *pNode, const char *pName);
@@ -290,7 +290,7 @@ void fn_800431DC(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
             p->mAlpha = 1.0f;
             p->mFlags = DIVOT_GROWN;
             active++;
-            fn_8019FB04(p);
+            DivotRenderOnRefresh(p);
         }
     }
     lbl_803EC790[0] = active;
@@ -300,7 +300,7 @@ void fn_800431DC(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
 void fn_800433D4(Divot *p)
 {
     lbl_802CCF30[p->mType].mpRemove(p);
-    fn_8019FAC8(p);
+    DivotRenderOnRemove(p);
     p->mActive = 0;
     p->mFlags = 0;
     lbl_803EC790[p->mType]--;
@@ -350,7 +350,7 @@ void fn_800435B4(Divot *p)
 {
     p->mActive = 0;
     if (lbl_803EC79C < DIVOT_MAX_RECORDS) {
-        if (p->mpOwner == fn_80137B40() || fn_80237260(1) < 0.75f) {
+        if (p->mpOwner == BallGetCurrentHolder() || fn_80237260(1) < 0.75f) {
             p->mAngle = (p->mAngle + 0xC00000) & 0xFFFFFF;
             p->mActive = 1;
             p->mAlpha = p->mAlphaMax;
@@ -529,7 +529,7 @@ void fn_80043AE4(void)
         lbl_803077D8[i].mFoot1[0] = 0.0f;
         lbl_803077D8[i].mFoot1[1] = 0.0f;
     }
-    fn_8019F9F0();
+    DivotRenderLoadAll();
 }
 
 void fn_80043D68(void)
@@ -544,7 +544,7 @@ void fn_80043D68(void)
     lbl_803EC798 = 0;
     fn_801D2BD0(lbl_803EC7A4);
     lbl_803EC7A4 = 0;
-    fn_8019FA3C();
+    DivotRenderFreeAll();
 }
 
 void fn_80043DD8(void)
@@ -560,7 +560,7 @@ void fn_80043DD8(void)
             pos.mX = (fn_80237260(1) * 2.0f - 1.0f) * width;
             pos.mY = (fn_80237260(1) * 2.0f - 1.0f) * length;
             pos.mZ = 0.0f;
-            pArea = fn_80054138(&pos.mX);
+            pArea = LevelFindArea(&pos.mX);
             if (pArea) {
                 Divot *p = fn_80044580(type);
 
@@ -579,7 +579,7 @@ void fn_80043DD8(void)
 
 void fn_80043F50(void)
 {
-    if (fn_8002D060(lbl_803EA368) || fn_80028934()) {
+    if (fn_8002D060(lbl_803EA368) || InGameIsPaused()) {
         return;
     }
     for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
@@ -619,7 +619,7 @@ void fn_80044114(void)
 
     if (lbl_803EA4A0) {
         fn_801D0470(VptGetMatrixStack());
-        fn_8019FB7C(0);
+        DivotRenderBeginType(0);
         pPool = lbl_803EC794[0];
         alpha = 0.1f;
         index = lbl_803EC7A0;
@@ -627,7 +627,7 @@ void fn_80044114(void)
         while (i < fn_80044518(0)) {
             pPool[index].mAlpha = alpha;
             if (pPool[index].mActive) {
-                fn_8019FB40(&pPool[index]);
+                DivotRenderOnDraw(&pPool[index]);
             }
             if (++index >= fn_80044518(0)) {
                 index = 0;
@@ -639,7 +639,7 @@ void fn_80044114(void)
                 }
             }
         }
-        fn_8019FBB4(0);
+        DivotRenderEndType(0);
     }
 }
 
@@ -726,7 +726,7 @@ void fn_80044460(void)
         p->mVariant = lbl_803EC7A4[i].mVariant;
         p->mActive = lbl_803EC7A4[i].mActive;
         if (p->mActive) {
-            fn_8019FB04(p);
+            DivotRenderOnRefresh(p);
         }
     }
     lbl_803EC790[0] = lbl_803EC7A8;
@@ -757,7 +757,7 @@ Divot *fn_80044580(int type)
 {
     Divot *p = 0;
 
-    if (fn_8002894C() && !fn_8002D060(lbl_803EA368)) {
+    if (InGameIsPlaying() && !fn_8002D060(lbl_803EA368)) {
         if (lbl_803EC790[type] < fn_80044518(type)) {
             int n;
 
@@ -817,7 +817,7 @@ unsigned char fn_800446E0(Divot *p)
         p->mVariant += lbl_803077C6[p->mType][p->mSurface];
         lbl_802CCF30[p->mType].mpPlace(p);
         if (p->mActive) {
-            fn_8019FA8C(p);
+            DivotRenderOnPlace(p);
             if (!p->mActive) {
                 lbl_802CCF30[p->mType].mpRemove(p);
             }
@@ -853,9 +853,9 @@ void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0)
         if (fn_80227890(pPos, pLast) >= 0.65f * 0.65f) {
             pLast[0] = pPos->mX;
             pLast[1] = pPos->mY;
-            if (!fn_8006560C()) {
+            if (!PauseIsOpen()) {
                 if (*pSkip == 0) {
-                    fn_80067E3C(0x58, pPos, pPlayer->mId, 0, 0, 0);
+                    AudmonEventPostId(0x58, pPos, pPlayer->mId, 0, 0, 0);
                 } else {
                     *pSkip = 0;
                 }
@@ -908,21 +908,21 @@ int fn_80044A7C(void *p)
     char *pObject = (char *)p;
 
     if (pObject[0x5C]) {
-        fn_8019CBC0(pObject + 0x14);
+        ArrowDraw(pObject + 0x14);
     }
     return 0;
 }
 
 void fn_80044AB0(void)
 {
-    fn_801DCF0C(16, 0x60, 40, fn_800449EC, fn_80044A38);
-    fn_801DD0C8(lbl_803EA4A4, 16, 0, fn_80044A7C);
+    ObjNewType_(16, 0x60, 40, fn_800449EC, fn_80044A38);
+    ObjSetListObjFunc(lbl_803EA4A4, 16, 0, fn_80044A7C);
 }
 
 void fn_80044B04(void)
 {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(16);
+    ObjDelType(16);
 }
 
 void fn_80044B2C(int handle)
@@ -990,8 +990,8 @@ void fn_80044C88(void *pNode, ColorEntry *pEntry)
     } else {
         pTo = text;
     }
-    pEntry->mFrom = fn_801C333C(text);
-    pEntry->mTo = fn_801C333C(pTo);
+    pEntry->mFrom = atoi(text);
+    pEntry->mTo = atoi(pTo);
     fn_80216F3C(pNode, "type", text, 15, 0);
     if (fn_801C3214(text, "set", 15) == 0) {
         if (pEntry->mColor == 0xFF) {

@@ -1,17 +1,19 @@
+/* Bitmap font for player nameplates: cuts glyphs out of a font texture,
+   measures strings and renders a string centred into a 256x32 I4 texture. */
 #include <string.h>
-#include "game/Font_8019BE30.h"
+#include "game/BmFont.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 
 extern "C" {
 
-void fn_8019B644(Font_8019BE30 *pFont)
+void BmFontClearMap(BmFont *pFont)
 {
     memset(pFont->mMap, 0xFF, sizeof(pFont->mMap));
     pFont->mMapCount = 0;
 }
 
-void fn_8019B684(Font_8019BE30 *pFont, unsigned int c, int count)
+void BmFontMapChars(BmFont *pFont, unsigned int c, int count)
 {
     while (count > 0 && c <= 0xFF) {
         pFont->mMap[c] = pFont->mMapCount++;
@@ -20,7 +22,7 @@ void fn_8019B684(Font_8019BE30 *pFont, unsigned int c, int count)
     }
 }
 
-unsigned int fn_8019B6C0(Glyph_8019BE30 *pGlyph, unsigned char *pDest, int destStride)
+unsigned int BmFontCopyGlyph(BmGlyph *pGlyph, unsigned char *pDest, int destStride)
 {
     unsigned int width = pGlyph->mWidth;
     unsigned int height = pGlyph->mHeight;
@@ -37,7 +39,7 @@ unsigned int fn_8019B6C0(Glyph_8019BE30 *pGlyph, unsigned char *pDest, int destS
 }
 
 /* Copies the glyph at half width, taking every other column. */
-unsigned int fn_8019B734(Glyph_8019BE30 *pGlyph, unsigned char *pDest, int destStride)
+unsigned int BmFontCopyGlyphHalf(BmGlyph *pGlyph, unsigned char *pDest, int destStride)
 {
     unsigned int width = pGlyph->mWidth;
     unsigned int height = pGlyph->mHeight;
@@ -56,7 +58,7 @@ unsigned int fn_8019B734(Glyph_8019BE30 *pGlyph, unsigned char *pDest, int destS
     return width / 2;
 }
 
-Glyph_8019BE30 *fn_8019B7B0(Font_8019BE30 *pFont, unsigned char c)
+BmGlyph *BmFontFindGlyph(BmFont *pFont, unsigned char c)
 {
     unsigned int index = pFont->mMap[c];
 
@@ -67,7 +69,7 @@ Glyph_8019BE30 *fn_8019B7B0(Font_8019BE30 *pFont, unsigned char c)
 }
 
 /* Returns 1 when any of count pixels down a column is opaque in pOpaque. */
-int fn_8019B7E8(unsigned char *pPixels, int stride, unsigned int count, unsigned char *pOpaque)
+int BmFontIsColumnOpaque(unsigned char *pPixels, int stride, unsigned int count, unsigned char *pOpaque)
 {
     unsigned int i;
 
@@ -82,7 +84,7 @@ int fn_8019B7E8(unsigned char *pPixels, int stride, unsigned int count, unsigned
 
 /* Skips the empty columns before a glyph, then takes the following run of
    non-empty columns as the glyph. Returns the number of columns consumed. */
-unsigned int fn_8019B824(Glyph_8019BE30 *pGlyph, unsigned char *pPixels, int stride,
+unsigned int BmFontCutGlyph(BmGlyph *pGlyph, unsigned char *pPixels, int stride,
                          unsigned int width, int height, unsigned char *pOpaque)
 {
     unsigned int x;
@@ -91,17 +93,17 @@ unsigned int fn_8019B824(Glyph_8019BE30 *pGlyph, unsigned char *pPixels, int str
     pGlyph->mpPixels = pPixels;
     pGlyph->mHeight = height;
     pGlyph->mStride = stride;
-    for (x = 0; x < width && !fn_8019B7E8(pPixels + x, stride, height, pOpaque); x++) {
+    for (x = 0; x < width && !BmFontIsColumnOpaque(pPixels + x, stride, height, pOpaque); x++) {
         pGlyph->mpPixels++;
     }
-    for (; x < width && fn_8019B7E8(pPixels + x, stride, height, pOpaque); x++) {
+    for (; x < width && BmFontIsColumnOpaque(pPixels + x, stride, height, pOpaque); x++) {
         pGlyph->mWidth++;
     }
     return x;
 }
 
 /* Overwrites the first and last rows of the glyph with value. */
-void fn_8019B8EC(Glyph_8019BE30 *pGlyph, unsigned char value)
+void BmFontSetGlyphEdgeRows(BmGlyph *pGlyph, unsigned char value)
 {
     unsigned int last = (pGlyph->mHeight - 1) * pGlyph->mStride;
     unsigned int x;
@@ -114,7 +116,7 @@ void fn_8019B8EC(Glyph_8019BE30 *pGlyph, unsigned char value)
 
 /* Marks the 16 palette entries whose alpha reaches threshold. Opaque RGB5A3
    entries count as alpha 0x80; translucent ones use their 3-bit alpha. */
-void fn_8019B934(unsigned short *pPalette, unsigned char *pOpaque, int size, unsigned int threshold)
+void BmFontMarkOpaque(unsigned short *pPalette, unsigned char *pOpaque, int size, unsigned int threshold)
 {
     unsigned short color;
     unsigned int alpha;
@@ -131,7 +133,7 @@ void fn_8019B934(unsigned short *pPalette, unsigned char *pOpaque, int size, uns
     }
 }
 
-void fn_8019B9AC(unsigned int *pDest, unsigned long long value, unsigned int count)
+void BmFontFillWords(unsigned int *pDest, unsigned long long value, unsigned int count)
 {
     while (count > 3) {
         pDest[0] = value;
@@ -143,13 +145,13 @@ void fn_8019B9AC(unsigned int *pDest, unsigned long long value, unsigned int cou
     }
 }
 
-unsigned int fn_8019B9D8(Font_8019BE30 *pFont, const unsigned char *pString)
+unsigned int BmFontGetStringWidth(BmFont *pFont, const unsigned char *pString)
 {
-    Glyph_8019BE30 *pGlyph;
+    BmGlyph *pGlyph;
     unsigned int width = 0;
 
     for (; *pString != 0; pString++) {
-        pGlyph = fn_8019B7B0(pFont, *pString);
+        pGlyph = BmFontFindGlyph(pFont, *pString);
         if (pGlyph != 0) {
             width += pGlyph->mWidth + pFont->mSpacing;
         } else {
@@ -161,7 +163,7 @@ unsigned int fn_8019B9D8(Font_8019BE30 *pFont, const unsigned char *pString)
 
 /* Cuts the font texture into glyphs, row by row, in the order of the
    descriptor's character list. */
-void fn_8019BA4C(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
+void BmFontCutGlyphs(BmFont *pFont, BmFontDesc *pDesc)
 {
     unsigned char opaque[256];
     unsigned char *pPixels = pFont->mTexture.mpImage;
@@ -169,13 +171,13 @@ void fn_8019BA4C(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
     unsigned int x;
     unsigned int y;
 
-    fn_8019B934(pFont->mTexture.mpPalette, opaque, sizeof(opaque), 0x20);
+    BmFontMarkOpaque(pFont->mTexture.mpPalette, opaque, sizeof(opaque), 0x20);
     x = 0;
     y = 0;
     for (i = 0; i < pFont->mCount && y < pFont->mTexture.mHeight; i++) {
-        x += fn_8019B824(&pFont->mpGlyphs[i], pPixels + y * 256 + x, pFont->mTexture.mWidth,
+        x += BmFontCutGlyph(&pFont->mpGlyphs[i], pPixels + y * 256 + x, pFont->mTexture.mWidth,
                          pFont->mTexture.mWidth - x, pDesc->mUnknownC, opaque);
-        fn_8019B8EC(&pFont->mpGlyphs[i], pFont->mBorder);
+        BmFontSetGlyphEdgeRows(&pFont->mpGlyphs[i], pFont->mBorder);
         if (x >= pFont->mTexture.mWidth) {
             x = 0;
             y += pDesc->mUnknownC;
@@ -184,7 +186,7 @@ void fn_8019BA4C(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
     pFont->mCount = i;
 }
 
-void fn_8019BB30(unsigned char *pPixels, int width, int height, unsigned char value)
+void BmFontSetImageEdgeRows(unsigned char *pPixels, int width, int height, unsigned char value)
 {
     unsigned char *pLast = pPixels + width * (height - 1);
     int x;
@@ -196,7 +198,7 @@ void fn_8019BB30(unsigned char *pPixels, int width, int height, unsigned char va
 }
 
 /* Packs a block of 8-bit intensities into 4-bit pairs. */
-void fn_8019BB60(unsigned char *pDest, unsigned char *pSrc, int srcStride, int width, int height)
+void BmFontPackI4(unsigned char *pDest, unsigned char *pSrc, int srcStride, int width, int height)
 {
     int x;
     int y;
@@ -211,14 +213,14 @@ void fn_8019BB60(unsigned char *pDest, unsigned char *pSrc, int srcStride, int w
 }
 
 /* Converts an 8-bit image into I4 texture tiles of 8x8 texels. */
-unsigned char *fn_8019BBBC(unsigned char *pDest, unsigned char *pSrc, int width, int height, int stride)
+unsigned char *BmFontConvertI4(unsigned char *pDest, unsigned char *pSrc, int width, int height, int stride)
 {
     int x;
     int y;
 
     for (y = 0; y < height; y += 8) {
         for (x = 0; x < width; x += 8) {
-            fn_8019BB60(pDest, pSrc + y * stride + x, stride, 8, 8);
+            BmFontPackI4(pDest, pSrc + y * stride + x, stride, 8, 8);
             pDest += 32;
         }
     }
@@ -227,17 +229,17 @@ unsigned char *fn_8019BBBC(unsigned char *pDest, unsigned char *pSrc, int width,
 
 /* Draws pString centred into a 256x32 image and stores it as an I4 texture
    at pDest; text too wide for the image is drawn at half width. */
-unsigned int fn_8019BC50(Font_8019BE30 *pFont, unsigned char *pDest, const unsigned char *pString)
+unsigned int BmFontRenderString(BmFont *pFont, unsigned char *pDest, const unsigned char *pString)
 {
     unsigned char image[0x4000];
-    Glyph_8019BE30 *pGlyph;
+    BmGlyph *pGlyph;
     unsigned int width;
     unsigned int spaceWidth;
     int scale = 1;
     int x;
 
-    fn_8019B9AC((unsigned int *)image, 0, 0x800);
-    width = fn_8019B9D8(pFont, pString);
+    BmFontFillWords((unsigned int *)image, 0, 0x800);
+    width = BmFontGetStringWidth(pFont, pString);
     spaceWidth = pFont->mSpaceWidth;
     x = 128 - width / 2;
     if (x <= 0) {
@@ -249,50 +251,50 @@ unsigned int fn_8019BC50(Font_8019BE30 *pFont, unsigned char *pDest, const unsig
         }
     }
     for (; *pString != 0; pString++) {
-        pGlyph = fn_8019B7B0(pFont, *pString);
+        pGlyph = BmFontFindGlyph(pFont, *pString);
         if (pGlyph != 0) {
             if (x + pGlyph->mWidth > 256) {
                 break;
             }
             if (scale == 2) {
-                x += fn_8019B734(pGlyph, image + x, 256);
+                x += BmFontCopyGlyphHalf(pGlyph, image + x, 256);
             } else {
-                x += fn_8019B6C0(pGlyph, image + x, 256);
+                x += BmFontCopyGlyph(pGlyph, image + x, 256);
             }
             x += pFont->mSpacing;
         } else {
             x += spaceWidth;
         }
     }
-    fn_8019BB30(image, 256, 32, pFont->mBorder);
-    fn_8019BBBC(pDest, image, 256, 32, 256);
+    BmFontSetImageEdgeRows(image, 256, 32, pFont->mBorder);
+    BmFontConvertI4(pDest, image, 256, 32, 256);
     return width;
 }
 
-void fn_8019BD88(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
+void BmFontBuild(BmFont *pFont, BmFontDesc *pDesc)
 {
     const char *pChars;
 
     pFont->mCount = strlen(pDesc->mpChars);
-    pFont->mpGlyphs = (Glyph_8019BE30 *)fn_801D2B7C(pFont->mCount * sizeof(Glyph_8019BE30), 0, 0);
+    pFont->mpGlyphs = (BmGlyph *)fn_801D2B7C(pFont->mCount * sizeof(BmGlyph), 0, 0);
     pFont->mSpaceWidth = pDesc->mUnknown10;
     pFont->mSpacing = pDesc->mUnknown14;
     pFont->mBorder = 0;
-    fn_8019B644(pFont);
+    BmFontClearMap(pFont);
     for (pChars = pDesc->mpChars; *pChars != 0; pChars++) {
-        fn_8019B684(pFont, *pChars, 1);
+        BmFontMapChars(pFont, *pChars, 1);
     }
-    fn_8019BA4C(pFont, pDesc);
+    BmFontCutGlyphs(pFont, pDesc);
 }
 
-void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index)
+void BmFontLoad(BmFont *pFont, BmFontDesc *pDesc, void *p, int index)
 {
     fn_8020DFD8((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
-    fn_8019BD88(pFont, pDesc);
+    BmFontBuild(pFont, pDesc);
     fn_801F010C(p, index);
 }
 
-void fn_8019BE94(Font_8019BE30 *pFont)
+void BmFontFree(BmFont *pFont)
 {
     fn_8020E258(&pFont->mTexture);
     fn_801D2BD0(pFont->mpGlyphs);

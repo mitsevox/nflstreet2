@@ -1,3 +1,6 @@
+/* Level lighting: picks the light scene and light colours for the current
+   level (twelve sets) or for the front end and hands them to the engine's
+   light code. */
 extern "C" {
 extern char lbl_802EEDD0[];
 extern char lbl_802EEE7C[];
@@ -20,90 +23,90 @@ void fn_802353D0(void *p);
 void fn_8023633C(void *p);
 int fn_800A3444(void);
 
-void fn_8019B43C(void);
-void fn_8019B460(int id);
-void fn_8019B5D4(void);
-void fn_8019B614(void);
+void LevelLightsInit(void);
+void LevelLightsSelect(int id);
+void LevelLightsSelectFrontEnd(void);
+void LevelLightsApplyColors(void);
 }
 
-static int lbl_803EB7B8 = -1;
-static char *lbl_803EB7BC = 0;
+static int _LevelLights_iCurrent = -1;
+static char *_LevelLights_pColors = 0;
 
 extern "C" {
 
-void fn_8019B43C(void)
+void LevelLightsInit(void)
 {
-    fn_8019B460(fn_800A3444());
+    LevelLightsSelect(fn_800A3444());
 }
 
-void fn_8019B460(int id)
+void LevelLightsSelect(int id)
 {
     switch (id) {
     case 0:
         fn_8023633C(lbl_802EF31C);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 2:
         fn_8023633C(lbl_802F052C);
-        lbl_803EB7B8 = 1;
+        _LevelLights_iCurrent = 1;
         break;
     case 3:
         fn_8023633C(lbl_802EF7A0);
-        lbl_803EB7B8 = 2;
+        _LevelLights_iCurrent = 2;
         break;
     case 1:
         fn_8023633C(lbl_802EFC24);
-        lbl_803EB7B8 = 3;
+        _LevelLights_iCurrent = 3;
         break;
     case 4:
         fn_8023633C(lbl_802F00A8);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 5:
         fn_8023633C(lbl_802F09B0);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 6:
         fn_8023633C(lbl_802F0E34);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 9:
         fn_8023633C(lbl_802F12B8);
-        lbl_803EB7B8 = 9;
+        _LevelLights_iCurrent = 9;
         break;
     case 7:
         fn_8023633C(lbl_802F173C);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 8:
         fn_8023633C(lbl_802F1BC0);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 10:
         fn_8023633C(lbl_802F2044);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     case 11:
         fn_8023633C(lbl_802F24C8);
-        lbl_803EB7B8 = id;
+        _LevelLights_iCurrent = id;
         break;
     }
-    lbl_803EB7BC = lbl_802EEE7C;
-    fn_8019B614();
+    _LevelLights_pColors = lbl_802EEE7C;
+    LevelLightsApplyColors();
 }
 
-void fn_8019B5D4(void)
+void LevelLightsSelectFrontEnd(void)
 {
-    lbl_803EB7BC = lbl_802EEEE0;
+    _LevelLights_pColors = lbl_802EEEE0;
     fn_8023633C(lbl_802EEDD0);
-    lbl_803EB7B8 = 0;
-    fn_8019B614();
+    _LevelLights_iCurrent = 0;
+    LevelLightsApplyColors();
 }
 
-void fn_8019B614(void)
+void LevelLightsApplyColors(void)
 {
-    fn_802353CC(lbl_803EB7BC + 64);
-    fn_802353D0(lbl_803EB7BC);
+    fn_802353CC(_LevelLights_pColors + 64);
+    fn_802353D0(_LevelLights_pColors);
 }
 
 }

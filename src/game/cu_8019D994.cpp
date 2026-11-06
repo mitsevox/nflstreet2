@@ -1,4 +1,4 @@
-#include "game/Frame_8019D3B8.h"
+#include "game/AnimFrameHeader.h"
 
 #include <string.h>
 
@@ -6,20 +6,20 @@ extern "C" {
 extern float lbl_802F26FC[];
 extern int lbl_802F2708[];
 
-void fn_8019DF38(int *output, short *input, int index, Record_8019D8AC *context);
+void fn_8019DF38(int *output, short *input, int index, AnimQuantContext *context);
 }
 
-extern "C" void fn_8019D994(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mode, float scale, Record_8019D8AC *context, int unused)
+extern "C" void fn_8019D994(Pose_80041930 *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
 {
-    Frame_8019D3B8 frame;
+    AnimFrameHeader frame;
     int special = entry->mUnknown8 & 4;
     short *samples;
     if (context) {
         samples = pose->mUnknown48;
-        short *encodedSamples = fn_8019D3B8(&frame, entry->mpUnknown40);
-        fn_8019D514(samples, encodedSamples, context, 1);
+        short *encodedSamples = AnimReadFrameHeader(&frame, entry->mpUnknown40);
+        AnimUnpackFrameBits(samples, encodedSamples, context, 1);
     } else {
-        samples = fn_8019D3B8(&frame, entry->mpUnknown40);
+        samples = AnimReadFrameHeader(&frame, entry->mpUnknown40);
     }
     unsigned int count = frame.count;
     if (count > 64)
@@ -72,12 +72,12 @@ extern "C" void fn_8019D994(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
         pose->mUnknown20[0] = frame.vector10[0] * 0.0009765625f;
         pose->mUnknown20[1] = frame.vector10[1] * 0.0009765625f;
         pose->mUnknown20[2] = frame.vector10[2] * 0.0009765625f;
-        fn_8019D8AC(pose->mUnknown36, samples, 19, context);
+        AnimMirrorVector(pose->mUnknown36, samples, 19, context);
     } else if (mode == 2) {
         pose->mUnknown20[0] = frame.vectorA[0] * 0.0009765625f;
         pose->mUnknown20[1] = frame.vectorA[1] * 0.0009765625f;
         pose->mUnknown20[2] = frame.vectorA[2] * 0.0009765625f;
-        fn_8019D8AC(pose->mUnknown36, samples, 25, context);
+        AnimMirrorVector(pose->mUnknown36, samples, 25, context);
     } else {
         pose->mUnknown20[0] = lbl_802F26FC[0];
         pose->mUnknown20[1] = lbl_802F26FC[1];
@@ -87,21 +87,21 @@ extern "C" void fn_8019D994(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
         pose->mUnknown36[2] = -lbl_802F2708[2] << 8;
     }
     if (!context)
-        fn_8019D83C(pose->mUnknown48, samples, count);
+        AnimMirrorRotations(pose->mUnknown48, samples, count);
     pose->mUnknown8[0] = -pose->mUnknown8[0];
     pose->mUnknown20[0] = -pose->mUnknown20[0];
-    Pair_8019D800 *pair = &context->mUnknown4;
-    entry->mUnknown12[0] = fn_8019D800(samples[0], 0, 0, context, pair) << 8;
+    AnimQuantTables *pair = &context->mUnknown4;
+    entry->mUnknown12[0] = AnimDequantize(samples[0], 0, 0, context, pair) << 8;
     entry->mUnknown12[1] = -frame.word2 << 8;
-    entry->mUnknown12[2] = -fn_8019D800(samples[2], 0, 2, context, pair) << 8;
+    entry->mUnknown12[2] = -AnimDequantize(samples[2], 0, 2, context, pair) << 8;
 }
 
-extern "C" void fn_8019DF38(int *output, short *input, int index, Record_8019D8AC *context)
+extern "C" void fn_8019DF38(int *output, short *input, int index, AnimQuantContext *context)
 {
     if (context) {
-        output[0] = fn_8019D800(input[index * 3], index, 0, context, &context->mUnknown4) << 8;
-        output[1] = fn_8019D800(input[index * 3 + 1], index, 1, context, &context->mUnknown4) << 8;
-        output[2] = fn_8019D800(input[index * 3 + 2], index, 2, context, &context->mUnknown4) << 8;
+        output[0] = AnimDequantize(input[index * 3], index, 0, context, &context->mUnknown4) << 8;
+        output[1] = AnimDequantize(input[index * 3 + 1], index, 1, context, &context->mUnknown4) << 8;
+        output[2] = AnimDequantize(input[index * 3 + 2], index, 2, context, &context->mUnknown4) << 8;
     } else {
         output[0] = input[index * 3] << 8;
         output[1] = input[index * 3 + 1] << 8;
@@ -109,17 +109,17 @@ extern "C" void fn_8019DF38(int *output, short *input, int index, Record_8019D8A
     }
 }
 
-extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mode, float scale, Record_8019D8AC *context, int unused)
+extern "C" void fn_8019E00C(Pose_80041930 *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
 {
-    Frame_8019D3B8 frame;
+    AnimFrameHeader frame;
     int special = entry->mUnknown8 & 4;
     short *samples;
     if (context) {
-        short *encodedSamples = fn_8019D3B8(&frame, entry->mpUnknown40);
-        fn_8019D514(pose->mUnknown48, encodedSamples, context, 0);
+        short *encodedSamples = AnimReadFrameHeader(&frame, entry->mpUnknown40);
+        AnimUnpackFrameBits(pose->mUnknown48, encodedSamples, context, 0);
         samples = pose->mUnknown48;
     } else {
-        samples = fn_8019D3B8(&frame, entry->mpUnknown40);
+        samples = AnimReadFrameHeader(&frame, entry->mpUnknown40);
     }
     unsigned int count = frame.count;
     if (count > 64)
@@ -188,8 +188,8 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
     }
     if (!context)
         memcpy(pose->mUnknown48, samples, count * 6);
-    Pair_8019D800 *pair = &context->mUnknown4;
-    entry->mUnknown12[0] = fn_8019D800(samples[0], 0, 0, context, pair) << 8;
+    AnimQuantTables *pair = &context->mUnknown4;
+    entry->mUnknown12[0] = AnimDequantize(samples[0], 0, 0, context, pair) << 8;
     entry->mUnknown12[1] = frame.word2 << 8;
-    entry->mUnknown12[2] = fn_8019D800(samples[2], 0, 2, context, pair) << 8;
+    entry->mUnknown12[2] = AnimDequantize(samples[2], 0, 2, context, pair) << 8;
 }

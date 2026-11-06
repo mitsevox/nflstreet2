@@ -1,8 +1,10 @@
+/* Weather particle drawing: emits the indexed quads or lines of the level's
+   weather particles with one matrix per corner. */
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
 
-extern "C" void fn_801A6870(int count)
+extern "C" void WeatherDrawQuads(int count)
 {
     int i;
 
@@ -27,7 +29,7 @@ extern "C" void fn_801A6870(int count)
     }
 }
 
-extern "C" void fn_801A6924(int count)
+extern "C" void WeatherDrawLines(int count)
 {
     int i;
 

@@ -1,3 +1,6 @@
+/* Draws on-field arrows as flat ribbons along a list of points, with an
+   arrow head, block or ellipse end piece, width and brightness tapering
+   along the arrow and an optional dashed body. */
 #include "game/Object_80039F5C.h"
 #include "game/Pair_8017055C.h"
 #include "game/fn_802270D4.h"
@@ -11,7 +14,7 @@
 
 /* A trail of points drawn as a flat ribbon with an end piece selected by
    mType. The width and brightness are interpolated along the trail. */
-struct Trail_8019CBC0 {
+struct ArrowPath {
     unsigned int mCount;
     int mUnknown4;
     Vector_80039F5C *mpPoints;
@@ -26,8 +29,8 @@ struct Trail_8019CBC0 {
     unsigned char mDashed;
 };
 
-/* Fan vertex of fn_8019C8C0; the 2D calls build its first two members. */
-struct Vertex_8019C8C0 {
+/* Fan vertex of ArrowDrawEllipseEnd; the 2D calls build its first two members. */
+struct ArrowFanVertex {
     Pair_8017055C mXY;
     float mZ;
     float mW;
@@ -52,12 +55,12 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 
-float fn_8019BECC(Trail_8019CBC0 *pTrail, unsigned int index)
+float ArrowGetWidth(ArrowPath *pTrail, unsigned int index)
 {
     return pTrail->mWidth * ((pTrail->mEndWidth - 1.0f) * index / pTrail->mCount + 1.0f);
 }
 
-void fn_8019BF38(Trail_8019CBC0 *pTrail, unsigned int index, unsigned char *pColor)
+void ArrowGetColor(ArrowPath *pTrail, unsigned int index, unsigned char *pColor)
 {
     float brightness = (pTrail->mEndBrightness - 1.0f) * index / pTrail->mCount + 1.0f;
 
@@ -67,7 +70,7 @@ void fn_8019BF38(Trail_8019CBC0 *pTrail, unsigned int index, unsigned char *pCol
 }
 
 /* Draws one quad of the ribbon at height 0 in the given colour. */
-static inline void DrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC,
+static inline void _ArrowDrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC,
                             Vector_80039F5C *pD, unsigned char *pColor)
 {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -83,7 +86,7 @@ static inline void DrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_800
 
 /* Draws the ribbon segment from point index - 1 to point index, joined to
    the segment drawn before it through pLeft and pRight. */
-int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_80039F5C *pLeft,
+int ArrowDrawSegment(int unused, ArrowPath *pTrail, unsigned int index, Vector_80039F5C *pLeft,
                 Vector_80039F5C *pRight)
 {
     Vector_80039F5C left1;
@@ -103,8 +106,8 @@ int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_8
     float x;
     unsigned char i;
 
-    width0 = fn_8019BECC(pTrail, index - 1);
-    width1 = fn_8019BECC(pTrail, index);
+    width0 = ArrowGetWidth(pTrail, index - 1);
+    width1 = ArrowGetWidth(pTrail, index);
     fn_802276B4(&side, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
     x = side.mX;
     side.mX = side.mY;
@@ -117,20 +120,20 @@ int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_8
     fn_802276B4(&right0, &pTrail->mpPoints[index - 1], &side0);
     fn_8022765C(&left1, &pTrail->mpPoints[index], &side1);
     fn_802276B4(&right1, &pTrail->mpPoints[index], &side1);
-    fn_8019BF38(pTrail, index - 1, color);
+    ArrowGetColor(pTrail, index - 1, color);
     if (pTrail->mDashed) {
         for (i = 0; i < 15; i++) {
             fn_80227930(&a0, &left1, &left0, (i * 2) / 29.0f);
             fn_80227930(&b0, &right1, &right0, (i * 2) / 29.0f);
             fn_80227930(&a1, &left1, &left0, (i * 2 + 1) / 29.0f);
             fn_80227930(&b1, &right1, &right0, (i * 2 + 1) / 29.0f);
-            DrawQuad(&a1, &a0, &b0, &b1, color);
+            _ArrowDrawQuad(&a1, &a0, &b0, &b1, color);
         }
     } else {
-        DrawQuad(&left1, &left0, &right0, &right1, color);
+        _ArrowDrawQuad(&left1, &left0, &right0, &right1, color);
     }
     if (index < pTrail->mCount - 1) {
-        DrawQuad(&left1, pLeft, pRight, &right1, color);
+        _ArrowDrawQuad(&left1, pLeft, pRight, &right1, color);
     }
     pLeft->mX = left0.mX;
     pLeft->mY = left0.mY;
@@ -142,7 +145,7 @@ int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_8
 }
 
 /* Arrow head at point index. */
-int fn_8019C4F4(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
+int ArrowDrawHead(int unused, ArrowPath *pTrail, unsigned int index)
 {
     Vector_80039F5C tip;
     Vector_80039F5C left;
@@ -154,8 +157,8 @@ int fn_8019C4F4(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     float t;
     Vector_80039F5C *pPoints;
 
-    width = fn_8019BECC(pTrail, index);
-    fn_8019BF38(pTrail, index - 1, color);
+    width = ArrowGetWidth(pTrail, index);
+    ArrowGetColor(pTrail, index - 1, color);
     fn_802276B4(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
     fn_802271F0(&direction, &direction);
     width *= 3.0f;
@@ -170,12 +173,12 @@ int fn_8019C4F4(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     fn_8022765C(&left, &pTrail->mpPoints[index], &direction);
     fn_802276B4(&right, &pTrail->mpPoints[index], &direction);
     pPoints = pTrail->mpPoints;
-    DrawQuad(&left, &tip, &right, &pPoints[index], color);
+    _ArrowDrawQuad(&left, &tip, &right, &pPoints[index], color);
     return 0;
 }
 
 /* Rectangular cap at point index: 2 * width long and 4 * width across. */
-int fn_8019C6D8(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
+int ArrowDrawBlockEnd(int unused, ArrowPath *pTrail, unsigned int index)
 {
     Vector_80039F5C corner0;
     Vector_80039F5C corner1;
@@ -187,8 +190,8 @@ int fn_8019C6D8(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     unsigned char color[3];
     float width;
 
-    width = fn_8019BECC(pTrail, index);
-    fn_8019BF38(pTrail, index - 1, color);
+    width = ArrowGetWidth(pTrail, index);
+    ArrowGetColor(pTrail, index - 1, color);
     fn_802276B4(&direction, &pTrail->mpPoints[index], &pTrail->mpPoints[index - 1]);
     fn_802271F0(&direction, &direction);
     fn_80227264(&direction, &direction, width + width);
@@ -203,15 +206,15 @@ int fn_8019C6D8(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     side.mZ = 0.0f;
     fn_8022765C(&corner3, &base, &side);
     fn_8022765C(&corner2, &pTrail->mpPoints[index], &side);
-    DrawQuad(&corner0, &corner1, &corner3, &corner2, color);
+    _ArrowDrawQuad(&corner0, &corner1, &corner3, &corner2, color);
     return 0;
 }
 
 /* Ellipse of radii mRadiusX and mRadiusY around point index, drawn as a
    fan of 30 vertices. */
-int fn_8019C8C0(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
+int ArrowDrawEllipseEnd(int unused, ArrowPath *pTrail, unsigned int index)
 {
-    Vertex_8019C8C0 vertex;
+    ArrowFanVertex vertex;
     unsigned char color[3];
     Pair_8017055C center;
     float first;
@@ -224,8 +227,8 @@ int fn_8019C8C0(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     int offset;
     int phase;
 
-    fn_8019BF38(pTrail, index - 1, color);
-    fn_8019BECC(pTrail, index);
+    ArrowGetColor(pTrail, index - 1, color);
+    ArrowGetWidth(pTrail, index);
     center.mX = pTrail->mpPoints[index].mX;
     center.mY = pTrail->mpPoints[index].mY;
     a = pTrail->mRadiusX;
@@ -252,7 +255,7 @@ int fn_8019C8C0(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
 }
 
 /* Drops each point that lies on the point before it. */
-void fn_8019CAC4(Trail_8019CBC0 *pTrail)
+void ArrowRemoveRepeatedPoints(ArrowPath *pTrail)
 {
     unsigned int i;
     unsigned int j;
@@ -271,7 +274,7 @@ void fn_8019CAC4(Trail_8019CBC0 *pTrail)
     pTrail->mCount -= removed;
 }
 
-void fn_8019CBC0(Trail_8019CBC0 *pTrail)
+void ArrowDraw(ArrowPath *pTrail)
 {
     Vector_80039F5C left;
     Vector_80039F5C right;
@@ -283,7 +286,7 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
         return;
     }
     fn_80210388();
-    fn_8019CAC4(pTrail);
+    ArrowRemoveRepeatedPoints(pTrail);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -311,16 +314,16 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
     fn_80210BD8(2);
     state = fn_80236EC0(0);
     if (pTrail->mType == 0) {
-        fn_8019C4F4(0, pTrail, pTrail->mCount - 1);
+        ArrowDrawHead(0, pTrail, pTrail->mCount - 1);
     } else if (pTrail->mType == 1) {
-        fn_8019C6D8(0, pTrail, pTrail->mCount - 1);
+        ArrowDrawBlockEnd(0, pTrail, pTrail->mCount - 1);
     } else if (pTrail->mType == 2) {
-        fn_8019C8C0(0, pTrail, pTrail->mCount - 1);
+        ArrowDrawEllipseEnd(0, pTrail, pTrail->mCount - 1);
     } else if (pTrail->mType == 3) {
-        fn_8019C4F4(0, pTrail, pTrail->mCount - 1);
+        ArrowDrawHead(0, pTrail, pTrail->mCount - 1);
     }
     for (i = pTrail->mCount - 1; i != 0; i--) {
-        fn_8019C044(0, pTrail, i, &left, &right);
+        ArrowDrawSegment(0, pTrail, i, &left, &right);
     }
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     fn_80210CC4(0.0f, 1.0f);

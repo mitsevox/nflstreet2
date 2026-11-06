@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_8015C25C.h"
-#include "game/cu_801A4AD4.h"
+#include "game/PlyrTex.h"
 #include "game/fn_8017F584.h"
 
 #include <dolphin/gx/GXVert.h>
@@ -203,7 +203,7 @@ void *fn_80160C08(void);
 Desc_802347EC *fn_8016102C(int player);
 void fn_80161498(void);
 void fn_8019723C(Object_80146094 *p);
-void fn_801A1400(Object_8003DEC4 *pPlayer);
+void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
 void fn_801C657C(void);
 void fn_801D0470(void);
@@ -1125,7 +1125,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     fn_80233BB8(&pPlayer->mUnknown4064[4], 0, 0);
     fn_80233BB8(&pPlayer->mUnknown4064[5], 0, 0);
     fn_80211FF0();
-    fn_80212018("platex", fn_801A4AE4(pPlayer->mUnknown4971));
+    fn_80212018("platex", PlyrTexGetLib(pPlayer->mUnknown4971));
     fn_8023488C(pPlayer->mUnknown4044, 0x38);
     fn_80210214(pPlayer->mUnknown4044, pModel->mpUnknown24);
     fn_8023465C(pPlayer->mUnknown4044, pModel, fn_8016102C(pPlayer->mUnknown4971));
@@ -1149,7 +1149,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
                 &fn_8016102C(pPlayer->mUnknown4971)[29], 0);
     fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &fn_8016102C(pPlayer->mUnknown4971)[30],
                 &fn_8016102C(pPlayer->mUnknown4971)[30], 0);
-    fn_801A4C1C(fn_8016102C(pPlayer->mUnknown4971), 0);
+    PlyrTexApplyFilters(fn_8016102C(pPlayer->mUnknown4971), 0);
     fn_80211FF0();
     fn_801A299C(&pPlayer->mUnknown1164[0], 0, &pPlayer->mUnknown4064[0], pPlayer->mUnknown4044);
     fn_801A29F8(&pPlayer->mUnknown1164[4], pPlayer->mUnknown4044, pPlayer);
@@ -1222,7 +1222,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
         pSlot->mpUnknown16 = 0;
     }
     if (pPlayer->mUnknown976 & 0x10) {
-        fn_801A1400(pPlayer);
+        PlyrModelDrawNameplate(pPlayer);
         pPlayer->mUnknown976 &= ~0x10;
     }
     pSlot->mpUnknown0 = pPlayer;

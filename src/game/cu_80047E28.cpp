@@ -95,7 +95,7 @@ void fn_801A3520(void);
 void fn_801A3588(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit);
 void fn_801A3C40(Object_8003DEC4 *pPlayer);
 void fn_801A3F48(Object_8003DEC4 *pPlayer);
-void fn_801A4AD4(Object_8003DEC4 *pPlayer);
+void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
@@ -803,7 +803,7 @@ extern "C" void fn_80049124(int player)
         fn_80160E94(index, 8, palette2, -1, 0);
     }
     fn_801C3284(pPlayer->mUnknown4184, lbl_803078E8[index].mName, 31);
-    fn_801A4AD4(pPlayer);
+    PlyrTexRequestNameplate(pPlayer);
 }
 
 extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)

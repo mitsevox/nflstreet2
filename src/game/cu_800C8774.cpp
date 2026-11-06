@@ -72,7 +72,7 @@
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
-#include "game/Entry_802F394C.h"
+#include "game/EnvFogSettings.h"
 
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);

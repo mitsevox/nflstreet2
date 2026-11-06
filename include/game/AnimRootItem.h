@@ -1,8 +1,8 @@
-#ifndef GAME_ITEM_8019F044_H
-#define GAME_ITEM_8019F044_H
+#ifndef GAME_ANIMROOTITEM_H
+#define GAME_ANIMROOTITEM_H
 
-/* 0x7C-byte item of the array passed to fn_8019F044. */
-struct Item_8019F044 {
+/* 0x7C-byte item of the array passed to AnimBlendRootAngles. */
+struct AnimRootItem {
     char mUnknown0[1];
     unsigned char mUnknown1;
     char mUnknown2[6];

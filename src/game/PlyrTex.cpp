@@ -1,7 +1,9 @@
+/* Player textures: nameplate redraw request, the player texture library,
+   texture copies between players and the per-body-part filter settings. */
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8020E52C.h"
-#include "game/cu_801A4AD4.h"
+#include "game/PlyrTex.h"
 #include "game/fn_8021216C.h"
 
 #include <string.h>
@@ -15,7 +17,7 @@ void fn_80239D1C(void *p, unsigned int size);
 
 #define TEXTURE_ENTRY(name, flag) { name, flag, { 3, 1, -1.3f, 0, 0, 0 } }
 
-static Entry_802F3488 lbl_802F3488[] = {
+static PlyrTexPartFilter _PlyrTex_aPartFilters[] = {
     TEXTURE_ENTRY("HAIR", 0),
     TEXTURE_ENTRY("HEAD", 0),
     TEXTURE_ENTRY("TORSO", 0),
@@ -50,17 +52,17 @@ static Entry_802F3488 lbl_802F3488[] = {
 
 extern "C" {
 
-void fn_801A4AD4(Object_8003DEC4 *pPlayer)
+void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer)
 {
     pPlayer->mUnknown976 |= 0x10;
 }
 
-void *fn_801A4AE4(int player)
+void *PlyrTexGetLib(int player)
 {
     return fn_8016102C(player)->mpUnknown24;
 }
 
-void fn_801A4B08(Desc_802347EC *pDesc)
+void PlyrTexFreeDesc(Desc_802347EC *pDesc)
 {
     fn_80234844(pDesc);
 }
@@ -68,7 +70,7 @@ void fn_801A4B08(Desc_802347EC *pDesc)
 /* Copies the image blocks and the +0x1C block selected by header halfword
    +8 of the texture data pSrc into pDest and flushes each copy; size is
    not read. */
-void fn_801A4B28(void *pDest, void *pSrc, unsigned int size)
+void PlyrTexCopy(void *pDest, void *pSrc, unsigned int size)
 {
     Object_8020E52C *pSrcHeader = fn_8020E52C(pSrc, 0);
     Object_8020E52C *pDestHeader = fn_8020E52C(pDest, 0);
@@ -90,14 +92,14 @@ void fn_801A4B28(void *pDest, void *pSrc, unsigned int size)
     fn_80239D1C(pDestBlock->mpUnknown8, pDestBlock->mUnknown4);
 }
 
-/* Applies each entry of pEntries (lbl_802F3488 when null) to the texture of
+/* Applies each entry of pEntries (_PlyrTex_aPartFilters when null) to the texture of
    the same name in pDescs. */
-void fn_801A4C1C(Desc_802347EC *pDescs, Entry_802F3488 *pEntries)
+void PlyrTexApplyFilters(Desc_802347EC *pDescs, PlyrTexPartFilter *pEntries)
 {
     int i;
 
     if (!pEntries) {
-        pEntries = lbl_802F3488;
+        pEntries = _PlyrTex_aPartFilters;
     }
     for (i = 0; pEntries[i].mpName; i++) {
         Desc_802347EC *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);

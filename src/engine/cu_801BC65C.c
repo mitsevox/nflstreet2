@@ -36,7 +36,7 @@ void fn_801BC67C(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB
     }
 }
 
-Record_8019D8AC *fn_801BC780(AnimFileFormat_t *pFile, int group)
+AnimQuantContext *fn_801BC780(AnimFileFormat_t *pFile, int group)
 {
     if ((pFile->flags & 1) && !(pFile->flags & 0x200)) {
         if (pFile->flags & 4)
