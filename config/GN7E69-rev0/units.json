@@ -14466,6 +14466,31 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/game/FEPlyrLoad.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8015C25C-0x8015D3EC (src/game/FEPlyrLoad.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015C25C",
+          "end": "0x8015D3EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3EF8",
+          "end": "0x802A3F10"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB328",
+          "end": "0x803EB330"
+        }
+      ]
     }
   ]
 }

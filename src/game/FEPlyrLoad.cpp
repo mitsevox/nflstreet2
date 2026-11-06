@@ -1,7 +1,15 @@
+/* Front-end player model loading: keeps one appearance request for each of the
+   two front-end player models, queued by priority, and loads one at a time. A
+   request compares the player's look with what the model already shows and
+   streams only the head, face, hat, slot-1 and accessory parts that changed,
+   then rebuilds the model's textures. Once a request is done the model
+   scales in from 0 to 1, and it scales back out while a new request for it
+   waits in the queue. */
+
 #include "game/FaceFeatures.h"
+#include "game/FEPlyrLoad.h"
 #include "game/Object_8003DEC4.h"
 #include "game/PlayerLook.h"
-#include "game/cu_8015C25C.h"
 #include "game/cu_8015D3EC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80233CBC.h"
@@ -10,8 +18,8 @@
 
 /* Per-player model request (0x11C bytes). The halfword at +0xFA keeps one
    "needs loading" bit (0x01-0x10) and one "loading" bit (0x20-0x200) for
-   each of the five parts loaded asynchronously by fn_8015C498. */
-struct Entry_803EB32C {
+   each of the five parts loaded asynchronously by FEPlyrLoadStartNextPart. */
+struct FEPlyrLoadRequest_t {
     int mUnknown0;
     PlayerHeadIds_t mUnknown4;
     int mUnknownC;
@@ -32,9 +40,9 @@ struct Entry_803EB32C {
     char mUnknownFE[30];
 };
 
-/* State allocated by fn_8015CBC8 (0x254 bytes). */
-struct State_803EB32C {
-    Entry_803EB32C mEntries[2];
+/* State allocated by FEPlyrLoadInit (0x254 bytes). */
+struct FEPlyrLoadState_t {
+    FEPlyrLoadRequest_t mEntries[2];
     int mCurrent;
     Object_8003DEC4 *mpPlayers[2];
     float mUnknown244[2];
@@ -60,18 +68,18 @@ void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
 int GameInfoGet(int index);
 
-void fn_8015C498(void);
-void fn_8015CB18(int wait);
-void fn_8015CCB4(int wait);
+void FEPlyrLoadStartNextPart(void);
+void FEPlyrLoadWait(int wait);
+void FEPlyrLoadReset(int wait);
 }
 
-static unsigned char lbl_803EB328 = 0;
-static State_803EB32C *lbl_803EB32C = 0;
+static unsigned char _FEPlyrLoad_bActive = 0;
+static FEPlyrLoadState_t *_FEPlyrLoad_pState = 0;
 
-extern "C" void fn_8015C25C(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadHatDone(Object_8003DEC4 *pPlayer)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry = &pState->mEntries[pState->mCurrent];
 
     fn_80234A14(&pPlayer->mUnknown1164[7], 1);
     fn_80234A14(&pPlayer->mUnknown1164[8], 1);
@@ -81,10 +89,10 @@ extern "C" void fn_8015C25C(Object_8003DEC4 *pPlayer)
     pEntry->mUnknownFA &= ~0x21;
 }
 
-extern "C" void fn_8015C2E0(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadHeadDone(Object_8003DEC4 *pPlayer)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry = &pState->mEntries[pState->mCurrent];
 
     fn_80234A14(&pPlayer->mUnknown1164[6], 1);
     fn_80233C7C(&pPlayer->mUnknown1164[6].mUnknown20);
@@ -92,10 +100,10 @@ extern "C" void fn_8015C2E0(Object_8003DEC4 *pPlayer)
     pEntry->mUnknownFA &= ~0x42;
 }
 
-extern "C" void fn_8015C34C(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadSlot1Done(Object_8003DEC4 *pPlayer)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry = &pState->mEntries[pState->mCurrent];
 
     fn_80234A14(&pPlayer->mUnknown1164[9], 1);
     fn_80233C7C(&pPlayer->mUnknown1164[9].mUnknown20);
@@ -103,10 +111,10 @@ extern "C" void fn_8015C34C(Object_8003DEC4 *pPlayer)
     pEntry->mUnknownFA &= ~0x84;
 }
 
-extern "C" void fn_8015C3B8(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadAccessoryDone(Object_8003DEC4 *pPlayer)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry = &pState->mEntries[pState->mCurrent];
 
     fn_80234A14(&pPlayer->mUnknown1164[11], 1);
     fn_80233C7C(&pPlayer->mUnknown1164[11].mUnknown20);
@@ -116,10 +124,10 @@ extern "C" void fn_8015C3B8(Object_8003DEC4 *pPlayer)
     pEntry->mUnknownFA &= ~0x210;
 }
 
-extern "C" void fn_8015C43C(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadFaceDone(Object_8003DEC4 *pPlayer)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry = &pState->mEntries[pState->mCurrent];
 
     fn_80234A14(&pPlayer->mUnknown1164[4], 1);
     fn_80234A14(&pPlayer->mUnknown1164[5], 1);
@@ -127,11 +135,11 @@ extern "C" void fn_8015C43C(Object_8003DEC4 *pPlayer)
 }
 
 /* Starts loading the next pending part of the current request. */
-extern "C" void fn_8015C498(void)
+extern "C" void FEPlyrLoadStartNextPart(void)
 {
-    State_803EB32C *pState = lbl_803EB32C;
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
     int index = pState->mCurrent;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadRequest_t *pEntry;
     Object_8003DEC4 *pPlayer;
 
     if (index == 2) {
@@ -147,27 +155,27 @@ extern "C" void fn_8015C498(void)
     }
     if ((pEntry->mUnknownFA & 0x2) && !(pEntry->mUnknownFA & 0x40)) {
         pEntry->mUnknownFA |= 0x40;
-        fn_8015F958(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, fn_8015C2E0);
+        fn_8015F958(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, FEPlyrLoadHeadDone);
     } else if ((pEntry->mUnknownFA & 0x8) && !(pEntry->mUnknownFA & 0x100)) {
         pEntry->mUnknownFA |= 0x100;
-        fn_801A46E0(pPlayer, pEntry->mUnknownC, fn_8015C43C);
+        fn_801A46E0(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
     } else if ((pEntry->mUnknownFA & 0x1) && !(pEntry->mUnknownFA & 0x20)) {
         pEntry->mUnknownFA |= 0x20;
-        fn_8015FB38(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, fn_8015C25C);
+        fn_8015FB38(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, FEPlyrLoadHatDone);
     } else if ((pEntry->mUnknownFA & 0x4) && !(pEntry->mUnknownFA & 0x80)) {
         pEntry->mUnknownFA |= 0x80;
-        fn_8015FC54(pPlayer->mUnknown4970, pEntry->mUnknownEC, pPlayer, fn_8015C34C);
+        fn_8015FC54(pPlayer->mUnknown4970, pEntry->mUnknownEC, pPlayer, FEPlyrLoadSlot1Done);
     } else if ((pEntry->mUnknownFA & 0x10) && !(pEntry->mUnknownFA & 0x200)) {
         pEntry->mUnknownFA |= 0x200;
-        fn_8015FD70(pPlayer->mUnknown4970, pEntry->mUnknownF0, pPlayer, fn_8015C3B8);
+        fn_8015FD70(pPlayer->mUnknown4970, pEntry->mUnknownF0, pPlayer, FEPlyrLoadAccessoryDone);
     }
 }
 
 /* Makes index the current request and works out which parts must be loaded. */
-extern "C" void fn_8015C5E8(int index)
+extern "C" void FEPlyrLoadBegin(int index)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry;
     Object_8003DEC4 *pPlayer;
     FaceFeatures_t block;
     FMCAPPORTValues values;
@@ -250,35 +258,35 @@ extern "C" void fn_8015C5E8(int index)
     }
 
     pEntry->mUnknownF4 = 1;
-    fn_8015C498();
+    FEPlyrLoadStartNextPart();
 }
 
 /* Returns the slot of mpPlayers that holds pPlayer. */
-extern "C" int fn_8015C9B4(Object_8003DEC4 *pPlayer)
+extern "C" int FEPlyrLoadGetSlot(Object_8003DEC4 *pPlayer)
 {
     int index = pPlayer->mUnknown4969;
     int slot = index + 1;
 
-    if (lbl_803EB32C->mpPlayers[index] == pPlayer) {
+    if (_FEPlyrLoad_pState->mpPlayers[index] == pPlayer) {
         slot = index;
     }
     return slot;
 }
 
 /* Queues (or re-queues) request index, keeping the queue ordered by priority. */
-extern "C" void fn_8015C9E0(int index, unsigned int priority, unsigned char queue)
+extern "C" void FEPlyrLoadQueue(int index, unsigned int priority, unsigned char queue)
 {
-    Entry_803EB32C *pEntry = &lbl_803EB32C->mEntries[index];
+    FEPlyrLoadRequest_t *pEntry = &_FEPlyrLoad_pState->mEntries[index];
     unsigned int i;
     int n;
 
     pEntry->mUnknownF6 = priority;
     if (pEntry->mUnknownFC) {
-        for (i = 0; i < lbl_803EB32C->mQueueCount; i++) {
-            if (lbl_803EB32C->mQueue[i] == index) {
-                lbl_803EB32C->mQueueCount--;
-                for (; i < lbl_803EB32C->mQueueCount; i++) {
-                    lbl_803EB32C->mQueue[i] = lbl_803EB32C->mQueue[i + 1];
+        for (i = 0; i < _FEPlyrLoad_pState->mQueueCount; i++) {
+            if (_FEPlyrLoad_pState->mQueue[i] == index) {
+                _FEPlyrLoad_pState->mQueueCount--;
+                for (; i < _FEPlyrLoad_pState->mQueueCount; i++) {
+                    _FEPlyrLoad_pState->mQueue[i] = _FEPlyrLoad_pState->mQueue[i + 1];
                 }
                 break;
             }
@@ -290,28 +298,27 @@ extern "C" void fn_8015C9E0(int index, unsigned int priority, unsigned char queu
         return;
     }
 
-    n = lbl_803EB32C->mQueueCount;
+    n = _FEPlyrLoad_pState->mQueueCount;
     for (;;) {
-        State_803EB32C *s = lbl_803EB32C;
-        if (n == 0 || s->mEntries[s->mQueue[n - 1]].mUnknownF6 >= priority) {
-            s->mQueue[n] = index;
+        if (n == 0 || _FEPlyrLoad_pState->mEntries[_FEPlyrLoad_pState->mQueue[n - 1]].mUnknownF6 >= priority) {
+            _FEPlyrLoad_pState->mQueue[n] = index;
             break;
         }
-        s->mQueue[n] = s->mQueue[n - 1];
+        _FEPlyrLoad_pState->mQueue[n] = _FEPlyrLoad_pState->mQueue[n - 1];
         n--;
     }
-    lbl_803EB32C->mQueueCount++;
-    if (lbl_803EB32C->mUnknown24F[index] == 0) {
-        lbl_803EB32C->mUnknown244[index] = 0.0f;
-        lbl_803EB32C->mUnknown251[index] = 0;
+    _FEPlyrLoad_pState->mQueueCount++;
+    if (_FEPlyrLoad_pState->mUnknown24F[index] == 0) {
+        _FEPlyrLoad_pState->mUnknown244[index] = 0.0f;
+        _FEPlyrLoad_pState->mUnknown251[index] = 0;
     }
 }
 
 /* Waits for the current request's loads to finish. */
-extern "C" void fn_8015CB18(int wait)
+extern "C" void FEPlyrLoadWait(int wait)
 {
-    State_803EB32C *pState = lbl_803EB32C;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadState_t *pState = _FEPlyrLoad_pState;
+    FEPlyrLoadRequest_t *pEntry;
     unsigned int count;
 
     if (pState->mCurrent == 2) {
@@ -337,25 +344,25 @@ extern "C" void fn_8015CB18(int wait)
     }
 }
 
-extern "C" void fn_8015CBC8(void)
+extern "C" void FEPlyrLoadInit(void)
 {
-    State_803EB32C *pState;
+    FEPlyrLoadState_t *pState;
 
-    lbl_803EB328 = 1;
-    pState = (State_803EB32C *)fn_801D2B7C(sizeof(State_803EB32C), 0, 0);
-    lbl_803EB32C = pState;
+    _FEPlyrLoad_bActive = 1;
+    pState = (FEPlyrLoadState_t *)fn_801D2B7C(sizeof(FEPlyrLoadState_t), 0, 0);
+    _FEPlyrLoad_pState = pState;
     pState->mCurrent = 2;
     pState->mQueueCount = 0;
-    fn_8015CCB4(0);
+    FEPlyrLoadReset(0);
 }
 
-extern "C" void fn_8015CC1C(void)
+extern "C" void FEPlyrLoadShutdown(void)
 {
-    State_803EB32C *pState;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadState_t *pState;
+    FEPlyrLoadRequest_t *pEntry;
 
-    lbl_803EB32C->mQueueCount = 0;
-    pState = lbl_803EB32C;
+    _FEPlyrLoad_pState->mQueueCount = 0;
+    pState = _FEPlyrLoad_pState;
     if (pState->mCurrent != 2) {
         pEntry = &pState->mEntries[pState->mCurrent];
         if (pEntry->mUnknownFA & 0x3E0) {
@@ -367,57 +374,57 @@ extern "C" void fn_8015CC1C(void)
             fn_8016118C();
         }
     }
-    fn_801D2BD0(lbl_803EB32C);
-    lbl_803EB32C = 0;
-    lbl_803EB328 = 0;
+    fn_801D2BD0(_FEPlyrLoad_pState);
+    _FEPlyrLoad_pState = 0;
+    _FEPlyrLoad_bActive = 0;
 }
 
-extern "C" void fn_8015CCB4(int wait)
+extern "C" void FEPlyrLoadReset(int wait)
 {
     unsigned int i;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    lbl_803EB32C->mQueueCount = 0;
-    fn_8015CB18(wait);
+    _FEPlyrLoad_pState->mQueueCount = 0;
+    FEPlyrLoadWait(wait);
     for (i = 0; i < 2; i++) {
-        lbl_803EB32C->mpPlayers[i] = fn_8003DEC4(i);
-        lbl_803EB32C->mUnknown244[i] = 0.0f;
-        lbl_803EB32C->mUnknown24F[i] = 0;
-        lbl_803EB32C->mUnknown251[i] = 0;
-        lbl_803EB32C->mEntries[i].mUnknownF8 = 0;
-        lbl_803EB32C->mEntries[i].mUnknownFC = 0;
-        lbl_803EB32C->mEntries[i].mUnknownF4 = 0;
-        lbl_803EB32C->mEntries[i].mUnknownFD = 0;
+        _FEPlyrLoad_pState->mpPlayers[i] = fn_8003DEC4(i);
+        _FEPlyrLoad_pState->mUnknown244[i] = 0.0f;
+        _FEPlyrLoad_pState->mUnknown24F[i] = 0;
+        _FEPlyrLoad_pState->mUnknown251[i] = 0;
+        _FEPlyrLoad_pState->mEntries[i].mUnknownF8 = 0;
+        _FEPlyrLoad_pState->mEntries[i].mUnknownFC = 0;
+        _FEPlyrLoad_pState->mEntries[i].mUnknownF4 = 0;
+        _FEPlyrLoad_pState->mEntries[i].mUnknownFD = 0;
     }
-    lbl_803EB32C->mCurrent = 2;
-    lbl_803EB32C->mUnknown253 = 1;
+    _FEPlyrLoad_pState->mCurrent = 2;
+    _FEPlyrLoad_pState->mUnknown253 = 1;
 }
 
-extern "C" unsigned char fn_8015CD9C(void)
+extern "C" unsigned char FEPlyrLoadIsActive(void)
 {
-    return lbl_803EB328;
+    return _FEPlyrLoad_bActive;
 }
 
 /* Per-frame update: steps the two per-player 0..1 ramp values and starts the
    next queued request once the current one has finished. */
-extern "C" void fn_8015CDA4(void)
+extern "C" void FEPlyrLoadUpdate(void)
 {
     unsigned int i;
-    State_803EB32C *pState;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadState_t *pState;
+    FEPlyrLoadRequest_t *pEntry;
     Object_8003DEC4 *pPlayer;
     int current;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    fn_8015C498();
+    FEPlyrLoadStartNextPart();
     fn_8015FE4C();
     fn_801A472C();
     for (i = 0; i < 2; i++) {
-        pState = lbl_803EB32C;
+        pState = _FEPlyrLoad_pState;
         pEntry = &pState->mEntries[i];
         if (pEntry->mUnknownFC) {
             if (pState->mUnknown244[i] > 0.0f) {
@@ -426,9 +433,9 @@ extern "C" void fn_8015CDA4(void)
                 } else {
                     pState->mUnknown244[i] = 0.0f;
                 }
-                if (lbl_803EB32C->mUnknown244[i] <= 0.0f) {
-                    lbl_803EB32C->mUnknown244[i] = 0.0f;
-                    lbl_803EB32C->mUnknown251[i] = 0;
+                if (_FEPlyrLoad_pState->mUnknown244[i] <= 0.0f) {
+                    _FEPlyrLoad_pState->mUnknown244[i] = 0.0f;
+                    _FEPlyrLoad_pState->mUnknown251[i] = 0;
                 }
             } else if (pEntry->mUnknownF7) {
                 pEntry->mUnknownF7--;
@@ -441,9 +448,9 @@ extern "C" void fn_8015CDA4(void)
                     } else {
                         pState->mUnknown244[i] = 0.0f;
                     }
-                    if (lbl_803EB32C->mUnknown244[i] <= 0.0f) {
-                        lbl_803EB32C->mUnknown244[i] = 0.0f;
-                        lbl_803EB32C->mUnknown251[i] = 0;
+                    if (_FEPlyrLoad_pState->mUnknown244[i] <= 0.0f) {
+                        _FEPlyrLoad_pState->mUnknown244[i] = 0.0f;
+                        _FEPlyrLoad_pState->mUnknown251[i] = 0;
                     }
                 }
             } else if (pState->mUnknown244[i] < 1.0f) {
@@ -453,29 +460,29 @@ extern "C" void fn_8015CDA4(void)
                 }
             }
         }
-        lbl_803EB32C->mUnknown24F[i] = 0;
+        _FEPlyrLoad_pState->mUnknown24F[i] = 0;
     }
 
-    current = lbl_803EB32C->mCurrent;
+    current = _FEPlyrLoad_pState->mCurrent;
     if (current != 2) {
         i = current;
-        if (lbl_803EB32C->mEntries[i].mUnknownFA == 0 && lbl_803EB32C->mEntries[i].mUnknownF8 == 0) {
+        if (_FEPlyrLoad_pState->mEntries[i].mUnknownFA == 0 && _FEPlyrLoad_pState->mEntries[i].mUnknownF8 == 0) {
             pPlayer = fn_8003DEC4(i);
-            lbl_803EB32C->mEntries[i].mUnknownF8 = 1;
-            if (strlen(lbl_803EB32C->mEntries[i].mUnknownFE)) {
-                fn_801611BC(pPlayer->mUnknown4971, lbl_803EB32C->mEntries[i].mUnknownFE, 0);
+            _FEPlyrLoad_pState->mEntries[i].mUnknownF8 = 1;
+            if (strlen(_FEPlyrLoad_pState->mEntries[i].mUnknownFE)) {
+                fn_801611BC(pPlayer->mUnknown4971, _FEPlyrLoad_pState->mEntries[i].mUnknownFE, 0);
             } else {
                 fn_8016130C(pPlayer->mUnknown4971, PlayerLookGetSkin(i), PlayerLookGetFace(i), PlayerLookGetBrow(i), 0);
             }
             PlayerLookApply(current);
         }
-    } else if (lbl_803EB32C->mQueueCount) {
-        i = lbl_803EB32C->mQueue[0];
-        if (lbl_803EB32C->mEntries[i].mUnknownF7 == 0) {
-            fn_8015C5E8(i);
-            lbl_803EB32C->mQueueCount--;
-            for (i = 0; i < lbl_803EB32C->mQueueCount; i++) {
-                lbl_803EB32C->mQueue[i] = lbl_803EB32C->mQueue[i + 1];
+    } else if (_FEPlyrLoad_pState->mQueueCount) {
+        i = _FEPlyrLoad_pState->mQueue[0];
+        if (_FEPlyrLoad_pState->mEntries[i].mUnknownF7 == 0) {
+            FEPlyrLoadBegin(i);
+            _FEPlyrLoad_pState->mQueueCount--;
+            for (i = 0; i < _FEPlyrLoad_pState->mQueueCount; i++) {
+                _FEPlyrLoad_pState->mQueue[i] = _FEPlyrLoad_pState->mQueue[i + 1];
             }
         }
     }
@@ -483,80 +490,85 @@ extern "C" void fn_8015CDA4(void)
 
 /* Queues a request for player index; it counts as changed when forced or when
    the stored name or the compared player values differ. */
-extern "C" void fn_8015D060(int index, const char *pName, unsigned char priority, int force)
+extern "C" void FEPlyrLoadRequest(int index, const char *pName, unsigned char priority, int force)
 {
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadRequest_t *pEntry;
     Object_8003DEC4 *pPlayer;
-    int flag;
+    unsigned char team;
+    int changed;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    pEntry = &lbl_803EB32C->mEntries[index];
+    pEntry = &_FEPlyrLoad_pState->mEntries[index];
     pPlayer = fn_8003DEC4(index);
-    flag = pPlayer->mUnknown4968 == GameInfoGet(GameInfoGet(2) ? 1 : 0);
+    if (!GameInfoGet(2)) {
+        team = pPlayer->mUnknown4968 == GameInfoGet(0);
+    } else {
+        team = pPlayer->mUnknown4968 == GameInfoGet(1);
+    }
     if (force || !pEntry->mUnknownFD || pEntry->mUnknown0 != pPlayer->mUnknown4956 ||
-        pEntry->mUnknownF5 != flag || strcmp(pEntry->mUnknownFE, pName)) {
-        pEntry->mUnknownF5 = flag;
+        pEntry->mUnknownF5 != team || strcmp(pEntry->mUnknownFE, pName)) {
         pEntry->mUnknown0 = pPlayer->mUnknown4956;
+        pEntry->mUnknownF5 = team;
         pEntry->mUnknownF7 = 4;
-        flag = 1;
         strcpy(pEntry->mUnknownFE, pName);
         pEntry->mUnknownFD = 1;
+        changed = 1;
     } else {
-        flag = 0;
+        changed = 0;
     }
     PlayerLookLoadForPlayer(index, pPlayer->mUnknown4971, pPlayer->mUnknown4968, pPlayer->mUnknown4956);
-    fn_8015C9E0(index, priority, flag);
+    FEPlyrLoadQueue(index, priority, changed);
 }
 
-extern "C" void fn_8015D180(int index, unsigned char priority)
+extern "C" void FEPlyrLoadRequestReload(int index, unsigned char priority)
 {
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadRequest_t *pEntry;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    pEntry = &lbl_803EB32C->mEntries[index];
+    pEntry = &_FEPlyrLoad_pState->mEntries[index];
     pEntry->mUnknownF7 = 4;
     pEntry->mUnknownFD = 1;
-    fn_8015C9E0(index, priority, 1);
+    FEPlyrLoadQueue(index, priority, 1);
 }
 
-extern "C" void fn_8015D1CC(int index, unsigned char priority)
+extern "C" void FEPlyrLoadSetPriority(int index, unsigned char priority)
 {
-    if (lbl_803EB328) {
-        fn_8015C9E0(index, priority, 0);
+    if (_FEPlyrLoad_bActive) {
+        FEPlyrLoadQueue(index, priority, 0);
     }
 }
 
-extern "C" unsigned char fn_8015D1FC(int index)
+extern "C" unsigned char FEPlyrLoadIsQueued(int index)
 {
-    if (lbl_803EB328) {
-        return lbl_803EB32C->mEntries[index].mUnknownFC;
+    if (_FEPlyrLoad_bActive) {
+        return _FEPlyrLoad_pState->mEntries[index].mUnknownFC;
     }
     return 0;
 }
 
-extern "C" void fn_8015D224(int index)
+extern "C" void FEPlyrLoadInvalidate(int index)
 {
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    lbl_803EB32C->mEntries[index].mUnknownFD = 0;
-    lbl_803EB32C->mEntries[index].mUnknownF4 = 0;
+    _FEPlyrLoad_pState->mEntries[index].mUnknownFD = 0;
+    _FEPlyrLoad_pState->mEntries[index].mUnknownF4 = 0;
 }
 
-extern "C" void fn_8015D254(int index)
+extern "C" void FEPlyrLoadFinish(int index)
 {
-    State_803EB32C *pState;
-    Entry_803EB32C *pEntry;
+    FEPlyrLoadState_t *pState;
+    FEPlyrLoadRequest_t *pEntry;
     int current;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return;
     }
-    pState = lbl_803EB32C;
+    pState = _FEPlyrLoad_pState;
     current = pState->mCurrent;
     if (current != index) {
         return;
@@ -567,31 +579,31 @@ extern "C" void fn_8015D254(int index)
     }
     pEntry->mUnknownF9 = 1;
     PlyrTexRequestNameplate(fn_8003DEC4(current));
-    lbl_803EB32C->mCurrent = 2;
+    _FEPlyrLoad_pState->mCurrent = 2;
     if (!pEntry->mUnknownFC && pEntry->mUnknownFD) {
-        lbl_803EB32C->mUnknown251[current] = 1;
+        _FEPlyrLoad_pState->mUnknown251[current] = 1;
     }
 }
 
-extern "C" unsigned char fn_8015D2E8(Object_8003DEC4 *pPlayer)
+extern "C" unsigned char FEPlyrLoadIsShown(Object_8003DEC4 *pPlayer)
 {
     int slot;
 
-    if (!lbl_803EB328) {
+    if (!_FEPlyrLoad_bActive) {
         return 1;
     }
-    slot = fn_8015C9B4(pPlayer);
-    return lbl_803EB32C->mUnknown251[slot];
+    slot = FEPlyrLoadGetSlot(pPlayer);
+    return _FEPlyrLoad_pState->mUnknown251[slot];
 }
 
-extern "C" void fn_8015D32C(Object_8003DEC4 *pPlayer, float *pScale)
+extern "C" void FEPlyrLoadGetScale(Object_8003DEC4 *pPlayer, float *pScale)
 {
     float scale;
     int slot;
 
-    if (lbl_803EB328) {
-        slot = fn_8015C9B4(pPlayer);
-        scale = lbl_803EB32C->mUnknown244[slot];
+    if (_FEPlyrLoad_bActive) {
+        slot = FEPlyrLoadGetSlot(pPlayer);
+        scale = _FEPlyrLoad_pState->mUnknown244[slot];
     } else {
         scale = 1.0f;
     }
@@ -600,20 +612,20 @@ extern "C" void fn_8015D32C(Object_8003DEC4 *pPlayer, float *pScale)
     pScale[2] = scale;
 }
 
-extern "C" unsigned char fn_8015D38C(unsigned char value)
+extern "C" unsigned char FEPlyrLoadSetScaleRamp(unsigned char value)
 {
     unsigned char old = 1;
 
-    if (lbl_803EB328) {
-        old = lbl_803EB32C->mUnknown253;
-        lbl_803EB32C->mUnknown253 = value;
+    if (_FEPlyrLoad_bActive) {
+        old = _FEPlyrLoad_pState->mUnknown253;
+        _FEPlyrLoad_pState->mUnknown253 = value;
     }
     return old;
 }
 
-extern "C" void fn_8015D3B0(Object_8003DEC4 *pPlayer)
+extern "C" void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer)
 {
-    if (lbl_803EB328) {
-        lbl_803EB32C->mUnknown24F[fn_8015C9B4(pPlayer)] = 1;
+    if (_FEPlyrLoad_bActive) {
+        _FEPlyrLoad_pState->mUnknown24F[FEPlyrLoadGetSlot(pPlayer)] = 1;
     }
 }

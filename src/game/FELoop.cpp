@@ -49,7 +49,7 @@ void fn_80072C90(int a, int b);
 void fn_800731D0(int a);
 void fn_8009418C(void);
 void fn_8013CF98(void);
-void fn_8015CDA4(void);
+void FEPlyrLoadUpdate(void);
 void fn_801801E8(int a);
 void fn_80186EF4(void);
 void fn_80187C0C(void);
@@ -376,7 +376,7 @@ unsigned char FELoop::Update()
     ConProcessChannel(-1);
     FEPlyrUpdate();
     fn_8003E1F0();
-    fn_8015CDA4();
+    FEPlyrLoadUpdate();
     gFMCAPPORT.Update();
     fn_80219650(lbl_803EB688, &a, &b);
     if (a == 0 && b == 7) {

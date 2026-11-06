@@ -1,7 +1,7 @@
 #include <string.h>
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/fn_8021D7B8.h"
 #include "game/cu_80181330.h"
 
@@ -316,7 +316,7 @@ int Class_8000F500::vfn_02(int a, int b, void **pOut)
     int result = -1;
 
     fn_8000E834(&lbl_8036AD78);
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
     fn_800876C0();
     fn_8000EC44()->mUnknown0 = 0;
@@ -393,7 +393,7 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         PlayerDbSeekId(fn_80182DC8(), value, 0);
         FEPlyrSetPlayer(FEPlyrGetBackIndex(), value, 1);
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), value, 1);
-        fn_8015D38C(0);
+        FEPlyrLoadSetScaleRamp(0);
     }
     *pCount = 7;
     *pOut = lbl_803ECE34;
@@ -822,7 +822,7 @@ static void fn_8000E8FC(int index, int value)
             break;
         }
     }
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
