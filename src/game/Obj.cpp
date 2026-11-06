@@ -2,8 +2,8 @@
 
 extern "C" {
 
-int fn_801DCE74(int);
-int fn_801DCEC8(void);
+int ObjInit(int);
+int ObjShutdown(void);
 }
 
 static ModuleDependency sDependencies[] = { &gSys, 0 };
@@ -15,12 +15,12 @@ const char *Obj::GetName() { return "Obj"; }
 
 int Obj::Init()
 {
-    fn_801DCE74(0x21);
+    ObjInit(0x21);
     return 1;
 }
 
 int Obj::Shutdown()
 {
-    fn_801DCEC8();
+    ObjShutdown();
     return 1;
 }

@@ -1,6 +1,9 @@
+/* Object manager: pools of typed game objects and ordered object lists, with per-type
+   functions run over each list every frame in fixed time steps. */
+
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_801DCA10.h"
+#include "engine/object.h"
 #include "engine/fn_801F7BD4.h"
 
 extern void *fn_801C6A20(void *pool);
@@ -18,12 +21,12 @@ extern void *memset(void *pDst, int value, unsigned int size);
 
 extern unsigned char lbl_803EBD50;
 extern int lbl_803ED640;
-extern ObjType_801DCA10 *lbl_803ED644;
+extern ObjType_t *lbl_803ED644;
 
-void fn_801DD2B8(Obj_801DCA10 *pObj);
-int fn_801DCF8C(int type);
+void ObjDel(Obj_t *pObj);
+int ObjDelType(int type);
 
-int fn_801DCA10(Obj_801DCA10 **ppA, Obj_801DCA10 **ppB)
+int _ObjDefaultInsertFunc(Obj_t **ppA, Obj_t **ppB)
 {
     unsigned int a = (*ppA)->mPriority;
     unsigned int b = (*ppB)->mPriority;
@@ -37,13 +40,13 @@ int fn_801DCA10(Obj_801DCA10 **ppA, Obj_801DCA10 **ppB)
     return 1;
 }
 
-void fn_801DCA44(ObjList_801DCA10 *pList, int time, int step, int func)
+void _ObjProcessListSingleFunc(ObjList_t *pList, int time, int step, int func)
 {
-    Obj_801DCA10 **pNode;
+    Obj_t **pNode;
 
     for (; time >= step; time -= step) {
         for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
-            ObjFunc_801DCA10 fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + func];
+            ObjFunc_t fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + func];
             if (fn != 0) {
                 fn(*pNode, step);
             }
@@ -52,9 +55,9 @@ void fn_801DCA44(ObjList_801DCA10 *pList, int time, int step, int func)
     pList->mTime = time;
 }
 
-void fn_801DCAF0(ObjList_801DCA10 *pList, int time, int step)
+void _ObjProcessListObjsFirst(ObjList_t *pList, int time, int step)
 {
-    Obj_801DCA10 **pNode;
+    Obj_t **pNode;
     int first;
     int i;
 
@@ -62,7 +65,7 @@ void fn_801DCAF0(ObjList_801DCA10 *pList, int time, int step)
         for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
             first = (*pNode)->mType * pList->mFuncCount;
             for (i = 0; i < pList->mFuncCount; i++) {
-                ObjFunc_801DCA10 fn = pList->mFuncs[first + i];
+                ObjFunc_t fn = pList->mFuncs[first + i];
                 if (fn != 0) {
                     fn(*pNode, step);
                 }
@@ -72,9 +75,9 @@ void fn_801DCAF0(ObjList_801DCA10 *pList, int time, int step)
     pList->mTime = time;
 }
 
-void fn_801DCBBC(ObjList_801DCA10 *pList, int time, int step)
+void _ObjProcessListFuncsFirst(ObjList_t *pList, int time, int step)
 {
-    Obj_801DCA10 **pNode;
+    Obj_t **pNode;
     int rest;
     int i;
 
@@ -82,7 +85,7 @@ void fn_801DCBBC(ObjList_801DCA10 *pList, int time, int step)
         rest = time - step;
         for (i = 0; i < pList->mFuncCount; i++) {
             for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
-                ObjFunc_801DCA10 fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + i];
+                ObjFunc_t fn = pList->mFuncs[(*pNode)->mType * pList->mFuncCount + i];
                 if (fn != 0) {
                     fn(*pNode, step);
                 }
@@ -93,7 +96,7 @@ void fn_801DCBBC(ObjList_801DCA10 *pList, int time, int step)
     pList->mTime = time;
 }
 
-void fn_801DCC84(ObjList_801DCA10 *pList, int time, unsigned int mode, int func)
+void _ObjProcessList(ObjList_t *pList, int time, unsigned int mode, int func)
 {
     int step = pList->mStep;
 
@@ -105,25 +108,25 @@ void fn_801DCC84(ObjList_801DCA10 *pList, int time, unsigned int mode, int func)
     if (fn_801C6880(pList->mpList, 3) != 0) {
         switch (mode) {
         case 0:
-            fn_801DCAF0(pList, time, step);
+            _ObjProcessListObjsFirst(pList, time, step);
             break;
         case 1:
-            fn_801DCBBC(pList, time, step);
+            _ObjProcessListFuncsFirst(pList, time, step);
             break;
         case 2:
-            fn_801DCA44(pList, time, step, func);
+            _ObjProcessListSingleFunc(pList, time, step, func);
             break;
         }
     }
 }
 
-int fn_801DCD40(int count)
+int _ObjNewTypeList(int count)
 {
-    ObjType_801DCA10 *pTypes;
+    ObjType_t *pTypes;
     int result = 0;
     int i;
 
-    pTypes = fn_801D2BB0(1, count * sizeof(ObjType_801DCA10), 0, 0);
+    pTypes = fn_801D2BB0(1, count * sizeof(ObjType_t), 0, 0);
     if (pTypes != 0) {
         for (i = 0; i < count; i++) {
             pTypes[i].mSize = 0;
@@ -135,39 +138,39 @@ int fn_801DCD40(int count)
     return result;
 }
 
-void fn_801DCDB8(void)
+void _ObjDelTypeList(void)
 {
     unsigned char i;
 
     for (i = 0; i < lbl_803ED640; i++) {
-        fn_801DCF8C(i);
+        ObjDelType(i);
     }
     fn_801D2BD0(lbl_803ED644);
 }
 
-int fn_801DCE10(void *pNode, void *pContext)
+int _ObjDelListTraverseFunc(void *pNode, void *pContext)
 {
-    Obj_801DCA10 *pObj = *(Obj_801DCA10 **)pNode;
+    Obj_t *pObj = *(Obj_t **)pNode;
 
     if (--pObj->mRefCount == 0) {
-        fn_801DD2B8(pObj);
+        ObjDel(pObj);
     }
     return 1;
 }
 
-int fn_801DCE50(void *pNode, void *pContext)
+int _ObjListTraverseFunc(void *pNode, void *pContext)
 {
-    if (*(Obj_801DCA10 **)pNode != *(Obj_801DCA10 **)pContext) {
+    if (*(Obj_t **)pNode != *(Obj_t **)pContext) {
         return 1;
     }
     *(void **)pContext = pNode;
     return 0;
 }
 
-int fn_801DCE74(int count)
+int ObjInit(int count)
 {
     if (lbl_803EBD50 == 0) {
-        if (fn_801DCD40(count) != 0) {
+        if (_ObjNewTypeList(count) != 0) {
             lbl_803EBD50 = 1;
             return 0;
         }
@@ -176,19 +179,19 @@ int fn_801DCE74(int count)
     return 0x90001;
 }
 
-int fn_801DCEC8(void)
+int ObjShutdown(void)
 {
     if (lbl_803EBD50 == 0) {
         return 0x90002;
     }
-    fn_801DCDB8();
+    _ObjDelTypeList();
     lbl_803EBD50 = 0;
     return 0;
 }
 
-int fn_801DCF0C(int type, int size, int count, ObjNewFunc_801DCA10 pNew, ObjDelFunc_801DCA10 pDel)
+int ObjNewType_(int type, int size, int count, ObjNewFunc_t pNew, ObjDelFunc_t pDel)
 {
-    ObjType_801DCA10 *pType = &lbl_803ED644[type];
+    ObjType_t *pType = &lbl_803ED644[type];
     int err = 0;
 
     pType->mSize = size;
@@ -203,9 +206,9 @@ int fn_801DCF0C(int type, int size, int count, ObjNewFunc_801DCA10 pNew, ObjDelF
     return err;
 }
 
-int fn_801DCF8C(int type)
+int ObjDelType(int type)
 {
-    ObjType_801DCA10 *pType = &lbl_803ED644[type];
+    ObjType_t *pType = &lbl_803ED644[type];
     int err = 0;
 
     if (pType->mSize != 0) {
@@ -218,16 +221,16 @@ int fn_801DCF8C(int type)
     return err;
 }
 
-ObjList_801DCA10 *fn_801DCFF0(int a, int b, int c, ObjInsertFunc_801DCA10 pInsert, ObjFindFunc_801DCA10 pFind,
+ObjList_t *ObjNewList(int a, int b, int c, ObjInsertFunc_t pInsert, ObjFindFunc_t pFind,
                               int funcCount, int unknown10, int step)
 {
-    ObjList_801DCA10 *pList;
-    int size = funcCount * lbl_803ED640 * sizeof(ObjFunc_801DCA10);
+    ObjList_t *pList;
+    int size = funcCount * lbl_803ED640 * sizeof(ObjFunc_t);
 
-    pList = fn_801D2BB0(a, size + sizeof(ObjList_801DCA10), 0, 0);
+    pList = fn_801D2BB0(a, size + sizeof(ObjList_t), 0, 0);
     if (pList != 0) {
         if (pInsert == 0) {
-            pInsert = (ObjInsertFunc_801DCA10)fn_801DCA10;
+            pInsert = (ObjInsertFunc_t)_ObjDefaultInsertFunc;
         }
         pList->mpList = fn_801C68FC(a, c, b, 4, (int (*)(void *, void *))pInsert, 0);
         pList->mUnknown4 = c;
@@ -245,28 +248,28 @@ ObjList_801DCA10 *fn_801DCFF0(int a, int b, int c, ObjInsertFunc_801DCA10 pInser
     return pList;
 }
 
-void fn_801DD0C8(ObjList_801DCA10 *pList, int type, int func, ObjFunc_801DCA10 fn)
+void ObjSetListObjFunc(ObjList_t *pList, int type, int func, ObjFunc_t fn)
 {
-    ObjFunc_801DCA10 *pFuncs = pList->mFuncs + type * pList->mFuncCount;
+    ObjFunc_t *pFuncs = pList->mFuncs + type * pList->mFuncCount;
     pFuncs += func;
     *pFuncs = fn;
 }
 
-void fn_801DD0E8(ObjList_801DCA10 *pList)
+void ObjDelList(ObjList_t *pList)
 {
-    fn_801C6D34(pList->mpList, 0, 0, 0, fn_801DCE10, 1);
+    fn_801C6D34(pList->mpList, 0, 0, 0, _ObjDelListTraverseFunc, 1);
     fn_801C69E4(pList->mpList);
     fn_801D2BD0(pList);
 }
 
-void fn_801DD140(ObjList_801DCA10 *pList, int time, int func)
+void ObjProcessListFunc(ObjList_t *pList, int time, int func)
 {
-    fn_801DCC84(pList, time, 2, func);
+    _ObjProcessList(pList, time, 2, func);
 }
 
-Obj_801DCA10 *fn_801DD168(int type, int subType, int arg)
+Obj_t *ObjNew(int type, int subType, int arg)
 {
-    Obj_801DCA10 *pObj;
+    Obj_t *pObj;
 
     pObj = DSNewNode(lbl_803ED644[type].mpPool);
     if (pObj != 0) {
@@ -281,9 +284,9 @@ Obj_801DCA10 *fn_801DD168(int type, int subType, int arg)
     return pObj;
 }
 
-int fn_801DD200(ObjList_801DCA10 *pList, Obj_801DCA10 *pObj)
+int ObjAddToList(ObjList_t *pList, Obj_t *pObj)
 {
-    Obj_801DCA10 **pNode;
+    Obj_t **pNode;
 
     pNode = fn_801C6A20(pList->mpList);
     if (pNode != 0) {
@@ -295,18 +298,18 @@ int fn_801DD200(ObjList_801DCA10 *pList, Obj_801DCA10 *pObj)
     return fn_801F7C88();
 }
 
-Obj_801DCA10 *fn_801DD268(ObjList_801DCA10 *pList, int type, int subType, int arg)
+Obj_t *ObjNewInList(ObjList_t *pList, int type, int subType, int arg)
 {
-    Obj_801DCA10 *pObj;
+    Obj_t *pObj;
 
-    pObj = fn_801DD168(type, subType, arg);
+    pObj = ObjNew(type, subType, arg);
     if (pObj != 0) {
-        fn_801DD200(pList, pObj);
+        ObjAddToList(pList, pObj);
     }
     return pObj;
 }
 
-void fn_801DD2B8(Obj_801DCA10 *pObj)
+void ObjDel(Obj_t *pObj)
 {
     if (lbl_803ED644[pObj->mType].mDel != 0) {
         lbl_803ED644[pObj->mType].mDel(pObj);
@@ -314,42 +317,42 @@ void fn_801DD2B8(Obj_801DCA10 *pObj)
     DSDelNode(lbl_803ED644[pObj->mType].mpPool, pObj);
 }
 
-void fn_801DD320(ObjList_801DCA10 *pList, Obj_801DCA10 *pObj)
+void ObjRemoveFromList(ObjList_t *pList, Obj_t *pObj)
 {
     void *pNode = pObj;
 
     if (pList->mFind != 0) {
         fn_801C6DCC(pList->mpList, 0, &pNode, 0, pList->mFind);
     } else {
-        fn_801C6D34(pList->mpList, 0, &pNode, 0, fn_801DCE50, 1);
+        fn_801C6D34(pList->mpList, 0, &pNode, 0, _ObjListTraverseFunc, 1);
     }
     fn_801C6C0C(pList->mpList, pNode);
     pObj->mRefCount--;
 }
 
-void fn_801DD3AC(ObjList_801DCA10 *pList, Obj_801DCA10 *pObj, int priority)
+void ObjSetPriority(ObjList_t *pList, Obj_t *pObj, int priority)
 {
-    fn_801DD320(pList, pObj);
+    ObjRemoveFromList(pList, pObj);
     pObj->mPriority = priority;
-    fn_801DD200(pList, pObj);
+    ObjAddToList(pList, pObj);
 }
 
-void fn_801DD3F0(ObjList_801DCA10 *pList)
+void ObjClearList(ObjList_t *pList)
 {
-    Obj_801DCA10 **pNode;
-    Obj_801DCA10 **pNext;
+    Obj_t **pNode;
+    Obj_t **pNext;
 
     for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = pNext) {
         (*pNode)->mRefCount--;
         if ((*pNode)->mRefCount == 0) {
-            fn_801DD2B8(*pNode);
+            ObjDel(*pNode);
         }
         pNext = fn_801C6C84(pList->mpList, pNode);
         fn_801C6C0C(pList->mpList, pNode);
     }
 }
 
-unsigned int fn_801DD474(ObjList_801DCA10 *pList, int c)
+unsigned int ObjGetListInfo(ObjList_t *pList, int c)
 {
     return fn_801C6880(pList->mpList, c);
 }

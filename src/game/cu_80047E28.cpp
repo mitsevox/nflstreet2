@@ -1,23 +1,23 @@
 #include "engine/viewport.h"
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/FELoop.h"
 #include "game/Item_800476DC.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Init_8004A040.h"
+#include "game/PlayerObjInit.h"
 #include "game/Object_8008044C.h"
-#include "game/Record_803078E8.h"
+#include "game/PlayerLookRecord.h"
 #include "game/Row_8007BC34.h"
-#include "game/cu_80047E28.h"
-#include "game/cu_800478DC.h"
-#include "game/fn_800624B0.h"
+#include "game/PlayerLook.h"
+#include "game/PlaTex.h"
+#include "game/StoryPlayerScreen.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_802372EC.h"
 
 /* Four bytes copied as one word from lbl_802CFB1C and passed by value. */
-struct Colors_802CFB1C {
+struct PlayerLookColors_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
@@ -25,31 +25,31 @@ struct Colors_802CFB1C {
 };
 
 /* Three bytes read by fn_800840A4. */
-struct Rgb_800840A4 {
+struct TeamRgb_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
 };
 
 /* Key/value pair for fn_8015FFC8; a key of 0xFFFF ends a list. */
-struct Pair_802CF382 {
+struct PlayerLookSwitch_t {
     unsigned short mKey;
     unsigned short mValue;
 };
 
-/* Element of lbl_80308368 (14 records of 0x18 bytes). */
-struct Entry_80308368 {
+/* Element of gPlayerLookBonuses (14 records of 0x18 bytes). */
+struct PlayerLookBonuses_t {
     int mId;
     short mValues[10];
 };
 
 extern "C" {
-extern Record_803078E8 lbl_803078E8[14];
-extern Entry_80308368 lbl_80308368[14];
-extern Pair_802CF382 lbl_802CF382[];
-extern Pair_802CF382 lbl_802CF3EE[45][9];
+extern PlayerLook_t gPlayerLooks[14];
+extern PlayerLookBonuses_t gPlayerLookBonuses[14];
+extern PlayerLookSwitch_t lbl_802CF382[];
+extern PlayerLookSwitch_t lbl_802CF3EE[45][9];
 extern int lbl_802CFA44[54];
-extern Colors_802CFB1C lbl_802CFB1C[22];
+extern PlayerLookColors_t lbl_802CFB1C[22];
 extern int lbl_802CFB74[22];
 extern unsigned char lbl_803EA4CA;
 
@@ -57,23 +57,23 @@ int MsgPlayerPickupIsOpen(void);
 int fn_8003DEB4(void);
 void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 int fn_8005FC7C(void);
-void fn_8007BA48(Object_8007A334 *pObject);
-void fn_8007BA88(Object_8007A334 *pObject, int a);
-void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
+void fn_8007BA48(DbCursor *pObject);
+void fn_8007BA88(DbCursor *pObject, int a);
+void fn_8007BB04(DbCursor *pObject);
+int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
 int fn_8007BF14(int index);
-int fn_8007CB6C(int index);
-int fn_80080970(Object_8008044C *pObject);
-void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080CB0(Object_8008044C *pObject);
-int fn_80080E48(Object_8008044C *pObject);
-int fn_80080E70(Object_8008044C *pObject);
-int fn_80080E98(Object_8008044C *pObject);
-int fn_8008125C(Object_8008044C *pObject);
+int GameInfoGet(int index);
+int PlayerDbGetTeamIndex(Object_8008044C *pObject);
+void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPrty(Object_8008044C *pObject);
+int PlayerDbGetPlex(Object_8008044C *pObject);
+int PlayerDbGetPlht(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
+int PlayerDbGetPjen(Object_8008044C *pObject);
 void fn_80081440(Object_8008044C *pObject, short *pValues);
-void fn_80081C10(Object_8008044C *pObject, unsigned char *p);
+void PlayerDbReadHairColors(Object_8008044C *pObject, unsigned char *p);
 void fn_80081CDC(void);
 void fn_80081D24(void);
 int fn_80081D4C(Object_8008044C *pObject, unsigned char *p);
@@ -81,9 +81,9 @@ int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
-void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
-void fn_80146094(Object_80146094 *pObject);
-void fn_8015F6E8(const char *pName, int b, int c, int d, Ids_8015F6E8 *pIds);
+void fn_800840A4(DbCursor *pObject, void *pBuffer);
+void ParticleTrailReset(ParticleTrailSet_t *pObject);
+void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
 void fn_8015FFC8(int player, int key, int value);
 void fn_80160E94(int index, int slot, int id, int palette, int d);
 int fn_80161048(char *pName);
@@ -92,48 +92,48 @@ void fn_8016139C(int a, int *pId, int *pPalette);
 int fn_801835A0(void);
 void fn_801A34B0(int a, int b, int c, int d);
 void fn_801A3520(void);
-void fn_801A3588(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit);
+void fn_801A3588(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
 void fn_801A3C40(Object_8003DEC4 *pPlayer);
 void fn_801A3F48(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040 *), void (*pB)(Object_8003DEC4 *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
+int ObjNewType_(int a, int b, int c, void (*pA)(Object_8003DEC4 *, PlayerObjInit_t *), void (*pB)(Object_8003DEC4 *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
 }
 
-static Object_8008044C lbl_80307720;
-static Object_8007A334 lbl_8030774C;
+static Object_8008044C _PlayerLook_sPlayerCursor;
+static DbCursor _PlayerLook_sGearCursor;
 
-extern "C" void fn_80047E28(int index)
+extern "C" void PlayerLookRandomizeGear(int index)
 {
     int a = 0;
     int b;
     int c;
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     fn_8007BA88(&cursor, 11);
-    a = fn_8007A410(&cursor);
+    a = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     fn_8007BA88(&cursor, 12);
-    b = fn_8007A410(&cursor);
+    b = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     fn_8007BA88(&cursor, 1);
-    c = fn_8007A410(&cursor);
+    c = DbCursorGetRowCount(&cursor);
     fn_8007BB04(&cursor);
     int x = fn_802372EC(0, a - 1) + 1;
     int y = fn_802372EC(0, b);
     int z = fn_802372EC(0, c - 1) + 1;
-    lbl_803078E8[index].mInfo.mValues[12] = x;
-    lbl_803078E8[index].mInfo.mValues[13] = y;
-    lbl_803078E8[index].mInfo.mValues[1] = z;
+    gPlayerLooks[index].mInfo.mValues[12] = x;
+    gPlayerLooks[index].mInfo.mValues[13] = y;
+    gPlayerLooks[index].mInfo.mValues[1] = z;
 }
 
-extern "C" void fn_80047F24(int player, int index)
+extern "C" void PlayerLookApplySwitchList(int player, int index)
 {
-    Pair_802CF382 pair;
+    PlayerLookSwitch_t pair;
     int i;
 
     for (i = 0, pair = lbl_802CF3EE[index][0]; pair.mKey != 0xFFFF; pair = lbl_802CF3EE[index][++i]) {
@@ -141,7 +141,7 @@ extern "C" void fn_80047F24(int player, int index)
     }
 }
 
-extern "C" void fn_80047FA4(Row_8007BC34 *pRow, Info_80307908 *pInfo, int player, int slot)
+extern "C" void PlayerLookApplyItemSwitches(Row_8007BC34 *pRow, Info_80307908 *pInfo, int player, int slot)
 {
     int type = pRow->mUnknown64;
 
@@ -154,37 +154,37 @@ extern "C" void fn_80047FA4(Row_8007BC34 *pRow, Info_80307908 *pInfo, int player
     switch (type) {
     case 22:
         if (pInfo->mUnknown00 & 1) {
-            fn_80047F24(player, 22);
+            PlayerLookApplySwitchList(player, 22);
         }
         if (pInfo->mUnknown00 & 2) {
-            fn_80047F24(player, 23);
+            PlayerLookApplySwitchList(player, 23);
         }
         break;
     case 25:
         if (pInfo->mUnknown01 & 1) {
-            fn_80047F24(player, 26);
+            PlayerLookApplySwitchList(player, 26);
         }
         if (pInfo->mUnknown01 & 2) {
-            fn_80047F24(player, 27);
+            PlayerLookApplySwitchList(player, 27);
         }
         break;
     case 26:
         if (pInfo->mUnknown01 & 1) {
-            fn_80047F24(player, 28);
+            PlayerLookApplySwitchList(player, 28);
         }
         if (pInfo->mUnknown01 & 2) {
-            fn_80047F24(player, 29);
+            PlayerLookApplySwitchList(player, 29);
         }
         break;
     default:
         if (lbl_802CFA44[pRow->mUnknown64] != 255) {
-            fn_80047F24(player, lbl_802CFA44[pRow->mUnknown64]);
+            PlayerLookApplySwitchList(player, lbl_802CFA44[pRow->mUnknown64]);
         }
         break;
     }
 }
 
-extern "C" void fn_800480C8(int base, unsigned int number, unsigned char home, int player, int *pIds, int *pPalettes, int kind)
+extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned char home, int player, int *pIds, int *pPalettes, int kind)
 {
     int id;
     int numberId;
@@ -312,7 +312,7 @@ extern "C" void fn_800480C8(int base, unsigned int number, unsigned char home, i
     fn_8015FFC8(player, 23, 0);
 }
 
-extern "C" void fn_80048388(Row_8007BC34 *pRow, int offset, unsigned char flag, int player, int *pIds, int *pPalettes)
+extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigned char flag, int player, int *pIds, int *pPalettes)
 {
     char name[82];
     int id;
@@ -325,7 +325,7 @@ extern "C" void fn_80048388(Row_8007BC34 *pRow, int offset, unsigned char flag, 
         pIds[24] = id;
         pPalettes[23] = -1;
         pPalettes[24] = -1;
-        Colors_802CFB1C colors = lbl_802CFB1C[pRow->mUnknown64];
+        PlayerLookColors_t colors = lbl_802CFB1C[pRow->mUnknown64];
         if (pRow->mUnknown71) {
             if (pRow->mUnknown72) {
                 fn_8015FFC8(player, 19, colors.mUnknown3);
@@ -339,7 +339,7 @@ extern "C" void fn_80048388(Row_8007BC34 *pRow, int offset, unsigned char flag, 
     }
 }
 
-extern "C" void fn_80048470(Row_8007BC34 *pRow, int offset, int player, int *pIds, int *pPalettes)
+extern "C" void PlayerLookSetHeadDecal(Row_8007BC34 *pRow, int offset, int player, int *pIds, int *pPalettes)
 {
     char name[82];
     int id;
@@ -362,14 +362,14 @@ extern "C" void fn_80048470(Row_8007BC34 *pRow, int offset, int player, int *pId
     }
 }
 
-extern "C" void fn_80048554(int number, int player, int *pId, int *pPalette)
+extern "C" void PlayerLookSetBackArtId(int number, int player, int *pId, int *pPalette)
 {
     *pId = number + 0x3FEE;
     *pPalette = -1;
     fn_8015FFC8(player, 20, 1);
 }
 
-extern "C" void fn_80048590(int kind, int key, Colors_802CFB1C colors, unsigned char number, unsigned int index,
+extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors, unsigned char number, unsigned int index,
                             unsigned char flag, unsigned char home, unsigned char single, int player, int *pId,
                             int *pPalette)
 {
@@ -430,33 +430,33 @@ extern "C" void fn_80048590(int kind, int key, Colors_802CFB1C colors, unsigned 
     }
 }
 
-extern "C" void fn_80048704(Row_8007BC34 *pRow, Info_80307908 *pInfo, unsigned char number, int index,
+extern "C" void PlayerLookSetJerseyDecals(Row_8007BC34 *pRow, Info_80307908 *pInfo, unsigned char number, int index,
                             unsigned char flag, unsigned char home, int player, int *pIds, int *pPalettes)
 {
-    if (fn_80047C84(pRow)) {
-        fn_800480C8(number, pRow->mUnknown78, home, player, pIds, pPalettes, pRow->mUnknown08);
+    if (PlaTexIsNumberItem(pRow)) {
+        PlayerLookSetNumberIds(number, pRow->mUnknown78, home, player, pIds, pPalettes, pRow->mUnknown08);
     } else if (pRow->mUnknown76) {
-        fn_80048388(pRow, pInfo->mUnknown0C, home, player, pIds, pPalettes);
+        PlayerLookSetJerseyDecal(pRow, pInfo->mUnknown0C, home, player, pIds, pPalettes);
     } else {
-        Colors_802CFB1C colors = lbl_802CFB1C[pRow->mUnknown64];
+        PlayerLookColors_t colors = lbl_802CFB1C[pRow->mUnknown64];
         int kind;
 
         kind = pRow->mUnknown71 ? pInfo->mUnknown09 : 0;
-        fn_80048590(kind, 19, colors, number, index, flag, home, pRow->mUnknown72, player, &pIds[23], &pPalettes[23]);
+        PlayerLookSetDecal(kind, 19, colors, number, index, flag, home, pRow->mUnknown72, player, &pIds[23], &pPalettes[23]);
         if (pInfo->mValues[10] == 0 && pInfo->mUnknown08 != 0 && home != 0) {
-            fn_80048554(pInfo->mUnknown08, player, &pIds[24], &pPalettes[24]);
+            PlayerLookSetBackArtId(pInfo->mUnknown08, player, &pIds[24], &pPalettes[24]);
         } else {
             kind = pRow->mUnknown70 && pInfo->mValues[10] ? pInfo->mUnknown0A : 0;
-            fn_80048590(kind, 20, colors, number, index, flag, home, 0, player, &pIds[24], &pPalettes[24]);
+            PlayerLookSetDecal(kind, 20, colors, number, index, flag, home, 0, player, &pIds[24], &pPalettes[24]);
         }
     }
 }
 
-extern "C" void fn_80048894(int index, unsigned char *pColors, unsigned char flag)
+extern "C" void PlayerLookLoadDecalColors(int index, unsigned char *pColors, unsigned char flag)
 {
-    Object_8007A334 cursor;
-    Query_80083E40 query;
-    Rgb_800840A4 rgb;
+    DbCursor cursor;
+    TeamQuery query;
+    TeamRgb_t rgb;
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
@@ -466,14 +466,14 @@ extern "C" void fn_80048894(int index, unsigned char *pColors, unsigned char fla
     pColors[4] = rgb.mUnknown0;
     pColors[5] = rgb.mUnknown1;
     pColors[6] = rgb.mUnknown2;
-    fn_8004795C(pColors, flag);
+    PlaTexApplyAwayColors(pColors, flag);
 }
 
-extern "C" void fn_80048950(int index, unsigned char *pColors, unsigned char flag)
+extern "C" void PlayerLookLoadHeadDecalColors(int index, unsigned char *pColors, unsigned char flag)
 {
-    Object_8007A334 cursor;
-    Query_80083E40 query;
-    Rgb_800840A4 rgb;
+    DbCursor cursor;
+    TeamQuery query;
+    TeamRgb_t rgb;
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
@@ -484,7 +484,7 @@ extern "C" void fn_80048950(int index, unsigned char *pColors, unsigned char fla
     pColors[1] = rgb.mUnknown1;
 }
 
-extern "C" int fn_800489F4(unsigned int type)
+extern "C" int PlayerLookMapHatKind(unsigned int type)
 {
     switch (type) {
     case 37:
@@ -514,29 +514,29 @@ extern "C" int fn_800489F4(unsigned int type)
     }
 }
 
-extern "C" int fn_80048ACC(int type)
+extern "C" int PlayerLookItemKeepsLogo(int type)
 {
     return lbl_802CFB74[lbl_802CFA44[type]] == 1;
 }
 
-extern "C" int fn_80048AFC(int index)
+extern "C" int PlayerLookGetHatKind(int index)
 {
     int result;
 
-    fn_8007BB84(&lbl_8030774C, 9, lbl_803078E8[index].mInfo.mValues[10], 0);
-    if (fn_8007BDF8(&lbl_8030774C) == 13) {
+    fn_8007BB84(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
+    if (fn_8007BDF8(&_PlayerLook_sGearCursor) == 13) {
         result = 0;
     } else {
-        fn_8007BB84(&lbl_8030774C, 0, lbl_803078E8[index].mInfo.mValues[0], 0);
-        result = fn_800489F4(fn_8007BDF8(&lbl_8030774C));
+        fn_8007BB84(&_PlayerLook_sGearCursor, 0, gPlayerLooks[index].mInfo.mValues[0], 0);
+        result = PlayerLookMapHatKind(fn_8007BDF8(&_PlayerLook_sGearCursor));
     }
     return result;
 }
 
-extern "C" int fn_80048B84(int index)
+extern "C" int PlayerLookGetSlot1Kind(int index)
 {
-    fn_8007BB84(&lbl_8030774C, 1, lbl_803078E8[index].mInfo.mValues[1], 0);
-    switch (fn_8007BDF8(&lbl_8030774C)) {
+    fn_8007BB84(&_PlayerLook_sGearCursor, 1, gPlayerLooks[index].mInfo.mValues[1], 0);
+    switch (fn_8007BDF8(&_PlayerLook_sGearCursor)) {
     case 45:
         return 1;
     case 46:
@@ -554,7 +554,7 @@ extern "C" int fn_80048B84(int index)
     }
 }
 
-extern "C" void fn_80048C40(int *pId, int *pPalette, int a, int b)
+extern "C" void PlayerLookGetAccessoryIds(int *pId, int *pPalette, int a, int b)
 {
     int even = 0;
 
@@ -569,119 +569,119 @@ extern "C" void fn_80048C40(int *pId, int *pPalette, int a, int b)
     *pPalette = (a - 1) * 2 + 0x3AF8 + even;
 }
 
-extern "C" void fn_80048C9C(int index, int unused, int id, unsigned char flag)
+extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag)
 {
-    Object_8007A334 cursor;
-    Block_80307980 block;
+    DbCursor cursor;
+    FaceFeatures_t block;
     int value;
-    unsigned char *pColors = lbl_803078E8[index].mUnknown7A;
-    Record_803078E8 *pRecord;
+    unsigned char *pColors = gPlayerLooks[index].mUnknown7A;
+    PlayerLook_t *pRecord;
 
-    fn_800809C4(&lbl_80307720, id, 0);
-    value = fn_80080970(&lbl_80307720);
+    PlayerDbSeekId(&_PlayerLook_sPlayerCursor, id, 0);
+    value = PlayerDbGetTeamIndex(&_PlayerLook_sPlayerCursor);
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, value, 0);
     fn_800840A4(&cursor, &pColors[20]);
-    lbl_803078E8[index].mUnknown6A = fn_80084158(&cursor);
-    lbl_803078E8[index].mUnknown68 = fn_80084438(&cursor);
+    gPlayerLooks[index].mUnknown6A = fn_80084158(&cursor);
+    gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
     fn_80083F68(&cursor);
-    fn_800817CC(&lbl_80307720, &lbl_803078E8[index].mInfo);
-    if (fn_80054D24(47) && !fn_8017F584()) {
-        fn_80047E28(index);
+    fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
+    if (CheatFlagsIsSet(47) && !fn_8017F584()) {
+        PlayerLookRandomizeGear(index);
     }
-    pRecord = &lbl_803078E8[index];
-    fn_80080A9C(&lbl_80307720, pRecord->mName, 31);
-    pRecord->mUnknown72 = fn_80081E3C(&lbl_80307720) + 1;
-    pRecord->mUnknown73 = fn_80082280(&lbl_80307720);
-    pRecord->mUnknown74 = fn_800822D4(&lbl_80307720);
-    pRecord->mUnknown6C = fn_80080E70(&lbl_80307720);
-    pRecord->mUnknown6E = fn_80080E98(&lbl_80307720);
-    pRecord->mUnknown77 = fn_8008125C(&lbl_80307720);
+    pRecord = &gPlayerLooks[index];
+    PlayerDbGetNickname(&_PlayerLook_sPlayerCursor, pRecord->mName, 31);
+    pRecord->mUnknown72 = fn_80081E3C(&_PlayerLook_sPlayerCursor) + 1;
+    pRecord->mUnknown73 = fn_80082280(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown74 = fn_800822D4(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown6C = PlayerDbGetPlht(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown6E = PlayerDbGetHairStyle(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown77 = PlayerDbGetPjen(&_PlayerLook_sPlayerCursor);
     pRecord->mUnknown93 = flag;
-    pRecord->mUnknown78 = fn_80080E20(&lbl_80307720);
-    pRecord->mUnknown76 = fn_80080E48(&lbl_80307720);
-    if (fn_80080CB0(&lbl_80307720)) {
-        fn_80082138(&lbl_80307720, &block);
-        fn_80049F10(index, &block);
-        pRecord->mInfo.mUnknown03 = fn_80046898(&block);
+    pRecord->mUnknown78 = PlayerDbGetPybt(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown76 = PlayerDbGetPlex(&_PlayerLook_sPlayerCursor);
+    if (PlayerDbGetPrty(&_PlayerLook_sPlayerCursor)) {
+        fn_80082138(&_PlayerLook_sPlayerCursor, &block);
+        PlayerLookSetFeatures(index, &block);
+        pRecord->mInfo.mUnknown03 = FaceMorphIsAllowed(&block);
     } else {
-        fn_80049F10(index, 0);
+        PlayerLookSetFeatures(index, 0);
     }
-    lbl_803078E8[index].mUnknown70 = fn_80048AFC(index);
-    lbl_803078E8[index].mUnknown75 = fn_80048B84(index);
-    fn_80081C10(&lbl_80307720, &pColors[18]);
-    if (!fn_80081D4C(&lbl_80307720, pColors)) {
-        fn_800478DC(pColors);
-        fn_8004795C(pColors, lbl_803078E8[index].mUnknown93);
+    gPlayerLooks[index].mUnknown70 = PlayerLookGetHatKind(index);
+    gPlayerLooks[index].mUnknown75 = PlayerLookGetSlot1Kind(index);
+    PlayerDbReadHairColors(&_PlayerLook_sPlayerCursor, &pColors[18]);
+    if (!fn_80081D4C(&_PlayerLook_sPlayerCursor, pColors)) {
+        PlaTexRemapColors(pColors);
+        PlaTexApplyAwayColors(pColors, gPlayerLooks[index].mUnknown93);
     }
 }
 
-extern "C" void fn_80048EDC(void)
+extern "C" void PlayerLookOpen(void)
 {
-    fn_8008044C(&lbl_80307720, 0, fn_80027DF0() ? 0x54415453 : 0x454D4147);
+    fn_8008044C(&_PlayerLook_sPlayerCursor, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     fn_80081CDC();
-    fn_8007BA48(&lbl_8030774C);
+    fn_8007BA48(&_PlayerLook_sGearCursor);
 }
 
-extern "C" void fn_80048F34(void)
+extern "C" void PlayerLookClose(void)
 {
-    fn_8007BB04(&lbl_8030774C);
+    fn_8007BB04(&_PlayerLook_sGearCursor);
     fn_80081D24();
-    fn_8008056C(&lbl_80307720);
+    fn_8008056C(&_PlayerLook_sPlayerCursor);
 }
 
-extern "C" void fn_80048F6C(int index, const char *pName)
+extern "C" void PlayerLookSetName(int index, const char *pName)
 {
-    fn_801C3284(lbl_803078E8[index].mName, pName, 31);
+    fn_801C3284(gPlayerLooks[index].mName, pName, 31);
 }
 
-extern "C" void fn_80048FA0(int index, int value)
+extern "C" void PlayerLookSetHeadDecalColors(int index, int value)
 {
-    lbl_803078E8[index].mInfo.mUnknown0D = value;
+    gPlayerLooks[index].mInfo.mUnknown0D = value;
 }
 
-extern "C" void fn_80048FB8(int index, int value)
+extern "C" void PlayerLookSetDecalColors(int index, int value)
 {
-    lbl_803078E8[index].mInfo.mUnknown0C = value;
+    gPlayerLooks[index].mInfo.mUnknown0C = value;
 }
 
-extern "C" void fn_80048FD0(int index, int value)
+extern "C" void PlayerLookSetLogo(int index, int value)
 {
-    lbl_803078E8[index].mUnknown6A = value;
+    gPlayerLooks[index].mUnknown6A = value;
 }
 
-extern "C" void fn_80048FE8(int index, int unused, int id)
+extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
 {
     Object_8008044C cursor;
     int i;
 
     fn_8008040C(&cursor, 0);
-    lbl_80308368[index].mId = id;
-    if (fn_800809C4(&cursor, id, 0)) {
-        fn_80081440(&cursor, lbl_80308368[index].mValues);
+    gPlayerLookBonuses[index].mId = id;
+    if (PlayerDbSeekId(&cursor, id, 0)) {
+        fn_80081440(&cursor, gPlayerLookBonuses[index].mValues);
     } else {
         for (i = 9; i >= 0; i--) {
-            lbl_80308368[index].mValues[i] = 0;
+            gPlayerLookBonuses[index].mValues[i] = 0;
         }
     }
     fn_8008056C(&cursor);
 }
 
-extern "C" void fn_800490A0(int player, int slot, int value)
+extern "C" void PlayerLookSetGear(int player, int slot, int value)
 {
     Object_8003DEC4 *pPlayer = fn_8003DEC4(player);
 
-    lbl_803078E8[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
-    lbl_803078E8[pPlayer->mUnknown4971].mUnknown70 = fn_80048AFC(pPlayer->mUnknown4971);
-    lbl_803078E8[pPlayer->mUnknown4971].mUnknown75 = fn_80048B84(pPlayer->mUnknown4971);
+    gPlayerLooks[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
+    gPlayerLooks[pPlayer->mUnknown4971].mUnknown70 = PlayerLookGetHatKind(pPlayer->mUnknown4971);
+    gPlayerLooks[pPlayer->mUnknown4971].mUnknown75 = PlayerLookGetSlot1Kind(pPlayer->mUnknown4971);
 }
 
-extern "C" void fn_80049124(int player)
+extern "C" void PlayerLookApply(int player)
 {
     int ids[32];
     int palettes[32];
     Row_8007BC34 row;
-    Colors_802CFB1C colors;
+    PlayerLookColors_t colors;
     int id;
     int palette;
     int id2;
@@ -692,7 +692,7 @@ extern "C" void fn_80049124(int player)
     unsigned char index;
     int i;
     int slot;
-    Record_803078E8 *pRecord;
+    PlayerLook_t *pRecord;
     unsigned char *pColors;
 
     pPlayer = fn_8003DEC4(player);
@@ -714,28 +714,28 @@ extern "C" void fn_80049124(int player)
     for (i = 0; lbl_802CF382[i].mKey != 0xFFFF; i++) {
         fn_8015FFC8(key, lbl_802CF382[i].mKey, lbl_802CF382[i].mValue);
     }
-    pColors = lbl_803078E8[index].mUnknown7A;
-    fn_800478DC(pColors);
-    fn_8004795C(pColors, lbl_803078E8[index].mUnknown93);
+    pColors = gPlayerLooks[index].mUnknown7A;
+    PlaTexRemapColors(pColors);
+    PlaTexApplyAwayColors(pColors, gPlayerLooks[index].mUnknown93);
     for (slot = 0; slot <= 13; slot++) {
-        fn_8007BB84(&lbl_8030774C, fn_8007BF14(slot), lbl_803078E8[index].mInfo.mValues[slot], 0);
-        fn_8007BC34(&lbl_8030774C, &row);
-        fn_800479B0(&row, &lbl_803078E8[index], ids, palettes, slot);
-        fn_80047FA4(&row, &lbl_803078E8[index].mInfo, key, slot);
+        fn_8007BB84(&_PlayerLook_sGearCursor, fn_8007BF14(slot), gPlayerLooks[index].mInfo.mValues[slot], 0);
+        fn_8007BC34(&_PlayerLook_sGearCursor, &row);
+        PlaTexBuildPartIds(&row, &gPlayerLooks[index], ids, palettes, slot);
+        PlayerLookApplyItemSwitches(&row, &gPlayerLooks[index].mInfo, key, slot);
         if (slot == 10) {
             if (row.mUnknown64 == 13) {
-                lbl_803078E8[index].mUnknown95 = 1;
+                gPlayerLooks[index].mUnknown95 = 1;
             } else {
-                lbl_803078E8[index].mUnknown95 = 0;
+                gPlayerLooks[index].mUnknown95 = 0;
             }
-            fn_80048704(&row, &lbl_803078E8[index].mInfo, lbl_803078E8[index].mUnknown77,
-                        lbl_803078E8[index].mUnknown6A - 1, lbl_803078E8[index].mUnknown68,
-                        lbl_803078E8[index].mUnknown93, key, ids, palettes);
+            PlayerLookSetJerseyDecals(&row, &gPlayerLooks[index].mInfo, gPlayerLooks[index].mUnknown77,
+                        gPlayerLooks[index].mUnknown6A - 1, gPlayerLooks[index].mUnknown68,
+                        gPlayerLooks[index].mUnknown93, key, ids, palettes);
             if (row.mUnknown76) {
-                fn_80048894(lbl_803078E8[index].mInfo.mUnknown0C, lbl_803078E8[index].mUnknown7A,
-                            lbl_803078E8[index].mUnknown93);
+                PlayerLookLoadDecalColors(gPlayerLooks[index].mInfo.mUnknown0C, gPlayerLooks[index].mUnknown7A,
+                            gPlayerLooks[index].mUnknown93);
             }
-            clearLogo = fn_80048ACC(row.mUnknown64) == 0;
+            clearLogo = PlayerLookItemKeepsLogo(row.mUnknown64) == 0;
         } else if (slot == 0) {
             unsigned char type;
 
@@ -743,10 +743,10 @@ extern "C" void fn_80049124(int player)
             colors.mUnknown0 = 0;
             colors.mUnknown3 = 255;
             colors.mUnknown2 = 0;
-            type = lbl_803078E8[index].mInfo.mUnknown0B;
+            type = gPlayerLooks[index].mInfo.mUnknown0B;
             if (row.mUnknown76) {
-                fn_80048470(&row, lbl_803078E8[index].mInfo.mUnknown0D, key, ids, palettes);
-                fn_80048950(lbl_803078E8[index].mInfo.mUnknown0D, lbl_803078E8[index].mUnknown7A, lbl_803078E8[index].mUnknown93);
+                PlayerLookSetHeadDecal(&row, gPlayerLooks[index].mInfo.mUnknown0D, key, ids, palettes);
+                PlayerLookLoadHeadDecalColors(gPlayerLooks[index].mInfo.mUnknown0D, gPlayerLooks[index].mUnknown7A, gPlayerLooks[index].mUnknown93);
             } else {
                 if (fn_801C302C(row.mName, "SKULLCAP_BLACK_L", 16) == 0) {
                     ids[2] = 0x3216;
@@ -757,8 +757,8 @@ extern "C" void fn_80049124(int player)
                     palettes[2] = -1;
                     fn_8015FFC8(key, 25, colors.mUnknown1);
                 } else {
-                    fn_80048590(type, 25, colors, lbl_803078E8[index].mUnknown77, lbl_803078E8[index].mUnknown6A - 1,
-                                lbl_803078E8[index].mUnknown68, lbl_803078E8[index].mUnknown93, 0, key, &ids[2], &palettes[2]);
+                    PlayerLookSetDecal(type, 25, colors, gPlayerLooks[index].mUnknown77, gPlayerLooks[index].mUnknown6A - 1,
+                                gPlayerLooks[index].mUnknown68, gPlayerLooks[index].mUnknown93, 0, key, &ids[2], &palettes[2]);
                 }
                 fn_8015FFC8(key, 26, 255);
             }
@@ -768,18 +768,18 @@ extern "C" void fn_80049124(int player)
         ids[10] = -1;
         palettes[10] = -1;
     }
-    fn_80047CA4(ids, &lbl_803078E8[index]);
+    PlaTexBuildDefaultIds(ids, &gPlayerLooks[index]);
     for (i = 0; i <= 31; i++) {
         if (i != 31) {
             fn_80160E94(index, i, ids[i], palettes[i], 0);
         }
     }
-    fn_801610B0(index, lbl_803078E8[index].mUnknown7A);
+    fn_801610B0(index, gPlayerLooks[index].mUnknown7A);
     if (ids[4] == -1) {
-        fn_8016139C(lbl_803078E8[index].mUnknown6E, &id, &palette);
+        fn_8016139C(gPlayerLooks[index].mUnknown6E, &id, &palette);
         fn_80160E94(index, 4, id, palette, 0);
     }
-    pRecord = &lbl_803078E8[index];
+    pRecord = &gPlayerLooks[index];
     if (pRecord->mUnknown95) {
         fn_8015FFC8(key, 0, 255);
         fn_8015FFC8(key, 27, 255);
@@ -789,58 +789,58 @@ extern "C" void fn_80049124(int player)
     if (pRecord->mUnknown70 != 15 && pRecord->mUnknown70 != 16 && !pRecord->mUnknown95) {
         pRecord->mUnknown94 = 1;
     } else {
-        lbl_803078E8[index].mUnknown94 = 0;
+        gPlayerLooks[index].mUnknown94 = 0;
     }
     fn_8015FFC8(key, 29, 255);
     fn_8015FFC8(key, 30, 255);
-    if (lbl_803078E8[index].mInfo.mValues[12]) {
+    if (gPlayerLooks[index].mInfo.mValues[12]) {
         fn_8015FFC8(key, 29, 0);
-        if (lbl_803078E8[index].mInfo.mValues[13]) {
+        if (gPlayerLooks[index].mInfo.mValues[13]) {
             fn_8015FFC8(key, 30, 0);
         }
-        fn_80048C40(&id2, &palette2, lbl_803078E8[index].mInfo.mValues[13], lbl_803078E8[index].mInfo.mValues[12]);
+        PlayerLookGetAccessoryIds(&id2, &palette2, gPlayerLooks[index].mInfo.mValues[13], gPlayerLooks[index].mInfo.mValues[12]);
         fn_80160E94(index, 7, id2, -1, 0);
         fn_80160E94(index, 8, palette2, -1, 0);
     }
-    fn_801C3284(pPlayer->mUnknown4184, lbl_803078E8[index].mName, 31);
+    fn_801C3284(pPlayer->mUnknown4184, gPlayerLooks[index].mName, 31);
     PlyrTexRequestNameplate(pPlayer);
 }
 
-extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
+extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused, int id)
 {
     int flag = 1;
 
-    if (fn_80027DF0() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
-        Object_8007A334 cursor;
+    if (FELoopIsMainFEActive() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
+        DbCursor cursor;
 
-        fn_8007A334(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
-        if (fn_800809C4((Object_8008044C *)&cursor, id, 0)) {
+        DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
+        if (PlayerDbSeekId((Object_8008044C *)&cursor, id, 0)) {
             flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
         }
-        fn_8007A3C4(&cursor);
-    } else if ((fn_80027DF0() && (fn_801835A0() || fn_800624B0())) || !fn_801486A0()) {
+        DbCursorClose(&cursor);
+    } else if ((FELoopIsMainFEActive() && (fn_801835A0() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
         flag = 1;
-    } else if (fn_8007CB6C(2) == 0) {
+    } else if (GameInfoGet(2) == 0) {
         flag = mode <= 6;
     } else {
         flag = mode > 6;
     }
-    fn_80048C9C(index, unused, id, flag);
+    PlayerLookLoad(index, unused, id, flag);
 }
 
-extern "C" void fn_800497F4(int unused, int id, unsigned short *pValues)
+extern "C" void PlayerLookGetBonuses(int unused, int id, unsigned short *pValues)
 {
     unsigned int i;
     int j;
 
     for (i = 0; i <= 13; i++) {
-        if (lbl_80308368[i].mId == id) {
+        if (gPlayerLookBonuses[i].mId == id) {
             break;
         }
     }
     if (i <= 13) {
         for (j = 0; j < 10; j++) {
-            pValues[j] = lbl_80308368[i].mValues[j];
+            pValues[j] = gPlayerLookBonuses[i].mValues[j];
         }
     } else {
         for (j = 0; j < 10; j++) {
@@ -849,11 +849,11 @@ extern "C" void fn_800497F4(int unused, int id, unsigned short *pValues)
     }
 }
 
-extern "C" int fn_80049888(int index)
+extern "C" int PlayerLookGetHatModel(int index)
 {
     int kind;
-    unsigned char style = lbl_803078E8[index].mInfo.mUnknown02;
-    unsigned short type = lbl_803078E8[index].mUnknown70;
+    unsigned char style = gPlayerLooks[index].mInfo.mUnknown02;
+    unsigned short type = gPlayerLooks[index].mUnknown70;
 
     if (type != 0 && type != 16 && type != 15) {
         switch (type) {
@@ -869,7 +869,7 @@ extern "C" int fn_80049888(int index)
                 kind = 3;
                 break;
             default:
-                kind = lbl_803078E8[index].mUnknown70;
+                kind = gPlayerLooks[index].mUnknown70;
                 break;
             }
             break;
@@ -891,22 +891,22 @@ extern "C" int fn_80049888(int index)
                 kind = 11;
                 break;
             default:
-                kind = lbl_803078E8[index].mUnknown70;
+                kind = gPlayerLooks[index].mUnknown70;
                 break;
             }
             break;
         default:
-            kind = lbl_803078E8[index].mUnknown70;
+            kind = gPlayerLooks[index].mUnknown70;
             break;
         }
-        return (kind - 1) * 14 + lbl_803078E8[index].mUnknown6C * 2 + 1;
+        return (kind - 1) * 14 + gPlayerLooks[index].mUnknown6C * 2 + 1;
     }
     return 3;
 }
 
-extern "C" int fn_800499A8(int index)
+extern "C" int PlayerLookGetSlot1Model(int index)
 {
-    Record_803078E8 *pRecord = &lbl_803078E8[index];
+    PlayerLook_t *pRecord = &gPlayerLooks[index];
 
     if (pRecord->mUnknown75 != 0) {
         return (pRecord->mUnknown75 - 1) * 8 + pRecord->mInfo.mUnknown03 * 2 + 1;
@@ -914,190 +914,190 @@ extern "C" int fn_800499A8(int index)
     return 1;
 }
 
-extern "C" int fn_800499E8(int index)
+extern "C" int PlayerLookGetAccessoryModel(int index)
 {
     Row_8007BC34 row;
-    unsigned int a = lbl_803078E8[index].mInfo.mValues[12];
-    unsigned int b = lbl_803078E8[index].mInfo.mValues[13];
+    unsigned int a = gPlayerLooks[index].mInfo.mValues[12];
+    unsigned int b = gPlayerLooks[index].mInfo.mValues[13];
     int result;
 
     if (a == 0) {
         result = 0x151;
     } else {
-        fn_8007BB84(&lbl_8030774C, 9, lbl_803078E8[index].mInfo.mValues[10], 0);
-        fn_8007BC34(&lbl_8030774C, &row);
+        fn_8007BB84(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
+        fn_8007BC34(&_PlayerLook_sGearCursor, &row);
         result = (a - 1) / 2;
         result = result * 13;
         result = result + b;
         result = result * 3 + lbl_802CFB74[lbl_802CFA44[row.mUnknown64]];
-        result = result * 4 + lbl_803078E8[index].mUnknown78;
+        result = result * 4 + gPlayerLooks[index].mUnknown78;
         result = result * 2;
         result = result + 1;
     }
     return result;
 }
 
-extern "C" unsigned short fn_80049AB8(int index)
+extern "C" unsigned short PlayerLookGetHair(int index)
 {
-    return lbl_803078E8[index].mUnknown6E;
+    return gPlayerLooks[index].mUnknown6E;
 }
 
-extern "C" void fn_80049AD0(int index, unsigned char value)
+extern "C" void PlayerLookSetHatStyle(int index, unsigned char value)
 {
-    lbl_803078E8[index].mInfo.mUnknown02 = value;
+    gPlayerLooks[index].mInfo.mUnknown02 = value;
 }
 
-extern "C" void fn_80049AE8(int index, unsigned char value)
+extern "C" void PlayerLookSetHeadDecalKind(int index, unsigned char value)
 {
-    lbl_803078E8[index].mInfo.mUnknown0B = value;
+    gPlayerLooks[index].mInfo.mUnknown0B = value;
 }
 
-extern "C" void fn_80049B00(int index, int value)
+extern "C" void PlayerLookSetFrontDecalKind(int index, int value)
 {
-    lbl_803078E8[index].mInfo.mUnknown09 = value;
+    gPlayerLooks[index].mInfo.mUnknown09 = value;
 }
 
-extern "C" void fn_80049B18(int index, unsigned char value)
+extern "C" void PlayerLookSetBackDecalKind(int index, unsigned char value)
 {
-    lbl_803078E8[index].mInfo.mUnknown0A = value;
+    gPlayerLooks[index].mInfo.mUnknown0A = value;
 }
 
-extern "C" void fn_80049B30(int index, int value)
+extern "C" void PlayerLookSetSkin(int index, int value)
 {
-    lbl_803078E8[index].mUnknown72 = value;
+    gPlayerLooks[index].mUnknown72 = value;
 }
 
-extern "C" void fn_80049B48(int index, int value)
+extern "C" void PlayerLookSetFace(int index, int value)
 {
-    lbl_803078E8[index].mUnknown73 = value;
+    gPlayerLooks[index].mUnknown73 = value;
 }
 
-extern "C" void fn_80049B60(int index, int value)
+extern "C" void PlayerLookSetBrow(int index, int value)
 {
-    lbl_803078E8[index].mUnknown74 = value;
+    gPlayerLooks[index].mUnknown74 = value;
 }
 
-extern "C" void fn_80049B78(int index, int value)
+extern "C" void PlayerLookSetHeadType(int index, int value)
 {
-    lbl_803078E8[index].mUnknown6C = value;
+    gPlayerLooks[index].mUnknown6C = value;
 }
 
-extern "C" void fn_80049B90(int index, int value)
+extern "C" void PlayerLookSetHair(int index, int value)
 {
-    lbl_803078E8[index].mUnknown6E = value;
+    gPlayerLooks[index].mUnknown6E = value;
 }
 
-extern "C" void fn_80049BA8(int index, int value)
+extern "C" void PlayerLookSetBodyType(int index, int value)
 {
-    lbl_803078E8[index].mUnknown78 = value;
+    gPlayerLooks[index].mUnknown78 = value;
 }
 
-extern "C" unsigned char fn_80049BC0(int index)
+extern "C" unsigned char PlayerLookGetBodyType(int index)
 {
-    return lbl_803078E8[index].mUnknown78;
+    return gPlayerLooks[index].mUnknown78;
 }
 
-extern "C" void fn_80049BD8(int index, int value)
+extern "C" void PlayerLookSetFaceFlag(int index, int value)
 {
-    lbl_803078E8[index].mInfo.mUnknown03 = value;
+    gPlayerLooks[index].mInfo.mUnknown03 = value;
 }
 
-extern "C" void fn_80049BF0(int index, int value)
+extern "C" void PlayerLookSetNumber(int index, int value)
 {
-    lbl_803078E8[index].mUnknown77 = value;
+    gPlayerLooks[index].mUnknown77 = value;
 }
 
-extern "C" unsigned short fn_80049C08(int index)
+extern "C" unsigned short PlayerLookGetHeadType(int index)
 {
-    return lbl_803078E8[index].mUnknown6C;
+    return gPlayerLooks[index].mUnknown6C;
 }
 
-extern "C" void fn_80049C20(int index, int value)
+extern "C" void PlayerLookSetPlex(int index, int value)
 {
-    lbl_803078E8[index].mUnknown76 = value;
+    gPlayerLooks[index].mUnknown76 = value;
 }
 
-extern "C" unsigned char fn_80049C38(int index)
+extern "C" unsigned char PlayerLookGetPlex(int index)
 {
-    return lbl_803078E8[index].mUnknown76;
+    return gPlayerLooks[index].mUnknown76;
 }
 
-extern "C" void fn_80049C50(int index, int player)
+extern "C" void PlayerLookApplyHeadDecal(int index, int player)
 {
-    Colors_802CFB1C colors;
+    PlayerLookColors_t colors;
     int dummy;
 
     colors.mUnknown1 = 0;
     colors.mUnknown0 = 0;
     colors.mUnknown2 = 0;
     colors.mUnknown3 = 255;
-    fn_80048590(lbl_803078E8[index].mInfo.mUnknown0B, 25, colors, lbl_803078E8[index].mUnknown77,
-                lbl_803078E8[index].mUnknown6A - 1, lbl_803078E8[index].mUnknown68,
-                lbl_803078E8[index].mUnknown93, 0, player, &dummy, &dummy);
+    PlayerLookSetDecal(gPlayerLooks[index].mInfo.mUnknown0B, 25, colors, gPlayerLooks[index].mUnknown77,
+                gPlayerLooks[index].mUnknown6A - 1, gPlayerLooks[index].mUnknown68,
+                gPlayerLooks[index].mUnknown93, 0, player, &dummy, &dummy);
 }
 
-extern "C" int fn_80049CD8(int index)
+extern "C" int PlayerLookHasHat(int index)
 {
     int result = 1;
 
-    if (lbl_803078E8[index].mUnknown70 == 0) {
+    if (gPlayerLooks[index].mUnknown70 == 0) {
         result = 0;
     }
     return result;
 }
 
-extern "C" unsigned char fn_80049D04(int index)
+extern "C" unsigned char PlayerLookShowsHair(int index)
 {
-    return lbl_803078E8[index].mUnknown94;
+    return gPlayerLooks[index].mUnknown94;
 }
 
-extern "C" unsigned char fn_80049D1C(int index)
+extern "C" unsigned char PlayerLookHidesHead(int index)
 {
-    return lbl_803078E8[index].mUnknown95;
+    return gPlayerLooks[index].mUnknown95;
 }
 
-extern "C" void fn_80049D34(int index, unsigned int value)
+extern "C" void PlayerLookSetHairColor(int index, unsigned int value)
 {
-    lbl_803078E8[index].mUnknown7A[18] = value + 0x80;
+    gPlayerLooks[index].mUnknown7A[18] = value + 0x80;
 }
 
-extern "C" void fn_80049D50(int index, unsigned int value)
+extern "C" void PlayerLookSetFacialHairColor(int index, unsigned int value)
 {
-    lbl_803078E8[index].mUnknown7A[19] = value + 0x80;
+    gPlayerLooks[index].mUnknown7A[19] = value + 0x80;
 }
 
-extern "C" void fn_80049D6C(int index, unsigned int which, int value)
+extern "C" void PlayerLookSetPartVariant(int index, unsigned int which, int value)
 {
     switch (which) {
     case 1:
-        lbl_803078E8[index].mInfo.mUnknown05 = value;
+        gPlayerLooks[index].mInfo.mUnknown05 = value;
         break;
     case 0:
-        lbl_803078E8[index].mInfo.mUnknown04 = value;
+        gPlayerLooks[index].mInfo.mUnknown04 = value;
         break;
     case 2:
-        lbl_803078E8[index].mInfo.mUnknown08 = value;
+        gPlayerLooks[index].mInfo.mUnknown08 = value;
         break;
     }
 }
 
-extern "C" void fn_80049DD0(int index, unsigned char value)
+extern "C" void PlayerLookSetSwitchFlagsA(int index, unsigned char value)
 {
-    lbl_803078E8[index].mInfo.mUnknown00 = value;
+    gPlayerLooks[index].mInfo.mUnknown00 = value;
 }
 
-extern "C" void fn_80049DE8(int index, unsigned char value)
+extern "C" void PlayerLookSetSwitchFlagsB(int index, unsigned char value)
 {
-    lbl_803078E8[index].mInfo.mUnknown01 = value;
+    gPlayerLooks[index].mInfo.mUnknown01 = value;
 }
 
-extern "C" void fn_80049E00(int index, const char *pName, Ids_8015F6E8 *pIds)
+extern "C" void PlayerLookGetHeadIds(int index, const char *pName, PlayerHeadIds_t *pIds)
 {
-    fn_80049C08(index);
-    fn_8015F6E8(pName, fn_80049AB8(index), fn_80049C08(index), fn_80049CD8(index), pIds);
+    PlayerLookGetHeadType(index);
+    fn_8015F6E8(pName, PlayerLookGetHair(index), PlayerLookGetHeadType(index), PlayerLookHasHat(index), pIds);
 }
 
-extern "C" void fn_80049E6C(void)
+extern "C" void PlayerLookHideSwitch28(void)
 {
     unsigned int count = fn_8003DEB4();
     unsigned int i;
@@ -1107,71 +1107,71 @@ extern "C" void fn_80049E6C(void)
     }
 }
 
-extern "C" unsigned char fn_80049EC8(int index)
+extern "C" unsigned char PlayerLookGetSkin(int index)
 {
-    return lbl_803078E8[index].mUnknown72;
+    return gPlayerLooks[index].mUnknown72;
 }
 
-extern "C" unsigned char fn_80049EE0(int index)
+extern "C" unsigned char PlayerLookGetFace(int index)
 {
-    return lbl_803078E8[index].mUnknown73;
+    return gPlayerLooks[index].mUnknown73;
 }
 
-extern "C" unsigned char fn_80049EF8(int index)
+extern "C" unsigned char PlayerLookGetBrow(int index)
 {
-    return lbl_803078E8[index].mUnknown74;
+    return gPlayerLooks[index].mUnknown74;
 }
 
-extern "C" void fn_80049F10(int index, Block_80307980 *pBlock)
+extern "C" void PlayerLookSetFeatures(int index, FaceFeatures_t *pBlock)
 {
     if (pBlock) {
-        lbl_803078E8[index].mBlock = *pBlock;
+        gPlayerLooks[index].mBlock = *pBlock;
     } else {
-        fn_801C1F94(&lbl_803078E8[index].mBlock, 0, sizeof(Block_80307980));
+        fn_801C1F94(&gPlayerLooks[index].mBlock, 0, sizeof(FaceFeatures_t));
     }
 }
 
-extern "C" void fn_80049FC8(int index, Block_80307980 *pBlock)
+extern "C" void PlayerLookGetFeatures(int index, FaceFeatures_t *pBlock)
 {
-    *pBlock = lbl_803078E8[index].mBlock;
+    *pBlock = gPlayerLooks[index].mBlock;
 }
 
-extern "C" void fn_8004A040(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit)
+extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit)
 {
     fn_801C1F94(pPlayer, 0x19F0, 0);
     fn_80042610(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
-    fn_80146094(&pPlayer->mUnknown5188);
+    ParticleTrailReset(&pPlayer->mUnknown5188);
     fn_801A3588(pPlayer, pInit);
 }
 
-extern "C" void fn_8004A0AC(Object_8003DEC4 *pPlayer)
+extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 {
     fn_801A3F48(pPlayer);
     fn_800428A8(pPlayer);
 }
 
-extern "C" void fn_8004A0E0(int a, int b)
+extern "C" void PlayerObjRenderInit(int a, int b)
 {
     lbl_803EA4CA = 1;
     fn_801A34B0(0, 0, a, b);
 }
 
-extern "C" void fn_8004A118(void)
+extern "C" void PlayerObjRenderShutdown(void)
 {
     lbl_803EA4CA = 0;
     fn_801A3520();
 }
 
-extern "C" void fn_8004A140(int owner, int type, int count)
+extern "C" void PlayerObjAddObjType(int owner, int type, int count)
 {
-    fn_801DCF0C(type, 0x19F0, count, fn_8004A040, fn_8004A0AC);
+    ObjNewType_(type, 0x19F0, count, PlayerObjCreate, PlayerObjDestroy);
     if (owner) {
-        fn_801DD0C8(owner, type, 0, fn_8004A1A8);
+        ObjSetListObjFunc(owner, type, 0, PlayerObjDraw);
     }
 }
 
-extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
+extern "C" int PlayerObjDraw(Object_8003DEC4 *pPlayer, int unused)
 {
     Item_800476DC *pItem = pPlayer->mUnknown988;
 
@@ -1182,18 +1182,18 @@ extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
     return 0;
 }
 
-extern "C" void fn_8004A1FC(int type)
+extern "C" void PlayerObjRemoveObjType(int type)
 {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(type);
+    ObjDelType(type);
 }
 
-extern "C" void fn_8004A230(unsigned char value)
+extern "C" void PlayerObjSetDrawReady(unsigned char value)
 {
     lbl_803EA4CA = value;
 }
 
-extern "C" unsigned char fn_8004A238(void)
+extern "C" unsigned char PlayerObjIsDrawReady(void)
 {
     return lbl_803EA4CA;
 }

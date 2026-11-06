@@ -555,7 +555,7 @@ void fn_80043DD8(void)
 
         for (int i = 0; i < lbl_803EA49C[type]; i++) {
             Vector_80039F5C pos;
-            Area_80054138 *pArea;
+            LevelSurface_t *pArea;
 
             pos.mX = (fn_80237260(1) * 2.0f - 1.0f) * width;
             pos.mY = (fn_80237260(1) * 2.0f - 1.0f) * length;

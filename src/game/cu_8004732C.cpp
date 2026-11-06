@@ -1,5 +1,5 @@
 #include "engine/viewport.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
@@ -31,11 +31,11 @@ void fn_801D0C58(void *a);
 void fn_801D1258(int which, float (*pMatrix)[4]);
 void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
-int fn_801DD268(int handle, int a, int b, int *pInit);
-void fn_801DD320(int handle, Item_800476DC *pInstance);
+int ObjNewType_(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
+int ObjNewInList(int handle, int a, int b, int *pInit);
+void ObjRemoveFromList(int handle, Item_800476DC *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
 int fn_80236EC0(int a);
 
@@ -76,7 +76,7 @@ int fn_800473AC(Item_800476DC *pInstance)
     if (lbl_803EA4C8 && fn_8007F828(17)) {
         int mode = fn_800AD9B4();
         if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
-            mode != 7 && !fn_8006560C() && !fn_800A9680()) {
+            mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];
             Quad_801CD308 value;
@@ -119,26 +119,26 @@ int fn_800473AC(Item_800476DC *pInstance)
 
 void fn_80047578(void)
 {
-    fn_801DCF0C(11, 36, 27, fn_80047358, fn_80047398);
-    fn_801DD0C8(lbl_803EA4C0, 11, 0, fn_800473AC);
+    ObjNewType_(11, 36, 27, fn_80047358, fn_80047398);
+    ObjSetListObjFunc(lbl_803EA4C0, 11, 0, fn_800473AC);
     lbl_803EA4C8 = 1;
 }
 
 void fn_800475D4(void)
 {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(11);
+    ObjDelType(11);
 }
 
 Item_800476DC *fn_800475FC(int value)
 {
-    return (Item_800476DC *)fn_801DD268(lbl_803EA4C0, 11, 0, &value);
+    return (Item_800476DC *)ObjNewInList(lbl_803EA4C0, 11, 0, &value);
 }
 
 void fn_80047630(Item_800476DC *pInstance)
 {
     if (pInstance) {
-        fn_801DD320(lbl_803EA4C0, pInstance);
+        ObjRemoveFromList(lbl_803EA4C0, pInstance);
         VptTrashObject((int)pInstance);
     }
 }

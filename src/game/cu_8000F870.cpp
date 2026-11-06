@@ -229,7 +229,7 @@ int ConGetChannelInfo(int a, int b);
 int fn_801E15D0(int a);
 unsigned int fn_801E1954(void);
 int fn_801E195C(int a);
-void fn_801E1BE8(void);
+void PerCheckConnectAll(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_8021E2B4(void *pObject, int a, int b);
 void fn_8021E72C(void *pObject, int a, int b);
@@ -519,7 +519,7 @@ int fn_8000FCDC(void)
     int limit;
     int i;
 
-    fn_801E1BE8();
+    PerCheckConnectAll();
     if (fn_801E1954() < 8) {
         limit = fn_801E1954();
     } else {
@@ -749,7 +749,7 @@ int fn_800103A4(int force)
     unsigned int count;
     unsigned char used[2];
 
-    fn_801E1BE8();
+    PerCheckConnectAll();
     count = 0;
     for (i = 0; i <= 7; i++) {
         unsigned char present = fn_801E195C(ConGetChannelInfo(i, 0)) == 2;

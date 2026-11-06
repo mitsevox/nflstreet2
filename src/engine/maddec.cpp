@@ -286,7 +286,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         pRefV += offset;
     }
     if ((flags & 1) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(&lbl_8039A310[0], 16);
         } else {
             fn_801DB670(&lbl_8039A310[0], 16);
@@ -296,7 +296,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         fn_801DA8E0(pRefY, stride, &lbl_8039A310[0], bias);
     }
     if ((flags & 2) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(&lbl_8039A310[8], 16);
         } else {
             fn_801DB670(&lbl_8039A310[8], 16);
@@ -306,7 +306,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         fn_801DA8E0(pRefY + 8, stride, &lbl_8039A310[8], bias);
     }
     if ((flags & 4) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(&lbl_8039A310[128], 16);
         } else {
             fn_801DB670(&lbl_8039A310[128], 16);
@@ -316,7 +316,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         fn_801DA8E0(pRefY + stride * 8, stride, &lbl_8039A310[128], bias);
     }
     if ((flags & 8) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(&lbl_8039A310[136], 16);
         } else {
             fn_801DB670(&lbl_8039A310[136], 16);
@@ -326,7 +326,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         fn_801DA8E0(pRefY + stride * 8 + 8, stride, &lbl_8039A310[136], bias);
     }
     if ((flags & 0x10) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(lbl_8039A710, 8);
         } else {
             fn_801DB670(lbl_8039A710, 8);
@@ -336,7 +336,7 @@ void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const u
         fn_801DA980(pRefU, halfStride, lbl_8039A710, bias);
     }
     if ((flags & 0x20) == 0) {
-        if (fn_801DB0B0() == 1) {
+        if (madvlcdecode() == 1) {
             fn_801DA884(lbl_8039A810, 8);
         } else {
             fn_801DB670(lbl_8039A810, 8);

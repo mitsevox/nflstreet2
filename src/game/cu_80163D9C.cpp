@@ -2,12 +2,12 @@
 
 extern "C" {
 void fn_80146DC4(int a);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, int item);
-void fn_801DD3AC(int handle, int item, int a);
+int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, int item);
+void ObjSetPriority(int handle, int item, int a);
 }
 
 static unsigned char lbl_803EB3A8 = 1;
@@ -24,18 +24,18 @@ int fn_80163D9C(void *pItem)
 
 void fn_80163DD0(int handle)
 {
-    fn_801DCF0C(26, 20, 1, 0, 0);
-    fn_801DD0C8(handle, 26, 0, fn_80163D9C);
-    lbl_803ECAF0 = fn_801DD268(handle, 26, 0, 0);
-    fn_801DD3AC(handle, lbl_803ECAF0, 13);
+    ObjNewType_(26, 20, 1, 0, 0);
+    ObjSetListObjFunc(handle, 26, 0, fn_80163D9C);
+    lbl_803ECAF0 = ObjNewInList(handle, 26, 0, 0);
+    ObjSetPriority(handle, lbl_803ECAF0, 13);
 }
 
 void fn_80163E54(int handle)
 {
-    fn_801DD320(handle, lbl_803ECAF0);
+    ObjRemoveFromList(handle, lbl_803ECAF0);
     VptTrashObject(lbl_803ECAF0);
     VptFlushObjectTrashSync();
-    fn_801DCF8C(26);
+    ObjDelType(26);
     lbl_803ECAF0 = 0;
 }
 }

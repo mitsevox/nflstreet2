@@ -5,27 +5,27 @@
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-int fn_801DCF8C(int a);
-int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)());
-void fn_801DD0E8(int handle);
-int fn_801DD268(int handle, int a, int b, int c);
-void fn_801DD320(int handle, int a);
-void fn_801DD3AC(int handle, int a, int b);
+int ObjNewType_(int a, int b, int c, void (*pA)(), void (*pB)());
+int ObjDelType(int a);
+int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)());
+void ObjDelList(int handle);
+int ObjNewInList(int handle, int a, int b, int c);
+void ObjRemoveFromList(int handle, int a);
+void ObjSetPriority(int handle, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_80187DD8(int a);
 void fn_80187E08(int a, const char *pText, int b, int c);
-void fn_8008A9F8(Object_8008A9F8 *pObject);
-void fn_8008AA48(Object_8008A9F8 *pObject);
-int fn_8008AA7C(Object_8008A9F8 *pObject);
-void fn_8008AA9C(Object_8008A9F8 *pObject);
-void fn_8008AAD0(Object_8008A9F8 *pObject);
-int fn_8008AAF0(Object_8008A9F8 *pObject);
-void fn_8008ABA4(Object_8008A9F8 *pObject);
-void fn_80199968(Object_8008A9F8 *pObject);
-void fn_801999B0(Object_8008A9F8 *pObject);
-void fn_801999F4(Object_8008A9F8 *pObject);
+void PortraitJobAllocImage(PortraitJob_t *pObject);
+void PortraitJobLoad(PortraitJob_t *pObject);
+int PortraitJobIsLoaded(PortraitJob_t *pObject);
+void PortraitJobUnload(PortraitJob_t *pObject);
+void PortraitJobQuantize(PortraitJob_t *pObject);
+int PortraitJobIsDone(PortraitJob_t *pObject);
+void PortraitJobSave(PortraitJob_t *pObject);
+void fn_80199968(PortraitJob_t *pObject);
+void fn_801999B0(PortraitJob_t *pObject);
+void fn_801999F4(PortraitJob_t *pObject);
 }
 
 static const char *sName = "FMCAPPORT";
@@ -33,14 +33,14 @@ static void *sDependencies[] = { 0 };
 FMCAPPORT gFMCAPPORT;
 
 extern "C" {
-static int fn_8008BFE4()
+static int _FMCAPPORTDrawCallback()
 {
-    gFMCAPPORT.fn_8008C870();
+    gFMCAPPORT.CaptureFrame();
     return 0;
 }
 }
 
-void FMCAPPORT::fn_8008C010()
+void FMCAPPORT::CreateCamera()
 {
     ViewportDesc_t desc;
 
@@ -58,29 +58,29 @@ void FMCAPPORT::fn_8008C010()
     VptSetEraseColor(mpState.mp->mUnknown4088, 0.0f, 0.0f, 1.0f);
 }
 
-void FMCAPPORT::fn_8008C0EC()
+void FMCAPPORT::DestroyCamera()
 {
     VptClose(mpState.mp->mUnknown4088);
     mpState.mp->mUnknown4088 = 0;
 }
 
-void FMCAPPORT::fn_8008C12C()
+void FMCAPPORT::CreateRenderPass()
 {
-    fn_801DCF0C(32, 20, 1, 0, 0);
-    mpState.mp->mUnknown4092 = fn_801DCFF0(1, 1, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(mpState.mp->mUnknown4092, 32, 0, fn_8008BFE4);
+    ObjNewType_(32, 20, 1, 0, 0);
+    mpState.mp->mUnknown4092 = ObjNewList(1, 1, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(mpState.mp->mUnknown4092, 32, 0, _FMCAPPORTDrawCallback);
     VptSetObjectList(mpState.mp->mUnknown4088, mpState.mp->mUnknown4092, 0);
-    mpState.mp->mUnknown4096 = fn_801DD268(mpState.mp->mUnknown4092, 32, 0, 0);
-    fn_801DD3AC(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
+    mpState.mp->mUnknown4096 = ObjNewInList(mpState.mp->mUnknown4092, 32, 0, 0);
+    ObjSetPriority(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
 }
 
-void FMCAPPORT::fn_8008C1FC()
+void FMCAPPORT::DestroyRenderPass()
 {
-    fn_801DD320(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
+    ObjRemoveFromList(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
     VptTrashObject(mpState.mp->mUnknown4096);
     VptFlushObjectTrashSync();
-    fn_801DD0E8(mpState.mp->mUnknown4092);
-    fn_801DCF8C(32);
+    ObjDelList(mpState.mp->mUnknown4092);
+    ObjDelType(32);
     mpState.mp->mUnknown4096 = 0;
     mpState.mp->mUnknown4092 = 0;
 }
@@ -137,7 +137,7 @@ void FMCAPPORT::Start()
 void FMCAPPORT::Update()
 {
     FMCAPPORTState *state = mpState.mp;
-    Object_8008A9F8 *object = &state->mObject;
+    PortraitJob_t *object = &state->mObject;
 
     switch (state->mState) {
     case 0:
@@ -173,16 +173,16 @@ void FMCAPPORT::Update()
         object->mValues52 = entry->mValues88;
         object->mValues52.mValues[entry->mUnknown300 + 1] = 1.0f;
         object->mUnknown364 = entry->mUnknown300;
-        fn_8008C010();
-        fn_8008C12C();
-        fn_8008A9F8(object);
-        fn_8008AA48(object);
+        CreateCamera();
+        CreateRenderPass();
+        PortraitJobAllocImage(object);
+        PortraitJobLoad(object);
         fn_80199968(object);
         mpState.mp->mState = 3;
         break;
     }
     case 3:
-        if (fn_8008AA7C(object)) {
+        if (PortraitJobIsLoaded(object)) {
             mpState.mp->mState = 4;
         }
         break;
@@ -192,21 +192,21 @@ void FMCAPPORT::Update()
         break;
     case 5:
         if (state->mUnknown8) {
-            fn_8008C1FC();
-            fn_8008C0EC();
+            DestroyRenderPass();
+            DestroyCamera();
             mpState.mp->mState = 6;
         }
         break;
     case 6:
-        state->mObject.mpUnknown1636 = new (0) Class_8008B284;
-        fn_8008AAD0(object);
+        state->mObject.mpUnknown1636 = new (0) ColorQuantizer;
+        PortraitJobQuantize(object);
         mpState.mp->mState = 7;
         break;
     case 7:
-        if (fn_8008AAF0(object)) {
-            fn_8008ABA4(object);
+        if (PortraitJobIsDone(object)) {
+            PortraitJobSave(object);
             fn_801999B0(object);
-            fn_8008AA9C(object);
+            PortraitJobUnload(object);
             delete mpState.mp->mObject.mpUnknown1636;
             mpState.mp->mObject.mpUnknown1636 = 0;
             mpState.mp->mCount--;
@@ -216,7 +216,7 @@ void FMCAPPORT::Update()
     }
 }
 
-void FMCAPPORT::fn_8008C870()
+void FMCAPPORT::CaptureFrame()
 {
     if (mpState.mp->mState == 5 && !mpState.mp->mUnknown8) {
         fn_801999F4(&mpState.mp->mObject);

@@ -1,22 +1,25 @@
-#include "engine/Body_801E9538.h"
+/* Rigid-body physics: a point constraint that holds two bodies together at an anchor point
+   (the game builds one for each "constraint" in an object's physics data). */
+
+#include "engine/rigidbody.h"
 #include "game/fn_802270D4.h"
 
-#include "engine/cu_801E8478.h"
+#include "engine/physconstraint.h"
 #include "engine/llmatrix.h"
 
-Class_801E8478::Class_801E8478(Body_801E9538 *pBodyA, Body_801E9538 *pBodyB,
+PointConstraint::PointConstraint(RigidBody_t *pBodyA, RigidBody_t *pBodyB,
                                Vec3_801DE1E0 *pAnchorA, Vec3_801DE1E0 *pAnchorB)
     : mpBodyA(pBodyA), mAnchorA(*pAnchorA), mpBodyB(pBodyB), mAnchorB(*pAnchorB)
 {
 }
 
-Class_801E8478::~Class_801E8478()
+PointConstraint::~PointConstraint()
 {
     mpBodyA = 0;
     mpBodyB = 0;
 }
 
-void Class_801E8478::vfn_01()
+void PointConstraint::Solve()
 {
     Vec3_801DE1E0 pointA;
     Vec3_801DE1E0 pointB;

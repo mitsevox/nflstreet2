@@ -1,7 +1,7 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801EF390.h"
 #include "engine/viewport.h"
@@ -52,12 +52,12 @@ void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float (*pMatrix)[4]);
-int fn_801DCF0C(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*callback)(Item_800469EC *));
-Item_800469EC *fn_801DD268(int handle, int type, int a, int *pInit);
-void fn_801DD320(int handle, Item_800469EC *p);
-void fn_801DD3AC(int handle, Item_800469EC *p, int a);
+int ObjNewType_(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(Item_800469EC *));
+Item_800469EC *ObjNewInList(int handle, int type, int a, int *pInit);
+void ObjRemoveFromList(int handle, Item_800469EC *p);
+void ObjSetPriority(int handle, Item_800469EC *p, int a);
 void TMRenderReset(void);
 void TMRenderBindTexture(int a, int b, int c);
 void TMRenderSetZRange(float a, float b);
@@ -109,7 +109,7 @@ float fn_80046920(Item_800469EC *p)
 int fn_800469EC(Item_800469EC *p)
 {
     if (fn_80177F70() && !fn_800BA6F8() && !fn_8002D060(lbl_803EA368) &&
-        lbl_803EC7C4[p->mUnknownF4] == 1 && !fn_8006560C() && fn_800AD9B4() != 7) {
+        lbl_803EC7C4[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
             float scale = fn_80046920(p);
@@ -181,11 +181,11 @@ void fn_80046DEC(Item_800469EC *p, int enabled)
 void fn_80046E30(int handle)
 {
     lbl_803EC7B8 = handle;
-    fn_801DCF0C(17, 0x128, 5, 0, 0);
-    fn_801DD0C8(lbl_803EC7B8, 17, 0, fn_800469EC);
+    ObjNewType_(17, 0x128, 5, 0, 0);
+    ObjSetListObjFunc(lbl_803EC7B8, 17, 0, fn_800469EC);
     for (int i = 0; i <= 4; ++i) {
         lbl_803EC7C4[i] = 1;
-        Item_800469EC *p = fn_801DD268(lbl_803EC7B8, 17, 0, 0);
+        Item_800469EC *p = ObjNewInList(lbl_803EC7B8, 17, 0, 0);
         lbl_803078D4[i] = p;
         switch (i) {
         case 0:
@@ -215,7 +215,7 @@ void fn_80046E30(int handle)
         TMTexLibLoad(p->mUnknownF8, fn_801EF390(fn_800C47C4(), 17, 1));
         p->mUnknown120 = TMTexLibGetTexture(p->mUnknownF8, 0xFF000000);
         p->mUnknown124 = TMTexLibGetClut(p->mUnknownF8, 0xFF000000, 0);
-        fn_801DD3AC(handle, p, 3);
+        ObjSetPriority(handle, p, 3);
     }
 }
 
@@ -223,12 +223,12 @@ void fn_80046FD0(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
         TMTexLibUnload(lbl_803078D4[i]->mUnknownF8);
-        fn_801DD320(lbl_803EC7B8, lbl_803078D4[i]);
+        ObjRemoveFromList(lbl_803EC7B8, lbl_803078D4[i]);
         VptTrashObject((int)lbl_803078D4[i]);
         lbl_803078D4[i] = 0;
     }
     VptFlushObjectTrashSync();
-    fn_801DCF8C(17);
+    ObjDelType(17);
     lbl_803EC7B8 = 0;
 }
 

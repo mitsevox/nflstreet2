@@ -53456,7 +53456,7 @@
     {
       "source": "src/engine/cu_801E9BB4.cpp",
       "profile": "game_cpp",
-      "evidence": "Bounded comparison-only fragment of eleven complete rigid-body motion helpers 0x801E9BB4-0x801E9F70 within the larger body area beginning at 0x801E9538. The preceding pose setter ends with blr at 0x801E9BB0; the next function 0x801E9F70 constructs the separately registered broad-phase class. These are function boundaries, not recovered original file edges. Shared Body_801E9538 is refined only within previously opaque spans, preserving every existing offset. Native five-float pool 0x802B16B8-0x802B16CC is measured in full. Earlier body functions and following literals/vtable remain original-owned and outside this fragment. Original class identity/member signatures remain unresolved; free C-linkage definitions retain the existing call ABI and original bytes stay linked.",
+      "evidence": "Bounded comparison-only fragment of eleven complete rigid-body motion helpers 0x801E9BB4-0x801E9F70 within the larger body area beginning at 0x801E9538. The preceding pose setter ends with blr at 0x801E9BB0; the next function 0x801E9F70 constructs the separately registered broad-phase class. These are function boundaries, not recovered original file edges. Shared RigidBody_t is refined only within previously opaque spans, preserving every existing offset. Native five-float pool 0x802B16B8-0x802B16CC is measured in full. Earlier body functions and following literals/vtable remain original-owned and outside this fragment. Original class identity/member signatures remain unresolved; free C-linkage definitions retain the existing call ABI and original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

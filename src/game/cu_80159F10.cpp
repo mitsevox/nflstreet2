@@ -15,7 +15,7 @@ extern "C" {
 int VptManagerGetPassIcons(void);
 int PauseIsOpen(void);
 int CamGameGetCurrentSlot(void);
-Camera_8013F738 *CamGameGetCamera(int index);
+GameCamera_t *CamGameGetCamera(int index);
 int PassIconsAreShown(void);
 int PassIconGetPosition(int index, Vector_80039F5C *pOut);
 int PassIconsWereShown(void);
@@ -55,7 +55,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
     if ((PassIconsAreShown() == 1 || PassIconsWereShown() == 1) && lbl_803ECA5C == 1 && PauseIsOpen() == 0) {
         Vector_80039F5C *pPos = &pInstance->mUnknown04;
         if (PassIconGetPosition(pInstance->mUnknown1C, pPos) == 1) {
-            Camera_8013F738 *pCamera;
+            GameCamera_t *pCamera;
             float scale = 1.0f;
             Vector_80039F5C pos;
 

@@ -94,12 +94,12 @@ int MathAngleDiff(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
 void fn_8012CB98(int, unsigned char, int, void *);
 int fn_8012CB50(void *);
-int fn_801DCF0C(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
-int fn_801DCF8C(int);
-void fn_801DD0C8(int, int, int, int (*)(Object_8015C244 *));
-Object_8015C244 *fn_801DD268(int, int, int, void *);
-void fn_801DD3AC(int, Object_8015C244 *, int);
-void fn_801DD320(int, Object_8015C244 *);
+int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
+int ObjDelType(int);
+void ObjSetListObjFunc(int, int, int, int (*)(Object_8015C244 *));
+Object_8015C244 *ObjNewInList(int, int, int, void *);
+void ObjSetPriority(int, Object_8015C244 *, int);
+void ObjRemoveFromList(int, Object_8015C244 *);
 void VptTrashObject(int);
 void VptFlushObjectTrashSync(void);
 void fn_8015BCAC(Object_8015C244 *);
@@ -520,8 +520,8 @@ void fn_8015BCAC(Object_8015C244 *p)
 
 void fn_8015BED4(void)
 {
-    fn_801DCF0C(14, sizeof(Object_8015C244), 27, fn_8015A2B4, fn_8015A354);
-    fn_801DD0C8(lbl_803ECA60, 14, 0, fn_8015A39C);
+    ObjNewType_(14, sizeof(Object_8015C244), 27, fn_8015A2B4, fn_8015A354);
+    ObjSetListObjFunc(lbl_803ECA60, 14, 0, fn_8015A39C);
 }
 
 int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
@@ -543,20 +543,20 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
 void fn_8015BFAC(void)
 {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(14);
+    ObjDelType(14);
 }
 
 Object_8015C244 *fn_8015BFD4(void)
 {
-    Object_8015C244 *p = fn_801DD268(lbl_803ECA60, 14, 0, 0);
-    fn_801DD3AC(lbl_803ECA60, p, 3);
+    Object_8015C244 *p = ObjNewInList(lbl_803ECA60, 14, 0, 0);
+    ObjSetPriority(lbl_803ECA60, p, 3);
     return p;
 }
 
 void fn_8015C024(Object_8015C244 *p)
 {
     if (p) {
-        fn_801DD320(lbl_803ECA60, p);
+        ObjRemoveFromList(lbl_803ECA60, p);
         VptTrashObject((int)p);
     }
 }

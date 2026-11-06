@@ -18,7 +18,7 @@ void *fn_801C1F94();
 void *fn_801C1FBC();
 int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
-void *fn_801E1D04(unsigned int port);
+void *PerSystemGetLLDriverData(unsigned int port);
 unsigned long fn_801E194C(void);
 void fn_8024734C(void *pStatus);
 void fn_802465BC(void *pStatus);
@@ -37,7 +37,7 @@ int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
     port = *pPort;
     status = fn_8025D574(port);
     if (status != 8 && status != 0x80 && status != 0x40) {
-        pJoy = fn_801E1D04(port);
+        pJoy = PerSystemGetLLDriverData(port);
         fn_801C1F94(pJoy, 0, sizeof(JoyData_801E1D44));
         pJoy->mPort = port;
         pJoy->mUnknown02 = 0;

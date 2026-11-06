@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_801442FC.h"
-#include "game/cu_80136B1C.h"
+#include "game/LightTracker.h"
+#include "game/Ball.h"
 
 /* Partial comparison source for the inferred grouping 0x8003F66C-0x800400CC.
    Not a recovered original file. The original assembly stays linked; only the
@@ -46,11 +46,11 @@ struct Object_8003F768 {
     float mUnknown652;
     unsigned char mUnknown656;
     char mUnknown657[3];
-    Object_80144310 *mpUnknown660;
+    LightSource_t *mpUnknown660;
     char mUnknown664[12];
     int mUnknown676;
     int mUnknown680;
-    Tracker_801442FC mUnknown684;
+    LightTracker_t mUnknown684;
     int mUnknown692;
 };
 
@@ -64,15 +64,15 @@ struct Init_8003F768 {
 extern "C" {
 void BallRenderShutdown(Object_8003F768 *p);
 void BallRenderDetach(Object_8003F768 *p);
-int fn_801DCF8C(int type);
-void fn_801DD320(int handle, int item);
+int ObjDelType(int type);
+void ObjRemoveFromList(int handle, int item);
 }
 
 #include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 
 extern "C" {
 unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
@@ -84,7 +84,7 @@ void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 }
 
 extern "C" {
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 unsigned int fn_80236398(int a);
 void BallRenderInit(Object_8003F768 *p);
 void BallRenderAttach(Object_8003F768 *p, int index);
@@ -104,12 +104,12 @@ void fn_801D0C58(float *p);
 void fn_801D0860(Quat_801EB488 *p);
 void fn_801D0F80(float (*p)[4]);
 void fn_801D0544(void);
-void fn_801DCF0C(int type, int size, int count,
+void ObjNewType_(int type, int size, int count,
                  void (*pInit)(Object_8003F768 *, Init_8003F768 *),
                  void (*pDestroy)(Object_8003F768 *));
-void fn_801DD0C8(int owner, int type, int a, int (*pCallback)(Object_8003F768 *));
-Object_8003F768 *fn_801DD268(int owner, int type, int a, Init_8003F768 *pInit);
-void fn_801DD3AC(int owner, Object_8003F768 *p, int flags);
+void ObjSetListObjFunc(int owner, int type, int a, int (*pCallback)(Object_8003F768 *));
+Object_8003F768 *ObjNewInList(int owner, int type, int a, Init_8003F768 *pInit);
+void ObjSetPriority(int owner, Object_8003F768 *p, int flags);
 int fn_8003FBF0(Object_8003F768 *p);
 }
 
@@ -195,7 +195,7 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     p->mpUnknown660 = 0;
     p->mUnknown676 = 0;
     p->mUnknown680 = 0xFFFF;
-    fn_801442FC(&p->mUnknown684);
+    LightTrackerReset(&p->mUnknown684);
     p->mUnknown20 |= 1;
     p->mUnknown652 = 1.0f;
     if (pInit->mpUnknown8 == 0) {
@@ -214,7 +214,7 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     color[1] = ((packed >> 8) & 255) * 0.0078125f;
     color[2] = ((packed >> 16) & 255) * 0.0078125f;
     color[3] = (packed >> 24) * 0.0078125f;
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         SimpShadowAdd(1, &p->mUnknown4, 0.4f, color);
     }
     p->mUnknown692 = pInit->mUnknown12;
@@ -259,16 +259,16 @@ extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos
 
 extern "C" void fn_8003FAC4(int owner)
 {
-    fn_801DCF0C(3, 0x2B8, 3, fn_8003F768, fn_8003F91C);
+    ObjNewType_(3, 0x2B8, 3, fn_8003F768, fn_8003F91C);
     if (owner != 0) {
-        fn_801DD0C8(owner, 3, 0, fn_8003FBF0);
+        ObjSetListObjFunc(owner, 3, 0, fn_8003FBF0);
     }
 }
 
 extern "C" void fn_8003FB2C(void)
 {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(3);
+    ObjDelType(3);
 }
 
 extern "C" Block_80170E64 *fn_8003FB54(int owner, Block_80170E64 *pFirst,
@@ -279,15 +279,15 @@ extern "C" Block_80170E64 *fn_8003FB54(int owner, Block_80170E64 *pFirst,
     init.mUnknown4 = b;
     init.mpUnknown8 = (Object_8003F768 *)pFirst;
     init.mUnknown12 = index;
-    Object_8003F768 *p = fn_801DD268(owner, 3, 0, &init);
-    fn_801DD3AC(owner, p, 8);
+    Object_8003F768 *p = ObjNewInList(owner, 3, 0, &init);
+    ObjSetPriority(owner, p, 8);
     return (Block_80170E64 *)p;
 }
 
 extern "C" void fn_8003FBB4(int handle, int item)
 {
     if (item) {
-        fn_801DD320(handle, item);
+        ObjRemoveFromList(handle, item);
         VptTrashObject(item);
     }
 }
@@ -316,8 +316,8 @@ extern "C" int fn_8003FC68(void)
 
 extern "C" void fn_8003FC70(Block_80170E64 *pBlock, BitStream_t *pStream)
 {
-    int index = fn_80137534(pBlock);
-    Object_80039F5C *pObject = fn_80137AD0(fn_80137ABC(index));
+    int index = BallFindByModel(pBlock);
+    Object_80039F5C *pObject = BallGetHolder(BallGet(index));
     int changed = index == fn_80030CB8();
     fn_80191068(pStream, changed, 1);
     if (changed == 1 && pObject != 0) {
@@ -398,7 +398,7 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
         fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
         QuatSlerp(&pBlock->mUnknown108, &rot1, &rot0, t);
     }
-    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4.mX);
+    pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);
     if (changed0 | changed1) {
         fn_80030CA4(pObject0, pObject1);
     }
@@ -409,12 +409,12 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
     }
 }
 
-extern "C" void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked)
+extern "C" void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked)
 {
     pBlock->mpUnknown676 = pLinked;
 }
 
-extern "C" Object_80041904 *fn_800400C4(Block_80170E64 *pBlock)
+extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock)
 {
     return pBlock->mpUnknown676;
 }

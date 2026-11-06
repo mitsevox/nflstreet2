@@ -7,14 +7,14 @@
    and 0x801D94A0-0x801D9634 (llmoviercmp.cpp). */
 
 /* Decoded frame image: a header followed by the Y, U and V planes. */
-typedef struct Shape_801D94A0 {
+typedef struct Shape_t {
     char mUnknown0[4];
     short mWidth;
     short mHeight;
     char mUnknown8[4];
     unsigned int mFlags;
     int mOffset;
-} Shape_801D94A0;
+} Shape_t;
 
 /* Video state (0x14 bytes). */
 typedef struct Video_801D86B4 {
@@ -50,7 +50,7 @@ typedef struct Chunk_801D86B4 {
 /* Frame returned by the decoder. */
 typedef struct Frame_801D86B4 {
     int mUnknown0;
-    Shape_801D94A0 *mpShape;
+    Shape_t *mpShape;
 } Frame_801D86B4;
 
 class Decoder_801D86B4;
@@ -110,15 +110,15 @@ CodecIData_801D9634 *fn_801D9990(CodecIData_801D9634 *pIData, void *pStreamer, G
                                  ReleaseChunkFunc_801D9634 release, int count);
 }
 
-/* llmoviercmp.cpp (src/engine/cu_801D94A0.cpp). */
-int fn_801D95E4(void *pInfo, void *pChunk);
-void fn_801D94A0(Shape_801D94A0 *pShape);
-void fn_801D9538(Shape_801D94A0 *pShape, int type);
+/* llmoviercmp.cpp (src/engine/llmoviercmp.cpp). */
+int MovieRcmpHandleChunk(void *pInfo, void *pChunk);
+void MovieRcmpRenderInit(Shape_t *pShape);
+void MovieRcmpRenderShape(Shape_t *pShape, int type);
 
 /* Chunk-type tests of rcmp_mad_codec_chunk_types.cpp and rcmp_vp6_codec_chunk_types.cpp. */
-int fn_801DA4F8(int id);
-int fn_801DC9C8(int id);
-int fn_801DC9E0(int id);
+int MAD_CODEC_is_chunk_for_codec(int id);
+int VP6_CODEC_is_head_chunk_for_codec(int id);
+int VP6_CODEC_is_chunk_for_codec(int id);
 
 /* Allocator hooks at 0x80399100. */
 typedef struct Alloc_801D86B4 {

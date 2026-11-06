@@ -22,15 +22,15 @@ Collection_801E7034::~Collection_801E7034()
 // The first shape seeds the bounds; later shapes extend them at both corners.
 void Collection_801E7034::AddShape(Shape_801E2CB4 *pShape)
 {
-    Class_801EADD8 bounds;
+    BoundingBox bounds;
     pShape->vfn_02(&bounds);
     mpShapes[mCount] = pShape;
     mCount++;
     if (mCount == 1) {
-        mLocalBounds.fn_801EAE44(&bounds.mMin, &bounds.mMax);
+        mLocalBounds.SetBounds(&bounds.mMin, &bounds.mMax);
     } else {
-        mLocalBounds.fn_801EAEB4(&bounds.mMin);
-        mLocalBounds.fn_801EAEB4(&bounds.mMax);
+        mLocalBounds.ExtendToPoint(&bounds.mMin);
+        mLocalBounds.ExtendToPoint(&bounds.mMax);
     }
 }
 
@@ -43,7 +43,7 @@ Shape_801E2CB4 *Collection_801E7034::GetShape(unsigned int index)
 // Keep the world-space box synchronized with the supplied body transform.
 void Collection_801E7034::UpdateWorldBounds(float matrix[4][4])
 {
-    mLocalBounds.fn_801EAF60(matrix, &mWorldBounds);
+    mLocalBounds.TransformBox(matrix, &mWorldBounds);
 }
 
 // Each shape supplies its own debug geometry under the body transform.
@@ -58,14 +58,14 @@ void Collection_801E7034::DrawShapes(const float matrix[4][4], int red, int gree
 void Collection_801E7034::DrawBounds(int red, int green, int blue, int worldSpace)
 {
     if (worldSpace) {
-        mWorldBounds.fn_801EB134(red, green, blue);
+        mWorldBounds.DrawDebug(red, green, blue);
     } else {
         for (unsigned char i = 0; i < mCount; i++) {
-            Class_801EADD8 bounds;
+            BoundingBox bounds;
             mpShapes[i]->vfn_02(&bounds);
-            bounds.fn_801EB134(red, green, blue);
+            bounds.DrawDebug(red, green, blue);
         }
-        mLocalBounds.fn_801EB134(red, green, blue);
+        mLocalBounds.DrawDebug(red, green, blue);
     }
 }
 

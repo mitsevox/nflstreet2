@@ -30,23 +30,23 @@ void EnvLayersInit(EnvObj *pObject);
 void EnvLayersFree(EnvObj *pObject);
 int EnvDrawOverlay(void *pObject);
 int EnvDraw(void *pObject);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, void *pItem);
-void fn_801DD3AC(int handle, void *pItem, int b);
+int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, void *pItem);
+void ObjSetPriority(int handle, void *pItem, int b);
 void fn_80234DCC(int a, void *p, const char *pName, int b);
 void fn_80234EA0(void *p, int a);
 void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
 }
 
-static EnvObj *lbl_803EA4B0 = 0;
-static EnvObjOverlay *lbl_803EA4B4 = 0;
+static EnvObj *_EnvObj_pMain = 0;
+static EnvObjOverlay *_EnvObj_pOverlay = 0;
 
 extern "C" {
-void fn_80046340(void)
+void EnvObjAttachModel(void)
 {
     void *pData = fn_800A336C();
     int index = fn_800A3374();
@@ -54,61 +54,61 @@ void fn_80046340(void)
     EnvObj *pObject;
 
     fn_80235DB8(handle);
-    pObject = lbl_803EA4B0;
+    pObject = _EnvObj_pMain;
     pObject->mpUnknown18 = pData;
     pObject->mUnknown1C = index;
     pObject->mUnknown20 = handle;
     fn_80234DCC(handle, pObject->mUnknownE64, "Environment", 1);
 }
 
-int fn_800463B4(void *pObject)
+int EnvObjDrawMain(void *pObject)
 {
     EnvDraw(pObject);
     return 0;
 }
 
-int fn_800463D8(void *pObject)
+int EnvObjDrawOverlay(void *pObject)
 {
     EnvDrawOverlay(pObject);
     return 0;
 }
 
-void fn_800463FC(int handle)
+void EnvObjAddObjType(int handle)
 {
     EnvObj *pObject;
 
-    fn_801DCF0C(6, sizeof(EnvObj), 1, 0, 0);
-    fn_801DCF0C(25, sizeof(EnvObjOverlay), 1, 0, 0);
-    fn_801DD0C8(handle, 6, 0, fn_800463B4);
-    lbl_803EA4B0 = (EnvObj *)fn_801DD268(handle, 6, 0, 0);
-    fn_801DD0C8(handle, 25, 0, fn_800463D8);
-    lbl_803EA4B4 = (EnvObjOverlay *)fn_801DD268(handle, 25, 0, 0);
-    fn_801DD3AC(handle, lbl_803EA4B0, 4);
-    lbl_803EA4B4->mpUnknown14 = lbl_803EA4B0;
-    fn_801DD3AC(handle, lbl_803EA4B4, 12);
-    fn_80046340();
-    pObject = lbl_803EA4B0;
+    ObjNewType_(6, sizeof(EnvObj), 1, 0, 0);
+    ObjNewType_(25, sizeof(EnvObjOverlay), 1, 0, 0);
+    ObjSetListObjFunc(handle, 6, 0, EnvObjDrawMain);
+    _EnvObj_pMain = (EnvObj *)ObjNewInList(handle, 6, 0, 0);
+    ObjSetListObjFunc(handle, 25, 0, EnvObjDrawOverlay);
+    _EnvObj_pOverlay = (EnvObjOverlay *)ObjNewInList(handle, 25, 0, 0);
+    ObjSetPriority(handle, _EnvObj_pMain, 4);
+    _EnvObj_pOverlay->mpUnknown14 = _EnvObj_pMain;
+    ObjSetPriority(handle, _EnvObj_pOverlay, 12);
+    EnvObjAttachModel();
+    pObject = _EnvObj_pMain;
     pObject->mUnknownC = pObject->mUnknown8 = pObject->mUnknown4 = 0.0f;
     EnvLayersInit(pObject);
 }
 
-void fn_80046504(int handle)
+void EnvObjRemoveObjType(int handle)
 {
-    EnvLayersFree(lbl_803EA4B0);
-    fn_80234EA0(lbl_803EA4B0->mUnknownE64, 1);
-    fn_801F010C(lbl_803EA4B0->mpUnknown18, lbl_803EA4B0->mUnknown1C);
-    fn_801DD320(handle, lbl_803EA4B0);
-    VptTrashObject((int)lbl_803EA4B0);
-    fn_801DD320(handle, lbl_803EA4B4);
-    VptTrashObject((int)lbl_803EA4B4);
+    EnvLayersFree(_EnvObj_pMain);
+    fn_80234EA0(_EnvObj_pMain->mUnknownE64, 1);
+    fn_801F010C(_EnvObj_pMain->mpUnknown18, _EnvObj_pMain->mUnknown1C);
+    ObjRemoveFromList(handle, _EnvObj_pMain);
+    VptTrashObject((int)_EnvObj_pMain);
+    ObjRemoveFromList(handle, _EnvObj_pOverlay);
+    VptTrashObject((int)_EnvObj_pOverlay);
     VptFlushObjectTrashSync();
-    fn_801DCF8C(6);
-    lbl_803EA4B0 = 0;
-    fn_801DCF8C(25);
-    lbl_803EA4B4 = 0;
+    ObjDelType(6);
+    _EnvObj_pMain = 0;
+    ObjDelType(25);
+    _EnvObj_pOverlay = 0;
 }
 
-void fn_8004659C(void)
+void EnvObjUpdateFades(void)
 {
     unsigned int i;
     void *pElement;
@@ -118,7 +118,7 @@ void fn_8004659C(void)
     float value;
 
     for (i = 0; i < 10; i++) {
-        pElement = lbl_803EA4B0->mUnknown6E4[i];
+        pElement = _EnvObj_pMain->mUnknown6E4[i];
         a = fn_80146F0C(i);
         b = fn_80146F40(i);
         state = fn_80146EDC(i);

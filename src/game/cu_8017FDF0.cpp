@@ -47,7 +47,7 @@ void fn_80186F9C(int a, char *pText, int c);
 int fn_801486A0(void);
 void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
 int fn_80178AE0(void);
-void fn_801E1BE8(void);
+void PerCheckConnectAll(void);
 void fn_8007AEE8(Object_8007A334 *pObject);
 void fn_8007AF14(Object_8007A334 *pObject);
 int fn_8007AF34(Object_8007A334 *pObject);
@@ -227,7 +227,7 @@ int fn_801800D0(void)
         Object_8007A334 cursor;
         int searching = 1;
 
-        fn_801E1BE8();
+        PerCheckConnectAll();
         fn_8007AEE8(&cursor);
         for (int found = fn_8007A444(&cursor); found && searching; found = fn_8007A510(&cursor)) {
             result = fn_8007AF34(&cursor);
