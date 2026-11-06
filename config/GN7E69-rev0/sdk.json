@@ -834,22 +834,6 @@
       ]
     },
     {
-      "name": "sdk/unassigned/8023ED18",
-      "source": null,
-      "library": "unassigned",
-      "evidence": "SDK-adjacent interval has no established Nintendo source-file ownership; retained under neutral address label.",
-      "sections": [
-        {
-          "section": ".text",
-          "start": "0x8023ED18",
-          "end": "0x8023ED68",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Bounded by adjacent target-backed units; runtime/middleware ownership unresolved. No SDK membership or source completion claim."
-        }
-      ]
-    },
-    {
       "name": "src/dolphin/dvd/dvdfs.c",
       "source": "src/dolphin/dvd/dvdfs.c",
       "library": "DVD",
