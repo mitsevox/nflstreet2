@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "engine/vec.h"
@@ -71,7 +71,7 @@ extern "C" void fn_800B26E0(Object_800B26B0 *pMotion)
             }
         }
         if (pMotion->mUnknown52 != 0.0f && maxSpeed != 0.0f) {
-            Point_80167910 push;
+            Vec2_t push;
 
             fn_80227538(&push, pMotion->mUnknown56, pMotion->mUnknown52);
             float ratio = speed / maxSpeed;

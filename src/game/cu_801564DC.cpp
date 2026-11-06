@@ -356,11 +356,11 @@ Class_80148A58 * fn_80148A58(void);
 void fn_80149040(Object_80039F5C *pObject);
 void fn_8014F3DC(int a);
 void fn_8015C254(int a);
-void fn_80167EA0(int team);
-void fn_80168264(void);
-void fn_80168640(int team, int kind);
-void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
-Team_80168EBC * fn_80168EBC(int team);
+void PlayBookLoadCurrentPlay(int team);
+void PlayBookLoadAudibleTable(void);
+void PlayBookSetFormationType(int team, int kind);
+void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
+Team_80168EBC * PlayBookGetTeam(int team);
 void fn_801735D8(unsigned int mask);
 void fn_80177C50(int a);
 void fn_80177E6C(int a, int b);
@@ -794,20 +794,20 @@ void fn_80156AB0(void)
     a = TutorialGetPlayIndex(fn_801568F0(), fn_801568E8(), side);
     if (side == 1) {
         fn_8017833C(0);
-        fn_80168640(0, 1);
-        fn_80168744(0, 0, 0, (unsigned char)a);
-        fn_80167EA0(0);
-        fn_80168640(1, 11);
-        fn_80168744(1, 0, 0, (unsigned char)b);
-        fn_80167EA0(1);
+        PlayBookSetFormationType(0, 1);
+        PlayBookSetIndices(0, 0, 0, (unsigned char)a);
+        PlayBookLoadCurrentPlay(0);
+        PlayBookSetFormationType(1, 11);
+        PlayBookSetIndices(1, 0, 0, (unsigned char)b);
+        PlayBookLoadCurrentPlay(1);
     } else {
         fn_8017833C(1);
-        fn_80168640(1, 1);
-        fn_80168744(1, 0, 0, (unsigned char)b);
-        fn_80167EA0(1);
-        fn_80168640(0, 11);
-        fn_80168744(0, 0, 0, (unsigned char)a);
-        fn_80167EA0(0);
+        PlayBookSetFormationType(1, 1);
+        PlayBookSetIndices(1, 0, 0, (unsigned char)b);
+        PlayBookLoadCurrentPlay(1);
+        PlayBookSetFormationType(0, 11);
+        PlayBookSetIndices(0, 0, 0, (unsigned char)a);
+        PlayBookLoadCurrentPlay(0);
     }
     fn_800B3EFC(0);
     fn_800B3EFC(1);
@@ -991,10 +991,10 @@ int fn_80157080(void)
                     fn_80177C50(0);
                 }
                 fn_80148A58()->vfn_07(0, 21);
-                fn_80168640(1, 1);
-                fn_80168744(1, 0, 0, 0);
-                fn_80167EA0(1);
-                fn_80085A34(fn_80168EBC(1)->mUnknown40, 1);
+                PlayBookSetFormationType(1, 1);
+                PlayBookSetIndices(1, 0, 0, 0);
+                PlayBookLoadCurrentPlay(1);
+                fn_80085A34(PlayBookGetTeam(1)->mUnknown40, 1);
                 fn_800B3EFC(1);
                 fn_800B63B0();
                 fn_800B847C(fn_800B65A0(1), 0);
@@ -1067,7 +1067,7 @@ int fn_80157080(void)
         fn_8006BCC8(3);
         fn_80072F04();
         fn_8006F394(3, 0);
-        fn_80168264();
+        PlayBookLoadAudibleTable();
     }
     return done;
 }

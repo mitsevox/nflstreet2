@@ -20,7 +20,7 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
@@ -159,7 +159,7 @@ void ParticlesFlush(void);
 void ParticlesStopOnLeave(void);
 void fn_801478A8(void);
 unsigned char fn_801478F0(unsigned char a);
-void fn_8015A0D0(int value);
+void PassIconObjSetEnabled(int value);
 void fn_80162780(int a, int b);
 void fn_80177E6C(int a, int b);
 int fn_80177F70(void);
@@ -1568,7 +1568,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
             }
             break;
         case 31:
-            if (fn_8016871C(fn_80178348())->mUnknown14 != pCond->mArg) {
+            if (PlayBookGetPlay(fn_80178348())->mUnknown14 != pCond->mArg) {
                 ok = 0;
             }
             break;
@@ -2746,7 +2746,7 @@ extern "C" void fn_800308A4(Type_803EA368 *pGame)
     lbl_803EC668 = 0;
     lbl_803EC664 = 0;
     fn_80162780(!(pGame->mUnknownD94 & 0x10000), 0);
-    fn_8015A0D0(0);
+    PassIconObjSetEnabled(0);
 }
 
 extern "C" void fn_800308E8(Type_803EA368 *p)
@@ -2756,7 +2756,7 @@ extern "C" void fn_800308E8(Type_803EA368 *p)
     } else {
         fn_80162780(1, 1);
     }
-    fn_8015A0D0(1);
+    PassIconObjSetEnabled(1);
 }
 
 extern "C" void fn_80030940(Type_803EA368 *pGame)

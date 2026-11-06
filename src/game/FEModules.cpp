@@ -20,12 +20,12 @@ void fn_8015E950(int, int);
 void fn_8015E994(void);
 void fn_8015F35C(void);
 void fn_8015F388(void);
-void fn_80160874(int);
-void fn_80160A80(void);
-void fn_80160B6C(void);
-void fn_801681A8(void);
-void fn_80168210(void);
-void fn_801684B8(int);
+void PlaTexCacheInit(int);
+void PlaTexCacheLoadDefaults(void);
+void PlaTexCacheShutdown(void);
+void PlayBookAlloc(void);
+void PlayBookClear(void);
+void PlayBookCloseDatabases(int);
 void fn_8017F664(void);
 void LevelLightsSelectFrontEnd(void);
 void ResTrackLabel(const char *);
@@ -41,14 +41,14 @@ const char *FEPlyBk::GetName() { return "FEPlyBk"; }
 
 int FEPlyBk::Init()
 {
-    fn_801681A8();
-    fn_80168210();
+    PlayBookAlloc();
+    PlayBookClear();
     return 1;
 }
 
 int FEPlyBk::Shutdown()
 {
-    fn_801684B8(0);
+    PlayBookCloseDatabases(0);
     return 1;
 }
 
@@ -69,8 +69,8 @@ int FEPlyr::Init()
     fn_8015E950(1, 0);
     ResTrackLabel("PlyrModel-FEFinish");
     ResTrackLabel("PlyrTex-FEStart");
-    fn_80160874(2);
-    fn_80160A80();
+    PlaTexCacheInit(2);
+    PlaTexCacheLoadDefaults();
     ResTrackLabel("PlyrTex-FEFinish");
     if (sFirstInit) {
         sFirstInit = 0;
@@ -88,7 +88,7 @@ int FEPlyr::Shutdown()
     FEPlyrShutdown();
     fn_8015E994();
     fn_8015E6C8();
-    fn_80160B6C();
+    PlaTexCacheShutdown();
     return 1;
 }
 

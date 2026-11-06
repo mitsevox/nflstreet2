@@ -9,7 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
@@ -2765,7 +2765,7 @@ extern "C" void fn_8006E010(int value)
 
 extern "C" void fn_8006E08C(void)
 {
-    lbl_803EA69C->mUnknown34 = fn_8016871C(fn_80178308())->mUnknown17;
+    lbl_803EA69C->mUnknown34 = PlayBookGetPlay(fn_80178308())->mUnknown17;
     lbl_803EA69C->mUnknown30 = 0;
     lbl_803EA69C->mFlags = 0;
     lbl_803EA69C->mUnknown24.mX = 0.0f;

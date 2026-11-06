@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/Ball.h"
 #include "game/Message_800F01CC.h"
 #include "game/fn_801C1F94.h"
@@ -10,7 +10,7 @@
 extern "C" {
 int fn_8012CAB4(Object_80039F5C *p);
 float fn_8012CD60(Object_80039F5C *p, float scale);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
@@ -35,7 +35,7 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
         if (pOut != 0) {
             int angle;
             float length;
-            Point_80167910 step;
+            Vec2_t step;
 
             pOut->mX = p->mMotion.mPos.mX;
             pOut->mY = p->mMotion.mPos.mY;

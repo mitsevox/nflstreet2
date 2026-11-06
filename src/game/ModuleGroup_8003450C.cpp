@@ -142,21 +142,21 @@ void fn_8015E6C4(void);
 void fn_8015E6C8(void);
 void fn_8015E950(int a, int b);
 void fn_8015E994(void);
-void fn_80160874(int a);
-void fn_80160A80(void);
-void fn_80160B6C(void);
-void fn_801615EC(void *pOwner);
-void fn_801616C0(void *pOwner);
+void PlaTexCacheInit(int a);
+void PlaTexCacheLoadDefaults(void);
+void PlaTexCacheShutdown(void);
+void EnvSkyObjCreate(void *pOwner);
+void EnvSkyObjDestroy(void *pOwner);
 void fn_80162D78(void);
-void fn_8016781C(void *p);
-void fn_80167860(void);
-void fn_801679B4(void);
-void fn_801681A8(void);
-void fn_80168210(void);
-void fn_80168264(void);
-void fn_80168324(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_80168418(int a, int b, int c, int d, int e, int f, int g);
-void fn_801684B8(int a);
+void PlayArtMemInit(void *p);
+void PlayArtMemShutdown(void);
+void PlayBookPostInit(void);
+void PlayBookAlloc(void);
+void PlayBookClear(void);
+void PlayBookLoadAudibleTable(void);
+void PlayBookOpenAndRegister(int a, int b, int c, int d, int e, int f, int g, int h);
+void PlayBookReopen(int a, int b, int c, int d, int e, int f, int g);
+void PlayBookCloseDatabases(int a);
 void fn_8016B04C(void);
 void fn_8016B0AC(void);
 void fn_80178B5C(void);
@@ -546,7 +546,7 @@ int Env::Init()
     ResTrackLabel("EnvMgrInitStart");
     fn_800A2F48();
     ResTrackLabel("EnvMgrInitFinish");
-    fn_801615EC((void *)GameObjList::GetListHandle());
+    EnvSkyObjCreate((void *)GameObjList::GetListHandle());
     ResTrackLabel("EnvObjAddObjTypeStart");
     EnvObjAddObjType(GameObjList::GetListHandle());
     ResTrackLabel("EnvObjAddObjTypeFinish");
@@ -563,7 +563,7 @@ int Env::Init()
 int Env::Shutdown()
 {
     fn_800A30B8();
-    fn_801616C0((void *)GameObjList::GetListHandle());
+    EnvSkyObjDestroy((void *)GameObjList::GetListHandle());
     return 1;
 }
 
@@ -857,13 +857,13 @@ const char *PlayArtMem::GetName() { return "PlayArtMem"; }
 
 int PlayArtMem::Init()
 {
-    fn_8016781C(gIGMisc.mData.mp);
+    PlayArtMemInit(gIGMisc.mData.mp);
     return 1;
 }
 
 int PlayArtMem::Shutdown()
 {
-    fn_80167860();
+    PlayArtMemShutdown();
     return 1;
 }
 
@@ -924,9 +924,9 @@ void PlayBook::fn_8003549C(int flag)
         fn_801FCE10(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
     }
     if (flag) {
-        fn_80168324((int)gIGMisc.mData.mp, a, b, c, d, e, f, 1);
+        PlayBookOpenAndRegister((int)gIGMisc.mData.mp, a, b, c, d, e, f, 1);
     } else {
-        fn_80168418(a, b, c, d, e, f, 1);
+        PlayBookReopen(a, b, c, d, e, f, 1);
     }
 }
 
@@ -940,17 +940,17 @@ const char *PlayBook::GetName() { return "PlayBook"; }
 
 int PlayBook::Init()
 {
-    fn_801681A8();
-    fn_80168210();
+    PlayBookAlloc();
+    PlayBookClear();
     fn_8003549C(1);
-    fn_801679B4();
-    fn_80168264();
+    PlayBookPostInit();
+    PlayBookLoadAudibleTable();
     return 1;
 }
 
 int PlayBook::Shutdown()
 {
-    fn_801684B8(1);
+    PlayBookCloseDatabases(1);
     return 1;
 }
 
@@ -969,8 +969,8 @@ const char *Plyr::GetName() { return "Plyr"; }
 int Plyr::Init()
 {
     ResTrackLabel("PlyrObjsInitStart");
-    fn_80160874(14);
-    fn_80160A80();
+    PlaTexCacheInit(14);
+    PlaTexCacheLoadDefaults();
     fn_8015E654(1);
     fn_8015E6C4();
     fn_8015E950(1, 1);
@@ -991,7 +991,7 @@ int Plyr::Shutdown()
     fn_80039890();
     fn_8003DCC0(GameObjList::GetListHandle());
     fn_8015E6C8();
-    fn_80160B6C();
+    PlaTexCacheShutdown();
     return 1;
 }
 

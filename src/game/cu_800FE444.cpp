@@ -61,7 +61,7 @@ float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
 int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
-int fn_80168E00(int,int,unsigned char *);
+int PlayBookGetReceiver(int,int,unsigned char *);
 void fn_8009BD2C(Object_80039F5C *,int *);
 void fn_8012430C(Directions_8012430C *,int,Object_80039F5C *);
 unsigned char fn_801243E0(Directions_8012430C *,int);
@@ -1021,7 +1021,7 @@ Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle)
     maximum.mX = -100.0f;
     maximum.mY = -100.0f;
     for (i = 0; i < 3; i++) {
-        unsigned int index = fn_80168E00(p->mIdBytes[2], i, &active);
+        unsigned int index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
 
         if (index != 255 && active) {
             Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned short)index);

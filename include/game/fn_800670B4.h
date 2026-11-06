@@ -3,7 +3,7 @@
 
 #include "game/Object_8017886C.h"
 
-struct Team_80167A8C;
+struct PlayBookTeam_t;
 
 /* One of the 8-byte slots at Object_8006719C +0x1C, filled by fn_80066318. */
 struct Slot_8006719C {
@@ -98,8 +98,8 @@ extern "C" {
 unsigned short fn_80067038(int tag, int kind);
 int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
 unsigned short fn_80067120(int tag, int key);
-void fn_8006719C(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject);
-void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject);
+void fn_8006719C(int tag, int key, int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject);
+void fn_8006723C(int tag, int key, PlayBookTeam_t *pTeam, Object_8006719C *pObject);
 unsigned short fn_800672BC(int tag, int key);
 int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord);
 }

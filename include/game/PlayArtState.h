@@ -1,12 +1,12 @@
-#ifndef GAME_STATE_80167094_H
-#define GAME_STATE_80167094_H
+#ifndef GAME_PLAYARTSTATE_H
+#define GAME_PLAYARTSTATE_H
 #include <dolphin/gx/GXStruct.h>
-struct Point_80167094 { float mX, mY; };
+struct PlayArtVertex_t { float mX, mY; };
 /* State passed from the play-data producers to the textured drawing callbacks. */
-struct State_80167094 {
+struct PlayArtState_t {
     unsigned char mUnknown0[0x940];
     int mUnknown940[12];
-    Point_80167094 mUnknown970[11][12][4];
+    PlayArtVertex_t mUnknown970[11][12][4];
     int mUnknown19F0[11][12];
     unsigned char mUnknown1C00[0x210];
     int mUnknown1E10[11][12];

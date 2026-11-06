@@ -1,7 +1,7 @@
 /* The three pass icons shown above the players the ball can be passed to. */
 
-#include "game/cu_80159F10.h"
-#include "game/fn_8016871C.h"
+#include "game/PassIconObj.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_800F06F4.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800AD9B4.h"
@@ -10,7 +10,7 @@ extern "C" {
 void *PassIconStateGetFlags(int value);
 int fn_8011E9D8(State_80039F5C *pState);
 int fn_8011F1F4(void);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int fn_80178308(void);
 int fn_801784C4(void);
 int fn_800C47C4(void);
@@ -18,7 +18,7 @@ int fn_800C47C4(void);
 
 static float _PassIcon_fHeight = 2.5f;
 static unsigned char _PassIcon_DefaultSlots[3] = { 2, 1, 3 };
-static Instance_80159F10 *_PassIcon_pIcons[3];
+static PassIconObj_t *_PassIcon_pIcons[3];
 
 extern "C" {
 
@@ -45,7 +45,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
             for (i = 0; i < 7 && result; i++) {
                 Object_80039F5C *pOther = fn_80039F5C(1, i);
                 if (pOther != 0) {
-                    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+                    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
                     void *pResult = fn_80164EC8(pRecord, fn_80178308(), i);
                     if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {
@@ -62,9 +62,9 @@ void PassIconsCreate(void *pOwner)
 {
     unsigned char i;
 
-    fn_8015A110(pOwner);
+    PassIconObjRegister(pOwner);
     for (i = 0; i < 3; i++) {
-        _PassIcon_pIcons[i] = fn_8015A1A8(pOwner, i, fn_800C47C4(), i + 1);
+        _PassIcon_pIcons[i] = PassIconObjNew(pOwner, i, fn_800C47C4(), i + 1);
     }
 }
 
@@ -73,9 +73,9 @@ void PassIconsDestroy(void *pOwner)
     unsigned char i;
 
     for (i = 0; i < 3; i++) {
-        fn_8015A204(pOwner, _PassIcon_pIcons[i]);
+        PassIconObjDelete(pOwner, _PassIcon_pIcons[i]);
     }
-    fn_8015A17C();
+    PassIconObjUnregister();
 }
 
 void PassIconsShow(int mode)
@@ -115,7 +115,7 @@ int PassIconGetSlot(int index, int force)
     unsigned char *pFlags = (unsigned char *)PassIconStateGetFlags(0);
     int team = fn_80178308();
     unsigned char found;
-    int slot = fn_80168E00(team, index, &found);
+    int slot = PlayBookGetReceiver(team, index, &found);
 
     fn_80178308();
     if (slot != 0xFF) {
@@ -155,7 +155,7 @@ int PassIconGetPosition(int index, Vector_80039F5C *pOut)
             pOut->mY = -pOut->mY;
         }
         pOut->mZ += _PassIcon_fHeight;
-        fn_8015A240(_PassIcon_pIcons[index], 2);
+        PassIconObjSetPalette(_PassIcon_pIcons[index], 2);
         result = 1;
     }
     return result;

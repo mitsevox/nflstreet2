@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
@@ -11,7 +11,7 @@ struct Input_800B2A14 {
     unsigned char mMove;
     char mUnknown2[2];
     int mTurnAngle;
-    Point_80167910 mMove8;
+    Vec2_t mMove8;
 };
 
 extern "C" {

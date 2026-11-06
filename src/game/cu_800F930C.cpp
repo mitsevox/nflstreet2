@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -56,7 +56,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 unsigned char fn_800FC0C4(Object_80039F5C *p);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 void *fn_8011F4EC(void);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 extern float lbl_803EAE60;
@@ -235,7 +235,7 @@ extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag) {
 
     for (i = 0; i <= 2; i++) {
         unsigned char valid;
-        int index = fn_80168E00(team, i, &valid);
+        int index = PlayBookGetReceiver(team, i, &valid);
 
         if (valid && index != 0xFF) {
             Object_80039F5C *pTarget = fn_80039F5C(team, index);

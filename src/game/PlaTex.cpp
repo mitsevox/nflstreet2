@@ -17,7 +17,7 @@ int PlaTexFindDynClut(Row_8007BC34 *pRow);
 int fn_8007BF14(int index);
 int fn_8007C67C(Row_8007BC34 *pRow);
 int PlaDynClutFind(char *pName);
-int fn_80161048(char *pName);
+int PlaTexCacheFindTexture(char *pName);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 int fn_801C31B0(char *pText0, char *pText1);
@@ -70,7 +70,7 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
 
             fn_801C2D88(name, sizeof(name), "PLATEX_%s_%02d_%s", pRow->mName, pRecord->mUnknown72, lbl_802CF280[10]);
             i = 17;
-            id = fn_80161048(name);
+            id = PlaTexCacheFindTexture(name);
             if (slot == 6) {
                 i = 16;
             }
@@ -98,7 +98,7 @@ void PlaTexBuildPartIds(Row_8007BC34 *pRow, PlayerLook_t *pRecord, int *pIds, in
             }
             fn_801C2F88(name, "_", sizeof(name) - 1 - strlen(name));
             fn_801C2F88(name, lbl_802CF280[part], sizeof(name) - 1 - strlen(name));
-            pIds[i] = fn_80161048(name);
+            pIds[i] = PlaTexCacheFindTexture(name);
             pPalettes[i] = palette;
         }
     }
@@ -154,7 +154,7 @@ void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
         } else {
             fn_801C2D88(name, sizeof(name), "PLATEX_%s_%s%02d", lbl_802CF020[i], lbl_802CF010[pRecord->mUnknown78], pRecord->mUnknown72);
         }
-        pIds[i] = fn_80161048(name);
+        pIds[i] = PlaTexCacheFindTexture(name);
         PlaTexSetArmArtIds(pIds, i, pRecord);
     }
 }

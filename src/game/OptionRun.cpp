@@ -9,7 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_80178D18.h"
@@ -44,7 +44,7 @@ float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
 void PassIconsShow(int mode);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 int fn_80177F70(void);
@@ -580,10 +580,10 @@ extern "C" void OptionRunMirror(Object_80039F5C *p)
         break;
     }
     i = 0;
-    pObject = fn_80168708(fn_80178308());
+    pObject = PlayBookGetFormation(fn_80178308());
     count = fn_80178D18(fn_80178308());
     for (; i < count; i++) {
-        if (fn_80163E94(pObject, i, 0)->mUnknownB == p->mIdBytes[2]) {
+        if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == p->mIdBytes[2]) {
             p->mIdBytes[2] = i;
             break;
         }

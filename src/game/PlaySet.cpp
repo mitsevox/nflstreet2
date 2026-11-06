@@ -1,9 +1,12 @@
+/* Formation sets of a loaded play: finds each player's entry (start spot, facing and
+   order) for a named set such as "Norm", and steps through the players in order. */
+
 #include <string.h>
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 
 extern "C" {
@@ -11,17 +14,17 @@ extern "C" {
 int fn_80178308(void);
 int fn_80178320(void);
 
-int fn_801641E0(Object_800670B4 *pObject, int index, const char **ppNames);
+int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames);
 
 /* Returns a pointer to entry index of row 0, first swapping into row 0 the
    entry of the row that ppNames selects. */
-Entry_8006719C *fn_80163E94(Object_800670B4 *pObject, unsigned int index, const char **ppNames)
+Entry_8006719C *PlaySetGetEntry(Object_800670B4 *pObject, unsigned int index, const char **ppNames)
 {
     if (index > 6) {
         index = 0;
     }
     if (ppNames) {
-        int row = fn_801641E0(pObject, index, ppNames);
+        int row = PlaySetFindRow(pObject, index, ppNames);
 
         if (row != -1 && row != 0) {
             Entry_8006719C entry = pObject->mUnknown8.mUnknown84[row][index];
@@ -33,7 +36,7 @@ Entry_8006719C *fn_80163E94(Object_800670B4 *pObject, unsigned int index, const 
     return &pObject->mUnknown8.mUnknown84[0][index];
 }
 
-void fn_80164058(Object_800670B4 *pObject, int row, int index)
+void PlaySetSwapRow(Object_800670B4 *pObject, int row, int index)
 {
     Entry_8006719C entry = pObject->mUnknown8.mUnknown84[row][index];
 
@@ -44,7 +47,7 @@ void fn_80164058(Object_800670B4 *pObject, int row, int index)
 /* Looks the names of the null-terminated list ppNames up in the name table
    and returns the first row whose entry index carries the id of a name found
    there, or -1. */
-int fn_801641E0(Object_800670B4 *pObject, int index, const char **ppNames)
+int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames)
 {
     int row = 0;
     int i = 0;
@@ -74,7 +77,7 @@ int fn_801641E0(Object_800670B4 *pObject, int index, const char **ppNames)
 
 /* Returns the index of the entry whose mUnknown8 follows that of entry
    index, wrapping to 1 after the team's player count. */
-int fn_801642DC(Object_800670B4 *pObject, unsigned char index)
+int PlaySetGetNextOrder(Object_800670B4 *pObject, unsigned char index)
 {
     unsigned int count;
     unsigned char next;
@@ -100,8 +103,8 @@ int fn_801642DC(Object_800670B4 *pObject, unsigned char index)
     return i;
 }
 
-/* As fn_801642DC, stepping back and wrapping to the player count. */
-int fn_80164384(Object_800670B4 *pObject, unsigned char index)
+/* As PlaySetGetNextOrder, stepping back and wrapping to the player count. */
+int PlaySetGetPrevOrder(Object_800670B4 *pObject, unsigned char index)
 {
     unsigned int count;
     unsigned char previous;
@@ -128,21 +131,21 @@ int fn_80164384(Object_800670B4 *pObject, unsigned char index)
     return i;
 }
 
-void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB)
+void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB)
 {
     *pA = pObject->mUnknown8.mUnknown84[0][index].mUnknown0;
     *pB = pObject->mUnknown8.mUnknown84[0][index].mUnknown3;
 }
 
-Object_80039F5C *fn_8016444C(Object_800670B4 *pObject)
+Object_80039F5C *PlaySetGetKeyPlayer(Object_800670B4 *pObject)
 {
-    if (fn_8016871C(fn_80178308())->mUnknown18 & 0x20000) {
+    if (PlayBookGetPlay(fn_80178308())->mUnknown18 & 0x20000) {
         return fn_80039F5C(fn_80178308(), 1);
     }
     return fn_80039F5C(fn_80178308(), pObject->mUnknown8.mUnknownE);
 }
 
-void fn_801644A0(Object_80039F5C *p)
+void PlaySetPointToRoleMate(Object_80039F5C *p)
 {
     Message_800F01CC msg;
     int post = 0;

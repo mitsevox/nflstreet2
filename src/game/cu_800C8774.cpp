@@ -37,7 +37,7 @@
 #include "game/RecordList_8002E7C0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Table_80089904.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
@@ -51,12 +51,12 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
@@ -71,7 +71,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
-#include "game/cu_80164568.h"
+#include "game/PlayAlign.h"
 #include "game/EnvFogSettings.h"
 
 extern "C" {
@@ -100,7 +100,7 @@ int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 float MathInverse(float value);
 int MathAngleDiff(int a, int b);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227890(void *, void *);
@@ -538,7 +538,7 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     Point_8017886C delta;
     Point_8017886C origin = {0.0f, 0.0f};
     Point_8017886C toTarget;
-    Point_80167910 arc;
+    Vec2_t arc;
     Point_8017886C aim;
     int infoAngle = pInfo->mUnknown56;
     int facing = p->mMotion.mFacing;

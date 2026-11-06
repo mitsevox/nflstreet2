@@ -211,8 +211,8 @@ int PlayerDbGetPlex(Object_8008044C *pObject);
 int PlayerDbGetHairColor(Object_8008044C *pObject);
 int PlayerDbGetFacialHairColor(Object_8008044C *pObject);
 void fn_8015F638(int a, int b, int c, int *pResult);
-int fn_8016128C(int a);
-void fn_8016139C(int a, int *pId, int *pPalette);
+int PlaTexCacheGetCapFaceId(int a);
+void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 
 void fn_8018B8B0(Object_8008044C *pObject)
 {
@@ -303,8 +303,8 @@ void fn_8018BB24(int index, int value)
     fn_80082138(&object, &block);
     FaceMorphBuildWeights(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
-    fn_8016139C(value6E, &unknown52, &unknown56);
-    int unknown8 = fn_8016128C(value72 + 1);
+    PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
+    int unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
     int unknown12 = value73 * 3 + value74 + 0x33BA;
     fn_801C1F94(&text60, 0, sizeof(text60));
     fn_801C1F94(&text20, 0, sizeof(text20));
@@ -360,8 +360,8 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         fn_80082138(&object, &block);
         FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
-        fn_8016139C(value6E, &unknown52, &unknown56);
-        int unknown8 = fn_8016128C(value72 + 1);
+        PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
+        int unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
         int unknown12 = value73 * 3 + value74 + 0x33BA;
         fn_801C1F94(&text60, 0, sizeof(text60));
         fn_801C1F94(&text20, 0, sizeof(text20));

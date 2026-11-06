@@ -4,7 +4,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include <math.h>
 #include "engine/viewport.h"
 #include "game/Lookup_8012078C.h"

@@ -59,7 +59,7 @@ void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int fn_80178320(void);
 unsigned int fn_802372EC(unsigned int, unsigned int);
-unsigned char fn_80168E00(int, unsigned char, unsigned char *);
+unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
 void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, float *values)
 {
@@ -205,7 +205,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         float nearest = 999.0f;
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char active;
-            unsigned char index = fn_80168E00(p->mIdBytes[2], i, &active);
+            unsigned char index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
             if (index != 255 && active) {
                 Object_80039F5C *candidate = fn_80039F5C(p->mIdBytes[2], index);
                 if (candidate->mMotion.mPos.mY < point[1] + 2.5f || candidate == ball) {

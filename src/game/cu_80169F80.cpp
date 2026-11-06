@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/Candidate_8016B364.h"
 #include "game/Class_80148A58.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
@@ -17,7 +17,7 @@ int fn_800A82FC(int team);
 int fn_800A8430(int team);
 int fn_800C8744(int team);
 int fn_801485D4(void);
-int fn_80168EA8(int team);
+int PlayBookGetDatabase(int team);
 int fn_80177F70(void);
 int fn_80178308(void);
 float fn_80178A5C(void);
@@ -363,7 +363,7 @@ void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count)
 void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
 {
     int opponent = team ^ 1;
-    Record_80067338 *pRecord = fn_8016871C(opponent);
+    Record_80067338 *pRecord = PlayBookGetPlay(opponent);
     unsigned char kind;
     unsigned char trend;
     unsigned int mask;
@@ -380,7 +380,7 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
     int key = team == 0 ? fn_80187C8C() : fn_80187C6C();
     if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
         rating = 50;
-    fn_80168EA8(team);
+    PlayBookGetDatabase(team);
 
     for (unsigned short i = 0; i < count; i++) {
         float weight = pList[i].mUnknown4;
@@ -518,7 +518,7 @@ void fn_8016B0AC(void)
 void fn_8016B0B0(void)
 {
     int team = fn_80178308();
-    Record_80067338 *pRecord = fn_8016871C(team);
+    Record_80067338 *pRecord = PlayBookGetPlay(team);
 
     lbl_803EB40C->mUnknown0 = fn_8016B8C8(team, pRecord->mUnknown4);
     lbl_803EB40C->mUnknown4 = fn_8016A334(team);

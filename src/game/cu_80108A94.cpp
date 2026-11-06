@@ -14,7 +14,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -23,8 +23,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -100,7 +100,7 @@ int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_8009A6EC(Object_80039F5C *p);
 int fn_8009A77C(Object_80039F5C *p);
 void fn_8009A8D4(void *p);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_80178308(void);
 int fn_801783AC(int bit);
@@ -202,7 +202,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
         unsigned char i;
 
         for (i = 0; i <= 2; i++) {
-            int index = fn_80168E00(fn_80178308(), i, 0);
+            int index = PlayBookGetReceiver(fn_80178308(), i, 0);
 
             if (index != 0xFF) {
                 pOther = fn_80039F5C(fn_80178308(), index);

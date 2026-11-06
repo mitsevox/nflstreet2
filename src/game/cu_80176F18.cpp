@@ -16,7 +16,7 @@
 #include "game/cu_8003108C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801FCE10.h"
@@ -1455,7 +1455,7 @@ extern "C" void fn_8017916C(void)
 
 extern "C" int fn_80179244(void)
 {
-    return fn_801650DC(fn_8016871C(fn_80178348()));
+    return fn_801650DC(PlayBookGetPlay(fn_80178348()));
 }
 
 extern "C" void fn_8017926C(int handle, int tag, int value, int kind)
@@ -2614,7 +2614,7 @@ extern "C" void fn_8017BD70(Object_8017886C *pResult, int kind, unsigned char fl
             lbl_803EB450(8, 0x7FFF, 0);
         }
 
-        if (fn_8016871C((unsigned char)defense)->mUnknown14 == 31) {
+        if (PlayBookGetPlay((unsigned char)defense)->mUnknown14 == 31) {
             fn_801794F0(defense, 0x7A627374, 1);
         }
     }
