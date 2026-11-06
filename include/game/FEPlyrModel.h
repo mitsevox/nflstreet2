@@ -1,5 +1,5 @@
-#ifndef GAME_RECORD_8036B55C_H
-#define GAME_RECORD_8036B55C_H
+#ifndef GAME_FEPLYRMODEL_H
+#define GAME_FEPLYRMODEL_H
 
 #include "engine/Record_800D81C8.h"
 #include "game/Object_8003DEC4.h"
@@ -18,8 +18,8 @@ struct Object_800B267C {
     float mUnknown36;
 };
 
-/* Element of lbl_8036B55C. */
-struct Record_8036B55C {
+/* Element of _FEPlyr_aModels. */
+struct FEPlyrModel_t {
     char mUnknown0[1];
     unsigned char mUnknown1;
     char mUnknown2[2];

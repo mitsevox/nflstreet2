@@ -28,16 +28,16 @@ struct Block_800624B8 {
 };
 
 extern "C" {
-void fn_80022398(void);
-void fn_800223C0(void);
-void fn_800223E4(int index, float x, float y, float z);
-void fn_8002248C(int index, unsigned char value);
-void fn_800224A4(int index, float angle);
-void fn_8002251C(int index, unsigned char value);
-void fn_80022534(int index, float scale);
-void fn_80022580(int index, int a, int b);
-void fn_80022680(int index, int a, int b);
-void fn_80022730(int index, int value);
+void FEPlyrShow(void);
+void FEPlyrHide(void);
+void FEPlyrSetPosition(int index, float x, float y, float z);
+void FEPlyrSetHoldPosition(int index, unsigned char value);
+void FEPlyrSetAngle(int index, float angle);
+void FEPlyrSetHoldAngle(int index, unsigned char value);
+void FEPlyrSetScale(int index, float scale);
+void FEPlyrPlayAnim(int index, int a, int b);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrSetPriority(int index, int value);
 void fn_80061DDC(void);
 int fn_800841AC(Object_8007A334 *pObject);
 int fn_800841D8(Object_8007A334 *pObject);
@@ -97,7 +97,7 @@ void fn_80062000(void)
 
     lbl_803EC7F4 = fn_8018BE68(lbl_803EC7FC, 1, &result);
     lbl_803EC7F8 = result.mUnknown0;
-    fn_80022680(0, result.mUnknown0, 1);
+    FEPlyrSetPlayer(0, result.mUnknown0, 1);
 }
 
 void fn_8006204C(void)
@@ -137,14 +137,14 @@ void fn_80062160(int *pId)
     if (lbl_803EA600 == 0) {
         lbl_803EA600 = 1;
         lbl_803EC7FC = fn_8022F384(fn_8022F4BC());
-        fn_80022398();
-        fn_800223E4(0, lbl_802D4EB0.mPosition[0], lbl_802D4EB0.mPosition[1], lbl_802D4EB0.mPosition[2]);
-        fn_800224A4(0, 0.0f);
-        fn_80022534(0, lbl_802D4EB0.mScale);
-        fn_8002248C(0, 0);
-        fn_8002251C(0, 0);
-        fn_80022730(0, lbl_802D4EB0.mUnknown16);
-        fn_80022580(0, 82, 0);
+        FEPlyrShow();
+        FEPlyrSetPosition(0, lbl_802D4EB0.mPosition[0], lbl_802D4EB0.mPosition[1], lbl_802D4EB0.mPosition[2]);
+        FEPlyrSetAngle(0, 0.0f);
+        FEPlyrSetScale(0, lbl_802D4EB0.mScale);
+        FEPlyrSetHoldPosition(0, 0);
+        FEPlyrSetHoldAngle(0, 0);
+        FEPlyrSetPriority(0, lbl_802D4EB0.mUnknown16);
+        FEPlyrPlayAnim(0, 82, 0);
         fn_80062000();
         lbl_803EC7FD = fn_8018526C();
         if (fn_8018C0E8(lbl_803EC7FC, pId)) {
@@ -170,7 +170,7 @@ void fn_80062308(void)
 {
     if (lbl_803EA600) {
         fn_8002ADAC();
-        fn_800223C0();
+        FEPlyrHide();
         if (fn_80183950() == 0) {
             fn_8018C48C(0x54415453);
         }

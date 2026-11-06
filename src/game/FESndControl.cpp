@@ -1,3 +1,5 @@
+/* Front-end sound: starts, services every frame and stops the audio of the menus. */
+
 struct Struct_8006C2C8;
 
 extern "C" {
@@ -12,7 +14,7 @@ void fn_800728F8(void);
 void fn_80073F58(void);
 void fn_801F4B20(void);
 
-void fn_80022FF0(void)
+void FESndInit(void)
 {
     fn_8006C2C8(&lbl_802D62A0);
     fn_8006D314();
@@ -20,13 +22,13 @@ void fn_80022FF0(void)
     fn_8006EC24();
 }
 
-void fn_80023024(int a)
+void FESndUpdate(int a)
 {
     fn_800728F8();
     fn_801F4B20();
 }
 
-void fn_80023048(void)
+void FESndShutdown(void)
 {
     fn_8006D338();
     fn_8006C454();

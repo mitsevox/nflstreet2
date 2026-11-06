@@ -37,7 +37,7 @@ void fn_8021956C(void *p, int a, int b, int c);
 void FileDebugProcess(void);
 void fn_8006CA84(int a);
 void fn_8018A7B0(void);
-void fn_80023024(int a);
+void FESndUpdate(int a);
 void fn_80187E08(int show, const char *pText, int a, int b);
 extern unsigned char lbl_803EB61D;
 extern unsigned char lbl_803EB624;
@@ -45,7 +45,7 @@ extern unsigned char lbl_803EB61B;
 
 void fn_801F87FC(int a);
 int fn_8017F60C(void);
-void fn_8002129C(char *pDest, int length);
+void MsgNameEntryGetName(char *pDest, int length);
 int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
 
 void fn_80187AD4(int id)
@@ -125,7 +125,7 @@ void fn_80187D10(void)
                 }
             }
             if ((unsigned char)(index % 10) == 9) {
-                fn_80023024(1);
+                FESndUpdate(1);
             }
         }
     }
@@ -236,7 +236,7 @@ void fn_8018807C(unsigned char value)
 
 void fn_801880B4(char *pText, int length)
 {
-    fn_8002129C(pText, length);
+    MsgNameEntryGetName(pText, length);
 }
 
 void fn_801880D4(int value, char *pText, int length)

@@ -3677,9 +3677,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002306C.cpp",
+      "source": "src/game/FaceTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002306C-0x800231B0 (src/game/cu_8002306C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8002306C-0x800231B0 (src/game/FaceTable.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -9338,9 +9338,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001BB20.cpp",
+      "source": "src/game/MsgStreetEvent.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/cu_8001BB20.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/MsgStreetEvent.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",

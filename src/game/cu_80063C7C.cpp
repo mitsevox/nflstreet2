@@ -4,12 +4,12 @@
 
 extern "C" {
 int fn_8000F870(int module, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8001BB20(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int MsgStreetEventDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_8001D0F4(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_8001D180(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8001D2D8(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8001F074(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8001F120(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int MsgMemCardDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int MsgTeamDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_80059664(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_80063AA8(int kind, int id, void *pArgs, int c, int *pResult);
 int fn_8017F6A8(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
@@ -453,13 +453,13 @@ extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg
         handled = fn_8000F870(group, id, pArgs, count, pResult);
         break;
     case 13:
-        handled = fn_8001BB20(group, id, pArgs, count, pResult);
+        handled = MsgStreetEventDispatch(group, id, pArgs, count, pResult);
         break;
     case 11:
         handled = fn_8001D180(group, id, pArgs, count, pResult);
         break;
     case 6:
-        handled = fn_8001D2D8(group, id, pArgs, count, pResult);
+        handled = MsgMemCardDispatch(group, id, pArgs, count, pResult);
         break;
     case 3:
         handled = fn_80059664(group, id, pArgs, count, pResult);
@@ -468,7 +468,7 @@ extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg
         handled = fn_80063AA8(group, id, pArgs, count, pResult);
         break;
     case 5:
-        handled = fn_8001F120(group, id, pArgs, count, pResult);
+        handled = MsgOptionsDispatch(group, id, pArgs, count, pResult);
         break;
     case 2:
         handled = fn_8017F6A8(group, id, pArgs, count, pResult);
@@ -480,7 +480,7 @@ extern "C" void fn_80064690(unsigned int id, int kind, int group, int count, Arg
         handled = fn_8001D0F4(group, id, pArgs, count, pResult);
         break;
     case 8:
-        handled = fn_8001F074(group, id, pArgs, count, pResult);
+        handled = MsgTeamDispatch(group, id, pArgs, count, pResult);
         break;
     }
     if (handled == 0) {

@@ -102,12 +102,12 @@ void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
 void fn_8001B828(void);
 void fn_8001ED90(unsigned char value);
-int fn_80023514(void);
-void fn_80023560(void);
-void fn_800235DC(void);
-void fn_80023634(int *pCount);
-void fn_80023684(char *pDest, int count);
-void fn_800236B0(int *pValue);
+int CreditsFetchLine(void);
+void CreditsOpen(void);
+void CreditsClose(void);
+void CreditsCountLines(int *pCount);
+void CreditsGetLine(char *pDest, int count);
+void CreditsGetLineType(int *pValue);
 int fn_80025708(void);
 int fn_80025718(void);
 unsigned char fn_8002892C(void);
@@ -3486,24 +3486,24 @@ void fn_800164F0(char *pText)
 
 void fn_800165BC(void)
 {
-    fn_80023560();
+    CreditsOpen();
     lbl_803EB9EC = -1;
     lbl_803EB9ED = 2;
 }
 
 void fn_800165EC(void)
 {
-    fn_800235DC();
+    CreditsClose();
 }
 
 void fn_8001660C(int *pCount, int *pValue, Params_80005284 *pRecord)
 {
     int ok = 1;
     if (lbl_803EB9EC < 0) {
-        ok = fn_80023514();
+        ok = CreditsFetchLine();
     }
     if (ok) {
-        fn_800236B0(pValue);
+        CreditsGetLineType(pValue);
         if (lbl_803EB9EC == -1 && *pValue == 2 && lbl_803EB9ED != 2) {
             lbl_803EB9EC = 2;
         } else if (lbl_803EB9EC == -1 && *pValue == 1 && lbl_803EB9ED != 1) {
@@ -3515,7 +3515,7 @@ void fn_8001660C(int *pCount, int *pValue, Params_80005284 *pRecord)
             *pValue = 0;
             (*pCount)--;
         } else {
-            fn_80023684(pRecord->mpText, pRecord->mLength);
+            CreditsGetLine(pRecord->mpText, pRecord->mLength);
             lbl_803EB9EC = -1;
             lbl_803EB9ED = *pValue;
         }
@@ -3531,7 +3531,7 @@ int fn_80016730(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     switch (id) {
     case 0x80000001:
         fn_800165BC();
-        fn_80023634(pArgs[0].pi);
+        CreditsCountLines(pArgs[0].pi);
         break;
     case 0x80000002:
         fn_800165EC();

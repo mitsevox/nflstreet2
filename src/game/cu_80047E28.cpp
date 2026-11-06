@@ -53,7 +53,7 @@ extern Colors_802CFB1C lbl_802CFB1C[22];
 extern int lbl_802CFB74[22];
 extern unsigned char lbl_803EA4CA;
 
-int fn_8001E4F4(void);
+int MsgPlayerPickupIsOpen(void);
 int fn_8003DEB4(void);
 void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
@@ -810,7 +810,7 @@ extern "C" void fn_800496A0(unsigned int mode, int index, int unused, int id)
 {
     int flag = 1;
 
-    if (fn_80027DF0() && fn_8001E4F4() && fn_8005FC7C()) {
+    if (fn_80027DF0() && MsgPlayerPickupIsOpen() && fn_8005FC7C()) {
         Object_8007A334 cursor;
 
         fn_8007A334(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);

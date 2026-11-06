@@ -38,7 +38,7 @@ struct Saved_802D4D64 {
 };
 
 /* Street event settings; fn_8005E4A8 sets the timer words. */
-struct Settings_8031BDD4 {
+struct MiniGameSettings_t {
     char mUnknown0[32];
     int mUnknown32;
     int mUnknown36;
@@ -168,7 +168,7 @@ int fn_80178AE0(void);
 Object_8008044C lbl_8030A0E4;
 Object_8007A334 lbl_8030A110;
 VetsRow_8018EC68 lbl_8030A13C;
-extern Settings_8031BDD4 lbl_8031BDD4;
+extern MiniGameSettings_t lbl_8031BDD4;
 
 Match_8030A1A0 lbl_8030A1A0;
 int lbl_8030A1AC[2][7];

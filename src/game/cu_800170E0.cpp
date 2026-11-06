@@ -64,7 +64,7 @@ struct Pair_8003AEA8;
 
 extern "C" {
 void fn_80015D28(int id);
-void fn_80023024(int a);
+void FESndUpdate(int a);
 void fn_8003B0F8(int group, int kind, int slot, int code, int a, int b);
 void fn_8003B1F4(int group);
 void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs);
@@ -333,7 +333,7 @@ int fn_80017380(int teamId)
             fn_80080874(2);
             used[i]++;
         }
-        fn_80023024(1);
+        FESndUpdate(1);
     }
     return n;
 }
@@ -422,7 +422,7 @@ int fn_80017610(int n, int teamId, float scale)
                 lbl_803EBA0C[n].mUnknownC = pos;
                 fn_800183EC(&lbl_803EBA0C[n], pos, scale, teamId);
             }
-            fn_80023024(1);
+            FESndUpdate(1);
         }
         if (lbl_803EBA38[0]) fn_80080874(0);
         if (lbl_803EBA38[1]) fn_80080874(1);
@@ -524,7 +524,7 @@ int fn_800179EC(int start, int teamId, float scale)
             lbl_803EBA0C[n].mTeam = 2;
             lbl_803EBA0C[n].mUnknown15 = 0xFF;
         }
-        fn_80023024(1);
+        FESndUpdate(1);
     }
     fn_80080874(0);
     if (lbl_803EBA38[1]) fn_80080874(1);
@@ -674,7 +674,7 @@ void fn_80018230(void)
     if (lbl_803EBA38[2]) {
         fn_800829D8();
     }
-    fn_80023024(1);
+    FESndUpdate(1);
 }
 
 void fn_80018374(void)
@@ -814,7 +814,7 @@ void fn_800188CC(void)
                 fn_8021E72C(pList, 10, lbl_803EBA0C[i].mUnknown8);
             }
             if (i % 10 == 9) {
-                fn_80023024(1);
+                FESndUpdate(1);
             }
         }
         lbl_803EBA08->mUnknown1B = 0;

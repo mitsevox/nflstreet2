@@ -32,7 +32,7 @@ struct Table_8015005C {
     unsigned char mUnknown125;
 };
 
-struct Settings_8031BDD4 {
+struct MiniGameSettings_t {
     char mUnknown0[32];
     int mUnknown32;
     int mUnknown36;
@@ -40,12 +40,12 @@ struct Settings_8031BDD4 {
 };
 
 extern "C" {
-extern Settings_8031BDD4 lbl_8031BDD4;
+extern MiniGameSettings_t lbl_8031BDD4;
 
 Table_8015005C *fn_801530FC(void);
 void fn_8003A4DC(void);
 void fn_801486A8(void);
-void fn_801527E0(Settings_8031BDD4 *p, int value);
+void fn_801527E0(MiniGameSettings_t *p, int value);
 Object_80039F5C *fn_8003AC84(int id);
 void fn_800AD910(int a, float b);
 void fn_800B6474(int index, unsigned char team);
