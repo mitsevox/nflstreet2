@@ -14466,6 +14466,50 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/game/PlayerLoco.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800D8A24-0x800D949C (src/game/PlayerLoco.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D8A24",
+          "end": "0x800D949C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D7E4",
+          "end": "0x8029D7F8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/LevelLoad.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8005406C-0x8005412C (src/game/LevelLoad.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005406C",
+          "end": "0x8005412C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DEAC",
+          "end": "0x8028DEB0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA550",
+          "end": "0x803EA554"
+        }
+      ]
     }
   ]
 }

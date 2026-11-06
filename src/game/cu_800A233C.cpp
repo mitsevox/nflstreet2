@@ -163,7 +163,7 @@ void fn_800A29AC(void);
 void fn_800A29D8(int mode);
 void fn_800A2D2C(void);
 EnvFogSettings *EnvGetFogSettings(int index);
-void fn_8005406C(void);
+void LevelLoad(void);
 void *fn_800C47C4(void);
 void fn_801464D0(void *owner);
 void fn_80146BF8(float value);
@@ -292,7 +292,7 @@ extern "C" void fn_800A2F48(void)
     lbl_8030E6E8.mVector10 = lbl_802D7C70[lbl_8030E6E8.mUnknown0];
     lbl_8030E6E8.mUnknown1C = lbl_802D7D00[lbl_8030E6E8.mUnknown0];
     lbl_803EA9F4 = fn_801EEB44(lbl_802EBFB4, 44);
-    fn_8005406C();
+    LevelLoad();
     fn_801464D0(fn_800C47C4());
     fn_80146BF8(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);
     fn_800A2D2C();
