@@ -7,7 +7,7 @@ int fn_80196278(void);
 void fn_800AD910(int a, float b);
 void fn_8006BCC8(int type);
 void fn_80072F04(void);
-int fn_8006F394(int index, int unknown);
+int SndgCrowdTriggerEvent(int index, int unknown);
 }
 
 extern "C" void fn_800AB074(Class_80297B90 *p, float dt)
@@ -18,6 +18,6 @@ extern "C" void fn_800AB074(Class_80297B90 *p, float dt)
         PauseClearBlocks();
         fn_8006BCC8(3);
         fn_80072F04();
-        fn_8006F394(3, 0);
+        SndgCrowdTriggerEvent(3, 0);
     }
 }

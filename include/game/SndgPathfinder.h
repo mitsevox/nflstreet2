@@ -22,7 +22,7 @@ struct Struct_802D611C {
 };
 
 /* Argument of fn_8006BBC4, which compares the string at +8 with the names of
-   lbl_802D50A4; fn_8006F6A0 reads the float at +4. */
+   lbl_802D50A4; SndgSoundObjUpdateFromEvent reads the float at +4. */
 struct Struct_8006BBC4 {
     int mUnknown0;
     float mUnknown4;

@@ -67,7 +67,7 @@ extern "C" void SndgIGInitAudio(void)
     fn_8006B664();
     fn_8006BCC8(0);
     if (fn_800A350C()) {
-        fn_8006F394(0, 0);
+        SndgCrowdTriggerEvent(0, 0);
     }
     fn_8006F810();
     fn_80071600();

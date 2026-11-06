@@ -1,3 +1,6 @@
+/* Stadium crowd sound module: starts and stops the crowd stream, sets the crowd
+   volume and fires crowd reaction cues for game events. */
+
 #include "game/fn_801EEB44.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
@@ -15,7 +18,7 @@ int fn_800A350C(void);
 
 static ModuleDependency sDependencies[] = { &gSndgPathfinder, 0 };
 static void *sLinks[] = { 0 };
-static unsigned char sUnknownByte = 100;
+static unsigned char _SndgCrowd_uVolume = 100;
 static int sIds[2][16] = {
     { 0x0484B11F, 0x04275C81, 0x04B18E13, 0x041EDEAC, 0x049D2DD0, 0x047C218B, 0x04472AF5, 0x041E6CDB,
       0x041DB7F7, 0x046C4981, 0x041AEAFF, 0x0462E5B4, 0x04A6E7DF, 0x0424B9BC, 0x048D591F, 0x04221664 },
@@ -36,7 +39,7 @@ int SndgCrowd::Init()
     if (fn_801F3E28()) {
         mpState.mp->mUnknown4 = fn_8006DBF8(mpState.mp->mpUnknown0, 1);
         fn_8006DC98(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
-        fn_8006DD70(0x14000001, sUnknownByte);
+        fn_8006DD70(0x14000001, _SndgCrowd_uVolume);
         fn_8006DE54(0x14000001, 127);
     }
     return 1;
@@ -54,15 +57,15 @@ int SndgCrowd::Shutdown()
     return 1;
 }
 
-void fn_8006F344(unsigned char value)
+void SndgCrowdSetVolume(unsigned char value)
 {
-    sUnknownByte = value;
+    _SndgCrowd_uVolume = value;
     if (gSndgCrowd.fn_801CC96C() && fn_801F3E28()) {
-        fn_8006DD70(0x14000001, sUnknownByte);
+        fn_8006DD70(0x14000001, _SndgCrowd_uVolume);
     }
 }
 
-int fn_8006F394(int index, int unknown)
+int SndgCrowdTriggerEvent(int index, int unknown)
 {
     int result = 0;
     int flag;

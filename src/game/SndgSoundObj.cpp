@@ -1,3 +1,6 @@
+/* Helpers for the stadium ambient sound objects of SndgPathfinder.cpp: create,
+   update or stop one object from a sound event, and fade a group of channels out. */
+
 #include "game/SndgPathfinder.h"
 #include "game/AudmonEvent.h"
 
@@ -12,11 +15,11 @@ void fn_8006BC30(int type, unsigned int index);
 float fn_8006BE3C(int type);
 void fn_8006CA18(int index, int a, unsigned char volume);
 
-void fn_8006F54C(void)
+void SndgNullUpdate(void)
 {
 }
 
-void fn_8006F550(void)
+void SndgFadeOutChannelGroup(void)
 {
     fn_8006CA18(45, 30, 0);
     fn_8006CA18(47, 30, 0);
@@ -28,7 +31,7 @@ void fn_8006F550(void)
     fn_8006CA18(52, 30, 0);
 }
 
-void fn_8006F5EC(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index)
+void SndgSoundObjControl(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index)
 {
     switch (mode) {
     case 1:
@@ -47,7 +50,7 @@ void fn_8006F5EC(int type, int mode, Vector_80039F5C *pPos, void *pObject, int i
     }
 }
 
-void fn_8006F6A0(int type, AudmonEvent_t *p)
+void SndgSoundObjUpdateFromEvent(int type, AudmonEvent_t *p)
 {
     Struct_8006BBC4 *pInfo = (Struct_8006BBC4 *)p->mUnknown14;
     float limit = fn_8006BE3C(type);
@@ -55,29 +58,29 @@ void fn_8006F6A0(int type, AudmonEvent_t *p)
 
     if (pInfo == 0) {
         if (fn_8006B810(type, (unsigned char)index)) {
-            fn_8006F5EC(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
+            SndgSoundObjControl(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
         }
     } else if (fn_8006BB44(type)) {
         if (fn_8006BBC4(pInfo)) {
             if (fn_8006B810(type, (unsigned char)index)) {
-                fn_8006F5EC(type, 2, &p->mPos, 0, index);
+                SndgSoundObjControl(type, 2, &p->mPos, 0, index);
             } else {
-                fn_8006F5EC(type, 1, &p->mPos, 0, index);
+                SndgSoundObjControl(type, 1, &p->mPos, 0, index);
             }
         } else if (fn_8006B810(type, (unsigned char)index)) {
-            fn_8006F5EC(type, 3, &p->mPos, 0, index);
+            SndgSoundObjControl(type, 3, &p->mPos, 0, index);
         }
     } else {
         float value = pInfo->mUnknown4;
 
         if (fn_8006B810(type, (unsigned char)index)) {
             if (value < limit) {
-                fn_8006F5EC(type, 3, &p->mPos, 0, index);
+                SndgSoundObjControl(type, 3, &p->mPos, 0, index);
             } else {
-                fn_8006F5EC(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
+                SndgSoundObjControl(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
             }
         } else if (value >= limit) {
-            fn_8006F5EC(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
+            SndgSoundObjControl(type, (unsigned char)p->mUnknown10.mValue, &p->mPos, 0, index);
         }
     }
 }

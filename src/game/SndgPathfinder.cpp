@@ -487,7 +487,7 @@ void fn_80030490(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
 int ReplayCursorGetPos(float *pValue);
-void fn_8006F344(unsigned char value);
+void SndgCrowdSetVolume(unsigned char value);
 void fn_8006F850(AudmonEvent_t *pEvent);
 void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
@@ -3086,7 +3086,7 @@ extern "C" void fn_8006EA04(unsigned int index, unsigned int value)
         fn_8006D684(0, value);
         fn_8006D684(1, value);
         fn_8006BDD8(value * 99 / 100);
-        fn_8006F344(value * 83 / 100);
+        SndgCrowdSetVolume(value * 83 / 100);
         break;
     case 2:
         if (value > 100) {

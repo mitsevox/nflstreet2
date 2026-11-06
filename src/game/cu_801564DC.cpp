@@ -1066,7 +1066,7 @@ int fn_80157080(void)
         PauseClearBlocks();
         fn_8006BCC8(3);
         fn_80072F04();
-        fn_8006F394(3, 0);
+        SndgCrowdTriggerEvent(3, 0);
         fn_80168264();
     }
     return done;
@@ -1719,7 +1719,7 @@ void fn_80158AA8(void)
         fn_80072F04();
     }
     fn_8006EA04(3, 100);
-    fn_8006F344(0);
+    SndgCrowdSetVolume(0);
     volume = fn_8007F828(5) * 10;
     fn_8006EA04(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {

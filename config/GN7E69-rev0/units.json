@@ -11550,9 +11550,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8006F54C.cpp",
+      "source": "src/game/SndgSoundObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8006F54C-0x8006F810 (src/game/cu_8006F54C.cpp) and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x8006F54C-0x8006F810 (src/game/SndgSoundObj.cpp) and its source-form row.",
       "sections": [
         {
           "section": ".text",
