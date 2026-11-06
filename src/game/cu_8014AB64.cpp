@@ -17,7 +17,7 @@ extern "C" {
 extern unsigned char lbl_803EB2B4;
 extern unsigned char lbl_803EB2B5;
 extern char *lbl_803EB2B0;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern void *lbl_803EABA4;
 extern const int lbl_802DE3D0[];
 
@@ -160,7 +160,7 @@ void fn_8014ADB0(void *p, float dt)
     fn_8009D8CC(1);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_17(lbl_802DE3D0);
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_800AAD58(p, dt);
 }
 
@@ -171,7 +171,7 @@ void fn_8014AE58(void)
 
 void fn_8014AE84(void)
 {
-    fn_8021956C(lbl_803EB688, 3, 17, 1);
+    fn_8021956C(gUISMainInfo, 3, 17, 1);
 }
 
 void fn_8014AEB4(void *p, float dt)

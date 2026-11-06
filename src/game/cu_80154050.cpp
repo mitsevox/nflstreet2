@@ -11,7 +11,7 @@ class Class_802A19F0 : public Class_80297B90 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const int lbl_802DEB78[];
 
 int fn_800A2178(void);
@@ -47,7 +47,7 @@ void fn_80154110(Class_802A19F0 *p, float dt)
     fn_8009D8CC(1);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_16(lbl_802DEB78);
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_800AAD58(p, dt);
 }
 
@@ -58,6 +58,6 @@ void fn_801541B8(Class_802A19F0 *p)
 
 void fn_801541E4(Class_802A19F0 *p)
 {
-    fn_8021956C(lbl_803EB688, 3, 20, 1);
+    fn_8021956C(gUISMainInfo, 3, 20, 1);
 }
 }

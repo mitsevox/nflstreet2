@@ -5,7 +5,7 @@
    scores, and builds the goal and reward texts the challenge screens show. */
 
 #include <string.h>
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 #include "game/Class_80297C60.h"
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
@@ -113,21 +113,21 @@ void ChalOpenProgress(DbCursor *pObject, int value)
 }
 
 /* Reads a row for id (tags 0x444D4843 and 0x54415453 passed to
-   fn_8018FDEC) into pInfo; mUnknown0 is 0 when fn_8018FF30 finds no row. */
+   OpenTable) into pInfo; mUnknown0 is 0 when FindColumnInt finds no row. */
 void ChalReadMedalGoal(int id, ChalMedalGoal_t *pInfo)
 {
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
 
-    cursor.fn_8018FDEC(0x444D4843, -1, 0, 0, 0x54415453);
-    if (cursor.fn_8018FF30(0x44494843, id, 0, 0)) {
-        pInfo->mUnknown0 = cursor.fn_8018FF9C(0x41514843);
-        pInfo->mUnknown4[0] = cursor.fn_8018FF9C(0x41505143);
-        pInfo->mUnknown4[1] = cursor.fn_8018FF9C(0x42505143);
-        pInfo->mUnknown4[2] = cursor.fn_8018FF9C(0x43505143);
-        pInfo->mUnknown1C = cursor.fn_8018FF9C(0x54524843);
-        pInfo->mUnknown20[0] = cursor.fn_8018FF9C(0x56524843);
-        pInfo->mUnknown20[1] = cursor.fn_8018FF9C(0x32564843);
-        pInfo->mUnknown20[2] = cursor.fn_8018FF9C(0x33564843);
+    cursor.OpenTable(0x444D4843, -1, 0, 0, 0x54415453);
+    if (cursor.FindColumnInt(0x44494843, id, 0, 0)) {
+        pInfo->mUnknown0 = cursor.GetColumnInt(0x41514843);
+        pInfo->mUnknown4[0] = cursor.GetColumnInt(0x41505143);
+        pInfo->mUnknown4[1] = cursor.GetColumnInt(0x42505143);
+        pInfo->mUnknown4[2] = cursor.GetColumnInt(0x43505143);
+        pInfo->mUnknown1C = cursor.GetColumnInt(0x54524843);
+        pInfo->mUnknown20[0] = cursor.GetColumnInt(0x56524843);
+        pInfo->mUnknown20[1] = cursor.GetColumnInt(0x32564843);
+        pInfo->mUnknown20[2] = cursor.GetColumnInt(0x33564843);
     } else {
         pInfo->mUnknown0 = 0;
     }
@@ -1157,48 +1157,48 @@ int ChalHasReward(Challenge_t *pRecord, int id)
 void ChalSetTournamentScore(int id, int a, int b)
 {
     int handle = fn_8022F3D4(fn_8022F4BC());
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
 
-    cursor.fn_8018FDEC(0x47505443, 0x4D475443, 0, 0, handle);
-    cursor.fn_8018FF54(0x4D475443, id, 0, 0);
-    cursor.fn_80190008(0x31535443, a);
-    cursor.fn_80190008(0x32535443, b);
+    cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
+    cursor.FindColumnValue(0x4D475443, id, 0, 0);
+    cursor.SetColumnValue(0x31535443, a);
+    cursor.SetColumnValue(0x32535443, b);
 }
 
 void ChalGetTournamentScore(int id, short *pA, short *pB)
 {
     int handle = fn_8022F3D4(fn_8022F4BC());
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
 
-    cursor.fn_8018FDEC(0x47505443, 0x4D475443, 0, 0, handle);
-    cursor.fn_8018FF54(0x4D475443, id, 0, 0);
-    *pA = cursor.fn_8018FF78(0x31535443);
-    *pB = cursor.fn_8018FF78(0x32535443);
+    cursor.OpenTable(0x47505443, 0x4D475443, 0, 0, handle);
+    cursor.FindColumnValue(0x4D475443, id, 0, 0);
+    *pA = cursor.GetColumnValue(0x31535443);
+    *pB = cursor.GetColumnValue(0x32535443);
 }
 
 void ChalSaveTournamentTeams(int *pValues, int count)
 {
     int handle = fn_8022F3D4(fn_8022F4BC());
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
     int i;
 
-    cursor.fn_8018FDEC(0x4C545443, 0x44524F54, 0, 0, handle);
+    cursor.OpenTable(0x4C545443, 0x44524F54, 0, 0, handle);
     for (i = 0; i < count; i++) {
-        cursor.fn_8018FF54(0x44524F54, i, 0, 0);
-        cursor.fn_80190008(0x44494754, pValues[i]);
+        cursor.FindColumnValue(0x44524F54, i, 0, 0);
+        cursor.SetColumnValue(0x44494754, pValues[i]);
     }
 }
 
 void ChalLoadTournamentTeams(int *pValues, int count)
 {
     int handle = fn_8022F3D4(fn_8022F4BC());
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
     int i;
 
-    cursor.fn_8018FDEC(0x4C545443, 0x44524F54, 0, 0, handle);
+    cursor.OpenTable(0x4C545443, 0x44524F54, 0, 0, handle);
     for (i = 0; i < count; i++) {
-        cursor.fn_8018FF54(0x44524F54, i, 0, 0);
-        pValues[i] = cursor.fn_8018FF78(0x44494754);
+        cursor.FindColumnValue(0x44524F54, i, 0, 0);
+        pValues[i] = cursor.GetColumnValue(0x44494754);
     }
 }
 

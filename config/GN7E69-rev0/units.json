@@ -1788,6 +1788,74 @@
     "iSPCH_InitRandom": {
       "address": "0x801B1B70",
       "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
+    },
+    "StevQueryRowCount": {
+      "address": "0x8018EA3C",
+      "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StevQueryDiveCount": {
+      "address": "0x8018EAAC",
+      "evidence": "evidence.tsv function/name rows for 0x8018EAAC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "SstlFetchEntry": {
+      "address": "0x8018EB20",
+      "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryIsEventCompleted": {
+      "address": "0x8018E5F4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E5F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryAddCompletedEvent": {
+      "address": "0x8018E658",
+      "evidence": "evidence.tsv function/name rows for 0x8018E658 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryCountRemainingEvents": {
+      "address": "0x8018E6A4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E6A4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryAreGroupEventsCompleted": {
+      "address": "0x8018E6E0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E6E0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryIsNew": {
+      "address": "0x8018E774",
+      "evidence": "evidence.tsv function/name rows for 0x8018E774 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetNew": {
+      "address": "0x8018E7A0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E7A0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetLkss": {
+      "address": "0x8018E7CC",
+      "evidence": "evidence.tsv function/name rows for 0x8018E7CC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetLkss": {
+      "address": "0x8018E828",
+      "evidence": "evidence.tsv function/name rows for 0x8018E828 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryTestIndexedFlag": {
+      "address": "0x8018E874",
+      "evidence": "evidence.tsv function/name rows for 0x8018E874 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetIndexedFlag": {
+      "address": "0x8018E8B0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E8B0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetFlag100": {
+      "address": "0x8018E8F4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E8F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetFlag100": {
+      "address": "0x8018E920",
+      "evidence": "evidence.tsv function/name rows for 0x8018E920 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetFlag200": {
+      "address": "0x8018E94C",
+      "evidence": "evidence.tsv function/name rows for 0x8018E94C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetFlag200": {
+      "address": "0x8018E978",
+      "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     }
   },
   "units": [
@@ -1880,37 +1948,37 @@
       ]
     },
     {
-      "source": "src/game/cu_8018B0BC.cpp",
+      "source": "src/game/StoryTeam.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018B014-0x8018C344 (src/game/cu_8018B0BC.cpp) and its function rows; every function exact. Whole range linked; the edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
+      "evidence": "evidence.tsv unit row 0x8018B014-0x8018C344 (src/game/StoryTeam.cpp) and its function rows; every function exact. Whole range linked; the edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
       "link_roots": {
         "symbols": [
-          "fn_8018B014",
-          "fn_8018B0BC",
-          "fn_8018B2A8",
-          "fn_8018B5E4",
-          "fn_8018B66C",
-          "fn_8018B6F0",
-          "fn_8018B8B0",
-          "fn_8018B950",
-          "fn_8018B9D4",
-          "fn_8018BA2C",
-          "fn_8018BA4C",
-          "fn_8018BB24",
-          "fn_8018BD9C",
-          "fn_8018BDFC",
-          "fn_8018BE68",
-          "fn_8018BECC",
-          "fn_8018BF10",
-          "fn_8018BF3C",
-          "fn_8018C008",
-          "fn_8018C044",
-          "fn_8018C064",
-          "fn_8018C0E8",
-          "fn_8018C15C",
-          "fn_8018C1A8",
-          "fn_8018C1E0",
-          "fn_8018C230"
+          "StoryTeamClearTables",
+          "StoryTeamStore",
+          "StoryTeamLoad",
+          "StoryTeamLoadAll",
+          "StoryTeamLoadOne",
+          "StoryTeamSyncCreatedPlayer",
+          "StoryPlayerSetDefaults",
+          "StoryPlayerResetById",
+          "StoryTeamCursorOpen",
+          "StoryTeamCursorClose",
+          "StoryTeamCreate",
+          "StoryTeamCreatePlayer",
+          "StoryTeamExists",
+          "StoryTeamLoadToStats",
+          "StoryTeamLoadOneToStats",
+          "StoryTeamAddOneToStats",
+          "StoryTeamStoreFromStats",
+          "StoryTeamClear",
+          "StoryTeamBackup",
+          "StoryTeamFreeBackup",
+          "StoryTeamRestore",
+          "StoryTeamGetId",
+          "StoryPlayerMoveToTeam",
+          "StoryPlayerDelete",
+          "StoryTeamGetLogo",
+          "StoryTeamLoadUserTeams"
         ],
         "evidence": "The file defines 27 functions. The target keeps 26 of them at the placed range; the 27th, CopyRdrcPlayersToTeam (Xbox DEFAULT.xbe 0x172FF0), has no code in the target's .init/.text (masked byte search), so the linker drops it. Its literals at 0x802A9E74-0x802A9F80 stay in the placed .rodata, as in the original link.",
         "discarded": [
@@ -3205,9 +3273,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AB0C.cpp",
+      "source": "src/game/UISModelObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/cu_8018AB0C.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
+      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/UISModelObj.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
       "sections": [
         {
           "section": ".text",
@@ -4073,9 +4141,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018422C.cpp",
+      "source": "src/game/MemCardUI.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018422C-0x80185AB4 (src/game/cu_8018422C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8018422C-0x80185AB4 (src/game/MemCardUI.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6250,9 +6318,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80188E98.cpp",
+      "source": "src/game/UISGame.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80188E98-0x8018A908 (src/game/cu_80188E98.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80188E98-0x8018A908 (src/game/UISGame.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6457,9 +6525,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018E9A4.cpp",
+      "source": "src/game/UnusedDbCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018E9A4-0x8018EA3C (src/game/cu_8018E9A4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8018E9A4-0x8018EA3C (src/game/UnusedDbCursor.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7747,27 +7815,27 @@
       ]
     },
     {
-      "source": "src/game/cu_8018DF98.cpp",
+      "source": "src/game/StoryData.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/cu_8018DF98.cpp) and its data, linker, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp) and its data, linker, compiler and source-form rows.",
       "link_roots": {
         "symbols": [
-          "fn_8018DFE4",
-          "fn_8018E02C",
-          "fn_8018E0D8",
-          "fn_8018E11C",
-          "fn_8018E174",
-          "fn_8018E194",
-          "fn_8018E20C",
-          "fn_8018E284",
-          "fn_8018E344",
-          "fn_8018E390",
-          "fn_8018E3DC",
-          "fn_8018E428",
-          "fn_8018E474",
-          "fn_8018E4B4",
-          "fn_8018E55C",
-          "fn_8018E598"
+          "StoryTestFlag",
+          "StorySetFlag",
+          "StoryGetIndexedFlagMask",
+          "StoryPlayerCursorOpen",
+          "StoryPlayerCursorClose",
+          "StoryPlayerGetFirstName",
+          "StoryPlayerGetLastName",
+          "StoryPlayerGetShortName",
+          "StoryGetExpPoints",
+          "StorySetExpPoints",
+          "StoryGetDevPoints",
+          "StorySetDevPoints",
+          "StoryClearFlags",
+          "StoryStartNew",
+          "StoryClearCompletedEvents",
+          "StoryCountCompletedEvents"
         ],
         "discarded": [
           "ResetYptsTadsCetsTables"
@@ -8140,9 +8208,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801861D0.cpp",
+      "source": "src/game/MsgController.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801861D0-0x801864E0 (src/game/cu_801861D0.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801861D0-0x801864E0 (src/game/MsgController.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8688,9 +8756,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80188A30.cpp",
+      "source": "src/game/TeamLogo.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80188A30-0x80188E98 (src/game/cu_80188A30.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80188A30-0x80188E98 (src/game/TeamLogo.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8713,18 +8781,18 @@
       ]
     },
     {
-      "source": "src/game/cu_8018EC68.cpp",
+      "source": "src/game/StevTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/cu_8018EC68.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/StevTable.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_8018EC68",
-          "fn_8018ED78",
-          "fn_8018EDF0",
-          "fn_8018EE44",
-          "fn_8018EE78",
-          "fn_8018EEAC",
-          "fn_8018EEF0"
+          "StevReadRow",
+          "StevFindNets",
+          "StevGetRow",
+          "StevCountDiveRows",
+          "StevCountRows",
+          "StevClose",
+          "StevOpen"
         ],
         "discarded": [
           "SelectTopVetsNets"
@@ -9183,7 +9251,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80190208.cpp",
+      "source": "src/game/Cheat.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
       "sections": [
@@ -9491,9 +9559,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80185AB4.cpp",
+      "source": "src/game/MsgAudio.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80185AB4-0x801861D0 (src/game/cu_80185AB4.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80185AB4-0x801861D0 (src/game/MsgAudio.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10000,9 +10068,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018A908.cpp",
+      "source": "src/game/UISViewObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018A908-0x8018A978 (src/game/cu_8018A908.cpp) and its .sdata row.",
+      "evidence": "evidence.tsv unit row 0x8018A908-0x8018A978 (src/game/UISViewObj.cpp) and its .sdata row.",
       "sections": [
         {
           "section": ".text",
@@ -10372,10 +10440,10 @@
       },
       "folded": {
         "symbols": {
-          "_._14Class_802938C0": "0x80083454",
-          "_vt.14Class_802938C0": "0x802938C0"
+          "_._10FchrCursor": "0x80083454",
+          "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row cu_80005668 Class_802938C0 linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of Class_802938C0 are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+        "evidence": "evidence.tsv source-form row cu_80005668 FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
       }
     },
     {
@@ -11132,9 +11200,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AC38.cpp",
+      "source": "src/game/UISSoundObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AC38-0x8018AD34 (src/game/cu_8018AC38.cpp) and its .data row.",
+      "evidence": "evidence.tsv unit row 0x8018AC38-0x8018AD34 (src/game/UISSoundObj.cpp) and its .data row.",
       "sections": [
         {
           "section": ".text",
@@ -11151,9 +11219,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AD78.cpp",
+      "source": "src/game/UISTextTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AD78-0x8018AFD0 (src/game/cu_8018AD78.cpp).",
+      "evidence": "evidence.tsv unit row 0x8018AD78-0x8018AFD0 (src/game/UISTextTable.cpp).",
       "sections": [
         {
           "section": ".text",
@@ -11164,9 +11232,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AFD0.cpp",
+      "source": "src/game/UISHeldObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AFD0-0x8018AFF0 (src/game/cu_8018AFD0.cpp) and its .sdata row.",
+      "evidence": "evidence.tsv unit row 0x8018AFD0-0x8018AFF0 (src/game/UISHeldObj.cpp) and its .sdata row.",
       "sections": [
         {
           "section": ".text",
@@ -11339,9 +11407,9 @@
       }
     },
     {
-      "source": "src/game/cu_8018AFF0.cpp",
+      "source": "src/game/DbTextToTag.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AFF0-0x8018B014 (src/game/cu_8018AFF0.cpp).",
+      "evidence": "evidence.tsv unit row 0x8018AFF0-0x8018B014 (src/game/DbTextToTag.cpp).",
       "sections": [
         {
           "section": ".text",
@@ -11435,9 +11503,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AD34.cpp",
+      "source": "src/game/UISGetFont.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AD34-0x8018AD78 (src/game/cu_8018AD34.cpp).",
+      "evidence": "evidence.tsv unit row 0x8018AD34-0x8018AD78 (src/game/UISGetFont.cpp).",
       "sections": [
         {
           "section": ".text",
@@ -11448,9 +11516,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801864E0.cpp",
+      "source": "src/game/UserRec.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/cu_801864E0.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/UserRec.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11467,9 +11535,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801882B4.cpp",
+      "source": "src/game/ResBank.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/cu_801882B4.cpp) and its compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/ResBank.cpp) and its compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11480,9 +11548,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018FD64.cpp",
+      "source": "src/game/DbTableCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018FD64-0x80190208 (src/game/cu_8018FD64.cpp) and its compiler, data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8018FD64-0x80190208 (src/game/DbTableCursor.cpp) and its compiler, data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11499,9 +11567,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018F1F0.cpp",
+      "source": "src/game/Gauntlet.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018F1F0-0x8018FD64 (src/game/cu_8018F1F0.cpp) and its compiler, data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8018F1F0-0x8018FD64 (src/game/Gauntlet.cpp) and its compiler, data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11724,9 +11792,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80180FA4.cpp",
+      "source": "src/game/FEMisc.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/cu_80180FA4.cpp), its .data and .bss rows and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/FEMisc.cpp), its .data and .bss rows and source-form rows.",
       "sections": [
         {
           "section": ".text",

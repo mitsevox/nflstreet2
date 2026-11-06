@@ -1,8 +1,8 @@
 /* The table of cheats active in the current game, gathered from the cheats each participating user
    has enabled. */
 extern "C" {
-void fn_80190280(int a);
-int fn_801908A0(int index);
+void CheatSelectSlot(int a);
+int CheatIsEnabled(int index);
 }
 
 static unsigned char _CheatFlags_abSet[55];
@@ -11,9 +11,9 @@ extern "C" void CheatFlagsAddUser(int a)
 {
     unsigned int i = 0;
 
-    fn_80190280(a);
+    CheatSelectSlot(a);
     while (i < 55) {
-        _CheatFlags_abSet[i] |= fn_801908A0(i);
+        _CheatFlags_abSet[i] |= CheatIsEnabled(i);
         i++;
     }
 }

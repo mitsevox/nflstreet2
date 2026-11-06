@@ -143,7 +143,7 @@ struct Table_803EA594 {
 
 extern "C" {
 extern char lbl_8031BDD4[];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_80152940(char *pObject, int index, Info_80152940 *pInfo);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -250,7 +250,7 @@ int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 int fn_80178D70(int team);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
-int fn_80186010(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int OptAudioHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80056444(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
@@ -530,7 +530,7 @@ void fn_80056ED8(int team, int a, int b)
         limit = lbl_803EA594->mUnknown48[team][lbl_803EA58C->mUnknown46[team]];
     }
     args.mLocked = a + b >= limit;
-    fn_8021D7B8(lbl_803EB688, 0x80000011, 5, &args);
+    fn_8021D7B8(gUISMainInfo, 0x80000011, 5, &args);
 }
 
 int fn_80057044(void)
@@ -1257,7 +1257,7 @@ void fn_80058CA0(char *pText, int size, int *pActive, int *pSide)
     lbl_803EA59E = 0;
     int pad = PauseGetValue();
     int value = 0;
-    fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
+    fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
     if (pad != -1) {
         fn_801C2E18(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
         int active = 1;
@@ -1297,7 +1297,7 @@ void fn_80058DA0(void)
         AudmonEventPostArgs(0x72, 0, PauseGetQuitFlag(), 0, 0);
         if (PauseGetSavedMode() != 5) {
             int value = 1;
-            fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
+            fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
         }
         if (fn_8017F584() == 6 && fn_800AD9B4() == 2) {
             ChallengeSendGoalList(1);
@@ -1498,15 +1498,15 @@ int fn_800594F4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80186010(0x80000001, 0, 0, 0);
+        OptAudioHandleMessage(0x80000001, 0, 0, 0);
         OptionsScreenMsg(0x80000001, 0, 0, 0);
         break;
     case 0x80000002:
         OptionsScreenMsg(0x80000002, 0, 0, 0);
-        fn_80186010(0x80000002, 0, 0, 0);
+        OptAudioHandleMessage(0x80000002, 0, 0, 0);
         break;
     case 0x80000005:
-        fn_80186010(0x80000003, pArgs, unused, pResult);
+        OptAudioHandleMessage(0x80000003, pArgs, unused, pResult);
         OptionsScreenMsg(0x80000005, pArgs, unused, pResult);
         break;
     case 0x80000006:
@@ -1683,10 +1683,10 @@ int fn_80178AE0(void);
 void *fn_8022F4BC(void);
 void *fn_80186B38(void *p);
 int GauntletScreenGetSelection(void);
-void fn_8018F340(void *p,int id);
-void fn_8018F4C4(void *p);
-int fn_8018F288(void *p,int id);
-int fn_8018F3D8(void *p);
+void GauntletMarkTeamBeaten(void *p,int id);
+void GauntletAdvance(void *p);
+int GauntletIsTeamBeaten(void *p,int id);
+int GauntletGetTeamsLeft(void *p);
 int fn_800A3444(void);
 void EnvSelect(int id);
 void EnvGetUIName(char *pText,int size);
@@ -2065,11 +2065,11 @@ void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
     if(fn_8017F584()==8) {
         if(score1>score0) {
             void *p=fn_80186B38(fn_8022F4BC());
-            fn_8018F340(p,GauntletScreenGetSelection());
-            fn_8018F4C4(fn_80186B38(fn_8022F4BC()));
+            GauntletMarkTeamBeaten(p,GauntletScreenGetSelection());
+            GauntletAdvance(fn_80186B38(fn_8022F4BC()));
             *pResult=1;
-            if(fn_8018F288(fn_80186B38(fn_8022F4BC()),34)) *pResult=3;
-            else if(!fn_8018F3D8(fn_80186B38(fn_8022F4BC()))) *pResult=2;
+            if(GauntletIsTeamBeaten(fn_80186B38(fn_8022F4BC()),34)) *pResult=3;
+            else if(!GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC()))) *pResult=2;
         } else *pResult=0;
         DbCursor query;
         fn_80083E40(&query,0,0x54415453);
@@ -2278,16 +2278,16 @@ int fn_8005BE5C(int value) {
     if(lbl_803EA5B0==3) {
         lbl_803EA5B0=value;
         switch(value) {
-        case 0:fn_80218FC4(lbl_803EB688,3,9,0,0);lbl_803EA5AC=0;return 1;
-        case 1:fn_80218FC4(lbl_803EB688,3,12,0,0);lbl_803EA5AC=0;return 1;
-        case 2:fn_80218FC4(lbl_803EB688,3,23,0,0);lbl_803EA5AC=0;return 1;
+        case 0:fn_80218FC4(gUISMainInfo,3,9,0,0);lbl_803EA5AC=0;return 1;
+        case 1:fn_80218FC4(gUISMainInfo,3,12,0,0);lbl_803EA5AC=0;return 1;
+        case 2:fn_80218FC4(gUISMainInfo,3,23,0,0);lbl_803EA5AC=0;return 1;
         }
     }
     return 0;
 }
-void fn_8005BF18(void) {fn_8021D7B8(lbl_803EB688,0x8000001C,0,0);lbl_803EA5AC=4;lbl_803EA5B0=3;}
-void fn_8005BF5C(void) {fn_8021D7B8(lbl_803EB688,0x80000029,0,0);lbl_803EA5AC=2;}
-void fn_8005BF98(void) {fn_8021D7B8(lbl_803EB688,0x8000002A,0,0);lbl_803EA5AC=0;}
+void fn_8005BF18(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);lbl_803EA5AC=4;lbl_803EA5B0=3;}
+void fn_8005BF5C(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);lbl_803EA5AC=2;}
+void fn_8005BF98(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);lbl_803EA5AC=0;}
 int fn_8005BFD4(void) {return lbl_803EA5AC;}
 int fn_8005BFDC(int group,unsigned int id,Arg_8018399C *p,int unused,int *result) {
     if(id==0x80000002) {

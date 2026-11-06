@@ -751,7 +751,7 @@ int fn_8006F0D8(void);
 void fn_80071748(int unknown);
 void SpchIGUpdate(void);
 void SpchIGUpdateFrontEnd(void);
-void fn_801860E4(int unknown);
+void OptAudioUpdate(int unknown);
 
 }
 
@@ -986,7 +986,7 @@ Struct_802D611C lbl_802D611C[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, (Handler_8030A668)SpchIGUpdate, fn_80071748, fn_8006E924, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, (Handler_8030A668)SpchIGUpdate, fn_80071748, fn_8006E924, OptAudioUpdate, 0 };
 
 Struct_8006C2C8 lbl_802D6228 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D5F24, lbl_802D620C };
 
@@ -995,7 +995,7 @@ Entry_8030A664 lbl_802D6240[3] = {
     { 1, lbl_802EBFCC, 0, 1, 0, 0, 0 },
     { 0, 0, 0, 0, 3, 0, 0 },
 };
-Handler_8030A668 lbl_802D6294[] = { (Handler_8030A668)SpchIGUpdateFrontEnd, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D6294[] = { (Handler_8030A668)SpchIGUpdateFrontEnd, OptAudioUpdate, 0 };
 
 Struct_8006C2C8 lbl_802D62A0 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D6240, lbl_802D6294 };
 

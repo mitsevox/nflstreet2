@@ -16,7 +16,7 @@
 extern "C" {
 extern char lbl_800034A0[];
 extern char lbl_802EC09C[];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern unsigned char lbl_803EBD6C;
 extern unsigned char lbl_803EBD6D;
 extern unsigned char lbl_803EBD6E;
@@ -26,8 +26,8 @@ extern int lbl_803ED5EC;
 
 int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int ProgressivePopupIsOn(void);
-int fn_80185274(void);
-void fn_8018A740(void);
+int MemCardUIIsResetLocked(void);
+void UISGameRefreshAll(void);
 int fn_801C1D54(void);
 void fn_801C1D84(void);
 int ConUpdateChannel(int a);
@@ -99,7 +99,7 @@ static void _BootWaitForScreen(void *p, unsigned short a, unsigned short b, int 
     unsigned short other = b;
 
     while (current == a) {
-        fn_8018A740();
+        UISGameRefreshAll();
         ConUpdateChannel(-1);
         ConProcessChannel(-1);
         fn_801D6F58();
@@ -144,7 +144,7 @@ static void _BootProgressiveCheck(void)
         void *p;
 
         fn_801801F0(1);
-        p = lbl_803EB688;
+        p = gUISMainInfo;
         fn_80218FC4(p, 1, 0xE, 0, 0);
         fn_802195E4(p, 1, 0xE);
         _BootWaitForScreen(p, 1, 0xE, -1);
@@ -164,8 +164,8 @@ static void _BootProgressiveCheck(void)
         _Boot_apMessageLines[0] = &_Boot_aMessageLines[0];
         _Boot_apMessageLines[1] = &_Boot_aMessageLines[1];
         _Boot_apMessageLines[2] = &_Boot_aMessageLines[2];
-        fn_80219044(lbl_803EB688, 1, 3, 3, _Boot_apMessageLines);
-        _BootWaitForScreen(lbl_803EB688, 1, 3, -1);
+        fn_80219044(gUISMainInfo, 1, 3, 3, _Boot_apMessageLines);
+        _BootWaitForScreen(gUISMainInfo, 1, 3, -1);
         fn_801801F0(0);
     } else {
         fn_8023CFD0(0);
@@ -192,7 +192,7 @@ void BootPlayIntroMovies(void)
 
 void BootShowStartupScreens(void)
 {
-    void *p = lbl_803EB688;
+    void *p = gUISMainInfo;
 
     fn_801CE248(1);
     _BootDelay();
@@ -225,7 +225,7 @@ void BootHandleReset(void)
 {
     int previous = fn_801F8758(1);
 
-    if (previous && !fn_80185274() && _Boot_bResetPressed) {
+    if (previous && !MemCardUIIsResetLocked() && _Boot_bResetPressed) {
         if (!OSGetResetButtonState()) {
             fn_801F87FC(0);
             _Boot_bResetPressed = 0;

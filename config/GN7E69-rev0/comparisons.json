@@ -3439,7 +3439,7 @@
     {
       "source": "src/game/cu_8007BA48.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007BA48.cpp, individual exact function extents, owned data spans, the Class_8018FD64 and Object_80023BBC type rows and the source-form rows recording the remaining differences. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007BA48.cpp, individual exact function extents, owned data spans, the DbTableCursor and Object_80023BBC type rows and the source-form rows recording the remaining differences. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -5060,9 +5060,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018DF98.cpp",
+      "source": "src/game/StoryData.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/cu_8018DF98.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the cu_8018DF98 draft source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the StoryData draft functions source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
       "sections": [
         {
           "section": ".text",
@@ -5079,81 +5079,81 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8018E5F4",
+          "symbol": "StoryIsEventCompleted",
           "start": "0x8018E5F4",
           "end": "0x8018E658"
         },
         {
-          "symbol": "fn_8018E658",
+          "symbol": "StoryAddCompletedEvent",
           "start": "0x8018E658",
           "end": "0x8018E6A4"
         },
         {
-          "symbol": "fn_8018E6A4",
+          "symbol": "StoryCountRemainingEvents",
           "start": "0x8018E6A4",
           "end": "0x8018E6E0"
         },
         {
-          "symbol": "fn_8018E6E0",
+          "symbol": "StoryAreGroupEventsCompleted",
           "start": "0x8018E6E0",
           "end": "0x8018E774"
         },
         {
-          "symbol": "fn_8018E774",
+          "symbol": "StoryIsNew",
           "start": "0x8018E774",
           "end": "0x8018E7A0"
         },
         {
-          "symbol": "fn_8018E7A0",
+          "symbol": "StorySetNew",
           "start": "0x8018E7A0",
           "end": "0x8018E7CC"
         },
         {
-          "symbol": "fn_8018E7CC",
+          "symbol": "StoryGetLkss",
           "start": "0x8018E7CC",
           "end": "0x8018E828"
         },
         {
-          "symbol": "fn_8018E828",
+          "symbol": "StorySetLkss",
           "start": "0x8018E828",
           "end": "0x8018E874"
         },
         {
-          "symbol": "fn_8018E874",
+          "symbol": "StoryTestIndexedFlag",
           "start": "0x8018E874",
           "end": "0x8018E8B0"
         },
         {
-          "symbol": "fn_8018E8B0",
+          "symbol": "StorySetIndexedFlag",
           "start": "0x8018E8B0",
           "end": "0x8018E8F4"
         },
         {
-          "symbol": "fn_8018E8F4",
+          "symbol": "StoryGetFlag100",
           "start": "0x8018E8F4",
           "end": "0x8018E920"
         },
         {
-          "symbol": "fn_8018E920",
+          "symbol": "StorySetFlag100",
           "start": "0x8018E920",
           "end": "0x8018E94C"
         },
         {
-          "symbol": "fn_8018E94C",
+          "symbol": "StoryGetFlag200",
           "start": "0x8018E94C",
           "end": "0x8018E978"
         },
         {
-          "symbol": "fn_8018E978",
+          "symbol": "StorySetFlag200",
           "start": "0x8018E978",
           "end": "0x8018E9A4"
         }
       ]
     },
     {
-      "source": "src/game/cu_8018EC68.cpp",
+      "source": "src/game/StevTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/cu_8018EC68.cpp), source-form row 0x8018EA3C-0x8018EF6C, exact function rows 0x8018EA3C-0x8018EC68 and the exact .rodata slice row 0x802AAF9C-0x802AB08C. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 3 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/StevTable.cpp), source-form row 0x8018EA3C-0x8018EF6C, exact function rows 0x8018EA3C-0x8018EC68 and the exact .rodata slice row 0x802AAF9C-0x802AB08C. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 3 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
@@ -5176,17 +5176,17 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8018EA3C",
+          "symbol": "StevQueryRowCount",
           "start": "0x8018EA3C",
           "end": "0x8018EAAC"
         },
         {
-          "symbol": "fn_8018EAAC",
+          "symbol": "StevQueryDiveCount",
           "start": "0x8018EAAC",
           "end": "0x8018EB20"
         },
         {
-          "symbol": "fn_8018EB20",
+          "symbol": "SstlFetchEntry",
           "start": "0x8018EB20",
           "end": "0x8018EC68"
         }
@@ -13567,7 +13567,7 @@
           "end": "0x80083454"
         },
         {
-          "symbol": "_._14Class_802938C0",
+          "symbol": "_._10FchrCursor",
           "start": "0x80083454",
           "end": "0x80083474"
         },

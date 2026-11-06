@@ -207,7 +207,7 @@ inline Class_8000F540 *fn_8000EE2C()
 }
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int FEPlyrGetBackIndex(void);
 int FEPlyrGetFrontIndex(void);
@@ -372,7 +372,7 @@ void Class_8000F500::vfn_03(int id)
         } else {
             fn_8000EC44()->mUnknown0 = -1;
         }
-        fn_8021D7B8(lbl_803EB688, 0x8000007E, 0, 0);
+        fn_8021D7B8(gUISMainInfo, 0x8000007E, 0, 0);
     }
 }
 

@@ -3,7 +3,7 @@
    file) and hands the chosen file on to be loaded. */
 
 #include "game/Callees_801D57E0.h"
-#include "game/cu_8018422C.h"
+#include "game/MemCardUI.h"
 #include "game/fn_801801F0.h"
 #include "game/TextRecord.h"
 #include "game/fn_801C1F94.h"
@@ -30,7 +30,7 @@ struct MemCardLoadArgs_t {
 };
 
 extern "C" {
-int fn_801869F0();
+int UserRecGetCount();
 void fn_8002A574(int, int);
 void MsgMemCardLoadRegisterCallbacks();
 void MsgMemCardLoadResetList(int, int *);
@@ -61,7 +61,7 @@ extern "C" void MsgMemCardLoadClose()
     fn_801D685C("GN7E-69", 0);
     fn_801D6714(-1);
     fn_801D654C(0);
-    fn_801851D0();
+    MemCardUIClearCallbacks();
 }
 
 extern "C" void MsgMemCardLoadResetList(int value, int *pCount)
@@ -96,7 +96,7 @@ extern "C" int MsgMemCardLoadNextEntry(int *p0, int *p4, int *p8, int *p12)
 
 extern "C" void MsgMemCardLoadSelectEntry(int key, int value)
 {
-    fn_8002A574(key, (key == 2 || key == 3) ? fn_801869F0() : 0);
+    fn_8002A574(key, (key == 2 || key == 3) ? UserRecGetCount() : 0);
     char first[32];
     char second[32];
     fn_801D6B74((signed char)value, key, first, 32, 0, -1, 0);
@@ -126,7 +126,7 @@ extern "C" int MsgMemCardLoadGetCardText(TextRecord_t *p)
 
 extern "C" void MsgMemCardLoadRegisterCallbacks()
 {
-    fn_801851A4(&_MsgMemCardLoad_Callbacks);
+    MemCardUISetCallbacks(&_MsgMemCardLoad_Callbacks);
 }
 
 extern "C" int MsgMemCardLoadHandleMessage(unsigned int value, MemCardLoadArgs_t *p)

@@ -24,7 +24,7 @@ struct Block_8014F104 {
 extern "C" {
 extern int lbl_803EB2DC;
 extern int lbl_803EB2E0;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const int lbl_802DE9CC[];
 
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
@@ -72,7 +72,7 @@ void fn_8014DB24(void *p, float dt)
 {
     fn_801735D8(2048);
     fn_8009D8CC(1);
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_16(lbl_802DE9CC);
     fn_800AAD58(p, dt);
@@ -85,7 +85,7 @@ void fn_8014DBCC(void)
 
 void fn_8014DBF8(void)
 {
-    fn_8021956C(lbl_803EB688, 3, 18, 1);
+    fn_8021956C(gUISMainInfo, 3, 18, 1);
 }
 
 int fn_8014DC28(void)

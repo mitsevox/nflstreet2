@@ -27,8 +27,8 @@ void fn_801779D8(void);
 void fn_80177B54(void);
 void fn_801787FC(int which, short value);
 void fn_8017885C(void);
-void fn_80189F68(void);
-void fn_8018A40C(void);
+void UISGameInit(void);
+void UISGameShutdown(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -250,12 +250,12 @@ const char *UIS::GetName() { return "UIS"; }
 
 int UIS::Init()
 {
-    fn_80189F68();
+    UISGameInit();
     return 1;
 }
 
 int UIS::Shutdown()
 {
-    fn_8018A40C();
+    UISGameShutdown();
     return 1;
 }

@@ -10,7 +10,7 @@ struct Object_8017E46C {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const float lbl_803ED6A4;
 extern const float lbl_803ED6A8;
 
@@ -53,7 +53,7 @@ extern "C" void fn_8017DD68(int index)
             args[0].i = 1;
         }
         args[1].i = 1;
-        fn_8021D7B8(lbl_803EB688, 0x80000031, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000031, 2, args);
     }
 }
 
@@ -69,7 +69,7 @@ extern "C" void fn_8017DDDC(int index)
             args[0].i = 1;
         }
         args[1].i = 0;
-        fn_8021D7B8(lbl_803EB688, 0x80000031, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000031, 2, args);
     }
 }
 
@@ -91,19 +91,19 @@ extern "C" void fn_8017DE54(int a, float t, int b, int direct)
     args[1].f = first;
     if (direct) {
         args[2].i = b;
-        fn_8021D7B8(lbl_803EB688, 0x8000002F, 3, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000002F, 3, args);
     } else {
         args[2].i = fn_800A83E0(a);
-        fn_8021D7B8(lbl_803EB688, 0x80000012, 3, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000012, 3, args);
     }
 
     args[1].f = second;
     if (direct) {
         args[2].i = b;
-        fn_8021D7B8(lbl_803EB688, 0x80000069, 3, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000069, 3, args);
     } else {
         args[2].i = fn_800A83E0(a);
-        fn_8021D7B8(lbl_803EB688, 0x80000068, 3, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000068, 3, args);
     }
 }
 
@@ -113,7 +113,7 @@ extern "C" void fn_8017DF6C(int a, int b)
 
     args[0].i = a;
     args[1].i = b;
-    fn_8021D7B8(lbl_803EB688, 0x8000006A, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000006A, 2, args);
 }
 
 extern "C" void fn_8017DFA8(int index)
@@ -129,7 +129,7 @@ extern "C" void fn_8017DFA8(int index)
             args[0].i = 1;
         }
         args[1].i = 1;
-        fn_8021D7B8(lbl_803EB688, 0x8000003D, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000003D, 2, args);
     }
 }
 
@@ -145,7 +145,7 @@ extern "C" void fn_8017E01C(int index)
             args[0].i = 1;
         }
         args[1].i = 0;
-        fn_8021D7B8(lbl_803EB688, 0x8000003D, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000003D, 2, args);
     }
 }
 
@@ -154,7 +154,7 @@ extern "C" void fn_8017E094(int a)
     Arg_8021D7B8 args[1];
 
     args[0].i = a;
-    fn_8021D7B8(lbl_803EB688, 0x80000076, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000076, 1, args);
 }
 
 extern "C" void fn_8017E0CC(const char *pText0, const char *pText1)
@@ -169,7 +169,7 @@ extern "C" void fn_8017E0CC(const char *pText0, const char *pText1)
     lbl_80362598[1].mLength = strlen(pText1) + 1;
     lbl_80362598[1].mpText = lbl_803625B0[1];
     args[1].p = &lbl_80362598[1];
-    fn_8021D7B8(lbl_803EB688, 0x80000077, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000077, 2, args);
 }
 
 extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key)
@@ -193,7 +193,7 @@ extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, co
     args[1].p = &lbl_803625F0[slot - 1];
     args[2].p = &lbl_803626F8[slot - 1];
     args[3].p = &lbl_80362800[slot - 1];
-    fn_8021D7B8(lbl_803EB688, 0x80000078, 4, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000078, 4, args);
 
     colour[0].i = slot;
     if (fn_8017E570(key, &red, &green, &blue)) {
@@ -207,7 +207,7 @@ extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, co
         colour[3].i = 0;
         colour[4].i = 0;
     }
-    fn_8021D7B8(lbl_803EB688, 0x80000079, 5, colour);
+    fn_8021D7B8(gUISMainInfo, 0x80000079, 5, colour);
 }
 
 extern "C" void fn_8017E328(int a, int b)
@@ -220,7 +220,7 @@ extern "C" void fn_8017E328(int a, int b)
         args[0].i = 1;
     }
     args[1].i = b;
-    fn_8021D7B8(lbl_803EB688, 0x8000006F, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000006F, 2, args);
 }
 
 extern "C" void fn_8017E380(int a)
@@ -232,7 +232,7 @@ extern "C" void fn_8017E380(int a)
     } else {
         args[0].i = 1;
     }
-    fn_8021D7B8(lbl_803EB688, 0x80000070, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000070, 1, args);
 }
 
 extern "C" void fn_8017E3CC(int a)
@@ -245,7 +245,7 @@ extern "C" void fn_8017E3CC(int a)
         } else {
             args[0].i = 1;
         }
-        fn_8021D7B8(lbl_803EB688, 0x8000006B, 1, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000006B, 1, args);
     }
 }
 
@@ -254,7 +254,7 @@ extern "C" void fn_8017E430(void)
     Arg_8021D7B8 args[1];
 
     args[0].i = 0;
-    fn_8021D7B8(lbl_803EB688, 0x80000071, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000071, 1, args);
 }
 
 extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, int c, int d)
@@ -294,7 +294,7 @@ extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, 
     args[4].i = red;
     args[5].i = green;
     args[6].i = blue;
-    fn_8021D7B8(lbl_803EB688, 0x8000007D, 7, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000007D, 7, args);
 }
 
 extern "C" int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue)
@@ -340,5 +340,5 @@ extern "C" void fn_8017E620(int a, int b)
 
     args[0].i = a;
     args[1].i = b;
-    fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
 }

@@ -1,11 +1,11 @@
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXCull.h>
 #include "engine/viewport.h"
-#include "game/cu_801882B4.h"
+#include "game/ResBank.h"
 #include "game/cu_80163674.h"
 
 extern "C" {
-Cache_80188688 *lbl_803EB3A4 = 0;
+ResBank_t *lbl_803EB3A4 = 0;
 extern char *lbl_802EAD10[];
 int FELoopIsMainFEActive(void);
 int ConGetCurrentContext(void);
@@ -42,7 +42,7 @@ int fn_80236B4C(int);
 
 void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc)
 {
-    int data = fn_801889CC(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02);
+    int data = ResBankGetData(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02);
     pObject->mUnknown198 |= 1;
     if (pObject->mUnknown198 & 1) {
         pObject->mUnknown14 = data;
@@ -86,8 +86,8 @@ void fn_80163788(Object_80163788 *pObject, Desc_80163788 *pDesc)
     pObject->mUnknown1DE = 0;
     pObject->mUnknown198 = 0;
     pObject->mUnknown1E4 = 255;
-    fn_80188784(lbl_803EB3A4, pDesc->mUnknown00);
-    fn_8018897C(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02, 0);
+    ResBankOpenFile(lbl_803EB3A4, pDesc->mUnknown00);
+    ResBankLoad(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02, 0);
     fn_80163674(pObject, pDesc);
 }
 
@@ -97,8 +97,8 @@ void fn_801638F0(Object_80163788 *pObject)
         fn_802355E4(&pObject->mUnknown48);
         fn_80234EA0(pObject->mUnknown18, 0);
     }
-    fn_801889A4(lbl_803EB3A4, pObject->mUnknown1CC, pObject->mUnknown1CE);
-    fn_801888A4(lbl_803EB3A4, pObject->mUnknown1CC);
+    ResBankUnload(lbl_803EB3A4, pObject->mUnknown1CC, pObject->mUnknown1CE);
+    ResBankCloseFile(lbl_803EB3A4, pObject->mUnknown1CC);
 }
 
 int fn_80163954(Object_80163788 *pObject, int value)
@@ -152,8 +152,8 @@ void fn_80163B44(Object_80163788 *pObject, void *pData)
     fn_80163AD8(pObject, pData, 4, 0);
     fn_80163AD8(pObject, pData, 5, 1);
     fn_80163AD8(pObject, pData, 3, 2);
-    fn_801889A4(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
-    fn_801888A4(lbl_803EB3A4, pObject->mUnknown1D8);
+    ResBankUnload(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
+    ResBankCloseFile(lbl_803EB3A4, pObject->mUnknown1D8);
     pObject->mUnknown1DE &= ~1;
 }
 
@@ -161,7 +161,7 @@ int fn_80163BCC(Object_80163788 *pObject)
 {
     int result = 1;
     if (pObject->mUnknown1DE & 1) {
-        void *pData = (void *)fn_801889CC(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
+        void *pData = (void *)ResBankGetData(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
         if (pData) {
             fn_80163B44(pObject, pData);
         } else {
@@ -178,12 +178,12 @@ int fn_80163C30(void *pHandle, int count)
         result = ObjSetListObjFunc(pHandle, 19, 0, fn_80163954);
     }
     if (!lbl_803EB3A4) {
-        Desc_80188688 desc;
+        ResBankDesc_t desc;
         desc.mUnknown0 = 1;
         desc.mUnknown4 = 21;
         desc.mUnknown12 = lbl_802EAD10;
         desc.mUnknown8 = 0;
-        lbl_803EB3A4 = fn_80188688(&desc);
+        lbl_803EB3A4 = ResBankCreate(&desc);
         result = (int)lbl_803EB3A4;
     }
     return result;
@@ -193,7 +193,7 @@ void fn_80163CD0(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(19);
-    fn_80188728(lbl_803EB3A4);
+    ResBankDestroy(lbl_803EB3A4);
     lbl_803EB3A4 = 0;
 }
 

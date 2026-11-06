@@ -44,7 +44,7 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 
 extern unsigned char lbl_803EB2D1;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const int lbl_802DE95C[];
 
 void fn_8021956C(void *p, int a, int b, int c);
@@ -77,7 +77,7 @@ int PlayerDbGetId(Object_8008044C *pObject);
 void fn_8014C868(void)
 {
     if (lbl_803EB2D1) {
-        fn_8021956C(lbl_803EB688, 3, 8, 1);
+        fn_8021956C(gUISMainInfo, 3, 8, 1);
         lbl_803EB2D1 = 0;
     }
 }
@@ -88,7 +88,7 @@ void fn_8014C8AC(void *p, float dt)
     fn_8009D8CC(1);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_17(lbl_802DE95C);
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_800AAD58(p, dt);
 }
 
@@ -99,7 +99,7 @@ void fn_8014C954(void)
 
 void fn_8014C980(void)
 {
-    fn_8021956C(lbl_803EB688, 3, 24, 1);
+    fn_8021956C(gUISMainInfo, 3, 24, 1);
 }
 
 void fn_8014C9B0(Class_802A2C90 *p)

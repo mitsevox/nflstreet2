@@ -13,7 +13,7 @@ struct ColumnDefault_802D6798 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int fn_801FA428(int file, Table_8007F19C *pTables, Expression_8007F19C *pExpression,
                 DbColumnValue *pList, Result_8007F19C *pResult, int a);
@@ -247,11 +247,11 @@ int fn_8007F828(int id)
     if ((unsigned int)id <= 22) {
         if (fn_8017F584() == 8) {
             override = 1;
-            if (FELoopIsMainFEActive() != 0 && lbl_803EB688 != 0) {
+            if (FELoopIsMainFEActive() != 0 && gUISMainInfo != 0) {
                 unsigned short state;
                 unsigned short other;
 
-                fn_80219650(lbl_803EB688, &state, &other);
+                fn_80219650(gUISMainInfo, &state, &other);
                 if (state == 5 || state == 0) {
                     allowed = 0;
                 }

@@ -7,7 +7,7 @@ class Class_802A1860 : public Class_80297B90 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 void fn_800AAD58(void *p, float dt);
 void fn_8021956C(void *p, int a, int b, int c);
 int fn_80178348(void);
@@ -27,7 +27,7 @@ void fn_801556D0(unsigned int kind, int value, int flag)
 
 void fn_8015576C(Class_802A1860 *p, float dt)
 {
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_80148A58()->vfn_12();
     fn_800AAD58(p, dt);
 }
@@ -39,6 +39,6 @@ void fn_801557E0(Class_802A1860 *p)
 
 void fn_8015580C(Class_802A1860 *p)
 {
-    fn_8021956C(lbl_803EB688, 3, 25, 1);
+    fn_8021956C(gUISMainInfo, 3, 25, 1);
 }
 }

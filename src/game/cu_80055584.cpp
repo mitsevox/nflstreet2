@@ -2,7 +2,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_8022F478.h"
-#include "game/cu_80190208.h"
+#include "game/Cheat.h"
 #include "game/DbCursor.h"
 #include "game/fn_8007F828.h"
 
@@ -33,10 +33,10 @@ int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
 int fn_800D41F8(int side);
 int fn_8017F60C(void);
-int fn_80190394(void);
+int CheatIsNoneEnabled(void);
 void fn_80186BAC(void);
 void fn_80186CE8(unsigned char *flags);
-int fn_80186A10(int index, char *text);
+int UserRecGetName(int index, char *text);
 void RecordsBegin(void);
 void RecordsEnd(void);
 void RecordsSeekRow(int type, int row);
@@ -56,9 +56,9 @@ int fn_800A7E54(unsigned char side);
 int FeatAwardGameCredits(int side);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
-void fn_8018F52C(DbCursor *pObject, int a);
-void fn_8018F584(DbCursor *pObject);
-void fn_8018F6C0(DbCursor *pObject, int index, int delta);
+void GauntletStatsOpen(DbCursor *pObject, int a);
+void GauntletStatsClose(DbCursor *pObject);
+void GauntletStatsAdd(DbCursor *pObject, int index, int delta);
 int fn_80178AE0(void);
 unsigned int fn_8009D990(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -129,14 +129,14 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
     unavailable = 0;
     if (!fn_8017F584()) {
         if (fn_80186F7C(0) != -1) {
-            fn_80190280(fn_80186F7C(0));
-            unavailable |= fn_80190394() == 0;
-            fn_80190288();
+            CheatSelectSlot(fn_80186F7C(0));
+            unavailable |= CheatIsNoneEnabled() == 0;
+            CheatClearSlot();
         }
         if (fn_80186F7C(1) != -1) {
-            fn_80190280(fn_80186F7C(1));
-            unavailable |= fn_80190394() == 0;
-            fn_80190288();
+            CheatSelectSlot(fn_80186F7C(1));
+            unavailable |= CheatIsNoneEnabled() == 0;
+            CheatClearSlot();
         }
     }
     if (!unavailable) {
@@ -146,7 +146,7 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
         if (update && (fn_80186F7C(0) != -1 || fn_80186F7C(1) != -1)) {
             for (side = 0; side <= 1; ++side) {
                 if (fn_80186F7C((unsigned char)side) != -1)
-                    fn_80186A10(fn_80186F7C((unsigned char)side), names[side]);
+                    UserRecGetName(fn_80186F7C((unsigned char)side), names[side]);
                 else
                     names[side][0] = 0;
             }
@@ -302,7 +302,7 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
         unsigned int score1;
         unsigned int score0;
 
-        fn_8018F52C(&cursor, (signed char)fn_8022F384(fn_8022F4BC()));
+        GauntletStatsOpen(&cursor, (signed char)fn_8022F384(fn_8022F4BC()));
         if (fn_8007F828(14) == 1) {
             score1 = fn_800D41F8(1);
             score0 = fn_800D41F8(0);
@@ -311,23 +311,23 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
             score0 = fn_801787DC(0);
         }
         if (score1 > score0) {
-            fn_8018F6C0(&cursor, 0, 1);
+            GauntletStatsAdd(&cursor, 0, 1);
         } else {
-            fn_8018F6C0(&cursor, 0, 0);
+            GauntletStatsAdd(&cursor, 0, 0);
         }
-        fn_8018F6C0(&cursor, 2, pStats[1][1]);
-        fn_8018F6C0(&cursor, 3, pStats[1][3]);
-        fn_8018F6C0(&cursor, 4, pStats[1][4]);
-        fn_8018F6C0(&cursor, 5, pStats[1][5]);
-        fn_8018F6C0(&cursor, 6, pStats[1][6]);
-        fn_8018F6C0(&cursor, 7, pStats[1][7]);
-        fn_8018F6C0(&cursor, 8, pStats[1][8]);
-        fn_8018F6C0(&cursor, 9, pStats[1][9]);
-        fn_8018F6C0(&cursor, 10, pStats[1][10]);
-        fn_8018F6C0(&cursor, 11, pStats[1][11]);
-        fn_8018F6C0(&cursor, 12, pStats[1][12]);
-        fn_8018F6C0(&cursor, 13, score1);
-        fn_8018F584(&cursor);
+        GauntletStatsAdd(&cursor, 2, pStats[1][1]);
+        GauntletStatsAdd(&cursor, 3, pStats[1][3]);
+        GauntletStatsAdd(&cursor, 4, pStats[1][4]);
+        GauntletStatsAdd(&cursor, 5, pStats[1][5]);
+        GauntletStatsAdd(&cursor, 6, pStats[1][6]);
+        GauntletStatsAdd(&cursor, 7, pStats[1][7]);
+        GauntletStatsAdd(&cursor, 8, pStats[1][8]);
+        GauntletStatsAdd(&cursor, 9, pStats[1][9]);
+        GauntletStatsAdd(&cursor, 10, pStats[1][10]);
+        GauntletStatsAdd(&cursor, 11, pStats[1][11]);
+        GauntletStatsAdd(&cursor, 12, pStats[1][12]);
+        GauntletStatsAdd(&cursor, 13, score1);
+        GauntletStatsClose(&cursor);
     }
     *pMode = fn_80178AE0();
     if (*pMode == 2) {

@@ -19,12 +19,12 @@ void fn_80166BE8(Object_80167160 *, State_80167094 *, Record_80167094 *, int, in
 int fn_8016631C(Record_80167094 *, int, void *, void *, void *, void *, int);
 int fn_80165770(Object_80167160 *, State_80167094 *, Record_80167094 *);
 Team_80167A8C *fn_80168EBC(int);
-void fn_8018A8C8(int);
+void UISGameSetDrawMode(int);
 int fn_8017F60C(void);
 int fn_801486A0(void);
 int fn_800BA6F8(void);
 void PlyrIconQueueAdd(float, float, void *, unsigned char);
-void fn_8018A908(void (*)(int, float, float, float, float));
+void UISViewObjSetDrawFunc(void (*)(int, float, float, float, float));
 void PlyrIconShutdown(void);
 int fn_801F1520(int);
 void fn_801A1240(int);
@@ -87,7 +87,7 @@ void fn_80167160(void *p, Object_80167160 *object, int, int, int, int group, int
 
 void fn_801673A0(int code, float x, float y, float, float)
 {
-    fn_8018A8C8(5);
+    UISGameSetDrawMode(5);
     int flag = 1;
     if ((!fn_8017F60C() && fn_801486A0() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
         flag = 0;
@@ -124,7 +124,7 @@ void fn_80167720(void)
     fn_801C1F94(lbl_80328570[0], fn_80168EBC(0)->mUnknown20.mUnknown10, 9);
     fn_801C1F94(lbl_80328570[1], fn_80168EBC(1)->mUnknown20.mUnknown10, 9);
     fn_801C1F94(lbl_80328570[2], 0, 9);
-    fn_8018A908(fn_801673A0);
+    UISViewObjSetDrawFunc(fn_801673A0);
 }
 void fn_80167794(signed char group, int value, int index)
 {
@@ -136,7 +136,7 @@ void fn_80167794(signed char group, int value, int index)
 }
 void fn_801677F4(void)
 {
-    fn_8018A908(0);
+    UISViewObjSetDrawFunc(0);
     PlyrIconShutdown();
 }
 void fn_8016781C(int value)
