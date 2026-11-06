@@ -240,7 +240,7 @@ int fn_801E0DF0(Desc_801E0DF0 *pDesc)
     if (pItem) {
         fn_801C1F94(pItem, 0, sizeof(Item_801E0A3C));
         pItem->mUnknown8 = pDesc->mUnknown24;
-        fn_801F50C8((SndBankEntry_801F50C8 *)fn_801F44A4(), pDesc->mUnknown10);
+        SndSetHeap((SndBankHeap_t *)fn_801F44A4(), pDesc->mUnknown10);
         if (pDesc->mUnknown24) {
             result = fn_801B3D28(pDesc->mId, &pDesc->mUnknown14, pDesc->mUnknown20);
             if (result >= 0) {

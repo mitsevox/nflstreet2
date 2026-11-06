@@ -130,11 +130,11 @@ static void fn_801F5E24(Stream_801F5DA4 *s, int size)
     int used;
     int newUsed;
 
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     used = s->mUsed;
     newUsed = used - size;
     s->mUsed = newUsed;
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (used >= s->mGreedyLevel && newUsed < s->mGreedyLevel) {
         s->mGreedyState = 1;
         if (s->mState == 1) {
@@ -147,7 +147,7 @@ static StreamRequest_801F5EA4 *fn_801F5EA4(Stream_801F5DA4 *s)
 {
     StreamRequest_801F5EA4 *req = 0;
 
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     if (s->pFree) {
         req = s->pFree;
         s->pFree = req->pNext;
@@ -157,7 +157,7 @@ static StreamRequest_801F5EA4 *fn_801F5EA4(Stream_801F5DA4 *s)
         }
         req->mID = (req->mID & 0xFF) | lbl_803ECFA0;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     return req;
 }
 
@@ -165,7 +165,7 @@ static void fn_801F5F28(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
 {
     req->mState = 1;
     req->pNext = 0;
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     if (s->pLast == 0) {
         req->pPrev = 0;
         s->pFirst = req;
@@ -176,7 +176,7 @@ static void fn_801F5F28(Stream_801F5DA4 *s, StreamRequest_801F5EA4 *req)
         s->pLast->pNext = req;
         s->pLast = req;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
 }
 
 static StreamRequest_801F5EA4 *fn_801F5FA4(Stream_801F5DA4 *s, int id)
@@ -260,16 +260,16 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
         }
         tap = fn_801F6074(s, c);
         if (tap < 0) {
-            fn_801F778C(s->pMutex);
+            _StreamMUTEX_lock(s->pMutex);
             cancelled = req->mState == 4;
             if (!cancelled) {
                 c->mID = fn_801F5D84(CHUNK_SKIP);
                 s->pHead += size;
             }
-            fn_801F77B4(s->pMutex);
+            _StreamMUTEX_unlock(s->pMutex);
         } else {
             c->mSize = fn_801F5D84(size | (tap << 24));
-            fn_801F778C(s->pMutex);
+            _StreamMUTEX_lock(s->pMutex);
             cancelled = req->mState == 4;
             if (!cancelled) {
                 t = &s->pTaps[tap - 1];
@@ -284,7 +284,7 @@ static int fn_801F60F0(Stream_801F5DA4 *s)
                     s->mGreedyState = 0;
                 }
             }
-            fn_801F77B4(s->pMutex);
+            _StreamMUTEX_unlock(s->pMutex);
         }
         if (cancelled) {
             if (fn_801F5D84(c->mID) != req->mEndMarker) {
@@ -318,11 +318,11 @@ static void fn_801F62F0(Stream_801F5DA4 *s)
     if (req->mState == 4) {
         fn_801F6410(s, s->mGreedyPriority);
     } else if (end || found) {
-        fn_801F778C(s->pMutex);
+        _StreamMUTEX_lock(s->pMutex);
         if (req->mState != 4) {
             req->mState = 3;
         }
-        fn_801F77B4(s->pMutex);
+        _StreamMUTEX_unlock(s->pMutex);
         fn_801F6410(s, s->mGreedyPriority);
     } else {
         fn_801F6540(s, s->mGreedyPriority - 1);
@@ -339,7 +339,7 @@ static void fn_801F6410(Stream_801F5DA4 *s, int priority)
     int idle;
     StreamRequest_801F5EA4 *req;
 
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     if (s->pCurrent == 0) {
         idle = 1;
     } else if (s->pCurrent->mState == 1) {
@@ -358,7 +358,7 @@ static void fn_801F6410(Stream_801F5DA4 *s, int priority)
         req->pStart = s->pHead;
         req->mState = 2;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (!idle) {
         s->pWrite = s->pHead;
         if (req->mType == 1) {
@@ -396,7 +396,7 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
             break;
         }
     }
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     for (;;) {
         req = s->pFirst;
         if (req->pNext == 0 || req->pNext->mState == 1) {
@@ -407,7 +407,7 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
         }
         fn_801F5FF4(s, req);
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if ((unsigned int)s->pTail > (unsigned int)s->pWrite) {
         avail = s->pTail - s->pWrite - 33;
     } else {
@@ -491,7 +491,7 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
         return 0;
     }
     s->mMagic = STREAM_MAGIC;
-    s->pMutex = fn_801F773C();
+    s->pMutex = _StreamMUTEX_alloc();
     pRequests = (StreamRequest_801F5EA4 *)(s + 1);
     pFilters = (StreamFilter_801F6074 *)(pRequests + numRequests);
     pTaps = (StreamTap_801F5DA4 *)(pFilters + numFilters);
@@ -580,7 +580,7 @@ void fn_801F6B84(StreamTap_801F5DA4 *h)
             }
         }
         s->mMagic = 0;
-        fn_801F7764(s->pMutex);
+        _StreamMUTEX_free(s->pMutex);
     }
 }
 
@@ -648,12 +648,12 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, u
     req->mUnk2C = offset;
     req->mEndMarker = endMarker;
     fn_801F5F28(s, req);
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 0) {
         s->mState = 1;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (state == 0) {
         if (s->mGreedyState) {
             fn_801F6410(s, s->mGreedyPriority);
@@ -693,12 +693,12 @@ int fn_801F6E9C(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMar
     req->mEndMarker = endMarker;
     req->mType = 1;
     fn_801F5F28(s, req);
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 0) {
         s->mState = 1;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (state == 0) {
         fn_801F6410(s, 0);
     }
@@ -722,7 +722,7 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
     if (fn_801F5DA4(h, &s, &t) != 0) {
         return;
     }
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     req = fn_801F5FA4(s, id);
     if (req == 0 || req->mState == 4) {
         skip = 1;
@@ -744,7 +744,7 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
         }
         skip = 0;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (!skip) {
         for (i = 0; i < s->mNumTaps; i++) {
             t = &s->pTaps[i];
@@ -758,9 +758,9 @@ void fn_801F6FA0(StreamTap_801F5DA4 *h, int id)
                         } else {
                             size = fn_801F5D84(c->mSize) & 0xFFFFFF;
                             if ((fn_801F5D84(c->mSize) & 0xFF000000) == tap) {
-                                fn_801F778C(s->pMutex);
+                                _StreamMUTEX_lock(s->pMutex);
                                 t->mBytes -= size;
-                                fn_801F77B4(s->pMutex);
+                                _StreamMUTEX_unlock(s->pMutex);
                                 fn_801F5E24(s, size);
                                 c->mID = fn_801F5D84(CHUNK_SKIP);
                                 c->mSize = fn_801F5D84(size);
@@ -850,9 +850,9 @@ StreamChunk_801F5D84 *fn_801F73D4(StreamTap_801F5DA4 *h)
     c = (StreamChunk_801F5D84 *)t->pRead;
     size = fn_801F5D84(c->mSize) & 0xFFFFFF;
     c->mSize = fn_801F5D84(size);
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     left = t->mBytes -= size;
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (left > 0) {
         tap = t->mIndex << 24;
         pNext = (StreamChunk_801F5D84 *)((char *)c + size);
@@ -881,12 +881,12 @@ void fn_801F74D4(StreamTap_801F5DA4 *h, StreamChunk_801F5D84 *c)
     }
     c->mID = fn_801F5D84(CHUNK_SKIP);
     fn_801F5E24(s, fn_801F5D84(c->mSize));
-    fn_801F778C(s->pMutex);
+    _StreamMUTEX_lock(s->pMutex);
     state = s->mState;
     if (state == 2) {
         s->mState = 1;
     }
-    fn_801F77B4(s->pMutex);
+    _StreamMUTEX_unlock(s->pMutex);
     if (state == 2) {
         if (s->mGreedyState) {
             fn_801F6540(s, s->mGreedyPriority);

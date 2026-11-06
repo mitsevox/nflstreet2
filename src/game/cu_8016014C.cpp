@@ -49,9 +49,9 @@ int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0A8C(void *pArchive, char *pName);
 int fn_801F0C50(void *pArchive, int id);
 int fn_801F1520(int value);
-void fn_801F282C(void);
-void fn_801F283C(void);
-void fn_801F51DC(int a, void *pBase, int count, int size,
+void ResTrackPause(void);
+void ResTrackResume(void);
+void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(const SortEntry_80160CDC *, const SortEntry_80160CDC *),
                  int b, int c, int d);
 void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
@@ -432,7 +432,7 @@ void fn_80160CDC(void)
     int palette;
     void *pBuffer;
 
-    fn_801F282C();
+    ResTrackPause();
     n = 0;
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
@@ -447,7 +447,7 @@ void fn_80160CDC(void)
 
     count = n;
     if (n != 0) {
-        fn_801F51DC(0, entries, n, 4, fn_80160CCC, 0, 0, 1);
+        SortArray(0, entries, n, 4, fn_80160CCC, 0, 0, 1);
         id = -1;
         pBuffer = fn_801D2B7C(sMaxSize, 0, 0);
         palette = -1;
@@ -464,7 +464,7 @@ void fn_80160CDC(void)
         }
         fn_801D2BD0(pBuffer);
     }
-    fn_801F283C();
+    ResTrackResume();
 }
 
 void fn_80160E94(int player, int slot, int id, int palette, int force)

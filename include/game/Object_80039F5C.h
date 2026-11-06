@@ -32,7 +32,7 @@ struct Vector_80039F5C {
     float mZ;
 };
 
-/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
+/* Rotation built by QuatFromEuler from three angles and reset by QuatIdentity. */
 struct Quat_801EB488 {
     float mX;
     float mY;

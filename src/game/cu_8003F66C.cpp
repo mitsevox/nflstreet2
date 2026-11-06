@@ -79,7 +79,7 @@ unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801E
                           Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot, Object_80039F5C **ppObject,
                           int *pIndex, unsigned char *pFlag);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
+void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 }
 
@@ -383,7 +383,7 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
 
         if (index0 == index1) {
             fn_80227930(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
-            fn_801EC048(&pBlock->mUnknown108, &linkRot1, &linkRot0, t);
+            QuatSlerp(&pBlock->mUnknown108, &linkRot1, &linkRot0, t);
         } else {
             pBlock->mUnknown4.mX = linkPos1.mX;
             pBlock->mUnknown4.mY = linkPos1.mY;
@@ -396,7 +396,7 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
         }
     } else {
         fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
-        fn_801EC048(&pBlock->mUnknown108, &rot1, &rot0, t);
+        QuatSlerp(&pBlock->mUnknown108, &rot1, &rot0, t);
     }
     pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4.mX);
     if (changed0 | changed1) {

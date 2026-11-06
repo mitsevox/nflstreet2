@@ -1,20 +1,24 @@
+/* Quaternion maths for the engine: identity, length, normalise, multiply, inverse, conversion to and
+   from rotation matrices and Euler angles, rotating vectors, and spherical interpolation, used by
+   animation blending and camera and player orientation. */
+
 #include "engine/Record_800D81C8.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 
-typedef struct Quat_801EB814 {
+typedef struct Quat_t {
     float x;
     float y;
     float z;
     float w;
-} Quat_801EB814;
+} Quat_t;
 
-typedef struct Mtx_801EB8B4 {
+typedef struct QuatMatrix_t {
     float mElements[16];
-} Mtx_801EB8B4;
+} QuatMatrix_t;
 
-static const unsigned char lbl_803ED6E0[3] = { 1, 2, 0 };
+static const unsigned char Quat_NextTraceIndex[3] = { 1, 2, 0 };
 
 double fabs(double x);
 float fn_80260B1C(float x);
@@ -25,31 +29,31 @@ float fn_801CFDB0(float x);
 int fn_801CFE40(float y, float x);
 float fn_801CFF54(float x);
 float fn_801CFFA0(float x);
-float fn_801EB4EC(Quat_801EB814 *q);
-void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale);
+float QuatInvLength(Quat_t *q);
+void QuatScale(Quat_t *pOut, Quat_t *q, float scale);
 
-void fn_801EB488(Quat_801EB814 *q)
+void QuatIdentity(Quat_t *q)
 {
     q->x = q->y = q->z = 0.0f;
     q->w = 1.0f;
 }
 
-float fn_801EB4AC(Quat_801EB814 *q)
+float QuatLength(Quat_t *q)
 {
     return fn_80260B1C(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
-float fn_801EB4EC(Quat_801EB814 *q)
+float QuatInvLength(Quat_t *q)
 {
     return fn_801CFF54(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
-void fn_801EB52C(Quat_801EB814 *pOut, Quat_801EB814 *q)
+void QuatNormalize(Quat_t *pOut, Quat_t *q)
 {
-    fn_801EB56C(pOut, q, fn_801EB4EC(q));
+    QuatScale(pOut, q, QuatInvLength(q));
 }
 
-void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale)
+void QuatScale(Quat_t *pOut, Quat_t *q, float scale)
 {
     pOut->x = q->x * scale;
     pOut->y = q->y * scale;
@@ -57,7 +61,7 @@ void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale)
     pOut->w = q->w * scale;
 }
 
-int fn_801EB5A0(Quat_801EB814 *pA, Quat_801EB814 *pB, float epsilon)
+int QuatIsEqual(Quat_t *pA, Quat_t *pB, float epsilon)
 {
     float dx = fabs(pA->x - pB->x);
     float dy = fabs(pA->y - pB->y);
@@ -71,7 +75,7 @@ int fn_801EB5A0(Quat_801EB814 *pA, Quat_801EB814 *pB, float epsilon)
     return equal;
 }
 
-void fn_801EB61C(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
+void QuatSubtract(Quat_t *pOut, Quat_t *pA, Quat_t *pB)
 {
     pOut->x = pA->x - pB->x;
     pOut->y = pA->y - pB->y;
@@ -79,9 +83,9 @@ void fn_801EB61C(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
     pOut->w = pA->w - pB->w;
 }
 
-void fn_801EB660(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
+void QuatMultiply(Quat_t *pOut, Quat_t *pA, Quat_t *pB)
 {
-    Quat_801EB814 q;
+    Quat_t q;
 
     q.x = pA->w * pB->x + pA->x * pB->w + pA->y * pB->z - pA->z * pB->y;
     q.y = pA->w * pB->y + pA->y * pB->w + pA->z * pB->x - pA->x * pB->z;
@@ -93,25 +97,25 @@ void fn_801EB660(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
     pOut->w = q.w;
 }
 
-void fn_801EB700(Quat_801EB814 *pOut, Quat_801EB814 *q)
+void QuatInverse(Quat_t *pOut, Quat_t *q)
 {
-    fn_801EB56C(pOut, q, 1.0f / (q->w * q->w + q->x * q->x + q->y * q->y + q->z * q->z));
+    QuatScale(pOut, q, 1.0f / (q->w * q->w + q->x * q->x + q->y * q->y + q->z * q->z));
     pOut->x = -q->x;
     pOut->y = -q->y;
     pOut->z = -q->z;
 }
 
-float fn_801EB780(Quat_801EB814 *pA, Quat_801EB814 *pB)
+float QuatDot(Quat_t *pA, Quat_t *pB)
 {
     return pA->x * pB->x + pA->y * pB->y + pA->z * pB->z + pA->w * pB->w;
 }
 
-float fn_801EB7B4(Quat_801EB814 *pA, Quat_801EB814 *pB)
+float QuatNormalizedDot(Quat_t *pA, Quat_t *pB)
 {
-    return fn_801EB780(pA, pB) * (fn_801EB4EC(pA) * fn_801EB4EC(pB));
+    return QuatDot(pA, pB) * (QuatInvLength(pA) * QuatInvLength(pB));
 }
 
-void fn_801EB814(float m[4][4], Quat_801EB814 *q)
+void QuatToMatrix(float m[4][4], Quat_t *q)
 {
     float x2 = q->x + q->x;
     float y2 = q->y + q->y;
@@ -139,7 +143,7 @@ void fn_801EB814(float m[4][4], Quat_801EB814 *q)
 
 /* Recover a quaternion from the rotation entries; the small-trace branch
    retains the added third diagonal term. */
-void QuatFromMatrix(float *q, Mtx_801EB8B4 *m)
+void QuatFromMatrix(float *q, QuatMatrix_t *m)
 {
     float trace;
     float s;
@@ -160,8 +164,8 @@ void QuatFromMatrix(float *q, Mtx_801EB8B4 *m)
         if (!(m->mElements[10] <= m->mElements[i * 4 + i])) {
             i = 2;
         }
-        j = lbl_803ED6E0[i];
-        k = lbl_803ED6E0[j];
+        j = Quat_NextTraceIndex[i];
+        k = Quat_NextTraceIndex[j];
         s = fn_80260B1C(m->mElements[i * 4 + i] - m->mElements[j * 4 + j] + m->mElements[k * 4 + k] + 1.0f);
         q[i] = s * 0.5f;
         s = 0.5f / s;
@@ -171,15 +175,15 @@ void QuatFromMatrix(float *q, Mtx_801EB8B4 *m)
     }
 }
 
-void fn_801EBA64(float *q)
+void QuatFromMat(float *q)
 {
-    Mtx_801EB8B4 m;
+    QuatMatrix_t m;
 
     fn_801D0F80(m.mElements);
     QuatFromMatrix(q, &m);
 }
 
-void fn_801EBAA0(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_801EB814 *q)
+void QuatTranslate(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_t *q)
 {
     float x2 = q->x + q->x;
     float y2 = q->y + q->y;
@@ -203,7 +207,7 @@ void fn_801EBAA0(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_801EB814 *q)
     pOut->z += rz;
 }
 
-void fn_801EBBA4(Quat_801EB814 *q, Vec3_801DE1E0 *pAxis, int angle)
+void QuatFromAxisAngle(Quat_t *q, Vec3_801DE1E0 *pAxis, int angle)
 {
     float s;
     float c;
@@ -215,7 +219,7 @@ void fn_801EBBA4(Quat_801EB814 *q, Vec3_801DE1E0 *pAxis, int angle)
     q->w = c;
 }
 
-void fn_801EBC18(Angles_801EBC18 *pOut, float *pRot)
+void QuatToEuler(QuatEulerAngles_t *pOut, float *pRot)
 {
     float x = pRot[0];
     float y = pRot[1];
@@ -250,7 +254,7 @@ void fn_801EBC18(Angles_801EBC18 *pOut, float *pRot)
     pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
 }
 
-void fn_801EBD8C(Triple_801BCA74 *pOut, Quat_801EB814 *q)
+void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_t *q)
 {
     float x = q->x;
     float y = q->y;
@@ -285,7 +289,7 @@ void fn_801EBD8C(Triple_801BCA74 *pOut, Quat_801EB814 *q)
     pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
 }
 
-void fn_801EBEF8(Quat_801EB814 *q, int x, int y, int z)
+void QuatFromEuler(Quat_t *q, int x, int y, int z)
 {
     int angles[3];
     float s[3];
@@ -309,7 +313,7 @@ void fn_801EBEF8(Quat_801EB814 *q, int x, int y, int z)
     q->w = c[0] * cc + s[0] * ss;
 }
 
-void fn_801EBFA0(Quat_801EB814 *q, int x, int y, int z)
+void QuatFromEulerYZX(Quat_t *q, int x, int y, int z)
 {
     int angles[3];
     float s[3];
@@ -333,16 +337,16 @@ void fn_801EBFA0(Quat_801EB814 *q, int x, int y, int z)
     q->w = c[0] * cc - s[0] * ss;
 }
 
-void fn_801EC048(Quat_801EB814 *q, Quat_801EB814 *pTo, Quat_801EB814 *pFrom, float t)
+void QuatSlerp(Quat_t *q, Quat_t *pTo, Quat_t *pFrom, float t)
 {
-    Quat_801EB814 to;
+    Quat_t to;
     float cosom;
     float omega;
     float sinom;
     float scale0;
     float scale1;
 
-    cosom = fn_801EB7B4(pFrom, pTo);
+    cosom = QuatNormalizedDot(pFrom, pTo);
     if (!(cosom >= 0.0f)) {
         cosom = -cosom;
         to.x = -pTo->x;

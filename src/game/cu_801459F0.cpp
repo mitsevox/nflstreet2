@@ -4,7 +4,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
 #include "game/Object_80146094.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 
 /* One 0x44-byte entry of the pool at lbl_803EB254. */
 struct Entry_80145EFC {
@@ -243,8 +243,8 @@ void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
     fn_801D0508();
     fn_801D0C58(pPos);
     if (pRot != 0) {
-        Angles_801EBC18 v;
-        fn_801EBC18(&v, pRot);
+        QuatEulerAngles_t v;
+        QuatToEuler(&v, pRot);
 
         fn_801D0BCC(v.mUnknown8, v.mUnknown4, v.mUnknown0);
     }

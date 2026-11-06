@@ -110,7 +110,7 @@ int fn_801E15D0(int a);
 int fn_801E17D0(int a, char *p);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
-float fn_801EC418(int a, int b, char *p);
+float RemapCheckEntry(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
 void fn_80236F34(void);
@@ -197,7 +197,7 @@ static void fn_80028140(int a, InputValues *pPrevious, InputValues *pCurrent)
         if (sUnknown803EA2F8 && fn_80026CC4(handle)) {
             done = 0;
             for (i = 0; i < count; i++) {
-                float value = fabs(fn_801EC418(handle, i, p + 8));
+                float value = fabs(RemapCheckEntry(handle, i, p + 8));
 
                 if (value <= 0.5f || done) {
                     continue;

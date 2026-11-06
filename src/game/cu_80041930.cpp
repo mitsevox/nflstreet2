@@ -51,8 +51,8 @@ void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0FB8(float *p);
 void fn_801D11F4(int *p, int a);
-void fn_801EB488(Quat_801EB488 *pRot);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatIdentity(Quat_801EB488 *pRot);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 
 float lbl_802CCDDC[7] = {0.75f, 0.9f, 0.95f, 1.0f, 0.95f, 0.9f, 0.75f};
@@ -375,10 +375,10 @@ void fn_800423F8(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
         fn_801D0FB8(pOut);
         fn_801D11F4(angles, 0);
         fn_801D0544();
-        fn_801EBEF8(pRot, angles[2], angles[1], angles[0]);
+        QuatFromEuler(pRot, angles[2], angles[1], angles[0]);
     } else {
         pOut[0] = pOut[1] = pOut[2] = 0.0f;
-        fn_801EB488(pRot);
+        QuatIdentity(pRot);
     }
 }
 

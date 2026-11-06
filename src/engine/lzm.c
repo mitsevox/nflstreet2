@@ -624,20 +624,20 @@ int fn_80281590(unsigned char *out, int dist, int len, int mode, int limit, int 
     return total;
 }
 
-void *fn_80281938(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *fn_80281938(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-void fn_80281C68(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void fn_80281C68(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
 
-void *fn_80281C6C(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst)
+void *fn_80281C6C(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
     return 0;
 }
 
-void fn_802821E4(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState)
+void fn_802821E4(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }

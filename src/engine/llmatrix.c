@@ -7,7 +7,7 @@
 extern MatStack_801D0110 *lbl_803EBCC0;
 
 void fn_8024AA18(float *pA, float *pB, float *pDst);
-void fn_801EB814(float *pMatrix, float *pQuat);
+void QuatToMatrix(float *pMatrix, float *pQuat);
 float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
 float fn_801CFB18(int angle);
@@ -183,7 +183,7 @@ void fn_801D0860(float *pQuat)
     float *pCurrent;
 
     fn_801D03D0(m);
-    fn_801EB814(m, pQuat);
+    QuatToMatrix(m, pQuat);
     pCurrent = fn_801D0444();
     fn_801D058C(m, pCurrent, m);
     pCurrent[0] = m[0];

@@ -62,7 +62,7 @@ extern const char lbl_802AFCFC[];
 extern const char lbl_802AFE50[];
 extern const char lbl_802AFE5C[];
 extern const char lbl_802AFE6C[];
-extern int fn_8027EFAC(int year);
+extern int DateIsYearLeap(int year);
 
 
 static void fn_801D3C68(int *pOffset, int *pChunkSize)
@@ -153,14 +153,14 @@ static void fn_801D3E6C(Struct_801D4848 *pEntry, unsigned int seconds)
     while (days >= count) {
         days -= count;
         pEntry->mYear++;
-        if (fn_8027EFAC(pEntry->mYear)) {
+        if (DateIsYearLeap(pEntry->mYear)) {
             count = 366;
         } else {
             count = 365;
         }
     }
     pEntry->mYear += 2000;
-    daysInMonth[2] = fn_8027EFAC(pEntry->mYear) ? 29 : 28;
+    daysInMonth[2] = DateIsYearLeap(pEntry->mYear) ? 29 : 28;
     count = 1;
     while (days >= daysInMonth[count]) {
         days -= daysInMonth[count++];

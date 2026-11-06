@@ -29,8 +29,8 @@ extern void *fn_801C6A20(void *pPool);
 extern void *fn_801C6B4C(void *pPool, int mode);
 extern void fn_801C6C0C(void *pPool, void *pItem);
 extern int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, int (*pFunc)(void *, void *, void *), int count);
-extern int fn_8027F000(int year);
-extern int fn_8027F030(int month, int year);
+extern int DateGetNumDaysInYear(int year);
+extern int DateGetNumDaysInMonth(int month, int year);
 
 extern unsigned char lbl_803EBE30;
 extern int lbl_803EBE34;
@@ -248,8 +248,8 @@ int fn_801F7C88(void)
 
 unsigned long long fn_801F7D34(SysTime_8039B430 *pTime)
 {
-    unsigned int monthDays = fn_8027F030(pTime->mMonth, pTime->mYear);
-    unsigned int yearDays = fn_8027F000(pTime->mYear);
+    unsigned int monthDays = DateGetNumDaysInMonth(pTime->mMonth, pTime->mYear);
+    unsigned int yearDays = DateGetNumDaysInYear(pTime->mYear);
 
     return pTime->mHundredths * 10 + pTime->mSeconds * 1000 + pTime->mMinutes * 60000 + pTime->mHours * 3600000 +
            pTime->mDays * 86400000 + pTime->mMonth * 86400000u * monthDays + pTime->mYear * 86400000u * yearDays;

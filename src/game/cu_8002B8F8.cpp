@@ -209,7 +209,7 @@ void *fn_801C6B4C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
 void *fn_801D2B7C(int size, int a, int b);
 int fn_801D2BD0(void *p);
-void fn_801EC3B8(int a, int b);
+void RemapCopyTable(int a, int b);
 int fn_801F7ABC(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
@@ -821,7 +821,7 @@ extern "C" void fn_8002C75C(Type_803EA368 *p)
         fn_801C6280(9, 2, (int)fn_80026DD4);
         fn_801C6280(9, 4, 1);
         fn_801C6280(-1, 3, (int)lbl_802EC330);
-        fn_801EC3B8(9, p->mUnknownD8C);
+        RemapCopyTable(9, p->mUnknownD8C);
     }
 }
 

@@ -28,7 +28,7 @@ void fn_80168210(void);
 void fn_801684B8(int);
 void fn_8017F664(void);
 void fn_8019B5D4(void);
-void fn_801F2798(const char *);
+void ResTrackLabel(const char *);
 }
 
 static ModuleDependency sFEPlyBkDependencies[] = { &gGameState, 0 };
@@ -63,15 +63,15 @@ int FEPlyr::Init()
 {
     static unsigned char sFirstInit = 1;
 
-    fn_801F2798("PlyrModel-FEStart");
+    ResTrackLabel("PlyrModel-FEStart");
     fn_8015E654(0);
     fn_8015E6C4();
     fn_8015E950(1, 0);
-    fn_801F2798("PlyrModel-FEFinish");
-    fn_801F2798("PlyrTex-FEStart");
+    ResTrackLabel("PlyrModel-FEFinish");
+    ResTrackLabel("PlyrTex-FEStart");
     fn_80160874(2);
     fn_80160A80();
-    fn_801F2798("PlyrTex-FEFinish");
+    ResTrackLabel("PlyrTex-FEFinish");
     if (sFirstInit) {
         sFirstInit = 0;
         fn_8015F35C();
@@ -126,9 +126,9 @@ int FMMainFEInit::Init()
     if (sFirstInit) {
         sFirstInit = 0;
         gSysPreLoad.fn_8008D4A8();
-        fn_801F2798("DynClutInitStart");
+        ResTrackLabel("DynClutInitStart");
         fn_8004613C();
-        fn_801F2798("DynClutInitFinish");
+        ResTrackLabel("DynClutInitFinish");
         fn_8008FBA0();
     }
     fn_8019B5D4();

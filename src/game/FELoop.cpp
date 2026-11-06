@@ -67,7 +67,7 @@ void fn_801CE82C(void);
 void fn_801CE910(void);
 int fn_801CEB4C(void);
 void fn_801D6F58(void);
-void fn_801F2798(const char *pText);
+void ResTrackLabel(const char *pText);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_802294F4(void);
@@ -285,7 +285,7 @@ static void fn_80027950()
 
 void FELoop::fn_800279AC()
 {
-    fn_801F2798("FELoopBootStart");
+    ResTrackLabel("FELoopBootStart");
     fn_80027950();
     fn_80187FDC();
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
@@ -295,7 +295,7 @@ void FELoop::fn_800279AC()
     }
     fn_80186EF4();
     fn_800244E4();
-    fn_801F2798("FELoopBootFinish");
+    ResTrackLabel("FELoopBootFinish");
 }
 
 void fn_80027A20()

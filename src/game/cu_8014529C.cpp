@@ -1,7 +1,7 @@
 #include "game/Event_801459F0.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_80136B1C.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
@@ -21,11 +21,11 @@ void fn_801D0C58(void *a);
 void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0FB8(Vector_80039F5C *pOut);
-void fn_801D11F4(Angles_801EBC18 *pOut, int a);
+void fn_801D11F4(QuatEulerAngles_t *pOut, int a);
 int fn_80227594(float *pA, float *pB, float tolerance);
 }
 
-extern "C" void fn_8014529C(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, Angles_801EBC18 *pAngles)
+extern "C" void fn_8014529C(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
     fn_801D04C4();
     fn_801D06D4(pBody->mUnknown908);
@@ -85,7 +85,7 @@ extern "C" void fn_801454DC(Event_801459F0 *pEvent)
 {
     Object_80039F5C *pPlayer = pEvent->mUnknown0C;
     Vector_80039F5C pos;
-    Angles_801EBC18 angles;
+    QuatEulerAngles_t angles;
     float m[4][4];
     Args_80144CE0 args;
 
@@ -125,7 +125,7 @@ extern "C" void fn_801455F8(Event_801459F0 *pEvent)
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
     Object_80146094 *pTrail = &pBody->mUnknown5188;
     Vector_80039F5C pos;
-    Angles_801EBC18 angles;
+    QuatEulerAngles_t angles;
     float m[4][4];
     Args_80144CE0 args;
 

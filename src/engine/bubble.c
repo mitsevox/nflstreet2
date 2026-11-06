@@ -1,9 +1,11 @@
+/* Bubble sort algorithm registered with the sorting front end as sort type 0. */
+
 #include "engine/sort.h"
 #include "game/fn_801D2B7C.h"
 
-static void fn_801F53A0(void *pA, void *pB, void *pTemp, int size);
+static void _BubbleSwapEl(void *pA, void *pB, void *pTemp, int size);
 
-static void fn_801F524C(void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
+static void _SortBubbleSort(void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
                         void (*pSwap)(void *, void *), void *pTemp, int flags)
 {
     void *pBuffer = 0;
@@ -33,7 +35,7 @@ static void fn_801F524C(void *pBase, unsigned int count, int size, int (*pCompar
                 if (pSwap) {
                     pSwap(p, p + size);
                 } else {
-                    fn_801F53A0(p, p + size, pBuffer, size);
+                    _BubbleSwapEl(p, p + size, pBuffer, size);
                 }
                 swapped = 1;
             }
@@ -49,7 +51,7 @@ static void fn_801F524C(void *pBase, unsigned int count, int size, int (*pCompar
     }
 }
 
-static void fn_801F53A0(void *pA, void *pB, void *pTemp, int size)
+static void _BubbleSwapEl(void *pA, void *pB, void *pTemp, int size)
 {
     if (size == 4) {
         int temp = *(int *)pA;
@@ -62,7 +64,7 @@ static void fn_801F53A0(void *pA, void *pB, void *pTemp, int size)
     }
 }
 
-void fn_801F542C(void)
+void SortInitBubbleModule(void)
 {
-    fn_801F522C(0, fn_801F524C);
+    SortAddSortType(0, _SortBubbleSort);
 }

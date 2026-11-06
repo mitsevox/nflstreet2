@@ -8,7 +8,7 @@
 #include "game/Record_8031B6F8.h"
 #include "game/cu_801A8620.h"
 #include "game/Object_80235588.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include <math.h>
 #include <string.h>
 
@@ -1307,9 +1307,9 @@ extern char *lbl_803EC7DC;
 extern unsigned short lbl_803EA4FC;
 extern Cache_8004DA0C *lbl_8030869C[];
 extern void *lbl_803EA368;
-void fn_801EBEF8(Quat_801EB488 *, int, int, int);
-void fn_801EBFA0(Quat_801EB488 *, int, int, int);
-void fn_801EB660(Quat_801EB488 *, Quat_801EB488 *, void *);
+void QuatFromEuler(Quat_801EB488 *, int, int, int);
+void QuatFromEulerYZX(Quat_801EB488 *, int, int, int);
+void QuatMultiply(Quat_801EB488 *, Quat_801EB488 *, void *);
 void fn_801D0508(void); void fn_801D0544(void);
 void fn_801D0860(void *); void fn_801D0C58(void *);
 void fn_801D0470(int); void fn_801D04C4(void); void fn_801D08FC(int);
@@ -1374,12 +1374,12 @@ void fn_8004CBEC(void *pData, float time, Object_80041904 *pObject, Object_80040
                 direction.mZ = -pObject->mUnknown356;
                 int angle = fn_801CFE40(direction.mZ, direction.mX);
                 int heading = fn_801CFE40(direction.mY, direction.mX);
-                fn_801EBFA0(&rotation, angle, heading, 0);
+                QuatFromEulerYZX(&rotation, angle, heading, 0);
                 position = pObject->mUnknown360;
             } else {
-                fn_801EBEF8(&rotation, (int)(p->mUnknown24[2] * 46603.3789f),
+                QuatFromEuler(&rotation, (int)(p->mUnknown24[2] * 46603.3789f),
                             (int)(p->mUnknown24[1] * 46603.3789f), (int)(p->mUnknown24[0] * 46603.3789f));
-                fn_801EB660(&rotation, &rotation, &pObject->mUnknown96);
+                QuatMultiply(&rotation, &rotation, &pObject->mUnknown96);
                 fn_801D0508();
                 fn_801D0860(&rotation);
                 Vector_80039F5C offset;
@@ -1424,10 +1424,10 @@ void fn_8004CEE8(Child_801A9430 *p)
     if (pExtra) {
         if (pExtra->mUnknown32) {
             p->mAngle4C = (p->mAngle4C + pExtra->mWord36) & 0xFFFFFF;
-            Angles_801EBC18 angles;
-            fn_801EBC18(&angles, &p->mRotation3C.mX);
+            QuatEulerAngles_t angles;
+            QuatToEuler(&angles, &p->mRotation3C.mX);
             angles.mUnknown8 = p->mAngle4C + 0x400000;
-            fn_801EBEF8(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+            QuatFromEuler(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
         }
         int angle = fn_801CFFD0(p->mAngle4C, pObject->mUnknown32);
         if (pExtra->mUnknown33) {
@@ -1476,7 +1476,7 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
     p->mUnknown14.mY = pDesc->mUnknown132.mUnknown8;
     p->mUnknown14.mZ = pDesc->mUnknown132.mUnknown12;
     p->mUnknown30 = p->mUnknown14;
-    fn_801EBFA0(&p->mRotation3C, (int)(pDesc->mUnknown132.mUnknown20 * 46603.3789f),
+    QuatFromEulerYZX(&p->mRotation3C, (int)(pDesc->mUnknown132.mUnknown20 * 46603.3789f),
                 (int)(pDesc->mUnknown132.mUnknown24 * 46603.3789f),
                 (int)(pDesc->mUnknown132.mUnknown16 * 46603.3789f));
     p->mUnknown20 = p->mRotation3C;
@@ -2349,7 +2349,7 @@ void fn_8004FF8C(void)
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C force = {0.0f, 0.0f, 0.0f};
             Quat_801EB488 rotation;
-            fn_801EBEF8(&rotation, 0, 0, 0);
+            QuatFromEuler(&rotation, 0, 0, 0);
             fn_801E9AF0(pBody, &position, &rotation);
             position.mZ += 5.0f;
             fn_801E9F0C(pBody, 1);
@@ -2386,7 +2386,7 @@ void fn_800502C0(void)
     Vector_80039F5C force = {0.0f, 0.0f, 0.0f};
     fn_801E99DC(pBody, &position);
     Quat_801EB488 rotation;
-    fn_801EBEF8(&rotation, 0, 0, 0);
+    QuatFromEuler(&rotation, 0, 0, 0);
     fn_801E9A44(pBody, &rotation);
     fn_801E9F0C(pBody, 1);
     fn_801E9C1C(pBody, &velocity); fn_801E9BDC(pBody, &force);
@@ -2476,7 +2476,7 @@ int fn_80051DB4(void) { return 1; }
 
 void fn_801E9BB4(Body_801E9538 *, Quat_801EB488 *);
 int fn_802275D8(void *, void *, float);
-int fn_801EB5A0(void *, void *, float);
+int QuatIsEqual(void *, void *, float);
 void fn_802271F0(void *, void *);
 float fn_8022785C(void *, void *);
 void fn_801E3610(Shape_801E2CB4 *, void *, void *, void *, void *);
@@ -2513,7 +2513,7 @@ void fn_80050964(void)
             Object_80039F5C *pPlayer = fn_8003E0C8(pBody->mpMetadata->mpBlock);
             Vector_80039F5C velocity = {0.0f, 0.0f, 0.0f};
             Vector_80039F5C a, b, c, direction;
-            Angles_801EBC18 angles;
+            QuatEulerAngles_t angles;
             Quat_801EB488 rotation, oldRotation;
             fn_8009BF5C(pPlayer, 0, &a, &angles);
             fn_8009BF5C(pPlayer, 4, &b, 0);
@@ -2528,7 +2528,7 @@ void fn_80050964(void)
                 a.mY = -a.mY;
                 angles.mUnknown8 += 0x800000;
             }
-            fn_801EBEF8(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+            QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
             fn_801E9BB4(pBody, &oldRotation);
             fn_802276B4(&direction, &a, &pBody->mUnknown100);
             float length = fn_802270D4(&direction);
@@ -2537,7 +2537,7 @@ void fn_80050964(void)
             velocity.mX = angles.mUnknown0 * 0.000021457672119140625f;
             velocity.mY = angles.mUnknown4 * 0.000021457672119140625f;
             velocity.mZ = angles.mUnknown8 * 0.000021457672119140625f;
-            fn_801EBC18(&angles, &oldRotation.mX);
+            QuatToEuler(&angles, &oldRotation.mX);
             velocity.mX -= angles.mUnknown0 * 0.000021457672119140625f;
             velocity.mY -= angles.mUnknown4 * 0.000021457672119140625f;
             velocity.mZ -= angles.mUnknown8 * 0.000021457672119140625f;
@@ -2583,13 +2583,13 @@ void fn_80050DA0(void)
             Vector_80039F5C position;
             fn_8004E3CC(pMetadata->mpObject, angles);
             angles[2] = (*(int *)((char *)lbl_80308B0C[i] + 24) + 0x400000) & 0xFFFFFF;
-            fn_801EBEF8(&rotation, angles[2], angles[1], angles[0]);
+            QuatFromEuler(&rotation, angles[2], angles[1], angles[0]);
             position.mX = lbl_80308B0C[i]->mX;
             position.mY = lbl_80308B0C[i]->mY;
             position.mZ = pMetadata->mpObject->mUnknown172.mUnknown8[1];
             fn_801E9BB4(pBody, &oldRotation);
             if (!fn_802275D8(&position, &pBody->mUnknown100, 0.01f) ||
-                !fn_801EB5A0(&rotation, &oldRotation, 0.01f)) {
+                !QuatIsEqual(&rotation, &oldRotation, 0.01f)) {
                 fn_801E9AF0(pBody, &position, &rotation);
             }
         }

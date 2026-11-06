@@ -58,8 +58,8 @@ int fn_801C5F9C(void);
 int fn_801C6280(int a, int b, int c);
 int fn_801CEF48(void);
 int fn_801CEFA0(void);
-int fn_801F512C(void);
-int fn_801F518C(void);
+int SortInit(void);
+int SortShutdown(void);
 void fn_801F8A0C(Desc_801F8A0C *pDesc);
 int fn_801F8A54(Desc_801F8A0C *pDesc);
 void fn_801F8C64(void);
@@ -400,13 +400,13 @@ const char *Remap::GetName() { return "Remap"; }
 
 int Remap::Init()
 {
-    fn_801EC1B4(10, fn_800273A4(), 3);
+    RemapInit(10, fn_800273A4(), 3);
     return 1;
 }
 
 int Remap::Shutdown()
 {
-    fn_801EC298();
+    RemapShutdown();
     return 1;
 }
 
@@ -419,13 +419,13 @@ const char *Sort::GetName() { return "Sort"; }
 
 int Sort::Init()
 {
-    fn_801F512C();
+    SortInit();
     return 1;
 }
 
 int Sort::Shutdown()
 {
-    fn_801F518C();
+    SortShutdown();
     return 1;
 }
 

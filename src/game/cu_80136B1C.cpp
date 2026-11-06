@@ -41,9 +41,9 @@ void fn_801D0470(int a);
 void fn_801D0494(void);
 void fn_801D0860(Quat_801EB488 *pRot);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-void fn_801EB488(Quat_801EB488 *pRot);
-void fn_801EB660(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatIdentity(Quat_801EB488 *pRot);
+void QuatMultiply(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void *fn_8023816C(void *pHandle);
@@ -76,8 +76,8 @@ int fn_80136B1C(void *p, int value)
         pBall->mState.mPos.mX = i * 5.0f + 15.0f;
         pBall->mState.mPos.mY = 20.0f;
         pBall->mState.mPos.mZ = 0.0f;
-        fn_801EBEF8(&pBall->mState.mUnknown18, 0, 0xFFC00000, 0xFFC00000);
-        fn_801EB488(&pBall->mState.mUnknown60);
+        QuatFromEuler(&pBall->mState.mUnknown18, 0, 0xFFC00000, 0xFFC00000);
+        QuatIdentity(&pBall->mState.mUnknown60);
         pBall->mState.mUnknownD0 = 0;
         pBall->mState.mUnknownE4 = 0;
         pBall->mState.mUnknownE8 = 1.0f;
@@ -629,7 +629,7 @@ void fn_80137E74(Object_80137ABC *pBall, Vector_80039F5C *p)
 
 void fn_80137E90(Object_80137ABC *pBall, int *pAngles)
 {
-    fn_801EBEF8(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
+    QuatFromEuler(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
 }
 
 void fn_80137EC4(Object_80137ABC *pBall, Vector_80039F5C *pOut)
@@ -660,7 +660,7 @@ void fn_80137F18(Object_80137ABC *pBall)
 
         pVector->mX = pVector->mY = pVector->mZ = 0.0f;
     }
-    fn_801EB488(&pBall->mState.mUnknown60);
+    QuatIdentity(&pBall->mState.mUnknown60);
     {
         Vector_80039F5C *pVector = &pBall->mState.mUnknown88;
 
@@ -803,10 +803,10 @@ void fn_80138270(void)
         pBall->mState.mUnknown70.mY = -pBall->mState.mUnknown70.mY;
         pBall->mState.mUnknown94.mX = -pBall->mState.mUnknown94.mX;
         pBall->mState.mUnknown94.mY = -pBall->mState.mUnknown94.mY;
-        fn_801EBEF8(&turn, 0, 0, 0x800000);
-        fn_801EB660(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
-        fn_801EBEF8(&turn, 0, 0, 0x800000);
-        fn_801EB660(&pBall->mState.mUnknown34, &turn, &pBall->mState.mUnknown34);
+        QuatFromEuler(&turn, 0, 0, 0x800000);
+        QuatMultiply(&pBall->mState.mUnknown18, &turn, &pBall->mState.mUnknown18);
+        QuatFromEuler(&turn, 0, 0, 0x800000);
+        QuatMultiply(&pBall->mState.mUnknown34, &turn, &pBall->mState.mUnknown34);
         fn_8013AB24(pBall);
     }
 }

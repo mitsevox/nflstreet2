@@ -28,7 +28,7 @@ int fn_801BC7C0(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, Object_80041904 *pObject, float d);
-void fn_801EBFA0(float *pOut, int x, int y, int z);
+void QuatFromEulerYZX(float *pOut, int x, int y, int z);
 int fn_80238278(const void *p, int size, int seed);
 void *fn_8023816C(void *pHandle);
 
@@ -130,7 +130,7 @@ Object_80041904 *fn_8004149C(void *pOwner, Desc_8004149C *pDesc)
     pObject->mUnknown8 = pDesc->mUnknown4;
     pObject->mUnknown12 = pDesc->mUnknown8;
     pObject->mUnknown16 = pDesc->mUnknown12;
-    fn_801EBFA0(&pObject->mUnknown96, (int)(pDesc->mUnknown20 * 46603.3789f), (int)(pDesc->mUnknown24 * 46603.3789f),
+    QuatFromEulerYZX(&pObject->mUnknown96, (int)(pDesc->mUnknown20 * 46603.3789f), (int)(pDesc->mUnknown24 * 46603.3789f),
                 (int)(pDesc->mUnknown16 * 46603.3789f));
     pObject->mUnknown32 = (int)((pDesc->mUnknown24 - 90.0f) * 46603.3789f);
     if (pObject->mUnknown428 != 0) {

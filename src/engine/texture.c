@@ -489,8 +489,8 @@ void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst)
     if (pImage->mType == 0) {
         memcpy(pDst, pImage->mpUnknownC, size);
     } else {
-        Buffer_8027F9AC src;
-        Buffer_8027F9AC dst;
+        GCmpBuffer_t src;
+        GCmpBuffer_t dst;
 
         src.mpData = pImage->mpUnknownC;
         src.mSize = pImage->mUnknown8;
@@ -498,7 +498,7 @@ void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst)
         src.mHeight = pImage->mHeight;
         src.mBits = 16;
         dst.mpData = pDst;
-        fn_8027F3A4(pImage->mType, &src, &dst);
+        GCmpDecompress(pImage->mType, &src, &dst);
         if (pImage->mType != 4) {
             int bpp = lbl_802F7A00[pImage->mFormat];
 

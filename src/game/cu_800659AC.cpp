@@ -17,7 +17,7 @@ extern char lbl_802EBDF8[];
 
 unsigned int fn_801688D4(void);
 void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
-void fn_801F51DC(int a, void *pBase, int count, int size,
+void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(Candidate_8016B364 *, Candidate_8016B364 *),
                  void (*pSwap)(Candidate_8016B364 *, Candidate_8016B364 *), int b, int c);
 int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, void *pSort, int *pCursor,
@@ -883,7 +883,7 @@ int fn_80067690(int team, int tag, int kind)
         unsigned int pick;
         unsigned int sum;
 
-        fn_801F51DC(0, list, count, sizeof(Candidate_8016B364), fn_80067624, fn_80067640, 0, 0);
+        SortArray(0, list, count, sizeof(Candidate_8016B364), fn_80067624, fn_80067640, 0, 0);
         fn_8016B364(team, list, count);
         total = 0;
         for (i = 0; i < count; i++) {

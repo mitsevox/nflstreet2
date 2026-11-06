@@ -32,7 +32,7 @@ int fn_8004D84C(int handle);
 void fn_8004D860(int handle, int value);
 int fn_80052678(Object_80040818 *pObject);
 int fn_801784C4(void);
-void fn_801EC048(float *pOut, float *pA, float *pB, float t);
+void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 void fn_80227264(void *pOut, void *pV, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 
@@ -166,7 +166,7 @@ int fn_800529CC(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         float t = (float)pData->mUnknown12 / (float)pData->mUnknown16;
         Object_80041904 *pMover = pOwner->mUnknown472;
         fn_8022765C(&pMover->mUnknown8, &pMover->mUnknown8, &pMover->mUnknown48);
-        fn_801EC048(&pOwner->mUnknown472->mUnknown96, &pData->mUnknown0->mUnknown472->mUnknown96,
+        QuatSlerp(&pOwner->mUnknown472->mUnknown96, &pData->mUnknown0->mUnknown472->mUnknown96,
                     &pData->mUnknown4->mUnknown472->mUnknown96, t);
         pNode = (Data_8005272C *)pData->mUnknown0->mUnknown472->mUnknown420;
     }

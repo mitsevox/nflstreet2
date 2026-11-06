@@ -28,7 +28,7 @@ void fn_801F76E8(void);
 void fn_801F7710(void);
 unsigned long fn_8023CEE0(void);
 void fn_801F4AEC(int a, int b);
-void fn_801F50F8(int a);
+void SndSetAllocHeap(int a);
 int fn_801F393C(Desc_801F393C *pDesc);
 int fn_801F3D2C(void);
 void fn_80071790(void);
@@ -66,7 +66,7 @@ int Snd::Init()
     if (fn_8023CEE0()) {
         fn_801F4AEC(3, 0);
     }
-    fn_801F50F8(256);
+    SndSetAllocHeap(256);
     fn_801F393C(&desc);
     fn_80071790();
     return 1;

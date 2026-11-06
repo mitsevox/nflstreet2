@@ -17,9 +17,9 @@ void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D09EC(int a);
 void fn_801D0C58(float *p);
-void fn_801EBD8C(int *pAngles, Quat_801EB488 *pRot);
-void fn_801EBFA0(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
+void QuatToEulerYZX(int *pAngles, Quat_801EB488 *pRot);
+void QuatFromEulerYZX(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 void fn_802338D4(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton, unsigned int flags);
 }
@@ -137,10 +137,10 @@ void fn_8019EA2C(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, P
     int angles[3];
     unsigned int i;
 
-    fn_801EBFA0(&rotA, pA->mUnknown32, pA->mUnknown48[2] << 8, pA->mUnknown48[0] << 8);
-    fn_801EBFA0(&rot, pOut->mUnknown32, pOut->mUnknown48[2] << 8, pOut->mUnknown48[0] << 8);
-    fn_801EC048(&rot, &rot, &rotA, t);
-    fn_801EBD8C(angles, &rot);
+    QuatFromEulerYZX(&rotA, pA->mUnknown32, pA->mUnknown48[2] << 8, pA->mUnknown48[0] << 8);
+    QuatFromEulerYZX(&rot, pOut->mUnknown32, pOut->mUnknown48[2] << 8, pOut->mUnknown48[0] << 8);
+    QuatSlerp(&rot, &rot, &rotA, t);
+    QuatToEulerYZX(angles, &rot);
     if (lbl_803EB7C8) {
         for (i = 1; i < pOut->mUnknown4; i++) {
             if (pPrev != 0 && pNext != 0) {

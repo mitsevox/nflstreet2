@@ -54,7 +54,7 @@ void fn_8017419C(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
 void fn_801735B4(unsigned int);
-void fn_801F51DC(int, void *, int, int,
+void SortArray(int, void *, int, int,
                  int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
 int fn_80175E3C(Object_80039F5C *, Object_80039F5C *, void *);
 void fn_801760B4(int, Object_80039F5C *, Object_80039F5C *);
@@ -779,7 +779,7 @@ int fn_801763D0(Entry_800B206C *events, int count, unsigned char *result) {
     *result = 1;
     return 1;
   case 2:
-    fn_801F51DC(0, events, 2, 36, fn_80174740, 0, 0, 1);
+    SortArray(0, events, 2, 36, fn_80174740, 0, 0, 1);
     if (events[1].mUnknown1C == 0)
       fn_801744E8(events, 2, result);
     else if (events[0].mUnknown1C == 1)

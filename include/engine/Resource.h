@@ -80,17 +80,17 @@ int fn_801F10B0(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize, uns
 int fn_801F1530(void);
 
 /* terfhash.c */
-int fn_801F1538(char *pString, unsigned int length, unsigned int *pParams);
-int fn_801F155C(unsigned char *pData, unsigned int length, unsigned int *pParams);
+int ProcHashHSH1(char *pString, unsigned int length, unsigned int *pParams);
+int ProcHashHSH2(unsigned char *pData, unsigned int length, unsigned int *pParams);
 
 /* hash.c */
-int fn_801F34C0(char *pString, int multiplier);
+int HashString(char *pString, int multiplier);
 
 /* reswrite.c */
 int fn_801F1B6C(Res_801EDC2C *pRes);
 
 /* ResTracker.c */
-void fn_801F23DC(unsigned int type, void *pData);
+void ResTrackResource(unsigned int type, void *pData);
 
 /* rescache.c */
 void fn_801F2ED8(int mode);
@@ -100,7 +100,7 @@ void fn_801F3104(Res_801EDC2C *pRes);
 void fn_801F318C(Res_801EDC2C *pRes, int index, int offset, void *pData, int size);
 
 /* resloosefile.c */
-int fn_801F33F0(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize);
+int ResLooseFileGetSize(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize);
 
 #ifdef __cplusplus
 }

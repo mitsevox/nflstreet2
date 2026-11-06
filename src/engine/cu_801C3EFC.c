@@ -3,7 +3,7 @@
 #include "engine/cu_801C4960.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_802270D4.h"
 
 typedef struct Limit_801C3EFC {
@@ -44,9 +44,9 @@ extern float lbl_802F489C[3];
 extern float lbl_802F48A8[3];
 
 int fn_801CFD78(float x);
-void fn_801EB660(float *pDst, float *pA, float *pB);
-void fn_801EBBA4(float *pQuat, float *pAxis, int angle);
-void fn_801EBEF8(float *pQuat, int z, int y, int x);
+void QuatMultiply(float *pDst, float *pA, float *pB);
+void QuatFromAxisAngle(float *pQuat, float *pAxis, int angle);
+void QuatFromEuler(float *pQuat, int z, int y, int x);
 void fn_802271F0(float *pOut, float *p);
 void fn_80227490(float *pOut, float *p, int x, int y, int z);
 float fn_80227704(float *pA, float *pB);
@@ -104,7 +104,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float q[4];
     float cur[4];
     int angles[32][3];
-    Angles_801EBC18 euler;
+    QuatEulerAngles_t euler;
     Skel_801C4960 *pSkel;
     SkelEuler_801C4960 *pRest;
     Limit_801C3EFC *pLimit;
@@ -145,10 +145,10 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
                 fn_802277DC(axis, toTarget, toEnd);
                 fn_802271F0(axis, axis);
                 rot[0] = -fn_801CFD78(c);
-                fn_801EBBA4(q, axis, rot[0]);
-                fn_801EBEF8(cur, angles[bone][2], angles[bone][1], angles[bone][0]);
-                fn_801EB660(q, cur, q);
-                fn_801EBC18(&euler, q);
+                QuatFromAxisAngle(q, axis, rot[0]);
+                QuatFromEuler(cur, angles[bone][2], angles[bone][1], angles[bone][0]);
+                QuatMultiply(q, cur, q);
+                QuatToEuler(&euler, q);
                 rot[0] = (euler.mUnknown0 << 8) >> 8;
                 rot[1] = (euler.mUnknown4 << 8) >> 8;
                 rot[2] = (euler.mUnknown8 << 8) >> 8;
