@@ -1,3 +1,4 @@
+/* Game-wide front-end message handler: the first handler the message dispatcher tries, it answers the generic message ids that no screen handler took (game setup values, Street Event sides, controllers, profiles, player status and portrait, user text buffers, demo and memory card flags). */
 #include "game/fn_801EF390.h"
 #include "game/fn_8022F478.h"
 #include "game/Class_80148A58.h"
@@ -7,16 +8,17 @@
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 #include "game/GameInfo.h"
-#include "game/fn_801801F0.h"
+#include "game/MsgGame.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C3284.h"
-#include "game/cu_8017F90C.h"
+#include "game/UISGameMsg.h"
 #include "game/fn_800B65A0.h"
 
-/* Filled by fn_80152940 for one index; the constructor leaves mUnknown8 unset. */
-struct Info_80152940 {
-    Info_80152940() : mUnknown0(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
+/* Filled per slot by the mini-game slot query; the constructor leaves
+   mUnknown8 unset. */
+struct MiniGameSlotInfo_t {
+    MiniGameSlotInfo_t() : mUnknown0(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
 
     int mUnknown0;
     int mUnknown4;
@@ -27,8 +29,8 @@ struct Info_80152940 {
     unsigned char mUnknown21;
 };
 
-/* One argument or result slot of the message handler fn_801801F8. */
-union Arg_801801F8 {
+/* One argument or result slot of the message handler MsgGameHandleMessage. */
+union MsgGameArg_t {
     int i;
     float f;
     int *pi;
@@ -45,7 +47,7 @@ int fn_801869F0(void);
 int fn_80186D64(int a);
 void fn_80186F9C(int a, char *pText, int c);
 int fn_801486A0(void);
-void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
+void fn_80152940(Class_80148A58 *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_80178AE0(void);
 void PerCheckConnectAll(void);
 void fn_8007AEE8(DbCursor *pObject);
@@ -75,7 +77,7 @@ int fn_801C2FE4(char *pText0, char *pText1);
 int fn_801C31B0(char *pText0, char *pText1);
 int ChallengeIsActive(void);
 int ChallengeIsPairingGame(void);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 void fn_80083E1C(DbCursor *pObject, int a);
 int fn_8008400C(DbCursor *pObject);
 int fn_80084360(DbCursor *pObject);
@@ -100,53 +102,53 @@ int fn_8022E558(void);
 int fn_8022E560(void);
 }
 
-static int lbl_803EB530 = 0;
-static int lbl_803EB534 = -1;
-static int lbl_803EB538 = -1;
-static int lbl_803EB53C = -1;
-static int lbl_803EB540 = 0;
-static unsigned char lbl_803EB544 = 0;
-static unsigned char lbl_803EB545 = 0;
+static int _MsgGame_iSetupState = 0;
+static int _MsgGame_iSetupId = -1;
+static int _MsgGame_iSetupArg = -1;
+static int _MsgGame_iPendingChoice = -1;
+static int _MsgGame_bFEStarted = 0;
+static unsigned char _MsgGame_bOverride = 0;
+static unsigned char _MsgGame_bMemCardActive = 0;
 
 extern "C" {
-int fn_8017FDF0(void)
+int MsgGameMsg1Result(void)
 {
     return 2;
 }
 
-int fn_8017FDF8(void)
+int MsgGameMsg136Result(void)
 {
     return 0;
 }
 
-int fn_8017FE00(void)
+int MsgGameMsg7Result(void)
 {
     return 0;
 }
 
-float fn_8017FE08(float min, float max)
+float MsgGameRandRange(float min, float max)
 {
     return min + (max - min) * fn_80237260(1);
 }
 
-void fn_8017FE4C(int a, int b, int c)
+void MsgGameSetSetup(int a, int b, int c)
 {
-    lbl_803EB530 = a;
-    lbl_803EB534 = b;
-    lbl_803EB538 = c;
-    if (a == 0 && b == 0x69 && fn_8017F584() == 8) {
+    _MsgGame_iSetupState = a;
+    _MsgGame_iSetupId = b;
+    _MsgGame_iSetupArg = c;
+    if (a == 0 && b == 0x69 && GameModeTypeGet() == 8) {
         fn_8018F2F4(fn_80186B38(fn_8022F4BC()), 0x3FF);
     }
 }
 
-int fn_8017FEA0(void)
+int MsgGameCheckSetting6(void)
 {
     int value = fn_8007F828(6);
 
     return value == 1 || value == 2;
 }
 
-int fn_8017FED4(int a, int *pResult)
+int MsgGameGetProfileValue(int a, int *pResult)
 {
     int value = -1;
 
@@ -162,12 +164,12 @@ int fn_8017FED4(int a, int *pResult)
     return found;
 }
 
-void fn_8017FF40(int a)
+void MsgGameSetPendingChoice(int a)
 {
-    lbl_803EB53C = a;
+    _MsgGame_iPendingChoice = a;
 }
 
-int fn_8017FF48(int a, char *pText)
+int MsgGameSetProfileText(int a, char *pText)
 {
     int state;
 
@@ -179,12 +181,12 @@ int fn_8017FF48(int a, char *pText)
     return state;
 }
 
-int fn_8017FF98(void)
+int MsgGameStreetEventHasOpenSlot(void)
 {
     int result = 0;
 
     if (FELoopIsMainFEActive() == 0) {
-        Info_80152940 info;
+        MiniGameSlotInfo_t info;
 
         switch (fn_801486A0()) {
         case 0:
@@ -211,7 +213,7 @@ int fn_8017FF98(void)
     return result;
 }
 
-int fn_80180070(void)
+int MsgGameStreetEventCheckSide(void)
 {
     if (fn_801486A0() != 15) {
         return fn_80148A58()->vfn_13();
@@ -219,7 +221,7 @@ int fn_80180070(void)
     return fn_800B65A0(fn_80178AE0()) != 0xFF;
 }
 
-int fn_801800D0(void)
+int MsgGameFindActivePort(void)
 {
     int result = -1;
 
@@ -248,69 +250,69 @@ int fn_801800D0(void)
     return result;
 }
 
-int fn_801801B4(void)
+int MsgGameGetSetupState(void)
 {
-    return lbl_803EB530;
+    return _MsgGame_iSetupState;
 }
 
-int fn_801801BC(void)
+int MsgGameGetSetupArg(void)
 {
-    return lbl_803EB538;
+    return _MsgGame_iSetupArg;
 }
 
-void fn_801801C4(int a)
+void MsgGameIgnoreValue(int a)
 {
 }
 
-void fn_801801C8(int a)
+void MsgGameSetSetupState(int a)
 {
-    lbl_803EB530 = a;
+    _MsgGame_iSetupState = a;
 }
 
-int fn_801801D0(void)
+int MsgGameTakePendingChoice(void)
 {
-    int value = lbl_803EB53C;
+    int value = _MsgGame_iPendingChoice;
 
-    lbl_803EB53C = -1;
+    _MsgGame_iPendingChoice = -1;
     return value;
 }
 
-unsigned char fn_801801E0(void)
+unsigned char MsgGameGetFEStarted(void)
 {
-    return lbl_803EB540;
+    return _MsgGame_bFEStarted;
 }
 
-void fn_801801E8(int a)
+void MsgGameSetFEStarted(int a)
 {
-    lbl_803EB540 = a;
+    _MsgGame_bFEStarted = a;
 }
 
-void fn_801801F0(unsigned char a)
+void MsgGameSetMemCardActive(unsigned char a)
 {
-    lbl_803EB545 = a;
+    _MsgGame_bMemCardActive = a;
 }
 
-void fn_80180AF8(int *pValues);
-void fn_80180BE4(int id, int *pStatus, int *pTeam);
-int fn_80180EF8(int id);
+void MsgGameFillPortStates(int *pValues);
+void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam);
+int MsgGameGetPlayerPortrait(int id);
 
-int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *pResult)
+int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGameArg_t *pResult)
 {
     switch (id) {
     case 1:
-        pResult->i = fn_8017FDF0();
+        pResult->i = MsgGameMsg1Result();
         break;
     case 0x136:
-        pResult->i = fn_8017FDF8();
+        pResult->i = MsgGameMsg136Result();
         break;
     case 7:
-        pResult->i = fn_8017FE00();
+        pResult->i = MsgGameMsg7Result();
         break;
     case 8:
-        fn_80180BE4(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
+        MsgGameGetPlayerStatus(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
         break;
     case 9:
-        pResult->f = fn_8017FE08(pArgs[0].f, pArgs[1].f);
+        pResult->f = MsgGameRandRange(pArgs[0].f, pArgs[1].f);
         break;
     case 0xA:
         *pArgs[0].pi = fn_80188030(*pArgs[0].pi);
@@ -319,29 +321,29 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = fn_80188044(pArgs[0].i);
         break;
     case 0xB:
-        fn_8017FE4C(pArgs[0].i, pArgs[1].i, pArgs[2].i);
+        MsgGameSetSetup(pArgs[0].i, pArgs[1].i, pArgs[2].i);
         break;
     case 0xC:
-        pResult->i = fn_8017FEA0();
+        pResult->i = MsgGameCheckSetting6();
         break;
     case 0xF: {
         int index = pArgs[0].pi[0] + 1;
 
-        fn_80180AF8(&pArgs[0].pi[index]);
+        MsgGameFillPortStates(&pArgs[0].pi[index]);
         break;
     }
 
     case 0xD:
-        pResult->i = fn_80180EF8(pArgs[0].i);
+        pResult->i = MsgGameGetPlayerPortrait(pArgs[0].i);
         break;
     case 0xE:
         FEPlyrSetPlayer(pArgs[1].i, pArgs[0].i, 0);
         break;
     case 0x5E:
-        fn_801801F0(pArgs[0].i);
+        MsgGameSetMemCardActive(pArgs[0].i);
         break;
     case 0x5F:
-        pResult->i = lbl_803EB545;
+        pResult->i = _MsgGame_bMemCardActive;
         break;
     case 0x114:
         pResult->i = fn_80187F44(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength,
@@ -375,10 +377,10 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         fn_80186D64(fn_8001194C(pArgs[0].i == 0));
         break;
     case 0x23:
-        pResult->i = fn_8017FED4(pArgs[0].i, pArgs[1].pi);
+        pResult->i = MsgGameGetProfileValue(pArgs[0].i, pArgs[1].pi);
         break;
     case 0x24:
-        pResult->i = fn_8017FF48(pArgs[0].i, pArgs[1].pParams->mpText);
+        pResult->i = MsgGameSetProfileText(pArgs[0].i, pArgs[1].pParams->mpText);
         break;
     case 0x25:
         fn_80186F8C(pArgs[0].i != 0);
@@ -394,7 +396,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     }
     case 0x26:
-        if (lbl_803EB544 != 0 || InGameIsDemo() != 0 || (lbl_803EB540 != 0 && MemCardScreenGetFlag() != 0)) {
+        if (_MsgGame_bOverride != 0 || InGameIsDemo() != 0 || (_MsgGame_bFEStarted != 0 && MemCardScreenGetFlag() != 0)) {
             pResult->i = 1;
         } else {
             pResult->i = 0;
@@ -423,7 +425,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = ChallengeIsPairingGame();
         break;
     case 0xE0:
-        pResult->i = fn_8017F60C();
+        pResult->i = GameModeTypeIsSpecial();
         break;
     case 0xED: {
         DbCursor cursor;
@@ -460,16 +462,16 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         }
         break;
     case 0x122:
-        pResult->i = fn_801801E0();
+        pResult->i = MsgGameGetFEStarted();
         break;
     case 0x11F:
-        fn_801801E8(pArgs[0].i == 1);
+        MsgGameSetFEStarted(pArgs[0].i == 1);
         break;
     case 0x108:
         pResult->i = fn_8022F384(fn_8022F4BC());
         break;
     case 0x111:
-        pResult->i = fn_801800D0();
+        pResult->i = MsgGameFindActivePort();
         break;
     case 0x13A:
         pResult->i = fn_801E195C(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
@@ -498,7 +500,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         fn_8000FCD4(pArgs[0].i);
         break;
     case 0x172:
-        pResult->i = fn_8017F584();
+        pResult->i = GameModeTypeGet();
         break;
     case 0x17C:
         pResult->i = fn_8000FCCC();
@@ -524,16 +526,16 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
     }
 
     case 0x186:
-        fn_8017FF40(pArgs[0].i);
+        MsgGameSetPendingChoice(pArgs[0].i);
         break;
     case 0x38:
         pResult->i = 1;
         break;
     case 0x190:
-        pResult->i = fn_8017FF98();
+        pResult->i = MsgGameStreetEventHasOpenSlot();
         break;
     case 0x191:
-        pResult->i = fn_80180070();
+        pResult->i = MsgGameStreetEventCheckSide();
         break;
     case 0xCB:
         pResult->i = 0;
@@ -560,7 +562,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
     return 1;
 }
 
-void fn_80180AF8(int *pValues)
+void MsgGameFillPortStates(int *pValues)
 {
     DbCursor cursor;
 
@@ -585,7 +587,7 @@ void fn_80180AF8(int *pValues)
     }
 }
 
-void fn_80180BE4(int id, int *pStatus, int *pTeam)
+void MsgGameGetPlayerStatus(int id, int *pStatus, int *pTeam)
 {
     DbCursor cursor;
     int team = 2;
@@ -594,7 +596,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
 
     *pStatus = 0;
     *pTeam = fn_80188DF0(-1);
-    mode = fn_8017F584();
+    mode = GameModeTypeGet();
     result = FELoopIsMainFEActive();
     if (mode == 7) {
         if (result) {
@@ -690,7 +692,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     }
 }
 
-int fn_80180EF8(int id)
+int MsgGameGetPlayerPortrait(int id)
 {
     Object_8008044C cursor;
     int result = 0;

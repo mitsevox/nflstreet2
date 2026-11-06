@@ -50,7 +50,7 @@ int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget,
                 float distB, float distA);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue, float *pOther);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float gFrameTimeScale;
 extern float lbl_803EC9E8;
 typedef void (*Score_8012430C)(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *);
@@ -78,7 +78,7 @@ extern float lbl_803EB0A0, lbl_803EB0A4, lbl_803EB0A8, lbl_803EB0AC;
 int fn_801485D4(void);
 extern const Directions_8012430C lbl_8029F5A0[6];
 
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801208C8(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
 float fn_80237260(int a);
 unsigned int fn_802372EC(int a, int b);
@@ -457,7 +457,7 @@ void fn_801237F4(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
                     if (pOther->mUnknown1032 == 4 || pOther->mUnknown1032 == 6 || pOther->mUnknown1032 == 5) {
                         if (!(distance >= 1.5f)) value += value;
                     } else {
-                        if (!(pOther->mMotion.mUnknown28 <= lbl_803ECB08 * 0.4f)
+                        if (!(pOther->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.4f)
                             && MathAngleDiff(angle, pOther->mMotion.mUnknown32) <= 0x1FFFFF) value *= 0.25f;
                         if (pOther->mUnknown1052 == 3 && fn_8011F1A4() && fn_8011F4C8() <= 3
                             && MathAngleDiff(angle, facing) <= 0x1FFFFF) {
@@ -911,7 +911,7 @@ int fn_80125304(Object_80039F5C *p)
     pState->mUnknown4 = 30;
     p->mUnknown512.mUnknown15 = 30;
     p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
     p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
     return 0;
@@ -969,8 +969,8 @@ void fn_80125594(Object_80039F5C *p, State_80125594 *pState)
     if (!pOther) BallGetVelocity(BallGetCurrent(), &velocity);
     else { velocity.mX = pOther->mMotion.mUnknown40; velocity.mY = pOther->mMotion.mUnknown44; velocity.mZ = pOther->mMotion.mUnknown48; }
     float speed;
-    if (!(p->mMotion.mUnknown28 < fn_8016D9F4(p, 0.14f, 1.0f))) speed = p->mMotion.mUnknown28;
-    else speed = fn_8016D9F4(p, 0.14f, 1.0f);
+    if (!(p->mMotion.mUnknown28 < PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f))) speed = p->mMotion.mUnknown28;
+    else speed = PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f);
     Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
     int predicted = fn_801208C8(pPos, &target, &velocity, speed);
     Point_8017886C delta;

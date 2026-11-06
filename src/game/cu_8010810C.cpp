@@ -111,7 +111,7 @@ int MathAngleDiff(int a, int b);
 void fn_802271A4(Point_8017886C *pOut, Point_8017886C *pIn);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80237260(int stream);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern const float lbl_803ED6CC;
 }
 
@@ -134,12 +134,12 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     fn_80227690(&ballToSpot, pA, &pInfo->mUnknown16);
     ballTime = fn_802270A4(&ballToSpot) / fn_802270A4(&pInfo->mUnknown28);
     myTime = fn_802270A4(&toTarget) /
-             (lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f)));
+             (gPlyrMoveFwdSpeed * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f)));
     if (pOther != 0) {
         fn_80227690(&otherToSpot, pA, &pOther->mMotion.mPos);
         fn_80227690(&meToOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
         otherTime = fn_802270A4(&otherToSpot) /
-                    (lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f)));
+                    (gPlyrMoveFwdSpeed * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f)));
     } else {
         otherToSpot.mX = otherToSpot.mY = 0.0f;
         meToOther.mX = meToOther.mY = 0.0f;
@@ -151,7 +151,7 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         ballTime = (float)(pPass->mUnknown16 - pPass->mUnknown0);
         fn_80227690(&toPass, &pPass->mUnknown4, &p->mMotion.mPos);
         myTime = fn_802270A4(&toPass) /
-                 (lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f)));
+                 (gPlyrMoveFwdSpeed * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f)));
     }
     switch (pBlock->mUnknown49) {
     case 1:

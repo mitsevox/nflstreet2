@@ -87,7 +87,7 @@ public:
 
 extern "C" {
 int fn_80151B20(Class_802A2918 *p);
-void fn_8017D844(const char *pText);
+void HudShowCallout(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, unsigned int count);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C3180(const char *pString);
@@ -95,7 +95,7 @@ char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
 Object_80039F5C *fn_8003AC84(int id);
 void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value);
 void fn_801502B4(void *p);
-void fn_801735D8(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 int fn_8009D9A8(int index);
 void fn_8009D964(int index, int value);
@@ -122,7 +122,7 @@ void fn_80151D9C(Class_802A2918 *p)
             pTable = p->mpUnknown1C->mpUnknown36;
             if (pTable->mUnknown124 == 0) {
                 pTable->mUnknown124 = 1;
-                fn_8017D844("Sudden Death!");
+                HudShowCallout("Sudden Death!");
             }
         } else {
             over = 1;
@@ -166,7 +166,7 @@ void fn_80151D9C(Class_802A2918 *p)
         fn_801502B4(&p->mpUnknown1C->mUnknown32);
         return;
     }
-    fn_8017D844(text);
+    HudShowCallout(text);
     for (i = 0; i < 4; i++) {
         pRows = p->mpUnknown1C->mpUnknown36->mEntries;
         if (pRows[i].mUnknown10 + pRows[i].mUnknown8 * 2 > pRows[i].mUnknown4) {
@@ -177,7 +177,7 @@ void fn_80151D9C(Class_802A2918 *p)
         pRows[i].mUnknown8 = 0;
         pRows[i].mUnknown10 = 0;
     }
-    fn_801735D8(0x800);
+    ClockRuleClearFlags(0x800);
     fn_8009D8CC(1);
     fn_8009D964(1, fn_8009D9A8(1));
     pState = &p->mpUnknown1C->mUnknown12;

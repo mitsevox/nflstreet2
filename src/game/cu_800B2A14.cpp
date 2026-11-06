@@ -18,7 +18,7 @@ extern "C" {
 void fn_80227538(void *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" void fn_800B2A14(Object_800B26B0 *pMotion, Input_800B2A14 *pInput)
@@ -34,8 +34,8 @@ extern "C" void fn_800B2A14(Object_800B26B0 *pMotion, Input_800B2A14 *pInput)
         if (pTail->mUnknown76 != pMotion->mUnknown32) {
             if (pTail->mUnknown80 != 0.0f && speed > 0.05f) {
                 speed *= pMotion->mUnknown28 / pTail->mUnknown80;
-                if (speed > lbl_803ECB08) {
-                    speed = lbl_803ECB08;
+                if (speed > gPlyrMoveFwdSpeed) {
+                    speed = gPlyrMoveFwdSpeed;
                 }
             }
             fn_80227538(&pInput->mMove8, pMotion->mUnknown32, speed);

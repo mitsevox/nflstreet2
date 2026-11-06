@@ -18,7 +18,7 @@ int fn_80178EA0(int team);
 int fn_80178EE0(int team);
 int fn_80155130(Class_80148A58 *p, int team, unsigned char index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-void fn_8017E17C(int slot, const char *pText0, const char *pText1,
+void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1,
                  const char *pText2, int key);
 
 void fn_80154638(Class_802A27F0 *p, int value, int *pList, int *pIds, unsigned int count)
@@ -107,7 +107,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
                 color = 254;
             }
         }
-        fn_8017E17C(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
+        HudSetScoreTableRow(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
     } else {
         int slot = team == 1 ? 1 : 3;
         Object_80039F5C *pPlayer = fn_80039F5C(team, 0);
@@ -118,7 +118,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
                 color = 254;
             }
         }
-        fn_8017E17C(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
+        HudSetScoreTableRow(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
         pPlayer = fn_80039F5C(team, 1);
         if (showColors) {
             color = fn_80155130(p, team, 1);
@@ -126,7 +126,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
                 color = 254;
             }
         }
-        fn_8017E17C(slot + 1, pPlayer->mUnknown2927 + 21, lbl_802A05C8,
+        HudSetScoreTableRow(slot + 1, pPlayer->mUnknown2927 + 21, lbl_802A05C8,
                    lbl_802A05C8, color);
     }
 }

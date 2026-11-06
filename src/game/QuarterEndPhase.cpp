@@ -14,7 +14,7 @@
 #include "game/fn_800B65A0.h"
 
 #include "game/QuarterEndPhase.h"
-#include "game/cu_8017F264.h"
+#include "game/GameEventFlags.h"
 #include "game/Params_80092E54.h"
 
 /* One step of the sequence that mpEntries points to; a step whose first word
@@ -74,15 +74,15 @@ void BallResetToSpot(void);
 void fn_80162780(int a, int b);
 void fn_80168C40(void);
 void fn_8016DCD4(int a);
-int fn_801735EC(void);
+int ClockRuleIsOvertime(void);
 void fn_80177E6C(int a, int b);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787DC(int a);
 void fn_801789F8(void);
-void fn_8017CFB4(int a);
-void fn_8017DB44(void);
-void fn_8017F048(void);
+void BannerClear(int a);
+void HudStop(void);
+void CoinTossApplyResultSwapped(void);
 int fn_801F0F18(int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
@@ -356,7 +356,7 @@ void QuarterEndPhase::OnEnter()
     _QuarterEnd_pState->mState = 0;
     fn_80177E6C(1, 0);
     _QuarterEnd_pState->mUnknown0 = fn_8009D86C();
-    fn_8017F2DC(0);
+    GameEventFlagsSetFlag0(0);
     _QuarterEnd_pState->mUnknown10 = 0;
     _QuarterEnd_pState->mUnknown11 = 0;
     _QuarterEnd_pState->mUnknown36 = 0;
@@ -378,7 +378,7 @@ void QuarterEndPhase::OnUpdate(float f)
         if (a == 3 && b == 2) {
             break;
         }
-        fn_8017CFB4(7);
+        BannerClear(7);
         switch (_QuarterEnd_pState->mUnknown0) {
         case 4:
         case 5:
@@ -405,9 +405,9 @@ void QuarterEndPhase::OnUpdate(float f)
         fn_800AFDD4(QuarterEndOnEvent);
         fn_80162780(1, 1);
         if (fn_8009D86C() == 6) {
-            fn_8017DB44();
+            HudStop();
         } else if (fn_8009D86C() == 5) {
-            if (fn_801735EC()) {
+            if (ClockRuleIsOvertime()) {
                 fn_80168C40();
                 fn_800CC560(1);
             }
@@ -416,7 +416,7 @@ void QuarterEndPhase::OnUpdate(float f)
             fn_8016DCD4(0);
         }
         if (fn_8009D86C() != 6 && fn_8009D86C() == 3) {
-            fn_8017F048();
+            CoinTossApplyResultSwapped();
         }
         fn_801789F8();
         _QuarterEnd_pState->mState = 1;
@@ -465,7 +465,7 @@ void QuarterEndPhase::OnUpdate(float f)
                 fn_800AD910(9, f);
                 break;
             case 3:
-                fn_8017F048();
+                CoinTossApplyResultSwapped();
                 fn_800AD910(5, f);
                 BallResetToSpot();
                 break;

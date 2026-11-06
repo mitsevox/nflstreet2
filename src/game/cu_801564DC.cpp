@@ -7,8 +7,8 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_8017F584.h"
-#include "game/fn_801801F0.h"
+#include "game/GameModeType.h"
+#include "game/MsgGame.h"
 #include "game/ModuleGroup_8003450C.h"
 #include "game/SndgCrowd.h"
 #include "game/PauseMenu.h"
@@ -19,7 +19,7 @@
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80218FC4.h"
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297BF8.h"
 #include "game/Class_80297C60.h"
@@ -361,7 +361,7 @@ void fn_80168264(void);
 void fn_80168640(int team, int kind);
 void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
 Team_80168EBC * fn_80168EBC(int team);
-void fn_801735D8(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
 void fn_80177C50(int a);
 void fn_80177E6C(int a, int b);
 int fn_80177F70(void);
@@ -378,10 +378,10 @@ float fn_80178A2C(void);
 int fn_80178C60(void);
 void fn_80178CD8(int a);
 void fn_80178F20(Class_802A56E8 *pObject);
-void fn_8017D6B8(int a, int b);
-void fn_8017D9D8(int a);
-void fn_8017DB44(void);
-int fn_801801D0(void);
+void HudSetScore(int a, int b);
+void HudShowPressPrompt(int a);
+void HudStop(void);
+int MsgGameTakePendingChoice(void);
 void RumbleStopAll(void);
 void RumbleEnable(unsigned char enabled);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -961,7 +961,7 @@ int fn_80157080(void)
         int modes[5] = { 2, 3, 0, 4, 15 };
         mode = modes[lesson];
         fn_800AD910(0, 0.0f);
-        fn_8017DB44();
+        HudStop();
         fn_800582D0();
         fn_80156854();
         fn_8015672C(5);
@@ -980,7 +980,7 @@ int fn_80157080(void)
                 fn_80148A58()->vfn_07(1, 5);
                 break;
             case 0:
-                fn_801735D8(0x800);
+                ClockRuleClearFlags(0x800);
                 fn_8009D8CC(1);
                 fn_8009D964(1, 0);
                 SpchIGSetCommentaryOn(0);
@@ -1028,7 +1028,7 @@ int fn_80157080(void)
         if (next != 5) {
             done = 1;
             fn_800AD910(0, 0.0f);
-            fn_8017DB44();
+            HudStop();
             fn_800582D0();
             fn_80148644();
             fn_800C1CA0();
@@ -1074,7 +1074,7 @@ int fn_80157080(void)
 
 short fn_80157448(int team, int unused, short value)
 {
-    if (fn_8017F584() == 11 && fn_800B65A0(team) == 0xFF) {
+    if (GameModeTypeGet() == 11 && fn_800B65A0(team) == 0xFF) {
         value = (short)(value * 0.75f);
     }
     return value;
@@ -1087,7 +1087,7 @@ void fn_801574DC(int value)
 
 void fn_80157514(void)
 {
-    if (fn_8017F584() == 11) {
+    if (GameModeTypeGet() == 11) {
         PauseRequestCancel();
         if (PauseIsUnblocked() == 0) {
             PauseUnblock();
@@ -1204,7 +1204,7 @@ void Class_802A3858::vfn_05(float dt)
 {
     unsigned int step = fn_801568E8();
     if (step >= 5 && step <= 7 && mUnknown4 && !mUnknown8.m) {
-        fn_8017D9D8(1);
+        HudShowPressPrompt(1);
         mUnknown8.m = 1;
     }
     Class_802A3B10::vfn_05(dt);
@@ -1753,7 +1753,7 @@ void Class_802A3A48::fn_80158C04()
 {
     PauseBlock();
     Step_802DEC08 *pRecord = fn_801568F8()->vfn_07();
-    fn_801801F0(1);
+    MsgGameSetMemCardActive(1);
     if (fn_80156C8C(pRecord->mMask)) {
         fn_80156E9C(pRecord->mPrompts, 1, 1);
         fn_80156D1C(1);
@@ -1808,7 +1808,7 @@ void Class_802A3B80::vfn_04(float dt)
         busy = other == 2;
     }
     if (!busy && MsgBoxIsClosed()) {
-        int choice = fn_801801D0();
+        int choice = MsgGameTakePendingChoice();
 
         if (choice == 2) {
             if (mUnknown4 == 2) {
@@ -1899,8 +1899,8 @@ void Class_802A3B10::vfn_04(float dt)
     fn_800BF658(1);
     fn_800D4164(1, 0.0f, 0);
     fn_800D4164(0, 0.0f, 0);
-    fn_8017DE54(1, 0.0f, 0, 0);
-    fn_8017DE54(0, 0.0f, 0, 0);
+    HudSetGameBreakerMeter(1, 0.0f, 0, 0);
+    HudSetGameBreakerMeter(0, 0.0f, 0, 0);
     args[0] = 1;
     args[1] = 0;
     fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
@@ -2064,7 +2064,7 @@ void Class_802A3A48::vfn_04(float dt)
             }
         } else if (MsgBoxIsClosed()) {
             if (mUnknown12 != 0) {
-                switch (fn_801801D0()) {
+                switch (MsgGameTakePendingChoice()) {
                 case 1:
                     mUnknown8++;
                     fn_801566DC(0);
@@ -2206,8 +2206,8 @@ void Class_802A3990::vfn_10()
         fn_800C87CC(1, 0);
         fn_800C87CC(0, 0);
         fn_80177F88(1);
-        fn_8017D6B8(1, 0);
-        fn_8017D6B8(0, 0);
+        HudSetScore(1, 0);
+        HudSetScore(0, 0);
     }
     fn_80178CD8(0);
 }

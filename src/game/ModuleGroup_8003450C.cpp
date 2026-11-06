@@ -161,12 +161,12 @@ void fn_8016B04C(void);
 void fn_8016B0AC(void);
 void fn_80178B5C(void);
 int fn_80178C60(void);
-void fn_8017CBD0(void);
-void fn_8017CBD4(void);
-void fn_8017CDD4(void);
-void fn_8017CEB0(void);
-void fn_8017EB94(void);
-void fn_8017EBF0(void);
+void SubDepthInit(void);
+void SubDepthShutdown(void);
+void BannerAlloc(void);
+void BannerClearAll(void);
+void CoinTossAllocState(void);
+void CoinTossClearState(void);
 void fn_80188B78(int a, int b);
 void fn_80188E14(void);
 void fn_80188E8C(void);
@@ -318,13 +318,13 @@ const char *Banner::GetName() { return "Banner"; }
 
 int Banner::Init()
 {
-    fn_8017CDD4();
+    BannerAlloc();
     return 1;
 }
 
 int Banner::Shutdown()
 {
-    fn_8017CEB0();
+    BannerClearAll();
     return 1;
 }
 
@@ -505,13 +505,13 @@ const char *CoinToss::GetName() { return "CoinToss"; }
 
 int CoinToss::Init()
 {
-    fn_8017EB94();
+    CoinTossAllocState();
     return 1;
 }
 
 int CoinToss::Shutdown()
 {
-    fn_8017EBF0();
+    CoinTossClearState();
     return 1;
 }
 
@@ -1299,13 +1299,13 @@ const char *Sub::GetName() { return "Sub"; }
 
 int Sub::Init()
 {
-    fn_8017CBD0();
+    SubDepthInit();
     return 1;
 }
 
 int Sub::Shutdown()
 {
-    fn_8017CBD4();
+    SubDepthShutdown();
     return 1;
 }
 

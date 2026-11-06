@@ -140,7 +140,7 @@ void fn_80039D08(float dt);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
 void CamGameResumeAll(void);
-void fn_8017DBCC(void);
+void HudPost3AOn(void);
 int fn_80156704(void);
 void fn_801574DC(int value);
 int fn_800A8468(int team);
@@ -200,7 +200,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             fn_8002C9A8(lbl_803EA368, 2, 0);
         }
         CamGameResumeAll();
-        fn_8017DBCC();
+        HudPost3AOn();
         if (fn_800A8468(0) || fn_800A8468(1)) {
             AudmonEventPostArgs(13, 0, 0, 0, 0);
         }

@@ -2,7 +2,7 @@
    game-event callback and the in-game speech (commentary) system, in a fixed order. */
 
 #include "game/AudmonEvent.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/SndgCrowd.h"
 
 struct Struct_8006C2C8;
@@ -63,7 +63,7 @@ extern "C" void SndgIGInitAudio(void)
     _SndgIG_iReserved = 0;
     AudmonEventStartInGame();
     fn_800B1670(fn_80071594);
-    fn_8006D188(fn_8017F584() == 11);
+    fn_8006D188(GameModeTypeGet() == 11);
     fn_8006B664();
     fn_8006BCC8(0);
     if (fn_800A350C()) {

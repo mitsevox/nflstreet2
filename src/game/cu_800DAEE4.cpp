@@ -17,7 +17,7 @@
 typedef Record_800DB60C Record_800DB074;
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAD14;
 extern unsigned char lbl_803EAD18;
 extern unsigned char lbl_803EAD19;
@@ -194,7 +194,7 @@ extern "C" void fn_800DB520(Record_800DB074 *pRecord, Object_80039F5C *p, Object
     pRecord->mUnknown4 = 0.0f;
     pRecord->mUnknown8 = 0.0f;
     fn_8009BD2C(pOther, &pRecord->mUnknown12);
-    pRecord->mUnknown16 = value / (lbl_803ECB08 * 100621.12f);
+    pRecord->mUnknown16 = value / (gPlyrMoveFwdSpeed * 100621.12f);
     Ball_t *pBall = BallFindHeldBy(p);
     if (pBall) {
         int kind = fn_801BE648(p->mpUnknown792);
@@ -408,7 +408,7 @@ struct List_800DC36C {
 };
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800A7EF4(unsigned char a);
@@ -426,7 +426,7 @@ int PassIconsWereShown(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
 Object_800670B4 *fn_80168708(int team);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);
 void AnimSeqSetSpeed(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float value, void *p);
@@ -515,7 +515,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                 if (p->mUnknown2913 == 0) {
                     int facing = p->mMotion.mFacing & 0xFFFFFF;
                     if (facing >= 0x6E38E4 && facing <= 0xC38E38
-                        && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                        && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                         target = 0x6AAAAB;
                     } else {
                         target = (angle + 0x38E38E) & 0xFFFFFF;
@@ -523,7 +523,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                 } else {
                     int facing = p->mMotion.mFacing & 0xFFFFFF;
                     if ((facing < 0x11C71C || facing > 0xBC71C7)
-                        && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                        && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                         target = 0x155555;
                     } else {
                         target = (angle - 0x38E38E) & 0xFFFFFF;
@@ -542,12 +542,12 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                     fn_800C89F0(p, 0x400000, 2, 0, 1.0f);
                 }
             }
-        } else if (p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+        } else if (p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
             angle = -0x400000;
             if (p->mUnknown2913 == 0) {
                 int facing = p->mMotion.mFacing & 0xFFFFFF;
                 if (facing >= 0x6E38E4 && facing <= 0xC38E38
-                    && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                    && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                     target = 0x6AAAAB;
                 } else {
                     target = (angle + 0x38E38E) & 0xFFFFFF;
@@ -555,7 +555,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
             } else {
                 int facing = p->mMotion.mFacing & 0xFFFFFF;
                 if ((facing < 0x11C71C || facing > 0xBC71C7)
-                    && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                    && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                     target = 0x155555;
                 } else {
                     target = (angle - 0x38E38E) & 0xFFFFFF;
@@ -603,7 +603,7 @@ extern "C" int fn_800DC080(Object_80039F5C *p)
                 } else if (PassIconsAreShown() == 1) {
                     if (!(p->mFlags & 0x200000)) {
                         result = 1;
-                    } else if (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f) {
+                    } else if (p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.4f) {
                         p->mFlags &= ~0x200000;
                         result = 1;
                     }
@@ -857,7 +857,7 @@ unsigned int fn_8011E188(void);
 int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, float f, int d, float g);
 int fn_801486A0(void);
 Object_800670B4 *fn_80168708(int team);
-void fn_80171DB0(Object_80039F5C *p);
+void PossReleaseBall(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801CFE08(float value);
 int MathAngleDiff(int a, int b);
@@ -867,7 +867,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 }
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 #include "game/fn_80177FE0.h"
 #include "game/Class_80297C60.h"
@@ -1168,7 +1168,7 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint);
 
 extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
 {
-    Object_8016D8B0 *pBlock = &p->mUnknown512;
+    PlyrMoveCmd_t *pBlock = &p->mUnknown512;
     int delta = MathAngleDiff(pBlock->mUnknown4, pBlock->mUnknown8);
     int angle;
     int result;
@@ -2416,7 +2416,7 @@ extern "C" int fn_800DFED0(Object_80039F5C *p)
                 fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
                 if (mode == 4) fn_8016DBE4(p);
                 p->mUnknown512.mUnknown14 = 1;
-                p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+                p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                 p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             }
         }
@@ -2445,7 +2445,7 @@ extern "C" int fn_800E0188(Object_80039F5C *p, float *pA, float *pB)
 extern "C" void fn_800E01D8(Object_80039F5C *p, Block_800E0230 *pBlock, int a)
 {
     if (p == BallGetCurrentHolder() && fn_801BE648(p->mpUnknown792) == 74 && fn_801486A0()) {
-        fn_80171DB0(p);
+        PossReleaseBall(p);
     }
 }
 
@@ -2479,7 +2479,7 @@ extern "C" float fn_800E02D0(Object_80039F5C *p)
 
 extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
 {
-    if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f || (unsigned char)fn_800B9A90(lbl_803EAB84) != 1) {
+    if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f || (unsigned char)fn_800B9A90(lbl_803EAB84) != 1) {
         pBlock->mUnknown8 = 0;
         pBlock->mUnknown0 = fn_800E02D0(p);
         pBlock->mUnknown4 = p->mMotion.mFacing;
@@ -2516,7 +2516,7 @@ extern "C" void fn_800E0438(Object_80039F5C *p, Block_800E0230 *pBlock)
 
 extern "C" void fn_800E04C8(Object_80039F5C *p, Block_800E0230 *pBlock)
 {
-    if (!(p->mMotion.mUnknown28 / lbl_803ECB08 > 0.2f) && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
+    if (!(p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed > 0.2f) && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown4;
         p->mUnknown512.mUnknown4 = pBlock->mUnknown4;
@@ -2559,7 +2559,7 @@ extern "C" int fn_800E05C0(Object_80039F5C *p)
         if (p->mFlags & 4) {
             fn_800E0438(p, pBlock);
             p->mUnknown512.mUnknown14 = state;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
             return 1;
@@ -2701,7 +2701,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             fn_8009A260(p);
             return 1;
         }

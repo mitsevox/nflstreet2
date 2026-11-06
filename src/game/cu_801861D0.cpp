@@ -22,7 +22,7 @@ struct Params_80186324 {
 
 extern "C" {
 int fn_8006C854(int index, Vector_80039F5C *pPos);
-int fn_801800D0(void);
+int MsgGameFindActivePort(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
@@ -112,7 +112,7 @@ int fn_80186324(unsigned int id, Params_80186324 *pParams, int c, int *pResult)
         *pResult = fn_801862A8(pParams->mUnknown0);
         break;
     case 0x80000004:
-        *pResult = fn_801800D0();
+        *pResult = MsgGameFindActivePort();
         break;
     case 0x80000005:
         *pResult = fn_801862E0(pParams->mUnknown0);

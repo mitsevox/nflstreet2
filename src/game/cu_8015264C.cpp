@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 
 struct Entry_8015005C {
     int mUnknown0;
@@ -43,7 +43,7 @@ Object_80039F5C *fn_8015264C(void)
 
 int fn_8015267C(Class_802A2918 *p)
 {
-    if (fn_8017F584() == 7) {
+    if (GameModeTypeGet() == 7) {
         return fn_801529C0(p) <= 2;
     }
     return lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown12 != 255;

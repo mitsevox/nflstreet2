@@ -1,6 +1,6 @@
 #include "game/cu_8002B8F8.h"
 #include "game/Ball.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_800AD9B4.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -36,17 +36,17 @@ void fn_8013F3FC(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 void fn_8016BA80(void);
-void fn_801735D8(unsigned int mask);
-void fn_80173C1C(void);
-void fn_80173C2C(void);
-void fn_80173D10(void);
-void fn_80176C58(void);
-void fn_80176C90(void);
+void ClockRuleClearFlags(unsigned int mask);
+void ClockRuleResetFlags(void);
+void DriveLogInit(void);
+void DriveLogEndDrive(void);
+void ScoringLogInit(void);
+void ScoringLogReset(void);
 void fn_80177B7C(int a);
 void fn_8017833C(int value);
 void fn_80178354(int value);
 int fn_80178AE0(void);
-void fn_8017D4AC(void);
+void HudReset(void);
 int fn_8022BF68(void);
 int fn_8022DD4C(int value);
 int fn_8022DD80(int value);
@@ -65,15 +65,15 @@ extern "C" void fn_800C1CA0(void)
     lbl_803EABB9 = 1;
     team = fn_80178AE0();
     lbl_803EABB8 = 1;
-    fn_80173C1C();
-    fn_80173C2C();
-    fn_80176C58();
-    fn_80173D10();
-    fn_80176C90();
+    ClockRuleResetFlags();
+    DriveLogInit();
+    ScoringLogInit();
+    DriveLogEndDrive();
+    ScoringLogReset();
     fn_800406C0(0x100);
     fn_8022DD4C(0);
     fn_8022DD80(0);
-    if (fn_8017F584() == 6) {
+    if (GameModeTypeGet() == 6) {
         GameSetupInit();
     } else {
         fn_80177B7C(team);
@@ -107,15 +107,15 @@ extern "C" void fn_800C1CA0(void)
         fn_8009D818(0);
         fn_800AD910(1, 0.0f);
     }
-    if (fn_8017F584() == 8) {
+    if (GameModeTypeGet() == 8) {
         fn_8017833C(1);
         fn_80178354(1);
     }
-    fn_801735D8(0x800);
+    ClockRuleClearFlags(0x800);
     fn_8009D8CC(1);
     fn_8009D8CC(5);
     fn_8009D8CC(0);
-    fn_8017D4AC();
+    HudReset();
     PassIconsHide();
     PassIconsClearReplayFlag();
     fn_80073328(0);

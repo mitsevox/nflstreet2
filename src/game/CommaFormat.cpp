@@ -1,3 +1,4 @@
+/* Writes an integer as decimal text with commas between groups of three digits. */
 extern "C" {
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 unsigned int fn_801C3180(const char *pText);
@@ -7,7 +8,7 @@ unsigned int fn_801C3180(const char *pText);
 // into pOut and terminates it. Copying stops early only when a digit lands at
 // index size - 2; a comma written with the next digit can step past that
 // point, so size does not bound the output.
-extern "C" void fn_8017F49C(int value, char *pOut, int size)
+extern "C" void CommaFormatInt(int value, char *pOut, int size)
 {
     char digits[20];
     int length;

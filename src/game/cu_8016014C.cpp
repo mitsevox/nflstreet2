@@ -5,7 +5,7 @@
 #include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 
 /* Per-player texture slot state: the wanted texture id and palette, and the
    progress of its load from the texture archive. */
@@ -587,7 +587,7 @@ void fn_801611BC(int player, const char *pName, int force)
     if (id == -1) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     }
-    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && GameModeTypeGet() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         fn_80160E94(player, 5, id, -1, force);
@@ -600,7 +600,7 @@ int fn_8016128C(int index)
     char name[32];
     int id;
 
-    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && GameModeTypeGet() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;

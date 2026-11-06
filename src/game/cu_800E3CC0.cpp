@@ -161,7 +161,7 @@ extern float lbl_803EADFC;
 extern float lbl_803EAE00;
 extern float lbl_803EAE04;
 extern float lbl_803EAE08;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EADD8;
 extern float lbl_803EADDC;
 extern float lbl_803EADE0;
@@ -251,7 +251,7 @@ void fn_800DB688(void *pBlock, Object_80039F5C *p);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
 void fn_800DB8B4(void *pBlock, Object_80039F5C *p);
 void fn_8009BD60(Object_80039F5C *p);
-void fn_8017D9B0(int a, int b);
+void HudClearMashPlayers(int a, int b);
 void fn_80178718(Object_80039F5C *p);
 int fn_800EAC9C(Object_80039F5C *p);
 int fn_800E92DC(Object_80039F5C *p);
@@ -1346,10 +1346,10 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
             switch (p->mpState->mId) {
             case 16:
                 result = 1;
-                fn_8017D9B0(p->mId, other);
+                HudClearMashPlayers(p->mId, other);
                 break;
             case 17:
-                fn_8017D9B0(other, p->mId);
+                HudClearMashPlayers(other, p->mId);
                 break;
             }
             fn_800E954C(p, 10, &direction, 1, &angle);
@@ -1418,7 +1418,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
     }
     if (!nearX && !nearY)
         return;
-    if (p->mMotion.mUnknown28 < lbl_803EADB4 * lbl_803ECB08)
+    if (p->mMotion.mUnknown28 < lbl_803EADB4 * gPlyrMoveFwdSpeed)
         return;
     if (nearX) {
         if (p->mMotion.mPos.mX > 0.0f) {
@@ -2081,7 +2081,7 @@ extern "C" int fn_800EBDCC(Object_80039F5C *p) {
     }
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     result = 1;
 done:
     return result;
@@ -2323,7 +2323,7 @@ extern "C" int fn_800ECD14(Object_80039F5C *p) {
         p->mFlags = flags & ~0x10804;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         result = 1;
     } else if (kind != 1) {
         fn_800EC9E4(p, kind, 0);

@@ -5,9 +5,9 @@
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
 extern "C" {
-int fn_8017F494(void);
-unsigned char fn_8017F48C(void);
-void fn_8017F444(void);
+int TeamPromptGetResult(void);
+unsigned char TeamPromptIsActive(void);
+void TeamPromptEnd(void);
 void fn_800B2630(void);
 int fn_801784E8(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -21,11 +21,11 @@ extern "C" int fn_800B1AAC(void *p)
     Pair_800A14A8 *pPair = (Pair_800A14A8 *)p;
     int result = 1;
 
-    if (fn_8017F494() != -1) {
-        if (fn_8017F48C() != 0) {
-            fn_8017F444();
+    if (TeamPromptGetResult() != -1) {
+        if (TeamPromptIsActive() != 0) {
+            TeamPromptEnd();
         }
-        if (fn_8017F494() == 0) {
+        if (TeamPromptGetResult() == 0) {
             lbl_803EAB20->mUnknown4.mUnknown5C |= 2;
         } else {
             lbl_803EAB20->mUnknown4.mUnknown48 = 0.0f;

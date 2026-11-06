@@ -10,7 +10,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_8016871C.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -3128,7 +3128,7 @@ extern "C" void fn_8006EC24(void)
 extern "C" void fn_8006ECB4(AudmonEvent_t *pEvent)
 {
     if (!fn_800BA6F8() && SpchIGIsEnabled()) {
-        if (fn_8017F584() == 11 && fn_801568F0() <= 4) {
+        if (GameModeTypeGet() == 11 && fn_801568F0() <= 4) {
             switch (pEvent->mType) {
             case 0x85:
                 SpchIGSayTutorialIntro(pEvent->mUnknown10.mValue, pEvent->mUnknown14);

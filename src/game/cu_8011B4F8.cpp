@@ -33,7 +33,7 @@ struct Block_803EB028 {
 
 extern "C" {
 extern Block_803EB028 *lbl_803EB028;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_8011F1CC(void);
@@ -62,7 +62,7 @@ extern "C" void fn_8011B4F8(Entry_8011AFCC *pEntry)
         } else {
             score = 5.0f;
         }
-        if (pMotion->mUnknown28 > lbl_803ECB08 * 0.5f && MathAngleDiff(pEntry->mUnknown64, pMotion->mUnknown32) > 0x4E38E3) {
+        if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.5f && MathAngleDiff(pEntry->mUnknown64, pMotion->mUnknown32) > 0x4E38E3) {
             pEntry->mUnknown76 = 1;
             score *= 0.8f;
         }

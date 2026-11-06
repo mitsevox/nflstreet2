@@ -6,7 +6,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/bitstream.h"
 #include "game/PlayerLook.h"
 #include "game/fn_802270D4.h"
@@ -44,12 +44,12 @@ Region_8003BDF0 *LevelGetData();
 int LevelFindArea(float *);
 void LevelGetQuadBase(void *, void *, void *);
 float LevelGetQuadHeight(void *);
-void fn_8003BDF0(Object_8003DEC4 *, Pair_8017055C *, int);
-void fn_8003BFCC(Object_8003DEC4 *, float *, Pair_8017055C *, Pair_8017055C *,
-                 Pair_8017055C *, int, float);
-int fn_8003C97C(Pair_8017055C *, Pair_8017055C *, Pair_8017055C *,
-                Pair_8017055C *, float *, float *);
-void fn_8003C8C8(void *, Pair_8017055C *, float *);
+void fn_8003BDF0(Object_8003DEC4 *, Point2_t *, int);
+void fn_8003BFCC(Object_8003DEC4 *, float *, Point2_t *, Point2_t *,
+                 Point2_t *, int, float);
+int fn_8003C97C(Point2_t *, Point2_t *, Point2_t *,
+                Point2_t *, float *, float *);
+void fn_8003C8C8(void *, Point2_t *, float *);
 void fn_8022732C(void *, void *, float);
 void fn_80227904(void *, void *, void *, float);
 void fn_80227930(void *, void *, void *, float);
@@ -161,7 +161,7 @@ void fn_8003BA00() {}
 void fn_8003BA04() {}
 void fn_8003BA08() {}
 void fn_8003BA0C() {}
-void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
+void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
                  int angle) {
   Projection_8003BA10 *p = &object->mUnknown4256;
   p->mUnknown673 =
@@ -181,7 +181,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
   if (!(width >= 0.65f))
     width = 0.65f;
   float length = fn_802270D4(delta);
-  Pair_8017055C forward, backward;
+  Point2_t forward, backward;
   if (!(length >= 0.4f)) {
     if (!(length <= 0.2f)) {
       fn_80227264(delta, delta, 1.0f / length);
@@ -210,7 +210,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
     backward.mX = -(delta[0] * 0.85f);
     backward.mY = -(delta[1] * 0.85f);
   }
-  Pair_8017055C side;
+  Point2_t side;
   side.mX = delta[1];
   side.mY = -delta[0];
   fn_80227248(&side, &side, width);
@@ -234,7 +234,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
     }
   }
 }
-void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
+void fn_8003BDF0(Object_8003DEC4 *object, Point2_t *axis, int angle) {
   Region_8003BDF0 *regions = LevelGetData();
   if (!regions)
     return;
@@ -249,7 +249,7 @@ void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
   Projection_8003BA10 *p = &object->mUnknown4256;
   radius += fn_8022781C(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
-    Pair_8017055C a, b, mid;
+    Point2_t a, b, mid;
     LevelGetQuadBase(regions->mUnknown132[i], &a, &b);
     float scale = LevelGetQuadHeight(regions->mUnknown132[i]);
     mid.mX = (a.mX + b.mX) * 0.5f;
@@ -259,12 +259,12 @@ void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
       fn_8003BFCC(object, center, axis, &a, &b, angle, scale);
   }
 }
-void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
-                 Pair_8017055C *a, Pair_8017055C *b, int angle, float scale) {
+void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
+                 Point2_t *a, Point2_t *b, int angle, float scale) {
   Projection_8003BA10 *p = &object->mUnknown4256;
   if (p->mUnknown672 > 3)
     return;
-  Pair_8017055C original = {center[0], center[1]}, shifted;
+  Point2_t original = {center[0], center[1]}, shifted;
   float t, u;
   fn_80227690(&shifted, &original, axis);
   if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && t > 0.0f)
@@ -275,13 +275,13 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
   Clip_8003BFCC *out = &p->mRecords[p->mUnknown672];
   out->mCount = 0;
   int accepted = 0;
-  Pair_8017055C shiftedA = *a, shiftedB = *b;
+  Point2_t shiftedA = *a, shiftedB = *b;
   fn_8022732C(&shiftedA, axis, shift);
   fn_8022732C(&shiftedB, axis, shift);
   float minimum = 1000000.0f, maximum = -1000000.0f;
   for (unsigned char i = 0; i < 4; ++i) {
-    if (fn_8003C97C(&shiftedA, &shiftedB, (Pair_8017055C *)p->mPoints[i],
-                    (Pair_8017055C *)p->mPoints[(i + 1) % 4], &t, &u) &&
+    if (fn_8003C97C(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
+                    (Point2_t *)p->mPoints[(i + 1) % 4], &t, &u) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
       if (!(t >= minimum))
         minimum = t;
@@ -305,11 +305,11 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
     }
     unsigned char next = (i + 1) % 4;
     float points[3][3];
-    Pair_8017055C pairs[3];
+    Point2_t pairs[3];
     float parameters[3];
     unsigned char count = 0;
-    if (fn_8003C97C((Pair_8017055C *)p->mPoints[i],
-                    (Pair_8017055C *)p->mPoints[next], &shiftedA, &shiftedB, &t,
+    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+                    (Point2_t *)p->mPoints[next], &shiftedA, &shiftedB, &t,
                     &u) &&
         !(t <= 0.0f) && !(t >= 1.0f) && !(u <= 0.0f) && !(u >= 1.0f)) {
       accepted = 1;
@@ -318,8 +318,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
       parameters[count] = t;
       count = 1;
     }
-    if (fn_8003C97C((Pair_8017055C *)p->mPoints[i],
-                    (Pair_8017055C *)p->mPoints[next], a, &shiftedA, &t, &u) &&
+    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+                    (Point2_t *)p->mPoints[next], a, &shiftedA, &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
@@ -336,8 +336,8 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
         ++count;
       }
     }
-    if (fn_8003C97C((Pair_8017055C *)p->mPoints[i],
-                    (Pair_8017055C *)p->mPoints[next], b, &shiftedB, &t, &u) &&
+    if (fn_8003C97C((Point2_t *)p->mPoints[i],
+                    (Point2_t *)p->mPoints[next], b, &shiftedB, &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
@@ -382,24 +382,24 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
   }
   ++p->mUnknown672;
 }
-void fn_8003C8C8(void *record, Pair_8017055C *offset, float *parameters) {
+void fn_8003C8C8(void *record, Point2_t *offset, float *parameters) {
   struct View {
     unsigned char pad[16];
     float points[4][3];
   };
   View *p = (View *)record;
-  Pair_8017055C line;
+  Point2_t line;
   fn_80227690(&line, p->points[0], p->points[3]);
   fn_80227638(&line, offset, &line);
-  fn_8003C97C((Pair_8017055C *)p->points[0], (Pair_8017055C *)p->points[1],
+  fn_8003C97C((Point2_t *)p->points[0], (Point2_t *)p->points[1],
               offset, &line, parameters, 0);
   fn_80227690(&line, p->points[1], p->points[0]);
   fn_80227638(&line, offset, &line);
-  fn_8003C97C((Pair_8017055C *)p->points[1], (Pair_8017055C *)p->points[2],
+  fn_8003C97C((Point2_t *)p->points[1], (Point2_t *)p->points[2],
               offset, &line, parameters + 1, 0);
 }
-int fn_8003C97C(Pair_8017055C *a, Pair_8017055C *b, Pair_8017055C *c,
-                Pair_8017055C *d, float *t, float *u) {
+int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
+                Point2_t *d, float *t, float *u) {
   float dy = b->mY - a->mY, dx = b->mX - a->mX;
   float cx = d->mX - c->mX, cy = d->mY - c->mY;
   float determinant = cy * dx - cx * dy;
@@ -436,7 +436,7 @@ void fn_8003CA20() {
   int angle = fn_80227040(angleVector, vector);
   fn_80227264(vector, vector, 1.0f / length);
   for (int i = 0; i < lbl_803EA434; ++i)
-    fn_8003BA10(lbl_803EA430[i], color, (Pair_8017055C *)vector, angle);
+    fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);
   fn_801D0544();
   lbl_803EA438 = !lbl_803EA438;
 }
@@ -889,7 +889,7 @@ Object_8003DEC4 *fn_8003DEE4(int value) {
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index) {
   return lbl_803EA430 ? fn_8003DEC4(side * 7 + index) : 0;
 }
-Object_8003DEC4 *fn_8003DF7C(Pair_8017055C *point, float *distance) {
+Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
   float value = 10000.0f;
   Object_8003DEC4 *result = 0;
   if (lbl_803EA430)

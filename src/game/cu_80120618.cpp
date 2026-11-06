@@ -7,7 +7,7 @@
 extern "C" {
 
 extern Lookup_8012078C *lbl_803EB09C;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir);
 int fn_801486A0(void);
@@ -57,7 +57,7 @@ int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir,
     if (range > 10.0f && pA->mY < pB->mY) {
         return 0x400000;
     }
-    if (dist < lbl_803ECB08 * 0.1f) {
+    if (dist < gPlyrMoveFwdSpeed * 0.1f) {
         return angle;
     }
     if (speed == 0.0f) {

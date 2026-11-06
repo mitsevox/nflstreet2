@@ -1,6 +1,6 @@
 #include "game/bitstream.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Item_800476DC.h"
@@ -126,7 +126,7 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
         &values[8], &values[9], &values[10], &values[11], &values[12], &values[13], &values[14], &values[15]);
     fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
     pOut->mUnknown20 = values[13];
-    if (fn_8017F584() == 0) {
+    if (GameModeTypeGet() == 0) {
         if (CheatFlagsIsSet(30) || CheatFlagsIsSet(34)) {
             pOut->mUnknown0 = (float)values[1] * 0.33;
         } else if (CheatFlagsIsSet(31)) {

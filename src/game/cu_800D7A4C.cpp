@@ -10,7 +10,7 @@ float AnimSeqGetOpcodeTime(void *p, int key);
 extern "C" void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     pBlock->mUnknownCHalf = pBlock->mUnknown0Word = 0;
-    Object_8016D8B0 *pMove = &p->mUnknown512;
+    PlyrMoveCmd_t *pMove = &p->mUnknown512;
     State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
     if (pMove->mUnknown14 == 6 && pState->mUnknown11) {
         int facing = p->mMotion.mFacing;

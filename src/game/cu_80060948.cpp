@@ -78,7 +78,7 @@ int TournamentOpen(int index);
 void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
 int fn_80178AE0(void);
-int fn_801801B4(void);
+int MsgGameGetSetupState(void);
 void fn_80186F30(signed char a, int b);
 void fn_8018C48C(int tag);
 int fn_8018E7CC(int a);
@@ -653,10 +653,10 @@ void fn_80061918(void)
 {
     if (lbl_803EA5E8) {
         if (!fn_8006102C()) {
-            if (fn_801801B4() == 0) {
+            if (MsgGameGetSetupState() == 0) {
                 fn_80060BE0();
                 lbl_803EA5EC = 0;
-            } else if (fn_801801B4() == 1) {
+            } else if (MsgGameGetSetupState() == 1) {
                 FELoopSetResume(1);
                 fn_8006167C();
                 fn_800616D8();

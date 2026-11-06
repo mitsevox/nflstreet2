@@ -47,7 +47,7 @@ void fn_800A042C(void *p);
 void fn_800A050C(void *p, float dt);
 void fn_8003AB08(Object_80039F5C *p, int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void fn_8017D844(const char *pText);
+void HudShowCallout(const char *pText);
 void fn_801477F0(Block_80170E64 *p);
 void fn_800F0490(int a, State_80039F5C *pQueue, int id);
 void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p,
@@ -60,7 +60,7 @@ int fn_801787A0(void);
 int fn_80178508(void *pPos, float *pOut, int a);
 void fn_801783D0(int bit, int on);
 void fn_80178370(void);
-void fn_80171824(Object_80039F5C *p);
+void PossFumble(Object_80039F5C *p);
 void fn_8014D210(Object_80039F5C *p, int a, int b);
 int fn_8009D990(int index);
 void fn_80177C44(int value);
@@ -82,7 +82,7 @@ void fn_8005BF5C(void);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 int fn_8005BFD4(void);
 void fn_800AD910(int a, float b);
-void fn_80173B8C(void);
+void ClockRuleEndPeriod(void);
 
 void fn_8014E534(State_802A2020 *p)
 {
@@ -108,7 +108,7 @@ void fn_8014E534(State_802A2020 *p)
     }
     char text[64];
     fn_801C2D88(text, 64, "Catch %s %s", pPlayer->mUnknown2927, pPlayer->mUnknown2927 + 21);
-    fn_8017D844(text);
+    HudShowCallout(text);
     fn_801477F0(pPlayer->mpUnknown4);
     for (unsigned char i = 0; i <= 4; i++) {
         Object_80039F5C *pOther = fn_80039F5C(0, i);
@@ -177,7 +177,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
             } else if ((pCarrier->mFlags & 0x800) &&
                        (pCarrier->mpState->mId == 10 || pCarrier->mpState->mId == 16 ||
                         pCarrier->mpState->mId == 25)) {
-                fn_80171824(pCarrier);
+                PossFumble(pCarrier);
             } else {
                 fn_8014D210(pCarrier, 130, 10);
             }
@@ -294,7 +294,7 @@ void fn_8014ED70(void *p, float dt)
     if (fn_8009D990(1)) {
         fn_800AD910(2, dt);
     } else {
-        fn_80173B8C();
+        ClockRuleEndPeriod();
     }
 }
 

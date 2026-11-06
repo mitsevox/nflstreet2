@@ -5,7 +5,7 @@
 
 extern "C" {
 
-void fn_8017F49C(int value, char *pOut, int size);
+void CommaFormatInt(int value, char *pOut, int size);
 
 void MemCardUtilHandleEvent(int a, int b, float c)
 {
@@ -56,7 +56,7 @@ void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const 
     }
     blocks += value >> 13;
     if (pText) {
-        fn_8017F49C(blocks, pOut, size);
+        CommaFormatInt(blocks, pOut, size);
         if (blocks == 1) {
             strcat(pOut, " block ");
             strcat(pOut, pText);
@@ -65,7 +65,7 @@ void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const 
             strcat(pOut, pText);
         }
     } else {
-        fn_8017F49C(blocks, pOut, size);
+        CommaFormatInt(blocks, pOut, size);
         if (blocks == 1) {
             strcat(pOut, " block");
         } else {

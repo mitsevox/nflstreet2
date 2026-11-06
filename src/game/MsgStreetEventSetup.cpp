@@ -52,7 +52,7 @@ unsigned char fn_8007AFDC(int a);
 int fn_80082414(int index);
 int fn_801486A0(void);
 void fn_8014F3DC(int ticks);
-int fn_801801B4(void);
+int MsgGameGetSetupState(void);
 void fn_8018C230(int a, int b);
 void fn_8018C48C(int handle);
 void fn_8018D7E0(void);
@@ -285,7 +285,7 @@ void MsgStreetEventSetupShutdown(void)
     fn_8001B260(mode, _MsgStreetEventSetup_iMinPool);
     fn_8001B828();
     MsgStreetEventSetupApplyOptions(_MsgStreetEventSetup_pState);
-    if (fn_801801B4() == 0) {
+    if (MsgGameGetSetupState() == 0) {
         fn_8018C48C(0x54415453);
     }
     fn_801D2BD0(_MsgStreetEventSetup_pState);

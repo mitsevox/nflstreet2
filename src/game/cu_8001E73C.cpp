@@ -21,8 +21,8 @@ void ChalFormatReward(int type, unsigned short value, char *pBuffer, unsigned sh
 void ChalFormatRewards(Challenge_t *pRecord, char *pBuffer, unsigned short size);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int ChalHasReward(Challenge_t *pRecord, int id);
-int fn_801801B4(void);
-void fn_801801E8(int a);
+int MsgGameGetSetupState(void);
+void MsgGameSetFEStarted(int a);
 void fn_801834DC(void);
 int fn_801835A0(void);
 }
@@ -64,7 +64,7 @@ void fn_8001E780(int *pA, int *pB, int *pC)
     *pA = lbl_803EBA78;
     *pB = lbl_803EBA7C;
     ChallengeSetMode(3);
-    fn_801801E8(1);
+    MsgGameSetFEStarted(1);
     if (fn_801835A0()) {
         fn_801834DC();
     }
@@ -82,7 +82,7 @@ void fn_8001E780(int *pA, int *pB, int *pC)
 
 void fn_8001E83C(int a, int b)
 {
-    if (fn_801801B4() == 0) {
+    if (MsgGameGetSetupState() == 0) {
         lbl_803EBA78 = 2;
         lbl_803EBA7C = 4;
     } else {

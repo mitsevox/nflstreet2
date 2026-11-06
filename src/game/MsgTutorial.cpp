@@ -56,8 +56,8 @@ void fn_80156724(int value);
 void fn_8015672C(int value);
 void fn_80156734(int value);
 unsigned int fn_801568F0(void);
-int fn_801801B4(void);
-void fn_801801C4(int a);
+int MsgGameGetSetupState(void);
+void MsgGameIgnoreValue(int a);
 void fn_80186F30(signed char a, int b);
 signed char fn_8022F384(int a);
 int fn_8022F478(int a);
@@ -112,7 +112,7 @@ void MsgTutorialGetLessonInfo(int index, TutorialTextRef_t first, TutorialTextRe
 void MsgTutorialPostLessonEvent(int value)
 {
     if (value != -1) {
-        fn_801801C4(value);
+        MsgGameIgnoreValue(value);
     }
     fn_8021D7B8(lbl_803EB688, 0x80000036, 0, 0);
 }
@@ -162,7 +162,7 @@ int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unuse
 
 void MsgTutorialBeginLesson(void)
 {
-    int state = fn_801801B4();
+    int state = MsgGameGetSetupState();
 
     if (state == 1) {
         int value = fn_8000FCDC();

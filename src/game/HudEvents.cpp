@@ -1,10 +1,11 @@
+/* In-game HUD event wrappers: each function posts one UI event (0x800000xx) to the in-game UI instance, driving the two GameBreaker meter halves and level, the Player/Points score table, per-player text popups in team colour, and two per-side on/off indicators. */
 #include <string.h>
 #include "game/Entry_80219044.h"
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/fn_8021D7B8.h"
 
 /* Only +8 is read here. */
-struct Object_8017E46C {
+struct HudPopupPlayer_t {
     char mUnknown0[8];
     unsigned char mUnknown8;
 };
@@ -19,34 +20,34 @@ unsigned char fn_800C1E48(void);
 int fn_80162E40(int a);
 int fn_80188030(int a);
 
-unsigned char fn_8017E608(int index);
-unsigned char fn_8017E614(int index);
-int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
+unsigned char HudIsEvent31Shown(int index);
+unsigned char HudIsEvent3DShown(int index);
+int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
 }
 
-static unsigned char lbl_803EB48C[4] = { 0 };
-static unsigned char lbl_803EB490[4] = { 0 };
+static unsigned char _Hud_abEvent31Shown[4] = { 0 };
+static unsigned char _Hud_abEvent3DShown[4] = { 0 };
 
-static Entry_80219044 lbl_80362598[2];
-static char lbl_803625B0[2][32];
-static Entry_80219044 lbl_803625F0[6];
-static char lbl_80362638[6][32];
-static Entry_80219044 lbl_803626F8[6];
-static char lbl_80362740[6][32];
-static Entry_80219044 lbl_80362800[6];
-static char lbl_80362848[6][32];
-static Entry_80219044 lbl_80362908;
-static char lbl_80362914[80];
+static Entry_80219044 _Hud_aScoreHeaderEntry[2];
+static char _Hud_aScoreHeaderText[2][32];
+static Entry_80219044 _Hud_aScoreNameEntry[6];
+static char _Hud_aScoreNameText[6][32];
+static Entry_80219044 _Hud_aScoreValueEntry[6];
+static char _Hud_aScoreValueText[6][32];
+static Entry_80219044 _Hud_aScoreExtraEntry[6];
+static char _Hud_aScoreExtraText[6][32];
+static Entry_80219044 _Hud_PopupEntry;
+static char _Hud_aPopupText[80];
 
-static const int lbl_802A57C4[4] = { 0, 1, 7, 3 };
+static const int _Hud_aiTeamColorIndex[4] = { 0, 1, 7, 3 };
 
-extern "C" void fn_8017DD68(int index)
+extern "C" void HudShowEvent31(int index)
 {
     unsigned char on = 1;
     Arg_8021D7B8 args[2];
 
-    if (!fn_8017E608(index)) {
-        lbl_803EB48C[index] = on;
+    if (!HudIsEvent31Shown(index)) {
+        _Hud_abEvent31Shown[index] = on;
         if (index == 0) {
             args[0].i = 0;
         } else {
@@ -57,12 +58,12 @@ extern "C" void fn_8017DD68(int index)
     }
 }
 
-extern "C" void fn_8017DDDC(int index)
+extern "C" void HudHideEvent31(int index)
 {
     Arg_8021D7B8 args[2];
 
-    if (fn_8017E608(index)) {
-        lbl_803EB48C[index] = 0;
+    if (HudIsEvent31Shown(index)) {
+        _Hud_abEvent31Shown[index] = 0;
         if (index == 0) {
             args[0].i = 0;
         } else {
@@ -73,7 +74,7 @@ extern "C" void fn_8017DDDC(int index)
     }
 }
 
-extern "C" void fn_8017DE54(int a, float t, int b, int direct)
+extern "C" void HudSetGameBreakerMeter(int a, float t, int b, int direct)
 {
     Arg_8021D7B8 args[3];
     float first;
@@ -107,7 +108,7 @@ extern "C" void fn_8017DE54(int a, float t, int b, int direct)
     }
 }
 
-extern "C" void fn_8017DF6C(int a, int b)
+extern "C" void HudSetGameBreakerLevel(int a, int b)
 {
     Arg_8021D7B8 args[2];
 
@@ -116,13 +117,13 @@ extern "C" void fn_8017DF6C(int a, int b)
     fn_8021D7B8(lbl_803EB688, 0x8000006A, 2, args);
 }
 
-extern "C" void fn_8017DFA8(int index)
+extern "C" void HudShowEvent3D(int index)
 {
     unsigned char on = 1;
     Arg_8021D7B8 args[2];
 
-    if (!fn_8017E614(index)) {
-        lbl_803EB490[index] = on;
+    if (!HudIsEvent3DShown(index)) {
+        _Hud_abEvent3DShown[index] = on;
         if (index == 0) {
             args[0].i = 0;
         } else {
@@ -133,12 +134,12 @@ extern "C" void fn_8017DFA8(int index)
     }
 }
 
-extern "C" void fn_8017E01C(int index)
+extern "C" void HudHideEvent3D(int index)
 {
     Arg_8021D7B8 args[2];
 
-    if (fn_8017E614(index)) {
-        lbl_803EB490[index] = 0;
+    if (HudIsEvent3DShown(index)) {
+        _Hud_abEvent3DShown[index] = 0;
         if (index == 0) {
             args[0].i = 0;
         } else {
@@ -149,7 +150,7 @@ extern "C" void fn_8017E01C(int index)
     }
 }
 
-extern "C" void fn_8017E094(int a)
+extern "C" void HudSetScoreTableRows(int a)
 {
     Arg_8021D7B8 args[1];
 
@@ -157,22 +158,22 @@ extern "C" void fn_8017E094(int a)
     fn_8021D7B8(lbl_803EB688, 0x80000076, 1, args);
 }
 
-extern "C" void fn_8017E0CC(const char *pText0, const char *pText1)
+extern "C" void HudSetScoreTableHeaders(const char *pText0, const char *pText1)
 {
     Arg_8021D7B8 args[2];
 
-    strncpy(lbl_803625B0[0], pText0, 32);
-    lbl_80362598[0].mLength = strlen(pText0) + 1;
-    lbl_80362598[0].mpText = lbl_803625B0[0];
-    args[0].p = &lbl_80362598[0];
-    strncpy(lbl_803625B0[1], pText1, 32);
-    lbl_80362598[1].mLength = strlen(pText1) + 1;
-    lbl_80362598[1].mpText = lbl_803625B0[1];
-    args[1].p = &lbl_80362598[1];
+    strncpy(_Hud_aScoreHeaderText[0], pText0, 32);
+    _Hud_aScoreHeaderEntry[0].mLength = strlen(pText0) + 1;
+    _Hud_aScoreHeaderEntry[0].mpText = _Hud_aScoreHeaderText[0];
+    args[0].p = &_Hud_aScoreHeaderEntry[0];
+    strncpy(_Hud_aScoreHeaderText[1], pText1, 32);
+    _Hud_aScoreHeaderEntry[1].mLength = strlen(pText1) + 1;
+    _Hud_aScoreHeaderEntry[1].mpText = _Hud_aScoreHeaderText[1];
+    args[1].p = &_Hud_aScoreHeaderEntry[1];
     fn_8021D7B8(lbl_803EB688, 0x80000077, 2, args);
 }
 
-extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key)
+extern "C" void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key)
 {
     Arg_8021D7B8 args[4];
     Arg_8021D7B8 colour[5];
@@ -180,23 +181,23 @@ extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, co
     unsigned char green;
     unsigned char blue;
 
-    strncpy(lbl_80362638[slot - 1], pText0, 32);
-    strncpy(lbl_80362740[slot - 1], pText1, 32);
-    strncpy(lbl_80362848[slot - 1], pText2, 32);
-    lbl_803625F0[slot - 1].mLength = strlen(lbl_80362638[slot - 1]) + 1;
-    lbl_803625F0[slot - 1].mpText = lbl_80362638[slot - 1];
-    lbl_803626F8[slot - 1].mLength = strlen(lbl_80362740[slot - 1]) + 1;
-    lbl_803626F8[slot - 1].mpText = lbl_80362740[slot - 1];
-    lbl_80362800[slot - 1].mLength = strlen(lbl_80362848[slot - 1]) + 1;
-    lbl_80362800[slot - 1].mpText = lbl_80362848[slot - 1];
+    strncpy(_Hud_aScoreNameText[slot - 1], pText0, 32);
+    strncpy(_Hud_aScoreValueText[slot - 1], pText1, 32);
+    strncpy(_Hud_aScoreExtraText[slot - 1], pText2, 32);
+    _Hud_aScoreNameEntry[slot - 1].mLength = strlen(_Hud_aScoreNameText[slot - 1]) + 1;
+    _Hud_aScoreNameEntry[slot - 1].mpText = _Hud_aScoreNameText[slot - 1];
+    _Hud_aScoreValueEntry[slot - 1].mLength = strlen(_Hud_aScoreValueText[slot - 1]) + 1;
+    _Hud_aScoreValueEntry[slot - 1].mpText = _Hud_aScoreValueText[slot - 1];
+    _Hud_aScoreExtraEntry[slot - 1].mLength = strlen(_Hud_aScoreExtraText[slot - 1]) + 1;
+    _Hud_aScoreExtraEntry[slot - 1].mpText = _Hud_aScoreExtraText[slot - 1];
     args[0].i = slot;
-    args[1].p = &lbl_803625F0[slot - 1];
-    args[2].p = &lbl_803626F8[slot - 1];
-    args[3].p = &lbl_80362800[slot - 1];
+    args[1].p = &_Hud_aScoreNameEntry[slot - 1];
+    args[2].p = &_Hud_aScoreValueEntry[slot - 1];
+    args[3].p = &_Hud_aScoreExtraEntry[slot - 1];
     fn_8021D7B8(lbl_803EB688, 0x80000078, 4, args);
 
     colour[0].i = slot;
-    if (fn_8017E570(key, &red, &green, &blue)) {
+    if (HudLookupColor(key, &red, &green, &blue)) {
         colour[1].i = red;
         colour[2].i = green;
         colour[3].i = blue;
@@ -210,7 +211,7 @@ extern "C" void fn_8017E17C(int slot, const char *pText0, const char *pText1, co
     fn_8021D7B8(lbl_803EB688, 0x80000079, 5, colour);
 }
 
-extern "C" void fn_8017E328(int a, int b)
+extern "C" void HudSetGameBreakerHalf(int a, int b)
 {
     Arg_8021D7B8 args[2];
 
@@ -223,7 +224,7 @@ extern "C" void fn_8017E328(int a, int b)
     fn_8021D7B8(lbl_803EB688, 0x8000006F, 2, args);
 }
 
-extern "C" void fn_8017E380(int a)
+extern "C" void HudResetGameBreaker(int a)
 {
     Arg_8021D7B8 args[1];
 
@@ -235,7 +236,7 @@ extern "C" void fn_8017E380(int a)
     fn_8021D7B8(lbl_803EB688, 0x80000070, 1, args);
 }
 
-extern "C" void fn_8017E3CC(int a)
+extern "C" void HudShowPlayLeader(int a)
 {
     Arg_8021D7B8 args[1];
 
@@ -249,7 +250,7 @@ extern "C" void fn_8017E3CC(int a)
     }
 }
 
-extern "C" void fn_8017E430(void)
+extern "C" void HudClearEvent71(void)
 {
     Arg_8021D7B8 args[1];
 
@@ -257,7 +258,7 @@ extern "C" void fn_8017E430(void)
     fn_8021D7B8(lbl_803EB688, 0x80000071, 1, args);
 }
 
-extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, int c, int d)
+extern "C" void HudShowPlayerPopup(HudPopupPlayer_t *pObject, int a, const char *pText, int c, int d)
 {
     Arg_8021D7B8 args[7];
     int red;
@@ -265,7 +266,7 @@ extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, 
     int blue;
     int rgb;
 
-    strncpy(lbl_80362914, pText, 79);
+    strncpy(_Hud_aPopupText, pText, 79);
     if (pObject != 0) {
         rgb = fn_80162E40(8);
         red = (rgb & 0xFF0000) >> 16;
@@ -274,7 +275,7 @@ extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, 
         if (pObject->mUnknown8 != 0xFF) {
             int index = fn_80188030(pObject->mUnknown8);
             if (index != -1) {
-                rgb = fn_80162E40(lbl_802A57C4[index]);
+                rgb = fn_80162E40(_Hud_aiTeamColorIndex[index]);
                 red = (rgb & 0xFF0000) >> 16;
                 green = (rgb & 0xFF00) >> 8;
                 blue = rgb & 0xFF;
@@ -286,9 +287,9 @@ extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, 
         blue = 200;
     }
     args[0].i = a;
-    args[1].p = &lbl_80362908;
-    lbl_80362908.mpText = lbl_80362914;
-    lbl_80362908.mLength = strlen(lbl_80362914);
+    args[1].p = &_Hud_PopupEntry;
+    _Hud_PopupEntry.mpText = _Hud_aPopupText;
+    _Hud_PopupEntry.mLength = strlen(_Hud_aPopupText);
     args[2].i = c;
     args[3].i = d;
     args[4].i = red;
@@ -297,7 +298,7 @@ extern "C" void fn_8017E46C(Object_8017E46C *pObject, int a, const char *pText, 
     fn_8021D7B8(lbl_803EB688, 0x8000007D, 7, args);
 }
 
-extern "C" int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue)
+extern "C" int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue)
 {
     int found = 0;
     int rgb;
@@ -315,7 +316,7 @@ extern "C" int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, 
         int index = fn_80188030(key);
         if (index != -1) {
             found = 1;
-            rgb = fn_80162E40(lbl_802A57C4[index]);
+            rgb = fn_80162E40(_Hud_aiTeamColorIndex[index]);
             *pRed = (rgb & 0xFF0000) >> 16;
             *pGreen = (rgb & 0xFF00) >> 8;
             *pBlue = rgb & 0xFF;
@@ -324,17 +325,17 @@ extern "C" int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, 
     return found;
 }
 
-extern "C" unsigned char fn_8017E608(int index)
+extern "C" unsigned char HudIsEvent31Shown(int index)
 {
-    return lbl_803EB48C[index];
+    return _Hud_abEvent31Shown[index];
 }
 
-extern "C" unsigned char fn_8017E614(int index)
+extern "C" unsigned char HudIsEvent3DShown(int index)
 {
-    return lbl_803EB490[index];
+    return _Hud_abEvent3DShown[index];
 }
 
-extern "C" void fn_8017E620(int a, int b)
+extern "C" void HudSetEvent1A(int a, int b)
 {
     Arg_8021D7B8 args[2];
 

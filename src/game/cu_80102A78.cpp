@@ -77,7 +77,7 @@ int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_801486A0(void);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 float fn_80237260(int stream);
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
@@ -153,7 +153,7 @@ void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed,
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int fn_80156C8C(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_80176838(Object_80039F5C *p);
 float fn_80178A2C(void);
 void fn_80227248(void *pOut, void *p, float scale);
@@ -355,8 +355,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     pEvent->mUnknown16 = (int)(speed * 256.0f);
     fn_800B1508();
     spin = fn_80237260(0) * 0.2f;
-    spin += p->mMotion.mUnknown28 * 0.1f / lbl_803ECB08;
-    spin += p->mUnknown560.mUnknown32 * 0.15f / (lbl_803ECB08 * 100621.1171875f);
+    spin += p->mMotion.mUnknown28 * 0.1f / gPlyrMoveFwdSpeed;
+    spin += p->mUnknown560.mUnknown32 * 0.15f / (gPlyrMoveFwdSpeed * 100621.1171875f);
     spin += (1.0f - pRecord->mUnknown4) * 0.2f * 2.0f;
     spin += pRecord->mUnknownC;
     random = fn_80237260(0);
@@ -410,8 +410,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
                     angle = pMotion->mUnknown32;
                 }
                 if (pTarget->mpState->mId == 20) {
-                    length = pTarget->mMotion.mUnknown28 >= fn_8016D9F4(pTarget, 0.72f, 1.0f)
-                        ? pTarget->mMotion.mUnknown28 : fn_8016D9F4(pTarget, 0.72f, 1.0f);
+                    length = pTarget->mMotion.mUnknown28 >= PlyrMoveGetRatedSpeed(pTarget, 0.72f, 1.0f)
+                        ? pTarget->mMotion.mUnknown28 : PlyrMoveGetRatedSpeed(pTarget, 0.72f, 1.0f);
                 } else {
                     length = pTarget->mMotion.mUnknown28;
                 }
@@ -693,16 +693,16 @@ extern "C" void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C 
         pOut->mZ = 1.3f;
         return;
     }
-    running = speed > fn_8016D9F4(p, 0.14f, 1.0f) && angle <= 0x7FFFFF;
-    if (speed > fn_800C49EC(lbl_803ECB08)) {
-        speed = fn_800C49EC(lbl_803ECB08);
+    running = speed > PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f) && angle <= 0x7FFFFF;
+    if (speed > fn_800C49EC(gPlyrMoveFwdSpeed)) {
+        speed = fn_800C49EC(gPlyrMoveFwdSpeed);
     }
     BallGetPosition(pBall, &ball);
     runSpeed = speed;
     fn_802276B4(&ball, &ball, &pos);
     distance = fn_802270A4(&ball);
     if (running) {
-        runSpeed += (fn_8016D9F4(p, 1.0f, 1.0f) - runSpeed) * fn_801CFB18(angle);
+        runSpeed += (PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f) - runSpeed) * fn_801CFB18(angle);
     }
     runSpeed /= gFrameTimeScale;
     if (runSpeed >= ballSpeed) {
@@ -726,11 +726,11 @@ extern "C" void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C 
     fn_80227690(&delta, pOut, &p->mMotion.mPos);
     distance = fn_802270A4(&delta);
     burst = fn_800CAAFC(p);
-    slack = runSpeed - fn_8016D9F4(p, 0.72f, 1.0f);
+    slack = runSpeed - PlyrMoveGetRatedSpeed(p, 0.72f, 1.0f);
     if (slack < 0.0f) {
         slack = 0.0f;
     }
-    reach = (slack * burst + fn_8016D9F4(p, 0.72f, 1.0f) * time) * 0.75f;
+    reach = (slack * burst + PlyrMoveGetRatedSpeed(p, 0.72f, 1.0f) * time) * 0.75f;
     if (reach < distance) {
         float short_ = distance - reach;
 
@@ -745,7 +745,7 @@ extern "C" void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C 
 extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, Vector_80039F5C *pPos, int *pAngle)
 {
     State_80039F5C *pQueue = p->mpState;
-    float speed = fn_8016D9F4(p, 1.0f, 1.0f);
+    float speed = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);
     State_80039F5C *pEntry;
     Point_8017886C offset;
     unsigned char i;

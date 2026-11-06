@@ -1,7 +1,7 @@
 #include "game/Entry_800B206C.h"
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
@@ -17,7 +17,7 @@ struct Table_801744E8 {
 struct State_80175E3C {
   unsigned short mUnknown0;
   unsigned char mUnknown2[2];
-  Pair_8017055C mUnknown4;
+  Point2_t mUnknown4;
   unsigned char mUnknownC[4];
   unsigned int mUnknown10;
 };
@@ -30,7 +30,7 @@ struct Block_80175FC8 {
 };
 extern "C" {
 extern Table_801744E8 lbl_802E9A04[];
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 int fn_80178308(void);
 int fn_80178320(void);
 unsigned char fn_80178348(void);
@@ -53,12 +53,12 @@ int fn_80177C38(void);
 void fn_8017419C(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
-void fn_801735B4(unsigned int);
+void ClockRuleSetFlags(unsigned int);
 void SortArray(int, void *, int, int,
                  int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
 int fn_80175E3C(Object_80039F5C *, Object_80039F5C *, void *);
 void fn_801760B4(int, Object_80039F5C *, Object_80039F5C *);
-extern const char *lbl_802E99F0[];
+extern const char *gPossJointNames[];
 unsigned int fn_80178D18(int team);
 void fn_80178370(void);
 int fn_800BA6F8(void);
@@ -666,7 +666,7 @@ int fn_80175DAC(Object_80039F5C *a, Object_80039F5C *b, Vector_80039F5C point) {
   return !(value < fn_80178A08() + 2.0f);
 }
 int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
-  Pair_8017055C delta;
+  Point2_t delta;
   fn_80227690(&delta, &b->mMotion.mPos, &a->mMotion.mPos);
   int toward = fn_801CFE40(delta.mY, delta.mX);
   fn_80227690(&delta, &a->mMotion.mPos, &b->mMotion.mPos);
@@ -683,7 +683,7 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
       float value;
     };
     float speed = ((View *)&b->mUnknown488)->value;
-    if (!(speed >= lbl_803ECB08 * 0.14f) && b->mUnknown512.mUnknown0 == 0.0f)
+    if (!(speed >= gPlyrMoveFwdSpeed * 0.14f) && b->mUnknown512.mUnknown0 == 0.0f)
       reject = 1;
     if (!reject) {
       if (b->mpState->mId == 28) {
@@ -713,7 +713,7 @@ int fn_80175FC8(Object_80039F5C *a, Object_80039F5C *b) {
   else if (!(value <= 1.0f))
     value = 1.0f;
   fn_800B260C((short)(fn_800B2600() + 1));
-  return !(block->mUnknown20 <= lbl_803ECB08 * (value * 100621.12f));
+  return !(block->mUnknown20 <= gPlyrMoveFwdSpeed * (value * 100621.12f));
 }
 void fn_801760B4(int type, Object_80039F5C *a, Object_80039F5C *b) {
   float value = 0.0f;
@@ -796,7 +796,7 @@ void fn_801764A0(int type, Input_80174868 *in, Output_80174868 *out) {
   if ((mode == 2 || mode == 4 || mode == 5) && !option &&
       !(out->mUnknownC <= 0.0f)) {
     out->mUnknownC = 0.0f;
-    fn_801735B4(256);
+    ClockRuleSetFlags(256);
   }
   if (lbl_802E9A04[type].mUnknown4 & 16)
     fn_800B2640(4, 1);
@@ -826,7 +826,7 @@ void fn_80176630(void) {
       for (unsigned short j = 0; j <= 4; j++) {
         Vector_80039F5C pos, dir;
         int joint =
-            CharSkelGetJointByName(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
+            CharSkelGetJointByName(player->mpUnknown4->mpUnknown100, gPossJointNames[j]);
         fn_8009BF5C(player, joint, &pos, &dir);
         if (!(pos.mY >= line.mY + 0.15625f)) {
           fn_800B2370(player, 2, 0, 1.0f);
@@ -865,7 +865,7 @@ void fn_80176838(Object_80039F5C *player) {
   }
   int near = 0;
   for (unsigned char i = 0; i <= 2; i++) {
-    Pair_8017055C delta;
+    Point2_t delta;
     unsigned short index = fn_80168E00(player->mIdBytes[2], i, 0);
     fn_80227690(&delta,
                 &fn_80039F5C(player->mIdBytes[2], index)->mMotion.mPos,
@@ -893,7 +893,7 @@ void fn_80176984(void) {
   BallGetPosition(ball, &ballPos);
   if (fn_80175DAC(carrier, tackler, pos))
     return;
-  Pair_8017055C delta;
+  Point2_t delta;
   fn_80227690(&delta, &pos, &carrier->mMotion.mPos);
   float carrierDistance = fn_802270A4(&delta);
   int carrierAngle = fn_801CFE40(delta.mY, delta.mX);

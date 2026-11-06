@@ -8,7 +8,7 @@
 #include "game/FELoop.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "engine/viewporttypes.h"
 
 extern "C" {
@@ -95,7 +95,7 @@ void OptionsScreenSetOption(int index, int value, int notify)
     if (_OptionsScreen_aiOptionIds[index] == 24) {
         return;
     }
-    if (fn_8017F584() == 8 && _OptionsScreen_aiOptionIds[index] == 8) {
+    if (GameModeTypeGet() == 8 && _OptionsScreen_aiOptionIds[index] == 8) {
         return;
     }
     if (fn_8007F828(_OptionsScreen_aiOptionIds[index]) == 0 && value != 0) {
