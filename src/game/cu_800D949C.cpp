@@ -23,18 +23,18 @@ int PassIconsAreShown(void);
 int fn_801787A0(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
 unsigned char PlayerMoveGetRunVariant(Object_80039F5C *p);
-int fn_800D9188(void);
-int fn_800D91D8(void);
+int PlayerLocoUseAltCategory(void);
+int PlayerLocoUseSpecialCategory(void);
 int fn_800DC080(Object_80039F5C *p);
-int fn_800D9078(Object_80039F5C *p, int flag);
+int PlayerLocoIsEngaged(Object_80039F5C *p, int flag);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 Point_8017886C fn_80177FFC(int team);
 void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scratch);
 int CharSkelGetJointByName(void *p, const char *name);
-int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *object);
-int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
-void fn_800D8FFC(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8 *entries, float value);
+int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *object);
+int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
+void PlayerLocoSetCycleDuration(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8 *entries, float value);
 unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
@@ -55,9 +55,9 @@ int fn_800D9C40(Object_80039F5C *);
 extern float gFrameTimeScale;
 
 int fn_80178308(void);
-int fn_800D91E0(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
+int PlayerLocoGetPrimaryCategory(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
 int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value);
-void fn_800D8DD8(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);
+void PlayerLocoSelectStates(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);
 int fn_801BA2D0(void *a, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
 void fn_801BA418(void *a, Record_800D81C8 *pEntries, int index, unsigned short b,
                  int c, unsigned short d, Object_80039F5C *pRecord);
@@ -88,8 +88,8 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
         case 3: result = 40; goto finish;
         case 2: result = 42; goto finish;
         }
-        result = fn_800D9188() ? 19 : 1;
-        if (fn_800D91D8()) result = 38;
+        result = PlayerLocoUseAltCategory() ? 19 : 1;
+        if (PlayerLocoUseSpecialCategory()) result = 38;
         if (p->mUnknown2914 != 0 && p->mUnknown2914 != 20 &&
             p->mUnknown2914 != 1 && p->mUnknown2914 != 3) goto finish;
         if (fn_800DC080(p)) {
@@ -110,7 +110,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
         }
         goto finish;
     }
-    if (p->mUnknown1052 && (result == 1 || (result == 2 && fn_800D9078(p, flag)))) {
+    if (p->mUnknown1052 && (result == 1 || (result == 2 && PlayerLocoIsEngaged(p, flag)))) {
         switch (p->mUnknown1032) {
         case 2: case 3: result = 4; break;
         case 4: case 7: result = 5; break;
@@ -126,9 +126,9 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
     case 19: result = 27; break;
     case 24: case 25: result = 36; break;
     case 30: result = 77; break;
-    default: result = fn_800D9188() ? 20 : 2; break;
+    default: result = PlayerLocoUseAltCategory() ? 20 : 2; break;
     }
-    if (p->mUnknown528.mUnknown14 == 9) result = fn_800D9188() ? 20 : 2;
+    if (p->mUnknown528.mUnknown14 == 9) result = PlayerLocoUseAltCategory() ? 20 : 2;
     if (p->mpState->mId == 42 && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
         if (!(p->mMotion.mPos.mY - point.mY >= 6.0f)) {
@@ -158,7 +158,7 @@ int fn_800D9A10(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, Object_8003
             flag = 0;
         }
         unsigned char result = 2;
-        first = fn_800D91E0(p, team, flag, &result);
+        first = PlayerLocoGetPrimaryCategory(p, team, flag, &result);
         second = fn_800D949C(p, pOther, team, flag, result);
     } else {
         first = 2;
@@ -167,7 +167,7 @@ int fn_800D9A10(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, Object_8003
     if (pBlock->mUnknown3C != first || pBlock->mUnknown3D != second) {
         pBlock->mUnknown3C = first;
         pBlock->mUnknown3D = second;
-        fn_800D8DD8(a, pBlock, p, value);
+        PlayerLocoSelectStates(a, pBlock, p, value);
         changed = 1;
     }
     return changed;
@@ -235,11 +235,11 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record
         Object_80039F5C *other = BallGetCurrentHolder();
         int team = fn_80178308();
         int flag = fn_800AD9B4() == 3 ? 0 : 1;
-        block->mUnknown3C = fn_800D91E0(p, team, flag, &value);
+        block->mUnknown3C = PlayerLocoGetPrimaryCategory(p, team, flag, &value);
         block->mUnknown3D = fn_800D949C(p, other, team, flag, value);
-        fn_800D8DD8(table, block, p, mode);
+        PlayerLocoSelectStates(table, block, p, mode);
         block->mUnknown4 = 1.0f;
-        int index = fn_800D8F8C(p, block->mpUnknownC);
+        int index = PlayerLocoGetBlendIndex(p, block->mpUnknownC);
         block->mUnknown20.mUnknown14Half = index;
         fn_800DA814((Object_800DA8D8 *)block->mpUnknownC, block, p,
                    block->mUnknown20.mUnknown16, (signed char)index, key, record, entries);
@@ -291,8 +291,8 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record
         if ((signed char)block->mUnknown3A[1] <= 0) {
             int mode = fn_801BA6B0(&entries[block->mUnknown0]);
             unsigned char changed = fn_800D9A10(table, block, p, other, mode);
-            changed |= fn_800D8E68(p, block, &frames);
-            int index = fn_800D8F8C(p, block->mpUnknownC);
+            changed |= PlayerLocoSelectBlendSet(p, block, &frames);
+            int index = PlayerLocoGetBlendIndex(p, block->mpUnknownC);
             if ((index != block->mUnknown20.mUnknown14Half || changed) && block->mUnknown20.mUnknown14Half != -1) {
                 fn_800DA8D8((Object_800DA8D8 *)block->mpUnknownC, block, p,
                            block->mUnknown20.mUnknown16, (signed char)index, key, record, entries, frames);
@@ -363,8 +363,8 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record
     default: return 0;
     }
     if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
-        fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, -block->mUnknown20.mUnknownC);
-    else fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, block->mUnknown20.mUnknownC);
+        PlayerLocoSetCycleDuration(block, (Object_800DA8D8 *)block->mpUnknownC, entries, -block->mUnknown20.mUnknownC);
+    else PlayerLocoSetCycleDuration(block, (Object_800DA8D8 *)block->mpUnknownC, entries, block->mUnknown20.mUnknownC);
     return 0;
 }
 

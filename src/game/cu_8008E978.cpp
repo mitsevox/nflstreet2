@@ -2809,7 +2809,7 @@ struct Pair_800A554C {
 
 extern "C" {
 void fn_801469A0(void);
-void fn_800540E0(void);
+void LevelUnload(void);
 int fn_801486A0(void);
 void fn_80146E78(void);
 void LevelUpdate(void);
@@ -2969,7 +2969,7 @@ extern "C" void fn_800A2F3C(int value)
 extern "C" void fn_800A30B8(void)
 {
     fn_801469A0();
-    fn_800540E0();
+    LevelUnload();
     if (lbl_8030E6DC.mpCallback4 != 0) {
         lbl_8030E6DC.mpCallback4();
     }
@@ -8332,8 +8332,8 @@ int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
-              unsigned int phase);
+int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                                  Object_80039F5C *p, unsigned int phase);
 int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
@@ -8381,7 +8381,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[84] = fn_800DC36C;
     lbl_8030FB60[91] = fn_800DD69C;
     lbl_8030FB60[203] = fn_800DDD24;
-    lbl_8030FB60[193] = fn_800D8A24;
+    lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[157] = fn_800DCC14;
     lbl_8030FB60[236] = fn_80102A78;
     lbl_8030FB60[86] = fn_800DD2E8;
@@ -8390,9 +8390,9 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[192] = fn_800D7E9C;
     lbl_8030FB60[204] = fn_8010680C;
     lbl_8030FB60[48] = fn_800EC674;
-    lbl_8030FB60[43] = fn_800D8A24;
-    lbl_8030FB60[44] = fn_800D8A24;
-    lbl_8030FB60[165] = fn_800D8A24;
+    lbl_8030FB60[43] = PlayerLocoHandleMomentumState;
+    lbl_8030FB60[44] = PlayerLocoHandleMomentumState;
+    lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[160] = fn_800DCC14;
     lbl_8030FB60[159] = fn_800DCC14;
     lbl_8030FB60[67] = fn_8009A344;
