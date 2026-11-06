@@ -36,7 +36,7 @@ void TMClusterObjShutdown(void)
     fn_801D2BD0(lbl_803ECFD4[0]);
 }
 
-void TMClusterObjInitObj(ClusterObj_80210724 *pObj)
+void TMClusterObjInitObj(TMClusterObj_t *pObj)
 {
     pObj->mpMatrices = 0;
     pObj->mNumMatrices = 0;
@@ -49,7 +49,7 @@ void TMClusterObjResetMatrices(void)
     lbl_803ECFE4 = 0;
 }
 
-void TMClusterObjAllocMatrices(ClusterObj_80210724 *pObj, int numMatrices)
+void TMClusterObjAllocMatrices(TMClusterObj_t *pObj, int numMatrices)
 {
     int used = lbl_803ECFE4;
     Mtx *pBuffer = lbl_803ECFD4[lbl_803ECFDC];
@@ -91,7 +91,7 @@ static inline void _TMClusterObjBuildBoneMatrix(Mtx *pParent, Mtx *pOut, int rx,
 
 /* Build the bone hierarchy from pose rotations and positions, optionally
    blending angles with 12-bit weights, then publish the matrix buffer. */
-void TMClusterObjSynthesizeMatrices(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3])
+void TMClusterObjSynthesizeMatrices(TMClusterObj_t *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3])
 {
     Mtx *pMatrices = pObj->mpCacheMatrices;
     unsigned int i;
@@ -129,7 +129,7 @@ void TMClusterObjSynthesizeMatrices(ClusterObj_80210724 *pObj, TMClusterPose_t *
 
 /* Start with angle-blended matrices, replace flagged bones with
    quaternion-interpolated rotations, and publish the updated buffer. */
-void TMClusterObjSynthesizeMatricesSlerp(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3],
+void TMClusterObjSynthesizeMatricesSlerp(TMClusterObj_t *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3],
                  unsigned char *pFlags)
 {
     Mtx *pMatrices;

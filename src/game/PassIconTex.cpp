@@ -27,11 +27,11 @@ struct PassIconClut {
 extern "C" {
 int fn_800C47C4(void);
 Mtx44Ptr fn_801D0444(void);
-void fn_80210388(void);
-void fn_80211E08(PassIconTexLib *pElement, int a);
-void fn_80211EFC(PassIconTexLib *pElement);
-PassIconTexture *fn_802120E4(PassIconTexLib *pElement, int a);
-PassIconClut *fn_80212124(PassIconTexLib *pElement, int a, int b);
+void TMRenderReset(void);
+void TMTexLibLoad(PassIconTexLib *pElement, int a);
+void TMTexLibUnload(PassIconTexLib *pElement);
+PassIconTexture *TMTexLibGetTexture(PassIconTexLib *pElement, int a);
+PassIconClut *TMTexLibGetClut(PassIconTexLib *pElement, int a, int b);
 int fn_80236EC0(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
@@ -60,14 +60,14 @@ void PassIconTexLoad(void)
     int i;
 
     _PassIconTex_hTextures = fn_801EF390((void *)fn_800C47C4(), 4, 1);
-    fn_80211E08(&_PassIconTex_TexLib, _PassIconTex_hTextures);
+    TMTexLibLoad(&_PassIconTex_TexLib, _PassIconTex_hTextures);
     for (i = 0; i < 3; i++) {
-        _PassIconTex_apTextures[i] = fn_802120E4(&_PassIconTex_TexLib, 0xFF000000 + i);
+        _PassIconTex_apTextures[i] = TMTexLibGetTexture(&_PassIconTex_TexLib, 0xFF000000 + i);
         GXInitTexObjCI(&_PassIconTex_aTexObjs[i], GXGetTexObjData(_PassIconTex_apTextures[i]), _PassIconTex_apTextures[i]->mUnknown24,
                     _PassIconTex_apTextures[i]->mUnknown26, 9, 0, 0, 0, 0);
     }
     for (i = 0; i < 3; i++) {
-        _PassIconTex_apCluts[i] = fn_80212124(&_PassIconTex_TexLib, 0xFF000000, i);
+        _PassIconTex_apCluts[i] = TMTexLibGetClut(&_PassIconTex_TexLib, 0xFF000000, i);
         GXInitTlutObj(&_PassIconTex_aTlutObjs[i], GXGetTlutObjData(_PassIconTex_apCluts[i]->mUnknown4),
                     GXGetTlutObjFmt(_PassIconTex_apCluts[i]->mUnknown4), GXGetTlutObjNumEntries(_PassIconTex_apCluts[i]->mUnknown4));
     }
@@ -76,7 +76,7 @@ void PassIconTexLoad(void)
 
 void PassIconTexFree(void)
 {
-    fn_80211EFC(&_PassIconTex_TexLib);
+    TMTexLibUnload(&_PassIconTex_TexLib);
     _PassIconTex_hTextures = 0;
     fn_801F010C((void *)fn_800C47C4(), 4);
     _PassIconTex_bLoaded = 0;
@@ -86,7 +86,7 @@ void PassIconTexDraw(Instance_80159F10 *pInstance)
 {
     int value = fn_80236EC0(0);
 
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);

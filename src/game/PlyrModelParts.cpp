@@ -1,7 +1,7 @@
 /* Player model parts: set-up of the model level-of-detail slots and their
    skeletons, and the jersey nameplate texture drawn from the player's name. */
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/BmFont.h"
 
 /* 0x50-byte object set up by 0x80233CF0, which stores its second argument at
@@ -24,17 +24,17 @@ struct PlyrTexClutEntry {
 };
 
 /* Partial view of the texture data returned by 0x80161094: the entry tables
-   at +0x18 (fn_8020E560) and +0x1C (fn_8020E5F8). */
+   at +0x18 (TexGetTextureByIndex) and +0x1C (TexGetPaletteByIndex). */
 struct PlyrTexData {
     char mUnknown0[0x18];
-    Object_8020E560 *mpUnknown18;
+    TexFileImage_t *mpUnknown18;
     PlyrTexClutEntry *mpUnknown1C;
 };
 
 extern "C" {
 
 unsigned char *fn_80161094(int player, int slot);
-void fn_8020F824(void *, void *);
+void TMModelRemapClusters(void *, void *);
 void fn_80233CF0(void *pInstance, void *pModel, void *p);
 
 void PlyrModelLodClear(PlyrModelLodView *pInstance)
@@ -49,7 +49,7 @@ void PlyrModelLodInit(PlyrModelLodView *pInstance, PlyrModelLodView *pSource, vo
 
 void PlyrModelLodBindSkeleton(PlyrModelLodView *pInstance, void *p)
 {
-    fn_8020F824(pInstance->mUnknown1C, p);
+    TMModelRemapClusters(pInstance->mUnknown1C, p);
 }
 
 void PlyrModelLodAttach(void)

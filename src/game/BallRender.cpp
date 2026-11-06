@@ -4,7 +4,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801EF390.h"
 #include "game/Object_80233EAC.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 
@@ -37,7 +37,7 @@ struct BallRenderObj {
     char mUnknown284[8];
     float mUnknown28C;
     char mUnknown290[4];
-    Object_80144310 *mpUnknown294;
+    LightSource_t *mpUnknown294;
     float mUnknown298;
     float mUnknown29C;
     float mUnknown2A0;
@@ -46,28 +46,28 @@ struct BallRenderObj {
 };
 
 extern "C" {
-int fn_80027DF0(void);
-unsigned char fn_80054D24(int index);
+int FELoopIsMainFEActive(void);
+unsigned char CheatFlagsIsSet(int index);
 int fn_801486A0(void);
 void SimpShadowSetVisible(void *p, int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0CFC(float a);
-void fn_8020FA38(int a, void *b);
-void fn_802100C0(void *p, void *q);
-void fn_80210114(void *p);
-void fn_80210388(void);
-void fn_80210654(Object_8023417C *pObject);
-void fn_80210BA4(void *p);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
-void fn_80210D10(int a, int b, int c);
+void TMXform(int a, void *b);
+void TMMaterialListAllocDefs(void *p, void *q);
+void TMMaterialListFree(void *p);
+void TMRenderReset(void);
+void TMRenderBindModel(Object_8023417C *pObject);
+void TMRenderBindMaterialList(void *p);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
+void TMRenderSetZMode(int a, int b, int c);
 void fn_80211350(void);
-void fn_80211E08(BallTexLib *pElement, int a);
-void fn_80211EFC(BallTexLib *pElement);
-void fn_80211FF0(void);
-void fn_80212018(const char *pName, BallTexLib *pElement);
+void TMTexLibLoad(BallTexLib *pElement, int a);
+void TMTexLibUnload(BallTexLib *pElement);
+void TMTexLibRegistryReset(void);
+void TMTexLibRegister(const char *pName, BallTexLib *pElement);
 void fn_80233D64(Object_80233EAC *pObject, BallModelLod *pDesc, const char *pName, int a,
                  void *pData, void *p);
 unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
@@ -89,11 +89,11 @@ void BallRenderInit(BallRenderObj *pObject)
 {
     int value;
 
-    fn_80211E08(&_BallRender_aTexLibs[0], fn_801EF390(pObject->mpUnknown18, 15, 1));
+    TMTexLibLoad(&_BallRender_aTexLibs[0], fn_801EF390(pObject->mpUnknown18, 15, 1));
     _BallRender_abTexLibLoaded[0] = 1;
     value = fn_801486A0();
     if (value == 1) {
-        fn_80211E08(&_BallRender_aTexLibs[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
+        TMTexLibLoad(&_BallRender_aTexLibs[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
         _BallRender_abTexLibLoaded[1] = 1;
     }
     fn_80233D64(&_BallRender_Model, &_BallRender_ModelLods, "BALL", 0, pObject->mpUnknown18, 0);
@@ -102,10 +102,10 @@ void BallRenderInit(BallRenderObj *pObject)
 void BallRenderShutdown(BallRenderObj *pObject)
 {
     fn_80233FCC(&_BallRender_Model);
-    fn_80211EFC(&_BallRender_aTexLibs[0]);
+    TMTexLibUnload(&_BallRender_aTexLibs[0]);
     _BallRender_abTexLibLoaded[0] = 0;
     if (_BallRender_abTexLibLoaded[1] != 0) {
-        fn_80211EFC(&_BallRender_aTexLibs[1]);
+        TMTexLibUnload(&_BallRender_aTexLibs[1]);
         _BallRender_abTexLibLoaded[1] = 0;
     }
     fn_801F010C(pObject->mpUnknown18, 15);
@@ -116,15 +116,15 @@ void BallRenderAttach(BallRenderObj *pObject, int index)
     Object_8023417C *pResult;
 
     pObject->mUnknown28C = 1.0f;
-    fn_80211FF0();
-    fn_80212018("model", &_BallRender_aTexLibs[index]);
+    TMTexLibRegistryReset();
+    TMTexLibRegister("model", &_BallRender_aTexLibs[index]);
     pResult = fn_8023417C(&_BallRender_Model, 0);
-    fn_802100C0(pObject->mUnknown284, pResult->mpUnknown18);
+    TMMaterialListAllocDefs(pObject->mUnknown284, pResult->mpUnknown18);
 }
 
 void BallRenderDetach(BallRenderObj *pObject)
 {
-    fn_80210114(pObject->mUnknown284);
+    TMMaterialListFree(pObject->mUnknown284);
 }
 
 void BallRenderDraw(BallRenderObj *pObject)
@@ -142,7 +142,7 @@ void BallRenderDraw(BallRenderObj *pObject)
     Object_8023417C *pResult;
 
     pUnknown = fn_80236384(0);
-    fn_80210388();
+    TMRenderReset();
     x = y = z = 1.0f;
     if (pObject->mpUnknown294 != 0) {
         x = pObject->mpUnknown294->mUnknownC;
@@ -156,7 +156,7 @@ void BallRenderDraw(BallRenderObj *pObject)
     }
     color.a = pObject->mUnknown28C * 128.0f;
     mask = fn_80236B98(4, x, y, z);
-    if (fn_80144310(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
+    if (LightTrackerUpdate(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
         unknown38[0] *= x;
         unknown38[1] *= y;
         unknown38[2] *= z;
@@ -172,25 +172,25 @@ void BallRenderDraw(BallRenderObj *pObject)
         pObject->mUnknown14 &= ~8;
         result = 63;
     }
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         pResult = fn_8023417C(&_BallRender_Model, 0);
     } else {
         pResult = fn_8023417C(&_BallRender_Model, fn_80234144(&_BallRender_Model, buffer));
     }
-    fn_80210654(pResult);
-    fn_80210BA4(pObject->mUnknown284);
+    TMRenderBindModel(pResult);
+    TMRenderBindMaterialList(pObject->mUnknown284);
     if (!(result & 63)) {
         fn_801D04C4();
         fn_801D0664(pObject->mUnknown20);
-        if (fn_80054D24(33) || fn_80054D24(34)) {
+        if (CheatFlagsIsSet(33) || CheatFlagsIsSet(34)) {
             if (!fn_8017F584()) {
                 fn_801D0CFC(1.5f);
             }
         }
-        fn_8020FA38(0, 0);
-        fn_80210BD8(2);
+        TMXform(0, 0);
+        TMRenderSetBlendMode(2);
         fn_80211350();
-        fn_80210BD8(1);
+        TMRenderSetBlendMode(1);
         fn_801D0544();
     }
     if (!(pObject->mUnknown14 & 2)) {
@@ -198,8 +198,8 @@ void BallRenderDraw(BallRenderObj *pObject)
     } else {
         SimpShadowSetVisible(pObject->mUnknown4, 0);
     }
-    fn_80210D10(1, 3, 1);
-    fn_80210CC4(0.0f, 1.0f);
-    fn_80210BD8(1);
+    TMRenderSetZMode(1, 3, 1);
+    TMRenderSetZRange(0.0f, 1.0f);
+    TMRenderSetBlendMode(1);
 }
 }

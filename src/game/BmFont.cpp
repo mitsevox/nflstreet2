@@ -289,14 +289,14 @@ void BmFontBuild(BmFont *pFont, BmFontDesc *pDesc)
 
 void BmFontLoad(BmFont *pFont, BmFontDesc *pDesc, void *p, int index)
 {
-    fn_8020DFD8((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
+    TexCreate((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
     BmFontBuild(pFont, pDesc);
     fn_801F010C(p, index);
 }
 
 void BmFontFree(BmFont *pFont)
 {
-    fn_8020E258(&pFont->mTexture);
+    TexDelete(&pFont->mTexture);
     fn_801D2BD0(pFont->mpGlyphs);
 }
 }

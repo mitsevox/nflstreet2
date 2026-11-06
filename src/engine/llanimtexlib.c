@@ -27,14 +27,14 @@ void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture)
     }
 }
 
-void LLAnimTexCreateTexture(int data, Texture_8020DB34 *image)
+void LLAnimTexCreateTexture(int data, Texture_t *image)
 {
-    fn_8020DFD8((void *)data, image);
+    TexCreate((void *)data, image);
 }
 
-void LLAnimTexDeleteTexture(Texture_8020DB34 *image)
+void LLAnimTexDeleteTexture(Texture_t *image)
 {
-    fn_8020E258(image);
+    TexDelete(image);
 }
 
 void LLAnimTexBindTexture(Texture_801C0928 *texture)

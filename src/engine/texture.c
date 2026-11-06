@@ -1,16 +1,20 @@
+/* Texture module of the EA engine: registers the RAW1 and MMAP texture file types, creates
+   textures from them, relocates loaded texture files and decompresses their images, so the game
+   can turn texture files from disc into images and palettes in memory. */
+
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/GCmp.h"
 #include "engine/tmlib.h"
 
-typedef struct TexChunk_8020DB34 {
+typedef struct TexChunk_t {
     int mId;
     int mSize;
     unsigned char mData[1];
-} TexChunk_8020DB34;
+} TexChunk_t;
 
-typedef struct TexDesc_8020DB34 {
+typedef struct TexRawDesc_t {
     int mUnknown00;
     int mUnknown04;
     unsigned short mWidth;
@@ -22,18 +26,18 @@ typedef struct TexDesc_8020DB34 {
     unsigned char mUnknown12;
     unsigned char mUnknown13;
     int mStream;
-} TexDesc_8020DB34;
+} TexRawDesc_t;
 
-typedef struct TexMipLevel_8020E2B0 {
+typedef struct TexMipLevel_t {
     unsigned char *mpData;
     int mUnknown04;
     int mUnknown08;
     int mUnknown0C;
     int mUnknown10;
     int mUnknown14;
-} TexMipLevel_8020E2B0;
+} TexMipLevel_t;
 
-typedef struct TexMipHeader_8020E2B0 {
+typedef struct TexMipHeader_t {
     unsigned int mNumLevels;
     int mUnknown04;
     int mUnknown08;
@@ -41,41 +45,41 @@ typedef struct TexMipHeader_8020E2B0 {
     int mUnknown10;
     int mUnknown14;
     int mUnknown18;
-    TexMipLevel_8020E2B0 mLevels[1];
-} TexMipHeader_8020E2B0;
+    TexMipLevel_t mLevels[1];
+} TexMipHeader_t;
 
-typedef struct TexHandler_8020DFBC {
+typedef struct TexFileType_t {
     int mId;
-    int (*mpLoad)(void *pSrc, Texture_8020DB34 *pTex);
-    int (*mpInit)(Texture_8020DB34 *pTex, void *pSrc, unsigned int flags);
-} TexHandler_8020DFBC;
+    int (*mpLoad)(void *pSrc, Texture_t *pTex);
+    int (*mpInit)(Texture_t *pTex, void *pSrc, unsigned int flags);
+} TexFileType_t;
 
-extern TexChunk_8020DB34 *fn_801CEEF4(void *pStream, int id, int endId, int flags);
+extern TexChunk_t *fn_801CEEF4(void *pStream, int id, int endId, int flags);
 extern char lbl_802B1BC4[];
 extern char lbl_802B1BCC[];
 
 extern unsigned char lbl_802F7A00[];
 extern unsigned int lbl_802F7A10[];
 extern unsigned char lbl_803EBC80[4];
-extern TexHandler_8020DFBC lbl_802F9BF0;
-extern TexHandler_8020DFBC lbl_802F9BFC;
+extern TexFileType_t _Tex_RawFileType;
+extern TexFileType_t _Tex_MipmapFileType;
 extern unsigned char lbl_803EBEB8;
 extern int lbl_803EBEC0;
-extern TexHandler_8020DFBC **lbl_803EBEC4;
+extern TexFileType_t **lbl_803EBEC4;
 extern int lbl_803EBEC8;
 extern void **lbl_803EBECC;
 extern int lbl_803ECFBC;
 extern int lbl_803ECFC0;
 
-void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst);
-int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short height, unsigned short format, unsigned short tlutFormat);
-int fn_8020E1B8(void *pSrc, Texture_8020DB34 *pTex, int flags);
-void fn_8020DFBC(TexHandler_8020DFBC *pHandler);
+void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst);
+int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height, unsigned short format, unsigned short tlutFormat);
+int TexUpdateFrame(void *pSrc, Texture_t *pTex, int flags);
+void TexAddConversionType(TexFileType_t *pHandler);
 
-static int fn_8020DB34(Texture_8020DB34 *pTex, void *pSrc, unsigned int flags)
+static int _TexRawConvert(Texture_t *pTex, void *pSrc, unsigned int flags)
 {
-    TexDesc_8020DB34 *pDesc = pSrc;
-    TexChunk_8020DB34 *pChunk;
+    TexRawDesc_t *pDesc = pSrc;
+    TexChunk_t *pChunk;
     int err;
 
     pChunk = fn_801CEEF4(&pDesc->mStream, 0x494D4744, 0x454E4444, flags);
@@ -96,20 +100,20 @@ static int fn_8020DB34(Texture_8020DB34 *pTex, void *pSrc, unsigned int flags)
     return err;
 }
 
-static int fn_8020DC10(Texture_8020DB34 *pTex, void *pSrc, unsigned int index)
+static int _TexMipmapConvert(Texture_t *pTex, void *pSrc, unsigned int index)
 {
-    TexHeader_8020E2B0 *pFile = pSrc;
+    TexFileHeader_t *pFile = pSrc;
     int err = 0;
 
     if (!(pFile->mFlags & 1)) {
-        fn_8020E2B0(pFile);
+        TexMipmapRelocate(pFile);
     }
     if (index < pFile->mNumMaterials) {
-        Object_8020E52C *pEntries = pFile->mpMaterials;
-        Object_8020E52C *pEntry = &pEntries[index];
-        Object_8020E560 *pImage = fn_8020E560(pFile, pEntry->mUnknown4);
+        TexFileMaterial_t *pEntries = pFile->mpMaterials;
+        TexFileMaterial_t *pEntry = &pEntries[index];
+        TexFileImage_t *pImage = TexGetTextureByIndex(pFile, pEntry->mUnknown4);
 
-        fn_8020E6A0(pImage, pTex->mpImage);
+        TexDecompressTexture(pImage, pTex->mpImage);
         if (pImage->mType == 4) {
             pTex->mFormat = pImage->mFormat;
             pTex->mWidth = pImage->mWidth;
@@ -117,7 +121,7 @@ static int fn_8020DC10(Texture_8020DB34 *pTex, void *pSrc, unsigned int index)
         }
         if (lbl_802F7A10[pImage->mFormat] != 0) {
             if (pEntries[index].mUnknown0 != 0) {
-                Object_8020E5F8 *pPalette = fn_8020E5F8(pFile, pEntry->mUnknown8);
+                TexFilePalette_t *pPalette = TexGetPaletteByIndex(pFile, pEntry->mUnknown8);
 
                 unsigned int numEntries = lbl_802F7A10[pPalette->mFormat];
 
@@ -132,10 +136,10 @@ static int fn_8020DC10(Texture_8020DB34 *pTex, void *pSrc, unsigned int index)
     return err;
 }
 
-static int fn_8020DD24(void *pSrc, Texture_8020DB34 *pTex)
+static int _TexRawCreate(void *pSrc, Texture_t *pTex)
 {
-    TexDesc_8020DB34 *pDesc = pSrc;
-    int result = fn_8020E064(pTex, pDesc->mWidth, pDesc->mHeight, pDesc->mFormat, pDesc->mTlutFormat);
+    TexRawDesc_t *pDesc = pSrc;
+    int result = TexCreateEmpty(pTex, pDesc->mWidth, pDesc->mHeight, pDesc->mFormat, pDesc->mTlutFormat);
 
     pTex->mUnknown4 = pDesc->mUnknown10;
     pTex->mUnknown5 = pDesc->mUnknown11;
@@ -143,28 +147,28 @@ static int fn_8020DD24(void *pSrc, Texture_8020DB34 *pTex)
     pTex->mUnknown7 = pDesc->mUnknown13;
     pTex->mUnknown1C = 1;
     if (result == 0) {
-        result = fn_8020E1B8(pDesc, pTex, 0);
+        result = TexUpdateFrame(pDesc, pTex, 0);
     }
     return result;
 }
 
-static int fn_8020DDA8(void *pSrc, Texture_8020DB34 *pTex)
+static int _TexMipmapCreate(void *pSrc, Texture_t *pTex)
 {
-    TexHeader_8020E2B0 *pFile = pSrc;
-    Object_8020E52C *pEntry;
-    Object_8020E560 *pImage;
+    TexFileHeader_t *pFile = pSrc;
+    TexFileMaterial_t *pEntry;
+    TexFileImage_t *pImage;
     unsigned short format;
     unsigned short tlutFormat;
     int result;
 
     if (!(pFile->mFlags & 1)) {
-        fn_8020E2B0(pFile);
+        TexMipmapRelocate(pFile);
     }
     pEntry = pFile->mpMaterials;
-    pImage = fn_8020E560(pFile, pEntry->mUnknown4);
+    pImage = TexGetTextureByIndex(pFile, pEntry->mUnknown4);
     format = pImage->mFormat;
     if (pEntry->mUnknown0 != 0) {
-        Object_8020E5F8 *pPalette = fn_8020E5F8(pFile, pEntry->mUnknown8);
+        TexFilePalette_t *pPalette = TexGetPaletteByIndex(pFile, pEntry->mUnknown8);
 
         tlutFormat = pPalette->mUnknown2;
         pPalette->mFormat = pImage->mFormat;
@@ -174,19 +178,19 @@ static int fn_8020DDA8(void *pSrc, Texture_8020DB34 *pTex)
             format = 0xE;
         }
     }
-    result = fn_8020E064(pTex, pImage->mWidth, pImage->mHeight, format, tlutFormat);
+    result = TexCreateEmpty(pTex, pImage->mWidth, pImage->mHeight, format, tlutFormat);
     pTex->mUnknown4 = pFile->mUnknown8;
     pTex->mUnknown5 = pFile->mUnknown9;
     pTex->mUnknown6 = pFile->mUnknownA;
     pTex->mUnknown7 = pFile->mUnknownB;
     pTex->mUnknown1C = 1;
     if (result == 0) {
-        result = fn_8020E1B8(pFile, pTex, 0);
+        result = TexUpdateFrame(pFile, pTex, 0);
     }
     return result;
 }
 
-int fn_8020DE8C(int heap, int count, int unknown)
+int TexInit(int heap, int count, int unknown)
 {
     int err = 0;
 
@@ -201,8 +205,8 @@ int fn_8020DE8C(int heap, int count, int unknown)
         lbl_803EBEC8 = 0;
         lbl_803EBECC = fn_801D2BB0(1, capacity * 4, 0, 0);
         lbl_803EBEB8 = 1;
-        fn_8020DFBC(&lbl_802F9BF0);
-        fn_8020DFBC(&lbl_802F9BFC);
+        TexAddConversionType(&_Tex_RawFileType);
+        TexAddConversionType(&_Tex_MipmapFileType);
     } else {
         err = 0x100001;
     }
@@ -210,7 +214,7 @@ int fn_8020DE8C(int heap, int count, int unknown)
     return err;
 }
 
-int fn_8020DF44(void)
+int TexShutdown(void)
 {
     int err = 0;
 
@@ -231,19 +235,19 @@ int fn_8020DF44(void)
     return err;
 }
 
-void fn_8020DFBC(TexHandler_8020DFBC *pHandler)
+void TexAddConversionType(TexFileType_t *pHandler)
 {
     lbl_803EBEC4[lbl_803EBEC0] = pHandler;
     lbl_803EBEC0++;
 }
 
-int fn_8020DFD8(void *pSrc, Texture_8020DB34 *pTex)
+int TexCreate(void *pSrc, Texture_t *pTex)
 {
     int result = 0;
     unsigned int i;
 
     for (i = 0; i < lbl_803EBEC0; i++) {
-        TexHandler_8020DFBC *pHandler = lbl_803EBEC4[i];
+        TexFileType_t *pHandler = lbl_803EBEC4[i];
 
         if (*(int *)pSrc == pHandler->mId) {
             result = pHandler->mpLoad(pSrc, pTex);
@@ -252,7 +256,7 @@ int fn_8020DFD8(void *pSrc, Texture_8020DB34 *pTex)
     return result;
 }
 
-int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short height, unsigned short format, unsigned short tlutFormat)
+int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height, unsigned short format, unsigned short tlutFormat)
 {
     int err = 0;
     unsigned int size;
@@ -292,13 +296,13 @@ int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short hei
     return err;
 }
 
-int fn_8020E1B8(void *pSrc, Texture_8020DB34 *pTex, int flags)
+int TexUpdateFrame(void *pSrc, Texture_t *pTex, int flags)
 {
     int result = 0x100003;
     unsigned int i;
 
     for (i = 0; i < lbl_803EBEC0; i++) {
-        TexHandler_8020DFBC *pHandler = lbl_803EBEC4[i];
+        TexFileType_t *pHandler = lbl_803EBEC4[i];
 
         if (*(int *)pSrc == pHandler->mId) {
             result = pHandler->mpInit(pTex, pSrc, flags);
@@ -308,7 +312,7 @@ int fn_8020E1B8(void *pSrc, Texture_8020DB34 *pTex, int flags)
     return result;
 }
 
-int fn_8020E258(Texture_8020DB34 *pTex)
+int TexDelete(Texture_t *pTex)
 {
     int err = 0;
 
@@ -323,11 +327,11 @@ int fn_8020E258(Texture_8020DB34 *pTex)
     return err;
 }
 
-void fn_8020E2B0(void *p)
+void TexMipmapRelocate(void *p)
 {
-    TexHeader_8020E2B0 *pFile = p;
+    TexFileHeader_t *pFile = p;
     unsigned short i;
-    Object_8020E5F8 *pPalette;
+    TexFilePalette_t *pPalette;
 
     if (pFile->mFlags & 1) {
         return;
@@ -343,11 +347,11 @@ void fn_8020E2B0(void *p)
             pFile->mFlags |= 1;
             return;
         }
-        pFile->mpMaterials = (Object_8020E52C *)((int)pFile->mpMaterials + (int)pFile);
-        pFile->mpTextures = (Object_8020E560 *)((int)pFile->mpTextures + (int)pFile);
-        pFile->mpPalettes = (Object_8020E5F8 *)((int)pFile->mpPalettes + (int)pFile);
+        pFile->mpMaterials = (TexFileMaterial_t *)((int)pFile->mpMaterials + (int)pFile);
+        pFile->mpTextures = (TexFileImage_t *)((int)pFile->mpTextures + (int)pFile);
+        pFile->mpPalettes = (TexFilePalette_t *)((int)pFile->mpPalettes + (int)pFile);
         for (i = 0; i < pFile->mNumTextures; i++) {
-            Object_8020E560 *pImage = fn_8020E560(pFile, i);
+            TexFileImage_t *pImage = TexGetTextureByIndex(pFile, i);
 
             if (pImage->mUnknown8 != 0) {
                 pImage->mpUnknownC = pImage->mpUnknownC + (int)pFile;
@@ -356,20 +360,20 @@ void fn_8020E2B0(void *p)
             }
         }
         for (i = 0; i < pFile->mNumPalettes; i++) {
-            pPalette = fn_8020E5F8(pFile, i);
+            pPalette = TexGetPaletteByIndex(pFile, i);
 
             pPalette->mpUnknown8 = pPalette->mpUnknown8 + (int)pFile;
         }
     } else if (memcmp(pFile, lbl_802B1BCC, 4) == 0) {
-        pFile->mpMaterials = (Object_8020E52C *)((int)pFile->mpMaterials + (int)pFile);
-        pFile->mpTextures = (Object_8020E560 *)((int)pFile->mpTextures + (int)pFile);
-        pFile->mpPalettes = (Object_8020E5F8 *)((int)pFile->mpPalettes + (int)pFile);
+        pFile->mpMaterials = (TexFileMaterial_t *)((int)pFile->mpMaterials + (int)pFile);
+        pFile->mpTextures = (TexFileImage_t *)((int)pFile->mpTextures + (int)pFile);
+        pFile->mpPalettes = (TexFilePalette_t *)((int)pFile->mpPalettes + (int)pFile);
         for (i = 0; i < pFile->mNumTextures; i++) {
-            Object_8020E560 *pImage = fn_8020E560(pFile, i);
+            TexFileImage_t *pImage = TexGetTextureByIndex(pFile, i);
 
             pImage->mpUnknownC = pImage->mpUnknownC + (int)pFile;
             if (pImage->mUnknown8 == 0) {
-                TexMipHeader_8020E2B0 *pHeader = (TexMipHeader_8020E2B0 *)pImage->mpUnknownC;
+                TexMipHeader_t *pHeader = (TexMipHeader_t *)pImage->mpUnknownC;
                 unsigned short j;
 
                 for (j = 0; j < pHeader->mNumLevels; j++) {
@@ -378,7 +382,7 @@ void fn_8020E2B0(void *p)
             }
         }
         for (i = 0; i < pFile->mNumPalettes; i++) {
-            pPalette = fn_8020E5F8(pFile, i);
+            pPalette = TexGetPaletteByIndex(pFile, i);
 
             pPalette->mpUnknown8 = pPalette->mpUnknown8 + (int)pFile;
         }
@@ -388,31 +392,31 @@ void fn_8020E2B0(void *p)
     if (pFile->mVersion != 0) {
         pFile->mpNames = (char (*)[16])((int)pFile->mpNames + (int)pFile);
         if (pFile->mpInfo != 0) {
-            pFile->mpInfo = (TexInfo_8020E2B0 *)((int)pFile->mpInfo + (int)pFile);
+            pFile->mpInfo = (TexFileInfo_t *)((int)pFile->mpInfo + (int)pFile);
             pFile->mpInfo->mpData = pFile->mpInfo->mpData + (int)pFile;
         }
     }
     pFile->mFlags |= 1;
 }
 
-unsigned short fn_8020E51C(TexHeader_8020E2B0 *pFile)
+unsigned short TexGetNumMaterials(TexFileHeader_t *pFile)
 {
     return pFile->mNumMaterials;
 }
 
-unsigned short fn_8020E524(TexHeader_8020E2B0 *pFile)
+unsigned short TexGetNumPalettes(TexFileHeader_t *pFile)
 {
     return pFile->mNumPalettes;
 }
 
-Object_8020E52C *fn_8020E52C(void *p, unsigned short index)
+TexFileMaterial_t *TexGetMaterialByIndex(void *p, unsigned short index)
 {
-    TexHeader_8020E2B0 *pFile = p;
+    TexFileHeader_t *pFile = p;
 
     return &pFile->mpMaterials[index];
 }
 
-const char *fn_8020E53C(TexHeader_8020E2B0 *pFile, unsigned short index)
+const char *TexGetMaterialNameByIndex(TexFileHeader_t *pFile, unsigned short index)
 {
     if (pFile->mVersion != 0) {
         return pFile->mpNames[index];
@@ -420,10 +424,10 @@ const char *fn_8020E53C(TexHeader_8020E2B0 *pFile, unsigned short index)
     return 0;
 }
 
-Object_8020E560 *fn_8020E560(void *p, unsigned short index)
+TexFileImage_t *TexGetTextureByIndex(void *p, unsigned short index)
 {
-    TexHeader_8020E2B0 *pFile = p;
-    Object_8020E560 *pImage;
+    TexFileHeader_t *pFile = p;
+    TexFileImage_t *pImage;
 
     if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
         unsigned int i;
@@ -438,7 +442,7 @@ Object_8020E560 *fn_8020E560(void *p, unsigned short index)
             if (pad != 0) {
                 pNext += 4 - pad;
             }
-            pImage = (Object_8020E560 *)pNext;
+            pImage = (TexFileImage_t *)pNext;
         }
     } else {
         pImage = &pFile->mpTextures[index];
@@ -446,10 +450,10 @@ Object_8020E560 *fn_8020E560(void *p, unsigned short index)
     return pImage;
 }
 
-Object_8020E5F8 *fn_8020E5F8(void *p, unsigned short index)
+TexFilePalette_t *TexGetPaletteByIndex(void *p, unsigned short index)
 {
-    TexHeader_8020E2B0 *pFile = p;
-    Object_8020E5F8 *pPalette = 0;
+    TexFileHeader_t *pFile = p;
+    TexFilePalette_t *pPalette = 0;
 
     if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
         unsigned int i;
@@ -458,7 +462,7 @@ Object_8020E5F8 *fn_8020E5F8(void *p, unsigned short index)
         for (i = 0; i < index; i++) {
             int pad;
 
-            pPalette = (Object_8020E5F8 *)pNext;
+            pPalette = (TexFilePalette_t *)pNext;
             pNext = pPalette->mpUnknown8;
             pNext += pPalette->mUnknown4;
             pad = (int)pNext & 3;
@@ -466,14 +470,14 @@ Object_8020E5F8 *fn_8020E5F8(void *p, unsigned short index)
                 pNext += 4 - pad;
             }
         }
-        pPalette = (Object_8020E5F8 *)pNext;
+        pPalette = (TexFilePalette_t *)pNext;
     } else {
         pPalette = &pFile->mpPalettes[index];
     }
     return pPalette;
 }
 
-void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst)
+void *TexDecompressTexture(TexFileImage_t *pImage, void *pDst)
 {
     int size;
 
@@ -510,5 +514,5 @@ void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst)
     return pDst;
 }
 
-TexHandler_8020DFBC lbl_802F9BF0 = {0x52415731, fn_8020DD24, fn_8020DB34};
-TexHandler_8020DFBC lbl_802F9BFC = {0x4D4D4150, fn_8020DDA8, fn_8020DC10};
+TexFileType_t _Tex_RawFileType = {0x52415731, _TexRawCreate, _TexRawConvert};
+TexFileType_t _Tex_MipmapFileType = {0x4D4D4150, _TexMipmapCreate, _TexMipmapConvert};

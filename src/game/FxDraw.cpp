@@ -27,7 +27,7 @@ void fn_801D0F80(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_801EF7BC(void *a, int b, void *p);
 int fn_801F0C50(void *a, int b);
-void fn_8020FA38(int a, void *b);
+void TMXform(int a, void *b);
 void fn_8024FA68(int a, GXColor color);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
@@ -42,7 +42,7 @@ void fn_802528B0(int a);
 void FxParticleDrawBegin(void)
 {
     fn_801D0508();
-    fn_8020FA38(0, 0);
+    TMXform(0, 0);
     fn_801D0544();
 }
 

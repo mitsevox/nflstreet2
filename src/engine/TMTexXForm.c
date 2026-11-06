@@ -13,7 +13,7 @@ void TMTexXformRelocateChunk(TMTexXformDef_t *pDef, void *pOldBase, void *pNewBa
     for (i = 0; i < pDef->mNumEntries; i++) {
         TMTexXformEntry_t *pEntry = &pDef->maEntries[i];
 
-        pEntry->mpName = fn_8020EB94((void *)pEntry->mpName, pOldBase, pNewBase);
+        pEntry->mpName = TMModelResRelocatePtr((void *)pEntry->mpName, pOldBase, pNewBase);
     }
 }
 

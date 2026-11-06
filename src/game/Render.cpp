@@ -3,21 +3,21 @@
 extern "C" {
 void TMViewportLLNew(int);
 void TMViewportLLDelete(void);
-void fn_802102E8(void);
-void fn_8021032C(void);
-void fn_8020EFC8(int);
-void fn_8020F00C(void);
-void fn_8020F5F0(int);
-void fn_8020F76C(void);
-void fn_80211F94(int);
-void fn_80211FC8(void);
-void fn_8021189C(int, int);
-void fn_802118F0(void);
+void TMRenderInit(void);
+void TMRenderShutdown(void);
+void TMGeomInitChannelBuffer(int);
+void TMGeomFreeChannelBuffer(void);
+void TMModelInit(int);
+void TMModelShutdown(void);
+void TMTexLibRegistryInit(int);
+void TMTexLibRegistryShutdown(void);
+void TMShaderLibRegistryInit(int, int);
+void TMShaderLibRegistryShutdown(void);
 void TMShaderStockInit(void);
 void TMShaderStockShutdown(void);
-void fn_8020FFE4(int);
-void fn_80210020(void);
-void fn_8020FC1C(int *);
+void TMMaterialListInit(int);
+void TMMaterialListShutdown(void);
+void TMMaterialInit(int *);
 void TMClusterObjInit(int, int);
 void TMClusterObjShutdown(void);
 }
@@ -34,27 +34,27 @@ int Render::Init()
     int counts[9] = { 0, 4000, 600, 300 };
 
     TMViewportLLNew(0x4000);
-    fn_802102E8();
-    fn_8020EFC8(0x23000);
-    fn_8020F5F0(16);
-    fn_80211F94(8);
-    fn_8021189C(64, 8);
+    TMRenderInit();
+    TMGeomInitChannelBuffer(0x23000);
+    TMModelInit(16);
+    TMTexLibRegistryInit(8);
+    TMShaderLibRegistryInit(64, 8);
     TMShaderStockInit();
-    fn_8020FFE4(0x1480);
-    fn_8020FC1C(counts);
+    TMMaterialListInit(0x1480);
+    TMMaterialInit(counts);
     TMClusterObjInit(4000, 1);
     return 1;
 }
 
 int Render::Shutdown()
 {
-    fn_80210020();
+    TMMaterialListShutdown();
     TMShaderStockShutdown();
-    fn_802118F0();
-    fn_80211FC8();
-    fn_8020F76C();
-    fn_8020F00C();
-    fn_8021032C();
+    TMShaderLibRegistryShutdown();
+    TMTexLibRegistryShutdown();
+    TMModelShutdown();
+    TMGeomFreeChannelBuffer();
+    TMRenderShutdown();
     TMClusterObjShutdown();
     TMViewportLLDelete();
     return 1;

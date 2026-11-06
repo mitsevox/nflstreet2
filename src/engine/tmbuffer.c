@@ -5,7 +5,7 @@
 void TMBufferNew(TMBuffer_t *pBuffer, int size, int align)
 {
     size = (size + (align - 1)) & -align;
-    pBuffer->mpData = fn_802127D0(size, 1);
+    pBuffer->mpData = TMMemAllocArray(size, 1);
     pBuffer->mUsed = 0;
     pBuffer->mAlign = align;
     pBuffer->mSize = size;
@@ -13,7 +13,7 @@ void TMBufferNew(TMBuffer_t *pBuffer, int size, int align)
 
 void TMBufferDelete(TMBuffer_t *pBuffer)
 {
-    fn_80212814(pBuffer->mpData);
+    TMMemFreeArray(pBuffer->mpData);
     pBuffer->mpData = 0;
     pBuffer->mUsed = 0;
     pBuffer->mAlign = 0;

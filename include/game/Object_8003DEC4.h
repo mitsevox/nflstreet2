@@ -71,7 +71,7 @@ struct Weight_80042530 {
     unsigned short mUnknown6;
 };
 
-/* 0x34-byte record copied by fn_8020F2C4; the static at 0x80365D54 in
+/* 0x34-byte record copied by TMModelClone; the static at 0x80365D54 in
    src/game/cu_801A14D8.cpp has the same layout. */
 struct Record_8020F2C4 {
     int mUnknown0;

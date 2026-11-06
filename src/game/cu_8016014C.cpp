@@ -1,7 +1,7 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/BmFont.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -29,9 +29,9 @@ struct SortEntry_80160CDC {
 };
 
 extern "C" {
-void fn_8004625C(void *p, int id, unsigned char *pColors);
-int fn_80049D04(int index);
-unsigned char fn_80054D24(int index);
+void PlaDynClutApplyColors(void *p, int id, unsigned char *pColors);
+int PlayerLookShowsHair(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_8015D254(int index);
 int ResStreamOpen(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
@@ -137,11 +137,11 @@ void fn_80160188(void)
             if (sSlots[player][slot].mDirty) {
                 if (sSlots[player][slot].mReceived) {
                     if (sSlots[player][slot].mRequested) {
-                        fn_8020E2B0(sSlots[player][slot].mpData);
+                        TexMipmapRelocate(sSlots[player][slot].mpData);
                         if (sSlots[player][slot].mPalette != -1) {
-                            int index = fn_8020E52C(sSlots[player][slot].mpData, 0)->mUnknown8;
+                            int index = TexGetMaterialByIndex(sSlots[player][slot].mpData, 0)->mUnknown8;
 
-                            fn_8004625C(fn_8020E5F8(sSlots[player][slot].mpData, index),
+                            PlaDynClutApplyColors(TexGetPaletteByIndex(sSlots[player][slot].mpData, index),
                                         sSlots[player][slot].mPalette, sColors[player]);
                         }
                         PlyrTexCopy(sTextures[player][slot], sSlots[player][slot].mpData,
@@ -213,11 +213,11 @@ void fn_8016032C(void)
         }
         if (other < sPlayerCount) {
             PlyrTexCopy(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -235,11 +235,11 @@ void fn_8016032C(void)
         }
         if (other < 32) {
             PlyrTexCopy(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -262,14 +262,14 @@ void fn_8016061C(int player, int slot, void *pData, int shared)
 {
     if (!shared) {
         fn_801EFF80(sArchive, sSlots[player][slot].mId, pData);
-        fn_8020E2B0(pData);
+        TexMipmapRelocate(pData);
     }
     PlyrTexCopy(sTextures[player][slot], pData, sSizes[slot]);
-    if (slot == 4 && fn_80049D04(player)) {
+    if (slot == 4 && PlayerLookShowsHair(player)) {
         fn_80161494(player, 4);
     }
     if (sSlots[player][slot].mPalette != -1) {
-        fn_8004625C(fn_8020E5F8(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
+        PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
                     sColors[player]);
     }
     sSlots[player][slot].mRequested = sSlots[player][slot].mReceived =
@@ -292,12 +292,12 @@ void fn_801607F0(int mode)
     int saved0 = 0;
     int saved1 = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         saved0 = fn_801F1520(mode);
         saved1 = fn_801C9DC8(mode);
     }
     sArchive = fn_801EEB44(lbl_802EC080, 44);
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         fn_801F1520(saved0);
         fn_801C9DC8(saved1);
     }
@@ -376,7 +376,7 @@ void fn_80160A80(void)
             fn_801C1FBC(sTextures[player][i], pDest, size);
         }
         for (player = 0; player < sPlayerCount; player++) {
-            fn_8020E2B0(sTextures[player][i]);
+            TexMipmapRelocate(sTextures[player][i]);
         }
     }
 }
@@ -587,7 +587,7 @@ void fn_801611BC(int player, const char *pName, int force)
     if (id == -1) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     }
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         fn_80160E94(player, 5, id, -1, force);
@@ -600,7 +600,7 @@ int fn_8016128C(int index)
     char name[32];
     int id;
 
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;

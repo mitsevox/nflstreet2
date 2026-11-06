@@ -1,7 +1,9 @@
+/* TM renderer transforms: loads a model matrix into a GX matrix slot and selects that slot. */
+
 #include <dolphin/gx/GXTransform.h>
 #include "engine/tmlib.h"
 
-void fn_8020FA38(u32 id, f32 (*pMtx)[4])
+void TMXform(u32 id, f32 (*pMtx)[4])
 {
     f32 aMtx[4][4];
 
@@ -13,7 +15,7 @@ void fn_8020FA38(u32 id, f32 (*pMtx)[4])
     GXLoadNrmMtxImm(pMtx, id);
 }
 
-void fn_8020FA8C(u32 id)
+void TMXformSelect(u32 id)
 {
     GXSetCurrentMtx(id);
 }

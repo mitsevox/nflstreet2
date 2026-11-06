@@ -1,10 +1,13 @@
+/* TM renderer shaders: builds a shader from its definition (texture and constant parameters) and
+   holds its bind and unbind callbacks. */
+
 #include "engine/tmlib.h"
 
-extern Shader_80211638 *lbl_803EBF08;
+extern TMShader_t *lbl_803EBF08;
 
-void fn_80211638(Shader_80211638 *pShader, ShaderDef_80211638 *pDef)
+void TMShaderNew(TMShader_t *pShader, TMShaderDef_t *pDef)
 {
-    ShaderParmDef_80211638 *pParm;
+    TMShaderParmDef_t *pParm;
     int i;
 
     pShader->mpDef = pDef;
@@ -31,29 +34,29 @@ void fn_80211638(Shader_80211638 *pShader, ShaderDef_80211638 *pDef)
         }
     }
     if (pDef->mbAllocConsts == 1) {
-        pShader->mpConstData = fn_802127D0(pShader->mConstSize, 4);
+        pShader->mpConstData = TMMemAllocArray(pShader->mConstSize, 4);
     }
-    fn_8021176C(pShader);
+    TMShaderSelect(pShader);
 }
 
-void fn_80211730(Shader_80211638 *pShader)
+void TMShaderDelete(TMShader_t *pShader)
 {
     if (pShader->mpConstData != 0) {
-        fn_80212814(pShader->mpConstData);
+        TMMemFreeArray(pShader->mpConstData);
     }
 }
 
-void fn_8021175C(Shader_80211638 *pShader, ShaderFunc_80211638 bindFunc)
+void TMShaderSetBindFunc(TMShader_t *pShader, TMShaderFunc_t bindFunc)
 {
     pShader->mBindFunc = bindFunc;
 }
 
-void fn_80211764(Shader_80211638 *pShader, ShaderFunc_80211638 unbindFunc)
+void TMShaderSetUnbindFunc(TMShader_t *pShader, TMShaderFunc_t unbindFunc)
 {
     pShader->mUnbindFunc = unbindFunc;
 }
 
-void fn_8021176C(Shader_80211638 *pShader)
+void TMShaderSelect(TMShader_t *pShader)
 {
     lbl_803EBF08 = pShader;
 }

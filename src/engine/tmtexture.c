@@ -1,3 +1,6 @@
+/* TM renderer textures: initialises GX texture and palette (CLUT) objects, their filter and wrap
+   modes, and the plain white null texture. */
+
 #include <dolphin/gx/GXGet.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/os/OSCache.h>
@@ -5,7 +8,7 @@
 
 extern unsigned int lbl_803E9780[64];
 
-void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso)
+void TMTextureSetFilter(TMTexture_t *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso)
 {
     float maxLod;
 
@@ -24,34 +27,34 @@ void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float
     }
 }
 
-void fn_80212310(Texture_80212234 *pTexture, TMTexFilterDesc_t *pDesc)
+void TMTextureSetFilterParm(TMTexture_t *pTexture, TMTexFilterDesc_t *pDesc)
 {
-    fn_80212234(pTexture, pDesc->mMinFilter, pDesc->mMagFilter, pDesc->mLodBias, pDesc->mbBiasClamp, pDesc->mbEdgeLod, pDesc->mMaxAniso);
+    TMTextureSetFilter(pTexture, pDesc->mMinFilter, pDesc->mMagFilter, pDesc->mLodBias, pDesc->mbBiasClamp, pDesc->mbEdgeLod, pDesc->mMaxAniso);
 }
 
-void fn_8021234C(Texture_80212234 *pTexture, int wrapS, int wrapT)
+void TMTextureSetWrap(TMTexture_t *pTexture, int wrapS, int wrapT)
 {
     if (pTexture != 0) {
         GXInitTexObjWrapMode(&pTexture->mObj, wrapS, wrapT);
     }
 }
 
-void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc)
+void TMTextureSetWrapParm(TMTexture_t *pTexture, TMTexWrapDesc_t *pDesc)
 {
-    fn_8021234C(pTexture, pDesc->mWrapS, pDesc->mWrapT);
+    TMTextureSetWrap(pTexture, pDesc->mWrapS, pDesc->mWrapT);
 }
 
-void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut)
+void TMTextureTexNew(TMTexture_t *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, TMClut_t *pClut)
 {
-    fn_8021242C(pTexture, pData, width, height, format, numMips, size, pClut);
-    fn_80212234(pTexture, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 0, 0, 0);
-    fn_8021234C(pTexture, (width & (width - 1)) == 0, (height & (height - 1)) == 0);
+    TMTextureSetTexData(pTexture, pData, width, height, format, numMips, size, pClut);
+    TMTextureSetFilter(pTexture, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 0, 0, 0);
+    TMTextureSetWrap(pTexture, (width & (width - 1)) == 0, (height & (height - 1)) == 0);
     pTexture->mSize = size;
     pTexture->mWidth = width;
     pTexture->mHeight = height;
 }
 
-void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut)
+void TMTextureSetTexData(TMTexture_t *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, TMClut_t *pClut)
 {
     GXBool bMipmap;
 
@@ -66,14 +69,14 @@ void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height,
     } else {
         GXInitTexObj(&pTexture->mObj, pData, width, height, format, GX_REPEAT, GX_REPEAT, bMipmap);
     }
-    fn_80212234(pTexture, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 0, 0, 0);
+    TMTextureSetFilter(pTexture, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 0, 0, 0);
 }
 
-void fn_80212530(Texture_80212234 *pTexture)
+void TMTextureTexDelete(TMTexture_t *pTexture)
 {
 }
 
-void fn_80212534(Clut_80212534 *pClut, void *pData, int format, int numEntries, unsigned int size)
+void TMTextureClutNew(TMClut_t *pClut, void *pData, int format, int numEntries, unsigned int size)
 {
     int dim;
 
@@ -94,20 +97,20 @@ void fn_80212534(Clut_80212534 *pClut, void *pData, int format, int numEntries, 
     pClut->mSize = size;
 }
 
-void fn_80212654(Clut_80212534 *pClut)
+void TMTextureClutDelete(TMClut_t *pClut)
 {
 }
 
-void fn_80212658(Texture_80212234 *pTexture)
+void TMTextureMakeNullTexture(TMTexture_t *pTexture)
 {
     int i;
 
     for (i = 0; i < 64; i++) {
         lbl_803E9780[i] = 0xFFFFFFFF;
     }
-    fn_8021239C(pTexture, lbl_803E9780, 8, 8, GX_TF_I8, 0, 0, 0);
+    TMTextureTexNew(pTexture, lbl_803E9780, 8, 8, GX_TF_I8, 0, 0, 0);
 }
 
-void fn_802126BC(Texture_80212234 *pTexture, const char *pName)
+void TMTextureSetTexName(TMTexture_t *pTexture, const char *pName)
 {
 }

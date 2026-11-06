@@ -96,7 +96,7 @@ void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item);
 Int32 fn_80220BFC(Int32 a, Int32 b);
 void fn_80220D3C(void);
 void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
-void fn_80210388(void);
+void TMRenderReset(void);
 
 extern Float32 lbl_8039F858[4];
 extern Float32 lbl_8039F868[4];
@@ -1495,7 +1495,7 @@ void fn_8021F984(Node_80223874 *pNode, Int32 Item)
         return;
     }
     Flags = pNode->Flags;
-    fn_80210388();
+    TMRenderReset();
     Mode = Flags & 3;
     fn_80220A08();
     lbl_803ECFF8 = -1;

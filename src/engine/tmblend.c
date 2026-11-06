@@ -7,7 +7,7 @@
 
 extern TMBlendState_t lbl_8039B600;
 
-static unsigned int _TMBlendBuildTargetList(GeomNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, TMBlendTarget_t *pItems, unsigned int maxItems)
+static unsigned int _TMBlendBuildTargetList(TMGeomNode_t *pNode, int baseIndex, short *pWeights, unsigned int numWeights, TMBlendTarget_t *pItems, unsigned int maxItems)
 {
     unsigned int numItems;
     int i;
@@ -150,12 +150,12 @@ void TMBlendEnd(void)
     _TMBlendReset();
 }
 
-void TMBlendBindModel(Model_8020F28C *pModel)
+void TMBlendBindModel(TMModel_t *pModel)
 {
     TMBlendBindModel2(0, pModel);
 }
 
-void TMBlendBindModel2(Model_8020F28C *pBase, Model_8020F28C *pModel)
+void TMBlendBindModel2(TMModel_t *pBase, TMModel_t *pModel)
 {
     TMBlendState_t *pState = &lbl_8039B600;
 
@@ -178,7 +178,7 @@ int TMBlendGeom(int nodeIndex)
 {
     TMBlendTarget_t aItems[128];
     int result = 0;
-    GeomNode_8020ED10 *pNode;
+    TMGeomNode_t *pNode;
     unsigned int numItems;
 
     if (lbl_8039B600.mpGeom != 0) {
@@ -199,7 +199,7 @@ int TMBlendGeom(int nodeIndex)
 int TMBlendGeomAll(void)
 {
     int total = 0;
-    Geom_8020ED10 *pGeom = lbl_8039B600.mpGeom;
+    TMGeom_t *pGeom = lbl_8039B600.mpGeom;
     int numNodes;
     int i;
 
@@ -208,7 +208,7 @@ int TMBlendGeomAll(void)
     }
     numNodes = pGeom->mNumNodes;
     for (i = 0; i < numNodes; i++) {
-        GeomNode_8020ED10 *pNode = &pGeom->mpNodes[i];
+        TMGeomNode_t *pNode = &pGeom->mpNodes[i];
 
         if (pNode->mNumLods != 0) {
             total += TMBlendGeom(i);

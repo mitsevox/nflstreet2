@@ -4,5 +4,5 @@
 
 void TMExtentsDefRelocateChunk(TMExtentsDef_t *pDef, void *pOldBase, void *pNewBase)
 {
-    pDef->mpExtents = fn_8020EB94(pDef->mpExtents, pOldBase, pNewBase);
+    pDef->mpExtents = TMModelResRelocatePtr(pDef->mpExtents, pOldBase, pNewBase);
 }

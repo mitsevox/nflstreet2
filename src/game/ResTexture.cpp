@@ -12,7 +12,7 @@ void ResTextureLoad(ResTexture *p)
     int data = fn_801EF390((void *)p->mUnknown0, p->mUnknown4, 1);
 
     fn_801F1520(previous);
-    fn_8020DFD8((void *)data, &p->mTexture);
+    TexCreate((void *)data, &p->mTexture);
     fn_8020E7EC(&p->mTexture);
     fn_801F010C((void *)p->mUnknown0, p->mUnknown4);
 }
@@ -30,7 +30,7 @@ void ResTextureClose(ResTexture *p)
     if (fn_801F0DB8((void *)p->mUnknown0, p->mUnknown4)) {
         fn_801F010C((void *)p->mUnknown0, p->mUnknown4);
     }
-    fn_8020E258(&p->mTexture);
+    TexDelete(&p->mTexture);
     ResTextureClear(p);
 }
 

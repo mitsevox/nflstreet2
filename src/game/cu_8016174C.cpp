@@ -37,10 +37,10 @@ extern Object_801618D8 *lbl_803EB38C, *lbl_803EB390;
 extern unsigned char lbl_803EB394, lbl_803EB395, lbl_803EB396, lbl_803EB397;
 extern Object_80039F5C *lbl_803EB398;
 extern int lbl_803ECAEC;
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
 int fn_80188030(int);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -53,8 +53,8 @@ void fn_801D0D94(float, float, float);
 void fn_801D12BC(int);
 int fn_801CFE40(float, float);
 void fn_80227E40(void *, void *);
-void fn_80210814(int, int, int);
-void fn_80210CC4(float, float);
+void TMRenderBindTexture(int, int, int);
+void TMRenderSetZRange(float, float);
 void fn_802520E0(int, int, int);
 void fn_802353D8(void *, int);
 void fn_80235588(void *, int);
@@ -69,12 +69,12 @@ void fn_80235D74(void *, int);
 void fn_80235DB8(int);
 int fn_80039F8C(Object_80039F5C *);
 int fn_801784C4(void);
-int fn_801DCF0C(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
-int fn_801DCF8C(int);
-int fn_801DD0C8(void *, int, int, int (*)(Object_801618D8 *));
-int fn_801DD268(void *, int, int, void *);
-void fn_801DD3AC(void *, int, int);
-void fn_801DD320(void *, int);
+int ObjNewType_(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
+int ObjDelType(int);
+int ObjSetListObjFunc(void *, int, int, int (*)(Object_801618D8 *));
+int ObjNewInList(void *, int, int, void *);
+void ObjSetPriority(void *, int, int);
+void ObjRemoveFromList(void *, int);
 void *fn_800C47C4(void);
 void fn_80030ACC(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int,
@@ -85,7 +85,7 @@ void fn_80163020(void);
 
 Object_80039F5C *fn_8016174C(int index, unsigned char *enabled) {
     Object_801618D8 *item = lbl_802E9780[index];
-    Object_80039F5C *current = fn_80137B40(), *player = 0;
+    Object_80039F5C *current = BallGetCurrentHolder(), *player = 0;
     if (item && (fn_800B65A0(0) != 255 || fn_800B65A0(1) != 255)) {
         if (index != 8) {
             if (item->mUnknown2C != -1) {
@@ -165,7 +165,7 @@ void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
     out->mUnknown104 = in->mUnknown104;
 }
 void fn_80161AD4(void *render, int index) {
-    int context = fn_801C657C();
+    int context = ConGetCurrentContext();
     float *color = lbl_802E97EC[index];
     fn_80235C90(render, context, color[0], color[1], color[2], color[3]);
 }
@@ -236,25 +236,25 @@ int fn_80161B38(Object_801618D8 *item) {
         }
         if (valid == 1) {
             fn_802520E0(1, 3, 0);
-            fn_80210814(0, 0, 0);
+            TMRenderBindTexture(0, 0, 0);
             if (item->mUnknown28 == 6) {
-                fn_80235740(item->mUnknown3C, fn_801C657C());
-                fn_80210CC4(0.0f, 0.0f);
+                fn_80235740(item->mUnknown3C, ConGetCurrentContext());
+                TMRenderSetZRange(0.0f, 0.0f);
                 fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
-                fn_80235764(item->mUnknown3C, fn_801C657C());
-                fn_80210CC4(0.0f, 1.0f);
+                fn_80235764(item->mUnknown3C, ConGetCurrentContext());
+                TMRenderSetZRange(0.0f, 1.0f);
             } else {
                 if (extra)
-                    fn_80235740(extra->mUnknown3C, fn_801C657C());
+                    fn_80235740(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235740(item->mUnknown3C, fn_801C657C());
+                    fn_80235740(item->mUnknown3C, ConGetCurrentContext());
                 fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
                 if (extra)
-                    fn_80235764(extra->mUnknown3C, fn_801C657C());
+                    fn_80235764(extra->mUnknown3C, ConGetCurrentContext());
                 if (draw)
-                    fn_80235764(item->mUnknown3C, fn_801C657C());
+                    fn_80235764(item->mUnknown3C, ConGetCurrentContext());
             }
         } else {
             fn_801D0470(VptGetMatrixStack());
@@ -370,24 +370,24 @@ void fn_801621B8(void) {
     }
 }
 void fn_8016239C(void *arg) {
-    fn_801DCF0C(8, 264, 34, fn_801618D8, fn_80161A34);
-    fn_801DD0C8(arg, 8, 0, fn_80161B38);
+    ObjNewType_(8, 264, 34, fn_801618D8, fn_80161A34);
+    ObjSetListObjFunc(arg, 8, 0, fn_80161B38);
     lbl_803EB398 = 0;
 }
 void fn_80162404(void) {
     VptFlushObjectTrashSync();
-    fn_801DCF8C(8);
+    ObjDelType(8);
     lbl_803EB398 = 0;
 }
 Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void *data, int mode) {
     Desc_801618D8 desc = {data, mode, index, shared};
-    int handle = fn_801DD268(arg, 8, 0, &desc);
-    fn_801DD3AC(arg, handle, 3);
+    int handle = ObjNewInList(arg, 8, 0, &desc);
+    ObjSetPriority(arg, handle, 3);
     return (Object_801618D8 *)handle;
 }
 void fn_80162494(void *arg, Object_801618D8 *item) {
     if (item) {
-        fn_801DD320(arg, (int)item);
+        ObjRemoveFromList(arg, (int)item);
         VptTrashObject((int)item);
     }
 }
@@ -454,7 +454,7 @@ unsigned char fn_8016278C(void) {
     return lbl_803EB394;
 }
 void fn_80162794(void) {
-    Object_80039F5C *current = fn_80137B40();
+    Object_80039F5C *current = BallGetCurrentHolder();
     lbl_803EB38C->mUnknown20 &= ~2;
     for (unsigned char i = 0; i < 9; ++i) {
         Object_801618D8 *item = lbl_802E9780[i], *other = lbl_802E97C8[i];

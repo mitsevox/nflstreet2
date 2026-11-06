@@ -195,16 +195,16 @@ extern int lbl_803EC13C;
 extern int lbl_803ED028;
 extern int lbl_803ED02C;
 
-extern void fn_8020EBB0(void *p);
-extern void fn_8020F28C(void *p);
-extern void fn_8020F4D0(void *p, void *pData);
-extern void fn_8020F96C(void *p, void *q, int a, int b);
-extern void fn_80210054(void *p, int a);
-extern void fn_80210114(void *p);
-extern void fn_80210214(void *p, void *q);
-extern int fn_80211984(const char *pName);
-extern void fn_80211FF0(void);
-extern void fn_80212018(const char *pName, void *p);
+extern void TMModelResRelocate(void *p);
+extern void TMModelReset(void *p);
+extern void TMModelBindModelRes(void *p, void *pData);
+extern void TMModelAddExtent(void *p, void *q, int a, int b);
+extern void TMMaterialListAlloc(void *p, int a);
+extern void TMMaterialListFree(void *p);
+extern void TMMaterialListSetMatDefs(void *p, void *q);
+extern int TMShaderLibGetShader(const char *pName);
+extern void TMTexLibRegistryReset(void);
+extern void TMTexLibRegister(const char *pName, void *p);
 extern void fn_802144AC(void *p);
 extern void *fn_8023816C(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
@@ -240,19 +240,19 @@ int fn_80237A28(Counter_80237934 *p);
 void fn_802355E4(Object_80235588 *p)
 {
     if (p->mpUnknown88 != 0) {
-        fn_80210114(p->mUnknown92);
+        TMMaterialListFree(p->mUnknown92);
         p->mpUnknown88 = 0;
     }
-    fn_8020F28C(&p->mUnknown100);
+    TMModelReset(&p->mUnknown100);
 }
 
 void fn_80235630(Object_80235588 *p, void *pData)
 {
     if (p->mpUnknown84 != pData) {
         p->mpUnknown84 = pData;
-        fn_8020F28C(&p->mUnknown100);
+        TMModelReset(&p->mUnknown100);
         if (pData != 0) {
-            fn_8020F4D0(&p->mUnknown100, pData);
+            TMModelBindModelRes(&p->mUnknown100, pData);
         }
         fn_802353E8(p, 0x8000);
         fn_802353E8(p, 0x10000);
@@ -264,14 +264,14 @@ void fn_80235630(Object_80235588 *p, void *pData)
                 fn_802353D8(p, 0x10000);
             }
             fn_802144AC(p->mUnknown152);
-            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
+            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
         }
     }
 }
 
 void fn_8023570C(Object_80235588 *p, const char *pName)
 {
-    p->mUnknown184 = fn_80211984(pName);
+    p->mUnknown184 = TMShaderLibGetShader(pName);
 }
 
 void fn_80235740(Object_80235588 *p, int handle)
@@ -290,19 +290,19 @@ void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
 
     if (p->mpUnknown88 != pElement) {
         if (p->mpUnknown88 != 0) {
-            fn_80210114(p->mUnknown92);
+            TMMaterialListFree(p->mUnknown92);
         }
         if (pElement != 0) {
-            fn_80211FF0();
+            TMTexLibRegistryReset();
             if (pElement->mUnknown40 != 0) {
-                fn_80212018(lbl_802B71A0, pElement);
+                TMTexLibRegister(lbl_802B71A0, pElement);
             }
             pLibrary = pElement->mpUnknown44;
             if (pLibrary != 0) {
-                fn_80210054(p->mUnknown92, pLibrary->mUnknown0);
-                fn_80210214(p->mUnknown92, pLibrary);
+                TMMaterialListAlloc(p->mUnknown92, pLibrary->mUnknown0);
+                TMMaterialListSetMatDefs(p->mUnknown92, pLibrary);
             } else {
-                fn_80210054(p->mUnknown92, 0);
+                TMMaterialListAlloc(p->mUnknown92, 0);
             }
         }
         p->mpUnknown88 = pElement;
@@ -366,7 +366,7 @@ int fn_80235D9C(unsigned int *p)
 
 void fn_80235DB8(void *p)
 {
-    fn_8020EBB0(p);
+    TMModelResRelocate(p);
 }
 
 void fn_80235DD8(float m[4][4], float *pDir)

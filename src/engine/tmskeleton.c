@@ -3,15 +3,15 @@
 
 #include "engine/tmlib.h"
 
-extern int fn_801C4E98(void *pSkel, const char *pName);
+extern int CharSkelGetJointByName(void *pSkel, const char *pName);
 
 void TMSkelRelocateChunk(TMSkeleton_t *pSkel, void *pOldBase, void *pNewBase)
 {
-    pSkel->mpNames = fn_8020EB94(pSkel->mpNames, pOldBase, pNewBase);
-    pSkel->mpBones = fn_8020EB94(pSkel->mpBones, pOldBase, pNewBase);
-    pSkel->mpInfo = fn_8020EB94(pSkel->mpInfo, pOldBase, pNewBase);
+    pSkel->mpNames = TMModelResRelocatePtr(pSkel->mpNames, pOldBase, pNewBase);
+    pSkel->mpBones = TMModelResRelocatePtr(pSkel->mpBones, pOldBase, pNewBase);
+    pSkel->mpInfo = TMModelResRelocatePtr(pSkel->mpInfo, pOldBase, pNewBase);
     if (pSkel->mpUnknown10 != 0) {
-        pSkel->mpUnknown10 = fn_8020EB94(pSkel->mpUnknown10, pOldBase, pNewBase);
+        pSkel->mpUnknown10 = TMModelResRelocatePtr(pSkel->mpUnknown10, pOldBase, pNewBase);
     }
 }
 
@@ -21,9 +21,9 @@ short *TMSkelBuildRemapTable(TMSkeleton_t *pSkel, void *pOther)
     unsigned int i;
 
     if (pSkel != 0 && pSkel->mpNames != 0) {
-        pRemap = fn_802127D0(pSkel->mNumBones, 2);
+        pRemap = TMMemAllocArray(pSkel->mNumBones, 2);
         for (i = 0; i < pSkel->mNumBones; i++) {
-            pRemap[i] = fn_801C4E98(pOther, pSkel->mpNames[i]);
+            pRemap[i] = CharSkelGetJointByName(pOther, pSkel->mpNames[i]);
         }
     }
     return pRemap;
@@ -38,9 +38,9 @@ void TMSkelRemapNodes(TMSkeleton_t *pSkel, short *pRemap)
     TMSkelBone_t *pOldBones;
     int i;
 
-    pOldInfo = fn_802127D0(numBones, sizeof(TMSkelBoneInfo_t));
+    pOldInfo = TMMemAllocArray(numBones, sizeof(TMSkelBoneInfo_t));
     memcpy(pOldInfo, pSkel->mpInfo, numBones * sizeof(TMSkelBoneInfo_t));
-    pOldBones = fn_802127D0(numBones, sizeof(TMSkelBone_t));
+    pOldBones = TMMemAllocArray(numBones, sizeof(TMSkelBone_t));
     memcpy(pOldBones, pSkel->mpBones, numBones * sizeof(TMSkelBone_t));
     for (i = 0; i < numBones; i++) {
         int index = pRemap[i];
@@ -57,6 +57,6 @@ void TMSkelRemapNodes(TMSkeleton_t *pSkel, short *pRemap)
             }
         }
     }
-    fn_80212814(pOldInfo);
-    fn_80212814(pOldBones);
+    TMMemFreeArray(pOldInfo);
+    TMMemFreeArray(pOldBones);
 }

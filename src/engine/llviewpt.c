@@ -12,13 +12,13 @@
 
 extern void fn_801CEC48(int a, int b, int c, int d);
 extern float fn_801CFD28(int angle);
-extern int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-extern void fn_801DD0E8(int handle);
-extern int fn_801DD200(int handle, int b);
-extern void fn_801DD2B8(int a);
-extern void fn_801DD3F0(int handle);
-extern int fn_801DD474(int handle, int b);
-extern void fn_80210608(void);
+extern int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+extern void ObjDelList(int handle);
+extern int ObjAddToList(int handle, int b);
+extern void ObjDel(int a);
+extern void ObjClearList(int handle);
+extern int ObjGetListInfo(int handle, int b);
+extern void TMRenderBeginViewport(void);
 
 static int _Vpt_pTrashCan = 0;
 static int _Vpt_TrashLatency = 0;
@@ -32,7 +32,7 @@ static void _VptSetupScissor(Viewport_t *pObject)
 int VptLLInit(VptInitBlock_t *pInit)
 {
     if (pInit->mUnknown8) {
-        _Vpt_pTrashCan = fn_801DCFF0(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
+        _Vpt_pTrashCan = ObjNewList(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
     }
     return 0;
 }
@@ -40,7 +40,7 @@ int VptLLInit(VptInitBlock_t *pInit)
 int VptLLShutdown(void)
 {
     if (_Vpt_pTrashCan) {
-        fn_801DD0E8(_Vpt_pTrashCan);
+        ObjDelList(_Vpt_pTrashCan);
     }
     return 0;
 }
@@ -128,21 +128,21 @@ void VptSetUpRender(Viewport_t *pObject)
     fn_801D12EC(4);
     fn_801D0544();
     _VptSetupScissor(pObject);
-    fn_80210608();
+    TMRenderBeginViewport();
 }
 
 void VptTrashObject(int handle)
 {
     if (_Vpt_pTrashCan) {
-        if (fn_801DD474(_Vpt_pTrashCan, 0) == 0) {
+        if (ObjGetListInfo(_Vpt_pTrashCan, 0) == 0) {
             VptFlushObjectTrashSync();
         }
-        if (fn_801DD200(_Vpt_pTrashCan, handle)) {
-            fn_801DD2B8(handle);
+        if (ObjAddToList(_Vpt_pTrashCan, handle)) {
+            ObjDel(handle);
         }
         _Vpt_TrashLatency = 2;
     } else {
-        fn_801DD2B8(handle);
+        ObjDel(handle);
     }
 }
 
@@ -150,7 +150,7 @@ void VptFlushObjectTrash(void)
 {
     if (_Vpt_pTrashCan) {
         if (_Vpt_TrashLatency <= 0) {
-            fn_801DD3F0(_Vpt_pTrashCan);
+            ObjClearList(_Vpt_pTrashCan);
         } else {
             _Vpt_TrashLatency--;
         }

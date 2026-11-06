@@ -5,7 +5,7 @@
 #include "game/Callees_801D57E0.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801EF390.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/MemCardCallbacks.h"
 
 struct IconResourceHeader {
@@ -44,10 +44,10 @@ void MemCardNullCallback(void)
 void MemCardGetIcon(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
 {
     IconResource *pResource = (IconResource *)fn_801EF390(pData, index, 1);
-    Object_8020E560 *pEntry;
+    TexFileImage_t *pEntry;
 
-    fn_8020E2B0(pResource);
-    pEntry = fn_8020E560(pResource, pResource->mpUnknown14->mUnknown4);
+    TexMipmapRelocate(pResource);
+    pEntry = TexGetTextureByIndex(pResource, pResource->mpUnknown14->mUnknown4);
     *pOut = pEntry->mUnknown8;
     if (pOptional) {
         *pOptional = pEntry->mpUnknownC;

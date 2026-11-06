@@ -6,7 +6,7 @@
 #include "game/cu_8008A274.h"
 #include "game/Object_80233EAC.h"
 #include "game/cu_8015D3EC.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 
 struct Slot_8008A900 {
     unsigned char mUsed;
@@ -108,10 +108,10 @@ void fn_8008A2E0(Object_8008A9F8 *pObject)
 
             pObject->mpUnknown368[i] = pData;
             fn_801EFF80(pArchive, id, pData);
-            fn_8020E2B0(pData);
+            TexMipmapRelocate(pData);
             id = pObject->mUnknown28[i];
             if (id != -1) {
-                fn_8004625C(fn_8020E5F8(pData, fn_8020E52C(pData, 0)->mUnknown8), id,
+                fn_8004625C(TexGetPaletteByIndex(pData, TexGetMaterialByIndex(pData, 0)->mUnknown8), id,
                             &pObject->mText264[i]);
             }
         } else {

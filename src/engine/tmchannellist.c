@@ -4,7 +4,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include "engine/tmlib.h"
 
-void TMChannelListBuild(TMChannelList_t *pList, GeomNode_8020ED10 *pNode, GeomAttr_8020ED10 *pAttrs, void **ppChannels)
+void TMChannelListBuild(TMChannelList_t *pList, TMGeomNode_t *pNode, TMGeomAttr_t *pAttrs, void **ppChannels)
 {
     unsigned int count = pNode->mNumAttrs;
     unsigned int i;
@@ -47,7 +47,7 @@ void TMChannelListSubmit_DFA(TMChannelList_t *pList)
     GXClearVtxDesc();
     count = pList->mCount;
     for (i = 0; i < count; i++) {
-        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        TMGeomAttr_t *pAttr = pList->mapAttrs[i];
         unsigned char compType;
         unsigned char stride;
         unsigned char frac;
@@ -79,7 +79,7 @@ void TMChannelListSubmit_A(TMChannelList_t *pList)
     int i;
 
     for (i = 0; i < count; i++) {
-        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        TMGeomAttr_t *pAttr = pList->mapAttrs[i];
         int stride = pList->maStride[i];
 
         if (stride == 0xFF) {

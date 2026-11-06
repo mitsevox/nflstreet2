@@ -2,9 +2,9 @@
    texture copies between players and the per-body-part filter settings. */
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "game/PlyrTex.h"
-#include "game/fn_8021216C.h"
+#include "engine/tmtexlib.h"
 
 #include <string.h>
 
@@ -72,22 +72,22 @@ void PlyrTexFreeDesc(Desc_802347EC *pDesc)
    not read. */
 void PlyrTexCopy(void *pDest, void *pSrc, unsigned int size)
 {
-    Object_8020E52C *pSrcHeader = fn_8020E52C(pSrc, 0);
-    Object_8020E52C *pDestHeader = fn_8020E52C(pDest, 0);
-    Object_8020E5F8 *pSrcBlock;
-    Object_8020E5F8 *pDestBlock;
+    TexFileMaterial_t *pSrcHeader = TexGetMaterialByIndex(pSrc, 0);
+    TexFileMaterial_t *pDestHeader = TexGetMaterialByIndex(pDest, 0);
+    TexFilePalette_t *pSrcBlock;
+    TexFilePalette_t *pDestBlock;
     int i;
 
     for (i = 0; i < pDestHeader->mUnknown2; i++) {
-        Object_8020E560 *pSrcImage = fn_8020E560(pSrc, pSrcHeader->mUnknown4 + i);
-        Object_8020E560 *pDestImage = fn_8020E560(pDest, pDestHeader->mUnknown4 + i);
+        TexFileImage_t *pSrcImage = TexGetTextureByIndex(pSrc, pSrcHeader->mUnknown4 + i);
+        TexFileImage_t *pDestImage = TexGetTextureByIndex(pDest, pDestHeader->mUnknown4 + i);
 
         memcpy(pDestImage->mpUnknownC, pSrcImage->mpUnknownC, pDestImage->mUnknown8);
         fn_80239D1C(pDestImage->mpUnknownC, pDestImage->mUnknown8);
     }
 
-    pSrcBlock = fn_8020E5F8(pSrc, pSrcHeader->mUnknown8);
-    pDestBlock = fn_8020E5F8(pDest, pDestHeader->mUnknown8);
+    pSrcBlock = TexGetPaletteByIndex(pSrc, pSrcHeader->mUnknown8);
+    pDestBlock = TexGetPaletteByIndex(pDest, pDestHeader->mUnknown8);
     memcpy(pDestBlock->mpUnknown8, pSrcBlock->mpUnknown8, pDestBlock->mUnknown4);
     fn_80239D1C(pDestBlock->mpUnknown8, pDestBlock->mUnknown4);
 }
@@ -105,11 +105,11 @@ void PlyrTexApplyFilters(Desc_802347EC *pDescs, PlyrTexPartFilter *pEntries)
         Desc_802347EC *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
 
         if (pEntries[i].mUnknown4) {
-            TexWrapDesc_80212374 pair = { 0, 0 };
+            TMTexWrapDesc_t pair = { 0, 0 };
 
-            fn_802121D0((TexLib_802119C4 *)pDesc->mpUnknown24, &pair);
+            TMTexLibSetWrapParm((TMTexLib_t *)pDesc->mpUnknown24, &pair);
         }
-        fn_8021216C((TexLib_802119C4 *)pDesc->mpUnknown24, &pEntries[i].mUnknown8);
+        TMTexLibSetFilterParm((TMTexLib_t *)pDesc->mpUnknown24, &pEntries[i].mUnknown8);
     }
 }
 }

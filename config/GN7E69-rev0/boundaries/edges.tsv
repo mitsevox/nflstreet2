@@ -90,11 +90,15 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x8020DB34	0x8020DB34	0x8020DB34	alignment	0	0	tdbiores.c	texture.c
 .text	-	0x8020E9D0	0x8020EA18	open	-	-	texture.c	tmmodelres.c
 .text	-	0x8020ED10	0x8020F28C	open	-	-	tmmodelres.c	tmmodel.c
-.text	-	0x8020FA8C	0x8020FF34	open	-	-	tmmodel.c	tmmateriallist.c
-.text	-	0x80210298	0x80211774	open	-	-	tmmateriallist.c	tmshaderlib.c
+.text	-	0x8020FA8C	0x8020FAAC	open	-	-	tmmodel.c	tmmaterial.c
+.text	0x8020FF34	0x8020FF34	0x8020FF34	at-or-before	0	7	tmmaterial.c	tmmateriallist.c
+.text	0x80210298	0x80210298	0x80210298	alignment	0	1	tmmateriallist.c	tmrender.c
+.text	-	0x80210D30	0x80211774	open	-	-	tmrender.c	tmshaderlib.c
 .text	0x802119C4	0x802119C4	0x802119C4	alignment	0	0	tmshaderlib.c	tmtexlib.c
 .text	0x80212234	0x80212234	0x80212234	alignment	0	11	tmtexlib.c	tmtexture.c
-.text	-	0x802126C0	0x8021283C	open	-	-	tmtexture.c	tmregistry.c
+.text	0x802126C0	0x802126C0	0x802126C0	alignment	0	0	tmtexture.c	tmname.c
+.text	0x802127D0	0x802127D0	0x802127D0	alignment	0	0	tmname.c	tmmemory.c
+.text	0x8021283C	0x8021283C	0x8021283C	alignment	0	2	tmmemory.c	tmregistry.c
 .text	0x80212D5C	0x80212D5C	0x80212D5C	alignment	0	0	tmregistry.c	tmshaderstock.c
 .text	0x80213214	0x80213214	0x80213214	alignment	0	0	tmshaderstock.c	tmshaderparm.c
 .text	0x80213224	0x80213224	0x80213224	alignment	0	0	tmshaderparm.c	tmshadercode.c
@@ -159,6 +163,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802B1138	0x802B1138	data	0	5/2	psysEmitter.c	psysCollision.c
 .rodata	-	0x802B1140	0x802B1140	data	0	2/3	psysCollision.c	colorRamp.c
 .rodata	-	0x802B1B90	0x802B1B90	thin	0	21/1	t3db_expr.c	t3db_query.c
+.rodata	-	0x802B1C38	0x802B1C38	thin	0	5/1	tmtexture.c	tmname.c
 .rodata	-	0x802B7280	0x802B7280	data	0	3/3	libgcc2.c	libgcc2.c
 .rodata	-	0x802B7298	0x802B7298	data	0	3/3	libgcc2.c	libgcc2.c
 .data	-	0x802CC5E0	0x802CC5E0	data	0	11/9	FSasync.c	sndvd.c
@@ -173,6 +178,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EBDE8	0x803EBDE8	data	0	2/2	rescache.c	resloosefile.c
 .sdata	-	0x803EBE20	0x803EBE20	thin	0	1/1	llsound.c	sort.c
 .sdata	-	0x803EBE70	0x803EBE70	data	0	9/5	llsystem.c	t3db.c
+.sdata	-	0x803EBEE8	0x803EBEE8	thin	0	1/1	tmmaterial.c	tmmateriallist.c
+.sdata	-	0x803EBEF0	0x803EBEF0	thin	0	1/5	tmmateriallist.c	tmrender.c
 .sdata	-	0x803EBF80	0x803EBF80	data	0	4/2	UIGFmv.c	LLUIGFmv.c
 .sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c

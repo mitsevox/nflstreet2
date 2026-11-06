@@ -47,13 +47,13 @@ extern "C" {
 int fn_80044528(int index);
 int fn_80044544(void);
 int fn_80044564(int index, int i);
-void fn_80211E08(DivotTexLib *pElement, int a);
-void fn_80211EFC(DivotTexLib *pElement);
-int fn_802120E4(DivotTexLib *pElement, int a);
-int fn_80212124(DivotTexLib *pElement, int a, int b);
-void fn_80210388(void);
-void fn_80210814(int a, int b, int c);
-void fn_80210CC4(float a, float b);
+void TMTexLibLoad(DivotTexLib *pElement, int a);
+void TMTexLibUnload(DivotTexLib *pElement);
+int TMTexLibGetTexture(DivotTexLib *pElement, int a);
+int TMTexLibGetClut(DivotTexLib *pElement, int a, int b);
+void TMRenderReset(void);
+void TMRenderBindTexture(int a, int b, int c);
+void TMRenderSetZRange(float a, float b);
 int fn_80236EC0(int a);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
@@ -82,9 +82,9 @@ void DivotRenderLoadType(int index)
         pElement = _DivotRender_apTexLibs[index] = (DivotTexLib *)fn_801D2B7C(fn_80044528(index) * sizeof(DivotTexLib), 0, 0);
         handle = fn_80044544();
         for (; i < fn_80044528(index); i++) {
-            fn_80211E08(pElement, fn_801EF390((void *)handle, fn_80044564(index, i), 1));
-            pElement->mUnknown28 = fn_802120E4(pElement, 0xFF000000);
-            pElement->mUnknown2C = fn_80212124(pElement, 0xFF000000, 0);
+            TMTexLibLoad(pElement, fn_801EF390((void *)handle, fn_80044564(index, i), 1));
+            pElement->mUnknown28 = TMTexLibGetTexture(pElement, 0xFF000000);
+            pElement->mUnknown2C = TMTexLibGetClut(pElement, 0xFF000000, 0);
             pElement++;
         }
     }
@@ -97,7 +97,7 @@ void DivotRenderFreeType(int index)
         int i;
 
         for (i = 0; i < fn_80044528(index); i++) {
-            fn_80211EFC(&pElements[i]);
+            TMTexLibUnload(&pElements[i]);
             fn_801F010C((void *)fn_80044544(), fn_80044564(index, i));
         }
         fn_801D2BD0(pElements);
@@ -124,13 +124,13 @@ void DivotRenderBegin(int index)
 {
     GXColor color = { 255, 255, 255, 255 };
 
-    fn_80210388();
+    TMRenderReset();
     _DivotRender_bSavedFog = fn_80236EC0(1);
     GXSetCullMode(GX_CULL_NONE);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-    fn_80210CC4(0.01f, 0.01f);
+    TMRenderSetZRange(0.01f, 0.01f);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -148,7 +148,7 @@ void DivotRenderBegin(int index)
 
 void DivotRenderEnd(int index)
 {
-    fn_80210CC4(0.0f, 1.0f);
+    TMRenderSetZRange(0.0f, 1.0f);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_80236EC0(_DivotRender_bSavedFog);
 }
@@ -161,7 +161,7 @@ void DivotRenderDrawOne(DivotDrawView *pObject)
     if (pObject->mpUnknown50 == 0 || pObject->mpUnknown50->mUnknownB != 0) {
         color.a = pObject->mUnknown34 * 255.0f;
         fn_8024FB58(4, color);
-        fn_80210814(0, pObject->mpUnknown60->mUnknown28, pObject->mpUnknown60->mUnknown2C);
+        TMRenderBindTexture(0, pObject->mpUnknown60->mUnknown28, pObject->mpUnknown60->mUnknown2C);
         fn_801D04C4();
         fn_801D0C58(pObject);
         fn_801D0ADC(pObject->mUnknown30);

@@ -6,17 +6,17 @@
 #include <dolphin/gx/GXTev.h>
 #include "engine/tmlib.h"
 
-extern ShaderDef_80211638 lbl_802F9C18;
-extern ShaderDef_80211638 lbl_802F9C34;
-extern ShaderDef_80211638 lbl_802F9C50;
-extern ShaderDef_80211638 lbl_802F9C80;
-extern ShaderDef_80211638 lbl_802F9CB0;
-extern ShaderDef_80211638 lbl_802F9CF4;
-extern ShaderDef_80211638 lbl_802F9D38;
-extern Registry_8021283C lbl_8039B54C;
-extern Shader_80211638 lbl_8039B55C;
+extern TMShaderDef_t lbl_802F9C18;
+extern TMShaderDef_t lbl_802F9C34;
+extern TMShaderDef_t lbl_802F9C50;
+extern TMShaderDef_t lbl_802F9C80;
+extern TMShaderDef_t lbl_802F9CB0;
+extern TMShaderDef_t lbl_802F9CF4;
+extern TMShaderDef_t lbl_802F9D38;
+extern TMRegistry_t lbl_8039B54C;
+extern TMShader_t lbl_8039B55C;
 
-static void _TMShaderStockBind_Null(Shader_80211638 *pShader)
+static void _TMShaderStockBind_Null(TMShader_t *pShader)
 {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
@@ -24,7 +24,7 @@ static void _TMShaderStockBind_Null(Shader_80211638 *pShader)
     TMTevSetTevOp(GX_TEVSTAGE0, GX_PASSCLR, 1);
 }
 
-static void _TMShaderStockBind_Flat(Shader_80211638 *pShader)
+static void _TMShaderStockBind_Flat(TMShader_t *pShader)
 {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
@@ -32,7 +32,7 @@ static void _TMShaderStockBind_Flat(Shader_80211638 *pShader)
     TMTevSetTevOp(GX_TEVSTAGE0, GX_PASSCLR, 1);
 }
 
-static void _TMShaderStockBind_OnePass(Shader_80211638 *pShader)
+static void _TMShaderStockBind_OnePass(TMShader_t *pShader)
 {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
@@ -40,7 +40,7 @@ static void _TMShaderStockBind_OnePass(Shader_80211638 *pShader)
     TMTevSetTevOp(GX_TEVSTAGE0, GX_MODULATE, 1);
 }
 
-static void _TMShaderStockBind_TwoPass(Shader_80211638 *pShader)
+static void _TMShaderStockBind_TwoPass(TMShader_t *pShader)
 {
     GXSetNumTexGens(2);
     GXSetNumTevStages(3);
@@ -55,7 +55,7 @@ static void _TMShaderStockBind_TwoPass(Shader_80211638 *pShader)
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_2, GX_TRUE, GX_TEVPREV);
 }
 
-static void _TMShaderStockBind_Replace(Shader_80211638 *pShader)
+static void _TMShaderStockBind_Replace(TMShader_t *pShader)
 {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
@@ -63,7 +63,7 @@ static void _TMShaderStockBind_Replace(Shader_80211638 *pShader)
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
 }
 
-static void _TMShaderStockBind_SpecularEnvMap(Shader_80211638 *pShader)
+static void _TMShaderStockBind_SpecularEnvMap(TMShader_t *pShader)
 {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
@@ -76,40 +76,40 @@ static void _TMShaderStockBind_SpecularEnvMap(Shader_80211638 *pShader)
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 }
 
-static void _TMShaderStockBind_OnePassTXDef(Shader_80211638 *pShader);
+static void _TMShaderStockBind_OnePassTXDef(TMShader_t *pShader);
 
-static void _TMShaderStockCreateShaders(Registry_8021283C *pLib)
+static void _TMShaderStockCreateShaders(TMRegistry_t *pLib)
 {
-    Shader_80211638 *pShader;
+    TMShader_t *pShader;
 
-    fn_80211860(pLib, &lbl_802F9C18, _TMShaderStockBind_Null);
-    fn_80211860(pLib, &lbl_802F9C34, _TMShaderStockBind_Flat);
-    fn_80211860(pLib, &lbl_802F9C80, _TMShaderStockBind_OnePass);
-    fn_80211860(pLib, &lbl_802F9CF4, _TMShaderStockBind_TwoPass);
-    fn_80211860(pLib, &lbl_802F9D38, _TMShaderStockBind_SpecularEnvMap);
-    fn_80211860(pLib, &lbl_802F9C50, _TMShaderStockBind_Replace);
-    pShader = fn_80211860(pLib, &lbl_802F9CB0, _TMShaderStockBind_OnePass);
-    fn_80211764(pShader, _TMShaderStockBind_OnePassTXDef);
+    TMShaderLibAddShader(pLib, &lbl_802F9C18, _TMShaderStockBind_Null);
+    TMShaderLibAddShader(pLib, &lbl_802F9C34, _TMShaderStockBind_Flat);
+    TMShaderLibAddShader(pLib, &lbl_802F9C80, _TMShaderStockBind_OnePass);
+    TMShaderLibAddShader(pLib, &lbl_802F9CF4, _TMShaderStockBind_TwoPass);
+    TMShaderLibAddShader(pLib, &lbl_802F9D38, _TMShaderStockBind_SpecularEnvMap);
+    TMShaderLibAddShader(pLib, &lbl_802F9C50, _TMShaderStockBind_Replace);
+    pShader = TMShaderLibAddShader(pLib, &lbl_802F9CB0, _TMShaderStockBind_OnePass);
+    TMShaderSetUnbindFunc(pShader, _TMShaderStockBind_OnePassTXDef);
 }
 
-static void _TMShaderStockBind_OnePassTXDef(Shader_80211638 *pShader)
+static void _TMShaderStockBind_OnePassTXDef(TMShader_t *pShader)
 {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 }
 
 void TMShaderStockInit(void)
 {
-    fn_80211638(&lbl_8039B55C, &lbl_802F9C18);
-    fn_8021175C(&lbl_8039B55C, _TMShaderStockBind_Null);
-    fn_802119BC(&lbl_8039B55C);
-    fn_802117C8(&lbl_8039B54C, 16);
+    TMShaderNew(&lbl_8039B55C, &lbl_802F9C18);
+    TMShaderSetBindFunc(&lbl_8039B55C, _TMShaderStockBind_Null);
+    TMShaderLibSetNullShader(&lbl_8039B55C);
+    TMShaderLibAlloc(&lbl_8039B54C, 16);
     _TMShaderStockCreateShaders(&lbl_8039B54C);
-    fn_80211928("stock", &lbl_8039B54C);
+    TMShaderLibRegister("stock", &lbl_8039B54C);
 }
 
 void TMShaderStockShutdown(void)
 {
-    fn_802117F0(&lbl_8039B54C);
-    fn_80211730(&lbl_8039B55C);
-    fn_802119BC(0);
+    TMShaderLibFree(&lbl_8039B54C);
+    TMShaderDelete(&lbl_8039B55C);
+    TMShaderLibSetNullShader(0);
 }

@@ -29,7 +29,7 @@ struct BmFont {
     unsigned int mSpaceWidth;
     unsigned int mSpacing;
     unsigned char mBorder;
-    Texture_8020DB34 mTexture;
+    Texture_t mTexture;
     char mUnknown34[0x28];
     unsigned char mMapCount;
     unsigned char mMap[256];

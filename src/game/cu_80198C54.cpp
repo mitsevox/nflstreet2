@@ -53,12 +53,12 @@ void fn_8008B09C(Class_8008B284 *pObject, void *pImage, int width, int height);
 void fn_8008B134(Class_8008B284 *pObject, void *pOut, void *p, int *pCount);
 int fn_8008B27C(Class_8008B284 *pObject);
 void fn_8008B1F0(Class_8008B284 *pObject, void *pImage, int width, int height, void *pOut);
-void fn_80210214(Object_8023488C *pObject, void *p);
-void fn_80210388(void);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
-void fn_80211FF0(void);
-void fn_80212018(const char *pName, void *p);
+void TMMaterialListSetMatDefs(Object_8023488C *pObject, void *p);
+void TMRenderReset(void);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
+void TMTexLibRegistryReset(void);
+void TMTexLibRegister(const char *pName, void *p);
 void fn_802337D4(void *a, void *b, Triple_80198D98 *pTriples, unsigned int c);
 void fn_802338D4(Object_802338D4 *pObject, Skeleton_80041930 *pData, Matrix_80198C54 *pOut);
 void fn_80233BB8(Object_80233BB8 *pObject, int a, int b);
@@ -179,12 +179,12 @@ void fn_80198F24(Object_8008A9F8 *pObject)
     void *pElement = pObject->mUnknown384[0].mpUnknown24;
     Desc_802347EC *pDescs = pObject->mUnknown384;
 
-    fn_80211FF0();
-    fn_80212018("capport", pElement);
+    TMTexLibRegistryReset();
+    TMTexLibRegister("capport", pElement);
     fn_8023488C(pUnknown612, 0x38);
-    fn_80210214(pUnknown612, pResult->mpUnknown18);
+    TMMaterialListSetMatDefs(pUnknown612, pResult->mpUnknown18);
     fn_8023465C(pUnknown612, pResult, pDescs);
-    fn_80211FF0();
+    TMTexLibRegistryReset();
 }
 
 void fn_80198FAC(Object_8008A9F8 *pObject)
@@ -415,7 +415,7 @@ void fn_80199838(Object_8008A9F8 *pObject)
     int mask;
 
     fn_8019979C();
-    fn_80210388();
+    TMRenderReset();
     GXColor white = {255, 255, 255, 255};
     mask = fn_80236B98(2, 1.0f, 1.0f, 1.0f);
     fn_8024FB58(4, white);
@@ -423,11 +423,11 @@ void fn_80199838(Object_8008A9F8 *pObject)
     fn_8024FC84(4, 1, 0, 0, mask, 2, 2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_FRONT);
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
     fn_80234BF4(0, &pObject->mUnknown620[0], 0);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    fn_80210BD8(2);
-    fn_80210CC4(0.0f, lbl_803EB774);
+    TMRenderSetBlendMode(2);
+    TMRenderSetZRange(0.0f, lbl_803EB774);
     fn_80234BF4(0, &pObject->mUnknown620[1], 0);
     fn_80234BF4(0, &pObject->mUnknown620[2], 0);
     fn_8019969C();

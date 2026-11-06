@@ -8,9 +8,9 @@ void TMSwapRelocateChunk(TMSwapDef_t *pSwap, void *pOldBase, void *pNewBase)
     unsigned short i;
     unsigned short j;
 
-    pSwap->mpSlots = fn_8020EB94(pSwap->mpSlots, pOldBase, pNewBase);
-    pSwap->mpStates = fn_8020EB94(pSwap->mpStates, pOldBase, pNewBase);
-    pSwap->mpNodeIndices = fn_8020EB94(pSwap->mpNodeIndices, pOldBase, pNewBase);
+    pSwap->mpSlots = TMModelResRelocatePtr(pSwap->mpSlots, pOldBase, pNewBase);
+    pSwap->mpStates = TMModelResRelocatePtr(pSwap->mpStates, pOldBase, pNewBase);
+    pSwap->mpNodeIndices = TMModelResRelocatePtr(pSwap->mpNodeIndices, pOldBase, pNewBase);
     for (i = 0; i < pSwap->mNumSlots; i++) {
         TMSwapSlot_t *pSlot = TMSwapGetNode(pSwap, i);
 

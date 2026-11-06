@@ -106,7 +106,7 @@ void FldObjInit(FldObj_t *pObject, int *pArgs)
         pObject->mUnknown4AC[i] = FldObjLoadModel(pObject->mpUnknown14, pObject->mUnknown18[i]);
         fn_80234DFC(pObject->mUnknown4AC[i], &pObject->mUnknown4C0[i], 0, 0, _FldObj_aLayers[i].mpName,
                     _FldObj_aLayers[i].mUnknown4);
-        TMTexLibSetFilterParm((TexLib_802119C4 *)&pObject->mUnknown4C0[i], &_FldObj_TexFilter);
+        TMTexLibSetFilterParm((TMTexLib_t *)&pObject->mUnknown4C0[i], &_FldObj_TexFilter);
         fn_80235588(&pObject->mUnknown2C[i], 6);
         fn_80235630(&pObject->mUnknown2C[i], pObject->mUnknown4AC[i]);
         fn_80235B6C(&pObject->mUnknown2C[i], &pObject->mUnknown4C0[i], 1);

@@ -7,7 +7,7 @@ extern TMBlendChannelSource_t lbl_8039B720;
 extern TMBlendChannel_t lbl_8039B730[];
 extern unsigned char lbl_8039B7E0[];
 
-static void *_TMBlendChannelGetInData(GeomAttr_8020ED10 *pAttr, int index)
+static void *_TMBlendChannelGetInData(TMGeomAttr_t *pAttr, int index)
 {
     void **ppInputs = lbl_8039B720.mppInputs;
 
@@ -36,7 +36,7 @@ TMBlendChannel_t *TMBlendChannelGetBuffer(int id)
 int TMBlendChannelSet(int id, int index)
 {
     TMBlendChannel_t *pChannel = TMBlendChannelGetBuffer(id);
-    GeomAttr_8020ED10 *pAttr = &lbl_8039B720.mpAttrs[index];
+    TMGeomAttr_t *pAttr = &lbl_8039B720.mpAttrs[index];
     int size;
 
     pChannel->mpAttr = pAttr;
@@ -58,7 +58,7 @@ unsigned char *TMBlendChannelSetMem(int id, unsigned char *pData, int size)
     return pData + size;
 }
 
-void TMBlendChannelSetChannels(GeomAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs)
+void TMBlendChannelSetChannels(TMGeomAttr_t *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs)
 {
     lbl_8039B720.mNumAttrs = numAttrs;
     if (numAttrs != 0) {

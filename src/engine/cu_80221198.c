@@ -116,7 +116,7 @@ typedef struct Transform_80221198 {
     Float32 mScaleColor[4]; /* 0x44 */
 } Transform_80221198;
 
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_80221198(void *p);
 void fn_801CE910(void);
 void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
@@ -309,7 +309,7 @@ void fn_80221738(Int32 a, Int32 b, Node_802215F0 *pNode)
     if (pNode->unk_24 != -1) {
         pNode->unk_24 = -1;
     }
-    fn_8020E258(&pNode->Texture);
+    TexDelete(&pNode->Texture);
     memset(pNode, 0, sizeof(Node_802215F0));
     fn_801D2BD0(pNode);
 }
@@ -683,7 +683,7 @@ void fn_80223CB8(Uint32 Flags)
     if ((Flags & 3) == 2) {
         bColor = 0;
     }
-    fn_80210388();
+    TMRenderReset();
     bTex = Flags & 2;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -940,7 +940,7 @@ void fn_80225B50(Uint32 Flags)
     if ((Flags & 6) == 4) {
         bColor = 0;
     }
-    fn_80210388();
+    TMRenderReset();
     bTex = Flags & 4;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

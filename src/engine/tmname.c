@@ -1,14 +1,17 @@
+/* TM renderer names: exact and wildcard name comparison and splitting of "dir/name" paths, used
+   by the registries. */
+
 #include "engine/tmlib.h"
 
 extern int strcmp(const char *s1, const char *s2);
 extern char *strcpy(char *dest, const char *src);
 
-int fn_802126C0(const char *pName, const char *pOther)
+int TMNameCompareExact(const char *pName, const char *pOther)
 {
     return strcmp(pName, pOther) == 0;
 }
 
-int fn_802126E8(const char *pPattern, const char *pName)
+int TMNameCompareWildcard(const char *pPattern, const char *pName)
 {
     while (*pPattern == *pName) {
         if (*pPattern == '\0') {
@@ -20,7 +23,7 @@ int fn_802126E8(const char *pPattern, const char *pName)
     return *pPattern == '*';
 }
 
-void fn_8021272C(const char *pPath, char *pDir, char *pFile)
+void TMNameSplitPath(const char *pPath, char *pDir, char *pFile)
 {
     int i;
 

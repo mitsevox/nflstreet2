@@ -28,7 +28,7 @@ extern QuadPoint_801A0614 lbl_802F2894[4];
 extern Mtx44 lbl_802F28F4;
 extern unsigned char lbl_803EB7DC[];
 int fn_800BA6F8(void);
-int fn_80027DF0(void);
+int FELoopIsMainFEActive(void);
 int fn_80177F70(void);
 float fn_80178298(void);
 float fn_80178A2C(void);
@@ -41,12 +41,12 @@ void fn_801D0664(Mtx44);
 void fn_801D0C58(float *);
 void fn_801D0D94(float, float, float);
 void fn_801D0F80(Mtx44);
-void fn_80210388(void);
-void fn_80211E08(Resource_801A1240 *, int);
-void fn_80211EFC(Resource_801A1240 *);
-Descriptor_801A1240 *fn_802120AC(Resource_801A1240 *, const char *);
-Palette_801A0088 *fn_80212074(Descriptor_801A1240 *, int);
-GXTexObj *fn_80212050(Descriptor_801A1240 *);
+void TMRenderReset(void);
+void TMTexLibLoad(Resource_801A1240 *, int);
+void TMTexLibUnload(Resource_801A1240 *);
+Descriptor_801A1240 *TMTexLibGetTexNode(Resource_801A1240 *, const char *);
+Palette_801A0088 *TMTexLibGetClutByTexNode(Descriptor_801A1240 *, int);
+GXTexObj *TMTexLibGetTextureByTexNode(Descriptor_801A1240 *);
 int VptGetMatrixStack(void);
 void fn_8024FC48(int);
 void fn_8024FC84(int, int, int, int, int, int, int);
@@ -222,7 +222,7 @@ extern "C" int fn_801A0CA0(int a,State_80167094 *s,int)
 extern "C" void fn_801A0E2C(void)
 {
     GXColor c={255,255,255,255};
-    fn_80210388();GXClearVtxDesc();GXSetVtxDesc(GX_VA_POS, GX_DIRECT);GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);fn_8024FC48(1);
+    TMRenderReset();GXClearVtxDesc();GXSetVtxDesc(GX_VA_POS, GX_DIRECT);GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);fn_8024FC48(1);
     fn_8024FC84(0,1,0,1,0,0,2);fn_8024FC84(2,0,0,1,0,0,2);fn_8024FA68(0,c);
     GXSetNumTevStages(1);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetNumTexGens(1);GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);fn_8024EB28(0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);fn_80252114(1);fn_802520E0(0,7,0);GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);fn_801A0088(0);
@@ -237,19 +237,19 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 {
     State_80167094 *s=(State_80167094 *)input;GXColor c={255,255,255,255};float pos[3]={x,y,0.0f};Mtx44 m;
     fn_801A0E2C();Point_8017886C point=fn_80177FE0();
-    if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!fn_80027DF0())fn_80178298();}
+    if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
     fn_8024FA68(4,c);fn_801D0470(VptGetMatrixStack());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);fn_80252034(1,4,5,5);
     fn_801D0F80(m);fn_8025251C(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);
 }
 extern "C" void fn_801A1240(int resource)
 {
-    fn_80211E08(&lbl_8036550C,fn_801EF390((void *)resource,0,1));
+    TMTexLibLoad(&lbl_8036550C,fn_801EF390((void *)resource,0,1));
     Entry_801A0088 *p=lbl_80365534;
-    for(unsigned int i=0;i<=7;++i,++p){Descriptor_801A1240 *d=fn_802120AC(&lbl_8036550C,lbl_802F2734[i]);if(d->mUnknownC)p->mpPalette=fn_80212074(d,0);else p->mpPalette=0;p->mpTexture=fn_80212050(d);}
+    for(unsigned int i=0;i<=7;++i,++p){Descriptor_801A1240 *d=TMTexLibGetTexNode(&lbl_8036550C,lbl_802F2734[i]);if(d->mUnknownC)p->mpPalette=TMTexLibGetClutByTexNode(d,0);else p->mpPalette=0;p->mpTexture=TMTexLibGetTextureByTexNode(d);}
 }
 extern "C" void fn_801A12E8(void)
 {
-    fn_80211EFC(&lbl_8036550C);
+    TMTexLibUnload(&lbl_8036550C);
     for(int i=7;i>=0;--i){lbl_80365534[i].mpTexture=0;lbl_80365534[i].mpPalette=0;}
 }

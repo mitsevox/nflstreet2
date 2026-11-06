@@ -241,7 +241,7 @@ unsigned int TMBlendOpAccumulate(int dstId, int srcId, int weight)
 {
     TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
     TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
-    GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
+    TMGeomAttr_t *pAttr = pSrc->mpAttr;
 
     if (pAttr->mbDelta) {
         switch (pAttr->mCompType) {
@@ -279,7 +279,7 @@ void TMBlendOpExtract(int dstId, int srcId)
 {
     TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
     TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
-    GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
+    TMGeomAttr_t *pAttr = pSrc->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:
@@ -299,7 +299,7 @@ void TMBlendOpIntract(int dstId, int srcId)
 {
     TMBlendChannel_t *pSrc = TMBlendChannelGetBuffer(srcId);
     TMBlendChannel_t *pDst = TMBlendChannelGetBuffer(dstId);
-    GeomAttr_8020ED10 *pAttr = pDst->mpAttr;
+    TMGeomAttr_t *pAttr = pDst->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:

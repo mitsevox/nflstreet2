@@ -6,17 +6,17 @@
 
 typedef struct Pool_801C750C Pool_801C750C;
 
-#include "game/Object_8020E52C.h"
+#include "engine/texfile.h"
 #include "engine/texture.h"
-#include "game/fn_8021216C.h"
+#include "engine/tmtexlib.h"
 
 
-typedef struct TexInfo_8020E2B0 {
+typedef struct TexFileInfo_t {
     int mUnknown00;
     unsigned char *mpData;
-} TexInfo_8020E2B0;
+} TexFileInfo_t;
 
-typedef struct TexHeader_8020E2B0 {
+typedef struct TexFileHeader_t {
     char maTag[4];
     unsigned short mVersion;
     unsigned short mFlags;
@@ -27,117 +27,117 @@ typedef struct TexHeader_8020E2B0 {
     unsigned short mNumMaterials;
     unsigned short mNumTextures;
     unsigned short mNumPalettes;
-    Object_8020E52C *mpMaterials;
-    Object_8020E560 *mpTextures;
-    Object_8020E5F8 *mpPalettes;
+    TexFileMaterial_t *mpMaterials;
+    TexFileImage_t *mpTextures;
+    TexFilePalette_t *mpPalettes;
     char (*mpNames)[16];
-    TexInfo_8020E2B0 *mpInfo;
-} TexHeader_8020E2B0;
+    TexFileInfo_t *mpInfo;
+} TexFileHeader_t;
 
 /* texture.c */
-unsigned short fn_8020E51C(TexHeader_8020E2B0 *pTex);
-unsigned short fn_8020E524(TexHeader_8020E2B0 *pTex);
-const char *fn_8020E53C(TexHeader_8020E2B0 *pTex, unsigned short index);
+unsigned short TexGetNumMaterials(TexFileHeader_t *pTex);
+unsigned short TexGetNumPalettes(TexFileHeader_t *pTex);
+const char *TexGetMaterialNameByIndex(TexFileHeader_t *pTex, unsigned short index);
 
 extern int lbl_803EBEBC;
 
 void fn_801D0F80(Mtx44 mtx);
-void fn_801D34D0(void *p, unsigned int size, int c, int d);
+void MemFill(void *p, unsigned int size, int c, int d);
 
-Pool_801C750C *fn_801C750C(int a, int count, int size, void *pMemory);
-int fn_801C75B8(Pool_801C750C *pPool);
-void *fn_801C75F0(Pool_801C750C *pPool);
-void fn_801C7650(Pool_801C750C *pPool, void *pElement);
+Pool_801C750C *DSNewNodeHandler(int a, int count, int size, void *pMemory);
+int DSDelNodeHandler(Pool_801C750C *pPool);
+void *DSNewNode(Pool_801C750C *pPool);
+void DSDelNode(Pool_801C750C *pPool, void *pElement);
 
-typedef struct RegistryEntry_8021283C {
+typedef struct TMRegistryEntry_t {
     const char *mpName;
     void *mpData;
-} RegistryEntry_8021283C;
+} TMRegistryEntry_t;
 
-typedef struct Registry_8021283C {
+typedef struct TMRegistry_t {
     int mMaxEntries;
     int mNumEntries;
-    RegistryEntry_8021283C *mpEntries;
+    TMRegistryEntry_t *mpEntries;
     unsigned char mbAppend;
     unsigned char mbPaths;
-} Registry_8021283C;
+} TMRegistry_t;
 
-typedef struct ShaderParmDef_80211638 {
+typedef struct TMShaderParmDef_t {
     char mName[16];
     unsigned char mType;
     unsigned char mUnknown11;
     unsigned short mIndex;
-} ShaderParmDef_80211638;
+} TMShaderParmDef_t;
 
-typedef struct ShaderDef_80211638 {
+typedef struct TMShaderDef_t {
     char mName[16];
     int mbAllocConsts;
     int mUnknown14;
     int mNumParms;
-    ShaderParmDef_80211638 mParms[1];
-} ShaderDef_80211638;
+    TMShaderParmDef_t mParms[1];
+} TMShaderDef_t;
 
-typedef struct Shader_80211638 Shader_80211638;
-typedef void (*ShaderFunc_80211638)(Shader_80211638 *pShader);
+typedef struct TMShader_t TMShader_t;
+typedef void (*TMShaderFunc_t)(TMShader_t *pShader);
 
-struct Shader_80211638 {
-    ShaderDef_80211638 *mpDef;
-    ShaderFunc_80211638 mBindFunc;
-    ShaderFunc_80211638 mUnbindFunc;
+struct TMShader_t {
+    TMShaderDef_t *mpDef;
+    TMShaderFunc_t mBindFunc;
+    TMShaderFunc_t mUnbindFunc;
     int mUnknownC;
     int mNumTextures;
     int mNumConsts;
-    ShaderParmDef_80211638 *mpFirstConst;
+    TMShaderParmDef_t *mpFirstConst;
     int mConstSize;
     void *mpConstData;
 };
 
-typedef struct Texture_80212234 {
+typedef struct TMTexture_t {
     GXTexObj mObj;
     unsigned short mNumMips;
     unsigned short mUnknown22;
     unsigned short mWidth;
     unsigned short mHeight;
     unsigned int mSize;
-} Texture_80212234;
+} TMTexture_t;
 
-typedef struct Clut_80212534 {
+typedef struct TMClut_t {
     int mType;
     union {
         GXTlutObj maTlut[2];
         GXTexObj mObj;
     } u;
     unsigned int mSize;
-} Clut_80212534;
+} TMClut_t;
 
-typedef struct TexNode_802119C4 {
+typedef struct TMTexNode_t {
     const char *mpName;
-    struct TexLib_802119C4 *mpLib;
+    struct TMTexLib_t *mpLib;
     short mTextureIndex;
     short mFirstClut;
     short mNumCluts;
     short mUnknownE;
-} TexNode_802119C4;
+} TMTexNode_t;
 
-struct TexLib_802119C4 {
-    Registry_8021283C mRegistry;
+struct TMTexLib_t {
+    TMRegistry_t mRegistry;
     int mNumTextures;
-    Texture_80212234 *mpTextures;
+    TMTexture_t *mpTextures;
     int mNumCluts;
-    Clut_80212534 *mpCluts;
+    TMClut_t *mpCluts;
     int mNumTexNodes;
-    TexNode_802119C4 *mpTexNodes;
+    TMTexNode_t *mpTexNodes;
 };
 
-typedef void (*ChunkRelocFunc_8020EA18)(void *pData, void *pOldBase, void *pNewBase);
+typedef void (*TMChunkRelocFunc_t)(void *pData, void *pOldBase, void *pNewBase);
 
-typedef struct ChunkDef_8020EA18 {
+typedef struct TMChunkDef_t {
     int mTag;
     int mVersion;
-    ChunkRelocFunc_8020EA18 mRelocate;
-} ChunkDef_8020EA18;
+    TMChunkRelocFunc_t mRelocate;
+} TMChunkDef_t;
 
-typedef struct Chunk_8020EA18 {
+typedef struct TMChunk_t {
     int mTag;
     void *mpData;
     int mSize;
@@ -145,9 +145,9 @@ typedef struct Chunk_8020EA18 {
     unsigned char mUnknownD;
     unsigned char mUnknownE;
     unsigned char mbRelocated;
-} Chunk_8020EA18;
+} TMChunk_t;
 
-typedef struct ModelRes_8020EA18 {
+typedef struct TMModelRes_t {
     int mUnknown0;
     int mUnknown4;
     unsigned short mNumChunks;
@@ -156,7 +156,7 @@ typedef struct ModelRes_8020EA18 {
     unsigned char mUnknownD;
     unsigned char mUnknownE;
     unsigned char mbRelocated;
-} ModelRes_8020EA18;
+} TMModelRes_t;
 
 typedef struct Extent_802144AC {
     float mMin[3];
@@ -164,7 +164,7 @@ typedef struct Extent_802144AC {
     float mMax[3];
 } Extent_802144AC;
 
-typedef struct GeomAttr_8020ED10 {
+typedef struct TMGeomAttr_t {
     void *mpData;
     unsigned short mCount;
     unsigned char mType;
@@ -175,9 +175,9 @@ typedef struct GeomAttr_8020ED10 {
     unsigned int mUnknownB : 3;
     unsigned int mbDelta : 1;
     unsigned char mDescType : 4;
-} GeomAttr_8020ED10;
+} TMGeomAttr_t;
 
-typedef struct GeomNode_8020ED10 {
+typedef struct TMGeomNode_t {
     void *mpData;
     unsigned short mDisplayListSize;
     short mMaterial;
@@ -190,16 +190,16 @@ typedef struct GeomNode_8020ED10 {
     unsigned char mUnknown13;
     unsigned char mNumLods;
     unsigned char maUnknown15[3];
-} GeomNode_8020ED10;
+} TMGeomNode_t;
 
-typedef struct Geom_8020ED10 {
-    GeomNode_8020ED10 *mpNodes;
+typedef struct TMGeom_t {
+    TMGeomNode_t *mpNodes;
     unsigned int mNumNodes;
-    GeomAttr_8020ED10 *mpAttrs;
+    TMGeomAttr_t *mpAttrs;
     int mNumAttrs;
     unsigned int mFlags;
     void *mpUnknown14;
-} Geom_8020ED10;
+} TMGeom_t;
 
 typedef struct TMMaterialDef_t {
     const char *mpName;
@@ -264,36 +264,36 @@ typedef struct TMSwapDef_t {
     unsigned short *mpNodeIndices;
 } TMSwapDef_t;
 
-typedef struct MaterialParm_8020FAAC {
-    Texture_80212234 *mpTexture;
-    Clut_80212534 *mpClut;
+typedef struct TMMaterialTexState_t {
+    TMTexture_t *mpTexture;
+    TMClut_t *mpClut;
     int mXForm;
-} MaterialParm_8020FAAC;
+} TMMaterialTexState_t;
 
-typedef union MaterialConst_8020FAAC {
+typedef union TMMaterialConst_t {
     GXColor mColor;
     float mFloat;
     unsigned int mWord;
-} MaterialConst_8020FAAC;
+} TMMaterialConst_t;
 
-typedef struct Material_8020FAAC {
+typedef struct TMMaterial_t {
     int mRefCount;
     TMMaterialDef_t *mpDef;
-    Shader_80211638 *mpShader;
+    TMShader_t *mpShader;
     int mNumParms;
-    MaterialParm_8020FAAC *mpParms;
-    MaterialConst_8020FAAC maConsts[4];
-} Material_8020FAAC;
+    TMMaterialTexState_t *mpParms;
+    TMMaterialConst_t maConsts[4];
+} TMMaterial_t;
 
-typedef struct MaterialList_8020FF34 {
+typedef struct TMMaterialList_t {
     int mNumMaterials;
-    Material_8020FAAC **mppMaterials;
-} MaterialList_8020FF34;
+    TMMaterial_t **mppMaterials;
+} TMMaterialList_t;
 
-typedef struct Model_8020F28C {
+typedef struct TMModel_t {
     void *mpInfo;
     void *mpExtn;
-    Geom_8020ED10 *mpGeom;
+    TMGeom_t *mpGeom;
     TMClusterDef_t *mpClst;
     TMSkeleton_t *mpSkel;
     TMSwapDef_t *mpSwap;
@@ -304,101 +304,101 @@ typedef struct Model_8020F28C {
     void *mpRint;
     void *mpDInf;
     void *mpFade;
-} Model_8020F28C;
+} TMModel_t;
 
 /* tmmodelres.c */
-void fn_8020EB08(int maxChunkTypes);
-void fn_8020EB48(int tag, ChunkRelocFunc_8020EA18 relocate, int version);
-void fn_8020EB70(void);
-void *fn_8020EB94(void *p, void *pOldBase, void *pNewBase);
-void fn_8020EBB0(ModelRes_8020EA18 *pRes);
-void *fn_8020EC50(ModelRes_8020EA18 *pRes, int tag, Chunk_8020EA18 **ppChunk);
+void TMModelResInit(int maxChunkTypes);
+void TMModelResAddChunkType(int tag, TMChunkRelocFunc_t relocate, int version);
+void TMModelResShutdown(void);
+void *TMModelResRelocatePtr(void *p, void *pOldBase, void *pNewBase);
+void TMModelResRelocate(TMModelRes_t *pRes);
+void *TMModelResGetChunk(TMModelRes_t *pRes, int tag, TMChunk_t **ppChunk);
 
 /* tmgeometry.c */
-void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count);
-void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count);
-void fn_8020EFC8(int size);
-void fn_8020F00C(void);
-void fn_8020F08C(Geom_8020ED10 *pPart, void *pOldBase, void *pNewBase);
-void fn_8020F178(Geom_8020ED10 *pPart, unsigned short *pRemap, int numMaterials);
-void fn_8020F1D8(Geom_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent);
+void TMGeomExtentAddS16Points(Extent_802144AC *pExtent, short *pPoints, int count);
+void TMGeomExtentAddF32Points(Extent_802144AC *pExtent, float *pPoints, int count);
+void TMGeomInitChannelBuffer(int size);
+void TMGeomFreeChannelBuffer(void);
+void TMGeomRelocateChunk(TMGeom_t *pPart, void *pOldBase, void *pNewBase);
+void TMGeometryRemapMaterials(TMGeom_t *pPart, unsigned short *pRemap, int numMaterials);
+void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, Extent_802144AC *pExtent);
 
 /* tmshader.c */
-void fn_80211638(Shader_80211638 *pShader, ShaderDef_80211638 *pDef);
-void fn_80211730(Shader_80211638 *pShader);
-void fn_8021175C(Shader_80211638 *pShader, ShaderFunc_80211638 bindFunc);
-void fn_80211764(Shader_80211638 *pShader, ShaderFunc_80211638 unbindFunc);
-void fn_8021176C(Shader_80211638 *pShader);
+void TMShaderNew(TMShader_t *pShader, TMShaderDef_t *pDef);
+void TMShaderDelete(TMShader_t *pShader);
+void TMShaderSetBindFunc(TMShader_t *pShader, TMShaderFunc_t bindFunc);
+void TMShaderSetUnbindFunc(TMShader_t *pShader, TMShaderFunc_t unbindFunc);
+void TMShaderSelect(TMShader_t *pShader);
 
 /* tmshaderlib.c */
-void fn_802117C8(Registry_8021283C *pLib, int maxShaders);
-void fn_802117F0(Registry_8021283C *pLib);
-Shader_80211638 *fn_80211860(Registry_8021283C *pLib, ShaderDef_80211638 *pDef, ShaderFunc_80211638 bindFunc);
-void fn_8021189C(int maxShaders, int maxLibs);
-void fn_802118F0(void);
-void fn_80211928(const char *pName, Registry_8021283C *pLib);
-void fn_80211958(const char *pName);
-Shader_80211638 *fn_80211984(const char *pPath);
-void fn_802119BC(Shader_80211638 *pShader);
+void TMShaderLibAlloc(TMRegistry_t *pLib, int maxShaders);
+void TMShaderLibFree(TMRegistry_t *pLib);
+TMShader_t *TMShaderLibAddShader(TMRegistry_t *pLib, TMShaderDef_t *pDef, TMShaderFunc_t bindFunc);
+void TMShaderLibRegistryInit(int maxShaders, int maxLibs);
+void TMShaderLibRegistryShutdown(void);
+void TMShaderLibRegister(const char *pName, TMRegistry_t *pLib);
+void TMShaderLibUnregister(const char *pName);
+TMShader_t *TMShaderLibGetShader(const char *pPath);
+void TMShaderLibSetNullShader(TMShader_t *pShader);
 
 /* tmtexlib.c */
-void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut);
-void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex);
-void fn_80211D24(TexLib_802119C4 *pLib, int numTexNodes, int numTextures, int numCluts);
-void fn_80211DA8(TexLib_802119C4 *pLib);
-void fn_80211E08(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex);
-void fn_80211EBC(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex);
-void fn_80211EDC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut);
-void fn_80211EFC(TexLib_802119C4 *pLib);
-void fn_80211F94(int maxLibs);
-void fn_80211FC8(void);
-void fn_80211FF0(void);
-void fn_80212018(const char *pName, TexLib_802119C4 *pLib);
-Texture_80212234 *fn_80212050(TexNode_802119C4 *pNode);
-Clut_80212534 *fn_80212074(TexNode_802119C4 *pNode, int index);
-TexNode_802119C4 *fn_802120AC(TexLib_802119C4 *pLib, const char *pName);
-Texture_80212234 *fn_802120E4(TexLib_802119C4 *pLib, const char *pName);
-Clut_80212534 *fn_80212124(TexLib_802119C4 *pLib, const char *pName, int index);
+void TMTexLibSetClutData(TMTexLib_t *pLib, TexFilePalette_t *pPalette, int clutIndex, TMClut_t *pClut);
+void TMTexLibSetTextureData(TexFileHeader_t *pTex, TMTexLib_t *pLib, int materialIndex, TexFileImage_t *pTexture, int textureIndex, int clutIndex);
+void TMTexLibAlloc(TMTexLib_t *pLib, int numTexNodes, int numTextures, int numCluts);
+void TMTexLibFree(TMTexLib_t *pLib);
+void TMTexLibLoad(TMTexLib_t *pLib, TexFileHeader_t *pTex);
+void TMTexLibReplaceTexture(TexFileHeader_t *pTex, TMTexLib_t *pLib, int materialIndex, TexFileImage_t *pTexture, int textureIndex, int clutIndex);
+void TMTexLibReplaceClut(TMTexLib_t *pLib, TexFilePalette_t *pPalette, int clutIndex, TMClut_t *pClut);
+void TMTexLibUnload(TMTexLib_t *pLib);
+void TMTexLibRegistryInit(int maxLibs);
+void TMTexLibRegistryShutdown(void);
+void TMTexLibRegistryReset(void);
+void TMTexLibRegister(const char *pName, TMTexLib_t *pLib);
+TMTexture_t *TMTexLibGetTextureByTexNode(TMTexNode_t *pNode);
+TMClut_t *TMTexLibGetClutByTexNode(TMTexNode_t *pNode, int index);
+TMTexNode_t *TMTexLibGetTexNode(TMTexLib_t *pLib, const char *pName);
+TMTexture_t *TMTexLibGetTexture(TMTexLib_t *pLib, const char *pName);
+TMClut_t *TMTexLibGetClut(TMTexLib_t *pLib, const char *pName, int index);
 
 /* tmtexture.c */
-void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso);
-void fn_80212310(Texture_80212234 *pTexture, TMTexFilterDesc_t *pDesc);
-void fn_8021234C(Texture_80212234 *pTexture, int wrapS, int wrapT);
-void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc);
-void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut);
-void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut);
-void fn_80212530(Texture_80212234 *pTexture);
-void fn_80212534(Clut_80212534 *pClut, void *pData, int format, int numEntries, unsigned int size);
-void fn_80212654(Clut_80212534 *pClut);
-void fn_80212658(Texture_80212234 *pTexture);
-void fn_802126BC(Texture_80212234 *pTexture, const char *pName);
+void TMTextureSetFilter(TMTexture_t *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso);
+void TMTextureSetFilterParm(TMTexture_t *pTexture, TMTexFilterDesc_t *pDesc);
+void TMTextureSetWrap(TMTexture_t *pTexture, int wrapS, int wrapT);
+void TMTextureSetWrapParm(TMTexture_t *pTexture, TMTexWrapDesc_t *pDesc);
+void TMTextureTexNew(TMTexture_t *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, TMClut_t *pClut);
+void TMTextureSetTexData(TMTexture_t *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, TMClut_t *pClut);
+void TMTextureTexDelete(TMTexture_t *pTexture);
+void TMTextureClutNew(TMClut_t *pClut, void *pData, int format, int numEntries, unsigned int size);
+void TMTextureClutDelete(TMClut_t *pClut);
+void TMTextureMakeNullTexture(TMTexture_t *pTexture);
+void TMTextureSetTexName(TMTexture_t *pTexture, const char *pName);
 
 /* tmname.c */
-int fn_802126C0(const char *pName, const char *pOther);
-int fn_802126E8(const char *pPattern, const char *pName);
-void fn_8021272C(const char *pPath, char *pDir, char *pFile);
+int TMNameCompareExact(const char *pName, const char *pOther);
+int TMNameCompareWildcard(const char *pPattern, const char *pName);
+void TMNameSplitPath(const char *pPath, char *pDir, char *pFile);
 
 /* tmmemory.c */
-void *fn_802127D0(int count, int size);
-void fn_80212814(void *p);
+void *TMMemAllocArray(int count, int size);
+void TMMemFreeArray(void *p);
 
 /* tmregistry.c */
-void fn_80212850(Registry_8021283C *pRegistry, int maxEntries, int bAppend, int bPaths);
-void fn_802128A8(Registry_8021283C *pRegistry);
-void fn_802128DC(Registry_8021283C *pRegistry);
-void fn_80212940(Registry_8021283C *pRegistry, int index, const char *pName, void *pData);
-void fn_8021295C(Registry_8021283C *pRegistry, const char *pName, void *pData);
-int fn_802129B8(Registry_8021283C *pRegistry, const char *pName);
-void fn_80212A48(Registry_8021283C *pRegistry, int index);
-void fn_80212AB0(Registry_8021283C *pRegistry, const char *pName);
-void *fn_80212AEC(Registry_8021283C *pRegistry, int index);
-void *fn_80212B1C(Registry_8021283C *pRegistry, char **ppNames, int depth, int numNames);
-void *fn_80212BDC(Registry_8021283C *pRegistry, const char *pPath);
-void *fn_80212C60(Registry_8021283C *pRegistry, const char *pName);
-int fn_80212CAC(Registry_8021283C *pRegistry);
+void TMRegistryAlloc(TMRegistry_t *pRegistry, int maxEntries, int bAppend, int bPaths);
+void TMRegistryFree(TMRegistry_t *pRegistry);
+void TMRegistryReset(TMRegistry_t *pRegistry);
+void TMRegistrySetEntry(TMRegistry_t *pRegistry, int index, const char *pName, void *pData);
+void TMRegistryAddEntry(TMRegistry_t *pRegistry, const char *pName, void *pData);
+int TMRegistryGetIndexByName(TMRegistry_t *pRegistry, const char *pName);
+void TMRegistryRemoveEntryByIndex(TMRegistry_t *pRegistry, int index);
+void TMRegistryRemoveEntryByName(TMRegistry_t *pRegistry, const char *pName);
+void *TMRegistryGetDataByIndex(TMRegistry_t *pRegistry, int index);
+void *TMRegistrySearch(TMRegistry_t *pRegistry, char **ppNames, int depth, int numNames);
+void *TMRegistrySearchPath(TMRegistry_t *pRegistry, const char *pPath);
+void *TMRegistryGetDataByName(TMRegistry_t *pRegistry, const char *pName);
+int TMRegistryGetNumEntries(TMRegistry_t *pRegistry);
 
 /* tmshaderdef.c */
-ShaderParmDef_80211638 *TMShaderDefGetParmByName(ShaderDef_80211638 *pDef, const char *pName, int type);
+TMShaderParmDef_t *TMShaderDefGetParmByName(TMShaderDef_t *pDef, const char *pName, int type);
 
 /* tmshaderstock.c */
 void TMShaderStockInit(void);
@@ -411,18 +411,18 @@ int TMShaderParmGetSize(int type);
 void TMShaderCodeLoad(int code);
 
 /* tmmodel.c */
-void fn_8020F28C(Model_8020F28C *pModel);
-void fn_8020F2C4(Model_8020F28C *pDst, Model_8020F28C *pSrc);
-int fn_8020F330(Model_8020F28C *pModel, ModelRes_8020EA18 *pRes, unsigned int tag);
-void fn_8020F4D0(Model_8020F28C *pModel, ModelRes_8020EA18 *pRes);
-void fn_8020F5F0(int maxChunkTypes);
-void fn_8020F76C(void);
-void fn_8020F78C(Model_8020F28C *pModel, TMMaterialDefList_t *pMatLib);
-void fn_8020F824(Model_8020F28C *pModel, void *pOther);
-void fn_8020F89C(Model_8020F28C *pModel);
-void fn_8020F8E0(Model_8020F28C *pModel);
-void fn_8020F92C(Model_8020F28C *pModel);
-void fn_8020F96C(Model_8020F28C *pModel, Extent_802144AC *pExtent, int state, int arg);
+void TMModelReset(TMModel_t *pModel);
+void TMModelClone(TMModel_t *pDst, TMModel_t *pSrc);
+int TMModelBindModelChunk(TMModel_t *pModel, TMModelRes_t *pRes, unsigned int tag);
+void TMModelBindModelRes(TMModel_t *pModel, TMModelRes_t *pRes);
+void TMModelInit(int maxChunkTypes);
+void TMModelShutdown(void);
+void TMModelRemapMaterials(TMModel_t *pModel, TMMaterialDefList_t *pMatLib);
+void TMModelRemapClusters(TMModel_t *pModel, void *pOther);
+void TMModelResetChannels(TMModel_t *pModel);
+void TMModelAllocChannels(TMModel_t *pModel);
+void TMModelFreeChannels(TMModel_t *pModel);
+void TMModelAddExtent(TMModel_t *pModel, Extent_802144AC *pExtent, int state, int arg);
 
 /* tmmaterialdef.c */
 void TMMaterialDefRelocateChunk(TMMaterialDefList_t *pLib, void *pOldBase, void *pNewBase);
@@ -433,36 +433,36 @@ void TMClusterDefRelocateChunk(TMClusterDef_t *pDef, void *pOldBase, void *pNewB
 void TMClusterDefRemap(TMClusterDef_t *pDef, short *pRemap);
 
 /* tmxform.c */
-void fn_8020FA38(u32 id, f32 (*pMtx)[4]);
-void fn_8020FA8C(u32 id);
+void TMXform(u32 id, f32 (*pMtx)[4]);
+void TMXformSelect(u32 id);
 
 /* tmmaterial.c */
-void fn_8020FC1C(int *pPoolSizes);
-void fn_8020FCA0(Material_8020FAAC *pMaterial);
-void fn_8020FD40(Material_8020FAAC *pMaterial);
-void fn_8020FD48(const char *pName, Texture_80212234 *pTexture, Clut_80212534 *pClut);
-void fn_8020FDAC(const char *pName, Clut_80212534 *pClut);
-void fn_8020FE04(const char *pPath);
-void fn_8020FE3C(Shader_80211638 *pShader);
-void fn_8020FE78(TMMaterialDef_t *pDef);
+void TMMaterialInit(int *pPoolSizes);
+void TMMaterialReset(TMMaterial_t *pMaterial);
+void TMMaterialSelect(TMMaterial_t *pMaterial);
+void TMMaterialBindTextureClut(const char *pName, TMTexture_t *pTexture, TMClut_t *pClut);
+void TMMaterialBindClut(const char *pName, TMClut_t *pClut);
+void TMMaterialBindShaderRef(const char *pPath);
+void TMMaterialBindShader(TMShader_t *pShader);
+void TMMaterialSetMatDef(TMMaterialDef_t *pDef);
 
 /* tmmateriallist.c */
-void fn_8020FFE4(int maxMaterials);
-void fn_80210020(void);
-void fn_80210054(MaterialList_8020FF34 *pList, unsigned int numMaterials);
-void fn_802100C0(MaterialList_8020FF34 *pList, TMMaterialDefList_t *pLib);
-void fn_80210114(MaterialList_8020FF34 *pList);
-Material_8020FAAC *fn_80210184(MaterialList_8020FF34 *pList, int index);
-void fn_802101B0(MaterialList_8020FF34 *pList, int index);
-void fn_80210214(MaterialList_8020FF34 *pList, TMMaterialDefList_t *pLib);
+void TMMaterialListInit(int maxMaterials);
+void TMMaterialListShutdown(void);
+void TMMaterialListAlloc(TMMaterialList_t *pList, unsigned int numMaterials);
+void TMMaterialListAllocDefs(TMMaterialList_t *pList, TMMaterialDefList_t *pLib);
+void TMMaterialListFree(TMMaterialList_t *pList);
+TMMaterial_t *TMMaterialListGetMaterial(TMMaterialList_t *pList, int index);
+void TMMaterialListSelect(TMMaterialList_t *pList, int index);
+void TMMaterialListSetMatDefs(TMMaterialList_t *pList, TMMaterialDefList_t *pLib);
 
-typedef void (*MaterialBindFunc_80210298)(Material_8020FAAC *pMaterial);
+typedef void (*TMMaterialBindFunc_t)(TMMaterial_t *pMaterial);
 
-typedef struct ClusterObj_80210724 {
+typedef struct TMClusterObj_t {
     void *mpMatrices;
     void *mpCacheMatrices;
     int mNumMatrices;
-} ClusterObj_80210724;
+} TMClusterObj_t;
 
 typedef struct TMClusterBone_t {
     unsigned char mIndex;
@@ -481,26 +481,26 @@ typedef struct TMClusterPose_t {
     short (*mpRotations)[3];
 } TMClusterPose_t;
 
-typedef struct RenderViewport_80210298 {
+typedef struct TMRenderViewport_t {
     float mLeft;
     float mTop;
     float mWidth;
     float mHeight;
     float mNear;
     float mFar;
-} RenderViewport_80210298;
+} TMRenderViewport_t;
 
-typedef struct RenderState_80210298 {
-    Geom_8020ED10 *mpGeom;
-    ClusterObj_80210724 *mpClusterObj;
+typedef struct TMRenderState_t {
+    TMGeom_t *mpGeom;
+    TMClusterObj_t *mpClusterObj;
     TMSkeleton_t *mpSkel;
     TMSwapDef_t *mpSwap;
-    MaterialList_8020FF34 *mpMaterialList;
-    Material_8020FAAC *mpMaterial;
-    Shader_80211638 *mpShader;
+    TMMaterialList_t *mpMaterialList;
+    TMMaterial_t *mpMaterial;
+    TMShader_t *mpShader;
     int mBlendMode;
     void **mpChannels;
-    RenderViewport_80210298 mViewport;
+    TMRenderViewport_t mViewport;
     int mNumHooks;
     struct RenderHook_80211138 *mapHooks[8];
     int mUnknown60;
@@ -510,43 +510,43 @@ typedef struct RenderState_80210298 {
     void *mpFade;
     unsigned char maUnknown74[0x14];
     void *mpTexXForm;
-    MaterialBindFunc_80210298 mBindFunc;
+    TMMaterialBindFunc_t mBindFunc;
     unsigned int mLod;
-} RenderState_80210298;
+} TMRenderState_t;
 
-extern RenderState_80210298 lbl_803E96E8;
+extern TMRenderState_t lbl_803E96E8;
 
 /* tmrender.c */
-void fn_80210298(void);
-void fn_802102E8(void);
-void fn_8021032C(void);
-void fn_80210368(Texture_80212234 *pTexture);
-void fn_80210388(void);
-void fn_802103DC(void);
-void fn_80210608(void);
-void fn_80210634(void);
-void fn_80210654(Model_8020F28C *pModel);
-void fn_80210724(ClusterObj_80210724 *pClusterObj);
-void fn_8021077C(Shader_80211638 *pShader);
-void fn_80210814(GXTexMapID id, Texture_80212234 *pTexture, Clut_80212534 *pClut);
-void fn_80210970(Material_8020FAAC *pMaterial);
-void fn_80210B6C(int index);
-void fn_80210BA4(MaterialList_8020FF34 *pList);
-void fn_80210BB0(void *pTexXForm);
-void fn_80210BD8(unsigned int mode);
-void fn_80210CC4(float nearZ, float farZ);
-void fn_80210D10(GXBool compareEnable, GXCompare func, GXBool updateEnable);
+void TMRenderDisable32BitIndirectCluts(void);
+void TMRenderInit(void);
+void TMRenderShutdown(void);
+void TMRenderSetDefaultTexture(TMTexture_t *pTexture);
+void TMRenderReset(void);
+void TMRenderBeginFrame(void);
+void TMRenderBeginViewport(void);
+void TMRenderEndFrame(void);
+void TMRenderBindModel(TMModel_t *pModel);
+void TMRenderBindClusterObj(TMClusterObj_t *pClusterObj);
+void TMRenderBindShader(TMShader_t *pShader);
+void TMRenderBindTexture(GXTexMapID id, TMTexture_t *pTexture, TMClut_t *pClut);
+void TMRenderBindMaterial(TMMaterial_t *pMaterial);
+void TMRenderBindMaterialIndex(int index);
+void TMRenderBindMaterialList(TMMaterialList_t *pList);
+void TMRenderBindTexXformList(void *pTexXForm);
+void TMRenderSetBlendMode(unsigned int mode);
+void TMRenderSetZRange(float nearZ, float farZ);
+void TMRenderSetZMode(GXBool compareEnable, GXCompare func, GXBool updateEnable);
 
 typedef struct TMChannelList_t {
     int mCount;
-    GeomAttr_8020ED10 *mapAttrs[8];
+    TMGeomAttr_t *mapAttrs[8];
     void *mapData[8];
     unsigned char maCompType[8];
     unsigned char maStride[8];
     unsigned char maFrac[8];
 } TMChannelList_t;
 
-typedef void (*RenderHookFunc_80211138)(struct RenderHook_80211138 *pHook, GeomNode_8020ED10 *pNode,
+typedef void (*RenderHookFunc_80211138)(struct RenderHook_80211138 *pHook, TMGeomNode_t *pNode,
                                         TMChannelList_t *pList);
 
 typedef struct RenderHook_80211138 {
@@ -555,7 +555,7 @@ typedef struct RenderHook_80211138 {
 } RenderHook_80211138;
 
 /* tmrendergeom.c */
-void fn_80210DCC(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode);
+void fn_80210DCC(TMRenderState_t *pState, TMGeomNode_t *pNode);
 void fn_8021126C(void);
 void fn_802112DC(unsigned short *pIndices, unsigned int count);
 void fn_80211350(void);
@@ -565,15 +565,15 @@ void fn_80211424(unsigned short *pIndices, unsigned int count);
 /* tmclusterobj.c */
 void TMClusterObjInit(int maxMatrices, int numBuffers);
 void TMClusterObjShutdown(void);
-void TMClusterObjInitObj(ClusterObj_80210724 *pObj);
+void TMClusterObjInitObj(TMClusterObj_t *pObj);
 void TMClusterObjResetMatrices(void);
-void TMClusterObjAllocMatrices(ClusterObj_80210724 *pObj, int numMatrices);
-void TMClusterObjSynthesizeMatrices(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3]);
-void TMClusterObjSynthesizeMatricesSlerp(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3],
+void TMClusterObjAllocMatrices(TMClusterObj_t *pObj, int numMatrices);
+void TMClusterObjSynthesizeMatrices(TMClusterObj_t *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3]);
+void TMClusterObjSynthesizeMatricesSlerp(TMClusterObj_t *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3],
                  unsigned char *pFlags);
 
 /* tmchannellist.c */
-void TMChannelListBuild(TMChannelList_t *pList, GeomNode_8020ED10 *pNode, GeomAttr_8020ED10 *pAttrs, void **ppChannels);
+void TMChannelListBuild(TMChannelList_t *pList, TMGeomNode_t *pNode, TMGeomAttr_t *pAttrs, void **ppChannels);
 void TMChannelListSubmit_DFA(TMChannelList_t *pList);
 void TMChannelListSubmit_A(TMChannelList_t *pList);
 
@@ -623,7 +623,7 @@ void TMLightDefRelocateChunk(TMLightDef_t *pDef, void *pOldBase, void *pNewBase)
 
 /* tmblendchannel.c */
 typedef struct TMBlendChannel_t {
-    GeomAttr_8020ED10 *mpAttr;
+    TMGeomAttr_t *mpAttr;
     unsigned char *mpCursor;
     int mSize;
     unsigned char *mpBase;
@@ -634,7 +634,7 @@ typedef struct TMBlendChannel_t {
 
 typedef struct TMBlendChannelSource_t {
     int mNumAttrs;
-    GeomAttr_8020ED10 *mpAttrs;
+    TMGeomAttr_t *mpAttrs;
     void **mppOutputs;
     void **mppInputs;
 } TMBlendChannelSource_t;
@@ -642,7 +642,7 @@ typedef struct TMBlendChannelSource_t {
 TMBlendChannel_t *TMBlendChannelGetBuffer(int id);
 int TMBlendChannelSet(int id, int index);
 unsigned char *TMBlendChannelSetMem(int id, unsigned char *pData, int size);
-void TMBlendChannelSetChannels(GeomAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs);
+void TMBlendChannelSetChannels(TMGeomAttr_t *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs);
 void TMBlendChannelSetOverride(int index, void *pOutput);
 void TMBlendChannelBegin(void);
 void TMBlendChannelEnd(void);
@@ -656,7 +656,7 @@ typedef struct TMBlendTarget_t {
 } TMBlendTarget_t;
 
 typedef struct TMBlendState_t {
-    Geom_8020ED10 *mpGeom;
+    TMGeom_t *mpGeom;
     TMBuffer_t *mpBuffer;
     int mFlushed;
     unsigned int mNumWeights;
@@ -671,8 +671,8 @@ int TMBlendSetWeightsFloat(float *pWeights, unsigned int numWeights);
 void TMBlendBegin(TMBuffer_t *pBuffer);
 void TMBlendFlushBuffer(void);
 void TMBlendEnd(void);
-void TMBlendBindModel(Model_8020F28C *pModel);
-void TMBlendBindModel2(Model_8020F28C *pBase, Model_8020F28C *pModel);
+void TMBlendBindModel(TMModel_t *pModel);
+void TMBlendBindModel2(TMModel_t *pBase, TMModel_t *pModel);
 void TMBlendSetMaxActiveTargets(unsigned int maxItems);
 int TMBlendGeom(int nodeIndex);
 int TMBlendGeomAll(void);

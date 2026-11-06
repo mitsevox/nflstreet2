@@ -128,8 +128,8 @@ int fn_801C2FE4(Node_80053674 *, const char *);
 void *fn_8021EA44(int);
 char *fn_80220BFC(int, int);
 void *fn_80221BAC(void *, int, int);
-void fn_80211EDC(void *, void *, int, int);
-void fn_80211EBC(void *, void *, int, void *, int, int);
+void TMTexLibReplaceClut(void *, void *, int, int);
+void TMTexLibReplaceTexture(void *, void *, int, void *, int, int);
 int fn_8022F358(int);
 int fn_8022F384(int);
 int fn_8022F3D4(int);
@@ -326,13 +326,13 @@ void fn_80053258(Args_80052F54 *pArgs)
     if (lbl_80309CB4[0].mpUnknown0C == 0) {
         fn_800530E8();
         Model_80053258 *pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EDC(pModel->mUnknown14C, &lbl_80309CB4[0].mUnknown10, 0, 0);
+        TMTexLibReplaceClut(pModel->mUnknown14C, &lbl_80309CB4[0].mUnknown10, 0, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EBC(pModel->mpUnknown144, pModel->mUnknown14C, 0, &lbl_80309CB4[0], 0, 0);
+        TMTexLibReplaceTexture(pModel->mpUnknown144, pModel->mUnknown14C, 0, &lbl_80309CB4[0], 0, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EDC(pModel->mUnknown14C, &lbl_80309CB4[1].mUnknown10, 1, 0);
+        TMTexLibReplaceClut(pModel->mUnknown14C, &lbl_80309CB4[1].mUnknown10, 1, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EBC(pModel->mpUnknown144, pModel->mUnknown14C, 1, &lbl_80309CB4[1], 1, 1);
+        TMTexLibReplaceTexture(pModel->mpUnknown144, pModel->mUnknown14C, 1, &lbl_80309CB4[1], 1, 1);
     }
     if (lbl_80309CEC[i].mValue == 0) {
         fn_8004E090(pObject, 0, 0);

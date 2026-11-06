@@ -1,5 +1,5 @@
 #include "engine/viewport.h"
-#include "game/Init_8004A040.h"
+#include "game/PlayerObjInit.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_8015C25C.h"
@@ -42,7 +42,7 @@ struct Vector_801A1650 {
     float z;
 };
 
-/* Model data returned by fn_8015E2FC; +0x18 is passed to fn_80210214. */
+/* Model data returned by fn_8015E2FC; +0x18 is passed to TMMaterialListSetMatDefs. */
 struct Model_8015E2FC {
     char mUnknown0[24];
     void *mpUnknown24;
@@ -59,7 +59,7 @@ struct Part_802F29E8 {
     int mUnknownC[8];
 };
 
-/* Part table record passed to fn_8020F78C and fn_802345BC: the part count
+/* Part table record passed to TMModelRemapMaterials and fn_802345BC: the part count
    and the part table. */
 struct Ref_803EB81C {
     int mUnknown0;
@@ -167,18 +167,18 @@ extern unsigned char lbl_803EB818;
 extern Ref_803EB81C lbl_803EB81C[1];
 extern unsigned char lbl_803EB824;
 extern unsigned char lbl_803EB825;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
-int fn_8002894C(void);
-int fn_80027DF0(void);
-void *fn_80028BB4(void);
+int InGameIsPlaying(void);
+int FELoopIsMainFEActive(void);
+void *GetListHandle(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
-int fn_80049D04(int index);
-unsigned char fn_80049D1C(int index);
-unsigned char fn_8004A238(void);
-unsigned char fn_80054D24(int index);
+int PlayerLookShowsHair(int index);
+unsigned char PlayerLookHidesHead(int index);
+unsigned char PlayerObjIsDrawReady(void);
+unsigned char CheatFlagsIsSet(int index);
 int fn_800A2624(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ADDD8(Element_80041BF8 *pElements, int index);
@@ -202,10 +202,10 @@ void fn_8015FFA8(void *a, void *b);
 void *fn_80160C08(void);
 Desc_802347EC *fn_8016102C(int player);
 void fn_80161498(void);
-void fn_8019723C(Object_80146094 *p);
+void fn_8019723C(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
-void fn_801C657C(void);
+void ConGetCurrentContext(void);
 void fn_801D0470(void);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -218,31 +218,31 @@ void fn_801D0D94(float x, float y, float z);
 void fn_801D0F80(float (*pMatrix)[4]);
 int fn_801D2BB0(int a, void *p, int b, int c);
 void fn_801D2BD0(int handle);
-void fn_801DD3AC(void *a, Object_8003DEC4 *pPlayer, int b);
+void ObjSetPriority(void *a, Object_8003DEC4 *pPlayer, int b);
 void fn_801EF7BC(void *a, int b, int c);
 void fn_801F010C(void *a, int b);
 void *fn_801F0C50(void *a, int b);
-void fn_8020F28C(Record_8020F2C4 *p);
-void fn_8020F2C4(void *pDst, void *pSrc);
-void fn_8020F78C(Record_8020F2C4 *p, Ref_803EB81C *pRef);
-void fn_8020F89C(Record_8020F2C4 *p);
-void fn_8020F8E0(Record_8020F2C4 *p);
-void fn_8020F92C(Record_8020F2C4 *p);
-void fn_80210214(void *p, void *q);
-void fn_80210388(void);
-void fn_80210654(Record_8020F2C4 *p);
-void fn_80210724(Joints_8003DEC4 *p);
-void fn_80210814(int a, int b, int c);
-void fn_80210BA4(void *p);
-void fn_80210BD8(int a);
-void fn_80210CC4(float a, float b);
+void TMModelReset(Record_8020F2C4 *p);
+void TMModelClone(void *pDst, void *pSrc);
+void TMModelRemapMaterials(Record_8020F2C4 *p, Ref_803EB81C *pRef);
+void TMModelResetChannels(Record_8020F2C4 *p);
+void TMModelAllocChannels(Record_8020F2C4 *p);
+void TMModelFreeChannels(Record_8020F2C4 *p);
+void TMMaterialListSetMatDefs(void *p, void *q);
+void TMRenderReset(void);
+void TMRenderBindModel(Record_8020F2C4 *p);
+void TMRenderBindClusterObj(Joints_8003DEC4 *p);
+void TMRenderBindTexture(int a, int b, int c);
+void TMRenderBindMaterialList(void *p);
+void TMRenderSetBlendMode(int a);
+void TMRenderSetZRange(float a, float b);
 void fn_802113C0(int a, int b);
-void fn_80211E08(void *p, int handle);
-void fn_80211EFC(void *p);
-void fn_80211FF0(void);
-void fn_80212018(const char *pName, void *p);
-int fn_802120E4(void *p, unsigned int color);
-int fn_80212124(void *p, unsigned int color, int a);
+void TMTexLibLoad(void *p, int handle);
+void TMTexLibUnload(void *p);
+void TMTexLibRegistryReset(void);
+void TMTexLibRegister(const char *pName, void *p);
+int TMTexLibGetTexture(void *p, unsigned int color);
+int TMTexLibGetClut(void *p, unsigned int color, int a);
 void TMBufferNew(void *p, int a, int b);
 void TMBufferDelete(void *p);
 void TMBufferReset(void *p);
@@ -304,7 +304,7 @@ void fn_802525F0(float (*pMatrix)[4], int id, int type);
 int fn_801A1C10(Object_8003DEC4 *pPlayer);
 void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag);
 int fn_801A201C(Object_8003DEC4 *pPlayer);
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], ParticleTrailSet_t *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod);
 void fn_801A32AC(int id, float sx, float sy, float tx, float ty);
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB);
@@ -316,18 +316,18 @@ void fn_801A14D8(void)
 {
     void *p = fn_801F0C50(fn_80160C08(), 0);
 
-    lbl_803ECC10 = fn_801D2BB0(fn_8002894C() ? 0x40 : 1, p, 2, 0);
+    lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
     fn_801EF7BC(fn_80160C08(), 0, lbl_803ECC10);
-    fn_80211E08(lbl_80365D98, lbl_803ECC10);
-    lbl_803ECC08 = fn_802120E4(lbl_80365D98, 0xFF000000);
-    lbl_803ECC0C = fn_80212124(lbl_80365D98, 0xFF000000, 0);
+    TMTexLibLoad(lbl_80365D98, lbl_803ECC10);
+    lbl_803ECC08 = TMTexLibGetTexture(lbl_80365D98, 0xFF000000);
+    lbl_803ECC0C = TMTexLibGetClut(lbl_80365D98, 0xFF000000, 0);
 }
 
 void fn_801A1578(void)
 {
-    fn_80211EFC(lbl_80365D98);
+    TMTexLibUnload(lbl_80365D98);
     fn_801D2BD0(lbl_803ECC10);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_801F010C(fn_80160C08(), 0);
         fn_80161498();
     }
@@ -338,7 +338,7 @@ void fn_801A15C4(Viewport_t *pObject)
     unsigned int i;
 
     TMBufferReset(lbl_80365D88);
-    fn_8020F89C(&lbl_80365D54);
+    TMModelResetChannels(&lbl_80365D54);
     for (i = 0; i < lbl_803ECC04; i++) {
         Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
 
@@ -346,7 +346,7 @@ void fn_801A15C4(Viewport_t *pObject)
             continue;
         }
         if (pPlayer->mUnknown20 & 0x20000) {
-            fn_801DD3AC(fn_80028BB4(), pPlayer, 11);
+            ObjSetPriority(GetListHandle(), pPlayer, 11);
         }
     }
 }
@@ -360,12 +360,12 @@ void fn_801A15C4(Viewport_t *pObject)
    +0x19A8 is 12. */
 int fn_801A1650(Object_8003DEC4 *pPlayer)
 {
-    Object_80146094 *pData = &pPlayer->mUnknown5188;
+    ParticleTrailSet_t *pData = &pPlayer->mUnknown5188;
     float r = 1.0f;
     float g = r;
     float b = r;
     int flash = 0;
-    Object_80144310 *pSource;
+    LightSource_t *pSource;
     int light;
     float block[4];
     Vector_801A1650 scale;
@@ -374,7 +374,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
     if (pPlayer->mUnknown20 & 0x20000) {
         flash = pData->mUnknown564 == 12.0f;
     }
-    pSource = (Object_80144310 *)pPlayer->mUnknown972;
+    pSource = (LightSource_t *)pPlayer->mUnknown972;
     if (pSource) {
         if (pSource->mUnknownC != pData->mUnknown580 || pSource->mUnknown10 != pData->mUnknown584 ||
             pSource->mUnknown14 != pData->mUnknown588) {
@@ -424,7 +424,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b = color.z;
     }
     light = fn_80236B98(1, r, g, b);
-    if (fn_80144310(&pPlayer->mUnknown4960, (Object_80144310 *)pPlayer->mUnknown972, block, &scale.x)) {
+    if (LightTrackerUpdate(&pPlayer->mUnknown4960, (LightSource_t *)pPlayer->mUnknown972, block, &scale.x)) {
         scale.x *= r;
         scale.y *= g;
         scale.z *= b;
@@ -442,7 +442,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     color.g = 255;
     color.b = 255;
     color.a = 255;
-    fn_80210388();
+    TMRenderReset();
     if (pPlayer->mUnknown20 & 8) {
         depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB808;
     } else {
@@ -456,35 +456,35 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     fn_8024FC84(2, 0, 0, 0, light, 0, 2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
     fn_80234BF4(0, &pPlayer->mUnknown1164[0], 0);
     light = fn_801A1C10(pPlayer);
     fn_80234BF4(0, &pPlayer->mUnknown1164[2], 0);
     fn_80234BF4(0, &pPlayer->mUnknown1164[3], 0);
-    fn_80210CC4(0.0f, depth);
+    TMRenderSetZRange(0.0f, depth);
     fn_80234BF4(0, &pPlayer->mUnknown1164[7], 0);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    fn_80210BD8(2);
+    TMRenderSetBlendMode(2);
     fn_801A1D80(pPlayer, light);
     fn_80234BF4(0, &pPlayer->mUnknown1164[11], 0);
     fn_80234BF4(0, &pPlayer->mUnknown1164[9], 0);
-    if (!fn_80049D04(pPlayer->mUnknown4971)) {
-        fn_80210BD8(1);
+    if (!PlayerLookShowsHair(pPlayer->mUnknown4971)) {
+        TMRenderSetBlendMode(1);
     }
     if (pPlayer->mUnknown20 & 8) {
         depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB80C;
     } else {
         depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB804;
     }
-    fn_80210CC4(0.0f, depth);
+    TMRenderSetZRange(0.0f, depth);
     fn_80234BF4(0, &pPlayer->mUnknown1164[6], 0);
-    if (!fn_80049D04(pPlayer->mUnknown4971)) {
-        fn_80210BD8(2);
+    if (!PlayerLookShowsHair(pPlayer->mUnknown4971)) {
+        TMRenderSetBlendMode(2);
     }
     fn_80234BF4(0, &pPlayer->mUnknown1164[1], 0);
     fn_80234BF4(0, &pPlayer->mUnknown1164[8], 0);
-    fn_80210BD8(1);
-    fn_80210CC4(0.0f, 1.0f);
+    TMRenderSetBlendMode(1);
+    TMRenderSetZRange(0.0f, 1.0f);
     fn_8024EB28(0);
 }
 
@@ -501,13 +501,13 @@ int fn_801A1C10(Object_8003DEC4 *pPlayer)
             result = fn_801A201C(pPlayer);
         }
         if (result) {
-            fn_80210654(&lbl_80365D54);
+            TMRenderBindModel(&lbl_80365D54);
         } else {
-            fn_80210654(&pSlot->mpUnknown16->mUnknown16);
+            TMRenderBindModel(&pSlot->mpUnknown16->mUnknown16);
         }
-        fn_80210BA4(pPlayer->mUnknown4044);
-        fn_80210724(&pPlayer->mUnknown4064[1]);
-        fn_80210BD8(1);
+        TMRenderBindMaterialList(pPlayer->mUnknown4044);
+        TMRenderBindClusterObj(&pPlayer->mUnknown4064[1]);
+        TMRenderSetBlendMode(1);
         fn_8024EB28(0);
         fn_801A3300(pPlayer, a, b);
         fn_801A32AC(30, 1.0f, 1.0f, b[0], b[1]);
@@ -527,9 +527,9 @@ int fn_801A1C10(Object_8003DEC4 *pPlayer)
 void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag)
 {
     if (flag) {
-        fn_80210654(&lbl_80365D54);
-        fn_80210BA4(pPlayer->mUnknown4044);
-        fn_80210724(&pPlayer->mUnknown4064[1]);
+        TMRenderBindModel(&lbl_80365D54);
+        TMRenderBindMaterialList(pPlayer->mUnknown4044);
+        TMRenderBindClusterObj(&pPlayer->mUnknown4064[1]);
         fn_802113C0(4, 0);
     } else {
         fn_80234BF4(0, &pPlayer->mUnknown1164[5], 0);
@@ -554,7 +554,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     fn_8024FC48(1);
     fn_8024FC84(0, 1, 0, 0, light, 2, 2);
     fn_8024FC84(2, 0, 0, 0, light, 0, 2);
-    fn_80210BD8(2);
+    TMRenderSetBlendMode(2);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
     index = pPlayer->mUnknown5188.mUnknown554;
@@ -575,9 +575,9 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
         index++;
         index &= 1;
     }
-    fn_80147860(pPlayer, lbl_803EA2C4);
-    fn_80210BD8(1);
-    fn_80210CC4(0.0f, 1.0f);
+    fn_80147860(pPlayer, gFrameTimeScale);
+    TMRenderSetBlendMode(1);
+    TMRenderSetZRange(0.0f, 1.0f);
     fn_8024EB28(0);
 }
 
@@ -596,7 +596,7 @@ int fn_801A201C(Object_8003DEC4 *pPlayer)
     return result;
 }
 
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], ParticleTrailSet_t *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod)
 {
     float scale = 1.5f;
@@ -633,7 +633,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
         fn_802337D4(pPlayer->mUnknown1164[0].mpUnknown12, &pPlayer->mUnknown4064[0], pPose, 0xE0000000);
     }
     fn_802337D4(pPlayer->mUnknown1164[4].mpUnknown12, &pPlayer->mUnknown4064[1], pPose, 0xE0000000);
-    if (fn_80054D24(0x20) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
         for (i = 1; i < pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mUnknown4; i++) {
             if (pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
                 for (j = 0; j < 12; j++) {
@@ -646,7 +646,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
     }
     if (pPlayer->mUnknown1164[7].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[7].mpUnknown12, &pPlayer->mUnknown4064[3], pPose, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -668,7 +668,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
     }
     if (pPlayer->mUnknown1164[9].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[9].mpUnknown12, &pPlayer->mUnknown4064[4], pPose, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -733,7 +733,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
         pHat[7] = pPose[61];
         pHat[8] = pPose[62];
         fn_802337D4(pPlayer->mUnknown1164[11].mpUnknown12, &pPlayer->mUnknown4064[5], pHat, 0xE0000000);
-        if (fn_80054D24(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
             if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -774,7 +774,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
                 apHands[k][1] = pJoint[1];
                 apHands[k][2] = pJoint[2];
                 fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
-                if (fn_80054D24(0x20) && !fn_8017F584()) {
+                if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
                     if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                         for (j = 0; j < 12; j++) {
                             if (j != 3 && j != 7 && j != 11) {
@@ -815,7 +815,7 @@ unsigned int fn_801A28E8(Object_8003DEC4 *pPlayer)
     if (!(pPlayer->mUnknown20 & 1)) {
         flags |= 1;
     }
-    if (!fn_8004A238()) {
+    if (!PlayerObjIsDrawReady()) {
         flags |= 1;
     }
     if (flags & 1) {
@@ -859,13 +859,13 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
     if (pPlayer->mUnknown992 == 0xFFFF) {
         fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
         fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
-        fn_8020F2C4(fn_8015E2FC(4, 0, 0), fn_8015E2FC(6, 0, 0));
-        fn_8020F2C4(fn_8015E2FC(4, 0, 1), fn_8015E2FC(6, 0, 1));
+        TMModelClone(fn_8015E2FC(4, 0, 0), fn_8015E2FC(6, 0, 0));
+        TMModelClone(fn_8015E2FC(4, 0, 1), fn_8015E2FC(6, 0, 1));
         for (i = 0; i < 53; i++) {
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
         values[pPlayer->mUnknown4972 + 1] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[6] = 0x1000;
         }
     } else {
@@ -874,7 +874,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
         fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[7] = 0x1000;
         }
     }
@@ -886,8 +886,8 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
     } else {
         a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
-        fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, 0, 0));
-        fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, 0, 1));
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, 0, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
         fn_80233760(&pPlayer->mUnknown1024[0], values, 37);
@@ -898,17 +898,17 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
     if (pPlayer->mUnknown992 != 0xFFFF) {
         fn_8015E908(pPlayer->mUnknown4970);
     }
-    fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
-    fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
+    TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
+    TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
     pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
     pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-    fn_8020F78C(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-    fn_8020F78C(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+    TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
+    TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
     fn_801A4690(0);
     fn_8015F3FC(0);
     if (lbl_80365D54.mUnknown0 == 0) {
-        fn_8020F2C4(&lbl_80365D54, &pPlayer->mUnknown1024[0].mUnknown16);
-        fn_8020F8E0(&lbl_80365D54);
+        TMModelClone(&lbl_80365D54, &pPlayer->mUnknown1024[0].mUnknown16);
+        TMModelAllocChannels(&lbl_80365D54);
         TMBufferNew(lbl_80365D88, 0x7404, 0x20);
     }
     fn_8015E9F4(pPlayer->mUnknown4970, &pPlayer->mUnknown996);
@@ -1062,7 +1062,7 @@ void fn_801A34B0(int a, int b, int c, int d)
 {
     fn_802341AC();
     lbl_803ECC04 = 0;
-    fn_8020F28C(&lbl_80365D54);
+    TMModelReset(&lbl_80365D54);
     fn_801A14D8();
     memset(lbl_802F3468, 0, sizeof(lbl_802F3468));
     lbl_802F3468[15] = 1;
@@ -1077,7 +1077,7 @@ void fn_801A3514(void)
 void fn_801A3520(void)
 {
     fn_802341B8();
-    fn_8020F92C(&lbl_80365D54);
+    TMModelFreeChannels(&lbl_80365D54);
     lbl_80365D54.mUnknown0 = 0;
     TMBufferDelete(lbl_80365D88);
     fn_801A1578();
@@ -1106,7 +1106,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4971 = pInit->mUnknown5A;
     pPlayer->mUnknown4970 = pInit->mUnknown59;
     pPlayer->mUnknown4972 = pInit->mUnknown5B;
-    fn_801442FC(&pPlayer->mUnknown4960);
+    LightTrackerReset(&pPlayer->mUnknown4960);
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
     fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);
@@ -1124,10 +1124,10 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     fn_80233BB8(&pPlayer->mUnknown4064[3], 0, 0);
     fn_80233BB8(&pPlayer->mUnknown4064[4], 0, 0);
     fn_80233BB8(&pPlayer->mUnknown4064[5], 0, 0);
-    fn_80211FF0();
-    fn_80212018("platex", PlyrTexGetLib(pPlayer->mUnknown4971));
+    TMTexLibRegistryReset();
+    TMTexLibRegister("platex", PlyrTexGetLib(pPlayer->mUnknown4971));
     fn_8023488C(pPlayer->mUnknown4044, 0x38);
-    fn_80210214(pPlayer->mUnknown4044, pModel->mpUnknown24);
+    TMMaterialListSetMatDefs(pPlayer->mUnknown4044, pModel->mpUnknown24);
     fn_8023465C(pPlayer->mUnknown4044, pModel, fn_8016102C(pPlayer->mUnknown4971));
     fn_8023472C(pPlayer->mUnknown4044, 0x11, 1, &fn_8016102C(pPlayer->mUnknown4971)[25],
                 &fn_8016102C(pPlayer->mUnknown4971)[25], 0);
@@ -1150,7 +1150,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &fn_8016102C(pPlayer->mUnknown4971)[30],
                 &fn_8016102C(pPlayer->mUnknown4971)[30], 0);
     PlyrTexApplyFilters(fn_8016102C(pPlayer->mUnknown4971), 0);
-    fn_80211FF0();
+    TMTexLibRegistryReset();
     fn_801A299C(&pPlayer->mUnknown1164[0], 0, &pPlayer->mUnknown4064[0], pPlayer->mUnknown4044);
     fn_801A29F8(&pPlayer->mUnknown1164[4], pPlayer->mUnknown4044, pPlayer);
     fn_801A299C(&pPlayer->mUnknown1164[5], 0, &pPlayer->mUnknown4064[1], pPlayer->mUnknown4044);
@@ -1198,7 +1198,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
         lbl_803EB7F0 = 1;
     }
     flags = fn_801A28E8(pPlayer);
-    fn_801C657C();
+    ConGetCurrentContext();
     VptGetMatrixStack();
     fn_801D0470();
     lod = pPlayer->mUnknown4216.mUnknown0;
@@ -1303,14 +1303,14 @@ void fn_801A3FFC(void)
     int old;
     float m[4][4];
 
-    fn_80210388();
+    TMRenderReset();
     i = 0;
     old = fn_80236EC0(1);
     fn_8024EB28(0);
     fn_80252034(1, 4, 5, 5);
     fn_80252114(0);
     fn_802520E0(1, 3, 0);
-    fn_80210CC4(0.01f, 0.01f);
+    TMRenderSetZRange(0.01f, 0.01f);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -1325,7 +1325,7 @@ void fn_801A3FFC(void)
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    fn_80210814(0, lbl_803ECC08, lbl_803ECC0C);
+    TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
     fn_8025251C(m, 0);
     fn_802525BC(0);
@@ -1352,7 +1352,7 @@ void fn_801A3FFC(void)
             }
         }
     }
-    fn_80210CC4(0.0f, 1.0f);
+    TMRenderSetZRange(0.0f, 1.0f);
     fn_802520E0(1, 3, 1);
     fn_80236EC0(old);
 }
@@ -1364,7 +1364,7 @@ void fn_801A42D4(void)
     int old;
     float m[4][4];
 
-    fn_80210388();
+    TMRenderReset();
     i = 0;
     old = fn_80236EC0(1);
     fn_8024EB28(0);
@@ -1385,7 +1385,7 @@ void fn_801A42D4(void)
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    fn_80210814(0, lbl_803ECC08, lbl_803ECC0C);
+    TMRenderBindTexture(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
     fn_8025251C(m, 0);
     fn_802525BC(0);
@@ -1416,7 +1416,7 @@ void fn_801A42D4(void)
             }
         }
     }
-    fn_80210CC4(0.0f, 1.0f);
+    TMRenderSetZRange(0.0f, 1.0f);
     fn_802520E0(1, 3, 1);
     fn_80236EC0(old);
 }
@@ -1491,25 +1491,25 @@ void fn_801A472C(void)
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
         values[pPlayer->mUnknown4972 + 1] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[6] = 0x1000;
         }
         a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
-        fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 0));
-        fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 1));
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(6, pPlayer->mUnknown4970, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
         fn_80233760(&pPlayer->mUnknown1024[0], values, 53);
         fn_80233760(&pPlayer->mUnknown1024[1], values, 53);
         a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
-        fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
-        fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        fn_8020F78C(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        fn_8020F78C(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
         fn_801A4690(0);
         fn_801A46BC();
     } else {
@@ -1517,24 +1517,24 @@ void fn_801A472C(void)
         fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         int a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         int b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
-        fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));
-        fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 1));
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
-        if (fn_80049D1C(pPlayer->mUnknown4971)) {
+        if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
             values[7] = 0x1000;
         }
         fn_80233760(&pPlayer->mUnknown1024[0], values, 37);
         fn_80233760(&pPlayer->mUnknown1024[1], values, 37);
         fn_8015E908(pPlayer->mUnknown1016);
-        fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
-        fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
+        TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(5, 0, 0));
+        TMModelClone(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(5, 0, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
         pPlayer->mUnknown1024[1].mUnknown16.mUnknown28 = b;
-        fn_8020F78C(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
-        fn_8020F78C(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[0].mUnknown16, lbl_803EB81C);
+        TMModelRemapMaterials(&pPlayer->mUnknown1024[1].mUnknown16, lbl_803EB81C);
         fn_801A4690(0);
         fn_8015F3FC(0);
         fn_801A46BC();

@@ -5,7 +5,7 @@
 
 void TMClusterDefRelocateChunk(TMClusterDef_t *pDef, void *pOldBase, void *pNewBase)
 {
-    pDef->mpEntries = fn_8020EB94(pDef->mpEntries, pOldBase, pNewBase);
+    pDef->mpEntries = TMModelResRelocatePtr(pDef->mpEntries, pOldBase, pNewBase);
 }
 
 void TMClusterDefRemap(TMClusterDef_t *pDef, short *pRemap)

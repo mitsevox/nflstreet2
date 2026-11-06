@@ -1,7 +1,7 @@
 #include "engine/viewport.h"
 #include "game/Effects_80146134.h"
-#include "game/Object_80146094.h"
-#include "game/Object_8020E52C.h"
+#include "game/ParticleTrail.h"
+#include "engine/texfile.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_8007F828.h"
 #include <dolphin/gx/GXGeometry.h>
@@ -17,8 +17,8 @@
 #include <math.h>
 
 extern "C" {
-void fn_80210388(void);
-void fn_80210BD8(int);
+void TMRenderReset(void);
+void TMRenderSetBlendMode(int);
 void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0508(void);
@@ -42,12 +42,12 @@ int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEA14(void);
 unsigned int FieldMarkerReadDepth(float, float);
-int fn_8020E51C(void *);
-int fn_8020E524(void *);
-void fn_8021239C(void *, void *, int, int, int, int, int, int);
-void fn_80212534(void *, void *, int, int, int);
-void fn_80212530(void *);
-void fn_80212654(void *);
+int TexGetNumMaterials(void *);
+int TexGetNumPalettes(void *);
+void TMTextureTexNew(void *, void *, int, int, int, int, int, int);
+void TMTextureClutNew(void *, void *, int, int, int);
+void TMTextureTexDelete(void *);
+void TMTextureClutDelete(void *);
 float fn_80197D08(float *, Vector_80146134 *);
 extern unsigned char lbl_803EB750;
 extern float lbl_803EB758[2];
@@ -67,7 +67,7 @@ void fn_80196F48(void *position, float scale)
         {-3.0f, 3.0f, 0.15f}, {-3.0f, -3.0f, 0.15f},
         {3.0f, -3.0f, 0.15f}, {3.0f, 3.0f, 0.15f}
     };
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -79,7 +79,7 @@ void fn_80196F48(void *position, float scale)
     GXSetNumChans(1);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    fn_80210BD8(6);
+    TMRenderSetBlendMode(6);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
@@ -102,14 +102,14 @@ void fn_80196F48(void *position, float scale)
             GXTexCoord2f32(lbl_802EDDF0[j][0], lbl_802EDDF0[j][1]);
         }
     }
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
 }
 
-void fn_8019723C(Object_80146094 *p)
+void fn_8019723C(ParticleTrailSet_t *p)
 {
     if (!fn_80147900()) return;
     Mtx44 matrix;
-    fn_80210388();
+    TMRenderReset();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -125,8 +125,8 @@ void fn_8019723C(Object_80146094 *p)
     fn_801D0F80(matrix);
     GXSetCurrentMtx(0);
     GXLoadPosMtxImm(matrix, 0);
-    if (p->mUnknown23C) fn_80210BD8(6);
-    else fn_80210BD8(2);
+    if (p->mUnknown23C) TMRenderSetBlendMode(6);
+    else TMRenderSetBlendMode(2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_NONE);
     Color_802DD68C color = p->mUnknown240;
@@ -164,7 +164,7 @@ void fn_8019723C(Object_80146094 *p)
         }
     }
     GXClearVtxDesc();
-    fn_80210BD8(1);
+    TMRenderSetBlendMode(1);
 }
 
 void fn_80197680(Entry_80146C4C *p)
@@ -343,29 +343,29 @@ void fn_80197E6C(Resource_80146E64 *p)
 {
     void *data = (void *)fn_801EF390(p->mUnknown0, p->mUnknown4, 1);
     p->mUnknown8 = (int)data;
-    fn_8020E2B0(data);
-    fn_8020E51C(data);
-    int count = fn_8020E524(data);
-    Object_8020E560 *image = fn_8020E560(data, 0);
+    TexMipmapRelocate(data);
+    TexGetNumMaterials(data);
+    int count = TexGetNumPalettes(data);
+    TexFileImage_t *image = TexGetTextureByIndex(data, 0);
     GXInvalidateTexAll();
     DCFlushRange(image->mpUnknownC, image->mWidth * image->mHeight * 4);
-    fn_8021239C(p->mUnknown10, image->mpUnknownC, image->mWidth, image->mHeight, image->mFormat, 0, image->mWidth * image->mHeight * 4, 0);
+    TMTextureTexNew(p->mUnknown10, image->mpUnknownC, image->mWidth, image->mHeight, image->mFormat, 0, image->mWidth * image->mHeight * 4, 0);
     if (count > 0) {
         int entries = 16;
         if (image->mFormat == 9) entries = 256;
-        Object_8020E5F8 *palette = fn_8020E5F8(data, 0);
+        TexFilePalette_t *palette = TexGetPaletteByIndex(data, 0);
         int bytes = entries + entries;
         DCFlushRange(palette->mpUnknown8, bytes);
-        fn_80212534(p->mUnknown3C, palette->mpUnknown8, palette->mUnknown2, entries, bytes);
+        TMTextureClutNew(p->mUnknown3C, palette->mpUnknown8, palette->mUnknown2, entries, bytes);
         p->mUnknown64 = 1;
     } else p->mUnknown64 = 0;
 }
 
 void fn_80197F84(Resource_80146E64 *p)
 {
-    fn_80212530(p->mUnknown10);
+    TMTextureTexDelete(p->mUnknown10);
     if (p->mUnknown64) {
-        fn_80212654(p->mUnknown3C);
+        TMTextureClutDelete(p->mUnknown3C);
         p->mUnknown64 = 0;
     }
     fn_801F010C(p->mUnknown0, p->mUnknown4);
