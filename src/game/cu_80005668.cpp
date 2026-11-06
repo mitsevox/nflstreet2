@@ -6,7 +6,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/PlayerLook.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
@@ -100,7 +100,7 @@ void fn_80087A30(int table, DbCursor *pObject);
 int fn_80087A78(int table, DbCursor *pObject, int value, int *pIndex);
 int fn_80087B00(int table, DbCursor *pObject);
 int fn_80087B5C(int type);
-void fn_8015D224(int index);
+void FEPlyrLoadInvalidate(int index);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
@@ -727,7 +727,7 @@ static void fn_80005BE4(int index, int value)
     flag = FaceMorphIsAllowed(&lbl_8036A170);
     PlayerLookSetFaceFlag(0, flag);
     PlayerLookSetFaceFlag(1, flag);
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
@@ -746,7 +746,7 @@ static void fn_80005CAC(int value)
     flag = FaceMorphIsAllowed(&lbl_8036A170);
     PlayerLookSetFaceFlag(0, flag);
     PlayerLookSetFaceFlag(1, flag);
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
@@ -770,7 +770,7 @@ static int fn_80005D88(unsigned int value)
         FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
         PlayerLookSetFeatures(0, &lbl_8036A170);
         PlayerLookSetFeatures(1, &lbl_8036A170);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     return mode;
@@ -780,7 +780,7 @@ static void fn_80005E64(int value)
 {
     PlayerLookSetHair(0, value);
     PlayerLookSetHair(1, value);
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
@@ -942,7 +942,7 @@ void Class_8000A108::vfn_03(int index)
         fn_80182E64(0xFF);
         fn_80182E70(-1);
         fn_80182E7C(-1);
-        fn_8015D224(FEPlyrGetFrontIndex());
+        FEPlyrLoadInvalidate(FEPlyrGetFrontIndex());
     }
     fn_80183740(0);
 }
@@ -1003,7 +1003,7 @@ void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
         *pValue = 3;
     }
     FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803EB928, 1);
-    fn_8015D38C(0);
+    FEPlyrLoadSetScaleRamp(0);
     if (lbl_803EB92C) {
         fn_8000CF24();
         lbl_803EB92C = 0;
@@ -1036,7 +1036,7 @@ int Class_8000A0B8::vfn_02(int a, int b, void **ppResult)
             break;
         }
     } else {
-        fn_8015D38C(1);
+        FEPlyrLoadSetScaleRamp(1);
     }
     return result;
 }
@@ -1254,7 +1254,7 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
     } else if (mUnknown8 == 3) {
         PlayerLookSetNumber(0, PlayerDbGetPjen(fn_80182DC8()));
         PlayerLookSetNumber(1, PlayerDbGetPjen(fn_80182DC8()));
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     return -1;
@@ -1268,7 +1268,7 @@ void Class_80009D88::vfn_03(int index)
     case 3:
         PlayerLookSetNumber(0, index);
         PlayerLookSetNumber(1, index);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     case 4:
@@ -1343,7 +1343,7 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
         PlayerDbGetNickname(fn_80182DC8(), name, 31);
         PlayerLookSetName(0, name);
         PlayerLookSetName(1, name);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     }
@@ -1413,7 +1413,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 1:
             PlayerLookSetHairColor(0, PlayerDbGetHairColor(fn_80182DC8()));
             PlayerLookSetHairColor(1, PlayerDbGetHairColor(fn_80182DC8()));
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
         case 2:
@@ -1422,13 +1422,13 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
         case 3:
             PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(fn_80182DC8()));
             PlayerLookSetFacialHairColor(1, PlayerDbGetFacialHairColor(fn_80182DC8()));
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
         case 4:
             PlayerLookSetBrow(0, fn_800822D4(fn_80182DC8()));
             PlayerLookSetBrow(1, fn_800822D4(fn_80182DC8()));
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
         }
@@ -1447,7 +1447,7 @@ void Class_80009E48::vfn_03(int index)
     case 1:
         PlayerLookSetHairColor(0, index);
         PlayerLookSetHairColor(1, index);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     case 2:
@@ -1457,13 +1457,13 @@ void Class_80009E48::vfn_03(int index)
     case 3:
         PlayerLookSetFacialHairColor(0, index);
         PlayerLookSetFacialHairColor(1, index);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     case 4:
         PlayerLookSetBrow(0, index);
         PlayerLookSetBrow(1, index);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     }
@@ -1527,7 +1527,7 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
         if (mUnknown8 == 8) {
             PlayerLookSetPlex(0, PlayerDbGetPlex(fn_80182DC8()));
             PlayerLookSetPlex(1, PlayerDbGetPlex(fn_80182DC8()));
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
             fn_80082138(fn_80182DC8(), &lbl_8036A170);
@@ -1547,7 +1547,7 @@ void Class_80009E08::vfn_03(int index)
     if (mUnknown8 == 8) {
         PlayerLookSetPlex(0, index);
         PlayerLookSetPlex(1, index);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     } else {
         const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
@@ -1619,12 +1619,12 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
         if (type == 3) {
             PlayerLookSetSkin(0, fn_80081E3C(fn_80182DC8()) + 1);
             PlayerLookSetSkin(1, fn_80081E3C(fn_80182DC8()) + 1);
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
             PlayerLookSetPartVariant(0, type, fn_80005EB4(&info, type));
             PlayerLookSetPartVariant(1, type, fn_80005EB4(&info, type));
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         }
     }
@@ -1638,7 +1638,7 @@ void Class_80009DC8::vfn_03(int index)
     if (type == 3) {
         PlayerLookSetSkin(0, index + 1);
         PlayerLookSetSkin(1, index + 1);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     } else {
         DbCursor cursor;
@@ -1650,7 +1650,7 @@ void Class_80009DC8::vfn_03(int index)
         TattooTableClose(&cursor);
         PlayerLookSetPartVariant(0, type, value);
         PlayerLookSetPartVariant(1, type, value);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
 }

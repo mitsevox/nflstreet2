@@ -2,7 +2,7 @@
 #include "game/PlayerObjInit.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/PlyrTex.h"
 #include "game/fn_8017F584.h"
 #include "game/GameObjList.h"
@@ -187,7 +187,7 @@ void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
 float fn_800D3F2C(int index);
 void fn_80147860(Object_8003DEC4 *pPlayer, float f);
-void fn_8015D3B0(Object_8003DEC4 *pPlayer);
+void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
 void fn_8015E73C(int id);
@@ -1237,7 +1237,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
     pSlot->mUnknown4 = flags;
     pSlot->mUnknown44 = (pPlayer->mUnknown20 >> 17) & 1;
     if (!(flags & 1)) {
-        if ((pPlayer->mUnknown20 & 8) && !fn_8015D2E8(pPlayer)) {
+        if ((pPlayer->mUnknown20 & 8) && !FEPlyrLoadIsShown(pPlayer)) {
             return;
         }
         if (lbl_803EB824 == 1) {
@@ -1245,11 +1245,11 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             lbl_803EB824 = 0;
         }
         fn_801A2EC8(pPlayer, pSlot);
-        if (fn_8015CD9C()) {
+        if (FEPlyrLoadIsActive()) {
             Vector_801A1650 scale;
 
-            fn_8015D3B0(pPlayer);
-            fn_8015D32C(pPlayer, &scale.x);
+            FEPlyrLoadMarkDrawn(pPlayer);
+            FEPlyrLoadGetScale(pPlayer, &scale.x);
             fn_801A209C(pPlayer, &scale.x, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,
                         pSlot->mUnknown8);
         } else {
@@ -1431,7 +1431,7 @@ void fn_801A45CC(void)
         if (pPlayer->mUnknown1160->mUnknown4 & 1) {
             continue;
         }
-        if ((pPlayer->mUnknown20 & 8) && !fn_8015D2E8(pPlayer)) {
+        if ((pPlayer->mUnknown20 & 8) && !FEPlyrLoadIsShown(pPlayer)) {
             continue;
         }
         if (pPlayer->mUnknown20 & 0x10000) {

@@ -42,7 +42,7 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
-void fn_8015CCB4(int value);
+void FEPlyrLoadReset(int value);
 void fn_8017F670(int a, char *pText);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_8018BDFC(int a, int b, int *pIds, int *pCount);
@@ -477,7 +477,7 @@ void MsgPlayerPickupShutdown(void)
     fn_8008056C(&_MsgPlayerPickup_PoolCursor);
     fn_8008056C(&_MsgPlayerPickup_TeamCursor);
     fn_8008056C(&_MsgPlayerPickup_RosterCursor);
-    fn_8015CCB4(1);
+    FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
         fn_8018BF10(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);
