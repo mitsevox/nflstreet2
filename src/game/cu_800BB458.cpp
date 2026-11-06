@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Camera_8013F738.h"
 #include "game/fn_80178D18.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80040818.h"
 #include "game/cu_80064864.h"
@@ -101,7 +101,7 @@ extern "C" void fn_800BB504(void)
     fn_800BB458();
     pCamera = fn_8013FA04(2);
     if (pCamera->mUnknown28 != 0) {
-        fn_802286D8((Object_80228224 *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
+        VptSetPerspective((Viewport_t *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
     }
 }
 

@@ -1,5 +1,5 @@
 #include "game/cu_8007F12C.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
 #include "game/Class_80297B90.h"
@@ -379,7 +379,7 @@ unsigned char InGame::fn_8002854C()
     fn_80195F80();
     fn_8006CA84(1);
     fn_801CE82C();
-    fn_802285CC();
+    VptProcessViewports();
     fn_80236F34();
     if (sCallback) {
         sCallback();

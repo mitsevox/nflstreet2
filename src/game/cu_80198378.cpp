@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/gx/GXStruct.h>
@@ -177,7 +177,7 @@ void fn_801985FC(void)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
     fn_8025251C(fn_801D0444(), 0);
@@ -219,7 +219,7 @@ void fn_801987F4(void)
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     GXSetZCompLoc(GX_FALSE);
     fn_80210CC4(0.0f, 0.9999f);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
     fn_8025251C(fn_801D0444(), 0);

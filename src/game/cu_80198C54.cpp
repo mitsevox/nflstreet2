@@ -5,7 +5,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/cu_8008A274.h"
 #include "game/cu_8015D3EC.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXCull.h>
@@ -398,9 +398,9 @@ void fn_80199798(void)
 void fn_8019979C(void)
 {
     fn_802524D4(lbl_80365338[0]);
-    fn_80228AD4(lbl_803652F8, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
+    VptPerspective(lbl_803652F8, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     fn_802523A4(lbl_803652F8, 0);
-    fn_80228668();
+    VptGetMatrixStack();
     fn_801D0470();
     fn_801D04C4();
     fn_801D1258(2, lbl_803652F8);

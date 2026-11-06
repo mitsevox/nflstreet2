@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_80163674.h"
 #include "game/fn_8018AB0C.h"
 
@@ -77,7 +77,7 @@ void fn_8018AA44(Object_8018A978 *p, int *pFlag)
 
 void fn_8018AAE4(Object_8018A978 *p)
 {
-    fn_80228D58((int)p->mpUnknown52);
+    VptTrashObject((int)p->mpUnknown52);
 }
 
 void fn_8018AB08(Object_8018A978 *p, int a, int b)

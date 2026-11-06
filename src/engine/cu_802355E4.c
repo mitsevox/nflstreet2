@@ -6,7 +6,7 @@
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/os/OSCache.h>
 #include <string.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
 #include "game/cu_801CF5BC.h"
@@ -181,7 +181,7 @@ extern char lbl_802B71A0[];
 extern float lbl_802FB458[3];
 extern Lights_803A2868 lbl_803A2868;
 extern LightSet_80236368 *lbl_803EC108;
-extern Object_80228224 *lbl_803EC110;
+extern Viewport_t *lbl_803EC110;
 extern float lbl_803EC114;
 extern float lbl_803EC118;
 extern GXColor lbl_803EC11C;
@@ -501,10 +501,10 @@ Light_802362C4 *fn_802362C4(Scene_8023609C *pScene, int index)
     return &pScene->mpUnknown4[index];
 }
 
-void fn_802362D4(Object_80228224 *pObject)
+void fn_802362D4(Viewport_t *pObject)
 {
     if (lbl_803A2868.mpUnknown0 != 0) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_8023609C(lbl_803A2868.mpUnknown0);
         fn_80236258(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown276);
         fn_80236164(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown4, lbl_803A2868.mUnknown260);
@@ -533,14 +533,14 @@ unsigned int fn_80236398(int index)
     return lbl_803A2868.mUnknown260[index];
 }
 
-void fn_802363B0(Object_80228224 *pObject)
+void fn_802363B0(Viewport_t *pObject)
 {
-    fn_80228474(pObject, 1, fn_802362D4, 0);
+    VptSetCallback(pObject, 1, fn_802362D4, 0);
 }
 
-void fn_802363E0(Object_80228224 *pObject)
+void fn_802363E0(Viewport_t *pObject)
 {
-    fn_802284EC(pObject, fn_802362D4);
+    VptRemoveCallback(pObject, fn_802362D4);
 }
 
 void fn_80236408(int index, float *pOut)
@@ -729,7 +729,7 @@ void fn_80236C10(int index, float *pColor, float *pDir)
     GXLoadLightObjImm(&light, (GXLightID)(1 << index));
 }
 
-void fn_80236DD8(Object_80228224 *pObject)
+void fn_80236DD8(Viewport_t *pObject)
 {
     lbl_803EC110 = pObject;
 }

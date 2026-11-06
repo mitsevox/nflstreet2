@@ -1,14 +1,14 @@
-#ifndef GAME_OBJECT_80228224_H
-#define GAME_OBJECT_80228224_H
+#ifndef ENGINE_VIEWPORTTYPES_H
+#define ENGINE_VIEWPORTTYPES_H
 
-typedef struct Object_80228224 Object_80228224;
-typedef struct Desc_80228224 Desc_80228224;
+typedef struct Viewport_t Viewport_t;
+typedef struct ViewportDesc_t ViewportDesc_t;
 
 /* Callback stored at +60 and called with the object and the pointer at +64. */
-typedef void (*Callback_80228224)(Object_80228224 *pObject, void *arg);
+typedef void (*VptCameraFuncT)(Viewport_t *pObject, void *arg);
 
-/* Object returned by fn_80228224: a 248-byte element of the pool created by fn_802280B0. */
-struct Object_80228224 {
+/* Object returned by VptOpen: a 248-byte element of the pool created by VptInit. */
+struct Viewport_t {
     int mUnknown0;
     float mUnknown4;
     float mUnknown8;
@@ -24,7 +24,7 @@ struct Object_80228224 {
     unsigned char mUnknown46;
     unsigned char mUnknown47;
     int mUnknown48[3];
-    Callback_80228224 mUnknown60;
+    VptCameraFuncT mUnknown60;
     void *mUnknown64;
     unsigned char mUnknown68;
     unsigned char mUnknown69;
@@ -44,8 +44,8 @@ struct Object_80228224 {
     char mUnknown244[4];
 };
 
-/* Argument of fn_80228224. */
-struct Desc_80228224 {
+/* Argument of VptOpen. */
+struct ViewportDesc_t {
     unsigned short mUnknown0;
     char mUnknown2;
     unsigned char mUnknown3;

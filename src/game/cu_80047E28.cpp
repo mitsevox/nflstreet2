@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Block_80307980.h"
 #include "game/FELoop.h"
 #include "game/Item_800476DC.h"
@@ -1184,7 +1184,7 @@ extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
 
 extern "C" void fn_8004A1FC(int type)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(type);
 }
 

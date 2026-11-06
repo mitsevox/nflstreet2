@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_801EF390.h"
 
 /* 228-byte object allocated through fn_801DCF0C by fn_80030F38; a single
@@ -74,14 +74,14 @@ int fn_80030E58(Object_80030D50 *pObject)
     float v[3];
 
     if (pObject->mUnknown220 != 0 && pObject->mUnknown224 == 1) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
         v[0] = pObject->mUnknown4[0];
         v[1] = pObject->mUnknown4[1];
         v[2] = 0.0f;
         fn_801D0C58(v);
         fn_80235740(pObject->mUnknown28, fn_801C657C());
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D0544();
         fn_80235C90(pObject->mUnknown28, fn_801C657C(), 0.25f, 0.25f, 0.75f, 1.0f);
         fn_80210814(0, 0, 0);
@@ -106,9 +106,9 @@ void fn_80030FD8(int handle)
 {
     if (sObject != 0) {
         fn_801DD320(handle, sObject);
-        fn_80228D58((int)sObject);
+        VptTrashObject((int)sObject);
     }
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(10);
 }
 

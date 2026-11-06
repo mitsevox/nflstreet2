@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
@@ -29,7 +29,7 @@ struct View_801A7170 {
   unsigned char mUnknown10[0x10];
   float mUnknown20;
   unsigned char mUnknown24[4];
-  Object_80228224 *mUnknown28;
+  Viewport_t *mUnknown28;
   unsigned char mUnknown2C[0x70];
   int mUnknown9C;
   unsigned char mUnknownA0[0x64];
@@ -119,7 +119,7 @@ void fn_801A69A8(Entry_801A69A8 *entry, unsigned int count) {
 }
 void fn_801A6AF8(Entry_801A69A8 *entry, unsigned int count, float speed,
                  float step) {
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   fn_801D0508();
   fn_801D0C58(&lbl_802F3A9C);
   fn_801D0ADC(lbl_803EB850);
@@ -217,7 +217,7 @@ void fn_801A6F88(float *matrix, Vector_80039F5C *out, float depth) {
   out->mY = ((matrix[14] - matrix[6]) * depth) / matrix[5];
 }
 void fn_801A6FC8(float *matrix, Bounds_801A6FC8 *bounds, float a, float b) {
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   fn_801D04C4();
   fn_801D0EE4();
   Vector_80039F5C low, high, point, transformed;
@@ -254,7 +254,7 @@ void fn_801A6FC8(float *matrix, Bounds_801A6FC8 *bounds, float a, float b) {
 void fn_801A7170(Bounds_801A6FC8 *bounds, float *matrix,
                  Vector_80039F5C *position) {
   View_801A7170 *view = (View_801A7170 *)fn_8002B550(0);
-  Object_80228224 *object = view->mUnknown28;
+  Viewport_t *object = view->mUnknown28;
   position->mX = view->mUnknown4.mX;
   position->mY = view->mUnknown4.mY;
   position->mZ = view->mUnknown4.mZ;
@@ -427,7 +427,7 @@ void fn_801A7880(void) {
   lbl_803ECC50 = -1;
   GXLoadTlut(&lbl_803ECC4C->mUnknown9C, 0);
   GXLoadTexObj(&lbl_803ECC4C->mUnknown7C, 0);
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   Mtx44 matrix;
   fn_801D1288(2, matrix);
   fn_80214140(0);

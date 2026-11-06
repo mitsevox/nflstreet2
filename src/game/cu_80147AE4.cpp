@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_80147908.h"
 
 struct Object_80147AE4 {
@@ -55,10 +55,10 @@ void fn_80147BA8(int handle)
 
     for (i = 0; i < 2; i++) {
         fn_801DD320(handle, lbl_803ECA1C[i]);
-        fn_80228D58((int)lbl_803ECA1C[i]);
+        VptTrashObject((int)lbl_803ECA1C[i]);
         lbl_803ECA1C[i] = 0;
     }
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(20);
 }
 

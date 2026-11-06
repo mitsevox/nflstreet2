@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Level_80054130.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_801442FC.h"
@@ -41,7 +41,7 @@ int fn_80144310(Tracker_801442FC *pTracker, Object_80144310 *pSource, float *pDi
         direction.mX = pObject->mUnknown12.mX;
         direction.mY = -pObject->mUnknown12.mZ;
         direction.mZ = pObject->mUnknown12.mY;
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_802271F0(&direction.mX, &direction.mX);
         direction.mX = -direction.mX;
         direction.mY = -direction.mY;

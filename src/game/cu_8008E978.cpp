@@ -9148,7 +9148,7 @@ int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 int fn_801F0F18(int a);
 }
 
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 extern "C" void fn_800BB504(void);
 

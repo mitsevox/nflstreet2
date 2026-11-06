@@ -4,7 +4,7 @@
 #include "game/cu_80064864.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801EF390.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -224,10 +224,10 @@ void fn_80046FD0(void)
     for (unsigned int i = 0; i <= 4; ++i) {
         fn_80211EFC(lbl_803078D4[i]->mUnknownF8);
         fn_801DD320(lbl_803EC7B8, lbl_803078D4[i]);
-        fn_80228D58((int)lbl_803078D4[i]);
+        VptTrashObject((int)lbl_803078D4[i]);
         lbl_803078D4[i] = 0;
     }
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(17);
     lbl_803EC7B8 = 0;
 }

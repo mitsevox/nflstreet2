@@ -1,5 +1,5 @@
 #include "game/fn_801D2B7C.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/FMCAPPORT.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -42,7 +42,7 @@ static int fn_8008BFE4()
 
 void FMCAPPORT::fn_8008C010()
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 1;
     desc.mUnknown2 = 0;
@@ -51,16 +51,16 @@ void FMCAPPORT::fn_8008C010()
     desc.mUnknown4[1] = 0;
     desc.mUnknown18 = 640;
     desc.mUnknown16 = 448;
-    mpState.mp->mUnknown4088 = fn_80228224(&desc);
-    fn_8022865C(mpState.mp->mUnknown4088, 0.0f, 0.0f);
-    fn_802286D8(mpState.mp->mUnknown4088, 45.0f, 1.0f, 0.1f, 10.0f);
+    mpState.mp->mUnknown4088 = VptOpen(&desc);
+    VptSetPos(mpState.mp->mUnknown4088, 0.0f, 0.0f);
+    VptSetPerspective(mpState.mp->mUnknown4088, 45.0f, 1.0f, 0.1f, 10.0f);
     mpState.mp->mUnknown4088->mUnknown28 &= ~1;
-    fn_8022864C(mpState.mp->mUnknown4088, 0.0f, 0.0f, 1.0f);
+    VptSetEraseColor(mpState.mp->mUnknown4088, 0.0f, 0.0f, 1.0f);
 }
 
 void FMCAPPORT::fn_8008C0EC()
 {
-    fn_802283FC(mpState.mp->mUnknown4088);
+    VptClose(mpState.mp->mUnknown4088);
     mpState.mp->mUnknown4088 = 0;
 }
 
@@ -69,7 +69,7 @@ void FMCAPPORT::fn_8008C12C()
     fn_801DCF0C(32, 20, 1, 0, 0);
     mpState.mp->mUnknown4092 = fn_801DCFF0(1, 1, 0, 0, 0, 1, 0, -1);
     fn_801DD0C8(mpState.mp->mUnknown4092, 32, 0, fn_8008BFE4);
-    fn_802286CC(mpState.mp->mUnknown4088, mpState.mp->mUnknown4092, 0);
+    VptSetObjectList(mpState.mp->mUnknown4088, mpState.mp->mUnknown4092, 0);
     mpState.mp->mUnknown4096 = fn_801DD268(mpState.mp->mUnknown4092, 32, 0, 0);
     fn_801DD3AC(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
 }
@@ -77,8 +77,8 @@ void FMCAPPORT::fn_8008C12C()
 void FMCAPPORT::fn_8008C1FC()
 {
     fn_801DD320(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
-    fn_80228D58(mpState.mp->mUnknown4096);
-    fn_80228E18();
+    VptTrashObject(mpState.mp->mUnknown4096);
+    VptFlushObjectTrashSync();
     fn_801DD0E8(mpState.mp->mUnknown4092);
     fn_801DCF8C(32);
     mpState.mp->mUnknown4096 = 0;

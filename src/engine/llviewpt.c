@@ -1,9 +1,16 @@
+/*
+ * GameCube side of the viewports: builds a viewport's viewport, perspective and orthographic
+ * matrices, loads them into GX with the viewport rectangle and scissor before the viewport is drawn,
+ * and keeps the object trash can, a list of render objects whose deletion is put off for a couple of
+ * frames until the GPU has finished with them.
+ */
 #include <dolphin/mtx.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include <dolphin/gx/GXTransform.h>
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
 
+extern void fn_801CEC48(int a, int b, int c, int d);
 extern float fn_801CFD28(int angle);
 extern int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 extern void fn_801DD0E8(int handle);
@@ -13,36 +20,42 @@ extern void fn_801DD3F0(int handle);
 extern int fn_801DD474(int handle, int b);
 extern void fn_80210608(void);
 
-static int lbl_803EBFA0 = 0;
-static int lbl_803EBFA4 = 0;
+static int _Vpt_pTrashCan = 0;
+static int _Vpt_TrashLatency = 0;
 
-int fn_802288F8(Init_802280B0 *pInit)
+static void _VptSetupScissor(Viewport_t *pObject)
+{
+    fn_801CEC48((unsigned int)pObject->mUnknown4, (unsigned int)pObject->mUnknown20,
+                (unsigned int)pObject->mUnknown8, (unsigned int)pObject->mUnknown24);
+}
+
+int VptLLInit(VptInitBlock_t *pInit)
 {
     if (pInit->mUnknown8) {
-        lbl_803EBFA0 = fn_801DCFF0(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
+        _Vpt_pTrashCan = fn_801DCFF0(1, pInit->mUnknown8, 0, 0, 0, 1, 3, 1);
     }
     return 0;
 }
 
-int fn_80228948(void)
+int VptLLShutdown(void)
 {
-    if (lbl_803EBFA0) {
-        fn_801DD0E8(lbl_803EBFA0);
+    if (_Vpt_pTrashCan) {
+        fn_801DD0E8(_Vpt_pTrashCan);
     }
     return 0;
 }
 
-int fn_80228978(Desc_80228224 *pDesc, Object_80228224 *pObject)
+int VptLLOpen(ViewportDesc_t *pDesc, Viewport_t *pObject)
 {
     return 0;
 }
 
-int fn_80228980(Object_80228224 *pObject)
+int VptLLClose(Viewport_t *pObject)
 {
     return 0;
 }
 
-void fn_80228988(Mtx44 m, float x, float y, float w, float h, float d)
+void VptViewport(Mtx44 m, float x, float y, float w, float h, float d)
 {
     float sx = w * 0.5f, sy = h * 0.5f, sz = d * 0.5f;
     float tx = x + sx, ty = y + sy;
@@ -52,12 +65,12 @@ void fn_80228988(Mtx44 m, float x, float y, float w, float h, float d)
     m[0][3] = tx;   m[1][3] = ty;   m[2][3] = sz;   m[3][3] = 1.0f;
 }
 
-void fn_802289FC(Mtx44 m, float l, float r, float b, float t, float n, float f, float s)
+void VptFrustum(Mtx44 m, float l, float r, float b, float t, float n, float f, float s)
 {
     C_MTXFrustum(m, t, b, l, r, n, f);
 }
 
-void fn_80228A34(Mtx44 m, float l, float r, float b, float t, float n, float f)
+void VptOrtho(Mtx44 m, float l, float r, float b, float t, float n, float f)
 {
     float a = 2.0f / (r - l), bb = 2.0f / (t - b), c = -2.0f / (f - n);
     m[0][0] = a;    m[1][0] = 0.0f; m[2][0] = 0.0f; m[3][0] = 0.0f;
@@ -66,14 +79,14 @@ void fn_80228A34(Mtx44 m, float l, float r, float b, float t, float n, float f)
     m[0][3] = -((r + l) / (r - l)); m[1][3] = -((t + b) / (t - b)); m[2][3] = -((f + n) / (f - n)); m[3][3] = 1.0f;
 }
 
-void fn_80228AD4(Mtx44 m, float fovy, float aspect, float n, float f)
+void VptPerspective(Mtx44 m, float fovy, float aspect, float n, float f)
 {
     float t = n * fn_801CFD28((int)(fovy * 46603.379f) / 2);
 
-    fn_802289FC(m, -t * aspect, t * aspect, -t, t, n, f, 1.0f);
+    VptFrustum(m, -t * aspect, t * aspect, -t, t, n, f, 1.0f);
 }
 
-void fn_80228B74(Object_80228224 *pObject)
+void VptSetUpRender(Viewport_t *pObject)
 {
     Mtx44 viewport;
     Mtx44 projection;
@@ -82,12 +95,12 @@ void fn_80228B74(Object_80228224 *pObject)
     float height = fn_801CEA14();
     float depth = (float)((1 << fn_801CE93C()) - 1) * 0.0625f;
 
-    fn_80228988(viewport, pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, depth);
+    VptViewport(viewport, pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, depth);
     if (pObject->mUnknown28 & 4) {
-        fn_80228A34(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
+        VptOrtho(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
                     pObject->mUnknown224, -pObject->mUnknown232, -pObject->mUnknown236);
     } else {
-        fn_802289FC(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
+        VptFrustum(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
                     pObject->mUnknown224, pObject->mUnknown232, pObject->mUnknown236, pObject->mUnknown240);
     }
     fn_801D0424((float *)pObject->mUnknown140, projection[0]);
@@ -95,7 +108,7 @@ void fn_80228B74(Object_80228224 *pObject)
     GXSetViewport(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, 0.0f, 1.0f);
     fn_801D1258(2, projection[0]);
     fn_801D1258(1, viewport[0]);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0F80(m[0]);
     fn_801D0508();
     fn_801D0664(m[0]);
@@ -114,40 +127,40 @@ void fn_80228B74(Object_80228224 *pObject)
     fn_801D131C(3);
     fn_801D12EC(4);
     fn_801D0544();
-    fn_802287D4(pObject);
+    _VptSetupScissor(pObject);
     fn_80210608();
 }
 
-void fn_80228D58(int handle)
+void VptTrashObject(int handle)
 {
-    if (lbl_803EBFA0) {
-        if (fn_801DD474(lbl_803EBFA0, 0) == 0) {
-            fn_80228E18();
+    if (_Vpt_pTrashCan) {
+        if (fn_801DD474(_Vpt_pTrashCan, 0) == 0) {
+            VptFlushObjectTrashSync();
         }
-        if (fn_801DD200(lbl_803EBFA0, handle)) {
+        if (fn_801DD200(_Vpt_pTrashCan, handle)) {
             fn_801DD2B8(handle);
         }
-        lbl_803EBFA4 = 2;
+        _Vpt_TrashLatency = 2;
     } else {
         fn_801DD2B8(handle);
     }
 }
 
-void fn_80228DD4(void)
+void VptFlushObjectTrash(void)
 {
-    if (lbl_803EBFA0) {
-        if (lbl_803EBFA4 <= 0) {
-            fn_801DD3F0(lbl_803EBFA0);
+    if (_Vpt_pTrashCan) {
+        if (_Vpt_TrashLatency <= 0) {
+            fn_801DD3F0(_Vpt_pTrashCan);
         } else {
-            lbl_803EBFA4--;
+            _Vpt_TrashLatency--;
         }
     }
 }
 
-void fn_80228E18(void)
+void VptFlushObjectTrashSync(void)
 {
     fn_801CE910();
-    fn_80228DD4();
-    fn_80228DD4();
-    fn_80228DD4();
+    VptFlushObjectTrash();
+    VptFlushObjectTrash();
+    VptFlushObjectTrash();
 }

@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Effects_80146134.h"
 #include "game/Object_80146094.h"
 #include "game/Object_8020E52C.h"
@@ -83,7 +83,7 @@ void fn_80196F48(void *position, float scale)
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetNumTevStages(1);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D131C(3);
     GXLoadPosMtxImm(fn_801D0444(), 0);
@@ -184,7 +184,7 @@ void fn_80197680(Entry_80146C4C *p)
     screen[0] = projected[0];
     screen[1] = projected[1];
     if (p->mUnknown4 == 1) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
         fn_801D12BC(3);
         fn_80227C2C(&facing, &p->mUnknown24);
@@ -304,7 +304,7 @@ float fn_80197D08(float *out, Vector_80146134 *position)
     float normalized[3];
     float point[4];
     float result;
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
     point[0] = position->x;

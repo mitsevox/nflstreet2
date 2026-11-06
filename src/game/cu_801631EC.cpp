@@ -1,5 +1,5 @@
 #include <dolphin/gx/GXPixel.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_800B65A0.h"
@@ -116,7 +116,7 @@ void fn_801631EC(int handle)
 
 void fn_8016324C(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(18);
 }
 
@@ -140,7 +140,7 @@ void fn_80163300(int handle)
 {
     if (lbl_802E989C.mpObject != 0) {
         fn_801DD320(handle, lbl_802E989C.mpObject);
-        fn_80228D58((int)lbl_802E989C.mpObject);
+        VptTrashObject((int)lbl_802E989C.mpObject);
         lbl_802E989C.mpObject = 0;
     }
     lbl_802E989C.mCount = 0;
@@ -184,13 +184,13 @@ int fn_8016345C(Object_80163358 *pObject)
                     fn_80235C90(pObject->mUnknown18, fn_801C657C(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
-                fn_801D0470(fn_80228668());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D04C4();
                 fn_801D0C58(&lbl_802E989C.mEntries[i].mPosition);
                 fn_801D08FC(0x400000);
                 fn_801D0CFC(lbl_802E989C.mEntries[i].mScale);
                 fn_80235740(pObject->mUnknown18, fn_801C657C());
-                fn_801D0470(fn_80228668());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
                 fn_80235764(pObject->mUnknown18, fn_801C657C());
             }

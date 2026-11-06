@@ -4,7 +4,7 @@
 #include "engine/camera.h"
 #include "engine/vec.h"
 #include "engine/llmatrix.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 typedef struct CamFocus_801C3A44 {
     Cam_801C33E8 mCam;
@@ -47,7 +47,7 @@ static void fn_801C3A44(CamFocus_801C3A44 *pCam)
     float offset[3];
     float focus[3];
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     focus[0] = pCam->mFocus[0];
     focus[1] = pCam->mFocus[1];

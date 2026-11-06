@@ -6,7 +6,7 @@
 #include "game/cu_8008E978.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_800AD9B4.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/Sample_801C009C.h"
 
 /* Views established by this caller's accesses. Their original identities
@@ -321,6 +321,6 @@ extern "C" void fn_80142228(Camera_8013F738 *camera)
         else if (fn_800AD9B4()==7) value=fn_800AB9EC(lbl_803EAA8C);
     }
     if (camera->mUnknown28)
-        fn_802286D8(static_cast<Object_80228224 *>(camera->mUnknown28),camera->mHeader.mUnknown20,camera->mHeader.mUnknown24,value,750.0f);
+        VptSetPerspective(static_cast<Viewport_t *>(camera->mUnknown28),camera->mHeader.mUnknown20,camera->mHeader.mUnknown24,value,750.0f);
 }
 extern "C" void fn_801422C0(unsigned char value) { lbl_803EB1F0=value; }

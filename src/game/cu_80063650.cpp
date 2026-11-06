@@ -5,7 +5,7 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_8017F584.h"
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 
 extern "C" {
 extern void *lbl_803EB688;
@@ -15,8 +15,8 @@ int fn_801E195C(int a);
 void fn_80194C5C(int a, int b, int c);
 int fn_800B6644(int a);
 void fn_80185F4C(int a, int b);
-Object_80228224 *fn_8018A854(void);
-void fn_8018A7F8(Object_80228224 *pObject, int mode);
+Viewport_t *fn_8018A854(void);
+void fn_8018A7F8(Viewport_t *pObject, int mode);
 
 static int lbl_803EA620 = 3;
 static int lbl_803EA624 = -1;

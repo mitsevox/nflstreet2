@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/GameVpt.h"
 #include "game/InGame.h"
@@ -60,7 +60,7 @@ void fn_80235C90(Object_80235588 *p, int a, float b, float c, float d, float e);
 void fn_80235D0C(Object_80235588 *p, int a);
 void fn_80235D10(Object_80235588 *p, float a);
 void fn_80235D78(Vector_80039F5C *p);
-void fn_80236DD8(Object_80228224 *p);
+void fn_80236DD8(Viewport_t *p);
 void fn_80236DE0(int a);
 void fn_80236E04(float a, float b);
 void fn_80236E2C(int r, int g, int b);
@@ -119,14 +119,14 @@ void fn_801A5568(Instance_801614D0 *pInstance, int unused)
     fn_80235C90(&pInstance->mUnknown48, 1, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 0, 0.5f, 0.5f, 0.5f, 0.51f);
     fn_80235C90(&pInstance->mUnknown108, 1, 0.5f, 0.5f, 0.5f, 0.51f);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pInstance->mUnknown4);
     fn_80235740(&pInstance->mUnknown48, handle);
     fn_80235764(&pInstance->mUnknown48, handle);
     fn_80235740(&pInstance->mUnknown108, handle);
     fn_80235764(&pInstance->mUnknown108, handle);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
 }
 
@@ -308,7 +308,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
     int handle = fn_801C657C();
     float alpha = 0.1f;
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
     fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
@@ -330,7 +330,7 @@ int fn_801A5D0C(Object_800463D8 *pOwner)
         fn_80235740(&pObject->mUnknown24[5], handle);
         fn_80235764(&pObject->mUnknown24[5], handle);
     }
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
     return 0;
 }
@@ -340,7 +340,7 @@ int fn_801A5E90(Object_80046340 *pObject)
     int handle = fn_801C657C();
     unsigned int i;
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(&pObject->mUnknown4);
     fn_80235D78(&((View_8002B550 *)fn_8002B550(0))->mUnknown4);
@@ -375,7 +375,7 @@ int fn_801A5E90(Object_80046340 *pObject)
         fn_80235740(&pObject->mUnknown6E4[i], handle);
         fn_80235764(&pObject->mUnknown6E4[i], handle);
     }
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
     if (fn_800A34B0()) {
         fn_801985FC();

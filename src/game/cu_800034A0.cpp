@@ -6,7 +6,7 @@
 extern "C" {
 void *fn_801D2B7C(int size, int a, int b);
 int fn_8018A854(void);
-void fn_80228474(int a, int b, void *c, int d);
+void VptSetCallback(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
 int fn_80029890(int type);
 void fn_8022F478(void);
@@ -41,7 +41,7 @@ int fn_801D6EA0(int a);
 void fn_801D6EFC(void);
 void fn_80029990(int type, int index, int value);
 void fn_80029E10(int a, int b);
-void fn_802284EC(int a, void *b);
+void VptRemoveCallback(int a, void *b);
 void fn_8002A804(void);
 
 extern StreamOps_8002ACB4 gCardStreamOps;
@@ -78,7 +78,7 @@ void fn_800034FC(void)
     lbl_80367580.mPosition = 0;
 
     if (fn_8018A854()) {
-        fn_80228474(fn_8018A854(), 2, (void *)fn_8002A804, 31);
+        VptSetCallback(fn_8018A854(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -123,7 +123,7 @@ void fn_80003620(void)
     lbl_80367580.mPosition = 0;
 
     if (fn_8018A854()) {
-        fn_80228474(fn_8018A854(), 2, (void *)fn_8002A804, 31);
+        VptSetCallback(fn_8018A854(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -337,7 +337,7 @@ int fn_800039E4(int a, int *b, int *c)
 
     if (*b != 0 && lbl_803EB8D4 != 0) {
         if (fn_8018A854()) {
-            fn_802284EC(fn_8018A854(), (void *)fn_8002A804);
+            VptRemoveCallback(fn_8018A854(), (void *)fn_8002A804);
         }
         lbl_803EB8D4 = 0;
     }

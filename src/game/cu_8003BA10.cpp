@@ -139,8 +139,8 @@ void fn_80049E6C();
 void fn_801613F0();
 int fn_80027DF0();
 void fn_80161498();
-void fn_80228D58(void *);
-void fn_80228DD4();
+void VptTrashObject(void *);
+void VptFlushObjectTrash();
 void fn_80047630(Item_800476DC *);
 void fn_801D2BD0(void *);
 void fn_8004A118();
@@ -823,20 +823,20 @@ int fn_8003DA94(int count, int owner, int mode) {
 int fn_8003DCC0(int owner) {
   if (lbl_803EA410) {
     fn_801DD320(owner, lbl_803EA410);
-    fn_80228D58(lbl_803EA410);
-    fn_80228DD4();
+    VptTrashObject(lbl_803EA410);
+    VptFlushObjectTrash();
     lbl_803EA410 = 0;
   }
   if (lbl_803EA414) {
     fn_801DD320(owner, lbl_803EA414);
-    fn_80228D58(lbl_803EA414);
-    fn_80228DD4();
+    VptTrashObject(lbl_803EA414);
+    VptFlushObjectTrash();
     lbl_803EA414 = 0;
   }
   if (lbl_803EA418) {
     fn_801DD320(owner, lbl_803EA418);
-    fn_80228D58(lbl_803EA418);
-    fn_80228DD4();
+    VptTrashObject(lbl_803EA418);
+    VptFlushObjectTrash();
     lbl_803EA418 = 0;
   }
   if (lbl_803EA430) {
@@ -845,9 +845,9 @@ int fn_8003DCC0(int owner) {
         fn_80047630(lbl_803EA430[i]->mUnknown988);
         fn_801DD320(owner, lbl_803EA430[i]);
       }
-      fn_80228D58(lbl_803EA430[i]);
+      VptTrashObject(lbl_803EA430[i]);
     }
-    fn_80228DD4();
+    VptFlushObjectTrash();
     fn_801D2BD0(lbl_803EA430);
     lbl_803EA430 = 0;
   }

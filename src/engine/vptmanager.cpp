@@ -1,15 +1,15 @@
 #include <string.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801C3660.h"
 #include "game/fn_801C68FC.h"
 
 struct Record_8002AE90 {
     void *mpObject;
-    int (*mpCallback4)(Object_80228224 *, void *);
-    int (*mpCallback8)(Object_80228224 *, void *);
+    int (*mpCallback4)(Viewport_t *, void *);
+    int (*mpCallback8)(Viewport_t *, void *);
 };
-struct State_8002AE90 { Object_80228224 *mpObject; void *mpList; };
+struct State_8002AE90 { Viewport_t *mpObject; void *mpList; };
 extern "C" {
 void *fn_801C6A20(void *);
 void *fn_801C6B4C(void *, void *);
@@ -17,7 +17,7 @@ void fn_801C6BC0(void *, Record_8002AE90 *);
 void fn_801C6C0C(void *, void *);
 void *fn_801C6C84(void *, void *);
 int fn_801C6DCC(void *, void *, void *, Record_8002AE90 **, int (*)(Record_8002AE90 *,void *,Record_8002AE90 **));
-void fn_801C36B0(Object_80228224 *, void *);
+void fn_801C36B0(Viewport_t *, void *);
 static State_8002AE90 *lbl_803EA348 = 0;
 
 int fn_8002AE90(void *p, int a) {
@@ -44,7 +44,7 @@ int fn_8002AF80(State_8002AE90 *s,Record_8002AE90 *r) {
     if(r->mpCallback8) result=r->mpCallback8(s->mpObject,r->mpObject);
     else {
         fn_801C36B0(s->mpObject,r->mpObject);
-        if(fn_802286B4(s->mpObject)) result=0;
+        if(VptGetCamera(s->mpObject)) result=0;
     }
     return result;
 }
@@ -53,7 +53,7 @@ Record_8002AE90 *fn_8002AFF4(State_8002AE90 *s) {
     r->mpCallback4=0;r->mpCallback8=0;r->mpObject=0;
     return r;
 }
-State_8002AE90 *fn_8002B02C(Object_80228224 *p) {
+State_8002AE90 *fn_8002B02C(Viewport_t *p) {
     if(!lbl_803EA348->mpObject) lbl_803EA348->mpObject=p;
     return lbl_803EA348;
 }
@@ -97,10 +97,10 @@ void fn_8002B1E4() {
 void fn_8002B270() {
     State_8002AE90 *s=fn_8002B02C(0);
     Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
-    if(r && fn_802286B4(s->mpObject)!=r->mpObject) fn_801C3660(s->mpObject,r->mpObject);
+    if(r && VptGetCamera(s->mpObject)!=r->mpObject) fn_801C3660(s->mpObject,r->mpObject);
 }
 void fn_8002B2D0() {}
-int fn_8002B2D4(Object_80228224 *p,void *obj,int (*a)(Object_80228224 *,void *),int (*b)(Object_80228224 *,void *)) {
+int fn_8002B2D4(Viewport_t *p,void *obj,int (*a)(Viewport_t *,void *),int (*b)(Viewport_t *,void *)) {
     int changed=0;
     State_8002AE90 *s=fn_8002B02C(p);
     int result=1;
@@ -119,7 +119,7 @@ int fn_8002B2D4(Object_80228224 *p,void *obj,int (*a)(Object_80228224 *,void *),
     }
     return result;
 }
-int fn_8002B3DC(Object_80228224 *p,void *obj) {
+int fn_8002B3DC(Viewport_t *p,void *obj) {
     int result=1;
     State_8002AE90 *s=fn_8002B02C(p);
     Record_8002AE90 *r=0;
@@ -135,7 +135,7 @@ int fn_8002B3DC(Object_80228224 *p,void *obj) {
     } else result=0;
     return result;
 }
-int fn_8002B494(Object_80228224 *p,void *obj,void *other) {
+int fn_8002B494(Viewport_t *p,void *obj,void *other) {
     int result=0;
     State_8002AE90 *s=fn_8002B02C(p);
     Record_8002AE90 *r=0;
@@ -151,7 +151,7 @@ int fn_8002B494(Object_80228224 *p,void *obj,void *other) {
     }
     return result;
 }
-void *fn_8002B550(Object_80228224 *p) {
+void *fn_8002B550(Viewport_t *p) {
     State_8002AE90 *s=fn_8002B02C(p);
     void *obj=0;
     Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);

@@ -1,6 +1,6 @@
 #include <dolphin/vi.h>
 #include "game/Entry_80219044.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/fn_801801F0.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -101,7 +101,7 @@ static void fn_800241E0(void *p, unsigned short a, unsigned short b, int unused)
         fn_801C601C(-1);
         fn_801C60BC(-1);
         fn_801D6F58();
-        fn_802285CC();
+        VptProcessViewports();
         fn_801CAF24();
         fn_801CE82C();
         fn_80219650(p, &current, &other);
@@ -115,7 +115,7 @@ static void fn_8002425C(void)
     for (i = 0; i < 60; i++) {
         fn_801C601C(-1);
         fn_801C60BC(-1);
-        fn_802285CC();
+        VptProcessViewports();
         fn_801CAF24();
         fn_801CE82C();
     }

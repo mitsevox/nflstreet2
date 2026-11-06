@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Init_8004A040.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -148,7 +148,7 @@ extern Record_8020F2C4 lbl_80365D54;
 extern char lbl_80365D88[16];
 extern char lbl_80365D98[];
 extern Slot_801A3284 lbl_80365AB4[14];
-extern Object_80228224 *lbl_803ECC00;
+extern Viewport_t *lbl_803ECC00;
 extern unsigned int lbl_803ECC04;
 extern int lbl_803ECC08;
 extern int lbl_803ECC0C;
@@ -333,7 +333,7 @@ void fn_801A1578(void)
     }
 }
 
-void fn_801A15C4(Object_80228224 *pObject)
+void fn_801A15C4(Viewport_t *pObject)
 {
     unsigned int i;
 
@@ -1082,7 +1082,7 @@ void fn_801A3520(void)
     fn_802145B0(lbl_80365D88);
     fn_801A1578();
     if (lbl_803ECC00) {
-        fn_802284EC(lbl_803ECC00, fn_801A15C4);
+        VptRemoveCallback(lbl_803ECC00, fn_801A15C4);
         lbl_803ECC00 = 0;
     }
 }
@@ -1199,7 +1199,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
     }
     flags = fn_801A28E8(pPlayer);
     fn_801C657C();
-    fn_80228668();
+    VptGetMatrixStack();
     fn_801D0470();
     lod = pPlayer->mUnknown4216.mUnknown0;
     if (pPlayer->mUnknown20 & 8) {
@@ -1440,10 +1440,10 @@ void fn_801A45CC(void)
     }
 }
 
-void fn_801A4650(Object_80228224 *pObject)
+void fn_801A4650(Viewport_t *pObject)
 {
     lbl_803ECC00 = pObject;
-    fn_80228474(pObject, 2, fn_801A15C4, 0);
+    VptSetCallback(pObject, 2, fn_801A15C4, 0);
 }
 
 void fn_801A4688(unsigned char enable)

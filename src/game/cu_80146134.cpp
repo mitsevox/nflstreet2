@@ -1,5 +1,5 @@
 #include "game/Effects_80146134.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Record_803EB25C.h"
 
 /* Local access views. Preset and input identities remain unknown. */
@@ -195,7 +195,7 @@ void fn_801464D0(void *owner)
             Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)lbl_803EA554)->mUnknown24[input->mUnknown18]);
             if (desc) {
                 lbl_8031B7DC[i] = fn_80146C4C(0, desc);
-                fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0558();
+                fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0558();
                 int x = (int)(input->mUnknownC.x * 46603.37890625f);
                 int y = (int)(input->mUnknownC.y * 46603.37890625f);
                 int z = (int)((input->mUnknownC.z + 90.0f) * 46603.37890625f);
@@ -242,7 +242,7 @@ void fn_80146A6C(Entry_80146C4C *p, SlotDescription_80146A6C *q)
 void fn_80146B40(Vector_80146134 *out, Vector_80146134 *in)
 {
     Vector_80146134 v;
-    fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D12BC(3);
+    fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D12BC(3);
     fn_80227D6C(&v, in); out->x = v.x; out->z = v.z; out->y = v.y; fn_801D0544();
 }
 int fn_80146BA8(Vector_80146134 *p) { return p->x > -1.0f && p->x < 1.0f && p->y > -1.0f && p->y < 1.0f; }

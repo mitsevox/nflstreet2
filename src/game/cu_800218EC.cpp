@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Record_8036B55C.h"
 #include "game/Object_8008044C.h"
@@ -107,7 +107,7 @@ void fn_80234424(int a);
 }
 
 static Object_8008044C lbl_8036B4F0;
-/* Matrix built by fn_80228AD4 and passed to fn_801D1258. */
+/* Matrix built by VptPerspective and passed to fn_801D1258. */
 static float lbl_8036B51C[4][4];
 static Record_8036B55C lbl_8036B55C[14];
 /* Current values; fn_800229D8 interpolates them from lbl_8037DAEC towards
@@ -278,7 +278,7 @@ static void fn_80021F60(int index, float a, float b, float c, float d)
 
     fn_8018A8C8(3);
     fn_801CE9E0(1);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D1288(2, projection);
     fn_801D1288(6, view);
     fn_801D04C4();
@@ -346,7 +346,7 @@ void fn_800221CC(int count)
 
     fn_8008044C(&lbl_8036B4F0, 0, 0x54415453);
     lbl_803EBAC0 = count;
-    fn_80228AD4(lbl_8036B51C, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
+    VptPerspective(lbl_8036B51C, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     fn_8008FCB4(0);
     fn_8008FE60();
     fn_800EFD70(0x21);
@@ -379,7 +379,7 @@ void fn_80022328(void)
     fn_8008FD88(1);
     fn_8008056C(&lbl_8036B4F0);
     lbl_803EBAC8->mUnknown20 &= ~2;
-    fn_80228D58((int)lbl_803EBAC8);
+    VptTrashObject((int)lbl_803EBAC8);
     lbl_803EBAC8 = 0;
     fn_8003FB2C();
 }
@@ -489,9 +489,9 @@ void fn_80022778(void)
 {
     if (lbl_803EBAC4) {
         if (fn_8007F828(6) == 2) {
-            fn_80228AD4(lbl_8036B51C, 45.0f, 16.0f / 9.0f, 1.0f, 200.0f);
+            VptPerspective(lbl_8036B51C, 45.0f, 16.0f / 9.0f, 1.0f, 200.0f);
         } else {
-            fn_80228AD4(lbl_8036B51C, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
+            VptPerspective(lbl_8036B51C, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
         }
         fn_80161168();
         if (lbl_803EBAC5 && lbl_803EBAC6) {

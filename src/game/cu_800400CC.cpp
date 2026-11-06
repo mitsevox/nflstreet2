@@ -62,9 +62,9 @@ int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-void fn_80228D58(Object_80040818 *pObject);
-void fn_80228DD4(void);
-void fn_80228E18(void);
+void VptTrashObject(Object_80040818 *pObject);
+void VptFlushObjectTrash(void);
+void VptFlushObjectTrashSync(void);
 
 int fn_800400CC(Object_80040818 *pObject);
 void fn_800400D4(Object_80040818 *pObject, unsigned int count);
@@ -236,9 +236,9 @@ void fn_800405F0(int handle)
                 pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
             }
             fn_801DD320(handle, lbl_803EA480[i]);
-            fn_80228D58(lbl_803EA480[i]);
+            VptTrashObject(lbl_803EA480[i]);
         }
-        fn_80228DD4();
+        VptFlushObjectTrash();
         fn_801D2BD0(lbl_803EA480);
         lbl_803EA480 = 0;
     }
@@ -283,7 +283,7 @@ void fn_80040788(int handle, int count)
 
 void fn_800407F0(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(28);
 }
 

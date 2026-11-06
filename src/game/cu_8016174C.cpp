@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
 #include "game/Team_80167A8C.h"
 #include "game/bitstream.h"
@@ -173,7 +173,7 @@ int fn_80161B38(Object_801618D8 *item) {
     Object_801618D8 *extra = 0;
     int draw = 1, valid = 1;
     if (item->mUnknownFC && (item->mUnknown20 & 2)) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
         switch (item->mUnknown28) {
         case 5:
@@ -240,7 +240,7 @@ int fn_80161B38(Object_801618D8 *item) {
             if (item->mUnknown28 == 6) {
                 fn_80235740(item->mUnknown3C, fn_801C657C());
                 fn_80210CC4(0.0f, 0.0f);
-                fn_801D0470(fn_80228668());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
                 fn_80235764(item->mUnknown3C, fn_801C657C());
                 fn_80210CC4(0.0f, 1.0f);
@@ -249,7 +249,7 @@ int fn_80161B38(Object_801618D8 *item) {
                     fn_80235740(extra->mUnknown3C, fn_801C657C());
                 if (draw)
                     fn_80235740(item->mUnknown3C, fn_801C657C());
-                fn_801D0470(fn_80228668());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
                 if (extra)
                     fn_80235764(extra->mUnknown3C, fn_801C657C());
@@ -257,7 +257,7 @@ int fn_80161B38(Object_801618D8 *item) {
                     fn_80235764(item->mUnknown3C, fn_801C657C());
             }
         } else {
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D0544();
         }
     }
@@ -375,7 +375,7 @@ void fn_8016239C(void *arg) {
     lbl_803EB398 = 0;
 }
 void fn_80162404(void) {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(8);
     lbl_803EB398 = 0;
 }
@@ -388,7 +388,7 @@ Object_801618D8 *fn_80162434(void *arg, int index, Object_801618D8 *shared, void
 void fn_80162494(void *arg, Object_801618D8 *item) {
     if (item) {
         fn_801DD320(arg, (int)item);
-        fn_80228D58((int)item);
+        VptTrashObject((int)item);
     }
 }
 void fn_801624D0(void *arg) {
@@ -495,7 +495,7 @@ void fn_80162794(void) {
     fn_801621B8();
 }
 int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float *scale) {
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
     struct Projection_8016295C {

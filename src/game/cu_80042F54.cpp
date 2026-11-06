@@ -129,8 +129,8 @@ int fn_80217070(void *pNode, const char *pName, int value);
 float fn_80227890(Vector_80039F5C *pA, float *pB);
 float fn_802278D0(Divot *pA, Divot *pB);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
-int fn_80228668(void);
-void fn_80228E18(void);
+int VptGetMatrixStack(void);
+void VptFlushObjectTrashSync(void);
 float fn_80237260(int stream);
 
 void fn_800433D4(Divot *p);
@@ -618,7 +618,7 @@ void fn_80044114(void)
     int i;
 
     if (lbl_803EA4A0) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_8019FB7C(0);
         pPool = lbl_803EC794[0];
         alpha = 0.1f;
@@ -921,7 +921,7 @@ void fn_80044AB0(void)
 
 void fn_80044B04(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(16);
 }
 

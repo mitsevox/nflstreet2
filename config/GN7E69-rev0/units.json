@@ -5964,21 +5964,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_80227F14.c",
+      "source": "src/engine/viewport.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80227F14-0x802288F8 (src/engine/cu_80227F14.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80227F14-0x802287D4 (src/engine/viewport.c) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80227F14",
-          "end": "0x802288F8"
+          "end": "0x802287D4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B20C8",
-          "end": "0x802B20F8"
+          "end": "0x802B20F0"
         },
         {
           "section": ".sdata",
@@ -5995,20 +5995,20 @@
       ]
     },
     {
-      "source": "src/engine/cu_802288F8.c",
+      "source": "src/engine/llviewpt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802288F8-0x80228E44 (src/engine/cu_802288F8.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x802287D4-0x80228E44 (src/engine/llviewpt.c) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x802288F8",
+          "start": "0x802287D4",
           "end": "0x80228E44"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B20F8",
+          "start": "0x802B20F0",
           "end": "0x802B2138"
         },
         {
@@ -6016,6 +6016,25 @@
           "placement": ".data5",
           "start": "0x803EBFA0",
           "end": "0x803EBFA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vram.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/vram.c) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
+          "end": "0x803EBFB8"
         }
       ]
     },
@@ -13858,7 +13877,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_80229094.c",
+      "source": "src/engine/dbteams.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270, all six exact function/name rows, complete native .sdata row 0x803EBFC8-0x803EBFD8 and canonical declaration/source-form rows. Complete source file linked.",
       "sections": [
@@ -13877,7 +13896,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228F78.c",
+      "source": "src/engine/dbtats.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084, four function/name rows, complete native .sdata row 0x803EBFB8-0x803EBFC4 and canonical declaration/source-form row. Complete source file linked.",
       "sections": [
@@ -13980,25 +13999,6 @@
           "placement": ".bss",
           "start": "0x8039ADB8",
           "end": "0x8039ADC4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80228E44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78, both exact function/name rows, canonical descriptor and entry access-view rows and exact native .sdata row 0x803EBFA8-0x803EBFB8. Complete file linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228E44",
-          "end": "0x80228F78"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFA8",
-          "end": "0x803EBFB8"
         }
       ]
     },

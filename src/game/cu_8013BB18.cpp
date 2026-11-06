@@ -1,5 +1,5 @@
 #include "engine/camfocus.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Camera_8013F738.h"
 #include "game/EaseVector_8013C9A4.h"
 #include "game/cu_80136B1C.h"
@@ -630,7 +630,7 @@ void fn_8013CAA4(EaseVector_8013C9A4 *pEase, int steps)
     angles[0] = (int)(pEase->mX.mValue * 46603.37890625f);
     angles[1] = (int)(pEase->mY.mValue * 46603.37890625f);
     angles[2] = (int)(pEase->mZ.mValue * 46603.37890625f);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D0C58(&pEase->mBase);
     fn_801D0ADC(-angles[2]);

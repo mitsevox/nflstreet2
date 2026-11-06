@@ -1,5 +1,5 @@
 #include "game/cu_801A8620.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/GameVpt.h"
 #include "game/Object_80039F5C.h"
@@ -119,7 +119,7 @@ int RenderModelObject_801A8620(Object_801A8620 *p, int arg)
     GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
     GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
     GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); GXSetZCompLoc(GX_FALSE); GXSetZMode(GX_TRUE,GX_LEQUAL,GX_TRUE); GXSetCullMode(GX_CULL_FRONT);
-    fn_80210BD8(2); fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0508();
+    fn_80210BD8(2); fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0508();
     fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
     fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC); fn_801D0F80(m1);
     fn_801D0544(); fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18);
@@ -321,7 +321,7 @@ int RenderModelChild_801A9430(Child_801A9430 *p,int arg)
     copy=color;GXSetChanMatColor(GX_COLOR0,copy);GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0,GX_ENABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_CLAMP,GX_AF_NONE);
     GXSetChanCtrl(GX_ALPHA0,GX_DISABLE,GX_SRC_REG,GX_SRC_REG,value,GX_DF_NONE,GX_AF_NONE);
-    fn_801D0470(fn_80228668());fn_801D0508();
+    fn_801D0470(VptGetMatrixStack());fn_801D0508();
     fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);fn_801D08FC(0x400000);
     fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m1);
     fn_801D0544();fn_801D04C4();fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);

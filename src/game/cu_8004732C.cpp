@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_80064864.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
@@ -102,7 +102,7 @@ int fn_800473AC(Item_800476DC *pInstance)
             matrix[2][2] = 0.0f;
             matrix[2][3] = pInstance->mUnknown32;
             fn_801D1258(1, matrix);
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D04C4();
             offset[0] = 106.666679f;
             offset[1] = 0.0f;
@@ -126,7 +126,7 @@ void fn_80047578(void)
 
 void fn_800475D4(void)
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_801DCF8C(11);
 }
 
@@ -139,7 +139,7 @@ void fn_80047630(Item_800476DC *pInstance)
 {
     if (pInstance) {
         fn_801DD320(lbl_803EA4C0, pInstance);
-        fn_80228D58((int)pInstance);
+        VptTrashObject((int)pInstance);
     }
 }
 
@@ -175,7 +175,7 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
     position[0] = pPosition[0];
     position[1] = pPosition[1];
     position[2] = pPosition[2];
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
     point[0] = position[0];
@@ -192,7 +192,7 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
         clip[3] *= scale;
         fn_801D12BC(1);
         fn_80227E40(view, clip);
-        float aspect = fn_80228644()->mUnknown208 * 0.75f;
+        float aspect = VptGetCurrentViewport()->mUnknown208 * 0.75f;
         float width = aspect * 320.0f;
         pInstance->mUnknown4[0] = width * clip[0] + 320.0f;
         pInstance->mUnknown4[1] = 224.0f - clip[1] * 224.0f;

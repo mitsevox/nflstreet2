@@ -13,7 +13,7 @@
 #include "engine/Font.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/sound.h"
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
@@ -189,7 +189,7 @@ void fn_80221198(void *p)
     Transform_80221198 *pXf = p;
     float aNeg[3];
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(pXf->mPosition);
     fn_801D0C58(pXf->mPivot);
@@ -209,7 +209,7 @@ void fn_80221198(void *p)
 
 void fn_80221294(void *p)
 {
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
     fn_80221118();
     fn_80220CFC(0);

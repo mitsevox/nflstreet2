@@ -1,6 +1,6 @@
-#include "engine/cu_80228E44.h"
-#include "engine/cu_80228F78.h"
-#include "engine/cu_80229094.h"
+#include "engine/vram.h"
+#include "engine/dbtats.h"
+#include "engine/dbteams.h"
 #include "engine/cu_80229270.h"
 #include "game/cu_8007F12C.h"
 #include "game/cu_80191398.h"
@@ -225,13 +225,13 @@ int DbGame::Init()
     data = fn_801EEB44(lbl_802EBE24, 44);
     fn_8022EA80(0x3000, lbl_802EBE24, 4);
     fn_8022EB10();
-    fn_80228F78(0x96000, lbl_802EBE24, 2);
-    fn_80229010();
+    DbTatsInit(0x96000, lbl_802EBE24, 2);
+    DbTatsLoad();
     fn_8022EBF0(0x96000, lbl_802EBE24, 2);
     fn_8022EF14(lbl_802EBE34);
     fn_8022F028(0x3000, lbl_802EBE24, 5);
     fn_8022F4C4();
-    fn_80229094(lbl_802EBE40);
+    DbTeamsInit(lbl_802EBE40);
     fn_801F9430(0x54415453, sDbGameTable_802D7070, sDbGameTable_802D7064);
     fn_8007F328(1);
     fn_801EEFAC(data);
@@ -242,13 +242,13 @@ int DbGame::Shutdown()
 {
     fn_8007F374();
     fn_801F9574();
-    fn_802290E0();
+    DbTeamsShutdown();
     fn_8022F744();
     fn_8022F094();
     fn_8022EF60();
     fn_8022EC48();
-    fn_8022905C();
-    fn_80228FD8();
+    DbTatsUnload();
+    DbTatsShutdown();
     fn_8022EBC8();
     fn_8022EAD8();
     fn_80229494();
@@ -481,7 +481,7 @@ int Task::Shutdown()
 }
 
 static void *sVRAMDependencies[] = { 0 };
-static Desc_80228E44 sVRAMDesc = { 1000 };
+static VramInitBlock_t sVRAMDesc = { 1000 };
 VRAM gVRAM;
 
 ModuleDependency *VRAM::GetDependencies() { return (ModuleDependency *)sVRAMDependencies; }
@@ -490,13 +490,13 @@ const char *VRAM::GetName() { return "VRAM"; }
 
 int VRAM::Init()
 {
-    fn_80228E44(&sVRAMDesc);
+    VramInit(&sVRAMDesc);
     return 1;
 }
 
 int VRAM::Shutdown()
 {
-    fn_80228F0C();
+    VramShutdown();
     return 1;
 }
 

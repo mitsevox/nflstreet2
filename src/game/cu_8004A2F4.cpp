@@ -1323,7 +1323,7 @@ int fn_801DCF8C(int);
 void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
 Child_801A9430 *fn_801DD268(int, int, int, Desc_800408E4 *);
 void fn_801DD320(int, Child_801A9430 *);
-void fn_80228D58(Child_801A9430 *); void fn_80228DD4(void); void fn_80228E18(void);
+void VptTrashObject(Child_801A9430 *); void VptFlushObjectTrash(void); void VptFlushObjectTrashSync(void);
 int fn_801F7C88(void);
 Object_80040818 *fn_8004113C(int, unsigned int);
 void fn_801A980C(Child_801A9430 *);
@@ -1339,7 +1339,7 @@ int fn_8021743C(void *, const char *, float *, int);
 int fn_8002D060(void *);
 int fn_801C657C(void);
 void fn_801A8548(Object_801A8620 *, int);
-int fn_80228668(void);
+int VptGetMatrixStack(void);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235740(void *, int); void fn_80235764(void *, int);
 int fn_801EF390(void *, int, int);
@@ -1455,16 +1455,16 @@ void fn_8004D068(int handle)
     if (lbl_803EA4F4) {
         for (unsigned short i = 0; i < lbl_803EC7D0; i++) {
             fn_801DD320(handle, lbl_803EA4F4[i]);
-            fn_80228D58(lbl_803EA4F4[i]);
+            VptTrashObject(lbl_803EA4F4[i]);
         }
-        fn_80228DD4();
+        VptFlushObjectTrash();
         fn_801D2BD0(lbl_803EA4F4);
         lbl_803EA4F4 = 0;
     }
 }
 
 void fn_8004D0F4(int handle) { fn_8004CFCC(handle, 64); }
-void fn_8004D118(int handle) { fn_8004D068(handle); fn_80228E18(); fn_801DCF8C(31); }
+void fn_8004D118(int handle) { fn_8004D068(handle); VptFlushObjectTrashSync(); fn_801DCF8C(31); }
 
 void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
 {
@@ -1582,7 +1582,7 @@ int fn_8004D874(Object_801A8620 *p, int mode)
         Object_80041904 *pPose = (Object_80041904 *)p->mpUnknown1D8;
         if (p->mFlagF0) fn_801A9368(p, (int)pPose->mUnknown200.mStep);
         if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
-        int index = fn_80228668();
+        int index = VptGetMatrixStack();
         Object_80235588 *pRender = &pInstance->mRender;
         fn_801D0470(index); fn_801D04C4();
         fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
@@ -2598,7 +2598,7 @@ void fn_80050DA0(void)
 
 void fn_80050F14(void)
 {
-    int renderState = fn_80228668();
+    int renderState = VptGetMatrixStack();
     unsigned int index = 0;
     fn_801D0470(renderState);
     fn_801D0508();
