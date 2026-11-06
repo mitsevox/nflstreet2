@@ -313,26 +313,26 @@ extern void fn_80211E08(void *p, int a);
 extern void fn_80211EFC(void *p);
 extern void *fn_80212050(void *p);
 extern void *fn_80212074(void *p, int a);
-extern void fn_802134D0(void *p);
-extern void fn_80213504(Joints_802337D4 *pJoints, int a);
-extern void SynthesizeClusterBoneMatrices_8021353C(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
-extern void SynthesizeFlaggedQuaternionBoneMatrices_80213774(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
-extern void fn_80213A38(int a, int b, int c);
+extern void TMClusterObjInitObj(void *p);
+extern void TMClusterObjAllocMatrices(Joints_802337D4 *pJoints, int a);
+extern void TMClusterObjSynthesizeMatrices(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
+extern void TMClusterObjSynthesizeMatricesSlerp(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
+extern void TMTevSetTevOp(int a, int b, int c);
 extern void fn_80214140(int a);
 extern void fn_80214184(int a);
 extern void fn_802141C4(int a, void *p, void *q);
 extern unsigned int fn_8021445C(void *p, void *q, int a);
 extern void fn_802144AC(void *p);
-extern void fn_80214554(void *p, int a, int b);
-extern void fn_802145B0(void *p);
-extern void fn_802145F4(void *p);
-extern void fn_802149D4(short *pValues, int count);
-extern void fn_80214A7C(void *p);
-extern void fn_80214B20(void);
-extern void fn_80214B44(void *p);
-extern void fn_80214CB4(void);
-extern Range_80216190 *fn_80216190(Group_803E96E8 *pGroup, int a, int key);
-extern int fn_802161D8(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
+extern void TMBufferNew(void *p, int a, int b);
+extern void TMBufferDelete(void *p);
+extern void TMBufferReset(void *p);
+extern void TMBlendSetWeights(short *pValues, int count);
+extern void TMBlendBegin(void *p);
+extern void TMBlendEnd(void);
+extern void TMBlendBindModel(void *p);
+extern void TMBlendGeomAll(void);
+extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
+extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
 extern int fn_802293A8(void);
 extern void fn_802293B0(void);
 extern int fn_8022942C(void);
@@ -1123,7 +1123,7 @@ int fn_802336BC(void)
 
 void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a)
 {
-    fn_80214554(pBlock, a, 32);
+    TMBufferNew(pBlock, a, 32);
     if (pSource != 0) {
         fn_8020F2C4(pBlock->mUnknown10, pSource);
         fn_8020F8E0(pBlock->mUnknown10);
@@ -1135,18 +1135,18 @@ void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a)
 void fn_80233728(Block_802336C4 *pBlock)
 {
     fn_8020F92C(pBlock->mUnknown10);
-    fn_802145B0(pBlock);
+    TMBufferDelete(pBlock);
 }
 
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count)
 {
     fn_8020F89C(pBlock->mUnknown10);
-    fn_802145F4(pBlock);
-    fn_80214A7C(pBlock);
-    fn_80214B44(pBlock->mUnknown10);
-    fn_802149D4(pValues, count);
-    fn_80214CB4();
-    fn_80214B20();
+    TMBufferReset(pBlock);
+    TMBlendBegin(pBlock);
+    TMBlendBindModel(pBlock->mUnknown10);
+    TMBlendSetWeights(pValues, count);
+    TMBlendGeomAll();
+    TMBlendEnd();
     DCFlushRange(pBlock->mpUnknown0, pBlock->mUnknown4);
 }
 
@@ -1162,8 +1162,8 @@ void fn_802337D4(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
             if (pJoints->mUnknown4 != 0) {
                 fn_80236F00();
             }
-            fn_80213504(pJoints, pSkeleton[1]);
-            SynthesizeClusterBoneMatrices_8021353C(pJoints, pBones, pSkeleton, pPose);
+            TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
+            TMClusterObjSynthesizeMatrices(pJoints, pBones, pSkeleton, pPose);
         }
     }
 }
@@ -1181,15 +1181,15 @@ void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, 
             if (pJoints->mUnknown4 != 0) {
                 fn_80236F00();
             }
-            fn_80213504(pJoints, pSkeleton[1]);
-            SynthesizeFlaggedQuaternionBoneMatrices_80213774(pJoints, pBones, pSkeleton, pPose, pFlags);
+            TMClusterObjAllocMatrices(pJoints, pSkeleton[1]);
+            TMClusterObjSynthesizeMatricesSlerp(pJoints, pBones, pSkeleton, pPose, pFlags);
         }
     }
 }
 
 void fn_80233BB8(void *pJoints, int a, int b)
 {
-    fn_802134D0(pJoints);
+    TMClusterObjInitObj(pJoints);
 }
 
 void fn_80233BD8(void *pJoints)
@@ -1222,7 +1222,7 @@ int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues)
         }
         for (i = 0; i < count; i++) {
             if (pValues->mUnknown8[i] != 255) {
-                total += fn_802161D8(pList, &pOut[total], i, pValues->mUnknown8[i]);
+                total += TMSwapGetGeomRefs(pList, &pOut[total], i, pValues->mUnknown8[i]);
             }
         }
     }
@@ -1695,7 +1695,7 @@ void fn_80234BF4(int a, Part_80234A30 *pPart, int mode)
         GXSetNumTexGens(1);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        fn_80213A38(0, 0, 1);
+        TMTevSetTevOp(0, 0, 1);
         fn_80211424(pPart->mUnknown96, pPart->mUnknown92);
         break;
     }
@@ -1824,7 +1824,7 @@ void fn_80235328(Owner_80235328 *pOwner, int key)
     int i;
 
     if (pGroup != 0) {
-        pRange = fn_80216190(pGroup, 0, key);
+        pRange = TMSwapGetState(pGroup, 0, key);
         if (pRange != 0) {
             pIndex = &pGroup->mpUnknown12[pRange->mUnknown16];
             for (i = 0; i < pRange->mUnknown18; i++) {

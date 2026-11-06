@@ -26,7 +26,7 @@ void fn_80211638(Shader_80211638 *pShader, ShaderDef_80211638 *pDef)
             if (pShader->mpFirstConst == 0) {
                 pShader->mpFirstConst = pParm;
             }
-            pShader->mConstSize += fn_80213214(pParm->mType);
+            pShader->mConstSize += TMShaderParmGetSize(pParm->mType);
             pShader->mNumConsts++;
         }
     }

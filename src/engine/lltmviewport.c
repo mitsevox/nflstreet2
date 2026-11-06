@@ -1,9 +1,12 @@
+/* Low-level viewport hooks of the TM renderer, called when rendering starts and stops; they
+   do nothing in this game. */
+
 #include "engine/tmlib.h"
 
-void fn_80215B6C(int unknown)
+void TMViewportLLNew(int unknown)
 {
 }
 
-void fn_80215B70(void)
+void TMViewportLLDelete(void)
 {
 }

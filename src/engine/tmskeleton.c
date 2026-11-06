@@ -1,8 +1,11 @@
+/* Model skeletons: pointer relocation after loading, and remapping bones between two
+   skeletons by bone name. */
+
 #include "engine/tmlib.h"
 
 extern int fn_801C4E98(void *pSkel, const char *pName);
 
-void fn_80215E5C(Skeleton_80215E5C *pSkel, void *pOldBase, void *pNewBase)
+void TMSkelRelocateChunk(TMSkeleton_t *pSkel, void *pOldBase, void *pNewBase)
 {
     pSkel->mpNames = fn_8020EB94(pSkel->mpNames, pOldBase, pNewBase);
     pSkel->mpBones = fn_8020EB94(pSkel->mpBones, pOldBase, pNewBase);
@@ -12,7 +15,7 @@ void fn_80215E5C(Skeleton_80215E5C *pSkel, void *pOldBase, void *pNewBase)
     }
 }
 
-short *fn_80215EE0(Skeleton_80215E5C *pSkel, void *pOther)
+short *TMSkelBuildRemapTable(TMSkeleton_t *pSkel, void *pOther)
 {
     short *pRemap = 0;
     unsigned int i;
@@ -26,19 +29,19 @@ short *fn_80215EE0(Skeleton_80215E5C *pSkel, void *pOther)
     return pRemap;
 }
 
-void fn_80215F78(Skeleton_80215E5C *pSkel, short *pRemap)
+void TMSkelRemapNodes(TMSkeleton_t *pSkel, short *pRemap)
 {
     int numBones = pSkel->mNumBones;
-    SkelBoneInfo_80215E5C *pInfo = pSkel->mpInfo;
-    SkelBone_80215E5C *pBones = pSkel->mpBones;
-    SkelBoneInfo_80215E5C *pOldInfo;
-    SkelBone_80215E5C *pOldBones;
+    TMSkelBoneInfo_t *pInfo = pSkel->mpInfo;
+    TMSkelBone_t *pBones = pSkel->mpBones;
+    TMSkelBoneInfo_t *pOldInfo;
+    TMSkelBone_t *pOldBones;
     int i;
 
-    pOldInfo = fn_802127D0(numBones, sizeof(SkelBoneInfo_80215E5C));
-    memcpy(pOldInfo, pSkel->mpInfo, numBones * sizeof(SkelBoneInfo_80215E5C));
-    pOldBones = fn_802127D0(numBones, sizeof(SkelBone_80215E5C));
-    memcpy(pOldBones, pSkel->mpBones, numBones * sizeof(SkelBone_80215E5C));
+    pOldInfo = fn_802127D0(numBones, sizeof(TMSkelBoneInfo_t));
+    memcpy(pOldInfo, pSkel->mpInfo, numBones * sizeof(TMSkelBoneInfo_t));
+    pOldBones = fn_802127D0(numBones, sizeof(TMSkelBone_t));
+    memcpy(pOldBones, pSkel->mpBones, numBones * sizeof(TMSkelBone_t));
     for (i = 0; i < numBones; i++) {
         int index = pRemap[i];
 

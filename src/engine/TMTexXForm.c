@@ -1,24 +1,26 @@
+/* Texture transform tables: pointer relocation after loading and lookup of a transform by name. */
+
 #include "engine/tmlib.h"
 
 extern int fn_801C31B0(const char *pA, const char *pB);
 
-extern TexXFormDef_80215838 *lbl_803EBF18;
+extern TMTexXformDef_t *lbl_803EBF18;
 
-void fn_80215838(TexXFormDef_80215838 *pDef, void *pOldBase, void *pNewBase)
+void TMTexXformRelocateChunk(TMTexXformDef_t *pDef, void *pOldBase, void *pNewBase)
 {
     unsigned int i;
 
     for (i = 0; i < pDef->mNumEntries; i++) {
-        TexXFormEntry_80215838 *pEntry = &pDef->maEntries[i];
+        TMTexXformEntry_t *pEntry = &pDef->maEntries[i];
 
         pEntry->mpName = fn_8020EB94((void *)pEntry->mpName, pOldBase, pNewBase);
     }
 }
 
-int fn_802158A4(const char *pName)
+int TMTexXformFind(const char *pName)
 {
-    TexXFormDef_80215838 *pDef = lbl_803EBF18;
-    TexXFormEntry_80215838 *pEntries;
+    TMTexXformDef_t *pDef = lbl_803EBF18;
+    TMTexXformEntry_t *pEntries;
     unsigned int i;
 
     if (pDef == 0) {

@@ -1,7 +1,10 @@
+/* The TM renderer's own GXSetTevOp: sets one TEV stage for replace, pass-color, decal, blend
+   or modulate. */
+
 #include <dolphin/gx/GXTev.h>
 #include "engine/tmlib.h"
 
-void fn_80213A38(GXTevStageID stage, GXTevMode mode, GXTevScale scale)
+void TMTevSetTevOp(GXTevStageID stage, GXTevMode mode, GXTevScale scale)
 {
     GXTevColorArg colorIn;
     GXTevAlphaArg alphaIn;

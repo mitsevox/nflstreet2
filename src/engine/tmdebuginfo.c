@@ -1,6 +1,8 @@
+/* Debug-info chunks of loaded models: pointer relocation of their name and string tables. */
+
 #include "engine/tmlib.h"
 
-void fn_80215B7C(DebugInfo_80215B7C *pInfo, void *pOldBase, void *pNewBase)
+void TMDebugInfoRelocateChunk(TMDebugInfo_t *pInfo, void *pOldBase, void *pNewBase)
 {
     if (pInfo->mNumNames != 0 && pInfo->mpNames != 0) {
         pInfo->mpNames = fn_8020EB94(pInfo, 0, pInfo->mpNames);

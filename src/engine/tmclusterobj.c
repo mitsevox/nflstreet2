@@ -1,3 +1,6 @@
+/* Bone matrices for skinned models: a double-buffered pool of matrices handed out each frame,
+   and the code that builds a model's bone hierarchy from its animation pose. */
+
 #include <dolphin/os/OSCache.h>
 #include <dolphin/mtx.h>
 #include "engine/tmlib.h"
@@ -10,16 +13,14 @@ void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 
 extern unsigned char lbl_803E9288[];
 
-typedef f32 Mtx34_80213444[3][4];
-
-extern Mtx34_80213444 *lbl_803ECFD4[2];
+extern Mtx *lbl_803ECFD4[2];
 extern int lbl_803ECFDC;
 extern int lbl_803ECFE0;
 extern int lbl_803ECFE4;
 
-void fn_80213444(int maxMatrices, int numBuffers)
+void TMClusterObjInit(int maxMatrices, int numBuffers)
 {
-    Mtx34_80213444 *pBuffer = fn_801D2B7C(sizeof(Mtx34_80213444) * maxMatrices * numBuffers, 0, 0);
+    Mtx *pBuffer = fn_801D2B7C(sizeof(Mtx) * maxMatrices * numBuffers, 0, 0);
 
     lbl_803ECFD4[0] = pBuffer;
     lbl_803ECFD4[1] = pBuffer;
@@ -27,31 +28,31 @@ void fn_80213444(int maxMatrices, int numBuffers)
         lbl_803ECFD4[1] = pBuffer + maxMatrices;
     }
     lbl_803ECFE0 = maxMatrices;
-    fn_802134E8();
+    TMClusterObjResetMatrices();
 }
 
-void fn_802134AC(void)
+void TMClusterObjShutdown(void)
 {
     fn_801D2BD0(lbl_803ECFD4[0]);
 }
 
-void fn_802134D0(ClusterObj_80210724 *pObj)
+void TMClusterObjInitObj(ClusterObj_80210724 *pObj)
 {
     pObj->mpMatrices = 0;
     pObj->mNumMatrices = 0;
     pObj->mpCacheMatrices = (void *)0xE0000000;
 }
 
-void fn_802134E8(void)
+void TMClusterObjResetMatrices(void)
 {
     lbl_803ECFDC = !lbl_803ECFDC;
     lbl_803ECFE4 = 0;
 }
 
-void fn_80213504(ClusterObj_80210724 *pObj, int numMatrices)
+void TMClusterObjAllocMatrices(ClusterObj_80210724 *pObj, int numMatrices)
 {
     int used = lbl_803ECFE4;
-    Mtx34_80213444 *pBuffer = lbl_803ECFD4[lbl_803ECFDC];
+    Mtx *pBuffer = lbl_803ECFD4[lbl_803ECFDC];
 
     numMatrices = (numMatrices + 1) & ~1;
     lbl_803ECFE4 = used + numMatrices;
@@ -61,7 +62,7 @@ void fn_80213504(ClusterObj_80210724 *pObj, int numMatrices)
 
 /* Builds the local matrix of one bone from its three angles and position and
    concatenates it with the parent's matrix. */
-static inline void fn_8021353C_Matrix(Mtx34_80213444 *pParent, Mtx34_80213444 *pOut, int rx, int ry, int rz,
+static inline void _TMClusterObjBuildBoneMatrix(Mtx *pParent, Mtx *pOut, int rx, int ry, int rz,
                                       float *pPos)
 {
     float sx, cx, sy, cy, sz, cz;
@@ -90,9 +91,9 @@ static inline void fn_8021353C_Matrix(Mtx34_80213444 *pParent, Mtx34_80213444 *p
 
 /* Build the bone hierarchy from pose rotations and positions, optionally
    blending angles with 12-bit weights, then publish the matrix buffer. */
-void SynthesizeClusterBoneMatrices_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3])
+void TMClusterObjSynthesizeMatrices(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3])
 {
-    Mtx34_80213444 *pMatrices = pObj->mpCacheMatrices;
+    Mtx *pMatrices = pObj->mpCacheMatrices;
     unsigned int i;
 
     if (pMatrices == 0) {
@@ -102,7 +103,7 @@ void SynthesizeClusterBoneMatrices_8021353C(ClusterObj_80210724 *pObj, Pose_8021
     }
     fn_801D0F80(pMatrices[0]);
     for (i = 1; i < pBones->mNumBones; i++) {
-        BoneEntry_8021353C *pBone = &pBones->mpBones[i];
+        TMClusterBone_t *pBone = &pBones->mpBones[i];
         int index = pBone->mIndex;
         int parent = pBone->mParent;
         float *pPos = pPose->mpPositions[index];
@@ -117,24 +118,24 @@ void SynthesizeClusterBoneMatrices_8021353C(ClusterObj_80210724 *pObj, Pose_8021
             ry += ((pTarget[1] - ry) * pBone->mWeight) >> 12;
             rx += ((pTarget[0] - rx) * pBone->mWeight) >> 12;
         }
-        fn_8021353C_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
+        _TMClusterObjBuildBoneMatrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
     }
     if (pObj->mpCacheMatrices != 0) {
-        LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
+        LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx));
     } else {
-        DCStoreRange(pMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
+        DCStoreRange(pMatrices, pBones->mNumBones * sizeof(Mtx));
     }
 }
 
 /* Start with angle-blended matrices, replace flagged bones with
    quaternion-interpolated rotations, and publish the updated buffer. */
-void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3],
+void TMClusterObjSynthesizeMatricesSlerp(ClusterObj_80210724 *pObj, TMClusterPose_t *pPose, TMClusterBoneList_t *pBones, short (*pBlend)[3],
                  unsigned char *pFlags)
 {
-    Mtx34_80213444 *pMatrices;
+    Mtx *pMatrices;
     unsigned int i;
 
-    SynthesizeClusterBoneMatrices_8021353C(pObj, pPose, pBones, pBlend);
+    TMClusterObjSynthesizeMatrices(pObj, pPose, pBones, pBlend);
     pMatrices = pObj->mpCacheMatrices;
     if (pMatrices == 0) {
         pMatrices = pObj->mpMatrices;
@@ -142,7 +143,7 @@ void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj,
         LCQueueWait(0);
     }
     for (i = 1; i < pBones->mNumBones; i++) {
-        BoneEntry_8021353C *pBone = &pBones->mpBones[i];
+        TMClusterBone_t *pBone = &pBones->mpBones[i];
         int index = pBone->mIndex;
 
         if (pBlend != 0 && index != -1) {
@@ -168,13 +169,13 @@ void SynthesizeFlaggedQuaternionBoneMatrices_80213774(ClusterObj_80210724 *pObj,
                 rx = angles.mUnknown0 >> 8;
                 ry = angles.mUnknown4 >> 8;
                 rz = angles.mUnknown8 >> 8;
-                fn_8021353C_Matrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
+                _TMClusterObjBuildBoneMatrix(&pMatrices[parent], &pMatrices[i], rx, ry, rz, pPos);
             }
         }
     }
     if (pObj->mpCacheMatrices != 0) {
-        LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
+        LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx));
     } else {
-        DCStoreRange(pMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
+        DCStoreRange(pMatrices, pBones->mNumBones * sizeof(Mtx));
     }
 }
