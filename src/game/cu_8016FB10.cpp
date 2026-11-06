@@ -67,7 +67,7 @@ double fabs(double);
 void fn_8003AB08(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
 void fn_80053A70(Object_80039F5C *p);
-void fn_8006F0B8(int a);
+void SndgSpchSetPlayFlags(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
 void fn_80071540(Object_80039F5C *p, void *pBall);
 void fn_80093C3C(int a, short b, Object_80039F5C *p);
@@ -763,7 +763,7 @@ void fn_80170F40(void)
             pRecord->mUnknown4 = pReceiver->mMotion.mPos.mX;
             pRecord->mUnknown8 = pReceiver->mMotion.mPos.mY;
             if (pReceiver->mMotion.mPos.mY < pos.mY && !fn_801783AC(0xC) && !fn_801783AC(0xB)) {
-                fn_8006F0B8(0x20);
+                SndgSpchSetPlayFlags(0x20);
             }
         } else {
             pRecord->mUnknown4 = pos.mX;

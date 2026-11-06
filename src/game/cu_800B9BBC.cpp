@@ -171,7 +171,7 @@ extern "C" {
 void fn_8003A1EC(int on, int team, int index);
 void fn_8003A394(int a, int team, int index);
 void fn_8003A3F4(int a, int team);
-int fn_8006D65C(int idx);
+int SndgChannelGetStream(int idx);
 Object_801618D8 *fn_80162DBC(int index);
 void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
 void fn_801F4934(int a, Position_801F4934 *pPosition);
@@ -183,7 +183,7 @@ extern "C" int fn_800B9F50(void)
     Position_801F4934 position;
     int done = 0;
 
-    fn_801F4834(fn_8006D65C(4), &status);
+    fn_801F4834(SndgChannelGetStream(4), &status);
     if (status.mUnknown0 == 0) {
         position.mUnknown4 = 0xFFFF;
     } else {

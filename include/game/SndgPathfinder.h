@@ -14,23 +14,23 @@ public:
 
 extern SndgPathfinder gSndgPathfinder;
 
-/* Entry of the 20-entry table lbl_802D611C. */
-struct Struct_802D611C {
+/* Entry of the 20-entry table gSndgAramRegions. */
+struct SndgAramRegion_t {
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned int mUnknown8;
 };
 
 /* Argument of SndgAmbIsPathNodeName, which compares the string at +8 with the names of
-   lbl_802D50A4; SndgSoundObjUpdateFromEvent reads the float at +4. */
-struct Struct_8006BBC4 {
+   _SndgAmb_apszPathNodeNames; SndgSoundObjUpdateFromEvent reads the float at +4. */
+struct SndgAmbObjInfo_t {
     int mUnknown0;
     float mUnknown4;
     char mUnknown8[1];
 };
 
 extern "C" {
-extern Struct_802D611C lbl_802D611C[];
+extern SndgAramRegion_t gSndgAramRegions[];
 
 int SndgPathLoadMap(void *pData, int unknown);
 int SndgPathUnloadMap(int handle);
@@ -38,7 +38,7 @@ int SndgPathCreateTrack(void *pData, int unknown, int id, float value);
 int SndgPathDestroyTrack(int id);
 void SndgPathSetTrackVolume(int id, unsigned int value);
 int SndgPathPostEvent(int id, int unknown);
-int fn_8006DE54(int id, int unknown);
+int SndgPathControl(int id, int unknown);
 }
 
 #endif

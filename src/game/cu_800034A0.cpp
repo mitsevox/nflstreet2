@@ -31,7 +31,7 @@ void DbCheckVersion(int handle);
 void fn_80029CE0(int a, int b);
 int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
-void fn_8006EC24(void);
+void SndgApplyVolumeOptions(void);
 void fn_8007F328(int a);
 void fn_8007F374(void);
 int fn_800298E8(int a, int b);
@@ -185,7 +185,7 @@ void fn_800037C0(int a, int *b)
             fn_8007F328(1);
             fn_8007F374();
         } else {
-            fn_8006EC24();
+            SndgApplyVolumeOptions();
             fn_801D6B24(buf + 8, 17);
             fn_80029A40(type, slot, fn_800298E8(type, slot), buf + 8);
         }

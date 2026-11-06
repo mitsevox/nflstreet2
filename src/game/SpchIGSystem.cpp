@@ -60,13 +60,13 @@ struct SpchIGState_t {
 extern "C" {
 extern char lbl_802EBE04[];
 
-int fn_8006D65C(int a);
-void fn_8006D684(int idx, unsigned char percent);
-void fn_8006D6F4(int a, int b, int c);
-void fn_8006D758(int a, Vector_80039F5C *pPos);
-void fn_8006EA04(int a, unsigned char b);
-void fn_8006ECB4(AudmonEvent_t *pRecord);
-void fn_8006F0C8(int a);
+int SndgChannelGetStream(int a);
+void SndgChannelSetVolume(int idx, unsigned char percent);
+void SndgChannelFadeStream(int a, int b, int c);
+void SndgChannelSetPosition(int a, Vector_80039F5C *pPos);
+void SndgSetVolumeOption(int a, unsigned char b);
+void SndgSpchHandleEvent(AudmonEvent_t *pRecord);
+void SndgSpchClearPlayFlags(int a);
 int SpchIGGetSceneSpeaker(void);
 unsigned char SpchIGIsSceneLineActive(void);
 int SpchIGGetWallTacklePlayer(void);
@@ -389,8 +389,8 @@ extern "C" void SpchIGStart(void)
     _SpchIG_sInitParams.mUnknown4 = (_SpchIG_sInitParams.mUnknown4 + 1) & 0x7FFFFFFF;
     SpchIGLoadChatData(&_SpchIG_sInitParams, 1);
     fn_801F5CCC(SpchIGStubQuery, SpchIGStubNotify);
-    fn_8006F0C8(127);
-    AudmonEventAddListener(fn_8006ECB4);
+    SndgSpchClearPlayFlags(127);
+    AudmonEventAddListener(SndgSpchHandleEvent);
     _SpchIG_bActive = 1;
     _SpchIG_bEnabled = 1;
 }
@@ -427,46 +427,46 @@ extern "C" void SpchIGUpdate(void)
             }
         }
     }
-    fn_8006EA04(3, fn_8007F828(3) * 10);
+    SndgSetVolumeOption(3, fn_8007F828(3) * 10);
     if (first != 0) {
-        fn_8006D684(4, 95);
+        SndgChannelSetVolume(4, 95);
     }
     if (second != 0) {
-        fn_8006D684(5, 95);
+        SndgChannelSetVolume(5, 95);
     }
 
     fn_801F4834(SpchIGGetChannelStream(0), &status);
-    fn_8006D758(4, 0);
+    SndgChannelSetPosition(4, 0);
     if (_SpchIG_bUseSpeakerPos != 0) {
         handle = SpchIGGetChannelSpeaker(0);
         if (handle != 0) {
             fn_8009BF5C(fn_8009BCE8(&handle), 13, &pos, 0);
-            fn_8006D758(4, &pos);
+            SndgChannelSetPosition(4, &pos);
         }
     }
-    fn_8006D6F4(4, 0, 127);
+    SndgChannelFadeStream(4, 0, 127);
     if (status.mUnknown0 == 0) {
         fn_801AF364(0);
     }
 
     fn_801F4834(SpchIGGetChannelStream(1), &status);
-    fn_8006D758(5, 0);
+    SndgChannelSetPosition(5, 0);
     if (_SpchIG_bUseSpeakerPos != 0) {
         handle = SpchIGGetChannelSpeaker(1);
         if (handle != 0) {
             fn_8009BF5C(fn_8009BCE8(&handle), 13, &pos, 0);
-            fn_8006D758(5, &pos);
+            SndgChannelSetPosition(5, &pos);
         }
     }
-    fn_8006D6F4(5, 0, 127);
+    SndgChannelFadeStream(5, 0, 127);
     if (status.mUnknown0 == 0) {
         fn_801AF364(1);
     }
 
     if (_SpchIG_bTutorial != 0) {
         fn_801F4834(SpchIGGetChannelStream(2), &status);
-        fn_8006D758(6, 0);
-        fn_8006D6F4(6, 0, 127);
+        SndgChannelSetPosition(6, 0);
+        SndgChannelFadeStream(6, 0, 127);
         if (status.mUnknown0 == 0) {
             fn_801AF364(2);
         }
@@ -481,7 +481,7 @@ extern "C" void SpchIGStop(void)
 {
     _SpchIG_bActive = 0;
     _SpchIG_bTutorial = 0;
-    AudmonEventRemoveListener(fn_8006ECB4);
+    AudmonEventRemoveListener(SndgSpchHandleEvent);
     fn_801F5D0C();
     fn_801F5C34();
     if (_SpchIG_sState.mpUnknown8 != 0) {
@@ -650,16 +650,16 @@ extern "C" int SpchIGGetChannelStream(unsigned int index)
 
     switch (index) {
     case 0:
-        result = fn_8006D65C(4);
+        result = SndgChannelGetStream(4);
         break;
     case 1:
-        result = fn_8006D65C(5);
+        result = SndgChannelGetStream(5);
         break;
     case 2:
-        result = fn_8006D65C(6);
+        result = SndgChannelGetStream(6);
         break;
     default:
-        result = fn_8006D65C(4);
+        result = SndgChannelGetStream(4);
         break;
     }
     return result;
