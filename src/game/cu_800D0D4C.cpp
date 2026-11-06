@@ -18,7 +18,7 @@
 
 enum Code_800D0F98 {};
 
-struct Record_8018FC1C {
+struct TkRow_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
@@ -59,7 +59,7 @@ struct Table_800D1788 {
    id 'trck' with lbl_803EACD4 as its pointer; unaccessed regions remain
    opaque. */
 struct State_800D0D4C {
-    Record_8018FC1C mUnknown0[127];
+    TkRow_t mUnknown0[127];
     char mUnknown19CC[156];
     int mUnknown1A68;
     int mUnknown1A6C;
@@ -215,7 +215,7 @@ extern const char lbl_803ED6C0[4], lbl_803ED6C4[1];
 extern float lbl_803EACCC;
 extern unsigned char lbl_803EC9CC[2];
 extern unsigned char lbl_803EC9D0[2];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int ChallengeIsActive(void);
 struct Challenge_t;
@@ -234,10 +234,10 @@ void fn_8017E3CC(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
 void UserInfoAddPoints(int, unsigned int);
-void fn_8018FB4C(DbCursor *, int);
-void fn_8018FBC8(DbCursor *);
-int fn_8018FBE8(DbCursor *, int);
-void fn_8018FC1C(DbCursor *, Record_8018FC1C *);
+void TkTableOpen(DbCursor *, int);
+void TkTableClose(DbCursor *);
+int TkTableFindId(DbCursor *, int);
+void TkTableReadRow(DbCursor *, TkRow_t *);
 void fn_8017C5A0(unsigned short, int);
 void fn_8017C5CC(unsigned short, int);
 void fn_8017C5F8(unsigned short, int);
@@ -607,7 +607,7 @@ extern "C" void fn_800D1500(int i, const char *pName, int a, int mode) {
         ((Entry_80219044 *)args[1].p)->mLength = strlen(lbl_803EACD4->mUnknown1C7C);
         args[2].i = a;
         args[3].i = mode;
-        fn_8021D7B8(lbl_803EB688, 0x80000013, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000013, 4, args);
     }
 }
 
@@ -617,7 +617,7 @@ extern "C" void fn_800D15E8(int i, int a) {
     if (lbl_803EACC4) {
         args[0].i = i;
         args[1].i = a;
-        fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
     }
 }
 
@@ -638,7 +638,7 @@ extern "C" void fn_800D1700(int i) {
         args[0] = &lbl_803EACD4->mUnknown1CCC;
         args[0]->mpText = i == 0 ? lbl_803EACD4->mUnknown1CD8 : lbl_803EACD4->mUnknown1DD3;
         args[0]->mLength = strlen(i == 0 ? lbl_803EACD4->mUnknown1CD8 : lbl_803EACD4->mUnknown1DD3);
-        fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
     }
 }
 
@@ -2646,12 +2646,12 @@ extern "C" void fn_800D7158(void) {
     } else if (lbl_803EACC8 != 0) { lbl_803EACC8 = 0; changed = 1; }
     if (changed) {
         DbCursor cursor;
-        fn_8018FB4C(&cursor, lbl_803EACC8);
+        TkTableOpen(&cursor, lbl_803EACC8);
         for (int i = 0; i <= 126; i++) {
-            if (fn_8018FBE8(&cursor, i)) fn_8018FC1C(&cursor, &lbl_803EACD4->mUnknown0[i]);
-            else memset(&lbl_803EACD4->mUnknown0[i], 0, sizeof(Record_8018FC1C));
+            if (TkTableFindId(&cursor, i)) TkTableReadRow(&cursor, &lbl_803EACD4->mUnknown0[i]);
+            else memset(&lbl_803EACD4->mUnknown0[i], 0, sizeof(TkRow_t));
         }
-        fn_8018FBC8(&cursor);
+        TkTableClose(&cursor);
     }
     fn_800D421C(0, 0); fn_800D421C(1, 0);
     fn_800D3FBC(0, 0, 0); fn_800D3FBC(1, 0, 0);

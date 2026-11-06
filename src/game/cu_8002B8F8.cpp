@@ -99,7 +99,7 @@ struct Type_80030ACC {
 
 extern "C" {
 extern char lbl_802EC330[];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 double fabs(double);
 
@@ -188,7 +188,7 @@ unsigned char fn_8017DD60(void);
 void fn_8017F814(void);
 unsigned char fn_8017F2DC(unsigned char value);
 unsigned char fn_8017F2EC(unsigned char value);
-void fn_8018A4BC(int a, unsigned int id, float value);
+void UISGameHandleInput(int a, unsigned int id, float value);
 void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
 int fn_80190EF0(Type_80190ED4 *pStream);
 unsigned long long fn_80190F18(void *pStream, int bits);
@@ -633,7 +633,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
         p->mUnknownD94 |= 0x200;
     }
     if (lbl_803EA364 == 0) {
-        fn_80219650(lbl_803EB688, &a, &b);
+        fn_80219650(gUISMainInfo, &a, &b);
         if (fn_800B81A4() != 0xFF) {
             p->mUnknownD94 |= 0x200;
         }
@@ -1021,12 +1021,12 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
             return;
         }
         if (p->mUnknownD94 & 0x100) {
-            fn_8018A4BC(9, id, value);
+            UISGameHandleInput(9, id, value);
             return;
         }
         if (p->mUnknownD94 & 0x800000) {
             fn_8002FC28(p->mpUnknownDA0, 9, id, value);
-            fn_8018A4BC(9, id, value);
+            UISGameHandleInput(9, id, value);
             return;
         }
         if ((p->mUnknownD94 & 0x2000000) && fn_8002D2D8()) {
@@ -1041,8 +1041,8 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
             unsigned short s1;
 
             fn_8002FA8C(p->mpUnknownDA0, a, id, value);
-            fn_80219650(lbl_803EB688, &s0, &s1);
-            fn_8018A4BC(a, id, value);
+            fn_80219650(gUISMainInfo, &s0, &s1);
+            UISGameHandleInput(a, id, value);
         }
         if (id == 0 && lbl_803EA360 > 29) {
             p->mUnknownD94 |= 0x200;
@@ -2496,31 +2496,31 @@ extern "C" void fn_8002FC28(GameCamera_t *pCamera, int player, unsigned int inpu
     switch (action) {
     case 0:
         fn_8002F204(pCamera, -1.0f);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 1:
         fn_8002F204(pCamera, 1.0f);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 2:
         fn_8002F5D4(pCamera, 1.0f);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 3:
         fn_8002F5D4(pCamera, -1.0f);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 4:
         fn_8002F5D4(pCamera, amount);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 5:
         fn_8002F510(pCamera, amount);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 6:
         fn_8002F550(pCamera, amount);
-        fn_802196B4(lbl_803EB688, player, 20, 0, 0, 1);
+        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     }
 }

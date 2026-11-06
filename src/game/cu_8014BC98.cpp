@@ -19,7 +19,7 @@ extern char *lbl_803EB2C0;
 extern char *lbl_803EB2C4;
 extern char *lbl_803EB2C8;
 extern char *lbl_803EB2CC;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
@@ -371,7 +371,7 @@ void fn_8014C5AC(void *p, float dt)
 {
     if (MsgBoxIsClosed()) {
         if (!lbl_803EB2D1 && fn_800C1E40() == 0) {
-            fn_80218FC4(lbl_803EB688, 3, 8, 0, 0);
+            fn_80218FC4(gUISMainInfo, 3, 8, 0, 0);
             lbl_803EB2D1 = 1;
         }
         fn_800BCB18(p, dt);

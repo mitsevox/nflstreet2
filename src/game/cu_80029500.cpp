@@ -72,7 +72,7 @@ int fn_801D6620(int *);
 void fn_801D6754(int);
 void fn_801D676C(SaveComment *);
 void fn_801D6760(int);
-int fn_80184B00(int, const char *);
+int MemCardUIIsNameFree(int, const char *);
 void fn_801F81AC(void);
 
 unsigned int fn_80029838(int type);
@@ -597,7 +597,7 @@ void fn_8002A5F0(int type, char *name, int unique)
     fn_8002A260(curType, curIndex, name, 0x20);
     maxLen = 12;
     name[maxLen] = 0;
-    if (fn_80184B00(type, name) && (!unique || fn_800295E0(type, name, 0, 0))) {
+    if (MemCardUIIsNameFree(type, name) && (!unique || fn_800295E0(type, name, 0, 0))) {
         return;
     }
     if (strlen(name) > maxLen - 1) {
@@ -605,17 +605,17 @@ void fn_8002A5F0(int type, char *name, int unique)
     }
     for (i = 1; i <= 12; i++) {
         sprintf(buf, "%s%d", name, i);
-        if (fn_80184B00(type, buf) && (!unique || fn_800295E0(type, buf, 0, 0))) {
+        if (MemCardUIIsNameFree(type, buf) && (!unique || fn_800295E0(type, buf, 0, 0))) {
             break;
         }
     }
-    if (!fn_80184B00(type, buf) || (unique && !fn_800295E0(type, buf, 0, 0))) {
+    if (!MemCardUIIsNameFree(type, buf) || (unique && !fn_800295E0(type, buf, 0, 0))) {
         if (strlen(name) > maxLen - 1) {
             name[maxLen - 1] = 0;
         }
         for (i = 13; i <= 99; i++) {
             sprintf(buf, "%s%d", name, i);
-            if (fn_80184B00(type, buf) && (!unique || fn_800295E0(type, buf, 0, 0))) {
+            if (MemCardUIIsNameFree(type, buf) && (!unique || fn_800295E0(type, buf, 0, 0))) {
                 break;
             }
         }

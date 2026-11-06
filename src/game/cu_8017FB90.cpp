@@ -1,4 +1,4 @@
-#include "game/fn_8018631C.h"
+#include "game/CtrlSel.h"
 #include "game/cu_8017F90C.h"
 #include "game/InGame.h"
 #include "game/PauseMenu.h"
@@ -20,7 +20,7 @@ extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int
         *pResult = 1;
         break;
     case 0x199:
-        *pResult = fn_8018631C();
+        *pResult = CtrlSelIsOpen();
         break;
     case 0x00:
         *pResult = 0;

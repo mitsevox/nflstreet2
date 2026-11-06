@@ -2,9 +2,9 @@
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 #include "game/DepthChart.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8018BE68.h"
+#include "game/StoryTeam.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801FCE10.h"
@@ -54,7 +54,7 @@ void fn_80015D28(int a);
 void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
 void fn_8005BE54(unsigned char value);
-int fn_80060354(VetsRow_8018EC68 *pRow, int *pList);
+int fn_80060354(StevRow_t *pRow, int *pList);
 void fn_80060410(int index, int *pList);
 void GameInfoSet(int index, int value);
 void fn_80084A8C(int a, int *pList, int b, int c);
@@ -81,7 +81,7 @@ int fn_80178AE0(void);
 int fn_801801B4(void);
 void fn_80186F30(signed char a, int b);
 void fn_8018C48C(int tag);
-int fn_8018E7CC(int a);
+int StoryGetLkss(int a);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022F358(int index);
@@ -93,11 +93,11 @@ int fn_8022F4BC(void);
 Object_8008044C lbl_8030A2BC;
 DbCursor lbl_8030A2E8;
 DbCursor lbl_8030A314;
-VetsRow_8018EC68 lbl_8030A340;
+StevRow_t lbl_8030A340;
 Match_8030A3A4 lbl_8030A3A4;
 
 static unsigned char lbl_803EA5E8 = 0;
-static VetsRow_8018EC68 *lbl_803EA5EC = 0;
+static StevRow_t *lbl_803EA5EC = 0;
 static Object_8008044C *lbl_803EA5F0 = 0;
 static DbCursor *lbl_803EA5F4 = 0;
 static State_803EA5F8 lbl_803EA5F8 = {0, -1, 0, 0};
@@ -178,7 +178,7 @@ void fn_80060A9C(void)
     ExpLevelClose();
     fn_8008056C(lbl_803EA5F0);
     lbl_803EA5F0 = 0;
-    fn_8018EEAC();
+    StevClose();
     UserStatsClose(lbl_803EA5F4);
     lbl_803EA5F4 = 0;
 }
@@ -188,7 +188,7 @@ void fn_80060B0C(void)
     lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
     lbl_803EA5F0 = &lbl_8030A2BC;
     fn_8008044C(&lbl_8030A2BC, 0, 0x54415453);
-    fn_8018EEF0();
+    StevOpen();
     ExpLevelOpen();
     lbl_803EA5F8.mUnknown2 = 0x7FFF;
     lbl_803EA5F4 = &lbl_8030A2E8;
@@ -199,7 +199,7 @@ void fn_80060B0C(void)
 
 void fn_80060BB4(void)
 {
-    lbl_803EA5F8.mUnknown1 = fn_8018E7CC(lbl_803EA5F8.mIndex);
+    lbl_803EA5F8.mUnknown1 = StoryGetLkss(lbl_803EA5F8.mIndex);
 }
 
 void fn_80060BE0(void)
@@ -492,13 +492,13 @@ int fn_80061390(int digt)
 
 int fn_80061408(int digt)
 {
-    Result_8018BE68 picks;
+    StoryTeamIdBlock_t picks;
     int list[14];
     int digt2;
     int count;
     int i;
 
-    digt2 = fn_8018BE68(lbl_803EA5F8.mIndex, 1, &picks);
+    digt2 = StoryTeamLoadOneToStats(lbl_803EA5F8.mIndex, 1, &picks);
     if (PlayerDbSeekId(lbl_803EA5F0, picks.mUnknown0, 0)) {
         fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
         fn_8007ABA4(lbl_803EA5F0, 0x44494754, digt2);
@@ -556,7 +556,7 @@ int fn_8006167C(void)
 {
     int result = 100;
 
-    if (fn_8018EDF0(0, fn_8018EE44(0) - 1, &lbl_8030A340)) {
+    if (StevGetRow(0, StevCountDiveRows(0) - 1, &lbl_8030A340)) {
         result = 123;
         lbl_803EA5EC = &lbl_8030A340;
     }
@@ -709,7 +709,7 @@ int fn_800619FC(unsigned int id, Block_800619FC *pBlock, int unused, int *pResul
     return 1;
 }
 
-VetsRow_8018EC68 *fn_80061AD4(void)
+StevRow_t *fn_80061AD4(void)
 {
     return lbl_803EA5EC;
 }

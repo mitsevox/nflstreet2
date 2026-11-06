@@ -86,8 +86,8 @@ int fn_80178320(void);
 void fn_8017833C(int value);
 int fn_801784C4(void);
 void fn_8017CFB4(int a);
-void fn_8018A798(int value);
-int fn_8018A7A0(void);
+void UISGameLockPad(int value);
+int UISGameUnlockPad(void);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
@@ -400,7 +400,7 @@ int fn_8017ED6C(void)
     case 1:
         fn_8017EFB0();
         fn_8013F374(lbl_802E9C18);
-        fn_8018A798((unsigned char)fn_8017F0C4());
+        UISGameLockPad((unsigned char)fn_8017F0C4());
         lbl_803EB498->mState = 2;
         break;
     case 2:
@@ -414,16 +414,16 @@ int fn_8017ED6C(void)
         break;
     case 4:
         lbl_803EB498->mState = 5;
-        fn_8018A7A0();
-        fn_8018A798((unsigned char)fn_8017F0FC());
+        UISGameUnlockPad();
+        UISGameLockPad((unsigned char)fn_8017F0FC());
         break;
     case 5:
         if (lbl_803EB498->mUnknown42 != -1) {
             lbl_803EB498->mState = 6;
             lbl_803EB498->mTimer = 0;
             fn_8017E6F4();
-            fn_8018A7A0();
-            fn_8018A798((unsigned char)fn_8017F154());
+            UISGameUnlockPad();
+            UISGameLockPad((unsigned char)fn_8017F154());
         }
         break;
     case 6:
@@ -448,7 +448,7 @@ int fn_8017ED6C(void)
     case 10:
         lbl_803EB498->mState = 0;
         result = 0;
-        fn_8018A7A0();
+        UISGameUnlockPad();
         break;
     }
     return result;

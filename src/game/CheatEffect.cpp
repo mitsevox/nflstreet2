@@ -1,5 +1,5 @@
 /* Turns each cheat's effect on or off for a user, such as unlocks and money. */
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 
 extern "C" {
 void fn_80060458(int index, int level);
@@ -27,11 +27,11 @@ int TutorialAllComplete(void);
 void TutorialSetProfileDb(int db);
 void UserInfoSetPoints(int handle, int value);
 int fn_80186B38(int db);
-void fn_8018E428(int index, int value);
-void fn_8018F340(int a, int b);
-int fn_8018F3D8(int a);
-void fn_8018F41C(int a);
-void fn_8018F4C4(int a);
+void StorySetDevPoints(int index, int value);
+void GauntletMarkTeamBeaten(int a, int b);
+int GauntletGetTeamsLeft(int a);
+void GauntletReset(int a);
+void GauntletAdvance(int a);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
 int fn_8022F478(int value);
@@ -94,7 +94,7 @@ void CheatEffectApply(signed char db, int id)
         EnvSetLocked(db, 10, 0);
         break;
     case 6:
-        fn_8018E428(db, 999999);
+        StorySetDevPoints(db, 999999);
         ChalSetDevPointsForSlot(db, 999999);
         break;
     case 7:
@@ -135,8 +135,8 @@ void CheatEffectApply(signed char db, int id)
     case 48:
         for (int i = 1; i <= 32; i++) {
             if (i != 19 && i != 22) {
-                fn_8018F340(fn_80186B38(fn_8022F4BC()), i);
-                fn_8018F4C4(fn_80186B38(fn_8022F4BC()));
+                GauntletMarkTeamBeaten(fn_80186B38(fn_8022F4BC()), i);
+                GauntletAdvance(fn_80186B38(fn_8022F4BC()));
             }
         }
         break;
@@ -191,12 +191,12 @@ void CheatEffectRemove(signed char db, int id)
         break;
     case 18: {
         int handle = fn_8022F3D4(fn_8022F358(db));
-        Class_8018FD64 cursor;
-        cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-        if (cursor.Class_8018FD64::fn_8018FF9C(0x504C5555) != 0x3FF) {
+        DbTableCursor cursor;
+        cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+        if (cursor.DbTableCursor::GetColumnValue(0x504C5555) != 0x3FF) {
             TeamLock(db, 34);
         }
-        if (fn_8018F3D8(db) != -1) {
+        if (GauntletGetTeamsLeft(db) != -1) {
             EnvSetLocked(db, 11, 1);
         }
         break;
@@ -215,7 +215,7 @@ void CheatEffectRemove(signed char db, int id)
         EnvSetLocked(db, 10, 1);
         break;
     case 6:
-        fn_8018E428(db, 0);
+        StorySetDevPoints(db, 0);
         ChalSetDevPointsForSlot(db, 0);
         break;
     case 7:
@@ -227,7 +227,7 @@ void CheatEffectRemove(signed char db, int id)
         fn_80061DA0(db);
         break;
     case 48:
-        fn_8018F41C(db);
+        GauntletReset(db);
         break;
     case 51:
     case 52:

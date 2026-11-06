@@ -1,6 +1,6 @@
 #include "game/FaceFeatures.h"
 #include "game/AppearanceNameTable.h"
-#include "game/Class_802938C0.h"
+#include "game/FchrCursor.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/DbCursor.h"
@@ -104,7 +104,7 @@ void fn_8015D224(int index);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
-void fn_80180FA4(const char *pText);
+void FEMiscSetHelpText(const char *pText);
 DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
@@ -519,7 +519,7 @@ static int fn_80008978(int key, int index);
 
 static DbCursor lbl_80369DDC;
 static DbCursor lbl_80369E08;
-static Class_802938C0 lbl_80369E34;
+static FchrCursor lbl_80369E34;
 static Entry_80369E64 lbl_80369E64[15];
 static FaceFeatures_t lbl_8036A170;
 static unsigned short lbl_8036A198[21];
@@ -737,8 +737,8 @@ static void fn_80005CAC(int value)
 
     PlayerLookSetFace(0, value);
     PlayerLookSetFace(1, value);
-    lbl_80369E34.fn_801900D4(value, 0);
-    lbl_8036A170.mUnknown0[0] = lbl_80369E34.fn_801901A4();
+    lbl_80369E34.FindFchrRow(value, 0);
+    lbl_8036A170.mUnknown0[0] = lbl_80369E34.GetFchrFhstCode();
     FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
     FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &lbl_8036A170);
@@ -823,14 +823,14 @@ int Class_80009ED8::vfn_02(int a, int b, void **ppResult)
     int result = Class_802A6B60::vfn_02(a, b, ppResult);
 
     fn_801831F0(0);
-    fn_80180FA4("");
+    FEMiscSetHelpText("");
     return result;
 }
 
 void Class_80009ED8::vfn_03(int id)
 {
     Class_802A6B60::vfn_03(id);
-    fn_80180FA4(lbl_802F4058[id]);
+    FEMiscSetHelpText(lbl_802F4058[id]);
     if (id >= 0 && id <= 9) {
         fn_800056A4(lbl_803EB938, id);
     }
@@ -1353,7 +1353,7 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
 
 void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
 {
-    lbl_80369E34.fn_80190098();
+    lbl_80369E34.OpenFchrTable();
     switch (mUnknown8) {
     case 0:
         fn_80087A78(0x12, &lbl_80369DDC, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
@@ -1364,8 +1364,8 @@ void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
         *pCount = 12;
         break;
     case 2:
-        lbl_80369E34.fn_801900D4(fn_80082280(fn_80182DC8()), pOut);
-        *pCount = lbl_80369E34.fn_8018FE34();
+        lbl_80369E34.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
+        *pCount = lbl_80369E34.GetRowCount();
         break;
     case 3:
         *pOut = PlayerDbGetFacialHairColor(fn_80182DC8());
@@ -1391,8 +1391,8 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             PlayerDbSetHairColor(fn_80182DC8(), a);
             break;
         case 2:
-            lbl_80369E34.fn_8018FF0C(a);
-            fn_800822A8(fn_80182DC8(), lbl_80369E34.fn_80190120());
+            lbl_80369E34.MoveToRow(a);
+            fn_800822A8(fn_80182DC8(), lbl_80369E34.GetFchrPffh());
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
@@ -1433,7 +1433,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             break;
         }
     }
-    lbl_80369E34.fn_8018FE10();
+    lbl_80369E34.CloseTable();
     return -1;
 }
 
@@ -1451,8 +1451,8 @@ void Class_80009E48::vfn_03(int index)
         FEPlyrRequestSwap();
         break;
     case 2:
-        lbl_80369E34.fn_8018FF0C(index);
-        fn_80005CAC(lbl_80369E34.fn_80190120());
+        lbl_80369E34.MoveToRow(index);
+        fn_80005CAC(lbl_80369E34.GetFchrPffh());
         break;
     case 3:
         PlayerLookSetFacialHairColor(0, index);
@@ -1486,8 +1486,8 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 2:
-        lbl_80369E34.fn_8018FF0C(index);
-        lbl_80369E34.fn_8019015C(name, 21);
+        lbl_80369E34.MoveToRow(index);
+        lbl_80369E34.GetFchrFhdcText(name, 21);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 4:

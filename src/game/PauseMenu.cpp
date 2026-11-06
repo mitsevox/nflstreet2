@@ -51,7 +51,7 @@ struct PauseState_t {
 
 extern "C" {
 extern void *lbl_803EA368;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_8002C9A8(void *p, int a, int b);
 void fn_8002CA74(void *p, int a, int b);
@@ -105,10 +105,10 @@ void fn_8017DA9C(int a);
 void fn_8017EFB0(void);
 unsigned char fn_8017F2EC(unsigned char value);
 void fn_80188014(int a);
-void fn_8018A4B4(int a);
-void fn_8018A798(int value);
-void fn_8018A7A0(void);
-void fn_8018AFD8(unsigned char value);
+void UISGameSetLastPad(int a);
+void UISGameLockPad(int value);
+void UISGameUnlockPad(void);
+void UISHeldObjEnable(unsigned char value);
 void RumbleStopAll(void);
 void RumbleInit(void);
 void RumbleInitAllPorts(void);
@@ -394,8 +394,8 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     _Pause_State.mState = 1;
     _Pause_bQuit = 0;
     _Pause_bAltAction = 0;
-    fn_8018A4B4(c);
-    fn_8018A798(c);
+    UISGameSetLastPad(c);
+    UISGameLockPad(c);
     fn_800C0330(lbl_803EABA4);
     _Pause_bSavedSwap1 = fn_8017F2EC(0);
     _Pause_bSavedSwap0 = fn_8017F2DC(2);
@@ -435,7 +435,7 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     fn_8002C9A8(lbl_803EA368, 4, 0);
     PauseBlock();
     _Pause_iValue = c;
-    fn_8018AFD8(1);
+    UISHeldObjEnable(1);
 }
 
 void PauseUpdate(void)
@@ -451,9 +451,9 @@ void PauseUpdate(void)
         switch (_Pause_State.mState) {
         case 1:
             fn_8017CFB4(7);
-            fn_80218FC4(lbl_803EB688, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow,
+            fn_80218FC4(gUISMainInfo, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow,
                         _Pause_State.mArgCount, _Pause_State.mArgs);
-            fn_802195E4(lbl_803EB688, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow);
+            fn_802195E4(gUISMainInfo, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow);
             _Pause_State.mState = 2;
             break;
         case 2:
@@ -481,8 +481,8 @@ void PauseClose(void)
     int i;
 
     _Pause_iValue = -1;
-    fn_8018A7A0();
-    fn_8018AFD8(0);
+    UISGameUnlockPad();
+    UISHeldObjEnable(0);
     PauseCameraRestore();
     if (_Pause_bResetFlag == 1) {
         _Pause_bResetFlag = 0;

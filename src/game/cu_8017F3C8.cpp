@@ -10,8 +10,8 @@ extern "C" {
 void PauseBlock(void);
 void PauseUnblock(void);
 Record_800B2340 *fn_800B2340(unsigned char index);
-void fn_8018A798(int value);
-int fn_8018A7A0(void);
+void UISGameLockPad(int value);
+int UISGameUnlockPad(void);
 }
 
 static int lbl_803EB4B8 = -1;
@@ -30,7 +30,7 @@ void fn_8017F3C8(int a, int b, int c)
     lbl_803ECB44 = a;
     PauseBlock();
     InGameSetInputPaused(1);
-    fn_8018A798(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
+    UISGameLockPad(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
 }
 
 void fn_8017F430(int value)
@@ -41,7 +41,7 @@ void fn_8017F430(int value)
 
 void fn_8017F444(void)
 {
-    fn_8018A7A0();
+    UISGameUnlockPad();
     lbl_803ECB40 = 0;
     if (lbl_803ECB44 != 0xFFFF) {
         InGameSetInputPaused(0);

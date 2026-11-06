@@ -8,7 +8,7 @@ struct Block_8017F868 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_8021956C(void *p, int a, int b, int c);
 }
@@ -38,7 +38,7 @@ extern "C" unsigned char fn_8017F860(void);
 extern "C" void fn_8017F814(void)
 {
     if (fn_8017F860()) {
-        fn_8021956C(lbl_803EB688, 2, 3, 1);
+        fn_8021956C(gUISMainInfo, 2, 3, 1);
         lbl_803EB500 = 0;
         lbl_803EB504 = 0;
         lbl_803EB508 = 0;

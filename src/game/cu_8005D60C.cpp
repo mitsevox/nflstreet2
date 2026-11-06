@@ -7,7 +7,7 @@
 #include "game/Object_8008044C.h"
 #include "game/DepthChart.h"
 #include "game/AutoDepth.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 #include "game/FELoop.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F6F8.h"
@@ -120,33 +120,33 @@ void fn_80148AF8(Class_80148A58 *pObject);
 void fn_8014F3DC(int ticks);
 void fn_80183368(int mode, int value);
 void fn_80186F30(signed char a, int b);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-int fn_80188DF0(int a);
-void fn_8018B9D4(DbCursor *pCursor, int index);
-void fn_8018BA2C(DbCursor *pCursor);
-int fn_8018BDFC(int index, int a, int *pIds, int *pCount);
-int fn_8018C1E0(DbCursor *pCursor);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+int TeamLogoGetHandle(int a);
+void StoryTeamCursorOpen(DbCursor *pCursor, int index);
+void StoryTeamCursorClose(DbCursor *pCursor);
+int StoryTeamLoadToStats(int index, int a, int *pIds, int *pCount);
+int StoryTeamGetLogo(DbCursor *pCursor);
 void fn_8018C48C(int tag);
-void fn_8018E474(int index);
-void fn_8018E55C(int index);
-void fn_8018E11C(DbCursor *pCursor, int index);
-void fn_8018E174(DbCursor *pCursor);
-int fn_8018E194(DbCursor *pCursor, int row, char *pBuffer, int size);
-int fn_8018E20C(DbCursor *pCursor, int row, char *pBuffer, int size);
-int fn_8018E284(DbCursor *pCursor, int row, char *pName, int size);
-int fn_8018E344(int index);
-void fn_8018E390(int index, int value);
-void fn_8018E7A0(int index, int value);
-int fn_8018E3DC(int index);
-void fn_8018E428(int index, int value);
-int fn_8018E5F4(int index, int id);
-void fn_8018E658(int index, int id);
-int fn_8018E6A4(int index);
-int fn_8018E6E0(int index, int a);
-int fn_8018E7CC(int index);
-int fn_8018E774(int index);
-void fn_8018E828(int index, int value);
-int fn_8018F1F0(unsigned int index, char *pEtnr, int size);
+void StoryClearFlags(int index);
+void StoryClearCompletedEvents(int index);
+void StoryPlayerCursorOpen(DbCursor *pCursor, int index);
+void StoryPlayerCursorClose(DbCursor *pCursor);
+int StoryPlayerGetFirstName(DbCursor *pCursor, int row, char *pBuffer, int size);
+int StoryPlayerGetLastName(DbCursor *pCursor, int row, char *pBuffer, int size);
+int StoryPlayerGetShortName(DbCursor *pCursor, int row, char *pName, int size);
+int StoryGetExpPoints(int index);
+void StorySetExpPoints(int index, int value);
+void StorySetNew(int index, int value);
+int StoryGetDevPoints(int index);
+void StorySetDevPoints(int index, int value);
+int StoryIsEventCompleted(int index, int id);
+void StoryAddCompletedEvent(int index, int id);
+int StoryCountRemainingEvents(int index);
+int StoryAreGroupEventsCompleted(int index, int a);
+int StoryGetLkss(int index);
+int StoryIsNew(int index);
+void StorySetLkss(int index, int value);
+int SstlGetEntryTag(unsigned int index, char *pEtnr, int size);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 unsigned int fn_801C3180(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -167,7 +167,7 @@ int fn_80178AE0(void);
 
 Object_8008044C lbl_8030A0E4;
 DbCursor lbl_8030A110;
-VetsRow_8018EC68 lbl_8030A13C;
+StevRow_t lbl_8030A13C;
 extern MiniGameSettings_t lbl_8031BDD4;
 
 Match_8030A1A0 lbl_8030A1A0;
@@ -179,7 +179,7 @@ unsigned char lbl_803EA5B8 = 0;
 int lbl_803EA5BC = 2;
 int lbl_803EA5C0 = 4;
 int lbl_803EA5C4 = 0;
-VetsRow_8018EC68 *lbl_803EA5C8 = 0;
+StevRow_t *lbl_803EA5C8 = 0;
 Object_8008044C *lbl_803EA5CC = 0;
 DbCursor *lbl_803EA5D0 = 0;
 float lbl_803EA5D4 = 0.0f;
@@ -205,7 +205,7 @@ void fn_8006088C(int value);
 int fn_8005F910(void);
 float fn_8005F754(void);
 void fn_8005F7C4(Object_8008044C *pObject, int id, float scale);
-int fn_80060354(VetsRow_8018EC68 *pRow, int *pList);
+int fn_80060354(StevRow_t *pRow, int *pList);
 void fn_80060410(int index, int *pList);
 
 void fn_8005D60C(void)
@@ -213,7 +213,7 @@ void fn_8005D60C(void)
     ExpLevelClose();
     fn_8008056C(lbl_803EA5CC);
     lbl_803EA5CC = 0;
-    fn_8018EEAC();
+    StevClose();
     UserStatsClose(lbl_803EA5D0);
     lbl_802D4D40.mIndex = -1;
     lbl_803EA5D0 = 0;
@@ -224,7 +224,7 @@ void fn_8005D660(void)
     lbl_802D4D40.mIndex = fn_8022F384(fn_8022F4BC());
     lbl_803EA5CC = &lbl_8030A0E4;
     fn_8008044C(&lbl_8030A0E4, 0, 0x54415453);
-    fn_8018EEF0();
+    StevOpen();
     ExpLevelOpen();
     lbl_802D4D40.mUnknown2 = 0x7FFF;
     lbl_803EA5D0 = &lbl_8030A110;
@@ -234,11 +234,11 @@ void fn_8005D660(void)
 
 void fn_8005D6EC(void)
 {
-    lbl_802D4D40.mPpxe = fn_8018E344(lbl_802D4D40.mIndex);
+    lbl_802D4D40.mPpxe = StoryGetExpPoints(lbl_802D4D40.mIndex);
     lbl_802D4D40.mUnknown1C = ExpLevelGetForPoints(lbl_802D4D40.mPpxe);
     lbl_802D4D40.mUnknown8 = UserStatsGet(lbl_803EA5D0, 14);
-    lbl_802D4D40.mUnknownC = fn_8018E3DC(lbl_802D4D40.mIndex);
-    lbl_802D4D40.mUnknown1 = fn_8018E7CC(lbl_802D4D40.mIndex);
+    lbl_802D4D40.mUnknownC = StoryGetDevPoints(lbl_802D4D40.mIndex);
+    lbl_802D4D40.mUnknown1 = StoryGetLkss(lbl_802D4D40.mIndex);
 }
 
 void fn_8005D764(int set)
@@ -246,9 +246,9 @@ void fn_8005D764(int set)
     DbCursor cursor;
     int value;
 
-    fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
-    value = fn_8018C1E0(&cursor);
-    fn_8018BA2C(&cursor);
+    StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
+    value = StoryTeamGetLogo(&cursor);
+    StoryTeamCursorClose(&cursor);
     if (set) {
         fn_80084FA8(value);
     } else {
@@ -278,18 +278,18 @@ void fn_8005D818(void)
 
 int fn_8005D86C(void)
 {
-    VetsRow_8018EC68 row;
+    StevRow_t row;
     int complete = 1;
     int i;
 
     for (i = 0; i <= 11; i++) {
         fn_800731D0(1);
-        int done = fn_8018E6E0(lbl_802D4D40.mIndex, i);
+        int done = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, i);
         lbl_8030A2AC.mDone[i] = done;
         if (complete && !done) {
-            int count = fn_8018EE44(i);
+            int count = StevCountDiveRows(i);
             for (int j = 0; j < count; j++) {
-                if (fn_8018EDF0(i, j, &row) && !fn_8018E5F4(lbl_802D4D40.mIndex, row.mNets) &&
+                if (StevGetRow(i, j, &row) && !StoryIsEventCompleted(lbl_802D4D40.mIndex, row.mNets) &&
                     row.mItes != 4) {
                     complete = 0;
                     break;
@@ -308,17 +308,17 @@ unsigned char fn_8005D94C(void)
 
 int fn_8005D958(void)
 {
-    return fn_8018E6A4(lbl_802D4D40.mIndex) == 2;
+    return StoryCountRemainingEvents(lbl_802D4D40.mIndex) == 2;
 }
 
 void fn_8005D990(int *pTotal)
 {
-    VetsRow_8018EC68 *pRow = lbl_803EA5C8;
+    StevRow_t *pRow = lbl_803EA5C8;
     int ppxe = lbl_802D4D40.mPpxe + pRow->mPewr;
     unsigned short limit = lbl_802D4D40.mUnknown1C;
     lbl_802D4D40.mUnknown10 = pRow->mPewr;
     unsigned int level = ExpLevelGetForPoints(ppxe);
-    fn_8018E390(lbl_802D4D40.mIndex, ppxe);
+    StorySetExpPoints(lbl_802D4D40.mIndex, ppxe);
     if (level > limit) {
         *pTotal += ExpLevelGetLvbn(level);
     }
@@ -435,7 +435,7 @@ int fn_8005DD6C(int *pTeam, int *pCopy)
     }
     etnr = -1;
     if (lbl_803EA5C8->mItes == 2) {
-        etnr = fn_8018F1F0(lbl_803EA5C8->mNets, name, sizeof(name));
+        etnr = SstlGetEntryTag(lbl_803EA5C8->mNets, name, sizeof(name));
     }
     *pTeam = fn_8008454C(6, etnr, name);
     team = fn_8008454C(6, etnr, name);
@@ -495,7 +495,7 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
             break;
         }
     }
-    team = fn_8018BDFC(lbl_802D4D40.mIndex, 1, ids, &count);
+    team = StoryTeamLoadToStats(lbl_802D4D40.mIndex, 1, ids, &count);
     *pTeam = fn_8008454C(6, -1, 0);
     if (count > 0) {
         for (i = 0; i < count; i++) {
@@ -620,7 +620,7 @@ void fn_8005E4A8(void)
             break;
         case 1: {
             fn_801485EC(1);
-            VetsRow_8018EC68 *pRow = lbl_803EA5C8;
+            StevRow_t *pRow = lbl_803EA5C8;
             lbl_8031BDD4.mUnknown40 = pRow->mPes[2] == 1;
             if (pRow->mPes[1] >= 0) {
                 lbl_8031BDD4.mUnknown32 = pRow->mPes[1];
@@ -697,7 +697,7 @@ void fn_8005E798(void)
 {
     int value = fn_8007F828(0);
 
-    fn_8018E828(lbl_802D4D40.mIndex, value);
+    StorySetLkss(lbl_802D4D40.mIndex, value);
     lbl_802D4D40.mUnknown1 = value;
 }
 
@@ -708,7 +708,7 @@ void fn_8005E7E4(void)
     if (lbl_802D4D40.mUnknown1 < 0) {
         fn_8005E798();
     }
-    fn_8018E658(lbl_802D4D40.mIndex, lbl_803EA5C8->mNets);
+    StoryAddCompletedEvent(lbl_802D4D40.mIndex, lbl_803EA5C8->mNets);
     total = 0;
     fn_8005D990(&total);
     total += lbl_803EA5C8->mPdwr;
@@ -730,19 +730,19 @@ void fn_8005E7E4(void)
     }
     lbl_802D4D40.mUnknown14 = total;
     total += lbl_802D4D40.mUnknownC;
-    fn_8018E428(lbl_802D4D40.mIndex, total);
+    StorySetDevPoints(lbl_802D4D40.mIndex, total);
     int base = lbl_802D4D40.mUnknown8;
     lbl_802D4D40.mUnknown18 = lbl_803EA5C8->mCswr;
     UserStatsSet(lbl_803EA5D0, 14, base + lbl_803EA5C8->mCswr);
     UserInfoAddPoints(fn_8022F358(lbl_802D4D40.mIndex), lbl_803EA5C8->mCswr);
-    lbl_8030A2AC.mDone[lbl_803EA5C8->mDive] = fn_8018E6E0(lbl_802D4D40.mIndex, lbl_803EA5C8->mDive);
+    lbl_8030A2AC.mDone[lbl_803EA5C8->mDive] = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, lbl_803EA5C8->mDive);
     fn_8005D6EC();
 }
 
 int fn_8005E980(int dive, int droe, int *pLevel, int *pDone, int *pLocked, int count, char *pName, int size)
 {
-    VetsRow_8018EC68 row;
-    VetsRow_8018EC68 first;
+    StevRow_t row;
+    StevRow_t first;
     int ites = 5;
 
     *pLevel = 0;
@@ -751,17 +751,17 @@ int fn_8005E980(int dive, int droe, int *pLevel, int *pDone, int *pLocked, int c
     if (pName) {
         *pName = 0;
     }
-    if (fn_8018EDF0(dive, droe, &row)) {
+    if (StevGetRow(dive, droe, &row)) {
         ites = row.mItes;
         if (pName) {
             fn_801C2EF0(pName, row.mIuve, size);
         }
         *pLevel = ExpLevelGetForPoints(row.mQrxe);
-        if (fn_8018E5F4(lbl_802D4D40.mIndex, row.mNets)) {
+        if (StoryIsEventCompleted(lbl_802D4D40.mIndex, row.mNets)) {
             *pDone = 1;
         } else if (row.mItes == 4) {
-            fn_8018EDF0(0, 0, &first);
-            *pLocked = !fn_8018E5F4(lbl_802D4D40.mIndex, first.mNets);
+            StevGetRow(0, 0, &first);
+            *pLocked = !StoryIsEventCompleted(lbl_802D4D40.mIndex, first.mNets);
         } else if (lbl_802D4D40.mPpxe < row.mQrxe) {
             *pLocked = 1;
         }
@@ -797,7 +797,7 @@ int fn_8005EB20(int all)
     int dive;
 
     for (dive = 0; dive <= 11; dive++) {
-        int count = all ? fn_8018EE44(dive) : 1;
+        int count = all ? StevCountDiveRows(dive) : 1;
         for (int droe = 0; droe < count; droe++) {
             int level;
             int done;
@@ -831,7 +831,7 @@ int fn_8005EBF0(int dive)
 int fn_8005EC14(int dive)
 {
     int complete = 1;
-    int count = fn_8018EE44(dive);
+    int count = StevCountDiveRows(dive);
 
     for (int droe = 0; droe < count; droe++) {
         int level;
@@ -917,7 +917,7 @@ void fn_8005ECA0(void)
 
 void fn_8005EEC4(int *pState, int *pScreen)
 {
-    VetsRow_8018EC68 first;
+    StevRow_t first;
     unsigned short count;
     int played;
     int dive;
@@ -932,7 +932,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
     fn_8005D660();
     fn_8005D764(1);
     if (fn_8005F910()) {
-        fn_8018E7A0(lbl_802D4D40.mIndex, 0);
+        StorySetNew(lbl_802D4D40.mIndex, 0);
     }
     played = 0;
     lbl_803EA5E4 = 0;
@@ -959,7 +959,7 @@ void fn_8005EEC4(int *pState, int *pScreen)
         }
         if (played) {
             fn_8005E7E4();
-            fn_8018EDF0(0, 0, &first);
+            StevGetRow(0, 0, &first);
             if (lbl_803EA5C8->mNets == first.mNets) {
                 lbl_803EA5C4 = 1;
             }
@@ -1028,7 +1028,7 @@ void fn_8005F13C(int state, int screen)
 
 void fn_8005F1F8(int dive, int *pCount)
 {
-    *pCount = fn_8018EE44(dive);
+    *pCount = StevCountDiveRows(dive);
     if (dive == 0 && !fn_8005D94C()) {
         (*pCount)--;
     }
@@ -1038,7 +1038,7 @@ int fn_8005F24C(int dive, int droe)
 {
     int value = 100;
 
-    if (fn_8018EDF0(dive, droe, &lbl_8030A13C)) {
+    if (StevGetRow(dive, droe, &lbl_8030A13C)) {
         lbl_803EA5C8 = &lbl_8030A13C;
         value = fn_8005E728();
     }
@@ -1047,7 +1047,7 @@ int fn_8005F24C(int dive, int droe)
 
 void fn_8005F29C(void)
 {
-    VetsRow_8018EC68 row;
+    StevRow_t row;
     int dive;
 
     fn_80010150(7);
@@ -1058,7 +1058,7 @@ void fn_8005F29C(void)
             dive = 5;
             break;
         }
-        fn_8018EDF0(dive, 0, &row);
+        StevGetRow(dive, 0, &row);
         if (row.mQrxe == 0) {
             break;
         }
@@ -1105,19 +1105,19 @@ int fn_8005F3E4(int *pResult)
     unsigned char color[4];
     int value = 0;
 
-    *pResult = fn_80188DF0(-1);
-    fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
+    *pResult = TeamLogoGetHandle(-1);
+    StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
-        value = fn_8018C1E0(&cursor);
+        value = StoryTeamGetLogo(&cursor);
         if (DbCursorGetInt(&cursor, 0x4C445443) == 0) {
             color[0] = DbCursorGetInt(&cursor, 0x31434D54);
             color[1] = DbCursorGetInt(&cursor, 0x32434D54);
             color[2] = DbCursorGetInt(&cursor, 0x33434D54);
-            fn_80188CBC(0, 4, value, 0xAC, color);
-            *pResult = fn_80188DF0(0);
+            TeamLogoRequestTint(0, 4, value, 0xAC, color);
+            *pResult = TeamLogoGetHandle(0);
         }
     }
-    fn_8018BA2C(&cursor);
+    StoryTeamCursorClose(&cursor);
     return value;
 }
 
@@ -1129,15 +1129,15 @@ void fn_8005F4EC(char *pName, int size)
     unsigned int length;
 
     *pName = 0;
-    fn_8018E11C(&cursor, lbl_802D4D40.mIndex);
+    StoryPlayerCursorOpen(&cursor, lbl_802D4D40.mIndex);
     buffer[0] = 0;
-    if (!fn_8018E20C(&cursor, 0, buffer, sizeof(buffer))) {
+    if (!StoryPlayerGetLastName(&cursor, 0, buffer, sizeof(buffer))) {
         *pName = 0;
     }
     buffer[last] = 0;
     length = fn_801C3180(buffer);
     buffer[0] = 0;
-    if (!fn_8018E194(&cursor, 0, buffer, sizeof(buffer))) {
+    if (!StoryPlayerGetFirstName(&cursor, 0, buffer, sizeof(buffer))) {
         *pName = 0;
     } else {
         buffer[last] = 0;
@@ -1146,12 +1146,12 @@ void fn_8005F4EC(char *pName, int size)
         if (length < last - 1) {
             buffer[first] = ' ';
             first++;
-            fn_8018E20C(&cursor, 0, buffer + first, sizeof(buffer) - first);
+            StoryPlayerGetLastName(&cursor, 0, buffer + first, sizeof(buffer) - first);
             buffer[length] = 0;
         }
     }
     if (*pName == 0) {
-        fn_8018E284(&cursor, 0, pName, last);
+        StoryPlayerGetShortName(&cursor, 0, pName, last);
         if (*pName == 0) {
             fn_801C2EF0(pName, "your hero", last);
             goto done;
@@ -1160,7 +1160,7 @@ void fn_8005F4EC(char *pName, int size)
     fn_801C2EF0(pName, buffer, last);
 done:
     pName[last] = 0;
-    fn_8018E174(&cursor);
+    StoryPlayerCursorClose(&cursor);
 }
 
 void fn_8005F664(char *pName, int size)
@@ -1169,12 +1169,12 @@ void fn_8005F664(char *pName, int size)
     int last = size - 1;
 
     *pName = 0;
-    fn_8018B9D4(&cursor, lbl_802D4D40.mIndex);
+    StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
         DbCursorSeek(&cursor, 0);
         fn_8007AA3C(&cursor, 0x414E4454, (int)pName, last);
     }
-    fn_8018BA2C(&cursor);
+    StoryTeamCursorClose(&cursor);
 }
 
 void fn_8005F708(int *pList, int id, int slot)
@@ -1245,7 +1245,7 @@ void fn_8005F900(int *pHome)
 
 int fn_8005F910(void)
 {
-    return fn_8018E774(fn_8022F384(fn_8022F4BC()));
+    return StoryIsNew(fn_8022F384(fn_8022F4BC()));
 }
 
 int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
@@ -1281,7 +1281,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
             *pLocked = 1;
         } else {
             Text_8005F8B4 *pText = (Text_8005F8B4 *)pArgs[3];
-            fn_8005E980(dive, droe, pLevel, pDone, pLocked, fn_8018EE44(dive), pText->mpText, pText->mSize);
+            fn_8005E980(dive, droe, pLevel, pDone, pLocked, StevCountDiveRows(dive), pText->mpText, pText->mSize);
         }
         break;
     }
@@ -1364,7 +1364,7 @@ int fn_8005F938(unsigned int id, int *pArgs, int unused, int *pResult)
     return 1;
 }
 
-VetsRow_8018EC68 *fn_8005FC7C(void)
+StevRow_t *fn_8005FC7C(void)
 {
     return lbl_803EA5C8;
 }
@@ -1529,7 +1529,7 @@ int fn_800602E0(void)
 
 int fn_800602E8(void)
 {
-    VetsRow_8018EC68 *pRow = lbl_803EA5C8;
+    StevRow_t *pRow = lbl_803EA5C8;
 
     if (pRow && (pRow->mItes == 0 || (pRow->mItes == 1 && pRow->mQrxe != 0)) && lbl_8030A1A0.mUnknown8 == 1) {
         return 1;
@@ -1542,7 +1542,7 @@ void fn_80060330(int group, int *pIds, int count, Object_8008044C *pObject)
     fn_8005E010(group, pIds, count, pObject, 0);
 }
 
-int fn_80060354(VetsRow_8018EC68 *pRow, int *pList)
+int fn_80060354(StevRow_t *pRow, int *pList)
 {
     int set = 0;
     int type = pRow->mCsis;
@@ -1586,10 +1586,10 @@ int *fn_80060444(int index)
 
 void fn_80060458(int index, int level)
 {
-    VetsRow_8018EC68 row;
+    StevRow_t row;
     int ppxe[4] = {16, 39, 63, 72};
     unsigned int mask = 0;
-    VetsRow_8018EC68 *pSaved;
+    StevRow_t *pSaved;
     int dive;
 
     switch (level) {
@@ -1601,61 +1601,61 @@ void fn_80060458(int index, int level)
         mask |= 0x340;
     case 0:
         mask |= 0xA0;
-        fn_8018E390(index, ppxe[level]);
+        StorySetExpPoints(index, ppxe[level]);
         break;
     }
-    fn_8018EEF0();
+    StevOpen();
     pSaved = lbl_803EA5C8;
     for (dive = 0; dive <= 11; dive++) {
         if (mask & (1 << dive)) {
             lbl_803EA5C8 = &row;
-            int count = fn_8018EE44(dive);
+            int count = StevCountDiveRows(dive);
             for (int droe = 0; droe < count; droe++) {
-                fn_8018EDF0(dive, droe, &row);
-                if (!fn_8018E5F4(index, row.mNets)) {
-                    fn_8018E658(index, row.mNets);
+                StevGetRow(dive, droe, &row);
+                if (!StoryIsEventCompleted(index, row.mNets)) {
+                    StoryAddCompletedEvent(index, row.mNets);
                 }
             }
         }
     }
-    fn_8018E7A0(index, 0);
-    fn_8018EEAC();
+    StorySetNew(index, 0);
+    StevClose();
     lbl_803EA5C8 = pSaved;
 }
 
 void fn_8006059C(int index)
 {
-    VetsRow_8018EC68 row;
-    VetsRow_8018EC68 *pSaved;
+    StevRow_t row;
+    StevRow_t *pSaved;
     int dive;
 
-    fn_8018EEF0();
+    StevOpen();
     pSaved = lbl_803EA5C8;
     for (dive = 0; dive <= 11; dive++) {
         lbl_803EA5C8 = &row;
-        int count = fn_8018EE44(dive);
+        int count = StevCountDiveRows(dive);
         for (int droe = 0; droe < count; droe++) {
             if (dive == 0 && droe == count - 1) {
                 continue;
             }
-            fn_8018EDF0(dive, droe, &row);
-            if (!fn_8018E5F4(index, row.mNets)) {
-                fn_8018E658(index, row.mNets);
+            StevGetRow(dive, droe, &row);
+            if (!StoryIsEventCompleted(index, row.mNets)) {
+                StoryAddCompletedEvent(index, row.mNets);
             }
         }
     }
-    fn_8018E7A0(index, 0);
-    fn_8018EEAC();
+    StorySetNew(index, 0);
+    StevClose();
     lbl_803EA5C8 = pSaved;
 }
 
 void fn_80060674(int index)
 {
-    fn_8018E55C(index);
-    fn_8018E390(index, 0);
-    fn_8018E474(index);
-    fn_8018E7A0(index, 1);
-    fn_8018E828(index, -1);
+    StoryClearCompletedEvents(index);
+    StorySetExpPoints(index, 0);
+    StoryClearFlags(index);
+    StorySetNew(index, 1);
+    StorySetLkss(index, -1);
 }
 
 Object_80039F5C *fn_800606CC(int type, int position)

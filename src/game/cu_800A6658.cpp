@@ -75,7 +75,7 @@ extern unsigned char lbl_803EAA4F;
 extern unsigned char lbl_803EAA50;
 extern unsigned char lbl_803EAA51;
 extern int lbl_802D7EFC[][3];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern Object_80039F5C *lbl_8030F404[2][2];
 extern void (*lbl_803EAA1C[2])(int team);
 extern void (*lbl_803EAA2C[2])(int team);
@@ -423,7 +423,7 @@ extern "C" void fn_800A7514(int team)
             fn_800A65BC();
             args[0] = team;
             args[1] = 1;
-            fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
+            fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
             if (fn_80156704() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
                 Object_80039F5C *p = fn_80039FE8(fn_80178308(), 0, 0);
                 unsigned char side;

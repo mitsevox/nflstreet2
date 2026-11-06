@@ -37,7 +37,7 @@ struct MiniGameSettings_t {
 
 extern "C" {
 extern MiniGameSettings_t lbl_8031BDD4;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const int lbl_802DEA78[];
 
 Table_8015005C *fn_801530FC(void);
@@ -115,7 +115,7 @@ void fn_801516A8(Class_802A1C30 *p, float dt)
     }
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_16(lbl_802DEA78);
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     if (fn_8005FC7C()) {
         fn_8006088C(fn_801529C0(&lbl_8031BDD4));
     }
@@ -129,6 +129,6 @@ void fn_80151798(Class_802A1C30 *p)
 
 void fn_801517C4(Class_802A1C30 *p)
 {
-    fn_8021956C(lbl_803EB688, 3, 19, 1);
+    fn_8021956C(gUISMainInfo, 3, 19, 1);
 }
 }

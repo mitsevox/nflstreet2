@@ -10,7 +10,7 @@
 #include "game/fn_800B65A0.h"
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int ChallengeIsActive(void);
 int VptManagerGetPassIcons(void);
@@ -129,13 +129,13 @@ void fn_8017D1D8(unsigned char id)
                     args[0] = fn_8017D0E0(lbl_803EB485);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
-                        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
                     }
                 }
                 args[0] = fn_8017D0E0(id);
                 args[1] = 1;
                 if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
-                    fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                    fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
                 }
                 lbl_803EB485 = id;
             }
@@ -146,13 +146,13 @@ void fn_8017D1D8(unsigned char id)
                     args[0] = fn_8017D0E0(lbl_803EB484);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
-                        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
                     }
                 }
                 args[0] = fn_8017D0E0(id);
                 args[1] = 1;
                 if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
-                    fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                    fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
                 }
                 lbl_803EB484 = id;
             }
@@ -163,7 +163,7 @@ void fn_8017D1D8(unsigned char id)
             args[0] = fn_8017D0E0(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
-                fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
             }
             lbl_803EB485 = 4;
         }
@@ -173,7 +173,7 @@ void fn_8017D1D8(unsigned char id)
             args[0] = fn_8017D0E0(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
-                fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+                fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
             }
             lbl_803EB484 = 4;
         }
@@ -215,12 +215,12 @@ void fn_8017D5D8(void)
     case 0:
     case 1:
     case 2:
-        fn_80218FC4(lbl_803EB688, 3, 0x10, 0, 0);
+        fn_80218FC4(gUISMainInfo, 3, 0x10, 0, 0);
         break;
     default:
-        fn_80218FC4(lbl_803EB688, 3, 3, 0, 0);
+        fn_80218FC4(gUISMainInfo, 3, 3, 0, 0);
         if (fn_80156704()) {
-            fn_80218FC4(lbl_803EB688, 7, 0x10, 0, 0);
+            fn_80218FC4(gUISMainInfo, 7, 0x10, 0, 0);
         }
         break;
     }
@@ -256,7 +256,7 @@ void fn_8017D6B8(int a, int b)
         lbl_803629B8.mpText = lbl_803ECB3C;
         args[1] = (int)&lbl_803629B8;
         lbl_803629B8.mLength = strlen(lbl_803629B8.mpText);
-        fn_8021D7B8(lbl_803EB688, 0x8000000B, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000000B, 2, args);
         break;
     }
 }
@@ -270,7 +270,7 @@ void fn_8017D764(void)
         count = fn_80177F70() + fn_80179138();
     }
     args[0] = count;
-    fn_8021D7B8(lbl_803EB688, 0x80000010, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000010, 1, args);
 }
 
 void fn_8017D7C4(const char *pText)
@@ -281,7 +281,7 @@ void fn_8017D7C4(const char *pText)
     args[0] = &lbl_803629C4;
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
-    fn_8021D7B8(lbl_803EB688, 0x8000000C, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000000C, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
@@ -293,7 +293,7 @@ void fn_8017D844(const char *pText)
     args[0] = &lbl_803629C4;
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
-    fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
@@ -316,7 +316,7 @@ void fn_8017D8D4(void)
         args[0] = fn_8017D0E0(lbl_803EB485);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
-            fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+            fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
         }
         lbl_803EB485 = 4;
     }
@@ -324,7 +324,7 @@ void fn_8017D8D4(void)
         args[0] = fn_8017D0E0(lbl_803EB484);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
-            fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+            fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
         }
         lbl_803EB484 = 4;
     }
@@ -356,7 +356,7 @@ void fn_8017D9D8(int team)
     args[3] = (int)&lbl_803629DC;
     lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
     }
 }
 
@@ -378,7 +378,7 @@ void fn_8017DA9C(int team)
     args[3] = (int)&lbl_803629DC;
     lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
     }
 }
 
@@ -389,12 +389,12 @@ void fn_8017DB44(void)
     case 0:
     case 1:
     case 2:
-        fn_8021956C(lbl_803EB688, 3, 0x10, 1);
+        fn_8021956C(gUISMainInfo, 3, 0x10, 1);
         break;
     default:
-        fn_8021956C(lbl_803EB688, 3, 3, 1);
+        fn_8021956C(gUISMainInfo, 3, 3, 1);
         if (fn_80156704()) {
-            fn_8021956C(lbl_803EB688, 7, 0x10, 1);
+            fn_8021956C(gUISMainInfo, 7, 0x10, 1);
         }
         break;
     }
@@ -406,7 +406,7 @@ void fn_8017DBCC(void)
     int args[1];
 
     args[0] = 1;
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 1, args);
 }
 
 void fn_8017DC08(void)
@@ -414,7 +414,7 @@ void fn_8017DC08(void)
     int args[1];
 
     args[0] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x8000003A, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000003A, 1, args);
 }
 
 void fn_8017DC44(void)
@@ -423,7 +423,7 @@ void fn_8017DC44(void)
 
     lbl_803EB488 = 1;
     args[0] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x8000001B, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000001B, 1, args);
 }
 
 void fn_8017DC88(void)
@@ -432,7 +432,7 @@ void fn_8017DC88(void)
 
     lbl_803EB488 = 0;
     args[0] = 1;
-    fn_8021D7B8(lbl_803EB688, 0x8000001B, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000001B, 1, args);
 }
 
 void fn_8017DCCC(void)
@@ -442,7 +442,7 @@ void fn_8017DCCC(void)
     lbl_803EB488 = 1;
     args[0] = 1;
     if (!fn_80156704()) {
-        fn_8021D7B8(lbl_803EB688, 0x80000067, 1, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
     }
 }
 
@@ -452,7 +452,7 @@ void fn_8017DD1C(void)
 
     lbl_803EB488 = 0;
     args[0] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x80000067, 1, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
 }
 
 unsigned char fn_8017DD60(void)

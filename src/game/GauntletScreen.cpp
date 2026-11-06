@@ -16,11 +16,11 @@ struct GauntletMsgArgs_t {
 extern "C" {
 int fn_8022F4BC(void);
 int fn_80186B38(int a);
-int fn_8018F3D8(int a);
-int fn_8018F288(int a, int b);
+int GauntletGetTeamsLeft(int a);
+int GauntletIsTeamBeaten(int a, int b);
 int fn_8022F384(int a);
 void EnvSetLocked(int a, int b, int c);
-void fn_8018F4C4(int a);
+void GauntletAdvance(int a);
 
 static const signed char _GauntletScreen_acTeamOrder[33] = {
     8, 23, 7, 16, 26, 19, 5, 14, 17, 32, 29, 18, 3, 1, 6, 15, 2,
@@ -32,19 +32,19 @@ void GauntletScreenEnter(int *pOut)
 {
     int value;
 
-    if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) > 24) {
+    if (GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC())) > 24) {
         value = 8;
-    } else if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) > 16) {
+    } else if (GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC())) > 16) {
         value = 16;
-    } else if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) > 8) {
+    } else if (GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC())) > 8) {
         value = 24;
-    } else if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) > 0) {
+    } else if (GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC())) > 0) {
         value = 32;
     } else {
         value = 33;
     }
     *pOut = value;
-    if (fn_8018F288(fn_80186B38(fn_8022F4BC()), 34) != 0) {
+    if (GauntletIsTeamBeaten(fn_80186B38(fn_8022F4BC()), 34) != 0) {
         EnvSetLocked(fn_8022F384(fn_8022F4BC()), 11, 0);
     }
 }
@@ -52,7 +52,7 @@ void GauntletScreenEnter(int *pOut)
 void GauntletScreenGetTeam(int index, int *pOut, int *pFlag)
 {
     *pOut = _GauntletScreen_acTeamOrder[index];
-    if (fn_8018F288(fn_80186B38(fn_8022F4BC()), *pOut) != 0) {
+    if (GauntletIsTeamBeaten(fn_80186B38(fn_8022F4BC()), *pOut) != 0) {
         *pFlag = 1;
     } else {
         *pFlag = 0;
@@ -80,9 +80,9 @@ int GauntletScreenMsg(unsigned int id, GauntletMsgArgs_t *pBlock, int unused, in
         _GauntletScreen_iSelection = pBlock->mUnknown0.mValue;
         break;
     case 0x80000005:
-        if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) == -1) {
+        if (GauntletGetTeamsLeft(fn_80186B38(fn_8022F4BC())) == -1) {
             *pResult = 1;
-            fn_8018F4C4(fn_80186B38(fn_8022F4BC()));
+            GauntletAdvance(fn_80186B38(fn_8022F4BC()));
         } else {
             *pResult = 0;
         }

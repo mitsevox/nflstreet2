@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "game/fn_801FCE10.h"
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
@@ -191,11 +191,11 @@ void fn_8007BF60(int id)
 {
     int index = fn_8022F384(fn_8022F4BC());
     int handle = fn_8022F3D4(fn_8022F4BC());
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
 
-    cursor.fn_8018FDEC(0x4C504947, 0x49544947, 0, 0, handle);
-    if (cursor.fn_8018FF54(0x49544947, id, 0, 0)) {
-        int count = cursor.fn_8018FF78(0x4C504947);
+    cursor.OpenTable(0x4C504947, 0x49544947, 0, 0, handle);
+    if (cursor.FindColumnInt(0x49544947, id, 0, 0)) {
+        int count = cursor.GetColumnInt(0x4C504947);
         int next = count + 1;
         DbSortKey keys[2];
         DbFilter both;
@@ -210,7 +210,7 @@ void fn_8007BF60(int id)
         int i;
         int j;
 
-        cursor.fn_80190008(0x4C504947, next);
+        cursor.SetColumnInt(0x4C504947, next);
         keys[0].Set(0x50495247, 0x47504947, 0);
         keys[1].Set(-1, -1, 3);
         both.Set(11, &first, &second);
@@ -219,41 +219,41 @@ void fn_8007BF60(int id)
         second.Set(6, 0x504952474C504947LL, 2);
         second.mUnknown16.mValue.mInt = count;
         {
-            Class_8018FD64 rows;
+            DbTableCursor rows;
 
-            rows.fn_8018FDEC(0x50495247, 0x594B5047, keys, &both, 0x54415453);
+            rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
-                oldKeys[i] = rows.fn_8018FF78(0x594B5047);
+                oldKeys[i] = rows.GetColumnInt(0x594B5047);
                 fresh[i] = !GearIsLocked(oldKeys[i]);
                 if (fresh[i]) {
                     GearLock(oldKeys[i]);
                 }
-                rows.fn_8018FEC4();
+                rows.MoveNext();
             }
         }
         second.Set(6, 0x504952474C504947LL, 2);
         second.mUnknown16.mValue.mInt = next;
         {
-            Class_8018FD64 rows;
+            DbTableCursor rows;
 
-            rows.fn_8018FDEC(0x50495247, 0x594B5047, keys, &both, 0x54415453);
+            rows.OpenTable(0x50495247, 0x594B5047, keys, &both, 0x54415453);
             for (i = 0; i < 2; i++) {
-                newKeys[i] = rows.fn_8018FF78(0x594B5047);
+                newKeys[i] = rows.GetColumnInt(0x594B5047);
                 if (fresh[i]) {
                     GearUnlock(newKeys[i]);
                 }
-                rows.fn_8018FEC4();
+                rows.MoveNext();
             }
         }
         for (i = 0; i < 2; i++) {
-            Class_8018FD64 rows;
+            DbTableCursor rows;
 
-            rows.fn_8018FDEC(0x52414547, 0x594B5047, 0, 0, 0x54415453);
-            rows.fn_8018FF54(0x594B5047, oldKeys[i], 0, 0);
-            types[i] = rows.fn_8018FF78(0x49545247);
-            oldIds[i] = rows.fn_8018FF78(0x44494547);
-            rows.fn_8018FF54(0x594B5047, newKeys[i], 0, 0);
-            newIds[i] = rows.fn_8018FF78(0x44494547);
+            rows.OpenTable(0x52414547, 0x594B5047, 0, 0, 0x54415453);
+            rows.FindColumnInt(0x594B5047, oldKeys[i], 0, 0);
+            types[i] = rows.GetColumnInt(0x49545247);
+            oldIds[i] = rows.GetColumnInt(0x44494547);
+            rows.FindColumnInt(0x594B5047, newKeys[i], 0, 0);
+            newIds[i] = rows.GetColumnInt(0x44494547);
         }
         {
             DbCursor teams;
@@ -312,12 +312,12 @@ int fn_8007C538(int id)
     GearLockOpen(&keys, fn_8022F384(fn_8022F4BC()));
     arg.Set(6, 0x5049524749544947LL, 2, id);
     {
-        Class_8018FD64 rows;
+        DbTableCursor rows;
         int more;
 
-        rows.fn_8018FDEC(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
-        for (more = rows.fn_8018FE7C(); more; more = rows.fn_8018FEC4()) {
-            if (!GearLockIsLocked(&keys, rows.fn_8018FF9C(0x594B5047))) {
+        rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
+        for (more = rows.MoveFirst(); more; more = rows.MoveNext()) {
+            if (!GearLockIsLocked(&keys, rows.GetColumnValue(0x594B5047))) {
                 result = 1;
                 break;
             }
@@ -340,13 +340,13 @@ int fn_8007C690(DbCursor *pCursor, short *pOut)
 
     arg.Set(6, 0x50495247594B5047LL, 2, fn_8007BB24(pCursor));
     {
-        Class_8018FD64 rows;
+        DbTableCursor rows;
 
-        rows.fn_8018FDEC(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
-        if (rows.fn_8018FE34() > 0 && rows.fn_8018FF78(0x49544947) > 0) {
+        rows.OpenTable(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
+        if (rows.GetRowCount() > 0 && rows.GetColumnInt(0x49544947) > 0) {
             if (pOut) {
                 for (i = 0; i < 10; i++) {
-                    pOut[i] = rows.fn_8018FF78(sShortColumnTags[i]);
+                    pOut[i] = rows.GetColumnInt(sShortColumnTags[i]);
                 }
             }
             result = 1;

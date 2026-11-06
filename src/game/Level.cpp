@@ -24,7 +24,7 @@ unsigned int fn_801C3180(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 LevelData_t *gLevelData = 0;
 LevelWallInfo_t *gLevelWallInfo = 0;
@@ -188,8 +188,8 @@ void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons)
     _MsgBox_apText[0] = &_MsgBox_aText[0];
     _MsgBox_apText[1] = &_MsgBox_aText[1];
     _MsgBox_apText[2] = &_MsgBox_aText[2];
-    fn_80218FC4(lbl_803EB688, 1, 3, 3, (int *)_MsgBox_apText);
-    fn_802195E4(lbl_803EB688, 1, 3);
+    fn_80218FC4(gUISMainInfo, 1, 3, 3, (int *)_MsgBox_apText);
+    fn_802195E4(gUISMainInfo, 1, 3);
 }
 
 int MsgBoxIsClosed(void)
@@ -197,7 +197,7 @@ int MsgBoxIsClosed(void)
     unsigned short group;
     unsigned short screen;
 
-    fn_80219650(lbl_803EB688, &group, &screen);
+    fn_80219650(gUISMainInfo, &group, &screen);
     return group != 1 || screen != 3;
 }
 }

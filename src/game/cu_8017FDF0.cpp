@@ -39,9 +39,9 @@ union Arg_801801F8 {
 extern "C" {
 int fn_8022F4BC(void);
 int fn_80186B38(int a);
-int fn_8018F2F4(int a, int b);
+int GauntletSetCurrentTeam(int a, int b);
 int fn_8001194C(int a);
-int fn_801869F0(void);
+int UserRecGetCount(void);
 int fn_80186D64(int a);
 void fn_80186F9C(int a, char *pText, int c);
 int fn_801486A0(void);
@@ -83,7 +83,7 @@ int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
-void fn_8018A8C0(unsigned char value);
+void UISGameSetInputFlag(unsigned char value);
 int PauseGetValue(void);
 int fn_8022F384(int a);
 void *fn_8021EA44(int index);
@@ -95,7 +95,7 @@ void fn_80187C5C(unsigned char a);
 void fn_80156E74(float *pX, float *pY, float *pZ);
 int fn_8005902C(void);
 int fn_8007B324(void);
-int fn_80188DF0(int a);
+int TeamLogoGetHandle(int a);
 int fn_8022E558(void);
 int fn_8022E560(void);
 }
@@ -135,7 +135,7 @@ void fn_8017FE4C(int a, int b, int c)
     lbl_803EB534 = b;
     lbl_803EB538 = c;
     if (a == 0 && b == 0x69 && fn_8017F584() == 8) {
-        fn_8018F2F4(fn_80186B38(fn_8022F4BC()), 0x3FF);
+        GauntletSetCurrentTeam(fn_80186B38(fn_8022F4BC()), 0x3FF);
     }
 }
 
@@ -153,7 +153,7 @@ int fn_8017FED4(int a, int *pResult)
     if (a != -1) {
         value = fn_8001194C(a == 0);
     }
-    *pResult = fn_801869F0();
+    *pResult = UserRecGetCount();
     bool found = false;
     if (*pResult == 2) {
         *pResult = fn_80186D64(value);
@@ -174,7 +174,7 @@ int fn_8017FF48(int a, char *pText)
     if (a == -1) {
         a = 1;
     }
-    state = fn_801869F0();
+    state = UserRecGetCount();
     fn_80186F9C(state, pText, a);
     return state;
 }
@@ -359,7 +359,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         fn_801410F4(2);
         break;
     case 0x13:
-        pResult->i = fn_801869F0();
+        pResult->i = UserRecGetCount();
         break;
     case 0x1F0:
         fn_80186A44(pArgs[0].i);
@@ -450,7 +450,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
     }
 
     case 0x113:
-        fn_8018A8C0(pArgs[0].i == 1);
+        UISGameSetInputFlag(pArgs[0].i == 1);
         break;
     case 0x107:
         if (PauseGetValue() == -1) {
@@ -507,7 +507,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         int result = 0;
 
         if (fn_80187C64()) {
-            result = fn_801869F0() == 0;
+            result = UserRecGetCount() == 0;
         }
         pResult->i = result;
         fn_80187C5C(0);
@@ -593,7 +593,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     int result;
 
     *pStatus = 0;
-    *pTeam = fn_80188DF0(-1);
+    *pTeam = TeamLogoGetHandle(-1);
     mode = fn_8017F584();
     result = FELoopIsMainFEActive();
     if (mode == 7) {
@@ -623,10 +623,10 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
                 }
                 switch (team) {
                 case 0:
-                    *pTeam = fn_80188DF0(0);
+                    *pTeam = TeamLogoGetHandle(0);
                     break;
                 case 1:
-                    *pTeam = fn_80188DF0(1);
+                    *pTeam = TeamLogoGetHandle(1);
                     break;
                 }
             }
@@ -677,10 +677,10 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
             if (!fn_80084438(&cursor)) {
                 switch (team) {
                 case 0:
-                    *pTeam = fn_80188DF0(0);
+                    *pTeam = TeamLogoGetHandle(0);
                     break;
                 case 1:
-                    *pTeam = fn_80188DF0(1);
+                    *pTeam = TeamLogoGetHandle(1);
                     break;
                 }
             }

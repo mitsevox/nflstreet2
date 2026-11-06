@@ -2,21 +2,21 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_8017F584.h"
-#include "game/cu_80190208.h"
+#include "game/Cheat.h"
 #include "libc/string.h"
 
 extern "C" {
-int fn_801869F0(void);
-int fn_80186A10(int, char *);
+int UserRecGetCount(void);
+int UserRecGetName(int, char *);
 int fn_8022F358(int);
 void ChalCloseCursors(void);
 void fn_8022F1BC(int);
 void fn_80029DCC(int, int);
 void fn_80029E90(int, int, int, int);
 void fn_80011894(int);
-int fn_80186518(int, int, int, int, int);
-void fn_80186808(int, int, int);
-void fn_80186714(int, int, int);
+int UserRecGetGameStat(int, int, int, int, int);
+void UserRecAddStat(int, int, int);
+void UserRecUpdateStreak(int, int, int);
 void RecordsPrune(void);
 void fn_8022F294(int);
 int fn_8022F0D4(int);
@@ -24,13 +24,13 @@ int fn_8022F794(int, char *);
 int fn_8022F3D4(int);
 void fn_80029C2C(int, int, int);
 void fn_8002A1D4(int, int, char *);
-int fn_80190394(void);
+int CheatIsNoneEnabled(void);
 int fn_801485D4(void);
 int fn_800D41F8(int);
 int fn_800A7E40(int);
 int fn_800A7E54(int);
 int fn_800A3444(void);
-void fn_8018689C(int);
+void UserRecAddRecent(int);
 int fn_80186F7C(unsigned char);
 void fn_80186ED8(int);
 int fn_80187038(unsigned char, int);
@@ -73,7 +73,7 @@ static char lbl_80362B7C[4][13];
 extern "C" {
 void fn_80186A44(signed char index)
 {
-    int count = fn_801869F0();
+    int count = UserRecGetCount();
     int db = fn_8022F358(index);
     ChalCloseCursors();
     fn_8022F1BC(db);
@@ -95,7 +95,7 @@ void fn_80186A44(signed char index)
 }
 int fn_80186B38(int db)
 {
-    int count = fn_801869F0();
+    int count = UserRecGetCount();
     signed char i = 0;
     int searching = 1;
     while (i < count && searching) {
@@ -109,16 +109,16 @@ void fn_80186BAC(void)
     if (fn_80186F7C(0) == -1 && fn_80186F7C(1) == -1) return;
     for (Entry_80186BAC *p = lbl_802EAA40; p->mKind != 13; p++) {
         if (fn_80186F7C(0) != -1) {
-            int value = fn_80186518(p->mKind, p->mArg4, p->mArg8, 0, 1);
-            fn_80186808(fn_8022F358(fn_80186F7C(0)), p->mKey, value);
+            int value = UserRecGetGameStat(p->mKind, p->mArg4, p->mArg8, 0, 1);
+            UserRecAddStat(fn_8022F358(fn_80186F7C(0)), p->mKey, value);
         }
         if (fn_80186F7C(1) != -1) {
-            int value = fn_80186518(p->mKind, p->mArg4, p->mArg8, 1, 0);
-            fn_80186808(fn_8022F358(fn_80186F7C(1)), p->mKey, value);
+            int value = UserRecGetGameStat(p->mKind, p->mArg4, p->mArg8, 1, 0);
+            UserRecAddStat(fn_8022F358(fn_80186F7C(1)), p->mKey, value);
         }
     }
-    if (fn_80186F7C(0) != -1) fn_80186714(fn_8022F358(fn_80186F7C(0)), 0, 1);
-    if (fn_80186F7C(1) != -1) fn_80186714(fn_8022F358(fn_80186F7C(1)), 1, 0);
+    if (fn_80186F7C(0) != -1) UserRecUpdateStreak(fn_8022F358(fn_80186F7C(0)), 0, 1);
+    if (fn_80186F7C(1) != -1) UserRecUpdateStreak(fn_8022F358(fn_80186F7C(1)), 1, 0);
 }
 void fn_80186CE8(unsigned char *pFlags)
 {
@@ -131,7 +131,7 @@ int fn_80186D64(int excluded)
 {
     signed char best = -1;
     unsigned int value = 0;
-    for (signed char i = 0; i < fn_801869F0(); i++) {
+    for (signed char i = 0; i < UserRecGetCount(); i++) {
         if (i != excluded) {
             if (best == -1) { best = i; value = lbl_803ECB8C[best]; }
             else if (lbl_803ECB8C[i] < value) { value = lbl_803ECB8C[i]; best = i; }
@@ -141,7 +141,7 @@ int fn_80186D64(int excluded)
 }
 int fn_80186DF0(signed char *pOrder, int capacity)
 {
-    int count = fn_801869F0();
+    int count = UserRecGetCount();
     for (signed char i = 0; i < capacity; i++) pOrder[i] = -1;
     for (signed char i = 0; i < count; i++) pOrder[i] = i;
     for (signed char pass = count - 1; pass > 0; pass--) {
@@ -164,13 +164,13 @@ void fn_80186EF4(void)
 void fn_80186F30(signed char index, unsigned char pad)
 {
     lbl_803ECB88[pad] = index;
-    if (index != -1 && index < fn_801869F0()) fn_80186ED8(index);
+    if (index != -1 && index < UserRecGetCount()) fn_80186ED8(index);
 }
 int fn_80186F7C(unsigned char pad) { return lbl_803ECB88[pad]; }
 void fn_80186F8C(int pad) { lbl_803ECB88[pad] = -1; }
 void fn_80186F9C(int index, char *pName, int)
 {
-    int count = fn_801869F0();
+    int count = UserRecGetCount();
     int db;
     if (index <= count - 1) { db = fn_8022F358(index); fn_8022F294(db); }
     else { index = count; db = fn_8022F0D4(count); }
@@ -186,7 +186,7 @@ int fn_80187038(unsigned char pad, int allowCreate)
     int v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18; int id = 0;
     int changed = 0;
     int selected = fn_80186F7C(pad);
-    fn_80186A10(selected, name);
+    UserRecGetName(selected, name);
     int db = fn_8022F358(selected);
     fn_8022F478(db);
     int token = fn_8022F3D4(db);
@@ -195,10 +195,10 @@ int fn_80187038(unsigned char pad, int allowCreate)
     int busy = 0;
     if (fn_8017F584() == 0) {
         if (fn_80186F7C(0) != -1) {
-            fn_80190280(fn_80186F7C(0)); busy = !fn_80190394(); fn_80190288();
+            CheatSelectSlot(fn_80186F7C(0)); busy = !CheatIsNoneEnabled(); CheatClearSlot();
         }
         if (fn_80186F7C(1) != -1) {
-            fn_80190280(fn_80186F7C(1)); busy |= !fn_80190394(); fn_80190288();
+            CheatSelectSlot(fn_80186F7C(1)); busy |= !CheatIsNoneEnabled(); CheatClearSlot();
         }
     }
     if (status != 0 || busy) id = -1;
@@ -294,7 +294,7 @@ void fn_8018787C(int index)
 {
     char name[32]; int v[13]; int id = 0;
     v[12] = 0;
-    fn_80186A10(index, name);
+    UserRecGetName(index, name);
     int db = fn_8022F358(index);
     fn_8022F478(db);
     int token = fn_8022F3D4(db);
@@ -304,7 +304,7 @@ void fn_8018787C(int index)
         if (fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'FNWU' into \x82 from 'TSPU'\n", token, &v[0], &v[1], &v[2], &v[3], &v[4], &v[5], &v[6], &v[7], &v[8], &v[9], &v[10], &v[11], &v[12]) == 0)
             fn_801FCE10(0, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'CNWH' = \x82\n", id, name, v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9], v[10], v[11], v[12]);
     }
-    if (id != -1) fn_8018689C(id);
+    if (id != -1) UserRecAddRecent(id);
 }
 void fn_80187A28(unsigned char index, char *pText)
 {

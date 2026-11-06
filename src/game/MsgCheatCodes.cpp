@@ -3,21 +3,21 @@
    conflicts with. */
 
 #include "game/MsgCheatCodes.h"
-#include "game/cu_80190208.h"
+#include "game/Cheat.h"
 
 static signed char _MsgCheatCodes_cProfile = -1;
 
 extern "C" {
-int fn_801869F0(void);
+int UserRecGetCount(void);
 int fn_80186DF0(signed char *pIndices, int length);
-int fn_80186A10(int index, char *pText);
+int UserRecGetName(int index, char *pText);
 void fn_80186ED8(signed char index);
 void CheatEffectRemove(signed char db, int id);
 void CheatEffectApply(signed char db, int id);
 
 void MsgCheatCodesCycleProfile(int control)
 {
-    int count = fn_801869F0();
+    int count = UserRecGetCount();
     if (_MsgCheatCodes_cProfile == -1 && count > 0) {
         signed char indices[2];
         unsigned char auxiliary[2];
@@ -49,10 +49,10 @@ void MsgCheatCodesCycleProfile(int control)
 int MsgCheatCodesGetProfile(int control, char *pText, int c, int *pValue, int *pFlag)
 {
     MsgCheatCodesCycleProfile(control);
-    fn_80190280(_MsgCheatCodes_cProfile);
-    fn_80186A10(_MsgCheatCodes_cProfile, pText);
-    *pValue = fn_80190294();
-    int result = fn_80190310();
+    CheatSelectSlot(_MsgCheatCodes_cProfile);
+    UserRecGetName(_MsgCheatCodes_cProfile, pText);
+    *pValue = CheatCountUnlocked();
+    int result = CheatAreAllUnlocked();
     *pFlag = result;
     return result;
 }
@@ -60,20 +60,20 @@ int MsgCheatCodesGetProfile(int control, char *pText, int c, int *pValue, int *p
 int MsgCheatCodesGetEntry(int value, char *pText, int length, int *pResult)
 {
     int count;
-    return fn_801905E0(value, &count, pText, length, pResult);
+    return CheatGetUnlockedInfo(value, &count, pText, length, pResult);
 }
 
 int MsgCheatCodesEnterCode(const char *pCode, int unused, char *pName, int d)
 {
-    unsigned int value = fn_80190420(pCode, unused, pName);
+    unsigned int value = CheatFindByCode(pCode, unused, pName);
     fn_80186ED8(_MsgCheatCodes_cProfile);
     if (value > 54) {
         return 0;
     }
-    if (fn_80190768(value)) {
+    if (CheatIsUnlocked(value)) {
         return 2;
     }
-    fn_80190808(value);
+    CheatUnlock(value);
     return 1;
 }
 
@@ -81,67 +81,67 @@ void MsgCheatCodesDisableConflicts(int value)
 {
     switch (value) {
     case 27:
-        fn_801909E4(26);
+        CheatDisable(26);
         break;
     case 26:
-        fn_801909E4(27);
+        CheatDisable(27);
         break;
     case 30:
-        fn_801909E4(44);
-        fn_801909E4(31);
-        fn_801909E4(34);
+        CheatDisable(44);
+        CheatDisable(31);
+        CheatDisable(34);
         break;
     case 31:
-        fn_801909E4(44);
-        fn_801909E4(30);
-        fn_801909E4(34);
+        CheatDisable(44);
+        CheatDisable(30);
+        CheatDisable(34);
         break;
     case 44:
-        fn_801909E4(31);
-        fn_801909E4(30);
-        fn_801909E4(34);
+        CheatDisable(31);
+        CheatDisable(30);
+        CheatDisable(34);
         break;
     case 34:
-        fn_801909E4(31);
-        fn_801909E4(30);
-        fn_801909E4(44);
-        fn_801909E4(33);
+        CheatDisable(31);
+        CheatDisable(30);
+        CheatDisable(44);
+        CheatDisable(33);
         break;
     case 33:
-        fn_801909E4(34);
+        CheatDisable(34);
         break;
     case 36:
-        fn_801909E4(37);
+        CheatDisable(37);
         break;
     case 37:
-        fn_801909E4(36);
+        CheatDisable(36);
         break;
     case 28:
-        fn_801909E4(29);
+        CheatDisable(29);
         break;
     case 29:
-        fn_801909E4(28);
+        CheatDisable(28);
         break;
     case 23:
-        fn_801909E4(24);
+        CheatDisable(24);
         break;
     case 24:
-        fn_801909E4(23);
+        CheatDisable(23);
         break;
     }
 }
 
 void MsgCheatCodesToggle(int value, int *pResult)
 {
-    int result = fn_801904E0(value);
+    int result = CheatGetUnlockedId(value);
     fn_80186ED8(_MsgCheatCodes_cProfile);
     int changed;
-    if (fn_801908A0(result)) {
-        fn_801909E4(result);
+    if (CheatIsEnabled(result)) {
+        CheatDisable(result);
         CheatEffectRemove(_MsgCheatCodes_cProfile, result);
         changed = 0;
     } else {
-        fn_8019094C(result);
+        CheatEnable(result);
         CheatEffectApply(_MsgCheatCodes_cProfile, result);
         MsgCheatCodesDisableConflicts(result);
         changed = 1;
@@ -153,11 +153,11 @@ int MsgCheatCodesHandleMessage(unsigned int id, CheatCodesArg_t *pArgs, int c, i
 {
     switch (id) {
     case 0x80000001:
-        *pArgs[0].mpUnknown0 = fn_801869F0();
+        *pArgs[0].mpUnknown0 = UserRecGetCount();
         break;
     case 0x80000002:
         _MsgCheatCodes_cProfile = -1;
-        fn_80190288();
+        CheatClearSlot();
         break;
     case 0x80000004:
     {
