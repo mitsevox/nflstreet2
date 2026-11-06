@@ -285,3 +285,4 @@
 0x801E7208	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
 0x801E7298	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
 0x801E736C	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
+0x801B1A3C	lifewillbeokay	Original exact seed body from PR #1249; preserved through this integration landing PR.
