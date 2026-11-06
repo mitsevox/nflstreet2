@@ -5,13 +5,13 @@
 extern "C" {
 #endif
 
-void fn_801C3AD8(void *camera, int unused);
-void fn_801C3B74(void *camera);
-void fn_801C3B78(void *camera);
-void fn_801C3C4C(void *viewport, void *camera);
-void fn_801C3C6C(void *camera, void *target);
-void fn_801C3C74(void *camera, int angleX, int angleZ);
-void SnapFocusCameraToTarget(void *camera);
+void CamFocusAdd(void *camera, int unused);
+void CamFocusDelete(void *camera);
+void CamFocusProcess(void *camera);
+void CamFocusUpdate(void *viewport, void *camera);
+void CamFocusSetTarget(void *camera, void *target);
+void CamFocusMoveAngle(void *camera, int angleX, int angleZ);
+void CamFocusWarpToDest(void *camera);
 
 #ifdef __cplusplus
 }

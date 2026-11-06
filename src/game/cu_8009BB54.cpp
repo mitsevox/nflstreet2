@@ -1,6 +1,6 @@
 #include "game/Table_80089904.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Item_80097440.h"
 
@@ -20,8 +20,8 @@ void fn_801D0664(float m[4][4]);
 void fn_801D0FB8(Vector_80039F5C *pOut);
 void fn_801D11F4(void *pOut, int a);
 void fn_801D0BCC(int a, int b, int c);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_801EB488(Quat_801EB488 *pRot);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatIdentity(Quat_801EB488 *pRot);
 void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
 void fn_800B267C(Object_800B26B0 *pMotion);
@@ -84,7 +84,7 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
 
     if (joint != -1) {
         float (*m)[4] = pBlock->mUnknown44.mUnknown52[joint];
-        Angles_801EBC18 angles;
+        QuatEulerAngles_t angles;
 
         fn_801D04C4();
         fn_801D06D4(p->mUnknown640);
@@ -95,10 +95,10 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
         fn_801D0FB8(pOut);
         fn_801D11F4(&angles, 0);
         fn_801D0544();
-        fn_801EBEF8(pRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        QuatFromEuler(pRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
     } else {
         pOut->mX = pOut->mY = pOut->mZ = 0.0f;
-        fn_801EB488(pRot);
+        QuatIdentity(pRot);
     }
 }
 

@@ -26,7 +26,7 @@ struct Block_800DE3B0 {
     int mUnknown14;
     int mUnknown18;
     unsigned char mUnknown1C, mUnknown1D, mUnknown1E, mUnknown1F;
-    State_800D8140 mUnknown20;
+    AnimMomentum_t mUnknown20;
     int mUnknown38;
     unsigned char mUnknown3C, mUnknown3D;
     signed char mUnknown3E, mUnknown3F;

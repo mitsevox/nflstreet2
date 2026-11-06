@@ -1,4 +1,4 @@
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
 #include "game/Lookup_8012078C.h"
@@ -24,7 +24,7 @@ void fn_8009E674(void);
 float fn_80178A44(void);
 int fn_8011F2C4(void);
 int fn_8011F1A4(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 float fn_80237260(int stream);
 extern float lbl_803EA9AC;
 extern float lbl_803EA9B0;
@@ -32,7 +32,7 @@ extern float lbl_803EA9B4;
 extern float lbl_803EA9B8;
 extern Point_8017886C lbl_802DA728[10];
 extern Point_8017886C lbl_802DA778[10];
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 }
 
 extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
@@ -41,7 +41,7 @@ extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
 
     if (p != 0 && pOther != 0 && fn_80237260(0) < p->mRatings[8] / 255.0f
         && fn_8009F058(p, pOther, 0x400000) != 0) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         if (pCarrier != 0) {
             Point_8017886C carrierDelta;
@@ -64,8 +64,8 @@ extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
 extern "C" int fn_8009E180(Object_80039F5C *p)
 {
     int check = 0;
-    Object_80137ABC *pBall = fn_801374BC();
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Ball_t *pBall = BallGetCurrent();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
     if (pCarrier != 0) {
         if (pCarrier->mIdBytes[3] == 1) {
@@ -118,19 +118,19 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
                 } else if (kind == 3) {
                     limit += 6;
                 }
-                pHolder = fn_80137AD0(pBall);
+                pHolder = BallGetHolder(pBall);
                 if (fn_8011F1A4() != 0 && (pHolder->mUnknown2914 != 0 || pHolder->mpState->mId == 91)) {
                     limit /= 2;
                 }
-                if (fn_80137F88(pBall) > limit) {
+                if (BallGetStateFrames(pBall) > limit) {
                     return 5;
                 }
             }
         }
     } else {
-        switch (fn_8013BA58(pBall, 0)) {
+        switch (BallStateGet(pBall, 0)) {
         case 4:
-            if (fn_80137B88(fn_801374BC()) != 0 || fn_801486A0() == 1) {
+            if (BallGetTarget(BallGetCurrent()) != 0 || fn_801486A0() == 1) {
                 return 4;
             }
             break;
@@ -160,7 +160,7 @@ extern "C" void fn_8009E674(void)
     float offset;
     int i;
 
-    fn_80137D58(fn_801374BC(), &pos);
+    BallGetPosition(BallGetCurrent(), &pos);
     pBoxes = p->mUnknown18;
     ball = fn_80177FE0();
     p->mUnknown14 = 12;

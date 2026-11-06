@@ -36,11 +36,11 @@ extern Callback_803EBF40 *lbl_803EBF40;
 extern Callback_803EBF44 *lbl_803EBF44;
 
 /* 12-byte argument of fn_8021DEFC. */
-typedef struct Desc_8021DEFC {
+typedef struct UISResListDesc {
     Int32 NumA;     /* 0x00 */
     Int32 NumB;     /* 0x04 */
     Int32 unk_08;   /* 0x08 */
-} Desc_8021DEFC;
+} UISResListDesc;
 
 /* A colour that is also compared as one word. */
 typedef union ColorWord_80220988 {
@@ -96,7 +96,7 @@ void fn_80220AD0(Node_80223874 *pNode, Int32 a, Int32 Item);
 Int32 fn_80220BFC(Int32 a, Int32 b);
 void fn_80220D3C(void);
 void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
-void fn_80210388(void);
+void TMRenderReset(void);
 
 extern Float32 lbl_8039F858[4];
 extern Float32 lbl_8039F868[4];
@@ -815,7 +815,7 @@ Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item)
     return Result;
 }
 
-Object_8021E688 *fn_8021DEFC(Desc_8021DEFC *pDesc)
+Object_8021E688 *fn_8021DEFC(UISResListDesc *pDesc)
 {
     Int32 Size;
     Object_8021E688 *pObject;
@@ -1495,7 +1495,7 @@ void fn_8021F984(Node_80223874 *pNode, Int32 Item)
         return;
     }
     Flags = pNode->Flags;
-    fn_80210388();
+    TMRenderReset();
     Mode = Flags & 3;
     fn_80220A08();
     lbl_803ECFF8 = -1;

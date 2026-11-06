@@ -1,7 +1,10 @@
+/* Vertex channel lists: gathers a geometry node's attributes and sends their descriptors,
+   formats and arrays to GX before drawing. */
+
 #include <dolphin/gx/GXGeometry.h>
 #include "engine/tmlib.h"
 
-void fn_8021592C(ChannelList_8021592C *pList, GeomNode_8020ED10 *pNode, GeomAttr_8020ED10 *pAttrs, void **ppChannels)
+void TMChannelListBuild(TMChannelList_t *pList, TMGeomNode_t *pNode, TMGeomAttr_t *pAttrs, void **ppChannels)
 {
     unsigned int count = pNode->mNumAttrs;
     unsigned int i;
@@ -36,7 +39,7 @@ void fn_8021592C(ChannelList_8021592C *pList, GeomNode_8020ED10 *pNode, GeomAttr
     }
 }
 
-void fn_80215A14(ChannelList_8021592C *pList)
+void TMChannelListSubmit_DFA(TMChannelList_t *pList)
 {
     int count;
     int i;
@@ -44,7 +47,7 @@ void fn_80215A14(ChannelList_8021592C *pList)
     GXClearVtxDesc();
     count = pList->mCount;
     for (i = 0; i < count; i++) {
-        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        TMGeomAttr_t *pAttr = pList->mapAttrs[i];
         unsigned char compType;
         unsigned char stride;
         unsigned char frac;
@@ -70,13 +73,13 @@ void fn_80215A14(ChannelList_8021592C *pList)
     }
 }
 
-void fn_80215B00(ChannelList_8021592C *pList)
+void TMChannelListSubmit_A(TMChannelList_t *pList)
 {
     int count = pList->mCount;
     int i;
 
     for (i = 0; i < count; i++) {
-        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        TMGeomAttr_t *pAttr = pList->mapAttrs[i];
         int stride = pList->maStride[i];
 
         if (stride == 0xFF) {

@@ -1,10 +1,10 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801EF390.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -52,19 +52,19 @@ void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float (*pMatrix)[4]);
-int fn_801DCF0C(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*callback)(Item_800469EC *));
-Item_800469EC *fn_801DD268(int handle, int type, int a, int *pInit);
-void fn_801DD320(int handle, Item_800469EC *p);
-void fn_801DD3AC(int handle, Item_800469EC *p, int a);
-void fn_80210388(void);
-void fn_80210814(int a, int b, int c);
-void fn_80210CC4(float a, float b);
-void fn_80211E08(void *p, int a);
-void fn_80211EFC(void *p);
-int fn_802120E4(void *p, unsigned int key);
-int fn_80212124(void *p, unsigned int key, int a);
+int ObjNewType_(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*callback)(Item_800469EC *));
+Item_800469EC *ObjNewInList(int handle, int type, int a, int *pInit);
+void ObjRemoveFromList(int handle, Item_800469EC *p);
+void ObjSetPriority(int handle, Item_800469EC *p, int a);
+void TMRenderReset(void);
+void TMRenderBindTexture(int a, int b, int c);
+void TMRenderSetZRange(float a, float b);
+void TMTexLibLoad(void *p, int a);
+void TMTexLibUnload(void *p);
+int TMTexLibGetTexture(void *p, unsigned int key);
+int TMTexLibGetClut(void *p, unsigned int key, int a);
 void fn_80234D00(Bounds_80234D00 *pIn, Bounds_80234D00 *pOut);
 int fn_80236EC0(int a);
 void fn_8024E908(int a, int b, int c);
@@ -109,18 +109,18 @@ float fn_80046920(Item_800469EC *p)
 int fn_800469EC(Item_800469EC *p)
 {
     if (fn_80177F70() && !fn_800BA6F8() && !fn_8002D060(lbl_803EA368) &&
-        lbl_803EC7C4[p->mUnknownF4] == 1 && !fn_8006560C() && fn_800AD9B4() != 7) {
+        lbl_803EC7C4[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
             float scale = fn_80046920(p);
             float matrix[4][4];
-            fn_80210388();
+            TMRenderReset();
             int state = fn_80236EC0(0);
             fn_8024EB28(0);
             fn_80252034(1, 4, 5, 5);
             fn_80252114(0);
             fn_802520E0(0, 3, 0);
-            fn_80210CC4(zero, 1.0f);
+            TMRenderSetZRange(zero, 1.0f);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -139,7 +139,7 @@ int fn_800469EC(Item_800469EC *p)
             GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-            fn_80210814(0, p->mUnknown120, p->mUnknown124);
+            TMRenderBindTexture(0, p->mUnknown120, p->mUnknown124);
             fn_801D04C4();
             fn_801D0C58(&p->mUnknown4);
             fn_801D0F80(matrix);
@@ -181,11 +181,11 @@ void fn_80046DEC(Item_800469EC *p, int enabled)
 void fn_80046E30(int handle)
 {
     lbl_803EC7B8 = handle;
-    fn_801DCF0C(17, 0x128, 5, 0, 0);
-    fn_801DD0C8(lbl_803EC7B8, 17, 0, fn_800469EC);
+    ObjNewType_(17, 0x128, 5, 0, 0);
+    ObjSetListObjFunc(lbl_803EC7B8, 17, 0, fn_800469EC);
     for (int i = 0; i <= 4; ++i) {
         lbl_803EC7C4[i] = 1;
-        Item_800469EC *p = fn_801DD268(lbl_803EC7B8, 17, 0, 0);
+        Item_800469EC *p = ObjNewInList(lbl_803EC7B8, 17, 0, 0);
         lbl_803078D4[i] = p;
         switch (i) {
         case 0:
@@ -212,23 +212,23 @@ void fn_80046E30(int handle)
         p->mUnknownEC = 0.0f;
         p->mUnknownF0 = 0.0f;
         lbl_803EC7BC[i] = 0;
-        fn_80211E08(p->mUnknownF8, fn_801EF390(fn_800C47C4(), 17, 1));
-        p->mUnknown120 = fn_802120E4(p->mUnknownF8, 0xFF000000);
-        p->mUnknown124 = fn_80212124(p->mUnknownF8, 0xFF000000, 0);
-        fn_801DD3AC(handle, p, 3);
+        TMTexLibLoad(p->mUnknownF8, fn_801EF390(fn_800C47C4(), 17, 1));
+        p->mUnknown120 = TMTexLibGetTexture(p->mUnknownF8, 0xFF000000);
+        p->mUnknown124 = TMTexLibGetClut(p->mUnknownF8, 0xFF000000, 0);
+        ObjSetPriority(handle, p, 3);
     }
 }
 
 void fn_80046FD0(void)
 {
     for (unsigned int i = 0; i <= 4; ++i) {
-        fn_80211EFC(lbl_803078D4[i]->mUnknownF8);
-        fn_801DD320(lbl_803EC7B8, lbl_803078D4[i]);
-        fn_80228D58((int)lbl_803078D4[i]);
+        TMTexLibUnload(lbl_803078D4[i]->mUnknownF8);
+        ObjRemoveFromList(lbl_803EC7B8, lbl_803078D4[i]);
+        VptTrashObject((int)lbl_803078D4[i]);
         lbl_803078D4[i] = 0;
     }
-    fn_80228E18();
-    fn_801DCF8C(17);
+    VptFlushObjectTrashSync();
+    ObjDelType(17);
     lbl_803EC7B8 = 0;
 }
 

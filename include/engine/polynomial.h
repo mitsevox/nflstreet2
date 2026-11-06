@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int FindPolynomialRoots(float *pCoef, int degree, float lo, int includeLo, float hi, int includeHi, float *pRoots);
+int PolynomialCalculateRoots(float *pCoef, int degree, float lo, int includeLo, float hi, int includeHi, float *pRoots);
 
 #ifdef __cplusplus
 }

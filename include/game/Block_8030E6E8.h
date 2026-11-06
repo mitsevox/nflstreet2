@@ -2,7 +2,7 @@
 #define GAME_BLOCK_8030E6E8_H
 
 #include "game/Object_80039F5C.h"
-#include "game/Entry_802F394C.h"
+#include "game/EnvFogSettings.h"
 
 struct Object_80144CE0;
 
@@ -55,7 +55,7 @@ struct Block_8030E6E8 {
     unsigned char mUnknown8BC;
     unsigned char mUnknown8BD;
     unsigned char mUnknown8BE[2];
-    Entry_802F394C *mpUnknown8C0;
+    EnvFogSettings *mpUnknown8C0;
     int mUnknown8C4;
     void *mpUnknown8C8;
 };

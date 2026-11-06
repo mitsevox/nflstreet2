@@ -1,5 +1,5 @@
 #include "game/Effects_80146134.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Record_803EB25C.h"
 
 /* Local access views. Preset and input identities remain unknown. */
@@ -35,7 +35,7 @@ struct Group_80146C00 { unsigned int mUnknown0; int mUnknown4; Entry_80146C4C *m
 
 extern "C" {
 struct Object_8005406C;
-extern Object_8005406C *lbl_803EA554;
+extern Object_8005406C *gLevelData;
 extern Vector_80146134 lbl_802A03D0;
 extern int lbl_802DD170[];
 extern char lbl_802DD584[][24];
@@ -62,14 +62,14 @@ unsigned int fn_802372EC(int, unsigned int);
 int fn_801C2FE4(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
-void fn_801D34D0(void *, unsigned int, int, int);
+void MemFill(void *, unsigned int, int, int);
 void fn_80197E64(void);
 void fn_80197E68(void);
 void fn_80197E6C(void *);
 void fn_80197F84(void *);
 void fn_80197FDC(void *, void *);
-void fn_801981D8(void *, int);
-void fn_8019831C(void *, int);
+void EffectBlendBegin(void *, int);
+void EffectBlendEnd(void *, int);
 int fn_800A33B0(void);
 int fn_800A33B8(void);
 int fn_800A3420(void);
@@ -87,7 +87,7 @@ void fn_80227D6C(Vector_80146134 *, Vector_80146134 *);
 Entry_80146C4C *fn_80146C4C(int, Description_801463D8 *);
 void fn_80146C00(int, int);
 void fn_80146A6C(Entry_80146C4C *, SlotDescription_80146A6C *);
-void fn_80198378(Entry_80146C4C *);
+void FieldMarkerInitEffect(Entry_80146C4C *);
 }
 
 static unsigned char lbl_803EB258 = 0;
@@ -169,13 +169,13 @@ void fn_801464D0(void *owner)
     lbl_803EB264 = (Entry_80146C4C *)fn_801D2B7C(7840, 0, 0);
     lbl_803EB268 = (Subrecord_80146134 *)fn_801D2B7C(960, 0, 0);
     lbl_803EB258 = 1;
-    fn_801D34D0(lbl_803EB264, 7840, 0, 1); fn_801D34D0(lbl_803EB268, 960, 0, 1);
+    MemFill(lbl_803EB264, 7840, 0, 1); MemFill(lbl_803EB268, 960, 0, 1);
     for (int i = 0; i < 11; ++i) {
         lbl_8031B88C[i].mUnknown0 = owner; lbl_8031B88C[i].mUnknown4 = lbl_802DD170[i];
         lbl_8031B88C[i].mUnknownC = 0; lbl_8031B88C[i].mUnknown8 = 0;
     }
     for (int i = 0; i < 40; ++i) lbl_8031B7DC[i] = 0;
-    fn_80146C00(0, ((Config_803EA554 *)lbl_803EA554)->mUnknown50 + 17);
+    fn_80146C00(0, ((Config_803EA554 *)gLevelData)->mUnknown50 + 17);
     lbl_803EB26C = 0; lbl_803EB270 = 0; fn_80197E64(); lbl_803EB260 = 0;
     if (fn_800A33B0()) {
         if (fn_800A3420() == 1) { if (fn_800A33B8() == 0) InitializeSpecial(); }
@@ -186,16 +186,16 @@ void fn_801464D0(void *owner)
             lbl_803EB278->mUnknown18.z = fn_800A3438()->z;
         }
     }
-    if (((Config_803EA554 *)lbl_803EA554)->mUnknown50 != 0) {
-        lbl_803EB25C = (Record_803EB25C *)fn_801D2B7C(((Config_803EA554 *)lbl_803EA554)->mUnknown50 * 36, 0, 0);
-        lbl_803EB260 = ((Config_803EA554 *)lbl_803EA554)->mUnknown50;
-        for (unsigned int i = 0; i < ((Config_803EA554 *)lbl_803EA554)->mUnknown50 && i <= 39; ++i) {
-            Input_80146150 *input = &((Config_803EA554 *)lbl_803EA554)->mUnknown54[i];
+    if (((Config_803EA554 *)gLevelData)->mUnknown50 != 0) {
+        lbl_803EB25C = (Record_803EB25C *)fn_801D2B7C(((Config_803EA554 *)gLevelData)->mUnknown50 * 36, 0, 0);
+        lbl_803EB260 = ((Config_803EA554 *)gLevelData)->mUnknown50;
+        for (unsigned int i = 0; i < ((Config_803EA554 *)gLevelData)->mUnknown50 && i <= 39; ++i) {
+            Input_80146150 *input = &((Config_803EA554 *)gLevelData)->mUnknown54[i];
             fn_80146150(&lbl_803EB25C[i], input);
-            Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)lbl_803EA554)->mUnknown24[input->mUnknown18]);
+            Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)gLevelData)->mUnknown24[input->mUnknown18]);
             if (desc) {
                 lbl_8031B7DC[i] = fn_80146C4C(0, desc);
-                fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0558();
+                fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0558();
                 int x = (int)(input->mUnknownC.x * 46603.37890625f);
                 int y = (int)(input->mUnknownC.y * 46603.37890625f);
                 int z = (int)((input->mUnknownC.z + 90.0f) * 46603.37890625f);
@@ -242,7 +242,7 @@ void fn_80146A6C(Entry_80146C4C *p, SlotDescription_80146A6C *q)
 void fn_80146B40(Vector_80146134 *out, Vector_80146134 *in)
 {
     Vector_80146134 v;
-    fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D12BC(3);
+    fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D12BC(3);
     fn_80227D6C(&v, in); out->x = v.x; out->z = v.z; out->y = v.y; fn_801D0544();
 }
 int fn_80146BA8(Vector_80146134 *p) { return p->x > -1.0f && p->x < 1.0f && p->y > -1.0f && p->y < 1.0f; }
@@ -274,16 +274,16 @@ Entry_80146C4C *fn_80146C4C(int index, Description_801463D8 *q)
         lbl_8031B88C[p->mUnknown0->mUnknown0].mUnknownC = 1;
     }
     p->mUnknown10 = 1; p->mUnknown11 = 0; p->mUnknown14 = 0.0f; p->mUnknown36 = 0; p->mUnknown35 = 0;
-    fn_80198378(p); return p;
+    FieldMarkerInitEffect(p); return p;
 }
 void fn_80146DC4(int index)
 {
-    char state[12]; fn_801981D8(state, index == 0);
+    char state[12]; EffectBlendBegin(state, index == 0);
     Group_80146C00 *group = &(&lbl_8031B87C)[index];
     for (unsigned short i = 0; i < group->mUnknown0; ++i) {
         Entry_80146C4C *p = &group->mUnknown8[i]; if (p->mUnknown10) fn_80197FDC(state, p);
     }
-    fn_8019831C(state, index == 0);
+    EffectBlendEnd(state, index == 0);
 }
 Resource_80146E64 *fn_80146E64(int index) { return &lbl_8031B88C[index]; }
 void fn_80146E78(void) { if (lbl_803EB25C) for (unsigned int i = 0; i < lbl_803EB260; ++i) fn_8014619C(&lbl_803EB25C[i]); }

@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -43,7 +43,7 @@ int fn_800AC2C0(int team);
 signed char fn_8009AF00(int team, signed char value);
 int fn_801163B4(Object_80039F5C *p);
 void fn_8011569C(Object_80039F5C *p);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_8009E180(Object_80039F5C *p);
 float fn_8016B938(void);
@@ -121,8 +121,8 @@ int fn_80116C34(Object_80039F5C *p)
             fn_8011569C(p);
             if (state->mUnknown12 == 1.0f) {
                 state->mUnknown4 = state->mUnknown8;
-                if (fn_801CFFD0(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
-                    fn_801CFFD0(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
+                if (MathAngleDiff(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
+                    MathAngleDiff(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
                     state->mUnknown21 = 1;
                 }
             } else {
@@ -148,7 +148,7 @@ int fn_80116C34(Object_80039F5C *p)
                         odds += (int)(odds * fn_8016B938());
                     }
                     Vector_80039F5C ball;
-                    fn_80137D58(fn_801374BC(), &ball);
+                    BallGetPosition(BallGetCurrent(), &ball);
                     if (fn_802372EC(0, 255) < odds || IsBallAway(ball)) {
                         fn_801C1F94(&message, 0, 4);
                         message.mId = 2;
@@ -156,11 +156,11 @@ int fn_80116C34(Object_80039F5C *p)
                         return 1;
                     }
                 } else {
-                    fn_80138064(fn_801374BC(), &target);
+                    BallGetLandingPoint(BallGetCurrent(), &target);
                     if (fn_8009F258(p)) {
                         fn_801C1F94(&message, 0, 4);
                         message.mId = 24;
-                        if (!fn_80137B88(fn_801374BC())) {
+                        if (!BallGetTarget(BallGetCurrent())) {
                             message.mUnknown1[0] = 0;
                         } else if (fabsf(target.mX - p->mMotion.mPos.mX) < 10.0f || fn_802372EC(0, 100) <= 49) {
                             message.mUnknown1[0] = 2;
@@ -178,7 +178,7 @@ int fn_80116C34(Object_80039F5C *p)
             p->mUnknown512.mUnknown4 = state->mUnknown8;
             p->mUnknown512.mUnknown8 = state->mUnknown4;
             p->mUnknown512.mUnknown0 = state->mUnknown12;
-        } else if (fn_801CFFD0(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
+        } else if (MathAngleDiff(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
             p->mUnknown512.mUnknown14 = 3;
             p->mUnknown512.mUnknown4 = (state->mUnknown4 + 0x800000) & 0xFFFFFF;
             p->mUnknown512.mUnknown8 = state->mUnknown4;
@@ -222,7 +222,7 @@ int fn_801170E8(Object_80039F5C *p)
             break;
         }
     }
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
         switch (side) {
         case 15: case 17: case 20:
@@ -268,7 +268,7 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
     float centerY = fn_80177FE0().mY;
     out->mX = p->mMotion.mPos.mX;
     out->mY = p->mMotion.mPos.mY;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier && (carrier->mFlags & 0x8000) &&
         ((!(carrier->mMotion.mPos.mX >= centerX) && p->mMotion.mPos.mX < centerX) ||
          (!(carrier->mMotion.mPos.mX <= centerX) && !(p->mMotion.mPos.mX <= centerX)))) {
@@ -292,10 +292,10 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
                     if (!(distance <= lbl_803EAFFC)) {
                         if (fn_8009EFDC(side) == -1) {
                             out->mX = carrier->mMotion.mPos.mX - 1.5f;
-                            if (first && fn_801CFFD0(carrier->mMotion.mUnknown32, 0x638E39) <= 0x1C71C6) state->mUnknown12 = 0.8f;
+                            if (first && MathAngleDiff(carrier->mMotion.mUnknown32, 0x638E39) <= 0x1C71C6) state->mUnknown12 = 0.8f;
                         } else {
                             out->mX = carrier->mMotion.mPos.mX + 1.5f;
-                            if (first && fn_801CFFD0(carrier->mMotion.mUnknown32, 0x1C71C7) <= 0x1C71C6) state->mUnknown12 = 0.8f;
+                            if (first && MathAngleDiff(carrier->mMotion.mUnknown32, 0x1C71C7) <= 0x1C71C6) state->mUnknown12 = 0.8f;
                         }
                         result = 1;
                     }

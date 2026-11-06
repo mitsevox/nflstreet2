@@ -10,11 +10,11 @@ typedef struct TDbIOFileHdr_801FC5FC {
     unsigned int mBase;
 } TDbIOFileHdr_801FC5FC;
 
-int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pDevice)
+int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_t *pDevice)
 {
     TDbIOFileHdr_801FC5FC hdr;
     TDbIOStream_801FA8C8 stream;
-    TDbTable_801FAA00 *pTable;
+    TDbTable_t *pTable;
     unsigned int *pOffsets;
     unsigned int count;
     unsigned int n;
@@ -31,7 +31,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
         }
     }
     pOffsets = 0;
-    err = fn_8020D1B0(lbl_803EBE8C, count * 8, &pOffsets);
+    err = TDbExtMemAlloc(lbl_803EBE8C, count * 8, &pOffsets);
     if (err != 0) {
         pOffsets = 0;
     }
@@ -71,7 +71,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
         stream.mCrcA = -1;
         if (err == 0) {
             err = fn_801FA8C8(&stream, pOffsets, count * 8);
-            fn_8020D2AC(lbl_803EBE8C, pOffsets, count * 8);
+            TDbExtMemFree(lbl_803EBE8C, pOffsets, count * 8);
             pOffsets = 0;
             if (err == 0) {
                 err = pDevice->mWrite(stream.mHandle, &stream.mCrcA, 4, &done);
@@ -92,7 +92,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
             }
         }
         if (pOffsets) {
-            fn_8020D2AC(lbl_803EBE8C, pOffsets, count * 8);
+            TDbExtMemFree(lbl_803EBE8C, pOffsets, count * 8);
             pOffsets = 0;
         }
         if (err == 0) {
@@ -101,7 +101,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
             pDevice->mClose(stream.mHandle);
         }
     } else if (pOffsets) {
-        fn_8020D2AC(lbl_803EBE8C, pOffsets, count * 8);
+        TDbExtMemFree(lbl_803EBE8C, pOffsets, count * 8);
     }
     TDbMemNotify_801FC9D4(4, -1, -1);
     return err;

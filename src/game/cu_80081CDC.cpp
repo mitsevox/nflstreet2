@@ -1,8 +1,8 @@
 #include "game/Record_80082B18.h"
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/Class_8018FD64.h"
 #include "game/Class_802938C0.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
 #include "game/fn_801FCE10.h"
@@ -10,18 +10,18 @@
 
 
 extern "C" {
-int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007BA88(Object_8007A334 *pCursor, int value);
-void fn_8007BB04(Object_8007A334 *pCursor);
-int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult);
+int DbCursorGetRow(DbCursor *pObject);
+void fn_8007BA88(DbCursor *pCursor, int value);
+void fn_8007BB04(DbCursor *pCursor);
+int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
 int fn_8007FC70(int a, int b, int mode, int c);
 void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
-int fn_800808F8(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
 void fn_800731D0(int a);
 int fn_80186F7C(unsigned char index);
-int fn_801C1F54(int c);
+int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022EF8C(int a, int tag);
@@ -40,7 +40,7 @@ extern const int lbl_80293968[];
 extern QueryCursor lbl_8030BC88;
 extern QueryCursor lbl_8030BC98;
 
-static Object_8007A334 lbl_8030BC2C;
+static DbCursor lbl_8030BC2C;
 
 static unsigned char lbl_803EA7D8 = 0;
 static int lbl_803EA7DC = 0;
@@ -48,20 +48,20 @@ static int lbl_803EA7E0 = 0;
 
 void fn_80081CDC(void)
 {
-    fn_8007A334(&lbl_8030BC2C, 0x4C434750, 0x44494750, 0, 0, 0x54415453);
+    DbCursorOpen(&lbl_8030BC2C, 0x4C434750, 0x44494750, 0, 0, 0x54415453);
 }
 
 void fn_80081D24(void)
 {
-    fn_8007A3C4(&lbl_8030BC2C);
+    DbCursorClose(&lbl_8030BC2C);
 }
 
 int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
 {
     int found = 0;
 
-    if (fn_8007A7F4(&lbl_8030BC2C, 0x44494750, fn_800808F8(pObject), 0, 0)) {
-        ColumnValue_802D6424 columns[19];
+    if (DbCursorFindInt(&lbl_8030BC2C, 0x44494750, PlayerDbGetId(pObject), 0, 0)) {
+        DbColumnValue columns[19];
         int i;
 
         found = 1;
@@ -79,7 +79,7 @@ int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
 
 int fn_80081E3C(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x494B5350);
+    return DbCursorGetInt(pObject, 0x494B5350);
 }
 
 void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size)
@@ -111,7 +111,7 @@ unsigned int fn_80081ECC(int category, int *pValues)
 
 void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
 {
-    unsigned int flags = fn_8007A98C(pObject, 0x47494C50);
+    unsigned int flags = DbCursorGetInt(pObject, 0x47494C50);
 
     if (a) {
         if (side == 0) {
@@ -132,24 +132,24 @@ void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
 int fn_80081FD4(Object_8008044C *pObject, int a)
 {
     if (a != 0) {
-        return (fn_8007A98C(pObject, 0x47494C50) >> 1) & 1;
+        return (DbCursorGetInt(pObject, 0x47494C50) >> 1) & 1;
     }
-    return fn_8007A98C(pObject, 0x47494C50) & 1;
+    return DbCursorGetInt(pObject, 0x47494C50) & 1;
 }
 
 int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosition)
 {
-    Object_8007A334 *pCursor = (Object_8007A334 *)pObject;
+    DbCursor *pCursor = (DbCursor *)pObject;
     int first;
     int second;
-    int row = fn_8007A43C(pCursor);
+    int row = DbCursorGetRow(pCursor);
     int position = -1;
-    int found1 = fn_8007A7F4(pCursor, 0x47494C50, 3, a, &first);
+    int found1 = DbCursorFindInt(pCursor, 0x47494C50, 3, a, &first);
     int found2;
     int found;
 
-    fn_8007A600(pCursor, row);
-    found2 = fn_8007A7F4(pCursor, 0x47494C50, b == 0 ? 1 : 2, a, &second);
+    DbCursorSeek(pCursor, row);
+    found2 = DbCursorFindInt(pCursor, 0x47494C50, b == 0 ? 1 : 2, a, &second);
     if (found1) {
         if (found2) {
             position = second;
@@ -167,9 +167,9 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
         found = 1;
     }
     if (found) {
-        fn_8007A600(pCursor, position);
+        DbCursorSeek(pCursor, position);
         if (pResult) {
-            *pResult = fn_800808F8(pObject);
+            *pResult = PlayerDbGetId(pObject);
         }
         if (pPosition) {
             *pPosition = position;
@@ -178,27 +178,27 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
     return found;
 }
 
-void fn_80082138(Object_8008044C *pObject, Block_80307980 *pBlock)
+void fn_80082138(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     Class_802938C0 cursor;
 
     cursor.fn_80190098();
     cursor.fn_801900D4(fn_80082280(pObject), 0);
     pBlock->mUnknown0[0] = cursor.fn_801901A4();
-    pBlock->mUnknown0[1] = fn_8007A98C(pObject, 0x57424650);
-    pBlock->mUnknown0[2] = fn_8007A98C(pObject, 0x41454650) + 8;
-    pBlock->mUnknown0[3] = fn_8007A98C(pObject, 0x54484C50);
-    pBlock->mUnknown0[4] = fn_8007A98C(pObject, 0x4F4D4650) + 0x15;
-    pBlock->mUnknown0[5] = fn_8007A98C(pObject, 0x504C4650) + 0x1E;
-    pBlock->mUnknown0[6] = fn_8007A98C(pObject, 0x434A4650) + 0x22;
-    pBlock->mUnknown0[7] = fn_8007A98C(pObject, 0x59454650) + 0x30;
-    pBlock->mUnknown0[8] = fn_8007A98C(pObject, 0x4F4E4650) + 0x48;
-    pBlock->mUnknown0[9] = fn_8007A98C(pObject, 0x54425950);
+    pBlock->mUnknown0[1] = DbCursorGetInt(pObject, 0x57424650);
+    pBlock->mUnknown0[2] = DbCursorGetInt(pObject, 0x41454650) + 8;
+    pBlock->mUnknown0[3] = DbCursorGetInt(pObject, 0x54484C50);
+    pBlock->mUnknown0[4] = DbCursorGetInt(pObject, 0x4F4D4650) + 0x15;
+    pBlock->mUnknown0[5] = DbCursorGetInt(pObject, 0x504C4650) + 0x1E;
+    pBlock->mUnknown0[6] = DbCursorGetInt(pObject, 0x434A4650) + 0x22;
+    pBlock->mUnknown0[7] = DbCursorGetInt(pObject, 0x59454650) + 0x30;
+    pBlock->mUnknown0[8] = DbCursorGetInt(pObject, 0x4F4E4650) + 0x48;
+    pBlock->mUnknown0[9] = DbCursorGetInt(pObject, 0x54425950);
 }
 
 int fn_80082280(Object_8008044C *pObject)
 {
-    return fn_8007A98C(pObject, 0x48464650);
+    return DbCursorGetInt(pObject, 0x48464650);
 }
 
 void fn_800822A8(Object_8008044C *pObject, int value)
@@ -208,7 +208,7 @@ void fn_800822A8(Object_8008044C *pObject, int value)
 
 int fn_800822D4(Object_8008044C *pObject)
 {
-    int value = fn_8007A98C(pObject, 0x42454650);
+    int value = DbCursorGetInt(pObject, 0x42454650);
 
     if (value > 2) {
         value = 0;
@@ -221,7 +221,7 @@ void fn_80082308(Object_8008044C *pObject, int value)
     fn_8007ABA4(pObject, 0x42454650, value);
 }
 
-void fn_80082334(Object_8008044C *pObject, Block_80307980 *pBlock)
+void fn_80082334(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     fn_8007ABA4(pObject, 0x57424650, pBlock->mUnknown0[1]);
     fn_8007ABA4(pObject, 0x41454650, pBlock->mUnknown0[2] - 8);
@@ -258,7 +258,7 @@ int fn_80082414(int index)
         desc.mUnknown8 = 1;
         desc.mUnknown0 = 0;
         fn_8008044C(&cursor, &desc, 0x54415453);
-        result = fn_8007A410((Object_8007A334 *)&cursor);
+        result = DbCursorGetRowCount((DbCursor *)&cursor);
         fn_8008056C(&cursor);
         return result;
     }
@@ -361,7 +361,7 @@ int fn_80082864(void)
     desc.mUnknown8 = 0x22;
     desc.mUnknown0 = 0;
     fn_8008044C(&cursor, &desc, 0x54415453);
-    count = fn_8007A410((Object_8007A334 *)&cursor);
+    count = DbCursorGetRowCount((DbCursor *)&cursor);
     fn_8008056C(&cursor);
     return count;
 }
@@ -512,7 +512,7 @@ void fn_80082C64(Record_80082B18 *pRecord)
     fn_801FCE10(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
-            pUpper[i] = fn_801C1F54(pLast[i]);
+            pUpper[i] = toupper(pLast[i]);
         }
     }
 }
@@ -604,7 +604,7 @@ void fn_80083070(Record_80082B18 *pRecord)
     pRecord->mUnknownAC = 0;
     pRecord->mUnknownB0 = 0;
     pRecord->mUnknownB4 = 0;
-    Object_8007A334 rows;
+    DbCursor rows;
     fn_8007BA88(&rows, 9);
     fn_8007BBFC(&rows, pRecord->mUnknown7C, 0);
     if (fn_8007BDF8(&rows) == 5) {

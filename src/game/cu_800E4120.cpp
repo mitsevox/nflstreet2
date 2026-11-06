@@ -1,6 +1,6 @@
 #include "engine/cu_801B9F00.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_8017886C.h"
 
 /* Player block at +336 as fn_800E4120 sets it. */

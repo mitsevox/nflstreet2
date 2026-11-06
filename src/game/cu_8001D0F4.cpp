@@ -3,8 +3,8 @@
 extern "C" {
 int fn_8005F938(unsigned int id, void *pArgs, int unused, int *pResult);
 int fn_800619FC(unsigned int id, void *pArgs, int unused, int *pResult);
-int fn_800624B8(unsigned int id, void *pArgs, int unused, int *pResult);
-int fn_80062714(unsigned int id, void *pArgs, int unused, int *pResult);
+int StoryPlayerScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
+int GauntletScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 
 int fn_8001D0F4(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
@@ -14,7 +14,7 @@ int fn_8001D0F4(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int
     case 3:
         return fn_800619FC(id, pArgs, unused, pResult);
     case 4:
-        return fn_800624B8(id, pArgs, unused, pResult);
+        return StoryPlayerScreenMsg(id, pArgs, unused, pResult);
     }
     return 0;
 }
@@ -23,7 +23,7 @@ int fn_8001D180(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int
 {
     switch (group) {
     case 0:
-        return fn_80062714(id, pArgs, unused, pResult);
+        return GauntletScreenMsg(id, pArgs, unused, pResult);
     }
     return 0;
 }

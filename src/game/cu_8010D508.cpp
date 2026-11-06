@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -83,7 +83,7 @@ extern "C" void fn_8010D508(Object_80039F5C *p) {
 
     pBlock->mUnknown27 = 0;
     fn_8009BD60(p);
-    pCarrier = fn_80137AD0(fn_801374BC());
+    pCarrier = BallGetHolder(BallGetCurrent());
     if (fn_8022781C(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 2.5f) {
         fn_801BBC3C(1, 0x25, &lbl_80319ED8);
         p->mUnknown1008.mUnknown0 = 1;

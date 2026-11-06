@@ -1,14 +1,14 @@
-#include "engine/cu_801E0A1C.h"
+#include "engine/pathfinder.h"
 #include <string.h>
 #include "game/fn_8009D990.h"
 
 #include "game/SndgPathfinder.h"
-#include "game/Camera_8013F738.h"
-#include "game/Class_801B8D9C.h"
+#include "game/GameCamera.h"
+#include "game/CsisClassHandle.h"
 #include "engine/cu_801B8C18.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/AudmonEvent.h"
+#include "game/Ball.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C68FC.h"
@@ -16,7 +16,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_801F40F4.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_802270D4.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -27,7 +27,7 @@ struct Vec2 {
 };
 
 extern "C" {
-int fn_801B8DA8(Class_801B8D9C *list, Struct_803EB878 *desc);
+int fn_801B8DA8(CsisClassHandle *list, Struct_803EB878 *desc);
 
 extern Struct_803EB878 lbl_803EB878;
 extern Struct_803EB878 lbl_803EB888;
@@ -40,7 +40,7 @@ extern Struct_803EB878 lbl_803EB8B8;
 extern Struct_803EB878 lbl_803EB8C0;
 }
 
-static inline int AddSound(Class_801B8D9C *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
+static inline int AddSound(CsisClassHandle *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
 {
     int err = fn_801B95AC(list, params, handle);
     if (err < 0) {
@@ -103,7 +103,7 @@ struct Sound0 : SoundObject {
         mUnknownC = 0;
         mUnknown10 = 0;
         SetPan(pan);
-        AddSound(&lbl_803ECC54, &lbl_803EB878, &mUnknown4, &mHandle);
+        AddSound(&gSndgBallThrow, &lbl_803EB878, &mUnknown4, &mHandle);
     }
 
     ~Sound0()
@@ -148,7 +148,7 @@ struct SoundVP : SoundObject {
         mPan = pan;
     }
 
-    SoundVP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, unsigned short pan)
+    SoundVP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, unsigned short pan)
     {
         SetVolume(volume);
         SetPan(pan);
@@ -204,7 +204,7 @@ struct SoundVFP : SoundObject {
         mPan = pan;
     }
 
-    SoundVFP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
+    SoundVFP(CsisClassHandle *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
     {
         SetVolume(volume);
         SetUnknown8(f);
@@ -267,7 +267,7 @@ struct Sound3 : SoundObject {
         SetVolume(volume);
         SetPan(pan);
         SetMode(mode);
-        AddSound(&lbl_803ECC64, &lbl_803EB888, &mVolume, &mHandle);
+        AddSound(&gSndgFan, &lbl_803EB888, &mVolume, &mHandle);
     }
 
     ~Sound3()
@@ -486,65 +486,65 @@ void fn_800300D4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030490(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
-int fn_80031054(float *pValue);
+int ReplayCursorGetPos(float *pValue);
 void fn_8006F344(unsigned char value);
-void fn_8006F850(Record_80067CA8 *pEvent);
-void fn_80070C40(Record_80067CA8 *pEvent);
+void fn_8006F850(AudmonEvent_t *pEvent);
+void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
 int fn_80071BA0(int a, int b);
 void fn_800728F8(void);
 void fn_80072C54(int value);
 void fn_80073144(int a, int b);
-void fn_80073620(int a, int b, int c);
-void fn_8007371C(void);
-void fn_80073764(void);
-void fn_80074358(int a);
-unsigned char fn_800744A8(void);
-unsigned char fn_800744B8(void);
-void fn_80074684(int a, int b);
-void fn_800746E0(void);
-void fn_80074734(void);
-void fn_80074788(void);
-void fn_800747DC(int a);
-void fn_80074864(int a);
-void fn_800748EC(int a);
-void fn_80074974(int a);
-void fn_80074A14(int a);
-void fn_80074AB4(int a);
-void fn_80074B54(int a);
-void fn_80074C08(int a);
-void fn_80074CBC(void);
-void fn_80074D70(void);
-void fn_80074DF8(int a);
-void fn_80074E08(void);
-void fn_80074E90(int a);
-void fn_80074EA0(void);
-void fn_80074F28(int a);
-void fn_80074F38(Vector_80039F5C *pPos);
-void fn_80075058(int a);
-void fn_80075068(void);
-void fn_800750F0(int a);
-void fn_80075100(void);
-void fn_80075188(int a);
-void fn_80076228(void);
-void fn_80076D9C(int a);
-void fn_80076DAC(int a);
-void fn_80076DB4(int a, int b, int c, int d);
-void fn_80076EA4(int a);
-void fn_80076EE8(int a);
-void fn_80077258(void);
-void fn_8007732C(int a);
-void fn_80077488(void);
-void fn_8007753C(void);
+void SpchIGSaySceneLine(int a, int b, int c);
+void SpchIGStopSceneLine(void);
+void SpchIGEndSceneLine(void);
+void SpchIGPurgeChannel(int a);
+unsigned char SpchIGIsEnabled(void);
+unsigned char SpchIGIsCommentaryOn(void);
+void SpchIGSayTutorialIntro(int a, int b);
+void SpchIGSayTutorialPassed(void);
+void SpchIGSayTutorialFailed(void);
+void SpchIGSayTutorialAdvance(void);
+void SpchIGSayCatch(int a);
+void SpchIGSayInterception(int a);
+void SpchIGSayWallHurdle(int a);
+void SpchIGSayStiffArm(int a);
+void SpchIGSayJukeSpin(int a);
+void SpchIGSayWallHurdleMiss(int a);
+void SpchIGSayPassThrown(int a);
+void SpchIGSayBallStrip(int a);
+void SpchIGSayFumble(void);
+void SpchIGSayWallTackle(void);
+void SpchIGSetWallTacklePlayer(int a);
+void SpchIGSayReceiverOpen(void);
+void SpchIGSetReceiverOpenPlayer(int a);
+void SpchIGSayStyling(void);
+void SpchIGSetStylingPlayer(int a);
+void SpchIGSayMissedCatch(Vector_80039F5C *pPos);
+void SpchIGSetMissedCatchPlayer(int a);
+void SpchIGSayStruggleCarrier(void);
+void SpchIGSetStruggleCarrier(int a);
+void SpchIGSayStruggleTackler(void);
+void SpchIGSetStruggleTackler(int a);
+void SpchIGSayPlayResult(void);
+void SpchIGSetScorer(int a);
+void SpchIGSetDownedCarrier(int a);
+void SpchIGSayTeamSceneLine(int a, int b, int c, int d);
+void SpchIGStopTeamSceneLine(int a);
+void SpchIGEndTeamSceneLine(int a);
+void SpchIGSayDownAndDistance(void);
+void SpchIGSayPreSnap(int a);
+void SpchIGSayDefenseShift(void);
+void SpchIGSayOffenseMotion(void);
 int fn_8007F828(int a);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800AD9B4(void);
 int fn_800BA6F8(void);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_8013FD0C(int index);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+int CamGameGetHeading(int index);
 unsigned int fn_801568F0(void);
 int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
@@ -566,7 +566,7 @@ int fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(Item_800
 void fn_801CE7D0(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
-int fn_801D34D0(void *p, int size, int value, int align);
+int MemFill(void *p, int size, int value, int align);
 int fn_801F0C50(void *a, int b);
 void fn_801F11AC(void *pData, int a);
 void fn_801F3C14(void);
@@ -688,8 +688,8 @@ unsigned char fn_8006CC48(void);
 int fn_8006CC54(int index);
 unsigned char fn_8006CC90(int index);
 void fn_8006CCA8(float value);
-void fn_8006CCD0(Record_80067CA8 *p);
-void fn_8006CE84(Record_80067CA8 *p);
+void fn_8006CCD0(AudmonEvent_t *p);
+void fn_8006CE84(AudmonEvent_t *p);
 void fn_8006CEC8(Struct_8030A688 *src);
 void fn_8006CF9C(Vector_80039F5C *origin, Vector_80039F5C *pos, unsigned short *pan, short *span);
 void fn_8006D0F8(void);
@@ -725,7 +725,7 @@ void fn_8006E010(int value);
 void fn_8006E08C(void);
 void fn_8006E0DC(int unknown);
 void fn_8006E134(int flags);
-void fn_8006E148(Record_80067CA8 *pEvent);
+void fn_8006E148(AudmonEvent_t *pEvent);
 int fn_8006E25C(void);
 void fn_8006E2A8(void);
 void fn_8006E308(Struct_8030A518Entry *pEntry);
@@ -743,14 +743,14 @@ void fn_8006E918(void);
 void fn_8006E924(int unknown);
 void fn_8006EA04(unsigned int index, unsigned int value);
 void fn_8006EC24(void);
-void fn_8006ECB4(Record_80067CA8 *pEvent);
+void fn_8006ECB4(AudmonEvent_t *pEvent);
 void fn_8006F0B8(int flags);
 void fn_8006F0C8(int flags);
 int fn_8006F0D8(void);
 
 void fn_80071748(int unknown);
-void fn_80073F5C(void);
-void fn_8007418C(void);
+void SpchIGUpdate(void);
+void SpchIGUpdateFrontEnd(void);
 void fn_801860E4(int unknown);
 
 }
@@ -986,7 +986,7 @@ Struct_802D611C lbl_802D611C[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, (Handler_8030A668)fn_80073F5C, fn_80071748, fn_8006E924, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, (Handler_8030A668)SpchIGUpdate, fn_80071748, fn_8006E924, fn_801860E4, 0 };
 
 Struct_8006C2C8 lbl_802D6228 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D5F24, lbl_802D620C };
 
@@ -995,7 +995,7 @@ Entry_8030A664 lbl_802D6240[3] = {
     { 1, lbl_802EBFCC, 0, 1, 0, 0, 0 },
     { 0, 0, 0, 0, 3, 0, 0 },
 };
-Handler_8030A668 lbl_802D6294[] = { (Handler_8030A668)fn_8007418C, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D6294[] = { (Handler_8030A668)SpchIGUpdateFrontEnd, fn_801860E4, 0 };
 
 Struct_8006C2C8 lbl_802D62A0 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D6240, lbl_802D6294 };
 
@@ -1251,14 +1251,14 @@ extern "C" void fn_80068E00(void)
 extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan)
 {
     Vector_80039F5C position;
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
     int angle;
 
-    pCamera = fn_8013FA04(fn_8013F9F8());
+    pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
     position.mX = pCamera->mHeader.mUnknown04[0];
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
-    angle = fn_8013FD0C(fn_8013F9F8());
+    angle = CamGameGetHeading(CamGameGetCurrentSlot());
     if (fn_801784C4()) {
         angle = (angle + 0x800000) & 0xFFFFFF;
         position.mX = -position.mX;
@@ -1270,9 +1270,9 @@ extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *
 extern "C" float fn_80068F70(Vector_80039F5C *pPos)
 {
     Vector_80039F5C position;
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
 
-    pCamera = fn_8013FA04(fn_8013F9F8());
+    pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
     position.mX = pCamera->mHeader.mUnknown04[0];
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
@@ -1303,9 +1303,9 @@ extern "C" int fn_80068FE8(Sound0 *pEntry, void *pObject, int index, int init)
     float distance;
     int result;
 
-    fn_80137D58((Object_80137ABC *)pObject, &position);
+    BallGetPosition((Ball_t *)pObject, &position);
     height = position.mZ;
-    fn_80138064((Object_80137ABC *)pObject, &other);
+    BallGetLandingPoint((Ball_t *)pObject, &other);
     result = 1;
     distance = fn_8022785C(&position, &other);
     if (init) {
@@ -1403,7 +1403,7 @@ extern "C" void fn_800696A4(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(5);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound1[index] = new SoundVFP(&lbl_803ECC9C, &lbl_803EB8C0, volume, (int)f, pan);
+        lbl_803EA67C->mSound1[index] = new SoundVFP(&gSndgIdleVehicle, &lbl_803EB8C0, volume, (int)f, pan);
         lbl_803EA67C->mSound1[index]->Commit();
     }
 }
@@ -1415,7 +1415,7 @@ extern "C" void fn_80069858(int index, Vector_80039F5C *pPos, void *pObject)
         short unk = 0;
         unsigned int volume = SoundVolume(6);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound2[index] = new SoundVP(&lbl_803ECC94, &lbl_803EB8B8, volume, pan);
+        lbl_803EA67C->mSound2[index] = new SoundVP(&gSndgIdleIdleTruck, &lbl_803EB8B8, volume, pan);
         lbl_803EA67C->mSound2[index]->Commit();
     }
 }
@@ -1441,7 +1441,7 @@ extern "C" void fn_80069B4C(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(8);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound4[index] = new SoundVFP(&lbl_803ECC6C, &lbl_803EB890, volume, (int)f, pan);
+        lbl_803EA67C->mSound4[index] = new SoundVFP(&gSndgIdleBus, &lbl_803EB890, volume, (int)f, pan);
         lbl_803EA67C->mSound4[index]->Commit();
     }
 }
@@ -1454,7 +1454,7 @@ extern "C" void fn_80069D00(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(9);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound5[index] = new SoundVFP(&lbl_803ECC84, &lbl_803EB8A8, volume, (int)f, pan);
+        lbl_803EA67C->mSound5[index] = new SoundVFP(&gSndgIdlePolice, &lbl_803EB8A8, volume, (int)f, pan);
         lbl_803EA67C->mSound5[index]->Commit();
     }
 }
@@ -1467,7 +1467,7 @@ extern "C" void fn_80069EB4(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(10);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound6[index] = new SoundVFP(&lbl_803ECC8C, &lbl_803EB8B0, volume, (int)f, pan);
+        lbl_803EA67C->mSound6[index] = new SoundVFP(&gSndgIdleGolfCart, &lbl_803EB8B0, volume, (int)f, pan);
         lbl_803EA67C->mSound6[index]->Commit();
     }
 }
@@ -1480,7 +1480,7 @@ extern "C" void fn_8006A068(int index, Vector_80039F5C *pPos, void *pObject)
         unsigned int volume = SoundVolume(11);
         float f = fn_80068F70(pPos);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound7[index] = new SoundVFP(&lbl_803ECC7C, &lbl_803EB8A0, volume, (int)f, pan);
+        lbl_803EA67C->mSound7[index] = new SoundVFP(&gSndgIdleTruck, &lbl_803EB8A0, volume, (int)f, pan);
         lbl_803EA67C->mSound7[index]->Commit();
     }
 }
@@ -1492,7 +1492,7 @@ extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
         short unk = 0;
         unsigned int volume = SoundVolume(12);
         fn_80068ED0(pPos, &pan, &unk);
-        lbl_803EA67C->mSound8[index] = new SoundVP(&lbl_803ECC74, &lbl_803EB898, volume, pan);
+        lbl_803EA67C->mSound8[index] = new SoundVP(&gSndgIdleTrain, &lbl_803EB898, volume, pan);
         lbl_803EA67C->mSound8[index]->Commit();
     }
 }
@@ -1941,8 +1941,8 @@ extern "C" void fn_8006C2C8(Struct_8006C2C8 *pInit)
     lbl_8030A654.m14 = pInit->m14;
     lbl_8030A654.m24 = (int *)fn_801D2B7C(pInit->m0 * 4, 0, 0);
     lbl_8030A654.m28 = (int *)fn_801D2B7C(pInit->m4 * 4, 0, 0);
-    fn_801D34D0(lbl_8030A654.m24, pInit->m0 * 4, 0, 4);
-    fn_801D34D0(lbl_8030A654.m28, pInit->m4 * 4, 0, 4);
+    MemFill(lbl_8030A654.m24, pInit->m0 * 4, 0, 4);
+    MemFill(lbl_8030A654.m28, pInit->m4 * 4, 0, 4);
     fn_8006BEC4();
     lbl_8030A654.m0 = 0;
     lbl_8030A654.m18 = 0x7FFFFFFF;
@@ -2224,14 +2224,14 @@ extern "C" void fn_8006CCA8(float value)
     lbl_803EA690 = (int)(value * 4096.0f);
 }
 
-extern "C" void fn_8006CCD0(Record_80067CA8 *p)
+extern "C" void fn_8006CCD0(AudmonEvent_t *p)
 {
     switch (p->mType) {
     case 0x1F:
         if (p->mUnknown10.mValue > 0x50000) {
             if (p->mUnknown10.mValue > 0x200000) {
                 int id = 15;
-                Object_80137ABC *pBall = fn_801374BC();
+                Ball_t *pBall = BallGetCurrent();
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
                     id = pBall->mpUnknown00->mUnknown660->mSurface;
                 }
@@ -2243,7 +2243,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
         break;
     case 0x20: {
         Vector_80039F5C vec;
-        fn_80137EC4((Object_80137ABC *)p->mUnknown10.mpObject, &vec);
+        BallGetVelocity((Ball_t *)p->mUnknown10.mpObject, &vec);
         if (fn_802270D4(&vec) > 0.42f) {
             fn_800717E0(&p->mPos);
         }
@@ -2275,7 +2275,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
     }
 }
 
-extern "C" void fn_8006CE84(Record_80067CA8 *p)
+extern "C" void fn_8006CE84(AudmonEvent_t *p)
 {
     fn_8006CCD0(p);
     fn_8006F850(p);
@@ -2286,7 +2286,7 @@ extern "C" void fn_8006CE84(Record_80067CA8 *p)
 extern "C" void fn_8006CEC8(Struct_8030A688 *src)
 {
     if (fn_8002D060(lbl_803EA368) == 0) {
-        Camera_8013F738 *obj = fn_8013FA04(fn_8013F9F8());
+        GameCamera_t *obj = CamGameGetCamera(CamGameGetCurrentSlot());
         int angle;
 
         src->mOrigin.mX = obj->mHeader.mUnknown04[0];
@@ -2296,13 +2296,13 @@ extern "C" void fn_8006CEC8(Struct_8030A688 *src)
             src->mOrigin.mX = -src->mOrigin.mX;
             src->mOrigin.mY = -src->mOrigin.mY;
         }
-        angle = fn_8013FD0C(fn_8013F9F8());
+        angle = CamGameGetHeading(CamGameGetCurrentSlot());
         if (fn_801784C4()) {
             angle = (angle + 0x800000) & 0xFFFFFF;
         }
         src->mAngle = angle;
-    } else if (fn_80031054(&src->mOrigin.mX) == 0) {
-        Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+    } else if (ReplayCursorGetPos(&src->mOrigin.mX) == 0) {
+        Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
         src->mOrigin.mX = pBlock->mUnknown4.mX;
         src->mOrigin.mY = pBlock->mUnknown4.mY;
@@ -2613,10 +2613,10 @@ int SndgPathfinder::Init()
     lbl_803EA698->mpPool[1] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     lbl_803EA698->mpPool[2] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     if (fn_801F3E28()) {
-        Desc_801E0AEC desc;
+        PathfinderInitDesc_t desc;
         desc.mHeap = 1;
         desc.mCount = 3;
-        fn_801E0AEC(&desc);
+        PathfinderInit(&desc);
         fn_801B2F18(fn_8006D91C, fn_8006D98C, fn_8006D9FC);
     }
     return 1;
@@ -2625,7 +2625,7 @@ int SndgPathfinder::Init()
 int SndgPathfinder::Shutdown()
 {
     if (fn_801F3E28()) {
-        fn_801E0BE4();
+        PathfinderShutdown();
     }
     fn_801C69E4(lbl_803EA698->mpPool[0]);
     fn_801C69E4(lbl_803EA698->mpPool[1]);
@@ -2638,8 +2638,8 @@ int SndgPathfinder::Shutdown()
 extern "C" int fn_8006DBF8(void *pData, int unknown)
 {
     int result = -1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0CA8(pData, unknown, 1);
+    if (PathfinderIsInit()) {
+        result = PathfinderLoadMap(pData, unknown, 1);
     }
     return result;
 }
@@ -2647,8 +2647,8 @@ extern "C" int fn_8006DBF8(void *pData, int unknown)
 extern "C" int fn_8006DC4C(int handle)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        result = fn_801E0D68(handle) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderUnloadMap(handle) >= 0;
     }
     return result;
 }
@@ -2656,8 +2656,8 @@ extern "C" int fn_8006DC4C(int handle)
 extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        Desc_801E0DF0 desc;
+    if (PathfinderIsInit()) {
+        PathfinderTrackDesc_t desc;
         desc.mUnknown24 = 0;
         desc.mUnknown10 = 0;
         desc.mUnknown14.mUnknown8 = 0;
@@ -2667,7 +2667,7 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
         desc.mUnknown0C = value;
         desc.mUnknown04 = 1000;
         desc.mUnknown08 = 2;
-        result = fn_801E0DF0(&desc) >= 0;
+        result = PathfinderCreateTrack(&desc) >= 0;
     }
     return result;
 }
@@ -2675,31 +2675,31 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
 extern "C" int fn_8006DD24(int id)
 {
     int result = 0;
-    if (fn_801E0AE4()) {
-        result = fn_801E0EF8(id) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderDestroyTrack(id) >= 0;
     }
     return result;
 }
 
 extern "C" void fn_8006DD70(int id, unsigned int value)
 {
-    if (fn_801E0AE4()) {
-        fn_801E0FBC(id, value);
+    if (PathfinderIsInit()) {
+        PathfinderSetVolume(id, value);
     }
 }
 
 extern "C" void fn_8006DDB4(int a, int b, int c)
 {
-    if (fn_801E0AE4()) {
-        fn_801E0FE0(a, b, c);
+    if (PathfinderIsInit()) {
+        PathfinderFade(a, b, c);
     }
 }
 
 extern "C" int fn_8006DE00(int id, int unknown)
 {
     int result = 1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0F9C(id, unknown) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderEvent(id, unknown) >= 0;
     }
     return result;
 }
@@ -2707,37 +2707,37 @@ extern "C" int fn_8006DE00(int id, int unknown)
 extern "C" int fn_8006DE54(int id, int unknown)
 {
     int result = 1;
-    if (fn_801E0AE4()) {
-        result = fn_801E0F7C(id, unknown) >= 0;
+    if (PathfinderIsInit()) {
+        result = PathfinderControl(id, unknown) >= 0;
     }
     return result;
 }
 
 extern "C" void fn_8006DEA8(int a, int b)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1048(a, b);
+    if (PathfinderIsInit()) {
+        PathfinderSetStreamValue(a, b);
     }
 }
 
 extern "C" void fn_8006DEEC(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1004(a, 1);
+    if (PathfinderIsInit()) {
+        PathfinderPause(a, 1);
     }
 }
 
 extern "C" void fn_8006DF2C(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1004(a, 0);
+    if (PathfinderIsInit()) {
+        PathfinderPause(a, 0);
     }
 }
 
 extern "C" void fn_8006DF6C(int a)
 {
-    if (fn_801E0AE4()) {
-        fn_801E1028(a);
+    if (PathfinderIsInit()) {
+        PathfinderStop(a);
     }
 }
 
@@ -2816,11 +2816,11 @@ extern "C" void fn_8006E134(int flags)
     lbl_803EA69C->mFlags |= flags;
 }
 
-extern "C" void fn_8006E148(Record_80067CA8 *pEvent)
+extern "C" void fn_8006E148(AudmonEvent_t *pEvent)
 {
     switch (pEvent->mType) {
     case 0x1F:
-        fn_80137D58(fn_801374BC(), &lbl_803EA69C->mUnknown24);
+        BallGetPosition(BallGetCurrent(), &lbl_803EA69C->mUnknown24);
         break;
     case 0x8E:
         lbl_803EA69C->mFlags |= 1;
@@ -3125,159 +3125,159 @@ extern "C" void fn_8006EC24(void)
     }
 }
 
-extern "C" void fn_8006ECB4(Record_80067CA8 *pEvent)
+extern "C" void fn_8006ECB4(AudmonEvent_t *pEvent)
 {
-    if (!fn_800BA6F8() && fn_800744A8()) {
+    if (!fn_800BA6F8() && SpchIGIsEnabled()) {
         if (fn_8017F584() == 11 && fn_801568F0() <= 4) {
             switch (pEvent->mType) {
             case 0x85:
-                fn_80074684(pEvent->mUnknown10.mValue, pEvent->mUnknown14);
+                SpchIGSayTutorialIntro(pEvent->mUnknown10.mValue, pEvent->mUnknown14);
                 break;
             case 0x86:
-                fn_800746E0();
+                SpchIGSayTutorialPassed();
                 break;
             case 0x88:
-                fn_80074788();
+                SpchIGSayTutorialAdvance();
                 break;
             case 0x87:
-                fn_80074734();
+                SpchIGSayTutorialFailed();
                 break;
             case 0x80:
-                fn_80073620(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18);
+                SpchIGSaySceneLine(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18);
                 break;
             case 0x81:
-                fn_8007371C();
+                SpchIGStopSceneLine();
                 break;
             case 0x82:
-                fn_80073764();
+                SpchIGEndSceneLine();
                 break;
             }
         } else {
-            if (fn_800744B8()) {
+            if (SpchIGIsCommentaryOn()) {
                 switch (pEvent->mType) {
                 case 0x73:
                     lbl_803EA6B0 = 0;
                     lbl_803EA6B1 = 0;
-                    fn_80077258();
+                    SpchIGSayDownAndDistance();
                     break;
                 case 0x75:
-                    fn_8007732C(fn_80178348());
+                    SpchIGSayPreSnap(fn_80178348());
                     break;
                 case 0x78:
                     if (!lbl_803EA6B1) {
-                        fn_80077488();
+                        SpchIGSayDefenseShift();
                         lbl_803EA6B1 = 1;
                     }
                     break;
                 case 0x77:
                     if (!lbl_803EA6B0) {
-                        fn_8007753C();
+                        SpchIGSayOffenseMotion();
                         lbl_803EA6B0 = 1;
                     }
                     break;
                 case 0x2A: {
                     unsigned char kind = fn_8009BCE8(&pEvent->mUnknown0)->mpState->mId;
                     if (kind != 0x3A && kind != 0x10 && !(fn_8006F0D8() & 8)) {
-                        fn_80076DAC(pEvent->mUnknown0);
+                        SpchIGSetDownedCarrier(pEvent->mUnknown0);
                         fn_8006F0B8(0x40);
                     }
                     break;
                 }
                 case 0x68:
-                    fn_80074CBC();
+                    SpchIGSayFumble();
                     break;
                 case 0x62:
-                    fn_80074E90(pEvent->mUnknown0);
-                    fn_80074E08();
+                    SpchIGSetReceiverOpenPlayer(pEvent->mUnknown0);
+                    SpchIGSayReceiverOpen();
                     break;
                 case 0x27:
-                    fn_80074F28(pEvent->mUnknown0);
-                    fn_80074EA0();
+                    SpchIGSetStylingPlayer(pEvent->mUnknown0);
+                    SpchIGSayStyling();
                     break;
                 case 0x2D:
-                    fn_80074DF8(pEvent->mUnknown0);
-                    fn_80074D70();
+                    SpchIGSetWallTacklePlayer(pEvent->mUnknown0);
+                    SpchIGSayWallTackle();
                     break;
                 case 0x36:
-                    fn_800747DC(pEvent->mUnknown0);
+                    SpchIGSayCatch(pEvent->mUnknown0);
                     break;
                 case 0x37:
-                    fn_80074864(pEvent->mUnknown0);
+                    SpchIGSayInterception(pEvent->mUnknown0);
                     break;
                 case 0x38:
-                    fn_800748EC(pEvent->mUnknown0);
+                    SpchIGSayWallHurdle(pEvent->mUnknown0);
                     break;
                 case 0x39:
-                    fn_80074974(pEvent->mUnknown0);
+                    SpchIGSayStiffArm(pEvent->mUnknown0);
                     break;
                 case 0x3A:
-                    fn_80074A14(pEvent->mUnknown0);
+                    SpchIGSayJukeSpin(pEvent->mUnknown0);
                     break;
                 case 0x3B:
-                    fn_80074AB4(pEvent->mUnknown0);
+                    SpchIGSayWallHurdleMiss(pEvent->mUnknown0);
                     break;
                 case 0x3C:
-                    fn_80074B54(pEvent->mUnknown0);
+                    SpchIGSayPassThrown(pEvent->mUnknown0);
                     break;
                 case 0x3D:
-                    fn_80074C08(pEvent->mUnknown0);
+                    SpchIGSayBallStrip(pEvent->mUnknown0);
                     break;
                 case 0x61:
                     if (pEvent->mUnknown10.mValue == 0x22) {
-                        fn_80074A14(pEvent->mUnknown0);
+                        SpchIGSayJukeSpin(pEvent->mUnknown0);
                     } else if (pEvent->mUnknown10.mValue == 0x23) {
-                        fn_80074A14(pEvent->mUnknown0);
+                        SpchIGSayJukeSpin(pEvent->mUnknown0);
                     } else if (pEvent->mUnknown10.mValue == 0x2B) {
-                        fn_80074974(pEvent->mUnknown0);
+                        SpchIGSayStiffArm(pEvent->mUnknown0);
                     }
                     break;
                 case 0x2F:
-                    fn_80075058(pEvent->mUnknown0);
-                    fn_80074F38(&pEvent->mPos);
+                    SpchIGSetMissedCatchPlayer(pEvent->mUnknown0);
+                    SpchIGSayMissedCatch(&pEvent->mPos);
                     break;
                 case 0x65:
-                    fn_800750F0(pEvent->mUnknown10.mValue);
-                    fn_80075188(pEvent->mUnknown14);
+                    SpchIGSetStruggleCarrier(pEvent->mUnknown10.mValue);
+                    SpchIGSetStruggleTackler(pEvent->mUnknown14);
                     if (fn_802372EC(1, 2)) {
-                        fn_80075068();
+                        SpchIGSayStruggleCarrier();
                     } else {
-                        fn_80075100();
+                        SpchIGSayStruggleTackler();
                     }
                     break;
                 case 0x5F:
-                    fn_80076D9C(pEvent->mUnknown0);
+                    SpchIGSetScorer(pEvent->mUnknown0);
                     break;
                 case 0x7C:
-                    fn_80076228();
+                    SpchIGSayPlayResult();
                     break;
                 }
             }
             switch (pEvent->mType) {
             case 0x80:
-                fn_80073620(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18);
+                SpchIGSaySceneLine(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18);
                 break;
             case 0x81:
-                fn_8007371C();
+                SpchIGStopSceneLine();
                 break;
             case 0x82:
-                fn_80073764();
+                SpchIGEndSceneLine();
                 break;
             case 0x6B:
-                fn_80076DB4(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18, pEvent->mUnknown14);
+                SpchIGSayTeamSceneLine(pEvent->mUnknown10.mValue, pEvent->mUnknown0, pEvent->mUnknown18, pEvent->mUnknown14);
                 break;
             case 0x6C:
-                fn_80076EA4(pEvent->mUnknown10.mValue);
+                SpchIGStopTeamSceneLine(pEvent->mUnknown10.mValue);
                 break;
             case 0x6D:
-                fn_80076EE8(pEvent->mUnknown10.mValue);
+                SpchIGEndTeamSceneLine(pEvent->mUnknown10.mValue);
                 break;
             }
         }
     }
     if (pEvent->mType == 0x84) {
-        fn_80074358(0);
-        fn_80074358(1);
-        fn_80074358(2);
+        SpchIGPurgeChannel(0);
+        SpchIGPurgeChannel(1);
+        SpchIGPurgeChannel(2);
     }
 }
 

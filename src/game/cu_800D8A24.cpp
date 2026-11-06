@@ -1,11 +1,11 @@
 #include <string.h>
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_800DA8D8.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800AD9B4.h"
@@ -16,8 +16,8 @@ int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_801BA6B0(Record_800D81C8 *pEntry);
 void fn_801BA6BC(Record_800D81C8 *pEntry, int value);
-void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
-void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
+void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
+void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_800C0464(void *p);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
@@ -25,22 +25,22 @@ float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, R
                   float value);
 int fn_800DC080(Object_80039F5C *p);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
-void fn_801BD758(Block_801BD6D4 *p, float value);
+void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 extern void *lbl_803EABA4;
 
-int fn_800D0B90(Object_80039F5C *p);
-int fn_800D0D1C(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
+int PlayerMoveIsVariantPending(Object_80039F5C *p);
 }
 
 /* Payload that fn_801BE60C returns for this handler's key: the entry index
-   chosen by fn_801BA2A8 and the state fn_800D8140 and fn_800D81C8 update. */
+   chosen by fn_801BA2A8 and the state AnimMomentumInit and AnimMomentumUpdate update. */
 struct Payload_800D8A24 {
     int mEntry;
-    State_800D8140 mState;
+    AnimMomentum_t mState;
 };
 
 extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
@@ -51,25 +51,25 @@ extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRe
     switch (phase) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        unsigned char side = p == fn_80137B40() ? 1 : 2;
+        unsigned char side = p == BallGetCurrentHolder() ? 1 : 2;
         int i = fn_8009C56C(pTable, &side);
         fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         if (index >= 0) {
             pPayload->mEntry = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
                                            pTable->mEntries[index].mUnknown2, key, p, 1.0f);
-            if (fn_80137C48(p) && p->mUnknown776 == 1) {
+            if (BallFindHeldBy(p) && p->mUnknown776 == 1) {
                 Record_800D81C8 *pEntry = &pEntries[pPayload->mEntry];
                 fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
             }
-            fn_800D8140(&pPayload->mState, (Object_800D81C8 *)p, pPayload->mEntry);
+            AnimMomentumInit(&pPayload->mState, (AnimMomentumActor_t *)p, pPayload->mEntry);
         }
         break;
     }
     case 1:
         break;
     case 2:
-        fn_800D81C8(&pPayload->mState, (Object_800D81C8 *)p);
+        AnimMomentumUpdate(&pPayload->mState, (AnimMomentumActor_t *)p);
         break;
     }
     return 0;
@@ -202,7 +202,7 @@ extern "C" int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
 {
     float value = p->mMotion.mUnknown28;
 
-    if (value != 0.0f && fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
+    if (value != 0.0f && MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
         value = -value;
     }
     return fn_800DA7AC(pObject, value);
@@ -215,7 +215,7 @@ extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Re
     for (unsigned char i = 0; i <= 1; i++) {
         unsigned char index = pBlock->mUnknown20.mUnknown8Bytes[i];
         if (index != 255) {
-            fn_801BD758(&pRecords[index].mUnknown4C, pBlock->mUnknown20.mUnknown10);
+            AnimSeqSetDuration(&pRecords[index].mUnknown4C, pBlock->mUnknown20.mUnknown10);
         }
     }
 }
@@ -242,7 +242,7 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
                     if (pOther) {
                         Pair_802270A4 delta;
                         fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
-                        if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
+                        if (MathAngleDiff(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
                             && fn_802270A4(&delta) < 4.5f) {
                             result = 1;
                         }
@@ -306,7 +306,7 @@ extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *p
                     default: result = 13; break;
                     }
                 }
-                if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && fn_800D0B90(p) == 2 && !fn_800D0D1C(p)) {
+                if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && PlayerMoveGetKind(p) == 2 && !PlayerMoveIsVariantPending(p)) {
                     result = 1;
                 }
             } else if (p->mUnknown1032 == 4) {

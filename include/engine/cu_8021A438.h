@@ -104,10 +104,10 @@ typedef struct Color_80223C4C {
     GXColor unk_24; /* 0x24 */
 } Color_80223C4C;
 
-/* 60-byte object allocated by fn_802215F0: a Texture_8020DB34 followed by
+/* 60-byte object allocated by fn_802215F0: a Texture_t followed by
    further members; only the accessed members are declared. */
 typedef struct Node_802215F0 {
-    Texture_8020DB34 Texture; /* 0x00 */
+    Texture_t Texture; /* 0x00 */
     Int32 unk_20;   /* 0x20 */
     Int32 unk_24;   /* 0x24 */
     Uint8 unk_28[0x08];

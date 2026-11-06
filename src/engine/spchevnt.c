@@ -285,7 +285,7 @@ int fn_801AEAEC(int *event)
             item = fn_801AE6BC(&key);
             if (item && fn_801AE710(&key, &channel)) {
                 int level = item->mUnknown9;
-                if (fn_801B1C1C(100, -1) <= level) {
+                if (iSPCH_Rand(100, -1) <= level) {
                     int voice = fn_801AE9A0(item->mUnknown4, channel);
                     if (voice >= 0) {
                         unsigned int now = fn_801B2368();

@@ -30,7 +30,7 @@ struct Desc_8008044C {
 };
 
 /* Row filled by fn_800817CC: bytes +0x00 to +0x0D and the 14 words at +0x10.
-   Record_803078E8 (include/game/Record_803078E8.h) holds one at +0x20. */
+   PlayerLook_t (include/game/PlayerLookRecord.h) holds one at +0x20. */
 struct Info_80307908 {
     unsigned char mUnknown00;
     unsigned char mUnknown01;
@@ -53,13 +53,13 @@ extern "C" {
 void fn_8008040C(Object_8008044C *pObject, Desc_8008044C *pDesc);
 void fn_8008044C(Object_8008044C *pObject, Desc_8008044C *pDesc, int tag);
 void fn_8008056C(Object_8008044C *pObject);
-int fn_80080948(Object_8008044C *pObject);
-int fn_800809C4(Object_8008044C *pObject, int a, int *pResult);
-void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080E20(Object_8008044C *pObject);
-int fn_800811E0(Object_8008044C *pObject);
-int fn_80080ECC(Object_8008044C *pObject);
+int PlayerDbGetTeamId(Object_8008044C *pObject);
+int PlayerDbSeekId(Object_8008044C *pObject, int a, int *pResult);
+void PlayerDbGetLastName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetNameKey(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPybt(Object_8008044C *pObject);
+int PlayerDbGetHeight(Object_8008044C *pObject);
+int PlayerDbGetPbpo(Object_8008044C *pObject);
 void fn_80081788(Object_8008044C *pObject, int *pValues);
 void fn_800817CC(Object_8008044C *pObject, Info_80307908 *pInfo);
 void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a);

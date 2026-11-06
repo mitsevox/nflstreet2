@@ -85,23 +85,23 @@ void fn_8003F6F0(void *, void *);
 void fn_8003F6C8(void *, unsigned char, unsigned char, unsigned char);
 void fn_8003F744(void *);
 void fn_8003F754(void *, int, int, float, float);
-void fn_8019CBC0(void *);
+void ArrowDraw(void *);
 void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
 void fn_8012CB98(int, unsigned char, int, void *);
 int fn_8012CB50(void *);
-int fn_801DCF0C(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
-int fn_801DCF8C(int);
-void fn_801DD0C8(int, int, int, int (*)(Object_8015C244 *));
-Object_8015C244 *fn_801DD268(int, int, int, void *);
-void fn_801DD3AC(int, Object_8015C244 *, int);
-void fn_801DD320(int, Object_8015C244 *);
-void fn_80228D58(int);
-void fn_80228E18(void);
+int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
+int ObjDelType(int);
+void ObjSetListObjFunc(int, int, int, int (*)(Object_8015C244 *));
+Object_8015C244 *ObjNewInList(int, int, int, void *);
+void ObjSetPriority(int, Object_8015C244 *, int);
+void ObjRemoveFromList(int, Object_8015C244 *);
+void VptTrashObject(int);
+void VptFlushObjectTrashSync(void);
 void fn_8015BCAC(Object_8015C244 *);
 int fn_8015BF28(Object_8015C244 *, unsigned char *);
 
@@ -109,7 +109,7 @@ int fn_8015A39C(Object_8015C244 *p)
 {
     if (p->mUnknown80 && lbl_803ECA68 == 1) {
         fn_8015BCAC(p);
-        fn_8019CBC0(p->mUnknown20);
+        ArrowDraw(p->mUnknown20);
     }
     return 0;
 }
@@ -256,8 +256,8 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
     unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
     int angle = index != 0xffff ? p->mpUnknown76[index * 4 + 2] << 17 : 0x400000;
     int turn;
-    if (fn_801CFFD0(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
-    else if (fn_801CFFD0(angle, 0) > 0x400000) turn = angle + 0x400000;
+    if (MathAngleDiff(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
+    else if (MathAngleDiff(angle, 0) > 0x400000) turn = angle + 0x400000;
     else turn = pPoint->mX < fn_80177FE0().mX ? 0x800000 : 0;
     float point[3];
     fn_80227538(point, turn, length);
@@ -391,7 +391,7 @@ int fn_8015B344(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pP
         target.mY = origin.mY;
         fn_80227690(&target, &target, &point);
         int angle = fn_801CFE40(target.mY, target.mX);
-        if (fn_801CFFD0(angle, 0x400000) > 0x3fffff) break;
+        if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
         float length = fn_802270A4(&target);
         fn_8015A588(p, 0, pPoint, &length, &angle);
         break;
@@ -520,8 +520,8 @@ void fn_8015BCAC(Object_8015C244 *p)
 
 void fn_8015BED4(void)
 {
-    fn_801DCF0C(14, sizeof(Object_8015C244), 27, fn_8015A2B4, fn_8015A354);
-    fn_801DD0C8(lbl_803ECA60, 14, 0, fn_8015A39C);
+    ObjNewType_(14, sizeof(Object_8015C244), 27, fn_8015A2B4, fn_8015A354);
+    ObjSetListObjFunc(lbl_803ECA60, 14, 0, fn_8015A39C);
 }
 
 int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
@@ -542,22 +542,22 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
 
 void fn_8015BFAC(void)
 {
-    fn_80228E18();
-    fn_801DCF8C(14);
+    VptFlushObjectTrashSync();
+    ObjDelType(14);
 }
 
 Object_8015C244 *fn_8015BFD4(void)
 {
-    Object_8015C244 *p = fn_801DD268(lbl_803ECA60, 14, 0, 0);
-    fn_801DD3AC(lbl_803ECA60, p, 3);
+    Object_8015C244 *p = ObjNewInList(lbl_803ECA60, 14, 0, 0);
+    ObjSetPriority(lbl_803ECA60, p, 3);
     return p;
 }
 
 void fn_8015C024(Object_8015C244 *p)
 {
     if (p) {
-        fn_801DD320(lbl_803ECA60, p);
-        fn_80228D58((int)p);
+        ObjRemoveFromList(lbl_803ECA60, p);
+        VptTrashObject((int)p);
     }
 }
 

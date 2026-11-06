@@ -1,8 +1,8 @@
 #include "game/cu_80159F10.h"
-#include "game/cu_8019FBEC.h"
+#include "game/PassIconTex.h"
 #include <math.h>
-#include "engine/cu_80227F14.h"
-#include "game/Camera_8013F738.h"
+#include "engine/viewport.h"
+#include "game/GameCamera.h"
 #include "game/Object_80039F5C.h"
 
 struct Init_80159F10 {
@@ -12,13 +12,13 @@ struct Init_80159F10 {
 };
 
 extern "C" {
-int fn_8002B5A8(void);
-int fn_8006560C(void);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_801481B0(void);
-int fn_8014830C(int index, Vector_80039F5C *pOut);
-int fn_801483F8(void);
+int VptManagerGetPassIcons(void);
+int PauseIsOpen(void);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+int PassIconsAreShown(void);
+int PassIconGetPosition(int index, Vector_80039F5C *pOut);
+int PassIconsWereShown(void);
 float fn_80178A44(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
@@ -27,12 +27,12 @@ void fn_801D08FC(int a);
 void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0CFC(float a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
-int fn_801DD268(int handle, int a, int b, Init_80159F10 *pInit);
-void fn_801DD320(int handle, int a);
-void fn_801DD3AC(int handle, int a, int b);
+int ObjNewType_(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
+int ObjNewInList(int handle, int a, int b, Init_80159F10 *pInit);
+void ObjRemoveFromList(int handle, int a);
+void ObjSetPriority(int handle, int a, int b);
 }
 
 static unsigned char lbl_803ECA5C;
@@ -52,26 +52,26 @@ extern "C" void fn_80159F70(void) {}
 
 extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 {
-    if ((fn_801481B0() == 1 || fn_801483F8() == 1) && lbl_803ECA5C == 1 && fn_8006560C() == 0) {
+    if ((PassIconsAreShown() == 1 || PassIconsWereShown() == 1) && lbl_803ECA5C == 1 && PauseIsOpen() == 0) {
         Vector_80039F5C *pPos = &pInstance->mUnknown04;
-        if (fn_8014830C(pInstance->mUnknown1C, pPos) == 1) {
-            Camera_8013F738 *pCamera;
+        if (PassIconGetPosition(pInstance->mUnknown1C, pPos) == 1) {
+            GameCamera_t *pCamera;
             float scale = 1.0f;
             Vector_80039F5C pos;
 
-            pCamera = fn_8013FA04(fn_8013F9F8());
+            pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
             scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D04C4();
             pos = *pPos;
             pos.mZ += scale * 0.5;
             fn_801D0C58(&pos);
             fn_801D0ADC(-pCamera->mHeader.mUnknown14[2]);
             fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14[0]);
-            pInstance->mUnknown20 = fn_801481B0() ? 1.0f : 0.4f;
+            pInstance->mUnknown20 = PassIconsAreShown() ? 1.0f : 0.4f;
             fn_801D0CFC(scale);
-            fn_8019FD80(pInstance);
-            fn_801D0470(fn_80228668());
+            PassIconTexDraw(pInstance);
+            fn_801D0470(VptGetMatrixStack());
             fn_801D0544();
         }
     }
@@ -80,7 +80,7 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 
 extern "C" void fn_8015A0D0(int value)
 {
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         lbl_803ECA5C = value;
     } else {
         lbl_803ECA5C = 0;
@@ -89,17 +89,17 @@ extern "C" void fn_8015A0D0(int value)
 
 extern "C" void fn_8015A110(void *pOwner)
 {
-    fn_801DCF0C(12, 36, 3, fn_80159F10, fn_80159F70);
-    fn_801DD0C8((int)pOwner, 12, 0, fn_80159F74);
-    fn_8019FBEC();
+    ObjNewType_(12, 36, 3, fn_80159F10, fn_80159F70);
+    ObjSetListObjFunc((int)pOwner, 12, 0, fn_80159F74);
+    PassIconTexLoad();
     lbl_803ECA5C = 1;
 }
 
 extern "C" void fn_8015A17C(void)
 {
-    fn_80228E18();
-    fn_8019FD38();
-    fn_801DCF8C(12);
+    VptFlushObjectTrashSync();
+    PassIconTexFree();
+    ObjDelType(12);
 }
 
 extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, int b)
@@ -110,16 +110,16 @@ extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, 
     init.mUnknown0 = a;
     init.mUnknown4 = b;
     init.mUnknown8 = c;
-    pItem = (Instance_80159F10 *)fn_801DD268((int)pOwner, 12, 0, &init);
-    fn_801DD3AC((int)pOwner, (int)pItem, 11);
+    pItem = (Instance_80159F10 *)ObjNewInList((int)pOwner, 12, 0, &init);
+    ObjSetPriority((int)pOwner, (int)pItem, 11);
     return pItem;
 }
 
 extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
 {
     if (pItem != 0) {
-        fn_801DD320((int)pOwner, (int)pItem);
-        fn_80228D58((int)pItem);
+        ObjRemoveFromList((int)pOwner, (int)pItem);
+        VptTrashObject((int)pItem);
     }
 }
 

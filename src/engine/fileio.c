@@ -30,13 +30,13 @@ extern Lock_801F8014 lbl_803D55C0;
 extern FileDevTable_801C8F14 lbl_802F4A50;
 
 void fn_801F81AC(void);
-int fn_801D34D0(void *pDest, int size, int value, int width);
-int fn_801CA760(FileAsync_801C8F14 *pAsync);
-void fn_801CA834(int handle);
-int fn_801CA364(const char *pName, int device, const char *pPrefix);
-int fn_801CA468(int handle);
-void fn_801CB00C(FileConfig_801C8F14 *pConfig);
-void fn_801CB0EC(void);
+int MemFill(void *pDest, int size, int value, int width);
+int FileQueueAsyncRequest(FileAsync_801C8F14 *pAsync);
+void FileAsyncWaitStream(int handle);
+int FileOpenhDevice(const char *pName, int device, const char *pPrefix);
+int FileCloseStream(int handle);
+void FileLLInit(FileConfig_801C8F14 *pConfig);
+void FileLLShutdown(void);
 
 static int fn_801C8F14(FileAsync_801C8F14 *pA, FileAsync_801C8F14 *pB)
 {
@@ -60,7 +60,7 @@ static FileReq_801C8F14 *fn_801C8F44(void)
 
     for (;;) {
         fn_801F8014(&lbl_803D5168);
-        pReq = fn_801C75F0(lbl_803ED628);
+        pReq = DSNewNode(lbl_803ED628);
         fn_801F809C(&lbl_803D5168);
         if (pReq) {
             break;
@@ -73,7 +73,7 @@ static FileReq_801C8F14 *fn_801C8F44(void)
 static void fn_801C8F9C(FileReq_801C8F14 *pReq)
 {
     fn_801F8014(&lbl_803D5168);
-    fn_801C7650(lbl_803ED628, pReq);
+    DSDelNode(lbl_803ED628, pReq);
     fn_801F809C(&lbl_803D5168);
 }
 
@@ -164,7 +164,7 @@ FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
     if (pAsync->mType == 2 && lbl_803EBC24[pReq->mHandle].mPos > lbl_803EBC24[pReq->mHandle].mLength) {
         lbl_803EBC24[pReq->mHandle].mLength = lbl_803EBC24[pReq->mHandle].mPos;
     }
-    fn_801F7BD4(fn_801CA760(pAsync));
+    fn_801F7BD4(FileQueueAsyncRequest(pAsync));
     return pReq;
 }
 
@@ -210,9 +210,9 @@ int fn_801C93D0(FileConfig_801C8F14 *pConfig)
     if (!lbl_803EBC18) {
         lbl_803D51A8 = *pConfig;
         lbl_803EBC24 = fn_801D2B7C(size = lbl_803D51A8.mNumFiles * sizeof(FileEntry_801C8F14), 0, 0);
-        fn_801D34D0(lbl_803EBC24, size, 0, 1);
+        MemFill(lbl_803EBC24, size, 0, 1);
         lbl_803EBC28 = fn_801D2B7C(size = lbl_803D51A8.mNumFiles * 0x20, 0, 0);
-        fn_801D34D0(lbl_803EBC28, size, 0, 1);
+        MemFill(lbl_803EBC28, size, 0, 1);
         for (j = 0; j < 9; j++) {
             lbl_803D55B4[j] = 0;
         }
@@ -223,9 +223,9 @@ int fn_801C93D0(FileConfig_801C8F14 *pConfig)
         lbl_803ED62C = fn_801C68FC(1, 0, 0x40, sizeof(FileAsync_801C8F14), (int (*)(void *, void *))fn_801C8F14, 0);
         fn_801F7FA8(&lbl_803D5188);
         lbl_803ED630 = 0;
-        lbl_803ED628 = fn_801C750C(1, 0x40, sizeof(FileReq_801C8F14), 0);
+        lbl_803ED628 = DSNewNodeHandler(1, 0x40, sizeof(FileReq_801C8F14), 0);
         fn_801F7FA8(&lbl_803D5168);
-        fn_801CB00C(&lbl_803D51A8);
+        FileLLInit(&lbl_803D51A8);
         lbl_803EBC10 = 0;
         lbl_803EBC34 = 0;
         lbl_803EBC18 = 1;
@@ -242,17 +242,17 @@ int fn_801C95C4(void)
     int i;
 
     if (lbl_803EBC18) {
-        fn_801CB0EC();
+        FileLLShutdown();
         for (i = 0; i < lbl_803D51A8.mNumFiles; i++) {
             if (i >= 0 && i < lbl_803D51A8.mNumFiles && lbl_803EBC24[i].mInUse) {
-                fn_801CA834(i);
+                FileAsyncWaitStream(i);
             }
             fn_801F80D0(&lbl_803EBC28[i]);
         }
         fn_801C69E4(lbl_803ED62C);
         fn_801F80D0(&lbl_803D5188);
         fn_801F80D0(&lbl_803D55C0);
-        fn_801C75B8(lbl_803ED628);
+        DSDelNodeHandler(lbl_803ED628);
         fn_801F80D0(&lbl_803D5168);
         fn_801D2BD0(lbl_803EBC24);
         fn_801D2BD0(lbl_803EBC28);
@@ -283,12 +283,12 @@ int fn_801C96E4(const char *pName, int device)
         error = 0xA0003;
         count = pList->mCount;
         for (i = 0; error == 0xA0003 && i < count; i++) {
-            if ((handle = fn_801CA364(pName, pList->mDevice[i], pList->mpPrefix[i])) >= 0) {
+            if ((handle = FileOpenhDevice(pName, pList->mDevice[i], pList->mpPrefix[i])) >= 0) {
                 error = 0;
             }
         }
     } else {
-        if ((handle = fn_801CA364(pName, device, "")) < 0) {
+        if ((handle = FileOpenhDevice(pName, device, "")) < 0) {
             error = 0xA0003;
         }
     }
@@ -305,8 +305,8 @@ int fn_801C97F0(int handle)
 {
     int error;
 
-    fn_801CA834(handle);
-    error = fn_801CA468(handle);
+    FileAsyncWaitStream(handle);
+    error = FileCloseStream(handle);
     fn_801F7BD4(error);
     if (error == 0) {
         lbl_803EBC10--;
@@ -374,7 +374,7 @@ int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     req.mpArg = &result;
     req.mCyclic = 0;
     fn_801C9174(&req, 1);
-    fn_801CA834(handle);
+    FileAsyncWaitStream(handle);
     count = result.mCount;
     if (count < 0 || count != size) {
         error = 0xA0007;
@@ -408,7 +408,7 @@ int fn_801C9A3C(int handle, char *pBuffer, int size, void (*callback)(int, int, 
     req.mpArg = &result;
     req.mCyclic = 0;
     fn_801C9174(&req, 2);
-    fn_801CA834(handle);
+    FileAsyncWaitStream(handle);
     count = result.mCount;
     if (count < 0 || count != size) {
         error = fn_801F7C88();

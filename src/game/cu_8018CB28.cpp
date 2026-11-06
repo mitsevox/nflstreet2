@@ -2,11 +2,11 @@
 #include "game/fn_801F9908.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Query_8008352C.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 #include "game/Object_8008044C.h"
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/FMCAPPORT.h"
 
 extern "C" {
@@ -17,21 +17,21 @@ void fn_8018CA80(int);
 void fn_8018CA14(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
-void fn_801F9718(int, int, ColumnValue_802D6424 *, int *, int);
-int fn_801F9D70(int, int, Object_80023BBC *, unsigned short *);
+void fn_801F9718(int, int, DbColumnValue *, int *, int);
+int fn_801F9D70(int, int, DbFilter *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
 int fn_80029D74(int, int);
 void fn_80029CE0(int, int);
-int fn_8008A900(int, int);
-int fn_80080E98(Object_8008044C *);
-int fn_80080E70(Object_8008044C *);
+int PortraitAllocSlot(int, int);
+int PlayerDbGetHairStyle(Object_8008044C *);
+int PlayerDbGetPlht(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
 int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);
-int fn_80080E48(Object_8008044C *);
-int fn_800810E0(Object_8008044C *);
-int fn_80081134(Object_8008044C *);
+int PlayerDbGetPlex(Object_8008044C *);
+int PlayerDbGetHairColor(Object_8008044C *);
+int PlayerDbGetFacialHairColor(Object_8008044C *);
 void fn_8015F638(int, int, int, int *);
 void fn_8016139C(int, int *, int *);
 int fn_8016128C(int);
@@ -61,7 +61,7 @@ extern "C" {
 void fn_8018CA80(int source)
 {
     QueryResult result;
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
 
     tables[0].Set(0x59505243);
     tables[1].Set(-1);
@@ -172,7 +172,7 @@ void fn_8018D07C(int index)
             fn_801FCE10(0, "fetch from \x8a\n", &cursor);
             fn_801FCE10(0, "use \x8c select 'YTRP' into \x85 from 'YPRC' where 'DIGP' = \x82\n", source, &ytrp, player);
             if (ytrp == 1) {
-                int mapped = fn_8008A900((unsigned char)index, 0);
+                int mapped = PortraitAllocSlot((unsigned char)index, 0);
                 fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPRC' where 'DIGP' = \x82\n", source, &oldPxsp, player);
                 fn_801FCE10(0, "use \x8c update 'YPRC' set 'PXSP' = \x85 where 'DIGP' = \x82\n", source, mapped, player);
                 fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, mapped, oldPxsp);
@@ -185,7 +185,7 @@ void fn_8018D07C(int index)
 
 int fn_8018D23C()
 {
-    ColumnValue_802D6424 list[17];
+    DbColumnValue list[17];
     unsigned short count = 1;
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
@@ -205,7 +205,7 @@ int fn_8018D23C()
 
 void fn_8018D358(int index, int team, int rumt)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
     QueryResult result;
     QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
@@ -229,22 +229,22 @@ void fn_8018D358(int index, int team, int rumt)
         fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
         fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
         Object_8008044C object;
-        Block_80307980 block;
+        FaceFeatures_t block;
         FMCAPPORTValues values;
         FMCAPPORTText text60, text20;
         int resultIds[2], unknown52, unknown56;
         fn_8008044C(&object, 0, 0x54415453);
-        fn_800809C4(&object, ids[i], 0);
-        int value6E = fn_80080E98(&object);
-        int value6C = fn_80080E70(&object);
+        PlayerDbSeekId(&object, ids[i], 0);
+        int value6E = PlayerDbGetHairStyle(&object);
+        int value6C = PlayerDbGetPlht(&object);
         int value72 = fn_80081E3C(&object);
         int value73 = fn_80082280(&object);
         int value74 = fn_800822D4(&object);
-        int value76 = fn_80080E48(&object);
-        unsigned int color18 = fn_800810E0(&object);
-        unsigned int color19 = fn_80081134(&object);
+        int value76 = PlayerDbGetPlex(&object);
+        unsigned int color18 = PlayerDbGetHairColor(&object);
+        unsigned int color19 = PlayerDbGetFacialHairColor(&object);
         fn_80082138(&object, &block);
-        fn_80046804(&block, &values);
+        FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
         fn_8016139C(value6E, &unknown52, &unknown56);
         int unknown8 = fn_8016128C(value72 + 1);
@@ -315,7 +315,7 @@ void fn_8018D918()
     if (!fn_8018F228(fn_80186B38(fn_8022F4BC())))
         fn_8018F41C(fn_80186B38(fn_8022F4BC()));
     QueryResult result;
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
     QueryCursor cursor;
     int pxsp, diop, ytrp, selected;
     cursor.mUnknown0 = 0;
@@ -355,8 +355,8 @@ void fn_8018D918()
 void fn_8018DC18(int unused, int player)
 {
     QueryResult result;
-    Table_8007E020 tables[2];
-    Object_80023BBC arg;
+    DbQueryTable tables[2];
+    DbFilter arg;
     arg.Set(6, 0x59414C5044494750LL, 3, player);
     tables[0].Set(0x59414C50);
     tables[1].Set(-1);
@@ -404,12 +404,12 @@ void fn_8018DE9C(int first, int second)
     fn_801FCE10(0, "use \x8c insert into \x8c.'MTRC' * select * from \x8c\n", 0x54415453, handle, first);
     fn_801FCE10(0, "use \x8c insert into \x8c.'YPRC' * select * from \x8c\n", 0x54415453, handle, second);
 }
-void fn_8018DF20(Object_8007A334 *pCursor, int index)
+void fn_8018DF20(DbCursor *pCursor, int index)
 {
-    fn_8007A334(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
 }
-void fn_8018DF78(Object_8007A334 *pCursor)
+void fn_8018DF78(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 }

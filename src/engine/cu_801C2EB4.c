@@ -199,7 +199,7 @@ char *fn_801C32CC(char *pString)
 
     for (p = pString; *p; p++) {
         if (CTYPE(*p) & 2) {
-            *p = fn_801C1F54(*p);
+            *p = toupper(*p);
         }
     }
     return pString;

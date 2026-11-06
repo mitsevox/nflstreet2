@@ -1,6 +1,6 @@
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_80047E28.h"
+#include "game/PlayerLook.h"
 #include "game/cu_8015C25C.h"
 #include "game/cu_8015D3EC.h"
 #include "game/fn_801D2B7C.h"
@@ -13,7 +13,7 @@
    each of the five parts loaded asynchronously by fn_8015C498. */
 struct Entry_803EB32C {
     int mUnknown0;
-    Ids_8015F6E8 mUnknown4;
+    PlayerHeadIds_t mUnknown4;
     int mUnknownC;
     int mUnknown10;
     FMCAPPORTValues mUnknown14;
@@ -46,7 +46,7 @@ struct State_803EB32C {
 };
 
 extern "C" {
-void fn_80023024(int a);
+void FESndUpdate(int a);
 void fn_8003E194(int index, int value);
 void fn_8015FFC8(int player, int key, int value);
 void fn_8016118C(void);
@@ -55,10 +55,10 @@ void fn_8016130C(int index, int a, int b, int c, int d);
 void fn_801613F0(void);
 void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
 void fn_801A472C(void);
-void fn_801A4AD4(Object_8003DEC4 *pPlayer);
+void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
-int fn_8007CB6C(int index);
+int GameInfoGet(int index);
 
 void fn_8015C498(void);
 void fn_8015CB18(int wait);
@@ -77,7 +77,7 @@ extern "C" void fn_8015C25C(Object_8003DEC4 *pPlayer)
     fn_80234A14(&pPlayer->mUnknown1164[8], 1);
     fn_80233C7C(&pPlayer->mUnknown1164[7].mUnknown20);
     fn_80233CBC(&pPlayer->mUnknown1164[7].mUnknown20, 27, 0);
-    fn_80049C50(pPlayer->mUnknown4971, pPlayer->mUnknown4970);
+    PlayerLookApplyHeadDecal(pPlayer->mUnknown4971, pPlayer->mUnknown4970);
     pEntry->mUnknownFA &= ~0x21;
 }
 
@@ -169,9 +169,9 @@ extern "C" void fn_8015C5E8(int index)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry;
     Object_8003DEC4 *pPlayer;
-    Block_80307980 block;
+    FaceFeatures_t block;
     FMCAPPORTValues values;
-    Ids_8015F6E8 ids;
+    PlayerHeadIds_t ids;
     char *pName;
     int head;
     int idE8;
@@ -186,14 +186,14 @@ extern "C" void fn_8015C5E8(int index)
     pEntry->mUnknownF9 = 0;
     pEntry->mUnknownFA = 0x1F;
     pPlayer = fn_8003DEC4(index);
-    fn_8003E194(index, fn_80049BC0(pPlayer->mUnknown4971));
-    fn_80049FC8(pPlayer->mUnknown4971, &block);
-    fn_80046804(&block, &values);
+    fn_8003E194(index, PlayerLookGetBodyType(pPlayer->mUnknown4971));
+    PlayerLookGetFeatures(pPlayer->mUnknown4971, &block);
+    FaceMorphBuildWeights(&block, &values);
     if (strlen(pName)) {
-        fn_80049E00(pPlayer->mUnknown4971, pName, &ids);
+        PlayerLookGetHeadIds(pPlayer->mUnknown4971, pName, &ids);
         head = fn_8015F5BC(pName);
     } else {
-        fn_80049E00(pPlayer->mUnknown4971, 0, &ids);
+        PlayerLookGetHeadIds(pPlayer->mUnknown4971, 0, &ids);
         head = 0xFFFF;
     }
 
@@ -204,18 +204,18 @@ extern "C" void fn_8015C5E8(int index)
     }
 
     if (pEntry->mUnknownF4 && pEntry->mUnknownC == head &&
-        pEntry->mUnknown10 == fn_80049C38(pPlayer->mUnknown4970) &&
+        pEntry->mUnknown10 == PlayerLookGetPlex(pPlayer->mUnknown4970) &&
         !memcmp(&pEntry->mUnknown14, &values, sizeof(values))) {
         pEntry->mUnknownFA &= ~0x8;
     } else {
         pEntry->mUnknownC = head;
-        pEntry->mUnknown10 = fn_80049C38(pPlayer->mUnknown4970);
+        pEntry->mUnknown10 = PlayerLookGetPlex(pPlayer->mUnknown4970);
         pPlayer->mUnknown4972 = pEntry->mUnknown10;
         pEntry->mUnknown14 = values;
         pPlayer->mUnknown4976 = pEntry->mUnknown14;
     }
 
-    idE8 = fn_80049888(pPlayer->mUnknown4971);
+    idE8 = PlayerLookGetHatModel(pPlayer->mUnknown4971);
     if (pEntry->mUnknownF4 && pEntry->mUnknownE8 == idE8) {
         pEntry->mUnknownFA &= ~0x1;
     } else {
@@ -226,7 +226,7 @@ extern "C" void fn_8015C5E8(int index)
         }
     }
 
-    idEC = fn_800499A8(pPlayer->mUnknown4971);
+    idEC = PlayerLookGetSlot1Model(pPlayer->mUnknown4971);
     if (pEntry->mUnknownF4 && pEntry->mUnknownEC == idEC) {
         pEntry->mUnknownFA &= ~0x4;
     } else {
@@ -237,7 +237,7 @@ extern "C" void fn_8015C5E8(int index)
         }
     }
 
-    idF0 = fn_800499E8(pPlayer->mUnknown4971);
+    idF0 = PlayerLookGetAccessoryModel(pPlayer->mUnknown4971);
     if (pEntry->mUnknownF4 && pEntry->mUnknownF0 == idF0) {
         pEntry->mUnknownFA &= ~0x10;
     } else {
@@ -327,7 +327,7 @@ extern "C" void fn_8015CB18(int wait)
             if (count > 4) {
                 count = 0;
                 if (wait) {
-                    fn_80023024(1);
+                    FESndUpdate(1);
                 }
             }
         }
@@ -465,9 +465,9 @@ extern "C" void fn_8015CDA4(void)
             if (strlen(lbl_803EB32C->mEntries[i].mUnknownFE)) {
                 fn_801611BC(pPlayer->mUnknown4971, lbl_803EB32C->mEntries[i].mUnknownFE, 0);
             } else {
-                fn_8016130C(pPlayer->mUnknown4971, fn_80049EC8(i), fn_80049EE0(i), fn_80049EF8(i), 0);
+                fn_8016130C(pPlayer->mUnknown4971, PlayerLookGetSkin(i), PlayerLookGetFace(i), PlayerLookGetBrow(i), 0);
             }
-            fn_80049124(current);
+            PlayerLookApply(current);
         }
     } else if (lbl_803EB32C->mQueueCount) {
         i = lbl_803EB32C->mQueue[0];
@@ -494,7 +494,7 @@ extern "C" void fn_8015D060(int index, const char *pName, unsigned char priority
     }
     pEntry = &lbl_803EB32C->mEntries[index];
     pPlayer = fn_8003DEC4(index);
-    flag = pPlayer->mUnknown4968 == fn_8007CB6C(fn_8007CB6C(2) ? 1 : 0);
+    flag = pPlayer->mUnknown4968 == GameInfoGet(GameInfoGet(2) ? 1 : 0);
     if (force || !pEntry->mUnknownFD || pEntry->mUnknown0 != pPlayer->mUnknown4956 ||
         pEntry->mUnknownF5 != flag || strcmp(pEntry->mUnknownFE, pName)) {
         pEntry->mUnknownF5 = flag;
@@ -506,7 +506,7 @@ extern "C" void fn_8015D060(int index, const char *pName, unsigned char priority
     } else {
         flag = 0;
     }
-    fn_800496A0(index, pPlayer->mUnknown4971, pPlayer->mUnknown4968, pPlayer->mUnknown4956);
+    PlayerLookLoadForPlayer(index, pPlayer->mUnknown4971, pPlayer->mUnknown4968, pPlayer->mUnknown4956);
     fn_8015C9E0(index, priority, flag);
 }
 
@@ -566,7 +566,7 @@ extern "C" void fn_8015D254(int index)
         return;
     }
     pEntry->mUnknownF9 = 1;
-    fn_801A4AD4(fn_8003DEC4(current));
+    PlyrTexRequestNameplate(fn_8003DEC4(current));
     lbl_803EB32C->mCurrent = 2;
     if (!pEntry->mUnknownFC && pEntry->mUnknownFD) {
         lbl_803EB32C->mUnknown251[current] = 1;

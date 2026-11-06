@@ -12,7 +12,7 @@ void fn_80029BBC(int value, char *pOut, int size);
 unsigned int fn_80029838(int value);
 int fn_8002A824(void);
 char *fn_801D6918(void);
-void fn_80191868(int value, char *pOut, int size, int unused, const char *pText);
+void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const char *pText);
 int fn_801C2D88(char *pOut, int size, const char *pFormat, ...);
 void fn_80191C70(int value, int index, char *pA, char *pB, int flag, char *pC, char *pD, char *pE);
 extern unsigned char lbl_803EB720;
@@ -68,10 +68,10 @@ void fn_80191948(int value, Object_80191948 *pA, Object_80191948 *pB, Object_801
         break;
     case 22: case 64: case 65: case 96: case 97: case 115: case 116:
         fn_80029BBC(fn_801D6850(), text, 32);
-        fn_80191868(fn_80029838(fn_801D6850()), textB, 32, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(fn_801D6850()), textB, 32, 0, 0);
         break;
     case 55:
-        fn_80191868(fn_8002A824(), text, 32, 0, 0);
+        MemCardUtilFormatBlocks(fn_8002A824(), text, 32, 0, 0);
         break;
     }
     fn_80191C70(value, index, text, textB, flag, pA->mpUnknown8, pB->mpUnknown8, pC->mpUnknown8);
@@ -381,11 +381,11 @@ void fn_80191C70(int value, int index, char *pA, char *pB, int flag, char *pC, c
         strcpy(pC, "!");
         sprintf(pD, "No %s could be found.  If you wish to save, please insert a %s now. ", textB, textB);
         sprintf(pD + strlen(pD), "NFL STREET 2 needs the following amount of files and blocks free to save new files:\n");
-        fn_80191868(fn_80029838(1), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(1), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "Options requires 1 file and %s.\n", textD);
-        fn_80191868(fn_80029838(2), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(2), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "User ID requires 1 file and %s.\n", textD);
-        fn_80191868(fn_80029838(3), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(3), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "Player Export requires 1 file and %s.\n", textD);
         strcpy(pE, "|Continue Without Saving|^Retry");
         break;
@@ -407,11 +407,11 @@ void fn_80191C70(int value, int index, char *pA, char *pB, int flag, char *pC, c
     case 62:
         strcpy(pC, "!");
         sprintf(pD, "The %s in %s does not\nhave sufficient space to save new\nNFL STREET 2 save files.\n", text, textC);
-        fn_80191868(fn_80029838(1), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(1), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "Options requires 1 file and %s.\n", textD);
-        fn_80191868(fn_80029838(2), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(2), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "User ID requires 1 file and %s.\n", textD);
-        fn_80191868(fn_80029838(3), textD, 18, 0, 0);
+        MemCardUtilFormatBlocks(fn_80029838(3), textD, 18, 0, 0);
         sprintf(pD + strlen(pD), "Player Export requires 1 file and %s.\n", textD);
         sprintf(pD + strlen(pD), "Existing files may be loaded and overwritten.");
         sprintf(pE, "|Continue Without Saving|^Retry|Manage %s", text);

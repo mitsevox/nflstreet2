@@ -1,10 +1,10 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Class_80297BF8.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
+#include "game/Ball.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
@@ -61,14 +61,14 @@ struct Block_800BC538 {
 };
 
 extern "C" {
-unsigned char fn_8002892C(void);
+unsigned char InGameIsDemo(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003A3F4(int a, int index);
 void fn_8003E174(int a);
-void fn_8004A230(unsigned char value);
-int fn_80074638(void);
-int fn_80076F40(int index);
+void PlayerObjSetDrawReady(unsigned char value);
+int SpchIGIsNarratorIdle(void);
+int SpchIGGetTeamSceneSpeaker(int index);
 void fn_800941B8(void);
 float fn_80094454(int handle);
 void fn_8009D8CC(int index);
@@ -112,10 +112,10 @@ unsigned char fn_800C0658(void);
 int fn_800C1E40(void);
 void fn_800CC560(int a);
 void fn_8010A220(void);
-void fn_80139274(void);
-void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
-void fn_8013F9B8(void);
-Camera_8013F738 *fn_8013FA04(int index);
+void BallResetToSpot(void);
+void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+void CamGamePushCurrentCamera(void);
+GameCamera_t *CamGameGetCamera(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80156704(void);
@@ -134,7 +134,7 @@ void fn_8017DBCC(void);
 void fn_8017DD68(int index);
 int fn_8017F60C(void);
 int fn_8019623C(int id);
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 int fn_801F0F18(int a);
 
 extern unsigned char lbl_802ED104[];
@@ -151,10 +151,10 @@ void Class_80297BF8::vfn_08(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
-    if (fn_800655F8() == 0) {
-        fn_800655D0();
+    if (PauseIsUnblocked() == 0) {
+        PauseUnblock();
     }
-    fn_800655B8();
+    PauseBlock();
     if (lbl_803EAB94 == 0) {
         fn_800BBF18();
     }
@@ -195,18 +195,18 @@ void Class_80297BF8::vfn_09(float dt)
 
 void Class_80297BF8::vfn_05()
 {
-    if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
+    if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || fn_8017F60C() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
         vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;
-    fn_8004A230(1);
-    fn_8013F9B8();
+    PlayerObjSetDrawReady(1);
+    CamGamePushCurrentCamera();
     fn_800CC560(0);
     fn_8010A220();
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         Point_8017886C pos = {0.0f, 0.0f};
-        int spot = fn_800785C0()->mUnknown1C0;
+        int spot = ChalGetCurrent()->mUnknown1C0;
 
         if (spot != -1) {
             if (spot < 50) {
@@ -219,8 +219,8 @@ void Class_80297BF8::vfn_05()
         }
         fn_801780A8(pos);
         fn_801782B0();
-        if (fn_800785C0()->mUnknown1A4 != 0) {
-            fn_8009D964(4, fn_800785C0()->mUnknown1A4);
+        if (ChalGetCurrent()->mUnknown1A4 != 0) {
+            fn_8009D964(4, ChalGetCurrent()->mUnknown1A4);
             fn_8009D8CC(4);
         }
     } else {
@@ -235,15 +235,15 @@ void Class_80297BF8::vfn_05()
     if (fn_800BA6F8() != 0) {
         fn_800BAAE4();
     } else {
-        fn_80139274();
+        BallResetToSpot();
     }
     fn_800AFE20(fn_800BB694);
-    fn_80067D4C(0x6e, 0);
-    if (fn_80076F40(0) != 0) {
-        fn_80067DB8(0x6d, 0, 0, 0, 0);
+    AudmonEventPost(0x6e, 0);
+    if (SpchIGGetTeamSceneSpeaker(0) != 0) {
+        AudmonEventPostArgs(0x6d, 0, 0, 0, 0);
     }
-    if (fn_80076F40(1) != 0) {
-        fn_80067DB8(0x6d, 0, 1, 0, 0);
+    if (SpchIGGetTeamSceneSpeaker(1) != 0) {
+        AudmonEventPostArgs(0x6d, 0, 1, 0, 0);
     }
     lbl_803EABA0 = 0;
     fn_801789F8();
@@ -255,14 +255,14 @@ void Class_80297BF8::vfn_05()
     lbl_803EC98C->mUnknown31 = 0;
     lbl_803EC98C->mUnknown28 = 0;
     lbl_803EAB95 = 0;
-    fn_801383E4(1);
+    BallsSetVisible(1);
     fn_800BB5DC();
     fn_8003E174(1);
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
     fn_8017DBCC();
-    if (fn_800C1E40() == 0 && fn_80025708() == 0 && fn_8019623C(0x23000) != 0) {
+    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(5, 100, 0, 0);
     }
 }
@@ -363,7 +363,7 @@ extern "C" float fn_800BD190(void)
 
 extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
 {
-    Camera_8013F738 *pCamera = fn_8013FA04(5);
+    GameCamera_t *pCamera = CamGameGetCamera(5);
     int result = 0;
     float value;
 
@@ -462,7 +462,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (fn_80178E10() != 0 && fn_8002D060(lbl_803EA368) == 0 && fn_800BA6F8() == 0 &&
             fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
             lbl_803EABA8->mSlots[side].mUnknown0 = 1;
-            fn_801C6280(index, 3, lbl_802ED104);
+            ConSetChannelInfo(index, 3, lbl_802ED104);
             fn_8017DD68(side);
         }
         break;
@@ -471,7 +471,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             int blocked = 0;
 
             if (fn_80156704() != 0) {
-                blocked = fn_80074638() == 0;
+                blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
                 fn_800A7514(side);

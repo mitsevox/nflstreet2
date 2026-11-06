@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
@@ -29,7 +29,7 @@ struct View_801A7170 {
   unsigned char mUnknown10[0x10];
   float mUnknown20;
   unsigned char mUnknown24[4];
-  Object_80228224 *mUnknown28;
+  Viewport_t *mUnknown28;
   unsigned char mUnknown2C[0x70];
   int mUnknown9C;
   unsigned char mUnknownA0[0x64];
@@ -78,8 +78,8 @@ void fn_8022765C(void *, void *, void *);
 void fn_801D0664(void *);
 void fn_80214184(int);
 unsigned int fn_8021445C(void *, void *, int);
-void fn_801A6924(unsigned int);
-void fn_801A6870(unsigned int);
+void WeatherDrawLines(unsigned int);
+void WeatherDrawQuads(unsigned int);
 int fn_800A33B8(void);
 int fn_800A3444(void);
 float fn_800A33C4(void);
@@ -119,7 +119,7 @@ void fn_801A69A8(Entry_801A69A8 *entry, unsigned int count) {
 }
 void fn_801A6AF8(Entry_801A69A8 *entry, unsigned int count, float speed,
                  float step) {
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   fn_801D0508();
   fn_801D0C58(&lbl_802F3A9C);
   fn_801D0ADC(lbl_803EB850);
@@ -217,7 +217,7 @@ void fn_801A6F88(float *matrix, Vector_80039F5C *out, float depth) {
   out->mY = ((matrix[14] - matrix[6]) * depth) / matrix[5];
 }
 void fn_801A6FC8(float *matrix, Bounds_801A6FC8 *bounds, float a, float b) {
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   fn_801D04C4();
   fn_801D0EE4();
   Vector_80039F5C low, high, point, transformed;
@@ -253,8 +253,8 @@ void fn_801A6FC8(float *matrix, Bounds_801A6FC8 *bounds, float a, float b) {
 }
 void fn_801A7170(Bounds_801A6FC8 *bounds, float *matrix,
                  Vector_80039F5C *position) {
-  View_801A7170 *view = (View_801A7170 *)fn_8002B550(0);
-  Object_80228224 *object = view->mUnknown28;
+  View_801A7170 *view = (View_801A7170 *)VptManagerGetCurrentCamera(0);
+  Viewport_t *object = view->mUnknown28;
   position->mX = view->mUnknown4.mX;
   position->mY = view->mUnknown4.mY;
   position->mZ = view->mUnknown4.mZ;
@@ -341,9 +341,9 @@ void fn_801A74BC(float x, float y, float z) {
       for (unsigned int i = 0; i < lbl_803ECC28; ++i, ++offset) {
         fn_801A6E78(0);
         if (lbl_803ECC34 == 2)
-          fn_801A6924(lbl_803EB858);
+          WeatherDrawLines(lbl_803EB858);
         else
-          fn_801A6870(lbl_803EB858);
+          WeatherDrawQuads(lbl_803EB858);
         if (lbl_803ECC34 == 1)
           fn_801D0ADC(lbl_803EB854);
         else
@@ -352,9 +352,9 @@ void fn_801A74BC(float x, float y, float z) {
     } else {
       fn_801A6E78(0);
       if (lbl_803ECC34 == 2)
-        fn_801A6924(lbl_803EB858);
+        WeatherDrawLines(lbl_803EB858);
       else
-        fn_801A6870(lbl_803EB858);
+        WeatherDrawQuads(lbl_803EB858);
     }
     ++lbl_803ECC2C;
   }
@@ -362,7 +362,7 @@ void fn_801A74BC(float x, float y, float z) {
   if (!flags && !(z > 0.0f)) {
     fn_801A6CF8(1);
     fn_801A6E78(1);
-    fn_801A6870(lbl_803EB858);
+    WeatherDrawQuads(lbl_803EB858);
   }
   fn_801D0544();
 }
@@ -427,7 +427,7 @@ void fn_801A7880(void) {
   lbl_803ECC50 = -1;
   GXLoadTlut(&lbl_803ECC4C->mUnknown9C, 0);
   GXLoadTexObj(&lbl_803ECC4C->mUnknown7C, 0);
-  fn_801D0470(fn_80228668());
+  fn_801D0470(VptGetMatrixStack());
   Mtx44 matrix;
   fn_801D1288(2, matrix);
   fn_80214140(0);

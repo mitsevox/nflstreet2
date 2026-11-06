@@ -24,7 +24,7 @@ struct State_800E4EE4 {
 extern "C" {
 void fn_80227690(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
 float fn_801CFB94(int angle);
-void fn_800E3C30(Object_80039F5C *p);
+void PlayerReleaseJointCtrls(Object_80039F5C *p);
 }
 
 extern "C" int fn_800E4EE4(Object_80039F5C *p)
@@ -57,7 +57,7 @@ extern "C" int fn_800E4EE4(Object_80039F5C *p)
         p->mUnknown512.mUnknown0 = 0.0f;
     }
     if (pState->mUnknown32 == 0) {
-        fn_800E3C30(p);
+        PlayerReleaseJointCtrls(p);
         return 1;
     }
     return 0;

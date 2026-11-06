@@ -1,7 +1,7 @@
 #include <string.h>
 #include "engine/particleLib.h"
 #include "engine/animTexLib.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 
@@ -99,14 +99,14 @@ void fn_801D2130(ObjType_801DE1E0 *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
-int fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
-int fn_801DCF8C(unsigned char heap);
-void *fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_801DD0C8(void *pList, unsigned char heap, int slot, void *pFunc);
-void fn_801DD0E8(void *pList);
-PartObj_801DE1E0 *fn_801DD168(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
-int fn_801DD200(void *pList, void *pObj);
+int MemFill(void *p, unsigned int size, int value, int flags);
+int ObjNewType_(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
+int ObjDelType(unsigned char heap);
+void *ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+void ObjSetListObjFunc(void *pList, unsigned char heap, int slot, void *pFunc);
+void ObjDelList(void *pList);
+PartObj_801DE1E0 *ObjNew(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
+int ObjAddToList(void *pList, void *pObj);
 void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
 
 void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
@@ -125,11 +125,11 @@ void fn_801DFD4C(void);
 
 static void fn_801DD498(void)
 {
-    fn_801D34D0(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
+    MemFill(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
     lbl_8039ADAC.mpUsed = fn_801D2B7C(lbl_8039AD10.mPoolCount, 0, 0);
-    fn_801D34D0(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
+    MemFill(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
     lbl_8039ADAC.mpPools = fn_801D2B7C(lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 0);
-    fn_801D34D0(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
+    MemFill(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
 }
 
 static void fn_801DD534(void)
@@ -251,12 +251,12 @@ static void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
 {
     unsigned short i;
 
-    fn_801E03F4(pObj);
+    PsysColPrecalcDependantVals(pObj);
     for (i = 0; i < pObj->mCount; i++) {
         Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
 
         if (pObj->mCollisionType != 0 || pObj->mColExtCount != 0) {
-            fn_801E043C(pObj, pParticle);
+            PsysColCalcCollision(pObj, pParticle);
         }
         pParticle->mPrevPos = pParticle->mPos;
         fn_801DDFB0(pObj, pParticle, dt);
@@ -341,7 +341,7 @@ static void fn_801DE114(PartObj_801DE1E0 *pObj)
 
 float fn_801DE1B8(void)
 {
-    return fn_801CF69C(lbl_8039AD10.mpRandom);
+    return MathGetRandom(lbl_8039AD10.mpRandom);
 }
 
 void fn_801DE1E0(Desc_801DE1E0 *pDesc)
@@ -356,14 +356,14 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     lbl_8039AD10.mUnknown16 = pDesc->mUnknown24;
     lbl_8039AD10.mUnknown14 = pDesc->mUnknown08;
     lbl_8039AD10.mUnknown10 = 1.0f / (unsigned int)lbl_8039AD10.mUnknown14;
-    lbl_8039AD10.mUnknown84 = fn_801CF7AC();
-    lbl_8039AD10.mpRandom = fn_801CF5BC(0, lbl_8039AD10.mUnknown84);
+    lbl_8039AD10.mUnknown84 = MathGetRandomSeed();
+    lbl_8039AD10.mpRandom = MathNewRandomStream(0, lbl_8039AD10.mUnknown84);
     lbl_8039AD10.mPoolCount = pDesc->mUnknown18;
-    fn_801DCF0C(lbl_8039AD10.mUnknown00, sizeof(PartObj_801DE1E0), pDesc->mUnknown04,
+    ObjNewType_(lbl_8039AD10.mUnknown00, sizeof(PartObj_801DE1E0), pDesc->mUnknown04,
                 (void (*)())fn_801DE7F4, (void (*)())fn_801DEA50);
-    lbl_8039AD10.mpUnknown04 = fn_801DCFF0(1, lbl_8039AD10.mUnknown60, 0, 0, 0, 2, 1, -1);
-    fn_801DD0C8(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 0, lbl_8039AD10.mpUnknown08);
-    fn_801DD0C8(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 1, lbl_8039AD10.mpUnknown0C);
+    lbl_8039AD10.mpUnknown04 = ObjNewList(1, lbl_8039AD10.mUnknown60, 0, 0, 0, 2, 1, -1);
+    ObjSetListObjFunc(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 0, lbl_8039AD10.mpUnknown08);
+    ObjSetListObjFunc(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 1, lbl_8039AD10.mpUnknown0C);
     lbl_8039AD10.mUnknown64 = pDesc->mUnknown10;
     if (lbl_8039AD10.mUnknown64) {
         lbl_8039AD10.mHeap = fn_801D2730();
@@ -406,9 +406,9 @@ void fn_801DE410(void)
 
     fn_801DD534();
     fn_801DFD4C();
-    fn_801DD0E8(pState->mpUnknown04);
-    fn_801DCF8C(pState->mUnknown00);
-    fn_801CF67C(pState->mpRandom);
+    ObjDelList(pState->mpUnknown04);
+    ObjDelType(pState->mUnknown00);
+    MathDelRandomStream(pState->mpRandom);
     if (pState->mUnknown64) {
         fn_801D2570(pState->mHeap);
     }
@@ -502,7 +502,7 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown0E8 = pSrc->mObj.mUnknown0E8;
     pDst->mUnknown0EC = pSrc->mObj.mUnknown0EC;
     pDst->mEmitterType = pSrc->mObj.mEmitterType;
-    fn_801DFE0C(pDst, &pSrc->mObj);
+    EmitterInitParms(pDst, &pSrc->mObj);
     pDst->mUnknown043 = pSrc->mObj.mUnknown043;
     pDst->mUnknown1F4 = pSrc->mObj.mUnknown1F4;
     pDst->mUnknown1F8 = pSrc->mObj.mUnknown1F8;
@@ -510,7 +510,7 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown044 = pSrc->mObj.mUnknown044;
     pDst->mUnknown200 = pSrc->mObj.mUnknown200;
     pDst->mCollisionType = pSrc->mObj.mCollisionType;
-    CopyParticleCollisionPayload(pDst, &pSrc->mObj);
+    PsysColInitParms(pDst, &pSrc->mObj);
     pDst->mUnknown288 = pSrc->mObj.mUnknown288;
     pDst->mUnknown048 = pSrc->mObj.mUnknown048;
 }
@@ -546,9 +546,9 @@ static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
         pObj->mMax = lbl_8039AD10.mUnknown62;
     }
     pObj->mppParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 0);
-    fn_801D34D0(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
+    MemFill(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
     pObj->mpParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0), 0, 0);
-    fn_801D34D0(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
+    MemFill(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
     for (i = 0; i < pObj->mMax; i++) {
         pObj->mppParticles[i] = &pObj->mpParticles[i];
     }
@@ -566,8 +566,8 @@ PartObj_801DE1E0 *fn_801DE918(Template_801DE1E0 *pTemplate)
     State_801DE1E0 *pState = &lbl_8039AD10;
     PartObj_801DE1E0 *pObj;
 
-    pObj = fn_801DD168(pState->mUnknown00, 0, pTemplate);
-    fn_801DD200(pState->mpUnknown04, pObj);
+    pObj = ObjNew(pState->mUnknown00, 0, pTemplate);
+    ObjAddToList(pState->mpUnknown04, pObj);
     return pObj;
 }
 
@@ -804,7 +804,7 @@ static void fn_801DF338(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
     *ppData += 4;
 }
 
-static void fn_801DF428(unsigned char **ppData, Emitter_801DFE0C *pDst, unsigned int type, int noSwap)
+static void fn_801DF428(unsigned char **ppData, EmitterParms_t *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
@@ -834,7 +834,7 @@ static void fn_801DF428(unsigned char **ppData, Emitter_801DFE0C *pDst, unsigned
     *ppData += 0x100;
 }
 
-static void fn_801DF578(unsigned char **ppData, Collision_801E0384 *pDst, unsigned int type, int noSwap)
+static void fn_801DF578(unsigned char **ppData, PsysColParms_t *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
@@ -881,10 +881,10 @@ void fn_801DFD4C(void)
 
 static float fn_801DFDB8(void)
 {
-    return fn_801CF69C(lbl_8039AD10.mpRandom);
+    return MathGetRandom(lbl_8039AD10.mpRandom);
 }
 
 static int fn_801DFDE0(int range)
 {
-    return fn_801CF6D4(lbl_8039AD10.mpRandom, range);
+    return MathGetRandomRange(lbl_8039AD10.mpRandom, range);
 }

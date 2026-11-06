@@ -1,4 +1,4 @@
-#include "engine/cu_80229094.h"
+#include "engine/dbteams.h"
 #include "engine/tdbext.h"
 #include "engine/fn_8022C938.h"
 #include "engine/fn_801F9134.h"
@@ -7,7 +7,7 @@
 
 #include "engine/Funcs_802FB3BC.h"
 #include "engine/llmemory.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
@@ -18,7 +18,7 @@
 #include <string.h>
 
 struct CardStreamTarget;
-struct StreamOps_8002ACB4;
+struct SaveStreamOps_t;
 #include "engine/Entry_802FB300.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
@@ -38,8 +38,8 @@ extern unsigned char lbl_803EC0D8;
 extern Entry_802FB300 lbl_802FB300[];
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9718(int db, int tbl, TDbCol_801F9718 *pCols, void *pRes, int a);
-extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_801FC5FC *pDevice);
-extern TDbIODevice_801FC5FC lbl_8030199C;
+extern int fn_801F9064(int db, int file, char *pName, int mode, TDbIODevice_t *pDevice);
+extern TDbIODevice_t lbl_8030199C;
 extern int fn_801F967C(int db, int tbl);
 int fn_8022F384(int key);
 
@@ -522,7 +522,7 @@ int fn_802299FC(void)
 
 int fn_80229A70(void)
 {
-    return fn_801D34D0(lbl_803A1C60, 1092, 0, 4);
+    return MemFill(lbl_803A1C60, 1092, 0, 4);
 }
 
 float fn_80229C98(int index)
@@ -1017,7 +1017,7 @@ int fn_8022C214(Callbacks_8022C214 *pCallbacks)
 
 void fn_8022C3C8(void)
 {
-    fn_801D34D0((char *)lbl_803A2390, 88, 0, 4);
+    MemFill((char *)lbl_803A2390, 88, 0, 4);
     lbl_803EC030 = 0;
     lbl_803EC034 = 0;
     lbl_803EC038 = 0;
@@ -1149,19 +1149,19 @@ int fn_8022C858(int a)
 
 void fn_8022C894(void)
 {
-    lbl_803EC040 = fn_801CF5BC(0, fn_801CF7AC());
+    lbl_803EC040 = MathNewRandomStream(0, MathGetRandomSeed());
 }
 
 void fn_8022C8C4(void)
 {
-    fn_801CF67C(lbl_803EC040);
+    MathDelRandomStream(lbl_803EC040);
     lbl_803EC040 = 0;
 }
 
 int fn_8022C8F0(unsigned int low, unsigned int high)
 {
     if (low < high) {
-        return low + fn_801CF6D4(lbl_803EC040, high - low);
+        return low + MathGetRandomRange(lbl_803EC040, high - low);
     }
     return low;
 }
@@ -1993,17 +1993,17 @@ int fn_8022EB10(void)
 {
     int result = fn_801F8D60(0x45564153, lbl_803EC0A0);
     if (result == 0) {
-        result = fn_8020D2D0(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
+        result = TDbExtLoadFromResource(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
     }
     return result;
 }
 
-int fn_8022EB5C(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOps)
+int fn_8022EB5C(struct CardStreamTarget *pTarget, struct SaveStreamOps_t *pOps)
 {
     return fn_801F9134(0x45564153, (int)pTarget, 0, (int)pOps);
 }
 
-int fn_8022EB94(void *pTarget, struct StreamOps_8002ACB4 *pOps)
+int fn_8022EB94(void *pTarget, struct SaveStreamOps_t *pOps)
 {
     return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
 }
@@ -2033,7 +2033,7 @@ int fn_8022EC80(void)
 {
     int result = fn_801F8D60(0x54415453, lbl_803EC0B0);
     if (result == 0) {
-        result = fn_8020D2D0(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
+        result = TDbExtLoadFromResource(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
     }
     return result;
 }
@@ -2166,7 +2166,7 @@ int fn_8022F0D4(void)
         id = fn_8022EFDC();
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown0 = id;
         lbl_802FB300[(signed char)lbl_803EC0D8].mUnknown4 = key;
-        fn_8020D2D0(key, lbl_803EC0CC, lbl_803EC0D0, 0);
+        TDbExtLoadFromResource(key, lbl_803EC0CC, lbl_803EC0D0, 0);
         lbl_803EC0D8++;
         old = fn_8022F478(id);
         fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);
@@ -2183,7 +2183,7 @@ void fn_8022F1BC(int key)
         index = fn_8022F384(key);
         if (index != -1) {
             lbl_803EC0D8--;
-            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
             for (; index < (signed char)lbl_803EC0D8; index++) {
                 lbl_802FB300[index] = lbl_802FB300[index + 1];
             }
@@ -2202,7 +2202,7 @@ void fn_8022F294(int key)
     if (key != -1) {
         index = fn_8022F384(key);
         if (index != -1) {
-            fn_8020D2D0(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
+            TDbExtLoadFromResource(lbl_802FB300[index].mUnknown4, lbl_803EC0CC, lbl_803EC0D0, 0);
             id = fn_8022EFDC();
             old = fn_8022F478(key);
             fn_801FCE10(0, lbl_802B5D64, fn_8022F3D4(fn_8022F4BC()), id);

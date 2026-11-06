@@ -1,5 +1,5 @@
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/Block_800AD634.h"
 #include "game/Table_80089904.h"
 #include "game/Object_8003DEC4.h"
@@ -21,7 +21,7 @@ extern "C" void fn_800AD9C0(float value)
     if (p != 0 && value > 0.0f) {
         p->mUnknownC = value;
         p->mUnknown8 = 1;
-        fn_800655B8();
+        PauseBlock();
         fn_8002C9A8(lbl_803EA368, 4, 0);
     }
 }

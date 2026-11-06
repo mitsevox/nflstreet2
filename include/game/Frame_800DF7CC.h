@@ -3,7 +3,7 @@
 
 struct Actor_801C009C;
 
-/* 48-byte frame record returned by fn_801C029C: index 0 gives the record
+/* 48-byte frame record returned by AnimSeqncrGetPlayerPtr: index 0 gives the record
    Actor +0x18 points to, index n the (n-1)th record of the array Actor +0x1C
    points to. */
 struct Frame_800DF7CC {
@@ -15,6 +15,6 @@ struct Frame_800DF7CC {
 };
 
 /* The callers extend the index to 16 bits (clrlwi r4,r29,16 at 0x800AA3AC). */
-extern "C" Frame_800DF7CC *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
+extern "C" Frame_800DF7CC *AnimSeqncrGetPlayerPtr(Actor_801C009C *pActor, unsigned short index);
 
 #endif

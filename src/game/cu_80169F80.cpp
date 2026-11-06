@@ -6,13 +6,13 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Object_8016B04C.h"
 
 extern "C" {
-int fn_80025708(void);
+int ChallengeIsActive(void);
 int fn_800A82FC(int team);
 int fn_800A8430(int team);
 int fn_800C8744(int team);
@@ -596,8 +596,8 @@ void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count)
     if (fn_800A82FC(team) && fn_80177F70() != 6)
         fn_8016AC24(team, pList, count);
 
-    if (fn_80025708() && team == fn_80178308() && fn_800B65A0(team) == 0xFF) {
-        int mode = fn_800785C0()->mUnknown1B4;
+    if (ChallengeIsActive() && team == fn_80178308() && fn_800B65A0(team) == 0xFF) {
+        int mode = ChalGetCurrent()->mUnknown1B4;
         if (mode != 0)
             fn_8016ACD8(team, pList, count, mode);
     }

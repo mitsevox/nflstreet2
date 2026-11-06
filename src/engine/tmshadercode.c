@@ -1,5 +1,7 @@
+/* Shader code loading hook of the TM renderer; it does nothing in this game. */
+
 #include "engine/tmlib.h"
 
-void fn_80213224(int code)
+void TMShaderCodeLoad(int code)
 {
 }

@@ -1,15 +1,15 @@
 #include "game/fn_801FCE10.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 
 extern "C" {
 int fn_80168ED0(int a);
-void fn_800850E8(void);
-void fn_80085118(void);
-int fn_80085148(int *pFirst, int *pSecond);
-int fn_800853A0(int formation, int team, int *pKeys, int *pValues);
-int fn_800855C8(int a);
-int fn_80085620(int index, int a);
-int *fn_80085744(int formation, int team);
+void FormationLineupClearBase(void);
+void FormationLineupClearUser(void);
+int FormationLineupMapPlayerIds(int *pFirst, int *pSecond);
+int FormationLineupRemapBase(int formation, int team, int *pKeys, int *pValues);
+int FormationCountForPlaybook(int a);
+int FormationGetByIndex(int index, int a);
+int *FormationLineupFetchUser(int formation, int team);
 int fn_8022D8F8(int a, int *pValues, int tag);
 int fn_80085BE4(int team);
 
@@ -31,7 +31,7 @@ int fn_80085810(int formation, int team, int *pValues)
 int fn_800858C8(int formation, int team, int first, int second)
 {
     int result = 0;
-    int *pValues = fn_80085744(formation, team);
+    int *pValues = FormationLineupFetchUser(formation, team);
     if (pValues) {
         int value = pValues[first];
         pValues[first] = pValues[second];
@@ -71,45 +71,45 @@ int fn_8008593C(int a, int team, int first, int second)
 
 int fn_80085A34(int formation, int team)
 {
-    int *pValues = fn_80085744(formation, team);
+    int *pValues = FormationLineupFetchUser(formation, team);
     if (pValues) fn_8022D8F8(team, pValues, 0x41474344);
     return 1;
 }
 
 void fn_80085A7C(void)
 {
-    fn_80085118();
-    fn_800850E8();
+    FormationLineupClearUser();
+    FormationLineupClearBase();
 }
 
-void fn_80085AA0(int firstTeam, Record_8003B6BC *pFirst, int secondTeam,
-                Record_8003B6BC *pSecond)
+void fn_80085AA0(int firstTeam, DepthChartSide_t *pFirst, int secondTeam,
+                DepthChartSide_t *pSecond)
 {
-    Record_8003B6BC first;
-    Record_8003B6BC second;
+    DepthChartSide_t first;
+    DepthChartSide_t second;
     for (int i = 0; i < 14; i++) {
         first.mUnknown[i] = pFirst->mUnknown[i];
         second.mUnknown[i] = pSecond->mUnknown[i];
     }
-    if (fn_80085148(first.mUnknown, second.mUnknown)) {
-        fn_800850E8();
+    if (FormationLineupMapPlayerIds(first.mUnknown, second.mUnknown)) {
+        FormationLineupClearBase();
         fn_80085BE4(firstTeam);
         fn_80085BE4(secondTeam);
-        fn_80085118();
-        int count = fn_800855C8(1);
+        FormationLineupClearUser();
+        int count = FormationCountForPlaybook(1);
         for (int i = 0; i < count; i++) {
-            int formation = fn_80085620(i, 1);
-            fn_800853A0(formation, firstTeam, pFirst->mUnknown, first.mUnknown);
-            fn_800853A0(formation, secondTeam, pSecond->mUnknown, second.mUnknown);
+            int formation = FormationGetByIndex(i, 1);
+            FormationLineupRemapBase(formation, firstTeam, pFirst->mUnknown, first.mUnknown);
+            FormationLineupRemapBase(formation, secondTeam, pSecond->mUnknown, second.mUnknown);
         }
-        count = fn_800855C8(0);
+        count = FormationCountForPlaybook(0);
         for (int i = 0; i < count; i++) {
-            int formation = fn_80085620(i, 0);
-            fn_800853A0(formation, firstTeam, pFirst->mUnknown, first.mUnknown);
-            fn_800853A0(formation, secondTeam, pSecond->mUnknown, second.mUnknown);
+            int formation = FormationGetByIndex(i, 0);
+            FormationLineupRemapBase(formation, firstTeam, pFirst->mUnknown, first.mUnknown);
+            FormationLineupRemapBase(formation, secondTeam, pSecond->mUnknown, second.mUnknown);
         }
     }
-    fn_800850E8();
+    FormationLineupClearBase();
 }
 
 int fn_80085BE4(int team)
@@ -127,21 +127,21 @@ int fn_80085C3C(int team)
 int fn_80085C94(int team, int *pValues)
 {
     fn_801FCE10(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
-    int count = fn_800855C8(0);
+    int count = FormationCountForPlaybook(0);
     for (int i = 0; i < count; i++) {
-        fn_80085810(fn_80085620(i, 0), team, pValues);
+        fn_80085810(FormationGetByIndex(i, 0), team, pValues);
     }
-    count = fn_800855C8(1);
+    count = FormationCountForPlaybook(1);
     for (int i = 0; i < count; i++) {
-        fn_80085810(fn_80085620(i, 1), team, pValues);
+        fn_80085810(FormationGetByIndex(i, 1), team, pValues);
     }
     return 1;
 }
 
 int fn_80085D54(void)
 {
-    fn_80085118();
-    fn_800850E8();
+    FormationLineupClearUser();
+    FormationLineupClearBase();
     return 1;
 }
 #endif

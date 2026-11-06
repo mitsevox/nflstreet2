@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
@@ -35,7 +35,7 @@ struct Block_800F8A88 {
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_80178320(void);
 int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -60,7 +60,7 @@ extern float lbl_803EAE48;
 
 extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
-        Object_80137ABC *pBall = fn_801374BC();
+        Ball_t *pBall = BallGetCurrent();
         Vector_80039F5C *pPos = &p->mMotion.mPos;
         Block_800F8A88 *pBlock = (Block_800F8A88 *)&p->mUnknown336;
         Point_8017886C origin;
@@ -78,7 +78,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_800F6B2C(p, pOut);
         direction = fn_801CFE40(pOut->mY, pOut->mX) & 0xFFFFFF;
         if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
-            if (fn_801CFFD0(p->mMotion.mFacing, fn_801CFE40(toBall.mY, toBall.mX)) > 0x71C71) {
+            if (MathAngleDiff(p->mMotion.mFacing, fn_801CFE40(toBall.mY, toBall.mX)) > 0x71C71) {
                 pBlock->mUnknown8 = (fn_801CFE40(toBall.mY, toBall.mX) + 0x800000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.66f;
             } else {
@@ -87,11 +87,11 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = fn_801CFE40(toBall.mY, toBall.mX);
             pBlock->mUnknown24 = 0;
-        } else if (fn_801CFFD0(direction, pOther->mMotion.mUnknown32) < 0x400000) {
+        } else if (MathAngleDiff(direction, pOther->mMotion.mUnknown32) < 0x400000) {
             pBlock->mUnknown8 = direction;
             pBlock->mUnknown4 = direction;
             pBlock->mUnknown12 = 1.0f;
-            if (fn_801CFFD0(p->mMotion.mFacing, direction) < 0xAAAAA) {
+            if (MathAngleDiff(p->mMotion.mFacing, direction) < 0xAAAAA) {
                 pBlock->mUnknown24 = 1;
             } else {
                 pBlock->mUnknown24 = 0;
@@ -175,8 +175,8 @@ extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther) {
         } else {
             float limit = p->mMotion.mPos.mY < fn_80178A2C() ? 25.0f : 58.0f;
 
-            if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) < (int)(limit * 46603.38f)
-                || fn_801CFFD0(pOther->mMotion.mUnknown32, 0xC00000) < (int)(limit * 46603.38f)) {
+            if (MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) < (int)(limit * 46603.38f)
+                || MathAngleDiff(pOther->mMotion.mUnknown32, 0xC00000) < (int)(limit * 46603.38f)) {
                 pBlock->mUnknown26 = 0;
             } else {
                 pBlock->mUnknown26 = 1;
@@ -218,7 +218,7 @@ extern "C" void fn_800F88E4(Object_80039F5C *p, Object_80039F5C *pTarget) {
         Vector_80039F5C ball;
         int right;
 
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         right = pTarget->mMotion.mPos.mX > ball.mX;
         *pTheirs &= ~1;
         *pMine &= ~1;
@@ -273,12 +273,12 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
             break;
         }
         unknown32 = p->mMotion.mUnknown32;
-        if (fn_801CFFD0(pBlock->mUnknown8, p->mMotion.mFacing) > 0x600000
+        if (MathAngleDiff(pBlock->mUnknown8, p->mMotion.mFacing) > 0x600000
             && pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f && pBlock->mUnknown12 >= lbl_803ECB08 * 0.14f
             && fn_802270A4(&delta) < 5.0f) {
             int angle = ((pBlock->mUnknown8 + unknown32) / 2) & 0xFFFFFF;
 
-            if (fn_801CFFD0(angle, pBlock->mUnknown8) > 0x400000) {
+            if (MathAngleDiff(angle, pBlock->mUnknown8) > 0x400000) {
                 angle = (angle + 0x800000) & 0xFFFFFF;
             }
             pBlock->mUnknown8 = angle;

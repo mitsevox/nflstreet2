@@ -38,18 +38,18 @@ typedef struct ListType_803D4FB8 {
 
 extern ListType_803D4FB8 lbl_803D4FB8[9];
 
-typedef struct LinkNode_801C6E5C {
+typedef struct LinkNode_t {
     unsigned int mFlags;
     int mUnused;
-    struct LinkNode_801C6E5C *mpPrev;
-    struct LinkNode_801C6E5C *mpNext;
-} LinkNode_801C6E5C;
+    struct LinkNode_t *mpPrev;
+    struct LinkNode_t *mpNext;
+} LinkNode_t;
 
-typedef struct LinkList_801C6E5C {
+typedef struct LinkList_t {
     List_801C68FC mBase;
-    LinkNode_801C6E5C *mpHead;
-    LinkNode_801C6E5C *mpTail;
-} LinkList_801C6E5C;
+    LinkNode_t *mpHead;
+    LinkNode_t *mpTail;
+} LinkList_t;
 
 typedef struct SplayNode_801C7684 {
     unsigned int mFlags;
@@ -88,16 +88,16 @@ typedef struct BinTree_801C7F70 {
     BinNode_801C7F70 *mpRoot;
 } BinTree_801C7F70;
 
-typedef struct NodePool_801C750C {
+typedef struct NodePool_t {
     unsigned int mCount;
     int mNodeSize;
     int mFree;
     int mHeap;
     void *mpStack;
     char *mpNodes;
-} NodePool_801C750C;
+} NodePool_t;
 
-int fn_801C6644(int size);
+int DSAlignSize(int size);
 void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68FC *),
                  void (*initNode)(Node_801C6A20 *, int),
                  Node_801C6A20 *(*add)(List_801C68FC *, Node_801C6A20 *, int),
@@ -114,11 +114,11 @@ void fn_801C6C0C(List_801C68FC *pList, void *item);
 void *fn_801C6C84(List_801C68FC *pList, void *item);
 int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, void *pArg, ListVisitFn_801C6D34 fn, int direction);
 int fn_801C6DCC(List_801C68FC *pList, void *pStart, void *pKey, void *pResult, ListSearchFn_801C6DCC fn);
-int fn_801C74A0(unsigned int count, int size);
-unsigned int fn_801C74C8(NodePool_801C750C *pPool, unsigned int stat);
-NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_801C750C *pPool);
-int fn_801C75B8(NodePool_801C750C *pPool);
-void *fn_801C75F0(NodePool_801C750C *pPool);
-void fn_801C7650(NodePool_801C750C *pPool, void *pNode);
+int DSGetNodeHandlerMemSize(unsigned int count, int size);
+unsigned int DSGetNodeHandlerStat(NodePool_t *pPool, unsigned int stat);
+NodePool_t *DSNewNodeHandler(int heap, unsigned int count, int size, NodePool_t *pPool);
+int DSDelNodeHandler(NodePool_t *pPool);
+void *DSNewNode(NodePool_t *pPool);
+void DSDelNode(NodePool_t *pPool, void *pNode);
 
 #endif

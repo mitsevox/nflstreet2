@@ -5,14 +5,14 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
-#include "game/Level_80054130.h"
-#include "game/Object_800785C0.h"
+#include "game/LevelData.h"
+#include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_8003EC04.h"
-#include "game/cu_80067C10.h"
-#include "game/cu_8007C9D4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Collide.h"
+#include "game/AudmonEvent.h"
+#include "game/GameInfo.h"
+#include "game/Ball.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
@@ -103,14 +103,14 @@ struct Baseline_802E9ADC {
 extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
-int fn_80025708(void);
-Set_8003EE6C *fn_8003A078(void);
+int ChallengeIsActive(void);
+CollideSet_t *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
 void fn_8006F0B8(int a);
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
-int fn_8007B974(void);
+void EnvSelect(int id);
+void EnvRelease(void);
+int EnvIsENVFSet(void);
 void fn_80093C3C(int index, short value, Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D8CC(int index);
@@ -132,7 +132,7 @@ int fn_800C8704(int *pA, int *pB);
 int fn_800C8744(int team);
 void fn_800C87CC(int team, int value);
 void fn_800C9FC0(void);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800D41F8(int team);
 void fn_800D421C(int team, int value);
 int fn_800D42CC(void);
@@ -140,9 +140,9 @@ void fn_800D5F1C(Object_80039F5C *p, int a, int b);
 void fn_8011DF90(void);
 void fn_8011F574(void);
 void fn_80120618(void);
-void fn_8013FAC0(void);
-void fn_8013FB44(void);
-Set_8003EE6C *fn_801442F0(void);
+void CamGameSuspendAll(void);
+void CamGameResumeAll(void);
+CollideSet_t *fn_801442F0(void);
 int fn_801486A0(void);
 int fn_801650DC(Record_80067338 *pRecord);
 void fn_8016F7F8(void);
@@ -398,16 +398,16 @@ extern "C" void fn_8017710C(void)
 {
     unsigned char count = 0;
 
-    if (fn_80054130()) {
+    if (LevelGetData()) {
         unsigned char i;
-        unsigned char total = fn_80054130()->mUnknown136;
-        Record_80054130 *pRecord = fn_80054130()->mUnknown140;
+        unsigned char total = LevelGetData()->mUnknown136;
+        LevelWall_t *pRecord = LevelGetData()->mUnknown140;
 
         for (i = 0; i < total; i++, pRecord++) {
             Point_8017886C a;
             Point_8017886C b;
 
-            fn_800541AC(pRecord, &a, &b);
+            LevelGetWallBase(pRecord, &a, &b);
             if (fn_801784C4()) {
                 Negate(a);
                 Negate(b);
@@ -463,7 +463,7 @@ int Class_802A56E8::vfn_02()
 
 void Class_802A56E8::vfn_03(int team)
 {
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         fn_8009D8CC(4);
         fn_8009D964(4, 0);
     } else {
@@ -546,8 +546,8 @@ int Class_802A56E8::vfn_14()
 {
     int result = 1;
 
-    if (fn_80025708()) {
-        result = fn_800785C0()->mUnknown1B0 == 0;
+    if (ChallengeIsActive()) {
+        result = ChalGetCurrent()->mUnknown1B0 == 0;
     }
     return result;
 }
@@ -556,8 +556,8 @@ int Class_802A56E8::vfn_15()
 {
     int result = 1;
 
-    if (fn_80025708()) {
-        result = fn_800785C0()->mUnknown1B4 == 0;
+    if (ChallengeIsActive()) {
+        result = ChalGetCurrent()->mUnknown1B4 == 0;
     }
     return result;
 }
@@ -605,9 +605,9 @@ void Class_802A56E8::vfn_19()
         fn_800B1508();
         fn_800A8954(0x16, fn_80178308(), 0);
         fn_800535FC();
-        pPlayer = fn_80137B40();
+        pPlayer = BallGetCurrentHolder();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
-            fn_800D5F1C(pPlayer, fn_800D0B90(pPlayer), 0xFF);
+            fn_800D5F1C(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);
         }
         fn_800AD910(4, 0.0f);
     }
@@ -658,12 +658,12 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown08 = 0.0f;
     pState->mUnknown0C.mX = 0.0f;
     pState->mUnknown0C.mY = 0.0f;
-    pState->mUnknownB0 = pState->mUnknown38 = fn_8007CB6C(2);
-    if (fn_80025708()) {
-        pState->mUnknown3C = fn_800785C0()->mUnknown1AC;
-        pState->mUnknown3E = fn_800785C0()->mUnknown1A8;
+    pState->mUnknownB0 = pState->mUnknown38 = GameInfoGet(2);
+    if (ChallengeIsActive()) {
+        pState->mUnknown3C = ChalGetCurrent()->mUnknown1AC;
+        pState->mUnknown3E = ChalGetCurrent()->mUnknown1A8;
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
-        pState->mUnknown30 = fn_800785C0()->mUnknown1C1;
+        pState->mUnknown30 = ChalGetCurrent()->mUnknown1C1;
     } else {
         pState->mUnknown30 = 1;
         pState->mUnknown3C = 0;
@@ -677,14 +677,14 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown3B = 0;
     pState->mUnknownB2 = 0;
     pState->mUnknownB1 = 0;
-    if (!fn_80027DF0()) {
-        fn_8007B684(fn_800A3444());
-        if (fn_8007B974() == 1) {
+    if (!FELoopIsMainFEActive()) {
+        EnvSelect(fn_800A3444());
+        if (EnvIsENVFSet() == 1) {
             pState->mUnknown39 = 1;
         } else {
             pState->mUnknown39 = 0;
         }
-        fn_8007B6D4();
+        EnvRelease();
     } else {
         pState->mUnknown39 = 0;
     }
@@ -802,11 +802,11 @@ extern "C" void fn_80177E6C(int a, int flip)
         FlipSides();
     }
     fn_8003A090();
-    fn_80138270();
-    fn_8003F60C(fn_8003A078());
-    fn_8003F60C(fn_801442F0());
-    fn_8003F60C(fn_80138264());
-    fn_8013FAC0();
+    BallsMirror();
+    CollideSetMirror(fn_8003A078());
+    CollideSetMirror(fn_801442F0());
+    CollideSetMirror(BallGetCollRecords());
+    CamGameSuspendAll();
     if (lbl_803EB444->mUnknown39 == 0) {
         lbl_803EB444->mUnknown39 = 1;
     } else {
@@ -814,7 +814,7 @@ extern "C" void fn_80177E6C(int a, int flip)
     }
     fn_800B1584(0x1E, 0);
     if (a) {
-        fn_8013FB44();
+        CamGameResumeAll();
     }
 }
 
@@ -1432,7 +1432,7 @@ extern "C" void fn_8017916C(void)
     if (kind == 1 || kind == 2) {
         float offset;
         Point_8017886C pos;
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
         Vector_80039F5C ballPos;
 
         if (kind == 1) {
@@ -1443,12 +1443,12 @@ extern "C" void fn_8017916C(void)
         pos.mX = 0.0f;
         pos.mY = fn_80178A2C() - offset;
         fn_801780A8(pos);
-        pBall = fn_801374BC();
-        fn_8013791C(pBall, 6, 0);
+        pBall = BallGetCurrent();
+        BallReleaseStill(pBall, 6, 0);
         ballPos.mX = pos.mX;
         ballPos.mY = pos.mY;
         ballPos.mZ = 0.0f;
-        fn_80137D74(pBall, &ballPos);
+        BallSetPosition(pBall, &ballPos);
         lbl_803EB444->mUnknown3E0 = 1;
     }
 }
@@ -1861,7 +1861,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         }
                         handled = 1;
                         result = 1;
-                        fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                        AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                         fn_8006F0B8(1);
                         fn_801794B4(pRecord->mUnknown0, 0x706F7374, (int)(pRecord->mUnknown10 - startY));
                         fn_801794B4(pRecord->mUnknown0, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
@@ -1873,7 +1873,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                     }
                     if (!handled) {
                         fn_80093C3C(1, 13, fn_8009BCE8(&receiver));
-                        fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                        AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                         fn_8006F0B8(2);
                         fn_8017937C(receiver, 0x6C746467, 1);
                     }
@@ -1909,7 +1909,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             if (mode != 6) {
                 fn_80173EE0(0, startY, 0, carrier, 0);
                 if (dpFlag) {
-                    fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                    AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                 }
             }
             break;
@@ -2182,7 +2182,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 fn_801794B4(pRecord->mUnknown0, 0x70447374, 1);
             }
             if (pRecord->mUnknown4 == 1) {
-                fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
+                AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
             }
             break;
         }

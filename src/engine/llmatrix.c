@@ -4,18 +4,18 @@
 #include "engine/matrix.h"
 #include "engine/llmatrix.h"
 
-extern MatStack_801D0110 *lbl_803EBCC0;
+extern MatStack_t *lbl_803EBCC0;
 
 void fn_8024AA18(float *pA, float *pB, float *pDst);
-void fn_801EB814(float *pMatrix, float *pQuat);
+void QuatToMatrix(float *pMatrix, float *pQuat);
 float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-float fn_801CFFA0(float x);
+float MathInverse(float x);
 
-extern Mtx_801D0110 lbl_803847C0[];
+extern MatMatrix_t lbl_803847C0[];
 
 
 void fn_801D03D0(float *pMatrix)
@@ -52,14 +52,14 @@ void fn_801D0424(float *pDst, float *pSrc)
 
 float *fn_801D0444(void)
 {
-    MatStack_801D0110 *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = lbl_803EBCC0;
 
     return pStack->mDepth ? pStack->mpMatrices[pStack->mTop] : 0;
 }
 
 void fn_801D0470(unsigned int index)
 {
-    lbl_803EBCC0 = fn_801D0110(index);
+    lbl_803EBCC0 = MatGetStackPtrFromIndex(index);
 }
 
 void fn_801D0494(void)
@@ -70,7 +70,7 @@ void fn_801D0494(void)
 
 void fn_801D04C4(void)
 {
-    MatStack_801D0110 *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = lbl_803EBCC0;
 
     pStack->mTop++;
     fn_801D0424(pStack->mpMatrices[pStack->mTop], pStack->mpMatrices[pStack->mTop - 1]);
@@ -78,7 +78,7 @@ void fn_801D04C4(void)
 
 void fn_801D0508(void)
 {
-    MatStack_801D0110 *pStack = lbl_803EBCC0;
+    MatStack_t *pStack = lbl_803EBCC0;
 
     pStack->mTop++;
     fn_801D03D0(pStack->mpMatrices[pStack->mTop]);
@@ -183,7 +183,7 @@ void fn_801D0860(float *pQuat)
     float *pCurrent;
 
     fn_801D03D0(m);
-    fn_801EB814(m, pQuat);
+    QuatToMatrix(m, pQuat);
     pCurrent = fn_801D0444();
     fn_801D058C(m, pCurrent, m);
     pCurrent[0] = m[0];
@@ -406,7 +406,7 @@ void fn_801D0FFC(int *pAngles, float *pMatrix)
     }
     cy = fn_80260B1C(1.0f - t);
     if (!(cy <= 1e-07f)) {
-        inv = fn_801CFFA0(cy);
+        inv = MathInverse(cy);
         sx = pMatrix[9] * inv;
         cx = pMatrix[10] * inv;
         sz = pMatrix[4] * inv;

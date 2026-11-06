@@ -31,49 +31,49 @@ typedef struct TDbParseInfo_801FC9D4 {
     int mUnknown18;
     unsigned int mUnknown1C;
     unsigned int mColRefCount;
-    TDbLitRef_80205754 *mColRefs;
+    TDbLitRef_t *mColRefs;
     TDbSQLVar_801FD47C *mVars;
     unsigned int mTableRefCount;
     TDbSQLTableRef_801FDC18 *mTableRefs;
-    TDbExpr_801FAA00 *mWhere;
+    TDbExpr_t *mWhere;
     unsigned int mExprCount;
-    TDbExpr_801FAA00 *mExprs;
+    TDbExpr_t *mExprs;
     TDbLexer_801FCE10 mLexer;
 } TDbParseInfo_801FC9D4;
 
 extern TDbSQLPool_801FC9D4 lbl_8039B43C[5];
 
-extern int fn_801F9718(int db, unsigned int tableId, TDbLitRef_80205754 *pColRefs, struct QueryResult *pResult,
+extern int fn_801F9718(int db, unsigned int tableId, TDbLitRef_t *pColRefs, struct QueryResult *pResult,
                        int a);
 extern int fn_801F97D0(int db, unsigned int tableId, int srcDb, int srcTable, struct QueryResult *pResult,
                        int a);
-extern int fn_801F9858(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere,
-                       TDbLitRef_80205754 *pColRefs, int srcDb, int srcTable, struct QueryResult *pResult,
+extern int fn_801F9858(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbLitRef_t *pColRefs, int srcDb, int srcTable, struct QueryResult *pResult,
                        int a);
-extern int fn_801F9908(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere,
+extern int fn_801F9908(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        struct QueryResult *pResult, int a);
-extern int fn_801F9AB8(int db, unsigned int tableId, TDbColumn_801FAA00 *pColumns, unsigned int *pCount);
-extern int fn_801F9D70(int handle, int table, TDbExpr_801FAA00 *pFilter, unsigned short *pCount);
-extern int fn_801F9E84(int db, unsigned int tableId, unsigned int index, TDbIdxColumnDef_801FFFC4 *pOrder,
-                       TDbExpr_801FAA00 *pWhere, unsigned char unique);
-extern int fn_801FA0BC(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere, void *pOrder,
+extern int fn_801F9AB8(int db, unsigned int tableId, TDbColumn_t *pColumns, unsigned int *pCount);
+extern int fn_801F9D70(int handle, int table, TDbExpr_t *pFilter, unsigned short *pCount);
+extern int fn_801F9E84(int db, unsigned int tableId, unsigned int index, TDbIdxColumnDef_t *pOrder,
+                       TDbExpr_t *pWhere, unsigned char unique);
+extern int fn_801FA0BC(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere, void *pOrder,
                        int *pCursor, struct QueryResult *pResult);
 extern int fn_801FA148(int cursor);
 extern int fn_801FA228(int handle, int a, int b, void *pRecord);
-extern int fn_801FA290(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere,
-                       TDbLitRef_80205754 *pColRefs);
-extern int fn_801FA3A0(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere,
-                       TDbLitRef_80205754 *pColRefs, struct QueryResult *pResult, int a);
+extern int fn_801FA290(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbLitRef_t *pColRefs);
+extern int fn_801FA3A0(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
+                       TDbLitRef_t *pColRefs, struct QueryResult *pResult, int a);
 extern int fn_801FA5EC(int db, int b, int cursor, void *pRow, struct QueryResult *pResult);
-extern int fn_801FA844(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_801FAA00 *pWhere,
+extern int fn_801FA844(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        unsigned long long column, TDbSQLAggregate_8020071C *pAgg, struct QueryResult *pResult);
-extern void fn_8020CCBC(TDbLitRef_80205754 *pLits, unsigned long long *pOut);
+extern void TDbUtilFillTableColRefsForTableColLits(TDbLitRef_t *pLits, unsigned long long *pOut);
 
 void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo);
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_801FAA00 **ppExpr);
+int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t **ppExpr);
 void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo);
 void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, struct QueryResult *pResult);
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_801FFFC4 *pOrder,
+int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count);
 void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResult);
 
@@ -86,7 +86,7 @@ static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned i
     pPool->mCount = count;
     if (count != 0) {
         TDbMemNotify_801FC9D4(0, -1, -1);
-        err = fn_8020D1B0(lbl_803EBE8C, count * itemSize, &pPool->mItems);
+        err = TDbExtMemAlloc(lbl_803EBE8C, count * itemSize, &pPool->mItems);
         TDbMemNotify_801FC9D4(4, -1, -1);
         return err;
     }
@@ -96,7 +96,7 @@ static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned i
 static inline void TDbSQLPoolFree_801FCD04(TDbSQLPool_801FC9D4 *pPool)
 {
     if (pPool->mCount != 0 && pPool->mItemSize != 0) {
-        fn_8020D2AC(lbl_803EBE8C, pPool->mItems, pPool->mItemSize * pPool->mCount);
+        TDbExtMemFree(lbl_803EBE8C, pPool->mItems, pPool->mItemSize * pPool->mCount);
     }
 }
 
@@ -148,7 +148,7 @@ int fn_801FC9D4(int parseCount, int colRefCount, int countC, int tableRefCount, 
 
     err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[2], 0xC, countC);
     if (err == 0) {
-        err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[1], sizeof(TDbLitRef_80205754), colRefCount);
+        err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[1], sizeof(TDbLitRef_t), colRefCount);
         if (err == 0) {
             err = TDbSQLPoolInit_801FC9D4(&lbl_8039B43C[4], 0x28, countE);
             if (err == 0) {
@@ -241,10 +241,10 @@ void fn_801FD0A4(TDbParseInfo_801FC9D4 *pInfo)
 
 void fn_801FD0E0(int db, TDbParseInfo_801FC9D4 *pInfo, unsigned char *pData, int size)
 {
-    TDbColumn_801FAA00 columns[0xFE];
+    TDbColumn_t columns[0xFE];
     unsigned int count;
-    TDbColumn_801FAA00 *pColumn;
-    TDbLitRef_80205754 *pRef;
+    TDbColumn_t *pColumn;
+    TDbLitRef_t *pRef;
 
     count = 0xFE;
     memset(pData, 0, size);
@@ -279,9 +279,9 @@ void fn_801FD200(int db, TDbParseInfo_801FC9D4 *pInfo, void *pOrder, struct Quer
     if (pResult->mUnknown4 == 0 || pResult->mUnknown4 == 0x17 || pResult->mUnknown4 == 0x15 || pResult->mUnknown4 == 0x14) {
         if (pInfo->mColRefCount == 0) {
             fn_801FD0E0(db, pInfo, literals, sizeof(literals));
-            fn_8020CCBC(pInfo->mColRefs, row);
+            TDbUtilFillTableColRefsForTableColLits(pInfo->mColRefs, row);
         } else {
-            fn_8020CCBC(pInfo->mColRefs, row);
+            TDbUtilFillTableColRefsForTableColLits(pInfo->mColRefs, row);
         }
         pResult->mUnknown4 = fn_801FA5EC(pInfo->mUnknown14, pInfo->mUnknown18, cursor, row, pResult);
     }
@@ -385,7 +385,7 @@ int fn_801FD47C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_80205754 *pRef,
+int fn_801FD97C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar, int mode)
 {
     unsigned int table;
@@ -438,7 +438,7 @@ int fn_801FDA78(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
 int fn_801FDC18(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
 {
     TDbSQLTableRef_801FDC18 *pRef;
-    TDbExpr_801FAA00 *pExpr;
+    TDbExpr_t *pExpr;
     unsigned int n;
 
     while (pLexer->mTokens[1].mType == 0x1A || pLexer->mTokens[1].mType == 0x18) {
@@ -492,7 +492,7 @@ int fn_801FDDC8(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbValue_801FDF28 *pValue)
+int fn_801FDF28(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbValue_t *pValue)
 {
     unsigned int table;
     unsigned int column;
@@ -589,7 +589,7 @@ int fn_801FE484(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_801FAA00 *pExpr)
+int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t *pExpr)
 {
     result = fn_801FDF28(pInfo, pLexer, result, &pExpr->mLeft);
     result = fn_801FDDC8(pInfo, pLexer, result, (unsigned int *)&pExpr->mOp);
@@ -605,12 +605,12 @@ int fn_801FE534(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_801FAA00 **ppExpr)
+int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbExpr_t **ppExpr)
 {
     TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
-    TDbExpr_801FAA00 *pExpr;
-    TDbExpr_801FAA00 *pRight;
-    TDbExpr_801FAA00 *pAnd;
+    TDbExpr_t *pExpr;
+    TDbExpr_t *pRight;
+    TDbExpr_t *pAnd;
     int op;
     unsigned int n;
 
@@ -621,7 +621,7 @@ int fn_801FE5E0(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
         TDbLexNext_801FD3C0(pLexer);
     } else if (pNext->mType == 0xF) {
         TDbLexNext_801FD3C0(pLexer);
-        *ppExpr = pExpr = va_arg(pInfo->mArgs, TDbExpr_801FAA00 *);
+        *ppExpr = pExpr = va_arg(pInfo->mArgs, TDbExpr_t *);
     } else {
         n = pInfo->mExprCount++;
         TDbSQLPoolAdd_801FD0E0(&lbl_8039B43C[4], 1);
@@ -690,7 +690,7 @@ int fn_801FE8DC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
     return result;
 }
 
-int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_80205754 *pRef,
+int fn_801FEA04(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbLitRef_t *pRef,
                 TDbSQLVar_801FD47C *pVar)
 {
     unsigned int table;
@@ -808,7 +808,7 @@ int fn_801FF0D4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
 
 int fn_801FF13C(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result)
 {
-    TDbLitRef_80205754 *pRef;
+    TDbLitRef_t *pRef;
     unsigned int n;
     unsigned int op;
 
@@ -1036,7 +1036,7 @@ int fn_801FFB68(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int res
 
 void fn_801FFDA8(TDbParseInfo_801FC9D4 *pInfo)
 {
-    TDbLitRef_80205754 *pRef = pInfo->mColRefs;
+    TDbLitRef_t *pRef = pInfo->mColRefs;
     TDbSQLVar_801FD47C *pVar = pInfo->mVars;
     void *pDst;
 
@@ -1083,7 +1083,7 @@ void fn_801FFE88(TDbParseInfo_801FC9D4 *pInfo)
 {
     unsigned int id = pInfo->mTableRefs->mId;
     unsigned int i = pInfo->mColRefCount;
-    TDbLitRef_80205754 *pRef;
+    TDbLitRef_t *pRef;
 
     if (i != 0) {
         i--;
@@ -1104,7 +1104,7 @@ static inline unsigned long long TDbColumnValue_801FFEE4(unsigned int table, uns
 void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo)
 {
     unsigned int id = pInfo->mTableRefs->mId;
-    TDbExpr_801FAA00 *pExpr = pInfo->mExprs;
+    TDbExpr_t *pExpr = pInfo->mExprs;
     unsigned int i;
 
     for (i = 0; i < pInfo->mExprCount; i++, pExpr++) {
@@ -1120,7 +1120,7 @@ void fn_801FFEE4(TDbParseInfo_801FC9D4 *pInfo)
 
 void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, struct QueryResult *pResult)
 {
-    TDbIdxColumnDef_801FFFC4 order[8];
+    TDbIdxColumnDef_t order[8];
     unsigned char unique;
     struct QueryCursor *pCursor;
     int db = 0;
@@ -1236,7 +1236,7 @@ void fn_801FFFC4(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int re
     }
 }
 
-int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_801FFFC4 *pOrder,
+int fn_802004CC(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_801FCE10 *pLexer, int result, TDbIdxColumnDef_t *pOrder,
                 int count)
 {
     TDbToken_801FD2E8 *pNext = &pLexer->mTokens[1];
@@ -1289,9 +1289,9 @@ void fn_8020071C(int db, TDbParseInfo_801FC9D4 *pInfo, struct QueryResult *pResu
 {
     TDbSQLAggregate_8020071C agg;
     int map[4];
-    TDbLitRef_80205754 *pRef = pInfo->mColRefs;
-    TDbLitRef_80205754 *pNextRef;
-    TDbLitRef_80205754 *pCur;
+    TDbLitRef_t *pRef = pInfo->mColRefs;
+    TDbLitRef_t *pNextRef;
+    TDbLitRef_t *pCur;
     unsigned char i = 0;
     unsigned char j;
     int done = 1;

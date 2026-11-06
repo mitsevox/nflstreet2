@@ -5,7 +5,7 @@
 #include "game/cu_8018422C.h"
 #include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
-#include "game/Record_80021154.h"
+#include "game/TextRecord.h"
 #include "game/fn_80191948.h"
 #include "game/cu_8017F90C.h"
 
@@ -36,9 +36,9 @@ int fn_801D46E8(int slot);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
 int fn_801F7ABC(void);
 void fn_801F8838(void);
-void fn_80032220(void);
-void fn_80032240(short a);
-void fn_80032250(short a, char *pBuf);
+void FeatClearEAGameSaves(void);
+void FeatSetEAGameSave(short a);
+void FeatGetEAGameCode(short a, char *pBuf);
 unsigned int fn_80029838(int a);
 int fn_80029B48(int a);
 void fn_80029E6C(int a, int b);
@@ -57,8 +57,8 @@ void fn_80029D28(int type, int index);
 int fn_8002A130(int a, int b);
 int fn_8002A2A4(int type, int index);
 int fn_8002A86C(int value, int type, const char *name, unsigned int *pIndex);
-int fn_80191810(int a);
-void fn_80193DC4(int *pA, int *pB);
+int MemCardUtilGetSaveType(int a);
+void MemCardGetNewSaveSpace(int *pA, int *pB);
 int fn_801D6850(void);
 }
 
@@ -91,7 +91,7 @@ void fn_80184234(int a, int *pB, int *pC)
     fn_801D65B4(0);
     fn_801D654C(1);
     fn_801D6714(0);
-    fn_80032220();
+    FeatClearEAGameSaves();
     if (lbl_803EB590 != 0) {
         lbl_803EB590(a, &unused);
     }
@@ -330,7 +330,7 @@ void fn_801849D4(int a)
     if (a <= 5) {
         char name[8];
 
-        fn_80032250(a, name);
+        FeatGetEAGameCode(a, name);
         fn_801D685C(name, 1);
         fn_801D6650(10);
     }
@@ -358,7 +358,7 @@ int fn_80184A7C(int a)
 void fn_80184A90(int a, int b)
 {
     if (b > 0) {
-        fn_80032240(a);
+        FeatSetEAGameSave(a);
     }
 }
 
@@ -472,7 +472,7 @@ void fn_80184E7C(int a, int b)
     }
 }
 
-void fn_80184ED0(Record_80021154 *pRecord)
+void fn_80184ED0(TextRecord_t *pRecord)
 {
     char name[32];
 
@@ -540,7 +540,7 @@ int fn_80185038(int *pSlot)
     return 1;
 }
 
-void fn_801850CC(int a, Record_80021154 *pRecord)
+void fn_801850CC(int a, TextRecord_t *pRecord)
 {
     fn_801D57E0(a, pRecord->mUnknown8, pRecord->mUnknown4);
 }
@@ -573,7 +573,7 @@ void fn_80185170(int a, int b)
     fn_801D67E4(name, 0);
 }
 
-void fn_801851A4(Callbacks_802F462C *pCallbacks)
+void fn_801851A4(MemCardListCallbacks_t *pCallbacks)
 {
     lbl_803EB590 = pCallbacks->mUnknown0;
     lbl_803EB594 = pCallbacks->mUnknown4;
@@ -673,7 +673,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         fn_801847A4(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 348:
-        *pResult = fn_80191810(pParams->mUnknown0);
+        *pResult = MemCardUtilGetSaveType(pParams->mUnknown0);
         break;
     case 349:
         fn_80184548();
@@ -761,7 +761,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         break;
     case 504:
         *pResult = 0;
-        if (fn_80027DF0() != 0) {
+        if (FELoopIsMainFEActive() != 0) {
             int type = pParams->mUnknown0;
             int index = pParams->mUnknown4;
             char name[17];
@@ -801,7 +801,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         *pResult = fn_8002A130(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 530:
-        fn_80193DC4((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
+        MemCardGetNewSaveSpace((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
         break;
     case 531:
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
@@ -834,7 +834,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         fn_80029D28(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 34:
-        fn_80184ED0((Record_80021154 *)pParams->mUnknown0);
+        fn_80184ED0((TextRecord_t *)pParams->mUnknown0);
         break;
     case 318:
         fn_80185170(pParams->mUnknown0, pParams->mUnknown4);
@@ -854,7 +854,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         *pResult = fn_80185038((int *)pParams->mUnknown0);
         break;
     case 186:
-        fn_801850CC(pParams->mUnknown0, (Record_80021154 *)pParams->mUnknown4);
+        fn_801850CC(pParams->mUnknown0, (TextRecord_t *)pParams->mUnknown4);
         break;
     case 159:
         fn_80184F60(pParams->mUnknown0, pParams->mUnknown4);

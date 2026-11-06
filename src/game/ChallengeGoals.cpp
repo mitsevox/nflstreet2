@@ -1,0 +1,645 @@
+/* Challenge goals: checks each goal of the current challenge (score margins, team stats, the winner) during and after the game, and sends the goal list to the screens. */
+
+#include "game/Entry_80219044.h"
+#include "game/Challenge.h"
+#include "game/AudmonEvent.h"
+#include "game/fn_8007F828.h"
+#include "game/fn_801C1F94.h"
+#include "game/fn_8021D7B8.h"
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
+
+/* Result list sent with message 0x80000083: a two-word header followed by
+   the four results copied by ChallengeSendGoalList. */
+struct ChallengeGoalResults_t {
+    int mUnknown0;
+    int mUnknown4;
+    int mResults[4];
+};
+
+extern "C" {
+extern void *lbl_803EB688;
+
+int ChallengeHasGoalType(Challenge_t *pRecord, int type, int *pValue);
+int ChallengeIsActive(void);
+int ChallengeEvaluateGoal(int side, Challenge_t *pRecord, int index);
+unsigned char ChallengeCountGoals(Challenge_t *pRecord);
+
+void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size);
+int ChalCheckGoal(int side, Challenge_t *pRecord, int index, int *pResult);
+int ChalCheckMedalGoal(int side, ChalMedalGoal_t *pInfo);
+int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
+int ChalHasMedalGoal(Challenge_t *pRecord);
+int fn_800A7E40(unsigned char side);
+int fn_800D41F8(int side);
+unsigned char fn_80174160(void);
+int fn_80177F70(void);
+int fn_80178308(void);
+int fn_80178348(void);
+int fn_801787DC(unsigned char side);
+int fn_801788D8(int *pValue);
+int fn_80178AE0(void);
+int fn_8022B7A4(int handle, int tag, void *pValue);
+
+static int _Challenge_iMode = 3;
+static Entry_80219044 _Challenge_aGoalEntries[4];
+static char _Challenge_aszGoalText[4][64];
+static ChallengeGoalResults_t _Challenge_GoalResults;
+
+int ChallengeGoalCheckWinner(int side);
+
+int ChallengeGoalCheckMargin(int side, int limit, int flag)
+{
+    int value;
+    int result;
+    int own;
+    int other;
+
+    result = 2;
+    switch (fn_801788D8(&value)) {
+    case 0:
+        own = fn_801787DC(side);
+        other = fn_801787DC((side + 1) & 1);
+        break;
+    case 1:
+        own = fn_800D41F8(side);
+        other = fn_800D41F8((side + 1) & 1);
+        break;
+    default:
+        return 2;
+    }
+    if (flag) {
+        result = ChallengeGoalCheckWinner(side);
+        if (result == 0) {
+            if (own - other < limit) {
+                result = 1;
+            }
+        } else if (result == 2) {
+            if (fn_8007F828(14) == 0 && value + 5 - limit < other) {
+                result = 1;
+            }
+        }
+    } else if (own - other >= limit) {
+        result = 0;
+    }
+    return result;
+}
+
+int ChallengeGoalCheckWinner(int side)
+{
+    int result = fn_80178AE0();
+
+    if (result == 2) {
+        return 2;
+    }
+    if (result == side) {
+        return 0;
+    }
+    return 1;
+}
+
+int ChallengeGoalCheckPointsMin(int side, int value)
+{
+    return fn_800D41F8(side) < value ? 2 : 0;
+}
+
+int ChallengeGoalCheckSpstMax(int side, unsigned int value)
+{
+    unsigned int stat;
+
+    fn_8022B7A4(side, 0x73707374, &stat);
+    if (stat >= value) {
+        int current = fn_80174160();
+
+        if (current != side || fn_80178308() != current) {
+            return 3;
+        }
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckNsstTotal(int side, int other, unsigned int value)
+{
+    unsigned int a;
+    unsigned int b;
+    unsigned int total;
+
+    fn_8022B7A4(side, 0x6E737374, &a);
+    fn_8022B7A4(other, 0x6E737374, &b);
+    total = a + b;
+    if (total > value) {
+        return 1;
+    }
+    if (total == value) {
+        return 3;
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckOpponentTally(int side)
+{
+    if (fn_800A7E40((side + 1) & 1)) {
+        return 1;
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckTallyMin(int side, unsigned int value)
+{
+    return fn_800A7E40(side) < value ? 2 : 0;
+}
+
+int ChallengeGoalCheckScoreStats(int side, unsigned int value)
+{
+    unsigned int a;
+    unsigned int b;
+    unsigned int c;
+
+    fn_8022B7A4(side, 0x74727374, &a);
+    fn_8022B7A4(side, 0x74507374, &b);
+    fn_8022B7A4(side, 0x64647374, &c);
+    if (fn_800B65A0(side) == 0xFF) {
+        return a + b + c > value;
+    }
+    return a + b + c < value ? 2 : 0;
+}
+
+int ChallengeGoalCheckScoreMin(int side, unsigned int value)
+{
+    return fn_801787DC(side) < value ? 2 : 0;
+}
+
+int ChallengeGoalCheckScoreAbove(int side, unsigned int value)
+{
+    int mode;
+    unsigned int own;
+
+    switch (fn_801788D8(&mode)) {
+    case 0:
+        own = fn_801787DC(side);
+        break;
+    case 1:
+        own = fn_800D41F8(side);
+        break;
+    default:
+        return 2;
+    }
+    if (own > value) {
+        return 1;
+    }
+    if (ChalGetCurrent()->mUnknown1A4 != 0 && ChallengeCountGoals(ChalGetCurrent()) == 1) {
+        if (fn_8009D990(4) == 0) {
+            return 0;
+        }
+        return 2;
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckSpstReached(int side, unsigned int value, int flag)
+{
+    unsigned int stat;
+
+    fn_8022B7A4(side, 0x73707374, &stat);
+    if (stat >= value) {
+        int current = fn_80174160();
+
+        if (current != side || fn_80178308() != current ||
+            (flag && fn_80177F70() == 6)) {
+            return 3;
+        }
+    }
+    return 2;
+}
+
+int ChallengeGoalCheckNsstReached(int side, int other, unsigned int value)
+{
+    unsigned int a;
+    unsigned int b;
+
+    fn_8022B7A4(side, 0x6E737374, &a);
+    fn_8022B7A4(other, 0x6E737374, &b);
+    if (a + b >= value) {
+        return 3;
+    }
+    return 2;
+}
+
+int ChallengeGoalCheckLeading(int side, int value)
+{
+    int mode;
+    int own;
+    int other;
+
+    switch (fn_801788D8(&mode)) {
+    case 0:
+        own = fn_801787DC(side);
+        other = fn_801787DC((side + 1) & 1);
+        break;
+    case 1:
+        own = fn_800D41F8(side);
+        other = fn_800D41F8((side + 1) & 1);
+        break;
+    default:
+        return 2;
+    }
+    if (own > other) {
+        if (ChalGetCurrent()->mUnknown1A4 != 0) {
+            if (fn_8009D990(4) == 0) {
+                return 0;
+            }
+            return 2;
+        }
+        return 0;
+    }
+    return 2;
+}
+
+int ChallengeGoalCheckApstRatio(int side, unsigned int value)
+{
+    int a;
+    int b;
+    unsigned int scaled;
+
+    fn_8022B7A4(side, 0x61707374, &a);
+    fn_8022B7A4(side, 0x6E737374, &b);
+    scaled = (float)a / (float)b * 100.0f;
+    return scaled < value ? 2 : 0;
+}
+
+int ChallengeGoalCheckTrstOrTpst(int side, int value)
+{
+    unsigned int a;
+    unsigned int b;
+
+    fn_8022B7A4(side, 0x74507374, &a);
+    fn_8022B7A4(side, 0x74727374, &b);
+    if (b != 0 || a != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckSpstVsScoreStats(int side, int value)
+{
+    int a;
+    int b;
+    int c;
+    int total;
+
+    fn_8022B7A4(side, 0x73707374, &a);
+    fn_8022B7A4(side, 0x74507374, &b);
+    fn_8022B7A4(side, 0x74727374, &c);
+    total = b + c;
+    if (total >= a) {
+        return 0;
+    }
+    if (total == a - 1 && fn_80174160() == side && fn_80178308() == side) {
+        return 2;
+    }
+    return 1;
+}
+
+int ChallengeGoalCheckScoreStatsZero(int side)
+{
+    unsigned int a;
+    unsigned int b;
+    unsigned int c;
+    unsigned int d;
+
+    fn_8022B7A4(side, 0x74727374, &a);
+    fn_8022B7A4(side, 0x74507374, &b);
+    fn_8022B7A4(side, 0x64647374, &c);
+    fn_8022B7A4(side, 0x64317374, &d);
+    if (fn_800B65A0(side) != 0xFF) {
+        if (a == 0 && b == 0 && c == 0 && d == 0) {
+            return 2;
+        }
+    } else if (a != 0 || b != 0 || c != 0 || d != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+int ChallengeGoalCheckApstMinusCpst(int side, unsigned int value)
+{
+    unsigned int a;
+    unsigned int b;
+
+    fn_8022B7A4(side, 0x61707374, &a);
+    fn_8022B7A4(side, 0x63707374, &b);
+    return a - b > value;
+}
+
+unsigned char ChallengeCountGoals(Challenge_t *pRecord)
+{
+    unsigned char count = 0;
+    int i;
+
+    for (i = 0; i < 4; i++) {
+        if (pRecord->mUnknown1C4[i].mType != 0) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int ChallengeHasGoalType(Challenge_t *pRecord, int type, int *pValue)
+{
+    return ChalFindGoalValue(pRecord, type, pValue);
+}
+
+int ChallengeEvaluateGoals(void)
+{
+    int counts[4];
+
+    if (ChallengeIsActive()) {
+        Challenge_t *pRecord = ChalGetCurrent();
+        int result = 7;
+        int active = ChalHasMedalGoal(pRecord);
+        int side = fn_800B65A0(0) == 0xFF;
+        int i;
+
+        fn_801C1F94(counts, 0, sizeof(counts));
+        for (i = 0; i < 4; i++) {
+            counts[ChallengeEvaluateGoal(side, pRecord, i)]++;
+        }
+        if (active) {
+            result = ChalCheckMedalGoal(side, &pRecord->mUnknown20C);
+        }
+        if (counts[1] > 0) {
+            return 1;
+        }
+        if (counts[0] + counts[3] == 4) {
+            int ret = 0;
+
+            if (active && result != 0) {
+                ret = counts[3] == 0 ? 2 : 0;
+            }
+            return ret;
+        }
+        if (counts[3] <= 0) {
+            return 2;
+        }
+        return 1;
+    }
+    switch (fn_80178AE0()) {
+    case 0:
+        return 1;
+    case 1:
+        return 0;
+    }
+    return 2;
+}
+
+int ChallengeIsDecided(int *pResult)
+{
+    int result = ChallengeEvaluateGoals();
+    int done = 1;
+
+    if (result == 2) {
+        done = 0;
+    }
+    if (pResult) {
+        *pResult = result;
+    }
+    return done;
+}
+
+int ChallengeEvaluateBonus(void)
+{
+    int result = 7;
+
+    if (ChallengeIsActive()) {
+        Challenge_t *pRecord = ChalGetCurrent();
+
+        if (ChalHasMedalGoal(pRecord)) {
+            result = ChalCheckMedalGoal(fn_800B65A0(0) == 0xFF, &pRecord->mUnknown20C);
+        }
+    }
+    return result;
+}
+
+void ChallengeSetMode(int mode)
+{
+    _Challenge_iMode = mode;
+}
+
+int ChallengeGetMode(void)
+{
+    return _Challenge_iMode;
+}
+
+int ChallengeIsActive(void)
+{
+    return _Challenge_iMode == 0;
+}
+
+int ChallengeIsPairingGame(void)
+{
+    return _Challenge_iMode == 1;
+}
+
+void ChallengePostOutcome(void)
+{
+    int result;
+
+    if (ChallengeIsDecided(&result)) {
+        if (result == 0) {
+            AudmonEventPostArgs(0x5E, 0, fn_800B65A0(0) == 0xFF, 0, 0);
+        } else if (result == 1) {
+            AudmonEventPostArgs(0x5D, 0, fn_80178348(), 0, 0);
+        }
+    }
+}
+
+int ChallengeEvaluateGoal(int side, Challenge_t *pRecord, int index)
+{
+    int result = 2;
+    int type = pRecord->mUnknown1C4[index].mType;
+    int value = pRecord->mUnknown1C4[index].mValue;
+    int opposite = side == 0;
+
+    if (ChalCheckGoal(side, pRecord, index, &result) == 0) {
+        switch (type) {
+        case 1:
+            if (ChallengeHasGoalType(pRecord, 2, 0)) {
+                result = ChallengeGoalCheckMargin(side, value, 1);
+            } else {
+                result = ChallengeGoalCheckMargin(side, value, 0);
+            }
+            break;
+        case 2:
+            result = ChallengeGoalCheckWinner(side);
+            break;
+        case 3:
+            result = ChallengeGoalCheckPointsMin(side, value);
+            break;
+        case 7:
+            result = ChallengeGoalCheckSpstMax(side, value);
+            break;
+        case 6:
+            result = ChallengeGoalCheckNsstTotal(side, opposite, value);
+            break;
+        case 20:
+            result = ChallengeGoalCheckOpponentTally(side);
+            break;
+        case 31:
+            result = ChallengeGoalCheckTallyMin(side, value);
+            break;
+        case 41:
+            result = ChallengeGoalCheckScoreStats(side, value);
+            break;
+        case 42:
+            result = ChallengeGoalCheckScoreMin(side, value);
+            break;
+        case 45:
+            result = ChallengeGoalCheckScoreStats(opposite, value);
+            break;
+        case 46:
+            result = ChallengeGoalCheckScoreAbove(opposite, value);
+            break;
+        case 47:
+        case 48:
+            break;
+        case 50:
+            result = ChallengeGoalCheckSpstMax(opposite, value);
+            break;
+        case 52:
+            result = ChallengeGoalCheckSpstReached(opposite, value, 0);
+            break;
+        case 53:
+            result = ChallengeGoalCheckNsstReached(side, opposite, value);
+            break;
+        case 56:
+            if (ChallengeHasGoalType(pRecord, 68, 0)) {
+                result = ChallengeGoalCheckSpstReached(side, value, 1);
+            } else {
+                result = ChallengeGoalCheckSpstReached(side, value, 0);
+            }
+            break;
+        case 55:
+            result = ChallengeGoalCheckLeading(side, value);
+            break;
+        case 58:
+            result = ChallengeGoalCheckApstRatio(side, value);
+            break;
+        case 60:
+            result = ChallengeGoalCheckTrstOrTpst(side, value);
+            break;
+        case 68:
+            result = ChallengeGoalCheckSpstVsScoreStats(side, value);
+            break;
+        case 71:
+            result = ChallengeGoalCheckScoreStatsZero(opposite);
+            break;
+        case 72:
+            result = ChallengeGoalCheckScoreStatsZero(side);
+            break;
+        case 74:
+            result = ChallengeGoalCheckApstMinusCpst(side, value);
+            break;
+        }
+    }
+    return result;
+}
+
+int ChallengeHasRecordFlag(void)
+{
+    int result = 0;
+
+    if (ChallengeIsActive() && ChalGetCurrent()->mUnknown1C3 != 0) {
+        result = 1;
+    }
+    return result;
+}
+
+int ChallengeGetGoalTexts(int *pResults, char (*pText)[64])
+{
+    unsigned char i;
+    Challenge_t *pRecord;
+    int count;
+
+    for (i = 0; i <= 3; i++) {
+        pText[i][0] = 0;
+        pResults[i] = -1;
+    }
+    pRecord = ChalGetCurrent();
+    count = 0;
+    for (i = 0; i <= 3; i++) {
+        ChalGoal_t *pEntry = &pRecord->mUnknown1C4[i];
+
+        if (pEntry->mType != 0 && pEntry->mUnknown8 != 0) {
+            ChalFormatGoalProgress(pEntry->mType, pEntry->mValue, pText[count], 64);
+            switch (pEntry->mType) {
+            case 6:
+            case 7:
+            case 21:
+            case 38:
+            case 39:
+            case 40:
+            case 46:
+            case 50:
+            case 52:
+            case 53:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 73:
+            case 74:
+                pResults[count] = -1;
+                break;
+            default:
+                switch (ChallengeEvaluateGoal(1, pRecord, i)) {
+                case 0:
+                case 3:
+                    pResults[count] = 1;
+                    break;
+                default:
+                    pResults[count] = 0;
+                    break;
+                }
+                break;
+            }
+            count++;
+        }
+    }
+    return count;
+}
+
+void ChallengeSendGoalList(int flag)
+{
+    if (ChallengeIsActive()) {
+        int results[4];
+        Arg_8021D7B8 args[7];
+        unsigned char i;
+        int count;
+
+        for (i = 0; i <= 3; i++) {
+            _Challenge_aszGoalText[i][0] = 0;
+            results[i] = -1;
+        }
+        count = 0;
+        if (flag) {
+            count = ChallengeGetGoalTexts(results, _Challenge_aszGoalText);
+        }
+        args[0].i = flag;
+        args[1].i = count;
+        for (i = 0; i <= 3; i++) {
+            _Challenge_aGoalEntries[i].mUnknown0 = 0;
+            _Challenge_aGoalEntries[i].mpText = _Challenge_aszGoalText[i];
+            _Challenge_aGoalEntries[i].mLength = 63;
+            args[i + 2].p = &_Challenge_aGoalEntries[i];
+            _Challenge_GoalResults.mResults[i] = results[i];
+        }
+        _Challenge_GoalResults.mUnknown0 = 1;
+        _Challenge_GoalResults.mUnknown4 = 4;
+        args[6].p = &_Challenge_GoalResults;
+        if (count > 0 || !flag) {
+            fn_8021D7B8(lbl_803EB688, 0x80000083, 7, args);
+        }
+    }
+}
+
+}

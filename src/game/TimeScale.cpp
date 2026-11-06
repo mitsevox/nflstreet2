@@ -1,7 +1,7 @@
 #include "game/TimeScale.h"
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 void fn_8006CCA8(float value);
 }
@@ -12,7 +12,7 @@ static float sStep = 0.0f;
 
 void TimeScaleReset()
 {
-    lbl_803EA2C4 = 1.0f;
+    gFrameTimeScale = 1.0f;
     fn_8006CCA8(1.0f);
     sCurrent = 1.0f;
     sTarget = 1.0f;
@@ -28,7 +28,7 @@ void TimeScaleUpdate()
             sCurrent = sTarget;
             sStep = 0.0f;
         }
-        lbl_803EA2C4 = sCurrent;
+        gFrameTimeScale = sCurrent;
         fn_8006CCA8(sCurrent);
     }
 }

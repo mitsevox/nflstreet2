@@ -2,9 +2,9 @@
 #define GAME_OBJECT_80040818_H
 
 #include "game/Object_8003DEC4.h"
-#include "game/cu_80041210.h"
-#include "game/cu_80136B1C.h"
-#include "game/fn_80054138.h"
+#include "game/BigObjInst.h"
+#include "game/Ball.h"
+#include "game/LevelSurface.h"
 
 struct Model_8004E0CC {
     char mUnknown0[40];
@@ -57,11 +57,11 @@ struct Object_80040818 {
         struct { char mUnknown312Head[4]; int mWord316; char mUnknown320Tail[8]; };
     };
     int mUnknown328;
-    Area_80054138 *mUnknown332;
+    LevelSurface_t *mUnknown332;
     float mUnknown336;
     float mUnknown340;
     char mName[128];
-    Object_80041904 *mUnknown472;
+    BigObjInst *mUnknown472;
     Flags_800411C8 *mUnknown476;
     int mUnknown480;
     char mUnknown484[64];

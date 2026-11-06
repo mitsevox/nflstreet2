@@ -1,5 +1,5 @@
-#include "game/Class_801CC350.h"
-#include "game/Class_801CBC50.h"
+#include "game/FlowGroupC.h"
+#include "game/FlowManagerC.h"
 
 extern "C" {
 void fn_801D3318(int ident, const char *pLabel);
@@ -21,7 +21,7 @@ void fn_801CC9DC(int a);
 void fn_801CC9E4();
 void fn_801CC9E8();
 
-Class_801CBC50::Class_801CBC50()
+FlowManagerC::FlowManagerC()
 {
     int i;
 
@@ -35,19 +35,19 @@ Class_801CBC50::Class_801CBC50()
     mUnknown1 = 0;
 }
 
-Class_801CBC50::~Class_801CBC50()
+FlowManagerC::~FlowManagerC()
 {
 }
 
-void fn_801CBCD0(Class_801CBC50 *p)
+void fn_801CBCD0(FlowManagerC *p)
 {
     int i;
 
     fn_801CC9DC(1);
-    p->mCount = p->fn_80032340();
+    p->mCount = p->GSGetNumGroups();
     p->mPendingCount = 0;
     for (i = 0; i < p->mCount; i++) {
-        p->mpGroups[i] = (Class_801CC350 *)p->fn_80032348(i);
+        p->mpGroups[i] = (FlowGroupC *)p->GSCreateGroup(i);
         p->mpGroups[i]->fn_801CC3C0();
     }
     fn_801CC9E4();
@@ -55,7 +55,7 @@ void fn_801CBCD0(Class_801CBC50 *p)
     p->mUnknown0 = 1;
 }
 
-int Class_801CBC50::fn_801CBD80(int a, int b)
+int FlowManagerC::fn_801CBD80(int a, int b)
 {
     int result;
     ModuleDependency *pDeps;
@@ -75,7 +75,7 @@ int Class_801CBC50::fn_801CBD80(int a, int b)
     return result;
 }
 
-int Class_801CBC50::fn_801CBE24(int a)
+int FlowManagerC::fn_801CBE24(int a)
 {
     int result;
     int id;
@@ -91,17 +91,17 @@ int Class_801CBC50::fn_801CBE24(int a)
     return result;
 }
 
-int Class_801CBC50::fn_801CBE9C(int a)
+int FlowManagerC::fn_801CBE9C(int a)
 {
     return fn_801CC4F4(mpGroups[a]);
 }
 
-int Class_801CBC50::fn_801CBEC8(int a)
+int FlowManagerC::fn_801CBEC8(int a)
 {
     return fn_801CC4FC(mpGroups[a]);
 }
 
-int Class_801CBC50::fn_801CBEF4(int a, int b)
+int FlowManagerC::fn_801CBEF4(int a, int b)
 {
     int id;
 
@@ -119,12 +119,12 @@ int Class_801CBC50::fn_801CBEF4(int a, int b)
     return 1;
 }
 
-int fn_801CBFA0(Class_801CBC50 *pTable)
+int fn_801CBFA0(FlowManagerC *pTable)
 {
     return pTable->mPendingCount;
 }
 
-void fn_801CBFA8(Class_801CBC50 *p)
+void fn_801CBFA8(FlowManagerC *p)
 {
     int i;
 
@@ -139,12 +139,12 @@ void fn_801CBFA8(Class_801CBC50 *p)
     }
 }
 
-void fn_801CC054(Class_801CBC50 *pTable, int flags)
+void fn_801CC054(FlowManagerC *pTable, int flags)
 {
     pTable->mFlags = flags;
 }
 
-int Class_801CBC50::fn_801CC05C(ModuleDependency *pDeps)
+int FlowManagerC::fn_801CC05C(ModuleDependency *pDeps)
 {
     int result = 1;
     int i;
@@ -156,7 +156,7 @@ int Class_801CBC50::fn_801CC05C(ModuleDependency *pDeps)
     return result;
 }
 
-int Class_801CBC50::fn_801CC0D0(ModuleDependency *pDeps)
+int FlowManagerC::fn_801CC0D0(ModuleDependency *pDeps)
 {
     int result = 1;
     int i;
@@ -176,7 +176,7 @@ int Class_801CBC50::fn_801CC0D0(ModuleDependency *pDeps)
     return result;
 }
 
-int Class_801CBC50::fn_801CC168(ModuleDependency *pDeps)
+int FlowManagerC::fn_801CC168(ModuleDependency *pDeps)
 {
     int result = 1;
     int i;
@@ -190,7 +190,7 @@ int Class_801CBC50::fn_801CC168(ModuleDependency *pDeps)
     return result;
 }
 
-int Class_801CBC50::fn_801CC1DC(int group, int from, int to)
+int FlowManagerC::fn_801CC1DC(int group, int from, int to)
 {
     ModuleDependency *pFrom;
     ModuleDependency *pTo;
@@ -207,7 +207,7 @@ int Class_801CBC50::fn_801CC1DC(int group, int from, int to)
     return result;
 }
 
-int Class_801CBC50::fn_801CC280(ModuleNode *pNode)
+int FlowManagerC::fn_801CC280(ModuleNode *pNode)
 {
     int result;
 
@@ -218,7 +218,7 @@ int Class_801CBC50::fn_801CC280(ModuleNode *pNode)
     return result;
 }
 
-int Class_801CBC50::fn_801CC2E8(ModuleNode *pNode)
+int FlowManagerC::fn_801CC2E8(ModuleNode *pNode)
 {
     int result;
 
@@ -229,7 +229,7 @@ int Class_801CBC50::fn_801CC2E8(ModuleNode *pNode)
     return result;
 }
 
-Class_801CC350::Class_801CC350() : mUnknown0(0), mUnknown1(0), mId(-1)
+FlowGroupC::FlowGroupC() : mUnknown0(0), mUnknown1(0), mId(-1)
 {
     mRecordCount = 0;
     mLinkCount = 0;
@@ -237,27 +237,27 @@ Class_801CC350::Class_801CC350() : mUnknown0(0), mUnknown1(0), mId(-1)
     mpLinks = 0;
 }
 
-Class_801CC350::~Class_801CC350()
+FlowGroupC::~FlowGroupC()
 {
 }
 
-void Class_801CC350::fn_801CC3C0()
+void FlowGroupC::fn_801CC3C0()
 {
-    mpRecords = vfn_04();
-    mpLinks = vfn_05();
+    mpRecords = GSGetStageList();
+    mpLinks = GSGetTransitionList();
     mOverrideId = -1;
     mRecordCount = 0;
     mOverride = 0;
     while (mpRecords[mRecordCount].mId != -1) {
         mRecordCount++;
     }
-    while (mpLinks[mLinkCount].mUnknown0 != -1) {
+    while (mpLinks[mLinkCount].mFromId != -1) {
         mLinkCount++;
     }
     mUnknown0 = 1;
 }
 
-int Class_801CC350::fn_801CC490(int id)
+int FlowGroupC::fn_801CC490(int id)
 {
     if (id == -1) {
         mId = fn_801CC518();
@@ -268,19 +268,19 @@ int Class_801CC350::fn_801CC490(int id)
     return 1;
 }
 
-int Class_801CC350::fn_801CC4DC()
+int FlowGroupC::fn_801CC4DC()
 {
     mId = -1;
     mUnknown1 = 0;
     return 1;
 }
 
-int fn_801CC4F4(Class_801CC350 *pGroup)
+int fn_801CC4F4(FlowGroupC *pGroup)
 {
     return pGroup->mUnknown1;
 }
 
-int fn_801CC4FC(Class_801CC350 *pGroup)
+int fn_801CC4FC(FlowGroupC *pGroup)
 {
     if (pGroup->mOverride != 0) {
         return pGroup->mOverrideId;
@@ -288,31 +288,31 @@ int fn_801CC4FC(Class_801CC350 *pGroup)
     return pGroup->mId;
 }
 
-int Class_801CC350::fn_801CC518()
+int FlowGroupC::fn_801CC518()
 {
     return mpRecords->mId;
 }
 
-ModuleDependency *Class_801CC350::fn_801CC524(int id)
+ModuleDependency *FlowGroupC::fn_801CC524(int id)
 {
-    return vfn_06(id);
+    return GSGetStageModuleList(id);
 }
 
-void Class_801CC350::fn_801CC558()
+void FlowGroupC::fn_801CC558()
 {
     fn_801D3318(-1, fn_801CC6C4());
-    vfn_02();
+    GSProcess();
     fn_801D3318(-1, 0);
 }
 
-void Class_801CC350::fn_801CC5B4(int id)
+void FlowGroupC::fn_801CC5B4(int id)
 {
     fn_801CC6F8();
     mOverrideId = id;
     mOverride = 1;
 }
 
-void Class_801CC350::fn_801CC604(int id)
+void FlowGroupC::fn_801CC604(int id)
 {
     int old = mId;
 
@@ -322,26 +322,26 @@ void Class_801CC350::fn_801CC604(int id)
     fn_801CC6FC(old);
 }
 
-int Class_801CC350::fn_801CC654(int id)
+int FlowGroupC::fn_801CC654(int id)
 {
     int result;
 
     fn_801D3318(-1, fn_801CC6C4());
-    result = vfn_03(mId, id);
+    result = GSTransition(mId, id);
     fn_801D3318(-1, 0);
     return result;
 }
 
-const char *Class_801CC350::fn_801CC6C4()
+const char *FlowGroupC::fn_801CC6C4()
 {
-    return GetName();
+    return GSGetGroupName();
 }
 
-void Class_801CC350::fn_801CC6F8()
+void FlowGroupC::fn_801CC6F8()
 {
 }
 
-void Class_801CC350::fn_801CC6FC(int id)
+void FlowGroupC::fn_801CC6FC(int id)
 {
 }
 
@@ -384,12 +384,12 @@ int fn_801CC820(ModuleNode *pNode, unsigned char flags)
 {
     int result;
 
-    pNode->fn_80025F24(pNode);
+    pNode->GSPreModuleStart(pNode);
     result = pNode->Init();
     if (result == 1) {
         pNode->mUnknown8 = result;
     }
-    pNode->fn_80025F28(pNode);
+    pNode->GSPostModuleStart(pNode);
     return result;
 }
 
@@ -398,7 +398,7 @@ int fn_801CC8AC(ModuleNode *pNode, unsigned char flags)
     int result;
 
     if (--pNode->mUnknown4 == 0) {
-        pNode->fn_80025F5C(pNode);
+        pNode->GSPreModuleStop(pNode);
         if (pNode->mUnknown8 == 1) {
             result = pNode->Shutdown();
         } else {
@@ -407,7 +407,7 @@ int fn_801CC8AC(ModuleNode *pNode, unsigned char flags)
         if (result == 1) {
             pNode->mUnknown8 = 0;
         }
-        pNode->fn_80025F60(pNode);
+        pNode->GSPostModuleStop(pNode);
     } else {
         result = 1;
     }
@@ -442,11 +442,11 @@ void fn_801CC9E8()
 {
 }
 
-Class_801CC9EC::~Class_801CC9EC()
+ModuleCounter::~ModuleCounter()
 {
 }
 
-void Class_801CC9EC::fn_801CCA20(ModuleNode *pNode)
+void ModuleCounter::fn_801CCA20(ModuleNode *pNode)
 {
     if (pNode->fn_801CC96C() == 0) {
         mCount++;

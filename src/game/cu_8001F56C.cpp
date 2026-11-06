@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
@@ -29,24 +29,24 @@ void fn_80072B84(int a, int b, int c);
 int fn_80072E6C(void);
 void fn_80072F04(void);
 void fn_80073094(void);
-void fn_8007B358(Object_8007A334 *pObject);
-void fn_8007B3AC(Object_8007A334 *pObject);
-void fn_8007B3CC(Object_8007A334 *pObject, int key, int *pResult);
-int fn_8007B404(Object_8007A334 *pObject);
-void fn_8007B42C(Object_8007A334 *pObject, char *pText, int length);
-void fn_8007B460(Object_8007A334 *pObject, char *pText, int length);
-void fn_8007B494(Object_8007A334 *pObject, char *pText, int length);
-void fn_8008352C(Object_8007A334 *pObject, void *pQuery);
-void fn_800835D0(Object_8007A334 *pObject);
-void fn_80083644(Object_8007A334 *pObject);
-int fn_80083664(Object_8007A334 *pObject);
-int fn_80083684(Object_8007A334 *pObject);
-void fn_800836A4(Object_8007A334 *pObject, int a, int b, int c);
-int fn_800837D8(Object_8007A334 *pObject);
-int fn_80083804(Object_8007A334 *pObject);
-int fn_8008382C(Object_8007A334 *pObject);
-void fn_80083854(Object_8007A334 *pObject);
-void fn_80083934(Object_8007A334 *pObject, int a, int b, int c);
+void fn_8007B358(DbCursor *pObject);
+void fn_8007B3AC(DbCursor *pObject);
+void fn_8007B3CC(DbCursor *pObject, int key, int *pResult);
+int fn_8007B404(DbCursor *pObject);
+void fn_8007B42C(DbCursor *pObject, char *pText, int length);
+void fn_8007B460(DbCursor *pObject, char *pText, int length);
+void fn_8007B494(DbCursor *pObject, char *pText, int length);
+void fn_8008352C(DbCursor *pObject, void *pQuery);
+void fn_800835D0(DbCursor *pObject);
+void fn_80083644(DbCursor *pObject);
+int fn_80083664(DbCursor *pObject);
+int fn_80083684(DbCursor *pObject);
+void fn_800836A4(DbCursor *pObject, int a, int b, int c);
+int fn_800837D8(DbCursor *pObject);
+int fn_80083804(DbCursor *pObject);
+int fn_8008382C(DbCursor *pObject);
+void fn_80083854(DbCursor *pObject);
+void fn_80083934(DbCursor *pObject, int a, int b, int c);
 }
 
 static void *lbl_803EBA90 = (void *)-1;
@@ -56,8 +56,8 @@ extern "C" {
 
 void fn_8001F56C(void)
 {
-    Object_8007A334 cursor;
-    Object_8007A334 table;
+    DbCursor cursor;
+    DbCursor table;
     unsigned char i;
 
     for (i = 0; i <= 20; i++) {
@@ -92,8 +92,8 @@ void fn_8001F56C(void)
 
 void fn_8001F704(void)
 {
-    Object_8007A334 cursor;
-    Object_8007A334 table;
+    DbCursor cursor;
+    DbCursor table;
     int changed = 0;
     unsigned char i;
 
@@ -108,7 +108,7 @@ void fn_8001F704(void)
 
             if (lbl_803EBA94->mEntries[i].mUnknown0 == 0) {
                 found = 1;
-                fn_8007A600(&table, lbl_803EBA94->mEntries[i].mUnknown4);
+                DbCursorSeek(&table, lbl_803EBA94->mEntries[i].mUnknown4);
                 value = fn_8007B404(&table);
             } else {
                 found = 0;
@@ -135,10 +135,10 @@ void fn_8001F850(int mode, int *pResult, Params_80005284 *pText)
     int count = 0;
 
     if (mode == 0) {
-        Object_8007A334 table;
+        DbCursor table;
 
         fn_8007B358(&table);
-        count = fn_8007A410(&table);
+        count = DbCursorGetRowCount(&table);
         *pResult = count;
         fn_8007B3AC(&table);
         fn_801C3284(pText->mpText, "EA TRAX", pText->mLength);
@@ -161,10 +161,10 @@ int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
     unsigned char i;
 
     if (mode == 0) {
-        Object_8007A334 table;
+        DbCursor table;
 
         fn_8007B358(&table);
-        if (fn_8007A600(&table, key)) {
+        if (DbCursorSeek(&table, key)) {
             fn_8007B460(&table, ppTexts[0]->mpText, ppTexts[0]->mLength);
             fn_8007B42C(&table, ppTexts[1]->mpText, ppTexts[1]->mLength);
             fn_8007B494(&table, ppTexts[2]->mpText, ppTexts[2]->mLength);
@@ -199,10 +199,10 @@ int fn_8001F90C(int mode, int key, Params_80005284 **ppTexts)
 void fn_8001FA90(int mode, int key, Params_80005284 *pText1, Params_80005284 *pText2, Params_80005284 *pText3)
 {
     if (mode == 0) {
-        Object_8007A334 table;
+        DbCursor table;
 
         fn_8007B358(&table);
-        if (fn_8007A600(&table, key)) {
+        if (DbCursorSeek(&table, key)) {
             fn_8007B42C(&table, pText1->mpText, pText1->mLength);
             fn_8007B460(&table, pText2->mpText, pText2->mLength);
             fn_8007B494(&table, pText3->mpText, pText3->mLength);
@@ -214,11 +214,11 @@ void fn_8001FA90(int mode, int key, Params_80005284 *pText1, Params_80005284 *pT
 void fn_8001FB3C(int mode, int key)
 {
     if (mode == 0) {
-        Object_8007A334 table;
+        DbCursor table;
         int value;
 
         fn_8007B358(&table);
-        fn_8007A600(&table, key);
+        DbCursorSeek(&table, key);
         value = fn_8007B404(&table);
         fn_8007B3AC(&table);
         fn_8006DF2C(0x11000001);

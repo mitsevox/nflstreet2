@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -87,7 +87,7 @@ float fn_80178A44(void);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern unsigned char lbl_802DABBC[];
 }
@@ -111,7 +111,7 @@ extern "C" int fn_8010B224(Object_80039F5C *p) {
         result = 0;
         break;
     }
-    if (fn_80137B40() != p) {
+    if (BallGetCurrentHolder() != p) {
         int facing = p->mMotion.mFacing;
         Point_8017886C ahead;
 
@@ -146,7 +146,7 @@ extern "C" unsigned char fn_8010B87C(Object_80039F5C *p, Object_80039F5C *pOther
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_802270A4(&delta) <= 5.0f) {
-            result = fn_801CFFD0(angle, p->mMotion.mFacing) <= 0xE38E2;
+            result = MathAngleDiff(angle, p->mMotion.mFacing) <= 0xE38E2;
         }
     }
     return result;
@@ -196,7 +196,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
             return 1;
         }
         if (p->mFlags & 0x1000) {
-            if (fn_80137B40() == p) {
+            if (BallGetCurrentHolder() == p) {
                 fn_80171DB0(p);
             }
             p->mFlags &= ~0x1000;

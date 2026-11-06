@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -44,12 +44,12 @@ float fn_80178A08(void);
 
 extern "C" int fn_801047C8(void);
 
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
+extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t *pBall, Vector_80039F5C *pTarget)
 {
     Vector_80039F5C ball;
     int clamp;
 
-    fn_80137D58(pBall, &ball);
+    BallGetPosition(pBall, &ball);
     clamp = 0;
     if (pTarget->mY > ball.mY) {
         clamp = pOther->mMotion.mPos.mY < ball.mY;
@@ -62,12 +62,12 @@ extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_
     }
 }
 
-extern "C" void fn_801048B4(Object_80039F5C *p, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
+extern "C" void fn_801048B4(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *pTarget)
 {
     Vector_80039F5C ball;
     float over;
 
-    fn_80137D58(pBall, &ball);
+    BallGetPosition(pBall, &ball);
     over = fabsf(pTarget->mX) - (fn_80178A08() - 2.0f);
     if (over > 0.0f) {
         if (over > 2.0f) {

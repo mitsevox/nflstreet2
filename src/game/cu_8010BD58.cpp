@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -59,7 +59,7 @@ extern "C" int fn_8010BD58(Object_80039F5C *p) {
         float limit;
         int index;
 
-        fn_80137D58(fn_801374BC(), &toBall);
+        BallGetPosition(BallGetCurrent(), &toBall);
         fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
         dist = fn_802270A4(&toBall);
         chance = 1.2f;

@@ -1,3 +1,6 @@
+/* Low-level controller ports: registers a driver for each connected controller, notices
+   controllers being plugged in or pulled out, and keeps each port's driver data. */
+
 #include <dolphin/si.h>
 #include "engine/periph.h"
 #include "game/fn_801D2B7C.h"
@@ -7,42 +10,42 @@ extern void *lbl_803ED664;
 void fn_801CE234(void (*pCallback)(void));
 void fn_80247134(void);
 void fn_802856D8(void);
-int fn_801E1B08(unsigned char port);
-int fn_801E1B94(void);
-void fn_801E1C38(unsigned char port);
-unsigned int fn_801E1D3C(void);
+int PerRegisterSingleDevice(unsigned char port);
+int PerUnRegisterDevices(void);
+void PerCheckConnectSingle(unsigned char port);
+unsigned int PerSystemGetDriverDataSize(void);
 
-int fn_801E1A20(void *pData)
+int PerSystemInit(void *pData)
 {
     fn_80247134();
     fn_802856D8();
-    lbl_803ED664 = fn_801D2BB0(1, fn_801E1D3C() * 4, 0, 0);
+    lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
     lbl_803ED660 = 4;
-    fn_801E1AB4();
+    PerRegisterDevices();
     fn_801E26FC();
     fn_801CE234(fn_801E26FC);
     return 0;
 }
 
-int fn_801E1A80(void)
+int PerSystemShutdown(void)
 {
-    fn_801E1B94();
+    PerUnRegisterDevices();
     fn_801D2BD0(lbl_803ED664);
     lbl_803ED664 = 0;
     return 0;
 }
 
-int fn_801E1AB4(void)
+int PerRegisterDevices(void)
 {
     unsigned char port;
 
     for (port = 0; port < lbl_803ED660; port++) {
-        fn_801E1B08(port);
+        PerRegisterSingleDevice(port);
     }
     return 0;
 }
 
-int fn_801E1B08(unsigned char port)
+int PerRegisterSingleDevice(unsigned char port)
 {
     unsigned char i;
     unsigned char arg;
@@ -57,26 +60,26 @@ int fn_801E1B08(unsigned char port)
     return 0;
 }
 
-int fn_801E1B94(void)
+int PerUnRegisterDevices(void)
 {
     unsigned char port;
 
     for (port = 0; port < lbl_803ED660; port++) {
-        fn_801E1B08(port);
+        PerRegisterSingleDevice(port);
     }
     return 0;
 }
 
-void fn_801E1BE8(void)
+void PerCheckConnectAll(void)
 {
     unsigned char port;
 
     for (port = 0; port < lbl_803ED660; port++) {
-        fn_801E1C38(port);
+        PerCheckConnectSingle(port);
     }
 }
 
-void fn_801E1C38(unsigned char port)
+void PerCheckConnectSingle(unsigned char port)
 {
     int status;
     int type;
@@ -94,11 +97,11 @@ void fn_801E1C38(unsigned char port)
             lbl_803ED658[port].mType = 0;
         }
     } else if (lbl_803ED658[port].mStatus == 0) {
-        fn_801E1B08(port);
+        PerRegisterSingleDevice(port);
     }
 }
 
-int fn_801E1CE0(unsigned int port)
+int PerIsDeviceConnected(unsigned int port)
 {
     if (lbl_803ED658[port].mStatus == 0) {
         return 0;
@@ -106,12 +109,12 @@ int fn_801E1CE0(unsigned int port)
     return 1;
 }
 
-void *fn_801E1D04(unsigned int port)
+void *PerSystemGetLLDriverData(unsigned int port)
 {
-    return (char *)lbl_803ED664 + fn_801E1D3C() * port;
+    return (char *)lbl_803ED664 + PerSystemGetDriverDataSize() * port;
 }
 
-unsigned int fn_801E1D3C(void)
+unsigned int PerSystemGetDriverDataSize(void)
 {
     return 16;
 }

@@ -1,9 +1,9 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_802372EC.h"
 #include <string.h>
@@ -46,13 +46,13 @@ void fn_801790D0(int team, float a, float b);
 void fn_8017833C(int team);
 void fn_8017E430(void);
 void fn_80157514(void);
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
-void fn_80139274(void);
+void BallResetToSpot(void);
 void fn_80168640(int team, int kind);
 int fn_80169E68(int mode);
 void fn_80167EA0(int team);
@@ -61,7 +61,7 @@ Team_80168EBC *fn_80168EBC(int team);
 int fn_80085A34(int formation, int team);
 void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
-void fn_8013FB44(void);
+void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
@@ -142,7 +142,7 @@ void fn_8014AC88(void *p)
 
 void fn_8014AD24(void *p, float dt)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         fn_800BCB18(p, dt);
     }
 }
@@ -150,7 +150,7 @@ void fn_8014AD24(void *p, float dt)
 void fn_8014AD70(void)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("2 Minute Challenge", lbl_803EB2B0, "|^Done");
+        MsgBoxShow("2 Minute Challenge", lbl_803EB2B0, "|^Done");
     }
 }
 
@@ -166,7 +166,7 @@ void fn_8014ADB0(void *p, float dt)
 
 void fn_8014AE58(void)
 {
-    fn_80064EFC(3, 17, -1);
+    PauseOpenScreen(3, 17, -1);
 }
 
 void fn_8014AE84(void)
@@ -181,7 +181,7 @@ void fn_8014AEB4(void *p, float dt)
     if (fn_800B65A0(fn_80178308()) != 255) {
         fn_800B3718(p, dt);
     } else {
-        fn_80139274();
+        BallResetToSpot();
     }
 }
 
@@ -213,7 +213,7 @@ void fn_8014B028(void *p, float dt)
         fn_800B4020(p, dt);
     } else {
         fn_8009D888(0, 10);
-        fn_8013FB44();
+        CamGameResumeAll();
         fn_8016DDDC(fn_80178308());
         fn_8016DDDC(fn_80178320());
         fn_8009D944(1);
@@ -236,10 +236,10 @@ void fn_8014B0D0(void *p, float dt)
     fn_801487C0(fn_80178320(), 2);
     short value = 9 - fn_802372EC(0, 5);
     fn_800C02EC(lbl_803EABA4, value);
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
-    fn_80137D58(pBall, &pos);
-    fn_80137A04(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGetPosition(pBall, &pos);
+    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
 }
 
 void fn_8014B178(void *p, float dt)
@@ -327,6 +327,6 @@ extern "C"
 void fn_801507E0(Class_802A1DC8 *p)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("Jump Ball Battle", lbl_803EB2E4, "|^Done");
+        MsgBoxShow("Jump Ball Battle", lbl_803EB2E4, "|^Done");
     }
 }

@@ -17,8 +17,8 @@ int fn_801784C4(void);
 int fn_801BBE5C(int objectType, int fileNum);
 unsigned int fn_801BBEC0(unsigned int id, int flags);
 void fn_801BB948(unsigned short id);
-void fn_801383E4(int on);
-int fn_80027DF0(void);
+void BallsSetVisible(int on);
+int FELoopIsMainFEActive(void);
 }
 
 extern unsigned char lbl_803EA8BD;
@@ -68,7 +68,7 @@ extern "C" void fn_80093410(int handle)
                         p->mMotion.mPos.mY = -p->mMotion.mPos.mY;
                     }
                 }
-                Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+                Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
                 int id = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
 
                 if (id != 0xFFFFFF && fn_801BBEC0(id, 0x400) != 0xFFFFFF) {
@@ -92,8 +92,8 @@ extern "C" void fn_80093410(int handle)
         } else {
             (lbl_803EC924->mUnknown80.mCharacters + handle)->mUnknown38C = 0;
         }
-        if (fn_80027DF0() == 0) {
-            fn_801383E4(1);
+        if (FELoopIsMainFEActive() == 0) {
+            BallsSetVisible(1);
         }
         fn_800941B8();
         fn_800941EC();

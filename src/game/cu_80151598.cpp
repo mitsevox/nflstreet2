@@ -2,7 +2,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Class_80297C60.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8021D7B8.h"
 
 class Class_802A1C98 : public Class_80297C60 {
@@ -28,7 +28,7 @@ struct Table_8015005C {
     unsigned char mUnknown125;
 };
 
-struct Settings_8031BDD4 {
+struct MiniGameSettings_t {
     char mUnknown0[32];
     int mUnknown32;
     int mUnknown36;
@@ -36,7 +36,7 @@ struct Settings_8031BDD4 {
 };
 
 extern "C" {
-extern Settings_8031BDD4 lbl_8031BDD4;
+extern MiniGameSettings_t lbl_8031BDD4;
 extern void *lbl_803EB688;
 extern const int lbl_802DEA78[];
 
@@ -57,7 +57,7 @@ void fn_8009B924(void);
 void fn_801735D8(unsigned int mask);
 void fn_8009D8CC(int index);
 int fn_8005FC7C(void);
-unsigned char fn_801529C0(Settings_8031BDD4 *p);
+unsigned char fn_801529C0(MiniGameSettings_t *p);
 void fn_8006088C(int value);
 void fn_800AAD58(void *p, float dt);
 void fn_8021956C(void *p, int a, int b, int c);
@@ -124,7 +124,7 @@ void fn_801516A8(Class_802A1C30 *p, float dt)
 
 void fn_80151798(Class_802A1C30 *p)
 {
-    fn_80064EFC(3, 19, -1);
+    PauseOpenScreen(3, 19, -1);
 }
 
 void fn_801517C4(Class_802A1C30 *p)

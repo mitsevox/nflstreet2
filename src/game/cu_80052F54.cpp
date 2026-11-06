@@ -4,7 +4,7 @@
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 struct Object_80053674;
@@ -103,15 +103,15 @@ int lbl_803EA548 = 0;
 
 int fn_80052D08(Args_80052F54 *);
 int fn_800AD9B4(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801486A0(void);
 int fn_80177C38(void);
 void fn_8004CBEC(void *, Container_80053258 *, Object_80053674 *, float);
 void fn_8004E090(Object_80053674 *, int, int);
 void fn_8005D2C8(int);
-void fn_80067E3C(int, void *, int, int, int, int);
-void fn_8007ECBC(int, int);
-void fn_80083E1C(Object_8007A334 *, int);
+void AudmonEventPostId(int, void *, int, int, int, int);
+void TeamUnlock(int, int);
+void fn_80083E1C(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 void fn_800D6D7C(Object_80039F5C *, unsigned int, int);
 int fn_800A3444(void);
@@ -128,8 +128,8 @@ int fn_801C2FE4(Node_80053674 *, const char *);
 void *fn_8021EA44(int);
 char *fn_80220BFC(int, int);
 void *fn_80221BAC(void *, int, int);
-void fn_80211EDC(void *, void *, int, int);
-void fn_80211EBC(void *, void *, int, void *, int, int);
+void TMTexLibReplaceClut(void *, void *, int, int);
+void TMTexLibReplaceTexture(void *, void *, int, void *, int, int);
 int fn_8022F358(int);
 int fn_8022F384(int);
 int fn_8022F3D4(int);
@@ -152,13 +152,13 @@ int fn_80052D08(Args_80052F54 *pArgs)
     unsigned short type = fn_801BE648(pPlayer->mpUnknown792);
     if (type == 181) {
         if (pPlayer->mpState->mId == 17) {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
                 pArgs->mKind = 1;
                 found = 1;
             }
         } else {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             pArgs->mRef = pPlayer->mUnknown336;
             if (pCarrier && pCarrier == pPlayer) {
                 pArgs->mKind = 1;
@@ -167,13 +167,13 @@ int fn_80052D08(Args_80052F54 *pArgs)
         }
     } else if (type == 186) {
         if (pPlayer->mpState->mId == 16) {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             if (pCarrier && pCarrier == pPlayer) {
                 pArgs->mKind = 2;
                 found = 1;
             }
         } else {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             pArgs->mRef = pPlayer->mUnknown336;
             if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
                 pArgs->mKind = 2;
@@ -181,7 +181,7 @@ int fn_80052D08(Args_80052F54 *pArgs)
             }
         }
     } else if (type == 235) {
-        if (fn_8011F4F8(fn_801374E0(fn_801374BC()))->mUnknown1D != 4) {
+        if (fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
             pArgs->mKind = phase;
             found = 1;
         }
@@ -230,7 +230,7 @@ void fn_80052F54(Args_80052F54 *pArgs)
             lbl_803EA540 = bit;
             if (value == 0x3FF) {
                 fn_8005D2C8(1);
-                fn_8007ECBC(fn_8022F384(fn_8022F4BC()), 34);
+                TeamUnlock(fn_8022F384(fn_8022F4BC()), 34);
             }
         }
     }
@@ -252,7 +252,7 @@ int fn_80053084(Args_80052F54 *pArgs)
 
 void fn_800530E8(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80083E1C(&cursor, 0);
     for (int i = 0; i <= 1; i++) {
         int id, team;
@@ -326,13 +326,13 @@ void fn_80053258(Args_80052F54 *pArgs)
     if (lbl_80309CB4[0].mpUnknown0C == 0) {
         fn_800530E8();
         Model_80053258 *pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EDC(pModel->mUnknown14C, &lbl_80309CB4[0].mUnknown10, 0, 0);
+        TMTexLibReplaceClut(pModel->mUnknown14C, &lbl_80309CB4[0].mUnknown10, 0, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EBC(pModel->mpUnknown144, pModel->mUnknown14C, 0, &lbl_80309CB4[0], 0, 0);
+        TMTexLibReplaceTexture(pModel->mpUnknown144, pModel->mUnknown14C, 0, &lbl_80309CB4[0], 0, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EDC(pModel->mUnknown14C, &lbl_80309CB4[1].mUnknown10, 1, 0);
+        TMTexLibReplaceClut(pModel->mUnknown14C, &lbl_80309CB4[1].mUnknown10, 1, 0);
         pModel = pObject->mpUnknown12C->mpModel;
-        fn_80211EBC(pModel->mpUnknown144, pModel->mUnknown14C, 1, &lbl_80309CB4[1], 1, 1);
+        TMTexLibReplaceTexture(pModel->mpUnknown144, pModel->mUnknown14C, 1, &lbl_80309CB4[1], 1, 1);
     }
     if (lbl_80309CEC[i].mValue == 0) {
         fn_8004E090(pObject, 0, 0);
@@ -342,7 +342,7 @@ void fn_80053258(Args_80052F54 *pArgs)
     pObject->mUnknownE8 |= 1;
     Object_80039F5C *pPlayer = fn_8009BCE8(pRef);
     if (pPlayer) {
-        fn_80067E3C(53, &pPlayer->mMotion, *pRef, 0, 0, 0);
+        AudmonEventPostId(53, &pPlayer->mMotion, *pRef, 0, 0, 0);
     }
 }
 

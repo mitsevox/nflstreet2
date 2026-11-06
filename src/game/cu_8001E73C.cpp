@@ -1,5 +1,5 @@
-#include "game/Object_8007A334.h"
-#include "game/Object_800785C0.h"
+#include "game/DbCursor.h"
+#include "game/Challenge.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_8007F828.h"
@@ -7,20 +7,20 @@
 extern "C" {
 void fn_80004504(unsigned char id);
 void fn_8000FCD4(int a);
-void fn_800256F8(int value);
-void fn_80077F24(void);
-Object_8007A334 *fn_80077F94(void);
-void fn_800780C0(Object_8007A334 *pObject, unsigned char id, int *pResult);
-void fn_800780F8(Object_8007A334 *pObject, Object_800785C0 *pRecord, int a);
-int fn_80078620(int id, int *pA, int *pB);
-unsigned int fn_80078800(void);
-int fn_80078934();
-int fn_80078A0C(int index);
-int fn_80078A8C(int a, signed char index);
-void fn_8007947C(int type, unsigned short value, char *pBuffer, unsigned short size);
-void fn_80079538(Object_800785C0 *pRecord, char *pBuffer, unsigned short size);
-int fn_8007984C(Object_800785C0 *pRecord);
-int fn_80079864(Object_800785C0 *pRecord, int id);
+void ChallengeSetMode(int value);
+void ChalCloseCursors(void);
+DbCursor *ChalGetTableCursor(void);
+void ChalFindRecord(DbCursor *pObject, unsigned char id, int *pResult);
+void ChalReadRecord(DbCursor *pObject, Challenge_t *pRecord, int a);
+int ChalGetProgress(int id, int *pA, int *pB);
+unsigned int ChalGetPoints(void);
+int ChalGetTournamentWon();
+int ChalCountInGroup(int index);
+int ChalGetIdInGroup(int a, signed char index);
+void ChalFormatReward(int type, unsigned short value, char *pBuffer, unsigned short size);
+void ChalFormatRewards(Challenge_t *pRecord, char *pBuffer, unsigned short size);
+int ChalHasMedalGoal(Challenge_t *pRecord);
+int ChalHasReward(Challenge_t *pRecord, int id);
 int fn_801801B4(void);
 void fn_801801E8(int a);
 void fn_801834DC(void);
@@ -63,19 +63,19 @@ void fn_8001E780(int *pA, int *pB, int *pC)
     *pC = 50;
     *pA = lbl_803EBA78;
     *pB = lbl_803EBA7C;
-    fn_800256F8(3);
+    ChallengeSetMode(3);
     fn_801801E8(1);
     if (fn_801835A0()) {
         fn_801834DC();
     }
     if (fn_8001ED88() == 5) {
-        fn_80077F24();
+        ChalCloseCursors();
         *pA = 3;
         *pB = lbl_8001EFF0[lbl_803EBA80];
     } else {
         lbl_803EBA84 = 0;
     }
-    *pC = fn_80078800();
+    *pC = ChalGetPoints();
     fn_8001ED80(3);
     fn_8001ED90(0);
 }
@@ -89,7 +89,7 @@ void fn_8001E83C(int a, int b)
         lbl_803EBA78 = a;
         lbl_803EBA7C = b;
     }
-    fn_80077F24();
+    ChalCloseCursors();
 }
 
 void fn_8001E894(int value, int *pA, int *pB)
@@ -100,24 +100,24 @@ void fn_8001E894(int value, int *pA, int *pB)
         lbl_803EBA80 = index;
         lbl_803EBA84 = 0;
     }
-    *pA = fn_80078A0C(lbl_803EBA80);
+    *pA = ChalCountInGroup(lbl_803EBA80);
     *pB = lbl_803EBA84;
 }
 
 void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
 {
-    Object_800785C0 record;
+    Challenge_t record;
     int a;
     int b;
-    Object_8007A334 *pObject = fn_80077F94();
-    int id = fn_80078A8C(lbl_803EBA80, index + 1);
+    DbCursor *pObject = ChalGetTableCursor();
+    int id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
 
     if (id) {
         int kind;
 
-        fn_800780C0(pObject, id, 0);
-        fn_800780F8(pObject, &record, fn_8007F828(0));
-        kind = fn_80078620(record.mUnknown0, &a, &b);
+        ChalFindRecord(pObject, id, 0);
+        ChalReadRecord(pObject, &record, fn_8007F828(0));
+        kind = ChalGetProgress(record.mUnknown0, &a, &b);
         fn_801C3284(text.pParams->mpText, record.mUnknown1, text.pParams->mLength);
         switch (kind) {
         case 0:
@@ -130,7 +130,7 @@ void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
             break;
         case 1:
         case 3:
-            *pB = record.mUnknown196 > fn_80078800();
+            *pB = record.mUnknown196 > ChalGetPoints();
             *pA = 0;
             break;
         default:
@@ -144,27 +144,27 @@ void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
 int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018399C textB,
                 Arg_8018399C textC, Arg_8018399C *pTexts1, Arg_8018399C *pTexts2)
 {
-    Object_800785C0 record;
+    Challenge_t record;
     int result = 0;
-    Object_8007A334 *pObject = fn_80077F94();
-    int id = fn_80078A8C(lbl_803EBA80, index + 1);
+    DbCursor *pObject = ChalGetTableCursor();
+    int id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
 
     lbl_803EBA84 = index;
     if (id) {
         int a;
         int b = 1;
-        Info_8007984C *pInfo;
+        ChalMedalGoal_t *pInfo;
         int kind;
         signed char i;
 
-        fn_800780C0(pObject, id, 0);
-        kind = fn_80078620(id, &a, &b);
+        ChalFindRecord(pObject, id, 0);
+        kind = ChalGetProgress(id, &a, &b);
         if (kind != 2) {
             b = fn_8007F828(0);
         }
-        fn_800780F8(pObject, &record, b);
+        ChalReadRecord(pObject, &record, b);
         pInfo = &record.mUnknown20C;
-        result = fn_8007984C(&record);
+        result = ChalHasMedalGoal(&record);
         fn_801C3284(textA.pParams->mpText, record.mUnknown1, textA.pParams->mLength);
         fn_801C3284(textB.pParams->mpText, record.mUnknownCB, textB.pParams->mLength);
         if (result) {
@@ -178,18 +178,18 @@ int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018
         *pFlag = kind != 2 ? record.mUnknown196 : 0;
         if (record.mUnknown198 == 0) {
             *pValue = 10001;
-        } else if (fn_80079864(&record, 4) || record.mUnknown198 == '?') {
+        } else if (ChalHasReward(&record, 4) || record.mUnknown198 == '?') {
             *pValue = -1;
         } else {
             *pValue = record.mUnknown198;
         }
         if (result) {
             for (i = 0; i <= 2; i++) {
-                fn_8007947C(pInfo->mUnknown1C, pInfo->mUnknown20[i], pTexts1[i].pParams->mpText,
+                ChalFormatReward(pInfo->mUnknown1C, pInfo->mUnknown20[i], pTexts1[i].pParams->mpText,
                             pTexts1[i].pParams->mLength);
             }
         } else {
-            fn_80079538(&record, pTexts1[0].pParams->mpText, pTexts1[0].pParams->mLength);
+            ChalFormatRewards(&record, pTexts1[0].pParams->mpText, pTexts1[0].pParams->mLength);
         }
         switch (record.mUnknown208) {
         case 0:
@@ -220,15 +220,15 @@ void fn_8001ECBC(int index, int a, int *pResult)
     int id;
 
     lbl_803EBA84 = index;
-    id = fn_80078A8C(lbl_803EBA80, index + 1);
+    id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
     fn_8000FCD4(a);
     fn_80004504(id);
-    *pResult = fn_80079864(fn_800785C0(), 4) ? 105 : 107;
+    *pResult = ChalHasReward(ChalGetCurrent(), 4) ? 105 : 107;
 }
 
 int fn_8001ED34(void)
 {
-    int state = fn_80078934();
+    int state = ChalGetTournamentWon();
     int result = 0;
 
     if (state) {
@@ -289,8 +289,8 @@ int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         int state;
 
         *pResult = 0;
-        state = fn_80078934();
-        if (fn_80078800() <= 5) {
+        state = ChalGetTournamentWon();
+        if (ChalGetPoints() <= 5) {
             if (lbl_803EBA75 == 0 && state == 0) {
                 lbl_803EBA75 = 1;
                 *pResult = 1;

@@ -4,25 +4,25 @@
 #include <dolphin/gx/GXTexture.h>
 #include "engine/texture.h"
 
-typedef struct TextureFrame_801C0E04 {
+typedef struct LLAnimTexFrame_t {
     float mU0;
     float mV0;
     float mU1;
     float mV1;
-} TextureFrame_801C0E04;
+} LLAnimTexFrame_t;
 
-typedef struct TextureGX_801C0E04 {
+typedef struct LLAnimTexGX_t {
     unsigned char mUnknown0[4];
     GXTexObj mTexObj;
     GXTlutObj mTlutObj;
-    TextureFrame_801C0E04 *mFrames;
-} TextureGX_801C0E04;
+    LLAnimTexFrame_t *mFrames;
+} LLAnimTexGX_t;
 
 typedef struct Texture_801C0928 {
     char mName[32];
     int mIndex;
     unsigned char mUnknown24[4];
-    Texture_8020DB34 mImage;
+    Texture_t mImage;
     unsigned char mAnimated;
     unsigned char mLoaded;
     unsigned short mFrameCount;
@@ -31,7 +31,7 @@ typedef struct Texture_801C0928 {
     float mCoords[8];
     float mCellWidth;
     float mCellHeight;
-    TextureGX_801C0E04 mGX;
+    LLAnimTexGX_t mGX;
 } Texture_801C0928;
 
 typedef struct TextureDesc_801C0928 {
@@ -84,14 +84,14 @@ Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load);
 Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load);
 void fn_801C0CCC(Texture_801C0928 *texture);
 Texture_801C0928 *fn_801C0D8C(const char *name);
-void fn_801C0E04(Texture_801C0928 *texture);
-void fn_801C0F64(int data, Texture_8020DB34 *image);
-void fn_801C0F84(Texture_8020DB34 *image);
-void fn_801C0FA4(Texture_801C0928 *texture);
-void fn_801C1054(Texture_801C0928 *texture);
-void fn_801C10A4(Texture_801C0928 *texture);
-void fn_801C10D8(void *p);
-void fn_801C10DC(void *p);
+void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture);
+void LLAnimTexCreateTexture(int data, Texture_t *image);
+void LLAnimTexDeleteTexture(Texture_t *image);
+void LLAnimTexBindTexture(Texture_801C0928 *texture);
+void LLAnimTexAllocTexCoords(Texture_801C0928 *texture);
+void LLAnimTexUnbindTexture(Texture_801C0928 *texture);
+void LLAnimTexLibInit(void *p);
+void LLAnimTexLibShutdown(void *p);
 #ifdef __cplusplus
 }
 #endif

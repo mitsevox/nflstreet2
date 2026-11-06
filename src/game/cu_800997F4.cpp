@@ -1,27 +1,27 @@
 #include "game/Command_800CEE74.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Item_80097440.h"
 
-extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
+extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Ball_t *pBall,
                            int b, int mode, float range, Block_800997F4 *pBlock, int c, int d, int e, int f, int g);
 extern "C" float fn_80178A2C(void);
 extern unsigned char lbl_803EA944;
-extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
+extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Ball_t *pBall,
                            int b, int mode, int c, int d, unsigned char flags, int e);
-extern "C" int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut);
+extern "C" int BallGetLandingPoint(Ball_t *pBall, Vector_80039F5C *pOut);
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_80178320(void);
 int fn_80099510(Object_80039F5C *p);
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, Block_800997F4 *pBlock, int b, int c, int d, unsigned char e);
+int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, float range, Block_800997F4 *pBlock, int b, int c, int d, unsigned char e);
 void fn_800CEE74(Command_800CEE74 *pOut, Object_80039F5C *pA, Object_80039F5C *pB, void *pData, int angle, int key, int mirror);
 void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer, Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue);
 }
 
-extern "C" int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, Block_800997F4 *pBlock, int a,
+extern "C" int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, Block_800997F4 *pBlock, int a,
                            int b, int c, int *pOutA, int *pOutB)
 {
     Command_800CEE74 command;
@@ -112,7 +112,7 @@ extern "C" int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float ran
     return result;
 }
 
-extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, int b, int d, unsigned char e)
+extern "C" void fn_80099AD0(Object_80039F5C *p, Ball_t *pBall, int a, int mode, int b, int d, unsigned char e)
 {
     unsigned char flags = 0;
     int facing;
@@ -126,10 +126,10 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, i
         return;
     }
     facing = p->mMotion.mFacing;
-    fn_80138064(pBall, &delta);
+    BallGetLandingPoint(pBall, &delta);
     fn_80227690(&delta, &delta, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX);
-    if (fn_801CFFD0(p->mMotion.mFacing, angle) <= 0xAAAA9) {
+    if (MathAngleDiff(p->mMotion.mFacing, angle) <= 0xAAAA9) {
         p->mMotion.mFacing = angle & 0xFFFFFF;
     } else {
         angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;
@@ -147,7 +147,7 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, i
     }
 }
 
-extern "C" int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int b, int *pOutA, int *pOutB)
+extern "C" int fn_80099C80(Object_80039F5C *p, Ball_t *pBall, int b, int *pOutA, int *pOutB)
 {
     Command_800CEE74 command;
     unsigned char order[3] = { 1, 2, 3 };

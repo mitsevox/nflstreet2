@@ -1,10 +1,10 @@
 #ifndef GAME_BLOCK_801BE60C_H
 #define GAME_BLOCK_801BE60C_H
 
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Object_801BBD5C.h"
 
-struct State_800D8140 {
+struct AnimMomentum_t {
     Pair_802270A4 mUnknown0;
     union {
         float mUnknown8;
@@ -69,13 +69,13 @@ struct Block_801BE60C {
         };
     };
     /* 0x800D7E9C writes +0x1C as a word and +0x20/+0x24 as floats and
-       passes +0x28 to fn_800D8140; 0x800D7A4C reads +0x1C..+0x24. */
+       passes +0x28 to AnimMomentumInit; 0x800D7A4C reads +0x1C..+0x24. */
     union {
         struct {
             unsigned char mUnknown1C;
             unsigned char mUnknown1D;
             char mUnknown1E[2];
-            State_800D8140 mUnknown20;
+            AnimMomentum_t mUnknown20;
             unsigned char mUnknown38;
             unsigned char mUnknown39;
             char mUnknown3A[2];
@@ -86,7 +86,7 @@ struct Block_801BE60C {
             int mUnknown1CWord;
             float mUnknown20Float;
             float mUnknown24Float;
-            State_800D8140 mUnknown28;
+            AnimMomentum_t mUnknown28;
         };
     };
 };

@@ -1,7 +1,7 @@
 #include "game/cu_8008E978.h"
 
 extern "C" {
-Frame_80141210 *fn_801C02C4(Actor_801C009C *pActor);
+Frame_80141210 *AnimSeqncrGetFirstPlayerPtr(Actor_801C009C *pActor);
 int fn_80093AF0(Object_80039F5C *p);
 }
 
@@ -15,7 +15,7 @@ extern "C" void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pAct
                             Vector_80039F5C *pOut, int *pAngle)
 {
     int mirror = 0;
-    Frame_80141210 *pFrame = fn_801C02C4(pActor);
+    Frame_80141210 *pFrame = AnimSeqncrGetFirstPlayerPtr(pActor);
 
     pOut->mX = p->mMotion.mPos.mX;
     pOut->mY = p->mMotion.mPos.mY;

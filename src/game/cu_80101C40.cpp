@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -44,16 +44,16 @@ int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800A2190(int bit);
 void fn_8009BD60(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_80101B7C(Object_80039F5C *p);
-int fn_801CFFD0(int a, int b);
-float fn_801CFFA0(float value);
-void fn_801BD81C(void *p, float value);
+int MathAngleDiff(int a, int b);
+float MathInverse(float value);
+void AnimSeqSetSpeed(void *p, float value);
 void fn_80156C78(int index, int value);
 void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
 }
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EC9E8;
 extern float lbl_803EAEC0;
 
@@ -83,7 +83,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         return 1;
     }
     pState = (State_800FDA58 *)&p->mUnknown336;
-    pState->mUnknown3Byte = fn_801374E0(fn_80137C48(p));
+    pState->mUnknown3Byte = BallGetIndex(BallFindHeldBy(p));
     pRequest = fn_8011F4F8(pState->mUnknown3Byte);
     p->mFlags &= ~0x1000;
     p->mFlags &= ~4;
@@ -112,17 +112,17 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         pRequest->mUnknown14 = pRequest->mUnknown18 = 0.0f;
         pRequest->mUnknown1C[0] = 0;
     }
-    kind = fn_800D0B90(p);
+    kind = PlayerMoveGetKind(p);
     hasBall = kind;
     fn_8009BD60(p);
     p->mFlags &= ~4;
     if (p->mpState->mUnknown1 != 2 && p->mpState->mUnknown1 != 5) {
-        if (fn_801BE648(p->mpUnknown792) == 0xDE && fn_800D0B90(p) == 0) {
+        if (fn_801BE648(p->mpUnknown792) == 0xDE && PlayerMoveGetKind(p) == 0) {
             mode = 8;
         } else if (p->mMotion.mUnknown28 > lbl_803EC9E8) {
             switch (fn_801BE648(p->mpUnknown792)) {
             case 0x54:
-                if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
+                if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
                     && p->mMotion.mUnknown32 > 0x238E39 && p->mMotion.mUnknown32 <= 0x58E38D) {
                     mode = 2;
                 } else {
@@ -131,14 +131,14 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
                 break;
             case 0x4A:
             default:
-                if (p->mMotion.mUnknown28 > 40.0f / (210.0f / lbl_803EA2C4) * 0.25f) {
+                if (p->mMotion.mUnknown28 > 40.0f / (210.0f / gFrameTimeScale) * 0.25f) {
                     if (fn_800CA5CC(p, 5, 1) != 0) {
                         mode = 5;
                     } else if (p->mUnknown2913 == 1
-                               && fn_801CFFD0(p->mMotion.mUnknown32, 0) <= 0x2AAAA9) {
+                               && MathAngleDiff(p->mMotion.mUnknown32, 0) <= 0x2AAAA9) {
                         mode = 5;
                     } else if (p->mUnknown2913 == 0
-                               && fn_801CFFD0(p->mMotion.mUnknown32, 0x800000) <= 0x2AAAA9) {
+                               && MathAngleDiff(p->mMotion.mUnknown32, 0x800000) <= 0x2AAAA9) {
                         mode = 5;
                     } else {
                         mode = 2;
@@ -160,7 +160,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
             if (fn_80101B7C(p) != 0) {
                 anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xEB, 0);
                 p->mFlags |= 8;
-                fn_80067E3C(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                AudmonEventPostId(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 fn_800A2190(0);
             } else {
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
@@ -181,7 +181,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     }
     pChannels = p->mpUnknown800;
     if (pRequest->mUnknown1D != 4 && fn_801BE648(p->mpUnknown792) != 0xEB) {
-        fn_801BD81C(&pChannels[anim].mUnknown4C, fn_801CFFA0(lbl_803EAEC0));
+        AnimSeqSetSpeed(&pChannels[anim].mUnknown4C, MathInverse(lbl_803EAEC0));
     }
     if (pRequest->mUnknownAByte != 15) {
         switch (p->mpState->mUnknown1) {

@@ -1,14 +1,17 @@
+/* String hashing for resource lookup tables: two hash functions and a builder that searches for a hash
+   parameter that gives every name in a table a distinct hash. */
+
 #include "engine/Resource.h"
 #include "game/fn_801D2B7C.h"
 
 extern unsigned int strlen(const char *s);
 
-int fn_801F1538(char *pString, unsigned int length, unsigned int *pParams)
+int ProcHashHSH1(char *pString, unsigned int length, unsigned int *pParams)
 {
-    return fn_801F34C0(pString, *pParams);
+    return HashString(pString, *pParams);
 }
 
-int fn_801F155C(unsigned char *pData, unsigned int length, unsigned int *pParams)
+int ProcHashHSH2(unsigned char *pData, unsigned int length, unsigned int *pParams)
 {
     unsigned int sum1 = 0;
     unsigned int sum3 = 0;
@@ -23,7 +26,7 @@ int fn_801F155C(unsigned char *pData, unsigned int length, unsigned int *pParams
     return (sum2 << 8) | sum1;
 }
 
-int fn_801F15B0(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
+int ProcBuildHashTable(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
                 int *pParamSize)
 {
     int unique = 1;
@@ -42,7 +45,7 @@ int fn_801F15B0(int type, unsigned int count, char **ppStrings, int *pHashes, un
                 if (ppStrings[i] == 0) {
                     return 0;
                 }
-                pHashes[i] = fn_801F1538(ppStrings[i], strlen(ppStrings[i]), *ppParams);
+                pHashes[i] = ProcHashHSH1(ppStrings[i], strlen(ppStrings[i]), *ppParams);
             }
             if (count <= 1) {
                 return 1;
@@ -63,7 +66,7 @@ int fn_801F15B0(int type, unsigned int count, char **ppStrings, int *pHashes, un
         *ppParams = 0;
         *pParamSize = 0;
         for (i = 0; i < count; i++) {
-            pHashes[i] = fn_801F155C((unsigned char *)ppStrings[i], strlen(ppStrings[i]), *ppParams);
+            pHashes[i] = ProcHashHSH2((unsigned char *)ppStrings[i], strlen(ppStrings[i]), *ppParams);
         }
         if (count <= 1) {
             return 1;

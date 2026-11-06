@@ -2,7 +2,7 @@
 #define ENGINE_COLLECTION_801E7034_H
 
 #include "engine/Shape_801E2CB4.h"
-#include "engine/cu_801EADD8.h"
+#include "engine/physaabb.h"
 
 /* Owns pointer storage; the collision shapes themselves are borrowed. */
 class Collection_801E7034 {
@@ -19,8 +19,8 @@ public:
     unsigned int mCapacity;
     Shape_801E2CB4 **mpShapes;
     int mMask;
-    Class_801EADD8 mLocalBounds;
-    Class_801EADD8 mWorldBounds;
+    BoundingBox mLocalBounds;
+    BoundingBox mWorldBounds;
 };
 
 extern "C" {

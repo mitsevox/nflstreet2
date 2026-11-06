@@ -1,10 +1,10 @@
 #include <string.h>
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Query_8008352C.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8003E214.h"
-#include "game/fn_8003B6BC.h"
+#include "game/AutoDepth.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
@@ -16,15 +16,15 @@ void *fn_801C2030(void *dst, const void *src, unsigned int n);
 unsigned int fn_801C3180(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801F967C(int handle, int table);
-void fn_801F9718(int handle, int table, ColumnValue_802D6424 *pList, int *pResult, int flags);
+void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9A90(int a, int tag);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_801F9BB4(int handle, int table, int column, int *pInfo);
-void fn_80023024(int a);
-int fn_8007A43C(Object_8007A334 *pObject);
-int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8007CAEC(int index, int value);
+void FESndUpdate(int a);
+int DbCursorGetRow(DbCursor *pObject);
+int DbCursorGetValue(DbCursor *pObject, int key);
+void GameInfoSet(int index, int value);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082A64(int a, int b);
@@ -53,24 +53,24 @@ static int lbl_802D6B54[14] = {
     0x4C4C4450, 0x524C4450, 0x46424C50, 0x42424C50, 0x4C424450, 0x43424450, 0x52424450,
 };
 
-static Record_8003E214 *lbl_803EA7E8 = 0;
+static AutoDepthPlayer_t *lbl_803EA7E8 = 0;
 static int lbl_803EC86C;
 
 extern "C" {
 
-unsigned int fn_800834CC(Object_8007A334 *pObject)
+unsigned int fn_800834CC(DbCursor *pObject)
 {
     unsigned int i;
 
     for (i = 0; i <= 39; i++) {
-        if (fn_8007A7F4(pObject, pObject->mUnknown12, i, 0, 0) == 0) {
+        if (DbCursorFindInt(pObject, pObject->mUnknown12, i, 0, 0) == 0) {
             break;
         }
     }
     return i;
 }
 
-void fn_8008352C(Object_8007A334 *pObject, Query_8008352C *pQuery)
+void fn_8008352C(DbCursor *pObject, Query_8008352C *pQuery)
 {
     Query_8008352C query;
     void *pColumns = 0;
@@ -95,62 +95,62 @@ void fn_8008352C(Object_8007A334 *pObject, Query_8008352C *pQuery)
     }
 
     if (query.mUnknown4 == 0) {
-        fn_8007A334(pObject, 0x54534C50, 0x4B504C50, pColumns, 0, 0x45564153);
+        DbCursorOpen(pObject, 0x54534C50, 0x4B504C50, pColumns, 0, 0x45564153);
     }
 }
 
-int fn_80083664(Object_8007A334 *pObject);
-int fn_80083684(Object_8007A334 *pObject);
-unsigned char fn_800837D8(Object_8007A334 *pObject);
-void fn_80083854(Object_8007A334 *pObject);
+int fn_80083664(DbCursor *pObject);
+int fn_80083684(DbCursor *pObject);
+unsigned char fn_800837D8(DbCursor *pObject);
+void fn_80083854(DbCursor *pObject);
 
-void fn_800835D0(Object_8007A334 *pObject)
+void fn_800835D0(DbCursor *pObject)
 {
     int more = fn_80083664(pObject);
 
     while (more) {
         if (fn_800837D8(pObject) == 0) {
-            int row = fn_8007A43C(pObject);
+            int row = DbCursorGetRow(pObject);
             fn_80083854(pObject);
-            more = fn_8007A600(pObject, row);
+            more = DbCursorSeek(pObject, row);
         } else {
             more = fn_80083684(pObject);
         }
     }
 }
 
-void fn_80083644(Object_8007A334 *pObject)
+void fn_80083644(DbCursor *pObject)
 {
-    fn_8007A3C4(pObject);
+    DbCursorClose(pObject);
 }
 
-int fn_80083664(Object_8007A334 *pObject)
+int fn_80083664(DbCursor *pObject)
 {
-    return fn_8007A444(pObject);
+    return DbCursorFirst(pObject);
 }
 
-int fn_80083684(Object_8007A334 *pObject)
+int fn_80083684(DbCursor *pObject)
 {
-    return fn_8007A510(pObject);
+    return DbCursorNext(pObject);
 }
 
-int fn_800836A4(Object_8007A334 *pObject, int a, int b, int c)
+int fn_800836A4(DbCursor *pObject, int a, int b, int c)
 {
     int found = 0;
     int more;
 
     if (a != 0) {
-        for (more = fn_8007A7F4(pObject, 0x58545349, 1, 0, 0); more;
-             more = fn_8007A7F4(pObject, 0x58545349, 1, 1, 0)) {
-            if (fn_8007A98C(pObject, 0x44494E53) == c) {
+        for (more = DbCursorFindInt(pObject, 0x58545349, 1, 0, 0); more;
+             more = DbCursorFindInt(pObject, 0x58545349, 1, 1, 0)) {
+            if (DbCursorGetInt(pObject, 0x44494E53) == c) {
                 found = 1;
                 break;
             }
         }
     } else {
-        for (more = fn_8007A7F4(pObject, 0x44495453, b, 0, 0); more;
-             more = fn_8007A7F4(pObject, 0x44495453, b, 1, 0)) {
-            if (fn_8007A98C(pObject, 0x44494E53) == c && fn_8007A98C(pObject, 0x58545349) == 0) {
+        for (more = DbCursorFindInt(pObject, 0x44495453, b, 0, 0); more;
+             more = DbCursorFindInt(pObject, 0x44495453, b, 1, 0)) {
+            if (DbCursorGetInt(pObject, 0x44494E53) == c && DbCursorGetInt(pObject, 0x58545349) == 0) {
                 found = 1;
                 break;
             }
@@ -159,32 +159,32 @@ int fn_800836A4(Object_8007A334 *pObject, int a, int b, int c)
     return found;
 }
 
-int fn_800837B8(Object_8007A334 *pObject)
+int fn_800837B8(DbCursor *pObject)
 {
-    return fn_8007A410(pObject);
+    return DbCursorGetRowCount(pObject);
 }
 
-unsigned char fn_800837D8(Object_8007A334 *pObject)
+unsigned char fn_800837D8(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x58545349);
+    return DbCursorGetInt(pObject, 0x58545349);
 }
 
-int fn_80083804(Object_8007A334 *pObject)
+int fn_80083804(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x44495453);
+    return DbCursorGetInt(pObject, 0x44495453);
 }
 
-int fn_8008382C(Object_8007A334 *pObject)
+int fn_8008382C(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494E53);
+    return DbCursorGetInt(pObject, 0x44494E53);
 }
 
-void fn_80083854(Object_8007A334 *pObject)
+void fn_80083854(DbCursor *pObject)
 {
     int info[4];
-    Object_80023BBC arg;
+    DbFilter arg;
     QueryResult result;
-    ColumnValue_802D6424 list[2];
+    DbColumnValue list[2];
 
     fn_801F9BB4(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown12, info);
     list[0].Set(-1, pObject->mUnknown12);
@@ -196,12 +196,12 @@ void fn_80083854(Object_8007A334 *pObject)
     unsigned int table = pObject->mUnknown8;
     unsigned int column = pObject->mUnknown12;
     arg.Set(6, ((unsigned long long)table << 32) | column, info[0], value);
-    fn_801F9908(pObject->mUnknown4, (Table_8007E020 *)pObject->mUnknown20, &arg, &result, 0);
+    fn_801F9908(pObject->mUnknown4, (DbQueryTable *)pObject->mUnknown20, &arg, &result, 0);
 }
 
-void fn_80083934(Object_8007A334 *pObject, int a, int b, int c)
+void fn_80083934(DbCursor *pObject, int a, int b, int c)
 {
-    ColumnValue_802D6424 list[5];
+    DbColumnValue list[5];
     int result[4];
 
     list[0].mColumnTag = 0x4B504C50;
@@ -224,27 +224,27 @@ void fn_80083934(Object_8007A334 *pObject, int a, int b, int c)
     fn_801F9718(pObject->mUnknown4, pObject->mUnknown8, list, result, 0);
 }
 
-void fn_80083A10(Object_8007A334 *pObject, void *pColumns, int tag, int value)
+void fn_80083A10(DbCursor *pObject, void *pColumns, int tag, int value)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
 
     arg.Set(6, 0x4D41455444494744LL, 3, value);
-    fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
+    DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
-void fn_80083A88(Object_8007A334 *pObject, void *pColumns, int tag)
+void fn_80083A88(DbCursor *pObject, void *pColumns, int tag)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
 
     arg.Set(6, 0x4D41455450595454LL, 3, 0);
-    fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
+    DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
-void fn_80083B00(Object_8007A334 *pObject, void *pColumns, int tag)
+void fn_80083B00(DbCursor *pObject, void *pColumns, int tag)
 {
-    Object_80023BBC root;
-    Object_80023BBC left;
-    Object_80023BBC right;
+    DbFilter root;
+    DbFilter left;
+    DbFilter right;
 
     root.mUnknown32 = 0x2000A;
     root.mUnknown0.mKind = 11;
@@ -255,30 +255,30 @@ void fn_80083B00(Object_8007A334 *pObject, void *pColumns, int tag)
     left.mUnknown16.mValue.mInt = 0;
     right.Set(6, 0x4D41455450595454LL, 3);
     right.mUnknown16.mValue.mInt = 5;
-    fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
+    DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083BC4(Object_8007A334 *pObject, void *pColumns, int tag, int logo)
+void fn_80083BC4(DbCursor *pObject, void *pColumns, int tag, int logo)
 {
-    Object_80023BBC root;
-    Object_80023BBC left;
-    Object_80023BBC right;
+    DbFilter root;
+    DbFilter left;
+    DbFilter right;
 
     root.Set(11, &left, &right);
     left.Set(6, 0x4D41455450595454LL, 3);
     left.mUnknown16.mValue.mInt = 0;
     right.Set(6, 0x4D4145544C474C54LL, 3);
     right.mUnknown16.mValue.mInt = logo;
-    fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
+    DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083C98(Object_8007A334 *pObject, void *pColumns, int tag, unsigned char flag)
+void fn_80083C98(DbCursor *pObject, void *pColumns, int tag, unsigned char flag)
 {
-    Object_80023BBC root;
-    Object_80023BBC left;
-    Object_80023BBC right;
-    Object_80023BBC leftLeft;
-    Object_80023BBC leftRight;
+    DbFilter root;
+    DbFilter left;
+    DbFilter right;
+    DbFilter leftLeft;
+    DbFilter leftRight;
 
     root.Set(11, &left, &right);
     left.Set(11, &leftLeft, &leftRight);
@@ -292,7 +292,7 @@ void fn_80083C98(Object_8007A334 *pObject, void *pColumns, int tag, unsigned cha
     leftLeft.SetUnknown32(6, 0x4D41455452554D54LL, 3, 0x10006);
     leftRight.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
     leftRight.mUnknown16.mValue.mInt = 2;
-    fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
+    DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
 void fn_80083DE4(int id)
@@ -300,15 +300,15 @@ void fn_80083DE4(int id)
     fn_801FCE10(0, "use 'TATS' update 'YALP' set 'ITGT' = \x85 where 'DIGT' = \x82\n", id, id);
 }
 
-void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery)
+void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery)
 {
     fn_80083E40(pObject, pQuery, 0);
 }
 
-void fn_80083E40(Object_8007A334 *pObject, Query_80083E40 *pQuery, int tag)
+void fn_80083E40(DbCursor *pObject, TeamQuery *pQuery, int tag)
 {
     void *pColumns = 0;
-    Query_80083E40 query;
+    TeamQuery query;
 
     if (pQuery) {
         query.mUnknown0 = pQuery->mUnknown0;
@@ -326,7 +326,7 @@ void fn_80083E40(Object_8007A334 *pObject, Query_80083E40 *pQuery, int tag)
 
     switch (query.mUnknown4) {
     case 0:
-        fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, 0, tag);
+        DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, 0, tag);
         break;
     case 1:
         fn_80083C98(pObject, pColumns, tag, query.mUnknown8);
@@ -346,44 +346,44 @@ void fn_80083E40(Object_8007A334 *pObject, Query_80083E40 *pQuery, int tag)
     }
 }
 
-void fn_80083F68(Object_8007A334 *pObject)
+void fn_80083F68(DbCursor *pObject)
 {
-    fn_8007A3C4(pObject);
+    DbCursorClose(pObject);
 }
 
-void fn_80083F88(Object_8007A334 *pObject, char *pBuffer, int size)
+void fn_80083F88(DbCursor *pObject, char *pBuffer, int size)
 {
     fn_8007AA3C(pObject, 0x414E4454, (int)pBuffer, size);
 }
 
-int fn_80083FBC(Object_8007A334 *pObject)
+int fn_80083FBC(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494754);
+    return DbCursorGetInt(pObject, 0x44494754);
 }
 
-int fn_80083FE4(Object_8007A334 *pObject)
+int fn_80083FE4(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x44494F54);
+    return DbCursorGetInt(pObject, 0x44494F54);
 }
 
-int fn_8008400C(Object_8007A334 *pObject)
+int fn_8008400C(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x50595454);
+    return DbCursorGetInt(pObject, 0x50595454);
 }
 
-int fn_80084034(Object_8007A334 *pObject, int id, int *pResult)
+int fn_80084034(DbCursor *pObject, int id, int *pResult)
 {
-    return fn_8007A7F4(pObject, 0x44494754, id, 0, pResult);
+    return DbCursorFindInt(pObject, 0x44494754, id, 0, pResult);
 }
 
-int fn_8008406C(Object_8007A334 *pObject, int id, int *pResult)
+int fn_8008406C(DbCursor *pObject, int id, int *pResult)
 {
-    return fn_8007A7F4(pObject, 0x52554D54, id, 0, pResult);
+    return DbCursorFindInt(pObject, 0x52554D54, id, 0, pResult);
 }
 
-void fn_800840A4(Object_8007A334 *pObject, unsigned char *pValues)
+void fn_800840A4(DbCursor *pObject, unsigned char *pValues)
 {
-    ColumnValue_802D6424 list[4];
+    DbColumnValue list[4];
     int i;
 
     for (i = 0; i < 3; i++) {
@@ -396,91 +396,91 @@ void fn_800840A4(Object_8007A334 *pObject, unsigned char *pValues)
     }
 }
 
-int fn_80084158(Object_8007A334 *pObject)
+int fn_80084158(DbCursor *pObject)
 {
-    return fn_8007A934(pObject, 0x4C474C54);
+    return DbCursorGetValue(pObject, 0x4C474C54);
 }
 
-void fn_80084180(Object_8007A334 *pObject, int value)
+void fn_80084180(DbCursor *pObject, int value)
 {
     fn_8007AA90(pObject, 0x4C474C54, value);
 }
 
-unsigned char fn_800841AC(Object_8007A334 *pObject)
+unsigned char fn_800841AC(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x31434D54);
+    return DbCursorGetInt(pObject, 0x31434D54);
 }
 
-unsigned char fn_800841D8(Object_8007A334 *pObject)
+unsigned char fn_800841D8(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x32434D54);
+    return DbCursorGetInt(pObject, 0x32434D54);
 }
 
-unsigned char fn_80084204(Object_8007A334 *pObject)
+unsigned char fn_80084204(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x33434D54);
+    return DbCursorGetInt(pObject, 0x33434D54);
 }
 
-void fn_80084230(Object_8007A334 *pObject, unsigned char value)
+void fn_80084230(DbCursor *pObject, unsigned char value)
 {
     fn_8007ABA4(pObject, 0x31434D54, value);
 }
 
-void fn_8008425C(Object_8007A334 *pObject, unsigned char value)
+void fn_8008425C(DbCursor *pObject, unsigned char value)
 {
     fn_8007ABA4(pObject, 0x32434D54, value);
 }
 
-void fn_80084288(Object_8007A334 *pObject, unsigned char value)
+void fn_80084288(DbCursor *pObject, unsigned char value)
 {
     fn_8007ABA4(pObject, 0x33434D54, value);
 }
 
-void fn_800842B4(Object_8007A334 *pObject, char *pText, int length)
+void fn_800842B4(DbCursor *pObject, char *pText, int length)
 {
     fn_8007ADD4(pObject, 0x414E4454, pText, length);
 }
 
-int fn_800842E8(Object_8007A334 *pObject)
+int fn_800842E8(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x464F5254);
+    return DbCursorGetInt(pObject, 0x464F5254);
 }
 
-int fn_80084310(Object_8007A334 *pObject)
+int fn_80084310(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x45445254);
+    return DbCursorGetInt(pObject, 0x45445254);
 }
 
-int fn_80084338(Object_8007A334 *pObject)
+int fn_80084338(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x564F5254);
+    return DbCursorGetInt(pObject, 0x564F5254);
 }
 
-int fn_80084360(Object_8007A334 *pObject)
+int fn_80084360(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x52554D54);
+    return DbCursorGetInt(pObject, 0x52554D54);
 }
 
 int fn_80084388(void)
 {
-    Object_8007A334 cursor;
-    Query_80083E40 query;
+    DbCursor cursor;
+    TeamQuery query;
     int id;
 
     query.mUnknown4 = 3;
     fn_80083E1C(&cursor, &query);
-    fn_8007A600(&cursor, (signed char)fn_80237390(1, 0, fn_8007A410(&cursor) - 1));
-    id = fn_8007A934(&cursor, 0x44494754);
+    DbCursorSeek(&cursor, (signed char)fn_80237390(1, 0, DbCursorGetRowCount(&cursor) - 1));
+    id = DbCursorGetValue(&cursor, 0x44494754);
     fn_80083F68(&cursor);
     return id;
 }
 
-int fn_80084438(Object_8007A334 *pObject)
+int fn_80084438(DbCursor *pObject)
 {
-    return fn_8007A98C(pObject, 0x4C445443) != 0;
+    return DbCursorGetInt(pObject, 0x4C445443) != 0;
 }
 
-void fn_80084470(Object_8007A334 *pObject, int value)
+void fn_80084470(DbCursor *pObject, int value)
 {
     if (value) {
         fn_8007ABA4(pObject, 0x4C445443, 1);
@@ -596,13 +596,13 @@ void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total
             for (j = 0; j < n; j++) {
                 prev = pOut[k] = fn_80082AB0(pIds[k], a, prev);
                 k++;
-                fn_80023024(1);
+                FESndUpdate(1);
             }
         }
     }
     while (k < total) {
         prev = pOut[k++] = fn_80082A64(a, prev);
-        fn_80023024(1);
+        FESndUpdate(1);
     }
     fn_800829D8();
 }
@@ -616,15 +616,15 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
     unsigned int j;
 
     memcpy(pList, pIn, size * 4);
-    fn_801D34D0(excluded, sizeof(excluded), 0xFF, 4);
+    MemFill(excluded, sizeof(excluded), 0xFF, 4);
     pList[size] = 0x7FFF;
     lbl_803EC86C = fn_802372EC(0, 5);
-    fn_8003E710(lbl_803EC86C, pList, &lbl_803EA7E8);
+    AutoDepthBuild(lbl_803EC86C, pList, &lbl_803EA7E8);
     for (i = 0; i < count; i++) {
         int id;
         int category;
 
-        fn_8003EB2C(lbl_803EA7E8, pList, excluded, &id, &category);
+        AutoDepthSelect(lbl_803EA7E8, pList, excluded, &id, &category);
         pIds[i] = id;
         excluded[i] = category;
         for (j = 0; j < size; j++) {
@@ -634,7 +634,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
             }
         }
     }
-    fn_8003E8B8(&lbl_803EA7E8);
+    AutoDepthFree(&lbl_803EA7E8);
     memcpy(pOut, pIds, count * 4);
     fn_801D2BD0(pList);
     fn_801D2BD0(pIds);
@@ -644,32 +644,32 @@ void fn_80084DAC(int team, int *pIds, unsigned int count);
 
 void fn_80084A8C(int team, int *pList, int side, int count)
 {
-    Record_8003B6BC record;
-    Object_8007A334 query;
+    DepthChartSide_t record;
+    DbCursor query;
     Object_8008044C cursor;
     int i;
 
     fn_8003DE74(side, pList);
-    fn_8003B6BC(side, &record);
+    DepthChartGetSide(side, &record);
     fn_80084DAC(team, record.mUnknown, count);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
     int type = fn_8008400C(&query);
     fn_80083F68(&query);
     if (side == 0) {
-        fn_8007CAEC(0, team);
+        GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
         fn_8022DC7C(0);
         fn_8022DCB0(0);
     } else {
-        fn_8007CAEC(1, team);
+        GameInfoSet(1, team);
         fn_8022A508(1, team, team, type, -1);
         fn_8022DCE4(0);
         fn_8022DD18(0);
     }
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
-        fn_800809C4(&cursor, record.mUnknown[i], 0);
+        PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);
@@ -677,31 +677,31 @@ void fn_80084A8C(int team, int *pList, int side, int count)
 
 void fn_80084C24(int team, int *pList, int side, int count)
 {
-    Record_8003B6BC record;
-    Object_8007A334 query;
+    DepthChartSide_t record;
+    DbCursor query;
     Object_8008044C cursor;
     int i;
 
     fn_8003DE74(side, pList);
-    fn_8003B6BC(side, &record);
+    DepthChartGetSide(side, &record);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
     int type = fn_8008400C(&query);
     fn_80083F68(&query);
     if (side == 0) {
-        fn_8007CAEC(0, team);
+        GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
         fn_8022DC7C(0);
         fn_8022DCB0(0);
     } else {
-        fn_8007CAEC(1, team);
+        GameInfoSet(1, team);
         fn_8022A508(1, team, team, type, -1);
         fn_8022DCE4(0);
         fn_8022DD18(0);
     }
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
-        fn_800809C4(&cursor, record.mUnknown[i], 0);
+        PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);
@@ -764,24 +764,24 @@ void fn_80084FE4(int value)
     fn_8021E72C(fn_8021EA44(1), 4, value);
 }
 
-void fn_80085020(Object_8007A334 *pObject)
+void fn_80085020(DbCursor *pObject)
 {
-    fn_8007A334(pObject, 0x52545354, 0x59545453, 0, 0, 0x54415453);
+    DbCursorOpen(pObject, 0x52545354, 0x59545453, 0, 0, 0x54415453);
 }
 
-void fn_80085060(Object_8007A334 *pObject)
+void fn_80085060(DbCursor *pObject)
 {
-    fn_8007A3C4(pObject);
+    DbCursorClose(pObject);
 }
 
-int fn_80085080(Object_8007A334 *pObject, int value, int *pResult)
+int fn_80085080(DbCursor *pObject, int value, int *pResult)
 {
-    return fn_8007A7F4(pObject, 0x59545453, value, 0, pResult);
+    return DbCursorFindInt(pObject, 0x59545453, value, 0, pResult);
 }
 
-int fn_800850B8(Object_8007A334 *pObject, int category)
+int fn_800850B8(DbCursor *pObject, int category)
 {
-    return fn_8007A98C(pObject, lbl_802D6B54[category]);
+    return DbCursorGetInt(pObject, lbl_802D6B54[category]);
 }
 
 }

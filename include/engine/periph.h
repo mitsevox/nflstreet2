@@ -48,9 +48,9 @@ int fn_801E1478(Desc_801E1478 *pDesc);
 int fn_801E153C(void);
 int fn_801E1688(unsigned int index);
 unsigned int fn_801E19B4(unsigned int index);
-int fn_801E1A20(void *pData);
-int fn_801E1A80(void);
-int fn_801E1AB4(void);
+int PerSystemInit(void *pData);
+int PerSystemShutdown(void);
+int PerRegisterDevices(void);
 void fn_801E26FC(void);
 
 #ifdef __cplusplus

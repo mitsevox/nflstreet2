@@ -1,11 +1,11 @@
 #ifndef GAME_OBJECT_80039F5C_H
 #define GAME_OBJECT_80039F5C_H
 
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Message_800F01CC.h"
 #include "game/Pose_80041930.h"
 
-struct Area_80054138;
+struct LevelSurface_t;
 
 struct Block_800CC180 {
     unsigned short mUnknown0;
@@ -32,7 +32,7 @@ struct Vector_80039F5C {
     float mZ;
 };
 
-/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
+/* Rotation built by QuatFromEuler from three angles and reset by QuatIdentity. */
 struct Quat_801EB488 {
     float mX;
     float mY;
@@ -40,7 +40,7 @@ struct Quat_801EB488 {
     float mW;
 };
 
-struct Object_80041904;
+struct BigObjInst;
 
 struct Rig_800C8860;
 
@@ -51,7 +51,7 @@ struct Model_800C8860 {
     char mUnknown52[4];
 };
 
-/* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
+/* Block at +4 of the player object; the entries of src/game/Ball.cpp
    hold one at +0. */
 struct Block_80170E64 {
     char mUnknown0[4];
@@ -79,9 +79,9 @@ struct Block_80170E64 {
     Quat_801EB488 mUnknown136;
     unsigned char mUnknown152;
     char mUnknown153[507];
-    Area_80054138 *mUnknown660;
+    LevelSurface_t *mUnknown660;
     char mUnknown664[12];
-    Object_80041904 *mpUnknown676;
+    BigObjInst *mpUnknown676;
     int mUnknown680;
     /* fn_80093410 reads a spot from +920/+936; the size is not established. */
     char mUnknown684[236];
@@ -227,8 +227,8 @@ struct Object_800CE674 {
 /* 124-byte entry of the array that +800 points to. */
 typedef Record_800D81C8 Entry_800EAC9C;
 
-/* 12-byte block at +1228; fn_800D0B90 returns its first word. */
-struct Block_800D0B90 {
+/* 12-byte block at +1228; PlayerMoveGetKind returns its first word. */
+struct PlayerMove_t {
     int mUnknown0;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -411,14 +411,14 @@ struct Object_80039F5C {
         short mUnknown778;
         unsigned short mUnknown778Unsigned;
     };
-    Area_80054138 *mpUnknown780;
+    LevelSurface_t *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
-    Object_801BA03C *mpUnknown796;
+    AnimHeader_t *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
     void *mpUnknown804;
-    Object_801BA03C *mpUnknown808;
+    AnimHeader_t *mpUnknown808;
     Record_800D81C8 *mpUnknown812;
     char mUnknown816[192];
     union {
@@ -468,7 +468,7 @@ struct Object_80039F5C {
         Block_800C8330 mUnknown1160Wide;
     };
     Object_80039F5C *mpUnknown1224;
-    Block_800D0B90 mUnknown1228;
+    PlayerMove_t mUnknown1228;
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;

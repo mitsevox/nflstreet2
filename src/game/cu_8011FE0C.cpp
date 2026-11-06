@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 extern "C" {
 extern Lookup_8012078C *lbl_803EB09C;
@@ -14,7 +14,7 @@ int fn_801486A0(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 void fn_8011FE0C(void)
@@ -35,7 +35,7 @@ void fn_8011FE0C(void)
     for (i = 0; i < (int)count; i++) {
         lbl_803EB09C->mpUnknown12[i] = 0;
     }
-    pCarrier = fn_80137B40();
+    pCarrier = BallGetCurrentHolder();
     if (count <= 1) return;
     for (i = 0; i < (int)count; i++) {
         if (fn_8011FD64(lbl_803EB09C->mpUnknown0[i]) == 2 || fn_801486A0() == 2) {
@@ -160,19 +160,19 @@ void fn_80120384(void)
     for (i = 0; i < count; i++) {
         lbl_803EB09C->mpUnknown12[i] = 3;
     }
-    fn_80137D58(fn_801374BC(), &pos);
-    pCarrier = fn_80137B40();
+    BallGetPosition(BallGetCurrent(), &pos);
+    pCarrier = BallGetCurrentHolder();
     if (pCarrier) {
         velocity.mX = pCarrier->mMotion.mUnknown40;
         velocity.mY = pCarrier->mMotion.mUnknown44;
         velocity.mZ = pCarrier->mMotion.mUnknown48;
     } else {
-        fn_80137EC4(fn_801374BC(), &velocity);
+        BallGetVelocity(BallGetCurrent(), &velocity);
     }
     angle = fn_801CFE40(velocity.mY, velocity.mX);
     for (i = 0; i < count; i++) {
         fn_80227690(&delta, &fn_80039F5C(fn_80178320(), i)->mMotion.mPos, &pos);
-        if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x238E38) {
+        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x238E38) {
             lbl_803EB09C->mpUnknown12[i] = 0;
         }
     }

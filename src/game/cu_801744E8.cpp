@@ -2,7 +2,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Pair_8017055C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
@@ -46,15 +46,15 @@ int fn_800B2600(void);
 void fn_800B260C(short);
 float fn_800B2618(int);
 int fn_801CFE40(float, float);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 void fn_80227690(void *, void *, void *);
-int fn_8013BA58(void *, int *);
+int BallStateGet(void *, int *);
 int fn_80177C38(void);
 void fn_8017419C(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
 void fn_801735B4(unsigned int);
-void fn_801F51DC(int, void *, int, int,
+void SortArray(int, void *, int, int,
                  int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
 int fn_80175E3C(Object_80039F5C *, Object_80039F5C *, void *);
 void fn_801760B4(int, Object_80039F5C *, Object_80039F5C *);
@@ -64,7 +64,7 @@ void fn_80178370(void);
 int fn_800BA6F8(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 float fn_802270A4(void *);
 void fn_8017419C(float *value, Object_80039F5C *, int) {
   unsigned int factor = 127;
@@ -564,7 +564,7 @@ void fn_801757A4(Object_80039F5C *a, float valueA, int angleA,
     flag = 1;
   }
   if ((zeroState && !flag) ||
-      fn_801CFFD0(a->mUnknown512.mUnknown4, angleA) > limit) {
+      MathAngleDiff(a->mUnknown512.mUnknown4, angleA) > limit) {
     if (!(valueA > valueB) && !fn_80175E3C(a, b, context) &&
         a->mpState->mId != 28) {
       selected = 1;
@@ -581,7 +581,7 @@ void fn_801757A4(Object_80039F5C *a, float valueA, int angleA,
     }
     if (b->mUnknown512.mUnknown0 == 0.0f ||
         (!(b->mUnknown512.mUnknown0 >= 0.5f) && !flag) ||
-        fn_801CFFD0(b->mUnknown512.mUnknown4, angleB) > limit) {
+        MathAngleDiff(b->mUnknown512.mUnknown4, angleB) > limit) {
       if (!(valueB > valueA) && !fn_80175E3C(b, a, context) &&
           b->mpState->mId != 28)
         fn_801760B4(4, b, a);
@@ -632,16 +632,16 @@ float fn_80175B88(float value) {
 }
 float fn_80175BF8(float value, Object_80039F5C *a, Object_80039F5C *b) {
   float adjusted = value;
-  if (fn_801CFFD0(a->mMotion.mUnknown32, b->mMotion.mUnknown32) <= 0x200000)
+  if (MathAngleDiff(a->mMotion.mUnknown32, b->mMotion.mUnknown32) <= 0x200000)
     adjusted *= 0.8f;
-  if (fn_801CFFD0(a->mMotion.mUnknown32, b->mMotion.mUnknown32) > 0x5FFFFF)
+  if (MathAngleDiff(a->mMotion.mUnknown32, b->mMotion.mUnknown32) > 0x5FFFFF)
     adjusted = value * 1.25f;
   return adjusted;
 }
-int fn_80175C8C(Object_80137ABC *ball, Object_80039F5C *player) {
+int fn_80175C8C(Ball_t *ball, Object_80039F5C *player) {
   if (fn_800AD9B4() != 3)
     return 1;
-  if (ball && fn_8013BA58(ball, 0) != 4)
+  if (ball && BallStateGet(ball, 0) != 4)
     return 1;
   if (!player)
     return 1;
@@ -672,11 +672,11 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
   fn_80227690(&delta, &a->mMotion.mPos, &b->mMotion.mPos);
   int away = fn_801CFE40(delta.mY, delta.mX);
   Vector_80039F5C point;
-  fn_80138064(fn_801374BC(), &point);
+  BallGetLandingPoint(BallGetCurrent(), &point);
   point.mZ = 0.0f;
   int reject = 0;
-  if (fn_801CFFD0(toward, a->mMotion.mUnknown32) <= 0x2AAAA9)
-    reject = fn_801CFFD0(toward, a->mMotion.mFacing) <= 0x2AAAA9;
+  if (MathAngleDiff(toward, a->mMotion.mUnknown32) <= 0x2AAAA9)
+    reject = MathAngleDiff(toward, a->mMotion.mFacing) <= 0x2AAAA9;
   if (!reject) {
     struct View {
       unsigned char pad[16];
@@ -695,7 +695,7 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
       }
       fn_80227690(&delta, &point, &b->mMotion.mPos);
       int direction = fn_801CFE40(delta.mY, delta.mX);
-      if (fn_801CFFD0(away, direction) > 0x200000)
+      if (MathAngleDiff(away, direction) > 0x200000)
         reject = 1;
     }
   }
@@ -779,7 +779,7 @@ int fn_801763D0(Entry_800B206C *events, int count, unsigned char *result) {
     *result = 1;
     return 1;
   case 2:
-    fn_801F51DC(0, events, 2, 36, fn_80174740, 0, 0, 1);
+    SortArray(0, events, 2, 36, fn_80174740, 0, 0, 1);
     if (events[1].mUnknown1C == 0)
       fn_801744E8(events, 2, result);
     else if (events[0].mUnknown1C == 1)
@@ -826,7 +826,7 @@ void fn_80176630(void) {
       for (unsigned short j = 0; j <= 4; j++) {
         Vector_80039F5C pos, dir;
         int joint =
-            fn_801C4E98(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
+            CharSkelGetJointByName(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
         fn_8009BF5C(player, joint, &pos, &dir);
         if (!(pos.mY >= line.mY + 0.15625f)) {
           fn_800B2370(player, 2, 0, 1.0f);
@@ -839,7 +839,7 @@ void fn_80176630(void) {
 void fn_8017678C(Object_80039F5C *player) {
   int mode = fn_800AD9B4();
   int live = fn_80177F70();
-  if (mode != 2 || !live || fn_8013BA58(fn_801374BC(), 0) != 6)
+  if (mode != 2 || !live || BallStateGet(BallGetCurrent(), 0) != 6)
     return;
   int team = fn_80178320();
   if (player->mIdBytes[2] == team && player->mUnknown560.mFlags.mBytes[0] &&
@@ -856,7 +856,7 @@ void fn_80176838(Object_80039F5C *player) {
   Point_8017886C line;
   line = fn_80177FE0();
   Vector_80039F5C ball;
-  if (!fn_80138064(fn_801374BC(), &ball))
+  if (!BallGetLandingPoint(BallGetCurrent(), &ball))
     return;
   if (player->mFlags & 0x8000) {
     if (!(ball.mY >= line.mY - 4.0f))
@@ -879,18 +879,18 @@ void fn_80176838(Object_80039F5C *player) {
     fn_800B2370(player, 11, 0, 1.0f);
 }
 void fn_80176984(void) {
-  Object_80137ABC *ball = fn_801374BC();
+  Ball_t *ball = BallGetCurrent();
   Object_80039F5C *carrier = 0;
   if (ball)
-    carrier = fn_80137B88(ball);
+    carrier = BallGetTarget(ball);
   if (fn_80175C8C(ball, carrier))
     return;
   Object_80039F5C *tackler = fn_8009BCE8(&carrier->mUnknown560.mUnknown40);
   if (!fn_80175FC8(carrier, tackler))
     return;
   Vector_80039F5C pos, ballPos;
-  fn_80138064(ball, &pos);
-  fn_80137D58(ball, &ballPos);
+  BallGetLandingPoint(ball, &pos);
+  BallGetPosition(ball, &ballPos);
   if (fn_80175DAC(carrier, tackler, pos))
     return;
   Pair_8017055C delta;
@@ -915,7 +915,7 @@ int fn_80176B04(void) {
   return 0;
 }
 void fn_80176B8C(Object_80039F5C *player) {
-  if (fn_800AD9B4() != 3 || fn_80137C48(player))
+  if (fn_800AD9B4() != 3 || BallFindHeldBy(player))
     return;
   float chance = 75.0f;
   fn_80175A40(&chance, 9, 100.0f);

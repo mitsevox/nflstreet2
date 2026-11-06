@@ -5,11 +5,11 @@
 #include <math.h>
 
 /* Defined with C++ linkage in src/game/MainLoop.cpp. */
-void fn_80026AF8(void);
+void MainLoopRun(void);
 
 extern "C" {
 
-void fn_801CE1F0(int value);
+void GlibSetTvMode(int value);
 void fn_802451F8(int value);
 void fn_80088F2C(void);
 
@@ -41,8 +41,8 @@ void fn_80088F78(void)
 int main(void)
 {
     fn_80088F78();
-    fn_801CE1F0(0);
-    fn_80026AF8();
+    GlibSetTvMode(0);
+    MainLoopRun();
     return 0;
 }
 

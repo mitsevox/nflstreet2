@@ -1,6 +1,6 @@
 /* Orientation helpers: 24-bit angle triples, shortest-path angle interpolation. */
 
-static int fn_801CF7CC(int a, int b, float t)
+static int _Orient_DoAngleLerp(int a, int b, float t)
 {
     long long r = ((long long)(a - b) * (int)(t * 16777216.0f)) >> 24;
 
@@ -8,7 +8,7 @@ static int fn_801CF7CC(int a, int b, float t)
     return r;
 }
 
-void fn_801CF810(int *pDst, int *pA, int *pB, float t)
+void Orient3Lerp(int *pDst, int *pA, int *pB, float t)
 {
     unsigned int i;
     int a;
@@ -24,11 +24,11 @@ void fn_801CF810(int *pDst, int *pA, int *pB, float t)
         } else if (diff < -0x800000) {
             a += 0x1000000;
         }
-        pDst[i] = fn_801CF7CC(a, b, t);
+        pDst[i] = _Orient_DoAngleLerp(a, b, t);
     }
 }
 
-void fn_801CF8A8(int *pDst, int a, int b, float t)
+void OrientLerpAngle(int *pDst, int a, int b, float t)
 {
     int diff;
 
@@ -40,10 +40,10 @@ void fn_801CF8A8(int *pDst, int a, int b, float t)
     } else if (diff < -0x800000) {
         a += 0x1000000;
     }
-    *pDst = fn_801CF7CC(a, b, t);
+    *pDst = _Orient_DoAngleLerp(a, b, t);
 }
 
-void fn_801CF910(int *pDst, int *pA, int *pB)
+void Orient3Add(int *pDst, int *pA, int *pB)
 {
     pDst[0] = pA[0] + pB[0];
     pDst[1] = pA[1] + pB[1];

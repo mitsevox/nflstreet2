@@ -4,14 +4,14 @@
 #include "game/fn_8016871C.h"
 #include <math.h>
 
-struct Object_80137ABC;
+struct Ball_t;
 
 extern "C" {
 int fn_8011F1CC(void);
 int fn_8011F37C(void);
 int fn_801486A0(void);
-Object_80137ABC *fn_801374BC(void);
-void fn_80137D58(Object_80137ABC *pBall, Vector_80039F5C *pOut);
+Ball_t *BallGetCurrent(void);
+void BallGetPosition(Ball_t *pBall, Vector_80039F5C *pOut);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_80178308(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -27,7 +27,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
         if (fn_801486A0() == 4) {
             Vector_80039F5C pos;
 
-            fn_80137D58(fn_801374BC(), &pos);
+            BallGetPosition(BallGetCurrent(), &pos);
             return fn_8003A130(&pos, 0, fn_80178308());
         } else {
             int team = fn_80178308();

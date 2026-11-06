@@ -1,6 +1,6 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80195EFC.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Interp_8013CC14.h"
 #include "game/EaseVector_8013C9A4.h"
 #include "game/cu_8013BB18.h"
@@ -52,9 +52,9 @@ struct State_8013E574 {
 };
 /* Mode-specific payload at +F8; the common leading camera block is shared. */
 struct ScriptCamera_8013E514 {
-    CameraHeader_8013F628 mHeader;
+    CamHdr_t mHeader;
     char mUnknown28[0xB4];
-    void (*mCallback)(Camera_8013F738 *, int);
+    void (*mCallback)(GameCamera_t *, int);
     char mUnknownE0[0x18];
     State_8013E574 mState;
 };
@@ -87,22 +87,22 @@ unsigned char lbl_803EB1D4 = 0;
 ScriptCamera_8013E514 *lbl_803EB1D8 = 0;
 State_8013E574 *lbl_803EB1DC = 0;
 unsigned char lbl_803EB1E0 = 0;
-int fn_80028310(void);
+int InGameIsStopped(void);
 void fn_800A3B5C(void);
 int fn_800AD9B4(void);
-void fn_8013F97C(int);
-Camera_8013F738 *fn_8013FA04(int);
-void fn_8013FBB4(int, int);
+void CamGameSelectCamera(int);
+GameCamera_t *CamGameGetCamera(int);
+void CamGameChangeType(int, int);
 void fn_80142B00(void);
 int fn_801784C4(void);
 void fn_8017CFB0(unsigned short, unsigned short, int, int);
 void fn_8017CFB4(int);
 void fn_80187DD0(unsigned short);
 int fn_8019623C(int);
-void fn_801C3990(void *, float, float);
+void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
-void fn_8013EDE4(Camera_8013F738 *, int);
+void fn_8013EDE4(GameCamera_t *, int);
 void fn_8013E960(int, int);
 void fn_8013E9F0(int, int);
 void fn_8013EA8C(State_8013E574 *);
@@ -121,15 +121,15 @@ extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
 }
 extern "C" void fn_8013E538(void)
 {
-    if (fn_80028310() == 0) fn_8013F300();
+    if (InGameIsStopped() == 0) fn_8013F300();
     lbl_803EB1D8 = 0;
     lbl_803EB1E0 = 0;
     lbl_803EB1DC = 0;
 }
 extern "C" State_8013E574 *fn_8013E574(void)
 {
-    fn_8013FBB4(3, 17);
-    fn_8013F97C(3);
+    CamGameChangeType(3, 17);
+    CamGameSelectCamera(3);
     State_8013E574 *p = lbl_803EB1DC;
     p->mFrame = 0; p->mRead = 0; p->mpCurrent = 0; p->mWrite = 0;
     lbl_803EB1E0 = 1;
@@ -166,7 +166,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
-    fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
+    CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
     fn_802270D4(&v);
 }
 extern "C" void fn_8013E75C(ScriptCamera_8013E514 *p)
@@ -202,7 +202,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
     fn_802270D4(&v);
-    fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
+    CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
 }
 extern "C" void fn_8013E940(ScriptCamera_8013E514 *) {}
 extern "C" Record_8013E944 *fn_8013E944(State_8013E574 *p)
@@ -278,7 +278,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
         }
     } else fn_8013F3FC();
 }
-extern "C" void fn_8013EDE4(Camera_8013F738 *camera, int msg)
+extern "C" void fn_8013EDE4(GameCamera_t *camera, int msg)
 {
     ScriptCamera_8013E514 *p = (ScriptCamera_8013E514 *)camera;
     State_8013E574 *s = &p->mState;
@@ -347,7 +347,7 @@ extern "C" void fn_8013F298(void)
 {
     if (lbl_803EB1E0) {
         fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1D8 = 0; lbl_803EB1DC = 0;
-        fn_8013F97C(0); fn_8013FA04(5)->mUnknown94 |= 4; fn_80142B00();
+        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; fn_80142B00();
     }
     lbl_803EB1D4 = 0;
 }

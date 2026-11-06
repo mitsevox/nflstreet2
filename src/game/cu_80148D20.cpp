@@ -1,5 +1,5 @@
 #include "game/Class_80148A58.h"
-#include "game/cu_8003E214.h"
+#include "game/AutoDepth.h"
 #include "game/fn_802372EC.h"
 
 extern "C" {
@@ -7,7 +7,7 @@ int fn_801486A0(void);
 int fn_80183950(void);
 void *fn_801C2030(void *dst, const void *src, unsigned int n);
 
-void fn_80148D20(Record_8003E214 *pRecord, int *pValues, Object_8007A334 *)
+void fn_80148D20(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor *)
 {
     Class_80148A58 *p = fn_80148A58();
     unsigned int i;
@@ -26,7 +26,7 @@ void fn_80148D20(Record_8003E214 *pRecord, int *pValues, Object_8007A334 *)
     }
 }
 
-void fn_80148DFC(Record_8003E214 *pRecords, int count, int *, int *pId, int *pCategory)
+void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *pCategory)
 {
     Class_80148A58 *p = fn_80148A58();
     int index = p->vfn_23(pRecords, count);

@@ -9,7 +9,7 @@
 #include "game/State_80167094.h"
 #include "game/Record_80167094.h"
 #include "game/fn_801C1F94.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" Point_80167094 lbl_8031D2B8[], lbl_8031D308[];
@@ -25,10 +25,10 @@ extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803
 extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
 extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
 int fn_80177F70(void);
-int fn_8006560C(void);
+int PauseIsOpen(void);
 void fn_80227638(void *, void *, void *);
 float fn_8022781C(void *, void *);
-int fn_801FA0BC(int, Table_8007E020 *, Object_80023BBC *, void *, int *, QueryResult *);
+int fn_801FA0BC(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
 int fn_8018AFF0(const char *);
 int fn_80178308(void);
@@ -178,10 +178,10 @@ void fn_80165110(Object_80167160 *record, int force)
 
 int fn_801651E0(void *handle, int, signed char, int id, Record_80167094 *records)
 {
-    Object_80023BBC filter;
+    DbFilter filter;
     filter.Set(6, 0x505445534C544553LL, 3, id);
-    Table_8007E020 tables[2] = {{0x50544553, 0, &filter}, {-1, 0, 0}};
-    ColumnValue_802D6424 columns[7] = {
+    DbQueryTable tables[2] = {{0x50544553, 0, &filter}, {-1, 0, 0}};
+    DbColumnValue columns[7] = {
         {0,0x50544553,0x6F736F70,0}, {0,0x50544553,0x69747261,0},
         {0,0x50544553,0x78747261,0}, {0,0x50544553,0x79747261,0},
         {0,0x50544553,0x736F5044,0}, {0,0x50544553,0x736F5045,0}, {0,-1,-1,0}
@@ -207,13 +207,13 @@ int fn_801651E0(void *handle, int, signed char, int id, Record_80167094 *records
 
 int fn_80165464(void *handle, int, int id, Record_80167094 *records)
 {
-    Object_80023BBC play, route;
+    DbFilter play, route;
     play.Set(6, 0x53594C504C594C50LL, 3, id);
     route.Set(6, 0x4C5452414C545241LL, 3, id);
-    Table_8007E020 plays[2] = {{0x53594C50,0,&play},{-1,0,0}};
-    Table_8007E020 routes[2] = {{0x4C545241,0,&route},{-1,0,0}};
-    ColumnValue_802D6424 counts[2] = {{0,0x53594C50,0x746E6361,0},{0,-1,-1,0}};
-    ColumnValue_802D6424 ids[3] = {{0,0x4C545241,0x4C545241,0},{0,0x4C545241,0x6F736F70,0},{0,-1,-1,0}};
+    DbQueryTable plays[2] = {{0x53594C50,0,&play},{-1,0,0}};
+    DbQueryTable routes[2] = {{0x4C545241,0,&route},{-1,0,0}};
+    DbColumnValue counts[2] = {{0,0x53594C50,0x746E6361,0},{0,-1,-1,0}};
+    DbColumnValue ids[3] = {{0,0x4C545241,0x4C545241,0},{0,0x4C545241,0x6F736F70,0},{0,-1,-1,0}};
     int cursor;
     int status = fn_801FA0BC((int)handle, plays, 0, 0, &cursor, 0);
     int opened = status == 0 || status == 23 || status == 21 || status == 20;
@@ -499,7 +499,7 @@ void fn_80166BE8(Object_80167160 *record, State_80167094 *state, Record_80167094
     unsigned char r = 130, g = 130, b = 130;
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
     unsigned char primaryR, primaryG, primaryB;
-    if (!fn_80177F70() && !fn_8006560C()) {
+    if (!fn_80177F70() && !PauseIsOpen()) {
         primaryR = lbl_803EB3D3; primaryG = lbl_803EB3D7; primaryB = lbl_803EB3DB;
     } else {
         void *queue = fn_80164EC8(record, team, (unsigned short)index);

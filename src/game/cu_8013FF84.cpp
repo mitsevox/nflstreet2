@@ -1,12 +1,12 @@
 #include "game/fn_80177FE0.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/Team_80167A8C.h"
 #include <math.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Lookup_8012078C.h"
 
 struct Vector_8013FF84 { float mX,mY,mZ; };
@@ -57,17 +57,17 @@ static float lbl_803EB1EC = 120.0f;
 static View_8013FF84 *lbl_803ECA04;
 static float lbl_803ECA08;
 extern "C" {
-void fn_8013FF28(Camera_8013F738 *, int);
+void CamPresetSetEaseRates(GameCamera_t *, int);
 unsigned int fn_802372EC(unsigned int,unsigned int);
 void fn_8022765C(void *,void *,void *);
 int fn_801CFDD0(float);
-void fn_801C3E54(Camera_8013F738 *);
+void CamFreeClearVelocity(GameCamera_t *);
 int fn_800AD9B4(void);
 int fn_801784C4(void);
 void fn_8013C2B4(void *,int,int,int);
-void fn_8013C6F0(Camera_8013F738 *);
-void fn_801CF810(void *,void *,void *,float);
-void fn_8013C4BC(Camera_8013F738 *,void *,int);
+void fn_8013C6F0(GameCamera_t *);
+void Orient3Lerp(void *,void *,void *,float);
+void fn_8013C4BC(GameCamera_t *,void *,int);
 void fn_80227930(void *,void *,void *,float);
 void fn_801D0470(int);
 void fn_801D0508(void);
@@ -76,26 +76,26 @@ void fn_801D0ADC(int);
 void fn_801D08FC(int);
 void fn_80227CC0(void *,void *);
 void fn_801D0544(void);
-void fn_8013FA8C(int);
-int fn_801383B0(void);
-void *fn_801374BC(void);
-void fn_80137D58(void *,void *);
+void CamGameSetModeAll(int);
+int BallsExist(void);
+void *BallGetCurrent(void);
+void BallGetPosition(void *,void *);
 int fn_801486A0(void);
-void fn_8013C478(Camera_8013F738 *,void *);
+void fn_8013C478(GameCamera_t *,void *);
 int fn_801783AC(int);
 int fn_80178308(void);
 void fn_8003A130(void *,float *,int);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
-void fn_801CF910(void *,void *,void *);
+void Orient3Add(void *,void *,void *);
 int fn_80178320(void);
-void fn_8013C438(Camera_8013F738 *);
+void fn_8013C438(GameCamera_t *);
 void fn_8013C384(void *,int,int,int);
-void fn_80067D4C(int,int);
-void fn_80140DBC(Camera_8013F738 *,int,int);
-void fn_80140EA0(Camera_8013F738 *);
+void AudmonEventPost(int,int);
+void fn_80140DBC(GameCamera_t *,int,int);
+void fn_80140EA0(GameCamera_t *);
 
-void fn_8013FF84(Camera_8013F738 *camera, Vector_8013FF84 *point)
+void fn_8013FF84(GameCamera_t *camera, Vector_8013FF84 *point)
 {
     if (lbl_802DBEBC.mUnknown0) {
         unsigned int index = lbl_802DBEBC.mUnknown4;
@@ -122,7 +122,7 @@ void fn_8013FF84(Camera_8013F738 *camera, Vector_8013FF84 *point)
             lbl_802DBEBC.mUnknown8 = 0;
             if (lbl_802DBEBC.mUnknownC >= entry->mUnknown4+10) lbl_802DBEBC.mUnknown0 = 0;
         }
-        fn_8013FF28(camera,2);
+        CamPresetSetEaseRates(camera,2);
     }
 }
 void fn_80140270(Vector_8013FF84 *point, Angles_8013FF84 *angles, Vector_8013FF84 *velocity, int index, int mode)
@@ -144,7 +144,7 @@ void fn_80140270(Vector_8013FF84 *point, Angles_8013FF84 *angles, Vector_8013FF8
         lbl_8031B6AC.mX = point->mX;
     }
 }
-void fn_80140360(Camera_8013F738 *camera)
+void fn_80140360(GameCamera_t *camera)
 {
     lbl_803ECA04 = lbl_802DC718[camera->mUnknown9C].mUnknown0;
     camera->mUnknownE0 = 0.0f;
@@ -154,12 +154,12 @@ void fn_80140360(Camera_8013F738 *camera)
     camera->mUnknown94 |= 0x10;
     camera->mUnknownF0 = camera->mUnknownEC = 0.0f;
 }
-void fn_801403BC(Camera_8013F738 *camera) { camera->mUnknown94 &= ~0x10; }
-void fn_801403CC(Camera_8013F738 *camera)
+void fn_801403BC(GameCamera_t *camera) { camera->mUnknown94 &= ~0x10; }
+void fn_801403CC(GameCamera_t *camera)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     camera->mUnknownE5 = lbl_803EB1E8 = 0;
-    fn_801C3E54(camera);
+    CamFreeClearVelocity(camera);
     if (fn_800AD9B4() == 3) {
         camera->mUnknownE0 = 180.0f;
         camera->mUnknownE4 = 1;
@@ -181,7 +181,7 @@ void fn_801403CC(Camera_8013F738 *camera)
         fn_8013C6F0(camera);
     }
 }
-unsigned char fn_80140504(Camera_8013F738 *camera)
+unsigned char fn_80140504(GameCamera_t *camera)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     Vector_8013FF84 zero;
@@ -191,13 +191,13 @@ unsigned char fn_80140504(Camera_8013F738 *camera)
         float blend = fabsf(camera->mUnknownE0-180.0f)*0.0055555557f;
         if (blend < 0.0f) blend = 0.0f; else if (blend > 1.0f) blend = 1.0f;
         Angles_8013FF84 angles;
-        fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
+        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
         angles.mZ = (int)(camera->mUnknownE0*46603.37890625f);
         fn_8013C4BC(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         Vector_8013FF84 point;
         fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
         float z = point.mZ;
-        fn_801D0470(fn_80228668());fn_801D0508();fn_801D0C58(&zero);
+        fn_801D0470(VptGetMatrixStack());fn_801D0508();fn_801D0C58(&zero);
         fn_801D0ADC(-(int)(camera->mUnknownE0*46603.37890625f));
         fn_801D08FC(0x400000);
         Vector_8013FF84 offset = {0.0f,0.0f,fn_802270A4(&state->mUnknown20)};
@@ -209,24 +209,24 @@ unsigned char fn_80140504(Camera_8013F738 *camera)
         fn_8013C6F0(camera);
     } else {
         camera->mUnknownE4 = 0;
-        fn_801C3E54(camera);
-        fn_8013FA8C(1);
+        CamFreeClearVelocity(camera);
+        CamGameSetModeAll(1);
         camera->mUnknown94 |= 0x10;
     }
     return camera->mUnknownE4;
 }
-unsigned char fn_80140700(Camera_8013F738 *camera) { return camera->mUnknownE4; }
-void fn_80140708(Camera_8013F738 *camera)
+unsigned char fn_80140700(GameCamera_t *camera) { return camera->mUnknownE4; }
+void fn_80140708(GameCamera_t *camera)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     Vector_8013FF84 velocity;
-    if (fn_801383B0()) {
-        fn_80137D58(fn_801374BC(),&velocity);
+    if (BallsExist()) {
+        BallGetPosition(BallGetCurrent(),&velocity);
         float bound = lbl_802DC718[camera->mUnknown9C].mUnknown8;
         if (velocity.mX < -bound) velocity.mX = -bound; else if (velocity.mX > bound) velocity.mX = bound;
     } else velocity.mX = velocity.mZ = velocity.mY = 0.0f;
     fn_80177FE0();
-    fn_8013FF28(camera,0);
+    CamPresetSetEaseRates(camera,0);
     switch (camera->mUnknownA0) {
     case 12:
         if (fn_801486A0() == 1) {
@@ -240,7 +240,7 @@ void fn_80140708(Camera_8013F738 *camera)
             fn_8013C4BC(camera,&angles,5);
         }
         break;
-    case 3: fn_8013FF28(camera,1);
+    case 3: CamPresetSetEaseRates(camera,1);
     case 1: case 2: case 4: {
         int gameMode = fn_800AD9B4();
         Vector_8013FF84 point;
@@ -255,7 +255,7 @@ void fn_80140708(Camera_8013F738 *camera)
                 else if (state->mUnknown38 > 1.0f) state->mUnknown38 = 1.0f;
             } else state->mUnknown38 = 1.0f;
             fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,state->mUnknown38);
-            fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
+            Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
             if (special) goto apply;
         }
         if (fn_801783AC(0)) {
@@ -268,7 +268,7 @@ void fn_80140708(Camera_8013F738 *camera)
         }
         if (fn_800BA6F8() && fn_800BAA24()) blend = 0.0f;
         fn_80227930(&point,&lbl_803ECA04[1],&lbl_803ECA04[camera->mUnknownA0],blend);
-        fn_801CF810(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
+        Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,blend);
     apply:
         if (gameMode != 2) fn_80140270(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
@@ -279,7 +279,7 @@ void fn_80140708(Camera_8013F738 *camera)
             offset.mX = (int)(mode->mUnknown30.mX*46603.37890625f);
             offset.mY = (int)(mode->mUnknown30.mY*46603.37890625f);
             offset.mZ = (int)(mode->mUnknown30.mZ*46603.37890625f);
-            fn_801CF910(&angles,&angles,&offset);
+            Orient3Add(&angles,&angles,&offset);
         }
         if (fn_801486A0() == 2) {
             Mode_8013FF84 *mode = &lbl_802DC718[camera->mUnknown9C];
@@ -289,7 +289,7 @@ void fn_80140708(Camera_8013F738 *camera)
             offset.mX = (int)(mode->mUnknown60.mX*46603.37890625f);
             offset.mY = (int)(mode->mUnknown60.mY*46603.37890625f);
             offset.mZ = (int)(mode->mUnknown60.mZ*46603.37890625f);
-            fn_801CF910(&angles,&angles,&offset);
+            Orient3Add(&angles,&angles,&offset);
         } else if (!fn_8007F828(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
             Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mpUnknown4);
@@ -311,7 +311,7 @@ void fn_80140708(Camera_8013F738 *camera)
     }
 }
 unsigned char fn_80140DB4(void) { return lbl_803EB1E8; }
-void fn_80140DBC(Camera_8013F738 *camera, int message, int)
+void fn_80140DBC(GameCamera_t *camera, int message, int)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     switch (message) {
@@ -325,7 +325,7 @@ void fn_80140DBC(Camera_8013F738 *camera, int message, int)
     case 6: case 7: case 8: case 9: case 10: state->mUnknownC |= 1u << message; break;
     }
 }
-void fn_80140EA0(Camera_8013F738 *camera)
+void fn_80140EA0(GameCamera_t *camera)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     state->mUnknown38 = 0.0f;
@@ -336,11 +336,11 @@ void fn_80140EA0(Camera_8013F738 *camera)
     state->mUnknown2C.mX = camera->mUnknownD0;
     state->mUnknown2C.mY = camera->mUnknownD4;
     state->mUnknown2C.mZ = camera->mUnknownD8;
-    fn_801C3E54(camera);
+    CamFreeClearVelocity(camera);
     lbl_802DBEBC.mUnknown0 = 0;
     switch (camera->mUnknownA0) {
     case 1:
-        if (fn_801383B0()) fn_8013C438(camera);
+        if (BallsExist()) fn_8013C438(camera);
         if (camera->mUnknownA4 == 0 || camera->mUnknownA4 == 5) break;
         fn_8013C478(camera,&lbl_803ECA04[camera->mUnknownA0]);
         fn_8013C4BC(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
@@ -351,7 +351,7 @@ void fn_80140EA0(Camera_8013F738 *camera)
         break;
     case 5: state->mUnknownC = 0;
     default:
-        if (fn_801383B0()) fn_8013C438(camera);
+        if (BallsExist()) fn_8013C438(camera);
         fn_8013C478(camera,&lbl_803ECA04[camera->mUnknownA0]);
         fn_8013C4BC(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         break;
@@ -380,7 +380,7 @@ void fn_801410F4(unsigned int index)
         lbl_802DBEBC.mUnknownC = 0;
         lbl_802DBEBC.mUnknown4 = index;
         lbl_802DBEBC.mUnknown8 = 100;
-        fn_80067D4C(17,0);
+        AudmonEventPost(17,0);
     }
 }
 void fn_80141164(float amount) { lbl_803ECA08 = amount; }

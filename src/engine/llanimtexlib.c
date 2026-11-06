@@ -1,9 +1,13 @@
+/* GameCube side of the animated texture library: sets up the GX texture objects
+   for animated textures and the texture coordinates of each animation cell in
+   their grid. */
+
 #include "engine/animTexLib.h"
 #include "game/fn_801D2B7C.h"
 
-void fn_801C0E04(Texture_801C0928 *texture)
+void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture)
 {
-    TextureGX_801C0E04 *gx = &texture->mGX;
+    LLAnimTexGX_t *gx = &texture->mGX;
     unsigned short i;
 
     if (!texture->mAnimated) {
@@ -11,7 +15,7 @@ void fn_801C0E04(Texture_801C0928 *texture)
         return;
     }
     if (gx->mFrames == 0)
-        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(TextureFrame_801C0E04), 0, 0);
+        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(LLAnimTexFrame_t), 0, 0);
     for (i = 0; i < texture->mFrameCount; i++) {
         unsigned short row = i / texture->mColumns;
         unsigned short column = i % texture->mColumns;
@@ -23,17 +27,17 @@ void fn_801C0E04(Texture_801C0928 *texture)
     }
 }
 
-void fn_801C0F64(int data, Texture_8020DB34 *image)
+void LLAnimTexCreateTexture(int data, Texture_t *image)
 {
-    fn_8020DFD8((void *)data, image);
+    TexCreate((void *)data, image);
 }
 
-void fn_801C0F84(Texture_8020DB34 *image)
+void LLAnimTexDeleteTexture(Texture_t *image)
 {
-    fn_8020E258(image);
+    TexDelete(image);
 }
 
-void fn_801C0FA4(Texture_801C0928 *texture)
+void LLAnimTexBindTexture(Texture_801C0928 *texture)
 {
     if (texture->mImage.mpPalette != 0) {
         unsigned short entries = 256;
@@ -48,29 +52,29 @@ void fn_801C0FA4(Texture_801C0928 *texture)
         GXInitTexObj(&texture->mGX.mTexObj, texture->mImage.mpImage, texture->mImage.mWidth,
                      texture->mImage.mHeight, texture->mImage.mFormat, GX_CLAMP, GX_CLAMP, 0);
     }
-    fn_801C0E04(texture);
+    _LLAnimTexBuildTexCoords(texture);
 }
 
-void fn_801C1054(Texture_801C0928 *texture)
+void LLAnimTexAllocTexCoords(Texture_801C0928 *texture)
 {
     if (texture->mAnimated) {
-        TextureGX_801C0E04 *gx = &texture->mGX;
-        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(TextureFrame_801C0E04), 0, 0);
+        LLAnimTexGX_t *gx = &texture->mGX;
+        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(LLAnimTexFrame_t), 0, 0);
     }
 }
 
-void fn_801C10A4(Texture_801C0928 *texture)
+void LLAnimTexUnbindTexture(Texture_801C0928 *texture)
 {
-    TextureGX_801C0E04 *gx = &texture->mGX;
+    LLAnimTexGX_t *gx = &texture->mGX;
 
     if (texture->mAnimated)
         fn_801D2BD0(gx->mFrames);
 }
 
-void fn_801C10D8(void *p)
+void LLAnimTexLibInit(void *p)
 {
 }
 
-void fn_801C10DC(void *p)
+void LLAnimTexLibShutdown(void *p)
 {
 }

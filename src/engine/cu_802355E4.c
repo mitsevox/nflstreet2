@@ -6,10 +6,10 @@
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/os/OSCache.h>
 #include <string.h>
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include "game/Object_80235588.h"
@@ -60,7 +60,7 @@ typedef struct Entry_8023850C {
     int mUnknown4;
     int mUnknown8;
     unsigned int mUnknown12;
-    Callback_80067EC8 mpUnknown16[1];
+    AudmonEventFn_t mpUnknown16[1];
 } Entry_8023850C;
 
 typedef struct Table_802382F0 {
@@ -181,7 +181,7 @@ extern char lbl_802B71A0[];
 extern float lbl_802FB458[3];
 extern Lights_803A2868 lbl_803A2868;
 extern LightSet_80236368 *lbl_803EC108;
-extern Object_80228224 *lbl_803EC110;
+extern Viewport_t *lbl_803EC110;
 extern float lbl_803EC114;
 extern float lbl_803EC118;
 extern GXColor lbl_803EC11C;
@@ -195,16 +195,16 @@ extern int lbl_803EC13C;
 extern int lbl_803ED028;
 extern int lbl_803ED02C;
 
-extern void fn_8020EBB0(void *p);
-extern void fn_8020F28C(void *p);
-extern void fn_8020F4D0(void *p, void *pData);
-extern void fn_8020F96C(void *p, void *q, int a, int b);
-extern void fn_80210054(void *p, int a);
-extern void fn_80210114(void *p);
-extern void fn_80210214(void *p, void *q);
-extern int fn_80211984(const char *pName);
-extern void fn_80211FF0(void);
-extern void fn_80212018(const char *pName, void *p);
+extern void TMModelResRelocate(void *p);
+extern void TMModelReset(void *p);
+extern void TMModelBindModelRes(void *p, void *pData);
+extern void TMModelAddExtent(void *p, void *q, int a, int b);
+extern void TMMaterialListAlloc(void *p, int a);
+extern void TMMaterialListFree(void *p);
+extern void TMMaterialListSetMatDefs(void *p, void *q);
+extern int TMShaderLibGetShader(const char *pName);
+extern void TMTexLibRegistryReset(void);
+extern void TMTexLibRegister(const char *pName, void *p);
 extern void fn_802144AC(void *p);
 extern void *fn_8023816C(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
@@ -240,19 +240,19 @@ int fn_80237A28(Counter_80237934 *p);
 void fn_802355E4(Object_80235588 *p)
 {
     if (p->mpUnknown88 != 0) {
-        fn_80210114(p->mUnknown92);
+        TMMaterialListFree(p->mUnknown92);
         p->mpUnknown88 = 0;
     }
-    fn_8020F28C(&p->mUnknown100);
+    TMModelReset(&p->mUnknown100);
 }
 
 void fn_80235630(Object_80235588 *p, void *pData)
 {
     if (p->mpUnknown84 != pData) {
         p->mpUnknown84 = pData;
-        fn_8020F28C(&p->mUnknown100);
+        TMModelReset(&p->mUnknown100);
         if (pData != 0) {
-            fn_8020F4D0(&p->mUnknown100, pData);
+            TMModelBindModelRes(&p->mUnknown100, pData);
         }
         fn_802353E8(p, 0x8000);
         fn_802353E8(p, 0x10000);
@@ -264,14 +264,14 @@ void fn_80235630(Object_80235588 *p, void *pData)
                 fn_802353D8(p, 0x10000);
             }
             fn_802144AC(p->mUnknown152);
-            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
+            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
         }
     }
 }
 
 void fn_8023570C(Object_80235588 *p, const char *pName)
 {
-    p->mUnknown184 = fn_80211984(pName);
+    p->mUnknown184 = TMShaderLibGetShader(pName);
 }
 
 void fn_80235740(Object_80235588 *p, int handle)
@@ -290,19 +290,19 @@ void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
 
     if (p->mpUnknown88 != pElement) {
         if (p->mpUnknown88 != 0) {
-            fn_80210114(p->mUnknown92);
+            TMMaterialListFree(p->mUnknown92);
         }
         if (pElement != 0) {
-            fn_80211FF0();
+            TMTexLibRegistryReset();
             if (pElement->mUnknown40 != 0) {
-                fn_80212018(lbl_802B71A0, pElement);
+                TMTexLibRegister(lbl_802B71A0, pElement);
             }
             pLibrary = pElement->mpUnknown44;
             if (pLibrary != 0) {
-                fn_80210054(p->mUnknown92, pLibrary->mUnknown0);
-                fn_80210214(p->mUnknown92, pLibrary);
+                TMMaterialListAlloc(p->mUnknown92, pLibrary->mUnknown0);
+                TMMaterialListSetMatDefs(p->mUnknown92, pLibrary);
             } else {
-                fn_80210054(p->mUnknown92, 0);
+                TMMaterialListAlloc(p->mUnknown92, 0);
             }
         }
         p->mpUnknown88 = pElement;
@@ -366,7 +366,7 @@ int fn_80235D9C(unsigned int *p)
 
 void fn_80235DB8(void *p)
 {
-    fn_8020EBB0(p);
+    TMModelResRelocate(p);
 }
 
 void fn_80235DD8(float m[4][4], float *pDir)
@@ -501,10 +501,10 @@ Light_802362C4 *fn_802362C4(Scene_8023609C *pScene, int index)
     return &pScene->mpUnknown4[index];
 }
 
-void fn_802362D4(Object_80228224 *pObject)
+void fn_802362D4(Viewport_t *pObject)
 {
     if (lbl_803A2868.mpUnknown0 != 0) {
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_8023609C(lbl_803A2868.mpUnknown0);
         fn_80236258(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown276);
         fn_80236164(lbl_803A2868.mpUnknown0, lbl_803A2868.mUnknown4, lbl_803A2868.mUnknown260);
@@ -533,14 +533,14 @@ unsigned int fn_80236398(int index)
     return lbl_803A2868.mUnknown260[index];
 }
 
-void fn_802363B0(Object_80228224 *pObject)
+void fn_802363B0(Viewport_t *pObject)
 {
-    fn_80228474(pObject, 1, fn_802362D4, 0);
+    VptSetCallback(pObject, 1, fn_802362D4, 0);
 }
 
-void fn_802363E0(Object_80228224 *pObject)
+void fn_802363E0(Viewport_t *pObject)
 {
-    fn_802284EC(pObject, fn_802362D4);
+    VptRemoveCallback(pObject, fn_802362D4);
 }
 
 void fn_80236408(int index, float *pOut)
@@ -729,7 +729,7 @@ void fn_80236C10(int index, float *pColor, float *pDir)
     GXLoadLightObjImm(&light, (GXLightID)(1 << index));
 }
 
-void fn_80236DD8(Object_80228224 *pObject)
+void fn_80236DD8(Viewport_t *pObject)
 {
     lbl_803EC110 = pObject;
 }
@@ -795,8 +795,8 @@ int fn_80236F78(void *p, int value)
     pRandom->mUnknown12 = 0;
     seed = pRandom->mUnknown4;
     for (i = 0; i < pRandom->mUnknown0; i++) {
-        pRandom->mpUnknown20[i] = fn_801CF5BC(0, seed);
-        seed = fn_801CF6D4(pRandom->mpUnknown20[i], 0x7FFFFFFF);
+        pRandom->mpUnknown20[i] = MathNewRandomStream(0, seed);
+        seed = MathGetRandomRange(pRandom->mpUnknown20[i], 0x7FFFFFFF);
     }
     return 0;
 }
@@ -806,7 +806,7 @@ int fn_8023701C(void *p, int value)
     Random_80236F78 *pRandom = p;
 
     while (pRandom->mUnknown0-- != 0) {
-        fn_801CF67C(pRandom->mpUnknown20[pRandom->mUnknown0]);
+        MathDelRandomStream(pRandom->mpUnknown20[pRandom->mUnknown0]);
     }
     fn_801D2BD0(pRandom->mpUnknown20);
     return 0;
@@ -831,7 +831,7 @@ int fn_802370E8(void *p, void *pBuffer)
 {
     Random_80236F78 *pRandom = p;
     memcpy(pBuffer, pRandom, sizeof(Random_80236F78));
-    fn_801CF60C((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
+    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
     return 1;
 }
 
@@ -839,13 +839,13 @@ int fn_80237138(void *p, void *pBuffer)
 {
     Random_80236F78 *pRandom = p;
     memcpy(pRandom, pBuffer, sizeof(Random_80236F78));
-    fn_801CF60C(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
+    MathCopyRandomStream(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
     return 1;
 }
 
 int fn_80237180(void *p)
 {
-    return fn_801CF664(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
+    return MathGetRandomStreamSize(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
 }
 
 void fn_802371B0(int count, int seed)
@@ -871,7 +871,7 @@ unsigned int fn_802372EC(int stream, unsigned int count)
 {
     unsigned int value;
 
-    value = fn_801CF6D4(lbl_803EC130->mpUnknown20[stream], count);
+    value = MathGetRandomRange(lbl_803EC130->mpUnknown20[stream], count);
     if (stream == 0) {
         lbl_803EC130->mUnknown8++;
         lbl_803EC130->mUnknown12 = (lbl_803EC130->mUnknown12 ^ count) + 7;
@@ -1398,7 +1398,7 @@ void fn_802382F0(int count)
     lbl_803A3A14.mUnknown0 = 0;
     lbl_803A3A14.mUnknown4 = count;
     lbl_803A3A14.mppUnknown8 = fn_801D2B7C(count * 4, 0, 0);
-    fn_801D34D0((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
+    MemFill((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
     lbl_803EC140 = 1;
 }
 
@@ -1455,9 +1455,9 @@ void fn_80238570(int index, int advance)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
-    Callback_80067EC8 *pCallbacks = p->mpUnknown16;
+    AudmonEventFn_t *pCallbacks = p->mpUnknown16;
     for (i = 0; i < p->mUnknown12; i++) {
-        Callback_80067EC8 callback = *pCallbacks++;
+        AudmonEventFn_t callback = *pCallbacks++;
         if (callback != 0) {
             callback(fn_8023850C(index));
         }
@@ -1475,10 +1475,10 @@ unsigned int fn_80238604(int index)
 void fn_8023861C(int index)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
-    fn_801D34D0((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
+    MemFill((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
     p->mUnknown4 = 0;
 }
-void fn_80238680(int index, Callback_80067EC8 callback)
+void fn_80238680(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
@@ -1487,7 +1487,7 @@ void fn_80238680(int index, Callback_80067EC8 callback)
     p->mpUnknown16[i] = callback;
 }
 
-void fn_802386DC(int index, Callback_80067EC8 callback)
+void fn_802386DC(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;

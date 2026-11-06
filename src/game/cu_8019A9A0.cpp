@@ -1,4 +1,4 @@
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 
 /* 196-byte record of the array described as Pool_800B8544 in
    cu_8008E978.cpp. */
@@ -98,7 +98,7 @@ extern "C" void fn_8019A9A0(unsigned int index, unsigned int id, float value)
         pRecord->mUnknown2C = value;
         break;
     case 0x8f:
-        pRecord->mUnknown30 = fn_800272EC(value);
+        pRecord->mUnknown30 = PadInputAxisToFixed(value);
         break;
     case 0xa:
         pRecord->mUnknown44 = value;

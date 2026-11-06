@@ -1,7 +1,9 @@
+/* Copies fixed-width byte fields (strings, binary data) into and out of T3DB table rows. */
+
 #include <string.h>
 #include "engine/t3db_table.h"
 
-void fn_8020CEC4(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, void *pSrc, unsigned int len)
+void _TDbDataSetPtrData(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, void *pSrc, unsigned int len)
 {
     unsigned int n;
 
@@ -16,7 +18,7 @@ void fn_8020CEC4(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCo
     }
 }
 
-void fn_8020CF34(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, unsigned char *pDst, unsigned int len)
+void _TDbDataGetPtrData(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, unsigned char *pDst, unsigned int len)
 {
     unsigned char *pSrc = pRow + (bitOffset >> 3);
     unsigned int n = bitCount >> 3;

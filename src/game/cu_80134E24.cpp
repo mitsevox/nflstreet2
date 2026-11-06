@@ -15,7 +15,7 @@
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
 #include "game/cu_80142BB4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 #include "game/State_80134E24.h"
 
@@ -80,22 +80,22 @@ extern "C" unsigned char lbl_803EB168, lbl_803EB16A;
 extern "C" float lbl_803EB184;
 extern "C" unsigned char lbl_803EB169;
 extern "C" {
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_80135CEC(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char fn_80168E00(int, unsigned char, unsigned char *);
 unsigned int fn_802372EC(unsigned int, unsigned int);
 int fn_80178320(void);
 int fn_800AD9B4(void);
-int fn_801481B0(void);
-int fn_801483F8(void);
-void fn_80148108(int);
-void fn_8013FA8C(int);
+int PassIconsAreShown(void);
+int PassIconsWereShown(void);
+void PassIconsShow(int);
+void CamGameSetModeAll(int);
 void fn_8015A0D0(int);
 void fn_800B8344(void);
 int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 unsigned char fn_80135F14(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int fn_80177F70(void);
 void fn_800C146C(Point_80167910 *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
@@ -121,9 +121,9 @@ void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
 void fn_80168E54(int, unsigned char, unsigned char);
 void fn_8009BD2C(Object_80039F5C *, int *);
-int fn_801BD934(float *, void *, unsigned short);
-float fn_801BD660(void *pScript, int key);
-float fn_801BD6D4(Block_801BD6D4 *);
+int AnimSeqHasOpcode(float *, void *, unsigned short);
+float AnimSeqGetOpcodeTime(void *pScript, int key);
+float AnimSeqGetTime(AnimSeq_t *);
 int fn_800E6AC8(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);
 float fn_8022781C(void *, void *);
@@ -131,7 +131,7 @@ int fn_800E815C(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int fn_801CFE40(float, float);
-int fn_800B7248(Input_800B6D34 *, Object_80137ABC *, Object_80039F5C *, Object_80039F5C *);
+int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_8003AB08(Object_80039F5C *, int);
 void fn_801360D4(Object_80039F5C *);
@@ -303,7 +303,7 @@ void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
 
 int fn_80134E24(Object_80039F5C *player) {
     unsigned int count = 0;
-    if (fn_80137B40() != player && !(player->mFlags & 0x4000)) {
+    if (BallGetCurrentHolder() != player && !(player->mFlags & 0x4000)) {
         Message_800F01CC message;
         fn_801C1F94(&message, 0, 4);
         message.mId = 33;
@@ -363,10 +363,10 @@ int fn_80134E24(Object_80039F5C *player) {
             state->mUnknown19 = 0;
     }
     int mode = fn_800AD9B4();
-    if (!fn_801481B0() && !fn_801483F8() && fn_800B65A0(player->mIdBytes[2]) != 255 && mode == 3 &&
-        fn_80137C48(player)) {
-        fn_80148108(0);
-        fn_8013FA8C(2);
+    if (!PassIconsAreShown() && !PassIconsWereShown() && fn_800B65A0(player->mIdBytes[2]) != 255 && mode == 3 &&
+        BallFindHeldBy(player)) {
+        PassIconsShow(0);
+        CamGameSetModeAll(2);
     }
     fn_8015A0D0(1);
     return mode != 3;
@@ -400,7 +400,7 @@ int fn_80135200(Object_80039F5C *player) {
         }
         return 0;
     }
-    if (player != fn_80137B40())
+    if (player != BallGetCurrentHolder())
         return 1;
     if (state->mUnknown4 > 0)
         --state->mUnknown4;
@@ -447,7 +447,7 @@ int fn_80135200(Object_80039F5C *player) {
                     minimum = sum;
                 } else if (sum == minimum) {
                     int base = player->mUnknown2913 == 1 ? 0x800000 : 0;
-                    if (fn_801CFFD0(base, state->mUnknown10) > fn_801CFFD0(base, angle))
+                    if (MathAngleDiff(base, state->mUnknown10) > MathAngleDiff(base, angle))
                         state->mUnknown10 = angle;
                 }
             }
@@ -596,7 +596,7 @@ int fn_80135200(Object_80039F5C *player) {
     if (fn_801344A0()) {
         Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 0.5f) {
-            if (fn_801CFFD0(state->mUnknown8, 0x400000) <= 0xE38E2)
+            if (MathAngleDiff(state->mUnknown8, 0x400000) <= 0xE38E2)
                 state->mUnknown3 = 0;
             else {
                 unsigned int angle = state->mUnknown8 & 0xFFFFFF;
@@ -674,7 +674,7 @@ unsigned char fn_80135F14(Object_80039F5C *p, Object_80039F5C *other, int *count
             Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
                 (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f ||
-                 fn_801CFFD0(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
+                 MathAngleDiff(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
                 *count = 0;
                 result = 2;
             }
@@ -756,12 +756,12 @@ int fn_80136210(Object_80039F5C *p)
     if (index == 0xFFFF)
         s->mUnknown4 = 0;
     else {
-        Block_801BD6D4 *block = &p->mpUnknown800[index].mUnknown4C;
+        AnimSeq_t *block = &p->mpUnknown800[index].mUnknown4C;
         float value;
-        if (fn_801BD934(&value, block->mpUnknown0, 0xC004))
-            value = fn_801BD660(block->mpUnknown0, 0xC004);
+        if (AnimSeqHasOpcode(&value, block->mpUnknown0, 0xC004))
+            value = AnimSeqGetOpcodeTime(block->mpUnknown0, 0xC004);
         else
-            value = fn_801BD60C(block->mpUnknown0);
+            value = AnimSeqGetLife(block->mpUnknown0);
         s->mUnknown4 = (short)(int)value;
     }
     s->mUnknown10 = 0;
@@ -817,7 +817,7 @@ int fn_801363A4(Object_80039F5C *p)
         (fn_801BE648(p->mpUnknown792) == 55 || fn_801BE648(p->mpUnknown792) == 49 ||
          fn_801BE648(p->mpUnknown792) == 52 || fn_801BE648(p->mpUnknown792) == 150 ||
          fn_801BE648(p->mpUnknown792) == 147) && (p->mUnknown1032 == 4 || p->mUnknown1032 == 6)) {
-        Object_80039F5C *ball = fn_80137B40();
+        Object_80039F5C *ball = BallGetCurrentHolder();
         if (ball) {
             int lower = ball->mMotion.mPos.mY + 2.0f > p->mMotion.mPos.mY;
             int action = 0;
@@ -888,7 +888,7 @@ int fn_80136820(Object_80039F5C *p)
         return 0;
     unsigned short index = s->mUnknown6;
     if (index != 0xFFFF)
-        fn_80136134(p, (unsigned int)fn_801BD6D4(&p->mpUnknown800[index].mUnknown4C));
+        fn_80136134(p, (unsigned int)AnimSeqGetTime(&p->mpUnknown800[index].mUnknown4C));
     p->mUnknown772 = 1.0f;
     fn_801360D4(p);
     Object_80039F5C *other = fn_8009BCE8(&s->mUnknown0Word);
@@ -917,7 +917,7 @@ int fn_80136900(Object_80039F5C *p)
         if (x != 0.0f || y != 0.0f)
             p->mUnknown512.mUnknown4 = fn_801CFE40(y, x);
         if (s->mUnknown8Bytes[3]) {
-            int result = fn_800B7248(&input, fn_801374BC(), p, p);
+            int result = fn_800B7248(&input, BallGetCurrent(), p, p);
             if (result == 1)
                 return 0;
         }

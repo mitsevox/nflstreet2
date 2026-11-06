@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801C1F94.h"
@@ -25,7 +25,7 @@ extern "C" {
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_800AC2C0(int team);
 signed char fn_8009AF00(int team, signed char value);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_8009E180(Object_80039F5C *p);
 float fn_8016B938(void);
@@ -46,7 +46,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     Message_800F01CC message;
     Vector_80039F5C ball;
     int update = 0;
-    Object_80039F5C *pCarrier = fn_80137B40();
+    Object_80039F5C *pCarrier = BallGetCurrentHolder();
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
     fn_8010A2DC(p, 0, -1);
     state->mUnknown0++;
@@ -69,7 +69,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
             }
         } else {
             state->mUnknown12 = 0.1f;
-            fn_80137D58(fn_801374BC(), &ball);
+            BallGetPosition(BallGetCurrent(), &ball);
             fn_80227690(&ball, &ball, &p->mMotion.mPos);
             state->mUnknown4 = fn_801CFE40(ball.mY, ball.mX);
             if (((fn_801CFE40(ball.mY, ball.mX) - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
@@ -110,15 +110,15 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     }
     if (state->mUnknown12 != 0.0f) {
         if (state->mUnknown12 == 1.0f &&
-            fn_801CFFD0(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
-            fn_801CFFD0(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
+            MathAngleDiff(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
+            MathAngleDiff(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
             p->mUnknown512.mUnknown15 = 1;
         }
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = state->mUnknown8;
         p->mUnknown512.mUnknown8 = state->mUnknown4;
         p->mUnknown512.mUnknown0 = state->mUnknown12;
-    } else if (fn_801CFFD0(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
+    } else if (MathAngleDiff(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = (state->mUnknown4 + 0x800000) & 0xFFFFFF;
         p->mUnknown512.mUnknown8 = state->mUnknown4;

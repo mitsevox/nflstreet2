@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801BE60C.h"
@@ -28,11 +28,11 @@ extern float lbl_803EAD38, lbl_803EAD3C, lbl_803EAD40, lbl_803EAD44,
 Point_8017886C fn_80177FFC(int);
 void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CBB00(Object_80039F5C *, int, Point_8017886C, int, int);
-void fn_800E3C30(Object_80039F5C *);
+void PlayerReleaseJointCtrls(Object_80039F5C *);
 int fn_800E2F20(Object_80039F5C *, Point_8017886C *, float);
 void fn_800E4120(Object_80039F5C *, State_800E2FE4 *, int, float);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
@@ -40,8 +40,8 @@ int fn_80178320(void);
 int fn_80178308(void);
 int fn_80124CE4(Object_80039F5C *, int, void *, int, float, int, float);
 int fn_800E1870(Object_80039F5C *);
-void fn_800E3AE8(Object_80039F5C *, int, int);
-int fn_800E3A34(Object_80039F5C *, Point_8017886C *);
+void PlayerPathStartSideAnim(Object_80039F5C *, int, int);
+int PlayerPathIsLaneClear(Object_80039F5C *, Point_8017886C *);
 
 void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   State_800E2FE4 *state = (State_800E2FE4 *)&player->mUnknown336;
@@ -64,7 +64,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
   }
   if ((!(distance <= 0.65f) && !state->mUnknown24) ||
       (!(distance <= lbl_803EAD44) && state->mUnknown24) || state->mUnknown3) {
-    fn_800E3C30(player);
+    PlayerReleaseJointCtrls(player);
     int facing = fn_801CFE40(delta.mY, delta.mX);
     if (fn_800E2F20(player, target, distance)) {
       fn_800E4120(player, state, facing,
@@ -103,7 +103,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
         }
       } else {
         if (!(player->mMotion.mUnknown28 >= 0.006f) &&
-            fn_801CFFD0(facing, angle) <= 0x11C71B) {
+            MathAngleDiff(facing, angle) <= 0x11C71B) {
           int option = (player->mFlags & 0x40000) != 0;
           if (!state->mUnknown24) {
             Point_8017886C point = *target;
@@ -123,7 +123,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
         return;
       }
       if (!(distance <= 2.0f)) {
-        if (fn_801CFFD0(facing, angle) > 0x18E38E) {
+        if (MathAngleDiff(facing, angle) > 0x18E38E) {
           player->mUnknown512.mUnknown14 = 3;
           player->mUnknown512.mUnknown8 = angle;
           player->mUnknown512.mUnknown0 = 0.5f;
@@ -132,7 +132,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
           player->mUnknown512.mUnknown8 = angle;
           player->mUnknown512.mUnknown0 = 0.5f;
         }
-      } else if (fn_801CFFD0(facing, angle) > 0x18E38E) {
+      } else if (MathAngleDiff(facing, angle) > 0x18E38E) {
         player->mUnknown512.mUnknown14 = 3;
         player->mUnknown512.mUnknown8 = angle;
         player->mUnknown512.mUnknown0 = 0.4f;
@@ -149,11 +149,11 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       int value;
       if (fn_80124CE4(player, player->mIdBytes[2], &value, 0x155555, 5.0f,
                       facing, 1.0f)) {
-        if (fn_801CFFD0(facing, 0) <= 0x2AAAA9) {
+        if (MathAngleDiff(facing, 0) <= 0x2AAAA9) {
           player->mUnknown512.mUnknown4 += (int)(lbl_803EAD48 * 46603.379f);
           break;
         }
-        if (fn_801CFFD0(facing, 0x800000) <= 0x2AAAA9) {
+        if (MathAngleDiff(facing, 0x800000) <= 0x2AAAA9) {
           player->mUnknown512.mUnknown4 -= (int)(lbl_803EAD48 * 46603.379f);
           break;
         }
@@ -176,7 +176,7 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
     }
     int limit = state->mUnknown24 ? 0x38E38 : 0xE38E3;
     if (!state->mUnknown3 &&
-        fn_801CFFD0(player->mMotion.mFacing, angle) > limit) {
+        MathAngleDiff(player->mMotion.mFacing, angle) > limit) {
       player->mUnknown512.mUnknown14 = 1;
       player->mMotion.mUnknown28 = 0.0f;
       player->mUnknown512.mUnknown4 = angle;
@@ -184,9 +184,9 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       player->mUnknown512.mUnknown0 = 0.0f;
       return;
     }
-    if (fn_801CFFD0(player->mMotion.mFacing, player->mMotion.mUnknown32) >
+    if (MathAngleDiff(player->mMotion.mFacing, player->mMotion.mUnknown32) >
             0x2E38E3 &&
-        fn_801CFFD0(player->mMotion.mFacing, 0xC00000) <= 0x18E38D &&
+        MathAngleDiff(player->mMotion.mFacing, 0xC00000) <= 0x18E38D &&
         (current == 74 || current == 160 || current == 73) &&
         !fn_800E1870(player)) {
       Animation_800E2FE4 *animation =
@@ -213,36 +213,36 @@ void fn_800E36DC(Object_80039F5C *player) {
   }
   case 3: {
     if (fn_801BE648(player->mpUnknown792) != 28) {
-      fn_800E3AE8(player, 1, 1);
+      PlayerPathStartSideAnim(player, 1, 1);
       break;
     }
     int change = 0;
     if (player->mFlags & 4) {
       player->mFlags &= ~4u;
       change = 1;
-    } else if (fn_800E3A34(player, &state->mUnknown4[state->mUnknown14]) != 1 ||
+    } else if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) != 1 ||
                !(player->mMotion.mPos.mY >=
                  state->mUnknown4[state->mUnknown14].mY + 0.3f))
       change = 1;
     if (change == 1) {
-      fn_800E3AE8(player, 8, 1);
+      PlayerPathStartSideAnim(player, 8, 1);
       state->mUnknown1E = 1;
     }
     break;
   }
   case 2: {
-    if (fn_800E3A34(player, &state->mUnknown4[state->mUnknown14]) == 1) {
+    if (PlayerPathIsLaneClear(player, &state->mUnknown4[state->mUnknown14]) == 1) {
       Point_8017886C delta;
       fn_80227690(&delta, &state->mUnknown4[state->mUnknown14],
                   &player->mMotion.mPos);
       float distance = fn_802270A4(&delta);
       int direction = fn_801CFE40(delta.mY, delta.mX);
-      if (!(distance <= 0.3f) && fn_801CFFD0(direction, 0xC00000) <= 0x2AAAA9) {
+      if (!(distance <= 0.3f) && MathAngleDiff(direction, 0xC00000) <= 0x2AAAA9) {
         if (player->mUnknown560.mFlags.mBytes[0] ||
             !(player->mMotion.mPos.mY >=
               lbl_803EAD38 * 0.5f +
                   (fn_80177FFC(player->mIdBytes[2]).mY + 0.15625f))) {
-          fn_800E3AE8(player, 1, 2);
+          PlayerPathStartSideAnim(player, 1, 2);
           state->mUnknown1E = 1;
         } else {
           player->mUnknown512.mUnknown15 = 28;
@@ -256,11 +256,11 @@ void fn_800E36DC(Object_80039F5C *player) {
         point.mY -= 5.0f;
         fn_80227690(&delta, &point, &player->mMotion.mPos);
         state->mUnknown38 = fn_801CFE40(delta.mY, delta.mX);
-        fn_800E3AE8(player, 1, 2);
+        PlayerPathStartSideAnim(player, 1, 2);
         state->mUnknown1E = 1;
       }
     } else {
-      fn_800E3AE8(player, 1, 1);
+      PlayerPathStartSideAnim(player, 1, 1);
       state->mUnknown1E = 1;
     }
     break;
@@ -268,11 +268,11 @@ void fn_800E36DC(Object_80039F5C *player) {
   case 1:
     if (player->mFlags & 4) {
       player->mFlags &= ~4u;
-      fn_800E3AE8(player, 8, 1);
+      PlayerPathStartSideAnim(player, 8, 1);
     }
     break;
   }
   if (state->mUnknown1E >= 2 && state->mUnknown1E <= 3)
-    fn_80067E3C(119, &player->mMotion.mPos, player->mId, 0, 0, 0);
+    AudmonEventPostId(119, &player->mMotion.mPos, player->mId, 0, 0, 0);
 }
 }

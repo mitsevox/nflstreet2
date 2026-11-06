@@ -1,10 +1,10 @@
 #include "game/Object_80039F5C.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/fn_80178D18.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80040818.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 
 struct Record_800BAE7C;
@@ -37,17 +37,17 @@ struct Block_800BC538 {
 extern "C" {
 void fn_80093410(int handle);
 void fn_800940F0(int handle);
-Camera_8013F738 *fn_8013FA04(int index);
+GameCamera_t *CamGameGetCamera(int index);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
 int fn_801F0F18(int a);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 int fn_80040F10(void);
 void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
-int fn_800655F8(void);
-void fn_80074358(int index);
+int PauseIsUnblocked(void);
+void SpchIGPurgeChannel(int index);
 void fn_800941B8(void);
 int fn_800B6644(int index);
 int fn_800BA6F8(void);
@@ -81,7 +81,7 @@ extern "C" void fn_800BB458(void)
 
 extern "C" void fn_800BB504(void)
 {
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
 
     fn_801F0F18(0);
     if (lbl_803EC98C->mUnknown20 != -1) {
@@ -99,9 +99,9 @@ extern "C" void fn_800BB504(void)
         lbl_803EC98C->mUnknown1C = -1;
     }
     fn_800BB458();
-    pCamera = fn_8013FA04(2);
+    pCamera = CamGameGetCamera(2);
     if (pCamera->mUnknown28 != 0) {
-        fn_802286D8((Object_80228224 *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
+        VptSetPerspective((Viewport_t *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
     }
 }
 
@@ -134,16 +134,16 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     if (lbl_803EC98C->mUnknown0 > 1 || lbl_803EC98C->mUnknownC != -1 || lbl_803EC98C->mUnknown32 == 1) {
         return;
     }
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013F3FC();
     fn_800BB9A4(1, 1);
     fn_80162780(1, 1);
-    fn_80074358(0);
-    fn_80074358(1);
+    SpchIGPurgeChannel(0);
+    SpchIGPurgeChannel(1);
     if (fn_800BA6F8() == 0) {
         fn_800BBE98();
-        if (fn_800655F8() == 0) {
-            fn_800655D0();
+        if (PauseIsUnblocked() == 0) {
+            PauseUnblock();
         }
     } else {
         lbl_803EAB94 = 1;

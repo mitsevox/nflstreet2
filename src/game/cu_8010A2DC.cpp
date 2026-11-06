@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -86,7 +86,7 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
                 fn_801C1F94(&message, 0, 4);
                 message.mUnknown1[0] = a;
                 message.mId = 62;
-                fn_80137D58(fn_801374BC(), &toBall);
+                BallGetPosition(BallGetCurrent(), &toBall);
                 fn_802276B4(&toBall, &toBall, &p->mMotion.mPos);
                 if (b == -1) {
                     if (fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 3.0f &&

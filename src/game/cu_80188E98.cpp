@@ -4,12 +4,12 @@
 #include "game/InGame.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
-#include "game/fn_801C3660.h"
+#include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
-#include "game/Object_80228224.h"
+#include "engine/viewporttypes.h"
 
 extern "C" {
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 }
 
 /* One of the eight 56-byte records at 0x80362FC0. */
@@ -24,22 +24,22 @@ struct Record_80362FC0 {
 };
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 extern char lbl_802EBE5C[];
 extern char lbl_802EBE78[];
 extern char lbl_802EBE98[];
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 double fabs(double);
 
-void fn_80024654(void);
-int fn_80033144(void *p);
+void BootHandleReset(void);
+int MainFEGroupIsFirstStart(void *p);
 void fn_8000FCD4(int a);
 void fn_80047670(int handle);
 void fn_80047698(void);
-void fn_800545C0(void);
-void fn_800545E8(void);
-void fn_80064690(void);
+void InGameStateReset(void);
+void InGameStateClearActive(void);
+void ScreenMsgDispatch(void);
 void fn_8006CA84(int a);
 void fn_8013CF98(void);
 float fn_8013D050(void);
@@ -65,16 +65,16 @@ void fn_8018AD78(void);
 void fn_8018AFD0(int a);
 unsigned char fn_8018AFD8(unsigned char value);
 unsigned char fn_8018AFE8(void);
-void fn_80191378(Object_80228224 *pObject);
-void fn_80196174(Object_80228224 *pObject, int a);
+void DbgScreenRenderCallback(Viewport_t *pObject);
+void fn_80196174(Viewport_t *pObject, int a);
 void fn_80196204(void);
-void fn_801A139C(void);
-void fn_801A6730(void);
-void *fn_801C3610(int a, int b);
-void fn_801C3640(void *p);
-void fn_801C3A10(void *p, float a);
-void fn_801C3EA4(void *p, float a, float b, float c);
-void fn_801C3ED0(void *p, int a, int b, int c);
+void PlyrIconQueueReset(void);
+void UISResListSetup(void);
+void *CamCreate(int a, int b);
+void CamDestroy(void *p);
+void CamSetZScale(void *p, float a);
+void CamFreeSetPos(void *p, float a, float b, float c);
+void CamFreeSetAngle(void *p, int a, int b, int c);
 void fn_801CD2A4(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
@@ -84,18 +84,18 @@ int fn_801CEA14(void);
 int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEC7C(void);
-int fn_801CECCC(int index);
-void fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+void GlibRenderSelectBin(int a);
 float fn_801CFD28(int a);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-int fn_801DCF8C(int a);
-int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(int, int));
-void fn_801DD0E8(int handle);
-int fn_801DD268(int handle, int a, int b, int c);
-void fn_801DD320(int handle, int a);
+int ObjNewType_(int a, int b, int c, void (*pA)(), void (*pB)());
+int ObjDelType(int a);
+int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(int, int));
+void ObjDelList(int handle);
+int ObjNewInList(int handle, int a, int b, int c);
+void ObjRemoveFromList(int handle, int a);
 int fn_802188A0(int a, int b, int c, int d, int e, int f);
 void fn_802188D4(void *p, int a, int b, int c, int d, int e, int f, unsigned int g);
 void fn_80218A34(void *p);
@@ -126,21 +126,21 @@ void fn_802212C8(void);
 void fn_80222220(void);
 void fn_80223460(void);
 void fn_80225654(void);
-void fn_802363B0(Object_80228224 *pObject);
-void fn_802363E0(Object_80228224 *pObject);
+void fn_802363B0(Viewport_t *pObject);
+void fn_802363E0(Viewport_t *pObject);
 int fn_80236EC0(int a);
 }
 
 static Cache_80188688 *lbl_803EB640 = 0;
-static Object_80228224 *lbl_803EB644 = 0;
+static Viewport_t *lbl_803EB644 = 0;
 static void *lbl_803EB648 = 0;
 static int lbl_803EB64C = 0;
 static int lbl_803EB650 = 0;
-static Object_80228224 *lbl_803EB654 = 0;
+static Viewport_t *lbl_803EB654 = 0;
 static void *lbl_803EB658 = 0;
 static int lbl_803EB65C = 0;
 static int lbl_803EB660 = 0;
-static Object_80228224 *lbl_803EB664 = 0;
+static Viewport_t *lbl_803EB664 = 0;
 static void *lbl_803EB668 = 0;
 static int lbl_803EB66C = 0;
 static int lbl_803EB670 = 0;
@@ -184,7 +184,7 @@ void fn_80188ED4(void *p)
 {
     fn_80218AB0(p, fn_801890F0, fn_80189164);
     fn_80218AC4(p, fn_802212C8);
-    fn_80218AA8(p, fn_80064690);
+    fn_80218AA8(p, ScreenMsgDispatch);
     fn_80218ABC(p, fn_801891A8);
     fn_80218ACC(p, fn_801897BC);
     fn_80218AD4(p, 0, fn_8021EFD8);
@@ -206,14 +206,14 @@ int fn_80189004(int a, int b)
     fn_80188D2C();
     fn_801CE9E0(0);
     fn_801CD2A4();
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_8021ED88(fn_8021EA44(1));
     }
     saved = fn_80236EC0(0);
     if (a == lbl_803EB650) {
         if (lbl_803EB688 && (lbl_803EB680 & 1)) {
             fn_8021992C(lbl_803EB688, b);
-            fn_801A139C();
+            PlyrIconQueueReset();
         }
         if (lbl_803EB690 && (lbl_803EB680 & 2)) {
             fn_8021992C(lbl_803EB690, b);
@@ -449,19 +449,19 @@ void fn_801897BC(void)
     fn_801892F0();
 }
 
-void fn_801897DC(Object_80228224 *pObject)
+void fn_801897DC(Viewport_t *pObject)
 {
     float near = 0.1f;
     float far = 1500.0f;
 
-    fn_802286D8(pObject, 45.0f, fn_8013D050(), near, far);
+    VptSetPerspective(pObject, 45.0f, fn_8013D050(), near, far);
 }
 
 void fn_80189844(void) {}
 
 void fn_80189848(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -470,40 +470,40 @@ void fn_80189848(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!fn_80027DF0() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB644 = fn_80228224(&desc);
+    lbl_803EB644 = VptOpen(&desc);
     fn_801897DC(lbl_803EB644);
     lbl_803EB644->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB644, 0.0f, 0.0f, 0.0f);
-    lbl_803EB648 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB648, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB648, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB644, lbl_803EB648);
-    if (fn_80027DF0()) {
-        fn_801C3A10(lbl_803EB648, 1.0f);
+    VptSetEraseColor(lbl_803EB644, 0.0f, 0.0f, 0.0f);
+    lbl_803EB648 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB648, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB648, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB644, lbl_803EB648);
+    if (FELoopIsMainFEActive()) {
+        CamSetZScale(lbl_803EB648, 1.0f);
     } else {
-        fn_801C3A10(lbl_803EB648, 4.0f);
+        CamSetZScale(lbl_803EB648, 4.0f);
     }
-    fn_80228474(lbl_803EB644, 2, fn_80191378, 31);
-    lbl_803EB64C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB64C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB644, lbl_803EB64C, 0);
-    lbl_803EB650 = fn_801DD268(lbl_803EB64C, 21, 0, 0);
-    if (!fn_80027DF0()) {
+    VptSetCallback(lbl_803EB644, 2, DbgScreenRenderCallback, 31);
+    lbl_803EB64C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB64C, 21, 0, fn_80189004);
+    VptSetObjectList(lbl_803EB644, lbl_803EB64C, 0);
+    lbl_803EB650 = ObjNewInList(lbl_803EB64C, 21, 0, 0);
+    if (!FELoopIsMainFEActive()) {
         fn_80196174(lbl_803EB644, 0);
     }
     lbl_803EB688 = fn_801D2B7C(fn_802188A0(12, 9, 160, 7, 640, 160), 0, 0);
-    fn_802188D4(lbl_803EB688, 12, 9, 160, 7, 640, 160, (unsigned int)(lbl_803EA2C4 * 16.666668f));
+    fn_802188D4(lbl_803EB688, 12, 9, 160, 7, 640, 160, (unsigned int)(gFrameTimeScale * 16.666668f));
     fn_80188ED4(lbl_803EB688);
     fn_8018A85C(lbl_803EB688);
 }
 
 void fn_80189ADC(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -512,32 +512,32 @@ void fn_80189ADC(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!fn_80027DF0() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB654 = fn_80228224(&desc);
+    lbl_803EB654 = VptOpen(&desc);
     fn_801897DC(lbl_803EB654);
     lbl_803EB654->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB654, 0.0f, 0.0f, 0.0f);
-    lbl_803EB658 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB658, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB654, lbl_803EB658);
-    fn_801C3A10(lbl_803EB658, 4.0f);
-    lbl_803EB65C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB65C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB654, lbl_803EB65C, 0);
-    lbl_803EB660 = fn_801DD268(lbl_803EB65C, 21, 0, 0);
+    VptSetEraseColor(lbl_803EB654, 0.0f, 0.0f, 0.0f);
+    lbl_803EB658 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB658, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB658, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB654, lbl_803EB658);
+    CamSetZScale(lbl_803EB658, 4.0f);
+    lbl_803EB65C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB65C, 21, 0, fn_80189004);
+    VptSetObjectList(lbl_803EB654, lbl_803EB65C, 0);
+    lbl_803EB660 = ObjNewInList(lbl_803EB65C, 21, 0, 0);
     lbl_803EB690 = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
-    fn_802188D4(lbl_803EB690, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
+    fn_802188D4(lbl_803EB690, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
     fn_80188ED4(lbl_803EB690);
     fn_8018A85C(lbl_803EB690);
 }
 
 void fn_80189D20(void)
 {
-    Desc_80228224 desc;
+    ViewportDesc_t desc;
 
     desc.mUnknown0 = 5;
     desc.mUnknown2 = 0;
@@ -546,25 +546,25 @@ void fn_80189D20(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!fn_80027DF0() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
-    lbl_803EB664 = fn_80228224(&desc);
+    lbl_803EB664 = VptOpen(&desc);
     fn_801897DC(lbl_803EB664);
     lbl_803EB664->mUnknown28 &= ~1;
-    fn_8022864C(lbl_803EB664, 0.0f, 0.0f, 0.0f);
-    lbl_803EB668 = fn_801C3610(0, 0);
-    fn_801C3ED0(lbl_803EB668, 0, 0x800000, 0x800000);
-    fn_801C3EA4(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
-    fn_801C3660(lbl_803EB664, lbl_803EB668);
-    fn_801C3A10(lbl_803EB668, 4.0f);
-    lbl_803EB66C = fn_801DCFF0(1, 336, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(lbl_803EB66C, 21, 0, fn_80189004);
-    fn_802286CC(lbl_803EB664, lbl_803EB66C, 0);
-    lbl_803EB670 = fn_801DD268(lbl_803EB66C, 21, 0, 0);
+    VptSetEraseColor(lbl_803EB664, 0.0f, 0.0f, 0.0f);
+    lbl_803EB668 = CamCreate(0, 0);
+    CamFreeSetAngle(lbl_803EB668, 0, 0x800000, 0x800000);
+    CamFreeSetPos(lbl_803EB668, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamAddCameraToViewport(lbl_803EB664, lbl_803EB668);
+    CamSetZScale(lbl_803EB668, 4.0f);
+    lbl_803EB66C = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
+    ObjSetListObjFunc(lbl_803EB66C, 21, 0, fn_80189004);
+    VptSetObjectList(lbl_803EB664, lbl_803EB66C, 0);
+    lbl_803EB670 = ObjNewInList(lbl_803EB66C, 21, 0, 0);
     lbl_803EB68C = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
-    fn_802188D4(lbl_803EB68C, 6, 9, 64, 1, 128, 128, (unsigned int)(lbl_803EA2C4 * 16.666668f));
+    fn_802188D4(lbl_803EB68C, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
     fn_80188ED4(lbl_803EB68C);
     fn_8018A85C(lbl_803EB68C);
 }
@@ -575,21 +575,21 @@ void fn_80189F68(void)
 {
     Desc_80188688 desc;
     int i;
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
     int result = 0;
 
     lbl_803EB680 = 0;
     fn_8021D880(fn_80188EA0);
-    fn_801DCF0C(21, 20, 4, fn_80188EA4, fn_80188EA8);
+    ObjNewType_(21, 20, 4, fn_80188EA4, fn_80188EA8);
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 15;
     desc.mUnknown8 = lbl_803EB698;
-    fn_801A6730();
+    UISResListSetup();
     fn_8021EF6C(fn_80189F64);
     if (!flag) {
         fn_80188E98();
     }
-    if (fn_8002894C()) {
+    if (InGameIsPlaying()) {
         for (i = 0; i < 15; i++) {
             lbl_80362F84[i] = 0;
         }
@@ -605,22 +605,22 @@ void fn_80189F68(void)
         desc.mUnknown12 = 0;
     }
     lbl_803EB640 = fn_80188688(&desc);
-    if (!fn_80027DF0()) {
+    if (!FELoopIsMainFEActive()) {
         fn_8013CF98();
     }
     fn_80189ADC();
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_80189D20();
     }
     fn_80189848();
     fn_8018AB0C();
-    if (fn_80027DF0() && !flag) {
+    if (FELoopIsMainFEActive() && !flag) {
         fn_801D339C(-1);
         fn_801D342C(-1);
     }
     result = fn_801890F0(14, 0);
     fn_80218CB8(lbl_803EB688, result);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (!flag) {
             fn_8018A69C(0);
             fn_8018A69C(1);
@@ -634,12 +634,12 @@ void fn_80189F68(void)
             fn_802363B0(lbl_803EB644);
         }
         fn_8018AFD8(1);
-    } else if (fn_8002894C()) {
+    } else if (InGameIsPlaying()) {
         fn_8017F584();
         fn_80047670(lbl_803EB64C);
-        fn_8017CED4((unsigned int)(lbl_803EA2C4 * 16.666668f));
+        fn_8017CED4((unsigned int)(gFrameTimeScale * 16.666668f));
         fn_8018AFD8(0);
-        fn_800545C0();
+        InGameStateReset();
         fn_8017F264();
     }
     fn_80220D04();
@@ -667,19 +667,19 @@ void fn_8018A274(void)
     fn_80218A34(lbl_803EB688);
     fn_801D2BD0(lbl_803EB688);
     lbl_803EB688 = 0;
-    if (!fn_80027DF0()) {
+    if (!FELoopIsMainFEActive()) {
         fn_80196204();
     }
-    fn_802284EC(lbl_803EB644, fn_80191378);
-    fn_801DD320(lbl_803EB64C, lbl_803EB650);
-    fn_80228D58(lbl_803EB650);
-    fn_80228E18();
+    VptRemoveCallback(lbl_803EB644, DbgScreenRenderCallback);
+    ObjRemoveFromList(lbl_803EB64C, lbl_803EB650);
+    VptTrashObject(lbl_803EB650);
+    VptFlushObjectTrashSync();
     lbl_803EB650 = 0;
-    fn_801DD0E8(lbl_803EB64C);
+    ObjDelList(lbl_803EB64C);
     lbl_803EB64C = 0;
-    fn_801C3640(lbl_803EB648);
+    CamDestroy(lbl_803EB648);
     lbl_803EB648 = 0;
-    fn_802283FC(lbl_803EB644);
+    VptClose(lbl_803EB644);
     lbl_803EB644 = 0;
 }
 
@@ -688,15 +688,15 @@ void fn_8018A314(void)
     fn_80218A34(lbl_803EB690);
     fn_801D2BD0(lbl_803EB690);
     lbl_803EB690 = 0;
-    fn_801DD320(lbl_803EB65C, lbl_803EB660);
-    fn_80228D58(lbl_803EB660);
-    fn_80228E18();
+    ObjRemoveFromList(lbl_803EB65C, lbl_803EB660);
+    VptTrashObject(lbl_803EB660);
+    VptFlushObjectTrashSync();
     lbl_803EB660 = 0;
-    fn_801DD0E8(lbl_803EB65C);
+    ObjDelList(lbl_803EB65C);
     lbl_803EB65C = 0;
-    fn_801C3640(lbl_803EB658);
+    CamDestroy(lbl_803EB658);
     lbl_803EB658 = 0;
-    fn_802283FC(lbl_803EB654);
+    VptClose(lbl_803EB654);
     lbl_803EB654 = 0;
 }
 
@@ -705,33 +705,33 @@ void fn_8018A390(void)
     fn_80218A34(lbl_803EB68C);
     fn_801D2BD0(lbl_803EB68C);
     lbl_803EB68C = 0;
-    fn_801DD320(lbl_803EB66C, lbl_803EB670);
-    fn_80228D58(lbl_803EB670);
-    fn_80228E18();
+    ObjRemoveFromList(lbl_803EB66C, lbl_803EB670);
+    VptTrashObject(lbl_803EB670);
+    VptFlushObjectTrashSync();
     lbl_803EB670 = 0;
-    fn_801DD0E8(lbl_803EB66C);
+    ObjDelList(lbl_803EB66C);
     lbl_803EB66C = 0;
-    fn_801C3640(lbl_803EB668);
+    CamDestroy(lbl_803EB668);
     lbl_803EB668 = 0;
-    fn_802283FC(lbl_803EB664);
+    VptClose(lbl_803EB664);
     lbl_803EB664 = 0;
 }
 
 void fn_8018A40C(void)
 {
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
 
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (!flag) {
             fn_802363E0(lbl_803EB644);
         }
-    } else if (fn_8002894C()) {
+    } else if (InGameIsPlaying()) {
         fn_80047698();
         fn_8017CFAC();
-        fn_800545E8();
+        InGameStateClearActive();
         fn_8017F284();
     }
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_8018A390();
     }
     fn_8018A314();
@@ -740,7 +740,7 @@ void fn_8018A40C(void)
     fn_8018AB3C();
     fn_80188728(lbl_803EB640);
     lbl_803EB640 = 0;
-    fn_801DCF8C(21);
+    ObjDelType(21);
 }
 
 void fn_8018A4B4(int a)
@@ -787,7 +787,7 @@ void fn_8018A4BC(int a, unsigned int id, float value)
             }
         }
         if (fn_801895EC(&a, &id, &value)) {
-            if ((id == 7 || id == 0) && fn_80027DF0()) {
+            if ((id == 7 || id == 0) && FELoopIsMainFEActive()) {
                 fn_8000FCD4(a);
             }
             fn_802196B4(lbl_803EB688, a, id, 1, &value, lbl_803EB674);
@@ -843,17 +843,17 @@ int fn_8018A7A0(void)
 
 void fn_8018A7B0(void)
 {
-    if (!fn_8022863C()) {
-        if (fn_80027DF0()) {
-            fn_80024654();
+    if (!VptIsProcessing()) {
+        if (FELoopIsMainFEActive()) {
+            BootHandleReset();
         }
-        fn_802285CC();
+        VptProcessViewports();
         fn_8006CA84(1);
         fn_801CE82C();
     }
 }
 
-void fn_8018A7F8(Object_80228224 *pObject, int mode)
+void fn_8018A7F8(Viewport_t *pObject, int mode)
 {
     float aspect = 4.0f / 3.0f;
 
@@ -865,10 +865,10 @@ void fn_8018A7F8(Object_80228224 *pObject, int mode)
         aspect = 16.0f / 9.0f;
         break;
     }
-    fn_802286D8(pObject, 45.0f, aspect, 0.1f, 1500.0f);
+    VptSetPerspective(pObject, 45.0f, aspect, 0.1f, 1500.0f);
 }
 
-Object_80228224 *fn_8018A854(void)
+Viewport_t *fn_8018A854(void)
 {
     return lbl_803EB644;
 }
@@ -903,6 +903,6 @@ void fn_8018A8C8(int a)
 {
     fn_80220CDC(a);
     fn_80220CFC(a);
-    fn_801CECDC(fn_801CECCC(14));
+    GlibRenderSelectBin(GlibRenderGetBin(14));
 }
 }

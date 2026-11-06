@@ -4,12 +4,12 @@
 #include <dolphin/gx/GXDispList.h>
 #include "engine/tmlib.h"
 
-static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
+static void fn_80210D30(TMGeomNode_t *pNode, TMChannelList_t *pList)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
+    TMRenderState_t *pState = &lbl_803E96E8;
 
     if (pNode->mFormatIndex != pState->mUnknown60) {
-        fn_80215A14(pList);
+        TMChannelListSubmit_DFA(pList);
         if (pNode->mFlags & 1) {
             GXSetVtxDesc(GX_VA_PNMTXIDX, GX_DIRECT);
         }
@@ -17,7 +17,7 @@ static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
             pState->mUnknown60 = pNode->mFormatIndex;
         }
     } else {
-        fn_80215B00(pList);
+        TMChannelListSubmit_A(pList);
     }
     GXCallDisplayList(pNode->mpData, pNode->mDisplayListSize << 5);
     if (pNode->mFlags & 1) {
@@ -25,23 +25,23 @@ static void fn_80210D30(GeomNode_8020ED10 *pNode, ChannelList_8021592C *pList)
     }
 }
 
-static void fn_80211138(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode)
+static void fn_80211138(TMRenderState_t *pState, TMGeomNode_t *pNode)
 {
-    ChannelList_8021592C list;
-    GeomNode_8020ED10 *pLod;
+    TMChannelList_t list;
+    TMGeomNode_t *pLod;
 
-    fn_80210B6C(pNode->mMaterial);
+    TMRenderBindMaterialIndex(pNode->mMaterial);
     pLod = pNode;
     if (pState->mLod != 0 && pNode->mNumLods >= pState->mLod) {
         pLod = &pNode[pState->mLod];
     }
-    fn_8021592C(&list, pLod, pState->mpGeom->mpAttrs, pState->mpChannels);
+    TMChannelListBuild(&list, pLod, pState->mpGeom->mpAttrs, pState->mpChannels);
     if (pState->mNumHooks == 0) {
         if (pNode->mFlags & 8) {
             unsigned int i;
 
             for (i = 0; i < list.mCount; i++) {
-                GeomAttr_8020ED10 *pAttr = list.mapAttrs[i];
+                TMGeomAttr_t *pAttr = list.mapAttrs[i];
 
                 if (pAttr->mType == GX_VA_POS && pAttr->mCompType == GX_S16) {
                     list.maCompType[i] = GX_F32;
@@ -65,8 +65,8 @@ static void fn_80211138(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode)
 
 void fn_8021126C(void)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
-    Geom_8020ED10 *pGeom = pState->mpGeom;
+    TMRenderState_t *pState = &lbl_803E96E8;
+    TMGeom_t *pGeom = pState->mpGeom;
     unsigned int i;
 
     if (pGeom != 0) {
@@ -78,8 +78,8 @@ void fn_8021126C(void)
 
 void fn_802112DC(unsigned short *pIndices, unsigned int count)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
-    Geom_8020ED10 *pGeom = pState->mpGeom;
+    TMRenderState_t *pState = &lbl_803E96E8;
+    TMGeom_t *pGeom = pState->mpGeom;
     unsigned int i;
 
     if (pGeom != 0) {
@@ -91,8 +91,8 @@ void fn_802112DC(unsigned short *pIndices, unsigned int count)
 
 void fn_80211350(void)
 {
-    RenderState_80210298 *pState = &lbl_803E96E8;
-    Geom_8020ED10 *pGeom = pState->mpGeom;
+    TMRenderState_t *pState = &lbl_803E96E8;
+    TMGeom_t *pGeom = pState->mpGeom;
     unsigned int i;
 
     if (pGeom != 0) {
@@ -104,10 +104,10 @@ void fn_80211350(void)
 
 void fn_802113C0(int state, int arg)
 {
-    Swap_802160A0 *pSwap = lbl_803E96E8.mpSwap;
+    TMSwapDef_t *pSwap = lbl_803E96E8.mpSwap;
 
     if (pSwap != 0) {
-        SwapState_802160A0 *pSwapState = fn_80216190(pSwap, state, arg);
+        TMSwapState_t *pSwapState = TMSwapGetState(pSwap, state, arg);
 
         if (pSwapState != 0) {
             fn_802112DC(&pSwap->mpNodeIndices[pSwapState->mFirstNode], pSwapState->mNumNodes);
@@ -117,20 +117,20 @@ void fn_802113C0(int state, int arg)
 
 void fn_80211424(unsigned short *pIndices, unsigned int count)
 {
-    Geom_8020ED10 *pGeom = lbl_803E96E8.mpGeom;
-    RenderState_80210298 *pState = &lbl_803E96E8;
-    MaterialList_8020FF34 *pList = pState->mpMaterialList;
-    GeomAttr_8020ED10 *pAttrs;
+    TMGeom_t *pGeom = lbl_803E96E8.mpGeom;
+    TMRenderState_t *pState = &lbl_803E96E8;
+    TMMaterialList_t *pList = pState->mpMaterialList;
+    TMGeomAttr_t *pAttrs;
     unsigned int i;
 
     if (pGeom != 0) {
         pAttrs = pGeom->mpAttrs;
 
         for (i = 0; i < count; i++) {
-            GeomNode_8020ED10 *pNode = &pGeom->mpNodes[pIndices[i]];
-            MaterialParm_8020FAAC *pParm = pList->mppMaterials[pNode->mMaterial]->mpParms;
-            Clut_80212534 *pClut = pParm->mpClut;
-            Texture_80212234 *pTexture = pParm->mpTexture;
+            TMGeomNode_t *pNode = &pGeom->mpNodes[pIndices[i]];
+            TMMaterialTexState_t *pParm = pList->mppMaterials[pNode->mMaterial]->mpParms;
+            TMClut_t *pClut = pParm->mpClut;
+            TMTexture_t *pTexture = pParm->mpTexture;
 
             if (pClut != 0) {
                 GXLoadTlut(&pClut->u.maTlut[0], 0);
@@ -148,7 +148,7 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
                 }
             }
             if (pNode->mFormatIndex != lbl_803E96E8.mUnknown60) {
-                GeomAttr_8020ED10 *pAttr = &pAttrs[pNode->mFirstAttr];
+                TMGeomAttr_t *pAttr = &pAttrs[pNode->mFirstAttr];
                 int n = pNode->mNumAttrs;
 
                 GXClearVtxDesc();
@@ -165,7 +165,7 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
                     lbl_803E96E8.mUnknown60 = pNode->mFormatIndex;
                 }
             } else {
-                GeomAttr_8020ED10 *pAttr = &pAttrs[pNode->mFirstAttr];
+                TMGeomAttr_t *pAttr = &pAttrs[pNode->mFirstAttr];
                 int n = pNode->mNumAttrs;
 
                 for (; n > 0; n--) {

@@ -10,7 +10,7 @@ void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_
 void fn_80091644(int index);
 int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, Object_80039F5C *pRef, unsigned short frameIndex,
                 Vector_80039F5C *pOut, int *pAngle);
-Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
+Ball_t *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 }
 
 extern int lbl_803EA8CC;

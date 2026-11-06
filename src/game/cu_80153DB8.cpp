@@ -1,7 +1,7 @@
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_802372EC.h"
@@ -33,7 +33,7 @@ void fn_800B3EFC(int team);
 void fn_80167FF0(int team);
 void fn_800AD910(int a, float b);
 void fn_8009D888(int index, int value);
-void fn_8013FB44(void);
+void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
@@ -69,7 +69,7 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
 void fn_80153EA8(Class_802A1B18 *p)
 {
     fn_8009D888(0, 10);
-    fn_8013FB44();
+    CamGameResumeAll();
     fn_8016DDDC(fn_80178308());
     fn_8016DDDC(fn_80178320());
     fn_801790D0(fn_80178308(), 0.0f, 0.0f);
@@ -103,7 +103,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
             if (value != lbl_803EB2F4) {
                 lbl_803EB2F4 = value;
                 if (value <= 5) {
-                    fn_80067D4C(20, 0);
+                    AudmonEventPost(20, 0);
                 }
             }
         }

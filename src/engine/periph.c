@@ -12,7 +12,7 @@ extern unsigned int lbl_803ED650;
 extern unsigned int lbl_803ED654;
 extern unsigned char *lbl_803ED65C;
 
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_801E15B8(void);
 int fn_801E173C(void);
 
@@ -84,8 +84,8 @@ static int fn_801E12F8(unsigned int numDevices, unsigned int numBits, unsigned i
         }
     }
     if (err == 0) {
-        fn_801D34D0(lbl_803ED658, numDevices * sizeof(Device_801E12F8), 0, 4);
-        fn_801D34D0(lbl_803ED65C, numDevices * lbl_803ECF54, 0, 4);
+        MemFill(lbl_803ED658, numDevices * sizeof(Device_801E12F8), 0, 4);
+        MemFill(lbl_803ED65C, numDevices * lbl_803ECF54, 0, 4);
         lbl_803ED660 = 0;
         pDevice = lbl_803ED658;
         pData = lbl_803ED65C;
@@ -123,11 +123,11 @@ int fn_801E1478(Desc_801E1478 *pDesc)
             err = fn_801E11E8(pDesc->mppDrivers);
             if (err == 0) {
                 lbl_803ED660 = pDesc->mNumDevices;
-                err = fn_801E1A20(pDesc->mpUnknown14);
+                err = PerSystemInit(pDesc->mpUnknown14);
                 if (err == 0) {
                     lbl_803ECF50 = pDesc->mpUnknown0C;
                     lbl_803EBD68 = 1;
-                    err = fn_801E1AB4();
+                    err = PerRegisterDevices();
                 }
             }
         }
@@ -146,7 +146,7 @@ int fn_801E153C(void)
     if (lbl_803EBD68) {
         fn_801F8014(&lbl_8039ADC4);
         fn_801E173C();
-        fn_801E1A80();
+        PerSystemShutdown();
         fn_801E1444();
         fn_801E12CC();
         fn_801F809C(&lbl_8039ADC4);

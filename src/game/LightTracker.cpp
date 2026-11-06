@@ -1,0 +1,74 @@
+/* Keeps track of which level light shines on an object and fades it in and out when it
+   changes. */
+
+#include "engine/viewport.h"
+#include "game/LevelData.h"
+#include "game/Object_80039F5C.h"
+#include "game/LightTracker.h"
+
+extern "C" {
+void fn_801D0470(int a);
+void fn_802271F0(float *pOut, float *pIn);
+void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+}
+
+extern "C" {
+
+void LightTrackerReset(LightTracker_t *pTracker)
+{
+    pTracker->mId = -1;
+    pTracker->mCount = 0;
+}
+
+int LightTrackerUpdate(LightTracker_t *pTracker, LightSource_t *pSource, float *pDirection, float *pScaled)
+{
+    if (pSource != 0 && pSource->mUnknown1C != -1) {
+        pTracker->mId = pSource->mUnknown1C;
+        if (pTracker->mCount <= 8) {
+            pTracker->mCount++;
+        }
+    } else if (pTracker->mCount != 0) {
+        pTracker->mCount--;
+        if (pTracker->mCount == 0) {
+            pTracker->mId = -1;
+        }
+    }
+    if (pTracker->mId != -1) {
+        LevelMarker_t *pObject = LevelGetMarker(pTracker->mId);
+        Vector_80039F5C direction;
+        float scale;
+        unsigned int count = pTracker->mCount;
+
+        scale = count / 9.0f;
+        scale *= 255.0f;
+        direction.mX = pObject->mUnknown12.mX;
+        direction.mY = -pObject->mUnknown12.mZ;
+        direction.mZ = pObject->mUnknown12.mY;
+        fn_801D0470(VptGetMatrixStack());
+        fn_802271F0(&direction.mX, &direction.mX);
+        direction.mX = -direction.mX;
+        direction.mY = -direction.mY;
+        direction.mZ = -direction.mZ;
+        fn_80227C2C(&direction, &direction);
+        pDirection[0] = direction.mX;
+        pDirection[1] = direction.mY;
+        pDirection[2] = direction.mZ;
+        pScaled[0] = pObject->mUnknown0.mX * scale;
+        pScaled[1] = pObject->mUnknown0.mY * scale;
+        pScaled[2] = pObject->mUnknown0.mZ * scale;
+    }
+    return pTracker->mId != -1;
+}
+
+void LightTrackerSnap(LightTracker_t *pTracker, LightSource_t *pSource)
+{
+    if (pSource != 0 && pSource->mUnknown1C != -1) {
+        pTracker->mId = pSource->mUnknown1C;
+        pTracker->mCount = 9;
+    } else {
+        pTracker->mId = -1;
+        pTracker->mCount = 0;
+    }
+}
+
+}

@@ -6,7 +6,7 @@ extern float lbl_803ECB08;
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-void fn_801D0370(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
+void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void fn_801D0470(int mode);
 void fn_801D0494(void);
 void fn_801D0E94(void);
@@ -120,7 +120,7 @@ void fn_80142D98(Body_80142D98 *pBody, Vector_80039F5C *pNormal, float restituti
     up.mZ = 1.0f;
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pBody->mUnknown0, &pBody->mUnknown0);
     pBody->mUnknown12.mX = pBody->mUnknown0.mX * 0.5f;
     pBody->mUnknown12.mY = pBody->mUnknown0.mY * 0.5f;
@@ -185,7 +185,7 @@ void fn_80142FF8(Body_80142D98 *pA, Body_80142D98 *pB, Vector_80039F5C *pNormal,
     fn_802271F0(pNormal, pNormal);
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     fn_80227C2C(&pA->mUnknown0, &pA->mUnknown0);
     fn_80227C2C(&pB->mUnknown0, &pB->mUnknown0);
     pA->mUnknown12.mX = pA->mUnknown0.mX;
@@ -222,7 +222,7 @@ void fn_80143150(Vector_80039F5C *pOut, Vector_80039F5C *pNormal, float scale)
     up.mZ = 1.0f;
     fn_801D0470(3);
     fn_801D0494();
-    fn_801D0370(pNormal, &up);
+    MatRotVecToVec(pNormal, &up);
     v.mX = fn_80237260(0) - 0.5f;
     v.mY = fn_80237260(0) - 0.5f;
     v.mZ = fn_80237260(0) * 0.5f;
@@ -392,7 +392,7 @@ void fn_8014359C(Block_80170374 *pBlock, int part, int otherPart)
     }
 }
 
-void fn_80143668(Contact_80089330 *pContact, Contact_80143668 *pState, int second)
+void fn_80143668(CollideContact_t *pContact, Contact_80143668 *pState, int second)
 {
     unsigned char part;
     unsigned char otherPart;
@@ -433,7 +433,7 @@ int fn_80143718(Object_80039F5C *p, Object_80039F5C *pOther)
     return 0;
 }
 
-int fn_8014377C(ContactList_8030BD74 *pContacts, unsigned int partA, unsigned int partB)
+int fn_8014377C(CollideContactList_t *pContacts, unsigned int partA, unsigned int partB)
 {
     int result = 0;
 
@@ -477,7 +477,7 @@ void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB)
     }
 }
 
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, ContactList_8030BD74 *pContacts)
+void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB, CollideContactList_t *pContacts)
 {
     Body_80142D98 bodyA;
     Body_80142D98 bodyB;
@@ -490,7 +490,7 @@ void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C
     float totalB[2];
     float deltaA[2];
     float deltaB[2];
-    Contact_80089330 *pContact;
+    CollideContact_t *pContact;
     float restitution;
     int i;
 

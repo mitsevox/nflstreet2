@@ -1,3 +1,3 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
-Object_8007A334 lbl_803629E8;
+DbCursor lbl_803629E8;

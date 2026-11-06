@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Query_800CE770.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8022781C.h"
 #include "game/Move_8011AB38.h"
 
@@ -36,7 +36,7 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 int fn_800CD2B4(int mode, Object_80039F5C *p);
 int fn_800EC758(Object_80039F5C *p);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int value);
@@ -121,7 +121,7 @@ extern "C" Move_8011AB38 *fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOthe
         side = 0;
         limit = 0.175f;
     }
-    if (fn_801CFFD0(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x671C72) {
+    if (MathAngleDiff(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x671C72) {
         dir = 0;
     } else if (((p->mMotion.mFacing - pOther->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
         dir = 1;
@@ -154,8 +154,8 @@ extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther)
     Pair_8011BAE0 delta;
 
     fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-    if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), pOther->mMotion.mFacing) > (int)(lbl_803EB08C * 46603.38f)) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+    if (MathAngleDiff(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), pOther->mMotion.mFacing) > (int)(lbl_803EB08C * 46603.38f)) {
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         if (pCarrier != 0 && fn_8022781C(&pOther->mMotion.mPos, &pCarrier->mMotion.mPos) > lbl_803EB090) {
             return 0;

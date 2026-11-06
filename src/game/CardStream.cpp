@@ -1,9 +1,11 @@
+/* Memory-card streams: the open, close, read and write operations the save code uses to move save data to and from the card, keeping a CRC-32 of the bytes transferred. */
+
 #include <dolphin/os.h>
 extern "C" {
 void *memset(void *pDest, int value, unsigned int size);
-void fn_80089668(void);
-void fn_800896A8(void *pData, unsigned int size);
-void fn_800896EC(unsigned int *pResult);
+void ChecksumCRC32Begin(void);
+void ChecksumCRC32Update(void *pData, unsigned int size);
+void ChecksumCRC32End(unsigned int *pResult);
 void fn_801D6E04(int error);
 void fn_801D6E10(void *pData, unsigned int size);
 void fn_801D6E54(void *pData, unsigned int size);
@@ -42,14 +44,14 @@ struct CardStreamOps {
     unsigned int mUnknown18;
 };
 
-static unsigned int sPollCount = 0;
+static unsigned int _CardStream_uPollCount = 0;
 
 extern "C" {
-static void fn_80023E08(void)
+static void _CardStreamYield(void)
 {
-    if (++sPollCount > 2) {
+    if (++_CardStream_uPollCount > 2) {
         OSYieldThread();
-        sPollCount = 0;
+        _CardStream_uPollCount = 0;
     }
 }
 }
@@ -67,14 +69,14 @@ static int CardStreamOpen(CardStream *pStream, int unused, CardStreamTarget *pTa
         pStream->mFillToEnd = pTarget->mFillToEnd;
         pStream->mpTarget = pTarget;
         pTarget->mChecksum = 0xFFFFFFFF;
-        fn_80089668();
+        ChecksumCRC32Begin();
     }
     return result;
 }
 
 /* Transfers the bytes left before the end: zeros when writing, discarded when reading. */
 extern "C" {
-static int fn_80023EAC(CardStream *pStream)
+static int _CardStreamFillToEnd(CardStream *pStream)
 {
     int result = 0;
     unsigned int size = pStream->mSize;
@@ -93,14 +95,14 @@ static int fn_80023EAC(CardStream *pStream)
         } else {
             fn_801D6E10(buffer, count);
         }
-        sPollCount = 0;
+        _CardStream_uPollCount = 0;
         while (!fn_801D6EA0(&failed)) {
             if (failed) {
                 result = 0x24;
                 break;
             }
             fn_801D6F58();
-            fn_80023E08();
+            _CardStreamYield();
         }
         if (failed) {
             break;
@@ -124,11 +126,11 @@ static int CardStreamClose(CardStream *pStream)
 
     fn_801D6EA0(&failed);
     if (failed) {
-        fn_800896EC(&pStream->mpTarget->mChecksum);
+        ChecksumCRC32End(&pStream->mpTarget->mChecksum);
     } else {
-        fn_800896EC(&pStream->mpTarget->mChecksum);
+        ChecksumCRC32End(&pStream->mpTarget->mChecksum);
         if (pStream->mFillToEnd) {
-            result = fn_80023EAC(pStream);
+            result = _CardStreamFillToEnd(pStream);
         }
     }
     return result;
@@ -144,17 +146,17 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
         return 3;
     }
     fn_801D6E10(pData, size);
-    sPollCount = 0;
+    _CardStream_uPollCount = 0;
     while (!fn_801D6EA0(&failed)) {
         if (failed) {
             result = 0x24;
             break;
         }
         fn_801D6F58();
-        fn_80023E08();
+        _CardStreamYield();
     }
     if (!failed) {
-        fn_800896A8(pData, size);
+        ChecksumCRC32Update(pData, size);
     }
     *pDone = size;
     *pStream->mpPosition += size;
@@ -171,17 +173,17 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
         return 3;
     }
     fn_801D6E54(pData, size);
-    sPollCount = 0;
+    _CardStream_uPollCount = 0;
     while (!fn_801D6EA0(&failed)) {
         if (failed) {
             result = 0x24;
             break;
         }
         fn_801D6F58();
-        fn_80023E08();
+        _CardStreamYield();
     }
     if (!failed) {
-        fn_800896A8(pData, size);
+        ChecksumCRC32Update(pData, size);
     }
     *pDone = size;
     *pStream->mpPosition += size;
@@ -189,12 +191,12 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
 }
 
 extern "C" {
-static int fn_800241D8(unsigned int size)
+static int _CardStreamPrepare(unsigned int size)
 {
     return 0;
 }
 }
 
 CardStreamOps gCardStreamOps = {
-    CardStreamOpen, CardStreamClose, CardStreamRead, CardStreamWrite, 0, fn_800241D8, 16,
+    CardStreamOpen, CardStreamClose, CardStreamRead, CardStreamWrite, 0, _CardStreamPrepare, 16,
 };

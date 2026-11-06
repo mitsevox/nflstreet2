@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Team_80167A8C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Message_800F01CC.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022781C.h"
@@ -12,7 +12,7 @@ int fn_8012CAB4(Object_80039F5C *p);
 float fn_8012CD60(Object_80039F5C *p, float scale);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 int fn_80178320(void);
 }
@@ -120,13 +120,13 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
 extern "C" int fn_8009FB60(Object_80039F5C *p)
 {
     int sent = 0;
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
 
-    if ((unsigned short)fn_8013BA58(pBall, 0) == 4 && (fn_801783AC(24) || fn_801783AC(11) || fn_801783AC(12))) {
+    if ((unsigned short)BallStateGet(pBall, 0) == 4 && (fn_801783AC(24) || fn_801783AC(11) || fn_801783AC(12))) {
         Vector_80039F5C spot;
         float distance;
 
-        fn_80138064(pBall, &spot);
+        BallGetLandingPoint(pBall, &spot);
         distance = fn_8022781C(&spot, &p->mMotion.mPos);
         if (distance < lbl_803EA9C4) {
             Message_800F01CC message;
@@ -149,7 +149,7 @@ extern "C" int fn_8009FB60(Object_80039F5C *p)
                     fn_801C1F94(&message, 0, sizeof(message));
                     sent = 1;
                     message.mId = 23;
-                    message.mUnknown1[0] = fn_801374E0(pBall);
+                    message.mUnknown1[0] = BallGetIndex(pBall);
                     fn_800F053C(0, p->mpState, &message, p);
                 }
             }

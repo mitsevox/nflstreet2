@@ -165,7 +165,7 @@ struct Sequence_801B84E4 {
     unsigned char mUnknown11[3];
     Event_801B845C mUnknown14[1];
 };
-struct Info_801E1084;
+struct PathfinderStatus_t;
 struct Entry_801B63F0 {
     unsigned char mUnknown0[4];
     unsigned int mUnknown4;
@@ -179,7 +179,7 @@ struct Entry_801B63F0 {
 struct Record_801B6780 {
     short mUnknown0;
 };
-struct Data_801E0DF0;
+struct PathfinderTrackData_t;
 
 class Class_803EBB64 {
 public:
@@ -206,7 +206,7 @@ extern int lbl_803EBB54;
 extern Bank_801B3480 *lbl_802F47D0[4];
 extern Class_803EBB60 *lbl_803EBB60;
 void fn_801B3724(void);
-int fn_801B3FE0(int flags, Data_801E0DF0 *data);
+int fn_801B3FE0(int flags, PathfinderTrackData_t *data);
 int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
 extern unsigned int lbl_802F481C[6];
 extern Class_803EBB64 *lbl_803EBB64;
@@ -225,9 +225,9 @@ int fn_801B3568(void);
 void fn_801B39B8(int mode);
 void fn_801B3A88(void);
 void fn_801B3AAC(void);
-int fn_801B3AD0(int flags, Data_801E0DF0 *data, int value);
-int fn_801B3D28(int flags, Data_801E0DF0 *data, int value);
-int fn_801B3F6C(int flags, Data_801E0DF0 *data);
+int fn_801B3AD0(int flags, PathfinderTrackData_t *data, int value);
+int fn_801B3D28(int flags, PathfinderTrackData_t *data, int value);
+int fn_801B3F6C(int flags, PathfinderTrackData_t *data);
 Node_801B3FE0 *fn_801B4174(unsigned int flags);
 void fn_801B421C(void);
 int fn_801B42C0(unsigned int flags);
@@ -240,7 +240,7 @@ int fn_801B57C0(Node_801B3FE0 *p, int index);
 int fn_801B58F0(Node_801B3FE0 *p);
 int fn_801B59B0(int flags, int value);
 void fn_801B5AB0(int flags, unsigned char value);
-int fn_801B5BCC(int flags, Info_801E1084 *info);
+int fn_801B5BCC(int flags, PathfinderStatus_t *info);
 int fn_801B5C88(Node_801B3FE0 *p, void *info);
 void fn_801B5CD0(int flags);
 int fn_801B5DB4(Node_801B3FE0 *p);
@@ -417,7 +417,7 @@ extern "C" void fn_801B3A88(void)
 extern "C" void fn_801B3AAC(void)
 { fn_801B39B8(66); }
 
-extern "C" int fn_801B3AD0(int flags, Data_801E0DF0 *data, int value)
+extern "C" int fn_801B3AD0(int flags, PathfinderTrackData_t *data, int value)
 {
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)
@@ -439,7 +439,7 @@ extern "C" int fn_801B3AD0(int flags, Data_801E0DF0 *data, int value)
     return result;
 }
 
-extern "C" int fn_801B3D28(int flags, Data_801E0DF0 *data, int value)
+extern "C" int fn_801B3D28(int flags, PathfinderTrackData_t *data, int value)
 {
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)
@@ -461,7 +461,7 @@ extern "C" int fn_801B3D28(int flags, Data_801E0DF0 *data, int value)
     return result;
 }
 
-extern "C" int fn_801B3F6C(int flags, Data_801E0DF0 *data)
+extern "C" int fn_801B3F6C(int flags, PathfinderTrackData_t *data)
 {
     if (!fn_801B34DC(flags))
         return -8;
@@ -725,7 +725,7 @@ extern "C" void fn_801B5AB0(int flags, unsigned char value)
     }
 }
 
-extern "C" int fn_801B5BCC(int flags, Info_801E1084 *info)
+extern "C" int fn_801B5BCC(int flags, PathfinderStatus_t *info)
 {
     int acquired;
     if (++lbl_803EBB24 == 1 && lbl_803EBB38)

@@ -2,7 +2,7 @@
 #include "game/fn_801EF390.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8007F828.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
@@ -40,10 +40,10 @@ extern "C" const signed char lbl_802AD828[40];
 
 extern "C" {
 int fn_800A3444(void);
-void fn_80211E08(Element_80194108 *, int);
-void fn_80211EFC(Element_80194108 *);
-Texture_80194108 *fn_802120E4(Element_80194108 *, int);
-Palette_80194108 *fn_80212124(Element_80194108 *, int, int);
+void TMTexLibLoad(Element_80194108 *, int);
+void TMTexLibUnload(Element_80194108 *);
+Texture_80194108 *TMTexLibGetTexture(Element_80194108 *, int);
+Palette_80194108 *TMTexLibGetClut(Element_80194108 *, int, int);
 extern "C" void GXPreLoadEntireTexture(Texture_80194108 *, GXTexRegion *);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXInitTexObjTlut(Texture_80194108 *, int);
@@ -114,9 +114,9 @@ void fn_80194060(void)
 void fn_80194108(int index, Texture_80194108 *out, int region)
 {
     Element_80194108 element;
-    fn_80211E08(&element, fn_801EF390(lbl_803EB728, index, 1));
-    Texture_80194108 *texture = fn_802120E4(&element, 0xFF000000);
-    Palette_80194108 *palette = fn_80212124(&element, 0xFF000000, 0);
+    TMTexLibLoad(&element, fn_801EF390(lbl_803EB728, index, 1));
+    Texture_80194108 *texture = TMTexLibGetTexture(&element, 0xFF000000);
+    Palette_80194108 *palette = TMTexLibGetClut(&element, 0xFF000000, 0);
     out->mUnknown54 = &lbl_80365038[region];
     GXPreLoadEntireTexture(texture, out->mUnknown54);
     GXDrawDone();
@@ -125,7 +125,7 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
         GXInitTexObjTlut(texture, region + 4);
     }
     memcpy(out, texture, 0x2C);
-    fn_80211EFC(&element);
+    TMTexLibUnload(&element);
     fn_801F010C(lbl_803EB728, index);
 }
 void fn_80194248(Texture_80194108 *) {}
@@ -237,10 +237,10 @@ void fn_80194794(void)
     fn_8019424C(&lbl_80364FF4,1.0f,1.0f);
     GXInitTexPreLoadRegion(&lbl_80365038[0],0,0x60000,0,0);
     GXInitTexPreLoadRegion(&lbl_80365038[1],0x60000,0x20000,0,0);
-    void *p = fn_801CF5BC(0,fn_801CF7AC());
-    lbl_803EB72C[2] = fn_801CF6D4(p,2);
-    lbl_803EB72C[3] = fn_801CF6D4(p,40) + 4;
-    fn_801CF67C(p);
+    void *p = MathNewRandomStream(0,MathGetRandomSeed());
+    lbl_803EB72C[2] = MathGetRandomRange(p,2);
+    lbl_803EB72C[3] = MathGetRandomRange(p,40) + 4;
+    MathDelRandomStream(p);
 }
 void fn_80194858(int mode)
 {

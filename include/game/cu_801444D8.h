@@ -11,10 +11,10 @@ struct Source_80144CE0 {
     float mUnknown14;
 };
 
-struct Texture_80196564;
-struct Particle_80196564;
+struct ParticleTexture_t;
+struct Particle_t;
 
-/* Object returned by fn_80144CE0 (from fn_801DEEF8), drawn by fn_80196564
+/* Object returned by fn_80144CE0 (from fn_801DEEF8), drawn by ParticleRenderEmitter
    (the callback of its descriptor lbl_802DCFF8) and released by
    fn_80144E38. */
 struct Object_80144CE0 {
@@ -37,7 +37,7 @@ struct Object_80144CE0 {
     char mPad0B0[0xF0 - 0xB0];
     int mUnknown0F0;
     char mPad0F4[0x2AC - 0xF4];
-    Texture_80196564 *mpUnknown2AC;
+    ParticleTexture_t *mpUnknown2AC;
     char mPad2B0[4];
     unsigned char mUnknown2B4;
     char mPad2B5[1];
@@ -53,7 +53,7 @@ struct Object_80144CE0 {
     float (*mpUnknown3B4)[4][4];
     unsigned int mUnknown3B8;
     char mPad3BC[4];
-    Particle_80196564 **mppUnknown3C0;
+    Particle_t **mppUnknown3C0;
     char mPad3C4[0x3C8 - 0x3C4];
     float mUnknown3C8;
     float mUnknown3CC;
@@ -72,7 +72,7 @@ struct Args_80144CE0 {
 extern "C" {
 Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSource);
 void fn_80144E38(Object_80144CE0 *pObject);
-void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
+void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
 }
 
 #endif

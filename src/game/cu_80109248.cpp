@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -79,7 +79,7 @@ struct Block_800F4A74 {
 /* Ball, three positions, the landing point and the time filled by
    fn_80107680. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -133,14 +133,14 @@ void fn_80108954(Object_80039F5C *p, Object_80039F5C *pOther, Result_801076F0 *p
 void fn_80108A94(Object_80039F5C *p, Points_800F3A6C *pInfo);
 void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int a);
 unsigned int fn_8011E188(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_80178308(void);
 int fn_801783AC(int bit);
 extern float lbl_803EAEF8;
 Point_8017886C fn_80177FFC(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern float lbl_803EAF08;
 extern float lbl_803EAF0C;
@@ -152,7 +152,7 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
     int result = 0;
 
     fn_80107680(&info, pBlock->mUnknown64);
-    if (fn_8013BA58(info.mpUnknown0, 0) != 4) {
+    if (BallStateGet(info.mpUnknown0, 0) != 4) {
         Message_800F01CC message;
 
         pBlock->mUnknown65 = 0;
@@ -201,7 +201,7 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
             if (fn_801783AC(11) || fn_801783AC(12)) {
                 rush = 1;
             }
-            pOther = fn_80137B88(info.mpUnknown0);
+            pOther = BallGetTarget(info.mpUnknown0);
             fn_80106A60(p);
             if (pOther != 0) {
                 fn_801076F0(p, pOther, &res, &info);
@@ -259,7 +259,7 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
     int facing = p->mMotion.mFacing & 0xFFFFFF;
 
     if (x > fn_80178A08() - lbl_803EAF0C) {
-        if (fn_801CFFD0(facing, 0) <= 0x555554) {
+        if (MathAngleDiff(facing, 0) <= 0x555554) {
             if (facing <= 0x7FFFFF) {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             } else {
@@ -267,7 +267,7 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
             }
         }
     } else if (x < lbl_803EAF0C - fn_80178A08()) {
-        if (fn_801CFFD0(facing, 0x800000) <= 0x555554) {
+        if (MathAngleDiff(facing, 0x800000) <= 0x555554) {
             if (facing <= 0x7FFFFF) {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);
             } else {
@@ -275,16 +275,16 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
             }
         }
     } else if (y > fn_80178A44() - lbl_803EAF0C) {
-        if (fn_801CFFD0(facing, 0x400000) <= 0x555554) {
-            if (fn_801CFFD0(facing, 0) <= 0x3FFFFF) {
+        if (MathAngleDiff(facing, 0x400000) <= 0x555554) {
+            if (MathAngleDiff(facing, 0) <= 0x3FFFFF) {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);
             } else {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             }
         }
     } else if (y < lbl_803EAF0C - fn_80178A44()) {
-        if (fn_801CFFD0(facing, 0xC00000) <= 0x555554) {
-            if (fn_801CFFD0(facing, 0) <= 0x3FFFFF) {
+        if (MathAngleDiff(facing, 0xC00000) <= 0x555554) {
+            if (MathAngleDiff(facing, 0) <= 0x3FFFFF) {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             } else {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);

@@ -1,7 +1,7 @@
 #ifndef GAME_CLASS_8018FD64_H
 #define GAME_CLASS_8018FD64_H
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
 /* Data-less polymorphic base of Class_8018FD64, without a destructor of its
    own. It declares entries 1-17 of the vtable 0x802AB4F8, the slots before
@@ -28,8 +28,8 @@ public:
 };
 
 /* Cursor object with vtable 0x802AB4F8: the vtable pointer at +0 and an
-   Object_8007A334 at +4 (48 bytes). Each virtual member passes &mObject and
-   its arguments to one Object_8007A334 function (vtable entry 1 0x8018FE34 to
+   DbCursor at +4 (48 bytes). Each virtual member passes &mObject and
+   its arguments to one DbCursor function (vtable entry 1 0x8018FE34 to
    entry 17 0x80190074, then the destructor 0x8018FD94 and 0x8018FE10).
    The constructor 0x8018FD64 is declared out of line here; see
    game/Class_8018FD64Inline.h for the files that expand it inline. */
@@ -59,7 +59,7 @@ public:
     virtual void fn_8018FE10();
 
 private:
-    Object_8007A334 mObject;
+    DbCursor mObject;
 };
 
 #endif

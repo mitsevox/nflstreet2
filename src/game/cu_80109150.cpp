@@ -15,10 +15,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -90,7 +90,7 @@ extern "C" int fn_80109150(Object_80039F5C *p) {
     pBlock->mUnknown60 = 1;
     pBlock->mUnknown63 = 0;
     pBlock->mUnknown62 = fn_8009F0B8(p, 0x38E38E);
-    pBlock->mUnknown64 = fn_801374D4();
+    pBlock->mUnknown64 = BallGetCurrentIndex();
     pBlock->mUnknown65 = 1;
     pBlock->mUnknown66 = 0;
     fn_80106A60(p);

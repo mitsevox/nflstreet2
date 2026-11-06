@@ -11,7 +11,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/Lookup_8012078C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
@@ -22,7 +22,7 @@
 
 extern "C" {
 int fn_801CFE40(float,float);
-int fn_801CFFD0(int,int);
+int MathAngleDiff(int,int);
 float fn_801CFB94(int);
 float fn_80260B1C(float);
 void fn_80227538(Point_8017886C *,int,float);
@@ -55,7 +55,7 @@ int fn_8012CAAC(Object_80039F5C *);
 int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
 float fn_8012CD60(Object_80039F5C *,float);
-void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
+void fn_80103F80(Ball_t *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
@@ -73,7 +73,7 @@ int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8010CEB8(Object_80039F5C *,int);
 void fn_800C89F0(Object_80039F5C *,int,int,int,float);
 void fn_8009D284(Object_80039F5C *,Object_80039F5C *);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803ECB08,lbl_803EAE84;
 extern float lbl_803EAEA4,lbl_803EAEA8,lbl_803EAEAC,lbl_803EAEB0;
 extern float lbl_803EAEB4,lbl_803EAEB8,lbl_803EAEBC;
@@ -91,11 +91,11 @@ void fn_800FE444(Object_80039F5C *p, int angle, Point_8017886C *point, float len
     fn_80227690(&delta, point, &p->mMotion.mPos);
     fn_802270A4(&delta);
     to = fn_801CFE40(delta.mY, delta.mX);
-    difference = fn_801CFFD0(to, angle);
+    difference = MathAngleDiff(to, angle);
     if (difference > 0x400000) {
         int limited = (angle - 0x400000) & 0xFFFFFF;
 
-        if (fn_801CFFD0(to, limited) <= 0x3FFFFF) {
+        if (MathAngleDiff(to, limited) <= 0x3FFFFF) {
             limited = (angle + 0x400000) & 0xFFFFFF;
         }
         fn_80227538(&delta, limited, length);
@@ -148,7 +148,7 @@ void fn_800FE564(Object_80039F5C *p, Object_80039F5C *other, Object_80039F5C *ta
         radius = 5.5f;
     }
     if (p->mMotion.mUnknown28 != 0.0f && other->mMotion.mUnknown28 != 0.0f) {
-        radius -= lbl_803EAE78 * fn_801CFB94(fn_801CFFD0(p->mMotion.mUnknown32, other->mMotion.mUnknown32));
+        radius -= lbl_803EAE78 * fn_801CFB94(MathAngleDiff(p->mMotion.mUnknown32, other->mMotion.mUnknown32));
         if (radius < lbl_803EAE7C) {
             radius = lbl_803EAE7C;
         }
@@ -312,8 +312,8 @@ void fn_800FEB60(Object_80039F5C *p, Point_8017886C *point, float *speed)
     fn_80227690(&delta, point, &p->mMotion.mPos);
     target = fn_801CFE40(delta.mY, delta.mX);
     heading = fn_801CFE40(direction.mY, direction.mX);
-    turn = fn_801CFFD0(target, heading);
-    fn_801CFFD0(p->mMotion.mUnknown32, heading);
+    turn = MathAngleDiff(target, heading);
+    MathAngleDiff(p->mMotion.mUnknown32, heading);
     scale = fn_802270A4(&direction) < 1.0f ? fn_802270A4(&direction) : 1.0f;
     if (s->mUnknown40 != 0.0f) {
         scale = fn_802270A4(&direction) < 1.0f ? fn_802270A4(&direction) : 1.0f;
@@ -456,15 +456,15 @@ int fn_800FF094(Object_80039F5C *p)
             if (speed == 1.0f) {
                 p->mUnknown512.mUnknown15 = 1;
             }
-            p->mUnknown512.mUnknown14 = fn_80137C48(p) ? 1 : 9;
+            p->mUnknown512.mUnknown14 = BallFindHeldBy(p) ? 1 : 9;
             p->mUnknown512.mUnknown8 = angle;
             p->mUnknown512.mUnknown4 = angle;
             p->mUnknown512.mUnknown0 = speed;
         }
         break;
     case 4:
-        if (special != 1 && fn_801CFFD0(s->mUnknown16, p->mMotion.mFacing) > 0xB60B) {
-            if (fn_801CFFD0(p->mMotion.mFacing, s->mUnknown16) <= 0x155554) {
+        if (special != 1 && MathAngleDiff(s->mUnknown16, p->mMotion.mFacing) > 0xB60B) {
+            if (MathAngleDiff(p->mMotion.mFacing, s->mUnknown16) <= 0x155554) {
                 if (p->mpState[1].mId != 87) {
                     p->mUnknown512.mUnknown14 = 3;
                     p->mUnknown512.mUnknown4 = s->mUnknown16;
@@ -530,7 +530,7 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
             s->mUnknown28 = 0.0f;
         } else {
             fn_80227690(&delta, point, &p->mMotion.mPos);
-            if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) >= 0x3C71C8) {
+            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) >= 0x3C71C8) {
                 s->mUnknown28 = 0.0f;
             } else {
                 float random = fn_80237260(0);
@@ -607,7 +607,7 @@ void fn_800FF8FC(Object_80039F5C *p, float *out)
     if (fn_801486A0() == 2) {
         Vector_80039F5C ball;
 
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         if (p->mMotion.mPos.mX > ball.mX + 2.0f) {
             out[0] = fabsf(out[0]);
         } else if (p->mMotion.mPos.mX < ball.mX - 2.0f) {
@@ -681,7 +681,7 @@ void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point
     delta.mX = value[0];
     delta.mY = value[1];
     delta.mX *= factor;
-    if (fn_801CFFD0(other->mMotion.mUnknown32, 0x400000) > 0x200000) {
+    if (MathAngleDiff(other->mMotion.mUnknown32, 0x400000) > 0x200000) {
         if (delta.mY < 0.0f) {
             delta.mY *= 3.0f;
             delta.mY = delta.mY < -3.0f ? -3.0f : delta.mY;
@@ -707,7 +707,7 @@ void fn_800FFD2C(Object_80039F5C *p, Point_8017886C *point)
     int angle;
     float speed;
 
-    fn_80137B40();
+    BallGetCurrentHolder();
     fn_80227690(&delta, point, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX);
     speed = (fn_802270A4(&delta) - 0.3f) * 0.5f;
@@ -796,7 +796,7 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     }
 }
 
-int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, float value, Vector_80039F5C *out)
+int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *out)
 {
     Vector_80039F5C pos;
     Vector_80039F5C velocity = *(Vector_80039F5C *)&p->mMotion.mUnknown40;
@@ -810,7 +810,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, float value, Vector_8
     pos = motion->mPos;
     int result = 0;
 
-    fn_80137D58(ball, &ballPos);
+    BallGetPosition(ball, &ballPos);
     state = p->mpState;
     switch (state->mId) {
     case 19:
@@ -877,7 +877,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, float value, Vector_8
     return result;
 }
 
-void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, float value,
+void fn_801007A4(Ball_t *ball, Object_80039F5C *p, Object_80039F5C *other, float value,
                  Vector_80039F5C *out, unsigned char *kind)
 {
     Object_800B26B0 *motion = &other->mMotion;
@@ -917,8 +917,8 @@ void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *oth
             }
             break;
         case 19: {
-            int towardNegative = fn_801CFFD0(motion->mUnknown32, 0x800000) <= 0x271C70;
-            int towardPositive = fn_801CFFD0(motion->mUnknown32, 0) <= 0x271C70;
+            int towardNegative = MathAngleDiff(motion->mUnknown32, 0x800000) <= 0x271C70;
+            int towardPositive = MathAngleDiff(motion->mUnknown32, 0) <= 0x271C70;
 
             if (motion->mPos.mY < p->mMotion.mPos.mY - 2.0f && (towardNegative || towardPositive)) {
                 speed = fn_8016D9F4(other, 1.0f, 1.0f);
@@ -1053,7 +1053,7 @@ Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle)
             int difference;
 
             fn_80227690(&delta, &players[i]->mMotion.mPos, &center);
-            difference = fn_801CFFD0(angle, fn_801CFE40(delta.mY, delta.mX));
+            difference = MathAngleDiff(angle, fn_801CFE40(delta.mY, delta.mX));
             if (difference < best) {
                 result = players[i];
                 best = difference;
@@ -1099,7 +1099,7 @@ void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out
     receiver = fn_80039F5C(fn_80178320(), lookup->mpUnknown4[1]);
     fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
     octant = ((unsigned int)fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
-    difference = fn_801CFFD0(p->mMotion.mUnknown32, 0x400000);
+    difference = MathAngleDiff(p->mMotion.mUnknown32, 0x400000);
     if ((values.mCost[best] == 0.0f || values.mCost[(best + 1) & 7] == 0.0f || values.mCost[(best + 7) & 7] == 0.0f)
         && (values.mCost[octant] >= 3.0f || values.mCost[(octant + 1) & 7] >= 4.0f || values.mCost[(octant + 7) & 7] >= 4.0f)
         && difference < 0x4AAAAB) {
@@ -1158,13 +1158,13 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
     target.mX = target.mY = target.mZ = 0.0f;
     if (point && angle && kind) {
         State_800FDA58 *state = (State_800FDA58 *)&p->mUnknown336;
-        Object_80137ABC *ball = fn_80137C48(p);
+        Ball_t *ball = BallFindHeldBy(p);
         Record_8011F4F8 *record = fn_8011F4F8(state->mUnknown3Byte);
         Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
         float speed;
 
         if (state->mUnknown0Bytes[0]) {
-            speed = lbl_803EA2C4 * 0.3f;
+            speed = gFrameTimeScale * 0.3f;
         } else {
             speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
         }

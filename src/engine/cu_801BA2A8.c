@@ -1,16 +1,16 @@
 #include "engine/cu_801B9F00.h"
-#include "engine/cu_801BA818.h"
+#include "engine/animemot.h"
 
 float fn_80260260(float x, float y);
-int fn_801BA720(Record_800D81C8 *pChannel, Anim_801BAB34 *pAnim, void *pUser);
+int fn_801BA720(Record_800D81C8 *pChannel, AnimScript_t *pAnim, void *pUser);
 
-int fn_801BA2A8(Object_801BA03C *pList, Record_800D81C8 *pChannels, unsigned short slot, int anim, int state,
+int fn_801BA2A8(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short slot, int anim, int state,
                 void *pUser, float weight)
 {
     return fn_801BA154(pList, pChannels, slot, anim, weight, state, pUser, 0xFFFF);
 }
 
-int fn_801BA2D0(Object_801BA03C *pList, Record_800D81C8 *pChannels, Record_800D81C8 *pSource)
+int fn_801BA2D0(AnimHeader_t *pList, Record_800D81C8 *pChannels, Record_800D81C8 *pSource)
 {
     int index = fn_801B9F00(pList, pChannels);
 
@@ -24,12 +24,12 @@ void fn_801BA360(Record_800D81C8 *pChannel, int type, float a, void *pSource, fl
     fn_801BF3C8(&pChannel->mUnknown30, type, a, pSource, b);
 }
 
-void fn_801BA384(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index)
+void fn_801BA384(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index)
 {
     pChannels[index].mUnknown1 = 0;
 }
 
-void fn_801BA398(Object_801BA03C *pList, Record_800D81C8 *pChannels, int state)
+void fn_801BA398(AnimHeader_t *pList, Record_800D81C8 *pChannels, int state)
 {
     int i;
 
@@ -39,7 +39,7 @@ void fn_801BA398(Object_801BA03C *pList, Record_800D81C8 *pChannels, int state)
     }
 }
 
-void fn_801BA418(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index, unsigned short slot, int anim,
+void fn_801BA418(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index, unsigned short slot, int anim,
                  unsigned short state, void *pUser)
 {
     float length;
@@ -47,18 +47,18 @@ void fn_801BA418(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index, 
     int result;
 
     if (pChannels[index].mUnknown1 == 2) {
-        pChannels[index].mUnknown4 = fn_801BAB2C(fn_801BC084(slot));
+        pChannels[index].mUnknown4 = AnimFileGetFileNum(fn_801BC084(slot));
         pChannels[index].mUnknown8 = state;
         pChannels[index].mUnknown6 = slot;
         pChannels[index].mUnknown2 = anim;
         if (pChannels[index].mUnknown4C.mUnknown1A == 0xFFFF)
-            pChannels[index].mUnknown4C.mUnknown1A = fn_801BD6DC(pChannels[index].mUnknown4C.mpUnknown0);
+            pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);
         length = pChannels[index].mUnknown4C.mUnknown4 * (unsigned int)pChannels[index].mUnknown4C.mUnknown1A;
         time = fn_80260260(pChannels[index].mUnknown4C.mUnknown8, length);
-        result = fn_801BA720(&pChannels[index], fn_801BAB34(fn_801BC084(slot), anim), pUser);
+        result = fn_801BA720(&pChannels[index], AnimFileGetAnimation(fn_801BC084(slot), anim), pUser);
         if (result != 1) {
-            pChannels[index].mUnknown4C.mUnknown1A = fn_801BD6DC(pChannels[index].mUnknown4C.mpUnknown0);
-            fn_801BD710(&pChannels[index].mUnknown4C, length / (unsigned int)pChannels[index].mUnknown4C.mUnknown1A);
+            pChannels[index].mUnknown4C.mUnknown1A = AnimSeqGetNumFrames(pChannels[index].mUnknown4C.mpUnknown0);
+            AnimSeqSetRate(&pChannels[index].mUnknown4C, length / (unsigned int)pChannels[index].mUnknown4C.mUnknown1A);
             result = fn_801BA650(&pChannels[index], time, pUser);
         }
         if (result == 1)
@@ -66,7 +66,7 @@ void fn_801BA418(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index, 
     }
 }
 
-unsigned short fn_801BA568(Object_801BA03C *pList, Record_800D81C8 *pChannels, unsigned short state)
+unsigned short fn_801BA568(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short state)
 {
     unsigned short count = 0;
     int i;
@@ -78,7 +78,7 @@ unsigned short fn_801BA568(Object_801BA03C *pList, Record_800D81C8 *pChannels, u
     return count;
 }
 
-unsigned short fn_801BA5A8(Object_801BA03C *pList, Record_800D81C8 *pChannels, unsigned short state, int index)
+unsigned short fn_801BA5A8(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short state, int index)
 {
     unsigned short count = 0;
     int i;
@@ -93,7 +93,7 @@ unsigned short fn_801BA5A8(Object_801BA03C *pList, Record_800D81C8 *pChannels, u
     return 0xFFFF;
 }
 
-void fn_801BA60C(Object_801BA03C *pList, Record_800D81C8 *pChannels, int state, float delay)
+void fn_801BA60C(AnimHeader_t *pList, Record_800D81C8 *pChannels, int state, float delay)
 {
     int i;
 
@@ -107,11 +107,11 @@ int fn_801BA650(Record_800D81C8 *pChannel, float time, void *pUser)
 {
     int result;
 
-    fn_801B9DA8(pUser);
-    fn_801B9D84(pChannel->mUnknown8);
-    result = fn_801BD4E4(&pChannel->mUnknown4C, time);
-    fn_801B9DCC();
-    fn_801B9DDC();
+    _AnimUserCallbackPushInfo(pUser);
+    _AnimUserCallbackPushState(pChannel->mUnknown8);
+    result = AnimSeqGrow(&pChannel->mUnknown4C, time);
+    _AnimUserCallbackPopState();
+    _AnimUserCallbackPopInfo();
     return result;
 }
 
@@ -139,15 +139,15 @@ void fn_801BA6BC(Record_800D81C8 *pChannel, int enable)
     }
 }
 
-int fn_801BA720(Record_800D81C8 *pChannel, Anim_801BAB34 *pAnim, void *pUser)
+int fn_801BA720(Record_800D81C8 *pChannel, AnimScript_t *pAnim, void *pUser)
 {
     int result;
 
-    fn_801B9D84(pChannel->mUnknown8);
-    fn_801B9DA8(pUser);
-    result = fn_801BD4C0(&pChannel->mUnknown4C, pAnim);
-    fn_801B9DCC();
-    fn_801B9DDC();
+    _AnimUserCallbackPushState(pChannel->mUnknown8);
+    _AnimUserCallbackPushInfo(pUser);
+    result = AnimSeqStart(&pChannel->mUnknown4C, pAnim);
+    _AnimUserCallbackPopState();
+    _AnimUserCallbackPopInfo();
     pChannel->mUnknown7 = pAnim->mUnknown2;
     return result;
 }
@@ -155,5 +155,5 @@ int fn_801BA720(Record_800D81C8 *pChannel, Anim_801BAB34 *pAnim, void *pUser)
 void fn_801BA784(Record_800D81C8 *pDest, Record_800D81C8 *pSource)
 {
     *pDest = *pSource;
-    pDest->mUnknown4C.mpUnknown0 = fn_801BAB34(fn_801BC084(pSource->mUnknown6), pSource->mUnknown2);
+    pDest->mUnknown4C.mpUnknown0 = AnimFileGetAnimation(fn_801BC084(pSource->mUnknown6), pSource->mUnknown2);
 }

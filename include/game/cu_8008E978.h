@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Params_80092E54.h"
 
-struct Object_80137ABC;
+struct Ball_t;
 
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque
@@ -42,7 +42,7 @@ struct Character_80093BCC : Params_80092E54 {
     int mUnknown38C;
 };
 
-struct Table_800680A8;
+struct CondTable_t;
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -72,7 +72,7 @@ struct Block_800920EC {
 
 /* Allocated through fn_80238174 under the id 'anms' (fn_800925F0). */
 struct Block_800925F0 {
-    Table_800680A8 *mpUnknown0;
+    CondTable_t *mpUnknown0;
     Entry_80094238 mEntries[6];
     void *mpUnknown7C;
     Block_800920EC mUnknown80;

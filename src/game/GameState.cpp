@@ -1,14 +1,16 @@
+/* The GameState modules: create and activate the store that holds the game state blocks. */
+
 #include "game/GameState.h"
 
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 
-int fn_80033124(void *p);
-int fn_80033144(void *p);
+int MainFEGroupIsStarted(void *p);
+int MainFEGroupIsFirstStart(void *p);
 void fn_80237E3C(int a);
-Object_80237EE8 *fn_80237EE8(int a, int b, int c, Record_802CC680 desc);
+Object_80237EE8 *fn_80237EE8(int a, int b, int c, MemPoolDesc_t desc);
 void fn_8023808C(Object_80237EE8 *pObject);
 void fn_802382F0(int a);
 void fn_80238358(void);
@@ -30,7 +32,7 @@ int GameState::Init()
     int arg;
 
     mpData.mp = new (0) GameStateData;
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(gMainFEGroup)) {
         arg2 = 0x16C00;
         arg1 = 50;
         arg = 3;
@@ -40,9 +42,9 @@ int GameState::Init()
         arg = 4;
     }
     fn_80237E3C(3);
-    mpData.mp->mpObject = fn_80237EE8(0, arg1, arg2, *fn_80025E50(4));
+    mpData.mp->mpObject = fn_80237EE8(0, arg1, arg2, *MemPoolGetDesc(4));
     fn_80237F98(mpData.mp->mpObject);
-    if (fn_80033144(lbl_80306B34)) {
+    if (MainFEGroupIsFirstStart(gMainFEGroup)) {
         mpData.mp->mUnknown4 = 0;
     } else {
         fn_802382F0(arg);
@@ -64,12 +66,12 @@ int GameState::Shutdown()
     return 1;
 }
 
-Object_80237EE8 *GameState::fn_8002900C()
+Object_80237EE8 *GameState::GetStore()
 {
     return gGameState.mpData.mp->mpObject;
 }
 
-void GameState::fn_8002901C()
+void GameState::Activate()
 {
     fn_80237FA4(mpData.mp->mpObject);
     fn_8023811C(mpData.mp->mpObject);
@@ -81,7 +83,7 @@ const char *GameStateActivate::GetName() { return "GameStateActivate"; }
 
 int GameStateActivate::Init()
 {
-    gGameState.fn_8002901C();
+    gGameState.Activate();
     return 1;
 }
 

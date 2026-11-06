@@ -2,9 +2,9 @@
 #define GAME_OBJECT_8003DEC4_H
 
 #include "game/FMCAPPORT.h"
-#include "game/Object_80146094.h"
+#include "game/ParticleTrail.h"
 #include "game/Pair_8017055C.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/Pose_80041930.h"
 
 struct Item_800476DC;
@@ -71,7 +71,7 @@ struct Weight_80042530 {
     unsigned short mUnknown6;
 };
 
-/* 0x34-byte record copied by fn_8020F2C4; the static at 0x80365D54 in
+/* 0x34-byte record copied by TMModelClone; the static at 0x80365D54 in
    src/game/cu_801A14D8.cpp has the same layout. */
 struct Record_8020F2C4 {
     int mUnknown0;
@@ -152,8 +152,8 @@ struct Projection_8003BA10 {
     unsigned char mUnknown673;
 };
 
-/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size fn_8004A140 passes
-   to fn_801DCF0C). */
+/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size PlayerObjAddObjType passes
+   to ObjNewType_). */
 struct Object_8003DEC4 {
     char mUnknown0[4];
     float mUnknown4[3];
@@ -202,7 +202,7 @@ struct Object_8003DEC4 {
         Slot_801A3284 *mUnknown1160;
         Part_8003DEC4 mUnknown1164[12];
         char mUnknown4044[16];
-        Desc_802347EC *mUnknown4060;
+        ModelTexSlot_t *mUnknown4060;
         Joints_8003DEC4 mUnknown4064[6];
         Joints_8003DEC4 mUnknown4136[2];
         char mUnknown4160[24];
@@ -213,7 +213,7 @@ struct Object_8003DEC4 {
     Projection_8003BA10 mUnknown4256;
     char mUnknown4932[24];
     int mUnknown4956;
-    Tracker_801442FC mUnknown4960;
+    LightTracker_t mUnknown4960;
     unsigned char mUnknown4968;
     unsigned char mUnknown4969;
     unsigned char mUnknown4970;
@@ -221,7 +221,7 @@ struct Object_8003DEC4 {
     unsigned char mUnknown4972;
     char mUnknown4973[3];
     FMCAPPORTValues mUnknown4976;
-    Object_80146094 mUnknown5188;
+    ParticleTrailSet_t mUnknown5188;
 };
 
 extern "C" {
@@ -230,9 +230,9 @@ Object_8003DEC4 *fn_8003DEC4(int index);
    0x800A926C). */
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
 void fn_801477F0(Object_8003DEC4 *pObject);
-/* Callback registered by fn_8004A140 through fn_801DD0C8; its second
+/* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */
-int fn_8004A1A8(Object_8003DEC4 *pObject, int unused);
+int PlayerObjDraw(Object_8003DEC4 *pObject, int unused);
 }
 
 #endif

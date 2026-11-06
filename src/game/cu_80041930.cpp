@@ -1,9 +1,9 @@
-#include "game/Frame_8019D3B8.h"
+#include "game/AnimFrameHeader.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_801BC084.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/bitstream.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -24,17 +24,17 @@ void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
 void fn_80147840(Object_8003DEC4 *pObject);
 int fn_801784C4(void);
-void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
+void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
                  unsigned char a);
-short *fn_8019ED20(int count);
-void fn_8019EDDC(Object_8003DEC4 *pObject, int a, int count);
-void fn_8019F044(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
-void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
-void fn_8019F48C(float *p);
-void fn_8019F4AC(Object_8003DEC4 *pObject);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
+short *AnimAllocPoseChannels(int count);
+void AnimBlendEntries(Object_8003DEC4 *pObject, int a, int count);
+void AnimBlendRootAngles(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
+void AnimBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
+void AnimResetWeights(float *p);
+void AnimBuildPoseMatrices(Object_8003DEC4 *pObject);
+void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 int fn_801BBE5C(int a, int b);
-void fn_801CF8A8(int *pOut, int a, int b, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
 void fn_801D0494(void);
 void fn_801D04C4(void);
@@ -51,8 +51,8 @@ void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0FB8(float *p);
 void fn_801D11F4(int *p, int a);
-void fn_801EB488(Quat_801EB488 *pRot);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatIdentity(Quat_801EB488 *pRot);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 
 float lbl_802CCDDC[7] = {0.75f, 0.9f, 0.95f, 1.0f, 0.95f, 0.9f, 0.75f};
@@ -222,12 +222,12 @@ void fn_80041EB0(Object_8003DEC4 *pObject, BitStream_t *pStream)
     fn_80191068(pStream, pObject->mUnknown264[1].mUnknown6, 16);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend);
+void fn_80042530(Object_8003DEC4 *pObject, AnimBlendList *pBlend);
 void fn_800425D4(Object_8003DEC4 *pObject);
 
 void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, int skip)
 {
-    Blend_8019EDDC blend;
+    AnimBlendList blend;
     float from;
     float to;
     long long value;
@@ -262,13 +262,13 @@ void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         value = ReadBitStream(pStreamB, 16);
         ReadBitStream(pStreamA, 32);
         weight = ReadBitStream(pStreamB, 32);
-        blend.mUnknown4[0].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
             ReadBitStream(pStreamA, 16);
             value = ReadBitStream(pStreamB, 16);
-            blend.mUnknown4[1].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
             ReadBitStream(pStreamA, 16);
@@ -311,7 +311,7 @@ void fn_80042208(Object_8003DEC4 *pObject)
 
 void fn_80042310(Object_8003DEC4 *pObject);
 
-void fn_80042270(Record_8036B55C *pRecord)
+void fn_80042270(FEPlyrModel_t *pRecord)
 {
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     Object_800B267C *pMotion = &pRecord->mUnknown424;
@@ -375,33 +375,33 @@ void fn_800423F8(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
         fn_801D0FB8(pOut);
         fn_801D11F4(angles, 0);
         fn_801D0544();
-        fn_801EBEF8(pRot, angles[2], angles[1], angles[0]);
+        QuatFromEuler(pRot, angles[2], angles[1], angles[0]);
     } else {
         pOut[0] = pOut[1] = pOut[2] = 0.0f;
-        fn_801EB488(pRot);
+        QuatIdentity(pRot);
     }
 }
 
 void fn_800424C0(Object_8003DEC4 *pObject, int a)
 {
-    fn_8019EDDC(pObject, a, pObject->mUnknown100->mUnknown6);
+    AnimBlendEntries(pObject, a, pObject->mUnknown100->mUnknown6);
 }
 
 void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c)
 {
-    fn_8019F044(pObject, a, b, c);
+    AnimBlendRootAngles(pObject, a, b, c);
 }
 
 void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int index)
 {
-    fn_8019F1F0(pObject, a, index, pObject->mUnknown100->mUnknown6);
+    AnimBlendRawEntries(pObject, a, index, pObject->mUnknown100->mUnknown6);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend)
+void fn_80042530(Object_8003DEC4 *pObject, AnimBlendList *pBlend)
 {
     pObject->mUnknown260 = pBlend->mUnknown0;
     if (pObject->mUnknown816 && pBlend->mUnknown0) {
-        fn_8019F404(pObject->mUnknown820, pBlend);
+        AnimBlendWeights(pObject->mUnknown820, pBlend);
         if (pObject->mUnknown20 & 0x40000) {
             pObject->mUnknown264[0].mUnknown0 = pBlend->mUnknown4[0].mUnknown4;
             pObject->mUnknown264[0].mUnknown4 = pBlend->mUnknown4[0].mUnknown32;
@@ -420,7 +420,7 @@ void fn_800425D4(Object_8003DEC4 *pObject)
 {
     pObject->mUnknown20 &= ~0x10;
     if (pObject->mUnknown820) {
-        fn_8019F48C(pObject->mUnknown820);
+        AnimResetWeights(pObject->mUnknown820);
     }
 }
 
@@ -441,7 +441,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown44.mUnknown4 = count + 1;
         pObject->mUnknown44.mUnknown0 = 0x100;
         pObject->mUnknown44.mUnknown2 = 0x202;
-        pObject->mUnknown44.mUnknown48 = fn_8019ED20(count);
+        pObject->mUnknown44.mUnknown48 = AnimAllocPoseChannels(count);
         pObject->mUnknown44.mUnknown52 = pObject->mUnknown112;
         fn_80041930(&pObject->mUnknown44, pObject->mUnknown100);
     }
@@ -453,7 +453,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
             pObject->mUnknown116[i].mUnknown12.mUnknown0 = 0x100;
             pObject->mUnknown116[i].mUnknown12.mUnknown4 = count;
             pObject->mUnknown116[i].mUnknown12.mUnknown2 = 0x202;
-            pObject->mUnknown116[i].mUnknown12.mUnknown48 = fn_8019ED20(count);
+            pObject->mUnknown116[i].mUnknown12.mUnknown48 = AnimAllocPoseChannels(count);
             pObject->mUnknown116[i].mUnknown12.mUnknown52 = 0;
             fn_80041930(&pObject->mUnknown116[i].mUnknown12, pObject->mUnknown116[i].mUnknown68);
         } else {
@@ -470,7 +470,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown280.mUnknown256.mUnknown4 = pSkeleton280->mUnknown6;
         pObject->mUnknown280.mUnknown256.mUnknown0 = 0x100;
         pObject->mUnknown280.mUnknown256.mUnknown2 = 0x202;
-        pObject->mUnknown280.mUnknown256.mUnknown48 = fn_8019ED20(pSkeleton280->mUnknown6);
+        pObject->mUnknown280.mUnknown256.mUnknown48 = AnimAllocPoseChannels(pSkeleton280->mUnknown6);
         pObject->mUnknown280.mUnknown256.mUnknown52 = 0;
         fn_80041930(&pObject->mUnknown280.mUnknown256, pObject->mUnknown280.mUnknown312);
         fn_800C2788(pObject, &pObject->mUnknown280, 1);
@@ -485,7 +485,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown596.mUnknown160.mUnknown4 = pSkeleton596->mUnknown6;
         pObject->mUnknown596.mUnknown160.mUnknown0 = 0x100;
         pObject->mUnknown596.mUnknown160.mUnknown2 = 0x202;
-        pObject->mUnknown596.mUnknown160.mUnknown48 = fn_8019ED20(pSkeleton596->mUnknown6);
+        pObject->mUnknown596.mUnknown160.mUnknown48 = AnimAllocPoseChannels(pSkeleton596->mUnknown6);
         pObject->mUnknown596.mUnknown160.mUnknown52 = 0;
         fn_80041930(&pObject->mUnknown596.mUnknown160, pObject->mUnknown596.mUnknown216);
         fn_800C2EC0(pObject, &pObject->mUnknown596, 1);
@@ -523,7 +523,7 @@ void fn_80042928(Object_8003DEC4 *pObject)
             pObject->mUnknown828 = fn_802372EC(1, 480) + 30;
         }
     }
-    fn_8019F4AC(pObject);
+    AnimBuildPoseMatrices(pObject);
 }
 
 void fn_80042998(Object_8003DEC4 *pObject)
@@ -665,18 +665,18 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
     fn_80227930(pObject->mUnknown4, posA, posB, t);
     angleB = (int)(ReadBitStream(pStreamB, 12) << 52 >> 40) & 0xFFF000;
     angleA = (int)(ReadBitStream(pStreamA, 12) << 52 >> 40) & 0xFFF000;
-    fn_801CF8A8(&pObject->mUnknown36, angleA, angleB, t);
+    OrientLerpAngle(&pObject->mUnknown36, angleA, angleB, t);
 
     if (!pStreamC) {
         if (!pStreamD) {
-            fn_8019EC88(&pObject->mUnknown44, &poseB, 0, 0, t, lbl_803EA490);
+            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, 0, t, lbl_803EA490);
         } else {
-            fn_8019EC88(&pObject->mUnknown44, &poseB, 0, &poseD, t, lbl_803EA490);
+            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, &poseD, t, lbl_803EA490);
         }
     } else if (!pStreamD) {
-        fn_8019EC88(&pObject->mUnknown44, &poseB, &poseC, 0, t, lbl_803EA490);
+        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, 0, t, lbl_803EA490);
     } else {
-        fn_8019EC88(&pObject->mUnknown44, &poseB, &poseC, &poseD, t, lbl_803EA490);
+        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, &poseD, t, lbl_803EA490);
     }
 
     pObject->mUnknown44.mUnknown48[87] = pObject->mUnknown44.mUnknown48[75];

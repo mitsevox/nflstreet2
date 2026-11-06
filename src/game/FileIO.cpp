@@ -9,7 +9,7 @@ struct FileIOConfig {
     unsigned char mUnknown1032;
 };
 
-/* fn_801C96E4 passes each mUnknown0[i], mUnknown32[i] pair to fn_801CA364. */
+/* fn_801C96E4 passes each mUnknown0[i], mUnknown32[i] pair to FileOpenhDevice. */
 struct FileIOList {
     int mUnknown0[8];
     const char *mUnknown32[8];
@@ -27,7 +27,7 @@ extern "C" {
 int fn_801C9D40(FileIOListTable *pTable);
 int fn_801C9D6C(int unknown);
 int fn_801C93D0(FileIOConfig *pConfig);
-void fn_801CA8D4(const char *pTitle);
+void FileAsyncSetErrorGameName(const char *pTitle);
 int fn_801C95C4(void);
 }
 
@@ -49,7 +49,7 @@ int FileIO::Init()
     fn_801C9D40(&sListTable);
     fn_801C9D6C(0);
     fn_801C93D0(&sConfig);
-    fn_801CA8D4(sTitle);
+    FileAsyncSetErrorGameName(sTitle);
     return 1;
 }
 

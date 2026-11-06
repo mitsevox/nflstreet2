@@ -2,10 +2,10 @@
 #define ENGINE_TEXTURE_H
 
 /* Texture record of src/engine/texture.c: filled by the load handlers that
-   fn_8020DFD8 dispatches to, created by fn_8020E064 and released by
-   fn_8020E258. +0x10 is the TLUT format fn_8020E064 stores and
-   fn_801C0E04 passes to GXInitTlutObj. */
-typedef struct Texture_8020DB34 {
+   TexCreate dispatches to, created by TexCreateEmpty and released by
+   TexDelete. +0x10 is the TLUT format TexCreateEmpty stores and
+   _LLAnimTexBuildTexCoords passes to GXInitTlutObj. */
+typedef struct Texture_t {
     unsigned short mWidth;
     unsigned short mHeight;
     unsigned char mUnknown4;
@@ -18,16 +18,16 @@ typedef struct Texture_8020DB34 {
     unsigned short *mpPalette;
     int mUnknown18;
     unsigned char mUnknown1C;
-} Texture_8020DB34;
+} Texture_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-int fn_8020DE8C(int heap, int count, int unknown);
-int fn_8020DF44(void);
-int fn_8020DFD8(void *pSrc, Texture_8020DB34 *pTex);
-int fn_8020E258(Texture_8020DB34 *pTex);
-void fn_8020E7EC(Texture_8020DB34 *pTex);
+int TexInit(int heap, int count, int unknown);
+int TexShutdown(void);
+int TexCreate(void *pSrc, Texture_t *pTex);
+int TexDelete(Texture_t *pTex);
+void fn_8020E7EC(Texture_t *pTex);
 #ifdef __cplusplus
 }
 #endif

@@ -14,7 +14,7 @@ struct ColorEntry {
 };
 
 /* The operations read from one "dynclut" block by fn_80044F20. */
-struct Entry_80046004 {
+struct PlaDynClutEntry_t {
     int mCount;
     ColorEntry *mpEntries;
 };
@@ -30,7 +30,7 @@ struct State_80045084 {
 };
 
 /* mCount palettes with the colour number that selects each. */
-struct Palettes_8004605C {
+struct PlaDynClutPalettes_t {
     int mCount;
     int *mpColorNums;
     ColorPalette *mpPalettes;
@@ -38,10 +38,10 @@ struct Palettes_8004605C {
 
 extern "C" {
 void fn_80044C88(void *pNode, ColorEntry *pEntry);
-void fn_80044F20(void *pData, Entry_80046004 *pEntry);
+void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry);
 void fn_80045084(void *p, State_80045084 *pState);
 void fn_800450A8(void *p, State_80045084 *pState);
-void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes);
+void fn_80045F64(ColorEntry *pEntry, State_80045084 *pState, PlaDynClutPalettes_t *pPalettes);
 }
 
 #endif

@@ -1,6 +1,6 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/PaletteColor.h"
 #include "game/cu_80181330.h"
@@ -50,36 +50,36 @@ int fn_8000EB80(void);
 void fn_8000EBA4(int a);
 int fn_8000EC14(void);
 int fn_8000EC38(void);
-void fn_80022398(void);
-void fn_800223C0(void);
-void fn_800223E4(int index, float x, float y, float z);
-void fn_800224A4(int index, float angle);
-void fn_80022534(int index, float scale);
-void fn_80022580(int index, int a, int b);
-void fn_800225F4(int index, unsigned int value);
-void fn_80022730(int index, int a);
-void fn_80022870(int index, float x, float y, float z, float angle, float scale, int flag);
-int fn_800229D8(void);
-float fn_80022BA0(float a);
-void fn_80022D0C(int a);
-unsigned char fn_80022D3C(unsigned char enable, int a, int b);
+void FEPlyrShow(void);
+void FEPlyrHide(void);
+void FEPlyrSetPosition(int index, float x, float y, float z);
+void FEPlyrSetAngle(int index, float angle);
+void FEPlyrSetScale(int index, float scale);
+void FEPlyrPlayAnim(int index, int a, int b);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPriority(int index, int a);
+void FEPlyrMoveTo(int index, float x, float y, float z, float angle, float scale, int flag);
+int FEPlyrUpdateMoves(void);
+float FEPlyrSpin(float a);
+void FEPlyrResetPose(int a);
+unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b);
 void fn_80029CE0(int a, int b);
 void fn_8005F29C(void);
-void fn_80077F24(void);
-int fn_80078B94(void);
-void fn_80078BB8(int a);
-int fn_8007A43C(Object_8007A334 *pObject);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
-void fn_8007BA48(Object_8007A334 *pObject);
-void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
-void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size);
+void ChalCloseCursors(void);
+int ChalGetDevPoints(void);
+void ChalSetDevPoints(int a);
+int DbCursorGetRow(DbCursor *pObject);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
+void fn_8007BA48(DbCursor *pObject);
+void fn_8007BB04(DbCursor *pObject);
+int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
+void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
 int fn_8007BF14(int a);
-int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
+int fn_8007C690(DbCursor *pCursor, short *pOut);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues);
 void fn_8008174C(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
@@ -159,7 +159,7 @@ static Layout_802EA9E0 lbl_802EA9E0 = {525.0f, 415.0f, 8.2f, 353.0f, 1.0f, 15, 1
 static int lbl_802EA9FC[10] = {6, 4, 7, 0, 3, 2, 1, 5, 8, 9};
 static char lbl_802EAA24[28] = "";
 
-extern Object_8007A334 lbl_80362A2C;
+extern DbCursor lbl_80362A2C;
 extern Object_8008044C lbl_80362A58;
 static State_80362A84 lbl_80362A84;
 static StackEntry_80362B14 lbl_80362B14[8];
@@ -179,7 +179,7 @@ static int lbl_803ECB7C;
 extern "C" {
 void fn_8018196C(void);
 void fn_801826FC(unsigned char *pOut);
-Object_8007A334 *fn_80182DBC(void);
+DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182E04(const char *pText);
 void fn_80182E34(char *pText);
@@ -239,10 +239,10 @@ void fn_80181330(void)
         break;
     case 0:
     case 2:
-        lbl_803ECB7C = fn_80078B94();
+        lbl_803ECB7C = ChalGetDevPoints();
         break;
     default:
-        lbl_803ECB7C = fn_80078B94();
+        lbl_803ECB7C = ChalGetDevPoints();
         fn_8018DE40(&lbl_803ECB74, &lbl_803ECB78, fn_8022F4BC());
         break;
     }
@@ -279,7 +279,7 @@ void fn_80181458(void)
     fn_8018196C();
     fn_8000890C(lbl_803ECB7C);
     if (!fn_80183950()) {
-        fn_80078BB8(lbl_803ECB7C);
+        ChalSetDevPoints(lbl_803ECB7C);
     }
     fn_80008924();
 }
@@ -391,7 +391,7 @@ void fn_80181670(int a, int *pCount, int *pValue)
         if (fn_80183950()) {
             fn_8000890C(fn_8018E3DC(lbl_803EB55C));
         } else {
-            fn_8000890C(fn_80078B94());
+            fn_8000890C(ChalGetDevPoints());
         }
     }
 }
@@ -436,7 +436,7 @@ void fn_80181828(int a)
         break;
     }
     fn_80181330();
-    fn_80022D0C(0);
+    FEPlyrResetPose(0);
     fn_801831A4();
     fn_8018300C();
     fn_80182E64(0xFF);
@@ -476,7 +476,7 @@ void fn_80181A88(void)
     int busy = gFMCAPPORT.IsBusy();
 
     if (!busy) {
-        fn_80027E98(0);
+        FELoopSetFrameCallback(0);
         fn_801834DC();
         lbl_803EB58C = busy;
         lbl_803EB58D = busy;
@@ -513,7 +513,7 @@ void fn_80181AD4(unsigned char a)
     fn_801813F4();
     fn_801835C0(-1);
     if (fn_80183950() || lbl_803EB58C) {
-        fn_80027E98(fn_80181A88);
+        FELoopSetFrameCallback(fn_80181A88);
         lbl_803EB58D = 1;
     }
     if (done) {
@@ -768,15 +768,15 @@ void fn_8018265C(int a, int *pOut)
     PaletteColor color;
 
     fn_801826FC(indices);
-    fn_8007A068(indices[0], &color);
+    DbColPalGetPrimaryColor(indices[0], &color);
     *pOut++ = color.r;
     *pOut++ = color.g;
     *pOut++ = color.b;
-    fn_8007A068(indices[1], &color);
+    DbColPalGetPrimaryColor(indices[1], &color);
     *pOut++ = color.r;
     *pOut++ = color.g;
     *pOut++ = color.b;
-    fn_8007A068(indices[2], &color);
+    DbColPalGetPrimaryColor(indices[2], &color);
     *pOut++ = color.r;
     *pOut++ = color.g;
     *pOut = color.b;
@@ -805,14 +805,14 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
     }
     if (fn_800089D8() != 0x7FFF) {
         Info_80307908 info;
-        Object_8007A334 query;
+        DbCursor query;
         char buffer[32];
         int type;
         int seen;
 
         fn_8007BA48(&query);
         seen = 0;
-        fn_800809C4(fn_80182DC8(), fn_800089D8(), 0);
+        PlayerDbSeekId(fn_80182DC8(), fn_800089D8(), 0);
         fn_800817CC(fn_80182DC8(), &info);
         for (i = 0; i < 14; i++) {
             type = fn_8007BF14(i);
@@ -863,8 +863,8 @@ void fn_80182964(void)
         fn_80082534(lbl_803ECB68, lbl_803EB55C);
     } else if (fn_80183948() != 2) {
         fn_8018D8EC(lbl_803EB55C, lbl_803ECB68);
-        if (fn_80078B94() != fn_80008914()) {
-            fn_80078BB8(fn_80008914());
+        if (ChalGetDevPoints() != fn_80008914()) {
+            ChalSetDevPoints(fn_80008914());
         }
     }
     if (fn_80183950() || fn_80183968()) {
@@ -1006,7 +1006,7 @@ void Class_802A6B60::vfn_05(int id, Entry_80182CC8 *pEntry)
 
 extern "C" {
 
-Object_8007A334 *fn_80182DBC(void)
+DbCursor *fn_80182DBC(void)
 {
     return &lbl_80362A2C;
 }
@@ -1139,10 +1139,10 @@ void fn_80183130(int a)
     int row;
 
     lbl_803EB589 = 1;
-    row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
-    fn_800809C4(fn_80182DC8(), a, 0);
-    fn_80080B08(fn_80182DC8(), lbl_80362B54, 28);
-    fn_8007A600((Object_8007A334 *)fn_80182DC8(), row);
+    row = DbCursorGetRow((DbCursor *)fn_80182DC8());
+    PlayerDbSeekId(fn_80182DC8(), a, 0);
+    PlayerDbGetShortName(fn_80182DC8(), lbl_80362B54, 28);
+    DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     fn_80183034(lbl_80362B54);
 }
 
@@ -1214,11 +1214,11 @@ void fn_801832B0(char *pText, int size)
     unsigned int limit;
     unsigned int width;
 
-    fn_80080BEC(fn_80182DC8(), pText, size);
+    PlayerDbGetFullName(fn_80182DC8(), pText, size);
     limit = fn_80225F88(pFont, 2, 3, "WWWWWWWWWW");
     width = fn_80225F88(pFont, 2, 3, pText);
     if (fn_801C3180(pText) > 20 || width > limit) {
-        fn_80080B08(fn_80182DC8(), pText, size);
+        PlayerDbGetShortName(fn_80182DC8(), pText, size);
     }
 }
 
@@ -1294,7 +1294,7 @@ void fn_801834DC(void)
                 fn_8018C48C(0x54415453);
             }
         }
-        fn_80077F24();
+        ChalCloseCursors();
         lbl_803EB548 = 6;
         lbl_803EB54C = 0;
     }
@@ -1318,28 +1318,28 @@ void fn_801835C0(int a)
 
 void fn_801835C8(void)
 {
-    fn_80022398();
-    fn_80022D3C(1, 0, 1);
-    fn_80022D0C(0);
-    fn_80022D0C(1);
-    fn_80022580(0, 0xD6, 0);
-    fn_80022580(1, 0xD6, 0);
-    fn_800225F4(0, 2);
-    fn_800225F4(1, 2);
-    fn_800223E4(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
-    fn_800223E4(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
-    fn_80022534(0, fn_80183734()->mUnknown16);
-    fn_80022534(1, fn_80183734()->mUnknown16);
-    fn_80022730(0, fn_80183734()->mUnknown20);
-    fn_80022730(1, fn_80183734()->mUnknown20);
-    fn_800224A4(0, 0.0f);
-    fn_800224A4(1, 0.0f);
+    FEPlyrShow();
+    FEPlyrSetPairMode(1, 0, 1);
+    FEPlyrResetPose(0);
+    FEPlyrResetPose(1);
+    FEPlyrPlayAnim(0, 0xD6, 0);
+    FEPlyrPlayAnim(1, 0xD6, 0);
+    FEPlyrSetPose(0, 2);
+    FEPlyrSetPose(1, 2);
+    FEPlyrSetPosition(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
+    FEPlyrSetPosition(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8);
+    FEPlyrSetScale(0, fn_80183734()->mUnknown16);
+    FEPlyrSetScale(1, fn_80183734()->mUnknown16);
+    FEPlyrSetPriority(0, fn_80183734()->mUnknown20);
+    FEPlyrSetPriority(1, fn_80183734()->mUnknown20);
+    FEPlyrSetAngle(0, 0.0f);
+    FEPlyrSetAngle(1, 0.0f);
 }
 
 void fn_80183704(void)
 {
-    fn_80022D3C(0, 0, 1);
-    fn_800223C0();
+    FEPlyrSetPairMode(0, 0, 1);
+    FEPlyrHide();
 }
 
 Layout_802EA9E0 *fn_80183734(void)
@@ -1350,19 +1350,19 @@ Layout_802EA9E0 *fn_80183734(void)
 void fn_80183740(const Layout_802EA9E0 *pOffset)
 {
     if (!pOffset) {
-        fn_80022870(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
+        FEPlyrMoveTo(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
                     fn_80183734()->mUnknown12, fn_80183734()->mUnknown16, fn_80183734()->mUnknown24);
-        fn_80022870(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
+        FEPlyrMoveTo(1, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,
                     fn_80183734()->mUnknown12, fn_80183734()->mUnknown16, fn_80183734()->mUnknown24);
-        fn_800225F4(0, 2);
-        fn_800225F4(1, 2);
+        FEPlyrSetPose(0, 2);
+        FEPlyrSetPose(1, 2);
     } else {
-        fn_80022870(0, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
+        FEPlyrMoveTo(0, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
                     fn_80183734()->mUnknown4 + pOffset->mUnknown4,
                     fn_80183734()->mUnknown8 + pOffset->mUnknown8,
                     fn_80183734()->mUnknown12 + pOffset->mUnknown12,
                     fn_80183734()->mUnknown16 + pOffset->mUnknown16, pOffset->mUnknown24);
-        fn_80022870(1, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
+        FEPlyrMoveTo(1, fn_80183734()->mUnknown0 + pOffset->mUnknown0,
                     fn_80183734()->mUnknown4 + pOffset->mUnknown4,
                     fn_80183734()->mUnknown8 + pOffset->mUnknown8,
                     fn_80183734()->mUnknown12 + pOffset->mUnknown12,
@@ -1484,11 +1484,11 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         fn_8018260C(pArgs[0].i, pArgs[1]);
         break;
     case 0xCC:
-        pResult->i = fn_800229D8();
+        pResult->i = FEPlyrUpdateMoves();
         break;
     case 0x128:
         if (lbl_803EB56C == 0x384 || lbl_803EB56C == 0x71) {
-            pResult->f = fn_80022BA0(pArgs[0].f);
+            pResult->f = FEPlyrSpin(pArgs[0].f);
         }
         break;
     case 0x10A:
@@ -1578,8 +1578,8 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         fn_80182A60();
         break;
     case 0x12F:
-        fn_80022534(0, 0.0f);
-        fn_80022534(1, 0.0f);
+        FEPlyrSetScale(0, 0.0f);
+        FEPlyrSetScale(1, 0.0f);
         break;
     case 0x92:
         pResult->i = lbl_803EB56C;
@@ -1614,7 +1614,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
 
 }
 
-Object_8007A334 lbl_80362A2C;
+DbCursor lbl_80362A2C;
 Object_8008044C lbl_80362A58;
 Class_802A6BB0 lbl_803ECB60;
 

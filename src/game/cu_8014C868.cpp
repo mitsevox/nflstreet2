@@ -2,9 +2,9 @@
 #include "game/fn_8007F828.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8003E214.h"
+#include "game/AutoDepth.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8007F6F8.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
@@ -41,7 +41,7 @@ extern const char lbl_802A0B74[];
 
 int fn_800C1E40(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 
 extern unsigned char lbl_803EB2D1;
 extern void *lbl_803EB688;
@@ -67,12 +67,12 @@ int fn_801787DC(int team);
 int fn_800C8744(int team);
 Object_80039F5C *fn_8003AC84(int id);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
-unsigned char fn_8003B560(int group, int index, int *pValue);
+unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
 int fn_8014A1B8(Class_80148A58 *p, int kind, int team);
 unsigned short fn_800D3EB0(int team, int index);
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-int fn_800808F8(Object_8008044C *pObject);
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
+int PlayerDbGetId(Object_8008044C *pObject);
 
 void fn_8014C868(void)
 {
@@ -94,7 +94,7 @@ void fn_8014C8AC(void *p, float dt)
 
 void fn_8014C954(void)
 {
-    fn_80064EFC(3, 24, -1);
+    PauseOpenScreen(3, 24, -1);
 }
 
 void fn_8014C980(void)
@@ -153,7 +153,7 @@ int fn_8014CA98(void)
 
 void fn_8014CAD4(Class_80148A58 *p, int value, int *pList, int *pIds)
 {
-    fn_8003E8FC(value, pList, pIds);
+    AutoDepthFillChart(value, pList, pIds);
     fn_8014BC98(pList, pIds, 4);
     fn_8014BED8(pList, pIds, 4);
 }
@@ -166,24 +166,24 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
     int handle = fn_800C8744(team);
     int value = 0;
     fn_8008040C(&cursor, 0);
-    if (fn_8003B560(team, 0, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+    if (DepthChartGetEntry(team, 0, &id)) {
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[0] = id;
-    if (fn_8003B560(team, 2, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+    if (DepthChartGetEntry(team, 2, &id)) {
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[1] = id;
-    if (fn_8003B560(team, 3, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+    if (DepthChartGetEntry(team, 3, &id)) {
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[2] = id;
-    if (fn_8003B560(team, 1, &id)) {
-        fn_800809FC(&cursor, id, 0);
-        id = fn_800808F8(&cursor);
+    if (DepthChartGetEntry(team, 1, &id)) {
+        PlayerDbSeekOriginalId(&cursor, id, 0);
+        id = PlayerDbGetId(&cursor);
     }
     ids[3] = id;
     fn_8008056C(&cursor);
@@ -246,7 +246,7 @@ void fn_8014C808(void *p)
     if (fn_800C1E40() == 0) {
         int value = fn_8007F828(1);
         fn_801C2D88(text, sizeof(text), lbl_803EB2B8, value);
-        fn_800544A4(lbl_802A0CEC, text, lbl_802A0B74);
+        MsgBoxShow(lbl_802A0CEC, text, lbl_802A0B74);
     }
 }
 }

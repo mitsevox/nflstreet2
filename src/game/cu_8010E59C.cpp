@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -68,7 +68,7 @@ int fn_801783AC(int flag);
 int fn_801787A0(void);
 int fn_80178C9C(void);
 float fn_801CFB94(int angle);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern float lbl_803ECB08;
 }
@@ -112,7 +112,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                 if (pTarget->mMotion.mUnknown28 != 0.0f &&
                     (fn_801BE648(pTarget->mpUnknown792) == 0x4A || fn_801BE648(pTarget->mpUnknown792) == 0x49 ||
                      fn_801BE648(pTarget->mpUnknown792) == 0xA0)) {
-                    if (fn_801CFFD0(heading, pTarget->mMotion.mUnknown32) > 0x6E38E3) {
+                    if (MathAngleDiff(heading, pTarget->mMotion.mUnknown32) > 0x6E38E3) {
                         if (distance < limit) pOut->mSpeed = distance / limit * 0.86f + 0.14f;
                     } else if (distance > 1.75f) {
                         if (fn_801BE648(pTarget->mpUnknown792) == 0xA0 && pTarget->mpState->mId != 2) {
@@ -131,7 +131,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                             case 8:
                             case 9:
                             case 24:
-                                off = fn_801CFFD0(heading, pOut->mHeading);
+                                off = MathAngleDiff(heading, pOut->mHeading);
                                 if (((heading - pOut->mHeading) & 0xFFFFFF) > 0x800000) {
                                     pOut->mHeading = pOut->mHeading - off / 2;
                                 } else {
@@ -142,17 +142,17 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                         }
                         if (distance < limit) pOut->mSpeed = distance / limit * (1.0f - 0.72f) + 0.72f;
                         if (fn_8011E188() <= 59 && distance > 2.0f && fn_8011F1A4() && fn_8011F4C8() > 3 && !fn_801783AC(0) &&
-                            fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x3FFFFF) {
+                            MathAngleDiff(pMotion->mFacing, 0x400000) <= 0x3FFFFF) {
                             toward.mX = fn_8011F4D4();
                             toward.mY = fn_80177FE0().mY;
                             if (fabsf(toward.mX) > fabsf(pMotion->mPos.mX) && aim.mY - toward.mY > 3.0f &&
                                 pMotion->mPos.mY - toward.mY < 1.5f) {
                                 fn_80227690(&toward, &toward, pMotion);
                                 side = toward.Heading();
-                                off = fn_801CFFD0(heading, side);
-                                if (off <= 0x671C71 && off > fn_801CFFD0(heading, pOut->mHeading)) {
+                                off = MathAngleDiff(heading, side);
+                                if (off <= 0x671C71 && off > MathAngleDiff(heading, pOut->mHeading)) {
                                     off = MAX(off, 0x18E38E);
-                                    if (fn_801CFFD0(side, heading) < fn_801CFFD0(side, pOut->mHeading)) pOut->mHeading = heading;
+                                    if (MathAngleDiff(side, heading) < MathAngleDiff(side, pOut->mHeading)) pOut->mHeading = heading;
                                     if (((side - heading) & 0xFFFFFF) > 0x800000) {
                                         pOut->mHeading -= off / 2;
                                     } else {
@@ -169,7 +169,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                         }
                         pOut->mUnknown22 = 0;
                     }
-                    pCarrier = fn_80137B40();
+                    pCarrier = BallGetCurrentHolder();
                     if (pCarrier) {
                         state = pCarrier->mpState->mId;
                         if (state == 1 || state == 0x23 || state == 0x22 || state == 0x24) {
@@ -177,25 +177,25 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                             distance = fn_802270A4(&toward);
                             if (distance < 10.0f) {
                                 side = toward.Heading() & 0xFFFFFF;
-                                if (distance < 5.0f && fn_801CFFD0(heading, side) > 0x58E38E &&
-                                    fn_801CFFD0(pCarrier->mMotion.mFacing, side) > 0x755555) {
-                                    off = fn_801CFFD0(heading, pOut->mHeading);
+                                if (distance < 5.0f && MathAngleDiff(heading, side) > 0x58E38E &&
+                                    MathAngleDiff(pCarrier->mMotion.mFacing, side) > 0x755555) {
+                                    off = MathAngleDiff(heading, pOut->mHeading);
                                     if (((pOut->mHeading - heading) & 0xFFFFFF) > 0x800000) {
                                         pOut->mHeading = (pOut->mHeading + off / 2) & 0xFFFFFF;
                                     } else {
                                         pOut->mHeading = (pOut->mHeading - off / 2) & 0xFFFFFF;
                                     }
-                                } else if (fn_801CFFD0(heading, side) <= 0x355554) {
+                                } else if (MathAngleDiff(heading, side) <= 0x355554) {
                                     if (((pOut->mHeading - heading) & 0xFFFFFF) > 0x800000) {
                                         if (((side - heading) & 0xFFFFFF) > 0x800000 &&
-                                            fn_801CFFD0(pOut->mHeading, heading) > fn_801CFFD0(side, heading)) {
+                                            MathAngleDiff(pOut->mHeading, heading) > MathAngleDiff(side, heading)) {
                                             pOut->mHeading = heading;
-                                            pOut->mHeading = (pOut->mHeading - fn_801CFFD0(side, heading) / 2) & 0xFFFFFF;
+                                            pOut->mHeading = (pOut->mHeading - MathAngleDiff(side, heading) / 2) & 0xFFFFFF;
                                         }
                                     } else if (((side - heading) & 0xFFFFFF) <= 0x7FFFFF &&
-                                               fn_801CFFD0(pOut->mHeading, heading) > fn_801CFFD0(side, heading)) {
+                                               MathAngleDiff(pOut->mHeading, heading) > MathAngleDiff(side, heading)) {
                                         pOut->mHeading = heading;
-                                        pOut->mHeading = (pOut->mHeading + fn_801CFFD0(side, heading) / 2) & 0xFFFFFF;
+                                        pOut->mHeading = (pOut->mHeading + MathAngleDiff(side, heading) / 2) & 0xFFFFFF;
                                     }
                                 }
                             }
@@ -210,7 +210,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                             toward.mY = fn_80177FE0().mY;
                             fn_80227690(&toward, &toward, pMotion);
                             side = toward.Heading();
-                            off = fn_801CFFD0(heading, side);
+                            off = MathAngleDiff(heading, side);
                             if (off <= 0x3FFFFF) {
                                 if (((pOut->mHeading - side) & 0xFFFFFF) <= 0x7FFFFF) {
                                     pOut->mHeading = pOut->mHeading - off / 2;
@@ -224,7 +224,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                 fn_8010E15C(p, pOut);
                 pOut->mHeading &= 0xFFFFFF;
                 pOut->mFacing = pOut->mHeading;
-                off = fn_801CFFD0(pOut->mHeading, pMotion->mFacing);
+                off = MathAngleDiff(pOut->mHeading, pMotion->mFacing);
                 if (off > 0x18E38E) {
                     off /= 2;
                     pOut->mSpeed = MIN(pOut->mSpeed, fn_801CFB94(off) * 0.72f);
@@ -234,8 +234,8 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                 fn_8010DAB4(p, pOut);
                 heading = pMotion->mFacing;
             }
-            if (pMotion->mUnknown28 > lbl_803ECB08 * 0.05f && fn_801CFFD0(pMotion->mUnknown32, pMotion->mFacing) > 0x400000 &&
-                fn_801CFFD0(pMotion->mUnknown32, pOut->mFacing) > 0x38E38E) {
+            if (pMotion->mUnknown28 > lbl_803ECB08 * 0.05f && MathAngleDiff(pMotion->mUnknown32, pMotion->mFacing) > 0x400000 &&
+                MathAngleDiff(pMotion->mUnknown32, pOut->mFacing) > 0x38E38E) {
                 pOut->mFacing = heading;
                 pOut->mSpeed = 0.0f;
                 pOut->mTimer = 0;

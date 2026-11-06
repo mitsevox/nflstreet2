@@ -1,6 +1,6 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802270D4.h"
 
@@ -19,7 +19,7 @@ struct Block_800F8D2C {
 
 extern "C" {
 int fn_8012CAB4(Object_80039F5C *p);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_8009E9A4(void);
 float fn_80178A2C(void);
 extern float lbl_803EAE2C;
@@ -61,7 +61,7 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
             direction = 0x100000;
         } else {
             side = 2;
-            if (fn_801CFFD0(angle, 0x400000) <= 0xAAAAA) {
+            if (MathAngleDiff(angle, 0x400000) <= 0xAAAAA) {
                 direction = 0x400000;
                 if (delta.mY < -6.0f) {
                     pBlock->mUnknown12 = 0.0f;
@@ -75,7 +75,7 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
         }
         if (p->mMotion.mPos.mY < fn_80177FE0().mY + 8.0f) {
             if (side == 2) {
-                if (fn_801CFFD0(angle, 0x400000) <= 0x11C71B) {
+                if (MathAngleDiff(angle, 0x400000) <= 0x11C71B) {
                     pBlock->mUnknown22 = side;
                     return 1;
                 }
@@ -86,7 +86,7 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
                 if (pBlock->mUnknown16 > 30) {
                     return 0;
                 }
-            } else if (fn_801CFFD0(angle, 0x400000) > 0x11C71B) {
+            } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
                 if (fabsf(delta.mX) < 2.0f) {
                     pBlock->mUnknown12 = 0.0f;
                 }
@@ -106,7 +106,7 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
             if (delta.mY < -9.0f) {
                 return 0;
             }
-            if ((fn_801CFFD0(angle, 0x400000) > 0x200000 || side != 2) && pBlock->mUnknown16 > 30) {
+            if ((MathAngleDiff(angle, 0x400000) > 0x200000 || side != 2) && pBlock->mUnknown16 > 30) {
                 return 0;
             }
         }
@@ -144,7 +144,7 @@ extern "C" int fn_800F9024(Object_80039F5C *p) {
                 angle = 0x1000000 - angle;
             }
         }
-        if (fn_801CFFD0(angle, 0x400000) > 0x1C71C7) {
+        if (MathAngleDiff(angle, 0x400000) > 0x1C71C7) {
             return 0;
         }
         delta.mX = pOther->mMotion.mUnknown40 * lbl_803EAE54 + delta.mX;
@@ -162,7 +162,7 @@ extern "C" int fn_800F9024(Object_80039F5C *p) {
         if (delta.mY < -7.0f && fn_8009E9A4() != 1) {
             return 0;
         }
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         if ((p->mpState->mUnknown2 & 1) == 0) {
             if (pOther->mMotion.mPos.mX > ball.mX) {
                 float lo = pOther->mMotion.mPos.mX - lbl_803EAE50;

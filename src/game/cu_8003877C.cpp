@@ -2,18 +2,18 @@
 #include "game/Object_80039F5C.h"
 #include "game/Player_8003877C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_800AD9B4.h"
 #include "game/Object_8017886C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
-#include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/AudmonEvent.h"
+#include "game/Ball.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -134,7 +134,7 @@ void fn_800B2BC0(Object_800B26B0 *pMotion);
 void fn_8009BEA8(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void fn_8016D9D0(Object_8016D8B0 *pObject);
-void fn_801B9EDC(void *p, int a, int b, int c);
+void AnimInitHeader(void *p, int a, int b, int c);
 void fn_801B9FEC(void *p, void *q);
 void fn_801BA03C(void *a, void *b, float f, Object_80039F5C *p);
 int fn_801BC7C0(void *a, void *b, void *c);
@@ -143,7 +143,7 @@ void fn_801BE040(void *p);
 void fn_801BE420(void *a, void *b, void *c, Object_80039F5C *p, float f);
 
 void fn_8003AB08(Object_80039F5C *p, int a);
-Set_8003EE6C *fn_8003A078(void);
+CollideSet_t *fn_8003A078(void);
 void fn_80042270(Object_80039F5C *p);
 void fn_80042928(void *p);
 void fn_8008E978(Object_80039F5C *p);
@@ -153,13 +153,13 @@ void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void fn_8009D00C(void *p, int *pRecord);
 int fn_8011E8A4(void);
 void fn_8011E8D8(Object_80039F5C *p);
-Set_8003EE6C *fn_801442F0(void);
+CollideSet_t *fn_801442F0(void);
 }
 
 extern "C" {
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
-void fn_80145D64(int type, int a, int b, int c);
+void ParticlesAddPlayerEvent(int type, int a, int b, int c);
 void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsigned char team, unsigned char index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8009C158(Object_80039F5C *p, int a);
@@ -180,9 +180,9 @@ void fn_8022765C(void *pOut, void *pA, void *pB);
 extern unsigned char lbl_803EA3F0, lbl_803EA3F1, lbl_803EA3F2;
 extern float lbl_803EA3F4;
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB,
-                 ContactList_8030BD74 *pContacts);
-void fn_80194C5C(int channel, int level, int duration);
+void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
+                 CollideContactList_t *pContacts);
+void RumbleStart(int channel, int level, int duration);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
@@ -202,15 +202,15 @@ void fn_801BA784(void *pDest, void *pSrc);
 void fn_8009C0B8(void *pDest, void *pSrc);
 int fn_8016278C(void);
 Object_80039F5C *fn_80163064(void);
-int fn_801481B0(void);
-int fn_801481DC(void);
-int fn_80148208(int index, int force);
+int PassIconsAreShown(void);
+int PassIconsAreLocked(void);
+int PassIconGetSlot(int index, int force);
 int fn_800B65A0(int team);
 int fn_801787A0(void);
 void fn_800F1700(void);
 void fn_800C11B8(void);
 void fn_800C845C(void);
-void fn_800D0A38(void);
+void PlayerMoveTickAll(void);
 void fn_800C8330(Object_80039F5C *p);
 void fn_800C7794(Object_80039F5C *p);
 void fn_800EA6F0(Object_80039F5C *p);
@@ -233,15 +233,15 @@ extern "C" void fn_8003830C(Object_80039F5C *p)
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
         int bone;
 
-        bone = fn_801C4E98(pObject->mUnknown100, "rwrist");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "rwrist");
         pObject->mUnknown44.mUnknown48[bone * 3] = pObject->mUnknown100->mUnknown1040[bone][0] << 4;
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "rforearm");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "rforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "lwrist");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "lwrist");
         pObject->mUnknown44.mUnknown48[bone * 3] = pObject->mUnknown100->mUnknown1040[bone][0] << 4;
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "lforearm");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "lforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
         fn_800ADB90(p, 0, 8, 1);
         fn_800ADB90(p, 0, 8, 0);
@@ -252,10 +252,10 @@ extern "C" void fn_8003845C(Object_80039F5C *p)
 {
     float (*pMatrix)[4][4] = &((Object_8003DEC4 *)p->mpUnknown4)->mUnknown908;
 
-    fn_80145D64(0, (int)pMatrix, (int)p, 8);
-    fn_80145D64(0, (int)pMatrix, (int)p, 4);
-    fn_80145D64(2, (int)pMatrix, (int)p, 10);
-    fn_80145D64(1, (int)pMatrix, (int)p, 13);
+    ParticlesAddPlayerEvent(0, (int)pMatrix, (int)p, 8);
+    ParticlesAddPlayerEvent(0, (int)pMatrix, (int)p, 4);
+    ParticlesAddPlayerEvent(2, (int)pMatrix, (int)p, 10);
+    ParticlesAddPlayerEvent(1, (int)pMatrix, (int)p, 13);
 }
 
 extern "C" int fn_800384DC(Manager_803EA3F8 *pManager)
@@ -264,7 +264,7 @@ extern "C" int fn_800384DC(Manager_803EA3F8 *pManager)
 
     pManager->mpPlayers = (Player_8003877C *)fn_801D2B7C(pManager->mCount * sizeof(Player_8003877C), 0, 0);
     fn_801C1F94(pManager->mpPlayers, 0, pManager->mCount * sizeof(Player_8003877C));
-    pManager->mpUnknown4 = (Block_8003877C *)fn_8003EE6C(pManager->mCount, pManager->mCount * 11);
+    pManager->mpUnknown4 = (Block_8003877C *)CollideSetCreate(pManager->mCount, pManager->mCount * 11);
     for (i = 0; i < pManager->mCount; i++) {
         Player_8003877C *pPlayers = pManager->mpPlayers;
         Object_80039F5C *p = &pPlayers[i].mObject;
@@ -273,7 +273,7 @@ extern "C" int fn_800384DC(Manager_803EA3F8 *pManager)
         fn_80038E80(p, &pPlayers[i], i / pManager->mPerTeam, i % pManager->mPerTeam);
         fn_800EFE1C(0, &p->mQueue[0]);
         fn_8003AB08(p, 0);
-        p->mpUnknown3092 = (Object_800EA284 *)fn_8003EFB8((Set_8003EE6C *)pManager->mpUnknown4, 0,
+        p->mpUnknown3092 = (Object_800EA284 *)CollideSetAddObject((CollideSet_t *)pManager->mpUnknown4, 0,
                                                           pPlayers[i].mObject.mId);
         fn_8003845C(p);
     }
@@ -288,7 +288,7 @@ extern "C" int fn_800385D4(Manager_803EA3F8 *pManager)
         Object_80039F5C *p = &pManager->mpPlayers[i].mObject;
         p->mpUnknown3092 = 0;
     }
-    fn_8003EF5C((Set_8003EE6C *)pManager->mpUnknown4);
+    CollideSetDestroy((CollideSet_t *)pManager->mpUnknown4);
     fn_801D2BD0(pManager->mpPlayers);
     pManager->mpPlayers = 0;
     return 0;
@@ -320,8 +320,8 @@ extern "C" int fn_80038650(Manager_803EA3F8 *pManager, int flags)
                 }
                 fn_8009C370(p);
                 fn_80042270(p);
-                fn_801444A0(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
-                            (Object_80144310 *)pObject->mUnknown972);
+                LightTrackerSnap(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
+                            (LightSource_t *)pObject->mUnknown972);
             }
         }
     }
@@ -343,9 +343,9 @@ extern "C" int fn_8003877C(Manager_803EA3F8 *pA, Manager_803EA3F8 *pB)
             b = (Object_80039F5C *)((char *)&pB->mpPlayers[i] + ((char *)pB - (char *)lbl_803EA3F8));
 
             result |= fn_8009C328(a, b);
-            result |= fn_8003F4E8((Record_8003EC04 *)((char *)a->mpUnknown3092 + ((char *)pA - (char *)lbl_803EA3F8)),
-                                  (Record_8003EC04 *)((char *)b->mpUnknown3092 + ((char *)pB - (char *)lbl_803EA3F8)),
-                                  (Record_8003EC04 *)a->mpUnknown3092);
+            result |= CollideCompareObjects((CollideObject_t *)((char *)a->mpUnknown3092 + ((char *)pA - (char *)lbl_803EA3F8)),
+                                  (CollideObject_t *)((char *)b->mpUnknown3092 + ((char *)pB - (char *)lbl_803EA3F8)),
+                                  (CollideObject_t *)a->mpUnknown3092);
             result |= fn_80238258(&a->mBlock1032, &b->mBlock1032, 0x80C);
         }
     } else {
@@ -455,7 +455,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     p->mUnknown9[2] = index < (unsigned int)fn_80178D70(team);
     p->mpState = &pPlayer->mObject.mQueue[0];
     p->mpUnknown792 = pPlayer->mObject.mUnknown1244 + 1252;
-    p->mpUnknown796 = (Object_801BA03C *)pPlayer->mObject.mUnknown1244;
+    p->mpUnknown796 = (AnimHeader_t *)pPlayer->mObject.mUnknown1244;
     p->mpUnknown800 = (Record_800D81C8 *)(pPlayer->mObject.mUnknown1244 + 12);
     p->mpUnknown804 = pPlayer->mUnknown3604;
     p->mpUnknown808 = &pPlayer->mUnknown3096;
@@ -480,7 +480,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     fn_800C3130(pObject, 1, team * fn_8003DEBC() + index, 2);
 }
 
-extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactList_8030BD74 *pContacts)
+extern "C" void fn_80039044(CollideObject_t *pA, CollideObject_t *pB, CollideContactList_t *pContacts)
 {
     Object_80039F5C *a = fn_8009BCE8(&pA->mUnknown28);
     Object_80039F5C *b = fn_8009BCE8(&pB->mUnknown28);
@@ -497,7 +497,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
         fn_801438EC(a, pA, b, pB, pContacts);
     }
     if (a->mUnknown560.mUnknown28 > 1e-7f || b->mUnknown560.mUnknown28 > 1e-7f) {
-        fn_80067DB8(35, &a->mMotion.mPos, (int)a, (int)b, 0);
+        AudmonEventPostArgs(35, &a->mMotion.mPos, (int)a, (int)b, 0);
         if (a->mUnknown8 != 0xFF) {
             unsigned int limit = lbl_803EA3F0;
             unsigned int level = (unsigned int)(lbl_803EA3F4 * a->mUnknown560.mUnknown28 + lbl_803EA3F1);
@@ -505,7 +505,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
             if (level > limit) {
                 level = limit;
             }
-            fn_80194C5C(a->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(a->mUnknown8, (unsigned char)level, lbl_803EA3F2);
         }
         if (b->mUnknown8 != 0xFF) {
             unsigned int limit = lbl_803EA3F0;
@@ -514,7 +514,7 @@ extern "C" void fn_80039044(Record_8003EC04 *pA, Record_8003EC04 *pB, ContactLis
             if (level > limit) {
                 level = limit;
             }
-            fn_80194C5C(b->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(b->mUnknown8, (unsigned char)level, lbl_803EA3F2);
         }
     }
 }
@@ -614,13 +614,13 @@ extern "C" void fn_8003962C(Object_80039F5C *p, int flag)
     pState[28] = value;
     if (flag == 0 && (lbl_803EABA4->fn_800C0420(0) || lbl_803EABA4->fn_800C0420(1))
         && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && fn_8016278C() == 1
-        && (((Block_8003A1EC *)p->mpUnknown4)->mFlags & 1) && fn_801481B0() && fn_80178308() == p->mIdBytes[2]) {
+        && (((Block_8003A1EC *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && fn_80178308() == p->mIdBytes[2]) {
         unsigned char i;
 
         for (i = 0; i <= 2; i++) {
-            int pad = fn_80148208(i, 1);
+            int pad = PassIconGetSlot(i, 1);
 
-            if (pad == 0xFF && fn_801481DC() == 0) {
+            if (pad == 0xFF && PassIconsAreLocked() == 0) {
                 continue;
             }
             if (pad == p->mIdBytes[1]) {
@@ -648,7 +648,7 @@ extern "C" void fn_800397D0(unsigned int count)
     void *pHandle;
     Manager_803EA3F8 *pManager;
 
-    fn_8003EE2C(0, 0, fn_80039044);
+    CollideSetPairCallback(0, 0, fn_80039044);
     pHandle = fn_80238174(0, (void **)&lbl_803EA3F8, sizeof(Manager_803EA3F8), 1, 0x706C7972);
     fn_80238234(pHandle, (Callback_80238234)fn_800384DC, (Callback_80238234)fn_800385D4,
                 (Callback_80238234)fn_80038650, (Callback1C_80238234)fn_8003877C);
@@ -683,14 +683,14 @@ extern "C" void fn_800398B4(void)
     fn_800F1700();
     fn_800C11B8();
     fn_800C845C();
-    fn_800D0A38();
+    PlayerMoveTickAll();
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
         int active;
 
         if (p->mFlags & 0x800) {
             if (p->mFlags & 0x08000000) {
-                fn_80067E3C(36, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                AudmonEventPostId(36, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 p->mFlags &= ~0x08000000;
             }
         } else if (!(p->mFlags & 0x08000000)) {
@@ -713,7 +713,7 @@ extern "C" void fn_800398B4(void)
         fn_8003924C(p);
         fn_8003962C(p, active);
     }
-    fn_800C7D44(fn_80137B40());
+    fn_800C7D44(BallGetCurrentHolder());
     fn_8011E13C();
 }
 
@@ -785,15 +785,15 @@ extern "C" void fn_80039B2C(float dt)
         } else {
             pos = p->mMotion.mPos;
         }
-        p->mpUnknown780 = fn_80054138(&pos.mX);
+        p->mpUnknown780 = LevelFindArea(&pos.mX);
     }
 }
 
 extern "C" void fn_80039C64(void)
 {
-    Set_8003EE6C *pSet = (Set_8003EE6C *)lbl_803EA3F8->mpUnknown4;
-    fn_8003F0AC(pSet, pSet);
-    fn_8003F0AC(fn_8003A078(), fn_801442F0());
+    CollideSet_t *pSet = (CollideSet_t *)lbl_803EA3F8->mpUnknown4;
+    CollideSetTest(pSet, pSet);
+    CollideSetTest(fn_8003A078(), fn_801442F0());
 }
 
 extern "C" void fn_80039CB0(void)
@@ -912,12 +912,12 @@ extern "C" int fn_8003A06C(void)
     return lbl_803EA3F8->mPerTeam;
 }
 
-extern "C" Set_8003EE6C *fn_8003A078(void)
+extern "C" CollideSet_t *fn_8003A078(void)
 {
     if (lbl_803EA3F8 == 0) {
         return 0;
     }
-    return (Set_8003EE6C *)lbl_803EA3F8->mpUnknown4;
+    return (CollideSet_t *)lbl_803EA3F8->mpUnknown4;
 }
 
 extern "C" void fn_8003A090(void)
@@ -1086,7 +1086,7 @@ extern "C" void fn_8003A5E8(void)
     ((Block_8003A1EC *)pManager->mpPlayers[pManager->mCount / 2].mObject.mpUnknown4)->mFlags &= ~0x4000;
 }
 
-extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
+extern "C" void fn_8003A628(CollideObject_t *pRecord)
 {
     Object_80039F5C *p = fn_8009BCE8(&pRecord->mUnknown28);
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
@@ -1104,8 +1104,8 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
     radius = 0.0f;
     int mode = fn_800AD9B4();
     if ((pRecord->mUnknown2C & 2) && (mode == 2 || mode == 6 || mode == 7) && !(p->mFlags & 0x4000)) {
-        Sub_8003EC54 *pSub = pRecord->mpUnknown20;
-        Sub_8003EC54 *pOther;
+        CollideShape_t *pSub = pRecord->mpUnknown20;
+        CollideShape_t *pOther;
 
         pRecord->mUnknown2F = 1;
         pOther = pRecord->mpUnknown24;
@@ -1151,7 +1151,7 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
         }
         for (i = 0; i < pRecord->mUnknown2F; i++) {
             float (*pMatrices)[4][4] = pObject->mUnknown112;
-            Sub_8003EC54 *pSub = &pRecord->mpUnknown20[i];
+            CollideShape_t *pSub = &pRecord->mpUnknown20[i];
             Vector_80039F5C a;
             Vector_80039F5C b;
             float d;
@@ -1195,8 +1195,8 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
     pRecord->mUnknown18 = radius;
     if (!(pRecord->mUnknown2C & 2)) {
         for (i = 0; i <= 10; i++) {
-            Sub_8003EC54 *pSub = &pRecord->mpUnknown20[i];
-            Sub_8003EC54 *pOther = &pRecord->mpUnknown24[i];
+            CollideShape_t *pSub = &pRecord->mpUnknown20[i];
+            CollideShape_t *pOther = &pRecord->mpUnknown24[i];
 
             switch (i) {
             case 0:
@@ -1264,14 +1264,14 @@ extern "C" void fn_8003AB40(Object_80039F5C *p)
     Player_8003877C *pPlayer = (Player_8003877C *)p;
     unsigned int i;
 
-    fn_801B9EDC(p->mUnknown1244, 0, 1, 10);
+    AnimInitHeader(p->mUnknown1244, 0, 1, 10);
     fn_801B9FEC(p->mUnknown1244, p->mUnknown1244 + 12);
     fn_801BE040(p->mUnknown1244 + 1252);
-    fn_801B9EDC(&pPlayer->mUnknown3096, 2, 3, 4);
+    AnimInitHeader(&pPlayer->mUnknown3096, 2, 3, 4);
     fn_801B9FEC(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
     fn_801BE040(pPlayer->mUnknown3604);
     for (i = 0; i <= 1; i++) {
-        fn_801B9EDC(&pPlayer->mUnknown4008[i], 0, 4, 2);
+        AnimInitHeader(&pPlayer->mUnknown4008[i], 0, 4, 2);
         fn_801B9FEC(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
         fn_801BE040(pPlayer->mUnknown4528[i]);
     }

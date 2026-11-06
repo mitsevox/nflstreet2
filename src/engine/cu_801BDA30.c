@@ -5,9 +5,9 @@
 
 extern Handlers_801BDA30 **lbl_803EBB98;
 extern int lbl_803ECEBC;
-extern List_801BAB88 lbl_8037EC7C;
+extern AnimStateAnimList_t lbl_8037EC7C;
 
-int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, Object_801BA03C *pObject,
+int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
                 Record_800D81C8 *pRecords)
 {
     if (key & 0x8000) {
@@ -45,7 +45,7 @@ void fn_801BDAC0(Collection_801BE594 *p)
     }
 }
 
-void fn_801BDBD4(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, int index,
+void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, int index,
                  void *pOwner)
 {
     fn_801BDA30(pObject->mUnknown2, p->mUnknown4[index].mUnknown0, pOwner, 3, pObject, pRecords);
@@ -53,7 +53,7 @@ void fn_801BDBD4(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81
     p->mUnknown4[index].mUnknown2 = 0;
 }
 
-unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, void *pOwner,
+unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner,
                            unsigned short key)
 {
     int slot = -1;
@@ -189,7 +189,7 @@ void fn_801BE040(Collection_801BE594 *p)
     }
 }
 
-int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, unsigned short key,
+int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, unsigned short key,
                 float frames, void *pOwner)
 {
     unsigned short previous = fn_801BE648(p);
@@ -251,7 +251,7 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C
     return 0;
 }
 
-void fn_801BE420(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, void *pOwner, float step)
+void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step)
 {
     int i;
 
@@ -331,7 +331,7 @@ unsigned short fn_801BE648(Collection_801BE594 *p)
     return key;
 }
 
-void fn_801BE67C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, void *pOwner)
+void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner)
 {
     int i;
 

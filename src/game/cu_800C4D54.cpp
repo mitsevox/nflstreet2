@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 extern "C" {
@@ -14,11 +14,11 @@ Item_80097440 *fn_8009A63C(int ref);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 int fn_800C53D8(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
 int fn_801486A0(void);
 float fn_80178A08(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 
 extern float lbl_803EABFC;
 extern float lbl_803EAC00;
@@ -68,17 +68,17 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     if (fn_800C53D8(pOther) || (!fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p))) {
         result = 0;
     }
-    if (fn_800D0B90(pOther)) {
+    if (PlayerMoveGetKind(pOther)) {
         result = 0;
     }
-    if (fn_80137B40() != pOther) {
+    if (BallGetCurrentHolder() != pOther) {
         result = 0;
     }
-    if (fn_801CFFD0(pOther->mMotion.mFacing, 0x400000) > (int)(lbl_803EABFC * 46603.37890625f)) {
+    if (MathAngleDiff(pOther->mMotion.mFacing, 0x400000) > (int)(lbl_803EABFC * 46603.37890625f)) {
         result = 0;
     }
-    if (fn_801CFFD0(pOther->mMotion.mFacing, 0x400000) > (int)(lbl_803EAC00 * 46603.37890625f) &&
-        fn_801CFFD0(pOther->mMotion.mFacing, 0x400000) < (int)(lbl_803EAC04 * 46603.37890625f) &&
+    if (MathAngleDiff(pOther->mMotion.mFacing, 0x400000) > (int)(lbl_803EAC00 * 46603.37890625f) &&
+        MathAngleDiff(pOther->mMotion.mFacing, 0x400000) < (int)(lbl_803EAC04 * 46603.37890625f) &&
         fabsf(pOther->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC08) {
         result = 0;
     }
@@ -94,7 +94,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     if (p->mUnknown1160.mUnknown52) {
         result = 0;
     }
-    if (fn_801CFFD0(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x400000) {
+    if (MathAngleDiff(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x400000) {
         if (fn_801BE648(pOther->mpUnknown792) == 225) {
             result = 0;
         }

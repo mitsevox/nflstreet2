@@ -1,12 +1,12 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_80238174.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 
 /* Four-byte entry of the stream read by fn_800B9F50. */
 struct Event_800B9F50 {
@@ -51,7 +51,7 @@ int fn_80178320(void);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 float fn_80178A08(void);
 void *fn_8023816C(void *pHandle);
-void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
+void fn_8013A910(Ball_t *pBall, int *pAngles);
 
 extern Block_800BA3F0 *lbl_803EAB88;
 }
@@ -105,14 +105,14 @@ extern "C" void fn_800B9D24(void)
 
     for (i = 0; i < 7; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
-        Object_80137ABC *pBall = fn_80137C48(p);
+        Ball_t *pBall = BallFindHeldBy(p);
 
         if (pBall != 0) {
             Vector_80039F5C velocity;
 
             velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-            fn_80137EE0(pBall, &velocity);
-            fn_8013791C(pBall, 5, 0);
+            BallSetVelocity(pBall, &velocity);
+            BallReleaseStill(pBall, 5, 0);
         }
         p->mMotion.mPos.mX = -100.0f;
         p->mMotion.mPos.mY = -100.0f - i * 3.0f;
@@ -334,11 +334,11 @@ extern "C" void fn_800BA3F0(void)
         p->mUnknown182 = 0;
     }
     if (p->mUnknown182) {
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
         Vector_80039F5C pos;
         int angles[3];
 
-        p->mUnknown180 = fn_8007CB6C(2);
+        p->mUnknown180 = GameInfoGet(2);
         p->mUnknown181[0] = p->mUnknown180 == 0;
         fn_800B9C3C();
         fn_800B9CB0();
@@ -365,8 +365,8 @@ extern "C" void fn_800BA3F0(void)
         p->mpUnknownC = 0;
         p->mUnknown18.mX = 0.0f;
         p->mUnknown18.mY = 15.0f;
-        pBall = fn_801374BC();
-        fn_8013791C(pBall, 6, 0);
+        pBall = BallGetCurrent();
+        BallReleaseStill(pBall, 6, 0);
         pos.mX = p->mUnknown18.mX;
         pos.mY = p->mUnknown18.mY;
         pos.mZ = 0.3f;

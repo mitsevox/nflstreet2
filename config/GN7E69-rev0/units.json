@@ -181,6 +181,14 @@
     }
   },
   "externals": {
+    "gPlayerLooks": {
+      "address": "0x803078E8",
+      "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
+    },
+    "gPlayerLookBonuses": {
+      "address": "0x80308368",
+      "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
+    },
     "RuntimeErrorFnc": {
       "address": "0x803EBF30",
       "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."
@@ -297,33 +305,33 @@
       "address": "0x801CC96C",
       "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
     },
-    "fn_801CC6FC__14Class_801CC350i": {
+    "fn_801CC6FC__10FlowGroupCi": {
       "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350i); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__10FlowGroupCi); descriptive name."
     },
-    "_._14Class_801CC350": {
+    "_._10FlowGroupC": {
       "address": "0x801CC38C",
-      "evidence": "evidence.tsv external row for 0x801CC38C (_._14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC38C (_._10FlowGroupC); descriptive name."
     },
-    "fn_801CC6F8__14Class_801CC350": {
+    "fn_801CC6F8__10FlowGroupC": {
       "address": "0x801CC6F8",
-      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__10FlowGroupC); descriptive name."
     },
-    "__14Class_801CC350": {
+    "__10FlowGroupC": {
       "address": "0x801CC350",
-      "evidence": "evidence.tsv external row for 0x801CC350 (__14Class_801CC350); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CC350 (__10FlowGroupC); descriptive name."
     },
-    "_._14Class_801CBC50": {
+    "_._12FlowManagerC": {
       "address": "0x801CBC9C",
-      "evidence": "evidence.tsv external row for 0x801CBC9C (_._14Class_801CBC50); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CBC9C (_._12FlowManagerC); descriptive name."
     },
-    "__14Class_801CBC50": {
+    "__12FlowManagerC": {
       "address": "0x801CBC50",
-      "evidence": "evidence.tsv external row for 0x801CBC50 (__14Class_801CBC50); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801CBC50 (__12FlowManagerC); descriptive name."
     },
-    "__14Class_801B8D9C": {
+    "__15CsisClassHandle": {
       "address": "0x801B8D9C",
-      "evidence": "evidence.tsv external row for 0x801B8D9C (__14Class_801B8D9C); descriptive name."
+      "evidence": "evidence.tsv external row for 0x801B8D9C (__15CsisClassHandle); descriptive name."
     },
     "__GXData": {
       "address": "0x803ED840",
@@ -1133,25 +1141,25 @@
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
     },
-    "fn_801CBD80__14Class_801CBC50ii": {
+    "fn_801CBD80__12FlowManagerCii": {
       "address": "0x801CBD80",
-      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
     },
-    "fn_801CBE24__14Class_801CBC50i": {
+    "fn_801CBE24__12FlowManagerCi": {
       "address": "0x801CBE24",
-      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
     },
-    "fn_801CBE9C__14Class_801CBC50i": {
+    "fn_801CBE9C__12FlowManagerCi": {
       "address": "0x801CBE9C",
-      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
     },
-    "fn_801CBEC8__14Class_801CBC50i": {
+    "fn_801CBEC8__12FlowManagerCi": {
       "address": "0x801CBEC8",
-      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
     },
-    "fn_801CBEF4__14Class_801CBC50ii": {
+    "fn_801CBEF4__12FlowManagerCii": {
       "address": "0x801CBEF4",
-      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
     },
     "__14Block_80156400": {
       "address": "0x80156400",
@@ -1656,13 +1664,137 @@
     "_dtors": {
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
+    },
+    "_Anim_ModuleActive": {
+      "address": "0x803EBB78",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB78 (target extent, related name)."
+    },
+    "_Anim_pUserOpcodeCallback": {
+      "address": "0x803EBB7C",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB7C (target extent, related name)."
+    },
+    "_Anim_pUserOpcodeSkipCallback": {
+      "address": "0x803EBB80",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB80 (target extent, related name)."
+    },
+    "_Anim_SeqVersion": {
+      "address": "0x803EBB84",
+      "evidence": "evidence.tsv data/name rows for 0x803EBB84 (target extent, related name)."
+    },
+    "_Anim_UserDataStackPosition": {
+      "address": "0x803ECEB4",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB4 (target extent, related name)."
+    },
+    "_Anim_UserStateStackPosition": {
+      "address": "0x803ECEB5",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB5 (target extent, related name)."
+    },
+    "_Anim_pCurrentUserData": {
+      "address": "0x8037E840",
+      "evidence": "evidence.tsv data/name rows for 0x8037E840 (target extent, related name)."
+    },
+    "_Anim_UserCallbackState": {
+      "address": "0x8037E84C",
+      "evidence": "evidence.tsv data/name rows for 0x8037E84C (target extent, related name)."
+    },
+    "_AnimCache_nCaches": {
+      "address": "0x803ED618",
+      "evidence": "evidence.tsv data/name rows for 0x803ED618 (target extent, related name)."
+    },
+    "_AnimCache_MemoryHeap": {
+      "address": "0x803ED61C",
+      "evidence": "evidence.tsv data/name rows for 0x803ED61C (target extent, related name)."
+    },
+    "_AnimCache_pCaches": {
+      "address": "0x803ED620",
+      "evidence": "evidence.tsv data/name rows for 0x803ED620 (target extent, related name)."
+    },
+    "_AnimCache_Initialized": {
+      "address": "0x803EBBA8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBA8 (target extent, related name)."
+    },
+    "_AnimFrameCache_CustomFunc": {
+      "address": "0x803ECEC0",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEC0 (target extent, related name)."
+    },
+    "_AnimSequencer_ModuleActive": {
+      "address": "0x803EBBAC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBAC (target extent, related name)."
+    },
+    "_AnimSequencer_fTicksPerSecond": {
+      "address": "0x803EBBB0",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB0 (target extent, related name)."
+    },
+    "_uLastGroupIndex": {
+      "address": "0x803EBBB4",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB4 (target extent, related name)."
+    },
+    "_uLastSubGroupIndex": {
+      "address": "0x803EBBB6",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB6 (target extent, related name)."
+    },
+    "_uLastIndex": {
+      "address": "0x803EBBB8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBB8 (target extent, related name)."
+    },
+    "_pLastSeq": {
+      "address": "0x803EBBBC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBBC (target extent, related name)."
+    },
+    "_ResStream_Lock": {
+      "address": "0x803D4F98",
+      "evidence": "evidence.tsv data/name rows for 0x803D4F98 (target extent, inferred name)."
+    },
+    "_ResStream_iNumStreams": {
+      "address": "0x803EBBC0",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC0 (target extent, inferred name)."
+    },
+    "_ResStream_pStreams": {
+      "address": "0x803EBBC4",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC4 (target extent, inferred name)."
+    },
+    "_ResStream_bShutdown": {
+      "address": "0x803EBBC8",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBC8 (target extent, inferred name)."
+    },
+    "_ResStream_iNumPending": {
+      "address": "0x803EBBCC",
+      "evidence": "evidence.tsv data/name rows for 0x803EBBCC (target extent, inferred name)."
+    },
+    "_AnimFile_RelocateFunc": {
+      "address": "0x803ECEB8",
+      "evidence": "evidence.tsv data/name rows for 0x803ECEB8 (target extent, related name)."
+    },
+    "gSpchRandomState": {
+      "address": "0x802F477C",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x802F477C; original-owned provider, no added storage or body."
+    },
+    "_SpchRandom_aHistory": {
+      "address": "0x8037E794",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x8037E794; original-owned provider, no added storage or body."
+    },
+    "_SpchRandom_iHistoryIndex": {
+      "address": "0x803EBB20",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x803EBB20; original-owned provider, no added storage or body."
+    },
+    "iSPCH_EACrandom": {
+      "address": "0x801B1934",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
+    },
+    "iSPCH_Rand": {
+      "address": "0x801B1C1C",
+      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1C1C; original-owned comparison body called by other speech files."
+    },
+    "iSPCH_InitRandom": {
+      "address": "0x801B1B70",
+      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
     }
   },
   "units": [
     {
-      "source": "src/game/cu_80003C94.cpp",
+      "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/cu_80003C94.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -1679,9 +1811,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002053C.cpp",
+      "source": "src/game/MsgCheatCodes.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x8002053C-0x80020A34 (src/game/cu_8002053C.cpp), its function and name rows and its .sdata data row 0x803EBAA0-0x803EBAA4; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x8002053C-0x80020A34 (src/game/MsgCheatCodes.cpp), its function and name rows and its .sdata data row 0x803EBAA0-0x803EBAA4; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -1698,9 +1830,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8013141C.cpp",
+      "source": "src/game/OptionRun.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/cu_8013141C.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
+      "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/OptionRun.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
       "sections": [
         {
           "section": ".text",
@@ -1729,9 +1861,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800D0474.cpp",
+      "source": "src/game/PlayerMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/cu_800D0474.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
+      "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/PlayerMove.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -1820,9 +1952,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D94A0.cpp",
+      "source": "src/engine/llmoviercmp.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801D94A0-0x801D9634 (src/engine/cu_801D94A0.cpp) and its function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801D94A0-0x801D9634 (src/engine/llmoviercmp.cpp) and its function rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -1833,9 +1965,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DA4F8.cpp",
+      "source": "src/engine/rcmp_mad_codec_chunk_types.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DA4F8-0x801DA52C (src/engine/cu_801DA4F8.cpp) and its function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DA4F8-0x801DA52C (src/engine/rcmp_mad_codec_chunk_types.cpp) and its function rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -1852,9 +1984,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DC9C8.cpp",
+      "source": "src/engine/rcmp_vp6_codec_chunk_types.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DC9C8-0x801DCA10 (src/engine/cu_801DC9C8.cpp) and its function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DC9C8-0x801DCA10 (src/engine/rcmp_vp6_codec_chunk_types.cpp) and its function rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -1940,9 +2072,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80023514.cpp",
+      "source": "src/game/CreditsTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80023514-0x8002373C (src/game/cu_80023514.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80023514-0x8002373C (src/game/CreditsTable.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -1972,9 +2104,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002373C.cpp",
+      "source": "src/game/AppearanceNameTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002373C-0x800238A0 (src/game/cu_8002373C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8002373C-0x800238A0 (src/game/AppearanceNameTable.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -1992,9 +2124,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800238A0.cpp",
+      "source": "src/game/DecalTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800238A0-0x80023E08 (src/game/cu_800238A0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800238A0-0x80023E08 (src/game/DecalTable.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -2018,9 +2150,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800241E0.cpp",
+      "source": "src/game/Boot.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800241E0-0x80024B10 (src/game/cu_800241E0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800241E0-0x80024B10 (src/game/Boot.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -2191,9 +2323,9 @@
       ]
     },
     {
-      "source": "src/game/ModuleGroup_80033A5C.cpp",
+      "source": "src/game/GameModules.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80033A5C-0x8003450C (src/game/ModuleGroup_80033A5C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80033A5C-0x8003450C (src/game/GameModules.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -2240,9 +2372,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007A3C4.cpp",
+      "source": "src/game/DbCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/cu_8007A3C4.cpp) and its type, source-form and function rows.",
+      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/DbCursor.cpp) and its type, source-form and function rows.",
       "sections": [
         {
           "section": ".text",
@@ -2253,9 +2385,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800850E8.cpp",
+      "source": "src/game/FormationLineupClear.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp) and the .rodata data row 0x80293D48-0x80293D88.",
+      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/FormationLineupClear.cpp) and the .rodata data row 0x80293D48-0x80293D88.",
       "sections": [
         {
           "section": ".text",
@@ -2616,9 +2748,9 @@
       ]
     },
     {
-      "source": "src/game/ModuleGroup_8008CC74.cpp",
+      "source": "src/game/SysModules.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008CC74-0x8008DF00 (src/game/ModuleGroup_8008CC74.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8008CC74-0x8008DF00 (src/game/SysModules.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -2967,28 +3099,28 @@
       ]
     },
     {
-      "source": "src/game/cu_80026BB0.cpp",
+      "source": "src/game/PadInput.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80026BB0-0x800273AC (src/game/cu_80026BB0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80026BB0-0x800273AC (src/game/PadInput.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_80026BB0",
-          "fn_80026BE8",
-          "fn_80026C5C",
-          "fn_80026CC4",
-          "fn_80026D50",
-          "fn_80026DA8",
-          "fn_80026DD4",
-          "fn_80027114",
-          "fn_800271A4",
-          "fn_800271D4",
-          "fn_80027230",
-          "fn_8002728C",
-          "fn_80027294",
-          "fn_800272EC",
-          "fn_80027358",
-          "fn_8002739C",
-          "fn_800273A4"
+          "PadInputGetCallbackAxis",
+          "PadInputSnapAxis",
+          "PadInputCopyValues",
+          "PadInputIsDeviceReady",
+          "PadInputInit",
+          "PadInputShutdown",
+          "PadInputRead",
+          "PadInputSetupRemap",
+          "PadInputSetDefaultHandler",
+          "PadInputSaveHandlers",
+          "PadInputRestoreHandlers",
+          "PadInputSetAxisCallback",
+          "PadInputAxisFromFixed",
+          "PadInputAxisToFixed",
+          "PadInputResetSlot",
+          "PadInputGetDeviceData",
+          "PadInputGetValueCount"
         ],
         "discarded": [
           "DequantizeStep"
@@ -3035,9 +3167,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800E3A34.cpp",
+      "source": "src/game/PlayerPathHelpers.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/cu_800E3A34.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
+      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/PlayerPathHelpers.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
       "sections": [
         {
           "section": ".text",
@@ -3577,9 +3709,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002306C.cpp",
+      "source": "src/game/FaceTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002306C-0x800231B0 (src/game/cu_8002306C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8002306C-0x800231B0 (src/game/FaceTable.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -3608,9 +3740,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800231B0.cpp",
+      "source": "src/game/FETables.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800231B0-0x80023514 (src/game/cu_800231B0.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800231B0-0x80023514 (src/game/FETables.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -3774,9 +3906,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80032340.cpp",
+      "source": "src/game/gsflowman.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/cu_80032340.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/gsflowman.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -3811,9 +3943,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80032EE8.cpp",
+      "source": "src/game/MainFEGroup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/cu_80032EE8.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80032EE8-0x80033490 (src/game/MainFEGroup.cpp) and its function and data rows; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -3903,9 +4035,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019D83C.cpp",
+      "source": "src/game/AnimMirror.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/cu_8019D83C.cpp) and its function rows.",
+      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/AnimMirror.cpp) and its function rows.",
       "sections": [
         {
           "section": ".text",
@@ -3916,9 +4048,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801AA24C.cpp",
+      "source": "src/game/SndgHandles.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/cu_801AA24C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/SndgHandles.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5231,9 +5363,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074D70.cpp",
+      "source": "src/game/SpchIGWallTackle.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074D70-0x80074E08 (src/game/cu_80074D70.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074D70-0x80074E08 (src/game/SpchIGWallTackle.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5250,9 +5382,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074684.cpp",
+      "source": "src/game/SpchIGTutorial.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074684-0x800747DC (src/game/cu_80074684.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074684-0x800747DC (src/game/SpchIGTutorial.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5269,9 +5401,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074E08.cpp",
+      "source": "src/game/SpchIGReceiverOpen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074E08-0x80074EA0 (src/game/cu_80074E08.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074E08-0x80074EA0 (src/game/SpchIGReceiverOpen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5288,9 +5420,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074EA0.cpp",
+      "source": "src/game/SpchIGStyling.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074EA0-0x80074F38 (src/game/cu_80074EA0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074EA0-0x80074F38 (src/game/SpchIGStyling.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5307,9 +5439,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80074F38.cpp",
+      "source": "src/game/SpchIGMissedCatch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80074F38-0x80075068 (src/game/cu_80074F38.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80074F38-0x80075068 (src/game/SpchIGMissedCatch.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5332,9 +5464,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075068.cpp",
+      "source": "src/game/SpchIGStruggleCarrier.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075068-0x80075100 (src/game/cu_80075068.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80075068-0x80075100 (src/game/SpchIGStruggleCarrier.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5351,9 +5483,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075100.cpp",
+      "source": "src/game/SpchIGStruggleTackler.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075100-0x80075198 (src/game/cu_80075100.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80075100-0x80075198 (src/game/SpchIGStruggleTackler.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5419,9 +5551,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8005412C.cpp",
+      "source": "src/game/Level.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005412C-0x800545B4 (src/game/cu_8005412C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8005412C-0x800545B4 (src/game/Level.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5450,9 +5582,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800545B4.cpp",
+      "source": "src/game/InGameState.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800545B4-0x80054628 (src/game/cu_800545B4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800545B4-0x80054628 (src/game/InGameState.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5469,9 +5601,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80053BC8.cpp",
+      "source": "src/game/LevelMesh.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80053BC8-0x8005406C (src/game/cu_80053BC8.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x80053BC8-0x8005406C (src/game/LevelMesh.cpp) and its .rodata row.",
       "sections": [
         {
           "section": ".text",
@@ -5488,9 +5620,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80054628.cpp",
+      "source": "src/game/CheatEffect.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80054628-0x80054CA8 (src/game/cu_80054628.cpp).",
+      "evidence": "evidence.tsv unit row 0x80054628-0x80054CA8 (src/game/CheatEffect.cpp).",
       "sections": [
         {
           "section": ".text",
@@ -5501,9 +5633,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80054CA8.cpp",
+      "source": "src/game/CheatFlags.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80054CA8-0x80054D34 (src/game/cu_80054CA8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80054CA8-0x80054D34 (src/game/CheatFlags.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5520,9 +5652,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80054D34.cpp",
+      "source": "src/game/ReplayScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80054D34-0x80054EDC (src/game/cu_80054D34.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80054D34-0x80054EDC (src/game/ReplayScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5539,9 +5671,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80054EDC.cpp",
+      "source": "src/game/LockedBuffer.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80054EDC-0x80054FC0 (src/game/cu_80054EDC.cpp) and its vtable row.",
+      "evidence": "evidence.tsv unit row 0x80054EDC-0x80054FC0 (src/game/LockedBuffer.cpp) and its vtable row.",
       "sections": [
         {
           "section": ".text",
@@ -5558,9 +5690,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80054FC0.cpp",
+      "source": "src/game/DepthChartScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80054FC0-0x80055318 (src/game/cu_80054FC0.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x80054FC0-0x80055318 (src/game/DepthChartScreen.cpp) and its .rodata row.",
       "sections": [
         {
           "section": ".text",
@@ -5596,9 +5728,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80088E8C.cpp",
+      "source": "src/game/MemSnapshot.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088E8C-0x80088F2C (src/game/cu_80088E8C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80088E8C-0x80088F2C (src/game/MemSnapshot.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5621,9 +5753,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007355C.cpp",
+      "source": "src/game/SpchIGInit.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007355C-0x80073620 (src/game/cu_8007355C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007355C-0x80073620 (src/game/SpchIGInit.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5640,9 +5772,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80073620.cpp",
+      "source": "src/game/SpchIGSceneLine.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80073620-0x80073830 (src/game/cu_80073620.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80073620-0x80073830 (src/game/SpchIGSceneLine.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -5659,9 +5791,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800895EC.cpp",
+      "source": "src/game/ChecksumCRC32.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800895EC-0x8008973C (src/game/cu_800895EC.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800895EC-0x8008973C (src/game/ChecksumCRC32.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5678,9 +5810,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8008973C.cpp",
+      "source": "src/game/PlaybookSides.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008973C-0x8008977C (src/game/cu_8008973C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8008973C-0x8008977C (src/game/PlaybookSides.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5697,9 +5829,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A133C.cpp",
+      "source": "src/game/PlyrIconQueue.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A133C-0x801A13A8 (src/game/cu_801A133C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x801A133C-0x801A13A8 (src/game/PlyrIconQueue.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5722,9 +5854,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063BE4.cpp",
+      "source": "src/game/UserString.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/UserString.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5747,9 +5879,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063C7C.cpp",
+      "source": "src/game/ScreenMsg.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/cu_80063C7C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/ScreenMsg.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -5816,9 +5948,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80147E94.cpp",
+      "source": "src/game/PassIconState.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147E94-0x80147F2C (src/game/cu_80147E94.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80147E94-0x80147F2C (src/game/PassIconState.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5908,9 +6040,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800218EC.cpp",
+      "source": "src/game/FEPlyrModels.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800218EC-0x80022FF0 (src/game/cu_800218EC.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800218EC-0x80022FF0 (src/game/FEPlyrModels.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5964,21 +6096,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_80227F14.c",
+      "source": "src/engine/viewport.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80227F14-0x802288F8 (src/engine/cu_80227F14.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80227F14-0x802287D4 (src/engine/viewport.c) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80227F14",
-          "end": "0x802288F8"
+          "end": "0x802287D4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B20C8",
-          "end": "0x802B20F8"
+          "end": "0x802B20F0"
         },
         {
           "section": ".sdata",
@@ -5995,20 +6127,20 @@
       ]
     },
     {
-      "source": "src/engine/cu_802288F8.c",
+      "source": "src/engine/llviewpt.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802288F8-0x80228E44 (src/engine/cu_802288F8.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x802287D4-0x80228E44 (src/engine/llviewpt.c) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x802288F8",
+          "start": "0x802287D4",
           "end": "0x80228E44"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B20F8",
+          "start": "0x802B20F0",
           "end": "0x802B2138"
         },
         {
@@ -6016,6 +6148,25 @@
           "placement": ".data5",
           "start": "0x803EBFA0",
           "end": "0x803EBFA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vram.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/vram.c) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
+          "end": "0x803EBFB8"
         }
       ]
     },
@@ -6130,9 +6281,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B5B0.cpp",
+      "source": "src/game/GameOutcome.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B5B0-0x8002B5C0 (src/game/cu_8002B5B0.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x8002B5B0-0x8002B5C0 (src/game/GameOutcome.cpp) and its data row.",
       "sections": [
         {
           "section": ".text",
@@ -6149,9 +6300,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B5C0.cpp",
+      "source": "src/game/ChallengeBonus.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B5C0-0x8002B5D0 (src/game/cu_8002B5C0.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x8002B5C0-0x8002B5D0 (src/game/ChallengeBonus.cpp) and its data row.",
       "sections": [
         {
           "section": ".text",
@@ -6168,9 +6319,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B70C.cpp",
+      "source": "src/game/TeamFilter.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B70C-0x8002B71C (src/game/cu_8002B70C.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x8002B70C-0x8002B71C (src/game/TeamFilter.cpp) and its data row.",
       "sections": [
         {
           "section": ".text",
@@ -6187,9 +6338,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80087C5C.cpp",
+      "source": "src/game/UserStats.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80087C5C-0x80087CBC (src/game/cu_80087C5C.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x80087C5C-0x80087CBC (src/game/UserStats.cpp) and its data row.",
       "sections": [
         {
           "section": ".text",
@@ -6337,9 +6488,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800CF84C.cpp",
+      "source": "src/game/QuarterEndPhase.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800CF84C-0x800D0474 (src/game/cu_800CF84C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800CF84C-0x800D0474 (src/game/QuarterEndPhase.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6380,9 +6531,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80080F20.cpp",
+      "source": "src/game/PlayerDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800808F8-0x800812B0 (src/game/cu_80080F20.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800808F8-0x800812B0 (src/game/PlayerDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6399,9 +6550,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80142B0C.cpp",
+      "source": "src/game/CollTypes.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80142B0C-0x80142BB4 (src/game/cu_80142B0C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80142B0C-0x80142BB4 (src/game/CollTypes.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6418,9 +6569,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063650.cpp",
+      "source": "src/game/OptionsScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063650-0x80063A30 (src/game/cu_80063650.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063650-0x80063A30 (src/game/OptionsScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6443,9 +6594,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800625DC.cpp",
+      "source": "src/game/GauntletScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800625DC-0x80062810 (src/game/cu_800625DC.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800625DC-0x80062810 (src/game/GauntletScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6511,9 +6662,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8013F460.cpp",
+      "source": "src/game/camgame.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013F460-0x8013FC58 (src/game/cu_8013F460.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013F460-0x8013FC58 (src/game/camgame.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6536,9 +6687,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8013FC58.cpp",
+      "source": "src/game/campreset.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013FC58-0x8013FF84 (src/game/cu_8013FC58.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013FC58-0x8013FF84 (src/game/campreset.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6561,9 +6712,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800D8140.cpp",
+      "source": "src/game/AnimMomentum.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800D8140-0x800D8A24 (src/game/cu_800D8140.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800D8140-0x800D8A24 (src/game/AnimMomentum.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6586,9 +6737,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80020E80.cpp",
+      "source": "src/game/MsgMemCardLoad.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80020E80-0x80021270 and data/type/source-form rows for src/game/cu_80020E80.cpp.",
+      "evidence": "evidence.tsv unit row 0x80020E80-0x80021270 and data/type/source-form rows for src/game/MsgMemCardLoad.cpp.",
       "sections": [
         {
           "section": ".text",
@@ -6809,14 +6960,14 @@
       ]
     },
     {
-      "source": "src/game/cu_80003F10.cpp",
+      "source": "src/game/DemoLaunch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/DemoLaunch.cpp) and its data/source-form rows.",
       "link_roots": {
         "symbols": [
-          "fn_80003F10",
-          "fn_80003F18",
-          "fn_80003F30"
+          "DemoLaunchSetFlag",
+          "DemoLaunchIsFlagSet",
+          "DemoLaunchIsAllowed"
         ],
         "discarded": [
           "FillDemoLaunchPaths__Fi"
@@ -6865,7 +7016,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80021270.cpp",
+      "source": "src/game/MsgNameEntry.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80021270-0x8002132C and its data, compiler and source-form rows.",
       "sections": [
@@ -6884,9 +7035,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002132C.cpp",
+      "source": "src/game/MsgMemCardScan.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002132C-0x800218EC (src/game/cu_8002132C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8002132C-0x800218EC (src/game/MsgMemCardScan.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6922,9 +7073,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800756E8.cpp",
+      "source": "src/game/SpchIGPlayResult.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/cu_800756E8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/SpchIGPlayResult.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -6947,7 +7098,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80076DB4.cpp",
+      "source": "src/game/SpchIGTeamScene.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80076DB4-0x80076F6C and its data, compiler and source-form rows.",
       "sections": [
@@ -6966,7 +7117,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80199C94.cpp",
+      "source": "src/game/ReplayAuxRam.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199C94-0x80199DF0 and its data, compiler and source-form rows.",
       "sections": [
@@ -7028,9 +7179,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8003EC04.cpp",
+      "source": "src/game/Collide.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003EC04-0x8003F66C (src/game/cu_8003EC04.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8003EC04-0x8003F66C (src/game/Collide.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7053,9 +7204,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007B4C8.cpp",
+      "source": "src/game/EnvDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/cu_8007B4C8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/EnvDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7090,9 +7241,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80073830.cpp",
+      "source": "src/game/SpchIGSystem.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/cu_80073830.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/SpchIGSystem.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7127,9 +7278,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019F508.cpp",
+      "source": "src/game/DivotRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019F508-0x8019FBEC (src/game/cu_8019F508.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019F508-0x8019FBEC (src/game/DivotRender.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7158,9 +7309,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007C9D4.cpp",
+      "source": "src/game/GameInfo.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007C9D4-0x8007CC50 (src/game/cu_8007C9D4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007C9D4-0x8007CC50 (src/game/GameInfo.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7201,9 +7352,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007C7E8.cpp",
+      "source": "src/game/GamebreakerDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007C7E8-0x8007C9D4 (src/game/cu_8007C7E8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007C7E8-0x8007C9D4 (src/game/GamebreakerDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7220,9 +7371,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80067C10.cpp",
+      "source": "src/game/AudmonEvent.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80067C10-0x80067F18 (src/game/cu_80067C10.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80067C10-0x80067F18 (src/game/AudmonEvent.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7245,7 +7396,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8003E214.cpp",
+      "source": "src/game/AutoDepth.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8003E214-0x8003EC04 and associated record/callback/data evidence; open/provisional original-file edges.",
       "sections": [
@@ -7276,9 +7427,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80062810.cpp",
+      "source": "src/game/MemCardScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80062810-0x80062B90 (src/game/cu_80062810.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80062810-0x80062B90 (src/game/MemCardScreen.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7307,9 +7458,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80062B90.cpp",
+      "source": "src/game/TournamentBracket.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80062B90-0x80063650 (src/game/cu_80062B90.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80062B90-0x80063650 (src/game/TournamentBracket.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7338,9 +7489,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80194B6C.cpp",
+      "source": "src/game/RumbleActuator.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80194B6C-0x80194FE8 (src/game/cu_80194B6C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80194B6C-0x80194FE8 (src/game/RumbleActuator.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7369,9 +7520,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80087F10.cpp",
+      "source": "src/game/TutorialDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80087F10-0x80088648 (src/game/cu_80087F10.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80087F10-0x80088648 (src/game/TutorialDb.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7394,9 +7545,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8013B874.cpp",
+      "source": "src/game/BallState.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013B874-0x8013BB18 (src/game/cu_8013B874.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013B874-0x8013BB18 (src/game/BallState.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7413,35 +7564,35 @@
       ]
     },
     {
-      "source": "src/game/cu_80086194.cpp",
+      "source": "src/game/TournamentDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/cu_80086194.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_80086194",
-          "fn_800862AC",
-          "fn_80086320",
-          "fn_80086398",
-          "fn_8008648C",
-          "fn_80086534",
-          "fn_8008656C",
-          "fn_8008660C",
-          "fn_8008671C",
-          "fn_80086754",
-          "fn_80086868",
-          "fn_800868A8",
-          "fn_800868E8",
-          "fn_80086960",
-          "fn_80086994",
-          "fn_800869C8",
-          "fn_800869FC",
-          "fn_80086A30",
-          "fn_80086A64",
-          "fn_80086A98",
-          "fn_80086ACC",
-          "fn_80086AEC",
-          "fn_80086B50",
-          "fn_80086BA4"
+          "TournamentDbQueryDraftPool",
+          "TournamentDbQueryMatchCount",
+          "TournamentDbQueryLevelMatchCount",
+          "TournamentDbQueryMatch",
+          "TournamentDbWriteMatchWinner",
+          "TournamentDbDeleteAllMatches",
+          "TournamentDbWritePlayerTeam",
+          "TournamentDbQueryTeamPlayers",
+          "TournamentDbDeleteAllPlayers",
+          "TournamentDbQueryTeamList",
+          "TournamentGetDraftPool1",
+          "TournamentGetDraftPool0",
+          "TournamentSetPlayersTeam",
+          "TournamentGetTeamPlayers",
+          "TournamentClearPlayers",
+          "TournamentGetLevelMatchCount",
+          "TournamentGetMatch",
+          "TournamentSetMatchWinner",
+          "TournamentClearMatches",
+          "TournamentGetMatchCount",
+          "TournamentGetTeamList",
+          "TournamentGetRoundCount",
+          "TournamentClose",
+          "TournamentOpen"
         ],
         "discarded": [
           "DeleteLtfnRow",
@@ -7472,9 +7623,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8008A274.cpp",
+      "source": "src/game/CAPPortrait.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008A274-0x8008AC40 (src/game/cu_8008A274.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8008A274-0x8008AC40 (src/game/CAPPortrait.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7509,9 +7660,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80064864.cpp",
+      "source": "src/game/PauseMenu.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80064864-0x800656EC (src/game/cu_80064864.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80064864-0x800656EC (src/game/PauseMenu.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7540,9 +7691,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801459F0.cpp",
+      "source": "src/game/ParticleEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801459F0-0x80146134 (src/game/cu_801459F0.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801459F0-0x80146134 (src/game/ParticleEvents.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7571,9 +7722,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80147F2C.cpp",
+      "source": "src/game/PassIcons.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147F2C-0x80148424 (src/game/cu_80147F2C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80147F2C-0x80148424 (src/game/PassIcons.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7639,9 +7790,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80136B1C.cpp",
+      "source": "src/game/Ball.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80136B1C-0x80138590 (src/game/cu_80136B1C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80136B1C-0x80138590 (src/game/Ball.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7670,9 +7821,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80138590.cpp",
+      "source": "src/game/BallCollide.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80138590-0x80138CC0 (src/game/cu_80138590.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80138590-0x80138CC0 (src/game/BallCollide.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -7770,9 +7921,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80076F6C.cpp",
+      "source": "src/game/SpchIGPreSnap.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80076F6C-0x800775F0 (src/game/cu_80076F6C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80076F6C-0x800775F0 (src/game/SpchIGPreSnap.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7795,27 +7946,14 @@
       ]
     },
     {
-      "source": "src/game/cu_800775F0.cpp",
+      "source": "src/game/Challenge.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/cu_800775F0.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800775F0-0x80079CD8 (src/game/Challenge.cpp), its exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800775F0",
-          "end": "0x80077A24"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80077A24.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/cu_80077A24.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/cu_800775F0.cpp (0x800775F0-0x80077A24).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80077A24",
           "end": "0x80079CD8"
         },
         {
@@ -7933,9 +8071,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80139308.cpp",
+      "source": "src/game/BallRest.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80139308-0x801394B0 (src/game/cu_80139308.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80139308-0x801394B0 (src/game/BallRest.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -7958,9 +8096,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80020A34.cpp",
+      "source": "src/game/MsgAudioSettings.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_80020A34.cpp unit and compiler rows",
+      "evidence": "evidence.tsv: src/game/MsgAudioSettings.cpp unit and compiler rows",
       "sections": [
         {
           "section": ".text",
@@ -8046,9 +8184,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8003AEA8.cpp",
+      "source": "src/game/DepthChart.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003AEA8-0x8003BA00 (src/game/cu_8003AEA8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8003AEA8-0x8003BA00 (src/game/DepthChart.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8089,9 +8227,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001FFE4.cpp",
+      "source": "src/game/MsgTutorial.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001FFE4-0x8002053C (src/game/cu_8001FFE4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8001FFE4-0x8002053C (src/game/MsgTutorial.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8126,9 +8264,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80046004.cpp",
+      "source": "src/game/PlaDynClut.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80046004-0x80046340 (src/game/cu_80046004.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80046004-0x80046340 (src/game/PlaDynClut.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8250,9 +8388,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002A9B8.cpp",
+      "source": "src/game/PlayerRecord.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002A9B8-0x8002ACB4 (src/game/cu_8002A9B8.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8002A9B8-0x8002ACB4 (src/game/PlayerRecord.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8269,9 +8407,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002ACB4.cpp",
+      "source": "src/game/PlayerSave.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_8002ACB4.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/PlayerSave.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
@@ -8288,9 +8426,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800656EC.cpp",
+      "source": "src/game/PauseRequest.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_800656EC.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/PauseRequest.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
@@ -8406,9 +8544,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80191248.cpp",
+      "source": "src/game/DbgScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_80191248.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/DbgScreen.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
@@ -8443,9 +8581,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80061F04.cpp",
+      "source": "src/game/StoryPlayerScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061F04-0x800625DC (src/game/cu_80061F04.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80061F04-0x800625DC (src/game/StoryPlayerScreen.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8480,9 +8618,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80030D50.cpp",
+      "source": "src/game/ReplayCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80030D50-0x8003108C (src/game/cu_80030D50.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80030D50-0x8003108C (src/game/ReplayCursor.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8505,23 +8643,23 @@
       ]
     },
     {
-      "source": "src/game/cu_80085D7C.cpp",
+      "source": "src/game/ExpLevel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80085D7C-0x80086194 (src/game/cu_80085D7C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80085D7C-0x80086194 (src/game/ExpLevel.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_80085D7C",
-          "fn_80085E3C",
-          "fn_80085EB0",
-          "fn_80085F24",
-          "fn_80085FB0",
-          "fn_80085FFC",
-          "fn_80086080",
-          "fn_800860B4",
-          "fn_800860E8",
-          "fn_8008611C",
-          "fn_80086154",
-          "fn_80086174"
+          "ExpLevelQueryForPoints",
+          "ExpLevelQueryScft",
+          "ExpLevelQueryLvbn",
+          "ExpLevelQueryName",
+          "ExpLevelCloseTable",
+          "ExpLevelOpenTable",
+          "ExpLevelGetForPoints",
+          "ExpLevelGetScft",
+          "ExpLevelGetLvbn",
+          "ExpLevelGetName",
+          "ExpLevelClose",
+          "ExpLevelOpen"
         ],
         "discarded": [
           "SelectLpxePpxe"
@@ -8664,9 +8802,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80047E28.cpp",
+      "source": "src/game/PlayerLook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/cu_80047E28.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8701,9 +8839,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80089330.cpp",
+      "source": "src/game/CollideContacts.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80089330-0x800895EC (src/game/cu_80089330.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80089330-0x800895EC (src/game/CollideContacts.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8726,7 +8864,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80020BAC.cpp",
+      "source": "src/game/MsgPlaybookStyle.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80020BAC-0x80020CF8 and its data, type and source-form rows.",
       "sections": [
@@ -8758,9 +8896,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80145224.cpp",
+      "source": "src/game/GroundPulse.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/cu_80145224.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/GroundPulse.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8783,9 +8921,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8014529C.cpp",
+      "source": "src/game/ParticleEventTypes.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8014529C-0x801459F0 (src/game/cu_8014529C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8014529C-0x801459F0 (src/game/ParticleEventTypes.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8802,7 +8940,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80020CF8.cpp",
+      "source": "src/game/MsgProfileList.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80020CF8-0x80020E80 and its type, field and source-form rows.",
       "sections": [
@@ -8815,7 +8953,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80085208.cpp",
+      "source": "src/game/FormationLineup.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80085148-0x800857D0 and its data, declaration and source-form rows.",
       "sections": [
@@ -8865,9 +9003,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019CE3C.cpp",
+      "source": "src/game/BallRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019CE3C-0x8019D2EC (src/game/cu_8019CE3C.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019CE3C-0x8019D2EC (src/game/BallRender.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8902,9 +9040,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019AD24.cpp",
+      "source": "src/game/FldObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019AD24-0x8019B368 (src/game/cu_8019AD24.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019AD24-0x8019B368 (src/game/FldObj.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8939,9 +9077,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80046340.cpp",
+      "source": "src/game/EnvObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80046340-0x8004669C (src/game/cu_80046340.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80046340-0x8004669C (src/game/EnvObj.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8964,9 +9102,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8004669C.cpp",
+      "source": "src/game/FaceMorph.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8004669C-0x80046898 (src/game/cu_8004669C.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8004669C-0x80046898 (src/game/FaceMorph.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8989,9 +9127,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80147AE4.cpp",
+      "source": "src/game/ScreenTint.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/cu_80147AE4.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/ScreenTint.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9070,9 +9208,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801981D8.cpp",
+      "source": "src/game/EffectBlend.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801981D8-0x80198378 (src/game/cu_801981D8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801981D8-0x80198378 (src/game/EffectBlend.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9138,9 +9276,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80067F18.cpp",
+      "source": "src/game/CondTable.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/cu_80067F18.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/CondTable.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9219,9 +9357,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001BB20.cpp",
+      "source": "src/game/MsgStreetEvent.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/cu_8001BB20.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/MsgStreetEvent.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9232,9 +9370,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001BB84.cpp",
+      "source": "src/game/MsgStreetEventSelect.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001BB84-0x8001BF24 (src/game/cu_8001BB84.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001BB84-0x8001BF24 (src/game/MsgStreetEventSelect.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9258,9 +9396,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001BF24.cpp",
+      "source": "src/game/MsgStreetEventSetup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001BF24-0x8001D0F4 (src/game/cu_8001BF24.cpp) and its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001BF24-0x8001D0F4 (src/game/MsgStreetEventSetup.cpp) and its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9284,9 +9422,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001D2D8.cpp",
+      "source": "src/game/MsgMemCardDispatch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001D2D8-0x8001D314 (src/game/cu_8001D2D8.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001D2D8-0x8001D314 (src/game/MsgMemCardDispatch.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9297,9 +9435,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001D314.cpp",
+      "source": "src/game/MsgPlayerPickup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001D314-0x8001E73C (src/game/cu_8001D314.cpp) and its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001D314-0x8001E73C (src/game/MsgPlayerPickup.cpp) and its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9378,9 +9516,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8001F020.cpp",
+      "source": "src/game/MsgDispatch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8001F020-0x8001F56C (src/game/cu_8001F020.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8001F020-0x8001F56C (src/game/MsgDispatch.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9397,9 +9535,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80025E50.cpp",
+      "source": "src/game/MemPool.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80025E50-0x80025F24 (src/game/cu_80025E50.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80025E50-0x80025F24 (src/game/MemPool.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9416,9 +9554,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80022FF0.cpp",
+      "source": "src/game/FESndControl.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80022FF0-0x8002306C (src/game/cu_80022FF0.cpp) and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x80022FF0-0x8002306C (src/game/FESndControl.cpp) and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -9429,9 +9567,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80024B20.cpp",
+      "source": "src/game/ChallengeGoals.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80024B20-0x80025E00 (src/game/cu_80024B20.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80024B20-0x80025E00 (src/game/ChallengeGoals.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9461,9 +9599,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B5D0.cpp",
+      "source": "src/game/ChallengeResult.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B5D0-0x8002B70C (src/game/cu_8002B5D0.cpp) and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x8002B5D0-0x8002B70C (src/game/ChallengeResult.cpp) and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -9474,9 +9612,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8002B71C.cpp",
+      "source": "src/game/GameSetup.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B71C-0x8002B8F8 (src/game/cu_8002B71C.cpp), its data row and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x8002B71C-0x8002B8F8 (src/game/GameSetup.cpp), its data row and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -9493,9 +9631,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800812B0.cpp",
+      "source": "src/game/PlayerRatings.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800812B0-0x80081440 (src/game/cu_800812B0.cpp), its data row and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x800812B0-0x80081440 (src/game/PlayerRatings.cpp), its data row and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -9512,9 +9650,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80138CC0.cpp",
+      "source": "src/game/BallSweep.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/BallSweep.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9537,9 +9675,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A4CBC.cpp",
+      "source": "src/game/SimpShadow.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A4CBC-0x801A5478 (src/game/cu_801A4CBC.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A4CBC-0x801A5478 (src/game/SimpShadow.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9574,9 +9712,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A60D8.cpp",
+      "source": "src/game/UISResList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A60D8-0x801A679C (src/game/cu_801A60D8.cpp), its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A60D8-0x801A679C (src/game/UISResList.cpp), its type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9587,9 +9725,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800314E0.cpp",
+      "source": "src/game/FeatAwards.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/cu_800314E0.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/FeatAwards.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9643,9 +9781,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007EEFC.cpp",
+      "source": "src/game/LogoList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007EEFC-0x8007F12C (src/game/cu_8007EEFC.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007EEFC-0x8007F12C (src/game/LogoList.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9674,9 +9812,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007E514.cpp",
+      "source": "src/game/ProfileUnlocks.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007E514-0x8007EEFC (src/game/cu_8007E514.cpp), its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007E514-0x8007EEFC (src/game/ProfileUnlocks.cpp), its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9699,9 +9837,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007DDC8.cpp",
+      "source": "src/game/GearLock.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007DDC8-0x8007E514 (src/game/cu_8007DDC8.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007DDC8-0x8007E514 (src/game/GearLock.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9718,9 +9856,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007CC50.cpp",
+      "source": "src/game/HairList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/cu_8007CC50.cpp), its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/HairList.cpp), its type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9731,9 +9869,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007CDA0.cpp",
+      "source": "src/game/Records.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007CDA0-0x8007DDC8 (src/game/cu_8007CDA0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8007CDA0-0x8007DDC8 (src/game/Records.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -9774,9 +9912,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80051E14.cpp",
+      "source": "src/game/BigObjBirdFence.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80051E14-0x8005272C (src/game/cu_80051E14.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x80051E14-0x8005272C (src/game/BigObjBirdFence.cpp) and its data row.",
       "sections": [
         {
           "section": ".text",
@@ -9793,9 +9931,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8005272C.cpp",
+      "source": "src/game/BigObjPath.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005272C-0x80052D08 (src/game/cu_8005272C.cpp) and its two .rodata rows.",
+      "evidence": "evidence.tsv unit row 0x8005272C-0x80052D08 (src/game/BigObjPath.cpp) and its two .rodata rows.",
       "sections": [
         {
           "section": ".text",
@@ -9812,9 +9950,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019B460.cpp",
+      "source": "src/game/LevelLights.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows.",
       "sections": [
         {
           "section": ".text",
@@ -9831,9 +9969,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80191398.cpp",
+      "source": "src/game/DbgFont.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80191398-0x80191804 (src/game/cu_80191398.cpp) and its .rodata, .data and .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x80191398-0x80191804 (src/game/DbgFont.cpp) and its .rodata, .data and .sdata rows.",
       "sections": [
         {
           "section": ".text",
@@ -9881,9 +10019,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80055318.cpp",
+      "source": "src/game/FeatsScreen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80055318-0x800554FC (src/game/cu_80055318.cpp) and its .rodata and .sbss rows.",
+      "evidence": "evidence.tsv unit row 0x80055318-0x800554FC (src/game/FeatsScreen.cpp) and its .rodata and .sbss rows.",
       "sections": [
         {
           "section": ".text",
@@ -9906,9 +10044,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80041210.cpp",
+      "source": "src/game/BigObjInst.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80041210-0x80041930 (src/game/cu_80041210.cpp) and its .rodata and .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x80041210-0x80041930 (src/game/BigObjInst.cpp) and its .rodata and .sdata rows.",
       "sections": [
         {
           "section": ".text",
@@ -9931,9 +10069,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019FBEC.cpp",
+      "source": "src/game/PassIconTex.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019FBEC-0x801A0088 (src/game/cu_8019FBEC.cpp) and its .rodata, .bss and .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019FBEC-0x801A0088 (src/game/PassIconTex.cpp) and its .rodata, .bss and .sdata rows.",
       "sections": [
         {
           "section": ".text",
@@ -9962,9 +10100,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80046898.cpp",
+      "source": "src/game/FaceMorphCheck.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80046898-0x80046920 (src/game/cu_80046898.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80046898-0x80046920 (src/game/FaceMorphCheck.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9981,9 +10119,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801422C8.cpp",
+      "source": "src/game/camballmode.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/cu_801422C8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/camballmode.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10000,9 +10138,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801962CC.cpp",
+      "source": "src/game/ParticleRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801962CC-0x80196AF0 (src/game/cu_801962CC.cpp) and its .rodata, .data, .sdata and .bss rows.",
+      "evidence": "evidence.tsv unit row 0x801962CC-0x80196AF0 (src/game/ParticleRender.cpp) and its .rodata, .data, .sdata and .bss rows.",
       "sections": [
         {
           "section": ".text",
@@ -10037,9 +10175,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80196AF0.cpp",
+      "source": "src/game/FxDraw.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80196AF0-0x80196F48 (src/game/cu_80196AF0.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x80196AF0-0x80196F48 (src/game/FxDraw.cpp) and its .rodata row.",
       "sections": [
         {
           "section": ".text",
@@ -10241,9 +10379,9 @@
       }
     },
     {
-      "source": "src/game/cu_80130494.cpp",
+      "source": "src/game/RouteRun.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/cu_80130494.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/RouteRun.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -10616,9 +10754,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801390D0.cpp",
+      "source": "src/game/BallPlace.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/cu_801390D0.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/BallPlace.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10635,9 +10773,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A6870.cpp",
+      "source": "src/game/WeatherDraw.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A6870-0x801A69A8 (src/game/cu_801A6870.cpp) and its source-form and compiler rows.",
+      "evidence": "evidence.tsv unit row 0x801A6870-0x801A69A8 (src/game/WeatherDraw.cpp) and its source-form and compiler rows.",
       "sections": [
         {
           "section": ".text",
@@ -10648,9 +10786,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063A30.cpp",
+      "source": "src/game/PopupScreens.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063A30-0x80063BE4 (src/game/cu_80063A30.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063A30-0x80063BE4 (src/game/PopupScreens.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -10667,9 +10805,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800554FC.cpp",
+      "source": "src/game/TeamPair.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800554FC-0x80055584 (src/game/cu_800554FC.cpp) and its source-form and compiler rows.",
+      "evidence": "evidence.tsv unit row 0x800554FC-0x80055584 (src/game/TeamPair.cpp) and its source-form and compiler rows.",
       "sections": [
         {
           "section": ".text",
@@ -10680,9 +10818,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80087CBC.cpp",
+      "source": "src/game/AudibleDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80087CBC-0x80087F10 (src/game/cu_80087CBC.cpp) and its .rodata and .data rows.",
+      "evidence": "evidence.tsv unit row 0x80087CBC-0x80087F10 (src/game/AudibleDb.cpp) and its .rodata and .data rows.",
       "sections": [
         {
           "section": ".text",
@@ -10705,9 +10843,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801442FC.cpp",
+      "source": "src/game/LightTracker.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/cu_801442FC.cpp) and its .rodata row.",
+      "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/LightTracker.cpp) and its .rodata row.",
       "sections": [
         {
           "section": ".text",
@@ -10969,9 +11107,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007342C.cpp",
+      "source": "src/game/SndgIGSystem.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/cu_8007342C.cpp) and its .rodata and .sbss rows.",
+      "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/SndgIGSystem.cpp) and its .rodata and .sbss rows.",
       "sections": [
         {
           "section": ".text",
@@ -11380,9 +11518,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80193E7C.cpp",
+      "source": "src/game/ResTexture.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80193E7C-0x80193FB0 (src/game/cu_80193E7C.cpp) and its compiler, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80193E7C-0x80193FB0 (src/game/ResTexture.cpp) and its compiler, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11393,9 +11531,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8008DF00.cpp",
+      "source": "src/game/PlayerMoveAnim.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008DF00-0x8008E978 (src/game/cu_8008DF00.cpp), its data row and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8008DF00-0x8008E978 (src/game/PlayerMoveAnim.cpp), its data row and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11425,9 +11563,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800747DC.cpp",
+      "source": "src/game/SpchIGPlays.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800747DC-0x80074D70 (src/game/cu_800747DC.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800747DC-0x80074D70 (src/game/SpchIGPlays.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11438,9 +11576,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007A24C.cpp",
+      "source": "src/game/DbCursorOpen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/cu_8007A24C.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/DbCursorOpen.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11451,9 +11589,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80087BE4.cpp",
+      "source": "src/game/UserStatsCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80087BE4-0x80087C5C (src/game/cu_80087BE4.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80087BE4-0x80087C5C (src/game/UserStatsCursor.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11464,9 +11602,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80081C10.cpp",
+      "source": "src/game/PlayerHairColors.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081C10-0x80081CDC (src/game/cu_80081C10.cpp), its data row and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x80081C10-0x80081CDC (src/game/PlayerHairColors.cpp), its data row and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -11483,9 +11621,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80075198.cpp",
+      "source": "src/game/SpchIGContext.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/cu_80075198.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/SpchIGContext.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11496,9 +11634,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8008AC40.cpp",
+      "source": "src/game/ColorQuantizer.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008AC40-0x8008B32C (src/game/cu_8008AC40.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8008AC40-0x8008B32C (src/game/ColorQuantizer.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11535,9 +11673,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A13A8.cpp",
+      "source": "src/game/PlyrModelParts.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A13A8-0x801A14D8 (src/game/cu_801A13A8.cpp) and its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A13A8-0x801A14D8 (src/game/PlyrModelParts.cpp) and its type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11548,9 +11686,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A679C.cpp",
+      "source": "src/game/AnimFixedLerp.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A679C-0x801A6870 (src/game/cu_801A679C.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A679C-0x801A6870 (src/game/AnimFixedLerp.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11561,9 +11699,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A4AD4.cpp",
+      "source": "src/game/PlyrTex.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A4AD4-0x801A4CBC (src/game/cu_801A4AD4.cpp) and its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A4AD4-0x801A4CBC (src/game/PlyrTex.cpp) and its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11611,9 +11749,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019E530.cpp",
+      "source": "src/game/AnimBlend.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019E530-0x8019F508 (src/game/cu_8019E530.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019E530-0x8019F508 (src/game/AnimBlend.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11681,9 +11819,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80191200.cpp",
+      "source": "src/game/DbgPrintSwitch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80191200-0x80191248 (src/game/cu_80191200.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80191200-0x80191248 (src/game/DbgPrintSwitch.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11694,9 +11832,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80191378.cpp",
+      "source": "src/game/DbgScreenRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80191378-0x80191398 (src/game/cu_80191378.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80191378-0x80191398 (src/game/DbgScreenRender.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11720,9 +11858,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019B368.cpp",
+      "source": "src/game/LightDir.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B368-0x8019B43C (src/game/cu_8019B368.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019B368-0x8019B43C (src/game/LightDir.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11752,9 +11890,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A5478.cpp",
+      "source": "src/game/EnvRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A5478-0x801A60D8 (src/game/cu_801A5478.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A5478-0x801A60D8 (src/game/EnvRender.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11783,9 +11921,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019B644.cpp",
+      "source": "src/game/BmFont.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B644-0x8019BECC (src/game/cu_8019B644.cpp) and its compiler, source-form and type rows.",
+      "evidence": "evidence.tsv unit row 0x8019B644-0x8019BECC (src/game/BmFont.cpp) and its compiler, source-form and type rows.",
       "sections": [
         {
           "section": ".text",
@@ -11796,9 +11934,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019BECC.cpp",
+      "source": "src/game/ArrowDraw.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019BECC-0x8019CE3C (src/game/cu_8019BECC.cpp) and its data, compiler, source-form and type rows.",
+      "evidence": "evidence.tsv unit row 0x8019BECC-0x8019CE3C (src/game/ArrowDraw.cpp) and its data, compiler, source-form and type rows.",
       "sections": [
         {
           "section": ".text",
@@ -11815,9 +11953,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80193CEC.cpp",
+      "source": "src/game/MemCardCallbacks.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80193CEC-0x80193E7C (src/game/cu_80193CEC.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80193CEC-0x80193E7C (src/game/MemCardCallbacks.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12134,9 +12272,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800EF834.cpp",
+      "source": "src/game/CarrierMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/cu_800EF834.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF7C-0x8029DF88.",
       "sections": [
         {
           "section": ".text",
@@ -12153,9 +12291,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80191804.cpp",
+      "source": "src/game/MemCardUtil.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80191804-0x80191948 (src/game/cu_80191804.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80191804-0x80191948 (src/game/MemCardUtil.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12172,9 +12310,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8019D2EC.cpp",
+      "source": "src/game/AnimFrameDecode.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C (src/game/cu_8019D2EC.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C (src/game/AnimFrameDecode.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12185,9 +12323,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80198378.cpp",
+      "source": "src/game/FieldMarker.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80198378-0x80198C54 (src/game/cu_80198378.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80198378-0x80198C54 (src/game/FieldMarker.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12235,9 +12373,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80088648.cpp",
+      "source": "src/game/UserUnlocks.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088648-0x80088E8C (src/game/cu_80088648.cpp), its data row 0x802D6C24-0x802D6C40 and its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80088648-0x80088E8C (src/game/UserUnlocks.cpp), its data row 0x802D6C24-0x802D6C40 and its type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12254,9 +12392,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800478DC.cpp",
+      "source": "src/game/PlaTex.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/cu_800478DC.cpp) and its data row 0x8028D674-0x8028D73C.",
+      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/PlaTex.cpp) and its data row 0x8028D674-0x8028D73C.",
       "sections": [
         {
           "section": ".text",
@@ -12273,9 +12411,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801AD488.c",
+      "source": "src/engine/__va_arg.c",
       "profile": "dolphin_dvd_release",
-      "evidence": "evidence.tsv unit row 0x801AD488-0x801AD57C (src/engine/cu_801AD488.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801AD488-0x801AD57C (src/engine/__va_arg.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12299,9 +12437,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF5E8.c",
+      "source": "src/engine/animcache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/animcache.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12312,9 +12450,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF94C.c",
+      "source": "src/engine/animframecache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/cu_801BF94C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/animframecache.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12325,9 +12463,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BFEF8.c",
+      "source": "src/engine/AnimSequencer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/cu_801BFEF8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/AnimSequencer.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12338,9 +12476,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BFFA8.c",
+      "source": "src/engine/AnimSeqCamera.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/cu_801BFFA8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/AnimSeqCamera.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12383,9 +12521,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C20A0.c",
+      "source": "src/engine/printf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C20A0-0x801C20F0 (src/engine/cu_801C20A0.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C20A0-0x801C20F0 (src/engine/printf.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12396,9 +12534,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C333C.c",
+      "source": "src/engine/strmath.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C333C-0x801C33E8 (src/engine/cu_801C333C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C333C-0x801C33E8 (src/engine/strmath.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12447,9 +12585,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C4F64.c",
+      "source": "src/engine/Curve.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/cu_801C4F64.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/Curve.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12460,9 +12598,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C5B9C.c",
+      "source": "src/engine/context.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C5B9C-0x801C6584 (src/engine/cu_801C5B9C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C5B9C-0x801C6584 (src/engine/context.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12537,9 +12675,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CBC1C.c",
+      "source": "src/engine/filehost.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CBC1C-0x801CBC50 (src/engine/cu_801CBC1C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CBC1C-0x801CBC50 (src/engine/filehost.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12550,9 +12688,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CE138.c",
+      "source": "src/engine/glib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CE138-0x801CE1F8 (src/engine/cu_801CE138.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CE138-0x801CE1F8 (src/engine/glib.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12563,9 +12701,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEC90.c",
+      "source": "src/engine/llrender.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/cu_801CEC90.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/llrender.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12582,9 +12720,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEF48.c",
+      "source": "src/engine/maths.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/cu_801CEF48.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/maths.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12614,9 +12752,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CFF34.c",
+      "source": "src/engine/llmath.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CFF34-0x801CFFD0 (src/engine/cu_801CFF34.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CFF34-0x801CFFD0 (src/engine/llmath.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12633,9 +12771,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CFFD0.c",
+      "source": "src/engine/angle.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CFFD0-0x801D0110 (src/engine/cu_801CFFD0.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801CFFD0-0x801D0110 (src/engine/angle.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12678,9 +12816,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DB058.cpp",
+      "source": "src/engine/maddeca.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DB058-0x801DB21C (src/engine/cu_801DB058.cpp) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DB058-0x801DB21C (src/engine/maddeca.cpp) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12691,9 +12829,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DB7D4.c",
+      "source": "src/engine/render.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/cu_801DB7D4.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/render.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -12860,9 +12998,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_8020CFA0.c",
+      "source": "src/engine/task.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/cu_8020CFA0.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/task.c) and its data rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13596,9 +13734,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C10E0.c",
+      "source": "src/engine/resstream.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/resstream.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13609,9 +13747,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DCA10.c",
+      "source": "src/engine/object.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801DCA10-0x801DD498 (src/engine/cu_801DCA10.c, NASCAR 2005 object.c), compiler row and function rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801DCA10-0x801DD498 (src/engine/object.c, NASCAR 2005 object.c), compiler row and function rows; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13705,9 +13843,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEE54.c",
+      "source": "src/engine/llrenderbin.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/cu_801CEE54.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/llrenderbin.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13782,9 +13920,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BA818.c",
+      "source": "src/engine/animemot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/cu_801BA818.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv provisional unit row 0x801BA818-0x801BAD98 (src/engine/animemot.c), its function and name rows and the existing engine_c_fastmath compiler row; every function and data placement exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -13795,7 +13933,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C4960.c",
+      "source": "src/engine/skeleton.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C4960-0x801C4F64, exact function rows and data row 0x802F48C0-0x802F4980; all twelve functions and the complete 48-entry callback table are linked.",
       "sections": [
@@ -13858,7 +13996,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_80229094.c",
+      "source": "src/engine/dbteams.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270, all six exact function/name rows, complete native .sdata row 0x803EBFC8-0x803EBFD8 and canonical declaration/source-form rows. Complete source file linked.",
       "sections": [
@@ -13877,7 +14015,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228F78.c",
+      "source": "src/engine/dbtats.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084, four function/name rows, complete native .sdata row 0x803EBFB8-0x803EBFC4 and canonical declaration/source-form row. Complete source file linked.",
       "sections": [
@@ -13896,9 +14034,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E8478.cpp",
+      "source": "src/engine/physconstraint.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801E8478.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
+      "evidence": "evidence.tsv provisional unit row for src/engine/physconstraint.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -13915,9 +14053,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801EADD8.cpp",
+      "source": "src/engine/physaabb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/engine/cu_801EADD8.cpp, individual exact function extents, exact literal/vtable range0x802B1720-0x802B1748, and compiler/type/field/source-form records. Complete seven-function class and native sections; original code-file boundaries remain provisional.",
+      "evidence": "evidence.tsv provisional unit row for src/engine/physaabb.cpp, individual exact function extents, exact literal/vtable range0x802B1720-0x802B1748, and compiler/type/field/source-form records. Complete seven-function class and native sections; original code-file boundaries remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -13953,7 +14091,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E0A1C.cpp",
+      "source": "src/engine/pathfinder.cpp",
       "profile": "game_cpp",
       "evidence": "Complete bounded inferred handler, pool state and allocator-vtable grouping; evidence.tsv unit/function/data/type/field rows. Both code-file edges remain provisional; historical shared-file alternatives and other target table users are disclosed.",
       "sections": [
@@ -13984,26 +14122,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228E44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78, both exact function/name rows, canonical descriptor and entry access-view rows and exact native .sdata row 0x803EBFA8-0x803EBFB8. Complete file linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228E44",
-          "end": "0x80228F78"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFA8",
-          "end": "0x803EBFB8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C01DC.c",
+      "source": "src/engine/animseqncr.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x801C01DC-0x801C06E8, all nine function/name rows, complete native .rodata row 0x802AEEE0-0x802AEEE8 and source-form/compiler records. Whole source linked; unchanged existing owner-approved profile.",
       "sections": [
@@ -14060,7 +14179,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BCF40.c",
+      "source": "src/engine/animseq.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x801BCF40-0x801BDA30, all seventeen name/function rows, source-form and field records, exact .rodata802AEDC8-802AEE38 and .sbss803ED610-803ED614. Complete unit on unchanged engine_c_fastmath library profile.",
       "sections": [
@@ -14123,7 +14242,7 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E8798.cpp",
+      "source": "src/engine/physstep.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x801E8798-0x801E8C78, ten target function extents and name rows, exact literal/vtable data 0x802B1570-0x802B15F8, and compiler/source-form/type/field rows. Complete native text and rodata; original source-file edges remain provisional.",
       "sections": [
@@ -14182,7 +14301,7 @@
     {
       "source": "src/engine/llquat.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801EB488-0x801EC1B4 (src/engine/llquat.c), its compiler row, the 21 exact function rows 0x801EB488-0x801EC1B4, the exact data rows 0x802B1748-0x802B179C (.rodata) and 0x803ED6E0-0x803ED6E4 (.sdata2), the type row Mtx_801EB8B4 and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x801EB488-0x801EC1B4 (src/engine/llquat.c), its compiler row, the 21 exact function rows 0x801EB488-0x801EC1B4, the exact data rows 0x802B1748-0x802B179C (.rodata) and 0x803ED6E0-0x803ED6E4 (.sdata2), the type row QuatMatrix_t and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -14205,9 +14324,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A8620.cpp",
+      "source": "src/game/DynObjRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A8620-0x801A980C (src/game/cu_801A8620.cpp), its 14 exact function extents, exact data rows 0x802AE8E0-0x802AE958, 0x802AE8F8-0x802AE904, 0x802F3B20-0x802F3B40, 0x803EB870-0x803EB874 and 0x803673E0-0x80367580, and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A8620-0x801A980C (src/game/DynObjRender.cpp), its 14 exact function extents, exact data rows 0x802AE8E0-0x802AE958, 0x802AE8F8-0x802AE904, 0x802F3B20-0x802F3B40, 0x803EB870-0x803EB874 and 0x803673E0-0x80367580, and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -14242,9 +14361,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801A7C20.cpp",
+      "source": "src/game/UVScroll.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/cu_801A7C20.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the fn_801A7F10 source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/UVScroll.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the UVScrollFixed source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -14286,9 +14405,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80141210.cpp",
+      "source": "src/game/camcurve.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8014116C-0x801422C8 (src/game/cu_80141210.cpp), its 12 exact function extents, data rows 0x802A0268-0x802A02B0, 0x802DCEB0-0x802DCF58, 0x802DCF58-0x802DCF74, 0x802DCF74-0x802DCF80 and 0x803EB1F0-0x803EB1F4, and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8014116C-0x801422C8 (src/game/camcurve.cpp), its 12 exact function extents, data rows 0x802A0268-0x802A02B0, 0x802DCEB0-0x802DCF58, 0x802DCF58-0x802DCF74, 0x802DCF74-0x802DCF80 and 0x803EB1F0-0x803EB1F4, and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -14334,6 +14453,19 @@
           "end": "0x802B1C58"
         }
       ]
+    },
+    {
+      "source": "src/engine/spchrand.c",
+      "profile": "speech_cxx",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B1A3C",
+          "end": "0x801B1A90"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
     }
   ]
 }

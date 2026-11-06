@@ -1,8 +1,8 @@
 #include "game/Object_80039F5C.h"
 #include "game/Block_800DE3B0.h"
 #include "game/Command_800CEE74.h"
-#include "game/Level_80054130.h"
-#include "game/Record_803EA558.h"
+#include "game/LevelData.h"
+#include "game/LevelWallInfo.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801BE60C.h"
@@ -24,14 +24,14 @@ extern "C" {
 int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord,
                 Vector_80039F5C *pPoint, int angle);
 int fn_800CD170(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue,
                  float *pOther);
 void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
-void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
-void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
+void AnimMomentumInit(AnimMomentum_t *pState, Object_80039F5C *p, int value);
+void AnimMomentumUpdate(AnimMomentum_t *pState, Object_80039F5C *p);
 void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 int fn_801784C4(void);
@@ -79,7 +79,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
             fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
             pBlock->mUnknown1F = fn_801BA6B0(&pEntries[pBlock->mUnknown1D]);
         }
-        fn_800D8140(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
+        AnimMomentumInit(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
         pBlock->mUnknown1E = fn_801784C4();
         break;
     }
@@ -92,7 +92,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
                 fn_800DF654(p, (Block_801BE60C *)pBlock);
             }
             fn_800DEC10(p, pBlock);
-            fn_800D81C8(&pBlock->mUnknown20, p);
+            AnimMomentumUpdate(&pBlock->mUnknown20, p);
         }
         break;
     case 1:
@@ -171,14 +171,14 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                 (pInfo->mUnknown56Byte == 0 && p->mUnknown1008.mUnknown0 == 8)) {
                 int direction;
                 unsigned int count;
-                Record_80054130 *pRow;
+                LevelWall_t *pRow;
                 float height;
                 unsigned char i;
 
                 fn_800CE804(pCommand, pTable, pTable->mEntries[entry].mUnknown2);
                 direction = fn_801CFE40(pCommand->mVector0.mY, pCommand->mVector0.mX);
-                count = (unsigned short)fn_80054130()->mUnknown136;
-                pRow = fn_80054130()->mUnknown140;
+                count = (unsigned short)LevelGetData()->mUnknown136;
+                pRow = LevelGetData()->mUnknown140;
                 height = pCommand->mUnknown12.mZ;
                 pCommand->mUnknown12.mZ = 0.0f;
                 for (i = 0; i < count; i++, pRow++) {
@@ -186,17 +186,17 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     int turn;
                     float limit;
 
-                    if (lbl_803EA558[i].mUnknown0 <= 1.0f) {
+                    if (gLevelWallInfo[i].mUnknown0 <= 1.0f) {
                         continue;
                     }
-                    angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
-                    if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EABD8 * 46603.37890625f)) {
+                    angle = fn_801784C4() ? gLevelWallInfo[i].mUnknown8 : gLevelWallInfo[i].mUnknown4;
+                    if (MathAngleDiff(angle, direction) >= (int)(lbl_803EABD8 * 46603.37890625f)) {
                         continue;
                     }
                     a.mZ = 0.0f;
                     point.mZ = 0.0f;
                     b.mZ = 0.0f;
-                    fn_800541AC(pRow, &a, &b);
+                    LevelGetWallBase(pRow, &a, &b);
                     turn = (angle - direction) & 0xFFFFFF;
                     if (turn > 0x800000) {
                         turn -= 0x1000000;
@@ -219,7 +219,7 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                         continue;
                     }
                     fn_80227690(&delta, &p->mMotion.mPos, &point);
-                    if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) > 0x3FFFFF) {
+                    if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) > 0x3FFFFF) {
                         continue;
                     }
                     fn_80227970(&a, &b, &p->mMotion.mPos, &closest, &playerDistance, &playerFactor);

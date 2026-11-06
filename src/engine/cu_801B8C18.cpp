@@ -1,5 +1,5 @@
 #include "engine/cu_801B8C18.h"
-#include "game/Class_801B8D9C.h"
+#include "game/CsisClassHandle.h"
 #include <dolphin/os/OSMutex.h>
 #include <stddef.h>
 #include <string.h>
@@ -10,7 +10,7 @@ extern OSMutex lbl_8037E828;
 extern int lbl_802F4838;
 
 int fn_801B8C60(Handle_801B8C60 *out, Struct_803EB878 *desc);
-int fn_801B8DF0(Class_801B8D9C *out, Struct_803EB878 *desc);
+int fn_801B8DF0(CsisClassHandle *out, Struct_803EB878 *desc);
 
 int fn_801B8C18(Handle_801B8C60 *out, Struct_803EB878 *desc)
 {
@@ -65,14 +65,14 @@ int fn_801B8D4C(Handle_801B8C60 *handle)
 
 }
 
-Class_801B8D9C::Class_801B8D9C()
+CsisClassHandle::CsisClassHandle()
 {
     mValue = -3;
 }
 
 extern "C" {
 
-int fn_801B8DA8(Class_801B8D9C *out, Struct_803EB878 *desc)
+int fn_801B8DA8(CsisClassHandle *out, Struct_803EB878 *desc)
 {
     fn_801B9148();
     int result = fn_801B8DF0(out, desc);
@@ -80,7 +80,7 @@ int fn_801B8DA8(Class_801B8D9C *out, Struct_803EB878 *desc)
     return result;
 }
 
-int fn_801B8DF0(Class_801B8D9C *out, Struct_803EB878 *desc)
+int fn_801B8DF0(CsisClassHandle *out, Struct_803EB878 *desc)
 {
     int pass = 0;
     for (;;) {
@@ -109,7 +109,7 @@ int fn_801B8DF0(Class_801B8D9C *out, Struct_803EB878 *desc)
     return -5;
 }
 
-int fn_801B8EDC(Class_801B8D9C *handle)
+int fn_801B8EDC(CsisClassHandle *handle)
 {
     if (handle->mValue < 0)
         return handle->mValue;
@@ -220,7 +220,7 @@ Class_8037E820 lbl_8037E820;
 extern unsigned short lbl_802F483C;
 
 int fn_801B94CC(Handle_801B8C60 *handle, Node_801B9410 *node);
-int fn_801B95FC(Class_801B8D9C *handle, void *params, Object_801B9068 **out);
+int fn_801B95FC(CsisClassHandle *handle, void *params, Object_801B9068 **out);
 int fn_801B9724(Object_801B9068 *object);
 int fn_801B9884(Object_801B9068 *object, void *params);
 
@@ -332,7 +332,7 @@ int fn_801B9530(Handle_801B8C60 *handle, Node_801B9410 *node)
     return 0;
 }
 
-int fn_801B95AC(Class_801B8D9C *handle, void *params, Object_801B9068 **out)
+int fn_801B95AC(CsisClassHandle *handle, void *params, Object_801B9068 **out)
 {
     fn_801B9148();
     int result = fn_801B95FC(handle, params, out);
@@ -340,7 +340,7 @@ int fn_801B95AC(Class_801B8D9C *handle, void *params, Object_801B9068 **out)
     return result;
 }
 
-int fn_801B95FC(Class_801B8D9C *handle, void *params, Object_801B9068 **out)
+int fn_801B95FC(CsisClassHandle *handle, void *params, Object_801B9068 **out)
 {
     *out = 0;
     int result = fn_801B8EDC(handle);
@@ -415,7 +415,7 @@ int fn_801B9884(Object_801B9068 *object, void *params)
     return 0;
 }
 
-int fn_801B98A8(Class_801B8D9C *handle, Node_801B95FC *node)
+int fn_801B98A8(CsisClassHandle *handle, Node_801B95FC *node)
 {
     int result = fn_801B8EDC(handle);
     if (result < 0)
@@ -429,7 +429,7 @@ int fn_801B98A8(Class_801B8D9C *handle, Node_801B95FC *node)
     return 0;
 }
 
-int fn_801B990C(Class_801B8D9C *handle, Node_801B95FC *node)
+int fn_801B990C(CsisClassHandle *handle, Node_801B95FC *node)
 {
     int result = fn_801B8EDC(handle);
     if (result < 0)

@@ -1,13 +1,13 @@
 #include "game/State_800D7A4C.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 extern "C" {
 float fn_8022781C(void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800ACD04(Object_80039F5C *p);
 int fn_801783AC(int bit);
 int fn_80178320(void);
@@ -19,7 +19,7 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
 {
     if (state->mUnknown5 != 3) return;
     Vector_80039F5C point;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
         point.mX = carrier->mMotion.mPos.mX;
         point.mY = carrier->mMotion.mPos.mY;
@@ -28,7 +28,7 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
         float scale = distance * ((float)lbl_803EAD78 * 0.1f);
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
-    } else fn_80137D58(fn_801374BC(), &point);
+    } else BallGetPosition(BallGetCurrent(), &point);
     Vector_80039F5C delta;
     fn_80227690(&delta, &point, &p->mMotion.mPos);
     int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
@@ -36,8 +36,8 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
     Point_8017886C origin = fn_80177FE0();
     if (!(point.mY >= origin.mY) && !fn_801783AC(0)) limit *= (int)lbl_803EAD7C;
     int step;
-    if (fn_801CFFD0(heading, p->mMotion.mFacing) <= limit)
-        step = fn_801CFFD0(heading, p->mMotion.mFacing);
+    if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
+        step = MathAngleDiff(heading, p->mMotion.mFacing);
     else step = limit;
     int facing;
     if (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000)

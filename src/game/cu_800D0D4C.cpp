@@ -2,13 +2,13 @@
 #include <math.h>
 #include "game/cu_8017DD68.h"
 #include "game/fn_800D4164.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80178D18.h"
@@ -217,10 +217,10 @@ extern unsigned char lbl_803EC9CC[2];
 extern unsigned char lbl_803EC9D0[2];
 extern void *lbl_803EB688;
 
-int fn_80025708(void);
-struct Object_800785C0;
-Object_800785C0 *fn_800785C0(void);
-int fn_800254E8(Object_800785C0 *, int, int *);
+int ChallengeIsActive(void);
+struct Challenge_t;
+Challenge_t *ChalGetCurrent(void);
+int ChallengeHasGoalType(Challenge_t *, int, int *);
 void fn_800A20D0(int, signed char);
 float fn_800A32B4(void);
 void fn_800A72B4(void);
@@ -233,11 +233,11 @@ int fn_801787DC(int);
 void fn_8017E3CC(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
-void fn_8008880C(int, unsigned int);
-void fn_8018FB4C(Object_8007A334 *, int);
-void fn_8018FBC8(Object_8007A334 *);
-int fn_8018FBE8(Object_8007A334 *, int);
-void fn_8018FC1C(Object_8007A334 *, Record_8018FC1C *);
+void UserInfoAddPoints(int, unsigned int);
+void fn_8018FB4C(DbCursor *, int);
+void fn_8018FBC8(DbCursor *);
+int fn_8018FBE8(DbCursor *, int);
+void fn_8018FC1C(DbCursor *, Record_8018FC1C *);
 void fn_8017C5A0(unsigned short, int);
 void fn_8017C5CC(unsigned short, int);
 void fn_8017C5F8(unsigned short, int);
@@ -255,7 +255,7 @@ void fn_8017C8DC(unsigned short, int);
 void fn_8017C908(unsigned short, int);
 void fn_8017C98C(unsigned short, int);
 
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800A7A0C(int team);
 int fn_800A8444(int team);
@@ -290,7 +290,7 @@ unsigned short fn_801BE648(void *p);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D0D48(int a);
 void fn_800D1A90(int, int, int, int, int, int, int, int, int, int);
 unsigned short fn_800D3EB0(int, int);
@@ -814,7 +814,7 @@ extern "C" void fn_800D2280(void) {
     else if (distance < 10.0f) limit = 3;
     else limit = 5;
     if ((unsigned int)++lbl_803EACD4->mUnknown1F30 >= limit) {
-        Object_80039F5C *carrier = fn_80137B40();
+        Object_80039F5C *carrier = BallGetCurrentHolder();
         if (carrier) {
             if (carrier->mMotion.mUnknown28 == 0.0f) lbl_803EACD4->mUnknown1F2C += 3;
             else lbl_803EACD4->mUnknown1F2C++;
@@ -901,9 +901,9 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         }
     }
     fn_800D2F9C(0, fn_800D2EB0(0)); fn_800D2F9C(1, fn_800D2EB0(1));
-    if (fn_80025708()) {
-        Object_800785C0 *object = fn_800785C0();
-        if (fn_800254E8(object, 20, 0) || fn_800254E8(object, 31, 0)) flag = 1;
+    if (ChallengeIsActive()) {
+        Challenge_t *object = ChalGetCurrent();
+        if (ChallengeHasGoalType(object, 20, 0) || ChallengeHasGoalType(object, 31, 0)) flag = 1;
     }
     if ((lbl_803EACD4->mUnknown1F13 == 0 || flag) && fn_800A8740() == 0) { fn_800A72B4(); fn_800A7B5C(); }
     fn_800D1634(0, lbl_803EACD4->mUnknown1A70, 0, 1); fn_800D1634(1, lbl_803EACD4->mUnknown1A74, 0, 1);
@@ -960,7 +960,7 @@ extern "C" void fn_800D2C9C(int a) {
     fn_800D0D48(63);
     if (lbl_803EACD4->mUnknown1F11) {
         fn_800D0D48(64);
-        if (a == 0 || (a == 1 && lbl_803EACD4->mpUnknown2060 != fn_80137B40())) {
+        if (a == 0 || (a == 1 && lbl_803EACD4->mpUnknown2060 != BallGetCurrentHolder())) {
             notify = 1;
             fn_800D0D48(65);
             fn_800D3C00(0);
@@ -1006,7 +1006,7 @@ extern "C" void fn_800D2E50(void) {
     lbl_803EACD4->mUnknown1EDA = 0;
     lbl_803EACD4->mUnknown1EDB = 0;
     lbl_803EACD4->mUnknown1F44 = 0;
-    fn_80067D4C(122, 0);
+    AudmonEventPost(122, 0);
 }
 
 extern "C" int fn_800D2EB0(int a) {
@@ -1118,7 +1118,7 @@ extern "C" void fn_800D3294(int team, unsigned int value) {
     } else {
         percent = value * 100 / limit;
     }
-    if (fn_80025708() == 0 && fn_801486A0() != 5) {
+    if (ChallengeIsActive() == 0 && fn_801486A0() != 5) {
         if (fn_800A84C8() != 0 && fn_800A8444((unsigned char)team) != 0) {
             fn_800D1D84(team, 107, percent);
         } else {
@@ -1324,7 +1324,7 @@ extern "C" void fn_800D391C(int a) {
         lbl_803EACD4->mUnknown1EE2 = 0;
     }
     if (lbl_803EACD4->mUnknown1EEA && a != 27 && (a < 1 || a > 5)) {
-        Object_80039F5C *p = fn_80137B40();
+        Object_80039F5C *p = BallGetCurrentHolder();
 
         if (p == 0 || p->mIdBytes[2] == fn_80178360() || fn_801787A0()) {
             fn_800D2378(9, fn_80178348(), 1);
@@ -1361,9 +1361,9 @@ extern "C" int fn_800D3CC0(void) {
     Object_80039F5C *pTarget = 0;
 
     if (!p) {
-        Object_80039F5C *pBall = fn_80137B40();
+        Object_80039F5C *pBall = BallGetCurrentHolder();
 
-        if (pBall || (pBall = fn_80137B64())) {
+        if (pBall || (pBall = BallGetCurrentLastHolder())) {
             if (pBall->mpState->mId == 16) {
                 pTarget = fn_8009BCE8(&pBall->mUnknown336);
             }
@@ -1449,11 +1449,11 @@ extern "C" void fn_800D3FBC(int side, int value, int arg) {
         }
         if (fn_800A8F84(side) == 0 || value < *(side == 0 ? &lbl_803EACD4->mUnknown1A70 : &lbl_803EACD4->mUnknown1A74)) {
             if (value == 0 && fn_800D3F08(side) > 0) {
-                fn_80067DB8(6, 0, side, 0, 0);
+                AudmonEventPostArgs(6, 0, side, 0, 0);
             }
             if (value == lbl_803EACD0 && fn_800D3F08(side) < lbl_803EACD0) {
                 lbl_803EACD4->mUnknown2064[side] = 1;
-                fn_80067DB8(5, 0, side, 0, 0);
+                AudmonEventPostArgs(5, 0, side, 0, 0);
             }
             if (value < *(side == 0 ? &lbl_803EACD4->mUnknown1A70 : &lbl_803EACD4->mUnknown1A74)) {
                 fn_800D1634(side, value, arg, 0);
@@ -1487,8 +1487,8 @@ extern "C" void fn_800D421C(int side, int value) {
     }
     if (lbl_803EACD8 == 2 && fn_801788D8(&limit) == 1 && value >= limit) {
         lbl_803EACD8 = side;
-        if (fn_80025708() == 0) {
-            fn_80067DB8(94, 0, lbl_803EACD8, 0, 0);
+        if (ChallengeIsActive() == 0) {
+            AudmonEventPostArgs(94, 0, lbl_803EACD8, 0, 0);
             fn_80178370();
         }
     }
@@ -1552,7 +1552,7 @@ extern "C" void fn_800D42D4(void) {
 extern "C" void fn_800D44A8(float a) {
     fn_800D0D48(40);
     if (fn_8017876C() != 0) {
-        fn_800B1698(fn_80137AD0(fn_801374BC()), fn_8017876C());
+        fn_800B1698(BallGetHolder(BallGetCurrent()), fn_8017876C());
     }
     if (fn_80177C38() == 0) {
         if (a < fn_80177FE0().mY && fn_80177F70() != 6) {
@@ -1611,7 +1611,7 @@ extern "C" void fn_800D45F0(Object_80039F5C *p, float a) {
 extern "C" void fn_800D4748(Object_80039F5C *p) {
     fn_800D0D48(39);
     if (p != 0 && !(p->mFlags & 0x10000)) {
-        if (fn_801787A0() == 0 && p == fn_80137B40()) {
+        if (fn_801787A0() == 0 && p == BallGetCurrentHolder()) {
             fn_800D391C(0);
             if (lbl_803EACD4->mUnknown1F01 == 0) {
                 fn_800D2378(30, p->mIdBytes[2], 1);
@@ -1623,7 +1623,7 @@ extern "C" void fn_800D4748(Object_80039F5C *p) {
 
 extern "C" void fn_800D47D4(int flag, Object_80039F5C *p) {
     fn_800D0D48(38);
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         if (flag != 0) {
             lbl_803EACD4->mUnknown1F00 = 1;
         } else if (fn_801787A0() == 0) {
@@ -1663,7 +1663,7 @@ extern "C" void fn_800D490C(void) {
 extern "C" void fn_800D4948(void) {
     fn_800D0D48(35);
     fn_800D391C(0);
-    fn_800AE7F0(12, fn_80178308(), fn_80137B40());
+    fn_800AE7F0(12, fn_80178308(), BallGetCurrentHolder());
     lbl_803EACD4->mUnknown1EFE = 1;
 }
 
@@ -1714,7 +1714,7 @@ extern "C" void fn_800D4A70(Object_80039F5C *p) {
         if (p->mIdBytes[2] == fn_80178320()) {
             Vector_80039F5C pos;
 
-            fn_80137D58(fn_801374BC(), &pos);
+            BallGetPosition(BallGetCurrent(), &pos);
             lbl_803EACD4->mUnknown1F14 = -pos.mY;
             lbl_803EACD4->mUnknown1F80[fn_80178308()] = 0;
         }
@@ -1769,7 +1769,7 @@ extern "C" void fn_800D4CD4(void) {
 extern "C" void fn_800D4D84(Object_80039F5C *p) {
     fn_800D0D48(28);
     if (fn_801787A0() == 0) {
-        if (fn_800D0B90(p) == 0) fn_80156C78(3, 1);
+        if (PlayerMoveGetKind(p) == 0) fn_80156C78(3, 1);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
         fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
@@ -1810,7 +1810,7 @@ extern "C" void fn_800D4F34(int flag) {
     fn_800D0D48(5);
     fn_800D391C(24);
     if (flag != 0) {
-        Object_80039F5C *p = fn_80137B40();
+        Object_80039F5C *p = BallGetCurrentHolder();
 
         lbl_803EACD4->mUnknown1EE7 = 1;
         lbl_803EACD4->mUnknown1F62 = fn_80178308();
@@ -1821,7 +1821,7 @@ extern "C" void fn_800D4F34(int flag) {
 
 extern "C" void fn_800D4FBC(Object_80039F5C *p, int flag) {
     fn_800D0D48(6);
-    if (lbl_803EACD4->mUnknown1EE7 != 0 && p == fn_80137B40() && fn_801787A0() == 0) {
+    if (lbl_803EACD4->mUnknown1EE7 != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         if (flag != 0) {
             lbl_803EACD4->mUnknown1EE8 = 1;
             lbl_803EACD4->mpUnknown1F68 = p;
@@ -1834,7 +1834,7 @@ extern "C" void fn_800D4FBC(Object_80039F5C *p, int flag) {
 }
 
 extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
-    if (p == fn_80137B40() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         int accept = 0;
         fn_800D0D48(1);
         fn_800D391C(14);
@@ -1860,12 +1860,12 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
         }
         if (accept == 0 && kind != 0) {
-            if (fn_800D0B90(p) == 0) fn_80156C78(4, 1);
+            if (PlayerMoveGetKind(p) == 0) fn_80156C78(4, 1);
             lbl_803EACD4->mUnknown1EF5 = 1;
             accept = 1;
         }
         Vector_80039F5C position;
-        fn_80137D58(fn_801374BC(), &position);
+        BallGetPosition(BallGetCurrent(), &position);
         float limit = fn_80177FE0().mY - 4.0f;
         if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
@@ -1883,7 +1883,7 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
 
 extern "C" void fn_800D52F8(Object_80039F5C *p) {
     fn_800D0D48(2);
-    if (lbl_803EACD4->mUnknown1EDD != 0 && p == fn_80137B40() && fn_801787A0() == 0) {
+    if (lbl_803EACD4->mUnknown1EDD != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         int b = 0;
         int id;
         int a;
@@ -1899,7 +1899,7 @@ extern "C" void fn_800D52F8(Object_80039F5C *p) {
             fn_80156C78(5, 1);
         } else {
             id = 34;
-            if (fn_800D0B90(p) == 0) {
+            if (PlayerMoveGetKind(p) == 0) {
                 fn_80156C78(4, 1);
             }
         }
@@ -1937,7 +1937,7 @@ extern "C" void fn_800D52F8(Object_80039F5C *p) {
 }
 
 extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
-    if (p == fn_80137B40() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         int accept = 0;
         fn_800D0D48(3);
         fn_800D391C(15);
@@ -1962,11 +1962,11 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
         }
         if (accept == 0) {
-            if (fn_800D0B90(p) == 0) fn_80156C78(7, 1);
+            if (PlayerMoveGetKind(p) == 0) fn_80156C78(7, 1);
             if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
         }
         Vector_80039F5C position;
-        fn_80137D58(fn_801374BC(), &position);
+        BallGetPosition(BallGetCurrent(), &position);
         float limit = fn_80177FE0().mY - 4.0f;
         if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
@@ -1982,7 +1982,7 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
 
 extern "C" void fn_800D5704(Object_80039F5C *p) {
     fn_800D0D48(4);
-    if (lbl_803EACD4->mUnknown1EDE != 0 && p == fn_80137B40() && fn_801787A0() == 0) {
+    if (lbl_803EACD4->mUnknown1EDE != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         int b = 0;
         Record_800B15FC *pRecord;
 
@@ -1993,7 +1993,7 @@ extern "C" void fn_800D5704(Object_80039F5C *p) {
                 fn_80156C78(8, 1);
             } else {
                 fn_800D2378(47, fn_80178308(), 1);
-                if (fn_800D0B90(p) == 0) {
+                if (PlayerMoveGetKind(p) == 0) {
                     fn_80156C78(7, 1);
                 }
             }
@@ -2017,7 +2017,7 @@ extern "C" void fn_800D5704(Object_80039F5C *p) {
                 }
             } else {
                 fn_800D2378(46, fn_80178308(), 1);
-                if (fn_800D0B90(p) == 0) {
+                if (PlayerMoveGetKind(p) == 0) {
                     fn_80156C78(7, 1);
                 }
             }
@@ -2084,15 +2084,15 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
             }
             if (active != 0) {
                 Vector_80039F5C position;
-                if (fn_80178348() == fn_80137B40()->mIdBytes[2]) {
-                    fn_80137D58(fn_801374BC(), &position);
+                if (fn_80178348() == BallGetCurrentHolder()->mIdBytes[2]) {
+                    BallGetPosition(BallGetCurrent(), &position);
                     if (lbl_803EACD4->mUnknown0[64].mUnknown36 == 0) {
-                        if (!(position.mY >= fn_80177FE0().mY)) { active = 0; fn_800D59C8(fn_80137B40()->mIdBytes[2]); }
+                        if (!(position.mY >= fn_80177FE0().mY)) { active = 0; fn_800D59C8(BallGetCurrentHolder()->mIdBytes[2]); }
                     }
                 } else {
-                    fn_80137D58(fn_801374BC(), &position);
+                    BallGetPosition(BallGetCurrent(), &position);
                     if (lbl_803EACD4->mUnknown0[64].mUnknown36 == 0 && !(position.mY >= lbl_803EACD4->mUnknown1F14)) {
-                        active = 0; fn_800D59C8(fn_80137B40()->mIdBytes[2]);
+                        active = 0; fn_800D59C8(BallGetCurrentHolder()->mIdBytes[2]);
                     }
                 }
             }
@@ -2103,7 +2103,7 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
         lbl_803EACD4->mUnknown1F44 = 0;
         if (lbl_803EACD4->mUnknown1EDA == 0) {
             lbl_803EACD4->mUnknown1EDA = 1;
-            lbl_803EACD4->mpUnknown1F40 = fn_80137B40();
+            lbl_803EACD4->mpUnknown1F40 = BallGetCurrentHolder();
             lbl_803EACD4->mUnknown1F2C = 0;
             fn_800D2280();
             lbl_803EACD4->mUnknown1F4C = a;
@@ -2115,18 +2115,18 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
                 lbl_803EACD4->mUnknown206C = 1;
             }
         } else {
-            if (lbl_803EACD4->mpUnknown1F40 != fn_80137B40()) fn_800D0D48(54);
-            if (lbl_803EACD4->mpUnknown1F40 == fn_80137B40()) {
+            if (lbl_803EACD4->mpUnknown1F40 != BallGetCurrentHolder()) fn_800D0D48(54);
+            if (lbl_803EACD4->mpUnknown1F40 == BallGetCurrentHolder()) {
                 fn_800D2280();
                 lbl_803EACD4->mUnknown1F4C = a;
                 lbl_803EACD4->mUnknown1F50 = b;
                 int scaled, value;
-                fn_800D1788(fn_80137B40()->mIdBytes[2], 64, lbl_803EACD4->mUnknown1F2C, &scaled, 0, &value, 0, 0, 0, 0);
+                fn_800D1788(BallGetCurrentHolder()->mIdBytes[2], 64, lbl_803EACD4->mUnknown1F2C, &scaled, 0, &value, 0, 0, 0, 0);
                 if (value != lbl_803EACD4->mUnknown1F34) {
                     lbl_803EACD4->mUnknown1F34 = value;
                     lbl_803EACD4->mUnknown1F38 = scaled;
-                    fn_800D2378(64, fn_80137B40()->mIdBytes[2], lbl_803EACD4->mUnknown1F2C);
-                    if (lbl_803EACD4->mUnknown1F34 > 499) fn_80067D4C(121, 0);
+                    fn_800D2378(64, BallGetCurrentHolder()->mIdBytes[2], lbl_803EACD4->mUnknown1F2C);
+                    if (lbl_803EACD4->mUnknown1F34 > 499) AudmonEventPost(121, 0);
                 }
                 if (lbl_803EACD4->mUnknown206C) {
                     float distance = (float)fabs(lbl_803EACD4->mpUnknown1F40->mMotion.mPos.mX) + 6.0f;
@@ -2139,22 +2139,22 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
             }
         }
     } else if (lbl_803EACD4->mUnknown1F2C + lbl_803EACD4->mUnknown1F30 != 0) {
-        if (lbl_803EACD4->mpUnknown1F40 != fn_80137B40()) { fn_800D0D48(55); lbl_803EACD4->mUnknown1F44++; }
+        if (lbl_803EACD4->mpUnknown1F40 != BallGetCurrentHolder()) { fn_800D0D48(55); lbl_803EACD4->mUnknown1F44++; }
         if ((unsigned int)++lbl_803EACD4->mUnknown1F44 > 1) {
             int value;
             fn_800D1788(lbl_803EACD4->mpUnknown1F40->mIdBytes[2], 64, lbl_803EACD4->mUnknown1F2C, 0, 0, &value, 0, 0, 0, 0);
             fn_800D0D48(56);
             if (value) fn_800D0D48(57);
-            if (lbl_803EACD4->mpUnknown1F40 == fn_80137B40()) fn_800D0D48(58);
+            if (lbl_803EACD4->mpUnknown1F40 == BallGetCurrentHolder()) fn_800D0D48(58);
             if (fn_801787A0()) fn_800D0D48(59);
             if (value) {
-                if (lbl_803EACD4->mUnknown1F12 || lbl_803EACD4->mpUnknown1F40 == fn_80137B40()) {
+                if (lbl_803EACD4->mUnknown1F12 || lbl_803EACD4->mpUnknown1F40 == BallGetCurrentHolder()) {
                     lbl_803EACD4->mUnknown1F3C = lbl_803EACD4->mpUnknown1F40->mIdBytes[2];
                     lbl_803EACD4->mUnknown1F48 = lbl_803EACD4->mUnknown1F2C;
                     lbl_803EACD4->mUnknown1EDC = 1;
                     if (fn_801787A0() == 0) fn_800D2DF0();
                     result = 1;
-                } else if (value && lbl_803EACD4->mpUnknown1F40 != fn_80137B40()) {
+                } else if (value && lbl_803EACD4->mpUnknown1F40 != BallGetCurrentHolder()) {
                     if (lbl_803EACD4->mUnknown1EEE == 0) {
                         lbl_803EACD4->mUnknown1F54 = lbl_803EACD4->mUnknown1F34;
                         lbl_803EACD4->mUnknown1F58 = lbl_803EACD4->mUnknown1F38;
@@ -2175,12 +2175,12 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
 }
 
 extern "C" void fn_800D5F1C(Object_80039F5C *p, int kind, unsigned char flag) {
-    if (p == fn_80137B40()) { fn_800D0D48(25); fn_800D391C(0); }
-    if (p == fn_80137B40() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder()) { fn_800D0D48(25); fn_800D391C(0); }
+    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         fn_800D391C(0);
         int id = 52;
         switch (kind) {
-        case 0: if (fn_800D0B90(p) == 0) fn_80156C78(12, 1); break;
+        case 0: if (PlayerMoveGetKind(p) == 0) fn_80156C78(12, 1); break;
         case 1: id = 53; fn_80156C78(13, 1); break;
         case 4: id = 54; fn_80156C78(14, 1); break;
         }
@@ -2204,7 +2204,7 @@ extern "C" void fn_800D5F1C(Object_80039F5C *p, int kind, unsigned char flag) {
 
 extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
     int accept = 0;
-    if (p == fn_80137B40() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         fn_800D0D48(23);
         fn_800D391C(16);
         int id = 57;
@@ -2235,11 +2235,11 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
         }
     }
     if (accept == 0) {
-        if (fn_800D0B90(p) == 0) fn_80156C78(9, 1);
+        if (PlayerMoveGetKind(p) == 0) fn_80156C78(9, 1);
         if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
     }
     Vector_80039F5C position;
-    fn_80137D58(fn_801374BC(), &position);
+    BallGetPosition(BallGetCurrent(), &position);
     float limit = fn_80177FE0().mY - 4.0f;
     if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
     if (accept) {
@@ -2256,7 +2256,7 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
 
 extern "C" void fn_800D640C(Object_80039F5C *p) {
     fn_800D0D48(24);
-    if (lbl_803EACD4->mUnknown1EDF != 0 && p == fn_80137B40() && fn_801787A0() == 0) {
+    if (lbl_803EACD4->mUnknown1EDF != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         int a = 0;
         Record_800B15FC *pRecord;
 
@@ -2278,7 +2278,7 @@ extern "C" void fn_800D640C(Object_80039F5C *p) {
             fn_80156C78(10, 1);
         } else {
             fn_800D2378(57, fn_80178308(), 1);
-            if (fn_800D0B90(p) == 0) {
+            if (PlayerMoveGetKind(p) == 0) {
                 fn_80156C78(9, 1);
             }
         }
@@ -2368,7 +2368,7 @@ extern "C" void fn_800D67B8(int a, Object_80039F5C *p) {
     fn_800D391C(0);
     fn_800D20A0(fn_80178348(), 0);
     lbl_803EACD4->mUnknown1ED8 = 1;
-    lbl_803EACD4->mUnknown1EF2 = fn_800D0B90(p);
+    lbl_803EACD4->mUnknown1EF2 = PlayerMoveGetKind(p);
     if (a != 0) {
         if (lbl_803EACD4->mUnknown1EF2 != 0) {
             fn_800D2C10(75, fn_80178360());
@@ -2386,14 +2386,14 @@ extern "C" void fn_800D67B8(int a, Object_80039F5C *p) {
         fn_80156C78(22, 1);
     }
     fn_800AE7F0(11, fn_80178360(), p);
-    fn_80137D58(fn_801374BC(), &pos);
+    BallGetPosition(BallGetCurrent(), &pos);
     lbl_803EACD4->mUnknown1F14 = -pos.mY;
     lbl_803EACD4->mUnknown1F80[fn_80178348()] = 0;
 }
 
 extern "C" void fn_800D6914(int flag, Object_80039F5C *p) {
     fn_800D0D48(15);
-    if (p == fn_80137B40() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
         lbl_803EACD4->mUnknown1EE1 = 1;
         lbl_803EACD4->mUnknown1EE2 = flag;
         if (flag != 0) {
@@ -2432,7 +2432,7 @@ extern "C" void fn_800D69A4(int team, int a, int b) {
             } else {
                 fn_800D2378(104, team, 1);
             }
-            fn_80137D58(fn_801374BC(), &pos);
+            BallGetPosition(BallGetCurrent(), &pos);
             lbl_803EACD4->mUnknown1F14 = -pos.mY;
             lbl_803EACD4->mUnknown1F80[team == 0] = 0;
         }
@@ -2477,14 +2477,14 @@ extern "C" void fn_800D6C70(Object_80039F5C *p) {
 }
 
 extern "C" void fn_800D6CC0(Object_80039F5C *p) {
-    if (p != 0 && p == fn_80137B40()) {
+    if (p != 0 && p == BallGetCurrentHolder()) {
         fn_800D0D48(46);
         fn_800D391C(2);
     }
 }
 
 extern "C" void fn_800D6D08(Object_80039F5C *p) {
-    if (p != 0 && p == fn_80137B40()) {
+    if (p != 0 && p == BallGetCurrentHolder()) {
         fn_800D0D48(52);
         fn_800D391C(5);
     }
@@ -2616,7 +2616,7 @@ extern "C" void fn_800D6F3C(Record_800B15FC *pRecord) {
     }
 }
 
-extern "C" void fn_800D70CC(Record_80067CA8 *pRecord) {
+extern "C" void fn_800D70CC(AudmonEvent_t *pRecord) {
     switch (pRecord->mType) {
     case 37:
         fn_800D0D48(96);
@@ -2645,7 +2645,7 @@ extern "C" void fn_800D7158(void) {
         if (lbl_803EACC8 != 1) { lbl_803EACC8 = 1; changed = 1; }
     } else if (lbl_803EACC8 != 0) { lbl_803EACC8 = 0; changed = 1; }
     if (changed) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         fn_8018FB4C(&cursor, lbl_803EACC8);
         for (int i = 0; i <= 126; i++) {
             if (fn_8018FBE8(&cursor, i)) fn_8018FC1C(&cursor, &lbl_803EACD4->mUnknown0[i]);
@@ -2706,9 +2706,9 @@ extern "C" void fn_800D7438(void) {
 
     lbl_803EACD0 = 20000;
     if (fn_8017F584() == 0) {
-        if (fn_80054D24(28)) {
+        if (CheatFlagsIsSet(28)) {
             lbl_803EACD0 = 10000;
-        } else if (fn_80054D24(29)) {
+        } else if (CheatFlagsIsSet(29)) {
             lbl_803EACD0 = 2000;
         }
     }
@@ -2745,7 +2745,7 @@ extern "C" unsigned int fn_800D7550(int side, unsigned int value) {
     unsigned int result = 0;
     if (index != -1) {
         result = (unsigned int)((float)value * lbl_803EACCC);
-        fn_8008880C(fn_8022F358(index), result);
+        UserInfoAddPoints(fn_8022F358(index), result);
     }
     return result;
 }

@@ -1,5 +1,5 @@
 #include <string.h>
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_80181330.h"
 #include "game/fn_8021D7B8.h"
 #include "game/cu_8017F90C.h"
@@ -16,9 +16,9 @@ int fn_8005F910(void);
 int fn_8005F938(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80186B38(int a);
 int fn_8018F228(int a);
-void fn_8018F52C(Object_8007A334 *pObject, int a);
-void fn_8018F584(Object_8007A334 *pObject);
-int fn_8018F5A4(Object_8007A334 *pObject, int index);
+void fn_8018F52C(DbCursor *pObject, int a);
+void fn_8018F584(DbCursor *pObject);
+int fn_8018F5A4(DbCursor *pObject, int index);
 void fn_80183368(int mode, int value);
 int fn_801835A0(void);
 int fn_80183948(void);
@@ -52,7 +52,7 @@ int fn_80181030(void)
    elements 3 to 5. */
 void fn_80181064(int *pValues)
 {
-    Object_8007A334 object;
+    DbCursor object;
     int total;
 
     fn_8018F52C(&object, (signed char)fn_8022F384(fn_8022F4BC()));

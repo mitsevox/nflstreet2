@@ -1,6 +1,6 @@
 #include "game/Query_8007F19C.h"
 #include "game/FELoop.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/cu_8007F12C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -16,7 +16,7 @@ extern "C" {
 extern void *lbl_803EB688;
 
 int fn_801FA428(int file, Table_8007F19C *pTables, Expression_8007F19C *pExpression,
-                ColumnValue_802D6424 *pList, Result_8007F19C *pResult, int a);
+                DbColumnValue *pList, Result_8007F19C *pResult, int a);
 void fn_8006EA04(int channel, unsigned char level);
 void fn_8006EC24(void);
 int fn_8013D0D0(void);
@@ -50,8 +50,8 @@ static ColumnDefault_802D6798 sColumnDefaults[23] = {
     { 0x5447504F, 0 },
 };
 
-static Object_8007A334 sCursor;
-static ColumnValue_802D6424 sRecord[24];
+static DbCursor sCursor;
+static DbColumnValue sRecord[24];
 
 /* While set, fn_8007F6F8 updates only the record and skips the per-column
    store; fn_8007F394 writes the whole record back when it clears. */
@@ -69,13 +69,13 @@ extern "C" {
 
 static void fn_8007F3D8(void);
 
-static inline int WriteRecord(Object_8007A334 *pCursor,
-                              ColumnValue_802D6424 *pList)
+static inline int WriteRecord(DbCursor *pCursor,
+                              DbColumnValue *pList)
 {
     Expression_8007F19C expression;
     Result_8007F19C result;
     Table_8007F19C tables[2];
-    ColumnValue_802D6424 key[2];
+    DbColumnValue key[2];
 
     key[0].Set(-1, pCursor->mUnknown12, 0);
     key[1].SetEnd();
@@ -92,12 +92,12 @@ static inline int WriteRecord(Object_8007A334 *pCursor,
 
 static void fn_8007F12C(void)
 {
-    fn_8007A334(&sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
+    DbCursorOpen(&sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
 }
 
 static int fn_8007F174(void)
 {
-    return fn_8007A3C4(&sCursor);
+    return DbCursorClose(&sCursor);
 }
 
 /* Writes the whole record back to the row the cursor's key column selects. */
@@ -109,7 +109,7 @@ static int fn_8007F19C(void)
 /* Fills the record with the defaults and replaces them with the stored row. */
 static int fn_8007F298(void)
 {
-    ColumnValue_802D6424 *pEnd;
+    DbColumnValue *pEnd;
     int i;
 
     for (i = 0; i < 23; i++) {
@@ -152,7 +152,7 @@ void fn_8007F394(int defer)
 /* Resets every option to its default and stores the result. */
 static void fn_8007F3D8(void)
 {
-    ColumnValue_802D6424 *pEnd;
+    DbColumnValue *pEnd;
     int mode;
     int i;
 
@@ -180,7 +180,7 @@ int fn_8007F548(void)
     unsigned char reset[23] = {
         1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
     };
-    ColumnValue_802D6424 *pEnd;
+    DbColumnValue *pEnd;
     int i;
 
     for (i = 0; i < 23; i++) {
@@ -247,7 +247,7 @@ int fn_8007F828(int id)
     if ((unsigned int)id <= 22) {
         if (fn_8017F584() == 8) {
             override = 1;
-            if (fn_80027DF0() != 0 && lbl_803EB688 != 0) {
+            if (FELoopIsMainFEActive() != 0 && lbl_803EB688 != 0) {
                 unsigned short state;
                 unsigned short other;
 

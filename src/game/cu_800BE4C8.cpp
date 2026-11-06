@@ -6,9 +6,9 @@
 extern "C" {
 int fn_801486A0(void);
 int fn_800B6644(int index);
-int fn_8002B59C(void);
-int fn_8002B5A8(void);
-void fn_8002B5A4(int value);
+int VptManagerIsMarketCamOn(void);
+int VptManagerGetPassIcons(void);
+void VptManagerSetPassIcons(int value);
 void fn_8015A0D0(int value);
 void fn_8017D7C4(const char *pText);
 int fn_800A7FD8(void);
@@ -29,8 +29,8 @@ void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_800BE8E4(int team);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801481B0(void);
-void fn_80148108(int mode);
+int PassIconsAreShown(void);
+void PassIconsShow(int mode);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6868(int a, int b, int c, int d);
 
@@ -45,10 +45,10 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
         return;
     }
     team = fn_800B6644(a);
-    if (fn_8002B59C() && msg == 14 && value == 1.0f) {
-        fn_8002B5A4(fn_8002B5A8() == 0);
-        fn_8015A0D0(fn_8002B5A8() == 0);
-        if (fn_8002B5A8()) {
+    if (VptManagerIsMarketCamOn() && msg == 14 && value == 1.0f) {
+        VptManagerSetPassIcons(VptManagerGetPassIcons() == 0);
+        fn_8015A0D0(VptManagerGetPassIcons() == 0);
+        if (VptManagerGetPassIcons()) {
             fn_8017D7C4("MarketCam-Pass Icons On");
         } else {
             fn_8017D7C4("MarketCam-Pass Icons Off");
@@ -142,8 +142,8 @@ extern "C" void fn_800BE944(int index, int a, unsigned int msg, float value)
             }
             break;
         default:
-            if (lbl_803EABA8->mSlots[index].mUnknown0 == 4 && index == fn_80178320() && fn_801481B0() == 0) {
-                fn_80148108(1);
+            if (lbl_803EABA8->mSlots[index].mUnknown0 == 4 && index == fn_80178320() && PassIconsAreShown() == 0) {
+                PassIconsShow(1);
             }
             break;
         }

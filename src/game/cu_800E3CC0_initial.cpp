@@ -1,6 +1,6 @@
 #include "game/State_800E4494.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_80227638.h"

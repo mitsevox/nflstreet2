@@ -1,3 +1,7 @@
+/* Low-level file I/O: opens files on the disc, memory card or host device, runs the queue of
+   asynchronous reads and writes, and shows the Nintendo disc error screens (cover open, wrong
+   disc, read error) until the drive recovers. */
+
 #include <dolphin/gx/GXManage.h>
 #include <dolphin/pad.h>
 #include <dolphin/dvd.h>
@@ -12,11 +16,11 @@
 #include "engine/Font.h"
 
 /* Text position handed to the font renderer as a float vector. */
-typedef struct FontPos_801C9DD8 {
+typedef struct FileFontPos_t {
     float x;
     float y;
     float z;
-} FontPos_801C9DD8;
+} FileFontPos_t;
 #include "game/fn_801C68FC.h"
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
@@ -24,7 +28,7 @@ typedef struct FontPos_801C9DD8 {
 #include "engine/cu_801C2EB4.h"
 #include "engine/llglib.h"
 #include "engine/llmatrix.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 extern FileEntry_801C8F14 *lbl_803EBC24;
 extern Lock_801F8014 *lbl_803EBC28;
@@ -63,29 +67,29 @@ void fn_801CB8C8(int fileNo);
 int fn_801CB92C(int fileNo, unsigned int offset, int whence);
 unsigned int fn_801CBA0C(int fileNo, unsigned char *pDst, unsigned int size);
 unsigned int fn_801CBAD8(int fileNo, unsigned char *pSrc, unsigned int size);
-void fn_801CBC1C(int count);
-void fn_801CBC20(void);
-int fn_801CBC24(const char *pName, int mode);
-void fn_801CBC2C(int handle);
-int fn_801CBC30(int handle, void *pDst, int size);
-int fn_801CBC38(int handle, const void *pSrc, int size);
-int fn_801CBC40(int handle, int offset, int whence);
-int fn_801CBC48(int handle);
+void FileHostInit(int count);
+void FileHostShutdown(void);
+int FileHostOpen(const char *pName, int mode);
+void FileHostClose(int handle);
+int FileHostRead(int handle, void *pDst, int size);
+int FileHostWrite(int handle, const void *pSrc, int size);
+int FileHostLSeek(int handle, int offset, int whence);
+int FileHostGetSize(int handle);
 void fn_801CEA7C(unsigned char clear);
 void fn_801CE908(unsigned char enable);
 void fn_801CE82C(void);
 void fn_8024A9EC(float (*pMtx)[4]);
 void fn_802523A4(float (*pMtx)[4], int type);
 
-static int fn_801CA180(int devType);
-int fn_801CA530(int handle, int pos, void *pBuffer, int size);
-int fn_801CA648(int handle, int pos, void *pBuffer, int size);
-int fn_801CA504(const char *pName);
-static int fn_801CA528(const char *pName, int mode);
-void fn_801CAB30(void);
-void fn_801CAF24(void);
+static int _FileStartIO(int devType);
+int FilePerformRead(int handle, int pos, void *pBuffer, int size);
+int FilePerformWrite(int handle, int pos, void *pBuffer, int size);
+int FileOpenWriteStream(const char *pName);
+static int _FileOpenWriteStream(const char *pName, int mode);
+void FileAsyncCheckError(void);
+void FileDebugProcess(void);
 
-static int fn_801C9DD8(int device, const char *pName, int mode)
+static int _FileOpenStream(int device, const char *pName, int mode)
 {
     int handle;
     int size;
@@ -100,10 +104,10 @@ static int fn_801C9DD8(int device, const char *pName, int mode)
     size = 0;
     switch (device) {
     case 4:
-        if (!(handle = fn_801CBC24(pName, mode))) {
+        if (!(handle = FileHostOpen(pName, mode))) {
             error = 0xA0003;
         } else {
-            size = fn_801CBC48(handle);
+            size = FileHostGetSize(handle);
         }
         break;
     case 1:
@@ -159,7 +163,7 @@ static int fn_801C9DD8(int device, const char *pName, int mode)
     return i;
 }
 
-static int fn_801CA020(FileAsync_801C8F14 *pAsync)
+static int _FileStartAsyncRequest(FileAsync_801C8F14 *pAsync)
 {
     int result = 0;
     int error = 0;
@@ -178,7 +182,7 @@ static int fn_801CA020(FileAsync_801C8F14 *pAsync)
             }
             lbl_803EBC3C = pAsync;
             pAsync->mState = 1;
-            if ((result = fn_801CA530(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) < 0) {
+            if ((result = FilePerformRead(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) < 0) {
                 pAsync->mState = busy;
                 if (!(error = fn_801F7C88())) {
                     error = 0xA0007;
@@ -188,7 +192,7 @@ static int fn_801CA020(FileAsync_801C8F14 *pAsync)
         break;
     case 2:
         lbl_803EBC24[pAsync->mHandle].mAsyncPos = pAsync->mPos;
-        if ((result = fn_801CA648(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) >= 0) {
+        if ((result = FilePerformWrite(pAsync->mHandle, pAsync->mPos, pAsync->mpBuffer, pAsync->mSize)) >= 0) {
             pAsync->mState = 1;
         } else if (!(error = fn_801F7C88())) {
             error = 0xA0008;
@@ -199,7 +203,7 @@ static int fn_801CA020(FileAsync_801C8F14 *pAsync)
     return result;
 }
 
-static int fn_801CA180(int devType)
+static int _FileStartIO(int devType)
 {
     int found = 0;
     FileAsync_801C8F14 *pAsync;
@@ -212,13 +216,13 @@ static int fn_801CA180(int devType)
         }
     }
     if (found) {
-        fn_801CA020(pAsync);
+        _FileStartAsyncRequest(pAsync);
     }
     fn_801F809C(&lbl_803D5188);
     return found;
 }
 
-void fn_801CA224(FileAsync_801C8F14 *pAsync)
+void _FileProcessRequestFinish(FileAsync_801C8F14 *pAsync)
 {
     int done = 1;
     int devType = lbl_803EBC24[pAsync->mHandle].mDevType;
@@ -242,20 +246,20 @@ void fn_801CA224(FileAsync_801C8F14 *pAsync)
         }
     }
     if (!busy) {
-        fn_801CA180(devType);
+        _FileStartIO(devType);
     }
     fn_801F809C(&lbl_803D5188);
 }
 
-static void fn_801CA31C(int result)
+static void _FileCDVDCallback(int result)
 {
     fn_801F8014(&lbl_803D5188);
     lbl_803EBC40 = 1;
-    fn_801CA224(lbl_803EBC3C);
+    _FileProcessRequestFinish(lbl_803EBC3C);
     fn_801F809C(&lbl_803D5188);
 }
 
-int fn_801CA364(const char *pName, int device, const char *pPrefix)
+int FileOpenhDevice(const char *pName, int device, const char *pPrefix)
 {
     int handle = 0;
     int error = 0;
@@ -266,7 +270,7 @@ int fn_801CA364(const char *pName, int device, const char *pPrefix)
         char path[128] = "";
 
         fn_801C92B8(path, pPrefix, pName, device);
-        handle = fn_801C9DD8(device, path, 0);
+        handle = _FileOpenStream(device, path, 0);
         if (handle < 0) {
             error = fn_801F7C88();
         }
@@ -274,13 +278,13 @@ int fn_801CA364(const char *pName, int device, const char *pPrefix)
     }
     case 2:
     case 3:
-        handle = fn_801C9DD8(device, pName, 3);
+        handle = _FileOpenStream(device, pName, 3);
         if (handle < 0) {
             error = fn_801F7C88();
         }
         break;
     case 0x2A:
-        handle = fn_801CA504(pName);
+        handle = FileOpenWriteStream(pName);
         break;
     case 5:
     default:
@@ -294,7 +298,7 @@ int fn_801CA364(const char *pName, int device, const char *pPrefix)
     return handle;
 }
 
-int fn_801CA468(int handle)
+int FileCloseStream(int handle)
 {
     int error = 0;
 
@@ -302,7 +306,7 @@ int fn_801CA468(int handle)
     lbl_803EBC24[handle].mInUse = 0;
     switch (lbl_803EBC24[handle].mDevType) {
     case 4:
-        fn_801CBC2C(lbl_803EBC24[handle].mDevHandle);
+        FileHostClose(lbl_803EBC24[handle].mDevHandle);
         break;
     case 1:
         fn_801CB4A0(lbl_803EBC24[handle].mDevHandle);
@@ -315,17 +319,17 @@ int fn_801CA468(int handle)
     return error;
 }
 
-int fn_801CA504(const char *pName)
+int FileOpenWriteStream(const char *pName)
 {
-    return fn_801CA528(pName, 4);
+    return _FileOpenWriteStream(pName, 4);
 }
 
-static int fn_801CA528(const char *pName, int mode)
+static int _FileOpenWriteStream(const char *pName, int mode)
 {
     return 0;
 }
 
-int fn_801CA530(int handle, int pos, void *pBuffer, int size)
+int FilePerformRead(int handle, int pos, void *pBuffer, int size)
 {
     int result = 0;
     int error = 0;
@@ -339,8 +343,8 @@ int fn_801CA530(int handle, int pos, void *pBuffer, int size)
         }
         break;
     case 4:
-        fn_801CBC40(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBC30(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileHostLSeek(lbl_803EBC24[handle].mDevHandle, pos, 0);
+        if ((result = FileHostRead(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0007;
         } else {
             result = size;
@@ -361,7 +365,7 @@ int fn_801CA530(int handle, int pos, void *pBuffer, int size)
     return result;
 }
 
-int fn_801CA648(int handle, int pos, void *pBuffer, int size)
+int FilePerformWrite(int handle, int pos, void *pBuffer, int size)
 {
     int result = 0;
     int error;
@@ -371,8 +375,8 @@ int fn_801CA648(int handle, int pos, void *pBuffer, int size)
     switch (lbl_803EBC24[handle].mDevType) {
     case 1:
     case 4:
-        fn_801CBC40(lbl_803EBC24[handle].mDevHandle, pos, 0);
-        if ((result = fn_801CBC38(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
+        FileHostLSeek(lbl_803EBC24[handle].mDevHandle, pos, 0);
+        if ((result = FileHostWrite(lbl_803EBC24[handle].mDevHandle, pBuffer, size)) < 0) {
             error = 0xA0008;
         } else {
             result = size;
@@ -394,7 +398,7 @@ int fn_801CA648(int handle, int pos, void *pBuffer, int size)
     return result;
 }
 
-int fn_801CA760(FileAsync_801C8F14 *pAsync)
+int FileQueueAsyncRequest(FileAsync_801C8F14 *pAsync)
 {
     int busy = 0;
     FileAsync_801C8F14 *pNode;
@@ -411,7 +415,7 @@ int fn_801CA760(FileAsync_801C8F14 *pAsync)
     if (!busy) {
         lbl_803ECEE8 = lbl_803EBC24[pAsync->mHandle].mDevType;
         if (lbl_803ECEE8 != 4) {
-            fn_801CA180(lbl_803ECEE8);
+            _FileStartIO(lbl_803ECEE8);
         }
     }
     fn_801F809C(&lbl_803D55C0);
@@ -420,7 +424,7 @@ int fn_801CA760(FileAsync_801C8F14 *pAsync)
     return 0;
 }
 
-void fn_801CA834(int handle)
+void FileAsyncWaitStream(int handle)
 {
     int busy;
     FileAsync_801C8F14 *pAsync;
@@ -429,7 +433,7 @@ void fn_801CA834(int handle)
     do {
         fn_801F8768();
         busy = 0;
-        fn_801CAB30();
+        FileAsyncCheckError();
         fn_801F8014(&lbl_803D5188);
         for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = pNext) {
             pNext = fn_801C6C84(lbl_803ED62C, pAsync);
@@ -439,18 +443,18 @@ void fn_801CA834(int handle)
             }
         }
         if (busy) {
-            fn_801CAF24();
+            FileDebugProcess();
         }
         fn_801F809C(&lbl_803D5188);
     } while (busy);
 }
 
-void fn_801CA8D4(const char *pName)
+void FileAsyncSetErrorGameName(const char *pName)
 {
     lbl_803EBC44 = pName;
 }
 
-static void fn_801CA8DC(FontPos_801C9DD8 *pPos, unsigned int status)
+static void _FileDisplayErrorString(FileFontPos_t *pPos, unsigned int status)
 {
     switch (status) {
     case 5:
@@ -493,10 +497,10 @@ static void fn_801CA8DC(FontPos_801C9DD8 *pPos, unsigned int status)
     }
 }
 
-void fn_801CAB30(void)
+void FileAsyncCheckError(void)
 {
     float mtx[3][4];
-    FontPos_801C9DD8 pos = {0.0f, 0.0f, -0.4f};
+    FileFontPos_t pos = {0.0f, 0.0f, -0.4f};
     GXColor white = {255, 255, 255, 255};
     GXColor black = {0, 0, 0, 0};
     int status;
@@ -540,7 +544,7 @@ void fn_801CAB30(void)
         fn_801CEA7C(1);
         fn_801CE908(0);
         fn_801CE2B8(0);
-        fn_801D0470(fn_80228668());
+        fn_801D0470(VptGetMatrixStack());
         fn_801D0508();
         fn_801D0D94(0.0014705883f, -0.002232143f, 1.0f);
         do {
@@ -551,7 +555,7 @@ void fn_801CAB30(void)
             fn_801CD2A4();
             fn_801CD308(0, lbl_802F4A74);
             fn_801CDD18();
-            fn_801CA8DC(&pos, status);
+            _FileDisplayErrorString(&pos, status);
             fn_801CE82C();
         } while (current == status);
         fn_801CD2A4();
@@ -567,7 +571,7 @@ void fn_801CAB30(void)
     }
 }
 
-void fn_801CAEC8(void)
+void FileInitErrorMessages(void)
 {
     if (!lbl_803EBC42) {
         fn_801CCF74(0, 0, (FontHeader_801CCA64 *)lbl_802F4AC0);
@@ -577,7 +581,7 @@ void fn_801CAEC8(void)
     }
 }
 
-void fn_801CAF24(void)
+void FileDebugProcess(void)
 {
     FileAsync_801C8F14 *pFirst = 0;
     int found = 0;
@@ -587,7 +591,7 @@ void fn_801CAF24(void)
     for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
         if (pAsync->mState == 1) {
             if (lbl_803EBC24[pAsync->mHandle].mDevType == 4) {
-                fn_801CA224(pAsync);
+                _FileProcessRequestFinish(pAsync);
             }
             found = 1;
             break;
@@ -597,12 +601,12 @@ void fn_801CAF24(void)
         }
     }
     if (!found && pFirst && pFirst->mState == 0 && lbl_803EBC24[pFirst->mHandle].mDevType == 4) {
-        fn_801CA180(4);
+        _FileStartIO(4);
     }
     fn_801F809C(&lbl_803D5188);
 }
 
-void fn_801CB00C(FileConfig_801C8F14 *pConfig)
+void FileLLInit(FileConfig_801C8F14 *pConfig)
 {
     FileDevTable_801C8F14 *pTable;
     FileDevList_801C8F14 *pList;
@@ -617,7 +621,7 @@ void fn_801CB00C(FileConfig_801C8F14 *pConfig)
         for (j = 0; j < pList->mCount; j++) {
             if (pList->mDevice[j] == 1) {
                 done = 1;
-                fn_801CB2E0(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, fn_801CA31C);
+                fn_801CB2E0(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
                 lbl_803EBC41 = 0;
                 break;
             }
@@ -628,26 +632,26 @@ void fn_801CB00C(FileConfig_801C8F14 *pConfig)
     }
     fn_801CB61C();
     if (lbl_803D51A8.mHostEnabled) {
-        fn_801CBC1C(lbl_803D51A8.mNumFiles);
+        FileHostInit(lbl_803D51A8.mNumFiles);
     }
 }
 
-void fn_801CB0EC(void)
+void FileLLShutdown(void)
 {
     if (lbl_803D51A8.mHostEnabled) {
-        fn_801CBC20();
+        FileHostShutdown();
     }
     fn_801CB648();
 }
 
-int fn_801CB120(void)
+int FileHostCheckActive(void)
 {
     fn_801F8768();
-    fn_801CAB30();
+    FileAsyncCheckError();
     return lbl_803EBC41;
 }
 
-int fn_801CB148(int handle)
+int FileGetSize(int handle)
 {
     int size;
 
@@ -656,18 +660,18 @@ int fn_801CB148(int handle)
         fn_801CB5A8(lbl_803EBC24[handle].mDevHandle, 0, &size);
         break;
     case 4:
-        size = fn_801CBC48(lbl_803EBC24[handle].mDevHandle);
+        size = FileHostGetSize(lbl_803EBC24[handle].mDevHandle);
         break;
     }
     return size;
 }
 
-int fn_801CB1AC(void)
+int FileCompareModificationTime(void)
 {
     return 0;
 }
 
-int fn_801CB1B4(void)
+int FileSetLength(void)
 {
     return 0;
 }

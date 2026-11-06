@@ -1,4 +1,6 @@
-int fn_8027EFAC(int year)
+/* Calendar helpers: leap years and the number of days in a year or a month. */
+
+int DateIsYearLeap(int year)
 {
     int leap = 0;
 
@@ -12,12 +14,12 @@ int fn_8027EFAC(int year)
     return leap;
 }
 
-int fn_8027F000(int year)
+int DateGetNumDaysInYear(int year)
 {
-    return fn_8027EFAC(year) ? 366 : 365;
+    return DateIsYearLeap(year) ? 366 : 365;
 }
 
-int fn_8027F030(int month, int year)
+int DateGetNumDaysInMonth(int month, int year)
 {
     int days = 31;
 
@@ -32,7 +34,7 @@ int fn_8027F030(int month, int year)
         days = 31;
         break;
     case 2:
-        days = fn_8027EFAC(year) ? 29 : 28;
+        days = DateIsYearLeap(year) ? 29 : 28;
         break;
     case 4:
     case 6:

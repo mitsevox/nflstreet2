@@ -1,4 +1,4 @@
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "game/cu_80163674.h"
 #include "game/fn_8018AB0C.h"
 
@@ -33,7 +33,7 @@ struct Object_8021CA3C {
 };
 
 extern "C" {
-Object_80163788 *fn_801DD168(int type, int flags, Desc_8018A978 *pDesc);
+Object_80163788 *ObjNew(int type, int flags, Desc_8018A978 *pDesc);
 Object_8021CA3C *fn_8021CA3C(void);
 void fn_8018A8C8(int a);
 void fn_801CE9E0(int a);
@@ -57,7 +57,7 @@ void fn_8018A978(Object_8018A978 *p)
     desc.mUnknown16 = p->mUnknown16;
     desc.mUnknown28 = p->mUnknown28;
     desc.mUnknown40 = p->mUnknown40;
-    p->mpUnknown52 = fn_801DD168(19, 0, &desc);
+    p->mpUnknown52 = ObjNew(19, 0, &desc);
 }
 
 void fn_8018AA44(Object_8018A978 *p, int *pFlag)
@@ -77,7 +77,7 @@ void fn_8018AA44(Object_8018A978 *p, int *pFlag)
 
 void fn_8018AAE4(Object_8018A978 *p)
 {
-    fn_80228D58((int)p->mpUnknown52);
+    VptTrashObject((int)p->mpUnknown52);
 }
 
 void fn_8018AB08(Object_8018A978 *p, int a, int b)

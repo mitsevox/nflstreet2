@@ -3,15 +3,15 @@
 #include <string.h>
 
 #include "game/bitstream.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 #include "game/Object_80040818.h"
-#include "game/cu_80041210.h"
-#include "game/cu_80136B1C.h"
+#include "game/BigObjInst.h"
+#include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
-#include "game/fn_80054138.h"
-#include "game/fn_801EBC18.h"
+#include "game/LevelSurface.h"
+#include "engine/llquat.h"
 
 extern "C" {
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
@@ -22,11 +22,11 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
-void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked);
+void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked);
 void fn_8004AA34(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count);
-void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
+void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t);
-void fn_8004AF84(Extra_8004149C *pExtra);
+void fn_8004AF84(BigObjPhysics_t *pExtra);
 void fn_8004CBE8(void);
 void fn_8004D0F4(int handle);
 void fn_8004D118(int handle);
@@ -48,23 +48,23 @@ void fn_80053A1C(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
-int fn_801DCF0C(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
+int ObjNewType_(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
                 void (*pRelease)(Object_80040818 *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
-Object_80040818 *fn_801DD268(int handle, int type, int a, Desc_800408E4 *pDesc);
-void fn_801DD320(int handle, Object_80040818 *pObject);
-void fn_801DD3AC(int handle, Object_80040818 *pObject, int a);
-void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
-void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
+Object_80040818 *ObjNewInList(int handle, int type, int a, Desc_800408E4 *pDesc);
+void ObjRemoveFromList(int handle, Object_80040818 *pObject);
+void ObjSetPriority(int handle, Object_80040818 *pObject, int a);
+void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
+void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int fn_801F1520(int value);
 int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-void fn_80228D58(Object_80040818 *pObject);
-void fn_80228DD4(void);
-void fn_80228E18(void);
+void VptTrashObject(Object_80040818 *pObject);
+void VptFlushObjectTrash(void);
+void VptFlushObjectTrashSync(void);
 
 int fn_800400CC(Object_80040818 *pObject);
 void fn_800400D4(Object_80040818 *pObject, unsigned int count);
@@ -93,7 +93,7 @@ int fn_800400CC(Object_80040818 *pObject)
    group id, and points each of them back at it. */
 void fn_800400D4(Object_80040818 *pObject, unsigned int count)
 {
-    Object_80041904 *pLinked = pObject->mUnknown472;
+    BigObjInst *pLinked = pObject->mUnknown472;
     unsigned int n = 0;
     unsigned int i;
 
@@ -148,7 +148,7 @@ void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
 
             if (fn_800410E0(pObject) != 0) {
                 fn_8004AF84(pObject->mUnknown472->mUnknown428);
-                fn_8004ABF4(pObject, fn_80041904(i), pStream0, pStream1, pStream2, pStream3, t);
+                fn_8004ABF4(pObject, BigObjInstGet(i), pStream0, pStream1, pStream2, pStream3, t);
             }
             bit = ReadBitStream(pStream1, 1);
             ReadBitStream(pStream0, 1);
@@ -171,7 +171,7 @@ void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
             }
             fn_80030304(pStream1, &rot1.mX, 12, 1024.0f);
             fn_80030304(pStream0, &rot0.mX, 12, 1024.0f);
-            fn_801EC048(&pObject->mRot, &rot0, &rot1, t);
+            QuatSlerp(&pObject->mRot, &rot0, &rot1, t);
             if (pStream2 != 0) {
                 ReadBitStream(pStream2, 1);
                 ReadBitStream(pStream2, 8);
@@ -230,15 +230,15 @@ void fn_800405F0(int handle)
 
     if (lbl_803EA480 != 0) {
         for (i = 0; i < lbl_803EC784; i++) {
-            Object_80041904 *pLinked = lbl_803EA480[i]->mUnknown472;
+            BigObjInst *pLinked = lbl_803EA480[i]->mUnknown472;
 
             if (pLinked->mUnknown184 != 0) {
                 pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
             }
-            fn_801DD320(handle, lbl_803EA480[i]);
-            fn_80228D58(lbl_803EA480[i]);
+            ObjRemoveFromList(handle, lbl_803EA480[i]);
+            VptTrashObject(lbl_803EA480[i]);
         }
-        fn_80228DD4();
+        VptFlushObjectTrash();
         fn_801D2BD0(lbl_803EA480);
         lbl_803EA480 = 0;
     }
@@ -260,7 +260,7 @@ void fn_800406C0(unsigned int flags)
             Object_80040818 *pObject = lbl_803EA480[i];
 
             if (all || ((1 << pObject->mUnknown472->mUnknown188) & flags)) {
-                Object_80041904 *pLinked = pObject->mUnknown472;
+                BigObjInst *pLinked = pObject->mUnknown472;
 
                 if (pLinked->mUnknown184 != 0) {
                     pLinked->mUnknown184(pLinked, pObject, 4);
@@ -275,16 +275,16 @@ void fn_800406C0(unsigned int flags)
 
 void fn_80040788(int handle, int count)
 {
-    fn_801DCF0C(28, sizeof(Object_80040818), count, fn_80040818, fn_80040884);
+    ObjNewType_(28, sizeof(Object_80040818), count, fn_80040818, fn_80040884);
     if (handle != 0) {
-        fn_801DD0C8(handle, 28, 0, fn_800408A4);
+        ObjSetListObjFunc(handle, 28, 0, fn_800408A4);
     }
 }
 
 void fn_800407F0(void)
 {
-    fn_80228E18();
-    fn_801DCF8C(28);
+    VptFlushObjectTrashSync();
+    ObjDelType(28);
 }
 
 void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc)
@@ -317,39 +317,39 @@ int fn_800408A4(Object_80040818 *pObject)
 
 void fn_800408E4(Desc_800408E4 *pDesc, int handle)
 {
-    Object_80041904 *pLinked;
+    BigObjInst *pLinked;
 
     pDesc->mUnknown168 = fn_8004D3A8(pDesc->mUnknown160, pDesc->mName);
     if (pDesc->mUnknown168 == -1) {
         return;
     }
-    lbl_803EA480[lbl_803EC784] = fn_801DD268(handle, 28, 0, pDesc);
-    fn_801DD3AC(handle, lbl_803EA480[lbl_803EC784], 6);
+    lbl_803EA480[lbl_803EC784] = ObjNewInList(handle, 28, 0, pDesc);
+    ObjSetPriority(handle, lbl_803EA480[lbl_803EC784], 6);
     fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, lbl_803EA480[lbl_803EC784]);
     if (fn_801C310C(pDesc->mName, "CROWD") != 0) {
         lbl_803EA480[lbl_803EC784]->mUnknown232_27 = 1;
     }
-    lbl_803EA480[lbl_803EC784]->mUnknown472 = fn_8004149C((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
+    lbl_803EA480[lbl_803EC784]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
     lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown4 = lbl_803EC784;
     fn_8004F754(pDesc->mUnknown168, lbl_803EA480[lbl_803EC784], lbl_803EC784);
     lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown144 = pDesc->mUnknown172;
     lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown148 = pDesc->mUnknown180;
     memset(lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown152, 0, 32);
     lbl_803EA480[lbl_803EC784]->mUnknown308 = pDesc->mUnknown176;
-    lbl_803EA480[lbl_803EC784]->mUnknown332 = fn_80054138(&pDesc->mUnknown132.mUnknown4);
+    lbl_803EA480[lbl_803EC784]->mUnknown332 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
     lbl_803EC784++;
 }
 
-void fn_80040A70(Object_80041904 *pLinked, int index)
+void fn_80040A70(BigObjInst *pLinked, int index)
 {
     Object_80040818 *pObject = lbl_803EA480[index];
 
     if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mUnknown32 != 0 || pLinked->mUnknown428->mUnknown33 != 0)) {
         fn_800B2A14(&pLinked->mUnknown8, &pLinked->mUnknown428->mUnknown32);
-        Angles_801EBC18 angles;
-        fn_801EBC18(&angles, &pLinked->mUnknown96);
+        QuatEulerAngles_t angles;
+        QuatToEuler(&angles, &pLinked->mUnknown96);
         angles.mUnknown8 = pLinked->mUnknown32 + 0x400000;
-        fn_801EBEF8(&pObject->mRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        QuatFromEuler(&pObject->mRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
     } else {
         pObject->mRot.mX = pLinked->mUnknown96;
         pObject->mRot.mY = pLinked->mUnknown100;
@@ -363,7 +363,7 @@ void fn_80040A70(Object_80041904 *pLinked, int index)
         pLinked->mUnknown428->mUnknown56 = pLinked->mUnknown32;
     }
     if (fn_80227594(&pObject->mUnknown336, &pLinked->mUnknown8, 0.05f) == 0) {
-        pObject->mUnknown332 = fn_80054138(&pLinked->mUnknown8);
+        pObject->mUnknown332 = LevelFindArea(&pLinked->mUnknown8);
         pObject->mUnknown336 = pLinked->mUnknown8;
         pObject->mUnknown340 = pLinked->mUnknown12;
     }
@@ -396,7 +396,7 @@ void fn_80040B88(int handle)
     desc.mUnknown180 = 0;
     index = lbl_803EC784;
     fn_800408E4(&desc, handle);
-    fn_800400BC(fn_8013825C(fn_801374BC()), fn_80040F18(index)->mUnknown472);
+    fn_800400BC(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
     fn_8004D818();
     fn_801EEFAC(desc.mUnknown160);
 }
@@ -404,8 +404,8 @@ void fn_80040B88(int handle)
 void fn_80040C90(int handle)
 {
     Desc_800408E4 desc;
-    Level_80054130 *pLevel;
-    Entry_80054130 *pEntry;
+    LevelData_t *pLevel;
+    LevelPlacement_t *pEntry;
     unsigned int i;
     unsigned short first;
 
@@ -419,7 +419,7 @@ void fn_80040C90(int handle)
     }
     desc.mUnknown164 = lbl_803EC78C;
     fn_8004D798();
-    pLevel = fn_80054130();
+    pLevel = LevelGetData();
     for (i = 0; i < pLevel->mUnknown88; i++) {
         pEntry = &pLevel->mUnknown92[i];
 
@@ -438,7 +438,7 @@ void fn_80040C90(int handle)
     first = lbl_803EC784;
     lbl_803EC788 = first;
     for (i = 0; i < pLevel->mUnknown104; i++) {
-        Entry_80054130 *pLinked = &pLevel->mUnknown108[i];
+        LevelPlacement_t *pLinked = &pLevel->mUnknown108[i];
         unsigned short count;
 
         strcpy(desc.mName, &pLevel->mUnknown60[pLinked->mUnknown24 * 24]);

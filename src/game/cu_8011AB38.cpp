@@ -19,7 +19,7 @@ int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011DCA8(unsigned int id);
-void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c);
+void AudmonEventPostArgs(int type, Vector_80039F5C *pPos, int a, int b, int c);
 void fn_800D6C70(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
@@ -100,7 +100,7 @@ extern "C" void fn_8011AB38(void)
                                         p->mFlags &= ~4;
                                         pOther->mFlags &= ~4;
                                         if (fn_8011DCA8(pMoves[j].mKey)) {
-                                            fn_80067DB8(103, &p->mMotion.mPos, p->mId, pOther->mId, 0);
+                                            AudmonEventPostArgs(103, &p->mMotion.mPos, p->mId, pOther->mId, 0);
                                         }
                                     }
                                     break;

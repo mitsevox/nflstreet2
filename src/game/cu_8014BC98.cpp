@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800F06F4.h"
 #include "game/Class_80297C60.h"
@@ -34,7 +34,7 @@ void fn_80178370(void);
 int fn_801783AC(int bit);
 void fn_801790D0(int team, float a, float b);
 void fn_80157514(void);
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
 void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
@@ -327,7 +327,7 @@ void fn_8014C308(State_802A23A8 *p, float dt)
         if (clear || fn_801783AC(13) || fn_801783AC(1)) {
             fn_8009D8CC(5);
         }
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
         int special = 0;
         if (pCarrier) {
             special = pCarrier->mpState->mId == 16;
@@ -369,7 +369,7 @@ void fn_8014C528(void *p)
 
 void fn_8014C5AC(void *p, float dt)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         if (!lbl_803EB2D1 && fn_800C1E40() == 0) {
             fn_80218FC4(lbl_803EB688, 3, 8, 0, 0);
             lbl_803EB2D1 = 1;

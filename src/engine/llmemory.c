@@ -1,18 +1,21 @@
+/* Low-level memory helpers: platform allocation stubs and MemFill, which fills memory with a
+   repeated 1-, 2-, 4-byte or larger pattern. */
+
 #include "engine/llmemory.h"
 
 extern void *memset(void *pDst, int value, unsigned int size);
 extern void *memcpy();
 
-void *fn_801D34C4(unsigned int size)
+void *MemGetMemLL(unsigned int size)
 {
     return 0;
 }
 
-void fn_801D34CC(void *pAddr)
+void MemFreeMemLL(void *pAddr)
 {
 }
 
-int fn_801D34D0(char *pDst, unsigned int size, int value, unsigned int width)
+int MemFill(char *pDst, unsigned int size, int value, unsigned int width)
 {
     char *pPattern;
     char *pFill;

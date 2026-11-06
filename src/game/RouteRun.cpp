@@ -1,0 +1,426 @@
+/* Player state that runs a player toward a target heading and distance, steering around
+   defenders, walls and the sidelines, watching the ball carrier, and starting a sidestep move
+   when the player is open. */
+
+#include <math.h>
+#include "game/Message_800F01CC.h"
+#include "game/Object_80039F5C.h"
+#include "game/LevelData.h"
+#include "game/Object_8017886C.h"
+#include "game/AudmonEvent.h"
+#include "game/Ball.h"
+#include "game/fn_801C1F94.h"
+#include "game/fn_800F06F4.h"
+#include "game/fn_80178D18.h"
+#include "game/fn_802270D4.h"
+#include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
+
+#define MIN(a, b) ((a) <= (b) ? (a) : (b))
+#define MAX(a, b) ((a) >= (b) ? (a) : (b))
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+struct RouteRunBlock_t {
+    float mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    int mUnknown16;
+    char mUnknown20[4];
+    unsigned int mUnknown24;
+    int mUnknown28;
+    unsigned short mUnknown32;
+    unsigned short mUnknown34;
+    char mUnknown36[20];
+    int mUnknown56;
+    unsigned char mUnknown60;
+    unsigned char mUnknown61;
+};
+
+extern "C" {
+void fn_8009A8D4(void *p);
+void fn_8009BD2C(Object_80039F5C *p, int *pRef);
+void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
+void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
+int fn_8009F0B8(Object_80039F5C *p, int angle);
+void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
+int fn_800FD2AC(Object_80039F5C *p);
+int fn_800FD41C(Object_80039F5C *p);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int fn_80112928(Object_80039F5C *p);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+int fn_80178320(void);
+int fn_801783AC(int bit);
+float fn_80178A08(void);
+float fn_80178A44(void);
+int CharSkelGetJointByName(void *p, const char *pName);
+int fn_801CFE40(float y, float x);
+int MathAngleDiff(int a, int b);
+void fn_80227690(void *pOut, void *pA, void *pB);
+float fn_80237260(int stream);
+float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
+void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
+                 float *pT);
+void fn_800FD724(Object_80039F5C *p);
+}
+
+static float _RouteRun_fEdgeMargin = 4.0f;
+static float _RouteRun_fAvoidRadius = 5.0f;
+static float _RouteRun_fAvoidConeDeg = 40.0f;
+static float _RouteRun_fAvoidTurnDeg = 30.0f;
+static float _RouteRun_fAvoidTurnWideDeg = 50.0f;
+
+extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+{
+    int angle = pBlock->mUnknown16;
+    int found = 0;
+    unsigned char i;
+    unsigned int count = fn_80178D18(fn_80178320());
+
+    for (i = 0; i < count; i++) {
+        int check = 0;
+        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+
+        switch (pOther->mpState->mId) {
+        case 10:
+        case 11:
+        case 58:
+        case 85:
+        case 92:
+            check = 1;
+            break;
+        }
+        if (pOther->mFlags & 0x800) {
+            check = 1;
+        }
+        if (pOther->mFlags & 0x4000) {
+            check = 1;
+        }
+        if (check && !(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) > _RouteRun_fAvoidRadius)) {
+            Point_8017886C delta;
+            int dir;
+
+            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            dir = fn_801CFE40(delta.mY, delta.mX);
+            if (MathAngleDiff(dir, angle) < (int)(_RouteRun_fAvoidConeDeg * 46603.38f)) {
+                int offset = (int)(p->mUnknown560.mFlags.mBytes[0] ? _RouteRun_fAvoidTurnWideDeg : _RouteRun_fAvoidTurnDeg);
+
+                if (p->mpState[1].mId == 19) {
+                    if ((p->mpState[1].mUnknown2 * 0x20000 - angle & 0xFFFFFF) > 0x800000) {
+                        found = 1;
+                        angle -= (int)(offset * 46603.38f);
+                    } else {
+                        found = 1;
+                        angle += (int)(offset * 46603.38f);
+                    }
+                } else if ((dir - angle & 0xFFFFFF) > 0x800000) {
+                    found = 1;
+                    angle += (int)(offset * 46603.38f);
+                } else {
+                    found = 1;
+                    angle -= (int)(offset * 46603.38f);
+                }
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+    if (found
+        && ((p->mMotion.mPos.mX > fn_80178A08() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
+            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - fn_80178A08() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF))) {
+        found = 0;
+    }
+    if (found) {
+        pBlock->mUnknown16 = angle;
+    } else {
+        pBlock->mUnknown16 = pBlock->mUnknown56;
+    }
+    return found;
+}
+
+extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+{
+    int angle = pBlock->mUnknown16;
+    Object_80039F5C *pBest = 0;
+    int found = 0;
+    int bestDiff = 0x1000000;
+    unsigned int count = 7;
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+
+        switch (pOther->mUnknown2914) {
+        case 10:
+        case 11:
+        case 12: {
+            Point_8017886C delta;
+            int diff;
+
+            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            diff = fn_801CFE40(delta.mY, delta.mX);
+            diff = MathAngleDiff(p->mMotion.mUnknown32, diff);
+            if (diff <= bestDiff) {
+                bestDiff = diff;
+                pBest = pOther;
+            }
+            break;
+        }
+        }
+    }
+    if (pBest) {
+        float dist = fn_8022781C(&p->mMotion.mPos, &pBest->mMotion.mPos);
+        float value = 17.0f;
+
+        value += (3.75f - dist) * 2.1333334f;
+        value = CLAMP(value, 17.0f, 25.0f);
+
+        if (dist < 3.75f && bestDiff <= 0xC16C0) {
+            if (pBest->mMotion.mPos.mX <= p->mMotion.mPos.mX) {
+                angle -= 0x133333;
+            } else {
+                angle += 0x133333;
+            }
+            found = 1;
+        }
+        if ((p->mMotion.mPos.mX > fn_80178A08() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
+            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - fn_80178A08() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)) {
+            found = 0;
+        }
+        if (found) {
+            pBlock->mUnknown16 = angle;
+        } else {
+            pBlock->mUnknown16 = pBlock->mUnknown56;
+        }
+    } else {
+        found = 0;
+    }
+    return found;
+}
+
+extern "C" int RouteRunAvoidWalls(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+{
+    int found = 0;
+    LevelData_t *pLevel = LevelGetData();
+    unsigned int i;
+
+    for (i = 0; i < pLevel->mUnknown136; i++) {
+        Vector_80039F5C a;
+        Vector_80039F5C b;
+        Vector_80039F5C nearest;
+        float dist;
+        float t;
+
+        LevelGetWallBase(&pLevel->mUnknown140[i], &a, &b);
+        b.mZ = 0.0f;
+        a.mZ = 0.0f;
+        fn_80227970(&a, &b, &p->mMotion.mPos, &nearest, &dist, &t);
+        if (dist < _RouteRun_fEdgeMargin * _RouteRun_fEdgeMargin) {
+            Point_8017886C delta;
+            int dir;
+
+            fn_80227690(&delta, &nearest, &p->mMotion.mPos);
+            dir = fn_801CFE40(delta.mY, delta.mX);
+            if (MathAngleDiff(dir, p->mMotion.mUnknown32) <= 0x3FFFFF) {
+                if ((dir - p->mMotion.mUnknown32 & 0xFFFFFF) <= 0x7FFFFF) {
+                    pBlock->mUnknown16 = dir - 0x438E39 & 0xFFFFFF;
+                } else {
+                    pBlock->mUnknown16 = dir + 0x438E39 & 0xFFFFFF;
+                }
+                found = 1;
+                break;
+            }
+        }
+    }
+    return found;
+}
+
+extern "C" int RouteRunPostTurn(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+{
+    int result = 0;
+
+    if (fn_801BE648(p->mpUnknown792) == 86) {
+        fn_800F0BF8(p, 4, pBlock->mUnknown16);
+        result = 1;
+    }
+    return result;
+}
+
+extern "C" int RouteRunIsOpen(Object_80039F5C *p)
+{
+    float dist;
+
+    if (fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), 0x11C71C, &dist, 1) && dist < 5.0f) {
+        return 0;
+    }
+    if (fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &dist, 0) && dist < 2.5f) {
+        return 0;
+    }
+    return 1;
+}
+
+extern "C" int RouteRunCanSprint(Object_80039F5C *p, RouteRunBlock_t *pBlock)
+{
+    unsigned int angle = pBlock->mUnknown16 & 0xFFFFFF;
+    unsigned int facing = p->mMotion.mFacing & 0xFFFFFF;
+    int ok = pBlock->mUnknown12 > 0.72f && facing + 0x71C70 <= 0x8E38E1 && angle + 0x71C70 <= 0x8E38E1;
+
+    if (ok && MathAngleDiff(p->mUnknown512.mUnknown4, p->mMotion.mUnknown32) > 0x155555) {
+        ok = 0;
+    }
+    if (ok && p->mpState[1].mId == 19) {
+        Point_8017886C delta;
+
+        delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
+        delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
+        if (fn_802270A4(&delta) < 1.0f
+            && MathAngleDiff(p->mMotion.mUnknown32, p->mpState[1].mUnknown2 << 17 & 0xFFFFFF) > 0x155555) {
+            ok = 0;
+        }
+    }
+    return ok;
+}
+
+extern "C" int RouteRunEnter(Object_80039F5C *p)
+{
+    RouteRunBlock_t *pBlock = (RouteRunBlock_t *)&p->mUnknown336;
+    int result;
+    int moved;
+    float margin;
+
+    fn_8009A8D4(pBlock->mUnknown36);
+    result = fn_800FD2AC(p);
+    pBlock->mUnknown12 = MIN(pBlock->mUnknown12, 1.0f);
+    moved = 0;
+    if (fabs(pBlock->mUnknown0) > fn_80178A08() - 3.0f) {
+        pBlock->mUnknown0 = MIN(pBlock->mUnknown0, fn_80178A08() - 3.0f);
+        pBlock->mUnknown0 = MAX(pBlock->mUnknown0, 3.0f - fn_80178A08());
+        moved = 1;
+    }
+    unsigned char *pInfo = &p->mpState[1].mId;
+
+    if (pInfo[0] == 20 && (pInfo[2] == 5 || pInfo[2] == 7)) {
+        margin = 4.5f;
+    } else {
+        margin = 3.0f;
+    }
+    if (pBlock->mUnknown4 > fn_80178A44() - margin) {
+        pBlock->mUnknown4 = MIN(pBlock->mUnknown4, fn_80178A44() - margin);
+        moved = 1;
+    }
+    if (moved == 1) {
+        Point_8017886C delta;
+
+        delta.mX = pBlock->mUnknown0;
+        delta.mY = pBlock->mUnknown4;
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+        pBlock->mUnknown8 = fn_802270A4(&delta);
+        pBlock->mUnknown16 = fn_801CFE40(delta.mY, delta.mX);
+    }
+    pBlock->mUnknown24 = 0;
+    pBlock->mUnknown60 = 0;
+    pBlock->mUnknown61 = 0;
+    pBlock->mUnknown34 = 0;
+    pBlock->mUnknown32 = 0;
+    pBlock->mUnknown28 = (int)((int)((1.0f - p->mRatings[3] / 255.0f) * 5.0f) + 2.0f);
+    pBlock->mUnknown56 = pBlock->mUnknown16;
+    if (RouteRunPostTurn(p, pBlock)) {
+        result = 0;
+    }
+    return result;
+}
+
+extern "C" int RouteRunUpdate(Object_80039F5C *p)
+{
+    RouteRunBlock_t *pBlock = (RouteRunBlock_t *)&p->mUnknown336;
+    int result;
+
+    BallGetCurrent();
+    if (fn_8010A2DC(p, 0, -1) == 1) {
+        pBlock->mUnknown61 = 1;
+        pBlock->mUnknown60 = 0;
+        p->mUnknown512.mUnknown15 = 0;
+    }
+    pBlock->mUnknown24++;
+    if (!(p->mFlags & 0x4000) && BallGetCurrentHolder() && fn_801783AC(0)) {
+        Message_800F01CC message;
+
+        fn_801C1F94(&message, 0, 4);
+        message.mId = 33;
+        fn_800F053C(0, p->mpState, &message, p);
+        return 1;
+    }
+    if (!RouteRunSidestepDefender(p, pBlock)) {
+        RouteRunAvoidDefenders(p, pBlock);
+    }
+    RouteRunAvoidWalls(p, pBlock);
+    result = fn_800FD41C(p);
+    if (RouteRunCanSprint(p, pBlock)) {
+        int move = 1;
+
+        if (pBlock->mUnknown60 == 0 && (pBlock->mUnknown34 == 18 || pBlock->mUnknown34 == 19)
+            && fn_80237260(0) < 0.5f) {
+            move = pBlock->mUnknown34;
+        }
+        p->mUnknown512.mUnknown15 = move;
+    } else {
+        p->mUnknown512.mUnknown15 = pBlock->mUnknown34;
+    }
+    if (pBlock->mUnknown60 == 1 && --pBlock->mUnknown32 & 0x8000) {
+        pBlock->mUnknown60 = 0;
+        pBlock->mUnknown34 = 0;
+    }
+    if (!result) {
+        if (--pBlock->mUnknown28 < 0 || fn_8009F0B8(p, 0x2AAAAA)) {
+            pBlock->mUnknown28 = (int)((int)((1.0f - p->mRatings[3] / 255.0f) * 5.0f) + 2.0f);
+            if (fn_80112928(p)) {
+                result = 1;
+            }
+        }
+        if (!result && pBlock->mUnknown60 == 0 && p->mUnknown16 != 2 && fn_800F06F4(0, p->mpState, 19, 1) == 0xFFFF) {
+            Vector_80039F5C delta;
+            float dist;
+
+            delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
+            delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
+            dist = fn_802270A4(&delta);
+            if (dist > 2.5f && dist < 6.0f) {
+                Object_80039F5C *pCarrier;
+
+                if (pBlock->mUnknown61 == 0 && MathAngleDiff(pBlock->mUnknown16, p->mMotion.mFacing) <= 0x38E37
+                    && RouteRunIsOpen(p) == 1 && BallGetCurrentHolder()) {
+                    int dir;
+                    int side;
+
+                    BallGetPosition(BallGetCurrent(), &delta);
+                    fn_80227690(&delta, &delta, &p->mMotion.mPos);
+                    dir = fn_801CFE40(delta.mY, delta.mX);
+                    side = MathAngleDiff(p->mMotion.mFacing, dir + 0x400000) <= 0x3FFFFF;
+                    pBlock->mUnknown34 = side ? 19 : 18;
+                    pBlock->mUnknown32 = fn_802372EC(0, 40) + 40;
+                    AudmonEventPostId(98, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                    pBlock->mUnknown60 = 1;
+                    pBlock->mUnknown61 = 1;
+                }
+                if (pBlock->mUnknown60 == 0 && pBlock->mUnknown24 > 5 && (pCarrier = BallGetCurrentHolder()) != 0) {
+                    int ref;
+
+                    fn_8009BD2C(pCarrier, &ref);
+                    fn_8009CEE4(p, ref, CharSkelGetJointByName(pCarrier->mpUnknown4->mpUnknown100, "up_torso"), 8, 2);
+                }
+            }
+        }
+    } else {
+        fn_8009CE88(p, &p->mUnknown16, 8);
+    }
+    return result;
+}
+
+extern "C" int RouteRunExit(Object_80039F5C *p)
+{
+    fn_8009CE88(p, &p->mUnknown16, 8);
+    fn_800FD724(p);
+    return 1;
+}

@@ -1,7 +1,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 
 /* Player block at +336 as used by fn_800E8420 and fn_800E8554. */
@@ -22,7 +22,7 @@ struct State_800E8420 {
 };
 
 extern "C" {
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800E73D4(Object_80039F5C *p);
 int fn_800E745C(Object_80039F5C *p);
@@ -38,7 +38,7 @@ void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 extern "C" int fn_800E8420(Object_80039F5C *p)
 {
     State_800E8420 *pState = (State_800E8420 *)&p->mUnknown336;
-    int mode = fn_800D0B90(p);
+    int mode = PlayerMoveGetKind(p);
     Input_800B6D34 input;
 
     p->mUnknown512.mUnknown14 = 0;
@@ -84,7 +84,7 @@ extern "C" int fn_800E8554(Object_80039F5C *p)
         if (pState->mUnknown18 == 0) {
             pState->mUnknown18 = fn_800E73D4(p);
         }
-        if (pState->mUnknown10 && !(p->mFlags & 0x800) && p == fn_80137B40() && p->mUnknown560.mFlags.mBytes[0]) {
+        if (pState->mUnknown10 && !(p->mFlags & 0x800) && p == BallGetCurrentHolder() && p->mUnknown560.mFlags.mBytes[0]) {
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
             if (pOther) {
                 if (!(p->mFlags & 0x10000)) {

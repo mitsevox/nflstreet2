@@ -1,13 +1,13 @@
 #include "game/Block_8030E6E8.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/fn_801EEB44.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/cu_801444D8.h"
-#include "game/Level_80054130.h"
+#include "game/LevelData.h"
 
 extern "C" {
-Camera_8013F738 *fn_8013FA04(int index);
-int fn_8013F9F8(void);
+GameCamera_t *CamGameGetCamera(int index);
+int CamGameGetCurrentSlot(void);
 unsigned char fn_8002FA84(void);
 unsigned char fn_80140DB4(void);
 int fn_801784C4(void);
@@ -117,7 +117,7 @@ extern "C" void fn_800A25BC(void)
 
 extern "C" int fn_800A262C(void)
 {
-    if (fn_8013FA04(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && fn_8013F9F8() == 0
+    if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
         && fn_8002FA84() == 0 && fn_801784C4() == 0 && (fn_801784C4() != 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
@@ -128,7 +128,7 @@ extern "C" int fn_800A262C(void)
 
 extern "C" int fn_800A26C4(void)
 {
-    if (fn_8013FA04(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && fn_8013F9F8() == 0
+    if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
         && fn_8002FA84() == 0 && fn_801784C4() != 0 && (fn_801784C4() == 0 || fn_80140DB4() == 0)) {
         lbl_803EA9F8 = 1;
         return 1;
@@ -139,30 +139,30 @@ extern "C" int fn_800A26C4(void)
 
 extern "C" {
 int fn_800A2760(void);
-int fn_8007B754(void);
-float fn_8007B784(void);
-float fn_8007B7B4(void);
-float fn_8007B7E4(void);
-float fn_8007B814(void);
-int fn_8007B844(void);
-float fn_8007B874(void);
-int fn_8007B974(void);
+int EnvGetEVTL(void);
+float EnvGetEVPL(void);
+float EnvGetEVPF(void);
+float EnvGetEVWD(void);
+float EnvGetEVWL(void);
+int EnvGetEVDS(void);
+float EnvGetEVED(void);
+int EnvIsENVFSet(void);
 int fn_800A33B0(void);
 float fn_80237260(int stream);
-int fn_801CFFD0(int a, int b);
-void fn_80147D4C(int index, unsigned char value);
-void fn_80147D60(int index, int value);
-void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
+int MathAngleDiff(int a, int b);
+void ScreenTintSetActive(int index, unsigned char value);
+void ScreenTintSetMode(int index, int value);
+void ScreenTintFadeTo(int index, unsigned int color, float value, unsigned int count);
 
 extern unsigned char lbl_802D7D90[][4];
 extern int lbl_802D7DC0[];
 
-void fn_8007B684(int id);
-void fn_8007B6D4(void);
+void EnvSelect(int id);
+void EnvRelease(void);
 void fn_800A29AC(void);
 void fn_800A29D8(int mode);
 void fn_800A2D2C(void);
-Entry_802F394C *fn_801A566C(int index);
+EnvFogSettings *EnvGetFogSettings(int index);
 void fn_8005406C(void);
 void *fn_800C47C4(void);
 void fn_801464D0(void *owner);
@@ -173,10 +173,10 @@ void fn_801D0544(void);
 void fn_801D0BCC(int z, int y, int x);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float m[4][4]);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 unsigned int fn_8017F584(void);
 
-extern Level_80054130 *lbl_803EA554;
+extern LevelData_t *gLevelData;
 
 extern char lbl_802EBFB4[];
 extern Vector_80039F5C lbl_802D7C70[];
@@ -197,14 +197,14 @@ extern "C" void fn_800A2848(void)
     lbl_8030E6E8.mUnknownA = first + 3;
     lbl_8030E6E8.mUnknownC = first + 8;
     lbl_8030E6E8.mUnknownE = first + 9;
-    lbl_8030E6E8.mUnknown40 = fn_8007B754();
-    lbl_8030E6E8.mUnknown4C = fn_8007B784();
-    lbl_8030E6E8.mUnknown50 = fn_8007B7B4();
-    lbl_8030E6E8.mUnknown54 = (int)(fn_8007B7E4() * 46603.379f);
-    lbl_8030E6E8.mUnknown58 = fn_8007B814();
-    lbl_8030E6E8.mUnknown64 = fn_8007B844();
-    lbl_8030E6E8.mUnknown68 = fn_8007B874();
-    lbl_8030E6E8.mUnknown3C = fn_8007B974();
+    lbl_8030E6E8.mUnknown40 = EnvGetEVTL();
+    lbl_8030E6E8.mUnknown4C = EnvGetEVPL();
+    lbl_8030E6E8.mUnknown50 = EnvGetEVPF();
+    lbl_8030E6E8.mUnknown54 = (int)(EnvGetEVWD() * 46603.379f);
+    lbl_8030E6E8.mUnknown58 = EnvGetEVWL();
+    lbl_8030E6E8.mUnknown64 = EnvGetEVDS();
+    lbl_8030E6E8.mUnknown68 = EnvGetEVED();
+    lbl_8030E6E8.mUnknown3C = EnvIsENVFSet();
     switch (lbl_8030E6E8.mUnknown40) {
     case 0:
         lbl_8030E6E8.mUnknown44 = 31;
@@ -256,7 +256,7 @@ extern "C" void fn_800A2B40(void)
             : (lbl_8030E6E8.mUnknown60 > 1.0f ? 1.0f : lbl_8030E6E8.mUnknown60);
 
         roll = fn_80237260(1) * 2.0f;
-        if (lbl_8030E6E8.mUnknown5C - lbl_8030E6E8.mUnknown54 != fn_801CFFD0(lbl_8030E6E8.mUnknown5C, lbl_8030E6E8.mUnknown54)) {
+        if (lbl_8030E6E8.mUnknown5C - lbl_8030E6E8.mUnknown54 != MathAngleDiff(lbl_8030E6E8.mUnknown5C, lbl_8030E6E8.mUnknown54)) {
             if (roll >= 0.5f) {
                 lbl_8030E6E8.mUnknown5C = (lbl_8030E6E8.mUnknown5C + turn) & 0xFFFFFF;
             } else {
@@ -274,18 +274,18 @@ extern "C" void fn_800A2B40(void)
 
 extern "C" void fn_800A2E80(int index, int count)
 {
-    fn_80147D4C(0, 1);
-    fn_80147D74(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],
+    ScreenTintSetActive(0, 1);
+    ScreenTintFadeTo(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],
                 (unsigned int)lbl_802D7D90[index][3] * (1.0f / 255.0f), count);
-    fn_80147D60(0, lbl_802D7DC0[index]);
+    ScreenTintSetMode(0, lbl_802D7DC0[index]);
 }
 
 extern "C" void fn_800A2F48(void)
 {
-    fn_8007B684(lbl_8030E6E8.mUnknown0);
+    EnvSelect(lbl_8030E6E8.mUnknown0);
     fn_800A2848();
     fn_800A29AC();
-    lbl_8030E6E8.mpUnknown8C0 = fn_801A566C(lbl_8030E6E8.mUnknown0);
+    lbl_8030E6E8.mpUnknown8C0 = EnvGetFogSettings(lbl_8030E6E8.mUnknown0);
     lbl_8030E6DC.mpCallback0 = 0;
     lbl_8030E6DC.mpCallback4 = 0;
     lbl_8030E6DC.mpCallback8 = 0;
@@ -307,7 +307,7 @@ extern "C" void fn_800A2F48(void)
     }
     lbl_8030E6E8.mpUnknown8C8 = lbl_802D7DF0[lbl_8030E6E8.mUnknown0];
     fn_800A2E80(lbl_8030E6E8.mUnknown0, 1);
-    fn_8007B6D4();
+    EnvRelease();
     lbl_803EA9F0 = 1;
 }
 
@@ -317,8 +317,8 @@ extern "C" void fn_800A3170(void)
     Args_80144CE0 args;
     unsigned char i;
 
-    for (i = 0; i < lbl_803EA554->mUnknown96; i++) {
-        Entry_80054130 *pEntry = &lbl_803EA554->mUnknown100[i];
+    for (i = 0; i < gLevelData->mUnknown96; i++) {
+        LevelPlacement_t *pEntry = &gLevelData->mUnknown100[i];
 
         fn_801D03D0(m[0]);
         m[0][3] = 0.0f;
@@ -335,17 +335,17 @@ extern "C" void fn_800A3170(void)
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
         args.mUnknown00 = pEntry->mUnknown24 + 8;
-        Source_80144CE0 *pSource = (Source_80144CE0 *)fn_80054138(pEntry->mUnknown0);
+        Source_80144CE0 *pSource = (Source_80144CE0 *)LevelFindArea(pEntry->mUnknown0);
         lbl_8030E6E8.mpUnknownBC[i] = fn_80144CE0(&args, 0, pSource);
     }
 }
 
 extern "C" float fn_800A32E4(void)
 {
-    if (fn_80054D24(27) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(27) != 0 && fn_8017F584() == 0) {
         return 10.0f;
     }
-    if (fn_80054D24(26) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(26) != 0 && fn_8017F584() == 0) {
         return lbl_8030E6E8.mUnknown2C * 2.0;
     }
     return lbl_8030E6E8.mFloat38;

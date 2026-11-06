@@ -15,10 +15,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -62,17 +62,17 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 extern "C" int fn_8010C8F8(Object_80039F5C *p) {
     int result = 0;
     float range = 1.0f;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Vector_80039F5C pos;
     Point_8017886C delta;
 
-    fn_80137B40();
-    pBall = fn_80137CD0(p);
+    BallGetCurrentHolder();
+    pBall = BallFindTargeting(p);
     if (pBall == 0) {
-        pBall = fn_801374BC();
+        pBall = BallGetCurrent();
         range = 1.5f;
     }
-    fn_80137D58(pBall, &pos);
+    BallGetPosition(pBall, &pos);
     fn_80227690(&delta, &pos, &p->mMotion.mPos);
     if (fn_802270A4(&delta) < range) {
         result = 1;
@@ -82,15 +82,15 @@ extern "C" int fn_8010C8F8(Object_80039F5C *p) {
 
 extern "C" void fn_8010C98C(Object_80039F5C *p) {
     int pick = 1;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Vector_80039F5C pos;
     int index;
 
-    pBall = fn_80137CD0(p);
+    pBall = BallFindTargeting(p);
     if (pBall == 0) {
-        pBall = fn_801374BC();
+        pBall = BallGetCurrent();
     }
-    fn_80137D58(pBall, &pos);
+    BallGetPosition(pBall, &pos);
     fn_8009BD60(p);
     index = fn_800F06F4(0, p->mpState, 26, 0xFFFF);
     if (index != 0xFFFF) {
@@ -148,7 +148,7 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
             Object_80039F5C *pCarrier;
 
             result = fn_800FD580(p);
-            pCarrier = fn_80137B40();
+            pCarrier = BallGetCurrentHolder();
             if (pCarrier != 0 && pCarrier->mpState->mId == 18 && (p->mFlags & 0x4000)) {
                 result = 1;
             }
@@ -159,7 +159,7 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
         }
         break;
     case 1:
-        if (fn_80137B40() == p && animation == 74) {
+        if (BallGetCurrentHolder() == p && animation == 74) {
             pBlock->mUnknown20 = 2;
         }
         if (p->mFlags & 4) {
@@ -182,7 +182,7 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
         int has26 = fn_800F06F4(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
         int has25 = fn_800F06F4(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
 
-        if (p == fn_80137B40() && !has18 && !has26 && !has25) {
+        if (p == BallGetCurrentHolder() && !has18 && !has26 && !has25) {
             Message_800F01CC message;
 
             fn_801C1F94(&message, 0, 4);

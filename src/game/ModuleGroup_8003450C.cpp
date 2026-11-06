@@ -3,24 +3,24 @@
 #include "game/GameState.h"
 #include "game/GameVpt.h"
 #include "game/InGame.h"
-#include "game/ModuleGroup_80033A5C.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/GameModules.h"
+#include "game/SysModules.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
-#include "game/cu_8003EC04.h"
-#include "game/cu_80041210.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80136B1C.h"
+#include "game/Collide.h"
+#include "game/BigObjInst.h"
+#include "game/PauseMenu.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
 extern char lbl_8030C070[];
 extern void *lbl_803EA368;
-extern void *lbl_803EA554;
+extern void *gLevelData;
 
-void fn_8002B1E4(void);
-void fn_8002B2D0(void);
+void VptManagerInit(void);
+void VptManagerShutdown(void);
 void *fn_8002C8C0(void);
 void fn_8002C964(void *p);
 void fn_80030B30(void);
@@ -40,17 +40,17 @@ void fn_80043AE4(void);
 void fn_80044378(void);
 void fn_80044B2C(int a);
 void fn_80044B50(void);
-void fn_800463FC(int a);
+void EnvObjAddObjType(int a);
 void fn_8004787C(void);
 void fn_8004A9FC(void);
 void fn_8004FF8C(void);
 void fn_800502C0(void);
-int fn_800543B4(void);
+int LevelGetObjectCount(void);
 void fn_8006E710(void);
 void fn_8006E760(void);
 void fn_8006E78C(void);
-void fn_80073478(void);
-void fn_80073528(void);
+void SndgIGInitAudio(void);
+void SndgIGShutdownAudio(void);
 unsigned char fn_8007AFDC(int a);
 void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
@@ -116,18 +116,18 @@ void fn_8011F0D8(void);
 void fn_8011F174(void);
 void fn_8012055C(int a);
 void fn_8012060C(void);
-void fn_8013F8D4(void *pObject);
-void fn_80142B0C(void);
-void fn_80142B68(void);
+void CamGameStart(void *pObject);
+void CollTypesRegister(void);
+void CollTypesUnregister(void);
 void fn_80144264(void);
 void fn_80144B50(int a);
 void fn_80144C6C(int a);
 void fn_8014512C(void);
-void fn_80145C88(void);
-void fn_80145D0C(void);
-void fn_80147AE4(int a);
-void fn_80147BA8(int a);
-void fn_80147EAC(void);
+void ParticlesInit(void);
+void ParticlesShutdown(void);
+void ScreenTintInit(int a);
+void ScreenTintShutdown(int a);
+void PassIconStateStart(void);
 int fn_801485D4(void);
 int fn_801485F4(void);
 void fn_80148644(void);
@@ -170,16 +170,16 @@ void fn_8017EBF0(void);
 void fn_80188B78(int a, int b);
 void fn_80188E14(void);
 void fn_80188E8C(void);
-void fn_8019B25C(int a);
-void fn_8019B43C(void);
-void fn_801A4650(Object_80228224 *pObject);
-void fn_801A4E9C(void);
-void fn_801A4FB0(void);
+void FldObjAddObjType(int a);
+void LevelLightsInit(void);
+void fn_801A4650(Viewport_t *pObject);
+void SimpShadowInit(void);
+void SimpShadowShutdown(void);
 int fn_801F0F18(int a);
-void fn_801F2798(const char *pText);
-void fn_80228E18(void);
-void fn_802363B0(Object_80228224 *pObject);
-void fn_802363E0(Object_80228224 *pObject);
+void ResTrackLabel(const char *pText);
+void VptFlushObjectTrashSync(void);
+void fn_802363B0(Viewport_t *pObject);
+void fn_802363E0(Viewport_t *pObject);
 }
 
 static ModuleDependency sAnimintfDependencies[] = { &gAnimData, &gGameState, 0 };
@@ -230,8 +230,8 @@ const char *Arrow::GetName() { return "Arrow"; }
 
 int Arrow::Init()
 {
-    fn_8015C064(GameObjList::fn_80028BB4());
-    fn_80044B2C(GameObjList::fn_80028BB4());
+    fn_8015C064(GameObjList::GetListHandle());
+    fn_80044B2C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -296,16 +296,16 @@ int Ball::Init()
     if (fn_801486A0() == 1) {
         mode = 3;
     }
-    fn_80137F98(mode);
-    fn_80137588(GameObjList::fn_80028BB4());
+    BallsStart(mode);
+    BallsCreateModels(GameObjList::GetListHandle());
     fn_800502C0();
-    fn_80040B88(GameObjList::fn_80028BB4());
+    fn_80040B88(GameObjList::GetListHandle());
     return 1;
 }
 
 int Ball::Shutdown()
 {
-    fn_8013764C(GameObjList::fn_80028BB4());
+    BallsDestroyModels(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -337,28 +337,28 @@ const char *BigObj::GetName() { return "BigObj"; }
 
 int BigObj::Init()
 {
-    unsigned short count = fn_800543B4() + 1;
+    unsigned short count = LevelGetObjectCount() + 1;
 
-    fn_801F2798("BigObjSetupBigObjectsStart");
-    fn_80040558(count, GameObjList::fn_80028BB4());
-    fn_801F2798("BigObjSetupBigObjectsFinish");
-    fn_801F2798("BObjInfoStateInitStart");
-    fn_800413F0(104, 10);
-    fn_801F2798("BObjInfoStateInitFinish");
-    fn_801F2798("GenObjSetupAnimationsStart");
+    ResTrackLabel("BigObjSetupBigObjectsStart");
+    fn_80040558(count, GameObjList::GetListHandle());
+    ResTrackLabel("BigObjSetupBigObjectsFinish");
+    ResTrackLabel("BObjInfoStateInitStart");
+    BigObjInstInit(104, 10);
+    ResTrackLabel("BObjInfoStateInitFinish");
+    ResTrackLabel("GenObjSetupAnimationsStart");
     fn_8004A9FC();
-    fn_801F2798("GenObjSetupAnimationsFinish");
-    fn_801F2798("BigObjAddAllObjectsStart");
-    fn_80040C90(GameObjList::fn_80028BB4());
-    fn_801F2798("BigObjAddAllObjectsFinish");
+    ResTrackLabel("GenObjSetupAnimationsFinish");
+    ResTrackLabel("BigObjAddAllObjectsStart");
+    fn_80040C90(GameObjList::GetListHandle());
+    ResTrackLabel("BigObjAddAllObjectsFinish");
     return 1;
 }
 
 int BigObj::Shutdown()
 {
-    fn_80041490();
-    fn_80228E18();
-    fn_800405F0(GameObjList::fn_80028BB4());
+    BigObjInstShutdown();
+    VptFlushObjectTrashSync();
+    fn_800405F0(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -390,7 +390,7 @@ const char *CamGame::GetName() { return "CamGame"; }
 
 int CamGame::Init()
 {
-    fn_8013F8D4(GameVpt::fn_800293A8());
+    CamGameStart(GameVpt::GetViewport());
     return 1;
 }
 
@@ -408,7 +408,7 @@ const char *CamScript::GetName() { return "CamScript"; }
 
 int CamScript::Init()
 {
-    fn_80096954(gAnimData.fn_80033AF8());
+    fn_80096954(gAnimData.GetArchive());
     return 1;
 }
 
@@ -465,15 +465,15 @@ const char *Cld::GetName() { return "Cld"; }
 
 int Cld::Init()
 {
-    fn_8003ED30(100);
-    fn_80142B0C();
+    CollideInit(100);
+    CollTypesRegister();
     return 1;
 }
 
 int Cld::Shutdown()
 {
-    fn_8003EDB8();
-    fn_80142B68();
+    CollideShutdown();
+    CollTypesUnregister();
     return 1;
 }
 
@@ -524,13 +524,13 @@ const char *Effects::GetName() { return "Effects"; }
 
 int Effects::Init()
 {
-    fn_80145C88();
+    ParticlesInit();
     return 1;
 }
 
 int Effects::Shutdown()
 {
-    fn_80145D0C();
+    ParticlesShutdown();
     return 1;
 }
 
@@ -543,18 +543,18 @@ const char *Env::GetName() { return "Env"; }
 
 int Env::Init()
 {
-    fn_801F2798("EnvMgrInitStart");
+    ResTrackLabel("EnvMgrInitStart");
     fn_800A2F48();
-    fn_801F2798("EnvMgrInitFinish");
-    fn_801615EC((void *)GameObjList::fn_80028BB4());
-    fn_801F2798("EnvObjAddObjTypeStart");
-    fn_800463FC(GameObjList::fn_80028BB4());
-    fn_801F2798("EnvObjAddObjTypeFinish");
-    fn_801F2798("FldObjAddObjTypeStart");
-    fn_8019B25C(GameObjList::fn_80028BB4());
-    fn_801F2798("FldObjAddObjTypeFinish");
+    ResTrackLabel("EnvMgrInitFinish");
+    fn_801615EC((void *)GameObjList::GetListHandle());
+    ResTrackLabel("EnvObjAddObjTypeStart");
+    EnvObjAddObjType(GameObjList::GetListHandle());
+    ResTrackLabel("EnvObjAddObjTypeFinish");
+    ResTrackLabel("FldObjAddObjTypeStart");
+    FldObjAddObjType(GameObjList::GetListHandle());
+    ResTrackLabel("FldObjAddObjTypeFinish");
     fn_80043AE4();
-    fn_800C47EC(lbl_803EA554);
+    fn_800C47EC(gLevelData);
     fn_8004787C();
     fn_80178B5C();
     return 1;
@@ -563,7 +563,7 @@ int Env::Init()
 int Env::Shutdown()
 {
     fn_800A30B8();
-    fn_801616C0((void *)GameObjList::fn_80028BB4());
+    fn_801616C0((void *)GameObjList::GetListHandle());
     return 1;
 }
 
@@ -595,7 +595,7 @@ const char *GameIntf::GetName() { return "GameIntf"; }
 
 int GameIntf::Init()
 {
-    fn_80147EAC();
+    PassIconStateStart();
     return 1;
 }
 
@@ -742,14 +742,14 @@ const char *Light::GetName() { return "Light"; }
 
 int Light::Init()
 {
-    fn_802363B0(GameVpt::fn_800293A8());
-    fn_8019B43C();
+    fn_802363B0(GameVpt::GetViewport());
+    LevelLightsInit();
     return 1;
 }
 
 int Light::Shutdown()
 {
-    fn_802363E0(GameVpt::fn_800293A8());
+    fn_802363E0(GameVpt::GetViewport());
     return 1;
 }
 
@@ -800,13 +800,13 @@ const char *Particles::GetName() { return "Particles"; }
 
 int Particles::Init()
 {
-    fn_80144B50(GameObjList::fn_80028BB4());
+    fn_80144B50(GameObjList::GetListHandle());
     return 1;
 }
 
 int Particles::Shutdown()
 {
-    fn_80144C6C(GameObjList::fn_80028BB4());
+    fn_80144C6C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -819,13 +819,13 @@ const char *Pause::GetName() { return "Pause"; }
 
 int Pause::Init()
 {
-    fn_80064E18();
+    PauseInit();
     return 1;
 }
 
 int Pause::Shutdown()
 {
-    fn_80064EA4();
+    PauseShutdown();
     return 1;
 }
 
@@ -915,7 +915,7 @@ void PlayBook::fn_8003549C(int flag)
     int f;
 
     fn_800C8704(&a, &b);
-    if (fn_8002892C()) {
+    if (InGameIsDemo()) {
         c = 59;
         d = 59;
         e = 59;
@@ -968,20 +968,20 @@ const char *Plyr::GetName() { return "Plyr"; }
 
 int Plyr::Init()
 {
-    fn_801F2798("PlyrObjsInitStart");
+    ResTrackLabel("PlyrObjsInitStart");
     fn_80160874(14);
     fn_80160A80();
     fn_8015E654(1);
     fn_8015E6C4();
     fn_8015E950(1, 1);
-    fn_8003DA94(14, GameObjList::fn_80028BB4(), 0);
+    fn_8003DA94(14, GameObjList::GetListHandle(), 0);
     fn_8015E994();
-    fn_801F2798("PlyrObjsInitFinish");
-    fn_801F2798("PlaStateInitStart");
+    ResTrackLabel("PlyrObjsInitFinish");
+    ResTrackLabel("PlaStateInitStart");
     fn_800397D0(14);
-    fn_801F2798("PlaStateInitFinish");
+    ResTrackLabel("PlaStateInitFinish");
     fn_80039A1C();
-    fn_801A4650(GameVpt::fn_800293A8());
+    fn_801A4650(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
 }
@@ -989,7 +989,7 @@ int Plyr::Init()
 int Plyr::Shutdown()
 {
     fn_80039890();
-    fn_8003DCC0(GameObjList::fn_80028BB4());
+    fn_8003DCC0(GameObjList::GetListHandle());
     fn_8015E6C8();
     fn_80160B6C();
     return 1;
@@ -1098,7 +1098,7 @@ const char *Replay::GetName() { return "Replay"; }
 
 int Replay::Init()
 {
-    GameState::fn_8002900C();
+    GameState::GetStore();
     lbl_803EA368 = fn_8002C8C0();
     return 1;
 }
@@ -1121,7 +1121,7 @@ const char *ReplayFrame::GetName() { return "ReplayFrame"; }
 int ReplayFrame::Init()
 {
     fn_80030BC0(0);
-    fn_8013740C();
+    BallsReplayRegister();
     fn_80162D78();
     fn_8003E118();
     fn_800410FC();
@@ -1148,13 +1148,13 @@ const char *ScreenTint::GetName() { return "ScreenTint"; }
 
 int ScreenTint::Init()
 {
-    fn_80147AE4(GameObjList::fn_80028BB4());
+    ScreenTintInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int ScreenTint::Shutdown()
 {
-    fn_80147BA8(GameObjList::fn_80028BB4());
+    ScreenTintShutdown(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1202,13 +1202,13 @@ const char *SimpShadow::GetName() { return "SimpShadow"; }
 
 int SimpShadow::Init()
 {
-    fn_801A4E9C();
+    SimpShadowInit();
     return 1;
 }
 
 int SimpShadow::Shutdown()
 {
-    fn_801A4FB0();
+    SimpShadowShutdown();
     return 1;
 }
 
@@ -1221,13 +1221,13 @@ const char *SndgIG::GetName() { return "SndgIG"; }
 
 int SndgIG::Init()
 {
-    fn_80073478();
+    SndgIGInitAudio();
     return 1;
 }
 
 int SndgIG::Shutdown()
 {
-    fn_80073528();
+    SndgIGShutdownAudio();
     return 1;
 }
 
@@ -1277,16 +1277,16 @@ const char *Statics::GetName() { return "Statics"; }
 
 int Statics::Init()
 {
-    fn_801F2798("StaticModelInitStart");
-    fn_800C46B0(GameObjList::fn_80028BB4());
-    fn_801F2798("StaticModelInitFinish");
+    ResTrackLabel("StaticModelInitStart");
+    fn_800C46B0(GameObjList::GetListHandle());
+    ResTrackLabel("StaticModelInitFinish");
     return 1;
 }
 
 int Statics::Shutdown()
 {
-    fn_80228E18();
-    fn_800C471C(GameObjList::fn_80028BB4());
+    VptFlushObjectTrashSync();
+    fn_800C471C(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1407,7 +1407,7 @@ int ColorStyle::Init()
 
 int ColorStyle::Shutdown()
 {
-    fn_80228E18();
+    VptFlushObjectTrashSync();
     fn_80188E8C();
     return 1;
 }
@@ -1421,13 +1421,13 @@ const char *VptMgr::GetName() { return "VptMgr"; }
 
 int VptMgr::Init()
 {
-    fn_8002B1E4();
+    VptManagerInit();
     return 1;
 }
 
 int VptMgr::Shutdown()
 {
-    fn_8002B2D0();
+    VptManagerShutdown();
     return 1;
 }
 

@@ -2,7 +2,7 @@
 #include "game/Desc_80169DF8.h"
 #include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
@@ -29,11 +29,11 @@ void fn_800674E0(int tag, int a, int *pResult);
 void fn_800675B4(int tag, int a, int b);
 void fn_80067A4C(int team, int tag, int kind, int *pResult);
 int fn_80067A8C(int tag, int a, int b);
-void fn_80087CBC(Object_8007A334 *pCursor);
-void fn_80087CFC(Object_8007A334 *pCursor);
-int fn_80087D1C(Object_8007A334 *pCursor, int key);
-unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
-unsigned char fn_8008973C(int index);
+void AudibleDbOpen(DbCursor *pCursor);
+void AudibleDbClose(DbCursor *pCursor);
+int AudibleDbSeekFormation(DbCursor *pCursor, int key);
+unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column);
+unsigned char PlaybookSideGetLoaded(int index);
 void fn_800B508C(unsigned char index);
 int fn_800BA6F8(void);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
@@ -52,7 +52,7 @@ float fn_80178A2C(void);
 int fn_80178E10(void);
 void fn_80179144(int a);
 void fn_8017916C(void);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_801F9FA4(int tag, int index, int column);
 int fn_801FA038(int tag, int index, int column);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -348,7 +348,7 @@ void fn_801681A8(void)
 void fn_80168210(void)
 {
     if (lbl_803ECAF4) {
-        fn_801D34D0(lbl_803ECAF4, sizeof(Object_80167A8C), 0, 4);
+        MemFill(lbl_803ECAF4, sizeof(Object_80167A8C), 0, 4);
         lbl_803ECAF4->mUnknown4[1].mUnknown4 = lbl_803ECAF4->mUnknown4[1].mUnknown0 =
             lbl_803ECAF4->mUnknown4[0].mUnknown4 = lbl_803ECAF4->mUnknown4[0].mUnknown0 = -1;
     }
@@ -357,20 +357,20 @@ void fn_80168210(void)
 void fn_80168264(void)
 {
     if (fn_80178E10()) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         unsigned int key;
 
-        fn_80087CBC(&cursor);
+        AudibleDbOpen(&cursor);
         for (key = 1; key <= 43; key++) {
-            if (fn_80087D1C(&cursor, key)) {
+            if (AudibleDbSeekFormation(&cursor, key)) {
                 unsigned int i;
 
                 for (i = 0; i <= 3; i++) {
-                    lbl_803ECAF4->mUnknownD314[key - 1][i] = fn_80087DA4(&cursor, i);
+                    lbl_803ECAF4->mUnknownD314[key - 1][i] = AudibleDbGetPlayIndex(&cursor, i);
                 }
             }
         }
-        fn_80087CFC(&cursor);
+        AudibleDbClose(&cursor);
     }
 }
 
@@ -418,11 +418,11 @@ void fn_801684B8(int a)
         fn_801F9FA4(0x31444250, 0x53594C50, 0x4C594C50);
     }
     if (lbl_803ECAF4->mUnknown4[0].mUnknown4 != -1) {
-        fn_80066DC8(0x31444250, fn_8008973C(1));
+        fn_80066DC8(0x31444250, PlaybookSideGetLoaded(1));
         lbl_803ECAF4->mUnknown4[0].mUnknown4 = -1;
     }
     if (lbl_803ECAF4->mUnknown4[0].mUnknown0 != -1) {
-        fn_80066DC8(0x31544250, fn_8008973C(0));
+        fn_80066DC8(0x31544250, PlaybookSideGetLoaded(0));
         lbl_803ECAF4->mUnknown4[0].mUnknown0 = -1;
     }
 }

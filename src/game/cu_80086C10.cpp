@@ -1,5 +1,5 @@
-#include "game/Object_8007A334.h"
-#include "game/Table_8007E020.h"
+#include "game/DbCursor.h"
+#include "game/DbQueryTable.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
@@ -34,9 +34,9 @@ struct Sort_80086D0C {
 extern "C" {
 int fn_80087BA0(int index);
 int fn_801F967C(int handle, int table);
-void fn_801F9718(int handle, int table, ColumnValue_802D6424 *pList, int *pResult, int flags);
+void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
-int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
+int fn_801FA0BC(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 void *pSort, int *pCursor, QueryResult *pResult);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
@@ -97,18 +97,18 @@ const Descriptor_80086CE8 *fn_80086CE8(int index)
 int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
                 char *pName, int nameSize)
 {
-    Table_8007E020 tables[2];
-    Object_80023BBC priceFilter;
-    Object_80023BBC both;
-    Object_80023BBC categoryFilter;
-    ColumnValue_802D6424 columns[4];
+    DbQueryTable tables[2];
+    DbFilter priceFilter;
+    DbFilter both;
+    DbFilter categoryFilter;
+    DbColumnValue columns[4];
     Sort_80086D0C sort[2];
     QueryResult queryResult;
     int cursor;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
     int result = 0;
     char *pBuffer = 0;
-    Object_80023BBC *pFilter = &priceFilter;
+    DbFilter *pFilter = &priceFilter;
     int column = 0;
 
     if (pName) {
@@ -178,13 +178,13 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
 
 int fn_80087128(int index)
 {
-    Object_80023BBC priceFilter;
-    Object_80023BBC both;
-    Object_80023BBC categoryFilter;
+    DbFilter priceFilter;
+    DbFilter both;
+    DbFilter categoryFilter;
     unsigned short count;
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
     int result = 0;
-    Object_80023BBC *pFilter = &priceFilter;
+    DbFilter *pFilter = &priceFilter;
     priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
     priceFilter.mUnknown16.mValue.mInt = 0;
     if (pDescriptor->mTable == 0x52414547) {
@@ -312,7 +312,7 @@ int fn_80087704(void)
 
 int fn_8008775C(void)
 {
-    ColumnValue_802D6424 columns[17];
+    DbColumnValue columns[17];
     unsigned short count = 1;
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
@@ -335,22 +335,22 @@ void fn_80087880(int team)
     fn_801FCE10(0, "use 'TATS' delete from 'MAET' where 'DIGT' = \x85\n", team);
 }
 
-int fn_800878D8(int index, Object_8007A334 *pCursor, int row)
+int fn_800878D8(int index, DbCursor *pCursor, int row)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
     int id = -1;
-    if (fn_8007A600(pCursor, row)) {
-        id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    if (DbCursorSeek(pCursor, row)) {
+        id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
     }
     return id;
 }
 
-int fn_80087938(int index, Object_8007A334 *pCursor, int ordinal, int *pRow)
+int fn_80087938(int index, DbCursor *pCursor, int ordinal, int *pRow)
 {
     int result = 0;
     int row = 0;
     int available = 0;
-    for (; fn_8007A600(pCursor, row); row++) {
+    for (; DbCursorSeek(pCursor, row); row++) {
         int id = fn_800878D8(index, pCursor, row);
         if (!fn_8008736C(index, id)) {
             if (available == ordinal) {
@@ -366,21 +366,21 @@ int fn_80087938(int index, Object_8007A334 *pCursor, int ordinal, int *pRow)
     return result;
 }
 
-int fn_800879E8(int index, Object_8007A334 *pCursor)
+int fn_800879E8(int index, DbCursor *pCursor)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    int id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
     return fn_80087460(index, id);
 }
 
-void fn_80087A30(int index, Object_8007A334 *pCursor)
+void fn_80087A30(int index, DbCursor *pCursor)
 {
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
-    int id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    int id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
     fn_8008754C(index, id);
 }
 
-int fn_80087A78(int index, Object_8007A334 *pCursor, int id, int *pOrdinal)
+int fn_80087A78(int index, DbCursor *pCursor, int id, int *pOrdinal)
 {
     int result = 0;
     int ordinal = 0;
@@ -395,7 +395,7 @@ int fn_80087A78(int index, Object_8007A334 *pCursor, int id, int *pOrdinal)
     return result;
 }
 
-int fn_80087B00(int index, Object_8007A334 *pCursor)
+int fn_80087B00(int index, DbCursor *pCursor)
 {
     int count = 0;
     int row;

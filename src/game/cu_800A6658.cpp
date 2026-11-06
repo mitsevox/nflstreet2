@@ -1,14 +1,14 @@
 #include "game/Object_80039F5C.h"
 #include "game/Block_800A70F4.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 
 struct Record_800B49EC;
 
@@ -26,12 +26,12 @@ void fn_800A8F70(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_800A92E4(void);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
-void fn_80146114(Object_80146094 *p);
+void ParticleTrailClearTint(ParticleTrailSet_t *p);
 void fn_80147840(Object_8003DEC4 *p);
-void fn_801460FC(Object_80146094 *p, float a, float b, float c);
+void ParticleTrailSetTint(ParticleTrailSet_t *p, float a, float b, float c);
 int fn_80178320(void);
-int fn_8007C7E8(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007C84C(Object_8007A334 *pCursor, Block_800A70F4 *pOut);
+int GamebreakerFind(DbCursor *pCursor, int key, int *pResult);
+void GamebreakerRead(DbCursor *pCursor, Block_800A70F4 *pOut);
 void fn_800A6B6C(int team);
 void fn_800A6C10(int team);
 void fn_800A7A0C(int team);
@@ -135,29 +135,29 @@ extern "C" void fn_800A680C(int team)
         if (lbl_8030F404[team][i] != pair[i]) {
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_80146114(&pObject->mUnknown5188);
+                ParticleTrailClearTint(&pObject->mUnknown5188);
                 fn_80147840(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_801460FC(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
+                ParticleTrailSetTint(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
             }
         }
     }
     if (team == fn_80178320()) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
 
-        fn_8007A308(&cursor, 'KRBG', 'DIBG');
-        if (fn_8007C7E8(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
+        DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
+        if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
             fn_800A6B6C(team);
-            fn_8007C84C(&cursor, lbl_803EC954[team]);
+            GamebreakerRead(&cursor, lbl_803EC954[team]);
             lbl_803EC954[team]->mUnknown10 = 10000;
             lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
         } else {
             fn_800A7A0C(team);
         }
-        fn_8007A3C4(&cursor);
+        DbCursorClose(&cursor);
     }
     fn_800A65BC();
 }
@@ -179,29 +179,29 @@ extern "C" void fn_800A69BC(int team)
         if (lbl_8030F404[team][i] != pair[i]) {
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_80146114(&pObject->mUnknown5188);
+                ParticleTrailClearTint(&pObject->mUnknown5188);
                 fn_80147840(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
-                fn_801460FC(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
+                ParticleTrailSetTint(&pObject->mUnknown5188, 20.0f, 20.0f, 20.0f);
             }
         }
     }
     if (team == fn_80178308()) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
 
-        fn_8007A308(&cursor, 'KRBG', 'DIBG');
-        if (fn_8007C7E8(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
+        DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
+        if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
             fn_800A6C10(team);
-            fn_8007C84C(&cursor, lbl_803EC954[team]);
+            GamebreakerRead(&cursor, lbl_803EC954[team]);
             lbl_803EC954[team]->mUnknown10 = 10000;
             lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
         } else {
             fn_800A7A0C(team);
         }
-        fn_8007A3C4(&cursor);
+        DbCursorClose(&cursor);
     }
     fn_800A65BC();
 }
@@ -318,7 +318,7 @@ extern "C" void fn_800A70F4(void)
 
 extern "C" void fn_800A72B4(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned char team;
 
     if (lbl_803EAA4D != 0) {
@@ -345,13 +345,13 @@ extern "C" void fn_800A72B4(void)
             && ((lbl_803EC954[team]->mUnknown8 == 1 && team == fn_80178308())
                 || (lbl_803EC954[team]->mUnknown8 == 0 && team == fn_80178320()))
             && lbl_803EC954[team]->mUnknown1C != 0) {
-            fn_8007A308(&cursor, 'KRBG', 'DIBG');
-            if (fn_8007C7E8(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
+            DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
+            if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
                 fn_800AE798(fn_800A6590(fn_800A8408(team)), team);
                 if (lbl_803EC954[team]->mUnknown68 != 0) {
                     lbl_803EAA2C[lbl_803EC954[team]->mUnknown8](team);
                 }
-                fn_8007C84C(&cursor, lbl_803EC954[team]);
+                GamebreakerRead(&cursor, lbl_803EC954[team]);
                 lbl_803EC954[team]->mUnknown10 = 10000;
                 lbl_803EC954[team]->mUnknown58 = 1.0f;
                 lbl_803EC954[team]->mUnknown64 = 0;
@@ -361,7 +361,7 @@ extern "C" void fn_800A72B4(void)
             } else {
                 fn_800A7A0C(team);
             }
-            fn_8007A3C4(&cursor);
+            DbCursorClose(&cursor);
             fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
         }
@@ -384,12 +384,12 @@ extern "C" void fn_800A7514(int team)
                 fn_800A9384(fn_800A6DD0(team));
                 fn_80156C78(35, 1);
                 if (lbl_803EC954[other]->mUnknown68 != 0) {
-                    fn_80067DB8(11, 0, 0, 0, 0);
+                    AudmonEventPostArgs(11, 0, 0, 0, 0);
                 } else {
-                    fn_80067DB8(10, 0, team, 0, 0);
+                    AudmonEventPostArgs(10, 0, team, 0, 0);
                 }
             } else if (lbl_803EC954[other]->mUnknown68 == 0) {
-                fn_80067DB8(8, 0, team, 0, 0);
+                AudmonEventPostArgs(8, 0, team, 0, 0);
                 fn_80073210(120);
             }
             lbl_803EC954[team]->mUnknown68 = lbl_803EC954[team]->mUnknown6C;

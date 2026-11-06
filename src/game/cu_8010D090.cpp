@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -57,14 +57,14 @@ struct Carrier_8010D090 {
 extern "C" {
 void fn_800B8344(Object_80039F5C *p);
 int fn_800FD580(Object_80039F5C *p);
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
+int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float range);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
-int fn_8010CE90(Object_80039F5C *p, Object_80137ABC *pBall);
+int fn_8010CE90(Object_80039F5C *p, Ball_t *pBall);
 void fn_8010CFD4(Object_80039F5C *p);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 extern float lbl_803ECB08;
 }
 
@@ -76,7 +76,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
     Message_800F01CC message2;
 
     fn_800B8344(p);
-    pCarrier = fn_80137B40();
+    pCarrier = BallGetCurrentHolder();
     fn_8010A2DC(p, 0, 0);
     if (*fn_8003AB38(p) == 0x39) {
         p->mUnknown3040 = 0;
@@ -98,12 +98,12 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
         p->mUnknown512.mUnknown15 = 0;
     } else {
-        Object_80137ABC *pBall = fn_801374BC();
+        Ball_t *pBall = BallGetCurrent();
 
-        if (fn_8013BA58(pBall, 0) == 3) {
+        if (BallStateGet(pBall, 0) == 3) {
             int angle = fn_80099734(p, pBall, 0, 1, pBlock->mUnknown24, 1, 0, 0, 0, 120.0f);
 
-            if (angle != 0x1FFFFFFF && fn_80099F04(p, angle, fn_801374E0(pBall)) == 1) {
+            if (angle != 0x1FFFFFFF && fn_80099F04(p, angle, BallGetIndex(pBall)) == 1) {
                 return 0;
             }
             result = fn_8010CE90(p, pBall);

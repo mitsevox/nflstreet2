@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/tmlib.h"
 
-void fn_8020E7EC(Texture_8020DB34 *pTex)
+void fn_8020E7EC(Texture_t *pTex)
 {
     int bpp;
     int size;
@@ -51,7 +51,7 @@ void fn_8020E7EC(Texture_8020DB34 *pTex)
     dstPitch = width * bpp / 8;
     size = height * dstPitch;
     pDst = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
-    fn_801D34D0(pDst, size, 0, 1);
+    MemFill(pDst, size, 0, 1);
     for (y = 0; y < pTex->mHeight; y++) {
         memcpy(pDst + y * dstPitch, pTex->mpImage + y * srcPitch, srcPitch);
     }

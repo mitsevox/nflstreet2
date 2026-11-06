@@ -1,8 +1,8 @@
 #include "engine/camfocus.h"
-#include "engine/cu_80227F14.h"
-#include "game/Camera_8013F738.h"
+#include "engine/viewport.h"
+#include "game/GameCamera.h"
 #include "game/EaseVector_8013C9A4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/cu_8013BB18.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -18,8 +18,8 @@ struct Target_8013BDC0 {
 
 /* Per-id handlers returned by fn_80141054. */
 struct Handlers_80141054 {
-    void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
-    void (*mUnknown04)(Camera_8013F738 *pCamera);
+    void (*mUnknown00)(GameCamera_t *pCamera, CameraDesc_t *pDesc);
+    void (*mUnknown04)(GameCamera_t *pCamera);
 };
 
 struct TypeEntry_802DBD7C {
@@ -40,17 +40,17 @@ void fn_8014106C(int id, int mode, float *pA, float *pB);
 int fn_801486A0(void);
 void fn_801527B8(void *p, Vector_80039F5C *pOut);
 int fn_801784C4(void);
-void fn_801C3918(void *p, Camera_8013F738 *pCamera);
-void fn_801C3A10(Camera_8013F738 *pCamera, float value);
-void fn_801C3CE8(Camera_8013F738 *pCamera, int a);
-void fn_801C3D98(Camera_8013F738 *pCamera);
-void fn_801C3D9C(Camera_8013F738 *pCamera);
-void fn_801C3E54(Camera_8013F738 *pCamera);
-void fn_801C3E84(void *p, Camera_8013F738 *pCamera);
-void fn_801C3EA4(Camera_8013F738 *pCamera, float x, float y, float z);
-void fn_801C3EC0(Camera_8013F738 *pCamera, float x, float y, float z);
-void fn_801C3ED0(Camera_8013F738 *pCamera, int a, int b, int c);
-void fn_801C3EEC(Camera_8013F738 *pCamera, int a, int b, int c);
+void CamConvertHdrToMatrix(void *p, GameCamera_t *pCamera);
+void CamSetZScale(GameCamera_t *pCamera, float value);
+void CamFreeFloatAdd(GameCamera_t *pCamera, int a);
+void CamFreeFloatDelete(GameCamera_t *pCamera);
+void CamFreeFloatProcess(GameCamera_t *pCamera);
+void CamFreeClearVelocity(GameCamera_t *pCamera);
+void CamFreeFloatUpdate(void *p, GameCamera_t *pCamera);
+void CamFreeSetPos(GameCamera_t *pCamera, float x, float y, float z);
+void CamFreeMovePos(GameCamera_t *pCamera, float x, float y, float z);
+void CamFreeSetAngle(GameCamera_t *pCamera, int a, int b, int c);
+void CamFreeMoveAngle(GameCamera_t *pCamera, int a, int b, int c);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
@@ -88,7 +88,7 @@ static inline void ZeroVector(Vector_80039F5C *pVec)
 
 extern "C" {
 
-unsigned char fn_8013BB18(Camera_8013F738 *pCamera)
+unsigned char fn_8013BB18(GameCamera_t *pCamera)
 {
     return ((pCamera->mUnknown94 >> 3) & 1) ^ fn_801784C4();
 }
@@ -104,7 +104,7 @@ void fn_8013BB70(int *pAngles)
     pAngles[2] = (pAngles[2] - 0x800000) & 0xFFFFFF;
 }
 
-void fn_8013BB84(Camera_8013F738 *pCamera)
+void fn_8013BB84(GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
@@ -116,12 +116,12 @@ void fn_8013BB84(Camera_8013F738 *pCamera)
 
             fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
             fn_8013BC4C(pCamera, &pCamera->mUnknownB8, &pos);
-            fn_801C3EC0(pCamera, pos.mX, pos.mY, pos.mZ);
+            CamFreeMovePos(pCamera, pos.mX, pos.mY, pos.mZ);
         }
         break;
     case 1:
         fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
-        fn_801C3C6C(pCamera, &pCamera->mUnknownB8);
+        CamFocusSetTarget(pCamera, &pCamera->mUnknownB8);
         if (pCamera->mUnknown94 & 4) {
             fn_8013C6F0(pCamera);
             pCamera->mUnknown94 &= ~4;
@@ -130,7 +130,7 @@ void fn_8013BB84(Camera_8013F738 *pCamera)
     }
 }
 
-void fn_8013BC4C(Camera_8013F738 *pCamera, Vector_80039F5C *pTarget, Vector_80039F5C *pOut)
+void fn_8013BC4C(GameCamera_t *pCamera, Vector_80039F5C *pTarget, Vector_80039F5C *pOut)
 {
     Vector_80039F5C offset;
     Vector_80039F5C target;
@@ -157,7 +157,7 @@ void fn_8013BC4C(Camera_8013F738 *pCamera, Vector_80039F5C *pTarget, Vector_8003
     }
 }
 
-void fn_8013BD98(Camera_8013F738 *pCamera, Vector_80039F5C *pOut)
+void fn_8013BD98(GameCamera_t *pCamera, Vector_80039F5C *pOut)
 {
     if (pCamera->mUnknown98 == 0) {
         pOut->mX = pCamera->mUnknown2C;
@@ -172,11 +172,11 @@ void fn_8013BDC0(int kind, int ref, Vector_80039F5C *pOut)
 {
     switch (kind) {
     case 1: {
-        Object_80137ABC *pBall = fn_80137ABC(ref);
-        Object_80039F5C *pObject = fn_80137AD0(pBall);
+        Ball_t *pBall = BallGet(ref);
+        Object_80039F5C *pObject = BallGetHolder(pBall);
 
         if (pObject == 0) {
-            fn_80137D58(pBall, pOut);
+            BallGetPosition(pBall, pOut);
         } else {
             pOut->mX = pObject->mMotion.mPos.mX;
             pOut->mY = pObject->mMotion.mPos.mY;
@@ -241,7 +241,7 @@ void fn_8013BEE0(int kind, int ref, int *pAngles)
     }
 }
 
-void fn_8013BF40(Camera_8013F738 *pCamera, int *pAngles)
+void fn_8013BF40(GameCamera_t *pCamera, int *pAngles)
 {
     Vector_80039F5C from;
     Vector_80039F5C to;
@@ -289,67 +289,67 @@ void fn_8013BF40(Camera_8013F738 *pCamera, int *pAngles)
     pAngles[0] &= 0xFFFFFF;
 }
 
-void fn_8013C120(Camera_8013F738 *pCamera)
+void fn_8013C120(GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
     case 4:
-        fn_801C3CE8(pCamera, 0);
+        CamFreeFloatAdd(pCamera, 0);
         pCamera->mUnknown5C = pCamera->mUnknown60 = pCamera->mUnknown64 = 0.1f;
         pCamera->mUnknown68 = pCamera->mUnknown6C = pCamera->mUnknown70 = 0.05f;
         pCamera->mUnknown80 = pCamera->mUnknown84 = pCamera->mUnknown88 = 0x200000;
         pCamera->mUnknown74 = pCamera->mUnknown78 = pCamera->mUnknown7C = 0x400000;
         break;
     case 1:
-        fn_801C3AD8(pCamera, 0);
+        CamFocusAdd(pCamera, 0);
         break;
     }
 }
 
-void fn_8013C1C8(Camera_8013F738 *pCamera)
+void fn_8013C1C8(GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3D98(pCamera);
+        CamFreeFloatDelete(pCamera);
         break;
     case 1:
-        fn_801C3B74(pCamera);
+        CamFocusDelete(pCamera);
         break;
     case 4:
         break;
     }
 }
 
-void fn_8013C204(Camera_8013F738 *pCamera)
+void fn_8013C204(GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3D9C(pCamera);
+        CamFreeFloatProcess(pCamera);
         break;
     case 1:
-        fn_801C3B78(pCamera);
+        CamFocusProcess(pCamera);
         break;
     case 4:
         break;
     }
-    fn_801C3A10(pCamera, 4.0f);
+    CamSetZScale(pCamera, 4.0f);
 }
 
-void fn_8013C260(Camera_8013F738 *pCamera, int *pAngles)
+void fn_8013C260(GameCamera_t *pCamera, int *pAngles)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3EEC(pCamera, pAngles[0], pAngles[1], pAngles[2]);
+        CamFreeMoveAngle(pCamera, pAngles[0], pAngles[1], pAngles[2]);
         break;
     case 1:
-        fn_801C3C74(pCamera, pAngles[0], pAngles[1]);
+        CamFocusMoveAngle(pCamera, pAngles[0], pAngles[1]);
         break;
     case 4:
         break;
     }
 }
 
-void fn_8013C2B4(Camera_8013F738 *pCamera, int a, int b, int c)
+void fn_8013C2B4(GameCamera_t *pCamera, int a, int b, int c)
 {
     if (pCamera->mUnknown98 == 0 || pCamera->mUnknown98 == 1) {
         fn_8013BB84(pCamera);
@@ -364,14 +364,14 @@ void fn_8013C2B4(Camera_8013F738 *pCamera, int a, int b, int c)
     fn_8013C204(pCamera);
 }
 
-void fn_8013C328(Camera_8013F738 *pCamera, int kind, int ref)
+void fn_8013C328(GameCamera_t *pCamera, int kind, int ref)
 {
     pCamera->mUnknownA8 = kind;
     pCamera->mUnknownAC = ref;
     pCamera->mUnknown94 |= 2;
 }
 
-void fn_8013C340(Desc_8013C340 *pDesc)
+void fn_8013C340(CameraDesc_t *pDesc)
 {
     pDesc->mUnknown00 = 0;
     pDesc->mUnknown04 = 0;
@@ -379,7 +379,7 @@ void fn_8013C340(Desc_8013C340 *pDesc)
     pDesc->mUnknown0C = 0;
 }
 
-void fn_8013C384(Camera_8013F738 *pCamera, unsigned int kind, int ref, int arg)
+void fn_8013C384(GameCamera_t *pCamera, unsigned int kind, int ref, int arg)
 {
     if (fn_801486A0() == 1 && (kind == 1 || kind == 4)) {
         kind = 7;
@@ -405,12 +405,12 @@ void fn_8013C384(Camera_8013F738 *pCamera, unsigned int kind, int ref, int arg)
     }
 }
 
-void fn_8013C438(Camera_8013F738 *pCamera)
+void fn_8013C438(GameCamera_t *pCamera)
 {
-    fn_8013C384(pCamera, 1, fn_801374D4(), 0);
+    fn_8013C384(pCamera, 1, BallGetCurrentIndex(), 0);
 }
 
-void fn_8013C478(Camera_8013F738 *pCamera, Vector_80039F5C *pOffset)
+void fn_8013C478(GameCamera_t *pCamera, Vector_80039F5C *pOffset)
 {
     switch (pCamera->mUnknown98) {
     case 0:
@@ -425,7 +425,7 @@ void fn_8013C478(Camera_8013F738 *pCamera, Vector_80039F5C *pOffset)
     }
 }
 
-void fn_8013C4BC(Camera_8013F738 *pCamera, int *pAngles, int bit)
+void fn_8013C4BC(GameCamera_t *pCamera, int *pAngles, int bit)
 {
     pCamera->mUnknown94 = (pCamera->mUnknown94 & ~0x60) | (1 << bit);
     switch (pCamera->mUnknown98) {
@@ -447,7 +447,7 @@ void fn_8013C4BC(Camera_8013F738 *pCamera, int *pAngles, int bit)
     }
 }
 
-void fn_8013C540(Camera_8013F738 *pCamera, int angle)
+void fn_8013C540(GameCamera_t *pCamera, int angle)
 {
     switch (pCamera->mUnknown98) {
     case 0:
@@ -460,7 +460,7 @@ void fn_8013C540(Camera_8013F738 *pCamera, int angle)
     }
 }
 
-void fn_8013C57C(Camera_8013F738 *pCamera, int angle)
+void fn_8013C57C(GameCamera_t *pCamera, int angle)
 {
     switch (pCamera->mUnknown98) {
     case 0:
@@ -483,7 +483,7 @@ void fn_8013C57C(Camera_8013F738 *pCamera, int angle)
     }
 }
 
-void fn_8013C624(Camera_8013F738 *pCamera, int id, int a, int b)
+void fn_8013C624(GameCamera_t *pCamera, int id, int a, int b)
 {
     fn_8013C824(pCamera, 0, 0);
     pCamera->mUnknownA4 = pCamera->mUnknownA0;
@@ -491,12 +491,12 @@ void fn_8013C624(Camera_8013F738 *pCamera, int id, int a, int b)
     fn_8013C824(pCamera, 1, 0);
 }
 
-int fn_8013C678(Camera_8013F738 *pCamera)
+int fn_8013C678(GameCamera_t *pCamera)
 {
     return pCamera->mUnknownA0;
 }
 
-void fn_8013C680(Camera_8013F738 *pCamera, int on, int a, int b)
+void fn_8013C680(GameCamera_t *pCamera, int on, int a, int b)
 {
     if (on) {
         if (pCamera->mUnknown94 & 8) {
@@ -509,7 +509,7 @@ void fn_8013C680(Camera_8013F738 *pCamera, int on, int a, int b)
     }
 }
 
-void fn_8013C6F0(Camera_8013F738 *pCamera)
+void fn_8013C6F0(GameCamera_t *pCamera)
 {
     Vector_80039F5C pos;
     int angles[3];
@@ -518,30 +518,30 @@ void fn_8013C6F0(Camera_8013F738 *pCamera)
     case 0:
         fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
         fn_8013BC4C(pCamera, &pCamera->mUnknownB8, &pos);
-        fn_801C3EA4(pCamera, pos.mX, pos.mY, pos.mZ);
+        CamFreeSetPos(pCamera, pos.mX, pos.mY, pos.mZ);
         fn_8013BF40(pCamera, angles);
-        fn_801C3ED0(pCamera, angles[0], angles[1], angles[2]);
-        fn_801C3E54(pCamera);
+        CamFreeSetAngle(pCamera, angles[0], angles[1], angles[2]);
+        CamFreeClearVelocity(pCamera);
         fn_8013C824(pCamera, 11, 0);
         break;
     case 1:
         fn_8013BF40(pCamera, angles);
-        fn_801C3C74(pCamera, angles[0], angles[1]);
-        SnapFocusCameraToTarget(pCamera);
+        CamFocusMoveAngle(pCamera, angles[0], angles[1]);
+        CamFocusWarpToDest(pCamera);
         break;
     case 4:
         break;
     }
 }
 
-void fn_8013C7C4(Camera_8013F738 *pCamera)
+void fn_8013C7C4(GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3E54(pCamera);
+        CamFreeClearVelocity(pCamera);
         break;
     case 1: {
-        CameraType1_802F4884 *pBase = (CameraType1_802F4884 *)pCamera;
+        GameCameraKind1_t *pBase = (GameCameraKind1_t *)pCamera;
 
         ZeroVector(&pBase->mUnknown4C);
         pBase->mUnknown58 = 0.0f;
@@ -554,7 +554,7 @@ void fn_8013C7C4(Camera_8013F738 *pCamera)
     }
 }
 
-void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg)
+void fn_8013C824(GameCamera_t *pCamera, int msg, int arg)
 {
     if (pCamera->mUnknownDC) {
         pCamera->mUnknownDC(pCamera, msg, arg);
@@ -566,7 +566,7 @@ int fn_8013C854(int id)
     return lbl_802DBD30[id];
 }
 
-void fn_8013C868(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc)
+void fn_8013C868(GameCamera_t *pCamera, CameraDesc_t *pDesc)
 {
     pCamera->mUnknown98 = pDesc->mUnknown00;
     fn_8013C120(pCamera);
@@ -580,23 +580,23 @@ void fn_8013C868(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc)
     pCamera->mUnknown94 |= 4;
 }
 
-void fn_8013C90C(Camera_8013F738 *pCamera)
+void fn_8013C90C(GameCamera_t *pCamera)
 {
     fn_80141054(pCamera->mUnknown9C)->mUnknown04(pCamera);
     fn_8013C1C8(pCamera);
 }
 
-void fn_8013C954(void *p, Camera_8013F738 *pCamera)
+void fn_8013C954(void *p, GameCamera_t *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3E84(p, pCamera);
+        CamFreeFloatUpdate(p, pCamera);
         break;
     case 1:
-        fn_801C3C4C(p, pCamera);
+        CamFocusUpdate(p, pCamera);
         break;
     case 4:
-        fn_801C3918(p, pCamera);
+        CamConvertHdrToMatrix(p, pCamera);
         break;
     }
 }
@@ -630,7 +630,7 @@ void fn_8013CAA4(EaseVector_8013C9A4 *pEase, int steps)
     angles[0] = (int)(pEase->mX.mValue * 46603.37890625f);
     angles[1] = (int)(pEase->mY.mValue * 46603.37890625f);
     angles[2] = (int)(pEase->mZ.mValue * 46603.37890625f);
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0508();
     fn_801D0C58(&pEase->mBase);
     fn_801D0ADC(-angles[2]);

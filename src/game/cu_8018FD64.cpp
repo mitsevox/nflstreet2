@@ -12,67 +12,67 @@ Class_8018FD64::~Class_8018FD64()
 
 void Class_8018FD64::fn_8018FDEC(int a, int b, void *c, void *d, int e)
 {
-    fn_8007A334(&mObject, a, b, c, d, e);
+    DbCursorOpen(&mObject, a, b, c, d, e);
 }
 
 void Class_8018FD64::fn_8018FE10()
 {
-    fn_8007A3C4(&mObject);
+    DbCursorClose(&mObject);
 }
 
 int Class_8018FD64::fn_8018FE34()
 {
-    return fn_8007A410(&mObject);
+    return DbCursorGetRowCount(&mObject);
 }
 
 int Class_8018FD64::fn_8018FE58()
 {
-    return fn_8007A43C(&mObject);
+    return DbCursorGetRow(&mObject);
 }
 
 int Class_8018FD64::fn_8018FE7C()
 {
-    return fn_8007A444(&mObject);
+    return DbCursorFirst(&mObject);
 }
 
 int Class_8018FD64::fn_8018FEA0()
 {
-    return fn_8007A4A4(&mObject);
+    return DbCursorLast(&mObject);
 }
 
 int Class_8018FD64::fn_8018FEC4()
 {
-    return fn_8007A510(&mObject);
+    return DbCursorNext(&mObject);
 }
 
 int Class_8018FD64::fn_8018FEE8()
 {
-    return fn_8007A588(&mObject);
+    return DbCursorPrev(&mObject);
 }
 
 int Class_8018FD64::fn_8018FF0C(int a)
 {
-    return fn_8007A600(&mObject, a);
+    return DbCursorSeek(&mObject, a);
 }
 
 int Class_8018FD64::fn_8018FF30(int a, int b, int c, int *pResult)
 {
-    return fn_8007A7F4(&mObject, a, b, c, pResult);
+    return DbCursorFindInt(&mObject, a, b, c, pResult);
 }
 
 int Class_8018FD64::fn_8018FF54(int a, int b, int c, int *pResult)
 {
-    return fn_8007A894(&mObject, a, b, c, pResult);
+    return DbCursorFindValue(&mObject, a, b, c, pResult);
 }
 
 int Class_8018FD64::fn_8018FF78(int column)
 {
-    return fn_8007A934(&mObject, column);
+    return DbCursorGetValue(&mObject, column);
 }
 
 int Class_8018FD64::fn_8018FF9C(int column)
 {
-    return fn_8007A98C(&mObject, column);
+    return DbCursorGetInt(&mObject, column);
 }
 
 float Class_8018FD64::fn_8018FFC0(int column)

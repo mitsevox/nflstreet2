@@ -28,7 +28,7 @@ void fn_8017FA84(int a, int b, int *pOut0, int *pOut1, int *pOut2)
     int value = fn_8017FB54(a, b);
 
     lbl_803EB520 = value;
-    fn_8007A068(value, &color);
+    DbColPalGetPrimaryColor(value, &color);
     *pOut0 = color.r;
     *pOut2 = color.b;
     *pOut1 = color.g;

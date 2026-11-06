@@ -1,9 +1,13 @@
+/* Blend-shape (morph target) blending of model geometry: picks the weighted targets of each
+   geometry node, blends their vertex attributes and writes the result to an output buffer that
+   overrides the model's own data when it is drawn. */
+
 #include "engine/tmlib.h"
 #include <dolphin/os.h>
 
-extern BlendState_80214718 lbl_8039B600;
+extern TMBlendState_t lbl_8039B600;
 
-static unsigned int fn_80214718(GeomNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems)
+static unsigned int _TMBlendBuildTargetList(TMGeomNode_t *pNode, int baseIndex, short *pWeights, unsigned int numWeights, TMBlendTarget_t *pItems, unsigned int maxItems)
 {
     unsigned int numItems;
     int i;
@@ -37,7 +41,7 @@ static unsigned int fn_80214718(GeomNode_8020ED10 *pNode, int baseIndex, short *
     return numItems;
 }
 
-static unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItems, unsigned int maxItems)
+static unsigned int _TMBlendClampTargets(TMBlendTarget_t *pItems, unsigned int numItems, unsigned int maxItems)
 {
     while (numItems > maxItems) {
         unsigned int i;
@@ -56,13 +60,13 @@ static unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItem
     return numItems;
 }
 
-static void fn_80214890(void)
+static void _TMBlendReset(void)
 {
-    fn_80214C04(0);
-    fn_80214B44(0);
+    TMBlendSetMaxActiveTargets(0);
+    TMBlendBindModel(0);
 }
 
-static unsigned int fn_802148BC(Buffer_80214554 *pBuffer, BlendItem_80214718 *pItems, unsigned int numItems)
+static unsigned int _TMBlendGeom(TMBuffer_t *pBuffer, TMBlendTarget_t *pItems, unsigned int numItems)
 {
     unsigned int numAttrs = pItems[0].mNumAttrs;
     unsigned int i;
@@ -72,36 +76,36 @@ static unsigned int fn_802148BC(Buffer_80214554 *pBuffer, BlendItem_80214718 *pI
         int size;
         unsigned char *pOutput;
 
-        size = fn_80214DCC(2, pItems[0].mFirstAttr);
-        fn_80215694(0, 2);
+        size = TMBlendChannelSet(2, pItems[0].mFirstAttr);
+        TMBlendOpExtract(0, 2);
         pOutput = 0;
         for (j = 1; j < numItems; j++) {
-            BlendItem_80214718 *pItem = &pItems[j];
+            TMBlendTarget_t *pItem = &pItems[j];
 
-            fn_80214DCC(4, pItem->mFirstAttr);
+            TMBlendChannelSet(4, pItem->mFirstAttr);
             pItem->mFirstAttr++;
-            fn_80215554(0, 4, pItem->mWeight);
+            TMBlendOpAccumulate(0, 4, pItem->mWeight);
         }
         if (pBuffer != 0) {
-            pOutput = fn_80214680(pBuffer, size);
-            fn_80214E3C(2, pOutput, size);
+            pOutput = TMBufferAlloc(pBuffer, size);
+            TMBlendChannelSetMem(2, pOutput, size);
         }
-        fn_8021574C(2, 0);
-        fn_80214EB4(pItems[0].mFirstAttr, pOutput);
+        TMBlendOpIntract(2, 0);
+        TMBlendChannelSetOverride(pItems[0].mFirstAttr, pOutput);
         pItems[0].mFirstAttr++;
     }
     return numAttrs;
 }
 
-void fn_802149D4(short *pWeights, unsigned int numWeights)
+void TMBlendSetWeights(short *pWeights, unsigned int numWeights)
 {
     lbl_8039B600.mNumWeights = numWeights;
     lbl_8039B600.mpWeights = pWeights;
 }
 
-int fn_802149E8(float *pWeights, unsigned int numWeights)
+int TMBlendSetWeightsFloat(float *pWeights, unsigned int numWeights)
 {
-    BlendState_80214718 *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &lbl_8039B600;
     int numActive = 0;
     unsigned int i;
     float scale = 4096.0f;
@@ -114,25 +118,25 @@ int fn_802149E8(float *pWeights, unsigned int numWeights)
             numActive++;
         }
     }
-    fn_802149D4(pState->maWeights, numWeights);
+    TMBlendSetWeights(pState->maWeights, numWeights);
     return numActive;
 }
 
-void fn_80214A7C(Buffer_80214554 *pBuffer)
+void TMBlendBegin(TMBuffer_t *pBuffer)
 {
-    BlendState_80214718 *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &lbl_8039B600;
 
-    fn_80214890();
+    _TMBlendReset();
     pState->mpBuffer = pBuffer;
     if (pBuffer != 0) {
         pState->mFlushed = pBuffer->mUsed;
     }
-    fn_80214ED0();
+    TMBlendChannelBegin();
 }
 
-void fn_80214AC8(void)
+void TMBlendFlushBuffer(void)
 {
-    Buffer_80214554 *pBuffer = lbl_8039B600.mpBuffer;
+    TMBuffer_t *pBuffer = lbl_8039B600.mpBuffer;
 
     if (pBuffer != 0) {
         DCFlushRange(pBuffer->mpData + lbl_8039B600.mFlushed, pBuffer->mUsed - lbl_8039B600.mFlushed);
@@ -140,62 +144,62 @@ void fn_80214AC8(void)
     }
 }
 
-void fn_80214B20(void)
+void TMBlendEnd(void)
 {
-    fn_80214F54();
-    fn_80214890();
+    TMBlendChannelEnd();
+    _TMBlendReset();
 }
 
-void fn_80214B44(Model_8020F28C *pModel)
+void TMBlendBindModel(TMModel_t *pModel)
 {
-    fn_80214B6C(0, pModel);
+    TMBlendBindModel2(0, pModel);
 }
 
-void fn_80214B6C(Model_8020F28C *pBase, Model_8020F28C *pModel)
+void TMBlendBindModel2(TMModel_t *pBase, TMModel_t *pModel)
 {
-    BlendState_80214718 *pState = &lbl_8039B600;
+    TMBlendState_t *pState = &lbl_8039B600;
 
     if (pModel != 0 && pModel->mpGeom != 0) {
         pState->mpGeom = pModel->mpGeom;
-        fn_80214E80(pModel->mpGeom->mpAttrs, pBase != 0 ? pBase->mpChannels : 0, pModel->mpChannels, pModel->mpGeom->mNumAttrs);
+        TMBlendChannelSetChannels(pModel->mpGeom->mpAttrs, pBase != 0 ? pBase->mpChannels : 0, pModel->mpChannels, pModel->mpGeom->mNumAttrs);
     } else {
         pState->mpGeom = 0;
-        fn_80214E80(0, 0, 0, 0);
+        TMBlendChannelSetChannels(0, 0, 0, 0);
     }
     pState->mBaseIndex = 0;
 }
 
-void fn_80214C04(unsigned int maxItems)
+void TMBlendSetMaxActiveTargets(unsigned int maxItems)
 {
     lbl_8039B600.mMaxItems = maxItems;
 }
 
-int fn_80214C10(int nodeIndex)
+int TMBlendGeom(int nodeIndex)
 {
-    BlendItem_80214718 aItems[128];
+    TMBlendTarget_t aItems[128];
     int result = 0;
-    GeomNode_8020ED10 *pNode;
+    TMGeomNode_t *pNode;
     unsigned int numItems;
 
     if (lbl_8039B600.mpGeom != 0) {
         pNode = &lbl_8039B600.mpGeom->mpNodes[nodeIndex];
         if (pNode->mNumLods != 0) {
-            numItems = fn_80214718(pNode, lbl_8039B600.mBaseIndex, lbl_8039B600.mpWeights, lbl_8039B600.mNumWeights, aItems, 128);
+            numItems = _TMBlendBuildTargetList(pNode, lbl_8039B600.mBaseIndex, lbl_8039B600.mpWeights, lbl_8039B600.mNumWeights, aItems, 128);
             if (numItems != 0) {
                 if (lbl_8039B600.mMaxItems != 0) {
-                    numItems = fn_80214814(aItems, numItems, lbl_8039B600.mMaxItems);
+                    numItems = _TMBlendClampTargets(aItems, numItems, lbl_8039B600.mMaxItems);
                 }
-                result = fn_802148BC(lbl_8039B600.mpBuffer, aItems, numItems);
+                result = _TMBlendGeom(lbl_8039B600.mpBuffer, aItems, numItems);
             }
         }
     }
     return result;
 }
 
-int fn_80214CB4(void)
+int TMBlendGeomAll(void)
 {
     int total = 0;
-    Geom_8020ED10 *pGeom = lbl_8039B600.mpGeom;
+    TMGeom_t *pGeom = lbl_8039B600.mpGeom;
     int numNodes;
     int i;
 
@@ -204,10 +208,10 @@ int fn_80214CB4(void)
     }
     numNodes = pGeom->mNumNodes;
     for (i = 0; i < numNodes; i++) {
-        GeomNode_8020ED10 *pNode = &pGeom->mpNodes[i];
+        TMGeomNode_t *pNode = &pGeom->mpNodes[i];
 
         if (pNode->mNumLods != 0) {
-            total += fn_80214C10(i);
+            total += TMBlendGeom(i);
             i += pNode->mNumLods;
         }
     }

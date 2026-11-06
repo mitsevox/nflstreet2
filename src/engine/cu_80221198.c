@@ -13,7 +13,7 @@
 #include "engine/Font.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 #include "engine/sound.h"
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
@@ -116,7 +116,7 @@ typedef struct Transform_80221198 {
     Float32 mScaleColor[4]; /* 0x44 */
 } Transform_80221198;
 
-void fn_80210388(void);
+void TMRenderReset(void);
 void fn_80221198(void *p);
 void fn_801CE910(void);
 void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
@@ -189,7 +189,7 @@ void fn_80221198(void *p)
     Transform_80221198 *pXf = p;
     float aNeg[3];
 
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D0C58(pXf->mPosition);
     fn_801D0C58(pXf->mPivot);
@@ -209,7 +209,7 @@ void fn_80221198(void *p)
 
 void fn_80221294(void *p)
 {
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
     fn_80221118();
     fn_80220CFC(0);
@@ -309,7 +309,7 @@ void fn_80221738(Int32 a, Int32 b, Node_802215F0 *pNode)
     if (pNode->unk_24 != -1) {
         pNode->unk_24 = -1;
     }
-    fn_8020E258(&pNode->Texture);
+    TexDelete(&pNode->Texture);
     memset(pNode, 0, sizeof(Node_802215F0));
     fn_801D2BD0(pNode);
 }
@@ -683,7 +683,7 @@ void fn_80223CB8(Uint32 Flags)
     if ((Flags & 3) == 2) {
         bColor = 0;
     }
-    fn_80210388();
+    TMRenderReset();
     bTex = Flags & 2;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -940,7 +940,7 @@ void fn_80225B50(Uint32 Flags)
     if ((Flags & 6) == 4) {
         bColor = 0;
     }
-    fn_80210388();
+    TMRenderReset();
     bTex = Flags & 4;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

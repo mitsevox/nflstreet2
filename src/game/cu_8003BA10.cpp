@@ -1,14 +1,14 @@
 #include "game/fn_8022781C.h"
-#include "game/Block_80307980.h"
-#include "game/Init_8004A040.h"
+#include "game/FaceFeatures.h"
+#include "game/PlayerObjInit.h"
 #include "game/Item_800476DC.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
 #include "game/Pair_8017055C.h"
 #include "game/bitstream.h"
-#include "game/cu_80047E28.h"
+#include "game/PlayerLook.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include <math.h>
@@ -27,7 +27,7 @@ extern unsigned short lbl_803EA434, lbl_803EA436;
 extern unsigned char lbl_803EA438;
 extern int lbl_802CCD8C[3], lbl_802CCD98[3], lbl_802CCDA4[14];
 extern void *lbl_803EAB3C, *lbl_803EAAFC, *lbl_803EAAE0;
-unsigned char fn_8004A238();
+unsigned char PlayerObjIsDrawReady();
 void fn_80042380(Object_8003DEC4 *, int, float *, int *);
 void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
@@ -40,10 +40,10 @@ float fn_802276E8(void *, void *);
 int fn_80227040(void *, void *);
 void fn_801CFC14(int, float *, float *);
 float fn_801CFD28(int);
-Region_8003BDF0 *fn_80054130();
-int fn_80054138(float *);
-void fn_800542DC(void *, void *, void *);
-float fn_8005434C(void *);
+Region_8003BDF0 *LevelGetData();
+int LevelFindArea(float *);
+void LevelGetQuadBase(void *, void *, void *);
+float LevelGetQuadHeight(void *);
 void fn_8003BDF0(Object_8003DEC4 *, Pair_8017055C *, int);
 void fn_8003BFCC(Object_8003DEC4 *, float *, Pair_8017055C *, Pair_8017055C *,
                  Pair_8017055C *, int, float);
@@ -74,28 +74,28 @@ void fn_800A3C14();
 void fn_800AE10C();
 void fn_800ADE6C();
 Skeleton_80041930 *fn_801EF390(void *, int, int);
-void fn_801C4DEC(Skeleton_80041930 *);
-void fn_801C4F10(Skeleton_80041930 *, Skeleton_80041930 *);
+void CharRelocateSkeleton(Skeleton_80041930 *);
+void CharSkelMirrorRest(Skeleton_80041930 *, Skeleton_80041930 *);
 void fn_800AF630(void *, int, int, int);
 void fn_800AF790(int, Skeleton_80041930 *, const char *, const char *, int);
 void fn_8015F484(Skeleton_80041930 *, Skeleton_80041930 **, Skeleton_80041930 *,
                  Skeleton_80041930 *);
-int fn_800809FC(Object_8008044C *, int, int *);
-int fn_800808F8(Object_8008044C *);
+int PlayerDbSeekOriginalId(Object_8008044C *, int, int *);
+int PlayerDbGetId(Object_8008044C *);
 void fn_8003BA00();
 void fn_8003BA04();
 void fn_8003BA08();
 void fn_8003BA0C();
-void fn_801DCF0C(int, int, int, void (*)(), void (*)());
-void fn_801DD0C8(int, int, int, int (*)(void));
-void *fn_801DD268(int, int, int, void *);
-void *fn_801DD168(int, int, void *);
-void fn_801DD3AC(int, void *, int);
-void fn_801DD320(int, void *);
+void ObjNewType_(int, int, int, void (*)(), void (*)());
+void ObjSetListObjFunc(int, int, int, int (*)(void));
+void *ObjNewInList(int, int, int, void *);
+void *ObjNew(int, int, void *);
+void ObjSetPriority(int, void *, int);
+void ObjRemoveFromList(int, void *);
 int fn_8003CBFC();
 int fn_8003CC20();
 int fn_8003CC44();
-void fn_8004A140(int, int, int);
+void PlayerObjAddObjType(int, int, int);
 void fn_801A4688(int);
 int fn_8015E440(int, int);
 void fn_80234A14(void *, int);
@@ -104,26 +104,26 @@ void fn_8003D0C8(int);
 void fn_80136AE4(int, int);
 void fn_8003D12C();
 void fn_8003D2E0();
-void fn_8004A0E0(int, int);
-void fn_80048EDC();
+void PlayerObjRenderInit(int, int);
+void PlayerLookOpen();
 void fn_8003D988(int, int *, int);
 void fn_80160C10();
 int fn_8003D378(int, int);
-void fn_801F282C();
-void fn_801F283C();
+void ResTrackPause();
+void ResTrackResume();
 int fn_801F7C88();
 void *fn_801D2B7C(int, int, int);
 void fn_8015EE74();
 void fn_8015EF10();
-int fn_80080D38(Object_8008044C *, char *, int);
+int PlayerDbGetNameKey(Object_8008044C *, char *, int);
 int fn_8015F5BC(const char *);
-void fn_8015F068(int, Ids_8015F6E8 *);
+void fn_8015F068(int, PlayerHeadIds_t *);
 void fn_8015F124(int, int);
 void fn_8015F1D4(int, int);
 void fn_8015F298(int, int);
-void fn_80080A9C(Object_8008044C *, char *, int);
-void fn_80048FE8(unsigned char, unsigned char, int);
-int fn_80080E48(Object_8008044C *);
+void PlayerDbGetNickname(Object_8008044C *, char *, int);
+void PlayerLookLoadBonuses(unsigned char, unsigned char, int);
+int PlayerDbGetPlex(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
 int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);
@@ -135,21 +135,21 @@ void fn_8003D958();
 
 void fn_80160CDC();
 int fn_800A3420();
-void fn_80049E6C();
+void PlayerLookHideSwitch28();
 void fn_801613F0();
-int fn_80027DF0();
+int FELoopIsMainFEActive();
 void fn_80161498();
-void fn_80228D58(void *);
-void fn_80228DD4();
+void VptTrashObject(void *);
+void VptFlushObjectTrash();
 void fn_80047630(Item_800476DC *);
 void fn_801D2BD0(void *);
-void fn_8004A118();
+void PlayerObjRenderShutdown();
 void fn_800AF71C();
 void fn_801F010C(void *, int);
-void fn_8004A1FC(int);
-int fn_801DCF8C(int);
+void PlayerObjRemoveObjType(int);
+int ObjDelType(int);
 void fn_80160F98();
-void fn_80048F34();
+void PlayerLookClose();
 int fn_80160C08();
 void fn_8009BD48(int *, int, int, int);
 int fn_800429CC(int);
@@ -165,7 +165,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
                  int angle) {
   Projection_8003BA10 *p = &object->mUnknown4256;
   p->mUnknown673 =
-      fn_8004A238() && (object->mUnknown20 & 1) && !(object->mUnknown20 & 2);
+      PlayerObjIsDrawReady() && (object->mUnknown20 & 1) && !(object->mUnknown20 & 2);
   float first[4], center[4], delta[4], direction[2];
   fn_80042380(object, 4, first, 0);
   fn_80042380(object, 8, center, 0);
@@ -224,7 +224,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
   p->mPoints[2][1] = center[1] + side.mY + backward.mY;
   p->mPoints[3][0] = center[0] - side.mX + backward.mX;
   p->mPoints[3][1] = center[1] - side.mY + backward.mY;
-  if (fn_80054130()) {
+  if (LevelGetData()) {
     unsigned int value =
         object->mUnknown4968 * lbl_803EA436 + object->mUnknown4969;
     int enabled = (value & 1) ? lbl_803EA438 : !lbl_803EA438;
@@ -235,7 +235,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
   }
 }
 void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
-  Region_8003BDF0 *regions = fn_80054130();
+  Region_8003BDF0 *regions = LevelGetData();
   if (!regions)
     return;
   float first[4], center[4];
@@ -250,8 +250,8 @@ void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
   radius += fn_8022781C(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
     Pair_8017055C a, b, mid;
-    fn_800542DC(regions->mUnknown132[i], &a, &b);
-    float scale = fn_8005434C(regions->mUnknown132[i]);
+    LevelGetQuadBase(regions->mUnknown132[i], &a, &b);
+    float scale = LevelGetQuadHeight(regions->mUnknown132[i]);
     mid.mX = (a.mX + b.mX) * 0.5f;
     mid.mY = (a.mY + b.mY) * 0.5f;
     float extent = fn_8022781C(&mid, &a);
@@ -572,7 +572,7 @@ void fn_8003CF88(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
   for (unsigned int i = 0; i < lbl_803EA434; ++i) {
     Object_8003DEC4 *object = lbl_803EA430[i];
     fn_80042AF4(object, a, b, c, d, t);
-    object->mUnknown972 = fn_80054138(object->mUnknown4);
+    object->mUnknown972 = LevelFindArea(object->mUnknown4);
     fn_80190F18(b, 1);
     fn_80190F18(a, 1);
     if (d)
@@ -603,42 +603,42 @@ void fn_8003D0C8(int mode) {
   fn_800ADE6C();
 }
 void fn_8003D12C() {
-  lbl_803EA41C = fn_801EF390(gAnimData.fn_80033AF8(), 57, 1);
-  fn_801C4DEC(lbl_803EA41C);
+  lbl_803EA41C = fn_801EF390(gAnimData.GetArchive(), 57, 1);
+  CharRelocateSkeleton(lbl_803EA41C);
   fn_8003CC68(lbl_803EA41C);
   for (int i = 0; i < 3; ++i) {
     lbl_802CCD98[i] = (short)lbl_803EA41C->mUnknown1040[15][i] * 16;
     lbl_802CCD8C[i] = (short)lbl_803EA41C->mUnknown1040[21][i] * 16;
   }
-  lbl_803EA420[0] = fn_801EF390(gAnimData.fn_80033AF8(), 58, 1);
-  fn_801C4DEC(lbl_803EA420[0]);
+  lbl_803EA420[0] = fn_801EF390(gAnimData.GetArchive(), 58, 1);
+  CharRelocateSkeleton(lbl_803EA420[0]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[0] + 16))[i] = 0.0f;
-  lbl_803EA420[1] = fn_801EF390(gAnimData.fn_80033AF8(), 59, 1);
-  fn_801C4DEC(lbl_803EA420[1]);
+  lbl_803EA420[1] = fn_801EF390(gAnimData.GetArchive(), 59, 1);
+  CharRelocateSkeleton(lbl_803EA420[1]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[1] + 16))[i] = 0.0f;
-  fn_801C4F10(lbl_803EA420[0], lbl_803EA420[1]);
-  lbl_803EA428 = fn_801EF390(gAnimData.fn_80033AF8(), 61, 1);
-  fn_801C4DEC(lbl_803EA428);
+  CharSkelMirrorRest(lbl_803EA420[0], lbl_803EA420[1]);
+  lbl_803EA428 = fn_801EF390(gAnimData.GetArchive(), 61, 1);
+  CharRelocateSkeleton(lbl_803EA428);
   fn_8003CD1C(lbl_803EA428);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA428 + 16))[i] = 0.0f;
-  lbl_803EA42C = fn_801EF390(gAnimData.fn_80033AF8(), 62, 1);
-  fn_801C4DEC(lbl_803EA42C);
+  lbl_803EA42C = fn_801EF390(gAnimData.GetArchive(), 62, 1);
+  CharRelocateSkeleton(lbl_803EA42C);
   fn_8003CDF8(lbl_803EA42C);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA42C + 16))[i] = 0.0f;
 }
 void fn_8003D2E0() {
-  fn_800AF630(gAnimData.fn_80033AF8(), 60, 1, 32);
+  fn_800AF630(gAnimData.GetArchive(), 60, 1, 32);
   fn_800AF790(0, lbl_803EA41C, "low_torso", "neckhi", 0);
   fn_800AF790(1, lbl_803EA41C, "lshoulder", "lwrist", 1);
   fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
 }
 int fn_8003D378(int owner, int mode) {
   Object_8008044C object;
-  fn_801F282C();
+  ResTrackPause();
   lbl_803EA430 = (Object_8003DEC4 **)fn_801D2B7C(lbl_803EA434 * 4, 0, 0);
   int result = fn_801F7C88();
   if (lbl_803EA430) {
@@ -655,21 +655,21 @@ int fn_8003D378(int owner, int mode) {
     unsigned int order[14], keys[14];
     for (unsigned int i = 0; i < lbl_803EA434; ++i) {
       unsigned char team = mode ? 0 : (unsigned char)(i / lbl_803EA436);
-      fn_800809C4(&object, lbl_802CCDA4[i], 0);
+      PlayerDbSeekId(&object, lbl_802CCDA4[i], 0);
       char name[28];
-      int hasName = fn_80080D38(&object, name, 27);
-      fn_800496A0(i, i, team, lbl_802CCDA4[i]);
+      int hasName = PlayerDbGetNameKey(&object, name, 27);
+      PlayerLookLoadForPlayer(i, i, team, lbl_802CCDA4[i]);
       order[i] = i;
-      int a = fn_80049888(i), b = fn_800499A8(i);
-      Ids_8015F6E8 ids;
+      int a = PlayerLookGetHatModel(i), b = PlayerLookGetSlot1Model(i);
+      PlayerHeadIds_t ids;
       if (hasName) {
-        fn_80049E00(i, name, &ids);
+        PlayerLookGetHeadIds(i, name, &ids);
         keys[i] = fn_8015F5BC(name);
       } else {
-        fn_80049E00(i, 0, &ids);
+        PlayerLookGetHeadIds(i, 0, &ids);
         keys[i] = 65535;
       }
-      int c = fn_800499E8(i);
+      int c = PlayerLookGetAccessoryModel(i);
       fn_8015F068(i, &ids);
       fn_8015F124(i, a);
       fn_8015F1D4(i, b);
@@ -694,38 +694,38 @@ int fn_8003D378(int owner, int mode) {
       init.mUnknown59 = index;
       init.mUnknown5A = index;
       init.mInit.mUnknown18 = lbl_802CCDA4[index];
-      fn_800809C4(&object, init.mInit.mUnknown18, 0);
-      fn_80080A9C(&object, init.mUnknown38, 31);
+      PlayerDbSeekId(&object, init.mInit.mUnknown18, 0);
+      PlayerDbGetNickname(&object, init.mUnknown38, 31);
       if (!mode)
-        fn_80048FE8(init.mUnknown5A, init.mUnknown57, init.mInit.mUnknown18);
+        PlayerLookLoadBonuses(init.mUnknown5A, init.mUnknown57, init.mInit.mUnknown18);
       char name[28];
-      int hasName = fn_80080D38(&object, name, 27);
-      int value = fn_80080E20(&object);
+      int hasName = PlayerDbGetNameKey(&object, name, 27);
+      int value = PlayerDbGetPybt(&object);
       if (hasName) {
         init.mUnknown1C = fn_8015F5BC(name);
-        fn_80049E00(init.mUnknown5A, init.mUnknown1C == 65535 ? 0 : name,
+        PlayerLookGetHeadIds(init.mUnknown5A, init.mUnknown1C == 65535 ? 0 : name,
                     &init.mUnknown20);
       } else {
-        fn_80049E00(init.mUnknown5A, 0, &init.mUnknown20);
+        PlayerLookGetHeadIds(init.mUnknown5A, 0, &init.mUnknown20);
         init.mUnknown1C = 65535;
       }
-      init.mUnknown30 = fn_800499E8(index);
-      init.mUnknown28 = fn_80049888(init.mUnknown5A);
-      init.mUnknown2C = fn_800499A8(init.mUnknown5A);
+      init.mUnknown30 = PlayerLookGetAccessoryModel(index);
+      init.mUnknown28 = PlayerLookGetHatModel(init.mUnknown5A);
+      init.mUnknown2C = PlayerLookGetSlot1Model(init.mUnknown5A);
       init.mUnknown34 = value;
-      init.mUnknown5B = fn_80080E48(&object);
-      Block_80307980 block;
+      init.mUnknown5B = PlayerDbGetPlex(&object);
+      FaceFeatures_t block;
       fn_80082138(&object, &block);
-      fn_80046804(&block, &init.mUnknown5C);
+      FaceMorphBuildWeights(&block, &init.mUnknown5C);
       if (owner) {
         lbl_803EA430[index] =
-            (Object_8003DEC4 *)fn_801DD268(owner, 0, 0, &init);
-        fn_801DD3AC(owner, lbl_803EA430[index], 10);
+            (Object_8003DEC4 *)ObjNewInList(owner, 0, 0, &init);
+        ObjSetPriority(owner, lbl_803EA430[index], 10);
         lbl_803EA430[index]->mUnknown988 =
             fn_800475FC(init.mUnknown57 * 7 + init.mUnknown58);
         fn_800476CC(lbl_803EA430[index]->mUnknown988, " ");
       } else {
-        lbl_803EA430[index] = (Object_8003DEC4 *)fn_801DD168(0, 0, &init);
+        lbl_803EA430[index] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
         lbl_803EA430[index]->mUnknown988 = 0;
       }
       if (lbl_803EA410 && lbl_803EA414) {
@@ -743,7 +743,7 @@ int fn_8003D378(int owner, int mode) {
         for (int k = 0; k < 4; ++k)
           p->mPoints[k][2] = 0.0f;
       }
-      fn_80049124(index);
+      PlayerLookApply(index);
       if (hasName)
         fn_801611BC(init.mUnknown5A, name, 0);
       else {
@@ -754,7 +754,7 @@ int fn_8003D378(int owner, int mode) {
     }
     fn_8008056C(&object);
   }
-  fn_801F283C();
+  ResTrackResume();
   return result;
 }
 void fn_8003D958() {
@@ -768,8 +768,8 @@ void fn_8003D988(int value, int *out, int mode) {
     desc.mUnknown8 = value;
     fn_8008044C(&object, &desc, 0x454D4147);
     for (unsigned int i = 0; i < lbl_803EA436; ++i) {
-      fn_800809FC(&object, out[i], 0);
-      out[i] = fn_800808F8(&object);
+      PlayerDbSeekOriginalId(&object, out[i], 0);
+      out[i] = PlayerDbGetId(&object);
     }
     fn_8008056C(&object);
   } else {
@@ -779,33 +779,33 @@ void fn_8003D988(int value, int *out, int mode) {
 }
 int fn_8003DA8C() { return 13; }
 int fn_8003DA94(int count, int owner, int mode) {
-  fn_801DCF0C(29, 20, 1, fn_8003BA00, fn_8003BA08);
+  ObjNewType_(29, 20, 1, fn_8003BA00, fn_8003BA08);
   if (owner) {
-    fn_801DD0C8(owner, 29, 0, fn_8003CBFC);
-    lbl_803EA410 = fn_801DD268(owner, 29, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA410, 2);
+    ObjSetListObjFunc(owner, 29, 0, fn_8003CBFC);
+    lbl_803EA410 = ObjNewInList(owner, 29, 0, 0);
+    ObjSetPriority(owner, lbl_803EA410, 2);
   }
-  fn_801DCF0C(30, 20, 1, fn_8003BA00, fn_8003BA08);
+  ObjNewType_(30, 20, 1, fn_8003BA00, fn_8003BA08);
   if (owner) {
-    fn_801DD0C8(owner, 30, 0, fn_8003CC20);
-    lbl_803EA414 = fn_801DD268(owner, 30, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA414, 7);
+    ObjSetListObjFunc(owner, 30, 0, fn_8003CC20);
+    lbl_803EA414 = ObjNewInList(owner, 30, 0, 0);
+    ObjSetPriority(owner, lbl_803EA414, 7);
   }
-  fn_801DCF0C(27, 20, 1, fn_8003BA04, fn_8003BA0C);
+  ObjNewType_(27, 20, 1, fn_8003BA04, fn_8003BA0C);
   if (owner) {
-    fn_801DD0C8(owner, 27, 0, fn_8003CC44);
-    lbl_803EA418 = fn_801DD268(owner, 27, 0, 0);
-    fn_801DD3AC(owner, lbl_803EA418, 13);
+    ObjSetListObjFunc(owner, 27, 0, fn_8003CC44);
+    lbl_803EA418 = ObjNewInList(owner, 27, 0, 0);
+    ObjSetPriority(owner, lbl_803EA418, 13);
   }
-  fn_8004A140(owner, 0, count);
+  PlayerObjAddObjType(owner, 0, count);
   lbl_803EA436 = (unsigned int)count >> 1;
   lbl_803EA434 = count;
   fn_8003D0C8(mode);
   fn_80136AE4(0, mode);
   fn_8003D12C();
   fn_8003D2E0();
-  fn_8004A0E0((int)lbl_803EA41C, (int)lbl_803EA420);
-  fn_80048EDC();
+  PlayerObjRenderInit((int)lbl_803EA41C, (int)lbl_803EA420);
+  PlayerLookOpen();
   fn_8003D988(0, lbl_802CCDA4, mode);
   fn_8003D988(1, lbl_802CCDA4 + lbl_803EA436, mode);
   fn_80160C10();
@@ -813,57 +813,57 @@ int fn_8003DA94(int count, int owner, int mode) {
   if (!mode) {
     fn_80160CDC();
     if (fn_800A3420() == 3)
-      fn_80049E6C();
+      PlayerLookHideSwitch28();
   } else
     fn_801613F0();
-  if (!fn_80027DF0())
+  if (!FELoopIsMainFEActive())
     fn_80161498();
   return result;
 }
 int fn_8003DCC0(int owner) {
   if (lbl_803EA410) {
-    fn_801DD320(owner, lbl_803EA410);
-    fn_80228D58(lbl_803EA410);
-    fn_80228DD4();
+    ObjRemoveFromList(owner, lbl_803EA410);
+    VptTrashObject(lbl_803EA410);
+    VptFlushObjectTrash();
     lbl_803EA410 = 0;
   }
   if (lbl_803EA414) {
-    fn_801DD320(owner, lbl_803EA414);
-    fn_80228D58(lbl_803EA414);
-    fn_80228DD4();
+    ObjRemoveFromList(owner, lbl_803EA414);
+    VptTrashObject(lbl_803EA414);
+    VptFlushObjectTrash();
     lbl_803EA414 = 0;
   }
   if (lbl_803EA418) {
-    fn_801DD320(owner, lbl_803EA418);
-    fn_80228D58(lbl_803EA418);
-    fn_80228DD4();
+    ObjRemoveFromList(owner, lbl_803EA418);
+    VptTrashObject(lbl_803EA418);
+    VptFlushObjectTrash();
     lbl_803EA418 = 0;
   }
   if (lbl_803EA430) {
     for (int i = 0; i < lbl_803EA434; ++i) {
       if (owner) {
         fn_80047630(lbl_803EA430[i]->mUnknown988);
-        fn_801DD320(owner, lbl_803EA430[i]);
+        ObjRemoveFromList(owner, lbl_803EA430[i]);
       }
-      fn_80228D58(lbl_803EA430[i]);
+      VptTrashObject(lbl_803EA430[i]);
     }
-    fn_80228DD4();
+    VptFlushObjectTrash();
     fn_801D2BD0(lbl_803EA430);
     lbl_803EA430 = 0;
   }
-  fn_8004A118();
+  PlayerObjRenderShutdown();
   fn_800AF71C();
-  fn_801F010C(gAnimData.fn_80033AF8(), 57);
-  fn_801F010C(gAnimData.fn_80033AF8(), 58);
-  fn_801F010C(gAnimData.fn_80033AF8(), 59);
-  fn_8004A1FC(0);
-  fn_801DCF8C(29);
-  fn_801DCF8C(30);
-  int result = fn_801DCF8C(27);
+  fn_801F010C(gAnimData.GetArchive(), 57);
+  fn_801F010C(gAnimData.GetArchive(), 58);
+  fn_801F010C(gAnimData.GetArchive(), 59);
+  PlayerObjRemoveObjType(0);
+  ObjDelType(29);
+  ObjDelType(30);
+  int result = ObjDelType(27);
   lbl_803EA434 = 0;
   fn_80160F98();
-  fn_80048F34();
-  if (fn_80027DF0() && fn_80160C08())
+  PlayerLookClose();
+  if (FELoopIsMainFEActive() && fn_80160C08())
     fn_80161498();
   return result;
 }

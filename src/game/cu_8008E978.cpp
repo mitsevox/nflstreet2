@@ -3,8 +3,8 @@
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
-#include "game/Record_803EA558.h"
-#include "game/Level_80054130.h"
+#include "game/LevelWallInfo.h"
+#include "game/LevelData.h"
 #include "game/cu_80142BB4.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
@@ -24,16 +24,16 @@
 
 #include "engine/vptmanager.h"
 #include "engine/cu_801B9F00.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
 #include "game/Entry_800B206C.h"
 #include "game/Block_800B21D0.h"
 #include "game/Entry_80219044.h"
-#include "game/Class_803EC99C.h"
+#include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -49,17 +49,17 @@
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_800314E0.h"
+#include "game/FeatAwards.h"
 #include "game/cu_8018EC68.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8017F584.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8011F518.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/cu_8008E978.h"
 
 
@@ -78,7 +78,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -90,25 +90,25 @@
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/Block_800B0CFC.h"
-#include "game/fn_801EBC18.h"
+#include "engine/llquat.h"
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
-#include "game/Entry_802F394C.h"
-#include "game/Object_800785C0.h"
+#include "game/EnvFogSettings.h"
+#include "game/Challenge.h"
 #include "game/Block_800BFAD0.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_800A3530.h"
 #include "game/Player_8003877C.h"
 
@@ -136,9 +136,9 @@ struct Header_80094B78 {
     unsigned char mUnknown4[10];
 };
 
-/* Row table searched by fn_800680A8 (laid out as in cu_80067F18.cpp):
+/* Row table searched by CondTableFindRows (laid out as in CondTable.cpp):
    mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
-struct Table_800680A8 {
+struct CondTable_t {
     char mUnknown0[4];
     int mUnknown4;
     unsigned int mUnknown8;
@@ -146,7 +146,7 @@ struct Table_800680A8 {
     unsigned int mUnknown10;
 };
 
-/* The four halfwords at mUnknownC of a Table_800680A8 row that
+/* The four halfwords at mUnknownC of a CondTable_t row that
    fn_80094B34 tests. */
 struct Cell_80094B34 {
     unsigned short mUnknown0[3];
@@ -193,7 +193,7 @@ int fn_80094374(int index);
 Object_80039F5C *fn_8003AD2C(int id);
 int fn_801485D4(void);
 int fn_80178AE0(void);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 int fn_80177F7C(void);
 void fn_80093410(int handle);
 void fn_80094BC4(Entry_80094BC4 *p);
@@ -224,7 +224,7 @@ int fn_80178308(void);
 int fn_8009313C(Params_80092E54 *pRequest);
 int fn_80096074(Params_80092E54 *pRequest, int flag);
 void fn_80092538(void);
-int fn_80094B34(Table_800680A8 *pTable, int index);
+int fn_80094B34(CondTable_t *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
 unsigned char fn_80178348(void);
 int fn_80178360(void);
@@ -237,13 +237,13 @@ int fn_80095284(Object_80039F5C *p, Params_80092E54 *pRequest, unsigned int coun
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 int fn_800B2320(void);
 Object_80039F5C *fn_800B2340(int index);
-Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
-int fn_801C01C4(Actor_801C009C *pActor);
+Ball_t *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
+int AnimSeqCamGetFileFlag(Actor_801C009C *pActor);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800944A4(int kind);
 int fn_800948E4(Object_8017886C *p);
-unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max);
+unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, CondTable_t *pTable, unsigned short **ppOut, unsigned int max);
 void fn_80094B78(Header_80094B78 *p);
 
 extern unsigned char lbl_803EA8BC;
@@ -274,7 +274,7 @@ extern Record_80093E4C lbl_802D7808[];
 extern int lbl_802D7974[5][5];
 extern Vector_80039F5C lbl_8030C0B4[];
 extern Params_80092E54 lbl_8030C184;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 /* -1-terminated roster slot lists fn_80095370 picks by position code. */
 extern int lbl_803EA8E0[2];
 extern int lbl_803EA8E8[2];
@@ -306,7 +306,7 @@ int fn_8002CA74(Type_803EA368 *p, int msg, int value);
 void fn_8002CF34(Type_803EA368 *p);
 unsigned char fn_8002D060(Type_803EA368 *p);
 void fn_8002E890(RecordList_8002E7C0 *pList);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E15D0(int a);
 int fn_801E195C(int a);
 void fn_80093684(void *p);
@@ -343,10 +343,10 @@ void fn_8002CFF4(Type_803EA368 *p);
 void fn_8017DC44(void);
 int fn_800B9B18(void *p);
 void fn_8017DC88(void);
-void fn_8013FA24(void);
-void fn_8013FA8C(int a);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
+void CamGameProcess(void);
+void CamGameSetModeAll(int a);
+GameCamera_t *CamGameGetCamera(int index);
+void fn_8013C6F0(GameCamera_t *pCamera);
 void fn_801D0508(void);
 void fn_801D0C58(void *p);
 void fn_801D0ADC(int a);
@@ -478,7 +478,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                         pRequest->mRequest.mUnknownE0.mUnknown0 = 0;
                         pRequest->mRequest.mUnknownE0.mUnknown4.mWord = -1;
                         lbl_802D73B8[id].mUnknown8++;
-                        if (fn_801C01C4(pActor) == 0) {
+                        if (AnimSeqCamGetFileFlag(pActor) == 0) {
                             pRequest->mRequest.mUnknownE0.mUnknown8.mWord = 0;
                             pRequest->mRequest.mUnknownE0.mUnknown0 = 1;
                             pRequest->mRequest.mUnknownE0.mUnknown4.mWord = 1;
@@ -491,7 +491,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                             if (type == 1) {
                                 fn_800B9B64(lbl_803EAB84, 0, (unsigned char)(id >> 8));
                                 lbl_803EC924->mUnknown80.mUnknownE4F[0] = type;
-                                fn_80067E3C(128, &p->mMotion.mPos, p->mId, pRequest->mRequest.mUnknownC, 0, 0);
+                                AudmonEventPostId(128, &p->mMotion.mPos, p->mId, pRequest->mRequest.mUnknownC, 0, 0);
                             }
                         }
                     }
@@ -640,12 +640,12 @@ extern "C" Actor_801C009C *fn_80091240(int index)
     return fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 }
 
-extern "C" int fn_80027DF0(void);
+extern "C" int FELoopIsMainFEActive(void);
 extern "C" void fn_80162780(int a, int b);
-extern "C" void fn_8013F97C(int a);
-extern "C" void fn_8013FB44(void);
-extern "C" void fn_8013FA58(int a, int b);
-extern "C" void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
+extern "C" void CamGameSelectCamera(int a);
+extern "C" void CamGameResumeAll(void);
+extern "C" void CamGameSetFocusAll(int a, int b);
+extern "C" void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
 extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 
 extern "C" void fn_8009126C(int index)
@@ -658,22 +658,22 @@ extern "C" void fn_8009126C(int index)
         pCharacter->mUnknownDC[0] = 0;
     }
     selected = pCharacter->mUnknownE0.mUnknown0;
-    if (fn_80027DF0() == 0 && selected != 0) {
+    if (FELoopIsMainFEActive() == 0 && selected != 0) {
         Object_80039F5C *p;
-        Camera_8013F738 *pCamera;
+        GameCamera_t *pCamera;
         int ref;
 
         fn_80162780(0, 0);
-        fn_8013F97C(2);
+        CamGameSelectCamera(2);
         p = fn_8008FF28(pCharacter, pActor);
         fn_8009BD2C(p, &ref);
-        pCamera = fn_8013FA04(2);
+        pCamera = CamGameGetCamera(2);
         pCamera->mUnknown100 = ref;
         pCamera->mUnknownF8 = p->mMotion.mPos.mX;
         pCamera->mUnknownFC = p->mMotion.mPos.mY;
-        fn_8013FB44();
-        fn_8013FA8C(10);
-        fn_8013FA58(0, 0);
+        CamGameResumeAll();
+        CamGameSetModeAll(10);
+        CamGameSetFocusAll(0, 0);
         fn_8013C824(pCamera, 3, 0);
     }
 }
@@ -702,9 +702,9 @@ extern "C" void fn_8009134C(int index)
 extern "C" void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p, Vector_80039F5C *pOut, int *pAngle);
 extern "C" void fn_800B267C(Object_800B26B0 *pMotion);
 extern "C" int fn_801784C4(void);
-extern "C" Object_80041904 *fn_800400C4(Block_80170E64 *pBlock);
+extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock);
 
-extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEntry, Object_80041904 *pBall)
+extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEntry, BigObjInst *pBall)
 {
     Vector_80039F5C pos;
     int angle;
@@ -736,15 +736,15 @@ extern "C" void fn_80091644(int index)
 
     for (; i < pActor->mUnknown6; i++) {
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
-            Object_80041904 *pBall = fn_800400C4(fn_8013825C(fn_801374BC()));
+            BigObjInst *pBall = fn_800400C4(BallGetModel(BallGetCurrent()));
 
             fn_80091578(pCharacter, &pActor->mpUnknown20[i], pBall);
         }
     }
 }
 
-extern "C" int fn_8004AF94(Object_80041904 *pBall, int a, int b, int c, unsigned char index);
-extern "C" void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
+extern "C" int fn_8004AF94(BigObjInst *pBall, int a, int b, int c, unsigned char index);
+extern "C" void BallStateChange(Ball_t *pBall, int a, int b);
 
 extern "C" int fn_800916E0(int index)
 {
@@ -754,11 +754,11 @@ extern "C" int fn_800916E0(int index)
 
     for (; i < pActor->mUnknown6; i++) {
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
-            Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+            Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
             pBlock->mUnknown680 = fn_8004AF94(fn_800400C4(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
-            fn_80138440(fn_801374BC(), 1);
-            fn_8013B9C0(fn_801374BC(), 8, 0);
+            BallSetVisible(BallGetCurrent(), 1);
+            BallStateChange(BallGetCurrent(), 8, 0);
         }
     }
     return 1;
@@ -772,16 +772,16 @@ extern "C" void fn_800917A4(int index)
 
     for (; i < pActor->mUnknown6; i++) {
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
-            Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+            Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
             if (pBlock->mUnknown680 != 0xFFFF) {
-                Extra_8004149C *pExtra = pBlock->mpUnknown676->mUnknown428;
+                BigObjPhysics_t *pExtra = pBlock->mpUnknown676->mUnknown428;
 
-                fn_801BA384((Object_801BA03C *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
+                fn_801BA384((AnimHeader_t *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
                             pBlock->mUnknown680);
                 pBlock->mUnknown680 = 0xFFFF;
             }
-            fn_8013B9C0(fn_801374BC(), 5, 0);
+            BallStateChange(BallGetCurrent(), 5, 0);
         }
     }
 }
@@ -794,17 +794,17 @@ extern "C" int fn_80091864(int index)
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 
     for (; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         switch (pFrame->mUnknown20) {
         case 0x42414C4C:
-            if (fn_801383B0()) {
-                Object_80137ABC *pBall = pCharacter->mUnknown74[i];
+            if (BallsExist()) {
+                Ball_t *pBall = pCharacter->mUnknown74[i];
 
                 if (pBall == 0) {
-                    Object_80039F5C *pCarrier = fn_80137B40();
+                    Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
-                    pBall = pCarrier != 0 ? fn_80137C48(pCarrier) : fn_801374BC();
+                    pBall = pCarrier != 0 ? BallFindHeldBy(pCarrier) : BallGetCurrent();
                 }
                 if (pBall != 0) {
                     pCharacter->mUnknown74[i] = pBall;
@@ -849,13 +849,13 @@ extern "C" void fn_800919F0(int index)
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 
     for (; i < pActor->mUnknown4; i++) {
-        switch (fn_801C029C(pActor, i)->mUnknown20) {
+        switch (AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown20) {
         case 0x434F494E:
             break;
         case 0x42414C4C:
-            if (fn_801383B0()) {
+            if (BallsExist()) {
                 if (pCharacter->mUnknown74[i] != 0) {
-                    fn_8013791C(pCharacter->mUnknown74[i], 5, 0);
+                    BallReleaseStill(pCharacter->mUnknown74[i], 5, 0);
                 }
             } else if (pCharacter->mUnknown14[0] != 0) {
                 pCharacter->mUnknown14[0]->mFlags &= ~0x40000;
@@ -869,7 +869,7 @@ extern "C" int fn_80091D34(void)
 {
     unsigned char result = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         switch (fn_800AD9B4()) {
         case 4:
             result = fn_800B9B18(lbl_803EAB84) != 0;
@@ -942,7 +942,7 @@ extern "C" int fn_80092168(void *p, void *q)
     return result;
 }
 
-extern "C" float fn_800921B0(Object_80039F5C *p, Camera_8013F738 *pCamera)
+extern "C" float fn_800921B0(Object_80039F5C *p, GameCamera_t *pCamera)
 {
     Vector_80039F5C delta;
 
@@ -1141,7 +1141,7 @@ extern "C" void fn_80093684(void *p)
         fn_801C1F94(&pBlock->mUnknown80.mCharacters[i], 0, sizeof(Character_80093BCC));
         pBlock->mUnknown80.mCharacters[i].mUnknown0 = -1;
     }
-    pBlock->mpUnknown0 = (Table_800680A8 *)fn_801EF390(p, 2, 1);
+    pBlock->mpUnknown0 = (CondTable_t *)fn_801EF390(p, 2, 1);
     for (j = 0; j < 66; j++) {
         lbl_802D73B8[j].mUnknownC = 0;
     }
@@ -1258,15 +1258,15 @@ extern "C" int fn_80093C64(void)
 }
 
 
-extern "C" Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound)
+extern "C" Ball_t *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound)
 {
     Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-    Object_80137ABC *result = 0;
+    Ball_t *result = 0;
     int i;
 
     *pFound = 0;
     for (i = 0; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         if (pFrame->mUnknown20 == id) {
             result = pRequest->mUnknown74[i];
@@ -1399,7 +1399,7 @@ extern "C" void fn_800940F0(int handle)
             Object_80039F5C *p = pCharacter->mUnknown14[i];
 
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
-                fn_801BA398((Object_801BA03C *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
+                fn_801BA398((AnimHeader_t *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
                 fn_800A3B5C(p);
             }
         }
@@ -1419,7 +1419,7 @@ extern "C" void fn_8009418C(void)
 extern "C" void fn_800941B8(void)
 {
     if (lbl_803EA8BE) {
-        fn_800655D0();
+        PauseUnblock();
         lbl_803EA8BE = 0;
     }
 }
@@ -1448,8 +1448,8 @@ struct Script_802D7A10 {
 };
 
 extern "C" Script_802D7A10 lbl_802D7A10[];
-extern "C" void fn_801C02EC(void);
-extern "C" void fn_801C06A0(void);
+extern "C" void AnimSeqncrRelocateSeqFile(void);
+extern "C" void AnimSeqncrRelocateTable(void);
 
 extern "C" void fn_80094238(int index)
 {
@@ -1460,9 +1460,9 @@ extern "C" void fn_80094238(int index)
     lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
     pData = lbl_803EC924->mpUnknown7C;
     lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)fn_801EF390(pData, lbl_802D7A10[index].mUnknown14, 1);
-    fn_801C02EC();
+    AnimSeqncrRelocateSeqFile();
     lbl_803EC924->mEntries[index].mUnknown4 = fn_801EF390(pData, lbl_802D7A10[index].mUnknown18, 1);
-    fn_801C06A0();
+    AnimSeqncrRelocateTable();
 }
 
 extern "C" void fn_800942F0(int index)
@@ -1509,11 +1509,11 @@ extern "C" int fn_800943D0(void)
 extern "C" void fn_800943D8(void)
 {
     if (fn_800AD9B4() == 1) {
-        fn_80067DB8(108, 0, fn_800BD1BC(lbl_803EAB90), 0, 0);
+        AudmonEventPostArgs(108, 0, fn_800BD1BC(lbl_803EAB90), 0, 0);
     } else if (fn_800AD9B4() == 7) {
-        fn_80067DB8(108, 0, fn_800ABCDC(), 0, 0);
+        AudmonEventPostArgs(108, 0, fn_800ABCDC(), 0, 0);
     } else {
-        fn_80067E3C(129, 0, 0, 0, 0, 0);
+        AudmonEventPostId(129, 0, 0, 0, 0, 0);
     }
 }
 
@@ -1531,7 +1531,7 @@ extern "C" int fn_800944A4(int kind)
 {
     int result = 1;
 
-    if ((fn_801485D4() != 0 && fn_80148A58()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || fn_80025708() != 0) {
+    if ((fn_801485D4() != 0 && fn_80148A58()->mUnknown8[12] == 0) || fn_80178AE0() != 2 || ChallengeIsActive() != 0) {
         result = 0;
     } else if (kind != 14) {
         if ((kind == 1 && fn_80177F7C() != 4) || lbl_802D79D8[kind] == 0) {
@@ -1634,7 +1634,7 @@ extern "C" void fn_80094608(unsigned char value)
 }
 
 extern "C" int fn_800947C4(Object_8017886C *p);
-extern "C" unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
+extern "C" unsigned int CondTableFindRows(CondTable_t *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
                                     int (*pCallback)(unsigned int index, int operand, int value, unsigned short *pRow));
 
 extern "C" int fn_800947C4(Object_8017886C *p)
@@ -1684,13 +1684,13 @@ extern "C" void fn_80094A9C(short *pValues, Object_8017886C *p)
     pValues[1] = fn_800948E4(p);
 }
 
-extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max)
+extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, CondTable_t *pTable, unsigned short **ppOut, unsigned int max)
 {
     fn_80094A9C(pValues, p);
-    return fn_800680A8(pTable, pValues, ppOut, max, fn_80094698);
+    return CondTableFindRows(pTable, pValues, ppOut, max, fn_80094698);
 }
 
-extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
+extern "C" int fn_80094B34(CondTable_t *pTable, int index)
 {
     unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4);
     int result = -1;
@@ -1862,7 +1862,7 @@ extern "C" int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *p
     unsigned int i;
 
     for (i = 1; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         if (fn_80095028(pFrame->mUnknown0) == key && pRequest->mUnknown14[i] == 0) {
             Object_80039F5C *pCandidates[24];
@@ -2038,11 +2038,11 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
 
     fn_801C1F94(ppOut, 0, 24 * sizeof(Object_80039F5C *));
     result = 1;
-    pFrame = fn_801C029C(pActor, index);
+    pFrame = AnimSeqncrGetPlayerPtr(pActor, index);
     switch (pFrame->mUnknown0) {
     case 0x42414C43: /* 'BALC' */
     case 0x46524543: /* 'FREC' */ {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         ppOut[0] = pCarrier;
         if (pCarrier != 0) {
@@ -2341,7 +2341,7 @@ extern "C" int fn_8009637C(int index)
     int result = 1;
 
     fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
-    if (pCharacter->mUnknownE0.mUnknown0 == 0 && fn_80027DF0() == 0 && fn_800AD9B4() == 4) {
+    if (pCharacter->mUnknownE0.mUnknown0 == 0 && FELoopIsMainFEActive() == 0 && fn_800AD9B4() == 4) {
         result = fn_8009B9BC() == 0;
     }
     return result;
@@ -2471,17 +2471,17 @@ extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag);
 extern "C" void fn_80096708(int index)
 {
     Point_8017886C pos = {0.0f, 0.0f};
-    Camera_8013F738 *pCamera;
+    GameCamera_t *pCamera;
 
     fn_80096DA8(index);
-    pCamera = fn_8013FA04(2);
+    pCamera = CamGameGetCamera(2);
     pCamera->mUnknown108 = index;
     fn_80096850(index, &pos, &pCamera->mUnknown10C);
     pCamera->mUnknownF8 = pos.mX;
     pCamera->mUnknownFC = pos.mY;
     fn_80162780(0, 0);
-    fn_8013F97C(2);
-    fn_8013FA8C(11);
+    CamGameSelectCamera(2);
+    CamGameSetModeAll(11);
 }
 
 extern "C" int fn_80096794(void)
@@ -2498,7 +2498,7 @@ extern "C" void fn_80096954(void *pData)
 
     lbl_803EA920 = (Block_80096954 *)fn_801D2B7C(sizeof(Block_80096954), 0, 0);
     lbl_803EA920->mpUnknown0[0] = (Table_80093BAC *)fn_801EF390(pData, 3, 1);
-    fn_801C02EC();
+    AnimSeqncrRelocateSeqFile();
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
         fn_801C1F94(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
@@ -2571,7 +2571,7 @@ extern "C" int fn_80096B1C(int index)
         if (fn_80096794() != 0 || fn_8009679C(index) == 0) {
             pPlayback->mUnknown10 = 3;
         } else {
-            float step = lbl_803EA2C4;
+            float step = gFrameTimeScale;
 
             pPlayback->mUnknown24 += step;
             break;
@@ -2812,7 +2812,7 @@ void fn_801469A0(void);
 void fn_800540E0(void);
 int fn_801486A0(void);
 void fn_80146E78(void);
-void fn_8005412C(void);
+void LevelUpdate(void);
 void fn_800A2B40(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
 void fn_80144E38(Object_80144CE0 *pObject);
@@ -2930,7 +2930,7 @@ void *fn_800C47C4(void);
 int fn_801F0A8C(void *pArchive, char *pName);
 void fn_80145100(int type, int index);
 
-extern Level_80054130 *lbl_803EA554;
+extern LevelData_t *gLevelData;
 }
 
 extern "C" void fn_800A2D2C(void)
@@ -2948,16 +2948,16 @@ extern "C" void fn_800A2D2C(void)
         lbl_8030E6E8.mUnknown8B4[j] = 0;
     }
     lbl_8030E6E8.mUnknown8B4[7] = 1;
-    for (i = 0; i < lbl_803EA554->mUnknown48; i++) {
+    for (i = 0; i < gLevelData->mUnknown48; i++) {
         unsigned char count = 0;
 
-        for (unsigned char k = 0; k < lbl_803EA554->mUnknown96; k++) {
-            if (lbl_803EA554->mUnknown100[k].mUnknown24Bytes[1] == i) {
+        for (unsigned char k = 0; k < gLevelData->mUnknown96; k++) {
+            if (gLevelData->mUnknown100[k].mUnknown24Bytes[1] == i) {
                 count++;
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &lbl_803EA554->mUnknown52[i * 24]));
+        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -2984,7 +2984,7 @@ extern "C" void fn_800A30B8(void)
 extern "C" void fn_800A3120(float value)
 {
     fn_80146E78();
-    fn_8005412C();
+    LevelUpdate();
     fn_800A2B40();
     if (lbl_8030E6DC.mpCallback8 != 0) {
         lbl_8030E6DC.mpCallback8(value);
@@ -3144,7 +3144,7 @@ extern "C" int fn_800A34E0(void)
     return lbl_8030E6E8.mUnknown8C4;
 }
 
-extern "C" Entry_802F394C *fn_800A34EC(void)
+extern "C" EnvFogSettings *fn_800A34EC(void)
 {
     return lbl_8030E6E8.mpUnknown8C0;
 }
@@ -3196,14 +3196,14 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
     return result;
 }
 
-extern "C" int fn_801CFFD0(int a, int b);
+extern "C" int MathAngleDiff(int a, int b);
 
 extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     unsigned int index = 0;
     Info_80089904 *pBest = 0;
     unsigned int i;
-    int angle = fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF);
+    int angle = MathAngleDiff(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF);
 
     for (i = 0; i < pTable->mCount; i++) {
         Info_80089904 *pEntry = pTable->mEntries[i].mpInfo;
@@ -3222,7 +3222,7 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
         if (p->mUnknown1008.mUnknown0 == 6) {
             target = 0x1000000 - target;
         }
-        pBlock->mUnknownCWord = fn_801CFFD0(target, angle);
+        pBlock->mUnknownCWord = MathAngleDiff(target, angle);
         if (p->mUnknown1008.mUnknown0 == 6) {
             if (((target - angle) & 0xFFFFFF) > 0x800000) {
                 pBlock->mUnknownCWord = -pBlock->mUnknownCWord;
@@ -3414,7 +3414,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
 
         if ((p->mFlags & 0x4000) == 0 && fn_800A554C(p, pTarget, pOther, kind)
             && fn_800A4E8C(p, pOther, kind, level)) {
-            fn_80067E3C(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
                 fn_800D5900(4);
             } else if (kind == 5) {
@@ -3508,24 +3508,24 @@ void fn_800B852C(void);
 void fn_80043DD8(void);
 void fn_801624D0(void *arg);
 void fn_80163274(int handle);
-void fn_80030F38(int handle);
-void fn_80148048(void *pOwner);
+void ReplayCursorCreate(int handle);
+void PassIconsCreate(void *pOwner);
 void fn_800C4410(int value);
 void fn_80046E30(int handle);
 void fn_80163DD0(int handle);
 void fn_80043D68(void);
-void fn_8019B320(int handle);
-void fn_80046504(int handle);
+void FldObjRemoveObjType(int handle);
+void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
 void fn_800C442C(void);
 void fn_80046FD0(void);
 void fn_80163E54(int handle);
 void fn_801626A4(void *arg);
 void fn_80163300(int handle);
-void fn_80030FD8(int handle);
-void fn_801480B0(void *pOwner);
-void fn_8019B368(void);
-void fn_8004659C(void);
+void ReplayCursorDestroy(int handle);
+void PassIconsDestroy(void *pOwner);
+void LightDirUpdate(void);
+void EnvObjUpdateFades(void);
 void fn_8016172C(void);
 void fn_80047050(void);
 void fn_80162794(void);
@@ -3547,13 +3547,13 @@ int fn_801486A0(void);
 int fn_801783AC(int bit);
 int fn_8011F1CC(void);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
 int fn_800EE7C8(Object_80039F5C *p);
 unsigned int fn_8011E188(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 unsigned short fn_801BE648(void *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_800C8C1C(Object_80039F5C *p);
@@ -3592,8 +3592,8 @@ extern "C" void fn_800C46B0(int handle)
     fn_80043DD8();
     fn_801624D0((void *)handle);
     fn_80163274(handle);
-    fn_80030F38(handle);
-    fn_80148048((void *)handle);
+    ReplayCursorCreate(handle);
+    PassIconsCreate((void *)handle);
     fn_800C4410(0);
     fn_80046E30(handle);
     fn_80163DD0(handle);
@@ -3602,22 +3602,22 @@ extern "C" void fn_800C46B0(int handle)
 extern "C" void fn_800C471C(int handle)
 {
     fn_80043D68();
-    fn_8019B320(handle);
-    fn_80046504(handle);
+    FldObjRemoveObjType(handle);
+    EnvObjRemoveObjType(handle);
     fn_800B8538();
     fn_800C442C();
     fn_80046FD0();
     fn_80163E54(handle);
     fn_801626A4((void *)handle);
     fn_80163300(handle);
-    fn_80030FD8(handle);
-    fn_801480B0((void *)handle);
+    ReplayCursorDestroy(handle);
+    PassIconsDestroy((void *)handle);
 }
 
 extern "C" void fn_800C478C(float dt)
 {
-    fn_8019B368();
-    fn_8004659C();
+    LightDirUpdate();
+    EnvObjUpdateFades();
     fn_8016172C();
     fn_80047050();
     fn_80162794();
@@ -3627,7 +3627,7 @@ extern "C" void fn_800C478C(float dt)
 
 extern "C" void *fn_800C47C4(void)
 {
-    return gStaData.fn_80033FD4();
+    return gStaData.GetArchive();
 }
 
 extern "C" float fn_800C48CC(int index, float value)
@@ -3716,7 +3716,7 @@ extern "C" int fn_800C4E30(Object_80039F5C *p, Object_80039F5C *pOther)
         result = 0;
     }
     if (result) {
-        if (fn_80137B40() != pOther) {
+        if (BallGetCurrentHolder() != pOther) {
             result = 0;
         }
         if (p->mpState->mId == 12 || p->mpState->mId == 94) {
@@ -3809,7 +3809,7 @@ extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut
 
 extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int *pC)
 {
-    if (value == 0 && fn_801486A0() && !fn_801783AC(0) && fn_8011F1CC() && fn_80137B40() == p) {
+    if (value == 0 && fn_801486A0() && !fn_801783AC(0) && fn_8011F1CC() && BallGetCurrentHolder() == p) {
         *pA = 94;
         *pB = 93;
         *pC = 164;
@@ -3836,7 +3836,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
         pOther = fn_8009BCE8(&pSource->mUnknown40);
     }
     if (pOther != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pOther, p)) {
-        if (fn_800D0B90(p) || (pOther != 0 && fn_800E1554(pOther))) {
+        if (PlayerMoveGetKind(p) || (pOther != 0 && fn_800E1554(pOther))) {
             return 0;
         }
         if (fn_800A7F30(p->mIdBytes[2]) == 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
@@ -4015,7 +4015,7 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
     int result = 0;
 
     if (fn_801486A0()) {
-        result = fn_801CFFD0(0xC00000, p->mMotion.mFacing) <= 0x1FFFFF;
+        result = MathAngleDiff(0xC00000, p->mMotion.mFacing) <= 0x1FFFFF;
         if (fn_80114E7C(p)) {
             result = 1;
         }
@@ -4072,7 +4072,7 @@ extern "C" {
 extern int lbl_802DA674[4];
 extern int lbl_802DA684[3];
 extern int lbl_802DA690[3];
-int fn_801C370C(int *pValue, int *pVel, int target, int a, int b);
+int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 }
 
 extern "C" void fn_800C8860(Model_800C8860 *pModel, int angle, int which)
@@ -4141,7 +4141,7 @@ extern "C" void fn_800C8AF0(Object_80039F5C *p)
     if (!pTurn->mSettled) {
         for (i = 0; i <= 1; i++) {
             if (pTurn->mAngle[i] != pTurn->mTarget[i]) {
-                fn_801C370C(&pTurn->mAngle[i], &pTurn->mSpeed[i], pTurn->mTarget[i],
+                CamRLerp(&pTurn->mAngle[i], &pTurn->mSpeed[i], pTurn->mTarget[i],
                             lbl_802DA684[pTurn->mRate[i]], lbl_802DA690[pTurn->mRate[i]]);
             }
         }
@@ -4207,7 +4207,7 @@ extern "C" Object_80039F5C *fn_800C90BC(int team, Object_80039F5C *pOther)
 {
     Vector_80039F5C pos;
 
-    fn_80137D58(fn_801374BC(), &pos);
+    BallGetPosition(BallGetCurrent(), &pos);
     return fn_800C8DBC(team, &pos, pOther, 0);
 }
 
@@ -4330,7 +4330,7 @@ extern "C" Object_80039F5C *fn_800C9570(int team)
 }
 
 extern "C" {
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 Object_80039F5C *fn_800CA248(void);
 extern char lbl_8031BDD4[];
@@ -4342,9 +4342,9 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
     Object_80039F5C *p = 0;
 
     if (fn_801486A0() != 1) {
-        Object_80039F5C *pCarrier = fn_80137B40();
-        Object_80137ABC *pBall = fn_801374BC();
-        int state = fn_8013BA58(pBall, 0);
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
+        Ball_t *pBall = BallGetCurrent();
+        int state = BallStateGet(pBall, 0);
         Object_80039F5C *pPrev;
         Object_80039F5C *pHolder;
         unsigned char i;
@@ -4355,7 +4355,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
             switch (state) {
             case 3:
             case 4:
-                p = fn_80137B88(pBall);
+                p = BallGetTarget(pBall);
                 if (p == 0) {
                     p = fn_800C90BC(team, 0);
                 }
@@ -4420,7 +4420,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
             switch (state) {
             case 3:
             case 4:
-                pHolder = fn_80137B88(pBall);
+                pHolder = BallGetTarget(pBall);
                 if (pHolder != 0) {
                     p = fn_800C9070(team, pHolder, pHolder, 0);
                 } else {
@@ -4458,7 +4458,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
                 switch (state) {
                 case 3:
                 case 4:
-                    pHolder = fn_80137B88(pBall);
+                    pHolder = BallGetTarget(pBall);
                     if (pHolder != 0) {
                         p = fn_800C9070(team, pHolder, pPrev, 0);
                     } else {
@@ -4731,13 +4731,13 @@ extern "C" void fn_800CA4A8(void)
 }
 
 extern "C" {
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 unsigned int fn_8017F584(void);
 int fn_800A7F1C(int team);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_80147598(void *pObject, int bit, unsigned int slot, unsigned char flag);
-void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
+void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 
 extern unsigned char lbl_803EAC40;
 extern unsigned char lbl_803EAC41;
@@ -4759,7 +4759,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
     allowed = 0;
     pressed = 0;
     if (p->mFlags & 0x4000) {
-        if (fn_80137B40() == p) {
+        if (BallGetCurrentHolder() == p) {
             if (input.mUnknown95 & 8) {
                 allowed = 1;
                 pressed = 1;
@@ -4784,8 +4784,8 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
             continue;
         }
         if (fn_800A7EA4(team) == 2
-            || (p == fn_80137B88(fn_801374BC()) && fn_800A7F1C(team) == 2 && fn_8013BA58(fn_801374BC(), 0) != 0)
-            || (fn_80054D24(22) != 0 && fn_8017F584() == 0)) {
+            || (p == BallGetTarget(BallGetCurrent()) && fn_800A7F1C(team) == 2 && BallStateGet(BallGetCurrent(), 0) != 0)
+            || (CheatFlagsIsSet(22) != 0 && fn_8017F584() == 0)) {
             cost = 0;
         } else {
             cost = fn_800C955C(p, kind);
@@ -4801,7 +4801,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
                     if (!(fn_800C9CF0(team, i) > fn_800AE998())) {
                         fn_800AE7F0(4, team, 0);
                     }
-                    if (fn_800D0B90(p) == 0) {
+                    if (PlayerMoveGetKind(p) == 0) {
                         fn_80156C78(0, 1);
                     }
                 }
@@ -4815,12 +4815,12 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
             lbl_803EAC3C->mEntries[team][i].mUnknown10 = 2;
             if ((p->mFlags & 0x4000) == 0) {
                 lbl_803EAC3C->mEntries[team][i].mUnknown12 = (int)lbl_803EC918;
-                fn_80067DB8(15, &p->mMotion.mPos, 0, 0, 0);
+                AudmonEventPostArgs(15, &p->mMotion.mPos, 0, 0, 0);
             } else {
                 int duration = lbl_803EAC40 + lbl_803EAC41;
 
-                fn_80067DB8(15, &p->mMotion.mPos, 1, 0, 0);
-                fn_80194F2C(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
+                AudmonEventPostArgs(15, &p->mMotion.mPos, 1, 0, 0);
+                RumbleStartPulse(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
             }
         }
     }
@@ -4903,10 +4903,10 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     }
     if (result) {
         fn_8002C9A8(lbl_803EA368, 3, 0);
-        if (fn_8002892C() == 0) {
-            fn_801E15D0(fn_801C6458(lbl_803EA990, 0));
+        if (InGameIsDemo() == 0) {
+            fn_801E15D0(ConGetChannelInfo(lbl_803EA990, 0));
         }
-        if (fn_801E195C(fn_801C6458(lbl_803EA990, 0)) == 2) {
+        if (fn_801E195C(ConGetChannelInfo(lbl_803EA990, 0)) == 2) {
             fn_8002CA74(lbl_803EA368, 10, lbl_803EA990);
         }
         *pState = 0;
@@ -4921,18 +4921,18 @@ extern "C" int fn_8009B288(unsigned int *pState)
 
     switch (*pState) {
     case 0:
-        fn_80067D4C(126, 0);
+        AudmonEventPost(126, 0);
         if (fn_8005BE5C(0) == 0) {
             fn_8005BF18();
             fn_8005BE5C(0);
         }
-        fn_800655B8();
+        PauseBlock();
         *pState = 1;
         break;
     case 1:
         if (fn_8005BFD4() == 1) {
-            if (fn_800655F8() == 0) {
-                fn_800655D0();
+            if (PauseIsUnblocked() == 0) {
+                PauseUnblock();
             }
             fn_8005BF5C();
             fn_8002CFF4(lbl_803EA368);
@@ -4945,16 +4945,16 @@ extern "C" int fn_8009B288(unsigned int *pState)
             fn_8002CA74(lbl_803EA368, 9, 0);
         }
         if (fn_8002D060(lbl_803EA368) == 0) {
-            Camera_8013F738 *pCamera;
+            GameCamera_t *pCamera;
 
             fn_8017DC88();
             result = 0;
-            fn_8013FA8C(1);
-            pCamera = fn_8013FA04(0);
+            CamGameSetModeAll(1);
+            pCamera = CamGameGetCamera(0);
             if (pCamera != 0) {
                 fn_8013C6F0(pCamera);
             }
-            fn_8013FA24();
+            CamGameProcess();
         }
         break;
     default:
@@ -5025,7 +5025,7 @@ extern "C" int fn_8009B4C8(int)
             }
         }
     }
-    if (fn_80025708() && result == 0) {
+    if (ChallengeIsActive() && result == 0) {
         fn_8009D944(4);
     }
     return result;
@@ -5170,7 +5170,7 @@ extern "C" void fn_8009BA10(int value)
     args[1] = value;
     args[3] = (int)&lbl_8030E6D0;
     lbl_8030E6D0.mLength = fn_801C3180(lbl_803EA994);
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
     lbl_803EA99B = value;
@@ -5211,7 +5211,7 @@ extern "C" void fn_8009BBD8(int value)
 {
     if (fn_8009B448(value, 1)) {
         lbl_803EA984[1]->mUnknown4.mUnknown127 = 1;
-        if (fn_80025708()) {
+        if (ChallengeIsActive()) {
             fn_8009D924(4);
         }
     } else {
@@ -5702,7 +5702,7 @@ extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limi
     Point_8017886C delta;
 
     fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-    return fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
+    return MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
 }
 
 extern "C" void fn_8009D0AC(Object_80039F5C *p)
@@ -5848,14 +5848,14 @@ int fn_800B78DC(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7E60(Object_80039F5C *p);
 int fn_80178308(void);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013C438(Camera_8013F738 *pCamera);
-void fn_8013FA8C(int a);
+GameCamera_t *CamGameGetCamera(int index);
+void fn_8013C438(GameCamera_t *pCamera);
+void CamGameSetModeAll(int a);
 void fn_8013C384(void *pCamera, int a, int b, int c);
-void fn_8013F97C(int a);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
+void CamGameSelectCamera(int a);
+void fn_8013C6F0(GameCamera_t *pCamera);
 int fn_8011F1CC(void);
-void fn_80148108(int mode);
+void PassIconsShow(int mode);
 void fn_80162FB8(int index, int ref);
 void fn_80163020(void);
 int fn_80156704(void);
@@ -5935,14 +5935,14 @@ extern "C" unsigned char fn_800A5F20(Object_80039F5C *p)
 {
     short average;
 
-    fn_80137B40();
+    BallGetCurrentHolder();
     average = (p->mRatings[4] + p->mRatings[2]) / 2;
     return Interpolate(average + 168, 510, 20, 40);
 }
 
 extern "C" int fn_800A5F80(void)
 {
-    Object_80039F5C *p = fn_80137B40();
+    Object_80039F5C *p = BallGetCurrentHolder();
     Input_800B6D34 input;
 
     if (lbl_803EC94C.mUnknown4 == 0) {
@@ -5975,14 +5975,14 @@ extern "C" void fn_800A6044(void)
     int team;
 
     fn_800A61A8();
-    fn_8013C438(fn_8013FA04(5));
-    p = fn_80137B40();
+    fn_8013C438(CamGameGetCamera(5));
+    p = BallGetCurrentHolder();
     team = fn_80178308();
     if (p == 0) {
-        fn_8013FA8C(1);
+        CamGameSetModeAll(1);
     } else if (fn_8011F1CC() && fn_800B65A0(team) != 255 && p->mpState->mId == 18) {
-        fn_80148108(0);
-        fn_8013FA8C(2);
+        PassIconsShow(0);
+        CamGameSetModeAll(2);
     }
 }
 
@@ -5994,7 +5994,7 @@ extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
         lbl_803EC94C.mUnknown5 = 1;
         lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
         fn_80162FB8(fn_800B65A0(b->mIdBytes[2]), b->mId);
-        fn_8013C384(fn_8013FA04(5), 2, b->mId, 0);
+        fn_8013C384(CamGameGetCamera(5), 2, b->mId, 0);
     }
 }
 
@@ -6092,7 +6092,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
     int mode = fn_800AD9B4();
     Object_80039F5C *pFirst;
     Object_80039F5C *pSecond;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     int ref;
 
     if (fn_800A9680() != 0 || (mode != 3 && (mode != 2 || fn_800A7FD8() != 0))) {
@@ -6107,7 +6107,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             ppOut[1] = 0;
         }
     } else {
-        pBall = fn_801374BC();
+        pBall = BallGetCurrent();
         if (team == 0) {
             ref = fn_800CAA8C(0, 0);
             pFirst = fn_8009BCE8(&ref);
@@ -6119,8 +6119,8 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             ref = fn_800CAA8C(1, 1);
             pSecond = fn_8009BCE8(&ref);
         }
-        if (fn_80178308() == team && fn_80137B40() != 0) {
-            ppOut[0] = fn_80137B40();
+        if (fn_80178308() == team && BallGetCurrentHolder() != 0) {
+            ppOut[0] = BallGetCurrentHolder();
             if (pFirst != 0 && pFirst != ppOut[0]) {
                 ppOut[1] = pFirst;
             } else if (pSecond != 0 && pSecond != ppOut[0]) {
@@ -6141,7 +6141,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             Vector_80039F5C ballPos;
             float distance;
 
-            fn_80137D58(pBall, &ballPos);
+            BallGetPosition(pBall, &ballPos);
             fn_802276B4(&delta, &pFirst->mMotion.mPos, &ballPos);
             distance = fn_802270A4(&delta);
             fn_802276B4(&delta, &pSecond->mMotion.mPos, &ballPos);
@@ -6165,7 +6165,7 @@ extern "C" {
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 void fn_800A6F04(int team);
-void fn_80146114(Object_80146094 *p);
+void ParticleTrailClearTint(ParticleTrailSet_t *p);
 void fn_80147840(Object_8003DEC4 *p);
 }
 
@@ -6224,7 +6224,7 @@ extern "C" void fn_800A6B6C(int team)
     for (i = 0; i < count; i++) {
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
 
-        fn_80146114(&pObject->mUnknown5188);
+        ParticleTrailClearTint(&pObject->mUnknown5188);
         fn_80147840(pObject);
     }
 }
@@ -6243,7 +6243,7 @@ extern "C" void fn_800A6C10(int team)
     for (i = 0; i < count; i++) {
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
 
-        fn_80146114(&pObject->mUnknown5188);
+        ParticleTrailClearTint(&pObject->mUnknown5188);
         fn_80147840(pObject);
     }
 }
@@ -6315,9 +6315,9 @@ extern "C" void fn_800A7A0C(int team)
     if (lbl_803EC954[team]->mUnknown68 != 0) {
         lbl_803EAA2C[lbl_803EC954[team]->mUnknown8](team);
         if (lbl_803EC954[team]->mUnknown68 == 2) {
-            fn_80067DB8(12, 0, 0, 0, 0);
+            AudmonEventPostArgs(12, 0, 0, 0, 0);
         } else if (lbl_803EC954[team == 0]->mUnknown68 == 0) {
-            fn_80067DB8(9, 0, team, 0, 0);
+            AudmonEventPostArgs(9, 0, team, 0, 0);
         }
     }
     lbl_803EC954[team]->mUnknown68 = 0;
@@ -6497,11 +6497,11 @@ extern "C" int fn_800A7FE0(void)
         if (pCharacter->mUnknownE0.mUnknown8.mWord == 0) {
             (pCharacter->mUnknown14[0])->mpUnknown4->mUnknown20 |= 0x400;
             p = pCharacter->mUnknown14[0];
-            fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][1], 0, 0);
+            AudmonEventPostId(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][1], 0, 0);
         } else {
             (pCharacter->mUnknown14[1])->mpUnknown4->mUnknown20 |= 0x400;
             p = pCharacter->mUnknown14[1];
-            fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
+            AudmonEventPostId(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
         }
         lbl_803EAA4E = fn_801478F0(0);
     } else {
@@ -6648,7 +6648,7 @@ extern "C" int fn_800A8740(void)
 extern "C" {
 void fn_80147840(Object_8003DEC4 *pObject);
 void fn_800A8570(void);
-int fn_800737B8(void);
+int SpchIGGetSceneSpeaker(void);
 }
 
 extern "C" void fn_800A87E8(void)
@@ -6659,8 +6659,8 @@ extern "C" void fn_800A87E8(void)
         fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[0])->mpUnknown4);
         fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
         fn_80093410(lbl_803EC95C);
-        if (fn_800737B8() != 0) {
-            fn_80067E3C(130, 0, 0, 0, 0, 0);
+        if (SpchIGGetSceneSpeaker() != 0) {
+            AudmonEventPostId(130, 0, 0, 0, 0, 0);
         }
         lbl_803EC95C = -1;
         if (((lbl_803EC954[0]->mUnknown6C == 1 || lbl_803EC954[0]->mUnknown6C == 2) &&
@@ -6674,9 +6674,9 @@ extern "C" void fn_800A87E8(void)
         }
         lbl_803EAA4D = 0;
         lbl_803EAA4F = 0;
-        fn_8013F97C(0);
-        fn_8013FA8C(1);
-        fn_8013C6F0(fn_8013FA04(5));
+        CamGameSelectCamera(0);
+        CamGameSetModeAll(1);
+        fn_8013C6F0(CamGameGetCamera(5));
         fn_8003E174(1);
         if (fn_8005BFD4() != 4) {
             fn_8005BF18();
@@ -6760,8 +6760,8 @@ extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
 
 extern "C" {
 Team_80167A8C *fn_80168EBC(int team);
-int *fn_80085744(int formation, int team);
-int fn_8008576C(int value, int firstHalf);
+int *FormationLineupFetchUser(int formation, int team);
+int FormationLineupFindSlot(int value, int firstHalf);
 
 extern unsigned int lbl_802D7FF4[14];
 extern unsigned int lbl_802D802C[14];
@@ -6780,10 +6780,10 @@ extern "C" void fn_800A9018(unsigned int step)
         unsigned int j = 0;
         unsigned int count = fn_80178D18((unsigned char)i);
 
-        fn_80085744(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
+        FormationLineupFetchUser(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
             Object_80039F5C *p = fn_80039F5C((unsigned char)i, j);
-            int slot = fn_8008576C(p->mUnknown2908, isOffense);
+            int slot = FormationLineupFindSlot(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
                 if (lbl_8030F42C.mUnknown0 == 7) {
@@ -6970,9 +6970,9 @@ extern "C" int fn_800A96D0(void)
 
 extern "C" void fn_800A981C(void)
 {
-    fn_8013F97C(0);
-    fn_8013FA8C(1);
-    fn_8013C6F0(fn_8013FA04(5));
+    CamGameSelectCamera(0);
+    CamGameSetModeAll(1);
+    fn_8013C6F0(CamGameGetCamera(5));
 }
 
 extern "C" {
@@ -6994,7 +6994,7 @@ extern "C" void fn_800A9854(void)
     int index;
 
     pCarrier = (Object_80039F5C *)fn_80096060(fn_80096440(lbl_802D7F14[lbl_8030F42C.mUnknown0][6]));
-    fn_80137A04(fn_801374BC(), pCarrier);
+    BallGiveToPlayer(BallGetCurrent(), pCarrier);
     pCarrier->mFlags &= ~4;
 
     team = fn_80178320();
@@ -7100,7 +7100,7 @@ extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
         fn_801783D0(1, 1);
         pRecord->mUnknown14 = 8;
         fn_800B1508();
-        fn_80067E3C(30, &p->mMotion.mPos, p->mId, 1, 1, 0);
+        AudmonEventPostId(30, &p->mMotion.mPos, p->mId, 1, 1, 0);
         break;
     case 25:
         pRecord->mUnknown14 = 4;
@@ -7182,7 +7182,7 @@ void fn_8017EBFC(void);
 int fn_8017ED6C(void);
 void fn_8017EFB4(void);
 void fn_8017EF20(void);
-void fn_80139274(void);
+void BallResetToSpot(void);
 void fn_800AD910(int a, float b);
 unsigned char fn_8017F2EC(unsigned char value);
 void fn_800B1900(Block_800B21D0 *p);
@@ -7195,8 +7195,8 @@ int fn_801783AC(int bit);
 void fn_80227538(void *pOut, int angle, float length);
 int fn_80177F70(void);
 void fn_8016DDDC(int team);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
+GameCamera_t *CamGameGetCamera(int index);
+void fn_8013C6F0(GameCamera_t *pCamera);
 int fn_80169EF4(int mode);
 void fn_80167EA0(int team);
 void fn_800B3EFC(int team);
@@ -7204,7 +7204,7 @@ void fn_80168640(int team, int kind);
 void fn_800B31B0(int a);
 void fn_800B34BC(void);
 void fn_80238680(int handle, int value);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_801677F4(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
@@ -7244,7 +7244,7 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
-void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c);
+void AudmonEventPostArgs(int type, Vector_80039F5C *pPos, int a, int b, int c);
 
 extern int lbl_803EAB18;
 extern int *lbl_803EAB1C;
@@ -7361,7 +7361,7 @@ extern "C" void fn_800B17F0(float value)
         *lbl_803EAB1C = 4;
         break;
     case 4:
-        fn_80139274();
+        BallResetToSpot();
         fn_800AD910(5, value);
         break;
     }
@@ -7630,7 +7630,7 @@ extern "C" void fn_800B2DF4(void)
         if (fn_80177F70() != 0) {
             fn_8016DDDC(fn_80178308());
             fn_8016DDDC(fn_80178320());
-            fn_8013C6F0(fn_8013FA04(5));
+            fn_8013C6F0(CamGameGetCamera(5));
         }
         lbl_803EAB34->mUnknown1F = 1;
     }
@@ -7725,7 +7725,7 @@ extern "C" void fn_800B30C8(void)
         fn_802195E4(lbl_803EB688, 3, 2);
     }
     lbl_803EAB34->mUnknown8 |= 1;
-    fn_800655D0();
+    PauseUnblock();
 }
 
 extern "C" void fn_800B31B0(int a)
@@ -7757,7 +7757,7 @@ void fn_80168744(unsigned char team, unsigned char a, unsigned char b, unsigned 
 void fn_80167FF0(int team);
 void fn_800B3474(void);
 void fn_800B3498(void);
-unsigned char fn_801374D4(void);
+unsigned char BallGetCurrentIndex(void);
 int fn_8016DD60(void);
 void fn_8009D888(int index, int value);
 void fn_8017D764(void);
@@ -7788,9 +7788,9 @@ extern "C" void fn_800B32A8(float dt)
         fn_800B3498();
     }
     if (fn_800B65A0(other) != 0xFF || fn_800B65A0(team) != 0xFF) {
-        fn_8013F97C(0);
-        fn_8013FA58(1, fn_801374D4());
-        fn_8013C6F0(fn_8013FA04(5));
+        CamGameSelectCamera(0);
+        CamGameSetFocusAll(1, BallGetCurrentIndex());
+        fn_8013C6F0(CamGameGetCamera(5));
     }
     if (fn_8016DD60() != 0) {
         fn_800AD910(2, dt);
@@ -7873,7 +7873,7 @@ void Class_80297B50::vfn_02()
 }
 
 extern "C" {
-void fn_80148154(void);
+void PassIconsHide(void);
 void fn_801687E4(int team, int a, int b, int c);
 int fn_8009D9D8(int index);
 int fn_800BA71C(void);
@@ -7886,7 +7886,7 @@ unsigned int fn_801688AC(int team);
 unsigned int fn_801688C0(int team);
 void fn_8017840C(void);
 void fn_8016DCD4(int team);
-void fn_801383E4(int on);
+void BallsSetVisible(int on);
 int fn_8019623C(int id);
 void fn_800B8028(void);
 void fn_8010A220(void);
@@ -7897,18 +7897,18 @@ void Class_80297B50::vfn_03()
     lbl_803EAB28 = -1;
     fn_8009D888(3, vfn_06());
     fn_8009D924(3);
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_8009D924(4);
     }
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(1, 20, 0x808080, 0);
     }
-    fn_800655B8();
+    PauseBlock();
     if (fn_800BA6F8() != 0 && fn_800BA71C() == 1) {
         fn_800B8028();
     }
     fn_801783D0(21, 0);
-    fn_80148154();
+    PassIconsHide();
     int team = fn_80178308();
     int other = fn_80178320();
     lbl_803EAB34->mUnknownC = 0;
@@ -7957,7 +7957,7 @@ void Class_80297B50::vfn_03()
     fn_8010A220();
     fn_8016DCD4(team);
     fn_8016DCD4(other);
-    fn_80067DB8(111, 0, team, 0, 0);
+    AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
@@ -7982,19 +7982,19 @@ void Class_80297B50::vfn_03()
     fn_800B3078();
     fn_800B3074();
     if (fn_800BA6F8() == 0) {
-        fn_80139274();
+        BallResetToSpot();
     }
-    fn_801383E4(1);
+    BallsSetVisible(1);
     fn_8009ABC4();
-    fn_8013FB44();
+    CamGameResumeAll();
 }
 
 
 extern "C" void fn_800B3AF4(void)
 {
-    fn_800655B8();
+    PauseBlock();
     fn_801783D0(21, 0);
-    fn_80148154();
+    PassIconsHide();
     int team = fn_80178308();
     int other = fn_80178320();
     if (fn_800BA6F8() != 0
@@ -8005,7 +8005,7 @@ extern "C" void fn_800B3AF4(void)
         lbl_803EAB34->mUnknown10 = 0;
     }
     if (fn_800B65A0(team) == 0xFF && fn_800B65A0(other) == 0xFF) {
-        fn_800655D0();
+        PauseUnblock();
     } else {
         if (fn_800B65A0(team) == 0xFF) {
             fn_801687E4(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
@@ -8014,11 +8014,11 @@ extern "C" void fn_800B3AF4(void)
         if (fn_801486A0() != 2) {
             fn_800B3078();
         } else {
-            fn_800655D0();
+            PauseUnblock();
         }
     }
     fn_800B3074();
-    fn_80067DB8(111, 0, team, 0, 0);
+    AudmonEventPostArgs(111, 0, team, 0, 0);
     lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
@@ -8049,7 +8049,7 @@ void Class_80297B50::vfn_04(float dt)
         arg.i = count;
         fn_8021D7B8(lbl_803EB688, 0x80000007, 1, &arg);
         if (count <= 5) {
-            fn_80067D4C(20, 0);
+            AudmonEventPost(20, 0);
         }
     }
     fn_80058688();
@@ -8141,12 +8141,12 @@ void Class_80297B50::vfn_05()
 {
     fn_8009D944(1);
     fn_8009D944(0);
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_8009D944(4);
     }
     if (lbl_803EAB34->mUnknown42 == 1) {
         fn_800B4184(1);
-        fn_80067DB8(0x70, 0, fn_80178308(), 0, 0);
+        AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
     }
     fn_800BA72C();
     fn_801689AC(0);
@@ -8167,14 +8167,14 @@ extern "C" void fn_800B40D8(unsigned char value)
 extern "C" void fn_800B410C(void)
 {
     if (lbl_803EAB34->mUnknown42 == 1) {
-        fn_800655B8();
+        PauseBlock();
         if (lbl_803EAB34->mUnknown8 & 1) {
             fn_800B31B0(0);
         }
         fn_801677F4();
         lbl_803EAB34->mUnknown42 = 0;
-        fn_800655D0();
-        fn_80067DB8(0x70, 0, fn_80178308(), 0, 0);
+        PauseUnblock();
+        AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
     }
 }
 
@@ -8284,16 +8284,16 @@ extern "C" void fn_800B4434(void)
 
 extern "C" void fn_800B4448(Settings_800B4448 *p)
 {
-    if (fn_80054D24(0x28) != 0) {
+    if (CheatFlagsIsSet(0x28) != 0) {
         p->mUnknown10 = 0xFF;
     }
-    if (fn_80054D24(0x29) != 0) {
+    if (CheatFlagsIsSet(0x29) != 0) {
         p->mUnknownC = 0xFF;
     }
-    if (fn_80054D24(0x2A) != 0) {
+    if (CheatFlagsIsSet(0x2A) != 0) {
         p->mUnknown14 = 0xFF;
     }
-    if (fn_80054D24(0x2B) != 0) {
+    if (CheatFlagsIsSet(0x2B) != 0) {
         p->mUnknown0 = p->mUnknown4 = 0;
     }
 }
@@ -8563,7 +8563,7 @@ void fn_800BA9C0(int value);
 void fn_800BAA30(int value);
 int fn_800BAAB8(void);
 int fn_8006D884(int idx);
-Camera_8013F738 *fn_8013FA04(int index);
+GameCamera_t *CamGameGetCamera(int index);
 Object_800670B4 *fn_80168708(int team);
 void fn_80177F88(int value);
 void fn_801780A8(Point_8017886C pos);
@@ -8626,7 +8626,7 @@ extern "C" void fn_800BA6F4(void);
 extern "C" void fn_800BA5B0(void)
 {
     if (lbl_803EAB88->mUnknown182) {
-        fn_8013FA04(0);
+        CamGameGetCamera(0);
         fn_800B9F4C();
         if (fn_800B9BFC() == 1) {
             fn_800BA804(1);
@@ -8949,8 +8949,8 @@ void fn_800BB840(int a, int b, int c);
 void fn_800BB8D4(void);
 void fn_800BBCF0(Record_800BAE7C *p);
 void fn_800BBDE0(void);
-void fn_8004A230(unsigned char value);
-unsigned char fn_800744A8(void);
+void PlayerObjSetDrawReady(unsigned char value);
+unsigned char SpchIGIsEnabled(void);
 void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_800940F0(int handle);
@@ -9003,7 +9003,7 @@ extern "C" void fn_800BBE98(void);
 
 extern "C" void fn_800BAF7C(void)
 {
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013F3FC();
     if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
         fn_800BBE98();
@@ -9032,9 +9032,9 @@ extern "C" int fn_800BB050(int value)
 {
     int result = 0;
 
-    if (fn_801F3E28() && fn_800744A8() && value == 0) {
+    if (fn_801F3E28() && SpchIGIsEnabled() && value == 0) {
         result = 1;
-    } else if (!(fn_801F3E28() && fn_800744A8()) && value == 0) {
+    } else if (!(fn_801F3E28() && SpchIGIsEnabled()) && value == 0) {
         result = 1;
     }
     return result;
@@ -9073,7 +9073,7 @@ extern "C" unsigned int fn_800BB0EC(void)
         pActor = fn_80093BAC(index, lbl_803EC98C->mUnknown14);
         ok = 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
-            if (fn_80096440(fn_801C029C(pActor, i)->mUnknown0) >= limit) {
+            if (fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0) >= limit) {
                 ok = 0;
                 break;
             }
@@ -9148,7 +9148,7 @@ int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 int fn_801F0F18(int a);
 }
 
-#include "engine/cu_80227F14.h"
+#include "engine/viewport.h"
 
 extern "C" void fn_800BB504(void);
 
@@ -9317,7 +9317,7 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
                 if (!(lbl_803EC98C->mUnknown2A & 0x80)) {
                     fn_80094048(key, &pA, &pB);
                 }
-                fn_80067E3C(107, &pA->mMotion.mPos, pA->mId, key, lbl_803EAB95 & 1, pB != 0 ? pB->mId : 0);
+                AudmonEventPostId(107, &pA->mMotion.mPos, pA->mId, key, lbl_803EAB95 & 1, pB != 0 ? pB->mId : 0);
                 p[lbl_803EAB95].mUnknown44 = 1;
             }
         }
@@ -9336,7 +9336,7 @@ extern "C" void fn_800BBDE0(void)
 
         p->mUnknown9[2] = 1;
         p->mpUnknown4->mUnknown20 |= 1;
-        fn_8009604C(fn_80096440(fn_801C029C(pActor, i)->mUnknown0), (int)p);
+        fn_8009604C(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0), (int)p);
     }
 }
 
@@ -9347,9 +9347,9 @@ extern "C" void fn_800BBE98(void)
     fn_80096E1C();
     lbl_803EC98C->mUnknown8 = -1;
     lbl_803EC98C->mUnknownC = -1;
-    fn_8004A230(1);
-    fn_8013825C(fn_801374BC())->mUnknown20 &= ~2;
-    fn_8013825C(fn_801374BC())->mUnknown20 |= 1;
+    PlayerObjSetDrawReady(1);
+    BallGetModel(BallGetCurrent())->mUnknown20 &= ~2;
+    BallGetModel(BallGetCurrent())->mUnknown20 |= 1;
     fn_800941B8();
     fn_8017CFB4(7);
     lbl_803EC98C->mUnknown0 = 2;
@@ -9400,7 +9400,7 @@ extern "C" void fn_800BBF18(void)
         } else {
             fn_800BAF7C();
         }
-        fn_800655D0();
+        PauseUnblock();
         if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
             for (i = 0; i < fn_80040F10(); i++) {
                 Object_80040818 *pObject = fn_80040F18(i);
@@ -9447,7 +9447,7 @@ extern "C" void fn_800BC190(int index, int value)
         }
         other = side ^ 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
-            unsigned int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            unsigned int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
             int choice;
 
             if (position > 6) {
@@ -9470,14 +9470,14 @@ extern "C" void fn_800BC190(int index, int value)
     }
     fn_8008040C(&reader, 0);
     for (i = 0; i < pActor->mUnknown4; i++) {
-        int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+        int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
 
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 0;
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mTeamWord = sides[i];
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject = fn_800BBB84(position, lbl_803EC98C->mpUnknown10, index, i);
-        fn_800809C4(&reader, ((Object_8003DEC4 *)lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mpUnknown4)->mUnknown4956, 0);
+        PlayerDbSeekId(&reader, ((Object_8003DEC4 *)lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mpUnknown4)->mUnknown4956, 0);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2912 = fn_80081E3C(&reader);
-        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = fn_80080E20(&reader);
+        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = PlayerDbGetPybt(&reader);
     }
     fn_8008056C(&reader);
     lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 31;
@@ -9550,7 +9550,7 @@ struct Block_800ABD1C {
 };
 
 extern "C" {
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -9564,16 +9564,16 @@ void fn_800AA510(Entry_800AA80C *pEntries, int index);
 void fn_80092F98(int handle);
 void fn_800940F0(int handle);
 void fn_80093348(int handle);
-void fn_8013FB44(void);
-int fn_800737B8(void);
-int fn_80025708(void);
+void CamGameResumeAll(void);
+int SpchIGGetSceneSpeaker(void);
+int ChallengeIsActive(void);
 void fn_8017DC08(void);
 int fn_80059004(void);
 void fn_80059014(void);
 void fn_800C1CA0(void);
 void fn_8009D964(int index, int value);
 void fn_8005BC10(int a);
-void fn_80031A54(void);
+void FeatAwardAfterGame(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 unsigned char fn_8005B3CC(void);
 Object_80039F5C *fn_8005A8AC(int index);
@@ -9582,10 +9582,10 @@ void fn_800ABAF0(void);
 int fn_80178308(void);
 int fn_8017F60C(void);
 void fn_800B8608(void);
-int fn_801C601C(int a);
-int fn_801C6458(int a, int b);
+int ConUpdateChannel(int a);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
-int fn_801C60BC(int a);
+int ConProcessChannel(int a);
 void fn_800BA574(void);
 void fn_800C3170(void);
 void fn_800CA14C(void);
@@ -9594,13 +9594,13 @@ void fn_800CA228(void);
 int fn_800BA6F8(void);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
-Set_8003EE6C *fn_8003A078(void);
-Set_8003EE6C *fn_801442F0(void);
+CollideSet_t *fn_8003A078(void);
+CollideSet_t *fn_801442F0(void);
 void fn_80039C64(void);
 void fn_8005122C(float dt);
 void fn_80039CB0(float dt);
 void fn_80039D08(float dt);
-void fn_801BF8DC(void);
+void AnimCacheUpdate(void);
 
 extern Block_800AACD4 *lbl_803EAA88;
 extern int lbl_803EAA90;
@@ -9630,8 +9630,8 @@ extern "C" void fn_800A9F64(void)
         fn_80093410(lbl_803EAA88->mUnknownC);
         lbl_803EAA88->mUnknownC = -1;
     }
-    fn_80067DB8(109, 0, 0, 0, 0);
-    fn_80067DB8(109, 0, 1, 0, 0);
+    AudmonEventPostArgs(109, 0, 0, 0, 0);
+    AudmonEventPostArgs(109, 0, 1, 0, 0);
 }
 
 extern "C" void fn_800AA124(void)
@@ -9648,7 +9648,7 @@ extern "C" void fn_800AA124(void)
         p = fn_80039F5C(1, i)->mpUnknown4;
         p->mUnknown20 |= 1;
     }
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
 }
 
 extern "C" void fn_800AA1B0(int a, int b)
@@ -9700,7 +9700,7 @@ extern "C" void fn_800AA2B4(void)
 extern "C" void fn_800AA2F8(void)
 {
     if (lbl_803EAA88->mUnknown4 != 13) {
-        fn_8013FB44();
+        CamGameResumeAll();
     }
     fn_80092F98(lbl_803EAA88->mUnknownC);
     lbl_803EAA88->mUnknown8 = lbl_803EAA88->mUnknownC;
@@ -9736,7 +9736,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
 
         fn_800AA020();
         for (i = 0; i < pActor->mUnknown4; i++) {
-            int slot = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
             Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
@@ -9798,15 +9798,15 @@ extern "C" void fn_800AA510(Entry_800AA80C *pEntries, int index)
         pActor = fn_80093BAC(pEntries[index].mUnknown0, 2);
         key = fn_80093E4C(2, (unsigned short)pEntries[index].mUnknown0);
     }
-    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 0)->mUnknown0));
+    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, 0)->mUnknown0));
     if (pActor->mUnknown4 > 1) {
-        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 1)->mUnknown0));
+        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, 1)->mUnknown0));
     }
     if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
         fn_80094048(key, &pObject, &pOther);
     }
     if (pObject != 0 && key != -1) {
-        fn_80067E3C(107, &pObject->mMotion.mPos, pObject->mId, key, lbl_803EAA90 & 1,
+        AudmonEventPostId(107, &pObject->mMotion.mPos, pObject->mId, key, lbl_803EAA90 & 1,
                     pOther != 0 ? pOther->mId : 0);
     }
 }
@@ -9826,8 +9826,8 @@ extern "C" void fn_800AA648(Entry_800AA80C *pEntries, int index)
 
 extern "C" void fn_800AA6D8(Entry_800AA80C *pEntries, int index)
 {
-    if (fn_800737B8() != 0) {
-        fn_80067E3C(109, 0, 0, 0, 0, 0);
+    if (SpchIGGetSceneSpeaker() != 0) {
+        AudmonEventPostId(109, 0, 0, 0, 0, 0);
     }
     fn_800A9F64();
 }
@@ -9838,7 +9838,7 @@ extern Table_800AA80C *lbl_803EAAA0;
 
 extern "C" void fn_800AA720(Class_80297B90 *p)
 {
-    if (fn_80025708() == 1 || p->vfn_11() != 0
+    if (ChallengeIsActive() == 1 || p->vfn_11() != 0
         || (fn_80178AE0() == 2 && fn_801787DC(0) == fn_801787DC(1))) {
         lbl_803EAA88->mUnknown4 = 3;
     } else {
@@ -9994,7 +9994,7 @@ extern Class_80297B90 lbl_803EC904;
 
 void Class_80297B90::vfn_06()
 {
-    if (fn_80025708() == 0) {
+    if (ChallengeIsActive() == 0) {
         fn_800731D0(0);
         fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
         fn_8021D7B8(lbl_803EB688, 0x80000035, 0, 0);
@@ -10003,7 +10003,7 @@ void Class_80297B90::vfn_06()
 
 void Class_80297B90::vfn_07()
 {
-    if (fn_80025708() == 0) {
+    if (ChallengeIsActive() == 0) {
         fn_8006C854(119, 0);
         fn_8021D7B8(lbl_803EB688, 0x80000034, 0, 0);
         fn_8021956C(lbl_803EB688, 3, 5, 1);
@@ -10012,7 +10012,7 @@ void Class_80297B90::vfn_07()
 
 void Class_80297B90::vfn_08()
 {
-    fn_80064EFC(3, 6, -1);
+    PauseOpenScreen(3, 6, -1);
 }
 
 void Class_80297B90::vfn_09()
@@ -10022,7 +10022,7 @@ void Class_80297B90::vfn_09()
 
 int Class_80297B90::vfn_10()
 {
-    return fn_80025708();
+    return ChallengeIsActive();
 }
 
 int Class_80297B90::vfn_11()
@@ -10060,10 +10060,10 @@ void Class_80297B90::vfn_03()
     lbl_803EAA99 = 0;
     lbl_803EAA88->mUnknown10 = 0;
     fn_800AFDD4(fn_800AA93C);
-    fn_80067D4C(131, 0);
+    AudmonEventPost(131, 0);
     fn_8002C9A8(lbl_803EA368, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
-    lbl_803EAA88->mUnknown15 = fn_8002892C();
+    lbl_803EAA88->mUnknown15 = InGameIsDemo();
     lbl_803EAA88->mUnknown16 = lbl_803EAA88->mUnknownC = lbl_803EAA88->mUnknown8 = -1;
     lbl_803EAA88->mUnknown17 = 0;
     fn_800AA720(this);
@@ -10106,8 +10106,8 @@ extern "C" int fn_800AAEE0(void *p, float dt)
     int result;
 
     if (fn_800AAAC4() != 0) {
-        if (fn_80137B40() != 0) {
-            fn_8013791C(fn_801374BC(), 5, 0);
+        if (BallGetCurrentHolder() != 0) {
+            BallReleaseStill(BallGetCurrent(), 5, 0);
         }
         fn_800AA2F8();
         fn_800AA2B4();
@@ -10145,7 +10145,7 @@ extern "C" int fn_800AAF38(void *p, float dt)
 
 extern "C" int fn_800AAFEC(void *p, float dt)
 {
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         lbl_803EAA88->mUnknown4 = 16;
         fn_8017DC08();
         if (fn_80059004() != 0) {
@@ -10177,7 +10177,7 @@ extern "C" int fn_800AB138(Class_80297B90 *p, float dt)
 {
     int result = 1;
 
-    if (fn_8006560C() == 0) {
+    if (PauseIsOpen() == 0) {
         result = 0;
         p->vfn_09();
     }
@@ -10187,11 +10187,11 @@ extern "C" int fn_800AB138(Class_80297B90 *p, float dt)
 extern "C" void fn_800AB190(void *p)
 {
     lbl_803EAA9C = 0;
-    fn_80031A54();
+    FeatAwardAfterGame();
 }
 
 extern "C" {
-extern Entry_80306620 lbl_8030F45C;
+extern FeatAward_t lbl_8030F45C;
 extern Entry_80219044 lbl_8030F504;
 extern Entry_80219044 lbl_8030F510;
 extern unsigned char lbl_803EAA9A;
@@ -10201,22 +10201,22 @@ extern "C" int fn_800AB1B8(void *p, float dt)
 {
     int result = 0;
 
-    if (lbl_803EAA9C < fn_8003203C()) {
+    if (lbl_803EAA9C < FeatGetAwardedCount()) {
         int args[3];
 
         result = 1;
-        fn_80032044(lbl_803EAA9C, &lbl_8030F45C);
+        FeatGetAwarded(lbl_803EAA9C, &lbl_8030F45C);
         lbl_8030F504.mpText = lbl_8030F45C.mName;
         lbl_8030F504.mLength = fn_801C3180(lbl_8030F45C.mName);
         lbl_8030F510.mpText = lbl_8030F45C.mText;
         lbl_8030F510.mLength = fn_801C3180(lbl_8030F45C.mText);
         args[0] = (int)&lbl_8030F504;
         args[1] = (int)&lbl_8030F510;
-        args[2] = lbl_8030F45C.mUnknown164;
-        fn_80064F58(1, 20, -1, 3, args, 1);
+        args[2] = lbl_8030F45C.mCredits;
+        PauseOpenScreenArgs(1, 20, -1, 3, args, 1);
         lbl_803EAA9C++;
     } else {
-        fn_800320B0();
+        FeatClearAwarded();
         lbl_803EAA9A = 0;
         lbl_803EAA9C = 0;
         fn_8021956C(lbl_803EB688, 1, 20, 1);
@@ -10259,7 +10259,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 extern "C" {
 void fn_8004730C(unsigned char enabled);
 void fn_80072C90(unsigned int delay, int wait);
-void fn_800282DC(void);
+void InGameStop(void);
 VetsRow_8018EC68 *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
 int fn_80157080(void);
@@ -10304,11 +10304,11 @@ void Class_80297B90::vfn_04(float dt)
         lbl_803EAA88->mUnknown4 = 4;
     case 4:
         fn_8006CAEC();
-        if (fn_8002892C() != 0) {
+        if (InGameIsDemo() != 0) {
             fn_80047874(0);
             fn_8004730C(0);
             fn_80072C90(250, 1);
-            fn_800282DC();
+            InGameStop();
             break;
         }
         vfn_07();
@@ -10430,12 +10430,12 @@ void Class_80297B90::vfn_04(float dt)
             fn_80047874(0);
             fn_8004730C(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
-                fn_8004A230(0);
+                PlayerObjSetDrawReady(0);
             }
-            fn_800282DC();
+            InGameStop();
             break;
         }
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         fn_80195EFC(6, 60, 0, 0);
         lbl_803EAA88->mUnknown4 = 17;
     case 17:
@@ -10446,7 +10446,7 @@ void Class_80297B90::vfn_04(float dt)
             fn_801CE720();
             fn_801CE774();
             fn_80072C90(250, 1);
-            fn_800282DC();
+            InGameStop();
         }
         break;
     }
@@ -10473,8 +10473,8 @@ void Class_80297B90::vfn_05()
     fn_80094DF0();
     fn_800AB944(lbl_803EAA8C);
     fn_800AFE20(fn_800AA93C);
-    fn_8013825C(fn_801374BC())->mUnknown20 |= 1;
-    fn_8013825C(fn_801374BC())->mUnknown20 &= ~2;
+    BallGetModel(BallGetCurrent())->mUnknown20 |= 1;
+    BallGetModel(BallGetCurrent())->mUnknown20 &= ~2;
     fn_8003E174(1);
     fn_800941B8();
     lbl_803EAA88->mUnknown4 = 19;
@@ -10495,7 +10495,7 @@ extern "C" void fn_800ABA0C(void)
             fn_800EFE60(0, p->mpState, p);
         }
     }
-    fn_8004A230(0);
+    PlayerObjSetDrawReady(0);
 }
 
 extern "C" void fn_800ABA90(void)
@@ -10551,7 +10551,7 @@ extern "C" void fn_800ABD80(void)
 
 extern "C" unsigned int fn_800ABDA4(int team)
 {
-    if (fn_8002892C() != 0) {
+    if (InGameIsDemo() != 0) {
         return 1;
     }
     if (fn_800B65A0(team) != 255) {
@@ -10808,15 +10808,15 @@ extern "C" void fn_800AD3A8(float dt)
     unsigned int i;
 
     fn_800B8608();
-    fn_801C601C(-1);
+    ConUpdateChannel(-1);
     for (i = 0; i < count; i++) {
-        int handle = fn_801C6458(i, 0);
+        int handle = ConGetChannelInfo(i, 0);
 
         if (handle != -1 && fn_801E195C(handle) == 2) {
-            fn_801C60BC(i);
+            ConProcessChannel(i);
         }
     }
-    fn_8002B270();
+    VptManagerRestoreCamera();
     fn_800BA574();
 }
 
@@ -10845,7 +10845,7 @@ extern "C" void fn_800AD418(float dt)
         fn_800AD600(dt);
         fn_800C478C(dt);
         fn_80177BCC(dt);
-        fn_8013FA24();
+        CamGameProcess();
         fn_801765C0();
     }
 }
@@ -10853,22 +10853,22 @@ extern "C" void fn_800AD418(float dt)
 extern "C" void fn_800AD4B8(float dt)
 {
     fn_800C3170();
-    fn_8004183C();
+    BigObjInstTickAll();
     fn_800CA14C();
     fn_800398B4();
     fn_800CA228();
     if (fn_800BA6F8() == 0) {
         fn_80094EDC();
     }
-    fn_801376B8(dt);
+    BallsProcessMotion(dt);
 }
 
 extern "C" void fn_800AD50C(float dt)
 {
-    fn_80041664();
+    BigObjInstSyncAll();
     fn_80039B2C(dt);
     fn_80039A38(dt);
-    fn_80137758(dt);
+    BallsProcessStates(dt);
 }
 
 extern "C" void fn_800AD550(float dt)
@@ -10876,20 +10876,20 @@ extern "C" void fn_800AD550(float dt)
     int mode = fn_800AD9B4();
 
     if (mode != 5 && mode != 1 && mode != 6 && mode != 7) {
-        fn_8003F04C(fn_8003A078());
-        fn_8003F04C(fn_801442F0());
+        CollideSetUpdate(fn_8003A078());
+        CollideSetUpdate(fn_801442F0());
         fn_80039C64();
     }
     fn_8005122C(dt);
-    fn_801377C4(dt);
+    BallsProcessCollision(dt);
 }
 
 extern "C" void fn_800AD5C0(float dt)
 {
-    fn_800416CC(dt);
+    BigObjInstSimulateAll(dt);
     fn_80039CB0(dt);
     fn_80039D08(dt);
-    fn_801BF8DC();
+    AnimCacheUpdate();
 }
 
 extern "C" void fn_80039F04(void);
@@ -10897,7 +10897,7 @@ extern "C" void fn_80039F04(void);
 extern "C" void fn_800AD600(float dt)
 {
     fn_80039F04();
-    fn_80137864(dt);
+    BallsSyncModels(dt);
 }
 
 extern "C" {
@@ -10923,7 +10923,7 @@ extern "C" void fn_800AD634(float dt)
     lbl_803EA9E4->vfn_01();
     lbl_803EAB84->vfn_01();
     lbl_803EAB38->vfn_01();
-    lbl_803EAC9C->fn_800CFEFC();
+    gQuarterEndPhase->InitState();
     lbl_803EAA8C->vfn_01();
     fn_800B175C();
     fn_800CB504();
@@ -10932,7 +10932,7 @@ extern "C" void fn_800AD634(float dt)
 extern "C" void fn_800AD888(float dt)
 {
     if (lbl_803EAAD4->mUnknown8 != 0) {
-        fn_8013FA24();
+        CamGameProcess();
         fn_800AD31C(dt);
     } else {
         void (*pUpdate)(float);
@@ -10948,7 +10948,7 @@ extern "C" void fn_800AD888(float dt)
 
 extern "C" void fn_800AD910(int mode, float dt)
 {
-    unsigned char busy = lbl_803EAC9C->fn_800D0408();
+    unsigned char busy = gQuarterEndPhase->IsWaiting();
 
     if (!busy) {
         void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
@@ -11007,12 +11007,12 @@ extern "C" void fn_800ADBC0(Object_80039F5C *p, int key, unsigned int duration, 
     }
 }
 
-extern "C" int fn_801BD910(void);
+extern "C" int AnimSeqGetOpcodeParameter(void);
 extern "C" unsigned char lbl_803EAAD8[4];
 
 extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     unsigned int index = 0;
     int value = 0;
     unsigned char duration;
@@ -11031,9 +11031,9 @@ extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
         && fn_8011F4F8(((State_800FDA58 *)&p->mUnknown336)->mUnknown3Byte)->mUnknown1D == 4) {
         value = 5;
     }
-    key = fn_801BD910();
+    key = AnimSeqGetOpcodeParameter();
     index = lbl_803EAAD8[key];
-    duration = fn_801BD910();
+    duration = AnimSeqGetOpcodeParameter();
     if (mirror != 0) {
         index = index != 1;
     }
@@ -11056,9 +11056,9 @@ extern "C" void fn_800ADD00(Object_80039F5C *p)
 
 extern "C" void fn_800ADD04(Object_80039F5C *p)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     int value = lbl_802D82D4[key];
-    unsigned char duration = fn_801BD910();
+    unsigned char duration = AnimSeqGetOpcodeParameter();
 
     if (p != 0) {
         Element_80041BF8 *pElements = ((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116;
@@ -11106,7 +11106,7 @@ extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement
     }
 }
 
-/* Clip returned by fn_801BAB34: the bank at +2 and eleven keys from +4. */
+/* Clip returned by AnimFileGetAnimation: the bank at +2 and eleven keys from +4. */
 struct Clip_800ADE6C {
     unsigned char mUnknown0[2];
     unsigned char mUnknown2;
@@ -11121,8 +11121,8 @@ struct Listing_800ADE6C {
 };
 
 extern "C" {
-void *fn_801BAB34(void *p, int key);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
+void *AnimFileGetAnimation(void *p, int key);
+void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 
 extern void *lbl_8030F958[11];
 }
@@ -11140,13 +11140,13 @@ extern "C" void fn_800ADE6C(void)
     handle = listing.mTable.mEntries[0].mUnknown0;
     key = listing.mTable.mEntries[0].mUnknown2;
     pRecord = fn_801BC084(handle);
-    pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+    pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
     for (i = 0; i <= 10; i++) {
-        lbl_8030F958[i] = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
+        lbl_8030F958[i] = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
     }
 }
 
-/* Key list returned by fn_801BAD70: a count followed by the keys. */
+/* Key list returned by AnimFileGetFrame: a count followed by the keys. */
 struct Keys_800A3C14 {
     unsigned short mCount;
     unsigned short mKeys[1];
@@ -11173,16 +11173,16 @@ extern "C" void fn_800A3C14(void)
             int handle = listing.mTable.mEntries[i].mUnknown0;
             int key = listing.mTable.mEntries[i].mUnknown2;
             pRecord = fn_801BC084(handle);
-            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+            pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
             for (unsigned int j = 0; j < 1; j++)
-                lbl_803EC938 = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
+                lbl_803EC938 = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
         } else {
             lbl_803EC93C = listing.mTable.mEntries[i].mUnknown0;
             lbl_803EC940 = listing.mTable.mEntries[i].mUnknown2;
             pRecord = fn_801BC084(lbl_803EC93C);
-            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, lbl_803EC940);
+            pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, lbl_803EC940);
             Keys_800A3C14 *pKeys =
-                (Keys_800A3C14 *)fn_801BAD70(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
+                (Keys_800A3C14 *)AnimFileGetFrame(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
             lbl_803EC944 = pKeys;
             for (unsigned int j = 0; j < pKeys->mCount; j++) {
                 pKeys->mKeys[j] &= 0x3F;
@@ -11200,10 +11200,10 @@ extern unsigned char lbl_803EAADC[4];
 
 extern "C" void fn_800AE0B8(Object_80039F5C *p)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     int index = lbl_803EAADC[key];
 
-    key = fn_801BD910();
+    key = AnimSeqGetOpcodeParameter();
     if (p != 0) {
         fn_800AE018((Player_8003877C *)p, index, key);
     }
@@ -11243,10 +11243,10 @@ void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
 
-unsigned char fn_80194F24(void);
-void fn_80194F1C(unsigned char enabled);
-void fn_80194C5C(int a, int b, int c);
-int fn_801C6458(int a, int b);
+unsigned char RumbleIsEnabled(void);
+void RumbleEnable(unsigned char enabled);
+void RumbleStart(int a, int b, int c);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 void fn_8017DDDC(int index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
@@ -11283,7 +11283,7 @@ extern "C" void fn_800AE138(unsigned int index)
 {
     int side = -1;
 
-    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
         return;
     }
     switch (lbl_802D82E0[index].mUnknown10) {
@@ -11299,49 +11299,49 @@ extern "C" void fn_800AE138(unsigned int index)
     lbl_803EAAE9 = 1;
     switch (index) {
     case 0:
-        fn_80064EFC(7, 14, side);
+        PauseOpenScreen(7, 14, side);
         break;
     case 1:
-        fn_80064EFC(7, 11, side);
+        PauseOpenScreen(7, 11, side);
         break;
     case 2:
-        fn_80064EFC(7, 10, side);
+        PauseOpenScreen(7, 10, side);
         break;
     case 3:
-        fn_80064EFC(7, 13, side);
+        PauseOpenScreen(7, 13, side);
         break;
     case 4:
-        fn_80064EFC(7, 0, side);
+        PauseOpenScreen(7, 0, side);
         break;
     case 5:
-        fn_80064EFC(7, 1, side);
+        PauseOpenScreen(7, 1, side);
         break;
     case 8:
-        fn_80064EFC(7, 2, side);
+        PauseOpenScreen(7, 2, side);
         break;
     case 6:
-        fn_80064EFC(7, 4, side);
+        PauseOpenScreen(7, 4, side);
         break;
     case 7:
-        fn_80064EFC(7, 5, side);
+        PauseOpenScreen(7, 5, side);
         break;
     case 9:
-        fn_80064EFC(7, 6, side);
+        PauseOpenScreen(7, 6, side);
         break;
     case 10:
-        fn_80064EFC(7, 7, side);
+        PauseOpenScreen(7, 7, side);
         break;
     case 11:
-        fn_80064EFC(7, 8, side);
+        PauseOpenScreen(7, 8, side);
         break;
     case 12:
-        fn_80064EFC(7, 9, side);
+        PauseOpenScreen(7, 9, side);
         break;
     case 13:
-        fn_80064EFC(7, 12, side);
+        PauseOpenScreen(7, 12, side);
         break;
     case 14:
-        fn_80064EFC(7, 15, side);
+        PauseOpenScreen(7, 15, side);
         break;
     default:
         lbl_803EAAE9 = 0;
@@ -11401,12 +11401,12 @@ extern "C" void fn_800AE380(void)
     if (fn_80178AE0() != 2) {
         lbl_803EAAE8 = 0;
     }
-    if (fn_80025708() != 0
+    if (ChallengeIsActive() != 0
         && (fn_80059004() != 0
-            || (fn_80025708() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
+            || (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
         lbl_803EAAE8 = 0;
     }
-    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
         lbl_803EAAE8 = 0;
     }
     if (lbl_803EAAEC == 3) {
@@ -11423,19 +11423,19 @@ extern "C" void fn_800AE380(void)
 
 extern "C" void fn_800AE65C(void)
 {
-    unsigned char saved = fn_80194F24();
+    unsigned char saved = RumbleIsEnabled();
 
-    fn_80194F1C(1);
+    RumbleEnable(1);
     if (fn_8007F828(9) != 0) {
         unsigned int i;
 
         for (i = 0; i <= 9; i++) {
-            if (fn_801E195C(fn_801C6458(i, 0)) == 2 && fn_800B6644(i) != 255) {
-                fn_80194C5C(i, 127, 20);
+            if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
+                RumbleStart(i, 127, 20);
             }
         }
     }
-    fn_80194F1C(saved);
+    RumbleEnable(saved);
 }
 
 extern "C" void fn_800AE6F0(void)
@@ -11742,10 +11742,10 @@ void fn_801C6C0C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
 int fn_801C6D34(void *pool, void *pItem, void *pContext, void *pResult, int (*pMatch)(void *pItem, void *pContext, void *pResult), int d);
 int fn_801C6DCC(void *pool, void *pItem, void *pContext, void *pResult, int (*pMatch)(void *pItem, void *pContext, void *pResult));
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 void *fn_801C47EC(void *p, int a, int b, int c);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_801CF810(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
+void Orient3Lerp(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
 void fn_801C4958(unsigned char enable);
 unsigned int fn_801F0C50(void *pRes, unsigned int index);
 Object_800670B4 *fn_80168708(int team);
@@ -11860,7 +11860,7 @@ extern "C" void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source
         to[0] = pSource[i].mUnknown0 << 8;
         to[1] = pSource[i].mUnknown2 << 8;
         to[2] = pSource[i].mUnknown4 << 8;
-        fn_801CF810(to, to, from, t);
+        Orient3Lerp(to, to, from, t);
         pPose->mUnknown48[index * 3 + 0] = to[0] >> 8;
         pPose->mUnknown48[index * 3 + 1] = to[1] >> 8;
         pPose->mUnknown48[index * 3 + 2] = to[2] >> 8;
@@ -11903,8 +11903,8 @@ extern "C" void fn_800AF71C(void)
 
 extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *pNameB, int value)
 {
-    int a = fn_801C4E98(p, pNameA);
-    int b = fn_801C4E98(p, pNameB);
+    int a = CharSkelGetJointByName(p, pNameA);
+    int b = CharSkelGetJointByName(p, pNameB);
 
     lbl_803EC978->mpUnknown4[index] = fn_801C47EC(p, a, b, value);
 }
@@ -12665,10 +12665,10 @@ extern "C" void fn_800996FC(int value)
     }
 }
 
-extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
+extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Ball_t *pBall,
                            int b, int mode, float range, Block_800997F4 *pBlock, int c, int d, int e, int f, int g);
 
-extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range,
+extern "C" int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, float range,
                            Block_800997F4 *pBlock, int b, int c, int d, unsigned char e)
 {
     int result = 0x1FFFFFFF;
@@ -12780,10 +12780,10 @@ void fn_8017C25C(int value);
 int fn_80178C24(void);
 int fn_8009D9A8(int index);
 int fn_8009D86C(void);
-int fn_80025640(int *pResult);
-int fn_80025718(void);
+int ChallengeIsDecided(int *pResult);
+int ChallengeIsPairingGame(void);
 int fn_8005900C(void);
-void fn_8002B5D0(int a, int b);
+void ChallengeRecordResult(int a, int b);
 int fn_800B9A90(Class_80297C60 *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
@@ -12800,12 +12800,12 @@ void fn_8009E58C(void);
 void fn_800FAD2C(void);
 void fn_800FAECC(int a);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
 int fn_800A1C50(void);
 void fn_800A1C74(Object_8017886C *a, Object_8017886C *b);
-void fn_80194F1C(unsigned char enabled);
+void RumbleEnable(unsigned char enabled);
 int fn_800C8774(int team);
 int fn_801787DC(int team);
 void fn_801787FC(int team, short value);
@@ -12905,7 +12905,7 @@ extern "C" int fn_8009D558(unsigned int time)
     if (lbl_803EA9A8->mEntries[5].mUnknown0 == 1) {
         fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         int mode = fn_800AD9B4();
 
         if (lbl_803EA9A8->mEntries[4].mUnknown0 == 1) {
@@ -12920,10 +12920,10 @@ extern "C" int fn_8009D558(unsigned int time)
             }
         }
         if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && fn_801735C8(0x10) == 0
-            && fn_80025640(0) != 0) {
+            && ChallengeIsDecided(0) != 0) {
             flags |= 1;
         }
-    } else if (fn_80025718() != 0) {
+    } else if (ChallengeIsPairingGame() != 0) {
         int done = fn_8005900C();
         int value;
 
@@ -12937,9 +12937,9 @@ extern "C" int fn_8009D558(unsigned int time)
             }
         }
         value = 0;
-        if (done != 0 || fn_80025640(&value) != 0) {
+        if (done != 0 || ChallengeIsDecided(&value) != 0) {
             flags |= 1;
-            fn_8002B5D0(value, 7);
+            ChallengeRecordResult(value, 7);
         }
     }
     if (fn_8009D86C() == 5 && fn_801787DC(0) != fn_801787DC(1)) {
@@ -13375,7 +13375,7 @@ extern "C" int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angl
     Point_8017886C delta;
 
     fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-    return fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < angle;
+    return MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < angle;
 }
 
 extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle)
@@ -13384,10 +13384,10 @@ extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle)
     Point_8017886C delta;
     int heading;
 
-    fn_80137D58(fn_801374BC(), &ball);
+    BallGetPosition(BallGetCurrent(), &ball);
     fn_80227690(&delta, &ball, &p->mMotion.mPos);
     heading = fn_801CFE40(delta.mY, delta.mX);
-    return fn_801CFFD0(heading, p->mMotion.mFacing + fn_800C8BAC(p, 0)) < angle;
+    return MathAngleDiff(heading, p->mMotion.mFacing + fn_800C8BAC(p, 0)) < angle;
 }
 
 extern "C" int fn_8009F13C(Object_80039F5C *p)
@@ -13447,7 +13447,7 @@ extern "C" {
 unsigned char fn_800FC0C4(Object_80039F5C *p);
 int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8003A06C(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 }
 
 extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
@@ -13458,7 +13458,7 @@ extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
     int id;
 
     if (p != 0 && fn_800F06F4(0, p->mpState, 22, 0xFFFF) != 0xFFFF && !fn_801783AC(0)
-        && fn_8013BA58(fn_801374BC(), 0) == 1) {
+        && BallStateGet(BallGetCurrent(), 0) == 1) {
         for (i = 0; i < fn_8003A06C(); i++) {
             pOther = fn_80039F5C(fn_80178308(), i);
             if (pOther == 0) {
@@ -13588,12 +13588,12 @@ extern "C" void fn_800A0230(void)
     case 1:
     case 4:
     case 6:
-        fn_80067D4C(25, 0);
+        AudmonEventPost(25, 0);
         break;
     case 2:
     case 5:
     case 7:
-        fn_80067D4C(26, 0);
+        AudmonEventPost(26, 0);
         break;
     }
 }
@@ -13608,7 +13608,7 @@ extern "C" void fn_800A039C(Class_80297AB8 *pObject)
 }
 
 extern "C" {
-void fn_80148154(void);
+void PassIconsHide(void);
 
 extern void **lbl_803EA9E8;
 }
@@ -13628,9 +13628,9 @@ void Class_80297AB8::vfn_02()
 
 void Class_80297AB8::vfn_05()
 {
-    fn_80148154();
-    fn_80027230(lbl_803EA9E8);
-    fn_80027358(-1);
+    PassIconsHide();
+    PadInputRestoreHandlers(lbl_803EA9E8);
+    PadInputResetSlot(-1);
     fn_800A61A8();
 }
 
@@ -13641,7 +13641,7 @@ extern "C" void fn_800A061C(int a, int *p, int value)
 
 extern "C" void fn_800A0624(Record_800A0624 *p)
 {
-    fn_801D34D0(p, sizeof(Record_800A0624), 0, 4);
+    MemFill(p, sizeof(Record_800A0624), 0, 4);
     p->mUnknown0 = 0;
     p->mUnknown4 = 0;
     fn_8009BD2C(0, &p->mUnknownC);
@@ -13650,7 +13650,7 @@ extern "C" void fn_800A0624(Record_800A0624 *p)
 
 extern "C" void fn_800A0684(Record_800A0684 *p)
 {
-    fn_801D34D0(p, sizeof(Record_800A0684), 0, 4);
+    MemFill(p, sizeof(Record_800A0684), 0, 4);
     fn_8009BD2C(0, &p->mUnknown0);
     p->mUnknown8 = fn_80177FE0();
     p->mUnknown4 = fn_80177F70();
@@ -13671,8 +13671,8 @@ extern "C" void fn_800A14A8(void *context)
 {
     Pair_800A14A8 *p=(Pair_800A14A8 *)context;
     fn_800A1C74(p->mpFirst, p->mpSecond);
-    fn_80194F1C(0);
-    fn_80067D4C(124, 0);
+    RumbleEnable(0);
+    AudmonEventPost(124, 0);
 }
 
 extern "C" void fn_800A14E4(Object_8017886C *pResult, unsigned char update)
@@ -13905,7 +13905,7 @@ int fn_8011E9B4(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800C91B0(Object_80039F5C *p);
 int fn_800C91F0(Object_80039F5C *p, unsigned char *pOut, int which);
 void fn_800CC0C0(int team);
@@ -14178,8 +14178,8 @@ extern "C" void fn_800CC244(Object_80039F5C *p)
     if (p->mpState->mId == 63) {
         fn_800FF6D8(p);
     } else {
-        if (fn_80137C48(p) != 0 && fn_80137B40() == p) {
-            fn_8013791C(fn_80137C48(p), 5, 0);
+        if (BallFindHeldBy(p) != 0 && BallGetCurrentHolder() == p) {
+            BallReleaseStill(BallFindHeldBy(p), 5, 0);
         }
         fn_800EFE60(0, p->mpState, p);
         fn_800CC388(p);
@@ -14291,7 +14291,7 @@ extern "C" int fn_800CC6A8(Object_80039F5C *p)
         break;
     }
     if (check && p->mIdBytes[2] == fn_80178320()) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         if (pCarrier != 0) {
             Object_80039F5C *pTarget = fn_8009BCE8(&p->mUnknown1036);
@@ -14304,7 +14304,7 @@ extern "C" int fn_800CC6A8(Object_80039F5C *p)
                 fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
                 angle = fn_801CFE40(delta.mY, delta.mX);
                 fn_80227690(&carrierDelta, &pCarrier->mMotion.mPos, &pTarget->mMotion.mPos);
-                if (fn_801CFFD0(angle, fn_801CFE40(carrierDelta.mY, carrierDelta.mX)) > 0x4E38E3) {
+                if (MathAngleDiff(angle, fn_801CFE40(carrierDelta.mY, carrierDelta.mX)) > 0x4E38E3) {
                     result = 0;
                 }
             }
@@ -14470,19 +14470,19 @@ extern "C" int fn_800CCC04(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
     } else {
         angle = (pPlay->mpUnknown20->mUnknown4 - pPlay->mpUnknown16->mUnknown4) & 0xFFFFFF;
     }
-    if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
+    if (MathAngleDiff(angle, (pPlay->mUnknown24 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
         result = 1;
     }
     if (result == 0) {
-        if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
+        if (MathAngleDiff(angle, (pPlay->mUnknown32 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
             result = 1;
         }
         if (result == 0) {
-            if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
+            if (MathAngleDiff(angle, (pPlay->mUnknown24 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
                 result = 1;
             }
             if (result == 0) {
-                if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
+                if (MathAngleDiff(angle, (pPlay->mUnknown32 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
                     result = 1;
                 }
             }
@@ -14686,17 +14686,17 @@ extern "C" void fn_800CF714(float dt)
 
 extern "C" void fn_800CF74C(float dt)
 {
-    lbl_803EAC9C->fn_800CFF4C();
+    gQuarterEndPhase->OnEnter();
 }
 
 extern "C" void fn_800CF784(float dt)
 {
-    lbl_803EAC9C->fn_800CFFC4(dt);
+    gQuarterEndPhase->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF7BC(float dt)
 {
-    lbl_803EAC9C->fn_800D0394();
+    gQuarterEndPhase->OnExit();
 }
 
 /* One of the 196-byte records of the array fn_800B8544 allocates. */
@@ -14748,14 +14748,14 @@ void fn_800C46A0(Sequence_800C4460 *p);
 void fn_800DC578(void);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void fn_800F1800(int index);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801486A0(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_8017F60C(void);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 unsigned int fn_801E1954(void);
 int fn_801E195C(int a);
 void fn_800B5150(Object_80039F5C *p);
@@ -14890,7 +14890,7 @@ extern "C" int fn_800B54C0(void *p)
 extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a)
 {
     int result = 1;
-    Object_80039F5C *pControlled = fn_80137B40();
+    Object_80039F5C *pControlled = BallGetCurrentHolder();
 
     if (pControlled == p && fn_800F06F4(0, pControlled->mpState, 25, 0xFFFF) == 0xFFFF
         && (pInput->mUnknown95 & 0x40) && fn_801064A4(pControlled, a) != 0) {
@@ -15130,7 +15130,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
             if (mode != 2 && mode != 3) {
                 index = fn_800B51D8(pTeam, index, mode);
             }
-            fn_80067DB8(16, 0, team, 0, 0);
+            AudmonEventPostArgs(16, 0, team, 0, 0);
         } else {
             index = 0;
         }
@@ -15195,7 +15195,7 @@ extern "C" void fn_800B6C98(void)
 
 extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
 
-extern "C" int fn_800B7248(Input_800B6D34 *pInput, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pTarget)
+extern "C" int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5C *p, Object_80039F5C *pTarget)
 {
     int result = 0;
 
@@ -15209,8 +15209,8 @@ extern "C" int fn_800B7248(Input_800B6D34 *pInput, Object_80137ABC *pBall, Objec
                 }
             }
         } else if (pInput->mUnknown96 & 2) {
-            if ((fn_80137B40() == 0 || fn_80137B40()->mUnknown2914 != 0) && fn_80137B40() != 0) {
-                if (fn_80137B40()->mUnknown2914 != 0 || fn_80137B40()->mpState->mId == 26) {
+            if ((BallGetCurrentHolder() == 0 || BallGetCurrentHolder()->mUnknown2914 != 0) && BallGetCurrentHolder() != 0) {
+                if (BallGetCurrentHolder()->mUnknown2914 != 0 || BallGetCurrentHolder()->mpState->mId == 26) {
                     if (fn_8009BCE8(&p->mUnknown1036) != 0) {
                         result = fn_800E6AC8(pTarget, 4);
                         if (result != 0) {
@@ -15253,7 +15253,7 @@ int fn_8009A6EC(Object_80039F5C *p);
 int fn_8010279C(Object_80039F5C *p);
 int fn_801133FC(Object_80039F5C *p, int a, int b);
 int fn_80125510(Object_80039F5C *p, int a);
-int fn_8013BA58(Object_80137ABC *p, int *pOut);
+int BallStateGet(Ball_t *p, int *pOut);
 int fn_801783AC(int bit);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 }
@@ -15268,7 +15268,7 @@ extern "C" {
 int fn_800B54D4(Object_80039F5C *p, int mode);
 int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
 int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E8098(Object_80039F5C *p, int a);
 int fn_80111090(Object_80039F5C *p, int a);
 void fn_8016DA98(Object_80039F5C *p);
@@ -15280,11 +15280,11 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
     int mode = 0;
 
     fn_800B6D34(p, &input);
-    if (fn_80137B40() == p) {
+    if (BallGetCurrentHolder() == p) {
         if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
             mode = 4;
         }
-        if (fn_800D0B90(p) == 0 && (input.mUnknown95 & 8)) {
+        if (PlayerMoveGetKind(p) == 0 && (input.mUnknown95 & 8)) {
             p->mFlags |= 0x4000;
             if (fn_800CA5CC(p, 0, 1) != 0) {
                 if ((unsigned int)(p->mUnknown528.mUnknown15 - 10) <= 1) {
@@ -15302,7 +15302,7 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
             fn_8016DA98(p);
         }
     }
-    if (fn_80137B40() == p) {
+    if (BallGetCurrentHolder() == p) {
         if (fn_800B56C4(p, &input, mode) == 0) {
             return 0;
         }
@@ -15340,7 +15340,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p);
 
 extern "C" int fn_800B7CA4(Object_80039F5C *p)
 {
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
     Input_800B6D34 input;
 
     fn_800B6D34(p, &input);
@@ -15351,12 +15351,12 @@ extern "C" int fn_800B7CA4(Object_80039F5C *p)
         }
     }
     if ((input.mUnknown92 & 1)
-        && ((fn_8013BA58(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0)
+        && ((BallStateGet(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0)
             || fn_800E815C(p, 0, 0) != 0)) {
         goto handled;
     }
     if (input.mUnknown92 & 4) {
-        if (fn_8013BA58(pBall, 0) != 4) {
+        if (BallStateGet(pBall, 0) != 4) {
             if (fn_800F2C1C(p, 0) != 0) {
                 goto handled;
             }
@@ -15392,7 +15392,7 @@ extern "C" int fn_800B7E60(Object_80039F5C *p)
                 if (fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF && fn_801783AC(0) == 0) {
                     return fn_8010279C(p);
                 }
-                if (fn_80137C48(p) != 0) {
+                if (BallFindHeldBy(p) != 0) {
                     return fn_800B76E8(p);
                 }
                 return fn_800B7CA4(p);
@@ -15408,7 +15408,7 @@ extern "C" int fn_800B7F34(Object_80039F5C *p)
 {
     Input_800B6D34 input;
 
-    fn_801374BC();
+    BallGetCurrent();
     fn_800B6D34(p, &input);
     if (input.mUnknown93 & 0x10) {
         fn_800B6988(p->mUnknown8);
@@ -15421,7 +15421,7 @@ extern "C" int fn_800B7F88(Object_80039F5C *p)
 {
     Input_800B6D34 input;
 
-    fn_801374BC();
+    BallGetCurrent();
     fn_800B6D34(p, &input);
     if (p->mIdBytes[2] == fn_80178320() && (input.mUnknown93 & 0x10)) {
         fn_800B6988(p->mUnknown8);
@@ -15431,7 +15431,7 @@ extern "C" int fn_800B7F88(Object_80039F5C *p)
 
 extern "C" int fn_800B7FE8(Object_80039F5C *p)
 {
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         return 0;
     }
     return fn_800B7F34(p);
@@ -15445,7 +15445,7 @@ extern "C" int fn_800B81A4(void)
 
     for (i = 0; i < lbl_803EAB60->mCount; i++) {
         if (fn_800B6644(i) != 0xFF) {
-            value = fn_801C6458(i, 0);
+            value = ConGetChannelInfo(i, 0);
             if ((fn_8017F60C() == 0 || value < fn_801E1954()) && fn_801E195C(value) != 2) {
                 return (unsigned char)i;
             }
@@ -15486,7 +15486,7 @@ extern "C" void fn_800B82AC(int team)
 
 extern "C" void fn_800B8344(Object_80039F5C *p)
 {
-    Object_80039F5C *pCurrent = fn_80137B40();
+    Object_80039F5C *pCurrent = BallGetCurrentHolder();
 
     if (pCurrent == p && pCurrent->mUnknown8 != 0xFF && fn_800B5FEC(pCurrent) != 0) {
         pCurrent->mFlags |= 0x4000;
@@ -15634,15 +15634,15 @@ extern "C" int fn_800B898C(void *p, void *q)
 }
 
 extern "C" {
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003A450(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void fn_8006E134(int flags);
 void fn_800AD910(int a, float b);
-int fn_8013F9F8(void);
-void fn_8013FA8C(int a);
-void fn_8013F97C(int a);
+int CamGameGetCurrentSlot(void);
+void CamGameSetModeAll(int a);
+void CamGameSelectCamera(int a);
 void fn_80162780(int a, int b);
 void fn_80173B8C(void);
 void fn_801783D0(int bit, int on);
@@ -15656,8 +15656,8 @@ extern int lbl_803EAB80;
 
 void Class_80297C60::vfn_08()
 {
-    fn_8013F97C(0);
-    fn_8013FA8C(4);
+    CamGameSelectCamera(0);
+    CamGameSetModeAll(4);
 }
 
 int Class_80297C60::vfn_13(int busy)
@@ -15666,10 +15666,10 @@ int Class_80297C60::vfn_13(int busy)
 
     if ((lbl_803EAB78->mSequence.mUnknown100 == 0 || lbl_803EAB78->mUnknown148 != 0) && busy == 0
         && fn_8002D060(lbl_803EA368) == 0) {
-        if (fn_80025708() == 0 || lbl_803EAB78->mUnknown148 == 0) {
+        if (ChallengeIsActive() == 0 || lbl_803EAB78->mUnknown148 == 0) {
             result = 1;
             if (fn_800AE978() != 0 || fn_800AE980() != 0 || fn_8009B9A8(1) != 0 || fn_8009B9A8(0) != 0
-                || fn_8013F9F8() == 3) {
+                || CamGameGetCurrentSlot() == 3) {
                 result = 0;
             }
             if (lbl_803EAB78->mUnknown154 < lbl_803EAB78->mUnknown15C) {
@@ -15703,7 +15703,7 @@ void Class_80297C60::vfn_14(float dt)
         }
         if (lbl_803EAB78->mUnknown159[0] == 0) {
             fn_801783D0(0x15, 0);
-            if (fn_80025708() == 0 || fn_8009D990(4) != 0) {
+            if (ChallengeIsActive() == 0 || fn_8009D990(4) != 0) {
                 fn_800AD910(5, dt);
             }
         } else {
@@ -15729,7 +15729,7 @@ extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
         if (lbl_803EA368->mUnknownD90 != 0) {
-            if (fn_800A2160() == 0 || fn_8002892C() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
+            if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
                 || fn_8002E950(0) == 0) {
                 return;
             }
@@ -15810,7 +15810,7 @@ void Class_80297C60::vfn_02()
 }
 
 extern "C" {
-void fn_8007617C(void);
+void SpchIGFlushPlayResult(void);
 void fn_800BAAE4(void);
 void fn_800C4460(Sequence_800C4460 *p);
 void fn_800C4568(Sequence_800C4460 *p);
@@ -15824,7 +15824,7 @@ extern int lbl_803EAB80;
 }
 
 extern "C" {
-void fn_800761B0(void);
+void SpchIGUpdatePlayResult(void);
 void fn_800C45C0(Sequence_800C4460 *p, float dt);
 void fn_8017D678(void);
 }
@@ -15834,12 +15834,12 @@ void Class_80297C60::vfn_04(float dt)
     int finished;
 
     fn_8017D678();
-    fn_800761B0();
+    SpchIGUpdatePlayResult();
     vfn_10(dt);
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
     }
-    if (fn_80025708() != 0 && fn_8009D990(4) == 0) {
+    if (ChallengeIsActive() != 0 && fn_8009D990(4) == 0) {
         vfn_15();
     }
     if (lbl_803EAB78->mUnknown14C != 0) {
@@ -15862,7 +15862,7 @@ void Class_80297C60::vfn_04(float dt)
 
 void Class_80297C60::vfn_05()
 {
-    fn_8007617C();
+    SpchIGFlushPlayResult();
     fn_800B14E4();
     fn_8009BA10(0);
     fn_800B8028();
@@ -15878,7 +15878,7 @@ void Class_80297C60::vfn_05()
         fn_800BAAE4();
     }
     fn_8017CFB4(7);
-    fn_80067D4C(125, 0);
+    AudmonEventPost(125, 0);
     lbl_803EAB78->mUnknown148 = 0;
     fn_8017DBCC();
     fn_800A8F70();
@@ -15966,39 +15966,39 @@ int fn_80177F70(void);
 int fn_801F0F18(int a);
 void fn_800AD910(int a, float b);
 int fn_8017D064(int a);
-void fn_8013F9B8(void);
+void CamGamePushCurrentCamera(void);
 void fn_801789F8(void);
 void fn_800B6B98(void);
 void fn_800C1E5C(int a, unsigned int b, float c);
 void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
 void fn_800AFE20(void (*pCallback)(int, unsigned int, float));
-void fn_8013FA8C(int a);
-void fn_8013F97C(int a);
-void fn_8013FA58(int a, int b);
+void CamGameSetModeAll(int a);
+void CamGameSelectCamera(int a);
+void CamGameSetFocusAll(int a, int b);
 void fn_800BA804(int a);
 int fn_8016E764(void);
 int fn_80178308(void);
 int fn_80178320(void);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6868(int a, int b, int c, int d);
-void fn_80148108(int mode);
-int fn_801481B0(void);
-int fn_800744FC(void);
+void PassIconsShow(int mode);
+int PassIconsAreShown(void);
+int SpchIGAreChannelsIdle(void);
 void fn_80162780(int a, int b);
 int fn_8011F32C(void);
 int fn_8011F228(void);
 int fn_800B119C(void);
 int fn_800BA6F8(void);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+void fn_8013C6F0(GameCamera_t *pCamera);
 int fn_800B6644(int index);
 int fn_800A937C(void);
 int fn_800A9648(void);
 void fn_800BD35C(void);
 void fn_8003A3F4(int a, int index);
 int fn_80156704(void);
-int fn_80025ACC(void);
+int ChallengeHasRecordFlag(void);
 void fn_800AE904(int a);
 int fn_800AE980(void);
 void fn_8017CBFC(int a);
@@ -16011,7 +16011,7 @@ int fn_80168E00(int team, int index, unsigned char *pOut);
 unsigned short fn_801BE648(void *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
-void fn_801F51DC(int a, void *pBase, int count, int size,
+void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(Entry_800C3130 *, Entry_800C3130 *),
                  void (*pSwap)(Entry_800C3130 *, Entry_800C3130 *), int b, int c);
 
@@ -16030,7 +16030,7 @@ extern Record_800C432C lbl_803103F0[10];
 }
 
 extern "C" {
-int fn_80074638(void);
+int SpchIGIsNarratorIdle(void);
 void fn_80168A14(int team);
 int fn_80178E4C(void);
 void fn_8017DFA8(int index);
@@ -16041,7 +16041,7 @@ void fn_8011F3A8(void);
 void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800A7514(int team);
 void fn_8009FFD4(void);
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 extern char lbl_802ED3FC[];
 extern char lbl_802ECD44[];
 }
@@ -16095,7 +16095,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             int blocked = 0;
 
             if (fn_80156704() != 0) {
-                blocked = fn_80074638() == 0;
+                blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
                 done = 1;
@@ -16128,7 +16128,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         } else if (action == 0xFC) {
             if (fn_80178E4C() != 0) {
                 lbl_803EABA8->mSlots[team].mUnknown0 = 3;
-                fn_801C6280(index, 3, lbl_802ED3FC);
+                ConSetChannelInfo(index, 3, lbl_802ED3FC);
                 fn_8017DDDC(team);
                 fn_8017DFA8(team);
                 lbl_803EABB4 = 0;
@@ -16140,12 +16140,12 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             if (team != away) {
                 p = fn_80039FE8(team, 0, 0);
                 if (p != 0) {
-                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                    AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             } else {
                 p = fn_80039F5C(team, fn_802372EC(1, fn_8003A06C()));
                 if (p != 0) {
-                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                    AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             }
             fn_80168908(team, action);
@@ -16163,7 +16163,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         }
         fn_8003A3F4(0, team);
         fn_8009FFD4();
-        fn_80067D4C(0x18, 0);
+        AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
             Object_800670B4 *pTeam = fn_80168708(t);
             unsigned int count = fn_80178D18(t);
@@ -16185,10 +16185,10 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
     }
     if (done) {
         lbl_803EABA8->mSlots[team].mUnknown0 = 2;
-        fn_801C6280(index, 3, lbl_802ECD44);
+        ConSetChannelInfo(index, 3, lbl_802ECD44);
         fn_8017DDDC(team);
         if (team == away) {
-            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            lbl_803EABA8->mUnknownAC = InGameGetFrameCount();
             lbl_803EABA8->mUnknownAB = 1;
         }
     }
@@ -16278,7 +16278,7 @@ extern "C" void fn_800BE808(int a, unsigned char index)
     }
     lbl_803EABA8->mSlots[index].mUnknown0 = 4;
     lbl_803EABA8->mSlots[index].mUnknown8 = 30;
-    fn_801C6280(a, 3, lbl_802ECF88);
+    ConSetChannelInfo(a, 3, lbl_802ECF88);
     if (fn_800A8488(0) && !fn_800A8444(0)) {
         fn_8017DA9C(0);
     }
@@ -16291,11 +16291,11 @@ extern "C" void fn_800BE808(int a, unsigned char index)
 extern "C" void fn_800BE8E4(int team)
 {
     if (team == fn_80178308()) {
-        fn_80148154();
-        fn_80148108(0);
+        PassIconsHide();
+        PassIconsShow(0);
     }
-    if (team == fn_80178320() && fn_801481B0() == 0) {
-        fn_80148108(1);
+    if (team == fn_80178320() && PassIconsAreShown() == 0) {
+        PassIconsShow(1);
     }
 }
 
@@ -16321,17 +16321,17 @@ extern "C" void fn_800BEC1C(int a, int index)
             fn_8017D9D8(1);
         }
     }
-    fn_801C6280(a, 3, lbl_802ECD44);
+    ConSetChannelInfo(a, 3, lbl_802ECD44);
     fn_800BD568(index);
 }
 
 extern "C" void fn_800BAD1C(void);
 extern "C" void fn_800BADD4(void);
-extern "C" void fn_80074358(int index);
+extern "C" void SpchIGPurgeChannel(int index);
 extern "C" int fn_8016EA68(void);
 extern "C" void fn_8016E008(int team);
 extern "C" void fn_800BD958(void);
-extern "C" void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
+extern "C" void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
 
 extern "C" void fn_800BED54(unsigned char index)
 {
@@ -16342,7 +16342,7 @@ extern "C" void fn_800BED54(unsigned char index)
         }
         break;
     case 1:
-        if (fn_800744FC() != 0) {
+        if (SpchIGAreChannelsIdle() != 0) {
             fn_800BACF4();
             lbl_803EABA8->mUnknownBC = 2;
         }
@@ -16353,7 +16353,7 @@ extern "C" void fn_800BED54(unsigned char index)
         }
         break;
     case 3:
-        if (fn_800744FC() != 0) {
+        if (SpchIGAreChannelsIdle() != 0) {
             fn_800BAD1C();
             lbl_803EABA8->mUnknownBC = 4;
         }
@@ -16368,11 +16368,11 @@ extern "C" void fn_800BED54(unsigned char index)
         unsigned int i;
 
         for (i = 0; i <= 2; i++) {
-            fn_80074358(i);
+            SpchIGPurgeChannel(i);
         }
         fn_800BADD4();
-        fn_8013C824(fn_8013FA04(5), 10, 0);
-        fn_8013FA8C(lbl_803EABA8->mUnknown44);
+        fn_8013C824(CamGameGetCamera(5), 10, 0);
+        CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknownBC = 6;
         lbl_803EABA8->mSlots[index].mUnknown8 = 30;
         if (fn_8016EA68() == 0) {
@@ -16386,7 +16386,7 @@ extern "C" void fn_800BED54(unsigned char index)
     }
     case 6:
         if (lbl_803EABA8->mSlots[index].mUnknown8-- <= 0) {
-            fn_801C6280(fn_800B65A0(index), 3, lbl_802ECD44);
+            ConSetChannelInfo(fn_800B65A0(index), 3, lbl_802ECD44);
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
             lbl_803EABA8->mUnknownC6 = 1;
             fn_80162780(1, 1);
@@ -16413,7 +16413,7 @@ extern "C" void fn_800BEFAC(int index)
     case 0:
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
-        } else if (fn_800744FC() != 0) {
+        } else if (SpchIGAreChannelsIdle() != 0) {
             lbl_803EABA8->mUnknownBC = 1;
             lbl_803EABA8->mSlots[index].mUnknown8 = 30;
         }
@@ -16421,7 +16421,7 @@ extern "C" void fn_800BEFAC(int index)
     case 1:
         if (lbl_803EABA8->mSlots[index].mUnknown8 > 0) {
             lbl_803EABA8->mSlots[index].mUnknown8--;
-        } else if (fn_800744FC() != 0) {
+        } else if (SpchIGAreChannelsIdle() != 0) {
             fn_80162780(1, 1);
             lbl_803EABA8->mUnknownC6 = state;
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
@@ -16513,28 +16513,28 @@ extern "C" void fn_800BF174(void)
 
 void Class_80297CE8::vfn_09()
 {
-    int count = fn_801383C8();
+    int count = BallsGetCount();
     int i;
 
     for (i = 0; i < count; i++) {
-        Object_80137ABC *pBall = fn_80137ABC(i);
-        Object_80039F5C *p = fn_80137AD0(pBall);
+        Ball_t *pBall = BallGet(i);
+        Object_80039F5C *p = BallGetHolder(pBall);
 
         if (p != 0 && p->mIdBytes[3] == 1) {
-            fn_8013791C(pBall, 5, 0);
+            BallReleaseStill(pBall, 5, 0);
         }
     }
 }
 
 void Class_80297CE8::vfn_11()
 {
-    fn_8013FA8C(1);
+    CamGameSetModeAll(1);
     if (fn_800B65A0(0) == 255 && fn_800B65A0(1) == 255 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(1, 20, 0x808080, 0);
     }
-    if (fn_8013F9F8() != 3) {
-        fn_8013F97C(0);
-        fn_8013C6F0(fn_8013FA04(5));
+    if (CamGameGetCurrentSlot() != 3) {
+        CamGameSelectCamera(0);
+        fn_8013C6F0(CamGameGetCamera(5));
     }
 }
 
@@ -16641,7 +16641,7 @@ extern "C" int fn_800BF824(void)
     int result = 0;
 
     if (lbl_803EABA8->mUnknownB8 > 30) {
-        if (fn_80156704() == 0 && fn_801485D4() == 0 && fn_80025ACC() != 0) {
+        if (fn_80156704() == 0 && fn_801485D4() == 0 && ChallengeHasRecordFlag() != 0) {
             fn_800AE904(3);
         }
         lbl_803EABA8->mUnknownB8 = -1;
@@ -16704,11 +16704,11 @@ extern "C" void fn_800BF9DC(Class_80297CE8 *p)
         }
         lbl_803EABA8->mUnknownB4 = -1;
     }
-    if (fn_80025708() != 0) {
-        if (fn_800785C0()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
+    if (ChallengeIsActive() != 0) {
+        if (ChalGetCurrent()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
             fn_800A7514(0);
         }
-        if (fn_800785C0()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
+        if (ChalGetCurrent()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
             fn_800A7514(1);
         }
     }
@@ -16852,16 +16852,16 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
     if (handled) {
         fn_8009FFD4();
         fn_800A02FC();
-        fn_80067D4C(24, 0);
+        AudmonEventPost(24, 0);
         fn_8017E01C(team);
         if (kind == 108) {
             lbl_803EABA8->mSlots[team].mUnknown0 = 1;
-            fn_801C6280(a, 3, lbl_802ED104);
+            ConSetChannelInfo(a, 3, lbl_802ED104);
             fn_8017DD68(team);
         } else {
             lbl_803EABA8->mSlots[team].mUnknown0 = 2;
-            fn_801C6280(a, 3, lbl_802ECD44);
-            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            ConSetChannelInfo(a, 3, lbl_802ECD44);
+            lbl_803EABA8->mUnknownAC = InGameGetFrameCount();
             lbl_803EABA8->mUnknownAB = 1;
         }
     }
@@ -16870,7 +16870,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
 extern "C" int fn_800C05F4(void)
 {
     if (lbl_803EABA8->mUnknownAB != 0) {
-        if (fn_800289A8() >= lbl_803EABA8->mUnknownAC + 15) {
+        if (InGameGetFrameCount() >= lbl_803EABA8->mUnknownAC + 15) {
             lbl_803EABA8->mUnknownAC = 0;
             lbl_803EABA8->mUnknownAB = 0;
             return 0;
@@ -16940,7 +16940,7 @@ extern "C" void fn_800C11B8(void)
     State_8011F4EC *pState = fn_8011F4EC();
 
     if (fn_801787A0() == 0) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
         unsigned char start = pState->mUnknown1C4;
         unsigned char i = start;
         unsigned char found;
@@ -17036,9 +17036,9 @@ extern "C" void fn_800C1E50(void)
 
 extern "C" void fn_800C2090(void)
 {
-    fn_8013FA8C(1);
-    fn_8013F97C(0);
-    fn_8013FA58(1, fn_801374D4());
+    CamGameSetModeAll(1);
+    CamGameSelectCamera(0);
+    CamGameSetFocusAll(1, BallGetCurrentIndex());
     fn_800AFDD4(fn_800C1E5C);
 }
 
@@ -17149,7 +17149,7 @@ extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBe
             return 1;
         }
     } else if (distanceSq < rangeSq &&
-               fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mUnknown36) < maxAngle) {
+               MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mUnknown36) < maxAngle) {
         fn_80227538((Point_80167910 *)&end, p->mUnknown36, range);
         end.mX += p->mUnknown4.mX;
         end.mY += p->mUnknown4.mY;
@@ -17185,7 +17185,7 @@ extern "C" void fn_800C3170(void)
     unsigned int i;
 
     for (i = 0; i < 3; i++) {
-        fn_801F51DC(1, lbl_8030FF40[i], lbl_802D9E90[i], sizeof(Entry_800C3130), fn_800C2F94, fn_800C2FB8, 0, 0);
+        SortArray(1, lbl_8030FF40[i], lbl_802D9E90[i], sizeof(Entry_800C3130), fn_800C2F94, fn_800C2FB8, 0, 0);
     }
 }
 
@@ -17193,7 +17193,7 @@ extern "C" void fn_800C3610(float value)
 {
     if (lbl_803EABD4 != 0) {
         lbl_803EABD4 = 0;
-        fn_8002885C();
+        InGamePause();
     } else {
         while (fn_8017D064(7) != 0) {
             fn_8017CFB4(7);
@@ -17204,7 +17204,7 @@ extern "C" void fn_800C3610(float value)
 
 extern "C" void fn_800C3678(void)
 {
-    fn_8013F9B8();
+    CamGamePushCurrentCamera();
     fn_8010A220();
     fn_801789F8();
     lbl_803EABD5 = 0;
@@ -17371,7 +17371,7 @@ void fn_80164A64(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
 int fn_8006D884(int idx);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA3;
 void fn_800BD1C8(Record_800BAE7C *pRecords);
@@ -17379,8 +17379,8 @@ void fn_800BC3F0(void);
 extern unsigned short lbl_802D9B14[];
 void fn_800BAAE4(void);
 void fn_8017DBCC(void);
-int fn_8013C678(Camera_8013F738 *pCamera);
-void fn_8013C7C4(Camera_8013F738 *pCamera);
+int fn_8013C678(GameCamera_t *pCamera);
+void fn_8013C7C4(GameCamera_t *pCamera);
 }
 
 void Class_80297BF8::vfn_02()
@@ -17392,7 +17392,7 @@ void Class_80297BF8::vfn_10(float dt)
 {
     int state;
 
-    if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && fn_8002892C() == 0 &&
+    if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
         fn_8017F60C() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
         (state = fn_8007F828(14)) == 1) {
         vfn_07();
@@ -17400,7 +17400,7 @@ void Class_80297BF8::vfn_10(float dt)
         lbl_803EABA3 = state;
     } else if (fn_800AE980() == 0) {
         fn_800AE988();
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         vfn_11(dt);
         fn_800941B8();
     }
@@ -17414,7 +17414,7 @@ void Class_80297BF8::vfn_11(float dt)
 void Class_80297BF8::vfn_04(float dt)
 {
     if (fn_800BA71C() == 1) {
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
         while (fn_8017D064(7) != 0) {
             fn_8017CFB4(7);
         }
@@ -17466,7 +17466,7 @@ extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
             if ((lbl_803EC98C->mUnknown2A & 0x80) == 0) {
                 fn_80094048(handle, &pA, &pB);
             }
-            fn_80067E3C(0x6b, &pA->mMotion.mPos, pA->mId, handle, (lbl_803EAB95 + 1) & 1,
+            AudmonEventPostId(0x6b, &pA->mMotion.mPos, pA->mId, handle, (lbl_803EAB95 + 1) & 1,
                         pB != 0 ? pB->mId : 0);
             pRecords[lbl_803EAB95 + 1].mUnknown44 = 1;
             lbl_803EABA0 = 1;
@@ -17498,7 +17498,7 @@ extern "C" void fn_800BD35C(void)
 
 extern "C" int fn_800BD3C0(int team)
 {
-    Camera_8013F738 *pCamera = fn_8013FA04(5);
+    GameCamera_t *pCamera = CamGameGetCamera(5);
 
     if (lbl_803EABA8->mUnknown44 != -1) {
         return 0;
@@ -17508,11 +17508,11 @@ extern "C" int fn_800BD3C0(int team)
     }
     lbl_803EABA8->mUnknown44 = fn_8013C678(pCamera);
     fn_8013C7C4(pCamera);
-    fn_8013FA8C(5);
+    CamGameSetModeAll(5);
     if (team == fn_80178308()) {
-        fn_80148108(0);
+        PassIconsShow(0);
     } else {
-        fn_80148108(1);
+        PassIconsShow(1);
     }
     return 1;
 }
@@ -17538,10 +17538,10 @@ extern "C" void fn_800BD460(int team, int force)
 extern "C" void fn_800BD51C(void)
 {
     if (lbl_803EABA8->mUnknown44 != -1) {
-        fn_8013FA8C(lbl_803EABA8->mUnknown44);
+        CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknown44 = -1;
     }
-    fn_80148154();
+    PassIconsHide();
     lbl_803EABA8->mUnknownC0 = 20;
 }
 
@@ -17554,11 +17554,11 @@ extern "C" void fn_800BD568(int team)
         lbl_803EABA8->mSlots[team].mStick.mUnknownA = 0;
         if (lbl_803EABA8->mSlots[other].mStick.mUnknownA != 0) {
             lbl_803EABA8->mSlots[other].mStick.mUnknown9 = 1;
-            fn_80148154();
+            PassIconsHide();
             if (other == fn_80178308()) {
-                fn_80148108(0);
+                PassIconsShow(0);
             } else {
-                fn_80148108(1);
+                PassIconsShow(1);
             }
         } else {
             fn_800BD51C();
@@ -17570,7 +17570,7 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team);
 
 extern "C" void fn_800BD774(int index, int kind)
 {
-    fn_8013FA04(5);
+    CamGameGetCamera(5);
     if (kind == 5) {
         if (lbl_803EABA8->mSlots[index].mUnknown8 < 0) {
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
@@ -17590,15 +17590,15 @@ extern "C" void fn_800BD830(void)
                 fn_80096D14(lbl_803EABA8->mUnknown9C);
                 lbl_803EABA8->mUnknown9C = -1;
             }
-        } else if (fn_8013F9F8() != 0) {
-            Camera_8013F738 *pCamera = fn_8013FA04(5);
+        } else if (CamGameGetCurrentSlot() != 0) {
+            GameCamera_t *pCamera = CamGameGetCamera(5);
             int current = pCamera->mUnknownA0;
             int id = fn_800BF56C();
 
             if (current != id) {
-                fn_8013FA8C(id);
+                CamGameSetModeAll(id);
             }
-            fn_8013F97C(0);
+            CamGameSelectCamera(0);
             fn_8013C6F0(pCamera);
         }
     }
@@ -17652,7 +17652,7 @@ extern "C" void fn_800BDA7C(void)
 {
     if (lbl_803EABA8->mUnknownC5 != 0 && fn_8016E928() != 0) {
         if (--lbl_803EABA8->mUnknownA0 <= 0) {
-            fn_80067D4C(0x76, 0);
+            AudmonEventPost(0x76, 0);
             lbl_803EABA8->mUnknownA0 = fn_802372EC(0, 120) + 60;
             if (fn_802372EC(0, 100) <= 24) {
                 lbl_803EABA8->mUnknown98++;
@@ -17746,7 +17746,7 @@ extern "C" Play_800CCEBC *fn_800CD8BC(Group_800CC98C *p, Play_800CCEBC *pOut, un
     fn_80227690(&delta, &p->mpUnknown0->mMotion, &pB->mMotion);
     if (!(fn_802270A4(&delta) >= p->mUnknown48)) {
         int angle = fn_801CFE40(delta.mY, delta.mX);
-        if (fn_801CFFD0(pB->mMotion.mFacing, angle) < p->mUnknown32
+        if (MathAngleDiff(pB->mMotion.mFacing, angle) < p->mUnknown32
             || (pB->mIdBytes[3] == 1 && pB->mUnknown1032 != 0)) {
             result = fn_800CD3C0(p, pOut, pIndex);
         }
@@ -17831,7 +17831,7 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
     float limit = fn_802270A4(&point);
     int pointAngle = fn_801CFE40(point.mY, point.mX);
     if (!(distance >= limit + p->mUnknown44)) {
-        if (fn_801CFFD0(angle, pointAngle) <= 0x155554) {
+        if (MathAngleDiff(angle, pointAngle) <= 0x155554) {
             if (p->mUnknown56 != 0) {
                 fn_80227690(&extra, &point, &pPlay->mpUnknown16->mUnknown8);
                 float a = fn_8022710C(&delta);
@@ -17842,7 +17842,7 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
         }
         angle = fn_801CFE40(delta.mY, delta.mX);
         pointAngle = fn_801CFE40(point.mY, point.mX);
-        if (fn_801CFFD0(angle, pointAngle) > (int)(lbl_803EAC80 * 46603.37890625f)) result = 0;
+        if (MathAngleDiff(angle, pointAngle) > (int)(lbl_803EAC80 * 46603.37890625f)) result = 0;
     }
     return result;
 }
@@ -18017,7 +18017,7 @@ extern "C" void fn_800CD978(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     Object_80039F5C *pA = p->mpUnknown0;
     Object_80039F5C *pB = p->mpUnknown4;
     int hadMessage = 0;
-    int carrier = pA == fn_80137B40();
+    int carrier = pA == BallGetCurrentHolder();
     if (pA->mpState->mId == 16) {
         if (fn_80113BCC(pB) == 0) {
             fn_80114DF4(pA);
@@ -18055,7 +18055,7 @@ extern "C" { extern int lbl_802DA718[4]; void fn_800F067C(int,State_80039F5C *,M
 extern "C" void fn_800CDB5C(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned int index)
 {
     Object_80039F5C *pA = p->mpUnknown0;
-    int carrier = pA == fn_80137B40();
+    int carrier = pA == BallGetCurrentHolder();
     for (unsigned short i = 0; i <= 6; i++) {
         Object_80039F5C *pB = p->mpUnknown4Entries[i];
         if (pB == 0) continue;
@@ -18369,21 +18369,21 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
     fn_800CE804(pRecord, &table.mTable, 0);
     int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
-    unsigned int count = (unsigned short)fn_80054130()->mUnknown136;
-    Record_80054130 *pRow = fn_80054130()->mUnknown140;
+    unsigned int count = (unsigned short)LevelGetData()->mUnknown136;
+    LevelWall_t *pRow = LevelGetData()->mUnknown140;
     float height = pRecord->mUnknown12.mZ;
     pRecord->mUnknown12.mZ = 0.0f;
     for (unsigned char i = 0; i < count; i++, pRow++) {
-        if (lbl_803EA558[i].mUnknown0 <= 1.0f) continue;
-        int angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
-        if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
+        if (gLevelWallInfo[i].mUnknown0 <= 1.0f) continue;
+        int angle = fn_801784C4() ? gLevelWallInfo[i].mUnknown8 : gLevelWallInfo[i].mUnknown4;
+        if (MathAngleDiff(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
         Vector_80039F5C point;
         Vector_80039F5C a;
         Vector_80039F5C b;
         point.mZ = 0.0f;
         b.mZ = 0.0f;
         a.mZ = 0.0f;
-        fn_800541AC(pRow, &a, &b);
+        LevelGetWallBase(pRow, &a, &b);
         int difference = (angle - direction) & 0xFFFFFF;
         if (difference > 0x800000) difference -= 0x1000000;
         Vector_80039F5C delta;
@@ -18467,7 +18467,7 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     Point_8017886C b;
     Object_80039F5C *pA;
     Play_800CCEBC *pPlay;
-    Record_80054130 *pRows;
+    LevelWall_t *pRows;
     unsigned int count;
     unsigned char index;
     unsigned char i;
@@ -18485,10 +18485,10 @@ extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     start.mY = pA->mMotion.mPos.mY;
     start.mZ = pA->mMotion.mPos.mZ;
     fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
-    count = (unsigned char)fn_80054130()->mUnknown136;
-    pRows = fn_80054130()->mUnknown140;
+    count = (unsigned char)LevelGetData()->mUnknown136;
+    pRows = LevelGetData()->mUnknown140;
     for (i = 0; i < count; i++, pRows++) {
-        fn_800541AC(pRows, &a, &b);
+        LevelGetWallBase(pRows, &a, &b);
         if (fn_800E0F48(&start, &end, &a, &b)) {
             result = 1;
             break;
@@ -18571,21 +18571,21 @@ extern "C" void fn_800A02FC(void)
 
 extern "C" {
 void fn_80173D10(void);
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 void fn_8006F0C8(int value);
-void fn_80074DF8(int value);
-void fn_80074E90(int value);
-void fn_80074F28(int value);
-void fn_80076D4C(int value);
-void fn_80076D5C(int value);
-void fn_80076D6C(int value);
-void fn_80076D7C(int value);
-void fn_80076D8C(int value);
-void fn_80076D9C(int value);
-void fn_80075058(int value);
-void fn_800750F0(int value);
-void fn_80075188(int value);
-void fn_80076DAC(int value);
+void SpchIGSetWallTacklePlayer(int value);
+void SpchIGSetReceiverOpenPlayer(int value);
+void SpchIGSetStylingPlayer(int value);
+void SpchIGSetTackler(int value);
+void SpchIGSetPassTarget(int value);
+void SpchIGSetPassCatcher(int value);
+void SpchIGSetBallCarrier(int value);
+void SpchIGSetTurnoverPlayer(int value);
+void SpchIGSetScorer(int value);
+void SpchIGSetMissedCatchPlayer(int value);
+void SpchIGSetStruggleCarrier(int value);
+void SpchIGSetStruggleTackler(int value);
+void SpchIGSetDownedCarrier(int value);
 extern char lbl_802EC880[];
 }
 
@@ -18596,25 +18596,25 @@ void Class_80297AB8::vfn_03()
     }
     fn_800B6408();
     fn_800B8608();
-    fn_80194F1C(1);
+    RumbleEnable(1);
     fn_800CC448();
     fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
-    fn_800271D4(lbl_803EA9E8);
-    fn_801C6280(-1, 3, lbl_802EC880);
+    PadInputSaveHandlers(lbl_803EA9E8);
+    ConSetChannelInfo(-1, 3, lbl_802EC880);
     fn_8006F0C8(127);
-    fn_80074DF8(0);
-    fn_80074E90(0);
-    fn_80074F28(0);
-    fn_80076D4C(0);
-    fn_80076D5C(0);
-    fn_80076D6C(0);
-    fn_80076D7C(0);
-    fn_80076D8C(0);
-    fn_80076D9C(0);
-    fn_80075058(0);
-    fn_800750F0(0);
-    fn_80075188(0);
-    fn_80076DAC(0);
+    SpchIGSetWallTacklePlayer(0);
+    SpchIGSetReceiverOpenPlayer(0);
+    SpchIGSetStylingPlayer(0);
+    SpchIGSetTackler(0);
+    SpchIGSetPassTarget(0);
+    SpchIGSetPassCatcher(0);
+    SpchIGSetBallCarrier(0);
+    SpchIGSetTurnoverPlayer(0);
+    SpchIGSetScorer(0);
+    SpchIGSetMissedCatchPlayer(0);
+    SpchIGSetStruggleCarrier(0);
+    SpchIGSetStruggleTackler(0);
+    SpchIGSetDownedCarrier(0);
     fn_800A2184();
 }
 
@@ -18661,7 +18661,7 @@ extern "C" void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1,
         }
     }
 }
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 DefPred gDefPred;
 
@@ -18672,16 +18672,16 @@ Class_80297C60 lbl_803EC90C;
 Class_80297BF8 lbl_803EC910;
 Class_80297CE8 lbl_803EC914;
 
-float lbl_803EC918 = 100.0f / lbl_803EA2C4;
+float lbl_803EC918 = 100.0f / gFrameTimeScale;
 
 unsigned int lbl_8030C084[12] = {
-    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    (unsigned int)(gFrameTimeScale * 5416666.5f),
     200000000,
     150000000,
     150000000,
     100000000,
     100000000,
-    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    (unsigned int)(gFrameTimeScale * 5416666.5f),
     0,
     100000000,
     200000000,

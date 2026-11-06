@@ -1,6 +1,6 @@
 #include <dolphin/gx/GXPixel.h>
-#include "engine/cu_80227F14.h"
-#include "game/cu_80136B1C.h"
+#include "engine/viewport.h"
+#include "game/Ball.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8013AD94.h"
@@ -35,25 +35,25 @@ extern State_802E989C lbl_802E989C;
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_801784C4(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D08FC(int a);
 void fn_801D0C58(void *p);
 void fn_801D0CFC(float a);
-int fn_801DCF0C(int type, int size, int count,
+int ObjNewType_(int type, int size, int count,
                 void (*pCreate)(Object_80163358 *, int *),
                 void (*pDestroy)(Object_80163358 *));
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
-int fn_801DD268(int handle, int type, int a, int *pDesc);
-void fn_801DD320(int handle, Object_80163358 *pObject);
-void fn_801DD3AC(int handle, Object_80163358 *pObject, int a);
-void fn_80210814(int a, int b, int c);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
+int ObjNewInList(int handle, int type, int a, int *pDesc);
+void ObjRemoveFromList(int handle, Object_80163358 *pObject);
+void ObjSetPriority(int handle, Object_80163358 *pObject, int a);
+void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
 void fn_802355E4(void *p);
@@ -73,16 +73,16 @@ int fn_8016345C(Object_80163358 *pObject);
 void fn_80163074(int index)
 {
     Entry_802E98A0 *pEntry = &lbl_802E989C.mEntries[index];
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
 
     pEntry->mEnabled = 0;
-    pBall = fn_80137ABC(index);
-    fn_8013BA58(pBall, 0);
+    pBall = BallGet(index);
+    BallStateGet(pBall, 0);
     if (fn_800BA6F8() != 0 && fn_800BA864() != 0) {
-        fn_80137D58(pBall, &pEntry->mPosition);
+        BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
-               && fn_8013AD94(pBall) != 0 && fn_80138064(pBall, &pEntry->mPosition) != 0) {
+               && fn_8013AD94(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;
@@ -94,7 +94,7 @@ void fn_80163074(int index)
         Vector_80039F5C ball;
         float height;
 
-        fn_80137D58(pBall, &ball);
+        BallGetPosition(pBall, &ball);
         height = ball.mZ;
         if (height <= 3.0f) {
             pEntry->mScale = 1.0f;
@@ -110,14 +110,14 @@ void fn_80163074(int index)
 
 void fn_801631EC(int handle)
 {
-    fn_801DCF0C(18, sizeof(Object_80163358), 1, fn_80163358, fn_80163414);
-    fn_801DD0C8(handle, 18, 0, fn_8016345C);
+    ObjNewType_(18, sizeof(Object_80163358), 1, fn_80163358, fn_80163414);
+    ObjSetListObjFunc(handle, 18, 0, fn_8016345C);
 }
 
 void fn_8016324C(void)
 {
-    fn_80228E18();
-    fn_801DCF8C(18);
+    VptFlushObjectTrashSync();
+    ObjDelType(18);
 }
 
 void fn_80163274(int handle)
@@ -132,15 +132,15 @@ void fn_80163274(int handle)
     } else {
         lbl_802E989C.mCount = 1;
     }
-    lbl_802E989C.mpObject = (Object_80163358 *)fn_801DD268(handle, 18, 0, &desc);
-    fn_801DD3AC(handle, lbl_802E989C.mpObject, 3);
+    lbl_802E989C.mpObject = (Object_80163358 *)ObjNewInList(handle, 18, 0, &desc);
+    ObjSetPriority(handle, lbl_802E989C.mpObject, 3);
 }
 
 void fn_80163300(int handle)
 {
     if (lbl_802E989C.mpObject != 0) {
-        fn_801DD320(handle, lbl_802E989C.mpObject);
-        fn_80228D58((int)lbl_802E989C.mpObject);
+        ObjRemoveFromList(handle, lbl_802E989C.mpObject);
+        VptTrashObject((int)lbl_802E989C.mpObject);
         lbl_802E989C.mpObject = 0;
     }
     lbl_802E989C.mCount = 0;
@@ -174,25 +174,25 @@ int fn_8016345C(Object_80163358 *pObject)
 {
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-        fn_80210814(0, 0, 0);
+        TMRenderBindTexture(0, 0, 0);
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
-                if (fn_801486A0() == 1 && fn_801374D4() == i) {
-                    fn_80235C90(pObject->mUnknown18, fn_801C657C(),
+                if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
+                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {
-                    fn_80235C90(pObject->mUnknown18, fn_801C657C(),
+                    fn_80235C90(pObject->mUnknown18, ConGetCurrentContext(),
                                0.390625f, 0.19921875f, 0.0f, 1.0f);
                 }
-                fn_801D0470(fn_80228668());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D04C4();
                 fn_801D0C58(&lbl_802E989C.mEntries[i].mPosition);
                 fn_801D08FC(0x400000);
                 fn_801D0CFC(lbl_802E989C.mEntries[i].mScale);
-                fn_80235740(pObject->mUnknown18, fn_801C657C());
-                fn_801D0470(fn_80228668());
+                fn_80235740(pObject->mUnknown18, ConGetCurrentContext());
+                fn_801D0470(VptGetMatrixStack());
                 fn_801D0544();
-                fn_80235764(pObject->mUnknown18, fn_801C657C());
+                fn_80235764(pObject->mUnknown18, ConGetCurrentContext());
             }
         }
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

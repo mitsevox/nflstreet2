@@ -5,7 +5,7 @@ extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(in
 extern int fn_801C9D2C(int handle);
 extern int fn_801F1838(int a, int b, int c, int d, int e, int f, int g);
 extern int fn_801F1D20(Res_801EDC2C *pWrite);
-extern int fn_801F15B0(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
+extern int ProcBuildHashTable(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
                        int *pParamSize);
 extern int fn_801F1F30(Res_801EDC2C *pWrite);
 
@@ -118,7 +118,7 @@ int fn_801F1D20(Res_801EDC2C *pWrite)
     }
     pHash = pWrite->pHash;
     count = pWrite->mNumRes;
-    if (fn_801F15B0(fn_801F17E0(pWrite->mHashCount), count, (char **)pWrite->pSlots, pWrite->pHashTable,
+    if (ProcBuildHashTable(fn_801F17E0(pWrite->mHashCount), count, (char **)pWrite->pSlots, pWrite->pHashTable,
                     &pWrite->pHashParams, &pHash->mUnk4) != 1) {
         for (i = 0; i < count - 1; i++) {
             for (j = i + 1; j < count; j++) {

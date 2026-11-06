@@ -5,7 +5,7 @@
 #include "game/cu_8002B8F8.h"
 #include <math.h>
 #include <string.h>
-#include "game/cu_801962CC.h"
+#include "game/ParticleRender.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/animTexLib.h"
 
@@ -44,7 +44,7 @@ struct Desc_802DCFF8 {
     unsigned char mUnknown24;
 };
 
-struct Entry_80196B24 {
+struct FxTexFile_t {
     void *mpUnknown0;
     int mUnknown4;
 };
@@ -60,7 +60,7 @@ struct Item_801DFD34 {
 };
 
 extern "C" {
-extern unsigned char lbl_803EB74C;
+extern unsigned char gParticleAnimTexFlag;
 
 int fn_8002D0AC(Type_803EA368 *p);
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
@@ -75,11 +75,11 @@ void fn_800A3170(void);
 void fn_800A3450(void);
 int fn_800A34C8(int index);
 void *fn_800C47C4(void);
-void fn_80196AF0(void);
-void fn_80196B20(void);
-void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData);
-void fn_80196BD4(int *pValues);
-void fn_80145264(void);
+void FxParticleDrawBegin(void);
+void FxParticleDrawEnd(void);
+void FxAnimTexLoadAll(FxTexFile_t *pEntries, int *pValues, void *pData);
+void FxAnimTexFreeAll(int *pValues);
+void GroundPulseDraw(void);
 void fn_801A762C(void);
 void fn_801A7778(void);
 void fn_801A7784(float rate);
@@ -91,12 +91,12 @@ void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0F80(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801DCF0C(int type, int size, int count, void *pCreate, void *pDestroy);
-int fn_801DCF8C(int type);
-void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(void *));
-int fn_801DD268(int handle, int type, int a, void *pInit);
-void fn_801DD320(int handle, int item);
-void fn_801DD3AC(int handle, int item, int a);
+int ObjNewType_(int type, int size, int count, void *pCreate, void *pDestroy);
+int ObjDelType(int type);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(void *));
+int ObjNewInList(int handle, int type, int a, void *pInit);
+void ObjRemoveFromList(int handle, int item);
+void ObjSetPriority(int handle, int item, int a);
 void fn_801DE1E0(Desc_802DCFF8 *pDesc);
 void fn_801DE410(void);
 void fn_801DE4F8(unsigned short a);
@@ -106,12 +106,12 @@ Object_80144CE0 *fn_801DEEF8(unsigned short handle);
 void fn_801DEF18(Object_80144CE0 *pObject);
 void fn_801DF620(void *pDesc, void *pData, int a);
 Manager_801DFD34 *fn_801DFD34(void);
-void fn_801E0520(Object_80144CE0 *pObject);
+void PsysColExtClearAll(Object_80144CE0 *pObject);
 void *fn_801EF7BC(void *pArchive, int file, void *pBuffer);
 int fn_801F010C(void *pArchive, int file);
 int fn_801F0C50(void *pArchive, int file);
-void fn_80228D58(int handle);
-void fn_80228E18(void);
+void VptTrashObject(int handle);
+void VptFlushObjectTrashSync(void);
 
 void fn_801444D8(void);
 void fn_80144564(void);
@@ -139,14 +139,14 @@ static unsigned char lbl_803EB23C = 1;
 static signed char lbl_803EB23D = 0;
 static signed char lbl_803EB240[2] = { 0, 0 };
 
-static Desc_802DCFF8 lbl_802DCFF8 = { 24, 172, 70, 60, 32.0f, 1, 200000, 20, 1, fn_80196564, 0 };
+static Desc_802DCFF8 lbl_802DCFF8 = { 24, 172, 70, 60, 32.0f, 1, 200000, 20, 1, ParticleRenderEmitter, 0 };
 static Entry_802DD020 lbl_802DD020[20] = {
     { 0, 46, 14 },  { 1, 18, 0 },   { 2, 19, 0 },   { 3, 22, 0 },   { 4, 23, 0 },
     { 5, 24, 0 },   { 6, 29, 0 },   { 7, 30, 0 },   { 8, -1, 0 },   { 9, -1, 0 },
     { 10, -1, 0 },  { 11, -1, 0 },  { 12, -1, 0 },  { 13, -1, 0 },  { 14, -1, 0 },
     { 15, -1, 0 },  { 16, -1, 0 },  { 17, -1, 0 },  { 18, -1, 0 },  { 19, -1, 0 },
 };
-static Entry_80196B24 lbl_802DD110[8] = {
+static FxTexFile_t lbl_802DD110[8] = {
     { 0, 94 }, { 0, 95 }, { 0, 96 }, { 0, 97 }, { 0, 98 }, { 0, 99 }, { 0, 100 }, { 0, 101 },
 };
 static int lbl_802DD150[8] = { 0 };
@@ -275,7 +275,7 @@ void fn_801447E8(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
         fn_80030304(pStream1, record.mRot, 12, 1024.0f);
         record.mpSource = (Source_80144CE0 *)(unsigned int)ReadBitStream(pStream1, 32);
         if (lbl_803EB240[0] != last.mUnknown0 || lbl_803EB240[1] != last.mUnknown1) {
-            fn_80145EFC(record.mId, record.mPos, record.mRot, record.mpSource);
+            ParticlesSpawnAt(record.mId, record.mPos, record.mRot, record.mpSource);
         }
         ReadBitStream(pStream0, 16);
         fn_800301C4(pStream0, record.mPos, 16, 256.0f);
@@ -325,17 +325,17 @@ void fn_80144B50(int handle)
     for (i = 0; i < 20; i++) {
         lbl_8031B6D0[i] = 20;
     }
-    lbl_803EB22A.mUnknown4 = lbl_803EB74C;
+    lbl_803EB22A.mUnknown4 = gParticleAnimTexFlag;
     fn_801C06E8(&lbl_803EB22A);
-    fn_80196B24(lbl_802DD110, lbl_802DD150, fn_800C47C4());
+    FxAnimTexLoadAll(lbl_802DD110, lbl_802DD150, fn_800C47C4());
     fn_801DE1E0(&lbl_802DCFF8);
     fn_80144660();
     fn_801444D8();
-    fn_80196480(1200);
-    fn_801DCF0C(22, 20, 1, 0, 0);
-    fn_801DD0C8(handle, 22, 0, fn_80144E64);
-    lbl_803EB238 = fn_801DD268(handle, 22, 0, 0);
-    fn_801DD3AC(handle, lbl_803EB238, 12);
+    ParticleRenderInit(1200);
+    ObjNewType_(22, 20, 1, 0, 0);
+    ObjSetListObjFunc(handle, 22, 0, fn_80144E64);
+    lbl_803EB238 = ObjNewInList(handle, 22, 0, 0);
+    ObjSetPriority(handle, lbl_803EB238, 12);
     lbl_803EB228 = 1;
     fn_801A762C();
     fn_800A3170();
@@ -347,15 +347,15 @@ void fn_80144C6C(int handle)
 {
     fn_800A3450();
     fn_801A7778();
-    fn_80196BD4(lbl_802DD150);
+    FxAnimTexFreeAll(lbl_802DD150);
     fn_801DE410();
     fn_801C07DC();
     fn_80144564();
-    fn_8019651C();
-    fn_801DD320(handle, lbl_803EB238);
-    fn_80228D58(lbl_803EB238);
-    fn_80228E18();
-    fn_801DCF8C(22);
+    ParticleRenderShutdown();
+    ObjRemoveFromList(handle, lbl_803EB238);
+    VptTrashObject(lbl_803EB238);
+    VptFlushObjectTrashSync();
+    ObjDelType(22);
     lbl_803EB228 = 0;
 }
 
@@ -394,7 +394,7 @@ Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSour
         fn_801D0F80(pObject->mUnknown35C);
         fn_801D0544();
         pObject->mUnknown03C = 1;
-        fn_801E0520(pObject);
+        PsysColExtClearAll(pObject);
     }
     return pObject;
 }
@@ -414,12 +414,12 @@ int fn_80144E64(void *pContext)
         Object_80144CE0 **ppList = pList->mppList;
         unsigned int i;
 
-        fn_80196AF0();
+        FxParticleDrawBegin();
         for (i = 0; i < count; i++) {
-            fn_80196564(*ppList++, 1);
+            ParticleRenderEmitter(*ppList++, 1);
         }
-        fn_80196B20();
-        fn_80145264();
+        FxParticleDrawEnd();
+        GroundPulseDraw();
         fn_801A7880();
     }
     return 0;

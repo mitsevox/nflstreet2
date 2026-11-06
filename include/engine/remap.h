@@ -5,11 +5,11 @@
 extern "C" {
 #endif
 
-int fn_801EC1B4(unsigned int numTables, unsigned int numEntries, unsigned int numInputs);
-int fn_801EC298(void);
-int fn_801EC314(unsigned int table, unsigned int start, unsigned int count, void *pData);
-int fn_801EC3B8(unsigned int dst, unsigned int src);
-float fn_801EC418(unsigned int table, unsigned int entry, unsigned char *pInputs);
+int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numInputs);
+int RemapShutdown(void);
+int RemapSetupEntries(unsigned int table, unsigned int start, unsigned int count, void *pData);
+int RemapCopyTable(unsigned int dst, unsigned int src);
+float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pInputs);
 
 #ifdef __cplusplus
 }

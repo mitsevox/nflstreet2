@@ -188,9 +188,9 @@ extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, unsigned int n);
 extern int fn_80203444(TDbPool_803E9654 *pPool, int heap, int size, unsigned short max, unsigned short grow);
 extern void fn_8020353C(TDbPool_803E9654 *pPool);
-extern int fn_8020D194(int a, int size, int *pHeap);
-extern void fn_8020D1A8(int heap);
-extern int fn_8020D1B0(int heap, int size, void *ppOut);
+extern int TDbExtMemInit(int a, int size, int *pHeap);
+extern void TDbExtMemShutdown(int heap);
+extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
 extern int fn_801F9014(int db);
 extern int fn_801F95C8(void);
 extern int fn_801FC5FC(TDbDb_801F88F0 *pDb, int a, int b);
@@ -203,11 +203,11 @@ extern int fn_80209E40(TDbQryBuf_801F9858 *pQry, int out);
 extern void fn_8020A3A0(TDbQryBuf_801F9858 *pQry, int out);
 extern int fn_8020AD1C(int a, TDbQryBuf_801F9858 *pQry, int d, int mode, TDbResult_801F9718 *pRes);
 extern int fn_8020AE88(int a, TDbQryBuf_801F9858 *pQry, TDbSelCol_801FA4B0 *pCols, int *pHandles, TDbResult_801F9718 *pRes);
-extern void fn_802055CC(int a);
+extern void _TDbExprFree(int a);
 extern int fn_802075F4(TDbQryBuf_801F9858 *pQry, int a);
 extern int fn_80207988(TDbQryBuf_801F9858 *pQry, int a);
 extern int fn_80207E24(TDbQryBuf_801F9858 *pQry, int a, int b);
-extern int fn_802032D8(TDbIdx_801F9E84 *pIdx);
+extern int _TDbIndexDestroy(TDbIdx_801F9E84 *pIdx);
 extern int fn_8020840C(int a, int b, int c, int d, int ref, TDbResult_801F9718 *pRes);
 extern int fn_802088A8(TDbQry_801F89B8 *pQry);
 extern int fn_802088FC(TDbQry_801F89B8 *pQry);
@@ -224,7 +224,7 @@ extern int fn_8020A908(int a, TDbQryBuf_801F9858 *pQry, int d, TDbTbl_801F88F0 *
 extern int fn_801FBFEC(TDbDb_801F88F0 *pDb, void *pFile, int a, int b, int c);
 extern int fn_802087D4(TDbQry_801F89B8 *pQry);
 extern int fn_8020BD90(TDbTbl_801F88F0 *pTbl);
-extern void fn_8020D2AC(int heap, void *p, int size);
+extern void TDbExtMemFree(int heap, void *p, int size);
 extern int lbl_803EBE84;
 extern TDbDb_801F88F0 *lbl_803EBE88;
 extern TDbQry_801F89B8 *lbl_803EBE90;
@@ -366,7 +366,7 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
     }
     lbl_803EBE84 = 0;
     lbl_803EBE88 = 0;
-    err = fn_8020D194(-1, pParms->mHeapSize, &lbl_803EBE8C);
+    err = TDbExtMemInit(-1, pParms->mHeapSize, &lbl_803EBE8C);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
         err = fn_80203444(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
@@ -382,7 +382,7 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
             err = fn_80203444(&lbl_803E96A8, lbl_803EBE8C, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
         }
         if (err != 0) {
-            fn_8020D1A8(lbl_803EBE8C);
+            TDbExtMemShutdown(lbl_803EBE8C);
         }
         Notify_801F8A54(4, -1, -1);
         pFuncs = pParms->pStrFuncs;
@@ -411,7 +411,7 @@ void fn_801F8C64(void)
         fn_8020353C(&lbl_803E9654);
         fn_8020353C(&lbl_803E96A8);
         fn_8020353C(&lbl_803E968C);
-        fn_8020D1A8(lbl_803EBE8C);
+        TDbExtMemShutdown(lbl_803EBE8C);
         lbl_803EBE84 = -1;
     }
 }
@@ -447,13 +447,13 @@ int fn_801F8D60(int db, int size)
     }
     pDb = pFind;
     if (pDb == 0) {
-        err = fn_8020D194(db, size, &heap);
+        err = TDbExtMemInit(db, size, &heap);
         if (err == 0) {
             Notify_801F8A54(1, db, -1);
-            err = fn_8020D1B0(heap, 0x14, &pDb);
+            err = TDbExtMemAlloc(heap, 0x14, &pDb);
             Notify_801F8A54(4, -1, -1);
             if (err != 0) {
-                fn_8020D1A8(heap);
+                TDbExtMemShutdown(heap);
             }
         }
     } else {
@@ -518,8 +518,8 @@ int fn_801F8EEC(int db)
                 pPrev->pNext = pDb->pNext;
             }
             heap = pDb->mHeap;
-            fn_8020D2AC(heap, pDb, 0x14);
-            fn_8020D1A8(heap);
+            TDbExtMemFree(heap, pDb, 0x14);
+            TDbExtMemShutdown(heap);
         }
     } else {
         err = 5;
@@ -1074,7 +1074,7 @@ int fn_801F9D70(int db, int tbl, TDbTerm_801FA4B0 *pFilter, unsigned short *pCou
                 if (err == 0x17) {
                     err = 0;
                 }
-                fn_802055CC(qry.mSel.mUnk28);
+                _TDbExprFree(qry.mSel.mUnk28);
             }
         }
         *pCount = n;
@@ -1092,7 +1092,7 @@ static inline TDbIdx_801F9E84 *FindIdx_801F9E84(TDbIdx_801F9E84 *p, int idx)
     return 0;
 }
 
-int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbExpr_801FAA00 *a, int b)
+int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbExpr_t *a, int b)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
@@ -1115,8 +1115,8 @@ int fn_801F9E84(int db, int tbl, int idx, TDbIdxCol_801F9E84 *pCols, struct TDbE
                     return 9;
                 }
             }
-            err = CreateDatabaseIndex((struct TDbTable_801FAA00 *)pTbl, idx,
-                                      (struct TDbIdxColumnDef_801FFFC4 *)pCols, a, b);
+            err = _TDbIndexCreate((struct TDbTable_t *)pTbl, idx,
+                                      (struct TDbIdxColumnDef_t *)pCols, a, b);
         }
     }
     return err;
@@ -1138,7 +1138,7 @@ int fn_801F9FA4(int db, int tbl, int idx)
         if (p == 0) {
             return 0xD;
         }
-        err = fn_802032D8(p);
+        err = _TDbIndexDestroy(p);
     }
     return err;
 }
@@ -1338,7 +1338,7 @@ int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0
             if (err != 0) {
                 while (i != 0) {
                     i--;
-                    fn_802055CC(handles[i]);
+                    _TDbExprFree(handles[i]);
                 }
                 break;
             }
@@ -1347,7 +1347,7 @@ int fn_801FA4B0(int a, int b, int c, TDbSelCol_801FA4B0 *pCols, TDbTerm_801FA4B0
             err = fn_8020AE88(a, &qry, pCols, handles, pRes);
         }
         for (i = 0; pCols[i].mCol != -1; i++) {
-            fn_802055CC(handles[i]);
+            _TDbExprFree(handles[i]);
         }
         fn_80207DB4(&qry);
     }

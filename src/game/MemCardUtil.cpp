@@ -1,0 +1,76 @@
+/* Memory card helpers for the front end: maps a request to its save type and writes a size as
+   "N block(s)" for the memory card messages; also an event hook and start/stop hooks that do nothing. */
+#include <string.h>
+#include "game/MemCardUtil.h"
+
+extern "C" {
+
+void fn_8017F49C(int value, char *pOut, int size);
+
+void MemCardUtilHandleEvent(int a, int b, float c)
+{
+}
+
+void MemCardUtilInit(void)
+{
+}
+
+void MemCardUtilShutdown(void)
+{
+}
+
+int MemCardUtilGetSaveType(int value)
+{
+    switch (value) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+        return 1;
+    case 7:
+        return 3;
+    case 8:
+        return 2;
+    case 0:
+        return 0;
+    }
+    return 0;
+}
+
+/* Writes a byte count as a number of 8 KB blocks, rounded up, followed by
+   " block" or " blocks" and pText when one is given; a negative count
+   writes a blank. */
+void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const char *pText)
+{
+    int blocks;
+
+    if (value < 0) {
+        strcpy(pOut, " ");
+        return;
+    }
+    blocks = 1;
+    if ((value & 0x1FFF) == 0) {
+        blocks = 0;
+    }
+    blocks += value >> 13;
+    if (pText) {
+        fn_8017F49C(blocks, pOut, size);
+        if (blocks == 1) {
+            strcat(pOut, " block ");
+            strcat(pOut, pText);
+        } else {
+            strcat(pOut, " blocks ");
+            strcat(pOut, pText);
+        }
+    } else {
+        fn_8017F49C(blocks, pOut, size);
+        if (blocks == 1) {
+            strcat(pOut, " block");
+        } else {
+            strcat(pOut, " blocks");
+        }
+    }
+}
+}

@@ -1,19 +1,19 @@
-#include "game/Frame_8019D3B8.h"
+#include "game/AnimFrameHeader.h"
 #include "game/fn_801BE60C.h"
 #include "game/Player_8003877C.h"
 
 extern "C" {
 float fn_801CFB94(int angle);
 
-extern Blend_8019EDDC lbl_8030F534;
+extern AnimBlendList lbl_8030F534;
 extern void *lbl_8030F958[11];
 }
 
 /* Blend between an element's current and next pose, eased over its
    duration. */
-extern "C" Blend_8019EDDC *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index)
+extern "C" AnimBlendList *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index)
 {
-    Blend_8019EDDC *pBlend = &lbl_8030F534;
+    AnimBlendList *pBlend = &lbl_8030F534;
     Element_80041BF8 *p = &pElements[index];
     unsigned int length = p->mUnknown6 * 16;
     float t = (float)p->mUnknown8 / (float)length;

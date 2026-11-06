@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
 #include "game/cu_8015C25C.h"
@@ -14,51 +14,51 @@ struct Entry_8036A2C8 {
 };
 
 extern "C" {
-void fn_800225F4(int index, unsigned int value);
-void fn_80022680(int index, int a, int b);
-void fn_80022D6C(void);
-int fn_80022D78(void);
-int fn_80022D80(void);
-void fn_80022E40(int a, int b);
-int fn_800238A0(int index);
-int fn_80023914(int index);
-void fn_80023988(int a, char *pBuffer, int size);
-unsigned char fn_80023A3C(int index, int a);
-void fn_80023B08(int index, int a);
-int fn_80023BBC(int index, int a);
-int fn_80023CA4(int index, int a);
-int fn_800489F4(unsigned int type);
-int fn_80048ACC(int type);
-void fn_80048FA0(int index, int value);
-void fn_80048FB8(int index, int value);
-void fn_80049AD0(int index, unsigned char value);
-void fn_80049AE8(int index, unsigned char value);
-void fn_80049B00(int index, int value);
-void fn_80049B18(int index, unsigned char value);
-void fn_80049DD0(int index, unsigned char value);
-void fn_80049DE8(int index, unsigned char value);
-int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007BA88(Object_8007A334 *pCursor, int value);
-void fn_8007BB04(Object_8007A334 *pCursor);
-int fn_8007BB24(Object_8007A334 *pCursor);
-int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_8007BE54(Object_8007A334 *pCursor);
-int fn_8007BE7C(Object_8007A334 *pCursor);
-int fn_8007BEA4(Object_8007A334 *pCursor);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrRequestSwap(void);
+int FEPlyrGetBackIndex(void);
+int FEPlyrGetFrontIndex(void);
+void FEPlyrSetPairSlot(int a, int b);
+int DecalCountUnlocked(int index);
+int DecalCountNew(int index);
+void DecalGetName(int a, char *pBuffer, int size);
+unsigned char DecalIsNew(int index, int a);
+void DecalClearNew(int index, int a);
+int DecalFindIndex(int index, int a);
+int DecalGetIdAt(int index, int a);
+int PlayerLookMapHatKind(unsigned int type);
+int PlayerLookItemKeepsLogo(int type);
+void PlayerLookSetHeadDecalColors(int index, int value);
+void PlayerLookSetDecalColors(int index, int value);
+void PlayerLookSetHatStyle(int index, unsigned char value);
+void PlayerLookSetHeadDecalKind(int index, unsigned char value);
+void PlayerLookSetFrontDecalKind(int index, int value);
+void PlayerLookSetBackDecalKind(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsA(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsB(int index, unsigned char value);
+int DbCursorGetRow(DbCursor *pObject);
+void fn_8007BA88(DbCursor *pCursor, int value);
+void fn_8007BB04(DbCursor *pCursor);
+int fn_8007BB24(DbCursor *pCursor);
+int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
+void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
+int fn_8007BE54(DbCursor *pCursor);
+int fn_8007BE7C(DbCursor *pCursor);
+int fn_8007BEA4(DbCursor *pCursor);
 int fn_8007BF14(int index);
 int fn_8007BF28(int index);
-int fn_8007BF3C(Object_8007A334 *pCursor);
-int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
-void fn_8007DDC8(Object_8007A334 *pObject, int a);
-void fn_8007DE20(Object_8007A334 *pObject);
-void fn_8007DE40(Object_8007A334 *pObject, int key, unsigned char *pA, unsigned char *pB);
-void fn_8007DFC4(Object_8007A334 *pObject, int id);
-int fn_8007E020(int type, int a, int b);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080D10(Object_8008044C *pObject);
+int fn_8007BF3C(DbCursor *pCursor);
+int fn_8007C690(DbCursor *pCursor, short *pOut);
+void GearLockOpen(DbCursor *pObject, int a);
+void GearLockClose(DbCursor *pObject);
+void GearLockGetFlags(DbCursor *pObject, int key, unsigned char *pA, unsigned char *pB);
+void GearLockClearNew(DbCursor *pObject, int id);
+int GearHasNew(int type, int a, int b);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
-Object_8007A334 *fn_80182DBC(void);
+DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
@@ -177,7 +177,7 @@ static const unsigned short lbl_8000DCBC[] = { 2, 2, 14, 11, 11, 12, 8, 12, 15, 
 
 static inline bool AnyDecalFlagged()
 {
-    return fn_80023914(fn_80183354()) != 0;
+    return DecalCountNew(fn_80183354()) != 0;
 }
 
 class Class_8000DBF0 : public Class_80184190 {
@@ -331,9 +331,9 @@ static inline Class_8000D8C0 *fn_8000D1F0();
 static inline Class_8000DB00 *fn_8000D220();
 static inline Class_8000D940 *fn_8000D248();
 
-static Object_8007A334 lbl_8036A1FC;
-static Object_8007A334 lbl_8036A228;
-static Object_8007A334 lbl_8036A254;
+static DbCursor lbl_8036A1FC;
+static DbCursor lbl_8036A228;
+static DbCursor lbl_8036A254;
 static Info_80307908 lbl_8036A280;
 static Entry_8036A2C8 lbl_8036A2C8[166];
 static unsigned char lbl_803EB940 = 0;
@@ -346,10 +346,10 @@ static void fn_8000A360(int id, int index)
 {
     if (lbl_803ECDD0 != 14) {
         int type = fn_8007BF14(lbl_803ECDD0);
-        int row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
         Info_80307908 info;
 
-        fn_800809C4(fn_80182DC8(), id, 0);
+        PlayerDbSeekId(fn_80182DC8(), id, 0);
         fn_800817CC(fn_80182DC8(), &info);
         fn_8007BBFC(&lbl_8036A1FC, 0, 0);
         if (fn_8007BF28(type) != 14) {
@@ -359,7 +359,7 @@ static void fn_8000A360(int id, int index)
             info.mValues[6] = 0;
         }
         fn_8008199C(fn_80182DC8(), &info);
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), row);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     }
 }
 
@@ -368,15 +368,15 @@ static int fn_8000A434(int type, int value)
     int result = -1;
 
     if (lbl_803ECDD0 != 14) {
-        int row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
         Info_80307908 info;
         int found;
 
-        for (found = fn_8007A444((Object_8007A334 *)fn_80182DC8()); found && result == -1; found = fn_8007A510((Object_8007A334 *)fn_80182DC8())) {
+        for (found = DbCursorFirst((DbCursor *)fn_80182DC8()); found && result == -1; found = DbCursorNext((DbCursor *)fn_80182DC8())) {
             int id;
 
             fn_800817CC(fn_80182DC8(), &info);
-            id = fn_800808F8(fn_80182DC8());
+            id = PlayerDbGetId(fn_80182DC8());
             if (fn_8007BF28(type) != 14) {
                 if (info.mValues[fn_8007BF28(type)] == value) {
                     result = id;
@@ -387,7 +387,7 @@ static int fn_8000A434(int type, int value)
                 }
             }
         }
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), row);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     }
     return result;
 }
@@ -397,7 +397,7 @@ static void fn_8000A528()
     int type = fn_8007BE7C(&lbl_8036A1FC);
     int id = fn_8007BE54(&lbl_8036A1FC);
     int unique = fn_8007BF3C(&lbl_8036A1FC);
-    int current = fn_800808F8(fn_80182DC8());
+    int current = PlayerDbGetId(fn_80182DC8());
     int owner = fn_8000A434(type, id);
 
     if (unique && owner != -1 && owner != current) {
@@ -434,9 +434,9 @@ static int fn_8000A620()
         showUnique = 0;
     }
     fn_8007BA88(&lbl_8036A1FC, type);
-    count = fn_8007A410(&lbl_8036A1FC);
+    count = DbCursorGetRowCount(&lbl_8036A1FC);
     lbl_803ECDD8 = 0;
-    fn_8007A444(&lbl_8036A1FC);
+    DbCursorFirst(&lbl_8036A1FC);
     for (i = 0; i < count; i++) {
         int id = fn_8007BE54(&lbl_8036A1FC);
         int set = fn_8007BEA4(&lbl_8036A1FC);
@@ -447,7 +447,7 @@ static int fn_8000A620()
             unsigned char locked;
             unsigned char flag;
 
-            fn_8007DE40(&lbl_8036A228, key, &locked, &flag);
+            GearLockGetFlags(&lbl_8036A228, key, &locked, &flag);
             if (!locked && (showUnique || !unique)) {
                 lbl_8036A2C8[lbl_803ECDD8].mUnknown12 = flag;
                 if (unique) {
@@ -460,7 +460,7 @@ static int fn_8000A620()
                 lbl_803ECDD8++;
             }
         }
-        fn_8007A510(&lbl_8036A1FC);
+        DbCursorNext(&lbl_8036A1FC);
     }
     return lbl_803ECDD8;
 }
@@ -492,7 +492,7 @@ static int fn_8000A838(int index, int a)
     if (index != 14) {
         int type = fn_8007BF14(index);
 
-        result = fn_8007E020(type, a, fn_80183968());
+        result = GearHasNew(type, a, fn_80183968());
     }
     return result;
 }
@@ -591,13 +591,13 @@ static unsigned int fn_8000AA38(int value, int *pTable, unsigned int count)
 static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
 {
     Row_8007BC34 row;
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int type;
 
     fn_8007BA88(&cursor, 0);
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[0], 0);
     fn_8007BC34(&cursor, &row);
-    type = fn_800489F4(row.mUnknown64);
+    type = PlayerLookMapHatKind(row.mUnknown64);
     fn_8007BB04(&cursor);
     if (pFlag) {
         *pFlag = row.mUnknown76;
@@ -614,7 +614,7 @@ static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
 
 static int fn_8000AB70()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
@@ -626,7 +626,7 @@ static int fn_8000AB70()
 
 static int fn_8000AC04()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
@@ -638,14 +638,14 @@ static int fn_8000AC04()
 
 static int fn_8000AC98()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[10], 0);
     fn_8007BC34(&cursor, &row);
     fn_8007BB04(&cursor);
-    return fn_80048ACC(row.mUnknown64);
+    return PlayerLookItemKeepsLogo(row.mUnknown64);
 }
 
 static int fn_8000AD18()
@@ -759,7 +759,7 @@ void Class_8000DBA0::vfn_01(int a, int *pCount, int *pOut)
     Class_802A6B60::vfn_01(a, pCount, pOut);
     fn_80183740(0);
     if (!lbl_803EB940) {
-        fn_80022680(fn_80022D78(), lbl_803ECDDC, 1);
+        FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803ECDDC, 1);
         fn_8015D38C(0);
     }
 }
@@ -830,10 +830,10 @@ void Class_8000DBF0::vfn_01(int a, int *pCount, int *pOut)
     fn_80182E34(buffer);
     fn_80182DD4("");
     fn_80182E04("");
-    *pCount = fn_8007A410((Object_8007A334 *)fn_80182DC8()) + 1;
-    fn_8007A444((Object_8007A334 *)fn_80182DC8());
-    lbl_803ECDDC = fn_800808F8(fn_80182DC8());
-    fn_80022680(fn_80022D80(), lbl_803ECDDC, 1);
+    *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8()) + 1;
+    DbCursorFirst((DbCursor *)fn_80182DC8());
+    lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
+    FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803ECDDC, 1);
 }
 
 int Class_8000DBF0::vfn_02(int a, int b, void **pOut)
@@ -841,7 +841,7 @@ int Class_8000DBF0::vfn_02(int a, int b, void **pOut)
     char buffer[27];
 
     *pOut = fn_8000D140();
-    fn_800809C4(fn_80182DC8(), a, 0);
+    PlayerDbSeekId(fn_80182DC8(), a, 0);
     fn_801832B0(buffer, 27);
     fn_80182E34(buffer);
     fn_800817CC(fn_80182DC8(), &lbl_8036A280);
@@ -853,9 +853,9 @@ void Class_8000DBF0::vfn_03(int index)
     if (index != 0x7FFF) {
         char buffer[27];
 
-        fn_800809C4(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
         lbl_803ECDDC = index;
-        fn_80022680(fn_80022D80(), index, 0);
+        FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
         fn_801832B0(buffer, 27);
         fn_80182DD4(buffer);
         fn_80182ED0();
@@ -866,11 +866,11 @@ void Class_8000DBF0::vfn_03(int index)
 
 void Class_8000DBF0::vfn_04(int index, int *pOut)
 {
-    if (index >= fn_8007A410((Object_8007A334 *)fn_80182DC8())) {
+    if (index >= DbCursorGetRowCount((DbCursor *)fn_80182DC8())) {
         *pOut = 0x7FFF;
     } else {
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
-        *pOut = fn_800808F8(fn_80182DC8());
+        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
+        *pOut = PlayerDbGetId(fn_80182DC8());
     }
 }
 
@@ -882,9 +882,9 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
     if (index != 0x7FFF) {
         int value;
 
-        fn_800809C4(fn_80182DC8(), index, 0);
-        value = fn_80080D10(fn_80182DC8());
-        pOut->mUnknown36 = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
+        value = PlayerDbGetPortraitId(fn_80182DC8());
+        pOut->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 0;
@@ -892,7 +892,7 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
         fn_801832B0(buffer, 27);
         fn_801C3284(pOut->mName, buffer, 22);
     } else {
-        pOut->mUnknown36 = fn_8007A410((Object_8007A334 *)fn_80182DC8());
+        pOut->mUnknown36 = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 4;
@@ -1244,7 +1244,7 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
         if (fn_8000A8B4(type) && index != 0) {
             index = (index - 1) / 3 + 1;
         }
-        fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[index].mId);
+        DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[index].mId);
         fn_8007BC34(&lbl_8036A1FC, &row);
         if (row.mUnknown76) {
             fn_8000D248()->mUnknown8 = type;
@@ -1253,7 +1253,7 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
             *pOut = fn_8000D248();
         } else {
             if (lbl_8036A2C8[index].mUnknown12) {
-                fn_8007DFC4(&lbl_8036A228, lbl_8036A2C8[index].mUnknown0);
+                GearLockClearNew(&lbl_8036A228, lbl_8036A2C8[index].mUnknown0);
             }
             if (lbl_8036A2C8[index].mOwner != -1 && lbl_8036A2C8[index].mOwner != lbl_803ECDDC) {
                 fn_8000A360(lbl_8036A2C8[index].mOwner, index);
@@ -1266,29 +1266,29 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         if (fn_8007BF14(lbl_803ECDD0) == 6) {
-            fn_80022E40(6, lbl_8036A280.mValues[6]);
-            fn_80022E40(7, lbl_8036A280.mValues[7]);
+            FEPlyrSetPairSlot(6, lbl_8036A280.mValues[6]);
+            FEPlyrSetPairSlot(7, lbl_8036A280.mValues[7]);
         } else {
-            fn_80022E40(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
+            FEPlyrSetPairSlot(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
         }
         if (lbl_803ECDD0 == 0) {
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
         }
-        fn_80049DD0(0, lbl_8036A280.mUnknown00);
-        fn_80049DD0(1, lbl_8036A280.mUnknown00);
-        fn_80049DE8(0, lbl_8036A280.mUnknown01);
-        fn_80049DE8(1, lbl_8036A280.mUnknown01);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+        PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     fn_801831A4();
     fn_8018300C();
     fn_801831E8(0);
     fn_80182ED0();
     fn_8000A7B0();
-    fn_800225F4(0, 2);
-    fn_800225F4(1, 2);
+    FEPlyrSetPose(0, 2);
+    FEPlyrSetPose(1, 2);
     return result;
 }
 
@@ -1298,15 +1298,15 @@ void Class_8000D980::vfn_03(int index)
     int item;
     int type;
 
-    fn_800225F4(0, lbl_8000DCBC[lbl_803ECDD0]);
-    fn_800225F4(1, lbl_8000DCBC[lbl_803ECDD0]);
+    FEPlyrSetPose(0, lbl_8000DCBC[lbl_803ECDD0]);
+    FEPlyrSetPose(1, lbl_8000DCBC[lbl_803ECDD0]);
     item = index;
     type = fn_8007BF14(lbl_803ECDD0);
     if (fn_8000A8B4(type) && item != 0) {
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
     }
-    fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
+    DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
     lbl_8036A280.mValues[lbl_803ECDD0] = lbl_8036A2C8[item].mId;
     fn_8000A528();
     fn_8000A5B0();
@@ -1314,24 +1314,24 @@ void Class_8000D980::vfn_03(int index)
         fn_8000A970(type, side, lbl_8036A2C8[item].mId);
     }
     if (type == 6) {
-        fn_80022E40(6, lbl_8036A280.mValues[6]);
-        fn_80022E40(7, lbl_8036A280.mValues[7]);
+        FEPlyrSetPairSlot(6, lbl_8036A280.mValues[6]);
+        FEPlyrSetPairSlot(7, lbl_8036A280.mValues[7]);
     } else {
-        fn_80022E40(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
+        FEPlyrSetPairSlot(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
     }
     if (lbl_803ECDD0 == 0) {
         unsigned char value = fn_8000AE7C(lbl_8036A280.mUnknown02);
 
-        fn_80049AD0(0, value);
-        fn_80049AD0(1, value);
+        PlayerLookSetHatStyle(0, value);
+        PlayerLookSetHatStyle(1, value);
     }
     fn_80182F24(&lbl_8036A280);
-    fn_80049DD0(0, lbl_8036A280.mUnknown00);
-    fn_80049DD0(1, lbl_8036A280.mUnknown00);
-    fn_80049DE8(0, lbl_8036A280.mUnknown01);
-    fn_80049DE8(1, lbl_8036A280.mUnknown01);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+    PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
@@ -1344,7 +1344,7 @@ void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
     }
-    fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
+    DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
     pOut->mUnknown40 = lbl_8036A2C8[item].mUnknown12;
     fn_8007BE20(&lbl_8036A1FC, name, 32);
     if (side != -1) {
@@ -1356,14 +1356,14 @@ void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void Class_8000D940::vfn_01(int a, int *pCount, int *pOut)
 {
-    Query_80083E40 query;
+    TeamQuery query;
     int selected;
 
     query.mUnknown4 = 3;
     query.mUnknown0 = 1;
     selected = 0;
     fn_80083E40(&lbl_8036A254, &query, 0x54415453);
-    *pCount = fn_8007A410(&lbl_8036A254);
+    *pCount = DbCursorGetRowCount(&lbl_8036A254);
     switch (mUnknown8) {
     case 0:
         selected = lbl_8036A280.mUnknown0D;
@@ -1373,9 +1373,9 @@ void Class_8000D940::vfn_01(int a, int *pCount, int *pOut)
         break;
     }
     *pOut = 0;
-    for (int more = fn_8007A444(&lbl_8036A254); more; more = fn_8007A510(&lbl_8036A254)) {
+    for (int more = DbCursorFirst(&lbl_8036A254); more; more = DbCursorNext(&lbl_8036A254)) {
         if (fn_80084158(&lbl_8036A254) - 1 == selected) {
-            *pOut = fn_8007A43C(&lbl_8036A254);
+            *pOut = DbCursorGetRow(&lbl_8036A254);
             break;
         }
     }
@@ -1386,7 +1386,7 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
     int result;
     int value;
 
-    fn_8007A600(&lbl_8036A254, a);
+    DbCursorSeek(&lbl_8036A254, a);
     result = -1;
     value = fn_80084158(&lbl_8036A254) - 1;
     if (b == 0) {
@@ -1399,22 +1399,22 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
             break;
         }
         result = -2;
-        fn_8007DFC4(&lbl_8036A228, mUnknown12);
+        GearLockClearNew(&lbl_8036A228, mUnknown12);
         fn_8008199C(fn_80182DC8(), &lbl_8036A280);
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 0:
-            fn_80048FA0(0, lbl_8036A280.mUnknown0D);
-            fn_80048FA0(1, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(0, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(1, lbl_8036A280.mUnknown0D);
             break;
         case 9:
-            fn_80048FB8(0, lbl_8036A280.mUnknown0C);
-            fn_80048FB8(1, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(0, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(1, lbl_8036A280.mUnknown0C);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     fn_80083F68(&lbl_8036A254);
     return result;
@@ -1424,27 +1424,27 @@ void Class_8000D940::vfn_03(int index)
 {
     int value;
 
-    fn_8007A600(&lbl_8036A254, index);
+    DbCursorSeek(&lbl_8036A254, index);
     value = fn_80084158(&lbl_8036A254) - 1;
     switch (mUnknown8) {
     case 0:
-        fn_80048FA0(0, value);
-        fn_80048FA0(1, value);
+        PlayerLookSetHeadDecalColors(0, value);
+        PlayerLookSetHeadDecalColors(1, value);
         break;
     case 9:
-        fn_80048FB8(0, value);
-        fn_80048FB8(1, value);
+        PlayerLookSetDecalColors(0, value);
+        PlayerLookSetDecalColors(1, value);
         break;
     }
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 void Class_8000D940::vfn_05(int index, Entry_80182CC8 *pOut)
 {
     char name[18];
 
-    fn_8007A600(&lbl_8036A254, index);
+    DbCursorSeek(&lbl_8036A254, index);
     fn_80083F88(&lbl_8036A254, name, 18);
     fn_801C3284(pOut->mName, name, 22);
 }
@@ -1485,9 +1485,9 @@ void Class_8000D900::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown0B - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown0B - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     }
@@ -1498,22 +1498,22 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
     if (b == 0) {
         fn_8008199C(fn_80182DC8(), &lbl_8036A280);
         if (mUnknown8 == 2 && lbl_8036A280.mUnknown0B > 5) {
-            fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown0B - 6);
+            DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown0B - 6);
         }
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
             break;
         case 2:
-            fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-            fn_80049AE8(1, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return -1;
 }
@@ -1524,22 +1524,22 @@ void Class_8000D900::vfn_03(int index)
     case 1:
         if (fn_8000ADB4()) {
             lbl_8036A280.mUnknown02 = fn_8000AE0C(index);
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
-            fn_8015D180(fn_80022D78(), 15);
-            fn_80022D6C();
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
+            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrRequestSwap();
         }
         break;
     case 2:
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown0B = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown0B = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown0B = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-        fn_80049AE8(1, lbl_8036A280.mUnknown0B);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+        PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
 }
@@ -1556,10 +1556,10 @@ void Class_8000D900::vfn_05(int index, Entry_80182CC8 *pOut)
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     }
@@ -1576,9 +1576,9 @@ void Class_8000D8C0::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown09 - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown09 - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     case 2: {
@@ -1587,9 +1587,9 @@ void Class_8000D8C0::vfn_01(int a, int *pCount, int *pOut)
         if (value <= 5) {
             *pOut = fn_8000AA38(value, fn_8000C6CC(), fn_8000C648());
         } else {
-            *pOut = fn_80023BBC(fn_80183354(), lbl_8036A280.mUnknown0A - 6) + fn_8000C648();
+            *pOut = DecalFindIndex(fn_80183354(), lbl_8036A280.mUnknown0A - 6) + fn_8000C648();
         }
-        *pCount = fn_8000C648() + fn_800238A0(fn_80183354());
+        *pCount = fn_8000C648() + DecalCountUnlocked(fn_80183354());
         break;
     }
     }
@@ -1602,12 +1602,12 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
         switch (mUnknown8) {
         case 1:
             if (lbl_8036A280.mUnknown09 > 5) {
-                fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown09 - 6);
+                DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown09 - 6);
             }
             break;
         case 2:
             if (lbl_8036A280.mUnknown0A > 5) {
-                fn_80023B08(fn_80183354(), lbl_8036A280.mUnknown0A - 6);
+                DecalClearNew(fn_80183354(), lbl_8036A280.mUnknown0A - 6);
             }
             break;
         }
@@ -1615,16 +1615,16 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049B00(0, lbl_8036A280.mUnknown09);
-            fn_80049B00(1, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
             break;
         case 2:
-            fn_80049B18(0, lbl_8036A280.mUnknown0A);
-            fn_80049B18(1, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
             break;
         }
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
     }
     return -1;
 }
@@ -1636,23 +1636,23 @@ void Class_8000D8C0::vfn_03(int index)
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown09 = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown09 = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown09 = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B00(0, lbl_8036A280.mUnknown09);
-        fn_80049B00(1, lbl_8036A280.mUnknown09);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+        PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     case 2:
         if (index < fn_8000C648()) {
             lbl_8036A280.mUnknown0A = fn_8000C678(index);
         } else {
-            lbl_8036A280.mUnknown0A = fn_80023CA4(fn_80183354(), index - fn_8000C648()) + 6;
+            lbl_8036A280.mUnknown0A = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B18(0, lbl_8036A280.mUnknown0A);
-        fn_80049B18(1, lbl_8036A280.mUnknown0A);
-        fn_8015D180(fn_80022D78(), 15);
-        fn_80022D6C();
+        PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+        PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
+        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrRequestSwap();
         break;
     }
 }
@@ -1664,20 +1664,20 @@ void Class_8000D8C0::vfn_05(int index, Entry_80182CC8 *pOut)
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     case 2:
         if (index < fn_8000C648()) {
             fn_801C3284(pOut->mName, lbl_802F4164[fn_8000C678(index)], 22);
         } else {
-            int id = fn_80023CA4(fn_80183354(), index - fn_8000C648());
+            int id = DecalGetIdAt(fn_80183354(), index - fn_8000C648());
 
-            pOut->mUnknown40 = fn_80023A3C(fn_80183354(), id);
-            fn_80023988(id, pOut->mName, 22);
+            pOut->mUnknown40 = DecalIsNew(fn_80183354(), id);
+            DecalGetName(id, pOut->mName, 22);
         }
         break;
     }
@@ -1685,12 +1685,12 @@ void Class_8000D8C0::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void fn_8000CEB4(int a)
 {
-    fn_8007DDC8(&lbl_8036A228, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&lbl_8036A228, fn_8022F384(fn_8022F4BC()));
     lbl_803EB940 = a;
     if (a == 0) {
         fn_801835C8();
     } else {
-        lbl_803ECDDC = fn_800808F8(fn_80182DC8());
+        lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
     }
 }
@@ -1700,7 +1700,7 @@ void fn_8000CF24()
     if (lbl_803EB940 == 0) {
         fn_80183704();
     }
-    fn_8007DE20(&lbl_8036A228);
+    GearLockClose(&lbl_8036A228);
 }
 
 Class_8000DBA0 *fn_8000CF5C()

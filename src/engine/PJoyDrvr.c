@@ -16,9 +16,9 @@ extern char lbl_803E92CC[0x30];
 
 void *fn_801C1F94();
 void *fn_801C1FBC();
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
-void *fn_801E1D04(unsigned int port);
+void *PerSystemGetLLDriverData(unsigned int port);
 unsigned long fn_801E194C(void);
 void fn_8024734C(void *pStatus);
 void fn_802465BC(void *pStatus);
@@ -33,11 +33,11 @@ int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
     int result = 0;
     unsigned int i;
 
-    fn_801D34D0(lbl_8039ADE4, sizeof(lbl_8039ADE4), 0, 1);
+    MemFill(lbl_8039ADE4, sizeof(lbl_8039ADE4), 0, 1);
     port = *pPort;
     status = fn_8025D574(port);
     if (status != 8 && status != 0x80 && status != 0x40) {
-        pJoy = fn_801E1D04(port);
+        pJoy = PerSystemGetLLDriverData(port);
         fn_801C1F94(pJoy, 0, sizeof(JoyData_801E1D44));
         pJoy->mPort = port;
         pJoy->mUnknown02 = 0;
@@ -70,7 +70,7 @@ int fn_801E25DC(Device_801E12F8 *pDevice, void *pBuffer)
     int result = 0;
 
     if ((unsigned int)pDevice->mStatus <= 1) {
-        fn_801D34D0(pDevice->mpData, fn_801E194C(), 0, 4);
+        MemFill(pDevice->mpData, fn_801E194C(), 0, 4);
     } else {
         result = 1;
         fn_801C1FBC(pBuffer, pDevice->mpData, fn_801E194C());
@@ -101,7 +101,7 @@ int fn_801E2658(Device_801E12F8 *pDevice, unsigned char *pBuffer)
 
 void fn_801E26FC(void)
 {
-    fn_801D34D0(lbl_803E92CC, sizeof(lbl_803E92CC), 0, 1);
+    MemFill(lbl_803E92CC, sizeof(lbl_803E92CC), 0, 1);
     fn_8024734C(lbl_803E92CC);
     fn_802465BC(lbl_803E92CC);
     fn_802857D8();

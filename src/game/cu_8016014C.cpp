@@ -1,8 +1,8 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
-#include "game/Font_8019BE30.h"
-#include "game/Object_8020E52C.h"
-#include "game/cu_801A4AD4.h"
+#include "game/BmFont.h"
+#include "engine/texfile.h"
+#include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8017F584.h"
@@ -29,17 +29,17 @@ struct SortEntry_80160CDC {
 };
 
 extern "C" {
-void fn_8004625C(void *p, int id, unsigned char *pColors);
-int fn_80049D04(int index);
-unsigned char fn_80054D24(int index);
+void PlaDynClutApplyColors(void *p, int id, unsigned char *pColors);
+int PlayerLookShowsHair(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_8015D254(int index);
-int fn_801C1870(int a, int b, unsigned int size, int count,
+int ResStreamOpen(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
-void fn_801C1950(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
-void fn_801C1B1C(int loader, void *pData);
-void fn_801C1B90(int loader, void *pData);
-void fn_801C1C1C(int loader);
-void fn_801C1C98(int loader);
+void ResStreamQueueRead(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
+void ResStreamHoldBuffer(int loader, void *pData);
+void ResStreamReleaseBuffer(int loader, void *pData);
+void ResStreamReleaseAllBuffers(int loader);
+void ResStreamClose(int loader);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C3084(const char *pString, int c);
@@ -49,12 +49,12 @@ int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0A8C(void *pArchive, char *pName);
 int fn_801F0C50(void *pArchive, int id);
 int fn_801F1520(int value);
-void fn_801F282C(void);
-void fn_801F283C(void);
-void fn_801F51DC(int a, void *pBase, int count, int size,
+void ResTrackPause(void);
+void ResTrackResume(void);
+void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(const SortEntry_80160CDC *, const SortEntry_80160CDC *),
                  int b, int c, int d);
-void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
+void fn_802347EC(void *pData, ModelTexSlot_t *pDesc, int a, int b);
 
 extern char lbl_802EC080[];
 }
@@ -79,7 +79,7 @@ extern char lbl_802EC080[];
         { 0x355B }, { 0x355C }, { 0x355D }, { 2 }                                           \
     }
 
-static Desc_802347EC sTextureDescs[14][33] = {
+static ModelTexSlot_t sTextureDescs[14][33] = {
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
@@ -93,14 +93,14 @@ static TextureSlot_802E6D68 sSlots[14][32] = {
     TEXTURE_SLOT_IDS, TEXTURE_SLOT_IDS,
 };
 
-static FontDesc_8019BE30 sFontDesc = {
+static BmFontDesc sFontDesc = {
     67, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,-#'.", 32, 32, 16, 3,
 };
 
 static unsigned char *sTextures[14][32];
 static unsigned char sColors[14][25];
 static unsigned int sSizes[32];
-static Font_8019BE30 sFont;
+static BmFont sFont;
 
 static unsigned char sInitialized = 0;
 static void *sArchive = 0;
@@ -120,7 +120,7 @@ void fn_80161494(int player, int slot);
 
 void fn_8016014C(int loader, void *pData, TextureSlot_802E6D68 *pSlot)
 {
-    fn_801C1B1C(loader, pData);
+    ResStreamHoldBuffer(loader, pData);
     pSlot->mpData = pData;
     pSlot->mReceived = 1;
 }
@@ -137,26 +137,26 @@ void fn_80160188(void)
             if (sSlots[player][slot].mDirty) {
                 if (sSlots[player][slot].mReceived) {
                     if (sSlots[player][slot].mRequested) {
-                        fn_8020E2B0(sSlots[player][slot].mpData);
+                        TexMipmapRelocate(sSlots[player][slot].mpData);
                         if (sSlots[player][slot].mPalette != -1) {
-                            int index = fn_8020E52C(sSlots[player][slot].mpData, 0)->mUnknown8;
+                            int index = TexGetMaterialByIndex(sSlots[player][slot].mpData, 0)->mUnknown8;
 
-                            fn_8004625C(fn_8020E5F8(sSlots[player][slot].mpData, index),
+                            PlaDynClutApplyColors(TexGetPaletteByIndex(sSlots[player][slot].mpData, index),
                                         sSlots[player][slot].mPalette, sColors[player]);
                         }
-                        fn_801A4B28(sTextures[player][slot], sSlots[player][slot].mpData,
+                        PlyrTexCopy(sTextures[player][slot], sSlots[player][slot].mpData,
                                     sSizes[slot]);
                         if (slot == 4) {
                             fn_80161494(player, 4);
                         }
-                        fn_801C1B90(sLoader, sSlots[player][slot].mpData);
+                        ResStreamReleaseBuffer(sLoader, sSlots[player][slot].mpData);
                         sSlots[player][slot].mpData = 0;
                         sSlots[player][slot].mDirty = 0;
                         sPending--;
                         sSlots[player][slot].mRequested = 0;
                         sSlots[player][slot].mReceived = 0;
                     } else {
-                        fn_801C1B90(sLoader, sSlots[player][slot].mpData);
+                        ResStreamReleaseBuffer(sLoader, sSlots[player][slot].mpData);
                         sSlots[player][slot].mpData = 0;
                         sSlots[player][slot].mReceived = 0;
                         sPending--;
@@ -212,12 +212,12 @@ void fn_8016032C(void)
             }
         }
         if (other < sPlayerCount) {
-            fn_801A4B28(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            PlyrTexCopy(sTextures[player][slot], sTextures[other][slot], sSizes[slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -234,12 +234,12 @@ void fn_8016032C(void)
             }
         }
         if (other < 32) {
-            fn_801A4B28(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
-            fn_8020E2B0(sTextures[player][slot]);
+            PlyrTexCopy(sTextures[player][slot], sTextures[player][other], sSizes[slot]);
+            TexMipmapRelocate(sTextures[player][slot]);
             if (sSlots[player][slot].mPalette != -1) {
-                int index = fn_8020E52C(sTextures[player][slot], 0)->mUnknown8;
+                int index = TexGetMaterialByIndex(sTextures[player][slot], 0)->mUnknown8;
 
-                fn_8004625C(fn_8020E5F8(sTextures[player][slot], index),
+                PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], index),
                             sSlots[player][slot].mPalette, sColors[player]);
             }
             sSlots[player][slot].mReceived = 0;
@@ -251,7 +251,7 @@ void fn_8016032C(void)
         sSlots[player][slot].mRequested = 1;
         sSlots[player][slot].mReceived = 0;
         sPending++;
-        fn_801C1950(sLoader, sArchive, sSlots[player][slot].mId, &sSlots[player][slot]);
+        ResStreamQueueRead(sLoader, sArchive, sSlots[player][slot].mId, &sSlots[player][slot]);
         if (sPending == 1) {
             return;
         }
@@ -262,14 +262,14 @@ void fn_8016061C(int player, int slot, void *pData, int shared)
 {
     if (!shared) {
         fn_801EFF80(sArchive, sSlots[player][slot].mId, pData);
-        fn_8020E2B0(pData);
+        TexMipmapRelocate(pData);
     }
-    fn_801A4B28(sTextures[player][slot], pData, sSizes[slot]);
-    if (slot == 4 && fn_80049D04(player)) {
+    PlyrTexCopy(sTextures[player][slot], pData, sSizes[slot]);
+    if (slot == 4 && PlayerLookShowsHair(player)) {
         fn_80161494(player, 4);
     }
     if (sSlots[player][slot].mPalette != -1) {
-        fn_8004625C(fn_8020E5F8(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
+        PlaDynClutApplyColors(TexGetPaletteByIndex(sTextures[player][slot], 0), sSlots[player][slot].mPalette,
                     sColors[player]);
     }
     sSlots[player][slot].mRequested = sSlots[player][slot].mReceived =
@@ -292,12 +292,12 @@ void fn_801607F0(int mode)
     int saved0 = 0;
     int saved1 = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         saved0 = fn_801F1520(mode);
         saved1 = fn_801C9DC8(mode);
     }
     sArchive = fn_801EEB44(lbl_802EC080, 44);
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         fn_801F1520(saved0);
         fn_801C9DC8(saved1);
     }
@@ -356,7 +356,7 @@ void fn_80160874(unsigned int count)
 
     saved0 = fn_801F1520(4);
     saved1 = fn_801C9DC8(4);
-    fn_8019BE30(&sFont, &sFontDesc, sArchive, 1);
+    BmFontLoad(&sFont, &sFontDesc, sArchive, 1);
     fn_801F1520(saved0);
     fn_801C9DC8(saved1);
 }
@@ -376,7 +376,7 @@ void fn_80160A80(void)
             fn_801C1FBC(sTextures[player][i], pDest, size);
         }
         for (player = 0; player < sPlayerCount; player++) {
-            fn_8020E2B0(sTextures[player][i]);
+            TexMipmapRelocate(sTextures[player][i]);
         }
     }
 }
@@ -395,7 +395,7 @@ void fn_80160B6C(void)
         }
     }
     fn_801D2BD0(sTextures[0][0]);
-    fn_8019BE94(&sFont);
+    BmFontFree(&sFont);
 }
 
 void *fn_80160C08(void)
@@ -408,7 +408,7 @@ void fn_80160C10(void)
     unsigned int player;
     unsigned int i;
 
-    sLoader = fn_801C1870(1, 1, sMaxSize, 100, fn_8016014C);
+    sLoader = ResStreamOpen(1, 1, sMaxSize, 100, fn_8016014C);
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
             fn_802347EC(sTextures[player][i], &sTextureDescs[player][i], 6, 0);
@@ -432,7 +432,7 @@ void fn_80160CDC(void)
     int palette;
     void *pBuffer;
 
-    fn_801F282C();
+    ResTrackPause();
     n = 0;
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
@@ -447,7 +447,7 @@ void fn_80160CDC(void)
 
     count = n;
     if (n != 0) {
-        fn_801F51DC(0, entries, n, 4, fn_80160CCC, 0, 0, 1);
+        SortArray(0, entries, n, 4, fn_80160CCC, 0, 0, 1);
         id = -1;
         pBuffer = fn_801D2B7C(sMaxSize, 0, 0);
         palette = -1;
@@ -464,7 +464,7 @@ void fn_80160CDC(void)
         }
         fn_801D2BD0(pBuffer);
     }
-    fn_801F283C();
+    ResTrackResume();
 }
 
 void fn_80160E94(int player, int slot, int id, int palette, int force)
@@ -504,17 +504,17 @@ void fn_80160F98(void)
     unsigned int player;
     unsigned int i;
 
-    fn_801C1C1C(sLoader);
-    fn_801C1C98(sLoader);
+    ResStreamReleaseAllBuffers(sLoader);
+    ResStreamClose(sLoader);
     sPending = 0;
     for (player = 0; player < sPlayerCount; player++) {
         for (i = 0; i < 32; i++) {
-            fn_801A4B08(&sTextureDescs[player][i]);
+            PlyrTexFreeDesc(&sTextureDescs[player][i]);
         }
     }
 }
 
-Desc_802347EC *fn_8016102C(int player)
+ModelTexSlot_t *fn_8016102C(int player)
 {
     return sTextureDescs[player];
 }
@@ -587,7 +587,7 @@ void fn_801611BC(int player, const char *pName, int force)
     if (id == -1) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     }
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         fn_80160E94(player, 5, id, -1, force);
@@ -600,7 +600,7 @@ int fn_8016128C(int index)
     char name[32];
     int id;
 
-    if (fn_80054D24(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;
@@ -670,7 +670,7 @@ void fn_80161498(void)
     sArchive = 0;
 }
 
-Font_8019BE30 *fn_801614C4(void)
+BmFont *fn_801614C4(void)
 {
     return &sFont;
 }

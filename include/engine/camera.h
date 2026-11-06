@@ -1,17 +1,17 @@
 #ifndef ENGINE_CAMERA_H
 #define ENGINE_CAMERA_H
 
-#include "game/CameraHeader_8013F628.h"
-#include "game/Object_80228224.h"
+#include "game/CamHdr.h"
+#include "engine/viewporttypes.h"
 
 /* Common camera header; each camera type extends it. */
-typedef struct Cam_801C33E8 {
-    CameraHeader_8013F628 mHeader;
-    Object_80228224 *mpViewport;
-} Cam_801C33E8;
+typedef struct Cam_t {
+    CamHdr_t mHeader;
+    Viewport_t *mpViewport;
+} Cam_t;
 
-int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel);
-int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
-void fn_801C3918(void *pUnused, Cam_801C33E8 *pCam);
+int CamRLerp(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel);
+int CamLerp(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
+void CamConvertHdrToMatrix(void *pUnused, Cam_t *pCam);
 
 #endif

@@ -3,7 +3,7 @@
 #include "game/Settings_800B4448.h"
 
 extern "C" {
-void fn_800497F4(int unused, int id, unsigned short *pValues);
+void PlayerLookGetBonuses(int unused, int id, unsigned short *pValues);
 short fn_80157448(int team, int unused, short value);
 short fn_80148698(int team, int index, short value);
 short fn_800ABE10(int team, int index, short value);
@@ -18,7 +18,7 @@ extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
     unsigned short bonuses[10];
     float scale = 1.0f;
 
-    fn_800497F4(team, id, bonuses);
+    PlayerLookGetBonuses(team, id, bonuses);
     for (unsigned int i = 0; i <= 9; i++) {
         short value = pRatings[i] + bonuses[i];
 

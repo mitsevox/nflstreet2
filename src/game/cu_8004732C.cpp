@@ -1,5 +1,5 @@
-#include "engine/cu_80227F14.h"
-#include "game/cu_80064864.h"
+#include "engine/viewport.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
@@ -22,8 +22,8 @@ int fn_801CD308(int index, Quad_801CD308 value);
 void fn_801CD3B0(int a);
 void fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
 void fn_801CDD18(void);
-int fn_801CECCC(int index);
-void fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+void GlibRenderSelectBin(int a);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -31,11 +31,11 @@ void fn_801D0C58(void *a);
 void fn_801D1258(int which, float (*pMatrix)[4]);
 void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
-int fn_801DD268(int handle, int a, int b, int *pInit);
-void fn_801DD320(int handle, Item_800476DC *pInstance);
+int ObjNewType_(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
+int ObjNewInList(int handle, int a, int b, int *pInit);
+void ObjRemoveFromList(int handle, Item_800476DC *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
 int fn_80236EC0(int a);
 
@@ -76,14 +76,14 @@ int fn_800473AC(Item_800476DC *pInstance)
     if (lbl_803EA4C8 && fn_8007F828(17)) {
         int mode = fn_800AD9B4();
         if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
-            mode != 7 && !fn_8006560C() && !fn_800A9680()) {
+            mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];
             Quad_801CD308 value;
             float offset[3];
             int state;
 
-            fn_801CECDC(fn_801CECCC(14));
+            GlibRenderSelectBin(GlibRenderGetBin(14));
             state = fn_80236EC0(0);
             fn_801CD2A4();
             if (lbl_803EA4C9) {
@@ -102,7 +102,7 @@ int fn_800473AC(Item_800476DC *pInstance)
             matrix[2][2] = 0.0f;
             matrix[2][3] = pInstance->mUnknown32;
             fn_801D1258(1, matrix);
-            fn_801D0470(fn_80228668());
+            fn_801D0470(VptGetMatrixStack());
             fn_801D04C4();
             offset[0] = 106.666679f;
             offset[1] = 0.0f;
@@ -119,27 +119,27 @@ int fn_800473AC(Item_800476DC *pInstance)
 
 void fn_80047578(void)
 {
-    fn_801DCF0C(11, 36, 27, fn_80047358, fn_80047398);
-    fn_801DD0C8(lbl_803EA4C0, 11, 0, fn_800473AC);
+    ObjNewType_(11, 36, 27, fn_80047358, fn_80047398);
+    ObjSetListObjFunc(lbl_803EA4C0, 11, 0, fn_800473AC);
     lbl_803EA4C8 = 1;
 }
 
 void fn_800475D4(void)
 {
-    fn_80228E18();
-    fn_801DCF8C(11);
+    VptFlushObjectTrashSync();
+    ObjDelType(11);
 }
 
 Item_800476DC *fn_800475FC(int value)
 {
-    return (Item_800476DC *)fn_801DD268(lbl_803EA4C0, 11, 0, &value);
+    return (Item_800476DC *)ObjNewInList(lbl_803EA4C0, 11, 0, &value);
 }
 
 void fn_80047630(Item_800476DC *pInstance)
 {
     if (pInstance) {
-        fn_801DD320(lbl_803EA4C0, pInstance);
-        fn_80228D58((int)pInstance);
+        ObjRemoveFromList(lbl_803EA4C0, pInstance);
+        VptTrashObject((int)pInstance);
     }
 }
 
@@ -175,7 +175,7 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
     position[0] = pPosition[0];
     position[1] = pPosition[1];
     position[2] = pPosition[2];
-    fn_801D0470(fn_80228668());
+    fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
     point[0] = position[0];
@@ -192,7 +192,7 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
         clip[3] *= scale;
         fn_801D12BC(1);
         fn_80227E40(view, clip);
-        float aspect = fn_80228644()->mUnknown208 * 0.75f;
+        float aspect = VptGetCurrentViewport()->mUnknown208 * 0.75f;
         float width = aspect * 320.0f;
         pInstance->mUnknown4[0] = width * clip[0] + 320.0f;
         pInstance->mUnknown4[1] = 224.0f - clip[1] * 224.0f;

@@ -1,5 +1,5 @@
 #include <string.h>
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8015C25C.h"
 #include "game/fn_8021D7B8.h"
@@ -19,7 +19,7 @@ struct Record_8036AD28 {
     int mUnknown4;
     unsigned char mUnknown8;
     int mUnknown12;
-    Object_8007A334 mUnknown16;
+    DbCursor mUnknown16;
 };
 
 inline Record_8036AD28 *fn_8000EC44()
@@ -209,28 +209,28 @@ inline Class_8000F540 *fn_8000EE2C()
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_80022D78(void);
-int fn_80022D80(void);
-void fn_80022D6C(void);
-void fn_800225F4(int index, unsigned int value);
-void fn_80022680(int index, int a, int b);
-void fn_80022E40(int a, int b);
-void fn_80048FD0(int a, int b);
-void fn_800490A0(int index, int a, int b);
-void fn_80049B00(int a, int b);
-void fn_80049B90(int a, int b);
-void fn_80049D6C(int a, unsigned int b, int c);
-void fn_8007BA48(Object_8007A334 *pObject);
-void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB4C(Object_8007A334 *pObject, int a, int b);
-int fn_8007BE54(Object_8007A334 *pObject);
-int fn_8007BE7C(Object_8007A334 *pObject);
+int FEPlyrGetBackIndex(void);
+int FEPlyrGetFrontIndex(void);
+void FEPlyrRequestSwap(void);
+void FEPlyrSetPose(int index, unsigned int value);
+void FEPlyrSetPlayer(int index, int a, int b);
+void FEPlyrSetPairSlot(int a, int b);
+void PlayerLookSetLogo(int a, int b);
+void PlayerLookSetGear(int index, int a, int b);
+void PlayerLookSetFrontDecalKind(int a, int b);
+void PlayerLookSetHair(int a, int b);
+void PlayerLookSetPartVariant(int a, unsigned int b, int c);
+void fn_8007BA48(DbCursor *pObject);
+void fn_8007BB04(DbCursor *pObject);
+int fn_8007BB4C(DbCursor *pObject, int a, int b);
+int fn_8007BE54(DbCursor *pObject);
+int fn_8007BE7C(DbCursor *pObject);
 int fn_8007BECC(int a, const char *pName);
 int fn_8007BF28(int index);
-void fn_8007CC50(Object_8007A334 *pObject);
-void fn_8007CCC4(Object_8007A334 *pObject);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080E98(Object_8008044C *pObject);
+void HairListOpen(DbCursor *pObject);
+void HairListClose(DbCursor *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int fn_800872E8(int a);
 int fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
 int fn_8008736C(int a, int b);
@@ -238,8 +238,8 @@ void fn_80087600(int a, int b);
 int fn_800876C0(void);
 int fn_80087704(void);
 int fn_80087BA0(int index);
-unsigned int fn_800886BC(int a);
-void fn_800888D0(int a, int b);
+unsigned int UserInfoGetPoints(int a);
+void UserInfoSpendPoints(int a, int b);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
@@ -316,8 +316,8 @@ int Class_8000F500::vfn_02(int a, int b, void **pOut)
     int result = -1;
 
     fn_8000E834(&lbl_8036AD78);
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
     fn_800876C0();
     fn_8000EC44()->mUnknown0 = 0;
     fn_80183740(0);
@@ -345,7 +345,7 @@ void Class_8000F500::vfn_05(int id, Entry_80182CC8 *pOut)
 
         pOut->mUnknown40 = 0;
         fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || fn_800886BC(fn_8022F4BC()) < price) {
+        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(fn_8022F4BC()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -386,13 +386,13 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
 
         fn_8000EC44()->mUnknown8 = 0;
         fn_801835C8();
-        fn_8007CC50(&fn_8000EC44()->mUnknown16);
-        fn_8007A444((Object_8007A334 *)fn_80182DC8());
-        value = fn_800808F8(fn_80182DC8());
+        HairListOpen(&fn_8000EC44()->mUnknown16);
+        DbCursorFirst((DbCursor *)fn_80182DC8());
+        value = PlayerDbGetId(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
-        fn_800809C4(fn_80182DC8(), value, 0);
-        fn_80022680(fn_80022D78(), value, 1);
-        fn_80022680(fn_80022D80(), value, 1);
+        PlayerDbSeekId(fn_80182DC8(), value, 0);
+        FEPlyrSetPlayer(FEPlyrGetBackIndex(), value, 1);
+        FEPlyrSetPlayer(FEPlyrGetFrontIndex(), value, 1);
         fn_8015D38C(0);
     }
     *pCount = 7;
@@ -454,7 +454,7 @@ int Class_8000F540::vfn_02(int a, int b, void **pOut)
     if (b) {
         fn_80183704();
         result = -1;
-        fn_8007CCC4(&fn_8000EC44()->mUnknown16);
+        HairListClose(&fn_8000EC44()->mUnknown16);
         fn_8000EC44()->mUnknown12 = result;
         fn_8000EC44()->mUnknown0 = 0;
     } else {
@@ -604,8 +604,8 @@ int Class_8000F460::vfn_02(int a, int b, void **pOut)
             result = 1;
             pItems->mUnknown8 = 10;
             fn_8000EC44()->mUnknown4 = 10;
-            fn_800225F4(0, 8);
-            fn_800225F4(1, 8);
+            FEPlyrSetPose(0, 8);
+            FEPlyrSetPose(1, 8);
             break;
         case 5:
             pItems = fn_8000ED34();
@@ -613,8 +613,8 @@ int Class_8000F460::vfn_02(int a, int b, void **pOut)
             result = 1;
             pItems->mUnknown8 = 11;
             fn_8000EC44()->mUnknown4 = 11;
-            fn_800225F4(0, 8);
-            fn_800225F4(1, 8);
+            FEPlyrSetPose(0, 8);
+            FEPlyrSetPose(1, 8);
             break;
         case 6:
             pItems = fn_8000ED34();
@@ -741,32 +741,32 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mValues[11];
     pOut->mUnknown0[12] = record.mValues[12];
     pOut->mUnknown0[13] = record.mValues[13];
-    lbl_803ECE30 = fn_80080E98(fn_80182DC8());
+    lbl_803ECE30 = PlayerDbGetHairStyle(fn_80182DC8());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
 {
-    Object_8007A334 object;
+    DbCursor object;
     int i;
 
     for (i = 0; i <= 13; i++) {
-        fn_80022E40(i, pRecord->mUnknown0[i]);
+        FEPlyrSetPairSlot(i, pRecord->mUnknown0[i]);
     }
-    fn_80049B90(0, lbl_803ECE30);
-    fn_80049B90(1, lbl_803ECE30);
+    PlayerLookSetHair(0, lbl_803ECE30);
+    PlayerLookSetHair(1, lbl_803ECE30);
     for (i = 0; i <= 2; i++) {
-        fn_80049D6C(0, i, 0);
-        fn_80049D6C(1, i, 0);
+        PlayerLookSetPartVariant(0, i, 0);
+        PlayerLookSetPartVariant(1, i, 0);
     }
-    fn_80049B00(0, 0);
-    fn_80049B00(1, 0);
+    PlayerLookSetFrontDecalKind(0, 0);
+    PlayerLookSetFrontDecalKind(1, 0);
 }
 
 static void fn_8000E8FC(int index, int value)
 {
     fn_8000E834(&lbl_8036AD78);
     if (lbl_8000F590[index] != 14 || index == 22) {
-        Object_8007A334 object;
+        DbCursor object;
         int a = 0;
         int b = 0;
         int c = 0;
@@ -780,50 +780,50 @@ static void fn_8000E8FC(int index, int value)
         fn_8007BB04(&object);
         if (c == 14) {
             if (b == 6) {
-                fn_80022E40(6, a);
-                fn_80022E40(7, a);
+                FEPlyrSetPairSlot(6, a);
+                FEPlyrSetPairSlot(7, a);
             }
         } else {
             switch (b) {
             case 12:
-                fn_80022E40(12, 1);
+                FEPlyrSetPairSlot(12, 1);
                 break;
             case 2:
-                fn_80022E40(10, lbl_803EB94C);
+                FEPlyrSetPairSlot(10, lbl_803EB94C);
                 break;
             }
-            fn_80022E40(c, a);
+            FEPlyrSetPairSlot(c, a);
         }
     } else {
         switch (index) {
         case 14:
             value += 6;
-            fn_80049B00(0, value);
-            fn_80049B00(1, value);
+            PlayerLookSetFrontDecalKind(0, value);
+            PlayerLookSetFrontDecalKind(1, value);
             break;
         case 15:
             lbl_803EB948 = value + 45;
-            fn_80048FD0(0, value + 45);
-            fn_80048FD0(1, lbl_803EB948);
-            fn_80049B00(0, 5);
-            fn_80049B00(1, 5);
+            PlayerLookSetLogo(0, value + 45);
+            PlayerLookSetLogo(1, lbl_803EB948);
+            PlayerLookSetFrontDecalKind(0, 5);
+            PlayerLookSetFrontDecalKind(1, 5);
             break;
         case 18:
-            fn_80049B90(0, value);
-            fn_80049B90(1, value);
+            PlayerLookSetHair(0, value);
+            PlayerLookSetHair(1, value);
             break;
         case 19:
-            fn_800490A0(0, 10, 0);
-            fn_800490A0(1, 10, 0);
+            PlayerLookSetGear(0, 10, 0);
+            PlayerLookSetGear(1, 10, 0);
         case 20:
         case 21:
-            fn_80049D6C(0, fn_80087BA0(index), value);
-            fn_80049D6C(1, fn_80087BA0(index), value);
+            PlayerLookSetPartVariant(0, fn_80087BA0(index), value);
+            PlayerLookSetPartVariant(1, fn_80087BA0(index), value);
             break;
         }
     }
-    fn_8015D180(fn_80022D78(), 15);
-    fn_80022D6C();
+    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrRequestSwap();
 }
 
 Class_8000F540 *fn_8000EB3C()
@@ -833,7 +833,7 @@ Class_8000F540 *fn_8000EB3C()
 
 unsigned int fn_8000EB5C()
 {
-    return fn_800886BC(fn_8022F4BC());
+    return UserInfoGetPoints(fn_8022F4BC());
 }
 
 int fn_8000EB80()
@@ -850,7 +850,7 @@ void fn_8000EBA4(int id)
     fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
     fn_8000EC44()->mUnknown8 = 1;
     fn_80087600(fn_8000EC44()->mUnknown4, item);
-    fn_800888D0(fn_8022F4BC(), price);
+    UserInfoSpendPoints(fn_8022F4BC(), price);
 }
 
 unsigned char fn_8000EC14()

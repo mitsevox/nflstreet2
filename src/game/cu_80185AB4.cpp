@@ -1,7 +1,7 @@
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_80228224.h"
-#include "game/fn_80063A0C.h"
+#include "engine/viewporttypes.h"
+#include "game/OptionsScreen.h"
 #include "game/fn_80072AA8.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
@@ -27,14 +27,14 @@ void fn_80072E84(void);
 void fn_80072F04(void);
 unsigned char fn_80072F84(void);
 void fn_80073094(void);
-void fn_8007420C(int index);
-void fn_80074250(int index);
-void fn_80074358(int a);
-int fn_800744C8(int index);
-int fn_800745D4(unsigned int index);
+void SpchIGPauseChannel(int index);
+void SpchIGResumeChannel(int index);
+void SpchIGPurgeChannel(int a);
+int SpchIGIsChannelIdle(int index);
+int SpchIGGetChannelStream(unsigned int index);
 void fn_8013CF98(void);
-void fn_8018A7F8(Object_80228224 *pObject, int mode);
-Object_80228224 *fn_8018A854(void);
+void fn_8018A7F8(Viewport_t *pObject, int mode);
+Viewport_t *fn_8018A854(void);
 int fn_801F48B8(int handle);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
@@ -90,8 +90,8 @@ void fn_80185B70(void)
             lbl_803EB5C0 = -1;
             fn_8006D8DC(lbl_803EB5C4);
         }
-        if (fn_80027DF0() != 0 || lbl_803EB5D0 == 10) {
-            if (fn_8007F828(fn_80063A0C(10)) > 0) {
+        if (FELoopIsMainFEActive() != 0 || lbl_803EB5D0 == 10) {
+            if (fn_8007F828(OptionsScreenGetOptionId(10)) > 0) {
                 fn_80072F04();
                 lbl_803EB5B8 = 1;
             }
@@ -102,7 +102,7 @@ void fn_80185B70(void)
 void fn_80185BEC(int mode, int value, int notify)
 {
     int flag = 0;
-    int index = fn_80063A0C(mode);
+    int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
         if (fn_8007F828(index) == 0 && value != 0) {
@@ -118,7 +118,7 @@ void fn_80185BEC(int mode, int value, int notify)
 int fn_80185C68(int mode)
 {
     int result = 0;
-    int index = fn_80063A0C(mode);
+    int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
         result = fn_8007F828(index);
@@ -128,7 +128,7 @@ int fn_80185C68(int mode)
 
 void fn_80185CA8(int mode)
 {
-    if (fn_80063A0C(mode) != 24) {
+    if (OptionsScreenGetOptionId(mode) != 24) {
         lbl_803EB5D0 = mode;
         if (mode >= 8 && mode <= 10) {
             if (mode == 10) {
@@ -141,7 +141,7 @@ void fn_80185CA8(int mode)
             }
         } else {
             fn_80185B70();
-            if (fn_80027DF0() == 0) {
+            if (FELoopIsMainFEActive() == 0) {
                 fn_80072E84();
                 lbl_803EB5B8 = 0;
             }
@@ -182,8 +182,8 @@ void fn_80185D78(void)
         fn_80073094();
     }
     fn_8006D670(1, 0);
-    if (fn_80027DF0() == 0) {
-        fn_8007420C(lbl_803EB5CC);
+    if (FELoopIsMainFEActive() == 0) {
+        SpchIGPauseChannel(lbl_803EB5CC);
         fn_80072E84();
     } else if (lbl_803ECB84 != 0) {
         fn_80072F04();
@@ -198,19 +198,19 @@ void fn_80185E88(void)
     int result;
 
     lbl_803EB5C0 = -1;
-    result = fn_80027DF0();
+    result = FELoopIsMainFEActive();
     lbl_803EB5B8 = 0;
     fn_80072E84();
     lbl_803EB5C8 = fn_8007F828(6);
     lbl_803EB5BC = fn_801EEB44(lbl_802EBFCC, 44);
-    if (result != 0 || fn_800744C8(0) != 0) {
+    if (result != 0 || SpchIGIsChannelIdle(0) != 0) {
         lbl_803EB5CC = 0;
     } else {
         lbl_803EB5CC = 1;
     }
-    fn_80074358(lbl_803EB5CC);
-    fn_80074250(lbl_803EB5CC);
-    fn_8006D670(1, fn_800745D4(lbl_803EB5CC));
+    SpchIGPurgeChannel(lbl_803EB5CC);
+    SpchIGResumeChannel(lbl_803EB5CC);
+    fn_8006D670(1, SpchIGGetChannelStream(lbl_803EB5CC));
     lbl_803ECB84 = fn_80072ACC() != 0;
 }
 
@@ -231,7 +231,7 @@ void fn_80185F4C(int mode, int flag)
             }
             lbl_803EB5B8 = 1;
             fn_80185AB4(mode);
-        } else if (fn_8007F828(fn_80063A0C(mode)) == 0 && mode == 10) {
+        } else if (fn_8007F828(OptionsScreenGetOptionId(mode)) == 0 && mode == 10) {
             if (lbl_803ECB84 == 0) {
                 fn_80073094();
             } else {
@@ -270,7 +270,7 @@ void fn_801860E4(int unknown)
     Status_801F4834 status;
     unsigned short a;
     unsigned short b;
-    Pair_80073CB0 pair;
+    SndStreamFile_t pair;
 
     if (lbl_803EB5C0 != -1) {
         fn_80219650(lbl_803EB688, &a, &b);
