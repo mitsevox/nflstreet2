@@ -22,7 +22,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    static Viewport_t *fn_800293A8();
+    static Viewport_t *GetViewport();
 
 private:
     GameVptStatePtr mpState;

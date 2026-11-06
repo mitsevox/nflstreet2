@@ -65,7 +65,7 @@ extern float lbl_803ECB08;
 double fabs(double);
 
 void fn_8003AB08(Object_80039F5C *p, int a);
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 void fn_80053A70(Object_80039F5C *p);
 void fn_8006F0B8(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
@@ -195,8 +195,8 @@ int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
 int BallIsClearOfHands(void *pBall);
-int fn_80025708(void);
-void fn_8002572C(void);
+int ChallengeIsActive(void);
+void ChallengePostOutcome(void);
 Object_80039F5C *fn_8009BCE8(int *pRef);
 int fn_8009D558(int a);
 void fn_8009D818(int state);
@@ -1018,7 +1018,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
         && ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) && !p->mUnknown1219) {
         forced = 1;
     }
-    if (fn_80054D24(0x17) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x17) && !fn_8017F584()) {
         forced = 1;
     }
     if (!fn_800A7EB8(p->mId >> 8 & 0xFF) && pTackler && fn_800A851C(pTackler->mId >> 8 & 0xFF, pTackler)) {
@@ -1041,7 +1041,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
                 eligible = 0;
             }
         }
-        if (fn_80054D24(0x18) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
             forced = 0;
             eligible = 0;
         }
@@ -1691,7 +1691,7 @@ int fn_8017319C(Object_80039F5C *p)
         return 0;
     }
     handoff = BallGetTransferKind(BallGetCurrent());
-    if (fn_80054D24(0x18) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
         return 0;
     }
     if (PlayerMoveGetKind(p)) {
@@ -1752,8 +1752,8 @@ void fn_80173324(unsigned int a)
             fn_801735B4(0x10);
             fn_801735D8(0x100);
             fn_800B9B9C(lbl_803EAB84);
-            if (fn_80025708()) {
-                fn_8002572C();
+            if (ChallengeIsActive()) {
+                ChallengePostOutcome();
             }
         }
     }
@@ -1781,7 +1781,7 @@ void fn_80173404(void)
         break;
     case 4:
         fn_8017F584();
-        if (fn_80178AE0() == 2 && !fn_80025708()) {
+        if (fn_80178AE0() == 2 && !ChallengeIsActive()) {
             fn_801735B4(0x40);
             state = 5;
             fn_80173298(2, 2);

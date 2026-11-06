@@ -1,8 +1,10 @@
+/* Reads one player's full record (ratings and attributes) from the PLAY table of the stats database. */
+
 #include "game/QueryStatus.h"
 #include "game/fn_801FCE10.h"
 
-/* Record filled by fn_8002A9B8; fn_8002ADE0 allocates and clears 0x100 bytes for it. */
-struct Record_8002A9B8 {
+/* Record filled by PlayerRecordRead; PlayerSavePrepare allocates and clears 0x100 bytes for it. */
+struct PlayerRecord_t {
     int mUnknown0;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -88,9 +90,9 @@ struct Record_8002A9B8 {
 };
 
 extern "C" {
-int fn_8002A9B8(int id, void *pBuffer)
+int PlayerRecordRead(int id, void *pBuffer)
 {
-    Record_8002A9B8 *pRecord = (Record_8002A9B8 *)pBuffer;
+    PlayerRecord_t *pRecord = (PlayerRecord_t *)pBuffer;
     int found = 0;
     int result = fn_801FCE10(0,
         "use 'TATS' select 'EGAP' into \x83 and "

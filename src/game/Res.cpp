@@ -1,5 +1,5 @@
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemPoolDesc.h"
 
 extern "C" {
 
@@ -23,7 +23,7 @@ int Res::Init()
 {
     fn_801EE970(0x40);
     fn_801F2BAC(1);
-    if (fn_80025E50(8)->mUnknown10 != 0) {
+    if (MemPoolGetDesc(8)->mUnknown10 != 0) {
         ResTrackInitSize(8, 0x100000);
         ResTrackSetTideCompatible(0);
         ResTrackEnable(1);

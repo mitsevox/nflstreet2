@@ -1,3 +1,5 @@
+/* The in-game loop module: the per-frame game update, pausing, the idle state and the attract-mode demo. */
+
 #include "game/cu_8007F12C.h"
 #include "engine/viewport.h"
 #include "game/PadInput.h"
@@ -125,16 +127,16 @@ struct EngineParamWords {
     int mUnknown4;
 };
 
-static unsigned char sUnknown803EA2F0 = 0;
+static unsigned char _InGame_bCancelRequest = 0;
 /* Called by Update when non-null. */
-static void (*sCallback)() = 0;
-static unsigned char sUnknown803EA2F8 = 0;
-static unsigned int sUnknown803EA2FC = 0;
-static unsigned char sUnknown803EA300 = 0;
-static unsigned char sUnknown803EC5F4;
-static int sUnknown803EC5F8;
-static int sUnknown803EC5FC;
-static int sUnknown803EC600;
+static void (*_InGame_pFrameCallback)() = 0;
+static unsigned char _InGame_bDemo = 0;
+static unsigned int _InGame_uIdleFrames = 0;
+static unsigned char _InGame_bIdle = 0;
+static unsigned char _InGame_bRunning;
+static int _InGame_iFrameCount;
+static int _InGame_iPauseCount;
+static int _InGame_bInputPaused;
 
 static ModuleDependency sDependencies[] = { &gUIS, lbl_8030716C, lbl_803072C4, 0 };
 InGame gInGame;
@@ -143,9 +145,9 @@ static void _InGamePadHandler(int a, int b, float c)
 {
     MemCardUtilHandleEvent(a, b, c);
     if (b != 0x8F) {
-        sUnknown803EA2FC = 0;
+        _InGame_uIdleFrames = 0;
     }
-    if (sUnknown803EC600 == 0) {
+    if (_InGame_bInputPaused == 0) {
         fn_8019A9A0(a, b, c);
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
@@ -168,9 +170,9 @@ static void _InGamePadHandler(int a, int b, float c)
     } else {
         fn_8018A740();
     }
-    if (sUnknown803EA2F0 == 1) {
+    if (_InGame_bCancelRequest == 1) {
         PauseRequestClose();
-        sUnknown803EA2F0 = 0;
+        _InGame_bCancelRequest = 0;
     }
 }
 
@@ -194,7 +196,7 @@ static void _InGameDemoPadRead(int a, InputValues *pPrevious, InputValues *pCurr
         fn_801E15D0(handle);
         fn_801E17D0(handle, p);
         _InGameDemoPadHook();
-        if (sUnknown803EA2F8 && PadInputIsDeviceReady(handle)) {
+        if (_InGame_bDemo && PadInputIsDeviceReady(handle)) {
             done = 0;
             for (i = 0; i < count; i++) {
                 float value = fabs(RemapCheckEntry(handle, i, p + 8));
@@ -216,9 +218,9 @@ static void _InGameUpdateHook3() {}
 static void _InGameEndDemo()
 {
     fn_80072C90(0xFA, 1);
-    sUnknown803EA2FC = 0;
-    if (sUnknown803EA300) {
-        sUnknown803EA300 = 0;
+    _InGame_uIdleFrames = 0;
+    if (_InGame_bIdle) {
+        _InGame_bIdle = 0;
         fn_8007F6F8(9, 1);
         RumbleShutdown();
         RumbleInit();
@@ -238,12 +240,12 @@ void InGameStop()
 {
     AudmonEventPost(0x84, 0);
     fn_800C1E50();
-    sUnknown803EC5F4 = 0;
+    _InGame_bRunning = 0;
 }
 
 int InGameIsStopped()
 {
-    return !sUnknown803EC5F4;
+    return !_InGame_bRunning;
 }
 
 int InGame::Init()
@@ -255,9 +257,9 @@ int InGame::Init()
     int result;
 
     result = 0;
-    sUnknown803EC5F8 = 0;
-    sUnknown803EA2FC = 0;
-    sUnknown803EA300 = 0;
+    _InGame_iFrameCount = 0;
+    _InGame_uIdleFrames = 0;
+    _InGame_bIdle = 0;
     fn_8007F394(1);
     fn_8008FE5C(0);
     fn_80099568(1);
@@ -268,7 +270,7 @@ int InGame::Init()
     fn_800AE8B4();
     VptManagerMarketCamInit();
     ConSetChannelInfo(-1, 1, (void *)_InGamePadHandler);
-    sUnknown803EC5F4 = 1;
+    _InGame_bRunning = 1;
     fn_800C8704(&a, &b);
     DepthChartGetSide(0, &record0);
     DepthChartGetSide(1, &record1);
@@ -278,7 +280,7 @@ int InGame::Init()
     fn_80176C58();
     fn_80176C90();
     BallsPark();
-    sUnknown803EC5FC = 0;
+    _InGame_iPauseCount = 0;
     InGameSetInputPaused(0);
     PadInputSetAxisCallback(CamGameGetSideYaw);
     fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &result);
@@ -313,7 +315,7 @@ int InGame::Init()
     fn_8018A6C4(1, 0);
     AudmonEventPost(0x6A, 0);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
-    return sUnknown803EC5F4;
+    return _InGame_bRunning;
 }
 
 unsigned char InGame::Update()
@@ -328,28 +330,28 @@ unsigned char InGame::Update()
     _InGameUpdateHook2();
     _InGameUpdateHook3();
     fn_801D6F58();
-    if (sUnknown803EA2FC > 10800) {
+    if (_InGame_uIdleFrames > 10800) {
         if (fn_8007F828(9)) {
-            sUnknown803EA300 = 1;
+            _InGame_bIdle = 1;
             fn_8007F6F8(9, 0);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(0);
         }
     } else {
-        if (sUnknown803EA300) {
-            sUnknown803EA300 = 0;
+        if (_InGame_bIdle) {
+            _InGame_bIdle = 0;
             fn_8007F6F8(9, 1);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(1);
         }
-        sUnknown803EA2FC++;
+        _InGame_uIdleFrames++;
     }
     RumbleProcess();
     TimeScaleUpdate();
-    if (sUnknown803EC5FC == 0) {
-        sUnknown803EC5F8++;
+    if (_InGame_iPauseCount == 0) {
+        _InGame_iFrameCount++;
         fn_80237830(1);
     }
     while ((count = fn_802378C8()) != 0) {
@@ -381,25 +383,25 @@ unsigned char InGame::Update()
     fn_801CE82C();
     VptProcessViewports();
     fn_80236F34();
-    if (sCallback) {
-        sCallback();
+    if (_InGame_pFrameCallback) {
+        _InGame_pFrameCallback();
     }
-    if (!sUnknown803EC5F4) {
+    if (!_InGame_bRunning) {
         if (fn_800A937C() || fn_800A9680()) {
             fn_800A9478(1);
         }
     }
-    return sUnknown803EC5F4;
+    return _InGame_bRunning;
 }
 
 int InGame::Shutdown()
 {
     TimeScaleReset();
     fn_800A8EB8();
-    if (sUnknown803EA2F8) {
-        sUnknown803EA2FC = 0;
-        if (sUnknown803EA300) {
-            sUnknown803EA300 = 0;
+    if (_InGame_bDemo) {
+        _InGame_uIdleFrames = 0;
+        if (_InGame_bIdle) {
+            _InGame_bIdle = 0;
             fn_8007F6F8(9, 1);
             RumbleShutdown();
             RumbleInit();
@@ -423,14 +425,14 @@ int InGame::Shutdown()
     MemCardUtilShutdown();
     ConSetChannelInfo(-1, 2, (void *)PadInputRead);
     fn_8017F664();
-    MemCardScreenSetFlag(sUnknown803EA2F8);
-    sUnknown803EA2F8 = 0;
+    MemCardScreenSetFlag(_InGame_bDemo);
+    _InGame_bDemo = 0;
     return 1;
 }
 
 void InGamePause()
 {
-    sUnknown803EC5FC++;
+    _InGame_iPauseCount++;
     InGameSetInputPaused(1);
     if (fn_800AD9B4() == 5) {
         fn_800B410C();
@@ -440,9 +442,9 @@ void InGamePause()
 
 void InGameResume()
 {
-    if (--sUnknown803EC5FC == 0) {
+    if (--_InGame_iPauseCount == 0) {
         InGameSetInputPaused(0);
-        if (fn_800AD9B4() == 5 && sUnknown803EC5F4) {
+        if (fn_800AD9B4() == 5 && _InGame_bRunning) {
             fn_800B3AF4(0.0f);
         } else {
             fn_800B4184(1);
@@ -452,22 +454,22 @@ void InGameResume()
 
 void InGameSetInputPaused(int unknown)
 {
-    sUnknown803EC600 = unknown;
+    _InGame_bInputPaused = unknown;
 }
 
 void InGameSetDemo()
 {
-    sUnknown803EA2F8 = 1;
+    _InGame_bDemo = 1;
 }
 
 unsigned char InGameIsDemo()
 {
-    return sUnknown803EA2F8;
+    return _InGame_bDemo;
 }
 
 int InGameIsPaused()
 {
-    return sUnknown803EC5FC != 0;
+    return _InGame_iPauseCount != 0;
 }
 
 int InGameIsPlaying()
@@ -483,5 +485,5 @@ int InGameIsPlaying()
 
 int InGameGetFrameCount()
 {
-    return sUnknown803EC5F8;
+    return _InGame_iFrameCount;
 }

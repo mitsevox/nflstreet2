@@ -127,7 +127,7 @@ int PassIconsAreShown(void);
 Object_800670B4 *fn_80168708(int team);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 int fn_8011E9B4(Object_80039F5C *p);
 float fn_801CFB94(int angle);
 void fn_800D7534(int team);
@@ -372,7 +372,7 @@ extern "C" float fn_801050DC(Ball_t *pBall, Vector_80039F5C *pTarget, float spee
             clamped = 0.4074074f;
         }
     }
-    return clamped * lbl_803EA2C4;
+    return clamped * gFrameTimeScale;
 }
 
 extern "C" void fn_80105168(int mode, Ball_t *pBall, Object_80039F5C *p, Object_80039F5C *pOther, float speed, Vector_80039F5C *pTarget, int unused)

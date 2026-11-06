@@ -1,23 +1,23 @@
 #include "game/cu_80181330.h"
-#include "game/cu_8003AEA8.h"
+#include "game/DepthChart.h"
 
 extern "C" {
 void fn_8001ED80(int value);
 int fn_8001ED88(void);
-int fn_8002B70C(void);
+int TeamFilterGet(void);
 void ChalCloseCursors(void);
 int fn_80082414(int index);
-int fn_80085428(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
+int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void fn_80183920(int mode, int value);
 int fn_8018D720(int a);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
 
-void fn_80054FC0(int *pResult)
+void FeTeamChooseScreen(int *pResult)
 {
     if (fn_8018D720(fn_8022F384(fn_8022F4BC()))) {
-        if (fn_8002B70C() != 0x3FF) {
+        if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
         } else if (fn_8001ED88() == 6) {
             fn_8001ED80(4);
@@ -32,7 +32,7 @@ void fn_80054FC0(int *pResult)
     ChalCloseCursors();
 }
 
-int fn_80055058(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 272:
@@ -43,7 +43,7 @@ int fn_80055058(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         *pResult = 0;
         break;
     case 392:
-        fn_80054FC0(pArgs[0].pi);
+        FeTeamChooseScreen(pArgs[0].pi);
         break;
     case 250:
     case 251:
@@ -57,30 +57,30 @@ int fn_80055058(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
     return 1;
 }
 
-int fn_800550E4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int DepthChartScreenHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 270:
-        fn_8003B360(pArgs[0].i);
+        DepthChartCommit(pArgs[0].i);
         break;
     case 271:
-        fn_8003B3AC(pArgs[0].i);
+        DepthChartCancel(pArgs[0].i);
         break;
     case 268: {
         int *pList = pArgs[5].pi;
         int list = pList[0] + 1;
 
         pList += list;
-        fn_8003AF8C(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[7].i, (Pair_8003AEA8 *)pArgs[4].pParams, pList,
+        DepthChartGetSpotPlayer(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[7].i, (DepthChartText_t *)pArgs[4].pParams, pList,
                     pArgs[6].pi);
         break;
     }
     case 267:
-        fn_8003AEF4(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[6].i, (Pair_8003AEA8 *)pArgs[3].pParams,
-                    (Pair_8003AEA8 *)pArgs[4].pParams, (Pair_8003AEA8 *)pArgs[5].pParams);
+        DepthChartGetSpotStatNames(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[6].i, (DepthChartText_t *)pArgs[3].pParams,
+                    (DepthChartText_t *)pArgs[4].pParams, (DepthChartText_t *)pArgs[5].pParams);
         break;
     case 269:
-        fn_8003B0A0(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[4].i);
+        DepthChartCanSwapSpots(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[4].i);
         break;
     default:
         return 0;
@@ -88,12 +88,12 @@ int fn_800550E4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
     return 1;
 }
 
-int fn_800551D8(unsigned char side)
+int DepthChartScreenIsSideShown(unsigned char side)
 {
     return 1;
 }
 
-void fn_800551E0(unsigned char side, int unused, char *pText, int size)
+void DepthChartScreenGetSideName(unsigned char side, int unused, char *pText, int size)
 {
     if (side) {
         fn_801C2EF0(pText, "Offense", size);
@@ -102,15 +102,15 @@ void fn_800551E0(unsigned char side, int unused, char *pText, int size)
     }
 }
 
-void fn_80055230(unsigned char side, int unused, int index, float *pX, float *pY, char *pLabel, int labelSize)
+void DepthChartScreenGetSpot(unsigned char side, int unused, int index, float *pX, float *pY, char *pLabel, int labelSize)
 {
     int value;
 
-    fn_80085428(side, index, pX, pY, &value, pLabel, labelSize);
-    fn_8003AED8(side != 0, index, value);
+    FormationSlotGetInfo(side, index, pX, pY, &value, pLabel, labelSize);
+    DepthChartSetSpotSlot(side != 0, index, value);
 }
 
-int fn_8005528C(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeCountsHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 372:

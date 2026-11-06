@@ -6,10 +6,10 @@
 #include "game/Object_8008044C.h"
 #include "game/Challenge.h"
 #include "game/Request_802329F0.h"
-#include "game/cu_8003AEA8.h"
-#include "game/cu_8003E214.h"
+#include "game/DepthChart.h"
+#include "game/AutoDepth.h"
 #include "game/cu_80181330.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_80072AA8.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
@@ -53,7 +53,7 @@ struct Pair_80014430 {
     unsigned char mUnknown1;
 };
 
-/* Two seven-entry position lists of one team, filled by fn_8003B5AC. */
+/* Two seven-entry position lists of one team, filled by DepthChartFindPlayer. */
 struct Slots_8036B0F8 {
     int mUnknown0[7];
     int mUnknown1C[7];
@@ -81,15 +81,15 @@ struct Stats_803EB9E8 {
     char mName[16];
 };
 
-/* Record filled by fn_80088CE0. */
-struct Record_80088CE0 {
+/* Record filled by UnlockListReadItem. */
+struct UnlockItem_t {
     signed char mIndex;
     char mName[147];
     int mUnknown94;
 };
 
-/* Pointer list read by fn_8003B234 (src/game/cu_8003AEA8.cpp). */
-struct Pair_8003AEA8;
+/* Pointer list read by DepthChartGetSideNames (src/game/DepthChart.cpp). */
+struct DepthChartText_t;
 
 void *operator new(unsigned int size, int unknown);
 
@@ -108,21 +108,21 @@ void CreditsClose(void);
 void CreditsCountLines(int *pCount);
 void CreditsGetLine(char *pDest, int count);
 void CreditsGetLineType(int *pValue);
-int fn_80025708(void);
-int fn_80025718(void);
-unsigned char fn_8002892C(void);
-void fn_8003B0F8(int group, int kind, int slot, int code, int a, int b);
-void fn_8003B1F4(int group);
-void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs);
-void fn_8003B2D0(int group, int kind, int slot);
-void fn_8003B584(int group, int value, int index0, int index1);
-int fn_8003B5AC(int group, int value, int *pFirst, int *pSecond);
+int ChallengeIsActive(void);
+int ChallengeIsPairingGame(void);
+unsigned char InGameIsDemo(void);
+void DepthChartCyclePending(int group, int kind, int slot, int code, int a, int b);
+void DepthChartRevertSide(int group);
+void DepthChartGetSideNames(int group, int kind, DepthChartText_t **pPairs);
+void DepthChartSwapPending(int group, int kind, int slot);
+void DepthChartSetEntryPair(int group, int value, int index0, int index1);
+int DepthChartFindPlayer(int group, int value, int *pFirst, int *pSecond);
 void fn_8003DE74(unsigned char side, int *pList);
-void fn_80054CA8(int a);
-void fn_80054CFC(void);
-int fn_800551D8(unsigned char a);
-void fn_800551E0(unsigned char a, int b, char *pText, int length);
-void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
+void CheatFlagsAddUser(int a);
+void CheatFlagsClear(void);
+int DepthChartScreenIsSideShown(unsigned char a);
+void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
+void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int GauntletScreenGetSelection(void);
 void MemCardScreenSetFlag(unsigned char a);
 void fn_8006CA18(int index, int a, unsigned char volume);
@@ -154,12 +154,12 @@ void RecordsSetSharedRanks(int a);
 void TeamLockOpen(DbCursor *pObject, int db);
 void TeamLockClose(DbCursor *pObject);
 int TeamLockIsHidden(DbCursor *pObject, int id);
-int fn_800808F8(Object_8008044C *pObject);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_80081188(Object_8008044C *pObject);
-int fn_800812E0(Object_8008044C *pObject, int index);
+int PlayerDbGetId(Object_8008044C *pObject);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetWeight(Object_8008044C *pObject);
+int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index);
 void fn_80082558(int a, int b);
 void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
 int fn_80083FBC(DbCursor *pObject);
@@ -170,17 +170,17 @@ int fn_80084204(DbCursor *pObject);
 int fn_800842E8(DbCursor *pObject);
 int fn_80084310(DbCursor *pObject);
 int fn_80084338(DbCursor *pObject);
-void fn_80087BE4(DbCursor *pObject, int index);
-void fn_80087C3C(DbCursor *pObject);
-int fn_80087C8C(DbCursor *pObject, unsigned int index);
-unsigned int fn_800886BC(int a);
-int fn_8008872C(int a);
-void fn_80088950(DbCursor *pObject, int index);
-void fn_80088A1C(DbCursor *pObject);
-int fn_80088A74(DbCursor *pObject, int index);
-void fn_80088B24(DbCursor *pObject, int a, unsigned char b);
-void fn_80088C8C(DbCursor *pObject);
-void fn_80088CE0(DbCursor *pObject, Record_80088CE0 *pRecord);
+void UserStatsOpen(DbCursor *pObject, int index);
+void UserStatsClose(DbCursor *pObject);
+int UserStatsGet(DbCursor *pObject, unsigned int index);
+unsigned int UserInfoGetPoints(int a);
+int UserInfoGetTotalPoints(int a);
+void UnlockStatusOpen(DbCursor *pObject, int index);
+void UnlockStatusClose(DbCursor *pObject);
+int UnlockStatusGet(DbCursor *pObject, int index);
+void UnlockListOpen(DbCursor *pObject, int a, unsigned char b);
+void UnlockListClose(DbCursor *pObject);
+void UnlockListReadItem(DbCursor *pObject, UnlockItem_t *pRecord);
 void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int fn_801485D4(void);
@@ -389,26 +389,26 @@ int fn_8000F870(int module, unsigned int id, Arg_8018399C *pArgs, int count, int
 
 void fn_8000FA0C(void)
 {
-    fn_80054CFC();
+    CheatFlagsClear();
     if (!lbl_803EB951) {
         lbl_803EB951 = 1;
         if (fn_801835A0()) {
             fn_801834DC();
         }
         fn_80183934();
-        if (!fn_80027E90()) {
-            fn_80027E88(1);
+        if (!FELoopWasVisited()) {
+            FELoopSetVisited(1);
         }
         fn_8018C48C(0x54415453);
         fn_8018C48C(0x454D4147);
-        fn_80027EA0();
+        FELoopResetIdle();
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
         }
         if (fn_802294F4()) {
             fn_80229554();
         }
-        if (fn_80187C64() && !fn_801869F0() && !fn_80027EAC()) {
+        if (fn_80187C64() && !fn_801869F0() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
         }
     }
@@ -567,7 +567,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     case 0x80000001:
         if (lbl_803EB950) {
             fn_801834DC();
-            fn_80027EA0();
+            FELoopResetIdle();
             lbl_803EB950 = 0;
         }
         fn_8000FA0C();
@@ -628,7 +628,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_801C2EF0(pArgs[0].pParams->mpText, "", pArgs[0].pParams->mLength);
         break;
     case 0x8000000F:
-        fn_80027EB4(0);
+        FELoopCheckDemoLaunch(0);
         break;
     case 0x80000010:
         *pResult = lbl_803EB964;
@@ -656,10 +656,10 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 
 void fn_80010150(int mode)
 {
-    unsigned char saved = fn_80027E90();
+    unsigned char saved = FELoopWasVisited();
     fn_8000FA0C();
     fn_8000FAD0(mode);
-    fn_80027E88(saved);
+    FELoopSetVisited(saved);
 }
 
 int fn_80010194(void)
@@ -713,7 +713,7 @@ void fn_80010208(void)
         fn_800103A4(1);
         lbl_803EB96A = state;
     }
-    if (fn_80025708() || fn_80025718()) {
+    if (ChallengeIsActive() || ChallengeIsPairingGame()) {
         lbl_803EB96A = GameInfoGet(2);
     }
 }
@@ -985,7 +985,7 @@ void fn_80010914(void)
                     } else {
                         fn_80186F30(lbl_803ECE48.mIndex[lbl_803EB96C[i]], 0);
                     }
-                    fn_80054CA8(lbl_803ECE48.mIndex[lbl_803EB96C[i]]);
+                    CheatFlagsAddUser(lbl_803ECE48.mIndex[lbl_803EB96C[i]]);
                 }
             }
         } else {
@@ -1755,23 +1755,23 @@ void fn_80012310(int side, int direction, int *pId, char *pName, int nameSize, i
         *pId = lbl_8036AE60[side].mEntries[found].mId;
         pPosition[0] = lbl_803EB9A0[side] + 1;
         pPosition[1] = lbl_803ECE50[side];
-        fn_800809C4(pObject, *pId, &result);
-        fn_80080B08(pObject, pName, nameSize);
-        fn_8017F670(fn_80080ECC(pObject), pRole);
+        PlayerDbSeekId(pObject, *pId, &result);
+        PlayerDbGetShortName(pObject, pName, nameSize);
+        fn_8017F670(PlayerDbGetPbpo(pObject), pRole);
         if (pStats) {
-            pStats[0] = fn_800812E0(pObject, 6);
-            pStats[1] = fn_800812E0(pObject, 4);
-            pStats[2] = fn_800812E0(pObject, 7);
-            pStats[3] = fn_800812E0(pObject, 0);
-            pStats[4] = fn_800812E0(pObject, 3);
-            pStats[5] = fn_800812E0(pObject, 2);
-            pStats[6] = fn_800812E0(pObject, 1);
-            pStats[7] = fn_800812E0(pObject, 5);
-            pStats[8] = fn_800812E0(pObject, 8);
-            pStats[9] = fn_800812E0(pObject, 9);
+            pStats[0] = PlayerDbGetBoostedRating(pObject, 6);
+            pStats[1] = PlayerDbGetBoostedRating(pObject, 4);
+            pStats[2] = PlayerDbGetBoostedRating(pObject, 7);
+            pStats[3] = PlayerDbGetBoostedRating(pObject, 0);
+            pStats[4] = PlayerDbGetBoostedRating(pObject, 3);
+            pStats[5] = PlayerDbGetBoostedRating(pObject, 2);
+            pStats[6] = PlayerDbGetBoostedRating(pObject, 1);
+            pStats[7] = PlayerDbGetBoostedRating(pObject, 5);
+            pStats[8] = PlayerDbGetBoostedRating(pObject, 8);
+            pStats[9] = PlayerDbGetBoostedRating(pObject, 9);
         }
-        unsigned int height = fn_800811E0(pObject);
-        int weight = fn_80081188(pObject);
+        unsigned int height = PlayerDbGetHeight(pObject);
+        int weight = PlayerDbGetWeight(pObject);
         fn_801C2D88(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
         fn_801C2D88(pWeight, weightSize, "%d lbs", weight);
         if (lbl_8036AE60[side].mEntries[found].mSlot >= 0) {
@@ -1804,7 +1804,7 @@ void fn_80012634(int side)
         fn_8008044C(&list, &desc, 0x54415453);
         if (DbCursorFirst((DbCursor *)&list)) {
             do {
-                fn_8021E72C(pList, 10, fn_80080D10(&list));
+                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&list));
             } while (DbCursorNext((DbCursor *)&list));
         }
         fn_8008056C(&list);
@@ -1822,7 +1822,7 @@ void fn_80012710(int side)
     fn_8008044C(&list, &desc, 0x54415453);
     if (DbCursorFirst((DbCursor *)&list)) {
         do {
-            fn_8021E2B4(pList, 10, fn_80080D10(&list));
+            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&list));
         } while (DbCursorNext((DbCursor *)&list));
     }
     fn_8008056C(&list);
@@ -1831,9 +1831,9 @@ void fn_80012710(int side)
 void fn_800127E4(int side, char *pBuffer, int size, int full)
 {
     if (full) {
-        fn_80080B08(&lbl_8036AE08[side], pBuffer, size);
+        PlayerDbGetShortName(&lbl_8036AE08[side], pBuffer, size);
     } else {
-        fn_80080BEC(&lbl_8036AE08[side], pBuffer, size);
+        PlayerDbGetFullName(&lbl_8036AE08[side], pBuffer, size);
     }
 }
 
@@ -1848,7 +1848,7 @@ void fn_80012834(unsigned char side)
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = lbl_803EB97C[side];
-    fn_8008044C(pObject, &desc, fn_80027DF0() ? 0x54415453 : 0x454D4147);
+    fn_8008044C(pObject, &desc, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     lbl_803EB9A0[side] = -1;
 }
 
@@ -1878,7 +1878,7 @@ static inline void GetRow(int team, int list, int row, int *pOut)
 {
     if (row != -1) {
         DbCursorSeek((DbCursor *)&lbl_8036AE08[list], row);
-        int id = fn_800808F8(&lbl_8036AE08[list]);
+        int id = PlayerDbGetId(&lbl_8036AE08[list]);
         int i;
 
         pOut[0] = id;
@@ -1897,7 +1897,7 @@ static inline void GetRow(int team, int list, int row, int *pOut)
 
 void fn_800128E8(unsigned char team)
 {
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (lbl_803EB9AC[team]) {
             unsigned char i;
 
@@ -1933,7 +1933,7 @@ void fn_80012A14(unsigned char team)
     lbl_803ECE50[team] = DbCursorGetRowCount((DbCursor *)&lbl_8036AE08[team]);
     DbCursorFirst((DbCursor *)&lbl_8036AE08[team]);
     for (i = 0; i < lbl_803ECE50[team]; i++) {
-        lbl_8036AE60[team].mEntries[i].mId = fn_800808F8(&lbl_8036AE08[team]);
+        lbl_8036AE60[team].mEntries[i].mId = PlayerDbGetId(&lbl_8036AE08[team]);
         lbl_8036AE60[team].mEntries[i].mIndex = i;
         DbCursorNext((DbCursor *)&lbl_8036AE08[team]);
     }
@@ -2001,7 +2001,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
     if (row != -1) {
         DbCursorSeek((DbCursor *)&lbl_8036AE08[list], row);
         fn_800127E4(list, pName, nameLength, 0);
-        fn_8017F670(fn_80080ECC(&lbl_8036AE08[list]), pRole);
+        fn_8017F670(PlayerDbGetPbpo(&lbl_8036AE08[list]), pRole);
         if (pValues) {
             int values[10];
 
@@ -2032,17 +2032,17 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
 
 void fn_800130B8(int group, int kind, int slot)
 {
-    fn_8003B2D0(group, kind, slot);
+    DepthChartSwapPending(group, kind, slot);
 }
 
-void fn_800130D8(int group, int kind, Pair_8003AEA8 **pPairs)
+void fn_800130D8(int group, int kind, DepthChartText_t **pPairs)
 {
-    fn_8003B234(group, kind, pPairs);
+    DepthChartGetSideNames(group, kind, pPairs);
 }
 
 void fn_800130F8(int group, int kind, int slot, int code, int a, int b)
 {
-    fn_8003B0F8(group, kind, slot, code, a, b);
+    DepthChartCyclePending(group, kind, slot, code, a, b);
 }
 
 int fn_80013118(int team)
@@ -2130,11 +2130,11 @@ void fn_80013254(int team, int *pIndex)
         keys[keyed] = 0xFF;
         ids[count] = 0x7FFF;
         if (pOpen) {
-            pOpen->mKey = fn_8003EA28(0, keys, pOpen->mId);
+            pOpen->mKey = AutoDepthGetBestSlot(0, keys, pOpen->mId);
         }
     } while (picked > keyed);
     if (picked < lbl_803EB974) {
-        fn_8003EB2C(0, ids, keys, &id, &key);
+        AutoDepthSelect(0, ids, keys, &id, &key);
         pSlot = fn_800131F4(team, id, pIndex);
         pSlot->mKey = key;
     }
@@ -2171,7 +2171,7 @@ void fn_80013438(int team)
         count++;
     }
     ids[count] = 0x7FFF;
-    fn_8003E710(lbl_803EB9C4[team], ids, 0);
+    AutoDepthBuild(lbl_803EB9C4[team], ids, 0);
     for (i = picked; i < lbl_803EB974; i++) {
         fn_80013254(team, &index);
         if (lbl_8036AE60[team].mEntries[index].mSlot < 0) {
@@ -2183,7 +2183,7 @@ void fn_80013438(int team)
             }
         }
     }
-    fn_8003E8B8(0);
+    AutoDepthFree(0);
     lbl_8036AE60[team].mUnknown140 = lbl_8036AE60[team].mEntries[lbl_803EB974 - 1].mId;
     for (i = 0; i < lbl_803ECE50[team]; i++) {
         lbl_8036AE60[team].mEntries[i].mKey = 0xFF;
@@ -2226,7 +2226,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
                 pArgs[1].i = fn_8018F228(fn_80186B38(fn_8022F4BC()));
             }
         }
-        if (fn_8017F584() == 6 && fn_80025708()) {
+        if (fn_8017F584() == 6 && ChallengeIsActive()) {
             DbCursor query;
             int team;
 
@@ -2297,7 +2297,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         int *pPairs = pArgs[2].pi;
         int pairs = pPairs[0] + 1;
 
-        fn_800130D8(pArgs[0].i, pArgs[1].i, (Pair_8003AEA8 **)(pPairs + pairs));
+        fn_800130D8(pArgs[0].i, pArgs[1].i, (DepthChartText_t **)(pPairs + pairs));
         break;
     }
     case 0x8000000B:
@@ -2341,10 +2341,10 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_8001565C(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
         break;
     case 0x147:
-        *pResult = fn_800551D8(pArgs[0].i);
+        *pResult = DepthChartScreenIsSideShown(pArgs[0].i);
         break;
     case 0x149:
-        fn_800551E0(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
+        DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
         *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
         break;
     case 0x14A: {
@@ -2352,7 +2352,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         int list = pList[0] + 1;
 
         pList += list;
-        fn_80055230(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
+        DepthChartScreenGetSpot(pArgs[0].i, pArgs[4].i, pArgs[3].i, pList, pList + 1, pArgs[2].pParams->mpText,
                     pArgs[2].pParams->mLength);
         break;
     }
@@ -2768,7 +2768,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     void *pList = fn_8021EA44(1);
     fn_8021E2B4(pList, 10, 1);
     fn_8021E2B4(pList, 10, 1);
-    fn_8003B6F0(fn_801801B4() == 1);
+    DepthChartLoad(fn_801801B4() == 1);
     lbl_803EB9AC[0] = lbl_803EB9AC[1] = fn_801801B4() == 1;
     if (fn_801801B4() == 1) {
         lbl_803EB9BC[0] = 1;
@@ -2796,7 +2796,7 @@ void fn_80014AA8(int team, int id)
     lbl_803EB97C[team] = id;
     fn_80012710(team);
     fn_80012834(team);
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         if (lbl_803EB9AC[team]) {
             int index = fn_80186F7C(team);
             if (index == -1) {
@@ -2817,7 +2817,7 @@ void fn_80014AA8(int team, int id)
 
 void fn_80014B98(void)
 {
-    Record_8003B6BC records[2];
+    DepthChartSide_t records[2];
     int ids[2][7];
     int value0 = 0;
     int value1 = 0;
@@ -2870,13 +2870,13 @@ void fn_80014B98(void)
 
     if (fn_801801B4() == 1 && ((fn_8017F584() == 8 && lbl_803EB99C) || fn_8017F584() != 8) &&
         ((fn_8017F584() == 6 && lbl_803EB99C) || fn_8017F584() != 6)) {
-        fn_8003B6BC(0, &records[0]);
-        fn_8003B6BC(1, &records[1]);
+        DepthChartGetSide(0, &records[0]);
+        DepthChartGetSide(1, &records[1]);
         for (unsigned char i = 0; i <= 6; i++) {
-            fn_800809C4(&lbl_8036AE08[0], records[0].mUnknown[i], 0);
+            PlayerDbSeekId(&lbl_8036AE08[0], records[0].mUnknown[i], 0);
             fn_80081F50(&lbl_8036AE08[0], 0, 1);
             ids[0][i] = lbl_8036AE60[0].mEntries[i].mId;
-            fn_800809C4(&lbl_8036AE08[1], records[1].mUnknown[i], 0);
+            PlayerDbSeekId(&lbl_8036AE08[1], records[1].mUnknown[i], 0);
             fn_80081F50(&lbl_8036AE08[1], 1, 1);
             ids[1][i] = lbl_8036AE60[1].mEntries[i].mId;
         }
@@ -2891,18 +2891,18 @@ void fn_80014B98(void)
     if (pPlayer->mUnknown0) {
         fn_8008056C(pPlayer);
     }
-    fn_8003B8BC();
+    DepthChartSave();
 
     if (fn_801801B4() == 1) {
         if (fn_8017F584() == 6 && lbl_803EB99C) {
-            if (fn_80025708()) {
+            if (ChallengeIsActive()) {
                 fn_80015D28(ChalGetCurrent()->mUnknown1BC);
             } else {
                 fn_80015D28(fn_800A3444());
             }
             fn_8001ED90(1);
         }
-        fn_80027E18(1);
+        FELoopSetResume(1);
     }
     if (fn_801801B4() == 0) {
         fn_8018807C(0);
@@ -2917,8 +2917,8 @@ void fn_80014B98(void)
         }
     }
 
-    fn_8003EBC4(0);
-    fn_8003EBE4(0);
+    AutoDepthSetRateCallback(0);
+    AutoDepthSetSelectCallback(0);
     if (fn_8017F584() == 6) {
         if (fn_8000485C() && fn_801801B4() == 1 && lbl_803EB9A8 != 0x6B) {
             lbl_803EB98C[0] = lbl_803EB97C[0];
@@ -2949,9 +2949,9 @@ void fn_80015000(int team, int *pList)
         }
         fn_8001416C(team);
         fn_8001317C(team, list);
-        fn_8003B3F8(team, list, lbl_803EB9C4[side]);
+        DepthChartAutoFill(team, list, lbl_803EB9C4[side]);
     }
-    fn_8003B1F4(team);
+    DepthChartRevertSide(team);
 
     if (pList) {
         unsigned char count = 0;
@@ -3000,7 +3000,7 @@ int fn_800151C0(int team, int *pNext, int id)
             }
         }
         if (!lbl_803EB9BC[side]) {
-            fn_8003B584(team, id, lbl_8036B0F8[side].mUnknown1C[slot], lbl_8036B0F8[side].mUnknown0[slot]);
+            DepthChartSetEntryPair(team, id, lbl_8036B0F8[side].mUnknown1C[slot], lbl_8036B0F8[side].mUnknown0[slot]);
         }
         if (i != slot) {
             fn_800133B0(team, i, slot);
@@ -3043,7 +3043,7 @@ void fn_80015420(int team, int *pIndex)
             break;
         }
     }
-    fn_800809C4(&lbl_8036AE08[side], lbl_8036AE60[side].mUnknown140, &lbl_8036B0E8[side].mTop);
+    PlayerDbSeekId(&lbl_8036AE08[side], lbl_8036AE60[side].mUnknown140, &lbl_8036B0E8[side].mTop);
     if (lbl_8036B0E8[side].mTop == 0) {
         lbl_8036B0E8[side].mTop = -1;
     } else {
@@ -3064,7 +3064,7 @@ void fn_800155CC(int team)
 {
     lbl_803EB9BC[team] = 0;
     for (int i = 0; i < 7; i++) {
-        fn_8003B5AC(team, lbl_8036AE60[team].mEntries[i].mId, &lbl_8036B0F8[team].mUnknown1C[i],
+        DepthChartFindPlayer(team, lbl_8036AE60[team].mEntries[i].mId, &lbl_8036B0F8[team].mUnknown1C[i],
                     &lbl_8036B0F8[team].mUnknown0[i]);
     }
 }
@@ -3191,7 +3191,7 @@ void fn_80015B0C(int id, int unused)
 {
     if (fn_801801B4() == 1) {
         fn_800A2F3C(id);
-        fn_80027A20();
+        FELoopStartGame();
     } else if (fn_801486A0() != 15) {
         fn_8001B228();
     }
@@ -3283,7 +3283,7 @@ int fn_80015E24(unsigned int index)
 void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 1;
-    fn_80027E88(0);
+    FELoopSetVisited(0);
     fn_80073094();
     MemCardScreenSetFlag(0);
 }
@@ -3291,7 +3291,7 @@ void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
 void fn_80015E80(Arg_8018399C *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 0;
-    if (!fn_8002892C()) {
+    if (!InGameIsDemo()) {
         fn_80072AA8();
         fn_80072F90();
     }
@@ -3350,24 +3350,24 @@ void fn_80016038(void)
 {
     DbCursor query;
     if (lbl_803EB9E7 != -1) {
-        fn_80087BE4(&query, lbl_803EB9E7);
-        lbl_803EB9E8->mValues[0] = fn_80087C8C(&query, 10);
-        lbl_803EB9E8->mValues[1] = fn_80087C8C(&query, 11);
-        lbl_803EB9E8->mValues[4] = fn_80087C8C(&query, 3);
-        lbl_803EB9E8->mValues[3] = fn_80087C8C(&query, 4);
-        lbl_803EB9E8->mValues[5] = fn_80087C8C(&query, 5);
+        UserStatsOpen(&query, lbl_803EB9E7);
+        lbl_803EB9E8->mValues[0] = UserStatsGet(&query, 10);
+        lbl_803EB9E8->mValues[1] = UserStatsGet(&query, 11);
+        lbl_803EB9E8->mValues[4] = UserStatsGet(&query, 3);
+        lbl_803EB9E8->mValues[3] = UserStatsGet(&query, 4);
+        lbl_803EB9E8->mValues[5] = UserStatsGet(&query, 5);
         lbl_803EB9E8->mValues[2] = lbl_803EB9E8->mValues[3] + lbl_803EB9E8->mValues[4] + lbl_803EB9E8->mValues[5];
-        lbl_803EB9E8->mValues[6] = fn_80087C8C(&query, 8);
-        lbl_803EB9E8->mValues[7] = fn_80087C8C(&query, 9);
-        lbl_803EB9E8->mValues[8] = fn_80087C8C(&query, 6);
-        lbl_803EB9E8->mValues[9] = fn_80087C8C(&query, 7);
-        lbl_803EB9E8->mValues[10] = fn_80087C8C(&query, 12);
-        lbl_803EB9E8->mValues[11] = fn_80087C8C(&query, 13);
-        lbl_803EB9E8->mValues[12] = fn_8008872C(fn_8022F358(lbl_803EB9E7));
-        lbl_803EB9E8->mUnknown34 = fn_80087C8C(&query, 0);
-        lbl_803EB9E8->mUnknown38 = fn_80087C8C(&query, 1);
-        lbl_803EB9E8->mStreak = fn_80087C8C(&query, 2);
-        fn_80087C3C(&query);
+        lbl_803EB9E8->mValues[6] = UserStatsGet(&query, 8);
+        lbl_803EB9E8->mValues[7] = UserStatsGet(&query, 9);
+        lbl_803EB9E8->mValues[8] = UserStatsGet(&query, 6);
+        lbl_803EB9E8->mValues[9] = UserStatsGet(&query, 7);
+        lbl_803EB9E8->mValues[10] = UserStatsGet(&query, 12);
+        lbl_803EB9E8->mValues[11] = UserStatsGet(&query, 13);
+        lbl_803EB9E8->mValues[12] = UserInfoGetTotalPoints(fn_8022F358(lbl_803EB9E7));
+        lbl_803EB9E8->mUnknown34 = UserStatsGet(&query, 0);
+        lbl_803EB9E8->mUnknown38 = UserStatsGet(&query, 1);
+        lbl_803EB9E8->mStreak = UserStatsGet(&query, 2);
+        UserStatsClose(&query);
         fn_80186A10(lbl_803EB9E7, lbl_803EB9E8->mName);
     } else {
         for (unsigned char i = 0; i <= 12; i++) {
@@ -3650,12 +3650,12 @@ void fn_80016A08(int *pCount)
 void fn_80016AF4(void)
 {
     if (lbl_803EBA00) {
-        fn_80088C8C(lbl_803EBA00);
+        UnlockListClose(lbl_803EBA00);
         delete lbl_803EBA00;
         lbl_803EBA00 = 0;
     }
     if (lbl_803EBA04) {
-        fn_80088A1C(lbl_803EBA04);
+        UnlockStatusClose(lbl_803EBA04);
         delete lbl_803EBA04;
         lbl_803EBA04 = 0;
     }
@@ -3680,25 +3680,25 @@ void fn_80016B60(int control, char *pText, int *pResult)
         }
     }
     if (lbl_803EBA04->mUnknown0) {
-        fn_80088A1C(lbl_803EBA04);
+        UnlockStatusClose(lbl_803EBA04);
     }
-    fn_80088950(lbl_803EBA04, lbl_803EB9FC);
+    UnlockStatusOpen(lbl_803EBA04, lbl_803EB9FC);
     fn_80186A10(lbl_803EB9FC, pText);
-    *pResult = fn_800886BC(fn_8022F358(lbl_803EB9FC));
+    *pResult = UserInfoGetPoints(fn_8022F358(lbl_803EB9FC));
 }
 
 void fn_80016C60(int index, char *pText, int *pUnknown94, int *pFlag)
 {
-    Record_80088CE0 record;
+    UnlockItem_t record;
     DbCursorSeek(lbl_803EBA00, index);
-    fn_80088CE0(lbl_803EBA00, &record);
+    UnlockListReadItem(lbl_803EBA00, &record);
     fn_801C2E18(pText, record.mName);
     char *pDot = fn_801C3084(pText, '.');
     if (pDot) {
         pDot[1] = 0;
     }
     *pUnknown94 = record.mUnknown94;
-    if (lbl_803EB9FC != -1 && fn_80088A74(lbl_803EBA04, record.mIndex) != 0) {
+    if (lbl_803EB9FC != -1 && UnlockStatusGet(lbl_803EBA04, record.mIndex) != 0) {
         *pFlag = 1;
     } else {
         *pFlag = 0;
@@ -3722,9 +3722,9 @@ void fn_80016D14(int control, char *pText, int size, int *pResult)
         break;
     }
     if (lbl_803EBA00->mUnknown0) {
-        fn_80088C8C(lbl_803EBA00);
+        UnlockListClose(lbl_803EBA00);
     }
-    fn_80088B24(lbl_803EBA00, 1, lbl_803EB9FD);
+    UnlockListOpen(lbl_803EBA00, 1, lbl_803EB9FD);
     fn_801C3284(pText, lbl_802F43E4[lbl_803EB9FD], size);
     *pResult = DbCursorGetRowCount(lbl_803EBA00);
 }

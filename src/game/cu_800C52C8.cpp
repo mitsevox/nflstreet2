@@ -1266,7 +1266,7 @@ extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char
             query.mUnknown56 = 0;
             query.mUnknown58 = 0;
             result = fn_800CE438(&query);
-            fn_8002892C();
+            InGameIsDemo();
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             fn_801BE67C(pOther->mpUnknown792, pOther->mpUnknown796, pOther->mpUnknown800, pOther);
         } else {

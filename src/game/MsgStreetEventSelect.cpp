@@ -36,7 +36,7 @@ void MsgStreetEventSelectInit(int *pCount, int *pValue)
         }
         _MsgStreetEventSelect_iPending = 15;
         _MsgStreetEventSelect_bOpen = 1;
-        fn_80027EA0();
+        FELoopResetIdle();
         if (fn_801801B4() == 0) {
             fn_801485C0();
         }

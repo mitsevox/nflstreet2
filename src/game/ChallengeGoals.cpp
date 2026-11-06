@@ -1,3 +1,5 @@
+/* Challenge goals: checks each goal of the current challenge (score margins, team stats, the winner) during and after the game, and sends the goal list to the screens. */
+
 #include "game/Entry_80219044.h"
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"

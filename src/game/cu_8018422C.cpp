@@ -761,7 +761,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         break;
     case 504:
         *pResult = 0;
-        if (fn_80027DF0() != 0) {
+        if (FELoopIsMainFEActive() != 0) {
             int type = pParams->mUnknown0;
             int index = pParams->mUnknown4;
             char name[17];

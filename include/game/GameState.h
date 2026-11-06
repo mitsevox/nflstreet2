@@ -2,7 +2,7 @@
 #define GAME_GAMESTATE_H
 
 #include "game/Module.h"
-#include "game/Record_802CC680.h"
+#include "game/MemPoolDesc.h"
 
 /* Object returned by fn_80237EE8. */
 #include "engine/Object_80237EE8.h"
@@ -26,8 +26,8 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    static Object_80237EE8 *fn_8002900C();
-    void fn_8002901C();
+    static Object_80237EE8 *GetStore();
+    void Activate();
 
 private:
     GameStateDataPtr mpData;

@@ -1,3 +1,5 @@
+/* The main loop: starts the system modules and runs the module groups frame by frame until the game quits. */
+
 #include "game/Class_801CBC50.h"
 #include "game/Module.h"
 
@@ -11,16 +13,16 @@ void fn_801D64EC(void);
 int fn_801F3D2C(void);
 }
 
-/* Set by fn_80026BA4; ends the loop in fn_80026AF8. */
-static unsigned char sDone = 0;
-float lbl_803EA2C4 = 1.0f;
+/* Set by MainLoopQuit; ends the loop in MainLoopRun. */
+static unsigned char _MainLoop_bDone = 0;
+float gFrameTimeScale = 1.0f;
 
-void fn_80026AD0(void)
+void MainLoopUpdate(void)
 {
     fn_801CBFA8(&lbl_803067B0);
 }
 
-void fn_80026AF8(void)
+void MainLoopRun(void)
 {
     Sys *pModule = &gSys;
     fn_801CC7FC(pModule);
@@ -32,8 +34,8 @@ void fn_80026AF8(void)
     pObject->fn_801CBD80(0, -1);
     pObject->fn_801CBD80(2, 7);
 
-    while (!sDone) {
-        fn_80026AD0();
+    while (!_MainLoop_bDone) {
+        MainLoopUpdate();
     }
 
     FESndShutdown();
@@ -42,7 +44,7 @@ void fn_80026AF8(void)
     fn_801CC8AC(&gSys, 0);
 }
 
-void fn_80026BA4(void)
+void MainLoopQuit(void)
 {
-    sDone = 1;
+    _MainLoop_bDone = 1;
 }

@@ -5,7 +5,7 @@
 #include <math.h>
 
 /* Defined with C++ linkage in src/game/MainLoop.cpp. */
-void fn_80026AF8(void);
+void MainLoopRun(void);
 
 extern "C" {
 
@@ -42,7 +42,7 @@ int main(void)
 {
     fn_80088F78();
     GlibSetTvMode(0);
-    fn_80026AF8();
+    MainLoopRun();
     return 0;
 }
 

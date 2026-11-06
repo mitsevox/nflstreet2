@@ -1,11 +1,13 @@
+/* Sets up the scores, the kicking side and the outcome state when a game starts. */
+
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-void fn_8002B5B8(int value);
-int fn_80025708(void);
+void GameOutcomeSet(int value);
+int ChallengeIsActive(void);
 void GameInfoSet(int index, int value);
 void fn_800A7A0C(int a);
 void fn_80177F88(int a);
@@ -17,12 +19,12 @@ void fn_80178878(const Object_8017886C *p);
 void fn_80179150(void);
 float fn_80237260(int stream);
 
-void fn_8002B71C(void)
+void GameSetupInit(void)
 {
     Object_8017886C info;
 
     fn_80179150();
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         fn_801787FC(0, ChalGetCurrent()->mUnknown1AC);
         fn_801787FC(1, ChalGetCurrent()->mUnknown1A8);
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n",
@@ -48,7 +50,7 @@ void fn_8002B71C(void)
         }
         fn_800A7A0C(0);
         fn_800A7A0C(1);
-        fn_8002B5B8(2);
+        GameOutcomeSet(2);
     } else {
         fn_801787FC(0, 0);
         fn_801787FC(1, 0);
@@ -60,7 +62,7 @@ void fn_8002B71C(void)
         fn_8017833C(1);
         fn_80178354(1);
         GameInfoSet(2, 1);
-        fn_8002B5B8(2);
+        GameOutcomeSet(2);
     }
 }
 

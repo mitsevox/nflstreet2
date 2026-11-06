@@ -73,7 +73,7 @@ int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8010CEB8(Object_80039F5C *,int);
 void fn_800C89F0(Object_80039F5C *,int,int,int,float);
 void fn_8009D284(Object_80039F5C *,Object_80039F5C *);
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803ECB08,lbl_803EAE84;
 extern float lbl_803EAEA4,lbl_803EAEA8,lbl_803EAEAC,lbl_803EAEB0;
 extern float lbl_803EAEB4,lbl_803EAEB8,lbl_803EAEBC;
@@ -1164,7 +1164,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
         float speed;
 
         if (state->mUnknown0Bytes[0]) {
-            speed = lbl_803EA2C4 * 0.3f;
+            speed = gFrameTimeScale * 0.3f;
         } else {
             speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
         }

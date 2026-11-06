@@ -639,7 +639,7 @@ void fn_8006182C(int *pGame)
         }
         lbl_803EA5EC = 0;
         lbl_803EA5E8 = 1;
-        fn_80027EA0();
+        FELoopResetIdle();
     }
     for (game = 0; game <= 14; game++) {
         if (fn_80060C14(game, &lvlt, &row) && fn_800869FC(lvlt, row, &dit1, &dit2, &tniw) && tniw == 0 &&
@@ -657,7 +657,7 @@ void fn_80061918(void)
                 fn_80060BE0();
                 lbl_803EA5EC = 0;
             } else if (fn_801801B4() == 1) {
-                fn_80027E18(1);
+                FELoopSetResume(1);
                 fn_8006167C();
                 fn_800616D8();
             }

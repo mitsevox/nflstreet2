@@ -1,3 +1,5 @@
+/* Controller input: reads each pad into 34 remapped stick and button values per frame and saves or restores the pad handlers. */
+
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
 #include "game/PadInput.h"
@@ -26,8 +28,8 @@ int fn_8023790C(void);
 static char *_PadInput_apRemapStandard[4] = {lbl_802EC198, lbl_802EC198, lbl_802EC198, lbl_802EC198};
 static char *_PadInput_apRemapType2[4] = {lbl_802EC264, lbl_802EC264, lbl_802EC264, lbl_802EC264};
 static unsigned char _PadInput_abResetSlot[10];
-static char *sPadState = 0;
-static int (*sCallback)();
+static char *_PadInput_pDeviceData = 0;
+static int (*_PadInput_pAxisCallback)();
 
 extern "C" {
 
@@ -35,8 +37,8 @@ float PadInputGetCallbackAxis(int slot)
 {
     int value = 0;
 
-    if (sCallback) {
-        value = sCallback();
+    if (_PadInput_pAxisCallback) {
+        value = _PadInput_pAxisCallback();
     }
     return PadInputAxisFromFixed(value);
 }
@@ -103,7 +105,7 @@ int PadInputInit(void)
 {
     int i;
 
-    sPadState = (char *)fn_801D2B7C(fn_801E194C(), 0, 0);
+    _PadInput_pDeviceData = (char *)fn_801D2B7C(fn_801E194C(), 0, 0);
     for (i = 0; i < 10; i++) {
         _PadInput_abResetSlot[i] = 0;
     }
@@ -112,13 +114,13 @@ int PadInputInit(void)
 
 void PadInputShutdown(void)
 {
-    fn_801D2BD0(sPadState);
-    sPadState = 0;
+    fn_801D2BD0(_PadInput_pDeviceData);
+    _PadInput_pDeviceData = 0;
 }
 
 void PadInputRead(int slot, InputValues *pPrevious, InputValues *pCurrent)
 {
-    char *pState = sPadState;
+    char *pState = _PadInput_pDeviceData;
     unsigned int i;
     unsigned int step;
     int handle;
@@ -195,7 +197,7 @@ void PadInputRestoreHandlers(void **pHandlers)
 
 void PadInputSetAxisCallback(int (*pCallback)())
 {
-    sCallback = pCallback;
+    _PadInput_pAxisCallback = pCallback;
 }
 
 float PadInputAxisFromFixed(int value)
@@ -231,7 +233,7 @@ void PadInputResetSlot(int slot)
 
 char *PadInputGetDeviceData(void)
 {
-    return sPadState;
+    return _PadInput_pDeviceData;
 }
 
 int PadInputGetValueCount(void)

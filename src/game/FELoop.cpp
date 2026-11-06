@@ -1,3 +1,5 @@
+/* The front-end loop module: boot screens, the per-frame update of the menus, the screen to return to after a game, and the idle timeout. */
+
 #include "game/cu_8007F12C.h"
 #include "game/fn_80072AA8.h"
 #include "engine/viewport.h"
@@ -76,15 +78,15 @@ void fn_802297B0(void);
 int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
-static unsigned char sUnknown803EA2D8 = 0;
-static unsigned char sUnknown803EA2D9 = 0;
-static unsigned int sUnknown803EA2DC = 0;
-static unsigned char sUnknown803EA2E0 = 0;
-static FELoopCallback sCallback = 0;
+static unsigned char _FELoop_uResumeMode = 0;
+static unsigned char _FELoop_bResume = 0;
+static unsigned int _FELoop_uIdleFrames = 0;
+static unsigned char _FELoop_bIdleTimeout = 0;
+static FELoopCallback _FELoop_pFrameCallback = 0;
 static void *sDependencies[] = { 0 };
-static unsigned char sUnknown803EA2EC = 0;
-static unsigned int sUnknown803EC5EC;
-static unsigned char sUnknown803EC5F0;
+static unsigned char _FELoop_bVisited = 0;
+static unsigned int _FELoop_uModeType;
+static unsigned char _FELoop_bRunning;
 
 FELoop gFELoop;
 
@@ -96,7 +98,7 @@ static void _FELoopEnterDefault()
     fn_801801E8(1);
     p = lbl_803EB688;
     args[0] = 0;
-    if (sUnknown803EA2EC) {
+    if (_FELoop_bVisited) {
         args[1] = 100;
     } else {
         args[1] = 101;
@@ -258,7 +260,7 @@ static void _FELoopEnterModeScreen(int mode)
 static void _FELoopPadHandler(int a, int b, float c)
 {
     if (b == 0x46) {
-        sUnknown803EC5F0 = 0;
+        _FELoop_bRunning = 0;
     }
     MemCardUtilHandleEvent(a, b, c);
     if (!gFMCAPPORT.IsBusy()) {
@@ -267,7 +269,7 @@ static void _FELoopPadHandler(int a, int b, float c)
     fn_8018A740();
     if (b != 0x8F) {
         MemCardScreenSetFlag(0);
-        sUnknown803EA2DC = 0;
+        _FELoop_uIdleFrames = 0;
     }
 }
 
@@ -300,11 +302,11 @@ void FELoop::Boot()
 
 void FELoopStartGame()
 {
-    if (sUnknown803EC5F0) {
+    if (_FELoop_bRunning) {
         DepthChartSide_t record0;
         DepthChartSide_t record1;
 
-        sUnknown803EC5F0 = 0;
+        _FELoop_bRunning = 0;
         fn_8001B228();
         fn_800731D0(1);
         DepthChartGetSide(0, &record0);
@@ -343,21 +345,21 @@ int FELoop::Init()
     PadInputSetDefaultHandler();
     fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
     fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
-    sUnknown803EC5F0 = 1;
+    _FELoop_bRunning = 1;
     fn_80187C0C();
-    if (sUnknown803EA2D9 == 1) {
-        if (sUnknown803EA2D8 != 3) {
+    if (_FELoop_bResume == 1) {
+        if (_FELoop_uResumeMode != 3) {
             fn_802297B0();
         }
     } else if (fn_802294F4() == 1) {
         fn_802297B0();
         FELoopRefreshModeType();
     }
-    sUnknown803EC5EC = fn_8017F584();
+    _FELoop_uModeType = fn_8017F584();
     fn_80188E14();
-    _FELoopEnterModeScreen(sUnknown803EC5EC);
-    sUnknown803EA2DC = 0;
-    sUnknown803EA2E0 = 0;
+    _FELoopEnterModeScreen(_FELoop_uModeType);
+    _FELoop_uIdleFrames = 0;
+    _FELoop_bIdleTimeout = 0;
     return 1;
 }
 
@@ -386,18 +388,18 @@ unsigned char FELoop::Update()
         FileDebugProcess();
         fn_8006CA84(1);
         fn_801CE82C();
-        if (sCallback) {
-            sCallback();
+        if (_FELoop_pFrameCallback) {
+            _FELoop_pFrameCallback();
         }
         if (fn_80010194() || fn_80015F2C()) {
-            if (++sUnknown803EA2DC > (int)(60.0f / gFrameTimeScale) * 75) {
+            if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(lbl_803EB688, 0x80000038, 0, 0);
                 fn_80072C90(0xFA, 1);
-                sUnknown803EA2E0 = 1;
+                _FELoop_bIdleTimeout = 1;
             }
         }
     }
-    return sUnknown803EC5F0;
+    return _FELoop_bRunning;
 }
 
 int FELoop::Shutdown()
@@ -408,8 +410,8 @@ int FELoop::Shutdown()
     fn_80066DC8(0x31444250, 0);
     fn_8009418C();
     ConSetChannelInfo(-1, 1, 0);
-    sUnknown803EA2DC = 0;
-    sUnknown803EA2E0 = 0;
+    _FELoop_uIdleFrames = 0;
+    _FELoop_bIdleTimeout = 0;
     return 1;
 }
 
@@ -420,16 +422,16 @@ int FELoopIsMainFEActive()
 
 void FELoopSetResume(unsigned char value)
 {
-    if (sUnknown803EA2EC) {
-        sUnknown803EA2D9 = value;
+    if (_FELoop_bVisited) {
+        _FELoop_bResume = value;
     } else {
-        sUnknown803EA2D9 = 0;
+        _FELoop_bResume = 0;
     }
 }
 
 void FELoopSetResumeMode(unsigned char value)
 {
-    sUnknown803EA2D8 = value;
+    _FELoop_uResumeMode = value;
 }
 
 void FELoopRefreshModeType()
@@ -441,37 +443,37 @@ void FELoopRefreshModeType()
         }
         fn_80229554();
     }
-    sUnknown803EC5EC = fn_8017F584();
+    _FELoop_uModeType = fn_8017F584();
 }
 
 void FELoopSetVisited(unsigned char value)
 {
-    sUnknown803EA2EC = value;
+    _FELoop_bVisited = value;
 }
 
 unsigned char FELoopWasVisited()
 {
-    return sUnknown803EA2EC;
+    return _FELoop_bVisited;
 }
 
 void FELoopSetFrameCallback(FELoopCallback pCallback)
 {
-    sCallback = pCallback;
+    _FELoop_pFrameCallback = pCallback;
 }
 
 void FELoopResetIdle()
 {
-    sUnknown803EA2DC = 0;
+    _FELoop_uIdleFrames = 0;
 }
 
 unsigned char FELoopIsIdleTimedOut()
 {
-    return sUnknown803EA2E0;
+    return _FELoop_bIdleTimeout;
 }
 
 void FELoopCheckDemoLaunch(int a)
 {
-    if (sUnknown803EC5F0) {
+    if (_FELoop_bRunning) {
         DemoLaunchIsAllowed();
     }
 }

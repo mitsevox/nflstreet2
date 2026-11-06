@@ -6,7 +6,7 @@
 #include "game/fn_800DF134.h"
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
@@ -26,9 +26,9 @@ static int lbl_803EB418 = 0x5B05B;
 static float lbl_803EB41C = 0.6f;
 static float lbl_803EB420 = 0.4f;
 static float lbl_803EB424 = 0.5f;
-static float lbl_803ECAF8 = 0.6f * lbl_803EA2C4;
-static float lbl_803ECAFC = 0.5f * lbl_803EA2C4;
-static float lbl_803ECB00 = 1.35f * lbl_803EA2C4;
+static float lbl_803ECAF8 = 0.6f * gFrameTimeScale;
+static float lbl_803ECAFC = 0.5f * gFrameTimeScale;
+static float lbl_803ECB00 = 1.35f * gFrameTimeScale;
 
 /* Indexed by the byte +15 of the record at +528 in fn_8016C3FC. */
 static void (*const lbl_802A4C80[31])(Object_80039F5C *) = {

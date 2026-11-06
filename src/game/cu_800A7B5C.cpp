@@ -18,7 +18,7 @@ void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_8017DE54(int a, float t, int b, int direct);
 void fn_8017DF6C(int a, int b);
 void fn_8017E328(int a, int b);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 float fn_800D3F2C(int team);
 int fn_80177F70(void);
 int fn_80178308(void);
@@ -77,7 +77,7 @@ extern "C" void fn_800A7B5C(void)
             lbl_803EC954[team]->mUnknown64 = 0;
             fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
-            if (fn_80025708() != 0 &&
+            if (ChallengeIsActive() != 0 &&
                 ((team == 0 && ChalGetCurrent()->mUnknown1C3 != 0) ||
                  (team == 1 && ChalGetCurrent()->mUnknown1C2 != 0))) {
                 quiet = 1;

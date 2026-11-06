@@ -1,3 +1,5 @@
+/* Viewport manager: the camera stack of the game viewport (push, pop, replace, current camera) and its saved state, plus the market-camera stubs. */
+
 #include <string.h>
 #include "engine/viewport.h"
 #include "game/fn_80238174.h"

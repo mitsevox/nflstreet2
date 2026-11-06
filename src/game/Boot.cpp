@@ -1,3 +1,5 @@
+/* Console start-up: the intro movies, the progressive-scan display prompt, the reset button while the front end runs, and the layout of the memory pools. */
+
 #include <dolphin/vi.h>
 #include "game/Entry_80219044.h"
 #include "engine/viewport.h"

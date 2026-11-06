@@ -1,8 +1,8 @@
-#ifndef GAME_CU_8002ACB4_H
-#define GAME_CU_8002ACB4_H
+#ifndef GAME_PLAYERSAVE_H
+#define GAME_PLAYERSAVE_H
 
 /* Seven-word stream operation table, the shape of the CardStream table at 0x802F46C4. */
-struct StreamOps_8002ACB4 {
+struct SaveStreamOps_t {
     int (*mpOpen)(void *pStream, int a, int target, unsigned char reading);
     int (*mpClose)(void *pStream);
     int (*mpRead)(void *pStream, void *pData, unsigned int size, unsigned int *pDone);
@@ -12,17 +12,17 @@ struct StreamOps_8002ACB4 {
     unsigned int mUnknown18;
 };
 
-struct Request_8002AD64 {
+struct SaveRequest_t {
     char mUnknown0[12];
     int mTarget;
     unsigned char mUnknown10;
 };
 
-/* src/game/cu_8002ACB4.cpp */
+/* src/game/PlayerSave.cpp */
 extern "C" {
-int fn_8002AD64(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
-void fn_8002ADAC(void);
-int fn_8002ADE0(int a, int b);
+int PlayerSaveOnSave(SaveRequest_t *pRequest, SaveStreamOps_t *pOps);
+void PlayerSaveFree(void);
+int PlayerSavePrepare(int a, int b);
 }
 
 #endif

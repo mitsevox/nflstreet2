@@ -476,7 +476,7 @@ void fn_80181A88(void)
     int busy = gFMCAPPORT.IsBusy();
 
     if (!busy) {
-        fn_80027E98(0);
+        FELoopSetFrameCallback(0);
         fn_801834DC();
         lbl_803EB58C = busy;
         lbl_803EB58D = busy;
@@ -513,7 +513,7 @@ void fn_80181AD4(unsigned char a)
     fn_801813F4();
     fn_801835C0(-1);
     if (fn_80183950() || lbl_803EB58C) {
-        fn_80027E98(fn_80181A88);
+        FELoopSetFrameCallback(fn_80181A88);
         lbl_803EB58D = 1;
     }
     if (done) {

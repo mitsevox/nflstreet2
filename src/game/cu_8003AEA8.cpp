@@ -257,7 +257,7 @@ void fn_8003B6BC(int group, Record_8003B6BC *pRecord)
 void fn_8003B6F0(int reset)
 {
     lbl_803EA409 = 1;
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         Desc_8008044C desc;
         int *p;
 
@@ -307,7 +307,7 @@ void fn_8003B8BC(void)
 {
     lbl_803EA409 = 0;
     fn_8008056C(&lbl_8030749C);
-    if (!fn_80027DF0()) {
+    if (!FELoopIsMainFEActive()) {
         int ids[2];
         unsigned char group;
         int i;

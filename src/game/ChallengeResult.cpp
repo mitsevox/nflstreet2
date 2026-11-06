@@ -1,3 +1,5 @@
+/* Records the result of a finished challenge or pairing game. */
+
 #include "game/Challenge.h"
 #include "game/fn_8007F828.h"
 

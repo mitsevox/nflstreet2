@@ -4,7 +4,7 @@
 #include "game/Class_80297BF8.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
-#include "game/cu_80026BB0.h"
+#include "game/PadInput.h"
 #include "game/Block_800AD634.h"
 
 extern "C" {
@@ -28,5 +28,5 @@ extern "C" void fn_800AD774(void)
     lbl_803EA9E4->vfn_02();
     lbl_803EAB84->vfn_02();
     lbl_803EAA8C->vfn_02();
-    ConSetChannelInfo(-1, 2, (void *)fn_80026DD4);
+    ConSetChannelInfo(-1, 2, (void *)PadInputRead);
 }

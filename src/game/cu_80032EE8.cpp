@@ -16,8 +16,8 @@ public:
 };
 
 extern "C" {
-void fn_800245DC(void);
-void fn_80024628(void);
+void BootInstallResetCallback(void);
+void BootRemoveResetCallback(void);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_80072D98(unsigned int delay);
 void fn_80187C5C(unsigned char a);
@@ -58,7 +58,7 @@ Record_803EA3A8 lbl_802CCC34[] = {
 
 const char lbl_8028ADDC[] = "MainFE Group";
 
-void fn_80026BA4();
+void MainLoopQuit();
 
 extern LoadingFE gLoadingFE;
 extern FEDLL gFEDLL;
@@ -189,7 +189,7 @@ void MainFEGroup::vfn_02()
     if (p->fn_801CBE9C(3) == 0) {
         switch (p->fn_801CBEC8(2)) {
         case 7:
-            gFELoop.fn_800279AC();
+            gFELoop.Boot();
             p->fn_801CBEF4(2, 8);
             break;
         case 8:
@@ -197,12 +197,12 @@ void MainFEGroup::vfn_02()
             p->fn_801CBEF4(2, 9);
             break;
         case 9:
-            fn_800245DC();
+            BootInstallResetCallback();
             p->fn_801CBEF4(2, 10);
             break;
         case 10:
-            if (!gFELoop.fn_80027C58()) {
-                fn_80024628();
+            if (!gFELoop.Update()) {
+                BootRemoveResetCallback();
                 if (!fn_801CBFA0(p)) {
                     p->fn_801CBEF4(2, 14);
                 }
@@ -213,7 +213,7 @@ void MainFEGroup::vfn_02()
             p->fn_801CBD80(1, -1);
             break;
         case 14:
-            fn_80026BA4();
+            MainLoopQuit();
             break;
         }
     }

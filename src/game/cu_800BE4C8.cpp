@@ -6,9 +6,9 @@
 extern "C" {
 int fn_801486A0(void);
 int fn_800B6644(int index);
-int fn_8002B59C(void);
-int fn_8002B5A8(void);
-void fn_8002B5A4(int value);
+int VptManagerIsMarketCamOn(void);
+int VptManagerGetPassIcons(void);
+void VptManagerSetPassIcons(int value);
 void fn_8015A0D0(int value);
 void fn_8017D7C4(const char *pText);
 int fn_800A7FD8(void);
@@ -45,10 +45,10 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
         return;
     }
     team = fn_800B6644(a);
-    if (fn_8002B59C() && msg == 14 && value == 1.0f) {
-        fn_8002B5A4(fn_8002B5A8() == 0);
-        fn_8015A0D0(fn_8002B5A8() == 0);
-        if (fn_8002B5A8()) {
+    if (VptManagerIsMarketCamOn() && msg == 14 && value == 1.0f) {
+        VptManagerSetPassIcons(VptManagerGetPassIcons() == 0);
+        fn_8015A0D0(VptManagerGetPassIcons() == 0);
+        if (VptManagerGetPassIcons()) {
             fn_8017D7C4("MarketCam-Pass Icons On");
         } else {
             fn_8017D7C4("MarketCam-Pass Icons Off");

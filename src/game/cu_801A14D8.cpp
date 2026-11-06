@@ -5,6 +5,7 @@
 #include "game/cu_8015C25C.h"
 #include "game/PlyrTex.h"
 #include "game/fn_8017F584.h"
+#include "game/GameObjList.h"
 
 #include <dolphin/gx/GXVert.h>
 #include <string.h>
@@ -171,7 +172,6 @@ extern float gFrameTimeScale;
 
 int InGameIsPlaying(void);
 int FELoopIsMainFEActive(void);
-void *GetListHandle(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
@@ -346,7 +346,7 @@ void fn_801A15C4(Viewport_t *pObject)
             continue;
         }
         if (pPlayer->mUnknown20 & 0x20000) {
-            ObjSetPriority(GetListHandle(), pPlayer, 11);
+            ObjSetPriority((void *)GameObjList::GetListHandle(), pPlayer, 11);
         }
     }
 }
