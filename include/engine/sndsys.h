@@ -6,6 +6,8 @@
 
 #include <string.h>
 
+#include "engine/slinklst.h"
+
 #include "engine/cu_802714A8.h"
 #include "engine/cu_8027CF9C.h"
 
@@ -41,19 +43,6 @@ typedef struct Parser_8027823C {
     unsigned char *mC;
     unsigned int m10;
 } Parser_8027823C;
-
-typedef struct Link_80278714 Link_80278714;
-
-struct Link_80278714 {
-    Link_80278714 *m0;
-    Link_80278714 *m4;
-};
-
-typedef struct List_80278714 {
-    Link_80278714 *m0;
-    Link_80278714 *m4;
-    int m8;
-} List_80278714;
 
 typedef struct Stream_803B5364 {
     int m0;
