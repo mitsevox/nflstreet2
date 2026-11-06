@@ -1,51 +1,55 @@
+/* Manages the animated textures used by particle effects, including loading, binding and frame coordinates. */
+
+#include <string.h>
+#include "engine/llmemory.h"
 #include "engine/animTexLib.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "engine/Resource.h"
 
-extern int MemFill(void *dest, int size, int value, int width);
-extern char *strcpy();
-extern int strcmp();
 
-void fn_801C06E8(TextureConfig_801C06E8 *config)
+AnimTexManager_t _AnimTexLib_sManager = { 0 };
+
+/* Free records start at the back of the table and enter its active prefix as textures are loaded. */
+void AnimTexLibInit(AnimTexConfig_t *config)
 {
-    Texture_801C0928 *pool;
+    AnimTex_t *pool;
     unsigned short i;
 
-    lbl_802F4870.mCount = 0;
-    lbl_802F4870.mCapacity = config->mCapacity;
-    LLAnimTexLibInit(lbl_802F4870.mUnknown10);
-    lbl_802F4870.mTextures = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 0);
-    MemFill(lbl_802F4870.mTextures, lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 1);
-    lbl_802F4870.mPool = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 0);
-    MemFill(lbl_802F4870.mPool, lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 1);
-    pool = lbl_802F4870.mPool;
-    for (i = 0; i < lbl_802F4870.mCapacity; i++)
-        lbl_802F4870.mTextures[i] = &pool[i];
-    lbl_802F4870.mInitialized = 1;
+    _AnimTexLib_sManager.mCapacity = config->mCapacity;
+    _AnimTexLib_sManager.mCount = 0;
+    LLAnimTexLibInit(&_AnimTexLib_sManager + 1, config);
+    _AnimTexLib_sManager.mTextures = fn_801D2B7C(_AnimTexLib_sManager.mCapacity * sizeof(AnimTex_t *), 0, 0);
+    MemFill((char *)_AnimTexLib_sManager.mTextures, _AnimTexLib_sManager.mCapacity * sizeof(AnimTex_t *), 0, 1);
+    _AnimTexLib_sManager.mPool = fn_801D2B7C(_AnimTexLib_sManager.mCapacity * sizeof(AnimTex_t), 0, 0);
+    MemFill((char *)_AnimTexLib_sManager.mPool, _AnimTexLib_sManager.mCapacity * sizeof(AnimTex_t), 0, 1);
+    pool = _AnimTexLib_sManager.mPool;
+    for (i = 0; i < _AnimTexLib_sManager.mCapacity; i++)
+        _AnimTexLib_sManager.mTextures[i] = &pool[i];
+    _AnimTexLib_sManager.mInitialized = 1;
 }
 
-void fn_801C07DC(void)
+void AnimTexLibShutdown(void)
 {
     unsigned short i;
 
-    for (i = 0; i < lbl_802F4870.mCount; i++) {
-        Texture_801C0928 *texture = lbl_802F4870.mTextures[i];
+    for (i = 0; i < _AnimTexLib_sManager.mCount; i++) {
+        AnimTex_t *texture = _AnimTexLib_sManager.mTextures[i];
         LLAnimTexDeleteTexture(&texture->mImage);
-        if (texture->mLoaded)
-            fn_801C09F8(texture);
+        if (texture->mBound)
+            AnimTexUnbind(texture);
     }
-    fn_801D2BD0(lbl_802F4870.mTextures);
-    lbl_802F4870.mTextures = 0;
-    fn_801D2BD0(lbl_802F4870.mPool);
-    lbl_802F4870.mPool = 0;
-    LLAnimTexLibShutdown(lbl_802F4870.mUnknown10);
-    LLAnimTexLibShutdown(lbl_802F4870.mUnknown10);
-    lbl_802F4870.mCount = 0;
-    lbl_802F4870.mCapacity = 0;
-    lbl_802F4870.mInitialized = 0;
+    fn_801D2BD0(_AnimTexLib_sManager.mTextures);
+    _AnimTexLib_sManager.mTextures = 0;
+    fn_801D2BD0(_AnimTexLib_sManager.mPool);
+    _AnimTexLib_sManager.mPool = 0;
+    LLAnimTexLibShutdown(&_AnimTexLib_sManager + 1);
+    LLAnimTexLibShutdown(&_AnimTexLib_sManager + 1);
+    _AnimTexLib_sManager.mCount = 0;
+    _AnimTexLib_sManager.mCapacity = 0;
+    _AnimTexLib_sManager.mInitialized = 0;
 }
 
-void fn_801C089C(Texture_801C0928 *texture)
+void AnimTexInitCoords(AnimTex_t *texture)
 {
     unsigned int columns = texture->mColumns;
     unsigned int rows = texture->mRows;
@@ -64,9 +68,9 @@ void fn_801C089C(Texture_801C0928 *texture)
     texture->mCellHeight = height;
 }
 
-void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc)
+void AnimTexInitTexture(AnimTex_t *texture, AnimTexDesc_t *desc)
 {
-    MemFill(texture, sizeof(Texture_801C0928), 0, 1);
+    MemFill((char *)texture, sizeof(AnimTex_t), 0, 1);
     strcpy(texture->mName, desc->mName);
     texture->mAnimated = desc->mAnimated;
     texture->mFrameCount = desc->mFrameCount;
@@ -74,28 +78,28 @@ void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc)
     texture->mColumns = desc->mColumns;
     if (!desc->mRelocated) {
         desc->mRelocated = 1;
-        desc->mData = (int)desc + desc->mData;
+        desc->mData.mpData = (char *)desc + desc->mData.mOffset;
     }
-    fn_801C089C(texture);
+    AnimTexInitCoords(texture);
 }
 
-void fn_801C09B8(Texture_801C0928 *texture)
+void AnimTexBind(AnimTex_t *texture)
 {
-    if (!texture->mLoaded) {
+    if (!texture->mBound) {
         LLAnimTexBindTexture(texture);
-        texture->mLoaded = 1;
+        texture->mBound = 1;
     }
 }
 
-void fn_801C09F8(Texture_801C0928 *texture)
+void AnimTexUnbind(AnimTex_t *texture)
 {
-    if (texture->mLoaded == 1) {
+    if (texture->mBound == 1) {
         LLAnimTexUnbindTexture(texture);
-        texture->mLoaded = 0;
+        texture->mBound = 0;
     }
 }
 
-void fn_801C0A38(Texture_801C0928 *texture, unsigned int time, unsigned int frame,
+void AnimTexGetCoords(AnimTex_t *texture, unsigned int time, unsigned int frame,
                  unsigned int rate, float *coords)
 {
     unsigned int count = texture->mFrameCount;
@@ -130,63 +134,63 @@ void fn_801C0A38(Texture_801C0928 *texture, unsigned int time, unsigned int fram
     }
 }
 
-Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load)
+AnimTex_t *AnimTexLoadResource(AnimTexFile_t *file, int load)
 {
-    int data;
-    Texture_801C0928 *texture;
+    void *data;
+    AnimTex_t *texture;
 
-    texture = fn_801C0C14((TextureDesc_801C0928 *)fn_801EF390(file->mData, file->mIndex, 1), &data, load);
+    texture = AnimTexLoad((AnimTexDesc_t *)fn_801EF390(file->mData, file->mIndex, 1), &data, load);
     texture->mIndex = file->mIndex;
     if (load)
         fn_801F010C(file->mData, file->mIndex);
     return texture;
 }
 
-Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load)
+AnimTex_t *AnimTexLoad(AnimTexDesc_t *desc, void **pData, int load)
 {
-    TextureManager_802F4870 *manager = &lbl_802F4870;
-    Texture_801C0928 *texture = manager->mTextures[manager->mCount];
+    AnimTexManager_t *manager = &_AnimTexLib_sManager;
+    AnimTex_t *texture = manager->mTextures[manager->mCount];
 
-    fn_801C0928(texture, desc);
-    if (load && !texture->mLoaded)
+    AnimTexInitTexture(texture, desc);
+    if (load && !texture->mBound)
         LLAnimTexAllocTexCoords(texture);
-    *pData = desc->mData;
+    *pData = desc->mData.mpData;
     LLAnimTexCreateTexture(*pData, &texture->mImage);
-    fn_801C09B8(texture);
+    AnimTexBind(texture);
     if (load)
         LLAnimTexDeleteTexture(&texture->mImage);
-    lbl_802F4870.mCount++;
+    _AnimTexLib_sManager.mCount++;
     return texture;
 }
 
-void fn_801C0CCC(Texture_801C0928 *texture)
+void AnimTexFree(AnimTex_t *texture)
 {
-    int last = lbl_802F4870.mCount - 1;
+    int last = _AnimTexLib_sManager.mCount - 1;
     int i;
 
-    for (i = 0; i < lbl_802F4870.mCount; i++) {
-        if (lbl_802F4870.mTextures[i] == texture) {
+    for (i = 0; i < _AnimTexLib_sManager.mCount; i++) {
+        if (_AnimTexLib_sManager.mTextures[i] == texture) {
             if (i < last) {
-                lbl_802F4870.mTextures[i] = lbl_802F4870.mTextures[last];
-                lbl_802F4870.mTextures[last] = texture;
+                _AnimTexLib_sManager.mTextures[i] = _AnimTexLib_sManager.mTextures[last];
+                _AnimTexLib_sManager.mTextures[last] = texture;
             }
             break;
         }
     }
     LLAnimTexDeleteTexture(&texture->mImage);
-    if (texture->mLoaded)
-        fn_801C09F8(texture);
-    lbl_802F4870.mCount--;
+    if (texture->mBound)
+        AnimTexUnbind(texture);
+    _AnimTexLib_sManager.mCount--;
 }
 
-Texture_801C0928 *fn_801C0D8C(const char *name)
+AnimTex_t *AnimTexFind(const char *name)
 {
-    Texture_801C0928 *texture = 0;
+    AnimTex_t *texture = 0;
     unsigned short i;
 
-    for (i = 0; i < lbl_802F4870.mCount; i++) {
-        if (strcmp(lbl_802F4870.mTextures[i]->mName, name) == 0) {
-            texture = lbl_802F4870.mTextures[i];
+    for (i = 0; i < _AnimTexLib_sManager.mCount; i++) {
+        if (strcmp(_AnimTexLib_sManager.mTextures[i]->mName, name) == 0) {
+            texture = _AnimTexLib_sManager.mTextures[i];
             break;
         }
     }
