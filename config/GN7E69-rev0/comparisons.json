@@ -43836,7 +43836,7 @@
           "end": "0x801B1934"
         },
         {
-          "symbol": "fn_801B1934",
+          "symbol": "iSPCH_EACrandom",
           "start": "0x801B1934",
           "end": "0x801B1A3C"
         }
@@ -43845,7 +43845,7 @@
     {
       "source": "src/engine/spchrand.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801B1A3C-0x801B1CFC (src/engine/spchrand.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv spchrand.c provisional whole-file unit row and documented-holdout/source-form rows. The seed prefix is linked; the four complete remaining bodies stay compared, including two exact bodies separated by loop holdouts. Full native text placement retained for relocation; no data definitions or hidden output.",
       "sections": [
         {
           "section": ".text",
@@ -43856,27 +43856,22 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801B1A3C",
-          "start": "0x801B1A3C",
-          "end": "0x801B1A90"
-        },
-        {
-          "symbol": "fn_801B1A90",
+          "symbol": "iSPCH_FindRandInQueue",
           "start": "0x801B1A90",
           "end": "0x801B1B34"
         },
         {
-          "symbol": "fn_801B1B34",
+          "symbol": "iSPCH_AddRandToQueue",
           "start": "0x801B1B34",
           "end": "0x801B1B70"
         },
         {
-          "symbol": "fn_801B1B70",
+          "symbol": "iSPCH_InitRandom",
           "start": "0x801B1B70",
           "end": "0x801B1C1C"
         },
         {
-          "symbol": "fn_801B1C1C",
+          "symbol": "iSPCH_Rand",
           "start": "0x801B1C1C",
           "end": "0x801B1CFC"
         }
