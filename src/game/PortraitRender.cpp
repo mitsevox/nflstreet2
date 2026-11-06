@@ -1,3 +1,8 @@
+/* Create-a-player portrait rendering. Sets up the portrait models with
+   their poses and materials, draws them off-screen over a
+   black block of the frame buffer, reads the 128x128 block back and turns
+   it into an 8-bit image with an RGB5A3 palette for the portrait job. */
+
 #include <dolphin/gx/GXPixel.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
@@ -15,36 +20,36 @@
 #include <dolphin/gx/GXManage.h>
 #include <dolphin/gx/GXTev.h>
 
-typedef float Matrix_80198C54[4][4];
+typedef float PortraitMtx44_t[4][4];
 
-struct Triple_802EDF8C {
+struct PortraitVec3_t {
     float mUnknown0;
     float mUnknown4;
     float mUnknown8;
 };
 
 /* Argument of fn_802338D4: a halfword-triple table at +0x30 and an output buffer at +0x34. */
-struct Object_802338D4 {
+struct PortraitPoseDesc_t {
     char mUnknown0[48];
     SkeletonJointTriple_t *mpUnknown48;
-    Matrix_80198C54 *mpUnknown52;
+    PortraitMtx44_t *mpUnknown52;
 };
 
 extern "C" {
 void fn_801CE95C(void);
-void fn_801D03D0(Matrix_80198C54 m);
+void fn_801D03D0(PortraitMtx44_t m);
 void fn_801D0470(void);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
-void fn_801D0664(Matrix_80198C54 m);
-void fn_801D06D4(Matrix_80198C54 m);
+void fn_801D0664(PortraitMtx44_t m);
+void fn_801D06D4(PortraitMtx44_t m);
 void fn_801D0BCC(int a, int b, int c);
-void C_MTXOrtho(Matrix_80198C54 m, float t, float b, float l, float r, float n, float f);
-void fn_801D0C58(Triple_802EDF8C *p);
+void C_MTXOrtho(PortraitMtx44_t m, float t, float b, float l, float r, float n, float f);
+void fn_801D0C58(PortraitVec3_t *p);
 void fn_801D0CFC(float a);
-void fn_801D0F80(Matrix_80198C54 m);
-void fn_801D1258(int a, Matrix_80198C54 m);
+void fn_801D0F80(PortraitMtx44_t m);
+void fn_801D1258(int a, PortraitMtx44_t m);
 void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
@@ -56,7 +61,7 @@ void TMRenderSetZRange(float a, float b);
 void TMTexLibRegistryReset(void);
 void TMTexLibRegister(const char *pName, void *p);
 void fn_802337D4(void *a, void *b, SkeletonJointTriple_t *pTriples, unsigned int c);
-void fn_802338D4(Object_802338D4 *pObject, Skeleton_80041930 *pData, Matrix_80198C54 *pOut);
+void fn_802338D4(PortraitPoseDesc_t *pObject, Skeleton_80041930 *pData, PortraitMtx44_t *pOut);
 void fn_80233BB8(SkeletonPose_t *pObject, int a, int b);
 void fn_80233BD8(SkeletonPose_t *pObject);
 void fn_80233BDC(SkeletonPose_t *pObject, Skeleton_80041930 *pData);
@@ -79,26 +84,26 @@ void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_802523A4(Matrix_80198C54 m, int a);
+void fn_802523A4(PortraitMtx44_t m, int a);
 void fn_802524D4(float *p);
-void fn_8025251C(Matrix_80198C54 m, int a);
+void fn_8025251C(PortraitMtx44_t m, int a);
 void fn_802525BC(int a);
 void fn_802528B0(int a);
 }
 
-static Triple_802EDF8C lbl_802EDF8C = {0.0f, -0.7f, -1.6f};
-static Triple_802EDF8C lbl_802EDF98 = {0.0f, 0.0f, 0.0f};
-static float lbl_803EB770 = 1.0f;
-static float lbl_803EB774 = 0.9999f;
-static GXTexObj lbl_80365298;
-static Matrix_80198C54 lbl_803652B8;
-static Matrix_80198C54 lbl_803652F8;
-static Matrix_80198C54 lbl_80365338;
-static void *lbl_803ECBE4;
+static PortraitVec3_t _PortraitRender_vTranslate = {0.0f, -0.7f, -1.6f};
+static PortraitVec3_t _PortraitRender_vRotate = {0.0f, 0.0f, 0.0f};
+static float _PortraitRender_fScale = 1.0f;
+static float _PortraitRender_fZFar = 0.9999f;
+static GXTexObj _PortraitRender_TexObj;
+static PortraitMtx44_t _PortraitRender_ModelMtx;
+static PortraitMtx44_t _PortraitRender_ProjMtx;
+static PortraitMtx44_t _PortraitRender_afProjection;
+static void *_PortraitRender_pCapture;
 
 extern "C" {
 
-void fn_80198C54(ModelDrawObject_t *pObject, unsigned int index)
+void PortraitRenderClearPartValues(ModelDrawObject_t *pObject, unsigned int index)
 {
     if (pObject->mpUnknown12 != 0) {
         switch (index) {
@@ -116,19 +121,19 @@ void fn_80198C54(ModelDrawObject_t *pObject, unsigned int index)
     }
 }
 
-void fn_80198CFC(void **ppBuffer)
+void PortraitRenderAllocCapture(void **ppBuffer)
 {
     *ppBuffer = fn_801D2B7C(0x80000, 0x100, 0);
-    GXInitTexObj(&lbl_80365298, lbl_803ECBE4, 128, 128, 6, 0, 0, 0);
+    GXInitTexObj(&_PortraitRender_TexObj, _PortraitRender_pCapture, 128, 128, 6, 0, 0, 0);
 }
 
-void fn_80198D60(void **ppBuffer)
+void PortraitRenderFreeCapture(void **ppBuffer)
 {
     fn_801D2BD0(*ppBuffer);
     *ppBuffer = 0;
 }
 
-void fn_80198D98(PortraitJob_t *pObject)
+void PortraitRenderInitPoses(PortraitJob_t *pObject)
 {
     unsigned int i;
     unsigned int j;
@@ -159,7 +164,7 @@ void fn_80198D98(PortraitJob_t *pObject)
     }
 }
 
-void fn_80198EE0(PortraitJob_t *pObject)
+void PortraitRenderFreePoses(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -168,7 +173,7 @@ void fn_80198EE0(PortraitJob_t *pObject)
     }
 }
 
-void fn_80198F24(PortraitJob_t *pObject)
+void PortraitRenderBindMaterials(PortraitJob_t *pObject)
 {
     Object_8023417C *pResult = fn_8015E2FC(0, 0, 0);
     ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
@@ -183,12 +188,12 @@ void fn_80198F24(PortraitJob_t *pObject)
     TMTexLibRegistryReset();
 }
 
-void fn_80198FAC(PortraitJob_t *pObject)
+void PortraitRenderFreeMaterials(PortraitJob_t *pObject)
 {
     fn_802348AC(&pObject->mUnknown612);
 }
 
-void fn_80198FD0(PortraitJob_t *pObject)
+void PortraitRenderInitDrawObjects(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -197,7 +202,7 @@ void fn_80198FD0(PortraitJob_t *pObject)
     }
 }
 
-void fn_80199018(PortraitJob_t *pObject)
+void PortraitRenderFreeDrawObjects(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -206,10 +211,10 @@ void fn_80199018(PortraitJob_t *pObject)
     }
 }
 
-void fn_8019905C(PortraitJob_t *pObject)
+void PortraitRenderPoseModels(PortraitJob_t *pObject)
 {
-    Object_802338D4 desc;
-    Matrix_80198C54 matrices[40];
+    PortraitPoseDesc_t desc;
+    PortraitMtx44_t matrices[40];
     SkeletonJointTriple_t triples[19];
     Skeleton_80041930 *pData0;
     Skeleton_80041930 *pData1;
@@ -217,12 +222,12 @@ void fn_8019905C(PortraitJob_t *pObject)
     ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
 
     fn_801D0508();
-    fn_801D0C58(&lbl_802EDF8C);
-    fn_801D0BCC((int)(lbl_802EDF98.mUnknown8 * 46603.379f), (int)(lbl_802EDF98.mUnknown4 * 46603.379f),
-                (int)(lbl_802EDF98.mUnknown0 * 46603.379f));
-    fn_801D0CFC(lbl_803EB770);
-    fn_801D0F80(lbl_803652B8);
-    fn_8025251C(lbl_803652B8, 0);
+    fn_801D0C58(&_PortraitRender_vTranslate);
+    fn_801D0BCC((int)(_PortraitRender_vRotate.mUnknown8 * 46603.379f), (int)(_PortraitRender_vRotate.mUnknown4 * 46603.379f),
+                (int)(_PortraitRender_vRotate.mUnknown0 * 46603.379f));
+    fn_801D0CFC(_PortraitRender_fScale);
+    fn_801D0F80(_PortraitRender_ModelMtx);
+    fn_8025251C(_PortraitRender_ModelMtx, 0);
     fn_802525BC(0);
     fn_801D0544();
 
@@ -250,7 +255,7 @@ void fn_8019905C(PortraitJob_t *pObject)
         fn_80234CA4(pElement, pUnknown588);
         fn_80234CF0(pElement, 0, pUnknown612);
         fn_80234DC0(pElement, 15);
-        fn_80198C54(pElement, i);
+        PortraitRenderClearPartValues(pElement, i);
     }
 
     pObject->mUnknown1340[13].mUnknown0 = 0xF342;
@@ -261,7 +266,7 @@ void fn_8019905C(PortraitJob_t *pObject)
     fn_801D0544();
 
     fn_801D0508();
-    fn_801D06D4(lbl_803652B8);
+    fn_801D06D4(_PortraitRender_ModelMtx);
     if (pObject->mUnknown620[0].mpUnknown12 != 0) {
         fn_801D04C4();
         fn_802337D4(pObject->mUnknown620[0].mpUnknown12, pObject->mUnknown588,
@@ -282,7 +287,7 @@ void fn_8019905C(PortraitJob_t *pObject)
     fn_801D0544();
 }
 
-void fn_8019930C(PortraitJob_t *pObject)
+void PortraitRenderCapture(PortraitJob_t *pObject)
 {
     unsigned int *pOut;
     unsigned int y;
@@ -291,7 +296,7 @@ void fn_8019930C(PortraitJob_t *pObject)
     u32 depth;
 
     GXDrawDone();
-    pOut = (unsigned int *)lbl_803ECBE4;
+    pOut = (unsigned int *)_PortraitRender_pCapture;
     for (y = 160; y < 288; y++) {
         for (x = 256; x < 384; x++) {
             GXPeekARGB(x, y, &color);
@@ -305,10 +310,10 @@ void fn_8019930C(PortraitJob_t *pObject)
     GXDrawDone();
 }
 
-void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alpha)
+void PortraitRenderBegin2D(int textured, unsigned int color, GXTexObj *pTexture, float alpha)
 {
-    Matrix_80198C54 view;
-    Matrix_80198C54 projection;
+    PortraitMtx44_t view;
+    PortraitMtx44_t projection;
     GXColor fill = {0, 0, 0, 255};
     unsigned int r;
     unsigned int g;
@@ -360,7 +365,7 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
         fn_802528B0(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     }
-    fn_802524D4(lbl_80365338[0]);
+    fn_802524D4(_PortraitRender_afProjection[0]);
     C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     fn_802523A4(projection, 1);
     fn_801D03D0(view);
@@ -368,49 +373,49 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
     fn_802525BC(0);
 }
 
-void fn_8019969C(void)
+void PortraitRenderEnd2D(void)
 {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_802523A4(lbl_80365338, 0);
+    fn_802523A4(_PortraitRender_afProjection, 0);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_802528B0(0);
 }
 
-void fn_801996F4(void)
+void PortraitRenderClearBackground(void)
 {
-    fn_801993B8(0, 0, 0, 1.0f);
+    PortraitRenderBegin2D(0, 0, 0, 1.0f);
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
     GXPosition3f32(256.0f, 160.0f, -1.0f);
     GXPosition3f32(384.0f, 160.0f, -1.0f);
     GXPosition3f32(256.0f, 288.0f, -1.0f);
     GXPosition3f32(384.0f, 288.0f, -1.0f);
-    fn_8019969C();
+    PortraitRenderEnd2D();
 }
 
-void fn_80199798(void)
+void PortraitRenderAfterCapture(void)
 {
 }
 
-void fn_8019979C(void)
+void PortraitRenderSetCamera(void)
 {
-    fn_802524D4(lbl_80365338[0]);
-    VptPerspective(lbl_803652F8, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
-    fn_802523A4(lbl_803652F8, 0);
+    fn_802524D4(_PortraitRender_afProjection[0]);
+    VptPerspective(_PortraitRender_ProjMtx, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
+    fn_802523A4(_PortraitRender_ProjMtx, 0);
     VptGetMatrixStack();
     fn_801D0470();
     fn_801D04C4();
-    fn_801D1258(2, lbl_803652F8);
+    fn_801D1258(2, _PortraitRender_ProjMtx);
     fn_801D12BC(1);
     fn_801D131C(2);
     fn_801D12EC(6);
     fn_801D0544();
 }
 
-void fn_80199838(PortraitJob_t *pObject)
+void PortraitRenderDrawModels(PortraitJob_t *pObject)
 {
     int mask;
 
-    fn_8019979C();
+    PortraitRenderSetCamera();
     TMRenderReset();
     GXColor white = {255, 255, 255, 255};
     mask = fn_80236B98(2, 1.0f, 1.0f, 1.0f);
@@ -423,39 +428,39 @@ void fn_80199838(PortraitJob_t *pObject)
     fn_80234BF4(0, &pObject->mUnknown620[0], 0);
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     TMRenderSetBlendMode(2);
-    TMRenderSetZRange(0.0f, lbl_803EB774);
+    TMRenderSetZRange(0.0f, _PortraitRender_fZFar);
     fn_80234BF4(0, &pObject->mUnknown620[1], 0);
     fn_80234BF4(0, &pObject->mUnknown620[2], 0);
-    fn_8019969C();
+    PortraitRenderEnd2D();
 }
 
-void fn_80199968(PortraitJob_t *pObject)
+void PortraitRenderInit(PortraitJob_t *pObject)
 {
-    fn_80198CFC(&lbl_803ECBE4);
-    fn_80198D98(pObject);
-    fn_80198F24(pObject);
-    fn_80198FD0(pObject);
+    PortraitRenderAllocCapture(&_PortraitRender_pCapture);
+    PortraitRenderInitPoses(pObject);
+    PortraitRenderBindMaterials(pObject);
+    PortraitRenderInitDrawObjects(pObject);
 }
 
-void fn_801999B0(PortraitJob_t *pObject)
+void PortraitRenderShutdown(PortraitJob_t *pObject)
 {
-    fn_80199018(pObject);
-    fn_80198FAC(pObject);
-    fn_80198EE0(pObject);
-    fn_80198D60(&lbl_803ECBE4);
+    PortraitRenderFreeDrawObjects(pObject);
+    PortraitRenderFreeMaterials(pObject);
+    PortraitRenderFreePoses(pObject);
+    PortraitRenderFreeCapture(&_PortraitRender_pCapture);
 }
 
-void fn_801999F4(PortraitJob_t *pObject)
+void PortraitRenderDraw(PortraitJob_t *pObject)
 {
-    fn_8019905C(pObject);
-    fn_801996F4();
-    fn_80199838(pObject);
-    fn_8019930C(pObject);
-    fn_80199798();
+    PortraitRenderPoseModels(pObject);
+    PortraitRenderClearBackground();
+    PortraitRenderDrawModels(pObject);
+    PortraitRenderCapture(pObject);
+    PortraitRenderAfterCapture();
     fn_801CE95C();
 }
 
-void fn_80199A3C(unsigned char (*pColors)[4], int index, unsigned char *pR, unsigned char *pG,
+void PortraitRenderGetColor(unsigned char (*pColors)[4], int index, unsigned char *pR, unsigned char *pG,
                  unsigned char *pB, unsigned char *pA)
 {
     unsigned char *pColor = pColors[index];
@@ -466,10 +471,9 @@ void fn_80199A3C(unsigned char (*pColors)[4], int index, unsigned char *pR, unsi
     *pA = pColor[0];
 }
 
-#if defined(DECOMP_COMPARE)
 /* Converts up to 16 colours starting at start into RGB5A3 texels, padding the block of 16
    with zeros; returns the next output position. */
-unsigned short *fn_80199A68(unsigned char (*pColors)[4], unsigned int count, unsigned int start,
+unsigned short *PortraitRenderPackColors(unsigned char (*pColors)[4], unsigned int count, unsigned int start,
                             unsigned short *pDst)
 {
     unsigned int n = count - start;
@@ -479,18 +483,18 @@ unsigned short *fn_80199A68(unsigned char (*pColors)[4], unsigned int count, uns
     unsigned char g;
     unsigned char b;
     unsigned char a;
-    unsigned int texel;
+    unsigned short texel;
 
     if (n > 16) {
         n = 16;
     }
     pOut = pDst;
     for (i = 0; i < n; i++) {
-        fn_80199A3C(pColors, start + i, &r, &g, &b, &a);
+        PortraitRenderGetColor(pColors, start + i, &r, &g, &b, &a);
         if (a > 0xDF) {
-            texel = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3) | 0x8000;
+            texel = ((r & 0xF8) << 7) | ((g & 0xF8) << 2) | (b >> 3) | 0x8000;
         } else {
-            texel = ((a >> 5) << 12) | ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+            texel = ((r & 0xF0) << 4) | (g & 0xF0) | (b >> 4) | ((a & 0xE0) << 7);
         }
         *pOut = texel;
         pOut++;
@@ -501,19 +505,19 @@ unsigned short *fn_80199A68(unsigned char (*pColors)[4], unsigned int count, uns
     return pOut;
 }
 
-void fn_80199B68(unsigned char (*pColors)[4], unsigned short *pOut, unsigned int count)
+void PortraitRenderPackPalette(unsigned char (*pColors)[4], unsigned short *pOut, unsigned int count)
 {
     unsigned int blocks = (count + 15) >> 4;
     unsigned int i;
 
     for (i = 0; i < blocks; i++) {
-        pOut = fn_80199A68(pColors, count, i * 16, pOut);
+        pOut = PortraitRenderPackColors(pColors, count, i * 16, pOut);
     }
 }
 
-void fn_80199BD4(PortraitJob_t *pObject)
+void PortraitRenderQuantize(PortraitJob_t *pObject)
 {
-    void **ppImage = &lbl_803ECBE4;
+    void **ppImage = &_PortraitRender_pCapture;
     unsigned char (*pColors)[4];
     int count;
 
@@ -523,9 +527,8 @@ void fn_80199BD4(PortraitJob_t *pObject)
     pObject->mpUnknown1636->BuildPalette((unsigned int *)pColors, 0, 0);
     count = pObject->mpUnknown1636->GetLeafCount();
     memset(pObject->mpUnknown8, 0, 0x400);
-    fn_80199B68(pColors, (unsigned short *)pObject->mpUnknown8, count);
+    PortraitRenderPackPalette(pColors, (unsigned short *)pObject->mpUnknown8, count);
     fn_801D2BD0(pColors);
     pObject->mpUnknown1636->MapImage((unsigned int *)*ppImage, 128, 128, (unsigned char *)pObject->mpUnknown4);
 }
-#endif
 }

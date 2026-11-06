@@ -60,7 +60,7 @@ struct ModelDrawObject_t {
 };
 
 /* Argument of PortraitJobAllocImage, PortraitJobLoad, PortraitJobIsLoaded, PortraitJobUnload, PortraitJobQuantize,
-   PortraitJobIsDone, PortraitJobSave, fn_80199968, fn_801999B0 and fn_801999F4. */
+   PortraitJobIsDone, PortraitJobSave, PortraitRenderInit, PortraitRenderShutdown and PortraitRenderDraw. */
 struct PortraitJob_t {
     int mUnknown0;
     void *mpUnknown4;
