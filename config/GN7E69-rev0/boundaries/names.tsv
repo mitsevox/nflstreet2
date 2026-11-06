@@ -360,8 +360,8 @@ address	size	sibling_name	how	sibling_file	unit
 0x801C029C	40	AnimSeqncrGetPlayerPtr	name	animseqncr.c	-
 0x801C02CC	16	AnimSeqncrGetStaticPtr	name	animseqncr.c	-
 0x801C02EC	880	AnimSeqncrRelocateSeqFile	name	animseqncr.c	-
-0x801C06E8	244	AnimTexLibInit	size	animTexLib.c	animTexLib.c
-0x801C07DC	192	AnimTexLibShutdown	size	animTexLib.c	animTexLib.c
+0x801C06E8	244	AnimTexLibInit	name	animTexLib.c	animTexLib.c
+0x801C07DC	192	AnimTexLibShutdown	name	animTexLib.c	animTexLib.c
 0x801C089C	140	AnimTexObjGenParms	size	animTexLib.c	animTexLib.c
 0x801C0928	144	_AnimTexObjInit	size	animTexLib.c	animTexLib.c
 0x801C09B8	64	AnimTexBindTexture	size	animTexLib.c	animTexLib.c
