@@ -1,13 +1,16 @@
+/* The stadium sky: loads the level's sky model and keeps one sky object in the object
+   list that draws it each frame. */
+
 #include "engine/viewport.h"
 #include "game/fn_801EF390.h"
-#include "game/Instance_801614D0.h"
+#include "game/EnvSkyObj.h"
 
 extern "C" {
 void *fn_800A336C(void);
 int fn_800A338C(void);
 int ObjNewType_(int type, int size, int count, void *pCreate, void *pDestroy);
 int ObjDelType(int type);
-void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Instance_801614D0 *, int));
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(EnvSkyObj_t *, int));
 int ObjNewInList(int handle, int type, int a, void *pInit);
 void ObjRemoveFromList(int handle, int item);
 void ObjSetPriority(int handle, int item, int a);
@@ -16,22 +19,22 @@ void fn_80234EA0(void *p, int a);
 void fn_802355E4(void *p);
 void fn_80235DB8(int a);
 
-static Instance_801614D0 *lbl_803EB380 = 0;
+static EnvSkyObj_t *_EnvSkyObj_pSky = 0;
 
-int fn_801614D0(void)
+int EnvSkyObjIsActive(void)
 {
-    return lbl_803EB380 != 0 && lbl_803EB380->mUnknown1CC != 0;
+    return _EnvSkyObj_pSky != 0 && _EnvSkyObj_pSky->mUnknown1CC != 0;
 }
 
-int fn_801614F4(Instance_801614D0 *pInstance, int a)
+int EnvSkyObjDraw(EnvSkyObj_t *pInstance, int a)
 {
-    if (fn_801614D0()) {
+    if (EnvSkyObjIsActive()) {
         EnvSkyDraw(pInstance, a);
     }
     return 0;
 }
 
-void fn_8016153C(Instance_801614D0 *pInstance)
+void EnvSkyObjLoadModel(EnvSkyObj_t *pInstance)
 {
     int handle = fn_801EF390(fn_800A336C(), pInstance->mUnknown1C8, 1);
 
@@ -40,7 +43,7 @@ void fn_8016153C(Instance_801614D0 *pInstance)
     fn_80234DFC(handle, pInstance->mUnknown18, 0, 0, "SkyObj", 1);
 }
 
-void fn_801615A0(Instance_801614D0 *pInstance)
+void EnvSkyObjFreeModel(EnvSkyObj_t *pInstance)
 {
     fn_802355E4(&pInstance->mUnknown48);
     fn_802355E4(&pInstance->mUnknown108);
@@ -48,41 +51,41 @@ void fn_801615A0(Instance_801614D0 *pInstance)
     pInstance->mUnknown14 = 0;
 }
 
-void fn_801615EC(void *pOwner)
+void EnvSkyObjCreate(void *pOwner)
 {
-    Instance_801614D0 *pItem;
+    EnvSkyObj_t *pItem;
 
-    if (lbl_803EB380 != 0) {
+    if (_EnvSkyObj_pSky != 0) {
         return;
     }
     pItem = 0;
-    if (ObjNewType_(13, sizeof(Instance_801614D0), 1, 0, 0) == 0) {
-        ObjSetListObjFunc((int)pOwner, 13, 0, fn_801614F4);
-        pItem = (Instance_801614D0 *)ObjNewInList((int)pOwner, 13, 0, 0);
+    if (ObjNewType_(13, sizeof(EnvSkyObj_t), 1, 0, 0) == 0) {
+        ObjSetListObjFunc((int)pOwner, 13, 0, EnvSkyObjDraw);
+        pItem = (EnvSkyObj_t *)ObjNewInList((int)pOwner, 13, 0, 0);
         if (pItem != 0) {
             ObjSetPriority((int)pOwner, (int)pItem, 0);
             pItem->mUnknown1CC = 1;
             pItem->mUnknown4.mZ = pItem->mUnknown4.mY = pItem->mUnknown4.mX = 0.0f;
             pItem->mUnknown1C8 = fn_800A338C();
-            fn_8016153C(pItem);
+            EnvSkyObjLoadModel(pItem);
             EnvSkyInit(pItem);
         }
     }
-    lbl_803EB380 = pItem;
+    _EnvSkyObj_pSky = pItem;
 }
 
-void fn_801616C0(void *pOwner)
+void EnvSkyObjDestroy(void *pOwner)
 {
-    Instance_801614D0 *pItem = lbl_803EB380;
+    EnvSkyObj_t *pItem = _EnvSkyObj_pSky;
 
     if (pItem != 0) {
         EnvSkyShutdown(pItem);
-        fn_801615A0(lbl_803EB380);
+        EnvSkyObjFreeModel(_EnvSkyObj_pSky);
         ObjRemoveFromList((int)pOwner, (int)pItem);
         VptTrashObject((int)pItem);
         VptFlushObjectTrashSync();
         ObjDelType(13);
-        lbl_803EB380 = 0;
+        _EnvSkyObj_pSky = 0;
     }
 }
 }

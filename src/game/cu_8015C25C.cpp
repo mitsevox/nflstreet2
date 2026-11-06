@@ -48,11 +48,11 @@ struct State_803EB32C {
 extern "C" {
 void FESndUpdate(int a);
 void fn_8003E194(int index, int value);
-void fn_8015FFC8(int player, int key, int value);
-void fn_8016118C(void);
-void fn_801611BC(int index, const char *pName, int a);
-void fn_8016130C(int index, int a, int b, int c, int d);
-void fn_801613F0(void);
+void PlyrSwitchSet(int player, int key, int value);
+void PlaTexCacheWaitReads(void);
+void PlaTexCacheSetFace(int index, const char *pName, int a);
+void PlaTexCacheSetCapFace(int index, int a, int b, int c, int d);
+void PlaTexCacheDiscardRequests(void);
 void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
 void fn_801A472C(void);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
@@ -222,7 +222,7 @@ extern "C" void fn_8015C5E8(int index)
         pEntry->mUnknownE8 = idE8;
         if (idE8 == 0xFFFF) {
             pEntry->mUnknownFA &= ~0x1;
-            fn_8015FFC8(index, 27, 255);
+            PlyrSwitchSet(index, 27, 255);
         }
     }
 
@@ -233,7 +233,7 @@ extern "C" void fn_8015C5E8(int index)
         pEntry->mUnknownEC = idEC;
         if (idEC == 0xFFFF) {
             pEntry->mUnknownFA &= ~0x4;
-            fn_8015FFC8(index, 28, 255);
+            PlyrSwitchSet(index, 28, 255);
         }
     }
 
@@ -244,8 +244,8 @@ extern "C" void fn_8015C5E8(int index)
         pEntry->mUnknownF0 = idF0;
         if (idEC == 0xFFFF) {
             pEntry->mUnknownFA &= ~0x10;
-            fn_8015FFC8(index, 29, 255);
-            fn_8015FFC8(index, 30, 255);
+            PlyrSwitchSet(index, 29, 255);
+            PlyrSwitchSet(index, 30, 255);
         }
     }
 
@@ -332,8 +332,8 @@ extern "C" void fn_8015CB18(int wait)
             }
         }
     } else if (pEntry->mUnknownF8) {
-        fn_8016118C();
-        fn_801613F0();
+        PlaTexCacheWaitReads();
+        PlaTexCacheDiscardRequests();
     }
 }
 
@@ -364,7 +364,7 @@ extern "C" void fn_8015CC1C(void)
                 fn_801A472C();
             }
         } else if (pEntry->mUnknownF8) {
-            fn_8016118C();
+            PlaTexCacheWaitReads();
         }
     }
     fn_801D2BD0(lbl_803EB32C);
@@ -463,9 +463,9 @@ extern "C" void fn_8015CDA4(void)
             pPlayer = fn_8003DEC4(i);
             lbl_803EB32C->mEntries[i].mUnknownF8 = 1;
             if (strlen(lbl_803EB32C->mEntries[i].mUnknownFE)) {
-                fn_801611BC(pPlayer->mUnknown4971, lbl_803EB32C->mEntries[i].mUnknownFE, 0);
+                PlaTexCacheSetFace(pPlayer->mUnknown4971, lbl_803EB32C->mEntries[i].mUnknownFE, 0);
             } else {
-                fn_8016130C(pPlayer->mUnknown4971, PlayerLookGetSkin(i), PlayerLookGetFace(i), PlayerLookGetBrow(i), 0);
+                PlaTexCacheSetCapFace(pPlayer->mUnknown4971, PlayerLookGetSkin(i), PlayerLookGetFace(i), PlayerLookGetBrow(i), 0);
             }
             PlayerLookApply(current);
         }

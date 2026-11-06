@@ -52,7 +52,7 @@ int fn_8009F258(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int value);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int fn_8011E9D8(State_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
@@ -203,7 +203,7 @@ int fn_801170E8(Object_80039F5C *p)
     Point_8017886C origin;
     origin = fn_80177FE0();
     for (unsigned char i = 0; i <= 2; i++) {
-        int index = fn_80168E00(fn_80178308(), i, 0);
+        int index = PlayBookGetReceiver(fn_80178308(), i, 0);
         if (index == 255) continue;
         Object_80039F5C *other = fn_80039F5C(fn_80178308(), (unsigned short)index);
         if (!other) continue;

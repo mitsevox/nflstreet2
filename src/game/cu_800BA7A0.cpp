@@ -60,9 +60,9 @@ void fn_8013AD9C(Ball_t *pBall, int a);
 void CamGameSelectCamera(int a);
 void CamGameSetFocusAll(int a, int b);
 void CamGameSetModeAll(int a);
-void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
-Object_800670B4 *fn_80168708(int team);
-void fn_80168A14(int team);
+void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+Object_800670B4 *PlayBookGetFormation(int team);
+void PlayBookRestoreSelection(int team);
 void fn_80173D10(void);
 void fn_80176C90(void);
 int fn_80177C38(void);
@@ -131,10 +131,10 @@ extern "C" void fn_800BAAE4(void)
     fn_8011DF90();
     fn_80176C90();
     fn_80173D10();
-    fn_80168A14(0);
-    fn_80168A14(1);
+    PlayBookRestoreSelection(0);
+    PlayBookRestoreSelection(1);
     for (int team = 0; team <= 1; team++) {
-        Object_800670B4 *pTeam = fn_80168708((unsigned char)team);
+        Object_800670B4 *pTeam = PlayBookGetFormation((unsigned char)team);
         int count = fn_80178D18((unsigned char)team);
 
         for (int i = 0; i < count; i++) {
@@ -142,7 +142,7 @@ extern "C" void fn_800BAAE4(void)
             unsigned char a;
             unsigned char b;
 
-            fn_80164430(pTeam, (unsigned char)i, &a, &b);
+            PlaySetGetEntryRoles(pTeam, (unsigned char)i, &a, &b);
             p->mUnknown2914 = a;
             fn_800B49EC((Record_800B49EC *)p->mRatings, (const Record_800B49EC *)p->mUnknown3020);
             fn_800B4798(p->mRatings, (unsigned char)team, (unsigned char)i, &p->mUnknown2900);

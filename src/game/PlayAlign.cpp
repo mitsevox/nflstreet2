@@ -1,3 +1,6 @@
+/* Lines a team up for the snap: sends every player to his spot and facing in the
+   called play and staggers when they start moving. */
+
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
@@ -6,13 +9,13 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_80163E94.h"
-#include "game/cu_80164568.h"
+#include "game/PlaySet.h"
+#include "game/PlayAlign.h"
 
 extern "C" {
-void fn_801647A0(Object_800670B4 *pObject, int team);
-void fn_80164A40(void);
-Object_800670B4 *fn_80168708(int team);
+void PlayAlignTeamBegin(Object_800670B4 *pObject, int team);
+void PlayAlignResetSetNames(void);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_8016DF34(Object_80039F5C *p);
 void fn_800E55B8(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -31,12 +34,12 @@ float fn_80237260(int stream);
 
 }
 
-static const char *lbl_8031D360[4];
+static const char *_PlayAlign_apSetNames[4];
 
-extern "C" const char *lbl_803EB3B0[] = { "Norm", 0 };
+extern "C" const char *gPlayAlignNormSet[] = { "Norm", 0 };
 
 extern "C" {
-void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
+void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
 {
     Message_800F01CC msg;
     Point_8017886C delta;
@@ -66,7 +69,7 @@ void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
         }
-        fn_801644A0(p);
+        PlaySetNotifyRoleMates(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 9;
         msg.mUnknown1[0] = side == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
@@ -79,24 +82,24 @@ void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
     }
 }
 
-void fn_801647A0(Object_800670B4 *pObject, int team)
+void PlayAlignTeamBegin(Object_800670B4 *pObject, int team)
 {
 }
 
-void fn_801647A4(Object_800670B4 *pObject, int team, const char **ppNames)
+void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
 {
     unsigned char i;
     unsigned int count;
     Message_800F01CC msg;
 
     if (team == fn_80178320()) {
-        fn_80164A40();
+        PlayAlignResetSetNames();
     }
-    fn_801647A0(pObject, team);
+    PlayAlignTeamBegin(pObject, team);
     fn_8003977C(team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Entry_8006719C *pEntry = fn_80163E94(pObject, i, ppNames);
+        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, ppNames);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
@@ -110,7 +113,7 @@ void fn_801647A4(Object_800670B4 *pObject, int team, const char **ppNames)
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 7;
         fn_800F03D8(0, p->mpState, &msg, p);
-        fn_801644A0(p);
+        PlaySetNotifyRoleMates(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 87;
         msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
@@ -119,18 +122,18 @@ void fn_801647A4(Object_800670B4 *pObject, int team, const char **ppNames)
     }
 }
 
-void fn_80164940(int team)
+void PlayRealignTeam(int team)
 {
     unsigned char i;
     unsigned int count;
     int home = fn_80178320();
-    Object_800670B4 *pObject = fn_80168708(team);
+    Object_800670B4 *pObject = PlayBookGetFormation(team);
 
-    fn_801647A0(pObject, team);
+    PlayAlignTeamBegin(pObject, team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
         int update = 1;
-        Entry_8006719C *pEntry = fn_80163E94(pObject, i, lbl_803EB3B0);
+        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         if (team != home) {
@@ -146,20 +149,20 @@ void fn_80164940(int team)
             p->mFlags &= ~0x40000;
             p->mFlags &= ~0x4000;
             p->mFlags |= 0x10;
-            fn_80164568(p, pEntry, pObject->mUnknown8.mUnknownF);
+            PlayAlignPlayer(p, pEntry, pObject->mUnknown8.mUnknownF);
         }
     }
 }
 
-void fn_80164A40(void)
+void PlayAlignResetSetNames(void)
 {
-    lbl_8031D360[0] = "Norm";
-    lbl_8031D360[1] = "Norm";
-    lbl_8031D360[2] = "Norm";
-    lbl_8031D360[3] = "Norm";
+    _PlayAlign_apSetNames[0] = "Norm";
+    _PlayAlign_apSetNames[1] = "Norm";
+    _PlayAlign_apSetNames[2] = "Norm";
+    _PlayAlign_apSetNames[3] = "Norm";
 }
 
-void fn_80164A64(int team)
+void PlayAlignPostStartDelays(int team)
 {
     unsigned char i;
     unsigned int count = fn_80178D70(team);
@@ -188,8 +191,8 @@ void fn_80164A64(int team)
     }
 }
 
-const char *fn_80164B64(int index)
+const char *PlayAlignGetSetName(int index)
 {
-    return lbl_8031D360[index];
+    return _PlayAlign_apSetNames[index];
 }
 }

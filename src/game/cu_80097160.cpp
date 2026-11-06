@@ -1,4 +1,4 @@
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/Ball.h"
 #include "game/Block_801BE60C.h"
 #include "game/fn_802270D4.h"
@@ -7,7 +7,7 @@
 extern "C" {
 int fn_80097160(Object_80039F5C *p, float value);
 int fn_801CFE40(float y, float x);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A298(int handle);
 void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
@@ -104,15 +104,15 @@ extern "C" int fn_80097864(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Point_80167910 *pTarget, Vector_80039F5C *pPos,
+extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos,
                             float time, int *pTurn, Ball_t *pBall)
 {
     Vector_80039F5C ballPos;
-    Point_80167910 target;
-    Point_80167910 offset;
-    Point_80167910 start;
-    Point_80167910 velocity;
-    Point_80167910 delta;
+    Vec2_t target;
+    Vec2_t offset;
+    Vec2_t start;
+    Vec2_t velocity;
+    Vec2_t delta;
     int angle;
     int facing;
 

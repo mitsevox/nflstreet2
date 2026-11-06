@@ -1,11 +1,15 @@
-#include "game/cu_80159F10.h"
+/* Pass icons: the button icons drawn above each eligible receiver while the player
+   chooses a pass. One small object per receiver is kept in the object list and drawn
+   at the receiver's position, scaled with the camera height. */
+
+#include "game/PassIconObj.h"
 #include "game/PassIconTex.h"
 #include <math.h>
 #include "engine/viewport.h"
 #include "game/GameCamera.h"
 #include "game/Object_80039F5C.h"
 
-struct Init_80159F10 {
+struct PassIconObjDesc_t {
     int mUnknown0;
     int mUnknown4;
     unsigned char mUnknown8;
@@ -27,17 +31,17 @@ void fn_801D08FC(int a);
 void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0CFC(float a);
-int ObjNewType_(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
+int ObjNewType_(int a, int b, int c, void (*pA)(PassIconObj_t *, const PassIconObjDesc_t *), void (*pB)(void));
 int ObjDelType(int a);
-void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
-int ObjNewInList(int handle, int a, int b, Init_80159F10 *pInit);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PassIconObj_t *));
+int ObjNewInList(int handle, int a, int b, PassIconObjDesc_t *pInit);
 void ObjRemoveFromList(int handle, int a);
 void ObjSetPriority(int handle, int a, int b);
 }
 
-static unsigned char lbl_803ECA5C;
+static unsigned char _PassIconObj_bEnabled;
 
-extern "C" void fn_80159F10(Instance_80159F10 *pInstance, const Init_80159F10 *pInit)
+extern "C" void PassIconObjInit(PassIconObj_t *pInstance, const PassIconObjDesc_t *pInit)
 {
     pInstance->mUnknown04.mX = 0.0f;
     pInstance->mUnknown04.mY = 0.0f;
@@ -45,14 +49,14 @@ extern "C" void fn_80159F10(Instance_80159F10 *pInstance, const Init_80159F10 *p
     pInstance->mUnknown14 = pInit->mUnknown0;
     pInstance->mUnknown18 = pInit->mUnknown4;
     pInstance->mUnknown1C = pInit->mUnknown8;
-    fn_8015A240(pInstance, 2);
+    PassIconObjSetStyle(pInstance, 2);
 }
 
-extern "C" void fn_80159F70(void) {}
+extern "C" void PassIconObjFree(void) {}
 
-extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
+extern "C" int PassIconObjDraw(PassIconObj_t *pInstance)
 {
-    if ((PassIconsAreShown() == 1 || PassIconsWereShown() == 1) && lbl_803ECA5C == 1 && PauseIsOpen() == 0) {
+    if ((PassIconsAreShown() == 1 || PassIconsWereShown() == 1) && _PassIconObj_bEnabled == 1 && PauseIsOpen() == 0) {
         Vector_80039F5C *pPos = &pInstance->mUnknown04;
         if (PassIconGetPosition(pInstance->mUnknown1C, pPos) == 1) {
             GameCamera_t *pCamera;
@@ -78,44 +82,44 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
     return 0;
 }
 
-extern "C" void fn_8015A0D0(int value)
+extern "C" void PassIconObjSetEnabled(int value)
 {
     if (VptManagerGetPassIcons()) {
-        lbl_803ECA5C = value;
+        _PassIconObj_bEnabled = value;
     } else {
-        lbl_803ECA5C = 0;
+        _PassIconObj_bEnabled = 0;
     }
 }
 
-extern "C" void fn_8015A110(void *pOwner)
+extern "C" void PassIconObjRegister(void *pOwner)
 {
-    ObjNewType_(12, 36, 3, fn_80159F10, fn_80159F70);
-    ObjSetListObjFunc((int)pOwner, 12, 0, fn_80159F74);
+    ObjNewType_(12, 36, 3, PassIconObjInit, PassIconObjFree);
+    ObjSetListObjFunc((int)pOwner, 12, 0, PassIconObjDraw);
     PassIconTexLoad();
-    lbl_803ECA5C = 1;
+    _PassIconObj_bEnabled = 1;
 }
 
-extern "C" void fn_8015A17C(void)
+extern "C" void PassIconObjUnregister(void)
 {
     VptFlushObjectTrashSync();
     PassIconTexFree();
     ObjDelType(12);
 }
 
-extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, int b)
+extern "C" PassIconObj_t *PassIconObjNew(void *pOwner, unsigned char c, int a, int b)
 {
-    Init_80159F10 init;
-    Instance_80159F10 *pItem;
+    PassIconObjDesc_t init;
+    PassIconObj_t *pItem;
 
     init.mUnknown0 = a;
     init.mUnknown4 = b;
     init.mUnknown8 = c;
-    pItem = (Instance_80159F10 *)ObjNewInList((int)pOwner, 12, 0, &init);
+    pItem = (PassIconObj_t *)ObjNewInList((int)pOwner, 12, 0, &init);
     ObjSetPriority((int)pOwner, (int)pItem, 11);
     return pItem;
 }
 
-extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
+extern "C" void PassIconObjDelete(void *pOwner, PassIconObj_t *pItem)
 {
     if (pItem != 0) {
         ObjRemoveFromList((int)pOwner, (int)pItem);
@@ -123,7 +127,7 @@ extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
     }
 }
 
-extern "C" void fn_8015A240(Instance_80159F10 *pInstance, unsigned char value)
+extern "C" void PassIconObjSetStyle(PassIconObj_t *pInstance, unsigned char value)
 {
     pInstance->mUnknown1D = value;
 }

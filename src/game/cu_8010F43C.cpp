@@ -4,11 +4,11 @@
 #include "game/State_800FDA58.h"
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
@@ -151,7 +151,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80156C78(int a, int b);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
@@ -369,7 +369,7 @@ extern "C" int fn_8010FC40(Object_80039F5C *p)
         p->mFlags |= 1 << (p->mpState->mUnknown3[0] & ~0x80);
     }
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
-        pOther = fn_8016444C(fn_80168708(fn_80178308()));
+        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         fn_80143E14(p, pOther);
         fn_80143E14(pOther, p);
     }
@@ -389,7 +389,7 @@ extern "C" int fn_8010FD94(Object_80039F5C *p)
     pTimer->mUnknown4 = 0.0f;
     pTimer->mUnknown8 = 0;
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
-        pOther = fn_8016444C(fn_80168708(fn_80178308()));
+        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         fn_80143E14(p, pOther);
         fn_80143E14(pOther, p);
     }

@@ -82,7 +82,7 @@ void PassIconTexFree(void)
     _PassIconTex_bLoaded = 0;
 }
 
-void PassIconTexDraw(Instance_80159F10 *pInstance)
+void PassIconTexDraw(PassIconObj_t *pInstance)
 {
     int value = fn_80236EC0(0);
 

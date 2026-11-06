@@ -1,8 +1,11 @@
+/* Player model switches: sets and reads the per-part switch values that choose which
+   pieces of a player model (gear, numbers, accessories) are shown. */
+
 #include "game/Object_8003DEC4.h"
 #include "game/fn_80233CBC.h"
 
 extern "C" {
-static int lbl_802E32B0[31][2] = {
+static int _PlyrSwitch_aKeyParts[31][2] = {
     {2, 6},
     {1, 4},
     {1, 4},
@@ -36,19 +39,19 @@ static int lbl_802E32B0[31][2] = {
     {1, 11},
 };
 
-int fn_801600FC(int index, int key);
+int PlyrSwitchGet(int index, int key);
 
-void fn_8015FFC8(int index, int key, int value)
+void PlyrSwitchSet(int index, int key, int value)
 {
     Object_8003DEC4 *pObject = fn_8003DEC4(index);
-    fn_80233CBC(&pObject->mUnknown1164[lbl_802E32B0[key][1]].mUnknown20, key, value);
+    fn_80233CBC(&pObject->mUnknown1164[_PlyrSwitch_aKeyParts[key][1]].mUnknown20, key, value);
     switch (key) {
     case 6:
         fn_80233CBC(&pObject->mUnknown1164[10].mUnknown20, 6, value);
         break;
     case 25:
     case 26:
-        if (fn_801600FC(index, 27) != 255)
+        if (PlyrSwitchGet(index, 27) != 255)
             fn_80233CBC(&pObject->mUnknown1164[8].mUnknown20, key, value);
         else
             fn_80233CBC(&pObject->mUnknown1164[8].mUnknown20, key, 255);
@@ -72,9 +75,9 @@ void fn_8015FFC8(int index, int key, int value)
     }
 }
 
-int fn_801600FC(int index, int key)
+int PlyrSwitchGet(int index, int key)
 {
     Object_8003DEC4 *pObject = fn_8003DEC4(index);
-    return pObject->mUnknown1164[lbl_802E32B0[key][1]].mUnknown20.mUnknown8[key];
+    return pObject->mUnknown1164[_PlyrSwitch_aKeyParts[key][1]].mUnknown20.mUnknown8[key];
 }
 }

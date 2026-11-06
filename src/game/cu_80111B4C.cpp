@@ -227,7 +227,7 @@ void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80171824(Object_80039F5C *p);
@@ -1457,7 +1457,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
     if (count == 0) {
         unsigned char i;
         for (i = 0; i < 3; i++) {
-            int index = fn_80168E00(fn_80178308(), i, 0);
+            int index = PlayBookGetReceiver(fn_80178308(), i, 0);
             if (index != 0xFF) {
                 numPlayers++;
                 Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), index);

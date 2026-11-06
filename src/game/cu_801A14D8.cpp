@@ -198,10 +198,10 @@ void fn_8015EC74(int a, int b);
 void fn_8015ED9C(int a, int b);
 void fn_8015F3FC(int a);
 void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, void (*pCallback)(Object_8003DEC4 *));
-void fn_8015FFA8(void *a, void *b);
-void *fn_80160C08(void);
-ModelTexSlot_t *fn_8016102C(int player);
-void fn_80161498(void);
+void PlyrModelAttachLod(void *a, void *b);
+void *PlaTexCacheGetArchive(void);
+ModelTexSlot_t *PlaTexCacheGetDescs(int player);
+void PlaTexCacheCloseArchive(void);
 void fn_8019723C(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
@@ -314,10 +314,10 @@ void fn_801A46BC(void);
 
 void fn_801A14D8(void)
 {
-    void *p = fn_801F0C50(fn_80160C08(), 0);
+    void *p = fn_801F0C50(PlaTexCacheGetArchive(), 0);
 
     lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
-    fn_801EF7BC(fn_80160C08(), 0, lbl_803ECC10);
+    fn_801EF7BC(PlaTexCacheGetArchive(), 0, lbl_803ECC10);
     TMTexLibLoad(lbl_80365D98, lbl_803ECC10);
     lbl_803ECC08 = TMTexLibGetTexture(lbl_80365D98, 0xFF000000);
     lbl_803ECC0C = TMTexLibGetClut(lbl_80365D98, 0xFF000000, 0);
@@ -328,8 +328,8 @@ void fn_801A1578(void)
     TMTexLibUnload(lbl_80365D98);
     fn_801D2BD0(lbl_803ECC10);
     if (FELoopIsMainFEActive()) {
-        fn_801F010C(fn_80160C08(), 0);
-        fn_80161498();
+        fn_801F010C(PlaTexCacheGetArchive(), 0);
+        PlaTexCacheCloseArchive();
     }
 }
 
@@ -857,8 +857,8 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
 
     memset(values, 0, sizeof(values));
     if (pPlayer->mUnknown992 == 0xFFFF) {
-        fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
         TMModelClone(fn_8015E2FC(4, 0, 0), fn_8015E2FC(6, 0, 0));
         TMModelClone(fn_8015E2FC(4, 0, 1), fn_8015E2FC(6, 0, 1));
         for (i = 0; i < 53; i++) {
@@ -870,8 +870,8 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
         }
     } else {
         fn_8015E73C(pPlayer->mUnknown992);
-        fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
         if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
@@ -1110,7 +1110,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
     fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);
-    pPlayer->mUnknown4060 = fn_8016102C(pInit->mUnknown5A);
+    pPlayer->mUnknown4060 = PlaTexCacheGetDescs(pInit->mUnknown5A);
     pModel = (Model_8015E2FC *)fn_8015E2FC(0, pPlayer->mUnknown1016, 0);
     fn_801A2A88(pPlayer, pInit->mInit.mUnknown04);
     fn_801A4690(0);
@@ -1128,28 +1128,28 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     TMTexLibRegister("platex", PlyrTexGetLib(pPlayer->mUnknown4971));
     fn_8023488C(pPlayer->mUnknown4044, 0x38);
     TMMaterialListSetMatDefs(pPlayer->mUnknown4044, pModel->mpUnknown24);
-    fn_8023465C(pPlayer->mUnknown4044, pModel, fn_8016102C(pPlayer->mUnknown4971));
-    fn_8023472C(pPlayer->mUnknown4044, 0x11, 1, &fn_8016102C(pPlayer->mUnknown4971)[25],
-                &fn_8016102C(pPlayer->mUnknown4971)[25], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x12, 1, &fn_8016102C(pPlayer->mUnknown4971)[25],
-                &fn_8016102C(pPlayer->mUnknown4971)[25], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1A, 1, &fn_8016102C(pPlayer->mUnknown4971)[26],
-                &fn_8016102C(pPlayer->mUnknown4971)[26], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1B, 1, &fn_8016102C(pPlayer->mUnknown4971)[26],
-                &fn_8016102C(pPlayer->mUnknown4971)[26], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x15, 1, &fn_8016102C(pPlayer->mUnknown4971)[27],
-                &fn_8016102C(pPlayer->mUnknown4971)[27], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x16, 1, &fn_8016102C(pPlayer->mUnknown4971)[27],
-                &fn_8016102C(pPlayer->mUnknown4971)[27], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1E, 1, &fn_8016102C(pPlayer->mUnknown4971)[28],
-                &fn_8016102C(pPlayer->mUnknown4971)[28], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1F, 1, &fn_8016102C(pPlayer->mUnknown4971)[28],
-                &fn_8016102C(pPlayer->mUnknown4971)[28], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x14, 1, &fn_8016102C(pPlayer->mUnknown4971)[29],
-                &fn_8016102C(pPlayer->mUnknown4971)[29], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &fn_8016102C(pPlayer->mUnknown4971)[30],
-                &fn_8016102C(pPlayer->mUnknown4971)[30], 0);
-    PlyrTexApplyFilters(fn_8016102C(pPlayer->mUnknown4971), 0);
+    fn_8023465C(pPlayer->mUnknown4044, pModel, PlaTexCacheGetDescs(pPlayer->mUnknown4971));
+    fn_8023472C(pPlayer->mUnknown4044, 0x11, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x12, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1A, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1B, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x15, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x16, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1E, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1F, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x14, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[29],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[29], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[30],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[30], 0);
+    PlyrTexApplyFilters(PlaTexCacheGetDescs(pPlayer->mUnknown4971), 0);
     TMTexLibRegistryReset();
     fn_801A299C(&pPlayer->mUnknown1164[0], 0, &pPlayer->mUnknown4064[0], pPlayer->mUnknown4044);
     fn_801A29F8(&pPlayer->mUnknown1164[4], pPlayer->mUnknown4044, pPlayer);
@@ -1485,8 +1485,8 @@ void fn_801A472C(void)
         int b;
         int i;
 
-        fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
         for (i = 0; i < 53; i++) {
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
@@ -1513,8 +1513,8 @@ void fn_801A472C(void)
         fn_801A4690(0);
         fn_801A46BC();
     } else {
-        fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         int a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         int b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
         TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));

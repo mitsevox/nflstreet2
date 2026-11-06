@@ -2,7 +2,7 @@
 #include "game/DepthChartSide.h"
 
 extern "C" {
-int fn_80168ED0(int a);
+int PlayCallGetPlaybookId(int a);
 void FormationLineupClearBase(void);
 void FormationLineupClearUser(void);
 int FormationLineupMapPlayerIds(int *pFirst, int *pSecond);
@@ -50,7 +50,7 @@ int fn_8008593C(int a, int team, int first, int second)
     QueryResult result;
     QueryCursor cursor;
     int formation;
-    int mode = fn_80168ED0(a);
+    int mode = PlayCallGetPlaybookId(a);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;

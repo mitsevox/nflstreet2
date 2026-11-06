@@ -12,13 +12,13 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802372EC.h"
-#include "game/cu_80164568.h"
-#include "game/fn_80163E94.h"
+#include "game/PlayAlign.h"
+#include "game/PlaySet.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_8016FB10.h"
@@ -98,7 +98,7 @@ int fn_801486A0(void);
 void fn_80162780(int a, int b);
 void fn_80164C4C(Object_800670B4 *pObject, Record_80067338 *pRecord, int team, int a);
 int fn_801650BC(Record_80067338 *pRecord);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_8016B0B0(void);
 void fn_80173614(void);
 void fn_80173E24(void);
@@ -157,7 +157,7 @@ void fn_8016F99C(void);
 
 extern "C" void fn_8016DB94(int team)
 {
-    fn_801647A4(fn_80168708(team), team, lbl_803EB3B0);
+    PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
     fn_8016E008(team);
     fn_80162780(1, 1);
 }
@@ -344,7 +344,7 @@ extern "C" void fn_8016E15C(void)
         BallGetPosition(pBall, &ballPos);
         pCarrier = fn_8003A130(&ballPos, 0, fn_80178308());
         BallGiveToPlayer(pBall, pCarrier);
-        pPasser = fn_8016444C(fn_80168708(fn_80178308()));
+        pPasser = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         if (pCarrier->mMotion.mPos.mY - pPasser->mMotion.mPos.mY < 2.5f) {
             fn_801C1F94(&message, 0, 4);
             message.mId = 26;
@@ -422,8 +422,8 @@ extern "C" void fn_8016E498(void)
     fn_800FAD2C();
     fn_8016B0B0();
     fn_800FAECC(1);
-    fn_80164C4C(fn_80168708(team), fn_8016871C(team), team, 0);
-    fn_80164C4C(fn_80168708(other), fn_8016871C(other), other, 0);
+    fn_80164C4C(PlayBookGetFormation(team), PlayBookGetPlay(team), team, 0);
+    fn_80164C4C(PlayBookGetFormation(other), PlayBookGetPlay(other), other, 0);
 
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
@@ -467,7 +467,7 @@ extern "C" void fn_8016E498(void)
     fn_800DC578();
     if (fn_800B65A0(side) != 0xFF && fn_80177F70() != 0) {
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
-        Record_80067338 *pRecord = fn_8016871C(side);
+        Record_80067338 *pRecord = PlayBookGetPlay(side);
 
         if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             CamGameSetModeAll(2);

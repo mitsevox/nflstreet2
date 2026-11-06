@@ -1,9 +1,9 @@
-#ifndef GAME_CU_80163674_H
-#define GAME_CU_80163674_H
+#ifndef GAME_UISMODEL_H
+#define GAME_UISMODEL_H
 
 #include "game/Object_80039F5C.h"
 
-struct Desc_80163788 {
+struct UISModelDesc_t {
     short mUnknown00;
     short mUnknown02;
     Vector_80039F5C mUnknown04;
@@ -12,12 +12,12 @@ struct Desc_80163788 {
     Vector_80039F5C mUnknown28;
 };
 
-struct State_80163AD8 {
+struct UISModelRender_t {
     unsigned char mUnknown00[88];
     void *mpUnknown58;
 };
 
-struct Object_80163788 {
+struct UISModel_t {
     unsigned char mUnknown00[4];
     float mUnknown04;
     float mUnknown08;
@@ -25,7 +25,7 @@ struct Object_80163788 {
     unsigned char mUnknown10[4];
     int mUnknown14;
     unsigned char mUnknown18[48];
-    State_80163AD8 mUnknown48;
+    UISModelRender_t mUnknown48;
     unsigned char mUnknownA4[244];
     unsigned int mUnknown198;
     Vector_80039F5C mUnknown19C;
@@ -48,17 +48,17 @@ struct Object_80163788 {
 };
 
 extern "C" {
-void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc);
-void fn_80163788(Object_80163788 *pObject, Desc_80163788 *pDesc);
-void fn_801638F0(Object_80163788 *pObject);
-int fn_80163954(Object_80163788 *pObject, int value);
-void fn_80163AD8(Object_80163788 *pObject, void *pData, int index, int component);
-void fn_80163B44(Object_80163788 *pObject, void *pData);
-int fn_80163BCC(Object_80163788 *pObject);
-int fn_80163C30(void *pHandle, int count);
-void fn_80163CD0(void);
-void fn_80163D08(Object_80163788 *pObject, int value);
-void fn_80163D64(Object_80163788 *pObject, unsigned char value);
+void UISModelBind(UISModel_t *pObject, UISModelDesc_t *pDesc);
+void UISModelInit(UISModel_t *pObject, UISModelDesc_t *pDesc);
+void UISModelFree(UISModel_t *pObject);
+int UISModelDraw(UISModel_t *pObject, int value);
+void UISModelCopyTexture(UISModel_t *pObject, void *pData, int index, int component);
+void UISModelApplyTextures(UISModel_t *pObject, void *pData);
+int UISModelUpdateTextures(UISModel_t *pObject);
+int UISModelRegister(void *pHandle, int count);
+void UISModelUnregister(void);
+void UISModelDrawReady(UISModel_t *pObject, int value);
+void UISModelSetDrawMode(UISModel_t *pObject, unsigned char value);
 }
 
 #endif

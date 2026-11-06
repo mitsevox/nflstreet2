@@ -9,7 +9,7 @@
 
 extern "C" {
 int DbCursorGetValue(DbCursor *pObject, int key);
-int fn_80168ED0(int a);
+int PlayCallGetPlaybookId(int a);
 int fn_801C302C(const char *s1, const char *s2, int n);
 
 void AudibleDbOpen(DbCursor *pCursor);
@@ -68,12 +68,12 @@ unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column)
         value = AudibleDbGetPlaybookId(pCursor);
         tag = 0x31544250;
         mode = 1;
-        match = value == fn_80168ED0(1);
+        match = value == PlayCallGetPlaybookId(1);
     } else {
         value = AudibleDbGetPlaybookId(pCursor);
         tag = 0x31444250;
         mode = 11;
-        if (value == fn_80168ED0(0)) {
+        if (value == PlayCallGetPlaybookId(0)) {
             match = 1;
         }
     }

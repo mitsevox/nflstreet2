@@ -1,12 +1,12 @@
-#ifndef GAME_RECORD_80167094_H
-#define GAME_RECORD_80167094_H
+#ifndef GAME_PLAYARTPLAYER_H
+#define GAME_PLAYARTPLAYER_H
 
-struct Route_80165890 {
+struct PlayArtStep_t {
     float mUnknown0, mUnknown4, mUnknown8, mUnknownC;
     int mUnknown10, mUnknown14, mUnknown18, mUnknown1C, mUnknown20;
 };
 
-struct Record_80167094 {
+struct PlayArtPlayer_t {
     union {
         unsigned char mUnknown0[8];
         struct { int mUnknown0Word, mUnknown4Word; };
@@ -18,12 +18,12 @@ struct Record_80167094 {
         unsigned char mUnknown14[0x1B8];
         struct {
             int mUnknown14Word, mUnknown18Word;
-            Route_80165890 mUnknown1C[12];
+            PlayArtStep_t mUnknown1C[12];
         };
     };
 };
 
-struct Object_80167160 {
+struct PlayArtPlay_t {
     union {
         unsigned char mUnknown0[0x14];
         struct { unsigned char mUnknown0Pad[12]; unsigned char mUnknownC; unsigned char mUnknownD[7]; };

@@ -1,27 +1,27 @@
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802372EC.h"
 
 extern "C" {
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_80169F80(int value);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
 float fn_80178A5C(void);
 
-// Randomly toggles byte +0x17 of team's fn_80168708 object, with a chance
+// Randomly toggles byte +0x17 of team's PlayBookGetFormation object, with a chance
 // adjusted by the x of the fn_80177FE0 line point and by the flags that
 // fn_8016B438 reports. Returns 1 when the byte was toggled.
 int fn_8016BAD8(int team)
 {
     int flipped = 0;
     int chance = 50;
-    Record_80067338 *pRecord = fn_8016871C(team);
-    Object_800670B4 *pObject = fn_80168708(team);
+    Record_80067338 *pRecord = PlayBookGetPlay(team);
+    Object_800670B4 *pObject = PlayBookGetFormation(team);
     float x;
     unsigned char kind;
     unsigned int flags;
 
-    if ((pObject->mUnknown8.mUnknown14 & 1) == 0 || (fn_8016871C(team)->mUnknown18 & 1) == 0) {
+    if ((pObject->mUnknown8.mUnknown14 & 1) == 0 || (PlayBookGetPlay(team)->mUnknown18 & 1) == 0) {
         return 0;
     }
 

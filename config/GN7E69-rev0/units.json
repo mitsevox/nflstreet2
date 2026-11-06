@@ -3186,7 +3186,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8015FFC8.cpp",
+      "source": "src/game/PlyrSwitch.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8015FFC8-0x8016014C (src/game/cu_8015FFC8.cpp) and the .data data row 0x802E32B0-0x802E33A8.",
       "sections": [
@@ -7840,59 +7840,59 @@
       ]
     },
     {
-      "source": "src/game/cu_80167A8C.cpp",
+      "source": "src/game/PlayBook.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/cu_80167A8C.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_80167910",
-          "fn_801679B4",
-          "fn_801679B8",
-          "fn_801679F4",
-          "fn_80167A40",
-          "fn_80167A6C",
-          "fn_80167A8C",
-          "fn_80167AD8",
-          "fn_80167B70",
-          "fn_80167C1C",
-          "fn_80167C8C",
-          "fn_80167D1C",
-          "fn_80167EA0",
-          "fn_80167FF0",
-          "fn_801681A8",
-          "fn_80168210",
-          "fn_80168264",
-          "fn_80168324",
-          "fn_80168418",
-          "fn_801684B8",
-          "fn_80168640",
-          "fn_80168708",
-          "fn_8016871C",
-          "fn_80168730",
-          "fn_80168744",
-          "fn_801687E4",
-          "fn_80168898",
-          "fn_801688AC",
-          "fn_801688C0",
-          "fn_801688D4",
-          "fn_801688E0",
-          "fn_801688F4",
-          "fn_80168908",
-          "fn_8016898C",
-          "fn_801689AC",
-          "fn_80168A14",
-          "fn_80168A7C",
-          "fn_80168B04",
-          "fn_80168B5C",
-          "fn_80168C10",
-          "fn_80168C40",
-          "fn_80168D10",
-          "fn_80168D74",
-          "fn_80168D98",
-          "fn_80168E00",
-          "fn_80168E54",
-          "fn_80168EA8",
-          "fn_80168EBC"
+          "PlayBookOffsetSpots",
+          "PlayBookPostInit",
+          "PlayBookCompareData",
+          "PlayBookSetupTeam",
+          "PlayBookReadFormation",
+          "PlayBookReadSet",
+          "PlayBookSelectFormation",
+          "PlayBookLoadFormation",
+          "PlayBookLoadSet",
+          "PlayBookReloadSet",
+          "PlayBookClearAudibles",
+          "PlayBookOpenDatabases",
+          "PlayBookLoadCurrentPlay",
+          "PlayBookLoadAudibles",
+          "PlayBookAlloc",
+          "PlayBookClear",
+          "PlayBookLoadAudibleTable",
+          "PlayBookOpenAndRegister",
+          "PlayBookReopen",
+          "PlayBookCloseDatabases",
+          "PlayBookSetFormationType",
+          "PlayBookGetFormation",
+          "PlayBookGetPlay",
+          "PlayBookGetSavedPlay",
+          "PlayBookSetIndices",
+          "PlayBookPickPage",
+          "PlayBookGetSetIndex",
+          "PlayBookGetFormationIndex",
+          "PlayBookGetPlayIndex",
+          "PlayBookGetLoadFlags",
+          "PlayBookSetLoadFlags",
+          "PlayBookClearLoadFlags",
+          "PlayBookSelectAudible",
+          "PlayBookGetAudiblePlay",
+          "PlayBookSaveSelection",
+          "PlayBookRestoreSelection",
+          "PlayBookSetSelection",
+          "PlayBookSelectPlayById",
+          "PlayBookPickPlay",
+          "PlayBookIsAiPlay",
+          "PlayBookSetupTeams",
+          "PlayBookSetAudible",
+          "PlayBookToggleFlip",
+          "PlayBookLoadPlayById",
+          "PlayBookGetReceiver",
+          "PlayBookSetReceiverOption",
+          "PlayBookGetDatabase",
+          "PlayBookGetTeam"
         ],
         "discarded": [
           "GetPlayerPosition"
@@ -8014,7 +8014,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80159F10.cpp",
+      "source": "src/game/PassIconObj.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80159F10-0x8015A248 (src/game/cu_80159F10.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
@@ -8058,7 +8058,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8015FFA8.cpp",
+      "source": "src/game/PlyrModelAttach.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8015FFA8-0x8015FFC8 (src/game/cu_8015FFA8.cpp).",
       "sections": [
@@ -8476,7 +8476,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8016014C.cpp",
+      "source": "src/game/PlaTexCache.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/cu_8016014C.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
@@ -8519,7 +8519,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801614D0.cpp",
+      "source": "src/game/EnvSkyObj.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv: src/game/cu_801614D0.cpp unit, data, compiler and source-form rows",
       "sections": [
@@ -9158,7 +9158,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80163D9C.cpp",
+      "source": "src/game/EffectDrawObj.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80163D9C-0x80163E94 (src/game/cu_80163D9C.cpp) and its data, compiler and source-form rows.",
       "sections": [
@@ -9762,7 +9762,7 @@
       ]
     },
     {
-      "source": "src/game/cu_801631EC.cpp",
+      "source": "src/game/BallMarker.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv bounded cu_801631EC unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state stays external; the helper 0x80163074 is part of this source.",
       "sections": [
@@ -11806,7 +11806,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8016172C.cpp",
+      "source": "src/game/EnvFogRefresh.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8016172C-0x8016174C (src/game/cu_8016172C.cpp) and its source-form rows.",
       "sections": [
@@ -11877,7 +11877,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80163E94.cpp",
+      "source": "src/game/PlaySet.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80163E94-0x80164568 (src/game/cu_80163E94.cpp) and its source-form rows.",
       "sections": [
@@ -12017,7 +12017,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80164568.cpp",
+      "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
       "sections": [
@@ -12048,7 +12048,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80163674.cpp",
+      "source": "src/game/UISModel.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80163674-0x80163D9C (src/game/cu_80163674.cpp), its function rows and data rows 0x802A45E0-0x802A460C and 0x803EB3A4-0x803EB3A8.",
       "sections": [
@@ -12073,7 +12073,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80168ED0.cpp",
+      "source": "src/game/PlayCallAI.cpp",
       "profile": "game_cpp",
       "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
       "sections": [
@@ -12253,7 +12253,7 @@
       }
     },
     {
-      "source": "src/game/cu_80167094.cpp",
+      "source": "src/game/PlayArt.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional source unit and membership row, exact individual function extents, direct reset storage extents and inferred types.",
       "sections": [

@@ -13,8 +13,8 @@ struct Desc_80169DF8 {
 #ifdef __cplusplus
 extern "C" {
 #endif
-int fn_80169308(int id, short *pRecord, int value);
-int fn_801694C8(int id, short *pRecord, int value);
+int PlayCallOffenseCommand(int id, short *pRecord, int value);
+int PlayCallDefenseCommand(int id, short *pRecord, int value);
 void fn_80169DF8(struct Desc_80169DF8 *pDesc);
 #ifdef __cplusplus
 }

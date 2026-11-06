@@ -5,7 +5,7 @@
 #include "game/GameVpt.h"
 #include "game/InGame.h"
 #include "game/Object_80039F5C.h"
-#include "game/Instance_801614D0.h"
+#include "game/EnvSkyObj.h"
 #include "game/EnvFogSettings.h"
 
 
@@ -87,7 +87,7 @@ static EnvFogSettings _EnvRender_aFogSettings[12] = {
 static float _EnvRender_fLayer3Value = 0.0001f;
 
 extern "C" {
-void EnvSkyInit(Instance_801614D0 *pInstance)
+void EnvSkyInit(EnvSkyObj_t *pInstance)
 {
     Object_80235588 *pLayer = &pInstance->mUnknown48;
     int handle = pInstance->mUnknown14;
@@ -106,13 +106,13 @@ void EnvSkyInit(Instance_801614D0 *pInstance)
     EnvApplyFog();
 }
 
-void EnvSkyShutdown(Instance_801614D0 *pInstance)
+void EnvSkyShutdown(EnvSkyObj_t *pInstance)
 {
     fn_80236DE0(0);
     fn_80236EC0(0);
 }
 
-void EnvSkyDraw(Instance_801614D0 *pInstance, int unused)
+void EnvSkyDraw(EnvSkyObj_t *pInstance, int unused)
 {
     int handle = ConGetCurrentContext();
 

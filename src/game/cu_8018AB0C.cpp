@@ -1,5 +1,5 @@
 #include "engine/viewport.h"
-#include "game/cu_80163674.h"
+#include "game/UISModel.h"
 #include "game/fn_8018AB0C.h"
 
 struct Block_8018A978 {
@@ -24,7 +24,7 @@ struct Object_8018A978 {
     Block_8018A978 mUnknown16;
     Block_8018A978 mUnknown28;
     Block_8018A978 mUnknown40;
-    Object_80163788 *mpUnknown52;
+    UISModel_t *mpUnknown52;
 };
 
 struct Object_8021CA3C {
@@ -33,7 +33,7 @@ struct Object_8021CA3C {
 };
 
 extern "C" {
-Object_80163788 *ObjNew(int type, int flags, Desc_8018A978 *pDesc);
+UISModel_t *ObjNew(int type, int flags, Desc_8018A978 *pDesc);
 Object_8021CA3C *fn_8021CA3C(void);
 void fn_8018A8C8(int a);
 void fn_801CE9E0(int a);
@@ -70,8 +70,8 @@ void fn_8018AA44(Object_8018A978 *p, int *pFlag)
         fn_801CE95C();
         *pFlag = 1;
     }
-    fn_80163D64(p->mpUnknown52, (unsigned char)(pObject->mUnknown12 * 255.0f));
-    fn_80163D08(p->mpUnknown52, 1);
+    UISModelSetDrawMode(p->mpUnknown52, (unsigned char)(pObject->mUnknown12 * 255.0f));
+    UISModelDrawReady(p->mpUnknown52, 1);
     fn_801CE9E0(0);
 }
 
@@ -86,14 +86,14 @@ void fn_8018AB08(Object_8018A978 *p, int a, int b)
 
 int fn_8018AB0C(void)
 {
-    int result = fn_80163C30(0, 40);
+    int result = UISModelRegister(0, 40);
     lbl_803EB6B0 = 1;
     return result;
 }
 
 void fn_8018AB3C(void)
 {
-    fn_80163CD0();
+    UISModelUnregister();
     lbl_803EB6B0 = 0;
 }
 

@@ -4,7 +4,7 @@
 extern "C" {
 int fn_80177F70(void);
 float fn_80178298(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_8022D23C(void);
 int fn_8022D25C(int value);
 int fn_8022D2F4(unsigned short handle, unsigned short a, unsigned char b, unsigned char *pPairs, int c);
@@ -43,7 +43,7 @@ void fn_8017CBD4(void)
 
 void fn_8017CBFC(int team)
 {
-    fn_8017CC34(team, fn_80168708(team));
+    fn_8017CC34(team, PlayBookGetFormation(team));
 }
 
 void fn_8017CC34(int team, Object_800670B4 *pTeam)

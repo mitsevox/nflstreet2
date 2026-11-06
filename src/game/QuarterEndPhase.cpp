@@ -72,7 +72,7 @@ void fn_800CC560(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
 void fn_80162780(int a, int b);
-void fn_80168C40(void);
+void PlayBookSetupTeams(void);
 void fn_8016DCD4(int a);
 int fn_801735EC(void);
 void fn_80177E6C(int a, int b);
@@ -408,7 +408,7 @@ void QuarterEndPhase::OnUpdate(float f)
             fn_8017DB44();
         } else if (fn_8009D86C() == 5) {
             if (fn_801735EC()) {
-                fn_80168C40();
+                PlayBookSetupTeams();
                 fn_800CC560(1);
             }
         } else {
