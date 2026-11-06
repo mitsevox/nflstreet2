@@ -22,8 +22,8 @@ struct Table_803EBA94 {
 extern "C" {
 extern char lbl_802EBFCC[];
 
-void fn_8006DF2C(int a);
-void fn_8006EA04(unsigned int index, unsigned int value);
+void SndgPathResumeTrack(int a);
+void SndgSetVolumeOption(unsigned int index, unsigned int value);
 void fn_80072AD8(unsigned char a);
 void fn_80072B84(int a, int b, int c);
 int fn_80072E6C(void);
@@ -221,7 +221,7 @@ void fn_8001FB3C(int mode, int key)
         DbCursorSeek(&table, key);
         value = fn_8007B404(&table);
         fn_8007B3AC(&table);
-        fn_8006DF2C(0x11000001);
+        SndgPathResumeTrack(0x11000001);
         fn_80072B84(1, 0, value);
     } else if (mode - 1 < 0) {
         fn_80072B84(0, 0, 0);
@@ -279,7 +279,7 @@ int fn_8001FC08(int a, int b)
 void fn_8001FD48(void)
 {
     lbl_803EBA90 = fn_801EEB44(lbl_802EBFCC, 44);
-    fn_8006EA04(2, 100);
+    SndgSetVolumeOption(2, 100);
     if (fn_80072E6C()) {
         fn_80072F04();
     }
@@ -291,7 +291,7 @@ void fn_8001FD48(void)
 
 void fn_8001FDB8(void)
 {
-    fn_8006EA04(2, (unsigned char)(fn_8007F828(5) * 10));
+    SndgSetVolumeOption(2, (unsigned char)(fn_8007F828(5) * 10));
     fn_80072AD8(0);
     fn_801EEFAC(lbl_803EBA90);
     fn_801D2BD0(lbl_803EBA94);

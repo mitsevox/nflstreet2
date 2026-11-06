@@ -55,7 +55,7 @@ int Snd::Init()
     desc.mUnknown20 = 1;
     desc.mUnknown22 = 5;
     desc.mUnknown24 = 12;
-    desc.mUnknown32 = lbl_802D611C;
+    desc.mUnknown32 = gSndgAramRegions;
     desc.mUnknown36 = 0;
     desc.mUnknown40 = 0;
     desc.mUnknown44 = 0;

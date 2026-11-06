@@ -35,7 +35,7 @@ int fn_8022E560(void);
 int fn_80219044(void *p, int a, int b, int c, Entry_80219044 **ppEntries);
 void fn_8021956C(void *p, int a, int b, int c);
 void FileDebugProcess(void);
-void fn_8006CA84(int a);
+void SndgUpdate(int a);
 void fn_8018A7B0(void);
 void FESndUpdate(int a);
 void fn_80187E08(int show, const char *pText, int a, int b);
@@ -165,7 +165,7 @@ void fn_80187E08(int show, const char *pText, int a, int b)
             lbl_80362BB0[2] = &lbl_80362BBC[2];
             fn_80219044(lbl_803EB68C, 1, 3, 3, lbl_80362BB0);
             FileDebugProcess();
-            fn_8006CA84(1);
+            SndgUpdate(1);
             fn_8018A7B0();
         }
     } else {

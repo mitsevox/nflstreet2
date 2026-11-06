@@ -8106,7 +8106,7 @@ extern "C" void fn_800B3EC0(int a, int b)
 }
 
 extern "C" {
-void fn_8006CAEC(void);
+void SndgNullHook(void);
 void fn_800B50E8(int team);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
@@ -8122,7 +8122,7 @@ extern "C" void fn_800B3EFC(int team)
     unsigned char b;
     int i = 0;
 
-    fn_8006CAEC();
+    SndgNullHook();
     Object_800670B4 *pTeam = fn_80168708(team);
     int count = fn_80178D18(team);
     for (; i < count; i++) {
@@ -8562,7 +8562,7 @@ int fn_800BA94C(void);
 void fn_800BA9C0(int value);
 void fn_800BAA30(int value);
 int fn_800BAAB8(void);
-int fn_8006D884(int idx);
+int SndgChannelIsStreamBusy(int idx);
 GameCamera_t *CamGameGetCamera(int index);
 Object_800670B4 *fn_80168708(int team);
 void fn_80177F88(int value);
@@ -8836,7 +8836,7 @@ extern "C" void fn_800BACF4(void)
 
 extern "C" int fn_800BACF8(void)
 {
-    return fn_8006D884(4);
+    return SndgChannelIsStreamBusy(4);
 }
 
 extern "C" {
@@ -8884,7 +8884,7 @@ extern "C" void fn_800BADD4(void)
 
 extern "C" int fn_800BAE40(void)
 {
-    return fn_8006D884(4);
+    return SndgChannelIsStreamBusy(4);
 }
 
 extern "C" int fn_800BAE64(void)
@@ -9986,7 +9986,7 @@ extern "C" void fn_800AAAFC(void)
 
 extern "C" {
 void fn_800731D0(int a);
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 void fn_800C1E50(void);
 
 extern Class_80297B90 lbl_803EC904;
@@ -10004,7 +10004,7 @@ void Class_80297B90::vfn_06()
 void Class_80297B90::vfn_07()
 {
     if (ChallengeIsActive() == 0) {
-        fn_8006C854(119, 0);
+        SndgSfxPlay(119, 0);
         fn_8021D7B8(lbl_803EB688, 0x80000034, 0, 0);
         fn_8021956C(lbl_803EB688, 3, 5, 1);
     }
@@ -10303,7 +10303,7 @@ void Class_80297B90::vfn_04(float dt)
         }
         lbl_803EAA88->mUnknown4 = 4;
     case 4:
-        fn_8006CAEC();
+        SndgNullHook();
         if (InGameIsDemo() != 0) {
             fn_80047874(0);
             fn_8004730C(0);
@@ -10419,7 +10419,7 @@ void Class_80297B90::vfn_04(float dt)
         lbl_803EAA88->mUnknown16 = -1;
         fn_800AA010(0);
         fn_800AA124();
-        fn_8006CAEC();
+        SndgNullHook();
         if (fn_800C1E40() == 0) {
             if (fn_8017F584() == 11 && fn_80157080() != 0) {
                 break;
@@ -15638,7 +15638,7 @@ int ChallengeIsActive(void);
 void fn_8003A450(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
-void fn_8006E134(int flags);
+void SndgSituationSetFlags(int flags);
 void fn_800AD910(int a, float b);
 int CamGameGetCurrentSlot(void);
 void CamGameSetModeAll(int a);
@@ -15708,7 +15708,7 @@ void Class_80297C60::vfn_14(float dt)
             }
         } else {
             fn_801783D0(0x15, 1);
-            fn_8006E134(0x400);
+            SndgSituationSetFlags(0x400);
             fn_80162780(1, 1);
             fn_8013F3FC();
             fn_800AD910(2, dt);
@@ -17370,7 +17370,7 @@ void fn_8016E008(int team);
 void fn_80164A64(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
-int fn_8006D884(int idx);
+int SndgChannelIsStreamBusy(int idx);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA3;
@@ -17455,7 +17455,7 @@ extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
 
     if (lbl_803EABA0 == 0 && lbl_803EAB95 + 1 <= 5 &&
         pRecords[lbl_803EAB95 + 1].mUnknown0 != 9999 &&
-        fn_8006D884(((lbl_803EAB95 + 1) & 1) == 0 ? 4 : 5) == 0) {
+        SndgChannelIsStreamBusy(((lbl_803EAB95 + 1) & 1) == 0 ? 4 : 5) == 0) {
         int handle;
 
         pA = pRecords[lbl_803EAB95 + 1].mSlots[0].mpObject;
@@ -18572,7 +18572,7 @@ extern "C" void fn_800A02FC(void)
 extern "C" {
 void fn_80173D10(void);
 int ConSetChannelInfo(int a, int b, void *p);
-void fn_8006F0C8(int value);
+void SndgSpchClearPlayFlags(int value);
 void SpchIGSetWallTacklePlayer(int value);
 void SpchIGSetReceiverOpenPlayer(int value);
 void SpchIGSetStylingPlayer(int value);
@@ -18601,7 +18601,7 @@ void Class_80297AB8::vfn_03()
     fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
     PadInputSaveHandlers(lbl_803EA9E8);
     ConSetChannelInfo(-1, 3, lbl_802EC880);
-    fn_8006F0C8(127);
+    SndgSpchClearPlayFlags(127);
     SpchIGSetWallTacklePlayer(0);
     SpchIGSetReceiverOpenPlayer(0);
     SpchIGSetStylingPlayer(0);

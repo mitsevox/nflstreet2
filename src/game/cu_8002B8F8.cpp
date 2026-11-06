@@ -128,8 +128,8 @@ void PauseUnblock(void);
 int PauseIsOpen(void);
 void PauseSetPollDelay(int value);
 void AudmonEventPost(int type, Vector_80039F5C *pPos);
-int fn_8006C854(int index, Vector_80039F5C *pPos);
-void fn_8006E918(void);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
+void SndgReplayReset(void);
 void fn_800711DC(int a);
 void fn_800711E0(void);
 void fn_80071344(void);
@@ -678,7 +678,7 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
         if (p->mUnknownD94 & 0x400000) {
             p->mUnknownD94 |= 0x800000;
         } else {
-            fn_8006C854(0x77, 0);
+            SndgSfxPlay(0x77, 0);
             InGamePause();
             PauseBlock();
             fn_8002B960(&p->mUnknown6B8);
@@ -739,7 +739,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
                 CamGameResumeAll();
             }
             if (!(p->mUnknownD94 & 0x10000)) {
-                fn_8006C854(0x78, 0);
+                SndgSfxPlay(0x78, 0);
                 fn_80072AEC(0xD);
                 PauseSetPollDelay(4);
             }
@@ -1875,7 +1875,7 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 
 extern "C" void fn_8002E75C(Type_803EA368 *p, Timer_8002E7C0 *pTimer)
 {
-    fn_8006E918();
+    SndgReplayReset();
     fn_8002D1B8(p, pTimer->mUnknown00 - pTimer->mUnknown04);
     fn_8002D128(p, pTimer->mUnknown0C);
     fn_8002D160(p, pTimer->mUnknown08);

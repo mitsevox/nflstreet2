@@ -125,7 +125,7 @@ void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int GauntletScreenGetSelection(void);
 void MemCardScreenSetFlag(unsigned char a);
-void fn_8006CA18(int index, int a, unsigned char volume);
+void SndgSfxSetVolume(int index, int a, unsigned char volume);
 void fn_80073094(void);
 void fn_800731D0(int a);
 int DbCursorGetRow(DbCursor *pObject);
@@ -1017,7 +1017,7 @@ void fn_80010914(void)
         }
     }
     GameInfoSet(2, lbl_803EB96A);
-    fn_8006CA18(0x8F, 0x32, 0);
+    SndgSfxSetVolume(0x8F, 0x32, 0);
     if (fn_801801B4() == 1) {
         fn_8018807C(1);
     }

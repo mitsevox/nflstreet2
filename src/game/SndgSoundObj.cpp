@@ -10,10 +10,10 @@ void SndgAmbObjCreate(int type, unsigned int index, Vector_80039F5C *pPos, void 
 void SndgAmbObjUpdate(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject);
 unsigned int SndgAmbObjFindSlot(int type, int value);
 int SndgAmbTypeUsesPathNodes(int type);
-int SndgAmbIsPathNodeName(Struct_8006BBC4 *p);
+int SndgAmbIsPathNodeName(SndgAmbObjInfo_t *p);
 void SndgAmbObjStop(int type, unsigned int index);
 float SndgAmbGetTypeThreshold(int type);
-void fn_8006CA18(int index, int a, unsigned char volume);
+void SndgSfxSetVolume(int index, int a, unsigned char volume);
 
 void SndgNullUpdate(void)
 {
@@ -21,14 +21,14 @@ void SndgNullUpdate(void)
 
 void SndgFadeOutChannelGroup(void)
 {
-    fn_8006CA18(45, 30, 0);
-    fn_8006CA18(47, 30, 0);
-    fn_8006CA18(49, 30, 0);
-    fn_8006CA18(51, 30, 0);
-    fn_8006CA18(46, 30, 0);
-    fn_8006CA18(48, 30, 0);
-    fn_8006CA18(50, 30, 0);
-    fn_8006CA18(52, 30, 0);
+    SndgSfxSetVolume(45, 30, 0);
+    SndgSfxSetVolume(47, 30, 0);
+    SndgSfxSetVolume(49, 30, 0);
+    SndgSfxSetVolume(51, 30, 0);
+    SndgSfxSetVolume(46, 30, 0);
+    SndgSfxSetVolume(48, 30, 0);
+    SndgSfxSetVolume(50, 30, 0);
+    SndgSfxSetVolume(52, 30, 0);
 }
 
 void SndgSoundObjControl(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index)
@@ -52,7 +52,7 @@ void SndgSoundObjControl(int type, int mode, Vector_80039F5C *pPos, void *pObjec
 
 void SndgSoundObjUpdateFromEvent(int type, AudmonEvent_t *p)
 {
-    Struct_8006BBC4 *pInfo = (Struct_8006BBC4 *)p->mUnknown14;
+    SndgAmbObjInfo_t *pInfo = (SndgAmbObjInfo_t *)p->mUnknown14;
     float limit = SndgAmbGetTypeThreshold(type);
     int index = SndgAmbObjFindSlot(type, p->mUnknown18);
 

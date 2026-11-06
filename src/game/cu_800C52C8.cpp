@@ -74,7 +74,7 @@
 #include "game/EnvFogSettings.h"
 
 extern "C" {
-void fn_8006F0B8(int kind);
+void SndgSpchSetPlayFlags(int kind);
 int fn_8009A578(int handle);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009B0CC(int team, int value);
@@ -650,7 +650,7 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
     }
     if (result != 0) {
         AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
-        fn_8006F0B8(8);
+        SndgSpchSetPlayFlags(8);
         p->mUnknown1219 = 0;
     }
     return result;
@@ -677,7 +677,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
         fn_800D4748(p);
         fn_800A8954(13, p->mIdBytes[2], p);
         AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
-        fn_8006F0B8(8);
+        SndgSpchSetPlayFlags(8);
         p->mUnknown1219 = 1;
     }
     return result;

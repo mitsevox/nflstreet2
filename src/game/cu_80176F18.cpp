@@ -107,7 +107,7 @@ int ChallengeIsActive(void);
 CollideSet_t *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
-void fn_8006F0B8(int a);
+void SndgSpchSetPlayFlags(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
 int EnvIsENVFSet(void);
@@ -1862,7 +1862,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         handled = 1;
                         result = 1;
                         AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
-                        fn_8006F0B8(1);
+                        SndgSpchSetPlayFlags(1);
                         fn_801794B4(pRecord->mUnknown0, 0x706F7374, (int)(pRecord->mUnknown10 - startY));
                         fn_801794B4(pRecord->mUnknown0, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
                         fn_801794B4(pRecord->mUnknown0, 0x79547374, (int)(pRecord->mUnknown10 - startY));
@@ -1874,7 +1874,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                     if (!handled) {
                         fn_80093C3C(1, 13, fn_8009BCE8(&receiver));
                         AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
-                        fn_8006F0B8(2);
+                        SndgSpchSetPlayFlags(2);
                         fn_8017937C(receiver, 0x6C746467, 1);
                     }
                 }
