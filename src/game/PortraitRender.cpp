@@ -1,6 +1,6 @@
 /* Create-a-player portrait rendering. Sets up the portrait models with
-   their poses and materials, draws them off-screen over a
-   black block of the frame buffer, reads the 128x128 block back and turns
+   their poses and materials, draws them into a black block
+   in the centre of the frame buffer, reads the 128x128 block back and turns
    it into an 8-bit image with an RGB5A3 palette for the portrait job. */
 
 #include <dolphin/gx/GXPixel.h>
