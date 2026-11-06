@@ -5,60 +5,60 @@
 
 extern "C" {
 
-int fn_8027AEE4(Node_80279D90 *node, int count, float *a, float *b, int flag)
+int SFILTER_unpackmtpf(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
-    Decoder_8027B168 *decoder;
+    SndMtUnpackFilter_t *decoder;
     Format_8027D284 format;
     int last;
     int total;
     int n;
 
-    decoder = (Decoder_8027B168 *)node;
+    decoder = (SndMtUnpackFilter_t *)node;
     total = 0;
-    if (decoder->m28 != 0) {
-        fn_8027952C(decoder->m24, decoder->m38, decoder->m28);
-        decoder->m28 = 0;
+    if (decoder->mPendingCount != 0) {
+        fn_8027952C(decoder->mStream, decoder->mChannel, decoder->mPendingCount);
+        decoder->mPendingCount = 0;
     }
     while (count > 0) {
-        n = fn_8027D05C(decoder->m34, &b, count);
-        decoder->m2C += n;
+        n = fn_8027D05C(decoder->mpCodec, &b, count);
+        decoder->mPacketPosition += n;
         b += n;
-        decoder->m28 += n;
+        decoder->mPendingCount += n;
         total += n;
         if (n < count) {
             count -= n;
-            decoder->m1C = fn_802792F0(decoder->m24, decoder->m38, &decoder->m20, &last);
-            if (decoder->m1C != 0) {
-                decoder->m2C = 0;
-                if (decoder->m30 <= 2) {
+            decoder->mpPacket = fn_802792F0(decoder->mStream, decoder->mChannel, &decoder->mPacketCount, &last);
+            if (decoder->mpPacket != 0) {
+                decoder->mPacketPosition = 0;
+                if (decoder->mMode <= 2) {
                     if (last == 0) {
-                        format = fn_8027D284(decoder->m34);
+                        format = fn_8027D284(decoder->mpCodec);
                         format.m8 = 1;
-                        fn_8027D2C4(decoder->m34, &format, 0);
+                        fn_8027D2C4(decoder->mpCodec, &format, 0);
                     } else {
-                        format = fn_8027D284(decoder->m34);
+                        format = fn_8027D284(decoder->mpCodec);
                         format.m8 = 0;
-                        fn_8027D2C4(decoder->m34, &format, 0);
+                        fn_8027D2C4(decoder->mpCodec, &format, 0);
                     }
-                    fn_8027D2E0(decoder->m34, 0);
+                    fn_8027D2E0(decoder->mpCodec, 0);
                 } else {
                     if (last == 0) {
-                        format = fn_8027D284(decoder->m34);
+                        format = fn_8027D284(decoder->mpCodec);
                         format.m4 = 0;
                         format.m8 = 1;
                     } else {
-                        format = fn_8027D284(decoder->m34);
+                        format = fn_8027D284(decoder->mpCodec);
                         format.m8 = 0;
                     }
-                    fn_8027D2C4(decoder->m34, &format, 0);
-                    fn_8027D2E0(decoder->m34, 1);
+                    fn_8027D2C4(decoder->mpCodec, &format, 0);
+                    fn_8027D2E0(decoder->mpCodec, 1);
                 }
-                fn_8027CFCC(decoder->m34, decoder->m1C + 1, decoder->m20 * 4, decoder->m20);
+                fn_8027CFCC(decoder->mpCodec, decoder->mpPacket + 1, decoder->mPacketCount * 4, decoder->mPacketCount);
             } else {
-                if (count > 0 && decoder->m28 != 0) {
+                if (count > 0 && decoder->mPendingCount != 0) {
                     memset(b, 0, count * 4);
                 }
-                decoder->m20 = 0;
+                decoder->mPacketCount = 0;
                 count = 0;
             }
         } else {
@@ -68,31 +68,31 @@ int fn_8027AEE4(Node_80279D90 *node, int count, float *a, float *b, int flag)
     return total;
 }
 
-void fn_8027B13C(Node_80279D90 *node)
+void SFILTER_unpackmtpfrestore(Node_80279D90 *node)
 {
-    Decoder_8027B168 *decoder;
+    SndMtUnpackFilter_t *decoder;
 
-    decoder = (Decoder_8027B168 *)node;
-    if (decoder->m34 != 0) {
-        fn_8027C04C(decoder->m34);
+    decoder = (SndMtUnpackFilter_t *)node;
+    if (decoder->mpCodec != 0) {
+        fn_8027C04C(decoder->mpCodec);
     }
 }
 
-void fn_8027B168(Node_80279D90 *node, Params_80275F80 *params)
+void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params)
 {
-    Decoder_8027B168 *decoder;
+    SndMtUnpackFilter_t *decoder;
 
-    decoder = (Decoder_8027B168 *)node;
-    node->m0 = fn_8027AEE4;
-    decoder->m24 = fn_802789E0(fn_80274304(params->m1C));
-    decoder->m38 = fn_80274334(params->m1C);
-    decoder->m1C = 0;
-    decoder->m2C = 0;
-    decoder->m30 = params->m24;
-    decoder->m20 = params->mC;
-    node->m4 = fn_8027B13C;
-    decoder->m34 = fn_8027CF9C(fn_8027C020(3432));
-    decoder->m28 = 0;
+    decoder = (SndMtUnpackFilter_t *)node;
+    node->m0 = SFILTER_unpackmtpf;
+    decoder->mStream = fn_802789E0(fn_80274304(params->m1C));
+    decoder->mChannel = fn_80274334(params->m1C);
+    decoder->mpPacket = 0;
+    decoder->mPacketPosition = 0;
+    decoder->mMode = params->m24;
+    decoder->mPacketCount = params->mC;
+    node->m4 = SFILTER_unpackmtpfrestore;
+    decoder->mpCodec = fn_8027CF9C(fn_8027C020(3432));
+    decoder->mPendingCount = 0;
 }
 
 }

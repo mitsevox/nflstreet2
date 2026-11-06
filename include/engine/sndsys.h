@@ -171,18 +171,18 @@ typedef struct Decoder_8027AE04 {
     unsigned char *m2C;
 } Decoder_8027AE04;
 
-typedef struct Decoder_8027B168 {
+typedef struct SndMtUnpackFilter_t {
     Node_80279D90 mNode;
-    unsigned char *m1C;
-    int m20;
-    int m24;
-    int m28;
-    unsigned short m2C;
-    unsigned char mUnknown2E[2];
-    int m30;
-    Codec_8027CF9C *m34;
-    unsigned char m38;
-} Decoder_8027B168;
+    unsigned char *mpPacket;
+    int mPacketCount;
+    int mStream;
+    int mPendingCount;
+    unsigned short mPacketPosition;
+    unsigned char unk_0x2E[2];
+    int mMode;
+    Codec_8027CF9C *mpCodec;
+    unsigned char mChannel;
+} SndMtUnpackFilter_t;
 
 typedef struct Decoder_8027B328 {
     Node_80279D90 mNode;
@@ -267,7 +267,7 @@ int fn_8027B1F8(Node_80279D90 *node, int count, float *a, float *b, int flag);
 
 /* Defined in another file of the library. */
 void fn_8027952C(int index, int channel, int value);
-void fn_8027B168(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B328(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B464(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B7B0(Node_80279D90 *node, Params_80275F80 *params);
