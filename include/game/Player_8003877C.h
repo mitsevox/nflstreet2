@@ -11,10 +11,10 @@
    used by every walk of the array. */
 struct Player_8003877C {
     Object_80039F5C mObject;
-    Object_801BA03C mUnknown3096;
+    AnimHeader_t mUnknown3096;
     Record_800D81C8 mUnknown3108[4];
     char mUnknown3604[404];
-    Object_801BA03C mUnknown4008[2];
+    AnimHeader_t mUnknown4008[2];
     Record_800D81C8 mUnknown4032[2][2];
     char mUnknown4528[2][404];
 };

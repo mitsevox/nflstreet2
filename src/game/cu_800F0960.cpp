@@ -763,7 +763,7 @@ int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0C0C(Object_80039F5C *p, int a);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
-void fn_801BD81C(void *p, float value);
+void AnimSeqSetSpeed(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800B83A0(Object_80039F5C *p);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
@@ -1129,7 +1129,7 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
             speed += excess / 170.0f * a;
         }
         pEntry = &pEntries[index];
-        fn_801BD81C(&pEntry->mUnknown4C.mpUnknown0, fn_801CFFA0(speed));
+        AnimSeqSetSpeed(&pEntry->mUnknown4C.mpUnknown0, fn_801CFFA0(speed));
         speed = 1.0f;
         if (pRatings[0] > 85) {
             short excess = pRatings[0] - 85;
@@ -1189,7 +1189,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
                 speed += excess / 170.0f * a;
             }
             pEntry = &pEntries[entry];
-            fn_801BD81C(&pEntry->mUnknown4C.mpUnknown0, fn_801CFFA0(speed));
+            AnimSeqSetSpeed(&pEntry->mUnknown4C.mpUnknown0, fn_801CFFA0(speed));
             speed = 1.0f;
             if (pRatings[0] > 85) {
                 short excess = pRatings[0] - 85;

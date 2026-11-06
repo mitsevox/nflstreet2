@@ -13,7 +13,7 @@ void fn_801C06E8(TextureConfig_801C06E8 *config)
 
     lbl_802F4870.mCount = 0;
     lbl_802F4870.mCapacity = config->mCapacity;
-    fn_801C10D8(lbl_802F4870.mUnknown10);
+    LLAnimTexLibInit(lbl_802F4870.mUnknown10);
     lbl_802F4870.mTextures = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 0);
     fn_801D34D0(lbl_802F4870.mTextures, lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 1);
     lbl_802F4870.mPool = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 0);
@@ -30,7 +30,7 @@ void fn_801C07DC(void)
 
     for (i = 0; i < lbl_802F4870.mCount; i++) {
         Texture_801C0928 *texture = lbl_802F4870.mTextures[i];
-        fn_801C0F84(&texture->mImage);
+        LLAnimTexDeleteTexture(&texture->mImage);
         if (texture->mLoaded)
             fn_801C09F8(texture);
     }
@@ -38,8 +38,8 @@ void fn_801C07DC(void)
     lbl_802F4870.mTextures = 0;
     fn_801D2BD0(lbl_802F4870.mPool);
     lbl_802F4870.mPool = 0;
-    fn_801C10DC(lbl_802F4870.mUnknown10);
-    fn_801C10DC(lbl_802F4870.mUnknown10);
+    LLAnimTexLibShutdown(lbl_802F4870.mUnknown10);
+    LLAnimTexLibShutdown(lbl_802F4870.mUnknown10);
     lbl_802F4870.mCount = 0;
     lbl_802F4870.mCapacity = 0;
     lbl_802F4870.mInitialized = 0;
@@ -82,7 +82,7 @@ void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc)
 void fn_801C09B8(Texture_801C0928 *texture)
 {
     if (!texture->mLoaded) {
-        fn_801C0FA4(texture);
+        LLAnimTexBindTexture(texture);
         texture->mLoaded = 1;
     }
 }
@@ -90,7 +90,7 @@ void fn_801C09B8(Texture_801C0928 *texture)
 void fn_801C09F8(Texture_801C0928 *texture)
 {
     if (texture->mLoaded == 1) {
-        fn_801C10A4(texture);
+        LLAnimTexUnbindTexture(texture);
         texture->mLoaded = 0;
     }
 }
@@ -149,12 +149,12 @@ Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load)
 
     fn_801C0928(texture, desc);
     if (load && !texture->mLoaded)
-        fn_801C1054(texture);
+        LLAnimTexAllocTexCoords(texture);
     *pData = desc->mData;
-    fn_801C0F64(*pData, &texture->mImage);
+    LLAnimTexCreateTexture(*pData, &texture->mImage);
     fn_801C09B8(texture);
     if (load)
-        fn_801C0F84(&texture->mImage);
+        LLAnimTexDeleteTexture(&texture->mImage);
     lbl_802F4870.mCount++;
     return texture;
 }
@@ -173,7 +173,7 @@ void fn_801C0CCC(Texture_801C0928 *texture)
             break;
         }
     }
-    fn_801C0F84(&texture->mImage);
+    LLAnimTexDeleteTexture(&texture->mImage);
     if (texture->mLoaded)
         fn_801C09F8(texture);
     lbl_802F4870.mCount--;

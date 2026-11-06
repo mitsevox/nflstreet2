@@ -8,7 +8,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Object_80137ABC *pB
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 extern "C" int fn_801BA6B0(Record_800D81C8 *entry);
 extern "C" void fn_801BA6BC(Record_800D81C8 *entry, int value);
-extern "C" void fn_801BD81C(void *p, float value);
+extern "C" void AnimSeqSetSpeed(void *p, float value);
 extern "C" void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 
 extern "C" {
@@ -71,7 +71,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
             fn_801BA6BC(&pRecords[entry], fn_801BA6B0(&pRecords[entry]) == 0);
         }
         pRecords[entry].mUnknown2C = duration;
-        fn_801BD81C(&pRecords[entry].mUnknown4C, blend);
+        AnimSeqSetSpeed(&pRecords[entry].mUnknown4C, blend);
         p->mpUnknown800[entry].mUnknownC = lbl_803EC92C->mUnknown4.mUnknown0;
         fn_801C1F94(&message, 0, sizeof(Message_800F01CC));
         message.mId = 28;

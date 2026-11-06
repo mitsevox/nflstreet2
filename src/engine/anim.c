@@ -1,59 +1,63 @@
+/* Animation library core: starts and stops the animation module, keeps the
+   stacks of game data that animation scripts hand to the game when they reach a
+   game-defined opcode, and records which sequence file version is in use. */
+
 #include "engine/cu_801B9F00.h"
-#include "engine/cu_801BA818.h"
+#include "engine/animemot.h"
 #include "engine/fn_801F7BD4.h"
 
-typedef int (*Callback_803EBB7C)(void *pUser, int op, unsigned int state);
+typedef int (*AnimUserOpcodeCallback_t)(void *pUser, int op, unsigned int state);
 
-extern unsigned char lbl_803EBB78;
-extern Callback_803EBB7C lbl_803EBB7C;
-extern Callback_803EBB7C lbl_803EBB80;
-extern int lbl_803EBB84;
-extern signed char lbl_803ECEB4;
-extern signed char lbl_803ECEB5;
-extern void *lbl_8037E840[];
-extern unsigned int lbl_8037E84C[];
+extern unsigned char _Anim_ModuleActive;
+extern AnimUserOpcodeCallback_t _Anim_pUserOpcodeCallback;
+extern AnimUserOpcodeCallback_t _Anim_pUserOpcodeSkipCallback;
+extern int _Anim_SeqVersion;
+extern signed char _Anim_UserDataStackPosition;
+extern signed char _Anim_UserStateStackPosition;
+extern void *_Anim_pCurrentUserData[];
+extern unsigned int _Anim_UserCallbackState[];
 
-int fn_801B9D00(int op)
+int _AnimDoUserOpcodeCallback(int op)
 {
-    return lbl_803EBB7C(lbl_8037E840[lbl_803ECEB4], op, lbl_8037E84C[lbl_803ECEB4]);
+    return _Anim_pUserOpcodeCallback(_Anim_pCurrentUserData[_Anim_UserDataStackPosition], op, _Anim_UserCallbackState[_Anim_UserDataStackPosition]);
 }
 
-int fn_801B9D50(int op)
+int _AnimDoUserOpcodeSkipCallback(int op)
 {
-    return lbl_803EBB80(0, op, 0);
+    return _Anim_pUserOpcodeSkipCallback(0, op, 0);
 }
 
-void fn_801B9D84(unsigned int state)
+void _AnimUserCallbackPushState(unsigned int state)
 {
-    lbl_8037E84C[++lbl_803ECEB5] = state;
+    _Anim_UserCallbackState[++_Anim_UserStateStackPosition] = state;
 }
 
-void fn_801B9DA8(void *pUser)
+void _AnimUserCallbackPushInfo(void *pUser)
 {
-    lbl_8037E840[++lbl_803ECEB4] = pUser;
+    _Anim_pCurrentUserData[++_Anim_UserDataStackPosition] = pUser;
 }
 
-void fn_801B9DCC(void)
+void _AnimUserCallbackPopState(void)
 {
-    lbl_803ECEB5--;
+    _Anim_UserStateStackPosition--;
 }
 
-void fn_801B9DDC(void)
+void _AnimUserCallbackPopInfo(void)
 {
-    lbl_803ECEB4--;
+    _Anim_UserDataStackPosition--;
 }
 
-int fn_801B9DEC(unsigned int mode)
+int AnimInit(unsigned int mode)
 {
     int err = 0;
 
-    if (lbl_803EBB78 == 0)
-        lbl_803EBB78 = 1;
+    if (_Anim_ModuleActive == 0)
+        _Anim_ModuleActive = 1;
     else
         err = 0x140001;
-    lbl_803ECEB4 = -1;
-    lbl_803ECEB5 = -1;
-    fn_801BA848(0);
+    _Anim_UserDataStackPosition = -1;
+    _Anim_UserStateStackPosition = -1;
+    AnimFileSetCustomRelocateFunc(0);
     switch (mode) {
     case 0:
         fn_801BC64C(fn_801BC57C);
@@ -63,18 +67,18 @@ int fn_801B9DEC(unsigned int mode)
         fn_801BC64C(fn_801BC0E8);
         break;
     }
-    lbl_803EBB84 = mode;
+    _Anim_SeqVersion = mode;
     fn_801F7BD4(err);
     return err;
 }
 
-int fn_801B9E88(void)
+int AnimShutdown(void)
 {
     int err = 0;
 
-    if (lbl_803EBB78) {
-        lbl_803EBB7C = 0;
-        lbl_803EBB78 = 0;
+    if (_Anim_ModuleActive) {
+        _Anim_pUserOpcodeCallback = 0;
+        _Anim_ModuleActive = 0;
     } else {
         err = 0x140002;
     }
@@ -82,20 +86,20 @@ int fn_801B9E88(void)
     return err;
 }
 
-void fn_801B9EDC(Object_801BA03C *pList, unsigned short a, unsigned short b, unsigned short count)
+void AnimInitHeader(AnimHeader_t *pList, unsigned short a, unsigned short b, unsigned short count)
 {
     pList->mUnknown0 = a;
     pList->mUnknown2 = b;
     pList->mUnknown4 = count;
 }
 
-void fn_801B9EEC(Callback_803EBB7C callback, Callback_803EBB7C fallback)
+void AnimSetUserOpcodeCallbacks(AnimUserOpcodeCallback_t callback, AnimUserOpcodeCallback_t fallback)
 {
-    lbl_803EBB7C = callback;
-    lbl_803EBB80 = fallback;
+    _Anim_pUserOpcodeCallback = callback;
+    _Anim_pUserOpcodeSkipCallback = fallback;
 }
 
-int fn_801B9EF8(void)
+int AnimGetSeqVersion(void)
 {
-    return lbl_803EBB84;
+    return _Anim_SeqVersion;
 }

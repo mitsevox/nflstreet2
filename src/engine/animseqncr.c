@@ -1,25 +1,29 @@
+/* Scripted sequence files: makes a loaded sequence file usable by turning its
+   offsets into pointers, gives access to its player, static and item records and
+   their timed keys, and measures the sequence's length. */
+
 #include "engine/fn_801C065C.h"
 #include "engine/cu_801B9F00.h"
-#include "engine/cu_801BA818.h"
-#include "engine/cu_801BFFA8.h"
+#include "engine/animemot.h"
+#include "engine/AnimSeqCamera.h"
 
 #define RELOCATE(p, base) ((p) = (void *)((char *)(base) + (int)(p)))
 
-void *fn_801C01DC(void *base, int offset)
+void *_AnimSeqncrRelocatePtr(void *base, int offset)
 {
     return (char *)base + offset;
 }
 
-float fn_801C01E4(Bank_801C009C *bank)
+float AnimSeqncrGetLength(AnimSeqncrBank_t *bank)
 {
     float result = 0.0f;
     unsigned short i;
 
     for (i = 0; i < bank->mFrameCount; i++) {
-        Frame_801C029C *frame = fn_801C029C(bank, i);
+        AnimSeqncrPlayer_t *frame = AnimSeqncrGetPlayerPtr(bank, i);
         AnimFileFormat_t *file = fn_801BC084(fn_801BBE5C(frame->mUnknown2A | 0x4000, frame->mUnknownE));
         if (file != 0) {
-            float length = fn_801BD60C(fn_801BAB34(file, 0)) / fn_801BFFA0();
+            float length = AnimSeqGetLife(AnimFileGetAnimation(file, 0)) / AnimSequencerGetTicksPerSecond();
             if (length > result)
                 result = length;
         }
@@ -27,62 +31,62 @@ float fn_801C01E4(Bank_801C009C *bank)
     return result;
 }
 
-Frame_801C029C *fn_801C029C(Bank_801C009C *bank, unsigned short index)
+AnimSeqncrPlayer_t *AnimSeqncrGetPlayerPtr(AnimSeqncrBank_t *bank, unsigned short index)
 {
     if (index == 0)
         return bank->mFirstFrame;
     return &bank->mFrames[index - 1];
 }
 
-Frame_801C029C *fn_801C02C4(Bank_801C009C *bank)
+AnimSeqncrPlayer_t *AnimSeqncrGetFirstPlayerPtr(AnimSeqncrBank_t *bank)
 {
     return bank->mFirstFrame;
 }
 
-Frame_801C029C *fn_801C02CC(Bank_801C009C *bank, int index)
+AnimSeqncrPlayer_t *AnimSeqncrGetStaticPtr(AnimSeqncrBank_t *bank, int index)
 {
     return &bank->mFrames2[index];
 }
 
-Item_801C02DC *fn_801C02DC(Bank_801C009C *bank, int index)
+AnimSeqncrItem_t *AnimSeqncrGetItemPtr(AnimSeqncrBank_t *bank, int index)
 {
     return &bank->mItems[index];
 }
 
-void fn_801C02EC(File_801C02EC *file)
+void AnimSeqncrRelocateSeqFile(AnimSeqncrFile_t *file)
 {
     unsigned int i;
 
     for (i = 0; i < file->mCount; i++) {
-        Bank_801C009C *bank;
+        AnimSeqncrBank_t *bank;
         unsigned short j;
         unsigned int k;
 
-        file->mBanks[i] = bank = fn_801C01DC(file, (int)file->mBanks[i]);
-        bank->mUnknown14 = fn_801C01DC(file, (int)bank->mUnknown14);
-        bank->mFirstFrame = fn_801C01DC(file, (int)bank->mFirstFrame);
-        bank->mFrames = fn_801C01DC(file, (int)bank->mFrames);
-        bank->mFrames2 = fn_801C01DC(file, (int)bank->mFrames2);
-        bank->mGroups = fn_801C01DC(file, (int)bank->mGroups);
-        bank->mItems = fn_801C01DC(file, (int)bank->mItems);
+        file->mBanks[i] = bank = _AnimSeqncrRelocatePtr(file, (int)file->mBanks[i]);
+        bank->mUnknown14 = _AnimSeqncrRelocatePtr(file, (int)bank->mUnknown14);
+        bank->mFirstFrame = _AnimSeqncrRelocatePtr(file, (int)bank->mFirstFrame);
+        bank->mFrames = _AnimSeqncrRelocatePtr(file, (int)bank->mFrames);
+        bank->mFrames2 = _AnimSeqncrRelocatePtr(file, (int)bank->mFrames2);
+        bank->mGroups = _AnimSeqncrRelocatePtr(file, (int)bank->mGroups);
+        bank->mItems = _AnimSeqncrRelocatePtr(file, (int)bank->mItems);
         if (bank->mFrameCount == 0xFFFF) {
             bank->mFirstFrame = 0;
             bank->mFrameCount = 0;
         }
         for (j = 0; j < bank->mGroupCount; j++) {
-            Group_801BFFD8 *group = &bank->mGroups[j];
+            AnimSeqCamGroup_t *group = &bank->mGroups[j];
             unsigned short m;
 
-            group->mChildren = fn_801C01DC(file, (int)group->mChildren);
-            if (fn_801B9EF8() != 2)
+            group->mChildren = _AnimSeqncrRelocatePtr(file, (int)group->mChildren);
+            if (AnimGetSeqVersion() != 2)
                 continue;
             for (m = 0; m < group->mCount; m++) {
-                Group_801C001C *child = &group->mChildren[m];
+                AnimSeqCamSubGroup_t *child = &group->mChildren[m];
                 unsigned short n;
 
-                child->mSamples = fn_801C01DC(file, (int)child->mSamples);
+                child->mSamples = _AnimSeqncrRelocatePtr(file, (int)child->mSamples);
                 for (n = 0; n < child->mCount; n++) {
-                    Sample_801C009C *sample = &child->mSamples[n];
+                    AnimSeqCamSample_t *sample = &child->mSamples[n];
                     RELOCATE(sample->mCurves[0].mpKeys, file);
                     RELOCATE(sample->mCurves[1].mpKeys, file);
                     RELOCATE(sample->mCurves[2].mpKeys, file);
@@ -102,24 +106,24 @@ void fn_801C02EC(File_801C02EC *file)
             }
         }
         for (k = 0; k < bank->mFrameCount; k++) {
-            bank->mFrames[k].mKeys = fn_801C01DC(file, (int)bank->mFrames[k].mKeys);
+            bank->mFrames[k].mKeys = _AnimSeqncrRelocatePtr(file, (int)bank->mFrames[k].mKeys);
             bank->mFrames[k].mUnknown20 = 0.0f;
         }
         if (bank->mFirstFrame != 0) {
-            bank->mFirstFrame->mKeys = fn_801C01DC(file, (int)bank->mFirstFrame->mKeys);
+            bank->mFirstFrame->mKeys = _AnimSeqncrRelocatePtr(file, (int)bank->mFirstFrame->mKeys);
             bank->mFrameCount++;
         }
         for (k = 0; k < bank->mFrameCount2; k++)
-            bank->mFrames2[k].mKeys = fn_801C01DC(file, (int)bank->mFrames2[k].mKeys);
+            bank->mFrames2[k].mKeys = _AnimSeqncrRelocatePtr(file, (int)bank->mFrames2[k].mKeys);
         for (k = 0; k < bank->mItemCount; k++)
-            bank->mItems[k].mUnknown10 = fn_801C01DC(file, (int)bank->mItems[k].mUnknown10);
+            bank->mItems[k].mUnknown10 = _AnimSeqncrRelocatePtr(file, (int)bank->mItems[k].mUnknown10);
     }
 }
 
 /* Queries before the first key return the default value zero. */
-int GetTimedKeyValue(void *p, float time)
+int AnimSeqncrGetKeyValue(void *p, float time)
 {
-    Frame_801C029C *frame = p;
+    AnimSeqncrPlayer_t *frame = p;
     unsigned int count = frame->mKeyCount;
     unsigned int i = 0;
     int result = 0;
@@ -135,7 +139,7 @@ int GetTimedKeyValue(void *p, float time)
     return result;
 }
 
-void fn_801C06A0(Table_801C06A0 *table)
+void AnimSeqncrRelocateTable(AnimSeqncrTable_t *table)
 {
     int i;
 

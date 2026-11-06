@@ -68,7 +68,7 @@ extern "C" void fn_80093410(int handle)
                         p->mMotion.mPos.mY = -p->mMotion.mPos.mY;
                     }
                 }
-                Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+                Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
                 int id = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
 
                 if (id != 0xFFFFFF && fn_801BBEC0(id, 0x400) != 0xFFFFFF) {

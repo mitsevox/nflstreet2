@@ -3,7 +3,7 @@
 #include "engine/llmatrix.h"
 
 extern "C" {
-Frame_80141210 *fn_801C02C4(Actor_801C009C *pActor);
+Frame_80141210 *AnimSeqncrGetFirstPlayerPtr(Actor_801C009C *pActor);
 int fn_80093AF0(Object_80039F5C *p);
 void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p, Vector_80039F5C *pOut,
                  int *pAngle);
@@ -14,7 +14,7 @@ void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_
    turn (or p copies pRef) and p's own spot is returned. Otherwise the start
    comes from fn_80091EC0, and a nonzero frameIndex takes that frame's
    offset and turn: flag 0x10 keeps p's spot, flag 0x20 turns the offset
-   through the matrix stack around the start. For index 0 fn_801C029C
+   through the matrix stack around the start. For index 0 AnimSeqncrGetPlayerPtr
    returns the actor's +0x18 record; other indexes return 0x30-byte entries
    of the array at actor +0x1C. Only fields below +0x30 (+0x18..+0x24) are
    read from that frame, and those offsets line up in both, so the
@@ -29,7 +29,7 @@ extern "C" int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, O
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 
     if (pActor->mUnknown8 & 0x400) {
-        Frame_80141210 *pFrame = fn_801C02C4(pActor);
+        Frame_80141210 *pFrame = AnimSeqncrGetFirstPlayerPtr(pActor);
 
         if (!(pActor->mUnknown8 & 0x800)) {
             p->mMotion.mFacing = 0;
@@ -65,7 +65,7 @@ extern "C" int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, O
     spot.mY = start.mY;
     spot.mZ = start.mZ;
     if (frameIndex != 0) {
-        Frame_80141210 *pFrame = (Frame_80141210 *)fn_801C029C(pActor, frameIndex);
+        Frame_80141210 *pFrame = (Frame_80141210 *)AnimSeqncrGetPlayerPtr(pActor, frameIndex);
 
         if (pActor->mUnknown8 & 0x10) {
             spot.mX = p->mMotion.mPos.mX;

@@ -161,8 +161,8 @@ float fn_80178A08(void);
 int fn_80178C9C(void);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
-float fn_801BD690(Block_801BD6D4 *p, int key);
-void fn_801BD81C(void *p, float value);
+float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
+void AnimSeqSetSpeed(void *p, float value);
 int fn_801CFE40(float y, float x);
 float fn_801CFFA0(float value);
 int fn_801CFFD0(int a, int b);
@@ -429,7 +429,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
                 index = fn_801BA5A8(p->mpUnknown796, pEntries, key, 0);
                 pTimer->mUnknown4 = pEntries[index].mUnknown48;
                 if (pTimer->mUnknown4 == 0.0f) {
-                    pTimer->mUnknown4 = fn_801BD690(&pEntries[index].mUnknown4C, 0xC004);
+                    pTimer->mUnknown4 = AnimSeqGetTimeToOpcode(&pEntries[index].mUnknown4C, 0xC004);
                 }
                 if (pTimer->mUnknown4 != 0.0f) {
                     pTimer->mUnknown4 = pTimer->mUnknown4 > 75.0f ? 75.0f : pTimer->mUnknown4;
@@ -717,7 +717,7 @@ extern "C" int fn_80110C70(Table_8010B738 *pTable, unsigned short key, void *pA,
         } else {
             pBlock->mUnknown32 = (p->mMotion.mFacing + angle) & 0xFFFFFF;
         }
-        fn_801BD81C(&pEntries[pBlock->mUnknown8].mUnknown4C, fn_801CFFA0(pBlock->mUnknown16));
+        AnimSeqSetSpeed(&pEntries[pBlock->mUnknown8].mUnknown4C, fn_801CFFA0(pBlock->mUnknown16));
         pEntries[pBlock->mUnknown8].mUnknown2C = pBlock->mUnknown20;
         pBlock->mUnknown28 = (int)(pBlock->mUnknown24 / pBlock->mUnknown12);
         pRecord = pTable->mEntries[index].mpRecord;

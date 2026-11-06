@@ -238,7 +238,7 @@ Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 int fn_800B2320(void);
 Object_80039F5C *fn_800B2340(int index);
 Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
-int fn_801C01C4(Actor_801C009C *pActor);
+int AnimSeqCamGetFileFlag(Actor_801C009C *pActor);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800944A4(int kind);
@@ -478,7 +478,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                         pRequest->mRequest.mUnknownE0.mUnknown0 = 0;
                         pRequest->mRequest.mUnknownE0.mUnknown4.mWord = -1;
                         lbl_802D73B8[id].mUnknown8++;
-                        if (fn_801C01C4(pActor) == 0) {
+                        if (AnimSeqCamGetFileFlag(pActor) == 0) {
                             pRequest->mRequest.mUnknownE0.mUnknown8.mWord = 0;
                             pRequest->mRequest.mUnknownE0.mUnknown0 = 1;
                             pRequest->mRequest.mUnknownE0.mUnknown4.mWord = 1;
@@ -777,7 +777,7 @@ extern "C" void fn_800917A4(int index)
             if (pBlock->mUnknown680 != 0xFFFF) {
                 Extra_8004149C *pExtra = pBlock->mpUnknown676->mUnknown428;
 
-                fn_801BA384((Object_801BA03C *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
+                fn_801BA384((AnimHeader_t *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
                             pBlock->mUnknown680);
                 pBlock->mUnknown680 = 0xFFFF;
             }
@@ -794,7 +794,7 @@ extern "C" int fn_80091864(int index)
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 
     for (; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         switch (pFrame->mUnknown20) {
         case 0x42414C4C:
@@ -849,7 +849,7 @@ extern "C" void fn_800919F0(int index)
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 
     for (; i < pActor->mUnknown4; i++) {
-        switch (fn_801C029C(pActor, i)->mUnknown20) {
+        switch (AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown20) {
         case 0x434F494E:
             break;
         case 0x42414C4C:
@@ -1266,7 +1266,7 @@ extern "C" Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame
 
     *pFound = 0;
     for (i = 0; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         if (pFrame->mUnknown20 == id) {
             result = pRequest->mUnknown74[i];
@@ -1399,7 +1399,7 @@ extern "C" void fn_800940F0(int handle)
             Object_80039F5C *p = pCharacter->mUnknown14[i];
 
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
-                fn_801BA398((Object_801BA03C *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
+                fn_801BA398((AnimHeader_t *)p->mUnknown1244, (Record_800D81C8 *)(p->mUnknown1244 + 12), 10);
                 fn_800A3B5C(p);
             }
         }
@@ -1448,8 +1448,8 @@ struct Script_802D7A10 {
 };
 
 extern "C" Script_802D7A10 lbl_802D7A10[];
-extern "C" void fn_801C02EC(void);
-extern "C" void fn_801C06A0(void);
+extern "C" void AnimSeqncrRelocateSeqFile(void);
+extern "C" void AnimSeqncrRelocateTable(void);
 
 extern "C" void fn_80094238(int index)
 {
@@ -1460,9 +1460,9 @@ extern "C" void fn_80094238(int index)
     lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
     pData = lbl_803EC924->mpUnknown7C;
     lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)fn_801EF390(pData, lbl_802D7A10[index].mUnknown14, 1);
-    fn_801C02EC();
+    AnimSeqncrRelocateSeqFile();
     lbl_803EC924->mEntries[index].mUnknown4 = fn_801EF390(pData, lbl_802D7A10[index].mUnknown18, 1);
-    fn_801C06A0();
+    AnimSeqncrRelocateTable();
 }
 
 extern "C" void fn_800942F0(int index)
@@ -1862,7 +1862,7 @@ extern "C" int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *p
     unsigned int i;
 
     for (i = 1; i < pActor->mUnknown4; i++) {
-        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, i);
 
         if (fn_80095028(pFrame->mUnknown0) == key && pRequest->mUnknown14[i] == 0) {
             Object_80039F5C *pCandidates[24];
@@ -2038,7 +2038,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
 
     fn_801C1F94(ppOut, 0, 24 * sizeof(Object_80039F5C *));
     result = 1;
-    pFrame = fn_801C029C(pActor, index);
+    pFrame = AnimSeqncrGetPlayerPtr(pActor, index);
     switch (pFrame->mUnknown0) {
     case 0x42414C43: /* 'BALC' */
     case 0x46524543: /* 'FREC' */ {
@@ -2498,7 +2498,7 @@ extern "C" void fn_80096954(void *pData)
 
     lbl_803EA920 = (Block_80096954 *)fn_801D2B7C(sizeof(Block_80096954), 0, 0);
     lbl_803EA920->mpUnknown0[0] = (Table_80093BAC *)fn_801EF390(pData, 3, 1);
-    fn_801C02EC();
+    AnimSeqncrRelocateSeqFile();
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
         fn_801C1F94(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
@@ -9073,7 +9073,7 @@ extern "C" unsigned int fn_800BB0EC(void)
         pActor = fn_80093BAC(index, lbl_803EC98C->mUnknown14);
         ok = 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
-            if (fn_80096440(fn_801C029C(pActor, i)->mUnknown0) >= limit) {
+            if (fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0) >= limit) {
                 ok = 0;
                 break;
             }
@@ -9336,7 +9336,7 @@ extern "C" void fn_800BBDE0(void)
 
         p->mUnknown9[2] = 1;
         p->mpUnknown4->mUnknown20 |= 1;
-        fn_8009604C(fn_80096440(fn_801C029C(pActor, i)->mUnknown0), (int)p);
+        fn_8009604C(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0), (int)p);
     }
 }
 
@@ -9447,7 +9447,7 @@ extern "C" void fn_800BC190(int index, int value)
         }
         other = side ^ 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
-            unsigned int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            unsigned int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
             int choice;
 
             if (position > 6) {
@@ -9470,7 +9470,7 @@ extern "C" void fn_800BC190(int index, int value)
     }
     fn_8008040C(&reader, 0);
     for (i = 0; i < pActor->mUnknown4; i++) {
-        int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+        int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
 
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 0;
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mTeamWord = sides[i];
@@ -9600,7 +9600,7 @@ void fn_80039C64(void);
 void fn_8005122C(float dt);
 void fn_80039CB0(float dt);
 void fn_80039D08(float dt);
-void fn_801BF8DC(void);
+void AnimCacheUpdate(void);
 
 extern Block_800AACD4 *lbl_803EAA88;
 extern int lbl_803EAA90;
@@ -9736,7 +9736,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
 
         fn_800AA020();
         for (i = 0; i < pActor->mUnknown4; i++) {
-            int slot = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            int slot = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
             Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
@@ -9798,9 +9798,9 @@ extern "C" void fn_800AA510(Entry_800AA80C *pEntries, int index)
         pActor = fn_80093BAC(pEntries[index].mUnknown0, 2);
         key = fn_80093E4C(2, (unsigned short)pEntries[index].mUnknown0);
     }
-    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 0)->mUnknown0));
+    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, 0)->mUnknown0));
     if (pActor->mUnknown4 > 1) {
-        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 1)->mUnknown0));
+        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(AnimSeqncrGetPlayerPtr(pActor, 1)->mUnknown0));
     }
     if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
         fn_80094048(key, &pObject, &pOther);
@@ -10889,7 +10889,7 @@ extern "C" void fn_800AD5C0(float dt)
     fn_800416CC(dt);
     fn_80039CB0(dt);
     fn_80039D08(dt);
-    fn_801BF8DC();
+    AnimCacheUpdate();
 }
 
 extern "C" void fn_80039F04(void);
@@ -11007,12 +11007,12 @@ extern "C" void fn_800ADBC0(Object_80039F5C *p, int key, unsigned int duration, 
     }
 }
 
-extern "C" int fn_801BD910(void);
+extern "C" int AnimSeqGetOpcodeParameter(void);
 extern "C" unsigned char lbl_803EAAD8[4];
 
 extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     unsigned int index = 0;
     int value = 0;
     unsigned char duration;
@@ -11031,9 +11031,9 @@ extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
         && fn_8011F4F8(((State_800FDA58 *)&p->mUnknown336)->mUnknown3Byte)->mUnknown1D == 4) {
         value = 5;
     }
-    key = fn_801BD910();
+    key = AnimSeqGetOpcodeParameter();
     index = lbl_803EAAD8[key];
-    duration = fn_801BD910();
+    duration = AnimSeqGetOpcodeParameter();
     if (mirror != 0) {
         index = index != 1;
     }
@@ -11056,9 +11056,9 @@ extern "C" void fn_800ADD00(Object_80039F5C *p)
 
 extern "C" void fn_800ADD04(Object_80039F5C *p)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     int value = lbl_802D82D4[key];
-    unsigned char duration = fn_801BD910();
+    unsigned char duration = AnimSeqGetOpcodeParameter();
 
     if (p != 0) {
         Element_80041BF8 *pElements = ((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116;
@@ -11106,7 +11106,7 @@ extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement
     }
 }
 
-/* Clip returned by fn_801BAB34: the bank at +2 and eleven keys from +4. */
+/* Clip returned by AnimFileGetAnimation: the bank at +2 and eleven keys from +4. */
 struct Clip_800ADE6C {
     unsigned char mUnknown0[2];
     unsigned char mUnknown2;
@@ -11121,8 +11121,8 @@ struct Listing_800ADE6C {
 };
 
 extern "C" {
-void *fn_801BAB34(void *p, int key);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
+void *AnimFileGetAnimation(void *p, int key);
+void *AnimFileGetFrame(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 
 extern void *lbl_8030F958[11];
 }
@@ -11140,13 +11140,13 @@ extern "C" void fn_800ADE6C(void)
     handle = listing.mTable.mEntries[0].mUnknown0;
     key = listing.mTable.mEntries[0].mUnknown2;
     pRecord = fn_801BC084(handle);
-    pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+    pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
     for (i = 0; i <= 10; i++) {
-        lbl_8030F958[i] = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
+        lbl_8030F958[i] = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
     }
 }
 
-/* Key list returned by fn_801BAD70: a count followed by the keys. */
+/* Key list returned by AnimFileGetFrame: a count followed by the keys. */
 struct Keys_800A3C14 {
     unsigned short mCount;
     unsigned short mKeys[1];
@@ -11173,16 +11173,16 @@ extern "C" void fn_800A3C14(void)
             int handle = listing.mTable.mEntries[i].mUnknown0;
             int key = listing.mTable.mEntries[i].mUnknown2;
             pRecord = fn_801BC084(handle);
-            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+            pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, key);
             for (unsigned int j = 0; j < 1; j++)
-                lbl_803EC938 = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
+                lbl_803EC938 = AnimFileGetFrame(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
         } else {
             lbl_803EC93C = listing.mTable.mEntries[i].mUnknown0;
             lbl_803EC940 = listing.mTable.mEntries[i].mUnknown2;
             pRecord = fn_801BC084(lbl_803EC93C);
-            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, lbl_803EC940);
+            pClip = (Clip_800ADE6C *)AnimFileGetAnimation(pRecord, lbl_803EC940);
             Keys_800A3C14 *pKeys =
-                (Keys_800A3C14 *)fn_801BAD70(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
+                (Keys_800A3C14 *)AnimFileGetFrame(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
             lbl_803EC944 = pKeys;
             for (unsigned int j = 0; j < pKeys->mCount; j++) {
                 pKeys->mKeys[j] &= 0x3F;
@@ -11200,10 +11200,10 @@ extern unsigned char lbl_803EAADC[4];
 
 extern "C" void fn_800AE0B8(Object_80039F5C *p)
 {
-    int key = fn_801BD910();
+    int key = AnimSeqGetOpcodeParameter();
     int index = lbl_803EAADC[key];
 
-    key = fn_801BD910();
+    key = AnimSeqGetOpcodeParameter();
     if (p != 0) {
         fn_800AE018((Player_8003877C *)p, index, key);
     }

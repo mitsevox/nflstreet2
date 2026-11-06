@@ -23,7 +23,7 @@ void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock);
 unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *pBlock);
 unsigned short fn_800A4358(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *pBlock);
 float fn_801CFFA0(float value);
-void fn_801BD81C(Block_801BD6D4 *p, float scale);
+void AnimSeqSetSpeed(AnimSeq_t *p, float scale);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 }
 
@@ -44,7 +44,7 @@ extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *reco
         int entry = fn_801BA2A8(record, entries, table->mEntries[index].mUnknown0,
                                 table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0Word = entry;
-        fn_801BD81C(&entries[entry].mUnknown4C, fn_801CFFA0(block->mUnknown8));
+        AnimSeqSetSpeed(&entries[entry].mUnknown4C, fn_801CFFA0(block->mUnknown8));
         block->mUnknown10Word = (int)((float)block->mUnknownCWord / block->mUnknown4);
         p->mFlags &= ~4;
         break;

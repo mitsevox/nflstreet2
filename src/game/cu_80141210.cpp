@@ -1,4 +1,4 @@
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/cu_8013BB18.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
@@ -7,21 +7,21 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_800AD9B4.h"
 #include "engine/viewport.h"
-#include "engine/Sample_801C009C.h"
+#include "engine/AnimSeqCamSample.h"
 
 /* Views established by this caller's accesses. Their original identities
    and the contents of the opaque spans remain unknown. */
 struct Settings_800963EC { unsigned char mUnknown0[0x300]; float mUnknown300; };
 struct Entry_801411B4 { float mUnknown0; unsigned char mUnknown4[4]; unsigned char mUnknown8; };
-struct State_80141210 { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; };
+struct CamCurveState_t { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; };
 struct Angles_80141210 { int mX,mY,mZ; };
 struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int mUnknown18; };
 
 extern "C" {
-float fn_801BFFA0(void);
-Sample_801C009C *fn_801C00F8(Actor_801C009C *);
-Sample_801C009C *fn_801C009C(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
-float fn_801C5278(float,Curve_801C02EC *,int);
+float AnimSequencerGetTicksPerSecond(void);
+AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
+AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
+float fn_801C5278(float,AnimSeqCamCurve_t *,int);
 void fn_801D04C4(void); void fn_801D0558(void); void fn_801D0544(void); void fn_801D0508(void);
 void fn_801D0F80(float (*)[4]); void fn_801D06D4(float (*)[4]); void fn_801D0ADC(int);
 void QuatFromAxisAngle(float *,Vector_80039F5C *,int);
@@ -34,21 +34,21 @@ void fn_80227C2C(void *,void *);
 void fn_80227384(void *,void *,int);
 void fn_80227490(void *,void *,int,int,int);
 int fn_801CFE40(float,float); float fn_80260B1C(float);
-void fn_8014116C(float,float,float,Vector_80039F5C *,State_80141210 *,Actor_801C009C *);
-void fn_8014118C(Angles_80141210 *,State_80141210 *,Actor_801C009C *,int,int,int);
-Entry_801411B4 *fn_801411B4(Camera_8013F738 *);
-int fn_80027DF0(void);
-void fn_801C3990(Camera_8013F738 *,float,float);
+void CamCurveOffsetPosition(float,float,float,Vector_80039F5C *,CamCurveState_t *,Actor_801C009C *);
+void CamCurveConvertAngles(Angles_80141210 *,CamCurveState_t *,Actor_801C009C *,int,int,int);
+Entry_801411B4 *CamCurveGetActorEntry(Camera_8013F738 *);
+int FELoopIsMainFEActive(void);
+void CamSetFieldOfView(Camera_8013F738 *,float,float);
 Settings_800963EC *fn_800963EC(Character_80093BCC *);
 int fn_801784C4(void);
-Camera_8013F738 *fn_8013FA04(int);
-void fn_801C3EA4(Camera_8013F738 *,float,float,float);
-void fn_801C3ED0(Camera_8013F738 *,int,int,int);
+Camera_8013F738 *CamGameGetCamera(int);
+void CamFreeSetPos(Camera_8013F738 *,float,float,float);
+void CamFreeSetAngle(Camera_8013F738 *,int,int,int);
 float fn_800BD190(void *); float fn_800AB9EC(void *);
-void fn_80142228(Camera_8013F738 *);
+void CamCurveSetProjection(Camera_8013F738 *);
 }
 
-static View_802DCEB0 lbl_802DCEB0[6] = {
+static View_802DCEB0 _CamCurve_Views[6] = {
     { { 0.0f, -12.0f, 3.5f }, { 0xCAAAAB, 0, 0 }, 5 },
     { { 0.0f, -7.5f, 3.5f }, { 0xCAAAAB, 0, 0 }, 5 },
     { { 0.0f, -9.5f, 5.0f }, { 0xCAAAAB, 0, 0 }, 5 },
@@ -56,27 +56,27 @@ static View_802DCEB0 lbl_802DCEB0[6] = {
     { { 0.0f, -12.0f, 5.0f }, { 0xCE38E4, 0, 0 }, 5 },
     { { 0.0f, -16.0f, 10.0f }, { 0xCE38E4, 0, 0 }, 5 },
 };
-static View_802DCEB0 lbl_802DCF58 = { { -30.0f, 0.0f, 10.0f }, { 0x38E38E, 0x800000, 0 }, 5 };
+static View_802DCEB0 _CamCurve_SideView = { { -30.0f, 0.0f, 10.0f }, { 0x38E38E, 0x800000, 0 }, 5 };
 
-static unsigned char lbl_803EB1F0 = 0;
+static unsigned char _CamCurve_bNarrowFov = 0;
 
-extern "C" void fn_8014116C(float x, float y, float z, Vector_80039F5C *out, State_80141210 *state, Actor_801C009C *)
+extern "C" void CamCurveOffsetPosition(float x, float y, float z, Vector_80039F5C *out, CamCurveState_t *state, Actor_801C009C *)
 {
     out->mX = state->mUnknown0 + x;
     out->mY = state->mUnknown4 + y;
     out->mZ = z;
 }
 
-extern "C" void fn_8014118C(Angles_80141210 *out, State_80141210 *, Actor_801C009C *, int x, int y, int z)
+extern "C" void CamCurveConvertAngles(Angles_80141210 *out, CamCurveState_t *, Actor_801C009C *, int x, int y, int z)
 {
     out->mX = (0xC00000 - x) & 0xFFFFFF;
     out->mY = y & 0xFFFFFF;
     out->mZ = -z & 0xFFFFFF;
 }
 
-extern "C" Entry_801411B4 *fn_801411B4(Camera_8013F738 *camera)
+extern "C" Entry_801411B4 *CamCurveGetActorEntry(Camera_8013F738 *camera)
 {
-    State_80141210 *state=reinterpret_cast<State_80141210 *>(camera->mPadF8);
+    CamCurveState_t *state=reinterpret_cast<CamCurveState_t *>(camera->mPadF8);
     Entry_801411B4 *entry=0;
     Object_80039F5C *object=fn_8009BCE8(&state->mUnknown8);
     if (object && object->mIdBytes[3]==1 && object->mpState->mId==50)
@@ -93,14 +93,14 @@ extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Acto
     float matrix[4][4];
     Vector_80039F5C direction;
     float qx[4], qy[4], qz[4];
-    Sample_801C009C *sample;
-    float t = time / fn_801BFFA0();
+    AnimSeqCamSample_t *sample;
+    float t = time / AnimSequencerGetTicksPerSecond();
 
     fn_801D04C4(); fn_801D0558(); fn_801D0F80(matrix); fn_801D0544();
     if (!selection->mUnknown0) return;
     if (selection->mUnknown4.mWord == -1 || selection->mUnknown8.mWord == -1)
-        sample = fn_801C00F8(actor);
-    else sample = fn_801C009C(actor,1,selection->mUnknown4.mParts[1],selection->mUnknown8.mParts[1]);
+        sample = AnimSeqCamFindFirstCamera(actor);
+    else sample = AnimSeqCamFindCamera(actor,1,selection->mUnknown4.mParts[1],selection->mUnknown8.mParts[1]);
     if (!sample) return;
     base.mX = sample->mUnknown0[0]; base.mY = -sample->mUnknown0[2]; base.mZ = sample->mUnknown0[1];
     offset.mX = fn_801C5278(t,&sample->mCurves[9],0);
@@ -150,11 +150,11 @@ extern "C" void ApplySelectedCameraCurves_80141210(Camera_8013F738 *camera, Acto
     angles.mX=fn_801CFE40(-direction.mZ,horizontal);
     fn_80227490(&up,&up,-angles.mZ,0,0); fn_80227490(&up,&up,0,0,-angles.mX);
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
-    fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
-    fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
-    else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
+    CamCurveOffsetPosition(position.mX,position.mY,position.mZ,&result,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor);
+    CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
+    if (_CamCurve_bNarrowFov && FELoopIsMainFEActive()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
+    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); CamCurveSetProjection(camera);
 }
 
 /* Build the camera view from the playback sample, applying the optional
@@ -166,10 +166,10 @@ extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Acto
     float matrix[4][4];
     float qx[4], qy[4], qz[4];
     Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
-    float t = time / fn_801BFFA0();
-    Sample_801C009C *sample = fn_801C009C(actor, playback->mUnknown14.mParts[1], playback->mUnknown18.mParts[1], playback->mUnknown1C.mParts[1]);
+    float t = time / AnimSequencerGetTicksPerSecond();
+    AnimSeqCamSample_t *sample = AnimSeqCamFindCamera(actor, playback->mUnknown14.mParts[1], playback->mUnknown18.mParts[1], playback->mUnknown1C.mParts[1]);
     if (!sample) return;
-    playback->mUnknown20 = (sample->mCurves[0].mUnknown8 - sample->mCurves[0].mUnknown4) * fn_801BFFA0();
+    playback->mUnknown20 = (sample->mCurves[0].mUnknown8 - sample->mCurves[0].mUnknown4) * AnimSequencerGetTicksPerSecond();
     base.mX = sample->mUnknown0[0]; base.mY = -sample->mUnknown0[2]; base.mZ = sample->mUnknown0[1];
     offset.mX = fn_801C5278(t, &sample->mCurves[11], 0);
     offset.mY = -fn_801C5278(t, &sample->mCurves[9], 0);
@@ -208,11 +208,11 @@ extern "C" void ApplyPlaybackCameraCurves_80141920(Camera_8013F738 *camera, Acto
     angles.mX=fn_801CFE40(look.mZ,look.mY);
     fn_80227490(&up,&up,-angles.mZ,0,0); fn_80227490(&up,&up,0,0,-angles.mX);
     angles.mY=fn_801CFE40(up.mZ,up.mX)-0x400000;
-    fn_8014116C(position.mX,position.mY,position.mZ,&result,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor);
-    fn_8014118C(&resultAngles,reinterpret_cast<State_80141210 *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
-    if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
-    else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
+    CamCurveOffsetPosition(position.mX,position.mY,position.mZ,&result,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor);
+    CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
+    if (_CamCurve_bNarrowFov && FELoopIsMainFEActive()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
+    else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
+    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); CamCurveSetProjection(camera);
 }
 
 /* Update the selected-character or playback view for modes 10 and 11;
@@ -222,7 +222,7 @@ extern "C" void UpdateCurveCameraMode_80141E8C(Camera_8013F738 *camera)
     Actor_801C009C *actor;
     switch (camera->mUnknownA0) {
     case 10: {
-        Entry_801411B4 *entry = fn_801411B4(camera);
+        Entry_801411B4 *entry = CamCurveGetActorEntry(camera);
         if (entry) {
             Character_80093BCC *character = fn_80093BCC(entry->mUnknown8);
             actor = fn_80093BAC(character->mUnknown0, character->mUnknown4);
@@ -250,16 +250,16 @@ extern "C" void UpdateCurveCameraMode_80141E8C(Camera_8013F738 *camera)
 extern "C" void InitializeCurveCameraView_80141FA0(Camera_8013F738 *camera)
 {
     if (camera->mUnknownA0 <= 5) {
-        fn_8013C478(camera, &lbl_802DCEB0[camera->mUnknownA0].mUnknown0);
-        fn_8013C4BC(camera, &lbl_802DCEB0[camera->mUnknownA0].mUnknownC.mX, lbl_802DCEB0[camera->mUnknownA0].mUnknown18);
+        fn_8013C478(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknown0);
+        fn_8013C4BC(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknownC.mX, _CamCurve_Views[camera->mUnknownA0].mUnknown18);
     }
     switch (camera->mUnknownA0) {
     case 7:
-        fn_8013C478(camera, &lbl_802DCF58.mUnknown0);
-        fn_8013C4BC(camera, &lbl_802DCF58.mUnknownC.mX, lbl_802DCF58.mUnknown18);
+        fn_8013C478(camera, &_CamCurve_SideView.mUnknown0);
+        fn_8013C4BC(camera, &_CamCurve_SideView.mUnknownC.mX, _CamCurve_SideView.mUnknown18);
         break;
     case 10: {
-        Entry_801411B4 *entry = fn_801411B4(camera);
+        Entry_801411B4 *entry = CamCurveGetActorEntry(camera);
         if (entry) {
             Character_80093BCC *character = fn_80093BCC(entry->mUnknown8);
             Actor_801C009C *actor = fn_80093BAC(character->mUnknown0, character->mUnknown4);
@@ -288,10 +288,10 @@ extern "C" void HandleCurveCameraEvent_80142110(Camera_8013F738 *camera, int eve
     switch (event) {
     case 4:
         if (argument != -1) {
-            Camera_8013F738 *other = fn_8013FA04(argument);
+            Camera_8013F738 *other = CamGameGetCamera(argument);
             float *position = other->mHeader.mUnknown04;
-            fn_801C3EA4(camera, position[0], position[1], position[2]);
-            fn_801C3ED0(camera, other->mHeader.mUnknown14[0], other->mHeader.mUnknown14[1], other->mHeader.mUnknown14[2]);
+            CamFreeSetPos(camera, position[0], position[1], position[2]);
+            CamFreeSetAngle(camera, other->mHeader.mUnknown14[0], other->mHeader.mUnknown14[1], other->mHeader.mUnknown14[2]);
             fn_8013C384(camera, 0, 0, 0);
         }
         break;
@@ -309,11 +309,11 @@ extern "C" void InitializeCurveCameraMode_801421C4(Camera_8013F738 *camera, Desc
     camera->mUnknown74 = camera->mUnknown78 = camera->mUnknown7C = 0x199999;
     camera->mUnknown80 = camera->mUnknown84 = camera->mUnknown88 = 0xCCCCC;
 }
-extern "C" void fn_80142224(Camera_8013F738 *) {}
+extern "C" void CamCurveUninit(Camera_8013F738 *) {}
 extern "C" {
-Mode_8013FD8C lbl_802DCF74 = { InitializeCurveCameraMode_801421C4, fn_80142224, 0 };
+Mode_8013FD8C CamCurveMode = { InitializeCurveCameraMode_801421C4, CamCurveUninit, 0 };
 }
-extern "C" void fn_80142228(Camera_8013F738 *camera)
+extern "C" void CamCurveSetProjection(Camera_8013F738 *camera)
 {
     float value=0.08f;
     if (camera->mUnknownA0!=11) {
@@ -323,4 +323,4 @@ extern "C" void fn_80142228(Camera_8013F738 *camera)
     if (camera->mUnknown28)
         VptSetPerspective(static_cast<Viewport_t *>(camera->mUnknown28),camera->mHeader.mUnknown20,camera->mHeader.mUnknown24,value,750.0f);
 }
-extern "C" void fn_801422C0(unsigned char value) { lbl_803EB1F0=value; }
+extern "C" void CamCurveSetNarrowFov(unsigned char value) { _CamCurve_bNarrowFov=value; }

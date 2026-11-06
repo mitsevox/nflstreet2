@@ -121,9 +121,9 @@ void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
 void fn_80168E54(int, unsigned char, unsigned char);
 void fn_8009BD2C(Object_80039F5C *, int *);
-int fn_801BD934(float *, void *, unsigned short);
-float fn_801BD660(void *pScript, int key);
-float fn_801BD6D4(Block_801BD6D4 *);
+int AnimSeqHasOpcode(float *, void *, unsigned short);
+float AnimSeqGetOpcodeTime(void *pScript, int key);
+float AnimSeqGetTime(AnimSeq_t *);
 int fn_800E6AC8(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);
 float fn_8022781C(void *, void *);
@@ -756,12 +756,12 @@ int fn_80136210(Object_80039F5C *p)
     if (index == 0xFFFF)
         s->mUnknown4 = 0;
     else {
-        Block_801BD6D4 *block = &p->mpUnknown800[index].mUnknown4C;
+        AnimSeq_t *block = &p->mpUnknown800[index].mUnknown4C;
         float value;
-        if (fn_801BD934(&value, block->mpUnknown0, 0xC004))
-            value = fn_801BD660(block->mpUnknown0, 0xC004);
+        if (AnimSeqHasOpcode(&value, block->mpUnknown0, 0xC004))
+            value = AnimSeqGetOpcodeTime(block->mpUnknown0, 0xC004);
         else
-            value = fn_801BD60C(block->mpUnknown0);
+            value = AnimSeqGetLife(block->mpUnknown0);
         s->mUnknown4 = (short)(int)value;
     }
     s->mUnknown10 = 0;
@@ -888,7 +888,7 @@ int fn_80136820(Object_80039F5C *p)
         return 0;
     unsigned short index = s->mUnknown6;
     if (index != 0xFFFF)
-        fn_80136134(p, (unsigned int)fn_801BD6D4(&p->mpUnknown800[index].mUnknown4C));
+        fn_80136134(p, (unsigned int)AnimSeqGetTime(&p->mpUnknown800[index].mUnknown4C));
     p->mUnknown772 = 1.0f;
     fn_801360D4(p);
     Object_80039F5C *other = fn_8009BCE8(&s->mUnknown0Word);

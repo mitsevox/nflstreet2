@@ -176,7 +176,7 @@ extern "C" Reach_80105630 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Obj
 extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 
 
-extern "C" float fn_801BD690(Block_801BD6D4 *p, int key);
+extern "C" float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 
 
 
@@ -723,7 +723,7 @@ extern "C" int fn_80105FF8(Object_80039F5C *p, Object_80137ABC *pBall, float tim
         if (p->mpState->mId == 10 || p->mpState->mId == 16) {
             int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
 
-            if (index != 0xFFFF && fn_801BD690(&p->mpUnknown800[index].mUnknown4C, 0xC001) > time) {
+            if (index != 0xFFFF && AnimSeqGetTimeToOpcode(&p->mpUnknown800[index].mUnknown4C, 0xC001) > time) {
                 ready = 1;
             }
         } else {
@@ -929,7 +929,7 @@ extern "C" int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRe
 
                 pTurn->mUnknown4 = pEntries[entry].mUnknown48;
                 if (pTurn->mUnknown4 != 0.0f ||
-                    (pTurn->mUnknown4 = fn_801BD690(&pEntries[entry].mUnknown4C, 0xC003)) != 0.0f) {
+                    (pTurn->mUnknown4 = AnimSeqGetTimeToOpcode(&pEntries[entry].mUnknown4C, 0xC003)) != 0.0f) {
                     pTurn->mUnknown4 = pTurn->mUnknown4 > 50.0f ? 50.0f : pTurn->mUnknown4;
                     pTurn->mUnknown0 = (int)(fn_801CFFD0(facing, p->mMotion.mFacing) / pTurn->mUnknown4);
                     if (((p->mMotion.mFacing - facing) & 0xFFFFFF) <= 0x7FFFFF) {

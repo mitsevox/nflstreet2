@@ -77,7 +77,7 @@ struct StateNameId_8004C270 {
     int mId;
 };
 
-/* Record of fn_801C02CC; its halfwords +42 and +14 are passed to fn_801BBE5C. */
+/* Record of AnimSeqncrGetStaticPtr; its halfwords +42 and +14 are passed to fn_801BBE5C. */
 struct Frame_801C02CC {
     char mUnknown0[14];
     unsigned short mUnknown14;
@@ -187,7 +187,7 @@ int fn_801BB638(int id, int a);
 int fn_801BBE5C(int a, int b);
 void fn_801BE030(int type, Table_803EA4D0 *pTable);
 void fn_801BE040(void *p);
-Frame_801C02CC *fn_801C02CC(Actor_801C009C *pActor, int index);
+Frame_801C02CC *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
 int fn_801C2FE4(const char *pA, const char *pB);
 int fn_801CFE40(float y, float x);
 void fn_80227248(void *pOut, void *p, float scale);
@@ -268,7 +268,7 @@ int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
         unsigned char b1 = pExtra->mUnknown1705;
         unsigned char b2 = pExtra->mUnknown1706;
         unsigned char b3 = pExtra->mUnknown1707;
-        Frame_801C02CC *pFrame = fn_801C02CC(fn_80093BAC(b0, b1), b2);
+        Frame_801C02CC *pFrame = AnimSeqncrGetStaticPtr(fn_80093BAC(b0, b1), b2);
 
         fn_801BA2A8(a, b, fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
     }
@@ -374,7 +374,7 @@ void fn_8004A908(Object_80041904 *pObject, int index)
             pPlaced->mUnknown172.mUnknown52 = (float (*)[4][4])pPlaced->mUnknown228;
             fn_8004A680(&pPlaced->mUnknown172, pSkeleton);
         }
-        fn_801B9EDC((Object_801BA03C *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
+        AnimInitHeader((AnimHeader_t *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
         fn_801B9FEC(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
         fn_801BE040(pObject->mUnknown428->mUnknown1300);
         pObject->mUnknown428->mUnknown1708 = 0;

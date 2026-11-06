@@ -16,32 +16,32 @@ typedef struct Triple_801BCA74 {
 
 /* Channel list header: +0 selects the initial channel state, +2 the object
    type, +4 the channel count; +8 is the shared angle base. */
-typedef struct Object_801BA03C {
+typedef struct AnimHeader_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     unsigned short mUnknown4;
     unsigned char mUnknown6[2];
     int mUnknown8;
-} Object_801BA03C;
+} AnimHeader_t;
 
 /* Sequence script: rate byte (sixteenths), flag byte +2, then opcode halfwords. */
-typedef struct Anim_801BAB34 {
+typedef struct AnimScript_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
     unsigned char mUnknown3;
     unsigned short mUnknown4[1];
-} Anim_801BAB34;
+} AnimScript_t;
 
-typedef struct Frame_801BD3BC {
+typedef struct AnimSeqLoop_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     float mUnknown4;
-} Frame_801BD3BC;
+} AnimSeqLoop_t;
 
 /* Sequence playback state (channel +0x4C). */
-typedef struct Block_801BD6D4 {
-    Anim_801BAB34 *mpUnknown0;
+typedef struct AnimSeq_t {
+    AnimScript_t *mpUnknown0;
     float mUnknown4;
     float mUnknown8;
     float mUnknownC;
@@ -53,8 +53,8 @@ typedef struct Block_801BD6D4 {
     unsigned short mUnknown1C;
     unsigned char mUnknown1E;
     unsigned char mUnknown1F;
-    Frame_801BD3BC mUnknown20[2];
-} Block_801BD6D4;
+    AnimSeqLoop_t mUnknown20[2];
+} AnimSeq_t;
 
 typedef struct Data1_801BF4A8 {
     float mUnknown0;
@@ -105,7 +105,7 @@ typedef struct Record_800D81C8 {
     float mUnknown2C;
     Block_801BF3C8 mUnknown30;
     float mUnknown48;
-    Block_801BD6D4 mUnknown4C;
+    AnimSeq_t mUnknown4C;
 } Record_800D81C8;
 
 #endif

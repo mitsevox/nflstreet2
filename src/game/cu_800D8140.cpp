@@ -11,8 +11,8 @@ void fn_80044854(Object_800D81C8 *p, State_800D8140 *pState);
 Object_800D81C8 *fn_80137B40(void);
 int fn_801784C4(void);
 int fn_801787A0(void);
-float fn_801BD660(void *p, int key);
-float fn_801BD6D4(Block_801BD6D4 *p);
+float AnimSeqGetOpcodeTime(void *p, int key);
+float AnimSeqGetTime(AnimSeq_t *p);
 void fn_80227248(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 void fn_8022728C(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 }
@@ -38,10 +38,10 @@ extern "C" void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int valu
 
 extern "C" void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther)
 {
-    Block_801BD6D4 *pBlock = &pOther->mpUnknown320[p->mUnknown17].mUnknown4C;
+    AnimSeq_t *pBlock = &pOther->mpUnknown320[p->mUnknown17].mUnknown4C;
     if (p->mUnknown17 != 255 && (pOther->mUnknownC & 0x800)) {
         if (!(pOther->mUnknownC & 8)) {
-            float time = fn_801BD6D4(pBlock);
+            float time = AnimSeqGetTime(pBlock);
             float value = time / pBlock->mUnknown4;
             if (!p->mUnknown14) {
                 p->mUnknown0.mUnknown0 = pOther->mUnknown1D0.mUnknown0;
@@ -53,9 +53,9 @@ extern "C" void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther)
                     fn_8022728C(&p->mUnknown0, &p->mUnknown0, 0.25f);
                 }
                 p->mUnknown8 = time;
-                p->mUnknownC = fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC004);
-                p->mUnknownC = p->mUnknownC < fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
-                    ? p->mUnknownC : fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
+                p->mUnknownC = AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC004);
+                p->mUnknownC = p->mUnknownC < AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
+                    ? p->mUnknownC : AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
                 float delta = p->mUnknownC - p->mUnknown8;
                 if (delta > lbl_803EC9E0) {
                     p->mUnknownC = p->mUnknown8 + lbl_803EC9E0;
@@ -102,7 +102,7 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
 {
     if (p && pOther) {
         Record_800D81C8 *pRecord = &pOther->mpUnknown320[p->mUnknown17];
-        Block_801BD6D4 *pBlock = &pRecord->mUnknown4C;
+        AnimSeq_t *pBlock = &pRecord->mUnknown4C;
         if (p->mUnknown17 == 255) return;
         if ((pOther->mUnknownC & 8) && p->mUnknown16) return;
         unsigned short id = fn_801BE648(pOther->mpUnknown318);
@@ -113,14 +113,14 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
         State_800D8140 *pState = &pResult->mUnknown20;
         int flag;
         if (pOther->mUnknownC & 8) {
-            flag = fn_801BD660(pRecord->mUnknown4C.mpUnknown0, 0xC00E)
-                > fn_801BD660(pRecord->mUnknown4C.mpUnknown0, 0xC001);
+            flag = AnimSeqGetOpcodeTime(pRecord->mUnknown4C.mpUnknown0, 0xC00E)
+                > AnimSeqGetOpcodeTime(pRecord->mUnknown4C.mpUnknown0, 0xC001);
         } else {
             flag = 0;
         }
         if (!(pOther->mUnknownC & 0x800)) return;
         if (flag && fn_80137B40() != pOther) return;
-        float time = fn_801BD6D4(pBlock);
+        float time = AnimSeqGetTime(pBlock);
         float value = time / pBlock->mUnknown4;
         if (!p->mUnknown14) {
             p->mUnknown0.mUnknown0 = pOther->mUnknown1D0.mUnknown0;
@@ -132,15 +132,15 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
                 fn_8022728C(&p->mUnknown0, &p->mUnknown0, 0.25f);
             }
             p->mUnknown8 = time;
-            p->mUnknownC = fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC004);
-            p->mUnknownC = p->mUnknownC < fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC002)
-                ? p->mUnknownC : fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC002);
-            p->mUnknownC = p->mUnknownC < fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
-                ? p->mUnknownC : fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
-            p->mUnknownC = p->mUnknownC < fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC00E)
-                ? p->mUnknownC : fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC00E);
-            p->mUnknownC = p->mUnknownC < fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
-                ? p->mUnknownC : fn_801BD660(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
+            p->mUnknownC = AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC004);
+            p->mUnknownC = p->mUnknownC < AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC002)
+                ? p->mUnknownC : AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC002);
+            p->mUnknownC = p->mUnknownC < AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
+                ? p->mUnknownC : AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
+            p->mUnknownC = p->mUnknownC < AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC00E)
+                ? p->mUnknownC : AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC00E);
+            p->mUnknownC = p->mUnknownC < AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000)
+                ? p->mUnknownC : AnimSeqGetOpcodeTime(pOther->mpUnknown320[p->mUnknown17].mUnknown4C.mpUnknown0, 0xC000);
             float delta = p->mUnknownC - p->mUnknown8;
             if (delta > lbl_803EC9E0) {
                 p->mUnknownC = p->mUnknown8 + lbl_803EC9E0;

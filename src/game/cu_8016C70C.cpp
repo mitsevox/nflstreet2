@@ -94,7 +94,7 @@ void fn_8016CA50(Object_80039F5C *p)
         }
         pMotion->mFacing = (pMotion->mFacing + limit) & 0xFFFFFF;
         if (p->mUnknown545 != 0) {
-            Object_801BA03C *pHeader = p->mpUnknown796;
+            AnimHeader_t *pHeader = p->mpUnknown796;
             Record_800D81C8 *pEntries = p->mpUnknown800;
             int index = fn_801BA5A8(pHeader, pEntries, fn_801BE648(p->mpUnknown792), 0);
             if (index != 0xFFFF) {

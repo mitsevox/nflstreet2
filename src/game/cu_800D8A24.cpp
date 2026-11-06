@@ -25,7 +25,7 @@ float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, R
                   float value);
 int fn_800DC080(Object_80039F5C *p);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
-void fn_801BD758(Block_801BD6D4 *p, float value);
+void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -215,7 +215,7 @@ extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Re
     for (unsigned char i = 0; i <= 1; i++) {
         unsigned char index = pBlock->mUnknown20.mUnknown8Bytes[i];
         if (index != 255) {
-            fn_801BD758(&pRecords[index].mUnknown4C, pBlock->mUnknown20.mUnknown10);
+            AnimSeqSetDuration(&pRecords[index].mUnknown4C, pBlock->mUnknown20.mUnknown10);
         }
     }
 }
