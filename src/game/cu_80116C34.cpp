@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -148,7 +148,7 @@ int fn_80116C34(Object_80039F5C *p)
                         odds += (int)(odds * fn_8016B938());
                     }
                     Vector_80039F5C ball;
-                    fn_80137D58(fn_801374BC(), &ball);
+                    BallGetPosition(BallGetCurrent(), &ball);
                     if (fn_802372EC(0, 255) < odds || IsBallAway(ball)) {
                         fn_801C1F94(&message, 0, 4);
                         message.mId = 2;
@@ -156,11 +156,11 @@ int fn_80116C34(Object_80039F5C *p)
                         return 1;
                     }
                 } else {
-                    fn_80138064(fn_801374BC(), &target);
+                    BallGetLandingPoint(BallGetCurrent(), &target);
                     if (fn_8009F258(p)) {
                         fn_801C1F94(&message, 0, 4);
                         message.mId = 24;
-                        if (!fn_80137B88(fn_801374BC())) {
+                        if (!BallGetTarget(BallGetCurrent())) {
                             message.mUnknown1[0] = 0;
                         } else if (fabsf(target.mX - p->mMotion.mPos.mX) < 10.0f || fn_802372EC(0, 100) <= 49) {
                             message.mUnknown1[0] = 2;
@@ -222,7 +222,7 @@ int fn_801170E8(Object_80039F5C *p)
             break;
         }
     }
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
         switch (side) {
         case 15: case 17: case 20:
@@ -268,7 +268,7 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
     float centerY = fn_80177FE0().mY;
     out->mX = p->mMotion.mPos.mX;
     out->mY = p->mMotion.mPos.mY;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier && (carrier->mFlags & 0x8000) &&
         ((!(carrier->mMotion.mPos.mX >= centerX) && p->mMotion.mPos.mX < centerX) ||
          (!(carrier->mMotion.mPos.mX <= centerX) && !(p->mMotion.mPos.mX <= centerX)))) {

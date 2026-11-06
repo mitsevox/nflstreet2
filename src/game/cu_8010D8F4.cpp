@@ -18,7 +18,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -50,7 +50,7 @@ extern "C" int fn_8010D8F4(Object_80039F5C *p) {
     Object_80039F5C *pCarrier;
 
     if (fn_801486A0() != 2 || fn_801783AC(20)) {
-        pCarrier = fn_80137B40();
+        pCarrier = BallGetCurrentHolder();
         if (pCarrier != 0 && pCarrier->mpState->mId == 1 && pCarrier->mMotion.mPos.mY > p->mMotion.mPos.mY &&
             fn_8022781C(&pCarrier->mMotion.mPos, &p->mMotion.mPos) < 7.0f) {
             Object_80039F5C *pBlocker = fn_8010DA38(pCarrier, p);

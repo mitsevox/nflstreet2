@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Input_800B6D34.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
 
@@ -11,8 +11,8 @@ void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_800DC080(Object_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
 void fn_800F177C(int index, Input_800B6D34 *pOut);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-int fn_801481B0(void);
+int BallStateGet(Ball_t *pBall, int *pOut);
+int PassIconsAreShown(void);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 void fn_8016DA5C(Object_80039F5C *p);
 int fn_80178308(void);
@@ -36,7 +36,7 @@ extern "C" void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput)
         if (fn_801C1FEC(pInput, &empty, sizeof(empty)) != 0) {
             if (fn_800AD9B4() == 3) {
                 mask = 0x7FFF0;
-                if (p->mIdBytes[2] == fn_80178308() || fn_8013BA58(fn_801374BC(), 0) != 4) {
+                if (p->mIdBytes[2] == fn_80178308() || BallStateGet(BallGetCurrent(), 0) != 4) {
                     mask = 0x7FFFF;
                 }
                 if (pInput->mUnknown4 == 0.0f && pInput->mUnknown8 == 0.0f && (pInput->mUnknown0 & mask) == 0) {
@@ -64,7 +64,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
     int ballAngle;
     int state;
     int turn;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
 
     if (p->mUnknown9[1] != 0) {
         p->mUnknown9[1]--;
@@ -102,16 +102,16 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             if (fn_800DC21C(p) == 1 && p->mUnknown512.mUnknown15 != 1) {
                 speed *= 0.75f;
             }
-            pBall = fn_801374BC();
-            state = fn_8013BA58(pBall, 0);
-            if (fn_80138064(pBall, &delta) != 0) {
+            pBall = BallGetCurrent();
+            state = BallStateGet(pBall, 0);
+            if (BallGetLandingPoint(pBall, &delta) != 0) {
                 fn_80227690(&delta, &delta, &p->mMotion);
                 ballAngle = MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mUnknown32);
             } else {
                 state = 0;
             }
             turn = MathAngleDiff(angle, p->mMotion.mUnknown32);
-            if (state == 4 && fn_80137B40() == 0 && turn > 0x671C72 && ballAngle <= 0x18E38D) {
+            if (state == 4 && BallGetCurrentHolder() == 0 && turn > 0x671C72 && ballAngle <= 0x18E38D) {
                 float top = fn_8016D9F4(p, 1.0f, 1.0f);
                 float ratio = top != 0.0f ? p->mMotion.mUnknown28 / top : 0.0f;
 
@@ -121,7 +121,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
                     p->mUnknown512.mUnknown0 = speed;
                     p->mUnknown512.mUnknown4 = angle;
                 }
-            } else if (p != fn_80137B40() && speed < 0.72f) {
+            } else if (p != BallGetCurrentHolder() && speed < 0.72f) {
                 p->mUnknown512.mUnknown14 = 3;
                 p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
                 p->mUnknown512.mUnknown0 = speed;
@@ -133,7 +133,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
                 p->mUnknown512.mUnknown4 = angle;
             }
             fn_800C89F0(p, angle, 0, 0, 0.5f);
-        } else if (fn_801481B0() != 0) {
+        } else if (PassIconsAreShown() != 0) {
             fn_800DBC4C(p, angle, speed);
         }
     } else {
@@ -149,7 +149,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             } else {
                 fn_800DBC4C(p, p->mMotion.mFacing, 0.0f);
             }
-        } else if (fn_800DC21C(p) == 1 && fn_801481B0() != 0) {
+        } else if (fn_800DC21C(p) == 1 && PassIconsAreShown() != 0) {
             fn_800DBC4C(p, p->mMotion.mFacing, 0.0f);
         }
     }

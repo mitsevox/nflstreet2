@@ -9,7 +9,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80178D18.h"
@@ -90,7 +90,7 @@ extern "C" void PlayerMoveUpdateRun(Object_80039F5C *p)
             pBlock->mUnknown5 = 0;
         }
     }
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         int active = pBlock->mUnknown0 == 2;
         unsigned char mode;
 
@@ -126,7 +126,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
     int held = 0;
     unsigned char id = p->mpState->mId;
 
-    if ((id == 1 || id == 91) && p == fn_80137B40()) {
+    if ((id == 1 || id == 91) && p == BallGetCurrentHolder()) {
         int c = p->mUnknown528.mUnknown15;
         int special = 0;
         if (c <= 21) {

@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 
 extern "C" {
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 void fn_800B26B0(Object_800B26B0 *pObject);
 void fn_800B26E0(Object_800B26B0 *pObject);
@@ -17,7 +17,7 @@ int fn_800DC080(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_8016BDCC(Object_80039F5C *p);
 void fn_8016BE10(Object_80039F5C *p);
 void fn_8016C3FC(Object_80039F5C *p);
@@ -37,14 +37,14 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 
 static unsigned short lbl_803EB428 = 30;
 
-float lbl_803ECB04 = 40.0f / (210.0f / lbl_803EA2C4);
+float lbl_803ECB04 = 40.0f / (210.0f / gFrameTimeScale);
 float lbl_803ECB08 = lbl_803ECB04;
 float lbl_803ECB0C = lbl_803ECB04;
 float lbl_803ECB10 = lbl_803ECB04;
 static float lbl_803ECB14 = lbl_803ECB04 * 0.15f;
-static float lbl_803ECB18 = lbl_803EA2C4 * 0.0125f;
-static float lbl_803ECB1C = lbl_803EA2C4 * 0.009f;
-static float lbl_803ECB20 = lbl_803EA2C4 * 0.0036f;
+static float lbl_803ECB18 = gFrameTimeScale * 0.0125f;
+static float lbl_803ECB1C = gFrameTimeScale * 0.009f;
+static float lbl_803ECB20 = gFrameTimeScale * 0.0036f;
 
 static void (*const lbl_802A4E08[])(Object_80039F5C *) = {
     fn_8016CEEC, fn_8016C3FC, fn_8016C434, fn_8016C70C, fn_8016CA50, fn_8016BE10,
@@ -142,7 +142,7 @@ void fn_8016D344(Object_80039F5C *p)
     float delta[2];
     float distance;
 
-    if (MathAngleDiff(0x400000, p->mMotion.mFacing) < 0x355555 && p == fn_80137B40()) {
+    if (MathAngleDiff(0x400000, p->mMotion.mFacing) < 0x355555 && p == BallGetCurrentHolder()) {
         int team = fn_80178308();
         Object_80039F5C *pOther = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), 0x355555, &distance, 0);
 
@@ -218,7 +218,7 @@ void fn_8016D4D8(Object_80039F5C *p)
         pInput->mUnknown15 = pRequest->mUnknown15;
         pInput->mUnknown0 = pInput->mUnknown0 <= 1.0f ? pInput->mUnknown0 : 1.0f;
         pRequest->mUnknown0 = pInput->mUnknown0;
-        if (p == fn_80137B40()) {
+        if (p == BallGetCurrentHolder()) {
             pInput->mUnknown0 = pInput->mUnknown0 <= 0.98f ? pInput->mUnknown0 : 0.98f;
             pRequest->mUnknown0 = pInput->mUnknown0;
             if (pInput->mUnknown15 == 1) {

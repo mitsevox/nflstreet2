@@ -1,7 +1,10 @@
+/* What happens when the ball hits a part of a player's body: it bounces off the part and may
+   pop up loose. */
+
 #include "game/Object_800EA284.h"
 #include "game/Record_800B15FC.h"
-#include "game/cu_80089330.h"
-#include "game/cu_80136B1C.h"
+#include "game/CollideContacts.h"
+#include "game/Ball.h"
 #include "game/cu_80142BB4.h"
 #include "game/fn_802270D4.h"
 
@@ -10,9 +13,9 @@
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800E9528(Object_80039F5C *p);
-void fn_8013A3BC(Object_80137ABC *pBall);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-int fn_8013BA88(Object_80137ABC *pBall, void *pData, int value);
+void fn_8013A3BC(Ball_t *pBall);
+int BallStateGet(Ball_t *pBall, int *pOut);
+int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 int fn_80178348(void);
 int CharSkelGetJointByName(void *p, const char *pName);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -24,26 +27,26 @@ void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoi
                  float *pT);
 }
 
-extern "C" void fn_80138590(Object_80137ABC *pBall)
+extern "C" void BallPrimeKickUp(Ball_t *pBall)
 {
     if (pBall) {
         pBall->mState.mUnknownF0 = 0.1f;
     }
 }
 
-extern "C" int fn_801385A8(Object_80137ABC *pBall)
+extern "C" int BallIsClearOfHands(Ball_t *pBall)
 {
     int result = 0;
 
     if (pBall) {
-        Object_80039F5C *p = fn_80137AD0(pBall);
+        Object_80039F5C *p = BallGetHolder(pBall);
 
         if (p) {
             Vector_80039F5C pos;
             Vector_80039F5C left;
             Vector_80039F5C right;
 
-            fn_80137D58(pBall, &pos);
+            BallGetPosition(pBall, &pos);
             fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &left, 0);
             fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rwrist"), &right, 0);
             if (fn_802278D0(&pos, &left) > 0.09f) {
@@ -54,8 +57,8 @@ extern "C" int fn_801385A8(Object_80137ABC *pBall)
     return result;
 }
 
-extern "C" void fn_80138690(Object_80137ABC *pBall, Vector_80039F5C *pCenter, Vector_80039F5C *pDir,
-                            Contact_80089330 *pContact, int push, float value)
+extern "C" void BallDeflect(Ball_t *pBall, Vector_80039F5C *pCenter, Vector_80039F5C *pDir,
+                            CollideContact_t *pContact, int push, float value)
 {
     float x = pBall->mState.mUnknown54.mX;
     float y = pBall->mState.mUnknown54.mY;
@@ -95,9 +98,9 @@ extern "C" void fn_80138690(Object_80137ABC *pBall, Vector_80039F5C *pCenter, Ve
     pBall->mState.mUnknown54.mZ = motion.mUnknown12.mZ;
 }
 
-extern "C" void fn_80138880(Vector_80039F5C *pOut, Object_80039F5C *p, Vector_80039F5C *pPos, unsigned char sub)
+extern "C" void BallGetDeflectNormal(Vector_80039F5C *pOut, Object_80039F5C *p, Vector_80039F5C *pPos, unsigned char sub)
 {
-    Segment_80138CC0 *pSegment = &p->mpUnknown3092->mpUnknown36[sub].mSegment16;
+    BallSegment_t *pSegment = &p->mpUnknown3092->mpUnknown36[sub].mSegment16;
     Vector_80039F5C down;
     Vector_80039F5C nearest;
     float dist;
@@ -139,7 +142,7 @@ extern "C" void fn_80138880(Vector_80039F5C *pOut, Object_80039F5C *p, Vector_80
     fn_802271F0(pOut, pOut);
 }
 
-extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_80089330 *pContact, unsigned char sub,
+extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub,
                             Vector_80039F5C *pPos)
 {
     Segment_80142C5C ball;
@@ -163,9 +166,9 @@ extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_
     target.mUnknown12.mX = p->mpUnknown3092->mpUnknown36[sub].mUnknown0;
     target.mUnknown12.mY = p->mpUnknown3092->mpUnknown36[sub].mUnknown4;
     target.mUnknown12.mZ = p->mpUnknown3092->mpUnknown36[sub].mUnknown8;
-    if (fn_80142C5C(&ball, &target, &hitA, &hitB) && !fn_8013BA88(pBall, p, sub)) {
+    if (fn_80142C5C(&ball, &target, &hitA, &hitB) && !BallStateCheckPlayerHit(pBall, p, sub)) {
         fn_8009BD2C(p, &pBall->mState.mUnknownCC);
-        fn_80138880(&dir, p, &pBall->mState.mUnknown28, sub);
+        BallGetDeflectNormal(&dir, p, &pBall->mState.mUnknown28, sub);
         if (hitA) {
             pBall->mState.mPos = pPos ? *pPos : pBall->mState.mUnknown28;
         }
@@ -196,9 +199,9 @@ extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_
         }
         fn_802276B4(&span, &target.mUnknown0, &target.mUnknown12);
         fn_8013A3BC(pBall);
-        fn_80138690(pBall, &span, &dir, pContact, 1, value);
-        if (fn_8013BA58(pBall, 0) == 4 && flag && p->mpState->mId == 28) {
-            fn_8013847C(pBall, 1);
+        BallDeflect(pBall, &span, &dir, pContact, 1, value);
+        if (BallStateGet(pBall, 0) == 4 && flag && p->mpState->mId == 28) {
+            BallKickUp(pBall, 1);
             if (fn_80178348() == p->mIdBytes[2]) {
                 Record_800B15FC *pRecord = fn_800B15FC();
 
@@ -209,7 +212,7 @@ extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_
                 fn_800B1508();
             }
         }
-        if (fn_8013BA58(pBall, 0) == 4) {
+        if (BallStateGet(pBall, 0) == 4) {
             int id = p->mpState->mId;
 
             if (id != 28 && id != 58 && id != 5) {

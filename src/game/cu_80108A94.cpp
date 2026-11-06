@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -82,7 +82,7 @@ struct Sphere_80108DF8 {
 /* Ball, three positions, the landing point and the time filled by
    fn_80107680. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -91,9 +91,9 @@ struct Points_800F3A6C {
 };
 
 extern "C" {
-int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
+int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
                 int *pOutB);
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
+int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float range);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
@@ -152,7 +152,7 @@ extern "C" int fn_80108C34(Object_80039F5C *p, Block_800F4A74 *pBlock, Points_80
     if (pBlock->mUnknown62 != 0 || p->mUnknown2914 == 17 || p->mUnknown2914 == 18 || p->mUnknown2914 == 16 ||
         fn_8009F0B8(p, 0x400000) == 1 || pBlock->mUnknown49 == 0) {
         result = 1;
-    } else if (pOther != 0 && pOther->mpState->mId == 28 && fn_80137B40() != pOther) {
+    } else if (pOther != 0 && pOther->mpState->mId == 28 && BallGetCurrentHolder() != pOther) {
         Block_800F4A74 *pOtherBlock = (Block_800F4A74 *)&pOther->mUnknown336;
 
         if (fn_800ACB8C(p->mIdBytes[2]) < (float)pOtherBlock->mUnknown0 / (float)pOtherBlock->mUnknown16 &&
@@ -186,7 +186,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
     float height;
     Object_80039F5C *pOther; /* teammate in the loop, then the 0x80137B88 player */
 
-    if (fn_80108C34(p, pBlock, pInfo, fn_80137B88(pInfo->mpUnknown0)) == 0) {
+    if (fn_80108C34(p, pBlock, pInfo, BallGetTarget(pInfo->mpUnknown0)) == 0) {
         return;
     }
     mode = 1;
@@ -216,7 +216,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             }
         }
     }
-    pOther = fn_80137B88(pInfo->mpUnknown0);
+    pOther = BallGetTarget(pInfo->mpUnknown0);
     if (pOther != 0 && pOther->mpState->mId == 28 && !fn_801783AC(11)) {
         Point_8017886C toTarget;
         Point_8017886C toPlayer;
@@ -238,12 +238,12 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             }
         }
     }
-    fn_801380AC(fn_80137ABC(pBlock->mUnknown64), &height);
+    BallGetLandingTime(BallGet(pBlock->mUnknown64), &height);
     if (fn_8009A6EC(p) != 0) {
-        handle = fn_800997F4(p, fn_80137ABC(pBlock->mUnknown64), range, pBlock, 3, 0, 0, &outA, &outB);
+        handle = fn_800997F4(p, BallGet(pBlock->mUnknown64), range, pBlock, 3, 0, 0, &outA, &outB);
     }
     if (handle == 0x1FFFFFFF) {
-        handle = fn_80099734(p, fn_80137ABC(pBlock->mUnknown64), 0, mode, pBlock, 1, 0, 0, fn_8009A77C(p), range);
+        handle = fn_80099734(p, BallGet(pBlock->mUnknown64), 0, mode, pBlock, 1, 0, 0, fn_8009A77C(p), range);
         if (handle == 0x1FFFFFFF) {
             return;
         }

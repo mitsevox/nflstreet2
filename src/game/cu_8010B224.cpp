@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -111,7 +111,7 @@ extern "C" int fn_8010B224(Object_80039F5C *p) {
         result = 0;
         break;
     }
-    if (fn_80137B40() != p) {
+    if (BallGetCurrentHolder() != p) {
         int facing = p->mMotion.mFacing;
         Point_8017886C ahead;
 
@@ -196,7 +196,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
             return 1;
         }
         if (p->mFlags & 0x1000) {
-            if (fn_80137B40() == p) {
+            if (BallGetCurrentHolder() == p) {
                 fn_80171DB0(p);
             }
             p->mFlags &= ~0x1000;

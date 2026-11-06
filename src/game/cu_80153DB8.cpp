@@ -33,7 +33,7 @@ void fn_800B3EFC(int team);
 void fn_80167FF0(int team);
 void fn_800AD910(int a, float b);
 void fn_8009D888(int index, int value);
-void fn_8013FB44(void);
+void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
@@ -69,7 +69,7 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
 void fn_80153EA8(Class_802A1B18 *p)
 {
     fn_8009D888(0, 10);
-    fn_8013FB44();
+    CamGameResumeAll();
     fn_8016DDDC(fn_80178308());
     fn_8016DDDC(fn_80178320());
     fn_801790D0(fn_80178308(), 0.0f, 0.0f);

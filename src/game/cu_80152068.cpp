@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8022781C.h"
 
 struct Entry_8015005C {
@@ -24,7 +24,7 @@ struct Table_8015005C {
 
 extern "C" {
 Table_8015005C *fn_801530FC(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 float fn_802373C8(int selector, float first, float last);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int MathAngleDiff(int a, int b);
@@ -39,7 +39,7 @@ void fn_80152068(int index, Vector_80039F5C *pOut)
 
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
 {
-    unsigned int count = fn_801383C8();
+    unsigned int count = BallsGetCount();
     int result = 0;
     float best = -3.4028234663852886e38f;
 
@@ -51,12 +51,12 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80137ABC *pBall = fn_80137ABC(i);
+        Ball_t *pBall = BallGet(i);
         float score = 0.0f;
 
-        if (fn_8013846C(pBall) && fn_8013BA58(pBall, 0) == 4) {
+        if (BallIsVisible(pBall) && BallStateGet(pBall, 0) == 4) {
             Vector_80039F5C position;
-            fn_80138064(pBall, &position);
+            BallGetLandingPoint(pBall, &position);
             float distance = fn_8022781C(&position, &p->mMotion.mPos);
             score = fn_802373C8(0, score, 0.75f);
             if (i == 0) {
@@ -83,7 +83,7 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
 
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
 {
-    unsigned int count = fn_801383C8();
+    unsigned int count = BallsGetCount();
     int result = 0;
     *pIndex = 0;
     float best = -3.4028234663852886e38f;
@@ -91,11 +91,11 @@ int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80137ABC *pBall = fn_80137ABC(i);
-        if (fn_8013846C(pBall) && fn_8013BA58(pBall, 0) == 4) {
+        Ball_t *pBall = BallGet(i);
+        if (BallIsVisible(pBall) && BallStateGet(pBall, 0) == 4) {
             Vector_80039F5C position;
             Point_8017886C delta;
-            fn_80138064(pBall, &position);
+            BallGetLandingPoint(pBall, &position);
             fn_80227690(&delta, &position, &p->mMotion.mPos);
             int direction = delta.Heading();
             float score = MathAngleDiff(direction, p->mUnknown512.mUnknown4);

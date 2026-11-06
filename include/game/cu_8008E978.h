@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Params_80092E54.h"
 
-struct Object_80137ABC;
+struct Ball_t;
 
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque

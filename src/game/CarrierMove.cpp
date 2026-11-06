@@ -9,7 +9,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_800B65A0.h"
@@ -91,7 +91,7 @@ extern "C" int CarrierMoveEnter(Object_80039F5C *p)
     CarrierMoveBlock_t *pBlock = (CarrierMoveBlock_t *)&p->mUnknown336;
     int mode = PlayerMoveGetKind(p);
 
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         pBlock->mUnknown24 = 1;
     } else {
         pBlock->mUnknown24 = 0;
@@ -118,7 +118,7 @@ extern "C" int CarrierMoveUpdate(Object_80039F5C *p)
     pBlock->mUnknown26++;
     fn_800DB7A4(pBlock, p);
     if (pBlock->mUnknown24) {
-        int result = (int)fn_80137C48(p);
+        int result = (int)BallFindHeldBy(p);
 
         if (result == 0) {
             p->mFlags |= 0x4000000;

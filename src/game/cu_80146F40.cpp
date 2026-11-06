@@ -85,7 +85,7 @@ void fn_80146FD8(void)
 {
 }
 
-void fn_80146FDC(Object_80146094 *pObject)
+void fn_80146FDC(ParticleTrailSet_t *pObject)
 {
     unsigned int i;
 
@@ -126,7 +126,7 @@ void fn_80146FDC(Object_80146094 *pObject)
 
 void fn_801470F0(Object_8003DEC4 *pObject)
 {
-    Object_80146094 *pData = &pObject->mUnknown5188;
+    ParticleTrailSet_t *pData = &pObject->mUnknown5188;
     unsigned int i;
 
     if (--pData->mUnknown55C < 0) {
@@ -196,7 +196,7 @@ void fn_801470F0(Object_8003DEC4 *pObject)
 
 void fn_80147598(Object_8003DEC4 *pObject, int bit, unsigned int slot, unsigned char flag)
 {
-    Object_80146094 *pData = &pObject->mUnknown5188;
+    ParticleTrailSet_t *pData = &pObject->mUnknown5188;
     int index;
 
     pObject->mUnknown20 |= 1 << bit;
@@ -214,7 +214,7 @@ void fn_801475F4(void)
 
     for (i = 0; i < fn_8003DEB4(); i++) {
         Object_8003DEC4 *pObject = fn_8003DEC4(i);
-        Object_80146094 *pData = &pObject->mUnknown5188;
+        ParticleTrailSet_t *pData = &pObject->mUnknown5188;
         Trail_80146FDC *pTrail;
         int j;
 

@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802372EC.h"
@@ -15,7 +15,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *message, Object_80039F5C *p);
 extern unsigned char lbl_803EAD68[5];
@@ -26,7 +26,7 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
     Message_800F01CC message;
     fn_801C1F94(&message, 0, 4);
     message.mId = 12;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     unsigned char choice;
     unsigned char kind;
     if (p == carrier) {
@@ -48,10 +48,10 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
         if (MathAngleDiff(heading, p->mMotion.mFacing) <= 0x3FFFFF) fn_802270A4(&delta);
     } else {
         Vector_80039F5C point;
-        fn_80138064(fn_801374BC(), &point);
+        BallGetLandingPoint(BallGetCurrent(), &point);
         Vector_80039F5C delta;
         fn_80227690(&delta, &point, &p->mMotion.mPos);
-        if (!(fn_802270A4(&delta) >= 8.0f)) fn_8013BA58(fn_801374BC(), 0);
+        if (!(fn_802270A4(&delta) >= 8.0f)) BallStateGet(BallGetCurrent(), 0);
         choice = 2;
         kind = 4;
     }

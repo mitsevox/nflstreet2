@@ -13,7 +13,7 @@
 #include "game/fn_80195EFC.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802270D4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 
 /* 8-byte records of the three 50-entry lists at 0x8030FF40 (one per side
@@ -47,9 +47,9 @@ void fn_800B9BAC(Class_80297C60 *p);
 void fn_800CC448(void);
 void fn_800545C0(void);
 void fn_800545E8(void);
-void fn_80139204(void);
-void fn_8013F97C(int a);
-void fn_8013FA58(int a, int b);
+void BallPlaceAtSpot(void);
+void CamGameSelectCamera(int a);
+void CamGameSetFocusAll(int a, int b);
 void fn_80162780(int a, int b);
 void fn_8016DDDC(int team);
 void fn_80173BCC(void);
@@ -404,7 +404,7 @@ extern "C" void fn_800C34B0(void)
     fn_800CC448();
     fn_8016DDDC(fn_80178308());
     fn_8016DDDC(fn_80178320());
-    fn_80139204();
+    BallPlaceAtSpot();
     fn_800B9BAC(lbl_803EAB84);
     if (lbl_803EABD5 == 0) {
         fn_8009D888(2, 0);
@@ -421,8 +421,8 @@ extern "C" void fn_800C34B0(void)
     if (fn_8019623C(0x23000) != 0) {
         fn_80195EFC(1, 20, 0x808080, 0);
     }
-    fn_8013F97C(0);
-    fn_8013FA58(1, fn_801374D4());
+    CamGameSelectCamera(0);
+    CamGameSetFocusAll(1, BallGetCurrentIndex());
 }
 
 extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord,

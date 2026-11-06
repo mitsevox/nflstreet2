@@ -1,5 +1,5 @@
 #include "game/Command_800CEE74.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80178D18.h"
 #include "game/Block_801BE60C.h"
@@ -87,7 +87,7 @@ extern "C" int fn_8009A6EC(Object_80039F5C *p)
     float distance;
     int result = fn_80178A68((Point_8017886C *)&p->mMotion.mPos) <= 5.0f;
 
-    fn_801380AC(fn_801374BC(), &distance);
+    BallGetLandingTime(BallGetCurrent(), &distance);
     if (distance < 40.0f) {
         result = 0;
     }

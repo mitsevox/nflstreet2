@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -127,7 +127,7 @@ extern "C" void fn_80109990(Pair_80109990 *pOut) {
 
 extern "C" int fn_80109A1C(Object_80039F5C *p, Point_8017886C *pOut) {
     int result = 0;
-    Object_80039F5C *pTarget = fn_80137B40();
+    Object_80039F5C *pTarget = BallGetCurrentHolder();
     float distance;
 
     if (pTarget != 0 && pTarget != p) {
@@ -211,7 +211,7 @@ extern "C" void fn_80109CA0(Object_80039F5C *p, int animation, unsigned char a, 
 extern "C" int fn_80109D70(Object_80039F5C *p, Point_8017886C *pOut) {
     int result = 6;
 
-    if (fn_80137C48(p)) {
+    if (BallFindHeldBy(p)) {
         result = 8;
     } else if (fn_80109C7C(p)) {
         result = 1;

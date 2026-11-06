@@ -15,7 +15,7 @@
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
 #include "game/cu_80142BB4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 #include "game/State_80134E24.h"
 
@@ -80,17 +80,17 @@ extern "C" unsigned char lbl_803EB168, lbl_803EB16A;
 extern "C" float lbl_803EB184;
 extern "C" unsigned char lbl_803EB169;
 extern "C" {
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_80135CEC(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char fn_80168E00(int, unsigned char, unsigned char *);
 unsigned int fn_802372EC(unsigned int, unsigned int);
 int fn_80178320(void);
 int fn_800AD9B4(void);
-int fn_801481B0(void);
-int fn_801483F8(void);
-void fn_80148108(int);
-void fn_8013FA8C(int);
+int PassIconsAreShown(void);
+int PassIconsWereShown(void);
+void PassIconsShow(int);
+void CamGameSetModeAll(int);
 void fn_8015A0D0(int);
 void fn_800B8344(void);
 int fn_8010A2DC(Object_80039F5C *, int, short);
@@ -131,7 +131,7 @@ int fn_800E815C(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int fn_801CFE40(float, float);
-int fn_800B7248(Input_800B6D34 *, Object_80137ABC *, Object_80039F5C *, Object_80039F5C *);
+int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_8003AB08(Object_80039F5C *, int);
 void fn_801360D4(Object_80039F5C *);
@@ -303,7 +303,7 @@ void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
 
 int fn_80134E24(Object_80039F5C *player) {
     unsigned int count = 0;
-    if (fn_80137B40() != player && !(player->mFlags & 0x4000)) {
+    if (BallGetCurrentHolder() != player && !(player->mFlags & 0x4000)) {
         Message_800F01CC message;
         fn_801C1F94(&message, 0, 4);
         message.mId = 33;
@@ -363,10 +363,10 @@ int fn_80134E24(Object_80039F5C *player) {
             state->mUnknown19 = 0;
     }
     int mode = fn_800AD9B4();
-    if (!fn_801481B0() && !fn_801483F8() && fn_800B65A0(player->mIdBytes[2]) != 255 && mode == 3 &&
-        fn_80137C48(player)) {
-        fn_80148108(0);
-        fn_8013FA8C(2);
+    if (!PassIconsAreShown() && !PassIconsWereShown() && fn_800B65A0(player->mIdBytes[2]) != 255 && mode == 3 &&
+        BallFindHeldBy(player)) {
+        PassIconsShow(0);
+        CamGameSetModeAll(2);
     }
     fn_8015A0D0(1);
     return mode != 3;
@@ -400,7 +400,7 @@ int fn_80135200(Object_80039F5C *player) {
         }
         return 0;
     }
-    if (player != fn_80137B40())
+    if (player != BallGetCurrentHolder())
         return 1;
     if (state->mUnknown4 > 0)
         --state->mUnknown4;
@@ -817,7 +817,7 @@ int fn_801363A4(Object_80039F5C *p)
         (fn_801BE648(p->mpUnknown792) == 55 || fn_801BE648(p->mpUnknown792) == 49 ||
          fn_801BE648(p->mpUnknown792) == 52 || fn_801BE648(p->mpUnknown792) == 150 ||
          fn_801BE648(p->mpUnknown792) == 147) && (p->mUnknown1032 == 4 || p->mUnknown1032 == 6)) {
-        Object_80039F5C *ball = fn_80137B40();
+        Object_80039F5C *ball = BallGetCurrentHolder();
         if (ball) {
             int lower = ball->mMotion.mPos.mY + 2.0f > p->mMotion.mPos.mY;
             int action = 0;
@@ -917,7 +917,7 @@ int fn_80136900(Object_80039F5C *p)
         if (x != 0.0f || y != 0.0f)
             p->mUnknown512.mUnknown4 = fn_801CFE40(y, x);
         if (s->mUnknown8Bytes[3]) {
-            int result = fn_800B7248(&input, fn_801374BC(), p, p);
+            int result = fn_800B7248(&input, BallGetCurrent(), p, p);
             if (result == 1)
                 return 0;
         }

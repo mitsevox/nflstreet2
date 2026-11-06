@@ -1,3 +1,6 @@
+/* The game balls: the saved 'ball' block of ball entries, their models and replay channel,
+   who holds, targets and last touched each ball, and the per-frame ball loops. */
+
 #include <math.h>
 #include <string.h>
 
@@ -51,8 +54,8 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 }
 
-static BallBlock_t *sSet = 0;
-static int sEntrySize;
+static BallBlock_t *_Ball_pSet = 0;
+static int _Ball_iEntrySize;
 
 extern "C" {
 
@@ -120,8 +123,8 @@ int BallBlockCompare(void *p, void *q)
                 Ball_t *pBallA = &pA->mEntries[i];
                 Ball_t *pBallB = &pB->mEntries[i];
 
-                result |= CollideCompareObjects((CollideObject_t *)((char *)pBallA->mState.mpRecord + ((char *)pA - (char *)sSet)),
-                                      (CollideObject_t *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)sSet)),
+                result |= CollideCompareObjects((CollideObject_t *)((char *)pBallA->mState.mpRecord + ((char *)pA - (char *)_Ball_pSet)),
+                                      (CollideObject_t *)((char *)pBallB->mState.mpRecord + ((char *)pB - (char *)_Ball_pSet)),
                                       pBallA->mState.mpRecord);
                 result |= pBallA->mpUnknown00 != pBallB->mpUnknown00;
                 result |= fn_80238258(&pBallA->mState.mFlags, &pBallB->mState.mFlags, sizeof(BallState_t) - 4);
@@ -199,9 +202,9 @@ int BallBlockRestore(void *p, void *pBuffer)
 
 int BallBlockGetSaveSize(void *p)
 {
-    CollideSet_t *pRecords = sSet->mHeader.mpRecords;
+    CollideSet_t *pRecords = _Ball_pSet->mHeader.mpRecords;
 
-    return sizeof(BallBlock_t) + (sSet->mHeader.mCount - 1) * sizeof(Ball_t) + sizeof(CollideSet_t)
+    return sizeof(BallBlock_t) + (_Ball_pSet->mHeader.mCount - 1) * sizeof(Ball_t) + sizeof(CollideSet_t)
          + pRecords->mUnknown4 * sizeof(CollideObject_t) + pRecords->mUnknownC * sizeof(CollideShape_t) * 2;
 }
 
@@ -286,8 +289,8 @@ void BallsReplayRecord(int a)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8003FC70(sSet->mEntries[i].mpUnknown00, a);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8003FC70(_Ball_pSet->mEntries[i].mpUnknown00, a);
     }
 }
 
@@ -295,15 +298,15 @@ void BallsReplayPlayback(int a, int b, int c, int d, float e)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8003FE90(sSet->mEntries[i].mpUnknown00, a, b, c, d, e);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8003FE90(_Ball_pSet->mEntries[i].mpUnknown00, a, b, c, d, e);
     }
 }
 
 void BallsReplayRegister(void)
 {
-    sEntrySize = fn_8003FC68();
-    fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, sEntrySize * sSet->mHeader.mCount, "Balls");
+    _Ball_iEntrySize = fn_8003FC68();
+    fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
 }
 
 void BallSetCurrent(unsigned char index)
@@ -313,26 +316,26 @@ void BallSetCurrent(unsigned char index)
     if (pBall) {
         pBall->mState.mFlags &= ~1;
     }
-    sSet->mHeader.mCurrent = index;
-    sSet->mEntries[index].mState.mFlags |= 1;
+    _Ball_pSet->mHeader.mCurrent = index;
+    _Ball_pSet->mEntries[index].mState.mFlags |= 1;
 }
 
 Ball_t *BallGetCurrent(void)
 {
-    return &sSet->mEntries[sSet->mHeader.mCurrent];
+    return &_Ball_pSet->mEntries[_Ball_pSet->mHeader.mCurrent];
 }
 
 unsigned char BallGetCurrentIndex(void)
 {
-    return sSet->mHeader.mCurrent;
+    return _Ball_pSet->mHeader.mCurrent;
 }
 
 unsigned char BallGetIndex(Ball_t *pBall)
 {
     unsigned char i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        if (&sSet->mEntries[i] == pBall) {
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        if (&_Ball_pSet->mEntries[i] == pBall) {
             break;
         }
     }
@@ -343,8 +346,8 @@ unsigned char BallFindByModel(Block_80170E64 *pBlock)
 {
     unsigned char i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        if (sSet->mEntries[i].mpUnknown00 == pBlock) {
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        if (_Ball_pSet->mEntries[i].mpUnknown00 == pBlock) {
             break;
         }
     }
@@ -358,8 +361,8 @@ void BallsCreateModels(int a)
     unsigned int i;
 
     fn_8003FAC4(a);
-    pBalls = sSet->mEntries;
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
+    pBalls = _Ball_pSet->mEntries;
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
         int notFirst;
 
         if (i == 0) {
@@ -381,8 +384,8 @@ void BallsDestroyModels(int a)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8003FBB4(a, sSet->mEntries[sSet->mHeader.mCount - i - 1].mpUnknown00);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8003FBB4(a, _Ball_pSet->mEntries[_Ball_pSet->mHeader.mCount - i - 1].mpUnknown00);
     }
     fn_8003FB2C();
 }
@@ -391,13 +394,13 @@ void BallsProcessMotion(float step)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        Object_80039F5C *p = BallGetHolder(&sSet->mEntries[i]);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        Object_80039F5C *p = BallGetHolder(&_Ball_pSet->mEntries[i]);
 
         if (p && (p->mpUnknown4->mUnknown20 & 1) == 0) {
-            BallSetVisible(&sSet->mEntries[i], 0);
+            BallSetVisible(&_Ball_pSet->mEntries[i], 0);
         }
-        BallStateMove(&sSet->mEntries[i], step);
+        BallStateMove(&_Ball_pSet->mEntries[i], step);
     }
 }
 
@@ -405,8 +408,8 @@ void BallsProcessStates(float step)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        BallStateUpdate(&sSet->mEntries[i], step);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        BallStateUpdate(&_Ball_pSet->mEntries[i], step);
     }
 }
 
@@ -415,12 +418,12 @@ void BallsProcessCollision(float step)
     CollideSet_t *pRecords;
     unsigned int i;
 
-    CollideSetUpdate(sSet->mHeader.mpRecords);
-    CollideSetTest(fn_8003A078(), sSet->mHeader.mpRecords);
-    pRecords = sSet->mHeader.mpRecords;
+    CollideSetUpdate(_Ball_pSet->mHeader.mpRecords);
+    CollideSetTest(fn_8003A078(), _Ball_pSet->mHeader.mpRecords);
+    pRecords = _Ball_pSet->mHeader.mpRecords;
     CollideSetTest(pRecords, fn_801442F0());
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8013A6A8(&sSet->mEntries[i], step);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8013A6A8(&_Ball_pSet->mEntries[i], step);
     }
 }
 
@@ -428,8 +431,8 @@ void BallsSyncModels(float step)
 {
     unsigned int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8013A440(&sSet->mEntries[i]);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8013A440(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -437,8 +440,8 @@ void BallsResetScales(void)
 {
     int i;
 
-    for (i = 0; i < sSet->mHeader.mCount; i++) {
-        fn_8013ABE0(&sSet->mEntries[i]);
+    for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+        fn_8013ABE0(&_Ball_pSet->mEntries[i]);
     }
 }
 
@@ -494,7 +497,7 @@ void BallGiveToPlayer(Ball_t *pBall, Object_80039F5C *p)
 
 Ball_t *BallGet(int index)
 {
-    return &sSet->mEntries[index];
+    return &_Ball_pSet->mEntries[index];
 }
 
 Object_80039F5C *BallGetHolder(Ball_t *pBall)
@@ -556,10 +559,10 @@ Ball_t *BallFindHeldBy(Object_80039F5C *p)
 {
     unsigned char i;
 
-    if (sSet) {
-        for (i = 0; i < sSet->mHeader.mCount; i++) {
-            if (p == fn_8009BCE8(&sSet->mEntries[i].mState.mUnknownB4)) {
-                return &sSet->mEntries[i];
+    if (_Ball_pSet) {
+        for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+            if (p == fn_8009BCE8(&_Ball_pSet->mEntries[i].mState.mUnknownB4)) {
+                return &_Ball_pSet->mEntries[i];
             }
         }
     }
@@ -570,10 +573,10 @@ Ball_t *BallFindTargeting(Object_80039F5C *p)
 {
     unsigned char i;
 
-    if (sSet) {
-        for (i = 0; i < sSet->mHeader.mCount; i++) {
-            if (p == fn_8009BCE8(&sSet->mEntries[i].mState.mUnknownC8)) {
-                return &sSet->mEntries[i];
+    if (_Ball_pSet) {
+        for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
+            if (p == fn_8009BCE8(&_Ball_pSet->mEntries[i].mState.mUnknownC8)) {
+                return &_Ball_pSet->mEntries[i];
             }
         }
     }
@@ -690,7 +693,7 @@ void BallsStart(int count)
     BallBlock_t *pSet;
 
     CollideSetPairCallback(0, 1, BallCollidePlayer);
-    pHandle = fn_80238174(0, (void **)&sSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
+    pHandle = fn_80238174(0, (void **)&_Ball_pSet, sizeof(BallBlock_t) + (count - 1) * sizeof(Ball_t), 10, 0x62616C6C);
     fn_80238234(pHandle, BallBlockInit, BallBlockShutdown, BallBlockSyncModels, BallBlockCompare);
     fn_80238248(pHandle, BallBlockSave, BallBlockGetSaveSize, BallBlockRestore);
     pSet = (BallBlock_t *)fn_8023816C(pHandle);
@@ -779,14 +782,14 @@ Block_80170E64 *BallGetModel(Ball_t *pBall)
 
 CollideSet_t *BallGetCollRecords(void)
 {
-    return sSet->mHeader.mpRecords;
+    return _Ball_pSet->mHeader.mpRecords;
 }
 
 /* Mirrors every entry: negates the X and Y of its vectors and turns its
    rotations by half a turn. */
 void BallsMirror(void)
 {
-    BallBlock_t *pSet = sSet;
+    BallBlock_t *pSet = _Ball_pSet;
     Quat_801EB488 turn;
     int i;
 
@@ -828,24 +831,24 @@ int BallGetLastToucher(Ball_t *pBall)
 
 int BallsExist(void)
 {
-    return sSet != 0;
+    return _Ball_pSet != 0;
 }
 
 unsigned char BallsGetCount(void)
 {
     unsigned char count;
 
-    if (sSet == 0) {
+    if (_Ball_pSet == 0) {
         count = 0;
     } else {
-        count = sSet->mHeader.mCount;
+        count = _Ball_pSet->mHeader.mCount;
     }
     return count;
 }
 
 void BallsSetVisible(int on)
 {
-    BallBlock_t *pSet = sSet;
+    BallBlock_t *pSet = _Ball_pSet;
     int i;
 
     if (!pSet) {

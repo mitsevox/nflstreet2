@@ -15,7 +15,7 @@ int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int flag);
 int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 void fn_80227538(void *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
@@ -120,7 +120,7 @@ extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
 
     if (p->mTarget.mUnknown4 == -1) {
         if (p->mpState->mId == 2 || p->mpState->mId == 30) {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
             if (pCarrier != 0) {
                 fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);

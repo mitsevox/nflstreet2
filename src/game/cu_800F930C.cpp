@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"

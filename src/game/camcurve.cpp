@@ -1,3 +1,6 @@
+/* Camera mode that plays camera moves stored as animation curves of a character or of a
+   playback clip. */
+
 #include "game/GameCamera.h"
 #include "game/cu_8013BB18.h"
 #include "game/Class_80297B90.h"

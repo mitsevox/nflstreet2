@@ -42,7 +42,7 @@ struct BallRenderObj {
     float mUnknown29C;
     float mUnknown2A0;
     char mUnknown2A4[8];
-    Tracker_801442FC mUnknown2AC;
+    LightTracker_t mUnknown2AC;
 };
 
 extern "C" {

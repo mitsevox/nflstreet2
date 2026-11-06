@@ -8877,9 +8877,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80145224.cpp",
+      "source": "src/game/GroundPulse.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/cu_80145224.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/GroundPulse.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10100,9 +10100,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801422C8.cpp",
+      "source": "src/game/camballmode.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/cu_801422C8.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801422C8-0x801422EC (src/game/camballmode.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",

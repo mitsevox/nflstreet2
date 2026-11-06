@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" int fn_800E8098(Object_80039F5C *p, void *pArg)
 {
     int result = 0;
     if (fn_800E7C84(p) == 1) {
-        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
         if (pCarrier && pCarrier->mpState->mId == 1) {
             Point_8017886C delta;
             fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);

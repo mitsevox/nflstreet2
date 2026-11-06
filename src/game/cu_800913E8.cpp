@@ -1,9 +1,9 @@
 #include "game/cu_8008E978.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "engine/AnimSeqCamSample.h"
 
 extern "C" {
-Camera_8013F738 *fn_8013FA04(int index);
+GameCamera_t *CamGameGetCamera(int index);
 AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
 float fn_801C5278(float, AnimSeqCamCurve_t *, int);
@@ -18,9 +18,9 @@ extern "C" int fn_800913E8(Vector_80039F5C *pOut, Character_80093BCC *pCharacter
                            Object_80039F5C *p, float time)
 {
     int result = 0;
-    Camera_8013F738 *pCamera = fn_8013FA04(0);
+    GameCamera_t *pCamera = CamGameGetCamera(0);
     float scale = 1.0f;
-    Selection_80141210 *pSelection = &pCharacter->mUnknownE0;
+    CamCurveSelection_t *pSelection = &pCharacter->mUnknownE0;
 
     if (!(pActor->mUnknown8 & 0x200)) {
         scale = p->mUnknown768;

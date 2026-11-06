@@ -1,7 +1,7 @@
 #ifndef GAME_CU_8002B8F8_H
 #define GAME_CU_8002B8F8_H
 
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Object_8017886C.h"
 #include "game/Object_80039F5C.h"
 
@@ -65,7 +65,7 @@ struct Type_803EA368 {
     unsigned int mUnknownD94;
     int mUnknownD98;
     char mPadD9C[4];
-    Camera_8013F738 *mpUnknownDA0;
+    GameCamera_t *mpUnknownDA0;
     char mPadDA4[4];
     void *mUnknownDA8[20];
     char mPadDF8[4];

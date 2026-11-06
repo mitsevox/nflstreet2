@@ -14,7 +14,7 @@
 extern "C" {
 float fn_800C4A2C(AnimMomentumActor_t *p);
 void fn_80044854(AnimMomentumActor_t *p, AnimMomentum_t *pState);
-AnimMomentumActor_t *fn_80137B40(void);
+AnimMomentumActor_t *BallGetCurrentHolder(void);
 int fn_801784C4(void);
 int fn_801787A0(void);
 float AnimSeqGetOpcodeTime(void *p, int key);
@@ -125,7 +125,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
             flag = 0;
         }
         if (!(pOther->mUnknownC & 0x800)) return;
-        if (flag && fn_80137B40() != pOther) return;
+        if (flag && BallGetCurrentHolder() != pOther) return;
         float time = AnimSeqGetTime(pBlock);
         float value = time / pBlock->mUnknown4;
         if (!p->mUnknown14) {
@@ -190,7 +190,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
                 pState->mUnknown0.mUnknown4 = p->mUnknown0.mUnknown4;
             }
         }
-        if ((pOther->mUnknownC & 8) && fn_80137B40() == pOther && !fn_801787A0()) {
+        if ((pOther->mUnknownC & 8) && BallGetCurrentHolder() == pOther && !fn_801787A0()) {
             pState->mUnknown8 = p->mUnknown8;
             pState->mUnknownC = p->mUnknownC;
             pState->mUnknown14 = 1;

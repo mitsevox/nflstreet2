@@ -1,25 +1,25 @@
 #include "game/cu_8008E978.h"
-#include "game/cu_80136B1C.h"
-#include "game/Camera_8013F738.h"
+#include "game/Ball.h"
+#include "game/GameCamera.h"
 #include "game/fn_80178D18.h"
 
 extern "C" {
 Object_80039F5C *fn_800963EC(Character_80093BCC *pCharacter);
 int AnimSeqCamGetFileNum(void);
-Camera_8013F738 *fn_8013FA04(int index);
-float fn_800921B0(Object_80039F5C *p, Camera_8013F738 *pCamera);
-int fn_80027DF0(void);
+GameCamera_t *CamGameGetCamera(int index);
+float fn_800921B0(Object_80039F5C *p, GameCamera_t *pCamera);
+int FELoopIsMainFEActive(void);
 }
 
 /* Updates bit 0 of every player's +4 block flags. With active set, players
    other than state 50 whose camera distance is at most character index's
    distance + 0.5 get it cleared; otherwise players with +11 set get it set.
-   The fn_80137B40 player's fn_801374BC entry gets the same change (in the
+   The BallGetCurrentHolder player's BallGetCurrent entry gets the same change (in the
    set path even when +11 is clear) in its word at +0x14, written through
    the Block_80170E64 view (whose +0x14 is that flags word). */
 extern "C" void fn_800921E8(int index, int active)
 {
-    Camera_8013F738 *pCamera = 0;
+    GameCamera_t *pCamera = 0;
     float distance = 0.0f;
     int side;
 
@@ -29,11 +29,11 @@ extern "C" void fn_800921E8(int index, int active)
 
         fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
         if (AnimSeqCamGetFileNum() == 0) {
-            pCamera = fn_8013FA04(2);
+            pCamera = CamGameGetCamera(2);
         }
         distance = fn_800921B0(pTarget, pCamera);
     }
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         for (side = 0; side <= 1; side++) {
             unsigned int count = fn_80178D18((unsigned char)side);
             unsigned int i;
@@ -44,16 +44,16 @@ extern "C" void fn_800921E8(int index, int active)
                 if (active != 0 && p->mpState->mId != 50) {
                     if (fn_800921B0(p, pCamera) <= distance + 0.5f) {
                         p->mpUnknown4->mUnknown20 &= ~1;
-                        if (p == fn_80137B40()) {
-                            ((Block_80170E64 *)fn_801374BC())->mUnknown20 &= ~1;
+                        if (p == BallGetCurrentHolder()) {
+                            ((Block_80170E64 *)BallGetCurrent())->mUnknown20 &= ~1;
                         }
                     }
                 } else {
                     if (p->mUnknown9[2] != 0) {
                         p->mpUnknown4->mUnknown20 |= 1;
                     }
-                    if (p == fn_80137B40()) {
-                        ((Block_80170E64 *)fn_801374BC())->mUnknown20 |= 1;
+                    if (p == BallGetCurrentHolder()) {
+                        ((Block_80170E64 *)BallGetCurrent())->mUnknown20 |= 1;
                     }
                 }
             }

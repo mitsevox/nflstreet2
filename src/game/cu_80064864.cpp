@@ -13,8 +13,8 @@
 
 typedef void (*Callback_8030A4A8)(int value);
 
-/* Camera returned by fn_8013FA04 (defined in src/game/cu_8013F460.cpp). */
-struct Camera_8013F738;
+/* Camera returned by CamGameGetCamera (defined in src/game/camgame.cpp). */
+struct GameCamera_t;
 
 /* Object at lbl_803EABA4 (declared in include/game/Class_80297CE8.h). */
 class Class_80297CE8;
@@ -83,14 +83,14 @@ int fn_800BF718(int a);
 void fn_800C0330(void *p);
 void fn_800C1CA0(void);
 int fn_800C1E40(void);
-int fn_8013C678(Camera_8013F738 *pCamera);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
-void fn_8013F97C(int a);
-int fn_8013F9F8(void);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013FA24(void);
-void fn_8013FA8C(int a);
-void fn_8013FB44(void);
+int fn_8013C678(GameCamera_t *pCamera);
+void fn_8013C6F0(GameCamera_t *pCamera);
+void CamGameSelectCamera(int a);
+int CamGameGetCurrentSlot(void);
+GameCamera_t *CamGameGetCamera(int index);
+void CamGameProcess(void);
+void CamGameSetModeAll(int a);
+void CamGameResumeAll(void);
 void fn_80162780(int a, int b);
 unsigned char fn_8016278C(void);
 void fn_80178370(void);
@@ -189,11 +189,11 @@ void fn_800649AC(void)
     if (fn_800AD9B4() == 1) {
         return;
     }
-    fn_8013FB44();
+    CamGameResumeAll();
     fn_800B43C8();
     lbl_8030A478.mUnknown136 = -1;
-    lbl_8030A478.mUnknown140 = fn_8013F9F8();
-    lbl_8030A478.mUnknown144 = fn_8013C678(fn_8013FA04(5));
+    lbl_8030A478.mUnknown140 = CamGameGetCurrentSlot();
+    lbl_8030A478.mUnknown144 = fn_8013C678(CamGameGetCamera(5));
     fn_801C1F94(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
@@ -255,7 +255,7 @@ int fn_80064B94(void)
     if (lbl_8030A478.mUnknown136 != -1 && fn_800AD9B4() != 1) {
         result = fn_80096B1C(lbl_8030A478.mUnknown136);
         if (result) {
-            fn_8013FA24();
+            CamGameProcess();
         }
     } else {
         result = 0;
@@ -272,9 +272,9 @@ int fn_80064BF8(void)
                 lbl_8030A478.mUnknown136 = -1;
             }
             fn_80162780(lbl_803EA646, lbl_803EA646);
-            fn_8013F97C(lbl_8030A478.mUnknown140);
-            fn_8013FA8C(lbl_8030A478.mUnknown144);
-            fn_8013C6F0(fn_8013FA04(lbl_8030A478.mUnknown140));
+            CamGameSelectCamera(lbl_8030A478.mUnknown140);
+            CamGameSetModeAll(lbl_8030A478.mUnknown144);
+            fn_8013C6F0(CamGameGetCamera(lbl_8030A478.mUnknown140));
         }
         if (fn_800AD9B4() == 5 && !fn_80059004() && !fn_8005900C()) {
             fn_800B4408();

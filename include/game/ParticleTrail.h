@@ -1,5 +1,5 @@
-#ifndef GAME_OBJECT_80146094_H
-#define GAME_OBJECT_80146094_H
+#ifndef GAME_PARTICLE_TRAIL_H
+#define GAME_PARTICLE_TRAIL_H
 
 /* Four-float record copied whole from the table lbl_802DD68C. */
 struct Color_802DD68C {
@@ -17,7 +17,7 @@ struct Point_80146FDC {
 };
 
 /* One of the four 0x8C-byte point histories at the start of
-   Object_80146094. Each update fills mSource[0]/mSource[1] through
+   ParticleTrailSet_t. Each update fills mSource[0]/mSource[1] through
    fn_80146F74 from the matrix indices mIndex[0]/mIndex[1] and stores one
    of them into the eight-entry ring mPoints at mHead. */
 struct Trail_80146FDC {
@@ -41,7 +41,7 @@ struct Half_801470F0 {
 
 /* Block at +0x1444 of Object_8003DEC4 (0x5AC bytes, to the end of the
    object). */
-struct Object_80146094 {
+struct ParticleTrailSet_t {
     Trail_80146FDC mTrails[4];
     float mUnknown230;
     unsigned int mUnknown234;

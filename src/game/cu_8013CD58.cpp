@@ -49,7 +49,7 @@ struct Camera_8013D1C0 {
     RecordList_8002E7C0 mUnknown128;
 };
 
-/* Object returned by fn_8013825C. */
+/* Object returned by BallGetModel. */
 struct Target_8013825C {
     char mPad00[4];
     float mUnknown04[3];
@@ -79,8 +79,8 @@ void fn_8002E7EC(void *p, RecordList_8002E7C0 *pList);
 Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
 void fn_80042380(Block_80170E64 *pBlock, int id, float *pOut, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void *fn_801374BC(void);
-Target_8013825C *fn_8013825C(void *p);
+void *BallGetCurrent(void);
+Target_8013825C *BallGetModel(void *p);
 void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
@@ -335,7 +335,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
 
     out[0] = out[1] = out[2] = 0.0f;
     p = fn_80030C70(0, 0);
-    pTarget = fn_8013825C(fn_801374BC());
+    pTarget = BallGetModel(BallGetCurrent());
     target[0] = pTarget->mUnknown04[0];
     target[1] = pTarget->mUnknown04[1];
     target[2] = pTarget->mUnknown04[2];
@@ -596,7 +596,7 @@ extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, 
     float blend;
     Target_8013825C *pTarget;
 
-    pTarget = fn_8013825C(fn_801374BC());
+    pTarget = BallGetModel(BallGetCurrent());
     tracked[0] = pTarget->mUnknown04[0];
     tracked[1] = pTarget->mUnknown04[1];
     tracked[2] = pTarget->mUnknown04[2];

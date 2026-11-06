@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -87,7 +87,7 @@ struct Info_800F3A6C {
    fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
    the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -191,7 +191,7 @@ extern "C" void fn_801079BC(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
 extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pA, Point_8017886C *pB,
                             Info_800F3A6C *pResult, Points_800F3A6C *pInfo, float *pScale) {
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
-    Object_80137ABC *pBall = fn_80137ABC(pBlock->mUnknown64);
+    Ball_t *pBall = BallGet(pBlock->mUnknown64);
     Point_8017886C ballToOther;
     Point_8017886C offset;
     Point_8017886C delta;
@@ -207,7 +207,7 @@ extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     if (fn_80178A08() - fabsf(pA->mX) < 5.0f && !fn_801783AC(12) && !fn_801783AC(11)) {
         pA->mY -= 6.0f;
     }
-    if (pOther->mpState->mId == 28 && fn_80137B40() != pOther) {
+    if (pOther->mpState->mId == 28 && BallGetCurrentHolder() != pOther) {
         Block_800F3344 *pPass = (Block_800F3344 *)&pOther->mUnknown336;
 
         fn_80227538(&offset, ballToOther.Heading(), 0.5f);
@@ -254,7 +254,7 @@ extern "C" void fn_80107D48(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         fn_80227538(&offset, offset.Heading(), 2.5f);
         fn_80227638(pA, pA, &offset);
     }
-    if (pOther->mpState->mId == 28 && fn_80137B40() != pOther) {
+    if (pOther->mpState->mId == 28 && BallGetCurrentHolder() != pOther) {
         Block_800F3344 *pPass = (Block_800F3344 *)&pOther->mUnknown336;
         int angle;
 

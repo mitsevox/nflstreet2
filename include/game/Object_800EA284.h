@@ -2,11 +2,11 @@
 #define GAME_OBJECT_800EA284_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_80138CC0.h"
+#include "game/BallSweep.h"
 
 /* 48-byte record of the arrays that words +32 and +36 of the player's +3092
    object point to. The two points at +16 and +32 are also read as one
-   Segment_80138CC0. */
+   BallSegment_t. */
 struct Record_800EA284 {
     float mUnknown0;
     float mUnknown4;
@@ -19,7 +19,7 @@ struct Record_800EA284 {
             Vector_80039F5C mUnknown32;
             char mUnknown44[4];
         };
-        Segment_80138CC0 mSegment16;
+        BallSegment_t mSegment16;
     };
 };
 

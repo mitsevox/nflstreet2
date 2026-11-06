@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -84,7 +84,7 @@ extern "C" void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
 
     aim.mX = aim.mY = aim.mZ = 0.0f;
     pOther = fn_80124C28(p, &distance, 0x38E38E, pOut->mHeading, 3.0f, 0.5f);
-    if (pOther && distance < 3.0f && pOther != pMark && pOther != fn_80137B40()) {
+    if (pOther && distance < 3.0f && pOther != pMark && pOther != BallGetCurrentHolder()) {
         limit = 3.0f;
         between = 0;
         pair = InRange(pOther->mUnknown1032, 4, 7);

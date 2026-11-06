@@ -1,3 +1,5 @@
+/* The three pass icons shown above the players the ball can be passed to. */
+
 #include "game/cu_80159F10.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_800F06F4.h"
@@ -5,7 +7,7 @@
 #include "game/fn_800AD9B4.h"
 
 extern "C" {
-void *fn_80147F18(int value);
+void *PassIconStateGetFlags(int value);
 int fn_8011E9D8(State_80039F5C *pState);
 int fn_8011F1F4(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -14,13 +16,13 @@ int fn_801784C4(void);
 int fn_800C47C4(void);
 }
 
-static float lbl_803EB2A0 = 2.5f;
-static unsigned char lbl_803EB2A4[3] = { 2, 1, 3 };
-static Instance_80159F10 *lbl_8031BD04[3];
+static float _PassIcon_fHeight = 2.5f;
+static unsigned char _PassIcon_DefaultSlots[3] = { 2, 1, 3 };
+static Instance_80159F10 *_PassIcon_pIcons[3];
 
 extern "C" {
 
-static int fn_80147F2C(Object_80039F5C *pPlayer)
+static int _PassIconIsEligible(Object_80039F5C *pPlayer)
 {
     int result = 1;
     unsigned char i;
@@ -56,29 +58,29 @@ static int fn_80147F2C(Object_80039F5C *pPlayer)
     return result;
 }
 
-void fn_80148048(void *pOwner)
+void PassIconsCreate(void *pOwner)
 {
     unsigned char i;
 
     fn_8015A110(pOwner);
     for (i = 0; i < 3; i++) {
-        lbl_8031BD04[i] = fn_8015A1A8(pOwner, i, fn_800C47C4(), i + 1);
+        _PassIcon_pIcons[i] = fn_8015A1A8(pOwner, i, fn_800C47C4(), i + 1);
     }
 }
 
-void fn_801480B0(void *pOwner)
+void PassIconsDestroy(void *pOwner)
 {
     unsigned char i;
 
     for (i = 0; i < 3; i++) {
-        fn_8015A204(pOwner, lbl_8031BD04[i]);
+        fn_8015A204(pOwner, _PassIcon_pIcons[i]);
     }
     fn_8015A17C();
 }
 
-void fn_80148108(int mode)
+void PassIconsShow(int mode)
 {
-    unsigned char *pFlags = (unsigned char *)fn_80147F18(0);
+    unsigned char *pFlags = (unsigned char *)PassIconStateGetFlags(0);
 
     *pFlags |= 1;
     if (mode == 1) {
@@ -86,10 +88,10 @@ void fn_80148108(int mode)
     }
 }
 
-void fn_80148154(void)
+void PassIconsHide(void)
 {
     int mode = fn_800AD9B4();
-    unsigned char *pFlags = (unsigned char *)fn_80147F18(0);
+    unsigned char *pFlags = (unsigned char *)PassIconStateGetFlags(0);
 
     if (mode == 3 && (*pFlags & 1)) {
         *pFlags |= 2;
@@ -97,20 +99,20 @@ void fn_80148154(void)
     *pFlags &= ~0xD;
 }
 
-int fn_801481B0(void)
+int PassIconsAreShown(void)
 {
-    return *(unsigned char *)fn_80147F18(0) & 1;
+    return *(unsigned char *)PassIconStateGetFlags(0) & 1;
 }
 
-int fn_801481DC(void)
+int PassIconsAreLocked(void)
 {
-    return (*(unsigned char *)fn_80147F18(0) >> 2) & 1;
+    return (*(unsigned char *)PassIconStateGetFlags(0) >> 2) & 1;
 }
 
-int fn_80148208(int index, int force)
+int PassIconGetSlot(int index, int force)
 {
     Object_80039F5C *pPlayer = 0;
-    unsigned char *pFlags = (unsigned char *)fn_80147F18(0);
+    unsigned char *pFlags = (unsigned char *)PassIconStateGetFlags(0);
     int team = fn_80178308();
     unsigned char found;
     int slot = fn_80168E00(team, index, &found);
@@ -123,7 +125,7 @@ int fn_80148208(int index, int force)
         int mode = fn_800AD9B4();
         if (mode == 2 || (mode == 3 && fn_8011F1F4() != 0)) {
             if (slot == 0xFF) {
-                slot = lbl_803EB2A4[index];
+                slot = _PassIcon_DefaultSlots[index];
             }
         } else {
             slot = 0xFF;
@@ -132,16 +134,16 @@ int fn_80148208(int index, int force)
     if ((*pFlags & 4) && force == 0) {
         slot = 0xFF;
     }
-    if (fn_8011F1F4() == 0 && pPlayer != 0 && fn_80147F2C(pPlayer) == 0) {
+    if (fn_8011F1F4() == 0 && pPlayer != 0 && _PassIconIsEligible(pPlayer) == 0) {
         slot = 0xFF;
     }
     return slot;
 }
 
-int fn_8014830C(int index, Vector_80039F5C *pOut)
+int PassIconGetPosition(int index, Vector_80039F5C *pOut)
 {
     int result = 0;
-    int slot = fn_80148208(index, 0);
+    int slot = PassIconGetSlot(index, 0);
 
     if (slot != 0xFF) {
         Object_80039F5C *pPlayer = fn_80039F5C(fn_80178308(), slot);
@@ -152,20 +154,20 @@ int fn_8014830C(int index, Vector_80039F5C *pOut)
             pOut->mX = -pOut->mX;
             pOut->mY = -pOut->mY;
         }
-        pOut->mZ += lbl_803EB2A0;
-        fn_8015A240(lbl_8031BD04[index], 2);
+        pOut->mZ += _PassIcon_fHeight;
+        fn_8015A240(_PassIcon_pIcons[index], 2);
         result = 1;
     }
     return result;
 }
 
-void fn_801483C8(void)
+void PassIconsClearReplayFlag(void)
 {
-    *(unsigned char *)fn_80147F18(0) &= ~2;
+    *(unsigned char *)PassIconStateGetFlags(0) &= ~2;
 }
 
-int fn_801483F8(void)
+int PassIconsWereShown(void)
 {
-    return (*(unsigned char *)fn_80147F18(0) >> 1) & 1;
+    return (*(unsigned char *)PassIconStateGetFlags(0) >> 1) & 1;
 }
 }

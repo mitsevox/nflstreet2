@@ -19,7 +19,7 @@
 #include "game/cu_80067C10.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -169,7 +169,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                         }
                         pOut->mUnknown22 = 0;
                     }
-                    pCarrier = fn_80137B40();
+                    pCarrier = BallGetCurrentHolder();
                     if (pCarrier) {
                         state = pCarrier->mpState->mId;
                         if (state == 1 || state == 0x23 || state == 0x22 || state == 0x24) {

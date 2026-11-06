@@ -1,8 +1,8 @@
-#ifndef GAME_CAMERAHEADER_8013F628_H
-#define GAME_CAMERAHEADER_8013F628_H
+#ifndef GAME_CAM_HDR_H
+#define GAME_CAM_HDR_H
 
 /* Leading block of a camera that a saved state restores. */
-typedef struct CameraHeader_8013F628 {
+typedef struct CamHdr_t {
     unsigned char mUnknown00;
     unsigned char mType;
     char mPad02[2];
@@ -11,6 +11,6 @@ typedef struct CameraHeader_8013F628 {
     int mUnknown14[3];
     float mUnknown20;
     float mUnknown24;
-} CameraHeader_8013F628;
+} CamHdr_t;
 
 #endif

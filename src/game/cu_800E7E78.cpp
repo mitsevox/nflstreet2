@@ -1,6 +1,6 @@
 #include "game/State_800D7A4C.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 extern "C" {
@@ -19,7 +19,7 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
 {
     if (state->mUnknown5 != 3) return;
     Vector_80039F5C point;
-    Object_80039F5C *carrier = fn_80137B40();
+    Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
         point.mX = carrier->mMotion.mPos.mX;
         point.mY = carrier->mMotion.mPos.mY;
@@ -28,7 +28,7 @@ void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *state)
         float scale = distance * ((float)lbl_803EAD78 * 0.1f);
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
-    } else fn_80137D58(fn_801374BC(), &point);
+    } else BallGetPosition(BallGetCurrent(), &point);
     Vector_80039F5C delta;
     fn_80227690(&delta, &point, &p->mMotion.mPos);
     int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;

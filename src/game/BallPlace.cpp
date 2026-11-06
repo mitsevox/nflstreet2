@@ -1,15 +1,18 @@
-#include "game/cu_80136B1C.h"
+/* Puts balls in place: at a point, on the spot, or parked off the field, and pushes them with
+   impulses. */
+
+#include "game/Ball.h"
 #include "game/fn_802270D4.h"
 #include "game/Object_8017886C.h"
 
 extern "C" {
-void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
-void fn_8013AD9C(Object_80137ABC *pBall, int a);
+void fn_8013A910(Ball_t *pBall, int *pAngles);
+void fn_8013AD9C(Ball_t *pBall, int a);
 Point_8017886C fn_80177FE0(void);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_802277DC(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 
-void fn_801390D0(Object_80137ABC *pBall, Vector_80039F5C *pPos)
+void BallPlaceAt(Ball_t *pBall, Vector_80039F5C *pPos)
 {
     Vector_80039F5C v;
     int angles[3];
@@ -20,51 +23,51 @@ void fn_801390D0(Object_80137ABC *pBall, Vector_80039F5C *pPos)
     angles[0] = 0;
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
-    fn_80137F18(pBall);
-    fn_8013791C(pBall, 6, 0);
-    fn_80137D74(pBall, pPos);
-    fn_80137EE0(pBall, &v);
+    BallClearSpin(pBall);
+    BallReleaseStill(pBall, 6, 0);
+    BallSetPosition(pBall, pPos);
+    BallSetVelocity(pBall, &v);
     fn_8013A910(pBall, angles);
     fn_8013AD9C(pBall, 0);
 }
 
-void fn_80139168(void)
+void BallsPark(void)
 {
     Vector_80039F5C pos;
     int count;
     int i;
 
-    count = fn_801383C8();
+    count = BallsGetCount();
     pos.mX = -150.0f;
     pos.mY = -150.0f;
     pos.mZ = 0.0f;
     for (i = 0; i < count; i++) {
-        Object_80137ABC *pBall = fn_80137ABC(i);
-        fn_801390D0(pBall, &pos);
-        fn_80138440(pBall, 0);
+        Ball_t *pBall = BallGet(i);
+        BallPlaceAt(pBall, &pos);
+        BallSetVisible(pBall, 0);
         pos.mX += 10.0f;
     }
 }
 
-void fn_80139204(void)
+void BallPlaceAtSpot(void)
 {
     Vector_80039F5C pos;
     Point_8017886C point;
-    Object_80137ABC *pBall = fn_801374BC();
+    Ball_t *pBall = BallGetCurrent();
 
     point = fn_80177FE0();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;
-    fn_801390D0(pBall, &pos);
+    BallPlaceAt(pBall, &pos);
 }
 
-void fn_80139274(void)
+void BallResetToSpot(void)
 {
-    fn_80139204();
+    BallPlaceAtSpot();
 }
 
-void fn_80139294(Object_80137ABC *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB)
+void BallApplyImpulse(Ball_t *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB)
 {
     Vector_80039F5C offset;
     Vector_80039F5C cross;

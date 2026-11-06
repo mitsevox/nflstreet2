@@ -3,7 +3,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
 #include "game/cu_80125F3C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
@@ -11,7 +11,7 @@
 #include <math.h>
 
 extern "C" {
-int fn_8013BA58(Object_80137ABC *ball, int *pOut);
+int BallStateGet(Ball_t *ball, int *pOut);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
 int fn_801CFE40(float y, float x);
@@ -39,14 +39,14 @@ extern float lbl_803EB0DC;
 
 int fn_801260D4(Object_80039F5C *p)
 {
-    Object_80137ABC *ball = fn_801374BC();
+    Ball_t *ball = BallGetCurrent();
     int info;
-    if (fn_8013BA58(ball, &info) != 3) return 0;
+    if (BallStateGet(ball, &info) != 3) return 0;
     Record_8011F518 *record = fn_8011F518();
     if (record->mUnknown4 != 11 && record->mUnknown4 != 9) return 0;
     Object_80039F5C *other = fn_8009BCE8(&record->mUnknown0);
     Vector_80039F5C position;
-    fn_80137D58(ball, &position);
+    BallGetPosition(ball, &position);
     Vector_80039F5C ballDelta;
     Vector_80039F5C playerDelta;
     fn_80227690(&ballDelta, &position, &other->mMotion.mPos);
@@ -103,12 +103,12 @@ void fn_801262B8(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos
         if (p->mUnknown1032 == 4 && !fn_8011E88C(p)) {
             int odds = 35;
             if (fn_801783AC(0)) {
-                if (!(distance >= 10.0f) && fn_80128B60() == fn_80137B40()) odds = 80;
+                if (!(distance >= 10.0f) && fn_80128B60() == BallGetCurrentHolder()) odds = 80;
             } else if (fn_8011F1A4()) {
                 if (!forced) {
                     if (distance < 10.0f || (fn_8011F1A4() && fn_8011F4C8() > 3)) {
                         Object_80039F5C *selected = fn_80128B60();
-                        odds = fn_80137B40() == selected ? 80 : 0;
+                        odds = BallGetCurrentHolder() == selected ? 80 : 0;
                     } else odds = 0;
                 }
             } else {
@@ -131,9 +131,9 @@ void fn_801262B8(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos
         }
     }
     if (done) return;
-    Object_80137ABC *ball = fn_801374BC();
-    if (fn_8013BA58(ball, 0) == 4) {
-        Record_8011F4F8 *record = fn_8011F4F8(fn_801374E0(ball));
+    Ball_t *ball = BallGetCurrent();
+    if (BallStateGet(ball, 0) == 4) {
+        Record_8011F4F8 *record = fn_8011F4F8(BallGetIndex(ball));
         int ballAngle;
         if (other && (fn_801BE648(other->mpUnknown792) == 69 || fn_801BE648(other->mpUnknown792) == 178) &&
             (record->mUnknown1D <= 1 || record->mUnknown1D == 6 || record->mUnknown1D == 7)) {
@@ -144,9 +144,9 @@ void fn_801262B8(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos
             fn_80227690(&direction, &target->mMotion.mPos, &other->mMotion.mPos);
             ballAngle = fn_801CFE40(direction.mY, direction.mX);
         } else {
-            fn_80137D58(ball, &position);
+            BallGetPosition(ball, &position);
             Vector_80039F5C velocity;
-            fn_80137EC4(ball, &velocity);
+            BallGetVelocity(ball, &velocity);
             ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
         }
         if (!(position.mZ >= 7.0f) && !(position.mZ <= 1.5f) &&
@@ -179,7 +179,7 @@ void fn_801269B8(Object_80039F5C *p, State_801297F8 *state, float unusedDistance
     Object_80039F5C *other = fn_80124C28(p, &distance, 0x38E38E, 3.0f, 0.5f, state->mUnknown8);
     if (!other || distance >= 3.0f) return;
     float limit = 3.0f;
-    if (other == fn_80137B40() && !fn_801787A0()) return;
+    if (other == BallGetCurrentHolder() && !fn_801787A0()) return;
     int mode = fn_8011E9B4(other);
     if (other->mIdBytes[2] == p->mIdBytes[2] && !mode) limit *= 0.5f;
     if (distance >= limit) return;
@@ -210,7 +210,7 @@ void fn_801269B8(Object_80039F5C *p, State_801297F8 *state, float unusedDistance
     int heading = fn_801CFE40(delta.mY, delta.mX);
     float weight = distance * 0.4f;
     if (!(weight <= 1.0f)) weight = 1.0f;
-    fn_80137B40();
+    BallGetCurrentHolder();
     int step = 0;
     if (MathAngleDiff(heading, state->mUnknown8) <= 0x271C70) {
         if (((heading - state->mUnknown8) & 0xFFFFFF) > 0x800000) {

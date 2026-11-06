@@ -2,7 +2,7 @@
 #define GAME_DYNOBJRENDER_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 
 struct DynObjTexHeader;
 struct DynObjInstance;
@@ -31,7 +31,7 @@ struct DynObjChild {
     void *mpUnknown58; DynObjChild *mpUnknown5C;
     union {
         Vector_80039F5C mUnknown60;
-        struct { Tracker_801442FC mTracker60; int mWord68; };
+        struct { LightTracker_t mTracker60; int mWord68; };
     };
     unsigned char mUnknown6C;
 };

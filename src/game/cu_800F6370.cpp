@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801C1F94.h"
 
@@ -28,7 +28,7 @@ void fn_8011E194(Object_80039F5C *p, unsigned char mask);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011F1CC(void);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_8011F2F8(void);
 int fn_801783AC(int bit);
 int MathAngleDiff(int a, int b);
@@ -41,7 +41,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
     Message_800F01CC message;
     int direction;
 
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         fn_8011E3EC(p, 0);
         fn_8011E240(p);
         fn_801C1F94(&message, 0, sizeof(message));
@@ -63,7 +63,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                 p->mUnknown512.mUnknown8 = direction;
                 p->mUnknown512.mUnknown0 = pRecord->mUnknown12;
                 fn_801C1F94(&message, 0, sizeof(message));
-                if (fn_801783AC(13) == 0 && fn_8013BA58(fn_801374BC(), 0) != 4
+                if (fn_801783AC(13) == 0 && BallStateGet(BallGetCurrent(), 0) != 4
                     && fn_801783AC(0) == 0 && fn_8011F1CC() != 0) {
                     message.mId = 31;
                     if (fn_8011F2F8() != 0) {
@@ -121,7 +121,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
             fn_801C1F94(&message, 0, sizeof(message));
-            if (fn_801783AC(13) == 0 && fn_8013BA58(fn_801374BC(), 0) != 4
+            if (fn_801783AC(13) == 0 && BallStateGet(BallGetCurrent(), 0) != 4
                 && fn_801783AC(0) == 0 && fn_8011F1CC() != 0) {
                 message.mId = 31;
                 if (fn_8011F2F8() != 0) {

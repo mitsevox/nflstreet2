@@ -29,8 +29,8 @@ void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_800BE8E4(int team);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801481B0(void);
-void fn_80148108(int mode);
+int PassIconsAreShown(void);
+void PassIconsShow(int mode);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6868(int a, int b, int c, int d);
 
@@ -142,8 +142,8 @@ extern "C" void fn_800BE944(int index, int a, unsigned int msg, float value)
             }
             break;
         default:
-            if (lbl_803EABA8->mSlots[index].mUnknown0 == 4 && index == fn_80178320() && fn_801481B0() == 0) {
-                fn_80148108(1);
+            if (lbl_803EABA8->mSlots[index].mUnknown0 == 4 && index == fn_80178320() && PassIconsAreShown() == 0) {
+                PassIconsShow(1);
             }
             break;
         }

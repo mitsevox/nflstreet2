@@ -22,7 +22,7 @@ void fn_800FF6D8(Object_80039F5C *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8003977C(int team);
 void fn_8003AB08(Object_80039F5C *p, int a);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_80178320(void);
@@ -102,7 +102,7 @@ void fn_801647A4(Object_800670B4 *pObject, int team, const char **ppNames)
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
         fn_800EFE60(0, p->mpState, p);
         fn_8003AB08(p, 0);
-        if (p == fn_80137B40()) {
+        if (p == BallGetCurrentHolder()) {
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 49;
             fn_800F03D8(0, p->mpState, &msg, p);

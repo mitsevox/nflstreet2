@@ -71,7 +71,7 @@ float fn_800AD204(int team, int value);
 int fn_800B65A0(int team);
 float fn_8016B938(void);
 float fn_8016B974(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_800ABF00(int team, Block_80119DB4 *p);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int value);
 void fn_80118894(Record_80118894 *pA, Record_80118894 *pB, int a, int b, Object_80039F5C *pPlayerA, Object_80039F5C *pPlayerB);
@@ -113,7 +113,7 @@ extern "C" void fn_80119DB4(Object_80039F5C *p, Object_80039F5C *pOther, int app
         pBlock->mUnknown24 += pBlock->mUnknown24 * lbl_803EB034;
         pBlock->mUnknown32 += pBlock->mUnknown32 * lbl_803EB034;
     }
-    pCarrier = fn_80137B40();
+    pCarrier = BallGetCurrentHolder();
     if (pCarrier != 0 && fn_800B65A0(pCarrier->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF) {
         float bonus = fn_8016B938();
 

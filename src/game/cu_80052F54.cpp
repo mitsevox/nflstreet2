@@ -4,7 +4,7 @@
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 
 struct Object_80053674;
@@ -103,7 +103,7 @@ int lbl_803EA548 = 0;
 
 int fn_80052D08(Args_80052F54 *);
 int fn_800AD9B4(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801486A0(void);
 int fn_80177C38(void);
 void fn_8004CBEC(void *, Container_80053258 *, Object_80053674 *, float);
@@ -152,13 +152,13 @@ int fn_80052D08(Args_80052F54 *pArgs)
     unsigned short type = fn_801BE648(pPlayer->mpUnknown792);
     if (type == 181) {
         if (pPlayer->mpState->mId == 17) {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
                 pArgs->mKind = 1;
                 found = 1;
             }
         } else {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             pArgs->mRef = pPlayer->mUnknown336;
             if (pCarrier && pCarrier == pPlayer) {
                 pArgs->mKind = 1;
@@ -167,13 +167,13 @@ int fn_80052D08(Args_80052F54 *pArgs)
         }
     } else if (type == 186) {
         if (pPlayer->mpState->mId == 16) {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             if (pCarrier && pCarrier == pPlayer) {
                 pArgs->mKind = 2;
                 found = 1;
             }
         } else {
-            Object_80039F5C *pCarrier = fn_80137B40();
+            Object_80039F5C *pCarrier = BallGetCurrentHolder();
             pArgs->mRef = pPlayer->mUnknown336;
             if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
                 pArgs->mKind = 2;
@@ -181,7 +181,7 @@ int fn_80052D08(Args_80052F54 *pArgs)
             }
         }
     } else if (type == 235) {
-        if (fn_8011F4F8(fn_801374E0(fn_801374BC()))->mUnknown1D != 4) {
+        if (fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
             pArgs->mKind = phase;
             found = 1;
         }

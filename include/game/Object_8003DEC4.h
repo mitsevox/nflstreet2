@@ -2,9 +2,9 @@
 #define GAME_OBJECT_8003DEC4_H
 
 #include "game/FMCAPPORT.h"
-#include "game/Object_80146094.h"
+#include "game/ParticleTrail.h"
 #include "game/Pair_8017055C.h"
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/Pose_80041930.h"
 
 struct Item_800476DC;
@@ -213,7 +213,7 @@ struct Object_8003DEC4 {
     Projection_8003BA10 mUnknown4256;
     char mUnknown4932[24];
     int mUnknown4956;
-    Tracker_801442FC mUnknown4960;
+    LightTracker_t mUnknown4960;
     unsigned char mUnknown4968;
     unsigned char mUnknown4969;
     unsigned char mUnknown4970;
@@ -221,7 +221,7 @@ struct Object_8003DEC4 {
     unsigned char mUnknown4972;
     char mUnknown4973[3];
     FMCAPPORTValues mUnknown4976;
-    Object_80146094 mUnknown5188;
+    ParticleTrailSet_t mUnknown5188;
 };
 
 extern "C" {

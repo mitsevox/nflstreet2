@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "engine/cu_801C2EB4.h"
 #include "game/fn_802372EC.h"
 
@@ -139,7 +139,7 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
     case 96:
     case 98:
     case 120: {
-        Object_80039F5C *pBallPlayer = fn_80137B64();
+        Object_80039F5C *pBallPlayer = BallGetCurrentLastHolder();
         if (pBallPlayer) {
             if (pBallPlayer->mpState->mId == 16) {
                 for (unsigned short i = 0; i <= 4; i++) {
@@ -171,9 +171,9 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
     }
     }
     if (credit == 1) {
-        pFirst = fn_80137B40();
+        pFirst = BallGetCurrentHolder();
         if (!pFirst) {
-            pFirst = fn_80137B64();
+            pFirst = BallGetCurrentLastHolder();
         }
         if (statA != 11) {
             fn_8014F4D8(fn_80148A58(), pFirst, statA, 1);

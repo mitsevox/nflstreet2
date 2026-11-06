@@ -16,10 +16,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -87,7 +87,7 @@ struct Info_800F3A6C {
    fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
    the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -104,7 +104,7 @@ struct Block_800F3344 {
     unsigned int mUnknown16;
 };
 extern "C" {
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 float fn_801CFB94(int angle);
 int MathAngleDiff(int a, int b);
@@ -204,7 +204,7 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
             int heading = p->mMotion.mFacing;
 
             if (MathAngleDiff(heading, 0x400000) <= 0x1FFFFF && pInfo->mUnknown16.mY < p->mMotion.mPos.mY &&
-                fn_8013BA58(pInfo->mpUnknown0, 0) == 4) {
+                BallStateGet(pInfo->mpUnknown0, 0) == 4) {
                 Point_8017886C toBall;
 
                 fn_80227690(&toBall, &pInfo->mUnknown16, &p->mMotion.mPos);

@@ -12,11 +12,11 @@
 #include "game/ModuleGroup_8003450C.h"
 #include "game/SndgCrowd.h"
 #include "game/cu_80064864.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
 #include "game/InGame.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80218FC4.h"
 #include "game/cu_8017DD68.h"
@@ -338,15 +338,15 @@ void fn_800D7158(void);
 void fn_800D7520(int a);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_8011DF90(void);
-void fn_80138590(Object_80137ABC *pBall);
-void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
-void fn_8013AD9C(Object_80137ABC *pBall, int a);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
-void fn_8013F97C(int a);
-Camera_8013F738 *fn_8013FA04(int index);
-void fn_8013FA58(int a, int b);
-void fn_8013FA8C(int a);
+void BallPrimeKickUp(Ball_t *pBall);
+void fn_8013A910(Ball_t *pBall, int *pAngles);
+void fn_8013AD9C(Ball_t *pBall, int a);
+int BallStateGet(Ball_t *pBall, int *pOut);
+void fn_8013C6F0(GameCamera_t *pCamera);
+void CamGameSelectCamera(int a);
+GameCamera_t *CamGameGetCamera(int index);
+void CamGameSetFocusAll(int a, int b);
+void CamGameSetModeAll(int a);
 void fn_801485B4(void);
 void fn_801485EC(int mode);
 int fn_801485F4(void);
@@ -1223,7 +1223,7 @@ void Class_802A3958::vfn_04(float dt)
             unsigned char button = fn_80156960();
             pStep = fn_801568F8()->vfn_07();
             unsigned int prompts = pStep->mPrompts;
-            if (fn_8013BA58(fn_801374BC(), 0) != 4) {
+            if (BallStateGet(BallGetCurrent(), 0) != 4) {
                 if (button != fn_801569B4()) {
                     fn_80156E9C(pStep->mPrompts, 0, 1);
                     if (++lbl_803EB31C > 2) {
@@ -1268,7 +1268,7 @@ void Class_802A3958::vfn_04(float dt)
         unsigned char button = fn_80156960();
         pStep = fn_801568F8()->vfn_07();
         unsigned int prompts = pStep->mPrompts;
-        if (fn_8013BA58(fn_801374BC(), 0) != 4) {
+        if (BallStateGet(BallGetCurrent(), 0) != 4) {
             if (button != fn_801569B4()) {
                 fn_80156E9C(pStep->mPrompts, 0, 0);
                 if (++lbl_803EB31C > 1) {
@@ -1286,7 +1286,7 @@ void Class_802A3958::vfn_04(float dt)
                 fn_801569BC();
             }
         } else {
-            Object_80039F5C *pPlayer = fn_80137B88(fn_801374BC());
+            Object_80039F5C *pPlayer = BallGetTarget(BallGetCurrent());
             int on = 0;
             if (pPlayer) {
                 if (pPlayer->mUnknown8 == 0xFF) {
@@ -1416,7 +1416,7 @@ void Class_802A3820::vfn_04(float dt)
         unsigned char button = fn_80156960();
         pStep = fn_801568F8()->vfn_07();
         unsigned int prompts = pStep->mPrompts;
-        if (fn_8013BA58(fn_801374BC(), 0) != 4) {
+        if (BallStateGet(BallGetCurrent(), 0) != 4) {
             if (button != fn_801569B4()) {
                 fn_80156E9C(pStep->mPrompts, 0, 1);
                 if (++lbl_803EB320 > 2) {
@@ -1452,7 +1452,7 @@ void Class_802A3820::vfn_04(float dt)
             unsigned char button = fn_80156960();
             pStep = fn_801568F8()->vfn_07();
             unsigned int prompts = pStep->mPrompts;
-            if (fn_8013BA58(fn_801374BC(), 0) != 4) {
+            if (BallStateGet(BallGetCurrent(), 0) != 4) {
                 if (button != fn_801569B4()) {
                     fn_80156E9C(pStep->mPrompts, 0, 0);
                     if (++lbl_803EB320 > 2) {
@@ -1473,7 +1473,7 @@ void Class_802A3820::vfn_04(float dt)
                     fn_801569BC();
                 }
             } else {
-                Object_80039F5C *pPlayer = fn_80137B88(fn_801374BC());
+                Object_80039F5C *pPlayer = BallGetTarget(BallGetCurrent());
                 int on = 0;
                 if (pPlayer) {
                     if (pPlayer->mUnknown8 == 0xFF) {
@@ -1864,7 +1864,7 @@ void Class_802A3B10::vfn_04(float dt)
     Vector_80039F5C pos;
     int angles[3];
     int args[2];
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
 
     fn_80156C48();
     fn_80156AB0();
@@ -1881,19 +1881,19 @@ void Class_802A3B10::vfn_04(float dt)
     }
     fn_801780A8(start);
     fn_801782B0();
-    pBall = fn_801374BC();
-    fn_8013791C(pBall, 6, 0);
+    pBall = BallGetCurrent();
+    BallReleaseStill(pBall, 6, 0);
     point = fn_80177FE0();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;
-    fn_80137D74(pBall, &pos);
+    BallSetPosition(pBall, &pos);
     angles[0] = 0;
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
     fn_8013A910(pBall, angles);
     fn_8013AD9C(pBall, 0);
-    fn_80138590(pBall);
+    BallPrimeKickUp(pBall);
     Class_80297CE8::vfn_04(dt);
     fn_8009E01C();
     fn_800BF658(1);
@@ -1923,7 +1923,7 @@ void Class_802A3B10::vfn_06(float dt)
 void Class_802A3B10::vfn_05(float dt)
 {
     if (fn_80156DC4()) {
-        Camera_8013F738 *pCamera = fn_8013FA04(5);
+        GameCamera_t *pCamera = CamGameGetCamera(5);
         Step_802DEC08 *pEntry = fn_801568F8()->vfn_07();
 
         if (pCamera->mUnknownA0 == 5 && lbl_803EB324 != 0) {
@@ -1968,7 +1968,7 @@ void Class_802A3AD8::vfn_03()
 
     Class_80297AB8::vfn_03();
     fn_80156D1C(0);
-    fn_8013C6F0(fn_8013FA04(5));
+    fn_8013C6F0(CamGameGetCamera(5));
     pEntry = fn_801568F8()->vfn_07();
     if (pEntry->mUnknown24 != 1) {
         fn_80156900(pEntry->mUnknown20, 60);
@@ -2119,35 +2119,35 @@ void Class_802A3A48::vfn_06()
 
 void Class_802A3A48::vfn_05()
 {
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Pair_80177FE0 point;
     Vector_80039F5C pos;
     int angles[3];
 
     Class_80297C60::vfn_05();
     fn_8011DF90();
-    if (fn_80137B40()) {
-        fn_8013791C(fn_801374BC(), 5, 0);
+    if (BallGetCurrentHolder()) {
+        BallReleaseStill(BallGetCurrent(), 5, 0);
     }
     if (fn_801784E8()) {
         fn_80177E6C(1, 1);
     }
-    pBall = fn_801374BC();
-    fn_8013791C(pBall, 6, 0);
+    pBall = BallGetCurrent();
+    BallReleaseStill(pBall, 6, 0);
     point = fn_80177FE0();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;
-    fn_80137D74(pBall, &pos);
+    BallSetPosition(pBall, &pos);
     angles[0] = 0;
     angles[1] = 0xFFC00000;
     angles[2] = 0xFFC00000;
     fn_8013A910(pBall, angles);
     fn_8013AD9C(pBall, 0);
-    fn_80138590(pBall);
-    fn_8013FA8C(1);
-    fn_8013F97C(0);
-    fn_8013FA58(1, fn_801374D4());
+    BallPrimeKickUp(pBall);
+    CamGameSetModeAll(1);
+    CamGameSelectCamera(0);
+    CamGameSetFocusAll(1, BallGetCurrentIndex());
 }
 
 void Class_802A3A48::vfn_07()

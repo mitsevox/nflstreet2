@@ -1,10 +1,13 @@
+/* Player state in which the ball carrier runs with a partner beside him and decides, on his
+   own or from the pad, whether to keep running, pitch or pass to the partner, or end the run. */
+
 #include <math.h>
-#include "game/Control_80132090.h"
+#include "game/OptionRunControl.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
@@ -39,8 +42,8 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(Directions_8012430C *pValues);
-void fn_8013FA8C(int a);
-void fn_80148108(int mode);
+void CamGameSetModeAll(int a);
+void PassIconsShow(int mode);
 Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
@@ -58,36 +61,36 @@ float fn_80237260(int stream);
 
 extern float lbl_803ECB08;
 
-static float lbl_802DB074[2][8] = {
+static float _OptionRun_NearSpotCosts[2][8] = {
     {20.0f, 12.0f, 3.0f, 0.0f, -1.0f, 3.0f, 30.0f, 25.0f},
     {-1.0f, 0.0f, 3.0f, 12.0f, 20.0f, 25.0f, 30.0f, 5.0f},
 };
 
-static float lbl_802DB0B4[2][8] = {
+static float _OptionRun_WideCosts[2][8] = {
     {-8.0f, -2.0f, -9.0f, -2.0f, 10.0f, 20.0f, 30.0f, 20.0f},
     {10.0f, -2.0f, -9.0f, -2.0f, -8.0f, 20.0f, 30.0f, 20.0f},
 };
 
-static int lbl_803EB140 = 0;
-static float lbl_803EB144 = 1.5f;
-static float lbl_803EB148 = 2.0f;
-static float lbl_803EB14C = 60.0f;
-static float lbl_803EB150 = 3.0f;
+static int _OptionRun_iCount = 0;
+static float _OptionRun_fMinPartnerDist = 1.5f;
+static float _OptionRun_fMinWidth = 2.0f;
+static float _OptionRun_fFacingLimitDeg = 60.0f;
+static float _OptionRun_fLineMargin = 3.0f;
 
-extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther);
+extern "C" int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther);
 
-extern "C" int fn_8013141C(Object_80039F5C *p)
+extern "C" int OptionRunHasQueuedRun(Object_80039F5C *p)
 {
     State_80039F5C *pState = p->mpState;
     int result = 0;
 
-    if (fn_80137C48(p) != 0 && pState[1].mId == 18) {
+    if (BallFindHeldBy(p) != 0 && pState[1].mId == 18) {
         result = fn_801783AC(0) == 0;
     }
     return result;
 }
 
-extern "C" int fn_80131474(Object_80039F5C *p, int a, int b)
+extern "C" int OptionRunIsWide(Object_80039F5C *p, int a, int b)
 {
     int result = 0;
 
@@ -115,7 +118,7 @@ extern "C" int fn_80131474(Object_80039F5C *p, int a, int b)
     return result;
 }
 
-extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, Directions_8012430C *pValues)
+extern "C" void OptionRunScoreDirections(Object_80039F5C *p, int index, int side, Directions_8012430C *pValues)
 {
     float *pA = 0;
     float *pB = 0;
@@ -123,10 +126,10 @@ extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, Directions_
 
     fn_8012430C(pValues, 3, p);
     if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) < 7.0f) {
-        pA = lbl_802DB074[index];
+        pA = _OptionRun_NearSpotCosts[index];
     }
-    if (fn_80131474(p, side, index)) {
-        pB = lbl_802DB0B4[index];
+    if (OptionRunIsWide(p, side, index)) {
+        pB = _OptionRun_WideCosts[index];
     }
     for (i = 0; i < 8; i++) {
         if (pA != 0) {
@@ -138,7 +141,7 @@ extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, Directions_
     }
 }
 
-extern "C" int fn_8013164C(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int OptionRunIsThreat(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Object_80039F5C *pFound;
     Point_8017886C delta;
@@ -156,20 +159,20 @@ extern "C" int fn_8013164C(Object_80039F5C *p, Object_80039F5C *pOther)
     return result;
 }
 
-extern "C" Object_80039F5C *fn_801316F0(Object_80039F5C *p, int angle, float maxA, float maxB)
+extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, float maxA, float maxB)
 {
     float distance;
     Object_80039F5C *pOther =
         fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), angle, &distance, 1);
 
     if (pOther != 0) {
-        if (distance > maxA || !fn_8013164C(p, pOther)) {
+        if (distance > maxA || !OptionRunIsThreat(p, pOther)) {
             pOther = 0;
         }
     }
     if (pOther == 0) {
         pOther = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &distance, 1);
-        if (distance > maxB || !fn_8013164C(p, pOther)) {
+        if (distance > maxB || !OptionRunIsThreat(p, pOther)) {
             pOther = 0;
         }
     }
@@ -183,18 +186,18 @@ static inline int IsShortOfGoal(Point_8017886C spot)
     return spot.mY < fn_80178A2C() - 5.0f;
 }
 
-extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     int result = 0;
 
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
         float own = fn_8012506C(p, 3);
         float target = fn_8012506C(pTarget, 3);
         Object_80039F5C *pOther;
 
-        if (pControl->mUnknown81 == 0 && own < 42.0f && fn_801316F0(p, 0x200000, 5.5f, 0.0f) != 0 &&
-            fn_801066D0(p, pTarget, 9) && fn_80132630(p, 0, 0)) {
+        if (pControl->mUnknown81 == 0 && own < 42.0f && OptionRunFindThreat(p, 0x200000, 5.5f, 0.0f) != 0 &&
+            fn_801066D0(p, pTarget, 9) && OptionRunCanPitchTo(p, 0, 0)) {
             float rating = p->mRatings[6] / 255.0f;
             float chance;
 
@@ -206,7 +209,7 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
             }
         }
 
-        pOther = fn_801316F0(p, 0x400000, 2.5f, 1.5f);
+        pOther = OptionRunFindThreat(p, 0x400000, 2.5f, 1.5f);
         if (pOther != 0) {
             Point_8017886C toOther;
             Point_8017886C toTarget;
@@ -216,14 +219,14 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
             if (fn_802276E8(&toOther, &toTarget) > 0.0f) {
                 result = 4;
             } else if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
-                       fn_80132630(p, &pTarget->mMotion.mPos, 0)) {
+                       OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
                 result = 2;
             }
         } else {
             int flag = 0;
 
             if (IsShortOfGoal(fn_80177FE0())) {
-                if (fn_8013141C(p)) {
+                if (OptionRunHasQueuedRun(p)) {
                     flag = own < 12.0f;
                 }
             }
@@ -231,7 +234,7 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
                 result = 6;
             } else if (own > 65.0f) {
                 if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
-                    fn_80132630(p, &pTarget->mMotion.mPos, 0)) {
+                    OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
                     result = 2;
                 } else if (MathAngleDiff(fn_801231E4(p, 0x400000), 0x400000) <= 0x71C70) {
                     result = 4;
@@ -247,12 +250,12 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
     return result;
 }
 
-extern "C" int fn_80131B3C(Object_80039F5C *p, int kind, int arg)
+extern "C" int OptionRunThrow(Object_80039F5C *p, int kind, int arg)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
     Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
     int result = 0;
-    Object_80039F5C *pCurrent = fn_80137B40();
+    Object_80039F5C *pCurrent = BallGetCurrentHolder();
 
     if (pCurrent == p) {
         if (fn_80105E90(pCurrent, pTarget, kind)) {
@@ -277,7 +280,7 @@ extern "C" int fn_80131B3C(Object_80039F5C *p, int kind, int arg)
     return result;
 }
 
-extern "C" void fn_80131C1C(Object_80039F5C *p, Directions_8012430C *pValues, Control_80132090 *pControl)
+extern "C" void OptionRunSteerCarrier(Object_80039F5C *p, Directions_8012430C *pValues, OptionRunControl_t *pControl)
 {
     int angle;
 
@@ -308,7 +311,7 @@ extern "C" void fn_80131C1C(Object_80039F5C *p, Directions_8012430C *pValues, Co
     fn_8012F5A0(p, 0, &pControl->mUnknown56);
 }
 
-extern "C" void fn_80131D48(Object_80039F5C *p, Directions_8012430C *pValues, Control_80132090 *pControl)
+extern "C" void OptionRunSteerTrailer(Object_80039F5C *p, Directions_8012430C *pValues, OptionRunControl_t *pControl)
 {
     pControl->mUnknown44 = fn_801243E0(pValues, -1) << 21;
     pControl->mUnknown40 = 0.72f;
@@ -318,7 +321,7 @@ extern "C" void fn_80131D48(Object_80039F5C *p, Directions_8012430C *pValues, Co
     p->mUnknown512.mUnknown0 = pControl->mUnknown40;
 }
 
-extern "C" void fn_80131DB4(Object_80039F5C *p, int a, int b)
+extern "C" void OptionRunEnd(Object_80039F5C *p, int a, int b)
 {
     Message_800F01CC message;
 
@@ -327,7 +330,7 @@ extern "C" void fn_80131DB4(Object_80039F5C *p, int a, int b)
     fn_800F053C(0, p->mpState, &message, p);
 }
 
-extern "C" void fn_80131E08(Object_80039F5C *p)
+extern "C" void OptionRunGiveUp(Object_80039F5C *p)
 {
     Message_800F01CC message;
 
@@ -339,12 +342,12 @@ extern "C" void fn_80131E08(Object_80039F5C *p)
     fn_800F053C(0, p->mpState, &message, p);
 }
 
-extern "C" void fn_80131E80(Object_80039F5C *p)
+extern "C" void OptionRunSwitchCamera(Object_80039F5C *p)
 {
-    fn_8013FA8C(2);
+    CamGameSetModeAll(2);
 }
 
-extern "C" int fn_80131EA4(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" int OptionRunIsOutOfRoom(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     int result;
 
@@ -369,7 +372,7 @@ extern "C" int fn_80131EA4(Object_80039F5C *p, Control_80132090 *pControl)
     return result;
 }
 
-extern "C" int fn_80131F90(Object_80039F5C *p, int a)
+extern "C" int OptionRunUseCarryGait(Object_80039F5C *p, int a)
 {
     float y = p->mMotion.mPos.mY;
     int result = 1;
@@ -382,13 +385,13 @@ extern "C" int fn_80131F90(Object_80039F5C *p, int a)
             result = 0;
         }
     }
-    if (fn_80137B40() != p) {
+    if (BallGetCurrentHolder() != p) {
         result = 0;
     }
     return result;
 }
 
-extern "C" void fn_80132038(Object_80039F5C *p, Control_80132090 *pControl)
+extern "C" void OptionRunFacePartner(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
 
@@ -400,9 +403,9 @@ extern "C" void fn_80132038(Object_80039F5C *p, Control_80132090 *pControl)
     }
 }
 
-extern "C" int fn_80132090(Object_80039F5C *p)
+extern "C" int OptionRunEnter(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
     pControl->mUnknown68 = p->mpState->mUnknown1;
     pControl->mUnknown64 = 1 | p->mIdBytes[2] << 8 | p->mpState->mUnknown2 << 16;
@@ -410,9 +413,9 @@ extern "C" int fn_80132090(Object_80039F5C *p)
     pControl->mUnknown72 = 0;
     pControl->mUnknown81 = p->mpState->mUnknown3[0];
     fn_80130338(p, pControl);
-    if (p == fn_80137B40()) {
+    if (p == BallGetCurrentHolder()) {
         pControl->mUnknown76 = 10;
-        lbl_803EB140 = 0;
+        _OptionRun_iCount = 0;
     } else {
         pControl->mUnknown76 = 20;
     }
@@ -425,69 +428,69 @@ extern "C" int fn_80132090(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80132164(Object_80039F5C *p)
+extern "C" int OptionRunExit(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
     p->mpState->mUnknown3[0] = pControl->mUnknown81;
     return 1;
 }
 
-extern "C" int fn_8013217C(Object_80039F5C *p)
+extern "C" int OptionRunUpdate(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
     int done = 0;
 
     fn_800B8344(p);
     if (fn_8010A2DC(p, 0, -1)) {
         return 0;
     }
-    fn_80131554(p, pControl->mUnknown68, pControl->mUnknown81, &pControl->mValues);
+    OptionRunScoreDirections(p, pControl->mUnknown68, pControl->mUnknown81, &pControl->mValues);
     if (pControl->mUnknown76 > 0) {
-        Object_80137ABC *pBall = fn_80137C48(p);
+        Ball_t *pBall = BallFindHeldBy(p);
 
         if (!(p->mFlags & 0x4000) || pBall == 0) {
             if (pBall != 0) {
                 pControl->mUnknown72 = 0;
-                fn_80131C1C(p, &pControl->mValues, pControl);
+                OptionRunSteerCarrier(p, &pControl->mValues, pControl);
             } else {
                 pControl->mUnknown72 = 1;
-                fn_80131D48(p, &pControl->mValues, pControl);
+                OptionRunSteerTrailer(p, &pControl->mValues, pControl);
             }
         }
         pControl->mUnknown76--;
-    } else if (fn_80131EA4(p, pControl)) {
-        if (!fn_8013141C(p)) {
-            fn_80131DB4(p, pControl->mUnknown68, pControl->mUnknown80);
+    } else if (OptionRunIsOutOfRoom(p, pControl)) {
+        if (!OptionRunHasQueuedRun(p)) {
+            OptionRunEnd(p, pControl->mUnknown68, pControl->mUnknown80);
         }
         done = 1;
     } else if (!(p->mFlags & 0x4000)) {
-        pControl->mUnknown72 = fn_801317F8(p, pControl);
+        pControl->mUnknown72 = OptionRunDecide(p, pControl);
         switch (pControl->mUnknown72) {
         case 5:
             pControl->mUnknown81 = 1;
-            fn_80131B3C(p, 10, 0);
+            OptionRunThrow(p, 10, 0);
             break;
         case 2:
-            if (fn_80131B3C(p, 9, fn_801067D8(p))) {
+            if (OptionRunThrow(p, 9, fn_801067D8(p))) {
                 break;
             }
         case 0:
-            fn_80131C1C(p, &pControl->mValues, pControl);
+            OptionRunSteerCarrier(p, &pControl->mValues, pControl);
             break;
         case 1:
-            fn_80131D48(p, &pControl->mValues, pControl);
+            OptionRunSteerTrailer(p, &pControl->mValues, pControl);
             break;
         case 4:
-            fn_80131DB4(p, pControl->mUnknown68, pControl->mUnknown80);
+            OptionRunEnd(p, pControl->mUnknown68, pControl->mUnknown80);
             done = 1;
             break;
         case 3:
-            fn_80131E08(p);
+            OptionRunGiveUp(p);
             done = 1;
             break;
         case 6:
-            fn_80131E80(p);
+            OptionRunSwitchCamera(p);
             done = 1;
             break;
         }
@@ -500,10 +503,10 @@ extern "C" int fn_8013217C(Object_80039F5C *p)
     }
 
     if (!done) {
-        if (pControl->mUnknown80 != 0 && fn_80131F90(p, pControl->mUnknown68)) {
+        if (pControl->mUnknown80 != 0 && OptionRunUseCarryGait(p, pControl->mUnknown68)) {
             if (p->mUnknown512.mUnknown15 != 20 && p->mUnknown512.mUnknown15 != 21) {
-                if (fn_80137C48(p) != 0) {
-                    fn_80132038(p, pControl);
+                if (BallFindHeldBy(p) != 0) {
+                    OptionRunFacePartner(p, pControl);
                 }
                 if (p->mUnknown512.mUnknown15 == 1 || p->mUnknown512.mUnknown15 == 11) {
                     p->mUnknown512.mUnknown15 = 11;
@@ -518,9 +521,9 @@ extern "C" int fn_8013217C(Object_80039F5C *p)
     return done;
 }
 
-extern "C" int fn_80132440(Object_80039F5C *p)
+extern "C" int OptionRunInput(Object_80039F5C *p)
 {
-    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
     int result = 0;
     int flag = 0;
 
@@ -537,18 +540,18 @@ extern "C" int fn_80132440(Object_80039F5C *p)
         if ((input.mBytes92[4] & 1) || (input.mBytes92[4] & 0x10)) {
             flag = 1;
         }
-        if (fn_8013141C(p) && (input.mBytes92[1] & 0x40)) {
+        if (OptionRunHasQueuedRun(p) && (input.mBytes92[1] & 0x40)) {
             result = 1;
-            fn_80148108(0);
-            fn_80131E80(p);
+            PassIconsShow(0);
+            OptionRunSwitchCamera(p);
         }
         if (!result) {
             if (input.mBytes92[3] & 0x40) {
-                if (fn_80131B3C(p, 9, flag)) {
+                if (OptionRunThrow(p, 9, flag)) {
                     p->mFlags |= 0x4000;
                 }
             } else if (input.mBytes92[4] & 8) {
-                if (fn_80131B3C(p, 10, 0)) {
+                if (OptionRunThrow(p, 10, 0)) {
                     p->mFlags |= 0x4000;
                     fn_800D5998();
                 }
@@ -562,7 +565,7 @@ extern "C" int fn_80132440(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_8013258C(Object_80039F5C *p)
+extern "C" void OptionRunMirror(Object_80039F5C *p)
 {
     unsigned char i;
     Object_800670B4 *pObject;
@@ -587,7 +590,7 @@ extern "C" void fn_8013258C(Object_80039F5C *p)
     }
 }
 
-extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther)
+extern "C" int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther)
 {
     signed char line = (signed char)(int)fn_80178A2C();
     signed char y = (signed char)(int)p->mMotion.mPos.mY;
@@ -595,14 +598,14 @@ extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_800
     if (pPos && pOther) {
         if (fn_80177F70() > 2 && !(p->mMotion.mPos.mY <= fn_80178298()) && !(pPos->mY >= fn_80178298()))
             allowed = 0;
-        if (pOther->mpState->mId != 90 && !(pPos->mY >= lbl_803EB150 - fn_80178A2C()))
+        if (pOther->mpState->mId != 90 && !(pPos->mY >= _OptionRun_fLineMargin - fn_80178A2C()))
             allowed = 0;
         if (!(fabsf(pPos->mX) >= fabsf(fn_80178A08())) && !(fabsf(pPos->mX) >= fabsf(pOther->mMotion.mPos.mX))
-            && !(fabsf(pPos->mX) >= lbl_803EB148))
+            && !(fabsf(pPos->mX) >= _OptionRun_fMinWidth))
             allowed = 0;
-        if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= lbl_803EB144))
+        if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= _OptionRun_fMinPartnerDist))
             allowed = 0;
-        if (MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * (16777216.0f / 360.0f)))
+        if (MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) < (int)(_OptionRun_fFacingLimitDeg * (16777216.0f / 360.0f)))
             allowed = 0;
     }
     return allowed;

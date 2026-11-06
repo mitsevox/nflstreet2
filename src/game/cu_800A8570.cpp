@@ -4,15 +4,15 @@
 #include "game/Block_8030F42C.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Object_8003DEC4.h"
 #include "game/fn_800D4164.h"
 
 extern "C" {
 void *fn_800A3360(void);
-void fn_80147D4C(int index, unsigned char value);
-void fn_80147D60(int index, int value);
-void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
+void ScreenTintSetActive(int index, unsigned char value);
+void ScreenTintSetMode(int index, int value);
+void ScreenTintFadeTo(int index, unsigned int color, float value, unsigned int count);
 
 extern Block_800A70F4 *lbl_803EC954[2];
 }
@@ -23,9 +23,9 @@ extern "C" void fn_800A8570(void)
     unsigned int color = (pColor[2] << 16) + (pColor[1] << 8) + pColor[0];
     float alpha = (unsigned int)pColor[3] * (1.0f / 255.0f);
 
-    fn_80147D4C(0, 1);
-    fn_80147D74(0, color, alpha, 60);
-    fn_80147D60(0, 1);
+    ScreenTintSetActive(0, 1);
+    ScreenTintFadeTo(0, color, alpha, 60);
+    ScreenTintSetMode(0, 1);
 }
 
 extern "C" void fn_800A866C(void)
@@ -35,9 +35,9 @@ extern "C" void fn_800A866C(void)
         unsigned int color = (pColor[2] << 16) + (pColor[1] << 8) + pColor[0];
         float alpha = (unsigned int)pColor[3] * (1.0f / 255.0f);
 
-        fn_80147D4C(0, 1);
-        fn_80147D74(0, color, alpha, 1);
-        fn_80147D60(0, 1);
+        ScreenTintSetActive(0, 1);
+        ScreenTintFadeTo(0, color, alpha, 1);
+        ScreenTintSetMode(0, 1);
     }
 }
 
@@ -139,7 +139,7 @@ void fn_80039CB0(float dt);
 void fn_80039D08(float dt);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
-void fn_8013FB44(void);
+void CamGameResumeAll(void);
 void fn_8017DBCC(void);
 int fn_80156704(void);
 void fn_801574DC(int value);
@@ -163,7 +163,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
 
         fn_8002C9A8(lbl_803EA368, 3, 0);
         fn_8002C9A8(lbl_803EA368, 1, 0);
-        fn_80137D58(fn_801374BC(), &pos);
+        BallGetPosition(BallGetCurrent(), &pos);
         if (fn_80178508((Point_8017886C *)&pos, 0, 0) != 1) {
             lost = 1;
         }
@@ -185,13 +185,13 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         }
         for (step = 0; step <= 19; step++) {
             fn_800398B4();
-            fn_801376B8(1.0f);
+            BallsProcessMotion(1.0f);
             fn_80039CB0(lbl_803EA2C4);
             fn_80039D08(lbl_803EA2C4);
             fn_80039B2C(lbl_803EA2C4);
             fn_80039A38(lbl_803EA2C4);
-            fn_80137758(lbl_803EA2C4);
-            fn_801377C4(lbl_803EA2C4);
+            BallsProcessStates(lbl_803EA2C4);
+            BallsProcessCollision(lbl_803EA2C4);
         }
         if (fn_80156704()) {
             fn_801574DC(1);
@@ -199,7 +199,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         if (lost) {
             fn_8002C9A8(lbl_803EA368, 2, 0);
         }
-        fn_8013FB44();
+        CamGameResumeAll();
         fn_8017DBCC();
         if (fn_800A8468(0) || fn_800A8468(1)) {
             fn_80067DB8(13, 0, 0, 0, 0);

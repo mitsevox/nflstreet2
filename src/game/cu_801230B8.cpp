@@ -4,7 +4,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Class_80148A58.h"
 #include "game/fn_800F06F4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Lookup_8012078C.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
@@ -26,7 +26,7 @@ unsigned int fn_80178D70(int team);
 unsigned int fn_80178D18(int team);
 int fn_80178320(void);
 int fn_801486A0(void);
-Object_80039F5C *fn_80137B40(void);
+Object_80039F5C *BallGetCurrentHolder(void);
 void fn_800F00D4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
 
@@ -51,7 +51,7 @@ int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget,
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue, float *pOther);
 extern float lbl_803ECB08;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EC9E8;
 typedef void (*Score_8012430C)(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *);
 extern Score_8012430C const lbl_8029F584[7];
@@ -897,7 +897,7 @@ int fn_80125214(Object_80039F5C *p, Object_80039F5C *pTarget)
         fn_80227690(&delta, (Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&pOther->mMotion.mPos);
         distance = fn_802270A4(&delta);
     }
-    if (pOther && pOther != fn_80137B40() && !(distance >= 3.0f)) result = fn_8011EAC0(p, pOther);
+    if (pOther && pOther != BallGetCurrentHolder() && !(distance >= 3.0f)) result = fn_8011EAC0(p, pOther);
     return result;
 }
 
@@ -964,9 +964,9 @@ int fn_801254C8(Object_80039F5C *p)
 void fn_80125594(Object_80039F5C *p, State_80125594 *pState)
 {
     Vector_80039F5C target, velocity;
-    fn_80137D58(fn_801374BC(), &target);
-    Object_80039F5C *pOther = fn_80137B40();
-    if (!pOther) fn_80137EC4(fn_801374BC(), &velocity);
+    BallGetPosition(BallGetCurrent(), &target);
+    Object_80039F5C *pOther = BallGetCurrentHolder();
+    if (!pOther) BallGetVelocity(BallGetCurrent(), &velocity);
     else { velocity.mX = pOther->mMotion.mUnknown40; velocity.mY = pOther->mMotion.mUnknown44; velocity.mZ = pOther->mMotion.mUnknown48; }
     float speed;
     if (!(p->mMotion.mUnknown28 < fn_8016D9F4(p, 0.14f, 1.0f))) speed = p->mMotion.mUnknown28;
@@ -988,12 +988,12 @@ void fn_80125594(Object_80039F5C *p, State_80125594 *pState)
 void fn_80125708(Object_80039F5C *p, State_80125594 *pState)
 {
     Vector_80039F5C target;
-    fn_80137D58(fn_801374BC(), &target);
-    Object_80039F5C *pOther = fn_80137B40();
+    BallGetPosition(BallGetCurrent(), &target);
+    Object_80039F5C *pOther = BallGetCurrentHolder();
     int velocityAngle;
     if (!pOther) {
         Vector_80039F5C velocity;
-        fn_80137EC4(fn_801374BC(), &velocity);
+        BallGetVelocity(BallGetCurrent(), &velocity);
         velocityAngle = fn_801CFE40(velocity.mY, velocity.mX);
     } else velocityAngle = pOther->mMotion.mUnknown32;
     Point_8017886C delta;
@@ -1059,14 +1059,14 @@ int fn_80125C28(Object_80039F5C *p, State_80125594 *)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     Vector_80039F5C target;
-    fn_80137D58(fn_801374BC(), &target);
+    BallGetPosition(BallGetCurrent(), &target);
     Point_8017886C delta;
     fn_80227690(&delta, (Point_8017886C *)&target, (Point_8017886C *)&pMotion->mPos);
     int angle = fn_801CFE40(delta.mY, delta.mX);
     int result = 0;
     unsigned int value = 0;
     if (MathAngleDiff(angle, pMotion->mFacing) <= 0x18E38D) {
-        Object_80039F5C *pOther = fn_80137B40();
+        Object_80039F5C *pOther = BallGetCurrentHolder();
         float distance = fn_802270A4(&delta);
         result = fn_8012A3B0(p, pOther, target, &value, distance);
     }
@@ -1087,11 +1087,11 @@ int fn_80125D98(Object_80039F5C *p, State_80125594 *pState)
 int fn_80125E20(Object_80039F5C *p)
 {
     State_80125594 *pState = (State_80125594 *)&p->mUnknown336;
-    if (!fn_80137B40()) {
+    if (!BallGetCurrentHolder()) {
         Message_800F01CC message;
         fn_801C1F94(&message, 0, sizeof(message));
         message.mId = 57;
-        message.mUnknown1[0] = fn_801374D4();
+        message.mUnknown1[0] = BallGetCurrentIndex();
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
@@ -1105,7 +1105,7 @@ int fn_80125E20(Object_80039F5C *p)
 void fn_80125EC8(int a, int b)
 {
     if (b == 65535 && a != 0) {
-        float value = 210.0f / lbl_803EA2C4;
+        float value = 210.0f / gFrameTimeScale;
         lbl_803EC9E8 = (40.0f / value) * 0.25f;
     }
 }

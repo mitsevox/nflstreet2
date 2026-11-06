@@ -9,7 +9,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/Collide.h"
 #include "game/BigObjInst.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801FCE10.h"

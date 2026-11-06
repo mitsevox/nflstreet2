@@ -3,7 +3,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
@@ -163,7 +163,7 @@ extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         int side;
         int flag;
 
-        fn_80137D58(fn_801374BC(), &ball);
+        BallGetPosition(BallGetCurrent(), &ball);
         fn_80227690(&delta, pTarget, &p->mMotion.mPos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
         if (pTarget->mX > ball.mX ? side == 0 : side != 0) {

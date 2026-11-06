@@ -72,7 +72,7 @@ struct Args_80144CE0 {
 extern "C" {
 Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSource);
 void fn_80144E38(Object_80144CE0 *pObject);
-void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
+void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
 }
 
 #endif

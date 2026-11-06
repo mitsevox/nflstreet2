@@ -1,11 +1,11 @@
-#ifndef GAME_CAMERA_8013F738_H
-#define GAME_CAMERA_8013F738_H
+#ifndef GAME_GAME_CAMERA_H
+#define GAME_GAME_CAMERA_H
 
-#include "game/CameraHeader_8013F628.h"
+#include "game/CamHdr.h"
 #include "game/RecordList_8002E7C0.h"
 
-struct Camera_8013F738 {
-    CameraHeader_8013F628 mHeader;
+struct GameCamera_t {
+    CamHdr_t mHeader;
     void *mUnknown28;
     float mUnknown2C;
     float mUnknown30;
@@ -20,7 +20,7 @@ struct Camera_8013F738 {
     float mUnknown70;
     /* +0x5C..+0x88 as the kind 0 and 4 cameras use them (CamFreeFloatAdd and
        fn_8013C120 store floats to +0x5C..+0x70 and words to +0x74..+0x88);
-       kind 1 lays this area out differently (CameraType1_802F4884). */
+       kind 1 lays this area out differently (GameCameraKind1_t). */
     int mUnknown74;
     int mUnknown78;
     int mUnknown7C;
@@ -49,7 +49,7 @@ struct Camera_8013F738 {
     int mUnknownD8;
     /* Mode message callback; fn_8013C824 passes the message and its
        argument. */
-    void (*mUnknownDC)(Camera_8013F738 *pCamera, int msg, int arg);
+    void (*mUnknownDC)(GameCamera_t *pCamera, int msg, int arg);
     float mUnknownE0;
     unsigned char mUnknownE4;
     unsigned char mUnknownE5;
@@ -80,7 +80,7 @@ struct Camera_8013F738 {
 /* The leading part as fn_8013C7C4 resets it and CamFocusAdd sets it up
    for kind 1 (type descriptor 0x802F4884, 0x94 bytes): floats at
    +0x64..+0x80 and words at +0x84..+0x90. */
-struct CameraType1_802F4884 {
+struct GameCameraKind1_t {
     char mPad00[0x4C];
     Vector_80039F5C mUnknown4C;
     float mUnknown58;
@@ -101,7 +101,7 @@ struct CameraType1_802F4884 {
 };
 
 /* Argument of CamCreate when it creates a camera; fn_8013C340 clears it. */
-struct Desc_8013C340 {
+struct CameraDesc_t {
     int mUnknown00;
     int mUnknown04;
     int mUnknown08;

@@ -51,10 +51,10 @@ struct QuarterEndClipVariant_t {
 extern "C" {
 extern void *lbl_803EB688;
 
-void fn_8004A230(int a);
-void fn_80064EFC(int a, int b, int c);
-void fn_800655B8(void);
-int fn_8006560C(void);
+void PlayerObjSetDrawReady(int a);
+void PauseOpenScreen(int a, int b, int c);
+void PauseBlock(void);
+int PauseIsOpen(void);
 int fn_80092784(unsigned char index);
 int fn_80092830(int handle);
 void fn_80092F98(int handle);
@@ -69,8 +69,8 @@ void fn_800AFE20(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
 void fn_800B43C8(void);
 void fn_800CC560(int a);
-void fn_801383E4(int a);
-void fn_80139274(void);
+void BallsSetVisible(int a);
+void BallResetToSpot(void);
 void fn_80162780(int a, int b);
 void fn_80168C40(void);
 void fn_8016DCD4(int a);
@@ -149,8 +149,8 @@ void QuarterEndStopClips(void)
         _QuarterEnd_pState->mUnknown24 = -1;
     }
     QuarterEndCleanupStub();
-    fn_8004A230(1);
-    fn_801383E4(1);
+    PlayerObjSetDrawReady(1);
+    BallsSetVisible(1);
     QuarterEndFreeBuffers();
     fn_80195EFC(1, 20, 0x808080, 0);
 }
@@ -218,7 +218,7 @@ void QuarterEndFinish(void)
     fn_800AFE20(QuarterEndOnEvent);
     if (_QuarterEnd_pState->mUnknown11) {
         if (fn_8009D86C() != 6) {
-            fn_80064EFC(3, 1, -1);
+            PauseOpenScreen(3, 1, -1);
             _QuarterEnd_pState->mState = 3;
         } else {
             _QuarterEnd_pState->mState = 4;
@@ -370,7 +370,7 @@ void QuarterEndPhase::OnUpdate(float f)
     unsigned short a = 0;
     unsigned short b = 0;
 
-    fn_8004A230(0);
+    PlayerObjSetDrawReady(0);
     switch (_QuarterEnd_pState->mState) {
     case 0:
         _QuarterEnd_bElementShown = 0;
@@ -398,7 +398,7 @@ void QuarterEndPhase::OnUpdate(float f)
             _QuarterEnd_pState->mUnknown11 = 0;
         }
         if (_QuarterEnd_pState->mUnknown11 == 1) {
-            fn_800655B8();
+            PauseBlock();
         }
         _QuarterEnd_pState->mUnknown8 = 0;
         _QuarterEnd_pState->mUnknown10 = 1;
@@ -438,8 +438,8 @@ void QuarterEndPhase::OnUpdate(float f)
         _QuarterEnd_pState->mUnknown32++;
         if (QuarterEndIsClipPlaying()) {
             if (fn_80092784(_QuarterEnd_pState->mUnknown20)) {
-                fn_8004A230(0);
-                fn_801383E4(0);
+                PlayerObjSetDrawReady(0);
+                BallsSetVisible(0);
             }
         } else {
             _QuarterEnd_uClipIndex++;
@@ -453,7 +453,7 @@ void QuarterEndPhase::OnUpdate(float f)
         }
         break;
     case 3:
-        if (fn_8006560C() == 0) {
+        if (PauseIsOpen() == 0) {
             fn_80162780(1, 1);
             _QuarterEnd_pState->mState = 4;
         }
@@ -467,10 +467,10 @@ void QuarterEndPhase::OnUpdate(float f)
             case 3:
                 fn_8017F048();
                 fn_800AD910(5, f);
-                fn_80139274();
+                BallResetToSpot();
                 break;
             default:
-                fn_80139274();
+                BallResetToSpot();
                 fn_800AD910(5, f);
                 break;
             }

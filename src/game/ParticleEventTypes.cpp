@@ -1,6 +1,9 @@
-#include "game/Event_801459F0.h"
+/* Particle effects tied to players and the ball: footstep dust, body trails, impacts
+   with the ground, effects that follow a joint, and ball bounces. */
+
+#include "game/ParticleEvent.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "engine/llquat.h"
 #include "game/fn_802270D4.h"
 
@@ -25,7 +28,7 @@ void fn_801D11F4(QuatEulerAngles_t *pOut, int a);
 int fn_80227594(float *pA, float *pB, float tolerance);
 }
 
-extern "C" void fn_8014529C(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
+extern "C" void ParticleEventGetJoint(Object_8003DEC4 *pBody, int index, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
     fn_801D04C4();
     fn_801D06D4(pBody->mUnknown908);
@@ -38,7 +41,7 @@ extern "C" void fn_8014529C(Object_8003DEC4 *pBody, int index, Vector_80039F5C *
     fn_801D0544();
 }
 
-extern "C" void fn_80145314(Event_801459F0 *pEvent)
+extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
 {
     Object_80039F5C *pPlayer = pEvent->mUnknown0C;
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pPlayer->mpUnknown4;
@@ -47,7 +50,7 @@ extern "C" void fn_80145314(Event_801459F0 *pEvent)
     Args_80144CE0 args;
     float speed;
 
-    fn_8014529C(pBody, pEvent->mUnknown14, &pos, 0);
+    ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, 0);
     speed = pPlayer->mMotion.mUnknown28;
     fn_80044858(pPlayer, &pos, pEvent->mUnknown14 == 8);
     if (fn_800A8444(0) || fn_800A8444(1) || pos.mZ >= 0.09f || speed <= 0.05f) {
@@ -81,7 +84,7 @@ extern "C" void fn_80145314(Event_801459F0 *pEvent)
     }
 }
 
-extern "C" void fn_801454DC(Event_801459F0 *pEvent)
+extern "C" void ParticleEventAttached(ParticleEvent_t *pEvent)
 {
     Object_80039F5C *pPlayer = pEvent->mUnknown0C;
     Vector_80039F5C pos;
@@ -89,7 +92,7 @@ extern "C" void fn_801454DC(Event_801459F0 *pEvent)
     float m[4][4];
     Args_80144CE0 args;
 
-    fn_8014529C((Object_8003DEC4 *)pPlayer->mpUnknown4, pEvent->mUnknown14, &pos, &angles);
+    ParticleEventGetJoint((Object_8003DEC4 *)pPlayer->mpUnknown4, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
         fn_801D03D0(m);
         m[0][3] = 0.0f;
@@ -120,10 +123,10 @@ extern "C" void fn_801454DC(Event_801459F0 *pEvent)
     }
 }
 
-extern "C" void fn_801455F8(Event_801459F0 *pEvent)
+extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
 {
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
-    Object_80146094 *pTrail = &pBody->mUnknown5188;
+    ParticleTrailSet_t *pTrail = &pBody->mUnknown5188;
     Vector_80039F5C pos;
     QuatEulerAngles_t angles;
     float m[4][4];
@@ -132,7 +135,7 @@ extern "C" void fn_801455F8(Event_801459F0 *pEvent)
     if (fn_800A33DC() != 0 && fn_800A33DC() != 1 && pTrail->mUnknown57C != 1) {
         return;
     }
-    fn_8014529C(pBody, pEvent->mUnknown14, &pos, &angles);
+    ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
         fn_801D03D0(m);
         m[0][3] = 0.0f;
@@ -168,18 +171,18 @@ extern "C" void fn_801455F8(Event_801459F0 *pEvent)
     }
 }
 
-extern "C" void fn_80145798(Event_801459F0 *pEvent)
+extern "C" void ParticleEventBodyImpact(ParticleEvent_t *pEvent)
 {
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
     Vector_80039F5C pos;
     float m[4][4];
     Args_80144CE0 args;
 
-    fn_8014529C(pBody, pEvent->mUnknown14, &pos, 0);
+    ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, 0);
     if (fn_800A8444(0) || fn_800A8444(1) || pos.mZ >= 0.25f || pEvent->mUnknown18 != 0 || pEvent->mUnknown04 != 0) {
         return;
     }
-    fn_80137AD0(fn_801374BC());
+    BallGetHolder(BallGetCurrent());
     args.mUnknown00 = 21;
     if (pBody->mUnknown972 != 0) {
         fn_801D03D0(m);
@@ -200,7 +203,7 @@ extern "C" void fn_80145798(Event_801459F0 *pEvent)
     }
 }
 
-extern "C" void fn_801458C8(Event_801459F0 *pEvent)
+extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
 {
     float m[4][4];
     Args_80144CE0 args;
@@ -213,11 +216,11 @@ extern "C" void fn_801458C8(Event_801459F0 *pEvent)
     pos.mX = (*pMatrix)[0][3];
     pos.mY = (*pMatrix)[1][3];
     pos.mZ = (*pMatrix)[2][3];
-    fn_80137EC4((Object_80137ABC *)pEvent->mUnknown10, &velocity);
+    BallGetVelocity((Ball_t *)pEvent->mUnknown10, &velocity);
     speed = fn_802270D4(&velocity);
-    if (pos.mZ < 0.15f && ((Object_80137ABC *)pEvent->mUnknown10)->mState.mState == 5 && speed > 0.06f
+    if (pos.mZ < 0.15f && ((Ball_t *)pEvent->mUnknown10)->mState.mState == 5 && speed > 0.06f
         && pEvent->mUnknown18 == 0) {
-        pSource = (Source_80144CE0 *)((Object_80137ABC *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
+        pSource = (Source_80144CE0 *)((Ball_t *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
         if (pSource != 0) {
             fn_801D03D0(m);
             m[0][3] = 0.0f;

@@ -225,8 +225,8 @@ void fn_80067DB8(int type, void *pPos, int a, int b, int c);
 int fn_8006562C(void);
 int fn_800AD9B4(void);
 void fn_80025C88(int flag);
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 void fn_80067D4C(int type, void *pPos);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_8009D8CC(int index);
@@ -1312,8 +1312,8 @@ void fn_80058E64(void)
 void fn_80058E68(void)
 {
     lbl_803EA59C = 1;
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_80067D4C(0x72, 0);
     fn_80072C90(250, 0);
 }

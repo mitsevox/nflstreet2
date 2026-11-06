@@ -1,3 +1,5 @@
+/* Two full-screen colour layers that tint the screen and fade between colours. */
+
 #include "engine/viewport.h"
 #include "game/fn_80147908.h"
 

@@ -1,12 +1,12 @@
-#ifndef GAME_CONTROL_80132090_H
-#define GAME_CONTROL_80132090_H
+#ifndef GAME_OPTION_RUN_CONTROL_H
+#define GAME_OPTION_RUN_CONTROL_H
 
 #include "game/Object_80039F5C.h"
 #include "game/Directions_8012430C.h"
 
-/* Eight bytes at +56 of Control_80132090, passed to fn_8012F5A0 as one
+/* Eight bytes at +56 of OptionRunControl_t, passed to fn_8012F5A0 as one
    block. */
-struct Block_8012F5A0 {
+struct OptionRunMove_t {
     short mUnknown0;
     unsigned char mUnknown2;
     unsigned char mUnknown3;
@@ -16,7 +16,7 @@ struct Block_8012F5A0 {
     char mUnknown7[1];
 };
 
-struct Control_80132090 {
+struct OptionRunControl_t {
     int mUnknown0;
     Directions_8012430C mValues;
     float mUnknown36;
@@ -30,7 +30,7 @@ struct Control_80132090 {
     char mUnknown53[1];
     unsigned char mUnknown54;
     unsigned char mUnknown55;
-    Block_8012F5A0 mUnknown56;
+    OptionRunMove_t mUnknown56;
     int mUnknown64;
     int mUnknown68;
     int mUnknown72;
@@ -42,10 +42,10 @@ struct Control_80132090 {
 
 extern "C" {
 int fn_8012FA64(Object_80039F5C *p);
-void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *pControl, int a);
-void fn_8012F5A0(Object_80039F5C *p, Control_80132090 *pControl, Block_8012F5A0 *pBlock);
-void fn_8012F89C(Object_80039F5C *p, Control_80132090 *pControl, int a);
-void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl);
+void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
+void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *pControl, OptionRunMove_t *pBlock);
+void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
+void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl);
 }
 
 #endif

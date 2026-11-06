@@ -1,6 +1,6 @@
 /* Texture scrolling of world objects (UVs advanced per frame in float or
    fixed point) and the lighting set-up for dynamic objects. */
-#include "game/cu_801442FC.h"
+#include "game/LightTracker.h"
 #include "game/DynObjRender.h"
 
 #include <math.h>
@@ -212,7 +212,7 @@ void DynObjDrawEnvMap(DynObj *, int)
 {
 }
 
-int DynObjSetupLight(Tracker_801442FC *pTracker, Object_80144310 *pSource)
+int DynObjSetupLight(LightTracker_t *pTracker, LightSource_t *pSource)
 {
     float direction[4];
     float scale[3];
@@ -223,7 +223,7 @@ int DynObjSetupLight(Tracker_801442FC *pTracker, Object_80144310 *pSource)
         z = pSource->mUnknown14;
     }
     int light = fn_80236B98(0, x, y, z);
-    if (fn_80144310(pTracker, pSource, direction, scale)) {
+    if (LightTrackerUpdate(pTracker, pSource, direction, scale)) {
         scale[0] *= x;
         scale[1] *= y;
         scale[2] *= z;

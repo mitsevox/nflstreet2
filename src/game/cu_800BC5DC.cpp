@@ -1,6 +1,6 @@
 #include "game/Class_80297BF8.h"
 #include "game/Object_800785C0.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 
 struct Slot_800BAE7C {
     int mUnknown0;
@@ -118,7 +118,7 @@ void Class_80297BF8::vfn_03()
         if (fn_800BA6F8() == 0) {
             fn_8004A230(0);
         }
-        fn_801383E4(1);
+        BallsSetVisible(1);
         lbl_803EAB94 = 0;
         fn_800BBA2C();
     }
