@@ -18,10 +18,10 @@ unsigned char *fn_8003AB38(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
-void fn_800D058C(Object_80039F5C *p);
-void fn_800D0660(Object_80039F5C *p, unsigned char *pOut);
-int fn_800D0694(Object_80039F5C *p);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveUpdateRun(Object_80039F5C *p);
+void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
+int PlayerMoveTryStartRun(Object_80039F5C *p);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800D5998(void);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
@@ -259,7 +259,7 @@ extern "C" int fn_80131B3C(Object_80039F5C *p, int kind, int arg)
             Message_800F01CC message;
 
             result = 1;
-            fn_800D0BF4(pCurrent, arg, 25);
+            PlayerMoveBegin(pCurrent, arg, 25);
             fn_801C1F94(&message, 0, 4);
             message.mId = 25;
             message.mUnknown1[0] = pTarget->mIdBytes[1];
@@ -296,10 +296,10 @@ extern "C" void fn_80131C1C(Object_80039F5C *p, Directions_8012430C *pValues, Co
         fn_8012DDCC(p, pControl, 0);
         pControl->mUnknown0 = fn_8012FA64(p);
         fn_8012F89C(p, pControl, 0);
-        fn_800D0694(p);
+        PlayerMoveTryStartRun(p);
     }
-    fn_800D058C(p);
-    fn_800D0660(p, &pControl->mUnknown52);
+    PlayerMoveUpdateRun(p);
+    PlayerMoveGetRunMode(p, &pControl->mUnknown52);
     p->mUnknown512.mUnknown15 = pControl->mUnknown52;
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = pControl->mUnknown44;
@@ -491,11 +491,11 @@ extern "C" int fn_8013217C(Object_80039F5C *p)
             done = 1;
             break;
         }
-    } else if (fn_800D0694(p)) {
+    } else if (PlayerMoveTryStartRun(p)) {
         unsigned char mode;
 
-        fn_800D058C(p);
-        fn_800D0660(p, &mode);
+        PlayerMoveUpdateRun(p);
+        PlayerMoveGetRunMode(p, &mode);
         p->mUnknown512.mUnknown15 = mode;
     }
 

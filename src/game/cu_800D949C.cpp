@@ -2,7 +2,7 @@
 #include "game/fn_801BA2A8.h"
 #include "game/Object_800DA8D8.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8036B55C.h"
 #include "game/Table_80089904.h"
@@ -21,8 +21,8 @@ extern Key_800DA6AC lbl_802DA8AC[4];
 int fn_801486A0(void);
 int fn_801481B0(void);
 int fn_801787A0(void);
-int fn_800D0B90(Object_80039F5C *p);
-unsigned char fn_800D0B98(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
+unsigned char PlayerMoveGetRunVariant(Object_80039F5C *p);
 int fn_800D9188(void);
 int fn_800D91D8(void);
 int fn_800DC080(Object_80039F5C *p);
@@ -74,7 +74,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
         switch (p->mUnknown528.mUnknown15) {
         case 10: case 11: result = 34; goto finish;
         case 20: case 21:
-            if (fn_800D0B90(p) == 2) result = lbl_802DA888[(unsigned char)fn_800D0B98(p)];
+            if (PlayerMoveGetKind(p) == 2) result = lbl_802DA888[(unsigned char)PlayerMoveGetRunVariant(p)];
             else result = 1;
             goto finish;
         case 6: case 7: result = 11; goto finish;

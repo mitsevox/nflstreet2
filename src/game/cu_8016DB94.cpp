@@ -74,7 +74,7 @@ void fn_800B82AC(int team);
 int fn_800BA6F8(void);
 void fn_800C9FC0(void);
 void fn_800CA3C4(void);
-void fn_800D0B08(void);
+void PlayerMoveResetAll(void);
 void fn_800DC578(void);
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -118,7 +118,7 @@ int fn_800A8408(int team);
 int fn_800A8444(int team);
 int fn_800A8F84(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800D42CC(void);
 void fn_800D45F0(Object_80039F5C *p, float a);
 void fn_8011DF90(void);
@@ -403,7 +403,7 @@ extern "C" void fn_8016E498(void)
     int side;
 
     fn_8011F574();
-    fn_800D0B08();
+    PlayerMoveResetAll();
     fn_80137D58(fn_801374BC(), &ballPos);
     fn_8003A4DC();
     fn_8017CFB4(1);
@@ -735,7 +735,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                 int kind;
 
                 fn_8017C858(p->mIdBytes[2], 1);
-                kind = fn_800D0B90(p);
+                kind = PlayerMoveGetKind(p);
                 if (kind != 0) {
                     fn_8017C8DC(p->mIdBytes[2], 1);
                     switch (kind) {
@@ -751,7 +751,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     }
                 }
             } else if (id >= 34 && id <= 36) {
-                if (fn_800D0B90(p) != 0) {
+                if (PlayerMoveGetKind(p) != 0) {
                     fn_8017C8DC(p->mIdBytes[2], 1);
                 }
             }

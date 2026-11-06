@@ -290,7 +290,7 @@ unsigned short fn_801BE648(void *p);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D0D48(int a);
 void fn_800D1A90(int, int, int, int, int, int, int, int, int, int);
 unsigned short fn_800D3EB0(int, int);
@@ -1769,7 +1769,7 @@ extern "C" void fn_800D4CD4(void) {
 extern "C" void fn_800D4D84(Object_80039F5C *p) {
     fn_800D0D48(28);
     if (fn_801787A0() == 0) {
-        if (fn_800D0B90(p) == 0) fn_80156C78(3, 1);
+        if (PlayerMoveGetKind(p) == 0) fn_80156C78(3, 1);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
         fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
@@ -1860,7 +1860,7 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
         }
         if (accept == 0 && kind != 0) {
-            if (fn_800D0B90(p) == 0) fn_80156C78(4, 1);
+            if (PlayerMoveGetKind(p) == 0) fn_80156C78(4, 1);
             lbl_803EACD4->mUnknown1EF5 = 1;
             accept = 1;
         }
@@ -1899,7 +1899,7 @@ extern "C" void fn_800D52F8(Object_80039F5C *p) {
             fn_80156C78(5, 1);
         } else {
             id = 34;
-            if (fn_800D0B90(p) == 0) {
+            if (PlayerMoveGetKind(p) == 0) {
                 fn_80156C78(4, 1);
             }
         }
@@ -1962,7 +1962,7 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
         }
         if (accept == 0) {
-            if (fn_800D0B90(p) == 0) fn_80156C78(7, 1);
+            if (PlayerMoveGetKind(p) == 0) fn_80156C78(7, 1);
             if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
         }
         Vector_80039F5C position;
@@ -1993,7 +1993,7 @@ extern "C" void fn_800D5704(Object_80039F5C *p) {
                 fn_80156C78(8, 1);
             } else {
                 fn_800D2378(47, fn_80178308(), 1);
-                if (fn_800D0B90(p) == 0) {
+                if (PlayerMoveGetKind(p) == 0) {
                     fn_80156C78(7, 1);
                 }
             }
@@ -2017,7 +2017,7 @@ extern "C" void fn_800D5704(Object_80039F5C *p) {
                 }
             } else {
                 fn_800D2378(46, fn_80178308(), 1);
-                if (fn_800D0B90(p) == 0) {
+                if (PlayerMoveGetKind(p) == 0) {
                     fn_80156C78(7, 1);
                 }
             }
@@ -2180,7 +2180,7 @@ extern "C" void fn_800D5F1C(Object_80039F5C *p, int kind, unsigned char flag) {
         fn_800D391C(0);
         int id = 52;
         switch (kind) {
-        case 0: if (fn_800D0B90(p) == 0) fn_80156C78(12, 1); break;
+        case 0: if (PlayerMoveGetKind(p) == 0) fn_80156C78(12, 1); break;
         case 1: id = 53; fn_80156C78(13, 1); break;
         case 4: id = 54; fn_80156C78(14, 1); break;
         }
@@ -2235,7 +2235,7 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
         }
     }
     if (accept == 0) {
-        if (fn_800D0B90(p) == 0) fn_80156C78(9, 1);
+        if (PlayerMoveGetKind(p) == 0) fn_80156C78(9, 1);
         if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
     }
     Vector_80039F5C position;
@@ -2278,7 +2278,7 @@ extern "C" void fn_800D640C(Object_80039F5C *p) {
             fn_80156C78(10, 1);
         } else {
             fn_800D2378(57, fn_80178308(), 1);
-            if (fn_800D0B90(p) == 0) {
+            if (PlayerMoveGetKind(p) == 0) {
                 fn_80156C78(9, 1);
             }
         }
@@ -2368,7 +2368,7 @@ extern "C" void fn_800D67B8(int a, Object_80039F5C *p) {
     fn_800D391C(0);
     fn_800D20A0(fn_80178348(), 0);
     lbl_803EACD4->mUnknown1ED8 = 1;
-    lbl_803EACD4->mUnknown1EF2 = fn_800D0B90(p);
+    lbl_803EACD4->mUnknown1EF2 = PlayerMoveGetKind(p);
     if (a != 0) {
         if (lbl_803EACD4->mUnknown1EF2 != 0) {
             fn_800D2C10(75, fn_80178360());

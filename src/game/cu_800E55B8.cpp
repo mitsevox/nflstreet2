@@ -21,7 +21,7 @@ struct Record_800E5EA4 {
 };
 
 extern "C" {
-void fn_800E3C30(Object_80039F5C *p);
+void PlayerReleaseJointCtrls(Object_80039F5C *p);
 Record_8011F4E0 *fn_8011F4E0(void);
 void fn_800FBB70(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
@@ -52,7 +52,7 @@ void fn_800E55B8(Object_80039F5C *p)
 {
     Record_8011F4E0 *pInfo = fn_8011F4E0();
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
-    fn_800E3C30(p);
+    PlayerReleaseJointCtrls(p);
     state->mUnknown1 = 1;
     state->mUnknown2 = fn_802372EC(0, 45);
     state->mUnknown0 = 0;

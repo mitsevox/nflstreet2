@@ -1,7 +1,7 @@
 #include "engine/fn_801C065C.h"
 #include "engine/cu_801B9F00.h"
 #include "game/fn_801BA2A8.h"
-#include "game/Object_800D81C8.h"
+#include "game/AnimMomentumActor.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
@@ -416,7 +416,7 @@ void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
 void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 int fn_8011F1CC(void);
 int fn_8011F1F4(void);
@@ -641,7 +641,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
             result = flag;
         }
     }
-    if (result && p && !fn_800D0B90(p)) {
+    if (result && p && !PlayerMoveGetKind(p)) {
         fn_800CABF4(p, &shown, 0);
         if (shown) {
             fn_80156C78(21, 1);
@@ -908,7 +908,7 @@ struct Block_800DE3B0 {
     int mUnknown14;
     int mUnknown18;
     unsigned char mUnknown1C, mUnknown1D, mUnknown1E, mUnknown1F;
-    State_800D8140 mUnknown20;
+    AnimMomentum_t mUnknown20;
     int mUnknown38;
     unsigned char mUnknown3C, mUnknown3D;
     signed char mUnknown3E, mUnknown3F;
@@ -990,7 +990,7 @@ void fn_8009A5DC(int a, int b, void *pKind, int *pHandle);
 float fn_8009A270(int handle);
 int fn_8009A578(int handle);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
 int fn_8009A68C(Object_80039F5C *p);
 unsigned char *fn_8009CC2C(Object_80039F5C *p, void (*callback)(int, Vector_80039F5C *, unsigned char *), int a, int b);
@@ -1033,7 +1033,7 @@ int fn_8016EADC(void);
 void fn_800E3DCC(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_80227538(Point_8017886C *pOut, int angle, float magnitude);
 void fn_800E586C(Object_80039F5C *p, Point_8017886C *pPoint);
-int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pPoint);
+int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pPoint);
 }
 
 #include "game/Command_800CEE74.h"
@@ -1069,9 +1069,9 @@ struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6
 extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short, unsigned short);
 void fn_800CEDA4(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
-void fn_800D8140(State_800D8140 *, Object_80039F5C *, int);
-void fn_800D81C8(State_800D8140 *, Object_80039F5C *);
-void fn_800D84DC(State_800D8140 *, Object_80039F5C *);
+void AnimMomentumInit(AnimMomentum_t *, Object_80039F5C *, int);
+void AnimMomentumUpdate(AnimMomentum_t *, Object_80039F5C *);
+void AnimMomentumUpdateLinked(AnimMomentum_t *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
 int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
 void fn_800DEC10(Object_80039F5C *, Block_800DE3B0 *);
@@ -2176,7 +2176,7 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
             fn_801BA6BC(pEntry, !fn_801BA6B0(pEntry));
             pBlock->mUnknown1F = fn_801BA6B0(&pEntries[pBlock->mUnknown1D]);
         }
-        fn_800D8140(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
+        AnimMomentumInit(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
         pBlock->mUnknown1E = fn_801784C4();
         break;
     }
@@ -2193,8 +2193,8 @@ extern "C" int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pDa
             }
             if (key == 181 || key == 186) fn_800DEC10(p, pBlock);
             if (pBlock->mUnknown1C) fn_800DE910(p, pBlock);
-            if (fn_801BE648(p->mpUnknown792) == 94 || fn_801BE648(p->mpUnknown792) == 95 || fn_801BE648(p->mpUnknown792) == 234) fn_800D84DC(&pBlock->mUnknown20, p);
-            else fn_800D81C8(&pBlock->mUnknown20, p);
+            if (fn_801BE648(p->mpUnknown792) == 94 || fn_801BE648(p->mpUnknown792) == 95 || fn_801BE648(p->mpUnknown792) == 234) AnimMomentumUpdateLinked(&pBlock->mUnknown20, p);
+            else AnimMomentumUpdate(&pBlock->mUnknown20, p);
         } else if (!fn_800DE364(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
         if ((key == 172 || key == 173) && (p->mFlags & 4)) fn_800C854C(p, key, pBlock->mUnknown3C);
         break;
@@ -2634,7 +2634,7 @@ extern "C" int fn_800E0850(Object_80039F5C *p)
     fn_800A3B58(p, 4, 0);
     if (fn_801BE648(p->mpUnknown792) == 227) {
         p->mUnknown1160.mUnknown54 = 1;
-        fn_800D0BF4(p, 1, 28);
+        PlayerMoveBegin(p, 1, 28);
     }
     if (fn_801BE648(p->mpUnknown792) == 224 || fn_801BE648(p->mpUnknown792) == 225) {
         p->mFlags |= 8;
@@ -3310,7 +3310,7 @@ extern "C" void fn_800E2ABC(Object_80039F5C *p)
     fn_800E586C(p, &target);
     pBlock->mUnknown20 = 0;
     pBlock->mUnknown4 = target;
-    if (!fn_800E3A34(p, &pBlock->mUnknown4)) {
+    if (!PlayerPathIsLaneClear(p, &pBlock->mUnknown4)) {
         float values[7];
         int count = 0;
         int players = fn_80178D18(p->mIdBytes[2]);

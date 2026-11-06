@@ -294,9 +294,9 @@ int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
 int fn_800C05F4(void);
 int fn_800A8444(int team);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
-void fn_800D0C0C(Object_80039F5C *p, int a);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
+void PlayerMoveSetResult(Object_80039F5C *p, int a);
 int fn_800E5C00(Object_80039F5C *p, int value);
 int fn_800E6984(Object_80039F5C *p);
 void fn_800E7588(Object_80039F5C *p, Block_800E7588 *pBlock);
@@ -498,11 +498,11 @@ extern "C" void fn_800E7B90(Object_80039F5C *p, Block_800E7588 *pBlock) {
     index = fn_800C3BEC(p, &command, &value, &unused);
     if (index != -1) {
         fn_800C39E0(p, 237, index, value, flag);
-        fn_800D0C0C(p, 0);
+        PlayerMoveSetResult(p, 0);
         p->mFlags |= 8;
     } else {
         p->mUnknown1008.mUnknown0 = saved;
-        fn_800D0BF4(p, 1, 12);
+        PlayerMoveBegin(p, 1, 12);
         fn_800E7588(p, pBlock);
     }
 }
@@ -590,7 +590,7 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
 
     if (pBlock->mUnknown4 == 1) {
         pBlock->mUnknown6++;
-        if (fn_800D0B90(p) != 0) {
+        if (PlayerMoveGetKind(p) != 0) {
             Input_800B6D34 input;
 
             fn_800B6D34(p, &input);
@@ -3353,7 +3353,7 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
             Record_800D81C8 *pEntry = &pRecords[entry];
             AnimSeqSetSpeed(&pEntry->mUnknown4C, fn_801CFFA0(speed));
             pEntry->mUnknown2C = lbl_803EAE08;
-            fn_800D0C0C(p, 0);
+            PlayerMoveSetResult(p, 0);
         }
         if (kind != 230) {
             fn_80067E3C(51, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -3361,14 +3361,14 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
         }
         p->mFlags |= 8;
     } else {
-        fn_800D0BF4(p, 1, 36);
+        PlayerMoveBegin(p, 1, 36);
         fn_800EF538(p);
         fn_80067E3C(59, &p->mMotion.mPos, p->mId, 0, 0, 0);
     }
 }
 
 extern "C" void fn_800EF538(Object_80039F5C *p) {
-    int mode = fn_800D0B90(p);
+    int mode = PlayerMoveGetKind(p);
     fn_8009BD60(p);
     if (fn_80137B40() == p) {
         int kind = 1;
@@ -3395,25 +3395,25 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
         switch (p->mUnknown1008.mUnknown2) {
         case 1:
             if (p->mUnknown1008.mUnknown1 == 2)
-                fn_800D0C0C(p, 1);
+                PlayerMoveSetResult(p, 1);
             else
-                fn_800D0C0C(p, 2);
+                PlayerMoveSetResult(p, 2);
             break;
         case 2:
             if (p->mUnknown1008.mUnknown1 == 2)
-                fn_800D0C0C(p, 7);
+                PlayerMoveSetResult(p, 7);
             else
-                fn_800D0C0C(p, 8);
+                PlayerMoveSetResult(p, 8);
             break;
         case 3:
             if (p->mUnknown1008.mUnknown1 == 2)
-                fn_800D0C0C(p, 3);
+                PlayerMoveSetResult(p, 3);
             else
-                fn_800D0C0C(p, 4);
+                PlayerMoveSetResult(p, 4);
             break;
         }
     } else {
-        fn_800D0C0C(p, 0);
+        PlayerMoveSetResult(p, 0);
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 24, 1.0f, p);
     }
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 24) || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 180)) {

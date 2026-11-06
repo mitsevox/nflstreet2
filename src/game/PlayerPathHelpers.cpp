@@ -1,9 +1,14 @@
+/* Helpers for players walking to field positions: a test that no player of
+   a given team stands in the lane to the next point, a side-step animation
+   chosen by which side of his team spot the player is on, and the release of
+   the joint controllers a player was holding. */
+
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
 #include <math.h>
 
-struct Block_800E3B8C {
+struct PlayerJointCtrlFlags_t {
     char mUnknown0[50];
     unsigned char mUnknown50;
     unsigned char mUnknown51;
@@ -18,7 +23,7 @@ Point_8017886C fn_80177FFC(int team);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 }
 
-extern "C" int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pTarget)
+extern "C" int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pTarget)
 {
     int team = fn_80178320();
     int i;
@@ -34,7 +39,7 @@ extern "C" int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pTarget)
     return 1;
 }
 
-extern "C" void fn_800E3AE8(Object_80039F5C *p, int a, int b)
+extern "C" void PlayerPathStartSideAnim(Object_80039F5C *p, int a, int b)
 {
     p->mFlags &= ~4;
     fn_8009BD60(p);
@@ -49,9 +54,9 @@ extern "C" void fn_800E3AE8(Object_80039F5C *p, int a, int b)
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 189, 1.0f, p);
 }
 
-extern "C" void fn_800E3B8C(Object_80039F5C *p)
+extern "C" void PlayerReleaseFlaggedJointCtrls(Object_80039F5C *p)
 {
-    Block_800E3B8C *pBlock = (Block_800E3B8C *)&p->mUnknown336;
+    PlayerJointCtrlFlags_t *pBlock = (PlayerJointCtrlFlags_t *)&p->mUnknown336;
     if (pBlock->mUnknown50 == 1 && (p->mFlags & 0x80)) {
         p->mFlags &= ~0x80;
         fn_8009CE88(p, &p->mUnknown16, 10);
@@ -67,9 +72,9 @@ extern "C" void fn_800E3B8C(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800E3C30(Object_80039F5C *p)
+extern "C" void PlayerReleaseJointCtrls(Object_80039F5C *p)
 {
-    Block_800E3B8C *pBlock = (Block_800E3B8C *)&p->mUnknown336;
+    PlayerJointCtrlFlags_t *pBlock = (PlayerJointCtrlFlags_t *)&p->mUnknown336;
     if (pBlock->mUnknown50 == 1) {
         fn_8009CE88(p, &p->mUnknown16, 10);
         pBlock->mUnknown50 = 0;

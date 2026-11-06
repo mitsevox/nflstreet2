@@ -232,8 +232,8 @@ void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState);
 int fn_8011E8A4(Object_80039F5C *p);
 int fn_800B7E60(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0C0C(Object_80039F5C *p, int a);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveSetResult(Object_80039F5C *p, int a);
 extern float lbl_803EAF30;
 extern unsigned short lbl_803EAF5E;
 }
@@ -579,7 +579,7 @@ struct Plan_80121264 {
 extern "C" {
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -691,7 +691,7 @@ unsigned int fn_80178D18(int team);
 int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
-int fn_800EF8E8(Object_80039F5C *p, int a);
+int CarrierMoveStart(Object_80039F5C *p, int a);
 int fn_800AD0E4(int team);
 int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
 int fn_800C53D8(Object_80039F5C *p);
@@ -702,7 +702,7 @@ int fn_801787A0(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800D4E68(unsigned char a);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
@@ -759,8 +759,8 @@ int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0C0C(Object_80039F5C *p, int a);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveSetResult(Object_80039F5C *p, int a);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void AnimSeqSetSpeed(void *p, float value);
@@ -1074,9 +1074,9 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
     pBlock->mUnknown8 = side;
     p->mUnknown1008.mUnknown1 = side;
     p->mUnknown1008.mUnknown0 = 3;
-    found = fn_800D0B90(p);
+    found = PlayerMoveGetKind(p);
     if (fn_800B83F4(p) != 0) {
-        fn_800D0C0C(p, 0);
+        PlayerMoveSetResult(p, 0);
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 240, 1.0f, p);
     } else if (found != 0) {
         if (fn_802372EC(0, 100) < 50) {
@@ -1088,21 +1088,21 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
         switch (p->mUnknown1008.mUnknown2) {
         case 1:
             if (side == 3) {
-                fn_800D0C0C(p, 2);
+                PlayerMoveSetResult(p, 2);
             } else {
-                fn_800D0C0C(p, 1);
+                PlayerMoveSetResult(p, 1);
             }
             break;
         case 2:
             if (side == 3) {
-                fn_800D0C0C(p, 4);
+                PlayerMoveSetResult(p, 4);
             } else {
-                fn_800D0C0C(p, 3);
+                PlayerMoveSetResult(p, 3);
             }
             break;
         }
     } else {
-        fn_800D0C0C(p, 0);
+        PlayerMoveSetResult(p, 0);
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 22, 1.0f, p);
     }
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 22) != 0 || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 179) != 0) {
@@ -1197,12 +1197,12 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
                 speed += excess / 170.0f * b;
             }
             pEntry->mUnknown2C = speed;
-            fn_800D0C0C(p, 0);
+            PlayerMoveSetResult(p, 0);
         }
         fn_80067E3C(48, &p->mMotion.mPos, p->mId, 0, 0, 0);
         p->mFlags |= 8;
     } else {
-        fn_800D0BF4(p, 1, 34);
+        PlayerMoveBegin(p, 1, 34);
         fn_800F1858(p);
     }
 }
@@ -1342,7 +1342,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
         p->mUnknown512.mUnknown8 = p->mUnknown512.mUnknown4;
         break;
     case 1:
-        if (fn_800D0B90(p) == 4) {
+        if (PlayerMoveGetKind(p) == 4) {
             fn_800F1C68(p);
         } else {
             fn_800F1858(p);

@@ -132,7 +132,7 @@ int fn_800C8704(int *pA, int *pB);
 int fn_800C8744(int team);
 void fn_800C87CC(int team, int value);
 void fn_800C9FC0(void);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800D41F8(int team);
 void fn_800D421C(int team, int value);
 int fn_800D42CC(void);
@@ -607,7 +607,7 @@ void Class_802A56E8::vfn_19()
         fn_800535FC();
         pPlayer = fn_80137B40();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
-            fn_800D5F1C(pPlayer, fn_800D0B90(pPlayer), 0xFF);
+            fn_800D5F1C(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);
         }
         fn_800AD910(4, 0.0f);
     }

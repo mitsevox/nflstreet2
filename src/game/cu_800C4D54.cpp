@@ -14,7 +14,7 @@ Item_80097440 *fn_8009A63C(int ref);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 int fn_800C53D8(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
 int fn_801486A0(void);
 float fn_80178A08(void);
@@ -68,7 +68,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     if (fn_800C53D8(pOther) || (!fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p))) {
         result = 0;
     }
-    if (fn_800D0B90(pOther)) {
+    if (PlayerMoveGetKind(pOther)) {
         result = 0;
     }
     if (fn_80137B40() != pOther) {

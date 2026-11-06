@@ -52,7 +52,7 @@ float fn_80178A44(void);
 void fn_801780A8(Point_8017886C pos);
 void fn_8017833C(int value);
 void fn_8013FA58(int a, int b);
-void fn_800D0B08(void);
+void PlayerMoveResetAll(void);
 void fn_800B14E4(void);
 void fn_80044264(void);
 void fn_80067CCC(void);
@@ -123,7 +123,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
 {
     if (p->mUnknown4) {
         p->mUnknown4 = 0;
-        fn_800D0B08();
+        PlayerMoveResetAll();
         fn_800B14E4();
         fn_80044264();
         fn_80067CCC();

@@ -22,7 +22,7 @@ struct State_800E8420 {
 };
 
 extern "C" {
-int fn_800D0B90(Object_80039F5C *p);
+int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800E73D4(Object_80039F5C *p);
 int fn_800E745C(Object_80039F5C *p);
@@ -38,7 +38,7 @@ void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 extern "C" int fn_800E8420(Object_80039F5C *p)
 {
     State_800E8420 *pState = (State_800E8420 *)&p->mUnknown336;
-    int mode = fn_800D0B90(p);
+    int mode = PlayerMoveGetKind(p);
     Input_800B6D34 input;
 
     p->mUnknown512.mUnknown14 = 0;

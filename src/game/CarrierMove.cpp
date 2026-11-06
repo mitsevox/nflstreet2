@@ -1,3 +1,9 @@
+/* Ball-carrier move state. While the ball is live the ball carrier can do a
+   move: the controlling player starts it with a button, and the computer
+   starts it when a defender is near. This file decides whether he may,
+   starts the player state for it, and runs that state: its start, each
+   frame, its end and its button input. */
+
 #include "game/Record_800DB60C.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
@@ -10,7 +16,7 @@
 
 /* Partial view of the opaque player block at +336 used by the handlers
    below. */
-struct Block_800EF968 {
+struct CarrierMoveBlock_t {
     Record_800DB60C mRecord;
     unsigned char mUnknown24;
     unsigned char mUnknown25;
@@ -20,8 +26,8 @@ struct Block_800EF968 {
 extern "C" {
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800C4B6C(Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
-void fn_800D0BF4(Object_80039F5C *p, int a, int b);
+int PlayerMoveGetKind(Object_80039F5C *p);
+void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800D640C(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
@@ -34,7 +40,7 @@ float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int b);
 extern float lbl_803EAE10;
 }
 
-extern "C" int fn_800EF834(Object_80039F5C *p)
+extern "C" int CarrierMoveCanStart(Object_80039F5C *p)
 {
     int result = 0;
 
@@ -64,14 +70,14 @@ extern "C" int fn_800EF834(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800EF8E8(Object_80039F5C *p, int a)
+extern "C" int CarrierMoveStart(Object_80039F5C *p, int a)
 {
     int result = 0;
 
-    if (fn_800EF834(p)) {
+    if (CarrierMoveCanStart(p)) {
         Message_800F01CC message;
 
-        fn_800D0BF4(p, a, 36);
+        PlayerMoveBegin(p, a, 36);
         result = 1;
         fn_801C1F94(&message, 0, 4);
         message.mId = 36;
@@ -80,10 +86,10 @@ extern "C" int fn_800EF8E8(Object_80039F5C *p, int a)
     return result;
 }
 
-extern "C" int fn_800EF968(Object_80039F5C *p)
+extern "C" int CarrierMoveEnter(Object_80039F5C *p)
 {
-    Block_800EF968 *pBlock = (Block_800EF968 *)&p->mUnknown336;
-    int mode = fn_800D0B90(p);
+    CarrierMoveBlock_t *pBlock = (CarrierMoveBlock_t *)&p->mUnknown336;
+    int mode = PlayerMoveGetKind(p);
 
     if (p == fn_80137B40()) {
         pBlock->mUnknown24 = 1;
@@ -105,9 +111,9 @@ extern "C" int fn_800EF968(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800EFA40(Object_80039F5C *p)
+extern "C" int CarrierMoveUpdate(Object_80039F5C *p)
 {
-    Block_800EF968 *pBlock = (Block_800EF968 *)&p->mUnknown336;
+    CarrierMoveBlock_t *pBlock = (CarrierMoveBlock_t *)&p->mUnknown336;
 
     pBlock->mUnknown26++;
     fn_800DB7A4(pBlock, p);
@@ -154,7 +160,7 @@ extern "C" int fn_800EFA40(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800EFB98(Object_80039F5C *p)
+extern "C" int CarrierMoveExit(Object_80039F5C *p)
 {
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
@@ -165,9 +171,9 @@ extern "C" int fn_800EFB98(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_800EFBD8(Object_80039F5C *p)
+extern "C" int CarrierMoveInput(Object_80039F5C *p)
 {
-    Block_800EF968 *pBlock = (Block_800EF968 *)&p->mUnknown336;
+    CarrierMoveBlock_t *pBlock = (CarrierMoveBlock_t *)&p->mUnknown336;
     Input_800B6D34 input;
 
     fn_800B65A0(p->mIdBytes[2]);
@@ -178,7 +184,7 @@ extern "C" int fn_800EFBD8(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800EFC34(Object_80039F5C *p, Object_80039F5C *a)
+extern "C" int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *a)
 {
     return fn_801250B8(p, a, 6) < lbl_803EAE10;
 }

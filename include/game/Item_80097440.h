@@ -60,7 +60,7 @@ struct Block_8009A344 {
     float mUnknown18;
     float mUnknown1C;
     int mUnknown20;
-    State_800D8140 mUnknown24;
+    AnimMomentum_t mUnknown24;
 };
 
 /* The 64-byte block fn_80099630 allocates under the id 'ctch'. */

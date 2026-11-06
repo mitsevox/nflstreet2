@@ -25,8 +25,8 @@ float fn_80260E24(float a);
 float fn_80260FE8(float a);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 void fn_801BE760(void *p, unsigned short key, unsigned short flags);
-void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
-void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
+void AnimMomentumInit(AnimMomentum_t *pState, Object_80039F5C *p, int value);
+void AnimMomentumUpdate(AnimMomentum_t *pState, Object_80039F5C *p);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 int fn_800ACF40(Object_80039F5C *p, signed char value);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
@@ -50,7 +50,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
         value = p->mUnknown1008.mUnknown2 | p->mUnknown1011 << 8;
         pBlock->mUnknown20 = fn_801BA2A8(pRecord, pEntries, value, animation, key, p, 1.0f);
         fn_801BE760(p->mpUnknown792, key, 1);
-        fn_800D8140(&pBlock->mUnknown24, p, lbl_803EC92C->mUnknown4.mUnknown20);
+        AnimMomentumInit(&pBlock->mUnknown24, p, lbl_803EC92C->mUnknown4.mUnknown20);
         break;
     case 2:
         if (fn_801BE648(p->mpUnknown792) == key) {
@@ -75,7 +75,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
                     p->mMotion.mPos.mY += pBlock->mUnknown1C;
                 }
             }
-            fn_800D81C8(&pBlock->mUnknown24, p);
+            AnimMomentumUpdate(&pBlock->mUnknown24, p);
         }
         break;
     }
