@@ -32,12 +32,12 @@ struct Struct_8006BBC4 {
 extern "C" {
 extern Struct_802D611C lbl_802D611C[];
 
-int SndgStreamOpen(void *pData, int unknown);
-int SndgStreamClose(int handle);
-int SndgStreamStart(void *pData, int unknown, int id, float value);
-int SndgStreamStop(int id);
-void SndgStreamSetVolume(int id, unsigned int value);
-int SndgStreamPostEvent(int id, int unknown);
+int SndgPathLoadMap(void *pData, int unknown);
+int SndgPathUnloadMap(int handle);
+int SndgPathCreateTrack(void *pData, int unknown, int id, float value);
+int SndgPathDestroyTrack(int id);
+void SndgPathSetTrackVolume(int id, unsigned int value);
+int SndgPathPostEvent(int id, int unknown);
 int fn_8006DE54(int id, int unknown);
 }
 

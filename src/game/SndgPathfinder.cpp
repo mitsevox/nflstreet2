@@ -606,7 +606,7 @@ void fn_8006E3F0(Struct_8030A518Entry *pEntry, void *pStream0, void *pStream1, v
                  float unknown);
 void SndgAmbAllocObjects(void);
 void SndgAmbFreeObjects(void);
-void SndgAmbStartStadiumStream(void);
+void SndgAmbStartStadiumTrack(void);
 void SndgAmbOpenBanks(void);
 void SndgAmbCloseBanks(void);
 void SndgAmbCalcPan(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan);
@@ -1125,7 +1125,7 @@ extern "C" void SndgAmbFreeObjects(void)
     FREE_LIST(mSound0, Sound0, 0);
 }
 
-extern "C" void SndgAmbStartStadiumStream(void)
+extern "C" void SndgAmbStartStadiumTrack(void)
 {
     int level = fn_800A3444();
 
@@ -1172,7 +1172,7 @@ extern "C" void SndgAmbStartStadiumStream(void)
     }
     lbl_803EA68C = lbl_80290758[level];
     lbl_803EA67C->mUnknownC = 0x12000001;
-    SndgStreamStart(lbl_803EA67C->mpUnknown4, 2, 0x12000001, 1.0f);
+    SndgPathCreateTrack(lbl_803EA67C->mpUnknown4, 2, 0x12000001, 1.0f);
 }
 
 extern "C" void SndgAmbOpenBanks(void)
@@ -1596,11 +1596,11 @@ extern "C" void SndgAmbInit(void)
         lbl_803EA67C->mpUnknown4 = fn_801EEB44(lbl_802EC00C, 44);
         lbl_803EA67C->mpUnknown10 = fn_801EEB44(lbl_802EC000, 44);
         fn_801F4B88(lbl_803EA67C->mpUnknown0, 1, 0);
-        lbl_803EA67C->mUnknown8 = SndgStreamOpen(lbl_803EA67C->mpUnknown4, 1);
-        SndgAmbStartStadiumStream();
+        lbl_803EA67C->mUnknown8 = SndgPathLoadMap(lbl_803EA67C->mpUnknown4, 1);
+        SndgAmbStartStadiumTrack();
         SndgAmbOpenBanks();
         SndgAmbAllocObjects();
-        SndgStreamSetVolume(lbl_803EA67C->mUnknownC, lbl_803EA680 * lbl_803EA68C / 100);
+        SndgPathSetTrackVolume(lbl_803EA67C->mUnknownC, lbl_803EA680 * lbl_803EA68C / 100);
         lbl_803EA684 = (unsigned char)(fn_8007F828(4) * 10);
         lbl_803EA688 = (unsigned char)(fn_8007F828(4) * 10);
     }
@@ -1610,8 +1610,8 @@ extern "C" void SndgAmbShutdown(void)
 {
     if (SndgAmbIsActive()) {
         SndgAmbFreeObjects();
-        SndgStreamStop(lbl_803EA67C->mUnknownC);
-        SndgStreamClose(lbl_803EA67C->mUnknown8);
+        SndgPathDestroyTrack(lbl_803EA67C->mUnknownC);
+        SndgPathUnloadMap(lbl_803EA67C->mUnknown8);
         SndgAmbCloseBanks();
         fn_801F4C5C();
         fn_801EEFAC(lbl_803EA67C->mpUnknown0);
@@ -1750,7 +1750,7 @@ extern "C" void SndgAmbPostCue(int type)
         if (type == 2) {
             SndgAmbSilenceAll();
         }
-        SndgStreamPostEvent(lbl_803EA67C->mUnknownC, lbl_802D5170[type]);
+        SndgPathPostEvent(lbl_803EA67C->mUnknownC, lbl_802D5170[type]);
     }
 }
 
@@ -1777,7 +1777,7 @@ extern "C" void SndgAmbSetVolume(unsigned int volume)
 {
     lbl_803EA680 = volume;
     if (SndgAmbIsActive()) {
-        SndgStreamSetVolume(lbl_803EA67C->mUnknownC, volume * lbl_803EA68C / 100);
+        SndgPathSetTrackVolume(lbl_803EA67C->mUnknownC, volume * lbl_803EA68C / 100);
         lbl_803EA684 = lbl_803EA688 = volume;
     }
 }
@@ -2635,7 +2635,7 @@ int SndgPathfinder::Shutdown()
     return 1;
 }
 
-extern "C" int SndgStreamOpen(void *pData, int unknown)
+extern "C" int SndgPathLoadMap(void *pData, int unknown)
 {
     int result = -1;
     if (PathfinderIsInit()) {
@@ -2644,7 +2644,7 @@ extern "C" int SndgStreamOpen(void *pData, int unknown)
     return result;
 }
 
-extern "C" int SndgStreamClose(int handle)
+extern "C" int SndgPathUnloadMap(int handle)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2653,7 +2653,7 @@ extern "C" int SndgStreamClose(int handle)
     return result;
 }
 
-extern "C" int SndgStreamStart(void *pData, int unknown, int id, float value)
+extern "C" int SndgPathCreateTrack(void *pData, int unknown, int id, float value)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2672,7 +2672,7 @@ extern "C" int SndgStreamStart(void *pData, int unknown, int id, float value)
     return result;
 }
 
-extern "C" int SndgStreamStop(int id)
+extern "C" int SndgPathDestroyTrack(int id)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2681,7 +2681,7 @@ extern "C" int SndgStreamStop(int id)
     return result;
 }
 
-extern "C" void SndgStreamSetVolume(int id, unsigned int value)
+extern "C" void SndgPathSetTrackVolume(int id, unsigned int value)
 {
     if (PathfinderIsInit()) {
         PathfinderSetVolume(id, value);
@@ -2695,7 +2695,7 @@ extern "C" void fn_8006DDB4(int a, int b, int c)
     }
 }
 
-extern "C" int SndgStreamPostEvent(int id, int unknown)
+extern "C" int SndgPathPostEvent(int id, int unknown)
 {
     int result = 1;
     if (PathfinderIsInit()) {

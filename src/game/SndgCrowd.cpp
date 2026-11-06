@@ -1,4 +1,4 @@
-/* Stadium crowd sound module: starts and stops the crowd stream, sets the crowd
+/* Stadium crowd sound module: starts and stops the crowd track, sets the crowd
    volume and fires crowd reaction cues for game events. */
 
 #include "game/fn_801EEB44.h"
@@ -37,9 +37,9 @@ int SndgCrowd::Init()
     memset(mpState.mp, 0, sizeof(SndgCrowdState));
     mpState.mp->mpUnknown0 = fn_801EEB44(lbl_802EC018, 44);
     if (fn_801F3E28()) {
-        mpState.mp->mUnknown4 = SndgStreamOpen(mpState.mp->mpUnknown0, 1);
-        SndgStreamStart(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
-        SndgStreamSetVolume(0x14000001, _SndgCrowd_uVolume);
+        mpState.mp->mUnknown4 = SndgPathLoadMap(mpState.mp->mpUnknown0, 1);
+        SndgPathCreateTrack(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
+        SndgPathSetTrackVolume(0x14000001, _SndgCrowd_uVolume);
         fn_8006DE54(0x14000001, 127);
     }
     return 1;
@@ -48,8 +48,8 @@ int SndgCrowd::Init()
 int SndgCrowd::Shutdown()
 {
     if (fn_801F3E28()) {
-        SndgStreamStop(0x14000001);
-        SndgStreamClose(mpState.mp->mUnknown4);
+        SndgPathDestroyTrack(0x14000001);
+        SndgPathUnloadMap(mpState.mp->mUnknown4);
     }
     fn_801EEFAC(mpState.mp->mpUnknown0);
     delete mpState.mp;
@@ -61,7 +61,7 @@ void SndgCrowdSetVolume(unsigned char value)
 {
     _SndgCrowd_uVolume = value;
     if (gSndgCrowd.fn_801CC96C() && fn_801F3E28()) {
-        SndgStreamSetVolume(0x14000001, _SndgCrowd_uVolume);
+        SndgPathSetTrackVolume(0x14000001, _SndgCrowd_uVolume);
     }
 }
 
@@ -76,7 +76,7 @@ int SndgCrowdTriggerEvent(int index, int unknown)
         flag = 1;
     }
     if (fn_800A350C()) {
-        result = SndgStreamPostEvent(0x14000001, sIds[flag ? 0 : 1][index]);
+        result = SndgPathPostEvent(0x14000001, sIds[flag ? 0 : 1][index]);
     }
     return result;
 }
