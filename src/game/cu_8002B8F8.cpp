@@ -21,7 +21,7 @@
 #include "game/cu_8003108C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8016871C.h"
-#include "game/fn_80191804.h"
+#include "game/MemCardUtil.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_80227638.h"
@@ -194,11 +194,11 @@ int fn_80190EF0(Type_80190ED4 *pStream);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
 int fn_8019623C(int id);
-void fn_80199C94(char *pSrc, int index, int size);
-char *fn_80199CC4(int index, int size);
-char *fn_80199CF0(int index, int size);
-void fn_80199D58(int count, int size);
-void fn_80199DB0(void);
+void ReplayAuxRamStoreFrame(char *pSrc, int index, int size);
+char *ReplayAuxRamGetScratch(int index, int size);
+char *ReplayAuxRamLoadFrame(int index, int size);
+void ReplayAuxRamInit(int count, int size);
+void ReplayAuxRamShutdown(void);
 void *fn_801C3610(int a, Desc_8013C340 *pDesc);
 void fn_801C3640(void *pCamera);
 void fn_801C39D0(Camera_8013F738 *pCamera, float value);
@@ -980,7 +980,7 @@ extern "C" int fn_8002CA74(Type_803EA368 *p, int msg, int value)
 extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float value)
 {
     if (a == 9) {
-        fn_80191804(9, id, value);
+        MemCardUtilHandleEvent(9, id, value);
         if (p->mUnknownD94 & 0x10000) {
             if (p->mUnknownD90 == 4) {
                 switch (id) {
@@ -2556,7 +2556,7 @@ extern "C" int fn_8002FDFC(void)
 
 extern "C" void fn_8002FE34(int index)
 {
-    char *pBuffer = fn_80199CC4(index, lbl_803EC650);
+    char *pBuffer = ReplayAuxRamGetScratch(index, lbl_803EC650);
 
     if (pBuffer != 0) {
         Type_80190ED4 stream;
@@ -2568,7 +2568,7 @@ extern "C" void fn_8002FE34(int index)
             pEntry->mpWrite(&stream);
         }
         fn_80190EF0(&stream);
-        fn_80199C94(pBuffer, index, lbl_803EC650);
+        ReplayAuxRamStoreFrame(pBuffer, index, lbl_803EC650);
     }
 }
 
@@ -2618,18 +2618,18 @@ extern "C" void fn_8002FECC(Type_803EA368 *pGame, char **ppCur, char **ppNext, c
             next2 = -1;
         }
     }
-    *ppCur = fn_80199CF0(cur, lbl_803EC650);
-    *ppNext = fn_80199CF0(next, lbl_803EC650);
+    *ppCur = ReplayAuxRamLoadFrame(cur, lbl_803EC650);
+    *ppNext = ReplayAuxRamLoadFrame(next, lbl_803EC650);
     if (prev >= 0) {
-        *ppPrev = fn_80199CF0(prev, lbl_803EC650);
+        *ppPrev = ReplayAuxRamLoadFrame(prev, lbl_803EC650);
     } else {
-        fn_80199CF0(cur, lbl_803EC650);
+        ReplayAuxRamLoadFrame(cur, lbl_803EC650);
         *ppPrev = 0;
     }
     if (next2 >= 0) {
-        *ppNext2 = fn_80199CF0(next2, lbl_803EC650);
+        *ppNext2 = ReplayAuxRamLoadFrame(next2, lbl_803EC650);
     } else {
-        fn_80199CF0(next, lbl_803EC650);
+        ReplayAuxRamLoadFrame(next, lbl_803EC650);
         *ppNext2 = 0;
     }
 }
@@ -2825,7 +2825,7 @@ extern "C" void fn_80030B30(void)
     }
     lbl_803EC650 = ((((lbl_803EC650 / 2 + 7) / 8 + 7) & ~7) + 31) & ~31;
     lbl_803EC658 = lbl_803EC64C / lbl_803EC650;
-    fn_80199D58(lbl_803EC658, lbl_803EC650);
+    ReplayAuxRamInit(lbl_803EC658, lbl_803EC650);
 }
 
 extern "C" void fn_80030BC0(int size)
@@ -2842,7 +2842,7 @@ extern "C" void fn_80030C40(void)
 {
     fn_801C69E4(lbl_803EC648);
     lbl_803EC648 = 0;
-    fn_80199DB0();
+    ReplayAuxRamShutdown();
 }
 
 extern "C" Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB)

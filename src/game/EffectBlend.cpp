@@ -1,3 +1,4 @@
+/* Begins and ends the additive, fog-free GX state used while the in-game effects list draws its entries. */
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -17,11 +18,11 @@ void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
 
-static float lbl_803651E4[7];
-static unsigned char lbl_803ECBE0;
+static float _EffectBlend_afProjection[7];
+static unsigned char _EffectBlend_bFog;
 
 extern "C" {
-void fn_801981D8(void *p, int value)
+void EffectBlendBegin(void *p, int value)
 {
     Mtx44 mtx;
 
@@ -44,11 +45,11 @@ void fn_801981D8(void *p, int value)
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_NOOP);
-    fn_802524D4(lbl_803651E4);
-    lbl_803ECBE0 = fn_80236EC0(0);
+    fn_802524D4(_EffectBlend_afProjection);
+    _EffectBlend_bFog = fn_80236EC0(0);
 }
 
-void fn_8019831C(void *p, int value)
+void EffectBlendEnd(void *p, int value)
 {
     Mtx44 mtx;
 
@@ -56,7 +57,7 @@ void fn_8019831C(void *p, int value)
     fn_801D0F80(mtx);
     fn_8025251C(mtx, 0);
     GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
-    fn_80252448(lbl_803651E4);
-    fn_80236EC0(lbl_803ECBE0);
+    fn_80252448(_EffectBlend_afProjection);
+    fn_80236EC0(_EffectBlend_bFog);
 }
 }

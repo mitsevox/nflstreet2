@@ -1,13 +1,15 @@
+/* Draws particle emitters: sets up the "ParticleOnePass" (textured) and "ParticleFlat" shaders and
+   draws each particle as a coloured, rotated, camera-facing quad. */
 #include <dolphin/gx/GXPixel.h>
 #include "game/Object_80039F5C.h"
-#include "game/cu_801962CC.h"
+#include "game/ParticleRender.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 
-struct Table_80212850 {
+struct ShaderTable_t {
     int mCapacity;
     int mCount;
     void *mpEntries;
@@ -15,31 +17,31 @@ struct Table_80212850 {
     unsigned char mUnknownD;
 };
 
-struct Pass_80211638 {
+struct ShaderPass_t {
     char mName[16];
     unsigned char mUnknown10;
     unsigned short mUnknown12;
 };
 
-struct Shader_80196480 {
+struct ShaderDesc_t {
     char mName[16];
     int mUnknown10;
     int mUnknown14;
     int mCount;
 };
 
-struct ShaderPasses_802EDDC0 {
-    Shader_80196480 mShader;
-    Pass_80211638 mPasses[1];
+struct ShaderDescPasses_t {
+    ShaderDesc_t mShader;
+    ShaderPass_t mPasses[1];
 };
 
-struct Texture_80196564 {
+struct ParticleTexture_t {
     char mUnknown0[124];
     GXTexObj mTexObj;
     GXTlutObj mTlutObj;
 };
 
-struct Particle_80196564 {
+struct Particle_t {
     char mUnknown0[12];
     Vector_80039F5C mPosition;
     char mUnknown18[34];
@@ -51,19 +53,19 @@ struct Particle_80196564 {
 };
 
 extern "C" {
-void fn_801C0A38(Texture_80196564 *pTexture, unsigned int a, unsigned int b, unsigned int c, float *pCoords);
+void fn_801C0A38(ParticleTexture_t *pTexture, unsigned int a, unsigned int b, unsigned int c, float *pCoords);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0ADC(int a);
-void fn_801DF064(float *pColor, Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
-float fn_801DF184(Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
+void fn_801DF064(float *pColor, Object_80144CE0 *pEmitter, Particle_t *pParticle);
+float fn_801DF184(Object_80144CE0 *pEmitter, Particle_t *pParticle);
 void fn_8021077C(int a);
 void fn_80210BD8(int a);
-void fn_802117C8(Table_80212850 *pTable, int count);
-void fn_802117F0(Table_80212850 *pTable);
-int fn_80211860(Table_80212850 *pTable, Shader_80196480 *pShader, void (*pSetup)(void));
-void fn_80211928(const char *pName, Table_80212850 *pTable);
+void fn_802117C8(ShaderTable_t *pTable, int count);
+void fn_802117F0(ShaderTable_t *pTable);
+int fn_80211860(ShaderTable_t *pTable, ShaderDesc_t *pShader, void (*pSetup)(void));
+void fn_80211928(const char *pName, ShaderTable_t *pTable);
 void fn_80211958(const char *pName);
 int fn_80211984(const char *pName);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -75,25 +77,25 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
 
-static Vector_80039F5C lbl_802EDD74[4] = {
+static Vector_80039F5C _ParticleRender_aCorners[4] = {
     { -1.0f, -1.0f, 0.0f },
     { -1.0f, 1.0f, 0.0f },
     { 1.0f, 1.0f, 0.0f },
     { 1.0f, -1.0f, 0.0f },
 };
-static Shader_80196480 lbl_802EDDA4 = { "ParticleOnePass", 0, 0, 0 };
-static ShaderPasses_802EDDC0 lbl_802EDDC0 = { { "ParticleFlat", 0, 0, 1 }, { { "base", 1, 0 } } };
+static ShaderDesc_t _ParticleRender_OnePassShader = { "ParticleOnePass", 0, 0, 0 };
+static ShaderDescPasses_t _ParticleRender_FlatShader = { { "ParticleFlat", 0, 0, 1 }, { { "base", 1, 0 } } };
 
-static Table_80212850 lbl_80365188;
+static ShaderTable_t _ParticleRender_ShaderTable;
 
-static unsigned char lbl_803EB740 = 0;
-static int lbl_803EB744 = 0;
-static int lbl_803EB748 = 0;
-unsigned char lbl_803EB74C = 0;
+static unsigned char _ParticleRender_bInit = 0;
+static int _ParticleRender_iOnePassShader = 0;
+static int _ParticleRender_iFlatShader = 0;
+unsigned char gParticleAnimTexFlag = 0;
 
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
 
-void fn_801962CC(int mode)
+void ParticleRenderSetBlend(int mode)
 {
     switch (mode) {
     case 0:
@@ -112,7 +114,7 @@ void fn_801962CC(int mode)
     }
 }
 
-void fn_8019634C(void)
+void ParticleRenderSetupTexturedPass(void)
 {
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
@@ -124,7 +126,7 @@ void fn_8019634C(void)
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 }
 
-void fn_80196414(void)
+void ParticleRenderSetupFlatPass(void)
 {
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
@@ -133,31 +135,31 @@ void fn_80196414(void)
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
 }
 
-void fn_80196480(int a)
+void ParticleRenderInit(int a)
 {
-    lbl_803EB740 = 1;
-    fn_802117C8(&lbl_80365188, 2);
-    fn_80211860(&lbl_80365188, &lbl_802EDDC0.mShader, fn_80196414);
-    fn_80211860(&lbl_80365188, &lbl_802EDDA4, fn_8019634C);
-    fn_80211928("Particles", &lbl_80365188);
-    lbl_803EB744 = fn_80211984("ParticleOnePass");
-    lbl_803EB748 = fn_80211984("ParticleFlat");
+    _ParticleRender_bInit = 1;
+    fn_802117C8(&_ParticleRender_ShaderTable, 2);
+    fn_80211860(&_ParticleRender_ShaderTable, &_ParticleRender_FlatShader.mShader, ParticleRenderSetupFlatPass);
+    fn_80211860(&_ParticleRender_ShaderTable, &_ParticleRender_OnePassShader, ParticleRenderSetupTexturedPass);
+    fn_80211928("Particles", &_ParticleRender_ShaderTable);
+    _ParticleRender_iOnePassShader = fn_80211984("ParticleOnePass");
+    _ParticleRender_iFlatShader = fn_80211984("ParticleFlat");
 }
 
-void fn_8019651C(void)
+void ParticleRenderShutdown(void)
 {
     fn_80211958("Particles");
-    fn_802117F0(&lbl_80365188);
-    lbl_803EB740 = 0;
-    lbl_803EB744 = 0;
-    lbl_803EB748 = 0;
+    fn_802117F0(&_ParticleRender_ShaderTable);
+    _ParticleRender_bInit = 0;
+    _ParticleRender_iOnePassShader = 0;
+    _ParticleRender_iFlatShader = 0;
 }
 
-int fn_80196564(Object_80144CE0 *pEmitter, int mode)
+int ParticleRenderEmitter(Object_80144CE0 *pEmitter, int mode)
 {
     int count;
-    Texture_80196564 *pTexture;
-    Particle_80196564 *pParticle;
+    ParticleTexture_t *pTexture;
+    Particle_t *pParticle;
     int i;
 
     if (!pEmitter->mUnknown2B4) {
@@ -168,11 +170,11 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
     if (count) {
         fn_801D04C4();
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-        fn_801962CC(pEmitter->mUnknown60);
+        ParticleRenderSetBlend(pEmitter->mUnknown60);
         if (pEmitter->mUnknown45 && pTexture) {
             GXLoadTlut(&pTexture->mTlutObj, 0);
             GXLoadTexObj(&pTexture->mTexObj, 0);
-            fn_8021077C(lbl_803EB744);
+            fn_8021077C(_ParticleRender_iOnePassShader);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -203,7 +205,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
                 fn_801D0508();
                 fn_801D0ADC((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
-                    fn_80227264(&corner, &lbl_802EDD74[j], size);
+                    fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
                     fn_80227C2C(&corner, &corner);
                     fn_8022765C(&vertex.mX, &position.mX, &corner.mX);
                     GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
@@ -213,7 +215,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
                 fn_801D0544();
             }
         } else {
-            fn_8021077C(lbl_803EB748);
+            fn_8021077C(_ParticleRender_iFlatShader);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -235,7 +237,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
                 fn_801D0508();
                 fn_801D0ADC((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
-                    fn_80227264(&corner, &lbl_802EDD74[j], size);
+                    fn_80227264(&corner, &_ParticleRender_aCorners[j], size);
                     fn_80227C2C(&corner, &corner);
                     fn_8022765C(&vertex.mX, &position.mX, &corner.mX);
                     GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);

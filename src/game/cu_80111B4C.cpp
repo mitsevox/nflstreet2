@@ -244,7 +244,7 @@ int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
-void fn_80194C5C(int a, int b, int c);
+void RumbleStart(int a, int b, int c);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
@@ -798,7 +798,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
             state->mUnknown18++;
         }
         if (state->mUnknown14 == 1 && p->mUnknown8 != 255) {
-            fn_80194C5C(p->mUnknown8, lbl_803EAF90, 10);
+            RumbleStart(p->mUnknown8, lbl_803EAF90, 10);
         }
     }
     if (pAnim->mUnknown0 != -1) {
@@ -1195,7 +1195,7 @@ extern "C" int fn_80114838(Object_80039F5C *p)
                 }
             }
             if (p->mUnknown8 != 255) {
-                fn_80194C5C(p->mUnknown8, lbl_803EAF98, 10);
+                RumbleStart(p->mUnknown8, lbl_803EAF98, 10);
             }
         }
         if (done == 0) {

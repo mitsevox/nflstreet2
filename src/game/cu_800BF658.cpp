@@ -63,7 +63,7 @@ int fn_800A8444(int team);
 int fn_801C6458(int a, int b);
 int fn_801E195C(int a);
 int fn_800B6644(int index);
-void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
+void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 void fn_8017D9D8(int team);
 void fn_8017885C(void);
 void fn_800BD958(void);
@@ -253,7 +253,7 @@ void Class_80297CE8::vfn_04(float dt)
 
             for (j = 0; j <= 9; j++) {
                 if (fn_801E195C(fn_801C6458(j, 0)) == 2 && fn_800B6644(j) == i) {
-                    fn_80194F2C(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
+                    RumbleStartPulse(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
                 }
             }
             fn_8017D9D8(i);

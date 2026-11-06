@@ -362,7 +362,7 @@ Clut_80212534 *fn_80212124(TexLib_802119C4 *pLib, const char *pName, int index);
 
 /* tmtexture.c */
 void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso);
-void fn_80212310(Texture_80212234 *pTexture, Desc_802EE9E4 *pDesc);
+void fn_80212310(Texture_80212234 *pTexture, TMTexFilterDesc_t *pDesc);
 void fn_8021234C(Texture_80212234 *pTexture, int wrapS, int wrapT);
 void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc);
 void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut);

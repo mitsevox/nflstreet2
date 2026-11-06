@@ -24,7 +24,7 @@ void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float
     }
 }
 
-void fn_80212310(Texture_80212234 *pTexture, Desc_802EE9E4 *pDesc)
+void fn_80212310(Texture_80212234 *pTexture, TMTexFilterDesc_t *pDesc)
 {
     fn_80212234(pTexture, pDesc->mMinFilter, pDesc->mMagFilter, pDesc->mLodBias, pDesc->mbBiasClamp, pDesc->mbEdgeLod, pDesc->mMaxAniso);
 }

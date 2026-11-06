@@ -1,3 +1,5 @@
+/* Effect drawing helpers: begin and end hooks around the particle pass, loading and freeing the
+   animated particle textures, and full-screen colour tints. */
 #include <dolphin/gx/GXPixel.h>
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
@@ -8,14 +10,14 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 
-struct Entry_80196B24 {
+struct FxTexFile_t {
     void *mpUnknown0;
     int mUnknown4;
 };
 
 extern "C" {
 int fn_800A34F8(int index);
-int fn_801C0BA8(Entry_80196B24 *pEntry, int a);
+int fn_801C0BA8(FxTexFile_t *pEntry, int a);
 void fn_801C0CCC(int a);
 void fn_801D03D0(Mtx44 m);
 void fn_801D04C4(void);
@@ -37,18 +39,18 @@ void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 void fn_802528B0(int a);
 
-void fn_80196AF0(void)
+void FxParticleDrawBegin(void)
 {
     fn_801D0508();
     fn_8020FA38(0, 0);
     fn_801D0544();
 }
 
-void fn_80196B20(void)
+void FxParticleDrawEnd(void)
 {
 }
 
-void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData)
+void FxAnimTexLoadAll(FxTexFile_t *pEntries, int *pValues, void *pData)
 {
     unsigned char i;
 
@@ -64,7 +66,7 @@ void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData)
     }
 }
 
-void fn_80196BD4(int *pValues)
+void FxAnimTexFreeAll(int *pValues)
 {
     unsigned char i;
 
@@ -75,7 +77,7 @@ void fn_80196BD4(int *pValues)
     }
 }
 
-void fn_80196C2C(unsigned int color, int mode, float alpha)
+void FxTintDraw(unsigned int color, int mode, float alpha)
 {
     Mtx44 view;
     Mtx44 projection;
@@ -141,13 +143,13 @@ void fn_80196C2C(unsigned int color, int mode, float alpha)
     fn_802528B0(0);
 }
 
-void fn_80196EF8(int unused, unsigned int color, float alpha)
+void FxTintDrawAlpha(int unused, unsigned int color, float alpha)
 {
-    fn_80196C2C(color, 0, alpha);
+    FxTintDraw(color, 0, alpha);
 }
 
-void fn_80196F20(int unused, unsigned int color, float alpha)
+void FxTintDrawSrcColor(int unused, unsigned int color, float alpha)
 {
-    fn_80196C2C(color, 1, alpha);
+    FxTintDraw(color, 1, alpha);
 }
 }

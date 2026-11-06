@@ -12,7 +12,7 @@
 #include "game/ModuleGroup_80033A5C.h"
 #include "game/TimeScale.h"
 #include "game/fn_8003B6BC.h"
-#include "game/fn_80191804.h"
+#include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
 #include "game/cu_80067C10.h"
 #include <dolphin/os.h>
@@ -88,13 +88,13 @@ void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A6C4(int a, int b);
 void fn_8018A710(int a, int b);
 void fn_8018A740(void);
-void fn_80191808(void);
-void fn_8019180C(void);
+void MemCardUtilInit(void);
+void MemCardUtilShutdown(void);
 void fn_80194AEC(int a);
-void fn_80194D20(void);
-void fn_80194DB8(void);
-void fn_80194E04(void);
-void fn_80194F1C(int a);
+void RumbleInit(void);
+void RumbleShutdown(void);
+void RumbleProcess(void);
+void RumbleEnable(int a);
 void fn_80195F80(void);
 void fn_80196130(void);
 void fn_8019A9A0(int a, int b, float c);
@@ -141,7 +141,7 @@ InGame gInGame;
 
 static void fn_80027FE0(int a, int b, float c)
 {
-    fn_80191804(a, b, c);
+    MemCardUtilHandleEvent(a, b, c);
     if (b != 0x8F) {
         sUnknown803EA2FC = 0;
     }
@@ -220,9 +220,9 @@ static void fn_80028244()
     if (sUnknown803EA300) {
         sUnknown803EA300 = 0;
         fn_8007F6F8(9, 1);
-        fn_80194DB8();
-        fn_80194D20();
-        fn_80194F1C(1);
+        RumbleShutdown();
+        RumbleInit();
+        RumbleEnable(1);
     }
     fn_800282DC();
     fn_801C6280(-1, 2, (void *)fn_80026DD4);
@@ -262,7 +262,7 @@ int InGame::Init()
     fn_8008FE5C(0);
     fn_80099568(1);
     fn_8013CF98();
-    fn_80191808();
+    MemCardUtilInit();
     fn_80066D5C();
     fn_800A216C(1);
     fn_800AE8B4();
@@ -332,21 +332,21 @@ unsigned char InGame::fn_8002854C()
         if (fn_8007F828(9)) {
             sUnknown803EA300 = 1;
             fn_8007F6F8(9, 0);
-            fn_80194DB8();
-            fn_80194D20();
-            fn_80194F1C(0);
+            RumbleShutdown();
+            RumbleInit();
+            RumbleEnable(0);
         }
     } else {
         if (sUnknown803EA300) {
             sUnknown803EA300 = 0;
             fn_8007F6F8(9, 1);
-            fn_80194DB8();
-            fn_80194D20();
-            fn_80194F1C(1);
+            RumbleShutdown();
+            RumbleInit();
+            RumbleEnable(1);
         }
         sUnknown803EA2FC++;
     }
-    fn_80194E04();
+    RumbleProcess();
     TimeScaleUpdate();
     if (sUnknown803EC5FC == 0) {
         sUnknown803EC5F8++;
@@ -401,9 +401,9 @@ int InGame::Shutdown()
         if (sUnknown803EA300) {
             sUnknown803EA300 = 0;
             fn_8007F6F8(9, 1);
-            fn_80194DB8();
-            fn_80194D20();
-            fn_80194F1C(1);
+            RumbleShutdown();
+            RumbleInit();
+            RumbleEnable(1);
         }
     }
     fn_8018A710(1, 0);
@@ -420,7 +420,7 @@ int InGame::Shutdown()
     fn_800582D0();
     fn_800AB944(lbl_803EAA8C);
     fn_80089754();
-    fn_8019180C();
+    MemCardUtilShutdown();
     fn_801C6280(-1, 2, (void *)fn_80026DD4);
     fn_8017F664();
     fn_80062A58(sUnknown803EA2F8);

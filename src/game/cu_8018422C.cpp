@@ -57,8 +57,8 @@ void fn_80029D28(int type, int index);
 int fn_8002A130(int a, int b);
 int fn_8002A2A4(int type, int index);
 int fn_8002A86C(int value, int type, const char *name, unsigned int *pIndex);
-int fn_80191810(int a);
-void fn_80193DC4(int *pA, int *pB);
+int MemCardUtilGetSaveType(int a);
+void MemCardGetNewSaveSpace(int *pA, int *pB);
 int fn_801D6850(void);
 }
 
@@ -673,7 +673,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         fn_801847A4(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 348:
-        *pResult = fn_80191810(pParams->mUnknown0);
+        *pResult = MemCardUtilGetSaveType(pParams->mUnknown0);
         break;
     case 349:
         fn_80184548();
@@ -801,7 +801,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         *pResult = fn_8002A130(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 530:
-        fn_80193DC4((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
+        MemCardGetNewSaveSpace((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
         break;
     case 531:
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {

@@ -1,8 +1,10 @@
+/* Runtime support for variable argument lists: va_arg in <stdarg.h> calls __va_arg to fetch the
+   address of the next argument of a given kind (word, double word, float, or vector) from the
+   registers saved at entry or from the stack. Part of the C runtime linked into the game; no code
+   in this build calls it. */
 #include <stdarg.h>
 
-void *fn_801AD488(va_list list, unsigned char type);
-
-void *fn_801AD488(va_list list, unsigned char type)
+void *__va_arg(va_list list, unsigned char type)
 {
     char *addr;
     char *reg = &list->gpr;

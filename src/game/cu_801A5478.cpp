@@ -33,9 +33,9 @@ struct View_8002B550 {
 
 extern "C" {
 unsigned char fn_80147E80(int index);
-void fn_801985FC(void);
+void FieldMarkerDrawBeams(void);
 void fn_801A5780(void);
-void fn_801987F4(void);
+void FieldMarkerDrawArrows(void);
 int fn_800A262C(void);
 int fn_800A26C4(void);
 int fn_800A34B0(void);
@@ -378,10 +378,10 @@ int fn_801A5E90(Object_80046340 *pObject)
     fn_801D0470(VptGetMatrixStack());
     fn_801D0544();
     if (fn_800A34B0()) {
-        fn_801985FC();
+        FieldMarkerDrawBeams();
     }
     if (fn_800A34BC()) {
-        fn_801987F4();
+        FieldMarkerDrawArrows();
     }
     return 0;
 }

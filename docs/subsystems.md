@@ -38,7 +38,7 @@ NFL Street 2's own code: the front end, game modes, gameplay, replay and the ren
 | 0x801564DC-0x80167A8C | Tutorial lessons; player appearance assembly (body types, heads, accessories); sky | `cu_801564DC` (tutorial), `cu_8015C25C`, `cu_8015D3EC`, `cu_8016014C` | 0/0/1/3/2 | 39 KiB | no |
 | 0x80167A8C-0x80181330 | Playbook, team database, ball-strip calls ("Gimme That!"), scramble rules, button mashing | `cu_80167A8C` (playbook), `cu_8016FB10`, `cu_80176F18` (ScrmRule), `cu_8017D0E0` | 0/1/3/1/1 | 53 KiB | no |
 | 0x80181330-0x80190A7C | Edit team and edit player screens, save game, memory card screens, widescreen aspect, story team | `cu_80181330`, `cu_80187AD4`, `cu_80188E98` (aspect and camera set-up), `cu_8018B0BC` | 1/5/1/2/0 | 27 KiB | no |
-| 0x80190A7C-0x801A1400 | Animation extension and bit stream, memory card messages, particle and field-line rendering, ball model, on-field markers; system modules | `animextn.cpp`, `bitstream.cpp`, `cu_80191948`, `cu_801962CC`, `cu_8019AD24`, `cu_801A0088`, `FileIO.cpp`, `GRender.cpp`, `GLIB.cpp`, `Render.cpp`, `Snd.cpp`, `Sys.cpp` | 1/1/4/3/0 | 31 KiB | no |
+| 0x80190A7C-0x801A1400 | Animation extension and bit stream, memory card messages, particle and field-line rendering, ball model, on-field markers; system modules | `animextn.cpp`, `bitstream.cpp`, `DbgPrintSwitch.cpp`, `DbgScreen.cpp`, `DbgFont.cpp`, `MemCardUtil.cpp`, `cu_80191948`, `MemCardCallbacks.cpp`, `ResTexture.cpp`, `RumbleActuator.cpp`, `ParticleRender.cpp` (particles), `FxDraw.cpp`, `EffectBlend.cpp`, `FieldMarker.cpp`, `ReplayAuxRam.cpp`, `FldObj.cpp` (field model), `cu_801A0088`, `FileIO.cpp`, `GRender.cpp`, `GLIB.cpp`, `Render.cpp`, `Snd.cpp`, `Sys.cpp` | 1/1/4/3/0 | 31 KiB | no |
 | 0x801A1400-0x801AA640 | Player head, face and hair rendering, body parts, simple shadows, model and crowd rendering | `cu_801A14D8`, `cu_801A4AD4`, `cu_801A8620` | 0/1/1/2/0 | 21 KiB | no |
 
 ## Libraries and EA engine (`src/engine/`, `src/Common/`)
@@ -47,7 +47,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
-| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers | `cu_801AA640` (libsn runtime), `cu_801AD424`, `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
+| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers; one CodeWarrior runtime file (`__va_arg.c`, the va_arg helper) | `cu_801AA640` (libsn runtime), `cu_801AD424`, `__va_arg.c` (CodeWarrior runtime), `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
 | 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block) | `spchevnt.c`, `cu_801AF60C`, `spchpick.c`, `spchrand.c`, `cu_801B1CFC` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
 | 0x801B9D00-0x801C1D84 | Animation C library | `anim.c`, `animtran.c`, `animTexLib.c`, `llanimtexlib.c`, `cu_801BA2A8`, `cu_801BC65C`, `cu_801BF090` ... | 1/3/4/2/0 | 20 KiB | no |
