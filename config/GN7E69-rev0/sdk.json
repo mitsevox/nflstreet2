@@ -803,7 +803,7 @@
       "name": "src/dolphin/db/db.c",
       "source": "src/dolphin/db/db.c",
       "library": "DB",
-      "evidence": "DBInit40 atEC7C, exceptionAux72 atECA4, exception-entry16 atECEC native anchors; final28-byte ECFC checks interface+4 exceptionmask against1<<(u8)exception, matching __DBIsExceptionMarked. Original source-group boundary provisional; ED18 varargs register-saving helper is runtime code.",
+      "evidence": "Five retained SDK debug functions: DBInit, context reporter, exception entry, mask query and empty variadic DBPrintf. The last body is independently identified by the diagnostic call at 0x80239150 and reproduces 0x8023ED18-0x8023ED68 from its existing source, replacing the former runtime-helper hypothesis. The next unit starts at 0x8023ED68 with __DVDFSInit; original file edges remain provisional.",
       "sections": [
         {
           "section": ".data4",
@@ -826,26 +826,10 @@
         {
           "section": ".text",
           "start": "0x8023EC7C",
-          "end": "0x8023ED18",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "DBInit40 atEC7C, exceptionAux72 atECA4, exception-entry16 atECEC native anchors; final28-byte ECFC checks interface+4 exceptionmask against1<<(u8)exception, matching __DBIsExceptionMarked. Original source-group boundary provisional; ED18 varargs register-saving helper is runtime code."
-        }
-      ]
-    },
-    {
-      "name": "sdk/unassigned/8023ED18",
-      "source": null,
-      "library": "unassigned",
-      "evidence": "SDK-adjacent interval has no established Nintendo source-file ownership; retained under neutral address label.",
-      "sections": [
-        {
-          "section": ".text",
-          "start": "0x8023ED18",
           "end": "0x8023ED68",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Bounded by adjacent target-backed units; runtime/middleware ownership unresolved. No SDK membership or source completion claim."
+          "evidence": "Five retained SDK debug functions: DBInit, context reporter, exception entry, mask query and empty variadic DBPrintf. The last body is independently identified by the diagnostic call at 0x80239150 and reproduces 0x8023ED18-0x8023ED68 from its existing source, replacing the former runtime-helper hypothesis. The next unit starts at 0x8023ED68 with __DVDFSInit; original file edges remain provisional."
         }
       ]
     },
