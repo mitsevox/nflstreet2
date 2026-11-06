@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_801FCE10.h"
 
 struct Record_8018FC1C {
@@ -34,15 +34,15 @@ int fn_8018F3D8(int a);
 void fn_8018F41C(int a);
 void fn_8018F488(int a);
 void fn_8018F4C4(int a);
-void fn_8018F52C(Object_8007A334 *pObject, int a);
-void fn_8018F584(Object_8007A334 *pObject);
-int fn_8018F5A4(Object_8007A334 *pObject, int index);
-void fn_8018F6C0(Object_8007A334 *pObject, int index, int delta);
+void fn_8018F52C(DbCursor *pObject, int a);
+void fn_8018F584(DbCursor *pObject);
+int fn_8018F5A4(DbCursor *pObject, int index);
+void fn_8018F6C0(DbCursor *pObject, int index, int delta);
 void fn_8018F9B4(int a);
-void fn_8018FB4C(Object_8007A334 *pObject, int type);
-void fn_8018FBC8(Object_8007A334 *pObject);
-int fn_8018FBE8(Object_8007A334 *pObject, int id);
-void fn_8018FC1C(Object_8007A334 *pObject, Record_8018FC1C *pRecord);
+void fn_8018FB4C(DbCursor *pObject, int type);
+void fn_8018FBC8(DbCursor *pObject);
+int fn_8018FBE8(DbCursor *pObject, int id);
+void fn_8018FC1C(DbCursor *pObject, Record_8018FC1C *pRecord);
 
 int fn_8018F1F0(unsigned int index, char *pEtnr, int size)
 {
@@ -123,115 +123,115 @@ void fn_8018F4C4(int a)
                 fn_8022F3D4(fn_8022F358(a)), lttg, digt);
 }
 
-void fn_8018F52C(Object_8007A334 *pObject, int a)
+void fn_8018F52C(DbCursor *pObject, int a)
 {
-    fn_8007A334(pObject, 0x41545347, 0x4E575347, 0, 0, fn_8022F3D4(fn_8022F358(a)));
+    DbCursorOpen(pObject, 0x41545347, 0x4E575347, 0, 0, fn_8022F3D4(fn_8022F358(a)));
 }
 
-void fn_8018F584(Object_8007A334 *pObject)
+void fn_8018F584(DbCursor *pObject)
 {
-    fn_8007A3C4(pObject);
+    DbCursorClose(pObject);
 }
 
-int fn_8018F5A4(Object_8007A334 *pObject, int index)
+int fn_8018F5A4(DbCursor *pObject, int index)
 {
     switch (index) {
     case 0:
-        return fn_8007A98C(pObject, 0x4E575347);
+        return DbCursorGetInt(pObject, 0x4E575347);
     case 1:
-        return fn_8007A98C(pObject, 0x534C5347);
+        return DbCursorGetInt(pObject, 0x534C5347);
     case 14:
-        return fn_8007A934(pObject, 0x54535347);
+        return DbCursorGetValue(pObject, 0x54535347);
     case 13:
-        return fn_8007A98C(pObject, 0x46505347);
+        return DbCursorGetInt(pObject, 0x46505347);
     case 2:
-        return fn_8007A98C(pObject, 0x50545347);
+        return DbCursorGetInt(pObject, 0x50545347);
     case 3:
-        return fn_8007A98C(pObject, 0x54525347);
+        return DbCursorGetInt(pObject, 0x54525347);
     case 4:
-        return fn_8007A98C(pObject, 0x54505347);
+        return DbCursorGetInt(pObject, 0x54505347);
     case 5:
-        return fn_8007A98C(pObject, 0x54445347);
+        return DbCursorGetInt(pObject, 0x54445347);
     case 6:
-        return fn_8007A98C(pObject, 0x53445347);
+        return DbCursorGetInt(pObject, 0x53445347);
     case 7:
-        return fn_8007A98C(pObject, 0x41535347);
+        return DbCursorGetInt(pObject, 0x41535347);
     case 8:
-        return fn_8007A98C(pObject, 0x49445347);
+        return DbCursorGetInt(pObject, 0x49445347);
     case 9:
-        return fn_8007A98C(pObject, 0x46465347);
+        return DbCursorGetInt(pObject, 0x46465347);
     case 11:
-        return fn_8007A98C(pObject, 0x42475347);
+        return DbCursorGetInt(pObject, 0x42475347);
     case 12:
-        return fn_8007A98C(pObject, 0x32475347);
+        return DbCursorGetInt(pObject, 0x32475347);
     case 10:
-        return fn_8007A98C(pObject, 0x44465347);
+        return DbCursorGetInt(pObject, 0x44465347);
     }
     return -1;
 }
 
-void fn_8018F6C0(Object_8007A334 *pObject, int index, int delta)
+void fn_8018F6C0(DbCursor *pObject, int index, int delta)
 {
     switch (index) {
     case 0:
         if (delta) {
-            fn_8007ABA4(pObject, 0x4E575347, fn_8007A98C(pObject, 0x4E575347) + 1);
-            if (fn_8007A934(pObject, 0x54535347) < 0) {
+            fn_8007ABA4(pObject, 0x4E575347, DbCursorGetInt(pObject, 0x4E575347) + 1);
+            if (DbCursorGetValue(pObject, 0x54535347) < 0) {
                 fn_8007AA90(pObject, 0x54535347, 1);
             } else {
-                fn_8007AA90(pObject, 0x54535347, fn_8007A934(pObject, 0x54535347) + 1);
+                fn_8007AA90(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) + 1);
             }
         } else {
-            fn_8007ABA4(pObject, 0x534C5347, fn_8007A98C(pObject, 0x534C5347) + 1);
-            if (fn_8007A934(pObject, 0x54535347) > 0) {
+            fn_8007ABA4(pObject, 0x534C5347, DbCursorGetInt(pObject, 0x534C5347) + 1);
+            if (DbCursorGetValue(pObject, 0x54535347) > 0) {
                 fn_8007AA90(pObject, 0x54535347, -1);
             } else {
-                fn_8007AA90(pObject, 0x54535347, fn_8007A934(pObject, 0x54535347) - 1);
+                fn_8007AA90(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) - 1);
             }
         }
         break;
     case 13:
-        fn_8007ABA4(pObject, 0x46505347, fn_8007A98C(pObject, 0x46505347) + delta);
+        fn_8007ABA4(pObject, 0x46505347, DbCursorGetInt(pObject, 0x46505347) + delta);
         break;
     case 2:
-        fn_8007ABA4(pObject, 0x50545347, fn_8007A98C(pObject, 0x50545347) + delta);
+        fn_8007ABA4(pObject, 0x50545347, DbCursorGetInt(pObject, 0x50545347) + delta);
         break;
     case 3:
-        fn_8007ABA4(pObject, 0x54525347, fn_8007A98C(pObject, 0x54525347) + delta);
+        fn_8007ABA4(pObject, 0x54525347, DbCursorGetInt(pObject, 0x54525347) + delta);
         break;
     case 4:
-        fn_8007ABA4(pObject, 0x54505347, fn_8007A98C(pObject, 0x54505347) + delta);
+        fn_8007ABA4(pObject, 0x54505347, DbCursorGetInt(pObject, 0x54505347) + delta);
         break;
     case 5:
-        fn_8007ABA4(pObject, 0x54445347, fn_8007A98C(pObject, 0x54445347) + delta);
+        fn_8007ABA4(pObject, 0x54445347, DbCursorGetInt(pObject, 0x54445347) + delta);
         break;
     case 6:
-        fn_8007ABA4(pObject, 0x53445347, fn_8007A98C(pObject, 0x53445347) + delta);
+        fn_8007ABA4(pObject, 0x53445347, DbCursorGetInt(pObject, 0x53445347) + delta);
         break;
     case 7:
-        fn_8007ABA4(pObject, 0x41535347, fn_8007A98C(pObject, 0x41535347) + delta);
+        fn_8007ABA4(pObject, 0x41535347, DbCursorGetInt(pObject, 0x41535347) + delta);
         break;
     case 8:
-        fn_8007ABA4(pObject, 0x49445347, fn_8007A98C(pObject, 0x49445347) + delta);
+        fn_8007ABA4(pObject, 0x49445347, DbCursorGetInt(pObject, 0x49445347) + delta);
         break;
     case 9:
-        fn_8007ABA4(pObject, 0x46465347, fn_8007A98C(pObject, 0x46465347) + delta);
+        fn_8007ABA4(pObject, 0x46465347, DbCursorGetInt(pObject, 0x46465347) + delta);
         break;
     case 11:
-        fn_8007ABA4(pObject, 0x42475347, fn_8007A98C(pObject, 0x42475347) + delta);
+        fn_8007ABA4(pObject, 0x42475347, DbCursorGetInt(pObject, 0x42475347) + delta);
         break;
     case 12:
-        fn_8007ABA4(pObject, 0x32475347, fn_8007A98C(pObject, 0x32475347) + delta);
+        fn_8007ABA4(pObject, 0x32475347, DbCursorGetInt(pObject, 0x32475347) + delta);
         break;
     case 10:
-        fn_8007ABA4(pObject, 0x44465347, fn_8007A98C(pObject, 0x44465347) + delta);
+        fn_8007ABA4(pObject, 0x44465347, DbCursorGetInt(pObject, 0x44465347) + delta);
         break;
     }
 }
 
 void fn_8018F9B4(int a)
 {
-    Object_8007A334 object;
+    DbCursor object;
 
     fn_8018F52C(&object, a);
     fn_8007ABA4(&object, 0x4E575347, 0);
@@ -253,44 +253,44 @@ void fn_8018F9B4(int a)
     fn_8018F584(&object);
 }
 
-void fn_8018FB4C(Object_8007A334 *pObject, int type)
+void fn_8018FB4C(DbCursor *pObject, int type)
 {
     switch (type) {
     case 0:
-        fn_8007A334(pObject, 0x54504B54, 0x44494B54, 0, 0, 0x54415453);
+        DbCursorOpen(pObject, 0x54504B54, 0x44494B54, 0, 0, 0x54415453);
         break;
     case 1:
-        fn_8007A334(pObject, 0x43435054, 0x44494B54, 0, 0, 0x54415453);
+        DbCursorOpen(pObject, 0x43435054, 0x44494B54, 0, 0, 0x54415453);
         break;
     }
 }
 
-void fn_8018FBC8(Object_8007A334 *pObject)
+void fn_8018FBC8(DbCursor *pObject)
 {
-    fn_8007A3C4(pObject);
+    DbCursorClose(pObject);
 }
 
-int fn_8018FBE8(Object_8007A334 *pObject, int id)
+int fn_8018FBE8(DbCursor *pObject, int id)
 {
-    return fn_8007A7F4(pObject, 0x44494B54, id, 0, 0);
+    return DbCursorFindInt(pObject, 0x44494B54, id, 0, 0);
 }
 
-void fn_8018FC1C(Object_8007A334 *pObject, Record_8018FC1C *pRecord)
+void fn_8018FC1C(DbCursor *pObject, Record_8018FC1C *pRecord)
 {
     pRecord->mUnknown0 = 1;
-    pRecord->mUnknown1 = fn_8007A98C(pObject, 0x50554B54);
-    pRecord->mUnknown2 = fn_8007A98C(pObject, 0x565A4B54);
-    pRecord->mUnknown4 = fn_8007A98C(pObject, 0x54504B54);
-    pRecord->mUnknown8 = fn_8007A98C(pObject, 0x42474B54);
-    pRecord->mUnknown12 = fn_8007A98C(pObject, 0x47534B54);
-    pRecord->mUnknown16 = fn_8007A934(pObject, 0x43534B54);
-    pRecord->mUnknown20 = fn_8007A98C(pObject, 0x54534B54);
+    pRecord->mUnknown1 = DbCursorGetInt(pObject, 0x50554B54);
+    pRecord->mUnknown2 = DbCursorGetInt(pObject, 0x565A4B54);
+    pRecord->mUnknown4 = DbCursorGetInt(pObject, 0x54504B54);
+    pRecord->mUnknown8 = DbCursorGetInt(pObject, 0x42474B54);
+    pRecord->mUnknown12 = DbCursorGetInt(pObject, 0x47534B54);
+    pRecord->mUnknown16 = DbCursorGetValue(pObject, 0x43534B54);
+    pRecord->mUnknown20 = DbCursorGetInt(pObject, 0x54534B54);
     pRecord->mUnknown24 = fn_8007A9E4(pObject, 0x49444B54);
-    pRecord->mUnknown28 = fn_8007A98C(pObject, 0x4E414B54);
-    pRecord->mUnknown32 = fn_8007A98C(pObject, 0x4F434B54);
-    pRecord->mUnknown36 = fn_8007A98C(pObject, 0x4C424B54);
-    pRecord->mUnknown40 = fn_8007A98C(pObject, 0x59544B54);
-    pRecord->mUnknown44 = fn_8007A98C(pObject, 0x4E534B54);
-    pRecord->mUnknown48 = fn_8007A98C(pObject, 0x4E4C4B54);
+    pRecord->mUnknown28 = DbCursorGetInt(pObject, 0x4E414B54);
+    pRecord->mUnknown32 = DbCursorGetInt(pObject, 0x4F434B54);
+    pRecord->mUnknown36 = DbCursorGetInt(pObject, 0x4C424B54);
+    pRecord->mUnknown40 = DbCursorGetInt(pObject, 0x59544B54);
+    pRecord->mUnknown44 = DbCursorGetInt(pObject, 0x4E534B54);
+    pRecord->mUnknown48 = DbCursorGetInt(pObject, 0x4E4C4B54);
 }
 }

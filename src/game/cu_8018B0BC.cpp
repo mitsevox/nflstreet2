@@ -2,7 +2,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Object_8008044C.h"
 #include "game/Request_802329F0.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 #include "game/fn_8018BE68.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801F9908.h"
@@ -32,7 +32,7 @@ void fn_8018B6F0(int index);
 void fn_8018B014(int handle)
 {
     QueryResult result;
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
 
     tables[0].Set(0x59505453);
     tables[1].Set(-1);
@@ -190,8 +190,8 @@ void fn_8018C344(int database, int firstTable, int secondTable,
 void fn_8018C3EC(int firstTable, int secondTable);
 int fn_80186F7C(unsigned char index);
 int fn_8018E874(int index, int n);
-int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
-int fn_8007A934(Object_8007A334 *pObject, int key);
+int fn_801F9D70(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
+int DbCursorGetValue(DbCursor *pObject, int key);
 void fn_8008135C(Object_8008044C *pObject, int index, int value);
 int fn_8022F4BC(void);
 int fn_8022F384(int a);
@@ -219,10 +219,10 @@ void fn_8018B8B0(Object_8008044C *pObject)
     for (int i = 0; i < 10; i++) {
         fn_8008135C(pObject, lbl_802EAE30[i], 1);
     }
-    fn_8007AA90((Object_8007A334 *)pObject, 0x44494F50, -1);
-    fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 0x41);
-    fn_8007AA90((Object_8007A334 *)pObject, 0x54475750, 0);
-    fn_8007AA90((Object_8007A334 *)pObject, 0x54425950, 2);
+    fn_8007AA90((DbCursor *)pObject, 0x44494F50, -1);
+    fn_8007AA90((DbCursor *)pObject, 0x54474850, 0x41);
+    fn_8007AA90((DbCursor *)pObject, 0x54475750, 0);
+    fn_8007AA90((DbCursor *)pObject, 0x54425950, 2);
 }
 
 extern char lbl_802EBE24[];
@@ -235,19 +235,19 @@ void fn_8018B950(int id)
     fn_8008056C(&object);
 }
 
-void fn_8018B9D4(Object_8007A334 *pCursor, int index)
+void fn_8018B9D4(DbCursor *pCursor, int index)
 {
-    fn_8007A334(pCursor, 0x4D455453, 0x44494754, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x4D455453, 0x44494754, 0, 0, fn_8022F3D4(fn_8022F358(index)));
 }
 
-void fn_8018BA2C(Object_8007A334 *pCursor)
+void fn_8018BA2C(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
 int fn_8018BA4C(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int id = fn_8008454C(6, -1, 0);
     fn_80083E40(&cursor, 0, 0x54415453);
     if (fn_80084034(&cursor, id, 0)) {
@@ -319,7 +319,7 @@ void fn_8018BB24(int index, int value)
 
 void CopyRdrcPlayersToTeam(int index, int team, int rumt)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
     QueryResult result;
     QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
@@ -422,7 +422,7 @@ void fn_8018BF10(int index, int team)
 
 void fn_8018BF3C(void)
 {
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
     QueryResult result;
     int pxsp;
     int handle = fn_8022F3D4(fn_8022F4BC());
@@ -455,9 +455,9 @@ void fn_8018C064(int firstTable, int secondTable)
 
 int fn_8018C0E8(int index, int *pTeam)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_8018B9D4(&cursor, index);
-    *pTeam = fn_8007A98C(&cursor, 0x44494754);
+    *pTeam = DbCursorGetInt(&cursor, 0x44494754);
     fn_8018BA2C(&cursor);
     return 1;
 }
@@ -475,10 +475,10 @@ void fn_8018C1A8(int player, int team)
     fn_801FCE10(&result, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82 and 'DIGP' = \x82\n", team, player);
 }
 
-int fn_8018C1E0(Object_8007A334 *pCursor)
+int fn_8018C1E0(DbCursor *pCursor)
 {
     int value = 132;
-    if (fn_8007A444(pCursor)) value = fn_8007A934(pCursor, 0x4C474C54);
+    if (DbCursorFirst(pCursor)) value = DbCursorGetValue(pCursor, 0x4C474C54);
     return value;
 }
 

@@ -58,7 +58,7 @@ void fn_801A472C(void);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
 void fn_80234A14(void *p, int a);
-int fn_8007CB6C(int index);
+int GameInfoGet(int index);
 
 void fn_8015C498(void);
 void fn_8015CB18(int wait);
@@ -494,7 +494,7 @@ extern "C" void fn_8015D060(int index, const char *pName, unsigned char priority
     }
     pEntry = &lbl_803EB32C->mEntries[index];
     pPlayer = fn_8003DEC4(index);
-    flag = pPlayer->mUnknown4968 == fn_8007CB6C(fn_8007CB6C(2) ? 1 : 0);
+    flag = pPlayer->mUnknown4968 == GameInfoGet(GameInfoGet(2) ? 1 : 0);
     if (force || !pEntry->mUnknownFD || pEntry->mUnknown0 != pPlayer->mUnknown4956 ||
         pEntry->mUnknownF5 != flag || strcmp(pEntry->mUnknownFE, pName)) {
         pEntry->mUnknownF5 = flag;

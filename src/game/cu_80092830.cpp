@@ -18,7 +18,7 @@ void fn_8005BF5C(void);
 void fn_8005BF98(void);
 int fn_8005BFD4(void);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-int fn_800737B8(void);
+int SpchIGGetSceneSpeaker(void);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 void fn_80090BDC(void);
 int fn_80090E4C(int index);
@@ -79,7 +79,7 @@ extern Type_803EA368 *lbl_803EA368;
    once; 8's body runs on a later call. 8: for kinds up to 2 set bit 0 of the
    +0x14 word of the block at +4 of each of the 14 objects whose +0xB byte is
    set; for every kind clear 0x803EA8BD and 0x803EA8C0 and end. On an end it calls
-   fn_80067E3C(0x82, ...) when fn_800737B8 is set, runs fn_800941B8 and
+   fn_80067E3C(0x82, ...) when SpchIGGetSceneSpeaker is set, runs fn_800941B8 and
    fn_800941EC, calls fn_80092380(character, 0) unless fn_800AD9B4 is 7, and
    calls fn_80028DD0(1.0f). */
 extern "C" int fn_80092830(int index)
@@ -216,7 +216,7 @@ extern "C" int fn_80092830(int index)
                 if (fn_8005BFD4() != 0) {
                     fn_8005BF98();
                 }
-                if (fn_800737B8() != 0) {
+                if (SpchIGGetSceneSpeaker() != 0) {
                     fn_80067E3C(0x82, 0, 0, 0, 0, 0);
                 }
                 pCharacter->mUnknown38C = 6;
@@ -259,7 +259,7 @@ extern "C" int fn_80092830(int index)
         break;
     }
     if (result == 0) {
-        if (fn_800737B8() != 0) {
+        if (SpchIGGetSceneSpeaker() != 0) {
             fn_80067E3C(0x82, 0, 0, 0, 0, 0);
         }
         fn_800941B8();

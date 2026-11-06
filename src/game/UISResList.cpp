@@ -2,8 +2,8 @@
    for in-game screens, with the team logos. */
 #include "game/FELoop.h"
 #include "game/InGame.h"
-#include "game/Object_8007A334.h"
-#include "game/cu_8007C9D4.h"
+#include "game/DbCursor.h"
+#include "game/GameInfo.h"
 
 struct UISResListDesc {
     int mUnknown0;
@@ -12,9 +12,9 @@ struct UISResListDesc {
 };
 
 extern "C" {
-int fn_80033144(void *p);
-int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_80083E1C(Object_8007A334 *pObject, int a);
+int MainFEGroupIsFirstStart(void *p);
+int DbCursorGetValue(DbCursor *pObject, int key);
+void fn_80083E1C(DbCursor *pObject, int a);
 void *fn_8021DEFC(UISResListDesc *pDesc);
 void fn_8021E050(void *pList, int index, const char *pName, int a, int b);
 void fn_8021E0B0(void *pList, int index, const char *pName, int a, int b, int c);
@@ -40,7 +40,7 @@ extern char lbl_802EBF48[];
 extern char lbl_802EBF58[];
 extern char lbl_802EBF68[];
 extern char lbl_802EBF78[];
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 
 extern "C" {
 void UISResListAddCommon(void)
@@ -55,7 +55,7 @@ void UISResListAddCommon(void)
 
 void UISResListAddFrontEnd(void)
 {
-    int flag = fn_80033144(lbl_80306B34);
+    int flag = MainFEGroupIsFirstStart(gMainFEGroup);
     void *pList = fn_8021EA44(1);
 
     if (flag == 0) {
@@ -82,7 +82,7 @@ void UISResListAddFrontEnd(void)
 
 void UISResListAddInGame(void)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int first = 0;
     int second = 0;
     void *pList = fn_8021EA44(1);
@@ -111,11 +111,11 @@ void UISResListAddInGame(void)
     fn_8021E504(pList, 1, 15);
     fn_8021E504(pList, 7, 4);
     fn_80083E1C(&cursor, 0);
-    if (fn_80084034(&cursor, fn_8007CB6C(0), 0)) {
-        first = fn_8007A934(&cursor, 0x4C474C54);
+    if (fn_80084034(&cursor, GameInfoGet(0), 0)) {
+        first = DbCursorGetValue(&cursor, 0x4C474C54);
     }
-    if (fn_80084034(&cursor, fn_8007CB6C(1), 0)) {
-        second = fn_8007A934(&cursor, 0x4C474C54);
+    if (fn_80084034(&cursor, GameInfoGet(1), 0)) {
+        second = DbCursorGetValue(&cursor, 0x4C474C54);
     }
     fn_80083F68(&cursor);
     fn_8021E504(pList, 4, first);
@@ -134,9 +134,9 @@ void UISResListSetup(void)
     desc.mUnknown8 = 1;
     fn_8021EA34(1, fn_8021DEFC(&desc));
     UISResListAddCommon();
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         UISResListAddFrontEnd();
-    } else if (fn_8002894C()) {
+    } else if (InGameIsPlaying()) {
         UISResListAddInGame();
     }
 }

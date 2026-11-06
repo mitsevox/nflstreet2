@@ -3,10 +3,10 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 #include "game/fn_801801F0.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -48,10 +48,10 @@ int fn_801486A0(void);
 void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
 int fn_80178AE0(void);
 void PerCheckConnectAll(void);
-void fn_8007AEE8(Object_8007A334 *pObject);
-void fn_8007AF14(Object_8007A334 *pObject);
-int fn_8007AF34(Object_8007A334 *pObject);
-int fn_8007AF5C(Object_8007A334 *pObject);
+void fn_8007AEE8(DbCursor *pObject);
+void fn_8007AF14(DbCursor *pObject);
+int fn_8007AF34(DbCursor *pObject);
+int fn_8007AF5C(DbCursor *pObject);
 int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B81A4(void);
@@ -67,24 +67,24 @@ void fn_80186A44(signed char a);
 int fn_8022F358(int index);
 void fn_80186F30(signed char a, int b);
 void fn_80186F8C(int a);
-unsigned char fn_80062A60(void);
-int fn_80063BE4(char *pDest, int count);
-void fn_80063C2C(const char *pSource, int count);
-int fn_80063C7C(int a, char *pText, int length);
+unsigned char MemCardScreenGetFlag(void);
+int UserStringGet(char *pDest, int count);
+void UserStringSet(const char *pSource, int count);
+int TextEntryGetCharSet(int a, char *pText, int length);
 int fn_801C2FE4(char *pText0, char *pText1);
 int fn_801C31B0(char *pText0, char *pText1);
-int fn_80025708(void);
-int fn_80025718(void);
+int ChallengeIsActive(void);
+int ChallengeIsPairingGame(void);
 int fn_8017F60C(void);
-void fn_80083E1C(Object_8007A334 *pObject, int a);
-int fn_8008400C(Object_8007A334 *pObject);
-int fn_80084360(Object_8007A334 *pObject);
-int fn_80080D10(Object_8008044C *pObject);
+void fn_80083E1C(DbCursor *pObject, int a);
+int fn_8008400C(DbCursor *pObject);
+int fn_80084360(DbCursor *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
 void fn_8018A8C0(unsigned char value);
-int fn_80065650(void);
+int PauseGetValue(void);
 int fn_8022F384(int a);
 void *fn_8021EA44(int index);
 void *fn_8021E984(void *p, int a);
@@ -183,7 +183,7 @@ int fn_8017FF98(void)
 {
     int result = 0;
 
-    if (fn_80027DF0() == 0) {
+    if (FELoopIsMainFEActive() == 0) {
         Info_80152940 info;
 
         switch (fn_801486A0()) {
@@ -223,13 +223,13 @@ int fn_801800D0(void)
 {
     int result = -1;
 
-    if (fn_80027DF0() != 0) {
-        Object_8007A334 cursor;
+    if (FELoopIsMainFEActive() != 0) {
+        DbCursor cursor;
         int searching = 1;
 
         PerCheckConnectAll();
         fn_8007AEE8(&cursor);
-        for (int found = fn_8007A444(&cursor); found && searching; found = fn_8007A510(&cursor)) {
+        for (int found = DbCursorFirst(&cursor); found && searching; found = DbCursorNext(&cursor)) {
             result = fn_8007AF34(&cursor);
             fn_8007AF5C(&cursor);
             searching = fn_801E195C(ConGetChannelInfo(result, 0)) == 2;
@@ -386,7 +386,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
     case 0x21: {
         int value = fn_8007F828(12);
 
-        if (value == 1 && fn_80027DF0() != 0) {
+        if (value == 1 && FELoopIsMainFEActive() != 0) {
             pResult->i = value;
         } else {
             pResult->i = 0;
@@ -394,7 +394,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     }
     case 0x26:
-        if (lbl_803EB544 != 0 || fn_8002892C() != 0 || (lbl_803EB540 != 0 && fn_80062A60() != 0)) {
+        if (lbl_803EB544 != 0 || InGameIsDemo() != 0 || (lbl_803EB540 != 0 && MemCardScreenGetFlag() != 0)) {
             pResult->i = 1;
         } else {
             pResult->i = 0;
@@ -402,13 +402,13 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         break;
     case 0x3A:
     case 0x3C:
-        pResult->i = fn_80063BE4(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
+        pResult->i = UserStringGet(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
         break;
     case 0x3B:
-        fn_80063C2C(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
+        UserStringSet(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
         break;
     case 0x3D:
-        pResult->i = fn_80063C7C(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
+        pResult->i = TextEntryGetCharSet(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength);
         break;
     case 0x109:
         pResult->i = fn_801C2FE4(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
@@ -417,16 +417,16 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = fn_801C31B0(pArgs[0].pParams->mpText, pArgs[1].pParams->mpText);
         break;
     case 0x104:
-        pResult->i = fn_80025708();
+        pResult->i = ChallengeIsActive();
         break;
     case 0x105:
-        pResult->i = fn_80025718();
+        pResult->i = ChallengeIsPairingGame();
         break;
     case 0xE0:
         pResult->i = fn_8017F60C();
         break;
     case 0xED: {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         char name[32];
 
         fn_80083E1C(&cursor, 0);
@@ -453,10 +453,10 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         fn_8018A8C0(pArgs[0].i == 1);
         break;
     case 0x107:
-        if (fn_80065650() == -1) {
+        if (PauseGetValue() == -1) {
             pResult->i = -1;
         } else {
-            pResult->i = fn_80065650();
+            pResult->i = PauseGetValue();
         }
         break;
     case 0x122:
@@ -478,8 +478,8 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         pResult->i = 0xFF;
         break;
     case 0xF5:
-        fn_80028920();
-        fn_80027AD8(0, -1, -1, -2, -2, -2);
+        InGameSetDemo();
+        FELoopConfigureEntry(0, -1, -1, -2, -2, -2);
         break;
     case 0x134:
         pResult->i = fn_8007F828(20) != 0;
@@ -562,14 +562,14 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
 
 void fn_80180AF8(int *pValues)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     if (fn_8007B324()) {
         for (int i = 3; i >= 0; i--) {
             pValues[i] = -1;
         }
         fn_8007AEE8(&cursor);
-        if (fn_8007A444(&cursor)) {
+        if (DbCursorFirst(&cursor)) {
             do {
                 int key = fn_8007AF34(&cursor);
                 int value = fn_8007AF5C(&cursor);
@@ -579,7 +579,7 @@ void fn_80180AF8(int *pValues)
                     pValues[index] = value == 0 ? 0 : value == 1 ? 1 : -1;
 
                 }
-            } while (fn_8007A510(&cursor));
+            } while (DbCursorNext(&cursor));
         }
         fn_8007AF14(&cursor);
     }
@@ -587,7 +587,7 @@ void fn_80180AF8(int *pValues)
 
 void fn_80180BE4(int id, int *pStatus, int *pTeam)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int team = 2;
     int mode;
     int result;
@@ -595,17 +595,17 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     *pStatus = 0;
     *pTeam = fn_80188DF0(-1);
     mode = fn_8017F584();
-    result = fn_80027DF0();
+    result = FELoopIsMainFEActive();
     if (mode == 7) {
         if (result) {
-            fn_8007A334(&cursor, 0x4D414554, 0x44494754, 0, 0, 0x54415453);
+            DbCursorOpen(&cursor, 0x4D414554, 0x44494754, 0, 0, 0x54415453);
         } else {
             fn_80083E1C(&cursor, 0);
         }
         if (fn_80084034(&cursor, id, 0)) {
             *pStatus = fn_80084158(&cursor);
             if (*pStatus == 0) {
-                if (id == fn_8007CB6C(1)) {
+                if (id == GameInfoGet(1)) {
                     *pStatus = 0x85;
                 } else {
                     *pStatus = 0x86;
@@ -633,13 +633,13 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
         }
         fn_80083F68(&cursor);
     } else if (mode == 2 || mode == 4 || mode == 13) {
-        if (id == fn_8007CB6C(1)) {
+        if (id == GameInfoGet(1)) {
             *pStatus = 0x85;
         } else {
             *pStatus = 0x86;
         }
     } else if (mode == 11) {
-        if (id == fn_8007CB6C(1)) {
+        if (id == GameInfoGet(1)) {
             fn_80083E1C(&cursor, 0);
             if (fn_80084034(&cursor, id, 0)) {
                 *pStatus = fn_80084158(&cursor);
@@ -695,13 +695,13 @@ int fn_80180EF8(int id)
     Object_8008044C cursor;
     int result = 0;
 
-    if (fn_80027DF0()) {
+    if (FELoopIsMainFEActive()) {
         fn_8008044C(&cursor, 0, 0x54415453);
     } else {
         fn_8008040C(&cursor, 0);
     }
-    if (fn_800809C4(&cursor, id, 0)) {
-        result = fn_80080D10(&cursor);
+    if (PlayerDbSeekId(&cursor, id, 0)) {
+        result = PlayerDbGetPortraitId(&cursor);
     }
     fn_8008056C(&cursor);
     return result;

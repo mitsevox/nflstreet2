@@ -60,9 +60,9 @@ int fn_8005900C(void);
 void fn_80065834(void);
 void fn_8006F824(int a);
 void fn_800719D4(void);
-void fn_8007420C(int index);
-void fn_80074250(int index);
-void fn_800744B0(unsigned char value);
+void SpchIGPauseChannel(int index);
+void SpchIGResumeChannel(int index);
+void SpchIGSetEnabled(unsigned char value);
 void fn_80094DF0(void);
 void fn_8009B924(void);
 void fn_8009BA10(int a);
@@ -141,20 +141,20 @@ void fn_80064864(void)
     fn_8006F824(0);
     fn_800719D4();
     fn_801F5D0C();
-    fn_8007420C(0);
-    fn_8007420C(1);
-    fn_8007420C(2);
-    fn_800744B0(0);
+    SpchIGPauseChannel(0);
+    SpchIGPauseChannel(1);
+    SpchIGPauseChannel(2);
+    SpchIGSetEnabled(0);
     fn_80067D4C(0x71, 0);
     lbl_803EA64A = 1;
 }
 
 void fn_800648C4(void)
 {
-    fn_800744B0(1);
-    fn_80074250(0);
-    fn_80074250(1);
-    fn_80074250(2);
+    SpchIGSetEnabled(1);
+    SpchIGResumeChannel(0);
+    SpchIGResumeChannel(1);
+    SpchIGResumeChannel(2);
     lbl_803EA64A = 0;
 }
 

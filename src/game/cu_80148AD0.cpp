@@ -9,7 +9,7 @@ extern "C" {
 int fn_80178AE0(void);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 void fn_80148D20(Record_8003E214 *pRecords, int *pValues,
-                 Object_8007A334 *pQuery);
+                 DbCursor *pQuery);
 void fn_80148DFC(Record_8003E214 *pRecords, int count, int *pExcluded,
                  int *pId, int *pCategory);
 

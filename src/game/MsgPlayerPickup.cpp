@@ -3,7 +3,7 @@
    picks one to add to the team and, when the team is full, one to release. The
    changes are written to the team when the screen closes. */
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
@@ -18,8 +18,8 @@ struct PlayerPickupModelLayout_t {
 };
 
 extern "C" {
-int fn_8002B70C(void);
-void fn_8002B714(int value);
+int TeamFilterGet(void);
+void TeamFilterSet(int value);
 void FEPlyrShow(void);
 void FEPlyrHide(void);
 void FEPlyrSetPosition(int index, float x, float y, float z);
@@ -30,18 +30,18 @@ int fn_8005FC7C(void);
 void fn_80060278(void);
 int fn_800602D8(void);
 int fn_800602E0(void);
-int fn_80078934();
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080920(Object_8008044C *pObject);
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_80081188(Object_8008044C *pObject);
-int fn_800812E0(Object_8008044C *pObject, int a);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+int ChalGetTournamentWon();
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetOriginalId(Object_8008044C *pObject);
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetWeight(Object_8008044C *pObject);
+int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 void fn_8015CCB4(int value);
 void fn_8017F670(int a, char *pText);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
@@ -99,10 +99,10 @@ static unsigned char _MsgPlayerPickup_bSkipTeam;
 extern "C" {
 void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, Arg_8018399C text)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     char name[18];
 
-    *pCount = fn_8007A410((Object_8007A334 *)&_MsgPlayerPickup_RosterCursor);
+    *pCount = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_RosterCursor);
     *pId = _MsgPlayerPickup_iTeam;
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, _MsgPlayerPickup_iTeam, 0);
@@ -115,11 +115,11 @@ void MsgPlayerPickupGetRosterRow(int index, int *pId, Arg_8018399C text, Arg_801
 {
     char name[27];
 
-    if (fn_8007A600((Object_8007A334 *)&_MsgPlayerPickup_RosterCursor, index)) {
-        *pId = fn_800808F8(&_MsgPlayerPickup_RosterCursor);
-        fn_80080B08(&_MsgPlayerPickup_RosterCursor, name, 27);
+    if (DbCursorSeek((DbCursor *)&_MsgPlayerPickup_RosterCursor, index)) {
+        *pId = PlayerDbGetId(&_MsgPlayerPickup_RosterCursor);
+        PlayerDbGetShortName(&_MsgPlayerPickup_RosterCursor, name, 27);
         fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
-        fn_8017F670(fn_80080ECC(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
+        fn_8017F670(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
     } else {
         *pId = -1;
     }
@@ -149,25 +149,25 @@ void MsgPlayerPickupRegisterPlayers(void)
 {
     void *pList = fn_8021EA44(1);
 
-    if (fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor)) {
+    if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor)) {
         do {
-            fn_8021E2B4(pList, 10, fn_80080D10(&_MsgPlayerPickup_PoolCursor));
-        } while (fn_8007A510((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor));
+            fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
+        } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_PoolCursor));
     }
-    fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor);
+    DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor);
     if (_MsgPlayerPickup_bSkipTeam == 0) {
-        if (fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor)) {
+        if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor)) {
             do {
-                fn_8021E2B4(pList, 10, fn_80080D10(&_MsgPlayerPickup_TeamCursor));
-            } while (fn_8007A510((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor));
+                fn_8021E2B4(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
+            } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_TeamCursor));
         }
-        fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+        DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor);
     }
 }
 
 void MsgPlayerPickupCopyTeam(int db)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     QueryResult result;
     Desc_8008044C desc;
     int ids[13] = { -1 };
@@ -193,17 +193,17 @@ void MsgPlayerPickupCopyTeam(int db)
     fn_8008044C(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
     fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &_MsgPlayerPickup_iTeamLGLT,
                 _MsgPlayerPickup_iTeam);
-    rows = fn_8007A410((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+    rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);
     _MsgPlayerPickup_bSkipTeam = rows == 0;
     _MsgPlayerPickup_bTeamFull = rows == 6;
     value = fn_800602D8();
-    fn_8007A334(&cursor, value, 0x44494750, 0, 0, 0x54415453);
-    n = fn_8007A410(&cursor);
+    DbCursorOpen(&cursor, value, 0x44494750, 0, 0, 0x54415453);
+    n = DbCursorGetRowCount(&cursor);
     fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
     n = count;
     fn_8022C628(0x54415453, 0x4D414554, &_MsgPlayerPickup_iCopyTeam, &teamCount);
     for (i = 0; i < n; i++) {
-        if (fn_8007A600(&cursor, i)) {
+        if (DbCursorSeek(&cursor, i)) {
             fn_8007ABA4(&cursor, 0x44494F50, ids[i]);
             fn_8007AA90(&cursor, 0x44494F50, -1);
             fn_8007ABA4(&cursor, 0x44494750, ids[i]);
@@ -211,7 +211,7 @@ void MsgPlayerPickupCopyTeam(int db)
         }
     }
     fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
-    fn_8007A3C4(&cursor);
+    DbCursorClose(&cursor);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
     desc.mUnknown8 = _MsgPlayerPickup_iCopyTeam;
@@ -230,16 +230,16 @@ void MsgPlayerPickupUnregisterPlayers(void)
 {
     void *pList = fn_8021EA44(1);
 
-    if (fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor)) {
+    if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_PoolCursor)) {
         do {
-            fn_8021E72C(pList, 10, fn_80080D10(&_MsgPlayerPickup_PoolCursor));
-        } while (fn_8007A510((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor));
+            fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_PoolCursor));
+        } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_PoolCursor));
     }
     if (_MsgPlayerPickup_bSkipTeam == 0) {
-        if (fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor)) {
+        if (DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor)) {
             do {
-                fn_8021E72C(pList, 10, fn_80080D10(&_MsgPlayerPickup_TeamCursor));
-            } while (fn_8007A510((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor));
+                fn_8021E72C(pList, 10, PlayerDbGetPortraitId(&_MsgPlayerPickup_TeamCursor));
+            } while (DbCursorNext((DbCursor *)&_MsgPlayerPickup_TeamCursor));
         }
     }
 }
@@ -272,8 +272,8 @@ void MsgPlayerPickupStep(int direction)
     } else if (_MsgPlayerPickup_iListRow >= _MsgPlayerPickup_iListCount) {
         _MsgPlayerPickup_iListRow = 0;
     }
-    fn_8007A600((Object_8007A334 *)_MsgPlayerPickup_pList, _MsgPlayerPickup_iListRow);
-    _MsgPlayerPickup_iShownPlayer = fn_800808F8(_MsgPlayerPickup_pList);
+    DbCursorSeek((DbCursor *)_MsgPlayerPickup_pList, _MsgPlayerPickup_iListRow);
+    _MsgPlayerPickup_iShownPlayer = PlayerDbGetId(_MsgPlayerPickup_pList);
     FEPlyrSetPlayer(0, _MsgPlayerPickup_iShownPlayer, 0);
 }
 
@@ -283,41 +283,41 @@ void MsgPlayerPickupGetPlayerInfo(int *pId, int *pFlag, int *pPosition, int *pVa
     pPosition[1] = _MsgPlayerPickup_iListCount;
     *pId = _MsgPlayerPickup_iShownPlayer;
     *pFlag = 0;
-    if (_MsgPlayerPickup_bChoosingDrop == 0 && _MsgPlayerPickup_bCopyMode == 0 && fn_800809FC(&_MsgPlayerPickup_TeamCursor, *pId, 0)) {
+    if (_MsgPlayerPickup_bChoosingDrop == 0 && _MsgPlayerPickup_bCopyMode == 0 && PlayerDbSeekOriginalId(&_MsgPlayerPickup_TeamCursor, *pId, 0)) {
         *pFlag = 1;
     }
-    pValues[0] = fn_800812E0(_MsgPlayerPickup_pList, 6);
-    pValues[1] = fn_800812E0(_MsgPlayerPickup_pList, 4);
-    pValues[2] = fn_800812E0(_MsgPlayerPickup_pList, 7);
-    pValues[3] = fn_800812E0(_MsgPlayerPickup_pList, 0);
-    pValues[4] = fn_800812E0(_MsgPlayerPickup_pList, 3);
-    pValues[5] = fn_800812E0(_MsgPlayerPickup_pList, 2);
-    pValues[6] = fn_800812E0(_MsgPlayerPickup_pList, 1);
-    pValues[7] = fn_800812E0(_MsgPlayerPickup_pList, 5);
-    pValues[8] = fn_800812E0(_MsgPlayerPickup_pList, 8);
-    pValues[9] = fn_800812E0(_MsgPlayerPickup_pList, 9);
+    pValues[0] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 6);
+    pValues[1] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 4);
+    pValues[2] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 7);
+    pValues[3] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 0);
+    pValues[4] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 3);
+    pValues[5] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 2);
+    pValues[6] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 1);
+    pValues[7] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 5);
+    pValues[8] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 8);
+    pValues[9] = PlayerDbGetBoostedRating(_MsgPlayerPickup_pList, 9);
 }
 
 void MsgPlayerPickupGetPlayerName(char *pBuffer, int size)
 {
-    fn_80080BEC(_MsgPlayerPickup_pList, pBuffer, size);
+    PlayerDbGetFullName(_MsgPlayerPickup_pList, pBuffer, size);
 }
 
 void MsgPlayerPickupGetPosition(char *pText, int size)
 {
-    fn_8017F670(fn_80080ECC(_MsgPlayerPickup_pList), pText);
+    fn_8017F670(PlayerDbGetPbpo(_MsgPlayerPickup_pList), pText);
 }
 
 void MsgPlayerPickupGetHeight(char *pBuffer, int size)
 {
-    unsigned int height = fn_800811E0(_MsgPlayerPickup_pList);
+    unsigned int height = PlayerDbGetHeight(_MsgPlayerPickup_pList);
 
     fn_801C2D88(pBuffer, size, "%d ft %d in", height / 12, height % 12);
 }
 
 void MsgPlayerPickupGetWeight(char *pBuffer, int size)
 {
-    fn_801C2D88(pBuffer, size, "%d lbs", fn_80081188(_MsgPlayerPickup_pList));
+    fn_801C2D88(pBuffer, size, "%d lbs", PlayerDbGetWeight(_MsgPlayerPickup_pList));
 }
 
 int MsgPlayerPickupSelectList(void)
@@ -331,11 +331,11 @@ int MsgPlayerPickupSelectList(void)
         if (_MsgPlayerPickup_bCopyMode != 0) {
             id = _MsgPlayerPickup_iCopyTeam;
         } else {
-            id = fn_8002B70C();
+            id = TeamFilterGet();
         }
         _MsgPlayerPickup_pList = &_MsgPlayerPickup_PoolCursor;
     }
-    _MsgPlayerPickup_iListCount = fn_8007A410((Object_8007A334 *)_MsgPlayerPickup_pList);
+    _MsgPlayerPickup_iListCount = DbCursorGetRowCount((DbCursor *)_MsgPlayerPickup_pList);
     _MsgPlayerPickup_iListRow = 0;
     MsgPlayerPickupStep(4);
     return id;
@@ -366,16 +366,16 @@ unsigned char MsgPlayerPickupInit(void)
         MsgPlayerPickupCopyTeam(_MsgPlayerPickup_cProfile);
     } else {
         Desc_8008044C desc;
-        Object_80023BBC node;
-        Object_80023BBC left;
-        Object_80023BBC right;
+        DbFilter node;
+        DbFilter left;
+        DbFilter right;
         int count;
         int rows;
         int i;
 
         _MsgPlayerPickup_bCopyMode = 0;
         _MsgPlayerPickup_iTeam = fn_8018D890(_MsgPlayerPickup_cProfile, 0);
-        desc.mUnknown8 = fn_8002B70C();
+        desc.mUnknown8 = TeamFilterGet();
         desc.mUnknown4 = 1;
         desc.mUnknown0 = 2;
         fn_8008044C(&_MsgPlayerPickup_PoolCursor, &desc, 0x54415453);
@@ -383,32 +383,32 @@ unsigned char MsgPlayerPickupInit(void)
         left.Set(6, 0x59414C5044494754LL, 3, _MsgPlayerPickup_iTeam);
         right.SetUnknown32(6, 0x59414C5044494F50LL, 3, 0x10006);
         right.mUnknown16.mValue.mInt = 32756;
-        fn_8007A334((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor, 0x59414C50, 0x44494750, _MsgPlayerPickup_aTeamSort, &node, 0x54415453);
+        DbCursorOpen((DbCursor *)&_MsgPlayerPickup_TeamCursor, 0x59414C50, 0x44494750, _MsgPlayerPickup_aTeamSort, &node, 0x54415453);
         desc.mUnknown12 = 0;
         desc.mUnknown4 = 1;
         desc.mUnknown8 = _MsgPlayerPickup_iTeam;
         desc.mUnknown0 = 2;
         fn_8008044C(&_MsgPlayerPickup_RosterCursor, &desc, 0x54415453);
-        count = fn_8007A410((Object_8007A334 *)&_MsgPlayerPickup_PoolCursor);
+        count = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_PoolCursor);
         _MsgPlayerPickup_bSkipTeam = count == 0;
-        rows = fn_8007A410((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+        rows = DbCursorGetRowCount((DbCursor *)&_MsgPlayerPickup_TeamCursor);
         if (rows == 15) {
             _MsgPlayerPickup_bTeamFull = 1;
         } else if (rows <= 13) {
             _MsgPlayerPickup_bTeamFull = 0;
         } else {
             _MsgPlayerPickup_bTeamFull = 1;
-            fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+            DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor);
             for (i = 0; i < count; i++) {
-                if (fn_80080920(&_MsgPlayerPickup_TeamCursor) == 32756) {
+                if (PlayerDbGetOriginalId(&_MsgPlayerPickup_TeamCursor) == 32756) {
                     _MsgPlayerPickup_bTeamFull = 0;
                     break;
                 }
-                fn_8007A510((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+                DbCursorNext((DbCursor *)&_MsgPlayerPickup_TeamCursor);
             }
-            fn_8007A444((Object_8007A334 *)&_MsgPlayerPickup_TeamCursor);
+            DbCursorFirst((DbCursor *)&_MsgPlayerPickup_TeamCursor);
         }
-        fn_80078934();
+        ChalGetTournamentWon();
         MsgPlayerPickupRegisterPlayers();
     }
     FEPlyrShow();
@@ -417,7 +417,7 @@ unsigned char MsgPlayerPickupInit(void)
     FEPlyrSetPriority(0, _MsgPlayerPickup_ModelLayout.mValue);
     _MsgPlayerPickup_bOpen = 1;
     _MsgPlayerPickup_bChoosingDrop = 0;
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_80083E40(&cursor, 0, 0x54415453);
     fn_80084034(&cursor, _MsgPlayerPickup_iTeam, 0);
     if (fn_80084438(&cursor) == 0) {
@@ -453,7 +453,7 @@ void MsgPlayerPickupApplyAdd(void)
         int found = 0;
 
         if (_MsgPlayerPickup_bCopyMode == 0) {
-            found = fn_800809FC(&_MsgPlayerPickup_TeamCursor, _MsgPlayerPickup_iAddPlayer, 0);
+            found = PlayerDbSeekOriginalId(&_MsgPlayerPickup_TeamCursor, _MsgPlayerPickup_iAddPlayer, 0);
         }
         if (!found) {
             if (_MsgPlayerPickup_bCopyMode != 0) {
@@ -487,7 +487,7 @@ void MsgPlayerPickupShutdown(void)
         fn_8018D8EC(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);
     }
-    fn_8002B714(1023);
+    TeamFilterSet(1023);
     _MsgPlayerPickup_bOpen = 0;
 }
 

@@ -295,8 +295,8 @@ void fn_80072C90(int a, int b);
 int fn_80072E6C(void);
 void fn_80072F04(void);
 void fn_800731D0(int a);
-void fn_800744C0(unsigned char value);
-int fn_80074638(void);
+void SpchIGSetCommentaryOn(unsigned char value);
+int SpchIGIsNarratorIdle(void);
 int fn_80085A34(int formation, int team);
 unsigned char fn_80087F10(void);
 unsigned char fn_8008801C(void);
@@ -975,7 +975,7 @@ int fn_80157080(void)
             fn_801485EC(mode);
             switch (mode) {
             case 2:
-                fn_800744C0(0);
+                SpchIGSetCommentaryOn(0);
                 fn_80148A58()->vfn_07(0, 1);
                 fn_80148A58()->vfn_07(1, 5);
                 break;
@@ -983,7 +983,7 @@ int fn_80157080(void)
                 fn_801735D8(0x800);
                 fn_8009D8CC(1);
                 fn_8009D964(1, 0);
-                fn_800744C0(0);
+                SpchIGSetCommentaryOn(0);
                 fn_8014F3DC(180);
                 break;
             case 4:
@@ -1024,7 +1024,7 @@ int fn_80157080(void)
             next = 4;
             break;
         }
-        fn_800744C0(1);
+        SpchIGSetCommentaryOn(1);
         if (next != 5) {
             done = 1;
             fn_800AD910(0, 0.0f);
@@ -1943,7 +1943,7 @@ void Class_802A3B10::vfn_05(float dt)
                 fn_80158BB4(pEntry->mPrompts);
             }
         }
-        if (mUnknown4 == 0 && fn_80074638()) {
+        if (mUnknown4 == 0 && SpchIGIsNarratorIdle()) {
             fn_8009D888(0, 5);
             fn_8009D944(0);
             mUnknown4 = 1;
@@ -2024,7 +2024,7 @@ void Class_802A3A48::vfn_04(float dt)
                 }
                 mUnknown6--;
             } else if (mUnknown6 == 1) {
-                if (fn_80074638() || !fn_80156D14()) {
+                if (SpchIGIsNarratorIdle() || !fn_80156D14()) {
                     mUnknown6--;
                     lbl_803EB325 = 0;
                 }

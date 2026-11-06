@@ -1,10 +1,10 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8003AEA8.h"
 #include "game/cu_8003E214.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 #include "game/cu_80181330.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80061AD4.h"
@@ -79,15 +79,15 @@ int fn_8005FC7C(void);
 void fn_8005FCF8(int *pA, int *pB);
 void fn_80060330(int a, int *pList, int count, Object_8008044C *pObject);
 void fn_80061B90(int team, int *pDigp);
-int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8007AEE8(Object_8007A334 *pObject);
-void fn_8007AF14(Object_8007A334 *pObject);
-int fn_8007AF34(Object_8007A334 *pObject);
-int fn_8007AF5C(Object_8007A334 *pObject);
+int DbCursorGetValue(DbCursor *pObject, int key);
+void fn_8007AEE8(DbCursor *pObject);
+void fn_8007AF14(DbCursor *pObject);
+int fn_8007AF34(DbCursor *pObject);
+int fn_8007AF5C(DbCursor *pObject);
 int fn_8007AF84(int team);
 unsigned char fn_8007B090(int a);
 void fn_8007B14C(int pad, int id);
-void fn_8007CAEC(int index, int value);
+void GameInfoSet(int index, int value);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_8008079C(int which);
 void fn_8008082C(int row, int which);
@@ -107,9 +107,9 @@ int fn_80082864(void);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082AB0(int a, int b, int c);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 int fn_800844B8(const char *pName, int a, int b);
 int fn_8008454C(int a, int b, int c);
 int fn_80086868(int *pList, int max);
@@ -173,7 +173,7 @@ int lbl_803ECE58[2];
 int lbl_803ECE60;
 
 Object_8008044C lbl_8036B168;
-Object_8007A334 lbl_8036B194;
+DbCursor lbl_8036B194;
 unsigned short lbl_8036B1C0[7];
 int lbl_8036B1D0[8];
 int lbl_8036B1F0[8];
@@ -549,8 +549,8 @@ int fn_80017DF4(void)
         fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
         fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
         lbl_802F43F4[0].mValue = ids[0];
-        fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
-        fn_8007A98C(&lbl_8036B168, 0x4F504250);
+        DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
+        DbCursorGetInt(&lbl_8036B168, 0x4F504250);
     }
     fn_80086BA4(index);
     fn_80086ACC(lbl_8036B1F0);
@@ -569,8 +569,8 @@ int fn_80017DF4(void)
         lbl_803EBA0C[n].mTeam = 8;
         lbl_803EBA0C[n].mUnknown15 = 0xFF;
         if (fn_800809C4(&lbl_8036B168, ids[i], 0)) {
-            int value8 = fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
-            int valueC = fn_8007A98C(&lbl_8036B168, 0x4F504250);
+            int value8 = DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
+            int valueC = DbCursorGetInt(&lbl_8036B168, 0x4F504250);
             lbl_803EBA0C[n].mUnknown8 = value8;
             lbl_803EBA0C[n].mUnknownC = valueC;
         }
@@ -585,8 +585,8 @@ int fn_80017DF4(void)
         lbl_803EBA0C[n].mTeam = 8;
         lbl_803EBA0C[n].mUnknown15 = 0xFF;
         if (fn_800809C4(&lbl_8036B168, others[i], 0)) {
-            int value8 = fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
-            int valueC = fn_8007A98C(&lbl_8036B168, 0x4F504250);
+            int value8 = DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
+            int valueC = DbCursorGetInt(&lbl_8036B168, 0x4F504250);
             lbl_803EBA0C[n].mUnknown8 = value8;
             lbl_803EBA0C[n].mUnknownC = valueC;
         }
@@ -621,8 +621,8 @@ int fn_80018114(void)
         ok = 1;
         fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
         fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
-        value8 = fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
-        valueC = fn_8007A98C(&lbl_8036B168, 0x4F504250);
+        value8 = DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
+        valueC = DbCursorGetInt(&lbl_8036B168, 0x4F504250);
         lbl_803EBA0C[0].mId = ids.mUnknown0;
         lbl_803EBA0C[0].mUnknown8 = value8;
         lbl_803EBA0C[0].mUnknownC = valueC;
@@ -1002,7 +1002,7 @@ void fn_80018F9C(unsigned char size)
     unsigned char other;
 
     fn_80018E14(2, size);
-    team = fn_8007CB6C(2);
+    team = GameInfoGet(2);
     other = team == 0;
     lbl_803EBA08->mpUnknown08[0] = fn_8007B090(other);
     lbl_803EBA08->mpUnknown08[1] = fn_8007B090(team);
@@ -1019,17 +1019,17 @@ void fn_800190A0(void)
     lbl_803EBA08->mUnknown15 = 0;
     lbl_803EBA08->mUnknown19 = 0;
     {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         int found;
 
         fn_8007AEE8(&cursor);
-        found = fn_8007A444(&cursor);
+        found = DbCursorFirst(&cursor);
         for (i = 0; i < 8; i++) {
             unsigned char id;
 
             if (found) {
                 id = fn_8007AF34(&cursor);
-                found = fn_8007A510(&cursor);
+                found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
@@ -1048,17 +1048,17 @@ void fn_800191E4(void)
     lbl_803EBA08->mUnknown15 = 0;
     lbl_803EBA08->mUnknown19 = 1;
     {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         int found;
 
         fn_8007AEE8(&cursor);
-        found = fn_8007A444(&cursor);
+        found = DbCursorFirst(&cursor);
         for (i = 0; i < 6; i++) {
             unsigned char id;
 
             if (found) {
                 id = fn_8007AF34(&cursor);
-                found = fn_8007A510(&cursor);
+                found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
@@ -1081,7 +1081,7 @@ void fn_800191E4(void)
 void fn_80019380(void)
 {
     unsigned int count = fn_80178D70(0) * 2;
-    unsigned char team = fn_8007CB6C(2);
+    unsigned char team = GameInfoGet(2);
     unsigned char other = team == 0;
 
     fn_80018E14(count, 1);
@@ -1093,11 +1093,11 @@ void fn_80019380(void)
         lbl_803EBA08->mpUnknown08[2] = lbl_803EBA08->mpUnknown08[0];
         lbl_803EBA08->mpUnknown08[3] = lbl_803EBA08->mpUnknown08[1];
         {
-            Object_8007A334 cursor;
+            DbCursor cursor;
             int found;
 
             fn_8007AEE8(&cursor);
-            for (found = fn_8007A444(&cursor); found; found = fn_8007A510(&cursor)) {
+            for (found = DbCursorFirst(&cursor); found; found = DbCursorNext(&cursor)) {
                 unsigned char id = fn_8007AF34(&cursor);
 
                 if (fn_8007AF5C(&cursor) == other && id != lbl_803EBA08->mpUnknown08[0]) {
@@ -1105,7 +1105,7 @@ void fn_80019380(void)
                     break;
                 }
             }
-            for (found = fn_8007A444(&cursor); found; found = fn_8007A510(&cursor)) {
+            for (found = DbCursorFirst(&cursor); found; found = DbCursorNext(&cursor)) {
                 unsigned char id = fn_8007AF34(&cursor);
 
                 if (fn_8007AF5C(&cursor) == team && id != lbl_803EBA08->mpUnknown08[1]) {
@@ -1127,17 +1127,17 @@ void fn_80019588(void)
     lbl_803EBA08->mUnknown15 = 0;
     lbl_803EBA08->mUnknown19 = 1;
     {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         int found;
 
         fn_8007AEE8(&cursor);
-        found = fn_8007A444(&cursor);
+        found = DbCursorFirst(&cursor);
         for (i = 0; i < 7; i++) {
             unsigned char id;
 
             if (found) {
                 id = fn_8007AF34(&cursor);
-                found = fn_8007A510(&cursor);
+                found = DbCursorNext(&cursor);
             } else {
                 id = 0xFF;
             }
@@ -1236,7 +1236,7 @@ int fn_80019848(int *pController, int *pCount)
         if (lbl_803EBA20) {
             fn_8001AA8C(fn_8001AC48(0, 0), 0);
             lbl_803EBA08->mUnknown15 = 0;
-            lbl_803EBA08->mUnknown19 = fn_8007CB6C(2) ? 0 : 1;
+            lbl_803EBA08->mUnknown19 = GameInfoGet(2) ? 0 : 1;
         }
         if (lbl_803EBA24 || lbl_803EBA20) {
             for (int i = 0; i < lbl_803EBA10; i++) {
@@ -1301,8 +1301,8 @@ void fn_80019AD4(void)
                 fn_80018CA4(&lbl_8036B1D0[1], records[1].mUnknown, "Team One");
                 lbl_803EBA1C = 0;
             }
-            fn_8007CAEC(0, lbl_8036B1D0[0]);
-            fn_8007CAEC(1, lbl_8036B1D0[1]);
+            GameInfoSet(0, lbl_8036B1D0[0]);
+            GameInfoSet(1, lbl_8036B1D0[1]);
             fn_8022A508(0, lbl_8036B1D0[0], lbl_8036B1D0[0], 6, -1);
             fn_8022A508(1, lbl_8036B1D0[1], lbl_8036B1D0[1], 6, -1);
             fn_8022DC7C(0);

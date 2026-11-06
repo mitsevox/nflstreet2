@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
 #include "game/cu_8015C25C.h"
@@ -37,28 +37,28 @@ void fn_80049B00(int index, int value);
 void fn_80049B18(int index, unsigned char value);
 void fn_80049DD0(int index, unsigned char value);
 void fn_80049DE8(int index, unsigned char value);
-int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007BA88(Object_8007A334 *pCursor, int value);
-void fn_8007BB04(Object_8007A334 *pCursor);
-int fn_8007BB24(Object_8007A334 *pCursor);
-int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size);
-int fn_8007BE54(Object_8007A334 *pCursor);
-int fn_8007BE7C(Object_8007A334 *pCursor);
-int fn_8007BEA4(Object_8007A334 *pCursor);
+int DbCursorGetRow(DbCursor *pObject);
+void fn_8007BA88(DbCursor *pCursor, int value);
+void fn_8007BB04(DbCursor *pCursor);
+int fn_8007BB24(DbCursor *pCursor);
+int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
+void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
+int fn_8007BE54(DbCursor *pCursor);
+int fn_8007BE7C(DbCursor *pCursor);
+int fn_8007BEA4(DbCursor *pCursor);
 int fn_8007BF14(int index);
 int fn_8007BF28(int index);
-int fn_8007BF3C(Object_8007A334 *pCursor);
-int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
-void fn_8007DDC8(Object_8007A334 *pObject, int a);
-void fn_8007DE20(Object_8007A334 *pObject);
-void fn_8007DE40(Object_8007A334 *pObject, int key, unsigned char *pA, unsigned char *pB);
-void fn_8007DFC4(Object_8007A334 *pObject, int id);
-int fn_8007E020(int type, int a, int b);
+int fn_8007BF3C(DbCursor *pCursor);
+int fn_8007C690(DbCursor *pCursor, short *pOut);
+void GearLockOpen(DbCursor *pObject, int a);
+void GearLockClose(DbCursor *pObject);
+void GearLockGetFlags(DbCursor *pObject, int key, unsigned char *pA, unsigned char *pB);
+void GearLockClearNew(DbCursor *pObject, int id);
+int GearHasNew(int type, int a, int b);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080D10(Object_8008044C *pObject);
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
-Object_8007A334 *fn_80182DBC(void);
+DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
@@ -331,9 +331,9 @@ static inline Class_8000D8C0 *fn_8000D1F0();
 static inline Class_8000DB00 *fn_8000D220();
 static inline Class_8000D940 *fn_8000D248();
 
-static Object_8007A334 lbl_8036A1FC;
-static Object_8007A334 lbl_8036A228;
-static Object_8007A334 lbl_8036A254;
+static DbCursor lbl_8036A1FC;
+static DbCursor lbl_8036A228;
+static DbCursor lbl_8036A254;
 static Info_80307908 lbl_8036A280;
 static Entry_8036A2C8 lbl_8036A2C8[166];
 static unsigned char lbl_803EB940 = 0;
@@ -346,7 +346,7 @@ static void fn_8000A360(int id, int index)
 {
     if (lbl_803ECDD0 != 14) {
         int type = fn_8007BF14(lbl_803ECDD0);
-        int row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
         Info_80307908 info;
 
         fn_800809C4(fn_80182DC8(), id, 0);
@@ -359,7 +359,7 @@ static void fn_8000A360(int id, int index)
             info.mValues[6] = 0;
         }
         fn_8008199C(fn_80182DC8(), &info);
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), row);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     }
 }
 
@@ -368,11 +368,11 @@ static int fn_8000A434(int type, int value)
     int result = -1;
 
     if (lbl_803ECDD0 != 14) {
-        int row = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
         Info_80307908 info;
         int found;
 
-        for (found = fn_8007A444((Object_8007A334 *)fn_80182DC8()); found && result == -1; found = fn_8007A510((Object_8007A334 *)fn_80182DC8())) {
+        for (found = DbCursorFirst((DbCursor *)fn_80182DC8()); found && result == -1; found = DbCursorNext((DbCursor *)fn_80182DC8())) {
             int id;
 
             fn_800817CC(fn_80182DC8(), &info);
@@ -387,7 +387,7 @@ static int fn_8000A434(int type, int value)
                 }
             }
         }
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), row);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     }
     return result;
 }
@@ -434,9 +434,9 @@ static int fn_8000A620()
         showUnique = 0;
     }
     fn_8007BA88(&lbl_8036A1FC, type);
-    count = fn_8007A410(&lbl_8036A1FC);
+    count = DbCursorGetRowCount(&lbl_8036A1FC);
     lbl_803ECDD8 = 0;
-    fn_8007A444(&lbl_8036A1FC);
+    DbCursorFirst(&lbl_8036A1FC);
     for (i = 0; i < count; i++) {
         int id = fn_8007BE54(&lbl_8036A1FC);
         int set = fn_8007BEA4(&lbl_8036A1FC);
@@ -447,7 +447,7 @@ static int fn_8000A620()
             unsigned char locked;
             unsigned char flag;
 
-            fn_8007DE40(&lbl_8036A228, key, &locked, &flag);
+            GearLockGetFlags(&lbl_8036A228, key, &locked, &flag);
             if (!locked && (showUnique || !unique)) {
                 lbl_8036A2C8[lbl_803ECDD8].mUnknown12 = flag;
                 if (unique) {
@@ -460,7 +460,7 @@ static int fn_8000A620()
                 lbl_803ECDD8++;
             }
         }
-        fn_8007A510(&lbl_8036A1FC);
+        DbCursorNext(&lbl_8036A1FC);
     }
     return lbl_803ECDD8;
 }
@@ -492,7 +492,7 @@ static int fn_8000A838(int index, int a)
     if (index != 14) {
         int type = fn_8007BF14(index);
 
-        result = fn_8007E020(type, a, fn_80183968());
+        result = GearHasNew(type, a, fn_80183968());
     }
     return result;
 }
@@ -591,7 +591,7 @@ static unsigned int fn_8000AA38(int value, int *pTable, unsigned int count)
 static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
 {
     Row_8007BC34 row;
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int type;
 
     fn_8007BA88(&cursor, 0);
@@ -614,7 +614,7 @@ static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
 
 static int fn_8000AB70()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
@@ -626,7 +626,7 @@ static int fn_8000AB70()
 
 static int fn_8000AC04()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
@@ -638,7 +638,7 @@ static int fn_8000AC04()
 
 static int fn_8000AC98()
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     Row_8007BC34 row;
 
     fn_8007BA88(&cursor, 9);
@@ -830,8 +830,8 @@ void Class_8000DBF0::vfn_01(int a, int *pCount, int *pOut)
     fn_80182E34(buffer);
     fn_80182DD4("");
     fn_80182E04("");
-    *pCount = fn_8007A410((Object_8007A334 *)fn_80182DC8()) + 1;
-    fn_8007A444((Object_8007A334 *)fn_80182DC8());
+    *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8()) + 1;
+    DbCursorFirst((DbCursor *)fn_80182DC8());
     lbl_803ECDDC = fn_800808F8(fn_80182DC8());
     FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803ECDDC, 1);
 }
@@ -866,10 +866,10 @@ void Class_8000DBF0::vfn_03(int index)
 
 void Class_8000DBF0::vfn_04(int index, int *pOut)
 {
-    if (index >= fn_8007A410((Object_8007A334 *)fn_80182DC8())) {
+    if (index >= DbCursorGetRowCount((DbCursor *)fn_80182DC8())) {
         *pOut = 0x7FFF;
     } else {
-        fn_8007A600((Object_8007A334 *)fn_80182DC8(), index);
+        DbCursorSeek((DbCursor *)fn_80182DC8(), index);
         *pOut = fn_800808F8(fn_80182DC8());
     }
 }
@@ -884,7 +884,7 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
 
         fn_800809C4(fn_80182DC8(), index, 0);
         value = fn_80080D10(fn_80182DC8());
-        pOut->mUnknown36 = fn_8007A43C((Object_8007A334 *)fn_80182DC8());
+        pOut->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 0;
@@ -892,7 +892,7 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
         fn_801832B0(buffer, 27);
         fn_801C3284(pOut->mName, buffer, 22);
     } else {
-        pOut->mUnknown36 = fn_8007A410((Object_8007A334 *)fn_80182DC8());
+        pOut->mUnknown36 = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
         pOut->mUnknown4 = 4;
@@ -1244,7 +1244,7 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
         if (fn_8000A8B4(type) && index != 0) {
             index = (index - 1) / 3 + 1;
         }
-        fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[index].mId);
+        DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[index].mId);
         fn_8007BC34(&lbl_8036A1FC, &row);
         if (row.mUnknown76) {
             fn_8000D248()->mUnknown8 = type;
@@ -1253,7 +1253,7 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
             *pOut = fn_8000D248();
         } else {
             if (lbl_8036A2C8[index].mUnknown12) {
-                fn_8007DFC4(&lbl_8036A228, lbl_8036A2C8[index].mUnknown0);
+                GearLockClearNew(&lbl_8036A228, lbl_8036A2C8[index].mUnknown0);
             }
             if (lbl_8036A2C8[index].mOwner != -1 && lbl_8036A2C8[index].mOwner != lbl_803ECDDC) {
                 fn_8000A360(lbl_8036A2C8[index].mOwner, index);
@@ -1306,7 +1306,7 @@ void Class_8000D980::vfn_03(int index)
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
     }
-    fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
+    DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
     lbl_8036A280.mValues[lbl_803ECDD0] = lbl_8036A2C8[item].mId;
     fn_8000A528();
     fn_8000A5B0();
@@ -1344,7 +1344,7 @@ void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
     }
-    fn_8007A600(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
+    DbCursorSeek(&lbl_8036A1FC, lbl_8036A2C8[item].mId);
     pOut->mUnknown40 = lbl_8036A2C8[item].mUnknown12;
     fn_8007BE20(&lbl_8036A1FC, name, 32);
     if (side != -1) {
@@ -1356,14 +1356,14 @@ void Class_8000D980::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void Class_8000D940::vfn_01(int a, int *pCount, int *pOut)
 {
-    Query_80083E40 query;
+    TeamQuery query;
     int selected;
 
     query.mUnknown4 = 3;
     query.mUnknown0 = 1;
     selected = 0;
     fn_80083E40(&lbl_8036A254, &query, 0x54415453);
-    *pCount = fn_8007A410(&lbl_8036A254);
+    *pCount = DbCursorGetRowCount(&lbl_8036A254);
     switch (mUnknown8) {
     case 0:
         selected = lbl_8036A280.mUnknown0D;
@@ -1373,9 +1373,9 @@ void Class_8000D940::vfn_01(int a, int *pCount, int *pOut)
         break;
     }
     *pOut = 0;
-    for (int more = fn_8007A444(&lbl_8036A254); more; more = fn_8007A510(&lbl_8036A254)) {
+    for (int more = DbCursorFirst(&lbl_8036A254); more; more = DbCursorNext(&lbl_8036A254)) {
         if (fn_80084158(&lbl_8036A254) - 1 == selected) {
-            *pOut = fn_8007A43C(&lbl_8036A254);
+            *pOut = DbCursorGetRow(&lbl_8036A254);
             break;
         }
     }
@@ -1386,7 +1386,7 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
     int result;
     int value;
 
-    fn_8007A600(&lbl_8036A254, a);
+    DbCursorSeek(&lbl_8036A254, a);
     result = -1;
     value = fn_80084158(&lbl_8036A254) - 1;
     if (b == 0) {
@@ -1399,7 +1399,7 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
             break;
         }
         result = -2;
-        fn_8007DFC4(&lbl_8036A228, mUnknown12);
+        GearLockClearNew(&lbl_8036A228, mUnknown12);
         fn_8008199C(fn_80182DC8(), &lbl_8036A280);
     } else {
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
@@ -1424,7 +1424,7 @@ void Class_8000D940::vfn_03(int index)
 {
     int value;
 
-    fn_8007A600(&lbl_8036A254, index);
+    DbCursorSeek(&lbl_8036A254, index);
     value = fn_80084158(&lbl_8036A254) - 1;
     switch (mUnknown8) {
     case 0:
@@ -1444,7 +1444,7 @@ void Class_8000D940::vfn_05(int index, Entry_80182CC8 *pOut)
 {
     char name[18];
 
-    fn_8007A600(&lbl_8036A254, index);
+    DbCursorSeek(&lbl_8036A254, index);
     fn_80083F88(&lbl_8036A254, name, 18);
     fn_801C3284(pOut->mName, name, 22);
 }
@@ -1685,7 +1685,7 @@ void Class_8000D8C0::vfn_05(int index, Entry_80182CC8 *pOut)
 
 void fn_8000CEB4(int a)
 {
-    fn_8007DDC8(&lbl_8036A228, fn_8022F384(fn_8022F4BC()));
+    GearLockOpen(&lbl_8036A228, fn_8022F384(fn_8022F4BC()));
     lbl_803EB940 = a;
     if (a == 0) {
         fn_801835C8();
@@ -1700,7 +1700,7 @@ void fn_8000CF24()
     if (lbl_803EB940 == 0) {
         fn_80183704();
     }
-    fn_8007DE20(&lbl_8036A228);
+    GearLockClose(&lbl_8036A228);
 }
 
 Class_8000DBA0 *fn_8000CF5C()

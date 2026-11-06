@@ -7,7 +7,7 @@ extern "C" {
 unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
 int fn_801499A8(Class_80148A58 *p, int kind, int team, int index, Object_80039F5C *pPlayer);
 int fn_801495E0(Class_80148A58 *p, int team, int index, Object_80039F5C *pPlayer, int kind);
-int fn_8007DBB4(int a);
+int RecordsGetValue(int a);
 
 int fn_8014F57C(Class_802A2B68 *p, int team, int index, Object_80039F5C *pPlayer, int kind)
 {
@@ -57,7 +57,7 @@ int fn_8014F57C(Class_802A2B68 *p, int team, int index, Object_80039F5C *pPlayer
     }
     case 17:
         {
-            int ok = p->vfn_31(17, team, index, pPlayer, 1, 0) && pRecord->mUnknown4 >= fn_8007DBB4(22);
+            int ok = p->vfn_31(17, team, index, pPlayer, 1, 0) && pRecord->mUnknown4 >= RecordsGetValue(22);
             result = ok;
         }
         break;

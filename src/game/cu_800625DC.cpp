@@ -15,7 +15,7 @@ int fn_80186B38(int a);
 int fn_8018F3D8(int a);
 int fn_8018F288(int a, int b);
 int fn_8022F384(int a);
-void fn_8007B5A8(int a, int b, int c);
+void EnvSetLocked(int a, int b, int c);
 void fn_8018F4C4(int a);
 
 static const signed char lbl_8028F6A4[33] = {
@@ -41,7 +41,7 @@ void fn_800625DC(int *pOut)
     }
     *pOut = value;
     if (fn_8018F288(fn_80186B38(fn_8022F4BC()), 34) != 0) {
-        fn_8007B5A8(fn_8022F384(fn_8022F4BC()), 11, 0);
+        EnvSetLocked(fn_8022F384(fn_8022F4BC()), 11, 0);
     }
 }
 

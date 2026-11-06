@@ -7,7 +7,7 @@ int fn_801486A0(void);
 int fn_80183950(void);
 void *fn_801C2030(void *dst, const void *src, unsigned int n);
 
-void fn_80148D20(Record_8003E214 *pRecord, int *pValues, Object_8007A334 *)
+void fn_80148D20(Record_8003E214 *pRecord, int *pValues, DbCursor *)
 {
     Class_80148A58 *p = fn_80148A58();
     unsigned int i;

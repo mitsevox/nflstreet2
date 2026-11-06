@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 
 extern "C" {
@@ -9,7 +9,7 @@ static int lbl_803EA7D0[2] = { 0x31414850, 0x43484650 };
 
 extern "C" void fn_80081C10(Object_8008044C *pObject, unsigned char *p)
 {
-    ColumnValue_802D6424 columns[3];
+    DbColumnValue columns[3];
     int i;
 
     fn_800808F8(pObject);

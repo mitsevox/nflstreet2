@@ -3,7 +3,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_8022F478.h"
 #include "game/cu_80190208.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_8007F828.h"
 
 extern "C" unsigned char lbl_803EA588;
@@ -37,11 +37,11 @@ int fn_80190394(void);
 void fn_80186BAC(void);
 void fn_80186CE8(unsigned char *flags);
 int fn_80186A10(int index, char *text);
-void fn_8007D4E8(void);
-void fn_8007D52C(void);
-void fn_8007DB74(int type, int row);
-int fn_8007DBB4(int column);
-int fn_8007D5A0(int type, int row, int column, char *text, int size);
+void RecordsBegin(void);
+void RecordsEnd(void);
+void RecordsSeekRow(int type, int row);
+int RecordsGetValue(int column);
+int RecordsGetText(int type, int row, int column, char *text, int size);
 int fn_800A3444(void);
 int fn_801C31B0(char *first, char *second);
 int fn_801485D4(void);
@@ -56,9 +56,9 @@ int fn_800A7E54(unsigned char side);
 int fn_80032288(int side);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
-void fn_8018F52C(Object_8007A334 *pObject, int a);
-void fn_8018F584(Object_8007A334 *pObject);
-void fn_8018F6C0(Object_8007A334 *pObject, int index, int delta);
+void fn_8018F52C(DbCursor *pObject, int a);
+void fn_8018F584(DbCursor *pObject);
+void fn_8018F6C0(DbCursor *pObject, int index, int delta);
 int fn_80178AE0(void);
 unsigned int fn_8009D990(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -151,20 +151,20 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
                     names[side][0] = 0;
             }
             fn_80055584();
-            fn_8007D4E8();
+            RecordsBegin();
             for (i = 0; i <= 20; ++i) {
                 row = 0;
                 if (lbl_802D4B14[i].type == 6)
                     row = fn_800A3444();
-                fn_8007DB74(lbl_802D4B14[i].type, row);
-                current = fn_8007DBB4(lbl_802D4B14[i].column);
-                fn_8007D5A0(lbl_802D4B14[i].type, row, 1, holder, 32);
+                RecordsSeekRow(lbl_802D4B14[i].type, row);
+                current = RecordsGetValue(lbl_802D4B14[i].column);
+                RecordsGetText(lbl_802D4B14[i].type, row, 1, holder, 32);
                 if (lbl_802D4B14[i].type == 6) {
                     lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
                     lbl_803EC7EC[lbl_802D4B14[i].side] |= lbl_802D4B14[i].exceeded;
                 } else {
-                    fn_8007DB74(lbl_802D4B14[i].type, row + 1);
-                    other = fn_8007DBB4(lbl_802D4B14[i].column);
+                    RecordsSeekRow(lbl_802D4B14[i].type, row + 1);
+                    other = RecordsGetValue(lbl_802D4B14[i].column);
                     if (lbl_802D4B14[i].type == 4) {
                         lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
                     } else {
@@ -175,15 +175,15 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
                 if (lbl_802D4B14[i].exceeded && i <= 15 && !fn_801485D4())
                     *anyExceeded = 1;
                 if (lbl_802D4B14[i].type != 6) {
-                    fn_8007DB74(lbl_802D4B14[i].type, 9);
-                    current = fn_8007DBB4(lbl_802D4B14[i].column);
+                    RecordsSeekRow(lbl_802D4B14[i].type, 9);
+                    current = RecordsGetValue(lbl_802D4B14[i].column);
                     for (side = 0; side <= 1; ++side) {
                         if (lbl_802D4B14[i].value[side] > current)
                             lbl_803EC7EC[side] = 1;
                     }
                 }
             }
-            fn_8007D52C();
+            RecordsEnd();
         }
         if (update)
             fn_80186CE8(lbl_803EC7EC);
@@ -192,18 +192,18 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
 
 extern "C" void fn_80055E8C(int *values, int *exceeded)
 {
-    fn_8007D4E8();
+    RecordsBegin();
     for (int i = 0; i < 16; i++) {
         int row;
         if (lbl_802D4B14[i].type == 6)
             row = fn_800A3444();
         else
             row = 0;
-        fn_8007DB74(lbl_802D4B14[i].type, row);
-        values[i] = fn_8007DBB4(lbl_802D4B14[i].column);
+        RecordsSeekRow(lbl_802D4B14[i].type, row);
+        values[i] = RecordsGetValue(lbl_802D4B14[i].column);
         exceeded[i] = lbl_802D4B14[i].exceeded;
     }
-    fn_8007D52C();
+    RecordsEnd();
 }
 
 /* Whole minutes and remaining seconds of a time in seconds. */
@@ -298,7 +298,7 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
         }
     }
     if (fn_8017F584() == 8) {
-        Object_8007A334 cursor;
+        DbCursor cursor;
         unsigned int score1;
         unsigned int score0;
 

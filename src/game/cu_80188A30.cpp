@@ -1,5 +1,5 @@
 #include "game/FMCAPPORT.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_801C1F94.h"
 
 #include <string.h>
@@ -32,10 +32,10 @@ struct Pending_80362F64 {
 };
 
 extern "C" {
-void fn_80083E1C(Object_8007A334 *pObject, int a);
-int fn_800841AC(Object_8007A334 *pObject);
-int fn_800841D8(Object_8007A334 *pObject);
-int fn_80084204(Object_8007A334 *pObject);
+void fn_80083E1C(DbCursor *pObject, int a);
+int fn_800841AC(DbCursor *pObject);
+int fn_800841D8(DbCursor *pObject);
+int fn_80084204(DbCursor *pObject);
 void fn_8004625C(Desc_8004625C *pDesc, int id, FMCAPPORTText *pText);
 void fn_801CE910(void);
 void *fn_8021EA44(int index);
@@ -99,7 +99,7 @@ void fn_80188A60(int id, int a, int b, int c, const unsigned char *pColor)
 
 void fn_80188B78(int a, int b)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned char color0[3];
     unsigned char color1[3];
     void *pObject;

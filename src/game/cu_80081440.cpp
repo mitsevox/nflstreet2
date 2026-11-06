@@ -1,18 +1,18 @@
 #include "game/fn_801C1F94.h"
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 
 extern "C" {
 int fn_8007BF14(int index);
-int fn_801FA290(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
-                ColumnValue_802D6424 *pColumns);
+int fn_801FA290(int handle, DbQueryTable *pTables, DbFilter *pFilter,
+                DbColumnValue *pColumns);
 void fn_8008138C(Object_8008044C *pObject, int *pValues);
 void fn_800814BC(Info_80307908 *pInfo, short *pValues);
 
 #if defined(DECOMP_COMPARE)
-static ColumnValue_802D6424 lbl_802D6A28[11] = {
+static DbColumnValue lbl_802D6A28[11] = {
     { 0, 0x50495247, 0x4C474147, 0 },
     { 0, 0x50495247, 0x504D4A47, 0 },
     { 0, 0x50495247, 0x4B544247, 0 },
@@ -40,11 +40,11 @@ void fn_80081440(Object_8008044C *pObject, short *pValues)
 
 void fn_800814BC(Info_80307908 *pInfo, short *pValues)
 {
-    Table_8007E020 tables[3];
-    Object_80023BBC filter;
-    Object_80023BBC left;
-    Object_80023BBC right;
-    Object_80023BBC join;
+    DbQueryTable tables[3];
+    DbFilter filter;
+    DbFilter left;
+    DbFilter right;
+    DbFilter join;
     int i;
     int j;
 

@@ -1,8 +1,8 @@
 #include "game/Object_8003DEC4.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_80233EAC.h"
 #include "game/cu_8015D3EC.h"
-#include "game/cu_80047E28.h"
+#include "game/PlayerLook.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 
@@ -18,10 +18,10 @@ struct QueueEntry_8031C098 {
 #define NO_MODEL 0xFFFF
 
 extern "C" {
-void fn_8007CC50(Object_8007A334 *pObject);
-void fn_8007CCC4(Object_8007A334 *pObject);
-void fn_8007CCE4(Object_8007A334 *pObject, int id, int *pResult);
-int fn_8007CD78(Object_8007A334 *pObject);
+void HairListOpen(DbCursor *pObject);
+void HairListClose(DbCursor *pObject);
+void HairListFind(DbCursor *pObject, int id, int *pResult);
+int HairListGetModel(DbCursor *pObject);
 void PlyrModelLodClear(ModelLod_802DF190 *pLod);
 void PlyrModelLodInit(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, Skeleton_80041930 *pSkeleton);
 void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, Skeleton_80041930 *pSkeleton);
@@ -820,7 +820,7 @@ void fn_8015E994(void)
     }
 }
 
-void fn_8015E9F4(int index, Ids_8015F6E8 *pIds)
+void fn_8015E9F4(int index, PlayerHeadIds_t *pIds)
 {
     ModelLod_802DF190 *pLods;
 
@@ -986,7 +986,7 @@ void fn_8015EF10(void)
     }
 }
 
-void fn_8015F068(int index, Ids_8015F6E8 *pIds)
+void fn_8015F068(int index, PlayerHeadIds_t *pIds)
 {
     ModelLod_802DF190 *pLods;
 
@@ -1137,12 +1137,12 @@ int fn_8015F5BC(const char *pName)
 
 void fn_8015F638(int style, int shape, int hat, int *pIds)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
-    fn_8007CC50(&cursor);
-    fn_8007CCE4(&cursor, style, 0);
-    style = fn_8007CD78(&cursor);
-    fn_8007CCC4(&cursor);
+    HairListOpen(&cursor);
+    HairListFind(&cursor, style, 0);
+    style = HairListGetModel(&cursor);
+    HairListClose(&cursor);
     style = style * 28 + shape * 4;
     pIds[0] = style + 1;
     if (hat) {
@@ -1151,7 +1151,7 @@ void fn_8015F638(int style, int shape, int hat, int *pIds)
     pIds[1] = pIds[0] + 1;
 }
 
-void fn_8015F6E8(const char *pName, int style, int shape, int hat, Ids_8015F6E8 *pIds)
+void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds_t *pIds)
 {
     char name[62];
     char *p;
@@ -1212,7 +1212,7 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
     }
 }
 
-void fn_8015F958(int index, Ids_8015F6E8 *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
 {
     ModelLod_802DF190 *pLods;
 

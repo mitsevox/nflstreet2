@@ -1,12 +1,12 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
-void fn_8018DF20(Object_8007A334 *pCursor, int index);
-void fn_8018DF78(Object_8007A334 *pCursor);
+void fn_8018DF20(DbCursor *pCursor, int index);
+void fn_8018DF78(DbCursor *pCursor);
 
 float lbl_802EAEF4[10] = {
     0.16f, 0.12f, 0.10f, 0.14f, 0.20f, 0.0f, 0.06f, 0.08f, 0.0f, 0.0f
@@ -41,13 +41,13 @@ void fn_8018C688(int *pValues, float *pFirst, float *pSecond, float *pThird)
 
 void fn_8018C7B8(int index, int *pFirst, int *pSecond, int *pThird)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     fn_8018DF20(&cursor, index);
-    int count = fn_8007A410(&cursor);
+    int count = DbCursorGetRowCount(&cursor);
     float firstTotal = 0.0f;
     float secondTotal = 0.0f;
     float thirdTotal = 0.0f;
-    if (fn_8007A444(&cursor)) {
+    if (DbCursorFirst(&cursor)) {
         do {
             int values[10];
             float first;
@@ -58,7 +58,7 @@ void fn_8018C7B8(int index, int *pFirst, int *pSecond, int *pThird)
             firstTotal += first;
             secondTotal += second;
             thirdTotal += third;
-        } while (fn_8007A510(&cursor));
+        } while (DbCursorNext(&cursor));
     }
     double first = firstTotal * 1.6 / count;
     if (first >= 1.0) {

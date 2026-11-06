@@ -7914,27 +7914,14 @@
       ]
     },
     {
-      "source": "src/game/cu_800775F0.cpp",
+      "source": "src/game/Challenge.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/cu_800775F0.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x800775F0-0x80079CD8 (src/game/Challenge.cpp), its exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800775F0",
-          "end": "0x80077A24"
-        }
-      ]
-    },
-    {
-      "source": "src/game/Challenge.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/Challenge.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/cu_800775F0.cpp (0x800775F0-0x80077A24).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80077A24",
           "end": "0x80079CD8"
         },
         {
@@ -9837,9 +9824,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007CC50.cpp",
+      "source": "src/game/HairList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/cu_8007CC50.cpp), its type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/HairList.cpp), its type and source-form rows.",
       "sections": [
         {
           "section": ".text",

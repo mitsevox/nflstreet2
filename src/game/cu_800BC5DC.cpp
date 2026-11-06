@@ -1,5 +1,5 @@
 #include "game/Class_80297BF8.h"
-#include "game/Object_800785C0.h"
+#include "game/Challenge.h"
 #include "game/Ball.h"
 
 struct Slot_800BAE7C {
@@ -49,10 +49,10 @@ struct Block_800BC538 {
 };
 
 extern "C" {
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003E174(int a);
-void fn_8004A230(unsigned char value);
-void fn_80065814(void);
+void PlayerObjSetDrawReady(unsigned char value);
+void PauseRequestCancel(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_8009D888(int index, int value);
 void fn_8009D964(int index, int value);
@@ -90,14 +90,14 @@ void Class_80297BF8::vfn_03()
     int practice;
     unsigned char i;
 
-    fn_80065814();
+    PauseRequestCancel();
     lbl_803EC98C->mUnknown32 = 0;
     practice = fn_801568F0() <= 4;
     fn_800BA674();
     fn_80173404();
     if (fn_800C1E40() != 0) {
         fn_8009D964(2, 0);
-        fn_8004A230(1);
+        PlayerObjSetDrawReady(1);
     }
     fn_8009D888(2, 0);
     fn_800CC448();
@@ -116,7 +116,7 @@ void Class_80297BF8::vfn_03()
         pBlock->mUnknown28 = 0;
         lbl_803EAB95 = 0;
         if (fn_800BA6F8() == 0) {
-            fn_8004A230(0);
+            PlayerObjSetDrawReady(0);
         }
         BallsSetVisible(1);
         lbl_803EAB94 = 0;
@@ -127,7 +127,7 @@ void Class_80297BF8::vfn_03()
         fn_800BBB4C(this);
         lbl_803EAB94 = 1;
     }
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         fn_800BBB4C(this);
     }
     if (practice) {
@@ -140,12 +140,12 @@ void Class_80297BF8::vfn_03()
     if (fn_800C1E40() == 0) {
         fn_8017D5D8();
     }
-    if (fn_80025708() != 0) {
-        if (fn_800785C0()->mUnknown1C3 != 0) {
+    if (ChallengeIsActive() != 0) {
+        if (ChalGetCurrent()->mUnknown1C3 != 0) {
             fn_800D4164(0, 0.5f, 0);
             fn_800A7B5C();
         }
-        if (fn_800785C0()->mUnknown1C2 != 0) {
+        if (ChalGetCurrent()->mUnknown1C2 != 0) {
             fn_800D4164(1, 0.5f, 0);
             fn_800A7B5C();
         }

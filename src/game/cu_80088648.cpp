@@ -1,5 +1,5 @@
-#include "game/Key_8007A334.h"
-#include "game/Object_8007A334.h"
+#include "game/DbSortKey.h"
+#include "game/DbCursor.h"
 #include "game/Record_80088CE0.h"
 #include "game/cu_8002ACB4.h"
 
@@ -16,63 +16,63 @@ void fn_800896EC(unsigned int *pResult);
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 
-void fn_80088648(Object_8007A334 *pCursor, int db);
-void fn_8008869C(Object_8007A334 *pCursor);
+void fn_80088648(DbCursor *pCursor, int db);
+void fn_8008869C(DbCursor *pCursor);
 unsigned int fn_800886BC(int db);
 int fn_8008872C(int db);
 void fn_8008879C(int db, int value);
 void fn_8008880C(int db, int value);
 void fn_800888D0(int db, int value);
-void fn_80088950(Object_8007A334 *pCursor, int index);
-void fn_8008898C(Object_8007A334 *pCursor, int db);
-void fn_80088A1C(Object_8007A334 *pCursor);
-void fn_80088A3C(Object_8007A334 *pCursor, int set);
-unsigned char fn_80088A74(Object_8007A334 *pCursor, int index);
-void fn_80088AC8(Object_8007A334 *pCursor, int index, int value);
-void fn_80088B24(Object_8007A334 *pCursor, int mode, unsigned char value);
-void fn_80088C8C(Object_8007A334 *pCursor);
-int fn_80088CAC(Object_8007A334 *pCursor, int a, int key, int *pResult);
-void fn_80088CE0(Object_8007A334 *pCursor, Record_80088CE0 *pRecord);
-unsigned char fn_80088D84(Object_8007A334 *pCursor);
+void fn_80088950(DbCursor *pCursor, int index);
+void fn_8008898C(DbCursor *pCursor, int db);
+void fn_80088A1C(DbCursor *pCursor);
+void fn_80088A3C(DbCursor *pCursor, int set);
+unsigned char fn_80088A74(DbCursor *pCursor, int index);
+void fn_80088AC8(DbCursor *pCursor, int index, int value);
+void fn_80088B24(DbCursor *pCursor, int mode, unsigned char value);
+void fn_80088C8C(DbCursor *pCursor);
+int fn_80088CAC(DbCursor *pCursor, int a, int key, int *pResult);
+void fn_80088CE0(DbCursor *pCursor, Record_80088CE0 *pRecord);
+unsigned char fn_80088D84(DbCursor *pCursor);
 }
 
 extern "C" {
 
-void fn_80088648(Object_8007A334 *pCursor, int db)
+void fn_80088648(DbCursor *pCursor, int db)
 {
-    fn_8007A334(pCursor, 0x464E4955, 0x41434955, 0, 0, fn_8022F3D4(db));
+    DbCursorOpen(pCursor, 0x464E4955, 0x41434955, 0, 0, fn_8022F3D4(db));
 }
 
-void fn_8008869C(Object_8007A334 *pCursor)
+void fn_8008869C(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
 unsigned int fn_800886BC(int db)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned int value;
 
     fn_80088648(&cursor, db);
-    value = fn_8007A98C(&cursor, 0x41434955);
+    value = DbCursorGetInt(&cursor, 0x41434955);
     fn_8008869C(&cursor);
     return value;
 }
 
 int fn_8008872C(int db)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     int value;
 
     fn_80088648(&cursor, db);
-    value = fn_8007A98C(&cursor, 0x54434955);
+    value = DbCursorGetInt(&cursor, 0x54434955);
     fn_8008869C(&cursor);
     return value;
 }
 
 void fn_8008879C(int db, int value)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     fn_80088648(&cursor, db);
     fn_8007ABA4(&cursor, 0x41434955, value);
@@ -83,13 +83,13 @@ void fn_8008879C(int db, int value)
    'TCIU' does not exceed 9999999. */
 void fn_8008880C(int db, int value)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
     unsigned int current;
     unsigned int total;
 
     fn_80088648(&cursor, db);
-    current = fn_8007A98C(&cursor, 0x41434955);
-    total = fn_8007A98C(&cursor, 0x54434955);
+    current = DbCursorGetInt(&cursor, 0x41434955);
+    total = DbCursorGetInt(&cursor, 0x54434955);
     if (total + value > 9999999) {
         value = 9999999 - total;
     }
@@ -100,61 +100,61 @@ void fn_8008880C(int db, int value)
 
 void fn_800888D0(int db, int value)
 {
-    Object_8007A334 cursor;
+    DbCursor cursor;
 
     fn_80088648(&cursor, db);
-    fn_8007ABA4(&cursor, 0x41434955, fn_8007A98C(&cursor, 0x41434955) - value);
+    fn_8007ABA4(&cursor, 0x41434955, DbCursorGetInt(&cursor, 0x41434955) - value);
     fn_8008869C(&cursor);
 }
 
-void fn_80088950(Object_8007A334 *pCursor, int index)
+void fn_80088950(DbCursor *pCursor, int index)
 {
     fn_8008898C(pCursor, fn_8022F358(index));
 }
 
-void fn_8008898C(Object_8007A334 *pCursor, int db)
+void fn_8008898C(DbCursor *pCursor, int db)
 {
-    Key_8007A334 keys[2];
+    DbSortKey keys[2];
 
     keys[0].Set(0x53544653, 0x49434655, 0);
     keys[1].Set(-1, -1, 3);
-    fn_8007A334(pCursor, 0x43465355, 0x49434655, keys, 0, fn_8022F3D4(db));
+    DbCursorOpen(pCursor, 0x43465355, 0x49434655, keys, 0, fn_8022F3D4(db));
 }
 
-void fn_80088A1C(Object_8007A334 *pCursor)
+void fn_80088A1C(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
-void fn_80088A3C(Object_8007A334 *pCursor, int set)
+void fn_80088A3C(DbCursor *pCursor, int set)
 {
     fn_8007AA90(pCursor, 0x43434655, set != 0);
 }
 
-unsigned char fn_80088A74(Object_8007A334 *pCursor, int index)
+unsigned char fn_80088A74(DbCursor *pCursor, int index)
 {
-    fn_8007A7F4(pCursor, 0x49434655, index, 0, 0);
-    return fn_8007A934(pCursor, 0x43434655);
+    DbCursorFindInt(pCursor, 0x49434655, index, 0, 0);
+    return DbCursorGetValue(pCursor, 0x43434655);
 }
 
-void fn_80088AC8(Object_8007A334 *pCursor, int index, int value)
+void fn_80088AC8(DbCursor *pCursor, int index, int value)
 {
-    fn_8007A7F4(pCursor, 0x49434655, index, 0, 0);
+    DbCursorFindInt(pCursor, 0x49434655, index, 0, 0);
     fn_8007AA90(pCursor, 0x43434655, value);
 }
 
-void fn_80088B24(Object_8007A334 *pCursor, int mode, unsigned char value)
+void fn_80088B24(DbCursor *pCursor, int mode, unsigned char value)
 {
-    Key_8007A334 keys[2];
-    Object_80023BBC root;
-    Object_80023BBC left;
-    Object_80023BBC right;
+    DbSortKey keys[2];
+    DbFilter root;
+    DbFilter left;
+    DbFilter right;
     unsigned int column = 0x54464653;
 
     keys[0].Set(0x53544653, 0x49464653, 0);
     keys[1].Set(-1, -1, 3);
     if (mode == 0) {
-        fn_8007A334(pCursor, 0x53544653, 0x49464653, keys, 0, 0x54415453);
+        DbCursorOpen(pCursor, 0x53544653, 0x49464653, keys, 0, 0x54415453);
     } else {
         switch (mode) {
         case 2:
@@ -168,36 +168,36 @@ void fn_80088B24(Object_8007A334 *pCursor, int mode, unsigned char value)
             left.mUnknown16.mValue.mInt = value;
             right.Set(6, 0x535446534E464653LL, 3);
             right.mUnknown16.mValue.mInt = 1;
-            fn_8007A334(pCursor, 0x53544653, 0x49464653, keys, &root, 0x54415453);
+            DbCursorOpen(pCursor, 0x53544653, 0x49464653, keys, &root, 0x54415453);
             break;
         }
         }
     }
 }
 
-void fn_80088C8C(Object_8007A334 *pCursor)
+void fn_80088C8C(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 
-int fn_80088CAC(Object_8007A334 *pCursor, int a, int key, int *pResult)
+int fn_80088CAC(DbCursor *pCursor, int a, int key, int *pResult)
 {
-    return fn_8007A7F4(pCursor, 0x51464653, key, a, pResult);
+    return DbCursorFindInt(pCursor, 0x51464653, key, a, pResult);
 }
 
-void fn_80088CE0(Object_8007A334 *pCursor, Record_80088CE0 *pRecord)
+void fn_80088CE0(DbCursor *pCursor, Record_80088CE0 *pRecord)
 {
-    pRecord->mIndex = fn_8007A98C(pCursor, 0x49464653);
+    pRecord->mIndex = DbCursorGetInt(pCursor, 0x49464653);
     fn_8007AA3C(pCursor, 0x44464653, (int)pRecord->mName, sizeof(pRecord->mName));
-    pRecord->mUnknown136 = fn_8007A98C(pCursor, 0x54464653);
-    pRecord->mUnknown140 = fn_8007A98C(pCursor, 0x51464653);
-    pRecord->mUnknown144 = fn_8007A98C(pCursor, 0x50464653);
-    pRecord->mUnknown148 = fn_8007A98C(pCursor, 0x57464653);
+    pRecord->mUnknown136 = DbCursorGetInt(pCursor, 0x54464653);
+    pRecord->mUnknown140 = DbCursorGetInt(pCursor, 0x51464653);
+    pRecord->mUnknown144 = DbCursorGetInt(pCursor, 0x50464653);
+    pRecord->mUnknown148 = DbCursorGetInt(pCursor, 0x57464653);
 }
 
-unsigned char fn_80088D84(Object_8007A334 *pCursor)
+unsigned char fn_80088D84(DbCursor *pCursor)
 {
-    return fn_8007A98C(pCursor, 0x49464653);
+    return DbCursorGetInt(pCursor, 0x49464653);
 }
 
 static int fn_80088DB0(void *pStream, int a, int target, unsigned char reading)

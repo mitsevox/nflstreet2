@@ -8,10 +8,10 @@
 extern "C" {
 int fn_801486A0(void);
 unsigned int fn_80178DC8(void);
-void fn_80085020(Object_8007A334 *pObject);
-void fn_80085060(Object_8007A334 *pObject);
-int fn_80085080(Object_8007A334 *pObject, int value, int *pResult);
-int fn_800850B8(Object_8007A334 *pObject, int category);
+void fn_80085020(DbCursor *pObject);
+void fn_80085060(DbCursor *pObject);
+int fn_80085080(DbCursor *pObject, int value, int *pResult);
+int fn_800850B8(DbCursor *pObject, int category);
 unsigned int fn_80081ECC(int category, int *pValues);
 void fn_801F4B20(void);
 }
@@ -111,7 +111,7 @@ void fn_8003E48C(int *list)
     while (*list != 32767) fn_8003E3FC(*list++, 0);
 }
 
-void fn_8003E4E0(Record_8003E214 *record, int *values, Object_8007A334 *query)
+void fn_8003E4E0(Record_8003E214 *record, int *values, DbCursor *query)
 {
     for (int i = 0; i < 14; i++) {
         int adjustment = fn_800850B8(query, i);
@@ -152,7 +152,7 @@ void fn_8003E5E0(Record_8003E214 *unused, int count, int *excluded, int *id, int
 
 void fn_8003E710(int value, int *list, Record_8003E214 **pRecords)
 {
-    Object_8007A334 first;
+    DbCursor first;
     Object_8008044C second;
     int values[10];
     Record_8003E214 **records;

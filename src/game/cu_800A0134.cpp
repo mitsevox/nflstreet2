@@ -169,9 +169,9 @@ void fn_8016B32C(int,unsigned char);
 void fn_8016B348(int,unsigned char);
 int fn_8009E9C8(void);
 void fn_8009BD2C(Object_80039F5C *,int *);
-void fn_80076D4C(int);
-void fn_80076D6C(int);
-void fn_80076D8C(int);
+void SpchIGSetTackler(int);
+void SpchIGSetPassCatcher(int);
+void SpchIGSetTurnoverPlayer(int);
 void fn_800A061C(Record_800A0624 *,int *,int);
 float fn_80178A2C(void);
 float fn_80178A08(void);
@@ -225,7 +225,7 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             break;
         case 6:
             ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
-            fn_80076D6C(e->mUnknown0);out->mUnknown18|=0x10000;
+            SpchIGSetPassCatcher(e->mUnknown0);out->mUnknown18|=0x10000;
             if(tracked) {
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
                 fn_8016B248(team,point,to,fn_8009E9C8());
@@ -249,11 +249,11 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             if(tracked)fn_8016B2E8(team,2);
             break;
         case 19:
-            ref=e->mUnknown0;fn_80076D8C(e->mUnknown0);
+            ref=e->mUnknown0;SpchIGSetTurnoverPlayer(e->mUnknown0);
             if(e->mUnknown0Bytes[2]==fn_80178360())out->mUnknown18|=0x200;
             {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
         case 20:
-            ref=e->mUnknown0;out->mUnknown18|=0x400;fn_80076D8C(e->mUnknown0);
+            ref=e->mUnknown0;out->mUnknown18|=0x400;SpchIGSetTurnoverPlayer(e->mUnknown0);
             if(tracked) {
                 Point_8017886C to={e->mUnknownC,e->mUnknown10};
                 fn_8016B248(team,point,to,fn_8009E9C8());fn_8016B2E8(team,3);
@@ -288,7 +288,7 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
             break;
         case 28:
             if(!placed){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-            state->mUnknown10=e->mUnknown4;fn_80076D4C(e->mUnknown4);
+            state->mUnknown10=e->mUnknown4;SpchIGSetTackler(e->mUnknown4);
             fn_800A061C(state,&out->mUnknown00,state->mUnknown10);
             if(tracked) {
                 if(fabsf(e->mUnknownC-point.mX)>4.0f)fn_8016B2E8(team,5);

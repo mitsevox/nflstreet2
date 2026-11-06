@@ -1,5 +1,5 @@
 #include <string.h>
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8015C25C.h"
 #include "game/fn_8021D7B8.h"
@@ -19,7 +19,7 @@ struct Record_8036AD28 {
     int mUnknown4;
     unsigned char mUnknown8;
     int mUnknown12;
-    Object_8007A334 mUnknown16;
+    DbCursor mUnknown16;
 };
 
 inline Record_8036AD28 *fn_8000EC44()
@@ -220,15 +220,15 @@ void fn_800490A0(int index, int a, int b);
 void fn_80049B00(int a, int b);
 void fn_80049B90(int a, int b);
 void fn_80049D6C(int a, unsigned int b, int c);
-void fn_8007BA48(Object_8007A334 *pObject);
-void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB4C(Object_8007A334 *pObject, int a, int b);
-int fn_8007BE54(Object_8007A334 *pObject);
-int fn_8007BE7C(Object_8007A334 *pObject);
+void fn_8007BA48(DbCursor *pObject);
+void fn_8007BB04(DbCursor *pObject);
+int fn_8007BB4C(DbCursor *pObject, int a, int b);
+int fn_8007BE54(DbCursor *pObject);
+int fn_8007BE7C(DbCursor *pObject);
 int fn_8007BECC(int a, const char *pName);
 int fn_8007BF28(int index);
-void fn_8007CC50(Object_8007A334 *pObject);
-void fn_8007CCC4(Object_8007A334 *pObject);
+void HairListOpen(DbCursor *pObject);
+void HairListClose(DbCursor *pObject);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080E98(Object_8008044C *pObject);
 int fn_800872E8(int a);
@@ -386,8 +386,8 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
 
         fn_8000EC44()->mUnknown8 = 0;
         fn_801835C8();
-        fn_8007CC50(&fn_8000EC44()->mUnknown16);
-        fn_8007A444((Object_8007A334 *)fn_80182DC8());
+        HairListOpen(&fn_8000EC44()->mUnknown16);
+        DbCursorFirst((DbCursor *)fn_80182DC8());
         value = fn_800808F8(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
         fn_800809C4(fn_80182DC8(), value, 0);
@@ -454,7 +454,7 @@ int Class_8000F540::vfn_02(int a, int b, void **pOut)
     if (b) {
         fn_80183704();
         result = -1;
-        fn_8007CCC4(&fn_8000EC44()->mUnknown16);
+        HairListClose(&fn_8000EC44()->mUnknown16);
         fn_8000EC44()->mUnknown12 = result;
         fn_8000EC44()->mUnknown0 = 0;
     } else {
@@ -746,7 +746,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
 {
-    Object_8007A334 object;
+    DbCursor object;
     int i;
 
     for (i = 0; i <= 13; i++) {
@@ -766,7 +766,7 @@ static void fn_8000E8FC(int index, int value)
 {
     fn_8000E834(&lbl_8036AD78);
     if (lbl_8000F590[index] != 14 || index == 22) {
-        Object_8007A334 object;
+        DbCursor object;
         int a = 0;
         int b = 0;
         int c = 0;

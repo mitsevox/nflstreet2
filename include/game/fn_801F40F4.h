@@ -12,7 +12,7 @@ struct Info_801F40F4 {
 };
 
 /* Two-word block passed to fn_801F4580. */
-struct Pair_80073CB0 {
+struct SndStreamFile_t {
     void *mpUnknown0;
     int mUnknown4;
 };
@@ -27,7 +27,7 @@ struct Status_801F4834 {
 extern "C" {
 int fn_801F4050(int a, int b, Info_801F40F4 *pInfo);
 void fn_801F40F4(Info_801F40F4 *pInfo);
-int fn_801F4580(int handle, Pair_80073CB0 *pPair, int a, int b);
+int fn_801F4580(int handle, SndStreamFile_t *pPair, int a, int b);
 void fn_801F4834(int handle, Status_801F4834 *pStatus);
 }
 

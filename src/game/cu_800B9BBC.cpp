@@ -6,7 +6,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_80238174.h"
-#include "game/cu_8007C9D4.h"
+#include "game/GameInfo.h"
 
 /* Four-byte entry of the stream read by fn_800B9F50. */
 struct Event_800B9F50 {
@@ -338,7 +338,7 @@ extern "C" void fn_800BA3F0(void)
         Vector_80039F5C pos;
         int angles[3];
 
-        p->mUnknown180 = fn_8007CB6C(2);
+        p->mUnknown180 = GameInfoGet(2);
         p->mUnknown181[0] = p->mUnknown180 == 0;
         fn_800B9C3C();
         fn_800B9CB0();

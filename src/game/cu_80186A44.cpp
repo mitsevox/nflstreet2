@@ -9,7 +9,7 @@ extern "C" {
 int fn_801869F0(void);
 int fn_80186A10(int, char *);
 int fn_8022F358(int);
-void fn_80077F24(void);
+void ChalCloseCursors(void);
 void fn_8022F1BC(int);
 void fn_80029DCC(int, int);
 void fn_80029E90(int, int, int, int);
@@ -17,7 +17,7 @@ void fn_80011894(int);
 int fn_80186518(int, int, int, int, int);
 void fn_80186808(int, int, int);
 void fn_80186714(int, int, int);
-void fn_8007D654(void);
+void RecordsPrune(void);
 void fn_8022F294(int);
 int fn_8022F0D4(int);
 int fn_8022F794(int, char *);
@@ -75,7 +75,7 @@ void fn_80186A44(signed char index)
 {
     int count = fn_801869F0();
     int db = fn_8022F358(index);
-    fn_80077F24();
+    ChalCloseCursors();
     fn_8022F1BC(db);
     for (int i = index; i < count; i = (signed char)(i + 1)) {
         fn_80029DCC(2, i);
@@ -125,7 +125,7 @@ void fn_80186CE8(unsigned char *pFlags)
     unsigned char changed = 0;
     if (fn_80186F7C(0) != -1) changed = fn_80187038(0, pFlags[0]);
     if (fn_80186F7C(1) != -1) changed |= fn_80187038(1, pFlags[1]);
-    if (changed) fn_8007D654();
+    if (changed) RecordsPrune();
 }
 int fn_80186D64(int excluded)
 {

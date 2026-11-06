@@ -2,7 +2,7 @@
    current profile's progress, starts the chosen lesson and records when every
    lesson has been completed. */
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/fn_8021D7B8.h"
 
 struct TutorialText_t {
@@ -30,26 +30,26 @@ void fn_80010200(int value);
 void fn_80011600(int a, int b, int c);
 void fn_80014294(int a, int b);
 void fn_80015D28(int a);
-void fn_80027E18(unsigned char value);
-int LessonTableSeek(Object_8007A334 *pObject, int a, int *pResult);
-int LessonTableGetCILM(Object_8007A334 *pObject);
-int LessonTableGetCISM(Object_8007A334 *pObject);
-int LessonTableGetDIRM(Object_8007A334 *pObject);
-void LessonTableGetTitle(Object_8007A334 *pObject, char *pData, int size);
-void LessonTableGetDescription(Object_8007A334 *pObject, char *pData, int size);
-void fn_8007EBDC(Object_8007A334 *pObject, int db);
-void fn_8007EC34(Object_8007A334 *pObject);
-int fn_8007EC54(Object_8007A334 *pObject, int a);
-void fn_8007ECBC(int db, int a);
-unsigned char fn_80087F70(void);
-unsigned char fn_80087FD0(void);
-int fn_80088068(int id);
-int fn_800881B8(void);
-int fn_80088224(int id);
-void fn_80088338(int id, char *pDest, int count);
-unsigned char fn_80088628(void);
-void fn_80088638(int db);
-int fn_80088640(void);
+void FELoopSetResume(unsigned char value);
+int LessonTableSeek(DbCursor *pObject, int a, int *pResult);
+int LessonTableGetCILM(DbCursor *pObject);
+int LessonTableGetCISM(DbCursor *pObject);
+int LessonTableGetDIRM(DbCursor *pObject);
+void LessonTableGetTitle(DbCursor *pObject, char *pData, int size);
+void LessonTableGetDescription(DbCursor *pObject, char *pData, int size);
+void TeamLockOpen(DbCursor *pObject, int db);
+void TeamLockClose(DbCursor *pObject);
+int TeamLockIsHidden(DbCursor *pObject, int a);
+void TeamUnlock(int db, int a);
+unsigned char TutorialDbOpenInfo(void);
+unsigned char TutorialDbCloseInfo(void);
+int TutorialGetStepCount(int id);
+int TutorialAllComplete(void);
+int TutorialIsComplete(int id);
+void TutorialGetDescription(int id, char *pDest, int count);
+unsigned char TutorialTakeAllCompleteFlag(void);
+void TutorialSetProfileDb(int db);
+int TutorialGetProfileDb(void);
 void fn_801566EC(void);
 void fn_801566F8(void);
 void fn_80156724(int value);
@@ -69,7 +69,7 @@ void MsgTutorialBeginLesson(void);
 void MsgTutorialCheckCompletion(void);
 }
 
-static Object_8007A334 _MsgTutorial_LessonCursor;
+static DbCursor _MsgTutorial_LessonCursor;
 static unsigned char _MsgTutorial_cFirstLesson = 0;
 static unsigned char _MsgTutorial_bDatabaseSet = 0;
 
@@ -77,21 +77,21 @@ extern "C" {
 void MsgTutorialInit(void)
 {
     fn_801566EC();
-    fn_80087F70();
+    TutorialDbOpenInfo();
     if (!_MsgTutorial_bDatabaseSet) {
         if (fn_8022F4BC() != -1) {
-            fn_80088638(fn_8022F4BC());
+            TutorialSetProfileDb(fn_8022F4BC());
             _MsgTutorial_bDatabaseSet = 1;
         }
     } else {
-        fn_8022F478(fn_80088640());
+        fn_8022F478(TutorialGetProfileDb());
     }
 }
 
 void MsgTutorialShutdown(void)
 {
     fn_801566F8();
-    fn_80087FD0();
+    TutorialDbCloseInfo();
 }
 
 int MsgTutorialGetLessonStatus(int index)
@@ -141,15 +141,15 @@ int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unuse
         fn_8015672C(pParams->mUnknown0);
         break;
     case 0x80000006:
-        fn_80088338(pParams->mUnknown0, pParams->mUnknown4.mUnknown0->mUnknown8, pParams->mUnknown4.mUnknown0->mUnknown4);
-        *pParams->mUnknown16 = fn_80088224(pParams->mUnknown0);
+        TutorialGetDescription(pParams->mUnknown0, pParams->mUnknown4.mUnknown0->mUnknown8, pParams->mUnknown4.mUnknown0->mUnknown4);
+        *pParams->mUnknown16 = TutorialIsComplete(pParams->mUnknown0);
         break;
     case 0x80000008:
-        *pResult = fn_800881B8();
+        *pResult = TutorialAllComplete();
         MsgTutorialCheckCompletion();
         break;
     case 0x80000009:
-        *pResult = fn_80088628();
+        *pResult = TutorialTakeAllCompleteFlag();
         break;
     case 0x8000000A:
         fn_80010200(600);
@@ -167,38 +167,38 @@ void MsgTutorialBeginLesson(void)
     if (state == 1) {
         int value = fn_8000FCDC();
         if (!_MsgTutorial_bDatabaseSet) {
-            fn_80088638(fn_8022F4BC());
+            TutorialSetProfileDb(fn_8022F4BC());
             _MsgTutorial_bDatabaseSet = state;
         }
         fn_80011600(-1, fn_8000FCCC(), value);
-        fn_80186F30(fn_8022F384(fn_80088640()), 1);
+        fn_80186F30(fn_8022F384(TutorialGetProfileDb()), 1);
         fn_80014294(0x36, 0x21);
-        fn_80027E18(1);
+        FELoopSetResume(1);
         unsigned int id = fn_801568F0();
-        if (fn_80088224(id)) {
+        if (TutorialIsComplete(id)) {
             fn_80156734(0);
             fn_80156724(0);
         } else {
-            fn_80156734(fn_80088068(id));
-            fn_80156724(fn_80088068(id));
+            fn_80156734(TutorialGetStepCount(id));
+            fn_80156724(TutorialGetStepCount(id));
         }
         fn_80015D28(4);
     } else {
-        fn_80088638(-1);
+        TutorialSetProfileDb(-1);
         _MsgTutorial_bDatabaseSet = 0;
     }
 }
 
 void MsgTutorialCheckCompletion(void)
 {
-    Object_8007A334 object;
+    DbCursor object;
 
     int db = fn_8022F384(fn_8022F4BC());
-    fn_8007EBDC(&object, db);
-    int found = fn_8007EC54(&object, 0x21);
-    fn_8007EC34(&object);
-    if (fn_800881B8() && found) {
-        fn_8007ECBC(db, 0x21);
+    TeamLockOpen(&object, db);
+    int found = TeamLockIsHidden(&object, 0x21);
+    TeamLockClose(&object);
+    if (TutorialAllComplete() && found) {
+        TeamUnlock(db, 0x21);
     }
 }
 }

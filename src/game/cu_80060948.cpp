@@ -1,4 +1,4 @@
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 #include "game/cu_8003AEA8.h"
@@ -56,7 +56,7 @@ void fn_8001B330(int a);
 void fn_8005BE54(unsigned char value);
 int fn_80060354(VetsRow_8018EC68 *pRow, int *pList);
 void fn_80060410(int index, int *pList);
-void fn_8007CAEC(int index, int value);
+void GameInfoSet(int index, int value);
 void fn_80084A8C(int a, int *pList, int b, int c);
 int fn_80085620(int a, int b);
 int *fn_80085744(int a, int b);
@@ -75,8 +75,8 @@ int fn_80086ACC(int *pList);
 int fn_80086AEC(int size);
 int fn_80086B50(void);
 int fn_80086BA4(int index);
-void fn_80087BE4(Object_8007A334 *pObject, int index);
-void fn_80087C3C(Object_8007A334 *pObject);
+void fn_80087BE4(DbCursor *pObject, int index);
+void fn_80087C3C(DbCursor *pObject);
 int fn_80178AE0(void);
 int fn_801801B4(void);
 void fn_80186F30(signed char a, int b);
@@ -91,15 +91,15 @@ int fn_8022F4BC(void);
 }
 
 Object_8008044C lbl_8030A2BC;
-Object_8007A334 lbl_8030A2E8;
-Object_8007A334 lbl_8030A314;
+DbCursor lbl_8030A2E8;
+DbCursor lbl_8030A314;
 VetsRow_8018EC68 lbl_8030A340;
 Match_8030A3A4 lbl_8030A3A4;
 
 static unsigned char lbl_803EA5E8 = 0;
 static VetsRow_8018EC68 *lbl_803EA5EC = 0;
 static Object_8008044C *lbl_803EA5F0 = 0;
-static Object_8007A334 *lbl_803EA5F4 = 0;
+static DbCursor *lbl_803EA5F4 = 0;
 static State_803EA5F8 lbl_803EA5F8 = {0, -1, 0, 0};
 
 static Saved_802D4E28 lbl_802D4E28 = {-1, 0, 0, 0};
@@ -543,7 +543,7 @@ void fn_80061584(void)
     }
     fn_80011600(-1, fn_8000FCCC(), saved);
     fn_80186F30(lbl_803EA5F8.mIndex, 1);
-    fn_8007CAEC(2, 1);
+    GameInfoSet(2, 1);
     fn_80015D28(lbl_803EA5EC->mDive);
 }
 

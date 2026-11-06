@@ -66,7 +66,7 @@ int fn_8002D0AC(Type_803EA368 *p);
 int fn_8002D228(Type_803EA368 *p);
 void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
 int fn_80065864(void);
-void fn_80076160(void);
+void SpchIGResetPlayResult(void);
 void fn_80094DF0(void);
 int fn_8009A6EC(Object_80039F5C *p);
 void fn_8009B924(void);
@@ -555,7 +555,7 @@ void Class_80297C60::vfn_03(float dt)
     Vector_80039F5C pos;
 
     pos.mX = pos.mY = pos.mZ = 0.0f;
-    fn_80076160();
+    SpchIGResetPlayResult();
     fn_800C9FC0();
     fn_800AE9EC();
     fn_801478F0(0);

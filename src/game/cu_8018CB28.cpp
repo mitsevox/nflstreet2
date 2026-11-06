@@ -2,9 +2,9 @@
 #include "game/fn_801F9908.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 #include "game/Query_8008352C.h"
-#include "game/Table_8007E020.h"
+#include "game/DbQueryTable.h"
 #include "game/Object_8008044C.h"
 #include "game/Block_80307980.h"
 #include "game/FMCAPPORT.h"
@@ -17,8 +17,8 @@ void fn_8018CA80(int);
 void fn_8018CA14(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
-void fn_801F9718(int, int, ColumnValue_802D6424 *, int *, int);
-int fn_801F9D70(int, int, Object_80023BBC *, unsigned short *);
+void fn_801F9718(int, int, DbColumnValue *, int *, int);
+int fn_801F9D70(int, int, DbFilter *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
 int fn_80029D74(int, int);
@@ -61,7 +61,7 @@ extern "C" {
 void fn_8018CA80(int source)
 {
     QueryResult result;
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
 
     tables[0].Set(0x59505243);
     tables[1].Set(-1);
@@ -185,7 +185,7 @@ void fn_8018D07C(int index)
 
 int fn_8018D23C()
 {
-    ColumnValue_802D6424 list[17];
+    DbColumnValue list[17];
     unsigned short count = 1;
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
@@ -205,7 +205,7 @@ int fn_8018D23C()
 
 void fn_8018D358(int index, int team, int rumt)
 {
-    Object_80023BBC arg;
+    DbFilter arg;
     QueryResult result;
     QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
@@ -315,7 +315,7 @@ void fn_8018D918()
     if (!fn_8018F228(fn_80186B38(fn_8022F4BC())))
         fn_8018F41C(fn_80186B38(fn_8022F4BC()));
     QueryResult result;
-    Table_8007E020 tables[2];
+    DbQueryTable tables[2];
     QueryCursor cursor;
     int pxsp, diop, ytrp, selected;
     cursor.mUnknown0 = 0;
@@ -355,8 +355,8 @@ void fn_8018D918()
 void fn_8018DC18(int unused, int player)
 {
     QueryResult result;
-    Table_8007E020 tables[2];
-    Object_80023BBC arg;
+    DbQueryTable tables[2];
+    DbFilter arg;
     arg.Set(6, 0x59414C5044494750LL, 3, player);
     tables[0].Set(0x59414C50);
     tables[1].Set(-1);
@@ -404,12 +404,12 @@ void fn_8018DE9C(int first, int second)
     fn_801FCE10(0, "use \x8c insert into \x8c.'MTRC' * select * from \x8c\n", 0x54415453, handle, first);
     fn_801FCE10(0, "use \x8c insert into \x8c.'YPRC' * select * from \x8c\n", 0x54415453, handle, second);
 }
-void fn_8018DF20(Object_8007A334 *pCursor, int index)
+void fn_8018DF20(DbCursor *pCursor, int index)
 {
-    fn_8007A334(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    DbCursorOpen(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
 }
-void fn_8018DF78(Object_8007A334 *pCursor)
+void fn_8018DF78(DbCursor *pCursor)
 {
-    fn_8007A3C4(pCursor);
+    DbCursorClose(pCursor);
 }
 }

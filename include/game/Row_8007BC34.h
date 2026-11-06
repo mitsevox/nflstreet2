@@ -1,7 +1,7 @@
 #ifndef GAME_ROW_8007BC34_H
 #define GAME_ROW_8007BC34_H
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
 /* One 'RAEG' row as fn_8007BC34 copies it out of the cursor: four words, two
    33-byte names (the second one is cut at its first space), 16 bytes, words at
@@ -28,8 +28,8 @@ struct Row_8007BC34 {
 };
 
 extern "C" {
-void fn_8007BC34(Object_8007A334 *pCursor, Row_8007BC34 *pRow);
-unsigned int fn_8007BDF8(Object_8007A334 *pCursor);
+void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pRow);
+unsigned int fn_8007BDF8(DbCursor *pCursor);
 }
 
 #endif

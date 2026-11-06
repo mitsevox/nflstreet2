@@ -1,7 +1,7 @@
 #ifndef GAME_QUERY_8007F19C_H
 #define GAME_QUERY_8007F19C_H
 
-#include "game/Object_8007A334.h"
+#include "game/DbCursor.h"
 
 /* Left operand, right operand and the comparison fn_801FA428 applies. */
 struct Expression_8007F19C {
@@ -51,6 +51,6 @@ struct Result_8007F19C {
     char mUnknown8[8];
 };
 
-extern "C" int fn_801FA428(int, Table_8007F19C *, Expression_8007F19C *, ColumnValue_802D6424 *, Result_8007F19C *, int);
+extern "C" int fn_801FA428(int, Table_8007F19C *, Expression_8007F19C *, DbColumnValue *, Result_8007F19C *, int);
 
 #endif

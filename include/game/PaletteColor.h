@@ -14,8 +14,8 @@ struct ColorPalette {
 };
 
 extern "C" {
-void fn_80079FBC(int index, ColorPalette *pPalette);
-void fn_8007A068(unsigned char index, PaletteColor *pColor);
+void DbColPalGetPalette(int index, ColorPalette *pPalette);
+void DbColPalGetPrimaryColor(unsigned char index, PaletteColor *pColor);
 }
 
 #endif
