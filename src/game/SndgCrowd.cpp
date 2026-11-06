@@ -37,9 +37,9 @@ int SndgCrowd::Init()
     memset(mpState.mp, 0, sizeof(SndgCrowdState));
     mpState.mp->mpUnknown0 = fn_801EEB44(lbl_802EC018, 44);
     if (fn_801F3E28()) {
-        mpState.mp->mUnknown4 = fn_8006DBF8(mpState.mp->mpUnknown0, 1);
-        fn_8006DC98(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
-        fn_8006DD70(0x14000001, _SndgCrowd_uVolume);
+        mpState.mp->mUnknown4 = SndgStreamOpen(mpState.mp->mpUnknown0, 1);
+        SndgStreamStart(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
+        SndgStreamSetVolume(0x14000001, _SndgCrowd_uVolume);
         fn_8006DE54(0x14000001, 127);
     }
     return 1;
@@ -48,8 +48,8 @@ int SndgCrowd::Init()
 int SndgCrowd::Shutdown()
 {
     if (fn_801F3E28()) {
-        fn_8006DD24(0x14000001);
-        fn_8006DC4C(mpState.mp->mUnknown4);
+        SndgStreamStop(0x14000001);
+        SndgStreamClose(mpState.mp->mUnknown4);
     }
     fn_801EEFAC(mpState.mp->mpUnknown0);
     delete mpState.mp;
@@ -61,7 +61,7 @@ void SndgCrowdSetVolume(unsigned char value)
 {
     _SndgCrowd_uVolume = value;
     if (gSndgCrowd.fn_801CC96C() && fn_801F3E28()) {
-        fn_8006DD70(0x14000001, _SndgCrowd_uVolume);
+        SndgStreamSetVolume(0x14000001, _SndgCrowd_uVolume);
     }
 }
 
@@ -76,7 +76,7 @@ int SndgCrowdTriggerEvent(int index, int unknown)
         flag = 1;
     }
     if (fn_800A350C()) {
-        result = fn_8006DE00(0x14000001, sIds[flag ? 0 : 1][index]);
+        result = SndgStreamPostEvent(0x14000001, sIds[flag ? 0 : 1][index]);
     }
     return result;
 }

@@ -21,7 +21,7 @@ struct Struct_802D611C {
     unsigned int mUnknown8;
 };
 
-/* Argument of fn_8006BBC4, which compares the string at +8 with the names of
+/* Argument of SndgAmbIsPathNodeName, which compares the string at +8 with the names of
    lbl_802D50A4; SndgSoundObjUpdateFromEvent reads the float at +4. */
 struct Struct_8006BBC4 {
     int mUnknown0;
@@ -32,12 +32,12 @@ struct Struct_8006BBC4 {
 extern "C" {
 extern Struct_802D611C lbl_802D611C[];
 
-int fn_8006DBF8(void *pData, int unknown);
-int fn_8006DC4C(int handle);
-int fn_8006DC98(void *pData, int unknown, int id, float value);
-int fn_8006DD24(int id);
-void fn_8006DD70(int id, unsigned int value);
-int fn_8006DE00(int id, int unknown);
+int SndgStreamOpen(void *pData, int unknown);
+int SndgStreamClose(int handle);
+int SndgStreamStart(void *pData, int unknown, int id, float value);
+int SndgStreamStop(int id);
+void SndgStreamSetVolume(int id, unsigned int value);
+int SndgStreamPostEvent(int id, int unknown);
 int fn_8006DE54(int id, int unknown);
 }
 

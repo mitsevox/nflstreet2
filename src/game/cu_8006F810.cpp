@@ -29,14 +29,14 @@ extern "C" {
 int fn_8007F828(int id);
 int fn_800A8444(int index);
 void fn_8006EA04(unsigned int index, unsigned int value);
-void fn_8006BD24(void);
+void SndgAmbStopAllAndCue(void);
 void fn_80072AEC(int mode);
 void fn_80072E84(void);
 void fn_80072F04(void);
-void fn_8006BC30(int type, unsigned int index);
-void fn_8006BCC8(int type);
-int fn_8006B810(int type, unsigned int index);
-unsigned int fn_8006BA54(int type, int value);
+void SndgAmbObjStop(int type, unsigned int index);
+void SndgAmbPostCue(int type);
+int SndgAmbObjExists(int type, unsigned int index);
+unsigned int SndgAmbObjFindSlot(int type, int value);
 void SndgSoundObjControl(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index);
 void SndgSoundObjUpdateFromEvent(int type, AudmonEvent_t *pRecord);
 void SndgFadeOutChannelGroup(void);
@@ -250,7 +250,7 @@ void fn_8006F850(AudmonEvent_t *p)
         SndgCrowdTriggerEvent(15, fn_8009BCE8(&p->mUnknown0)->mIdBytes[2]);
         fn_8006C854(53, &p->mPos);
         break;
-    case 132: fn_8006BD24(); SndgCrowdTriggerEvent(2, 0); break;
+    case 132: SndgAmbStopAllAndCue(); SndgCrowdTriggerEvent(2, 0); break;
     case 126: fn_80072AEC(10); break;
     case 127: fn_80072AEC(11); break;
     case 107: case 128:
@@ -306,13 +306,13 @@ void fn_8006F850(AudmonEvent_t *p)
     case 103: fn_800719A4(&p->mPos); break;
     case 62:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(10, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 63:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(104, &p->mPos);
         } else {
             unsigned char volume;
@@ -327,19 +327,19 @@ void fn_8006F850(AudmonEvent_t *p)
         break;
     case 65:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(106, &p->mPos);
         } else fn_80071A04(3, &p->mPos);
         break;
     case 66:
         if (p->mUnknown14) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(105, &p->mPos);
         }
         break;
     case 67:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(110, &p->mPos);
         } else {
             unsigned char volume;
@@ -354,31 +354,31 @@ void fn_8006F850(AudmonEvent_t *p)
         break;
     case 68:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(106, &p->mPos);
         } else { fn_80071A04(4, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 69:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(5, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 70:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(6, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 72:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(105, &p->mPos);
         }
         break;
     case 73:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(110, &p->mPos);
         } else {
             unsigned char volume;
@@ -392,35 +392,35 @@ void fn_8006F850(AudmonEvent_t *p)
         }
         break;
     case 64: case 74:
-        if (p->mUnknown14 || !p->mUnknown0) fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        if (p->mUnknown14 || !p->mUnknown0) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         fn_80071A04(9, &p->mPos);
         break;
     case 75:
         if (p->mUnknown14) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(111, &p->mPos);
         } else fn_80071A04(8, &p->mPos);
         break;
     case 76:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(112, &p->mPos);
         }
         break;
     case 77:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(107, &p->mPos);
         } else { fn_80071A04(8, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 78:
         fn_80071A04(1, &p->mPos);
-        if (p->mUnknown14) fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        if (p->mUnknown14) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         else fn_80071914(&p->mPos);
         break;
-    case 47: fn_8006BC30(4, (unsigned char)p->mUnknown18); break;
+    case 47: SndgAmbObjStop(4, (unsigned char)p->mUnknown18); break;
     case 86: case 87:
-        SndgSoundObjControl(7, fn_8006B810(7, 0) ? 2 : 1, &p->mPos, 0, 0);
+        SndgSoundObjControl(7, SndgAmbObjExists(7, 0) ? 2 : 1, &p->mPos, 0, 0);
         break;
     case 85: SndgSoundObjUpdateFromEvent(12, p); break;
     case 81: SndgSoundObjUpdateFromEvent(5, p); break;
@@ -429,7 +429,7 @@ void fn_8006F850(AudmonEvent_t *p)
     case 82: SndgSoundObjUpdateFromEvent(9, p); break;
     case 83: SndgSoundObjUpdateFromEvent(10, p); break;
     case 84:
-        SndgSoundObjControl(6, fn_8006B810(6, (unsigned char)fn_8006BA54(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
+        SndgSoundObjControl(6, SndgAmbObjExists(6, (unsigned char)SndgAmbObjFindSlot(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
         break;
     case 44: lbl_803EA6EC = 1; break;
     case 46: fn_80071914(&p->mPos); break;
@@ -463,12 +463,12 @@ void fn_8006F850(AudmonEvent_t *p)
     case 112: if (fn_801486A0()) fn_8007134C(); break;
     case 113:
         fn_8006C854(130, 0);
-        fn_8006BCC8(2);
+        SndgAmbPostCue(2);
         fn_80072E84();
         SndgCrowdTriggerEvent(2, 0);
         break;
     case 114:
-        fn_8006BCC8(3);
+        SndgAmbPostCue(3);
         if (!p->mUnknown10.mValue) fn_80072F04();
         SndgCrowdTriggerEvent(3, 0);
         break;
@@ -596,7 +596,7 @@ void fn_8006F850(AudmonEvent_t *p)
     case 124: fn_8017886C(); break;
     case 139:
         fn_8006F824(50);
-        fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         if (lbl_803EA6F8) {
             fn_80072AEC(8);
             lbl_803EA6F8 = 0;
