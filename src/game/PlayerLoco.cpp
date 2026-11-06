@@ -1,7 +1,7 @@
 /* Player locomotion animation: the handler for the momentum animation states
    and the helpers of the locomotion animation state (key 74). The helpers
    pick the animation sub-states from two category bytes, choose the speed
-   blend set, set the hand poses and scale the cycle duration with the
+   blend set, set the two pose elements and scale the cycle duration with the
    player's speed. */
 #include <string.h>
 #include "game/Block_801BE60C.h"
@@ -117,7 +117,7 @@ extern "C" void PlayerLocoSetupBlendSets(Table_80089904 *pTable, Block_801BE60C 
     pBlock->mUnknown20.mUnknown16 = pBlock->mUnknown20.mUnknown17;
 }
 
-extern "C" void PlayerLocoSetHandPoses(Table_80089904 *pTable, Object_80039F5C *p, int index, int swap)
+extern "C" void PlayerLocoSetPoseElements(Table_80089904 *pTable, Object_80039F5C *p, int index, int swap)
 {
     Info_80089904 *pInfo = pTable->mEntries[index].mpInfo;
     unsigned char a = pInfo->mType;
@@ -142,7 +142,7 @@ extern "C" void PlayerLocoSelectSecondaryState(Table_80089904 *pTable, Block_801
     values[0] = pBlock->mUnknown3D;
     int index = fn_8009C56C(pTable, values);
     unsigned short id = pTable->mEntries[index].mUnknown2 & 0x7FFF;
-    PlayerLocoSetHandPoses(pTable, p, index, swap);
+    PlayerLocoSetPoseElements(pTable, p, index, swap);
     fn_801BBC3C(p->mpUnknown796->mUnknown2, id, pTable);
     PlayerLocoSetupBlendSets(pTable, pBlock, p);
 }
