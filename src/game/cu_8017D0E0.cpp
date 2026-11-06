@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Entry_80219044.h"
 #include "game/Challenge.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/cu_8017DD68.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
@@ -12,8 +12,8 @@
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_80025708(void);
-int fn_8002B5A8(void);
+int ChallengeIsActive(void);
+int VptManagerGetPassIcons(void);
 int fn_800A8444(int team);
 int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);
@@ -128,13 +128,13 @@ void fn_8017D1D8(unsigned char id)
                 if (lbl_803EB485 != 4) {
                     args[0] = fn_8017D0E0(lbl_803EB485);
                     args[1] = 0;
-                    if (fn_8002B5A8()) {
+                    if (VptManagerGetPassIcons()) {
                         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                     }
                 }
                 args[0] = fn_8017D0E0(id);
                 args[1] = 1;
-                if (fn_8002B5A8() && fn_8017D1D0(id)) {
+                if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
                     fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                 }
                 lbl_803EB485 = id;
@@ -145,13 +145,13 @@ void fn_8017D1D8(unsigned char id)
                 if (lbl_803EB484 != 4) {
                     args[0] = fn_8017D0E0(lbl_803EB484);
                     args[1] = 0;
-                    if (fn_8002B5A8()) {
+                    if (VptManagerGetPassIcons()) {
                         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                     }
                 }
                 args[0] = fn_8017D0E0(id);
                 args[1] = 1;
-                if (fn_8002B5A8() && fn_8017D1D0(id)) {
+                if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
                     fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                 }
                 lbl_803EB484 = id;
@@ -162,7 +162,7 @@ void fn_8017D1D8(unsigned char id)
         if (lbl_803EB485 == id && (lbl_803EB480 == 0 || lbl_803EB480 != p->mId)) {
             args[0] = fn_8017D0E0(id);
             args[1] = 0;
-            if (fn_8002B5A8()) {
+            if (VptManagerGetPassIcons()) {
                 fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
             }
             lbl_803EB485 = 4;
@@ -172,7 +172,7 @@ void fn_8017D1D8(unsigned char id)
         if (lbl_803EB484 == id && (lbl_803EB47C == 0 || lbl_803EB47C != p->mId)) {
             args[0] = fn_8017D0E0(id);
             args[1] = 0;
-            if (fn_8002B5A8()) {
+            if (VptManagerGetPassIcons()) {
                 fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
             }
             lbl_803EB484 = 4;
@@ -193,7 +193,7 @@ void fn_8017D4AC(void)
     fn_8017DE54(1, 0.0f, 0, 0);
     fn_8017E620(0, 0);
     fn_8017E620(1, 0);
-    if (fn_80025708()) {
+    if (ChallengeIsActive()) {
         fn_8017D6B8(0, ChalGetCurrent()->mUnknown1AC);
         fn_8017D6B8(1, ChalGetCurrent()->mUnknown1A8);
     } else {
@@ -282,7 +282,7 @@ void fn_8017D7C4(const char *pText)
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x8000000C, 1, args);
-    fn_80067D4C(0x13, 0);
+    AudmonEventPost(0x13, 0);
 }
 
 void fn_8017D844(const char *pText)
@@ -294,7 +294,7 @@ void fn_8017D844(const char *pText)
     args[0]->mpText = lbl_80362964;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
-    fn_80067D4C(0x13, 0);
+    AudmonEventPost(0x13, 0);
 }
 
 void fn_8017D8C4(int a, int b, unsigned char c)
@@ -315,7 +315,7 @@ void fn_8017D8D4(void)
     if (lbl_803EB485 != 4) {
         args[0] = fn_8017D0E0(lbl_803EB485);
         args[1] = 0;
-        if (fn_8002B5A8()) {
+        if (VptManagerGetPassIcons()) {
             fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
         }
         lbl_803EB485 = 4;
@@ -323,7 +323,7 @@ void fn_8017D8D4(void)
     if (lbl_803EB484 != 4) {
         args[0] = fn_8017D0E0(lbl_803EB484);
         args[1] = 0;
-        if (fn_8002B5A8()) {
+        if (VptManagerGetPassIcons()) {
             fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
         }
         lbl_803EB484 = 4;
@@ -355,7 +355,7 @@ void fn_8017D9D8(int team)
     lbl_803629DC.mpText = lbl_803EB474;
     args[3] = (int)&lbl_803629DC;
     lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
 }
@@ -377,7 +377,7 @@ void fn_8017DA9C(int team)
     lbl_803629DC.mpText = lbl_803EB474;
     args[3] = (int)&lbl_803629DC;
     lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
-    if (fn_8002B5A8()) {
+    if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
 }

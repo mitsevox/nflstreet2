@@ -1,8 +1,8 @@
 /* Audio settings screen: reads and writes the game setting behind each row and,
    when the player accepts, rebuilds the music playlist and starts the next song. */
 
-#include "game/Block_80063910.h"
-#include "game/fn_80063A0C.h"
+#include "game/OptionsScreenMsg.h"
+#include "game/OptionsScreen.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80072AA8.h"
@@ -16,7 +16,7 @@ void MsgAudioSettingsApply(void)
 
 void MsgAudioSettingsSetValue(unsigned int index, int value)
 {
-    int id = fn_80063A0C(index);
+    int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
         fn_8007F6F8(id, value);
@@ -26,7 +26,7 @@ void MsgAudioSettingsSetValue(unsigned int index, int value)
 int MsgAudioSettingsGetValue(unsigned int index)
 {
     int result = 0;
-    int id = fn_80063A0C(index);
+    int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
         result = fn_8007F828(id);
@@ -37,7 +37,7 @@ int MsgAudioSettingsGetValue(unsigned int index)
 void MsgAudioSettingsClose(void) {}
 void MsgAudioSettingsOpen(void) {}
 
-int MsgAudioSettingsHandleMessage(unsigned int id, Block_80063910 *pBlock, int unused, int *pResult)
+int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

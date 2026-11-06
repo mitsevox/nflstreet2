@@ -7,7 +7,7 @@
 #include "game/Level_80054130.h"
 #include "game/Record_803EA558.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_80195EFC.h"
@@ -415,7 +415,7 @@ extern "C" void fn_800C34B0(void)
         fn_8017F264();
         fn_800545E8();
         fn_800545C0();
-        fn_8006563C();
+        PauseClearSavedFlags();
         fn_80162780(0, 0);
     }
     if (fn_8019623C(0x23000) != 0) {

@@ -25,7 +25,7 @@ extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803
 extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
 extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
 int fn_80177F70(void);
-int fn_8006560C(void);
+int PauseIsOpen(void);
 void fn_80227638(void *, void *, void *);
 float fn_8022781C(void *, void *);
 int fn_801FA0BC(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
@@ -499,7 +499,7 @@ void fn_80166BE8(Object_80167160 *record, State_80167094 *state, Record_80167094
     unsigned char r = 130, g = 130, b = 130;
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
     unsigned char primaryR, primaryG, primaryB;
-    if (!fn_80177F70() && !fn_8006560C()) {
+    if (!fn_80177F70() && !PauseIsOpen()) {
         primaryR = lbl_803EB3D3; primaryG = lbl_803EB3D7; primaryB = lbl_803EB3DB;
     } else {
         void *queue = fn_80164EC8(record, team, (unsigned short)index);

@@ -1,3 +1,7 @@
+/* Options screen: maps menu items to game options, reads and writes them, and
+   reacts to changes (a rumble test pulse, sound modes, and option 6 when the
+   screen closes). */
+
 #include "game/cu_8007F12C.h"
 #include "game/OptionsScreenMsg.h"
 #include "game/OptionsScreen.h"

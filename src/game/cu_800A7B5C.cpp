@@ -2,7 +2,7 @@
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
 #include "game/Block_800A70F4.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 
 struct GamebreakerRecord_t;
 
@@ -84,9 +84,9 @@ extern "C" void fn_800A7B5C(void)
             }
             if (!quiet) {
                 if (lbl_803EC954[team]->mUnknown6C == 1) {
-                    fn_80067DB8(22, 0, team, 0, 0);
+                    AudmonEventPostArgs(22, 0, team, 0, 0);
                 } else if (lbl_803EC954[team]->mUnknown6C == 2) {
-                    fn_80067DB8(23, 0, team, 0, 0);
+                    AudmonEventPostArgs(23, 0, team, 0, 0);
                 }
             }
         }

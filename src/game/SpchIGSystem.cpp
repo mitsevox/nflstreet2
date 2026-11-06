@@ -2,7 +2,7 @@
    about, streams spoken lines on two commentary channels and a narrator channel, places them on the
    speaking player and pauses, stops or purges them on request. */
 
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -65,7 +65,7 @@ void fn_8006D684(int idx, unsigned char percent);
 void fn_8006D6F4(int a, int b, int c);
 void fn_8006D758(int a, Vector_80039F5C *pPos);
 void fn_8006EA04(int a, unsigned char b);
-void fn_8006ECB4(Record_80067CA8 *pRecord);
+void fn_8006ECB4(AudmonEvent_t *pRecord);
 void fn_8006F0C8(int a);
 int SpchIGGetSceneSpeaker(void);
 unsigned char SpchIGIsSceneLineActive(void);
@@ -390,7 +390,7 @@ extern "C" void SpchIGStart(void)
     SpchIGLoadChatData(&_SpchIG_sInitParams, 1);
     fn_801F5CCC(SpchIGStubQuery, SpchIGStubNotify);
     fn_8006F0C8(127);
-    fn_80067EC8(fn_8006ECB4);
+    AudmonEventAddListener(fn_8006ECB4);
     _SpchIG_bActive = 1;
     _SpchIG_bEnabled = 1;
 }
@@ -481,7 +481,7 @@ extern "C" void SpchIGStop(void)
 {
     _SpchIG_bActive = 0;
     _SpchIG_bTutorial = 0;
-    fn_80067EF0(fn_8006ECB4);
+    AudmonEventRemoveListener(fn_8006ECB4);
     fn_801F5D0C();
     fn_801F5C34();
     if (_SpchIG_sState.mpUnknown8 != 0) {

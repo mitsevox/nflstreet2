@@ -2,8 +2,8 @@
 #include "game/Class_80297BF8.h"
 #include "game/Challenge.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
@@ -61,12 +61,12 @@ struct Block_800BC538 {
 };
 
 extern "C" {
-unsigned char fn_8002892C(void);
+unsigned char InGameIsDemo(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
-int fn_80025708(void);
+int ChallengeIsActive(void);
 void fn_8003A3F4(int a, int index);
 void fn_8003E174(int a);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 int SpchIGIsNarratorIdle(void);
 int SpchIGGetTeamSceneSpeaker(int index);
 void fn_800941B8(void);
@@ -151,10 +151,10 @@ void Class_80297BF8::vfn_08(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
-    if (fn_800655F8() == 0) {
-        fn_800655D0();
+    if (PauseIsUnblocked() == 0) {
+        PauseUnblock();
     }
-    fn_800655B8();
+    PauseBlock();
     if (lbl_803EAB94 == 0) {
         fn_800BBF18();
     }
@@ -195,16 +195,16 @@ void Class_80297BF8::vfn_09(float dt)
 
 void Class_80297BF8::vfn_05()
 {
-    if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
+    if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || fn_8017F60C() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
         vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     CamGamePushCurrentCamera();
     fn_800CC560(0);
     fn_8010A220();
-    if (fn_80025708() != 0) {
+    if (ChallengeIsActive() != 0) {
         Point_8017886C pos = {0.0f, 0.0f};
         int spot = ChalGetCurrent()->mUnknown1C0;
 
@@ -238,12 +238,12 @@ void Class_80297BF8::vfn_05()
         BallResetToSpot();
     }
     fn_800AFE20(fn_800BB694);
-    fn_80067D4C(0x6e, 0);
+    AudmonEventPost(0x6e, 0);
     if (SpchIGGetTeamSceneSpeaker(0) != 0) {
-        fn_80067DB8(0x6d, 0, 0, 0, 0);
+        AudmonEventPostArgs(0x6d, 0, 0, 0, 0);
     }
     if (SpchIGGetTeamSceneSpeaker(1) != 0) {
-        fn_80067DB8(0x6d, 0, 1, 0, 0);
+        AudmonEventPostArgs(0x6d, 0, 1, 0, 0);
     }
     lbl_803EABA0 = 0;
     fn_801789F8();
@@ -262,7 +262,7 @@ void Class_80297BF8::vfn_05()
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
     fn_8017DBCC();
-    if (fn_800C1E40() == 0 && fn_80025708() == 0 && fn_8019623C(0x23000) != 0) {
+    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(5, 100, 0, 0);
     }
 }

@@ -1,7 +1,7 @@
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_802372EC.h"
@@ -103,7 +103,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
             if (value != lbl_803EB2F4) {
                 lbl_803EB2F4 = value;
                 if (value <= 5) {
-                    fn_80067D4C(20, 0);
+                    AudmonEventPost(20, 0);
                 }
             }
         }

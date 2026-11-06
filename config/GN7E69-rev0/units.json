@@ -5822,9 +5822,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80063BE4.cpp",
+      "source": "src/game/UserString.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/UserString.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",

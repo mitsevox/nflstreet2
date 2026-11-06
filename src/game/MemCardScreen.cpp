@@ -1,3 +1,7 @@
+/* Memory card screen: installs the callbacks that list the save slots and
+   files, and answers the screen's messages (an option, a forced slot, whether
+   the card is busy). */
+
 #include "game/fn_8007F6F8.h"
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
@@ -8,26 +12,26 @@ extern "C" {
 int fn_8002A1B0(int, int);
 void fn_8002A330(int, int, int *, int *, int);
 void fn_8002A478(int *, int *);
-void fn_80062840(int, int *);
-void fn_80062910();
-int fn_8006291C(int *, int *, int *, int *);
+void MemCardScreenListBegin(int, int *);
+void MemCardScreenListReset();
+int MemCardScreenListGetItem(int *, int *, int *, int *);
 }
 
-static unsigned char lbl_803EA608 = 0;
-static int lbl_803EA60C = 2;
-static int lbl_803EC804;
-static int lbl_803EC808;
-static MemCardListCallbacks_t lbl_802D4EC4 = {
-    fn_80062840, fn_80062910, fn_8006291C, 0, 0
+static unsigned char _MemCardScreen_bFlag = 0;
+static int _MemCardScreen_iUnusedArg = 2;
+static int _MemCardScreen_iListPos;
+static int _MemCardScreen_iForcedSlot;
+static MemCardListCallbacks_t _MemCardScreen_ListCallbacks = {
+    MemCardScreenListBegin, MemCardScreenListReset, MemCardScreenListGetItem, 0, 0
 };
 
-extern "C" void fn_80062810()
+extern "C" void MemCardScreenInstallList()
 {
     fn_801D6714(-1);
-    fn_801851A4(&lbl_802D4EC4);
+    fn_801851A4(&_MemCardScreen_ListCallbacks);
 }
 
-extern "C" void fn_80062840(int value, int *pCount)
+extern "C" void MemCardScreenListBegin(int value, int *pCount)
 {
     int a;
     int b;
@@ -41,14 +45,14 @@ extern "C" void fn_80062840(int value, int *pCount)
             fn_801D6680(fn_801D671C());
         }
         index = 0;
-        if (lbl_803EC808 != -1) {
-            index = lbl_803EC808;
+        if (_MemCardScreen_iForcedSlot != -1) {
+            index = _MemCardScreen_iForcedSlot;
         }
-    } else if (lbl_803EC808 != -1 && lbl_803EC808 != index) {
+    } else if (_MemCardScreen_iForcedSlot != -1 && _MemCardScreen_iForcedSlot != index) {
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
             fn_801D6680(fn_801D671C());
         }
-        index = lbl_803EC808;
+        index = _MemCardScreen_iForcedSlot;
     }
     fn_801D6714(index);
     fn_801D65B4(0);
@@ -56,22 +60,22 @@ extern "C" void fn_80062840(int value, int *pCount)
     fn_801D6650(8);
 }
 
-extern "C" void fn_80062910()
+extern "C" void MemCardScreenListReset()
 {
-    lbl_803EC804 = 0;
+    _MemCardScreen_iListPos = 0;
 }
 
-extern "C" int fn_8006291C(int *p0, int *p4, int *p8, int *p12)
+extern "C" int MemCardScreenListGetItem(int *p0, int *p4, int *p8, int *p12)
 {
     unsigned char flag = 0;
     int a;
     int b;
 
     fn_8002A478(&a, &b);
-    lbl_803EC804 = 0;
+    _MemCardScreen_iListPos = 0;
     do {
-        fn_8002A330(0, lbl_803EC804, p4, p12, 0);
-        lbl_803EC804++;
+        fn_8002A330(0, _MemCardScreen_iListPos, p4, p12, 0);
+        _MemCardScreen_iListPos++;
     } while (*p4 != a || *p12 != b);
     *p0 = fn_8002A190(*p4, *p12);
     *p8 = fn_8002A1B0(a, b);
@@ -90,27 +94,27 @@ extern "C" int fn_8006291C(int *p0, int *p4, int *p8, int *p12)
     return 1;
 }
 
-extern "C" void fn_80062A58(unsigned char value)
+extern "C" void MemCardScreenSetFlag(unsigned char value)
 {
-    lbl_803EA608 = value;
+    _MemCardScreen_bFlag = value;
 }
 
-extern "C" unsigned char fn_80062A60()
+extern "C" unsigned char MemCardScreenGetFlag()
 {
-    return lbl_803EA608;
+    return _MemCardScreen_bFlag;
 }
 
-extern "C" int fn_80062A68(unsigned int id, int *p, int c, int *pResult)
+extern "C" int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult)
 {
     switch (id) {
     case 0x80000003:
         fn_8007F6F8(12, *p);
         break;
     case 0x80000004:
-        fn_80062810();
+        MemCardScreenInstallList();
         break;
     case 0x80000002:
-        lbl_803EC808 = -1;
+        _MemCardScreen_iForcedSlot = -1;
         fn_801D65B4(0);
         fn_801D654C(1);
         fn_801D6714(0);
@@ -122,10 +126,10 @@ extern "C" int fn_80062A68(unsigned int id, int *p, int c, int *pResult)
         fn_801851D0();
         break;
     case 0x80000006:
-        lbl_803EC808 = *p;
+        _MemCardScreen_iForcedSlot = *p;
         break;
     case 0x80000007:
-        lbl_803EA60C = *p;
+        _MemCardScreen_iUnusedArg = *p;
         break;
     case 0x80000008:
         *pResult = gFMCAPPORT.IsBusy();

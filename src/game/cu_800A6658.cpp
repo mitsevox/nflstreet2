@@ -8,7 +8,7 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 
 struct Record_800B49EC;
 
@@ -384,12 +384,12 @@ extern "C" void fn_800A7514(int team)
                 fn_800A9384(fn_800A6DD0(team));
                 fn_80156C78(35, 1);
                 if (lbl_803EC954[other]->mUnknown68 != 0) {
-                    fn_80067DB8(11, 0, 0, 0, 0);
+                    AudmonEventPostArgs(11, 0, 0, 0, 0);
                 } else {
-                    fn_80067DB8(10, 0, team, 0, 0);
+                    AudmonEventPostArgs(10, 0, team, 0, 0);
                 }
             } else if (lbl_803EC954[other]->mUnknown68 == 0) {
-                fn_80067DB8(8, 0, team, 0, 0);
+                AudmonEventPostArgs(8, 0, team, 0, 0);
                 fn_80073210(120);
             }
             lbl_803EC954[team]->mUnknown68 = lbl_803EC954[team]->mUnknown6C;

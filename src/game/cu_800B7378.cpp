@@ -9,8 +9,8 @@
 #include "game/Step_800C4460.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/InGame.h"
 #include <string.h>
 
@@ -53,7 +53,7 @@ struct Block_800B95B4 {
     int mUnknown164;
 };
 
-struct Desc_802345C4 {
+struct EngineParamWords {
     int mUnknown0;
     int mUnknown4;
 };
@@ -65,7 +65,7 @@ unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_8002D0AC(Type_803EA368 *p);
 int fn_8002D228(Type_803EA368 *p);
 void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
-int fn_80065864(void);
+int PauseRequestIsPending(void);
 void SpchIGResetPlayResult(void);
 void fn_80094DF0(void);
 int fn_8009A6EC(Object_80039F5C *p);
@@ -146,7 +146,7 @@ int MathAngleDiff(int a, int b);
 float fn_8022710C(void *pV);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022E558(void);
-void fn_802345C4(Desc_802345C4 *pDesc, int count);
+void fn_802345C4(EngineParamWords *pDesc, int count);
 
 extern unsigned char lbl_803EAB64;
 extern unsigned char lbl_803EAB65;
@@ -381,8 +381,8 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
         break;
     case 9:
         if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
-            && fn_8002892C() == 0 && fn_80028934() == 0 && fn_8017F48C() == 0 && fn_80065864() == 0
-            && fn_800655F8() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
+            && InGameIsDemo() == 0 && InGameIsPaused() == 0 && fn_8017F48C() == 0 && PauseRequestIsPending() == 0
+            && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
             if (fn_8002D228(lbl_803EA368) != 0) {
                 fn_8009BA10(0);
@@ -575,7 +575,7 @@ void Class_80297C60::vfn_03(float dt)
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800AFDD4(fn_800B876C);
     }
-    fn_80067D4C(123, 0);
+    AudmonEventPost(123, 0);
     PassIconsHide();
     PassIconsClearReplayFlag();
     if (fn_8002D0AC(lbl_803EA368)) {
@@ -591,7 +591,7 @@ void Class_80297C60::vfn_03(float dt)
     lbl_803EAB78->mUnknown160 = 1;
     lbl_803EAB78->mUnknown164 = 2;
     vfn_07();
-    Desc_802345C4 desc = { 3, 14 };
+    EngineParamWords desc = { 3, 14 };
     fn_802345C4(&desc, 2);
     fn_801789F8();
     lbl_803EAB80 = -1;

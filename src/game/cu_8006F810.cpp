@@ -2,12 +2,12 @@
 #include "game/SndgPathfinder.h"
 #include "game/Block_800C9D6C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
 #include "game/SndgCrowd.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
@@ -38,7 +38,7 @@ void fn_8006BCC8(int type);
 int fn_8006B810(int type, unsigned int index);
 unsigned int fn_8006BA54(int type, int value);
 void fn_8006F5EC(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index);
-void fn_8006F6A0(int type, Record_80067CA8 *pRecord);
+void fn_8006F6A0(int type, AudmonEvent_t *pRecord);
 void fn_8006F550(void);
 void fn_8006F0B8(int flags);
 void fn_8006E08C(void);
@@ -235,7 +235,7 @@ void fn_80071C34(int value)
     lbl_803EA6F9 = value;
 }
 
-void fn_8006F850(Record_80067CA8 *p)
+void fn_8006F850(AudmonEvent_t *p)
 {
     switch (p->mType) {
     case 53: fn_8006C854(48, &p->mPos); break;
@@ -261,7 +261,7 @@ void fn_8006F850(Record_80067CA8 *p)
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((Area_80054138 *)pose->mUnknown972)->mSurface;
+        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int id = fn_80071BDC(surface);
         if (BallGetCurrentHolder() == player) {
             int volume = fn_8006CC90(id) * 2;
@@ -295,7 +295,7 @@ void fn_8006F850(Record_80067CA8 *p)
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((Area_80054138 *)pose->mUnknown972)->mSurface;
+        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int state = fn_800A3444();
         lbl_803EA6D1 = (lbl_803EA6D1 + 1) % 2;
         fn_8006C854(fn_80071B08(state, surface) + lbl_803EA6D1, &p->mPos);
@@ -605,7 +605,7 @@ void fn_8006F850(Record_80067CA8 *p)
     }
 }
 
-void fn_80070C40(Record_80067CA8 *p)
+void fn_80070C40(AudmonEvent_t *p)
 {
     if (!fn_80177F70()) return;
     switch (p->mType) {
@@ -794,14 +794,14 @@ void fn_80071458(Object_80039F5C *p, Ball_t *ball)
         fn_80227690(&delta, &pos, &p->mMotion);
         nearby = fn_802270A4(&delta) < 0.3f;
     }
-    fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
+    AudmonEventPostArgs(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
 void fn_80071540(int *value, Ball_t *ball)
 {
     Vector_80039F5C pos;
     BallGetPosition(ball, &pos);
-    fn_80067E3C(29, &pos, *value, 0, 0, ball->mState.mIndex);
+    AudmonEventPostId(29, &pos, *value, 0, 0, ball->mState.mIndex);
 }
 
 void fn_80071594(void *record)
@@ -811,7 +811,7 @@ void fn_80071594(void *record)
     pos.mX = p->mUnknownC;
     pos.mY = p->mUnknown10;
     pos.mZ = 0.0f;
-    if (lbl_803EA6CD) fn_80067E3C((unsigned short)(p->mUnknown14 + 137), &pos, p->mUnknown0, p->mUnknown4, p->mUnknown8, 0);
+    if (lbl_803EA6CD) AudmonEventPostId((unsigned short)(p->mUnknown14 + 137), &pos, p->mUnknown0, p->mUnknown4, p->mUnknown8, 0);
 }
 
 void fn_80071600(void)

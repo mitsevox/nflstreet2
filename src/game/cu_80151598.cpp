@@ -2,7 +2,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Class_80297C60.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_8021D7B8.h"
 
 class Class_802A1C98 : public Class_80297C60 {
@@ -124,7 +124,7 @@ void fn_801516A8(Class_802A1C30 *p, float dt)
 
 void fn_80151798(Class_802A1C30 *p)
 {
-    fn_80064EFC(3, 19, -1);
+    PauseOpenScreen(3, 19, -1);
 }
 
 void fn_801517C4(Class_802A1C30 *p)

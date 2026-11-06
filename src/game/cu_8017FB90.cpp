@@ -1,7 +1,7 @@
 #include "game/fn_8018631C.h"
 #include "game/cu_8017F90C.h"
 #include "game/InGame.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 
 extern "C" {
 int lbl_803EB52C = 0;
@@ -13,7 +13,7 @@ extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int
     switch (id) {
     case 0xC3:
         fn_800282DC();
-        fn_800652A8();
+        PauseRequestClose();
         break;
     case 0xBF:
     case 0xE2:

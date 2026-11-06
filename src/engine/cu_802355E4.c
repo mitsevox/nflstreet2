@@ -60,7 +60,7 @@ typedef struct Entry_8023850C {
     int mUnknown4;
     int mUnknown8;
     unsigned int mUnknown12;
-    Callback_80067EC8 mpUnknown16[1];
+    AudmonEventFn_t mpUnknown16[1];
 } Entry_8023850C;
 
 typedef struct Table_802382F0 {
@@ -1455,9 +1455,9 @@ void fn_80238570(int index, int advance)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
-    Callback_80067EC8 *pCallbacks = p->mpUnknown16;
+    AudmonEventFn_t *pCallbacks = p->mpUnknown16;
     for (i = 0; i < p->mUnknown12; i++) {
-        Callback_80067EC8 callback = *pCallbacks++;
+        AudmonEventFn_t callback = *pCallbacks++;
         if (callback != 0) {
             callback(fn_8023850C(index));
         }
@@ -1478,7 +1478,7 @@ void fn_8023861C(int index)
     MemFill((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
     p->mUnknown4 = 0;
 }
-void fn_80238680(int index, Callback_80067EC8 callback)
+void fn_80238680(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;
@@ -1487,7 +1487,7 @@ void fn_80238680(int index, Callback_80067EC8 callback)
     p->mpUnknown16[i] = callback;
 }
 
-void fn_802386DC(int index, Callback_80067EC8 callback)
+void fn_802386DC(int index, AudmonEventFn_t callback)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     unsigned int i;

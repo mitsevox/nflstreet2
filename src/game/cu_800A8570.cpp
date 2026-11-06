@@ -3,7 +3,7 @@
 #include "game/Block_800A70F4.h"
 #include "game/Block_8030F42C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/Object_8003DEC4.h"
 #include "game/fn_800D4164.h"
@@ -73,7 +73,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             fn_800A636C(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
-                fn_80067D4C(14, &p->mMotion.mPos);
+                AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
         if (isUser) {
@@ -102,7 +102,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             fn_800A636C(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
-                fn_80067D4C(14, &p->mMotion.mPos);
+                AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
         if (!isUser) {
@@ -147,7 +147,7 @@ int fn_800A8468(int team);
 void fn_800A981C(void);
 void fn_800A9854(void);
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern unsigned char lbl_803EAA84;
 extern unsigned char lbl_803EAA85;
 extern Block_8030F42C lbl_8030F42C;
@@ -186,12 +186,12 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         for (step = 0; step <= 19; step++) {
             fn_800398B4();
             BallsProcessMotion(1.0f);
-            fn_80039CB0(lbl_803EA2C4);
-            fn_80039D08(lbl_803EA2C4);
-            fn_80039B2C(lbl_803EA2C4);
-            fn_80039A38(lbl_803EA2C4);
-            BallsProcessStates(lbl_803EA2C4);
-            BallsProcessCollision(lbl_803EA2C4);
+            fn_80039CB0(gFrameTimeScale);
+            fn_80039D08(gFrameTimeScale);
+            fn_80039B2C(gFrameTimeScale);
+            fn_80039A38(gFrameTimeScale);
+            BallsProcessStates(gFrameTimeScale);
+            BallsProcessCollision(gFrameTimeScale);
         }
         if (fn_80156704()) {
             fn_801574DC(1);
@@ -202,7 +202,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         CamGameResumeAll();
         fn_8017DBCC();
         if (fn_800A8468(0) || fn_800A8468(1)) {
-            fn_80067DB8(13, 0, 0, 0, 0);
+            AudmonEventPostArgs(13, 0, 0, 0, 0);
         }
     }
 }

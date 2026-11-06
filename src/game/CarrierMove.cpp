@@ -8,7 +8,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
@@ -104,7 +104,7 @@ extern "C" int CarrierMoveEnter(Object_80039F5C *p)
     } else {
         fn_800EF538(p);
     }
-    fn_80067E3C(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
+    AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
     fn_800A8954(3, p->mIdBytes[2], p);
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~4;

@@ -4,7 +4,7 @@
 #include "engine/viewport.h"
 #include "game/Class_80148A58.h"
 #include "game/Object_80040818.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 
 struct Record_800BAE7C;
@@ -43,10 +43,10 @@ int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
 int fn_801F0F18(int a);
-void fn_8004A230(unsigned char value);
+void PlayerObjSetDrawReady(unsigned char value);
 int fn_80040F10(void);
 void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
-int fn_800655F8(void);
+int PauseIsUnblocked(void);
 void SpchIGPurgeChannel(int index);
 void fn_800941B8(void);
 int fn_800B6644(int index);
@@ -134,7 +134,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     if (lbl_803EC98C->mUnknown0 > 1 || lbl_803EC98C->mUnknownC != -1 || lbl_803EC98C->mUnknown32 == 1) {
         return;
     }
-    fn_8004A230(1);
+    PlayerObjSetDrawReady(1);
     fn_8013F3FC();
     fn_800BB9A4(1, 1);
     fn_80162780(1, 1);
@@ -142,8 +142,8 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     SpchIGPurgeChannel(1);
     if (fn_800BA6F8() == 0) {
         fn_800BBE98();
-        if (fn_800655F8() == 0) {
-            fn_800655D0();
+        if (PauseIsUnblocked() == 0) {
+            PauseUnblock();
         }
     } else {
         lbl_803EAB94 = 1;

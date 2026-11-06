@@ -136,7 +136,7 @@ struct Header_80094B78 {
     unsigned char mUnknown4[10];
 };
 
-/* Row table searched by CondTableFindRows (laid out as in cu_80067F18.cpp):
+/* Row table searched by CondTableFindRows (laid out as in CondTable.cpp):
    mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
 struct CondTable_t {
     char mUnknown0[4];

@@ -1,7 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8003E214.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 
@@ -73,7 +73,7 @@ void fn_80148BF0(Class_80148A58 *p)
     if (value != p->mState.mCachedValue && value >= 0) {
         p->mState.mCachedValue = value;
         if (value <= 10) {
-            fn_80067D4C(20, 0);
+            AudmonEventPost(20, 0);
         }
     }
 }

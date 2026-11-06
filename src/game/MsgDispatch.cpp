@@ -3,7 +3,7 @@
    (settings, EA Trax, tutorial, unlocks, audio settings, cheat codes). Also holds
    the profile-to-controller handler and the unlock list. */
 
-#include "game/Block_80063910.h"
+#include "game/OptionsScreenMsg.h"
 #include "game/Class_8018FD64Inline.h"
 #include "game/cu_80181330.h"
 #include "game/MsgCheatCodes.h"
@@ -13,9 +13,9 @@ int MsgPlayerPickupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unuse
 int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8001FE10(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int MsgTutorialHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
-int MsgAudioSettingsHandleMessage(unsigned int id, Block_80063910 *pBlock, int unused, int *pResult);
-int fn_80063578(unsigned int id, void *pArgs, int unused, int *pResult);
-int fn_80063910(unsigned int id, Block_80063910 *pBlock, int unused, int *pResult);
+int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
+int TournBracketMsg(unsigned int id, void *pArgs, int unused, int *pResult);
+int OptionsScreenMsg(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
 int fn_80186010(unsigned int id, void *pArgs, int unused, int *pResult);
 signed char fn_80186B38(int a);
 void fn_80186ED8(signed char a);
@@ -49,7 +49,7 @@ int MsgTeamDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused,
     case 1:
         return MsgPlayerPickupHandleMessage(id, pArgs, unused, pResult);
     case 4:
-        return fn_80063578(id, pArgs, unused, pResult);
+        return TournBracketMsg(id, pArgs, unused, pResult);
     }
     return 0;
 }
@@ -61,7 +61,7 @@ int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unus
 {
     switch (group) {
     case 0:
-        return fn_80063910(id, (Block_80063910 *)pArgs, unused, pResult);
+        return OptionsScreenMsg(id, (OptionsScreenMsg_t *)pArgs, unused, pResult);
     case 1:
         return fn_8001FE10(id, pArgs, unused, pResult);
     case 2:
@@ -69,7 +69,7 @@ int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unus
     case 5:
         return fn_80186010(id, pArgs, unused, pResult);
     case 6:
-        return MsgAudioSettingsHandleMessage(id, (Block_80063910 *)pArgs, unused, pResult);
+        return MsgAudioSettingsHandleMessage(id, (OptionsScreenMsg_t *)pArgs, unused, pResult);
     case 7:
         return MsgCheatCodesHandleMessage(id, (CheatCodesArg_t *)pArgs, unused, pResult);
     case 4:

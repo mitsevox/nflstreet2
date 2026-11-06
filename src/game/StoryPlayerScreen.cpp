@@ -1,30 +1,34 @@
+/* Story mode player screen: shows the story player's 3D preview model in the
+   team's colours and handles the screen's messages for accepting, reverting
+   and saving the player's edits in the profile database. */
+
 #include "game/DbCursor.h"
-#include "game/cu_8002ACB4.h"
-#include "game/fn_800624B0.h"
+#include "game/PlayerSave.h"
+#include "game/StoryPlayerScreen.h"
 #include "game/fn_8018BE68.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 
-struct Setup_802D4EB0 {
+struct StoryModelLayout_t {
     float mPosition[3];
     float mScale;
     int mUnknown16;
 };
 
-struct Pair_800624B8 {
+struct StoryPlayerMsgExtra_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
 };
 
-union Word_800624B8 {
+union StoryPlayerMsgWord_t {
     int *mpId;
     int mValue;
 };
 
-struct Block_800624B8 {
-    Word_800624B8 mUnknown0;
-    Pair_800624B8 *mpUnknown4;
+struct StoryPlayerMsgArgs_t {
+    StoryPlayerMsgWord_t mUnknown0;
+    StoryPlayerMsgExtra_t *mpUnknown4;
 };
 
 extern "C" {
@@ -63,18 +67,18 @@ int fn_8022F384(int a);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 
-static Setup_802D4EB0 lbl_802D4EB0 = {{330.0f, 290.0f, 7.0f}, 1.0f, 14};
-static unsigned char lbl_803EA600 = 0;
-static int lbl_803EC7F4;
-static int lbl_803EC7F8;
-static signed char lbl_803EC7FC;
-static unsigned char lbl_803EC7FD;
+static StoryModelLayout_t _StoryPlayerScreen_ModelLayout = {{330.0f, 290.0f, 7.0f}, 1.0f, 14};
+static unsigned char _StoryPlayerScreen_bActive = 0;
+static int _StoryPlayerScreen_iLoadResult;
+static int _StoryPlayerScreen_iPlayerId;
+static signed char _StoryPlayerScreen_iProfile;
+static unsigned char _StoryPlayerScreen_bSavedFlag;
 
-void fn_80061F04(void)
+void StoryPlayerScreenCopyToSlot8(void)
 {
     int a;
     int b;
-    int handle = fn_8022F3D4(fn_8022F358(lbl_803EC7FC));
+    int handle = fn_8022F3D4(fn_8022F358(_StoryPlayerScreen_iProfile));
     void *p1;
     void *p2;
 
@@ -91,63 +95,63 @@ void fn_80061F04(void)
     fn_801D2BD0(p1);
 }
 
-void fn_80062000(void)
+void StoryPlayerScreenLoadModel(void)
 {
     Result_8018BE68 result;
 
-    lbl_803EC7F4 = fn_8018BE68(lbl_803EC7FC, 1, &result);
-    lbl_803EC7F8 = result.mUnknown0;
+    _StoryPlayerScreen_iLoadResult = fn_8018BE68(_StoryPlayerScreen_iProfile, 1, &result);
+    _StoryPlayerScreen_iPlayerId = result.mUnknown0;
     FEPlyrSetPlayer(0, result.mUnknown0, 1);
 }
 
-void fn_8006204C(void)
+void StoryPlayerScreenAccept(void)
 {
     fn_80185264(1);
-    fn_8002ADE0(lbl_803EC7FC, lbl_803EC7F8);
+    PlayerSavePrepare(_StoryPlayerScreen_iProfile, _StoryPlayerScreen_iPlayerId);
 }
 
-void fn_80062080(int enable)
+void StoryPlayerScreenMarkChanged(int enable)
 {
     if (enable && fn_8018527C()) {
-        fn_8018E8B0(lbl_803EC7FC, 0, 1);
+        fn_8018E8B0(_StoryPlayerScreen_iProfile, 0, 1);
     }
 }
 
-void fn_800620C4(void)
+void StoryPlayerScreenRevert(void)
 {
     Result_8018BE68 result;
     int handle;
 
-    fn_80185264(lbl_803EC7FD);
-    handle = fn_8018D890(lbl_803EC7FC, 0);
+    fn_80185264(_StoryPlayerScreen_bSavedFlag);
+    handle = fn_8018D890(_StoryPlayerScreen_iProfile, 0);
     if (fn_8018DD04(handle) > 0) {
         fn_8018DCBC(handle);
     }
-    fn_8018BECC(lbl_803EC7FC, 0, &result);
+    fn_8018BECC(_StoryPlayerScreen_iProfile, 0, &result);
     fn_8018DD4C(handle, result.mUnknown0, 1);
-    fn_8018D8EC(lbl_803EC7FC, handle);
+    fn_8018D8EC(_StoryPlayerScreen_iProfile, handle);
     fn_8018C48C(0x54415453);
-    fn_80061F04();
-    fn_80062000();
+    StoryPlayerScreenCopyToSlot8();
+    StoryPlayerScreenLoadModel();
 }
 
-void fn_80062160(int *pId)
+void StoryPlayerScreenEnter(int *pId)
 {
     fn_80061DDC();
-    if (lbl_803EA600 == 0) {
-        lbl_803EA600 = 1;
-        lbl_803EC7FC = fn_8022F384(fn_8022F4BC());
+    if (_StoryPlayerScreen_bActive == 0) {
+        _StoryPlayerScreen_bActive = 1;
+        _StoryPlayerScreen_iProfile = fn_8022F384(fn_8022F4BC());
         FEPlyrShow();
-        FEPlyrSetPosition(0, lbl_802D4EB0.mPosition[0], lbl_802D4EB0.mPosition[1], lbl_802D4EB0.mPosition[2]);
+        FEPlyrSetPosition(0, _StoryPlayerScreen_ModelLayout.mPosition[0], _StoryPlayerScreen_ModelLayout.mPosition[1], _StoryPlayerScreen_ModelLayout.mPosition[2]);
         FEPlyrSetAngle(0, 0.0f);
-        FEPlyrSetScale(0, lbl_802D4EB0.mScale);
+        FEPlyrSetScale(0, _StoryPlayerScreen_ModelLayout.mScale);
         FEPlyrSetHoldPosition(0, 0);
         FEPlyrSetHoldAngle(0, 0);
-        FEPlyrSetPriority(0, lbl_802D4EB0.mUnknown16);
+        FEPlyrSetPriority(0, _StoryPlayerScreen_ModelLayout.mUnknown16);
         FEPlyrPlayAnim(0, 82, 0);
-        fn_80062000();
-        lbl_803EC7FD = fn_8018526C();
-        if (fn_8018C0E8(lbl_803EC7FC, pId)) {
+        StoryPlayerScreenLoadModel();
+        _StoryPlayerScreen_bSavedFlag = fn_8018526C();
+        if (fn_8018C0E8(_StoryPlayerScreen_iProfile, pId)) {
             DbCursor cursor;
             fn_80083E40(&cursor, 0, 0x54415453);
             fn_80084034(&cursor, *pId, 0);
@@ -166,31 +170,31 @@ void fn_80062160(int *pId)
     }
 }
 
-void fn_80062308(void)
+void StoryPlayerScreenExit(void)
 {
-    if (lbl_803EA600) {
-        fn_8002ADAC();
+    if (_StoryPlayerScreen_bActive) {
+        PlayerSaveFree();
         FEPlyrHide();
         if (fn_80183950() == 0) {
             fn_8018C48C(0x54415453);
         }
-        fn_80185264(lbl_803EC7FD);
-        lbl_803EA600 = 0;
+        fn_80185264(_StoryPlayerScreen_bSavedFlag);
+        _StoryPlayerScreen_bActive = 0;
     }
 }
 
-int fn_80062360(int which)
+int StoryPlayerScreenCheckFlags(int which)
 {
     int result = 1;
 
     switch (which) {
     case 0:
-        if (fn_8018E874(lbl_803EC7FC, 0) == 0) {
+        if (fn_8018E874(_StoryPlayerScreen_iProfile, 0) == 0) {
             result = 0;
         }
         break;
     case 1:
-        if (fn_8018E874(lbl_803EC7FC, 1) == 0 && fn_8018D780(lbl_803EC7FC) != 0) {
+        if (fn_8018E874(_StoryPlayerScreen_iProfile, 1) == 0 && fn_8018D780(_StoryPlayerScreen_iProfile) != 0) {
             result = 0;
         }
         break;
@@ -198,69 +202,69 @@ int fn_80062360(int which)
     return result;
 }
 
-void fn_800623EC(int a, int b, int c) {}
+void StoryPlayerScreenIgnore(int a, int b, int c) {}
 
-void fn_800623F0(void)
+void StoryPlayerScreenSave(void)
 {
-    int active = fn_8018E874(lbl_803EC7FC, 1);
+    int active = fn_8018E874(_StoryPlayerScreen_iProfile, 1);
 
     fn_8018BF3C();
     if (active) {
-        fn_8018E8B0(lbl_803EC7FC, 1, 1);
+        fn_8018E8B0(_StoryPlayerScreen_iProfile, 1, 1);
     }
 }
 
-void fn_80062448(int which)
+void StoryPlayerScreenConfirm(int which)
 {
     switch (which) {
     case 0:
-        fn_8006204C();
+        StoryPlayerScreenAccept();
         break;
     case 1:
-        if (fn_8018E874(lbl_803EC7FC, 1) == 0) {
-            fn_800620C4();
-            fn_8018E8B0(lbl_803EC7FC, 1, 1);
+        if (fn_8018E874(_StoryPlayerScreen_iProfile, 1) == 0) {
+            StoryPlayerScreenRevert();
+            fn_8018E8B0(_StoryPlayerScreen_iProfile, 1, 1);
         }
         break;
     }
 }
 
-unsigned char fn_800624B0(void)
+unsigned char StoryPlayerScreenIsActive(void)
 {
-    return lbl_803EA600;
+    return _StoryPlayerScreen_bActive;
 }
 
-int fn_800624B8(unsigned int id, Block_800624B8 *pBlock, int unused, int *pResult)
+int StoryPlayerScreenMsg(unsigned int id, StoryPlayerMsgArgs_t *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_80062160(pBlock->mUnknown0.mpId);
+        StoryPlayerScreenEnter(pBlock->mUnknown0.mpId);
         break;
     case 0x80000002:
-        fn_80062308();
+        StoryPlayerScreenExit();
         break;
     case 0x80000003:
-        if (fn_80062360(pBlock->mUnknown0.mValue)) {
+        if (StoryPlayerScreenCheckFlags(pBlock->mUnknown0.mValue)) {
             *pResult = 1;
         } else {
             *pResult = 0;
         }
         break;
     case 0x80000004:
-        fn_800623EC(pBlock->mUnknown0.mValue, pBlock->mpUnknown4->mUnknown8, pBlock->mpUnknown4->mUnknown4);
+        StoryPlayerScreenIgnore(pBlock->mUnknown0.mValue, pBlock->mpUnknown4->mUnknown8, pBlock->mpUnknown4->mUnknown4);
         break;
     case 0x80000005:
-        fn_800623F0();
+        StoryPlayerScreenSave();
         break;
     case 0x80000006:
-        fn_80062448(pBlock->mUnknown0.mValue);
+        StoryPlayerScreenConfirm(pBlock->mUnknown0.mValue);
         break;
     case 0x80000007: {
         int enable = 0;
         if (pBlock->mUnknown0.mValue) {
             enable = 1;
         }
-        fn_80062080(enable);
+        StoryPlayerScreenMarkChanged(enable);
         break;
     }
     default:

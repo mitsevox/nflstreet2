@@ -1,7 +1,7 @@
 #include "game/cu_8008E978.h"
 #include "game/cu_8002B8F8.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_80064864.h"
+#include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 
 struct Class_80297C60;
@@ -17,7 +17,7 @@ void fn_8005BF18(void);
 void fn_8005BF5C(void);
 void fn_8005BF98(void);
 int fn_8005BFD4(void);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int SpchIGGetSceneSpeaker(void);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 void fn_80090BDC(void);
@@ -60,7 +60,7 @@ extern Type_803EA368 *lbl_803EA368;
 /* Steps character index's state machine (+0x38C) once and returns 0 when the
    sequence ends or cannot start. 0: wait until fn_800927BC(index) reports
    ready, clear the frame counter 0x803EA8D0. 1: count frames, start
-   fn_800655B8 once, then wait for fn_80096304 (kind 1 counts as ready) and,
+   PauseBlock once, then wait for fn_80096304 (kind 1 counts as ready) and,
    when fn_800AD9B4 was 4 on entry, until the frame counter exceeds 120; when
    AnimSeqCamFindCamera finds no sample for the +0xE0 selection, clear its two ids and
    keep +0xE0 set only if AnimSeqCamFindFirstCamera returns a fallback sample; then go to 2
@@ -79,7 +79,7 @@ extern Type_803EA368 *lbl_803EA368;
    once; 8's body runs on a later call. 8: for kinds up to 2 set bit 0 of the
    +0x14 word of the block at +4 of each of the 14 objects whose +0xB byte is
    set; for every kind clear 0x803EA8BD and 0x803EA8C0 and end. On an end it calls
-   fn_80067E3C(0x82, ...) when SpchIGGetSceneSpeaker is set, runs fn_800941B8 and
+   AudmonEventPostId(0x82, ...) when SpchIGGetSceneSpeaker is set, runs fn_800941B8 and
    fn_800941EC, calls fn_80092380(character, 0) unless fn_800AD9B4 is 7, and
    calls fn_80028DD0(1.0f). */
 extern "C" int fn_80092830(int index)
@@ -109,7 +109,7 @@ extern "C" int fn_80092830(int index)
         }
         if (lbl_803EA8BE == 0 && pCharacter->mUnknown4 != 4 &&
             (pCharacter->mUnknown4 != 2 || pCharacter->mUnknown0 != 1)) {
-            fn_800655B8();
+            PauseBlock();
             lbl_803EA8BE = 1;
         }
         ready = fn_80096304(index);
@@ -217,7 +217,7 @@ extern "C" int fn_80092830(int index)
                     fn_8005BF98();
                 }
                 if (SpchIGGetSceneSpeaker() != 0) {
-                    fn_80067E3C(0x82, 0, 0, 0, 0, 0);
+                    AudmonEventPostId(0x82, 0, 0, 0, 0, 0);
                 }
                 pCharacter->mUnknown38C = 6;
                 lbl_803EA8BD = 1;
@@ -260,7 +260,7 @@ extern "C" int fn_80092830(int index)
     }
     if (result == 0) {
         if (SpchIGGetSceneSpeaker() != 0) {
-            fn_80067E3C(0x82, 0, 0, 0, 0, 0);
+            AudmonEventPostId(0x82, 0, 0, 0, 0, 0);
         }
         fn_800941B8();
         fn_800941EC();

@@ -18,7 +18,7 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
@@ -629,7 +629,7 @@ extern "C" int fn_80105AF4(Object_80039F5C *p) {
         if (pBall != 0 && fn_801787A0() == 0) {
             fn_801061E8(p, pBall);
             if (pRecord->mUnknown4 != 8) {
-                fn_80067E3C(60, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
+                AudmonEventPostId(60, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
                 fn_800A2190(2);
             }
             fn_8011F5AC(0);
