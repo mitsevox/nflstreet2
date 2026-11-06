@@ -1,4 +1,4 @@
-/* Partial source for vprintf.c (C library): formatted output to the standard output stream. */
+/* C library: forwards formatted game diagnostics to the standard output stream. */
 
 #include "engine/Reent_802622DC.h"
 #include <stdarg.h>
