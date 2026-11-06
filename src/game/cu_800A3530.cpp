@@ -21,7 +21,7 @@ extern int lbl_803EC940;
 void fn_8009BD60(Object_80039F5C *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 Object_80039F5C *fn_80137B40(void);
-int fn_801CFFD0(int from, int to);
+int MathAngleDiff(int from, int to);
 extern float lbl_802D7EA4[];
 extern float lbl_802D7ED0[];
 extern float lbl_803EAA04;
@@ -214,7 +214,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
             distance = fn_8022781C(&p->mMotion, &pOther->mMotion);
         if (pTarget->mMode == 2 && (p->mpState->mId == 30 || p->mpState->mId == 2))
             angle = 0x400000;
-        int turn = fn_801CFFD0(p->mMotion.mFacing, angle);
+        int turn = MathAngleDiff(p->mMotion.mFacing, angle);
         if (distance > 0.5f && (float)pTarget->mValue > lbl_802D7ED0[pTarget->mMode]
             && turn > 0x1C71C7) {
             fn_8009BD60(p);
@@ -227,7 +227,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
             p->mUnknown1008.mUnknown0 = style;
             p->mUnknown1008.mUnknown1 = speed;
             p->mUnknown1008.mUnknown2 = angle >> 17;
-            if (fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF) > 0x1C71C7) {
+            if (MathAngleDiff(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF) > 0x1C71C7) {
                 p->mTarget.mUnknown10 = 1;
                 if (distance > lbl_803EAA04 && distance < lbl_803EAA08
                     && turn < (int)(lbl_803EAA0C * 46603.38f)
@@ -271,7 +271,7 @@ extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p,
     fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
     int heading = fn_801CFE40(delta.mUnknown4, delta.mUnknown0) & 0xFFFFFF;
     int facing = p->mMotion.mUnknown32 & 0xFFFFFF;
-    if (fn_801CFFD0(heading, facing) <= (int)(lbl_803EAA10 * 46603.38f)) {
+    if (MathAngleDiff(heading, facing) <= (int)(lbl_803EAA10 * 46603.38f)) {
         p->mUnknown1008.mUnknown1 = 1;
         switch (pTarget->mMode) {
         case 5:

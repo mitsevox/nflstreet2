@@ -27,7 +27,7 @@ int fn_800DC080(Object_80039F5C *p);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 extern void *lbl_803EABA4;
@@ -202,7 +202,7 @@ extern "C" int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
 {
     float value = p->mMotion.mUnknown28;
 
-    if (value != 0.0f && fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
+    if (value != 0.0f && MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
         value = -value;
     }
     return fn_800DA7AC(pObject, value);
@@ -242,7 +242,7 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
                     if (pOther) {
                         Pair_802270A4 delta;
                         fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
-                        if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
+                        if (MathAngleDiff(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
                             && fn_802270A4(&delta) < 4.5f) {
                             result = 1;
                         }

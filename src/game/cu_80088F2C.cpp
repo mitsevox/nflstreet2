@@ -9,7 +9,7 @@ void fn_80026AF8(void);
 
 extern "C" {
 
-void fn_801CE1F0(int value);
+void GlibSetTvMode(int value);
 void fn_802451F8(int value);
 void fn_80088F2C(void);
 
@@ -41,7 +41,7 @@ void fn_80088F78(void)
 int main(void)
 {
     fn_80088F78();
-    fn_801CE1F0(0);
+    GlibSetTvMode(0);
     fn_80026AF8();
     return 0;
 }

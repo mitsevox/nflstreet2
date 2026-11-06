@@ -36,8 +36,8 @@ void fn_800AD9C0(float value);
 void fn_80141164(float value);
 int fn_80178308(void);
 int fn_80178320(void);
-void *fn_801C3610(int a, Desc_8013C340 *pDesc);
-void fn_801C3640(void *pCamera);
+void *CamCreate(int a, Desc_8013C340 *pDesc);
+void CamDestroy(void *pCamera);
 void *fn_8023816C(void *pHandle);
 
 void fn_8013F7C0(State_803ECA00 *pState, int index, int id);
@@ -148,12 +148,12 @@ void fn_8013F7C0(State_803ECA00 *pState, int index, int id)
     fn_8013C340(&desc);
     desc.mUnknown00 = fn_8013C854(id);
     desc.mUnknown04 = id;
-    pState->mSet.mpCameras[index] = (Camera_8013F738 *)fn_801C3610(2, &desc);
+    pState->mSet.mpCameras[index] = (Camera_8013F738 *)CamCreate(2, &desc);
 }
 
 void fn_8013F820(State_803ECA00 *pState, int index)
 {
-    fn_801C3640(pState->mSet.mpCameras[index]);
+    CamDestroy(pState->mSet.mpCameras[index]);
     pState->mSet.mpCameras[index] = 0;
 }
 

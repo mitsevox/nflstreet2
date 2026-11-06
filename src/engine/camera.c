@@ -3,40 +3,40 @@
 #include "engine/camera.h"
 #include "engine/viewport.h"
 #include "engine/fn_801F7BD4.h"
-#include "game/fn_801C3660.h"
+#include "game/CamAddCameraToViewport.h"
 #include "engine/llmatrix.h"
 
-typedef struct CamFuncs_801C33E8 {
-    void (*mpAdd)(Cam_801C33E8 *pCam);
-    void (*mpDelete)(Cam_801C33E8 *pCam);
-    void (*mpProcess)(Viewport_t *pViewport, Cam_801C33E8 *pCam);
-} CamFuncs_801C33E8;
+typedef struct CamFuncs_t {
+    void (*mpAdd)(Cam_t *pCam);
+    void (*mpDelete)(Cam_t *pCam);
+    void (*mpProcess)(Viewport_t *pViewport, Cam_t *pCam);
+} CamFuncs_t;
 
-typedef struct CamType_801C33E8 {
-    CamFuncs_801C33E8 *mpFuncs;
+typedef struct CamType_t {
+    CamFuncs_t *mpFuncs;
     unsigned int mSize;
-    void (*mpPreProcess)(Cam_801C33E8 *pCam);
-} CamType_801C33E8;
+    void (*mpPreProcess)(Cam_t *pCam);
+} CamType_t;
 
 extern unsigned char lbl_803EBBD4;
 extern unsigned char lbl_803ECECC;
 extern unsigned char lbl_803ECECD;
-extern CamType_801C33E8 *lbl_803ECED0;
+extern CamType_t *lbl_803ECED0;
 extern float lbl_803ECED4;
 
-int fn_801DCF0C(int type, unsigned int size, int count, void (*pAdd)(Cam_801C33E8 *), void (*pDelete)(Cam_801C33E8 *));
-int fn_801DCF8C(int type);
-Cam_801C33E8 *fn_801DD168(int type, int a, int b);
-void fn_801DD2B8(Cam_801C33E8 *pCam);
+int ObjNewType_(int type, unsigned int size, int count, void (*pAdd)(Cam_t *), void (*pDelete)(Cam_t *));
+int ObjDelType(int type);
+Cam_t *ObjNew(int type, int a, int b);
+void ObjDel(Cam_t *pCam);
 
-void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect);
+void CamSetFieldOfView(Cam_t *pCam, float fov, float aspect);
 
-static inline int fn_801C33E8_Mul(int a, int b)
+static inline int _CamMulFixed24(int a, int b)
 {
     return (int)(((long long)a * b) >> 24);
 }
 
-static void fn_801C33E8(Cam_801C33E8 *pCam)
+static void _CamAddFunc(Cam_t *pCam)
 {
     lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpAdd(pCam);
     pCam->mHeader.mUnknown20 = 45.0f;
@@ -44,14 +44,14 @@ static void fn_801C33E8(Cam_801C33E8 *pCam)
     pCam->mpViewport = 0;
 }
 
-static void fn_801C3448(Cam_801C33E8 *pCam)
+static void _CamDeleteFunc(Cam_t *pCam)
 {
     lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpDelete(pCam);
 }
 
-static void fn_801C3480(Viewport_t *pViewport, void *pArg)
+static void _CamProcessFunc(Viewport_t *pViewport, void *pArg)
 {
-    Cam_801C33E8 *pCam = pArg;
+    Cam_t *pCam = pArg;
 
     if (lbl_803ECED0[pCam->mHeader.mType].mpPreProcess) {
         lbl_803ECED0[pCam->mHeader.mType].mpPreProcess(pCam);
@@ -59,7 +59,7 @@ static void fn_801C3480(Viewport_t *pViewport, void *pArg)
     lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpProcess(pViewport, pCam);
 }
 
-int fn_801C34F8(int count, int numTypes, CamType_801C33E8 *pTypes, int type)
+int CamInit(int count, int numTypes, CamType_t *pTypes, int type)
 {
     int error = 0;
     unsigned int maxSize = 0;
@@ -75,7 +75,7 @@ int fn_801C34F8(int count, int numTypes, CamType_801C33E8 *pTypes, int type)
                 maxSize = pTypes[i].mSize;
             }
         }
-        error = fn_801DCF0C(type, maxSize, count, fn_801C33E8, fn_801C3448);
+        error = ObjNewType_(type, maxSize, count, _CamAddFunc, _CamDeleteFunc);
         lbl_803EBBD4 = 1;
     } else {
         error = 0xB0001;
@@ -84,12 +84,12 @@ int fn_801C34F8(int count, int numTypes, CamType_801C33E8 *pTypes, int type)
     return error;
 }
 
-int fn_801C35B8(void)
+int CamShutdown(void)
 {
     int error = 0;
 
     if (lbl_803EBBD4) {
-        fn_801DCF8C(lbl_803ECECC);
+        ObjDelType(lbl_803ECECC);
         lbl_803EBBD4 = 0;
     } else {
         error = 0xB0002;
@@ -98,26 +98,26 @@ int fn_801C35B8(void)
     return error;
 }
 
-Cam_801C33E8 *fn_801C3610(int a, int b)
+Cam_t *CamCreate(int a, int b)
 {
-    return fn_801DD168(lbl_803ECECC, a, b);
+    return ObjNew(lbl_803ECECC, a, b);
 }
 
-void fn_801C3640(Cam_801C33E8 *pCam)
+void CamDestroy(Cam_t *pCam)
 {
-    fn_801DD2B8(pCam);
+    ObjDel(pCam);
 }
 
-void fn_801C3660(Viewport_t *pViewport, void *pArg)
+void CamAddCameraToViewport(Viewport_t *pViewport, void *pArg)
 {
-    Cam_801C33E8 *pCam = pArg;
+    Cam_t *pCam = pArg;
 
-    VptSetCamera(pViewport, fn_801C3480, pCam);
+    VptSetCamera(pViewport, _CamProcessFunc, pCam);
     pCam->mpViewport = pViewport;
-    fn_801C3990(pCam, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24);
+    CamSetFieldOfView(pCam, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24);
 }
 
-void fn_801C36B0(Viewport_t *pViewport, Cam_801C33E8 *pCam)
+void CamRemoveCameraFromViewport(Viewport_t *pViewport, Cam_t *pCam)
 {
     if (pCam || (pCam = VptGetCamera(pViewport))) {
         if (pCam == VptGetCamera(pViewport)) {
@@ -127,7 +127,7 @@ void fn_801C36B0(Viewport_t *pViewport, Cam_801C33E8 *pCam)
     }
 }
 
-int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel)
+int CamRLerp(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel)
 {
     int done = 0;
     int forward = 1;
@@ -142,9 +142,9 @@ int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel)
         diff = 0x1000000 - diff;
     }
     if (diff > 0) {
-        limit = fn_801C33E8_Mul(diff, maxSpeed);
+        limit = _CamMulFixed24(diff, maxSpeed);
         if (forward == 1) {
-            *pSpeed += fn_801C33E8_Mul(diff, accel);
+            *pSpeed += _CamMulFixed24(diff, accel);
             if (*pSpeed > limit) {
                 *pSpeed = limit;
             }
@@ -153,7 +153,7 @@ int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel)
                 done = 1;
             }
         } else {
-            *pSpeed -= fn_801C33E8_Mul(diff, accel);
+            *pSpeed -= _CamMulFixed24(diff, accel);
             if (*pSpeed < -limit) {
                 *pSpeed = -limit;
             }
@@ -173,7 +173,7 @@ int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel)
     return 0;
 }
 
-int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel)
+int CamLerp(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel)
 {
     int done = 0;
     float diff = dest - *pValue;
@@ -206,7 +206,7 @@ int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float 
     return 0;
 }
 
-void fn_801C3918(void *pUnused, Cam_801C33E8 *pCam)
+void CamConvertHdrToMatrix(void *pUnused, Cam_t *pCam)
 {
     float pos[3];
 
@@ -221,7 +221,7 @@ void fn_801C3918(void *pUnused, Cam_801C33E8 *pCam)
     fn_801D0C58(pos);
 }
 
-void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect)
+void CamSetFieldOfView(Cam_t *pCam, float fov, float aspect)
 {
     pCam->mHeader.mUnknown20 = fov;
     pCam->mHeader.mUnknown24 = aspect;
@@ -230,21 +230,21 @@ void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect)
     }
 }
 
-void fn_801C39D0(Cam_801C33E8 *pCam, float n)
+void CamSetNearPlane(Cam_t *pCam, float n)
 {
     if (pCam->mpViewport) {
         VptSetPerspective(pCam->mpViewport, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24, n, pCam->mpViewport->mUnknown236);
     }
 }
 
-void fn_801C3A10(Cam_801C33E8 *pCam, float scale)
+void CamSetZScale(Cam_t *pCam, float scale)
 {
     if (pCam->mpViewport) {
         VptSetZScale(pCam->mpViewport, scale);
     }
 }
 
-void fn_801C3A3C(float aspect)
+void CamSetDefaultAspect(float aspect)
 {
     lbl_803ECED4 = aspect;
 }

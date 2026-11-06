@@ -1,9 +1,12 @@
+/* Fixed-size node pools of the data-structure library: a block of equal nodes with a stack of free
+   indices, used to hand out and take back list nodes. */
+
 #include "engine/list.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
 
 
-static int fn_801C735C(unsigned int count, int size, int *pStackOffset, int *pNodeOffset)
+static int _DSGetNodeHandlerMemSize(unsigned int count, int size, int *pStackOffset, int *pNodeOffset)
 {
     int entrySize;
     int offset;
@@ -12,13 +15,13 @@ static int fn_801C735C(unsigned int count, int size, int *pStackOffset, int *pNo
     offset = 24;
     *pStackOffset = offset;
     offset += count * entrySize;
-    offset = fn_801C6644(offset);
+    offset = DSAlignSize(offset);
     *pNodeOffset = offset;
     offset += count * size;
     return offset;
 }
 
-static int fn_801C73C0(NodePool_801C750C *pPool)
+static int _DSPopNode(NodePool_t *pPool)
 {
     int result;
 
@@ -35,7 +38,7 @@ static int fn_801C73C0(NodePool_801C750C *pPool)
     return result;
 }
 
-static void fn_801C7408(NodePool_801C750C *pPool, int index)
+static void _DSPushNode(NodePool_t *pPool, int index)
 {
     if (pPool->mCount <= 0xFF) {
         ((unsigned char *)pPool->mpStack)[pPool->mFree] = index;
@@ -45,25 +48,25 @@ static void fn_801C7408(NodePool_801C750C *pPool, int index)
     pPool->mFree++;
 }
 
-static void fn_801C7444(NodePool_801C750C *pPool)
+static void _DSFormatNodeHandlerStack(NodePool_t *pPool)
 {
     unsigned int i;
 
     pPool->mFree = 0;
     for (i = 0; i < pPool->mCount; i++) {
-        fn_801C7408(pPool, i);
+        _DSPushNode(pPool, i);
     }
 }
 
-int fn_801C74A0(unsigned int count, int size)
+int DSGetNodeHandlerMemSize(unsigned int count, int size)
 {
     int stackOffset;
     int nodeOffset;
 
-    return fn_801C735C(count, size, &stackOffset, &nodeOffset);
+    return _DSGetNodeHandlerMemSize(count, size, &stackOffset, &nodeOffset);
 }
 
-unsigned int fn_801C74C8(NodePool_801C750C *pPool, unsigned int stat)
+unsigned int DSGetNodeHandlerStat(NodePool_t *pPool, unsigned int stat)
 {
     unsigned int value;
 
@@ -84,14 +87,14 @@ unsigned int fn_801C74C8(NodePool_801C750C *pPool, unsigned int stat)
     return value;
 }
 
-NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_801C750C *pPool)
+NodePool_t *DSNewNodeHandler(int heap, unsigned int count, int size, NodePool_t *pPool)
 {
     int stackOffset;
     int nodeOffset;
     int memSize;
-    NodePool_801C750C *pResult;
+    NodePool_t *pResult;
 
-    memSize = fn_801C735C(count, size, &stackOffset, &nodeOffset);
+    memSize = _DSGetNodeHandlerMemSize(count, size, &stackOffset, &nodeOffset);
     if (pPool == 0) {
         pPool = fn_801D2BB0(heap, memSize, 0, 0);
     }
@@ -102,7 +105,7 @@ NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_
         pPool->mHeap = heap;
         pPool->mpStack = (char *)pPool + stackOffset;
         pPool->mpNodes = (char *)pPool + nodeOffset;
-        fn_801C7444(pPool);
+        _DSFormatNodeHandlerStack(pPool);
         fn_801F7BD4(0);
     } else {
         pResult = 0;
@@ -110,7 +113,7 @@ NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_
     return pResult;
 }
 
-int fn_801C75B8(NodePool_801C750C *pPool)
+int DSDelNodeHandler(NodePool_t *pPool)
 {
     int result = 0;
 
@@ -120,13 +123,13 @@ int fn_801C75B8(NodePool_801C750C *pPool)
     return result;
 }
 
-void *fn_801C75F0(NodePool_801C750C *pPool)
+void *DSNewNode(NodePool_t *pPool)
 {
     int index;
     void *pNode;
     int error;
 
-    index = fn_801C73C0(pPool);
+    index = _DSPopNode(pPool);
     if (index >= 0) {
         pNode = pPool->mpNodes + index * pPool->mNodeSize;
         error = 0;
@@ -138,7 +141,7 @@ void *fn_801C75F0(NodePool_801C750C *pPool)
     return pNode;
 }
 
-void fn_801C7650(NodePool_801C750C *pPool, void *pNode)
+void DSDelNode(NodePool_t *pPool, void *pNode)
 {
-    fn_801C7408(pPool, (unsigned int)((char *)pNode - pPool->mpNodes) / pPool->mNodeSize);
+    _DSPushNode(pPool, (unsigned int)((char *)pNode - pPool->mpNodes) / pPool->mNodeSize);
 }

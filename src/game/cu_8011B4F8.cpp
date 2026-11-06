@@ -41,7 +41,7 @@ int fn_800A2178(void);
 int fn_800ACFFC(int team, int value);
 int fn_80113BCC(Object_80039F5C *p);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8011B2A4(Entry_8011AFCC *pEntry);
 void fn_8011AFCC(Entry_8011AFCC *pEntries);
@@ -62,7 +62,7 @@ extern "C" void fn_8011B4F8(Entry_8011AFCC *pEntry)
         } else {
             score = 5.0f;
         }
-        if (pMotion->mUnknown28 > lbl_803ECB08 * 0.5f && fn_801CFFD0(pEntry->mUnknown64, pMotion->mUnknown32) > 0x4E38E3) {
+        if (pMotion->mUnknown28 > lbl_803ECB08 * 0.5f && MathAngleDiff(pEntry->mUnknown64, pMotion->mUnknown32) > 0x4E38E3) {
             pEntry->mUnknown76 = 1;
             score *= 0.8f;
         }
@@ -75,7 +75,7 @@ extern "C" void fn_8011B4F8(Entry_8011AFCC *pEntry)
         if (fn_8011F1CC()) {
             score += fabsf(pMotion->mPos.mX - fn_80177FE0().mX) * 0.25f;
         } else {
-            int angle = fn_801CFFD0(pEntry->mUnknown64, pMotion->mFacing);
+            int angle = MathAngleDiff(pEntry->mUnknown64, pMotion->mFacing);
 
             if (angle > 0x600000) {
                 score *= 0.083333336f;

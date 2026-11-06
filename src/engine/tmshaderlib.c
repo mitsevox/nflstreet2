@@ -11,7 +11,7 @@ static TMShader_t *_TMShaderLibAddShader(TMRegistry_t *pLib, TMShaderDef_t *pDef
 {
     TMShader_t *pShader;
 
-    pShader = fn_801C75F0(lbl_803EBF10);
+    pShader = DSNewNode(lbl_803EBF10);
     TMShaderNew(pShader, pDef);
     TMRegistryAddEntry(pLib, pDef->mName, pShader);
     return pShader;
@@ -32,7 +32,7 @@ void TMShaderLibFree(TMRegistry_t *pLib)
     for (i = 0; i < count; i++) {
         pShader = TMRegistryGetDataByIndex(pLib, i);
         TMShaderDelete(pShader);
-        fn_801C7650(lbl_803EBF10, pShader);
+        DSDelNode(lbl_803EBF10, pShader);
     }
     TMRegistryFree(pLib);
 }
@@ -49,13 +49,13 @@ TMShader_t *TMShaderLibAddShader(TMRegistry_t *pLib, TMShaderDef_t *pDef, TMShad
 void TMShaderLibRegistryInit(int maxShaders, int maxLibs)
 {
     TMRegistryAlloc(&lbl_8039B52C, maxLibs, 1, 1);
-    lbl_803EBF10 = fn_801C750C(1, maxShaders, sizeof(TMShader_t), 0);
+    lbl_803EBF10 = DSNewNodeHandler(1, maxShaders, sizeof(TMShader_t), 0);
 }
 
 void TMShaderLibRegistryShutdown(void)
 {
     TMRegistryFree(&lbl_8039B52C);
-    fn_801C75B8(lbl_803EBF10);
+    DSDelNodeHandler(lbl_803EBF10);
     lbl_803EBF10 = 0;
 }
 

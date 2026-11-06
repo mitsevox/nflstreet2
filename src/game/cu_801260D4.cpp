@@ -72,7 +72,7 @@ float fn_80178A2C(void);
 float fn_80178A5C(void);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_8022710C(void *pV);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -127,13 +127,13 @@ extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float di
 {
     if (p->mUnknown1032 != 4 && pOther != 0 && distance < 4.0f && fn_801BE648(pOther->mpUnknown792) != 69
         && fn_801BE648(pOther->mpUnknown792) != 178
-        && (fn_801CFFD0(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x355555 || fn_800DC080(pOther) != 0)) {
+        && (MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x355555 || fn_800DC080(pOther) != 0)) {
         Point_80167910 delta;
         int angle;
 
         fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         angle = fn_801CFE40(delta.mY, delta.mX);
-        if (fn_801CFFD0(angle, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
+        if (MathAngleDiff(angle, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
             float scale;
 
             pState->mUnknown16 = 12;
@@ -147,11 +147,11 @@ extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float di
             angle += 0x800000;
             angle &= 0xFFFFFF;
             if (!(p->mFlags & 0x4000) && fn_800DC080(pOther) != 0
-                && fn_801CFFD0(p->mMotion.mFacing, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
+                && MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
                 int diff;
 
                 pState->mUnknown16 = 1;
-                diff = fn_801CFFD0(angle, pState->mUnknown8);
+                diff = MathAngleDiff(angle, pState->mUnknown8);
                 if (((angle - pState->mUnknown8) & 0xFFFFFF) > 0x800000) {
                     pState->mUnknown8 -= diff / 2;
                 } else {
@@ -174,7 +174,7 @@ extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_80
 
     fn_80227690(&delta, &pos, pMotion);
     target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-    diff = fn_801CFFD0(angle, target);
+    diff = MathAngleDiff(angle, target);
     if (pMotion->mPos.mY < pos.mY || distance > 5.5f
         || (pOther != 0 && (pOther->mUnknown528.mUnknown15 == 1 || pOther->mUnknown528.mUnknown15 == 5))) {
         pState->mUnknown16 = 1;
@@ -221,14 +221,14 @@ extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_80
                 angle = (angle - diff / 2) & 0xFFFFFF;
             }
         }
-        if (fn_801CFFD0(target, pMotion->mFacing) > 0x11C71C) {
+        if (MathAngleDiff(target, pMotion->mFacing) > 0x11C71C) {
             pState->mUnknown16 = 0;
         }
     }
-    if (pOther != 0 && pMotion->mPos.mY < pos.mY && fn_801CFFD0(angle2, 0xC00000) <= 0x271C70) {
+    if (pOther != 0 && pMotion->mPos.mY < pos.mY && MathAngleDiff(angle2, 0xC00000) <= 0x271C70) {
         fn_80227690(&delta, &pos, pMotion);
         target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-        diff = fn_801CFFD0(angle, target);
+        diff = MathAngleDiff(angle, target);
         if (((angle - target) & 0xFFFFFF) > 0x800000) {
             angle = (angle + diff / 2) & 0xFFFFFF;
         } else {
@@ -241,14 +241,14 @@ extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_80
 extern "C" void fn_80127324(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos, int angle2)
 {
     if (fn_801783AC(0) == 0 && fn_8011F1A4() != 0 && fn_8011F4C8() > 3
-        && ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && fn_801CFFD0(*pAngle, 0) <= 0x3FFFFF)
-            || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) && fn_801CFFD0(*pAngle, 0) > 0x400000))) {
+        && ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && MathAngleDiff(*pAngle, 0) <= 0x3FFFFF)
+            || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) && MathAngleDiff(*pAngle, 0) > 0x400000))) {
         Point_8017886C point;
 
         point = fn_80177FE0();
         if (fabsf(point.mX - p->mMotion.mPos.mX) < 5.0f && p->mMotion.mPos.mY - point.mY < 5.0f && pos.mY < point.mY
-            && pos.mY > point.mY - 10.0f && fn_801CFFD0(angle2, 0x400000) <= 0x5FFFFF) {
-            if (fn_801CFFD0(*pAngle, 0) <= 0x3FFFFF) {
+            && pos.mY > point.mY - 10.0f && MathAngleDiff(angle2, 0x400000) <= 0x5FFFFF) {
+            if (MathAngleDiff(*pAngle, 0) <= 0x3FFFFF) {
                 if ((*pAngle & 0xFFFFFF) > 0x400000) {
                     *pAngle = 0;
                 }
@@ -275,7 +275,7 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
 
             fn_80227690(&delta, &pOther->mMotion.mPos, pMotion);
             target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-            diff = fn_801CFFD0(angle, target);
+            diff = MathAngleDiff(angle, target);
             if (((angle - target) & 0xFFFFFF) > 0x800000) {
                 angle = (angle + diff / 2) & 0xFFFFFF;
             } else {
@@ -290,10 +290,10 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
                 }
             }
             if (pMotion->mPos.mY < pos.mY || distance > 5.5f || pOther->mUnknown528.mUnknown15 == 1
-                || pOther->mUnknown528.mUnknown15 == 5 || fn_801CFFD0(angle, pMotion->mFacing) <= 0x11C71B) {
+                || pOther->mUnknown528.mUnknown15 == 5 || MathAngleDiff(angle, pMotion->mFacing) <= 0x11C71B) {
                 pState->mUnknown16 = 1;
             }
-            if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0xC00000) <= 0x1FFFFF) {
+            if (MathAngleDiff(pOther->mMotion.mUnknown32, 0xC00000) <= 0x1FFFFF) {
                 fn_80227690(&delta, &pOther->mMotion.mPos, pMotion);
                 angle = fn_801CFE40(delta.mY, delta.mX);
                 pState->mUnknown16 = 0;
@@ -330,7 +330,7 @@ extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_80
             }
         }
         if (turn != 0) {
-            int diff = fn_801CFFD0(angle, target);
+            int diff = MathAngleDiff(angle, target);
             if (((angle - target) & 0xFFFFFF) > 0x800000) {
                 angle = (angle + diff / 2) & 0xFFFFFF;
             } else {
@@ -364,8 +364,8 @@ extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         }
     }
     if (done == 0 && fn_8011E188() < lbl_803EB0E0) {
-        if ((pMotion->mPos.mX > 0.0f && fn_801CFFD0(angle, 0x800000) <= 0x3FFFFF)
-            || (pMotion->mPos.mX < 0.0f && fn_801CFFD0(angle, 0) <= 0x3FFFFF)) {
+        if ((pMotion->mPos.mX > 0.0f && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)
+            || (pMotion->mPos.mX < 0.0f && MathAngleDiff(angle, 0) <= 0x3FFFFF)) {
             if (pMotion->mPos.mX > 0.0f) {
                 angle = (int)(lbl_803EB0E8 * 46603.38f);
             } else {
@@ -386,9 +386,9 @@ extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         && pMotion->mPos.mY > pos.mY && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
         && fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 1.0f) {
         if (angle > 0xC00000) {
-            angle -= fn_801CFFD0(0, angle) / 2;
+            angle -= MathAngleDiff(0, angle) / 2;
         } else {
-            angle += fn_801CFFD0(0x800000, angle) / 2;
+            angle += MathAngleDiff(0x800000, angle) / 2;
         }
     }
     turn = 0;
@@ -406,7 +406,7 @@ extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_80
 
         fn_80227690(&delta, &pOther->mMotion.mPos, pMotion);
         target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-        diff = fn_801CFFD0(angle, target);
+        diff = MathAngleDiff(angle, target);
         if (((angle - target) & 0xFFFFFF) > 0x800000) {
             angle = (angle + diff / 2) & 0xFFFFFF;
         } else {
@@ -465,13 +465,13 @@ extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_8
     Point_80167910 delta;
 
     if (pOther != 0 && pMotion->mPos.mY > pos.mY && pContext->mpUnknown12[p->mIdBytes[1]] != 6
-        && fn_801CFFD0(angle2, 0x400000) <= 0x31C71B && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
+        && MathAngleDiff(angle2, 0x400000) <= 0x31C71B && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
         && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 1.0f) {
         fn_80227690(&delta, &pos, pMotion);
         if (p->mMotion.mPos.mX > 0.0f) {
-            *pAngle -= fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
+            *pAngle -= MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
         } else {
-            *pAngle += fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
+            *pAngle += MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
         }
     }
     if (pOther != 0) {
@@ -481,7 +481,7 @@ extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_8
         case 67:
         case 225:
         case 227:
-            if (fn_801CFFD0(angle2, 0xC00000) <= 0x3FFFFF) {
+            if (MathAngleDiff(angle2, 0xC00000) <= 0x3FFFFF) {
                 turn = 1;
             }
             break;
@@ -492,7 +492,7 @@ extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_8
 
             fn_80227690(&delta, &pos, pMotion);
             angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-            diff = fn_801CFFD0(*pAngle, angle);
+            diff = MathAngleDiff(*pAngle, angle);
             if (((*pAngle - angle) & 0xFFFFFF) > 0x800000) {
                 *pAngle = (*pAngle + diff / 2) & 0xFFFFFF;
             } else {
@@ -550,7 +550,7 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
 
             fn_80227690(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX);
-            if (fn_801CFFD0(pCarrier->mMotion.mUnknown32, 0) <= 0x3FFFFF) {
+            if (MathAngleDiff(pCarrier->mMotion.mUnknown32, 0) <= 0x3FFFFF) {
                 low = (int)(low - (int)(lbl_803EB0F8 * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
                 high = (int)(high - (int)(lbl_803EB0FC * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
             } else {
@@ -589,7 +589,7 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
                             float distance)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    int diff = fn_801CFFD0(angle, pMotion->mFacing);
+    int diff = MathAngleDiff(angle, pMotion->mFacing);
     Point_80167910 delta;
 
     if (diff > 0x177777) {
@@ -598,7 +598,7 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
                 pState->mUnknown0 = fn_801CFB94(diff / 2) * 0.4f;
             } else if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
                 float scale = 0.4f;
-                scale += fn_801CFB94(fn_801CFFD0(pMotion->mFacing, angle2) / 2) * (0.72f - 0.4f);
+                scale += fn_801CFB94(MathAngleDiff(pMotion->mFacing, angle2) / 2) * (0.72f - 0.4f);
                 pState->mUnknown0 = scale * fn_801CFB94(diff / 2);
             }
         } else {
@@ -608,10 +608,10 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
     }
     if (!(p->mFlags & 0x20000) && pOther != 0 && pOther->mpState->mId == 35 && distance < 5.0f
         && pMotion->mPos.mY > pOther->mMotion.mPos.mY
-        && fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) <= 0x3C71C6) {
+        && MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) <= 0x3C71C6) {
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        if (fn_801CFFD0(pMotion->mUnknown32, fn_801CFE40(delta.mY, delta.mX)) > 0x200000
-            && fn_801CFFD0(pMotion->mUnknown32, pOther->mpState->mUnknown2 == 1 ? 0x800000 : 0) > 0x400000) {
+        if (MathAngleDiff(pMotion->mUnknown32, fn_801CFE40(delta.mY, delta.mX)) > 0x200000
+            && MathAngleDiff(pMotion->mUnknown32, pOther->mpState->mUnknown2 == 1 ? 0x800000 : 0) > 0x400000) {
             if (pState->mUnknown0 > 0.72f) {
                 pState->mUnknown0 = 0.4f;
             }
@@ -724,12 +724,12 @@ extern "C" void fn_80128BE0(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     if (fn_802372EC(0, 100) < 75) {
         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
-        if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
+        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             fn_80111354(p);
         }
     } else if (fn_802372EC(0, 100) < 50) {
         fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
-        if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
+        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             fn_800E96EC(p, pTarget);
         }
     }
@@ -799,7 +799,7 @@ extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float d
     flag = 0;
     fn_80227690(&delta, &pOther->mMotion.mPos, pMotion);
     angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-    if (fn_801CFFD0(angle, pMotion->mFacing) > 0x51C71B && distance >= 1.0f) {
+    if (MathAngleDiff(angle, pMotion->mFacing) > 0x51C71B && distance >= 1.0f) {
         return;
     }
     scale = 0.0f;
@@ -886,7 +886,7 @@ extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Ve
     dx = fabsf(target.mX - pMotion->mPos.mX);
     if (pCarrier != 0 && lbl_803EB0D8 != 0 && PlayerMoveGetKind(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
         && dx > lbl_803EB10C) {
-        int angle = fn_801CFFD0(fn_801CFE40(dir.mY, dir.mX), 0x400000);
+        int angle = MathAngleDiff(fn_801CFE40(dir.mY, dir.mX), 0x400000);
         float scale;
         float length;
 
@@ -909,7 +909,7 @@ extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         if (distance < 10.0f) {
             Object_800B26B0 *pMotion = &p->mMotion;
             Point_80167910 velocity;
-            int diff = fn_801CFFD0(*pAngle, pOther->mUnknown512.mUnknown4);
+            int diff = MathAngleDiff(*pAngle, pOther->mUnknown512.mUnknown4);
 
             if (diff > 0x2E38E3) {
                 diff = 0x2E38E3;
@@ -1220,7 +1220,7 @@ extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_8
         } else {
             float range = lbl_803EB0B0;
 
-            if (fn_801CFFD0(pOther->mMotion.mFacing, pMotion->mFacing) <= 0x1FFFFF) {
+            if (MathAngleDiff(pOther->mMotion.mFacing, pMotion->mFacing) <= 0x1FFFFF) {
                 range = lbl_803EB0B8;
             }
             if (distance < range) {

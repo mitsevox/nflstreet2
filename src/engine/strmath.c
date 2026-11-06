@@ -1,8 +1,10 @@
+/* String to number conversion: atoi, used by the game to read numbers out of text. */
+
 extern const unsigned char lbl_802AEF10[];
 
 #define CTYPE(c) ((lbl_802AEF10 + 1)[(unsigned char)(c)])
 
-int fn_801C333C(const char *pString)
+int atoi(const char *pString)
 {
     int value = 0;
     int negative = 0;

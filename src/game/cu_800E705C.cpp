@@ -11,7 +11,7 @@ int fn_801486A0(void);
 unsigned int fn_8011E188(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 extern float lbl_803EAD50;
 
 int fn_800E705C(Object_80039F5C *p)
@@ -47,7 +47,7 @@ int fn_800E705C(Object_80039F5C *p)
         } else {
             heading = p->mUnknown2913 ? 0x800000 : 0;
         }
-        if (fn_801CFFD0(p->mMotion.mFacing, heading) > 0x38E38) {
+        if (MathAngleDiff(p->mMotion.mFacing, heading) > 0x38E38) {
             if (((p->mMotion.mFacing - heading) & 0xFFFFFF) > 0x800000)
                 p->mMotion.mFacing += 0x38E38;
             else p->mMotion.mFacing -= 0x38E38;

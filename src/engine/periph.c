@@ -12,7 +12,7 @@ extern unsigned int lbl_803ED650;
 extern unsigned int lbl_803ED654;
 extern unsigned char *lbl_803ED65C;
 
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_801E15B8(void);
 int fn_801E173C(void);
 
@@ -84,8 +84,8 @@ static int fn_801E12F8(unsigned int numDevices, unsigned int numBits, unsigned i
         }
     }
     if (err == 0) {
-        fn_801D34D0(lbl_803ED658, numDevices * sizeof(Device_801E12F8), 0, 4);
-        fn_801D34D0(lbl_803ED65C, numDevices * lbl_803ECF54, 0, 4);
+        MemFill(lbl_803ED658, numDevices * sizeof(Device_801E12F8), 0, 4);
+        MemFill(lbl_803ED65C, numDevices * lbl_803ECF54, 0, 4);
         lbl_803ED660 = 0;
         pDevice = lbl_803ED658;
         pData = lbl_803ED65C;

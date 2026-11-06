@@ -3,7 +3,7 @@
 #include "game/Object_80039F5C.h"
 
 extern "C" {
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float AnimSeqGetOpcodeTime(void *p, int key);
 }
 
@@ -17,7 +17,7 @@ extern "C" void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock)
         if (pBlock->mUnknown24Float > 0.0f) {
             facing += (int)(pBlock->mUnknown1CWord * (pBlock->mUnknown24Float / pBlock->mUnknown20Float));
         }
-        int turn = fn_801CFFD0(facing, pMove->mUnknown8);
+        int turn = MathAngleDiff(facing, pMove->mUnknown8);
         if (((pMove->mUnknown8 - facing) & 0xFFFFFF) > 0x800000) {
             turn = -turn;
         }

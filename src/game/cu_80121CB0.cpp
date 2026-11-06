@@ -10,7 +10,7 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 int fn_801218EC(Point_8017886C *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_801CFB94(int angle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
@@ -31,13 +31,13 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
             pEntry->mpUnknown4->mUnknown8.mY < pEntry->mpUnknown0->mUnknown8.mY) {
             fn_80227690(&delta, &pEntry->mpUnknown4->mUnknown8, &pEntry->mUnknown8);
             adjust = 1;
-            weight = fn_801CFB94(fn_801CFFD0(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF));
+            weight = fn_801CFB94(MathAngleDiff(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF));
             delta = pEntry->mpUnknown0->mUnknown8;
         } else if (pPos->mX < pEntry->mpUnknown0->mUnknown8.mX &&
                    pEntry->mpUnknown4->mUnknown8.mY > pEntry->mpUnknown0->mUnknown8.mY) {
             fn_80227690(&delta, &pEntry->mpUnknown0->mUnknown8, &pEntry->mUnknown8);
             adjust = 1;
-            weight = fn_801CFB94(fn_801CFFD0(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF));
+            weight = fn_801CFB94(MathAngleDiff(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF));
             delta = pEntry->mpUnknown4->mUnknown8;
         }
     } else if ((flagsA & 1) && (flagsB & 1)) {
@@ -52,9 +52,9 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
                 delta = pEntry->mpUnknown0->mUnknown8;
             }
             adjust = 1;
-            weight = fn_801CFB94(fn_801CFFD0(heading, 0x400000));
-        } else if (pEntry->mUnknown24 > 8.0f && fn_801CFFD0(pEntry->mUnknown16, angle) > 0x271C71 &&
-                   fn_801CFFD0(pEntry->mUnknown16, facing) > 0x271C71) {
+            weight = fn_801CFB94(MathAngleDiff(heading, 0x400000));
+        } else if (pEntry->mUnknown24 > 8.0f && MathAngleDiff(pEntry->mUnknown16, angle) > 0x271C71 &&
+                   MathAngleDiff(pEntry->mUnknown16, facing) > 0x271C71) {
             pEntry->mUnknown16 = angle;
         } else if (inside && pPos->mY > fn_80178A2C() - 5.0f && fn_801486A0()) {
             pEntry->mUnknown16 = angle;
@@ -74,7 +74,7 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         }
         if (adjust) {
             fn_80227690(&delta, &delta, &pEntry->mUnknown8);
-            weight = fn_801CFB94(fn_801CFFD0(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF) / 2);
+            weight = fn_801CFB94(MathAngleDiff(delta.Heading() & 0xFFFFFF, (pEntry->mUnknown16 + 0x800000) & 0xFFFFFF) / 2);
             if (flagsA & 2) {
                 delta = pEntry->mpUnknown0->mUnknown8;
             } else {
@@ -93,10 +93,10 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
             }
             delta = pEnd->mUnknown8;
             heading = (pEnd->mUnknown20 + 0x800000) & 0xFFFFFF;
-            if (fn_801CFFD0(heading, pEntry->mUnknown16) > 0x400000 &&
-                fn_801CFFD0(pEntry->mUnknown16, facing) > 0x200000) {
+            if (MathAngleDiff(heading, pEntry->mUnknown16) > 0x400000 &&
+                MathAngleDiff(pEntry->mUnknown16, facing) > 0x200000) {
                 pEntry->mUnknown16 = angle;
-            } else if (fn_801CFFD0(heading, pEntry->mUnknown16) > 0x200000 &&
+            } else if (MathAngleDiff(heading, pEntry->mUnknown16) > 0x200000 &&
                        fabsf(pPos->mX - delta.mX) > 0.55f) {
                 adjust = 1;
                 weight = 0.35f;
@@ -171,7 +171,7 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         pEntry->mUnknown16 = angle;
     }
 
-    if (inside && pEntry->mUnknown24 > 4.0f && fn_801CFFD0(angle, 0x400000) <= 0x238E38) {
+    if (inside && pEntry->mUnknown24 > 4.0f && MathAngleDiff(angle, 0x400000) <= 0x238E38) {
         fn_80227690(&delta, &pEntry->mpUnknown4->mUnknown8, pPos);
         heading = delta.Heading() & 0xFFFFFF;
         if (angle > heading) {
@@ -187,9 +187,9 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         fn_80227690(&delta, &delta, pPos);
         heading = delta.Heading() & 0xFFFFFF;
         if (((heading - pEntry->mUnknown16) & 0xFFFFFF) > 0x800000) {
-            pEntry->mUnknown16 = (pEntry->mUnknown16 - (int)(fn_801CFFD0(heading, pEntry->mUnknown16) * weight)) & 0xFFFFFF;
+            pEntry->mUnknown16 = (pEntry->mUnknown16 - (int)(MathAngleDiff(heading, pEntry->mUnknown16) * weight)) & 0xFFFFFF;
         } else {
-            pEntry->mUnknown16 = (pEntry->mUnknown16 + (int)(fn_801CFFD0(heading, pEntry->mUnknown16) * weight)) & 0xFFFFFF;
+            pEntry->mUnknown16 = (pEntry->mUnknown16 + (int)(MathAngleDiff(heading, pEntry->mUnknown16) * weight)) & 0xFFFFFF;
         }
     }
 }

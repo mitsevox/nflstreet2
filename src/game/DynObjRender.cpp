@@ -56,7 +56,7 @@ struct DynObjPacket {
 struct DynObjInstance {
     DynObjCache *mpUnknown0; DynObjContext mUnknown4;
     DynObjPacket mUnknownC; unsigned char mUnknownF8[4];
-    unsigned char mUnknownFC[12]; Tracker_801442FC mUnknown108;
+    unsigned char mUnknownFC[12]; LightTracker_t mUnknown108;
 };
 struct DynObjPose { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct DynObjSkeletonRef { void *mpUnknown0; };

@@ -2,7 +2,7 @@
 
 #include "engine/fn_801F7BD4.h"
 
-int fn_801CFFD0(int a, int b)
+int MathAngleDiff(int a, int b)
 {
     int diff = (a - b) & 0xFFFFFF;
     int other = 0x1000000 - diff;
@@ -13,7 +13,7 @@ int fn_801CFFD0(int a, int b)
     return diff;
 }
 
-int fn_801CFFF0(int a, int b, float t)
+int MathRLerp(int a, int b, float t)
 {
     int error = 0;
     int result;

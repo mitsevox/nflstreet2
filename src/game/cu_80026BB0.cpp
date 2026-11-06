@@ -9,8 +9,8 @@ extern char lbl_802EC198[];
 extern char lbl_802EC264[];
 extern char lbl_802EC330[];
 
-int fn_801C6280(int a, int b, void *p);
-int fn_801C6458(int a, int b);
+int ConSetChannelInfo(int a, int b, void *p);
+int ConGetChannelInfo(int a, int b);
 int fn_801E15D0(int a);
 int fn_801E17D0(int a, PadState_801E17D0 *pState);
 int fn_801E194C(void);
@@ -125,7 +125,7 @@ void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
     int ready;
 
     fn_8023790C();
-    handle = fn_801C6458(slot, 0);
+    handle = ConGetChannelInfo(slot, 0);
     ready = fn_80026CC4(handle);
     if (ready) {
         fn_801E17D0(handle, (PadState_801E17D0 *)pState);
@@ -157,7 +157,7 @@ void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
 
 void fn_80027114(int slot, int index)
 {
-    switch (fn_801E19B4(fn_801C6458(slot, 0)) >> 16) {
+    switch (fn_801E19B4(ConGetChannelInfo(slot, 0)) >> 16) {
     case 2:
         RemapSetupEntries(slot, 0, 34, lbl_802CC770[index]);
         break;
@@ -170,7 +170,7 @@ void fn_80027114(int slot, int index)
 
 void fn_800271A4(void)
 {
-    fn_801C6280(-1, 3, lbl_802EC330);
+    ConSetChannelInfo(-1, 3, lbl_802EC330);
 }
 
 void fn_800271D4(void **pHandlers)
@@ -178,8 +178,8 @@ void fn_800271D4(void **pHandlers)
     unsigned int i;
 
     for (i = 0; i < 10; i++) {
-        pHandlers[i] = (void *)fn_801C6458(i, 2);
-        pHandlers[i + 10] = (void *)fn_801C6458(i, 3);
+        pHandlers[i] = (void *)ConGetChannelInfo(i, 2);
+        pHandlers[i + 10] = (void *)ConGetChannelInfo(i, 3);
     }
 }
 
@@ -188,8 +188,8 @@ void fn_80027230(void **pHandlers)
     unsigned int i;
 
     for (i = 0; i < 10; i++) {
-        fn_801C6280(i, 2, pHandlers[i]);
-        fn_801C6280(i, 3, pHandlers[i + 10]);
+        ConSetChannelInfo(i, 2, pHandlers[i]);
+        ConSetChannelInfo(i, 3, pHandlers[i + 10]);
     }
 }
 

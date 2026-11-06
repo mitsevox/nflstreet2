@@ -97,7 +97,7 @@ extern "C" MadFrame_801D9A88 *fn_801D9AA8(MadFrame_801D9A88 *pFrame, unsigned in
     pFrame->mUnknown0 = 1;
     pFrame->mpShape = (Shape_801D94A0 *)lbl_80399100.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
                                                            lbl_80399100.mFlags);
-    fn_801D34D0((char *)pFrame->mpShape, 0x10, 0, 4);
+    MemFill((char *)pFrame->mpShape, 0x10, 0, 4);
     pFrame->mpShape->mUnknown0[0] = 0x6C;
     pFrame->mpShape->mWidth = width;
     pFrame->mpShape->mHeight = height;

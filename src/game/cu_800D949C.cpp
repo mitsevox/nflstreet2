@@ -4,9 +4,9 @@
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
 #include "game/Block_801BE60C.h"
-#include "game/Record_8036B55C.h"
+#include "game/FEPlyrModel.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
@@ -19,7 +19,7 @@ extern unsigned char lbl_802DA888[];
 struct Key_800DA6AC { unsigned short mUnknown0; unsigned short mUnknown2; };
 extern Key_800DA6AC lbl_802DA8AC[4];
 int fn_801486A0(void);
-int fn_801481B0(void);
+int PassIconsAreShown(void);
 int fn_801787A0(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
 unsigned char PlayerMoveGetRunVariant(Object_80039F5C *p);
@@ -28,10 +28,10 @@ int fn_800D91D8(void);
 int fn_800DC080(Object_80039F5C *p);
 int fn_800D9078(Object_80039F5C *p, int flag);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 Point_8017886C fn_80177FFC(int team);
 void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scratch);
-int fn_801C4E98(void *p, const char *name);
+int CharSkelGetJointByName(void *p, const char *name);
 int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *object);
 int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void fn_800D8FFC(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8 *entries, float value);
@@ -40,10 +40,10 @@ void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
-float fn_801CFFA0(float value);
+float MathInverse(float value);
 void AnimSeqSetSpeed(void *p, float value);
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int key);
-void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, Record_8036B55C *record, Record_800D81C8 *entries);
+void fn_800DA6AC(FEPlyrModel_t *record, Record_800D81C8 *entries, int key);
+void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, FEPlyrModel_t *record, Record_800D81C8 *entries);
 void fn_800DA8D8(Object_800DA8D8 *, Block_801BE60C *, Object_80039F5C *, int, int, unsigned short, void *, Record_800D81C8 *, unsigned char);
 void fn_800DAC78(Block_801BE60C *, float, float);
 void fn_800DAC88(Block_801BE60C *, void *, Record_800D81C8 *);
@@ -52,7 +52,7 @@ int fn_800D9B0C(Object_80039F5C *, int, int);
 int fn_800D9A10(void *, Block_801BE60C *, Object_80039F5C *, Object_80039F5C *, int);
 int fn_800D9C40(Object_80039F5C *);
 
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 
 int fn_80178308(void);
 int fn_800D91E0(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
@@ -70,7 +70,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
         result = 2;
         goto finish;
     }
-    if (pOther == p || (fn_801486A0() == 1 && fn_80137C48(p))) {
+    if (pOther == p || (fn_801486A0() == 1 && BallFindHeldBy(p))) {
         switch (p->mUnknown528.mUnknown15) {
         case 10: case 11: result = 34; goto finish;
         case 20: case 21:
@@ -98,14 +98,14 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
             if (p->mUnknown2913 == 0) {
                 int angle = block->mUnknown3D == 9 ? 95 : 85;
                 result = 6;
-                if (fn_801CFFD0(direction, 0) < (int)(angle * 46603.37890625f)) result = 9;
+                if (MathAngleDiff(direction, 0) < (int)(angle * 46603.37890625f)) result = 9;
             } else {
                 int angle = block->mUnknown3D == 9 ? 85 : 95;
                 result = 9;
-                if (fn_801CFFD0(direction, 0) < (int)(angle * 46603.37890625f)) result = 6;
+                if (MathAngleDiff(direction, 0) < (int)(angle * 46603.37890625f)) result = 6;
                 if (!(p->mMotion.mUnknown28 > 0.0000001f)) result = 9;
             }
-        } else if (fn_801481B0() || !(p->mFlags & 0x400)) {
+        } else if (PassIconsAreShown() || !(p->mFlags & 0x400)) {
             result = p->mUnknown2913 ? 22 : 23;
         }
         goto finish;
@@ -129,7 +129,7 @@ int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag,
     default: result = fn_800D9188() ? 20 : 2; break;
     }
     if (p->mUnknown528.mUnknown14 == 9) result = fn_800D9188() ? 20 : 2;
-    if (p->mpState->mId == 42 && fn_801CFFD0(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
+    if (p->mpState->mId == 42 && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
         if (!(p->mMotion.mPos.mY - point.mY >= 6.0f)) {
             result = 15;
@@ -162,7 +162,7 @@ int fn_800D9A10(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, Object_8003
         second = fn_800D949C(p, pOther, team, flag, result);
     } else {
         first = 2;
-        second = fn_80137C48(p) ? 1 : 2;
+        second = BallFindHeldBy(p) ? 1 : 2;
     }
     if (pBlock->mUnknown3C != first || pBlock->mUnknown3D != second) {
         pBlock->mUnknown3C = first;
@@ -200,7 +200,7 @@ int fn_800D9B0C(Object_80039F5C *p, int check, int value)
         case 18:
             return 0;
         }
-        if (fn_80137C48(p) == 0) {
+        if (BallFindHeldBy(p) == 0) {
             if (check != 0 && fn_800AD9B4() != 2) {
                 value = fn_802372EC(0, 100) < 50;
             }
@@ -222,7 +222,7 @@ int fn_800D9C40(Object_80039F5C *p)
     return result;
 }
 
-int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *record,
+int fn_800D9C80(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries, Object_80039F5C *p, int phase)
 {
     unsigned char value = 0;
@@ -232,7 +232,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         int mode = fn_800D9B0C(p, 1, 0);
-        Object_80039F5C *other = fn_80137B40();
+        Object_80039F5C *other = BallGetCurrentHolder();
         int team = fn_80178308();
         int flag = fn_800AD9B4() == 3 ? 0 : 1;
         block->mUnknown3C = fn_800D91E0(p, team, flag, &value);
@@ -247,8 +247,8 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
         block->mUnknown20.mUnknown8Bytes[0] = 255;
         Vector_80039F5C left, right;
         int scratch[3];
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
         if (mode) {
             fn_801BA6BC(&entries[block->mUnknown0], 1);
             fn_801BA6BC(&entries[block->mUnknown1], 1);
@@ -287,7 +287,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     }
     case 2: {
         if (fn_801BE648(p->mpUnknown792) != key) return 0;
-        Object_80039F5C *other = fn_80137B40();
+        Object_80039F5C *other = BallGetCurrentHolder();
         if ((signed char)block->mUnknown3A[1] <= 0) {
             int mode = fn_801BA6B0(&entries[block->mUnknown0]);
             unsigned char changed = fn_800D9A10(table, block, p, other, mode);
@@ -362,7 +362,7 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
         return 0;
     default: return 0;
     }
-    if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
+    if (MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x56C16C)
         fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, -block->mUnknown20.mUnknownC);
     else fn_800D8FFC(block, (Object_800DA8D8 *)block->mpUnknownC, entries, block->mUnknown20.mUnknownC);
     return 0;
@@ -378,7 +378,7 @@ unsigned char fn_800DA53C(unsigned short index)
     return lbl_802DA888[index];
 }
 
-int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *record,
+int fn_800DA54C(Table_80089904 *table, unsigned short key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries, Object_80039F5C *p, int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
@@ -392,20 +392,20 @@ int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
                                          table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0 = entry;
         if (block->mUnknown2 == 2 && p->mUnknown528.mUnknown0 != 0.0f)
-            AnimSeqSetSpeed(&entries[(unsigned char)entry].mUnknown4C, fn_801CFFA0(p->mUnknown528.mUnknown0));
+            AnimSeqSetSpeed(&entries[(unsigned char)entry].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0));
         break;
     }
     case 2:
         if (block->mUnknown2 == 2 && p->mUnknown528.mUnknown0 != 0.0f) {
             p->mpUnknown800[block->mUnknown0].mUnknownC = p->mUnknown528.mUnknown8;
-            AnimSeqSetSpeed(&entries[block->mUnknown0].mUnknown4C, fn_801CFFA0(p->mUnknown528.mUnknown0));
+            AnimSeqSetSpeed(&entries[block->mUnknown0].mUnknown4C, MathInverse(p->mUnknown528.mUnknown0));
         }
         break;
     }
     return 0;
 }
 
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int)
+void fn_800DA6AC(FEPlyrModel_t *record, Record_800D81C8 *entries, int)
 {
     for (unsigned int i = 0; i <= 3; i++) {
         unsigned int count = fn_801BA568((AnimHeader_t *)record, entries, lbl_802DA8AC[i].mUnknown2);
@@ -430,7 +430,7 @@ int fn_800DA7AC(Object_801BBD5C *pObject, float value)
 {
     int index = 0;
     while (index < (int)(pObject->mCount - 2)) {
-        float end = pObject->mValues[index + 1].mValue * lbl_803EA2C4;
+        float end = pObject->mValues[index + 1].mValue * gFrameTimeScale;
         if (!(fabsf(end) >= 0.000001f)) end = 0.0f;
         if (!(end <= value)) break;
         index++;
@@ -439,7 +439,7 @@ int fn_800DA7AC(Object_801BBD5C *pObject, float value)
 }
 
 void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p,
-                 int value, int index, int key, Record_8036B55C *record,
+                 int value, int index, int key, FEPlyrModel_t *record,
                  Record_800D81C8 *entries)
 {
     fn_800DA6AC(record, entries, key);
@@ -474,8 +474,8 @@ void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F
 float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
                   float value)
 {
-    float start = pObject->mUnknown24[index].mUnknown4 * lbl_803EA2C4;
-    float ratio = (value - start) / (pObject->mUnknown24[index + 1].mUnknown4 * lbl_803EA2C4 - start);
+    float start = pObject->mUnknown24[index].mUnknown4 * gFrameTimeScale;
+    float ratio = (value - start) / (pObject->mUnknown24[index + 1].mUnknown4 * gFrameTimeScale - start);
     float t = ratio < 0.0f ? 0.0f : (ratio > 1.0f ? 1.0f : ratio);
 
     pObject->mUnknown24[index + 1].mUnknown0 = fabsf(pObject->mUnknown24[index + 1].mUnknown0);
@@ -566,8 +566,8 @@ int fn_800DAE4C(Object_80039F5C *p)
 {
     Vector_80039F5C left, right;
     int scratch[3];
-    fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
-    fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
+    fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, scratch);
+    fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, scratch);
     int result = 1;
     if (!(left.mZ >= right.mZ)) result = 2;
     return result;

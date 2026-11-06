@@ -3,7 +3,7 @@
 #include "game/fn_8007F828.h"
 
 extern "C" {
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E1884(int channel, void *state);
 }
 
@@ -70,7 +70,7 @@ void _RumbleSetup(void)
 
 void RumbleStart(int channel, int level, int duration)
 {
-    int port = fn_801C6458(channel, 0);
+    int port = ConGetChannelInfo(channel, 0);
 
     if (_Rumble_bEnabled && _Rumble_abPortActive[port]) {
         _RumbleStartActuator(port, 1, level, duration);
@@ -173,7 +173,7 @@ unsigned char RumbleIsEnabled(void)
 
 void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force)
 {
-    int port = fn_801C6458(channel, 0);
+    int port = ConGetChannelInfo(channel, 0);
 
     if ((_Rumble_bEnabled || force) && _Rumble_abPortActive[port]) {
         RumbleMotor_t *m = &_Rumble_aPorts[port].mMotor[0];

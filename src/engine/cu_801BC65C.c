@@ -9,7 +9,7 @@ int abs(int x);
 void QuatFromEulerYZX(Quat_801BC67C *pOut, int x, int y, int z);
 void QuatSlerp(Quat_801BC67C *pOut, Quat_801BC67C *pA, Quat_801BC67C *pB, float t);
 void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_801BC67C *pQuat);
-void fn_801CF810(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
+void Orient3Lerp(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
 
 unsigned short fn_801BC65C(int state, AnimFileFormat_t *pFile, Slot_801BE594 *pSlot)
 {
@@ -32,7 +32,7 @@ void fn_801BC67C(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB
         QuatSlerp(&a, &a, &b, t);
         QuatToEulerYZX(pOut, &a);
     } else {
-        fn_801CF810(pOut, pA, pB, t);
+        Orient3Lerp(pOut, pA, pB, t);
     }
 }
 

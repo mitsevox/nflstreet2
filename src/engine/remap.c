@@ -18,7 +18,7 @@ extern unsigned int lbl_803ED5EC;
 extern unsigned char lbl_803EBD6C[8];
 
 void *fn_801C1FBC();
-int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int MemFill(void *p, unsigned int size, int value, int flags);
 
 int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numInputs)
 {
@@ -38,7 +38,7 @@ int RemapInit(unsigned int numTables, unsigned int numEntries, unsigned int numI
             if (lbl_803ECF6C == 0) {
                 err = fn_801F7C88();
             } else {
-                fn_801D34D0(lbl_803ECF6C, lbl_803ECF68, 0, 2);
+                MemFill(lbl_803ECF6C, lbl_803ECF68, 0, 2);
                 lbl_803EBD7C = 1;
             }
         } else {

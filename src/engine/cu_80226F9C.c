@@ -2,7 +2,7 @@
 
 extern void fn_801F7BD4(int err);
 extern float fn_80260B1C(float x);
-extern float fn_801CFF54(float x);
+extern float MathInvSqrt(float x);
 extern int fn_801CFD78(float x);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
 extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
@@ -67,12 +67,12 @@ float fn_80227120(float *p)
 
 float fn_8022713C(float *p)
 {
-    return fn_801CFF54(p[0] * p[0] + p[1] * p[1]);
+    return MathInvSqrt(p[0] * p[0] + p[1] * p[1]);
 }
 
 float fn_8022716C(float *p)
 {
-    return fn_801CFF54(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
+    return MathInvSqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
 }
 
 void fn_802271A4(float *pOut, float *p)

@@ -19,7 +19,7 @@ int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, ColumnValue_802D6424 *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9A90(int a, int tag);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_801F9BB4(int handle, int table, int column, int *pInfo);
 void fn_80023024(int a);
 int fn_8007A43C(Object_8007A334 *pObject);
@@ -616,7 +616,7 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
     unsigned int j;
 
     memcpy(pList, pIn, size * 4);
-    fn_801D34D0(excluded, sizeof(excluded), 0xFF, 4);
+    MemFill(excluded, sizeof(excluded), 0xFF, 4);
     pList[size] = 0x7FFF;
     lbl_803EC86C = fn_802372EC(0, 5);
     fn_8003E710(lbl_803EC86C, pList, &lbl_803EA7E8);

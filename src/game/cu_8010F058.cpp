@@ -12,7 +12,7 @@ int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
 int fn_801783AC(int bit);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
@@ -32,7 +32,7 @@ extern "C" void fn_8010F058(Object_80039F5C *p, Object_80039F5C *pOther)
     fn_80227690(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
     angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
     distance = fn_802270A4(&delta);
-    if (fn_801CFFD0(angle, pMotion->mFacing) > 0x4E38E2) {
+    if (MathAngleDiff(angle, pMotion->mFacing) > 0x4E38E2) {
         return;
     }
     scale = 0.0f;
@@ -90,13 +90,13 @@ extern "C" void fn_8010F1F4(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
     angle = fn_801CFE40(delta.mY, delta.mX);
-    if (fn_801CFFD0(angle, p->mMotion.mFacing) > 0x2AAAA9) {
+    if (MathAngleDiff(angle, p->mMotion.mFacing) > 0x2AAAA9) {
         return;
     }
     delta.mX = pOther->mMotion.mPos.mX + pOther->mMotion.mUnknown40 * 5.0f;
     delta.mY = pOther->mMotion.mPos.mY + pOther->mMotion.mUnknown44 * 5.0f;
     fn_80227690(&delta, &delta, &p->mMotion.mPos);
-    if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) > 0x18E38D) {
+    if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) > 0x18E38D) {
         return;
     }
     pBlocker = fn_8009BCE8(&pTarget->mUnknown1036);
@@ -108,7 +108,7 @@ extern "C" void fn_8010F1F4(Object_80039F5C *p, Object_80039F5C *pOther)
     delta.mX = pOther->mMotion.mPos.mX + pOther->mMotion.mUnknown40 * 5.0f;
     delta.mY = pOther->mMotion.mPos.mY + pOther->mMotion.mUnknown44 * 5.0f;
     fn_80227690(&delta, &delta, &pBlocker->mMotion.mPos);
-    if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x18E38E) {
+    if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x18E38E) {
         return;
     }
     switch (pBlocker->mUnknown1032) {

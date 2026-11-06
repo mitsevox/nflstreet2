@@ -15,7 +15,7 @@ void fn_8016C70C(Object_80039F5C *pObject);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 int fn_802275D8(void *pA, void *pB, float epsilon);
@@ -89,7 +89,7 @@ void fn_8016BE10(Object_80039F5C *pObject)
             fn_8009BF5C(pTarget, 11, &joint, &extra);
             fn_80227690(&delta, &joint, pMotion);
             facing = fn_801CFE40(delta.mY, delta.mX);
-            if (fn_801CFFD0(facing, pMotion->mFacing) > 0x38E38) {
+            if (MathAngleDiff(facing, pMotion->mFacing) > 0x38E38) {
                 if (((facing - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
                     pMotion->mFacing = (pMotion->mFacing - 0x38E38) & 0xFFFFFF;
                 } else {
@@ -99,12 +99,12 @@ void fn_8016BE10(Object_80039F5C *pObject)
                 pMotion->mFacing = facing;
             }
         }
-        if (fn_801CFFD0(pMotion->mUnknown32, pControl->mUnknown4) > 0) {
+        if (MathAngleDiff(pMotion->mUnknown32, pControl->mUnknown4) > 0) {
             pMotion->mUnknown52 *= 10.0f;
         }
         fn_800B26D0(pMotion, pControl->mUnknown4, pMotion->mFacing, pMotion->mUnknown52);
         if (distance < 2.95f) {
-            int apart = fn_801CFFD0(pTarget->mMotion.mFacing, pMotion->mFacing);
+            int apart = MathAngleDiff(pTarget->mMotion.mFacing, pMotion->mFacing);
             float limit;
 
             if (apart > 0x400000) {
@@ -120,7 +120,7 @@ void fn_8016BE10(Object_80039F5C *pObject)
         }
     } else {
         fn_80227538(&delta, angle, distance * 0.5f);
-        if (fn_801CFFD0(pBlock->mUnknown60, pMotion->mFacing) > 0x16C16) {
+        if (MathAngleDiff(pBlock->mUnknown60, pMotion->mFacing) > 0x16C16) {
             Point_8017886C center;
             Point_8017886C turned;
 
@@ -146,12 +146,12 @@ void fn_8016BE10(Object_80039F5C *pObject)
     pControl->mUnknown0 = pObject->mUnknown512.mUnknown0;
 }
 
-/* Angles are 24-bit: fn_801CFFD0 returns the difference of two angles modulo
+/* Angles are 24-bit: MathAngleDiff returns the difference of two angles modulo
    0x1000000, folded to at most 0x800000. Moves current toward target by at
    most step. */
 int fn_8016C170(int current, int target, int step)
 {
-    if (fn_801CFFD0(target, current) > step) {
+    if (MathAngleDiff(target, current) > step) {
         if (((target - current) & 0xFFFFFF) > 0x800000) {
             target = (current - step) & 0xFFFFFF;
         } else {
@@ -168,7 +168,7 @@ int fn_8016C1DC(Object_80039F5C *pObject, Object_800B26B0 *pMotion, int target, 
     int direction;
 
     if (pMotion->mUnknown28 != 0.0f && pMotion->mUnknown36 != 0.0f) {
-        if (fn_801CFFD0(pMotion->mFacing, pMotion->mUnknown32) > 0x2E38E3) {
+        if (MathAngleDiff(pMotion->mFacing, pMotion->mUnknown32) > 0x2E38E3) {
             direction = target;
         } else {
             direction = pMotion->mUnknown32;
@@ -188,7 +188,7 @@ void fn_8016C264(Object_80039F5C *pObject)
     if (pObject->mUnknown545 == 0) {
         Object_8016D8B0 *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
-        int angle = fn_801CFFD0(pMotion->mUnknown32, pControl->mUnknown4);
+        int angle = MathAngleDiff(pMotion->mUnknown32, pControl->mUnknown4);
         float factor = 0.0f;
 
         if (angle > 0) {
@@ -235,7 +235,7 @@ void fn_8016C434(Object_80039F5C *pObject)
     if (pObject->mUnknown545 == 0) {
         Object_8016D8B0 *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
-        int angle = fn_801CFFD0(pMotion->mFacing, pControl->mUnknown4);
+        int angle = MathAngleDiff(pMotion->mFacing, pControl->mUnknown4);
         float factor = 0.0f;
 
         if (angle > 0) {
@@ -272,7 +272,7 @@ void fn_8016C550(Object_80039F5C *pObject)
     if (pObject->mUnknown545 == 0) {
         Object_8016D8B0 *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
-        int angle = fn_801CFFD0(pMotion->mFacing, pControl->mUnknown4);
+        int angle = MathAngleDiff(pMotion->mFacing, pControl->mUnknown4);
         float factor = 0.0f;
 
         if (angle > 0) {

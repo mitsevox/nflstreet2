@@ -150,7 +150,7 @@ int fn_8018F1F0(unsigned int index, char *pEtnr, int size);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 unsigned int fn_801C3180(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
@@ -379,7 +379,7 @@ int fn_8005DC10(void)
     unsigned int count;
     unsigned int i;
 
-    fn_801D34D0(list, sizeof(list), 0x7FFF, 4);
+    MemFill(list, sizeof(list), 0x7FFF, 4);
     QueryCursor cursor = {0, 0, -1, 0};
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -553,7 +553,7 @@ void fn_8005E360(void)
 
     fn_8003B6F0(1);
     count = 0;
-    fn_801D34D0(list, sizeof(list), 0x7FFF, 4);
+    MemFill(list, sizeof(list), 0x7FFF, 4);
     home = fn_8005E014(&homeTeam, list, &count);
     if (fn_8005D958()) {
         away = fn_8005DC10();

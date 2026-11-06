@@ -36,7 +36,7 @@ int fn_8009EFDC(int side);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pSpot, int a, unsigned char flag);
 int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227890(void *pA, void *pB);
 int fn_80117494(Object_80039F5C *p, Point_8017886C *out);
@@ -171,7 +171,7 @@ extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSp
         }
         Point_8017886C delta;
         fn_80227690(&delta, &p->mMotion.mPos, pOut);
-        if (fn_801CFFD0(delta.Heading(), pOther->mMotion.mUnknown32) <= (int)(lbl_803EAFE0 * 46603.38f)) {
+        if (MathAngleDiff(delta.Heading(), pOther->mMotion.mUnknown32) <= (int)(lbl_803EAFE0 * 46603.38f)) {
             if (delta.mY > 0.0f) {
                 pOut->mY = p->mMotion.mPos.mY;
                 if (fn_80227890(&p->mMotion.mPos, pOut) < lbl_803EAFDC) {

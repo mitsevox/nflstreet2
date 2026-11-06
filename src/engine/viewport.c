@@ -23,14 +23,14 @@ typedef struct VptCallbackMatch_t {
     int mUnknown8;
 } VptCallbackMatch_t;
 
-extern void fn_801CAB30(void);
+extern void FileAsyncCheckError(void);
 extern void fn_801CE720(void);
 extern void fn_801CE774(void);
 extern int fn_801CEA14(void);
 extern float fn_801CFD28(int angle);
-extern int fn_801D0290(unsigned int a, unsigned int b);
-extern int fn_801D0310(unsigned int a);
-extern void fn_801DD140(int handle, int a, int b);
+extern int MatNewStack(unsigned int a, unsigned int b);
+extern int MatDelStack(unsigned int a);
+extern void ObjProcessListFunc(int handle, int a, int b);
 extern void fn_801F7BD4(int err);
 extern int fn_801F7C88(void);
 extern void fn_801F8768(void);
@@ -114,7 +114,7 @@ int VptInit(VptInitBlock_t *pInit)
         if ((_Vpt_ViewportList = fn_801C68FC(1, 0, pInit->mUnknown0, sizeof(Viewport_t), _VptInsertByPriorityViewport, 0)) != 0
             && (_Vpt_CallbackList = fn_801C68FC(1, 0, pInit->mUnknown4, sizeof(VptCallback_t), _VptInsertByPriorityCallback, 0)) != 0) {
             _Vpt_MatrixStackIndex = pInit->mUnknown10;
-            err = fn_801D0290(pInit->mUnknown10, pInit->mUnknown11);
+            err = MatNewStack(pInit->mUnknown10, pInit->mUnknown11);
             if (err == 0) {
                 err = VptLLInit(pInit);
             }
@@ -144,7 +144,7 @@ int VptShutdown(void)
             fn_801C69E4(_Vpt_CallbackList);
             _Vpt_CallbackList = 0;
         }
-        fn_801D0310(_Vpt_MatrixStackIndex);
+        MatDelStack(_Vpt_MatrixStackIndex);
         err = VptLLShutdown();
         _Vpt_ModuleActive = 0;
     } else {
@@ -247,13 +247,13 @@ void VptUpdateCamera(Viewport_t *pObject)
 void VptProcessObjectList(Viewport_t *pObject)
 {
     if (pObject->mUnknown72) {
-        fn_801DD140(pObject->mUnknown72, 1, pObject->mUnknown69);
+        ObjProcessListFunc(pObject->mUnknown72, 1, pObject->mUnknown69);
     }
 }
 
 void VptProcessViewports(void)
 {
-    fn_801CAB30();
+    FileAsyncCheckError();
     fn_801F8768();
     if (!_Vpt_IsProcessing) {
         fn_801CE720();

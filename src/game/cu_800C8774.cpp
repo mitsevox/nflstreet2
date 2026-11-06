@@ -3,8 +3,8 @@
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
-#include "game/Record_803EA558.h"
-#include "game/Level_80054130.h"
+#include "game/LevelWallInfo.h"
+#include "game/LevelData.h"
 #include "game/cu_80142BB4.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
@@ -14,7 +14,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 #include "engine/vptmanager.h"
-#include "game/Camera_8013F738.h"
+#include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
 #include "game/Class_80297BF8.h"
 #include "game/Entry_800B206C.h"
@@ -28,7 +28,7 @@
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -39,13 +39,13 @@
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
-#include "game/cu_80041210.h"
+#include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
-#include "game/cu_80064864.h"
-#include "game/cu_80067C10.h"
+#include "game/PauseMenu.h"
+#include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8011F518.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/cu_8008E978.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800670B4.h"
@@ -63,7 +63,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
-#include "game/fn_80054138.h"
+#include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
@@ -96,10 +96,10 @@ int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 unsigned short fn_801BE648(void *p);
 void fn_801BE760(void *p, unsigned short key, unsigned short flags);
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
-float fn_801CFFA0(float value);
-int fn_801CFFD0(int a, int b);
+float MathInverse(float value);
+int MathAngleDiff(int a, int b);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -108,7 +108,7 @@ extern float lbl_802DA69C[];
 extern unsigned int lbl_8030C084[];
 extern Table_80089904 lbl_80317AF4;
 extern Table_80089904 lbl_803186D8;
-extern float lbl_803EA2C4;
+extern float gFrameTimeScale;
 extern float lbl_803EAC2C;
 extern float lbl_803EAC30;
 extern float lbl_803EAC34;
@@ -308,14 +308,14 @@ extern "C" void fn_800C9E4C(unsigned char count0, unsigned char count1)
         lbl_803EAC3C->mEntries[0][i].mUnknown4 = 1000000000;
         lbl_803EAC3C->mEntries[0][i].mUnknown14 = 1000000000;
         lbl_803EAC3C->mEntries[0][i].mRef = 0;
-        lbl_803EAC3C->mEntries[0][i].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+        lbl_803EAC3C->mEntries[0][i].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
         lbl_803EAC3C->mEntries[0][i].mUnknown8 = -1;
         lbl_803EAC3C->mEntries[0][i].mUnknown10 = 0;
         lbl_803EAC3C->mEntries[0][i].mUnknown11 = lbl_803EAC3C->mEntries[0][i].mUnknown12 = 0;
         lbl_803EAC3C->mEntries[1][i].mUnknown4 = 1000000000;
         lbl_803EAC3C->mEntries[1][i].mUnknown14 = 1000000000;
         lbl_803EAC3C->mEntries[1][i].mRef = 0;
-        lbl_803EAC3C->mEntries[1][i].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+        lbl_803EAC3C->mEntries[1][i].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
         lbl_803EAC3C->mEntries[1][i].mUnknown8 = -1;
         lbl_803EAC3C->mEntries[1][i].mUnknown10 = 0;
         lbl_803EAC3C->mEntries[1][i].mUnknown11 = lbl_803EAC3C->mEntries[1][i].mUnknown12 = 0;
@@ -338,7 +338,7 @@ extern "C" void fn_800C9FC0(void)
                 lbl_803EAC3C->mEntries[team][j].mUnknownC = 0;
             } else {
                 lbl_803EAC3C->mEntries[team][j].mUnknown4 = fn_800ACBFC(team);
-                lbl_803EAC3C->mEntries[team][j].mUnknownC = (unsigned int)(lbl_803EA2C4 * 8333333.0f);
+                lbl_803EAC3C->mEntries[team][j].mUnknownC = (unsigned int)(gFrameTimeScale * 8333333.0f);
             }
             lbl_803EAC3C->mEntries[team][j].mUnknown14 = lbl_803EAC3C->mEntries[team][j].mUnknown4;
             lbl_803EAC3C->mEntries[team][j].mRef = 0;
@@ -433,8 +433,8 @@ extern "C" int fn_800CAC54(Object_80039F5C *p)
         Vector_80039F5C scratch;
 
         foot = 2;
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, &scratch);
-        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, &scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, &scratch);
+        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, &scratch);
         if (!(left.mY <= right.mY)) {
             foot = 1;
         }
@@ -461,7 +461,7 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
         fn_801BA6BC(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = 1.0f;
-    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC68));
+    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, MathInverse(lbl_803EAC68));
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
     desired = lbl_803EAC58;
@@ -508,7 +508,7 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
         fn_801BA6BC(&pRecords[index], 1);
     }
     pRecords[index].mUnknown2C = lbl_803EAC60;
-    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC6C));
+    AnimSeqSetSpeed(&pRecords[index].mUnknown4C, MathInverse(lbl_803EAC6C));
     pTurn->mScale = lbl_803EAC6C;
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
@@ -566,7 +566,7 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     fn_800CB484(&delta, &origin, &step, lbl_803EAC4C, heading, 1.0f);
     turn = fn_801CFE40(delta.mY, delta.mX);
     fn_80227690(&toTarget, &target, &p->mMotion.mPos);
-    bend = fn_801CFFD0(fn_801CFE40(toTarget.mY, toTarget.mX), turn);
+    bend = MathAngleDiff(fn_801CFE40(toTarget.mY, toTarget.mX), turn);
     fn_80227538(&arc, (0x400000 - bend) & 0xFFFFFF, fn_802270A4(&toTarget) * (3.7450704e-07f * bend));
     fn_80227638(&aim, &arc, &target);
     fn_80227690(&arc, &aim, &p->mMotion.mPos);
@@ -620,7 +620,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     facing = p->mMotion.mFacing;
     fn_80227690(&delta, &target, &p->mMotion.mPos);
     distance = fn_802270A4(&delta);
-    fn_801CFFD0(facing, angle);
+    MathAngleDiff(facing, angle);
     lbl_803EAC48 = 144;
     lbl_803EAC44 = &lbl_803186D8;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
@@ -631,7 +631,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         pInfo = lbl_803EAC44->mEntries[i].mpInfo;
         limit = 0x238E39;
         if (!(distance - fn_802270A4(&pInfo->mUnknown20) <= 0.5f)
-            && fn_801CFFD0(fn_801CFFD0(pInfo->mUnknown56, 0), fn_801CFFD0(facing, angle)) < limit
+            && MathAngleDiff(MathAngleDiff(pInfo->mUnknown56, 0), MathAngleDiff(facing, angle)) < limit
             && fn_800CADC0(p, pInfo, angle, check) != 0) {
             *pIndex = i;
             found = 1;
@@ -674,14 +674,14 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     goal = fn_80177FFC(p->mIdBytes[2]);
     direction = fn_801CFE40(delta.mY, delta.mX);
     distance = fn_802270A4(&delta);
-    turn = fn_801CFFD0(facing, direction);
+    turn = MathAngleDiff(facing, direction);
     if (beyond != 2 && turn > 0x18E38E) {
         return 0;
     }
     if (mode == 2) {
         int allowed = 1;
 
-        if (fn_801CFFD0(facing, angle) < 621378.0f && fn_801CFFD0(direction, facing) < 621378.0f) {
+        if (MathAngleDiff(facing, angle) < 621378.0f && MathAngleDiff(direction, facing) < 621378.0f) {
             switch (p->mUnknown2914) {
             case 24:
             case 5:
@@ -731,14 +731,14 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
         pInfo = lbl_803EAC44->mEntries[i].mpInfo;
         length = fn_802270A4(&pInfo->mUnknown20);
         if (beyond == 2 || !(fabsf(length - distance) >= 2.0f)) {
-            int infoAngle = fn_801CFFD0(pInfo->mUnknown56, 0);
+            int infoAngle = MathAngleDiff(pInfo->mUnknown56, 0);
             int limit = 0x155555;
-            int turn = fn_801CFFD0(facing, angle);
+            int turn = MathAngleDiff(facing, angle);
 
             if (turn > 0x555554) {
                 limit = 0x2AAAAA;
             }
-            if (fn_801CFFD0(infoAngle, turn) < limit && fn_800CAE28(p, pInfo, angle) != 0) {
+            if (MathAngleDiff(infoAngle, turn) < limit && fn_800CAE28(p, pInfo, angle) != 0) {
                 float scale = 0.25f;
 
                 switch (beyond) {

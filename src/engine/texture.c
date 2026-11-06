@@ -54,7 +54,7 @@ typedef struct TexFileType_t {
     int (*mpInit)(Texture_t *pTex, void *pSrc, unsigned int flags);
 } TexFileType_t;
 
-extern TexChunk_t *fn_801CEEF4(void *pStream, int id, int endId, int flags);
+extern TexChunk_t *GlibFindChunk(void *pStream, int id, int endId, int flags);
 extern char lbl_802B1BC4[];
 extern char lbl_802B1BCC[];
 
@@ -82,12 +82,12 @@ static int _TexRawConvert(Texture_t *pTex, void *pSrc, unsigned int flags)
     TexChunk_t *pChunk;
     int err;
 
-    pChunk = fn_801CEEF4(&pDesc->mStream, 0x494D4744, 0x454E4444, flags);
+    pChunk = GlibFindChunk(&pDesc->mStream, 0x494D4744, 0x454E4444, flags);
     err = 0;
     if (pChunk != 0) {
         memcpy(pTex->mpImage, pChunk->mData, pChunk->mSize - 8);
         if (lbl_802F7A10[pDesc->mFormat] != 0) {
-            pChunk = fn_801CEEF4(&pDesc->mStream, 0x434C5554, 0x454E4444, flags);
+            pChunk = GlibFindChunk(&pDesc->mStream, 0x434C5554, 0x454E4444, flags);
             if (pChunk != 0) {
                 memcpy(pTex->mpPalette, pChunk->mData, pChunk->mSize - 8);
             } else {
@@ -270,7 +270,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
         size = (lbl_802F7A10[format] * lbl_803EBC80[tlutFormat]) >> 3;
         pTex->mpPalette = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
         if (pTex->mpPalette != 0) {
-            fn_801D34D0(pTex->mpPalette, size, 0, 1);
+            MemFill(pTex->mpPalette, size, 0, 1);
         } else {
             err = fn_801F7C88();
         }
@@ -280,7 +280,7 @@ int TexCreateEmpty(Texture_t *pTex, unsigned short width, unsigned short height,
         size = (width * height * lbl_802F7A00[format]) >> 3;
         pTex->mpImage = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
         if (pTex->mpImage != 0) {
-            fn_801D34D0(pTex->mpImage, size, 0, 1);
+            MemFill(pTex->mpImage, size, 0, 1);
             pTex->mTlutFormat = tlutFormat;
         } else {
             fn_801D2BD0(pTex->mpPalette);

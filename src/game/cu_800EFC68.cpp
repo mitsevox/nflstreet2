@@ -19,10 +19,10 @@
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
 #include "game/State_803EB098.h"
-#include "game/cu_80067C10.h"
+#include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
@@ -225,7 +225,7 @@ extern "C" {
 int fn_8011F25C(void);
 int fn_8011F290(void);
 int fn_800FD2AC(Object_80039F5C *p);
-int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue);
+int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float *pValue);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B7FE8(Object_80039F5C *p);
 int fn_8011165C(Object_80039F5C *p);
@@ -413,7 +413,7 @@ struct Info_800F3A6C {
    fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
    the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
-    Object_80137ABC *mpUnknown0;
+    Ball_t *mpUnknown0;
     Vector_80039F5C mUnknown4;
     Vector_80039F5C mUnknown16;
     Vector_80039F5C mUnknown28;
@@ -524,7 +524,7 @@ float fn_801250B8(Object_80039F5C *p, Object_80039F5C *pExclude, int kind);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern float lbl_803EAF58;
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -547,8 +547,8 @@ int fn_801783AC(int bit);
 void fn_8009A8D4(void *p);
 int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
-int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
-int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);
+int fn_80099AD0(Object_80039F5C *p, Ball_t *pBall, int a, int b, int c, int d, int e);
+int fn_80099C80(Object_80039F5C *p, Ball_t *pBall, int a, int *pOut, int *pOut2);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_800C1180(Object_80039F5C *p);
@@ -572,7 +572,7 @@ int fn_8011DC68(unsigned int id);
 unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
@@ -653,16 +653,16 @@ int fn_8011E9D8(State_80039F5C *pState);
 int fn_8011F1A4(void);
 int fn_8011F228(void);
 float fn_8011F4D4(void);
-void fn_8013FA8C(int a);
+void CamGameSetModeAll(int a);
 extern float lbl_803EAED8;
 extern unsigned int lbl_803EAEDC;
 void fn_800A2190(int bit);
 void fn_800A60D8(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80104D98(Object_80039F5C *p);
-void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
+void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
-void fn_80148108(int mode);
-int fn_801481B0(void);
+void PassIconsShow(int mode);
+int PassIconsAreShown(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
@@ -690,7 +690,7 @@ int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
 int fn_800B6644(int index);
 Record_800B8694 *fn_800B8694(int index);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
@@ -699,10 +699,10 @@ void PlayerMoveSetResult(Object_80039F5C *p, int a);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void AnimSeqSetSpeed(void *p, float value);
-float fn_801CFFA0(float value);
+float MathInverse(float value);
 int fn_800B83A0(Object_80039F5C *p);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-extern float lbl_803EA2C4;
+void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+extern float gFrameTimeScale;
 float fn_80178A08(void);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
@@ -718,7 +718,7 @@ extern unsigned char lbl_803EAE20[8];
 extern const float lbl_803ED6CC;
 int fn_800AC3FC(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801528E0(void *pSet, Point_8017886C *pOut);
 int fn_800AC3A0(Object_80039F5C *p);
@@ -728,9 +728,9 @@ float fn_80178A44(void);
 float fn_8011F4D4(void);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
 int fn_8009A6EC(Object_80039F5C *p);
-int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
+int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
                 int *pOutB);
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
+int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float range);
 extern char lbl_8031BDD4[];
 }
@@ -1063,12 +1063,12 @@ extern "C" int fn_800F0CCC(Object_80039F5C *p) {
         p->mFlags &= ~4;
         pBlock->mUnknown8 = 1;
     }
-    if (fn_8013BA58(fn_801374BC(), 0) == 4 && p == fn_80137B88(fn_801374BC())) {
+    if (BallStateGet(BallGetCurrent(), 0) == 4 && p == BallGetTarget(BallGetCurrent())) {
         Message_800F01CC message;
 
         memset(&message, 0, 4);
         message.mId = 23;
-        message.mUnknown1[0] = fn_801374E0(fn_801374BC());
+        message.mUnknown1[0] = BallGetIndex(BallGetCurrent());
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
@@ -1202,7 +1202,7 @@ extern "C" int fn_800F1EE0(Object_80039F5C *p) {
     int result = 0;
     int mode = fn_800AD9B4();
 
-    if (fn_80137C48(p) == 0) {
+    if (BallFindHeldBy(p) == 0) {
         return 0;
     }
     if (mode == 3) {
@@ -1223,7 +1223,7 @@ extern "C" int fn_800F1EE0(Object_80039F5C *p) {
             result = 1;
             break;
         }
-        if (!(p->mFlags & 0x4000) && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x38E38E) {
+        if (!(p->mFlags & 0x4000) && MathAngleDiff(p->mMotion.mUnknown32, 0x400000) > 0x38E38E) {
             result = 0;
         }
         if ((p->mUnknown528.mUnknown15 >= 4 && p->mUnknown528.mUnknown15 <= 19) || p->mUnknown528.mUnknown15 > 21) {
@@ -1293,13 +1293,13 @@ extern "C" int fn_800F285C(Object_80039F5C *p) {
 }
 
 extern "C" int fn_800F2A40(Object_80039F5C *p) {
-    Object_80039F5C *pOther = fn_80137B40();
+    Object_80039F5C *pOther = BallGetCurrentHolder();
 
     if (pOther != 0) {
         Point_8017886C delta;
 
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing);
+        MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing);
     }
     return 1;
 }
@@ -1345,7 +1345,7 @@ extern "C" int fn_800F4A74(Object_80039F5C *p) {
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
 
     memset(pBlock, 0, 88);
-    pBlock->mUnknown62 = fn_801374E0(fn_801374BC());
+    pBlock->mUnknown62 = BallGetIndex(BallGetCurrent());
     pBlock->mUnknown63 = 0;
     pBlock->mUnknown36 = 0;
     pBlock->mUnknown40 = 0xC00000;
@@ -1423,7 +1423,7 @@ extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *
         int flag;
         float distance;
 
-        fn_80137D58(fn_801374BC(), &pos);
+        BallGetPosition(BallGetCurrent(), &pos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
         if (*pX > pos.mX ? side == 0 : side != 0) {
             flag = 1;
@@ -2216,11 +2216,11 @@ extern "C" int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock) {
 
             fn_80227690(&delta, &pBlock->mUnknown4[pBlock->mUnknown32], pMotion);
             toTarget = fn_801CFE40(delta.mY, delta.mX);
-            if (fn_801CFFD0(toTarget, toOther) <= 0x11C71B) {
-                if (fn_801CFFD0(toTarget, 0) <= 0x3FFFFF) {
-                    result = fn_801CFFD0(toOther, toTarget) - 0x200000;
+            if (MathAngleDiff(toTarget, toOther) <= 0x11C71B) {
+                if (MathAngleDiff(toTarget, 0) <= 0x3FFFFF) {
+                    result = MathAngleDiff(toOther, toTarget) - 0x200000;
                 } else {
-                    result = 0x200000 - fn_801CFFD0(toOther, toTarget);
+                    result = 0x200000 - MathAngleDiff(toOther, toTarget);
                 }
             }
         }
@@ -2242,7 +2242,7 @@ extern "C" int fn_800FC7A0(Object_80039F5C *p, Block_800FCC24 *pBlock) {
     direction = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
     distance = fn_802270A4(&delta);
     speed = pBlock->mUnknown28;
-    turn = fn_801CFFD0(direction, p->mMotion.mFacing);
+    turn = MathAngleDiff(direction, p->mMotion.mFacing);
     limit = 0x200000;
     if (pBlock->mUnknown34 & 2) {
         limit = 0x5C71C7;
@@ -2253,9 +2253,9 @@ extern "C" int fn_800FC7A0(Object_80039F5C *p, Block_800FCC24 *pBlock) {
             speed = distance * 0.14f;
         }
         if (fabsf(fn_80177FE0().mX - p->mMotion.mPos.mX) > 7.0f) {
-            if (fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x38E37) {
+            if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x38E37) {
                 if (turn > 0x7C71C7) {
-                    if (fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x38E37) {
+                    if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x38E37) {
                         pBlock->mUnknown36 = 1;
                         speed = 0.14f;
                         pBlock->mUnknown24 = p->mMotion.mFacing;
@@ -2336,7 +2336,7 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
     pBlock->mUnknown36 = 0;
     fn_800FC290(p, pBlock, target);
     p->mUnknown512.mUnknown14 = 0;
-    fn_80067E3C(120, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    AudmonEventPostId(120, &p->mMotion.mPos, p->mId, 0, 0, 0);
     p->mFlags &= ~0x40000;
     p->mFlags |= 0x10;
     p->mFlags |= 0x20000000;
@@ -2394,7 +2394,7 @@ extern "C" int fn_800FCC24(Object_80039F5C *p) {
         break;
     }
     if (result == 1) {
-        if (fn_801CFFD0(p->mMotion.mFacing, pBlock->mUnknown20) > 0x200000) {
+        if (MathAngleDiff(p->mMotion.mFacing, pBlock->mUnknown20) > 0x200000) {
             fn_801C1F94(&message, 0, 4);
             message.mId = 6;
             message.mUnknown1[0] = pBlock->mUnknown20 >> 16;
@@ -2459,7 +2459,7 @@ extern "C" int fn_800FCFC0(Object_80039F5C *p) {
                     fn_80227690(&toCarrier, &fn_8009BCE8(&pOther->mUnknown1036)->mMotion.mPos, pPos);
                     fn_80227690(&toOther, &pOther->mMotion.mPos, pPos);
                     angle = fn_801CFE40(toOther.mY, toOther.mX);
-                    if (fn_801CFFD0(angle, fn_801CFE40(toCarrier.mY, toCarrier.mX)) > 0x400000
+                    if (MathAngleDiff(angle, fn_801CFE40(toCarrier.mY, toCarrier.mX)) > 0x400000
                         || fn_8022710C(&toOther) < fn_8022710C(&toCarrier)) {
                         if (fn_80124714(p, pOther, 0) == 1) {
                             result = 1;
@@ -2722,7 +2722,7 @@ extern "C" int fn_800FFDFC(Object_80039F5C *p)
 
 extern "C" int fn_800FFE30(Object_80039F5C *p)
 {
-    Object_80039F5C *pOther = fn_80137B40();
+    Object_80039F5C *pOther = BallGetCurrentHolder();
     State_800FFDFC *pState = (State_800FFDFC *)&p->mUnknown336;
     Message_800F01CC message;
     Point_8017886C point;
@@ -2774,12 +2774,12 @@ extern "C" int fn_800FFFB0(Object_80039F5C *p)
     if (fn_801486A0() == 1) {
         int result = 0;
 
-        if (fn_80137C48(p) != 0) {
+        if (BallFindHeldBy(p) != 0) {
             result = fn_80178308() == p->mIdBytes[2];
         }
         return result;
     }
-    return p == fn_80137B40();
+    return p == BallGetCurrentHolder();
 }
 
 extern "C" int fn_801000EC(Object_80039F5C *p)
@@ -2822,13 +2822,13 @@ extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int 
         if (flag != pEntry->mUnknown16 || p->mUnknown1008.mUnknown0 != pEntry->mUnknown4) {
             continue;
         }
-        value = fn_801CFFD0(p->mMotion.mUnknown32 - ((p->mMotion.mFacing + fn_800C8BAC(p, 0)) & 0xFFFFFF),
+        value = MathAngleDiff(p->mMotion.mUnknown32 - ((p->mMotion.mFacing + fn_800C8BAC(p, 0)) & 0xFFFFFF),
                             pEntry->mUnknown8);
         *pOut = value;
         if (p->mUnknown1008.mUnknown0 == 1 || p->mUnknown1008.mUnknown0 == 2 || value <= 0x3FFFFF) {
             score = 6;
         }
-        value = fn_801CFFD0(b, pEntry->mUnknown12);
+        value = MathAngleDiff(b, pEntry->mUnknown12);
         *pOut = value;
         if (pEntry->mUnknown6 == 2 && value > 0x160B60 && value <= 0x7FFFFF) {
             *pOut = 0x160B60;
@@ -2840,9 +2840,9 @@ extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int 
         if (p->mUnknown1008.mUnknown1 == byte5) {
             if (byte5 != 10
                 || (p->mUnknown2913 == 0
-                    && fn_801CFFD0(p->mMotion.mFacing, 0) <= 0x3FFFFF)
+                    && MathAngleDiff(p->mMotion.mFacing, 0) <= 0x3FFFFF)
                 || (p->mUnknown2913 == 1
-                    && fn_801CFFD0(p->mMotion.mFacing, 0x800000) <= 0x3FFFFF)) {
+                    && MathAngleDiff(p->mMotion.mFacing, 0x800000) <= 0x3FFFFF)) {
                 score += 3;
             }
         } else {
@@ -2936,7 +2936,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         break;
     default:
         fn_800D4E68(PlayerMoveGetKind(p));
-        fn_8013FA8C(3);
+        CamGameSetModeAll(3);
         fn_800F053C(0, p->mpState, &message, p);
         fn_801C1F94(&message, 0, 4);
         message.mId = 33;
@@ -2989,9 +2989,9 @@ extern "C" int fn_80102664(Object_80039F5C *p)
 }
 
 extern "C" {
-void fn_80148154(void);
-void fn_801483C8(void);
-int fn_801483F8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
+int PassIconsWereShown(void);
 int fn_800A61E0(void);
 Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle);
 void fn_80136034(Object_80039F5C *p);
@@ -3008,11 +3008,11 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
     if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
         d = 4;
     }
-    if (fn_801481B0() == 0) {
-        if ((fn_801483F8() == 1 && (input.mUnknown94 & 1) && fn_800A61E0() == 0)
-            || (fn_801483F8() == 0 && (input.mUnknown93 & 0x40) && fn_800A61E0() == 0)) {
-            fn_80148108(0);
-            fn_8013FA8C(2);
+    if (PassIconsAreShown() == 0) {
+        if ((PassIconsWereShown() == 1 && (input.mUnknown94 & 1) && fn_800A61E0() == 0)
+            || (PassIconsWereShown() == 0 && (input.mUnknown93 & 0x40) && fn_800A61E0() == 0)) {
+            PassIconsShow(0);
+            CamGameSetModeAll(2);
         } else if (fn_800DC080(p) == 0) {
             return fn_800B76E8(p);
         }
@@ -3023,8 +3023,8 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
             if (input.mUnknown94 & 8) {
                 Object_80039F5C *pTarget = fn_80100EA0(p, p->mMotion.mFacing);
 
-                fn_80148154();
-                fn_801483C8();
+                PassIconsHide();
+                PassIconsClearReplayFlag();
                 fn_80136034(p);
                 if (pTarget != 0) {
                     fn_801024FC(p, 4, pTarget->mIdBytes[1], 0, d);
@@ -3064,8 +3064,8 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
             return 0;
         }
         if (input.mUnknown93 & 0x80) {
-            fn_80148154();
-            fn_8013FA8C(1);
+            PassIconsHide();
+            CamGameSetModeAll(1);
             fn_80156C78(19, 1);
         }
         if ((input.mUnknown95 & 8) && fn_800CA5CC(p, 0, 1) != 0) {
@@ -3207,7 +3207,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
     int result = 0;
     Message_800F01CC message;
 
-    if (fn_80137C48(p) == 0 && (kind == 5 || kind == 9)) {
+    if (BallFindHeldBy(p) == 0 && (kind == 5 || kind == 9)) {
         result = 1;
         fn_801C1F94(&message, 0, 4);
         message.mId = 62;
@@ -3267,7 +3267,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
         break;
     }
     case 4: {
-        pOther = fn_80137B40();
+        pOther = BallGetCurrentHolder();
         if (pOther != 0) {
             result = fn_8010B87C(p, pOther);
         }
@@ -3321,7 +3321,7 @@ extern "C" unsigned char fn_8010B5B0(Object_80039F5C *p, unsigned char *pOut) {
     State_8010BA00 *pState = (State_8010BA00 *)&p->mUnknown336;
     unsigned char count = 0;
 
-    if (fn_80137B40() != p) {
+    if (BallGetCurrentHolder() != p) {
         pOut[count++] = pState->mUnknown2;
         if ((p->mIdBytes[2] == fn_80178348() && mode == 0) ||
             (p->mIdBytes[2] == fn_80178360() && mode == 14)) {
@@ -3378,7 +3378,7 @@ extern "C" unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable)
         for (j = 0; j < count; j++) {
             if (pRecord->mUnknown4.mUnknown0 == kinds[j] && fn_8010B3A0(p, pRecord->mUnknown4.mUnknown1)) {
                 if ((pRecord->mUnknown4.mUnknown2 == 1 && p->mUnknown776 == 2) ||
-                    (pRecord->mUnknown4.mUnknown2 == 2 && p->mUnknown776 == 1) || fn_80137B40() != p) {
+                    (pRecord->mUnknown4.mUnknown2 == 2 && p->mUnknown776 == 1) || BallGetCurrentHolder() != p) {
                     if (lbl_802DABBC[i] == 0) {
                         found = 1;
                     }
@@ -3444,7 +3444,7 @@ extern "C" int fn_8010BA00(Object_80039F5C *p) {
     } else {
         pState->mUnknown1 = fn_802372EC(0, 15);
     }
-    if (pState->mUnknown2 == 0 && fn_80137B40() != p) {
+    if (pState->mUnknown2 == 0 && BallGetCurrentHolder() != p) {
         pState->mUnknown0 = 1;
     }
     return 0;
@@ -3532,7 +3532,7 @@ extern "C" int fn_8010CE2C(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_8010CE90(Object_80039F5C *p, Object_80137ABC *pBall)
+extern "C" int fn_8010CE90(Object_80039F5C *p, Ball_t *pBall)
 {
     State_8010CAE8 *pState = (State_8010CAE8 *)&p->mUnknown336;
 
@@ -3553,7 +3553,7 @@ extern "C" int fn_8010D004(Object_80039F5C *p)
     State_8010CAE8 *pState = (State_8010CAE8 *)&p->mUnknown336;
     int result;
 
-    if (fn_80137B40() != p) {
+    if (BallGetCurrentHolder() != p) {
         fn_800FD2AC(p);
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pState->mUnknown16;
@@ -3570,7 +3570,7 @@ extern "C" int fn_8010D004(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_8010D36C(Object_80039F5C *p, Object_80137ABC *pBall, State_8010D80C *pState)
+extern "C" int fn_8010D36C(Object_80039F5C *p, Ball_t *pBall, State_8010D80C *pState)
 {
     int result = 0;
     Vector_80039F5C pos;
@@ -3578,13 +3578,13 @@ extern "C" int fn_8010D36C(Object_80039F5C *p, Object_80137ABC *pBall, State_801
     float time;
 
     if (pState->mUnknown26 == 0) {
-        fn_80137D58(pBall, &pos);
-        fn_80137EC4(pBall, &velocity);
+        BallGetPosition(pBall, &pos);
+        BallGetVelocity(pBall, &velocity);
         time = fn_8022781C(&pos, pState) / fn_802270A4(&velocity);
         result = pState->mUnknown16 >= time;
     }
     if (result && (p->mUnknown1008.mUnknown0 == 2 || p->mUnknown1008.mUnknown0 == 3)) {
-        if (fn_8013BA58(pBall, 0) != 2) {
+        if (BallStateGet(pBall, 0) != 2) {
             result = 0;
         }
     }
@@ -3608,16 +3608,16 @@ extern "C" int fn_8010D734(Object_80039F5C *p)
 {
     int result = 0;
     State_8010D80C *pState = (State_8010D80C *)&p->mUnknown336;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     Record_800B15FC *pRecord;
     Vector_80039F5C pos;
 
     fn_800B8344(p);
-    pBall = fn_801374BC();
-    fn_80137D58(pBall, &pos);
+    pBall = BallGetCurrent();
+    BallGetPosition(pBall, &pos);
     if (fn_8010D36C(p, pBall, pState)) {
         fn_8010D434(p, pState);
-    } else if ((p->mFlags & 4) && fn_80137C48(p)) {
+    } else if ((p->mFlags & 4) && BallFindHeldBy(p)) {
         pRecord = fn_800B15FC();
         result = 1;
         pRecord->mUnknownC = pos.mX;
@@ -3625,7 +3625,7 @@ extern "C" int fn_8010D734(Object_80039F5C *p)
         fn_8009BD2C(p, &pRecord->mUnknown0);
         pRecord->mUnknown14 = 4;
         fn_800B1508();
-        fn_80138398(pBall, 0);
+        BallSetTransferKind(pBall, 0);
         p->mFlags &= ~4;
     }
     return result;
@@ -3669,7 +3669,7 @@ extern "C" void fn_8010EF40(Object_80039F5C *p)
     Point_8017886C delta;
 
     if (pBlock->mFlags.mBytes[0] == 1) {
-        pCarrier = fn_80137B40();
+        pCarrier = BallGetCurrentHolder();
         if (pCarrier != 0 && (pCarrier->mFlags & 0x10000)) {
             switch (pBlock->mUnknown54) {
             case 0:
@@ -3686,7 +3686,7 @@ extern "C" void fn_8010EF40(Object_80039F5C *p)
                 }
                 if (found && fn_802372EC(0, 100) <= 74) {
                     fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-                    if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
+                    if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
                         fn_800E96EC(p, pOther);
                     }
                 }
@@ -3718,7 +3718,7 @@ extern "C" int fn_8010FB4C(Object_80039F5C *p)
             fn_800B6D34(p, &input);
             fn_800B6E68(p, &input);
             fn_80227690(&delta, &fn_8009BCE8(&p->mUnknown1036)->mMotion.mPos, &p->mMotion.mPos);
-            if (fn_801CFFD0(p->mUnknown512.mUnknown4, fn_801CFE40(delta.mY, delta.mX)) > 0x600000) {
+            if (MathAngleDiff(p->mUnknown512.mUnknown4, fn_801CFE40(delta.mY, delta.mX)) > 0x600000) {
                 fn_8011E3EC(p, 0);
                 fn_8011E240(p);
             } else {
@@ -3780,7 +3780,7 @@ extern "C" int fn_801101DC(Object_80039F5C *p)
             result = 1;
             break;
         }
-        if (p != fn_80137B40()) {
+        if (p != BallGetCurrentHolder()) {
             result = 0;
         }
         switch (p->mUnknown528.mUnknown15) {
@@ -3863,7 +3863,7 @@ extern "C" unsigned short fn_8011067C(Table_8010B738 *pTable, Object_80039F5C *p
         if (p->mUnknown1008.mUnknown1 == 6) {
             target = 0x1000000 - target;
         }
-        delta = fn_801CFFD0(target, angle);
+        delta = MathAngleDiff(target, angle);
         pBlock->mUnknown24 = delta;
         if (p->mUnknown1008.mUnknown1 == 6) {
             if (((target - angle) & 0xFFFFFF) > 0x800000) {
@@ -3955,7 +3955,7 @@ extern "C" int fn_80110EE4(Object_80039F5C *p)
         if (pTarget != 0) {
             fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX);
-            fn_801CFFD0(angle, p->mMotion.mFacing);
+            MathAngleDiff(angle, p->mMotion.mFacing);
             if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
                 p->mpState->mUnknown1 = 1;
             } else {
@@ -3994,7 +3994,7 @@ extern "C" int fn_80110FE4(Object_80039F5C *p)
             result = 1;
             break;
         }
-        if (p != fn_80137B40()) {
+        if (p != BallGetCurrentHolder()) {
             result = 0;
         }
     }
@@ -4214,7 +4214,7 @@ extern "C" int fn_80112F8C(Object_80039F5C *p)
 extern "C" int fn_80113088(Object_80039F5C *p)
 {
     int result = 0;
-    int ballState = fn_8013BA58(fn_801374BC(), 0);
+    int ballState = BallStateGet(BallGetCurrent(), 0);
     int *pMode = &p->mUnknown1032;
 
     switch (p->mpState->mId) {
@@ -4242,23 +4242,23 @@ extern "C" int fn_80113088(Object_80039F5C *p)
             if (ballState == 3 || ballState == 4) {
                 result = 1;
             } else {
-                Object_80039F5C *pCarrier = fn_80137B40();
+                Object_80039F5C *pCarrier = BallGetCurrentHolder();
                 if (pCarrier != 0 && pCarrier->mpState->mId == 15) {
                     result = 1;
                 }
             }
             if (result == 0 && fn_801486A0() == 1) {
-                unsigned int count = fn_801383C8();
+                unsigned int count = BallsGetCount();
                 unsigned int i;
                 for (i = 1; i < count; i++) {
-                    Object_80137ABC *pBall = fn_80137ABC(i);
-                    int state = fn_8013BA58(pBall, 0);
+                    Ball_t *pBall = BallGet(i);
+                    int state = BallStateGet(pBall, 0);
                     Object_80039F5C *pOther;
                     if (state == 3 || state == 4) {
                         result = 1;
                         break;
                     }
-                    pOther = fn_80137AD0(pBall);
+                    pOther = BallGetHolder(pBall);
                     if (pOther != 0 && pOther->mpState->mId == 15) {
                         result = 1;
                         break;
@@ -4278,7 +4278,7 @@ extern "C" int fn_80113208(Object_80039F5C *p, int a, int mode, int c)
     int value = -1;
     int extra = 0;
     int flag = 0;
-    Object_80137ABC *pBall;
+    Ball_t *pBall;
     int target;
 
     index = 0;
@@ -4286,10 +4286,10 @@ extern "C" int fn_80113208(Object_80039F5C *p, int a, int mode, int c)
         flag = 1;
     }
     if (fn_801486A0() == 1 && fn_801520C4(p, &index) != 0) {
-        pBall = fn_80137ABC(index);
+        pBall = BallGet(index);
     } else {
-        pBall = fn_801374BC();
-        index = fn_801374E0(pBall);
+        pBall = BallGetCurrent();
+        index = BallGetIndex(pBall);
     }
     if (p->mpState->mUnknown2 != 0) {
         target = fn_80099AD0(p, pBall, 3, 3, mode, a, c);
@@ -4559,7 +4559,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
         result = 1;
         fn_8017D8C4(p->mId, pOther->mId, 0);
     }
-    if (fn_801787A0() != 0 || (fn_80137B40() != p && fn_80137B40() != pOther)) {
+    if (fn_801787A0() != 0 || (BallGetCurrentHolder() != p && BallGetCurrentHolder() != pOther)) {
         result = 3;
         if (fn_802372EC(0, 100) < 50) {
             result = 2;
@@ -4568,7 +4568,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
     pOtherState->mUnknown14 = result;
     state->mUnknown56 = result;
     if (result != 1) {
-        fn_80067DB8(102, &p->mMotion.mPos, result, 0, 0);
+        AudmonEventPostArgs(102, &p->mMotion.mPos, result, 0, 0);
         fn_8017D9B0(p->mId, pOther->mId);
         if (result == 2) {
             fn_800D47D4(0, p);
@@ -4601,7 +4601,7 @@ extern "C" void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther)
     p->mUnknown392 = 4;
     ((State_80113AAC *)&pOther->mUnknown336)->mUnknown14 = 4;
     fn_800D6EDC();
-    fn_80067DB8(101, &p->mMotion.mPos, p->mId, pOther->mId, 0);
+    AudmonEventPostArgs(101, &p->mMotion.mPos, p->mId, pOther->mId, 0);
     if (!(pOther->mFlags & 0x400) && fn_801486A0() != 0) {
         int port = fn_800B65A0(pOther->mIdBytes[2]);
         if (port != 255) {
@@ -4631,7 +4631,7 @@ extern "C" void fn_80114DF4(Object_80039F5C *p)
         pOther->mpState->mUnknown3[0] = 255;
         fn_800E98A4(pOther, p);
         fn_80143EBC(p, pOther);
-        fn_80067DB8(102, &p->mMotion.mPos, 0, 0, 0);
+        AudmonEventPostArgs(102, &p->mMotion.mPos, 0, 0, 0);
         fn_8017D9B0(p->mId, pOther->mId);
     }
 }
@@ -4701,11 +4701,11 @@ extern "C" void fn_80116880(Object_80039F5C *p, Object_80039F5C *pOther, float *
     if (p != 0 && pValue != 0 && pOut != 0 && pOther != 0) {
         if (fabsf(p->mMotion.mPos.mX - *pValue) < range) {
             int limit = 0x2AAAA9;
-            fn_801CFFD0(pOther->mMotion.mUnknown32, p->mMotion.mUnknown32);
-            if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0) <= limit) {
+            MathAngleDiff(pOther->mMotion.mUnknown32, p->mMotion.mUnknown32);
+            if (MathAngleDiff(pOther->mMotion.mUnknown32, 0) <= limit) {
                 pending = 0;
                 *pOut = *pValue + range;
-            } else if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x800000) <= limit) {
+            } else if (MathAngleDiff(pOther->mMotion.mUnknown32, 0x800000) <= limit) {
                 pending = 0;
                 *pOut = *pValue - range;
             }
@@ -4866,7 +4866,7 @@ extern "C" void fn_8011893C(void)
             case 3:
                 if (pOther != 0) {
                     mode = 1;
-                    if (fn_801CFFD0(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x471C71) {
+                    if (MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x471C71) {
                         mode = p->mUnknown1032;
                     }
                     otherMode = pOther->mUnknown1032;
@@ -5102,8 +5102,8 @@ void fn_8011D8B4(Entry_8011AFCC *pEntries)
 
 void fn_8011D930(Entry_8011AFCC *pA, Entry_8011AFCC *pB, Pair_8011BAE0 pairB, Pair_8011BAE0 pairA)
 {
-    fn_801D34D0(pA, 8 * sizeof(Entry_8011AFCC), 0, 4);
-    fn_801D34D0(pB, 8 * sizeof(Entry_8011AFCC), 0, 4);
+    MemFill(pA, 8 * sizeof(Entry_8011AFCC), 0, 4);
+    MemFill(pB, 8 * sizeof(Entry_8011AFCC), 0, 4);
     fn_8011B83C(pA, pairA);
     fn_8011B6E8(pB, pairB);
 }
@@ -5833,7 +5833,7 @@ void fn_8011FBBC(void *pA, void *pB)
 void fn_8011FBE0(void)
 {
     int team = fn_80178320();
-    Object_80039F5C *pPlayer = fn_80137B40();
+    Object_80039F5C *pPlayer = BallGetCurrentHolder();
     Vector_80039F5C pos;
     unsigned char count;
     unsigned char i;
@@ -5841,8 +5841,8 @@ void fn_8011FBE0(void)
     if (pPlayer) {
         pos.mX = pPlayer->mMotion.mPos.mX;
         pos.mY = pPlayer->mMotion.mPos.mY;
-    } else if (!fn_80138064(fn_801374BC(), &pos)) {
-        fn_80137D58(fn_801374BC(), &pos);
+    } else if (!BallGetLandingPoint(BallGetCurrent(), &pos)) {
+        BallGetPosition(BallGetCurrent(), &pos);
     }
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
@@ -6094,7 +6094,7 @@ int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget,
         fn_80227690(&delta, pTarget, pB);
         distB = fn_802270A4(&delta);
     }
-    if (fn_801CFFD0(heading, angle) > 0x6E38E3 && distA < distB) {
+    if (MathAngleDiff(heading, angle) > 0x6E38E3 && distA < distB) {
         return 1;
     }
     return 0;
@@ -6105,7 +6105,7 @@ void fn_80123024(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)
     unsigned char i;
 
     for (i = 0; i < pPlan->mUnknown2372; i++) {
-        pPlan->mUnknown1444[i].mUnknown28 = fn_801CFB94(fn_801CFFD0(pPlan->mUnknown1444[i].mUnknown16, angle) / 2);
+        pPlan->mUnknown1444[i].mUnknown28 = fn_801CFB94(MathAngleDiff(pPlan->mUnknown1444[i].mUnknown16, angle) / 2);
         fn_801227DC(p, pPlan, &pPlan->mUnknown1444[i]);
     }
 }

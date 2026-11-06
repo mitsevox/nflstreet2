@@ -1,13 +1,13 @@
 #include "game/cu_8007F12C.h"
 #include "game/fn_80072AA8.h"
 #include "engine/viewport.h"
-#include "game/Class_801CBC50.h"
+#include "game/FlowManagerC.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
-#include "game/cu_80003F10.h"
-#include "game/cu_80026BB0.h"
-#include "game/cu_8007C9D4.h"
-#include "game/fn_8003B6BC.h"
+#include "game/DemoLaunch.h"
+#include "game/PadInput.h"
+#include "game/GameInfo.h"
+#include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -16,8 +16,8 @@
 #include "game/fn_8021D7B8.h"
 
 extern "C" {
-extern char lbl_80306B34[];
-extern float lbl_803EA2C4;
+extern char gMainFEGroup[];
+extern float gFrameTimeScale;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 
@@ -29,16 +29,16 @@ void fn_8001442C(void);
 void fn_80015D28(int a);
 int fn_80015F2C(void);
 void fn_8001B228(void);
-void fn_80022778(void);
-void fn_800244E4(void);
-void fn_80024560(void);
-void fn_80024608(void);
-int fn_80033124(void *p);
+void FEPlyrUpdate(void);
+void BootPlayIntroMovies(void);
+void BootShowStartupScreens(void);
+void BootUpdateReset(void);
+int MainFEGroupIsStarted(void *p);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
 int fn_80061CAC(void);
-void fn_80062A58(unsigned char a);
+void MemCardScreenSetFlag(unsigned char a);
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
 void fn_8006CA84(int a);
@@ -58,11 +58,11 @@ void fn_80188E8C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A740(void);
 void RumbleProcess(void);
-int fn_801C601C(int a);
-int fn_801C60BC(int a);
-int fn_801C6280(int a, int b, void *pValue);
-void fn_801C3A3C(float a);
-void fn_801CAF24(void);
+int ConUpdateChannel(int a);
+int ConProcessChannel(int a);
+int ConSetChannelInfo(int a, int b, void *pValue);
+void CamSetDefaultAspect(float a);
+void FileDebugProcess(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 int fn_801CEB4C(void);
@@ -73,7 +73,7 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_802297B0(void);
-int fn_80232FD4(Record_8003B6BC *pRecord0, Record_8003B6BC *pRecord1);
+int fn_80232FD4(DepthChartSide_t *pRecord0, DepthChartSide_t *pRecord1);
 }
 
 static unsigned char sUnknown803EA2D8 = 0;
@@ -88,7 +88,7 @@ static unsigned char sUnknown803EC5F0;
 
 FELoop gFELoop;
 
-static void fn_800273AC()
+static void _FELoopEnterDefault()
 {
     int args[2];
     void *p;
@@ -105,7 +105,7 @@ static void fn_800273AC()
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_8002742C()
+static void _FELoopEnterMode0()
 {
     int args[2];
     void *p;
@@ -118,97 +118,97 @@ static void fn_8002742C()
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_80027494()
+static void _FELoopEnterMode8()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(8);
     fn_80218FC4(lbl_803EB688, 11, 1, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_800274F4()
+static void _FELoopEnterMode6()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(6);
     fn_80218FC4(lbl_803EB688, 8, 2, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_80027554()
+static void _FELoopEnterMode7()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = fn_800602E8() ? 401 : 1;
     fn_80010150(7);
     fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_800275C4()
+static void _FELoopEnterMode10()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 123;
     fn_80010150(7);
     fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_80027624()
+static void _FELoopEnterMode10Alt()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 604;
     fn_80010150(7);
     fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_80027684()
+static void _FELoopEnterMode11()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(11);
     fn_80218FC4(lbl_803EB688, 7, 17, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_800276E4()
+static void _FELoopEnterMode9()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 700;
     fn_80010150(9);
     fn_80218FC4(lbl_803EB688, 13, 0, 1, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_80027744()
+static void _FELoopEnterMode2()
 {
     int args[2];
 
-    fn_80027E3C();
+    FELoopRefreshModeType();
     args[0] = 1;
     args[1] = 109;
     fn_80218FC4(lbl_803EB688, 0, 2, 2, args);
     fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
 }
 
-static void fn_800277A8(int mode)
+static void _FELoopEnterModeScreen(int mode)
 {
-    fn_80027E18(0);
+    FELoopSetResume(0);
     switch (mode) {
     case 3:
     case 4:
@@ -216,46 +216,46 @@ static void fn_800277A8(int mode)
     case 13:
         break;
     case 9:
-        fn_800276E4();
+        _FELoopEnterMode9();
         break;
     case 6:
-        fn_800274F4();
+        _FELoopEnterMode6();
         break;
     case 0:
-        fn_8002742C();
+        _FELoopEnterMode0();
         break;
     case 2:
-        fn_80027744();
+        _FELoopEnterMode2();
         break;
     case 8:
-        fn_80027494();
+        _FELoopEnterMode8();
         break;
     case 7:
         fn_8005FC7C();
-        fn_80027554();
+        _FELoopEnterMode7();
         break;
     case 10:
         fn_80061AD4();
         if (fn_80061CAC()) {
-            fn_80027624();
+            _FELoopEnterMode10Alt();
         } else {
-            fn_800275C4();
+            _FELoopEnterMode10();
         }
         break;
     case 11:
-        fn_80027684();
+        _FELoopEnterMode11();
         break;
     default:
-        if (fn_80003F18()) {
-            fn_80003F10(0);
+        if (DemoLaunchIsFlagSet()) {
+            DemoLaunchSetFlag(0);
         }
-        fn_800273AC();
+        _FELoopEnterDefault();
         break;
     }
-    fn_80027E34(0);
+    FELoopSetResumeMode(0);
 }
 
-static void fn_800278B8(int a, int b, float c)
+static void _FELoopPadHandler(int a, int b, float c)
 {
     if (b == 0x46) {
         sUnknown803EC5F0 = 0;
@@ -266,61 +266,61 @@ static void fn_800278B8(int a, int b, float c)
     }
     fn_8018A740();
     if (b != 0x8F) {
-        fn_80062A58(0);
+        MemCardScreenSetFlag(0);
         sUnknown803EA2DC = 0;
     }
 }
 
-static void fn_80027950()
+static void _FELoopBootSetup()
 {
-    fn_801C6280(-1, 1, (void *)fn_800278B8);
-    fn_800271A4();
+    ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
+    PadInputSetDefaultHandler();
     fn_8007F374();
-    fn_80024560();
+    BootShowStartupScreens();
     fn_8007F328(0);
     fn_8006EC24();
     fn_80072AA8();
-    fn_801C6280(-1, 1, 0);
+    ConSetChannelInfo(-1, 1, 0);
 }
 
-void FELoop::fn_800279AC()
+void FELoop::Boot()
 {
     ResTrackLabel("FELoopBootStart");
-    fn_80027950();
+    _FELoopBootSetup();
     fn_80187FDC();
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
-        fn_801C3A3C(4.0f / 3.0f);
+        CamSetDefaultAspect(4.0f / 3.0f);
     } else {
         fn_8013CF98();
     }
     fn_80186EF4();
-    fn_800244E4();
+    BootPlayIntroMovies();
     ResTrackLabel("FELoopBootFinish");
 }
 
-void fn_80027A20()
+void FELoopStartGame()
 {
     if (sUnknown803EC5F0) {
-        Record_8003B6BC record0;
-        Record_8003B6BC record1;
+        DepthChartSide_t record0;
+        DepthChartSide_t record1;
 
         sUnknown803EC5F0 = 0;
         fn_8001B228();
         fn_800731D0(1);
-        fn_8003B6BC(0, &record0);
+        DepthChartGetSide(0, &record0);
         fn_800731D0(1);
-        fn_8003B6BC(1, &record1);
+        DepthChartGetSide(1, &record1);
         fn_800731D0(1);
         fn_80232FD4(&record0, &record1);
         fn_800731D0(1);
-        fn_8007CA28();
+        GameInfoRead();
         fn_8021956C(lbl_803EB690, 1, 5, 1);
         fn_800731D0(1);
-        lbl_803067B0.fn_801CBEF4(2, 12);
+        gGSFlowManager.fn_801CBEF4(2, 12);
     }
 }
 
-void fn_80027AD8(int a, int b, int c, int d, int e, int f)
+void FELoopConfigureEntry(int a, int b, int c, int d, int e, int f)
 {
     fn_80010150(a);
     if (b == -1 && c == -1) {
@@ -339,8 +339,8 @@ const char *FELoop::GetName() { return "FELoop"; }
 int FELoop::Init()
 {
     fn_8018807C(0);
-    fn_801C6280(-1, 1, (void *)fn_800278B8);
-    fn_800271A4();
+    ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
+    PadInputSetDefaultHandler();
     fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
     fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
     sUnknown803EC5F0 = 1;
@@ -351,28 +351,28 @@ int FELoop::Init()
         }
     } else if (fn_802294F4() == 1) {
         fn_802297B0();
-        fn_80027E3C();
+        FELoopRefreshModeType();
     }
     sUnknown803EC5EC = fn_8017F584();
     fn_80188E14();
-    fn_800277A8(sUnknown803EC5EC);
+    _FELoopEnterModeScreen(sUnknown803EC5EC);
     sUnknown803EA2DC = 0;
     sUnknown803EA2E0 = 0;
     return 1;
 }
 
-unsigned char FELoop::fn_80027C58()
+unsigned char FELoop::Update()
 {
     unsigned short a;
     unsigned short b;
     int flag = 1;
 
-    fn_80024608();
+    BootUpdateReset();
     fn_8018A740();
     fn_801D6F58();
-    fn_801C601C(-1);
-    fn_801C60BC(-1);
-    fn_80022778();
+    ConUpdateChannel(-1);
+    ConProcessChannel(-1);
+    FEPlyrUpdate();
     fn_8003E1F0();
     fn_8015CDA4();
     gFMCAPPORT.Update();
@@ -383,14 +383,14 @@ unsigned char FELoop::fn_80027C58()
     RumbleProcess();
     if (flag) {
         VptProcessViewports();
-        fn_801CAF24();
+        FileDebugProcess();
         fn_8006CA84(1);
         fn_801CE82C();
         if (sCallback) {
             sCallback();
         }
         if (fn_80010194() || fn_80015F2C()) {
-            if (++sUnknown803EA2DC > (int)(60.0f / lbl_803EA2C4) * 75) {
+            if (++sUnknown803EA2DC > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(lbl_803EB688, 0x80000038, 0, 0);
                 fn_80072C90(0xFA, 1);
                 sUnknown803EA2E0 = 1;
@@ -407,18 +407,18 @@ int FELoop::Shutdown()
     fn_80066DC8(0x31544250, 0);
     fn_80066DC8(0x31444250, 0);
     fn_8009418C();
-    fn_801C6280(-1, 1, 0);
+    ConSetChannelInfo(-1, 1, 0);
     sUnknown803EA2DC = 0;
     sUnknown803EA2E0 = 0;
     return 1;
 }
 
-int fn_80027DF0()
+int FELoopIsMainFEActive()
 {
-    return fn_80033124(lbl_80306B34);
+    return MainFEGroupIsStarted(gMainFEGroup);
 }
 
-void fn_80027E18(unsigned char value)
+void FELoopSetResume(unsigned char value)
 {
     if (sUnknown803EA2EC) {
         sUnknown803EA2D9 = value;
@@ -427,51 +427,51 @@ void fn_80027E18(unsigned char value)
     }
 }
 
-void fn_80027E34(unsigned char value)
+void FELoopSetResumeMode(unsigned char value)
 {
     sUnknown803EA2D8 = value;
 }
 
-void fn_80027E3C()
+void FELoopRefreshModeType()
 {
-    fn_80027E18(0);
+    FELoopSetResume(0);
     if (fn_802294F4() == 1) {
-        if (fn_8007CAE4()) {
-            fn_8007CAB4();
+        if (GameInfoIsInitialized()) {
+            GameInfoShutdown();
         }
         fn_80229554();
     }
     sUnknown803EC5EC = fn_8017F584();
 }
 
-void fn_80027E88(unsigned char value)
+void FELoopSetVisited(unsigned char value)
 {
     sUnknown803EA2EC = value;
 }
 
-unsigned char fn_80027E90()
+unsigned char FELoopWasVisited()
 {
     return sUnknown803EA2EC;
 }
 
-void fn_80027E98(FELoopCallback pCallback)
+void FELoopSetFrameCallback(FELoopCallback pCallback)
 {
     sCallback = pCallback;
 }
 
-void fn_80027EA0()
+void FELoopResetIdle()
 {
     sUnknown803EA2DC = 0;
 }
 
-unsigned char fn_80027EAC()
+unsigned char FELoopIsIdleTimedOut()
 {
     return sUnknown803EA2E0;
 }
 
-void fn_80027EB4(int a)
+void FELoopCheckDemoLaunch(int a)
 {
     if (sUnknown803EC5F0) {
-        fn_80003F30();
+        DemoLaunchIsAllowed();
     }
 }

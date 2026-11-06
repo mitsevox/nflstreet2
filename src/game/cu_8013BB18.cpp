@@ -40,17 +40,17 @@ void fn_8014106C(int id, int mode, float *pA, float *pB);
 int fn_801486A0(void);
 void fn_801527B8(void *p, Vector_80039F5C *pOut);
 int fn_801784C4(void);
-void fn_801C3918(void *p, Camera_8013F738 *pCamera);
-void fn_801C3A10(Camera_8013F738 *pCamera, float value);
-void fn_801C3CE8(Camera_8013F738 *pCamera, int a);
-void fn_801C3D98(Camera_8013F738 *pCamera);
-void fn_801C3D9C(Camera_8013F738 *pCamera);
-void fn_801C3E54(Camera_8013F738 *pCamera);
-void fn_801C3E84(void *p, Camera_8013F738 *pCamera);
-void fn_801C3EA4(Camera_8013F738 *pCamera, float x, float y, float z);
-void fn_801C3EC0(Camera_8013F738 *pCamera, float x, float y, float z);
-void fn_801C3ED0(Camera_8013F738 *pCamera, int a, int b, int c);
-void fn_801C3EEC(Camera_8013F738 *pCamera, int a, int b, int c);
+void CamConvertHdrToMatrix(void *p, Camera_8013F738 *pCamera);
+void CamSetZScale(Camera_8013F738 *pCamera, float value);
+void CamFreeFloatAdd(Camera_8013F738 *pCamera, int a);
+void CamFreeFloatDelete(Camera_8013F738 *pCamera);
+void CamFreeFloatProcess(Camera_8013F738 *pCamera);
+void CamFreeClearVelocity(Camera_8013F738 *pCamera);
+void CamFreeFloatUpdate(void *p, Camera_8013F738 *pCamera);
+void CamFreeSetPos(Camera_8013F738 *pCamera, float x, float y, float z);
+void CamFreeMovePos(Camera_8013F738 *pCamera, float x, float y, float z);
+void CamFreeSetAngle(Camera_8013F738 *pCamera, int a, int b, int c);
+void CamFreeMoveAngle(Camera_8013F738 *pCamera, int a, int b, int c);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
@@ -116,12 +116,12 @@ void fn_8013BB84(Camera_8013F738 *pCamera)
 
             fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
             fn_8013BC4C(pCamera, &pCamera->mUnknownB8, &pos);
-            fn_801C3EC0(pCamera, pos.mX, pos.mY, pos.mZ);
+            CamFreeMovePos(pCamera, pos.mX, pos.mY, pos.mZ);
         }
         break;
     case 1:
         fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
-        fn_801C3C6C(pCamera, &pCamera->mUnknownB8);
+        CamFocusSetTarget(pCamera, &pCamera->mUnknownB8);
         if (pCamera->mUnknown94 & 4) {
             fn_8013C6F0(pCamera);
             pCamera->mUnknown94 &= ~4;
@@ -294,14 +294,14 @@ void fn_8013C120(Camera_8013F738 *pCamera)
     switch (pCamera->mUnknown98) {
     case 0:
     case 4:
-        fn_801C3CE8(pCamera, 0);
+        CamFreeFloatAdd(pCamera, 0);
         pCamera->mUnknown5C = pCamera->mUnknown60 = pCamera->mUnknown64 = 0.1f;
         pCamera->mUnknown68 = pCamera->mUnknown6C = pCamera->mUnknown70 = 0.05f;
         pCamera->mUnknown80 = pCamera->mUnknown84 = pCamera->mUnknown88 = 0x200000;
         pCamera->mUnknown74 = pCamera->mUnknown78 = pCamera->mUnknown7C = 0x400000;
         break;
     case 1:
-        fn_801C3AD8(pCamera, 0);
+        CamFocusAdd(pCamera, 0);
         break;
     }
 }
@@ -310,10 +310,10 @@ void fn_8013C1C8(Camera_8013F738 *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3D98(pCamera);
+        CamFreeFloatDelete(pCamera);
         break;
     case 1:
-        fn_801C3B74(pCamera);
+        CamFocusDelete(pCamera);
         break;
     case 4:
         break;
@@ -324,25 +324,25 @@ void fn_8013C204(Camera_8013F738 *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3D9C(pCamera);
+        CamFreeFloatProcess(pCamera);
         break;
     case 1:
-        fn_801C3B78(pCamera);
+        CamFocusProcess(pCamera);
         break;
     case 4:
         break;
     }
-    fn_801C3A10(pCamera, 4.0f);
+    CamSetZScale(pCamera, 4.0f);
 }
 
 void fn_8013C260(Camera_8013F738 *pCamera, int *pAngles)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3EEC(pCamera, pAngles[0], pAngles[1], pAngles[2]);
+        CamFreeMoveAngle(pCamera, pAngles[0], pAngles[1], pAngles[2]);
         break;
     case 1:
-        fn_801C3C74(pCamera, pAngles[0], pAngles[1]);
+        CamFocusMoveAngle(pCamera, pAngles[0], pAngles[1]);
         break;
     case 4:
         break;
@@ -518,16 +518,16 @@ void fn_8013C6F0(Camera_8013F738 *pCamera)
     case 0:
         fn_8013BDC0(pCamera->mUnknownA8, pCamera->mUnknownAC, &pCamera->mUnknownB8);
         fn_8013BC4C(pCamera, &pCamera->mUnknownB8, &pos);
-        fn_801C3EA4(pCamera, pos.mX, pos.mY, pos.mZ);
+        CamFreeSetPos(pCamera, pos.mX, pos.mY, pos.mZ);
         fn_8013BF40(pCamera, angles);
-        fn_801C3ED0(pCamera, angles[0], angles[1], angles[2]);
-        fn_801C3E54(pCamera);
+        CamFreeSetAngle(pCamera, angles[0], angles[1], angles[2]);
+        CamFreeClearVelocity(pCamera);
         fn_8013C824(pCamera, 11, 0);
         break;
     case 1:
         fn_8013BF40(pCamera, angles);
-        fn_801C3C74(pCamera, angles[0], angles[1]);
-        SnapFocusCameraToTarget(pCamera);
+        CamFocusMoveAngle(pCamera, angles[0], angles[1]);
+        CamFocusWarpToDest(pCamera);
         break;
     case 4:
         break;
@@ -538,7 +538,7 @@ void fn_8013C7C4(Camera_8013F738 *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3E54(pCamera);
+        CamFreeClearVelocity(pCamera);
         break;
     case 1: {
         CameraType1_802F4884 *pBase = (CameraType1_802F4884 *)pCamera;
@@ -590,13 +590,13 @@ void fn_8013C954(void *p, Camera_8013F738 *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-        fn_801C3E84(p, pCamera);
+        CamFreeFloatUpdate(p, pCamera);
         break;
     case 1:
-        fn_801C3C4C(p, pCamera);
+        CamFocusUpdate(p, pCamera);
         break;
     case 4:
-        fn_801C3918(p, pCamera);
+        CamConvertHdrToMatrix(p, pCamera);
         break;
     }
 }

@@ -20,8 +20,8 @@ struct SysInitParams_t {
 
 extern "C" {
 int fn_80185274(void);
-int fn_801C6584(void);
-int fn_801C65E4(void);
+int DSInit(void);
+int DSShutdown(void);
 void fn_80025E00(void);
 void fn_80025E28(void);
 int fn_801D2054(MemInitParams_t *pConfig);
@@ -58,7 +58,7 @@ int Sys::Init()
     Record_802CC680 *pDebug;
     Record_802CC680 *pAuxRam;
 
-    fn_801C6584();
+    DSInit();
     fn_80025E00();
     _Sys_MemInitParams.mpArena = fn_80025E50(1);
     fn_801D2054(&_Sys_MemInitParams);
@@ -91,6 +91,6 @@ int Sys::Shutdown()
     fn_801D2570(0x20);
     fn_801D20C8();
     fn_80025E28();
-    fn_801C65E4();
+    DSShutdown();
     return 1;
 }

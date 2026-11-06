@@ -566,7 +566,7 @@ int fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(Item_800
 void fn_801CE7D0(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
-int fn_801D34D0(void *p, int size, int value, int align);
+int MemFill(void *p, int size, int value, int align);
 int fn_801F0C50(void *a, int b);
 void fn_801F11AC(void *pData, int a);
 void fn_801F3C14(void);
@@ -1941,8 +1941,8 @@ extern "C" void fn_8006C2C8(Struct_8006C2C8 *pInit)
     lbl_8030A654.m14 = pInit->m14;
     lbl_8030A654.m24 = (int *)fn_801D2B7C(pInit->m0 * 4, 0, 0);
     lbl_8030A654.m28 = (int *)fn_801D2B7C(pInit->m4 * 4, 0, 0);
-    fn_801D34D0(lbl_8030A654.m24, pInit->m0 * 4, 0, 4);
-    fn_801D34D0(lbl_8030A654.m28, pInit->m4 * 4, 0, 4);
+    MemFill(lbl_8030A654.m24, pInit->m0 * 4, 0, 4);
+    MemFill(lbl_8030A654.m28, pInit->m4 * 4, 0, 4);
     fn_8006BEC4();
     lbl_8030A654.m0 = 0;
     lbl_8030A654.m18 = 0x7FFFFFFF;

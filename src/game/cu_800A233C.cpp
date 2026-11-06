@@ -149,7 +149,7 @@ float fn_8007B874(void);
 int fn_8007B974(void);
 int fn_800A33B0(void);
 float fn_80237260(int stream);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80147D4C(int index, unsigned char value);
 void fn_80147D60(int index, int value);
 void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
@@ -256,7 +256,7 @@ extern "C" void fn_800A2B40(void)
             : (lbl_8030E6E8.mUnknown60 > 1.0f ? 1.0f : lbl_8030E6E8.mUnknown60);
 
         roll = fn_80237260(1) * 2.0f;
-        if (lbl_8030E6E8.mUnknown5C - lbl_8030E6E8.mUnknown54 != fn_801CFFD0(lbl_8030E6E8.mUnknown5C, lbl_8030E6E8.mUnknown54)) {
+        if (lbl_8030E6E8.mUnknown5C - lbl_8030E6E8.mUnknown54 != MathAngleDiff(lbl_8030E6E8.mUnknown5C, lbl_8030E6E8.mUnknown54)) {
             if (roll >= 0.5f) {
                 lbl_8030E6E8.mUnknown5C = (lbl_8030E6E8.mUnknown5C + turn) & 0xFFFFFF;
             } else {

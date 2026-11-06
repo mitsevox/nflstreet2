@@ -20,7 +20,7 @@ int fn_801784C4(void);
 unsigned short fn_801BE648(void *p);
 int fn_801C1FEC(const void *pA, const void *pB, int size);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_802270A4(void *pV);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
@@ -106,11 +106,11 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             state = fn_8013BA58(pBall, 0);
             if (fn_80138064(pBall, &delta) != 0) {
                 fn_80227690(&delta, &delta, &p->mMotion);
-                ballAngle = fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mUnknown32);
+                ballAngle = MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mUnknown32);
             } else {
                 state = 0;
             }
-            turn = fn_801CFFD0(angle, p->mMotion.mUnknown32);
+            turn = MathAngleDiff(angle, p->mMotion.mUnknown32);
             if (state == 4 && fn_80137B40() == 0 && turn > 0x671C72 && ballAngle <= 0x18E38D) {
                 float top = fn_8016D9F4(p, 1.0f, 1.0f);
                 float ratio = top != 0.0f ? p->mMotion.mUnknown28 / top : 0.0f;

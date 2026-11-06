@@ -14,7 +14,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *message, Object_80039F5C *p);
@@ -45,7 +45,7 @@ int fn_800E815C(Object_80039F5C *p, int unused, int mode)
         kind = 3;
         choice = 1;
         int heading = fn_801CFE40(delta.mY, delta.mX);
-        if (fn_801CFFD0(heading, p->mMotion.mFacing) <= 0x3FFFFF) fn_802270A4(&delta);
+        if (MathAngleDiff(heading, p->mMotion.mFacing) <= 0x3FFFFF) fn_802270A4(&delta);
     } else {
         Vector_80039F5C point;
         fn_80138064(fn_801374BC(), &point);

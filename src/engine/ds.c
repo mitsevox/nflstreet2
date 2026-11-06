@@ -8,15 +8,15 @@ extern int lbl_803EBC04;
 
 void fn_801C6760(void);
 
-int fn_801C6634(int alignment);
+int DSSetAlignment(int alignment);
 
-int fn_801C6584(void)
+int DSInit(void)
 {
     int error = 0;
 
     if (!lbl_803EBC00) {
         fn_801C6760();
-        fn_801C6634(4);
+        DSSetAlignment(4);
         lbl_803EBC00 = 1;
     } else {
         error = 0x30001;
@@ -25,7 +25,7 @@ int fn_801C6584(void)
     return error;
 }
 
-int fn_801C65E4(void)
+int DSShutdown(void)
 {
     int error = 0;
 
@@ -38,7 +38,7 @@ int fn_801C65E4(void)
     return error;
 }
 
-int fn_801C6634(int alignment)
+int DSSetAlignment(int alignment)
 {
     int old = lbl_803EBC04;
 
@@ -46,7 +46,7 @@ int fn_801C6634(int alignment)
     return old;
 }
 
-int fn_801C6644(int size)
+int DSAlignSize(int size)
 {
     return (size + (lbl_803EBC04 - 1)) & ~(lbl_803EBC04 - 1);
 }

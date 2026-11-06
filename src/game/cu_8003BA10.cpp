@@ -74,8 +74,8 @@ void fn_800A3C14();
 void fn_800AE10C();
 void fn_800ADE6C();
 Skeleton_80041930 *fn_801EF390(void *, int, int);
-void fn_801C4DEC(Skeleton_80041930 *);
-void fn_801C4F10(Skeleton_80041930 *, Skeleton_80041930 *);
+void CharRelocateSkeleton(Skeleton_80041930 *);
+void CharSkelMirrorRest(Skeleton_80041930 *, Skeleton_80041930 *);
 void fn_800AF630(void *, int, int, int);
 void fn_800AF790(int, Skeleton_80041930 *, const char *, const char *, int);
 void fn_8015F484(Skeleton_80041930 *, Skeleton_80041930 **, Skeleton_80041930 *,
@@ -604,28 +604,28 @@ void fn_8003D0C8(int mode) {
 }
 void fn_8003D12C() {
   lbl_803EA41C = fn_801EF390(gAnimData.fn_80033AF8(), 57, 1);
-  fn_801C4DEC(lbl_803EA41C);
+  CharRelocateSkeleton(lbl_803EA41C);
   fn_8003CC68(lbl_803EA41C);
   for (int i = 0; i < 3; ++i) {
     lbl_802CCD98[i] = (short)lbl_803EA41C->mUnknown1040[15][i] * 16;
     lbl_802CCD8C[i] = (short)lbl_803EA41C->mUnknown1040[21][i] * 16;
   }
   lbl_803EA420[0] = fn_801EF390(gAnimData.fn_80033AF8(), 58, 1);
-  fn_801C4DEC(lbl_803EA420[0]);
+  CharRelocateSkeleton(lbl_803EA420[0]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[0] + 16))[i] = 0.0f;
   lbl_803EA420[1] = fn_801EF390(gAnimData.fn_80033AF8(), 59, 1);
-  fn_801C4DEC(lbl_803EA420[1]);
+  CharRelocateSkeleton(lbl_803EA420[1]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[1] + 16))[i] = 0.0f;
-  fn_801C4F10(lbl_803EA420[0], lbl_803EA420[1]);
+  CharSkelMirrorRest(lbl_803EA420[0], lbl_803EA420[1]);
   lbl_803EA428 = fn_801EF390(gAnimData.fn_80033AF8(), 61, 1);
-  fn_801C4DEC(lbl_803EA428);
+  CharRelocateSkeleton(lbl_803EA428);
   fn_8003CD1C(lbl_803EA428);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA428 + 16))[i] = 0.0f;
   lbl_803EA42C = fn_801EF390(gAnimData.fn_80033AF8(), 62, 1);
-  fn_801C4DEC(lbl_803EA42C);
+  CharRelocateSkeleton(lbl_803EA42C);
   fn_8003CDF8(lbl_803EA42C);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA42C + 16))[i] = 0.0f;

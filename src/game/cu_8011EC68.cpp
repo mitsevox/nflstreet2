@@ -23,7 +23,7 @@ Object_80039F5C *fn_80137B40(void);
 unsigned char fn_801383C8(void);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void *fn_8023816C(void *pHandle);
@@ -39,14 +39,14 @@ int fn_8011EC68(Object_80039F5C *p, Object_80039F5C *pOther)
 
         fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         angle = fn_801CFE40(delta.mY, delta.mX);
-        if (fn_801CFFD0(pOther->mUnknown512.mUnknown4, angle) >= (int)(lbl_803EB024 * (16777216.0f / 360.0f))) {
+        if (MathAngleDiff(pOther->mUnknown512.mUnknown4, angle) >= (int)(lbl_803EB024 * (16777216.0f / 360.0f))) {
             Point_8017886C toBall;
             Point_8017886C ball;
 
             ball = fn_80177FE0();
             fn_80227690(&toBall, &ball, &pOther->mMotion.mPos);
             angle = fn_801CFE40(toBall.mY, toBall.mX);
-            if (fn_801CFFD0(pOther->mUnknown512.mUnknown4, angle) > 0x400000 || !fn_8011F1CC() ||
+            if (MathAngleDiff(pOther->mUnknown512.mUnknown4, angle) > 0x400000 || !fn_8011F1CC() ||
                 (pCarrier->mFlags & 0x8000)) {
                 Query_800CE770 query;
 

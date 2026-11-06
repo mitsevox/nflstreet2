@@ -26,7 +26,7 @@ Object_80039F5C *fn_80137B40(void);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_80178320(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_80237260(int stream);
 
 }
@@ -57,7 +57,7 @@ void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
-        } else if (fn_801CFFD0(side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20,
+        } else if (MathAngleDiff(side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20,
                        p->mMotion.mFacing) > 0xAAAAA) {
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 6;

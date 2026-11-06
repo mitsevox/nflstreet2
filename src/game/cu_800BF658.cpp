@@ -1,10 +1,10 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Class_80297CE8.h"
 #include "game/fn_800B65A0.h"
-#include "game/cu_80026BB0.h"
-#include "game/cu_80067C10.h"
+#include "game/PadInput.h"
+#include "game/AudmonEvent.h"
 
-struct Desc_802345C4 {
+struct EngineParamWords {
     int mUnknown0;
     int mUnknown4;
 };
@@ -21,21 +21,21 @@ int fn_800BF824(void);
 int fn_800BF8A8(Class_80297CE8 *p);
 void fn_800BF9DC(Class_80297CE8 *p);
 void fn_800BE798(Class_80297CE8 *p);
-void fn_800771DC(void);
+void SpchIGUpdatePreSnap(void);
 void fn_8017D678(void);
 int fn_8016EA68(void);
 void fn_800B0E18(void);
 void fn_8009E01C(void);
-void fn_8007454C(int side);
-void fn_800771C0(void);
+void SpchIGPickTeamPlayer(int side);
+void SpchIGResetPreSnap(void);
 void fn_800ABE00(void);
-unsigned char fn_8002892C(void);
+unsigned char InGameIsDemo(void);
 unsigned char fn_8017F324(unsigned char value);
 unsigned char fn_8017F334(unsigned char value);
 unsigned char fn_8017F384(unsigned char value);
 void fn_8015C254(int value);
 void fn_8015A0D0(int value);
-void fn_80145EB8(void);
+void ParticlesResetEvents(void);
 void fn_8010A220(void);
 void fn_8009DE9C(void);
 int fn_801486A0(void);
@@ -47,7 +47,7 @@ void fn_800AEEDC(int team);
 void fn_8016F6A4(void);
 void fn_8011F3A8(void);
 void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 void fn_800BF07C(void);
 void fn_800BF174(void);
 void fn_800BF3F4(int team);
@@ -56,21 +56,21 @@ int fn_800BA6F8(void);
 void fn_8009D888(int index, int value);
 void fn_801789F8(void);
 void fn_800BF4B8(void);
-void fn_801383E4(int on);
+void BallsSetVisible(int on);
 void fn_800C9BB0(void);
 int fn_800A8488(int team);
 int fn_800A8444(int team);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B6644(int index);
 void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 void fn_8017D9D8(int team);
 void fn_8017885C(void);
 void fn_800BD958(void);
-void fn_800771D8(void);
-void fn_801378C0(void);
-unsigned char fn_800545F4(unsigned char value);
-void fn_80025C88(int flag);
+void SpchIGEndPreSnap(void);
+void BallsResetScales(void);
+unsigned char InGameStateSetActive(unsigned char value);
+void ChallengeSendGoalList(int flag);
 void fn_800A87E8(void);
 void fn_80094DF0(void);
 int fn_8009D86C(void);
@@ -83,13 +83,13 @@ void fn_800BD568(int index);
 void fn_8017CFB4(int index);
 void fn_800AEF38(int team);
 void fn_8017E01C(int index);
-void fn_80148154(void);
-void fn_801483C8(void);
+void PassIconsHide(void);
+void PassIconsClearReplayFlag(void);
 unsigned char fn_801478F0(unsigned char a);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_800BD2F8(int team);
-void fn_802345C4(Desc_802345C4 *pDesc, int count);
+void fn_802345C4(EngineParamWords *pDesc, int count);
 
 extern float lbl_803EABAC[2];
 extern unsigned char lbl_803EABB4;
@@ -149,14 +149,14 @@ void Class_80297CE8::vfn_04(float dt)
     unsigned char i;
 
     lbl_803EABB4 = 0;
-    fn_8007454C(0);
-    fn_8007454C(1);
-    fn_800771C0();
+    SpchIGPickTeamPlayer(0);
+    SpchIGPickTeamPlayer(1);
+    SpchIGResetPreSnap();
     fn_800ABE00();
     vfn_09();
-    fn_800545F4(1);
+    InGameStateSetActive(1);
     if ((fn_8009D86C() == 2 || fn_8009D86C() > 3) && fn_8009D990(1) <= 120 && fn_8009D990(1) != 0
-        && fn_8002892C() == 0) {
+        && InGameIsDemo() == 0) {
         fn_8017F324(0);
         fn_8017F334(0);
         fn_8017F384(1);
@@ -166,10 +166,10 @@ void Class_80297CE8::vfn_04(float dt)
     if (fn_8017F2DC(1) == 1) {
         fn_8017F384(1);
     }
-    fn_80148154();
+    PassIconsHide();
     fn_8015C254(1);
     fn_8015A0D0(1);
-    fn_80145EB8();
+    ParticlesResetEvents();
     fn_8010A220();
     fn_8009DE9C();
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
@@ -189,8 +189,8 @@ void Class_80297CE8::vfn_04(float dt)
     vfn_10();
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
-    fn_800271D4(lbl_803EABA8->mUnknown48);
-    fn_801C6280(-1, 3, lbl_802ECD44);
+    PadInputSaveHandlers(lbl_803EABA8->mUnknown48);
+    ConSetChannelInfo(-1, 3, lbl_802ECD44);
     for (i = 0; i <= 1; i++) {
         Slot_800BFAD0 *pSlot = &lbl_803EABA8->mSlots[i];
 
@@ -224,7 +224,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_800BF174();
     fn_8003A3F4(0, 0);
     fn_8003A3F4(0, 1);
-    fn_801483C8();
+    PassIconsClearReplayFlag();
     fn_800BF3F4(fn_80178308());
     fn_800BF3F4(fn_80178320());
     fn_800BD99C(fn_80178308());
@@ -242,24 +242,24 @@ void Class_80297CE8::vfn_04(float dt)
     }
     fn_801789F8();
     fn_800BF4B8();
-    fn_801383E4(1);
-    Desc_802345C4 desc = { 0, 14 };
+    BallsSetVisible(1);
+    EngineParamWords desc = { 0, 14 };
     fn_802345C4(&desc, 2);
-    fn_80067D4C(115, 0);
+    AudmonEventPost(115, 0);
     fn_800C9BB0();
     for (i = 0; i <= 1; i++) {
         if (fn_800A8488(i) && !fn_800A8444(i)) {
             unsigned int j;
 
             for (j = 0; j <= 9; j++) {
-                if (fn_801E195C(fn_801C6458(j, 0)) == 2 && fn_800B6644(j) == i) {
+                if (fn_801E195C(ConGetChannelInfo(j, 0)) == 2 && fn_800B6644(j) == i) {
                     RumbleStartPulse(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
                 }
             }
             fn_8017D9D8(i);
         }
     }
-    fn_80025C88(1);
+    ChallengeSendGoalList(1);
     lbl_803EABA8->mUnknownAC = 0;
     lbl_803EABA8->mUnknownAB = 0;
     fn_8017885C();
@@ -281,14 +281,14 @@ void Class_80297CE8::vfn_05(float dt)
     if (fn_800BF824() != 0) {
         return;
     }
-    fn_800771DC();
+    SpchIGUpdatePreSnap();
     fn_8017D678();
     if (fn_800BF8A8(this) == 0 && lbl_803EABA8->mUnknownB8 == -1) {
         fn_800BF9DC(this);
         if (lbl_803EABA8->mUnknownC5 == 0) {
             lbl_803EABA8->mUnknownC5 = fn_8016EA68() != 0 && lbl_803EABA8->mUnknownC6 != 0;
             if (lbl_803EABA8->mUnknownC5 != 0) {
-                fn_80067D4C(117, 0);
+                AudmonEventPost(117, 0);
             }
         }
         fn_800B0E18();
@@ -297,7 +297,7 @@ void Class_80297CE8::vfn_05(float dt)
         fn_800BF72C(this, dt);
     }
     if (fn_8016EA68() != 0) {
-        Desc_802345C4 desc = { 0, 14 };
+        EngineParamWords desc = { 0, 14 };
         fn_802345C4(&desc, 2);
     }
     if (lbl_803EABA8->mUnknownB8 != -1) {
@@ -316,19 +316,19 @@ void Class_80297CE8::vfn_05(float dt)
 
 void Class_80297CE8::vfn_06(float dt)
 {
-    fn_800771D8();
+    SpchIGEndPreSnap();
     lbl_803EABA8->mUnknown40 = 0;
-    fn_801378C0();
-    fn_800545F4(0);
-    fn_80025C88(0);
+    BallsResetScales();
+    InGameStateSetActive(0);
+    ChallengeSendGoalList(0);
     fn_800A87E8();
     fn_80094DF0();
     if ((fn_8009D86C() != 2 && fn_8009D86C() <= 3) || fn_8009D990(1) > 120 || fn_8009D990(1) == 0) {
         fn_8017F2DC(0);
     }
     fn_800AFE20(fn_800BE4C8);
-    fn_80027230(lbl_803EABA8->mUnknown48);
-    fn_80027358(-1);
+    PadInputRestoreHandlers(lbl_803EABA8->mUnknown48);
+    PadInputResetSlot(-1);
     fn_800B0DA4();
     fn_800BD568(0);
     fn_800BD568(1);
@@ -340,12 +340,12 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800AEF38(1);
     fn_8017E01C(0);
     fn_8017E01C(1);
-    fn_80148154();
-    fn_801483C8();
+    PassIconsHide();
+    PassIconsClearReplayFlag();
     fn_801478F0(1);
     fn_800BD2F8(fn_80178308());
     fn_800BD2F8(fn_80178320());
     lbl_803EABA8->mUnknownC5 = 0;
-    Desc_802345C4 desc = { 0, 14 };
+    EngineParamWords desc = { 0, 14 };
     fn_802345C4(&desc, 2);
 }

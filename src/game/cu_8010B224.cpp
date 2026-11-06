@@ -87,7 +87,7 @@ float fn_80178A44(void);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern unsigned char lbl_802DABBC[];
 }
@@ -146,7 +146,7 @@ extern "C" unsigned char fn_8010B87C(Object_80039F5C *p, Object_80039F5C *pOther
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_802270A4(&delta) <= 5.0f) {
-            result = fn_801CFFD0(angle, p->mMotion.mFacing) <= 0xE38E2;
+            result = MathAngleDiff(angle, p->mMotion.mFacing) <= 0xE38E2;
         }
     }
     return result;

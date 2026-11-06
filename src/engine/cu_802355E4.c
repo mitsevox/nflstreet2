@@ -9,7 +9,7 @@
 #include "engine/viewport.h"
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include "game/Object_80235588.h"
@@ -795,8 +795,8 @@ int fn_80236F78(void *p, int value)
     pRandom->mUnknown12 = 0;
     seed = pRandom->mUnknown4;
     for (i = 0; i < pRandom->mUnknown0; i++) {
-        pRandom->mpUnknown20[i] = fn_801CF5BC(0, seed);
-        seed = fn_801CF6D4(pRandom->mpUnknown20[i], 0x7FFFFFFF);
+        pRandom->mpUnknown20[i] = MathNewRandomStream(0, seed);
+        seed = MathGetRandomRange(pRandom->mpUnknown20[i], 0x7FFFFFFF);
     }
     return 0;
 }
@@ -806,7 +806,7 @@ int fn_8023701C(void *p, int value)
     Random_80236F78 *pRandom = p;
 
     while (pRandom->mUnknown0-- != 0) {
-        fn_801CF67C(pRandom->mpUnknown20[pRandom->mUnknown0]);
+        MathDelRandomStream(pRandom->mpUnknown20[pRandom->mUnknown0]);
     }
     fn_801D2BD0(pRandom->mpUnknown20);
     return 0;
@@ -831,7 +831,7 @@ int fn_802370E8(void *p, void *pBuffer)
 {
     Random_80236F78 *pRandom = p;
     memcpy(pBuffer, pRandom, sizeof(Random_80236F78));
-    fn_801CF60C((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
+    MathCopyRandomStream((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
     return 1;
 }
 
@@ -839,13 +839,13 @@ int fn_80237138(void *p, void *pBuffer)
 {
     Random_80236F78 *pRandom = p;
     memcpy(pRandom, pBuffer, sizeof(Random_80236F78));
-    fn_801CF60C(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
+    MathCopyRandomStream(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
     return 1;
 }
 
 int fn_80237180(void *p)
 {
-    return fn_801CF664(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
+    return MathGetRandomStreamSize(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
 }
 
 void fn_802371B0(int count, int seed)
@@ -871,7 +871,7 @@ unsigned int fn_802372EC(int stream, unsigned int count)
 {
     unsigned int value;
 
-    value = fn_801CF6D4(lbl_803EC130->mpUnknown20[stream], count);
+    value = MathGetRandomRange(lbl_803EC130->mpUnknown20[stream], count);
     if (stream == 0) {
         lbl_803EC130->mUnknown8++;
         lbl_803EC130->mUnknown12 = (lbl_803EC130->mUnknown12 ^ count) + 7;
@@ -1398,7 +1398,7 @@ void fn_802382F0(int count)
     lbl_803A3A14.mUnknown0 = 0;
     lbl_803A3A14.mUnknown4 = count;
     lbl_803A3A14.mppUnknown8 = fn_801D2B7C(count * 4, 0, 0);
-    fn_801D34D0((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
+    MemFill((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
     lbl_803EC140 = 1;
 }
 
@@ -1475,7 +1475,7 @@ unsigned int fn_80238604(int index)
 void fn_8023861C(int index)
 {
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
-    fn_801D34D0((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
+    MemFill((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
     p->mUnknown4 = 0;
 }
 void fn_80238680(int index, Callback_80067EC8 callback)

@@ -105,8 +105,8 @@ int fn_801F0C50(void *pArchive, int id);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 AnimFileFormat_t *fn_801EF548(void *pArchive, int id, int heap, int arg,
                               void (*pCallback)(int, int, int, int, Request_801BAE08 *), Request_801BAE08 *pRequest);
-int fn_801CB120(void);
-void fn_801CAF24(void);
+int FileHostCheckActive(void);
+void FileDebugProcess(void);
 
 unsigned short fn_801BAD98(void);
 int fn_801BAEAC(int slot);
@@ -373,8 +373,8 @@ int fn_801BB74C(unsigned short slot, int id, Info_801BC0E8 *pInfo)
                     fn_801F0F18(0);
                 else
                     fn_801F81AC();
-                if (fn_801CB120())
-                    fn_801CAF24();
+                if (FileHostCheckActive())
+                    FileDebugProcess();
             }
         case 1:
             fn_801BAEAC(index);

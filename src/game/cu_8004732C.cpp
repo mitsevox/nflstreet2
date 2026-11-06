@@ -22,8 +22,8 @@ int fn_801CD308(int index, Quad_801CD308 value);
 void fn_801CD3B0(int a);
 void fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
 void fn_801CDD18(void);
-int fn_801CECCC(int index);
-void fn_801CECDC(int a);
+int GlibRenderGetBin(int index);
+void GlibRenderSelectBin(int a);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -83,7 +83,7 @@ int fn_800473AC(Item_800476DC *pInstance)
             float offset[3];
             int state;
 
-            fn_801CECDC(fn_801CECCC(14));
+            GlibRenderSelectBin(GlibRenderGetBin(14));
             state = fn_80236EC0(0);
             fn_801CD2A4();
             if (lbl_803EA4C9) {

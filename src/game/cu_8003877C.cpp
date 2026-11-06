@@ -157,7 +157,7 @@ Set_8003EE6C *fn_801442F0(void);
 }
 
 extern "C" {
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
 void fn_80145D64(int type, int a, int b, int c);
 void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsigned char team, unsigned char index);
@@ -233,15 +233,15 @@ extern "C" void fn_8003830C(Object_80039F5C *p)
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
         int bone;
 
-        bone = fn_801C4E98(pObject->mUnknown100, "rwrist");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "rwrist");
         pObject->mUnknown44.mUnknown48[bone * 3] = pObject->mUnknown100->mUnknown1040[bone][0] << 4;
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "rforearm");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "rforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "lwrist");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "lwrist");
         pObject->mUnknown44.mUnknown48[bone * 3] = pObject->mUnknown100->mUnknown1040[bone][0] << 4;
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
-        bone = fn_801C4E98(pObject->mUnknown100, "lforearm");
+        bone = CharSkelGetJointByName(pObject->mUnknown100, "lforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
         fn_800ADB90(p, 0, 8, 1);
         fn_800ADB90(p, 0, 8, 0);

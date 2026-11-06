@@ -1,5 +1,5 @@
 #include "game/FELoop.h"
-#include "game/cu_801CF5BC.h"
+#include "engine/rand.h"
 #include "game/InGame.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
@@ -86,7 +86,7 @@ const char *GRand::GetName() { return "GRand"; }
 
 int GRand::Init()
 {
-    fn_802371B0(2, fn_801CF7AC());
+    fn_802371B0(2, MathGetRandomSeed());
     return 1;
 }
 

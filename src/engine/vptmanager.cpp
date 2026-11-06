@@ -1,69 +1,69 @@
 #include <string.h>
 #include "engine/viewport.h"
 #include "game/fn_80238174.h"
-#include "game/fn_801C3660.h"
+#include "game/CamAddCameraToViewport.h"
 #include "game/fn_801C68FC.h"
 
-struct Record_8002AE90 {
+struct VptManagerStackEntry_t {
     void *mpObject;
     int (*mpCallback4)(Viewport_t *, void *);
     int (*mpCallback8)(Viewport_t *, void *);
 };
-struct State_8002AE90 { Viewport_t *mpObject; void *mpList; };
+struct VptManagerStack_t { Viewport_t *mpObject; void *mpList; };
 extern "C" {
 void *fn_801C6A20(void *);
 void *fn_801C6B4C(void *, void *);
-void fn_801C6BC0(void *, Record_8002AE90 *);
+void fn_801C6BC0(void *, VptManagerStackEntry_t *);
 void fn_801C6C0C(void *, void *);
 void *fn_801C6C84(void *, void *);
-int fn_801C6DCC(void *, void *, void *, Record_8002AE90 **, int (*)(Record_8002AE90 *,void *,Record_8002AE90 **));
-void fn_801C36B0(Viewport_t *, void *);
-static State_8002AE90 *lbl_803EA348 = 0;
+int fn_801C6DCC(void *, void *, void *, VptManagerStackEntry_t **, int (*)(VptManagerStackEntry_t *,void *,VptManagerStackEntry_t **));
+void CamRemoveCameraFromViewport(Viewport_t *, void *);
+static VptManagerStack_t *_VptManager_pStack = 0;
 
-int fn_8002AE90(void *p, int a) {
-    State_8002AE90 *s=(State_8002AE90 *)p;
+int _VptManagerCreateStack(void *p, int a) {
+    VptManagerStack_t *s=(VptManagerStack_t *)p;
     s->mpList=fn_801C68FC(1,0,5,12,0,0);
     s->mpObject=0;
     return 0;
 }
-int fn_8002AEE4(void *p,int a) {
-    State_8002AE90 *s=(State_8002AE90 *)p;
+int _VptManagerDestroyStack(void *p,int a) {
+    VptManagerStack_t *s=(VptManagerStack_t *)p;
     fn_801C69E4(s->mpList);
     s->mpObject=0;
     s->mpList=0;
     return 0;
 }
-int fn_8002AF24(State_8002AE90 *s,Record_8002AE90 *r) {
+int _VptManagerAttach(VptManagerStack_t *s,VptManagerStackEntry_t *r) {
     int result=1;
     if(r->mpCallback4) result=r->mpCallback4(s->mpObject,r->mpObject);
-    else fn_801C3660(s->mpObject,r->mpObject);
+    else CamAddCameraToViewport(s->mpObject,r->mpObject);
     return result;
 }
-int fn_8002AF80(State_8002AE90 *s,Record_8002AE90 *r) {
+int _VptManagerDetach(VptManagerStack_t *s,VptManagerStackEntry_t *r) {
     int result=1;
     if(r->mpCallback8) result=r->mpCallback8(s->mpObject,r->mpObject);
     else {
-        fn_801C36B0(s->mpObject,r->mpObject);
+        CamRemoveCameraFromViewport(s->mpObject,r->mpObject);
         if(VptGetCamera(s->mpObject)) result=0;
     }
     return result;
 }
-Record_8002AE90 *fn_8002AFF4(State_8002AE90 *s) {
-    Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6A20(s->mpList);
+VptManagerStackEntry_t *_VptManagerNewStackEntry(VptManagerStack_t *s) {
+    VptManagerStackEntry_t *r=(VptManagerStackEntry_t *)fn_801C6A20(s->mpList);
     r->mpCallback4=0;r->mpCallback8=0;r->mpObject=0;
     return r;
 }
-State_8002AE90 *fn_8002B02C(Viewport_t *p) {
-    if(!lbl_803EA348->mpObject) lbl_803EA348->mpObject=p;
-    return lbl_803EA348;
+VptManagerStack_t *_VptManagerGetStack(Viewport_t *p) {
+    if(!_VptManager_pStack->mpObject) _VptManager_pStack->mpObject=p;
+    return _VptManager_pStack;
 }
-int fn_8002B048(Record_8002AE90 *r,void *p,Record_8002AE90 **out) {
+int _VptManagerFindStackEntry(VptManagerStackEntry_t *r,void *p,VptManagerStackEntry_t **out) {
     if(r->mpObject==p) {*out=r;return 0;}
     return -1;
 }
-int fn_8002B068(void *p,void *q) { return 0; }
-int fn_8002B070(void *p,void *data) {
-    State_8002AE90 *s=(State_8002AE90 *)p;
+int _VptManagerCompare(void *p,void *q) { return 0; }
+int _VptManagerSave(void *p,void *data) {
+    VptManagerStack_t *s=(VptManagerStack_t *)p;
     short count=0;
     void *r=fn_801C6B4C(s->mpList,0);
     while(r) {count++;r=fn_801C6C84(s->mpList,r);}
@@ -75,8 +75,8 @@ int fn_8002B070(void *p,void *data) {
     }
     return 1;
 }
-int fn_8002B13C(void *p,void *data) {
-    State_8002AE90 *s=(State_8002AE90 *)p;
+int _VptManagerLoad(void *p,void *data) {
+    VptManagerStack_t *s=(VptManagerStack_t *)p;
     void *r;
     while((r=fn_801C6B4C(s->mpList,0))!=0) fn_801C6C0C(s->mpList,r);
     short count=*(short *)data;data=(char *)data+2;
@@ -87,79 +87,79 @@ int fn_8002B13C(void *p,void *data) {
     }
     return 1;
 }
-int fn_8002B1DC(void *p) {return 62;}
-void fn_8002B1E4() {
-    void *h=fn_80238174(0,(void **)&lbl_803EA348,8,0,0x7670746D);
-    fn_80238234(h,fn_8002AE90,fn_8002AEE4,0,fn_8002B068);
-    fn_80238248(h,fn_8002B070,fn_8002B1DC,fn_8002B13C);
+int _VptManagerGetSaveSize(void *p) {return 62;}
+void VptManagerInit() {
+    void *h=fn_80238174(0,(void **)&_VptManager_pStack,8,0,0x7670746D);
+    fn_80238234(h,_VptManagerCreateStack,_VptManagerDestroyStack,0,_VptManagerCompare);
+    fn_80238248(h,_VptManagerSave,_VptManagerGetSaveSize,_VptManagerLoad);
     fn_802381E0(h);
 }
-void fn_8002B270() {
-    State_8002AE90 *s=fn_8002B02C(0);
-    Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
-    if(r && VptGetCamera(s->mpObject)!=r->mpObject) fn_801C3660(s->mpObject,r->mpObject);
+void VptManagerRestoreCamera() {
+    VptManagerStack_t *s=_VptManagerGetStack(0);
+    VptManagerStackEntry_t *r=(VptManagerStackEntry_t *)fn_801C6B4C(s->mpList,0);
+    if(r && VptGetCamera(s->mpObject)!=r->mpObject) CamAddCameraToViewport(s->mpObject,r->mpObject);
 }
-void fn_8002B2D0() {}
-int fn_8002B2D4(Viewport_t *p,void *obj,int (*a)(Viewport_t *,void *),int (*b)(Viewport_t *,void *)) {
+void VptManagerShutdown() {}
+int VptManagerPushCamera(Viewport_t *p,void *obj,int (*a)(Viewport_t *,void *),int (*b)(Viewport_t *,void *)) {
     int changed=0;
-    State_8002AE90 *s=fn_8002B02C(p);
+    VptManagerStack_t *s=_VptManagerGetStack(p);
     int result=1;
-    Record_8002AE90 *r=0;
-    fn_801C6DCC(s->mpList,0,obj,&r,fn_8002B048);
-    Record_8002AE90 *first=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
-    if(first && first!=r) result=fn_8002AF80(s,first);
+    VptManagerStackEntry_t *r=0;
+    fn_801C6DCC(s->mpList,0,obj,&r,_VptManagerFindStackEntry);
+    VptManagerStackEntry_t *first=(VptManagerStackEntry_t *)fn_801C6B4C(s->mpList,0);
+    if(first && first!=r) result=_VptManagerDetach(s,first);
     if(result) {
         if(r) {
             if(r!=first) {changed=1;fn_801C6BC0(s->mpList,r);}
         } else {
-            changed=1;r=fn_8002AFF4(s);
+            changed=1;r=_VptManagerNewStackEntry(s);
             r->mpCallback4=a;r->mpCallback8=b;r->mpObject=obj;
         }
-        if(changed) {fn_801C6AA4(s->mpList,r,0);fn_8002AF24(s,r);}
+        if(changed) {fn_801C6AA4(s->mpList,r,0);_VptManagerAttach(s,r);}
     }
     return result;
 }
-int fn_8002B3DC(Viewport_t *p,void *obj) {
+int VptManagerPopCamera(Viewport_t *p,void *obj) {
     int result=1;
-    State_8002AE90 *s=fn_8002B02C(p);
-    Record_8002AE90 *r=0;
-    fn_801C6DCC(s->mpList,0,obj,&r,fn_8002B048);
-    Record_8002AE90 *first=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
+    VptManagerStack_t *s=_VptManagerGetStack(p);
+    VptManagerStackEntry_t *r=0;
+    fn_801C6DCC(s->mpList,0,obj,&r,_VptManagerFindStackEntry);
+    VptManagerStackEntry_t *first=(VptManagerStackEntry_t *)fn_801C6B4C(s->mpList,0);
     if(r) {
         if(r==first) {
-            fn_8002AF80(s,r);
-            Record_8002AE90 *next=(Record_8002AE90 *)fn_801C6C84(s->mpList,r);
-            if(next) fn_8002AF24(s,next);
+            _VptManagerDetach(s,r);
+            VptManagerStackEntry_t *next=(VptManagerStackEntry_t *)fn_801C6C84(s->mpList,r);
+            if(next) _VptManagerAttach(s,next);
         }
         fn_801C6C0C(s->mpList,r);
     } else result=0;
     return result;
 }
-int fn_8002B494(Viewport_t *p,void *obj,void *other) {
+int VptManagerReplaceCamera(Viewport_t *p,void *obj,void *other) {
     int result=0;
-    State_8002AE90 *s=fn_8002B02C(p);
-    Record_8002AE90 *r=0;
-    fn_801C6DCC(s->mpList,0,obj,&r,fn_8002B048);
-    Record_8002AE90 *first=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
+    VptManagerStack_t *s=_VptManagerGetStack(p);
+    VptManagerStackEntry_t *r=0;
+    fn_801C6DCC(s->mpList,0,obj,&r,_VptManagerFindStackEntry);
+    VptManagerStackEntry_t *first=(VptManagerStackEntry_t *)fn_801C6B4C(s->mpList,0);
     if(r) {
         result=1;
-        if(r==first) result=fn_8002AF80(s,first);
+        if(r==first) result=_VptManagerDetach(s,first);
         if(result) {
             r->mpObject=other;
-            if(r==first) result=fn_8002AF24(s,r);
+            if(r==first) result=_VptManagerAttach(s,r);
         }
     }
     return result;
 }
-void *fn_8002B550(Viewport_t *p) {
-    State_8002AE90 *s=fn_8002B02C(p);
+void *VptManagerGetCurrentCamera(Viewport_t *p) {
+    VptManagerStack_t *s=_VptManagerGetStack(p);
     void *obj=0;
-    Record_8002AE90 *r=(Record_8002AE90 *)fn_801C6B4C(s->mpList,0);
+    VptManagerStackEntry_t *r=(VptManagerStackEntry_t *)fn_801C6B4C(s->mpList,0);
     if(r) obj=r->mpObject;
     return obj;
 }
-void fn_8002B598() {}
-int fn_8002B59C() {return 0;}
-void fn_8002B5A4(int value) {}
-int fn_8002B5A8() {return 1;}
+void VptManagerMarketCamInit() {}
+int VptManagerIsMarketCamOn() {return 0;}
+void VptManagerSetPassIcons(int value) {}
+int VptManagerGetPassIcons() {return 1;}
 }

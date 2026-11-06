@@ -36,7 +36,7 @@ extern float lbl_803EB094;
 extern float lbl_803ECB08;
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_801CFB94(int angle);
 int fn_801783AC(int bit);
 Object_80039F5C *fn_80137B40(void);
@@ -140,7 +140,7 @@ float fn_8011BCDC(Entry_8011AFCC *pEntry, Entry_8011AFCC *pTarget, Pair_8011BAE0
 
                 if (close) {
                     if (pOtherMotion->mUnknown28 > lbl_803ECB08 * 0.5f) {
-                        if (fn_801CFFD0(pTarget->mUnknown64, pOtherMotion->mUnknown32) < 0x2AAAAA) {
+                        if (MathAngleDiff(pTarget->mUnknown64, pOtherMotion->mUnknown32) < 0x2AAAAA) {
                             weight *= 1.5f;
                         }
                     } else {
@@ -244,7 +244,7 @@ float fn_8011BCDC(Entry_8011AFCC *pEntry, Entry_8011AFCC *pTarget, Pair_8011BAE0
                         Point_8017886C gap;
 
                         fn_80227690(&gap, pOtherMotion, &pBlocker->mMotion.mPos);
-                        if (fn_802270A4(&gap) < 2.0f && fn_801CFFD0(gap.Heading(), pBlocker->mMotion.mFacing) < 0x400000) {
+                        if (fn_802270A4(&gap) < 2.0f && MathAngleDiff(gap.Heading(), pBlocker->mMotion.mFacing) < 0x400000) {
                             weight *= 0.5f;
                         }
                     }
@@ -384,21 +384,21 @@ float fn_8011C4E0(Entry_8011AFCC *pEntry, Entry_8011AFCC *pTarget, Pair_8011BAE0
         return 0.0f;
     }
     if (lbl_803EB028->mUnknown84 != 0 && pTarget->mpUnknown60->mpState->mId != 51) {
-        if (fn_801CFFD0(pMotion->mFacing + fn_800C8BAC(pEntry->mpUnknown60, 0), (angle + 0x800000) & 0xFFFFFF) > 0x555555) {
+        if (MathAngleDiff(pMotion->mFacing + fn_800C8BAC(pEntry->mpUnknown60, 0), (angle + 0x800000) & 0xFFFFFF) > 0x555555) {
             if (pMotion->mPos.mY < from.mUnknown4 || (pMotion->mPos.mY < ball.mY && !a)) {
                 return 0.0f;
             }
         }
         if (length < 25.0f) {
-            turn = fn_801CFFD0(pMotion->mFacing, (angle - 0x800000) & 0xFFFFFF);
+            turn = MathAngleDiff(pMotion->mFacing, (angle - 0x800000) & 0xFFFFFF);
 
             if (a || pMotion->mPos.mY > ball.mY || (turn > 0x2E38E3 && lbl_803EB028->mUnknown84 > 30)) {
-                turn = fn_801CFFD0(pTarget->mUnknown64, pEntry->mUnknown64);
+                turn = MathAngleDiff(pTarget->mUnknown64, pEntry->mUnknown64);
                 weight *= fn_801CFB94(turn / 4);
-                turn = fn_801CFFD0(pEntry->mUnknown64, angle);
+                turn = MathAngleDiff(pEntry->mUnknown64, angle);
                 weight *= fn_801CFB94(turn / 3);
             }
-            weight *= fn_801CFB94(fn_801CFFD0(pMotion->mFacing + fn_800C8BAC(pEntry->mpUnknown60, 0), (angle - 0x800000) & 0xFFFFFF) / 4);
+            weight *= fn_801CFB94(MathAngleDiff(pMotion->mFacing + fn_800C8BAC(pEntry->mpUnknown60, 0), (angle - 0x800000) & 0xFFFFFF) / 4);
         }
     }
     if (pEntry->mpUnknown60->mUnknown1139 == 1) {
@@ -450,7 +450,7 @@ float fn_8011CC10(Entry_8011AFCC *pEntry, Entry_8011AFCC *pOther, Pair_8011BAE0 
     if (score == 0.0f) {
         return 0.0f;
     }
-    if (bit && fn_801CFFD0(pEntry->mUnknown64, (angle - 0x800000) & 0xFFFFFF) <= 0x38E38D && pPos->mY < pOtherPos->mY) {
+    if (bit && MathAngleDiff(pEntry->mUnknown64, (angle - 0x800000) & 0xFFFFFF) <= 0x38E38D && pPos->mY < pOtherPos->mY) {
         score *= 0.5f;
     }
     if (a && pEntry->mpUnknown60->mUnknown8 == 255 && pPos->mY > pOtherPos->mY) {
@@ -458,13 +458,13 @@ float fn_8011CC10(Entry_8011AFCC *pEntry, Entry_8011AFCC *pOther, Pair_8011BAE0 
     }
     if ((pEntry->mpUnknown60->mUnknown1032 == 7 && fn_8009BCE8(&pEntry->mpUnknown60->mUnknown1040) == pOther->mpUnknown60)
         || fn_8009BCE8(&pEntry->mpUnknown60->mUnknown1036) == pOther->mpUnknown60) {
-        if ((a && distance < 4.5f && fn_801CFFD0(angle, ((Object_800B26B0 *)pOtherPos)->mFacing) <= 0x3FFFFF)
+        if ((a && distance < 4.5f && MathAngleDiff(angle, ((Object_800B26B0 *)pOtherPos)->mFacing) <= 0x3FFFFF)
             || (b && pOtherPos->mY < ball.mY + 2.0f)) {
             score *= lbl_803EB094;
         }
         if (!c && distance < 6.0f && distance > 2.25f) {
             if (fn_80124714(pEntry->mpUnknown60, pOther->mpUnknown60, 0)) {
-                if (b || fn_801CFFD0(angle, ((Object_800B26B0 *)pOtherPos)->mFacing) <= 0x3FFFFF) {
+                if (b || MathAngleDiff(angle, ((Object_800B26B0 *)pOtherPos)->mFacing) <= 0x3FFFFF) {
                     score *= 1.1f;
                 }
             } else if (bit || (a && pPos->mY > ball.mY)) {
@@ -482,7 +482,7 @@ float fn_8011CC10(Entry_8011AFCC *pEntry, Entry_8011AFCC *pOther, Pair_8011BAE0 
             score *= 0.85f;
         }
     }
-    if (pEntry->mpUnknown60->mUnknown8 != 255 && fn_801CFFD0(angle, ((Object_800B26B0 *)pPos)->mUnknown32) > 0x6AAAAB) {
+    if (pEntry->mpUnknown60->mUnknown8 != 255 && MathAngleDiff(angle, ((Object_800B26B0 *)pPos)->mUnknown32) > 0x6AAAAB) {
         score *= 20.0f;
     }
     return score;

@@ -4,7 +4,7 @@
 
 extern unsigned char lbl_803EBBE8;
 
-int fn_801C4F64(void)
+int CurveInit(void)
 {
     int error = 0;
 
@@ -17,7 +17,7 @@ int fn_801C4F64(void)
     return error;
 }
 
-int fn_801C4FB8(void)
+int CurveShutdown(void)
 {
     int error = 0;
 

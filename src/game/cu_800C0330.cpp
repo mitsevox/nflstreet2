@@ -9,7 +9,7 @@ void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_8003A3F4(int a, int index);
 void fn_8017DDDC(int index);
 void fn_8017E01C(int index);
-int fn_801C6280(int a, int b, void *p);
+int ConSetChannelInfo(int a, int b, void *p);
 int fn_800C8744(int team);
 unsigned short fn_800C0660(unsigned short *p, int value);
 void fn_800B4DE4(QueryCursor cursor, int index, void *pData);
@@ -44,7 +44,7 @@ extern "C" void fn_800C0330(void *p)
                 break;
             }
         }
-        fn_801C6280(-1, 3, lbl_802ECD44);
+        ConSetChannelInfo(-1, 3, lbl_802ECD44);
     }
 }
 

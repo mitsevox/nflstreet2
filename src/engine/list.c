@@ -3,13 +3,13 @@
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
 
-void fn_801C72D0(void);
+void DSListInitLinkedModule(void);
 void fn_801C7EE4(void);
 void fn_801C8E88(void);
 
 static int fn_801C665C(int type, int size)
 {
-    return fn_801C6644(size) + lbl_803D4FB8[type].mNodeSize;
+    return DSAlignSize(size) + lbl_803D4FB8[type].mNodeSize;
 }
 
 static int fn_801C66A4(int type, int count, int *pSize)
@@ -17,8 +17,8 @@ static int fn_801C66A4(int type, int count, int *pSize)
     int size;
 
     *pSize = fn_801C665C(type, *pSize);
-    size = fn_801C74A0(count, *pSize);
-    return size + fn_801C6644(lbl_803D4FB8[type].mHeaderSize);
+    size = DSGetNodeHandlerMemSize(count, *pSize);
+    return size + DSAlignSize(lbl_803D4FB8[type].mHeaderSize);
 }
 
 static void fn_801C670C(List_801C68FC *pList, Node_801C6A20 *pNode)
@@ -34,7 +34,7 @@ void fn_801C6760(void)
     for (i = 0; i < 9; i++) {
         lbl_803D4FB8[i].mActive = 0;
     }
-    fn_801C72D0();
+    DSListInitLinkedModule();
     fn_801C8E88();
     fn_801C7EE4();
 }
@@ -57,8 +57,8 @@ void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68
     lbl_803D4FB8[type].mSearch = search;
     lbl_803D4FB8[type].mOptimize = optimize;
     lbl_803D4FB8[type].mInit = init;
-    lbl_803D4FB8[type].mHeaderSize = fn_801C6644(headerSize);
-    lbl_803D4FB8[type].mNodeSize = fn_801C6644(nodeSize);
+    lbl_803D4FB8[type].mHeaderSize = DSAlignSize(headerSize);
+    lbl_803D4FB8[type].mNodeSize = DSAlignSize(nodeSize);
     lbl_803D4FB8[type].mActive = 1;
 }
 
@@ -73,13 +73,13 @@ unsigned int fn_801C6880(List_801C68FC *pList, unsigned int stat)
 
     switch (stat) {
     case 0:
-        value = fn_801C74C8(pList->mpNodes, 0);
+        value = DSGetNodeHandlerStat(pList->mpNodes, 0);
         break;
     case 1:
-        value = fn_801C74C8(pList->mpNodes, 1);
+        value = DSGetNodeHandlerStat(pList->mpNodes, 1);
         break;
     case 2:
-        value = fn_801C74C8(pList->mpNodes, 2);
+        value = DSGetNodeHandlerStat(pList->mpNodes, 2);
         break;
     case 3:
         value = pList->mCount;
@@ -97,7 +97,7 @@ void *fn_801C68FC(int a, int b, int count, int size, int (*cmp)(void *, void *),
     int itemSize;
     int memSize;
 
-    itemSize = fn_801C6644(size);
+    itemSize = DSAlignSize(size);
     memSize = fn_801C66A4(b, count, &size);
     if (pList == 0) {
         pList = fn_801D2BB0(a, memSize, 0, 0);
@@ -110,8 +110,8 @@ void *fn_801C68FC(int a, int b, int count, int size, int (*cmp)(void *, void *),
     pList->mCount = 0;
     pList->mCompare = cmp;
     pList->mType = b;
-    pList->mpNodes = fn_801C750C(0, count, size,
-                                 (NodePool_801C750C *)((char *)pList + fn_801C6644(lbl_803D4FB8[b].mHeaderSize)));
+    pList->mpNodes = DSNewNodeHandler(0, count, size,
+                                 (NodePool_t *)((char *)pList + DSAlignSize(lbl_803D4FB8[b].mHeaderSize)));
     lbl_803D4FB8[b].mInit(pList);
     fn_801F7BD4(0);
     return pList;
@@ -129,7 +129,7 @@ void *fn_801C6A20(void *pool)
     List_801C68FC *pList = pool;
     Node_801C6A20 *pNode;
 
-    pNode = fn_801C75F0(pList->mpNodes);
+    pNode = DSNewNode(pList->mpNodes);
     if (pNode) {
         lbl_803D4FB8[pList->mType].mInitNode(pNode, lbl_803D4FB8[pList->mType].mNodeSize);
         pNode->mFlags &= ~0x80000000;
@@ -169,7 +169,7 @@ void fn_801C6C0C(List_801C68FC *pList, void *item)
     if (pNode->mFlags & 0x80000000) {
         fn_801C670C(pList, pNode);
     }
-    fn_801C7650(pList->mpNodes, pNode);
+    DSDelNode(pList->mpNodes, pNode);
 }
 
 void *fn_801C6C84(List_801C68FC *pList, void *item)

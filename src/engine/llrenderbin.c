@@ -1,12 +1,12 @@
 /* Render bin initialisation and chunk lookup. */
-#include "engine/cu_801CEC90.h"
+#include "engine/llrender.h"
 
-typedef struct Chunk_801CEE54 {
+typedef struct Chunk_t {
     int mType;
     int mSize;
-} Chunk_801CEE54;
+} Chunk_t;
 
-void fn_801CEE54(RenderBin_801CEC90 *pBin)
+void GlibBinAlloc(RenderBin_t *pBin)
 {
     pBin->mActive = 1;
     pBin->mUnk28 = 0;
@@ -19,21 +19,21 @@ void fn_801CEE54(RenderBin_801CEC90 *pBin)
     pBin->mUnk48 = 0;
 }
 
-void fn_801CEE84(RenderBin_801CEC90 *pBins, unsigned int numBins)
+void GlibBinAllocList(RenderBin_t *pBins, unsigned int numBins)
 {
     unsigned int i;
 
     for (i = 0; i < numBins; i++) {
-        fn_801CEE54(&pBins[i]);
+        GlibBinAlloc(&pBins[i]);
         pBins[i].mpNext = &pBins[i + 1];
     }
     pBins[i - 1].mpNext = 0;
 }
 
-Chunk_801CEE54 *fn_801CEEF4(Chunk_801CEE54 *pChunk, int type, int endType, int index)
+Chunk_t *GlibFindChunk(Chunk_t *pChunk, int type, int endType, int index)
 {
     int count = 0;
-    Chunk_801CEE54 *pFound = 0;
+    Chunk_t *pFound = 0;
 
     while (pChunk->mType != endType) {
         if (pChunk->mType == type) {
@@ -43,7 +43,7 @@ Chunk_801CEE54 *fn_801CEEF4(Chunk_801CEE54 *pChunk, int type, int endType, int i
             }
             count++;
         }
-        pChunk = (Chunk_801CEE54 *)((char *)pChunk + pChunk->mSize);
+        pChunk = (Chunk_t *)((char *)pChunk + pChunk->mSize);
     }
     return pFound;
 }

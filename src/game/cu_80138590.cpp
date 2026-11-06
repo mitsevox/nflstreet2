@@ -14,7 +14,7 @@ void fn_8013A3BC(Object_80137ABC *pBall);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_8013BA88(Object_80137ABC *pBall, void *pData, int value);
 int fn_80178348(void);
-int fn_801C4E98(void *p, const char *pName);
+int CharSkelGetJointByName(void *p, const char *pName);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -44,8 +44,8 @@ extern "C" int fn_801385A8(Object_80137ABC *pBall)
             Vector_80039F5C right;
 
             fn_80137D58(pBall, &pos);
-            fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lwrist"), &left, 0);
-            fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rwrist"), &right, 0);
+            fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &left, 0);
+            fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rwrist"), &right, 0);
             if (fn_802278D0(&pos, &left) > 0.09f) {
                 result = fn_802278D0(&pos, &right) > 0.09f;
             }

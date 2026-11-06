@@ -10,10 +10,10 @@ extern void *fn_801C6C84(void *pool, void *item);
 extern int fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
 extern int fn_801C6DCC(void *pool, int a, void *pKey, void *pResult, int (*match)(void *, void *));
 extern unsigned int fn_801C6880(void *pool, int c);
-extern void *fn_801C750C(int a, int count, int size, void *pMemory);
-extern int fn_801C75B8(void *pPool);
-extern void *fn_801C75F0(void *pPool);
-extern void fn_801C7650(void *pPool, void *pElement);
+extern void *DSNewNodeHandler(int a, int count, int size, void *pMemory);
+extern int DSDelNodeHandler(void *pPool);
+extern void *DSNewNode(void *pPool);
+extern void DSDelNode(void *pPool, void *pElement);
 extern void *memset(void *pDst, int value, unsigned int size);
 
 extern unsigned char lbl_803EBD50;
@@ -195,7 +195,7 @@ int fn_801DCF0C(int type, int size, int count, ObjNewFunc_801DCA10 pNew, ObjDelF
     pType->mNew = pNew;
     pType->mDel = pDel;
     pType->mCount = count;
-    pType->mpPool = fn_801C750C(1, count, size, 0);
+    pType->mpPool = DSNewNodeHandler(1, count, size, 0);
     if (pType->mpPool == 0) {
         err = fn_801F7C88();
     }
@@ -211,7 +211,7 @@ int fn_801DCF8C(int type)
     if (pType->mSize != 0) {
         pType->mSize = 0;
         if (pType->mpPool != 0) {
-            err = fn_801C75B8(pType->mpPool);
+            err = DSDelNodeHandler(pType->mpPool);
         }
     }
     fn_801F7BD4(err);
@@ -268,7 +268,7 @@ Obj_801DCA10 *fn_801DD168(int type, int subType, int arg)
 {
     Obj_801DCA10 *pObj;
 
-    pObj = fn_801C75F0(lbl_803ED644[type].mpPool);
+    pObj = DSNewNode(lbl_803ED644[type].mpPool);
     if (pObj != 0) {
         memset(pObj, 0, lbl_803ED644[type].mSize);
         pObj->mType = type;
@@ -311,7 +311,7 @@ void fn_801DD2B8(Obj_801DCA10 *pObj)
     if (lbl_803ED644[pObj->mType].mDel != 0) {
         lbl_803ED644[pObj->mType].mDel(pObj);
     }
-    fn_801C7650(lbl_803ED644[pObj->mType].mpPool, pObj);
+    DSDelNode(lbl_803ED644[pObj->mType].mpPool, pObj);
 }
 
 void fn_801DD320(ObjList_801DCA10 *pList, Obj_801DCA10 *pObj)

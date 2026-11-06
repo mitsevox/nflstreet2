@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Item_800476DC.h"
-#include "game/cu_80136B1C.h"
+#include "game/Ball.h"
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
 #include "game/Input_800B6D34.h"
@@ -54,17 +54,17 @@ struct Record_800B4DE4 {
 };
 
 extern "C" {
-unsigned char fn_80054D24(int index);
+unsigned char CheatFlagsIsSet(int index);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
 void fn_800476CC(Item_800476DC *p, const char *name);
 void fn_8009BD88(Object_80039F5C *p, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 float fn_801CFB18(int angle);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 int CarrierMoveStart(Object_80039F5C *p, int a);
@@ -74,7 +74,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 void fn_80227264(void *pOut, void *pV, float scale);
 void fn_80227350(void *pOut, void *pV, float scale);
@@ -84,7 +84,7 @@ void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput);
-int fn_800289A8(void);
+int InGameGetFrameCount(void);
 float fn_80178A68(Point_8017886C *pPos);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 int fn_80110824(Object_80039F5C *p, int a, int b, int c);
@@ -93,7 +93,7 @@ void fn_80227384(void *pOut, void *pIn, int angle);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227248(void *pOut, void *pIn, float scale);
 float fn_80260B1C(float x);
-int fn_801CFFF0(int a, int b, float t);
+int MathRLerp(int a, int b, float t);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 
@@ -127,11 +127,11 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
     fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
     pOut->mUnknown20 = values[13];
     if (fn_8017F584() == 0) {
-        if (fn_80054D24(30) || fn_80054D24(34)) {
+        if (CheatFlagsIsSet(30) || CheatFlagsIsSet(34)) {
             pOut->mUnknown0 = (float)values[1] * 0.33;
-        } else if (fn_80054D24(31)) {
+        } else if (CheatFlagsIsSet(31)) {
             pOut->mUnknown0 = (float)values[1] * 1.5;
-        } else if (fn_80054D24(44)) {
+        } else if (CheatFlagsIsSet(44)) {
             pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
         } else {
             pOut->mUnknown0 = (float)values[1];
@@ -194,8 +194,8 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
 
         fn_80227690(&delta, &pNearest->mMotion, pMotion);
         angle = fn_801CFE40(delta.mY, delta.mX);
-        turn = fn_801CFFD0(angle, pMotion->mFacing);
-        fn_801CFFD0((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
+        turn = MathAngleDiff(angle, pMotion->mFacing);
+        MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
         if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && CarrierMoveStart(p, mode) != 0) {
             return 1;
         }
@@ -215,14 +215,14 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
 extern "C" void fn_800B5764(Vector_80039F5C *pOut)
 {
     pOut->mX = pOut->mY = 0.0f;
-    Object_80039F5C *pOwner = fn_80137BEC();
+    Object_80039F5C *pOwner = BallGetCurrentTarget();
     float height;
     if (pOwner) {
         height = (pOwner->mUnknown2900 * 0.027777778f + 1.159353f) * 0.5f;
     } else {
         height = 1.65f;
     }
-    fn_8013AA00(fn_801374BC(), height, 0, pOut);
+    fn_8013AA00(BallGetCurrent(), height, 0, pOut);
 }
 
 extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPos, Vector_80039F5C *pVel, int carried)
@@ -239,7 +239,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
     unsigned short i;
 
     if (carried) {
-        pCarrier = fn_80137AD0(fn_801374BC());
+        pCarrier = BallGetHolder(BallGetCurrent());
     }
     pos.mX = pPos->mX;
     pos.mY = pPos->mY;
@@ -249,7 +249,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
         fn_8022732C(&pos, &vel, lbl_803EAB44);
     } else {
         fn_800B5764((Vector_80039F5C *)&pos);
-        Object_80039F5C *pReceiver = fn_80137B88(fn_801374BC());
+        Object_80039F5C *pReceiver = BallGetTarget(BallGetCurrent());
 
         if (pReceiver != 0) {
             pTarget = fn_800FB9D4(pReceiver);
@@ -260,7 +260,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
         if (carried || angle > 0x800000) {
             angle = (0x1000000 - angle) & 0xFFFFFF;
             if (angle > 0x800000) {
-                angle = fn_801CFFF0(0xC00000, angle, lbl_803EAB54);
+                angle = MathRLerp(0xC00000, angle, lbl_803EAB54);
             } else if (angle > 0x400000) {
                 angle = (int)((270.0f - lbl_803EAB54 * 90.0f) * 46603.378f);
             } else {
@@ -350,7 +350,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0x400000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0x400000) <= 0x100000) {
             if (pInput->mUnknown0 & 8) {
                 *pA = 1;
                 *pB = 2;
@@ -358,7 +358,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0xC00000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0xC00000) <= 0x100000) {
             if (pInput->mUnknown0 & 4) {
                 *pA = 1;
                 *pB = 2;
@@ -366,7 +366,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0) <= 0x100000) {
             if (pInput->mUnknown0 & 2) {
                 *pA = 1;
                 *pB = 2;
@@ -374,7 +374,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0x800000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0x800000) <= 0x100000) {
             if (pInput->mUnknown0 & 1) {
                 *pA = 1;
                 *pB = 2;
@@ -382,7 +382,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0x200000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0x200000) <= 0x100000) {
             if ((pInput->mUnknown0 & 0xA) == 0xA) {
                 *pA = 1;
                 *pB = 2;
@@ -390,7 +390,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0xA00000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0xA00000) <= 0x100000) {
             if ((pInput->mUnknown0 & 5) == 5) {
                 *pA = 1;
                 *pB = 2;
@@ -398,7 +398,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0x600000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0x600000) <= 0x100000) {
             if ((pInput->mUnknown0 & 9) == 9) {
                 *pA = 1;
                 *pB = 2;
@@ -406,7 +406,7 @@ extern "C" void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA,
                 *pA = 2;
                 *pB = 1;
             }
-        } else if (fn_801CFFD0(facing, 0xE00000) <= 0x100000) {
+        } else if (MathAngleDiff(facing, 0xE00000) <= 0x100000) {
             if ((pInput->mUnknown0 & 6) == 6) {
                 *pA = 1;
                 *pB = 2;
@@ -431,7 +431,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
     if (pInput->mUnknown95 & 0x20) {
         if (lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4 != 0) {
             if (lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 == 0) {
-                unsigned int elapsed = fn_800289A8() - lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4;
+                unsigned int elapsed = InGameGetFrameCount() - lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4;
 
                 if (mode == 4 && fn_80178A68((Point_8017886C *)&p->mMotion.mPos) < 5.0f) {
                     if (fn_800F22D8(p, 4, fn_800B5F94(p, pInput), 4)) {
@@ -440,7 +440,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
                     }
                     lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 = 1;
                 } else if (elapsed >= lbl_803EAB58
-                           || (fn_801486A0() != 0 && (float)fn_801CFFD0(p->mMotion.mFacing, 0xC00000) < 45.0f)) {
+                           || (fn_801486A0() != 0 && (float)MathAngleDiff(p->mMotion.mFacing, 0xC00000) < 45.0f)) {
                     if (fn_80110824(p, 1, fn_800B5FC0(p, pInput), mode)) {
                         result = 1;
                         p->mFlags |= 0x4000;
@@ -449,7 +449,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
                 }
             }
         } else {
-            lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4 = fn_800289A8();
+            lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4 = InGameGetFrameCount();
         }
     } else if (lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4 != 0) {
         if (lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 == 0 && fn_800F22D8(p, 4, fn_800B5F94(p, pInput), mode)) {
@@ -471,15 +471,15 @@ extern "C" void fn_800B6988(int index)
         Vector_80039F5C target;
         Vector_80039F5C pos;
         Object_80039F5C *p;
-        Object_80137ABC *pBall;
+        Ball_t *pBall;
         Object_80039F5C *pCarrier;
         int ballState;
 
         fn_80156C78(0x24, 1);
         p = fn_800B6544(index);
-        pBall = fn_801374BC();
-        fn_8013BA58(pBall, &ballState);
-        pCarrier = fn_80137AD0(pBall);
+        pBall = BallGetCurrent();
+        BallStateGet(pBall, &ballState);
+        pCarrier = BallGetHolder(pBall);
         if (pCarrier != 0) {
             pos.mX = pCarrier->mMotion.mPos.mX;
             pos.mY = pCarrier->mMotion.mPos.mY;
@@ -487,14 +487,14 @@ extern "C" void fn_800B6988(int index)
             vel.mY = pCarrier->mMotion.mUnknown44;
             vel.mZ = pCarrier->mMotion.mUnknown48;
         } else {
-            fn_80137D58(pBall, &pos);
-            fn_80137EC4(pBall, &vel);
-            if (fn_80138064(pBall, &target) != 0) {
+            BallGetPosition(pBall, &pos);
+            BallGetVelocity(pBall, &vel);
+            if (BallGetLandingPoint(pBall, &target) != 0) {
                 Object_80039F5C *pReceiver;
 
                 fn_80227264(&pos, &pos, 1.0f - 0.8f);
                 fn_80227350(&pos, &target, 0.8f);
-                pReceiver = fn_80137B88(pBall);
+                pReceiver = BallGetTarget(pBall);
                 if (p->mIdBytes[2] == fn_80178308() && pReceiver != 0 && pReceiver->mUnknown8 == 0xFF
                     && !fn_801783AC(11) && !fn_801783AC(12) && !fn_801783AC(24)) {
                     pNew = pReceiver;
@@ -509,12 +509,12 @@ extern "C" void fn_800B6988(int index)
 
             fn_800B6658(p);
             fn_800B6714(pNew, index);
-            if (fn_8013BA58(fn_801374BC(), &state) == 5 && state == 1) {
+            if (BallStateGet(BallGetCurrent(), &state) == 5 && state == 1) {
                 Message_800F01CC message;
 
                 memset(&message, 0, sizeof(message));
                 message.mId = 0x39;
-                message.mUnknown1[0] = fn_801374E0(fn_801374BC());
+                message.mUnknown1[0] = BallGetIndex(BallGetCurrent());
                 fn_8003AB28(pNew, &message, 0);
             }
         }

@@ -27,7 +27,7 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
 extern "C" {
 void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource);
 void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource, float t);
-int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
+int CamLerp(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
 
 extern Source_800AF2AC lbl_8030F9FC[];
 extern Vector_80039F5C lbl_802D870C[];
@@ -48,9 +48,9 @@ extern "C" void fn_800AF4A8(Entry_800AF82C *p)
         }
         pMax = &lbl_802D8730[p->mUnknown3D];
         pAccel = &lbl_802D870C[p->mUnknown3D];
-        fn_801C384C(&p->mUnknown18.mX, &p->mUnknown24.mX, p->mpUnknown14->mX, pMax->mX, pAccel->mX);
-        fn_801C384C(&p->mUnknown18.mY, &p->mUnknown24.mY, p->mpUnknown14->mY, pMax->mY, pAccel->mY);
-        fn_801C384C(&p->mUnknown18.mZ, &p->mUnknown24.mZ, p->mpUnknown14->mZ, pMax->mZ, pAccel->mZ);
+        CamLerp(&p->mUnknown18.mX, &p->mUnknown24.mX, p->mpUnknown14->mX, pMax->mX, pAccel->mX);
+        CamLerp(&p->mUnknown18.mY, &p->mUnknown24.mY, p->mpUnknown14->mY, pMax->mY, pAccel->mY);
+        CamLerp(&p->mUnknown18.mZ, &p->mUnknown24.mZ, p->mpUnknown14->mZ, pMax->mZ, pAccel->mZ);
     } else {
         fn_800AF404(p, lbl_8030F9FC, &p->mUnknown18.mX);
         fn_800AF304((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC, 1.0f - p->mUnknownC);

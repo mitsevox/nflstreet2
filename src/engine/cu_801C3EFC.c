@@ -1,6 +1,6 @@
 /* Skeleton joint chains: build a chain between two joints, pose it and clamp joint angles. */
 
-#include "engine/cu_801C4960.h"
+#include "engine/skeleton.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/llmatrix.h"
 #include "engine/llquat.h"
@@ -18,7 +18,7 @@ typedef struct ChainLink_801C3EFC {
 } ChainLink_801C3EFC;
 
 typedef struct Chain_801C3EFC {
-    Skel_801C4960 *mpSkel;
+    Skel_t *mpSkel;
     unsigned char mType;
     unsigned char mCount;
     unsigned char mStart;
@@ -72,8 +72,8 @@ int fn_801C3EFC(int *pLimits, int rest, int *pAngle)
 
 void fn_801C3F48(Chain_801C3EFC *pChain, int first, int last, int (*pAngles)[3], float (*pOut)[16])
 {
-    Skel_801C4960 *pSkel = pChain->mpSkel;
-    SkelNode_801C4960 *pNode = pSkel->mpJoints[pChain->mpLinks[first].mBone].mpNode;
+    Skel_t *pSkel = pChain->mpSkel;
+    SkelNode_t *pNode = pSkel->mpJoints[pChain->mpLinks[first].mBone].mpNode;
     int bone;
     int i;
 
@@ -91,7 +91,7 @@ static inline void fn_801C3EFC_Rot(int x, int y, int z)
     fn_801D0BCC(z << 8, y << 8, x << 8);
 }
 
-void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_801C4960 *pInst,
+void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
                  Limit_801C3EFC *pLimits, float *pTarget, int iterations)
 {
     float toEnd[3];
@@ -105,8 +105,8 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float cur[4];
     int angles[32][3];
     QuatEulerAngles_t euler;
-    Skel_801C4960 *pSkel;
-    SkelEuler_801C4960 *pRest;
+    Skel_t *pSkel;
+    SkelEuler_t *pRest;
     Limit_801C3EFC *pLimit;
     float c;
     int bone;
@@ -116,9 +116,9 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     fn_801D04C4();
     pSkel = pChain->mpSkel;
     for (i = 0; i < 32; i++) {
-        angles[i][0] = ((SkelEuler_801C4960 *)pInst->mpLocal)[i].x << 8;
-        angles[i][1] = ((SkelEuler_801C4960 *)pInst->mpLocal)[i].y << 8;
-        angles[i][2] = ((SkelEuler_801C4960 *)pInst->mpLocal)[i].z << 8;
+        angles[i][0] = ((SkelEuler_t *)pInst->mpLocal)[i].x << 8;
+        angles[i][1] = ((SkelEuler_t *)pInst->mpLocal)[i].y << 8;
+        angles[i][2] = ((SkelEuler_t *)pInst->mpLocal)[i].z << 8;
     }
     fn_801D0558();
     fn_801D0C58(pInst->mPos);
@@ -186,10 +186,10 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     pChain->mSolved = count;
 }
 
-void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_801C4960 *pInst, SkelEuler_801C4960 *pAngles, int stop)
+void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_t *pInst, SkelEuler_t *pAngles, int stop)
 {
-    Skel_801C4960 *pSkel = pChain->mpSkel;
-    SkelNode_801C4960 *pNode;
+    Skel_t *pSkel = pChain->mpSkel;
+    SkelNode_t *pNode;
     int bone;
     int i;
 
@@ -207,7 +207,7 @@ void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_801C4960 *pInst, SkelEuler_801
     }
 }
 
-void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_801C4960 *pInst, int unused,
+void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst, int unused,
                  float *pTarget, int *pYaw)
 {
     int angles[3];
@@ -219,7 +219,7 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float base[16];
     float rot[16];
     float joint[16];
-    SkelEuler_801C4960 *pAngles = pInst->mpLocal;
+    SkelEuler_t *pAngles = pInst->mpLocal;
     int bone = pChain->mpLinks[pChain->mCount - 1].mBone;
     float d;
 
@@ -270,12 +270,12 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     fn_801D0544();
 }
 
-Chain_801C3EFC *fn_801C47EC(Skel_801C4960 *pSkel, int start, int end, int type)
+Chain_801C3EFC *fn_801C47EC(Skel_t *pSkel, int start, int end, int type)
 {
-    SkelNode_801C4960 *pRoot = pSkel->mpJoints[0].mpNode;
-    SkelNode_801C4960 *pLast = pSkel->mpJoints[end].mpNode;
-    SkelNode_801C4960 *pNode;
-    SkelNode_801C4960 *pParent;
+    SkelNode_t *pRoot = pSkel->mpJoints[0].mpNode;
+    SkelNode_t *pLast = pSkel->mpJoints[end].mpNode;
+    SkelNode_t *pNode;
+    SkelNode_t *pParent;
     Chain_801C3EFC *pChain;
     unsigned int child;
     int count = 0;

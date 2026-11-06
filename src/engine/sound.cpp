@@ -102,8 +102,8 @@ void *fn_801C6AA4(void *pPool, void *pItem, int c);
 void *fn_801C6B4C(void *pList, int where);
 void fn_801C6C0C(void *pList, void *pNode);
 int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverse_801C6D34 pFunc, int count);
-int fn_801CB120(void);
-void fn_801CAF24(void);
+int FileHostCheckActive(void);
+void FileDebugProcess(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 int fn_801B91A0(void *p);
 void fn_801B9328(void *p);
@@ -419,8 +419,8 @@ void fn_801F3F74(SndBankInfo_801F3524 *pBank)
 {
     if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         while (!pBank->mLoaded) {
-            if (fn_801CB120() != 0) {
-                fn_801CAF24();
+            if (FileHostCheckActive() != 0) {
+                FileDebugProcess();
             }
             fn_801F4B20();
         }

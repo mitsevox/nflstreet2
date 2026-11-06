@@ -25,7 +25,7 @@ extern unsigned char lbl_8037FC00[0x2000];
 extern OSSemaphore lbl_80381C00;
 extern OSSemaphore lbl_80381C0C;
 
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void *fn_801C1FBC();
 
 static DVDFileInfo *fn_801CB1BC(void)
@@ -66,9 +66,9 @@ int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int))
     DVDFileInfo *pFiles;
 
     pFiles = fn_801D2BB0(1, size, lbl_803EBC34, 0);
-    fn_801D34D0(&lbl_803D55E0, sizeof(FsClient_801CB1BC), 0, 4);
+    MemFill(&lbl_803D55E0, sizeof(FsClient_801CB1BC), 0, 4);
     lbl_803D55E0.mpFiles = pFiles;
-    fn_801D34D0(pFiles, size, 0, 4);
+    MemFill(pFiles, size, 0, 4);
     lbl_803D55E0.mNumFiles = numFiles;
     OSInitSemaphore(&lbl_80381C0C, 10);
     OSInitSemaphore(&lbl_80381C00, 10);
@@ -94,7 +94,7 @@ int fn_801CB3D0(const char *pName, int unused, int *pHandle)
         if (*pName == '\\') {
             *pOut = '/';
         } else {
-            *pOut = fn_801C1F54(*pName);
+            *pOut = toupper(*pName);
         }
     }
     *pOut = 0;

@@ -31,7 +31,7 @@ void *fn_801C1F94();
 void *fn_801C1FBC();
 void fn_801F7B04(void);
 void fn_802523A4(float (*pMtx)[4], int type);
-void fn_801CED3C(GlibState_801CE1F8 *pMode);
+void GlibRenderBegin(GlibState_801CE1F8 *pMode);
 void TMRenderBeginFrame(void);
 void TMRenderEndFrame(void);
 extern unsigned char lbl_80383DA0[];
@@ -215,7 +215,7 @@ void fn_801CE720(void)
         GXGetFifoPtrs(GXGetCPUFifo(), &a, &b);
         GXEnableBreakPt(b);
     }
-    fn_801CED3C(&lbl_803E9224);
+    GlibRenderBegin(&lbl_803E9224);
     TMRenderBeginFrame();
 }
 

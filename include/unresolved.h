@@ -9,6 +9,6 @@
 void *fn_801C2030(void *dst, const void *src, Uint32 n);
 
 /* Returns a global mode value (0 initially). */
-Int32 fn_801CE1E8(void);
+Int32 GlibGetTvMode(void);
 
 #endif

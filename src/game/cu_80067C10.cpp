@@ -11,7 +11,7 @@ typedef unsigned int (*Fn_803EA674)(int);
 extern "C" {
 void fn_8006CE84(Record_80067CA8 *pRecord);
 void fn_800D70CC(Record_80067CA8 *pRecord);
-int fn_801D34D0(void *pDest, int size, int value, int width);
+int MemFill(void *pDest, int size, int value, int width);
 void fn_802384C4(int handle);
 void *fn_8023850C(int handle);
 void fn_80238570(int handle, int unknown);
@@ -65,7 +65,7 @@ extern "C" void fn_80067D4C(int type, Vector_80039F5C *pPos)
 {
     Record_80067CA8 *p = fn_80067CA8();
 
-    fn_801D34D0(p, sizeof(*p), 0, 4);
+    MemFill(p, sizeof(*p), 0, 4);
     p->mType = type;
     if (pPos) {
         p->mPos.mX = pPos->mX;
@@ -79,7 +79,7 @@ extern "C" void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c
 {
     Record_80067CA8 *p = fn_80067CA8();
 
-    fn_801D34D0(p, sizeof(*p), 0, 4);
+    MemFill(p, sizeof(*p), 0, 4);
     p->mType = type;
     p->mUnknown10.mValue = a;
     p->mUnknown14 = b;
@@ -96,7 +96,7 @@ extern "C" void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int 
 {
     Record_80067CA8 *p = fn_80067CA8();
 
-    fn_801D34D0(p, sizeof(*p), 0, 4);
+    MemFill(p, sizeof(*p), 0, 4);
     p->mType = type;
     p->mUnknown0 = id;
     p->mUnknown10.mValue = a;

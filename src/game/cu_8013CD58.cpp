@@ -85,10 +85,10 @@ void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
 void fn_8017CFB4(int a);
-void fn_801C3A3C(float aspect);
-int fn_801C370C(int *pValue, int *pVel, int target, int a, int b);
-int fn_801C384C(float *pValue, float *pVel, float target, float a, float b);
-void fn_801C3990(Camera_8013D1C0 *pCamera, float a, float b);
+void CamSetDefaultAspect(float aspect);
+int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
+int CamLerp(float *pValue, float *pVel, float target, float a, float b);
+void CamSetFieldOfView(Camera_8013D1C0 *pCamera, float a, float b);
 int fn_801CEB40(void);
 int fn_801CEB4C(void);
 float fn_801CFB74(float x);
@@ -219,20 +219,20 @@ extern "C" void fn_8013CF98(void)
 
     if (a == 0xFFFF && b == 0xFFFF) {
         if (fn_8007F828(6) == 0) {
-            fn_801C3A3C(4.0f / 3.0f);
+            CamSetDefaultAspect(4.0f / 3.0f);
         } else {
-            fn_801C3A3C(16.0f / 9.0f);
+            CamSetDefaultAspect(16.0f / 9.0f);
         }
     } else if (b == 0xFFFF) {
         if (a == 0 && fn_8007F828(6) == 0) {
-            fn_801C3A3C(4.0f / 3.0f);
+            CamSetDefaultAspect(4.0f / 3.0f);
         } else {
-            fn_801C3A3C(16.0f / 9.0f);
+            CamSetDefaultAspect(16.0f / 9.0f);
         }
     } else if (a == 1 || b == 1) {
-        fn_801C3A3C(16.0f / 9.0f);
+        CamSetDefaultAspect(16.0f / 9.0f);
     } else {
-        fn_801C3A3C(4.0f / 3.0f);
+        CamSetDefaultAspect(4.0f / 3.0f);
     }
 }
 
@@ -683,10 +683,10 @@ extern "C" void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth)
 
     if (!smooth
         || (pState->mUnknown18 != pState->mUnknown1C
-            && fn_801C384C(&pState->mUnknown18, &pState->mUnknown20, pState->mUnknown1C, argA, argB))) {
+            && CamLerp(&pState->mUnknown18, &pState->mUnknown20, pState->mUnknown1C, argA, argB))) {
         pState->mUnknown18 = pState->mUnknown1C;
     }
-    fn_801C3990(pCamera, pState->mUnknown18 > 2796202.0f ? 2796202.0f : pState->mUnknown18, pCamera->mUnknown24);
+    CamSetFieldOfView(pCamera, pState->mUnknown18 > 2796202.0f ? 2796202.0f : pState->mUnknown18, pCamera->mUnknown24);
 }
 
 extern "C" void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t)
@@ -707,9 +707,9 @@ extern "C" void fn_8013E1E4(Camera_8013D1C0 *pCamera, int *pAngles, int smooth)
     pAngles[1] &= 0xffffff;
     pAngles[2] &= 0xffffff;
     if (smooth) {
-        fn_801C370C(&pCamera->mUnknown14, &pCamera->mUnknown50, pAngles[0], pCamera->mUnknown74, pCamera->mUnknown80);
-        fn_801C370C(&pCamera->mUnknown18, &pCamera->mUnknown54, pAngles[1], pCamera->mUnknown78, pCamera->mUnknown84);
-        fn_801C370C(&pCamera->mUnknown1C, &pCamera->mUnknown58, pAngles[2], pCamera->mUnknown7C, pCamera->mUnknown88);
+        CamRLerp(&pCamera->mUnknown14, &pCamera->mUnknown50, pAngles[0], pCamera->mUnknown74, pCamera->mUnknown80);
+        CamRLerp(&pCamera->mUnknown18, &pCamera->mUnknown54, pAngles[1], pCamera->mUnknown78, pCamera->mUnknown84);
+        CamRLerp(&pCamera->mUnknown1C, &pCamera->mUnknown58, pAngles[2], pCamera->mUnknown7C, pCamera->mUnknown88);
     } else {
         pCamera->mUnknown14 = pAngles[0];
         pCamera->mUnknown18 = pAngles[1];

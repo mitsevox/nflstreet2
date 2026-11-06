@@ -27,8 +27,8 @@ void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);
 float fn_801CFB74(float x);
 float fn_801CFDB0(float x);
 int fn_801CFE40(float y, float x);
-float fn_801CFF54(float x);
-float fn_801CFFA0(float x);
+float MathInvSqrt(float x);
+float MathInverse(float x);
 float QuatInvLength(Quat_t *q);
 void QuatScale(Quat_t *pOut, Quat_t *q, float scale);
 
@@ -45,7 +45,7 @@ float QuatLength(Quat_t *q)
 
 float QuatInvLength(Quat_t *q)
 {
-    return fn_801CFF54(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
+    return MathInvSqrt(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
 void QuatNormalize(Quat_t *pOut, Quat_t *q)
@@ -237,7 +237,7 @@ void QuatToEuler(QuatEulerAngles_t *pOut, float *pRot)
     float r;
 
     if (!((float)fabs(cosY) <= 1e-07f)) {
-        r = fn_801CFFA0(cosY);
+        r = MathInverse(cosY);
         r = r + r;
         sinX = (y * z + w * x) * r;
         cosX = (0.5f - xx - yy) * r;
@@ -272,7 +272,7 @@ void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_t *q)
     float r;
 
     if (!((float)fabs(cosZ) <= 1e-07f)) {
-        r = fn_801CFFA0(cosZ);
+        r = MathInverse(cosZ);
         r = r + r;
         sinX = (w * x - y * z) * r;
         cosX = (0.5f - xx - zz) * r;

@@ -95,7 +95,7 @@ void fn_8015A0D0(int);
 void fn_800B8344(void);
 int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
-int fn_801CFFD0(int, int);
+int MathAngleDiff(int, int);
 unsigned char fn_80135F14(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int fn_80177F70(void);
 void fn_800C146C(Point_80167910 *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
@@ -447,7 +447,7 @@ int fn_80135200(Object_80039F5C *player) {
                     minimum = sum;
                 } else if (sum == minimum) {
                     int base = player->mUnknown2913 == 1 ? 0x800000 : 0;
-                    if (fn_801CFFD0(base, state->mUnknown10) > fn_801CFFD0(base, angle))
+                    if (MathAngleDiff(base, state->mUnknown10) > MathAngleDiff(base, angle))
                         state->mUnknown10 = angle;
                 }
             }
@@ -596,7 +596,7 @@ int fn_80135200(Object_80039F5C *player) {
     if (fn_801344A0()) {
         Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 0.5f) {
-            if (fn_801CFFD0(state->mUnknown8, 0x400000) <= 0xE38E2)
+            if (MathAngleDiff(state->mUnknown8, 0x400000) <= 0xE38E2)
                 state->mUnknown3 = 0;
             else {
                 unsigned int angle = state->mUnknown8 & 0xFFFFFF;
@@ -674,7 +674,7 @@ unsigned char fn_80135F14(Object_80039F5C *p, Object_80039F5C *other, int *count
             Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
                 (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f ||
-                 fn_801CFFD0(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
+                 MathAngleDiff(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
                 *count = 0;
                 result = 2;
             }

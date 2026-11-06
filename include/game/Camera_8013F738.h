@@ -18,7 +18,7 @@ struct Camera_8013F738 {
     float mUnknown68;
     float mUnknown6C;
     float mUnknown70;
-    /* +0x5C..+0x88 as the kind 0 and 4 cameras use them (fn_801C3CE8 and
+    /* +0x5C..+0x88 as the kind 0 and 4 cameras use them (CamFreeFloatAdd and
        fn_8013C120 store floats to +0x5C..+0x70 and words to +0x74..+0x88);
        kind 1 lays this area out differently (CameraType1_802F4884). */
     int mUnknown74;
@@ -77,7 +77,7 @@ struct Camera_8013F738 {
     int mUnknownF5C;
 };
 
-/* The leading part as fn_8013C7C4 resets it and fn_801C3AD8 sets it up
+/* The leading part as fn_8013C7C4 resets it and CamFocusAdd sets it up
    for kind 1 (type descriptor 0x802F4884, 0x94 bytes): floats at
    +0x64..+0x80 and words at +0x84..+0x90. */
 struct CameraType1_802F4884 {
@@ -100,7 +100,7 @@ struct CameraType1_802F4884 {
     int mUnknown90;
 };
 
-/* Argument of fn_801C3610 when it creates a camera; fn_8013C340 clears it. */
+/* Argument of CamCreate when it creates a camera; fn_8013C340 clears it. */
 struct Desc_8013C340 {
     int mUnknown00;
     int mUnknown04;

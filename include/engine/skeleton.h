@@ -1,39 +1,39 @@
-#ifndef ENGINE_CU_801C4960_H
-#define ENGINE_CU_801C4960_H
+#ifndef ENGINE_SKELETON_H
+#define ENGINE_SKELETON_H
 
 /* Hierarchy node: child count, node id, joint index, parent, child pointers. */
-typedef struct SkelNode_801C4960 {
+typedef struct SkelNode_t {
     unsigned char mNumChildren;
     unsigned char mId;
     unsigned char mJoint;
-    struct SkelNode_801C4960 *mpParent;
-    struct SkelNode_801C4960 *mpChildren[1];
-} SkelNode_801C4960;
+    struct SkelNode_t *mpParent;
+    struct SkelNode_t *mpChildren[1];
+} SkelNode_t;
 
 /* 20-byte joint record: its hierarchy node (file-relative until relocated) and a 16-byte name. */
-typedef struct SkelJoint_801C4960 {
-    SkelNode_801C4960 *mpNode;
+typedef struct SkelJoint_t {
+    SkelNode_t *mpNode;
     char mName[16];
-} SkelJoint_801C4960;
+} SkelJoint_t;
 
-typedef struct SkelEuler_801C4960 {
+typedef struct SkelEuler_t {
     short x;
     short y;
     short z;
-} SkelEuler_801C4960;
+} SkelEuler_t;
 
 /* Skeleton file: header, per-joint positions and rest rotations. */
-typedef struct Skel_801C4960 {
+typedef struct Skel_t {
     int mUnk0;
     unsigned short mFlags;
     unsigned short mNumJoints;
-    SkelNode_801C4960 *mpRoot;
-    SkelJoint_801C4960 *mpJoints;
+    SkelNode_t *mpRoot;
+    SkelJoint_t *mpJoints;
     float mPos[64][4];
-    SkelEuler_801C4960 mRest[1];
-} Skel_801C4960;
+    SkelEuler_t mRest[1];
+} Skel_t;
 
-typedef struct SkelPose_801C4960 {
+typedef struct SkelPose_t {
     int mUnk0[2];
     float mPos[4];
     int mUnk18[2];
@@ -41,13 +41,13 @@ typedef struct SkelPose_801C4960 {
     int mUnk24[3];
     void *mpLocal;  /* local rotations: Euler triples or quaternions */
     void *mpOutput; /* quaternions or 4x4 matrices */
-} SkelPose_801C4960;
+} SkelPose_t;
 
 /* Running rotation and position while walking the hierarchy. */
-typedef struct SkelXform_801C4960 {
+typedef struct SkelXform_t {
     float mQuat[4];
     float mPos[4];
     unsigned char mUnknown20[416];
-} SkelXform_801C4960;
+} SkelXform_t;
 
 #endif

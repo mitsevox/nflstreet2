@@ -43,7 +43,7 @@ int fn_800AC2C0(int team);
 signed char fn_8009AF00(int team, signed char value);
 int fn_801163B4(Object_80039F5C *p);
 void fn_8011569C(Object_80039F5C *p);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_8009E180(Object_80039F5C *p);
 float fn_8016B938(void);
@@ -121,8 +121,8 @@ int fn_80116C34(Object_80039F5C *p)
             fn_8011569C(p);
             if (state->mUnknown12 == 1.0f) {
                 state->mUnknown4 = state->mUnknown8;
-                if (fn_801CFFD0(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
-                    fn_801CFFD0(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
+                if (MathAngleDiff(p->mMotion.mFacing, state->mUnknown8) <= 0xE38E2 &&
+                    MathAngleDiff(p->mMotion.mUnknown32, state->mUnknown8) <= 0xE38E2) {
                     state->mUnknown21 = 1;
                 }
             } else {
@@ -178,7 +178,7 @@ int fn_80116C34(Object_80039F5C *p)
             p->mUnknown512.mUnknown4 = state->mUnknown8;
             p->mUnknown512.mUnknown8 = state->mUnknown4;
             p->mUnknown512.mUnknown0 = state->mUnknown12;
-        } else if (fn_801CFFD0(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
+        } else if (MathAngleDiff(p->mMotion.mFacing, state->mUnknown4) > 0x71C71) {
             p->mUnknown512.mUnknown14 = 3;
             p->mUnknown512.mUnknown4 = (state->mUnknown4 + 0x800000) & 0xFFFFFF;
             p->mUnknown512.mUnknown8 = state->mUnknown4;
@@ -292,10 +292,10 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
                     if (!(distance <= lbl_803EAFFC)) {
                         if (fn_8009EFDC(side) == -1) {
                             out->mX = carrier->mMotion.mPos.mX - 1.5f;
-                            if (first && fn_801CFFD0(carrier->mMotion.mUnknown32, 0x638E39) <= 0x1C71C6) state->mUnknown12 = 0.8f;
+                            if (first && MathAngleDiff(carrier->mMotion.mUnknown32, 0x638E39) <= 0x1C71C6) state->mUnknown12 = 0.8f;
                         } else {
                             out->mX = carrier->mMotion.mPos.mX + 1.5f;
-                            if (first && fn_801CFFD0(carrier->mMotion.mUnknown32, 0x1C71C7) <= 0x1C71C6) state->mUnknown12 = 0.8f;
+                            if (first && MathAngleDiff(carrier->mMotion.mUnknown32, 0x1C71C7) <= 0x1C71C6) state->mUnknown12 = 0.8f;
                         }
                         result = 1;
                     }

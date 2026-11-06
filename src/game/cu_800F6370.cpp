@@ -31,7 +31,7 @@ int fn_8011F1CC(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_8011F2F8(void);
 int fn_801783AC(int bit);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 extern float lbl_803ECB08;
 }
 
@@ -99,13 +99,13 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                 } else {
                     fn_800F4F08(p, pRecord);
                 }
-                if (fn_801CFFD0(pRecord->mUnknown20, p->mMotion.mFacing) <= 0x155554) {
+                if (MathAngleDiff(pRecord->mUnknown20, p->mMotion.mFacing) <= 0x155554) {
                     p->mUnknown512.mUnknown15 = 1;
                 }
                 direction = fn_800F5CBC(p, pRecord);
                 if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.05f
-                    && fn_801CFFD0(p->mMotion.mUnknown32, p->mMotion.mFacing) > 0x355555
-                    && fn_801CFFD0(p->mMotion.mUnknown32, pRecord->mUnknown20) > 0x400000) {
+                    && MathAngleDiff(p->mMotion.mUnknown32, p->mMotion.mFacing) > 0x355555
+                    && MathAngleDiff(p->mMotion.mUnknown32, pRecord->mUnknown20) > 0x400000) {
                     p->mUnknown512.mUnknown14 = 1;
                     p->mUnknown512.mUnknown8 = pRecord->mUnknown20;
                     p->mUnknown512.mUnknown0 = 0.0f;

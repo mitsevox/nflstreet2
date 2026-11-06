@@ -1,9 +1,9 @@
 #include "engine/viewport.h"
 #include "game/fn_801EF390.h"
 
-/* 228-byte object allocated through fn_801DCF0C by fn_80030F38; a single
+/* 228-byte object allocated through ObjNewType_ by ReplayCursorCreate; a single
    instance is kept in sObject. */
-struct Object_80030D50 {
+struct ReplayCursor_t {
     int mUnknown0;
     float mUnknown4[3];
     int mUnknown16;
@@ -16,18 +16,18 @@ struct Object_80030D50 {
 
 extern "C" {
 int fn_800C47C4(void);
-int fn_801C657C(void);
+int ConGetCurrentContext(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(void *a);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80030D50 *, int *),
-                void (*pRelease)(Object_80030D50 *));
-int fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80030D50 *));
-int fn_801DD268(int handle, int a, int b, int *pDesc);
-void fn_801DD320(int handle, Object_80030D50 *pObject);
-void fn_801DD3AC(int handle, Object_80030D50 *pObject, int b);
+int ObjNewType_(int a, int size, int c, void (*pInit)(ReplayCursor_t *, int *),
+                void (*pRelease)(ReplayCursor_t *));
+int ObjDelType(int a);
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(ReplayCursor_t *));
+int ObjNewInList(int handle, int a, int b, int *pDesc);
+void ObjRemoveFromList(int handle, ReplayCursor_t *pObject);
+void ObjSetPriority(int handle, ReplayCursor_t *pObject, int b);
 void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
@@ -40,10 +40,10 @@ void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
 }
 
-static Object_80030D50 *sObject = 0;
+static ReplayCursor_t *sObject = 0;
 
 extern "C" {
-void fn_80030D50(Object_80030D50 *pObject, int *pArgs)
+void ReplayCursorObjInit(ReplayCursor_t *pObject, int *pArgs)
 {
     pObject->mUnknown4[0] = 0.0f;
     pObject->mUnknown4[1] = 0.0f;
@@ -59,7 +59,7 @@ void fn_80030D50(Object_80030D50 *pObject, int *pArgs)
     fn_802353D8(pObject->mUnknown28, 0x400008);
 }
 
-void fn_80030DFC(Object_80030D50 *pObject)
+void ReplayCursorObjRelease(ReplayCursor_t *pObject)
 {
     fn_802355E4(pObject->mUnknown28);
     if (pObject->mUnknown220 != 0) {
@@ -69,7 +69,7 @@ void fn_80030DFC(Object_80030D50 *pObject)
     }
 }
 
-int fn_80030E58(Object_80030D50 *pObject)
+int ReplayCursorObjDraw(ReplayCursor_t *pObject)
 {
     float v[3];
 
@@ -80,41 +80,41 @@ int fn_80030E58(Object_80030D50 *pObject)
         v[1] = pObject->mUnknown4[1];
         v[2] = 0.0f;
         fn_801D0C58(v);
-        fn_80235740(pObject->mUnknown28, fn_801C657C());
+        fn_80235740(pObject->mUnknown28, ConGetCurrentContext());
         fn_801D0470(VptGetMatrixStack());
         fn_801D0544();
-        fn_80235C90(pObject->mUnknown28, fn_801C657C(), 0.25f, 0.25f, 0.75f, 1.0f);
+        fn_80235C90(pObject->mUnknown28, ConGetCurrentContext(), 0.25f, 0.25f, 0.75f, 1.0f);
         TMRenderBindTexture(0, 0, 0);
-        fn_80235764(pObject->mUnknown28, fn_801C657C());
+        fn_80235764(pObject->mUnknown28, ConGetCurrentContext());
     }
     return 0;
 }
 
-void fn_80030F38(int handle)
+void ReplayCursorCreate(int handle)
 {
     int desc[2];
 
-    fn_801DCF0C(10, sizeof(Object_80030D50), 1, fn_80030D50, fn_80030DFC);
-    fn_801DD0C8(handle, 10, 0, fn_80030E58);
+    ObjNewType_(10, sizeof(ReplayCursor_t), 1, ReplayCursorObjInit, ReplayCursorObjRelease);
+    ObjSetListObjFunc(handle, 10, 0, ReplayCursorObjDraw);
     desc[0] = fn_800C47C4();
     desc[1] = 7;
-    sObject = (Object_80030D50 *)fn_801DD268(handle, 10, 0, desc);
-    fn_801DD3AC(handle, sObject, 3);
+    sObject = (ReplayCursor_t *)ObjNewInList(handle, 10, 0, desc);
+    ObjSetPriority(handle, sObject, 3);
 }
 
-void fn_80030FD8(int handle)
+void ReplayCursorDestroy(int handle)
 {
     if (sObject != 0) {
-        fn_801DD320(handle, sObject);
+        ObjRemoveFromList(handle, sObject);
         VptTrashObject((int)sObject);
     }
     VptFlushObjectTrashSync();
-    fn_801DCF8C(10);
+    ObjDelType(10);
 }
 
-void fn_80031018(const float *pValue, int)
+void ReplayCursorSetPos(const float *pValue, int)
 {
-    Object_80030D50 *pObject = sObject;
+    ReplayCursor_t *pObject = sObject;
 
     if (pObject == 0) {
         return;
@@ -124,9 +124,9 @@ void fn_80031018(const float *pValue, int)
     pObject->mUnknown4[2] = pValue[2];
 }
 
-void fn_80031040(unsigned char value)
+void ReplayCursorSetVisible(unsigned char value)
 {
-    Object_80030D50 *pObject = sObject;
+    ReplayCursor_t *pObject = sObject;
 
     if (pObject == 0) {
         return;
@@ -134,9 +134,9 @@ void fn_80031040(unsigned char value)
     pObject->mUnknown224 = value;
 }
 
-int fn_80031054(float *pValue)
+int ReplayCursorGetPos(float *pValue)
 {
-    Object_80030D50 *pObject = sObject;
+    ReplayCursor_t *pObject = sObject;
     int result = 0;
 
     if (pObject->mUnknown224 != 0) {

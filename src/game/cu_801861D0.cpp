@@ -24,7 +24,7 @@ extern "C" {
 int fn_8006C854(int index, Vector_80039F5C *pPos);
 int fn_801800D0(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-int fn_801C6458(int a, int b);
+int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 }
 
@@ -58,7 +58,7 @@ void fn_8018623C(int index, char *pText)
 
 void fn_80186270(int a, char *pText)
 {
-    fn_8018623C(fn_801C6458(a, 0), pText);
+    fn_8018623C(ConGetChannelInfo(a, 0), pText);
 }
 
 int fn_801862A8(int a)
@@ -73,7 +73,7 @@ int fn_801862E0(int a)
 
 int fn_801862E8(int a)
 {
-    return fn_801E195C(fn_801C6458(a, 0)) == 2;
+    return fn_801E195C(ConGetChannelInfo(a, 0)) == 2;
 }
 
 unsigned char fn_8018631C(void)

@@ -140,7 +140,7 @@ extern float lbl_803EAEF8;
 Point_8017886C fn_80177FFC(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 extern float lbl_803EAF08;
 extern float lbl_803EAF0C;
@@ -259,7 +259,7 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
     int facing = p->mMotion.mFacing & 0xFFFFFF;
 
     if (x > fn_80178A08() - lbl_803EAF0C) {
-        if (fn_801CFFD0(facing, 0) <= 0x555554) {
+        if (MathAngleDiff(facing, 0) <= 0x555554) {
             if (facing <= 0x7FFFFF) {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             } else {
@@ -267,7 +267,7 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
             }
         }
     } else if (x < lbl_803EAF0C - fn_80178A08()) {
-        if (fn_801CFFD0(facing, 0x800000) <= 0x555554) {
+        if (MathAngleDiff(facing, 0x800000) <= 0x555554) {
             if (facing <= 0x7FFFFF) {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);
             } else {
@@ -275,16 +275,16 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
             }
         }
     } else if (y > fn_80178A44() - lbl_803EAF0C) {
-        if (fn_801CFFD0(facing, 0x400000) <= 0x555554) {
-            if (fn_801CFFD0(facing, 0) <= 0x3FFFFF) {
+        if (MathAngleDiff(facing, 0x400000) <= 0x555554) {
+            if (MathAngleDiff(facing, 0) <= 0x3FFFFF) {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);
             } else {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             }
         }
     } else if (y < lbl_803EAF0C - fn_80178A44()) {
-        if (fn_801CFFD0(facing, 0xC00000) <= 0x555554) {
-            if (fn_801CFFD0(facing, 0) <= 0x3FFFFF) {
+        if (MathAngleDiff(facing, 0xC00000) <= 0x555554) {
+            if (MathAngleDiff(facing, 0) <= 0x3FFFFF) {
                 turn = (int)(lbl_803EAF08 * 46603.38f);
             } else {
                 turn = -(int)(lbl_803EAF08 * 46603.38f);

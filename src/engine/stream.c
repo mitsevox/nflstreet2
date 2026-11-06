@@ -82,8 +82,8 @@ extern int fn_801C9B18(int handle, char *pBuffer, int size, int priority,
 extern int fn_801C9C88(int readHandle, int priority);
 extern void fn_801C9D78(void);
 extern void fn_801C9DA0(void);
-extern void fn_801CAF24(void);
-extern int fn_801CB120(void);
+extern void FileDebugProcess(void);
+extern int FileHostCheckActive(void);
 
 extern Lock_801F8014 lbl_8039B3D8;
 
@@ -575,8 +575,8 @@ void fn_801F6B84(StreamTap_801F5DA4 *h)
     if (fn_801F5DA4(h, &s, &t) == 0) {
         fn_801F7208(h);
         while (s->mState == 1) {
-            if (fn_801CB120()) {
-                fn_801CAF24();
+            if (FileHostCheckActive()) {
+                FileDebugProcess();
             }
         }
         s->mMagic = 0;

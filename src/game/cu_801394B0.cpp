@@ -58,7 +58,7 @@ int fn_801783AC(int bit);
 void fn_801783D0(int bit, int on);
 int fn_801787A0(void);
 int fn_801486A0(void);
-int fn_801CFFD0(int a, int b);
+int MathAngleDiff(int a, int b);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D08FC(int a);
@@ -789,7 +789,7 @@ int fn_8013AE1C(Object_80137ABC *pBall, Object_80039F5C *p, unsigned int type, i
     default:
         if (facing && (type == 0 || type == 7 || type == 5 || type == 1 || type == 3)) {
             fn_80227690(&delta, &pBall->mState.mPos, &p->mMotion.mPos);
-            if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF) {
+            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF) {
                 result = 1;
             }
         }

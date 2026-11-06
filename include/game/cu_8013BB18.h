@@ -8,7 +8,7 @@
 
 /* Camera type record. lbl_802DBD24 and the replay camera's lbl_802CC83C
    have this form; lbl_802DBD7C lists both, and fn_8008CCFC passes that
-   list to fn_801C34F8. */
+   list to CamInit. */
 struct Type_802DBD24 {
     void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
     void (*mUnknown04)(Camera_8013F738 *pCamera);
