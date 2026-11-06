@@ -115,7 +115,7 @@ static void fn_801DE04C(PartObj_801DE1E0 *pObj);
 static void fn_801DE114(PartObj_801DE1E0 *pObj);
 void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc);
 void fn_801DE794(PartObj_801DE1E0 *pObj);
-void fn_801DE968(PartObj_801DE1E0 *pObj, Texture_801C0928 *pTex);
+void fn_801DE968(PartObj_801DE1E0 *pObj, AnimTex_t *pTex);
 void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
 int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps);
 static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate);
@@ -538,7 +538,7 @@ void fn_801DE794(PartObj_801DE1E0 *pObj)
 static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
 {
     unsigned short i;
-    Texture_801C0928 *pTex;
+    AnimTex_t *pTex;
 
     if (pTemplate->mObj.mUnknown03F) {
         pObj->mMax = pTemplate->mObj.mUnknown0B4;
@@ -554,7 +554,7 @@ static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
     }
     fn_801DE564(pObj, pTemplate);
     fn_801DE794(pObj);
-    pTex = fn_801C0D8C(pTemplate->mObj.mUnknown28C);
+    pTex = AnimTexFind(pTemplate->mObj.mUnknown28C);
     if (pTex) {
         fn_801DE968(pObj, pTex);
     }
@@ -571,7 +571,7 @@ PartObj_801DE1E0 *fn_801DE918(Template_801DE1E0 *pTemplate)
     return pObj;
 }
 
-void fn_801DE968(PartObj_801DE1E0 *pObj, Texture_801C0928 *pTex)
+void fn_801DE968(PartObj_801DE1E0 *pObj, AnimTex_t *pTex)
 {
     pObj->mUnknown045 = 1;
     pObj->mpUnknown2AC = pTex;

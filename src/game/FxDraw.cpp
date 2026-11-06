@@ -2,6 +2,7 @@
    animated particle textures, and full-screen colour tints. */
 #include <dolphin/gx/GXPixel.h>
 #include "game/fn_801D2B7C.h"
+#include "engine/animTexLib.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
@@ -10,15 +11,8 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 
-struct FxTexFile_t {
-    void *mpUnknown0;
-    int mUnknown4;
-};
-
 extern "C" {
 int fn_800A34F8(int index);
-int fn_801C0BA8(FxTexFile_t *pEntry, int a);
-void fn_801C0CCC(int a);
 void fn_801D03D0(Mtx44 m);
 void fn_801D04C4(void);
 void fn_801D0508(void);
@@ -50,29 +44,29 @@ void FxParticleDrawEnd(void)
 {
 }
 
-void FxAnimTexLoadAll(FxTexFile_t *pEntries, int *pValues, void *pData)
+void FxAnimTexLoadAll(AnimTexFile_t *pEntries, AnimTex_t **pValues, void *pData)
 {
     unsigned char i;
 
     for (i = 0; i <= 7; i++) {
-        pEntries[i].mpUnknown0 = pData;
+        pEntries[i].mData = pData;
         if (fn_800A34F8(i)) {
-            void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pEntries[i].mpUnknown0, pEntries[i].mUnknown4), 4, 0);
+            void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pEntries[i].mData, pEntries[i].mIndex), 4, 0);
 
-            fn_801EF7BC(pEntries[i].mpUnknown0, pEntries[i].mUnknown4, pBuffer);
-            pValues[i] = fn_801C0BA8(&pEntries[i], 0);
+            fn_801EF7BC(pEntries[i].mData, pEntries[i].mIndex, pBuffer);
+            pValues[i] = AnimTexLoadResource(&pEntries[i], 0);
             fn_801D2BD0(pBuffer);
         }
     }
 }
 
-void FxAnimTexFreeAll(int *pValues)
+void FxAnimTexFreeAll(AnimTex_t **pValues)
 {
     unsigned char i;
 
     for (i = 0; i <= 7; i++) {
         if (fn_800A34F8(i)) {
-            fn_801C0CCC(pValues[i]);
+            AnimTexFree(pValues[i]);
         }
     }
 }
