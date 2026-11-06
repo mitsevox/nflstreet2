@@ -2017,6 +2017,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8023ECA4	72	__DBExceptionDestinationAux	name	OSReboot.c	-
 0x8023ECEC	16	__DBExceptionDestination	name	OSReboot.c	-
 0x8023ECFC	28	__DBIsExceptionMarked	name	OSReboot.c	-
+0x8023ED18	80	DBPrintf	name	OSReboot.c	-
 0x8023ED68	56	__DVDFSInit	name	OSReboot.c	-
 0x8023EDA0	756	DVDConvertPathToEntrynum	name	OSReboot.c	-
 0x8023F094	200	DVDOpen	name	OSReboot.c	-
