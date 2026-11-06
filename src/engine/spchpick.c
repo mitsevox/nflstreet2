@@ -386,7 +386,7 @@ void fn_801B08DC(unsigned char *p, Work_801B10AC *work)
         int n = work->mEntries[i].mUnknown9;
         unsigned char *values = work->mValues + work->mEntries[i].mUnknown8;
         while (n > 1) {
-            int j = fn_801B1C1C(n, -1);
+            int j = iSPCH_Rand(n, -1);
             unsigned char value = values[j];
             values[j] = values[n - 1];
             values[n - 1] = value;
@@ -438,7 +438,7 @@ int fn_801B0A18(unsigned char *p, Work_801B10AC *work, int limit)
 
 int fn_801B0B18(WorkEntry_801B0B18 *p)
 {
-    int value = fn_801B1C1C(p->mUnknown9, p->mUnknown4);
+    int value = iSPCH_Rand(p->mUnknown9, p->mUnknown4);
     p->mUnknownA = p->mUnknown8 + value;
     return 1;
 }
@@ -571,7 +571,7 @@ int fn_801B14B4(Item_801AE3F4 *p, int *values)
 
 int fn_801B15E4(unsigned char *p)
 {
-    return fn_801B1C1C(100, -1) < p[1];
+    return iSPCH_Rand(100, -1) < p[1];
 }
 
 void fn_801B192C(int value)
@@ -579,30 +579,31 @@ void fn_801B192C(int value)
     lbl_803ECEA8 = value;
 }
 
-unsigned int fn_801B1934(void)
+// Advance the shared six-word generator and return its leading word.
+unsigned int iSPCH_EACrandom(void)
 {
-    unsigned int old = lbl_802F477C[4];
-    unsigned int sum = old + lbl_802F477C[5];
-    unsigned int carry = sum < old || sum < lbl_802F477C[5];
-    lbl_802F477C[4] = sum;
-    old = lbl_802F477C[3];
+    unsigned int old = gSpchRandomState[4];
+    unsigned int sum = old + gSpchRandomState[5];
+    unsigned int carry = sum < old || sum < gSpchRandomState[5];
+    gSpchRandomState[4] = sum;
+    old = gSpchRandomState[3];
     sum += old + carry;
-    lbl_802F477C[3] = sum;
+    gSpchRandomState[3] = sum;
     carry = sum < old;
-    old = lbl_802F477C[2];
+    old = gSpchRandomState[2];
     sum += old + carry;
-    lbl_802F477C[2] = sum;
+    gSpchRandomState[2] = sum;
     carry = sum < old;
-    old = lbl_802F477C[1];
+    old = gSpchRandomState[1];
     sum += old + carry;
-    lbl_802F477C[1] = sum;
+    gSpchRandomState[1] = sum;
     carry = sum < old;
-    sum += lbl_802F477C[0] + carry;
-    lbl_802F477C[0] = sum;
+    sum += gSpchRandomState[0] + carry;
+    gSpchRandomState[0] = sum;
     for (int i = 5; i >= 0; i--) {
-        if (++lbl_802F477C[i]) break;
+        if (++gSpchRandomState[i]) break;
     }
-    return lbl_802F477C[0];
+    return gSpchRandomState[0];
 }
 
 }

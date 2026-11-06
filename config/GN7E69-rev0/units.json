@@ -1656,6 +1656,30 @@
     "_dtors": {
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
+    },
+    "gSpchRandomState": {
+      "address": "0x802F477C",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x802F477C; original-owned provider, no added storage or body."
+    },
+    "_SpchRandom_aHistory": {
+      "address": "0x8037E794",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x8037E794; original-owned provider, no added storage or body."
+    },
+    "_SpchRandom_iHistoryIndex": {
+      "address": "0x803EBB20",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x803EBB20; original-owned provider, no added storage or body."
+    },
+    "iSPCH_EACrandom": {
+      "address": "0x801B1934",
+      "evidence": "evidence.tsv named function/data extent and descriptive name row at 0x801B1934; original-owned provider, no added storage or body."
+    },
+    "iSPCH_Rand": {
+      "address": "0x801B1C1C",
+      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1C1C; original-owned comparison body called by other speech files."
+    },
+    "iSPCH_InitRandom": {
+      "address": "0x801B1B70",
+      "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
     }
   },
   "units": [
@@ -14334,6 +14358,19 @@
           "end": "0x802B1C58"
         }
       ]
+    },
+    {
+      "source": "src/engine/spchrand.c",
+      "profile": "speech_cxx",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B1A3C",
+          "end": "0x801B1A90"
+        }
+      ],
+      "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
     }
   ]
 }

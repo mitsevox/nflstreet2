@@ -1,40 +1,35 @@
-/* Speech random numbers (spchrand.c): the seeded random generator the picker uses. */
+/* Seeds speech choices and keeps recent choices to limit repeats within each category. */
 
 #include "engine/spchlib.h"
 
 extern "C" {
 
-unsigned int fn_801B1A3C(unsigned int seed)
+// The six state words advance together from the supplied seed.
+void iSPCH_EACseedrandom(unsigned int seed)
 {
-    seed += 0xF22D0E56U;
-    unsigned int first = seed;
-    lbl_802F477C[0] = seed;
-    seed += 0x96041893U;
-    lbl_802F477C[1] = seed;
-    seed += 0x3DF3B646U;
-    lbl_802F477C[2] = seed;
-    seed += 0x40DDE76DU;
-    lbl_802F477C[3] = seed;
-    seed += 0x97327AE1U;
-    lbl_802F477C[4] = seed;
-    seed += 0xD1A9FBE7U;
-    lbl_802F477C[5] = seed;
-    return first;
+    gSpchRandomState[0] = seed + 0xF22D0E56U;
+    gSpchRandomState[1] = gSpchRandomState[0] + 0x96041893U;
+    gSpchRandomState[2] = gSpchRandomState[1] + 0x3DF3B646U;
+    gSpchRandomState[3] = gSpchRandomState[2] + 0x40DDE76DU;
+    gSpchRandomState[4] = gSpchRandomState[3] + 0x97327AE1U;
+    gSpchRandomState[5] = gSpchRandomState[4] + 0xD1A9FBE7U;
 }
 
-int fn_801B1A90(int value, int count, int id)
+#if defined(DECOMP_COMPARE)
+// Recency counts entries from this category, starting with the newest choice.
+int iSPCH_FindRandInQueue(int value, int count, int id)
 {
     int result = -1;
     if (count > 32) count = 32;
-    int index = lbl_803EBB20;
+    int index = _SpchRandom_iHistoryIndex;
     int matched = 0;
     int scanned = 0;
     int done = 0;
     do {
         if (matched < count) {
-            if (lbl_8037E794[index][1] == id) {
+            if (_SpchRandom_aHistory[index][1] == id) {
                 matched++;
-                if (lbl_8037E794[index][0] == value) {
+                if (_SpchRandom_aHistory[index][0] == value) {
                     done = 1;
                     result = matched - 1;
                 }
@@ -48,41 +43,44 @@ int fn_801B1A90(int value, int count, int id)
     return result;
 }
 
-void fn_801B1B34(int value, int id)
+// Advance before storing so the index always identifies the newest entry.
+void iSPCH_AddRandToQueue(int value, int id)
 {
-    if (++lbl_803EBB20 > 31) lbl_803EBB20 = 0;
-    lbl_8037E794[lbl_803EBB20][0] = value;
-    lbl_8037E794[lbl_803EBB20][1] = id;
+    if (++_SpchRandom_iHistoryIndex > 31) _SpchRandom_iHistoryIndex = 0;
+    _SpchRandom_aHistory[_SpchRandom_iHistoryIndex][0] = value;
+    _SpchRandom_aHistory[_SpchRandom_iHistoryIndex][1] = id;
 }
 
-void fn_801B1B70(int seed)
+// Empty the history, expand the seed, and advance the generator without recording choices.
+void iSPCH_InitRandom(int seed)
 {
     for (int i = 0; i <= 31; i++) {
-        lbl_8037E794[i][1] = 65535;
-        lbl_8037E794[i][0] = 65535;
+        _SpchRandom_aHistory[i][1] = 65535;
+        _SpchRandom_aHistory[i][0] = 65535;
     }
     seed += seed << 16;
-    lbl_803EBB20 = 0;
-    fn_801B1A3C(seed);
+    _SpchRandom_iHistoryIndex = 0;
+    iSPCH_EACseedrandom(seed);
     int count = 32 - seed % 32;
     for (int i = 0; i < count; i++) {
-        fn_801B1C1C(10, -1);
+        iSPCH_Rand(10, -1);
     }
 }
 
-int fn_801B1C1C(int count, int id)
+// Limit repeat retries; record the preferred candidate but return the last draw.
+int iSPCH_Rand(int count, int id)
 {
     int tries = 0;
     int done = 0;
     int best = -1;
     int limit = count / 2;
     if (limit > 10) limit = 10;
-    int value = ((fn_801B1934() >> 16) * count) >> 16;
+    int value = ((iSPCH_EACrandom() >> 16) * count) >> 16;
     int selected = value;
     if (id != -1) {
         id = (unsigned short)id;
         do {
-            int age = fn_801B1A90(value, limit, id);
+            int age = iSPCH_FindRandInQueue(value, limit, id);
             if (age == -1) {
                 selected = value;
                 done = 1;
@@ -91,11 +89,12 @@ int fn_801B1C1C(int count, int id)
                 selected = value;
             }
             if (++tries > 31) done = 1;
-            if (!done) value = ((fn_801B1934() >> 16) * count) >> 16;
+            if (!done) value = ((iSPCH_EACrandom() >> 16) * count) >> 16;
         } while (!done);
-        fn_801B1B34(selected, id);
+        iSPCH_AddRandToQueue(selected, id);
     }
     return value;
 }
+#endif
 
 }

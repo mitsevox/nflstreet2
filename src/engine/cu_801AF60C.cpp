@@ -32,7 +32,7 @@ int fn_801AF650(int a, int b, int c)
         lbl_8037E0A0.mUnknown0 = a;
         lbl_803EBB10 = fn_801AEC58;
         lbl_803ECEA0 = b;
-        fn_801B1B70(b);
+        iSPCH_InitRandom(b);
         fn_801B118C();
         fn_801B192C(0);
         for (i = 0; i <= 7; i++) {
