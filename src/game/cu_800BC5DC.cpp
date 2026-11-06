@@ -72,10 +72,10 @@ void fn_800C432C(void);
 void fn_800CC448(void);
 void fn_800D4164(int side, float time, int a);
 unsigned int fn_801568F0(void);
-void fn_80173404(void);
+void ClockRuleNextPeriod(void);
 void fn_801790D0(int team, float a, float b);
-void fn_8017D5D8(void);
-void fn_8017DC08(void);
+void HudStart(void);
+void HudPost3AOff(void);
 
 extern unsigned short lbl_802D9B14[];
 extern unsigned char lbl_803EAB94;
@@ -94,7 +94,7 @@ void Class_80297BF8::vfn_03()
     lbl_803EC98C->mUnknown32 = 0;
     practice = fn_801568F0() <= 4;
     fn_800BA674();
-    fn_80173404();
+    ClockRuleNextPeriod();
     if (fn_800C1E40() != 0) {
         fn_8009D964(2, 0);
         PlayerObjSetDrawReady(1);
@@ -138,7 +138,7 @@ void Class_80297BF8::vfn_03()
     fn_800B2670(0);
     fn_800C432C();
     if (fn_800C1E40() == 0) {
-        fn_8017D5D8();
+        HudStart();
     }
     if (ChallengeIsActive() != 0) {
         if (ChalGetCurrent()->mUnknown1C3 != 0) {
@@ -150,7 +150,7 @@ void Class_80297BF8::vfn_03()
             fn_800A7B5C();
         }
     }
-    fn_8017DC08();
+    HudPost3AOff();
     vfn_06();
     fn_801790D0(0, 0.0f, 0.0f);
     fn_801790D0(1, 0.0f, 0.0f);

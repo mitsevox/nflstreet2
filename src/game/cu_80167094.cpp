@@ -20,7 +20,7 @@ int fn_8016631C(Record_80167094 *, int, void *, void *, void *, void *, int);
 int fn_80165770(Object_80167160 *, State_80167094 *, Record_80167094 *);
 Team_80167A8C *fn_80168EBC(int);
 void fn_8018A8C8(int);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 int fn_801486A0(void);
 int fn_800BA6F8(void);
 void PlyrIconQueueAdd(float, float, void *, unsigned char);
@@ -89,7 +89,7 @@ void fn_801673A0(int code, float x, float y, float, float)
 {
     fn_8018A8C8(5);
     int flag = 1;
-    if ((!fn_8017F60C() && fn_801486A0() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
+    if ((!GameModeTypeIsSpecial() && fn_801486A0() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
         flag = 0;
     }
     switch ((unsigned int)code) {

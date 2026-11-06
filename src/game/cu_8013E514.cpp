@@ -95,8 +95,8 @@ GameCamera_t *CamGameGetCamera(int);
 void CamGameChangeType(int, int);
 void fn_80142B00(void);
 int fn_801784C4(void);
-void fn_8017CFB0(unsigned short, unsigned short, int, int);
-void fn_8017CFB4(int);
+void BannerShow(unsigned short, unsigned short, int, int);
+void BannerClear(int);
 void fn_80187DD0(unsigned short);
 int fn_8019623C(int);
 void CamSetFieldOfView(void *, float, float);
@@ -249,7 +249,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                     p->mpUnknown4->mUnknown20 |= 1;
                 }
             }
-            if (b->mUnknown118) { fn_8017CFB4(7); fn_8017CFB0(b->mUnknown114, b->mUnknown116, b->mUnknown118, 0); }
+            if (b->mUnknown118) { BannerClear(7); BannerShow(b->mUnknown114, b->mUnknown116, b->mUnknown118, 0); }
             if ((b->mFlags & 8) && b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
                 float angle = 360.0f - (float)p->mMotion.mFacing * 0.000021457672119140625f;
@@ -271,7 +271,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 b->mTarget.mX = -b->mTarget.mX; b->mTarget.mY = -b->mTarget.mY;
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
-            if (b->mUnknown74) fn_8017CFB0(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
+            if (b->mUnknown74) BannerShow(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
             if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
             break;
         }

@@ -18,7 +18,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801BE60C.h"
@@ -147,17 +147,17 @@ int fn_801486A0(void);
 int fn_801650DC(Record_80067338 *pRecord);
 void fn_8016F7F8(void);
 int fn_8016FAD8(float *pOut);
-void fn_801732D0(void);
-void fn_80173320(void);
-void fn_80173324(unsigned int value);
-void fn_80173D10(void);
-void fn_80173EE0(int type, short a, short b, int c, int d);
-int fn_801740A8(void);
-void fn_8017417C(void);
+void ClockRuleInit(void);
+void ClockRuleShutdown(void);
+void ClockRuleUpdate(unsigned int value);
+void DriveLogEndDrive(void);
+void DriveLogAddPlay(int type, short a, short b, int c, int d);
+int DriveLogHasLongPlay(void);
+void DriveLogSetLongPlay(void);
 void fn_80176984(void);
-void fn_80176CC8(int type, short a, int b, int c);
-void fn_80176E34(int a, int b, int c, int d);
-int fn_8017F60C(void);
+void ScoringLogAddScore(int type, short a, int b, int c);
+void ScoringLogSetConversion(int a, int b, int c, int d);
+int GameModeTypeIsSpecial(void);
 void fn_8022B2CC(int handle, int tag, int value);
 int fn_8022B414(int handle, int tag, int *pValue);
 int fn_8022B580(int handle, int tag, int value);
@@ -593,7 +593,7 @@ void Class_802A56E8::vfn_19()
     if (mode == 4 || mode == 7) {
         return;
     }
-    if (mode == 5 && fn_8017F60C()) {
+    if (mode == 5 && GameModeTypeIsSpecial()) {
         return;
     }
     if (fn_801486A0() || fn_80177C38() || fn_801783AC(3)) {
@@ -651,7 +651,7 @@ extern "C" void fn_801779D8(void)
 
     int resume = 0;
 
-    fn_8017F584();
+    GameModeTypeGet();
     if (resume) {
         fn_801FCE10(0, "select 'SRSG' into \x89 from 'NIBG'\n", pState);
     }
@@ -695,13 +695,13 @@ extern "C" void fn_801779D8(void)
     pState->mUnknownAC = 0.0f;
     fn_802381E0(pHandle);
     fn_80178F20(0);
-    fn_801732D0();
+    ClockRuleInit();
     fn_80179150();
 }
 
 extern "C" void fn_80177B54(void)
 {
-    fn_80173320();
+    ClockRuleShutdown();
     lbl_803EB444 = 0;
 }
 
@@ -716,7 +716,7 @@ extern "C" void fn_80177B7C(int a)
 extern "C" void fn_80177BCC(float value)
 {
     fn_8016F7F8();
-    fn_80173324(value);
+    ClockRuleUpdate(value);
     fn_80176984();
 }
 
@@ -1491,7 +1491,7 @@ extern "C" int fn_80179358(int id)
 
 extern "C" void fn_8017937C(int id, int tag, int value)
 {
-    unsigned int mode = fn_8017F584();
+    unsigned int mode = GameModeTypeGet();
     int handle = fn_8017932C(id);
     int old;
     int result = fn_8022B414(handle, tag, &old);
@@ -1619,7 +1619,7 @@ extern "C" void fn_80179874(int id, float from, float to, float time)
         fn_8017937C(id, 0x79327567, 1);
     }
     if (fn_80177F7C() != 6) {
-        fn_80173EE0(1, (int)from, gain, id, 0);
+        DriveLogAddPlay(1, (int)from, gain, id, 0);
     }
     fn_80179594(id, time, (int)(to - from));
 }
@@ -1631,7 +1631,7 @@ extern "C" void fn_80179A54(int id, float from, float to)
     fn_8017937C(id, 0x79697367, yards);
     fn_8017937C(id, 0x526C7367, yards);
     if (fn_80177F7C() != 6) {
-        fn_80173EE0(4, (int)from, yards, id, 0);
+        DriveLogAddPlay(4, (int)from, yards, id, 0);
     }
 }
 
@@ -1669,9 +1669,9 @@ extern "C" void fn_80179C74(int id, float from, float to)
     fn_801794B4(id, 0x79747374, yards);
     fn_801794B4(id, 0x79547374, yards);
     if (to >= fn_80178A2C()) {
-        fn_80173EE0(7, (int)from, yards, id, 0);
+        DriveLogAddPlay(7, (int)from, yards, id, 0);
         fn_8017937C(id, 0x74707267, 1);
-        fn_80176CC8(7, yards, id, 0);
+        ScoringLogAddScore(7, yards, id, 0);
     }
 }
 
@@ -1687,9 +1687,9 @@ extern "C" void fn_80179D98(int id, float from, float to)
     fn_801794B4(id, 0x79747374, yards);
     fn_801794B4(id, 0x79547374, yards);
     if (to >= fn_80178A2C()) {
-        fn_80173EE0(6, (int)from, yards, id, 0);
+        DriveLogAddPlay(6, (int)from, yards, id, 0);
         fn_8017937C(id, 0x746B7267, 1);
-        fn_80176CC8(6, yards, id, 0);
+        ScoringLogAddScore(6, yards, id, 0);
     }
 }
 
@@ -1787,8 +1787,8 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             fn_801794B4(who, 0x6E737374, 1);
             startY = markY;
             ballY = markY;
-            if (mode != 6 && ballY > 30.0f && !fn_801740A8()) {
-                fn_8017417C();
+            if (mode != 6 && ballY > 30.0f && !DriveLogHasLongPlay()) {
+                DriveLogSetLongPlay();
                 fn_8017C2F0(pRecord->mUnknown4);
             }
             break;
@@ -1796,7 +1796,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         case 30:
             turnovers++;
             flips++;
-            fn_80173D10();
+            DriveLogEndDrive();
             startY = -startY;
             markY = -markY;
             ballY = -ballY;
@@ -1867,7 +1867,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         fn_801794B4(pRecord->mUnknown0, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
                         fn_801794B4(pRecord->mUnknown0, 0x79547374, (int)(pRecord->mUnknown10 - startY));
                         if (mode != 6) {
-                            fn_80173EE0(12, startY, pRecord->mUnknown10 - startY, id, 0);
+                            DriveLogAddPlay(12, startY, pRecord->mUnknown10 - startY, id, 0);
                         }
                         state = 0;
                     }
@@ -1888,7 +1888,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             ballY = pRecord->mUnknown10;
             if (state == 0x61796167) {
                 if (mode != 6) {
-                    fn_80173EE0(0, startY, 0, carrier, 0);
+                    DriveLogAddPlay(0, startY, 0, carrier, 0);
                 }
                 fn_8017952C(carrier, 0, pRecord->mUnknownC, 0.0f);
             }
@@ -1907,7 +1907,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             fn_8017952C(carrier, 0, pRecord->mUnknownC, 0.0f);
             state = 0;
             if (mode != 6) {
-                fn_80173EE0(0, startY, 0, carrier, 0);
+                DriveLogAddPlay(0, startY, 0, carrier, 0);
                 if (dpFlag) {
                     AudmonEventPostArgs(0x63, 0, fn_80178320(), 0, 0);
                 }
@@ -2078,8 +2078,8 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             state = 0;
             id = kicker = pRecord->mUnknown0;
             toGo = fn_80178A44() - pRecord->mUnknown10;
-            if (startY > 30.0f && !fn_801740A8()) {
-                fn_8017417C();
+            if (startY > 30.0f && !DriveLogHasLongPlay()) {
+                DriveLogSetLongPlay();
                 fn_8017C2F0(fn_8009BCE8(&kicker)->mId >> 8 & 0xFF);
             }
             fn_8017937C(kicker, 0x61666B67, 1);
@@ -2235,7 +2235,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         if (ballY > fn_80178A2C() && mode != 6) {
             fn_8017937C(id, 0x64747567, 1);
             fn_801794B4(id, 0x74727374, 1);
-            fn_80176CC8(1, ballY - startY, id, 0);
+            ScoringLogAddScore(1, ballY - startY, id, 0);
             if (lbl_803EB450) {
                 lbl_803EB450(1, fn_8017932C(id), 0);
             }
@@ -2252,13 +2252,13 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             endY = ballY;
         }
         if (mode != 6) {
-            fn_80173EE0(0, startY, endY - startY, carrier, id);
+            DriveLogAddPlay(0, startY, endY - startY, carrier, id);
         }
         if ((ballY >= fn_80178A2C() || (fn_8009BCE8(&id)->mFlags & 0x800000)) && mode != 6) {
             fn_8017937C(carrier, 0x64746167, 1);
             fn_8017937C(id, 0x64746367, 1);
             fn_801794B4(carrier, 0x74507374, 1);
-            fn_80176CC8(0, fn_80178A2C() - startY, carrier, id);
+            ScoringLogAddScore(0, fn_80178A2C() - startY, carrier, id);
             if (lbl_803EB450) {
                 lbl_803EB450(0, fn_8017932C(id), 0);
             }
@@ -2273,7 +2273,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 fn_801794B4(id, 0x72697374, 1);
                 fn_801794B4(id, 0x64647374, 1);
             }
-            fn_80176CC8(4, ballY - markY, id, 0);
+            ScoringLogAddScore(4, ballY - markY, id, 0);
             if (lbl_803EB450) {
                 lbl_803EB450(2, fn_8017932C(id), 0);
             }
@@ -2300,14 +2300,14 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             int yards;
 
             if (mode != 6) {
-                fn_80173EE0(3, markY, gain, id, 0);
+                DriveLogAddPlay(3, markY, gain, id, 0);
             }
             yards = (int)gain;
             fn_8017937C(id, 0x79666C67, yards);
             if (ballY > fn_80178A2C() && mode != 6) {
                 fn_8017937C(id, 0x74666C67, 1);
                 fn_801794B4(id, 0x64647374, 1);
-                fn_80176CC8(3, yards, id, 0);
+                ScoringLogAddScore(3, yards, id, 0);
                 if (lbl_803EB450) {
                     lbl_803EB450(2, fn_8017932C(id), 0);
                 }
@@ -2315,7 +2315,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         } else if (ballY > fn_80178A2C() && mode != 6) {
             fn_8017937C(id, 0x64747567, 1);
             fn_801794B4(id, 0x74727374, 1);
-            fn_80176CC8(3, ballY - markY, id, 0);
+            ScoringLogAddScore(3, ballY - markY, id, 0);
             if (lbl_803EB450) {
                 lbl_803EB450(1, fn_8017932C(id), 0);
             }
@@ -2396,7 +2396,7 @@ extern "C" int fn_8017B83C(void)
             break;
         case 2:
             i = count;
-            fn_80173D10();
+            DriveLogEndDrive();
             break;
         case 6:
             carrier = pRecord->mUnknown0;
@@ -2435,10 +2435,10 @@ extern "C" int fn_8017B83C(void)
         case 15:
             fn_8017937C(tackler, 0x6D656B67, 1);
             reported = 1;
-            fn_80176E34(5, 1, tackler, 0);
+            ScoringLogSetConversion(5, 1, tackler, 0);
             break;
         case 16:
-            fn_80176E34(10, 1, tackler, 0);
+            ScoringLogSetConversion(10, 1, tackler, 0);
             reported = 1;
             break;
         case 17:
@@ -2465,21 +2465,21 @@ extern "C" int fn_8017B83C(void)
         if (yards >= fn_80178A2C()) {
             fn_8017937C(carrier, 0x70327567, 1);
             reported = 1;
-            fn_80176E34(1, 0, carrier, 0);
+            ScoringLogSetConversion(1, 0, carrier, 0);
         }
         break;
     case 0x61796367:
         if (yards >= fn_80178A2C() || (fn_8009BCE8(&carrier)->mFlags & 0x800000)) {
             fn_8017937C(carrier, 0x70326367, 1);
             reported = 1;
-            fn_80176E34(0, 0, passer, carrier);
+            ScoringLogSetConversion(0, 0, passer, carrier);
         }
         break;
     case 0x79666C67:
         if (sameTeam && yards >= fn_80178A2C()) {
             fn_8017937C(carrier, 0x70327567, 1);
             reported = 1;
-            fn_80176E34(1, 0, carrier, 0);
+            ScoringLogSetConversion(1, 0, carrier, 0);
         }
         break;
     case 0x79697367:
@@ -2489,7 +2489,7 @@ extern "C" int fn_8017B83C(void)
     }
 
     if (!reported) {
-        fn_80176E34(11, 0, carrier, 0);
+        ScoringLogSetConversion(11, 0, carrier, 0);
     }
 
     if (lbl_803EB450) {
@@ -2622,17 +2622,17 @@ extern "C" void fn_8017BD70(Object_8017886C *pResult, int kind, unsigned char fl
     if (pResult->mUnknown1D == -2) {
         fn_801794F0(fn_80178320(), 0x74737374, 1);
         if (pResult->mUnknown00 == 0) {
-            fn_80176CC8(9, 0, (fn_80178320() & 0xFF) << 8 | 1, 0);
+            ScoringLogAddScore(9, 0, (fn_80178320() & 0xFF) << 8 | 1, 0);
             if (lbl_803EB450) {
                 lbl_803EB450(5, 0x7FFF, 0);
             }
         } else {
-            fn_80176CC8(9, 0, pResult->mUnknown00, 0);
+            ScoringLogAddScore(9, 0, pResult->mUnknown00, 0);
             if (lbl_803EB450) {
                 lbl_803EB450(5, fn_8017932C(pResult->mUnknown00), 0);
             }
         }
-        fn_80173D10();
+        DriveLogEndDrive();
     }
 }
 
@@ -2709,7 +2709,7 @@ extern "C" void fn_8017C3E4(unsigned short team, short yards, int handle)
         spot = (short)fn_80177FE0().mY;
         mode = fn_80177F70();
         if (mode != 0 && mode != 6) {
-            fn_80173EE0(8, spot, yards, handle, 0);
+            DriveLogAddPlay(8, spot, yards, handle, 0);
         }
     }
 }
@@ -2718,7 +2718,7 @@ extern "C" void fn_8017C4B8(void)
 {
     lbl_80361F88[0].mKind = -1;
     lbl_803EB458 = 0;
-    if (fn_8017F584() != 1) {
+    if (GameModeTypeGet() != 1) {
         int home;
         int away;
 

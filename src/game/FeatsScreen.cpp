@@ -2,7 +2,7 @@
    name, text and value. */
 #include "game/FeatAwards.h"
 #include <stdio.h>
-#include "game/cu_8017F90C.h"
+#include "game/UISGameMsg.h"
 
 struct FeatsScreenText_t {
     int mUnknown0;

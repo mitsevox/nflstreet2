@@ -15,8 +15,8 @@ int MathAngleDiff(int a, int b);
 
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
 
-extern float lbl_803ECB0C;
-extern float lbl_803ECB10;
+extern float gPlyrMoveSideSpeed;
+extern float gPlyrMoveBackSpeed;
 
 /* The PlayerMoveAnimUpdate* functions are the movement-state handlers: the player's
    movement state picks one each update. PlayerMoveAnimUpdateMove chooses its animation
@@ -26,7 +26,7 @@ extern float lbl_803ECB10;
 
 extern "C" int PlayerMoveAnimWantsReverse(Object_80039F5C *p, int key)
 {
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     Object_800B26B0 *pMotion = &p->mMotion;
     int result = 0;
 
@@ -58,8 +58,8 @@ extern "C" int PlayerMoveAnimCheckReverse(Object_80039F5C *p, unsigned short key
 
 extern "C" int PlayerMoveAnimSelectByHeading(Object_80039F5C *p, int diff, unsigned short *pKey)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     int result = 0;
 
     if (diff <= 0x1C71C6 || pCur->mUnknown0 == 0.0f) {
@@ -95,8 +95,8 @@ extern "C" int PlayerMoveAnimSelectByHeading(Object_80039F5C *p, int diff, unsig
 
 extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     int handled = 0;
     int key = 74;
     int diff;
@@ -110,13 +110,13 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
 
     if (BallGetCurrentHolder() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
         if (diff <= 0x56C16B) {
-            if (flag || p->mUnknown492 <= lbl_803ECB0C) {
+            if (flag || p->mUnknown492 <= gPlyrMoveSideSpeed) {
                 if (p->mIdBytes[2] == fn_80178320() || flag) {
                     key = 160;
-                    pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
+                    pNext->mUnknown0 = MAX(pCur->mUnknown0, gPlyrMoveSideSpeed * 0.18f / gPlyrMoveSideSpeed);
                 } else {
                     key = 73;
-                    pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.4f / lbl_803ECB0C);
+                    pNext->mUnknown0 = MAX(pCur->mUnknown0, gPlyrMoveSideSpeed * 0.4f / gPlyrMoveSideSpeed);
                 }
                 handled = 1;
                 pNext->mUnknown14 = pCur->mUnknown14;
@@ -124,7 +124,7 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
                 pNext->mUnknown4 = pCur->mUnknown4;
             }
         } else if (diff <= 0x71C71B && p->mIdBytes[2] == fn_80178320()) {
-            if (flag || p->mUnknown492 <= lbl_803ECB10) {
+            if (flag || p->mUnknown492 <= gPlyrMoveBackSpeed) {
                 int offset;
                 fn_800C89F0(p, pCur->mUnknown8, 2, 0, 1.0f);
                 key = 159;
@@ -133,13 +133,13 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
                     key = 157;
                     offset = -offset;
                 }
-                pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
+                pNext->mUnknown0 = MAX(pCur->mUnknown0, gPlyrMoveSideSpeed * 0.18f / gPlyrMoveSideSpeed);
                 handled = 1;
                 pNext->mUnknown14 = pCur->mUnknown14;
                 pNext->mUnknown8 = (pCur->mUnknown8 + offset) & 0xFFFFFF;
                 pNext->mUnknown4 = pCur->mUnknown4;
             }
-        } else if (flag || p->mUnknown492 <= lbl_803ECB10) {
+        } else if (flag || p->mUnknown492 <= gPlyrMoveBackSpeed) {
             key = 74;
             handled = 1;
             pNext->mUnknown0 = pCur->mUnknown0;
@@ -164,8 +164,8 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
 
 extern "C" void PlayerMoveAnimUpdateStand(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     unsigned short key;
 
     pNext->mUnknown0 = pCur->mUnknown0;
@@ -200,8 +200,8 @@ extern "C" void PlayerMoveAnimUpdateStand(Object_80039F5C *p)
 
 extern "C" void PlayerMoveAnimUpdateHold(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
 
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
@@ -219,8 +219,8 @@ extern "C" void PlayerMoveAnimUpdateSpecial(Object_80039F5C *p);
 extern "C" void PlayerMoveAnimUpdateMove(Object_80039F5C *p)
 {
     int changed = 0;
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     unsigned short key = fn_801BE648(p->mpUnknown792);
     int diff = MathAngleDiff(pCur->mUnknown4, pCur->mUnknown8);
 
@@ -250,8 +250,8 @@ extern "C" void PlayerMoveAnimUpdateMove(Object_80039F5C *p)
 
 extern "C" void PlayerMoveAnimUpdateKeep(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
 
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
@@ -260,8 +260,8 @@ extern "C" void PlayerMoveAnimUpdateKeep(Object_80039F5C *p)
 
 extern "C" void PlayerMoveAnimUpdateLimited(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
     unsigned short key = fn_801BE648(p->mpUnknown792);
 
     switch (key) {
@@ -327,8 +327,8 @@ extern "C" void PlayerMoveAnimUpdateLimited(Object_80039F5C *p)
 
 extern "C" void PlayerMoveAnimUpdateDefault(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
 
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
@@ -342,8 +342,8 @@ extern "C" void PlayerMoveAnimUpdateDefault(Object_80039F5C *p)
 
 extern "C" void PlayerMoveAnimUpdateSpecial(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pCur = &p->mUnknown512;
-    Object_8016D8B0 *pNext = &p->mUnknown528;
+    PlyrMoveCmd_t *pCur = &p->mUnknown512;
+    PlyrMoveCmd_t *pNext = &p->mUnknown528;
 
     pNext->mUnknown0 = pCur->mUnknown0;
     pNext->mUnknown4 = pCur->mUnknown4;

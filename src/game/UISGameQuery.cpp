@@ -1,14 +1,15 @@
+/* Answers the many UIStudio game queries that have fixed or trivial results on this build. */
 #include "game/fn_8018631C.h"
-#include "game/cu_8017F90C.h"
+#include "game/UISGameMsg.h"
 #include "game/InGame.h"
 #include "game/PauseMenu.h"
 
 extern "C" {
-int lbl_803EB52C = 0;
+int gUISQueryLevel = 0;
 }
 
-// Message handler called in turn by fn_8017F90C: returns nonzero for the ids it handles.
-extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+// Message handler called in turn by UISGameMsgDispatch: returns nonzero for the ids it handles.
+extern "C" int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0xC3:
@@ -42,7 +43,7 @@ extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int
         *pResult = 0;
         break;
     case 0x141:
-        *pResult = lbl_803EB52C > 2;
+        *pResult = gUISQueryLevel > 2;
         break;
     case 0x41:
     case 0x85:

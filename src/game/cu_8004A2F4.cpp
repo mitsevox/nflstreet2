@@ -1776,7 +1776,7 @@ int fn_800EA284(Object_80039F5C *, int, int);
 void fn_80178718(Object_80039F5C *);
 void fn_800E954C(Object_80039F5C *, int, int *, int, int *);
 int fn_800EAC9C(Object_80039F5C *);
-float fn_8016D9F4(Object_80039F5C *, float, float);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *, float, float);
 int BallStateGet(Ball_t *, int *);
 int fn_80178508(void *, int, int);
 void BallApplyImpulse(Ball_t *, Vector_80039F5C *, Vector_80039F5C *);
@@ -1978,7 +1978,7 @@ void fn_8004E4D0(RigidBody_t *pBody, unsigned int index, RigidBody_t *pOther,
                 fn_800E954C(p, 10, &facing, 1, &angle);
                 break;
             default:
-                if (!fn_800EAC9C(p) && !(p->mMotion.mUnknown28 < fn_8016D9F4(p, 0.5f, 1.0f)))
+                if (!fn_800EAC9C(p) && !(p->mMotion.mUnknown28 < PlyrMoveGetRatedSpeed(p, 0.5f, 1.0f)))
                     fn_800E954C(p, 58, &facing, 3, &angle);
                 break;
             }

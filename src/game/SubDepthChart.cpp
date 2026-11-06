@@ -1,3 +1,4 @@
+/* Sub module helpers: write a team's seven-player depth chart (position and player pairs) to the game database, read the chart back by position, and release the query. */
 #include "game/fn_80177FE0.h"
 #include "game/fn_800670B4.h"
 
@@ -15,9 +16,9 @@ int fn_8022D540(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
 
-void fn_8017CC34(int team, Object_800670B4 *pTeam);
+void SubDepthWriteTeam(int team, Object_800670B4 *pTeam);
 
-int fn_8017CB40(void)
+int SubDepthIsThirdAndLong(void)
 {
     float y = fn_80178298();
     Point_8017886C point;
@@ -31,22 +32,22 @@ int fn_8017CB40(void)
     return 0;
 }
 
-void fn_8017CBD0(void)
+void SubDepthInit(void)
 {
 }
 
-void fn_8017CBD4(void)
+void SubDepthShutdown(void)
 {
     fn_8022D23C();
     fn_8022D25C(0);
 }
 
-void fn_8017CBFC(int team)
+void SubDepthSetTeam(int team)
 {
-    fn_8017CC34(team, fn_80168708(team));
+    SubDepthWriteTeam(team, fn_80168708(team));
 }
 
-void fn_8017CC34(int team, Object_800670B4 *pTeam)
+void SubDepthWriteTeam(int team, Object_800670B4 *pTeam)
 {
     unsigned char pairs[7][2];
     int flag;
@@ -54,7 +55,7 @@ void fn_8017CC34(int team, Object_800670B4 *pTeam)
     int handle;
 
     flag = 0;
-    if (fn_8017CB40()) {
+    if (SubDepthIsThirdAndLong()) {
         flag = 1;
     }
     for (i = 0; i <= 6; i++) {
@@ -75,13 +76,13 @@ void fn_8017CC34(int team, Object_800670B4 *pTeam)
     fn_8022D2F4(handle, pTeam->mUnknown8.mUnknown4, pTeam->mUnknown4, &pairs[0][0], 1);
 }
 
-void fn_8017CD20(void)
+void SubDepthRelease(void)
 {
     fn_8022D540();
     fn_8022D3AC();
 }
 
-short fn_8017CD44(unsigned char index)
+short SubDepthGetEntry(unsigned char index)
 {
     return fn_8022D3D4(index);
 }

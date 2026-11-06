@@ -12,7 +12,7 @@ int BallStateGet(Ball_t *p, int *pArg);
 void fn_8016C70C(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Object_8016D8B0 *pControl = &p->mUnknown528;
+    PlyrMoveCmd_t *pControl = &p->mUnknown528;
     int requested = pControl->mUnknown8;
     int limit;
 
@@ -71,7 +71,7 @@ void fn_8016C70C(Object_80039F5C *p)
 void fn_8016CA50(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Object_8016D8B0 *pControl = &p->mUnknown528;
+    PlyrMoveCmd_t *pControl = &p->mUnknown528;
     int limit;
 
     if (pMotion->mUnknown28 != 0.0f && pMotion->mUnknown28 < pMotion->mUnknown36) {

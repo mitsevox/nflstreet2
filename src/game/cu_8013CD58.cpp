@@ -84,7 +84,7 @@ Target_8013825C *BallGetModel(void *p);
 void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
-void fn_8017CFB4(int a);
+void BannerClear(int a);
 void CamSetDefaultAspect(float aspect);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
@@ -775,6 +775,6 @@ extern "C" void fn_8013E474(void)
         fn_8002CFF4(lbl_803EA368);
     } else {
         fn_8002D198(p);
-        fn_8017CFB4(3);
+        BannerClear(3);
     }
 }

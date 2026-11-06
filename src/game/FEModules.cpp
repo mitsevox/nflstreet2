@@ -26,7 +26,7 @@ void fn_80160B6C(void);
 void fn_801681A8(void);
 void fn_80168210(void);
 void fn_801684B8(int);
-void fn_8017F664(void);
+void GameModeTypeInvalidate(void);
 void LevelLightsSelectFrontEnd(void);
 void ResTrackLabel(const char *);
 }
@@ -122,7 +122,7 @@ int FMMainFEInit::Init()
 {
     static unsigned char sFirstInit = 1;
 
-    fn_8017F664();
+    GameModeTypeInvalidate();
     if (sFirstInit) {
         sFirstInit = 0;
         gSysPreLoad.LoadSystems();

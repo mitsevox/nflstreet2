@@ -65,7 +65,7 @@ int MathAngleDiff(int a, int b);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 
@@ -155,7 +155,7 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
     } else {
         if (fn_801787A0()) {
             pOut->mHeading = pMotion->mFacing;
-            pOut->mSpeed = pMotion->mUnknown28 / lbl_803ECB08;
+            pOut->mSpeed = pMotion->mUnknown28 / gPlyrMoveFwdSpeed;
         } else {
             pOut->mSpeed = 0.72f;
             if (!BallGetLandingPoint(pBall, &ballPos)) {

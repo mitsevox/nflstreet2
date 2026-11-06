@@ -8,7 +8,7 @@
 #include "game/Class_80297BF8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801FCE10.h"
 #include "game/InGame.h"
 #include "game/GameModules.h"
@@ -79,12 +79,12 @@ void CamGameApplyUserCamera(void);
 int CamGameGetSideYaw();
 void fn_80144EDC(float a);
 void ParticlesProcess(float a);
-void fn_80173C2C(void);
-void fn_80173D10(void);
-void fn_80176C58(void);
-void fn_80176C90(void);
-int fn_8017CEDC(float a);
-void fn_8017F664(void);
+void DriveLogInit(void);
+void DriveLogEndDrive(void);
+void ScoringLogInit(void);
+void ScoringLogReset(void);
+int BannerUpdate(float a);
+void GameModeTypeInvalidate(void);
 void fn_80187C0C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A6C4(int a, int b);
@@ -275,10 +275,10 @@ int InGame::Init()
     DepthChartGetSide(0, &record0);
     DepthChartGetSide(1, &record1);
     fn_80085AA0(a, &record0, b, &record1);
-    fn_80173C2C();
-    fn_80173D10();
-    fn_80176C58();
-    fn_80176C90();
+    DriveLogInit();
+    DriveLogEndDrive();
+    ScoringLogInit();
+    ScoringLogReset();
     BallsPark();
     _InGame_iPauseCount = 0;
     InGameSetInputPaused(0);
@@ -288,7 +288,7 @@ int InGame::Init()
     if (result) {
         fn_800AD910(10, 0.0f);
     } else {
-        unsigned int value = fn_8017F584();
+        unsigned int value = GameModeTypeGet();
 
         if (value <= 11 || value == 13) {
             fn_800AD910(1, 0.0f);
@@ -359,7 +359,7 @@ unsigned char InGame::Update()
 
         handled = 1;
         fn_800AD888(value * gFrameTimeScale);
-        fn_8017CEDC(value);
+        BannerUpdate(value);
     }
     if (!handled) {
         ConUpdateChannel(-1);
@@ -424,7 +424,7 @@ int InGame::Shutdown()
     PlaybookSideClearAll();
     MemCardUtilShutdown();
     ConSetChannelInfo(-1, 2, (void *)PadInputRead);
-    fn_8017F664();
+    GameModeTypeInvalidate();
     MemCardScreenSetFlag(_InGame_bDemo);
     _InGame_bDemo = 0;
     return 1;

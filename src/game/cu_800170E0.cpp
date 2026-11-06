@@ -9,7 +9,7 @@
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_8018BE68.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
@@ -122,9 +122,9 @@ int fn_801486A0(void);
 void fn_80148AF8(Class_80148A58 *pObject);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_8017F60C(void);
-void fn_8017F670(int a, char *pText);
-int fn_801801B4(void);
+int GameModeTypeIsSpecial(void);
+void PositionAbbrevFormat(int a, char *pText);
+int MsgGameGetSetupState(void);
 int fn_80188030(int a);
 void fn_8018807C(unsigned char a);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
@@ -1066,7 +1066,7 @@ void fn_800191E4(void)
         }
         fn_8007AF14(&cursor);
     }
-    if (!fn_8017F60C()) {
+    if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 6; i++) {
             unsigned char j = i + fn_802372EC(0, 6 - i);
             unsigned char id = lbl_803EBA08->mpUnknown08[i];
@@ -1145,7 +1145,7 @@ void fn_80019588(void)
         }
         fn_8007AF14(&cursor);
     }
-    if (!fn_8017F60C()) {
+    if (!GameModeTypeIsSpecial()) {
         for (i = 0; i < 4; i++) {
             unsigned char j = i + fn_802372EC(0, 4 - i);
             unsigned char id = lbl_803EBA08->mpUnknown08[i];
@@ -1228,7 +1228,7 @@ int fn_80019848(int *pController, int *pCount)
     fn_8008044C(&lbl_8036B168, 0, 0x54415453);
     fn_80083E40(&lbl_8036B194, 0, 0x54415453);
 
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         lbl_803ECE58[0] = fn_8001729C();
         lbl_803ECE58[1] = fn_8001729C();
         fn_80018990();
@@ -1247,7 +1247,7 @@ int fn_80019848(int *pController, int *pCount)
                 }
             }
         }
-    } else if (fn_801801B4() == 0) {
+    } else if (MsgGameGetSetupState() == 0) {
         for (int i = 0; i < lbl_803EBA08->mCount; i++) {
             lbl_803EBA08->mpCounts[i] = *pCount;
         }
@@ -1259,7 +1259,7 @@ int fn_80019848(int *pController, int *pCount)
         }
     }
 
-    DepthChartLoad(fn_801801B4() == 1);
+    DepthChartLoad(MsgGameGetSetupState() == 1);
     return 0;
 }
 
@@ -1268,7 +1268,7 @@ void fn_80019AD4(void)
     int digp[8][7];
 
     lbl_803EBA43 = 1;
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         unsigned int i;
 
         if (lbl_803EBA24) {
@@ -1324,7 +1324,7 @@ void fn_80019AD4(void)
             }
         }
         FELoopSetResume(1);
-    } else if (fn_801801B4() == 0) {
+    } else if (MsgGameGetSetupState() == 0) {
         fn_8018C48C(0x54415453);
         fn_8018C48C(0x454D4147);
     }
@@ -1333,10 +1333,10 @@ void fn_80019AD4(void)
     fn_8008056C(&lbl_8036B168);
     fn_80083F68(&lbl_8036B194);
     DepthChartSave();
-    if (fn_801801B4() == 0) {
+    if (MsgGameGetSetupState() == 0) {
         fn_8001B228();
     }
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         if (lbl_803EBA24 == 0 && lbl_803EBA20) {
             fn_8005FCF8(digp[0], digp[1]);
             fn_80015D28(lbl_803EBA20->mUnknown48);
@@ -1488,7 +1488,7 @@ void fn_8001A220(int message, Arg_8018399C text, int *pCount)
         break;
     }
 
-    fn_8017F670(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pParams->mpText);
+    PositionAbbrevFormat(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pParams->mpText);
     int count = fn_80017208(lbl_803EBA08->mUnknown17);
     *pCount = count;
     for (int i = lbl_8036B1C0[lbl_803EBA08->mUnknown17];
@@ -1576,7 +1576,7 @@ void fn_8001A508(int slot, int *pId, Arg_8018399C name, Arg_8018399C position)
 
     if (*pId != -1 && PlayerDbSeekId(&lbl_8036B168, *pId, 0)) {
         PlayerDbGetLastName(&lbl_8036B168, pName->mpText, pName->mLength);
-        fn_8017F670(PlayerDbGetPbpo(&lbl_8036B168), pPosition->mpText);
+        PositionAbbrevFormat(PlayerDbGetPbpo(&lbl_8036B168), pPosition->mpText);
     }
 }
 
@@ -1854,9 +1854,9 @@ void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C grou
     }
 
     *pResult = fn_80017208(lbl_803EBA08->mUnknown17);
-    fn_8017F670(lbl_802F4488[prev][0], pPrev->mpText);
-    fn_8017F670(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pGroup->mpText);
-    fn_8017F670(lbl_802F4488[next][0], pNext->mpText);
+    PositionAbbrevFormat(lbl_802F4488[prev][0], pPrev->mpText);
+    PositionAbbrevFormat(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pGroup->mpText);
+    PositionAbbrevFormat(lbl_802F4488[next][0], pNext->mpText);
 }
 
 void fn_8001AF08(int index, int team, int *pValid, int *pId, Arg_8018399C name, Arg_8018399C text)
@@ -1868,7 +1868,7 @@ void fn_8001AF08(int index, int team, int *pValid, int *pId, Arg_8018399C name, 
                 PlayerDbSeekId(&lbl_8036B168, lbl_803EBA0C[i].mId, 0);
                 *pId = PlayerDbGetPortraitId(&lbl_8036B168);
                 PlayerDbGetLastName(&lbl_8036B168, name.pParams->mpText, name.pParams->mLength);
-                fn_8017F670(PlayerDbGetPbpo(&lbl_8036B168), text.pParams->mpText);
+                PositionAbbrevFormat(PlayerDbGetPbpo(&lbl_8036B168), text.pParams->mpText);
                 break;
             }
         }
@@ -1915,7 +1915,7 @@ void fn_8001B020(int id, int *pA, int *pB)
 void fn_8001B15C(int index, char *pDest, int size)
 {
     *pDest = 0;
-    if (fn_8017F584() != 7) {
+    if (GameModeTypeGet() != 7) {
         fn_801C2EF0(pDest, "Opponent", size);
     } else if (index < lbl_803EBA08->mCount && index > -1) {
         int id = *lbl_803EBA08->mppLists[index];

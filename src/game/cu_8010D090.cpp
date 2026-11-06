@@ -65,7 +65,7 @@ int fn_8010CE90(Object_80039F5C *p, Ball_t *pBall);
 void fn_8010CFD4(Object_80039F5C *p);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_8010D090(Object_80039F5C *p) {
@@ -95,7 +95,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         p->mUnknown512.mUnknown15 = 0;
     } else {
         Ball_t *pBall = BallGetCurrent();

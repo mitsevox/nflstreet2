@@ -14,7 +14,7 @@
 #include "game/PlayerLook.h"
 #include "game/PlaTex.h"
 #include "game/StoryPlayerScreen.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_802372EC.h"
@@ -589,7 +589,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
     fn_80083F68(&cursor);
     fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
-    if (CheatFlagsIsSet(47) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
     }
     pRecord = &gPlayerLooks[index];

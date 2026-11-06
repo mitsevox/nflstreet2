@@ -10,7 +10,7 @@ int VptManagerIsMarketCamOn(void);
 int VptManagerGetPassIcons(void);
 void VptManagerSetPassIcons(int value);
 void fn_8015A0D0(int value);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 int fn_800A7FD8(void);
 int fn_800BF574(int a, unsigned int kind);
 int fn_800A937C(void);
@@ -49,9 +49,9 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
         VptManagerSetPassIcons(VptManagerGetPassIcons() == 0);
         fn_8015A0D0(VptManagerGetPassIcons() == 0);
         if (VptManagerGetPassIcons()) {
-            fn_8017D7C4("MarketCam-Pass Icons On");
+            HudShowAlert("MarketCam-Pass Icons On");
         } else {
-            fn_8017D7C4("MarketCam-Pass Icons Off");
+            HudShowAlert("MarketCam-Pass Icons Off");
         }
     }
     if (fn_800A7FD8()) {

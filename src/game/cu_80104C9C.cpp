@@ -104,7 +104,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_801486A0(void);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
@@ -658,7 +658,7 @@ extern "C" int fn_80105AF4(Object_80039F5C *p) {
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
     }
     return result;
@@ -1032,9 +1032,9 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
     if (pOther != 0) {
         fn_80227690(&delta, &start, &pOther->mMotion.mPos);
         otherTime = fn_802270A4(&delta)
-            / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
+            / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
         fn_80227690(&delta, &start, &p->mMotion.mPos);
-        time = fn_802270A4(&delta) / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+        time = fn_802270A4(&delta) / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         distance = fn_802270A4(&delta);
         fn_80227690(&apart, &p->mMotion.mPos, &pOther->mMotion.mPos);
@@ -1048,7 +1048,7 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
                 ballTime = fn_802270A4(&delta) / fn_802270A4(&velocity);
                 fn_80227690(&delta, &pPass->mUnknown4, &p->mMotion.mPos);
                 time = fn_802270A4(&delta)
-                    / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+                    / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
             }
         }
         switch (pBlock->mUnknown20) {

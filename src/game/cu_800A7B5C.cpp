@@ -15,9 +15,9 @@ void fn_800A6DA4(void);
 int fn_800A6590(int value);
 int fn_800A8408(int team);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
-void fn_8017DE54(int a, float t, int b, int direct);
-void fn_8017DF6C(int a, int b);
-void fn_8017E328(int a, int b);
+void HudSetGameBreakerMeter(int a, float t, int b, int direct);
+void HudSetGameBreakerLevel(int a, int b);
+void HudSetGameBreakerHalf(int a, int b);
 int ChallengeIsActive(void);
 float fn_800D3F2C(int team);
 int fn_80177F70(void);
@@ -65,17 +65,17 @@ extern "C" void fn_800A7B5C(void)
             }
             if (fn_800D3F2C(team) >= 1.0f) {
                 lbl_803EC954[team]->mUnknown6C = 2;
-                fn_8017DF6C(team, 2);
+                HudSetGameBreakerLevel(team, 2);
             } else {
                 lbl_803EC954[team]->mUnknown6C = 1;
-                fn_8017DF6C(team, 1);
+                HudSetGameBreakerLevel(team, 1);
                 if (fn_800D3F2C(team) >= 0.5f) {
-                    fn_8017E328(team, 2);
+                    HudSetGameBreakerHalf(team, 2);
                 }
             }
             lbl_803EC954[team]->mUnknown58 = 1.0f;
             lbl_803EC954[team]->mUnknown64 = 0;
-            fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
+            HudSetGameBreakerMeter(team, fn_800D3F2C(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
             if (ChallengeIsActive() != 0 &&
                 ((team == 0 && ChalGetCurrent()->mUnknown1C3 != 0) ||

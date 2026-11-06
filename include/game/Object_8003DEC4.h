@@ -3,7 +3,7 @@
 
 #include "game/FMCAPPORT.h"
 #include "game/ParticleTrail.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/LightTracker.h"
 #include "game/Pose_80041930.h"
 
@@ -136,7 +136,7 @@ struct Lod_802341C4 {
 /* Clipped shadow polygon: up to seven points and texture coordinates. */
 struct Clip_8003BFCC {
     float mPoints[7][3];
-    Pair_8017055C mPairs[7];
+    Point2_t mPairs[7];
     unsigned char mCount;
     unsigned char mUnknown141[3];
 };
@@ -146,7 +146,7 @@ struct Clip_8003BFCC {
 struct Projection_8003BA10 {
     float mColor[4];
     float mPoints[4][3];
-    Pair_8017055C mPairs[4];
+    Point2_t mPairs[4];
     Clip_8003BFCC mRecords[4];
     unsigned char mUnknown672;
     unsigned char mUnknown673;

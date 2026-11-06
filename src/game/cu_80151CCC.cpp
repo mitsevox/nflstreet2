@@ -37,7 +37,7 @@ Object_80039F5C *fn_8003AC84(int id);
 void fn_800B6658(Object_80039F5C *pPlayer);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80148814(Object_80039F5C *p);
-void fn_8017E094(int a);
+void HudSetScoreTableRows(int a);
 
 void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
 {
@@ -55,7 +55,7 @@ void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
             fn_801488D4(pPlayer, pOther);
         }
         fn_80148814(pOther);
-        fn_8017E094(p->mpUnknown1C->mpUnknown36->mCount);
+        HudSetScoreTableRows(p->mpUnknown1C->mpUnknown36->mCount);
     }
 }
 }

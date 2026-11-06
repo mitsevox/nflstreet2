@@ -59,7 +59,7 @@ int fn_80177F70(void);
 Point_8017886C fn_80177FE0(void);
 float fn_80178298(void);
 int fn_801784C4(void);
-void fn_8017CFB4(int a);
+void BannerClear(int a);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
@@ -170,7 +170,7 @@ void fn_801423D0(Camera_801422EC *pCamera)
         a = 0;
         if (lbl_803EB218 == 0 && fn_800AD9B4() != 1) {
             lbl_803EB218 = 1;
-            fn_8017CFB4(7);
+            BannerClear(7);
         }
         if (replay && (lbl_803EB208-- < 0 || a == 0)) {
             if (pPlayer) {

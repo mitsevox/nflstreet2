@@ -25,8 +25,8 @@ int fn_801787DC(int team);
 void fn_801787FC(int team, short value);
 void fn_800C87CC(int team, int value);
 void fn_80177768(void *p, int team);
-void fn_801735D8(unsigned int mask);
-void fn_801735B4(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
+void ClockRuleSetFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_8009D888(int index, int value);
@@ -44,7 +44,7 @@ int fn_80178AE0(void);
 void fn_80178CD8(int a);
 void fn_801790D0(int team, float a, float b);
 void fn_8017833C(int team);
-void fn_8017E430(void);
+void HudClearEvent71(void);
 void fn_80157514(void);
 int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
@@ -65,11 +65,11 @@ void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 void fn_8003A450(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
-void fn_80173B8C(void);
+void ClockRuleEndPeriod(void);
 void fn_800C02EC(void *p, short value);
 
 void fn_800BC5DC(void *p);
@@ -120,7 +120,7 @@ void fn_8014AC0C(void *p, int team)
     int score = points + 1;
     fn_801787FC(team, score);
     fn_800C87CC(team, score);
-    fn_801735D8(2048);
+    ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     fn_8009D964(1, 0);
 }
@@ -132,11 +132,11 @@ void fn_8014AC88(void *p)
     fn_801790D0(fn_80178308(), 0.0f, 0.0f);
     fn_801790D0(fn_80178320(), 5.0f, 3.0f);
     fn_80178A20(fn_80178A2C() * 2.0f);
-    fn_801735B4(2048);
+    ClockRuleSetFlags(2048);
     lbl_803EB2B4 = 0;
     fn_8017833C(1);
     lbl_803EB2B5 = 0;
-    fn_8017E430();
+    HudClearEvent71();
     fn_80157514();
 }
 
@@ -156,7 +156,7 @@ void fn_8014AD70(void)
 
 void fn_8014ADB0(void *p, float dt)
 {
-    fn_801735D8(2048);
+    ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_17(lbl_802DE3D0);
@@ -253,7 +253,7 @@ void fn_8014B178(void *p, float dt)
 
 void fn_8014B1C8(void *p, float dt)
 {
-    fn_801735B4(2048);
+    ClockRuleSetFlags(2048);
     fn_800A042C(p, dt);
 }
 
@@ -264,7 +264,7 @@ void fn_8014B210(void *p, float dt)
     if (fn_8011F1CC() && fn_801783AC(0) && !fn_801783AC(13) && !fn_801783AC(1) &&
         !fn_801783AC(20)) {
         fn_80178370();
-        fn_8017D7C4("Passer Cannot Run!");
+        HudShowAlert("Passer Cannot Run!");
     } else if (fn_80178308() != fn_80178348()) {
         fn_80178370();
     }
@@ -295,9 +295,9 @@ void fn_8014B38C(void *p, float dt)
         fn_800AD910(5, dt);
     } else {
         int pending = 0;
-        fn_801735D8(2048);
+        ClockRuleClearFlags(2048);
         fn_8009D8CC(1);
-        fn_801735D8(16);
+        ClockRuleClearFlags(16);
         if (fn_80178AE0() == 2) {
             if (lbl_803EB2B4) {
                 lbl_803EB2B5 = 1;
@@ -315,7 +315,7 @@ void fn_8014B38C(void *p, float dt)
             pending = 1;
         }
         if (pending) {
-            fn_80173B8C();
+            ClockRuleEndPeriod();
         }
     }
 }

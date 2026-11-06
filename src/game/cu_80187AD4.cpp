@@ -27,7 +27,7 @@ extern Entry_80219044 *lbl_80362BB0[3];
 
 int fn_801F95C8(void);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_80180EF8(int id);
+int MsgGameGetPlayerPortrait(int id);
 void *fn_8021EA44(int index);
 int fn_8021E72C(void *pObject, int a, int b);
 int fn_8022E558(void);
@@ -44,7 +44,7 @@ extern unsigned char lbl_803EB624;
 extern unsigned char lbl_803EB61B;
 
 void fn_801F87FC(int a);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 void MsgNameEntryGetName(char *pDest, int length);
 int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
 
@@ -119,7 +119,7 @@ void fn_80187D10(void)
         for (unsigned char index = 0; index < 7; ++index) {
             Object_80039F5C *p = fn_80039F5C(team, index);
             if (p->mUnknown9[2] != 0) {
-                int id = fn_80180EF8(p->mUnknown2908);
+                int id = MsgGameGetPlayerPortrait(p->mUnknown2908);
                 if (id > 630) {
                     fn_8021E72C(pList, 10, id);
                 }
@@ -229,7 +229,7 @@ int fn_80188044(int value)
 
 void fn_8018807C(unsigned char value)
 {
-    if (fn_8017F60C() == 0) {
+    if (GameModeTypeIsSpecial() == 0) {
         lbl_803EB61B = value;
     }
 }

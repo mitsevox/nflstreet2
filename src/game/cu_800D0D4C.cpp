@@ -1,6 +1,6 @@
 #include <string.h>
 #include <math.h>
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/fn_800D4164.h"
 #include "game/DbCursor.h"
 #include "game/Entry_80219044.h"
@@ -12,7 +12,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_80238174.h"
 
@@ -230,7 +230,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned cha
 float fn_80178A2C(void);
 Point_8017886C fn_80178070(void);
 int fn_801787DC(int);
-void fn_8017E3CC(int);
+void HudShowPlayLeader(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
 void UserInfoAddPoints(int, unsigned int);
@@ -627,7 +627,7 @@ extern "C" void fn_800D1634(int side, int value, int a, int b) {
         if (value == 0) t = 0.0f;
         else if (value >= lbl_803EACD0) t = 1.0f;
         else t = (float)value / (float)lbl_803EACD0;
-        fn_8017DE54((unsigned char)side, t, a, b);
+        HudSetGameBreakerMeter((unsigned char)side, t, a, b);
     }
 }
 
@@ -913,8 +913,8 @@ extern "C" void fn_800D2378(int id, int team, int count) {
     lbl_803EACD4->mUnknown2058[0] = fn_800D41F8(0) - lbl_803EACD4->mUnknown2050[0];
     lbl_803EACD4->mUnknown2058[1] = fn_800D41F8(1) - lbl_803EACD4->mUnknown2050[1];
     if (lbl_803EACD4->mUnknown2058[fn_80178320()] > lbl_803EACD4->mUnknown2058[fn_80178308()]) {
-        if (lbl_803EACD4->mUnknown2058[fn_80178320()] > 0) fn_8017E3CC(fn_80178320());
-    } else if (lbl_803EACD4->mUnknown2058[fn_80178308()] > 0) fn_8017E3CC(fn_80178308());
+        if (lbl_803EACD4->mUnknown2058[fn_80178320()] > 0) HudShowPlayLeader(fn_80178320());
+    } else if (lbl_803EACD4->mUnknown2058[fn_80178308()] > 0) HudShowPlayLeader(fn_80178308());
     fn_8017C5A0(0, lbl_803EACD4->mUnknown2058[0]); fn_8017C5A0(1, lbl_803EACD4->mUnknown2058[1]);
     fn_8017C5CC(0, lbl_803EC9A4[0]); fn_8017C5CC(1, lbl_803EC9A4[1]);
     fn_8017C5F8(0, lbl_803EC9AC[0]); fn_8017C5F8(1, lbl_803EC9AC[1]);
@@ -2705,7 +2705,7 @@ extern "C" void fn_800D7438(void) {
     void *pHandle;
 
     lbl_803EACD0 = 20000;
-    if (fn_8017F584() == 0) {
+    if (GameModeTypeGet() == 0) {
         if (CheatFlagsIsSet(28)) {
             lbl_803EACD0 = 10000;
         } else if (CheatFlagsIsSet(29)) {

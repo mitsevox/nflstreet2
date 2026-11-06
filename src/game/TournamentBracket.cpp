@@ -34,8 +34,8 @@ int fn_80084204(DbCursor *pObject);
 void fn_80188CBC(int, int, int, int, char *);
 int ChalGetTournamentSlot();
 void ChalSetTournamentSlot(int);
-int fn_801801B4();
-int fn_801801BC();
+int MsgGameGetSetupState();
+int MsgGameGetSetupArg();
 void ChalCloseCursors();
 void fn_8000FCD4(int a);
 void fn_8000473C(int, int);
@@ -266,8 +266,8 @@ extern "C" void TournBracketPlayNext(int value)
 {
     int team = -1;
     int active = 0;
-    if (fn_801801B4() == 1) {
-        active = fn_801801BC() == 1;
+    if (MsgGameGetSetupState() == 1) {
+        active = MsgGameGetSetupArg() == 1;
     }
     if (active) {
         char opponent;

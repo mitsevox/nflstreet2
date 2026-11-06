@@ -40,7 +40,7 @@
 extern "C" {
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
 void PassIconsShow(int mode);
 }
@@ -118,7 +118,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
 
         pState->mUnknown4++;
         pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
-        if (pOther && (pOther->mpState->mId == 12 || p->mUnknown560.mUnknown32 > lbl_803ECB08 * 50310.56f)) {
+        if (pOther && (pOther->mpState->mId == 12 || p->mUnknown560.mUnknown32 > gPlyrMoveFwdSpeed * 50310.56f)) {
             switch (p->mUnknown560.mUnknown55) {
             case 0:
             case 5:

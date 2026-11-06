@@ -7,7 +7,7 @@ extern "C" {
 int fn_80178308(void);
 int fn_801486A0(void);
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_800B0A2C(Object_80039F5C *p, int value)
@@ -23,7 +23,7 @@ extern "C" int fn_800B0A2C(Object_80039F5C *p, int value)
 
     for (; i < count; i++) {
         Object_80039F5C *pPlayer = fn_80039F5C(team, i);
-        if (pPlayer->mpState->mId != 61 && pPlayer->mMotion.mUnknown28 > lbl_803ECB08 * 0.14f) {
+        if (pPlayer->mpState->mId != 61 && pPlayer->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.14f) {
             result = 0;
             break;
         }

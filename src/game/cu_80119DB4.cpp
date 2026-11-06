@@ -60,7 +60,7 @@ extern float lbl_803EB070;
 extern float lbl_803EB074;
 extern float lbl_803EB078;
 extern float lbl_803EB07C;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EB088;
 float fn_80237260(int stream);
 int fn_800E1554(Object_80039F5C *p);
@@ -109,7 +109,7 @@ extern "C" void fn_80119DB4(Object_80039F5C *p, Object_80039F5C *pOther, int app
         pBlock->mUnknown28 -= pBlock->mUnknown28 * scale;
         pBlock->mUnknown32 -= pBlock->mUnknown32 * scale;
         pBlock->mUnknown36 -= pBlock->mUnknown36 * scale;
-    } else if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.4f) {
+    } else if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.4f) {
         pBlock->mUnknown24 += pBlock->mUnknown24 * lbl_803EB034;
         pBlock->mUnknown32 += pBlock->mUnknown32 * lbl_803EB034;
     }

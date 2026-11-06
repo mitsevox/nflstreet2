@@ -63,8 +63,8 @@ void CamGameSetModeAll(int a);
 void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 Object_800670B4 *fn_80168708(int team);
 void fn_80168A14(int team);
-void fn_80173D10(void);
-void fn_80176C90(void);
+void DriveLogEndDrive(void);
+void ScoringLogReset(void);
 int fn_80177C38(void);
 void fn_80177C44(int value);
 void fn_80177C50(int a);
@@ -129,8 +129,8 @@ extern "C" void fn_800BAAE4(void)
     CamGameSelectCamera(0);
     CamGameSetFocusAll(1, BallGetCurrentIndex());
     fn_8011DF90();
-    fn_80176C90();
-    fn_80173D10();
+    ScoringLogReset();
+    DriveLogEndDrive();
     fn_80168A14(0);
     fn_80168A14(1);
     for (int team = 0; team <= 1; team++) {

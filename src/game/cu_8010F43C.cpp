@@ -172,7 +172,7 @@ float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 extern float gFrameTimeScale;
 extern unsigned char lbl_803EAF50;
 extern unsigned char lbl_803EAF51;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable);
 int fn_80113498(Object_80039F5C *p);
 }
@@ -757,7 +757,7 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 1.0f;
-    } else if (p->mMotion.mUnknown28 / lbl_803ECB08 < 0.65f) {
+    } else if (p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed < 0.65f) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.65f;
@@ -849,7 +849,7 @@ extern "C" int fn_8011168C(Object_80039F5C *p)
     int angle;
     Message_800F01CC message;
 
-    if (pMotion->mUnknown28 > lbl_803ECB08 * 0.4f && pMotion->mUnknown44 > 0.0f && fn_801115C0(p)) {
+    if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.4f && pMotion->mUnknown44 > 0.0f && fn_801115C0(p)) {
         if (p->mMotion.mPos.mX > 0.0f) {
             angle = (pMotion->mUnknown32 - 0x400000) & 0xFFFFFF;
             result = angle > 0xF8E38F;

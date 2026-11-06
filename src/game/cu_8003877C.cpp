@@ -120,7 +120,7 @@ void fn_800CE684(Object_800CE674 *p);
 void fn_800D782C(Object_80039F5C *p);
 void fn_80143DC4(Object_80039F5C *p);
 void fn_8015C244(void *p);
-void fn_8016D8F0(Object_80039F5C *p, float f);
+void PlyrMoveUpdate(Object_80039F5C *p, float f);
 void fn_8016F780(void);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
@@ -133,7 +133,7 @@ int fn_800ADEFC(void *pElements, unsigned int index);
 void fn_800B2BC0(Object_800B26B0 *pMotion);
 void fn_8009BEA8(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
-void fn_8016D9D0(Object_8016D8B0 *pObject);
+void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
 void AnimInitHeader(void *p, int a, int b, int c);
 void fn_801B9FEC(void *p, void *q);
 void fn_801BA03C(void *a, void *b, float f, Object_80039F5C *p);
@@ -186,7 +186,7 @@ void RumbleStart(int channel, int level, int duration);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
-void fn_8016D8B0(Object_8016D8B0 *pObject);
+void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject);
 void fn_800AF804(void *p);
 void fn_800C3130(Object_8003DEC4 *pObject, short a, unsigned short b, int index);
 int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
@@ -446,8 +446,8 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     Object_800CE674 *pReset = &pPlayer->mObject.mUnknown1240;
 
     fn_8009BC38(p, pObject);
-    fn_8016D8B0(&p->mUnknown512);
-    fn_8016D8B0(&p->mUnknown528);
+    PlyrMoveCmdClear(&p->mUnknown512);
+    PlyrMoveCmdClear(&p->mUnknown528);
     fn_8009BD48(&p->mId, 1, team, index);
     p->mUnknown9[0] = 1;
     p->mUnknown8 = 0xFF;
@@ -764,7 +764,7 @@ extern "C" void fn_80039B2C(float dt)
     for (i = 0; i < count; i++) {
         p = &lbl_803EA3F8->mpPlayers[i].mObject;
 
-        fn_8016D8F0(p, dt);
+        PlyrMoveUpdate(p, dt);
         fn_80039458(p);
         fn_800394F4(p);
         fn_800B2B90(&p->mMotion);
@@ -930,8 +930,8 @@ extern "C" void fn_8003A090(void)
         fn_800B2BC0(&p->mMotion);
         fn_801BCEEC(p->mUnknown1244, p->mUnknown1244 + 12);
         fn_800F0770(0, p->mQueue, 4, 1, p);
-        fn_8016D9D0(&p->mUnknown528);
-        fn_8016D9D0(&p->mUnknown512);
+        PlyrMoveCmdReverse(&p->mUnknown528);
+        PlyrMoveCmdReverse(&p->mUnknown512);
         fn_8009BEA8(p);
     }
 }

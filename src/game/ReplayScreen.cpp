@@ -1,11 +1,11 @@
 /* The instant replay screen: starts and ends replay playback and reports the replay position and
    length. */
-#include "game/ArgsPrefix_8017F6A8.h"
+#include "game/UISTextArg.h"
 
 
 struct ReplayScreenArgs_t {
     int mUnknown0;
-    ArgsPrefix_8017F6A8 *mpArgs;
+    UISTextArg_t *mpArgs;
 };
 
 extern "C" {
@@ -14,7 +14,7 @@ extern void *lbl_803EA368;
 int fn_8002CA74(void *p, int a, int b);
 int fn_8002D0D0(void *p);
 int fn_8002D0FC(void *p);
-void fn_8017DBCC(void);
+void HudPost3AOn(void);
 void fn_8018A798(int value);
 int fn_8018A7A0(void);
 unsigned char fn_8018AFD8(unsigned char value);
@@ -38,7 +38,7 @@ extern "C" void ReplayScreenExit(void)
     _ReplayScreen_iSavedValue = -1;
     fn_8018AFD8(_ReplayScreen_bSavedFlag);
     fn_8002CA74(lbl_803EA368, 9, 0);
-    fn_8017DBCC();
+    HudPost3AOn();
 }
 
 extern "C" int ReplayScreenGetLength(void) { return fn_8002D0FC(lbl_803EA368); }

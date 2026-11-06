@@ -1,14 +1,16 @@
+/* Ball possession rules: catch, pitch and fumble rolls, giving the ball to a player, spotting the ball and the out-of-bounds check.
+   Also holds the game clock stop rules (flag word 'clkr') and the per-drive play log behind the play-by-play summary lines. */
 #include "game/fn_8022781C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Class_80297C60.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -26,9 +28,9 @@
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
-#include "game/fn_8016FB10.h"
+#include "game/Possession.h"
 
-struct Object_80172FB0 {
+struct PossBallView_t {
     char mUnknown0[12];
     Vector_80039F5C mUnknownC;
     char mUnknown18[180];
@@ -37,9 +39,9 @@ struct Object_80172FB0 {
     int mUnknownF4;
 };
 
-/* One logged play: its type (fn_80173EE0 counts type 8 separately), two
- * signed halfword values and two player references from fn_80174114. */
-struct Play_80361694 {
+/* One logged play: its type (DriveLogAddPlay counts type 8 separately), two
+ * signed halfword values and two player references from DriveLogGetPlayerNum. */
+struct DriveLogPlay_t {
     int mType;
     short mUnknown4;
     short mUnknown6;
@@ -47,10 +49,10 @@ struct Play_80361694 {
     unsigned short mUnknownA;
 };
 
-/* One block of the log: up to 40 plays and the block state. fn_80173D10
+/* One block of the log: up to 40 plays and the block state. DriveLogEndDrive
  * copies a finished block into the entry after its +0x1E4 index. */
-struct Log_80361694 {
-    Play_80361694 mPlays[40];
+struct DriveLog_t {
+    DriveLogPlay_t mPlays[40];
     int mUnknown1E0;
     unsigned short mUnknown1E4;
     unsigned short mCount;
@@ -60,7 +62,7 @@ struct Log_80361694 {
 };
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 double fabs(double);
 
@@ -148,12 +150,12 @@ int fn_801486A0(void);
 int fn_80156704(void);
 void fn_80156C78(int a, int b);
 float fn_8016FAB4(void);
-void fn_80173D10(void);
-void fn_80173EE0(int a, short b, short c, int d, int e);
-void fn_80174074(void);
+void DriveLogEndDrive(void);
+void DriveLogAddPlay(int a, short b, short c, int d, int e);
+void DriveLogStampTime(void);
 void fn_80177C50(int a);
 int fn_80177F70(void);
-void fn_80178264(Pair_8017055C pos);
+void fn_80178264(Point2_t pos);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_80178348(void);
@@ -167,30 +169,30 @@ Object_80039F5C *fn_8017876C(void);
 int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
-float fn_80178A68(Pair_8017055C *pPos);
-void fn_8017CFB4(int a);
-int fn_8017D064(int a);
-void fn_8017D0A4(int a, int b, const char *pText);
-void fn_8017D7C4(const char *pText);
-void fn_8017D844(const char *pText);
+float fn_80178A68(Point2_t *pPos);
+void BannerClear(int a);
+int BannerIsActive(int a);
+void BannerSetText(int a, int b, const char *pText);
+void HudShowAlert(const char *pText);
+void HudShowCallout(const char *pText);
 int CharSkelGetJointByName(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
-void fn_80227538(Pair_8017055C *pOut, int angle, float length);
+void fn_80227538(Point2_t *pOut, int angle, float length);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_80237260(int stream);
 
-int fn_80170198(Object_80039F5C *p);
-int fn_80170294(Object_80039F5C *p);
-float fn_80170374(Object_80039F5C *p);
-void fn_80171824(Object_80039F5C *p);
-void fn_80171DB0(Object_80039F5C *p);
-void fn_80171E30(void);
-void fn_80172154(Object_80039F5C *p, void *pBall);
-void fn_801726F8(Object_80039F5C *p);
-int fn_8017319C(Object_80039F5C *p);
+int PossIsCatchInBounds(Object_80039F5C *p);
+int PossCanFumble(Object_80039F5C *p);
+float PossCalcHitFactor(Object_80039F5C *p);
+void PossFumble(Object_80039F5C *p);
+void PossReleaseBall(Object_80039F5C *p);
+void PossStartFumble(void);
+void PossGiveBall(Object_80039F5C *p, void *pBall);
+void PossLogBallResult(Object_80039F5C *p);
+int PossCheckDownedBall(Object_80039F5C *p);
 int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
@@ -217,15 +219,15 @@ int fn_801787DC(int team);
 int fn_80178AE0(void);
 int fn_80178C24(void);
 void *fn_8023816C(void *pHandle);
-void fn_801735B4(unsigned int mask);
-unsigned int fn_801735C8(unsigned int mask);
-void fn_801735D8(unsigned int mask);
-void fn_801739D0(void);
-int fn_80173A88(void);
-unsigned char fn_80173B64(void);
-void fn_80173C68(void);
-int fn_80173CAC(void);
-int fn_80174114(int id);
+void ClockRuleSetFlags(unsigned int mask);
+unsigned int ClockRuleTestFlags(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
+void ClockRuleSetStopMode(void);
+int ClockRuleCanEndPeriod(void);
+unsigned char ClockRuleIsEndHeld(void);
+void DriveLogClearSaved(void);
+int DriveLogGetElapsed(void);
+int DriveLogGetPlayerNum(int id);
 int fn_80177C38(void);
 void fn_8017C298(unsigned short a, short b);
 void fn_8017C2F0(unsigned short a);
@@ -234,16 +236,16 @@ int fn_8022DDB4(int tag, void *data);
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
-float lbl_803EB430 = 0.075f;
-float lbl_803EB434 = 0.12f;
-int lbl_802E99C4[11] = {6, 2, 5, 1, 24, 18, 22, 16, 21, 15, 26};
+float _Poss_fSpotPad = 0.075f;
+float _Poss_fSpotPadHandoff = 0.12f;
+int _Poss_aiSpotJoints[11] = {6, 2, 5, 1, 24, 18, 22, 16, 21, 15, 26};
 
-unsigned char lbl_803EB438 = 1;
-unsigned char lbl_803EB439 = 0;
-int lbl_803EB43C = 0;
+unsigned char _Poss_bAllowCatch = 1;
+unsigned char _Poss_bMissArmed = 0;
+int _Poss_iMissedCatchId = 0;
 
 extern "C" {
-void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
+void PossCalcBallSpot(Object_80039F5C *p, void *pBall, Point2_t *pOut, int a)
 {
     Vector_80039F5C ballPos;
     unsigned char unknown;
@@ -339,14 +341,14 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
                 }
             }
             if (pOut->mX < 0.0f) {
-                pOut->mX -= lbl_803EB434;
+                pOut->mX -= _Poss_fSpotPadHandoff;
             } else {
-                pOut->mX += lbl_803EB434;
+                pOut->mX += _Poss_fSpotPadHandoff;
             }
             if (pOut->mY < 0.0f) {
-                pOut->mY -= lbl_803EB434;
+                pOut->mY -= _Poss_fSpotPadHandoff;
             } else {
-                pOut->mY += lbl_803EB434;
+                pOut->mY += _Poss_fSpotPadHandoff;
             }
             result = fn_80178508(pOut, (float *)&region, 0);
             if (result == 3) {
@@ -364,14 +366,14 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
             return;
         }
         if (pOut->mX < 0.0f) {
-            pOut->mX -= lbl_803EB430;
+            pOut->mX -= _Poss_fSpotPad;
         } else {
-            pOut->mX += lbl_803EB430;
+            pOut->mX += _Poss_fSpotPad;
         }
         if (pOut->mY < 0.0f) {
-            pOut->mY -= lbl_803EB430;
+            pOut->mY -= _Poss_fSpotPad;
         } else {
-            pOut->mY += lbl_803EB430;
+            pOut->mY += _Poss_fSpotPad;
         }
         if (leftDown || rightDown) {
             return;
@@ -387,7 +389,7 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
             onSide = left.mZ;
         }
         for (i = 0; i <= 10; i++) {
-            fn_8009BF5C(p, lbl_802E99C4[i], &joint, &extra);
+            fn_8009BF5C(p, _Poss_aiSpotJoints[i], &joint, &extra);
             if (joint.mZ < onSide) {
                 onSide = joint.mZ;
             }
@@ -407,7 +409,7 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
 }
 
 
-int fn_80170140(Object_80039F5C *p)
+int PossTestCarrierBall(Object_80039F5C *p)
 {
     int result = 0;
 
@@ -420,10 +422,10 @@ int fn_80170140(Object_80039F5C *p)
     return result;
 }
 
-int fn_80170198(Object_80039F5C *p)
+int PossIsCatchInBounds(Object_80039F5C *p)
 {
     float zoneInfo;
-    Pair_8017055C point;
+    Point2_t point;
 
     if (!fn_800A7F44(p->mId >> 8 & 0xFF)) {
         return 0;
@@ -444,7 +446,7 @@ int fn_80170198(Object_80039F5C *p)
     return fn_80178508(&point, &zoneInfo, 0) <= 2;
 }
 
-int fn_80170294(Object_80039F5C *p)
+int PossCanFumble(Object_80039F5C *p)
 {
     int allowed = 1;
     void *pBall = BallFindHeldBy(p);
@@ -471,7 +473,7 @@ int fn_80170294(Object_80039F5C *p)
     return allowed;
 }
 
-float fn_80170374(Object_80039F5C *p)
+float PossCalcHitFactor(Object_80039F5C *p)
 {
     float factor = 0.0f;
     float timing;
@@ -519,7 +521,7 @@ float fn_80170374(Object_80039F5C *p)
             break;
         }
     }
-    factor *= p->mUnknown560.mUnknown28 / (lbl_803ECB08 * 100621.117f) * 0.85f + 0.15f;
+    factor *= p->mUnknown560.mUnknown28 / (gPlyrMoveFwdSpeed * 100621.117f) * 0.85f + 0.15f;
     if (pBlock->mFlags.mAll & 0xC0000) {
         factor = 0.87f;
     } else if (pBlock->mFlags.mBytes[1] & 1 || pBlock->mFlags.mBytes[1] & 2) {
@@ -530,7 +532,7 @@ float fn_80170374(Object_80039F5C *p)
     return factor * timing;
 }
 
-void fn_8017055C(Object_80039F5C *p, int *pFlags, int *pAngle, int move, int handle)
+void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, int handle)
 {
     Vector_80039F5C velocity;
 
@@ -583,12 +585,12 @@ void fn_8017055C(Object_80039F5C *p, int *pFlags, int *pAngle, int move, int han
         *pFlags = 0x100;
         break;
     }
-    if (lbl_803EB438 == 0) {
+    if (_Poss_bAllowCatch == 0) {
         *pFlags = 0x100;
     }
 }
 
-void fn_80170754(Object_80039F5C *p, float *pA, float *pB, int angle)
+void PossCalcBallTerms(Object_80039F5C *p, float *pA, float *pB, int angle)
 {
     Vector_80039F5C velocity;
 
@@ -601,7 +603,7 @@ void fn_80170754(Object_80039F5C *p, float *pA, float *pB, int angle)
     *pA = *pA < 0.0f ? 0.0f : (*pA > 1.0f ? 1.0f : *pA);
 }
 
-unsigned short fn_80170864(Object_80039F5C *p, float *pChance)
+unsigned short PossApplyCoverage(Object_80039F5C *p, float *pChance)
 {
     float pressure = 0.0f;
     unsigned short count = 0;
@@ -671,7 +673,7 @@ unsigned short fn_80170864(Object_80039F5C *p, float *pChance)
     return count;
 }
 
-float fn_80170B30(Object_80039F5C *p, Object_80039F5C *pReceiver, int flags, int angle)
+float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int flags, int angle)
 {
     int offense = fn_80178308() == (p->mId >> 8 & 0xFF);
     Vector_80039F5C velocity;
@@ -682,7 +684,7 @@ float fn_80170B30(Object_80039F5C *p, Object_80039F5C *pReceiver, int flags, int
     float chance;
 
     BallGetVelocity(BallGetCurrent(), &velocity);
-    fn_80170754(p, &a, &b, angle);
+    PossCalcBallTerms(p, &a, &b, angle);
     if (fn_801486A0() == 1) {
         rating = p->mRatings[8] >= p->mRatings[3] ? p->mRatings[8] : p->mRatings[3];
     } else if ((p->mId >> 8 & 0xFF) == fn_80178308()) {
@@ -705,8 +707,8 @@ float fn_80170B30(Object_80039F5C *p, Object_80039F5C *pReceiver, int flags, int
     if (fn_800E0EF0(p)) {
         chance += 0.15f;
     }
-    fn_80170864(p, &chance);
-    chance -= fn_80170374(p) * 0.3f;
+    PossApplyCoverage(p, &chance);
+    chance -= PossCalcHitFactor(p) * 0.3f;
     if (offense ? fn_800A7EE0(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)
                 : fn_800A7F44(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)) {
         chance = chance < 1.0f ? 1.0f : chance;
@@ -725,7 +727,7 @@ float fn_80170B30(Object_80039F5C *p, Object_80039F5C *pReceiver, int flags, int
     return chance;
 }
 
-int fn_80170E64(void *pUnused, Object_80039F5C *p, int right)
+int PossIsWristNearJoint(void *pUnused, Object_80039F5C *p, int right)
 {
     int result = 1;
     Vector_80039F5C wrist;
@@ -745,7 +747,7 @@ int fn_80170E64(void *pUnused, Object_80039F5C *p, int right)
     return result;
 }
 
-void fn_80170F40(void)
+void PossEndIncompletePass(void)
 {
     if (fn_800AD9B4() == 3) {
         void *pBall = BallGetCurrent();
@@ -776,7 +778,7 @@ void fn_80170F40(void)
     }
 }
 
-int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
+int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
 {
     int handle = 0xFFFF;
     int unknown;
@@ -796,9 +798,9 @@ int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
             if (BallStateGet(pBall, 0) == 4 && !fn_801783AC(0xB) && !fn_801783AC(0xC)) {
                 pReceiver = BallGetLastHolder(pBall);
             }
-            fn_8017055C(p, &flags, &angle, move, handle);
+            PossClassifyCatch(p, &flags, &angle, move, handle);
             if (flags <= 0xFF) {
-                chance = fn_80170B30(p, pReceiver, flags, angle);
+                chance = PossCalcCatchChance(p, pReceiver, flags, angle);
                 if (fn_80178308() == (p->mId >> 8 & 0xFF)) {
                     if (fn_800E0F40(p)) {
                         chance = 0.0f;
@@ -809,12 +811,12 @@ int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
                     if (fn_80237260(0) < chance) {
                         caught = 1;
                     } else {
-                        lbl_803EB43C = p->mId;
+                        _Poss_iMissedCatchId = p->mId;
                     }
-                } else if (fn_80170198(p) == 1 && fn_80237260(0) < chance) {
+                } else if (PossIsCatchInBounds(p) == 1 && fn_80237260(0) < chance) {
                     caught = 1;
                 } else {
-                    lbl_803EB43C = p->mId;
+                    _Poss_iMissedCatchId = p->mId;
                 }
             } else if (fn_80178320() == (p->mId >> 8 & 0xFF)) {
                 switch (move) {
@@ -830,7 +832,7 @@ int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
                     case 0xC:
                     case 0x1C:
                     case 0x5E:
-                        lbl_803EB43C = p->mId;
+                        _Poss_iMissedCatchId = p->mId;
                         break;
                     }
                     break;
@@ -838,11 +840,11 @@ int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
             }
         }
     } else {
-        caught = lbl_803EB438;
+        caught = _Poss_bAllowCatch;
     }
     if (caught == 1) {
         fn_80071458(p, pBall);
-        fn_80172154(p, pBall);
+        PossGiveBall(p, pBall);
         BallSetTarget(pBall, 0);
         if (handle == 0xFFFF || !fn_8009A5D4(handle)) {
             BallGetPosition(pBall, &pos);
@@ -854,7 +856,7 @@ int fn_80171068(void *pBall, Object_80039F5C *p, unsigned int move)
     return caught;
 }
 
-int fn_801712D0(void *pBall, Object_80039F5C *p)
+int PossTryReceivePitch(void *pBall, Object_80039F5C *p)
 {
     int caught = 0;
     Record_8011F518 *pPitch = fn_8011F518();
@@ -881,15 +883,15 @@ int fn_801712D0(void *pBall, Object_80039F5C *p)
         Object_80039F5C *pPasser = BallGetCurrentLastHolder();
 
         AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 0, (p->mId >> 8 & 0xFF) == (pPasser->mId >> 8 & 0xFF), 0);
-        fn_80172154(p, pBall);
-        fn_801726F8(p);
+        PossGiveBall(p, pBall);
+        PossLogBallResult(p);
     } else {
         fn_80071540(p, pBall);
     }
     return caught;
 }
 
-void fn_80171450(Object_80039F5C *p)
+void PossTryJarBall(Object_80039F5C *p)
 {
     void *pBall = 0;
     float chance = 0.0f;
@@ -938,7 +940,7 @@ void fn_80171450(Object_80039F5C *p)
                 chance += chance * hitterScale;
                 if (fn_801BE648(p->mpUnknown792) == 0x5F && pHitter->mUnknown1218 == 2) {
                     Vector_80039F5C toBall;
-                    Pair_8017055C toHitter;
+                    Point2_t toHitter;
                     int ballAngle;
 
                     fn_80227690(&toHitter, &pHitter->mMotion.mPos, &p->mMotion.mPos);
@@ -967,7 +969,7 @@ void fn_80171450(Object_80039F5C *p)
         int unknown;
         int state = BallStateGetPrev(pBall, &unknown);
 
-        fn_80171DB0(p);
+        PossReleaseBall(p);
         if (state == 4 && !fn_801783AC(0xB) && !fn_801783AC(0xC)) {
             Record_800B15FC *pRecord;
 
@@ -986,11 +988,11 @@ void fn_80171450(Object_80039F5C *p)
     }
 }
 
-void fn_80171824(Object_80039F5C *p)
+void PossFumble(Object_80039F5C *p)
 {
     int cleared = 0;
 
-    fn_80171DB0(p);
+    PossReleaseBall(p);
     if ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) {
         fn_800D4BF0(p, fn_80178320());
     }
@@ -1002,13 +1004,13 @@ void fn_80171824(Object_80039F5C *p)
         fn_800B1698(p, fn_8017876C());
         p->mFlags &= ~0x10000;
     }
-    fn_80171E30();
+    PossStartFumble();
     if (cleared) {
         fn_80178718(0);
     }
 }
 
-void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
+void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
 {
     unsigned int chance = 0;
     Block_801718E8 *pBlock = 0;
@@ -1018,13 +1020,13 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
         && ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) && !p->mUnknown1219) {
         forced = 1;
     }
-    if (CheatFlagsIsSet(0x17) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x17) && !GameModeTypeGet()) {
         forced = 1;
     }
     if (!fn_800A7EB8(p->mId >> 8 & 0xFF) && pTackler && fn_800A851C(pTackler->mId >> 8 & 0xFF, pTackler)) {
         forced = 1;
     }
-    if (!fn_8017319C(p) && !fn_801787A0() && fn_80170294(p)) {
+    if (!PossCheckDownedBall(p) && !fn_801787A0() && PossCanFumble(p)) {
         int eligible = 1;
         void *pBall = BallFindHeldBy(p);
         int handoff = BallGetTransferKind(pBall);
@@ -1041,7 +1043,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
                 eligible = 0;
             }
         }
-        if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x18) && !GameModeTypeGet()) {
             forced = 0;
             eligible = 0;
         }
@@ -1052,7 +1054,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
             chance = 0;
             if (p->mpState->mId == 0x10 && pTackler == fn_8009BCE8(&p->mUnknown336) && pTackler->mUnknown1218 == 2) {
                 Vector_80039F5C toBall;
-                Pair_8017055C toTackler;
+                Point2_t toTackler;
                 int ballAngle;
                 int angle;
 
@@ -1117,7 +1119,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
             if (handoff == 0 && (p->mFlags & 0x2000) && pRequest->mUnknownB) {
                 fn_801039D8(p);
             } else if (handoff == 0) {
-                fn_80171824(p);
+                PossFumble(p);
             } else {
                 if (state == 4 && !fn_801783AC(0xB) && !fn_801783AC(0xC)) {
                     Record_800B15FC *pRecord;
@@ -1136,7 +1138,7 @@ void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler)
     }
 }
 
-void fn_80171DB0(Object_80039F5C *p)
+void PossReleaseBall(Object_80039F5C *p)
 {
     void *pBall = BallFindHeldBy(p);
     Vector_80039F5C velocity;
@@ -1149,7 +1151,7 @@ void fn_80171DB0(Object_80039F5C *p)
     }
 }
 
-void fn_80171E30(void)
+void PossStartFumble(void)
 {
     void *pBall = BallGetCurrent();
     Object_80039F5C *pCarrier = BallGetCurrentLastHolder();
@@ -1186,25 +1188,25 @@ void fn_80171E30(void)
     if (fn_801486A0() == 0) {
         switch (anim) {
         case 0xEA:
-            fn_8017D844("Gimme That!");
+            HudShowCallout("Gimme That!");
             break;
         case 0xEE:
-            fn_8017D844("Mine!");
+            HudShowCallout("Mine!");
             break;
         default:
-            fn_8017D844("Fumble");
+            HudShowCallout("Fumble");
             break;
         }
     } else {
         switch (anim) {
         case 0xEA:
-            fn_8017D7C4("Gimme That!");
+            HudShowAlert("Gimme That!");
             break;
         case 0xEE:
-            fn_8017D7C4("Mine!");
+            HudShowAlert("Mine!");
             break;
         default:
-            fn_8017D7C4("Fumble");
+            HudShowAlert("Fumble");
             break;
         }
     }
@@ -1212,24 +1214,24 @@ void fn_80171E30(void)
     PassIconsClearReplayFlag();
 }
 
-void fn_801720B4(Object_80039F5C *p)
+void PossGrabBall(Object_80039F5C *p)
 {
     AudmonEventPostId(0x69, &p->mMotion.mPos, p->mId, (p->mId >> 8 & 0xFF) == fn_80178308(), 0, 0);
     if (!fn_801787A0() && (p->mId >> 8 & 0xFF) == fn_80178320()) {
         fn_800A8954(0xF, p->mId >> 8 & 0xFF, p);
     }
-    fn_80172154(p, BallGetCurrent());
-    fn_801726F8(p);
+    PossGiveBall(p, BallGetCurrent());
+    PossLogBallResult(p);
 }
 
-void fn_80172154(Object_80039F5C *p, void *pBall)
+void PossGiveBall(Object_80039F5C *p, void *pBall)
 {
     int stolen;
     int resolved;
     int result;
     int status;
     Message_800F01CC message;
-    Pair_8017055C pos;
+    Point2_t pos;
 
     BallGiveToPlayer(pBall, p);
     stolen = 0;
@@ -1254,14 +1256,14 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
             fn_80177F70();
             fn_8009D86C();
             fn_801783D0(4, 0);
-            fn_8016FB10(p, pBall, &pos, 0);
-            fn_801729F8(pBall, &pos);
+            PossCalcBallSpot(p, pBall, &pos, 0);
+            PossCheckBallOut(pBall, &pos);
         }
     } else {
         stolen = 1;
         if (result == 5 && status == 1) {
-            fn_8016FB10(p, pBall, &pos, 0);
-            if (!fn_801729F8(pBall, &pos)) {
+            PossCalcBallSpot(p, pBall, &pos, 0);
+            if (!PossCheckBallOut(pBall, &pos)) {
                 stolen = 0;
             }
         }
@@ -1269,10 +1271,10 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
             if (result == 4) {
                 if (fn_801486A0() != 1) {
                     if (fn_800E0EF0(p)) {
-                        fn_8017D7C4("User Pick");
+                        HudShowAlert("User Pick");
                         fn_800D67B8(1, p);
                     } else {
-                        fn_8017D7C4("Interception");
+                        HudShowAlert("Interception");
                         fn_800D67B8(0, p);
                     }
                 }
@@ -1280,35 +1282,35 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
                 if (fn_801BE648(p->mpUnknown792) == 0xE1) {
                     AudmonEventPostId(0x37, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
                 }
-                fn_801726F8(p);
+                PossLogBallResult(p);
             } else if (result == 3) {
                 if (fn_800E0EF0(p)) {
-                    fn_8017D7C4("User Steal");
+                    HudShowAlert("User Steal");
                     fn_800D69A4(p->mId >> 8 & 0xFF, 1, 1);
                     fn_800310C0(lbl_803EA368, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 } else {
                     fn_800D69A4(p->mId >> 8 & 0xFF, 1, 0);
-                    fn_8017D7C4("Stolen Pitch");
+                    HudShowAlert("Stolen Pitch");
                 }
                 fn_800A8954(0xF, p->mId >> 8 & 0xFF, p);
-                fn_801726F8(p);
+                PossLogBallResult(p);
             } else {
                 int offense;
                 fn_800D4A70(p);
                 offense = fn_80178348();
-                if (fn_8017D064(3)) {
-                    fn_8017CFB4(5);
+                if (BannerIsActive(3)) {
+                    BannerClear(5);
                     if ((p->mId >> 8 & 0xFF) == offense) {
-                        fn_8017D0A4(5, 0, "Offense Recovers");
+                        BannerSetText(5, 0, "Offense Recovers");
                     } else {
-                        fn_8017D0A4(5, 0, "Defense Recovers");
+                        BannerSetText(5, 0, "Defense Recovers");
                     }
                 } else {
-                    fn_8017CFB4(3);
+                    BannerClear(3);
                     if ((p->mId >> 8 & 0xFF) == offense) {
-                        fn_8017D0A4(3, 0, "Offense Recovers");
+                        BannerSetText(3, 0, "Offense Recovers");
                     } else {
-                        fn_8017D0A4(3, 0, "Defense Recovers");
+                        BannerSetText(3, 0, "Defense Recovers");
                     }
                 }
             }
@@ -1382,7 +1384,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
     }
 }
 
-void fn_801726F8(Object_80039F5C *p)
+void PossLogBallResult(Object_80039F5C *p)
 {
     int mode = fn_800AD9B4();
     void *pBall;
@@ -1435,8 +1437,8 @@ void fn_801726F8(Object_80039F5C *p)
                 } else {
                     pRecord->mUnknown4 = 2;
                 }
-                fn_80173EE0(4, 0, 0, 0, 0);
-                fn_80173D10();
+                DriveLogAddPlay(4, 0, 0, 0, 0);
+                DriveLogEndDrive();
             }
             break;
         case 3:
@@ -1447,7 +1449,7 @@ void fn_801726F8(Object_80039F5C *p)
         case 5:
             if (status == 1) {
                 pRecord->mUnknown14 = 0x13;
-                fn_80174074();
+                DriveLogStampTime();
             }
             break;
         }
@@ -1479,7 +1481,7 @@ void fn_801726F8(Object_80039F5C *p)
     }
 }
 
-int fn_801729F8(void *pBall, Pair_8017055C *pPos)
+int PossCheckBallOut(void *pBall, Point2_t *pPos)
 {
     Object_80039F5C *pCarrier = 0;
     int done = 0;
@@ -1500,7 +1502,7 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
             switch (state) {
             case 4:
                 if (!fn_801783AC(3) && fn_801783AC(1)) {
-                    fn_80171E30();
+                    PossStartFumble();
                 }
                 break;
             case 1: {
@@ -1508,7 +1510,7 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
                 pCarrier = BallGetHolder(pBall);
                 if (mode == 3) {
                     if (BallGetTransferKind(pBall) == 4) {
-                        fn_801726F8(pCarrier);
+                        PossLogBallResult(pCarrier);
                         if (pPos->mY > fn_80178A2C() && fabs(pPos->mX) >= fn_80178A08()) {
                             pPos->mX = 0.0f;
                         }
@@ -1629,23 +1631,23 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
     return !done;
 }
 
-void fn_80172F9C(void)
+void PossResetMissedCatch(void)
 {
-    lbl_803EB439 = 0;
-    lbl_803EB43C = 0;
+    _Poss_bMissArmed = 0;
+    _Poss_iMissedCatchId = 0;
 }
 
-void fn_80172FB0(Object_80172FB0 *pEvent)
+void PossUpdateMissedCatch(PossBallView_t *pEvent)
 {
-    if (!lbl_803EB439) {
-        if (lbl_803EB43C) {
-            lbl_803EB439 = 1;
+    if (!_Poss_bMissArmed) {
+        if (_Poss_iMissedCatchId) {
+            _Poss_bMissArmed = 1;
         }
-    } else if (!lbl_803EB43C) {
+    } else if (!_Poss_iMissedCatchId) {
         Object_80039F5C *pTackler = fn_8009BCE8(&pEvent->mUnknownCC);
         Record_800B15FC *pRecord;
 
-        lbl_803EB439 = 0;
+        _Poss_bMissArmed = 0;
         if ((pEvent->mUnknownCC >> 8 & 0xFF) == fn_80178308()) {
             if (!fn_801783AC(0xB) && !fn_801783AC(0xC)) {
                 fn_801783D0(0xC, 1);
@@ -1676,12 +1678,12 @@ void fn_80172FB0(Object_80172FB0 *pEvent)
             fn_800D6724(pTackler);
         }
     }
-    lbl_803EB43C = 0;
+    _Poss_iMissedCatchId = 0;
 }
 }
 
 extern "C" {
-int fn_8017319C(Object_80039F5C *p)
+int PossCheckDownedBall(Object_80039F5C *p)
 {
     int result = 0;
     int down = 0;
@@ -1691,7 +1693,7 @@ int fn_8017319C(Object_80039F5C *p)
         return 0;
     }
     handoff = BallGetTransferKind(BallGetCurrent());
-    if (CheatFlagsIsSet(0x18) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x18) && !GameModeTypeGet()) {
         return 0;
     }
     if (PlayerMoveGetKind(p)) {
@@ -1701,35 +1703,35 @@ int fn_8017319C(Object_80039F5C *p)
         result = BallIsClearOfHands(BallGetCurrent());
     }
     if (result) {
-        fn_80171824(p);
+        PossFumble(p);
     }
     return result;
 }
 }
 
-/* Flag word allocated through fn_80238174 under the id 'clkr' (fn_801732D0). */
-static unsigned int *lbl_803ECB2C;
+/* Clock-stop rule flags, allocated under the id 'clkr'. */
+static unsigned int *_ClockRule_puFlags;
 
 extern "C" {
 
-void fn_80173298(int a, int b)
+void ClockRuleDbSetTimeouts(int a, int b)
 {
     fn_801FCE10(0, "update 'FNIG' set 'OTHG' = \x82 and 'OTAG' = \x82\n", a, b);
 }
 
-void fn_801732D0(void)
+void ClockRuleInit(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803ECB2C, sizeof(*lbl_803ECB2C), 0, 0x636C6B72);
+    void *pHandle = fn_80238174(0, (void **)&_ClockRule_puFlags, sizeof(*_ClockRule_puFlags), 0, 0x636C6B72);
 
     fn_8023816C(pHandle);
     fn_802381E0(pHandle);
 }
 
-void fn_80173320(void)
+void ClockRuleShutdown(void)
 {
 }
 
-void fn_80173324(unsigned int a)
+void ClockRuleUpdate(unsigned int a)
 {
     int flags;
 
@@ -1744,13 +1746,13 @@ void fn_80173324(unsigned int a)
         }
     }
     if (flags & 1) {
-        if (!fn_801735C8(0x10) && fn_80173A88() && !fn_80173B64() && fn_800AD9B4() != 3) {
+        if (!ClockRuleTestFlags(0x10) && ClockRuleCanEndPeriod() && !ClockRuleIsEndHeld() && fn_800AD9B4() != 3) {
             fn_8009D8CC(1);
             fn_8009D8CC(0);
-            fn_801735B4(1);
+            ClockRuleSetFlags(1);
             fn_80178370();
-            fn_801735B4(0x10);
-            fn_801735D8(0x100);
+            ClockRuleSetFlags(0x10);
+            ClockRuleClearFlags(0x100);
             fn_800B9B9C(lbl_803EAB84);
             if (ChallengeIsActive()) {
                 ChallengePostOutcome();
@@ -1759,7 +1761,7 @@ void fn_80173324(unsigned int a)
     }
 }
 
-void fn_80173404(void)
+void ClockRuleNextPeriod(void)
 {
     int state;
 
@@ -1770,21 +1772,21 @@ void fn_80173404(void)
     switch (state) {
     case 0:
         state = 4;
-        fn_80173298(0, 0);
+        ClockRuleDbSetTimeouts(0, 0);
         break;
     case 2:
-        fn_80173298(3, 3);
+        ClockRuleDbSetTimeouts(3, 3);
     case 1:
     case 3:
         state++;
         fn_800AD910(6, 0.0f);
         break;
     case 4:
-        fn_8017F584();
+        GameModeTypeGet();
         if (fn_80178AE0() == 2 && !ChallengeIsActive()) {
-            fn_801735B4(0x40);
+            ClockRuleSetFlags(0x40);
             state = 5;
-            fn_80173298(2, 2);
+            ClockRuleDbSetTimeouts(2, 2);
             fn_801FCE10(0, "update 'FNIG' set 'TOFG' = \x83\n", 1);
         } else {
             state = 6;
@@ -1803,39 +1805,39 @@ void fn_80173404(void)
         fn_8017886C()->mUnknown1D = 0;
     }
     fn_8009D818(state);
-    fn_801735D8(4);
-    fn_801735D8(0x80);
+    ClockRuleClearFlags(4);
+    ClockRuleClearFlags(0x80);
     if (fn_8009D990(1) <= 120 && !fn_800BA6F8()) {
-        fn_801735B4(4);
-        fn_801735B4(0x80);
+        ClockRuleSetFlags(4);
+        ClockRuleSetFlags(0x80);
     }
 }
 
-void fn_801735B4(unsigned int mask)
+void ClockRuleSetFlags(unsigned int mask)
 {
-    *lbl_803ECB2C |= mask;
+    *_ClockRule_puFlags |= mask;
 }
 
-unsigned int fn_801735C8(unsigned int mask)
+unsigned int ClockRuleTestFlags(unsigned int mask)
 {
-    return *lbl_803ECB2C & mask;
+    return *_ClockRule_puFlags & mask;
 }
 
-void fn_801735D8(unsigned int mask)
+void ClockRuleClearFlags(unsigned int mask)
 {
-    *lbl_803ECB2C &= ~mask;
+    *_ClockRule_puFlags &= ~mask;
 }
 
-unsigned char fn_801735EC(void)
+unsigned char ClockRuleIsOvertime(void)
 {
-    return fn_801735C8(0x40);
+    return ClockRuleTestFlags(0x40);
 }
 
-void fn_80173614(void)
+void ClockRuleSnap(void)
 {
     int allow;
 
-    fn_801735D8(0x32B);
+    ClockRuleClearFlags(0x32B);
     if (fn_8009D9D8(0) == 1) {
         fn_8009D8CC(0);
     }
@@ -1853,22 +1855,22 @@ void fn_80173614(void)
     }
 }
 
-void fn_801736AC(void)
+void ClockRuleRestartOnReady(void)
 {
     int allow;
     int mode;
 
-    if (fn_8009D9D8(1) == 0 && !fn_801735C8(1) && fn_801735C8(2)) {
+    if (fn_8009D9D8(1) == 0 && !ClockRuleTestFlags(1) && ClockRuleTestFlags(2)) {
         allow = 1;
         switch (fn_8009D86C()) {
         case 2:
-            if (fn_8009D990(1) <= 119 && !fn_801735C8(0x100)) {
+            if (fn_8009D990(1) <= 119 && !ClockRuleTestFlags(0x100)) {
                 allow = 0;
             }
             break;
         case 4:
         case 5:
-            if (fn_8009D990(1) <= 299 && !fn_801735C8(0x100)) {
+            if (fn_8009D990(1) <= 299 && !ClockRuleTestFlags(0x100)) {
                 allow = 0;
             }
             break;
@@ -1886,7 +1888,7 @@ void fn_801736AC(void)
     }
 }
 
-void fn_80173794(void)
+void ClockRuleApplyPlayEvents(void)
 {
     unsigned int count = fn_800B15D4();
     int found = 0;
@@ -1907,30 +1909,30 @@ void fn_80173794(void)
         case 21:
         case 30:
             found = 1;
-            fn_801735B4(1);
+            ClockRuleSetFlags(1);
             break;
         case 25:
             found = 1;
-            fn_801735D8(0x100);
+            ClockRuleClearFlags(0x100);
             if (seen3) {
                 switch (fn_8009D86C()) {
                 case 2:
                     if (pRecord->mUnknown18 <= 119) {
-                        fn_801735B4(1);
+                        ClockRuleSetFlags(1);
                     } else {
-                        fn_801735B4(2);
+                        ClockRuleSetFlags(2);
                     }
                     break;
                 case 4:
                 case 5:
                     if (pRecord->mUnknown18 <= 299) {
-                        fn_801735B4(1);
+                        ClockRuleSetFlags(1);
                     } else {
-                        fn_801735B4(2);
+                        ClockRuleSetFlags(2);
                     }
                     break;
                 default:
-                    fn_801735B4(2);
+                    ClockRuleSetFlags(2);
                     break;
                 }
                 if (fn_800B232C(0) == 2) {
@@ -1949,9 +1951,9 @@ void fn_80173794(void)
                         int score = fn_801787DC(p->mId >> 8 & 0xFF);
 
                         if (score < fn_801787DC((p->mId >> 8 & 0xFF) ^ 1)) {
-                            fn_801735D8(1);
-                            fn_801735B4(0x100);
-                            fn_801735B4(2);
+                            ClockRuleClearFlags(1);
+                            ClockRuleSetFlags(0x100);
+                            ClockRuleSetFlags(2);
                         }
                     }
                     break;
@@ -1963,9 +1965,9 @@ void fn_80173794(void)
             found = 1;
             if (seen3) {
                 if (pRecord->mUnknown0) {
-                    fn_801739D0();
+                    ClockRuleSetStopMode();
                 } else {
-                    fn_801735B4(1);
+                    ClockRuleSetFlags(1);
                 }
             }
             break;
@@ -1977,38 +1979,38 @@ void fn_80173794(void)
     fn_8009D8CC(0);
 }
 
-void fn_801739D0(void)
+void ClockRuleSetStopMode(void)
 {
     switch (fn_8009D86C()) {
     case 2:
         if (fn_8009D990(1) <= 119) {
-            fn_801735B4(1);
+            ClockRuleSetFlags(1);
         } else {
-            fn_801735B4(2);
+            ClockRuleSetFlags(2);
         }
         break;
     case 4:
     case 5:
         if (fn_8009D990(1) <= 299) {
-            fn_801735B4(1);
+            ClockRuleSetFlags(1);
         } else {
-            fn_801735B4(2);
+            ClockRuleSetFlags(2);
         }
         break;
     default:
-        fn_801735B4(2);
+        ClockRuleSetFlags(2);
         break;
     }
 }
 
-void fn_80173A50(void)
+void ClockRuleStopGameClock(void)
 {
     fn_8009D8CC(1);
-    fn_801735B4(1);
+    ClockRuleSetFlags(1);
     fn_8009D964(0, 10);
 }
 
-int fn_80173A88(void)
+int ClockRuleCanEndPeriod(void)
 {
     int allow = 1;
     int mode = fn_800AD9B4();
@@ -2021,50 +2023,48 @@ int fn_80173A88(void)
         allow = 0;
     }
     if (state == 2 || state == 4 || state == 5) {
-        if (fn_800B2624() && !fn_801735C8(0x100)) {
-            fn_801735B4(0x20);
+        if (fn_800B2624() && !ClockRuleTestFlags(0x100)) {
+            ClockRuleSetFlags(0x20);
             allow = 0;
         } else {
-            fn_801735D8(0x20);
+            ClockRuleClearFlags(0x20);
         }
     }
     return allow;
 }
 
-unsigned char fn_80173B64(void)
+unsigned char ClockRuleIsEndHeld(void)
 {
-    return fn_801735C8(0x20);
+    return ClockRuleTestFlags(0x20);
 }
 
-void fn_80173B8C(void)
+void ClockRuleEndPeriod(void)
 {
     fn_8009D8CC(0);
-    fn_801735B4(1);
+    ClockRuleSetFlags(1);
     fn_8009D8CC(1);
-    fn_80173404();
-    fn_801735D8(0x10);
+    ClockRuleNextPeriod();
+    ClockRuleClearFlags(0x10);
 }
 
-void fn_80173BCC(void)
+void ClockRuleSetTwoMinuteFlags(void)
 {
-    fn_801735B4(4);
-    fn_801735B4(0x80);
+    ClockRuleSetFlags(4);
+    ClockRuleSetFlags(0x80);
 }
 
-void fn_80173BF8(void)
+void ClockRuleSetTwoMinuteFlag(void)
 {
-    fn_801735B4(4);
+    ClockRuleSetFlags(4);
 }
 
-void fn_80173C1C(void)
+void ClockRuleResetFlags(void)
 {
-    *lbl_803ECB2C = 0;
+    *_ClockRule_puFlags = 0;
 }
 
 /* Player-name lookup ("select 'ANLP' into ... from 'AGLP' where 'DIGP' = ...")
- * It has no code in the GameCube target; the
- * PS2 build keeps it at SLUS_211.18 0x31CCE0, directly before the counterpart
- * of fn_80173C2C. Name is descriptive, not recovered. */
+ * It has no code in the GameCube target. */
 void GetPlayerName(unsigned short id, char *pName)
 {
     if (id != 0xFFFF) {
@@ -2077,36 +2077,36 @@ void GetPlayerName(unsigned short id, char *pName)
 
 }
 
-int lbl_803ECB30;
-Log_80361694 lbl_80361694[3];
-int lbl_80361C58[3];
+int _DriveLog_iCurrent;
+DriveLog_t _DriveLog_aLogs[3];
+int _DriveLog_aiElapsed[3];
 
 extern "C" {
-void fn_80173C2C(void)
+void DriveLogInit(void)
 {
     int resume = 0;
 
-    lbl_803ECB30 = 0;
-    fn_801C1F94(lbl_80361694, 0, sizeof(lbl_80361694));
+    _DriveLog_iCurrent = 0;
+    fn_801C1F94(_DriveLog_aLogs, 0, sizeof(_DriveLog_aLogs));
     if (resume) {
         int found;
 
         fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
         resume = found;
     }
-    fn_80173C68();
+    DriveLogClearSaved();
     if (resume) {
-        fn_801FCE10(0, "select 'MSDG' into \x89 from 'NIBG'\n", &lbl_80361694[lbl_803ECB30]);
+        fn_801FCE10(0, "select 'MSDG' into \x89 from 'NIBG'\n", &_DriveLog_aLogs[_DriveLog_iCurrent]);
     }
 }
 
-void fn_80173C68(void)
+void DriveLogClearSaved(void)
 {
-    fn_801C1F94(&lbl_80361694[1], 0, sizeof(Log_80361694));
-    fn_801C1F94(&lbl_80361694[2], 0, sizeof(Log_80361694));
+    fn_801C1F94(&_DriveLog_aLogs[1], 0, sizeof(DriveLog_t));
+    fn_801C1F94(&_DriveLog_aLogs[2], 0, sizeof(DriveLog_t));
 }
 
-int fn_80173CAC(void)
+int DriveLogGetElapsed(void)
 {
     unsigned int count = fn_8009D86C();
 
@@ -2117,86 +2117,86 @@ int fn_80173CAC(void)
     return count * fn_8009D9A8(1) - fn_8009D990(1);
 }
 
-void fn_80173D10(void)
+void DriveLogEndDrive(void)
 {
-    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+    DriveLog_t *pLog = &_DriveLog_aLogs[_DriveLog_iCurrent];
     int value;
 
     if (pLog->mUnknown1E4 <= 1) {
-        lbl_80361694[pLog->mUnknown1E4 + 1] = *pLog;
+        _DriveLog_aLogs[pLog->mUnknown1E4 + 1] = *pLog;
     }
-    lbl_80361694[lbl_803ECB30].mUnknown1E4 = 0xFFFF;
-    lbl_80361694[lbl_803ECB30].mCount = 0;
-    lbl_80361694[lbl_803ECB30].mUnknown1E8 = 0;
-    lbl_80361694[lbl_803ECB30].mUnknown1EA = 0;
-    lbl_80361694[lbl_803ECB30].mUnknown1EB = 0;
-    value = fn_80173CAC();
-    lbl_80361694[lbl_803ECB30].mUnknown1E0 = value;
-    lbl_80361C58[lbl_803ECB30] = value;
-    fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E4 = 0xFFFF;
+    _DriveLog_aLogs[_DriveLog_iCurrent].mCount = 0;
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E8 = 0;
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EA = 0;
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EB = 0;
+    value = DriveLogGetElapsed();
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E0 = value;
+    _DriveLog_aiElapsed[_DriveLog_iCurrent] = value;
+    fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
 }
 
-void fn_80173E24(void)
+void DriveLogUpdateTeam(void)
 {
     int team = fn_80178308();
-    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+    DriveLog_t *pLog = &_DriveLog_aLogs[_DriveLog_iCurrent];
 
     if (pLog->mUnknown1E4 != team && pLog->mUnknown1EB == 0) {
-        fn_80173D10();
-        lbl_80361694[lbl_803ECB30].mUnknown1E4 = team;
+        DriveLogEndDrive();
+        _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E4 = team;
         fn_8017C298(team, (short)fn_80177FE0().mY);
     }
-    fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+    fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
 }
 
-void fn_80173EE0(int type, short a, short b, int c, int d)
+void DriveLogAddPlay(int type, short a, short b, int c, int d)
 {
-    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+    DriveLog_t *pLog = &_DriveLog_aLogs[_DriveLog_iCurrent];
 
     if (pLog->mCount < 40) {
-        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mType = type;
-        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mUnknown4 = a;
-        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mUnknown6 = b;
-        lbl_80361694[lbl_803ECB30].mPlays[lbl_80361694[lbl_803ECB30].mCount].mUnknown8 = fn_80174114(c);
-        lbl_80361694[lbl_803ECB30].mPlays[lbl_80361694[lbl_803ECB30].mCount].mUnknownA = fn_80174114(d);
-        if (lbl_80361694[lbl_803ECB30].mUnknown1EA == 0 && (float)a >= 30.0f && fn_80177C38() == 0) {
-            lbl_80361694[lbl_803ECB30].mUnknown1EA = 1;
-            fn_8017C2F0(lbl_80361694[lbl_803ECB30].mUnknown1E4);
+        _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[pLog->mCount].mType = type;
+        _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[pLog->mCount].mUnknown4 = a;
+        _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[pLog->mCount].mUnknown6 = b;
+        _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[_DriveLog_aLogs[_DriveLog_iCurrent].mCount].mUnknown8 = DriveLogGetPlayerNum(c);
+        _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[_DriveLog_aLogs[_DriveLog_iCurrent].mCount].mUnknownA = DriveLogGetPlayerNum(d);
+        if (_DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EA == 0 && (float)a >= 30.0f && fn_80177C38() == 0) {
+            _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EA = 1;
+            fn_8017C2F0(_DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E4);
         }
         if (type == 8) {
-            lbl_80361694[lbl_803ECB30].mUnknown1E8++;
+            _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E8++;
         }
-        lbl_80361694[lbl_803ECB30].mCount++;
-        fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+        _DriveLog_aLogs[_DriveLog_iCurrent].mCount++;
+        fn_8022DDB4(0x4D534447, &_DriveLog_aLogs[_DriveLog_iCurrent]);
     }
 }
 
-void fn_80174074(void)
+void DriveLogStampTime(void)
 {
-    lbl_80361C58[lbl_803ECB30] = fn_80173CAC();
+    _DriveLog_aiElapsed[_DriveLog_iCurrent] = DriveLogGetElapsed();
 }
 
-/* PS2 SLUS_211.18 0x31D2B8: returns one field of play [index] of the current
- * block. No code in the GameCube target. Name is descriptive. */
+/* Returns one field of play [index] of the current drive. No code in the
+ * GameCube target. */
 int GetPlayField(int index, int field)
 {
     switch (field) {
     case 0:
-        return lbl_80361694[lbl_803ECB30].mPlays[index].mType;
+        return _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[index].mType;
     case 1:
-        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown4;
+        return _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[index].mUnknown4;
     case 2:
-        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown6;
+        return _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[index].mUnknown6;
     case 3:
-        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown8;
+        return _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[index].mUnknown8;
     case 4:
-        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknownA;
+        return _DriveLog_aLogs[_DriveLog_iCurrent].mPlays[index].mUnknownA;
     }
     return 0;
 }
 
-/* PS2 SLUS_211.18 0x31D3D8: writes the play-by-play line for a play. No code
- * in the GameCube target; its strings remain in this unit's .rodata. */
+/* Writes the play-by-play line for a play. No code in the GameCube target;
+ * its strings remain in this unit's .rodata. */
 void FormatPlay(int type, short yards, unsigned short player, unsigned short other, char *pOut)
 {
     char name[16];
@@ -2254,8 +2254,8 @@ void FormatPlay(int type, short yards, unsigned short player, unsigned short oth
     }
 }
 
-/* PS2 SLUS_211.18 0x31D5B0: writes the scoring-play suffix. No code in the
- * GameCube target; its strings remain in this unit's .rodata. */
+/* Writes the scoring-play suffix. No code in the GameCube target; its
+ * strings remain in this unit's .rodata. */
 void FormatPlaySuffix(int type, short yards, unsigned short player, unsigned short other, char *pOut)
 {
     char name[16];
@@ -2292,14 +2292,14 @@ void FormatPlaySuffix(int type, short yards, unsigned short player, unsigned sho
     }
 }
 
-int fn_801740A8(void)
+int DriveLogHasLongPlay(void)
 {
-    return lbl_80361694[lbl_803ECB30].mUnknown1EA;
+    return _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EA;
 }
 
-void fn_801740C4(int value)
+void DriveLogSetHold(int value)
 {
-    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+    DriveLog_t *pLog = &_DriveLog_aLogs[_DriveLog_iCurrent];
 
     if (pLog->mUnknown1EB == 0) {
         pLog->mUnknown1EB = value;
@@ -2307,7 +2307,7 @@ void fn_801740C4(int value)
     }
 }
 
-int fn_80174114(int id)
+int DriveLogGetPlayerNum(int id)
 {
     if (id != 0 && (id & 0xFF) == 1) {
         return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
@@ -2315,16 +2315,16 @@ int fn_80174114(int id)
     return 0xFFFF;
 }
 
-unsigned char fn_80174160(void)
+unsigned char DriveLogGetTeam(void)
 {
-    return lbl_80361694[lbl_803ECB30].mUnknown1E4;
+    return _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1E4;
 }
 
-void fn_8017417C(void)
+void DriveLogSetLongPlay(void)
 {
-    lbl_80361694[lbl_803ECB30].mUnknown1EA = 1;
+    _DriveLog_aLogs[_DriveLog_iCurrent].mUnknown1EA = 1;
 }
 }
 
-/* Joint names read in order by fn_80176630 (lis r22 at 0x80176698, addi at 0x801766EC). */
-const char *lbl_802E99F0[5] = {"headend", "rwrist", "lwrist", "lball", "rball"};
+/* Player joint names, read in this order by another unit. */
+const char *gPossJointNames[5] = {"headend", "rwrist", "lwrist", "lball", "rball"};

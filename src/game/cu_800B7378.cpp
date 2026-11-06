@@ -122,23 +122,23 @@ void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
-void fn_8016DA98(Object_80039F5C *p);
-void fn_80173D10(void);
-unsigned int fn_801735C8(unsigned int mask);
+void PlyrMoveClearHold(Object_80039F5C *p);
+void DriveLogEndDrive(void);
+unsigned int ClockRuleTestFlags(unsigned int mask);
 int fn_80177C38(void);
 int fn_80177F70(void);
 int fn_801783AC(int bit);
 void fn_801783D0(int bit, int on);
 void fn_801789F8(void);
 int fn_80179138(void);
-void fn_8017CFB4(int index);
-int fn_8017D064(int a);
-void fn_8017D7C4(const char *pText);
-void fn_8017F2A4(void);
-unsigned char fn_8017F2DC(unsigned char value);
-unsigned char fn_8017F324(unsigned char value);
-unsigned char fn_8017F394(void);
-unsigned char fn_8017F48C(void);
+void BannerClear(int index);
+int BannerIsActive(int a);
+void HudShowAlert(const char *pText);
+void GameEventFlagsReset(void);
+unsigned char GameEventFlagsSetFlag0(unsigned char value);
+unsigned char GameEventFlagsSetFlag3(unsigned char value);
+unsigned char GameEventFlagsPollFlag2Hold(void);
+unsigned char TeamPromptIsActive(void);
 unsigned short fn_801BE648(void *p);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
@@ -160,7 +160,7 @@ extern unsigned char lbl_803EAB7C;
 extern unsigned char lbl_803EAB7D;
 extern unsigned char lbl_803EAB7E;
 extern int lbl_803EAB80;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_800B7378(Object_80039F5C *p)
@@ -175,7 +175,7 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
     int angle;
     float distance;
 
-    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / lbl_803ECB08 > 0.14f) {
+    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / gPlyrMoveFwdSpeed > 0.14f) {
         if ((unsigned int)(p->mUnknown528.mUnknown15 - 4) <= 1) {
             angleSlack = (int)(lbl_803EAB6A * 46603.379f);
         } else {
@@ -226,7 +226,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         p->mFlags |= 0x4000;
         if (fn_800CA5CC(p, 0, 1) != 0) {
             p->mUnknown512.mUnknown15 = 1;
-            fn_8016DA98(p);
+            PlyrMoveClearHold(p);
         }
     }
     if (input.mUnknown92 & 1) {
@@ -381,7 +381,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
         break;
     case 9:
         if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
-            && InGameIsDemo() == 0 && InGameIsPaused() == 0 && fn_8017F48C() == 0 && PauseRequestIsPending() == 0
+            && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             fn_8002C9A8(lbl_803EA368, 3, 0);
             if (fn_8002D228(lbl_803EA368) != 0) {
@@ -389,13 +389,13 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
                 fn_8009B924();
                 fn_80094DF0();
                 fn_8002D2C8(lbl_803EA368, 1);
-                while (fn_8017D064(7) != 0) {
-                    fn_8017CFB4(7);
+                while (BannerIsActive(7) != 0) {
+                    BannerClear(7);
                 }
-                if (fn_8017F394() != 0) {
-                    fn_8017F2A4();
-                    fn_8017F324(1);
-                    fn_8017F2DC(2);
+                if (GameEventFlagsPollFlag2Hold() != 0) {
+                    GameEventFlagsReset();
+                    GameEventFlagsSetFlag3(1);
+                    GameEventFlagsSetFlag0(2);
                 }
                 fn_8002CA74(lbl_803EA368, 10, index);
                 fn_8002CA74(lbl_803EA368, 11, 0);
@@ -433,11 +433,11 @@ int Class_80297C60::vfn_09(char *pText)
     char touchdown2[] = "Touchdown";
     char touchback[] = "Touchback";
     int changed = 0;
-    int pending = fn_8017D064(3);
+    int pending = BannerIsActive(3);
     int score = lbl_803EAB78->mUnknown104.mUnknown1D;
     int state = fn_80177F70();
 
-    if (pending == 0 && fn_801735C8(0x200) == 0) {
+    if (pending == 0 && ClockRuleTestFlags(0x200) == 0) {
         if (lbl_803EAB78->mUnknown104.mUnknown04 == 1) {
             if (state == 6) {
                 if (score == 0) {
@@ -455,7 +455,7 @@ int Class_80297C60::vfn_09(char *pText)
                 if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x800) {
                     strcpy(pText, turnover);
                     changed = 1;
-                    fn_80173D10();
+                    DriveLogEndDrive();
                 }
             }
         } else if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x20000) {
@@ -519,7 +519,7 @@ extern "C" void fn_800B925C(void *p, char *pText)
     char touchback[] = "Touchback";
 
     if (pText != 0) {
-        fn_8017D7C4(pText);
+        HudShowAlert(pText);
         if (strcmp(pText, firstDown) == 0) {
             fn_800D490C();
             fn_800AE9A4();
