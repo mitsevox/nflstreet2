@@ -1,23 +1,27 @@
+/* Create-a-player portraits: loads the head, facial hair and hair parts and the head
+   model of a created player for the portrait shot, manages the portrait slots, and reads
+   and saves the portrait image and palette in the profile database. */
+
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
 #include "game/FMCAPPORT.h"
-#include "game/cu_8008A274.h"
+#include "game/CAPPortrait.h"
 #include "game/Object_80233EAC.h"
 #include "game/cu_8015D3EC.h"
 #include "engine/texfile.h"
 
-struct Slot_8008A900 {
+struct PortraitSlot_t {
     unsigned char mUsed;
     unsigned char mValue;
 };
 
-struct SlotTable_8008A900 {
-    Slot_8008A900 mSlots[18];
+struct PortraitSlotTable_t {
+    PortraitSlot_t mSlots[18];
 };
 
-struct Object_8008AAF8 {
+struct PortraitImageRequest_t {
     int mUnknown0[3];
     void *mpUnknown12;
     int mUnknown16;
@@ -29,20 +33,20 @@ Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
 void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
 void *fn_80160C08(void);
-void fn_80199BD4(Object_8008A9F8 *pObject);
+void fn_80199BD4(PortraitJob_t *pObject);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0C50(void *pArchive, int id);
-void fn_80221BE8(void (*pCallback)(int, unsigned int, Object_8008AAF8 *));
+void fn_80221BE8(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 void fn_802336C4(void *pObject, Object_8023417C *pModel, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
-void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
-void fn_80234844(Desc_802347EC *pDesc);
+void fn_802347EC(void *pData, ModelTexSlot_t *pDesc, int a, int b);
+void fn_80234844(ModelTexSlot_t *pDesc);
 
 extern char lbl_802EC038[];
 extern char lbl_802EC044[];
@@ -50,28 +54,28 @@ extern char lbl_802EC050[];
 extern char lbl_802EC080[];
 }
 
-static SlotTable_8008A900 *sSlots = 0;
-static Skeleton_80041930 *(*sCallbacks[2])(void) = { fn_8003E028, fn_8003E030 };
-static int sUnknown[2] = { 15, 32 };
-static const char *sFileNames[2] = { lbl_802EC038, lbl_802EC044 };
-static ModelLod_802DF190 sDesc0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
-static ModelLod_802DF190 sDesc1[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
-static ModelLod_802DF190 *sDescs[2] = { sDesc0, sDesc1 };
-static Object_80233EAC sObjects[2];
+static PortraitSlotTable_t *_Portrait_pSlots = 0;
+static Skeleton_80041930 *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
+static int _Portrait_aiSkeletonParam[2] = { 15, 32 };
+static const char *_Portrait_apszArchives[2] = { lbl_802EC038, lbl_802EC044 };
+static ModelLod_802DF190 _Portrait_aLod0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
+static ModelLod_802DF190 _Portrait_aLod1[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
+static ModelLod_802DF190 *_Portrait_apLods[2] = { _Portrait_aLod0, _Portrait_aLod1 };
+static Object_80233EAC _Portrait_aModels[2];
 
 extern "C" {
 
-int fn_8008A800(void);
-void fn_8008A988(int id);
-void fn_8008A9BC(void);
-void fn_8008AAF8(unsigned int id, Object_8008AAF8 *pObject);
-void fn_8008AC10(int type, unsigned int id, Object_8008AAF8 *pObject);
+int PortraitIsReady(void);
+void PortraitFreeSlot(int id);
+void PortraitFreeAllSlots(void);
+void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject);
+void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest_t *pObject);
 
-void fn_8008A274(void)
+void PortraitInitHook(void)
 {
 }
 
-void fn_8008A278(const FMCAPPORTValues *pValues, short *pOut)
+void PortraitConvertMorphs(const FMCAPPORTValues *pValues, short *pOut)
 {
     int i;
 
@@ -80,16 +84,16 @@ void fn_8008A278(const FMCAPPORTValues *pValues, short *pOut)
     }
 }
 
-void fn_8008A2B8(void)
+void PortraitClearSlots(void)
 {
     int i;
 
     for (i = 0; i < 18; i++) {
-        sSlots->mSlots[i].mUsed = 0;
+        _Portrait_pSlots->mSlots[i].mUsed = 0;
     }
 }
 
-void fn_8008A2E0(Object_8008A9F8 *pObject)
+void PortraitLoadParts(PortraitJob_t *pObject)
 {
     unsigned int i;
     void *pArchive = fn_80160C08();
@@ -119,10 +123,10 @@ void fn_8008A2E0(Object_8008A9F8 *pObject)
         }
     }
 
-    Desc_802347EC *pDescs = pObject->mUnknown384;
+    ModelTexSlot_t *pDescs = pObject->mUnknown384;
     const char *names[4] = { "HEAD", "FACIALHAIR", "HAIR" };
     for (i = 0; i < 4; i++) {
-        memset(&pDescs[i], 0, sizeof(Desc_802347EC));
+        memset(&pDescs[i], 0, sizeof(ModelTexSlot_t));
         if (i != 3) {
             if (pObject->mpUnknown368[i] == 0) {
                 pDescs[i].mpName = (char *)fn_801D2B7C(15, 0, 0);
@@ -145,7 +149,7 @@ void fn_8008A2E0(Object_8008A9F8 *pObject)
     }
 }
 
-void fn_8008A504(Object_8008A9F8 *pObject)
+void PortraitFreeParts(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -164,7 +168,7 @@ void fn_8008A504(Object_8008A9F8 *pObject)
     }
 }
 
-void fn_8008A590(Object_8008A9F8 *pObject)
+void PortraitLoadModels(PortraitJob_t *pObject)
 {
     short values[53];
     unsigned int i;
@@ -180,12 +184,12 @@ void fn_8008A590(Object_8008A9F8 *pObject)
                 pArchive = fn_801EEB44(lbl_802EC050, 44);
                 id -= 50000;
             } else {
-                pArchive = fn_801EEB44(sFileNames[i], 44);
+                pArchive = fn_801EEB44(_Portrait_apszArchives[i], 44);
             }
             pObject->mpUnknown512[i] = fn_801D2B7C(fn_801F0C50(pArchive, id), 0, 0);
-            sDescs[i]->mId = id;
-            Skeleton_80041930 *pSkeleton = fn_8008A84C(i);
-            fn_80233EAC(&sObjects[i], sDescs[i], "CAPPORT", 0, pArchive, pSkeleton,
+            _Portrait_apLods[i]->mId = id;
+            Skeleton_80041930 *pSkeleton = PortraitGetSkeleton(i);
+            fn_80233EAC(&_Portrait_aModels[i], _Portrait_apLods[i], "CAPPORT", 0, pArchive, pSkeleton,
                         &pObject->mpUnknown512[i], 1);
         } else {
             pObject->mpUnknown512[i] = 0;
@@ -194,7 +198,7 @@ void fn_8008A590(Object_8008A9F8 *pObject)
 
     memset(values, 0, sizeof(values));
     if (pObject->mUnknown44[0] == 0xFFFF) {
-        fn_8008A278(&pObject->mValues52, values);
+        PortraitConvertMorphs(&pObject->mValues52, values);
         fn_802336C4(pObject->mUnknown520, fn_8015E2FC(6, 0, 0), 50000);
         fn_80233760(pObject->mUnknown520, values, 53);
     } else {
@@ -208,7 +212,7 @@ void fn_8008A590(Object_8008A9F8 *pObject)
     fn_801A46BC();
 }
 
-void fn_8008A78C(Object_8008A9F8 *pObject)
+void PortraitFreeModels(PortraitJob_t *pObject)
 {
     unsigned int i;
 
@@ -223,47 +227,47 @@ void fn_8008A78C(Object_8008A9F8 *pObject)
     }
 }
 
-int fn_8008A800(void)
+int PortraitIsReady(void)
 {
     return 1;
 }
 
-void *fn_8008A808(Object_8008A9F8 *pObject, int index)
+void *PortraitGetModel(PortraitJob_t *pObject, int index)
 {
     if (index != 0) {
-        return fn_8023417C(&sObjects[index], 0);
+        return fn_8023417C(&_Portrait_aModels[index], 0);
     }
     return pObject->mUnknown520;
 }
 
-Skeleton_80041930 *fn_8008A84C(int index)
+Skeleton_80041930 *PortraitGetSkeleton(int index)
 {
-    return sCallbacks[index]();
+    return _Portrait_apGetSkeleton[index]();
 }
 
-int fn_8008A87C(int index)
+int PortraitGetSkeletonParam(int index)
 {
-    return sUnknown[index];
+    return _Portrait_aiSkeletonParam[index];
 }
 
-void fn_8008A88C(void)
+void PortraitSystemInit(void)
 {
-    fn_8008A274();
-    sSlots = (SlotTable_8008A900 *)fn_801D2B7C(sizeof(SlotTable_8008A900), 4, 0);
-    fn_8008A2B8();
-    fn_80221BE8(fn_8008AC10);
+    PortraitInitHook();
+    _Portrait_pSlots = (PortraitSlotTable_t *)fn_801D2B7C(sizeof(PortraitSlotTable_t), 4, 0);
+    PortraitClearSlots();
+    fn_80221BE8(_PortraitDbCallback);
 }
 
-void fn_8008A8D0(void)
+void PortraitSystemShutdown(void)
 {
-    fn_8008A9BC();
-    fn_801D2BD0(sSlots);
-    sSlots = 0;
+    PortraitFreeAllSlots();
+    fn_801D2BD0(_Portrait_pSlots);
+    _Portrait_pSlots = 0;
 }
 
 /* Claims the first free slot of the group and stores the value in it; returns the
    slot id (0x277 + index), or 0xFFFF when the group has no free slot. */
-int fn_8008A900(int value, int group)
+int PortraitAllocSlot(int value, int group)
 {
     int id = 0xFFFF;
     int start = 0xFFFF;
@@ -282,69 +286,69 @@ int fn_8008A900(int value, int group)
     }
 
     for (i = start; i < end; i++) {
-        if (sSlots->mSlots[i].mUsed == 0) {
-            sSlots->mSlots[i].mUsed = 1;
+        if (_Portrait_pSlots->mSlots[i].mUsed == 0) {
+            _Portrait_pSlots->mSlots[i].mUsed = 1;
             id = i + 0x277;
-            sSlots->mSlots[i].mValue = value;
+            _Portrait_pSlots->mSlots[i].mValue = value;
             break;
         }
     }
     return id;
 }
 
-void fn_8008A988(int id)
+void PortraitFreeSlot(int id)
 {
     int i = id - 0x277;
 
-    if (sSlots->mSlots[i].mUsed == 1) {
-        sSlots->mSlots[i].mUsed = 0;
-        sSlots->mSlots[i].mValue = 0xFF;
+    if (_Portrait_pSlots->mSlots[i].mUsed == 1) {
+        _Portrait_pSlots->mSlots[i].mUsed = 0;
+        _Portrait_pSlots->mSlots[i].mValue = 0xFF;
     }
 }
 
-void fn_8008A9BC(void)
+void PortraitFreeAllSlots(void)
 {
     int i;
 
     for (i = 0; i < 18; i++) {
-        fn_8008A988(i + 0x277);
+        PortraitFreeSlot(i + 0x277);
     }
 }
 
-void fn_8008A9F8(Object_8008A9F8 *pObject)
+void PortraitJobAllocImage(PortraitJob_t *pObject)
 {
     pObject->mpUnknown4 = fn_801D2B7C(0x20000, 0, 0);
     pObject->mpUnknown8 = fn_801D2B7C(0x400, 0, 0);
 }
 
-void fn_8008AA48(Object_8008A9F8 *pObject)
+void PortraitJobLoad(PortraitJob_t *pObject)
 {
-    fn_8008A2E0(pObject);
-    fn_8008A590(pObject);
+    PortraitLoadParts(pObject);
+    PortraitLoadModels(pObject);
 }
 
-int fn_8008AA7C(Object_8008A9F8 *pObject)
+int PortraitJobIsLoaded(PortraitJob_t *pObject)
 {
-    return fn_8008A800();
+    return PortraitIsReady();
 }
 
-void fn_8008AA9C(Object_8008A9F8 *pObject)
+void PortraitJobUnload(PortraitJob_t *pObject)
 {
-    fn_8008A504(pObject);
-    fn_8008A78C(pObject);
+    PortraitFreeParts(pObject);
+    PortraitFreeModels(pObject);
 }
 
-void fn_8008AAD0(Object_8008A9F8 *pObject)
+void PortraitJobQuantize(PortraitJob_t *pObject)
 {
     fn_80199BD4(pObject);
 }
 
-int fn_8008AAF0(Object_8008A9F8 *pObject)
+int PortraitJobIsDone(PortraitJob_t *pObject)
 {
     return 1;
 }
 
-void fn_8008AAF8(unsigned int id, Object_8008AAF8 *pObject)
+void PortraitReadImage(unsigned int id, PortraitImageRequest_t *pObject)
 {
     if (pObject != 0 && id >= 0x277) {
         void *pUnknown12 = pObject->mpUnknown12;
@@ -353,13 +357,13 @@ void fn_8008AAF8(unsigned int id, Object_8008AAF8 *pObject)
         fn_801FCE10(0,
                     "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where "
                     "'PXSP' = \x85\n",
-                    fn_8022F3D4(fn_8022F358((signed char)sSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
+                    fn_8022F3D4(fn_8022F358((signed char)_Portrait_pSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
         memcpy(pObject->mpUnknown20, pBuffer, 0x200);
         fn_801D2BD0(pBuffer);
     }
 }
 
-void fn_8008ABA4(Object_8008A9F8 *pObject)
+void PortraitJobSave(PortraitJob_t *pObject)
 {
     void *pUnknown4 = pObject->mpUnknown4;
     void *pUnknown8 = pObject->mpUnknown8;
@@ -372,10 +376,10 @@ void fn_8008ABA4(Object_8008A9F8 *pObject)
     fn_801D2BD0(pUnknown8);
 }
 
-void fn_8008AC10(int type, unsigned int id, Object_8008AAF8 *pObject)
+void _PortraitDbCallback(int type, unsigned int id, PortraitImageRequest_t *pObject)
 {
     if (type == 10) {
-        fn_8008AAF8(id, pObject);
+        PortraitReadImage(id, pObject);
     }
 }
 }

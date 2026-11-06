@@ -1,5 +1,5 @@
-#ifndef GAME_MODULEGROUP_8008CC74_H
-#define GAME_MODULEGROUP_8008CC74_H
+#ifndef GAME_SYSMODULES_H
+#define GAME_SYSMODULES_H
 
 #include "game/Module.h"
 
@@ -11,7 +11,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void fn_8008D4A8();
+    void LoadSystems();
 };
 
 extern ARes gARes;

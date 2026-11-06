@@ -78,8 +78,8 @@ int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
 void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
 int fn_8007BF14(int a);
 int fn_8007C690(DbCursor *pCursor, short *pOut);
-void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues);
 void fn_8008174C(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
@@ -812,7 +812,7 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
 
         fn_8007BA48(&query);
         seen = 0;
-        fn_800809C4(fn_80182DC8(), fn_800089D8(), 0);
+        PlayerDbSeekId(fn_80182DC8(), fn_800089D8(), 0);
         fn_800817CC(fn_80182DC8(), &info);
         for (i = 0; i < 14; i++) {
             type = fn_8007BF14(i);
@@ -1140,8 +1140,8 @@ void fn_80183130(int a)
 
     lbl_803EB589 = 1;
     row = DbCursorGetRow((DbCursor *)fn_80182DC8());
-    fn_800809C4(fn_80182DC8(), a, 0);
-    fn_80080B08(fn_80182DC8(), lbl_80362B54, 28);
+    PlayerDbSeekId(fn_80182DC8(), a, 0);
+    PlayerDbGetShortName(fn_80182DC8(), lbl_80362B54, 28);
     DbCursorSeek((DbCursor *)fn_80182DC8(), row);
     fn_80183034(lbl_80362B54);
 }
@@ -1214,11 +1214,11 @@ void fn_801832B0(char *pText, int size)
     unsigned int limit;
     unsigned int width;
 
-    fn_80080BEC(fn_80182DC8(), pText, size);
+    PlayerDbGetFullName(fn_80182DC8(), pText, size);
     limit = fn_80225F88(pFont, 2, 3, "WWWWWWWWWW");
     width = fn_80225F88(pFont, 2, 3, pText);
     if (fn_801C3180(pText) > 20 || width > limit) {
-        fn_80080B08(fn_80182DC8(), pText, size);
+        PlayerDbGetShortName(fn_80182DC8(), pText, size);
     }
 }
 

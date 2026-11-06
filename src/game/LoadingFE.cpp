@@ -1,5 +1,5 @@
 #include "game/fn_8007F828.h"
-#include "game/ModuleGroup_8008CC74.h"
+#include "game/SysModules.h"
 
 extern "C" {
 void fn_8013CF98(void);

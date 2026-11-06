@@ -1,13 +1,15 @@
+/* Empties the two formation lineup tables of the game database. */
+
 #include "game/fn_801FCE10.h"
 
 extern "C" {
 
-void fn_800850E8(void)
+void FormationLineupClearBase(void)
 {
     fn_801FCE10(0, "use 'EMAG' delete from 'BLMF'\n");
 }
 
-void fn_80085118(void)
+void FormationLineupClearUser(void)
 {
     fn_801FCE10(0, "use 'EMAG' delete from 'ULMF'\n");
 }

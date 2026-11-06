@@ -3,9 +3,9 @@
 #include <dolphin/os.h>
 extern "C" {
 void *memset(void *pDest, int value, unsigned int size);
-void fn_80089668(void);
-void fn_800896A8(void *pData, unsigned int size);
-void fn_800896EC(unsigned int *pResult);
+void ChecksumCRC32Begin(void);
+void ChecksumCRC32Update(void *pData, unsigned int size);
+void ChecksumCRC32End(unsigned int *pResult);
 void fn_801D6E04(int error);
 void fn_801D6E10(void *pData, unsigned int size);
 void fn_801D6E54(void *pData, unsigned int size);
@@ -69,7 +69,7 @@ static int CardStreamOpen(CardStream *pStream, int unused, CardStreamTarget *pTa
         pStream->mFillToEnd = pTarget->mFillToEnd;
         pStream->mpTarget = pTarget;
         pTarget->mChecksum = 0xFFFFFFFF;
-        fn_80089668();
+        ChecksumCRC32Begin();
     }
     return result;
 }
@@ -126,9 +126,9 @@ static int CardStreamClose(CardStream *pStream)
 
     fn_801D6EA0(&failed);
     if (failed) {
-        fn_800896EC(&pStream->mpTarget->mChecksum);
+        ChecksumCRC32End(&pStream->mpTarget->mChecksum);
     } else {
-        fn_800896EC(&pStream->mpTarget->mChecksum);
+        ChecksumCRC32End(&pStream->mpTarget->mChecksum);
         if (pStream->mFillToEnd) {
             result = _CardStreamFillToEnd(pStream);
         }
@@ -156,7 +156,7 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
         _CardStreamYield();
     }
     if (!failed) {
-        fn_800896A8(pData, size);
+        ChecksumCRC32Update(pData, size);
     }
     *pDone = size;
     *pStream->mpPosition += size;
@@ -183,7 +183,7 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
         _CardStreamYield();
     }
     if (!failed) {
-        fn_800896A8(pData, size);
+        ChecksumCRC32Update(pData, size);
     }
     *pDone = size;
     *pStream->mpPosition += size;

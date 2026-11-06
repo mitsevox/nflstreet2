@@ -1,3 +1,7 @@
+/* Tournament data in a profile database: the draft pool, which players were drafted to
+   which tournament team, the bracket matches of each round with their winners, and the
+   number of rounds for a bracket size. */
+
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
@@ -8,11 +12,11 @@ int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 }
 
-static unsigned char sPdfnOpen = 0;
-static int sHandle = -1;
+static unsigned char _Tournament_bDraftPoolOpen = 0;
+static int _Tournament_iDbHandle = -1;
 
 extern "C" {
-int fn_80086194(int ptfd, int *pList, int max)
+int TournamentDbQueryDraftPool(int ptfd, int *pList, int max)
 {
     QueryCursor cursor;
     int value;
@@ -41,11 +45,11 @@ int fn_80086194(int ptfd, int *pList, int max)
     return count;
 }
 
-int fn_800862AC(void)
+int TournamentDbQueryMatchCount(void)
 {
     int count;
     int total = -1;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", sHandle, &count);
+    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN'\n", _Tournament_iDbHandle, &count);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
         total = count;
@@ -53,11 +57,11 @@ int fn_800862AC(void)
     return total;
 }
 
-int fn_80086320(int lvlt)
+int TournamentDbQueryLevelMatchCount(int lvlt)
 {
     int count;
     int total = -1;
-    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN' where 'LVLT' = \x82\n", sHandle,
+    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LTFN' where 'LVLT' = \x82\n", _Tournament_iDbHandle,
                              &count, lvlt);
 
     if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
@@ -66,7 +70,7 @@ int fn_80086320(int lvlt)
     return total;
 }
 
-int fn_80086398(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
+int TournamentDbQueryMatch(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
 {
     QueryCursor cursor;
     int found = 0;
@@ -79,7 +83,7 @@ int fn_80086398(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
     if (fn_801FCE10(0,
                     "use \x8c declare \x8a fastcursor for select '1DIT' into \x85 and '2DIT' into \x85 and 'TNIW' "
                     "into \x85 from 'LTFN' where 'LVLT' = \x82\n",
-                    sHandle, &cursor, pDit1, pDit2, pTniw, lvlt) == 0) {
+                    _Tournament_iDbHandle, &cursor, pDit1, pDit2, pTniw, lvlt) == 0) {
         cursor.mUnknown4 = row;
         if (cursor.mUnknown0 != 0) {
             result = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
@@ -94,19 +98,19 @@ int fn_80086398(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
     return found;
 }
 
-int fn_8008648C(int lvlt, int dit1, int dit2, int tniw)
+int TournamentDbWriteMatchWinner(int lvlt, int dit1, int dit2, int tniw)
 {
     int success = 0;
     int result = fn_801FCE10(0,
                              "use \x8c update 'LTFN' set 'TNIW' = \x85 where 'LVLT' = \x82 and '1DIT' = \x85 and "
                              "'2DIT' = \x85\n",
-                             sHandle, tniw, lvlt, dit1, dit2);
+                             _Tournament_iDbHandle, tniw, lvlt, dit1, dit2);
 
     if (result == 0x17) {
         success = fn_801FCE10(0,
                               "use \x8c insert into 'LTFN' set '1DIT' = \x85 and '2DIT' = \x85 and 'LVLT' = \x82 and "
                               "'TNIW' = \x85\n",
-                              sHandle, dit1, dit2, lvlt, tniw) == 0;
+                              _Tournament_iDbHandle, dit1, dit2, lvlt, tniw) == 0;
     } else if (result == 0) {
         success = 1;
     }
@@ -117,24 +121,24 @@ int DeleteLtfnRow(int lvlt, int dit1, int dit2)
 {
     return fn_801FCE10(0,
                        "use \x8c delete from 'LTFN' where 'LVLT' = \x82 and '1DIT' = \x85 and '2DIT' = \x85\n",
-                       sHandle, lvlt, dit1, dit2) != 0x17;
+                       _Tournament_iDbHandle, lvlt, dit1, dit2) != 0x17;
 }
 
-int fn_80086534(void)
+int TournamentDbDeleteAllMatches(void)
 {
-    fn_801FCE10(0, "use \x8c delete from 'LTFN'\n", sHandle);
+    fn_801FCE10(0, "use \x8c delete from 'LTFN'\n", _Tournament_iDbHandle);
     return 1;
 }
 
-int fn_8008656C(int digp, int munt, int digt)
+int TournamentDbWritePlayerTeam(int digp, int munt, int digt)
 {
     int success = 0;
     int result = fn_801FCE10(0, "use \x8c update 'PTFN' set 'MUNT' = \x85 and 'DIGT' = \x85 where 'DIGP' = \x85\n",
-                             sHandle, munt, digt, digp);
+                             _Tournament_iDbHandle, munt, digt, digp);
 
     if (result == 0x17) {
         success = fn_801FCE10(0, "use \x8c insert into 'PTFN' set 'DIGP' = \x85 and 'MUNT' = \x85 and 'DIGT' = \x85\n",
-                              sHandle, digp, munt, digt) == 0;
+                              _Tournament_iDbHandle, digp, munt, digt) == 0;
     } else if (result == 0) {
         success = 1;
     }
@@ -145,12 +149,12 @@ int SelectPtfnRow(int digp, int *pMunt, int *pDigt)
 {
     int result = fn_801FCE10(0,
                              "use \x8c select 'MUNT' into \x85 and 'DIGT' into \x85 from 'PTFN' where 'DIGP' = \x85\n",
-                             sHandle, pMunt, pDigt, digp);
+                             _Tournament_iDbHandle, pMunt, pDigt, digp);
 
     return QUERY_STATUS_ACCEPTED(result) && result != 0x17;
 }
 
-int fn_8008660C(int digt, int *pList)
+int TournamentDbQueryTeamPlayers(int digt, int *pList)
 {
     QueryCursor cursor;
     int value;
@@ -162,7 +166,7 @@ int fn_8008660C(int digt, int *pList)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     if (fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x85 from 'PTFN' where 'DIGT' = \x85\n",
-                    sHandle, &cursor, &value, digt) == 0) {
+                    _Tournament_iDbHandle, &cursor, &value, digt) == 0) {
         result = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
         count = 0;
         while (cursor.mUnknown0 != 0 && QUERY_STATUS_ACCEPTED(result) == true && result != 0x15) {
@@ -188,7 +192,7 @@ int ListPtfnByMunt(int munt, int *pList)
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     if (fn_801FCE10(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x85 from 'PTFN' where 'MUNT' = \x85\n",
-                    sHandle, &cursor, &value, munt) == 0) {
+                    _Tournament_iDbHandle, &cursor, &value, munt) == 0) {
         result = fn_801FCE10(0, "fetch from \x8a\n", &cursor);
         count = 0;
         while (cursor.mUnknown0 != 0 && QUERY_STATUS_ACCEPTED(result) == true && result != 0x15) {
@@ -202,13 +206,13 @@ int ListPtfnByMunt(int munt, int *pList)
     return count;
 }
 
-int fn_8008671C(void)
+int TournamentDbDeleteAllPlayers(void)
 {
-    fn_801FCE10(0, "use \x8c delete from 'PTFN'\n", sHandle);
+    fn_801FCE10(0, "use \x8c delete from 'PTFN'\n", _Tournament_iDbHandle);
     return 1;
 }
 
-int fn_80086754(int *pList)
+int TournamentDbQueryTeamList(int *pList)
 {
     QueryCursor cursor;
     int value;
@@ -239,38 +243,38 @@ int fn_80086754(int *pList)
     return count;
 }
 
-int fn_80086868(int *pList, int max)
+int TournamentGetDraftPool1(int *pList, int max)
 {
     int result;
 
-    if (!sPdfnOpen) {
+    if (!_Tournament_bDraftPoolOpen) {
         result = -1;
     } else {
-        result = fn_80086194(1, pList, max);
+        result = TournamentDbQueryDraftPool(1, pList, max);
     }
     return result;
 }
 
-int fn_800868A8(int *pList, int max)
+int TournamentGetDraftPool0(int *pList, int max)
 {
     int result;
 
-    if (!sPdfnOpen) {
+    if (!_Tournament_bDraftPoolOpen) {
         result = -1;
     } else {
-        result = fn_80086194(0, pList, max);
+        result = TournamentDbQueryDraftPool(0, pList, max);
     }
     return result;
 }
 
-int fn_800868E8(int *pDigp, int count, int munt, int digt)
+int TournamentSetPlayersTeam(int *pDigp, int count, int munt, int digt)
 {
     int result = 0;
     int i;
 
-    if (sHandle != -1) {
+    if (_Tournament_iDbHandle != -1) {
         for (i = 0; i < count; i++) {
-            result = fn_8008656C(pDigp[i], munt, digt);
+            result = TournamentDbWritePlayerTeam(pDigp[i], munt, digt);
             if (!result) {
                 break;
             }
@@ -279,96 +283,96 @@ int fn_800868E8(int *pDigp, int count, int munt, int digt)
     return result;
 }
 
-int fn_80086960(int digt, int *pList)
+int TournamentGetTeamPlayers(int digt, int *pList)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = -1;
     } else {
-        result = fn_8008660C(digt, pList);
+        result = TournamentDbQueryTeamPlayers(digt, pList);
     }
     return result;
 }
 
-int fn_80086994(void)
+int TournamentClearPlayers(void)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = 0;
     } else {
-        result = fn_8008671C();
+        result = TournamentDbDeleteAllPlayers();
     }
     return result;
 }
 
-int fn_800869C8(int lvlt)
+int TournamentGetLevelMatchCount(int lvlt)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = -1;
     } else {
-        result = fn_80086320(lvlt);
+        result = TournamentDbQueryLevelMatchCount(lvlt);
     }
     return result;
 }
 
-int fn_800869FC(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
+int TournamentGetMatch(int lvlt, int row, int *pDit1, int *pDit2, int *pTniw)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = 0;
     } else {
-        result = fn_80086398(lvlt, row, pDit1, pDit2, pTniw);
+        result = TournamentDbQueryMatch(lvlt, row, pDit1, pDit2, pTniw);
     }
     return result;
 }
 
-int fn_80086A30(int lvlt, int dit1, int dit2, int tniw)
+int TournamentSetMatchWinner(int lvlt, int dit1, int dit2, int tniw)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = 0;
     } else {
-        result = fn_8008648C(lvlt, dit1, dit2, tniw);
+        result = TournamentDbWriteMatchWinner(lvlt, dit1, dit2, tniw);
     }
     return result;
 }
 
-int fn_80086A64(void)
+int TournamentClearMatches(void)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = 0;
     } else {
-        result = fn_80086534();
+        result = TournamentDbDeleteAllMatches();
     }
     return result;
 }
 
-int fn_80086A98(void)
+int TournamentGetMatchCount(void)
 {
     int result;
 
-    if (sHandle == -1) {
+    if (_Tournament_iDbHandle == -1) {
         result = -1;
     } else {
-        result = fn_800862AC();
+        result = TournamentDbQueryMatchCount();
     }
     return result;
 }
 
-int fn_80086ACC(int *pList)
+int TournamentGetTeamList(int *pList)
 {
-    return fn_80086754(pList);
+    return TournamentDbQueryTeamList(pList);
 }
 
-int fn_80086AEC(int size)
+int TournamentGetRoundCount(int size)
 {
     int shift;
 
@@ -390,31 +394,31 @@ int fn_80086AEC(int size)
     return shift;
 }
 
-int fn_80086B50(void)
+int TournamentClose(void)
 {
     int result;
 
-    if (!sPdfnOpen) {
+    if (!_Tournament_bDraftPoolOpen) {
         return 1;
     }
     result = fn_8022EFBC(0, 0x5044464E);
-    sHandle = -1;
-    sPdfnOpen = 0;
+    _Tournament_iDbHandle = -1;
+    _Tournament_bDraftPoolOpen = 0;
     return result == 0;
 }
 
-int fn_80086BA4(int index)
+int TournamentOpen(int index)
 {
     int ok = 1;
 
-    sHandle = fn_8022F3D4(fn_8022F358(index));
-    if (sHandle == -1) {
+    _Tournament_iDbHandle = fn_8022F3D4(fn_8022F358(index));
+    if (_Tournament_iDbHandle == -1) {
         ok = 0;
     }
     if (fn_8022EF8C(0, 0x5044464E) == 0) {
-        sPdfnOpen = 1;
+        _Tournament_bDraftPoolOpen = 1;
     } else {
-        sPdfnOpen = 0;
+        _Tournament_bDraftPoolOpen = 0;
         ok = 0;
     }
     return ok;

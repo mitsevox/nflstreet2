@@ -7,12 +7,12 @@
 #include "game/fn_801C1F94.h"
 
 extern "C" {
-int fn_800808F8(Object_8008044C *pObject);
-int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-int fn_80080D10(Object_8008044C *pObject);
-int fn_800812E0(Object_8008044C *pObject, int a);
-int fn_80085620(int a, int b);
-int *fn_80085744(int a, int b);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
+int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
+int FormationGetByIndex(int a, int b);
+int *FormationLineupFetchUser(int a, int b);
 int fn_8008593C(int a, int b, int c, int d);
 int fn_80085BE4(int a);
 int fn_80085C3C(int a);
@@ -47,7 +47,7 @@ static unsigned char lbl_803EA409 = 0;
 extern "C" {
 void fn_8003AEA8(int a, int b, int c)
 {
-    fn_80080A68(&lbl_8030749C, (char *)a, b);
+    PlayerDbGetLastName(&lbl_8030749C, (char *)a, b);
 }
 
 void fn_8003AED8(int kind, int index, int value)
@@ -69,18 +69,18 @@ void fn_8003AF8C(int a, int kind, int index, int key, int e, Pair_8003AEA8 *pPai
     unsigned char i;
 
     if (kind == 1) {
-        handle = fn_80085620(e, 1);
+        handle = FormationGetByIndex(e, 1);
     } else {
-        handle = fn_80085620(e, 0);
+        handle = FormationGetByIndex(e, 0);
     }
-    list = fn_80085744(handle, a);
+    list = FormationLineupFetchUser(handle, a);
     if (list != 0) {
-        if (fn_800809C4(&lbl_8030749C, list[lbl_803075A8[kind][key]], 0) != 0) {
+        if (PlayerDbSeekId(&lbl_8030749C, list[lbl_803075A8[kind][key]], 0) != 0) {
             fn_8003AEA8(pPair->mUnknown8, pPair->mUnknown4, 1);
             for (i = 0; i <= 2; i++) {
-                pValues[i] = fn_800812E0(&lbl_8030749C, lbl_802CCCE4[lbl_803075A8[kind][index]][i]);
+                pValues[i] = PlayerDbGetBoostedRating(&lbl_8030749C, lbl_802CCCE4[lbl_803075A8[kind][index]][i]);
             }
-            *pResult = fn_80080D10(&lbl_8030749C);
+            *pResult = PlayerDbGetPortraitId(&lbl_8030749C);
         }
     }
 }
@@ -102,7 +102,7 @@ void fn_8003B0F8(int group, int kind, int slot, int code, int a, int b)
         lbl_803EA400[group] = slot;
     }
     lbl_803EA400[group] = (lbl_803EA400[group] + step + 7) % 7;
-    fn_800809C4(&lbl_8030749C, lbl_803074C8[group][lbl_802CCCAC[row][lbl_803EA400[group]]], 0);
+    PlayerDbSeekId(&lbl_8030749C, lbl_803074C8[group][lbl_802CCCAC[row][lbl_803EA400[group]]], 0);
     fn_8003AEA8(a, b, 1);
 }
 
@@ -122,7 +122,7 @@ void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs)
     int i;
 
     for (i = 0; i < 7; i++) {
-        fn_800809C4(&lbl_8030749C, lbl_803074C8[group][lbl_802CCCAC[row][i]], 0);
+        PlayerDbSeekId(&lbl_8030749C, lbl_803074C8[group][lbl_802CCCAC[row][i]], 0);
         fn_8003AEA8(pPairs[i]->mUnknown8, pPairs[i]->mUnknown4, 1);
     }
 }
@@ -291,8 +291,8 @@ void fn_8003B6F0(int reset)
                 desc.mUnknown8 = ids[group];
                 fn_8008040C(&cursor, &desc);
                 for (i = 0; i < 14; i++) {
-                    fn_800809FC(&cursor, lbl_80307538[group][i], 0);
-                    lbl_803074C8[group][i] = lbl_80307538[group][i] = fn_800808F8(&cursor);
+                    PlayerDbSeekOriginalId(&cursor, lbl_80307538[group][i], 0);
+                    lbl_803074C8[group][i] = lbl_80307538[group][i] = PlayerDbGetId(&cursor);
                 }
                 fn_8008056C(&cursor);
             }

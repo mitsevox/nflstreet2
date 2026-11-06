@@ -1,3 +1,6 @@
+/* Chooses a player's movement animation (stand, run, turn, reverse) from the current and
+   wanted heading and speed; one function per movement state. */
+
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_801BE60C.h"
@@ -15,14 +18,13 @@ int MathAngleDiff(int a, int b);
 extern float lbl_803ECB0C;
 extern float lbl_803ECB10;
 
-/* fn_8008E424, fn_8008E510, fn_8008E598, fn_8008E6D8, fn_8008E6FC,
-   fn_8008E858 and fn_8008E8D8 are words of the .data table 0x80297D68, which
-   fn_8008E978 indexes by the byte +14 of the record at +512. fn_8008DFF8,
-   fn_8008E040 and fn_8008E188 are called from fn_8008E598, and fn_8008DF00
-   from fn_8008DFF8. The 16-bit keys are the values fn_801BE648 returns
-   and fn_801BE068 takes. */
+/* The PlayerMoveAnimUpdate* functions are the movement-state handlers: the player's
+   movement state picks one each update. PlayerMoveAnimUpdateMove chooses its animation
+   with PlayerMoveAnimSelectByHeading or PlayerMoveAnimSelectTurn and checks for a
+   reversal with PlayerMoveAnimCheckReverse. The keys are animation ids, the ones the
+   animation player reports and starts. */
 
-extern "C" int fn_8008DF00(Object_80039F5C *p, int key)
+extern "C" int PlayerMoveAnimWantsReverse(Object_80039F5C *p, int key)
 {
     Object_8016D8B0 *pNext = &p->mUnknown528;
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -44,17 +46,17 @@ extern "C" int fn_8008DF00(Object_80039F5C *p, int key)
     return result;
 }
 
-extern "C" int fn_8008DFF8(Object_80039F5C *p, unsigned short key)
+extern "C" int PlayerMoveAnimCheckReverse(Object_80039F5C *p, unsigned short key)
 {
     int result = 0;
 
     if (p->mIdBytes[3] == 1 && p->mpState->mId != 61) {
-        result = fn_8008DF00(p, key);
+        result = PlayerMoveAnimWantsReverse(p, key);
     }
     return result;
 }
 
-extern "C" int fn_8008E040(Object_80039F5C *p, int diff, unsigned short *pKey)
+extern "C" int PlayerMoveAnimSelectByHeading(Object_80039F5C *p, int diff, unsigned short *pKey)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -91,7 +93,7 @@ extern "C" int fn_8008E040(Object_80039F5C *p, int diff, unsigned short *pKey)
     return result;
 }
 
-extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
+extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -160,7 +162,7 @@ extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
     return key;
 }
 
-extern "C" void fn_8008E424(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateStand(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -196,7 +198,7 @@ extern "C" void fn_8008E424(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8008E510(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateHold(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -212,9 +214,9 @@ extern "C" void fn_8008E510(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8008E8D8(Object_80039F5C *p);
+extern "C" void PlayerMoveAnimUpdateSpecial(Object_80039F5C *p);
 
-extern "C" void fn_8008E598(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateMove(Object_80039F5C *p)
 {
     int changed = 0;
     Object_8016D8B0 *pCur = &p->mUnknown512;
@@ -229,24 +231,24 @@ extern "C" void fn_8008E598(Object_80039F5C *p)
         pNext->mUnknown8 = pCur->mUnknown4;
         pNext->mUnknown0 = pCur->mUnknown0;
     } else if (fn_800DC080(p)) {
-        changed = fn_8008E040(p, diff, &key);
+        changed = PlayerMoveAnimSelectByHeading(p, diff, &key);
     } else {
         int flag = pCur->mUnknown15 == 4 || pCur->mUnknown15 == 5;
         if (flag && pCur->mUnknown0 == 0.0f) {
-            fn_8008E8D8(p);
+            PlayerMoveAnimUpdateSpecial(p);
             return;
         }
-        key = fn_8008E188(p, flag);
+        key = PlayerMoveAnimSelectTurn(p, flag);
     }
 
-    if (fn_8008DFF8(p, key) == 0) {
+    if (PlayerMoveAnimCheckReverse(p, key) == 0) {
         if (fn_801BE648(p->mpUnknown792) != key || changed) {
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
         }
     }
 }
 
-extern "C" void fn_8008E6D8(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateKeep(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -256,7 +258,7 @@ extern "C" void fn_8008E6D8(Object_80039F5C *p)
     pNext->mUnknown0 = pCur->mUnknown0;
 }
 
-extern "C" void fn_8008E6FC(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateLimited(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -323,7 +325,7 @@ extern "C" void fn_8008E6FC(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8008E858(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateDefault(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -338,7 +340,7 @@ extern "C" void fn_8008E858(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8008E8D8(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateSpecial(Object_80039F5C *p)
 {
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
@@ -356,7 +358,7 @@ extern "C" void fn_8008E8D8(Object_80039F5C *p)
         }
         break;
     default:
-        fn_8008E424(p);
+        PlayerMoveAnimUpdateStand(p);
         break;
     }
 }

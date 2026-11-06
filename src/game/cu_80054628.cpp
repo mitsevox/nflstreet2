@@ -22,9 +22,9 @@ void TeamUnlockAll(int db);
 void TeamLockAll(int db);
 void fn_80082688(int db);
 void fn_8008274C(int db);
-int fn_800881B8(void);
-void fn_80088638(int db);
-void fn_8008879C(int handle, int value);
+int TutorialAllComplete(void);
+void TutorialSetProfileDb(int db);
+void UserInfoSetPoints(int handle, int value);
 int fn_80186B38(int db);
 void fn_8018E428(int index, int value);
 void fn_8018F340(int a, int b);
@@ -36,7 +36,7 @@ int fn_8022F3D4(int handle);
 int fn_8022F478(int value);
 int fn_8022F4BC(void);
 
-void fn_80054628(signed char db, int id)
+void CheatEffectApply(signed char db, int id)
 {
     switch (id) {
     case 1:
@@ -97,7 +97,7 @@ void fn_80054628(signed char db, int id)
         ChalSetDevPointsForSlot(db, 999999);
         break;
     case 7:
-        fn_8008879C(fn_8022F358(db), 9999999);
+        UserInfoSetPoints(fn_8022F358(db), 9999999);
         break;
     case 8: {
         int saved = fn_8022F4BC();
@@ -145,7 +145,7 @@ void fn_80054628(signed char db, int id)
     }
 }
 
-void fn_80054964(signed char db, int id)
+void CheatEffectRemove(signed char db, int id)
 {
     switch (id) {
     case 1:
@@ -201,11 +201,11 @@ void fn_80054964(signed char db, int id)
         break;
     }
     case 19:
-        fn_80088638(fn_8022F358(db));
-        if (fn_800881B8() == 0) {
+        TutorialSetProfileDb(fn_8022F358(db));
+        if (TutorialAllComplete() == 0) {
             TeamLock(db, 33);
         }
-        fn_80088638(-1);
+        TutorialSetProfileDb(-1);
         break;
     case 20:
         TeamLock(db, 44);
@@ -218,7 +218,7 @@ void fn_80054964(signed char db, int id)
         ChalSetDevPointsForSlot(db, 0);
         break;
     case 7:
-        fn_8008879C(fn_8022F358(db), 0);
+        UserInfoSetPoints(fn_8022F358(db), 0);
         break;
     case 8:
         fn_80060674(db);

@@ -1,3 +1,7 @@
+/* The system modules registered at start-up: resources, camera, context, curves, the
+   database and game database, debug print, events, loading, maths, memory card,
+   peripherals, remapping, sorting, preloading, tasks, video memory and front-end music. */
+
 #include "engine/vram.h"
 #include "engine/dbtats.h"
 #include "engine/dbteams.h"
@@ -368,8 +372,8 @@ static int _PeriphNextId()
 }
 }
 
-static int sPeriphUnknown[2];
-static Desc_801E1478 sPeriphDesc = { 4, 16, 16, _PeriphNextId, sPeriphEntries, sPeriphUnknown };
+static int sPeriphState[2];
+static Desc_801E1478 sPeriphDesc = { 4, 16, 16, _PeriphNextId, sPeriphEntries, sPeriphState };
 static ModuleDependency sPeriphDependencies[] = { &gSys, 0 };
 Periph gPeriph;
 
@@ -379,8 +383,8 @@ const char *Periph::GetName() { return "Periph"; }
 
 int Periph::Init()
 {
-    sPeriphUnknown[0] = 0;
-    sPeriphUnknown[1] = 0;
+    sPeriphState[0] = 0;
+    sPeriphState[1] = 0;
     fn_801E1478(&sPeriphDesc);
     return 1;
 }

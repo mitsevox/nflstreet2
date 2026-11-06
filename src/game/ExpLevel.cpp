@@ -1,3 +1,6 @@
+/* Experience levels: opens the level table and answers which level a points total reaches,
+   the points a level needs, and a level's name and other values. */
+
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
@@ -8,10 +11,10 @@ int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 }
 
-static unsigned char sLpxeOpen = 0;
+static unsigned char _ExpLevel_bOpen = 0;
 
 extern "C" {
-int fn_80085D7C(int ppxe)
+int ExpLevelQueryForPoints(int ppxe)
 {
     QueryCursor cursor;
     int value;
@@ -49,7 +52,7 @@ int SelectLpxePpxe(int vlxe)
     return found;
 }
 
-int fn_80085E3C(int vlxe)
+int ExpLevelQueryScft(int vlxe)
 {
     int value;
     int found = 0;
@@ -61,7 +64,7 @@ int fn_80085E3C(int vlxe)
     return found;
 }
 
-int fn_80085EB0(int vlxe)
+int ExpLevelQueryLvbn(int vlxe)
 {
     int value;
     int found = 0;
@@ -73,7 +76,7 @@ int fn_80085EB0(int vlxe)
     return found;
 }
 
-int fn_80085F24(int vlxe, char *pName, int size)
+int ExpLevelQueryName(int vlxe, char *pName, int size)
 {
     char name[33];
     int found = 0;
@@ -86,94 +89,94 @@ int fn_80085F24(int vlxe, char *pName, int size)
     return found;
 }
 
-int fn_80085FB0(void)
+int ExpLevelCloseTable(void)
 {
     int ok = 1;
 
-    if (sLpxeOpen) {
+    if (_ExpLevel_bOpen) {
         ok = fn_8022EFBC(0, 0x4C505845) == 0;
-        sLpxeOpen = 0;
+        _ExpLevel_bOpen = 0;
     }
     return ok;
 }
 
-int fn_80085FFC(void)
+int ExpLevelOpenTable(void)
 {
     int ok = 1;
     int failed;
 
-    if (!sLpxeOpen) {
+    if (!_ExpLevel_bOpen) {
         fn_800731D0(1);
         fn_800731D0(0);
         failed = fn_8022EF8C(0, 0x4C505845);
         fn_800731D0(1);
         fn_800731D0(0);
         if (failed) {
-            sLpxeOpen = 0;
+            _ExpLevel_bOpen = 0;
             ok = 0;
         } else {
-            sLpxeOpen = ok;
+            _ExpLevel_bOpen = ok;
         }
     }
     return ok;
 }
 
-int fn_80086080(int ppxe)
+int ExpLevelGetForPoints(int ppxe)
 {
     int result;
 
-    if (!sLpxeOpen) {
+    if (!_ExpLevel_bOpen) {
         result = 0;
     } else {
-        result = fn_80085D7C(ppxe);
+        result = ExpLevelQueryForPoints(ppxe);
     }
     return result;
 }
 
-int fn_800860B4(int vlxe)
+int ExpLevelGetScft(int vlxe)
 {
     int result;
 
-    if (!sLpxeOpen) {
+    if (!_ExpLevel_bOpen) {
         result = 0;
     } else {
-        result = fn_80085E3C(vlxe);
+        result = ExpLevelQueryScft(vlxe);
     }
     return result;
 }
 
-int fn_800860E8(int vlxe)
+int ExpLevelGetLvbn(int vlxe)
 {
     int result;
 
-    if (!sLpxeOpen) {
+    if (!_ExpLevel_bOpen) {
         result = 0;
     } else {
-        result = fn_80085EB0(vlxe);
+        result = ExpLevelQueryLvbn(vlxe);
     }
     return result;
 }
 
-int fn_8008611C(int vlxe, char *pName, int size)
+int ExpLevelGetName(int vlxe, char *pName, int size)
 {
     int result;
 
-    if (!sLpxeOpen) {
+    if (!_ExpLevel_bOpen) {
         pName[0] = 0;
         result = 0;
     } else {
-        result = fn_80085F24(vlxe, pName, size);
+        result = ExpLevelQueryName(vlxe, pName, size);
     }
     return result;
 }
 
-int fn_80086154(void)
+int ExpLevelClose(void)
 {
-    return fn_80085FB0();
+    return ExpLevelCloseTable();
 }
 
-int fn_80086174(void)
+int ExpLevelOpen(void)
 {
-    return fn_80085FFC();
+    return ExpLevelOpenTable();
 }
 }

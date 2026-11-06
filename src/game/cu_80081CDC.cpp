@@ -1,5 +1,5 @@
 #include "game/Record_80082B18.h"
-#include "game/Block_80307980.h"
+#include "game/FaceFeatures.h"
 #include "game/Class_8018FD64.h"
 #include "game/Class_802938C0.h"
 #include "game/DbCursor.h"
@@ -18,7 +18,7 @@ int fn_8007FC70(int a, int b, int mode, int c);
 void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
-int fn_800808F8(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
 void fn_800731D0(int a);
 int fn_80186F7C(unsigned char index);
 int toupper(int c);
@@ -60,7 +60,7 @@ int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
 {
     int found = 0;
 
-    if (DbCursorFindInt(&lbl_8030BC2C, 0x44494750, fn_800808F8(pObject), 0, 0)) {
+    if (DbCursorFindInt(&lbl_8030BC2C, 0x44494750, PlayerDbGetId(pObject), 0, 0)) {
         DbColumnValue columns[19];
         int i;
 
@@ -169,7 +169,7 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
     if (found) {
         DbCursorSeek(pCursor, position);
         if (pResult) {
-            *pResult = fn_800808F8(pObject);
+            *pResult = PlayerDbGetId(pObject);
         }
         if (pPosition) {
             *pPosition = position;
@@ -178,7 +178,7 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
     return found;
 }
 
-void fn_80082138(Object_8008044C *pObject, Block_80307980 *pBlock)
+void fn_80082138(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     Class_802938C0 cursor;
 
@@ -221,7 +221,7 @@ void fn_80082308(Object_8008044C *pObject, int value)
     fn_8007ABA4(pObject, 0x42454650, value);
 }
 
-void fn_80082334(Object_8008044C *pObject, Block_80307980 *pBlock)
+void fn_80082334(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     fn_8007ABA4(pObject, 0x57424650, pBlock->mUnknown0[1]);
     fn_8007ABA4(pObject, 0x41454650, pBlock->mUnknown0[2] - 8);

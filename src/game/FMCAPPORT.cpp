@@ -1,3 +1,7 @@
+/* FMCAPPORT front-end module: takes the queued create-a-player portrait jobs one at a
+   time, renders the player's head with its own camera, captures the frame, quantizes it
+   and saves the portrait ("Updating Players..."). */
+
 #include "game/fn_801D2B7C.h"
 #include "engine/viewport.h"
 #include "game/FMCAPPORT.h"

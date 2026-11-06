@@ -16,8 +16,8 @@ int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_800812B0(Object_8008044C *pObject, int index);
-void fn_8008135C(Object_8008044C *pObject, int index, int value);
+int PlayerDbGetRating(Object_8008044C *pObject, int index);
+void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int fn_8008454C(int type, int logo, const char *pName);
 void fn_80084808(int a, int *pIds, int *pCounts, int count, int *pOut, int total);
 void fn_80083DE4(int id);
@@ -90,10 +90,10 @@ void fn_800042D8(int team)
     if (DbCursorFirst((DbCursor *)&cursor)) {
         do {
             for (int i = 0; i < 10; i++) {
-                unsigned int value = fn_800812B0(&cursor, i);
+                unsigned int value = PlayerDbGetRating(&cursor, i);
                 value = (unsigned int)((float)value * 0.13f) * 5;
                 value = value == 0 ? 1 : (value > 100 ? 100 : value);
-                fn_8008135C(&cursor, i, value);
+                PlayerDbSetRating(&cursor, i, value);
             }
         } while (DbCursorNext((DbCursor *)&cursor));
     }

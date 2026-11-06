@@ -29,11 +29,11 @@ void fn_800674E0(int tag, int a, int *pResult);
 void fn_800675B4(int tag, int a, int b);
 void fn_80067A4C(int team, int tag, int kind, int *pResult);
 int fn_80067A8C(int tag, int a, int b);
-void fn_80087CBC(DbCursor *pCursor);
-void fn_80087CFC(DbCursor *pCursor);
-int fn_80087D1C(DbCursor *pCursor, int key);
-unsigned char fn_80087DA4(DbCursor *pCursor, int column);
-unsigned char fn_8008973C(int index);
+void AudibleDbOpen(DbCursor *pCursor);
+void AudibleDbClose(DbCursor *pCursor);
+int AudibleDbSeekFormation(DbCursor *pCursor, int key);
+unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column);
+unsigned char PlaybookSideGetLoaded(int index);
 void fn_800B508C(unsigned char index);
 int fn_800BA6F8(void);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
@@ -360,17 +360,17 @@ void fn_80168264(void)
         DbCursor cursor;
         unsigned int key;
 
-        fn_80087CBC(&cursor);
+        AudibleDbOpen(&cursor);
         for (key = 1; key <= 43; key++) {
-            if (fn_80087D1C(&cursor, key)) {
+            if (AudibleDbSeekFormation(&cursor, key)) {
                 unsigned int i;
 
                 for (i = 0; i <= 3; i++) {
-                    lbl_803ECAF4->mUnknownD314[key - 1][i] = fn_80087DA4(&cursor, i);
+                    lbl_803ECAF4->mUnknownD314[key - 1][i] = AudibleDbGetPlayIndex(&cursor, i);
                 }
             }
         }
-        fn_80087CFC(&cursor);
+        AudibleDbClose(&cursor);
     }
 }
 
@@ -418,11 +418,11 @@ void fn_801684B8(int a)
         fn_801F9FA4(0x31444250, 0x53594C50, 0x4C594C50);
     }
     if (lbl_803ECAF4->mUnknown4[0].mUnknown4 != -1) {
-        fn_80066DC8(0x31444250, fn_8008973C(1));
+        fn_80066DC8(0x31444250, PlaybookSideGetLoaded(1));
         lbl_803ECAF4->mUnknown4[0].mUnknown4 = -1;
     }
     if (lbl_803ECAF4->mUnknown4[0].mUnknown0 != -1) {
-        fn_80066DC8(0x31544250, fn_8008973C(0));
+        fn_80066DC8(0x31544250, PlaybookSideGetLoaded(0));
         lbl_803ECAF4->mUnknown4[0].mUnknown0 = -1;
     }
 }

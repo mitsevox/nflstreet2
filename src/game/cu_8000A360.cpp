@@ -27,16 +27,16 @@ unsigned char DecalIsNew(int index, int a);
 void DecalClearNew(int index, int a);
 int DecalFindIndex(int index, int a);
 int DecalGetIdAt(int index, int a);
-int fn_800489F4(unsigned int type);
-int fn_80048ACC(int type);
-void fn_80048FA0(int index, int value);
-void fn_80048FB8(int index, int value);
-void fn_80049AD0(int index, unsigned char value);
-void fn_80049AE8(int index, unsigned char value);
-void fn_80049B00(int index, int value);
-void fn_80049B18(int index, unsigned char value);
-void fn_80049DD0(int index, unsigned char value);
-void fn_80049DE8(int index, unsigned char value);
+int PlayerLookMapHatKind(unsigned int type);
+int PlayerLookItemKeepsLogo(int type);
+void PlayerLookSetHeadDecalColors(int index, int value);
+void PlayerLookSetDecalColors(int index, int value);
+void PlayerLookSetHatStyle(int index, unsigned char value);
+void PlayerLookSetHeadDecalKind(int index, unsigned char value);
+void PlayerLookSetFrontDecalKind(int index, int value);
+void PlayerLookSetBackDecalKind(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsA(int index, unsigned char value);
+void PlayerLookSetSwitchFlagsB(int index, unsigned char value);
 int DbCursorGetRow(DbCursor *pObject);
 void fn_8007BA88(DbCursor *pCursor, int value);
 void fn_8007BB04(DbCursor *pCursor);
@@ -55,8 +55,8 @@ void GearLockClose(DbCursor *pObject);
 void GearLockGetFlags(DbCursor *pObject, int key, unsigned char *pA, unsigned char *pB);
 void GearLockClearNew(DbCursor *pObject, int id);
 int GearHasNew(int type, int a, int b);
-int fn_800808F8(Object_8008044C *pObject);
-int fn_80080D10(Object_8008044C *pObject);
+int PlayerDbGetId(Object_8008044C *pObject);
+int PlayerDbGetPortraitId(Object_8008044C *pObject);
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 DbCursor *fn_80182DBC(void);
 Object_8008044C *fn_80182DC8(void);
@@ -349,7 +349,7 @@ static void fn_8000A360(int id, int index)
         int row = DbCursorGetRow((DbCursor *)fn_80182DC8());
         Info_80307908 info;
 
-        fn_800809C4(fn_80182DC8(), id, 0);
+        PlayerDbSeekId(fn_80182DC8(), id, 0);
         fn_800817CC(fn_80182DC8(), &info);
         fn_8007BBFC(&lbl_8036A1FC, 0, 0);
         if (fn_8007BF28(type) != 14) {
@@ -376,7 +376,7 @@ static int fn_8000A434(int type, int value)
             int id;
 
             fn_800817CC(fn_80182DC8(), &info);
-            id = fn_800808F8(fn_80182DC8());
+            id = PlayerDbGetId(fn_80182DC8());
             if (fn_8007BF28(type) != 14) {
                 if (info.mValues[fn_8007BF28(type)] == value) {
                     result = id;
@@ -397,7 +397,7 @@ static void fn_8000A528()
     int type = fn_8007BE7C(&lbl_8036A1FC);
     int id = fn_8007BE54(&lbl_8036A1FC);
     int unique = fn_8007BF3C(&lbl_8036A1FC);
-    int current = fn_800808F8(fn_80182DC8());
+    int current = PlayerDbGetId(fn_80182DC8());
     int owner = fn_8000A434(type, id);
 
     if (unique && owner != -1 && owner != current) {
@@ -597,7 +597,7 @@ static int fn_8000AA7C(unsigned char *pFlag, unsigned char *pSkullcap)
     fn_8007BA88(&cursor, 0);
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[0], 0);
     fn_8007BC34(&cursor, &row);
-    type = fn_800489F4(row.mUnknown64);
+    type = PlayerLookMapHatKind(row.mUnknown64);
     fn_8007BB04(&cursor);
     if (pFlag) {
         *pFlag = row.mUnknown76;
@@ -645,7 +645,7 @@ static int fn_8000AC98()
     fn_8007BBFC(&cursor, lbl_8036A280.mValues[10], 0);
     fn_8007BC34(&cursor, &row);
     fn_8007BB04(&cursor);
-    return fn_80048ACC(row.mUnknown64);
+    return PlayerLookItemKeepsLogo(row.mUnknown64);
 }
 
 static int fn_8000AD18()
@@ -832,7 +832,7 @@ void Class_8000DBF0::vfn_01(int a, int *pCount, int *pOut)
     fn_80182E04("");
     *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8()) + 1;
     DbCursorFirst((DbCursor *)fn_80182DC8());
-    lbl_803ECDDC = fn_800808F8(fn_80182DC8());
+    lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
     FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803ECDDC, 1);
 }
 
@@ -841,7 +841,7 @@ int Class_8000DBF0::vfn_02(int a, int b, void **pOut)
     char buffer[27];
 
     *pOut = fn_8000D140();
-    fn_800809C4(fn_80182DC8(), a, 0);
+    PlayerDbSeekId(fn_80182DC8(), a, 0);
     fn_801832B0(buffer, 27);
     fn_80182E34(buffer);
     fn_800817CC(fn_80182DC8(), &lbl_8036A280);
@@ -853,7 +853,7 @@ void Class_8000DBF0::vfn_03(int index)
     if (index != 0x7FFF) {
         char buffer[27];
 
-        fn_800809C4(fn_80182DC8(), index, 0);
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
         lbl_803ECDDC = index;
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
         fn_801832B0(buffer, 27);
@@ -870,7 +870,7 @@ void Class_8000DBF0::vfn_04(int index, int *pOut)
         *pOut = 0x7FFF;
     } else {
         DbCursorSeek((DbCursor *)fn_80182DC8(), index);
-        *pOut = fn_800808F8(fn_80182DC8());
+        *pOut = PlayerDbGetId(fn_80182DC8());
     }
 }
 
@@ -882,8 +882,8 @@ void Class_8000DBF0::vfn_05(int index, Entry_80182CC8 *pOut)
     if (index != 0x7FFF) {
         int value;
 
-        fn_800809C4(fn_80182DC8(), index, 0);
-        value = fn_80080D10(fn_80182DC8());
+        PlayerDbSeekId(fn_80182DC8(), index, 0);
+        value = PlayerDbGetPortraitId(fn_80182DC8());
         pOut->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
         pOut->mId = index;
         pOut->mUnknown30 = 1;
@@ -1272,13 +1272,13 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
             FEPlyrSetPairSlot(lbl_803ECDD0, lbl_8036A280.mValues[lbl_803ECDD0]);
         }
         if (lbl_803ECDD0 == 0) {
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
         }
-        fn_80049DD0(0, lbl_8036A280.mUnknown00);
-        fn_80049DD0(1, lbl_8036A280.mUnknown00);
-        fn_80049DE8(0, lbl_8036A280.mUnknown01);
-        fn_80049DE8(1, lbl_8036A280.mUnknown01);
+        PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+        PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+        PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
         fn_8015D180(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
@@ -1322,14 +1322,14 @@ void Class_8000D980::vfn_03(int index)
     if (lbl_803ECDD0 == 0) {
         unsigned char value = fn_8000AE7C(lbl_8036A280.mUnknown02);
 
-        fn_80049AD0(0, value);
-        fn_80049AD0(1, value);
+        PlayerLookSetHatStyle(0, value);
+        PlayerLookSetHatStyle(1, value);
     }
     fn_80182F24(&lbl_8036A280);
-    fn_80049DD0(0, lbl_8036A280.mUnknown00);
-    fn_80049DD0(1, lbl_8036A280.mUnknown00);
-    fn_80049DE8(0, lbl_8036A280.mUnknown01);
-    fn_80049DE8(1, lbl_8036A280.mUnknown01);
+    PlayerLookSetSwitchFlagsA(0, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
+    PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
+    PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
     fn_8015D180(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
@@ -1405,12 +1405,12 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 0:
-            fn_80048FA0(0, lbl_8036A280.mUnknown0D);
-            fn_80048FA0(1, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(0, lbl_8036A280.mUnknown0D);
+            PlayerLookSetHeadDecalColors(1, lbl_8036A280.mUnknown0D);
             break;
         case 9:
-            fn_80048FB8(0, lbl_8036A280.mUnknown0C);
-            fn_80048FB8(1, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(0, lbl_8036A280.mUnknown0C);
+            PlayerLookSetDecalColors(1, lbl_8036A280.mUnknown0C);
             break;
         }
         fn_8015D180(FEPlyrGetBackIndex(), 15);
@@ -1428,12 +1428,12 @@ void Class_8000D940::vfn_03(int index)
     value = fn_80084158(&lbl_8036A254) - 1;
     switch (mUnknown8) {
     case 0:
-        fn_80048FA0(0, value);
-        fn_80048FA0(1, value);
+        PlayerLookSetHeadDecalColors(0, value);
+        PlayerLookSetHeadDecalColors(1, value);
         break;
     case 9:
-        fn_80048FB8(0, value);
-        fn_80048FB8(1, value);
+        PlayerLookSetDecalColors(0, value);
+        PlayerLookSetDecalColors(1, value);
         break;
     }
     fn_8015D180(FEPlyrGetBackIndex(), 15);
@@ -1504,12 +1504,12 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
             break;
         case 2:
-            fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-            fn_80049AE8(1, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+            PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
             break;
         }
         fn_8015D180(FEPlyrGetBackIndex(), 15);
@@ -1524,8 +1524,8 @@ void Class_8000D900::vfn_03(int index)
     case 1:
         if (fn_8000ADB4()) {
             lbl_8036A280.mUnknown02 = fn_8000AE0C(index);
-            fn_80049AD0(0, lbl_8036A280.mUnknown02);
-            fn_80049AD0(1, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
+            PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
             fn_8015D180(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         }
@@ -1536,8 +1536,8 @@ void Class_8000D900::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown0B = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049AE8(0, lbl_8036A280.mUnknown0B);
-        fn_80049AE8(1, lbl_8036A280.mUnknown0B);
+        PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
+        PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
         fn_8015D180(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
@@ -1615,12 +1615,12 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
         switch (mUnknown8) {
         case 1:
-            fn_80049B00(0, lbl_8036A280.mUnknown09);
-            fn_80049B00(1, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+            PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
             break;
         case 2:
-            fn_80049B18(0, lbl_8036A280.mUnknown0A);
-            fn_80049B18(1, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+            PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
             break;
         }
         fn_8015D180(FEPlyrGetBackIndex(), 15);
@@ -1638,8 +1638,8 @@ void Class_8000D8C0::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown09 = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B00(0, lbl_8036A280.mUnknown09);
-        fn_80049B00(1, lbl_8036A280.mUnknown09);
+        PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
+        PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
         fn_8015D180(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
@@ -1649,8 +1649,8 @@ void Class_8000D8C0::vfn_03(int index)
         } else {
             lbl_8036A280.mUnknown0A = DecalGetIdAt(fn_80183354(), index - fn_8000C648()) + 6;
         }
-        fn_80049B18(0, lbl_8036A280.mUnknown0A);
-        fn_80049B18(1, lbl_8036A280.mUnknown0A);
+        PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
+        PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
         fn_8015D180(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
@@ -1690,7 +1690,7 @@ void fn_8000CEB4(int a)
     if (a == 0) {
         fn_801835C8();
     } else {
-        lbl_803ECDDC = fn_800808F8(fn_80182DC8());
+        lbl_803ECDDC = PlayerDbGetId(fn_80182DC8());
         fn_800817CC(fn_80182DC8(), &lbl_8036A280);
     }
 }

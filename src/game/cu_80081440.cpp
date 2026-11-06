@@ -8,7 +8,7 @@ extern "C" {
 int fn_8007BF14(int index);
 int fn_801FA290(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 DbColumnValue *pColumns);
-void fn_8008138C(Object_8008044C *pObject, int *pValues);
+void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues);
 void fn_800814BC(Info_80307908 *pInfo, short *pValues);
 
 #if defined(DECOMP_COMPARE)
@@ -80,7 +80,7 @@ void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues)
     short sums[10];
     int i;
 
-    fn_8008138C(pObject, pValues);
+    PlayerDbReadRatings(pObject, pValues);
     fn_800814BC(pInfo, sums);
     for (i = 0; i < 10; i++) {
         pValues[i] = sums[i] + pValues[i];

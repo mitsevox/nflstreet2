@@ -54,7 +54,7 @@ void ResTrackResume(void);
 void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(const SortEntry_80160CDC *, const SortEntry_80160CDC *),
                  int b, int c, int d);
-void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
+void fn_802347EC(void *pData, ModelTexSlot_t *pDesc, int a, int b);
 
 extern char lbl_802EC080[];
 }
@@ -79,7 +79,7 @@ extern char lbl_802EC080[];
         { 0x355B }, { 0x355C }, { 0x355D }, { 2 }                                           \
     }
 
-static Desc_802347EC sTextureDescs[14][33] = {
+static ModelTexSlot_t sTextureDescs[14][33] = {
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
     TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES, TEXTURE_SLOT_NAMES,
@@ -514,7 +514,7 @@ void fn_80160F98(void)
     }
 }
 
-Desc_802347EC *fn_8016102C(int player)
+ModelTexSlot_t *fn_8016102C(int player)
 {
     return sTextureDescs[player];
 }

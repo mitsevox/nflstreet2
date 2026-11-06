@@ -17,9 +17,9 @@ struct PlyrTexPartFilter {
 extern "C" {
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void *PlyrTexGetLib(int player);
-void PlyrTexFreeDesc(Desc_802347EC *pDesc);
+void PlyrTexFreeDesc(ModelTexSlot_t *pDesc);
 void PlyrTexCopy(void *pDest, void *pSrc, unsigned int size);
-void PlyrTexApplyFilters(Desc_802347EC *pDescs, PlyrTexPartFilter *pEntries);
+void PlyrTexApplyFilters(ModelTexSlot_t *pDescs, PlyrTexPartFilter *pEntries);
 }
 
 #endif

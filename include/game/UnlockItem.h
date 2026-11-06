@@ -1,8 +1,8 @@
-#ifndef GAME_RECORD_80088CE0_H
-#define GAME_RECORD_80088CE0_H
+#ifndef GAME_UNLOCKITEM_H
+#define GAME_UNLOCKITEM_H
 
-/* Record filled by fn_80088CE0. */
-struct Record_80088CE0 {
+/* Record filled by UnlockListReadItem. */
+struct UnlockItem_t {
     signed char mIndex;
     char mName[132];
     int mUnknown136;

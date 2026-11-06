@@ -9,9 +9,9 @@
 #include <string.h>
 
 extern "C" {
-Desc_802347EC *fn_8016102C(int player);
-Desc_802347EC *fn_802345F8(Desc_802347EC *pDescs, const char *pName);
-void fn_80234844(Desc_802347EC *pDesc);
+ModelTexSlot_t *fn_8016102C(int player);
+ModelTexSlot_t *fn_802345F8(ModelTexSlot_t *pDescs, const char *pName);
+void fn_80234844(ModelTexSlot_t *pDesc);
 void fn_80239D1C(void *p, unsigned int size);
 }
 
@@ -62,7 +62,7 @@ void *PlyrTexGetLib(int player)
     return fn_8016102C(player)->mpUnknown24;
 }
 
-void PlyrTexFreeDesc(Desc_802347EC *pDesc)
+void PlyrTexFreeDesc(ModelTexSlot_t *pDesc)
 {
     fn_80234844(pDesc);
 }
@@ -94,7 +94,7 @@ void PlyrTexCopy(void *pDest, void *pSrc, unsigned int size)
 
 /* Applies each entry of pEntries (_PlyrTex_aPartFilters when null) to the texture of
    the same name in pDescs. */
-void PlyrTexApplyFilters(Desc_802347EC *pDescs, PlyrTexPartFilter *pEntries)
+void PlyrTexApplyFilters(ModelTexSlot_t *pDescs, PlyrTexPartFilter *pEntries)
 {
     int i;
 
@@ -102,7 +102,7 @@ void PlyrTexApplyFilters(Desc_802347EC *pDescs, PlyrTexPartFilter *pEntries)
         pEntries = _PlyrTex_aPartFilters;
     }
     for (i = 0; pEntries[i].mpName; i++) {
-        Desc_802347EC *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
+        ModelTexSlot_t *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
 
         if (pEntries[i].mUnknown4) {
             TMTexWrapDesc_t pair = { 0, 0 };

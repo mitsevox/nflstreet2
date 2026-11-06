@@ -7,8 +7,8 @@ extern char lbl_800034A0[];
 int fn_801D2130(MemPoolDesc_t *pObject);
 int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int fn_801D2570(int id);
-void fn_80088E8C(char *pStart, char *pEnd);
-void fn_80088EC8(char *pStart, char *pEnd);
+void MemSnapshotRestore(char *pStart, char *pEnd);
+void MemSnapshotSave(char *pStart, char *pEnd);
 }
 
 static ModuleDependency sDependencies[] = { &gSys, 0 };
@@ -24,7 +24,7 @@ int FEDLL::Init()
 {
     if (sShutdown) {
         fn_801D2570(0x40);
-        fn_80088E8C(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
+        MemSnapshotRestore(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
         sShutdown = 0;
     }
     return 1;
@@ -36,7 +36,7 @@ int FEDLL::Shutdown()
 {
     MemPoolDesc_t *pObject = MemPoolGetDesc(0x40);
     pObject->mUnknown10 = (char *)ChallengeGoalCheckMargin - lbl_800034A0;
-    fn_80088EC8(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
+    MemSnapshotSave(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
     pObject->mUnknown10 = 0x209C0;
     fn_801D2130(pObject);
     sShutdown = 1;
