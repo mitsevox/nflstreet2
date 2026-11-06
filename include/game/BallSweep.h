@@ -5,9 +5,9 @@
 
 /* Two points 16 bytes apart with a float after the first; BallSegmentsTouch
    passes both points of two of these to fn_80088FFC, and BallSweepToPart copies
-   one as a 32-byte block from +16 of a Sub_8003EC54 and adds the floats at
+   one as a 32-byte block from +16 of a CollideShape_t and adds the floats at
    +12 of two of them. These 32 bytes are the region +16..+48 that
-   include/game/cu_8003EC04.h declares as separate floats. */
+   include/game/Collide.h declares as separate floats. */
 struct BallSegment_t {
     Vector_80039F5C mUnknown0;
     float mUnknownC;

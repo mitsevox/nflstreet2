@@ -10,7 +10,7 @@ struct DynObjPose;
 struct DynObjSkeletonRef;
 struct DynObj;
 struct Object_80040818;
-struct Object_80041904;
+struct BigObjInst;
 struct Instance_8004DA0C;
 struct Cache_8004E16C;
 
@@ -27,7 +27,7 @@ struct DynObjChild {
         struct { Quat_801EB488 mRotation3C; int mAngle4C; };
     };
     union { DynObj *mpUnknown50; Object_80040818 *mpOwner50; };
-    union { unsigned char mUnknown54[4]; Object_80041904 *mpObject54; };
+    union { unsigned char mUnknown54[4]; BigObjInst *mpObject54; };
     void *mpUnknown58; DynObjChild *mpUnknown5C;
     union {
         Vector_80039F5C mUnknown60;

@@ -31,7 +31,7 @@ struct PortraitImageRequest_t {
 extern "C" {
 Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
-void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
+void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *fn_80160C08(void);
 void fn_80199BD4(PortraitJob_t *pObject);
 void fn_801A4690(int a);
@@ -115,7 +115,7 @@ void PortraitLoadParts(PortraitJob_t *pObject)
             TexMipmapRelocate(pData);
             id = pObject->mUnknown28[i];
             if (id != -1) {
-                fn_8004625C(TexGetPaletteByIndex(pData, TexGetMaterialByIndex(pData, 0)->mUnknown8), id,
+                PlaDynClutApplyColors(TexGetPaletteByIndex(pData, TexGetMaterialByIndex(pData, 0)->mUnknown8), id,
                             &pObject->mText264[i]);
             }
         } else {

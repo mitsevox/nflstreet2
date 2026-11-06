@@ -2,7 +2,7 @@
    two players, and the list of contact points the detailed test fills. */
 
 #include "game/CollideContacts.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
@@ -31,7 +31,7 @@ void CollideAddCapsuleContact(float *pCapsuleA, float *pCapsuleB, unsigned int i
     }
 }
 
-int CollideTestCylinders(Record_8003EC04 *pA, Record_8003EC04 *pB)
+int CollideTestCylinders(CollideObject_t *pA, CollideObject_t *pB)
 {
     float t;
     float d;
@@ -67,7 +67,7 @@ int CollideTestSpheres(float *pSphereA, float *pSphereB)
     return d <= r * r;
 }
 
-void CollideMakeSplitPlane(CollidePlane_t *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB)
+void CollideMakeSplitPlane(CollidePlane_t *pPlane, CollideObject_t *pA, CollideObject_t *pB)
 {
     float delta[3];
 

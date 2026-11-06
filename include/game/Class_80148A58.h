@@ -5,7 +5,7 @@
    after 24 bytes of data. Only the vtable slots called through are given
    signatures; the others are placeholders. */
 struct Object_80039F5C;
-struct Record_8003E214;
+struct AutoDepthPlayer_t;
 
 struct Record_80148C4C {
     int mUnknown0;
@@ -48,7 +48,7 @@ public:
     virtual int vfn_21();
     virtual int vfn_22(int a);
 
-    virtual int vfn_23(Record_8003E214 *pRecords, int count);
+    virtual int vfn_23(AutoDepthPlayer_t *pRecords, int count);
     virtual int vfn_24(int team, unsigned int tag);
     virtual unsigned char vfn_25(int team, int index);
     virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);

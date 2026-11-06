@@ -608,7 +608,7 @@ void fn_8013A844(Ball_t *pBall, float dt)
     }
     ClearVector(&pBall->mState.mUnknown7C);
     ClearVector(&pBall->mState.mUnknown88);
-    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4.mX);
+    pBlock->mUnknown660 = LevelFindArea(&pBlock->mUnknown4.mX);
 }
 
 void fn_8013A910(Ball_t *pBall, int *pAngles)

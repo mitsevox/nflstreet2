@@ -76,7 +76,7 @@ int BallSweepBisect(Vector_80039F5C *pPos, BallSegment_t *pA, BallSegment_t *pB,
     return first;
 }
 
-float BallSweepToPart(Record_8003EC04 *pA, Record_8003EC04 *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit)
+float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit)
 {
     BallSegment_t seg;
     BallSegment_t *pSeg;

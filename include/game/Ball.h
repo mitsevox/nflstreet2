@@ -2,12 +2,12 @@
 #define GAME_BALL_H
 
 #include "game/Object_80039F5C.h"
-#include "game/cu_8003EC04.h"
+#include "game/Collide.h"
 
 /* The part of a Ball_t entry that the block snapshot saves,
    restores and checksums. */
 struct BallState_t {
-    Record_8003EC04 *mpRecord;
+    CollideObject_t *mpRecord;
     unsigned int mFlags;
     Vector_80039F5C mPos;
     Quat_801EB488 mUnknown18;
@@ -58,7 +58,7 @@ struct Ball_t {
 struct BallBlockHeader_t {
     unsigned char mCount;
     unsigned char mCurrent;
-    Set_8003EE6C *mpRecords;
+    CollideSet_t *mpRecords;
 };
 
 /* Allocated with room for mCount entries. */
@@ -111,9 +111,9 @@ int BallGetStateStartTick(Ball_t *pBall);
 void BallsStart(int count);
 int BallGetLandingPoint(Ball_t *pBall, Vector_80039F5C *pOut);
 int BallGetLandingTime(Ball_t *pBall, float *pOut);
-void BallUpdateCollRecord(Record_8003EC04 *pRecord);
+void BallUpdateCollRecord(CollideObject_t *pRecord);
 Block_80170E64 *BallGetModel(Ball_t *pBall);
-Set_8003EE6C *BallGetCollRecords(void);
+CollideSet_t *BallGetCollRecords(void);
 void BallsMirror(void);
 void BallSetTransferKind(Ball_t *pBall, int value);
 int BallGetTransferKind(Ball_t *pBall);

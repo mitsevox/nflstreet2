@@ -35,7 +35,7 @@ struct Group_80146C00 { unsigned int mUnknown0; int mUnknown4; Entry_80146C4C *m
 
 extern "C" {
 struct Object_8005406C;
-extern Object_8005406C *lbl_803EA554;
+extern Object_8005406C *gLevelData;
 extern Vector_80146134 lbl_802A03D0;
 extern int lbl_802DD170[];
 extern char lbl_802DD584[][24];
@@ -175,7 +175,7 @@ void fn_801464D0(void *owner)
         lbl_8031B88C[i].mUnknownC = 0; lbl_8031B88C[i].mUnknown8 = 0;
     }
     for (int i = 0; i < 40; ++i) lbl_8031B7DC[i] = 0;
-    fn_80146C00(0, ((Config_803EA554 *)lbl_803EA554)->mUnknown50 + 17);
+    fn_80146C00(0, ((Config_803EA554 *)gLevelData)->mUnknown50 + 17);
     lbl_803EB26C = 0; lbl_803EB270 = 0; fn_80197E64(); lbl_803EB260 = 0;
     if (fn_800A33B0()) {
         if (fn_800A3420() == 1) { if (fn_800A33B8() == 0) InitializeSpecial(); }
@@ -186,13 +186,13 @@ void fn_801464D0(void *owner)
             lbl_803EB278->mUnknown18.z = fn_800A3438()->z;
         }
     }
-    if (((Config_803EA554 *)lbl_803EA554)->mUnknown50 != 0) {
-        lbl_803EB25C = (Record_803EB25C *)fn_801D2B7C(((Config_803EA554 *)lbl_803EA554)->mUnknown50 * 36, 0, 0);
-        lbl_803EB260 = ((Config_803EA554 *)lbl_803EA554)->mUnknown50;
-        for (unsigned int i = 0; i < ((Config_803EA554 *)lbl_803EA554)->mUnknown50 && i <= 39; ++i) {
-            Input_80146150 *input = &((Config_803EA554 *)lbl_803EA554)->mUnknown54[i];
+    if (((Config_803EA554 *)gLevelData)->mUnknown50 != 0) {
+        lbl_803EB25C = (Record_803EB25C *)fn_801D2B7C(((Config_803EA554 *)gLevelData)->mUnknown50 * 36, 0, 0);
+        lbl_803EB260 = ((Config_803EA554 *)gLevelData)->mUnknown50;
+        for (unsigned int i = 0; i < ((Config_803EA554 *)gLevelData)->mUnknown50 && i <= 39; ++i) {
+            Input_80146150 *input = &((Config_803EA554 *)gLevelData)->mUnknown54[i];
             fn_80146150(&lbl_803EB25C[i], input);
-            Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)lbl_803EA554)->mUnknown24[input->mUnknown18]);
+            Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)gLevelData)->mUnknown24[input->mUnknown18]);
             if (desc) {
                 lbl_8031B7DC[i] = fn_80146C4C(0, desc);
                 fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0558();

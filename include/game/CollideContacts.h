@@ -1,7 +1,7 @@
 #ifndef GAME_COLLIDECONTACTS_H
 #define GAME_COLLIDECONTACTS_H
 
-struct Record_8003EC04;
+struct CollideObject_t;
 
 /* One contact produced by CollideAddCapsuleContact: a point and the two sub-record indices. */
 struct CollideContact_t {
@@ -34,9 +34,9 @@ struct CollidePlane_t {
 
 extern "C" {
 void CollideAddCapsuleContact(float *pCapsuleA, float *pCapsuleB, unsigned int index);
-int CollideTestCylinders(Record_8003EC04 *pA, Record_8003EC04 *pB);
+int CollideTestCylinders(CollideObject_t *pA, CollideObject_t *pB);
 int CollideTestSpheres(float *pSphereA, float *pSphereB);
-void CollideMakeSplitPlane(CollidePlane_t *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB);
+void CollideMakeSplitPlane(CollidePlane_t *pPlane, CollideObject_t *pA, CollideObject_t *pB);
 int CollideCapsuleReachesPlane(CollidePlane_t *pPlane, float *pCapsule);
 void CollideContactsBegin(CollideContact_t *pContacts, int capacity);
 CollideContactList_t *CollideGetContacts(void);

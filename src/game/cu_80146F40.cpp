@@ -4,7 +4,7 @@
 #include "game/PaletteColor.h"
 
 /* Three bytes read by fn_800840A4. */
-struct Rgb_800840A4 {
+struct TeamRgb_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
@@ -238,7 +238,7 @@ void fn_801475F4(void)
 void fn_801476C8(Args_801476C8 *pArgs)
 {
     DbCursor cursor;
-    Rgb_800840A4 rgb;
+    TeamRgb_t rgb;
     PaletteColor color;
     Object_8003DEC4 *pObject = pArgs->mUnknown4;
     int id = fn_800C8744(pArgs->mUnknown2);

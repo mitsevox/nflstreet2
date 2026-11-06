@@ -152,7 +152,7 @@ struct Projection_8003BA10 {
     unsigned char mUnknown673;
 };
 
-/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size fn_8004A140 passes
+/* Object returned by fn_8003DEC4 (0x19F0 bytes, the size PlayerObjAddObjType passes
    to ObjNewType_). */
 struct Object_8003DEC4 {
     char mUnknown0[4];
@@ -230,9 +230,9 @@ Object_8003DEC4 *fn_8003DEC4(int index);
    0x800A926C). */
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
 void fn_801477F0(Object_8003DEC4 *pObject);
-/* Callback registered by fn_8004A140 through ObjSetListObjFunc; its second
+/* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */
-int fn_8004A1A8(Object_8003DEC4 *pObject, int unused);
+int PlayerObjDraw(Object_8003DEC4 *pObject, int unused);
 }
 
 #endif

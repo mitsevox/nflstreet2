@@ -50,9 +50,9 @@ extern char *lbl_803EB2F0;
 extern const char lbl_802A0B74[];
 
 int fn_800C1E40(void);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 Rules_801531C4 *fn_80155128(Class_80148A58 *p);
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
@@ -93,7 +93,7 @@ void fn_801538C8(Class_802A1BC8 *p)
 
 void fn_80153910(Class_802A1BC8 *p, float dt)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         p->Class_80297BF8::vfn_04(dt);
     }
 }
@@ -105,7 +105,7 @@ void fn_8015399C(Class_802A1BC8 *p)
 void fn_8015395C(Class_802A1BC8 *p)
 {
     if (fn_800C1E40() == 0) {
-        fn_800544A4("Open Field Showdown", lbl_803EB2F0, lbl_802A0B74);
+        MsgBoxShow("Open Field Showdown", lbl_803EB2F0, lbl_802A0B74);
     }
 }
 

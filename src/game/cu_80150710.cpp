@@ -5,12 +5,12 @@ class Class_802A1DC8 : public Class_80297BF8 {
 };
 
 extern "C" {
-int fn_80054568(void);
+int MsgBoxIsClosed(void);
 void fn_800AD910(int a, float b);
 
 void fn_80150710(Class_802A1DC8 *p, float value)
 {
-    if (fn_80054568()) {
+    if (MsgBoxIsClosed()) {
         p->vfn_11(value);
     }
 }

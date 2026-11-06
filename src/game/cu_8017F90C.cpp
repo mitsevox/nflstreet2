@@ -25,11 +25,11 @@ extern "C" int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int unused, int
     if (result != 0) {
         return result;
     }
-    result = fn_800550E4(id, pArgs, unused, pResult);
+    result = DepthChartScreenHandleMessage(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
-    result = fn_8005528C(id, pArgs, unused, pResult);
+    result = FeCountsHandleMessage(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
@@ -41,7 +41,7 @@ extern "C" int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int unused, int
     if (result != 0) {
         return result;
     }
-    result = fn_8005542C(id, (Args_8005542C *)pArgs, unused, pResult);
+    result = FeatsScreenHandleMessage(id, (FeatsScreenArgs_t *)pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
@@ -49,5 +49,5 @@ extern "C" int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int unused, int
     if (result != 0) {
         return result;
     }
-    return fn_80055058(id, pArgs, unused, pResult);
+    return FeTeamHandleMessage(id, pArgs, unused, pResult);
 }

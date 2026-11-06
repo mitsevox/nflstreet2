@@ -162,7 +162,7 @@ void fn_801A9C44(Pose_80041930 *pose, AnimBlendEntry *entry, AnimQuantContext *c
     entry->mUnknown12[2] = fn_801A9C08(samples[2], 0, 2, context, pair) << 8;
 }
 
-void fn_801A9F98(Extra_8004149C *unused, Object_80040818 *pObject, int blend, int unused2)
+void fn_801A9F98(BigObjPhysics_t *unused, Object_80040818 *pObject, int blend, int unused2)
 {
     AnimBlendList *pBlend = (AnimBlendList *)blend;
     Pose_80041930 pose;

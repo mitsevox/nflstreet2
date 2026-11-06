@@ -47,7 +47,7 @@ void fn_80143668(CollideContact_t *pContact, Contact_80143668 *pState, int secon
 int fn_80143718(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8014377C(CollideContactList_t *pContacts, unsigned int partA, unsigned int partB);
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
-void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB, CollideContactList_t *pContacts);
+void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB, CollideContactList_t *pContacts);
 void fn_80143D3C(Block_80170374 *pBlock);
 void fn_80143DC4(Object_80039F5C *p);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
