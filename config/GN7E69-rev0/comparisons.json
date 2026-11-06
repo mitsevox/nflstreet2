@@ -15145,66 +15145,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80198C54.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80198C54-0x80199C94 (src/game/cu_80198C54.cpp), source-form row cu_80198C54 draft functions 0x80199A68-0x80199C94 and the exact function rows 0x80199A68-0x80199C94. Draft comparisons only; the full native placements are kept for relocation and are fully covered by the file's linked source, and original bytes remain linked for the 3 unlinked functions.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80198C54",
-          "end": "0x80199C94"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802ADB40",
-          "end": "0x802ADB94"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EDF8C",
-          "end": "0x802EDFA4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB770",
-          "end": "0x803EB778"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80365298",
-          "end": "0x80365378"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECBE4",
-          "end": "0x803ECBE8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80199A68",
-          "start": "0x80199A68",
-          "end": "0x80199B68"
-        },
-        {
-          "symbol": "fn_80199B68",
-          "start": "0x80199B68",
-          "end": "0x80199BD4"
-        },
-        {
-          "symbol": "fn_80199BD4",
-          "start": "0x80199BD4",
-          "end": "0x80199C94"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8003F66C.cpp",
       "profile": "game_cpp",
       "evidence": "Issue #744; existing open/open grouping and exact function ranges retained. All 23 complete bodies measured; 16 prior definitions and original attribution preserved. Full 48-byte literal context 0x8028D358-0x8028D388 is measured, including both alignment words and all per-function pools. Original assembly remains linked.",
