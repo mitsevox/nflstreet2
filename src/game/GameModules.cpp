@@ -1,3 +1,8 @@
+/* Nine small modules the front-end and in-game groups list: AnimData and
+   StaData (each opens a data archive), Audmon, GRand (seeds the game
+   random numbers), IGMisc (in-game data archive), MemAudit (records
+   which loop is running), Qkl (opens the loop's .qkl file), ScrmRule and
+   UIS. Each gives its dependencies and name and has Init and Shutdown. */
 #include "game/FELoop.h"
 #include "engine/rand.h"
 #include "game/InGame.h"
@@ -5,17 +10,16 @@
 #include "game/fn_801FCE10.h"
 #include "game/AudmonEvent.h"
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
+#include "game/MainFEGroup.h"
 
 extern "C" {
-extern char lbl_80306B34[];
 extern char lbl_802EBDBC[];
 extern char lbl_802EBDF8[];
 extern char lbl_802EBFC0[];
 extern char lbl_803EB6F0[];
 extern char lbl_803EB6F8[];
 
-int fn_80033124(void *pObject);
 void fn_800A1A58(void);
 void fn_800A1A80(void);
 int fn_800A3444(void);
@@ -35,10 +39,10 @@ void fn_802371B0(int unknown, int seed);
 void fn_8023725C(void);
 }
 
-static ModuleDependency sAnimDataDependencies[] = { &gRes, 0 };
+static ModuleDependency _GameModules_aAnimDataDependencies[] = { &gRes, 0 };
 AnimData gAnimData;
 
-ModuleDependency *AnimData::GetDependencies() { return sAnimDataDependencies; }
+ModuleDependency *AnimData::GetDependencies() { return _GameModules_aAnimDataDependencies; }
 ModuleDependency *AnimData::GetLinks() { return 0; }
 const char *AnimData::GetName() { return "AnimData"; }
 
@@ -56,12 +60,12 @@ int AnimData::Shutdown()
     return 1;
 }
 
-void *AnimData::fn_80033AF8() { return mData.mp; }
+void *AnimData::GetArchive() { return mData.mp; }
 
-static ModuleDependency sAudmonDependencies[] = { &gGameState, 0 };
+static ModuleDependency _GameModules_aAudmonDependencies[] = { &gGameState, 0 };
 Audmon gAudmon;
 
-ModuleDependency *Audmon::GetDependencies() { return sAudmonDependencies; }
+ModuleDependency *Audmon::GetDependencies() { return _GameModules_aAudmonDependencies; }
 ModuleDependency *Audmon::GetLinks() { return 0; }
 const char *Audmon::GetName() { return "Audmon"; }
 
@@ -77,10 +81,10 @@ int Audmon::Shutdown()
     return 1;
 }
 
-static ModuleDependency sGRandDependencies[] = { &gGameState, 0 };
+static ModuleDependency _GameModules_aGRandDependencies[] = { &gGameState, 0 };
 GRand gGRand;
 
-ModuleDependency *GRand::GetDependencies() { return sGRandDependencies; }
+ModuleDependency *GRand::GetDependencies() { return _GameModules_aGRandDependencies; }
 ModuleDependency *GRand::GetLinks() { return 0; }
 const char *GRand::GetName() { return "GRand"; }
 
@@ -96,10 +100,10 @@ int GRand::Shutdown()
     return 1;
 }
 
-static ModuleDependency sIGMiscDependencies[] = { &gSys, &gRes, 0 };
+static ModuleDependency _GameModules_aIGMiscDependencies[] = { &gSys, &gRes, 0 };
 IGMisc gIGMisc;
 
-ModuleDependency *IGMisc::GetDependencies() { return sIGMiscDependencies; }
+ModuleDependency *IGMisc::GetDependencies() { return _GameModules_aIGMiscDependencies; }
 ModuleDependency *IGMisc::GetLinks() { return 0; }
 const char *IGMisc::GetName() { return "IGMisc"; }
 
@@ -116,36 +120,36 @@ int IGMisc::Shutdown()
     return 1;
 }
 
-static ModuleDependency sMemAuditDependencies[] = { &gSys, 0 };
+static ModuleDependency _GameModules_aMemAuditDependencies[] = { &gSys, 0 };
 MemAudit gMemAudit;
-static const char *sLoopName = 0;
+static const char *_GameModules_pszMemAuditLoopName = 0;
 
-ModuleDependency *MemAudit::GetDependencies() { return sMemAuditDependencies; }
+ModuleDependency *MemAudit::GetDependencies() { return _GameModules_aMemAuditDependencies; }
 ModuleDependency *MemAudit::GetLinks() { return 0; }
 const char *MemAudit::GetName() { return "MemAudit"; }
 
 int MemAudit::Init()
 {
     if (InGameIsPlaying()) {
-        sLoopName = "GameLoop";
+        _GameModules_pszMemAuditLoopName = "GameLoop";
     } else if (FELoopIsMainFEActive()) {
-        sLoopName = "FELoop";
+        _GameModules_pszMemAuditLoopName = "FELoop";
     } else {
-        sLoopName = "unknown";
+        _GameModules_pszMemAuditLoopName = "unknown";
     }
     return 1;
 }
 
 int MemAudit::Shutdown()
 {
-    sLoopName = 0;
+    _GameModules_pszMemAuditLoopName = 0;
     return 1;
 }
 
-static ModuleDependency sQklDependencies[] = { &gRes, 0 };
+static ModuleDependency _GameModules_aQklDependencies[] = { &gRes, 0 };
 Qkl gQkl;
 
-ModuleDependency *Qkl::GetDependencies() { return sQklDependencies; }
+ModuleDependency *Qkl::GetDependencies() { return _GameModules_aQklDependencies; }
 ModuleDependency *Qkl::GetLinks() { return 0; }
 const char *Qkl::GetName() { return "Qkl"; }
 
@@ -153,14 +157,14 @@ int Qkl::Init()
 {
     char text[24];
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(&gMainFEGroup)) {
         ResTrackLabel("FELoopEnterStart");
     } else {
         fn_801C2E18(text, "GameLoopEnterStart%d", fn_800A3444());
         ResTrackLabel(text);
     }
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(&gMainFEGroup)) {
         fn_801C2EF0(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
     } else {
         fn_801C2D88(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
@@ -176,7 +180,7 @@ int Qkl::Shutdown()
     fn_801F2CD4(mFileName.mText);
     mFileName.mText[0] = 0;
 
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(&gMainFEGroup)) {
         ResTrackLabel("FELoopEnterFinish");
     } else {
         fn_801C2E18(text, "GameLoopEnterFinish%d", fn_800A3444());
@@ -185,10 +189,10 @@ int Qkl::Shutdown()
     return 1;
 }
 
-static ModuleDependency sScrmRuleDependencies[] = { &gGameState, 0 };
+static ModuleDependency _GameModules_aScrmRuleDependencies[] = { &gGameState, 0 };
 ScrmRule gScrmRule;
 
-ModuleDependency *ScrmRule::GetDependencies() { return sScrmRuleDependencies; }
+ModuleDependency *ScrmRule::GetDependencies() { return _GameModules_aScrmRuleDependencies; }
 ModuleDependency *ScrmRule::GetLinks() { return 0; }
 const char *ScrmRule::GetName() { return "ScrmRule"; }
 
@@ -215,10 +219,10 @@ int ScrmRule::Shutdown()
     return 1;
 }
 
-static ModuleDependency sStaDataDependencies[] = { &gRes, 0 };
+static ModuleDependency _GameModules_aStaDataDependencies[] = { &gRes, 0 };
 StaData gStaData;
 
-ModuleDependency *StaData::GetDependencies() { return sStaDataDependencies; }
+ModuleDependency *StaData::GetDependencies() { return _GameModules_aStaDataDependencies; }
 ModuleDependency *StaData::GetLinks() { return 0; }
 const char *StaData::GetName() { return "StaData"; }
 
@@ -235,12 +239,12 @@ int StaData::Shutdown()
     return 1;
 }
 
-void *StaData::fn_80033FD4() { return mData.mp; }
+void *StaData::GetArchive() { return mData.mp; }
 
-static ModuleDependency sUISDependencies[] = { &gGRender, 0 };
+static ModuleDependency _GameModules_aUISDependencies[] = { &gGRender, 0 };
 UIS gUIS;
 
-ModuleDependency *UIS::GetDependencies() { return sUISDependencies; }
+ModuleDependency *UIS::GetDependencies() { return _GameModules_aUISDependencies; }
 ModuleDependency *UIS::GetLinks() { return 0; }
 const char *UIS::GetName() { return "UIS"; }
 

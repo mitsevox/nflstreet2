@@ -5,10 +5,10 @@
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-extern char lbl_80306B34[];
+extern char gMainFEGroup[];
 
-int fn_80033124(void *p);
-int fn_80033144(void *p);
+int MainFEGroupIsStarted(void *p);
+int MainFEGroupIsFirstStart(void *p);
 void fn_80237E3C(int a);
 Object_80237EE8 *fn_80237EE8(int a, int b, int c, MemPoolDesc_t desc);
 void fn_8023808C(Object_80237EE8 *pObject);
@@ -32,7 +32,7 @@ int GameState::Init()
     int arg;
 
     mpData.mp = new (0) GameStateData;
-    if (fn_80033124(lbl_80306B34)) {
+    if (MainFEGroupIsStarted(gMainFEGroup)) {
         arg2 = 0x16C00;
         arg1 = 50;
         arg = 3;
@@ -44,7 +44,7 @@ int GameState::Init()
     fn_80237E3C(3);
     mpData.mp->mpObject = fn_80237EE8(0, arg1, arg2, *MemPoolGetDesc(4));
     fn_80237F98(mpData.mp->mpObject);
-    if (fn_80033144(lbl_80306B34)) {
+    if (MainFEGroupIsFirstStart(gMainFEGroup)) {
         mpData.mp->mUnknown4 = 0;
     } else {
         fn_802382F0(arg);

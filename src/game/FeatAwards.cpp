@@ -1,3 +1,7 @@
+/* Street Feats: checks which feats each user has just completed (after a
+   game, for a new user ID, for saves of other EA games found on the
+   memory card), marks them done, pays out their Credits and keeps the
+   list of new awards the screens then show one by one. */
 #include "game/DbCursor.h"
 #include "game/UnlockItem.h"
 #include "game/FeatAwards.h"
@@ -63,7 +67,7 @@ int FeatAwardByKey(DbCursor *pCursor, DbCursor *pOther, int key, FeatAward_t *pE
     UserInfoAddPoints(db, record.mUnknown148);
     fn_801C2E18(pEntry->mName, record.mName);
     fn_80186A10(fn_80186B38(db), pEntry->mText);
-    pEntry->mUnknown164 = record.mUnknown148;
+    pEntry->mCredits = record.mUnknown148;
     return 1;
 }
 
@@ -91,7 +95,7 @@ void FeatAwardStatFeats(DbCursor *pCursor, DbCursor *pOther, signed char pad)
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(pad, pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
             }
@@ -126,7 +130,7 @@ void FeatAwardModeFeat(DbCursor *pCursor, DbCursor *pOther, int db)
         _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
         fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
-        _Feat_apAwarded[_Feat_uAwardedCount]->mUnknown164 = entry.mUnknown164;
+        _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
         _Feat_uAwardedCount++;
     }
 }
@@ -149,7 +153,7 @@ void FeatAwardSettingFeats(DbCursor *pCursor, DbCursor *pOther, int db)
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
             }
@@ -173,7 +177,7 @@ void FeatAwardValueFeat(DbCursor *pCursor, DbCursor *pOther, int db, int key, in
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
                 return;
@@ -246,7 +250,7 @@ void FeatAwardEAGameSaveFeats(void)
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
                     fn_80186A10(fn_8022F384(db), pEntry->mText);
-                    pEntry->mUnknown164 = record.mUnknown148;
+                    pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
                 UnlockStatusClose(&other);
@@ -275,7 +279,7 @@ void FeatAwardNewUserFeats(void)
         _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
         fn_801C2E18(pEntry->mName, record.mName);
         fn_80186A10(fn_8022F384(db), pEntry->mText);
-        pEntry->mUnknown164 = record.mUnknown148;
+        pEntry->mCredits = record.mUnknown148;
         _Feat_uAwardedCount++;
         UnlockStatusClose(&other);
         UnlockListClose(&cursor);
@@ -299,7 +303,7 @@ void FeatAwardAllUsersFeat(void)
             _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
             fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
             fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
-            _Feat_apAwarded[_Feat_uAwardedCount]->mUnknown164 = entry.mUnknown164;
+            _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
             _Feat_uAwardedCount++;
         }
         UnlockStatusClose(&other);
@@ -317,7 +321,7 @@ void FeatGetAwarded(int index, FeatAward_t *pEntry)
     if (index <= 100) {
         fn_801C2E18(pEntry->mName, _Feat_apAwarded[index]->mName);
         fn_801C2E18(pEntry->mText, _Feat_apAwarded[index]->mText);
-        pEntry->mUnknown164 = _Feat_apAwarded[index]->mUnknown164;
+        pEntry->mCredits = _Feat_apAwarded[index]->mCredits;
     }
 }
 

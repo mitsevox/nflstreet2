@@ -1,6 +1,6 @@
 /* The main loop: starts the system modules and runs the module groups frame by frame until the game quits. */
 
-#include "game/Class_801CBC50.h"
+#include "game/FlowManagerC.h"
 #include "game/Module.h"
 
 extern "C" {
@@ -19,7 +19,7 @@ float gFrameTimeScale = 1.0f;
 
 void MainLoopUpdate(void)
 {
-    fn_801CBFA8(&lbl_803067B0);
+    fn_801CBFA8(&gGSFlowManager);
 }
 
 void MainLoopRun(void)
@@ -28,7 +28,7 @@ void MainLoopRun(void)
     fn_801CC7FC(pModule);
     fn_801CC820(pModule, 0);
 
-    Class_803067B0 *pObject = &lbl_803067B0;
+    GSFlowManagerC *pObject = &gGSFlowManager;
     fn_801CBCD0(pObject);
     fn_801CC054(pObject, 0);
     pObject->fn_801CBD80(0, -1);

@@ -1,19 +1,15 @@
-#include "game/Class_801CC350.h"
-#include "game/Class_801CBC50.h"
+/* The main front-end flow group: its stages (loading, first start, main
+   menu, online, exit to the game or exit the program), the stage changes
+   it allows, the modules each stage needs, and the per-frame step that
+   moves the front end from one stage to the next. */
+#include "game/FlowGroupC.h"
+#include "game/MainFEGroup.h"
+#include "game/FlowManagerC.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/GameState.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 
-class MainFEGroup : public Class_801CC350 {
-public:
-    virtual void vfn_02();
-    virtual int vfn_03(int a, int b);
-    virtual Record_802CCBAC *vfn_04();
-    virtual Record_803EA3A8 *vfn_05();
-    virtual ModuleDependency *vfn_06(int id);
-    virtual const char *GetName();
-};
 
 extern "C" {
 void BootInstallResetCallback(void);
@@ -21,18 +17,18 @@ void BootRemoveResetCallback(void);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_80072D98(unsigned int delay);
 void fn_80187C5C(unsigned char a);
-extern const char lbl_8028ADDC[];
-extern Record_802CCBAC lbl_802CCBF4[];
-extern Record_803EA3A8 lbl_802CCC34[];
-extern ModuleDependency lbl_80306B58[];
-extern ModuleDependency lbl_80306B84[];
-extern ModuleDependency lbl_80306B98[];
-extern ModuleDependency lbl_80306BF4[];
-extern ModuleDependency lbl_80306C4C[];
-extern ModuleDependency lbl_80306C58[];
+extern const char _MainFEGroup_szName[];
+extern FlowStageEntry_t _MainFEGroup_aStages[];
+extern FlowTransitionEntry_t _MainFEGroup_aTransitions[];
+extern ModuleDependency _MainFEGroup_aFirstStartModules[];
+extern ModuleDependency _MainFEGroup_aFirstStartCompleteModules[];
+extern ModuleDependency _MainFEGroup_aLoadingModules[];
+extern ModuleDependency _MainFEGroup_aMainMenuModules[];
+extern ModuleDependency _MainFEGroup_aOnlineModules[];
+extern ModuleDependency _MainFEGroup_aExitModules[];
 }
 
-Record_802CCBAC lbl_802CCBF4[] = {
+FlowStageEntry_t _MainFEGroup_aStages[] = {
     { 9, "FE Loading" },
     { 7, "FE FirstStart" },
     { 8, "FE FirstStartComplete" },
@@ -43,7 +39,7 @@ Record_802CCBAC lbl_802CCBF4[] = {
     { -1, 0 },
 };
 
-Record_803EA3A8 lbl_802CCC34[] = {
+FlowTransitionEntry_t _MainFEGroup_aTransitions[] = {
     { 7, 8 },
     { 8, 9 },
     { 9, 10 },
@@ -56,7 +52,7 @@ Record_803EA3A8 lbl_802CCC34[] = {
     { -1, -1 },
 };
 
-const char lbl_8028ADDC[] = "MainFE Group";
+const char _MainFEGroup_szName[] = "MainFE Group";
 
 void MainLoopQuit();
 
@@ -70,9 +66,9 @@ extern FESnd gFESnd;
 extern StatGen gStatGen;
 extern FEPlyr gFEPlyr;
 
-MainFEGroup lbl_80306B34;
+MainFEGroup gMainFEGroup;
 
-ModuleDependency lbl_80306B58[] = {
+ModuleDependency _MainFEGroup_aFirstStartModules[] = {
     &gQkl,
     &gGRender,
     &gFEDLL,
@@ -86,7 +82,7 @@ ModuleDependency lbl_80306B58[] = {
     0,
 };
 
-ModuleDependency lbl_80306B84[] = {
+ModuleDependency _MainFEGroup_aFirstStartCompleteModules[] = {
     &gQkl,
     &gGRender,
     &gFEDLL,
@@ -94,7 +90,7 @@ ModuleDependency lbl_80306B84[] = {
     0,
 };
 
-ModuleDependency lbl_80306B98[] = {
+ModuleDependency _MainFEGroup_aLoadingModules[] = {
     &gGRender,
     &gLoadingFE,
     &gFEDLL,
@@ -120,7 +116,7 @@ ModuleDependency lbl_80306B98[] = {
     0,
 };
 
-ModuleDependency lbl_80306BF4[] = {
+ModuleDependency _MainFEGroup_aMainMenuModules[] = {
     &gGRender,
     &gFEDLL,
     &gFELoop,
@@ -145,46 +141,46 @@ ModuleDependency lbl_80306BF4[] = {
     0,
 };
 
-ModuleDependency lbl_80306C4C[] = {
+ModuleDependency _MainFEGroup_aOnlineModules[] = {
     &gMemAudit,
     &gFEDLL,
     0,
 };
 
-ModuleDependency lbl_80306C58[] = {
+ModuleDependency _MainFEGroup_aExitModules[] = {
     &gFEDLL,
     &gMemAudit,
     0,
 };
 
-const char *MainFEGroup::GetName() { return lbl_8028ADDC; }
-Record_802CCBAC *MainFEGroup::vfn_04() { return lbl_802CCBF4; }
-Record_803EA3A8 *MainFEGroup::vfn_05() { return lbl_802CCC34; }
+const char *MainFEGroup::GSGetGroupName() { return _MainFEGroup_szName; }
+FlowStageEntry_t *MainFEGroup::GSGetStageList() { return _MainFEGroup_aStages; }
+FlowTransitionEntry_t *MainFEGroup::GSGetTransitionList() { return _MainFEGroup_aTransitions; }
 
-ModuleDependency *MainFEGroup::vfn_06(int id)
+ModuleDependency *MainFEGroup::GSGetStageModuleList(int id)
 {
     switch (id) {
     case 7:
-        return lbl_80306B58;
+        return _MainFEGroup_aFirstStartModules;
     case 8:
-        return lbl_80306B84;
+        return _MainFEGroup_aFirstStartCompleteModules;
     case 9:
-        return lbl_80306B98;
+        return _MainFEGroup_aLoadingModules;
     case 10:
-        return lbl_80306BF4;
+        return _MainFEGroup_aMainMenuModules;
     case 12:
     case 14:
-        return lbl_80306C58;
+        return _MainFEGroup_aExitModules;
     case 11:
-        return lbl_80306C4C;
+        return _MainFEGroup_aOnlineModules;
     default:
         return 0;
     }
 }
 
-void MainFEGroup::vfn_02()
+void MainFEGroup::GSProcess()
 {
-    Class_803067B0 *p = &lbl_803067B0;
+    GSFlowManagerC *p = &gGSFlowManager;
 
     if (p->fn_801CBE9C(3) == 0) {
         switch (p->fn_801CBEC8(2)) {
@@ -219,7 +215,7 @@ void MainFEGroup::vfn_02()
     }
 }
 
-int MainFEGroup::vfn_03(int a, int b)
+int MainFEGroup::GSTransition(int a, int b)
 {
     switch (b) {
     case 12:
@@ -232,14 +228,14 @@ int MainFEGroup::vfn_03(int a, int b)
     return 1;
 }
 
-extern "C" int fn_80033124(Class_801CC350 *pGroup) { return fn_801CC4F4(pGroup); }
+extern "C" int MainFEGroupIsStarted(FlowGroupC *pGroup) { return fn_801CC4F4(pGroup); }
 
-extern "C" int fn_80033144(Class_801CC350 *pGroup)
+extern "C" int MainFEGroupIsFirstStart(FlowGroupC *pGroup)
 {
     int result = 0;
     int stage = fn_801CC4FC(pGroup);
 
-    if (fn_80033124(pGroup) && (stage == 7 || stage == 8)) {
+    if (MainFEGroupIsStarted(pGroup) && (stage == 7 || stage == 8)) {
         result = 1;
     }
     return result;

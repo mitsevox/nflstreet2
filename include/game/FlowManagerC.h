@@ -1,7 +1,7 @@
-#ifndef GAME_CLASS_801CBC50_H
-#define GAME_CLASS_801CBC50_H
+#ifndef GAME_FLOWMANAGERC_H
+#define GAME_FLOWMANAGERC_H
 
-class Class_801CC350;
+class FlowGroupC;
 class ModuleNode;
 struct ModuleDependency;
 
@@ -12,13 +12,13 @@ struct Request_801CBC50 {
     int mTo;
 };
 
-class Class_801CBC50 {
+class FlowManagerC {
 public:
-    Class_801CBC50();
-    virtual ~Class_801CBC50();
-    virtual int fn_80032340() = 0;
-    virtual void *fn_80032348(int index) = 0;
-    virtual void fn_800323AC() = 0;
+    FlowManagerC();
+    virtual ~FlowManagerC();
+    virtual int GSGetNumGroups() = 0;
+    virtual void *GSCreateGroup(int index) = 0;
+    virtual void GSDestroyGroup() = 0;
 
     int fn_801CBD80(int a, int b);
     int fn_801CBE24(int a);
@@ -37,25 +37,25 @@ public:
     int mFlags;
     int mCount;
     int mPendingCount;
-    Class_801CC350 *mpGroups[20];
+    FlowGroupC *mpGroups[20];
     Request_801CBC50 mPending[10];
     int mUnknownD8;
 };
 
-class Class_803067B0 : public Class_801CBC50 {
+class GSFlowManagerC : public FlowManagerC {
 public:
-    virtual ~Class_803067B0() {}
-    virtual int fn_80032340();
-    virtual void *fn_80032348(int index);
-    virtual void fn_800323AC();
+    virtual ~GSFlowManagerC() {}
+    virtual int GSGetNumGroups();
+    virtual void *GSCreateGroup(int index);
+    virtual void GSDestroyGroup();
 };
-extern Class_803067B0 lbl_803067B0;
+extern GSFlowManagerC gGSFlowManager;
 
 extern "C" {
-void fn_801CBCD0(Class_801CBC50 *pTable);
-int fn_801CBFA0(Class_801CBC50 *pTable);
-void fn_801CBFA8(Class_801CBC50 *pTable);
-void fn_801CC054(Class_801CBC50 *pTable, int flags);
+void fn_801CBCD0(FlowManagerC *pTable);
+int fn_801CBFA0(FlowManagerC *pTable);
+void fn_801CBFA8(FlowManagerC *pTable);
+void fn_801CC054(FlowManagerC *pTable, int flags);
 }
 
 #endif

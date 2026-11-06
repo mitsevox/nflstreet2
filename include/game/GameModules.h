@@ -1,5 +1,5 @@
-#ifndef GAME_MODULEGROUP_80033A5C_H
-#define GAME_MODULEGROUP_80033A5C_H
+#ifndef GAME_GAMEMODULES_H
+#define GAME_GAMEMODULES_H
 
 #include "game/Module.h"
 
@@ -23,7 +23,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void *fn_80033AF8();
+    void *GetArchive();
 
 private:
     ModuleDataPtr mData;
@@ -61,7 +61,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void *fn_80033FD4();
+    void *GetArchive();
 
 private:
     ModuleDataPtr mData;

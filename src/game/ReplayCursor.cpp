@@ -1,17 +1,20 @@
+/* Replay camera cursor: the marker drawn at the point the free replay
+   camera looks at. The replay code moves it and shows or hides it, and
+   the sound code reads its position while it is shown. */
 #include "engine/viewport.h"
 #include "game/fn_801EF390.h"
 
-/* 228-byte object allocated through ObjNewType_ by ReplayCursorCreate; a single
-   instance is kept in sObject. */
+/* 228-byte object allocated through ObjNewType_ by ReplayCursorCreate; the
+   single instance is kept in _ReplayCursor_pObject. */
 struct ReplayCursor_t {
     int mUnknown0;
-    float mUnknown4[3];
+    float mPos[3];
     int mUnknown16;
     void *mUnknown20;
     int mUnknown24;
     unsigned char mUnknown28[192];
     int mUnknown220;
-    unsigned char mUnknown224;
+    unsigned char mbVisible;
 };
 
 extern "C" {
@@ -40,15 +43,15 @@ void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
 }
 
-static ReplayCursor_t *sObject = 0;
+static ReplayCursor_t *_ReplayCursor_pObject = 0;
 
 extern "C" {
 void ReplayCursorObjInit(ReplayCursor_t *pObject, int *pArgs)
 {
-    pObject->mUnknown4[0] = 0.0f;
-    pObject->mUnknown4[1] = 0.0f;
-    pObject->mUnknown4[2] = 0.01f;
-    pObject->mUnknown224 = 0;
+    pObject->mPos[0] = 0.0f;
+    pObject->mPos[1] = 0.0f;
+    pObject->mPos[2] = 0.01f;
+    pObject->mbVisible = 0;
     pObject->mUnknown20 = (void *)pArgs[0];
     pObject->mUnknown24 = pArgs[1];
     pObject->mUnknown220 = fn_801EF390(pObject->mUnknown20, pObject->mUnknown24, 1);
@@ -73,11 +76,11 @@ int ReplayCursorObjDraw(ReplayCursor_t *pObject)
 {
     float v[3];
 
-    if (pObject->mUnknown220 != 0 && pObject->mUnknown224 == 1) {
+    if (pObject->mUnknown220 != 0 && pObject->mbVisible == 1) {
         fn_801D0470(VptGetMatrixStack());
         fn_801D04C4();
-        v[0] = pObject->mUnknown4[0];
-        v[1] = pObject->mUnknown4[1];
+        v[0] = pObject->mPos[0];
+        v[1] = pObject->mPos[1];
         v[2] = 0.0f;
         fn_801D0C58(v);
         fn_80235740(pObject->mUnknown28, ConGetCurrentContext());
@@ -98,15 +101,15 @@ void ReplayCursorCreate(int handle)
     ObjSetListObjFunc(handle, 10, 0, ReplayCursorObjDraw);
     desc[0] = fn_800C47C4();
     desc[1] = 7;
-    sObject = (ReplayCursor_t *)ObjNewInList(handle, 10, 0, desc);
-    ObjSetPriority(handle, sObject, 3);
+    _ReplayCursor_pObject = (ReplayCursor_t *)ObjNewInList(handle, 10, 0, desc);
+    ObjSetPriority(handle, _ReplayCursor_pObject, 3);
 }
 
 void ReplayCursorDestroy(int handle)
 {
-    if (sObject != 0) {
-        ObjRemoveFromList(handle, sObject);
-        VptTrashObject((int)sObject);
+    if (_ReplayCursor_pObject != 0) {
+        ObjRemoveFromList(handle, _ReplayCursor_pObject);
+        VptTrashObject((int)_ReplayCursor_pObject);
     }
     VptFlushObjectTrashSync();
     ObjDelType(10);
@@ -114,36 +117,36 @@ void ReplayCursorDestroy(int handle)
 
 void ReplayCursorSetPos(const float *pValue, int)
 {
-    ReplayCursor_t *pObject = sObject;
+    ReplayCursor_t *pObject = _ReplayCursor_pObject;
 
     if (pObject == 0) {
         return;
     }
-    pObject->mUnknown4[0] = pValue[0];
-    pObject->mUnknown4[1] = pValue[1];
-    pObject->mUnknown4[2] = pValue[2];
+    pObject->mPos[0] = pValue[0];
+    pObject->mPos[1] = pValue[1];
+    pObject->mPos[2] = pValue[2];
 }
 
 void ReplayCursorSetVisible(unsigned char value)
 {
-    ReplayCursor_t *pObject = sObject;
+    ReplayCursor_t *pObject = _ReplayCursor_pObject;
 
     if (pObject == 0) {
         return;
     }
-    pObject->mUnknown224 = value;
+    pObject->mbVisible = value;
 }
 
 int ReplayCursorGetPos(float *pValue)
 {
-    ReplayCursor_t *pObject = sObject;
+    ReplayCursor_t *pObject = _ReplayCursor_pObject;
     int result = 0;
 
-    if (pObject->mUnknown224 != 0) {
+    if (pObject->mbVisible != 0) {
         result = 1;
-        pValue[0] = pObject->mUnknown4[0];
-        pValue[1] = pObject->mUnknown4[1];
-        pValue[2] = pObject->mUnknown4[2];
+        pValue[0] = pObject->mPos[0];
+        pValue[1] = pObject->mPos[1];
+        pValue[2] = pObject->mPos[2];
     }
     return result;
 }

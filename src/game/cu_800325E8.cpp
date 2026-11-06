@@ -1,9 +1,9 @@
 #include "game/Class_800325E8.h"
 #include "game/ModuleGroup_8003450C.h"
-#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameModules.h"
 #include "game/GameState.h"
 #include "game/SndgCrowd.h"
-#include "game/Class_801CBC50.h"
+#include "game/FlowManagerC.h"
 #include "game/InGame.h"
 #include "game/FELoop.h"
 #include "game/fn_80072AA8.h"
@@ -15,8 +15,8 @@ void fn_80072D98(unsigned int delay);
 void fn_80073094(void);
 extern const char lbl_8028AD04[];
 extern char lbl_8030C070[];
-extern Record_802CCBAC lbl_802CCBBC[];
-extern Record_803EA3A8 lbl_802CCBDC[];
+extern FlowStageEntry_t lbl_802CCBBC[];
+extern FlowTransitionEntry_t lbl_802CCBDC[];
 }
 
 extern LoadingFEToInGame gLoadingFEToInGame;
@@ -186,11 +186,11 @@ static ModuleDependency lbl_803EC680[] = {
     0,
 };
 
-const char *Class_800325E8::GetName() { return lbl_8028AD04; }
-Record_802CCBAC *Class_800325E8::vfn_04() { return lbl_802CCBBC; }
-Record_803EA3A8 *Class_800325E8::vfn_05() { return lbl_802CCBDC; }
+const char *Class_800325E8::GSGetGroupName() { return lbl_8028AD04; }
+FlowStageEntry_t *Class_800325E8::GSGetStageList() { return lbl_802CCBBC; }
+FlowTransitionEntry_t *Class_800325E8::GSGetTransitionList() { return lbl_802CCBDC; }
 
-ModuleDependency *Class_800325E8::vfn_06(int id)
+ModuleDependency *Class_800325E8::GSGetStageModuleList(int id)
 {
     switch (id) {
     case 4:
@@ -204,9 +204,9 @@ ModuleDependency *Class_800325E8::vfn_06(int id)
     }
 }
 
-void Class_800325E8::vfn_02()
+void Class_800325E8::GSProcess()
 {
-    Class_803067B0 *p = &lbl_803067B0;
+    GSFlowManagerC *p = &gGSFlowManager;
 
     if (p->fn_801CBE9C(3) == 0) {
         switch (p->fn_801CBEC8(1)) {
@@ -227,7 +227,7 @@ void Class_800325E8::vfn_02()
     }
 }
 
-int Class_800325E8::vfn_03(int a, int id)
+int Class_800325E8::GSTransition(int a, int id)
 {
     switch (id) {
     case 5:
