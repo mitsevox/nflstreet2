@@ -83,7 +83,7 @@ int DbTeamsLoad(int a, int *pOut)
     int *pState = &_DbTeams_iMode;
 
     *pState = a;
-    err = fn_801F9134(_DbTeams_iDbId, (int)&_DbTeams_pResource, 0, (int)&lbl_802F9BAC);
+    err = fn_801F9134(_DbTeams_iDbId, (int)&_DbTeams_pResource, 0, (int)&tdbioresCallback);
     *pState = -1;
     *pOut = err != 0 ? -1 : _DbTeams_iDbId;
     return err;

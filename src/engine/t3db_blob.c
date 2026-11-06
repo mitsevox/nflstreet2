@@ -1,7 +1,10 @@
+/* Reads variable-length string and blob columns out of T3DB tables, Huffman-decoding them when
+   the table stores them compressed. */
+
 #include <string.h>
 #include "engine/t3db_table.h"
 
-static void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int count, unsigned char *pOut)
+static void _TDbBlobHuffDecode(TDbHuffNode_t *pTree, unsigned char *pBits, int count, unsigned char *pOut)
 {
     int i = 0;
     unsigned char bit = 8;
@@ -24,12 +27,12 @@ static void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int coun
     } while (count != i);
 }
 
-void fn_8020CD9C(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pColumn, void *pRow, unsigned char *pOut)
+void _TDbBlobGetData(TDbTable_t *pTable, TDbColumn_t *pColumn, void *pRow, unsigned char *pOut)
 {
     int offset;
     unsigned int len;
 
-    fn_80201D94(pRow, pColumn->mBitOffset, 32, (unsigned int *)&offset, 0);
+    _TDbDataGetBitData(pRow, pColumn->mBitOffset, 32, (unsigned int *)&offset, 0);
     len = 0;
     if (offset != -1) {
         switch (pColumn->mType) {
@@ -42,7 +45,7 @@ void fn_8020CD9C(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pColumn, void *p
             len |= pTable->mUnknown18[offset++];
         }
         if (pTable->mFlags & 0x40) {
-            fn_8020CD2C((HuffNode_8020CD2C *)pTable->mUnknown18, pTable->mUnknown18 + offset, len, pOut);
+            _TDbBlobHuffDecode((TDbHuffNode_t *)pTable->mUnknown18, pTable->mUnknown18 + offset, len, pOut);
         } else {
             memcpy(pOut, pTable->mUnknown18 + offset, len);
         }

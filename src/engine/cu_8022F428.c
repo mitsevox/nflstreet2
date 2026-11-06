@@ -438,7 +438,7 @@ int fn_8022F4C4(void)
     unsigned int i;
 
     for (i = 0; i <= 1 && (err = fn_801F8D60(lbl_803ED6E4[i], lbl_803EC0C8)) == 0; i++) {
-        err = fn_8020D2D0(lbl_803ED6E4[i], lbl_803EC0CC, lbl_803EC0D0, 0);
+        err = TDbExtLoadFromResource(lbl_803ED6E4[i], lbl_803EC0CC, lbl_803EC0D0, 0);
         if (err != 0) {
             break;
         }
@@ -1089,7 +1089,7 @@ int fn_80233588(Block_80233588 *p)
     if (err != 0) {
         return err;
     }
-    err = fn_8020D2D0(0x454D4147, p->mpUnknown4, p->mUnknown8, 3);
+    err = TDbExtLoadFromResource(0x454D4147, p->mpUnknown4, p->mUnknown8, 3);
     if (err != 0) {
         return err;
     }

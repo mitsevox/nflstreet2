@@ -1,12 +1,12 @@
 #include <string.h>
 #include "engine/t3db.h"
 
-int fn_80205880(TDbTable_801FAA00 *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx);
-int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur);
+int fn_80205880(TDbTable_t *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx);
+int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppCur);
 
-int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLits, unsigned int *pMask)
+int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_t *pLits, unsigned int *pMask)
 {
-    TDbQuery_802032D8 *pQuery;
+    TDbQuery_t *pQuery;
     unsigned int i;
     unsigned int lit;
 
@@ -30,7 +30,7 @@ int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLits, unsigned int
     return 0;
 }
 
-int fn_80205880(TDbTable_801FAA00 *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx)
+int fn_80205880(TDbTable_t *pTable, unsigned char column, TDbQIdx_80205880 *pQIdx)
 {
     unsigned int table;
     unsigned int i;
@@ -53,12 +53,12 @@ int fn_80205880(TDbTable_801FAA00 *pTable, unsigned char column, TDbQIdx_8020588
             }
             if (!used) {
                 if (pQIdx->mStmt->mWhere != 0) {
-                    used = fn_8020567C(pQIdx->mStmt->mWhere, (unsigned long long)table << 32 | column);
+                    used = _TDbExprFindTableCol(pQIdx->mStmt->mWhere, (unsigned long long)table << 32 | column);
                 }
                 if (!used) {
                     for (i = table; i < pQIdx->mStmt->mTableCount; i++) {
                         if (pQIdx->mStmt->mTableExprs[i] != 0) {
-                            used = fn_8020567C(pQIdx->mStmt->mTableExprs[i],
+                            used = _TDbExprFindTableCol(pQIdx->mStmt->mTableExprs[i],
                                                (unsigned long long)table << 32 | column);
                             if (used) {
                                 break;
@@ -72,12 +72,12 @@ int fn_80205880(TDbTable_801FAA00 *pTable, unsigned char column, TDbQIdx_8020588
     return used;
 }
 
-int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur)
+int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppCur)
 {
     unsigned int key[10];
-    TDbValue_801FDF28 result;
-    TDbIdxNode_80201EC8 *pNode;
-    TDbIdxTree_80201EC8 *pTree;
+    TDbValue_t result;
+    TDbIdxNode_t *pNode;
+    TDbIdxTree_t *pTree;
     int err;
 
     if (*ppCur != 0) {
@@ -100,7 +100,7 @@ int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur)
                     fn_80206C9C(pQIdx, &pNode);
                     pNode->mColor = 1;
                     pNode->mParent = pNode->mChild[0] = pNode->mChild[1] = 0;
-                    fn_802024B0(pTree, pNode, 0);
+                    _TDbIdxTreeInsert(pTree, pNode, 0);
                     pQIdx->mCount++;
                 }
                 err = fn_80207988(pQIdx->mStmt, pQIdx->mStmt->mTableCount - 1);
@@ -111,7 +111,7 @@ int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur)
                 err = 0;
             }
             pQIdx->mDirty = 1;
-            *ppCur = fn_80201EC8(pTree, key);
+            *ppCur = _TDbIdxSeekClosest(pTree, key);
         }
     }
     return err;
@@ -144,11 +144,11 @@ void fn_80205C08(TDbStmt_80205754 *pStmt)
     }
 }
 
-void fn_80205C44(TDbTable_801FAA00 *pTable, int row)
+void fn_80205C44(TDbTable_t *pTable, int row)
 {
-    TDbQuery_802032D8 *pQuery;
-    TDbIdxNode_80201EC8 *pNode;
-    TDbIdxNode_80201EC8 *pNext;
+    TDbQuery_t *pQuery;
+    TDbIdxNode_t *pNode;
+    TDbIdxNode_t *pNext;
     unsigned int found;
 
     for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
@@ -159,17 +159,17 @@ void fn_80205C44(TDbTable_801FAA00 *pTable, int row)
         if (found != 0) {
             pQuery->mSource.mQIdx->mDirty = 1;
             found--;
-            pNode = fn_80202200(&pQuery->mSource.mQIdx->mTree, 0);
+            pNode = _TDbIdxTreeMoveRight(&pQuery->mSource.mQIdx->mTree, 0);
             while (pNode != 0) {
-                pNext = fn_80202200(&pQuery->mSource.mQIdx->mTree, pNode);
+                pNext = _TDbIdxTreeMoveRight(&pQuery->mSource.mQIdx->mTree, pNode);
                 if (row == ((unsigned short *)pNode->mRow)[found]) {
                     if (pNode == pQuery->mCur) {
-                        pQuery->mCur = fn_80202298(&pQuery->mSource.mQIdx->mTree, pNode);
+                        pQuery->mCur = _TDbIdxTreeMoveLeft(&pQuery->mSource.mQIdx->mTree, pNode);
                         if (pQuery->mCur == 0) {
-                            pQuery->mCur = fn_80202200(&pQuery->mSource.mQIdx->mTree, pNode);
+                            pQuery->mCur = _TDbIdxTreeMoveRight(&pQuery->mSource.mQIdx->mTree, pNode);
                         }
                     }
-                    fn_802025C4(&pQuery->mSource.mQIdx->mTree, pNode);
+                    _TDbIdxTreeDelete(&pQuery->mSource.mQIdx->mTree, pNode);
                     fn_80203744(&pQuery->mSource.mQIdx->mPool, pNode);
                     pQuery->mSource.mQIdx->mDirty = 1;
                     pQuery->mSource.mQIdx->mCount--;

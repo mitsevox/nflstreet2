@@ -1,3 +1,6 @@
+/* Task list behind the game's Task module: created at start-up with room for a given number of
+   44-byte entries kept sorted by a 16-bit key, freed at shutdown, with the system time its clock starts from. */
+
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801C68FC.h"
 
@@ -9,23 +12,23 @@ extern int lbl_803ECFB0;
 extern int lbl_803ECFB4;
 extern int lbl_803ECFB8;
 
-void fn_8020D0A8(void);
+void TaskResetClock(void);
 
-int fn_8020CFA0(void *pA, void *pB)
+int TaskCompareKey(void *pA, void *pB)
 {
     return ((unsigned short *)pA)[1] - ((unsigned short *)pB)[1];
 }
 
-int fn_8020CFB0(int count)
+int TaskInit(int count)
 {
     int err = 0;
 
     if (lbl_803EBE9C == 0) {
-        lbl_803ECFAC = fn_801C68FC(1, 0, count, 0x2C, fn_8020CFA0, 0);
+        lbl_803ECFAC = fn_801C68FC(1, 0, count, 0x2C, TaskCompareKey, 0);
         if (lbl_803ECFAC == 0) {
             err = fn_801F7C88();
         }
-        fn_8020D0A8();
+        TaskResetClock();
         lbl_803EBE9C = 1;
     } else {
         err = 0x80001;
@@ -36,7 +39,7 @@ int fn_8020CFB0(int count)
     return err;
 }
 
-int fn_8020D048(void)
+int TaskShutdown(void)
 {
     int err = 0;
 
@@ -52,7 +55,7 @@ int fn_8020D048(void)
     return err;
 }
 
-void fn_8020D0A8(void)
+void TaskResetClock(void)
 {
     lbl_803ECFB0 = fn_801F7ABC();
 }

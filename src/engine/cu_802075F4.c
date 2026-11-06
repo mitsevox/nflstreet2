@@ -1,26 +1,26 @@
 #include "engine/t3db.h"
 
-extern int fn_801F88F0(void *pDb, int id, int *pOut, TDbTable_801FAA00 **ppTable);
-extern int fn_80205DB8(TDbStmt_80205754 *pStmt, TDbExpr_801FAA00 *pWhere, int a, int b);
-extern unsigned char fn_80207448(TDbExpr_801FAA00 *pExpr, unsigned int table, unsigned int *pOtherTable,
-                                 TDbExpr_801FAA00 **ppOut);
-extern void fn_8020C3E4(TDbTable_801FAA00 *pTable, int row);
+extern int fn_801F88F0(void *pDb, int id, int *pOut, TDbTable_t **ppTable);
+extern int fn_80205DB8(TDbStmt_80205754 *pStmt, TDbExpr_t *pWhere, int a, int b);
+extern unsigned char fn_80207448(TDbExpr_t *pExpr, unsigned int table, unsigned int *pOtherTable,
+                                 TDbExpr_t **ppOut);
+extern void fn_8020C3E4(TDbTable_t *pTable, int row);
 extern void fn_8020A5A8(void);
 
 int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
 {
     int err = 0;
     unsigned int key;
-    TDbValue_801FDF28 value;
-    TDbValue_801FDF28 result;
-    TDbExpr_801FAA00 *pSeek;
+    TDbValue_t value;
+    TDbValue_t result;
+    TDbExpr_t *pSeek;
     unsigned int *pKey;
 
     if (pStmt->mIndexes[t] == 0) {
         pStmt->mRows[t] = 0;
     } else {
         if (pStmt->mSeekExprs[t] == 0) {
-            pStmt->mNodes[t] = fn_80202200(&pStmt->mIndexes[t]->mTree, 0);
+            pStmt->mNodes[t] = _TDbIdxTreeMoveRight(&pStmt->mIndexes[t]->mTree, 0);
         } else {
             pSeek = pStmt->mSeekExprs[t];
             pKey = &key;
@@ -28,7 +28,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                 unsigned int table = pSeek->mRight.mValue.l >> 32;
                 unsigned char column = pSeek->mRight.mValue.l;
                 unsigned short row = pStmt->mRows[table];
-                TDbTable_801FAA00 *pTable = pStmt->mTables[table];
+                TDbTable_t *pTable = pStmt->mTables[table];
 
                 if (row == 0xFFFF) {
                     *pKey = 0;
@@ -36,7 +36,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                     unsigned char *pRow = pTable->mRows + pTable->mRowSize * row;
 
                     if (pTable->mColumns[column].mType > 1) {
-                        fn_80201D94((unsigned int *)pRow, pTable->mColumns[column].mBitOffset,
+                        _TDbDataGetBitData((unsigned int *)pRow, pTable->mColumns[column].mBitOffset,
                                     pTable->mColumns[column].mBitCount, pKey, pTable->mColumns[column].mType == 2);
                     } else {
                         *pKey = (unsigned int)(pRow + (pTable->mColumns[column].mBitOffset >> 3));
@@ -48,12 +48,12 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
             } else {
                 *pKey = pSeek->mRight.mValue.u;
             }
-            pStmt->mNodes[t] = fn_80201F9C(&pStmt->mIndexes[t]->mTree, pKey, pStmt->mSeekExprs[t]->mOp);
+            pStmt->mNodes[t] = _TDbIdxSeek(&pStmt->mIndexes[t]->mTree, pKey, pStmt->mSeekExprs[t]->mOp);
         }
         if (err == 0) {
             if (pStmt->mNodes[t] != 0) {
                 pStmt->mRows[t] = pStmt->mNodes[t]->mRow;
-                pStmt->mNodes[t] = fn_80202200(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
+                pStmt->mNodes[t] = _TDbIdxTreeMoveRight(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
             } else {
                 pStmt->mRows[t] = 0xFFFF;
                 err = 0x17;
@@ -90,7 +90,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
                     break;
                 } else {
                     pStmt->mRows[t] = pStmt->mNodes[t]->mRow;
-                    pStmt->mNodes[t] = fn_80202200(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
+                    pStmt->mNodes[t] = _TDbIdxTreeMoveRight(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
                 }
             }
         } while (err == 0x17);
@@ -109,7 +109,7 @@ int fn_802075F4(TDbStmt_80205754 *pStmt, unsigned int t)
 int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t)
 {
     int err = 0x17;
-    TDbValue_801FDF28 value;
+    TDbValue_t value;
 
     if (pStmt->mRows[t] != 0xFFFF) {
         do {
@@ -130,7 +130,7 @@ int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t)
                     break;
                 }
                 pStmt->mRows[t] = pStmt->mNodes[t]->mRow;
-                pStmt->mNodes[t] = fn_80202200(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
+                pStmt->mNodes[t] = _TDbIdxTreeMoveRight(&pStmt->mIndexes[t]->mTree, pStmt->mNodes[t]);
             }
             if (pStmt->mSeekExprs[t] != 0) {
                 _TDbExprTest(pStmt->mSeekExprs[t], &value, pStmt->mTables, pStmt->mRows);
@@ -159,12 +159,12 @@ int fn_80207988(TDbStmt_80205754 *pStmt, unsigned int t)
     return err;
 }
 
-int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_801FAA00 *pWhere, TDbStmt_80205754 *pStmt)
+int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, TDbStmt_80205754 *pStmt)
 {
     int err = 0;
     unsigned int count;
     int info;
-    TDbExpr_801FAA00 *pAnd;
+    TDbExpr_t *pAnd;
 
     pStmt->mTableCount = 0;
     pStmt->mWhere = 0;
@@ -215,11 +215,11 @@ int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_801FAA00 *pWh
     }
     if (err != 0) {
         if (pStmt->mWhere != 0) {
-            fn_802055CC(pStmt->mWhere);
+            _TDbExprFree(pStmt->mWhere);
         }
         while (pStmt->mTableCount > 1) {
             pStmt->mTableCount--;
-            fn_802055CC(pStmt->mTableExprs[pStmt->mTableCount]);
+            _TDbExprFree(pStmt->mTableExprs[pStmt->mTableCount]);
         }
     }
     return err;
@@ -230,26 +230,26 @@ void fn_80207DB4(TDbStmt_80205754 *pStmt)
     unsigned int i;
 
     if (pStmt->mWhere != 0) {
-        fn_802055CC(pStmt->mWhere);
+        _TDbExprFree(pStmt->mWhere);
     }
     for (i = 0; i < pStmt->mTableCount; i++) {
         if (pStmt->mTableExprs[i] != 0) {
-            fn_802055CC(pStmt->mTableExprs[i]);
+            _TDbExprFree(pStmt->mTableExprs[i]);
         }
     }
 }
 
-int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_801FFFC4 *pCols, int create)
+int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, int create)
 {
     int err = 0;
     int exact = 0;
-    TDbIndex_801FAA00 *pBest = 0;
+    TDbIndex_t *pBest = 0;
     unsigned int best = -1;
-    TDbExpr_801FAA00 *pBestSeek = 0;
+    TDbExpr_t *pBestSeek = 0;
     unsigned int score;
-    TDbIndex_801FAA00 *pIndex;
-    TDbExpr_801FAA00 *pSeek;
-    TDbIdxColumnDef_801FFFC4 *pCol;
+    TDbIndex_t *pIndex;
+    TDbExpr_t *pSeek;
+    TDbIdxColumnDef_t *pCol;
     unsigned short row;
 
     pStmt->mJoinTables[0] = 0;
@@ -290,7 +290,7 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_801FFFC4 *pCols, int cr
                 if (pBest == 0) {
                     for (row = 0; row < pStmt->mTables[0]->mRowCount; row++) {
                         if (!TDbRowBit_801FAAF8(pStmt->mTables[0], row)) {
-                            err = fn_8020299C(pIndex, row);
+                            err = _TDbIndexRowAdd(pIndex, row);
                             if (err != 0) {
                                 break;
                             }
@@ -301,7 +301,7 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_801FFFC4 *pCols, int cr
                     pStmt->mIndexes[0] = pBest;
                     pStmt->mSeekExprs[0] = pBestSeek;
                     for (err = fn_802075F4(pStmt, 0); err == 0; err = fn_80207988(pStmt, 0)) {
-                        err = fn_8020299C(pIndex, pStmt->mRows[0]);
+                        err = _TDbIndexRowAdd(pIndex, pStmt->mRows[0]);
                         if (err != 0) {
                             break;
                         }
@@ -311,14 +311,14 @@ int fn_80207E24(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_801FFFC4 *pCols, int cr
                     }
                 }
                 if (err != 0) {
-                    fn_802032D8(pIndex);
+                    _TDbIndexDestroy(pIndex);
                     pStmt->mIndexes[0] = 0;
                     pStmt->mRows[0] = 0;
                     pStmt->mNodes[0] = 0;
                 } else {
                     pStmt->mRows[0] = 0;
                     pStmt->mIndexes[0] = pIndex;
-                    pStmt->mNodes[0] = fn_80202200(&pIndex->mTree, 0);
+                    pStmt->mNodes[0] = _TDbIdxTreeMoveRight(&pIndex->mTree, 0);
                 }
             }
         }
@@ -333,8 +333,8 @@ int fn_80208094(TDbStmt_80205754 *pStmt)
     unsigned int score;
     unsigned char column;
     unsigned int otherTable;
-    TDbExpr_801FAA00 *pSeek;
-    TDbIndex_801FAA00 *pIndex;
+    TDbExpr_t *pSeek;
+    TDbIndex_t *pIndex;
 
     for (t = 0; t < pStmt->mTableCount; t++) {
         best = -1;
@@ -380,8 +380,8 @@ int fn_80208094(TDbStmt_80205754 *pStmt)
 int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
-    TDbValue_801FDF28 value;
-    TDbIndex_801FAA00 *pIndex;
+    TDbValue_t value;
+    TDbIndex_t *pIndex;
 
     pResult->mCount = 0;
     if (pStmt->mTableCount == 1) {
@@ -403,7 +403,7 @@ int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
                     if (value.mValue.i != 0) {
                         fn_8020651C(pStmt->mTables[0], pStmt->mRows[0]);
                         for (pIndex = pStmt->mTables[0]->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
-                            err = fn_80202D34(pIndex, pStmt->mRows[0]);
+                            err = _TDbIndexRowDelete(pIndex, pStmt->mRows[0]);
                             if (err != 0) {
                                 break;
                             }

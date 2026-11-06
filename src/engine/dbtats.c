@@ -36,7 +36,7 @@ int DbTatsLoad(void)
     int err = fn_801F8D60(0x54415453, _DbTats_iSize);
 
     if (err == 0) {
-        err = fn_8020D2D0(0x54415453, _DbTats_pFileName, _DbTats_iMode, 0);
+        err = TDbExtLoadFromResource(0x54415453, _DbTats_pFileName, _DbTats_iMode, 0);
     }
     return err;
 }

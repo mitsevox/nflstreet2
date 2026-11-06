@@ -1,6 +1,9 @@
+/* Reads and writes the packed bit fields that T3DB, the in-game database behind rosters, stats
+   and saves, stores in each table row. */
+
 #include "engine/t3db.h"
 
-void fn_80201D94(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue,
+void _TDbDataGetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue,
                  int isSigned)
 {
     unsigned int word = bitOffset / 32;
@@ -17,7 +20,7 @@ void fn_80201D94(unsigned int *pData, unsigned int bitOffset, unsigned int bitCo
     *pValue = bits;
 }
 
-void fn_80201E10(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue)
+void _TDbDataSetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue)
 {
     unsigned int word = bitOffset / 32;
     unsigned int shift;

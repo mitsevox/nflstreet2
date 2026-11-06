@@ -1,3 +1,6 @@
+/* Connects T3DB to the game: gives the database its own memory heap and allocation functions, and
+   loads databases such as rosters, stats and saves from resource files. */
+
 #include "engine/tdbext.h"
 #include "engine/fn_801F9134.h"
 #include "engine/tdbiores.h"
@@ -6,10 +9,10 @@
 #include "game/fn_801EEB44.h"
 #include "game/Record_802CC680.h"
 
-typedef struct TdbExtFile_8020D2D0 {
+typedef struct TDbExtResRef_t {
     void *mpStream;
     int mMode;
-} TdbExtFile_8020D2D0;
+} TDbExtResRef_t;
 
 extern unsigned char fn_801D2700(int handle);
 extern int fn_801D2130(Record_802CC680 *pParams);
@@ -23,7 +26,7 @@ extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
 
-void fn_8020D0CC(Record_802CC680 *pParams)
+void TDbExtInit(Record_802CC680 *pParams)
 {
     lbl_8039B498 = *pParams;
     lbl_803EBEAD = fn_801D2700(pParams->mUnknown8);
@@ -34,7 +37,7 @@ void fn_8020D0CC(Record_802CC680 *pParams)
     lbl_803EBEA8 = 0;
 }
 
-void fn_8020D158(void)
+void TDbExtShutdown(void)
 {
     if (lbl_803EBEAD == 0) {
         fn_801D2570(lbl_8039B498.mUnknown8);
@@ -42,18 +45,18 @@ void fn_8020D158(void)
     lbl_803EBEAC = 0;
 }
 
-int fn_8020D194(int a, int b, int *pHandle)
+int TDbExtMemInit(int a, int b, int *pHandle)
 {
     *pHandle = lbl_8039B498.mUnknown8;
     return 0;
 }
 
-int fn_8020D1A8(void)
+int TDbExtMemShutdown(void)
 {
     return 0;
 }
 
-int fn_8020D1B0(void *pHeap, int size, void *ppMem)
+int TDbExtMemAlloc(void *pHeap, int size, void *ppMem)
 {
     void *pMem;
 
@@ -65,7 +68,7 @@ int fn_8020D1B0(void *pHeap, int size, void *ppMem)
     return pMem ? 0 : 2;
 }
 
-int fn_8020D204(void *pHeap, int size, void *ppMem)
+int TDbExtMemAllocTemp(void *pHeap, int size, void *ppMem)
 {
     void *pMem;
     int flags = lbl_803EBEB0;
@@ -78,7 +81,7 @@ int fn_8020D204(void *pHeap, int size, void *ppMem)
     return pMem ? 0 : 2;
 }
 
-int fn_8020D260(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
+int TDbExtMemRealloc(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
 {
     void *pMem = fn_801D310C(pOld, newSize, lbl_803EBEB0, 0);
 
@@ -86,14 +89,14 @@ int fn_8020D260(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
     return pMem ? 0 : 2;
 }
 
-void fn_8020D2AC(void *pHeap, void *pMem, int size)
+void TDbExtMemFree(void *pHeap, void *pMem, int size)
 {
     fn_801D2BD0(pMem);
 }
 
-int fn_8020D2D0(int db, void *pPath, int mode, int flags)
+int TDbExtLoadFromResource(int db, void *pPath, int mode, int flags)
 {
-    TdbExtFile_8020D2D0 file;
+    TDbExtResRef_t file;
     int isOpen;
     int err;
 
@@ -101,7 +104,7 @@ int fn_8020D2D0(int db, void *pPath, int mode, int flags)
     file.mMode = mode;
     file.mpStream = fn_801EEB44(pPath, 0x2C);
     if (file.mpStream != 0) {
-        err = fn_801F9134(db, (int)&file, flags, (int)&lbl_802F9BAC);
+        err = fn_801F9134(db, (int)&file, flags, (int)&tdbioresCallback);
         if (isOpen == 0) {
             if (err == 0) {
                 if (fn_801EEFAC(file.mpStream)) {
