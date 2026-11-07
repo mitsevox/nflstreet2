@@ -14466,6 +14466,19 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/engine/copysignf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80261A24-0x80261A58, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Adjacent survey bytes stay original.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261A24",
+          "end": "0x80261A58"
+        }
+      ]
     }
   ]
 }
