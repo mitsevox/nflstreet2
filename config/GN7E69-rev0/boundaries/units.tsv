@@ -140,6 +140,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8025FABC	0x8025FAF8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FAF8	0x8025FBD4	libgcc2.c	4	4	4	0	4	-	eabi.asm
 0x802622DC	0x80262310	vprintf.c	1	1	1	1	0	-	-
+0x80262310	0x802623A8	src/engine/atexit.c	1	0	-	0	0	provisional	-
 0x802623A8	0x80262440	bsearch.c	1	1	1	1	0	-	-
 0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	6	-	-
 0x80271D34	0x8027257C	sdspmix.c	7	7	8	0	6	-	-
