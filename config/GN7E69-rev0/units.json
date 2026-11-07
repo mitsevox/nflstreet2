@@ -409,10 +409,6 @@
       "address": "0x80182BC4",
       "evidence": "evidence.tsv external row 0x80182BC4 (vfn_03__14Class_802A6B60i) and type row Class_802A6B60."
     },
-    "atexit": {
-      "address": "0x80262310",
-      "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
-    },
     "VMInit": {
       "address": "0x80244F18",
       "evidence": "evidence.tsv external row for 0x80244F18 (VMInit)."
@@ -14477,6 +14473,19 @@
           "placement": ".text",
           "start": "0x802623A8",
           "end": "0x80262440"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/atexit.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/atexit.c 0x80262310-0x802623A8, exact function extent, inferred atexit name and callback-block type/field rows. Whole exit-registration file owns no static data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80262310",
+          "end": "0x802623A8"
         }
       ]
     }
