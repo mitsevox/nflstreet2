@@ -179,15 +179,15 @@ extern unsigned int (*lbl_803EBE70)(const char *s);
 extern int (*lbl_803EBE74)(const char *a, const char *b, unsigned int n);
 extern char *(*lbl_803EBE78)(char *dst, const char *src);
 extern char *(*lbl_803EBE7C)(char *dst, const char *src, unsigned int n);
-extern void (*lbl_803EBE80)(TDbEvent_801F8A54 *pEvent);
+extern void (*_tDbMemAllocInfoCallback)(TDbEvent_801F8A54 *pEvent);
 extern int lbl_803EBE8C;
 
 extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
 extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, unsigned int n);
-extern int fn_80203444(TDbPool_803E9654 *pPool, int heap, int size, unsigned short max, unsigned short grow);
-extern void fn_8020353C(TDbPool_803E9654 *pPool);
+extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, int heap, int size, unsigned short max, unsigned short grow);
+extern void _TDbMemPoolDeinit(TDbPool_803E9654 *pPool);
 extern int TDbExtMemInit(int a, int size, int *pHeap);
 extern void TDbExtMemShutdown(int heap);
 extern int TDbExtMemAlloc(int heap, int size, void *ppOut);
@@ -233,11 +233,11 @@ static inline void Notify_801F8A54(int type, int a, int b)
 {
     TDbEvent_801F8A54 event;
 
-    if (lbl_803EBE80 != 0) {
+    if (_tDbMemAllocInfoCallback != 0) {
         event.mType = type;
         event.mUnk4 = a;
         event.mUnk8 = b;
-        lbl_803EBE80(&event);
+        _tDbMemAllocInfoCallback(&event);
     }
 }
 
@@ -369,17 +369,17 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
     err = TDbExtMemInit(-1, pParms->mHeapSize, &lbl_803EBE8C);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
-        err = fn_80203444(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
+        err = _TDbMemPoolInit(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
         if (err == 0) {
-            if (fn_80203444(&lbl_803E9670, lbl_803EBE8C, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
-                if (fn_80203444(&lbl_803E968C, lbl_803EBE8C, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
+            if (_TDbMemPoolInit(&lbl_803E9670, lbl_803EBE8C, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
+                if (_TDbMemPoolInit(&lbl_803E968C, lbl_803EBE8C, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
                     goto pools_done;
                 }
-                fn_8020353C(&lbl_803E9670);
+                _TDbMemPoolDeinit(&lbl_803E9670);
             }
-            fn_8020353C(&lbl_803E9654);
+            _TDbMemPoolDeinit(&lbl_803E9654);
         pools_done:
-            err = fn_80203444(&lbl_803E96A8, lbl_803EBE8C, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
+            err = _TDbMemPoolInit(&lbl_803E96A8, lbl_803EBE8C, 0x54, pParms->mIdxMax, pParms->mIdxGrow);
         }
         if (err != 0) {
             TDbExtMemShutdown(lbl_803EBE8C);
@@ -407,10 +407,10 @@ void fn_801F8C64(void)
         while (lbl_803EBE88 != 0) {
             fn_801F8EEC(lbl_803EBE88->mId);
         }
-        fn_8020353C(&lbl_803E9670);
-        fn_8020353C(&lbl_803E9654);
-        fn_8020353C(&lbl_803E96A8);
-        fn_8020353C(&lbl_803E968C);
+        _TDbMemPoolDeinit(&lbl_803E9670);
+        _TDbMemPoolDeinit(&lbl_803E9654);
+        _TDbMemPoolDeinit(&lbl_803E96A8);
+        _TDbMemPoolDeinit(&lbl_803E968C);
         TDbExtMemShutdown(lbl_803EBE8C);
         lbl_803EBE84 = -1;
     }
