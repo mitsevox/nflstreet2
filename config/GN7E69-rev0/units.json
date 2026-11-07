@@ -14466,6 +14466,19 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/engine/memchr.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x8026696C-0x80266A2C, exact function extent, inferred byte-search name/signature and compiler row. Earlier 0x802645AC-0x8026696C remains an unreconstructed candidate.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026696C",
+          "end": "0x80266A2C"
+        }
+      ]
     }
   ]
 }
