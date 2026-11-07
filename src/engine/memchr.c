@@ -1,7 +1,8 @@
-/* Partial source for the C library range 0x802645AC-0x80266A2C (neutral file name): the
-   integer-only formatted-output engine, floating-point helpers, multibyte conversion and memchr. */
+/* Finds the first matching byte in a bounded memory region for runtime string and output processing. */
 
-void *fn_8026696C(const void *src, int c, unsigned long length)
+#include <string.h>
+
+void *memchr(const void *src, int c, size_t length)
 {
     const unsigned char *s = (const unsigned char *)src;
     unsigned long *asrc;
