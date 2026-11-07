@@ -14479,6 +14479,19 @@
           "end": "0x80261A58"
         }
       ]
+    },
+    {
+      "source": "src/engine/fabsf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80260FC4-0x80260FE8, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Remaining survey bytes stay original.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260FC4",
+          "end": "0x80260FE8"
+        }
+      ]
     }
   ]
 }

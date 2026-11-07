@@ -29640,13 +29640,13 @@
     {
       "source": "src/engine/cu_80260B1C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80261A24, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. Two draft comparisons only; original assembly remains linked. The independent sign-copy source was separated as src/engine/copysignf.c; later 0x80261A58-0x802622DC remains an unreconstructed candidate.",
+      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80260FC4, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. One draft comparison remains; original assembly stays linked. Independent magnitude and sign-copy files are linked separately; the intervening survey tail 0x80260FE8-0x80261A24 is unreconstructed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80260B1C",
-          "end": "0x80261A24"
+          "end": "0x80260FC4"
         },
         {
           "section": ".sdata2",
@@ -29660,11 +29660,6 @@
           "symbol": "fn_80260B1C",
           "start": "0x80260B1C",
           "end": "0x80260C14"
-        },
-        {
-          "symbol": "fn_80260FC4",
-          "start": "0x80260FC4",
-          "end": "0x80260FE8"
         }
       ]
     },

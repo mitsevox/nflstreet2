@@ -36,6 +36,7 @@ extern inline float fabsf(float x)
 extern "C" {
 #endif
 float sqrtf(float x);
+float fabsf(float x);
 #ifdef __cplusplus
 }
 #endif
