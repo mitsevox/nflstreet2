@@ -29849,31 +29849,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_802898FC.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802898FC-0x80289A20: neutral partial file for the inferred grouping; both functions registered; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802898FC",
-          "end": "0x80289A20"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_802898FC",
-          "start": "0x802898FC",
-          "end": "0x80289928"
-        },
-        {
-          "symbol": "fn_80289928",
-          "start": "0x80289928",
-          "end": "0x80289A04"
-        }
-      ]
-    },
-    {
       "source": "src/engine/vprintf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80262310 (src/engine/vprintf.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. Draft comparison only; original assembly remains linked.",

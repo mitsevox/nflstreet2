@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "engine/cu_802714A8.h"
+#include "engine/sndvoice.h"
 
 class Class_80271640 {
 public:
@@ -293,7 +294,6 @@ int fn_802743A0(int index, Stream_802743A0 *stream);
 int fn_802747D0(void);
 int fn_80274CA8(int index, int value);
 int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
-int fn_80274EAC(int index);
 int fn_80274F5C(int index);
 void *fn_80275150(int unused, int size);
 int fn_80275194(int unused, void *p);
