@@ -14466,6 +14466,19 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/engine/bsearch.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/bsearch.c 0x802623A8-0x80262440, exact function extent and inferred bsearch name. Standalone binary search owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802623A8",
+          "end": "0x80262440"
+        }
+      ]
     }
   ]
 }
