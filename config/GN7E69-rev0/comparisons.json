@@ -29894,26 +29894,6 @@
       ]
     },
     {
-      "source": "src/engine/atexit.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80262310-0x802623A8 (src/engine/atexit.c), exact atexit function row, and library compiler/source-form rows. Exit registration remains comparison-only and owns no data; the independently bounded bsearch.c is linked separately and the allocation helper 0x80262440-0x8026247C remains unreconstructed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80262310",
-          "end": "0x802623A8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "atexit",
-          "start": "0x80262310",
-          "end": "0x802623A8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/vfprintf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8026247C-0x802645AC (src/engine/vfprintf.c), the compiler rows 0x802622DC-0x80264424 and 0x80264424-0x80266A2C, the source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. 0x80262C34 is not registered. Draft comparisons only; original assembly remains linked.",
