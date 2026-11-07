@@ -1,7 +1,7 @@
 #ifndef ENGINE_REENT_802622DC_H
 #define ENGINE_REENT_802622DC_H
 
-/* C library state shared by vprintf.c, the atexit/bsearch file and vfprintf.c. */
+/* C library state shared by vprintf.c, the exit-registration code and vfprintf.c. */
 
 typedef struct File_80262B5C
 {

@@ -29894,15 +29894,15 @@
       ]
     },
     {
-      "source": "src/engine/cu_80262310.c",
+      "source": "src/engine/atexit.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80262310-0x8026247C (src/engine/cu_80262310.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. 0x80262440 is not registered. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80262310-0x802623A8 (src/engine/atexit.c), exact atexit function row, and library compiler/source-form rows. Exit registration remains comparison-only and owns no data; the independently bounded bsearch.c is linked separately and the allocation helper 0x80262440-0x8026247C remains unreconstructed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80262310",
-          "end": "0x8026247C"
+          "end": "0x802623A8"
         }
       ],
       "functions": [
@@ -29910,11 +29910,6 @@
           "symbol": "atexit",
           "start": "0x80262310",
           "end": "0x802623A8"
-        },
-        {
-          "symbol": "fn_802623A8",
-          "start": "0x802623A8",
-          "end": "0x80262440"
         }
       ]
     },

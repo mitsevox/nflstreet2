@@ -2565,7 +2565,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80260FC4	36	fabsf	gap	sf_fabs.c	-
 0x80261A24	52	copysignf	gap	sf_copysign.c	-
 0x802622DC	52	vprintf	name	vprintf.c	vprintf.c
-0x802623A8	152	bsearch	size	bsearch.c	-
+0x802623A8	152	bsearch	name	bsearch.c	bsearch.c
 0x8026247C	92	strround	size	vfprintf.c	vfprintf.c
 0x802624D8	76	strrev	size	vfprintf.c	vfprintf.c
 0x80262524	124	itoa	size	vfprintf.c	vfprintf.c
