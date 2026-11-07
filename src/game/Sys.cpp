@@ -2,6 +2,7 @@
    real-time clock, and installs the reset-button check. */
 #include "game/Module.h"
 #include "game/MemPoolDesc.h"
+#include "engine/MemExtern.h"
 
 /* Argument of fn_801D2054. */
 struct MemInitParams_t {
@@ -29,7 +30,6 @@ int fn_801D20C8(void);
 int fn_801D2130(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
 void fn_801D277C(int a);
-int fn_801D3B0C(int id, int a, int base, int size, int b, int c);
 int fn_80245514(int base, int size);
 int fn_801F7824(SysInitParams_t *pDesc);
 int fn_801F79C0(void);
@@ -72,7 +72,7 @@ int Sys::Init()
         fn_801D2130(pDebug);
     }
     pAuxRam = MemPoolGetDesc(0x10);
-    fn_801D3B0C(0x10, 1, pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);
+    MemInitExternHeap(0x10, 1, (char *)pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);
     fn_801D277C(1);
     SysInitParams_t desc(1, 0, 1);
     fn_801F7824(&desc);

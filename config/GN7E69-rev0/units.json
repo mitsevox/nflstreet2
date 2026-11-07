@@ -1788,6 +1788,10 @@
     "iSPCH_InitRandom": {
       "address": "0x801B1B70",
       "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
+    },
+    "MemInitExternHeap": {
+      "address": "0x801D3B0C",
+      "evidence": "evidence.tsv function/name/source-form rows at 0x801D3B0C: Sys::Init calls the original external-region initializer at 0x8019A7F4; MemExtern.c remains comparison-only."
     }
   },
   "units": [

@@ -1,38 +1,46 @@
+/* External-region heap: tracks allocated and free spans in a separate block map.
+   The Sys module uses this allocator for auxiliary RAM. */
 #include "engine/Memory.h"
+#include "engine/MemExtern.h"
 
-typedef struct Struct_801D3B0C {
+typedef struct MemExternHeap_t {
     int mIdent;
     unsigned char mKind;
     char *mBase;
     unsigned int mSize;
     unsigned int mAlign;
     int mNumAllocs;
-    int mUnknown18;
+    int unk_0x18;
     unsigned int mUsed;
-    int mUnknown20;
+    int unk_0x20;
     int mNumBlocks;
     int mMaxBlocks;
-    int mUnknown2C;
-    int mUnknown30;
+    int unk_0x2C;
+    int unk_0x30;
     unsigned int mBlocks[1];
-} Struct_801D3B0C;
+} MemExternHeap_t;
 
 #define BLOCK_FREE 0x80000000
 #define BLOCK_SIZE(block) ((block) & 0x7FFFFFFF)
 #define BLOCK_END 0xFFFFFFFF
 
-static void fn_801D36E8(void *pHeapData)
+static const char _MemExtern_aCorruptMapMessage[] = "MEMEXTERN.C: memory map corrupted";
+
+/* The parent memory manager owns and releases the map storage. */
+static void _MemExternDestroyHeap(void *pHeapData)
 {
 }
 
-static int fn_801D36EC(void *pHeapData, int flags)
+/* External heaps have no display implementation. */
+static int _MemExternDisplayHeap(void *pHeapData, int flags)
 {
     return 0;
 }
 
-static int fn_801D36F4(void *pHeapData)
+/* Check that the map spans cover the registered region. */
+static int _MemExternVerifyHeap(void *pHeapData)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int total = 0;
 
@@ -42,13 +50,14 @@ static int fn_801D36F4(void *pHeapData)
     if (pHeap->mSize == total) {
         return 0;
     }
-    fn_801D26C4(pHeap->mIdent, 0, "MEMEXTERN.C: memory map corrupted");
+    fn_801D26C4(pHeap->mIdent, 0, _MemExtern_aCorruptMapMessage);
     return -1;
 }
 
-static int fn_801D3768(void *pHeapData, void *pAddr)
+/* Accept only the beginning of an allocated span. */
+static int _MemExternVerifyAddr(void *pHeapData, void *pAddr)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     int offset = (char *)pAddr - pHeap->mBase;
 
@@ -62,9 +71,10 @@ static int fn_801D3768(void *pHeapData, void *pAddr)
     return -1;
 }
 
-static int fn_801D37AC(void *pHeapData, int what)
+/* Query free or used bytes; mode 3 retains its sentinel-derived result. */
+static int _MemExternHeapInfo(void *pHeapData, int what)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int largest;
 
@@ -86,24 +96,24 @@ static int fn_801D37AC(void *pHeapData, int what)
     return -1;
 }
 
-static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
+/* Select a fitting span, splitting only when space and map capacity permit. */
+static void *_MemExternAlloc(void *pHeapData, int size, int flags, const char *pGroup,
+                             const char *pContext0, const char *pContext1, int contextValue)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock;
-    unsigned int *pScan;
     unsigned int want;
     unsigned int block;
+    unsigned int rounded;
     unsigned int offset;
-    unsigned int scanOffset;
-    unsigned int carry;
-    unsigned int next;
     unsigned int numBlocks;
     unsigned int maxBlocks;
 
     if (size == 0) {
         size = 1;
     }
-    size = (size - 1 + pHeap->mAlign) & -pHeap->mAlign;
+    rounded = size - 1;
+    size = (rounded + pHeap->mAlign) & -pHeap->mAlign;
     want = size | BLOCK_FREE;
     offset = 0;
     for (pBlock = pHeap->mBlocks; *pBlock < want; pBlock++) {
@@ -116,7 +126,10 @@ static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
     numBlocks = pHeap->mNumBlocks;
     maxBlocks = pHeap->mMaxBlocks;
     if (pHeap->mKind == 'b') {
-        pScan = pBlock;
+        unsigned int *pScan = pBlock;
+        unsigned int scanOffset;
+        unsigned int next;
+
         scanOffset = offset + block;
         while (*++pScan != BLOCK_END) {
             next = *pScan;
@@ -131,6 +144,10 @@ static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
     if (numBlocks >= maxBlocks || BLOCK_SIZE(block) < size + 0x100) {
         *pBlock = BLOCK_SIZE(block);
     } else {
+        unsigned int *pScan;
+        unsigned int carry;
+        unsigned int next;
+
         *pBlock = BLOCK_SIZE(size);
         carry = (BLOCK_SIZE(block) - size) | BLOCK_FREE;
         for (pScan = pBlock + 1; *pScan != BLOCK_END; pScan++) {
@@ -147,9 +164,10 @@ static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
     return pHeap->mBase + BLOCK_SIZE(offset);
 }
 
-static int fn_801D399C(void *pHeapData, void *pAddr)
+/* Release a span, merge adjacent free spans, and compact the map. */
+static int _MemExternFree(void *pHeapData, void *pAddr)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     unsigned int *pOut;
     int offset = (char *)pAddr - pHeap->mBase;
@@ -184,14 +202,16 @@ static int fn_801D399C(void *pHeapData, void *pAddr)
     return 0;
 }
 
-static int fn_801D3ABC(void *pHeapData, void *pAddr, int size)
+/* External spans cannot be resized through this hook. */
+static void *_MemExternResize(void *pHeapData, void *pAddr, int size, int flags)
 {
     return 0;
 }
 
-static int fn_801D3AC4(void *pHeapData, void *pAddr)
+/* Return the occupied span length for an allocated start address. */
+static int _MemExternSizeof(void *pHeapData, void *pAddr)
 {
-    Struct_801D3B0C *pHeap = pHeapData;
+    MemExternHeap_t *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     int offset = (char *)pAddr - pHeap->mBase;
 
@@ -205,24 +225,25 @@ static int fn_801D3AC4(void *pHeapData, void *pAddr)
     return BLOCK_SIZE(*pBlock);
 }
 
-static MemHeapFuncs_801D134C lbl_802F7B40 = {
-    fn_801D36E8, fn_801D36EC, fn_801D36F4, fn_801D3768, fn_801D37AC,
-    fn_801D3820, fn_801D399C, fn_801D3ABC, fn_801D3AC4,
+static MemHeapFuncs_t _MemExtern_sHeapFuncs = {
+    _MemExternDestroyHeap, _MemExternDisplayHeap, _MemExternVerifyHeap, _MemExternVerifyAddr, _MemExternHeapInfo,
+    _MemExternAlloc, _MemExternFree, _MemExternResize, _MemExternSizeof,
 };
 
-int fn_801D3B0C(int ident, int parentIdent, char *pStart, unsigned int size, unsigned int maxBlocks,
-                unsigned int align)
+/* Register a best-fit map for the region; both exit paths return zero. */
+int MemInitExternHeap(int ident, int parentIdent, char *pStart, unsigned int size, unsigned int maxBlocks,
+                      unsigned int align)
 {
-    Struct_801D3B0C *pHeap;
+    MemExternHeap_t *pHeap;
 
     if (maxBlocks < 8) {
         maxBlocks = 8;
     }
-    pHeap = fn_801D2478(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(Struct_801D3B0C), &lbl_802F7B40);
+    pHeap = fn_801D2478(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(MemExternHeap_t), &_MemExtern_sHeapFuncs);
     if (pHeap == 0) {
         return 0;
     }
-    memset(pHeap, 0, sizeof(Struct_801D3B0C));
+    memset(pHeap, 0, sizeof(MemExternHeap_t));
     pHeap->mBlocks[1] = BLOCK_END;
     pHeap->mAlign = align;
     pHeap->mIdent = ident;
