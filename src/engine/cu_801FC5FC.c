@@ -22,7 +22,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_t *pDevice)
     unsigned int base;
     int err;
 
-    TDbMemNotify_801FC9D4(1, (int)pDb->mUnknown8, -1);
+    _TDbMemNotify(1, (int)pDb->mUnknown8, -1);
     memset(&hdr, 0, sizeof(hdr));
     count = 0;
     for (pTable = pDb->mTables; pTable != 0; pTable = pTable->mNext) {
@@ -103,7 +103,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_t *pDevice)
     } else if (pOffsets) {
         TDbExtMemFree(lbl_803EBE8C, pOffsets, count * 8);
     }
-    TDbMemNotify_801FC9D4(4, -1, -1);
+    _TDbMemNotify(4, -1, -1);
     return err;
 }
 

@@ -197,7 +197,7 @@ int fn_80207B8C(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, TD
                     pStmt->mTableExprs[0] = pStmt->mWhere;
                     pStmt->mWhere = 0;
                 } else if (pStmt->mWhere != 0) {
-                    err = fn_8020360C(&lbl_803E9654, &pAnd);
+                    err = __TDbMemPoolAlloc(&lbl_803E9654, &pAnd);
                     if (err == 0) {
                         pAnd->mOp = 0x20009;
                         pAnd->mLeft.mType = 3;

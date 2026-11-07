@@ -85,9 +85,9 @@ static inline int TDbSQLPoolInit_801FC9D4(TDbSQLPool_801FC9D4 *pPool, unsigned i
     pPool->mUsed = 0;
     pPool->mCount = count;
     if (count != 0) {
-        TDbMemNotify_801FC9D4(0, -1, -1);
+        _TDbMemNotify(0, -1, -1);
         err = TDbExtMemAlloc(lbl_803EBE8C, count * itemSize, &pPool->mItems);
-        TDbMemNotify_801FC9D4(4, -1, -1);
+        _TDbMemNotify(4, -1, -1);
         return err;
     }
     return 3;

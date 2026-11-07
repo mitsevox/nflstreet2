@@ -85,9 +85,9 @@ int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppCur)
     } else {
         memset(key, 0, sizeof(key));
     }
-    err = fn_802035C8(&pQIdx->mPool);
+    err = _TDbMemPoolReset(&pQIdx->mPool);
     if (err == 0) {
-        fn_802035C8(&pQIdx->mKeyPool);
+        _TDbMemPoolReset(&pQIdx->mKeyPool);
         pQIdx->mCount = 0;
         pQIdx->mTree.mRoot = 0;
         err = fn_80208094(pQIdx->mStmt);
@@ -170,7 +170,7 @@ void fn_80205C44(TDbTable_t *pTable, int row)
                         }
                     }
                     _TDbIdxTreeDelete(&pQuery->mSource.mQIdx->mTree, pNode);
-                    fn_80203744(&pQuery->mSource.mQIdx->mPool, pNode);
+                    __TDbMemPoolFree(&pQuery->mSource.mQIdx->mPool, pNode);
                     pQuery->mSource.mQIdx->mDirty = 1;
                     pQuery->mSource.mQIdx->mCount--;
                 }

@@ -135,7 +135,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
     TDbIndex_t *pIndex;
 
     memset(&rowDef, 0, sizeof(rowDef));
-    TDbMemNotify_801FC9D4(3, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(3, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
     if (pCols == 0 || pCols[0].mId == -1) {
         rowDef.mColumn = TDB_COLUMN_ROW;
         pCols = &rowDef;
@@ -147,7 +147,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
         } while (pCols[count].mId != -1);
     }
     if (count <= 2) {
-        err = fn_8020360C(&lbl_803E96A8, ppIndex);
+        err = __TDbMemPoolAlloc(&lbl_803E96A8, ppIndex);
         (*ppIndex)->mFlags = 4;
     } else {
         err = TDbExtMemAlloc(pTable->mDb->mHeap, count * sizeof(TDbIdxPart_t) + 0x3C, ppIndex);
@@ -156,7 +156,7 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
     if (err == 0) {
         pIndex = *ppIndex;
         _TDbExprCopy(pFilter, &pIndex->mFilter);
-        err = fn_80203444(&pIndex->mPool, pTable->mDb->mHeap, count * 4 + 0x14,
+        err = _TDbMemPoolInit(&pIndex->mPool, pTable->mDb->mHeap, count * 4 + 0x14,
                           (pFilter == 0 ? pTable->mCapacity : pTable->mCapacity >> 2) + 5, 100);
         if (err == 0) {
             pIndex->mLocked = 0;
@@ -186,12 +186,12 @@ int fn_802069BC(TDbTable_t *pTable, TDbIdxColumnDef_t *pCols, TDbExpr_t *pFilter
             }
             pIndex->mNext = 0;
         } else if (pIndex->mFlags & 4) {
-            fn_80203744(&lbl_803E96A8, pIndex);
+            __TDbMemPoolFree(&lbl_803E96A8, pIndex);
         } else {
             TDbExtMemFree(pTable->mDb->mHeap, pIndex, count * sizeof(TDbIdxPart_t) + 0x3C);
         }
     }
-    TDbMemNotify_801FC9D4(4, -1, -1);
+    _TDbMemNotify(4, -1, -1);
     return err;
 }
 
@@ -206,8 +206,8 @@ void fn_80206C9C(TDbQIdx_80205880 *pQIdx, TDbIdxNode_t **ppNode)
     unsigned char *pRow;
     unsigned int row;
 
-    fn_8020360C(&pQIdx->mPool, ppNode);
-    fn_8020360C(&pQIdx->mKeyPool, &(*ppNode)->mRow);
+    __TDbMemPoolAlloc(&pQIdx->mPool, ppNode);
+    __TDbMemPoolAlloc(&pQIdx->mKeyPool, &(*ppNode)->mRow);
     pRows = (unsigned short *)(*ppNode)->mRow;
     pKey = (*ppNode)->mKey;
     for (i = 0; i < pQIdx->mTree.mPartCount; i++) {
@@ -248,10 +248,10 @@ void fn_80206E4C(TDbQIdx_80205880 *pQIdx)
     void *pHeap;
 
     fn_80207DB4(pQIdx->mStmt);
-    fn_80203744(&lbl_803E968C, pQIdx->mStmt);
+    __TDbMemPoolFree(&lbl_803E968C, pQIdx->mStmt);
     pHeap = pQIdx->mKeyPool.mHeap;
-    fn_8020353C(&pQIdx->mKeyPool);
-    fn_8020353C(&pQIdx->mPool);
+    _TDbMemPoolDeinit(&pQIdx->mKeyPool);
+    _TDbMemPoolDeinit(&pQIdx->mPool);
     TDbExtMemFree(pHeap, pQIdx, pQIdx->mTree.mPartCount * sizeof(TDbIdxPart_t) + 0x4C);
 }
 
@@ -274,15 +274,15 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205
             count++;
         } while (pCols[count].mId != -1);
     }
-    TDbMemNotify_801FC9D4(3, (int)pDb->mUnknown8, -1);
+    _TDbMemNotify(3, (int)pDb->mUnknown8, -1);
     err = TDbExtMemAlloc(pDb->mHeap, count * sizeof(TDbIdxPart_t) + 0x4C, ppQIdx);
-    TDbMemNotify_801FC9D4(4, -1, -1);
+    _TDbMemNotify(4, -1, -1);
     (*ppQIdx)->mCount = 0;
     if (err == 0) {
         (*ppQIdx)->mStmt = pStmt;
-        err = fn_80203444(&(*ppQIdx)->mPool, pDb->mHeap, count * 4 + 0x14, 100, 100);
+        err = _TDbMemPoolInit(&(*ppQIdx)->mPool, pDb->mHeap, count * 4 + 0x14, 100, 100);
         if (err == 0) {
-            err = fn_80203444(&(*ppQIdx)->mKeyPool, pDb->mHeap,
+            err = _TDbMemPoolInit(&(*ppQIdx)->mKeyPool, pDb->mHeap,
                               (pStmt->mTableCount < 4 ? 4 : pStmt->mTableCount) * sizeof(unsigned short), 100, 100);
             if (err == 0) {
                 (*ppQIdx)->mTree.mPartCount = count;
@@ -311,11 +311,11 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_t *pCols, TDbQIdx_80205
                 }
                 count = (*ppQIdx)->mTree.mPartCount;
                 if (err != 0) {
-                    fn_8020353C(&(*ppQIdx)->mKeyPool);
+                    _TDbMemPoolDeinit(&(*ppQIdx)->mKeyPool);
                 }
             }
             if (err != 0) {
-                fn_8020353C(&(*ppQIdx)->mPool);
+                _TDbMemPoolDeinit(&(*ppQIdx)->mPool);
             }
         }
         if (err != 0) {
