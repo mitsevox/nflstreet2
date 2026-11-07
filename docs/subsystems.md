@@ -82,3 +82,5 @@ The site also lists 136,828 bytes (134 KiB) of code that no chunk owns yet (`Unm
 ## Keeping this page true
 
 Update a row in the PR that changes it: a new file name, a link that moves a file off the ladder or a corrected description. Do not record single-file claims here; the open PRs are the record. Re-measure the rung counts from the site's `map.json` when a structure PR moves boundaries, and change the snapshot revision at the top.
+
+- `src/engine/copysignf.c` (0x80261A24-0x80261A58): complete 52-byte single-precision sign-copy runtime leaf, no static data; separated from the multi-file floating-point survey, with both historical file edges provisional.
