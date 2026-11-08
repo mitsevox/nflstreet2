@@ -210,4 +210,3 @@ int _mbtowc_r(Reent_802622DC *r, RuntimeWideChar_t *pwc, const char *s, size_t n
 
   return 1;
 }
-
