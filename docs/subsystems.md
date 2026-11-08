@@ -88,3 +88,5 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/math_support.c` (0x80265D2C-0x80266640): the complete four-function numeric runtime used for rounding, signed remainder and logarithms in formatted output, 2,324 code bytes and 224 read-only bytes; separated from the multi-file survey `cu_802645AC`. File edges provisional.
 
 - `mbtowc_r.c` (`0x80266640-0x8026696C`) is the complete one-function locale-selected multibyte converter after `math_support.c`: Shift-JIS/EUC-JP byte pairs and the JIS conversion-state machine. All812 code bytes and888 native data bytes are linked; both source-file edges remain provisional.
+
+- `src/engine/vfiprintf.c` (`0x802645AC-0x80265D2C`) is the complete integer-only C formatter and its byte staging writer and fixed-locale accessors: all four functions (6,016 code bytes),172 initialized data bytes and128 uninitialized staging bytes are linked together. Both source-file edges and original buffer-allocation edges remain provisional. Shared reentrancy context, multibyte limit and decimal grouping helper retain their existing providers.

@@ -141,7 +141,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x8025FAF8	0x8025FAF8	0x8025FAF8	alignment	0	0	libgcc2.c	libgcc2.c
 .text	-	0x8025FBD4	0x802622DC	open	-	-	libgcc2.c	vprintf.c
 .text	-	0x80262310	0x8026247C	open	-	-	vprintf.c	vfprintf.c
-.text	-	0x802645AC	0x80265D2C	open	-	-	vfprintf.c	math_support.c
+.text	0x802645AC	0x802645AC	0x802645AC	alignment	0	2	vfprintf.c	vfprintf.c
+.text	0x80265D2C	0x80265D2C	0x80265D2C	alignment	0	0	vfprintf.c	math_support.c
 .text	0x80266640	0x80266640	0x80266640	alignment	0	0	math_support.c	mbtowc_r.c
 .text	0x8026696C	0x8026696C	0x8026696C	alignment	0	0	mbtowc_r.c	memchr.c
 .text	-	0x80266A2C	0x80271D34	open	-	-	memchr.c	sdspmix.c
@@ -160,6 +161,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .bss	-	0x8039AE14	0x8039AE14	thin	0	1/3	remap.c	Resource.c
 .bss	-	0x8039B53C	0x8039B53C	thin	0	1/1	tmshaderlib.c	tmtexlib.c
 .bss	-	0x8039B720	0x8039B720	data	0	2/6	tmblend.c	tmblendchannel.c
+.bss	-	0x803A6B4C	0x803A6B4C	thin	0	2/1	vfprintf.c	vfprintf.c
 .bss	-	-	0x803D5010	mixed	1	1/1	splytree.c	bintree.c
 .bss	-	0x803D55B0	0x803D55B0	mixed	1	5/1	fileio.c	llfileio.c
 .bss	-	0x803D55B1	0x803D55E0	thin	0	1/3	llfileio.c	fs_cli.c
@@ -181,6 +183,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802B1C38	0x802B1C38	thin	0	5/1	tmtexture.c	tmname.c
 .rodata	-	0x802B7280	0x802B7280	data	0	3/3	libgcc2.c	libgcc2.c
 .rodata	-	0x802B7298	0x802B7298	data	0	3/3	libgcc2.c	libgcc2.c
+.rodata	-	0x802B7578	0x802B7608	data	0	9/3	vfprintf.c	vfprintf.c
+.rodata	-	0x802B76A4	0x802B76C8	data	0	3/27	vfprintf.c	math_support.c
 .data	-	0x802CC5E0	0x802CC5E0	data	0	11/9	FSasync.c	sndvd.c
 .data	-	0x802F4A74	0x802F4A74	thin	0	1/2	fileio.c	llfileio.c
 .data	-	0x802F9B78	0x802F9B78	thin	0	1/1	t3db_expr.c	t3db_query.c
@@ -197,6 +201,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .sdata	-	0x803EBEE8	0x803EBEE8	thin	0	1/1	tmmaterial.c	tmmateriallist.c
 .sdata	-	0x803EBEF0	0x803EBEF0	thin	0	1/5	tmmateriallist.c	tmrender.c
 .sdata	-	0x803EBF80	0x803EBF80	data	0	4/2	UIGFmv.c	LLUIGFmv.c
+.sdata	-	0x803EC550	0x803EC550	data	0	2/3	vfprintf.c	vfprintf.c
 .sdata	-	0x803EC584	0x803EC584	thin	0	2/1	lzm.c	lzh.c
 .sbss	-	0x803ECF70	0x803ECF70	data	0	6/4	remap.c	Resource.c
 .sbss	-	0x803ED420	0x803ED420	data	0	3/45	lzm.c	lzh.c

@@ -4,6 +4,7 @@
 #include "engine/fn_80266AD8.h"
 #include "engine/math_support.h"
 #include "engine/Reent_802622DC.h"
+#include "engine/vfiprintf.h"
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
@@ -15,7 +16,6 @@ extern int lbl_803EC548;
 extern char *lbl_803EC54C;
 
 extern int fn_80262C34 (void *data, File_80262B5C *fp, const char *fmt, va_list ap);
-extern int fn_80264680 ();
 extern char lbl_803A6A28[];
 
 void fn_802624D8 (char *s);
@@ -309,7 +309,7 @@ fn_80262B5C (File_80262B5C *fp, const char *fmt, va_list ap)
 	    }
 	}
     }
-  return fn_80264680 (fp->mUnknown5C, fp, fmt, ap);
+  return _vfiprintf_r (fp->mUnknown5C, fp, fmt, ap);
 }
 
 char *fn_80264424(char *dst, char *start, char *end, int *pLen)
