@@ -324,7 +324,6 @@ int StyleTrackerIsCurrentActorUserControlled(void);
 int StyleTrackerIsFumbleForcerUserControlled(void);
 }
 
-#if defined(DECOMP_COMPARE)
 extern "C" void StyleTrackerTraceEvent(int)
 {
 }
@@ -652,13 +651,11 @@ extern "C" void StyleTrackerCalculateAward(int side, int id, int count, int *pSc
         }
         if (i > 9) ended = 1;
         if (found && !ended) {
-            const StyleAwardStep_t *next = &steps[i];
-            const StyleAwardStep_t *previous = next - 1;
-            if (previous->mInterpolate) {
-                distance = (unsigned int)count - previous->mThreshold;
-                unsigned int percent = (distance / previous->mInterval) *
-                    ((previous->mInterval * 100) / (next->mThreshold - previous->mThreshold));
-                if (percent >= 1 && percent <= 99) value += (percent * (next->mPoints - previous->mPoints)) / 100;
+            if (steps[i - 1].mInterpolate) {
+                distance = (unsigned int)count - steps[i - 1].mThreshold;
+                unsigned int percent = (distance / steps[i - 1].mInterval) *
+                    ((steps[i - 1].mInterval * 100) / (steps[i].mThreshold - steps[i - 1].mThreshold));
+                if (percent >= 1 && percent <= 99) value += (percent * (steps[i].mPoints - steps[i - 1].mPoints)) / 100;
             }
         }
         const StyleAwardGrowth_t *increment = _StyleTracker_aAwardTables[_StyleTracker_pState->mRules[id].mTableIndex].mpGrowth;
@@ -2741,7 +2738,6 @@ extern "C" unsigned int StyleTrackerAddProfilePoints(int side, unsigned int valu
 extern "C" void StyleTrackerSetAwardCallback(StyleAwardCallback a) {
     _StyleTracker_pAwardCallback = a;
 }
-#endif
 
 extern "C" {
 extern const StyleAwardGrowth_t _StyleTracker_sNoGrowth;
