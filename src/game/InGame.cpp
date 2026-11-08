@@ -99,7 +99,7 @@ void RumbleProcess(void);
 void RumbleEnable(int a);
 void fn_80195F80(void);
 void fn_80196130(void);
-void fn_8019A9A0(int a, int b, float c);
+void PadStateSetValue(int a, int b, float c);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
 int ConSetChannelInfo(int a, int b, void *pValue);
@@ -148,7 +148,7 @@ static void _InGamePadHandler(int a, int b, float c)
         _InGame_uIdleFrames = 0;
     }
     if (_InGame_bInputPaused == 0) {
-        fn_8019A9A0(a, b, c);
+        PadStateSetValue(a, b, c);
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
             PauseRequestHandleInput(a, b, c);

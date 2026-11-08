@@ -3755,6 +3755,19 @@
       ]
     },
     {
+      "source": "src/game/PadState.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019A9A0-0x8019AD24 (src/game/PadState.cpp) and its type and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019A9A0",
+          "end": "0x8019AD24"
+        }
+      ]
+    },
+    {
       "source": "src/game/GLIB.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019A110-0x8019A2B4 (src/game/GLIB.cpp) and its data rows.",

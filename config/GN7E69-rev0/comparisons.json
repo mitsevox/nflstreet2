@@ -40784,26 +40784,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8019A9A0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv candidate unit cu_8019A9A0 0x8019A9A0-0x8019AD24 and its exact function row. The only function is exact; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8019A9A0",
-          "end": "0x8019AD24"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8019A9A0",
-          "start": "0x8019A9A0",
-          "end": "0x8019AD24"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801AA640.c",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), linker rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
