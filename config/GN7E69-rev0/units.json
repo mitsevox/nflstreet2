@@ -14498,6 +14498,31 @@
           "end": "0x802B77A8"
         }
       ]
+    },
+    {
+      "source": "src/engine/mbtowc_r.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv whole-file provisional unit row0x80266640-0x8026696C, function/name/compiler/source-form/type/field rows, exact24-byte locale-string pool and864-byte JIS table containers. Complete812-byte function and all888 native data bytes verified together.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266640",
+          "end": "0x8026696C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B77AC",
+          "end": "0x802B77C4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF7DC",
+          "end": "0x802FFB3C"
+        }
+      ]
     }
   ]
 }

@@ -2577,6 +2577,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80265EA0	860	sn_fmod	size	math_support.c	math_support.c
 0x802661FC	764	sn_log	size	math_support.c	math_support.c
 0x802664F8	328	sn_log10	size	math_support.c	math_support.c
+0x80266640	812	_mbtowc_r	name	mbtowc_r.c	mbtowc_r.c
 0x8026696C	192	memchr	name	memchr.c	memchr.c
 0x80266A88	80	_write	size	dummy.c	-
 0x80266AD8	32	write	size	dummy.c	-
