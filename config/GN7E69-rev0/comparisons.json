@@ -51089,7 +51089,7 @@
     {
       "source": "src/engine/tdbiomem.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional code/data unit rows for src/engine/tdbiomem.c, exact function/data extents, names, type/fields and compiler/source-form rows. Six complete callbacks and the complete 28-byte table are measured. Read/write holdouts omit one mr r5,r31 each (120/124 versus target 124/128 bytes); whole unit remains comparison-only with original bytes linked.",
+      "evidence": "evidence.tsv provisional unit ownership row for src/engine/tdbiomem.c, exact function/data extents, names, type/fields and compiler/source-form rows. Six complete callbacks and the complete 28-byte table are measured. Read/write holdouts omit one mr r5,r31 each (120/124 versus target 124/128 bytes); whole unit remains comparison-only with original bytes linked.",
       "sections": [
         {
           "section": ".text",
