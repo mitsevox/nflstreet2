@@ -29640,13 +29640,13 @@
     {
       "source": "src/engine/cu_80260B1C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x80261A24, retained function/name/compiler/source-form rows and .sdata2 0x803EDEDC-0x803EDEE4. Two draft comparisons only; original assembly remains linked. The independent sign-copy source was separated as src/engine/copysignf.c; later 0x80261A58-0x802622DC remains an unreconstructed candidate.",
+      "evidence": "evidence.tsv provisional survey row 0x80260B1C-0x8026120C and retained function/name/compiler/source-form rows, .sdata2 0x803EDEDC-0x803EDEE4. Both draft bodies remain original-linked; standalone scalbnf and the following four-file trigonometric survey are separated at their observed complete-function edges.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80260B1C",
-          "end": "0x80261A24"
+          "end": "0x8026120C"
         },
         {
           "section": ".sdata2",
