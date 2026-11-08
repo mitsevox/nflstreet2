@@ -1,4 +1,5 @@
 #include "engine/viewport.h"
+#include "game/StyleTracker.h"
 #include "game/PlayerObjInit.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -185,7 +186,6 @@ int fn_800ADDD8(Element_80041BF8 *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
-float fn_800D3F2C(int index);
 void fn_80147860(Object_8003DEC4 *pPlayer, float f);
 void fn_8015D3B0(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
@@ -418,7 +418,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b *= pData->mUnknown574;
     }
     if (flash) {
-        fn_80227930(&color, lbl_802F29B0, lbl_802F29BC, fn_800D3F2C(pPlayer->mUnknown4968));
+        fn_80227930(&color, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
         r = color.x;
         g = color.y;
         b = color.z;
@@ -548,7 +548,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     color.g = 255;
     color.b = 255;
     color.a = 255;
-    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, fn_800D3F2C(pPlayer->mUnknown4968));
+    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
     light = fn_80236B98(1, v.x, v.y, v.z);
     fn_8024FB58(0, color);
     fn_8024FC48(1);

@@ -1,4 +1,5 @@
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/Class_80297CE8.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -119,8 +120,6 @@ int fn_800A8444(int team);
 int fn_800A8F84(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
-int fn_800D42CC(void);
-void fn_800D45F0(Object_80039F5C *p, float a);
 void fn_8011DF90(void);
 int fn_8011F1CC(void);
 int fn_8011F2C4(void);
@@ -780,11 +779,11 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             break;
         case 1:
             if (fn_80177F70() != 6) {
-                if (fn_800D42CC() == 2) {
+                if (StyleTrackerGetWinner() == 2) {
                     AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             } else {
-                if (fn_800D42CC() == 2) {
+                if (StyleTrackerGetWinner() == 2) {
                     AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             }
@@ -855,11 +854,11 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     break;
                 case 1:
                     if (fn_80177F70() != 6) {
-                        if (fn_800D42CC() == 2) {
+                        if (StyleTrackerGetWinner() == 2) {
                             AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     } else {
-                        if (fn_800D42CC() == 2) {
+                        if (StyleTrackerGetWinner() == 2) {
                             AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     }
@@ -872,7 +871,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     fn_800310C0(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
                     fn_800310C0(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
                 }
-                fn_800D45F0(p, line);
+                StyleTrackerOnTackle(p, line);
                 fn_800310C0(lbl_803EA368, 6, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 fn_80178370();
             }

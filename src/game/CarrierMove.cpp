@@ -5,6 +5,7 @@
    frame, its end and its button input. */
 
 #include "game/Record_800DB60C.h"
+#include "game/StyleTracker.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -28,7 +29,6 @@ void fn_800A8954(int event, int team, Object_80039F5C *p);
 int fn_800C4B6C(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
-void fn_800D640C(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
 void fn_800EF224(Object_80039F5C *p);
@@ -137,7 +137,7 @@ extern "C" int CarrierMoveUpdate(Object_80039F5C *p)
     }
     if (p->mFlags & 0x40000000) {
         p->mFlags &= ~0x40000000;
-        fn_800D640C(p);
+        StyleTrackerFinishHurdle(p);
     }
     if (p->mFlags & 4) {
         p->mFlags &= ~4;

@@ -1,4 +1,5 @@
 #include "game/fn_801FCE10.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_8017F584.h"
@@ -26,7 +27,6 @@ void fn_80029C2C(int, int, int);
 void fn_8002A1D4(int, int, char *);
 int fn_80190394(void);
 int fn_801485D4(void);
-int fn_800D41F8(int);
 int fn_800A7E40(int);
 int fn_800A7E54(int);
 int fn_800A3444(void);
@@ -217,7 +217,7 @@ int fn_80187038(unsigned char pad, int allowCreate)
         }
     }
     if (id != -1 && !fn_801485D4()) {
-        int side = fn_800D41F8(pad);
+        int side = StyleTrackerGetTotal(pad);
         fn_801877E8(id, side);
         fn_80187580(id, fn_800A7E40(pad));
         fn_80187614(id, fn_800A7E54(pad));

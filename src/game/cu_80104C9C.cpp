@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
@@ -105,7 +106,6 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_801486A0(void);
 extern float lbl_803ECB08;
-void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
@@ -130,7 +130,6 @@ void fn_8009BD60(Object_80039F5C *p);
 extern float gFrameTimeScale;
 int fn_8011E9B4(Object_80039F5C *p);
 float fn_801CFB94(int angle);
-void fn_800D7534(int team);
 void fn_801783D0(int bit, int on);
 void fn_80099568(int kind);
 void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
@@ -552,7 +551,7 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
         kind = 6;
     }
     if (p->mpState->mUnknown2 == 9 || p->mpState->mUnknown2 == 11) {
-        fn_800D6914(PlayerMoveGetKind(p) != 0, p);
+        StyleTrackerBeginPitch(PlayerMoveGetKind(p) != 0, p);
     }
     fn_80106678(pRecord, pTarget, kind, p->mpState->mUnknown2);
     pState->mUnknown0 = 2;
@@ -802,7 +801,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
             pEvent->mUnknown4 = 0;
             pEvent->mUnknown16 = 0;
             pEvent->mUnknown8 = (int)pTarget;
-            fn_800D7534(p->mIdBytes[2]);
+            StyleTrackerMarkCatchOpportunity(p->mIdBytes[2]);
             fn_801783D0(13, 1);
             fn_801783D0(1, 0);
         }
@@ -840,7 +839,7 @@ extern "C" int fn_80106580(Object_80039F5C *p, int a) {
     if (pTarget != 0 && fn_80105E90(p, pTarget, 11) && fn_80106618(p)) {
         fn_80106678(fn_8011F518(), pTarget, 6, 11);
         fn_8010CEB8(pTarget, 11);
-        fn_800D6914(0, p);
+        StyleTrackerBeginPitch(0, p);
         result = 1;
     }
     return result;

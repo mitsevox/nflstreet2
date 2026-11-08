@@ -1,4 +1,5 @@
 #include "game/Object_80039F5C.h"
+#include "game/StyleTracker.h"
 #include "game/Query_800CE770.h"
 #include "game/Record_800CE608.h"
 #include "game/Move_8011AB38.h"
@@ -20,7 +21,6 @@ void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011DCA8(unsigned int id);
 void AudmonEventPostArgs(int type, Vector_80039F5C *pPos, int a, int b, int c);
-void fn_800D6C70(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 }
@@ -115,7 +115,7 @@ extern "C" void fn_8011AB38(void)
                 if ((p->mFlags & 4) || (pOther->mFlags & 4)) {
                     p->mFlags &= ~4;
                     pOther->mFlags &= ~4;
-                    fn_800D6C70(pOther);
+                    StyleTrackerEndDefensiveMove(pOther);
                     fn_800CE770(&query);
                     query.mpUnknown0 = p;
                     query.mpUnknown4 = pOther;

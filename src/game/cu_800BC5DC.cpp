@@ -1,4 +1,5 @@
 #include "game/Class_80297BF8.h"
+#include "game/StyleTracker.h"
 #include "game/Challenge.h"
 #include "game/Ball.h"
 
@@ -70,7 +71,6 @@ void fn_800BC3F0(void);
 int fn_800C1E40(void);
 void fn_800C432C(void);
 void fn_800CC448(void);
-void fn_800D4164(int side, float time, int a);
 unsigned int fn_801568F0(void);
 void fn_80173404(void);
 void fn_801790D0(int team, float a, float b);
@@ -142,11 +142,11 @@ void Class_80297BF8::vfn_03()
     }
     if (ChallengeIsActive() != 0) {
         if (ChalGetCurrent()->mUnknown1C3 != 0) {
-            fn_800D4164(0, 0.5f, 0);
+            StyleTrackerSetMeterFraction(0, 0.5f, 0);
             fn_800A7B5C();
         }
         if (ChalGetCurrent()->mUnknown1C2 != 0) {
-            fn_800D4164(1, 0.5f, 0);
+            StyleTrackerSetMeterFraction(1, 0.5f, 0);
             fn_800A7B5C();
         }
     }

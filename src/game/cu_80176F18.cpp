@@ -1,4 +1,5 @@
 #include "game/fn_80177FE0.h"
+#include "game/StyleTracker.h"
 #include <math.h>
 #include <string.h>
 #include "game/Class_802A56E8.h"
@@ -133,10 +134,6 @@ int fn_800C8744(int team);
 void fn_800C87CC(int team, int value);
 void fn_800C9FC0(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
-int fn_800D41F8(int team);
-void fn_800D421C(int team, int value);
-int fn_800D42CC(void);
-void fn_800D5F1C(Object_80039F5C *p, int a, int b);
 void fn_8011DF90(void);
 void fn_8011F574(void);
 void fn_80120618(void);
@@ -314,7 +311,7 @@ void fn_8017C9B8(unsigned short team, int value);
 void fn_8017C9E4(unsigned short team, int value);
 void fn_8017CA10(unsigned short team, int value);
 void fn_8017CA3C(int id, int value);
-void fn_8017CA68(unsigned short team, int value);
+void fn_8017CA68(int team, int value);
 void fn_8017CA94(unsigned short team, int value);
 void fn_8017CAC0(void (*pCallback)(int kind, int a, int b));
 }
@@ -475,7 +472,7 @@ void Class_802A56E8::vfn_03(int team)
             fn_800C87CC(team, value);
             break;
         case 1:
-            fn_800D421C(team, value);
+            StyleTrackerSetTotal(team, value);
             break;
         }
     }
@@ -607,7 +604,7 @@ void Class_802A56E8::vfn_19()
         fn_800535FC();
         pPlayer = BallGetCurrentHolder();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
-            fn_800D5F1C(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);
+            StyleTrackerAwardDive(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);
         }
         fn_800AD910(4, 0.0f);
     }
@@ -620,7 +617,7 @@ int Class_802A5630::vfn_01()
 
 int Class_802A5630::vfn_02()
 {
-    return fn_800D42CC();
+    return StyleTrackerGetWinner();
 }
 
 int Class_802A5630::vfn_04(int team)
@@ -628,7 +625,7 @@ int Class_802A5630::vfn_04(int team)
     int result = 0;
     unsigned int limit = vfn_01();
 
-    if (fn_80177F70() != 6 && limit - fn_800D41F8(team) <= 50000) {
+    if (fn_80177F70() != 6 && limit - StyleTrackerGetTotal(team) <= 50000) {
         result = 1;
     }
     return result;
@@ -641,7 +638,7 @@ int Class_802A5630::vfn_06()
 
 int Class_802A5630::vfn_07(int team)
 {
-    return fn_800D41F8(team);
+    return StyleTrackerGetTotal(team);
 }
 
 extern "C" void fn_801779D8(void)
@@ -2870,7 +2867,7 @@ extern "C" void fn_8017CA3C(int id, int value)
     fn_801794B4(id, 0x73687374, value);
 }
 
-extern "C" void fn_8017CA68(unsigned short team, int value)
+extern "C" void fn_8017CA68(int team, int value)
 {
     fn_801794F0(team, 0x6C627374, value);
 }

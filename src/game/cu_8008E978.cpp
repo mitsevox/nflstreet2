@@ -1,4 +1,5 @@
 #include "engine/Desc_80238424.h"
+#include "game/StyleTracker.h"
 #include "game/Step_800C4460.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
@@ -3394,7 +3395,6 @@ extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 
 extern "C" {
 void fn_8016BA28(unsigned char *pOut);
-void fn_800D5900(int value);
 int fn_80178320(void);
 int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
 }
@@ -3416,13 +3416,13 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
             && fn_800A4E8C(p, pOther, kind, level)) {
             AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
-                fn_800D5900(4);
+                StyleTrackerOnMoveResult(4);
             } else if (kind == 5) {
-                fn_800D5900(5);
+                StyleTrackerOnMoveResult(5);
             } else if (kind == 1) {
-                fn_800D5900(1);
+                StyleTrackerOnMoveResult(1);
             } else if (kind == 2 && p->mMotion.mPos.mY < fn_80177FE0().mY) {
-                fn_800D5900(2);
+                StyleTrackerOnMoveResult(2);
             }
         }
     }
@@ -6301,7 +6301,6 @@ extern "C" {
 void fn_8017DF6C(int a, int b);
 void fn_8017E328(int a, int b);
 void fn_8017E380(int a);
-void fn_800D3FBC(int side, int value, int arg);
 void fn_800A65BC(void);
 void fn_800A861C(void);
 
@@ -6329,7 +6328,7 @@ extern "C" void fn_800A7A0C(int team)
     args[0] = team;
     args[1] = 0;
     fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
-    fn_800D3FBC(team, 0, 0);
+    StyleTrackerSetMeter(team, 0, 0);
     fn_800A65BC();
     if (lbl_803EAA4D != 0) {
         fn_800A61E8(1);
@@ -7071,7 +7070,6 @@ extern "C" {
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_801783D0(int bit, int on);
 void fn_80177C50(int a);
-void fn_800D67B8(int a, Object_80039F5C *p);
 }
 
 extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
@@ -7121,7 +7119,7 @@ extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
         pRecord->mUnknown10 = p->mMotion.mPos.mY;
         pRecord->mUnknown14 = 20;
         fn_800B1508();
-        fn_800D67B8(0, p);
+        StyleTrackerOnInterception(0, p);
         break;
     case 12:
         pRecord->mUnknown14 = 28;
@@ -7171,7 +7169,6 @@ void *fn_80238540(int handle, int index);
 void *fn_8023850C(int handle);
 void fn_80238570(int handle, int unknown);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
-void fn_800D6F3C(Record_800B15FC *pRecord);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
 void fn_800AFE20(void (*pCallback)(int, unsigned int, float));
@@ -7274,7 +7271,7 @@ extern "C" void fn_800B1508(void)
 
         pRecord->mUnknown18 = fn_8009D990(1);
         fn_80238570(lbl_803EAB18, pRecord->mUnknown14 <= 61);
-        fn_800D6F3C(pRecord);
+        StyleTrackerHandleGameEvent(pRecord);
     }
 }
 

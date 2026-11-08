@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -48,9 +49,7 @@ void fn_800B8344(Object_80039F5C *p);
 void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
-int fn_800D5A6C(int a, int b, int c);
 int fn_8009AD30(Object_80039F5C *p, int value);
-void fn_800D6CC0(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
@@ -115,7 +114,6 @@ int fn_80177C38(void);
 float fn_801CFB18(int angle);
 int fn_800E885C(Object_80039F5C *p);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
-void fn_800D4948(void);
 int fn_80111090(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
@@ -896,7 +894,7 @@ extern "C" void fn_8012C5A8(Object_80039F5C *p, int value)
     int team;
 
     AudmonEventPostId(38, &p->mMotion.mPos, p->mId, 0, 0, 0);
-    fn_800D6CC0(p);
+    StyleTrackerOnCarrierActionTwo(p);
     fn_801C1F94(&message, 0, 4);
     message.mId = 20;
     team = p->mpState->mUnknown2;
@@ -1816,7 +1814,7 @@ extern "C" int fn_8012EF94(Object_80039F5C *p, Object_80039F5C *pOther, int a, i
                 chance = chance * 3 >> 1;
             }
             if (fn_802372EC(0, 100) < chance && fn_800E815C(p, 2, fn_800E885C(p))) {
-                fn_800D4948();
+                StyleTrackerOnStyleFirstDown();
                 return 1;
             }
         }
@@ -2157,7 +2155,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
     fn_800B8344(p);
     if (p == BallGetCurrentHolder()) {
         fn_8012CEF4(p, pControl);
-        fn_800D5A6C(0, 0, 0);
+        StyleTrackerUpdateRun(0, 0, 0);
         fn_800A3B58(p, 2, 0);
     } else {
         fn_801C1F94(&message, 0, 4);

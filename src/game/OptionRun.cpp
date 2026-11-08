@@ -2,6 +2,7 @@
    own or from the pad, whether to keep running, pitch or pass to the partner, or end the run. */
 
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
@@ -25,7 +26,6 @@ void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
-void fn_800D5998(void);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
@@ -553,7 +553,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
             } else if (input.mBytes92[4] & 8) {
                 if (OptionRunThrow(p, 10, 0)) {
                     p->mFlags |= 0x4000;
-                    fn_800D5998();
+                    StyleTrackerBeginPumpInteraction();
                 }
             } else if (*fn_8003AB38(p) == 57) {
                 fn_800B7CA4(p);

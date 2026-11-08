@@ -1,4 +1,5 @@
 #include "game/ModuleGroup_8003450C.h"
+#include "game/StyleTracker.h"
 #include "game/GameObjList.h"
 #include "game/GameState.h"
 #include "game/GameVpt.h"
@@ -101,8 +102,6 @@ int fn_800C8704(int *pA, int *pB);
 void fn_800C9D6C(unsigned char a, unsigned char b);
 void fn_800C9E40(void);
 void fn_800C9E4C(unsigned char a, unsigned char b);
-void fn_800D7438(void);
-void fn_800D750C(void);
 void fn_800D77F0(void);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
@@ -1318,13 +1317,13 @@ const char *Trk::GetName() { return "Trk"; }
 
 int Trk::Init()
 {
-    fn_800D7438();
+    StyleTrackerInit();
     return 1;
 }
 
 int Trk::Shutdown()
 {
-    fn_800D750C();
+    StyleTrackerResetDefaults();
     return 1;
 }
 

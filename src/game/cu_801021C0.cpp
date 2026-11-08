@@ -1,4 +1,5 @@
 #include "game/fn_801248D4.h"
+#include "game/StyleTracker.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -55,7 +56,6 @@ struct State_801021C0 {
 };
 extern "C" {
 int fn_80103CB0(Object_80039F5C *p);
-void fn_800D4D84(Object_80039F5C *p);
 int fn_80104610(Object_80039F5C *p);
 void fn_80176B8C(Object_80039F5C *p);
 }
@@ -88,7 +88,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
         }
         if ((p->mFlags & 0x2000) && kind == 4) {
             fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
-            fn_800D4D84(p);
+            StyleTrackerOnPumpFake(p);
             if (p->mFlags & 0x4000) {
                 PassIconsShow(0);
             }

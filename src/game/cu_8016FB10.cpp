@@ -1,4 +1,5 @@
 #include "game/fn_8022781C.h"
+#include "game/StyleTracker.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
@@ -99,14 +100,6 @@ void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D44A8(float a);
-void fn_800D4A70(Object_80039F5C *p);
-void fn_800D4BF0(Object_80039F5C *p, int team);
-void fn_800D65A4(int a, int b, unsigned char c);
-void fn_800D660C(Object_80039F5C *p);
-void fn_800D6724(Object_80039F5C *p);
-void fn_800D67B8(int a, Object_80039F5C *p);
-void fn_800D69A4(int team, int a, int b);
 void fn_800D782C(Object_80039F5C *p);
 int fn_800E0EF0(Object_80039F5C *p);
 int fn_800E0F40(Object_80039F5C *p);
@@ -992,7 +985,7 @@ void fn_80171824(Object_80039F5C *p)
 
     fn_80171DB0(p);
     if ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) {
-        fn_800D4BF0(p, fn_80178320());
+        StyleTrackerOnFumble(p, fn_80178320());
     }
     if ((p->mFlags & 0x10800) == 0x10000) {
         if (!fn_8017876C()) {
@@ -1243,14 +1236,14 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
     if ((p->mId >> 8 & 0xFF) == fn_80178308()) {
         if (result == 4) {
             int special = fn_801BE648(p->mpUnknown792) == 0xE1;
-            fn_800D65A4(fn_800E0EF0(p), special, PlayerMoveGetKind(p));
+            StyleTrackerSetCatchFlags(fn_800E0EF0(p), special, PlayerMoveGetKind(p));
             fn_800A8954(7, p->mId >> 8 & 0xFF, p);
         }
         if (result == 3 && fn_8011F518()) {
-            fn_800D69A4(fn_80178308(), 0, 0);
+            StyleTrackerFinishPitch(fn_80178308(), 0, 0);
         }
         if (result == 5 && status == 1) {
-            fn_800D4A70(p);
+            StyleTrackerOnFumbleRecovery(p);
             fn_80177F70();
             fn_8009D86C();
             fn_801783D0(4, 0);
@@ -1270,10 +1263,10 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
                 if (fn_801486A0() != 1) {
                     if (fn_800E0EF0(p)) {
                         fn_8017D7C4("User Pick");
-                        fn_800D67B8(1, p);
+                        StyleTrackerOnInterception(1, p);
                     } else {
                         fn_8017D7C4("Interception");
-                        fn_800D67B8(0, p);
+                        StyleTrackerOnInterception(0, p);
                     }
                 }
                 fn_800A8954(9, p->mId >> 8 & 0xFF, p);
@@ -1284,17 +1277,17 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
             } else if (result == 3) {
                 if (fn_800E0EF0(p)) {
                     fn_8017D7C4("User Steal");
-                    fn_800D69A4(p->mId >> 8 & 0xFF, 1, 1);
+                    StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 1);
                     fn_800310C0(lbl_803EA368, 0x35, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 } else {
-                    fn_800D69A4(p->mId >> 8 & 0xFF, 1, 0);
+                    StyleTrackerFinishPitch(p->mId >> 8 & 0xFF, 1, 0);
                     fn_8017D7C4("Stolen Pitch");
                 }
                 fn_800A8954(0xF, p->mId >> 8 & 0xFF, p);
                 fn_801726F8(p);
             } else {
                 int offense;
-                fn_800D4A70(p);
+                StyleTrackerOnFumbleRecovery(p);
                 offense = fn_80178348();
                 if (fn_8017D064(3)) {
                     fn_8017CFB4(5);
@@ -1468,7 +1461,7 @@ void fn_801726F8(Object_80039F5C *p)
         if (pRecord->mUnknown14 != 2) {
             fn_800B1508();
             if (pRecord->mUnknown14 == 6) {
-                fn_800D660C(p);
+                StyleTrackerAwardCatch(p);
                 fn_80156C78(0x2B, 1);
             }
             fn_80053A70(p);
@@ -1597,7 +1590,7 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
                 fn_8009BD2C(pCarrier, &pRecord->mUnknown4);
                 fn_800B1508();
                 if (pCarrier) {
-                    fn_800D44A8(fn_8017827C().mY);
+                    StyleTrackerOnCarrierStopped(fn_8017827C().mY);
                 }
                 if (state != 1) {
                     BallStateChange(pBall, 5, 0);
@@ -1673,7 +1666,7 @@ void fn_80172FB0(Object_80172FB0 *pEvent)
             }
             AudmonEventPostId(0x2F, &pEvent->mUnknownC, pEvent->mUnknownCC, 0, 0, pEvent->mUnknownF4);
             fn_800A8954(8, pEvent->mUnknownCC >> 8 & 0xFF, fn_8009BCE8(&pEvent->mUnknownCC));
-            fn_800D6724(pTackler);
+            StyleTrackerOnCarrierContact(pTackler);
         }
     }
     lbl_803EB43C = 0;

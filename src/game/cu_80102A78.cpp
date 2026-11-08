@@ -1,4 +1,5 @@
 #include "game/fn_801248D4.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -116,7 +117,6 @@ struct State_80102A78 {
     unsigned char mUnknown36;
 };
 extern "C" {
-void fn_800D4EC0(int value);
 int fn_80100024(Object_80039F5C *p, int angle, int mode);
 void fn_801016A4(Object_80039F5C *p, unsigned char *pKind, Point_8017886C *pPoint, unsigned int *pAngle);
 void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *pPoint);
@@ -127,7 +127,6 @@ extern float lbl_803EAEC4;
 extern "C" {
 void fn_800B260C(short value);
 void fn_800B1584(int a, const float *pPos);
-void fn_800D7534(int team);
 void fn_801783D0(int bit, int on);
 void fn_80099568(int kind);
 void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
@@ -253,7 +252,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
             PlayerMoveBegin(p, 0, 0);
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, 1.0f, p);
         } else if (index != -1) {
-            fn_800D4EC0(pEntry->mUnknown7);
+            StyleTrackerSetPassSubtype(pEntry->mUnknown7);
             pState->mUnknown20 = pEntry->mUnknown20;
             pState->mUnknown24 = pEntry->mUnknown24;
             pState->mUnknown28 = pState->mUnknown24 - pState->mUnknown20;
@@ -483,7 +482,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         } else {
             fn_801783D0(13, 1);
             fn_801783D0(1, 0);
-            fn_800D7534(p->mIdBytes[2]);
+            StyleTrackerMarkCatchOpportunity(p->mIdBytes[2]);
         }
         fn_80101064(p);
         break;
@@ -582,7 +581,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     pEvent->mUnknown16 = 0;
     pEvent->mUnknown14 = 5;
     fn_800B1508();
-    fn_800D7534(p->mIdBytes[2]);
+    StyleTrackerMarkCatchOpportunity(p->mIdBytes[2]);
     fn_800B1584(56, 0);
     fn_801783D0(23, 1);
     fn_800310C0(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);

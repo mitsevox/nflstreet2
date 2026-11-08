@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801248D4.h"
 #include "game/Directions_8012430C.h"
 #include "game/Queue_800EFE0C.h"
@@ -229,7 +230,6 @@ int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float *pValue);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B7FE8(Object_80039F5C *p);
 int fn_8011165C(Object_80039F5C *p);
-void fn_800D4F34(int a);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
 void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState);
@@ -555,7 +555,6 @@ int fn_800C1180(Object_80039F5C *p);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
-void fn_800D6EDC(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 int fn_800E98A4(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -584,7 +583,6 @@ void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
@@ -610,7 +608,6 @@ extern Input_800B6D34 lbl_802DAAD0;
 extern unsigned int *lbl_802EE928[];
 extern int *lbl_802EE938[];
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_800D6C70(Object_80039F5C *p);
 int fn_800DD648(Object_80039F5C *p);
 void fn_800EFC68(int a, State_80039F5C *pQueue);
 void fn_800EFCD0(int a, State_80039F5C *pQueue, Object_80039F5C *p);
@@ -630,7 +627,6 @@ int CarrierMoveStart(Object_80039F5C *p, int a);
 int fn_800AD0E4(int team);
 int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
 int fn_800C53D8(Object_80039F5C *p);
-void fn_800D47D4(int a, Object_80039F5C *p);
 void fn_8017D8C4(int a, int b, unsigned char c);
 void fn_80178718(Object_80039F5C *p);
 int fn_801787A0(void);
@@ -638,7 +634,6 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D4E68(unsigned char a);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
 void fn_800FD978(Object_80039F5C *p);
@@ -707,7 +702,6 @@ float fn_80178A08(void);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 int fn_800C4B6C(Object_80039F5C *p);
-void fn_800D52F8(Object_80039F5C *p);
 int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
@@ -749,7 +743,7 @@ extern "C" void fn_800EFCD0(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
         fn_800EFCD0(a, pQueue, p);
     }
     p->mUnknown3088 = 1;
-    fn_800D6C70(p);
+    StyleTrackerEndDefensiveMove(p);
 }
 
 extern "C" void fn_800EFD70(int count) {
@@ -2935,7 +2929,7 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         fn_800F05E4(0, p->mpState, &message, p);
         break;
     default:
-        fn_800D4E68(PlayerMoveGetKind(p));
+        StyleTrackerSetStylePassPending(PlayerMoveGetKind(p));
         CamGameSetModeAll(3);
         fn_800F053C(0, p->mpState, &message, p);
         fn_801C1F94(&message, 0, 4);
@@ -4025,7 +4019,7 @@ extern "C" int fn_80111104(Object_80039F5C *p)
     if (p->mpState->mUnknown1 != 3) {
         pState->mUnknown0 = fn_80110EE4(p);
         if (pState->mUnknown0 != 22) {
-            fn_800D4F34(1);
+            StyleTrackerBeginStiffArm(1);
             pState->mUnknown6 = lbl_803EAF5E + (pState->mUnknown4 >> 4);
             value = pState->mUnknown4 + 20;
             p->mRatings[2] = value > 255 ? 255 : value;
@@ -4571,10 +4565,10 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
         AudmonEventPostArgs(102, &p->mMotion.mPos, result, 0, 0);
         fn_8017D9B0(p->mId, pOther->mId);
         if (result == 2) {
-            fn_800D47D4(0, p);
+            StyleTrackerOnTackleContest(0, p);
         }
         if (result == 3) {
-            fn_800D47D4(1, p);
+            StyleTrackerOnTackleContest(1, p);
         }
     }
     return result;
@@ -4600,7 +4594,7 @@ extern "C" void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     p->mUnknown392 = 4;
     ((State_80113AAC *)&pOther->mUnknown336)->mUnknown14 = 4;
-    fn_800D6EDC();
+    StyleTrackerOnActionFour();
     AudmonEventPostArgs(101, &p->mMotion.mPos, p->mId, pOther->mId, 0);
     if (!(pOther->mFlags & 0x400) && fn_801486A0() != 0) {
         int port = fn_800B65A0(pOther->mIdBytes[2]);

@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/StyleTracker.h"
 #include "game/fn_8007F828.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
@@ -70,7 +71,6 @@ int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
 int fn_8014A1B8(Class_80148A58 *p, int kind, int team);
-unsigned short fn_800D3EB0(int team, int index);
 int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
 int PlayerDbGetId(Object_8008044C *pObject);
 
@@ -225,7 +225,7 @@ int fn_8014CFDC(Class_80148A58 *p, int kind, int team)
 {
     int result;
     if (kind == 41) {
-        result = fn_800D3EB0(team, 101);
+        result = StyleTrackerGetEventCount(team, 101);
     } else {
         result = fn_8014A1B8(p, kind, team);
     }

@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8017F584.h"
@@ -24,8 +25,6 @@ void fn_800B5150(Object_80039F5C *p);
 void fn_8003AE24(Object_80039F5C *p);
 int fn_800C8704(int *pFirst, int *pSecond);
 int fn_800C8744(int team);
-int fn_800D41F8(int team);
-unsigned short fn_800D3EB0(int team, int index);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
@@ -208,7 +207,7 @@ int fn_801499A8(Class_80148A58 *,int kind,int team,int index,Object_80039F5C *pP
         fn_8022B414(id,0x6E696167,&value);result+=value;break;
     case 10:break;
     case 11:fn_8022B414(id,0x75667567,&result);break;
-    case 12:result=fn_800D41F8(team);break;
+    case 12:result=StyleTrackerGetTotal(team);break;
     case 13:
         fn_8022B414(id,0x72666C67,&result);
         fn_8022B414(id,0x6E696167,&value);result+=value;break;
@@ -282,21 +281,21 @@ int fn_8014A1B8(Class_80148A58 *p,int kind,int team)
         fn_8022B7A4(handle,0x74507374,&value);result+=value;
         fn_8022B7A4(handle,0x64647374,&value);result+=value;break;
     case 3: {
-        int a=fn_800D3EB0(team,30),b=fn_800D3EB0(team,31);
-        int c=fn_800D3EB0(team,29);result=a+b+c;break;
+        int a=StyleTrackerGetEventCount(team,30),b=StyleTrackerGetEventCount(team,31);
+        int c=StyleTrackerGetEventCount(team,29);result=a+b+c;break;
     }
     case 4: {
-        int a=fn_800D3EB0(team,57),b=fn_800D3EB0(team,63);result=a+b;break;
+        int a=StyleTrackerGetEventCount(team,57),b=StyleTrackerGetEventCount(team,63);result=a+b;break;
     }
     case 5: {
-        int a=fn_800D3EB0(team,34),b=fn_800D3EB0(team,46);
-        int c=fn_800D3EB0(team,42);result=a+b+c;break;
+        int a=StyleTrackerGetEventCount(team,34),b=StyleTrackerGetEventCount(team,46);
+        int c=StyleTrackerGetEventCount(team,42);result=a+b+c;break;
     }
     case 6:fn_8022B7A4(handle,0x72667374,&result);break;
     case 7: {
-        int a=fn_800D3EB0(team,63),b=fn_800D3EB0(team,11);
-        int c=fn_800D3EB0(team,42),d=fn_800D3EB0(team,113);
-        int e=fn_800D3EB0(team,110);result=a+b+c+d+e;break;
+        int a=StyleTrackerGetEventCount(team,63),b=StyleTrackerGetEventCount(team,11);
+        int c=StyleTrackerGetEventCount(team,42),d=StyleTrackerGetEventCount(team,113);
+        int e=StyleTrackerGetEventCount(team,110);result=a+b+c+d+e;break;
     }
     case 8:
         fn_8022B7A4(handle,0x74727374,&value);result+=value;
@@ -309,16 +308,16 @@ int fn_8014A1B8(Class_80148A58 *p,int kind,int team)
     case 11:
         fn_8022B7A4(handle,0x75667374,&value);result+=value*5;
         fn_8022B7A4(handle,0x70447374,&value);result+=value;break;
-    case 12:result=fn_800D41F8(team);break;
+    case 12:result=StyleTrackerGetTotal(team);break;
     case 13:
         fn_8022B7A4(handle,0x69447374,&result);
         result+=p->vfn_24(team,0x72666C67);break;
     case 14: {
-        int a=fn_800D3EB0(team,77),b=fn_800D3EB0(team,103);result=a+b;break;
+        int a=StyleTrackerGetEventCount(team,77),b=StyleTrackerGetEventCount(team,103);result=a+b;break;
     }
     case 15: {
-        int a=fn_800D3EB0(team,74),b=fn_800D3EB0(team,75);
-        int c=fn_800D3EB0(team,105);result=a+b+c;break;
+        int a=StyleTrackerGetEventCount(team,74),b=StyleTrackerGetEventCount(team,75);
+        int c=StyleTrackerGetEventCount(team,105);result=a+b+c;break;
     }
     }
     return result;

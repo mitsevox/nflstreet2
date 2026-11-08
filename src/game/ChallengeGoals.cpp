@@ -1,6 +1,7 @@
 /* Challenge goals: checks each goal of the current challenge (score margins, team stats, the winner) during and after the game, and sends the goal list to the screens. */
 
 #include "game/Entry_80219044.h"
+#include "game/StyleTracker.h"
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_8007F828.h"
@@ -31,7 +32,6 @@ int ChalCheckMedalGoal(int side, ChalMedalGoal_t *pInfo);
 int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int fn_800A7E40(unsigned char side);
-int fn_800D41F8(int side);
 unsigned char fn_80174160(void);
 int fn_80177F70(void);
 int fn_80178308(void);
@@ -62,8 +62,8 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag)
         other = fn_801787DC((side + 1) & 1);
         break;
     case 1:
-        own = fn_800D41F8(side);
-        other = fn_800D41F8((side + 1) & 1);
+        own = StyleTrackerGetTotal(side);
+        other = StyleTrackerGetTotal((side + 1) & 1);
         break;
     default:
         return 2;
@@ -100,7 +100,7 @@ int ChallengeGoalCheckWinner(int side)
 
 int ChallengeGoalCheckPointsMin(int side, int value)
 {
-    return fn_800D41F8(side) < value ? 2 : 0;
+    return StyleTrackerGetTotal(side) < value ? 2 : 0;
 }
 
 int ChallengeGoalCheckSpstMax(int side, unsigned int value)
@@ -179,7 +179,7 @@ int ChallengeGoalCheckScoreAbove(int side, unsigned int value)
         own = fn_801787DC(side);
         break;
     case 1:
-        own = fn_800D41F8(side);
+        own = StyleTrackerGetTotal(side);
         break;
     default:
         return 2;
@@ -237,8 +237,8 @@ int ChallengeGoalCheckLeading(int side, int value)
         other = fn_801787DC((side + 1) & 1);
         break;
     case 1:
-        own = fn_800D41F8(side);
-        other = fn_800D41F8((side + 1) & 1);
+        own = StyleTrackerGetTotal(side);
+        other = StyleTrackerGetTotal((side + 1) & 1);
         break;
     default:
         return 2;

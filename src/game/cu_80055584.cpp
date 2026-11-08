@@ -1,4 +1,5 @@
 #include "game/fn_801FCE10.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_8022F478.h"
@@ -31,7 +32,6 @@ extern unsigned char lbl_803EC7EC[2];
 int fn_80186F7C(unsigned char index);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
-int fn_800D41F8(int side);
 int fn_8017F60C(void);
 int fn_80190394(void);
 void fn_80186BAC(void);
@@ -83,7 +83,7 @@ extern "C" void fn_80055584(void)
                 &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
                 &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
                 &values[12], &values[13], &values[14], &values[15], &values[16], &values[17]);
-            int score = fn_800D41F8(side);
+            int score = StyleTrackerGetTotal(side);
             if (result == 0) {
                 lbl_802D4B14[0].SetValue(side, values[0]);
                 lbl_802D4B14[1].SetValue(side, values[1]);
@@ -286,7 +286,7 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
         pStats[side][10] = fn_80055F24(pHandles[index], 0x64317374);
         pStats[side][9] = fn_80055F24(pHandles[index], 0x66667374);
         pStats[side][8] = fn_80055F24(pHandles[index], 0x69447374);
-        pStats[side][1] = fn_800D41F8(side);
+        pStats[side][1] = StyleTrackerGetTotal(side);
         pStats[side][11] = fn_800A7E40(side);
         pStats[side][12] = fn_800A7E54(side);
         pStats[side][6] = fn_80055F24(pHandles[index], 0x6B737374);
@@ -304,8 +304,8 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
 
         fn_8018F52C(&cursor, (signed char)fn_8022F384(fn_8022F4BC()));
         if (fn_8007F828(14) == 1) {
-            score1 = fn_800D41F8(1);
-            score0 = fn_800D41F8(0);
+            score1 = StyleTrackerGetTotal(1);
+            score0 = StyleTrackerGetTotal(0);
         } else {
             score1 = fn_801787DC(1);
             score0 = fn_801787DC(0);

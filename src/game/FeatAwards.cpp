@@ -3,6 +3,7 @@
    memory card), marks them done, pays out their Credits and keeps the
    list of new awards the screens then show one by one. */
 #include "game/DbCursor.h"
+#include "game/StyleTracker.h"
 #include "game/UnlockItem.h"
 #include "game/FeatAwards.h"
 #include "game/cu_80190208.h"
@@ -12,8 +13,6 @@
 
 extern "C" {
 int fn_800A3444(void);
-int fn_800D41F8(int side);
-int fn_800D7550(int a, unsigned int b);
 void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
 int fn_80083FE4(DbCursor *pObject);
 void UserStatsOpen(DbCursor *pObject, int index);
@@ -412,6 +411,6 @@ int FeatAwardGameCredits(int side)
     if (flag) {
         return 0;
     }
-    return fn_800D7550(side, fn_800D41F8(side));
+    return StyleTrackerAddProfilePoints(side, StyleTrackerGetTotal(side));
 }
 }

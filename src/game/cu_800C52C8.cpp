@@ -1,4 +1,5 @@
 #include "game/Step_800C4460.h"
+#include "game/StyleTracker.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
@@ -114,9 +115,6 @@ int fn_800CD35C(int mode, Object_80039F5C *p);
 int fn_800CE438(Query_800CE770 *pQuery);
 int fn_800CF090(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D4748(Object_80039F5C *p);
-void fn_800D4FBC(Object_80039F5C *p, int flag);
-void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag);
 int fn_800E1554(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800EC640(Object_80039F5C *p);
@@ -321,7 +319,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                     fn_800B1508();
                 }
                 p->mUnknown1160.mUnknown44++;
-                fn_800D4748(p);
+                StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
@@ -674,7 +672,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
         result = fn_800CE2B8(&query);
     }
     if (result != 0) {
-        fn_800D4748(p);
+        StyleTrackerOnBrokenTackle(p);
         fn_800A8954(13, p->mIdBytes[2], p);
         AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
         fn_8006F0B8(8);
@@ -802,14 +800,14 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
         result = fn_800CE2B8(&query);
         if (result != 0) {
             if (types[i] == 5 || types[i] == 6) {
-                fn_800D4FBC(p, 1);
+                StyleTrackerResolveStiffArm(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
                 AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
                 fn_800310C0(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
-                fn_800D60BC(p, PlayerMoveGetKind(p), 255);
+                StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), 255);
             } else {
-                fn_800D4748(p);
+                StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             p->mUnknown1219 = 1;

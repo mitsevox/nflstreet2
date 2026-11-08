@@ -1,4 +1,5 @@
 #include "game/State_800E4494.h"
+#include "game/StyleTracker.h"
 #include "engine/cu_801B9F00.h"
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
@@ -203,7 +204,6 @@ int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_8003A130(void *pPos, float *pExtra, int team);
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int fn_80178360(void);
-void fn_800D4CD4(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
 float fn_8011F4D4(void);
@@ -243,8 +243,6 @@ Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
 float fn_80237260(int stream);
 int fn_8023790C(void);
 int fn_800C4184(Object_80039F5C *p);
-void fn_800D6CC0(Object_80039F5C *p);
-void fn_800D6D50(void);
 void fn_800D7A18(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB688(void *pBlock, Object_80039F5C *p);
@@ -1144,7 +1142,7 @@ extern "C" int fn_800E9B84(Object_80039F5C *p, int kind) {
         float angle;
         unsigned char value;
         AudmonEventPostId(38, &pMotion->mPos, p->mId, 0, 0, 0);
-        fn_800D6CC0(p);
+        StyleTrackerOnCarrierActionTwo(p);
         fn_801C1F94(&message, 0, 4);
         message.mId = 10;
         if (kind == 3) {
@@ -1520,7 +1518,7 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
         p->mFlags &= ~0x8;
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
-        fn_800D6D50();
+        StyleTrackerOnActionThree();
         if (previous == 0xFFFF) {
             fn_801C1F94(&message, 0, 4);
             message.mId = 1;
@@ -1828,7 +1826,7 @@ extern "C" void fn_800EBA48(int id) {
     BallStateGet(pBall, &owner);
     if (BallGetLandingPoint(pBall, &pos))
         fn_8003A130(&pos, 0, fn_80178360());
-    fn_800D4CD4();
+    StyleTrackerRefreshUserPlayers();
     for (unsigned char team = 0; team <= 1; team++) {
         int count = fn_80178D70(team);
         for (int i = 0; i < count; i++) {

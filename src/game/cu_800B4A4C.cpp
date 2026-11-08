@@ -1,4 +1,5 @@
 #include "game/bitstream.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8017F584.h"
 #include "game/Object_80039F5C.h"
@@ -68,7 +69,6 @@ int MathAngleDiff(int a, int b);
 float fn_801CFB18(int angle);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 int CarrierMoveStart(Object_80039F5C *p, int a);
-void fn_800D4948(void);
 float fn_80178A2C(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -205,7 +205,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         limit = 7.0f;
         limit *= fn_801CFB18(p->mMotion.mFacing);
         if (otherDistance > 0.0f && otherDistance < limit && fn_800E815C(p, 2, mode) != 0) {
-            fn_800D4948();
+            StyleTrackerOnStyleFirstDown();
             return 1;
         }
     }

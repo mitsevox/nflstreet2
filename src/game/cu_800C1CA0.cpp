@@ -1,4 +1,5 @@
 #include "game/cu_8002B8F8.h"
+#include "game/StyleTracker.h"
 #include "game/Ball.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_800AD9B4.h"
@@ -30,8 +31,6 @@ int fn_800A8740(void);
 void fn_800AD910(int mode, float dt);
 void fn_800B4184(int a);
 void fn_800B63B0(void);
-void fn_800D6F08(void);
-void fn_800D7158(void);
 void fn_8013F3FC(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
@@ -81,8 +80,8 @@ extern "C" void fn_800C1CA0(void)
     fn_8002D274(lbl_803EA368);
     fn_8016BA80();
     fn_8022BF68();
-    fn_800D6F08();
-    fn_800D7158();
+    StyleTrackerEndPlay();
+    StyleTrackerReset();
     fn_80071C34(0);
     if (SpchIGIsSceneLineActive()) {
         SpchIGEndSceneLine();

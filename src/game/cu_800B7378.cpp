@@ -1,4 +1,5 @@
 #include "game/Object_80039F5C.h"
+#include "game/StyleTracker.h"
 #include "game/Object_8017886C.h"
 #include "game/Input_800B6D34.h"
 #include "game/Ball.h"
@@ -100,14 +101,6 @@ void fn_800C4460(Sequence_800C4460 *p);
 int fn_800C8704(int *pA, int *pB);
 void fn_800C9FC0(void);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int value);
-void fn_800D42D4(void);
-void fn_800D45A0(void);
-void fn_800D4858(void);
-void fn_800D4888(int flag);
-void fn_800D490C(void);
-void fn_800D49A4(void);
-void fn_800D49FC(void);
-void fn_800D4A40(void);
 int fn_800E1350(Object_80039F5C *p);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 void fn_800F181C(int index, int value);
@@ -480,7 +473,7 @@ int Class_80297C60::vfn_09(char *pText)
             strcpy(pText, safety);
             changed = 1;
         } else if (score == 6 || score == 9) {
-            fn_800D42D4();
+            StyleTrackerOnTouchdown();
             if (fn_80177C38() == 1 && fn_801783AC(20)) {
                 strcpy(pText, touchdown2);
                 changed = 1;
@@ -521,28 +514,28 @@ extern "C" void fn_800B925C(void *p, char *pText)
     if (pText != 0) {
         fn_8017D7C4(pText);
         if (strcmp(pText, firstDown) == 0) {
-            fn_800D490C();
+            StyleTrackerOnFirstDown();
             fn_800AE9A4();
         }
         if (strcmp(pText, turnover) == 0) {
-            fn_800D4858();
+            StyleTrackerOnTurnoverOnDowns();
         }
         if (strcmp(pText, onePoint) == 0 || strcmp(pText, twoPoint) == 0) {
-            fn_800D49A4();
+            StyleTrackerOnConversion();
             fn_800AE9A4();
         }
         if (strcmp(pText, defensive) == 0) {
-            fn_800D49FC();
+            StyleTrackerOnDefensiveConversion();
             fn_800AE9A4();
         }
         if (strcmp(pText, failed) == 0) {
-            fn_800D4A40();
+            StyleTrackerOnFailedConversion();
         }
         if (strcmp(pText, safety) == 0) {
-            fn_800D45A0();
+            StyleTrackerOnSafety();
         }
         if (strcmp(pText, touchback) == 0) {
-            fn_800D4888(0);
+            StyleTrackerOnTouchback(0);
         }
         if (strcmp(pText, touchdown) == 0 || strcmp(pText, touchdown2) == 0) {
             fn_800AE9A4();
