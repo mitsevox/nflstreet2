@@ -2280,6 +2280,43 @@
       ]
     },
     {
+      "source": "src/game/Loading.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80193FB0-0x80194B6C (src/game/Loading.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80193FB0",
+          "end": "0x80194B6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD7E8",
+          "end": "0x802AD850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB728",
+          "end": "0x803EB730"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB9C",
+          "end": "0x803ECBAC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364F58",
+          "end": "0x803650A8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/TibNew.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows; every function exact, promoted from comparison-only.",

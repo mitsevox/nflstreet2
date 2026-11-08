@@ -92,7 +92,7 @@ void UISGameFreeKeyItem(int a, int b);
 void UISGameRefreshAll(void);
 void MemCardUtilInit(void);
 void MemCardUtilShutdown(void);
-void fn_80194AEC(int a);
+void LoadingEnd(int a);
 void RumbleInit(void);
 void RumbleShutdown(void);
 void RumbleProcess(void);
@@ -307,7 +307,7 @@ int InGame::Init()
     if (InGameIsDemo()) {
         ConSetChannelInfo(-1, 2, (void *)_InGameDemoPadRead);
     }
-    fn_80194AEC(0);
+    LoadingEnd(0);
     fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
     EngineParamWords desc = { 4, 14 };
     fn_802345C4(&desc, 2);
