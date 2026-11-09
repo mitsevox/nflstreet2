@@ -1268,7 +1268,7 @@ static void _ResUnprotectAll(ResFile_t *pRes)
     }
 }
 
-int ResInit(int heap)
+int ResInit(int maxResources)
 {
     int err;
 
@@ -1280,7 +1280,7 @@ int ResInit(int heap)
         fn_801F7FA8(&_Res_sResourceLock);
         fn_801F7FA8(&_Res_sAsyncCountLock);
         fn_801F8014(&_Res_sResourceLock);
-        _Res_pResourceFileList = fn_801C68FC(1, 1, heap, 0xA4, _ResFileInsertFunc, 0);
+        _Res_pResourceFileList = fn_801C68FC(1, 1, maxResources, 0xA4, _ResFileInsertFunc, 0);
         _Res_pBlockLoadBuffer = fn_801D2BB0(1, 0x8000, _Res_uMemAllocFlags, 0);
         _Res_bModuleActive = 1;
         _Res_bCachingEnabled = 0;
