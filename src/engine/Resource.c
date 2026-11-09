@@ -1,3 +1,5 @@
+/* Loads resource directories and their entries from files or memory, including
+ * asynchronous reads, decompression, caching and timed request processing. */
 #include "engine/Resource.h"
 #include "engine/system.h"
 #include "game/fn_801C68FC.h"

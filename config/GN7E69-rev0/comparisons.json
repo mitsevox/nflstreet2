@@ -47696,7 +47696,7 @@
     {
       "source": "src/engine/Resource.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801EC650-0x801F1538 (src/engine/Resource.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv provisional Resource.c unit row 0x801EC650-0x801F1538, complete function extents, unchanged engine_c compiler profile and NASCAR 2005 related naming evidence. All 50 full function extents are registered, including five missing bodies being reconstructed. Original assembly remains linked; static storage remains externally referenced until native data ownership is established.",
       "sections": [
         {
           "section": ".text",
@@ -47752,6 +47752,16 @@
           "end": "0x801ECC70"
         },
         {
+          "symbol": "fn_801ECC70",
+          "start": "0x801ECC70",
+          "end": "0x801ED634"
+        },
+        {
+          "symbol": "fn_801ED634",
+          "start": "0x801ED634",
+          "end": "0x801EDC2C"
+        },
+        {
           "symbol": "fn_801EDC2C",
           "start": "0x801EDC2C",
           "end": "0x801EDCD0"
@@ -47770,6 +47780,16 @@
           "symbol": "fn_801EDDB0",
           "start": "0x801EDDB0",
           "end": "0x801EDDF8"
+        },
+        {
+          "symbol": "fn_801EDDF8",
+          "start": "0x801EDDF8",
+          "end": "0x801EE38C"
+        },
+        {
+          "symbol": "fn_801EE38C",
+          "start": "0x801EE38C",
+          "end": "0x801EE700"
         },
         {
           "symbol": "fn_801EE700",
@@ -47845,6 +47865,11 @@
           "symbol": "fn_801F010C",
           "start": "0x801F010C",
           "end": "0x801F02AC"
+        },
+        {
+          "symbol": "fn_801F02AC",
+          "start": "0x801F02AC",
+          "end": "0x801F08FC"
         },
         {
           "symbol": "fn_801F08FC",
