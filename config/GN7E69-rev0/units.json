@@ -1788,6 +1788,342 @@
     "iSPCH_InitRandom": {
       "address": "0x801B1B70",
       "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
+    },
+    "_ResGetDirInfo": {
+      "address": "0x801EC650",
+      "evidence": "evidence.tsv function and name rows at 0x801EC650: Reads directory offsets and the compressed and expanded sizes for an entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetBlockOffset": {
+      "address": "0x801EC6C4",
+      "evidence": "evidence.tsv function and name rows at 0x801EC6C4: Chooses the directory offset or the relocated bulk-buffer offset from entry flag 8. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResBlockLoadCompFileAsync": {
+      "address": "0x801EC718",
+      "evidence": "evidence.tsv function and name rows at 0x801EC718: Starts block streaming through the shared 0x8000-byte input buffer and returns the stream request. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResBlockLoadCompFileAsyncBlockCallback": {
+      "address": "0x801EC760",
+      "evidence": "evidence.tsv function and name rows at 0x801EC760: Feeds successive file blocks into the active decompressor and stops it at end of input. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResCalcPad": {
+      "address": "0x801EC894",
+      "evidence": "evidence.tsv function and name rows at 0x801EC894: Computes the bytes needed to align a block size to its alignment. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResFileInsertFunc": {
+      "address": "0x801EC8AC",
+      "evidence": "evidence.tsv function and name rows at 0x801EC8AC: Compares two resource names for insertion into the open-file list. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResFileSearchByFileNameFunc": {
+      "address": "0x801EC8D4",
+      "evidence": "evidence.tsv function and name rows at 0x801EC8D4: Compares a resource name with a search key and stores the matching record. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResAsyncCallbackFunc": {
+      "address": "0x801EC914",
+      "evidence": "evidence.tsv function and name rows at 0x801EC914: Completes a read, handles optional decompression/cache writes, updates load flags, and dispatches or queues the completion. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetBaseBlockSize": {
+      "address": "0x801ECBE4",
+      "evidence": "evidence.tsv function and name rows at 0x801ECBE4: Computes metadata payload sizes for TERF, COMP, DIR1 and HSH1/HSH2 blocks. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLoadRes": {
+      "address": "0x801ECC70",
+      "evidence": "evidence.tsv function and name rows at 0x801ECC70: Loads one resource synchronously from loose files, cached/quickload streams, mapped memory or ARAM, with optional decompression. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLoadResAsync": {
+      "address": "0x801ED634",
+      "evidence": "evidence.tsv function and name rows at 0x801ED634: Creates an asynchronous request, handles timed completion and starts ordinary or block-compressed reads. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLockRes": {
+      "address": "0x801EDC2C",
+      "evidence": "evidence.tsv function and name rows at 0x801EDC2C: Marks an entry locked and maps its bulk-buffer address when entry flag 8 is set. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResUnlockRes": {
+      "address": "0x801EDCD0",
+      "evidence": "evidence.tsv function and name rows at 0x801EDCD0: Clears an eligible entry lock and its bulk-buffer address, returning the remaining address. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResReadTerfBlock": {
+      "address": "0x801EDD68",
+      "evidence": "evidence.tsv function and name rows at 0x801EDD68: Reads the eight-byte TERF block envelope and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResReadBlock": {
+      "address": "0x801EDDB0",
+      "evidence": "evidence.tsv function and name rows at 0x801EDDB0: Reads a metadata payload of the requested size and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResInitResourceFile": {
+      "address": "0x801EDDF8",
+      "evidence": "evidence.tsv function and name rows at 0x801EDDF8: Parses file-backed TERF metadata, allocates the directory/hash/entry arrays and cleans up failed opens. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResInitRamResourceFile": {
+      "address": "0x801EE38C",
+      "evidence": "evidence.tsv function and name rows at 0x801EE38C: Parses in-memory TERF metadata and moves the DATA area to ARAM for state 3 resources. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetResourceBuffer": {
+      "address": "0x801EE700",
+      "evidence": "evidence.tsv function and name rows at 0x801EE700: Selects a mapped entry address or allocates a destination buffer, including loose-file overrides. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResUnprotectAll": {
+      "address": "0x801EE91C",
+      "evidence": "evidence.tsv function and name rows at 0x801EE91C: Clears entry protection on every entry in a resource file. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResInit": {
+      "address": "0x801EE970",
+      "evidence": "evidence.tsv function and name rows at 0x801EE970: Initializes compression, resource locks, the open-file pool and block input buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResShutdown": {
+      "address": "0x801EEA60",
+      "evidence": "evidence.tsv function and name rows at 0x801EEA60: Closes open resources and releases the pool, buffer, locks and compression subsystem. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResOpenDevice": {
+      "address": "0x801EEB44",
+      "evidence": "evidence.tsv function and name rows at 0x801EEB44: Opens or reuses a named device-backed resource file and tracks its reference count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResOpenRam": {
+      "address": "0x801EECD0",
+      "evidence": "evidence.tsv function and name rows at 0x801EECD0: Opens or reuses a resource nested inside a loaded parent entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResClose": {
+      "address": "0x801EEFAC",
+      "evidence": "evidence.tsv function and name rows at 0x801EEFAC: Releases a resource reference and tears down owned metadata and loaded entries when required. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoad": {
+      "address": "0x801EF390",
+      "evidence": "evidence.tsv function and name rows at 0x801EF390: Validates a resource entry, waits for pending work, allocates its destination and loads it synchronously. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAsync": {
+      "address": "0x801EF548",
+      "evidence": "evidence.tsv function and name rows at 0x801EF548: Validates an entry and begins an asynchronous load into an allocated destination with a user callback. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadToBuffer": {
+      "address": "0x801EF7BC",
+      "evidence": "evidence.tsv function and name rows at 0x801EF7BC: Loads a resource synchronously into a supplied buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResWriteFromBuffer": {
+      "address": "0x801EF92C",
+      "evidence": "evidence.tsv function and name rows at 0x801EF92C: Writes the supplied entry data to its directory offset in the backing file. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAsyncToBuffer": {
+      "address": "0x801EFAD8",
+      "evidence": "evidence.tsv function and name rows at 0x801EFAD8: Starts an asynchronous entry load into a supplied buffer and records the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCopyAsyncToBuffer": {
+      "address": "0x801EFD2C",
+      "evidence": "evidence.tsv function and name rows at 0x801EFD2C: Starts an asynchronous entry copy without storing the caller buffer as the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCopyToBuffer": {
+      "address": "0x801EFF80",
+      "evidence": "evidence.tsv function and name rows at 0x801EFF80: Copies an entry synchronously into a supplied buffer without retaining it in the loaded-entry table. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnLoad": {
+      "address": "0x801F010C",
+      "evidence": "evidence.tsv function and name rows at 0x801F010C: Waits for and releases one loaded entry subject to its protection/ownership flags. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAll": {
+      "address": "0x801F02AC",
+      "evidence": "evidence.tsv function and name rows at 0x801F02AC: Loads entries individually or allocates, expands and maps an entire bulk resource buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnLoadAll": {
+      "address": "0x801F08FC",
+      "evidence": "evidence.tsv function and name rows at 0x801F08FC: Releases every loaded entry and the resource bulk allocation when present. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResFindIndexByName": {
+      "address": "0x801F0A8C",
+      "evidence": "evidence.tsv function and name rows at 0x801F0A8C: Hashes a name with HSH1/HSH2 parameters and searches the variable-width hash table for its resource index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetSize": {
+      "address": "0x801F0C50",
+      "evidence": "evidence.tsv function and name rows at 0x801F0C50: Returns a loose override size when present, otherwise the entry expanded size. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetNumResources": {
+      "address": "0x801F0D34",
+      "evidence": "evidence.tsv function and name rows at 0x801F0D34: Returns the validated resource count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsLoaded": {
+      "address": "0x801F0DB8",
+      "evidence": "evidence.tsv function and name rows at 0x801F0DB8: Tests entry flag 2 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsLoading": {
+      "address": "0x801F0E68",
+      "evidence": "evidence.tsv function and name rows at 0x801F0E68: Tests entry flag 0x10 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSync": {
+      "address": "0x801F0F18",
+      "evidence": "evidence.tsv function and name rows at 0x801F0F18: Optionally waits for outstanding reads and dispatches timed completions, returning the pending count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsOpen": {
+      "address": "0x801F0F9C",
+      "evidence": "evidence.tsv function and name rows at 0x801F0F9C: Tests whether a name exists in the initialized open-resource list. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsMemoryBacked": {
+      "address": "0x801F1008",
+      "evidence": "evidence.tsv function and name rows at 0x801F1008: Verifies that the supplied record is the open record for its name, then tests storage states 2 and 3. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetStreamInfo": {
+      "address": "0x801F10B0",
+      "evidence": "evidence.tsv function and name rows at 0x801F10B0: Returns the backing-file handle, entry offset and size, rejecting compressed entries. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSetFlags": {
+      "address": "0x801F11AC",
+      "evidence": "evidence.tsv function and name rows at 0x801F11AC: Sets resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResClearFlags": {
+      "address": "0x801F1230",
+      "evidence": "evidence.tsv function and name rows at 0x801F1230: Clears resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCallTimedAsync": {
+      "address": "0x801F12B4",
+      "evidence": "evidence.tsv function and name rows at 0x801F12B4: Drains due requests from the timed ring and invokes their completion callbacks. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnprotect": {
+      "address": "0x801F1488",
+      "evidence": "evidence.tsv function and name rows at 0x801F1488: Clears entry protection flag 0x40. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetAlignment": {
+      "address": "0x801F149C",
+      "evidence": "evidence.tsv function and name rows at 0x801F149C: Returns the validated resource alignment. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSetMemFlags": {
+      "address": "0x801F1520",
+      "evidence": "evidence.tsv function and name rows at 0x801F1520: Replaces allocation flags and returns their previous value. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetMemAllocFlags": {
+      "address": "0x801F1530",
+      "evidence": "evidence.tsv function and name rows at 0x801F1530: Returns the resource allocation flags. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_Res_szDiskLabelByHandle": {
+      "address": "0x802B17C0",
+      "evidence": "evidence.tsv data/name rows 0x802B17C0: disk decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szDiskLabelByName": {
+      "address": "0x802B17CC",
+      "evidence": "evidence.tsv data/name rows 0x802B17CC: disk decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szRamLabelByHandle": {
+      "address": "0x802B17D8",
+      "evidence": "evidence.tsv data/name rows 0x802B17D8: mapped-memory decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szRamLabelByName": {
+      "address": "0x802B17E4",
+      "evidence": "evidence.tsv data/name rows 0x802B17E4: mapped-memory decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szNameFormat": {
+      "address": "0x802B17EC",
+      "evidence": "evidence.tsv data/name rows 0x802B17EC: bounded resource-name formatter for ARAM temporary label; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szIndexFormat": {
+      "address": "0x802B17F0",
+      "evidence": "evidence.tsv data/name rows 0x802B17F0: four-digit resource index suffix; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szAramLabelByHandle": {
+      "address": "0x802B17F8",
+      "evidence": "evidence.tsv data/name rows 0x802B17F8: ARAM decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szAramLabelByName": {
+      "address": "0x802B1804",
+      "evidence": "evidence.tsv data/name rows 0x802B1804: ARAM decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szLoadAllLabelByHandle": {
+      "address": "0x802B1810",
+      "evidence": "evidence.tsv data/name rows 0x802B1810: bulk-load decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szLoadAllLabelByName": {
+      "address": "0x802B181C",
+      "evidence": "evidence.tsv data/name rows 0x802B181C: bulk-load decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szModuleID": {
+      "address": "0x802F9508",
+      "evidence": "evidence.tsv data/name rows 0x802F9508: RESOURCE.LIB; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bModuleActive": {
+      "address": "0x803EBD80",
+      "evidence": "evidence.tsv data/name rows 0x803EBD80: initialization guard; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncLoadCount": {
+      "address": "0x803EBD84",
+      "evidence": "evidence.tsv data/name rows 0x803EBD84: in-flight async load count protected by count lock; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncOverride": {
+      "address": "0x803EBD88",
+      "evidence": "evidence.tsv data/name rows 0x803EBD88: positive value makes public async loads use synchronous loading unless resource flag 4; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pAsyncDebugProc": {
+      "address": "0x803EBD8C",
+      "evidence": "evidence.tsv data/name rows 0x803EBD8C: optional async lifecycle event hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncDebugParm": {
+      "address": "0x803EBD90",
+      "evidence": "evidence.tsv data/name rows 0x803EBD90: fifth argument to optional async event hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pLoopingCallback": {
+      "address": "0x803EBD94",
+      "evidence": "evidence.tsv data/name rows 0x803EBD94: long resource-wait notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pErrorCallback": {
+      "address": "0x803EBD98",
+      "evidence": "evidence.tsv data/name rows 0x803EBD98: resource-open error notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bCachingEnabled": {
+      "address": "0x803EBD9C",
+      "evidence": "evidence.tsv data/name rows 0x803EBD9C: resource cache enable flag; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_uTimedAsyncTick": {
+      "address": "0x803EBDA0",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA0: current timed-async dispatch tick; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iTimedAsyncPut": {
+      "address": "0x803EBDA4",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA4: 16-entry timed completion FIFO producer index; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iTimedAsyncGet": {
+      "address": "0x803EBDA8",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA8: 16-entry timed completion FIFO consumer index; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bLooseFileSupport": {
+      "address": "0x803EBDAC",
+      "evidence": "evidence.tsv data/name rows 0x803EBDAC: enable separate-file resource overrides; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_uMemAllocFlags": {
+      "address": "0x803EBDB0",
+      "evidence": "evidence.tsv data/name rows 0x803EBDB0: default resource allocation flags; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockDecompressor": {
+      "address": "0x803ECF70",
+      "evidence": "evidence.tsv data/name rows 0x803ECF70: current block codec state; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iBlockBytesRead": {
+      "address": "0x803ECF74",
+      "evidence": "evidence.tsv data/name rows 0x803ECF74: accumulated bytes delivered to block codec; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockRequest": {
+      "address": "0x803ECF78",
+      "evidence": "evidence.tsv data/name rows 0x803ECF78: request retained by active block callback; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockLoadBuffer": {
+      "address": "0x803ECF7C",
+      "evidence": "evidence.tsv data/name rows 0x803ECF7C: 0x8000-byte streaming read buffer; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sBlockInput": {
+      "address": "0x8039AE14",
+      "evidence": "evidence.tsv data/name rows 0x8039AE14: codec input stream record; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sBlockOutput": {
+      "address": "0x8039AE30",
+      "evidence": "evidence.tsv data/name rows 0x8039AE30: codec output stream record; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_apTimedAsyncRequests": {
+      "address": "0x8039AE4C",
+      "evidence": "evidence.tsv data/name rows 0x8039AE4C: 16-entry timed completion request FIFO; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sAsyncCountLock": {
+      "address": "0x803E92FC",
+      "evidence": "evidence.tsv data/name rows 0x803E92FC: recursive lock for async count; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sResourceLock": {
+      "address": "0x803E931C",
+      "evidence": "evidence.tsv data/name rows 0x803E931C: recursive lock for resource pool and metadata; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pResourceFileList": {
+      "address": "0x803ED668",
+      "evidence": "evidence.tsv data/name rows 0x803ED668: open-resource pool returned by DS allocator; original storage remains externally linked for the partial Resource.c reconstruction."
     }
   },
   "units": [

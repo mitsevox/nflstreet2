@@ -4,7 +4,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
@@ -244,7 +244,7 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 }
 extern "C" void fn_801A1240(int resource)
 {
-    TMTexLibLoad(&lbl_8036550C,fn_801EF390((void *)resource,0,1));
+    TMTexLibLoad(&lbl_8036550C,ResLoad((void *)resource,0,1));
     Entry_801A0088 *p=lbl_80365534;
     for(unsigned int i=0;i<=7;++i,++p){Descriptor_801A1240 *d=TMTexLibGetTexNode(&lbl_8036550C,lbl_802F2734[i]);if(d->mUnknownC)p->mpPalette=TMTexLibGetClutByTexNode(d,0);else p->mpPalette=0;p->mpTexture=TMTexLibGetTextureByTexNode(d);}
 }

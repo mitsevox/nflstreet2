@@ -13,8 +13,8 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 #include "game/fn_801F40F4.h"
 #include "game/LevelSurface.h"
 #include "game/fn_802270D4.h"
@@ -567,8 +567,8 @@ void fn_801CE7D0(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
 int MemFill(void *p, int size, int value, int align);
-int fn_801F0C50(void *a, int b);
-void fn_801F11AC(void *pData, int a);
+int ResGetSize(void *a, int b);
+void ResSetFlags(void *pData, int a);
 void fn_801F3C14(void);
 int fn_801F3E28(void);
 int fn_801F3E34(void);
@@ -1592,9 +1592,9 @@ extern "C" void fn_8006B664(void)
         lbl_803EA67C->mpUnknown0 = (void *)-1;
         lbl_803EA67C->mpUnknown4 = (void *)-1;
         lbl_803EA67C->mpUnknown10 = (void *)-1;
-        lbl_803EA67C->mpUnknown0 = fn_801EEB44(lbl_802EBFF4, 44);
-        lbl_803EA67C->mpUnknown4 = fn_801EEB44(lbl_802EC00C, 44);
-        lbl_803EA67C->mpUnknown10 = fn_801EEB44(lbl_802EC000, 44);
+        lbl_803EA67C->mpUnknown0 = ResOpenDevice(lbl_802EBFF4, 44);
+        lbl_803EA67C->mpUnknown4 = ResOpenDevice(lbl_802EC00C, 44);
+        lbl_803EA67C->mpUnknown10 = ResOpenDevice(lbl_802EC000, 44);
         fn_801F4B88(lbl_803EA67C->mpUnknown0, 1, 0);
         lbl_803EA67C->mUnknown8 = fn_8006DBF8(lbl_803EA67C->mpUnknown4, 1);
         fn_80068A04();
@@ -1614,9 +1614,9 @@ extern "C" void fn_8006B790(void)
         fn_8006DC4C(lbl_803EA67C->mUnknown8);
         fn_80068E00();
         fn_801F4C5C();
-        fn_801EEFAC(lbl_803EA67C->mpUnknown0);
-        fn_801EEFAC(lbl_803EA67C->mpUnknown4);
-        fn_801EEFAC(lbl_803EA67C->mpUnknown10);
+        ResClose(lbl_803EA67C->mpUnknown0);
+        ResClose(lbl_803EA67C->mpUnknown4);
+        ResClose(lbl_803EA67C->mpUnknown10);
         fn_801D2BD0(lbl_803EA67C);
         lbl_803EA67C = 0;
     }
@@ -1863,7 +1863,7 @@ extern "C" void fn_8006C040(void *item)
 extern "C" void fn_8006C074(Node_8006BF4C *pNode)
 {
     if (lbl_8030A654.m1C != 0) {
-        if (fn_801F0C50(pNode->m4, pNode->m8) < fn_801D27F4(1)) {
+        if (ResGetSize(pNode->m4, pNode->m8) < fn_801D27F4(1)) {
             int *pSlot;
             Entry_8030A664 *pEntry;
 
@@ -1918,8 +1918,8 @@ extern "C" void fn_8006C1E8(void)
 extern "C" void fn_8006C22C(Entry_8030A664 *pEntry)
 {
     while (pEntry->m10 != 3) {
-        pEntry->m8 = fn_801EEB44(pEntry->m4, 44);
-        fn_801F11AC(pEntry->m8, 1);
+        pEntry->m8 = ResOpenDevice(pEntry->m4, 44);
+        ResSetFlags(pEntry->m8, 1);
         pEntry++;
     }
 }
@@ -1927,7 +1927,7 @@ extern "C" void fn_8006C22C(Entry_8030A664 *pEntry)
 extern "C" void fn_8006C284(Entry_8030A664 *pEntry)
 {
     while (pEntry->m10 != 3) {
-        fn_801EEFAC(pEntry->m8);
+        ResClose(pEntry->m8);
         pEntry++;
     }
 }
@@ -2018,9 +2018,9 @@ extern "C" int fn_8006C548(unsigned int index, int a, Callback_8006C548 cb)
     pSlot = &lbl_8030A654.m24[index];
     queue = 0;
     result = 0;
-    canQueue = fn_801F0C50(pEntry->m8, a) < fn_801D27F4(1);
+    canQueue = ResGetSize(pEntry->m8, a) < fn_801D27F4(1);
     if (*pSlot != 0) {
-        if (fn_801F0DB8(pEntry->m8, a)) {
+        if (ResIsLoaded(pEntry->m8, a)) {
             result = 1;
             if (cb != 0) {
                 cb(*pSlot);
@@ -2043,7 +2043,7 @@ extern "C" int fn_8006C674(int index, int a)
 {
     if (fn_801F3E28()) {
         int *pSlot = &lbl_8030A654.m24[index];
-        if (*pSlot != 0 && fn_801F0DB8(fn_8006BE68(0, index)->m8, a)) {
+        if (*pSlot != 0 && ResIsLoaded(fn_8006BE68(0, index)->m8, a)) {
             return 1;
         }
     }

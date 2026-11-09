@@ -4,7 +4,7 @@
 #include "engine/texfile.h"
 #include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_8017F584.h"
 
 /* Per-player texture slot state: the wanted texture id and palette, and the
@@ -45,10 +45,10 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C3084(const char *pString, int c);
 int fn_801C9DC8(int value);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801EFF80(void *pArchive, int id, void *pDest);
-int fn_801F0A8C(void *pArchive, char *pName);
-int fn_801F0C50(void *pArchive, int id);
-int fn_801F1520(int value);
+int ResCopyToBuffer(void *pArchive, int id, void *pDest);
+int ResFindIndexByName(void *pArchive, char *pName);
+int ResGetSize(void *pArchive, int id);
+int ResSetMemFlags(int value);
 void ResTrackPause(void);
 void ResTrackResume(void);
 void SortArray(int a, void *pBase, int count, int size,
@@ -261,7 +261,7 @@ void fn_8016032C(void)
 void fn_8016061C(int player, int slot, void *pData, int shared)
 {
     if (!shared) {
-        fn_801EFF80(sArchive, sSlots[player][slot].mId, pData);
+        ResCopyToBuffer(sArchive, sSlots[player][slot].mId, pData);
         TexMipmapRelocate(pData);
     }
     PlyrTexCopy(sTextures[player][slot], pData, sSizes[slot]);
@@ -293,12 +293,12 @@ void fn_801607F0(int mode)
     int saved1 = 0;
 
     if (FELoopIsMainFEActive() == 0) {
-        saved0 = fn_801F1520(mode);
+        saved0 = ResSetMemFlags(mode);
         saved1 = fn_801C9DC8(mode);
     }
-    sArchive = fn_801EEB44(lbl_802EC080, 44);
+    sArchive = ResOpenDevice(lbl_802EC080, 44);
     if (FELoopIsMainFEActive() == 0) {
-        fn_801F1520(saved0);
+        ResSetMemFlags(saved0);
         fn_801C9DC8(saved1);
     }
 }
@@ -328,7 +328,7 @@ void fn_80160874(unsigned int count)
         fn_8016074C(player);
         for (i = 0; i < 32; i++) {
             if (player == 0) {
-                size = fn_801F0C50(sArchive, sSlots[0][i].mId);
+                size = ResGetSize(sArchive, sSlots[0][i].mId);
                 sSizes[i] = size;
             } else {
                 size = sSizes[i];
@@ -354,10 +354,10 @@ void fn_80160874(unsigned int count)
         }
     }
 
-    saved0 = fn_801F1520(4);
+    saved0 = ResSetMemFlags(4);
     saved1 = fn_801C9DC8(4);
     BmFontLoad(&sFont, &sFontDesc, sArchive, 1);
-    fn_801F1520(saved0);
+    ResSetMemFlags(saved0);
     fn_801C9DC8(saved1);
 }
 
@@ -369,9 +369,9 @@ void fn_80160A80(void)
     for (i = 0; i < 32; i++) {
         unsigned char *pDest = sTextures[0][i];
         int id = sSlots[0][i].mId;
-        unsigned int size = fn_801F0C50(sArchive, id);
+        unsigned int size = ResGetSize(sArchive, id);
 
-        fn_801EFF80(sArchive, id, pDest);
+        ResCopyToBuffer(sArchive, id, pDest);
         for (player = 1; player < sPlayerCount; player++) {
             fn_801C1FBC(sTextures[player][i], pDest, size);
         }
@@ -526,7 +526,7 @@ int fn_80161048(char *pName)
     if (pSpace) {
         *pSpace = 0;
     }
-    return fn_801F0A8C(sArchive, pName);
+    return ResFindIndexByName(sArchive, pName);
 }
 
 unsigned char *fn_80161094(int player, int slot)
@@ -666,7 +666,7 @@ void fn_80161494(int player, int slot)
 
 void fn_80161498(void)
 {
-    fn_801EEFAC(sArchive);
+    ResClose(sArchive);
     sArchive = 0;
 }
 

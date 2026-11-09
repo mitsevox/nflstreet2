@@ -1,7 +1,7 @@
 /* The environment (stadium) object: creates the environment draw objects, attaches the stadium
    model and fades its ten elements. */
 #include "engine/viewport.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 struct EnvObj {
     char mUnknown0[4];
@@ -52,7 +52,7 @@ void EnvObjAttachModel(void)
 {
     void *pData = fn_800A336C();
     int index = fn_800A3374();
-    int handle = fn_801EF390(pData, index, 1);
+    int handle = ResLoad(pData, index, 1);
     EnvObj *pObject;
 
     fn_80235DB8(handle);
@@ -98,7 +98,7 @@ void EnvObjRemoveObjType(int handle)
 {
     EnvLayersFree(_EnvObj_pMain);
     fn_80234EA0(_EnvObj_pMain->mUnknownE64, 1);
-    fn_801F010C(_EnvObj_pMain->mpUnknown18, _EnvObj_pMain->mUnknown1C);
+    ResUnLoad(_EnvObj_pMain->mpUnknown18, _EnvObj_pMain->mUnknown1C);
     ObjRemoveFromList(handle, _EnvObj_pMain);
     VptTrashObject((int)_EnvObj_pMain);
     ObjRemoveFromList(handle, _EnvObj_pOverlay);

@@ -47696,7 +47696,7 @@
     {
       "source": "src/engine/Resource.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional Resource.c unit row 0x801EC650-0x801F1538, complete function extents, unchanged engine_c compiler profile and NASCAR 2005 related naming evidence. The existing 45 complete source bodies are compared; the five absent bodies remain visible as unreconstructed code in the whole-file inventory until their source is added. Original assembly remains linked; static storage remains externally referenced until native data ownership is established.",
+      "evidence": "evidence.tsv Resource.c unit row 0x801EC650-0x801F1538; all 50 complete source bodies retain full original extents under the unchanged engine_c profile. Documented partials remain measured; original assembly stays linked pending complete native text and data placement.",
       "sections": [
         {
           "section": ".text",
@@ -47707,227 +47707,252 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801EC650",
+          "symbol": "_ResGetDirInfo",
           "start": "0x801EC650",
           "end": "0x801EC6C4"
         },
         {
-          "symbol": "fn_801EC6C4",
+          "symbol": "_ResGetBlockOffset",
           "start": "0x801EC6C4",
           "end": "0x801EC718"
         },
         {
-          "symbol": "fn_801EC718",
+          "symbol": "_ResBlockLoadCompFileAsync",
           "start": "0x801EC718",
           "end": "0x801EC760"
         },
         {
-          "symbol": "fn_801EC760",
+          "symbol": "_ResBlockLoadCompFileAsyncBlockCallback",
           "start": "0x801EC760",
           "end": "0x801EC894"
         },
         {
-          "symbol": "fn_801EC894",
+          "symbol": "_ResCalcPad",
           "start": "0x801EC894",
           "end": "0x801EC8AC"
         },
         {
-          "symbol": "fn_801EC8AC",
+          "symbol": "_ResFileInsertFunc",
           "start": "0x801EC8AC",
           "end": "0x801EC8D4"
         },
         {
-          "symbol": "fn_801EC8D4",
+          "symbol": "_ResFileSearchByFileNameFunc",
           "start": "0x801EC8D4",
           "end": "0x801EC914"
         },
         {
-          "symbol": "fn_801EC914",
+          "symbol": "_ResAsyncCallbackFunc",
           "start": "0x801EC914",
           "end": "0x801ECBE4"
         },
         {
-          "symbol": "fn_801ECBE4",
+          "symbol": "_ResGetBaseBlockSize",
           "start": "0x801ECBE4",
           "end": "0x801ECC70"
         },
         {
-          "symbol": "fn_801EDC2C",
+          "symbol": "_ResLoadRes",
+          "start": "0x801ECC70",
+          "end": "0x801ED634"
+        },
+        {
+          "symbol": "_ResLoadResAsync",
+          "start": "0x801ED634",
+          "end": "0x801EDC2C"
+        },
+        {
+          "symbol": "_ResLockRes",
           "start": "0x801EDC2C",
           "end": "0x801EDCD0"
         },
         {
-          "symbol": "fn_801EDCD0",
+          "symbol": "_ResUnlockRes",
           "start": "0x801EDCD0",
           "end": "0x801EDD68"
         },
         {
-          "symbol": "fn_801EDD68",
+          "symbol": "_ResReadTerfBlock",
           "start": "0x801EDD68",
           "end": "0x801EDDB0"
         },
         {
-          "symbol": "fn_801EDDB0",
+          "symbol": "_ResReadBlock",
           "start": "0x801EDDB0",
           "end": "0x801EDDF8"
         },
         {
-          "symbol": "fn_801EE700",
+          "symbol": "_ResInitResourceFile",
+          "start": "0x801EDDF8",
+          "end": "0x801EE38C"
+        },
+        {
+          "symbol": "_ResInitRamResourceFile",
+          "start": "0x801EE38C",
+          "end": "0x801EE700"
+        },
+        {
+          "symbol": "_ResGetResourceBuffer",
           "start": "0x801EE700",
           "end": "0x801EE91C"
         },
         {
-          "symbol": "fn_801EE91C",
+          "symbol": "_ResUnprotectAll",
           "start": "0x801EE91C",
           "end": "0x801EE970"
         },
         {
-          "symbol": "fn_801EE970",
+          "symbol": "ResInit",
           "start": "0x801EE970",
           "end": "0x801EEA60"
         },
         {
-          "symbol": "fn_801EEA60",
+          "symbol": "ResShutdown",
           "start": "0x801EEA60",
           "end": "0x801EEB44"
         },
         {
-          "symbol": "fn_801EEB44",
+          "symbol": "ResOpenDevice",
           "start": "0x801EEB44",
           "end": "0x801EECD0"
         },
         {
-          "symbol": "fn_801EECD0",
+          "symbol": "ResOpenRam",
           "start": "0x801EECD0",
           "end": "0x801EEFAC"
         },
         {
-          "symbol": "fn_801EEFAC",
+          "symbol": "ResClose",
           "start": "0x801EEFAC",
           "end": "0x801EF390"
         },
         {
-          "symbol": "fn_801EF390",
+          "symbol": "ResLoad",
           "start": "0x801EF390",
           "end": "0x801EF548"
         },
         {
-          "symbol": "fn_801EF548",
+          "symbol": "ResLoadAsync",
           "start": "0x801EF548",
           "end": "0x801EF7BC"
         },
         {
-          "symbol": "fn_801EF7BC",
+          "symbol": "ResLoadToBuffer",
           "start": "0x801EF7BC",
           "end": "0x801EF92C"
         },
         {
-          "symbol": "fn_801EF92C",
+          "symbol": "ResWriteFromBuffer",
           "start": "0x801EF92C",
           "end": "0x801EFAD8"
         },
         {
-          "symbol": "fn_801EFAD8",
+          "symbol": "ResLoadAsyncToBuffer",
           "start": "0x801EFAD8",
           "end": "0x801EFD2C"
         },
         {
-          "symbol": "fn_801EFD2C",
+          "symbol": "ResCopyAsyncToBuffer",
           "start": "0x801EFD2C",
           "end": "0x801EFF80"
         },
         {
-          "symbol": "fn_801EFF80",
+          "symbol": "ResCopyToBuffer",
           "start": "0x801EFF80",
           "end": "0x801F010C"
         },
         {
-          "symbol": "fn_801F010C",
+          "symbol": "ResUnLoad",
           "start": "0x801F010C",
           "end": "0x801F02AC"
         },
         {
-          "symbol": "fn_801F08FC",
+          "symbol": "ResLoadAll",
+          "start": "0x801F02AC",
+          "end": "0x801F08FC"
+        },
+        {
+          "symbol": "ResUnLoadAll",
           "start": "0x801F08FC",
           "end": "0x801F0A8C"
         },
         {
-          "symbol": "fn_801F0A8C",
+          "symbol": "ResFindIndexByName",
           "start": "0x801F0A8C",
           "end": "0x801F0C50"
         },
         {
-          "symbol": "fn_801F0C50",
+          "symbol": "ResGetSize",
           "start": "0x801F0C50",
           "end": "0x801F0D34"
         },
         {
-          "symbol": "fn_801F0D34",
+          "symbol": "ResGetNumResources",
           "start": "0x801F0D34",
           "end": "0x801F0DB8"
         },
         {
-          "symbol": "fn_801F0DB8",
+          "symbol": "ResIsLoaded",
           "start": "0x801F0DB8",
           "end": "0x801F0E68"
         },
         {
-          "symbol": "fn_801F0E68",
+          "symbol": "ResIsLoading",
           "start": "0x801F0E68",
           "end": "0x801F0F18"
         },
         {
-          "symbol": "fn_801F0F18",
+          "symbol": "ResSync",
           "start": "0x801F0F18",
           "end": "0x801F0F9C"
         },
         {
-          "symbol": "fn_801F0F9C",
+          "symbol": "ResIsOpen",
           "start": "0x801F0F9C",
           "end": "0x801F1008"
         },
         {
-          "symbol": "fn_801F1008",
+          "symbol": "ResIsMemoryBacked",
           "start": "0x801F1008",
           "end": "0x801F10B0"
         },
         {
-          "symbol": "fn_801F10B0",
+          "symbol": "ResGetStreamInfo",
           "start": "0x801F10B0",
           "end": "0x801F11AC"
         },
         {
-          "symbol": "fn_801F11AC",
+          "symbol": "ResSetFlags",
           "start": "0x801F11AC",
           "end": "0x801F1230"
         },
         {
-          "symbol": "fn_801F1230",
+          "symbol": "ResClearFlags",
           "start": "0x801F1230",
           "end": "0x801F12B4"
         },
         {
-          "symbol": "fn_801F12B4",
+          "symbol": "ResCallTimedAsync",
           "start": "0x801F12B4",
           "end": "0x801F1488"
         },
         {
-          "symbol": "fn_801F1488",
+          "symbol": "ResUnprotect",
           "start": "0x801F1488",
           "end": "0x801F149C"
         },
         {
-          "symbol": "fn_801F149C",
+          "symbol": "ResGetAlignment",
           "start": "0x801F149C",
           "end": "0x801F1520"
         },
         {
-          "symbol": "fn_801F1520",
+          "symbol": "ResSetMemFlags",
           "start": "0x801F1520",
           "end": "0x801F1530"
         },
         {
-          "symbol": "fn_801F1530",
+          "symbol": "ResGetMemAllocFlags",
           "start": "0x801F1530",
           "end": "0x801F1538"
         }

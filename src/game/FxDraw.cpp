@@ -25,8 +25,8 @@ void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0F80(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
-void fn_801EF7BC(void *a, int b, void *p);
-int fn_801F0C50(void *a, int b);
+void ResLoadToBuffer(void *a, int b, void *p);
+int ResGetSize(void *a, int b);
 void TMXform(int a, void *b);
 void fn_8024FA68(int a, GXColor color);
 void fn_8024FB58(int a, GXColor color);
@@ -57,9 +57,9 @@ void FxAnimTexLoadAll(FxTexFile_t *pEntries, int *pValues, void *pData)
     for (i = 0; i <= 7; i++) {
         pEntries[i].mpUnknown0 = pData;
         if (fn_800A34F8(i)) {
-            void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pEntries[i].mpUnknown0, pEntries[i].mUnknown4), 4, 0);
+            void *pBuffer = fn_801D2BB0(1, ResGetSize(pEntries[i].mpUnknown0, pEntries[i].mUnknown4), 4, 0);
 
-            fn_801EF7BC(pEntries[i].mpUnknown0, pEntries[i].mUnknown4, pBuffer);
+            ResLoadToBuffer(pEntries[i].mpUnknown0, pEntries[i].mUnknown4, pBuffer);
             pValues[i] = fn_801C0BA8(&pEntries[i], 0);
             fn_801D2BD0(pBuffer);
         }

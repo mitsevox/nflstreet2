@@ -4,7 +4,7 @@
    textures in). */
 
 #include "game/fn_801D2B7C.h"
-#include "engine/fn_801EFD2C.h"
+#include "engine/ResCopyAsyncToBuffer.h"
 #include "engine/fn_801F8014.h"
 
 typedef struct ResStreamRequest_t {
@@ -169,7 +169,7 @@ void ResStreamStartNextRead(ResStream_t *loader)
     }
     fn_801F809C(&_ResStream_Lock);
     if (issue)
-        fn_801EFD2C(request->mArchive, request->mId, loader->mHeap, loader->mBuffers[slot],
+        ResCopyAsyncToBuffer(request->mArchive, request->mId, loader->mHeap, loader->mBuffers[slot],
                     loader->mUnknown24, ResStreamReadDone, loader);
 }
 

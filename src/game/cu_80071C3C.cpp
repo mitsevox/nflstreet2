@@ -91,8 +91,8 @@ int fn_8008382C(DbCursor *p);
 void fn_801B3084(int flags, const char *pName, int value);
 unsigned int fn_801C3180(const char *pText);
 void fn_801CE7D0(int a);
-void *fn_801EEB44(const char *pName, int flags);
-void fn_801EEFAC(void *p);
+void *ResOpenDevice(const char *pName, int flags);
+void ResClose(void *p);
 int fn_801F3E28(void);
 unsigned long long fn_801F7D34(Calendar_801F81F4 *p);
 void fn_801F81F4(Calendar_801F81F4 *p);
@@ -472,7 +472,7 @@ void fn_8007272C(void)
     }
     fn_80083644(&cursor);
     if (fn_801F3E28()) {
-        lbl_803EA704->mpUnknown20 = fn_801EEB44(lbl_802EBF88, 44);
+        lbl_803EA704->mpUnknown20 = ResOpenDevice(lbl_802EBF88, 44);
         lbl_803EA704->mUnknown24 = fn_8006DBF8(lbl_803EA704->mpUnknown20, 1);
         fn_8006DC98(lbl_803EA704->mpUnknown20, 2, 0x11000001, 2.0f);
         fn_8006DFA8(fn_80071C3C);
@@ -488,7 +488,7 @@ void fn_80072890(void)
         fn_8006E010(fn_80071C3C);
         fn_8006DD24(0x11000001);
         fn_8006DC4C(lbl_803EA704->mUnknown24);
-        fn_801EEFAC(lbl_803EA704->mpUnknown20);
+        ResClose(lbl_803EA704->mpUnknown20);
     }
     fn_801D2BD0(lbl_803EA704);
     lbl_803EA704 = 0;

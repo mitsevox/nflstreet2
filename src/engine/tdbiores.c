@@ -35,7 +35,7 @@ typedef struct TDbIOResWriteFile_t {
     int mState;
 } TDbIOResWriteFile_t;
 
-extern int fn_801EF92C(void *pArchive, int id, void *pData);
+extern int ResWriteFromBuffer(void *pArchive, int id, void *pData);
 extern int fn_801F1B44(int a, int b, void *pData, unsigned int size, int e);
 
 static void _EnterReadState(TDbIOResFile_t *pFile);
@@ -50,7 +50,7 @@ static int _IORes_Open(void *pHandle, unsigned int expectedSize, void *pName, in
     if (pFile == 0 || pDesc == 0) {
         return 3;
     }
-    size = fn_801F0C50(pDesc->mpArchive, pDesc->mId);
+    size = ResGetSize(pDesc->mpArchive, pDesc->mId);
     if (fn_801F7C88() != 0 || (bAnySize == 0 && size != expectedSize)) {
         return 0x24;
     }
@@ -71,9 +71,9 @@ static int _IORes_Close(void *pHandle)
         return 3;
     }
     if (pFile->mState == 1) {
-        fn_801F010C(pFile->mDesc.mpArchive, pFile->mDesc.mId);
+        ResUnLoad(pFile->mDesc.mpArchive, pFile->mDesc.mId);
     } else if (pFile->mState == 2 && pFile->mpWriteBuf != 0) {
-        if (fn_801EF92C(pFile->mDesc.mpArchive, pFile->mDesc.mId, pFile->mpWriteBuf) != 0) {
+        if (ResWriteFromBuffer(pFile->mDesc.mpArchive, pFile->mDesc.mId, pFile->mpWriteBuf) != 0) {
             err = 0x24;
         }
         fn_801D2BD0(pFile->mpWriteBuf);
@@ -157,7 +157,7 @@ static unsigned int _IORes_CalcPadding(unsigned int size)
 static void _EnterReadState(TDbIOResFile_t *pFile)
 {
     if (pFile != 0) {
-        pFile->mpReadData = (unsigned char *)fn_801EF390(pFile->mDesc.mpArchive, pFile->mDesc.mId, 1);
+        pFile->mpReadData = (unsigned char *)ResLoad(pFile->mDesc.mpArchive, pFile->mDesc.mId, 1);
         pFile->mPos = 0;
         pFile->mState = pFile->mpReadData != 0 ? 1 : 3;
     }

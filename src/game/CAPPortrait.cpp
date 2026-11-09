@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_801FCE10.h"
 #include "game/FMCAPPORT.h"
 #include "game/CAPPortrait.h"
@@ -36,8 +36,8 @@ void *fn_80160C08(void);
 void fn_80199BD4(PortraitJob_t *pObject);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
-int fn_801EFF80(void *pArchive, int id, void *pDest);
-int fn_801F0C50(void *pArchive, int id);
+int ResCopyToBuffer(void *pArchive, int id, void *pDest);
+int ResGetSize(void *pArchive, int id);
 void fn_80221BE8(void (*pCallback)(int, unsigned int, PortraitImageRequest_t *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
@@ -100,7 +100,7 @@ void PortraitLoadParts(PortraitJob_t *pObject)
     int loaded = 0;
 
     if (pArchive == 0) {
-        pArchive = fn_801EEB44(lbl_802EC080, 44);
+        pArchive = ResOpenDevice(lbl_802EC080, 44);
         loaded = 1;
     }
 
@@ -108,10 +108,10 @@ void PortraitLoadParts(PortraitJob_t *pObject)
         int id = pObject->mUnknown12[i];
 
         if (id != -1) {
-            void *pData = fn_801D2B7C(fn_801F0C50(pArchive, id), 0, 0);
+            void *pData = fn_801D2B7C(ResGetSize(pArchive, id), 0, 0);
 
             pObject->mpUnknown368[i] = pData;
-            fn_801EFF80(pArchive, id, pData);
+            ResCopyToBuffer(pArchive, id, pData);
             TexMipmapRelocate(pData);
             id = pObject->mUnknown28[i];
             if (id != -1) {
@@ -145,7 +145,7 @@ void PortraitLoadParts(PortraitJob_t *pObject)
     }
 
     if (loaded == 1) {
-        fn_801EEFAC(pArchive);
+        ResClose(pArchive);
     }
 }
 
@@ -181,12 +181,12 @@ void PortraitLoadModels(PortraitJob_t *pObject)
             void *pArchive;
 
             if (i == 1 && (unsigned int)id > 50000) {
-                pArchive = fn_801EEB44(lbl_802EC050, 44);
+                pArchive = ResOpenDevice(lbl_802EC050, 44);
                 id -= 50000;
             } else {
-                pArchive = fn_801EEB44(_Portrait_apszArchives[i], 44);
+                pArchive = ResOpenDevice(_Portrait_apszArchives[i], 44);
             }
-            pObject->mpUnknown512[i] = fn_801D2B7C(fn_801F0C50(pArchive, id), 0, 0);
+            pObject->mpUnknown512[i] = fn_801D2B7C(ResGetSize(pArchive, id), 0, 0);
             _Portrait_apLods[i]->mId = id;
             Skeleton_80041930 *pSkeleton = PortraitGetSkeleton(i);
             fn_80233EAC(&_Portrait_aModels[i], _Portrait_apLods[i], "CAPPORT", 0, pArchive, pSkeleton,

@@ -2,7 +2,7 @@
    attaches the model to a ball object and draws it with its lighting, fade
    and level of detail, toggling the ball's simple shadow. */
 #include "game/fn_8017F584.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/Object_80233EAC.h"
 #include "game/LightTracker.h"
 #include <dolphin/mtx.h>
@@ -89,11 +89,11 @@ void BallRenderInit(BallRenderObj *pObject)
 {
     int value;
 
-    TMTexLibLoad(&_BallRender_aTexLibs[0], fn_801EF390(pObject->mpUnknown18, 15, 1));
+    TMTexLibLoad(&_BallRender_aTexLibs[0], ResLoad(pObject->mpUnknown18, 15, 1));
     _BallRender_abTexLibLoaded[0] = 1;
     value = fn_801486A0();
     if (value == 1) {
-        TMTexLibLoad(&_BallRender_aTexLibs[1], fn_801EF390(pObject->mpUnknown18, 16, 1));
+        TMTexLibLoad(&_BallRender_aTexLibs[1], ResLoad(pObject->mpUnknown18, 16, 1));
         _BallRender_abTexLibLoaded[1] = 1;
     }
     fn_80233D64(&_BallRender_Model, &_BallRender_ModelLods, "BALL", 0, pObject->mpUnknown18, 0);
@@ -108,7 +108,7 @@ void BallRenderShutdown(BallRenderObj *pObject)
         TMTexLibUnload(&_BallRender_aTexLibs[1]);
         _BallRender_abTexLibLoaded[1] = 0;
     }
-    fn_801F010C(pObject->mpUnknown18, 15);
+    ResUnLoad(pObject->mpUnknown18, 15);
 }
 
 void BallRenderAttach(BallRenderObj *pObject, int index)

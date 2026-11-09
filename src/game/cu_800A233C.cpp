@@ -1,6 +1,6 @@
 #include "game/Block_8030E6E8.h"
 #include "game/GameCamera.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"
 #include "game/cu_801444D8.h"
 #include "game/LevelData.h"
@@ -291,7 +291,7 @@ extern "C" void fn_800A2F48(void)
     lbl_8030E6DC.mpCallback8 = 0;
     lbl_8030E6E8.mVector10 = lbl_802D7C70[lbl_8030E6E8.mUnknown0];
     lbl_8030E6E8.mUnknown1C = lbl_802D7D00[lbl_8030E6E8.mUnknown0];
-    lbl_803EA9F4 = fn_801EEB44(lbl_802EBFB4, 44);
+    lbl_803EA9F4 = ResOpenDevice(lbl_802EBFB4, 44);
     fn_8005406C();
     fn_801464D0(fn_800C47C4());
     fn_80146BF8(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);

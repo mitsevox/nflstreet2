@@ -1,5 +1,5 @@
 #include "engine/viewport.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/Instance_801614D0.h"
 
 extern "C" {
@@ -33,7 +33,7 @@ int fn_801614F4(Instance_801614D0 *pInstance, int a)
 
 void fn_8016153C(Instance_801614D0 *pInstance)
 {
-    int handle = fn_801EF390(fn_800A336C(), pInstance->mUnknown1C8, 1);
+    int handle = ResLoad(fn_800A336C(), pInstance->mUnknown1C8, 1);
 
     fn_80235DB8(handle);
     pInstance->mUnknown14 = handle;

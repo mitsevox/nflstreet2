@@ -13,7 +13,7 @@
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 
 /* Partial source for the engine range 0x8021A438-0x80221198 (neutral file
    name). Functions without a body here keep their original bytes. */
@@ -64,15 +64,15 @@ extern Object_8021E688 *lbl_803ED004;
 extern Int32 lbl_803ED008;
 extern Int32 lbl_803ED00C;
 
-int fn_801F0DB8(void *pData, int index);
-int fn_801F0E68(void *pData, int index);
-Res_801EDC2C *fn_801EECD0(Res_801EDC2C *pParent, unsigned int index, int heap, int mode);
-unsigned int fn_801EF548(Res_801EDC2C *pRes, unsigned int index, int heap, int a, ResDone_801EFAD8 pDone,
+int ResIsLoaded(void *pData, int index);
+int ResIsLoading(void *pData, int index);
+ResFile_t *ResOpenRam(ResFile_t *pParent, unsigned int index, int heap, int mode);
+unsigned int ResLoadAsync(ResFile_t *pRes, unsigned int index, int heap, int a, ResDoneCallback_t pDone,
                          void *pUser);
-int fn_801F02AC(Res_801EDC2C *pRes, int heap, int a);
-int fn_801F08FC(Res_801EDC2C *pRes);
-int fn_801F0D34(Res_801EDC2C *pRes);
-int fn_801F149C(Res_801EDC2C *pRes);
+int ResLoadAll(ResFile_t *pRes, int heap, int a);
+int ResUnLoadAll(ResFile_t *pRes);
+int ResGetNumResources(ResFile_t *pRes);
+int ResGetAlignment(ResFile_t *pRes);
 Int32 fn_8021CF38(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs);
 void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry);
 Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item);
@@ -804,7 +804,7 @@ Int32 fn_8021DE9C(Entry_8021E688 *pEntry, Int32 Item)
     Item_8021E688 *pItem;
 
     Result = 0;
-    if (fn_801F0DB8(pEntry->pData, Item) != 0) {
+    if (ResIsLoaded(pEntry->pData, Item) != 0) {
         Result = 1;
     } else {
         pItem = &pEntry->pItems[Item];
@@ -860,7 +860,7 @@ void fn_8021E050(Object_8021E688 *pObject, Int32 Index, const char *pName, Int32
 
     pEntry = &pObject->pB[Index];
     pEntry->Flags = 0x80000000;
-    pEntry->pData = fn_801EEB44(pName, 44);
+    pEntry->pData = ResOpenDevice(pName, 44);
     pEntry->u.unk_0C = (Int32)pName;
     pEntry->unk_00 = a;
     pEntry->unk_04 = b;
@@ -901,12 +901,12 @@ void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
     if (!(pEntry->Flags & 10)) {
         if (pEntry->Flags & 0x80000000) {
             pParent = &pObject->pB[pEntry->u.Ref.Index];
-            pEntry->pData = fn_801EECD0(pParent->pData, pEntry->u.Ref.Item, pParent->unk_00,
+            pEntry->pData = ResOpenRam(pParent->pData, pEntry->u.Ref.Item, pParent->unk_00,
                                         pParent->unk_04);
         } else {
-            pEntry->pData = fn_801EEB44((const char *)pEntry->u.unk_0C, 44);
+            pEntry->pData = ResOpenDevice((const char *)pEntry->u.unk_0C, 44);
         }
-        pEntry->NumItems = fn_801F0D34(pEntry->pData);
+        pEntry->NumItems = ResGetNumResources(pEntry->pData);
         Size = pEntry->NumItems * sizeof(Item_8021E688);
         pEntry->pItems = fn_801D2B7C(Size, pObject->unk_00, 0);
         memset(pEntry->pItems, 0, Size);
@@ -964,10 +964,10 @@ Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
                 if (pItem->unk_00 == 1 && pItem->unk_03 == 0) {
                     pItem->unk_02 = 1;
                 }
-                if (fn_801F0E68(pEntry->pData, Item) == 0) {
+                if (ResIsLoading(pEntry->pData, Item) == 0) {
                     fn_8021EF04(Index, Item);
                     fn_8021EF74(pEntry->Flags);
-                    Result = fn_801EF548(pEntry->pData, Item, pEntry->unk_00, 100, fn_8021E950, pItem);
+                    Result = ResLoadAsync(pEntry->pData, Item, pEntry->unk_00, 100, fn_8021E950, pItem);
                     fn_8021EFA4();
                     fn_8021EF34();
                 }
@@ -984,10 +984,10 @@ Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 Index, Int32 Item)
             if (pItem->unk_04 != 0 && (pEntry->Flags & 0x80)) {
                 pItem->unk_00++;
             } else {
-                if (!(pEntry->Flags & 10) && fn_801F0C50(pEntry->pData, i) != 0) {
+                if (!(pEntry->Flags & 10) && ResGetSize(pEntry->pData, i) != 0) {
                     fn_8021EF04(Index, i);
                     fn_8021EF74(pEntry->Flags);
-                    Result = fn_801EF390(pEntry->pData, i, pEntry->unk_00);
+                    Result = ResLoad(pEntry->pData, i, pEntry->unk_00);
                     fn_8021EFA4();
                     fn_8021EF34();
                 }
@@ -1024,7 +1024,7 @@ Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         if (pEntry->Flags & 10) {
             bAll = 0;
         } else if (pEntry->Flags & 4) {
-            bAll = fn_801F149C(pEntry->pData) == 128;
+            bAll = ResGetAlignment(pEntry->pData) == 128;
         } else {
             bAll = 1;
         }
@@ -1032,15 +1032,15 @@ Int32 fn_8021E504(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     if (bAll) {
         fn_8021EF04(Index, 0);
         fn_8021EF74(pEntry->Flags);
-        fn_801F02AC(pEntry->pData, pEntry->unk_00, 1);
+        ResLoadAll(pEntry->pData, pEntry->unk_00, 1);
         fn_8021EFA4();
         fn_8021EF34();
     } else if (!(pEntry->Flags & 10)) {
         for (Item = First; Item < End; Item++) {
-            if (fn_801F0C50(pEntry->pData, Item) != 0) {
+            if (ResGetSize(pEntry->pData, Item) != 0) {
                 fn_8021EF04(Index, Item);
                 fn_8021EF74(pEntry->Flags);
-                Result = fn_801EF390(pEntry->pData, Item, pEntry->unk_00);
+                Result = ResLoad(pEntry->pData, Item, pEntry->unk_00);
                 fn_8021EFA4();
                 fn_8021EF34();
             }
@@ -1118,7 +1118,7 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         }
         if (bInUse == 0) {
             if (!(pEntry->Flags & 10)) {
-                fn_801F08FC(pEntry->pData);
+                ResUnLoadAll(pEntry->pData);
             }
             fn_8021E9AC(pObject, Index, pEntry);
             if (Item == -2) {
@@ -1131,13 +1131,13 @@ void fn_8021E72C(Object_8021E688 *pObject, Int32 Index, Int32 Item)
         if ((pEntry->Flags & 0x10) && pItem->unk_00 < 0) {
             pItem->unk_00 = 0;
             if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && fn_8021DE9C(pEntry, Item) != 0) {
-                fn_801F010C(pEntry->pData, Item);
+                ResUnLoad(pEntry->pData, Item);
                 pItem->unk_02 = 0;
             }
         } else if (pItem->unk_00 <= 0) {
             fn_8021EB54(pObject, pEntry->Flags, Index, Item);
             if (!(pEntry->Flags & 10) && pItem->unk_03 == 0 && fn_8021DE9C(pEntry, Item) != 0) {
-                fn_801F010C(pEntry->pData, Item);
+                ResUnLoad(pEntry->pData, Item);
                 pItem->unk_02 = 0;
             }
         }
@@ -1194,7 +1194,7 @@ void fn_8021E9AC(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry)
     if (pEntry->Flags != 0) {
         fn_8021ECFC(pObject, pEntry->Flags, Index);
         if (!(pEntry->Flags & 10) && pEntry->pData != NULL) {
-            fn_801EEFAC(pEntry->pData);
+            ResClose(pEntry->pData);
             pEntry->pData = NULL;
         }
         if (pEntry->pItems != NULL) {
@@ -1227,10 +1227,10 @@ Int32 fn_8021EA54(Object_8021E688 *pObject, Int32 Index, Int32 Item)
     pItem = &pEntry->pItems[Item];
     Result = 0;
     if ((pEntry->Flags & 0x10) && pItem->unk_04 == 0 && !(pEntry->Flags & 10) &&
-        fn_801F0DB8(pEntry->pData, Item) != 0) {
+        ResIsLoaded(pEntry->pData, Item) != 0) {
         fn_8021EF04(Index, Item);
         fn_8021EF74(pEntry->Flags);
-        Result = fn_801EF390(pEntry->pData, Item, pEntry->unk_00);
+        Result = ResLoad(pEntry->pData, Item, pEntry->unk_00);
         fn_8021EFA4();
         fn_8021EF34();
     }
@@ -1278,7 +1278,7 @@ void fn_8021EBB4(Object_8021E688 *pObject, Uint32 Flags, Int32 Index, Int32 Item
         fn_802261D4(pObject, Index, Item);
     }
     if ((Flags & 0x8A) == 0x80 && Value != 0 && pObject->pA[Index].pItems[Item].unk_03 == 0) {
-        fn_801F010C(pObject->pA[Index].pData, Item);
+        ResUnLoad(pObject->pA[Index].pData, Item);
         pObject->pA[Index].pItems[Item].unk_02 = 0;
     }
     fn_8021EF34();
@@ -1345,7 +1345,7 @@ Int32 fn_8021EE10(Object_8021E688 *pObject, Int32 Index, Int32 Item)
 
     pEntry = &pObject->pA[Index];
     if (pEntry->Flags & 0x10) {
-        return fn_801F0E68(pEntry->pData, Item);
+        return ResIsLoading(pEntry->pData, Item);
     }
     return 0;
 }

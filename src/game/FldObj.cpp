@@ -1,7 +1,7 @@
 /* The football field object: loads the field model layers (base, overlay, lines, wear and shadow)
    and draws them each frame. */
 #include "engine/viewport.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "engine/tmtexlib.h"
 #include "game/Object_80235588.h"
 
@@ -89,7 +89,7 @@ static float _FldObj_fDegradeScale;
 extern "C" {
 int FldObjLoadModel(void *pData, int index)
 {
-    int handle = fn_801EF390(pData, index, 1);
+    int handle = ResLoad(pData, index, 1);
 
     fn_80235DB8(handle);
     return handle;
@@ -134,7 +134,7 @@ void FldObjRelease(FldObj_t *pObject)
     fn_802355E4(&pObject->mUnknown2C[5]);
     for (i = 0; i < 5; i++) {
         fn_80234EA0(&pObject->mUnknown4C0[i], _FldObj_aLayers[i].mUnknown4);
-        fn_801F010C(pObject->mpUnknown14, pObject->mUnknown18[i]);
+        ResUnLoad(pObject->mpUnknown14, pObject->mUnknown18[i]);
     }
 }
 

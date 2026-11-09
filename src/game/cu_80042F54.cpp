@@ -10,7 +10,7 @@
 #include "game/bitstream.h"
 #include "game/LevelSurface.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_802372EC.h"
 
 #define DIVOT_NUM_TYPES 1
@@ -120,7 +120,7 @@ void *fn_801D2BB0(int a, int size, int c, int d);
 int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
-int fn_801F0A8C(void *pData, char *pName);
+int ResFindIndexByName(void *pData, char *pName);
 void *fn_80216860(int handle, const char *pName);
 void *fn_80216BFC(void *pNode, const char *pName);
 void *fn_80216E34(void *pNode);
@@ -455,7 +455,7 @@ void fn_80043954(void)
     for (int i = 0; i < DIVOT_NUM_TYPES; i++) {
         counts[i] = 0;
     }
-    for (pSurface = fn_80216860(fn_801EF390(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
+    for (pSurface = fn_80216860(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
          pSurface = fn_80216E34(pSurface)) {
         int surface = fn_80217070(pSurface, "surfType", DIVOT_SURFACE_NONE);
 
@@ -464,7 +464,7 @@ void fn_80043954(void)
             int ref;
 
             fn_80216F3C(pDivot, "tideRef", name, 31, "");
-            ref = fn_801F0A8C((void *)fn_80044544(), name);
+            ref = ResFindIndexByName((void *)fn_80044544(), name);
             if (surface != DIVOT_SURFACE_NONE && type != DIVOT_TYPE_1 && ref != -1) {
                 lbl_803077B8[type][surface]++;
                 lbl_80307778[type][counts[type]] = ref;
@@ -472,7 +472,7 @@ void fn_80043954(void)
             }
         }
     }
-    fn_801F010C(fn_800A336C(), fn_800A33A4());
+    ResUnLoad(fn_800A336C(), fn_800A33A4());
 }
 
 void fn_80043AE4(void)

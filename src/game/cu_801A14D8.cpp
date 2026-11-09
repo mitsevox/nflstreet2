@@ -219,9 +219,9 @@ void fn_801D0F80(float (*pMatrix)[4]);
 int fn_801D2BB0(int a, void *p, int b, int c);
 void fn_801D2BD0(int handle);
 void ObjSetPriority(void *a, Object_8003DEC4 *pPlayer, int b);
-void fn_801EF7BC(void *a, int b, int c);
-void fn_801F010C(void *a, int b);
-void *fn_801F0C50(void *a, int b);
+void ResLoadToBuffer(void *a, int b, int c);
+void ResUnLoad(void *a, int b);
+void *ResGetSize(void *a, int b);
 void TMModelReset(Record_8020F2C4 *p);
 void TMModelClone(void *pDst, void *pSrc);
 void TMModelRemapMaterials(Record_8020F2C4 *p, Ref_803EB81C *pRef);
@@ -314,10 +314,10 @@ void fn_801A46BC(void);
 
 void fn_801A14D8(void)
 {
-    void *p = fn_801F0C50(fn_80160C08(), 0);
+    void *p = ResGetSize(fn_80160C08(), 0);
 
     lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
-    fn_801EF7BC(fn_80160C08(), 0, lbl_803ECC10);
+    ResLoadToBuffer(fn_80160C08(), 0, lbl_803ECC10);
     TMTexLibLoad(lbl_80365D98, lbl_803ECC10);
     lbl_803ECC08 = TMTexLibGetTexture(lbl_80365D98, 0xFF000000);
     lbl_803ECC0C = TMTexLibGetClut(lbl_80365D98, 0xFF000000, 0);
@@ -328,7 +328,7 @@ void fn_801A1578(void)
     TMTexLibUnload(lbl_80365D98);
     fn_801D2BD0(lbl_803ECC10);
     if (FELoopIsMainFEActive()) {
-        fn_801F010C(fn_80160C08(), 0);
+        ResUnLoad(fn_80160C08(), 0);
         fn_80161498();
     }
 }

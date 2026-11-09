@@ -1,6 +1,6 @@
 #include "engine/animTexLib.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 extern int MemFill(void *dest, int size, int value, int width);
 extern char *strcpy();
@@ -135,10 +135,10 @@ Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load)
     int data;
     Texture_801C0928 *texture;
 
-    texture = fn_801C0C14((TextureDesc_801C0928 *)fn_801EF390(file->mData, file->mIndex, 1), &data, load);
+    texture = fn_801C0C14((TextureDesc_801C0928 *)ResLoad(file->mData, file->mIndex, 1), &data, load);
     texture->mIndex = file->mIndex;
     if (load)
-        fn_801F010C(file->mData, file->mIndex);
+        ResUnLoad(file->mData, file->mIndex);
     return texture;
 }
 

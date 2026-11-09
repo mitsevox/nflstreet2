@@ -160,7 +160,7 @@ void fn_8004D860(int handle, int position);
 int fn_800C47C4(void);
 void fn_80145100(int type, int index);
 char *fn_801C2EB4(char *pDst, const char *pSrc);
-int fn_801F0A8C(int set, const char *pName);
+int ResFindIndexByName(int set, const char *pName);
 void fn_8004CBEC(void *pData, float t, BigObjInst *pObject, Object_80040818 *pOwner);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
 unsigned short fn_801BE648(void *p);
@@ -924,7 +924,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
                 pEmitter->mUnknown40 = 1;
             }
             if (fn_8004D5B8(handle, "psf", text, 64)) {
-                int index = fn_801F0A8C(fn_800C47C4(), text);
+                int index = ResFindIndexByName(fn_800C47C4(), text);
 
                 if (index == -1) {
                     pEmitter->mUnknown0 = 21;
@@ -1327,8 +1327,8 @@ void VptTrashObject(DynObjChild *); void VptFlushObjectTrash(void); void VptFlus
 int fn_801F7C88(void);
 Object_80040818 *fn_8004113C(int, unsigned int);
 void fn_801A980C(DynObjChild *);
-void *fn_801EF7BC(void *, int, char *);
-int fn_801F0C50(void *, int);
+void *ResLoadToBuffer(void *, int, char *);
+int ResGetSize(void *, int);
 void *fn_80216860(void *, const char *);
 void *fn_80216BFC(void *, const char *);
 void *fn_80216E34(void *);
@@ -1342,12 +1342,12 @@ void DynObjDrawEnvMap(DynObj *, int);
 int VptGetMatrixStack(void);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235740(void *, int); void fn_80235764(void *, int);
-int fn_801EF390(void *, int, int);
+int ResLoad(void *, int, int);
 void fn_80235DB8(int); void fn_80234DCC(int, void *, const char *, int);
 void fn_80235588(void *, int); void fn_802355E4(void *);
 void fn_80235630(void *, int); void fn_80235C24(void *, void *);
 void fn_80235D74(void *, int); void fn_802353D8(void *, int); void fn_802353F8(void *, int);
-void fn_80234EA0(void *, int); void fn_801F010C(void *, int);
+void fn_80234EA0(void *, int); void ResUnLoad(void *, int);
 void fn_8004E16C(void *, int, Object_80040818 *);
 void DynObjRenderInit(void *, int, DynObj *);
 void DynObjLoadAnimPal(void *, DynObj *);
@@ -1511,15 +1511,15 @@ int fn_8004D334(const char *pName)
 
 int fn_8004D3A8(void *pData, char *pName)
 {
-    int id = fn_801F0A8C((int)pData, pName);
+    int id = ResFindIndexByName((int)pData, pName);
     if (id == -1) return -1;
     int index = fn_8004D334(pName);
     if (index == -1) {
         fn_801C2EB4(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
-        void *p = fn_801EF7BC(pData, id, lbl_803EC7DC);
+        void *p = ResLoadToBuffer(pData, id, lbl_803EC7DC);
         lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
         lbl_803EA4F8[lbl_803EC7D4].mpData = p;
-        lbl_803EC7DC += fn_801F0C50(pData, id) + 4;
+        lbl_803EC7DC += ResGetSize(pData, id) + 4;
         lbl_803EA4F8[lbl_803EC7D4].mId = id;
         index = lbl_803EC7D4++;
     } else lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
@@ -1616,8 +1616,8 @@ void fn_8004DA0C(void *pData, int handle, Object_80040818 *pObject)
         pInstance->mpCache->mReferences = 1;
         fn_801C2EB4(pInstance->mpCache->mName, name);
         pInstance->mpCache->mpArchive = pData;
-        pInstance->mpCache->mId = fn_801F0A8C((int)pData, name);
-        pInstance->mpCache->mHandle = fn_801EF390(pData, pInstance->mpCache->mId, 1);
+        pInstance->mpCache->mId = ResFindIndexByName((int)pData, name);
+        pInstance->mpCache->mHandle = ResLoad(pData, pInstance->mpCache->mId, 1);
         fn_80235DB8(pInstance->mpCache->mHandle);
         fn_80234DCC(pInstance->mpCache->mHandle, pInstance->mpCache->mUnknown260, "Objects", 3);
     } else {
@@ -1642,7 +1642,7 @@ void fn_8004DC08(Object_80040818 *pObject)
     pInstance->mpCache->mReferences--;
     if (pInstance->mpCache->mReferences <= 0) {
         fn_80234EA0(pInstance->mpCache->mUnknown260, 3);
-        fn_801F010C(pInstance->mpCache->mpArchive, pInstance->mpCache->mId);
+        ResUnLoad(pInstance->mpCache->mpArchive, pInstance->mpCache->mId);
     }
     fn_801D2BD0(p->mpRender12C);
     p->mpRender12C = 0;
@@ -1689,7 +1689,7 @@ void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
     if (fn_8004D4B0(handle, "animPal")) {
         p->mFlagF0 = 1;
         fn_8004D5B8(handle, "tideRef", name, 128);
-        p->mUnknownF4 = fn_801F0A8C((int)pData, name);
+        p->mUnknownF4 = ResFindIndexByName((int)pData, name);
         DynObjLoadAnimPal(pData, p);
     } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
 }
@@ -1855,8 +1855,8 @@ void fn_8004E16C(void *pData, int handle, Object_80040818 *pObject)
             fn_801C2EB4(pCache->mName, name);
             pCache->mpArchive = pData;
             pCache->mReferences = 1;
-            pCache->mId = fn_801F0A8C((int)pData, name);
-            pCache->mHandle = fn_801EF390(pData, pCache->mId, 1);
+            pCache->mId = ResFindIndexByName((int)pData, name);
+            pCache->mHandle = ResLoad(pData, pCache->mId, 1);
             DebugPrintf("Loading Object Skeleton\n");
             CharRelocateSkeleton(pCache->mHandle);
         } else {
@@ -1872,7 +1872,7 @@ void fn_8004E2B4(Object_80040818 *pObject)
     Cache_8004E16C *pCache = p->mpSkeleton130;
     if (pCache) {
         pCache->mReferences--;
-        if (pCache->mReferences <= 0) fn_801F010C(pCache->mpArchive, pCache->mId);
+        if (pCache->mReferences <= 0) ResUnLoad(pCache->mpArchive, pCache->mId);
         fn_801D2BD0(pObject->mUnknown228);
         fn_801D2BD0(pObject->mpUnknown220);
     }

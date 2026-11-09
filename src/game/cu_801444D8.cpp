@@ -107,9 +107,9 @@ void fn_801DEF18(Object_80144CE0 *pObject);
 void fn_801DF620(void *pDesc, void *pData, int a);
 Manager_801DFD34 *fn_801DFD34(void);
 void PsysColExtClearAll(Object_80144CE0 *pObject);
-void *fn_801EF7BC(void *pArchive, int file, void *pBuffer);
-int fn_801F010C(void *pArchive, int file);
-int fn_801F0C50(void *pArchive, int file);
+void *ResLoadToBuffer(void *pArchive, int file, void *pBuffer);
+int ResUnLoad(void *pArchive, int file);
+int ResGetSize(void *pArchive, int file);
 void VptTrashObject(int handle);
 void VptFlushObjectTrashSync(void);
 
@@ -188,10 +188,10 @@ void fn_801445A8(int index, int id)
 {
     char desc[1632];
     void *pArchive = fn_800C47C4();
-    void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pArchive, lbl_802DD020[index].mFile), 4, 0);
-    void *pData = fn_801EF7BC(pArchive, lbl_802DD020[index].mFile, pBuffer);
+    void *pBuffer = fn_801D2BB0(1, ResGetSize(pArchive, lbl_802DD020[index].mFile), 4, 0);
+    void *pData = ResLoadToBuffer(pArchive, lbl_802DD020[index].mFile, pBuffer);
 
-    fn_801F010C(pArchive, lbl_802DD020[index].mFile);
+    ResUnLoad(pArchive, lbl_802DD020[index].mFile);
     fn_801DF620(desc, pData, 0);
     lbl_8031B6D0[index] = fn_801DECFC(id, desc);
     fn_801D2BD0(pBuffer);

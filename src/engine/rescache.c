@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 
 typedef struct ResCacheWrite_801F2E54 {
-    Res_801EDC2C *pFile;
+    ResFile_t *pFile;
     int mIndex;
     void *pBuffer;
     int mSize;
@@ -44,7 +44,7 @@ void fn_801F2ED8(int mode)
     lbl_803EBDE4 = mode;
 }
 
-void fn_801F2EE0(Res_801EDC2C *pFile, char *pName)
+void fn_801F2EE0(ResFile_t *pFile, char *pName)
 {
     char name[128];
     int invalid = 0;
@@ -102,13 +102,13 @@ void fn_801F2EE0(Res_801EDC2C *pFile, char *pName)
     pFile->mCacheHandle = -1;
 }
 
-void fn_801F30CC(Res_801EDC2C *pFile)
+void fn_801F30CC(ResFile_t *pFile)
 {
     fn_801D2BD0(pFile->pCache);
     fn_801C97F0(pFile->mCacheHandle);
 }
 
-void fn_801F3104(Res_801EDC2C *pFile)
+void fn_801F3104(ResFile_t *pFile)
 {
     char name[128];
     int handle = 0;
@@ -123,7 +123,7 @@ void fn_801F3104(Res_801EDC2C *pFile)
     }
 }
 
-void fn_801F318C(Res_801EDC2C *pFile, int index, int offset, void *pData, int size)
+void fn_801F318C(ResFile_t *pFile, int index, int offset, void *pData, int size)
 {
     ResCacheWrite_801F2E54 *pWrite;
     void *pBuffer;

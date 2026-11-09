@@ -273,10 +273,10 @@ extern void fn_801D0F80(Mtx44 m);
 extern void fn_801D12BC(int a);
 extern void *fn_801D2B7C(int size, int a, int b);
 extern int fn_801D2BD0(void *p);
-extern int fn_801EF390(void *pData, int index, int a);
-extern int fn_801EFF80(void *pArchive, int id, void *pDest);
-extern int fn_801F010C(void *pData, int index);
-extern int fn_801F0DB8(void *pData, int index);
+extern int ResLoad(void *pData, int index, int a);
+extern int ResCopyToBuffer(void *pArchive, int id, void *pDest);
+extern int ResUnLoad(void *pData, int index);
+extern int ResIsLoaded(void *pData, int index);
 extern int fn_801F9014(int handle);
 extern int fn_801F91AC(int handle, int a, int b);
 extern int fn_801F9430(int a, int *pTable4, int *pTable8);
@@ -1276,10 +1276,10 @@ void fn_80233D64(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char 
     pObject->mpUnknown8 = pData;
     for (; pLods->mId != 0xFFFF; pLods++) {
         if (pLods->mId != 0) {
-            if (fn_801F0DB8(pData, pLods->mId) != 0) {
+            if (ResIsLoaded(pData, pLods->mId) != 0) {
                 fresh = 0;
             }
-            pLods->mpUnknown18 = (void *)fn_801EF390(pData, pLods->mId, 1);
+            pLods->mpUnknown18 = (void *)ResLoad(pData, pLods->mId, 1);
             TMModelReset(&pLods->mUnknown1C);
             pLods->mpUnknown10 = &pLods->mUnknown1C;
             if (pLods->mpUnknown18 != 0) {
@@ -1317,7 +1317,7 @@ void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char 
     for (; pLods->mId != 0xFFFF; pLods++) {
         if (pLods->mId != 0) {
             if (load != 0) {
-                fn_801EFF80(pArchive, pLods->mId, ppData[n]);
+                ResCopyToBuffer(pArchive, pLods->mId, ppData[n]);
             }
             pLods->mpUnknown18 = ppData[n];
             TMModelReset(&pLods->mUnknown1C);
@@ -1350,7 +1350,7 @@ void fn_80233FCC(Object_80233EAC *pObject)
         ModelLod_802DF190 *pLod = &pLods[i];
 
         if (pLod->mId != 0) {
-            fn_801F010C(pObject->mpUnknown8, pLod->mId);
+            ResUnLoad(pObject->mpUnknown8, pLod->mId);
             pLod->mpUnknown18 = 0;
             pLod->mpUnknown10 = 0;
             if (pLod->mUnknown1C.mUnknown1C != 0) {

@@ -1,4 +1,4 @@
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
 #include "game/fn_800B65A0.h"
@@ -32,7 +32,7 @@ int SndgCrowd::Init()
 {
     mpState.mp = new (0) SndgCrowdState;
     memset(mpState.mp, 0, sizeof(SndgCrowdState));
-    mpState.mp->mpUnknown0 = fn_801EEB44(lbl_802EC018, 44);
+    mpState.mp->mpUnknown0 = ResOpenDevice(lbl_802EC018, 44);
     if (fn_801F3E28()) {
         mpState.mp->mUnknown4 = fn_8006DBF8(mpState.mp->mpUnknown0, 1);
         fn_8006DC98(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
@@ -48,7 +48,7 @@ int SndgCrowd::Shutdown()
         fn_8006DD24(0x14000001);
         fn_8006DC4C(mpState.mp->mUnknown4);
     }
-    fn_801EEFAC(mpState.mp->mpUnknown0);
+    ResClose(mpState.mp->mpUnknown0);
     delete mpState.mp;
     mpState.mp = 0;
     return 1;

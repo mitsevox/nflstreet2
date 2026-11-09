@@ -1,4 +1,4 @@
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/Desc_80169DF8.h"
 #include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
@@ -385,7 +385,7 @@ void fn_80168324(int a, int b, int c, int d, int e, int f, int g, int h)
     if (h) {
         Desc_80169DF8 desc;
 
-        desc.mUnknown0 = fn_801EF390((void *)a, 4, 1);
+        desc.mUnknown0 = ResLoad((void *)a, 4, 1);
         desc.mUnknown4 = (short *)lbl_803ECAF4->mUnknownD2EC;
         desc.mUnknown8 = fn_80169308;
         desc.mUnknownC = fn_801694C8;

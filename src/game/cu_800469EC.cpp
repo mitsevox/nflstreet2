@@ -3,7 +3,7 @@
 #include "game/cu_8002B8F8.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "engine/viewport.h"
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
@@ -212,7 +212,7 @@ void fn_80046E30(int handle)
         p->mUnknownEC = 0.0f;
         p->mUnknownF0 = 0.0f;
         lbl_803EC7BC[i] = 0;
-        TMTexLibLoad(p->mUnknownF8, fn_801EF390(fn_800C47C4(), 17, 1));
+        TMTexLibLoad(p->mUnknownF8, ResLoad(fn_800C47C4(), 17, 1));
         p->mUnknown120 = TMTexLibGetTexture(p->mUnknownF8, 0xFF000000);
         p->mUnknown124 = TMTexLibGetClut(p->mUnknownF8, 0xFF000000, 0);
         ObjSetPriority(handle, p, 3);

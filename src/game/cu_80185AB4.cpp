@@ -5,7 +5,7 @@
 #include "game/fn_80072AA8.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_8021D7B8.h"
 
@@ -188,7 +188,7 @@ void fn_80185D78(void)
     } else if (lbl_803ECB84 != 0) {
         fn_80072F04();
     }
-    fn_801EEFAC(lbl_803EB5BC);
+    ResClose(lbl_803EB5BC);
     lbl_803EB5BC = (void *)-1;
     lbl_803EB5C0 = -1;
 }
@@ -202,7 +202,7 @@ void fn_80185E88(void)
     lbl_803EB5B8 = 0;
     fn_80072E84();
     lbl_803EB5C8 = fn_8007F828(6);
-    lbl_803EB5BC = fn_801EEB44(lbl_802EBFCC, 44);
+    lbl_803EB5BC = ResOpenDevice(lbl_802EBFCC, 44);
     if (result != 0 || SpchIGIsChannelIdle(0) != 0) {
         lbl_803EB5CC = 0;
     } else {
