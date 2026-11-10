@@ -1,6 +1,7 @@
 /* Challenge goals: checks each goal of the current challenge (score margins, team stats, the winner) during and after the game, and sends the goal list to the screens. */
 
 #include "game/Entry_80219044.h"
+#include "game/StyleTracker.h"
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_8007F828.h"
@@ -31,8 +32,7 @@ int ChalCheckMedalGoal(int side, ChalMedalGoal_t *pInfo);
 int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int fn_800A7E40(unsigned char side);
-int fn_800D41F8(int side);
-unsigned char fn_80174160(void);
+unsigned char DriveLogGetTeam(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178348(void);
@@ -62,8 +62,8 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag)
         other = fn_801787DC((side + 1) & 1);
         break;
     case 1:
-        own = fn_800D41F8(side);
-        other = fn_800D41F8((side + 1) & 1);
+        own = StyleTrackerGetTotal(side);
+        other = StyleTrackerGetTotal((side + 1) & 1);
         break;
     default:
         return 2;
@@ -100,7 +100,7 @@ int ChallengeGoalCheckWinner(int side)
 
 int ChallengeGoalCheckPointsMin(int side, int value)
 {
-    return fn_800D41F8(side) < value ? 2 : 0;
+    return StyleTrackerGetTotal(side) < value ? 2 : 0;
 }
 
 int ChallengeGoalCheckSpstMax(int side, unsigned int value)
@@ -109,7 +109,7 @@ int ChallengeGoalCheckSpstMax(int side, unsigned int value)
 
     fn_8022B7A4(side, 0x73707374, &stat);
     if (stat >= value) {
-        int current = fn_80174160();
+        int current = DriveLogGetTeam();
 
         if (current != side || fn_80178308() != current) {
             return 3;
@@ -179,7 +179,7 @@ int ChallengeGoalCheckScoreAbove(int side, unsigned int value)
         own = fn_801787DC(side);
         break;
     case 1:
-        own = fn_800D41F8(side);
+        own = StyleTrackerGetTotal(side);
         break;
     default:
         return 2;
@@ -202,7 +202,7 @@ int ChallengeGoalCheckSpstReached(int side, unsigned int value, int flag)
 
     fn_8022B7A4(side, 0x73707374, &stat);
     if (stat >= value) {
-        int current = fn_80174160();
+        int current = DriveLogGetTeam();
 
         if (current != side || fn_80178308() != current ||
             (flag && fn_80177F70() == 6)) {
@@ -237,8 +237,8 @@ int ChallengeGoalCheckLeading(int side, int value)
         other = fn_801787DC((side + 1) & 1);
         break;
     case 1:
-        own = fn_800D41F8(side);
-        other = fn_800D41F8((side + 1) & 1);
+        own = StyleTrackerGetTotal(side);
+        other = StyleTrackerGetTotal((side + 1) & 1);
         break;
     default:
         return 2;
@@ -294,7 +294,7 @@ int ChallengeGoalCheckSpstVsScoreStats(int side, int value)
     if (total >= a) {
         return 0;
     }
-    if (total == a - 1 && fn_80174160() == side && fn_80178308() == side) {
+    if (total == a - 1 && DriveLogGetTeam() == side && fn_80178308() == side) {
         return 2;
     }
     return 1;

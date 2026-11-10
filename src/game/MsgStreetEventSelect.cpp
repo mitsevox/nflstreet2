@@ -11,7 +11,7 @@ void fn_8000FCD4(int a);
 void fn_801485B4(void);
 void fn_801485C0(void);
 void fn_801485EC(int value);
-int fn_801801B4(void);
+int MsgGameGetSetupState(void);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
@@ -37,7 +37,7 @@ void MsgStreetEventSelectInit(int *pCount, int *pValue)
         _MsgStreetEventSelect_iPending = 15;
         _MsgStreetEventSelect_bOpen = 1;
         FELoopResetIdle();
-        if (fn_801801B4() == 0) {
+        if (MsgGameGetSetupState() == 0) {
             fn_801485C0();
         }
         fn_801485B4();

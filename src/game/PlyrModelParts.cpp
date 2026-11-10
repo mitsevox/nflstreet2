@@ -33,7 +33,7 @@ struct PlyrTexData {
 
 extern "C" {
 
-unsigned char *fn_80161094(int player, int slot);
+unsigned char *PlaTexCacheGetTexture(int player, int slot);
 void TMModelRemapClusters(void *, void *);
 void fn_80233CF0(void *pInstance, void *pModel, void *p);
 
@@ -62,11 +62,11 @@ void PlyrModelLodAttach(void)
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer)
 {
     unsigned char *pDest =
-        ((PlyrTexData *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown18->mpUnknownC;
+        ((PlyrTexData *)PlaTexCacheGetTexture(pPlayer->mUnknown4971, 31))->mpUnknown18->mpUnknownC;
     PlyrTexClutBlock *pBlock;
 
-    BmFontRenderString(fn_801614C4(), pDest, (const unsigned char *)pPlayer->mUnknown4184);
-    pBlock = ((PlyrTexData *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
-    *pBlock = *((PlyrTexData *)fn_80161094(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
+    BmFontRenderString(PlaTexCacheGetFont(), pDest, (const unsigned char *)pPlayer->mUnknown4184);
+    pBlock = ((PlyrTexData *)PlaTexCacheGetTexture(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
+    *pBlock = *((PlyrTexData *)PlaTexCacheGetTexture(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
 }
 }

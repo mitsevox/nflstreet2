@@ -42,7 +42,7 @@ void fn_8009BD60(Object_80039F5C *p);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
-int fn_801F0F18(int a);
+int ResSync(int a);
 void PlayerObjSetDrawReady(unsigned char value);
 int fn_80040F10(void);
 void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
@@ -83,7 +83,7 @@ extern "C" void fn_800BB504(void)
 {
     GameCamera_t *pCamera;
 
-    fn_801F0F18(0);
+    ResSync(0);
     if (lbl_803EC98C->mUnknown20 != -1) {
         fn_800940F0(lbl_803EC98C->mUnknown20);
         fn_80093410(lbl_803EC98C->mUnknown20);

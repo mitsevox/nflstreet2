@@ -1,7 +1,7 @@
 /* Automatic depth-chart builder: scores every player of a team for each roster slot from his
    ratings and fills the offensive and defensive slots with the best remaining players. */
 #include "game/FELoop.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_802372EC.h"
 #include "game/AutoDepth.h"
 #include "game/Object_8008044C.h"
@@ -143,7 +143,7 @@ void AutoDepthPickBest(AutoDepthPlayer_t *unused, int count, int *excluded, int 
             }
         }
     }
-    if (*category != 0 && fn_8017F584() == 2) {
+    if (*category != 0 && GameModeTypeGet() == 2) {
         for (unsigned int i = 0; i < 3; i++) {
             if (bestIds[i + 1] == 32767) break;
             if (fn_802372EC(1, 4) == 0) *id = bestIds[i + 1];

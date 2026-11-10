@@ -11,14 +11,14 @@ extern "C" {
    stream request; sound.cpp keeps up to four of them as AEMS stream file
    descriptors and passes the stream code their "AEMSnn" names instead. */
 typedef struct StreamFile_801F6D54 {
-    Res_801EDC2C *pRes;
+    ResFile_t *pRes;
     unsigned int mIndex;
 } StreamFile_801F6D54;
 
 /* Sound bank list item; +0x14 is the sound library's bank index. */
 typedef struct SndBankInfo_801F3524 {
     unsigned int mFlags;
-    Res_801EDC2C *pRes;
+    ResFile_t *pRes;
     unsigned int mIndex;
     void *pData;
     unsigned int mBank;

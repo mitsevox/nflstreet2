@@ -3,9 +3,9 @@
 #include <dolphin/vi.h>
 #include "game/Entry_80219044.h"
 #include "engine/viewport.h"
-#include "game/fn_801801F0.h"
+#include "game/MsgGame.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_80218FC4.h"
 #include <string.h>
 #include <dolphin/os/OSResetSW.h>
@@ -143,7 +143,7 @@ static void _BootProgressiveCheck(void)
     if (VIGetDTVStatus() && found) {
         void *p;
 
-        fn_801801F0(1);
+        MsgGameSetMemCardActive(1);
         p = lbl_803EB688;
         fn_80218FC4(p, 1, 0xE, 0, 0);
         fn_802195E4(p, 1, 0xE);
@@ -166,7 +166,7 @@ static void _BootProgressiveCheck(void)
         _Boot_apMessageLines[2] = &_Boot_aMessageLines[2];
         fn_80219044(lbl_803EB688, 1, 3, 3, _Boot_apMessageLines);
         _BootWaitForScreen(lbl_803EB688, 1, 3, -1);
-        fn_801801F0(0);
+        MsgGameSetMemCardActive(0);
     } else {
         fn_8023CFD0(0);
     }
@@ -334,7 +334,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     handle = fn_801F687C(2, 2, 2, pBuffer, 0x100000);
     unknown0 = fn_801F6CE8(handle, 2);
     fn_801F6AC8(handle, 1, 0xFFFF, 0x4353, 2);
-    _Boot_pMovieFile = fn_801EEB44(lbl_802EC09C, 0x2C);
+    _Boot_pMovieFile = ResOpenDevice(lbl_802EC09C, 0x2C);
     desc.mpUnknown0 = _Boot_pMovieFile;
     desc.mUnknown4 = index;
     unknown1 = fn_801F6D54(handle, &desc, 0, 0);
@@ -351,7 +351,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     fn_801CEA84();
     fn_801F6B84(handle);
     fn_801D2BD0(pBuffer);
-    fn_801EEFAC(_Boot_pMovieFile);
+    ResClose(_Boot_pMovieFile);
     return _Boot_bMovieAbort;
 }
 }

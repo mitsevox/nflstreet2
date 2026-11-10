@@ -6,7 +6,7 @@
 #include "game/DbCursor.h"
 #include "game/QueryStatus.h"
 #include "game/DbQueryTable.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
@@ -15,7 +15,7 @@
 extern "C" {
 extern char lbl_802EBDF8[];
 
-unsigned int fn_801688D4(void);
+unsigned int PlayBookGetLoadFlags(void);
 void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void SortArray(int a, void *pBase, int count, int size,
                  int (*pCompare)(Candidate_8016B364 *, Candidate_8016B364 *),
@@ -45,7 +45,7 @@ const char *GetPositionString(int index)
     return lbl_802D5034[index];
 }
 
-void fn_800659AC(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_800659AC(int tag, int key, int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
 {
     DbFilter filter;
     DbFilter orderFilter;
@@ -95,7 +95,7 @@ void fn_80065B50(int tag, int key, Object_8006719C *pObject)
     pObject->mUnknownF = 0;
 }
 
-void fn_80065CAC(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_80065CAC(int tag, int key, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
 {
     DbFilter filter;
     DbQueryTable tables[2] = { { 0x50544553 }, { -1 } };
@@ -114,7 +114,7 @@ void fn_80065CAC(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObjec
         { 0, -1, -1 }
     };
     int cursor;
-    unsigned int flags = fn_801688D4();
+    unsigned int flags = PlayBookGetLoadFlags();
     int opened = 0;
     int status;
 
@@ -620,24 +620,24 @@ unsigned short fn_80067120(int tag, int key)
     return count;
 }
 
-void fn_8006719C(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_8006719C(int tag, int key, int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
 {
     fn_801C1F94(pObject, 0, sizeof(*pObject));
     fn_800659AC(tag, key, index, pTeam, pObject);
     if (pObject->mUnknown4) {
         fn_80065B50(tag, pObject->mUnknown4, pObject);
-        fn_801688D4();
+        PlayBookGetLoadFlags();
         fn_80065CAC(tag, pObject->mUnknown4, pTeam, pObject);
         fn_80066318(tag, pObject->mUnknown4, pObject);
     }
 }
 
-void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_8006723C(int tag, int key, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
 {
     fn_801C1F94(pObject, 0, sizeof(*pObject));
     pObject->mUnknown4 = key;
     fn_80065B50(tag, key, pObject);
-    fn_801688D4();
+    PlayBookGetLoadFlags();
     fn_80065CAC(tag, key, pTeam, pObject);
     fn_80066318(tag, key, pObject);
 }
@@ -667,7 +667,7 @@ int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord)
     fn_801C1F94(pRecord, 0, sizeof(*pRecord));
     fn_80066560(tag, key, index, pRecord);
     result = fn_80066704(tag, pRecord->mUnknown0, pRecord);
-    flags = fn_801688D4();
+    flags = PlayBookGetLoadFlags();
     fn_80066844(tag, pRecord->mUnknown0, pRecord->mUnknown14, pRecord);
     if (flags & 2) {
         if (flags & 8) {
@@ -782,14 +782,14 @@ void SelectTSBPPoints(int tag, int key, Point_8017886C *pPoints)
     }
 }
 
-void LoadTSBPObject(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void LoadTSBPObject(int tag, int key, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
 {
     unsigned int flags;
     int formation;
     int order;
 
     fn_801C1F94(pObject, 0, sizeof(*pObject));
-    flags = fn_801688D4();
+    flags = PlayBookGetLoadFlags();
     fn_801FCE10(0, "use \x8c select 'MFBP' into \x85 and '_dro' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
                 &formation, &order, key);
     fn_800659AC(tag, formation, order - 1, pTeam, pObject);

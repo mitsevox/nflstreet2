@@ -192,7 +192,7 @@ int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_t *pDefs, i
         }
         words = (recBits + 32) >> 5;
         recBits = words * 4;
-        TDbMemNotify_801FC9D4(2, (int)pOwner->mUnknown8, tableId);
+        _TDbMemNotify(2, (int)pOwner->mUnknown8, tableId);
         err = TDbExtMemAlloc(pOwner->mHeap, n * sizeof(TDbColumn_t) + 0x4C, &pTable);
         if (err == 0) {
             pTable->mRowSize = recBits;
@@ -224,13 +224,13 @@ int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_t *pDefs, i
                 }
             }
         }
-        if (lbl_803EBE80 != 0) {
+        if (_tDbMemAllocInfoCallback != 0) {
             TDbMemEvent_t event;
 
             event.mType = 4;
             event.mUnknown4 = -1;
             event.mUnknown8 = -1;
-            lbl_803EBE80(&event);
+            _tDbMemAllocInfoCallback(&event);
         }
         if (err == 0) {
             fn_8020B564(pTable, pDefs);
@@ -467,7 +467,7 @@ int fn_8020C5C8(TDbTable_t *pTable, int count)
     if (pTable->mFlags & 0x60) {
         return 0x31;
     }
-    TDbMemNotify_801FC9D4(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
     if (pTable->mCapacity == 0) {
         err = TDbExtMemAlloc(pTable->mDb->mHeap, pTable->mRowSize * count, &pTable->mRows);
     } else {
@@ -478,13 +478,13 @@ int fn_8020C5C8(TDbTable_t *pTable, int count)
         pTable->mCapacity = count;
         pTable->mUnknown40 = count;
     }
-    if (lbl_803EBE80 != 0) {
+    if (_tDbMemAllocInfoCallback != 0) {
         TDbMemEvent_t event;
 
         event.mType = 4;
         event.mUnknown4 = -1;
         event.mUnknown8 = -1;
-        lbl_803EBE80(&event);
+        _tDbMemAllocInfoCallback(&event);
     }
     return err;
 }
@@ -550,21 +550,21 @@ int fn_8020C764(TDbTable_t *pSrc, TDbTable_t *pDst, TDbResult_8020AD1C *pResult)
         int tableId = pSrc->mUnknown1C;
 
         pEvent = &event;
-        if (lbl_803EBE80 != 0) {
+        if (_tDbMemAllocInfoCallback != 0) {
             event.mUnknown4 = dbId;
             event.mType = 2;
             event.mUnknown8 = tableId;
-            lbl_803EBE80(pEvent);
+            _tDbMemAllocInfoCallback(pEvent);
         }
         pResult->mErr = TDbExtMemAlloc(pSrc->mDb->mHeap, maxBits + 1, &pBuf);
         if (pResult->mErr != 0) {
             return pResult->mErr;
         }
-        if (lbl_803EBE80 != 0) {
+        if (_tDbMemAllocInfoCallback != 0) {
             pEvent->mType = 4;
             pEvent->mUnknown4 = -1;
             pEvent->mUnknown8 = -1;
-            lbl_803EBE80(pEvent);
+            _tDbMemAllocInfoCallback(pEvent);
         }
     }
     fn_8020A540();

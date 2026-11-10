@@ -11,7 +11,7 @@ struct Source_80144CE0 {
     float mUnknown14;
 };
 
-struct ParticleTexture_t;
+struct AnimTex_t;
 struct Particle_t;
 
 /* Object returned by fn_80144CE0 (from fn_801DEEF8), drawn by ParticleRenderEmitter
@@ -37,7 +37,7 @@ struct Object_80144CE0 {
     char mPad0B0[0xF0 - 0xB0];
     int mUnknown0F0;
     char mPad0F4[0x2AC - 0xF4];
-    ParticleTexture_t *mpUnknown2AC;
+    AnimTex_t *mpUnknown2AC;
     char mPad2B0[4];
     unsigned char mUnknown2B4;
     char mPad2B5[1];
@@ -70,6 +70,7 @@ struct Args_80144CE0 {
 };
 
 extern "C" {
+AnimTex_t *fn_80145118(int index);
 Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSource);
 void fn_80144E38(Object_80144CE0 *pObject);
 void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);

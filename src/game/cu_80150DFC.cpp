@@ -40,7 +40,7 @@ extern "C" {
 Table_8015005C *fn_801530FC(void);
 Object_80039F5C *fn_8003AC84(int id);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
+void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
 void fn_801780A8(Point_8017886C point);
@@ -113,9 +113,9 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
             Entry_8015005C *pEntries = fn_801530FC()->mEntries;
             fn_801C2D88(score, sizeof(score), lbl_802A0DDC,
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);
-            fn_8017E17C(i + 1, name, score, lbl_802A05C8, fn_801530FC()->mEntries[i].mUnknown12);
+            HudSetScoreTableRow(i + 1, name, score, lbl_802A05C8, fn_801530FC()->mEntries[i].mUnknown12);
         } else {
-            fn_8017E17C(i + 1, lbl_802A05C8, lbl_802A05C8, lbl_802A05C8, 255);
+            HudSetScoreTableRow(i + 1, lbl_802A05C8, lbl_802A05C8, lbl_802A05C8, 255);
         }
     }
 }

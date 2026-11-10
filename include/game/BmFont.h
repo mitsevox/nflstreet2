@@ -39,7 +39,7 @@ extern "C" {
 unsigned int BmFontRenderString(BmFont *pFont, unsigned char *pDest, const unsigned char *pString);
 void BmFontLoad(BmFont *pFont, BmFontDesc *pDesc, void *p, int index);
 void BmFontFree(BmFont *pFont);
-BmFont *fn_801614C4(void);
+BmFont *PlaTexCacheGetFont(void);
 }
 
 #endif

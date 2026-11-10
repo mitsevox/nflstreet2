@@ -1,4 +1,4 @@
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/SndgPathfinder.h"
 #include "game/Block_800C9D6C.h"
 #include "game/Object_8003DEC4.h"
@@ -12,7 +12,7 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_802372EC.h"
 
 struct Record_80071594 {
@@ -48,7 +48,7 @@ int fn_80073310(void);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_80178348(void);
 extern unsigned int lbl_80290B9C[4];
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern unsigned char lbl_803EA6EC;
 extern unsigned char lbl_803EA6F8;
 extern unsigned int lbl_803EA6E0;
@@ -70,7 +70,7 @@ int fn_80177F70(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *fn_80168708(int side);
+Object_800670B4 *PlayBookGetFormation(int side);
 int fn_8006CC54(int id);
 void fn_8006C9D4(int id);
 int fn_8006C548(unsigned int channel, int id, void (*callback)(int handle));
@@ -484,8 +484,8 @@ void fn_8006F850(AudmonEvent_t *p)
         Object_80039F5C *a = (Object_80039F5C *)p->mUnknown10.mpObject;
         Object_80039F5C *b = (Object_80039F5C *)p->mUnknown14;
         int id;
-        if (a->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f ||
-            b->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f || fn_800A9680()) {
+        if (a->mUnknown560.mUnknown28 > gPlyrMoveFwdSpeed * 3144.409912109375f ||
+            b->mUnknown560.mUnknown28 > gPlyrMoveFwdSpeed * 3144.409912109375f || fn_800A9680()) {
             lbl_803EA6D0 = (lbl_803EA6D0 + 1) % 3;
             id = lbl_803EA6D0 + 15;
         } else {
@@ -495,9 +495,9 @@ void fn_8006F850(AudmonEvent_t *p)
         unsigned char volume;
         if (fn_800A9680()) volume = fn_8006CC90(id);
         else {
-            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f);
+            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (gPlyrMoveFwdSpeed * 100621.1171875f);
             if (!(scaled <= fn_8006CC90(id))) volume = (unsigned char)(int)(float)fn_8006CC90(id);
-            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f));
+            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (gPlyrMoveFwdSpeed * 100621.1171875f));
         }
         fn_8006C8A4(id, &a->mMotion.mPos, volume);
         break;
@@ -558,10 +558,10 @@ void fn_8006F850(AudmonEvent_t *p)
         int id;
         if (((unsigned int)state <= 1 || state == 3 || state == 5 || state == 7) &&
             ((unsigned int)previous <= 1 || previous == 3 || previous == 5 || previous == 7)) {
-            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
+            if (!(value <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
                 lbl_803EA6D2 = (lbl_803EA6D2 + 1) % 2;
                 id = lbl_803EA6D2 + 6;
-            } else if (value > lbl_803ECB08 * 3144.409912109375f) {
+            } else if (value > gPlyrMoveFwdSpeed * 3144.409912109375f) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -569,7 +569,7 @@ void fn_8006F850(AudmonEvent_t *p)
                 id = lbl_803EA6D4 + 10;
             }
         } else {
-            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
+            if (!(value <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -587,7 +587,7 @@ void fn_8006F850(AudmonEvent_t *p)
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
                 Point_8017886C point = fn_80177FE0();
-                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(fn_8016871C(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
+                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(PlayBookGetPlay(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
             }
             if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }
@@ -613,7 +613,7 @@ void fn_80070C40(AudmonEvent_t *p)
     case 118: fn_802372EC(1, 2); break;
     case 116: {
         unsigned char side = ((unsigned char *)&p->mUnknown10)[3];
-        if (fn_8017F584() == 11 && fn_801486A0() == 15) break;
+        if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
         if (side != fn_80178308()) break;
         if (fn_8006CC54(66) || fn_8006CC54(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
@@ -622,7 +622,7 @@ void fn_80070C40(AudmonEvent_t *p)
         break;
     }
     case 140:
-        if (fn_8017F584() == 11 && fn_801486A0() == 15) break;
+        if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
         fn_8006C9D4(66);
         fn_8006C9D4(67);
         fn_8006C854(65, &p->mPos);
@@ -679,7 +679,7 @@ void fn_80070E8C(void)
 void fn_80070F84(void)
 {
     if (!lbl_803EA6FA) return;
-    Object_800670B4 *p = fn_80168708(fn_80178320());
+    Object_800670B4 *p = PlayBookGetFormation(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;

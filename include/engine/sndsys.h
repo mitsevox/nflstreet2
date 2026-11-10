@@ -6,7 +6,10 @@
 
 #include <string.h>
 
+#include "engine/slinklst.h"
+
 #include "engine/cu_802714A8.h"
+#include "engine/sndvoice.h"
 #include "engine/cu_8027CF9C.h"
 
 typedef struct Object_80277404 {
@@ -41,19 +44,6 @@ typedef struct Parser_8027823C {
     unsigned char *mC;
     unsigned int m10;
 } Parser_8027823C;
-
-typedef struct Link_80278714 Link_80278714;
-
-struct Link_80278714 {
-    Link_80278714 *m0;
-    Link_80278714 *m4;
-};
-
-typedef struct List_80278714 {
-    Link_80278714 *m0;
-    Link_80278714 *m4;
-    int m8;
-} List_80278714;
 
 typedef struct Stream_803B5364 {
     int m0;
@@ -171,18 +161,18 @@ typedef struct Decoder_8027AE04 {
     unsigned char *m2C;
 } Decoder_8027AE04;
 
-typedef struct Decoder_8027B168 {
+typedef struct SndMtUnpackFilter_t {
     Node_80279D90 mNode;
-    unsigned char *m1C;
-    int m20;
-    int m24;
-    int m28;
-    unsigned short m2C;
-    unsigned char mUnknown2E[2];
-    int m30;
-    Codec_8027CF9C *m34;
-    unsigned char m38;
-} Decoder_8027B168;
+    unsigned char *mpPacket;
+    int mPacketCount;
+    int mStream;
+    int mPendingCount;
+    unsigned short mPacketPosition;
+    unsigned char unk_0x2E[2];
+    int mMode;
+    Codec_8027CF9C *mpCodec;
+    unsigned char mChannel;
+} SndMtUnpackFilter_t;
 
 typedef struct Decoder_8027B328 {
     Node_80279D90 mNode;
@@ -239,10 +229,8 @@ extern unsigned char lbl_80300EDC[];
 extern unsigned int lbl_80301428[];
 extern int lbl_803A772C;
 
-int fn_8026A288(int handle);
 void *fn_8026B5D4(int size);
 void fn_8026B7D8(void *p);
-int fn_8026C910(int handle, int *index);
 unsigned int fn_8026CB14(void);
 void fn_8026D0AC(void);
 void fn_8026D0EC(void);
@@ -267,7 +255,7 @@ int fn_8027B1F8(Node_80279D90 *node, int count, float *a, float *b, int flag);
 
 /* Defined in another file of the library. */
 void fn_8027952C(int index, int channel, int value);
-void fn_8027B168(Node_80279D90 *node, Params_80275F80 *params);
+void SFILTER_unpackmtpfinit(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B328(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B464(Node_80279D90 *node, Params_80275F80 *params);
 void fn_8027B7B0(Node_80279D90 *node, Params_80275F80 *params);

@@ -8,7 +8,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_801BE60C.h"
@@ -82,8 +82,8 @@ void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 struct State_80039F5C;
 void fn_800EFFA0(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
-void fn_80161168(void);
-void fn_8016D8B0(void *pObject);
+void PlaTexCacheUpdate(void);
+void PlyrMoveCmdClear(void *pObject);
 void fn_8018A8C8(int a);
 void fn_8018A908(void (*pCallback)(int, float, float, float, float));
 void fn_801BA03C(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
@@ -154,8 +154,8 @@ static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
     pRecord->mUnknown4 = pObject;
     fn_8003AB40(pRecord);
     fn_800B267C(&pRecord->mUnknown424);
-    fn_8016D8B0(pRecord->mUnknown512);
-    fn_8016D8B0(pRecord->mUnknown528);
+    PlyrMoveCmdClear(pRecord->mUnknown512);
+    PlyrMoveCmdClear(pRecord->mUnknown528);
     fn_8009BD48((int *)pRecord, 3, 0, (unsigned char)index);
     pRecord->mUnknown8 = 0;
     pRecord->mUnknown12 = 0;
@@ -296,7 +296,7 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     fn_80234424(0);
     PlayerObjDraw(pObject, 1);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
-        if (fn_8015D2E8(pObject)) {
+        if (FEPlyrLoadIsShown(pObject)) {
             fn_8003FBF0(_FEPlyr_pScene, 1);
         }
     }
@@ -364,7 +364,7 @@ void FEPlyrInit(int count)
         FEPlyrSetScale(i, 1.0f);
         FEPlyrSetAngle(i, 0.0f);
     }
-    fn_8015CBC8();
+    FEPlyrLoadInit();
     fn_8003FAC4(0);
     desc.mUnknown0 = fn_800C47C4();
     desc.mUnknown8 = 0;
@@ -378,7 +378,7 @@ void FEPlyrInit(int count)
 void FEPlyrShutdown(void)
 {
     _FEPlyr_bActive = 0;
-    fn_8015CC1C();
+    FEPlyrLoadShutdown();
     fn_8003DCC0(0);
     fn_800EFDD8();
     fn_8008FED4();
@@ -475,15 +475,15 @@ void FEPlyrSetPlayer(int index, int a, int b)
     PlayerDbGetNameKey(&_FEPlyr_PlayerCursor, buffer, 27);
     PlayerDbGetPybt(&_FEPlyr_PlayerCursor);
     FEPlyrSetHeight(index, PlayerDbGetHeight(&_FEPlyr_PlayerCursor));
-    if (fn_8015CD9C()) {
-        fn_8015D060(index, buffer, _FEPlyr_aPriority[index], b);
+    if (FEPlyrLoadIsActive()) {
+        FEPlyrLoadRequest(index, buffer, _FEPlyr_aPriority[index], b);
     }
 }
 
 void FEPlyrSetPriority(int index, int value)
 {
     _FEPlyr_aPriority[index] = value;
-    fn_8015D1CC(index, value);
+    FEPlyrLoadSetPriority(index, value);
 }
 
 void FEPlyrSetHeight(int index, unsigned int value)
@@ -499,11 +499,11 @@ void FEPlyrUpdate(void)
         } else {
             VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
         }
-        fn_80161168();
+        PlaTexCacheUpdate();
         if (_FEPlyr_bPairMode && _FEPlyr_bSwapPending) {
             Object_8003DEC4 *pObject = fn_8003DEC4(_FEPlyr_iBackIndex);
 
-            if (fn_8015D1FC(_FEPlyr_iBackIndex) == 0 && fn_8015D2E8(pObject)) {
+            if (FEPlyrLoadIsQueued(_FEPlyr_iBackIndex) == 0 && FEPlyrLoadIsShown(pObject)) {
                 int index = _FEPlyr_iFrontIndex;
 
                 _FEPlyr_iFrontIndex = _FEPlyr_iBackIndex;

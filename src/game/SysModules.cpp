@@ -8,7 +8,7 @@
 #include "engine/cu_80229270.h"
 #include "game/cu_8007F12C.h"
 #include "game/DbgFont.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/SysModules.h"
 #include "game/SndgPathfinder.h"
 #include "game/MemPoolDesc.h"
@@ -46,7 +46,7 @@ void fn_8015E548(void);
 void fn_8015E65C(void);
 void fn_8015E684(void);
 void fn_8015E714(void);
-void fn_801607F0(int a);
+void PlaTexCacheOpenArchive(int a);
 void DbgPrintEnable(void);
 void DbgPrintDisable(void);
 void DbgScreenClear(void);
@@ -226,7 +226,7 @@ int DbGame::Init()
     void *data;
 
     fn_80229470();
-    data = fn_801EEB44(lbl_802EBE24, 44);
+    data = ResOpenDevice(lbl_802EBE24, 44);
     fn_8022EA80(0x3000, lbl_802EBE24, 4);
     fn_8022EB10();
     DbTatsInit(0x96000, lbl_802EBE24, 2);
@@ -238,7 +238,7 @@ int DbGame::Init()
     DbTeamsInit(lbl_802EBE40);
     fn_801F9430(0x54415453, _DbGame_aOptionTables, _DbGame_aSaveTags);
     fn_8007F328(1);
-    fn_801EEFAC(data);
+    ResClose(data);
     return 1;
 }
 
@@ -462,7 +462,7 @@ void SysPreLoad::LoadSystems()
     fn_8015E620(14, 1);
     fn_8015E684();
     PortraitSystemInit();
-    fn_801607F0(4);
+    PlaTexCacheOpenArchive(4);
 }
 
 static ModuleDependency sTaskDependencies[] = { &gSys, 0 };

@@ -13,8 +13,8 @@ int fn_800DC21C(Object_80039F5C *p);
 void fn_800F177C(int index, Input_800B6D34 *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int PassIconsAreShown(void);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
-void fn_8016DA5C(Object_80039F5C *p);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
+void PlyrMoveStartHold(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801784C4(void);
 unsigned short fn_801BE648(void *p);
@@ -45,7 +45,7 @@ extern "C" void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput)
             } else if (pInput->mUnknown4 == 0.0f && pInput->mUnknown8 == 0.0f && (pInput->mUnknown0 & 0xF) == 0) {
                 return;
             }
-            fn_8016DA5C(p);
+            PlyrMoveStartHold(p);
             if (fn_800B5FEC(p) != 0) {
                 p->mFlags |= 0x4000;
             }
@@ -112,7 +112,7 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
             }
             turn = MathAngleDiff(angle, p->mMotion.mUnknown32);
             if (state == 4 && BallGetCurrentHolder() == 0 && turn > 0x671C72 && ballAngle <= 0x18E38D) {
-                float top = fn_8016D9F4(p, 1.0f, 1.0f);
+                float top = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);
                 float ratio = top != 0.0f ? p->mMotion.mUnknown28 / top : 0.0f;
 
                 if (ratio < 0.15f) {

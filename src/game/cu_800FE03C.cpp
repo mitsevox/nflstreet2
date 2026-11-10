@@ -14,7 +14,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -23,8 +23,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -40,7 +40,7 @@
 extern "C" {
 int fn_80178320(void);
 int fn_8009FE24(Object_80039F5C *p);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
 Point_8017886C fn_80177FFC(int team);
@@ -75,13 +75,13 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
     Object_800670B4 *pTeam;
 
     base = fn_80177FFC(p->mIdBytes[2]);
-    pTeam = fn_80168708(p->mIdBytes[2]);
+    pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     GetFormationPoint(pTeam, p->mIdBytes[1], pOut);
     if (fn_8009FE24(p)) {
         Object_80039F5C *pOther = fn_800FB844(p);
 
         if (pOther) {
-            Object_800670B4 *pOtherTeam = fn_80168708(pOther->mIdBytes[2]);
+            Object_800670B4 *pOtherTeam = PlayBookGetFormation(pOther->mIdBytes[2]);
             Point_8017886C other;
             unsigned char i;
             unsigned int count;

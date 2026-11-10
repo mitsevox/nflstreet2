@@ -9,7 +9,7 @@
 #include <string.h>
 
 extern "C" {
-ModelTexSlot_t *fn_8016102C(int player);
+ModelTexSlot_t *PlaTexCacheGetDescs(int player);
 ModelTexSlot_t *fn_802345F8(ModelTexSlot_t *pDescs, const char *pName);
 void fn_80234844(ModelTexSlot_t *pDesc);
 void fn_80239D1C(void *p, unsigned int size);
@@ -59,7 +59,7 @@ void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer)
 
 void *PlyrTexGetLib(int player)
 {
-    return fn_8016102C(player)->mpUnknown24;
+    return PlaTexCacheGetDescs(player)->mpUnknown24;
 }
 
 void PlyrTexFreeDesc(ModelTexSlot_t *pDesc)

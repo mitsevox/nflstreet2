@@ -1,4 +1,5 @@
 #include "game/Object_80039F5C.h"
+#include "game/StyleTracker.h"
 #include "game/Block_800A70F4.h"
 #include "game/Object_8003DEC4.h"
 #include "game/DbCursor.h"
@@ -40,31 +41,29 @@ int fn_800A8408(int team);
 int fn_800A8444(int team);
 void fn_800A61E8(int value);
 unsigned char fn_80178348(void);
-float fn_800D3F2C(int team);
-void fn_8017DE54(int a, float t, int b, int direct);
+void HudSetGameBreakerMeter(int a, float t, int b, int direct);
 int fn_800A6590(int value);
 void fn_800AE798(int index, int team);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_800A7514(int team);
 void fn_800AE750(int index, int team);
-void fn_8017DA9C(int team);
+void HudHidePressPrompt(int team);
 void fn_80156C78(int id, int value);
 void fn_800A9384(int mode);
 void fn_80073210(int frames);
-void fn_800D4164(int side, float t, int arg);
 void fn_800A6D5C(int team);
 int fn_80156704(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
-void fn_80168908(int team, unsigned int index);
-void fn_80164940(int team);
+void PlayBookSelectAudible(int team, unsigned int index);
+void PlayRealignTeam(int team);
 void fn_800B0DA4(void);
 void fn_800AEEDC(int team);
 void fn_8011F3A8(void);
 void fn_8003A3F4(int a, int team);
 void fn_8009FFD4(void);
-Object_800670B4 *fn_80168708(int team);
-void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+Object_800670B4 *PlayBookGetFormation(int team);
+void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 
@@ -338,7 +337,7 @@ extern "C" void fn_800A72B4(void)
             } else if (lbl_803EC954[team]->mUnknown54 == 0) {
                 fn_800A7A0C(team);
             } else {
-                fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
+                HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
             }
         }
         if ((lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2)
@@ -362,7 +361,7 @@ extern "C" void fn_800A72B4(void)
                 fn_800A7A0C(team);
             }
             DbCursorClose(&cursor);
-            fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
+            HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
         }
     }
@@ -374,10 +373,10 @@ extern "C" void fn_800A7514(int team)
 
     if (lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2) {
         fn_800AE750(fn_800A6590(fn_800A8408(team)), team);
-        fn_8017DA9C(team);
+        HudHidePressPrompt(team);
         if (lbl_803EC954[team]->mUnknown68 == 0 && lbl_803EC954[other]->mUnknown68 != 2) {
-            float mine = fn_800D3F2C(team);
-            float theirs = fn_800D3F2C(other);
+            float mine = StyleTrackerGetMeterFraction(team);
+            float theirs = StyleTrackerGetMeterFraction(other);
 
             fn_80156C78(34, 1);
             if (lbl_803EC954[team]->mUnknown6C == 2) {
@@ -399,19 +398,19 @@ extern "C" void fn_800A7514(int team)
                     mine -= theirs;
                     theirs = 0.0f;
                     lbl_803EC954[team]->mUnknown54 = mine * 2.0f * lbl_803EC954[team]->mUnknown10;
-                    fn_800D4164(team, mine, 0);
+                    StyleTrackerSetMeterFraction(team, mine, 0);
                     fn_800A7A0C(other);
                 } else if (theirs > mine) {
                     theirs -= mine;
                     lbl_803EC954[other]->mUnknown54 = theirs * 2.0f * lbl_803EC954[other]->mUnknown10;
-                    fn_800D4164(other, theirs, 0);
+                    StyleTrackerSetMeterFraction(other, theirs, 0);
                     fn_800A7A0C(team);
                 } else {
                     fn_800A7A0C(team);
                     fn_800A7A0C(other);
                 }
                 if (theirs < 0.5f) {
-                    fn_8017DA9C(other);
+                    HudHidePressPrompt(other);
                 }
             }
             fn_800A6D5C(team);
@@ -432,15 +431,15 @@ extern "C" void fn_800A7514(int team)
                     p = fn_80039F5C(fn_80178308(), 0);
                 }
                 fn_8010B1FC(p, 0, 0);
-                fn_80168908(fn_80178308(), 0);
-                fn_80164940(fn_80178308());
+                PlayBookSelectAudible(fn_80178308(), 0);
+                PlayRealignTeam(fn_80178308());
                 fn_800B0DA4();
                 fn_800AEEDC(fn_80178308());
                 fn_8011F3A8();
                 fn_8003A3F4(0, fn_80178308());
                 fn_8009FFD4();
                 for (side = 0; side <= 1; side++) {
-                    Object_800670B4 *pRoster = fn_80168708(side);
+                    Object_800670B4 *pRoster = PlayBookGetFormation(side);
                     unsigned int count = fn_80178D18(side);
                     unsigned char i;
 
@@ -449,7 +448,7 @@ extern "C" void fn_800A7514(int team)
                         unsigned char level;
                         unsigned char secondary;
 
-                        fn_80164430(pRoster, i, &level, &secondary);
+                        PlaySetGetEntryRoles(pRoster, i, &level, &secondary);
                         pPlayer->mUnknown2914 = level;
                         fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
                         fn_800B4798(pPlayer->mRatings, side, i, &pPlayer->mUnknown2900);

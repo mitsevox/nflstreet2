@@ -44,11 +44,6 @@ struct Desc_802DCFF8 {
     unsigned char mUnknown24;
 };
 
-struct FxTexFile_t {
-    void *mpUnknown0;
-    int mUnknown4;
-};
-
 /* Pool owner returned by fn_801DFD34. */
 struct Manager_801DFD34 {
     void *mpPool;
@@ -77,8 +72,8 @@ int fn_800A34C8(int index);
 void *fn_800C47C4(void);
 void FxParticleDrawBegin(void);
 void FxParticleDrawEnd(void);
-void FxAnimTexLoadAll(FxTexFile_t *pEntries, int *pValues, void *pData);
-void FxAnimTexFreeAll(int *pValues);
+void FxAnimTexLoadAll(AnimTexFile_t *pEntries, AnimTex_t **pValues, void *pData);
+void FxAnimTexFreeAll(AnimTex_t **pValues);
 void GroundPulseDraw(void);
 void fn_801A762C(void);
 void fn_801A7778(void);
@@ -107,9 +102,9 @@ void fn_801DEF18(Object_80144CE0 *pObject);
 void fn_801DF620(void *pDesc, void *pData, int a);
 Manager_801DFD34 *fn_801DFD34(void);
 void PsysColExtClearAll(Object_80144CE0 *pObject);
-void *fn_801EF7BC(void *pArchive, int file, void *pBuffer);
-int fn_801F010C(void *pArchive, int file);
-int fn_801F0C50(void *pArchive, int file);
+void *ResLoadToBuffer(void *pArchive, int file, void *pBuffer);
+int ResUnLoad(void *pArchive, int file);
+int ResGetSize(void *pArchive, int file);
 void VptTrashObject(int handle);
 void VptFlushObjectTrashSync(void);
 
@@ -127,12 +122,11 @@ void fn_80144EDC(float rate);
 int fn_80144FE8(int a);
 int fn_80145074(int a);
 void fn_80145100(int index, int file);
-int fn_80145118(int index);
 void fn_8014512C(void);
 }
 
 static unsigned char lbl_803EB228 = 0;
-static TextureConfig_801C06E8 lbl_803EB22A = { 8, 0, 0, 0 };
+static AnimTexConfig_t lbl_803EB22A = { 8, {0, 0}, 0, 0 };
 static List_803EB230 lbl_803EB230 = { 0, 0, 0 };
 static int lbl_803EB238 = 0;
 static unsigned char lbl_803EB23C = 1;
@@ -146,10 +140,10 @@ static Entry_802DD020 lbl_802DD020[20] = {
     { 10, -1, 0 },  { 11, -1, 0 },  { 12, -1, 0 },  { 13, -1, 0 },  { 14, -1, 0 },
     { 15, -1, 0 },  { 16, -1, 0 },  { 17, -1, 0 },  { 18, -1, 0 },  { 19, -1, 0 },
 };
-static FxTexFile_t lbl_802DD110[8] = {
+static AnimTexFile_t lbl_802DD110[8] = {
     { 0, 94 }, { 0, 95 }, { 0, 96 }, { 0, 97 }, { 0, 98 }, { 0, 99 }, { 0, 100 }, { 0, 101 },
 };
-static int lbl_802DD150[8] = { 0 };
+static AnimTex_t *lbl_802DD150[8] = { 0 };
 
 static unsigned short lbl_8031B6D0[20];
 static Record_8031B6F8 lbl_8031B6F8[6];
@@ -188,10 +182,10 @@ void fn_801445A8(int index, int id)
 {
     char desc[1632];
     void *pArchive = fn_800C47C4();
-    void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pArchive, lbl_802DD020[index].mFile), 4, 0);
-    void *pData = fn_801EF7BC(pArchive, lbl_802DD020[index].mFile, pBuffer);
+    void *pBuffer = fn_801D2BB0(1, ResGetSize(pArchive, lbl_802DD020[index].mFile), 4, 0);
+    void *pData = ResLoadToBuffer(pArchive, lbl_802DD020[index].mFile, pBuffer);
 
-    fn_801F010C(pArchive, lbl_802DD020[index].mFile);
+    ResUnLoad(pArchive, lbl_802DD020[index].mFile);
     fn_801DF620(desc, pData, 0);
     lbl_8031B6D0[index] = fn_801DECFC(id, desc);
     fn_801D2BD0(pBuffer);
@@ -325,8 +319,8 @@ void fn_80144B50(int handle)
     for (i = 0; i < 20; i++) {
         lbl_8031B6D0[i] = 20;
     }
-    lbl_803EB22A.mUnknown4 = gParticleAnimTexFlag;
-    fn_801C06E8(&lbl_803EB22A);
+    lbl_803EB22A.unk_0x4 = gParticleAnimTexFlag;
+    AnimTexLibInit(&lbl_803EB22A);
     FxAnimTexLoadAll(lbl_802DD110, lbl_802DD150, fn_800C47C4());
     fn_801DE1E0(&lbl_802DCFF8);
     fn_80144660();
@@ -349,7 +343,7 @@ void fn_80144C6C(int handle)
     fn_801A7778();
     FxAnimTexFreeAll(lbl_802DD150);
     fn_801DE410();
-    fn_801C07DC();
+    AnimTexLibShutdown();
     fn_80144564();
     ParticleRenderShutdown();
     ObjRemoveFromList(handle, lbl_803EB238);
@@ -524,7 +518,7 @@ void fn_80145100(int index, int file)
     lbl_802DD020[index].mFile = file;
 }
 
-int fn_80145118(int index)
+AnimTex_t *fn_80145118(int index)
 {
     return lbl_802DD150[index];
 }

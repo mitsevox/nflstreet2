@@ -32,7 +32,7 @@ void fn_80149040(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 Object_80039F5C *fn_8003AC84(int id);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_801735D8(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_800AAD58(void *p, float dt);
@@ -70,7 +70,7 @@ void fn_8014DA90(void)
 
 void fn_8014DB24(void *p, float dt)
 {
-    fn_801735D8(2048);
+    ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     fn_8021D7B8(lbl_803EB688, 0x8000003A, 0, 0);
     fn_80148A58()->vfn_12();

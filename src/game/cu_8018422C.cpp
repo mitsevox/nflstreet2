@@ -7,7 +7,7 @@
 #include "game/fn_8007F828.h"
 #include "game/TextRecord.h"
 #include "game/fn_80191948.h"
-#include "game/cu_8017F90C.h"
+#include "game/UISGameMsg.h"
 
 struct Name_801859C8 {
     char mUnknown0[8];

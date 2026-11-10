@@ -2,7 +2,7 @@
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_80072AA8.h"
 #include "game/fn_8007F828.h"
 
@@ -278,7 +278,7 @@ int fn_8001FC08(int a, int b)
 
 void fn_8001FD48(void)
 {
-    lbl_803EBA90 = fn_801EEB44(lbl_802EBFCC, 44);
+    lbl_803EBA90 = ResOpenDevice(lbl_802EBFCC, 44);
     fn_8006EA04(2, 100);
     if (fn_80072E6C()) {
         fn_80072F04();
@@ -293,7 +293,7 @@ void fn_8001FDB8(void)
 {
     fn_8006EA04(2, (unsigned char)(fn_8007F828(5) * 10));
     fn_80072AD8(0);
-    fn_801EEFAC(lbl_803EBA90);
+    ResClose(lbl_803EBA90);
     fn_801D2BD0(lbl_803EBA94);
     lbl_803EBA94 = 0;
     fn_80072F90();

@@ -32,7 +32,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_8011F2F8(void);
 int fn_801783AC(int bit);
 int MathAngleDiff(int a, int b);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_800F6370(Object_80039F5C *p) {
@@ -103,7 +103,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                     p->mUnknown512.mUnknown15 = 1;
                 }
                 direction = fn_800F5CBC(p, pRecord);
-                if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.05f
+                if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.05f
                     && MathAngleDiff(p->mMotion.mUnknown32, p->mMotion.mFacing) > 0x355555
                     && MathAngleDiff(p->mMotion.mUnknown32, pRecord->mUnknown20) > 0x400000) {
                     p->mUnknown512.mUnknown14 = 1;

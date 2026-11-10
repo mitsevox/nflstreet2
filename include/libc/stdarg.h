@@ -89,29 +89,14 @@ __extension__ (*({ \
           (AP)->overflow_arg_area = (char *) (__pptr + 1); \
         } \
     } \
-  else if (sizeof (TYPE) == 8) \
-    { \
-      unsigned char __gpr = (AP)->gpr; \
-      if (__gpr < 7) \
-        { \
-          __gpr += __gpr & 1; \
-          __ptr = __VA_GP_REGSAVE (AP, __gpr, TYPE); \
-          (AP)->gpr = __gpr + 2; \
-        } \
-      else \
-        { \
-          unsigned long __addr = (unsigned long) ((AP)->overflow_arg_area); \
-          __ptr = (TYPE *)((__addr + 7) & -8); \
-          (AP)->gpr = 8; \
-          (AP)->overflow_arg_area = (char *)(__ptr + 1); \
-        } \
-    } \
   else \
     { \
       signed char __gpr = (AP)->gpr; \
       if (__gpr + sizeof (TYPE) / 4 <= 8) \
         { \
-          __ptr = __VA_GP_REGSAVE (AP, __gpr, TYPE); \
+          if (sizeof (TYPE) == 8 && ((AP)->gpr & 1)) \
+            (AP)->gpr++; \
+          __ptr = __VA_GP_REGSAVE (AP, (signed char)(AP)->gpr, TYPE); \
           (AP)->gpr += sizeof (TYPE) / 4; \
         } \
       else if (__gpr < 8) \

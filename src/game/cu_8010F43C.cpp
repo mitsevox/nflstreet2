@@ -1,14 +1,15 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
@@ -129,9 +130,6 @@ int fn_800C4B6C(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D4FBC(Object_80039F5C *p, int flag);
-void fn_800D5704(Object_80039F5C *p);
-void fn_800D6D08(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -151,7 +149,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80156C78(int a, int b);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
@@ -172,7 +170,7 @@ float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 extern float gFrameTimeScale;
 extern unsigned char lbl_803EAF50;
 extern unsigned char lbl_803EAF51;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable);
 int fn_80113498(Object_80039F5C *p);
 }
@@ -369,7 +367,7 @@ extern "C" int fn_8010FC40(Object_80039F5C *p)
         p->mFlags |= 1 << (p->mpState->mUnknown3[0] & ~0x80);
     }
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
-        pOther = fn_8016444C(fn_80168708(fn_80178308()));
+        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         fn_80143E14(p, pOther);
         fn_80143E14(pOther, p);
     }
@@ -389,7 +387,7 @@ extern "C" int fn_8010FD94(Object_80039F5C *p)
     pTimer->mUnknown4 = 0.0f;
     pTimer->mUnknown8 = 0;
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
-        pOther = fn_8016444C(fn_80168708(fn_80178308()));
+        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         fn_80143E14(p, pOther);
         fn_80143E14(pOther, p);
     }
@@ -615,7 +613,7 @@ extern "C" int fn_801109A4(Object_80039F5C *p)
     case 2:
         if (p->mFlags & 0x40000000) {
             p->mFlags &= ~0x40000000;
-            fn_800D5704(p);
+            StyleTrackerFinishSpin(p);
         }
         if (p->mFlags & 4) {
             p->mRatings[2] = pState->mUnknown8;
@@ -749,7 +747,7 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown15 = 0;
-        fn_800D4FBC(p, 0);
+        StyleTrackerResolveStiffArm(p, 0);
         return 1;
     }
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
@@ -757,7 +755,7 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 1.0f;
-    } else if (p->mMotion.mUnknown28 / lbl_803ECB08 < 0.65f) {
+    } else if (p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed < 0.65f) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.65f;
@@ -781,7 +779,7 @@ extern "C" int fn_801113DC(Object_80039F5C *p)
     State_80039F5C *pMessage;
 
     p->mUnknown9[0] = 1;
-    fn_800D6D08(p);
+    StyleTrackerOnCarrierActionFive(p);
     pState = (State_801113DC *)&p->mUnknown336;
     pState->mUnknown0 = 255;
     pState->mUnknown4 = 0.0f;
@@ -849,7 +847,7 @@ extern "C" int fn_8011168C(Object_80039F5C *p)
     int angle;
     Message_800F01CC message;
 
-    if (pMotion->mUnknown28 > lbl_803ECB08 * 0.4f && pMotion->mUnknown44 > 0.0f && fn_801115C0(p)) {
+    if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.4f && pMotion->mUnknown44 > 0.0f && fn_801115C0(p)) {
         if (p->mMotion.mPos.mX > 0.0f) {
             angle = (pMotion->mUnknown32 - 0x400000) & 0xFFFFFF;
             result = angle > 0xF8E38F;

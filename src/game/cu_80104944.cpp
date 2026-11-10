@@ -4,7 +4,7 @@
 
 extern "C" {
 extern unsigned char lbl_803EAEE8;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803ED6CC;
 float fn_80237260(int stream);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
@@ -24,7 +24,7 @@ extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut) {
 
 extern "C" void fn_80104A08(Object_80039F5C *p, float scale, int angle, Point_8017886C *pPoint, float *pValue) {
     if (scale == 0.0f) {
-        scale = p->mUnknown560.mUnknown28 / (lbl_803ECB08 * 100621.117f);
+        scale = p->mUnknown560.mUnknown28 / (gPlyrMoveFwdSpeed * 100621.117f);
     }
     if (scale > 0.0f) {
         Point_8017886C offset;
@@ -52,7 +52,7 @@ extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut) {
     case 68:
     case 90:
         speed = pState->mUnknown3[0] / 255.0f;
-        speed *= lbl_803ECB08;
+        speed *= gPlyrMoveFwdSpeed;
         speed *= (1.0f - lbl_803ED6CC) * 0.75000006f + lbl_803ED6CC;
         fn_80227538((Point_8017886C *)pOut, (pState->mUnknown2 << 17) & 0xFFFFFF, speed);
         fn_8022765C(pOut, pOut, &p->mMotion.mUnknown40);

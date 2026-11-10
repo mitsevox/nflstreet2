@@ -1,4 +1,5 @@
 #include "game/fn_801FCE10.h"
+#include "game/StyleTracker.h"
 #include "game/fn_8022F478.h"
 
 extern "C" {
@@ -6,7 +7,6 @@ int fn_80178AE0(void);
 int fn_801486A0(void);
 int fn_80178EA0(int a);
 int fn_80178EE0(int a);
-int fn_800D41F8(int a);
 int fn_800A7E40(unsigned char a);
 int fn_800A7E54(unsigned char a);
 int fn_8022F34C(void);
@@ -70,7 +70,7 @@ int fn_80186518(int kind, int a, int b, int c, int d)
             result = fn_801864E0(c) ? 1 : 0;
             break;
         case 4:
-            result = fn_800D41F8(c);
+            result = StyleTrackerGetTotal(c);
             break;
         case 5:
             result = fn_800A7E40(c);

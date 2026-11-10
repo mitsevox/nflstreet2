@@ -6,7 +6,7 @@
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_8021D7B8.h"
-#include "game/cu_8017F90C.h"
+#include "game/UISGameMsg.h"
 
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {
@@ -86,11 +86,11 @@ void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
 int fn_8008775C(void);
 void fn_80087880(int a);
-void fn_8017F670(int a, char *pText);
-int fn_8017FB54(int a, int b);
-void fn_8017FB64(int value, int *pQuotient, int *pRemainder);
-int fn_8017FB88(void);
-int fn_801801B4(void);
+void PositionAbbrevFormat(int a, char *pText);
+int ColorPickCellToIndex(int a, int b);
+void ColorPickIndexToCell(int value, int *pQuotient, int *pRemainder);
+int ColorPickGetSelected(void);
+int MsgGameGetSetupState(void);
 int fn_80186B38(int a);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_80188DF0(int a);
@@ -495,7 +495,7 @@ void fn_80181AD4(unsigned char a)
         switch (lbl_803EB548) {
         case 0:
         case 3:
-            if (!fn_801801B4()) {
+            if (!MsgGameGetSetupState()) {
                 done = 1;
             }
             break;
@@ -623,7 +623,7 @@ void fn_80181F60(int a, int *pValues, int *pResult, Arg_8018399C text0, Arg_8018
             pValues[fn_801815A0(i)] = lbl_80362A84.mValues[i];
         }
         if ((unsigned int)lbl_80362A84.mUnknown64 < 14) {
-            fn_8017F670(lbl_80362A84.mUnknown64, p0->mpText);
+            PositionAbbrevFormat(lbl_80362A84.mUnknown64, p0->mpText);
             fn_801C2D88(p1->mpText, p1->mLength + 1, "%d ft %d in", lbl_80362A84.mUnknown68 / 12,
                         lbl_80362A84.mUnknown68 % 12);
             fn_801C2D88(p2->mpText, p2->mLength + 1, "%d lbs", lbl_80362A84.mUnknown72);
@@ -663,12 +663,12 @@ void fn_80182170(int a, int *pB, int *pC)
     int value = 0;
 
     lbl_803ECB64->vfn_01(a, &value);
-    fn_8017FB64(value, pB, pC);
+    ColorPickIndexToCell(value, pB, pC);
 }
 
 void fn_801821D8(int a, int b, int c)
 {
-    int value = fn_8017FB54(b, c);
+    int value = ColorPickCellToIndex(b, c);
 
     lbl_803ECB64->vfn_02(a, 0, value);
     lbl_803EB588 = 1;
@@ -788,7 +788,7 @@ void fn_801826FC(unsigned char *pOut)
 
     for (i = 0; i < 3; i++) {
         if (lbl_803ECB70[i]) {
-            pOut[i] = fn_8017FB88();
+            pOut[i] = ColorPickGetSelected();
         } else {
             pOut[i] = lbl_803ECB6C[i];
         }
@@ -1284,7 +1284,7 @@ void fn_801834DC(void)
         fn_8008056C(&lbl_80362A58);
         if (fn_80183950()) {
             fn_8018C48C(0x54415453);
-            if (fn_801801B4() == 1 && fn_80183948() == 3) {
+            if (MsgGameGetSetupState() == 1 && fn_80183948() == 3) {
                 fn_8005F29C();
             }
         } else if (!fn_8018397C()) {

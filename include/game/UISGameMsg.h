@@ -1,0 +1,31 @@
+#ifndef GAME_UISGAMEMSG_H
+#define GAME_UISGAMEMSG_H
+
+#include "game/cu_80181330.h"
+
+/* Message handlers called in turn by UISGameMsgDispatch. Each takes the message id,
+   an argument record, an unused word and a result pointer; the handlers
+   defined in source give the argument and result records their own types. */
+struct FeatsScreenArgs_t;
+struct ColorPickMsg_t;
+union MsgGameArg_t;
+struct Params_80185284;
+
+extern "C" {
+int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int DepthChartScreenHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FeCountsHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FeatsScreenHandleMessage(unsigned int id, FeatsScreenArgs_t *pArgs, int a, int *pResult);
+int ColorPickHandleMsg(int id, ColorPickMsg_t *pBlock, int unused, int *pResult);
+int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGameArg_t *pResult);
+int fn_801811C8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_80181238(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *pResult);
+int fn_8018422C(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult);
+
+int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+}
+
+#endif

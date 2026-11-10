@@ -4,7 +4,7 @@
 
 #include "game/Callees_801D57E0.h"
 #include "game/cu_8018422C.h"
-#include "game/fn_801801F0.h"
+#include "game/MsgGame.h"
 #include "game/fn_801C1F94.h"
 
 struct MemCardScanEntry_t {
@@ -48,7 +48,7 @@ static MemCardListCallbacks_t _MsgMemCardScan_Callbacks = {
 
 extern "C" void MsgMemCardScanOpen()
 {
-    fn_801801F0(1);
+    MsgGameSetMemCardActive(1);
     fn_801D685C("GN7E-69", 0);
     fn_801D65B4(0);
     fn_801D654C(1);
@@ -102,7 +102,7 @@ extern "C" void MsgMemCardScanIgnoreFlag(unsigned char value)
 
 extern "C" void MsgMemCardScanClose()
 {
-    fn_801801F0(0);
+    MsgGameSetMemCardActive(0);
     fn_801D685C("GN7E-69", 0);
     fn_801D6714(-1);
     fn_801D654C(0);

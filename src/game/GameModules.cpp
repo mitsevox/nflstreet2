@@ -6,7 +6,7 @@
 #include "game/FELoop.h"
 #include "engine/rand.h"
 #include "game/InGame.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_801FCE10.h"
 #include "game/AudmonEvent.h"
 #include "game/GameState.h"
@@ -48,14 +48,14 @@ const char *AnimData::GetName() { return "AnimData"; }
 
 int AnimData::Init()
 {
-    mData.mp = fn_801EEB44(lbl_802EBDBC, 44);
+    mData.mp = ResOpenDevice(lbl_802EBDBC, 44);
     InGameIsPlaying();
     return 1;
 }
 
 int AnimData::Shutdown()
 {
-    fn_801EEFAC(mData.mp);
+    ResClose(mData.mp);
     mData.mp = 0;
     return 1;
 }
@@ -109,13 +109,13 @@ const char *IGMisc::GetName() { return "IGMisc"; }
 
 int IGMisc::Init()
 {
-    mData.mp = fn_801EEB44(lbl_802EBDF8, 44);
+    mData.mp = ResOpenDevice(lbl_802EBDF8, 44);
     return 1;
 }
 
 int IGMisc::Shutdown()
 {
-    fn_801EEFAC(mData.mp);
+    ResClose(mData.mp);
     mData.mp = 0;
     return 1;
 }
@@ -228,13 +228,13 @@ const char *StaData::GetName() { return "StaData"; }
 
 int StaData::Init()
 {
-    mData.mp = fn_801EEB44(lbl_802EBFC0, 44);
+    mData.mp = ResOpenDevice(lbl_802EBFC0, 44);
     return 1;
 }
 
 int StaData::Shutdown()
 {
-    fn_801EEFAC(mData.mp);
+    ResClose(mData.mp);
     mData.mp = 0;
     return 1;
 }

@@ -27,7 +27,7 @@ struct Block_803EB028 {
 
 extern "C" {
 extern Block_803EB028 *lbl_803EB028;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 int fn_8011F1CC(void);
 int fn_8011F2F8(void);
 int fn_801783AC(int bit);
@@ -72,7 +72,7 @@ extern "C" int fn_8011B2A4(Entry_8011AFCC *pEntry)
                         break;
                     }
                     if (MathAngleDiff(pEntry->mpUnknown60->mMotion.mUnknown32, 0xC00000) <= 0x200000
-                        && pEntry->mpUnknown60->mMotion.mUnknown28 >= lbl_803ECB08 * 0.4f) {
+                        && pEntry->mpUnknown60->mMotion.mUnknown28 >= gPlyrMoveFwdSpeed * 0.4f) {
                         break;
                     }
                 }

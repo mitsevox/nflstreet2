@@ -1,4 +1,5 @@
 #include "game/Command_800CEE74.h"
+#include "game/StyleTracker.h"
 #include "game/Ball.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80178D18.h"
@@ -20,7 +21,6 @@ extern float lbl_802D7BD0[];
 extern Block_80099630 *lbl_803EC92C;
 float fn_80178A68(Point_8017886C *pPos);
 int fn_801787DC(int team);
-int fn_800D41F8(int team);
 float fn_80260E24(float a);
 float fn_80260FE8(float a);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
@@ -146,8 +146,8 @@ extern "C" void fn_8009A8F0(void)
         scale = 8.0f;
         break;
     case 1:
-        score0 = fn_800D41F8(0);
-        score1 = fn_800D41F8(1);
+        score0 = StyleTrackerGetTotal(0);
+        score1 = StyleTrackerGetTotal(1);
         scale = 100000.0f;
         break;
     case 2:

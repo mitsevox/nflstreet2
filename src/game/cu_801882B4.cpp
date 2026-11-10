@@ -1,8 +1,8 @@
 #include "game/cu_801882B4.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 
 struct Entry_801883B0 {
     int mIndex;
@@ -33,12 +33,12 @@ int fn_801C6DCC(void *pPool, int a, void *pKey, void *pResult, int (*match)(void
 void *fn_801C6A20(void *pPool);
 void fn_801C6C0C(void *pPool, void *pItem);
 void *fn_801D2BB0(int a, int size, int c, int d);
-void *fn_801EECD0(void *pData, int a, int b, int c);
-int fn_801EF548(void *pData, int index, int a, int b, void (*callback)(void *, int, int, int, Cache_80188688 *), Cache_80188688 *pCache);
-int fn_801F02AC(void *pData, int a, int b);
-int fn_801F08FC(void *pData);
-int fn_801F0D34(void *pData);
-int fn_801F1008(void *pData);
+void *ResOpenRam(void *pData, int a, int b, int c);
+int ResLoadAsync(void *pData, int index, int a, int b, void (*callback)(void *, int, int, int, Cache_80188688 *), Cache_80188688 *pCache);
+int ResLoadAll(void *pData, int a, int b);
+int ResUnLoadAll(void *pData);
+int ResGetNumResources(void *pData);
+int ResIsMemoryBacked(void *pData);
 }
 
 extern "C" {
@@ -125,7 +125,7 @@ void fn_80188458(Cache_80188688 *pCache, int key, int index, int async)
         return;
     }
     if (index == -1) {
-        fn_801F02AC(pEntry->mpData, 1, 1);
+        ResLoadAll(pEntry->mpData, 1, 1);
         for (index = 0; index < pEntry->mCount; index++) {
             fn_80188458(pCache, key, index, async);
         }
@@ -137,12 +137,12 @@ void fn_80188458(Cache_80188688 *pCache, int key, int index, int async)
         pItem->mRefs = 1;
         pItem->mIndex = index;
         fn_801C6AA4(pEntry->mpEntries, pItem, 1);
-        if (async && fn_801F1008(pEntry->mpData) == 0) {
+        if (async && ResIsMemoryBacked(pEntry->mpData) == 0) {
             pItem->mLoaded = 0;
-            pItem->mValue = fn_801EF548(pEntry->mpData, index, pCache->mUnknown0, 100, fn_801883F8, pCache);
+            pItem->mValue = ResLoadAsync(pEntry->mpData, index, pCache->mUnknown0, 100, fn_801883F8, pCache);
         } else {
             pItem->mLoaded = 1;
-            pItem->mValue = fn_801EF390(pEntry->mpData, index, pCache->mUnknown0);
+            pItem->mValue = ResLoad(pEntry->mpData, index, pCache->mUnknown0);
         }
     } else {
         pItem->mRefs++;
@@ -177,13 +177,13 @@ void fn_801885A4(Cache_80188688 *pCache, int key, int index)
         if (pItem) {
             pItem->mRefs--;
             if (!single || pItem->mRefs == 0) {
-                fn_801F010C(pEntry->mpData, index);
+                ResUnLoad(pEntry->mpData, index);
                 fn_801C6C0C(pEntry->mpEntries, pItem);
             }
         }
     }
     if (!single) {
-        fn_801F08FC(pEntry->mpData);
+        ResUnLoadAll(pEntry->mpData);
     }
 }
 
@@ -198,7 +198,7 @@ Cache_80188688 *fn_80188688(Desc_80188688 *pDesc)
         pCache->mpName = pDesc->mUnknown8;
         pCache->mpNames = pDesc->mUnknown12;
         if (pCache->mpName) {
-            pCache->mpData = fn_801EEB44(pCache->mpName, 44);
+            pCache->mpData = ResOpenDevice(pCache->mpName, 44);
         }
         pCache->mpEntries = fn_801C68FC(pCache->mUnknown0, 0, pCache->mCount, sizeof(Entry_80188320), 0, 0);
     }
@@ -210,7 +210,7 @@ void fn_80188728(Cache_80188688 *pCache)
     if (pCache) {
         fn_801888A4(pCache, -1);
         if (pCache->mpName) {
-            fn_801EEFAC(pCache->mpData);
+            ResClose(pCache->mpData);
         }
         fn_801C69E4(pCache->mpEntries);
         fn_801D2BD0(pCache);
@@ -235,11 +235,11 @@ void fn_80188784(Cache_80188688 *pCache, int key)
         pEntry = (Entry_80188320 *)fn_801C6A20(pCache->mpEntries);
         pEntry->mKey = key;
         if (pCache->mpNames && pCache->mpNames[key]) {
-            pEntry->mpData = fn_801EEB44(pCache->mpNames[key], 44);
+            pEntry->mpData = ResOpenDevice(pCache->mpNames[key], 44);
         } else {
-            pEntry->mpData = fn_801EECD0(pCache->mpData, key, pCache->mUnknown0, 16);
+            pEntry->mpData = ResOpenRam(pCache->mpData, key, pCache->mUnknown0, 16);
         }
-        pEntry->mCount = fn_801F0D34(pEntry->mpData);
+        pEntry->mCount = ResGetNumResources(pEntry->mpData);
         pEntry->mRefs = 1;
         pEntry->mpEntries = fn_801C68FC(pCache->mUnknown0, 0, pEntry->mCount, sizeof(Entry_801883B0), 0, 0);
         fn_801C6AA4(pCache->mpEntries, pEntry, 1);
@@ -272,7 +272,7 @@ void fn_801888A4(Cache_80188688 *pCache, int key)
             pEntry->mRefs--;
             if (!single || pEntry->mRefs == 0) {
                 fn_801885A4(pCache, key, -1);
-                fn_801EEFAC(pEntry->mpData);
+                ResClose(pEntry->mpData);
                 fn_801C69E4(pEntry->mpEntries);
                 fn_801C6C0C(pCache->mpEntries, pEntry);
             }

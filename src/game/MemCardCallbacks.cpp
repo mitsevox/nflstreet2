@@ -4,7 +4,7 @@
 #include <string.h>
 #include "game/Callees_801D57E0.h"
 #include "game/fn_801C3284.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "engine/texfile.h"
 #include "game/MemCardCallbacks.h"
 
@@ -13,7 +13,7 @@ struct IconResourceHeader {
     unsigned short mUnknown4;
 };
 
-/* Object returned by fn_801EF390. */
+/* Object returned by ResLoad. */
 struct IconResource {
     char mUnknown0[0x14];
     IconResourceHeader *mpUnknown14;
@@ -43,7 +43,7 @@ void MemCardNullCallback(void)
 
 void MemCardGetIcon(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
 {
-    IconResource *pResource = (IconResource *)fn_801EF390(pData, index, 1);
+    IconResource *pResource = (IconResource *)ResLoad(pData, index, 1);
     TexFileImage_t *pEntry;
 
     TexMipmapRelocate(pResource);
@@ -52,7 +52,7 @@ void MemCardGetIcon(void *pData, int index, unsigned char **pOptional, unsigned 
     if (pOptional) {
         *pOptional = pEntry->mpUnknownC;
     } else {
-        fn_801F010C(pData, index);
+        ResUnLoad(pData, index);
     }
 }
 

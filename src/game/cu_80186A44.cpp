@@ -1,7 +1,8 @@
 #include "game/fn_801FCE10.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/cu_80190208.h"
 #include "libc/string.h"
 
@@ -26,7 +27,6 @@ void fn_80029C2C(int, int, int);
 void fn_8002A1D4(int, int, char *);
 int fn_80190394(void);
 int fn_801485D4(void);
-int fn_800D41F8(int);
 int fn_800A7E40(int);
 int fn_800A7E54(int);
 int fn_800A3444(void);
@@ -193,7 +193,7 @@ int fn_80187038(unsigned char pad, int allowCreate)
     int status = fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
     if (v1 < 0) v1 = 0;
     int busy = 0;
-    if (fn_8017F584() == 0) {
+    if (GameModeTypeGet() == 0) {
         if (fn_80186F7C(0) != -1) {
             fn_80190280(fn_80186F7C(0)); busy = !fn_80190394(); fn_80190288();
         }
@@ -217,7 +217,7 @@ int fn_80187038(unsigned char pad, int allowCreate)
         }
     }
     if (id != -1 && !fn_801485D4()) {
-        int side = fn_800D41F8(pad);
+        int side = StyleTrackerGetTotal(pad);
         fn_801877E8(id, side);
         fn_80187580(id, fn_800A7E40(pad));
         fn_80187614(id, fn_800A7E54(pad));

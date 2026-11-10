@@ -2,7 +2,7 @@
    camera looks at. The replay code moves it and shows or hides it, and
    the sound code reads its position while it is shown. */
 #include "engine/viewport.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 /* 228-byte object allocated through ObjNewType_ by ReplayCursorCreate; the
    single instance is kept in _ReplayCursor_pObject. */
@@ -54,7 +54,7 @@ void ReplayCursorObjInit(ReplayCursor_t *pObject, int *pArgs)
     pObject->mbVisible = 0;
     pObject->mUnknown20 = (void *)pArgs[0];
     pObject->mUnknown24 = pArgs[1];
-    pObject->mUnknown220 = fn_801EF390(pObject->mUnknown20, pObject->mUnknown24, 1);
+    pObject->mUnknown220 = ResLoad(pObject->mUnknown20, pObject->mUnknown24, 1);
     fn_80235DB8(pObject->mUnknown220);
     fn_80235588(pObject->mUnknown28, 6);
     fn_80235630(pObject->mUnknown28, pObject->mUnknown220);
@@ -66,8 +66,8 @@ void ReplayCursorObjRelease(ReplayCursor_t *pObject)
 {
     fn_802355E4(pObject->mUnknown28);
     if (pObject->mUnknown220 != 0) {
-        if (fn_801F0DB8(pObject->mUnknown20, pObject->mUnknown24)) {
-            fn_801F010C(pObject->mUnknown20, pObject->mUnknown24);
+        if (ResIsLoaded(pObject->mUnknown20, pObject->mUnknown24)) {
+            ResUnLoad(pObject->mUnknown20, pObject->mUnknown24);
         }
     }
 }

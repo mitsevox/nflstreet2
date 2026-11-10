@@ -1,23 +1,7 @@
 #include "game/DbCursor.h"
 #include "game/fn_801FCE10.h"
 
-struct Record_8018FC1C {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    int mUnknown20;
-    float mUnknown24;
-    int mUnknown28;
-    int mUnknown32;
-    unsigned char mUnknown36;
-    int mUnknown40;
-    int mUnknown44;
-    int mUnknown48;
-};
+#include "game/StyleAwardRule.h"
 
 extern "C" {
 int fn_8018EB20(unsigned int index, int *pLglt, char *pEtnr, int size);
@@ -42,7 +26,7 @@ void fn_8018F9B4(int a);
 void fn_8018FB4C(DbCursor *pObject, int type);
 void fn_8018FBC8(DbCursor *pObject);
 int fn_8018FBE8(DbCursor *pObject, int id);
-void fn_8018FC1C(DbCursor *pObject, Record_8018FC1C *pRecord);
+void fn_8018FC1C(DbCursor *pObject, StyleAwardRule_t *pRecord);
 
 int fn_8018F1F0(unsigned int index, char *pEtnr, int size)
 {
@@ -275,22 +259,22 @@ int fn_8018FBE8(DbCursor *pObject, int id)
     return DbCursorFindInt(pObject, 0x44494B54, id, 0, 0);
 }
 
-void fn_8018FC1C(DbCursor *pObject, Record_8018FC1C *pRecord)
+void fn_8018FC1C(DbCursor *pObject, StyleAwardRule_t *pRecord)
 {
-    pRecord->mUnknown0 = 1;
-    pRecord->mUnknown1 = DbCursorGetInt(pObject, 0x50554B54);
-    pRecord->mUnknown2 = DbCursorGetInt(pObject, 0x565A4B54);
-    pRecord->mUnknown4 = DbCursorGetInt(pObject, 0x54504B54);
-    pRecord->mUnknown8 = DbCursorGetInt(pObject, 0x42474B54);
-    pRecord->mUnknown12 = DbCursorGetInt(pObject, 0x47534B54);
-    pRecord->mUnknown16 = DbCursorGetValue(pObject, 0x43534B54);
-    pRecord->mUnknown20 = DbCursorGetInt(pObject, 0x54534B54);
-    pRecord->mUnknown24 = fn_8007A9E4(pObject, 0x49444B54);
-    pRecord->mUnknown28 = DbCursorGetInt(pObject, 0x4E414B54);
-    pRecord->mUnknown32 = DbCursorGetInt(pObject, 0x4F434B54);
-    pRecord->mUnknown36 = DbCursorGetInt(pObject, 0x4C424B54);
-    pRecord->mUnknown40 = DbCursorGetInt(pObject, 0x59544B54);
-    pRecord->mUnknown44 = DbCursorGetInt(pObject, 0x4E534B54);
-    pRecord->mUnknown48 = DbCursorGetInt(pObject, 0x4E4C4B54);
+    pRecord->mEnabled = 1;
+    pRecord->mApply = DbCursorGetInt(pObject, 0x50554B54);
+    pRecord->mAllowZero = DbCursorGetInt(pObject, 0x565A4B54);
+    pRecord->mPoints = DbCursorGetInt(pObject, 0x54504B54);
+    pRecord->unk_0x8 = DbCursorGetInt(pObject, 0x42474B54);
+    pRecord->mMeterSteal = DbCursorGetInt(pObject, 0x47534B54);
+    pRecord->mScoreDelta = DbCursorGetValue(pObject, 0x43534B54);
+    pRecord->mTableIndex = DbCursorGetInt(pObject, 0x54534B54);
+    pRecord->mOpponentDistance = fn_8007A9E4(pObject, 0x49444B54);
+    pRecord->mOpponentAngle = DbCursorGetInt(pObject, 0x4E414B54);
+    pRecord->mComboWeight = DbCursorGetInt(pObject, 0x4F434B54);
+    pRecord->mAllowBehindLine = DbCursorGetInt(pObject, 0x4C424B54);
+    pRecord->mCategory = DbCursorGetInt(pObject, 0x59544B54);
+    pRecord->mComboLabel = DbCursorGetInt(pObject, 0x4E534B54);
+    pRecord->mMessage = DbCursorGetInt(pObject, 0x4E4C4B54);
 }
 }

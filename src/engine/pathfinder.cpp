@@ -15,7 +15,7 @@ extern "C" {
 }
 
 /* Item of the first pool of _Pathfinder_State (0x10 bytes), keyed by a generated handle;
-   holds the fn_801EF390 arguments. */
+   holds the ResLoad arguments. */
 struct PathfinderMap_t {
     int mHandle;
     void *mpData;
@@ -176,7 +176,7 @@ void PathfinderShutdown(void)
     if (_Pathfinder_State.mpPool0) {
         pItem = (PathfinderMap_t *)fn_801C6B4C(_Pathfinder_State.mpPool0, 0);
         while (pItem) {
-            fn_801F010C((Res_801EDC2C *)pItem->mpData, pItem->mUnknown8);
+            ResUnLoad((ResFile_t *)pItem->mpData, pItem->mUnknown8);
             pItem = (PathfinderMap_t *)fn_801C6C84(_Pathfinder_State.mpPool0, pItem);
         }
         fn_801C69E4(_Pathfinder_State.mpPool0);
@@ -198,7 +198,7 @@ int PathfinderLoadMap(void *pData, int a, int b)
     if (_Pathfinder_bInit) {
         pItem = (PathfinderMap_t *)fn_801C6A20(_Pathfinder_State.mpPool0);
         if (pItem) {
-            id = fn_801EF390((Res_801EDC2C *)pData, a, b);
+            id = ResLoad((ResFile_t *)pData, a, b);
             if (id) {
                 if (fn_801B2CDC(id) >= 0) {
                     pItem->mHandle = _PathfinderNewMapHandle();
@@ -208,7 +208,7 @@ int PathfinderLoadMap(void *pData, int a, int b)
                     handle = pItem->mHandle;
                     fn_801C6AA4(_Pathfinder_State.mpPool0, pItem, 0);
                 } else {
-                    fn_801F010C((Res_801EDC2C *)pData, a);
+                    ResUnLoad((ResFile_t *)pData, a);
                     fn_801C6C0C(_Pathfinder_State.mpPool0, pItem);
                 }
             }
@@ -228,7 +228,7 @@ int PathfinderUnloadMap(int handle)
                     _PathfinderMatchMap);
         if (pItem) {
             result = 0;
-            fn_801F010C((Res_801EDC2C *)pItem->mpData, pItem->mUnknown8);
+            ResUnLoad((ResFile_t *)pItem->mpData, pItem->mUnknown8);
             fn_801C6C0C(_Pathfinder_State.mpPool0, pItem);
         }
     }

@@ -1,10 +1,11 @@
 #include "engine/viewport.h"
+#include "game/StyleTracker.h"
 #include "game/PlayerObjInit.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/PlyrTex.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/GameObjList.h"
 
 #include <dolphin/gx/GXVert.h>
@@ -185,9 +186,8 @@ int fn_800ADDD8(Element_80041BF8 *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
-float fn_800D3F2C(int index);
 void fn_80147860(Object_8003DEC4 *pPlayer, float f);
-void fn_8015D3B0(Object_8003DEC4 *pPlayer);
+void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
 void fn_8015E73C(int id);
@@ -198,10 +198,10 @@ void fn_8015EC74(int a, int b);
 void fn_8015ED9C(int a, int b);
 void fn_8015F3FC(int a);
 void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, void (*pCallback)(Object_8003DEC4 *));
-void fn_8015FFA8(void *a, void *b);
-void *fn_80160C08(void);
-ModelTexSlot_t *fn_8016102C(int player);
-void fn_80161498(void);
+void PlyrModelAttachLod(void *a, void *b);
+void *PlaTexCacheGetArchive(void);
+ModelTexSlot_t *PlaTexCacheGetDescs(int player);
+void PlaTexCacheCloseArchive(void);
 void fn_8019723C(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
@@ -219,9 +219,9 @@ void fn_801D0F80(float (*pMatrix)[4]);
 int fn_801D2BB0(int a, void *p, int b, int c);
 void fn_801D2BD0(int handle);
 void ObjSetPriority(void *a, Object_8003DEC4 *pPlayer, int b);
-void fn_801EF7BC(void *a, int b, int c);
-void fn_801F010C(void *a, int b);
-void *fn_801F0C50(void *a, int b);
+void ResLoadToBuffer(void *a, int b, int c);
+void ResUnLoad(void *a, int b);
+void *ResGetSize(void *a, int b);
 void TMModelReset(Record_8020F2C4 *p);
 void TMModelClone(void *pDst, void *pSrc);
 void TMModelRemapMaterials(Record_8020F2C4 *p, Ref_803EB81C *pRef);
@@ -314,10 +314,10 @@ void fn_801A46BC(void);
 
 void fn_801A14D8(void)
 {
-    void *p = fn_801F0C50(fn_80160C08(), 0);
+    void *p = ResGetSize(PlaTexCacheGetArchive(), 0);
 
     lbl_803ECC10 = fn_801D2BB0(InGameIsPlaying() ? 0x40 : 1, p, 2, 0);
-    fn_801EF7BC(fn_80160C08(), 0, lbl_803ECC10);
+    ResLoadToBuffer(PlaTexCacheGetArchive(), 0, lbl_803ECC10);
     TMTexLibLoad(lbl_80365D98, lbl_803ECC10);
     lbl_803ECC08 = TMTexLibGetTexture(lbl_80365D98, 0xFF000000);
     lbl_803ECC0C = TMTexLibGetClut(lbl_80365D98, 0xFF000000, 0);
@@ -328,8 +328,8 @@ void fn_801A1578(void)
     TMTexLibUnload(lbl_80365D98);
     fn_801D2BD0(lbl_803ECC10);
     if (FELoopIsMainFEActive()) {
-        fn_801F010C(fn_80160C08(), 0);
-        fn_80161498();
+        ResUnLoad(PlaTexCacheGetArchive(), 0);
+        PlaTexCacheCloseArchive();
     }
 }
 
@@ -418,7 +418,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b *= pData->mUnknown574;
     }
     if (flash) {
-        fn_80227930(&color, lbl_802F29B0, lbl_802F29BC, fn_800D3F2C(pPlayer->mUnknown4968));
+        fn_80227930(&color, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
         r = color.x;
         g = color.y;
         b = color.z;
@@ -548,7 +548,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     color.g = 255;
     color.b = 255;
     color.a = 255;
-    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, fn_800D3F2C(pPlayer->mUnknown4968));
+    fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, StyleTrackerGetMeterFraction(pPlayer->mUnknown4968));
     light = fn_80236B98(1, v.x, v.y, v.z);
     fn_8024FB58(0, color);
     fn_8024FC48(1);
@@ -633,7 +633,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
         fn_802337D4(pPlayer->mUnknown1164[0].mpUnknown12, &pPlayer->mUnknown4064[0], pPose, 0xE0000000);
     }
     fn_802337D4(pPlayer->mUnknown1164[4].mpUnknown12, &pPlayer->mUnknown4064[1], pPose, 0xE0000000);
-    if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
         for (i = 1; i < pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mUnknown4; i++) {
             if (pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
                 for (j = 0; j < 12; j++) {
@@ -646,7 +646,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     }
     if (pPlayer->mUnknown1164[7].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[7].mpUnknown12, &pPlayer->mUnknown4064[3], pPose, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -668,7 +668,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     }
     if (pPlayer->mUnknown1164[9].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[9].mpUnknown12, &pPlayer->mUnknown4064[4], pPose, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -733,7 +733,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
         pHat[7] = pPose[61];
         pHat[8] = pPose[62];
         fn_802337D4(pPlayer->mUnknown1164[11].mpUnknown12, &pPlayer->mUnknown4064[5], pHat, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -774,7 +774,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
                 apHands[k][1] = pJoint[1];
                 apHands[k][2] = pJoint[2];
                 fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
-                if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+                if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
                     if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                         for (j = 0; j < 12; j++) {
                             if (j != 3 && j != 7 && j != 11) {
@@ -857,8 +857,8 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
 
     memset(values, 0, sizeof(values));
     if (pPlayer->mUnknown992 == 0xFFFF) {
-        fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
         TMModelClone(fn_8015E2FC(4, 0, 0), fn_8015E2FC(6, 0, 0));
         TMModelClone(fn_8015E2FC(4, 0, 1), fn_8015E2FC(6, 0, 1));
         for (i = 0; i < 53; i++) {
@@ -870,8 +870,8 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
         }
     } else {
         fn_8015E73C(pPlayer->mUnknown992);
-        fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         values[1] = 0x1000;
         values[pPlayer->mUnknown4972 + 2] = 0x1000;
         if (PlayerLookHidesHead(pPlayer->mUnknown4971)) {
@@ -1110,7 +1110,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
     fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);
-    pPlayer->mUnknown4060 = fn_8016102C(pInit->mUnknown5A);
+    pPlayer->mUnknown4060 = PlaTexCacheGetDescs(pInit->mUnknown5A);
     pModel = (Model_8015E2FC *)fn_8015E2FC(0, pPlayer->mUnknown1016, 0);
     fn_801A2A88(pPlayer, pInit->mInit.mUnknown04);
     fn_801A4690(0);
@@ -1128,28 +1128,28 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     TMTexLibRegister("platex", PlyrTexGetLib(pPlayer->mUnknown4971));
     fn_8023488C(pPlayer->mUnknown4044, 0x38);
     TMMaterialListSetMatDefs(pPlayer->mUnknown4044, pModel->mpUnknown24);
-    fn_8023465C(pPlayer->mUnknown4044, pModel, fn_8016102C(pPlayer->mUnknown4971));
-    fn_8023472C(pPlayer->mUnknown4044, 0x11, 1, &fn_8016102C(pPlayer->mUnknown4971)[25],
-                &fn_8016102C(pPlayer->mUnknown4971)[25], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x12, 1, &fn_8016102C(pPlayer->mUnknown4971)[25],
-                &fn_8016102C(pPlayer->mUnknown4971)[25], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1A, 1, &fn_8016102C(pPlayer->mUnknown4971)[26],
-                &fn_8016102C(pPlayer->mUnknown4971)[26], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1B, 1, &fn_8016102C(pPlayer->mUnknown4971)[26],
-                &fn_8016102C(pPlayer->mUnknown4971)[26], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x15, 1, &fn_8016102C(pPlayer->mUnknown4971)[27],
-                &fn_8016102C(pPlayer->mUnknown4971)[27], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x16, 1, &fn_8016102C(pPlayer->mUnknown4971)[27],
-                &fn_8016102C(pPlayer->mUnknown4971)[27], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1E, 1, &fn_8016102C(pPlayer->mUnknown4971)[28],
-                &fn_8016102C(pPlayer->mUnknown4971)[28], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1F, 1, &fn_8016102C(pPlayer->mUnknown4971)[28],
-                &fn_8016102C(pPlayer->mUnknown4971)[28], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x14, 1, &fn_8016102C(pPlayer->mUnknown4971)[29],
-                &fn_8016102C(pPlayer->mUnknown4971)[29], 0);
-    fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &fn_8016102C(pPlayer->mUnknown4971)[30],
-                &fn_8016102C(pPlayer->mUnknown4971)[30], 0);
-    PlyrTexApplyFilters(fn_8016102C(pPlayer->mUnknown4971), 0);
+    fn_8023465C(pPlayer->mUnknown4044, pModel, PlaTexCacheGetDescs(pPlayer->mUnknown4971));
+    fn_8023472C(pPlayer->mUnknown4044, 0x11, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x12, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[25], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1A, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1B, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[26], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x15, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x16, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[27], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1E, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1F, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[28], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x14, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[29],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[29], 0);
+    fn_8023472C(pPlayer->mUnknown4044, 0x1D, 1, &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[30],
+                &PlaTexCacheGetDescs(pPlayer->mUnknown4971)[30], 0);
+    PlyrTexApplyFilters(PlaTexCacheGetDescs(pPlayer->mUnknown4971), 0);
     TMTexLibRegistryReset();
     fn_801A299C(&pPlayer->mUnknown1164[0], 0, &pPlayer->mUnknown4064[0], pPlayer->mUnknown4044);
     fn_801A29F8(&pPlayer->mUnknown1164[4], pPlayer->mUnknown4044, pPlayer);
@@ -1237,7 +1237,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
     pSlot->mUnknown4 = flags;
     pSlot->mUnknown44 = (pPlayer->mUnknown20 >> 17) & 1;
     if (!(flags & 1)) {
-        if ((pPlayer->mUnknown20 & 8) && !fn_8015D2E8(pPlayer)) {
+        if ((pPlayer->mUnknown20 & 8) && !FEPlyrLoadIsShown(pPlayer)) {
             return;
         }
         if (lbl_803EB824 == 1) {
@@ -1245,11 +1245,11 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             lbl_803EB824 = 0;
         }
         fn_801A2EC8(pPlayer, pSlot);
-        if (fn_8015CD9C()) {
+        if (FEPlyrLoadIsActive()) {
             Vector_801A1650 scale;
 
-            fn_8015D3B0(pPlayer);
-            fn_8015D32C(pPlayer, &scale.x);
+            FEPlyrLoadMarkDrawn(pPlayer);
+            FEPlyrLoadGetScale(pPlayer, &scale.x);
             fn_801A209C(pPlayer, &scale.x, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,
                         pSlot->mUnknown8);
         } else {
@@ -1431,7 +1431,7 @@ void fn_801A45CC(void)
         if (pPlayer->mUnknown1160->mUnknown4 & 1) {
             continue;
         }
-        if ((pPlayer->mUnknown20 & 8) && !fn_8015D2E8(pPlayer)) {
+        if ((pPlayer->mUnknown20 & 8) && !FEPlyrLoadIsShown(pPlayer)) {
             continue;
         }
         if (pPlayer->mUnknown20 & 0x10000) {
@@ -1485,8 +1485,8 @@ void fn_801A472C(void)
         int b;
         int i;
 
-        fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
         for (i = 0; i < 53; i++) {
             values[i] = pPlayer->mUnknown4976.mValues[i] * 4096.0f;
         }
@@ -1513,8 +1513,8 @@ void fn_801A472C(void)
         fn_801A4690(0);
         fn_801A46BC();
     } else {
-        fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
-        fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
+        PlyrModelAttachLod(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         int a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
         int b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
         TMModelClone(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));

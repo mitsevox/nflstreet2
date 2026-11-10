@@ -129,13 +129,13 @@ void fn_801789F8(void);
 float fn_80178A2C(void);
 void fn_80178CD8(int a);
 int fn_80178E10(void);
-void fn_8017D764(void);
-void fn_8017DBCC(void);
-void fn_8017DD68(int index);
-int fn_8017F60C(void);
+void HudSetDown(void);
+void HudPost3AOn(void);
+void HudShowEvent31(int index);
+int GameModeTypeIsSpecial(void);
 int fn_8019623C(int id);
 int ConSetChannelInfo(int a, int b, void *p);
-int fn_801F0F18(int a);
+int ResSync(int a);
 
 extern unsigned char lbl_802ED104[];
 extern unsigned char lbl_803EAB94;
@@ -195,7 +195,7 @@ void Class_80297BF8::vfn_09(float dt)
 
 void Class_80297BF8::vfn_05()
 {
-    if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || fn_8017F60C() != 0 ||
+    if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
         vfn_07();
     }
@@ -231,7 +231,7 @@ void Class_80297BF8::vfn_05()
         fn_8017886C()->mUnknown08.mY = spot.mY;
     }
     fn_800941B8();
-    fn_8017D764();
+    HudSetDown();
     if (fn_800BA6F8() != 0) {
         fn_800BAAE4();
     } else {
@@ -261,7 +261,7 @@ void Class_80297BF8::vfn_05()
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
-    fn_8017DBCC();
+    HudPost3AOn();
     if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
         fn_80195EFC(5, 100, 0, 0);
     }
@@ -343,12 +343,12 @@ extern "C" void fn_800BCF7C(void)
     ambience.mUnknown32 = 300.0f;
     ambience.mUnknown28 = 0;
     lbl_803EC98C->mUnknown8 = fn_80096A58(&crowd);
-    fn_801F0F18(0);
+    ResSync(0);
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096B1C(lbl_803EC98C->mUnknown8);
     }
     lbl_803EC98C->mUnknownC = fn_80096A58(&ambience);
-    fn_801F0F18(0);
+    ResSync(0);
 }
 
 extern "C" float fn_800BD190(void)
@@ -390,7 +390,7 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
             } else {
                 result = 0;
             }
-        } else if (fn_8017F60C() != 0 && lbl_803EABA8->mSlots[team].mUnknown0 == 4 &&
+        } else if (GameModeTypeIsSpecial() != 0 && lbl_803EABA8->mSlots[team].mUnknown0 == 4 &&
                    pStick->mY == 0.0f) {
             result = 0;
         }
@@ -463,7 +463,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
             lbl_803EABA8->mSlots[side].mUnknown0 = 1;
             ConSetChannelInfo(index, 3, lbl_802ED104);
-            fn_8017DD68(side);
+            HudShowEvent31(side);
         }
         break;
     case 0x5B:

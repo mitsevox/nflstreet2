@@ -2,7 +2,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 extern "C" {
 int fn_801CFE40(float y, float x);
@@ -305,7 +305,7 @@ float fn_80143464(Block_80170374 *pBlock, Vector_80039F5C *pImpulse, Vector_8003
     fn_802277DC(&torque, &arm, pImpulse);
     fn_8022765C(&pBlock->mUnknown16, &pBlock->mUnknown16, &torque);
     force = fn_802270D4(pImpulse);
-    limit = lbl_803ECB08 * 100621.117f;
+    limit = gPlyrMoveFwdSpeed * 100621.117f;
     if (force > limit) {
         force = limit;
     }

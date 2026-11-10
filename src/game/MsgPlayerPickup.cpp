@@ -42,8 +42,8 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int a);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
-void fn_8015CCB4(int value);
-void fn_8017F670(int a, char *pText);
+void FEPlyrLoadReset(int value);
+void PositionAbbrevFormat(int a, char *pText);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_8018BDFC(int a, int b, int *pIds, int *pCount);
 void fn_8018BF10(int a, int b);
@@ -119,7 +119,7 @@ void MsgPlayerPickupGetRosterRow(int index, int *pId, Arg_8018399C text, Arg_801
         *pId = PlayerDbGetId(&_MsgPlayerPickup_RosterCursor);
         PlayerDbGetShortName(&_MsgPlayerPickup_RosterCursor, name, 27);
         fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
-        fn_8017F670(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
+        PositionAbbrevFormat(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
     } else {
         *pId = -1;
     }
@@ -305,7 +305,7 @@ void MsgPlayerPickupGetPlayerName(char *pBuffer, int size)
 
 void MsgPlayerPickupGetPosition(char *pText, int size)
 {
-    fn_8017F670(PlayerDbGetPbpo(_MsgPlayerPickup_pList), pText);
+    PositionAbbrevFormat(PlayerDbGetPbpo(_MsgPlayerPickup_pList), pText);
 }
 
 void MsgPlayerPickupGetHeight(char *pBuffer, int size)
@@ -477,7 +477,7 @@ void MsgPlayerPickupShutdown(void)
     fn_8008056C(&_MsgPlayerPickup_PoolCursor);
     fn_8008056C(&_MsgPlayerPickup_TeamCursor);
     fn_8008056C(&_MsgPlayerPickup_RosterCursor);
-    fn_8015CCB4(1);
+    FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
         fn_8018BF10(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);

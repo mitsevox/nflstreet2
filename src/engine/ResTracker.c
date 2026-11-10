@@ -16,21 +16,6 @@ extern int lbl_803EBDCC;
 extern unsigned char lbl_803EBDD0;
 extern unsigned char lbl_803EBDD1;
 
-typedef struct ResTrackOpenInfo_t {
-    char *pName;
-    char mMode;
-} ResTrackOpenInfo_t;
-
-typedef struct ResTrackLoadInfo_t {
-    Res_801EDC2C *pRes;
-    int mIndex;
-    int mOffset;
-    int mDiskSize;
-    int mFullSize;
-    unsigned char mAsync;
-    char mMode;
-} ResTrackLoadInfo_t;
-
 extern char lbl_802B1828[];
 extern char lbl_802B1834[];
 extern char lbl_802B183C[];
@@ -83,7 +68,7 @@ void ResTrackInitSize(int heap, int size)
 void ResTrackResource(unsigned int type, void *pData)
 {
     ResTrackLoadInfo_t *pLoad;
-    Res_801EDC2C *pRes;
+    ResFile_t *pRes;
     char *pMem;
     char *pName;
     int index;

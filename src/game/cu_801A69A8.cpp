@@ -1,3 +1,5 @@
+#include "engine/animTexLib.h"
+#include "game/cu_801444D8.h"
 #include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/Object_80039F5C.h"
@@ -16,12 +18,6 @@ struct Bounds_801A6FC8 {
   float mUnknown0[3];
   unsigned char mUnknownC[4];
   float mUnknown10[3];
-};
-struct Resource_801A69A8 {
-  unsigned char mUnknown0[0x7C];
-  GXTexObj mUnknown7C;
-  GXTlutObj mUnknown9C;
-  float *mUnknownA8;
 };
 struct View_801A7170 {
   unsigned char mUnknown0[4];
@@ -48,7 +44,7 @@ extern int lbl_803ECC34;
 extern float lbl_803ECC38;
 extern unsigned char lbl_803ECC3C, lbl_803ECC3D, lbl_803ECC3E;
 extern GXColor lbl_803ECC40, lbl_803ECC44, lbl_803ECC48;
-extern Resource_801A69A8 *lbl_803ECC4C;
+extern AnimTex_t *lbl_803ECC4C;
 extern int lbl_803ECC50;
 extern int lbl_803EB850, lbl_803EB854;
 extern unsigned int lbl_803EB858;
@@ -56,7 +52,6 @@ extern float lbl_803EB85C, lbl_803EB860;
 extern Vector_80039F5C lbl_802F3A9C, lbl_802F3AA8[], lbl_802F3AD8[],
     lbl_802F3B08[];
 extern Bounds_801A6FC8 lbl_802F3A7C;
-int fn_80145118(int);
 float fn_80237260(int);
 void fn_80239CEC(void *, int);
 void fn_80239D1C(void *, int);
@@ -84,8 +79,6 @@ int fn_800A33B8(void);
 int fn_800A3444(void);
 float fn_800A33C4(void);
 float fn_800A33F4(void);
-extern "C" void GXLoadTlut(GXTlutObj *, int);
-extern "C" void GXLoadTexObj(GXTexObj *, int);
 void fn_801D1288(int, void *);
 void fn_80214140(int);
 void fn_801D131C(int);
@@ -95,7 +88,7 @@ void fn_8024FC84(int, int, int, int, int, int, int);
 
 void fn_801A69A8(Entry_801A69A8 *entry, unsigned int count) {
   GXColor *color = &lbl_803ECC40;
-  lbl_803ECC4C = (Resource_801A69A8 *)fn_80145118(0);
+  lbl_803ECC4C = fn_80145118(0);
   if (lbl_803ECC34 == 2)
     color = &lbl_803ECC44;
   for (unsigned int i = 0; i < count; ++i, ++entry) {
@@ -107,14 +100,14 @@ void fn_801A69A8(Entry_801A69A8 *entry, unsigned int count) {
     entry->mUnknownC.b = color->b;
     entry->mUnknownC.a = lbl_803ECC3C;
   }
-  lbl_80366780[0] = lbl_803ECC4C->mUnknownA8[0];
-  lbl_80366780[1] = lbl_803ECC4C->mUnknownA8[1];
-  lbl_80366780[2] = lbl_803ECC4C->mUnknownA8[0];
-  lbl_80366780[3] = lbl_803ECC4C->mUnknownA8[3];
-  lbl_80366780[4] = lbl_803ECC4C->mUnknownA8[2];
-  lbl_80366780[5] = lbl_803ECC4C->mUnknownA8[3];
-  lbl_80366780[6] = lbl_803ECC4C->mUnknownA8[2];
-  lbl_80366780[7] = lbl_803ECC4C->mUnknownA8[1];
+  lbl_80366780[0] = lbl_803ECC4C->mGX.mFrames[0].mU0;
+  lbl_80366780[1] = lbl_803ECC4C->mGX.mFrames[0].mV0;
+  lbl_80366780[2] = lbl_803ECC4C->mGX.mFrames[0].mU0;
+  lbl_80366780[3] = lbl_803ECC4C->mGX.mFrames[0].mV1;
+  lbl_80366780[4] = lbl_803ECC4C->mGX.mFrames[0].mU1;
+  lbl_80366780[5] = lbl_803ECC4C->mGX.mFrames[0].mV1;
+  lbl_80366780[6] = lbl_803ECC4C->mGX.mFrames[0].mU1;
+  lbl_80366780[7] = lbl_803ECC4C->mGX.mFrames[0].mV0;
   fn_80239CEC(lbl_80366780, 32);
 }
 void fn_801A6AF8(Entry_801A69A8 *entry, unsigned int count, float speed,
@@ -425,8 +418,8 @@ void fn_801A7880(void) {
   if (!lbl_803ECC34)
     return;
   lbl_803ECC50 = -1;
-  GXLoadTlut(&lbl_803ECC4C->mUnknown9C, 0);
-  GXLoadTexObj(&lbl_803ECC4C->mUnknown7C, 0);
+  GXLoadTlut(&lbl_803ECC4C->mGX.mTlutObj, 0);
+  GXLoadTexObj(&lbl_803ECC4C->mGX.mTexObj, GX_TEXMAP0);
   fn_801D0470(VptGetMatrixStack());
   Mtx44 matrix;
   fn_801D1288(2, matrix);

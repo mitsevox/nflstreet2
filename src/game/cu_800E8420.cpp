@@ -31,7 +31,7 @@ void fn_800E7B90(Object_80039F5C *p, State_800E8420 *pState);
 void fn_800E7E78(Object_80039F5C *p, State_800E8420 *pState);
 unsigned char fn_800E8898(Object_80039F5C *p, void *pArg);
 void fn_80178718(Object_80039F5C *p);
-void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pOther);
+void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 }
 
@@ -100,7 +100,7 @@ extern "C" int fn_800E8554(Object_80039F5C *p)
                 case 4:
                 case 9:
                 case 10:
-                    fn_801718E8(p, pOther);
+                    PossTryFumble(p, pOther);
                     pState->mUnknown10 = 0;
                     break;
                 }

@@ -1,4 +1,5 @@
 #include "game/Step_800C4460.h"
+#include "game/StyleTracker.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
@@ -36,7 +37,7 @@
 #include "game/RecordList_8002E7C0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Table_80089904.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
@@ -50,18 +51,18 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 #include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
@@ -70,7 +71,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
-#include "game/cu_80164568.h"
+#include "game/PlayAlign.h"
 #include "game/EnvFogSettings.h"
 
 extern "C" {
@@ -114,9 +115,6 @@ int fn_800CD35C(int mode, Object_80039F5C *p);
 int fn_800CE438(Query_800CE770 *pQuery);
 int fn_800CF090(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D4748(Object_80039F5C *p);
-void fn_800D4FBC(Object_80039F5C *p, int flag);
-void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag);
 int fn_800E1554(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800EC640(Object_80039F5C *p);
@@ -135,7 +133,7 @@ void fn_80156C78(int id, int value);
 float fn_8016B938(void);
 float fn_8016B974(void);
 void fn_8016F6F4(Object_80039F5C *p, int *pValue);
-void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler);
+void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler);
 int fn_80177C38(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -162,7 +160,7 @@ extern float lbl_803EAC1C;
 extern float lbl_803EAC20;
 extern float lbl_803EAC24;
 extern float lbl_803EAC28;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803ED6B4;
 extern float lbl_803ED6BC;
 }
@@ -321,7 +319,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                     fn_800B1508();
                 }
                 p->mUnknown1160.mUnknown44++;
-                fn_800D4748(p);
+                StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
@@ -530,9 +528,9 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             ratingScore *= 0.5f;
             speedDiff = pTargetStats[1] * pTarget->mMotion.mUnknown28 - pStats[1] * p->mMotion.mUnknown28;
             if (speedDiff > 0.0f) {
-                speedScore = speedDiff * 30.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+                speedScore = speedDiff * 30.0f / (gPlyrMoveFwdSpeed * 415.0f) + 70.0f;
             } else {
-                speedScore = speedDiff * 70.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+                speedScore = speedDiff * 70.0f / (gPlyrMoveFwdSpeed * 415.0f) + 70.0f;
             }
             speedScore *= 0.5f;
             total = ratingScore + speedScore;
@@ -674,7 +672,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
         result = fn_800CE2B8(&query);
     }
     if (result != 0) {
-        fn_800D4748(p);
+        StyleTrackerOnBrokenTackle(p);
         fn_800A8954(13, p->mIdBytes[2], p);
         AudmonEventPostArgs(44, &p->mMotion.mPos, 0, 0, 0);
         fn_8006F0B8(8);
@@ -802,14 +800,14 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
         result = fn_800CE2B8(&query);
         if (result != 0) {
             if (types[i] == 5 || types[i] == 6) {
-                fn_800D4FBC(p, 1);
+                StyleTrackerResolveStiffArm(p, 1);
                 fn_800A8954(2, p->mIdBytes[2], p);
                 AudmonEventPostId(97, &p->mMotion.mPos, p->mId, p->mpState->mId, 0, 0);
                 fn_800310C0(lbl_803EA368, 59, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             } else if (isTwo) {
-                fn_800D60BC(p, PlayerMoveGetKind(p), 255);
+                StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), 255);
             } else {
-                fn_800D4748(p);
+                StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             p->mUnknown1219 = 1;
@@ -1102,7 +1100,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
             } else {
                 fn_800C561C(p, key);
                 fn_800C51DC(p, pOther);
-                fn_801718E8(p, pOther);
+                PossTryFumble(p, pOther);
                 AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)p->mUnknown560.mUnknown28,
                             p->mUnknown560.mUnknown54, p->mUnknown560.mUnknown55);
                 fn_800A3B58(p, 1, 0);

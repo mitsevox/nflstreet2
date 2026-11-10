@@ -3,7 +3,7 @@
 #include "game/DbCursor.h"
 #include "game/cu_8007F12C.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 
 /* One row of the option table: the column tag and the value to store when the
    options are reset. */
@@ -57,7 +57,7 @@ static DbColumnValue sRecord[24];
    store; fn_8007F394 writes the whole record back when it clears. */
 static unsigned char sDeferWrites = 0;
 
-/* Columns 1, 2, 14, 8 and 19 keep a separate value that fn_8017F584() == 6
+/* Columns 1, 2, 14, 8 and 19 keep a separate value that GameModeTypeGet() == 6
    selects instead of the record value. */
 static int sShadow1 = 36;
 static int sShadow2 = 100000;
@@ -200,7 +200,7 @@ int fn_8007F548(void)
 
 void fn_8007F6F8(int id, int value)
 {
-    if (fn_8017F584() == 6) {
+    if (GameModeTypeGet() == 6) {
         switch (id) {
         case 1:
             sShadow1 = value;
@@ -245,7 +245,7 @@ int fn_8007F828(int id)
     int override = 0;
 
     if ((unsigned int)id <= 22) {
-        if (fn_8017F584() == 8) {
+        if (GameModeTypeGet() == 8) {
             override = 1;
             if (FELoopIsMainFEActive() != 0 && lbl_803EB688 != 0) {
                 unsigned short state;
@@ -257,7 +257,7 @@ int fn_8007F828(int id)
                 }
             }
         }
-        if (fn_8017F584() == 6) {
+        if (GameModeTypeGet() == 6) {
             switch (id) {
             case 1:
                 return sShadow1;

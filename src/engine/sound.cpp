@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 
 struct SndSeqInfo_801F438C {
-    Res_801EDC2C *pRes;
+    ResFile_t *pRes;
     unsigned int mIndex;
     int mUnk8;
     void *pData;
@@ -154,8 +154,8 @@ int fn_801F3B4C(Desc_801F393C *pDesc);
 void fn_801F3C14(void);
 unsigned char fn_801F3E28(void);
 unsigned char fn_801F3E34(void);
-SndBankInfo_801F3524 *fn_801F3E40(Res_801EDC2C *pRes, unsigned int index, unsigned int bank);
-void fn_801F3ED8(Res_801EDC2C *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
+SndBankInfo_801F3524 *fn_801F3E40(ResFile_t *pRes, unsigned int index, unsigned int bank);
+void fn_801F3ED8(ResFile_t *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
                  void (*pCallback)(SndBankInfo_801F3524 *pBank));
 void fn_801F3F74(SndBankInfo_801F3524 *pBank);
 unsigned char fn_801F4024(SndBankInfo_801F3524 *pBank);
@@ -166,7 +166,7 @@ int fn_801F41A0(int handle);
 void fn_801F421C(int handle, int value);
 void fn_801F4294(int handle, int a, int value);
 void fn_801F4314(int handle, int value);
-SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index);
+SndSeqInfo_801F438C *fn_801F438C(ResFile_t *pRes, unsigned int index);
 void fn_801F4448(SndSeqInfo_801F438C *pSeq);
 SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank);
 int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b);
@@ -184,10 +184,10 @@ void fn_801F4AB0(int a, int b);
 void fn_801F4AEC(int a, int b);
 void fn_801F4AF8(void (*pCallback)(int a, int b));
 void fn_801F4B20(void);
-int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank);
+int fn_801F4B88(ResFile_t *pRes, unsigned int index, int bank);
 int fn_801F4C5C(void);
-SndAemsBankInfo_801F4D00 *fn_801F4DAC(Res_801EDC2C *pRes, unsigned int index, int bank);
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Res_801EDC2C *pStreamRes,
+SndAemsBankInfo_801F4D00 *fn_801F4DAC(ResFile_t *pRes, unsigned int index, int bank);
+SndAemsBankInfo_801F4D00 *fn_801F4DD8(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
                                       unsigned int streamIndex, int bank);
 int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank);
 char *fn_801F4F98(StreamFile_801F6D54 *pFile);
@@ -241,9 +241,9 @@ static void fn_801F35B4(void)
             pBank->mState = 3;
             pData = (char *)pBank->pData;
             if (pData[0] != 'B' || pData[1] != 'N' || pData[2] != 'K' || pData[3] != 'b') {
-                fn_801F010C(pBank->pRes, pBank->mIndex);
+                ResUnLoad(pBank->pRes, pBank->mIndex);
                 pBank->mState = 1;
-                fn_801EFAD8(pBank->pRes, pBank->mIndex, 1, pData, 100, fn_801F35A8, pBank);
+                ResLoadAsyncToBuffer(pBank->pRes, pBank->mIndex, 1, pData, 100, fn_801F35A8, pBank);
             } else {
                 SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
                 fn_8026A870(&pBank->mHandle, pBank->pData);
@@ -265,12 +265,12 @@ static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigne
     fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
     pBank->mBank = bank;
     pBank->mFlags = flags;
-    pBank->pRes = (Res_801EDC2C *)pRes;
+    pBank->pRes = (ResFile_t *)pRes;
     pBank->mIndex = index;
-    length = fn_801F0C50((Res_801EDC2C *)pRes, index);
+    length = ResGetSize((ResFile_t *)pRes, index);
     pBank->pData = pData;
     DCFlushRange(pData, length);
-    fn_801EFF80((Res_801EDC2C *)pRes, index, pData);
+    ResCopyToBuffer((ResFile_t *)pRes, index, pData);
     SndSetHeap(lbl_8039AE8C.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
     fn_8026A4D4(&pBank->mHandle, pData);
@@ -295,11 +295,11 @@ static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int 
         pBank->mLoaded = 0;
         pBank->pCallback = pCallback;
         pBank->mState = 1;
-        pBank->pRes = (Res_801EDC2C *)pRes;
+        pBank->pRes = (ResFile_t *)pRes;
         pBank->mIndex = index;
         pBank->pData = pData;
         *ppBank = pBank;
-        fn_801EFAD8((Res_801EDC2C *)pRes, index, 1, pData, 100, fn_801F35A8, pBank);
+        ResLoadAsyncToBuffer((ResFile_t *)pRes, index, 1, pData, 100, fn_801F35A8, pBank);
     }
 }
 
@@ -393,24 +393,24 @@ unsigned char fn_801F3E34(void)
     return lbl_8039AE8C.mStatus.mFlags.mActive;
 }
 
-SndBankInfo_801F3524 *fn_801F3E40(Res_801EDC2C *pRes, unsigned int index, unsigned int bank)
+SndBankInfo_801F3524 *fn_801F3E40(ResFile_t *pRes, unsigned int index, unsigned int bank)
 {
     unsigned int size;
 
     if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    size = fn_801F0C50(pRes, index);
+    size = ResGetSize(pRes, index);
     return fn_801F3728(pRes, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0);
 }
 
-void fn_801F3ED8(Res_801EDC2C *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
+void fn_801F3ED8(ResFile_t *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
                  void (*pCallback)(SndBankInfo_801F3524 *pBank))
 {
     unsigned int size;
 
     if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
-        size = fn_801F0C50(pRes, index);
+        size = ResGetSize(pRes, index);
         fn_801F3834(pRes, ppBank, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0, pCallback);
     }
 }
@@ -426,7 +426,7 @@ void fn_801F3F74(SndBankInfo_801F3524 *pBank)
         }
         fn_8026AB88(pBank->mHandle);
         if (pBank->mFlags & 1) {
-            fn_801F010C(pBank->pRes, pBank->mIndex);
+            ResUnLoad(pBank->pRes, pBank->mIndex);
         }
         if (!(pBank->mFlags & 2)) {
             fn_801D2BD0(pBank->pData);
@@ -516,7 +516,7 @@ void fn_801F4314(int handle, int value)
     }
 }
 
-SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index)
+SndSeqInfo_801F438C *fn_801F438C(ResFile_t *pRes, unsigned int index)
 {
     SndSeqInfo_801F438C *pSeq;
     void *pData;
@@ -528,8 +528,8 @@ SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index)
     fn_801C6AA4(lbl_8039AE8C.pSeqList, pSeq, 0);
     pSeq->pRes = pRes;
     pSeq->mIndex = index;
-    pData = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
-    fn_801EFF80(pRes, index, pData);
+    pData = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
+    ResCopyToBuffer(pRes, index, pData);
     pSeq->mLoaded = 1;
     pSeq->pData = pData;
     pSeq->mUnk8 = -1;
@@ -714,18 +714,18 @@ void fn_801F4B20(void)
     }
 }
 
-int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank)
+int fn_801F4B88(ResFile_t *pRes, unsigned int index, int bank)
 {
     int result;
 
     result = 0;
     if (SND_READY()) {
         SndSetHeap(lbl_8039AE8C.pBankTable, bank);
-        lbl_8039AE8C.pAemsSystem = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
-        fn_801EF7BC(pRes, index, lbl_8039AE8C.pAemsSystem);
+        lbl_8039AE8C.pAemsSystem = fn_801D2B7C(ResGetSize(pRes, index), 0, 0);
+        ResLoadToBuffer(pRes, index, lbl_8039AE8C.pAemsSystem);
         result = fn_801B91A0(lbl_8039AE8C.pAemsSystem);
-        lbl_8039AE8C.pAemsStreams = fn_801D2B7C(fn_801F0C50(pRes, index + 1), 0, 0);
-        fn_801EF7BC(pRes, index + 1, lbl_8039AE8C.pAemsStreams);
+        lbl_8039AE8C.pAemsStreams = fn_801D2B7C(ResGetSize(pRes, index + 1), 0, 0);
+        ResLoadToBuffer(pRes, index + 1, lbl_8039AE8C.pAemsStreams);
         fn_8026B124(lbl_8039AE8C.pAemsStreams);
     }
     return result;
@@ -777,12 +777,12 @@ static void fn_801F4D6C(SndAemsBankInfo_801F4D00 *pBank)
     pBank->pData = fn_801D310C(pBank->pData, pBank->mSize, 0, 0);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DAC(Res_801EDC2C *pRes, unsigned int index, int bank)
+SndAemsBankInfo_801F4D00 *fn_801F4DAC(ResFile_t *pRes, unsigned int index, int bank)
 {
-    return fn_801F4DD8(pRes, index, (Res_801EDC2C *)-1, (unsigned int)-1, bank);
+    return fn_801F4DD8(pRes, index, (ResFile_t *)-1, (unsigned int)-1, bank);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Res_801EDC2C *pStreamRes,
+SndAemsBankInfo_801F4D00 *fn_801F4DD8(ResFile_t *pRes, unsigned int index, ResFile_t *pStreamRes,
                                       unsigned int streamIndex, int bank)
 {
     SndAemsBankInfo_801F4D00 *pBank;
@@ -795,12 +795,12 @@ SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Re
         fn_801C6AA4(lbl_8039AE8C.pAemsBankList, pBank, 0);
         pBank->mBank = bank;
         SndSetHeap(lbl_8039AE8C.pBankTable, bank);
-        size = fn_801F0C50(pRes, index);
+        size = ResGetSize(pRes, index);
         pBank->pData = fn_801D2BB0(1, size, 0, 0);
         DCFlushRange(pBank->pData, size);
-        fn_801EF7BC(pRes, index, pBank->pData);
+        ResLoadToBuffer(pRes, index, pBank->pData);
         DCFlushRange(pBank->pData, size);
-        if (pStreamRes != (Res_801EDC2C *)-1 && streamIndex != (unsigned int)-1) {
+        if (pStreamRes != (ResFile_t *)-1 && streamIndex != (unsigned int)-1) {
             pBank->mFile.pRes = pStreamRes;
             pBank->mFile.mIndex = streamIndex;
             pName = fn_801F4F98(&pBank->mFile);

@@ -1,20 +1,20 @@
 /* A texture loaded from a resource bundle entry: open (load and build), close (free) and clear. Used
    for the simple shadow texture. */
 #include "game/ResTexture.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 extern "C" {
-int fn_801F1520(int value);
+int ResSetMemFlags(int value);
 
 void ResTextureLoad(ResTexture *p)
 {
-    int previous = fn_801F1520(4);
-    int data = fn_801EF390((void *)p->mUnknown0, p->mUnknown4, 1);
+    int previous = ResSetMemFlags(4);
+    int data = ResLoad((void *)p->mUnknown0, p->mUnknown4, 1);
 
-    fn_801F1520(previous);
+    ResSetMemFlags(previous);
     TexCreate((void *)data, &p->mTexture);
     fn_8020E7EC(&p->mTexture);
-    fn_801F010C((void *)p->mUnknown0, p->mUnknown4);
+    ResUnLoad((void *)p->mUnknown0, p->mUnknown4);
 }
 
 void ResTextureOpen(ResTexture *p, int a, int b, int c, const char *pName)
@@ -27,8 +27,8 @@ void ResTextureOpen(ResTexture *p, int a, int b, int c, const char *pName)
 
 void ResTextureClose(ResTexture *p)
 {
-    if (fn_801F0DB8((void *)p->mUnknown0, p->mUnknown4)) {
-        fn_801F010C((void *)p->mUnknown0, p->mUnknown4);
+    if (ResIsLoaded((void *)p->mUnknown0, p->mUnknown4)) {
+        ResUnLoad((void *)p->mUnknown0, p->mUnknown4);
     }
     TexDelete(&p->mTexture);
     ResTextureClear(p);

@@ -2,7 +2,7 @@
    the play-by-play commentary (switched off in some modes), and remembers which so it can shut down
    cleanly. */
 
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 extern "C" {
 void SpchIGStart(void);
 void SpchIGStop(void);
@@ -18,7 +18,7 @@ extern "C" void SpchIGInit(void)
     int state;
 
     SpchIGSetCommentaryOn(1);
-    if (fn_8017F584() == 11 && fn_801568F0() <= 4) {
+    if (GameModeTypeGet() == 11 && fn_801568F0() <= 4) {
         SpchIGStart();
         state = 1;
     } else {

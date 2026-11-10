@@ -14,7 +14,7 @@
 #include "game/PlayerLook.h"
 #include "game/PlaTex.h"
 #include "game/StoryPlayerScreen.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_802372EC.h"
@@ -34,7 +34,7 @@ struct TeamRgb_t {
     unsigned char mUnknown2;
 };
 
-/* Key/value pair for fn_8015FFC8; a key of 0xFFFF ends a list. */
+/* Key/value pair for PlyrSwitchSet; a key of 0xFFFF ends a list. */
 struct PlayerLookSwitch_t {
     unsigned short mKey;
     unsigned short mValue;
@@ -87,11 +87,11 @@ int fn_800822D4(Object_8008044C *pObject);
 void fn_800840A4(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
-void fn_8015FFC8(int player, int key, int value);
-void fn_80160E94(int index, int slot, int id, int palette, int d);
-int fn_80161048(char *pName);
-void fn_801610B0(int index, unsigned char *pColors);
-void fn_8016139C(int a, int *pId, int *pPalette);
+void PlyrSwitchSet(int player, int key, int value);
+void PlaTexCacheSetSlot(int index, int slot, int id, int palette, int d);
+int PlaTexCacheFindTexture(char *pName);
+void PlaTexCacheSetColors(int index, unsigned char *pColors);
+void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 int fn_801835A0(void);
 void fn_801A34B0(int a, int b, int c, int d);
 void fn_801A3520(void);
@@ -140,7 +140,7 @@ extern "C" void PlayerLookApplySwitchList(int player, int index)
     int i;
 
     for (i = 0, pair = lbl_802CF3EE[index][0]; pair.mKey != 0xFFFF; pair = lbl_802CF3EE[index][++i]) {
-        fn_8015FFC8(player, pair.mKey, pair.mValue);
+        PlyrSwitchSet(player, pair.mKey, pair.mValue);
     }
 }
 
@@ -207,19 +207,19 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
         pPalettes[24] = -1;
         switch (number + 1) {
         case 26:
-            fn_8015FFC8(player, 22, 255);
-            fn_8015FFC8(player, 21, 2);
+            PlyrSwitchSet(player, 22, 255);
+            PlyrSwitchSet(player, 21, 2);
             break;
         case 15:
         case 25:
         case 27:
-            fn_8015FFC8(player, 22, 0);
-            fn_8015FFC8(player, 21, 0);
+            PlyrSwitchSet(player, 22, 0);
+            PlyrSwitchSet(player, 21, 0);
             break;
         case 7:
             if (home == 0) {
-                fn_8015FFC8(player, 22, 0);
-                fn_8015FFC8(player, 21, 1);
+                PlyrSwitchSet(player, 22, 0);
+                PlyrSwitchSet(player, 21, 1);
                 break;
             }
         case 1:
@@ -229,8 +229,8 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
         case 10:
         case 23:
         case 30:
-            fn_8015FFC8(player, 22, 255);
-            fn_8015FFC8(player, 21, 2);
+            PlyrSwitchSet(player, 22, 255);
+            PlyrSwitchSet(player, 21, 2);
             break;
         case 6:
         case 12:
@@ -242,8 +242,8 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
         case 28:
         case 31:
         case 32:
-            fn_8015FFC8(player, 22, 0);
-            fn_8015FFC8(player, 21, 1);
+            PlyrSwitchSet(player, 22, 0);
+            PlyrSwitchSet(player, 21, 1);
             break;
         case 2:
         case 4:
@@ -255,8 +255,8 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
         case 19:
         case 20:
         case 29:
-            fn_8015FFC8(player, 22, 0);
-            fn_8015FFC8(player, 21, 255);
+            PlyrSwitchSet(player, 22, 0);
+            PlyrSwitchSet(player, 21, 255);
             break;
         }
     } else {
@@ -300,19 +300,19 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
         case 30:
         case 31:
         case 32:
-            fn_8015FFC8(player, 22, 0);
-            fn_8015FFC8(player, 21, 255);
+            PlyrSwitchSet(player, 22, 0);
+            PlyrSwitchSet(player, 21, 255);
             break;
         case 8:
         case 10:
         case 21:
         case 24:
-            fn_8015FFC8(player, 22, 255);
-            fn_8015FFC8(player, 21, 255);
+            PlyrSwitchSet(player, 22, 255);
+            PlyrSwitchSet(player, 21, 255);
             break;
         }
     }
-    fn_8015FFC8(player, 23, 0);
+    PlyrSwitchSet(player, 23, 0);
 }
 
 extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigned char flag, int player, int *pIds, int *pPalettes)
@@ -321,7 +321,7 @@ extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigne
     int id;
 
     fn_801C2D88(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
-    id = fn_80161048(name);
+    id = PlaTexCacheFindTexture(name);
     if (id >= 0) {
         id += offset;
         pIds[23] = id;
@@ -331,13 +331,13 @@ extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigne
         PlayerLookColors_t colors = lbl_802CFB1C[pRow->mUnknown64];
         if (pRow->mUnknown71) {
             if (pRow->mUnknown72) {
-                fn_8015FFC8(player, 19, colors.mUnknown3);
+                PlyrSwitchSet(player, 19, colors.mUnknown3);
             } else {
-                fn_8015FFC8(player, 19, colors.mUnknown1);
+                PlyrSwitchSet(player, 19, colors.mUnknown1);
             }
         }
         if (pRow->mUnknown70) {
-            fn_8015FFC8(player, 20, colors.mUnknown1);
+            PlyrSwitchSet(player, 20, colors.mUnknown1);
         }
     }
 }
@@ -348,7 +348,7 @@ extern "C" void PlayerLookSetHeadDecal(Row_8007BC34 *pRow, int offset, int playe
     int id;
 
     fn_801C2D88(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
-    id = fn_80161048(name);
+    id = PlaTexCacheFindTexture(name);
     if (id >= 0) {
         if (fn_801C302C(pRow->mName, "REEBOK_T045Z", 33) == 0 || fn_801C302C(pRow->mName, "REEBOK_BO04A381", 33) == 0) {
             pIds[3] = 3;
@@ -360,8 +360,8 @@ extern "C" void PlayerLookSetHeadDecal(Row_8007BC34 *pRow, int offset, int playe
         id += offset;
         pIds[2] = id;
         pPalettes[2] = -1;
-        fn_8015FFC8(player, 25, 0);
-        fn_8015FFC8(player, 26, 0);
+        PlyrSwitchSet(player, 25, 0);
+        PlyrSwitchSet(player, 26, 0);
     }
 }
 
@@ -369,7 +369,7 @@ extern "C" void PlayerLookSetBackArtId(int number, int player, int *pId, int *pP
 {
     *pId = number + 0x3FEE;
     *pPalette = -1;
-    fn_8015FFC8(player, 20, 1);
+    PlyrSwitchSet(player, 20, 1);
 }
 
 extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors, unsigned char number, unsigned int index,
@@ -395,7 +395,7 @@ extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors,
         }
         *pId = number + 0x3B10;
         *pPalette = 0xAB;
-        fn_8015FFC8(player, key, c2);
+        PlyrSwitchSet(player, key, c2);
         break;
     case 2:
         if (home) {
@@ -404,17 +404,17 @@ extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors,
             *pId = index + 0x3B74;
         }
         *pPalette = -1;
-        fn_8015FFC8(player, key, c0);
+        PlyrSwitchSet(player, key, c0);
         break;
     case 3:
         *pId = index + 0x3BBA;
         *pPalette = 0xA9;
-        fn_8015FFC8(player, key, c1);
+        PlyrSwitchSet(player, key, c1);
         break;
     case 4:
         *pId = index + 0x3BBA;
         *pPalette = 0xA9;
-        fn_8015FFC8(player, key, c0);
+        PlyrSwitchSet(player, key, c0);
         break;
     case 5:
         id = index + 0x3BDD;
@@ -423,12 +423,12 @@ extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors,
             *pId = 0x3C0A;
         }
         *pPalette = flag ? -1 : 0xAD;
-        fn_8015FFC8(player, key, c1);
+        PlyrSwitchSet(player, key, c1);
         break;
     default:
         *pId = kind + 0x31FF;
         *pPalette = -1;
-        fn_8015FFC8(player, key, c1);
+        PlyrSwitchSet(player, key, c1);
         break;
     }
 }
@@ -589,7 +589,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     gPlayerLooks[index].mUnknown68 = fn_80084438(&cursor);
     fn_80083F68(&cursor);
     fn_800817CC(&_PlayerLook_sPlayerCursor, &gPlayerLooks[index].mInfo);
-    if (CheatFlagsIsSet(47) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(47) && !GameModeTypeGet()) {
         PlayerLookRandomizeGear(index);
     }
     pRecord = &gPlayerLooks[index];
@@ -715,7 +715,7 @@ extern "C" void PlayerLookApply(int player)
     ids[29] = 0x3EEE;
     ids[30] = 0x3DE3;
     for (i = 0; lbl_802CF382[i].mKey != 0xFFFF; i++) {
-        fn_8015FFC8(key, lbl_802CF382[i].mKey, lbl_802CF382[i].mValue);
+        PlyrSwitchSet(key, lbl_802CF382[i].mKey, lbl_802CF382[i].mValue);
     }
     pColors = gPlayerLooks[index].mUnknown7A;
     PlaTexRemapColors(pColors);
@@ -754,16 +754,16 @@ extern "C" void PlayerLookApply(int player)
                 if (fn_801C302C(row.mName, "SKULLCAP_BLACK_L", 16) == 0) {
                     ids[2] = 0x3216;
                     palettes[2] = -1;
-                    fn_8015FFC8(key, 25, colors.mUnknown1);
+                    PlyrSwitchSet(key, 25, colors.mUnknown1);
                 } else if (fn_801C302C(row.mName, "SKULLCAP_WHITE_L", 16) == 0) {
                     ids[2] = 0x3215;
                     palettes[2] = -1;
-                    fn_8015FFC8(key, 25, colors.mUnknown1);
+                    PlyrSwitchSet(key, 25, colors.mUnknown1);
                 } else {
                     PlayerLookSetDecal(type, 25, colors, gPlayerLooks[index].mUnknown77, gPlayerLooks[index].mUnknown6A - 1,
                                 gPlayerLooks[index].mUnknown68, gPlayerLooks[index].mUnknown93, 0, key, &ids[2], &palettes[2]);
                 }
-                fn_8015FFC8(key, 26, 255);
+                PlyrSwitchSet(key, 26, 255);
             }
         }
     }
@@ -774,36 +774,36 @@ extern "C" void PlayerLookApply(int player)
     PlaTexBuildDefaultIds(ids, &gPlayerLooks[index]);
     for (i = 0; i <= 31; i++) {
         if (i != 31) {
-            fn_80160E94(index, i, ids[i], palettes[i], 0);
+            PlaTexCacheSetSlot(index, i, ids[i], palettes[i], 0);
         }
     }
-    fn_801610B0(index, gPlayerLooks[index].mUnknown7A);
+    PlaTexCacheSetColors(index, gPlayerLooks[index].mUnknown7A);
     if (ids[4] == -1) {
-        fn_8016139C(gPlayerLooks[index].mUnknown6E, &id, &palette);
-        fn_80160E94(index, 4, id, palette, 0);
+        PlaTexCacheGetHairTexture(gPlayerLooks[index].mUnknown6E, &id, &palette);
+        PlaTexCacheSetSlot(index, 4, id, palette, 0);
     }
     pRecord = &gPlayerLooks[index];
     if (pRecord->mUnknown95) {
-        fn_8015FFC8(key, 0, 255);
-        fn_8015FFC8(key, 27, 255);
-        fn_8015FFC8(key, 25, 255);
-        fn_8015FFC8(key, 26, 255);
+        PlyrSwitchSet(key, 0, 255);
+        PlyrSwitchSet(key, 27, 255);
+        PlyrSwitchSet(key, 25, 255);
+        PlyrSwitchSet(key, 26, 255);
     }
     if (pRecord->mUnknown70 != 15 && pRecord->mUnknown70 != 16 && !pRecord->mUnknown95) {
         pRecord->mUnknown94 = 1;
     } else {
         gPlayerLooks[index].mUnknown94 = 0;
     }
-    fn_8015FFC8(key, 29, 255);
-    fn_8015FFC8(key, 30, 255);
+    PlyrSwitchSet(key, 29, 255);
+    PlyrSwitchSet(key, 30, 255);
     if (gPlayerLooks[index].mInfo.mValues[12]) {
-        fn_8015FFC8(key, 29, 0);
+        PlyrSwitchSet(key, 29, 0);
         if (gPlayerLooks[index].mInfo.mValues[13]) {
-            fn_8015FFC8(key, 30, 0);
+            PlyrSwitchSet(key, 30, 0);
         }
         PlayerLookGetAccessoryIds(&id2, &palette2, gPlayerLooks[index].mInfo.mValues[13], gPlayerLooks[index].mInfo.mValues[12]);
-        fn_80160E94(index, 7, id2, -1, 0);
-        fn_80160E94(index, 8, palette2, -1, 0);
+        PlaTexCacheSetSlot(index, 7, id2, -1, 0);
+        PlaTexCacheSetSlot(index, 8, palette2, -1, 0);
     }
     fn_801C3284(pPlayer->mUnknown4184, gPlayerLooks[index].mName, 31);
     PlyrTexRequestNameplate(pPlayer);
@@ -1106,7 +1106,7 @@ extern "C" void PlayerLookHideSwitch28(void)
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        fn_8015FFC8(fn_8003DEC4(i)->mUnknown4970, 28, 255);
+        PlyrSwitchSet(fn_8003DEC4(i)->mUnknown4970, 28, 255);
     }
 }
 

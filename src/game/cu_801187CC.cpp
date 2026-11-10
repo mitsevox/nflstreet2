@@ -73,7 +73,7 @@ float fn_80227890(void *pA, void *pB);
 float fn_80237260(int stream);
 extern Block_803EB028 *lbl_803EB028;
 extern float lbl_803EB020;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern int lbl_802DAC38[];
 int fn_8011F32C(void);
 int fn_80177C38(void);
@@ -138,7 +138,7 @@ extern "C" int fn_80118B4C(Object_80039F5C *p, Pair_8011BAE0 *pPair)
             close = 1;
         }
         if (lbl_803EB028->mUnknown84 <= 45 && !close) goto done;
-        slow = lbl_803ECB08 * 0.2f;
+        slow = gPlyrMoveFwdSpeed * 0.2f;
         if (p->mMotion.mUnknown28 <= slow || pOther->mMotion.mUnknown28 <= slow) goto done;
         if (!fn_8011A994(p, pOther)) goto done;
         fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
@@ -347,7 +347,7 @@ extern "C" void fn_801194F0(void)
         fn_800CA5CC(pOther, 8, 0);
         if (fn_8011F1CC() && lbl_803EB028->mUnknown84 <= 45) continue;
         if (covered) continue;
-        float slow = lbl_803ECB08 * 0.14f;
+        float slow = gPlyrMoveFwdSpeed * 0.14f;
         if (p->mMotion.mUnknown28 <= slow && pOther->mMotion.mUnknown28 <= slow) continue;
         if (!fn_8011A994(p, pOther) && !fn_80113BCC(pOther)) continue;
 
@@ -367,14 +367,14 @@ extern "C" void fn_801194F0(void)
         unsigned char num = 0;
         if (lbl_803EB028->mUnknown84 > 12) {
             int tryOther = 1;
-            if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f
+            if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f
                 && MathAngleDiff(angle, p->mMotion.mFacing + fn_800C8BAC(p, 0)) <= 0x155554) {
                 if (fn_80237260(0) < pBlock->mUnknown52) {
                     moves[num] = lbl_802DAC20[3];
                     num++;
                     tryOther = 0;
                 }
-            } else if (pOther->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f && !fn_80113BCC(pOther)) {
+            } else if (pOther->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f && !fn_80113BCC(pOther)) {
                 if (fn_80237260(0) < pBlock->mUnknown52) {
                     moves[num] = lbl_802DAC20[2];
                     num++;
@@ -393,13 +393,13 @@ extern "C" void fn_801194F0(void)
                     }
                 }
                 if (!blocked) {
-                    if (pOther->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f
+                    if (pOther->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f
                         && MathAngleDiff(angle + 0x800000, pOther->mMotion.mFacing + fn_800C8BAC(pOther, 0)) <= 0x155554) {
                         if (fn_80237260(0) < pOtherBlock->mUnknown52) {
                             moves[num] = lbl_802DAC20[0];
                             num++;
                         }
-                    } else if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f) {
+                    } else if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f) {
                         if (fn_80237260(0) < pOtherBlock->mUnknown52) {
                             moves[num] = lbl_802DAC20[5];
                             num++;

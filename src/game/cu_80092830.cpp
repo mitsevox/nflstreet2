@@ -40,9 +40,9 @@ int fn_8009637C(int index);
 void fn_8009BA10(int value);
 int fn_800B65A0(int team);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
-void fn_8015A0D0(int value);
+void PassIconObjSetEnabled(int value);
 void fn_8015C254(int a);
-void fn_8017DC08(void);
+void HudPost3AOff(void);
 AnimSeqCamSample_t *AnimSeqCamFindCamera(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
 AnimSeqCamSample_t *AnimSeqCamFindFirstCamera(Actor_801C009C *);
 }
@@ -173,7 +173,7 @@ extern "C" int fn_80092830(int index)
     case 3:
         if ((pCharacter->mUnknown4 != 1 && fn_800AD9B4() == 4) || fn_800AD9B4() == 2) {
             if (fn_8005BFD4() == 1) {
-                fn_8017DC08();
+                HudPost3AOff();
                 fn_8005BF5C();
                 pCharacter->mUnknown38C = 4;
                 lbl_803EA8BD = 0;
@@ -182,7 +182,7 @@ extern "C" int fn_80092830(int index)
         }
     case 4:
         fn_8015C254(0);
-        fn_8015A0D0(0);
+        PassIconObjSetEnabled(0);
         lbl_803EA8BF = 1;
         if (lbl_803EC924->mUnknown80.mUnknownE4F[0] != 0) {
             int team = 2;

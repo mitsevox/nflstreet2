@@ -14,7 +14,7 @@
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
@@ -186,13 +186,13 @@ int fn_800A3444(void);
 int fn_801485D4(void);
 int fn_801486A0(void);
 void fn_80148AF8(Class_80148A58 *pObject);
-int fn_8017F60C(void);
-void fn_8017F670(int a, char *pText);
+int GameModeTypeIsSpecial(void);
+void PositionAbbrevFormat(int a, char *pText);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801801B4(void);
-void fn_801801C4(int a);
-void fn_801801C8(int a);
+int MsgGameGetSetupState(void);
+void MsgGameIgnoreValue(int a);
+void MsgGameSetSetupState(int a);
 void fn_80183368(int mode, int value);
 void fn_801834DC(void);
 int fn_801835A0(void);
@@ -612,7 +612,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     case 0x80000008:
         break;
     case 0x8000000A:
-        fn_801801C4(pArgs[0].i);
+        MsgGameIgnoreValue(pArgs[0].i);
         break;
     case 0x8000000B:
         lbl_803EB960 = pArgs[0].i;
@@ -690,7 +690,7 @@ void fn_80010208(void)
         lbl_803EB968 = 0;
         break;
     default:
-        unsigned int type = fn_8017F584();
+        unsigned int type = GameModeTypeGet();
         if (type == 6 || type == 8) {
             lbl_803EB968 = 0;
         } else {
@@ -708,7 +708,7 @@ void fn_80010208(void)
         break;
     }
     fn_800102D8();
-    int state = fn_801801B4();
+    int state = MsgGameGetSetupState();
     if (state == 1) {
         fn_800103A4(1);
         lbl_803EB96A = state;
@@ -837,7 +837,7 @@ void fn_800106B8(int *pA, int *pB)
     } else {
         *pA = 2;
     }
-    switch (fn_8017F584()) {
+    switch (GameModeTypeGet()) {
     case 2:
         *pB = 1;
         break;
@@ -975,7 +975,7 @@ void fn_80010914(void)
         }
     }
     fn_80186F8C(0);
-    if (fn_8017F584() != 6 && fn_8017F584() != 8 && fn_8017F584() != 7 && fn_8017F584() != 11) {
+    if (GameModeTypeGet() != 6 && GameModeTypeGet() != 8 && GameModeTypeGet() != 7 && GameModeTypeGet() != 11) {
         fn_80186F8C(1);
         if (fn_801486A0() != 0 && fn_801486A0() != 1) {
             for (i = 0; i <= 3; i++) {
@@ -1018,7 +1018,7 @@ void fn_80010914(void)
     }
     GameInfoSet(2, lbl_803EB96A);
     fn_8006CA18(0x8F, 0x32, 0);
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         fn_8018807C(1);
     }
 }
@@ -1348,7 +1348,7 @@ int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         *pArgs[3].pi = lbl_803ECE40[3];
         break;
     case 0x80000009: {
-        unsigned int state = fn_8017F584();
+        unsigned int state = GameModeTypeGet();
         if (state == 6 || state == 8) {
             *pResult = 0;
         } else if (lbl_803ECE44[pArgs[0].i]) {
@@ -1377,7 +1377,7 @@ int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 
 void fn_80011600(int pad0, int pad1, int keep)
 {
-    fn_801801C8(1);
+    MsgGameSetSetupState(1);
     if (keep) {
         fn_80010208();
     } else {
@@ -1407,7 +1407,7 @@ void fn_80011600(int pad0, int pad1, int keep)
     int db = fn_8022F384(fn_8022F4BC());
     if (pad0 != -1 && fn_80188030(pad0) != -1) {
         lbl_803ECE40[fn_80188030(pad0)] = 2;
-        fn_8017F60C();
+        GameModeTypeIsSpecial();
         lbl_803ECE44[fn_80188030(pad0)] = 1;
         lbl_803EB96C[fn_80188030(pad0)] = db;
         if (db != -1) {
@@ -1680,7 +1680,7 @@ void fn_800120C8(int side, int *pIndex)
     int count = fn_80012244(side);
 
     for (i = 0; i < count; i++) {
-        if (fn_8017F584() == 8 && fn_8018F228(fn_80186B38(fn_8022F4BC())) != 0x3FF) {
+        if (GameModeTypeGet() == 8 && fn_8018F228(fn_80186B38(fn_8022F4BC())) != 0x3FF) {
             if (side == 1) {
                 if (lbl_803EB994[1][i] == fn_8018F228(fn_80186B38(fn_8022F4BC()))) {
                     *pIndex = i;
@@ -1757,7 +1757,7 @@ void fn_80012310(int side, int direction, int *pId, char *pName, int nameSize, i
         pPosition[1] = lbl_803ECE50[side];
         PlayerDbSeekId(pObject, *pId, &result);
         PlayerDbGetShortName(pObject, pName, nameSize);
-        fn_8017F670(PlayerDbGetPbpo(pObject), pRole);
+        PositionAbbrevFormat(PlayerDbGetPbpo(pObject), pRole);
         if (pStats) {
             pStats[0] = PlayerDbGetBoostedRating(pObject, 6);
             pStats[1] = PlayerDbGetBoostedRating(pObject, 4);
@@ -2001,7 +2001,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
     if (row != -1) {
         DbCursorSeek((DbCursor *)&lbl_8036AE08[list], row);
         fn_800127E4(list, pName, nameLength, 0);
-        fn_8017F670(PlayerDbGetPbpo(&lbl_8036AE08[list]), pRole);
+        PositionAbbrevFormat(PlayerDbGetPbpo(&lbl_8036AE08[list]), pRole);
         if (pValues) {
             int values[10];
 
@@ -2215,18 +2215,18 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_80011E34(pArgs[0].i);
         break;
     case 0x80000006:
-        if (fn_8017F584() == 8 && pArgs[0].i == 0) {
+        if (GameModeTypeGet() == 8 && pArgs[0].i == 0) {
             fn_80014AA8(0, GauntletScreenGetSelection());
             break;
         }
-        if (fn_8017F584() == 8 && fn_801801B4() == 1) {
+        if (GameModeTypeGet() == 8 && MsgGameGetSetupState() == 1) {
             if (fn_8018F228(fn_80186B38(fn_8022F4BC())) == 0x3FF) {
                 fn_8018F2F4(fn_80186B38(fn_8022F4BC()), pArgs[1].i);
             } else {
                 pArgs[1].i = fn_8018F228(fn_80186B38(fn_8022F4BC()));
             }
         }
-        if (fn_8017F584() == 6 && ChallengeIsActive()) {
+        if (GameModeTypeGet() == 6 && ChallengeIsActive()) {
             DbCursor query;
             int team;
 
@@ -2329,7 +2329,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_80014FD8(pArgs[0].i);
         break;
     case 0x80000013:
-        fn_8017F584();
+        GameModeTypeGet();
         break;
     case 0xD:
         if (pArgs[0].i == -1) {
@@ -2391,7 +2391,7 @@ void fn_80013D74(void)
     if (pQuery->mUnknown0) {
         fn_80083F68(pQuery);
     }
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         fn_80183368(5, lbl_803EB9D4[1]);
     } else {
         lbl_803EB9D4[1] = 0x3FF;
@@ -2547,7 +2547,7 @@ void fn_80014294(int id0, int id1)
     int saved1 = lbl_803EB97C[1];
     int saved0 = lbl_803EB97C[0];
 
-    fn_801801C8(1);
+    MsgGameSetSetupState(1);
     fn_80014430(0, 0, 0, 0);
 
     if (id0 == -2) {
@@ -2607,7 +2607,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     unsigned int j;
 
     mode = fn_801486A0();
-    if (fn_8017F584() == 6) {
+    if (GameModeTypeGet() == 6) {
         lbl_803EB984[0] = lbl_803EB97C[0];
         lbl_803EB984[1] = lbl_803EB97C[1];
         lbl_803EB97C[0] = lbl_803EB98C[0];
@@ -2646,8 +2646,8 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     lbl_803EB9D0[0] = pair.mUnknown0;
     lbl_803EB9D0[1] = pair.mUnknown1;
 
-    if (fn_801801B4() == 1) {
-        if (fn_8017F584() == 6) {
+    if (MsgGameGetSetupState() == 1) {
+        if (GameModeTypeGet() == 6) {
             if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
                 fn_8018D7E0();
             }
@@ -2658,9 +2658,9 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 
     query.mUnknown0 = 1;
     query.mUnknown4 = 0;
-    if (fn_8017F584() == 3) {
+    if (GameModeTypeGet() == 3) {
         query.mUnknown4 = 3;
-    } else if (fn_8017F584() == 6) {
+    } else if (GameModeTypeGet() == 6) {
         if (lbl_803EB9A8 == 0x6B) {
             if (lbl_803EB97C[0] == 63) {
                 int id;
@@ -2679,15 +2679,15 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         query.mUnknown8 = 0;
     }
     fn_80083E1C(&lbl_8036ADB0[0], &query);
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         lbl_803EB978[0] = fn_80011D28(&lbl_8036ADB0[0], 0);
     }
 
     query.mUnknown4 = 0;
     query.mUnknown0 = 1;
-    if (fn_8017F584() == 3) {
+    if (GameModeTypeGet() == 3) {
         query.mUnknown4 = 3;
-    } else if (fn_8017F584() == 6) {
+    } else if (GameModeTypeGet() == 6) {
         if (lbl_803EB9A8 == 0x6B) {
             query.mUnknown4 = 1;
             query.mUnknown8 = 1;
@@ -2705,7 +2705,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         }
     }
     fn_80083E1C(&lbl_8036ADB0[1], &query);
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         lbl_803EB978[1] = fn_80011D28(&lbl_8036ADB0[1], 1);
     }
 
@@ -2727,7 +2727,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         lbl_803ECE4C[i] = (int *)fn_801D2B7C(12, 0, 0);
     }
 
-    if (fn_8017F584() == 6) {
+    if (GameModeTypeGet() == 6) {
         if (lbl_803EB9A8 == 0x6B) {
             fn_80084034(&lbl_8036ADB0[0], lbl_803EB97C[0], 0);
         } else {
@@ -2744,7 +2744,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         fn_80011CEC(&lbl_8036ADB0[0]);
     }
 
-    if (fn_8017F584() == 6) {
+    if (GameModeTypeGet() == 6) {
         if (lbl_803EB9A8 == 0x6B) {
             fn_80084034(&lbl_8036ADB0[1], lbl_803EB97C[1], 0);
         } else if (lbl_803EB97C[0] != 0) {
@@ -2768,9 +2768,9 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     void *pList = fn_8021EA44(1);
     fn_8021E2B4(pList, 10, 1);
     fn_8021E2B4(pList, 10, 1);
-    DepthChartLoad(fn_801801B4() == 1);
-    lbl_803EB9AC[0] = lbl_803EB9AC[1] = fn_801801B4() == 1;
-    if (fn_801801B4() == 1) {
+    DepthChartLoad(MsgGameGetSetupState() == 1);
+    lbl_803EB9AC[0] = lbl_803EB9AC[1] = MsgGameGetSetupState() == 1;
+    if (MsgGameGetSetupState() == 1) {
         lbl_803EB9BC[0] = 1;
         lbl_803EB9BC[1] = 1;
         lbl_803EB9C0[0] = 1;
@@ -2831,7 +2831,7 @@ void fn_80014B98(void)
     fn_8021E72C(pList, 10, 1);
     fn_8021E72C(pList, 10, 1);
 
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         id0 = lbl_803EB97C[0];
         fn_80084034(&lbl_8036ADB0[0], id0, 0);
         value0 = DbCursorGetInt(&lbl_8036ADB0[0], 0x49524454);
@@ -2846,7 +2846,7 @@ void fn_80014B98(void)
     if (pCursor->mUnknown0) {
         fn_80083F68(pCursor);
     }
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         GameInfoSet(0, id0);
         GameInfoSet(1, id1);
         fn_8022A508(0, id0, id0, 0, value0);
@@ -2868,8 +2868,8 @@ void fn_80014B98(void)
         lbl_803EB994[1] = 0;
     }
 
-    if (fn_801801B4() == 1 && ((fn_8017F584() == 8 && lbl_803EB99C) || fn_8017F584() != 8) &&
-        ((fn_8017F584() == 6 && lbl_803EB99C) || fn_8017F584() != 6)) {
+    if (MsgGameGetSetupState() == 1 && ((GameModeTypeGet() == 8 && lbl_803EB99C) || GameModeTypeGet() != 8) &&
+        ((GameModeTypeGet() == 6 && lbl_803EB99C) || GameModeTypeGet() != 6)) {
         DepthChartGetSide(0, &records[0]);
         DepthChartGetSide(1, &records[1]);
         for (unsigned char i = 0; i <= 6; i++) {
@@ -2893,8 +2893,8 @@ void fn_80014B98(void)
     }
     DepthChartSave();
 
-    if (fn_801801B4() == 1) {
-        if (fn_8017F584() == 6 && lbl_803EB99C) {
+    if (MsgGameGetSetupState() == 1) {
+        if (GameModeTypeGet() == 6 && lbl_803EB99C) {
             if (ChallengeIsActive()) {
                 fn_80015D28(ChalGetCurrent()->mUnknown1BC);
             } else {
@@ -2904,9 +2904,9 @@ void fn_80014B98(void)
         }
         FELoopSetResume(1);
     }
-    if (fn_801801B4() == 0) {
+    if (MsgGameGetSetupState() == 0) {
         fn_8018807C(0);
-        if (fn_8017F584() == 6) {
+        if (GameModeTypeGet() == 6) {
             if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
                 fn_8018C48C(0x454D4147);
                 fn_8018C48C(0x54415453);
@@ -2919,8 +2919,8 @@ void fn_80014B98(void)
 
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
-    if (fn_8017F584() == 6) {
-        if (fn_8000485C() && fn_801801B4() == 1 && lbl_803EB9A8 != 0x6B) {
+    if (GameModeTypeGet() == 6) {
+        if (fn_8000485C() && MsgGameGetSetupState() == 1 && lbl_803EB9A8 != 0x6B) {
             lbl_803EB98C[0] = lbl_803EB97C[0];
         }
         lbl_803EB97C[0] = lbl_803EB984[0];
@@ -3120,7 +3120,7 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
                     *pFlag = 0;
                 }
             }
-            if (fn_8017F584() == 8) {
+            if (GameModeTypeGet() == 8) {
                 int value = fn_8018F3D8(fn_80186F7C(1));
                 if (value == 0 && lbl_802F43A8[index] == 11) {
                     *pFlag = value;
@@ -3171,7 +3171,7 @@ void fn_800159A4(int *pCount, int *pCurrent, int *pResult)
     }
     *pCount = 12;
     *pCurrent = lbl_803EB9E0;
-    if (fn_8017F584() == 8 && fn_8018F3D8(fn_80186F7C(1)) == 0) {
+    if (GameModeTypeGet() == 8 && fn_8018F3D8(fn_80186F7C(1)) == 0) {
         *pCurrent = 11;
         lbl_803EB9E0 = 11;
     }
@@ -3189,7 +3189,7 @@ void fn_800159A4(int *pCount, int *pCurrent, int *pResult)
 
 void fn_80015B0C(int id, int unused)
 {
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         fn_800A2F3C(id);
         FELoopStartGame();
     } else if (fn_801486A0() != 15) {
@@ -3246,7 +3246,7 @@ void fn_80015D28(int id)
     int count;
     int current;
     int flag;
-    fn_801801C8(1);
+    MsgGameSetSetupState(1);
     fn_800159A4(&count, &current, &flag);
     int saved = lbl_803EB9E0;
     if (id == -1) {
@@ -3556,7 +3556,7 @@ void fn_80016808(void)
 {
     fn_8007F6F8(1, lbl_803EB9F4);
     fn_8001B330(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
-    if (fn_801801B4() == 1) {
+    if (MsgGameGetSetupState() == 1) {
         fn_8001B260(lbl_803EB9F0, 14);
         fn_8001B828();
     }

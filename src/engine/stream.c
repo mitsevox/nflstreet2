@@ -518,7 +518,7 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
     s->pCurrent = 0;
     s->pLast = 0;
     s->pFree = pRequests;
-    s->mFile.pRes = (Res_801EDC2C *)-1;
+    s->mFile.pRes = (ResFile_t *)-1;
     s->mFile.mIndex = -1;
     s->mFileSize = 0;
     if (bufferSize <= 0x3FFF) {
@@ -644,7 +644,7 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, u
     req->mType = 0;
     req->mFile.pRes = pFile->pRes;
     req->mFile.mIndex = pFile->mIndex;
-    fn_801F10B0(pFile->pRes, pFile->mIndex, &req->mFileSize, &req->mFileOffset, &req->mFileHandle);
+    ResGetStreamInfo(pFile->pRes, pFile->mIndex, &req->mFileSize, &req->mFileOffset, &req->mFileHandle);
     req->mUnk2C = offset;
     req->mEndMarker = endMarker;
     fn_801F5F28(s, req);

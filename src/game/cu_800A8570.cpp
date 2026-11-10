@@ -6,7 +6,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/Object_8003DEC4.h"
-#include "game/fn_800D4164.h"
+#include "game/StyleTracker.h"
 
 extern "C" {
 void *fn_800A3360(void);
@@ -88,7 +88,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[team]->mUnknown54;
         }
         lbl_803EC954[team]->mUnknown54 -= amount;
-        fn_800D4164(team, 0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10),
+        StyleTrackerSetMeterFraction(team, 0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10),
                     0);
         if (lbl_803EC954[team]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
@@ -117,7 +117,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[other]->mUnknown54;
         }
         lbl_803EC954[other]->mUnknown54 -= amount;
-        fn_800D4164(other, 0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10),
+        StyleTrackerSetMeterFraction(other, 0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10),
                     0);
         if (lbl_803EC954[other]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
@@ -140,7 +140,7 @@ void fn_80039D08(float dt);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
 void CamGameResumeAll(void);
-void fn_8017DBCC(void);
+void HudPost3AOn(void);
 int fn_80156704(void);
 void fn_801574DC(int value);
 int fn_800A8468(int team);
@@ -200,7 +200,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             fn_8002C9A8(lbl_803EA368, 2, 0);
         }
         CamGameResumeAll();
-        fn_8017DBCC();
+        HudPost3AOn();
         if (fn_800A8468(0) || fn_800A8468(1)) {
             AudmonEventPostArgs(13, 0, 0, 0, 0);
         }

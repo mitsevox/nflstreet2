@@ -618,7 +618,7 @@ int fn_801D20C8(void)
 }
 
 void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
-                  MemHeapFuncs_801D134C *pFuncs)
+                  MemHeapFuncs_t *pFuncs)
 {
     MemHeap_801D134C *pHeap;
     int total;

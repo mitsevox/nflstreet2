@@ -2,7 +2,7 @@
    arrow head, block or ellipse end piece, width and brightness tapering
    along the arrow and an optional dashed body. */
 #include "game/Object_80039F5C.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include <dolphin/mtx.h>
@@ -31,7 +31,7 @@ struct ArrowPath {
 
 /* Fan vertex of ArrowDrawEllipseEnd; the 2D calls build its first two members. */
 struct ArrowFanVertex {
-    Pair_8017055C mXY;
+    Point2_t mXY;
     float mZ;
     float mW;
 };
@@ -45,7 +45,7 @@ void TMRenderSetBlendMode(int a);
 void TMRenderSetZRange(float a, float b);
 void fn_802271F0(Vector_80039F5C *pOut, Vector_80039F5C *pV);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227538(Pair_8017055C *pOut, int angle, float length);
+void fn_80227538(Point2_t *pOut, int angle, float length);
 int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
@@ -216,7 +216,7 @@ int ArrowDrawEllipseEnd(int unused, ArrowPath *pTrail, unsigned int index)
 {
     ArrowFanVertex vertex;
     unsigned char color[3];
-    Pair_8017055C center;
+    Point2_t center;
     float first;
     float second;
     float angle;

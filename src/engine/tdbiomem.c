@@ -1,12 +1,18 @@
+/* Database I/O callbacks for reading and writing a caller-owned memory buffer. */
 #include <string.h>
-typedef struct MemFile_8020D388 {
+#include "engine/tdbiomem.h"
+
+typedef struct TDbIOMemFile_t {
     unsigned char *mpData;
     unsigned int mPos;
     unsigned int mSize;
-} MemFile_8020D388;
+} TDbIOMemFile_t;
 
-static int fn_8020D388(MemFile_8020D388 *pFile, void *pName, MemFile_8020D388 *pSrc)
+/* Start a buffer view at the supplied descriptor's current position. */
+static int _TDbIOMemOpen(void *pHandle, unsigned int size, void *pName, int mode)
 {
+    TDbIOMemFile_t *pFile = pHandle;
+    TDbIOMemFile_t *pSrc = pName;
     int err = 0;
 
     if (pSrc == 0) {
@@ -19,8 +25,10 @@ static int fn_8020D388(MemFile_8020D388 *pFile, void *pName, MemFile_8020D388 *p
     return err;
 }
 
-static int fn_8020D3C0(MemFile_8020D388 *pFile)
+/* Check that the buffer is present and its full declared size was consumed. */
+static int _TDbIOMemClose(void *pHandle)
 {
+    TDbIOMemFile_t *pFile = pHandle;
     int err = 0;
 
     if (pFile->mpData == 0) {
@@ -31,8 +39,10 @@ static int fn_8020D3C0(MemFile_8020D388 *pFile)
     return err;
 }
 
-static int fn_8020D3F4(MemFile_8020D388 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+/* Copy bytes into the buffer and advance the position on success. */
+static int _TDbIOMemWrite(void *pHandle, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
+    TDbIOMemFile_t *pFile = pHandle;
     if (pFile->mpData != 0) {
         if (pFile->mSize >= pFile->mPos + size) {
             memcpy(pFile->mpData + pFile->mPos, pSrc, size);
@@ -44,8 +54,10 @@ static int fn_8020D3F4(MemFile_8020D388 *pFile, void *pSrc, unsigned int size, u
     return 3;
 }
 
-static int fn_8020D470(MemFile_8020D388 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
+/* Copy bytes out of the buffer and advance the position on success. */
+static int _TDbIOMemRead(void *pHandle, void *pDst, unsigned int size, unsigned int *pRead)
 {
+    TDbIOMemFile_t *pFile = pHandle;
     if (pFile->mpData != 0) {
         if (pFile->mSize >= pFile->mPos + size) {
             memcpy(pDst, pFile->mpData + pFile->mPos, size);
@@ -57,8 +69,10 @@ static int fn_8020D470(MemFile_8020D388 *pFile, void *pDst, unsigned int size, u
     return 3;
 }
 
-static int fn_8020D4F0(MemFile_8020D388 *pFile, int offset)
+/* Move relative to the current position, rejecting a negative or past-end result. */
+static int _TDbIOMemSeek(void *pHandle, int offset)
 {
+    TDbIOMemFile_t *pFile = pHandle;
     int pos;
 
     if (pFile->mpData == 0) {
@@ -72,7 +86,18 @@ static int fn_8020D4F0(MemFile_8020D388 *pFile, int offset)
     return 0;
 }
 
-static int fn_8020D52C(void)
+/* Report no extra storage beyond the serialized database bytes. */
+static unsigned int _TDbIOMemCalcExtraSize(unsigned int size)
 {
     return 0;
 }
+
+TDbIODevice_t gTDbIOMemCallback = {
+    _TDbIOMemOpen,
+    _TDbIOMemClose,
+    _TDbIOMemRead,
+    _TDbIOMemWrite,
+    _TDbIOMemSeek,
+    _TDbIOMemCalcExtraSize,
+    12
+};

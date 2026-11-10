@@ -1,10 +1,11 @@
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/Class_80297CE8.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
-#include "game/Pair_8017055C.h"
+#include "game/Point2.h"
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
 #include "game/Record_800B15FC.h"
@@ -12,16 +13,16 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802372EC.h"
-#include "game/cu_80164568.h"
-#include "game/fn_80163E94.h"
+#include "game/PlayAlign.h"
+#include "game/PlaySet.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
-#include "game/fn_8016FB10.h"
+#include "game/Possession.h"
 #include "game/Info_ScrmState.h"
 
 /* Player block at +336 as written after fn_800EEE3C: the point and facing it
@@ -45,7 +46,7 @@ struct State_8016EC40 {
 };
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 int ChallengeHasGoalType(Challenge_t *pRecord, int a, int b);
 int ChallengeIsActive(void);
@@ -98,10 +99,10 @@ int fn_801486A0(void);
 void fn_80162780(int a, int b);
 void fn_80164C4C(Object_800670B4 *pObject, Record_80067338 *pRecord, int team, int a);
 int fn_801650BC(Record_80067338 *pRecord);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_8016B0B0(void);
-void fn_80173614(void);
-void fn_80173E24(void);
+void ClockRuleSnap(void);
+void DriveLogUpdateTeam(void);
 void fn_80176630(void);
 int fn_80177F70(void);
 int fn_80178308(void);
@@ -110,8 +111,8 @@ int fn_80178508(void *pPos, float *pOut, int a);
 int fn_801787DC(int team);
 float fn_80178A08(void);
 float fn_80178A2C(void);
-void fn_8017CFB4(int index);
-void fn_8017DA9C(int team);
+void BannerClear(int index);
+void HudHidePressPrompt(int team);
 void CamFreeClearVelocity(GameCamera_t *pCamera);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_800A8408(int team);
@@ -119,15 +120,13 @@ int fn_800A8444(int team);
 int fn_800A8F84(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
-int fn_800D42CC(void);
-void fn_800D45F0(Object_80039F5C *p, float a);
 void fn_8011DF90(void);
 int fn_8011F1CC(void);
 int fn_8011F2C4(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
-void fn_80171450(Object_80039F5C *p);
-void fn_801726F8(Object_80039F5C *p);
+void PossTryJarBall(Object_80039F5C *p);
+void PossLogBallResult(Object_80039F5C *p);
 void fn_80177C50(int a);
 void fn_80178370(void);
 int fn_801783AC(int bit);
@@ -157,7 +156,7 @@ void fn_8016F99C(void);
 
 extern "C" void fn_8016DB94(int team)
 {
-    fn_801647A4(fn_80168708(team), team, lbl_803EB3B0);
+    PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
     fn_8016E008(team);
     fn_80162780(1, 1);
 }
@@ -344,7 +343,7 @@ extern "C" void fn_8016E15C(void)
         BallGetPosition(pBall, &ballPos);
         pCarrier = fn_8003A130(&ballPos, 0, fn_80178308());
         BallGiveToPlayer(pBall, pCarrier);
-        pPasser = fn_8016444C(fn_80168708(fn_80178308()));
+        pPasser = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         if (pCarrier->mMotion.mPos.mY - pPasser->mMotion.mPos.mY < 2.5f) {
             fn_801C1F94(&message, 0, 4);
             message.mId = 26;
@@ -372,7 +371,7 @@ extern "C" void fn_8016E15C(void)
             for (i = 0; i < count; i++) {
                 Object_80039F5C *p = fn_80039F5C(team, i);
 
-                if (p != pCarrier && p != pPasser && p->mMotion.mUnknown28 < lbl_803ECB08 * 0.1f &&
+                if (p != pCarrier && p != pPasser && p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.1f &&
                     (p->mIdBytes[2] == defense || fabsf(pos.mY - p->mMotion.mPos.mY) < 2.0f ||
                      fabsf(pos.mX - p->mMotion.mPos.mX) > 6.0f)) {
                     float delay = 0.025098039f;
@@ -406,11 +405,11 @@ extern "C" void fn_8016E498(void)
     PlayerMoveResetAll();
     BallGetPosition(BallGetCurrent(), &ballPos);
     fn_8003A4DC();
-    fn_8017CFB4(1);
-    fn_8017CFB4(2);
-    fn_8017CFB4(0);
-    fn_8017DA9C(fn_80178308());
-    fn_8017DA9C(fn_80178320());
+    BannerClear(1);
+    BannerClear(2);
+    BannerClear(0);
+    HudHidePressPrompt(fn_80178308());
+    HudHidePressPrompt(fn_80178320());
     fn_800B14E4();
     fn_80044264();
     AudmonEventClear();
@@ -422,8 +421,8 @@ extern "C" void fn_8016E498(void)
     fn_800FAD2C();
     fn_8016B0B0();
     fn_800FAECC(1);
-    fn_80164C4C(fn_80168708(team), fn_8016871C(team), team, 0);
-    fn_80164C4C(fn_80168708(other), fn_8016871C(other), other, 0);
+    fn_80164C4C(PlayBookGetFormation(team), PlayBookGetPlay(team), team, 0);
+    fn_80164C4C(PlayBookGetFormation(other), PlayBookGetPlay(other), other, 0);
 
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
@@ -441,7 +440,7 @@ extern "C" void fn_8016E498(void)
     fn_800AEEDC(0);
     fn_800AEEDC(1);
     fn_800B6C98();
-    fn_80173614();
+    ClockRuleSnap();
     fn_8016E15C();
     fn_8011E068();
     fn_80039AA8();
@@ -459,7 +458,7 @@ extern "C" void fn_8016E498(void)
     }
     fn_800B2630();
     fn_80176630();
-    fn_80173E24();
+    DriveLogUpdateTeam();
 
     side = fn_80178308();
     BallPrimeKickUp(BallGetCurrent());
@@ -467,7 +466,7 @@ extern "C" void fn_8016E498(void)
     fn_800DC578();
     if (fn_800B65A0(side) != 0xFF && fn_80177F70() != 0) {
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
-        Record_80067338 *pRecord = fn_8016871C(side);
+        Record_80067338 *pRecord = PlayBookGetPlay(side);
 
         if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             CamGameSetModeAll(2);
@@ -544,7 +543,7 @@ extern "C" int fn_8016E928(void)
             break;
         default:
             moving++;
-            if (p->mMotion.mUnknown44 > lbl_803ECB08 * 0.05f) {
+            if (p->mMotion.mUnknown44 > gPlyrMoveFwdSpeed * 0.05f) {
                 blocked = 1;
             }
             if (p->mpState->mId == 7) {
@@ -780,11 +779,11 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             break;
         case 1:
             if (fn_80177F70() != 6) {
-                if (fn_800D42CC() == 2) {
+                if (StyleTrackerGetWinner() == 2) {
                     AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             } else {
-                if (fn_800D42CC() == 2) {
+                if (StyleTrackerGetWinner() == 2) {
                     AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                 }
             }
@@ -807,10 +806,10 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
         fn_800B1508();
         fn_80178370();
     } else {
-        Pair_8017055C target;
+        Point2_t target;
 
-        fn_8016FB10(p, pBall, &target, 0);
-        if (!fn_801729F8(pBall, &target) || p == 0) {
+        PossCalcBallSpot(p, pBall, &target, 0);
+        if (!PossCheckBallOut(pBall, &target) || p == 0) {
             return;
         }
         if (pOwner->mMotion.mPos.mZ > 0.0f) {
@@ -822,7 +821,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             float line;
 
             if (BallGetTransferKind(pBall) != 0) {
-                fn_801726F8(p);
+                PossLogBallResult(p);
             }
             if (fn_8017876C() == 0) {
                 fn_80178718(fn_8009BCE8(&pOwner->mUnknown560.mUnknown48));
@@ -855,11 +854,11 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     break;
                 case 1:
                     if (fn_80177F70() != 6) {
-                        if (fn_800D42CC() == 2) {
+                        if (StyleTrackerGetWinner() == 2) {
                             AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     } else {
-                        if (fn_800D42CC() == 2) {
+                        if (StyleTrackerGetWinner() == 2) {
                             AudmonEventPostArgs(90, &ballPos, p->mIdBytes[2], 0, 0);
                         }
                     }
@@ -872,7 +871,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     fn_800310C0(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
                     fn_800310C0(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
                 }
-                fn_800D45F0(p, line);
+                StyleTrackerOnTackle(p, line);
                 fn_800310C0(lbl_803EA368, 6, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 fn_80178370();
             }
@@ -890,12 +889,12 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
         }
         if (BallGetTransferKind(pBall) == 4) {
             if (BallGetStateFrames(pBall) > 20) {
-                fn_801726F8(p);
+                PossLogBallResult(p);
             } else {
-                fn_80171450(p);
+                PossTryJarBall(p);
             }
         } else if (BallGetTransferKind(pBall) == 1) {
-            fn_80171450(p);
+            PossTryJarBall(p);
         }
     }
 }

@@ -3,7 +3,7 @@
 #include "game/FELoop.h"
 #include "game/Ball.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_801D2B7C.h"
 #include "game/AnimFileFormat.h"
 #include "engine/animemot.h"
@@ -40,8 +40,8 @@ extern void *lbl_803EA8B0;
 extern void *lbl_803EC91C;
 extern void *lbl_803EC920;
 extern const char lbl_802EBDBC[];
-extern float lbl_803ECB0C;
-extern float lbl_803ECB10;
+extern float gPlyrMoveSideSpeed;
+extern float gPlyrMoveBackSpeed;
 int PlayerMoveAnimCheckReverse(Object_80039F5C *, unsigned short);
 int MathAngleDiff(int, int);
 int fn_801BB608(void *, void *);
@@ -65,7 +65,7 @@ void fn_801CC8AC(void *, int);
 void AnimSetUserOpcodeCallbacks(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void AnimFileSetCustomRelocateFunc(void (*)(AnimFileFormat_t *));
 void fn_801BAEA4(void (*)(AnimFileFormat_t *));
-void fn_801F0F18(int);
+void ResSync(int);
 void *fn_801BB570(int, int, int, int);
 void fn_801BB480(void);
 int AnimSequencerShutdown(void);
@@ -77,7 +77,7 @@ void AnimCacheShutdown(void);
 int fn_801BF384(void);
 void fn_8004AD3C(void *);
 void *fn_801D2BB0(int, int, int, int);
-int fn_801F0C50(void *, int);
+int ResGetSize(void *, int);
 
 extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
@@ -115,21 +115,21 @@ extern "C" void fn_8008E978(Object_80039F5C *p)
 extern "C" void fn_8008E9B0(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
-    Object_8016D8B0 *current=&p->mUnknown512;
-    Object_8016D8B0 *next=&p->mUnknown528;
+    PlyrMoveCmd_t *current=&p->mUnknown512;
+    PlyrMoveCmd_t *next=&p->mUnknown528;
     int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
         next->mUnknown0=current->mUnknown0;
-    } else if(difference<=0x56C16B && !(p->mUnknown492>lbl_803ECB0C)) {
+    } else if(difference<=0x56C16B && !(p->mUnknown492>gPlyrMoveSideSpeed)) {
         key=160;
-        float speed=lbl_803ECB0C*0.18f/lbl_803ECB0C;
+        float speed=gPlyrMoveSideSpeed*0.18f/gPlyrMoveSideSpeed;
         next->mUnknown0=current->mUnknown0>=speed?current->mUnknown0:speed;
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;
-    } else if(difference>0x56C16B && !(p->mUnknown492>lbl_803ECB10)) {
+    } else if(difference>0x56C16B && !(p->mUnknown492>gPlyrMoveBackSpeed)) {
         key=74;next->mUnknown0=current->mUnknown0;
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;
@@ -338,17 +338,17 @@ extern "C" void fn_8008F9F0(int flag)
 }
 extern "C" void fn_8008FAA8(void)
 {
-    void *archive=fn_801EEB44(lbl_802EBDBC,44);
+    void *archive=ResOpenDevice(lbl_802EBDBC,44);
     int size=0,largest=0;
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i) {
-        int amount=fn_801F0C50(archive,lbl_802D71D8[i].mId);
+        int amount=ResGetSize(archive,lbl_802D71D8[i].mId);
         if(lbl_802D71D8[i].mUnknown4) {
             if(amount<=largest) amount/=5;
             else {int previous=largest;largest=amount;amount=largest/5+(largest-previous);}
         }
         size+=amount+512;
     }
-    fn_801EEFAC(archive);
+    ResClose(archive);
     lbl_803EA8B0=fn_801D2BB0(1,size,2,0);
 }
 extern "C" void fn_8008FBA0(void)
@@ -359,7 +359,7 @@ extern "C" void fn_8008FBA0(void)
     lbl_802D713C.mpArchive=pModule->GetArchive();
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
     AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
-    fn_801BB2D8(&lbl_802D713C);fn_801F0F18(0);
+    fn_801BB2D8(&lbl_802D713C);ResSync(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
         lbl_802D71D8[i].mHandle=fn_801BB570(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);

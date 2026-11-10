@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -46,7 +46,7 @@ extern "C" void fn_800FAD2C(void) {
     pRecord->mUnknown0 = 1;
     pRecord->mUnknown2 = 150;
     team = fn_80178308();
-    fn_8016871C(team);
+    PlayBookGetPlay(team);
     mode = fn_800AD9B4();
     for (; i <= 2; i++) {
         pRecord->mUnknown8[i] = ((Block_800FAD2C *)fn_8011F4EC())->mUnknown409[i];

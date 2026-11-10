@@ -17,7 +17,7 @@
 typedef Record_800DB60C Record_800DB074;
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAD14;
 extern unsigned char lbl_803EAD18;
 extern unsigned char lbl_803EAD19;
@@ -194,7 +194,7 @@ extern "C" void fn_800DB520(Record_800DB074 *pRecord, Object_80039F5C *p, Object
     pRecord->mUnknown4 = 0.0f;
     pRecord->mUnknown8 = 0.0f;
     fn_8009BD2C(pOther, &pRecord->mUnknown12);
-    pRecord->mUnknown16 = value / (lbl_803ECB08 * 100621.12f);
+    pRecord->mUnknown16 = value / (gPlyrMoveFwdSpeed * 100621.12f);
     Ball_t *pBall = BallFindHeldBy(p);
     if (pBall) {
         int kind = fn_801BE648(p->mpUnknown792);
@@ -386,7 +386,7 @@ extern "C" int fn_800DBAF0(Object_80039F5C *p)
 #include "game/fn_800AD9B4.h"
 
 #include "game/Object_80039F5C.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 
 struct Object_800DC36C {
     char mUnknown0[36];
@@ -408,7 +408,7 @@ struct List_800DC36C {
 };
 
 extern "C" {
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800A7EF4(unsigned char a);
@@ -425,8 +425,8 @@ int PassIconsAreShown(void);
 int PassIconsWereShown(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
-Object_800670B4 *fn_80168708(int team);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+Object_800670B4 *PlayBookGetFormation(int team);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);
 void AnimSeqSetSpeed(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float value, void *p);
@@ -515,7 +515,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                 if (p->mUnknown2913 == 0) {
                     int facing = p->mMotion.mFacing & 0xFFFFFF;
                     if (facing >= 0x6E38E4 && facing <= 0xC38E38
-                        && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                        && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                         target = 0x6AAAAB;
                     } else {
                         target = (angle + 0x38E38E) & 0xFFFFFF;
@@ -523,7 +523,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                 } else {
                     int facing = p->mMotion.mFacing & 0xFFFFFF;
                     if ((facing < 0x11C71C || facing > 0xBC71C7)
-                        && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                        && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                         target = 0x155555;
                     } else {
                         target = (angle - 0x38E38E) & 0xFFFFFF;
@@ -542,12 +542,12 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                     fn_800C89F0(p, 0x400000, 2, 0, 1.0f);
                 }
             }
-        } else if (p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+        } else if (p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
             angle = -0x400000;
             if (p->mUnknown2913 == 0) {
                 int facing = p->mMotion.mFacing & 0xFFFFFF;
                 if (facing >= 0x6E38E4 && facing <= 0xC38E38
-                    && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                    && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                     target = 0x6AAAAB;
                 } else {
                     target = (angle + 0x38E38E) & 0xFFFFFF;
@@ -555,7 +555,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
             } else {
                 int facing = p->mMotion.mFacing & 0xFFFFFF;
                 if ((facing < 0x11C71C || facing > 0xBC71C7)
-                    && p->mMotion.mUnknown28 <= fn_8016D9F4(p, 0.0f, 1.0f)) {
+                    && p->mMotion.mUnknown28 <= PlyrMoveGetRatedSpeed(p, 0.0f, 1.0f)) {
                     target = 0x155555;
                 } else {
                     target = (angle - 0x38E38E) & 0xFFFFFF;
@@ -590,9 +590,9 @@ extern "C" int fn_800DC080(Object_80039F5C *p)
 
     if (p->mIdBytes[3] == 1) {
         int mode = fn_800AD9B4();
-        Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+        Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
         if (!fn_801783AC(0) && BallFindHeldBy(p)
-            && (p == fn_8016444C(pTeam)
+            && (p == PlaySetGetKeyPlayer(pTeam)
                 || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
                     && (PassIconsAreShown() || !(p->mFlags & 0x400))))
             && (fn_8011F1CC() || fn_8011F1F4())
@@ -603,7 +603,7 @@ extern "C" int fn_800DC080(Object_80039F5C *p)
                 } else if (PassIconsAreShown() == 1) {
                     if (!(p->mFlags & 0x200000)) {
                         result = 1;
-                    } else if (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f) {
+                    } else if (p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.4f) {
                         p->mFlags &= ~0x200000;
                         result = 1;
                     }
@@ -626,10 +626,10 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
     unsigned char flag;
     unsigned char shown;
     int mode = fn_800AD9B4();
-    Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (!fn_801783AC(0) && BallFindHeldBy(p)
-        && (p == fn_8016444C(pTeam)
+        && (p == PlaySetGetKeyPlayer(pTeam)
             || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
                 && (PassIconsAreShown() || !(p->mFlags & 0x400))))
         && fn_8011F1CC() && mode == 3 && p->mpState->mId != 1 && p->mpState->mId != 91) {
@@ -714,8 +714,8 @@ extern "C" void fn_800DC578(void)
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
@@ -856,8 +856,8 @@ void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 unsigned int fn_8011E188(void);
 int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, float f, int d, float g);
 int fn_801486A0(void);
-Object_800670B4 *fn_80168708(int team);
-void fn_80171DB0(Object_80039F5C *p);
+Object_800670B4 *PlayBookGetFormation(int team);
+void PossReleaseBall(Object_80039F5C *p);
 int fn_80178308(void);
 int fn_801CFE08(float value);
 int MathAngleDiff(int a, int b);
@@ -867,7 +867,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 }
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 #include "game/fn_80177FE0.h"
 #include "game/Class_80297C60.h"
@@ -1021,7 +1021,7 @@ struct Record_800E2ABC { char mUnknown0[4]; unsigned char mUnknown4, mUnknown5, 
 struct Record_80168EBC { char mUnknown0[48]; unsigned char mUnknown48; };
 extern "C" {
 Record_8011F4E0 *fn_8011F4E0(void);
-Record_80168EBC *fn_80168EBC(int team);
+Record_80168EBC *PlayBookGetTeam(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
 int fn_8009FE24(Object_80039F5C *p);
@@ -1085,7 +1085,7 @@ extern "C" void fn_800538E0(void *, Object_80039F5C *);
 
 extern "C" int fn_8009F778(Object_80039F5C *);
 extern "C" int fn_8009F6B4(void);
-extern "C" void fn_80164B64(int);
+extern "C" void PlayAlignGetSetName(int);
 extern "C" float fn_802270A4(void *);
 
 
@@ -1168,7 +1168,7 @@ extern "C" int fn_800E2F20(Object_80039F5C *p, Point_8017886C *pPoint);
 
 extern "C" int fn_800DC584(Object_80039F5C *p, Record_800DC584 *pRecord)
 {
-    Object_8016D8B0 *pBlock = &p->mUnknown512;
+    PlyrMoveCmd_t *pBlock = &p->mUnknown512;
     int delta = MathAngleDiff(pBlock->mUnknown4, pBlock->mUnknown8);
     int angle;
     int result;
@@ -2416,7 +2416,7 @@ extern "C" int fn_800DFED0(Object_80039F5C *p)
                 fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
                 if (mode == 4) fn_8016DBE4(p);
                 p->mUnknown512.mUnknown14 = 1;
-                p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+                p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                 p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             }
         }
@@ -2445,7 +2445,7 @@ extern "C" int fn_800E0188(Object_80039F5C *p, float *pA, float *pB)
 extern "C" void fn_800E01D8(Object_80039F5C *p, Block_800E0230 *pBlock, int a)
 {
     if (p == BallGetCurrentHolder() && fn_801BE648(p->mpUnknown792) == 74 && fn_801486A0()) {
-        fn_80171DB0(p);
+        PossReleaseBall(p);
     }
 }
 
@@ -2479,7 +2479,7 @@ extern "C" float fn_800E02D0(Object_80039F5C *p)
 
 extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
 {
-    if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.2f || (unsigned char)fn_800B9A90(lbl_803EAB84) != 1) {
+    if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.2f || (unsigned char)fn_800B9A90(lbl_803EAB84) != 1) {
         pBlock->mUnknown8 = 0;
         pBlock->mUnknown0 = fn_800E02D0(p);
         pBlock->mUnknown4 = p->mMotion.mFacing;
@@ -2516,7 +2516,7 @@ extern "C" void fn_800E0438(Object_80039F5C *p, Block_800E0230 *pBlock)
 
 extern "C" void fn_800E04C8(Object_80039F5C *p, Block_800E0230 *pBlock)
 {
-    if (!(p->mMotion.mUnknown28 / lbl_803ECB08 > 0.2f) && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
+    if (!(p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed > 0.2f) && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown4;
         p->mUnknown512.mUnknown4 = pBlock->mUnknown4;
@@ -2559,7 +2559,7 @@ extern "C" int fn_800E05C0(Object_80039F5C *p)
         if (p->mFlags & 4) {
             fn_800E0438(p, pBlock);
             p->mUnknown512.mUnknown14 = state;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
             return 1;
@@ -2701,7 +2701,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             fn_8009A260(p);
             return 1;
         }
@@ -2945,12 +2945,12 @@ extern "C" int fn_800E1778(Object_80039F5C *p)
         chance = 10;
         break;
     }
-    Object_800670B4 *pObject = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
     if (pObject->mUnknown8.mUnknownF == 0) {
-        pRecord = (Record_800E1778 *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        pRecord = (Record_800E1778 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     } else {
-        unsigned char index = fn_80163E94(pObject, p->mIdBytes[1], 0)->mUnknownB;
-        pRecord = (Record_800E1778 *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
+        unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
+        pRecord = (Record_800E1778 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
     }
     if ((pRecord->mUnknown0 & ~0x80) == 85) {
         chance = 0;
@@ -2995,11 +2995,11 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             else pLeft = pOther;
         }
         if (fn_8009F778(pOther) && fn_8009F6B4() == 1) pSpecial = pOther;
-        if (fn_8009F778(pOther) && fn_8009F6B4() == 1 && !pOtherBlock->mpUnknown36) fn_80164B64(2);
+        if (fn_8009F778(pOther) && fn_8009F6B4() == 1 && !pOtherBlock->mpUnknown36) PlayAlignGetSetName(2);
     }
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    Object_800670B4 *pTeam = fn_80168708(fn_80178320());
-    Entry_8006719C *pEntry = fn_80163E94(pTeam, p->mIdBytes[1], 0);
+    Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178320());
+    Entry_8006719C *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
     Point_8017886C own = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10;
     fn_80227638(&own, &own, &goal);
     if (!fn_8009F780() || fn_801BE648(p->mpUnknown792) == 86) {
@@ -3016,8 +3016,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
     }
     if (pMarked) {
         {
-            Object_800670B4 *pMarkedTeam = fn_80168708(fn_80178308());
-            Entry_8006719C *pMarkedEntry = fn_80163E94(pMarkedTeam, pMarked->mIdBytes[1], 0);
+            Object_800670B4 *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            Entry_8006719C *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked = pMarkedTeam->mUnknown8.mUnknownF == 1 ? pMarkedEntry->mUnknown18 : pMarkedEntry->mUnknown10;
             fn_80227638(&marked, &marked, &goal);
         }
@@ -3077,8 +3077,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
                 int slot = !(own.mX <= goal.mX) ? 1 : 5;
                 pMarked = fn_80039F5C(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
                 {
-            Object_800670B4 *pMarkedTeam = fn_80168708(fn_80178308());
-            Entry_8006719C *pMarkedEntry = fn_80163E94(pMarkedTeam, pMarked->mIdBytes[1], 0);
+            Object_800670B4 *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            Entry_8006719C *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked = pMarkedTeam->mUnknown8.mUnknownF == 1 ? pMarkedEntry->mUnknown18 : pMarkedEntry->mUnknown10;
             fn_80227638(&marked, &marked, &goal);
         }
@@ -3100,8 +3100,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
                 int slot = !(own.mX <= goal.mX) ? 2 : 4;
                 pMarked = fn_80039F5C(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
                 {
-            Object_800670B4 *pMarkedTeam = fn_80168708(fn_80178308());
-            Entry_8006719C *pMarkedEntry = fn_80163E94(pMarkedTeam, pMarked->mIdBytes[1], 0);
+            Object_800670B4 *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            Entry_8006719C *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked = pMarkedTeam->mUnknown8.mUnknownF == 1 ? pMarkedEntry->mUnknown18 : pMarkedEntry->mUnknown10;
             fn_80227638(&marked, &marked, &goal);
         }
@@ -3135,8 +3135,8 @@ extern "C" void fn_800E1954(Object_80039F5C *p)
             int slot = !(own.mX <= goal.mX) ? 2 : 4;
             pMarked = fn_80039F5C(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
             {
-            Object_800670B4 *pMarkedTeam = fn_80168708(fn_80178308());
-            Entry_8006719C *pMarkedEntry = fn_80163E94(pMarkedTeam, pMarked->mIdBytes[1], 0);
+            Object_800670B4 *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            Entry_8006719C *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked = pMarkedTeam->mUnknown8.mUnknownF == 1 ? pMarkedEntry->mUnknown18 : pMarkedEntry->mUnknown10;
             fn_80227638(&marked, &marked, &goal);
         }
@@ -3174,8 +3174,8 @@ extern "C" void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngl
 {
     Point_8017886C point = fn_80177FFC(p->mIdBytes[2]);
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    Object_800670B4 *pTeam = fn_80168708(fn_80178320());
-    Entry_8006719C *pEntry = fn_80163E94(pTeam, p->mIdBytes[1], 0);
+    Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178320());
+    Entry_8006719C *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
     *pOut = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10;
     fn_80227638(pOut, pOut, &point);
     if (!(pOut->mX >= 1.0f - fn_80178A08())) {
@@ -3292,7 +3292,7 @@ extern "C" void fn_800E2ABC(Object_80039F5C *p)
         target.mY = fn_80177FFC(p->mIdBytes[2]).mY + 1.0f;
         if (!(target.mY <= p->mMotion.mPos.mY)) target.mY = p->mMotion.mPos.mY;
     }
-    Record_800E2ABC *pRecord = (Record_800E2ABC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[1], p->mIdBytes[2]);
+    Record_800E2ABC *pRecord = (Record_800E2ABC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[1], p->mIdBytes[2]);
     if ((pRecord->mUnknown4 & ~0x80) == 30) {
         Point_8017886C velocity;
         float value = (float)(pRecord->mUnknown5 >> 3) + (float)(pRecord->mUnknown5 & 7) * 0.1428571492433548f;
@@ -3359,7 +3359,7 @@ extern "C" void fn_800E2ABC(Object_80039F5C *p)
         pBlock->mUnknown24 = 0;
     } else if (pBlock->mUnknown22 == 1 && pBlock->mUnknown23 == 1) {
         int angle = pRecord->mUnknown6 << 17;
-        if (fn_80168EBC(fn_80178320())->mUnknown48) angle = (0x800000 - angle) & 0xFFFFFF;
+        if (PlayBookGetTeam(fn_80178320())->mUnknown48) angle = (0x800000 - angle) & 0xFFFFFF;
         if (angle <= 0xBFFFFF) {
             pBlock->mUnknown20 = pBlock->mUnknown4.mX >= pBlock->mUnknown12.mX;
         } else {

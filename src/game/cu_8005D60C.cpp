@@ -161,7 +161,7 @@ int fn_8022F4BC(void);
 void fn_8005BE54(unsigned char value);
 void fn_80061ADC(void);
 void fn_80061AE8(void);
-int fn_801801B4(void);
+int MsgGameGetSetupState(void);
 int fn_80178AE0(void);
 }
 
@@ -1006,9 +1006,9 @@ void fn_8005F13C(int state, int screen)
 {
     if (lbl_803EA5B8) {
         fn_8005D764(0);
-        if (fn_801801B4() == 0) {
+        if (MsgGameGetSetupState() == 0) {
             fn_8005D818();
-        } else if (fn_801801B4() == 1 && lbl_803EA5C8) {
+        } else if (MsgGameGetSetupState() == 1 && lbl_803EA5C8) {
             FELoopSetResume(1);
             fn_8005E4A8();
         }
@@ -1016,7 +1016,7 @@ void fn_8005F13C(int state, int screen)
         lbl_802D4D40.mUnknown20 = 0;
         lbl_803EA5B8 = 0;
     }
-    if (fn_801801B4() == 0) {
+    if (MsgGameGetSetupState() == 0) {
         lbl_803EA5BC = 2;
         lbl_803EA5C0 = 4;
     } else {

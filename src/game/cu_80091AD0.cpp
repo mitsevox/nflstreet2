@@ -1,14 +1,14 @@
 #include "game/cu_8008E978.h"
 #include "game/Ball.h"
 #include "game/fn_802270D4.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 
 extern "C" {
 int fn_80093C64(void);
 Ball_t *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 void fn_80227264(void *pOut, void *pIn, float scale);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(Vec2_t *pOut, int angle, float length);
 
 extern float lbl_803EA8D8;
 }
@@ -41,7 +41,7 @@ extern "C" int fn_80091AD0(Character_80093BCC *pCharacter, Actor_801C009C *pActo
                                 fn_80227264(&velocity, &velocity, lbl_803EA8D8 / speed);
                             } else {
                                 BallGetPosition(pBall, &pos);
-                                fn_80227538((Point_80167910 *)&direction, p->mMotion.mFacing, lbl_803EA8D8);
+                                fn_80227538((Vec2_t *)&direction, p->mMotion.mFacing, lbl_803EA8D8);
                                 direction.mZ = 0.0f;
                                 BallSetVelocity(pBall, &direction);
                             }

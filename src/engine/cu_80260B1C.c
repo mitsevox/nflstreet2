@@ -1,4 +1,4 @@
-/* Partial source for the floating-point range 0x80260B1C-0x802622DC (neutral file name). */
+/* Partial source for the floating-point range 0x80260B1C-0x80260FC4 (neutral file name). */
 
 /*
  * ====================================================
@@ -84,21 +84,4 @@ float fn_80260B1C(float x)
 	ix += (m <<23);
 	SET_FLOAT_WORD(z,ix);
 	return z;
-}
-
-float fn_80260FC4(float x)
-{
-	u_int32_t ix;
-	GET_FLOAT_WORD(ix,x);
-	SET_FLOAT_WORD(x,ix&0x7fffffff);
-        return x;
-}
-
-float fn_80261A24(float x, float y)
-{
-	u_int32_t ix,iy;
-	GET_FLOAT_WORD(ix,x);
-	GET_FLOAT_WORD(iy,y);
-	SET_FLOAT_WORD(x,(ix&0x7fffffff)|(iy&0x80000000));
-        return x;
 }

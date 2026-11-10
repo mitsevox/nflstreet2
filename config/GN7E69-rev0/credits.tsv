@@ -286,3 +286,21 @@
 0x801E7298	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
 0x801E736C	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
 0x801B1A3C	lifewillbeokay	Original body PR #1249, revision d4690694d0dc1a9df02789c75bdb130ccf3f78d7; final source src/engine/spchrand.c blob 98dd32e259ac6c324dc44b421e19ebd6abb8d789; merged_via #1250.
+0x8023ED18	mitsevox	Existing DBPrintf C body at base 1e35a5b8eff2b3fb932a9fea5650f1e1347a8fda; this correction identifies and links it without changing its implementation.
+0x80265D2C	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x80265EA0	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x802661FC	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x802664F8	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x80266640	adampreddy	First exact reconstruction of the complete locale multibyte-conversion routine from public licensed newlib with target-supported first-byte ordering, named and promoted with its full native data.
+0x802645AC	adampreddy	First exact reconstruction and whole-file promotion of the integer formatter staging writer, with licensed public Newlib provenance and target-supported ABI.
+0x80264680	adampreddy	First exact reconstruction and whole-file promotion of the complete integer formatter, with licensed public Newlib provenance and target-supported ABI.
+0x80265CFC	adampreddy	First exact reconstruction and whole-file promotion of the fixed locale convention accessor, with licensed public Newlib provenance and target-supported ABI.
+0x80265D08	adampreddy	First exact reconstruction and whole-file promotion of the shared-context locale wrapper, with licensed public Newlib provenance and target-supported ABI.
+0x8015C9E0	adampreddy	First exact body (FEPlyrLoadQueue) in original PR #1268, landed through this integration PR.
+0x8015D060	adampreddy	First exact body (FEPlyrLoadRequest) in original PR #1268, landed through this integration PR.
+0x801C06E8	adampreddy	First exact body (AnimTexLibInit) in original PR #1275, landed through this integration PR.
+0x80203444	lifewillbeokay	First exact body (_TDbMemPoolInit) in original PR #1277, landed through this integration PR.
+0x8020360C	lifewillbeokay	First exact body (__TDbMemPoolAlloc) in original PR #1277, landed through this integration PR.
+0x800D1788	lifewillbeokay	First exact body (StyleTrackerCalculateAward) in original PR #1317, landed through this integration PR.
+0x801EE38C	lifewillbeokay	First exact body (_ResInitRamResourceFile) in original PR #1319, landed through this integration PR.
+0x801F02AC	lifewillbeokay	First exact body (ResLoadAll) in original PR #1319, landed through this integration PR.

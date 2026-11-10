@@ -1,4 +1,4 @@
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 struct Vector_8005406C {
     float mX;
@@ -27,7 +27,7 @@ extern Object_8005406C *gLevelData;
 
 void fn_8005406C(void)
 {
-    lbl_803EA550 = gLevelData = (Object_8005406C *)fn_801EF390(fn_800A336C(), fn_800A3380(), 1);
+    lbl_803EA550 = gLevelData = (Object_8005406C *)ResLoad(fn_800A336C(), fn_800A3380(), 1);
     LevelMeshRelocate();
     fn_80227264(fn_800A3438(), &gLevelData->mScale, lbl_8028DEAC[0]);
     LevelMeshPostLoad(gLevelData);
@@ -37,7 +37,7 @@ void fn_8005406C(void)
 void fn_800540E0(void)
 {
     LevelFreeWallInfo();
-    fn_801F010C(fn_800A336C(), fn_800A3380());
+    ResUnLoad(fn_800A336C(), fn_800A3380());
     gLevelData = 0;
     lbl_803EA550 = 0;
 }

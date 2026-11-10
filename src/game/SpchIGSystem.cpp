@@ -6,8 +6,8 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
-#include "game/fn_801EEB44.h"
+#include "game/GameModeType.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
@@ -82,7 +82,7 @@ int SpchIGGetBallCarrier(void);
 int SpchIGGetTurnoverPlayer(void);
 int SpchIGGetScorer(void);
 int SpchIGGetTeamSceneSpeaker(int index);
-void *fn_801EECD0(void *pData, int a, int b, int c);
+void *ResOpenRam(void *pData, int a, int b, int c);
 void fn_801F4638(int handle);
 void fn_801F46F8(int handle, int a);
 void fn_801F4AB0(int a, int b);
@@ -358,10 +358,10 @@ extern "C" void SpchIGLoadChatData(SpchIGInitParams_t *pParams, int unused)
 {
     int i;
 
-    _SpchIG_bTutorial = fn_8017F584() == 11;
+    _SpchIG_bTutorial = GameModeTypeGet() == 11;
     _SpchIG_bUseSpeakerPos = 1;
-    _SpchIG_sState.mpUnknown4 = fn_801EEB44(lbl_802EBE04, 44);
-    _SpchIG_sState.mpUnknown8 = fn_801EECD0(_SpchIG_sState.mpUnknown4, 0, 1, 1);
+    _SpchIG_sState.mpUnknown4 = ResOpenDevice(lbl_802EBE04, 44);
+    _SpchIG_sState.mpUnknown8 = ResOpenRam(_SpchIG_sState.mpUnknown4, 0, 1, 1);
     fn_801F5B30(pParams);
     fn_801F5CEC(SpchIGCanPlayEvent);
     _SpchIG_sState.mUnknown0 = pParams->mUnknown14;
@@ -485,11 +485,11 @@ extern "C" void SpchIGStop(void)
     fn_801F5D0C();
     fn_801F5C34();
     if (_SpchIG_sState.mpUnknown8 != 0) {
-        fn_801EEFAC(_SpchIG_sState.mpUnknown8);
+        ResClose(_SpchIG_sState.mpUnknown8);
         _SpchIG_sState.mpUnknown8 = 0;
     }
     if (_SpchIG_sState.mpUnknown4 != 0) {
-        fn_801EEFAC(_SpchIG_sState.mpUnknown4);
+        ResClose(_SpchIG_sState.mpUnknown4);
         _SpchIG_sState.mpUnknown4 = 0;
     }
 }

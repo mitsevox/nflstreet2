@@ -44,7 +44,7 @@ void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
 int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, float f, int d, float g);
 void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAE2C;
 extern const float lbl_803ED6CC;
 }
@@ -77,7 +77,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             pBlock->mUnknown24 = 0;
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
-        } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
+        } else if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
             if (MathAngleDiff(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
                 pBlock->mUnknown8 = (toBall.Heading() + 0x400000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.25f;
@@ -103,7 +103,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             flat.mX = 0.0f;
             flat.mY = toSpot.mY;
             speed = pOther->mMotion.mUnknown28
-                / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+                / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
             if (fn_802270A4(&flat) > 1.5f) {
                 speed = 1.0f;
             }
@@ -170,7 +170,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
-        } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
+        } else if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
             if (MathAngleDiff(p->mMotion.mFacing, toBall.Heading()) > 0x11C71C) {
                 pBlock->mUnknown8 = (toBall.Heading() + 0x800000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.25f;
@@ -197,7 +197,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             flat.mX = toSpot.mX;
             flat.mY = 0.0f;
             speed = pOther->mMotion.mUnknown28
-                / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+                / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
             if (fn_802270A4(&flat) > 1.5f) {
                 speed = 1.0f;
             }
@@ -323,7 +323,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         pBlock = (Block_800F7314 *)&p->mUnknown336;
         origin = fn_80177FE0();
         if ((MathAngleDiff(pOther->mMotion.mUnknown32, fromOther.Heading()) < 0xE38E3 && fn_802270A4(&toOther) < 12.0f
-             && (pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f
+             && (pOther->mMotion.mUnknown28 >= gPlyrMoveFwdSpeed * 0.14f
                  || fabsf(pOther->mMotion.mPos.mY - origin.mY) < 2.5f))
             || pOther->mpState->mId == 0x34) {
             pBlock->mUnknown8 = pOther->mMotion.mUnknown32;

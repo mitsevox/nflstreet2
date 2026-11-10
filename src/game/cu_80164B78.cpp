@@ -1,25 +1,25 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_8016871C.h"
-#include "game/fn_80163E94.h"
+#include "game/PlayBookGetPlay.h"
+#include "game/PlaySet.h"
 #include "game/fn_800F06F4.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
-#include "game/State_80167094.h"
-#include "game/Record_80167094.h"
+#include "game/PlayArtState.h"
+#include "game/PlayArtPlayer.h"
 #include "game/fn_801C1F94.h"
 #include "game/DbQueryTable.h"
 #include "game/fn_801FCE10.h"
 
-extern "C" Point_80167094 lbl_8031D2B8[], lbl_8031D308[];
+extern "C" PlayArtVertex_t lbl_8031D2B8[], lbl_8031D308[];
 
 extern "C" {
 void fn_802271A4(void *, void *);
 float fn_80260B1C(float);
 
 extern int lbl_802E9964[];
-extern Point_80167094 lbl_802E98FC[];
+extern PlayArtVertex_t lbl_802E98FC[];
 extern unsigned char lbl_802E98E0[][4], lbl_802E98F0[][3];
 extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803EB3CB,lbl_803EB3CF;
 extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
@@ -34,7 +34,7 @@ int fn_8018AFF0(const char *);
 int fn_80178308(void);
 unsigned int fn_80178D18(int);
 int fn_80178D70(int);
-Object_800670B4 *fn_80168708(int);
+Object_800670B4 *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
@@ -45,12 +45,12 @@ void fn_80164CE4(Record_80067338 *, Object_80039F5C *, int);
 
 unsigned char fn_80164B78(void)
 {
-    Object_80039F5C *selected = fn_8016444C(fn_80168708(fn_80178308()));
+    Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
     if (selected == fn_80039F5C(fn_80178308(), 0)) {
         unsigned int n = fn_80178D18(fn_80178308());
         for (unsigned char i = 0; i < n; ++i) {
             Object_80039F5C *p = fn_80039F5C(fn_80178308(), i);
-            Record_80067338 *record = fn_8016871C(fn_80178308());
+            Record_80067338 *record = PlayBookGetPlay(fn_80178308());
             void *queue = fn_80164EC8(record, fn_80178308(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
         }
@@ -70,7 +70,7 @@ void fn_80164CE4(Record_80067338 *record, Object_80039F5C *p, int remap)
 {
     if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
     unsigned char index = p->mIdBytes[1];
-    if (remap) index = fn_80163E94(fn_80168708(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
+    if (remap) index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
     Message_800F01CC *other = fn_800AEE20(p);
     if (other) {fn_800AEF74(p, other); return;}
     Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
@@ -92,7 +92,7 @@ void fn_80164CE4(Record_80067338 *record, Object_80039F5C *p, int remap)
 int fn_80164E30(Record_80067338 *record, Object_800670B4 *object, Object_80039F5C *p, int kind)
 {
     unsigned char index = p->mIdBytes[1];
-    if (object->mUnknown8.mUnknownF) index = fn_80163E94(object, p->mIdBytes[1], 0)->mUnknownB;
+    if (object->mUnknown8.mUnknownF) index = PlaySetGetEntry(object, p->mIdBytes[1], 0)->mUnknownB;
     Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
     for (;;) {
         int end = queue->mId & 0x80;
@@ -125,7 +125,7 @@ unsigned char fn_80164ED8(Object_800670B4 *object, Record_80067338 *record, int 
         if (slots && !override) {
             if (!remap) *out = slots[slot][1];
             else {
-                unsigned char n = fn_80163E94(object, index, 0)->mUnknownB;
+                unsigned char n = PlaySetGetEntry(object, index, 0)->mUnknownB;
                 *out = 0;
                 for (int i = 0; i <= 2; ++i) {
                     if (slots[i][0] == n) {*out = slots[i][1]; break;}
@@ -139,7 +139,7 @@ unsigned char fn_80164ED8(Object_800670B4 *object, Record_80067338 *record, int 
 void fn_80165000(Object_800670B4 *object, Record_80067338 *record, unsigned int index, unsigned char value, int remap)
 {
     if (fn_801650DC(record)) {
-        if (remap == 1) index = fn_80163E94(object, index, 0)->mUnknownB;
+        if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
         for (unsigned char i = 0; i <= 2; ++i)
             if (record->mUnknown1C[i][0] == index) {record->mUnknown1C[i][1] = value; break;}
     }
@@ -153,11 +153,11 @@ int fn_801650DC(Record_80067338 *record) {unsigned int n = record->mUnknown14; r
 
 int fn_801650FC(Record_80067338 *record) {return record->mUnknown14 == 21;}
 
-void fn_80165110(Object_80167160 *record, int force)
+void fn_80165110(PlayArtPlay_t *record, int force)
 {
     int swap = 0;
     if (record->mUnknown14 >= 1 && record->mUnknown14 <= 5) {
-        Object_800670B4 *object = fn_80168708(fn_80178308());
+        Object_800670B4 *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char index = record->mUnknown1C[i][0];
             fn_80039F5C(fn_80178308(), index);
@@ -176,7 +176,7 @@ void fn_80165110(Object_80167160 *record, int force)
     }
 }
 
-int fn_801651E0(void *handle, int, signed char, int id, Record_80167094 *records)
+int fn_801651E0(void *handle, int, signed char, int id, PlayArtPlayer_t *records)
 {
     DbFilter filter;
     filter.Set(6, 0x505445534C544553LL, 3, id);
@@ -192,7 +192,7 @@ int fn_801651E0(void *handle, int, signed char, int id, Record_80167094 *records
     if (!status) {
         status = fn_801FA228(cursor, 1, 0, columns);
         while (!status) {
-            Record_80167094 *record = &records[columns[0].mValue];
+            PlayArtPlayer_t *record = &records[columns[0].mValue];
             record->mUnknown18Word = columns[4].mValue;
             record->mUnknown8 = (float)columns[2].mValue;
             record->mUnknown10 = columns[1].mValue;
@@ -205,7 +205,7 @@ int fn_801651E0(void *handle, int, signed char, int id, Record_80167094 *records
     return 1;
 }
 
-int fn_80165464(void *handle, int, int id, Record_80167094 *records)
+int fn_80165464(void *handle, int, int id, PlayArtPlayer_t *records)
 {
     DbFilter play, route;
     play.Set(6, 0x53594C504C594C50LL, 3, id);
@@ -221,7 +221,7 @@ int fn_80165464(void *handle, int, int id, Record_80167094 *records)
         status = fn_801FA228(cursor, 1, 0, ids);
         route.mUnknown16.mValue.mInt = ids[0].mValue;
         while (!status) {
-            Record_80167094 *record = &records[ids[1].mValue];
+            PlayArtPlayer_t *record = &records[ids[1].mValue];
             route.mUnknown16.mKind = 3;
             record->mUnknown0Word = route.mUnknown16.mValue.mInt;
             fn_801FA290((int)handle, routes, 0, counts);
@@ -234,7 +234,7 @@ int fn_80165464(void *handle, int, int id, Record_80167094 *records)
     return 1;
 }
 
-int fn_80165770(Object_80167160 *record, State_80167094 *state, Record_80167094 *)
+int fn_80165770(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *)
 {
     unsigned int kind = record->mUnknown14;
     state->mUnknown2160 = 0;
@@ -257,10 +257,10 @@ int fn_80165770(Object_80167160 *record, State_80167094 *state, Record_80167094 
     return 1;
 }
 
-int fn_80165890(void *handle, Record_80167094 *records, int first, unsigned char count)
+int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char count)
 {
     for (unsigned int i = first; i < count; ++i) {
-        Record_80167094 *record = &records[i];
+        PlayArtPlayer_t *record = &records[i];
         int steps = record->mUnknown4Word;
         fn_801C1F94(record->mUnknown1C, 0, 0x1B0);
         for (int j = 0; j < steps; ++j) {
@@ -281,7 +281,7 @@ int fn_80165890(void *handle, Record_80167094 *records, int first, unsigned char
             int status = fn_801FCE10(0, "use \x8c select \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 from 'LTRA' where 'LTRA' = \x85\n",
                 (int)handle, axTag,&x,ayTag,&y,atTag,&type,auTag,&u,avTag,&v,ctTag,&link,spTag,&speed,ltTag,&arrow,lsTag,&color,record->mUnknown0Word);
             if (!status) {
-                Route_80165890 *step = &record->mUnknown1C[j];
+                PlayArtStep_t *step = &record->mUnknown1C[j];
                 step->mUnknown0 = (float)x;
                 step->mUnknown4 = (float)y;
                 step->mUnknown10 = type;
@@ -298,7 +298,7 @@ int fn_80165890(void *handle, Record_80167094 *records, int first, unsigned char
     return 1;
 }
 
-void fn_80165C50(Point_80167094 *points, int count, Point_80167094 *out, float t)
+void fn_80165C50(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, float t)
 {
     for (int i = 0; i < count; ++i) lbl_8031D2B8[i] = points[i];
     for (int i = 1; i < count; ++i)
@@ -309,7 +309,7 @@ void fn_80165C50(Point_80167094 *points, int count, Point_80167094 *out, float t
     *out = lbl_8031D2B8[0];
 }
 
-void fn_80165D18(Point_80167094 *points, int count, Point_80167094 *out, int samples)
+void fn_80165D18(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, int samples)
 {
     float step = 1.0f / (float)(samples - 1);
     out[0] = points[0];
@@ -321,13 +321,13 @@ void fn_80165D18(Point_80167094 *points, int count, Point_80167094 *out, int sam
     out[samples-1] = points[count-1];
 }
 
-void fn_80165DF8(Point_80167094 *a, Point_80167094 *b, Point_80167094 *left, Point_80167094 *right,
-                int width, Point_80167094 *prior, int average)
+void fn_80165DF8(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, PlayArtVertex_t *right,
+                int width, PlayArtVertex_t *prior, int average)
 {
-    Point_80167094 normal = {a->mY - b->mY, a->mX - b->mX};
+    PlayArtVertex_t normal = {a->mY - b->mY, a->mX - b->mX};
     fn_802271A4(&normal, &normal);
     float half = (float)width * 0.25f;
-    Point_80167094 offset;
+    PlayArtVertex_t offset;
     if (prior && average) {
         offset.mX = (normal.mX + prior->mX) * 0.5f;
         offset.mY = (normal.mY + prior->mY) * 0.5f;
@@ -342,11 +342,11 @@ void fn_80165DF8(Point_80167094 *a, Point_80167094 *b, Point_80167094 *left, Poi
     if (prior) *prior = normal;
 }
 
-void fn_80165F78(Point_80167094 *control, Point_80167094 *out, int samples, int width)
+void fn_80165F78(PlayArtVertex_t *control, PlayArtVertex_t *out, int samples, int width)
 {
     fn_80165D18(control, 3, lbl_8031D308, samples);
     lbl_8031D308[samples] = lbl_8031D308[samples-2];
-    Point_80167094 prior;
+    PlayArtVertex_t prior;
     fn_80165DF8(&lbl_8031D308[0], &lbl_8031D308[1], &out[0], &out[1], width, &prior, 0);
     int n = 2;
     for (int i = 1; i < samples - 1; ++i) {
@@ -356,15 +356,15 @@ void fn_80165F78(Point_80167094 *control, Point_80167094 *out, int samples, int 
     fn_80165DF8(&lbl_8031D308[samples-1], &lbl_8031D308[samples], &out[n+1], &out[n], width, 0, 0);
 }
 
-void fn_801660A0(Point_80167094 *points, Point_80167094 *out, int width)
+void fn_801660A0(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
 {
     fn_80165DF8(&points[0], &points[1], &out[0], &out[1], width, 0, 0);
     fn_80165DF8(&points[1], &points[0], &out[2], &out[3], width, 0, 0);
 }
 
-void fn_80166110(Point_80167094 *points, Point_80167094 *out, int width, int length)
+void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
 {
-    Point_80167094 direction = {points[0].mX - points[1].mX, points[0].mY - points[1].mY};
+    PlayArtVertex_t direction = {points[0].mX - points[1].mX, points[0].mY - points[1].mY};
     float magnitude = fn_80260B1C(direction.mX * direction.mX + direction.mY * direction.mY);
     if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
     float x = -direction.mY * 0.5f * (float)width;
@@ -381,7 +381,7 @@ void fn_80166110(Point_80167094 *points, Point_80167094 *out, int width, int len
     out[3].mY = out[1].mY + forwardY;
 }
 
-int fn_801662A8(Point_80167094 *out, int count, int, Point_80167094 *quad)
+int fn_801662A8(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
 {
     out[count] = quad[0];
     out[count+1] = quad[1];
@@ -390,19 +390,19 @@ int fn_801662A8(Point_80167094 *out, int count, int, Point_80167094 *quad)
     return count+4;
 }
 
-int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void *arrowBuffer,
+int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
                 void *kindBuffer, void *colorBuffer, int extend)
 {
-    Point_80167094 *vertices = (Point_80167094 *)vertexBuffer;
-    Point_80167094 (*arrows)[4] = (Point_80167094 (*)[4])arrowBuffer;
+    PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
+    PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
     int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
-    Point_80167094 starts[12], ends[13], controls[3], strip[20];
+    PlayArtVertex_t starts[12], ends[13], controls[3], strip[20];
     fn_801C1F94(controls, 0, 24);
     int drawn = 0;
     int count = 0;
     fn_801C1F94(strip, 0, 160);
     for (int i = 0; i <= 11; ++i) {
-        Route_80165890 *step = &record->mUnknown1C[i];
+        PlayArtStep_t *step = &record->mUnknown1C[i];
         int arrowKind = step->mUnknown14;
         kinds[i] = arrowKind;
         colors[i] = step->mUnknown20;
@@ -414,7 +414,7 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
             else starts[i] = ends[link+1];
         }
         int stop = 0;
-        Point_80167094 zero = {0.0f, 0.0f};
+        PlayArtVertex_t zero = {0.0f, 0.0f};
         if (step->mUnknown10 == 1) {
             controls[0] = starts[i];
             fn_80227638(&controls[1], &step->mUnknown0, starts);
@@ -466,7 +466,7 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
                 fn_801660A0(controls, strip, width);
                 count = fn_801662A8(vertices, count, capacity, strip);
             }
-            Point_80167094 axis[2];
+            PlayArtVertex_t axis[2];
             if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}
             else {axis[0] = ends[i+1]; axis[1] = starts[i];}
             if (fabsf(axis[0].mX - axis[1].mX) == 0.0f && fabsf(axis[0].mY - axis[1].mY) == 0.0f) {
@@ -494,7 +494,7 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
     return count;
 }
 
-void fn_80166BE8(Object_80167160 *record, State_80167094 *state, Record_80167094 *entry, int team, int index, unsigned char)
+void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
 {
     unsigned char r = 130, g = 130, b = 130;
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;

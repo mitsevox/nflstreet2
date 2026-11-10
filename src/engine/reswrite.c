@@ -4,17 +4,17 @@ extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9D2C(int handle);
 extern int fn_801F1838(int a, int b, int c, int d, int e, int f, int g);
-extern int fn_801F1D20(Res_801EDC2C *pWrite);
+extern int fn_801F1D20(ResFile_t *pWrite);
 extern int ProcBuildHashTable(int type, unsigned int count, char **ppStrings, int *pHashes, unsigned int **ppParams,
                        int *pParamSize);
-extern int fn_801F1F30(Res_801EDC2C *pWrite);
+extern int fn_801F1F30(ResFile_t *pWrite);
 
 static void fn_801F21B4(int handle, unsigned char value);
 static unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count);
 static void fn_801F2244(int handle, unsigned short value, int bigEndian);
 static void fn_801F2294(int handle, unsigned int value, int bigEndian);
-static int fn_801F201C(Res_801EDC2C *pWrite);
-static int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned int size);
+static int fn_801F201C(ResFile_t *pWrite);
+static int fn_801F2120(ResFile_t *pWrite, int index, unsigned int offset, unsigned int size);
 
 static int fn_801F17E0(unsigned int id)
 {
@@ -35,7 +35,7 @@ int fn_801F1B44(int a, int b, int c, int d, int e)
     return fn_801F1838(a, b, c, d, e, 0, 0);
 }
 
-int fn_801F1B6C(Res_801EDC2C *pWrite)
+int fn_801F1B6C(ResFile_t *pWrite)
 {
     int size;
 
@@ -102,9 +102,9 @@ static unsigned int fn_801F1CF8(unsigned int size, unsigned int alignment)
     return pad;
 }
 
-int fn_801F1D20(Res_801EDC2C *pWrite)
+int fn_801F1D20(ResFile_t *pWrite)
 {
-    ResHash_801F0A8C *pHash;
+    ResHashHeader_t *pHash;
     unsigned int count;
     unsigned int size;
     unsigned int pad;
@@ -113,31 +113,31 @@ int fn_801F1D20(Res_801EDC2C *pWrite)
     unsigned int i;
     unsigned int j;
 
-    if (pWrite->mHashCount == 0) {
+    if (pWrite->mHashTag == 0) {
         return 1;
     }
     pHash = pWrite->pHash;
     count = pWrite->mNumRes;
-    if (ProcBuildHashTable(fn_801F17E0(pWrite->mHashCount), count, (char **)pWrite->pSlots, pWrite->pHashTable,
-                    &pWrite->pHashParams, &pHash->mUnk4) != 1) {
+    if (ProcBuildHashTable(fn_801F17E0(pWrite->mHashTag), count, (char **)pWrite->pSlots, pWrite->pHashTable,
+                    &pWrite->pHashParams, &pHash->mParamSize) != 1) {
         for (i = 0; i < count - 1; i++) {
             for (j = i + 1; j < count; j++) {
             }
         }
         return 0;
     }
-    size = fn_801F1CD4(pWrite->mHashCount, pWrite->mNumRes);
+    size = fn_801F1CD4(pWrite->mHashTag, pWrite->mNumRes);
     pad = fn_801F1CF8(size, pWrite->mAlignment);
-    type = pWrite->mHashCount;
+    type = pWrite->mHashTag;
     size += pad;
     position = fn_801C9D2C(pWrite->mFile);
     fn_801C9844(pWrite->mFile, pWrite->mHashOffset, 0);
     fn_801F2294(pWrite->mFile, type, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     fn_801F2294(pWrite->mFile, pHash->mType, pWrite->mBigEndian);
-    fn_801F2294(pWrite->mFile, pHash->mUnk4, pWrite->mBigEndian);
+    fn_801F2294(pWrite->mFile, pHash->mParamSize, pWrite->mBigEndian);
     fn_801F2294(pWrite->mFile, pHash->mWidth, pWrite->mBigEndian);
-    if (pWrite->mHashCount == 0x48534831) {
+    if (pWrite->mHashTag == 0x48534831) {
         fn_801F2294(pWrite->mFile, pWrite->pHashParams[0], pWrite->mBigEndian);
     }
     for (i = 0; i < count; i++) {
@@ -158,7 +158,7 @@ int fn_801F1D20(Res_801EDC2C *pWrite)
     return 1;
 }
 
-int fn_801F1F30(Res_801EDC2C *pWrite)
+int fn_801F1F30(ResFile_t *pWrite)
 {
     int position;
     unsigned int size;
@@ -171,14 +171,14 @@ int fn_801F1F30(Res_801EDC2C *pWrite)
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     for (i = 0; i < pWrite->mNumRes; i++) {
         if (pWrite->mDirTag == 0x44495231) {
-            fn_801F2120(pWrite, i, pWrite->pDir[i].mUnk0, pWrite->pDir[i].mUnk4);
+            fn_801F2120(pWrite, i, pWrite->pDir[i].mOffsetOrCodec, pWrite->pDir[i].mSize);
         }
     }
     fn_801C9844(pWrite->mFile, position, 0);
     return 1;
 }
 
-static int fn_801F201C(Res_801EDC2C *pWrite)
+static int fn_801F201C(ResFile_t *pWrite)
 {
     unsigned int size;
     unsigned int i;
@@ -195,8 +195,8 @@ static int fn_801F201C(Res_801EDC2C *pWrite)
     fn_801F2294(pWrite->mFile, 0x434F4D50, 0);
     fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     for (; i < pWrite->mNumRes; i++) {
-        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mUnk0, pWrite->mBigEndian);
-        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mUnk4, pWrite->mBigEndian);
+        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mOffsetOrCodec, pWrite->mBigEndian);
+        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mSize, pWrite->mBigEndian);
     }
     written = fn_801C9D2C(pWrite->mFile) - pWrite->mCompOffset;
     fn_801F21E4(pWrite->mFile, 0, pWrite->mCompSize - written);
@@ -204,7 +204,7 @@ static int fn_801F201C(Res_801EDC2C *pWrite)
     return 1;
 }
 
-static int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned int size)
+static int fn_801F2120(ResFile_t *pWrite, int index, unsigned int offset, unsigned int size)
 {
     fn_801C9844(pWrite->mFile, pWrite->mDirOffset + 8, 0);
     if (pWrite->mDirTag != 0x44495231) {

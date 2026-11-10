@@ -14,7 +14,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -23,8 +23,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -65,7 +65,7 @@ int fn_8010CE90(Object_80039F5C *p, Ball_t *pBall);
 void fn_8010CFD4(Object_80039F5C *p);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_8010D090(Object_80039F5C *p) {
@@ -95,7 +95,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         p->mUnknown512.mUnknown15 = 0;
     } else {
         Ball_t *pBall = BallGetCurrent();

@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -48,9 +49,7 @@ void fn_800B8344(Object_80039F5C *p);
 void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
-int fn_800D5A6C(int a, int b, int c);
 int fn_8009AD30(Object_80039F5C *p, int value);
-void fn_800D6CC0(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
@@ -98,7 +97,7 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 float fn_80178A68(void *p);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_8012BB6C(float *pA, float *pB);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
@@ -115,7 +114,6 @@ int fn_80177C38(void);
 float fn_801CFB18(int angle);
 int fn_800E885C(Object_80039F5C *p);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
-void fn_800D4948(void);
 int fn_80111090(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
@@ -151,7 +149,7 @@ extern int lbl_803EB118;
 extern float lbl_803EB11C, lbl_803EB120, lbl_803EB124;
 extern unsigned char lbl_802DB05C[21];
 Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 typedef int (*Action_8012F5A0)(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
@@ -198,7 +196,7 @@ extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
 
 extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
-extern "C" int fn_80168E00(int team, int a, unsigned char *pOut);
+extern "C" int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 
 #endif
 
@@ -286,7 +284,7 @@ extern "C" int fn_8012A6B0(Object_80039F5C *p)
     if (p->mFlags & 0x4000) {
         result = 0;
     }
-    if (!(p->mMotion.mUnknown28 >= fn_8016D9F4(p, 0.14f, 1.0f))) {
+    if (!(p->mMotion.mUnknown28 >= PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f))) {
         Object_80039F5C *pOther = BallGetCurrentHolder();
 
         if (pOther && pOther->mpState->mId == 15) {
@@ -389,7 +387,7 @@ extern "C" int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower,
     team = fn_80178308();
     for (unsigned char i = 0; i <= 2; ++i) {
         unsigned char valid;
-        unsigned short index = fn_80168E00(team, i, &valid);
+        unsigned short index = PlayBookGetReceiver(team, i, &valid);
         if (valid) {
             Object_80039F5C *other = fn_80039F5C(team, index);
             if (other != p) {
@@ -646,7 +644,7 @@ fallback:
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         } else {
-            float speed = p->mMotion.mUnknown28 / lbl_803ECB08;
+            float speed = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             if (!(speed >= 0.14f)) speed = 0.14f;
             p->mUnknown512.mUnknown0 = speed;
             p->mUnknown512.mUnknown14 = 1;
@@ -896,7 +894,7 @@ extern "C" void fn_8012C5A8(Object_80039F5C *p, int value)
     int team;
 
     AudmonEventPostId(38, &p->mMotion.mPos, p->mId, 0, 0, 0);
-    fn_800D6CC0(p);
+    StyleTrackerOnCarrierActionTwo(p);
     fn_801C1F94(&message, 0, 4);
     message.mId = 20;
     team = p->mpState->mUnknown2;
@@ -1133,16 +1131,16 @@ extern "C" float fn_8012CD60(Object_80039F5C *p, float value)
     switch (state->mUnknown2) {
     case 5:
         if (!(fraction < 0.8f)) {
-            value = p->mMotion.mUnknown28 / lbl_803ECB08;
+            value = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
         break;
     case 11:
         if (fraction >= 0.64f) {
-            value = p->mMotion.mUnknown28 / lbl_803ECB08;
+            value = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
         break;
     }
-    return fn_8016D9F4(p, value, 0.72f);
+    return PlyrMoveGetRatedSpeed(p, value, 0.72f);
 }
 #endif
 
@@ -1816,7 +1814,7 @@ extern "C" int fn_8012EF94(Object_80039F5C *p, Object_80039F5C *pOther, int a, i
                 chance = chance * 3 >> 1;
             }
             if (fn_802372EC(0, 100) < chance && fn_800E815C(p, 2, fn_800E885C(p))) {
-                fn_800D4948();
+                StyleTrackerOnStyleFirstDown();
                 return 1;
             }
         }
@@ -1992,7 +1990,7 @@ extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int
         control->mUnknown52 = 0;
         if (!(fabsf(other->mMotion.mPos.mX) - 0.5f >= fabsf(p->mMotion.mPos.mX))
             && !(other->mMotion.mUnknown28 >= p->mMotion.mUnknown28)) {
-            control->mUnknown40 = other->mMotion.mUnknown28 / lbl_803ECB08;
+            control->mUnknown40 = other->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             control->mUnknown40 = control->mUnknown40 >= 0.75f ? control->mUnknown40 : 0.75f;
         }
     } else if (control->mUnknown52 == 1) {
@@ -2110,7 +2108,7 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl)
 
         if (pOther && fn_8011E9B4(pOther)
             && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x200000) {
-            result = p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.4f;
+            result = p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.4f;
         }
         if (result) {
             p->mUnknown512.mUnknown15 = 27;
@@ -2157,7 +2155,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
     fn_800B8344(p);
     if (p == BallGetCurrentHolder()) {
         fn_8012CEF4(p, pControl);
-        fn_800D5A6C(0, 0, 0);
+        StyleTrackerUpdateRun(0, 0, 0);
         fn_800A3B58(p, 2, 0);
     } else {
         fn_801C1F94(&message, 0, 4);

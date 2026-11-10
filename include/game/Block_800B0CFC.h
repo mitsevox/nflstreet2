@@ -1,7 +1,7 @@
 #ifndef GAME_BLOCK_800B0CFC_H
 #define GAME_BLOCK_800B0CFC_H
 
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/fn_800670B4.h"
 
 /* 72-byte entries of Block_800B0CFC. */

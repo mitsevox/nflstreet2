@@ -50,7 +50,7 @@ void fn_800FE41C(Object_80039F5C *,Object_80039F5C *,Point_8017886C *);
 void fn_800FE430(Object_80039F5C *,Object_80039F5C *,Point_8017886C *);
 void fn_800FF598(State_800FDA58 *,Object_80039F5C *,Point_8017886C *,int,float);
 
-float fn_8016D9F4(Object_80039F5C *,float,float);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *,float,float);
 int fn_8012CAAC(Object_80039F5C *);
 int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
@@ -61,7 +61,7 @@ float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
 int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
-int fn_80168E00(int,int,unsigned char *);
+int PlayBookGetReceiver(int,int,unsigned char *);
 void fn_8009BD2C(Object_80039F5C *,int *);
 void fn_8012430C(Directions_8012430C *,int,Object_80039F5C *);
 unsigned char fn_801243E0(Directions_8012430C *,int);
@@ -74,7 +74,7 @@ void fn_8010CEB8(Object_80039F5C *,int);
 void fn_800C89F0(Object_80039F5C *,int,int,int,float);
 void fn_8009D284(Object_80039F5C *,Object_80039F5C *);
 extern float gFrameTimeScale;
-extern float lbl_803ECB08,lbl_803EAE84;
+extern float gPlyrMoveFwdSpeed,lbl_803EAE84;
 extern float lbl_803EAEA4,lbl_803EAEA8,lbl_803EAEAC,lbl_803EAEB0;
 extern float lbl_803EAEB4,lbl_803EAEB8,lbl_803EAEBC;
 extern unsigned short lbl_803EAE76;
@@ -142,8 +142,8 @@ void fn_800FE564(Object_80039F5C *p, Object_80039F5C *other, Object_80039F5C *ta
     } else {
         base = 2.0f;
     }
-    if (base + fn_802270A4(&bv) / lbl_803ECB08 <= 5.5f) {
-        radius = base + fn_802270A4(&bv) / lbl_803ECB08;
+    if (base + fn_802270A4(&bv) / gPlyrMoveFwdSpeed <= 5.5f) {
+        radius = base + fn_802270A4(&bv) / gPlyrMoveFwdSpeed;
     } else {
         radius = 5.5f;
     }
@@ -213,7 +213,7 @@ void fn_800FE910(Object_80039F5C *p, Point_8017886C *point, float *value, float 
     *distance = fn_8022781C(point, &p->mMotion.mPos);
     *distance = *distance > 15.0f ? 15.0f : *distance;
     if (*value > 0.0000001f) {
-        float t = *distance / (lbl_803ECB08 * *value);
+        float t = *distance / (gPlyrMoveFwdSpeed * *value);
 
         *time = t > 180.0f ? 180.0f : t;
     }
@@ -522,7 +522,7 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
     s->mUnknown12 = point->mY;
     s->mUnknown20Float = 0.56f;
     s->mUnknown16 = angle;
-    s->mUnknown24 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    s->mUnknown24 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     if (value == -1.0f) {
         Point_8017886C delta;
 
@@ -814,7 +814,7 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
     state = p->mpState;
     switch (state->mId) {
     case 19:
-        speed = fn_8016D9F4(p, 1.0f, 1.0f);
+        speed = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);
         break;
     case 20:
         if ((unsigned int)(state->mUnknown2 - 8) < 2) {
@@ -829,7 +829,7 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
     case 52:
         if ((unsigned int)(state->mUnknown1 - 4) < 2) {
             pos.mY += 3.0f;
-            speed = fn_8016D9F4(p, 1.0f, 0.72f);
+            speed = PlyrMoveGetRatedSpeed(p, 1.0f, 0.72f);
             fn_80227538((Point_8017886C *)&velocity, angle, speed);
         }
         break;
@@ -863,7 +863,7 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
                         if (state->mId == 20) {
                             speed = fn_8012CD60(p, 1.0f - shortened / steps);
                         } else {
-                            speed = fn_8016D9F4(p, 1.0f - shortened / steps, 1.0f);
+                            speed = PlyrMoveGetRatedSpeed(p, 1.0f - shortened / steps, 1.0f);
                         }
                         fn_80227538((Point_8017886C *)&velocity, angle, speed);
                         result = 1;
@@ -905,14 +905,14 @@ void fn_801007A4(Ball_t *ball, Object_80039F5C *p, Object_80039F5C *other, float
         case 52:
             if ((unsigned int)(state->mUnknown1 - 4) < 2) {
                 pos.mY += 3.0f;
-                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                speed = PlyrMoveGetRatedSpeed(other, 1.0f, 1.0f);
                 fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
             }
             break;
         case 51:
             if (fn_800F06F4(0, state, 19, 0xFFFF) != 0xFFFF && other->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
                 pos.mY += 2.5f;
-                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                speed = PlyrMoveGetRatedSpeed(other, 1.0f, 1.0f);
                 fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
             }
             break;
@@ -921,7 +921,7 @@ void fn_801007A4(Ball_t *ball, Object_80039F5C *p, Object_80039F5C *other, float
             int towardPositive = MathAngleDiff(motion->mUnknown32, 0) <= 0x271C70;
 
             if (motion->mPos.mY < p->mMotion.mPos.mY - 2.0f && (towardNegative || towardPositive)) {
-                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                speed = PlyrMoveGetRatedSpeed(other, 1.0f, 1.0f);
                 fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
                 if (towardNegative) {
                     pos.mX -= 3.0f;
@@ -1021,7 +1021,7 @@ Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle)
     maximum.mX = -100.0f;
     maximum.mY = -100.0f;
     for (i = 0; i < 3; i++) {
-        unsigned int index = fn_80168E00(p->mIdBytes[2], i, &active);
+        unsigned int index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
 
         if (index != 255 && active) {
             Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned short)index);

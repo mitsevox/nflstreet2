@@ -6,7 +6,7 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -52,7 +52,7 @@ void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *p
 void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAE40;
 extern float lbl_803EAE44;
 extern float lbl_803EAE48;
@@ -77,7 +77,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_800F6E30(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
         direction = fn_801CFE40(pOut->mY, pOut->mX) & 0xFFFFFF;
-        if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
+        if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
             if (MathAngleDiff(p->mMotion.mFacing, fn_801CFE40(toBall.mY, toBall.mX)) > 0x71C71) {
                 pBlock->mUnknown8 = (fn_801CFE40(toBall.mY, toBall.mX) + 0x800000) & 0xFFFFFF;
                 pBlock->mUnknown12 = 0.66f;
@@ -151,7 +151,7 @@ extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther) {
         origin = fn_80177FE0();
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         if (pBlock->mUnknown26 != 3 && pBlock->mUnknown26 != 7
-            && pOther->mMotion.mUnknown28 <= lbl_803ECB08 * 0.14f) {
+            && pOther->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.14f) {
             return;
         }
         if (fn_8011E9D8(pOther->mpState) && pBlock->mUnknown27) {
@@ -274,7 +274,7 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
         }
         unknown32 = p->mMotion.mUnknown32;
         if (MathAngleDiff(pBlock->mUnknown8, p->mMotion.mFacing) > 0x600000
-            && pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f && pBlock->mUnknown12 >= lbl_803ECB08 * 0.14f
+            && pOther->mMotion.mUnknown28 >= gPlyrMoveFwdSpeed * 0.14f && pBlock->mUnknown12 >= gPlyrMoveFwdSpeed * 0.14f
             && fn_802270A4(&delta) < 5.0f) {
             int angle = ((pBlock->mUnknown8 + unknown32) / 2) & 0xFFFFFF;
 

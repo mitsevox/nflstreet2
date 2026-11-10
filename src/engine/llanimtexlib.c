@@ -5,7 +5,7 @@
 #include "engine/animTexLib.h"
 #include "game/fn_801D2B7C.h"
 
-void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture)
+void _LLAnimTexBuildTexCoords(AnimTex_t *texture)
 {
     LLAnimTexGX_t *gx = &texture->mGX;
     unsigned short i;
@@ -27,9 +27,9 @@ void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture)
     }
 }
 
-void LLAnimTexCreateTexture(int data, Texture_t *image)
+void LLAnimTexCreateTexture(void *data, Texture_t *image)
 {
-    TexCreate((void *)data, image);
+    TexCreate(data, image);
 }
 
 void LLAnimTexDeleteTexture(Texture_t *image)
@@ -37,7 +37,7 @@ void LLAnimTexDeleteTexture(Texture_t *image)
     TexDelete(image);
 }
 
-void LLAnimTexBindTexture(Texture_801C0928 *texture)
+void LLAnimTexBindTexture(AnimTex_t *texture)
 {
     if (texture->mImage.mpPalette != 0) {
         unsigned short entries = 256;
@@ -55,7 +55,7 @@ void LLAnimTexBindTexture(Texture_801C0928 *texture)
     _LLAnimTexBuildTexCoords(texture);
 }
 
-void LLAnimTexAllocTexCoords(Texture_801C0928 *texture)
+void LLAnimTexAllocTexCoords(AnimTex_t *texture)
 {
     if (texture->mAnimated) {
         LLAnimTexGX_t *gx = &texture->mGX;
@@ -63,7 +63,7 @@ void LLAnimTexAllocTexCoords(Texture_801C0928 *texture)
     }
 }
 
-void LLAnimTexUnbindTexture(Texture_801C0928 *texture)
+void LLAnimTexUnbindTexture(AnimTex_t *texture)
 {
     LLAnimTexGX_t *gx = &texture->mGX;
 
@@ -71,7 +71,7 @@ void LLAnimTexUnbindTexture(Texture_801C0928 *texture)
         fn_801D2BD0(gx->mFrames);
 }
 
-void LLAnimTexLibInit(void *p)
+void LLAnimTexLibInit(void *p, AnimTexConfig_t *config)
 {
 }
 

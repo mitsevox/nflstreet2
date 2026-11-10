@@ -1,4 +1,5 @@
 #include "game/fn_801248D4.h"
+#include "game/StyleTracker.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -14,7 +15,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -23,8 +24,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -40,7 +41,7 @@
 extern "C" {
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
 void PassIconsShow(int mode);
 }
@@ -55,7 +56,6 @@ struct State_801021C0 {
 };
 extern "C" {
 int fn_80103CB0(Object_80039F5C *p);
-void fn_800D4D84(Object_80039F5C *p);
 int fn_80104610(Object_80039F5C *p);
 void fn_80176B8C(Object_80039F5C *p);
 }
@@ -88,7 +88,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
         }
         if ((p->mFlags & 0x2000) && kind == 4) {
             fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
-            fn_800D4D84(p);
+            StyleTrackerOnPumpFake(p);
             if (p->mFlags & 0x4000) {
                 PassIconsShow(0);
             }
@@ -118,7 +118,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
 
         pState->mUnknown4++;
         pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
-        if (pOther && (pOther->mpState->mId == 12 || p->mUnknown560.mUnknown32 > lbl_803ECB08 * 50310.56f)) {
+        if (pOther && (pOther->mpState->mId == 12 || p->mUnknown560.mUnknown32 > gPlyrMoveFwdSpeed * 50310.56f)) {
             switch (p->mUnknown560.mUnknown55) {
             case 0:
             case 5:

@@ -7,8 +7,8 @@
 
 extern "C" {
 int fn_80178308(void);
-Object_800670B4 *fn_80168708(int team);
-int fn_801641E0(Object_800670B4 *pObject, int index, const char **ppNames);
+Object_800670B4 *PlayBookGetFormation(int team);
+int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800B0004(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -19,7 +19,7 @@ extern const char *lbl_802D8754[2][5];
 extern "C" void fn_800B0090(void)
 {
     int team = fn_80178308();
-    Object_800670B4 *pObject = fn_80168708(team);
+    Object_800670B4 *pObject = PlayBookGetFormation(team);
     int count = fn_80178D18(team);
     const char *names[2];
     unsigned int group;
@@ -37,7 +37,7 @@ extern "C" void fn_800B0090(void)
                 int row;
 
                 names[0] = lbl_802D8754[group][slot];
-                row = fn_801641E0(pObject, (unsigned char)i, names);
+                row = PlaySetFindRow(pObject, (unsigned char)i, names);
                 if (row != -1 && pEntry->mUnknown46 <= 4) {
                     Object_80039F5C *pPlayer = fn_80039F5C(team, i);
                     Entry_8006719C *pZone;
@@ -47,7 +47,7 @@ extern "C" void fn_800B0090(void)
                     pEntry->mpUnknown0[pEntry->mUnknown46] = pZone;
                     fn_8009BD2C(pPlayer, &pEntry->mUnknown28[pEntry->mUnknown46]);
                     names[0] = "Norm";
-                    row = fn_801641E0(pObject, (unsigned char)i, names);
+                    row = PlaySetFindRow(pObject, (unsigned char)i, names);
                     pEntry->mUnknown41[pEntry->mUnknown46] = row;
                     pEntry->mpUnknown14[pEntry->mUnknown46] = &pObject->mUnknown8.mUnknown84[row][i];
                     if (pEntry->mpUnknown0[0] != 0 && (pZone->mUnknownE & 1) && pEntry->mUnknown46 != 0) {

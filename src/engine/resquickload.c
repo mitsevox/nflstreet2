@@ -1,4 +1,5 @@
 #include "engine/Resource.h"
+#include "engine/bsearch.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
 
@@ -60,8 +61,6 @@ extern int fn_801C97F0(int handle);
 extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9D2C(int handle);
-extern void *fn_802623A8(const void *pKey, const void *pBase, int count, int size,
-                         int (*pCompare)(const void *, const void *));
 
 extern void *lbl_803EBDD8;
 extern ResQuickloadAlias_801F2D60 *lbl_803EBDDC;
@@ -78,7 +77,7 @@ static void fn_801F284C(int handle, ResQuickload_801F284C *pQuickload)
     size = header[2];
     pQuickload->mDataOffset = size;
     pQuickload->mPosition = size;
-    pQuickload->pData = fn_801D2BB0(1, size, fn_801F1530(), 0);
+    pQuickload->pData = fn_801D2BB0(1, size, ResGetMemAllocFlags(), 0);
     fn_801C9844(handle, 0, 0);
     fn_801C9960(handle, pQuickload->pData, size, 0);
     for (pChunk = (ResQuickloadChunk_801F284C *)pQuickload->pData; (char *)pChunk < pQuickload->pData + size;
@@ -107,7 +106,7 @@ static ResQuickload_801F284C *fn_801F2954(char *pName, int *pIndex)
 
     for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
         pFiles = pQuickload->pFiles;
-        pFound = fn_802623A8(pName, pFiles->mEntries, pFiles->mCount, sizeof(pFiles->mEntries[0]), fn_801F2934);
+        pFound = bsearch(pName, pFiles->mEntries, pFiles->mCount, sizeof(pFiles->mEntries[0]), fn_801F2934);
         if (pFound != 0) {
             *pIndex = (pFound - (char *)pFiles->mEntries) / sizeof(pFiles->mEntries[0]);
             break;
@@ -153,7 +152,7 @@ static ResQuickloadEntry_801F2A4C *fn_801F2A4C(ResQuickloadDetails_801F2A4C *pDe
     key.mType = type;
     key.mID = id;
     key.mOffset = offset;
-    pEntry = fn_802623A8(&key, pDetails->mEntries, pDetails->mCount, sizeof(ResQuickloadEntry_801F2A4C), fn_801F29F0);
+    pEntry = bsearch(&key, pDetails->mEntries, pDetails->mCount, sizeof(ResQuickloadEntry_801F2A4C), fn_801F29F0);
     if (pEntry != 0) {
         while (pEntry > pDetails->mEntries) {
             pNext = pEntry - 1;

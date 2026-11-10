@@ -1,6 +1,6 @@
 #include <dolphin/vi.h>
-#include "game/fn_801EF390.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResLoad.h"
+#include "game/ResOpenDevice.h"
 #include "game/fn_8007F828.h"
 #include "engine/rand.h"
 #include <dolphin/mtx.h>
@@ -114,7 +114,7 @@ void fn_80194060(void)
 void fn_80194108(int index, Texture_80194108 *out, int region)
 {
     Element_80194108 element;
-    TMTexLibLoad(&element, fn_801EF390(lbl_803EB728, index, 1));
+    TMTexLibLoad(&element, ResLoad(lbl_803EB728, index, 1));
     Texture_80194108 *texture = TMTexLibGetTexture(&element, 0xFF000000);
     Palette_80194108 *palette = TMTexLibGetClut(&element, 0xFF000000, 0);
     out->mUnknown54 = &lbl_80365038[region];
@@ -126,7 +126,7 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
     }
     memcpy(out, texture, 0x2C);
     TMTexLibUnload(&element);
-    fn_801F010C(lbl_803EB728, index);
+    ResUnLoad(lbl_803EB728, index);
 }
 void fn_80194248(Texture_80194108 *) {}
 void fn_8019424C(Quad_8019424C *quad, float x, float y)
@@ -244,7 +244,7 @@ void fn_80194794(void)
 }
 void fn_80194858(int mode)
 {
-    lbl_803EB728 = fn_801EEB44(lbl_802EBE14,44);
+    lbl_803EB728 = ResOpenDevice(lbl_802EBE14,44);
     GXInvalidateTexAll();
     GXTexModeSync();
     fn_801CEA7C(0);
@@ -286,7 +286,7 @@ void fn_80194858(int mode)
         fn_80194280(&lbl_80364FB0,0,0,0,640,480);
         break;
     }
-    fn_801EEFAC(lbl_803EB728);
+    ResClose(lbl_803EB728);
     lbl_803EB728 = 0;
     if (mode != 5) {
         lbl_803ECBA4 = 6.0f;

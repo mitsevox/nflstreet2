@@ -2,6 +2,7 @@
    own or from the pad, whether to keep running, pitch or pass to the partner, or end the run. */
 
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/OptionRunControl.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
@@ -9,7 +10,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_80178D18.h"
@@ -25,7 +26,6 @@ void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
-void fn_800D5998(void);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
@@ -44,7 +44,7 @@ float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
 void PassIconsShow(int mode);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 int fn_80177F70(void);
@@ -59,7 +59,7 @@ float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
 float fn_80237260(int stream);
 }
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 static float _OptionRun_NearSpotCosts[2][8] = {
     {20.0f, 12.0f, 3.0f, 0.0f, -1.0f, 3.0f, 30.0f, 25.0f},
@@ -422,7 +422,7 @@ extern "C" int OptionRunEnter(Object_80039F5C *p)
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown15 = 10;
     p->mUnknown528.mUnknown15 = 10;
-    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
     p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
     return 0;
@@ -553,7 +553,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
             } else if (input.mBytes92[4] & 8) {
                 if (OptionRunThrow(p, 10, 0)) {
                     p->mFlags |= 0x4000;
-                    fn_800D5998();
+                    StyleTrackerBeginPumpInteraction();
                 }
             } else if (*fn_8003AB38(p) == 57) {
                 fn_800B7CA4(p);
@@ -580,10 +580,10 @@ extern "C" void OptionRunMirror(Object_80039F5C *p)
         break;
     }
     i = 0;
-    pObject = fn_80168708(fn_80178308());
+    pObject = PlayBookGetFormation(fn_80178308());
     count = fn_80178D18(fn_80178308());
     for (; i < count; i++) {
-        if (fn_80163E94(pObject, i, 0)->mUnknownB == p->mIdBytes[2]) {
+        if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == p->mIdBytes[2]) {
             p->mIdBytes[2] = i;
             break;
         }

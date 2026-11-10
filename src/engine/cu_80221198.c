@@ -17,7 +17,7 @@
 #include "engine/sound.h"
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 
 /* Partial source for the engine range 0x80221198-0x80226F9C (neutral file
    name). Functions without a body here keep their original bytes. */
@@ -128,7 +128,7 @@ int fn_801CD244(Font_801CCA64 *pFont);
 int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags);
 int fn_801CD750(Font_801CCA64 *pFont, unsigned char c);
 int fn_801CD790(Font_801CCA64 *pFont);
-int fn_801F0D34(Res_801EDC2C *pRes);
+int ResGetNumResources(ResFile_t *pRes);
 unsigned char fn_801F3E28(void);
 struct StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, void *pMem,
                                        int memSize);
@@ -976,7 +976,7 @@ void fn_80225D90(Object_8021E688 *pObject, Int16 a)
     if (a != -1 && fn_8021EB40(pObject, a) == 0) {
         Handle = fn_801CCDA4((const char *)fn_8021E970(pObject, a), 44);
         fn_8021EB2C(pObject, a, Handle);
-        fn_8021E244(pObject, a, fn_801F0D34((Res_801EDC2C *)Handle));
+        fn_8021E244(pObject, a, ResGetNumResources((ResFile_t *)Handle));
     }
 }
 
@@ -1076,9 +1076,9 @@ void fn_802260D0(DisplayList_802260D0 *pList)
 
 void fn_802260F8(Object_8021E688 *pObject, Int32 a)
 {
-    void *p = fn_801EEB44((const char *)fn_8021E970(pObject, a), 44);
+    void *p = ResOpenDevice((const char *)fn_8021E970(pObject, a), 44);
 
-    fn_8021E244(pObject, a, fn_801F0D34(p));
+    fn_8021E244(pObject, a, ResGetNumResources(p));
     fn_8021E998(pObject, a, p);
     fn_802267D0();
 }
@@ -1088,7 +1088,7 @@ void fn_8022615C(Object_8021E688 *pObject, Int32 a)
     void *p = fn_8021E984(pObject, a);
 
     if (p != NULL) {
-        fn_801EEFAC(p);
+        ResClose(p);
         fn_802267D4();
     }
 }

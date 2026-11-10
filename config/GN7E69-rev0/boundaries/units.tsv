@@ -15,7 +15,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801BE82C	0x801BF090	animtran.c	5	5	5	0	5	-	-
 0x801BF090	0x801BF8DC	animwgt.c	17	13	13	2	11	-	animcache.c
 0x801BFEF8	0x801C00F8	AnimSequencer.c	8	5	5	5	0	-	AnimSeqCamera.c
-0x801C06E8	0x801C0E04	animTexLib.c	11	11	11	0	11	-	-
+0x801C06E8	0x801C0E04	animTexLib.c	11	11	11	2	9	-	-
 0x801C0E04	0x801C10E0	llanimtexlib.c	8	8	8	8	0	-	-
 0x801C1F54	0x801C1F94	ctype.c	2	2	2	2	0	-	-
 0x801C1F94	0x801C20A0	memory.c	4	4	4	0	4	-	printf.c
@@ -66,7 +66,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801E11D0	0x801E1A20	periph.c	18	18	18	0	18	-	-
 0x801E1A20	0x801E1D44	llperiph.c	10	10	11	10	0	-	-
 0x801EC1B4	0x801EC650	remap.c	5	4	4	4	0	-	-
-0x801EC650	0x801F1538	Resource.c	45	43	48	0	42	-	-
+0x801EC650	0x801F1538	Resource.c	50	48	48	47	1	-	-
 0x801F1538	0x801F17E0	terfhash.c	3	3	3	3	0	-	-
 0x801F17E0	0x801F2310	reswrite.c	14	14	15	0	14	-	-
 0x801F284C	0x801F2E54	resquickload.c	11	11	11	0	11	-	-
@@ -139,8 +139,16 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8025F088	0x8025F0A8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FABC	0x8025FAF8	libgcc2.c	1	1	1	1	0	-	-
 0x8025FAF8	0x8025FBD4	libgcc2.c	4	4	4	0	4	-	eabi.asm
+0x80260FC4	0x80260FE8	sf_fabs.c	1	1	1	1	0	-	-
+0x80261A24	0x80261A58	sf_copysign.c	1	1	1	1	0	-	-
 0x802622DC	0x80262310	vprintf.c	1	1	1	1	0	-	-
-0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	6	-	-
+0x80262310	0x802623A8	src/engine/atexit.c	1	0	-	0	0	provisional	-
+0x802623A8	0x80262440	bsearch.c	1	1	1	1	0	-	sn_malloc.c
+0x8026247C	0x802645AC	vfprintf.c	7	7	8	0	7	-	-
+0x802645AC	0x80265D2C	vfprintf.c	4	4	4	3	1	-	locale.c
+0x80265D2C	0x80266640	math_support.c	4	4	4	0	4	-	impure.c
+0x80266640	0x8026696C	mbtowc_r.c	1	1	1	1	0	-	-
+0x8026696C	0x80266A2C	memchr.c	1	1	1	1	0	-	-
 0x80271D34	0x8027257C	sdspmix.c	7	7	8	0	6	-	-
 0x8027257C	0x802753F0	snddrv.c	40	38	49	0	30	-	-
 0x80278700	0x8027882C	slinklst.c	5	5	5	0	5	-	-

@@ -12,19 +12,19 @@ typedef struct LLAnimTexFrame_t {
 } LLAnimTexFrame_t;
 
 typedef struct LLAnimTexGX_t {
-    unsigned char mUnknown0[4];
+    unsigned char unk_0x0[4];
     GXTexObj mTexObj;
     GXTlutObj mTlutObj;
     LLAnimTexFrame_t *mFrames;
 } LLAnimTexGX_t;
 
-typedef struct Texture_801C0928 {
+typedef struct AnimTex_t {
     char mName[32];
     int mIndex;
-    unsigned char mUnknown24[4];
+    unsigned char unk_0x24[4];
     Texture_t mImage;
     unsigned char mAnimated;
-    unsigned char mLoaded;
+    unsigned char mBound;
     unsigned short mFrameCount;
     unsigned short mRows;
     unsigned short mColumns;
@@ -32,65 +32,66 @@ typedef struct Texture_801C0928 {
     float mCellWidth;
     float mCellHeight;
     LLAnimTexGX_t mGX;
-} Texture_801C0928;
+} AnimTex_t;
 
-typedef struct TextureDesc_801C0928 {
+typedef union AnimTexData_t {
+    unsigned int mOffset;
+    void *mpData;
+} AnimTexData_t;
+
+typedef struct AnimTexDesc_t {
     char mName[32];
     unsigned char mAnimated;
     unsigned char mRelocated;
     unsigned short mFrameCount;
     unsigned short mRows;
     unsigned short mColumns;
-    int mData;
-} TextureDesc_801C0928;
+    AnimTexData_t mData;
+} AnimTexDesc_t;
 
-/* Configuration passed to fn_801C06E8, which reads only the capacity +0. The
-   game's instance at 0x803EB22A (src/game/cu_801444D8.cpp) is 6 bytes,
-   initialized {8, 0, 0, 0}, and the byte +4 is stored before the call. */
-typedef struct TextureConfig_801C06E8 {
+typedef struct AnimTexConfig_t {
     unsigned short mCapacity;
-    unsigned short mUnknown2;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-} TextureConfig_801C06E8;
+    unsigned char unk_0x2[2];
+    unsigned char unk_0x4;
+    unsigned char unk_0x5;
+} AnimTexConfig_t;
 
-typedef struct TextureFile_801C0BA8 {
+typedef struct AnimTexFile_t {
     void *mData;
     int mIndex;
-} TextureFile_801C0BA8;
+} AnimTexFile_t;
 
-typedef struct TextureManager_802F4870 {
+typedef struct AnimTexManager_t {
     unsigned char mInitialized;
     unsigned short mCount;
     unsigned short mCapacity;
-    Texture_801C0928 **mTextures;
-    Texture_801C0928 *mPool;
-    unsigned char mUnknown10[16];
-} TextureManager_802F4870;
+    AnimTex_t **mTextures;
+    AnimTex_t *mPool;
+} AnimTexManager_t;
 
-extern TextureManager_802F4870 lbl_802F4870;
+extern AnimTexManager_t _AnimTexLib_sManager;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-void fn_801C06E8(TextureConfig_801C06E8 *config);
-void fn_801C07DC(void);
-void fn_801C089C(Texture_801C0928 *texture);
-void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc);
-void fn_801C09B8(Texture_801C0928 *texture);
-void fn_801C09F8(Texture_801C0928 *texture);
-void fn_801C0A38(Texture_801C0928 *texture, unsigned int time, unsigned int frame, unsigned int rate, float *coords);
-Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load);
-Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load);
-void fn_801C0CCC(Texture_801C0928 *texture);
-Texture_801C0928 *fn_801C0D8C(const char *name);
-void _LLAnimTexBuildTexCoords(Texture_801C0928 *texture);
-void LLAnimTexCreateTexture(int data, Texture_t *image);
+void AnimTexLibInit(AnimTexConfig_t *config);
+void AnimTexLibShutdown(void);
+void AnimTexInitCoords(AnimTex_t *texture);
+void AnimTexInitTexture(AnimTex_t *texture, AnimTexDesc_t *desc);
+void AnimTexBind(AnimTex_t *texture);
+void AnimTexUnbind(AnimTex_t *texture);
+void AnimTexGetCoords(AnimTex_t *texture, unsigned int time, unsigned int frame, unsigned int rate, float *coords);
+AnimTex_t *AnimTexLoadResource(AnimTexFile_t *file, int load);
+AnimTex_t *AnimTexLoad(AnimTexDesc_t *desc, void **pData, int load);
+void AnimTexFree(AnimTex_t *texture);
+AnimTex_t *AnimTexFind(const char *name);
+void _LLAnimTexBuildTexCoords(AnimTex_t *texture);
+void LLAnimTexCreateTexture(void *data, Texture_t *image);
 void LLAnimTexDeleteTexture(Texture_t *image);
-void LLAnimTexBindTexture(Texture_801C0928 *texture);
-void LLAnimTexAllocTexCoords(Texture_801C0928 *texture);
-void LLAnimTexUnbindTexture(Texture_801C0928 *texture);
-void LLAnimTexLibInit(void *p);
+void LLAnimTexBindTexture(AnimTex_t *texture);
+void LLAnimTexAllocTexCoords(AnimTex_t *texture);
+void LLAnimTexUnbindTexture(AnimTex_t *texture);
+void LLAnimTexLibInit(void *p, AnimTexConfig_t *config);
 void LLAnimTexLibShutdown(void *p);
 #ifdef __cplusplus
 }

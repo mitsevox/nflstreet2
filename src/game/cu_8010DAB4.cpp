@@ -14,7 +14,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -23,8 +23,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -65,7 +65,7 @@ int MathAngleDiff(int a, int b);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 
@@ -155,7 +155,7 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
     } else {
         if (fn_801787A0()) {
             pOut->mHeading = pMotion->mFacing;
-            pOut->mSpeed = pMotion->mUnknown28 / lbl_803ECB08;
+            pOut->mSpeed = pMotion->mUnknown28 / gPlyrMoveFwdSpeed;
         } else {
             pOut->mSpeed = 0.72f;
             if (!BallGetLandingPoint(pBall, &ballPos)) {

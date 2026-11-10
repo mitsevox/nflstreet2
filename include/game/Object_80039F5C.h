@@ -118,9 +118,9 @@ struct MotionTail_800B26B0 {
     float mUnknown80;
 };
 
-/* 16-byte record cleared by fn_8016D8B0; the player object holds two of them
+/* 16-byte record cleared by PlyrMoveCmdClear; the player object holds two of them
    at +512 and +528. */
-struct Object_8016D8B0 {
+struct PlyrMoveCmd_t {
     float mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -386,8 +386,8 @@ struct Object_80039F5C {
     int mUnknown500;
     float mUnknown504;
     float mUnknown508;
-    Object_8016D8B0 mUnknown512;
-    Object_8016D8B0 mUnknown528;
+    PlyrMoveCmd_t mUnknown512;
+    PlyrMoveCmd_t mUnknown528;
     unsigned char mUnknown544;
     unsigned char mUnknown545;
     char mUnknown546[2];

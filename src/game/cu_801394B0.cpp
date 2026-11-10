@@ -44,15 +44,15 @@ void fn_800D782C(Object_80039F5C *p);
 void fn_800EBA48(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
-int fn_80170E64(Ball_t *pBall, Object_80039F5C *p, int a);
-void fn_80170F40(void);
-int fn_80171068(Ball_t *pBall, Object_80039F5C *p, unsigned int type);
-int fn_801712D0(Ball_t *pBall, Object_80039F5C *p, unsigned int type);
-void fn_80171E30(void);
-void fn_801720B4(Object_80039F5C *p);
-void fn_80172F9C(void);
-void fn_80172FB0(Ball_t *pBall);
-void fn_801736AC(void);
+int PossIsWristNearJoint(Ball_t *pBall, Object_80039F5C *p, int a);
+void PossEndIncompletePass(void);
+int PossTryCatch(Ball_t *pBall, Object_80039F5C *p, unsigned int type);
+int PossTryReceivePitch(Ball_t *pBall, Object_80039F5C *p, unsigned int type);
+void PossStartFumble(void);
+void PossGrabBall(Object_80039F5C *p);
+void PossResetMissedCatch(void);
+void PossUpdateMissedCatch(Ball_t *pBall);
+void ClockRuleRestartOnReady(void);
 int fn_80178308(void);
 int fn_801783AC(int bit);
 void fn_801783D0(int bit, int on);
@@ -764,7 +764,7 @@ int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing
         if (state == 3 || state == 4) {
             result = 1;
         } else {
-            if (fn_80170E64(pBall, p, 0)) {
+            if (PossIsWristNearJoint(pBall, p, 0)) {
                 result = 1;
             }
             if (!fn_8013ADA4(p)) {
@@ -778,7 +778,7 @@ int fn_8013AE1C(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing
         if (state == 3 || state == 4) {
             result = 1;
         } else {
-            if (fn_80170E64(pBall, p, 1)) {
+            if (PossIsWristNearJoint(pBall, p, 1)) {
                 result = 1;
             }
             if (!fn_8013ADA4(p)) {
@@ -814,7 +814,7 @@ void fn_8013AF88(Ball_t *pBall)
 
 void fn_8013AFE8(Ball_t *pBall)
 {
-    fn_80172F9C();
+    PossResetMissedCatch();
     pBall->mState.mFlags = (pBall->mState.mFlags | 8) & ~0x10;
 }
 
@@ -859,12 +859,12 @@ void fn_8013B1E4(Ball_t *pBall, float dt)
 {
     fn_8013A64C(pBall, dt);
     AudmonEventPostArgs(0x21, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
-    fn_80172FB0(pBall);
+    PossUpdateMissedCatch(pBall);
 }
 
 void fn_8013B230(Ball_t *pBall)
 {
-    fn_801736AC();
+    ClockRuleRestartOnReady();
 }
 
 void fn_8013B250(Ball_t *pBall)
@@ -882,9 +882,9 @@ void fn_8013B2A0(Ball_t *pBall, float dt)
     if (fn_800AD9B4() == 3 && (BallGetCurrent() == pBall || fn_801486A0() == 1)) {
         if (!fn_801783AC(1)) {
             BallStateChange(pBall, 5, 0);
-            fn_80170F40();
+            PossEndIncompletePass();
         } else {
-            fn_80171E30();
+            PossStartFumble();
         }
     }
     fn_8013A494(pBall, dt);
@@ -900,9 +900,9 @@ void fn_8013B350(Ball_t *pBall, float dt)
     BallSetTarget(pBall, 0);
     if (BallGetCurrent() == pBall && !fn_801787A0()) {
         if (fn_801783AC(1) || !fn_801486A0()) {
-            fn_80171E30();
+            PossStartFumble();
         } else {
-            fn_80170F40();
+            PossEndIncompletePass();
         }
     } else {
         BallStateChange(pBall, 5, 0);
@@ -958,7 +958,7 @@ int fn_8013B52C(Ball_t *pBall, void *pData, unsigned int type)
         if (fn_8013AE1C(pBall, p, type, 0) &&
             (BallGetStateStartTick(pBall) + 60 < fn_8023790C() || fn_801BE648(p->mpUnknown792) == 0x30)) {
             result = 1;
-            fn_801720B4(p);
+            PossGrabBall(p);
         } else {
             pBall->mState.mFlags |= 0x40;
         }
@@ -977,7 +977,7 @@ int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
         if (p->mIdBytes[2] == fn_80178308() && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
             result = 1;
         } else {
-            result = fn_80171068(pBall, p, type);
+            result = PossTryCatch(pBall, p, type);
         }
     }
     if (!result) {
@@ -995,7 +995,7 @@ int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
     if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
         result = 1;
     } else if (fn_8013AE1C(pBall, p, type, 1)) {
-        result = fn_801712D0(pBall, p, type);
+        result = PossTryReceivePitch(pBall, p, type);
     } else {
         result = 0;
     }

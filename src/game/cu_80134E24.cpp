@@ -5,7 +5,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
@@ -74,7 +74,7 @@ static Key_802DB1D4 keys_802DB1D4[43] = {
     {0, 233},
     {0, 243}
 };
-extern "C" float lbl_803EB188, lbl_803EB18C, lbl_803ECB08;
+extern "C" float lbl_803EB188, lbl_803EB18C, gPlyrMoveFwdSpeed;
 extern "C" Queue_800EFE0C lbl_803EB190, lbl_803EB198;
 extern "C" unsigned char lbl_803EB168, lbl_803EB16A;
 extern "C" float lbl_803EB184;
@@ -83,7 +83,7 @@ extern "C" {
 Object_80039F5C *BallGetCurrentHolder(void);
 void fn_80135CEC(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
-unsigned char fn_80168E00(int, unsigned char, unsigned char *);
+unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 unsigned int fn_802372EC(unsigned int, unsigned int);
 int fn_80178320(void);
 int fn_800AD9B4(void);
@@ -91,17 +91,17 @@ int PassIconsAreShown(void);
 int PassIconsWereShown(void);
 void PassIconsShow(int);
 void CamGameSetModeAll(int);
-void fn_8015A0D0(int);
+void PassIconObjSetEnabled(int);
 void fn_800B8344(void);
 int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
 int MathAngleDiff(int, int);
 unsigned char fn_80135F14(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int fn_80177F70(void);
-void fn_800C146C(Point_80167910 *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
+void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int fn_80156704(void);
 float fn_80178A2C(void);
-void fn_80227538(Point_80167910 *, int, float);
+void fn_80227538(Vec2_t *, int, float);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 void fn_800F00D4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 void fn_80227690(void *, void *, void *);
@@ -119,7 +119,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned cha
 int fn_80178308(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
-void fn_80168E54(int, unsigned char, unsigned char);
+void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int AnimSeqHasOpcode(float *, void *, unsigned short);
 float AnimSeqGetOpcodeTime(void *pScript, int key);
@@ -275,7 +275,7 @@ void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
 {
     if (!p || !s) return;
     unsigned char indexes[3];
-    for (unsigned char i = 0; i <= 2; ++i) indexes[i] = fn_80168E00(p->mIdBytes[2], i, 0);
+    for (unsigned char i = 0; i <= 2; ++i) indexes[i] = PlayBookGetReceiver(p->mIdBytes[2], i, 0);
     for (unsigned char i = 0; i <= 2; ++i) {
         if (!s->mUnknown30[i] || indexes[i] == 255) continue;
         Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], indexes[i]);
@@ -292,11 +292,11 @@ void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
             disabled = 1;
         if (s->mUnknown2D[i] && disabled) {
             s->mUnknown2D[i] = 0;
-            fn_80168E54(p->mIdBytes[2], indexes[i], 0);
+            PlayBookSetReceiverOption(p->mIdBytes[2], indexes[i], 0);
         } else if (s->mUnknown30[i] && !s->mUnknown2D[i] &&
                    (other->mpState->mId == 19 || other->mpState->mId == 21)) {
             s->mUnknown2D[i] = s->mUnknown30[i];
-            fn_80168E54(p->mIdBytes[2], indexes[i], s->mUnknown30[i]);
+            PlayBookSetReceiverOption(p->mIdBytes[2], indexes[i], s->mUnknown30[i]);
         }
     }
 }
@@ -321,7 +321,7 @@ int fn_80134E24(Object_80039F5C *player) {
         fn_800D7A0C(player, 1);
     if (player->mFlags & 0x4000) {
         for (int i = 0; i < 3; ++i)
-            fn_80168E00(player->mIdBytes[2], i, &state->mUnknown2D[i]);
+            PlayBookGetReceiver(player->mIdBytes[2], i, &state->mUnknown2D[i]);
         for (int i = 0; i < 3; ++i)
             state->mUnknown30[i] = state->mUnknown2D[i];
         fn_80135CEC(player);
@@ -339,7 +339,7 @@ int fn_80134E24(Object_80039F5C *player) {
         state->mUnknown8 = state->mUnknown10 = player->mUnknown2913 == 1 ? 0x800000 : 0;
         state->mUnknown1A = state->mUnknown18 = 0;
         for (int i = 0; i < 3; ++i)
-            fn_80168E00(player->mIdBytes[2], i, &state->mUnknown2D[i]);
+            PlayBookGetReceiver(player->mIdBytes[2], i, &state->mUnknown2D[i]);
         for (int i = 0; i < 3; ++i)
             state->mUnknown30[i] = state->mUnknown2D[i];
         state->mUnknown1B =
@@ -368,7 +368,7 @@ int fn_80134E24(Object_80039F5C *player) {
         PassIconsShow(0);
         CamGameSetModeAll(2);
     }
-    fn_8015A0D0(1);
+    PassIconObjSetEnabled(1);
     return mode != 3;
 }
 
@@ -465,7 +465,7 @@ int fn_80135200(Object_80039F5C *player) {
             unsigned char indices[3];
             int total = 0;
             for (int i = 0; i < 3; ++i) {
-                indices[i] = fn_80168E00(player->mIdBytes[2], i, 0);
+                indices[i] = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
                 total += state->mUnknown2D[i];
             }
             int choice = fn_802372EC(0, total);
@@ -522,7 +522,7 @@ int fn_80135200(Object_80039F5C *player) {
                                        (state->mUnknown20[i] < score ||
                                         (state->mUnknown20[i] == score && state->mUnknown2D[i] > weight)))))
                         continue;
-                    Point_80167910 predicted = {0.0f, 0.0f};
+                    Vec2_t predicted = {0.0f, 0.0f};
                     unsigned int bonus = 0;
                     candidate = fn_80039F5C(player->mIdBytes[2], indices[i]);
                     if (fn_80177F70() != 6) {
@@ -567,7 +567,7 @@ int fn_80135200(Object_80039F5C *player) {
             if (found == 1) {
                 if (selected) {
                     if (selected->mpState->mId == 21) {
-                        Point_80167910 offset;
+                        Vec2_t offset;
                         fn_80227538(&offset, selected->mMotion.mFacing, 10.0f);
                         offset.mX += selected->mMotion.mPos.mX;
                         offset.mY += selected->mMotion.mPos.mY;
@@ -673,7 +673,7 @@ unsigned char fn_80135F14(Object_80039F5C *p, Object_80039F5C *other, int *count
             float distance;
             Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
-                (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f ||
+                (p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.4f ||
                  MathAngleDiff(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
                 *count = 0;
                 result = 2;
@@ -689,10 +689,10 @@ void fn_80136034(Object_80039F5C *p)
         State_80134E24 *s = (State_80134E24 *)&p->mUnknown336;
         unsigned char previous[3];
         for (unsigned char i = 0; i <= 2; ++i)
-            previous[i] = fn_80168E00(p->mIdBytes[2], i, 0);
+            previous[i] = PlayBookGetReceiver(p->mIdBytes[2], i, 0);
         for (unsigned char i = 0; i <= 2; ++i) {
             s->mUnknown2D[i] = s->mUnknown30[i];
-            fn_80168E54(p->mIdBytes[2], previous[i], s->mUnknown30[i]);
+            PlayBookSetReceiverOption(p->mIdBytes[2], previous[i], s->mUnknown30[i]);
         }
     }
 }

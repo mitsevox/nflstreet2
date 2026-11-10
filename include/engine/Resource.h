@@ -6,32 +6,32 @@ extern "C" {
 #endif
 
 /* Directory or compression block entry of a resource file (8 bytes). */
-typedef struct ResBlock_801F10B0 {
-    unsigned int mUnk0;
-    unsigned int mUnk4;
-} ResBlock_801F10B0;
+typedef struct ResBlockEntry_t {
+    unsigned int mOffsetOrCodec;
+    unsigned int mSize;
+} ResBlockEntry_t;
 
-typedef struct ResHash_801F0A8C {
+typedef struct ResHashHeader_t {
     int mType;
-    int mUnk4;
+    int mParamSize;
     unsigned int mWidth;
-} ResHash_801F0A8C;
+} ResHashHeader_t;
 
 /* Open resource file record (0xA4 bytes, pool item of Resource.c). */
-typedef struct Res_801EDC2C {
+typedef struct ResFile_t {
     int mFile;
     char *pName;
     unsigned int mEndPad;
     unsigned int mPosition;
     unsigned short mNumWritten;
-    unsigned char mUnk12;
+    unsigned char unk_0x12;
     unsigned char mBigEndian;
     unsigned short mNumRes;
     unsigned short mAlignment;
     int mDirTag;
-    int mHashCount;
+    int mHashTag;
     unsigned char mCompressed;
-    unsigned char mUnk21;
+    unsigned char unk_0x21;
     unsigned short mVersion;
     unsigned int mDirSize;
     unsigned int mCompSize;
@@ -39,15 +39,15 @@ typedef struct Res_801EDC2C {
     int mDirOffset;
     int mCompOffset;
     unsigned int mHashOffset;
-    /* File offset of the data area for file-backed resources; fn_801EEFAC frees it
+    /* File offset of the data area for file-backed resources; ResClose frees it
        as an allocation for a state-3 resource. */
     unsigned int mBaseOffset;
-    ResBlock_801F10B0 *pDir;
-    ResHash_801F0A8C *pHash;
+    ResBlockEntry_t *pDir;
+    ResHashHeader_t *pHash;
     unsigned int *pHashParams;
     void *pHashTable;
     void **pSlots;
-    ResBlock_801F10B0 *pBlocks;
+    ResBlockEntry_t *pBlocks;
     unsigned short mState;
     unsigned short mNumLocked;
     unsigned int mDataSize;
@@ -58,26 +58,44 @@ typedef struct Res_801EDC2C {
     int mMode;
     unsigned int *pAddrs;
     volatile unsigned char *pFlags;
-    char mUnk7C[8];
+    char unk_0x7C[8];
     int mCacheHandle;
     int *pCache;
     unsigned int mFlags;
     int mOpenCount;
-    char mUnk94[0x10];
-} Res_801EDC2C;
+    unsigned int mMinDelay;
+    unsigned int mMinSize;
+    unsigned int mMaxDelay;
+    unsigned int mMaxSize;
+} ResFile_t;
 
-typedef void (*ResDone_801EFAD8)(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
+typedef struct ResTrackOpenInfo_t {
+    char *pName;
+    char mMode;
+} ResTrackOpenInfo_t;
+
+typedef struct ResTrackLoadInfo_t {
+    ResFile_t *pRes;
+    int mIndex;
+    int mOffset;
+    int mDiskSize;
+    int mFullSize;
+    unsigned char mAsync;
+    char mMode;
+} ResTrackLoadInfo_t;
+
+typedef void (*ResDoneCallback_t)(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
 
 /* Resource.c */
-unsigned int fn_801EF390(Res_801EDC2C *pRes, unsigned int index, int heap);
-unsigned int fn_801EF7BC(Res_801EDC2C *pRes, unsigned int index, void *pBuffer);
-unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, void *pBuffer, int a,
-                         ResDone_801EFAD8 pDone, void *pUser);
-int fn_801EFF80(Res_801EDC2C *pRes, unsigned int index, void *pBuffer);
-int fn_801F010C(Res_801EDC2C *pRes, unsigned int index);
-unsigned int fn_801F0C50(Res_801EDC2C *pRes, unsigned int index);
-int fn_801F10B0(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize, unsigned int *pOffset, int *pFile);
-int fn_801F1530(void);
+unsigned int ResLoad(ResFile_t *pRes, unsigned int index, int heap);
+unsigned int ResLoadToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer);
+unsigned int ResLoadAsyncToBuffer(ResFile_t *pRes, unsigned int index, int heap, void *pBuffer, int a,
+                         ResDoneCallback_t pDone, void *pUser);
+int ResCopyToBuffer(ResFile_t *pRes, unsigned int index, void *pBuffer);
+int ResUnLoad(ResFile_t *pRes, unsigned int index);
+unsigned int ResGetSize(ResFile_t *pRes, unsigned int index);
+int ResGetStreamInfo(ResFile_t *pRes, unsigned int index, unsigned int *pSize, unsigned int *pOffset, int *pFile);
+int ResGetMemAllocFlags(void);
 
 /* terfhash.c */
 int ProcHashHSH1(char *pString, unsigned int length, unsigned int *pParams);
@@ -87,20 +105,20 @@ int ProcHashHSH2(unsigned char *pData, unsigned int length, unsigned int *pParam
 int HashString(char *pString, int multiplier);
 
 /* reswrite.c */
-int fn_801F1B6C(Res_801EDC2C *pRes);
+int fn_801F1B6C(ResFile_t *pRes);
 
 /* ResTracker.c */
 void ResTrackResource(unsigned int type, void *pData);
 
 /* rescache.c */
 void fn_801F2ED8(int mode);
-void fn_801F2EE0(Res_801EDC2C *pRes, char *pName);
-void fn_801F30CC(Res_801EDC2C *pRes);
-void fn_801F3104(Res_801EDC2C *pRes);
-void fn_801F318C(Res_801EDC2C *pRes, int index, int offset, void *pData, int size);
+void fn_801F2EE0(ResFile_t *pRes, char *pName);
+void fn_801F30CC(ResFile_t *pRes);
+void fn_801F3104(ResFile_t *pRes);
+void fn_801F318C(ResFile_t *pRes, int index, int offset, void *pData, int size);
 
 /* resloosefile.c */
-int ResLooseFileGetSize(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize);
+int ResLooseFileGetSize(ResFile_t *pRes, unsigned int index, unsigned int *pSize);
 
 #ifdef __cplusplus
 }

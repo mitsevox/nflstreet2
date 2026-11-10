@@ -12,7 +12,7 @@
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
@@ -49,8 +49,8 @@ void fn_80072C90(int a, int b);
 void fn_800731D0(int a);
 void fn_8009418C(void);
 void fn_8013CF98(void);
-void fn_8015CDA4(void);
-void fn_801801E8(int a);
+void FEPlyrLoadUpdate(void);
+void MsgGameSetFEStarted(int a);
 void fn_80186EF4(void);
 void fn_80187C0C(void);
 void fn_80187FDC(void);
@@ -95,7 +95,7 @@ static void _FELoopEnterDefault()
     int args[2];
     void *p;
 
-    fn_801801E8(1);
+    MsgGameSetFEStarted(1);
     p = lbl_803EB688;
     args[0] = 0;
     if (_FELoop_bVisited) {
@@ -112,7 +112,7 @@ static void _FELoopEnterMode0()
     int args[2];
     void *p;
 
-    fn_801801E8(1);
+    MsgGameSetFEStarted(1);
     p = lbl_803EB688;
     args[0] = 0;
     args[1] = 100;
@@ -355,7 +355,7 @@ int FELoop::Init()
         fn_802297B0();
         FELoopRefreshModeType();
     }
-    _FELoop_uModeType = fn_8017F584();
+    _FELoop_uModeType = GameModeTypeGet();
     fn_80188E14();
     _FELoopEnterModeScreen(_FELoop_uModeType);
     _FELoop_uIdleFrames = 0;
@@ -376,7 +376,7 @@ unsigned char FELoop::Update()
     ConProcessChannel(-1);
     FEPlyrUpdate();
     fn_8003E1F0();
-    fn_8015CDA4();
+    FEPlyrLoadUpdate();
     gFMCAPPORT.Update();
     fn_80219650(lbl_803EB688, &a, &b);
     if (a == 0 && b == 7) {
@@ -443,7 +443,7 @@ void FELoopRefreshModeType()
         }
         fn_80229554();
     }
-    _FELoop_uModeType = fn_8017F584();
+    _FELoop_uModeType = GameModeTypeGet();
 }
 
 void FELoopSetVisited(unsigned char value)

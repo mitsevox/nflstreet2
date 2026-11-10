@@ -24,20 +24,20 @@ extern int lbl_803EB2F4;
 
 int fn_80178308(void);
 int fn_80178320(void);
-void fn_80168640(int team, int kind);
-void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
-void fn_80167EA0(int team);
-Team_80168EBC *fn_80168EBC(int team);
+void PlayBookSetFormationType(int team, int kind);
+void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
+void PlayBookLoadCurrentPlay(int team);
+Team_80168EBC *PlayBookGetTeam(int team);
 int fn_80085A34(int formation, int team);
 void fn_800B3EFC(int team);
-void fn_80167FF0(int team);
+void PlayBookLoadAudibles(int team);
 void fn_800AD910(int a, float b);
 void fn_8009D888(int index, int value);
 void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 void fn_80178370(void);
 int fn_80177C38(void);
 void fn_8009D8CC(int index);
@@ -53,16 +53,16 @@ void fn_80153DBC(Class_802A1B18 *p, float dt)
     int other = !team;
     unsigned int flag = fn_802372EC(0, 100) & 1;
 
-    fn_80168640(team, 1);
-    fn_80168640(other, 11);
-    fn_80168744(team, 0, 0, fn_800B65A0(team) == 255 ? flag : 0);
-    fn_80167EA0(team);
-    fn_80085A34(fn_80168EBC(team)->mUnknown40, team);
-    fn_80168744(other, 0, 0, 0);
-    fn_80167EA0(other);
+    PlayBookSetFormationType(team, 1);
+    PlayBookSetFormationType(other, 11);
+    PlayBookSetIndices(team, 0, 0, fn_800B65A0(team) == 255 ? flag : 0);
+    PlayBookLoadCurrentPlay(team);
+    fn_80085A34(PlayBookGetTeam(team)->mUnknown40, team);
+    PlayBookSetIndices(other, 0, 0, 0);
+    PlayBookLoadCurrentPlay(other);
     fn_800B3EFC(team);
     fn_800B3EFC(other);
-    fn_80167FF0(fn_80178308());
+    PlayBookLoadAudibles(fn_80178308());
     fn_800AD910(2, dt);
 }
 
@@ -88,7 +88,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
     p->Class_80297AB8::vfn_04(dt);
     if (fn_801787A0() == 0) {
         if (fn_8009D990(5) == 0) {
-            fn_8017D7C4("Time Expired");
+            HudShowAlert("Time Expired");
             fn_80178370();
         } else {
             unsigned int value;

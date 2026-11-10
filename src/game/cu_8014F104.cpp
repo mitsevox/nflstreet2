@@ -24,7 +24,7 @@ int fn_80187A78(unsigned char index, char *pText, int count);
 int fn_80187400(int kind, int key, int first, int last);
 
 Object_80039F5C *fn_8003AC84(int id);
-int fn_8017F584(void);
+int GameModeTypeGet(void);
 int fn_8014FF34(Class_802A2B68 *p);
 unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
 
@@ -98,7 +98,7 @@ void fn_8014F19C(Class_802A2B68 *p)
 
 int fn_8014F36C(Class_802A2B68 *p)
 {
-    if (fn_8017F584() == 7) {
+    if (GameModeTypeGet() == 7) {
         return fn_8014FF34(p) <= 4;
     }
     return fn_8014F104(fn_80148A58())->mpUnknown34[0].mUnknown8 != 255;

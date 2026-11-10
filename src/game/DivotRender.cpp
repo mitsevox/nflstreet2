@@ -2,7 +2,7 @@
    each divot as a faded, rotated and scaled textured quad; dispatchers route
    the divot code's events to the type's handlers. */
 #include <dolphin/gx/GXPixel.h>
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -82,7 +82,7 @@ void DivotRenderLoadType(int index)
         pElement = _DivotRender_apTexLibs[index] = (DivotTexLib *)fn_801D2B7C(fn_80044528(index) * sizeof(DivotTexLib), 0, 0);
         handle = fn_80044544();
         for (; i < fn_80044528(index); i++) {
-            TMTexLibLoad(pElement, fn_801EF390((void *)handle, fn_80044564(index, i), 1));
+            TMTexLibLoad(pElement, ResLoad((void *)handle, fn_80044564(index, i), 1));
             pElement->mUnknown28 = TMTexLibGetTexture(pElement, 0xFF000000);
             pElement->mUnknown2C = TMTexLibGetClut(pElement, 0xFF000000, 0);
             pElement++;
@@ -98,7 +98,7 @@ void DivotRenderFreeType(int index)
 
         for (i = 0; i < fn_80044528(index); i++) {
             TMTexLibUnload(&pElements[i]);
-            fn_801F010C((void *)fn_80044544(), fn_80044564(index, i));
+            ResUnLoad((void *)fn_80044544(), fn_80044564(index, i));
         }
         fn_801D2BD0(pElements);
         _DivotRender_apTexLibs[index] = 0;

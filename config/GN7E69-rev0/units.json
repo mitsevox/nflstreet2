@@ -409,10 +409,6 @@
       "address": "0x80182BC4",
       "evidence": "evidence.tsv external row 0x80182BC4 (vfn_03__14Class_802A6B60i) and type row Class_802A6B60."
     },
-    "atexit": {
-      "address": "0x80262310",
-      "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
-    },
     "VMInit": {
       "address": "0x80244F18",
       "evidence": "evidence.tsv external row for 0x80244F18 (VMInit)."
@@ -853,10 +849,6 @@
       "address": "0x8023BBA0",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
     },
-    "DBPrintf": {
-      "address": "0x8023ED18",
-      "evidence": "Original complete OSExceptionInit call instruction0x80239150 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "ICEnable": {
       "address": "0x80239DBC",
       "evidence": "Original complete __OSCacheInit call instruction0x8023A210 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -948,10 +940,6 @@
     "DVDInquiryAsync": {
       "address": "0x802413BC",
       "evidence": "Original complete OSInit call instruction0x80238EC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__DBIsExceptionMarked": {
-      "address": "0x8023ECFC",
-      "evidence": "Original complete OSExceptionInit call instruction0x80239000 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "GXSetGPMetric": {
       "address": "0x8025295C",
@@ -1092,10 +1080,6 @@
     "__init_cpp": {
       "address": "0x8023E838",
       "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802CC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
-    },
-    "__DBExceptionDestination": {
-      "address": "0x8023ECEC",
-      "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
     },
     "__VMBASEInvalidateTLBEntry": {
       "address": "0x80245B14",
@@ -1784,6 +1768,358 @@
     "iSPCH_InitRandom": {
       "address": "0x801B1B70",
       "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
+    },
+    "_tDbMemAllocInfoCallback": {
+      "address": "0x803EBE80",
+      "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
+    },
+    "MemInitExternHeap": {
+      "address": "0x801D3B0C",
+      "evidence": "evidence.tsv function/name/source-form rows at 0x801D3B0C: Sys::Init calls the original external-region initializer at 0x8019A7F4; MemExtern.c remains comparison-only."
+    },
+    "__udivdi3": {
+      "address": "0x8025F0A8",
+      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
+    },
+    "__umoddi3": {
+      "address": "0x8025F58C",
+      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
+    },
+    "_ResGetDirInfo": {
+      "address": "0x801EC650",
+      "evidence": "evidence.tsv function and name rows at 0x801EC650: Reads directory offsets and the compressed and expanded sizes for an entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetBlockOffset": {
+      "address": "0x801EC6C4",
+      "evidence": "evidence.tsv function and name rows at 0x801EC6C4: Chooses the directory offset or the relocated bulk-buffer offset from entry flag 8. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResBlockLoadCompFileAsync": {
+      "address": "0x801EC718",
+      "evidence": "evidence.tsv function and name rows at 0x801EC718: Starts block streaming through the shared 0x8000-byte input buffer and returns the stream request. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResBlockLoadCompFileAsyncBlockCallback": {
+      "address": "0x801EC760",
+      "evidence": "evidence.tsv function and name rows at 0x801EC760: Feeds successive file blocks into the active decompressor and stops it at end of input. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResCalcPad": {
+      "address": "0x801EC894",
+      "evidence": "evidence.tsv function and name rows at 0x801EC894: Computes the bytes needed to align a block size to its alignment. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResFileInsertFunc": {
+      "address": "0x801EC8AC",
+      "evidence": "evidence.tsv function and name rows at 0x801EC8AC: Compares two resource names for insertion into the open-file list. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResFileSearchByFileNameFunc": {
+      "address": "0x801EC8D4",
+      "evidence": "evidence.tsv function and name rows at 0x801EC8D4: Compares a resource name with a search key and stores the matching record. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResAsyncCallbackFunc": {
+      "address": "0x801EC914",
+      "evidence": "evidence.tsv function and name rows at 0x801EC914: Completes a read, handles optional decompression/cache writes, updates load flags, and dispatches or queues the completion. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetBaseBlockSize": {
+      "address": "0x801ECBE4",
+      "evidence": "evidence.tsv function and name rows at 0x801ECBE4: Computes metadata payload sizes for TERF, COMP, DIR1 and HSH1/HSH2 blocks. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLoadRes": {
+      "address": "0x801ECC70",
+      "evidence": "evidence.tsv function and name rows at 0x801ECC70: Loads one resource synchronously from loose files, cached/quickload streams, mapped memory or ARAM, with optional decompression. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLoadResAsync": {
+      "address": "0x801ED634",
+      "evidence": "evidence.tsv function and name rows at 0x801ED634: Creates an asynchronous request, handles timed completion and starts ordinary or block-compressed reads. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResLockRes": {
+      "address": "0x801EDC2C",
+      "evidence": "evidence.tsv function and name rows at 0x801EDC2C: Marks an entry locked and maps its bulk-buffer address when entry flag 8 is set. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResUnlockRes": {
+      "address": "0x801EDCD0",
+      "evidence": "evidence.tsv function and name rows at 0x801EDCD0: Clears an eligible entry lock and its bulk-buffer address, returning the remaining address. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResReadTerfBlock": {
+      "address": "0x801EDD68",
+      "evidence": "evidence.tsv function and name rows at 0x801EDD68: Reads the eight-byte TERF block envelope and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResReadBlock": {
+      "address": "0x801EDDB0",
+      "evidence": "evidence.tsv function and name rows at 0x801EDDB0: Reads a metadata payload of the requested size and reports a short-read error. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResInitResourceFile": {
+      "address": "0x801EDDF8",
+      "evidence": "evidence.tsv function and name rows at 0x801EDDF8: Parses file-backed TERF metadata, allocates the directory/hash/entry arrays and cleans up failed opens. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResInitRamResourceFile": {
+      "address": "0x801EE38C",
+      "evidence": "evidence.tsv function and name rows at 0x801EE38C: Parses in-memory TERF metadata and moves the DATA area to ARAM for state 3 resources. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResGetResourceBuffer": {
+      "address": "0x801EE700",
+      "evidence": "evidence.tsv function and name rows at 0x801EE700: Selects a mapped entry address or allocates a destination buffer, including loose-file overrides. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_ResUnprotectAll": {
+      "address": "0x801EE91C",
+      "evidence": "evidence.tsv function and name rows at 0x801EE91C: Clears entry protection on every entry in a resource file. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResInit": {
+      "address": "0x801EE970",
+      "evidence": "evidence.tsv function and name rows at 0x801EE970: Initializes compression, resource locks, the open-file pool and block input buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResShutdown": {
+      "address": "0x801EEA60",
+      "evidence": "evidence.tsv function and name rows at 0x801EEA60: Closes open resources and releases the pool, buffer, locks and compression subsystem. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResOpenDevice": {
+      "address": "0x801EEB44",
+      "evidence": "evidence.tsv function and name rows at 0x801EEB44: Opens or reuses a named device-backed resource file and tracks its reference count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResOpenRam": {
+      "address": "0x801EECD0",
+      "evidence": "evidence.tsv function and name rows at 0x801EECD0: Opens or reuses a resource nested inside a loaded parent entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResClose": {
+      "address": "0x801EEFAC",
+      "evidence": "evidence.tsv function and name rows at 0x801EEFAC: Releases a resource reference and tears down owned metadata and loaded entries when required. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoad": {
+      "address": "0x801EF390",
+      "evidence": "evidence.tsv function and name rows at 0x801EF390: Validates a resource entry, waits for pending work, allocates its destination and loads it synchronously. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAsync": {
+      "address": "0x801EF548",
+      "evidence": "evidence.tsv function and name rows at 0x801EF548: Validates an entry and begins an asynchronous load into an allocated destination with a user callback. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadToBuffer": {
+      "address": "0x801EF7BC",
+      "evidence": "evidence.tsv function and name rows at 0x801EF7BC: Loads a resource synchronously into a supplied buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResWriteFromBuffer": {
+      "address": "0x801EF92C",
+      "evidence": "evidence.tsv function and name rows at 0x801EF92C: Writes the supplied entry data to its directory offset in the backing file. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAsyncToBuffer": {
+      "address": "0x801EFAD8",
+      "evidence": "evidence.tsv function and name rows at 0x801EFAD8: Starts an asynchronous entry load into a supplied buffer and records the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCopyAsyncToBuffer": {
+      "address": "0x801EFD2C",
+      "evidence": "evidence.tsv function and name rows at 0x801EFD2C: Starts an asynchronous entry copy without storing the caller buffer as the loaded entry. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCopyToBuffer": {
+      "address": "0x801EFF80",
+      "evidence": "evidence.tsv function and name rows at 0x801EFF80: Copies an entry synchronously into a supplied buffer without retaining it in the loaded-entry table. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnLoad": {
+      "address": "0x801F010C",
+      "evidence": "evidence.tsv function and name rows at 0x801F010C: Waits for and releases one loaded entry subject to its protection/ownership flags. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResLoadAll": {
+      "address": "0x801F02AC",
+      "evidence": "evidence.tsv function and name rows at 0x801F02AC: Loads entries individually or allocates, expands and maps an entire bulk resource buffer. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnLoadAll": {
+      "address": "0x801F08FC",
+      "evidence": "evidence.tsv function and name rows at 0x801F08FC: Releases every loaded entry and the resource bulk allocation when present. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResFindIndexByName": {
+      "address": "0x801F0A8C",
+      "evidence": "evidence.tsv function and name rows at 0x801F0A8C: Hashes a name with HSH1/HSH2 parameters and searches the variable-width hash table for its resource index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetSize": {
+      "address": "0x801F0C50",
+      "evidence": "evidence.tsv function and name rows at 0x801F0C50: Returns a loose override size when present, otherwise the entry expanded size. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetNumResources": {
+      "address": "0x801F0D34",
+      "evidence": "evidence.tsv function and name rows at 0x801F0D34: Returns the validated resource count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsLoaded": {
+      "address": "0x801F0DB8",
+      "evidence": "evidence.tsv function and name rows at 0x801F0DB8: Tests entry flag 2 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsLoading": {
+      "address": "0x801F0E68",
+      "evidence": "evidence.tsv function and name rows at 0x801F0E68: Tests entry flag 0x10 after validating the resource and index. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSync": {
+      "address": "0x801F0F18",
+      "evidence": "evidence.tsv function and name rows at 0x801F0F18: Optionally waits for outstanding reads and dispatches timed completions, returning the pending count. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsOpen": {
+      "address": "0x801F0F9C",
+      "evidence": "evidence.tsv function and name rows at 0x801F0F9C: Tests whether a name exists in the initialized open-resource list. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResIsMemoryBacked": {
+      "address": "0x801F1008",
+      "evidence": "evidence.tsv function and name rows at 0x801F1008: Verifies that the supplied record is the open record for its name, then tests storage states 2 and 3. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetStreamInfo": {
+      "address": "0x801F10B0",
+      "evidence": "evidence.tsv function and name rows at 0x801F10B0: Returns the backing-file handle, entry offset and size, rejecting compressed entries. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSetFlags": {
+      "address": "0x801F11AC",
+      "evidence": "evidence.tsv function and name rows at 0x801F11AC: Sets resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResClearFlags": {
+      "address": "0x801F1230",
+      "evidence": "evidence.tsv function and name rows at 0x801F1230: Clears resource flags under the resource-list lock. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResCallTimedAsync": {
+      "address": "0x801F12B4",
+      "evidence": "evidence.tsv function and name rows at 0x801F12B4: Drains due requests from the timed ring and invokes their completion callbacks. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResUnprotect": {
+      "address": "0x801F1488",
+      "evidence": "evidence.tsv function and name rows at 0x801F1488: Clears entry protection flag 0x40. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetAlignment": {
+      "address": "0x801F149C",
+      "evidence": "evidence.tsv function and name rows at 0x801F149C: Returns the validated resource alignment. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResSetMemFlags": {
+      "address": "0x801F1520",
+      "evidence": "evidence.tsv function and name rows at 0x801F1520: Replaces allocation flags and returns their previous value. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "ResGetMemAllocFlags": {
+      "address": "0x801F1530",
+      "evidence": "evidence.tsv function and name rows at 0x801F1530: Returns the resource allocation flags. Original bytes remain linked while Resource.c is a registered comparison."
+    },
+    "_Res_szDiskLabelByHandle": {
+      "address": "0x802B17C0",
+      "evidence": "evidence.tsv data/name rows 0x802B17C0: disk decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szDiskLabelByName": {
+      "address": "0x802B17CC",
+      "evidence": "evidence.tsv data/name rows 0x802B17CC: disk decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szRamLabelByHandle": {
+      "address": "0x802B17D8",
+      "evidence": "evidence.tsv data/name rows 0x802B17D8: mapped-memory decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szRamLabelByName": {
+      "address": "0x802B17E4",
+      "evidence": "evidence.tsv data/name rows 0x802B17E4: mapped-memory decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szNameFormat": {
+      "address": "0x802B17EC",
+      "evidence": "evidence.tsv data/name rows 0x802B17EC: bounded resource-name formatter for ARAM temporary label; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szIndexFormat": {
+      "address": "0x802B17F0",
+      "evidence": "evidence.tsv data/name rows 0x802B17F0: four-digit resource index suffix; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szAramLabelByHandle": {
+      "address": "0x802B17F8",
+      "evidence": "evidence.tsv data/name rows 0x802B17F8: ARAM decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szAramLabelByName": {
+      "address": "0x802B1804",
+      "evidence": "evidence.tsv data/name rows 0x802B1804: ARAM decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szLoadAllLabelByHandle": {
+      "address": "0x802B1810",
+      "evidence": "evidence.tsv data/name rows 0x802B1810: bulk-load decompression label with numeric file handle; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szLoadAllLabelByName": {
+      "address": "0x802B181C",
+      "evidence": "evidence.tsv data/name rows 0x802B181C: bulk-load decompression label with resource name; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_szModuleID": {
+      "address": "0x802F9508",
+      "evidence": "evidence.tsv data/name rows 0x802F9508: RESOURCE.LIB; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bModuleActive": {
+      "address": "0x803EBD80",
+      "evidence": "evidence.tsv data/name rows 0x803EBD80: initialization guard; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncLoadCount": {
+      "address": "0x803EBD84",
+      "evidence": "evidence.tsv data/name rows 0x803EBD84: in-flight async load count protected by count lock; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncOverride": {
+      "address": "0x803EBD88",
+      "evidence": "evidence.tsv data/name rows 0x803EBD88: positive value makes public async loads use synchronous loading unless resource flag 4; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pAsyncDebugProc": {
+      "address": "0x803EBD8C",
+      "evidence": "evidence.tsv data/name rows 0x803EBD8C: optional async lifecycle event hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iAsyncDebugParm": {
+      "address": "0x803EBD90",
+      "evidence": "evidence.tsv data/name rows 0x803EBD90: fifth argument to optional async event hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pLoopingCallback": {
+      "address": "0x803EBD94",
+      "evidence": "evidence.tsv data/name rows 0x803EBD94: long resource-wait notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pErrorCallback": {
+      "address": "0x803EBD98",
+      "evidence": "evidence.tsv data/name rows 0x803EBD98: resource-open error notification hook; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bCachingEnabled": {
+      "address": "0x803EBD9C",
+      "evidence": "evidence.tsv data/name rows 0x803EBD9C: resource cache enable flag; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_uTimedAsyncTick": {
+      "address": "0x803EBDA0",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA0: current timed-async dispatch tick; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iTimedAsyncPut": {
+      "address": "0x803EBDA4",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA4: 16-entry timed completion FIFO producer index; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iTimedAsyncGet": {
+      "address": "0x803EBDA8",
+      "evidence": "evidence.tsv data/name rows 0x803EBDA8: 16-entry timed completion FIFO consumer index; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_bLooseFileSupport": {
+      "address": "0x803EBDAC",
+      "evidence": "evidence.tsv data/name rows 0x803EBDAC: enable separate-file resource overrides; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_uMemAllocFlags": {
+      "address": "0x803EBDB0",
+      "evidence": "evidence.tsv data/name rows 0x803EBDB0: default resource allocation flags; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockDecompressor": {
+      "address": "0x803ECF70",
+      "evidence": "evidence.tsv data/name rows 0x803ECF70: current block codec state; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_iBlockBytesRead": {
+      "address": "0x803ECF74",
+      "evidence": "evidence.tsv data/name rows 0x803ECF74: accumulated bytes delivered to block codec; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockRequest": {
+      "address": "0x803ECF78",
+      "evidence": "evidence.tsv data/name rows 0x803ECF78: request retained by active block callback; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pBlockLoadBuffer": {
+      "address": "0x803ECF7C",
+      "evidence": "evidence.tsv data/name rows 0x803ECF7C: 0x8000-byte streaming read buffer; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sBlockInput": {
+      "address": "0x8039AE14",
+      "evidence": "evidence.tsv data/name rows 0x8039AE14: codec input stream record; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sBlockOutput": {
+      "address": "0x8039AE30",
+      "evidence": "evidence.tsv data/name rows 0x8039AE30: codec output stream record; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_apTimedAsyncRequests": {
+      "address": "0x8039AE4C",
+      "evidence": "evidence.tsv data/name rows 0x8039AE4C: 16-entry timed completion request FIFO; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sAsyncCountLock": {
+      "address": "0x803E92FC",
+      "evidence": "evidence.tsv data/name rows 0x803E92FC: recursive lock for async count; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_sResourceLock": {
+      "address": "0x803E931C",
+      "evidence": "evidence.tsv data/name rows 0x803E931C: recursive lock for resource pool and metadata; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "_Res_pResourceFileList": {
+      "address": "0x803ED668",
+      "evidence": "evidence.tsv data/name rows 0x803ED668: open-resource pool returned by DS allocator; original storage remains externally linked for the partial Resource.c reconstruction."
     }
   },
   "units": [
@@ -3182,9 +3518,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015FFC8.cpp",
+      "source": "src/game/PlyrSwitch.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015FFC8-0x8016014C (src/game/cu_8015FFC8.cpp) and the .data data row 0x802E32B0-0x802E33A8.",
+      "evidence": "evidence.tsv unit row 0x8015FFC8-0x8016014C (src/game/PlyrSwitch.cpp) and the .data data row 0x802E32B0-0x802E33A8.",
       "sections": [
         {
           "section": ".text",
@@ -5705,9 +6041,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F7B0.cpp",
+      "source": "src/game/DebugWindow.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F7B0-0x8017F90C (src/game/cu_8017F7B0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017F7B0-0x8017F90C (src/game/DebugWindow.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5894,9 +6230,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F584.cpp",
+      "source": "src/game/GameModeType.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F584-0x8017F670 (src/game/cu_8017F584.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017F584-0x8017F670 (src/game/GameModeType.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -5919,9 +6255,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F3C8.cpp",
+      "source": "src/game/TeamPrompt.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F3C8-0x8017F49C (src/game/cu_8017F3C8.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017F3C8-0x8017F49C (src/game/TeamPrompt.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6353,9 +6689,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017FA78.cpp",
+      "source": "src/game/ColorPick.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017FA78-0x8017FB90 (src/game/cu_8017FA78.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017FA78-0x8017FB90 (src/game/ColorPick.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6372,9 +6708,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017FDF0.cpp",
+      "source": "src/game/MsgGame.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017FDF0-0x80180FA4 (src/game/cu_8017FDF0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017FDF0-0x80180FA4 (src/game/MsgGame.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6397,9 +6733,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F264.cpp",
+      "source": "src/game/GameEventFlags.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F264-0x8017F3C8 (src/game/cu_8017F264.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017F264-0x8017F3C8 (src/game/GameEventFlags.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6422,9 +6758,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F718.cpp",
+      "source": "src/game/SpareDbCursor.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F718-0x8017F7B0 (src/game/cu_8017F718.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017F718-0x8017F7B0 (src/game/SpareDbCursor.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6771,9 +7107,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8016CF40.cpp",
+      "source": "src/game/PlyrMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016CEEC-0x8016DB94 (src/game/cu_8016CF40.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8016CEEC-0x8016DB94 (src/game/PlyrMove.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6808,9 +7144,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8016C170.cpp",
+      "source": "src/game/PlyrMoveModes.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016BD54-0x8016C70C (src/game/cu_8016C170.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8016BD54-0x8016C70C (src/game/PlyrMoveModes.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -6845,68 +7181,68 @@
       ]
     },
     {
-      "source": "src/game/cu_8016FB10.cpp",
+      "source": "src/game/Possession.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016FB10-0x8017419C (src/game/cu_8016FB10.cpp), its linker row 0x802A50EC-0x802A5344 and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8016FB10-0x8017419C (src/game/Possession.cpp), its linker row 0x802A50EC-0x802A5344 and its data, type, compiler and source-form rows.",
       "link_roots": {
         "symbols": [
-          "fn_8016FB10",
-          "fn_80170140",
-          "fn_80170198",
-          "fn_80170294",
-          "fn_80170374",
-          "fn_8017055C",
-          "fn_80170754",
-          "fn_80170864",
-          "fn_80170B30",
-          "fn_80170E64",
-          "fn_80170F40",
-          "fn_80171068",
-          "fn_801712D0",
-          "fn_80171450",
-          "fn_80171824",
-          "fn_801718E8",
-          "fn_80171DB0",
-          "fn_80171E30",
-          "fn_801720B4",
-          "fn_80172154",
-          "fn_801726F8",
-          "fn_801729F8",
-          "fn_80172F9C",
-          "fn_80172FB0",
-          "fn_8017319C",
-          "fn_80173298",
-          "fn_801732D0",
-          "fn_80173320",
-          "fn_80173324",
-          "fn_80173404",
-          "fn_801735B4",
-          "fn_801735C8",
-          "fn_801735D8",
-          "fn_801735EC",
-          "fn_80173614",
-          "fn_801736AC",
-          "fn_80173794",
-          "fn_801739D0",
-          "fn_80173A50",
-          "fn_80173A88",
-          "fn_80173B64",
-          "fn_80173B8C",
-          "fn_80173BCC",
-          "fn_80173BF8",
-          "fn_80173C1C",
-          "fn_80173C2C",
-          "fn_80173C68",
-          "fn_80173CAC",
-          "fn_80173D10",
-          "fn_80173E24",
-          "fn_80173EE0",
-          "fn_80174074",
-          "fn_801740A8",
-          "fn_801740C4",
-          "fn_80174114",
-          "fn_80174160",
-          "fn_8017417C"
+          "PossCalcBallSpot",
+          "PossTestCarrierBall",
+          "PossIsCatchInBounds",
+          "PossCanFumble",
+          "PossCalcHitFactor",
+          "PossClassifyCatch",
+          "PossCalcBallTerms",
+          "PossApplyCoverage",
+          "PossCalcCatchChance",
+          "PossIsWristNearJoint",
+          "PossEndIncompletePass",
+          "PossTryCatch",
+          "PossTryReceivePitch",
+          "PossTryJarBall",
+          "PossFumble",
+          "PossTryFumble",
+          "PossReleaseBall",
+          "PossStartFumble",
+          "PossGrabBall",
+          "PossGiveBall",
+          "PossLogBallResult",
+          "PossCheckBallOut",
+          "PossResetMissedCatch",
+          "PossUpdateMissedCatch",
+          "PossCheckDownedBall",
+          "ClockRuleDbSetTimeouts",
+          "ClockRuleInit",
+          "ClockRuleShutdown",
+          "ClockRuleUpdate",
+          "ClockRuleNextPeriod",
+          "ClockRuleSetFlags",
+          "ClockRuleTestFlags",
+          "ClockRuleClearFlags",
+          "ClockRuleIsOvertime",
+          "ClockRuleSnap",
+          "ClockRuleRestartOnReady",
+          "ClockRuleApplyPlayEvents",
+          "ClockRuleSetStopMode",
+          "ClockRuleStopGameClock",
+          "ClockRuleCanEndPeriod",
+          "ClockRuleIsEndHeld",
+          "ClockRuleEndPeriod",
+          "ClockRuleSetTwoMinuteFlags",
+          "ClockRuleSetTwoMinuteFlag",
+          "ClockRuleResetFlags",
+          "DriveLogInit",
+          "DriveLogClearSaved",
+          "DriveLogGetElapsed",
+          "DriveLogEndDrive",
+          "DriveLogUpdateTeam",
+          "DriveLogAddPlay",
+          "DriveLogStampTime",
+          "DriveLogHasLongPlay",
+          "DriveLogSetHold",
+          "DriveLogGetPlayerNum",
+          "DriveLogGetTeam",
+          "DriveLogSetLongPlay"
         ],
         "discarded": [
           "GetPlayerName",
@@ -7836,59 +8172,59 @@
       ]
     },
     {
-      "source": "src/game/cu_80167A8C.cpp",
+      "source": "src/game/PlayBook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/cu_80167A8C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/PlayBook.cpp) and its data rows.",
       "link_roots": {
         "symbols": [
-          "fn_80167910",
-          "fn_801679B4",
-          "fn_801679B8",
-          "fn_801679F4",
-          "fn_80167A40",
-          "fn_80167A6C",
-          "fn_80167A8C",
-          "fn_80167AD8",
-          "fn_80167B70",
-          "fn_80167C1C",
-          "fn_80167C8C",
-          "fn_80167D1C",
-          "fn_80167EA0",
-          "fn_80167FF0",
-          "fn_801681A8",
-          "fn_80168210",
-          "fn_80168264",
-          "fn_80168324",
-          "fn_80168418",
-          "fn_801684B8",
-          "fn_80168640",
-          "fn_80168708",
-          "fn_8016871C",
-          "fn_80168730",
-          "fn_80168744",
-          "fn_801687E4",
-          "fn_80168898",
-          "fn_801688AC",
-          "fn_801688C0",
-          "fn_801688D4",
-          "fn_801688E0",
-          "fn_801688F4",
-          "fn_80168908",
-          "fn_8016898C",
-          "fn_801689AC",
-          "fn_80168A14",
-          "fn_80168A7C",
-          "fn_80168B04",
-          "fn_80168B5C",
-          "fn_80168C10",
-          "fn_80168C40",
-          "fn_80168D10",
-          "fn_80168D74",
-          "fn_80168D98",
-          "fn_80168E00",
-          "fn_80168E54",
-          "fn_80168EA8",
-          "fn_80168EBC"
+          "PlayBookOffsetSpots",
+          "PlayBookPostInit",
+          "PlayBookCompareData",
+          "PlayBookSetupTeam",
+          "PlayBookReadFormation",
+          "PlayBookReadSet",
+          "PlayBookSelectFormation",
+          "PlayBookLoadFormation",
+          "PlayBookLoadSet",
+          "PlayBookReloadSet",
+          "PlayBookClearAudibles",
+          "PlayBookOpenDatabases",
+          "PlayBookLoadCurrentPlay",
+          "PlayBookLoadAudibles",
+          "PlayBookAlloc",
+          "PlayBookClear",
+          "PlayBookLoadAudibleTable",
+          "PlayBookOpenAndRegister",
+          "PlayBookReopen",
+          "PlayBookCloseDatabases",
+          "PlayBookSetFormationType",
+          "PlayBookGetFormation",
+          "PlayBookGetPlay",
+          "PlayBookGetSavedPlay",
+          "PlayBookSetIndices",
+          "PlayBookPickPage",
+          "PlayBookGetSetIndex",
+          "PlayBookGetFormationIndex",
+          "PlayBookGetPlayIndex",
+          "PlayBookGetLoadFlags",
+          "PlayBookSetLoadFlags",
+          "PlayBookClearLoadFlags",
+          "PlayBookSelectAudible",
+          "PlayBookGetAudiblePlay",
+          "PlayBookSaveSelection",
+          "PlayBookRestoreSelection",
+          "PlayBookSetSelection",
+          "PlayBookSelectPlayById",
+          "PlayBookPickPlay",
+          "PlayBookIsAiPlay",
+          "PlayBookSetupTeams",
+          "PlayBookSetAudible",
+          "PlayBookToggleFlip",
+          "PlayBookLoadPlayById",
+          "PlayBookGetReceiver",
+          "PlayBookSetReceiverOption",
+          "PlayBookGetDatabase",
+          "PlayBookGetTeam"
         ],
         "discarded": [
           "GetPlayerPosition"
@@ -7991,9 +8327,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80176C58.cpp",
+      "source": "src/game/ScoringLog.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80176C58-0x80176F18 (src/game/cu_80176C58.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80176C58-0x80176F18 (src/game/ScoringLog.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8010,9 +8346,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80159F10.cpp",
+      "source": "src/game/PassIconObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80159F10-0x8015A248 (src/game/cu_80159F10.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80159F10-0x8015A248 (src/game/PassIconObj.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8054,9 +8390,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015FFA8.cpp",
+      "source": "src/game/PlyrModelAttach.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015FFA8-0x8015FFC8 (src/game/cu_8015FFA8.cpp).",
+      "evidence": "evidence.tsv unit row 0x8015FFA8-0x8015FFC8 (src/game/PlyrModelAttach.cpp).",
       "sections": [
         {
           "section": ".text",
@@ -8105,9 +8441,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017CD64.cpp",
+      "source": "src/game/Banner.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017CD64-0x8017D0E0 (src/game/cu_8017CD64.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8017CD64-0x8017D0E0 (src/game/Banner.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8285,9 +8621,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017D0E0.cpp",
+      "source": "src/game/GameHud.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017D0E0-0x8017DD68 (src/game/cu_8017D0E0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017D0E0-0x8017DD68 (src/game/GameHud.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8322,9 +8658,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017E65C.cpp",
+      "source": "src/game/CoinToss.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017E65C-0x8017F264 (src/game/cu_8017E65C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017E65C-0x8017F264 (src/game/CoinToss.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -8353,9 +8689,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017DD68.cpp",
+      "source": "src/game/HudEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017DD68-0x8017E65C (src/game/cu_8017DD68.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8017DD68-0x8017E65C (src/game/HudEvents.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8472,9 +8808,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8016014C.cpp",
+      "source": "src/game/PlaTexCache.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/cu_8016014C.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/PlaTexCache.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -8515,9 +8851,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801614D0.cpp",
+      "source": "src/game/skyobj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_801614D0.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/skyobj.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
@@ -9154,9 +9490,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80163D9C.cpp",
+      "source": "src/game/EffectDrawObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80163D9C-0x80163E94 (src/game/cu_80163D9C.cpp) and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80163D9C-0x80163E94 (src/game/EffectDrawObj.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -9758,9 +10094,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801631EC.cpp",
+      "source": "src/game/BallMarker.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded cu_801631EC unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state stays external; the helper 0x80163074 is part of this source.",
+      "evidence": "evidence.tsv bounded src/game/BallMarker.cpp unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state stays external; the helper 0x80163074 is part of this source.",
       "sections": [
         {
           "section": ".text",
@@ -11770,9 +12106,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F670.cpp",
+      "source": "src/game/UISGroup2Msg.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F670-0x8017F718 (src/game/cu_8017F670.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8017F670-0x8017F718 (src/game/UISGroup2Msg.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11783,9 +12119,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017CB40.cpp",
+      "source": "src/game/SubDepthChart.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017CB40-0x8017CD64 (src/game/cu_8017CB40.cpp), its source-form row and the data row 0x802A57A0.",
+      "evidence": "evidence.tsv unit row 0x8017CB40-0x8017CD64 (src/game/SubDepthChart.cpp), its source-form row and the data row 0x802A57A0.",
       "sections": [
         {
           "section": ".text",
@@ -11802,9 +12138,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8016172C.cpp",
+      "source": "src/game/EnvFogRefresh.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016172C-0x8016174C (src/game/cu_8016172C.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8016172C-0x8016174C (src/game/EnvFogRefresh.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11873,9 +12209,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80163E94.cpp",
+      "source": "src/game/PlaySet.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80163E94-0x80164568 (src/game/cu_80163E94.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80163E94-0x80164568 (src/game/PlaySet.cpp) and its source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11962,9 +12298,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F49C.cpp",
+      "source": "src/game/CommaFormat.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F49C-0x8017F584 (src/game/cu_8017F49C.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8017F49C-0x8017F584 (src/game/CommaFormat.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -11981,9 +12317,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017F90C.cpp",
+      "source": "src/game/UISGameMsg.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F90C-0x8017FA78 (src/game/cu_8017F90C.cpp) and its source-form row.",
+      "evidence": "evidence.tsv unit row 0x8017F90C-0x8017FA78 (src/game/UISGameMsg.cpp) and its source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -11994,9 +12330,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8016BAD8.cpp",
+      "source": "src/game/PlayAutoFlip.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8016BAD8-0x8016BD54 (src/game/cu_8016BAD8.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8016BAD8-0x8016BD54 (src/game/PlayAutoFlip.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -12013,9 +12349,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80164568.cpp",
+      "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
       "sections": [
         {
           "section": ".text",
@@ -12044,9 +12380,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80163674.cpp",
+      "source": "src/game/UISModel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80163674-0x80163D9C (src/game/cu_80163674.cpp), its function rows and data rows 0x802A45E0-0x802A460C and 0x803EB3A4-0x803EB3A8.",
+      "evidence": "evidence.tsv unit row 0x80163674-0x80163D9C (src/game/UISModel.cpp), its function rows and data rows 0x802A45E0-0x802A460C and 0x803EB3A4-0x803EB3A8.",
       "sections": [
         {
           "section": ".text",
@@ -12069,7 +12405,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80168ED0.cpp",
+      "source": "src/game/PlayCallAI.cpp",
       "profile": "game_cpp",
       "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
       "sections": [
@@ -12249,7 +12585,7 @@
       }
     },
     {
-      "source": "src/game/cu_80167094.cpp",
+      "source": "src/game/PlayArt.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional source unit and membership row, exact individual function extents, direct reset storage extents and inferred types.",
       "sections": [
@@ -14068,9 +14404,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8017FB90.cpp",
+      "source": "src/game/UISGameQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional complete bounded handler unit src/game/cu_8017FB90.cpp at0x8017FB90-0x8017FDF0, exact function extent and scalar data803EB52C-803EB530; neutral name, compiler/source-form/declaration records. All native code/data linked; historical file boundaries/linkage remain unresolved.",
+      "evidence": "evidence.tsv provisional complete bounded handler unit src/game/UISGameQuery.cpp at0x8017FB90-0x8017FDF0, exact function extent and scalar data803EB52C-803EB530; neutral name, compiler/source-form/declaration records. All native code/data linked; historical file boundaries/linkage remain unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -14473,6 +14809,310 @@
           "placement": ".text",
           "start": "0x802622DC",
           "end": "0x80262310"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/slinklst.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80278700-0x8027882C (src/engine/slinklst.c), its five function/name rows and SndLinkList_t/SndLinkNode_t type/field rows; sound_cxx compiler row 0x802714A8-0x8027CF9C. Complete native .text, no owned data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278700",
+          "end": "0x8027882C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/supmutpf.c",
+      "profile": "sound_cxx",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027AEE4",
+          "end": "0x8027B1F8"
+        }
+      ],
+      "evidence": "evidence.tsv complete 788-byte supmutpf.c unit, three function/name rows and owned decoder layout/fields; whole file linked with provisional edges."
+    },
+    {
+      "source": "src/game/FEPlyrLoad.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8015C25C-0x8015D3EC (src/game/FEPlyrLoad.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015C25C",
+          "end": "0x8015D3EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3EF8",
+          "end": "0x802A3F10"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB328",
+          "end": "0x803EB330"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8023EC7C-0x8023ED68, five function/name rows and exact data placements; all unchanged native functions including DBPrintf linked without retention or discarded code.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023EC7C",
+          "end": "0x8023ED68"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCCF0",
+          "end": "0x802FCD08"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0F0",
+          "end": "0x803ED0F8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/animTexLib.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C06E8",
+          "end": "0x801C0E04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE8",
+          "end": "0x802AEF08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4870",
+          "end": "0x802F4880"
+        }
+      ],
+      "evidence": "evidence.tsv provisional whole-file unit row 0x801C06E8-0x801C0E04, eleven function/name rows, 32-byte literal allocation and exact 16-byte accessed manager prefix. No retained code or excluded original ranges; the following zero word remains unassigned."
+    },
+    {
+      "source": "src/engine/t3db_mem.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv inferred unit row 0x80203444-0x80203754: five database record-pool helpers; provisional file edges corroborated by NASCAR 2005 t3db_mem.c. Complete native text linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80203444",
+          "end": "0x80203754"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/bsearch.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/bsearch.c 0x802623A8-0x80262440, exact function extent and inferred bsearch name. Standalone binary search owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802623A8",
+          "end": "0x80262440"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/atexit.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/atexit.c 0x80262310-0x802623A8, exact function extent, inferred atexit name and callback-block type/field rows. Whole exit-registration file owns no static data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80262310",
+          "end": "0x802623A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/voicequery.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/voicequery.c 0x802898FC-0x80289A04, separate exact function extents and inferred names/source-form rows. Complete two-function audio helper file, no owned data; trailing 28 zero bytes remain unassigned.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802898FC",
+          "end": "0x80289A04"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/memchr.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x8026696C-0x80266A2C, exact function extent, inferred byte-search name/signature and compiler row. Earlier 0x802645AC-0x8026696C remains an unreconstructed candidate.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026696C",
+          "end": "0x80266A2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/copysignf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80261A24-0x80261A58, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Adjacent survey bytes stay original.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80261A24",
+          "end": "0x80261A58"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/fabsf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file row 0x80260FC4-0x80260FE8, exact function extent, inferred name/ABI/type fields and unchanged compiler profile; no static data. Remaining survey bytes stay original.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260FC4",
+          "end": "0x80260FE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/math_support.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv whole-file provisional unit row0x80265D2C-0x80266640, individual function/name/compiler/source-form/type/field rows and exact read-only constant extent0x802B76C8-0x802B77A8. All four functions and all224 constant bytes verified together.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80265D2C",
+          "end": "0x80266640"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B76C8",
+          "end": "0x802B77A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/mbtowc_r.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv whole-file provisional unit row0x80266640-0x8026696C, function/name/compiler/source-form/type/field rows, exact24-byte locale-string pool and864-byte JIS table containers. Complete812-byte function and all888 native data bytes verified together.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266640",
+          "end": "0x8026696C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B77AC",
+          "end": "0x802B77C4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF7DC",
+          "end": "0x802FFB3C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/vfiprintf.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv whole second-vfprintf.c grouping0x802645AC-0x80265D2C, four exact function/name/ABI rows, exact172 initialized data bytes and provisional128-byte staging allocation, type/field/compiler/source-form records. All functions and native sections are replaced together.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802645AC",
+          "end": "0x80265D2C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7608",
+          "end": "0x802B76AC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6B4C",
+          "end": "0x803A6BCC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC550",
+          "end": "0x803EC558"
+        }
+      ]
+    },
+    {
+      "source": "src/game/StyleTracker.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional StyleTracker.cpp unit row, 118 exact full function extents and complete native data extents. Direct adjacent step indexing resolves the final CalculateAward operand-order mismatch. Full contiguous native .text and readonly data, initialized globals, strings and BSS replace the original ranges; unchanged game_cpp profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0D48",
+          "end": "0x800D760C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80298098",
+          "end": "0x8029D678"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EACC0",
+          "end": "0x803EACDC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6C0",
+          "end": "0x803ED6C8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9A4",
+          "end": "0x803EC9E0"
         }
       ]
     }

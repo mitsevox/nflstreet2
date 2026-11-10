@@ -2,7 +2,9 @@
    conversion helpers. */
 
 #include "engine/fn_80266AD8.h"
+#include "engine/math_support.h"
 #include "engine/Reent_802622DC.h"
+#include "engine/vfiprintf.h"
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
@@ -14,9 +16,6 @@ extern int lbl_803EC548;
 extern char *lbl_803EC54C;
 
 extern int fn_80262C34 (void *data, File_80262B5C *fp, const char *fmt, va_list ap);
-extern int fn_80264680 ();
-extern double fn_80265D2C (double x);
-extern double fn_80265EA0 (double x, double y);
 extern char lbl_803A6A28[];
 
 void fn_802624D8 (char *s);
@@ -128,13 +127,13 @@ fn_802625A0 (double value, int prec, int conv, int strip, char *sign)
 
   if (value >= 1.0)
     {
-      ip = fn_80265D2C (value);
+      ip = sn_floor (value);
       value -= ip;
       do
 	{
 	  if (n > 162)
 	    break;
-	  d = (int) fn_80265EA0 (ip, 10.0);
+	  d = (int) sn_fmod (ip, 10.0);
 	  p[n++] = d + '0';
 	  ip -= d;
 	  ip /= 10.0;
@@ -310,7 +309,7 @@ fn_80262B5C (File_80262B5C *fp, const char *fmt, va_list ap)
 	    }
 	}
     }
-  return fn_80264680 (fp->mUnknown5C, fp, fmt, ap);
+  return _vfiprintf_r (fp->mUnknown5C, fp, fmt, ap);
 }
 
 char *fn_80264424(char *dst, char *start, char *end, int *pLen)

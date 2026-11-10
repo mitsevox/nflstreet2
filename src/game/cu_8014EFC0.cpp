@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/StyleTracker.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
@@ -77,7 +78,6 @@ public:
     Block_8014F104 *mpUnknown1C;
 };
 
-typedef void (*Callback_800D7604)(int, int, const char *, int, int, int, int);
 
 extern "C" {
 void fn_800BC51C(Class_80297BF8 *pObject);
@@ -92,7 +92,6 @@ void fn_8006088C(int value);
 int fn_8014FF34(Class_802A2B68 *p);
 int fn_80149014(Class_802A2B68 *p);
 void fn_8014DA90(Class_802A2B68 *p);
-void fn_800D7604(Callback_800D7604 a);
 
 void fn_8014EFC0(Class_802A2B68 *p)
 {
@@ -106,7 +105,7 @@ void fn_8014EFC0(Class_802A2B68 *p)
     if (fn_80149014(p)) {
         fn_8014DA90(p);
     }
-    fn_800D7604(0);
+    StyleTrackerSetAwardCallback(0);
     fn_80178F20(0);
     fn_800BC51C(0);
     fn_800BFAB4(0);

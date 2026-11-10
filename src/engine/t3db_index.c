@@ -407,7 +407,7 @@ int _TDbIndexRowAdd(TDbIndex_t *pIndex, unsigned int rowArg)
             return 0;
         }
     }
-    err = fn_8020360C(&pIndex->mPool, &pNode);
+    err = __TDbMemPoolAlloc(&pIndex->mPool, &pNode);
     if (err == 0) {
         _TDbIdxCreateKey(&pIndex->mTree, row, pNode);
         pNode->mRow = row;
@@ -415,7 +415,7 @@ int _TDbIndexRowAdd(TDbIndex_t *pIndex, unsigned int rowArg)
         pNode->mColor = 1;
         err = _TDbIdxTreeInsert(&pIndex->mTree, pNode, 0);
         if (err != 0) {
-            fn_80203744(&pIndex->mPool, pNode);
+            __TDbMemPoolFree(&pIndex->mPool, pNode);
         } else {
             pIndex->mDirty = 1;
             pIndex->mCount++;
@@ -429,7 +429,7 @@ TDbIdxNode_t *_TDbIndexRowFindNode(TDbIndex_t *pIndex, int row)
     TDbIdxNode_t *pKey;
     TDbIdxNode_t *pNode = 0;
 
-    if (fn_8020360C(&pIndex->mPool, &pKey) == 0) {
+    if (__TDbMemPoolAlloc(&pIndex->mPool, &pKey) == 0) {
         _TDbIdxCreateKey(&pIndex->mTree, row, pKey);
         pNode = _TDbIdxSeek(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
         while (pNode != 0 && row != pNode->mRow) {
@@ -438,7 +438,7 @@ TDbIdxNode_t *_TDbIndexRowFindNode(TDbIndex_t *pIndex, int row)
                 pNode = 0;
             }
         }
-        fn_80203744(&pIndex->mPool, pKey);
+        __TDbMemPoolFree(&pIndex->mPool, pKey);
     }
     return pNode;
 }
@@ -458,14 +458,14 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
         if (result.mValue.i == 0) {
             fn_80206668(pIndex, pNode, 0);
             _TDbIdxTreeDelete(&pIndex->mTree, pNode);
-            fn_80203744(&pIndex->mPool, pNode);
+            __TDbMemPoolFree(&pIndex->mPool, pNode);
             pIndex->mDirty = 1;
             pIndex->mCount--;
             return 0;
         }
     }
     pPool = &pIndex->mPool;
-    err = fn_8020360C(pPool, &pNew);
+    err = __TDbMemPoolAlloc(pPool, &pNew);
     if (err == 0) {
         if (pIndex->mFlags & 1) {
             pIndex->mDirty = 1;
@@ -474,7 +474,7 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
             pNew->mColor = 1;
             err = _TDbIdxTreeInsert(&pIndex->mTree, pNode, 0);
             if (err != 0) {
-                fn_80203744(pPool, pNew);
+                __TDbMemPoolFree(pPool, pNew);
             }
         } else {
             _TDbIdxCreateKey(&pIndex->mTree, row, pNew);
@@ -482,16 +482,16 @@ int _TDbIndexRowUpdated(TDbIndex_t *pIndex, TDbIdxNode_t *pNode, unsigned short 
                 pIndex->mDirty = 1;
                 fn_80206668(pIndex, pNode, pNew);
                 _TDbIdxTreeDelete(&pIndex->mTree, pNode);
-                fn_80203744(pPool, pNode);
+                __TDbMemPoolFree(pPool, pNode);
                 pNew->mRow = row;
                 pNew->mChild[0] = pNew->mChild[1] = 0;
                 pNew->mColor = 1;
                 err = _TDbIdxTreeInsert(&pIndex->mTree, pNew, 0);
                 if (err != 0) {
-                    fn_80203744(pPool, pNew);
+                    __TDbMemPoolFree(pPool, pNew);
                 }
             } else {
-                fn_80203744(pPool, pNew);
+                __TDbMemPoolFree(pPool, pNew);
             }
         }
     }
@@ -504,14 +504,14 @@ int _TDbIndexRowDelete(TDbIndex_t *pIndex, int row)
     TDbIdxNode_t *pNode;
     int err;
 
-    err = fn_8020360C(&pIndex->mPool, &pKey);
+    err = __TDbMemPoolAlloc(&pIndex->mPool, &pKey);
     if (err == 0) {
         _TDbIdxCreateKey(&pIndex->mTree, row, pKey);
         pNode = _TDbIdxSeek(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
         while (pNode != 0) {
             if (row == pNode->mRow) {
                 _TDbIdxTreeDelete(&pIndex->mTree, pNode);
-                fn_80203744(&pIndex->mPool, pNode);
+                __TDbMemPoolFree(&pIndex->mPool, pNode);
                 pIndex->mDirty = 1;
                 pIndex->mCount--;
                 pNode = _TDbIdxSeek(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
@@ -522,7 +522,7 @@ int _TDbIndexRowDelete(TDbIndex_t *pIndex, int row)
                 }
             }
         }
-        fn_80203744(&pIndex->mPool, pKey);
+        __TDbMemPoolFree(&pIndex->mPool, pKey);
     }
     return err;
 }
@@ -539,21 +539,21 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
     while (pDefs[i].mId != -1) {
         i++;
     }
-    TDbMemNotify_801FC9D4(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    _TDbMemNotify(2, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
     if (i <= 2) {
-        err = fn_8020360C(&lbl_803E96A8, &pIndex);
+        err = __TDbMemPoolAlloc(&lbl_803E96A8, &pIndex);
         pIndex->mFlags = 4;
     } else {
         err =
             TDbExtMemAlloc(pTable->mDb->mHeap, sizeof(TDbIndex_t) + (i - 1) * sizeof(TDbIdxPart_t), &pIndex);
         pIndex->mFlags = 0;
     }
-    if (lbl_803EBE80) {
+    if (_tDbMemAllocInfoCallback) {
         TDbMemEvent_t event;
         event.mType = 4;
         event.mUnknown4 = -1;
         event.mUnknown8 = -1;
-        lbl_803EBE80(&event);
+        _tDbMemAllocInfoCallback(&event);
     }
     if (err == 0) {
         if (pFilter != 0) {
@@ -562,7 +562,7 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
             pIndex->mFilter = 0;
         }
         if (err == 0) {
-            err = fn_80203444(&pIndex->mPool, pTable->mDb->mHeap,
+            err = _TDbMemPoolInit(&pIndex->mPool, pTable->mDb->mHeap,
                               sizeof(TDbIdxNode_t) + (i - 1) * sizeof(unsigned int),
                               (pFilter == 0 ? pTable->mCapacity : pTable->mCapacity >> 2) + 5, 100);
             if (err == 0) {
@@ -593,7 +593,7 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
                     }
                 }
                 if (err != 0) {
-                    fn_8020353C(&pIndex->mPool);
+                    _TDbMemPoolDeinit(&pIndex->mPool);
                 }
             }
         }
@@ -611,7 +611,7 @@ int _TDbIndexCreate(TDbTable_t *pTable, int id, TDbIdxColumnDef_t *pDefs,
         pIndex->mNext = 0;
     } else if (pIndex != 0) {
         if (pIndex->mFlags & 4) {
-            fn_80203744(&lbl_803E96A8, pIndex);
+            __TDbMemPoolFree(&lbl_803E96A8, pIndex);
         } else {
             TDbExtMemFree(pTable->mDb->mHeap, pIndex, sizeof(TDbIndex_t) + (i - 1) * sizeof(TDbIdxPart_t));
         }
@@ -623,9 +623,9 @@ int _TDbIndexZap(TDbIndex_t *pIndex)
 {
     int err;
 
-    err = fn_8020353C(&pIndex->mPool);
+    err = _TDbMemPoolDeinit(&pIndex->mPool);
     if (err == 0) {
-        err = fn_80203444(&pIndex->mPool, pIndex->mTable->mDb->mHeap,
+        err = _TDbMemPoolInit(&pIndex->mPool, pIndex->mTable->mDb->mHeap,
                           sizeof(TDbIdxNode_t) + (pIndex->mTree.mPartCount - 1) * sizeof(unsigned int),
                           pIndex->mTable->mCapacity + 5, 100);
         if (err == 0) {
@@ -668,13 +668,13 @@ int _TDbIndexDestroy(TDbIndex_t *pIndex)
         }
     }
     if (found) {
-        err = fn_8020353C(&pIndex->mPool);
+        err = _TDbMemPoolDeinit(&pIndex->mPool);
         if (err == 0) {
             if (pIndex->mFilter != 0) {
                 _TDbExprFree(pIndex->mFilter);
             }
             if (pIndex->mFlags & 4) {
-                fn_80203744(&lbl_803E96A8, pIndex);
+                __TDbMemPoolFree(&lbl_803E96A8, pIndex);
             } else {
                 TDbExtMemFree(pTable->mDb->mHeap, pIndex,
                             sizeof(TDbIndex_t) + (pIndex->mTree.mPartCount - 1) * sizeof(TDbIdxPart_t));

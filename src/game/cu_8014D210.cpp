@@ -24,10 +24,10 @@ extern "C" {
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 void fn_8014D024(unsigned short index);
 void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
-void fn_8017E46C(Object_80039F5C *p, int team, const char *pText, int value, int d);
+void HudShowPlayerPopup(Object_80039F5C *p, int team, const char *pText, int value, int d);
 Object_80039F5C *fn_8003AC84(int id);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-void fn_8017E17C(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
+void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
 extern const char lbl_802A05C8[];
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
@@ -190,14 +190,14 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
             fn_8014D210(pFirst, kind, value);
         }
         if (addText) {
-            fn_8017E46C(pFirst, pFirst->mIdBytes[2], pText, value, d);
+            HudShowPlayerPopup(pFirst, pFirst->mIdBytes[2], pText, value, d);
         }
         if (pSecond) {
             if (addValue) {
                 fn_8014D210(pSecond, kind, value);
             }
             if (addText) {
-                fn_8017E46C(pSecond, pSecond->mIdBytes[2], pText, value, d);
+                HudShowPlayerPopup(pSecond, pSecond->mIdBytes[2], pText, value, d);
             }
         }
     }
@@ -250,7 +250,7 @@ void RefreshSixPlayerScoreRows(void *p)
         if (fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown8 != 255) {
             fn_8014F104(fn_80148A58());
         }
-        fn_8017E17C(i + 1, name, score, lbl_802A05C8,
+        HudSetScoreTableRow(i + 1, name, score, lbl_802A05C8,
                     fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown8);
     }
 }
