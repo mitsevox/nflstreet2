@@ -15227,6 +15227,25 @@
           "end": "0x80362A20"
         }
       ]
+    },
+    {
+      "source": "src/engine/sf_scalbn.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit/function/name/type/field/data/compiler/source-form rows for sf_scalbn.c; complete native284-byte function and16-byte scalar pool match target under unchanged engine_c.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026120C",
+          "end": "0x80261328"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC470",
+          "end": "0x803EC480"
+        }
+      ]
     }
   ]
 }
