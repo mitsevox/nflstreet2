@@ -143,7 +143,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x80262310	0x80262310	0x80262310	alignment	1	0	vprintf.c	src/engine/atexit.c
 .text	0x802623A8	0x802623A8	0x802623A8	alignment	0	0	src/engine/atexit.c	bsearch.c
 .text	0x8026247C	0x8026247C	0x8026247C	alignment	0	0	bsearch.c	vfprintf.c
-.text	-	0x802645AC	0x80271D34	open	-	-	vfprintf.c	sdspmix.c
+.text	-	0x802645AC	0x8026696C	open	-	-	vfprintf.c	memchr.c
+.text	-	0x80266A2C	0x80271D34	open	-	-	memchr.c	sdspmix.c
 .text	-	0x8027257C	0x8027257C	open	-	-	sdspmix.c	snddrv.c
 .text	-	0x802753F0	0x80278700	open	-	-	snddrv.c	slinklst.c
 .text	-	0x8027882C	0x8027EFAC	open	-	-	slinklst.c	date.c

@@ -14616,6 +14616,19 @@
           "end": "0x80289A04"
         }
       ]
+    },
+    {
+      "source": "src/engine/memchr.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x8026696C-0x80266A2C, exact function extent, inferred byte-search name/signature and compiler row. Earlier 0x802645AC-0x8026696C remains an unreconstructed candidate.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026696C",
+          "end": "0x80266A2C"
+        }
+      ]
     }
   ]
 }

@@ -2574,7 +2574,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x80262A88	212	_vfwrite	size	vfprintf.c	vfprintf.c
 0x80262B5C	216	vfprintf	size	vfprintf.c	vfprintf.c
 0x80264424	392	add_separators	gap	vfprintf.c	vfprintf.c
-0x8026696C	192	memchr	gap	memchr.c	-
+0x8026696C	192	memchr	name	memchr.c	memchr.c
 0x80266A88	80	_write	size	dummy.c	-
 0x80266AD8	32	write	size	dummy.c	-
 0x80266AF8	28	iSPCH_GetGlobalMatchParmAddr	size	spchrslv.c	-
