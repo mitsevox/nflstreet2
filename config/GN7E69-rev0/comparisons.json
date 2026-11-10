@@ -11938,37 +11938,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8005406C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005406C-0x8005412C (src/game/cu_8005406C.cpp), its function rows and data row. Draft comparison: 1 of 2 functions exact; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005406C",
-          "end": "0x8005412C"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EA550",
-          "end": "0x803EA554"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8005406C",
-          "start": "0x8005406C",
-          "end": "0x800540E0"
-        },
-        {
-          "symbol": "fn_800540E0",
-          "start": "0x800540E0",
-          "end": "0x8005412C"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
@@ -29396,87 +29365,6 @@
           "symbol": "fn_800D7E9C",
           "start": "0x800D7E9C",
           "end": "0x800D8140"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800D8A24.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred provisional/open grouping row 0x800D8A24-0x800D949C, exact function rows of its twelve registered bodies, and exact .rodata data row 0x8029D7E4-0x8029D7F8 (literals of fn_800D8A24, fn_800D8E68, fn_800D8F8C and fn_800D9078). All other static storage remains original and unmeasured.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D8A24",
-          "end": "0x800D949C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D7E4",
-          "end": "0x8029D7F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D8A24",
-          "start": "0x800D8A24",
-          "end": "0x800D8B84"
-        },
-        {
-          "symbol": "fn_800D8B84",
-          "start": "0x800D8B84",
-          "end": "0x800D8CB4"
-        },
-        {
-          "symbol": "fn_800D8CB4",
-          "start": "0x800D8CB4",
-          "end": "0x800D8D34"
-        },
-        {
-          "symbol": "fn_800D8D34",
-          "start": "0x800D8D34",
-          "end": "0x800D8DD8"
-        },
-        {
-          "symbol": "fn_800D8DD8",
-          "start": "0x800D8DD8",
-          "end": "0x800D8E68"
-        },
-        {
-          "symbol": "fn_800D8E68",
-          "start": "0x800D8E68",
-          "end": "0x800D8F8C"
-        },
-        {
-          "symbol": "fn_800D8F8C",
-          "start": "0x800D8F8C",
-          "end": "0x800D8FFC"
-        },
-        {
-          "symbol": "fn_800D8FFC",
-          "start": "0x800D8FFC",
-          "end": "0x800D9078"
-        },
-        {
-          "symbol": "fn_800D9078",
-          "start": "0x800D9078",
-          "end": "0x800D9188"
-        },
-        {
-          "symbol": "fn_800D9188",
-          "start": "0x800D9188",
-          "end": "0x800D91D8"
-        },
-        {
-          "symbol": "fn_800D91D8",
-          "start": "0x800D91D8",
-          "end": "0x800D91E0"
-        },
-        {
-          "symbol": "fn_800D91E0",
-          "start": "0x800D91E0",
-          "end": "0x800D949C"
         }
       ]
     },

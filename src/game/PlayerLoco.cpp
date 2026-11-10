@@ -1,3 +1,8 @@
+/* Player locomotion animation: the handler for the momentum animation states
+   and the helpers of the locomotion animation state (key 74). The helpers
+   pick the animation sub-states from two category bytes, choose the speed
+   blend set, set the two pose elements and scale the cycle duration with the
+   player's speed. */
 #include <string.h>
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
@@ -36,17 +41,17 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerMoveIsVariantPending(Object_80039F5C *p);
 }
 
-/* Payload that fn_801BE60C returns for this handler's key: the entry index
-   chosen by fn_801BA2A8 and the state AnimMomentumInit and AnimMomentumUpdate update. */
-struct Payload_800D8A24 {
+/* Payload that fn_801BE60C returns for this handler's key: the channel index
+   that fn_801BA2A8 returns and the state AnimMomentumInit and AnimMomentumUpdate update. */
+struct PlayerLocoMomentumPayload_t {
     int mEntry;
     AnimMomentum_t mState;
 };
 
-extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
-                           Object_80039F5C *p, unsigned int phase)
+extern "C" int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                                             Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int phase)
 {
-    Payload_800D8A24 *pPayload = (Payload_800D8A24 *)fn_801BE60C(p->mpUnknown792, key);
+    PlayerLocoMomentumPayload_t *pPayload = (PlayerLocoMomentumPayload_t *)fn_801BE60C(p->mpUnknown792, key);
 
     switch (phase) {
     case 0: {
@@ -75,7 +80,7 @@ extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRe
     return 0;
 }
 
-extern "C" void fn_800D8B84(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p)
+extern "C" void PlayerLocoSetupBlendSets(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p)
 {
     pBlock->mpUnknown18 = 0;
     pBlock->mpUnknown14 = 0;
@@ -112,7 +117,7 @@ extern "C" void fn_800D8B84(Table_80089904 *pTable, Block_801BE60C *pBlock, Obje
     pBlock->mUnknown20.mUnknown16 = pBlock->mUnknown20.mUnknown17;
 }
 
-extern "C" void fn_800D8CB4(Table_80089904 *pTable, Object_80039F5C *p, int index, int swap)
+extern "C" void PlayerLocoSetPoseElements(Table_80089904 *pTable, Object_80039F5C *p, int index, int swap)
 {
     Info_80089904 *pInfo = pTable->mEntries[index].mpInfo;
     unsigned char a = pInfo->mType;
@@ -129,7 +134,7 @@ extern "C" void fn_800D8CB4(Table_80089904 *pTable, Object_80039F5C *p, int inde
     }
 }
 
-extern "C" void fn_800D8D34(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
+extern "C" void PlayerLocoSelectSecondaryState(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
 {
     unsigned char values[4];
 
@@ -137,12 +142,12 @@ extern "C" void fn_800D8D34(Table_80089904 *pTable, Block_801BE60C *pBlock, Obje
     values[0] = pBlock->mUnknown3D;
     int index = fn_8009C56C(pTable, values);
     unsigned short id = pTable->mEntries[index].mUnknown2 & 0x7FFF;
-    fn_800D8CB4(pTable, p, index, swap);
+    PlayerLocoSetPoseElements(pTable, p, index, swap);
     fn_801BBC3C(p->mpUnknown796->mUnknown2, id, pTable);
-    fn_800D8B84(pTable, pBlock, p);
+    PlayerLocoSetupBlendSets(pTable, pBlock, p);
 }
 
-extern "C" void fn_800D8DD8(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
+extern "C" void PlayerLocoSelectStates(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
 {
     unsigned char values[4];
 
@@ -150,10 +155,10 @@ extern "C" void fn_800D8DD8(Table_80089904 *pTable, Block_801BE60C *pBlock, Obje
     values[0] = pBlock->mUnknown3C;
     int index = fn_8009C56C(pTable, values);
     fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[index].mUnknown2 & 0x7FFF, pTable);
-    fn_800D8D34(pTable, pBlock, p, swap);
+    PlayerLocoSelectSecondaryState(pTable, pBlock, p, swap);
 }
 
-extern "C" int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *pBlock, unsigned char *pKind)
+extern "C" int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *pBlock, unsigned char *pKind)
 {
     unsigned char id = 0;
     int changed = 0;
@@ -198,7 +203,7 @@ extern "C" int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *pBlock, unsigned 
     return changed;
 }
 
-extern "C" int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
+extern "C" int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *pObject)
 {
     float value = p->mMotion.mUnknown28;
 
@@ -208,8 +213,8 @@ extern "C" int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
     return fn_800DA7AC(pObject, value);
 }
 
-extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pRecords,
-                            float value)
+extern "C" void PlayerLocoSetCycleDuration(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pRecords,
+                                           float value)
 {
     pBlock->mUnknown20.mUnknown10 = fn_800DAA68(pBlock->mUnknown20.mUnknown14Half, pBlock, pObject, pRecords, value);
     for (unsigned char i = 0; i <= 1; i++) {
@@ -220,7 +225,7 @@ extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Re
     }
 }
 
-extern "C" int fn_800D9078(Object_80039F5C *p, int a)
+extern "C" int PlayerLocoIsEngaged(Object_80039F5C *p, int a)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
     int result = 0;
@@ -258,7 +263,7 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
     return result;
 }
 
-extern "C" int fn_800D9188(void)
+extern "C" int PlayerLocoUseAltCategory(void)
 {
     int mode = fn_800AD9B4();
 
@@ -268,12 +273,12 @@ extern "C" int fn_800D9188(void)
     return 0;
 }
 
-extern "C" int fn_800D91D8(void)
+extern "C" int PlayerLocoUseSpecialCategory(void)
 {
     return 0;
 }
 
-extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *pOut)
+extern "C" int PlayerLocoGetPrimaryCategory(Object_80039F5C *p, int team, int a, unsigned char *pOut)
 {
     int result;
 
@@ -283,7 +288,7 @@ extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *p
         unsigned char kind = p->mUnknown528.mUnknown15;
         if (kind <= 1 || kind == 4 || kind == 5 || kind == 29 || kind == 20 || kind == 21) {
             if (p->mIdBytes[2] == team) {
-                *pOut = fn_800D9078(p, a);
+                *pOut = PlayerLocoIsEngaged(p, a);
                 if (*pOut) {
                     *pOut = 1;
                     result = 7;
