@@ -86,3 +86,5 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/memchr.c` (0x8026696C-0x80266A2C): one complete runtime byte-search function, 192 bytes; separated from the unreconstructed survey remainder `cu_802645AC`, whose earlier bytes stay original. File edges provisional.
 
 - `src/engine/copysignf.c` (0x80261A24-0x80261A58): complete 52-byte single-precision sign-copy runtime leaf, no static data; separated from the multi-file floating-point survey, with both historical file edges provisional.
+
+- `src/engine/fabsf.c` (0x80260FC4-0x80260FE8): complete 36-byte single-precision magnitude runtime leaf, no static data; separated from the explicit multi-file survey, with historical file edges provisional.
