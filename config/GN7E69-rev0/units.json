@@ -1772,6 +1772,10 @@
     "iSPCH_InitRandom": {
       "address": "0x801B1B70",
       "evidence": "evidence.tsv function extent and inferred name row at 0x801B1B70; original-owned comparison body called by other speech files."
+    },
+    "_tDbMemAllocInfoCallback": {
+      "address": "0x803EBE80",
+      "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
     }
   },
   "units": [
@@ -14564,6 +14568,19 @@
         }
       ],
       "evidence": "evidence.tsv provisional whole-file unit row 0x801C06E8-0x801C0E04, eleven function/name rows, 32-byte literal allocation and exact 16-byte accessed manager prefix. No retained code or excluded original ranges; the following zero word remains unassigned."
+    },
+    {
+      "source": "src/engine/t3db_mem.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv inferred unit row 0x80203444-0x80203754: five database record-pool helpers; provisional file edges corroborated by NASCAR 2005 t3db_mem.c. Complete native text linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80203444",
+          "end": "0x80203754"
+        }
+      ]
     }
   ]
 }

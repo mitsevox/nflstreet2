@@ -26,7 +26,7 @@ int fn_802087D4(TDbQuery_t *pQuery)
     } else if (pQuery->mState == 3) {
         fn_80206E4C(pQuery->mSource.mQIdx);
     }
-    fn_80203744(&lbl_803E9670, pQuery);
+    __TDbMemPoolFree(&lbl_803E9670, pQuery);
     return 0;
 }
 

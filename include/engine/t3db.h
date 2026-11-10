@@ -84,14 +84,14 @@ typedef struct TDbMemEvent_t {
     int mUnknown8;
 } TDbMemEvent_t;
 
-typedef struct TDbMemBlock_80203444 {
-    struct TDbMemBlock_80203444 *mNext;
-    int mUnknown4;
-} TDbMemBlock_80203444;
+typedef struct TDbMemBlock_t {
+    struct TDbMemBlock_t *mNext;
+    unsigned char unk_0x4[4];
+} TDbMemBlock_t;
 
 typedef struct TDbMemPool_t {
     void *mFree;
-    TDbMemBlock_80203444 *mBlocks;
+    TDbMemBlock_t *mBlocks;
     unsigned char *mNext;
     void *mHeap;
     unsigned int mItemSize;
@@ -265,7 +265,7 @@ typedef struct TDbIOIndexPart_801FBC2C {
     unsigned int mAscending;
 } TDbIOIndexPart_801FBC2C;
 
-extern void (*lbl_803EBE80)(TDbMemEvent_t *pEvent);
+extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
 extern unsigned int lbl_802F9548[256];
 extern TDbMemPool_t lbl_803E9654;
 extern TDbMemPool_t lbl_803E96A8;
@@ -292,12 +292,12 @@ TDbIdxNode_t *_TDbIdxTreeDelete(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode);
 int _TDbIndexRowAdd(TDbIndex_t *pIndex, unsigned int row);
 int _TDbIndexRowDelete(TDbIndex_t *pIndex, int row);
 int _TDbIndexDestroy(TDbIndex_t *pIndex);
-int fn_80203444(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
+int _TDbMemPoolInit(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
                 unsigned short growCount);
-int fn_8020353C(TDbMemPool_t *pPool);
-int fn_802035C8(TDbMemPool_t *pPool);
-int fn_8020360C(TDbMemPool_t *pPool, void *ppItem);
-void fn_80203744(TDbMemPool_t *pPool, void *pItem);
+int _TDbMemPoolDeinit(TDbMemPool_t *pPool);
+int _TDbMemPoolReset(TDbMemPool_t *pPool);
+int __TDbMemPoolAlloc(TDbMemPool_t *pPool, void *ppItem);
+void __TDbMemPoolFree(TDbMemPool_t *pPool, void *pItem);
 void _TDbExprTest(TDbExpr_t *pExpr, TDbValue_t *pResult, TDbTable_t **ppTables,
                  unsigned short *pRows);
 int _TDbExprCopy(TDbExpr_t *pSrc, TDbExpr_t **ppDst);
@@ -324,15 +324,15 @@ unsigned char fn_8020B97C(TDbTable_t *pTable, int id);
 int TDbExtMemAlloc(void *pHeap, int size, void *ppMem);
 void TDbExtMemFree(void *pHeap, void *pMem, int size);
 
-static inline void TDbMemNotify_801FC9D4(int type, int a, int b)
+static inline void _TDbMemNotify(int type, int a, int b)
 {
     TDbMemEvent_t event;
 
-    if (lbl_803EBE80) {
+    if (_tDbMemAllocInfoCallback) {
         event.mType = type;
         event.mUnknown4 = a;
         event.mUnknown8 = b;
-        lbl_803EBE80(&event);
+        _tDbMemAllocInfoCallback(&event);
     }
 }
 

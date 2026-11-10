@@ -45160,46 +45160,6 @@
       ]
     },
     {
-      "source": "src/engine/t3db_mem.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80203444-0x80203754 (src/engine/t3db_mem.c): the whole original t3db_mem.c (NASCAR 2005 symbol table), 5 functions. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80203444",
-          "end": "0x80203754"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80203444",
-          "start": "0x80203444",
-          "end": "0x8020353C"
-        },
-        {
-          "symbol": "fn_8020353C",
-          "start": "0x8020353C",
-          "end": "0x802035C8"
-        },
-        {
-          "symbol": "fn_802035C8",
-          "start": "0x802035C8",
-          "end": "0x8020360C"
-        },
-        {
-          "symbol": "fn_8020360C",
-          "start": "0x8020360C",
-          "end": "0x80203744"
-        },
-        {
-          "symbol": "fn_80203744",
-          "start": "0x80203744",
-          "end": "0x80203754"
-        }
-      ]
-    },
-    {
       "source": "src/engine/t3db_query.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c): first six functions of the original t3db_query.c (NASCAR 2005 symbol table); 0x80205DB8 has no source yet. Comparison only; original assembly stays linked.",
