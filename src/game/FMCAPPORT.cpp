@@ -27,9 +27,9 @@ void PortraitJobUnload(PortraitJob_t *pObject);
 void PortraitJobQuantize(PortraitJob_t *pObject);
 int PortraitJobIsDone(PortraitJob_t *pObject);
 void PortraitJobSave(PortraitJob_t *pObject);
-void fn_80199968(PortraitJob_t *pObject);
-void fn_801999B0(PortraitJob_t *pObject);
-void fn_801999F4(PortraitJob_t *pObject);
+void PortraitRenderInit(PortraitJob_t *pObject);
+void PortraitRenderShutdown(PortraitJob_t *pObject);
+void PortraitRenderDraw(PortraitJob_t *pObject);
 }
 
 static const char *sName = "FMCAPPORT";
@@ -181,7 +181,7 @@ void FMCAPPORT::Update()
         CreateRenderPass();
         PortraitJobAllocImage(object);
         PortraitJobLoad(object);
-        fn_80199968(object);
+        PortraitRenderInit(object);
         mpState.mp->mState = 3;
         break;
     }
@@ -209,7 +209,7 @@ void FMCAPPORT::Update()
     case 7:
         if (PortraitJobIsDone(object)) {
             PortraitJobSave(object);
-            fn_801999B0(object);
+            PortraitRenderShutdown(object);
             PortraitJobUnload(object);
             delete mpState.mp->mObject.mpUnknown1636;
             mpState.mp->mObject.mpUnknown1636 = 0;
@@ -223,7 +223,7 @@ void FMCAPPORT::Update()
 void FMCAPPORT::CaptureFrame()
 {
     if (mpState.mp->mState == 5 && !mpState.mp->mUnknown8) {
-        fn_801999F4(&mpState.mp->mObject);
+        PortraitRenderDraw(&mpState.mp->mObject);
         mpState.mp->mUnknown8 = 1;
     }
 }

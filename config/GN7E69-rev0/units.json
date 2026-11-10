@@ -9233,15 +9233,15 @@
       ]
     },
     {
-      "source": "src/game/cu_80198C54.cpp",
+      "source": "src/game/PortraitRender.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80198C54-0x80199C94 (src/game/cu_80198C54.cpp) and its data and source-form rows. The linked range ends at 0x80199A68; the last three functions are draft comparisons (comparisons.json) and their original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x80198C54-0x80199C94 (src/game/PortraitRender.cpp), its function, data and source-form rows. The whole .text range and every data placement are linked from source.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80198C54",
-          "end": "0x80199A68"
+          "end": "0x80199C94"
         },
         {
           "section": ".rodata",
