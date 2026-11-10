@@ -6,7 +6,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/Object_8003DEC4.h"
-#include "game/fn_800D4164.h"
+#include "game/StyleTracker.h"
 
 extern "C" {
 void *fn_800A3360(void);
@@ -88,7 +88,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[team]->mUnknown54;
         }
         lbl_803EC954[team]->mUnknown54 -= amount;
-        fn_800D4164(team, 0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10),
+        StyleTrackerSetMeterFraction(team, 0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10),
                     0);
         if (lbl_803EC954[team]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
@@ -117,7 +117,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[other]->mUnknown54;
         }
         lbl_803EC954[other]->mUnknown54 -= amount;
-        fn_800D4164(other, 0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10),
+        StyleTrackerSetMeterFraction(other, 0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10),
                     0);
         if (lbl_803EC954[other]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {

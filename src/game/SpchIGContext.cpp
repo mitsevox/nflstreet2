@@ -4,11 +4,11 @@
    it can pick a fitting line. */
 
 #include "game/Object_80039F5C.h"
+#include "game/StyleTracker.h"
 
 extern "C" {
 int fn_800A8444(int team);
 int fn_800A8468(int team);
-int fn_800D41F8(int side);
 int fn_80177F70(void);
 int fn_801787DC(int team);
 int fn_80178308(void);
@@ -63,8 +63,8 @@ void SpchIGGetScoreSituation(int *pResult)
         break;
     }
     case 1: {
-        int own = fn_800D41F8(fn_80178348());
-        int other = fn_800D41F8(fn_80178360());
+        int own = StyleTrackerGetTotal(fn_80178348());
+        int other = StyleTrackerGetTotal(fn_80178360());
 
         if (own == other) {
             if (own > 99999) {
@@ -128,8 +128,8 @@ void SpchIGGetScoreMargin(int *pResult)
         break;
     }
     case 1: {
-        unsigned short own = fn_800D41F8(fn_80178348());
-        unsigned short other = fn_800D41F8(fn_80178360());
+        unsigned short own = StyleTrackerGetTotal(fn_80178348());
+        unsigned short other = StyleTrackerGetTotal(fn_80178360());
         unsigned short gap = own < other ? other - own : own - other;
 
         if (gap > 49999) {

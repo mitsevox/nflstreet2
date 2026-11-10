@@ -1,4 +1,5 @@
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80148A58.h"
@@ -176,7 +177,6 @@ void fn_800A061C(Record_800A0624 *,int *,int);
 float fn_80178A2C(void);
 float fn_80178A08(void);
 void fn_8017CA94(unsigned short,int);
-void fn_800D4888(int);
 int fn_801486A0(void);
 }
 
@@ -275,7 +275,7 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
                     out->mUnknown08.mX=0.0f;out->mUnknown08.mY=-e->mUnknown10;
                     if(fn_801486A0()!=2)out->mUnknown18|=4;
                     out->mUnknown18|=0x100;
-                    fn_8017CA94((unsigned short)fn_80178308(),1);fn_800D4888(1);
+                    fn_8017CA94((unsigned short)fn_80178308(),1);StyleTrackerOnTouchback(1);
                 }
             }
             placed=true;break;
@@ -306,7 +306,6 @@ int fn_80177F70(void);
 int fn_80177C38(void);
 float fn_80178298(void);
 void fn_80093C3C(int,int,int);
-int fn_800D42CC(void);
 int fn_801783AC(int);
 int fn_801788D8(int *);
 int fn_801787DC(int);
@@ -333,7 +332,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                     } else if(!(out->mUnknown18&0x84)) {
                         if(previous==4) {
                             fn_80093C3C(1,4,0);out->mUnknown04=1;out->mUnknown18|=0x844;
-                            if(fn_800D42CC()==2)AudmonEventPostArgs(0x5D,0,fn_80178348(),0,0);
+                            if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5D,0,fn_80178348(),0,0);
                             if(fn_8007F828(14)==1)out->mUnknown18|=0x80;
                             if(fn_801486A0()==4)out->mUnknown18|=0x80;
                         } else out->mUnknown04=previous+1;
@@ -350,7 +349,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
             } else if(previous==6) {
                 if(out->mUnknown1D==3)out->mUnknown1D=1;
                 else if(out->mUnknown08.mY>fn_80178A2C() || (ballPlayer && ballPlayer->mFlags&0x800000))out->mUnknown1D=2;
-                else if(fn_800D42CC()==2)AudmonEventPostArgs(0x5B,0,fn_80178348(),0,0);
+                else if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5B,0,fn_80178348(),0,0);
                 if(!(out->mUnknown08.mY>=-fn_80178A2C()))out->mUnknown08.mY=0.0f;
                 out->mUnknown04=1;out->mUnknown18|=0xC0;
                 if(fn_80177C38()==1 || fn_80177C38()==3)out->mUnknown18&=~4;
@@ -375,7 +374,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                 int count=0;
                 switch(fn_801788D8(&count)) {
                 case 1:
-                    if(fn_800D42CC()==2)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
+                    if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
                     break;
                 case 0:
                     if((unsigned int)(fn_801787DC(fn_80178360())+2)<(unsigned int)count)AudmonEventPostArgs(0x5C,0,fn_80178348(),0,0);
@@ -474,7 +473,6 @@ void fn_80178878(const Object_8017886C *);
 void fn_800A14E4(Object_8017886C *,unsigned char);
 int fn_800C8774(int);
 void fn_80178F90(void);
-void fn_800D6F08(void);
 void fn_8017C1F0(Object_8017886C *);
 void fn_80178CD8(int);
 void fn_80177D54(void);
@@ -531,7 +529,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
                 AudmonEventPostArgs(0x5E,&pos,fn_80178308(),0,0);
             }
         }
-        fn_80178F90();fn_800D6F08();
+        fn_80178F90();StyleTrackerEndPlay();
         if(update==1)fn_8017C1F0(result);
         if(result->mUnknown18&0x80)fn_80178CD8(((result->mUnknown18^4)>>2)&1);
         fn_80178AE0();

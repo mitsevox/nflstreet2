@@ -1,4 +1,5 @@
 #include "engine/cu_80229270.h"
+#include "game/StyleTracker.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_801FCE10.h"
 #include "game/Object_80039F5C.h"
@@ -332,10 +333,6 @@ void fn_800BFAB4(Class_80297CE8 *pObject);
 void fn_800C1CA0(void);
 void fn_800C1E50(void);
 void fn_800C87CC(int a, int b);
-void fn_800D4164(int a, float b, int c);
-void fn_800D6F08(void);
-void fn_800D7158(void);
-void fn_800D7520(int a);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_8011DF90(void);
 void BallPrimeKickUp(Ball_t *pBall);
@@ -1059,7 +1056,7 @@ int fn_80157080(void)
         gTurbo.fn_80035EE0();
         fn_8009D8CC(2);
         fn_8009D984(fn_80178C60());
-        fn_800D7158();
+        StyleTrackerReset();
         gPlayBook.fn_800355FC();
         fn_80057F28();
         fn_800AD910(1, 0.0f);
@@ -1187,9 +1184,9 @@ void Class_802A3858::vfn_04(float dt)
         fn_800A7A0C(1);
         fn_800A8F08();
         if (step == 7) {
-            fn_800D4164(1, lbl_803ED6A8, 0);
+            StyleTrackerSetMeterFraction(1, lbl_803ED6A8, 0);
         } else {
-            fn_800D4164(1, lbl_803ED6A4 + 0.2f, 0);
+            StyleTrackerSetMeterFraction(1, lbl_803ED6A4 + 0.2f, 0);
         }
         fn_800A7B5C();
     } else {
@@ -1790,7 +1787,7 @@ static unsigned char lbl_803EB325 = 0;
 void Class_802A3B80::vfn_03()
 {
     Class_80297BF8::vfn_03();
-    fn_800D7520(1);
+    StyleTrackerSetEnabled(1);
     mUnknown4 = 1;
     fn_80158AA8();
     PauseBlock();
@@ -1897,8 +1894,8 @@ void Class_802A3B10::vfn_04(float dt)
     Class_80297CE8::vfn_04(dt);
     fn_8009E01C();
     fn_800BF658(1);
-    fn_800D4164(1, 0.0f, 0);
-    fn_800D4164(0, 0.0f, 0);
+    StyleTrackerSetMeterFraction(1, 0.0f, 0);
+    StyleTrackerSetMeterFraction(0, 0.0f, 0);
     fn_8017DE54(1, 0.0f, 0, 0);
     fn_8017DE54(0, 0.0f, 0, 0);
     args[0] = 1;
@@ -2106,7 +2103,7 @@ void Class_802A3A48::vfn_04(float dt)
                     }
                     break;
                 }
-                fn_800D6F08();
+                StyleTrackerEndPlay();
             }
             Class_80297C60::vfn_04(dt);
         }

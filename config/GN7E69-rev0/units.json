@@ -14742,6 +14742,43 @@
           "end": "0x803EC558"
         }
       ]
+    },
+    {
+      "source": "src/game/StyleTracker.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional StyleTracker.cpp unit row, 118 exact full function extents and complete native data extents. Direct adjacent step indexing resolves the final CalculateAward operand-order mismatch. Full contiguous native .text and readonly data, initialized globals, strings and BSS replace the original ranges; unchanged game_cpp profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0D48",
+          "end": "0x800D760C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80298098",
+          "end": "0x8029D678"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EACC0",
+          "end": "0x803EACDC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6C0",
+          "end": "0x803ED6C8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9A4",
+          "end": "0x803EC9E0"
+        }
+      ]
     }
   ]
 }

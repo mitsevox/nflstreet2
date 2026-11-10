@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
@@ -54,7 +55,6 @@ void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Obje
                  unsigned char position);
 void fn_80120618(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_800D6F08(void);
 void fn_800B14E4(void);
 int fn_801787A0(void);
 int fn_80178508(void *pPos, float *pOut, int a);
@@ -163,7 +163,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
         }
     } else if (p->mUnknown4) {
         p->mUnknown4 = 0;
-        fn_800D6F08();
+        StyleTrackerEndPlay();
     }
     fn_800A050C(p, dt);
     fn_800B14E4();
@@ -173,7 +173,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
             if (fn_80178508(&pCarrier->mMotion, 0, 0) > 2) {
                 fn_801783D0(3, 1);
                 fn_80178370();
-                fn_800D6F08();
+                StyleTrackerEndPlay();
             } else if ((pCarrier->mFlags & 0x800) &&
                        (pCarrier->mpState->mId == 10 || pCarrier->mpState->mId == 16 ||
                         pCarrier->mpState->mId == 25)) {
@@ -188,7 +188,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
         if (!fn_8009D990(1)) {
             fn_80177C44(1);
             fn_80178370();
-            fn_800D6F08();
+            StyleTrackerEndPlay();
         }
     }
     fn_80148A58()->vfn_15();

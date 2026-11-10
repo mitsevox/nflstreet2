@@ -1,5 +1,5 @@
 #include "game/Class_80148A58.h"
-#include "game/fn_800D4164.h"
+#include "game/StyleTracker.h"
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
 #include "game/Object_80039F5C.h"
@@ -1656,10 +1656,8 @@ void fn_800B823C(int side);
 int fn_80187C8C(void);
 int fn_80187C6C(void);
 int fn_801787DC(int team);
-int fn_800D41F8(int team);
 int fn_800A8444(int team);
 int fn_800A8740(void);
-float fn_800D3F2C(int team);
 void fn_8017E328(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
 float fn_800C9CF0(int team, int index);
@@ -1743,8 +1741,8 @@ void fn_8005B9FC(int *pResult,Params_80005284 **pNames);
 void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
 {
     if (ChallengeIsActive()) {
-        if (ChalGetCurrent()->mUnknown1C3) { fn_800D4164(0, lbl_803ED6A4, 0); fn_800A7B5C(); }
-        if (ChalGetCurrent()->mUnknown1C2) { fn_800D4164(1, lbl_803ED6A4, 0); fn_800A7B5C(); }
+        if (ChalGetCurrent()->mUnknown1C3) { StyleTrackerSetMeterFraction(0, lbl_803ED6A4, 0); fn_800A7B5C(); }
+        if (ChalGetCurrent()->mUnknown1C2) { StyleTrackerSetMeterFraction(1, lbl_803ED6A4, 0); fn_800A7B5C(); }
     }
     fn_800B823C(0); fn_800B823C(1);
     fn_80059A9C(pList);
@@ -1758,19 +1756,19 @@ void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, i
         ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1]->mpText[0] = 0;
         ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2]->mpText[0] = 0;
     }
-    pScores[0] = fn_800D41F8(0); pScores[1] = fn_800D41F8(1);
+    pScores[0] = StyleTrackerGetTotal(0); pScores[1] = StyleTrackerGetTotal(1);
     pZero[1] = 0; pZero[0] = 0; pModes[1] = 0; pModes[0] = 0;
     *pState = fn_80177F70();
     pFlags[0] = fn_800A8444(0); pFlags[1] = fn_800A8444(1);
     *pEnabled = fn_800A8740() == 0;
     if (*pEnabled == 1) {
         for (int i = 0; i < 2; i++) {
-            if (fn_800D3F2C(i) < lbl_803ED6A8) {
-                if (fn_800D3F2C(i) < lbl_803ED6A4) pModes[i] = 0;
+            if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A8) {
+                if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A4) pModes[i] = 0;
                 else pModes[i] = 1;
             } else pModes[i] = 2;
             fn_8017DF6C((unsigned char)i, (unsigned char)pModes[i]);
-            if (fn_800D3F2C(i) < lbl_803ED6A4) fn_8017E328((unsigned char)i, 1);
+            if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A4) fn_8017E328((unsigned char)i, 1);
             else fn_8017E328((unsigned char)i, 2);
         }
     }
@@ -2039,7 +2037,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
     }
     *pEnabled=enabled;
     unsigned int score1,score0;
-    if(fn_8007F828(14)==1) {score1=fn_800D41F8(1);score0=fn_800D41F8(0);}
+    if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     *pAllowed=!((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255));
     if(fn_8017F584()==8) {
@@ -2060,7 +2058,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
 void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
 {
     unsigned int score1,score0;
-    if(fn_8007F828(14)==1) {score1=fn_800D41F8(1);score0=fn_800D41F8(0);}
+    if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if(fn_8017F584()==8) {
         if(score1>score0) {

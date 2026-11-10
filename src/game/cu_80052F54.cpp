@@ -1,4 +1,5 @@
 #include "game/Class_8018FD64Inline.h"
+#include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801BE60C.h"
@@ -113,7 +114,6 @@ void AudmonEventPostId(int, void *, int, int, int, int);
 void TeamUnlock(int, int);
 void fn_80083E1C(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
-void fn_800D6D7C(Object_80039F5C *, unsigned int, int);
 int fn_800A3444(void);
 int fn_801485D4(void);
 int fn_80156704(void);
@@ -317,7 +317,7 @@ void fn_80053258(Args_80052F54 *pArgs)
     if (count == 1) {
         fn_80052F54(pArgs);
     }
-    fn_800D6D7C(fn_8009BCE8(pRef), count, changed);
+    StyleTrackerAwardHotspot(fn_8009BCE8(pRef), count, changed);
     fn_8017CA3C(*pRef, 1);
     Object_80053674 *pOther = pObject->mpUnknown1D8->mpUnknown98;
     if (pOther) {

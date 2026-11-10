@@ -3,6 +3,7 @@
    the registered audio listeners. */
 
 #include "engine/Desc_80238424.h"
+#include "game/StyleTracker.h"
 #include "engine/fn_80238680.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_8009D990.h"
@@ -14,7 +15,6 @@ typedef unsigned int (*AudmonClockFn_t)(int);
 
 extern "C" {
 void fn_8006CE84(AudmonEvent_t *pRecord);
-void fn_800D70CC(AudmonEvent_t *pRecord);
 int MemFill(void *pDest, int size, int value, int width);
 void fn_802384C4(int handle);
 void *fn_8023850C(int handle);
@@ -62,7 +62,7 @@ extern "C" void AudmonEventSend(void)
         p->mUnknown1C = _AudmonEvent_pfnClock(1);
     }
     fn_80238570(_AudmonEvent_iQueue, 0);
-    fn_800D70CC(p);
+    StyleTrackerHandleAudioEvent(p);
 }
 
 extern "C" void AudmonEventPost(int type, Vector_80039F5C *pPos)

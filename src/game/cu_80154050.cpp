@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/StyleTracker.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297C60.h"
 #include "game/PauseMenu.h"
@@ -15,7 +16,6 @@ extern void *lbl_803EB688;
 extern const int lbl_802DEB78[];
 
 int fn_800A2178(void);
-void fn_800D42D4(void);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 void fn_801735D8(unsigned int mask);
 void fn_8009D8CC(int index);
@@ -30,11 +30,11 @@ int fn_80154050(Class_802A1A58 *p, char *pText)
     int kind = fn_800A2178();
 
     if (kind == 0) {
-        fn_800D42D4();
+        StyleTrackerOnTouchdown();
         result = 1;
         fn_801C2EB4(pText, touchdown);
     } else if (kind == 14) {
-        fn_800D42D4();
+        StyleTrackerOnTouchdown();
         result = 1;
         fn_801C2EB4(pText, defensive);
     }

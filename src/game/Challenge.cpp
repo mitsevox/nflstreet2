@@ -5,6 +5,7 @@
    scores, and builds the goal and reward texts the challenge screens show. */
 
 #include <string.h>
+#include "game/StyleTracker.h"
 #include "game/Class_8018FD64Inline.h"
 #include "game/Class_80297C60.h"
 #include "game/DbCursor.h"
@@ -15,7 +16,6 @@
 
 extern "C" {
 
-int fn_800D41F8(int side);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 
 /* Goal tests, one pair per goal kind (see _Chal_aGoalTests): ChalCheckGoal calls the
@@ -85,7 +85,7 @@ int ChalRankAtLeastGoal(int tag, int side, ChalMedalGoal_t *pInfo)
 int ChalRankStylePoints(int side, ChalMedalGoal_t *pInfo)
 {
     int result = 7;
-    unsigned int value = fn_800D41F8(side);
+    unsigned int value = StyleTrackerGetTotal(side);
     int i;
 
     for (i = 0; i <= 2; i++) {
@@ -179,9 +179,6 @@ int fn_800A7E40(unsigned char side);
 int fn_800AD9B4(void);
 void fn_800B4A18(int index, char *pDest, int size);
 int fn_800B9A90(Class_80297C60 *p);
-int fn_800D41F8(int side);
-unsigned char fn_800D7528(int side);
-unsigned char fn_800D7544(int side);
 int fn_80178308(void);
 int fn_801787DC(int team);
 int fn_80186B38(int a);
@@ -861,7 +858,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
     } else {
         switch (type) {
         case 3:
-            fn_801C2D88(text, 128, pFormat, fn_800D41F8(1));
+            fn_801C2D88(text, 128, pFormat, StyleTrackerGetTotal(1));
             fn_801C2EF0(pText, text, size);
             break;
         case 6:
@@ -917,7 +914,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             if (a >= value) {
                 fn_801C2D88(text, 128, "Best Completion Streak: %d", a);
             } else {
-                fn_801C2D88(text, 128, "Current Completion Streak: %d", fn_800D7528(1));
+                fn_801C2D88(text, 128, "Current Completion Streak: %d", StyleTrackerGetCatchStreak(1));
             }
             fn_801C2EF0(pText, text, size);
             break;
@@ -954,7 +951,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             if (a >= value) {
                 fn_801C2D88(text, 128, "Best Stylin' Completion Streak: %d", a);
             } else {
-                fn_801C2D88(text, 128, "Current Stylin' Completion Streak: %d", fn_800D7544(1));
+                fn_801C2D88(text, 128, "Current Stylin' Completion Streak: %d", StyleTrackerGetStyleCatchStreak(1));
             }
             fn_801C2EF0(pText, text, size);
             break;

@@ -6,6 +6,7 @@
    ball carrier and resets the records each frame when a player changes state. */
 
 #include <math.h>
+#include "game/StyleTracker.h"
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
@@ -19,11 +20,6 @@ extern "C" {
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ABDA4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
-void fn_800D5054(Object_80039F5C *p, int a);
-void fn_800D5494(Object_80039F5C *p, int a, int b);
-void fn_800D5A6C(int a, int b, int c);
-void fn_800D5F1C(Object_80039F5C *p, int a, int b);
-void fn_800D60BC(Object_80039F5C *p, int a, int b);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
@@ -96,7 +92,7 @@ extern "C" void PlayerMoveUpdateRun(Object_80039F5C *p)
 
         PlayerMoveGetRunMode(p, &mode);
         if (pBlock->mUnknown0 == 2) {
-            fn_800D5A6C(active, 2, pBlock->mUnknown4);
+            StyleTrackerUpdateRun(active, 2, pBlock->mUnknown4);
         }
     }
     fn_800A3B58(p, 6, 0);
@@ -317,17 +313,17 @@ extern "C" void PlayerMoveSetResult(Object_80039F5C *p, int a)
         switch (p->mpState->mId) {
         case 12:
             if (PlayerMoveGetKind(p) != 4) {
-                fn_800D5F1C(p, PlayerMoveGetKind(p), value);
+                StyleTrackerAwardDive(p, PlayerMoveGetKind(p), value);
             }
             break;
         case 36:
-            fn_800D60BC(p, PlayerMoveGetKind(p), value);
+            StyleTrackerBeginHurdle(p, PlayerMoveGetKind(p), value);
             break;
         case 34:
-            fn_800D5054(p, PlayerMoveGetKind(p));
+            StyleTrackerBeginJuke(p, PlayerMoveGetKind(p));
             break;
         case 35:
-            fn_800D5494(p, PlayerMoveGetKind(p), value);
+            StyleTrackerBeginSpin(p, PlayerMoveGetKind(p), value);
             break;
         }
         pBlock->mUnknown9 = value;

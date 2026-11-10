@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/StyleTracker.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/fn_800B65A0.h"
@@ -193,8 +194,6 @@ void fn_800CE684(Object_800CE674 *p);
 int fn_800CE690(Object_800CE674 *p);
 float fn_800CE73C(Object_800CE674 *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D640C(Object_80039F5C *p);
-void fn_800D6E98(int team);
 void fn_800D7A18(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
@@ -970,7 +969,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         if (fn_801787A0() == 0) {
             if (state->mUnknown56 == 5) {
                 AudmonEventPostId(61, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
-                fn_800D6E98(fn_80178320());
+                StyleTrackerAwardStrip(fn_80178320());
                 fn_80171E30();
                 fn_801720B4(pOther);
                 fn_800A8954(26, p->mIdBytes[2], p);
@@ -978,7 +977,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 fn_80171E30();
                 fn_801720B4(pOther);
                 if (fn_801787A0() == 0) {
-                    fn_800D6E98(fn_80178308());
+                    StyleTrackerAwardStrip(fn_80178308());
                     fn_800A8954(26, p->mIdBytes[2], p);
                     fn_80156C78(40, 1);
                 }
@@ -1146,7 +1145,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
-        fn_800D640C(p);
+        StyleTrackerFinishHurdle(p);
     }
     return result;
 }
