@@ -753,10 +753,6 @@
       "address": "0x801AD474",
       "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
     },
-    "vprintf": {
-      "address": "0x802622DC",
-      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
-    },
     "_stack_addr": {
       "address": "0x803FE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
@@ -14466,6 +14462,19 @@
         }
       ],
       "evidence": "evidence.tsv whole-file provisional unit row, seed function/name/return rows and partial-linking source-form row. Exact native 84-byte prefix only; remaining complete functions are comparison-only."
+    },
+    {
+      "source": "src/engine/vprintf.c",
+      "profile": "engine_c",
+      "evidence": "Complete 52-byte vprintf wrapper; existing related unit evidence and target calls at 0x8023ABB4/0x8023AC60. Both file edges provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802622DC",
+          "end": "0x80262310"
+        }
+      ]
     }
   ]
 }

@@ -29814,26 +29814,6 @@
       ]
     },
     {
-      "source": "src/engine/vprintf.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80262310 (src/engine/vprintf.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. Draft comparison only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802622DC",
-          "end": "0x80262310"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "vprintf",
-          "start": "0x802622DC",
-          "end": "0x80262310"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80262310.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80262310-0x8026247C (src/engine/cu_80262310.c), the compiler row 0x802622DC-0x80264424, the source-form, function and name rows. 0x80262440 is not registered. Draft comparisons only; original assembly remains linked.",
