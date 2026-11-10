@@ -2573,7 +2573,11 @@ address	size	sibling_name	how	sibling_file	unit
 0x802625A0	1256	fftoa	size	vfprintf.c	vfprintf.c
 0x80262A88	212	_vfwrite	size	vfprintf.c	vfprintf.c
 0x80262B5C	216	vfprintf	size	vfprintf.c	vfprintf.c
-0x80264424	392	add_separators	gap	vfprintf.c	vfprintf.c
+0x80264424	392	add_separators	size	vfprintf.c	vfprintf.c
+0x802645AC	212	_vfwrite	size	vfprintf.c	vfprintf.c
+0x80264680	5756	_vfiprintf_r	name	vfprintf.c	vfprintf.c
+0x80265CFC	12	_localeconv_r	name	vfprintf.c	vfprintf.c
+0x80265D08	36	localeconv	name	vfprintf.c	vfprintf.c
 0x80265D2C	372	sn_floor	size	math_support.c	math_support.c
 0x80265EA0	860	sn_fmod	size	math_support.c	math_support.c
 0x802661FC	764	sn_log	size	math_support.c	math_support.c

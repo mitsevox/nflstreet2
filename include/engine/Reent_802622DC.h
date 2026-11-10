@@ -5,7 +5,12 @@
 
 typedef struct File_80262B5C
 {
-  char mUnknown0[92];
+  unsigned char *mCursor;
+  char mUnknown4[4];
+  int mWriteRemaining;
+  short mFlags;
+  short mDescriptor;
+  char mUnknown10[76];
   void *mUnknown5C;
 } File_80262B5C;
 
