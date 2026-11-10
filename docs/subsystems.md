@@ -90,3 +90,5 @@ Update a row in the PR that changes it: a new file name, a link that moves a fil
 - `src/engine/fabsf.c` (0x80260FC4-0x80260FE8): complete 36-byte single-precision magnitude runtime leaf, no static data; separated from the explicit multi-file survey, with historical file edges provisional.
 
 - `src/engine/math_support.c` (0x80265D2C-0x80266640): the complete four-function numeric runtime used for rounding, signed remainder and logarithms in formatted output, 2,324 code bytes and 224 read-only bytes; separated from the multi-file survey `cu_802645AC`. File edges provisional.
+
+- `mbtowc_r.c` (`0x80266640-0x8026696C`) is the complete one-function locale-selected multibyte converter after `math_support.c`: Shift-JIS/EUC-JP byte pairs and the JIS conversion-state machine. All812 code bytes and888 native data bytes are linked; both source-file edges remain provisional.

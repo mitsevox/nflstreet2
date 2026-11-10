@@ -20,7 +20,9 @@ typedef struct Reent_802622DC
 {
   char mUnknown0[8];
   File_80262B5C *mUnknown8;
-  char mUnknownC[316];
+  char mUnknownC[40];
+  const char *mLocaleName;
+  char mUnknown38[272];
   RuntimeExitBlock_t *mExitBlock;
   RuntimeExitBlock_t mEmbeddedExitBlock;
 } Reent_802622DC;

@@ -291,3 +291,4 @@
 0x80265EA0	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
 0x802661FC	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
 0x802664F8	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x80266640	adampreddy	First exact reconstruction of the complete locale multibyte-conversion routine from public licensed newlib with target-supported first-byte ordering, named and promoted with its full native data.
