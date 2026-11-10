@@ -853,10 +853,6 @@
       "address": "0x8023BBA0",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
     },
-    "DBPrintf": {
-      "address": "0x8023ED18",
-      "evidence": "Original complete OSExceptionInit call instruction0x80239150 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "ICEnable": {
       "address": "0x80239DBC",
       "evidence": "Original complete __OSCacheInit call instruction0x8023A210 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -948,10 +944,6 @@
     "DVDInquiryAsync": {
       "address": "0x802413BC",
       "evidence": "Original complete OSInit call instruction0x80238EC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__DBIsExceptionMarked": {
-      "address": "0x8023ECFC",
-      "evidence": "Original complete OSExceptionInit call instruction0x80239000 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "GXSetGPMetric": {
       "address": "0x8025295C",
@@ -1092,10 +1084,6 @@
     "__init_cpp": {
       "address": "0x8023E838",
       "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802CC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
-    },
-    "__DBExceptionDestination": {
-      "address": "0x8023ECEC",
-      "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
     },
     "__VMBASEInvalidateTLBEntry": {
       "address": "0x80245B14",
@@ -14524,6 +14512,31 @@
           "placement": ".data5",
           "start": "0x803EB328",
           "end": "0x803EB330"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8023EC7C-0x8023ED68, five function/name rows and exact data placements; all unchanged native functions including DBPrintf linked without retention or discarded code.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023EC7C",
+          "end": "0x8023ED68"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCCF0",
+          "end": "0x802FCD08"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0F0",
+          "end": "0x803ED0F8"
         }
       ]
     }

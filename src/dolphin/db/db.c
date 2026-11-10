@@ -1,3 +1,4 @@
+/* Dolphin debug interface and exception reporting for the game. */
 #include <dolphin/db.h>
 #include <dolphin/base/PPCArch.h>
 #include <dolphin/os.h>

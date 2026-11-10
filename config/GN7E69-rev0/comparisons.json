@@ -26522,56 +26522,6 @@
       ]
     },
     {
-      "source": "src/dolphin/db/db.c",
-      "profile": "dolphin_release",
-      "evidence": "Private complete target-supported C functions from coherent BFBB; unsupported assembly entry remains external at actual target address.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023EC7C",
-          "end": "0x8023ED18"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FCCF0",
-          "end": "0x802FCD08"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED0F0",
-          "end": "0x803ED0F8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DBInit",
-          "start": "0x8023EC7C",
-          "end": "0x8023ECA4"
-        },
-        {
-          "symbol": "__DBExceptionDestinationAux",
-          "start": "0x8023ECA4",
-          "end": "0x8023ECEC"
-        },
-        {
-          "symbol": "__DBIsExceptionMarked",
-          "start": "0x8023ECFC",
-          "end": "0x8023ED18"
-        },
-        {
-          "symbol": "__DBExceptionDestination",
-          "start": "0x8023ECEC",
-          "end": "0x8023ECFC"
-        }
-      ],
-      "discarded": [
-        "DBPrintf"
-      ]
-    },
-    {
       "source": "src/dolphin/cu_8025D6C8.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv provisional unit row 0x8025D6C8-0x8025E148 (src/dolphin/cu_8025D6C8.c), its compiler, source-form, type, function and name rows and the exact data rows 0x803EC320-0x803EC321 (.sdata) and 0x803ED3F8-0x803ED40D (.sbss). Draft comparisons only; original assembly remains linked.",
