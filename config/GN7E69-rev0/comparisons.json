@@ -46178,7 +46178,7 @@
     {
       "source": "src/engine/MemExtern.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D36E8-0x801D3BD0 (src/engine/MemExtern.c), its function rows and the exact data rows 0x802AFCA0-0x802AFCC4 (.rodata) and 0x802F7B40-0x802F7B64 (.data). Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit/compiler/name/type/field/source-form rows for MemExtern.c, all ten complete function extents, and the exact 36-byte string and callback-table extents. Two documented holdouts: _MemExternAlloc (372 native / 380 target bytes, temporary-register/copy differences) and MemInitExternHeap (196 bytes, constant-load scheduling). All code and data remain measured with the unchanged engine_c profile; original assembly remains linked because the complete native .text cannot yet replace its contiguous target range.",
       "sections": [
         {
           "section": ".text",
@@ -46201,52 +46201,52 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D36E8",
+          "symbol": "_MemExternDestroyHeap",
           "start": "0x801D36E8",
           "end": "0x801D36EC"
         },
         {
-          "symbol": "fn_801D36EC",
+          "symbol": "_MemExternDisplayHeap",
           "start": "0x801D36EC",
           "end": "0x801D36F4"
         },
         {
-          "symbol": "fn_801D36F4",
+          "symbol": "_MemExternVerifyHeap",
           "start": "0x801D36F4",
           "end": "0x801D3768"
         },
         {
-          "symbol": "fn_801D3768",
+          "symbol": "_MemExternVerifyAddr",
           "start": "0x801D3768",
           "end": "0x801D37AC"
         },
         {
-          "symbol": "fn_801D37AC",
+          "symbol": "_MemExternHeapInfo",
           "start": "0x801D37AC",
           "end": "0x801D3820"
         },
         {
-          "symbol": "fn_801D3820",
+          "symbol": "_MemExternAlloc",
           "start": "0x801D3820",
           "end": "0x801D399C"
         },
         {
-          "symbol": "fn_801D399C",
+          "symbol": "_MemExternFree",
           "start": "0x801D399C",
           "end": "0x801D3ABC"
         },
         {
-          "symbol": "fn_801D3ABC",
+          "symbol": "_MemExternResize",
           "start": "0x801D3ABC",
           "end": "0x801D3AC4"
         },
         {
-          "symbol": "fn_801D3AC4",
+          "symbol": "_MemExternSizeof",
           "start": "0x801D3AC4",
           "end": "0x801D3B0C"
         },
         {
-          "symbol": "fn_801D3B0C",
+          "symbol": "MemInitExternHeap",
           "start": "0x801D3B0C",
           "end": "0x801D3BD0"
         }

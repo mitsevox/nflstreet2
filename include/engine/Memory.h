@@ -22,17 +22,18 @@ typedef struct MemBlock_801D134C {
     void **mpTail;
 } MemBlock_801D134C;
 
-typedef struct MemHeapFuncs_801D134C {
+typedef struct MemHeapFuncs_t {
     void (*mDestroy)(void *pHeapData);
     int (*mDisplay)(void *pHeapData, int flags);
     int (*mVerify)(void *pHeapData);
     int (*mVerifyAddr)(void *pHeapData, void *pAddr);
     int (*mInfo)(void *pHeapData, int what);
-    void *(*mAlloc)(void *pHeapData, int size, int align, int flags);
+    void *(*mAlloc)(void *pHeapData, int size, int flags, const char *pGroup,
+                    const char *pContext0, const char *pContext1, int contextValue);
     int (*mFree)(void *pHeapData, void *pAddr);
-    int (*mResize)(void *pHeapData, void *pAddr, int size);
+    void *(*mResize)(void *pHeapData, void *pAddr, int size, int flags);
     int (*mSizeof)(void *pHeapData, void *pAddr);
-} MemHeapFuncs_801D134C;
+} MemHeapFuncs_t;
 
 /* 0x100-byte heap record; extern heaps keep their own data right after it. */
 typedef struct MemHeap_801D134C {
@@ -58,13 +59,13 @@ typedef struct MemHeap_801D134C {
     unsigned char mFill;
     unsigned char mOwnsMemory;
     char mUnkF5[0xF8 - 0xF5];
-    MemHeapFuncs_801D134C *mpFuncs;
+    MemHeapFuncs_t *mpFuncs;
     void (*mCopy)(void *pDst, int dstExtern, void *pSrc, int srcExtern, int size);
 } MemHeap_801D134C;
 
 int fn_801D26C4(int ident, int flags, const char *pMessage);
 void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
-                  MemHeapFuncs_801D134C *pFuncs);
+                  MemHeapFuncs_t *pFuncs);
 void fn_801D3470(void *pAddr, char *pOut, int size);
 
 #endif
