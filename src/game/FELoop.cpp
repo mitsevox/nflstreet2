@@ -43,8 +43,8 @@ int fn_80061CAC(void);
 void MemCardScreenSetFlag(unsigned char a);
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
-void fn_8006CA84(int a);
-void fn_8006EC24(void);
+void SndgUpdate(int a);
+void SndgApplyVolumeOptions(void);
 void fn_80072C90(int a, int b);
 void fn_800731D0(int a);
 void fn_8009418C(void);
@@ -280,7 +280,7 @@ static void _FELoopBootSetup()
     fn_8007F374();
     BootShowStartupScreens();
     fn_8007F328(0);
-    fn_8006EC24();
+    SndgApplyVolumeOptions();
     fn_80072AA8();
     ConSetChannelInfo(-1, 1, 0);
 }
@@ -386,7 +386,7 @@ unsigned char FELoop::Update()
     if (flag) {
         VptProcessViewports();
         FileDebugProcess();
-        fn_8006CA84(1);
+        SndgUpdate(1);
         fn_801CE82C();
         if (_FELoop_pFrameCallback) {
             _FELoop_pFrameCallback();

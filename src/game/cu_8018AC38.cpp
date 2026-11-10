@@ -6,7 +6,7 @@ struct Args_8018ACBC {
 };
 
 extern "C" {
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 
 void fn_8018AC38(void *p);
 void fn_8018AC3C(void *p);
@@ -44,7 +44,7 @@ extern "C" void fn_8018AC40(int group, unsigned int index)
             } else {
                 id = lbl_802EADC0[index];
             }
-            fn_8006C854(id, 0);
+            SndgSfxPlay(id, 0);
         }
     }
 }

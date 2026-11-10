@@ -47,9 +47,9 @@ void fn_8004A9FC(void);
 void fn_8004FF8C(void);
 void fn_800502C0(void);
 int LevelGetObjectCount(void);
-void fn_8006E710(void);
-void fn_8006E760(void);
-void fn_8006E78C(void);
+void SndgReplayInit(void);
+void SndgReplayShutdown(void);
+void SndgReplayRegister(void);
 void SndgIGInitAudio(void);
 void SndgIGShutdownAudio(void);
 unsigned char fn_8007AFDC(int a);
@@ -1125,7 +1125,7 @@ int ReplayFrame::Init()
     fn_8003E118();
     fn_800410FC();
     fn_80044378();
-    fn_8006E78C();
+    SndgReplayRegister();
     fn_8014512C();
     fn_800B4A4C();
     fn_800D77F0();
@@ -1239,13 +1239,13 @@ const char *SndgReplay::GetName() { return "SndgReplay"; }
 
 int SndgReplay::Init()
 {
-    fn_8006E710();
+    SndgReplayInit();
     return 1;
 }
 
 int SndgReplay::Shutdown()
 {
-    fn_8006E760();
+    SndgReplayShutdown();
     return 1;
 }
 

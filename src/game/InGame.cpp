@@ -44,7 +44,7 @@ void PauseRequestClose(void);
 int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
 void fn_80066D5C(void);
-void fn_8006CA84(int a);
+void SndgUpdate(int a);
 void fn_800726B8(void);
 void fn_800728F8(void);
 void fn_80072C90(int a, int b);
@@ -379,7 +379,7 @@ unsigned char InGame::Update()
     fn_800728F8();
     fn_800726B8();
     fn_80195F80();
-    fn_8006CA84(1);
+    SndgUpdate(1);
     fn_801CE82C();
     VptProcessViewports();
     fn_80236F34();

@@ -10,7 +10,7 @@
 #include "engine/spchevnt.h"
 
 extern "C" {
-int fn_8006F0D8(void);
+int SndgSpchGetPlayFlags(void);
 void SpchIGFindNearestOpponent(int handle);
 int SpchIGGetNearestOpponent(int side);
 int SpchIGGetTeamPlayer(int side);
@@ -90,10 +90,10 @@ extern "C" int SpchIGClassifyPlayResult(void)
     if (fn_80177F7C() == 4 && (p->mUnknown18 & 0x1000)) {
         return 4;
     }
-    if (fn_8006F0D8() & 1) {
+    if (SndgSpchGetPlayFlags() & 1) {
         return 5;
     }
-    if (fn_8006F0D8() & 2) {
+    if (SndgSpchGetPlayFlags() & 2) {
         return 6;
     }
     if (fn_800A21A8(2)) {
@@ -120,7 +120,7 @@ extern "C" int SpchIGClassifyPlayResult(void)
         }
         return 8;
     }
-    if (fn_8006F0D8() & 0x40) {
+    if (SndgSpchGetPlayFlags() & 0x40) {
         SpchIGFindNearestOpponent(_SpchIG_iDownedCarrier);
         return 10;
     }
@@ -228,10 +228,10 @@ extern "C" void SpchIGGetTackleForLossFlags(int *pResult)
     if (p->mUnknown14 < 0.0f) {
         *pResult = 9;
     }
-    if (fn_8006F0D8() & 4) {
+    if (SndgSpchGetPlayFlags() & 4) {
         *pResult |= 2;
     }
-    if (fn_8006F0D8() & 8) {
+    if (SndgSpchGetPlayFlags() & 8) {
         *pResult |= 4;
     }
 }
@@ -248,10 +248,10 @@ extern "C" void SpchIGGetIncompletionFlags(int *pResult)
     if (fn_801783AC(23)) {
         *pResult |= 8;
     }
-    if (fn_8006F0D8() & 0x10) {
+    if (SndgSpchGetPlayFlags() & 0x10) {
         *pResult |= 16;
     }
-    if (fn_8006F0D8() & 0x20) {
+    if (SndgSpchGetPlayFlags() & 0x20) {
         *pResult |= 32;
     }
 }

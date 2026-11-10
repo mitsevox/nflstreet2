@@ -21,7 +21,7 @@ struct Params_80186324 {
 };
 
 extern "C" {
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 int MsgGameFindActivePort(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
@@ -40,7 +40,7 @@ void fn_801861D0(int a, unsigned char b)
     if (lbl_803EB5D8 == 0 && InGameIsStopped() == 0) {
         AudmonEventPost(0x72, 0);
     } else {
-        fn_8006C854(0x78, 0);
+        SndgSfxPlay(0x78, 0);
     }
     if (lbl_803EB5D9) {
         PauseRequestClose();
@@ -90,7 +90,7 @@ int fn_80186324(unsigned int id, Params_80186324 *pParams, int c, int *pResult)
         if (lbl_803EB5D9 == 0) {
             if (FELoopIsMainFEActive() != 0 || PauseIsAudioPaused() != 0) {
                 lbl_803EB5D8 = 1;
-                fn_8006C854(0x77, 0);
+                SndgSfxPlay(0x77, 0);
             } else {
                 lbl_803EB5D8 = 0;
                 AudmonEventPost(0x71, 0);

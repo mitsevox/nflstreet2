@@ -3,7 +3,7 @@
 extern "C" {
 extern float gFrameTimeScale;
 
-void fn_8006CCA8(float value);
+void SndgSetSfxRate(float value);
 }
 
 static float sCurrent = 1.0f;
@@ -13,7 +13,7 @@ static float sStep = 0.0f;
 void TimeScaleReset()
 {
     gFrameTimeScale = 1.0f;
-    fn_8006CCA8(1.0f);
+    SndgSetSfxRate(1.0f);
     sCurrent = 1.0f;
     sTarget = 1.0f;
     sStep = 0.0f;
@@ -29,7 +29,7 @@ void TimeScaleUpdate()
             sStep = 0.0f;
         }
         gFrameTimeScale = sCurrent;
-        fn_8006CCA8(sCurrent);
+        SndgSetSfxRate(sCurrent);
     }
 }
 

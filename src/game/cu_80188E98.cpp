@@ -40,7 +40,7 @@ void fn_80047698(void);
 void InGameStateReset(void);
 void InGameStateClearActive(void);
 void ScreenMsgDispatch(void);
-void fn_8006CA84(int a);
+void SndgUpdate(int a);
 void fn_8013CF98(void);
 float fn_8013D050(void);
 void BannerSetTickMs(unsigned int a);
@@ -848,7 +848,7 @@ void fn_8018A7B0(void)
             BootHandleReset();
         }
         VptProcessViewports();
-        fn_8006CA84(1);
+        SndgUpdate(1);
         fn_801CE82C();
     }
 }

@@ -66,14 +66,14 @@ extern void *lbl_803EB690;
 extern char lbl_802EBF88[];
 int FELoopIsMainFEActive(void);
 int fn_801486A0(void);
-void fn_8006CA84(int a);
-void fn_8006DDB4(int a, int b, unsigned int c);
-void fn_8006DEA8(int a, int b);
-void fn_8006DEEC(int a);
-void fn_8006DF2C(int a);
-void fn_8006DF6C(int a);
-void fn_8006DFA8(void (*callback)(int, int));
-void fn_8006E010(void (*callback)(int, int));
+void SndgUpdate(int a);
+void SndgPathFadeTrack(int a, int b, unsigned int c);
+void SndgPathSetStreamValue(int a, int b);
+void SndgPathPauseTrack(int a);
+void SndgPathResumeTrack(int a);
+void SndgPathStopTrack(int a);
+void SndgPathAddCallback(void (*callback)(int, int));
+void SndgPathRemoveCallback(void (*callback)(int, int));
 void fn_8007B358(DbCursor *p);
 void fn_8007B3AC(DbCursor *p);
 void fn_8007B3CC(DbCursor *p, int id, int *pResult);
@@ -307,10 +307,10 @@ int fn_80071EDC(int mode)
         }
         if (stop) {
             fn_801B3084(0x1000000, "SongNum", 0);
-            fn_8006DEEC(0x11000001);
+            SndgPathPauseTrack(0x11000001);
         } else if (start) {
             fn_801B3084(0x1000000, "SongNum", 1);
-            fn_8006DF2C(0x11000001);
+            SndgPathResumeTrack(0x11000001);
         }
         if (!blocked) {
             result = SndgPathPostEvent(0x11000001, id);
@@ -324,7 +324,7 @@ int fn_80071EDC(int mode)
 int fn_8007224C(int value)
 {
     if (lbl_803EA704->mUnknown121 || lbl_803EA704->mUnknown125) {
-        fn_8006DEA8(0x11000001, value);
+        SndgPathSetStreamValue(0x11000001, value);
     }
     return 1;
 }
@@ -475,7 +475,7 @@ void fn_8007272C(void)
         lbl_803EA704->mpUnknown20 = ResOpenDevice(lbl_802EBF88, 44);
         lbl_803EA704->mUnknown24 = SndgPathLoadMap(lbl_803EA704->mpUnknown20, 1);
         SndgPathCreateTrack(lbl_803EA704->mpUnknown20, 2, 0x11000001, 2.0f);
-        fn_8006DFA8(fn_80071C3C);
+        SndgPathAddCallback(fn_80071C3C);
         fn_80072C54(lbl_803EA700);
         fn_80072424();
         fn_80071EA8(lbl_803EA704->mUnknown122, lbl_803EA704->mUnknown28, lbl_803EA704->mUnknown2C);
@@ -485,7 +485,7 @@ void fn_8007272C(void)
 void fn_80072890(void)
 {
     if (fn_801F3E28()) {
-        fn_8006E010(fn_80071C3C);
+        SndgPathRemoveCallback(fn_80071C3C);
         SndgPathDestroyTrack(0x11000001);
         SndgPathUnloadMap(lbl_803EA704->mUnknown24);
         ResClose(lbl_803EA704->mpUnknown20);
@@ -526,7 +526,7 @@ void fn_800728F8(void)
         }
         if (lbl_803EA708) {
             lbl_803EA708 = 0;
-            fn_8006DF6C(0x11000001);
+            SndgPathStopTrack(0x11000001);
             fn_80072B84(lbl_803EA704->mUnknown122, lbl_803EA704->mUnknown28, lbl_803EA704->mUnknown2C);
         } else {
             fn_80071EA8(lbl_803EA704->mUnknown122, lbl_803EA704->mUnknown28, lbl_803EA704->mUnknown2C);
@@ -601,7 +601,7 @@ void fn_80072C90(unsigned int delay, int wait)
         fn_801F81F4(&calendar);
         lbl_803EA704->mUnknown8 = fn_801F7D34(&calendar) + delay;
         if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
-            fn_8006DDB4(0x11000001, 0, delay);
+            SndgPathFadeTrack(0x11000001, 0, delay);
         }
         if (FELoopIsMainFEActive() && lbl_803EB690) {
             fn_8021D7B8(lbl_803EB690, 0x80000003, 0, 0);
@@ -623,7 +623,7 @@ void fn_80072D98(unsigned int delay)
             (lbl_803EA704->mUnknown124 || lbl_803EA704->mUnknown8 || lbl_803EA700)) {
             fn_80072F04();
             if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
-                fn_8006DDB4(0x11000001, 100, delay);
+                SndgPathFadeTrack(0x11000001, 100, delay);
             }
             lbl_803EA704->mUnknown8 = 0;
             fn_800731D0(1);
@@ -646,7 +646,7 @@ void fn_80072E84(void)
     if ((lbl_803EA704->mUnknown121 || lbl_803EA704->mUnknown125) &&
         lbl_803EA704->mUnknown123 && !lbl_803EA704->mUnknown124) {
         if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
-            fn_8006DEEC(0x11000001);
+            SndgPathPauseTrack(0x11000001);
         }
         lbl_803EA704->mUnknown124 = 1;
     }
@@ -657,7 +657,7 @@ void fn_80072F04(void)
     if ((lbl_803EA704->mUnknown121 || lbl_803EA704->mUnknown125) && lbl_803EA700 &&
         lbl_803EA704->mUnknown124) {
         if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
-            fn_8006DF2C(0x11000001);
+            SndgPathResumeTrack(0x11000001);
         }
         lbl_803EA704->mUnknown124 = 0;
     }
@@ -699,8 +699,8 @@ void fn_80073094(void)
     if (lbl_803EA704) {
         if (lbl_803EA704->mUnknown123) {
             if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown127) {
-                fn_8006DF2C(0x11000001);
-                fn_8006DF6C(0x11000001);
+                SndgPathResumeTrack(0x11000001);
+                SndgPathStopTrack(0x11000001);
             }
             lbl_803EA704->mUnknown124 = 0;
             lbl_803EA704->mUnknown123 = 0;
@@ -739,7 +739,7 @@ void fn_80073144(int value, unsigned int duration)
 
 void fn_800731D0(int draw)
 {
-    fn_8006CA84(1);
+    SndgUpdate(1);
     if (draw) {
         fn_801CE7D0(1);
     }

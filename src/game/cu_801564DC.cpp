@@ -289,8 +289,8 @@ void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void PauseRequestCancel(void);
 void SndgAmbPostCue(int type);
-void fn_8006EA04(int channel, unsigned int level);
-void fn_8006EC24(void);
+void SndgSetVolumeOption(int channel, unsigned int level);
+void SndgApplyVolumeOptions(void);
 void fn_8006F824(int a);
 void fn_80072C90(int a, int b);
 int fn_80072E6C(void);
@@ -671,7 +671,7 @@ void fn_80156854(void)
     fn_80178F20(0);
     fn_8007F6F8(0, lbl_803EB310);
     lbl_803EB310 = 1;
-    fn_8006EC24();
+    SndgApplyVolumeOptions();
     lbl_803EB30C = 0xFFFF;
     lbl_803EB304 = 0xFFFF;
     fn_8015672C(5);
@@ -1000,7 +1000,7 @@ int fn_80157080(void)
             fn_8015651C();
             fn_801485F4();
             fn_80072F04();
-            fn_8006EC24();
+            SndgApplyVolumeOptions();
             fn_80072F04();
             lbl_803ECA58 = 0;
         }
@@ -1042,7 +1042,7 @@ int fn_80157080(void)
         }
     } else {
         fn_80072F04();
-        fn_8006EC24();
+        SndgApplyVolumeOptions();
         fn_80072F04();
     }
 
@@ -1715,10 +1715,10 @@ void fn_80158AA8(void)
     if (fn_80072E6C()) {
         fn_80072F04();
     }
-    fn_8006EA04(3, 100);
+    SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
     volume = fn_8007F828(5) * 10;
-    fn_8006EA04(2, volume * 40u / 100);
+    SndgSetVolumeOption(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {
         QueryCursor cursor;
         int a;

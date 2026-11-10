@@ -5,17 +5,17 @@
 #include "game/GameModeType.h"
 #include "game/SndgCrowd.h"
 
-struct Struct_8006C2C8;
+struct SndgConfig_t;
 
 extern "C" {
 void SndgAmbInit(void);
 void SndgAmbShutdown(void);
 void SndgAmbPostCue(int type);
-void fn_8006C2C8(Struct_8006C2C8 *pInit);
-void fn_8006C454(void);
-void fn_8006D188(int withThird);
-void fn_8006D268(void);
-void fn_8006EC24(void);
+void SndgInit(SndgConfig_t *pInit);
+void SndgShutdown(void);
+void SndgChannelsCreateStreams(int withThird);
+void SndgChannelsDestroyStreams(void);
+void SndgApplyVolumeOptions(void);
 void fn_8006F810(void);
 void fn_8006F820(void);
 void fn_800710C8(void);
@@ -30,7 +30,7 @@ void fn_800B1670(void (*pCallback)(void *));
 int fn_800C8704(int *pA, int *pB);
 void ResTrackLabel(const char *pText);
 
-extern Struct_8006C2C8 lbl_802D6228;
+extern SndgConfig_t gSndgIGConfig;
 }
 
 static int _SndgIG_iReserved;
@@ -59,11 +59,11 @@ extern "C" void SndgIGLogStartupInfo(void)
 
 extern "C" void SndgIGInitAudio(void)
 {
-    fn_8006C2C8(&lbl_802D6228);
+    SndgInit(&gSndgIGConfig);
     _SndgIG_iReserved = 0;
     AudmonEventStartInGame();
     fn_800B1670(fn_80071594);
-    fn_8006D188(GameModeTypeGet() == 11);
+    SndgChannelsCreateStreams(GameModeTypeGet() == 11);
     SndgAmbInit();
     SndgAmbPostCue(0);
     if (fn_800A350C()) {
@@ -73,7 +73,7 @@ extern "C" void SndgIGInitAudio(void)
     fn_80071600();
     fn_80071C34(0);
     SndgIGLogStartupInfo();
-    fn_8006EC24();
+    SndgApplyVolumeOptions();
     fn_800710C8();
     ResTrackLabel("SpchIGInitStart");
     SpchIGInit();
@@ -86,6 +86,6 @@ extern "C" void SndgIGShutdownAudio(void)
     SndgAmbShutdown();
     fn_8006F820();
     fn_800716E4();
-    fn_8006D268();
-    fn_8006C454();
+    SndgChannelsDestroyStreams();
+    SndgShutdown();
 }
