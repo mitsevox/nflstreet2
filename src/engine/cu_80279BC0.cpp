@@ -161,13 +161,13 @@ void fn_8027A844(void)
 {
     lbl_803B4E34.m18[2][0] = fn_8027AC08;
     lbl_803B4E34.m60[2][0] = 44;
-    lbl_803B4E34.m18[2][2] = fn_8027B168;
+    lbl_803B4E34.m18[2][2] = SFILTER_unpackmtpfinit;
     lbl_803B4E34.m60[2][2] = 60;
     lbl_803B4E34.m18[2][1] = fn_8027AE04;
     lbl_803B4E34.m60[2][1] = 48;
     lbl_803B4E34.m18[3][0] = fn_8027AC08;
     lbl_803B4E34.m60[3][0] = 44;
-    lbl_803B4E34.m18[3][2] = fn_8027B168;
+    lbl_803B4E34.m18[3][2] = SFILTER_unpackmtpfinit;
     lbl_803B4E34.m60[3][2] = 60;
     lbl_803B4E34.m18[3][1] = fn_8027AE04;
     lbl_803B4E34.m60[3][1] = 48;
