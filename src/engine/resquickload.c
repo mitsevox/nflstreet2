@@ -77,7 +77,7 @@ static void fn_801F284C(int handle, ResQuickload_801F284C *pQuickload)
     size = header[2];
     pQuickload->mDataOffset = size;
     pQuickload->mPosition = size;
-    pQuickload->pData = fn_801D2BB0(1, size, fn_801F1530(), 0);
+    pQuickload->pData = fn_801D2BB0(1, size, ResGetMemAllocFlags(), 0);
     fn_801C9844(handle, 0, 0);
     fn_801C9960(handle, pQuickload->pData, size, 0);
     for (pChunk = (ResQuickloadChunk_801F284C *)pQuickload->pData; (char *)pChunk < pQuickload->pData + size;

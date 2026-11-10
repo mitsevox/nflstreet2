@@ -6,8 +6,8 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 #include "engine/cu_801C2EB4.h"
 
 typedef struct FontParams_801CCA64 {
@@ -177,7 +177,7 @@ int fn_801CCDA4(const char *pName, int mode)
 
     if (!lbl_803EBC58) {
         error = 0x110002;
-    } else if (result = fn_801EEB44(pName, mode)) {
+    } else if (result = ResOpenDevice(pName, mode)) {
         handle = (int)result;
     } else {
         error = fn_801F7C88();
@@ -193,7 +193,7 @@ int fn_801CCE10(int handle)
     if (!lbl_803EBC58) {
         error = 0x110002;
     } else {
-        error = fn_801EEFAC((void *)handle);
+        error = ResClose((void *)handle);
     }
     fn_801F7BD4(error);
     return error;
@@ -214,7 +214,7 @@ int fn_801CCE60(void *pFile, int id)
         if (!(pEntry = fn_801C6A20(lbl_80383CF0.mpList))) {
             error = fn_801F7C88();
         } else {
-            if (pData = (FontHeader_801CCA64 *)fn_801EF390(pFile, id, lbl_80383CF0.mHeap)) {
+            if (pData = (FontHeader_801CCA64 *)ResLoad(pFile, id, lbl_80383CF0.mHeap)) {
                 pEntry->mHandle = id;
                 pEntry->mId = id;
                 pEntry->mpFile = pFile;
@@ -275,7 +275,7 @@ int fn_801CD07C(int id)
         error = 0x110002;
     } else {
         if (pEntry = fn_801CCA64(id)) {
-            error = fn_801F010C(pEntry->mpFile, pEntry->mHandle);
+            error = ResUnLoad(pEntry->mpFile, pEntry->mHandle);
             fn_801C6C0C(lbl_80383CF0.mpList, pEntry);
             lbl_80383CF0.mNumFonts--;
         } else {

@@ -1,9 +1,9 @@
 #include "engine/cu_801B9F00.h"
 #include "engine/animemot.h"
-#include "engine/fn_801EFD2C.h"
+#include "engine/ResCopyAsyncToBuffer.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 /* 32-byte slot record of the table at lbl_803ED5FC. */
 typedef struct Buffer_801BB2D8 {
@@ -99,11 +99,11 @@ extern int lbl_803ED604;
 extern int lbl_803ED608;
 extern Request_801BAE08 *lbl_803ED60C;
 
-int fn_801F0F18(int a);
+int ResSync(int a);
 void fn_801F81AC(void);
-int fn_801F0C50(void *pArchive, int id);
-int fn_801EFF80(void *pArchive, int id, void *pDest);
-AnimFileFormat_t *fn_801EF548(void *pArchive, int id, int heap, int arg,
+int ResGetSize(void *pArchive, int id);
+int ResCopyToBuffer(void *pArchive, int id, void *pDest);
+AnimFileFormat_t *ResLoadAsync(void *pArchive, int id, int heap, int arg,
                               void (*pCallback)(int, int, int, int, Request_801BAE08 *), Request_801BAE08 *pRequest);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
@@ -160,7 +160,7 @@ int fn_801BAEAC(int slot)
             if (lbl_803ED5FC[slot].mStatus == 2) {
                 while (fn_801BBFE4(lbl_803ED5FC[slot].mId) != 1) {
                     if (lbl_803EBB94)
-                        fn_801F0F18(0);
+                        ResSync(0);
                     else
                         fn_801F81AC();
                 }
@@ -169,7 +169,7 @@ int fn_801BAEAC(int slot)
             if (lbl_803ED5FC[slot].mStatus == 2) {
                 while (fn_801BC044(slot - lbl_803ED5F0) != 1) {
                     if (lbl_803EBB94)
-                        fn_801F0F18(0);
+                        ResSync(0);
                     else
                         fn_801F81AC();
                 }
@@ -178,7 +178,7 @@ int fn_801BAEAC(int slot)
             if (lbl_803ED5FC[slot].mStatus == 2) {
                 while (fn_801BC060(slot - lbl_803ED5F0 - lbl_803ED5F4) != 1) {
                     if (lbl_803EBB94)
-                        fn_801F0F18(0);
+                        ResSync(0);
                     else
                         fn_801F81AC();
                 }
@@ -188,7 +188,7 @@ int fn_801BAEAC(int slot)
             if (lbl_803EBB90 && !(lbl_803ED5FC[slot].mObjectType & 0x8000) && lbl_803ED5FC[slot].mId != -3)
                 lbl_803EBB90(lbl_803ED5FC[slot].mpData);
             if (slot < lbl_803ED5F0 && lbl_803ED5FC[slot].mId != -1 && lbl_803ED5FC[slot].mId != -3)
-                result = fn_801F010C(lbl_803EBB88, lbl_803ED5FC[slot].mId);
+                result = ResUnLoad(lbl_803EBB88, lbl_803ED5FC[slot].mId);
             if (slot >= lbl_803ED5F0 + lbl_803ED5F4) {
                 lbl_803ED5FC[slot].mSize = 0;
                 lbl_803ED5FC[slot].mpData = 0;
@@ -225,7 +225,7 @@ int fn_801BB164(int id, AnimFileFormat_t *pData, struct AnimFrameCache_t *pFrame
             lbl_803ED5FC[i].mStatus = 1;
             lbl_803ED5FC[i].mId = id;
             if (pData == 0) {
-                lbl_803ED5FC[i].mpData = (void *)fn_801EF390(lbl_803EBB88, id, lbl_803ED600);
+                lbl_803ED5FC[i].mpData = (void *)ResLoad(lbl_803EBB88, id, lbl_803ED600);
                 result = fn_801F7C88();
             } else {
                 lbl_803ED5FC[i].mpData = pData;
@@ -294,7 +294,7 @@ void fn_801BB480(void)
 {
     int i;
 
-    fn_801F0F18(0);
+    ResSync(0);
     for (i = 0; i < lbl_803ED5F8; i++) {
         if (lbl_803ED5FC[i].mStatus == 1)
             fn_801BAEAC(i);
@@ -313,10 +313,10 @@ int fn_801BB544(int id, struct AnimFrameCache_t *pFrameCache, Info_801BC0E8 *pIn
 
 AnimFileFormat_t *fn_801BB570(int id, int heap, int align, int frameCache)
 {
-    AnimFileFormat_t *pFile = fn_801D2BB0(heap, fn_801F0C50(lbl_803EBB88, id), align, 0);
+    AnimFileFormat_t *pFile = fn_801D2BB0(heap, ResGetSize(lbl_803EBB88, id), align, 0);
 
     if (pFile) {
-        fn_801EFF80(lbl_803EBB88, id, pFile);
+        ResCopyToBuffer(lbl_803EBB88, id, pFile);
         if (frameCache)
             pFile->flags |= 0x200;
         else
@@ -350,7 +350,7 @@ int fn_801BB65C(int id, struct AnimFrameCache_t *pFrameCache)
             lbl_803ED60C[i].mSlot = i;
             lbl_803ED60C[i].mpInfo = 0;
             lbl_803ED5FC[i].mpData =
-                fn_801EF548(lbl_803EBB88, id, lbl_803ED600, lbl_803ED604, fn_801BAE08, &lbl_803ED60C[i]);
+                ResLoadAsync(lbl_803EBB88, id, lbl_803ED600, lbl_803ED604, fn_801BAE08, &lbl_803ED60C[i]);
             result = fn_801F7C88();
             break;
         }
@@ -370,7 +370,7 @@ int fn_801BB74C(unsigned short slot, int id, Info_801BC0E8 *pInfo)
         case 2:
             while (fn_801BC044(slot) != 1) {
                 if (lbl_803EBB94)
-                    fn_801F0F18(0);
+                    ResSync(0);
                 else
                     fn_801F81AC();
                 if (FileHostCheckActive())
@@ -384,7 +384,7 @@ int fn_801BB74C(unsigned short slot, int id, Info_801BC0E8 *pInfo)
         lbl_803ED5FC[index].mId = id;
         lbl_803ED60C[index].mSlot = index;
         lbl_803ED60C[index].mpInfo = pInfo;
-        fn_801EFD2C(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[index].mpData, lbl_803ED604, fn_801BAE08,
+        ResCopyAsyncToBuffer(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[index].mpData, lbl_803ED604, fn_801BAE08,
                     &lbl_803ED60C[index]);
         result = fn_801F7C88();
     }
@@ -403,7 +403,7 @@ unsigned short fn_801BB878(int id, AnimFileFormat_t *pData, int size, Info_801BC
         lbl_803ED5FC[slot].mUnknown1C = flag;
         lbl_803ED60C[slot].mSlot = slot;
         lbl_803ED60C[slot].mpInfo = pInfo;
-        fn_801EFD2C(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[slot].mpData, lbl_803ED604, fn_801BAE08,
+        ResCopyAsyncToBuffer(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[slot].mpData, lbl_803ED604, fn_801BAE08,
                     &lbl_803ED60C[slot]);
     }
     return slot - lbl_803ED5F0 - lbl_803ED5F4;

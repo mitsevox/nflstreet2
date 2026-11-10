@@ -174,7 +174,7 @@ void LevelLightsInit(void);
 void fn_801A4650(Viewport_t *pObject);
 void SimpShadowInit(void);
 void SimpShadowShutdown(void);
-int fn_801F0F18(int a);
+int ResSync(int a);
 void ResTrackLabel(const char *pText);
 void VptFlushObjectTrashSync(void);
 void fn_802363B0(Viewport_t *pObject);
@@ -1104,7 +1104,7 @@ int Replay::Init()
 
 int Replay::Shutdown()
 {
-    fn_801F0F18(0);
+    ResSync(0);
     fn_8002C964(lbl_803EA368);
     lbl_803EA368 = 0;
     return 1;

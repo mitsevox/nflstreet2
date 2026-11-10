@@ -11,7 +11,7 @@
 #include "game/LightTracker.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include <dolphin/gx/GXStruct.h>
@@ -98,7 +98,7 @@ void fn_80227C2C(void *, void *); void fn_802271F0(void *, void *); float fn_802
 int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(DynObj *, int, int);
-int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
+int ResFindIndexByName(void *, const char *); char *fn_801C310C(char *, const char *);
 int DynObjIsFacingAway(DynObj *); int DynObjChildIsFacingAway(DynObjChild *);
 int DynObjDrawChild(DynObjChild *, int);
 }
@@ -240,8 +240,8 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
         fn_801C1F94(_DynObj_apCaches[_DynObj_uNumCaches],0,0x174);
         s->mpUnknown0=_DynObj_apCaches[_DynObj_uNumCaches++];s->mpUnknown0->mUnknown138=1;
         strcpy(s->mpUnknown0->mUnknown38,name);s->mpUnknown0->mpUnknown13C=data;
-        s->mpUnknown0->mUnknown140=fn_801F0A8C(data,name);
-        s->mpUnknown0->mpUnknown0=reinterpret_cast<DynObjAsset *>(fn_801EF390(data,s->mpUnknown0->mUnknown140,1));
+        s->mpUnknown0->mUnknown140=ResFindIndexByName(data,name);
+        s->mpUnknown0->mpUnknown0=reinterpret_cast<DynObjAsset *>(ResLoad(data,s->mpUnknown0->mUnknown140,1));
         if(s->mpUnknown0->mpUnknown0) {
             TMModelResRelocate(s->mpUnknown0->mpUnknown0);
             TMModelBindModelRes(&s->mpUnknown0->mUnknown4,s->mpUnknown0->mpUnknown0);
@@ -249,8 +249,8 @@ void DynObjRenderInit(void *data,int handle,DynObj *p)
                 s->mpUnknown0->mpUnknown144=static_cast<DynObjTexHeader *>(TMModelResGetChunk(s->mpUnknown0->mpUnknown0,0x54657874,0));
                 p->mUnknownFC=0;
             } else {
-                p->mUnknownF4=fn_801F0A8C(data,behavior);
-                s->mpUnknown0->mpUnknown144=reinterpret_cast<DynObjTexHeader *>(fn_801EF390(data,p->mUnknownF4,1));
+                p->mUnknownF4=ResFindIndexByName(data,behavior);
+                s->mpUnknown0->mpUnknown144=reinterpret_cast<DynObjTexHeader *>(ResLoad(data,p->mUnknownF4,1));
                 p->mUnknownFC=fn_802372EC(1,s->mpUnknown0->mpUnknown144->mUnknown10);
             }
             if(s->mpUnknown0->mpUnknown144)TMTexLibLoad(&s->mpUnknown0->mUnknown14C,reinterpret_cast<int>(s->mpUnknown0->mpUnknown144));
@@ -280,7 +280,7 @@ void DynObjRenderShutdown(DynObj *p)
     s->mpUnknown0->mUnknown138--;
     if(s->mpUnknown0->mUnknown138<=0) {
         TMTexLibUnload(&s->mpUnknown0->mUnknown14C);
-        fn_801F010C(s->mpUnknown0->mpUnknown13C,s->mpUnknown0->mUnknown140);
+        ResUnLoad(s->mpUnknown0->mpUnknown13C,s->mpUnknown0->mUnknown140);
     }
     fn_801D2BD0(s);p->mpUnknown12C=0;
 }
@@ -292,7 +292,7 @@ void DynObjCacheFree(void)
 }
 void DynObjLoadAnimPal(void *data,DynObj *p)
 {
-    p->mpUnknown100=reinterpret_cast<DynObjTexHeader *>(fn_801EF390(data,p->mUnknownF4,1));
+    p->mpUnknown100=reinterpret_cast<DynObjTexHeader *>(ResLoad(data,p->mUnknownF4,1));
     TexMipmapRelocate(p->mpUnknown100);TMTexLibRegistryReset();
     TMTexLibLoad(&p->mUnknown104,reinterpret_cast<int>(p->mpUnknown100));
     p->mUnknownF8=p->mpUnknown100->mUnknown10;
@@ -300,7 +300,7 @@ void DynObjLoadAnimPal(void *data,DynObj *p)
 void DynObjFreeAnimPal(DynObj *p)
 {
     TMTexLibUnload(&p->mUnknown104);
-    fn_801F010C(p->mpUnknownA8,p->mUnknownF4);
+    ResUnLoad(p->mpUnknownA8,p->mUnknownF4);
 }
 void DynObjSetAnimPalFrame(DynObj *p,int index)
 {

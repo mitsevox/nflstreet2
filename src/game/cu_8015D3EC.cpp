@@ -4,7 +4,7 @@
 #include "game/cu_8015D3EC.h"
 #include "game/PlayerLook.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 
 #include <string.h>
 
@@ -32,12 +32,12 @@ char *fn_801C3084(const char *pString, int c);
 int fn_801C9DC8(int value);
 void fn_801CE910(void);
 int fn_801D3148(int a, void *p);
-void fn_801EFD2C(void *pArchive, int id, int a, void *pDest, int b, void (*pCallback)(void), int c);
-int fn_801EFF80(void *pArchive, int id, void *pDest);
-int fn_801F0A8C(void *pArchive, char *pName);
-int fn_801F0C50(void *pArchive, int id);
-int fn_801F0F18(int a);
-int fn_801F1520(int value);
+void ResCopyAsyncToBuffer(void *pArchive, int id, int a, void *pDest, int b, void (*pCallback)(void), int c);
+int ResCopyToBuffer(void *pArchive, int id, void *pDest);
+int ResFindIndexByName(void *pArchive, char *pName);
+int ResGetSize(void *pArchive, int id);
+int ResSync(int a);
+int ResSetMemFlags(int value);
 
 extern char lbl_802EC028[];
 extern char lbl_802EC038[];
@@ -225,7 +225,7 @@ void fn_8015D3EC(int load)
         if (load) {
             for (j = 0; j < 2; j++) {
                 lbl_8031C664[i][j] =
-                    fn_801D2B7C(fn_801F0C50(lbl_803ECACC, lbl_802E31A0[i][j].mId), 4, 0);
+                    fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_802E31A0[i][j].mId), 4, 0);
             }
         }
         fn_80233EAC(&lbl_8031C0D8[i], lbl_802E31A0[i], "PLYRBODY", 0, lbl_803ECACC, 0,
@@ -270,7 +270,7 @@ void fn_8015D550(int load)
             if (load) {
                 for (k = 0; k < count; k++) {
                     lbl_8031C684[i][j][k] =
-                        fn_801D2B7C(fn_801F0C50(lbl_803ECACC, lbl_802E31B0[i][j][k].mId), 4, 0);
+                        fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_802E31B0[i][j][k].mId), 4, 0);
                 }
             }
             fn_80233EAC(&lbl_8031C128[i][j], lbl_802E31B0[i][j], "PLYRHAND", 0, lbl_803ECACC, 0,
@@ -305,7 +305,7 @@ void fn_8015D718(int load)
         for (i = 0; i < 2; i++) {
             if (lbl_803EB33C[i].mId != NO_MODEL) {
                 lbl_803ECAA4[i] =
-                    fn_801D2B7C(fn_801F0C50(lbl_803ECACC, lbl_803EB33C[i].mId), 4, 0);
+                    fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_803EB33C[i].mId), 4, 0);
             }
         }
     }
@@ -421,12 +421,12 @@ void fn_8015DA80(int index, int load)
         if (lbl_803EB35D) {
             fn_801CE910();
         }
-        fn_801EFF80(HairArchive(id0), HairId(lbl_802E31D0[index][0].mId), lbl_8031C6A4[index][0]);
-        fn_801EFF80(HairArchive(id1), HairId(lbl_802E31D0[index][1].mId), lbl_8031C6A4[index][1]);
+        ResCopyToBuffer(HairArchive(id0), HairId(lbl_802E31D0[index][0].mId), lbl_8031C6A4[index][0]);
+        ResCopyToBuffer(HairArchive(id1), HairId(lbl_802E31D0[index][1].mId), lbl_8031C6A4[index][1]);
         fn_80233EAC(&lbl_8031C204[index], lbl_802E31D0[index], "PLYRMODEL", 0, HairArchive(id0),
                     lbl_803EB354, lbl_8031C6A4[index], 0);
         if (lbl_803EB35D) {
-            fn_801F0F18(0);
+            ResSync(0);
         }
     } else {
         fn_80233EAC(&lbl_8031C204[index], lbl_802E31D0[index], "PLYRMODEL", 0, HairArchive(id0),
@@ -463,7 +463,7 @@ void fn_8015DD3C(int index, int load)
         fn_80233EAC(&lbl_8031C31C[index], lbl_802E3208[index], "PLYRMODEL", 0, lbl_803ECADC,
                     lbl_803EB348, lbl_8031C714[index], 1);
         if (lbl_803EB35D) {
-            fn_801F0F18(0);
+            ResSync(0);
         }
     } else {
         fn_80233EAC(&lbl_8031C31C[index], lbl_802E3208[index], "PLYRMODEL", 0, lbl_803ECADC,
@@ -486,7 +486,7 @@ void fn_8015DE3C(int index, int load)
         fn_80233EAC(&lbl_8031C434[index], lbl_802E3240[index], "PLYRMODEL", 0, lbl_803ECAE0,
                     lbl_803EB348, lbl_8031C784[index], 1);
         if (lbl_803EB35D) {
-            fn_801F0F18(0);
+            ResSync(0);
         }
     } else {
         fn_80233EAC(&lbl_8031C434[index], lbl_802E3240[index], "PLYRMODEL", 0, lbl_803ECAE0,
@@ -521,7 +521,7 @@ void fn_8015DF3C(int index, int load)
         fn_80233EAC(&lbl_8031C54C[index], lbl_802E3278[index], "PLYRMODEL", 0, lbl_803ECAE4,
                     lbl_803EB358, lbl_8031C7F4[index], 1);
         if (lbl_803EB35D) {
-            fn_801F0F18(0);
+            ResSync(0);
         }
     } else {
         fn_80233EAC(&lbl_8031C54C[index], lbl_802E3278[index], "PLYRMODEL", 0, lbl_803ECAE4,
@@ -612,8 +612,8 @@ void fn_8015E240(int load, int flag)
 
     if (load) {
         value = 0;
-        size0 = fn_801F0C50(lbl_803ECACC, lbl_803EB340[0].mId);
-        size1 = fn_801F0C50(lbl_803ECACC, lbl_803EB340[1].mId);
+        size0 = ResGetSize(lbl_803ECACC, lbl_803EB340[0].mId);
+        size1 = ResGetSize(lbl_803ECACC, lbl_803EB340[1].mId);
         if (flag) {
             value = 4;
         }
@@ -691,17 +691,17 @@ Object_80233EAC *fn_8015E440(int type, int index)
 
 void fn_8015E548(void)
 {
-    int a = fn_801F1520(4);
+    int a = ResSetMemFlags(4);
     int b = fn_801C9DC8(4);
 
-    lbl_803ECACC = fn_801EEB44(lbl_802EC028, 0x2C);
-    lbl_803ECAD0 = fn_801EEB44(lbl_802EC044, 0x2C);
-    lbl_803ECAD4 = fn_801EEB44(lbl_802EC050, 0x2C);
-    lbl_803ECAD8 = fn_801EEB44(lbl_802EC038, 0x2C);
-    lbl_803ECADC = fn_801EEB44(lbl_802EC064, 0x2C);
-    lbl_803ECAE0 = fn_801EEB44(lbl_802EC070, 0x2C);
-    lbl_803ECAE4 = fn_801EEB44(lbl_802EC08C, 0x2C);
-    fn_801F1520(a);
+    lbl_803ECACC = ResOpenDevice(lbl_802EC028, 0x2C);
+    lbl_803ECAD0 = ResOpenDevice(lbl_802EC044, 0x2C);
+    lbl_803ECAD4 = ResOpenDevice(lbl_802EC050, 0x2C);
+    lbl_803ECAD8 = ResOpenDevice(lbl_802EC038, 0x2C);
+    lbl_803ECADC = ResOpenDevice(lbl_802EC064, 0x2C);
+    lbl_803ECAE0 = ResOpenDevice(lbl_802EC070, 0x2C);
+    lbl_803ECAE4 = ResOpenDevice(lbl_802EC08C, 0x2C);
+    ResSetMemFlags(a);
     fn_801C9DC8(b);
 }
 
@@ -762,20 +762,20 @@ void fn_8015E73C(int id)
     int size1;
 
     if (lbl_803EB330) {
-        fn_801F0F18(0);
+        ResSync(0);
         fn_8015FE4C();
     }
     lbl_803EB338[0].mId = id;
     lbl_803EB338[1].mId = id + 1;
-    size0 = fn_801F0C50(lbl_803ECAD8, id);
-    size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
+    size0 = ResGetSize(lbl_803ECAD8, id);
+    size1 = ResGetSize(lbl_803ECAD8, lbl_803EB338[1].mId);
     if (lbl_803EB344 && lbl_803ECAC4[0] == 0 && lbl_803ECAC4[1] == 0) {
         lbl_803ECABC[0] = (char *)fn_801D2B7C(size0, 4, 0);
         lbl_803ECABC[1] = (char *)fn_801D2B7C(size1, 4, 0);
         lbl_803ECAC4[0] = lbl_803EB338[0].mId;
         lbl_803ECAC4[1] = lbl_803EB338[1].mId;
-        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC4[0], lbl_803ECABC[0]);
-        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC4[1], lbl_803ECABC[1]);
+        ResCopyToBuffer(lbl_803ECAD8, lbl_803ECAC4[0], lbl_803ECABC[0]);
+        ResCopyToBuffer(lbl_803ECAD8, lbl_803ECAC4[1], lbl_803ECABC[1]);
     }
     lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 4, 0);
     lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 4, 0);
@@ -789,7 +789,7 @@ void fn_8015E73C(int id)
                     (void **)lbl_803ECAAC, 1);
     }
     if (lbl_803EB35D) {
-        fn_801F0F18(0);
+        ResSync(0);
     }
 }
 
@@ -825,7 +825,7 @@ void fn_8015E9F4(int index, PlayerHeadIds_t *pIds)
     ModelLod_802DF190 *pLods;
 
     if (lbl_803EB331) {
-        fn_801F0F18(0);
+        ResSync(0);
         fn_8015FE4C();
     }
     if (lbl_8031C0C8[0] & (1 << index)) {
@@ -857,7 +857,7 @@ void fn_8015EB4C(int index, int id)
     ModelLod_802DF190 *pLods;
 
     if (lbl_803EB332) {
-        fn_801F0F18(0);
+        ResSync(0);
         fn_8015FE4C();
     }
     if (lbl_8031C0C8[1] & (1 << index)) {
@@ -888,7 +888,7 @@ void fn_8015EC74(int index, int id)
     ModelLod_802DF190 *pLods;
 
     if (lbl_803EB333) {
-        fn_801F0F18(0);
+        ResSync(0);
         fn_8015FE4C();
     }
     if (lbl_8031C0C8[2] & (1 << index)) {
@@ -919,7 +919,7 @@ void fn_8015ED9C(int index, int id)
     ModelLod_802DF190 *pLods;
 
     if (lbl_803EB334) {
-        fn_801F0F18(0);
+        ResSync(0);
         fn_8015FE4C();
     }
     if (lbl_8031C0C8[3] & (1 << index)) {
@@ -973,9 +973,9 @@ void fn_8015EF10(void)
                 lastId = pQueue[j].mId;
                 pLast = pQueue[j].mpData;
                 if (i == 0) {
-                    fn_801EFF80(HairArchive(lastId), HairId(lastId), pLast);
+                    ResCopyToBuffer(HairArchive(lastId), HairId(lastId), pLast);
                 } else {
-                    fn_801EFF80(lbl_8031C0B8[i], lastId, pLast);
+                    ResCopyToBuffer(lbl_8031C0B8[i], lastId, pLast);
                 }
             }
         }
@@ -1128,7 +1128,7 @@ int fn_8015F5BC(const char *pName)
     }
     name[0] = 0;
     fn_801C2D88(name, sizeof(name), "HEAD_MODEL_%s_2700", pName);
-    id = fn_801F0A8C(lbl_803ECAD8, name);
+    id = ResFindIndexByName(lbl_803ECAD8, name);
     if (id == -1) {
         id = 0x1D8;
     }
@@ -1169,7 +1169,7 @@ void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds
         } else {
             fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%s_2700", pName);
         }
-        id = fn_801F0A8C(lbl_803ECAD4, name);
+        id = ResFindIndexByName(lbl_803ECAD4, name);
         if (id != -1) {
             pIds->mUnknown0 = id + ROSTER_ID_BASE;
         }
@@ -1179,7 +1179,7 @@ void fn_8015F6E8(const char *pName, int style, int shape, int hat, PlayerHeadIds
         } else {
             fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%s_1500", pName);
         }
-        id = fn_801F0A8C(lbl_803ECAD4, name);
+        id = ResFindIndexByName(lbl_803ECAD4, name);
         if (id != -1) {
             pIds->mUnknown4 = id + ROSTER_ID_BASE;
         }
@@ -1197,14 +1197,14 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
         lbl_803EB330 = 1;
         lbl_803EB338[0].mId = id;
         lbl_803EB338[1].mId = id + 1;
-        size0 = fn_801F0C50(lbl_803ECAD8, id);
-        size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
+        size0 = ResGetSize(lbl_803ECAD8, id);
+        size1 = ResGetSize(lbl_803ECAD8, lbl_803EB338[1].mId);
         lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 2, 0);
         lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 2, 0);
         lbl_803EB330++;
-        fn_801EFD2C(lbl_803ECAD8, lbl_803EB338[0].mId, 1, lbl_803ECAAC[0], 100, fn_8015E1F0, 0);
+        ResCopyAsyncToBuffer(lbl_803ECAD8, lbl_803EB338[0].mId, 1, lbl_803ECAAC[0], 100, fn_8015E1F0, 0);
         lbl_803EB330++;
-        fn_801EFD2C(lbl_803ECAD8, lbl_803EB338[1].mId, 1, lbl_803ECAAC[1], 100, fn_8015E1F0, 0);
+        ResCopyAsyncToBuffer(lbl_803ECAD8, lbl_803EB338[1].mId, 1, lbl_803ECAAC[1], 100, fn_8015E1F0, 0);
     } else {
         lbl_803EB338[0].mId = id;
         lbl_803EB338[1].mId = id;
@@ -1227,11 +1227,11 @@ void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Cal
             lbl_802E31D0[index][0].mId = pIds->mUnknown0;
             lbl_802E31D0[index][1].mId = pIds->mUnknown4;
             lbl_803EB331++;
-            fn_801EFD2C(HairArchive(lbl_802E31D0[index][0].mId), HairId(lbl_802E31D0[index][0].mId), 1,
+            ResCopyAsyncToBuffer(HairArchive(lbl_802E31D0[index][0].mId), HairId(lbl_802E31D0[index][0].mId), 1,
                         lbl_8031C6A4[index][0], 100, fn_8015E200, 0);
             if (lbl_803EB360) {
                 lbl_803EB331++;
-                fn_801EFD2C(HairArchive(lbl_802E31D0[index][1].mId), HairId(lbl_802E31D0[index][1].mId),
+                ResCopyAsyncToBuffer(HairArchive(lbl_802E31D0[index][1].mId), HairId(lbl_802E31D0[index][1].mId),
                             1, lbl_8031C6A4[index][1], 100, fn_8015E200, 0);
             }
             return;
@@ -1255,11 +1255,11 @@ void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
             pLods[0].mId = id;
             lbl_802E3208[index][1].mId = id + 1;
             lbl_803EB332++;
-            fn_801EFD2C(lbl_803ECADC, lbl_802E3208[index][0].mId, 1, lbl_8031C714[index][0], 100,
+            ResCopyAsyncToBuffer(lbl_803ECADC, lbl_802E3208[index][0].mId, 1, lbl_8031C714[index][0], 100,
                         fn_8015E210, 0);
             if (lbl_803EB360) {
                 lbl_803EB332++;
-                fn_801EFD2C(lbl_803ECADC, lbl_802E3208[index][1].mId, 1, lbl_8031C714[index][1], 100,
+                ResCopyAsyncToBuffer(lbl_803ECADC, lbl_802E3208[index][1].mId, 1, lbl_8031C714[index][1], 100,
                             fn_8015E210, 0);
             }
             return;
@@ -1283,11 +1283,11 @@ void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
             pLods[0].mId = id;
             lbl_802E3240[index][1].mId = id + 1;
             lbl_803EB333++;
-            fn_801EFD2C(lbl_803ECAE0, lbl_802E3240[index][0].mId, 1, lbl_8031C784[index][0], 100,
+            ResCopyAsyncToBuffer(lbl_803ECAE0, lbl_802E3240[index][0].mId, 1, lbl_8031C784[index][0], 100,
                         fn_8015E220, 0);
             if (lbl_803EB360) {
                 lbl_803EB333++;
-                fn_801EFD2C(lbl_803ECAE0, lbl_802E3240[index][1].mId, 1, lbl_8031C784[index][1], 100,
+                ResCopyAsyncToBuffer(lbl_803ECAE0, lbl_802E3240[index][1].mId, 1, lbl_8031C784[index][1], 100,
                             fn_8015E220, 0);
             }
             return;
@@ -1311,7 +1311,7 @@ void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
             pLods[0].mId = id;
             lbl_802E3278[index][1].mId = id + 1;
             lbl_803EB334++;
-            fn_801EFD2C(lbl_803ECAE4, lbl_802E3278[index][0].mId, 1, lbl_8031C7F4[index][0], 100,
+            ResCopyAsyncToBuffer(lbl_803ECAE4, lbl_802E3278[index][0].mId, 1, lbl_8031C7F4[index][0], 100,
                         fn_8015E230, 0);
             return;
         }

@@ -1,4 +1,4 @@
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_8022F478.h"
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
@@ -489,7 +489,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         int high = pArgs[1].i >> 16;
         int low = pArgs[1].i & 0xFFFF;
 
-        pResult->i = fn_801F0DB8(fn_8021E984(pObject, high), low);
+        pResult->i = ResIsLoaded(fn_8021E984(pObject, high), low);
 
         break;
     }

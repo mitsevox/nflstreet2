@@ -9,7 +9,7 @@
 #include "game/Ball.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"
 #include "engine/llquat.h"
 
@@ -57,7 +57,7 @@ void ObjRemoveFromList(int handle, Object_80040818 *pObject);
 void ObjSetPriority(int handle, Object_80040818 *pObject, int a);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
-int fn_801F1520(int value);
+int ResSetMemFlags(int value);
 int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -217,7 +217,7 @@ void fn_80040558(int count, int handle)
     fn_801F7C88();
     lbl_803EC786 = count;
     lbl_803EC784 = 0;
-    lbl_803EC78C = fn_801EEB44("objmodel.dat", 44);
+    lbl_803EC78C = ResOpenDevice("objmodel.dat", 44);
     fn_8004DFDC();
     fn_8004E320();
     fn_800504EC();
@@ -247,7 +247,7 @@ void fn_800405F0(int handle)
     fn_8004E358();
     fn_80051308();
     fn_8004D118(handle);
-    fn_801EEFAC(lbl_803EC78C);
+    ResClose(lbl_803EC78C);
 }
 
 void fn_800406C0(unsigned int flags)
@@ -375,11 +375,11 @@ void fn_80040B88(int handle)
     unsigned short index;
 
     {
-        int saved0 = fn_801F1520(4);
+        int saved0 = ResSetMemFlags(4);
         int saved1 = fn_801C9DC8(4);
 
-        desc.mUnknown160 = fn_801EEB44("objdefs.dat", 44);
-        fn_801F1520(saved0);
+        desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
+        ResSetMemFlags(saved0);
         fn_801C9DC8(saved1);
     }
     desc.mUnknown164 = lbl_803EC78C;
@@ -398,7 +398,7 @@ void fn_80040B88(int handle)
     fn_800408E4(&desc, handle);
     fn_800400BC(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
     fn_8004D818();
-    fn_801EEFAC(desc.mUnknown160);
+    ResClose(desc.mUnknown160);
 }
 
 void fn_80040C90(int handle)
@@ -410,11 +410,11 @@ void fn_80040C90(int handle)
     unsigned short first;
 
     {
-        int saved0 = fn_801F1520(4);
+        int saved0 = ResSetMemFlags(4);
         int saved1 = fn_801C9DC8(4);
 
-        desc.mUnknown160 = fn_801EEB44("objdefs.dat", 44);
-        fn_801F1520(saved0);
+        desc.mUnknown160 = ResOpenDevice("objdefs.dat", 44);
+        ResSetMemFlags(saved0);
         fn_801C9DC8(saved1);
     }
     desc.mUnknown164 = lbl_803EC78C;
@@ -471,7 +471,7 @@ void fn_80040C90(int handle)
         fn_8004D144(&desc, handle, first);
     }
     fn_8004D818();
-    fn_801EEFAC(desc.mUnknown160);
+    ResClose(desc.mUnknown160);
     fn_8004CBE8();
 }
 

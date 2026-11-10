@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Team_80167A8C.h"
 #include "game/bitstream.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_802270D4.h"
 #include <math.h>
 #include "game/fn_800B65A0.h"
@@ -135,7 +135,7 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
     item->mUnknown28 = desc->mUnknown4;
     if (!desc->mUnknownC) {
         item->mUnknownFC = 0;
-        item->mUnknownFC = fn_801EF390(desc->mUnknown0, desc->mUnknown4, 1);
+        item->mUnknownFC = ResLoad(desc->mUnknown0, desc->mUnknown4, 1);
         fn_80235DB8(item->mUnknownFC);
     } else {
         item->mUnknown20 |= 1;
@@ -151,7 +151,7 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
 void fn_80161A34(Object_801618D8 *item) {
     fn_802355E4(item->mUnknown3C);
     if ((item->mUnknown20 & 1) == 0 && item->mUnknownFC)
-        fn_801F010C(item->mUnknown24, item->mUnknown28);
+        ResUnLoad(item->mUnknown24, item->mUnknown28);
 }
 void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
     out->mUnknown14 = in->mUnknown14;

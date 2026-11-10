@@ -6,7 +6,7 @@
 #include "engine/tdbiores.h"
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "game/MemPoolDesc.h"
 
 typedef struct TDbExtResRef_t {
@@ -18,7 +18,7 @@ extern unsigned char fn_801D2700(int handle);
 extern int fn_801D2130(MemPoolDesc_t *pParams);
 extern int fn_801D2570(int handle);
 extern void *fn_801D310C(void *p, int size, int flags, int d);
-extern int fn_801F0F9C(void *pPath);
+extern int ResIsOpen(void *pPath);
 
 extern MemPoolDesc_t lbl_8039B498;
 extern void *lbl_803EBEA8;
@@ -100,18 +100,18 @@ int TDbExtLoadFromResource(int db, void *pPath, int mode, int flags)
     int isOpen;
     int err;
 
-    isOpen = fn_801F0F9C(pPath);
+    isOpen = ResIsOpen(pPath);
     file.mMode = mode;
-    file.mpStream = fn_801EEB44(pPath, 0x2C);
+    file.mpStream = ResOpenDevice(pPath, 0x2C);
     if (file.mpStream != 0) {
         err = fn_801F9134(db, (int)&file, flags, (int)&tdbioresCallback);
         if (isOpen == 0) {
             if (err == 0) {
-                if (fn_801EEFAC(file.mpStream)) {
+                if (ResClose(file.mpStream)) {
                     err = 0x27;
                 }
             } else {
-                fn_801EEFAC(file.mpStream);
+                ResClose(file.mpStream);
             }
         }
     } else {

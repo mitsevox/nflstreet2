@@ -5,7 +5,7 @@
  * file again.
  */
 #include "engine/fn_801F8D60.h"
-#include "game/fn_801EEB44.h"
+#include "game/ResOpenDevice.h"
 #include "engine/cu_801C2EB4.h"
 #include "engine/dbteams.h"
 #include "engine/fn_8022C938.h"
@@ -36,7 +36,7 @@ int DbTeamsOpen(void)
 {
     int err = 0;
 
-    _DbTeams_pResource = fn_801EEB44(_DbTeams_pFileName, 44);
+    _DbTeams_pResource = ResOpenDevice(_DbTeams_pFileName, 44);
     if (_DbTeams_pResource == 0) {
         err = 38;
     }
@@ -66,11 +66,11 @@ int DbTeamsClose(void)
 
     if (err == 0) {
         _DbTeams_iDbId = -1;
-        if (fn_801EEFAC(_DbTeams_pResource) != 0) {
+        if (ResClose(_DbTeams_pResource) != 0) {
             err = 39;
         }
     } else {
-        fn_801EEFAC(_DbTeams_pResource);
+        ResClose(_DbTeams_pResource);
     }
     _DbTeams_pResource = 0;
     _DbTeams_iMode = -1;

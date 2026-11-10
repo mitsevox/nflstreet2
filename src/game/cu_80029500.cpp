@@ -7,8 +7,8 @@
 #include "game/PlayerSave.h"
 #include "game/MemCardCallbacks.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 #include "game/fn_8022F478.h"
 
 struct SaveSlot {
@@ -57,7 +57,7 @@ void fn_801D6924(int (*)(char *, int, MemCardComment *), void (*)(void), void (*
 int fn_801D5824(int, int);
 void fn_801D6904(int, int);
 void fn_801D64EC(void);
-int fn_801F0C50(void *, int);
+int ResGetSize(void *, int);
 int fn_801D8618(int, unsigned int, int);
 int fn_801D8658(int, unsigned int, int);
 void fn_8022F698(SaveRequest_t *, SaveStreamOps_t *);
@@ -115,7 +115,7 @@ void fn_80029500(int type, unsigned char **pOptional, unsigned int *pOut)
 
 void fn_80029544(int type)
 {
-    fn_801F010C(lbl_803EA320, lbl_802CC780[type].mUnknown4);
+    ResUnLoad(lbl_803EA320, lbl_802CC780[type].mUnknown4);
 }
 
 void fn_8002957C(SaveSlot *slot, const char *name)
@@ -155,7 +155,7 @@ void fn_800296B0(void)
 {
     unsigned int i;
 
-    lbl_803EA320 = fn_801EEB44(lbl_802EBE50, 0x2C);
+    lbl_803EA320 = ResOpenDevice(lbl_802EBE50, 0x2C);
     fn_801D646C();
     fn_801D654C(0);
     for (i = 0; i <= 3; i++) {
@@ -179,7 +179,7 @@ void fn_800297D0(void)
     int i;
 
     fn_801D64EC();
-    fn_801EEFAC(lbl_803EA320);
+    ResClose(lbl_803EA320);
     for (i = 0; i < 4; i++) {
         if (lbl_802CC780[i].mpSlots) {
             fn_801D2BD0(lbl_802CC780[i].mpSlots);
@@ -190,12 +190,12 @@ void fn_800297D0(void)
 
 unsigned int fn_80029838(int type)
 {
-    return fn_801D8618(type, lbl_802CC780[type].mUnknown0, fn_801F0C50(lbl_803EA320, lbl_802CC780[type].mUnknown4));
+    return fn_801D8618(type, lbl_802CC780[type].mUnknown0, ResGetSize(lbl_803EA320, lbl_802CC780[type].mUnknown4));
 }
 
 int fn_80029890(int type)
 {
-    return fn_801D8658(type, lbl_802CC780[type].mUnknown0, fn_801F0C50(lbl_803EA320, lbl_802CC780[type].mUnknown4));
+    return fn_801D8658(type, lbl_802CC780[type].mUnknown0, ResGetSize(lbl_803EA320, lbl_802CC780[type].mUnknown4));
 }
 
 int fn_800298E8(int type, int index)

@@ -1,7 +1,7 @@
 #include <dolphin/gx/GXPixel.h>
 #include "engine/viewport.h"
 #include "game/Ball.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8013AD94.h"
 
@@ -151,7 +151,7 @@ void fn_80163358(Object_80163358 *pObject, int *pArgs)
 {
     pObject->mUnknown0C = pObject->mUnknown08 = pObject->mUnknown04 = 0.0f;
     pObject->mpUnknown14 = (void *)pArgs[0];
-    pObject->mUnknownD8 = fn_801EF390(pObject->mpUnknown14, 10, 1);
+    pObject->mUnknownD8 = ResLoad(pObject->mpUnknown14, 10, 1);
     fn_80163074(0);
     pObject->mUnknown10C = lbl_802E989C.mEntries[0].mEnabled;
     fn_80235DB8(pObject->mUnknownD8);
@@ -166,7 +166,7 @@ void fn_80163414(Object_80163358 *pObject)
 {
     fn_802355E4(pObject->mUnknown18);
     if (pObject->mUnknownD8 != 0) {
-        fn_801F010C(pObject->mpUnknown14, 10);
+        ResUnLoad(pObject->mpUnknown14, 10);
     }
 }
 

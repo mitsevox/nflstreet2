@@ -135,7 +135,7 @@ void fn_8017DD68(int index);
 int fn_8017F60C(void);
 int fn_8019623C(int id);
 int ConSetChannelInfo(int a, int b, void *p);
-int fn_801F0F18(int a);
+int ResSync(int a);
 
 extern unsigned char lbl_802ED104[];
 extern unsigned char lbl_803EAB94;
@@ -343,12 +343,12 @@ extern "C" void fn_800BCF7C(void)
     ambience.mUnknown32 = 300.0f;
     ambience.mUnknown28 = 0;
     lbl_803EC98C->mUnknown8 = fn_80096A58(&crowd);
-    fn_801F0F18(0);
+    ResSync(0);
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096B1C(lbl_803EC98C->mUnknown8);
     }
     lbl_803EC98C->mUnknownC = fn_80096A58(&ambience);
-    fn_801F0F18(0);
+    ResSync(0);
 }
 
 extern "C" float fn_800BD190(void)

@@ -13,10 +13,10 @@ extern char lbl_802B19AC[];
 extern char lbl_802B19B0[];
 extern char lbl_802B19B8[];
 extern char lbl_803E933C[];
-extern Res_801EDC2C *lbl_803EBDE8;
+extern ResFile_t *lbl_803EBDE8;
 extern int lbl_803EBDEC;
 
-static void _ResLooseFileGetName(Res_801EDC2C *pFile, int index)
+static void _ResLooseFileGetName(ResFile_t *pFile, int index)
 {
     char name[5];
     char *p;
@@ -33,13 +33,13 @@ static void _ResLooseFileGetName(Res_801EDC2C *pFile, int index)
     lbl_803EBDEC = index;
 }
 
-int ResLooseFileExists(Res_801EDC2C *pFile, int index)
+int ResLooseFileExists(ResFile_t *pFile, int index)
 {
     _ResLooseFileGetName(pFile, index);
     return fn_801C9910(lbl_803E933C, 0x2C) == 0;
 }
 
-int ResLooseFileGetSize(Res_801EDC2C *pFile, unsigned int index, unsigned int *pSize)
+int ResLooseFileGetSize(ResFile_t *pFile, unsigned int index, unsigned int *pSize)
 {
     int result = 1;
     int handle;
@@ -59,7 +59,7 @@ int ResLooseFileGetSize(Res_801EDC2C *pFile, unsigned int index, unsigned int *p
     return result;
 }
 
-int ResLooseFileOpen(Res_801EDC2C *pFile, int index)
+int ResLooseFileOpen(ResFile_t *pFile, int index)
 {
     int handle;
 

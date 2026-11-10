@@ -139,10 +139,10 @@ AnimTex_t *AnimTexLoadResource(AnimTexFile_t *file, int load)
     void *data;
     AnimTex_t *texture;
 
-    texture = AnimTexLoad((AnimTexDesc_t *)fn_801EF390(file->mData, file->mIndex, 1), &data, load);
+    texture = AnimTexLoad((AnimTexDesc_t *)ResLoad(file->mData, file->mIndex, 1), &data, load);
     texture->mIndex = file->mIndex;
     if (load)
-        fn_801F010C(file->mData, file->mIndex);
+        ResUnLoad(file->mData, file->mIndex);
     return texture;
 }
 

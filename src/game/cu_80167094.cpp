@@ -26,7 +26,7 @@ int fn_800BA6F8(void);
 void PlyrIconQueueAdd(float, float, void *, unsigned char);
 void fn_8018A908(void (*)(int, float, float, float, float));
 void PlyrIconShutdown(void);
-int fn_801F1520(int);
+int ResSetMemFlags(int);
 void fn_801A1240(int);
 void fn_801A12E8(void);
 
@@ -141,9 +141,9 @@ void fn_801677F4(void)
 }
 void fn_8016781C(int value)
 {
-    int saved = fn_801F1520(4);
+    int saved = ResSetMemFlags(4);
     fn_801A1240(value);
-    fn_801F1520(saved);
+    ResSetMemFlags(saved);
 }
 void fn_80167860(void)
 {

@@ -2,7 +2,7 @@
 #include "game/Effects_80146134.h"
 #include "game/ParticleTrail.h"
 #include "engine/texfile.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 #include "game/fn_8007F828.h"
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXLighting.h>
@@ -341,7 +341,7 @@ void fn_80197E68(void) {}
 
 void fn_80197E6C(Resource_80146E64 *p)
 {
-    void *data = (void *)fn_801EF390(p->mUnknown0, p->mUnknown4, 1);
+    void *data = (void *)ResLoad(p->mUnknown0, p->mUnknown4, 1);
     p->mUnknown8 = (int)data;
     TexMipmapRelocate(data);
     TexGetNumMaterials(data);
@@ -368,7 +368,7 @@ void fn_80197F84(Resource_80146E64 *p)
         TMTextureClutDelete(p->mUnknown3C);
         p->mUnknown64 = 0;
     }
-    fn_801F010C(p->mUnknown0, p->mUnknown4);
+    ResUnLoad(p->mUnknown0, p->mUnknown4);
 }
 
 void fn_80197FDC(void *unused, Entry_80146C4C *p)

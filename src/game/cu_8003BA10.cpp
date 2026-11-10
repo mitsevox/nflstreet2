@@ -73,7 +73,7 @@ void fn_800A3D70();
 void fn_800A3C14();
 void fn_800AE10C();
 void fn_800ADE6C();
-Skeleton_80041930 *fn_801EF390(void *, int, int);
+Skeleton_80041930 *ResLoad(void *, int, int);
 void CharRelocateSkeleton(Skeleton_80041930 *);
 void CharSkelMirrorRest(Skeleton_80041930 *, Skeleton_80041930 *);
 void fn_800AF630(void *, int, int, int);
@@ -145,7 +145,7 @@ void fn_80047630(Item_800476DC *);
 void fn_801D2BD0(void *);
 void PlayerObjRenderShutdown();
 void fn_800AF71C();
-void fn_801F010C(void *, int);
+void ResUnLoad(void *, int);
 void PlayerObjRemoveObjType(int);
 int ObjDelType(int);
 void fn_80160F98();
@@ -603,28 +603,28 @@ void fn_8003D0C8(int mode) {
   fn_800ADE6C();
 }
 void fn_8003D12C() {
-  lbl_803EA41C = fn_801EF390(gAnimData.GetArchive(), 57, 1);
+  lbl_803EA41C = ResLoad(gAnimData.GetArchive(), 57, 1);
   CharRelocateSkeleton(lbl_803EA41C);
   fn_8003CC68(lbl_803EA41C);
   for (int i = 0; i < 3; ++i) {
     lbl_802CCD98[i] = (short)lbl_803EA41C->mUnknown1040[15][i] * 16;
     lbl_802CCD8C[i] = (short)lbl_803EA41C->mUnknown1040[21][i] * 16;
   }
-  lbl_803EA420[0] = fn_801EF390(gAnimData.GetArchive(), 58, 1);
+  lbl_803EA420[0] = ResLoad(gAnimData.GetArchive(), 58, 1);
   CharRelocateSkeleton(lbl_803EA420[0]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[0] + 16))[i] = 0.0f;
-  lbl_803EA420[1] = fn_801EF390(gAnimData.GetArchive(), 59, 1);
+  lbl_803EA420[1] = ResLoad(gAnimData.GetArchive(), 59, 1);
   CharRelocateSkeleton(lbl_803EA420[1]);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA420[1] + 16))[i] = 0.0f;
   CharSkelMirrorRest(lbl_803EA420[0], lbl_803EA420[1]);
-  lbl_803EA428 = fn_801EF390(gAnimData.GetArchive(), 61, 1);
+  lbl_803EA428 = ResLoad(gAnimData.GetArchive(), 61, 1);
   CharRelocateSkeleton(lbl_803EA428);
   fn_8003CD1C(lbl_803EA428);
   for (int i = 0; i < 3; ++i)
     ((float *)((char *)lbl_803EA428 + 16))[i] = 0.0f;
-  lbl_803EA42C = fn_801EF390(gAnimData.GetArchive(), 62, 1);
+  lbl_803EA42C = ResLoad(gAnimData.GetArchive(), 62, 1);
   CharRelocateSkeleton(lbl_803EA42C);
   fn_8003CDF8(lbl_803EA42C);
   for (int i = 0; i < 3; ++i)
@@ -853,9 +853,9 @@ int fn_8003DCC0(int owner) {
   }
   PlayerObjRenderShutdown();
   fn_800AF71C();
-  fn_801F010C(gAnimData.GetArchive(), 57);
-  fn_801F010C(gAnimData.GetArchive(), 58);
-  fn_801F010C(gAnimData.GetArchive(), 59);
+  ResUnLoad(gAnimData.GetArchive(), 57);
+  ResUnLoad(gAnimData.GetArchive(), 58);
+  ResUnLoad(gAnimData.GetArchive(), 59);
   PlayerObjRemoveObjType(0);
   ObjDelType(29);
   ObjDelType(30);

@@ -83,7 +83,7 @@ void fn_801789F8(void);
 void fn_8017CFB4(int a);
 void fn_8017DB44(void);
 void fn_8017F048(void);
-int fn_801F0F18(int a);
+int ResSync(int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
 void *fn_8023816C(void *pHandle);
@@ -133,7 +133,7 @@ void QuarterEndFreeBuffers(void)
 
 void QuarterEndStopClips(void)
 {
-    fn_801F0F18(0);
+    ResSync(0);
     if (_QuarterEnd_pState->mUnknown28 != -1) {
         fn_800940F0(_QuarterEnd_pState->mUnknown28);
         fn_80093410(_QuarterEnd_pState->mUnknown28);

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "game/BmFont.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801EF390.h"
+#include "game/ResLoad.h"
 
 extern "C" {
 
@@ -289,9 +289,9 @@ void BmFontBuild(BmFont *pFont, BmFontDesc *pDesc)
 
 void BmFontLoad(BmFont *pFont, BmFontDesc *pDesc, void *p, int index)
 {
-    TexCreate((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
+    TexCreate((void *)ResLoad(p, index, 1), &pFont->mTexture);
     BmFontBuild(pFont, pDesc);
-    fn_801F010C(p, index);
+    ResUnLoad(p, index);
 }
 
 void BmFontFree(BmFont *pFont)

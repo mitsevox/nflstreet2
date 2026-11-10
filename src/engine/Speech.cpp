@@ -31,8 +31,8 @@ void fn_801B2A08(void *pData);
 void fn_80266CB8(void *pData, int a);
 
 void fn_801F5C34(void);
-void fn_801F5C6C(Res_801EDC2C *pRes, unsigned int index);
-void fn_801F5C94(Res_801EDC2C *pRes, unsigned int index, int a);
+void fn_801F5C6C(ResFile_t *pRes, unsigned int index);
+void fn_801F5C94(ResFile_t *pRes, unsigned int index, int a);
 void fn_801F5CCC(int (*pA)(void), void (*pB)(void));
 void fn_801F5CEC(void *pFunc);
 void fn_801F5D0C(void);
@@ -86,14 +86,14 @@ void fn_801F5C34(void)
     lbl_803EBE28 = 0;
 }
 
-void fn_801F5C6C(Res_801EDC2C *pRes, unsigned int index)
+void fn_801F5C6C(ResFile_t *pRes, unsigned int index)
 {
-    fn_801B2A08((void *)fn_801EF390(pRes, index, 1));
+    fn_801B2A08((void *)ResLoad(pRes, index, 1));
 }
 
-void fn_801F5C94(Res_801EDC2C *pRes, unsigned int index, int a)
+void fn_801F5C94(ResFile_t *pRes, unsigned int index, int a)
 {
-    fn_80266CB8((void *)fn_801EF390(pRes, index, 1), a);
+    fn_80266CB8((void *)ResLoad(pRes, index, 1), a);
 }
 
 void fn_801F5CCC(int (*pA)(void), void (*pB)(void))

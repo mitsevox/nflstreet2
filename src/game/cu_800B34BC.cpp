@@ -5,7 +5,7 @@
 #include "game/fn_800B65A0.h"
 
 extern "C" {
-int fn_801F0F18(int a);
+int ResSync(int a);
 int fn_800BA6F8(void);
 
 extern int lbl_803EAB30;
@@ -35,7 +35,7 @@ extern "C" void fn_800B34BC(void)
     lbl_803EAB30 = pick;
     params.mUnknown32 = 60.0f;
     lbl_803EAB34->mUnknown14 = fn_80096A58(&params);
-    fn_801F0F18(0);
+    ResSync(0);
     if ((fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF || fn_800BA6F8() != 0)
         && lbl_803EAB34->mUnknown14 != -1) {
         fn_80096B1C(lbl_803EAB34->mUnknown14);

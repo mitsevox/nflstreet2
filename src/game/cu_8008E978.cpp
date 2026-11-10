@@ -94,8 +94,8 @@
 #include "engine/llquat.h"
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
-#include "game/fn_801EEB44.h"
-#include "game/fn_801EF390.h"
+#include "game/ResOpenDevice.h"
+#include "game/ResLoad.h"
 #include "game/LevelSurface.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
@@ -1142,7 +1142,7 @@ extern "C" void fn_80093684(void *p)
         fn_801C1F94(&pBlock->mUnknown80.mCharacters[i], 0, sizeof(Character_80093BCC));
         pBlock->mUnknown80.mCharacters[i].mUnknown0 = -1;
     }
-    pBlock->mpUnknown0 = (CondTable_t *)fn_801EF390(p, 2, 1);
+    pBlock->mpUnknown0 = (CondTable_t *)ResLoad(p, 2, 1);
     for (j = 0; j < 66; j++) {
         lbl_802D73B8[j].mUnknownC = 0;
     }
@@ -1209,7 +1209,7 @@ extern "C" void fn_800937CC(void)
     if (fn_8009B9F0(0)) {
         fn_8009B8C4(0);
     }
-    fn_801F010C(lbl_803EC924->mpUnknown7C, 2);
+    ResUnLoad(lbl_803EC924->mpUnknown7C, 2);
     fn_800925A4();
 }
 
@@ -1460,9 +1460,9 @@ extern "C" void fn_80094238(int index)
     lbl_803EC924->mEntries[index].mUnknown8 = lbl_802D7A10[index].mUnknown14;
     lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
     pData = lbl_803EC924->mpUnknown7C;
-    lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)fn_801EF390(pData, lbl_802D7A10[index].mUnknown14, 1);
+    lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)ResLoad(pData, lbl_802D7A10[index].mUnknown14, 1);
     AnimSeqncrRelocateSeqFile();
-    lbl_803EC924->mEntries[index].mUnknown4 = fn_801EF390(pData, lbl_802D7A10[index].mUnknown18, 1);
+    lbl_803EC924->mEntries[index].mUnknown4 = ResLoad(pData, lbl_802D7A10[index].mUnknown18, 1);
     AnimSeqncrRelocateTable();
 }
 
@@ -1470,8 +1470,8 @@ extern "C" void fn_800942F0(int index)
 {
     void *pData = lbl_803EC924->mpUnknown7C;
 
-    fn_801F010C(pData, lbl_803EC924->mEntries[index].mUnknown8);
-    fn_801F010C(pData, lbl_803EC924->mEntries[index].mUnknownC);
+    ResUnLoad(pData, lbl_803EC924->mEntries[index].mUnknown8);
+    ResUnLoad(pData, lbl_803EC924->mEntries[index].mUnknownC);
     lbl_803EC924->mEntries[index].mUnknown8 = 0;
     lbl_803EC924->mEntries[index].mUnknownC = 0;
     lbl_803EC924->mEntries[index].mUnknown10 = 0;
@@ -1563,7 +1563,7 @@ extern "C" void fn_80094598(int index)
     int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
     int handle = fn_801BC654();
 
-    while (fn_801F0E68((void *)handle, id) != 0) {
+    while (ResIsLoading((void *)handle, id) != 0) {
     }
 }
 
@@ -2498,7 +2498,7 @@ extern "C" void fn_80096954(void *pData)
     unsigned int i;
 
     lbl_803EA920 = (Block_80096954 *)fn_801D2B7C(sizeof(Block_80096954), 0, 0);
-    lbl_803EA920->mpUnknown0[0] = (Table_80093BAC *)fn_801EF390(pData, 3, 1);
+    lbl_803EA920->mpUnknown0[0] = (Table_80093BAC *)ResLoad(pData, 3, 1);
     AnimSeqncrRelocateSeqFile();
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
@@ -2513,7 +2513,7 @@ extern "C" void fn_80096954(void *pData)
 
 extern "C" void fn_80096A24(void)
 {
-    fn_801F010C(lbl_803EA920->mpUnknown8, 3);
+    ResUnLoad(lbl_803EA920->mpUnknown8, 3);
     fn_801D2BD0(lbl_803EA920);
 }
 
@@ -2928,7 +2928,7 @@ extern "C" void fn_800A29D8(int mode)
 
 extern "C" {
 void *fn_800C47C4(void);
-int fn_801F0A8C(void *pArchive, char *pName);
+int ResFindIndexByName(void *pArchive, char *pName);
 void fn_80145100(int type, int index);
 
 extern LevelData_t *gLevelData;
@@ -2958,7 +2958,7 @@ extern "C" void fn_800A2D2C(void)
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
+        fn_80145100(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -2974,7 +2974,7 @@ extern "C" void fn_800A30B8(void)
     if (lbl_8030E6DC.mpCallback4 != 0) {
         lbl_8030E6DC.mpCallback4();
     }
-    fn_801EEFAC(lbl_803EA9F4);
+    ResClose(lbl_803EA9F4);
     lbl_803EA9F4 = 0;
     lbl_8030E6DC.mpCallback0 = 0;
     lbl_8030E6DC.mpCallback4 = 0;
@@ -9142,7 +9142,7 @@ extern "C" void fn_800BB24C(void)
 
 extern "C" {
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
-int fn_801F0F18(int a);
+int ResSync(int a);
 }
 
 #include "engine/viewport.h"
@@ -9611,11 +9611,11 @@ extern char *lbl_803EC964[2];
 extern Table_800AA80C lbl_802D8194;
 }
 
-extern "C" int fn_801F0F18(int a);
+extern "C" int ResSync(int a);
 
 extern "C" void fn_800A9F64(void)
 {
-    fn_801F0F18(0);
+    ResSync(0);
     if (lbl_803EAA88->mUnknown8 != -1) {
         if (lbl_803EAA88->mUnknown4 > 1) {
             fn_800940F0(lbl_803EAA88->mUnknown8);
@@ -9684,7 +9684,7 @@ extern "C" void fn_800AA1B0(int a, int b)
     }
     lbl_803EAA88->mUnknownC = fn_80092E54(&request, pBuffer, size);
     if (lbl_803EAA88->mUnknown16 >= 0) {
-        fn_801F0F18(0);
+        ResSync(0);
     }
 }
 
@@ -10499,7 +10499,7 @@ extern "C" void fn_800ABA90(void)
 {
     fn_800AA010(0);
     fn_800AA1B0(1, 1);
-    fn_801F0F18(0);
+    ResSync(0);
     fn_8009604C(0, (int)fn_8005A8AC(0));
     fn_8009604C(1, (int)fn_8005A8AC(1));
 }
@@ -11744,7 +11744,7 @@ void *fn_801C47EC(void *p, int a, int b, int c);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void Orient3Lerp(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
 void fn_801C4958(unsigned char enable);
-unsigned int fn_801F0C50(void *pRes, unsigned int index);
+unsigned int ResGetSize(void *pRes, unsigned int index);
 Object_800670B4 *fn_80168708(int team);
 int fn_80164E30(Record_80067338 *pRecord, Object_800670B4 *pObject, Object_80039F5C *p, int value);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -11821,7 +11821,7 @@ extern "C" void fn_800AF264(int key)
     Item_800AF13C *pItem = fn_800AF13C(key);
 
     if (pItem != 0) {
-        fn_801F010C(pItem->mpUnknown0, pItem->mUnknown4);
+        ResUnLoad(pItem->mpUnknown0, pItem->mUnknown4);
         fn_801C6C0C(lbl_803EAB00, pItem);
     }
 }
@@ -11874,7 +11874,7 @@ extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
     lbl_803EC978 = (Table_800AF71C *)fn_801D2B7C(sizeof(Table_800AF71C), 0, 0);
     fn_801C1F94(lbl_803EC978, 0, sizeof(Table_800AF71C));
     lbl_803EC978->mCount = 3;
-    size = fn_801F0C50(pRes, index);
+    size = ResGetSize(pRes, index);
     lbl_803EC97C = (Item_800AF82C *)fn_801D2B7C(size * count, 0, 0);
     pItems = lbl_803EC97C;
     lbl_803EC980 = size / sizeof(Item_800AF82C);
@@ -15960,7 +15960,7 @@ struct Record_800C432C {
 extern "C" {
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80177F70(void);
-int fn_801F0F18(int a);
+int ResSync(int a);
 void fn_800AD910(int a, float b);
 int fn_8017D064(int a);
 void CamGamePushCurrentCamera(void);
@@ -16572,7 +16572,7 @@ extern "C" void fn_800BF4B8(void)
             params.mUnknown24 = mode;
             params.mUnknown28 = fn_802372EC(1, 11);
             lbl_803EABA8->mUnknown9C = fn_80096A58(&params);
-            fn_801F0F18(0);
+            ResSync(0);
         }
     }
 }

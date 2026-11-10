@@ -3,7 +3,7 @@
 
 #include "game/Module.h"
 
-/* Data block loaded by fn_801EEB44 in Init and released by fn_801EEFAC in Shutdown. */
+/* Data block loaded by ResOpenDevice in Init and released by ResClose in Shutdown. */
 struct ModuleDataPtr {
     ModuleDataPtr() : mp(0) {}
     void *mp;
