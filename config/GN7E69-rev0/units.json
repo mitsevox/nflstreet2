@@ -14603,6 +14603,19 @@
           "end": "0x802623A8"
         }
       ]
+    },
+    {
+      "source": "src/engine/voicequery.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/voicequery.c 0x802898FC-0x80289A04, separate exact function extents and inferred names/source-form rows. Complete two-function audio helper file, no owned data; trailing 28 zero bytes remain unassigned.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802898FC",
+          "end": "0x80289A04"
+        }
+      ]
     }
   ]
 }

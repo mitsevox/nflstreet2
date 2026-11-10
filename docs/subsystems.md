@@ -70,7 +70,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 | 0x8025E148-0x80270B10 | C runtime: compiler support routines, C library, standard output forwarding, standard I/O and strings | `cu_8025E148` ... `vprintf.c`, `bsearch.c` (152 B linked), `atexit.c` (152 B linked; allocation helper remains unreconstructed), `vfprintf.c` ... `cu_8026A664` | 0/0/1/3/3 | 74 KiB | no |
 | 0x80270B10-0x8027EFAC | C++ decoder classes with a 3,432-byte state, sound intrusive lists and the MT sample unpack filter; the decoded format is not read yet | `cu_802714A8`, `sdspmix.c`, `snddrv.c`, `cu_802753F0`, `cu_80276DE4`, `slinklst.c`, `cu_8027882C`, `saramman.c`, `cu_80279BC0`, `supmutpf.c`, `cu_8027B1F8`, `cu_8027CF9C`, `cu_8027D3AC` | 0/0/2/0/3 | 57 KiB | no |
 | 0x8027EFAC-0x80285A90 | Decompression: the `LZM1` descriptor and table-driven decoders | `date.c`, `GCmp.c`, `huff.c`, `rle.c`, `none.c`, `lzm.c`, `cu_802821E8`, `cu_802832CC` | 0/0/0/3/0 | 21 KiB | no |
-| 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c` | 1/1/0/0/0 | 2 KiB | no |
+| 0x80285A90-end | SDK audio and extras: font, DSP, AX, GBA | `OSFont.c`, `dsp*.c`, `AX*.c`, `GBA*.c`, `voicequery.c` (264 B linked) | 1/1/0/0/0 | 2 KiB | no |
 
 The site also lists 136,828 bytes (134 KiB) of code that no chunk owns yet (`Unmapped / Code section 2`, 62 non-exact functions); the structure pass assigns it to files.
 

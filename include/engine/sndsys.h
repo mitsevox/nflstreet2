@@ -9,6 +9,7 @@
 #include "engine/slinklst.h"
 
 #include "engine/cu_802714A8.h"
+#include "engine/sndvoice.h"
 #include "engine/cu_8027CF9C.h"
 
 typedef struct Object_80277404 {
@@ -228,10 +229,8 @@ extern unsigned char lbl_80300EDC[];
 extern unsigned int lbl_80301428[];
 extern int lbl_803A772C;
 
-int fn_8026A288(int handle);
 void *fn_8026B5D4(int size);
 void fn_8026B7D8(void *p);
-int fn_8026C910(int handle, int *index);
 unsigned int fn_8026CB14(void);
 void fn_8026D0AC(void);
 void fn_8026D0EC(void);
