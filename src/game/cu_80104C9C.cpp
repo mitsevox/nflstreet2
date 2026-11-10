@@ -17,7 +17,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -26,8 +26,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -124,7 +124,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 extern float gFrameTimeScale;
@@ -673,10 +673,10 @@ extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
     } else if (pMessage->mUnknown1[2] == 2) {
         pMessage->mUnknown1[2] = 1;
     }
-    pObject = fn_80168708(fn_80178308());
+    pObject = PlayBookGetFormation(fn_80178308());
     count = fn_80178D18(fn_80178308());
     for (i = 0; i < count; i++) {
-        if (fn_80163E94(pObject, i, 0)->mUnknownB == pMessage->mUnknown1[0]) {
+        if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == pMessage->mUnknown1[0]) {
             pMessage->mUnknown1[0] = i;
             break;
         }

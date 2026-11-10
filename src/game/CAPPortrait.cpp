@@ -32,7 +32,7 @@ extern "C" {
 Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
-void *fn_80160C08(void);
+void *PlaTexCacheGetArchive(void);
 void PortraitRenderQuantize(PortraitJob_t *pObject);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
@@ -96,7 +96,7 @@ void PortraitClearSlots(void)
 void PortraitLoadParts(PortraitJob_t *pObject)
 {
     unsigned int i;
-    void *pArchive = fn_80160C08();
+    void *pArchive = PlaTexCacheGetArchive();
     int loaded = 0;
 
     if (pArchive == 0) {

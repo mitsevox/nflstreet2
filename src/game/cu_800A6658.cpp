@@ -55,15 +55,15 @@ void fn_800A6D5C(int team);
 int fn_80156704(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
-void fn_80168908(int team, unsigned int index);
-void fn_80164940(int team);
+void PlayBookSelectAudible(int team, unsigned int index);
+void PlayRealignTeam(int team);
 void fn_800B0DA4(void);
 void fn_800AEEDC(int team);
 void fn_8011F3A8(void);
 void fn_8003A3F4(int a, int team);
 void fn_8009FFD4(void);
-Object_800670B4 *fn_80168708(int team);
-void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+Object_800670B4 *PlayBookGetFormation(int team);
+void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 
@@ -431,15 +431,15 @@ extern "C" void fn_800A7514(int team)
                     p = fn_80039F5C(fn_80178308(), 0);
                 }
                 fn_8010B1FC(p, 0, 0);
-                fn_80168908(fn_80178308(), 0);
-                fn_80164940(fn_80178308());
+                PlayBookSelectAudible(fn_80178308(), 0);
+                PlayRealignTeam(fn_80178308());
                 fn_800B0DA4();
                 fn_800AEEDC(fn_80178308());
                 fn_8011F3A8();
                 fn_8003A3F4(0, fn_80178308());
                 fn_8009FFD4();
                 for (side = 0; side <= 1; side++) {
-                    Object_800670B4 *pRoster = fn_80168708(side);
+                    Object_800670B4 *pRoster = PlayBookGetFormation(side);
                     unsigned int count = fn_80178D18(side);
                     unsigned char i;
 
@@ -448,7 +448,7 @@ extern "C" void fn_800A7514(int team)
                         unsigned char level;
                         unsigned char secondary;
 
-                        fn_80164430(pRoster, i, &level, &secondary);
+                        PlaySetGetEntryRoles(pRoster, i, &level, &secondary);
                         pPlayer->mUnknown2914 = level;
                         fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
                         fn_800B4798(pPlayer->mRatings, side, i, &pPlayer->mUnknown2900);

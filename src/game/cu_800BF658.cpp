@@ -34,7 +34,7 @@ unsigned char fn_8017F324(unsigned char value);
 unsigned char fn_8017F334(unsigned char value);
 unsigned char fn_8017F384(unsigned char value);
 void fn_8015C254(int value);
-void fn_8015A0D0(int value);
+void PassIconObjSetEnabled(int value);
 void ParticlesResetEvents(void);
 void fn_8010A220(void);
 void fn_8009DE9C(void);
@@ -168,7 +168,7 @@ void Class_80297CE8::vfn_04(float dt)
     }
     PassIconsHide();
     fn_8015C254(1);
-    fn_8015A0D0(1);
+    PassIconObjSetEnabled(1);
     ParticlesResetEvents();
     fn_8010A220();
     fn_8009DE9C();

@@ -12,7 +12,7 @@ extern float lbl_802E99B8[3];
 
 int fn_800BA6F8(void);
 int fn_8011F1CC(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 int fn_8022DDB4(int tag, void *data);
@@ -150,7 +150,7 @@ unsigned char fn_8016B7C4(Point_8017886C *pTo)
 void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags)
 {
     *pFlags = pRecord->mUnknown18 & 0x3FE;
-    if (fn_80168708(team)->mUnknown8.mUnknownF != 0) {
+    if (PlayBookGetFormation(team)->mUnknown8.mUnknownF != 0) {
         if (*pFlags & 8)
             *pFlags = (*pFlags & ~8) | 2;
         else if (*pFlags & 2)

@@ -1,3 +1,6 @@
+/* Ball marker: the flat model drawn on the ground under the ball (or where it will
+   land), growing as the ball rises; one marker per ball in the three-ball mode. */
+
 #include <dolphin/gx/GXPixel.h>
 #include "engine/viewport.h"
 #include "game/Ball.h"
@@ -5,7 +8,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_8013AD94.h"
 
-struct Object_80163358 {
+struct BallMarkerObj_t {
     unsigned char mUnknown00[4];
     float mUnknown04;
     float mUnknown08;
@@ -18,20 +21,20 @@ struct Object_80163358 {
     unsigned char mUnknown10C;
 };
 
-struct Entry_802E98A0 {
+struct BallMarkerEntry_t {
     Vector_80039F5C mPosition;
     float mScale;
     unsigned char mEnabled;
 };
 
-struct State_802E989C {
+struct BallMarkerTable_t {
     unsigned int mCount;
-    Entry_802E98A0 mEntries[3];
-    Object_80163358 *mpObject;
+    BallMarkerEntry_t mEntries[3];
+    BallMarkerObj_t *mpObject;
 };
 
 extern "C" {
-extern State_802E989C lbl_802E989C;
+extern BallMarkerTable_t lbl_802E989C;
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
@@ -46,13 +49,13 @@ void fn_801D08FC(int a);
 void fn_801D0C58(void *p);
 void fn_801D0CFC(float a);
 int ObjNewType_(int type, int size, int count,
-                void (*pCreate)(Object_80163358 *, int *),
-                void (*pDestroy)(Object_80163358 *));
+                void (*pCreate)(BallMarkerObj_t *, int *),
+                void (*pDestroy)(BallMarkerObj_t *));
 int ObjDelType(int type);
-void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(BallMarkerObj_t *));
 int ObjNewInList(int handle, int type, int a, int *pDesc);
-void ObjRemoveFromList(int handle, Object_80163358 *pObject);
-void ObjSetPriority(int handle, Object_80163358 *pObject, int a);
+void ObjRemoveFromList(int handle, BallMarkerObj_t *pObject);
+void ObjSetPriority(int handle, BallMarkerObj_t *pObject, int a);
 void TMRenderBindTexture(int a, int b, int c);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
@@ -64,15 +67,15 @@ void fn_80235764(void *p, int a);
 void fn_80235C48(void *p, int a);
 void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
-void fn_80163358(Object_80163358 *pObject, int *pArgs);
-void fn_80163414(Object_80163358 *pObject);
-int fn_8016345C(Object_80163358 *pObject);
+void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs);
+void BallMarkerObjFree(BallMarkerObj_t *pObject);
+int BallMarkerObjDraw(BallMarkerObj_t *pObject);
 
 // Refreshes marker entry index from ball index: its position, whether it
 // is shown, and a scale that grows with the ball's height.
-void fn_80163074(int index)
+void BallMarkerUpdateEntry(int index)
 {
-    Entry_802E98A0 *pEntry = &lbl_802E989C.mEntries[index];
+    BallMarkerEntry_t *pEntry = &lbl_802E989C.mEntries[index];
     Ball_t *pBall;
 
     pEntry->mEnabled = 0;
@@ -108,35 +111,35 @@ void fn_80163074(int index)
     }
 }
 
-void fn_801631EC(int handle)
+void BallMarkerRegister(int handle)
 {
-    ObjNewType_(18, sizeof(Object_80163358), 1, fn_80163358, fn_80163414);
-    ObjSetListObjFunc(handle, 18, 0, fn_8016345C);
+    ObjNewType_(18, sizeof(BallMarkerObj_t), 1, BallMarkerObjInit, BallMarkerObjFree);
+    ObjSetListObjFunc(handle, 18, 0, BallMarkerObjDraw);
 }
 
-void fn_8016324C(void)
+void BallMarkerUnregister(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(18);
 }
 
-void fn_80163274(int handle)
+void BallMarkerCreate(int handle)
 {
     int data = fn_800C47C4();
     int desc;
 
-    fn_801631EC(handle);
+    BallMarkerRegister(handle);
     desc = data;
     if (fn_801486A0() == 1) {
         lbl_802E989C.mCount = 3;
     } else {
         lbl_802E989C.mCount = 1;
     }
-    lbl_802E989C.mpObject = (Object_80163358 *)ObjNewInList(handle, 18, 0, &desc);
+    lbl_802E989C.mpObject = (BallMarkerObj_t *)ObjNewInList(handle, 18, 0, &desc);
     ObjSetPriority(handle, lbl_802E989C.mpObject, 3);
 }
 
-void fn_80163300(int handle)
+void BallMarkerDestroy(int handle)
 {
     if (lbl_802E989C.mpObject != 0) {
         ObjRemoveFromList(handle, lbl_802E989C.mpObject);
@@ -144,15 +147,15 @@ void fn_80163300(int handle)
         lbl_802E989C.mpObject = 0;
     }
     lbl_802E989C.mCount = 0;
-    fn_8016324C();
+    BallMarkerUnregister();
 }
 
-void fn_80163358(Object_80163358 *pObject, int *pArgs)
+void BallMarkerObjInit(BallMarkerObj_t *pObject, int *pArgs)
 {
     pObject->mUnknown0C = pObject->mUnknown08 = pObject->mUnknown04 = 0.0f;
     pObject->mpUnknown14 = (void *)pArgs[0];
     pObject->mUnknownD8 = ResLoad(pObject->mpUnknown14, 10, 1);
-    fn_80163074(0);
+    BallMarkerUpdateEntry(0);
     pObject->mUnknown10C = lbl_802E989C.mEntries[0].mEnabled;
     fn_80235DB8(pObject->mUnknownD8);
     fn_80235588(pObject->mUnknown18, 6);
@@ -162,7 +165,7 @@ void fn_80163358(Object_80163358 *pObject, int *pArgs)
     fn_8023570C(pObject->mUnknown18, "Flat");
 }
 
-void fn_80163414(Object_80163358 *pObject)
+void BallMarkerObjFree(BallMarkerObj_t *pObject)
 {
     fn_802355E4(pObject->mUnknown18);
     if (pObject->mUnknownD8 != 0) {
@@ -170,7 +173,7 @@ void fn_80163414(Object_80163358 *pObject)
     }
 }
 
-int fn_8016345C(Object_80163358 *pObject)
+int BallMarkerObjDraw(BallMarkerObj_t *pObject)
 {
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
@@ -200,12 +203,12 @@ int fn_8016345C(Object_80163358 *pObject)
     return 0;
 }
 
-void fn_801635E8(void)
+void BallMarkerUpdate(void)
 {
     if (lbl_802E989C.mpObject != 0) {
         lbl_802E989C.mpObject->mUnknown10C = 0;
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
-            fn_80163074(i);
+            BallMarkerUpdateEntry(i);
             lbl_802E989C.mpObject->mUnknown10C |= lbl_802E989C.mEntries[i].mEnabled;
         }
     }

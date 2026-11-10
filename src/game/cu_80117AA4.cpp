@@ -35,7 +35,7 @@ Object_80039F5C *fn_8009EDD4(unsigned int index, int side, Point_8017886C *pOut)
 int fn_8009EFDC(int side);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pSpot, int a, unsigned char flag);
 int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227890(void *pA, void *pB);
@@ -104,7 +104,7 @@ extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSp
                     float maxX = -100.0f;
                     unsigned char i;
                     for (i = 0; i <= 2; i++) {
-                        int index = fn_80168E00(fn_80178308(), i, 0);
+                        int index = PlayBookGetReceiver(fn_80178308(), i, 0);
                         if (index != 0xFF) {
                             numPlayers++;
                             pMark = fn_80039F5C(fn_80178308(), index);

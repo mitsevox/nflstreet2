@@ -18,7 +18,7 @@
 #include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/State_803EB098.h"
 #include "game/AudmonEvent.h"
 #include "game/Query_800CE770.h"
@@ -27,8 +27,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -658,7 +658,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
@@ -669,7 +669,7 @@ int fn_800DC080(Object_80039F5C *p);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -1471,7 +1471,7 @@ extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
     Point_8017886C point;
 
     base = fn_80177FFC(p->mIdBytes[2]);
-    pTeam = fn_80168708(p->mIdBytes[2]);
+    pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
     point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
@@ -1688,8 +1688,8 @@ extern "C" void fn_800FAECC(void) {
     }
     pRecord->mUnknown6 = 0;
     team = fn_80178320();
-    pInfoTeam = fn_8016871C(team);
-    pTeam = fn_80168708(team);
+    pInfoTeam = PlayBookGetPlay(team);
+    pTeam = PlayBookGetFormation(team);
     fn_8009F6B4();
     for (unsigned char i = 0; i < 8; i++) {
         pRecord->mUnknown40[i] = 0xFF;
@@ -1708,7 +1708,7 @@ extern "C" void fn_800FAECC(void) {
         if (!useAlt) {
             index = p->mIdBytes[1];
         } else {
-            index = fn_80163E94(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+            index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
         }
         pRoutes = (Message_800F01CC *)fn_800AEE20(fn_80039F5C(team, index));
         if (!pRoutes) {
@@ -1929,15 +1929,15 @@ extern "C" void fn_800FBB70(void) {
         *pp = fn_80039F5C(fn_80178308(), i);
         state = (*pp)->mUnknown2914;
         if (fn_8011F1CC() && mode != 2) {
-            Object_800670B4 *pTeam = fn_80168708(fn_80178308());
+            Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
             void *pInfo = fn_800AEE20(*pp);
 
             if (!pInfo) {
                 if (pTeam->mUnknown8.mUnknownF == 0) {
-                    pInfo = fn_80164EC8(fn_8016871C((*pp)->mIdBytes[2]), ((*pp)->mId >> 8) & 0xFF, ((*pp)->mId >> 16) & 0xFF);
+                    pInfo = fn_80164EC8(PlayBookGetPlay((*pp)->mIdBytes[2]), ((*pp)->mId >> 8) & 0xFF, ((*pp)->mId >> 16) & 0xFF);
                 } else {
-                    unsigned char index = fn_80163E94(pTeam, (*pp)->mIdBytes[1], 0)->mUnknownB;
-                    pInfo = fn_80164EC8(fn_8016871C((*pp)->mIdBytes[2]), (*pp)->mIdBytes[2], index);
+                    unsigned char index = PlaySetGetEntry(pTeam, (*pp)->mIdBytes[1], 0)->mUnknownB;
+                    pInfo = fn_80164EC8(PlayBookGetPlay((*pp)->mIdBytes[2]), (*pp)->mIdBytes[2], index);
                 }
             }
             if (fn_800F06F4(0, pInfo, 21, 0xFFFF) != 0xFFFF) {
@@ -2309,7 +2309,7 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
     Point_8017886C target;
 
     ball = fn_80177FE0();
-    pTeam = fn_80168708(p->mIdBytes[2]);
+    pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
     pOffset = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
     target.mX = pOffset->mX + ball.mX;
@@ -2618,7 +2618,7 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
 
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
-    Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
 
     return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
@@ -2946,7 +2946,7 @@ struct State_80102664 {
     unsigned char mUnknown3;
 };
 
-extern "C" int fn_80168E00(int team, int index, unsigned char *pOut);
+extern "C" int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 extern "C" void fn_80156C78(int a, int b);
 extern unsigned int lbl_802DAB54[];
 
@@ -2962,7 +2962,7 @@ extern "C" int fn_80102664(Object_80039F5C *p)
 
         fn_800B6D34(p, &input);
         for (i = 0; i <= 2; i++) {
-            int index = fn_80168E00(p->mIdBytes[2], i, 0);
+            int index = PlayBookGetReceiver(p->mIdBytes[2], i, 0);
 
             if (pRecord->mUnknownAByte == index) {
                 break;
@@ -3028,7 +3028,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
             bit = lbl_802DAB48[i];
             if (((&input.mUnknown92)[bit >> 3] & (1 << (bit & 7))) == (1 << (bit & 7))) {
                 unsigned char valid;
-                int index = fn_80168E00(p->mIdBytes[2], i, &valid);
+                int index = PlayBookGetReceiver(p->mIdBytes[2], i, &valid);
 
                 if (valid != 0 && index != 255 && fn_801000EC(fn_80039F5C(fn_80178308(), index)) == 0) {
                     if (input.mUnknown94 & 4) {
@@ -5540,64 +5540,64 @@ void fn_8011F174(void)
 
 int fn_8011F1A4(void)
 {
-    return fn_801650BC(fn_8016871C(fn_80178308()));
+    return fn_801650BC(PlayBookGetPlay(fn_80178308()));
 }
 
 int fn_8011F1CC(void)
 {
-    return fn_801650DC(fn_8016871C(fn_80178308()));
+    return fn_801650DC(PlayBookGetPlay(fn_80178308()));
 }
 
 int fn_8011F1F4(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown17 == 14;
+    return PlayBookGetPlay(fn_80178308())->mUnknown17 == 14;
 }
 
 int fn_8011F228(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown17 == 16;
+    return PlayBookGetPlay(fn_80178308())->mUnknown17 == 16;
 }
 
 int fn_8011F25C(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown14 == 4;
+    return PlayBookGetPlay(fn_80178308())->mUnknown14 == 4;
 }
 
 int fn_8011F290(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown14 == 18;
+    return PlayBookGetPlay(fn_80178308())->mUnknown14 == 18;
 }
 
 int fn_8011F2C4(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown17 == 2;
+    return PlayBookGetPlay(fn_80178308())->mUnknown17 == 2;
 }
 
 int fn_8011F2F8(void)
 {
-    return fn_8016871C(fn_80178308())->mUnknown17 == 5;
+    return PlayBookGetPlay(fn_80178308())->mUnknown17 == 5;
 }
 
 int fn_8011F32C(void)
 {
-    return fn_801650FC(fn_8016871C(fn_80178308()));
+    return fn_801650FC(PlayBookGetPlay(fn_80178308()));
 }
 
 int fn_8011F354(void)
 {
-    return fn_801650FC(fn_8016871C(fn_80178348()));
+    return fn_801650FC(PlayBookGetPlay(fn_80178348()));
 }
 
 int fn_8011F37C(void)
 {
-    return (fn_8016871C(fn_80178308())->mUnknown18 >> 16) & 1;
+    return (PlayBookGetPlay(fn_80178308())->mUnknown18 >> 16) & 1;
 }
 
 void fn_8011F3A8(void)
 {
     if (fn_8011F1A4()) {
-        lbl_803EB098->mUnknown4 = fn_8016871C(fn_80178308())->mUnknown1C[0][0];
-        if (fn_80168708(fn_80178308())->mUnknown8.mUnknownF) {
+        lbl_803EB098->mUnknown4 = PlayBookGetPlay(fn_80178308())->mUnknown1C[0][0];
+        if (PlayBookGetFormation(fn_80178308())->mUnknown8.mUnknownF) {
             if (lbl_803EB098->mUnknown4 & 1) {
                 lbl_803EB098->mUnknown4 = lbl_803EB098->mUnknown4 - 1;
             } else {
@@ -5617,7 +5617,7 @@ void fn_8011F45C(int a)
 {
     if (lbl_803EB098->mUnknown5) {
         lbl_803EB098->mUnknown4 = a;
-    } else if (fn_8016871C(fn_80178308())->mUnknown14 == 2) {
+    } else if (PlayBookGetPlay(fn_80178308())->mUnknown14 == 2) {
         lbl_803EB098->mUnknown4 = a;
         lbl_803EB098->mUnknown5 = 1;
     }
@@ -5661,12 +5661,12 @@ Record_8011F518 *fn_8011F518(void)
 
 int fn_8011F524(void)
 {
-    return fn_80165098(fn_8016871C(fn_80178348()));
+    return fn_80165098(PlayBookGetPlay(fn_80178348()));
 }
 
 Object_80039F5C *fn_8011F54C(void)
 {
-    return fn_8016444C(fn_80168708(fn_80178308()));
+    return PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
 }
 
 void fn_8011F574(void)

@@ -8,7 +8,7 @@
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_80168ED0(int a);
+int PlayCallGetPlaybookId(int a);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int fn_80085810(int formation, int team, int *pValues);
 }
@@ -99,7 +99,7 @@ int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue,
     int x = 0;
     int y = 0;
     int result = 0;
-    int mode = fn_80168ED0(a);
+    int mode = PlayCallGetPlaybookId(a);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -130,7 +130,7 @@ int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue,
 int FormationCountForPlaybook(int a)
 {
     int count = 0;
-    int mode = fn_80168ED0(a);
+    int mode = PlayCallGetPlaybookId(a);
     fn_801FCE10(0, "use 'TATS' select count(*) into \x85 from 'ILMF' where ( 'DIBP' = \x85 and 'FOSI' = \x83 )\n", &count, mode, a);
     return count;
 }
@@ -143,7 +143,7 @@ int FormationGetByIndex(int index, int a)
 {
     QueryCursor cursor;
     int value = 0;
-    int mode = fn_80168ED0(a);
+    int mode = PlayCallGetPlaybookId(a);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;

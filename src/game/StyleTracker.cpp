@@ -13,7 +13,7 @@
 #include "game/cu_8003108C.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_8021D7B8.h"
@@ -1571,7 +1571,7 @@ extern "C" void StyleTrackerOnTackle(Object_80039F5C *p, float a) {
     if (p != 0) {
         StyleTrackerFinishStiffArm(0);
         if (fn_80177C38() == 0) {
-            if (fn_801650DC(fn_8016871C(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
+            if (fn_801650DC(PlayBookGetPlay(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
                 a <= fn_80177FE0().mY && (p->mFlags & 0x10000000)) {
                 if (StyleTrackerIsCurrentActorUserControlled() != 0) {
                     _StyleTracker_pState->mUserQbStop = 1;

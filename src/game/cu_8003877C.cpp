@@ -18,8 +18,8 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Class_80297CE8.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80227638.h"
 
@@ -220,7 +220,7 @@ void fn_800A5E68(Object_80039F5C *p);
 void fn_8003962C(Object_80039F5C *p, int flag);
 void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
 void *fn_8015C170(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, int flag);
 void fn_8015C218(void *p);
@@ -967,8 +967,8 @@ extern "C" void fn_8003A1EC(int on, int team, int index)
         if (pBlock->mpUnknown984 == 0) {
             unsigned char side = team;
             unsigned char slot = index;
-            Object_800670B4 *pPlay = fn_80168708(side);
-            Entry_8006719C *pEntry = (Entry_8006719C *)fn_80163E94(pPlay, slot, 0);
+            Object_800670B4 *pPlay = PlayBookGetFormation(side);
+            Entry_8006719C *pEntry = (Entry_8006719C *)PlaySetGetEntry(pPlay, slot, 0);
             Point_8017886C offset;
             Point_8017886C pos;
             unsigned char flip;
@@ -989,11 +989,11 @@ extern "C" void fn_8003A1EC(int on, int team, int index)
                 int entry;
 
                 if (flip) {
-                    entry = fn_80163E94(fn_80168708(side), slot, 0)->mUnknownB;
+                    entry = PlaySetGetEntry(PlayBookGetFormation(side), slot, 0)->mUnknownB;
                 } else {
                     entry = index;
                 }
-                pRecord = fn_80164EC8(fn_8016871C(side), side, entry);
+                pRecord = fn_80164EC8(PlayBookGetPlay(side), side, entry);
             } else {
                 flip = 0;
             }

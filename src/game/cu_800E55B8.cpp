@@ -3,8 +3,8 @@
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
@@ -31,7 +31,7 @@ Object_80039F5C *fn_800FB844(Object_80039F5C *p);
 void fn_800FB824(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E1778(Object_80039F5C *p);
 int fn_800B146C(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 float fn_80237260(int stream);
 extern float gFrameTimeScale;
 int fn_80178320(void);
@@ -65,15 +65,15 @@ void fn_800E55B8(Object_80039F5C *p)
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
-    Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     Message_800F01CC *pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
         if (pTeam->mUnknown8.mUnknownF == 0) {
-            pMessage = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]),
+            pMessage = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]),
                 (p->mId >> 8) & 255, (p->mId >> 16) & 255);
         } else {
-            unsigned char index = fn_80163E94(pTeam, p->mIdBytes[1], 0)->mUnknownB;
-            pMessage = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
+            unsigned char index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+            pMessage = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
         }
     }
     switch (pMessage->mId & ~0x80) {

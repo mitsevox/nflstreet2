@@ -3,7 +3,7 @@
 #include "game/cu_80125F3C.h"
 #include <math.h>
 #include "game/Object_80039F5C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/Ball.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -74,7 +74,7 @@ float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 float fn_8022710C(void *pV);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
@@ -128,7 +128,7 @@ extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float di
     if (p->mUnknown1032 != 4 && pOther != 0 && distance < 4.0f && fn_801BE648(pOther->mpUnknown792) != 69
         && fn_801BE648(pOther->mpUnknown792) != 178
         && (MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing) > 0x355555 || fn_800DC080(pOther) != 0)) {
-        Point_80167910 delta;
+        Vec2_t delta;
         int angle;
 
         fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
@@ -167,7 +167,7 @@ extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_80
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Point_80167910 delta;
+    Vec2_t delta;
     int target;
     int diff;
     int turn;
@@ -266,7 +266,7 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     Object_800B26B0 *pMotion = &p->mMotion;
 
     if (pOther != 0) {
-        Point_80167910 delta;
+        Vec2_t delta;
 
         if ((distance > 3.0f && pMotion->mPos.mY < fn_80177FE0().mY && fn_800DC080(pOther) != 0 && mode != 2)
             || (mode == 2 && distance < 8.0f)) {
@@ -310,7 +310,7 @@ extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     int done = 0;
 
     if (pOther != 0) {
-        Point_80167910 delta;
+        Vec2_t delta;
         int target;
         int turn;
         int flag;
@@ -400,7 +400,7 @@ extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         }
     }
     if (turn != 0) {
-        Point_80167910 delta;
+        Vec2_t delta;
         int target;
         int diff;
 
@@ -428,8 +428,8 @@ extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         float offset;
         float step;
         unsigned char i;
-        Point_80167910 target;
-        Point_80167910 dir;
+        Vec2_t target;
+        Vec2_t dir;
 
         if (fabsf(pos.mX) > fn_80178A5C() * 2.0f) {
             width = fn_80178A08() * 0.85f;
@@ -462,7 +462,7 @@ extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_8
                             int *pAngle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Point_80167910 delta;
+    Vec2_t delta;
 
     if (pOther != 0 && pMotion->mPos.mY > pos.mY && pContext->mpUnknown12[p->mIdBytes[1]] != 6
         && MathAngleDiff(angle2, 0x400000) <= 0x31C71B && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
@@ -544,7 +544,7 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
         anim = fn_801BE648(pCarrier->mpUnknown792);
         if (pCarrier != 0 && anim != 84 && anim != 69 && anim != 178 && anim != 77
             && (unsigned int)pCarrier->mMotion.mUnknown32 <= 0x800000) {
-            Point_80167910 delta;
+            Vec2_t delta;
             int angle;
             float distance;
 
@@ -590,7 +590,7 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     int diff = MathAngleDiff(angle, pMotion->mFacing);
-    Point_80167910 delta;
+    Vec2_t delta;
 
     if (diff > 0x177777) {
         if (pOther != 0 && !(pOther->mFlags & 0x200000) && fn_800DC080(pOther) == 0) {
@@ -694,7 +694,7 @@ extern "C" void fn_80128BE0(Object_80039F5C *p, Object_80039F5C *pOther)
     Block_80170374 *pBlock = &p->mUnknown560;
     int found = 0;
     Object_80039F5C *pTarget;
-    Point_80167910 delta;
+    Vec2_t delta;
 
     if (pBlock->mFlags.mBytes[0] != 1) {
         return;
@@ -787,7 +787,7 @@ extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState, Vector_80
 extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float distance)
 {
     Object_800B26B0 *pMotion;
-    Point_80167910 delta;
+    Vec2_t delta;
     int angle;
     int flag;
     float scale;
@@ -832,7 +832,7 @@ extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float d
 
 extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C target, Vector_80039F5C offset)
 {
-    Point_80167910 dir;
+    Vec2_t dir;
 
     fn_80227538(&dir, angle, pMotion->mUnknown28);
     if (pMotion->mPos.mY > target.mY) {
@@ -902,13 +902,13 @@ extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Ve
     }
 }
 
-extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Point_80167910 *pVelocity, int *pAngle,
+extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t *pVelocity, int *pAngle,
                             float *pSpeed, Vector_80039F5C *pTarget, float distance)
 {
     if (fn_801BE648(pOther->mpUnknown792) == 74) {
         if (distance < 10.0f) {
             Object_800B26B0 *pMotion = &p->mMotion;
-            Point_80167910 velocity;
+            Vec2_t velocity;
             int diff = MathAngleDiff(*pAngle, pOther->mUnknown512.mUnknown4);
 
             if (diff > 0x2E38E3) {
@@ -1018,7 +1018,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
         speed = pOtherMotion->mUnknown28;
         angle = pOtherMotion->mUnknown32;
         distance = fn_8022781C(pMotion, &pos);
-        fn_801294A8(p, pOther, (Point_80167910 *)&velocity, &angle, &speed, &pos, distance);
+        fn_801294A8(p, pOther, (Vec2_t *)&velocity, &angle, &speed, &pos, distance);
     } else {
         if (BallGetLandingPoint(pBall, &pos) != 0) {
             Vector_80039F5C ballPos;
@@ -1119,7 +1119,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
             if (ok) {
                 facing = fn_80120794(pMotion, &pos, &dir, speed, dirLength, dirAngle, distance);
             } else {
-                Point_80167910 delta;
+                Vec2_t delta;
 
                 fn_80227690(&delta, pMotion, &pOther->mMotion.mPos);
                 facing = (fn_801CFE40(delta.mY, delta.mX) - 0x800000) & 0xFFFFFF;

@@ -1,5 +1,5 @@
 #include "game/Object_80039F5C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 
 extern "C" {
 void fn_80227538(void *pOut, int angle, float length);
@@ -10,7 +10,7 @@ int fn_801CFE40(float y, float x);
 
 extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
 {
-    Point_80167910 offset;
+    Vec2_t offset;
     int angle = (pTarget->mMotion.mFacing + 0x400000) & 0xFFFFFF;
 
     if (pTarget->mUnknown344 == 3) {

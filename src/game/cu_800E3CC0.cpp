@@ -18,8 +18,8 @@
 #include "game/fn_800F06F4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_800670B4.h"
-#include "game/fn_80163E94.h"
-#include "game/fn_8016871C.h"
+#include "game/PlaySet.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
@@ -302,7 +302,7 @@ unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_8011F1A4(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80177F70(void);
 int fn_801783AC(int bit);
@@ -334,7 +334,7 @@ extern "C" int fn_800E4494(Object_80039F5C *p) {
     state->mUnknown55 = 0;
     state->mUnknown32 = 0;
     state->mUnknown33 = 0;
-    Object_800670B4 *pObject = fn_80168708(fn_80178308());
+    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
     switch (p->mUnknown2914) {
     case 17:
     case 18:
@@ -359,13 +359,13 @@ extern "C" int fn_800E4494(Object_80039F5C *p) {
 extern "C" int fn_800E579C(Object_80039F5C *p) {
     int result = 1;
     void *pRecord;
-    Object_800670B4 *pObject = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (pObject->mUnknown8.mUnknownF == 0) {
-        pRecord = fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        pRecord = fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     } else {
-        unsigned char index = fn_80163E94(pObject, p->mIdBytes[1], 0)->mUnknownB;
-        pRecord = fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
+        unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
+        pRecord = fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
     }
     if (fn_800F06F4(0, pRecord, 48, 0xFFFF) != 0xFFFF && fn_800F06F4(0, pRecord, 30, 0xFFFF) != 0xFFFF) {
         result = 0;
@@ -3065,10 +3065,10 @@ extern "C" void fn_800EE694(Object_80039F5C *p) {
         p->mIdBytes[2] = 9;
         break;
     }
-    Object_800670B4 *pObject = fn_80168708(fn_80178308());
+    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
     unsigned int count = fn_80178D18(fn_80178308());
     for (unsigned char i = 0; i < count; i++) {
-        if (fn_80163E94(pObject, i, 0)->mUnknownB == p->mIdBytes[1]) {
+        if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == p->mIdBytes[1]) {
             p->mIdBytes[1] = i;
             break;
         }

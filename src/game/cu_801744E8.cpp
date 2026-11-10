@@ -63,7 +63,7 @@ unsigned int fn_80178D18(int team);
 void fn_80178370(void);
 int fn_800BA6F8(void);
 int fn_801787A0(void);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int CharSkelGetJointByName(void *p, const char *pName);
 float fn_802270A4(void *);
 void fn_8017419C(float *value, Object_80039F5C *, int) {
@@ -866,7 +866,7 @@ void fn_80176838(Object_80039F5C *player) {
   int near = 0;
   for (unsigned char i = 0; i <= 2; i++) {
     Pair_8017055C delta;
-    unsigned short index = fn_80168E00(player->mIdBytes[2], i, 0);
+    unsigned short index = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
     fn_80227690(&delta,
                 &fn_80039F5C(player->mIdBytes[2], index)->mMotion.mPos,
                 &ball);

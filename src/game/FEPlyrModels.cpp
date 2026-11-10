@@ -82,7 +82,7 @@ void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 struct State_80039F5C;
 void fn_800EFFA0(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
-void fn_80161168(void);
+void PlaTexCacheUpdate(void);
 void fn_8016D8B0(void *pObject);
 void fn_8018A8C8(int a);
 void fn_8018A908(void (*pCallback)(int, float, float, float, float));
@@ -499,7 +499,7 @@ void FEPlyrUpdate(void)
         } else {
             VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
         }
-        fn_80161168();
+        PlaTexCacheUpdate();
         if (_FEPlyr_bPairMode && _FEPlyr_bSwapPending) {
             Object_8003DEC4 *pObject = fn_8003DEC4(_FEPlyr_iBackIndex);
 

@@ -1,4 +1,4 @@
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/SndgPathfinder.h"
 #include "game/Block_800C9D6C.h"
 #include "game/Object_8003DEC4.h"
@@ -70,7 +70,7 @@ int fn_80177F70(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *fn_80168708(int side);
+Object_800670B4 *PlayBookGetFormation(int side);
 int fn_8006CC54(int id);
 void fn_8006C9D4(int id);
 int fn_8006C548(unsigned int channel, int id, void (*callback)(int handle));
@@ -587,7 +587,7 @@ void fn_8006F850(AudmonEvent_t *p)
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
                 Point_8017886C point = fn_80177FE0();
-                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(fn_8016871C(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
+                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(PlayBookGetPlay(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
             }
             if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }
@@ -679,7 +679,7 @@ void fn_80070E8C(void)
 void fn_80070F84(void)
 {
     if (!lbl_803EA6FA) return;
-    Object_800670B4 *p = fn_80168708(fn_80178320());
+    Object_800670B4 *p = PlayBookGetFormation(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;

@@ -1,11 +1,14 @@
+/* 3D models shown in the user interface screens: loads them from the UIS libraries,
+   swaps in their textures and draws them at a given position, rotation and scale. */
+
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXCull.h>
 #include "engine/viewport.h"
 #include "game/cu_801882B4.h"
-#include "game/cu_80163674.h"
+#include "game/UISModel.h"
 
 extern "C" {
-Cache_80188688 *lbl_803EB3A4 = 0;
+Cache_80188688 *_UISModel_pLibCache = 0;
 extern char *lbl_802EAD10[];
 int FELoopIsMainFEActive(void);
 int ConGetCurrentContext(void);
@@ -17,9 +20,9 @@ void fn_801D09EC(int);
 void fn_801D0ADC(int);
 void fn_801D0C58(void *);
 void fn_801D0D94(float, float, float);
-int ObjNewType_(int, int, int, void (*)(Object_80163788 *, Desc_80163788 *), void (*)(Object_80163788 *));
+int ObjNewType_(int, int, int, void (*)(UISModel_t *, UISModelDesc_t *), void (*)(UISModel_t *));
 int ObjDelType(int);
-int ObjSetListObjFunc(void *, int, int, int (*)(Object_80163788 *, int));
+int ObjSetListObjFunc(void *, int, int, int (*)(UISModel_t *, int));
 void fn_80234DFC(int, void *, int, int, const char *, int);
 void fn_80234EA0(void *, int);
 void fn_80234EEC(void *, int, void *, unsigned char);
@@ -40,9 +43,9 @@ int fn_80235D9C(int);
 void fn_80235DB8(int);
 int fn_80236B4C(int);
 
-void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc)
+void UISModelBind(UISModel_t *pObject, UISModelDesc_t *pDesc)
 {
-    int data = fn_801889CC(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02);
+    int data = fn_801889CC(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02);
     pObject->mUnknown198 |= 1;
     if (pObject->mUnknown198 & 1) {
         pObject->mUnknown14 = data;
@@ -67,7 +70,7 @@ void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc)
     }
 }
 
-void fn_80163788(Object_80163788 *pObject, Desc_80163788 *pDesc)
+void UISModelInit(UISModel_t *pObject, UISModelDesc_t *pDesc)
 {
     pObject->mUnknown04 = 0.0f;
     pObject->mUnknown08 = 0.0f;
@@ -86,22 +89,22 @@ void fn_80163788(Object_80163788 *pObject, Desc_80163788 *pDesc)
     pObject->mUnknown1DE = 0;
     pObject->mUnknown198 = 0;
     pObject->mUnknown1E4 = 255;
-    fn_80188784(lbl_803EB3A4, pDesc->mUnknown00);
-    fn_8018897C(lbl_803EB3A4, pDesc->mUnknown00, pDesc->mUnknown02, 0);
-    fn_80163674(pObject, pDesc);
+    fn_80188784(_UISModel_pLibCache, pDesc->mUnknown00);
+    fn_8018897C(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02, 0);
+    UISModelBind(pObject, pDesc);
 }
 
-void fn_801638F0(Object_80163788 *pObject)
+void UISModelFree(UISModel_t *pObject)
 {
     if (pObject->mUnknown198 & 1) {
         fn_802355E4(&pObject->mUnknown48);
         fn_80234EA0(pObject->mUnknown18, 0);
     }
-    fn_801889A4(lbl_803EB3A4, pObject->mUnknown1CC, pObject->mUnknown1CE);
-    fn_801888A4(lbl_803EB3A4, pObject->mUnknown1CC);
+    fn_801889A4(_UISModel_pLibCache, pObject->mUnknown1CC, pObject->mUnknown1CE);
+    fn_801888A4(_UISModel_pLibCache, pObject->mUnknown1CC);
 }
 
-int fn_80163954(Object_80163788 *pObject, int value)
+int UISModelDraw(UISModel_t *pObject, int value)
 {
     int context = ConGetCurrentContext();
     fn_801D0470(VptGetMatrixStack());
@@ -137,33 +140,33 @@ int fn_80163954(Object_80163788 *pObject, int value)
     return 0;
 }
 
-void fn_80163AD8(Object_80163788 *pObject, void *pData, int index, int component)
+void UISModelCopyTexture(UISModel_t *pObject, void *pData, int index, int component)
 {
     if (pObject->mUnknown198 & 1) {
-        State_80163AD8 *pState = &pObject->mUnknown48;
+        UISModelRender_t *pState = &pObject->mUnknown48;
         unsigned char part = component;
         fn_80234EEC(pState, index, pData, part);
         fn_80234F74(pState->mpUnknown58, index, pData, part, 0);
     }
 }
 
-void fn_80163B44(Object_80163788 *pObject, void *pData)
+void UISModelApplyTextures(UISModel_t *pObject, void *pData)
 {
-    fn_80163AD8(pObject, pData, 4, 0);
-    fn_80163AD8(pObject, pData, 5, 1);
-    fn_80163AD8(pObject, pData, 3, 2);
-    fn_801889A4(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
-    fn_801888A4(lbl_803EB3A4, pObject->mUnknown1D8);
+    UISModelCopyTexture(pObject, pData, 4, 0);
+    UISModelCopyTexture(pObject, pData, 5, 1);
+    UISModelCopyTexture(pObject, pData, 3, 2);
+    fn_801889A4(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
+    fn_801888A4(_UISModel_pLibCache, pObject->mUnknown1D8);
     pObject->mUnknown1DE &= ~1;
 }
 
-int fn_80163BCC(Object_80163788 *pObject)
+int UISModelUpdateTextures(UISModel_t *pObject)
 {
     int result = 1;
     if (pObject->mUnknown1DE & 1) {
-        void *pData = (void *)fn_801889CC(lbl_803EB3A4, pObject->mUnknown1D8, pObject->mUnknown1DA);
+        void *pData = (void *)fn_801889CC(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
         if (pData) {
-            fn_80163B44(pObject, pData);
+            UISModelApplyTextures(pObject, pData);
         } else {
             result = 0;
         }
@@ -171,40 +174,40 @@ int fn_80163BCC(Object_80163788 *pObject)
     return result;
 }
 
-int fn_80163C30(void *pHandle, int count)
+int UISModelRegister(void *pHandle, int count)
 {
-    int result = ObjNewType_(19, sizeof(Object_80163788), count, fn_80163788, fn_801638F0);
+    int result = ObjNewType_(19, sizeof(UISModel_t), count, UISModelInit, UISModelFree);
     if (pHandle) {
-        result = ObjSetListObjFunc(pHandle, 19, 0, fn_80163954);
+        result = ObjSetListObjFunc(pHandle, 19, 0, UISModelDraw);
     }
-    if (!lbl_803EB3A4) {
+    if (!_UISModel_pLibCache) {
         Desc_80188688 desc;
         desc.mUnknown0 = 1;
         desc.mUnknown4 = 21;
         desc.mUnknown12 = lbl_802EAD10;
         desc.mUnknown8 = 0;
-        lbl_803EB3A4 = fn_80188688(&desc);
-        result = (int)lbl_803EB3A4;
+        _UISModel_pLibCache = fn_80188688(&desc);
+        result = (int)_UISModel_pLibCache;
     }
     return result;
 }
 
-void fn_80163CD0(void)
+void UISModelUnregister(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(19);
-    fn_80188728(lbl_803EB3A4);
-    lbl_803EB3A4 = 0;
+    fn_80188728(_UISModel_pLibCache);
+    _UISModel_pLibCache = 0;
 }
 
-void fn_80163D08(Object_80163788 *pObject, int value)
+void UISModelDrawReady(UISModel_t *pObject, int value)
 {
-    if ((pObject->mUnknown198 & 1) && pObject->mUnknown14 && fn_80163BCC(pObject)) {
-        fn_80163954(pObject, value);
+    if ((pObject->mUnknown198 & 1) && pObject->mUnknown14 && UISModelUpdateTextures(pObject)) {
+        UISModelDraw(pObject, value);
     }
 }
 
-void fn_80163D64(Object_80163788 *pObject, unsigned char value)
+void UISModelSetDrawMode(UISModel_t *pObject, unsigned char value)
 {
     pObject->mUnknown1E4 = value;
     if (pObject->mUnknown198 & 1) {

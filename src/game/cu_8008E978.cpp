@@ -48,7 +48,7 @@
 #include "game/Block_800B3660.h"
 #include "game/Block_800B0CFC.h"
 #include "game/Table_80089904.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/cu_8002B8F8.h"
 #include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
@@ -80,12 +80,12 @@
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
 #include "game/Challenge.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_80163E94.h"
+#include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
@@ -105,7 +105,7 @@
 #include "game/fn_80238174.h"
 #include "game/PadInput.h"
 #include "game/fn_80094488.h"
-#include "game/cu_80164568.h"
+#include "game/PlayAlign.h"
 #include "game/EnvFogSettings.h"
 #include "game/Challenge.h"
 #include "game/Block_800BFAD0.h"
@@ -184,7 +184,7 @@ struct Timer_8009D338 {
 
 extern "C" {
 int fn_80238278(const void *p, int size, int seed);
-void fn_8015A0D0(int value);
+void PassIconObjSetEnabled(int value);
 void fn_8015C254(int a);
 int fn_80092830(int index);
 float fn_80094454(int handle);
@@ -1163,7 +1163,7 @@ extern "C" int fn_80093AF0(Object_80039F5C *p)
     Object_8003DEC4 *pModel;
     Vector_80039F5C offset;
     float matrix[4][4];
-    Point_80167910 delta;
+    Vec2_t delta;
 
     if (p->mUnknown9[0] == 8 || p->mUnknown9[0] == 1) {
         return p->mMotion.mFacing;
@@ -1429,7 +1429,7 @@ extern "C" void fn_800941EC(void)
 {
     if (lbl_803EA8BF) {
         fn_8015C254(1);
-        fn_8015A0D0(1);
+        PassIconObjSetEnabled(1);
         lbl_803EA8BF = 0;
     }
 }
@@ -1642,7 +1642,7 @@ extern "C" int fn_800947C4(Object_8017886C *p)
 {
     int result = 0;
 
-    fn_8016871C(fn_80178348());
+    PlayBookGetPlay(fn_80178348());
     if (p->mUnknown18 & 0x8000) {
         result = 1;
     }
@@ -1868,8 +1868,8 @@ extern "C" int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *p
         if (fn_80095028(pFrame->mUnknown0) == key && pRequest->mUnknown14[i] == 0) {
             Object_80039F5C *pCandidates[24];
             unsigned short count;
-            Point_80167910 target;
-            Point_80167910 delta;
+            Vec2_t target;
+            Vec2_t delta;
             Object_80039F5C *pBest = 0;
             float best = range;
             unsigned short j;
@@ -2693,7 +2693,7 @@ extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
     int angle = fn_801CFE40(pIn->mY, pIn->mX);
     float length = fn_802270A4(pIn);
 
-    fn_80227538((Point_80167910 *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
+    fn_80227538((Vec2_t *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
     pOut->mZ = pIn->mZ;
 }
 
@@ -3507,29 +3507,29 @@ int fn_8022E560(void);
 void fn_800B852C(void);
 void fn_80043DD8(void);
 void fn_801624D0(void *arg);
-void fn_80163274(int handle);
+void BallMarkerCreate(int handle);
 void ReplayCursorCreate(int handle);
 void PassIconsCreate(void *pOwner);
 void fn_800C4410(int value);
 void fn_80046E30(int handle);
-void fn_80163DD0(int handle);
+void EffectDrawObjCreate(int handle);
 void fn_80043D68(void);
 void FldObjRemoveObjType(int handle);
 void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
 void fn_800C442C(void);
 void fn_80046FD0(void);
-void fn_80163E54(int handle);
+void EffectDrawObjDestroy(int handle);
 void fn_801626A4(void *arg);
-void fn_80163300(int handle);
+void BallMarkerDestroy(int handle);
 void ReplayCursorDestroy(int handle);
 void PassIconsDestroy(void *pOwner);
 void LightDirUpdate(void);
 void EnvObjUpdateFades(void);
-void fn_8016172C(void);
+void EnvFogRefresh(void);
 void fn_80047050(void);
 void fn_80162794(void);
-void fn_801635E8(void);
+void BallMarkerUpdate(void);
 void fn_8015C114(void);
 int fn_80178308(void);
 int fn_800A7F30(int team);
@@ -3565,7 +3565,7 @@ int fn_800BAA24(void);
 int fn_80178C9C(void);
 int fn_800B6644(int index);
 Object_80039F5C *fn_800B6544(int index);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int fn_800C4E18(Object_80039F5C *p);
 Object_80039F5C *fn_800C9070(int team, Object_80039F5C *p, Object_80039F5C *pOther, int mode);
 int fn_800C91F0(Object_80039F5C *p, unsigned char *pOut, int second);
@@ -3591,12 +3591,12 @@ extern "C" void fn_800C46B0(int handle)
     fn_800B852C();
     fn_80043DD8();
     fn_801624D0((void *)handle);
-    fn_80163274(handle);
+    BallMarkerCreate(handle);
     ReplayCursorCreate(handle);
     PassIconsCreate((void *)handle);
     fn_800C4410(0);
     fn_80046E30(handle);
-    fn_80163DD0(handle);
+    EffectDrawObjCreate(handle);
 }
 
 extern "C" void fn_800C471C(int handle)
@@ -3607,9 +3607,9 @@ extern "C" void fn_800C471C(int handle)
     fn_800B8538();
     fn_800C442C();
     fn_80046FD0();
-    fn_80163E54(handle);
+    EffectDrawObjDestroy(handle);
     fn_801626A4((void *)handle);
-    fn_80163300(handle);
+    BallMarkerDestroy(handle);
     ReplayCursorDestroy(handle);
     PassIconsDestroy((void *)handle);
 }
@@ -3618,10 +3618,10 @@ extern "C" void fn_800C478C(float dt)
 {
     LightDirUpdate();
     EnvObjUpdateFades();
-    fn_8016172C();
+    EnvFogRefresh();
     fn_80047050();
     fn_80162794();
-    fn_801635E8();
+    BallMarkerUpdate();
     fn_8015C114();
 }
 
@@ -4687,7 +4687,7 @@ extern "C" void fn_800CA3C4(void)
     int tmp;
 
     for (i = 0; i <= 2; i++) {
-        index = fn_80168E00(team, i, &out);
+        index = PlayBookGetReceiver(team, i, &out);
         if (index != 255) {
             fn_8009BD2C(fn_80039F5C(team, index), &ref);
             lbl_803EAC3C->mRefs[i] = ref;
@@ -6051,7 +6051,7 @@ extern "C" Object_80039F5C *fn_800A624C(int team)
     unsigned char i;
 
     if (team == fn_80178308()) {
-        Record_80067338 *pRecord = fn_8016871C(team);
+        Record_80067338 *pRecord = PlayBookGetPlay(team);
 
         for (i = 0; i < count; i++) {
             p = fn_80039F5C(team, i);
@@ -6758,7 +6758,7 @@ extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
 }
 
 extern "C" {
-Team_80167A8C *fn_80168EBC(int team);
+PlayBookTeam_t *PlayBookGetTeam(int team);
 int *FormationLineupFetchUser(int formation, int team);
 int FormationLineupFindSlot(int value, int firstHalf);
 
@@ -6779,7 +6779,7 @@ extern "C" void fn_800A9018(unsigned int step)
         unsigned int j = 0;
         unsigned int count = fn_80178D18((unsigned char)i);
 
-        FormationLineupFetchUser(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
+        FormationLineupFetchUser(PlayBookGetTeam((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
             Object_80039F5C *p = fn_80039F5C((unsigned char)i, j);
             int slot = FormationLineupFindSlot(p->mUnknown2908, isOffense);
@@ -7195,26 +7195,26 @@ void fn_8016DDDC(int team);
 GameCamera_t *CamGameGetCamera(int index);
 void fn_8013C6F0(GameCamera_t *pCamera);
 int fn_80169EF4(int mode);
-void fn_80167EA0(int team);
+void PlayBookLoadCurrentPlay(int team);
 void fn_800B3EFC(int team);
-void fn_80168640(int team, int kind);
+void PlayBookSetFormationType(int team, int kind);
 void fn_800B31B0(int a);
 void fn_800B34BC(void);
 void fn_80238680(int handle, int value);
 unsigned char CheatFlagsIsSet(int index);
-void fn_801677F4(void);
+void PlayArtStop(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
 unsigned int fn_801765A8(int type);
 void fn_8017F430(int value);
 void fn_8017F3C8(int a, int b, int c);
-void fn_80167720(int mode);
-int fn_80168D98(int team, int a, int b);
+void PlayArtStart(int mode);
+int PlayBookLoadPlayById(int team, int a, int b);
 void fn_800B4184(int a);
 void fn_800B43AC(int value);
 void fn_800B43C8(void);
 void fn_800BA72C(void);
-void fn_801689AC(int team);
+void PlayBookSaveSelection(int team);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 void fn_8021956C(void *p, int a, int b, int c);
 int fn_80169E68(int mode);
@@ -7222,11 +7222,11 @@ int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void fn_800B40D8(unsigned char value);
 void fn_800B3470(void);
-void fn_80167880(void);
-void fn_801688E0(int mode);
-void fn_801688F4(int mode);
+void PlayArtResetAll(void);
+void PlayBookSetLoadFlags(int mode);
+void PlayBookClearLoadFlags(int mode);
 void fn_80165110(Record_80067338 *pRecord, int a);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_800B4250(int enable, int own);
 
 extern void *lbl_803EB688;
@@ -7612,7 +7612,7 @@ extern "C" void fn_800B2BC0(Object_800B26B0 *pMotion)
 
 extern "C" void fn_800B2D9C(Object_800B26B0 *pMotion)
 {
-    Point_80167910 point;
+    Vec2_t point;
 
     fn_80227538(&point, pMotion->mFacing, pMotion->mUnknown28);
     pMotion->mUnknown40 = point.mX;
@@ -7637,14 +7637,14 @@ extern "C" void fn_800B2E54(void)
 {
     int team;
 
-    fn_801688E0(3);
+    PlayBookSetLoadFlags(3);
     team = fn_80178308();
     if (fn_800BA6F8() == 0 && !(lbl_803EAB34->mUnknown8 & 2)) {
         fn_80169E68(0);
     }
-    fn_80167EA0((unsigned char)team);
-    if (fn_80168708((unsigned char)team)->mUnknown8.mUnknownF != 0) {
-        fn_80165110(fn_8016871C((unsigned char)team), 0);
+    PlayBookLoadCurrentPlay((unsigned char)team);
+    if (PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknownF != 0) {
+        fn_80165110(PlayBookGetPlay((unsigned char)team), 0);
     }
     team = fn_80178320();
     if (fn_800BA6F8() != 0) {
@@ -7654,8 +7654,8 @@ extern "C" void fn_800B2E54(void)
     } else if (fn_800B65A0(team) == 255 || !(lbl_803EAB34->mUnknown8 & 4)) {
         fn_80169EF4(0);
     }
-    fn_80167EA0((unsigned char)team);
-    fn_801688F4(3);
+    PlayBookLoadCurrentPlay((unsigned char)team);
+    PlayBookClearLoadFlags(3);
 }
 
 extern "C" int fn_800B2F40(void)
@@ -7693,7 +7693,7 @@ extern "C" void fn_800B3074(void)
 
 extern "C" void fn_800B3078(void)
 {
-    fn_80167720(1);
+    PlayArtStart(1);
     fn_80178320();
     fn_80178308();
     fn_8002C9A8(lbl_803EA368, 3, 0);
@@ -7745,13 +7745,13 @@ extern "C" void fn_800B31B0(int a)
         }
     }
     lbl_803EAB34->mUnknown8 = (lbl_803EAB34->mUnknown8 & ~1) | 8;
-    fn_801677F4();
-    fn_80167880();
+    PlayArtStop();
+    PlayArtResetAll();
 }
 
 extern "C" {
-void fn_80168744(unsigned char team, unsigned char a, unsigned char b, unsigned char c);
-void fn_80167FF0(int team);
+void PlayBookSetIndices(unsigned char team, unsigned char a, unsigned char b, unsigned char c);
+void PlayBookLoadAudibles(int team);
 void fn_800B3474(void);
 void fn_800B3498(void);
 unsigned char BallGetCurrentIndex(void);
@@ -7768,18 +7768,18 @@ extern "C" void fn_800B32A8(float dt)
     if (fn_800BA6F8() == 0
         && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF || fn_800BA6F8() != 0)) {
         if (fn_800B65A0(other) == 0xFF) {
-            fn_80168744(other, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
+            PlayBookSetIndices(other, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
                         lbl_803EAB34->mUnknown34[2]);
         }
         if (fn_800B65A0(team) == 0xFF) {
-            fn_80168744(team, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
+            PlayBookSetIndices(team, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
                         lbl_803EAB34->mUnknown34[2]);
         }
     }
     if (lbl_803EAB34->mUnknown41 == 0) {
         fn_800B2E54();
-        fn_80167FF0(0);
-        fn_80167FF0(1);
+        PlayBookLoadAudibles(0);
+        PlayBookLoadAudibles(1);
         lbl_803EAB34->mUnknown41 = 1;
         fn_800B3474();
         fn_800B3498();
@@ -7803,8 +7803,8 @@ extern "C" void fn_800B3420(void)
     int team = fn_80178320();
 
     fn_80169EF4(0);
-    fn_80167EA0(team);
-    lbl_803EAB34->mUnknown24 = fn_8016871C(team)->mUnknown4;
+    PlayBookLoadCurrentPlay(team);
+    lbl_803EAB34->mUnknown24 = PlayBookGetPlay(team)->mUnknown4;
 }
 
 extern "C" void fn_800B3470(void)
@@ -7871,16 +7871,16 @@ void Class_80297B50::vfn_02()
 
 extern "C" {
 void PassIconsHide(void);
-void fn_801687E4(int team, int a, int b, int c);
+void PlayBookPickPage(int team, int a, int b, int c);
 int fn_8009D9D8(int index);
 int fn_800BA71C(void);
 void fn_800B4300(int mode);
 void fn_800B3EC0(int a, int b);
 
 extern int lbl_803EAB28;
-unsigned int fn_80168898(int team);
-unsigned int fn_801688AC(int team);
-unsigned int fn_801688C0(int team);
+unsigned int PlayBookGetSetIndex(int team);
+unsigned int PlayBookGetFormationIndex(int team);
+unsigned int PlayBookGetPlayIndex(int team);
 void fn_8017840C(void);
 void fn_8016DCD4(int team);
 void BallsSetVisible(int on);
@@ -7915,7 +7915,7 @@ void Class_80297B50::vfn_03()
     lbl_803EAB34->mUnknown1F = 0;
     if (fn_800BA6F8() == 0) {
         fn_800B4300(2);
-        fn_801688E0(3);
+        PlayBookSetLoadFlags(3);
         fn_800B3EC0(team, other);
         fn_800B43AC(0);
         fn_80169E68(0);
@@ -7923,7 +7923,7 @@ void Class_80297B50::vfn_03()
         if (fn_800B65A0(team) == 0xFF) {
             lbl_803EAB34->mUnknown1C = 1;
         }
-        fn_801688F4(3);
+        PlayBookClearLoadFlags(3);
         lbl_803EAB34->mUnknown10 = lbl_803EAB34->mUnknown30;
         if (fn_800B65A0(team) == 0xFF && fn_80177F70() != 0) {
             lbl_803EAB34->mUnknownC = 600;
@@ -7934,13 +7934,13 @@ void Class_80297B50::vfn_03()
         if (fn_800B65A0(other) == 0xFF) {
             lbl_803EAB34->mUnknown8 |= 4;
         }
-        fn_80167EA0(team);
-        Record_80067338 *pRecord = fn_8016871C(team);
-        fn_80168708(team);
+        PlayBookLoadCurrentPlay(team);
+        Record_80067338 *pRecord = PlayBookGetPlay(team);
+        PlayBookGetFormation(team);
         lbl_803EAB34->mUnknown20 = pRecord->mUnknown4;
-        lbl_803EAB34->mUnknown34[0] = fn_801688AC(team);
-        lbl_803EAB34->mUnknown34[1] = fn_80168898(team);
-        lbl_803EAB34->mUnknown34[2] = fn_801688C0(team);
+        lbl_803EAB34->mUnknown34[0] = PlayBookGetFormationIndex(team);
+        lbl_803EAB34->mUnknown34[1] = PlayBookGetSetIndex(team);
+        lbl_803EAB34->mUnknown34[2] = PlayBookGetPlayIndex(team);
         fn_800B3420();
     }
     fn_800B34BC();
@@ -7964,17 +7964,17 @@ void Class_80297B50::vfn_03()
         lbl_803EAB34->mUnknown1D = 1;
     }
     if (fn_800B65A0(team) == 0xFF) {
-        fn_801687E4(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
+        PlayBookPickPage(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
                     (signed char)lbl_803EAB34->mUnknown34[2]);
     }
     if (fn_800B65A0(other) == 0xFF) {
-        fn_801687E4(other, -1, -1, -1);
+        PlayBookPickPage(other, -1, -1, -1);
     }
     if (fn_800B65A0(team) != 0xFF) {
-        fn_801687E4(team, -1, -1, -1);
+        PlayBookPickPage(team, -1, -1, -1);
     }
     if (fn_800B65A0(other) != 0xFF) {
-        fn_801687E4(other, -1, -1, -1);
+        PlayBookPickPage(other, -1, -1, -1);
     }
     fn_800B3078();
     fn_800B3074();
@@ -8005,7 +8005,7 @@ extern "C" void fn_800B3AF4(void)
         PauseUnblock();
     } else {
         if (fn_800B65A0(team) == 0xFF) {
-            fn_801687E4(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
+            PlayBookPickPage(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
                         (signed char)lbl_803EAB34->mUnknown34[2]);
         }
         if (fn_801486A0() != 2) {
@@ -8066,8 +8066,8 @@ void Class_80297B50::vfn_04(float dt)
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0
         && lbl_803EAB34->mUnknown41 == 0) {
         fn_800B2E54();
-        fn_80167FF0(0);
-        fn_80167FF0(1);
+        PlayBookLoadAudibles(0);
+        PlayBookLoadAudibles(1);
         if (fn_80177F70() == 0) {
             fn_800B3474();
             fn_800B3498();
@@ -8098,8 +8098,8 @@ void Class_80297B50::vfn_04(float dt)
 
 extern "C" void fn_800B3EC0(int a, int b)
 {
-    fn_80168640(a, 1);
-    fn_80168640(b, 11);
+    PlayBookSetFormationType(a, 1);
+    PlayBookSetFormationType(b, 11);
 }
 
 extern "C" {
@@ -8120,12 +8120,12 @@ extern "C" void fn_800B3EFC(int team)
     int i = 0;
 
     fn_8006CAEC();
-    Object_800670B4 *pTeam = fn_80168708(team);
+    Object_800670B4 *pTeam = PlayBookGetFormation(team);
     int count = fn_80178D18(team);
     for (; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
         ids[i] = p->mUnknown2908;
-        fn_80164430(pTeam, i, &a, &b);
+        PlaySetGetEntryRoles(pTeam, i, &a, &b);
         p->mUnknown2914 = a;
     }
     cursor = fn_800C0750(team, values);
@@ -8146,8 +8146,8 @@ void Class_80297B50::vfn_05()
         AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
     }
     fn_800BA72C();
-    fn_801689AC(0);
-    fn_801689AC(1);
+    PlayBookSaveSelection(0);
+    PlayBookSaveSelection(1);
     lbl_803EAB34->mUnknown1C = 0;
     fn_800B43AC(0);
     lbl_803EAB34->mUnknown42 = 0;
@@ -8168,7 +8168,7 @@ extern "C" void fn_800B410C(void)
         if (lbl_803EAB34->mUnknown8 & 1) {
             fn_800B31B0(0);
         }
-        fn_801677F4();
+        PlayArtStop();
         lbl_803EAB34->mUnknown42 = 0;
         PauseUnblock();
         AudmonEventPostArgs(0x70, 0, fn_80178308(), 0, 0);
@@ -8207,7 +8207,7 @@ extern "C" void fn_800B4250(int enable, int own)
 {
     if (own != 0) {
         if (enable != 0) {
-            lbl_803EAB34->mUnknown28 = fn_80168D98(fn_80178308(), lbl_803EAB34->mUnknown20, 1);
+            lbl_803EAB34->mUnknown28 = PlayBookLoadPlayById(fn_80178308(), lbl_803EAB34->mUnknown20, 1);
         } else {
             lbl_803EAB34->mUnknown28 = -1;
         }
@@ -8216,7 +8216,7 @@ extern "C" void fn_800B4250(int enable, int own)
             fn_800B3420();
             lbl_803EAB34->mUnknown44 = 1;
         }
-        lbl_803EAB34->mUnknown2C = fn_80168D98(fn_80178320(), lbl_803EAB34->mUnknown24, 1);
+        lbl_803EAB34->mUnknown2C = PlayBookLoadPlayById(fn_80178320(), lbl_803EAB34->mUnknown24, 1);
     } else {
         lbl_803EAB34->mUnknown2C = -1;
     }
@@ -8561,7 +8561,7 @@ void fn_800BAA30(int value);
 int fn_800BAAB8(void);
 int fn_8006D884(int idx);
 GameCamera_t *CamGameGetCamera(int index);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 void fn_80177F88(int value);
 void fn_801780A8(Point_8017886C pos);
 int fn_80178308(void);
@@ -8691,10 +8691,10 @@ extern "C" void fn_800BA728(void)
 
 extern "C" void fn_800BA72C(void)
 {
-    lbl_803EAB88->mpUnknown0 = fn_80168708(fn_80178308());
-    lbl_803EAB88->mpUnknown4 = fn_80168708(fn_80178320());
-    lbl_803EAB88->mpUnknown8 = fn_8016871C(fn_80178308());
-    lbl_803EAB88->mpUnknownC = fn_8016871C(fn_80178320());
+    lbl_803EAB88->mpUnknown0 = PlayBookGetFormation(fn_80178308());
+    lbl_803EAB88->mpUnknown4 = PlayBookGetFormation(fn_80178320());
+    lbl_803EAB88->mpUnknown8 = PlayBookGetPlay(fn_80178308());
+    lbl_803EAB88->mpUnknownC = PlayBookGetPlay(fn_80178320());
     lbl_803EAB88->mUnknown14 = 1;
     lbl_803EAB88->mUnknown10 = 0;
     lbl_803EAB88->mUnknown184 = 0;
@@ -11745,7 +11745,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void Orient3Lerp(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
 void fn_801C4958(unsigned char enable);
 unsigned int ResGetSize(void *pRes, unsigned int index);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_80164E30(Record_80067338 *pRecord, Object_800670B4 *pObject, Object_80039F5C *p, int value);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_800AF198(void *pItem, void *pContext, void *pResult);
@@ -11760,7 +11760,7 @@ int fn_800B0558(Object_80039F5C *p, Point_8017886C *pPoint);
 void fn_800B0DA4(void);
 void fn_800B0EB8(void);
 void fn_800B0F28(void);
-void fn_80164058(Object_800670B4 *pObject, int row, int index);
+void PlaySetSwapRow(Object_800670B4 *pObject, int row, int index);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 
 extern void *lbl_803EAB00;
@@ -12081,7 +12081,7 @@ extern "C" int fn_800AFE8C(int group, int index, int ref)
         Entry_800B0CFC *pEntry = &lbl_803EAB14->mEntries[group][index];
         Point_8017886C *pPoint;
 
-        if (fn_80168708(p->mIdBytes[2])->mUnknown8.mUnknownF == 1) {
+        if (PlayBookGetFormation(p->mIdBytes[2])->mUnknown8.mUnknownF == 1) {
             pPoint = &pEntry->mpUnknown0[0]->mUnknown18;
         } else {
             pPoint = &pEntry->mpUnknown0[0]->mUnknown10;
@@ -12108,8 +12108,8 @@ extern "C" int fn_800AFF20(int group, int index, int ref)
 extern "C" int fn_800AFF88(Object_80039F5C *p)
 {
     unsigned int i = 0;
-    Record_80067338 *pRecord = fn_8016871C(p->mIdBytes[2]);
-    Object_800670B4 *pObject = fn_80168708(p->mIdBytes[2]);
+    Record_80067338 *pRecord = PlayBookGetPlay(p->mIdBytes[2]);
+    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     for (; i <= 3; i++) {
         if (fn_80164E30(pRecord, pObject, p, lbl_803EAB10[i]) == 1) {
@@ -12178,7 +12178,7 @@ extern "C" void fn_800B03A4(int direction)
         return;
     }
     team = fn_80178308();
-    pObject = fn_80168708(team);
+    pObject = PlayBookGetFormation(team);
     count = fn_80178D18(team);
     p = fn_8009BCE8(&lbl_803EAB14->mUnknown2D0);
     pEntry = &lbl_803EAB14->mEntries[lbl_803EAB14->mUnknown2D8][lbl_803EAB14->mUnknown2D4];
@@ -12284,7 +12284,7 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
     if (p == 0) {
         return;
     }
-    pObject = fn_80168708(p->mIdBytes[2]);
+    pObject = PlayBookGetFormation(p->mIdBytes[2]);
     fn_8009BD2C(p, &ref);
     for (slot = 0; slot <= 4; slot++) {
         pEntry = &lbl_803EAB14->mEntries[group][slot];
@@ -12341,8 +12341,8 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
                 if (!fn_800B0558(p, pPoint)) {
                     Message_800F01CC message;
 
-                    fn_80164058(pObject, row, p->mIdBytes[1]);
-                    fn_80163E94(pObject, p->mIdBytes[1], 0);
+                    PlaySetSwapRow(pObject, row, p->mIdBytes[1]);
+                    PlaySetGetEntry(pObject, p->mIdBytes[1], 0);
                     fn_800EFE1C(0, p->mpState);
                     lbl_803EAB14->mUnknown2E5 = 1;
                     if (p->mFlags & 0x40000) {
@@ -12434,7 +12434,7 @@ extern "C" void fn_800B0DA4(void)
     lbl_803EAB14->mUnknown2D4 = 0;
     lbl_803EAB14->mUnknown2E4 = 1;
     lbl_803EAB14->mUnknown2E5 = 0;
-    pObject = fn_80168708(fn_80178308());
+    pObject = PlayBookGetFormation(fn_80178308());
     if (pObject != 0) {
         lbl_803EAB14->mUnknown2DC = pObject->mUnknown8.mUnknown8;
     }
@@ -12442,7 +12442,7 @@ extern "C" void fn_800B0DA4(void)
 
 extern "C" void fn_800B0E18(void)
 {
-    Object_800670B4 *pObject = fn_80168708(fn_80178308());
+    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
 
     fn_800B0BC0();
     fn_800B0A28();
@@ -12491,8 +12491,8 @@ extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
     unsigned char total = 0;
-    Object_800670B4 *pTeam = fn_80168708(fn_80178308());
-    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+    Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
+    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
     unsigned int count = fn_80178D18(fn_80178308());
     unsigned int roll = fn_802372EC(0, 100);
 
@@ -12545,7 +12545,7 @@ extern "C" void fn_800B0FA4(void)
 
 extern "C" int fn_800B119C(void)
 {
-    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
     unsigned char total = 0;
     unsigned char i;
 
@@ -12786,8 +12786,8 @@ State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *fn_80168708(int team);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+Object_800670B4 *PlayBookGetFormation(int team);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 void fn_800C1C34(void);
 void fn_800FBAA8(void);
 void fn_8009E674(void);
@@ -13059,7 +13059,7 @@ extern "C" void fn_8009DA90(void)
     p->mUnknown198 = 3;
     if (fn_8011F1CC() != 0) {
         for (i = 0; i < p->mUnknown198; i++) {
-            p->mUnknown199[i] = fn_80168E00(team, i, &p->mUnknown19C[i]);
+            p->mUnknown199[i] = PlayBookGetReceiver(team, i, &p->mUnknown19C[i]);
         }
     } else {
         for (i = 0; i < p->mUnknown198; i++) {
@@ -13076,10 +13076,10 @@ extern "C" void fn_8009DB54(int flag)
 
     fn_8011F4EC();
     team = fn_80178320();
-    pObject = fn_80168708(team);
+    pObject = PlayBookGetFormation(team);
     pObject->mUnknown8.mUnknownF ^= 1;
     if (flag != 0) {
-        fn_801647A4(pObject, team, lbl_803EB3B0);
+        PlayAlignTeam(pObject, team, gPlayAlignNormSet);
     }
 }
 
@@ -13121,9 +13121,9 @@ extern "C" void fn_8009DEFC(int flag)
 
     fn_8009DA90();
     team = fn_80178320();
-    pObject = fn_80168708((unsigned char)team);
-    pOther = fn_80168708(fn_80178308());
-    if ((pObject->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+    pObject = PlayBookGetFormation((unsigned char)team);
+    pOther = PlayBookGetFormation(fn_80178308());
+    if ((pObject->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
         p->mUnknown1A8 = pObject->mUnknown8.mUnknownF == 0;
         if (fn_8009DBB4(p) != 0) {
@@ -13155,7 +13155,7 @@ extern "C" void fn_8009E01C(void)
     fn_800FAD2C();
     fn_800FAECC(0);
     team = fn_80178320();
-    if ((fn_80168708((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+    if ((PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
         if (fn_8009DBB4(p) != 0) {
             if (p->mUnknown1A8 == 0) {
@@ -13244,7 +13244,7 @@ extern "C" void fn_8009E58C(void)
 
         if (p->mUnknown1A2 == 0) {
             for (i = 0; i <= 2; i++) {
-                p->mUnknown19F[i] = fn_80168E00(team, i, 0);
+                p->mUnknown19F[i] = PlayBookGetReceiver(team, i, 0);
             }
         }
         do {
@@ -13505,18 +13505,18 @@ extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 extern "C" int fn_8009FE24(Object_80039F5C *p)
 {
     int result = 0;
-    Object_800670B4 *pObject = fn_80168708(p->mIdBytes[2]);
+    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (p->mIdBytes[2] == fn_80178320()) {
         Message_800F01CC *pRecord = fn_800AEE20(p);
 
         if (pRecord == 0) {
             if (pObject->mUnknown8.mUnknownF == 0) {
-                pRecord = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+                pRecord = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
             } else {
-                unsigned char index = fn_80163E94(pObject, p->mIdBytes[1], 0)->mUnknownB;
+                unsigned char index = PlaySetGetEntry(pObject, p->mIdBytes[1], 0)->mUnknownB;
 
-                pRecord = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
+                pRecord = (Message_800F01CC *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
             }
         }
         if ((pRecord->mId & ~0x80) == 22 && (pRecord->mUnknown1[1] & 8)) {
@@ -14748,7 +14748,7 @@ void fn_800F1800(int index);
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801486A0(void);
-Object_800670B4 *fn_80168708(int team);
+Object_800670B4 *PlayBookGetFormation(int team);
 int fn_8017F60C(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -14808,9 +14808,9 @@ extern "C" int fn_800B51D0(Object_80039F5C *p)
 extern "C" short fn_800B51D8(Object_800670B4 *p, int index, int mode)
 {
     if (mode == 0) {
-        index = fn_801642DC(p, index);
+        index = PlaySetGetNextOrder(p, index);
     } else {
-        index = fn_80164384(p, index);
+        index = PlaySetGetPrevOrder(p, index);
     }
     return index;
 }
@@ -15122,7 +15122,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
 
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
         tries = 7;
-        pTeam = fn_80168708(team);
+        pTeam = PlayBookGetFormation(team);
         if (index != 0xFF) {
             if (mode != 2 && mode != 3) {
                 index = fn_800B51D8(pTeam, index, mode);
@@ -16004,7 +16004,7 @@ void fn_8017CD20(void);
 QueryCursor fn_800C0698(int index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
-int fn_80168E00(int team, int index, unsigned char *pOut);
+int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 unsigned short fn_801BE648(void *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
@@ -16028,14 +16028,14 @@ extern Record_800C432C lbl_803103F0[10];
 
 extern "C" {
 int SpchIGIsNarratorIdle(void);
-void fn_80168A14(int team);
+void PlayBookRestoreSelection(int team);
 int fn_80178E4C(void);
 void fn_8017DFA8(int index);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
-void fn_80168908(int team, unsigned int index);
-void fn_80164940(int team);
+void PlayBookSelectAudible(int team, unsigned int index);
+void PlayRealignTeam(int team);
 void fn_8011F3A8(void);
-void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800A7514(int team);
 void fn_8009FFD4(void);
 int ConSetChannelInfo(int a, int b, void *p);
@@ -16109,7 +16109,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         lbl_803EABB4 = 1;
         fn_8010B1FC(fn_800B6544(index), 0, 0);
         if (action == 0xFE) {
-            fn_80168A14(team);
+            PlayBookRestoreSelection(team);
             if (lbl_803EABA8->mUnknownC7 != 0) {
                 lbl_803EABA8->mUnknownC7 = 0;
                 fn_800AF088();
@@ -16145,12 +16145,12 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
                     AudmonEventPostArgs(0x74, &p->mMotion.mPos, home, 0, 0);
                 }
             }
-            fn_80168908(team, action);
+            PlayBookSelectAudible(team, action);
         }
         if (team == away) {
             fn_800FBAA8();
         }
-        fn_80164940(team);
+        PlayRealignTeam(team);
         if (team == home) {
             fn_800B0DA4();
             if (action != 0xFD) {
@@ -16162,7 +16162,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         fn_8009FFD4();
         AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
-            Object_800670B4 *pTeam = fn_80168708(t);
+            Object_800670B4 *pTeam = PlayBookGetFormation(t);
             unsigned int count = fn_80178D18(t);
             unsigned char i;
 
@@ -16171,7 +16171,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
                 unsigned char a;
                 unsigned char b;
 
-                fn_80164430(pTeam, i, &a, &b);
+                PlaySetGetEntryRoles(pTeam, i, &a, &b);
                 pPlayer->mUnknown2914 = a;
                 fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
                 fn_800B4798(pPlayer->mRatings, t, i, &pPlayer->mUnknown2900);
@@ -16375,7 +16375,7 @@ extern "C" void fn_800BED54(unsigned char index)
         if (fn_8016EA68() == 0) {
             int team = fn_80178308();
 
-            fn_801647A4(fn_80168708(team), team, lbl_803EB3B0);
+            PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
             fn_8016E008(team);
             fn_800BD958();
         }
@@ -16943,13 +16943,13 @@ extern "C" void fn_800C11B8(void)
         unsigned char found;
         unsigned char level;
 
-        pState->mUnknown1C1[i] = fn_80168E00(fn_80178308(), i, &found);
+        pState->mUnknown1C1[i] = PlayBookGetReceiver(fn_80178308(), i, &found);
         while (pState->mUnknown1C1[i] == 255 || found == 0) {
             i = (i + 1) % 3;
             if (i == start) {
                 return;
             }
-            pState->mUnknown1C1[i] = fn_80168E00(fn_80178308(), i, &found);
+            pState->mUnknown1C1[i] = PlayBookGetReceiver(fn_80178308(), i, &found);
         }
         if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
             Object_80039F5C *p = fn_80039F5C(fn_80178308(), pState->mUnknown1C1[i]);
@@ -16992,7 +16992,7 @@ extern "C" unsigned char fn_800C13A0(State_80039F5C *pState, unsigned char *pA, 
     if (i != 3 && fn_801787A0() == 0) {
         unsigned char state[4];
 
-        fn_80168E00(fn_80178308(), i, state);
+        PlayBookGetReceiver(fn_80178308(), i, state);
         if (id != 255 && state[0] != 0) {
             result = pBlock->mUnknown1B8[i];
             *pA = pBlock->mUnknown1BB[i];
@@ -17147,7 +17147,7 @@ extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBe
         }
     } else if (distanceSq < rangeSq &&
                MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mUnknown36) < maxAngle) {
-        fn_80227538((Point_80167910 *)&end, p->mUnknown36, range);
+        fn_80227538((Vec2_t *)&end, p->mUnknown36, range);
         end.mX += p->mUnknown4.mX;
         end.mY += p->mUnknown4.mY;
         end.mZ = p->mUnknown4.mZ;
@@ -17364,7 +17364,7 @@ extern "C" void fn_800C46A0(Sequence_800C4460 *p)
 extern "C" {
 int fn_800BF56C(void);
 void fn_8016E008(int team);
-void fn_80164A64(int team);
+void PlayAlignPostStartDelays(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
 int fn_8006D884(int idx);
@@ -17607,10 +17607,10 @@ extern "C" void fn_800BD8F4(void)
 
     fn_8013F3FC();
     fn_800B6408();
-    fn_801647A4(fn_80168708(team), team, lbl_803EB3B0);
+    PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
     fn_8016E008(team);
-    fn_80164A64(fn_80178308());
-    fn_80164A64(team);
+    PlayAlignPostStartDelays(fn_80178308());
+    PlayAlignPostStartDelays(team);
 }
 
 extern "C" void fn_800BD958(void)
@@ -18595,7 +18595,7 @@ void Class_80297AB8::vfn_03()
     fn_800B8608();
     RumbleEnable(1);
     fn_800CC448();
-    fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
+    fn_800996FC(PlayBookGetPlay(fn_80178308())->mUnknown14);
     PadInputSaveHandlers(lbl_803EA9E8);
     ConSetChannelInfo(-1, 3, lbl_802EC880);
     fn_8006F0C8(127);

@@ -196,7 +196,7 @@ extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
 
 extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
-extern "C" int fn_80168E00(int team, int a, unsigned char *pOut);
+extern "C" int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 
 #endif
 
@@ -387,7 +387,7 @@ extern "C" int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower,
     team = fn_80178308();
     for (unsigned char i = 0; i <= 2; ++i) {
         unsigned char valid;
-        unsigned short index = fn_80168E00(team, i, &valid);
+        unsigned short index = PlayBookGetReceiver(team, i, &valid);
         if (valid) {
             Object_80039F5C *other = fn_80039F5C(team, index);
             if (other != p) {

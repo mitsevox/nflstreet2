@@ -1,6 +1,6 @@
 #include "engine/viewport.h"
 #include "game/Object_80039F5C.h"
-#include "game/Team_80167A8C.h"
+#include "game/PlayBookTeam.h"
 #include "game/bitstream.h"
 #include "game/ResLoad.h"
 #include "game/fn_802270D4.h"
@@ -263,7 +263,7 @@ int fn_80161B38(Object_801618D8 *item) {
     }
     return 0;
 }
-void fn_80161E7C(Object_801618D8 *item, Point_80167910 *point, int flip) {
+void fn_80161E7C(Object_801618D8 *item, Vec2_t *point, int flip) {
     item->mUnknown4.mX = point->mX;
     item->mUnknown4.mY = point->mY;
     item->mUnknown4.mZ = 0.0f;
@@ -301,7 +301,7 @@ void fn_80161F5C(Object_801618D8 *item, BitStream_t *a, BitStream_t *b, BitStrea
         int id = (int)ReadBitStream(b, 5);
         if (active && id <= 13) {
             Object_80039F5C *player = fn_80039F5C((unsigned char)(id / 7), (unsigned short)(id % 7));
-            fn_80161E7C(item, (Point_80167910 *)&player->mpUnknown4->mUnknown4, 0);
+            fn_80161E7C(item, (Vec2_t *)&player->mpUnknown4->mUnknown4, 0);
         }
     } else
         ReadBitStream(b, 6);
@@ -346,7 +346,7 @@ void fn_801621B8(void) {
             }
             if (item->mUnknown20 & 0x20) {
                 item->mUnknown18 *= 1.1f;
-                Point_80167910 *point = (Point_80167910 *)&item->mUnknown100->mMotion.mPos;
+                Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
                 fn_80161E7C(item, point, fn_801784C4());
                 if (item->mUnknown18 > item->mUnknown38) {
                     item->mUnknown18 = item->mUnknown38;
@@ -354,7 +354,7 @@ void fn_801621B8(void) {
                 }
             }
             if (item->mUnknown20 & 0x40) {
-                Point_80167910 *point = (Point_80167910 *)&item->mUnknown100->mMotion.mPos;
+                Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
                 fn_80161E7C(item, point, fn_801784C4());
                 if (item->mUnknown18 > 1.0f)
                     item->mUnknown18 *= 0.9f;
@@ -468,7 +468,7 @@ void fn_80162794(void) {
                     fn_80162F28(item);
                     player->mFlags &= ~0x2000000;
                 }
-                fn_80161E7C(item, (Point_80167910 *)&player->mMotion.mPos, fn_801784C4());
+                fn_80161E7C(item, (Vec2_t *)&player->mMotion.mPos, fn_801784C4());
                 other->mUnknown20 |= 2;
                 other->mUnknown4 = item->mUnknown4;
                 if (player == current) {
@@ -521,7 +521,7 @@ int fn_8016295C(Vector_80039F5C *input, Vector_80039F5C *out, int *angle, float 
     point.mX *= ratio;
     point.mY *= ratio;
     float a = (fn_802270D4(&unscaled) - 10.25f) * 0.11111111f;
-    Point_80167910 pair = {point.mX, point.mY};
+    Vec2_t pair = {point.mX, point.mY};
     float b = (fn_802270A4(&pair) - 1.0f) * 0.5f;
     if (unscaled.mZ < 0.0f)
         b = a;
@@ -616,7 +616,7 @@ void fn_80162F28(Object_801618D8 *source) {
             item->mUnknown18 = 1.0f;
             item->mUnknown38 = fn_801621AC();
             item->mUnknown30 = source->mUnknown30;
-            Point_80167910 *point = (Point_80167910 *)&item->mUnknown100->mMotion.mPos;
+            Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
             fn_80161E7C(item, point, fn_801784C4());
         }
     }

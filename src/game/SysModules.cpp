@@ -46,7 +46,7 @@ void fn_8015E548(void);
 void fn_8015E65C(void);
 void fn_8015E684(void);
 void fn_8015E714(void);
-void fn_801607F0(int a);
+void PlaTexCacheOpenArchive(int a);
 void DbgPrintEnable(void);
 void DbgPrintDisable(void);
 void DbgScreenClear(void);
@@ -462,7 +462,7 @@ void SysPreLoad::LoadSystems()
     fn_8015E620(14, 1);
     fn_8015E684();
     PortraitSystemInit();
-    fn_801607F0(4);
+    PlaTexCacheOpenArchive(4);
 }
 
 static ModuleDependency sTaskDependencies[] = { &gSys, 0 };

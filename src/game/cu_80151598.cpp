@@ -47,7 +47,7 @@ void fn_80177C50(int a);
 void fn_80177C44(int value);
 void fn_8011DF90(void);
 int fn_80178308(void);
-void fn_80168A14(int team);
+void PlayBookRestoreSelection(int team);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
 int fn_80178AE0(void);
@@ -79,7 +79,7 @@ void fn_801515D0(Class_802A1C98 *p)
     }
     fn_8011DF90();
     team = fn_80178308();
-    fn_80168A14(team);
+    PlayBookRestoreSelection(team);
 }
 
 void fn_80151628(Class_802A1C98 *p, float dt)

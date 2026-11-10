@@ -158,7 +158,7 @@ int fn_80178360(void);
 int fn_8011F354(void);
 int fn_8011F524(void);
 float fn_8011F4D4(void);
-Record_80067338 *fn_80168730(int);
+Record_80067338 *PlayBookGetSavedPlay(int);
 void fn_8016B144(int,int);
 void fn_8016B210(int,int);
 void fn_8016B22C(int,signed char);
@@ -188,8 +188,8 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
     unsigned short count=fn_800B15D4();
     int ref=0;
     if(count>1 && !fn_8011F354()) {
-        fn_8016B144(team,fn_80168730(team)->mUnknown4);
-        fn_8016B210(team,fn_80168730((unsigned char)(team^1))->mUnknown4);
+        fn_8016B144(team,PlayBookGetSavedPlay(team)->mUnknown4);
+        fn_8016B210(team,PlayBookGetSavedPlay((unsigned char)(team^1))->mUnknown4);
         if(fn_8011F1CC())fn_8016B310(team,2);
         else {
             fn_8016B310(team,1);

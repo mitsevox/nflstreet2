@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8016871C.h"
+#include "game/PlayBookGetPlay.h"
 
 /* Play record bytes as fn_800E4EE4 reads and writes them. */
 struct Record_800E4EE4 {
@@ -31,7 +31,7 @@ extern "C" int fn_800E4EE4(Object_80039F5C *p)
 {
     State_800E4EE4 *pState = (State_800E4EE4 *)&p->mUnknown336;
     Record_800E4EE4 *pRecord =
-        (Record_800E4EE4 *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+        (Record_800E4EE4 *)fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
 
     if ((pRecord->mUnknown0 & ~0x80) == 48 && fn_800AD9B4() == 3 && (pRecord->mUnknown4 & ~0x80) == 30) {
         Point_8017886C delta;

@@ -107,7 +107,7 @@ void fn_8003D2E0();
 void PlayerObjRenderInit(int, int);
 void PlayerLookOpen();
 void fn_8003D988(int, int *, int);
-void fn_80160C10();
+void PlaTexCacheStart();
 int fn_8003D378(int, int);
 void ResTrackPause();
 void ResTrackResume();
@@ -129,16 +129,16 @@ int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);
 Item_800476DC *fn_800475FC(int);
 void fn_800476CC(Item_800476DC *, const char *);
-void fn_801611BC(int, const char *, int);
-void fn_8016130C(int, int, int, int, int);
+void PlaTexCacheSetFace(int, const char *, int);
+void PlaTexCacheSetCapFace(int, int, int, int, int);
 void fn_8003D958();
 
-void fn_80160CDC();
+void PlaTexCacheLoadAllNow();
 int fn_800A3420();
 void PlayerLookHideSwitch28();
-void fn_801613F0();
+void PlaTexCacheDiscardRequests();
 int FELoopIsMainFEActive();
-void fn_80161498();
+void PlaTexCacheCloseArchive();
 void VptTrashObject(void *);
 void VptFlushObjectTrash();
 void fn_80047630(Item_800476DC *);
@@ -148,9 +148,9 @@ void fn_800AF71C();
 void ResUnLoad(void *, int);
 void PlayerObjRemoveObjType(int);
 int ObjDelType(int);
-void fn_80160F98();
+void PlaTexCacheStop();
 void PlayerLookClose();
-int fn_80160C08();
+int PlaTexCacheGetArchive();
 void fn_8009BD48(int *, int, int, int);
 int fn_800429CC(int);
 void fn_80030ACC(void (*)(BitStream_t *),
@@ -745,11 +745,11 @@ int fn_8003D378(int owner, int mode) {
       }
       PlayerLookApply(index);
       if (hasName)
-        fn_801611BC(init.mUnknown5A, name, 0);
+        PlaTexCacheSetFace(init.mUnknown5A, name, 0);
       else {
         int a = fn_80081E3C(&object) + 1, b = fn_80082280(&object),
             c = fn_800822D4(&object);
-        fn_8016130C(init.mUnknown5A, a, b, c, 0);
+        PlaTexCacheSetCapFace(init.mUnknown5A, a, b, c, 0);
       }
     }
     fn_8008056C(&object);
@@ -808,16 +808,16 @@ int fn_8003DA94(int count, int owner, int mode) {
   PlayerLookOpen();
   fn_8003D988(0, lbl_802CCDA4, mode);
   fn_8003D988(1, lbl_802CCDA4 + lbl_803EA436, mode);
-  fn_80160C10();
+  PlaTexCacheStart();
   int result = fn_8003D378(owner, mode);
   if (!mode) {
-    fn_80160CDC();
+    PlaTexCacheLoadAllNow();
     if (fn_800A3420() == 3)
       PlayerLookHideSwitch28();
   } else
-    fn_801613F0();
+    PlaTexCacheDiscardRequests();
   if (!FELoopIsMainFEActive())
-    fn_80161498();
+    PlaTexCacheCloseArchive();
   return result;
 }
 int fn_8003DCC0(int owner) {
@@ -861,10 +861,10 @@ int fn_8003DCC0(int owner) {
   ObjDelType(30);
   int result = ObjDelType(27);
   lbl_803EA434 = 0;
-  fn_80160F98();
+  PlaTexCacheStop();
   PlayerLookClose();
-  if (FELoopIsMainFEActive() && fn_80160C08())
-    fn_80161498();
+  if (FELoopIsMainFEActive() && PlaTexCacheGetArchive())
+    PlaTexCacheCloseArchive();
   return result;
 }
 void fn_8003DE74(int side, int *values) {
