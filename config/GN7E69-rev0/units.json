@@ -14581,6 +14581,19 @@
           "end": "0x80203754"
         }
       ]
+    },
+    {
+      "source": "src/engine/bsearch.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row src/engine/bsearch.c 0x802623A8-0x80262440, exact function extent and inferred bsearch name. Standalone binary search owns no data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802623A8",
+          "end": "0x80262440"
+        }
+      ]
     }
   ]
 }
