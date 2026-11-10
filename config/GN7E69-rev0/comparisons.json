@@ -37477,46 +37477,6 @@
       ]
     },
     {
-      "source": "src/engine/slinklst.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80278700-0x8027882C (src/engine/slinklst.c), the sound_cxx compiler row 0x802714A8-0x8027CF9C, the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80278700",
-          "end": "0x8027882C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80278700",
-          "start": "0x80278700",
-          "end": "0x80278714"
-        },
-        {
-          "symbol": "fn_80278714",
-          "start": "0x80278714",
-          "end": "0x80278750"
-        },
-        {
-          "symbol": "fn_80278750",
-          "start": "0x80278750",
-          "end": "0x8027878C"
-        },
-        {
-          "symbol": "fn_8027878C",
-          "start": "0x8027878C",
-          "end": "0x802787CC"
-        },
-        {
-          "symbol": "fn_802787CC",
-          "start": "0x802787CC",
-          "end": "0x8027882C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_8027882C.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv provisional unit row 0x8027882C-0x8027981C (src/engine/cu_8027882C.cpp), the compiler, external and source-form rows 0x80276DE4-0x8027CF9C, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

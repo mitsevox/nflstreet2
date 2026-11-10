@@ -14475,6 +14475,19 @@
           "end": "0x80262310"
         }
       ]
+    },
+    {
+      "source": "src/engine/slinklst.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80278700-0x8027882C (src/engine/slinklst.c), its five function/name rows and SndLinkList_t/SndLinkNode_t type/field rows; sound_cxx compiler row 0x802714A8-0x8027CF9C. Complete native .text, no owned data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80278700",
+          "end": "0x8027882C"
+        }
+      ]
     }
   ]
 }

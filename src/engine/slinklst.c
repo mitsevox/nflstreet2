@@ -1,75 +1,75 @@
 /* Sound linked lists (slinklst.c): init, push, push to the tail, pop and remove on the sound
    system's node lists. */
 
-#include "engine/sndsys.h"
+#include "engine/slinklst.h"
 
 extern "C" {
 
-void fn_80278700(List_80278714 *list)
+void SNDLINKI_init(SndLinkList_t *list)
 {
-    list->m0 = 0;
-    list->m4 = 0;
-    list->m8 = 0;
+    list->mpFirst = 0;
+    list->mpLast = 0;
+    list->mCount = 0;
 }
 
-void fn_80278714(List_80278714 *list, Link_80278714 *link)
+void SNDLINKI_push(SndLinkList_t *list, SndLinkNode_t *link)
 {
-    link->m0 = list->m0;
-    link->m4 = 0;
-    if (list->m0 != 0) {
-        list->m0->m4 = link;
+    link->mpNext = list->mpFirst;
+    link->mpPrev = 0;
+    if (list->mpFirst != 0) {
+        list->mpFirst->mpPrev = link;
     } else {
-        list->m4 = link;
+        list->mpLast = link;
     }
-    list->m0 = link;
-    list->m8++;
+    list->mpFirst = link;
+    list->mCount++;
 }
 
-void fn_80278750(List_80278714 *list, Link_80278714 *link)
+void SNDLINKI_pushtail(SndLinkList_t *list, SndLinkNode_t *link)
 {
-    link->m0 = 0;
-    link->m4 = list->m4;
-    if (list->m4 != 0) {
-        list->m4->m0 = link;
+    link->mpNext = 0;
+    link->mpPrev = list->mpLast;
+    if (list->mpLast != 0) {
+        list->mpLast->mpNext = link;
     } else {
-        list->m0 = link;
+        list->mpFirst = link;
     }
-    list->m4 = link;
-    list->m8++;
+    list->mpLast = link;
+    list->mCount++;
 }
 
-Link_80278714 *fn_8027878C(List_80278714 *list)
+SndLinkNode_t *SNDLINKI_pop(SndLinkList_t *list)
 {
-    Link_80278714 *link;
+    SndLinkNode_t *link;
 
-    link = list->m0;
+    link = list->mpFirst;
     if (link != 0) {
-        list->m0 = link->m0;
-        if (list->m0 == 0) {
-            list->m4 = 0;
+        list->mpFirst = link->mpNext;
+        if (list->mpFirst == 0) {
+            list->mpLast = 0;
         } else {
-            list->m0->m4 = 0;
+            list->mpFirst->mpPrev = 0;
         }
-        list->m8--;
+        list->mCount--;
     }
     return link;
 }
 
-void fn_802787CC(List_80278714 *list, Link_80278714 *link)
+void SNDLINKI_remove(SndLinkList_t *list, SndLinkNode_t *link)
 {
-    if (link == list->m0) {
-        list->m0 = link->m0;
+    if (link == list->mpFirst) {
+        list->mpFirst = link->mpNext;
     }
-    if (link == list->m4) {
-        list->m4 = link->m4;
+    if (link == list->mpLast) {
+        list->mpLast = link->mpPrev;
     }
-    if (link->m4 != 0) {
-        link->m4->m0 = link->m0;
+    if (link->mpPrev != 0) {
+        link->mpPrev->mpNext = link->mpNext;
     }
-    if (link->m0 != 0) {
-        link->m0->m4 = link->m4;
+    if (link->mpNext != 0) {
+        link->mpNext->mpPrev = link->mpPrev;
     }
-    list->m8--;
+    list->mCount--;
 }
 
 }
