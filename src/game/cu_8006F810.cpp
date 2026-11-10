@@ -29,17 +29,17 @@ extern "C" {
 int fn_8007F828(int id);
 int fn_800A8444(int index);
 void fn_8006EA04(unsigned int index, unsigned int value);
-void fn_8006BD24(void);
+void SndgAmbStopAllAndCue(void);
 void fn_80072AEC(int mode);
 void fn_80072E84(void);
 void fn_80072F04(void);
-void fn_8006BC30(int type, unsigned int index);
-void fn_8006BCC8(int type);
-int fn_8006B810(int type, unsigned int index);
-unsigned int fn_8006BA54(int type, int value);
-void fn_8006F5EC(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index);
-void fn_8006F6A0(int type, AudmonEvent_t *pRecord);
-void fn_8006F550(void);
+void SndgAmbObjStop(int type, unsigned int index);
+void SndgAmbPostCue(int type);
+int SndgAmbObjExists(int type, unsigned int index);
+unsigned int SndgAmbObjFindSlot(int type, int value);
+void SndgSoundObjControl(int type, int mode, Vector_80039F5C *pPos, void *pObject, int index);
+void SndgSoundObjUpdateFromEvent(int type, AudmonEvent_t *pRecord);
+void SndgFadeOutChannelGroup(void);
 void fn_8006F0B8(int flags);
 void fn_8006E08C(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
@@ -79,7 +79,7 @@ int fn_8006C7F4(unsigned int channel);
 int fn_8006C8A4(int id, Vector_80039F5C *pos, unsigned char volume);
 unsigned char fn_8006CC90(int id);
 unsigned char fn_8006CC48(void);
-void fn_8006F54C(void);
+void SndgNullUpdate(void);
 int fn_800A3444(void);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
@@ -243,14 +243,14 @@ void fn_8006F850(AudmonEvent_t *p)
     case 51: fn_8006C854(56, &p->mPos); break;
     case 52: fn_8006C854(57, &p->mPos); break;
     case 48:
-        fn_8006F394(14, fn_8009BCE8(&p->mUnknown0)->mIdBytes[2]);
+        SndgCrowdTriggerEvent(14, fn_8009BCE8(&p->mUnknown0)->mIdBytes[2]);
         fn_8006C854(54, &p->mPos);
         break;
     case 49:
-        fn_8006F394(15, fn_8009BCE8(&p->mUnknown0)->mIdBytes[2]);
+        SndgCrowdTriggerEvent(15, fn_8009BCE8(&p->mUnknown0)->mIdBytes[2]);
         fn_8006C854(53, &p->mPos);
         break;
-    case 132: fn_8006BD24(); fn_8006F394(2, 0); break;
+    case 132: SndgAmbStopAllAndCue(); SndgCrowdTriggerEvent(2, 0); break;
     case 126: fn_80072AEC(10); break;
     case 127: fn_80072AEC(11); break;
     case 107: case 128:
@@ -306,13 +306,13 @@ void fn_8006F850(AudmonEvent_t *p)
     case 103: fn_800719A4(&p->mPos); break;
     case 62:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(10, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 63:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(104, &p->mPos);
         } else {
             unsigned char volume;
@@ -327,19 +327,19 @@ void fn_8006F850(AudmonEvent_t *p)
         break;
     case 65:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(106, &p->mPos);
         } else fn_80071A04(3, &p->mPos);
         break;
     case 66:
         if (p->mUnknown14) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(105, &p->mPos);
         }
         break;
     case 67:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(110, &p->mPos);
         } else {
             unsigned char volume;
@@ -354,31 +354,31 @@ void fn_8006F850(AudmonEvent_t *p)
         break;
     case 68:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(106, &p->mPos);
         } else { fn_80071A04(4, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 69:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(5, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 70:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(108, &p->mPos);
         } else { fn_80071A04(6, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 72:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(105, &p->mPos);
         }
         break;
     case 73:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(110, &p->mPos);
         } else {
             unsigned char volume;
@@ -392,44 +392,44 @@ void fn_8006F850(AudmonEvent_t *p)
         }
         break;
     case 64: case 74:
-        if (p->mUnknown14 || !p->mUnknown0) fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        if (p->mUnknown14 || !p->mUnknown0) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         fn_80071A04(9, &p->mPos);
         break;
     case 75:
         if (p->mUnknown14) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(111, &p->mPos);
         } else fn_80071A04(8, &p->mPos);
         break;
     case 76:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(112, &p->mPos);
         }
         break;
     case 77:
         if (p->mUnknown14 || !p->mUnknown0) {
-            fn_8006BC30(4, (unsigned char)p->mUnknown18);
+            SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
             fn_8006C854(107, &p->mPos);
         } else { fn_80071A04(8, &p->mPos); fn_80071914(&p->mPos); }
         break;
     case 78:
         fn_80071A04(1, &p->mPos);
-        if (p->mUnknown14) fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        if (p->mUnknown14) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         else fn_80071914(&p->mPos);
         break;
-    case 47: fn_8006BC30(4, (unsigned char)p->mUnknown18); break;
+    case 47: SndgAmbObjStop(4, (unsigned char)p->mUnknown18); break;
     case 86: case 87:
-        fn_8006F5EC(7, fn_8006B810(7, 0) ? 2 : 1, &p->mPos, 0, 0);
+        SndgSoundObjControl(7, SndgAmbObjExists(7, 0) ? 2 : 1, &p->mPos, 0, 0);
         break;
-    case 85: fn_8006F6A0(12, p); break;
-    case 81: fn_8006F6A0(5, p); break;
-    case 79: fn_8006F6A0(8, p); break;
-    case 80: fn_8006F6A0(11, p); break;
-    case 82: fn_8006F6A0(9, p); break;
-    case 83: fn_8006F6A0(10, p); break;
+    case 85: SndgSoundObjUpdateFromEvent(12, p); break;
+    case 81: SndgSoundObjUpdateFromEvent(5, p); break;
+    case 79: SndgSoundObjUpdateFromEvent(8, p); break;
+    case 80: SndgSoundObjUpdateFromEvent(11, p); break;
+    case 82: SndgSoundObjUpdateFromEvent(9, p); break;
+    case 83: SndgSoundObjUpdateFromEvent(10, p); break;
     case 84:
-        fn_8006F5EC(6, fn_8006B810(6, (unsigned char)fn_8006BA54(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
+        SndgSoundObjControl(6, SndgAmbObjExists(6, (unsigned char)SndgAmbObjFindSlot(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
         break;
     case 44: lbl_803EA6EC = 1; break;
     case 46: fn_80071914(&p->mPos); break;
@@ -463,20 +463,20 @@ void fn_8006F850(AudmonEvent_t *p)
     case 112: if (fn_801486A0()) fn_8007134C(); break;
     case 113:
         fn_8006C854(130, 0);
-        fn_8006BCC8(2);
+        SndgAmbPostCue(2);
         fn_80072E84();
-        fn_8006F394(2, 0);
+        SndgCrowdTriggerEvent(2, 0);
         break;
     case 114:
-        fn_8006BCC8(3);
+        SndgAmbPostCue(3);
         if (!p->mUnknown10.mValue) fn_80072F04();
-        fn_8006F394(3, 0);
+        SndgCrowdTriggerEvent(3, 0);
         break;
     case 95: if (fn_801486A0()) fn_8006C854(63, 0); break;
-    case 89: fn_8006F394(4, (unsigned char)p->mUnknown10.mValue); break;
-    case 94: fn_8006F394(11, (unsigned char)p->mUnknown10.mValue); break;
-    case 92: fn_8006F394(9, (unsigned char)p->mUnknown10.mValue); fn_8006C854(134, 0); break;
-    case 90: fn_8006F394(13, (unsigned char)p->mUnknown10.mValue); break;
+    case 89: SndgCrowdTriggerEvent(4, (unsigned char)p->mUnknown10.mValue); break;
+    case 94: SndgCrowdTriggerEvent(11, (unsigned char)p->mUnknown10.mValue); break;
+    case 92: SndgCrowdTriggerEvent(9, (unsigned char)p->mUnknown10.mValue); fn_8006C854(134, 0); break;
+    case 90: SndgCrowdTriggerEvent(13, (unsigned char)p->mUnknown10.mValue); break;
     case 24: fn_8006C854(136, 0); break;
     case 25: fn_8006C854(137, 0); break;
     case 26: fn_8006C854(138, 0); break;
@@ -517,11 +517,11 @@ void fn_8006F850(AudmonEvent_t *p)
         if (fn_801486A0() != 1) {
             if (!lbl_803EA6F9) fn_80072AEC(9);
             else lbl_803EA6F9 = 0;
-            fn_8006F394(5, player->mIdBytes[2]);
+            SndgCrowdTriggerEvent(5, player->mIdBytes[2]);
         } else if (lbl_803EA6CE) {
             fn_80071C2C(0);
             lbl_803EA6E0 = (lbl_803EA6E0 + 1) % 4;
-            fn_8006F394(lbl_80290B9C[lbl_803EA6E0], player->mIdBytes[2]);
+            SndgCrowdTriggerEvent(lbl_80290B9C[lbl_803EA6E0], player->mIdBytes[2]);
         }
         break;
     }
@@ -530,7 +530,7 @@ void fn_8006F850(AudmonEvent_t *p)
         if (fn_801486A0()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
             if (!lbl_803EA6F9) fn_80072AEC(7);
-            fn_8006F394(6, player->mIdBytes[2]);
+            SndgCrowdTriggerEvent(6, player->mIdBytes[2]);
             lbl_803EA6F8 = 1;
         }
         break;
@@ -539,7 +539,7 @@ void fn_8006F850(AudmonEvent_t *p)
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
             if (!lbl_803EA6F9 || fn_80073310() == 7) fn_80072AEC(8);
             lbl_803EA6F9 = 0;
-            fn_8006F394(7, player->mIdBytes[2]);
+            SndgCrowdTriggerEvent(7, player->mIdBytes[2]);
             lbl_803EA6F8 = 0;
         }
         break;
@@ -552,7 +552,7 @@ void fn_8006F850(AudmonEvent_t *p)
         unsigned int amount = p->mUnknown10.mValue;
         int state = p->mUnknown14;
         int previous = p->mUnknown18;
-        fn_8006F550();
+        SndgFadeOutChannelGroup();
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         float value = (float)amount;
         int id;
@@ -589,14 +589,14 @@ void fn_8006F850(AudmonEvent_t *p)
                 Point_8017886C point = fn_80177FE0();
                 if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(fn_8016871C(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
             }
-            if (eligible) fn_8006F394(8, player->mIdBytes[2]);
+            if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }
         break;
     }
     case 124: fn_8017886C(); break;
     case 139:
         fn_8006F824(50);
-        fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         if (lbl_803EA6F8) {
             fn_80072AEC(8);
             lbl_803EA6F8 = 0;
@@ -724,7 +724,7 @@ void fn_800711E0(void)
     if (lbl_803EA6FA) {
         switch (lbl_803EA6F4) {
         case 0: {
-            fn_8006F54C();
+            SndgNullUpdate();
             unsigned char id;
             lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
             id = lbl_803EA6C4;
@@ -754,7 +754,7 @@ void fn_800711E0(void)
             fn_8006C548(4, id, 0);
             break;
         }
-        case 1: case 2: fn_8006F54C(); break;
+        case 1: case 2: SndgNullUpdate(); break;
         }
     }
     lbl_803EA6F4 = 3;

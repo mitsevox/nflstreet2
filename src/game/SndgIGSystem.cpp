@@ -8,9 +8,9 @@
 struct Struct_8006C2C8;
 
 extern "C" {
-void fn_8006B664(void);
-void fn_8006B790(void);
-void fn_8006BCC8(int type);
+void SndgAmbInit(void);
+void SndgAmbShutdown(void);
+void SndgAmbPostCue(int type);
 void fn_8006C2C8(Struct_8006C2C8 *pInit);
 void fn_8006C454(void);
 void fn_8006D188(int withThird);
@@ -64,10 +64,10 @@ extern "C" void SndgIGInitAudio(void)
     AudmonEventStartInGame();
     fn_800B1670(fn_80071594);
     fn_8006D188(fn_8017F584() == 11);
-    fn_8006B664();
-    fn_8006BCC8(0);
+    SndgAmbInit();
+    SndgAmbPostCue(0);
     if (fn_800A350C()) {
-        fn_8006F394(0, 0);
+        SndgCrowdTriggerEvent(0, 0);
     }
     fn_8006F810();
     fn_80071600();
@@ -83,7 +83,7 @@ extern "C" void SndgIGInitAudio(void)
 extern "C" void SndgIGShutdownAudio(void)
 {
     SpchIGShutdown();
-    fn_8006B790();
+    SndgAmbShutdown();
     fn_8006F820();
     fn_800716E4();
     fn_8006D268();

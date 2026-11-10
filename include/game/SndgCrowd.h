@@ -28,8 +28,8 @@ private:
 extern SndgCrowd gSndgCrowd;
 
 extern "C" {
-void fn_8006F344(unsigned char value);
-int fn_8006F394(int index, int unknown);
+void SndgCrowdSetVolume(unsigned char value);
+int SndgCrowdTriggerEvent(int index, int unknown);
 }
 
 #endif
