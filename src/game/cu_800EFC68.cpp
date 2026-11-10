@@ -575,9 +575,9 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
-void fn_8017D9B0(int a, int b);
+void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
@@ -627,7 +627,7 @@ int CarrierMoveStart(Object_80039F5C *p, int a);
 int fn_800AD0E4(int team);
 int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
 int fn_800C53D8(Object_80039F5C *p);
-void fn_8017D8C4(int a, int b, unsigned char c);
+void HudSetMashPlayers(int a, int b, unsigned char c);
 void fn_80178718(Object_80039F5C *p);
 int fn_801787A0(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -1075,7 +1075,7 @@ extern "C" int fn_800F0CCC(Object_80039F5C *p) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pMotion->mFacing;
         p->mUnknown512.mUnknown4 = pMotion->mFacing;
-        p->mUnknown512.mUnknown0 = pMotion->mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = pMotion->mUnknown28 / gPlyrMoveFwdSpeed;
         return 1;
     }
     return 0;
@@ -2118,7 +2118,7 @@ extern "C" void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_80
     pBlock->mUnknown32 = 1;
     pBlock->mUnknown4[1].mX = target.mX;
     pBlock->mUnknown4[1].mY = target.mY;
-    if (pMotion->mUnknown28 < lbl_803ECB08 * 0.07f) {
+    if (pMotion->mUnknown28 < gPlyrMoveFwdSpeed * 0.07f) {
         if (fn_80177FE0().mY - pMotion->mPos.mY > 1.5f) {
             if (fn_80177FE0().mY - target.mY > 1.5f) {
                 if (target.mY - pMotion->mPos.mY > 0.05f) {
@@ -2745,7 +2745,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
         return 1;
     } else {
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         fn_8010CFD4(p);
     }
@@ -4028,7 +4028,7 @@ extern "C" int fn_80111104(Object_80039F5C *p)
             }
             p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
             p->mUnknown512.mUnknown14 = 1;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         }
         return 0;
@@ -4167,7 +4167,7 @@ extern "C" int fn_80112E8C(Object_80039F5C *p)
             p->mUnknown512.mUnknown14 = 1;
             result = 1;
             p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             break;
         }
     } else if (state->mUnknown13 == 1) {
@@ -4551,7 +4551,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
         }
     } else {
         result = 1;
-        fn_8017D8C4(p->mId, pOther->mId, 0);
+        HudSetMashPlayers(p->mId, pOther->mId, 0);
     }
     if (fn_801787A0() != 0 || (BallGetCurrentHolder() != p && BallGetCurrentHolder() != pOther)) {
         result = 3;
@@ -4563,7 +4563,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
     state->mUnknown56 = result;
     if (result != 1) {
         AudmonEventPostArgs(102, &p->mMotion.mPos, result, 0, 0);
-        fn_8017D9B0(p->mId, pOther->mId);
+        HudClearMashPlayers(p->mId, pOther->mId);
         if (result == 2) {
             StyleTrackerOnTackleContest(0, p);
         }
@@ -4626,7 +4626,7 @@ extern "C" void fn_80114DF4(Object_80039F5C *p)
         fn_800E98A4(pOther, p);
         fn_80143EBC(p, pOther);
         AudmonEventPostArgs(102, &p->mMotion.mPos, 0, 0, 0);
-        fn_8017D9B0(p->mId, pOther->mId);
+        HudClearMashPlayers(p->mId, pOther->mId);
     }
 }
 

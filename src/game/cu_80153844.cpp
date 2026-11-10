@@ -62,7 +62,7 @@ int fn_80178320(void);
 void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
 unsigned int fn_80153328(Class_802A1930 *p);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 void BallResetToSpot(void);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 unsigned char fn_8007AFDC(int team);
@@ -127,7 +127,7 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
 
     unsigned int limit = pRules->mpUnknown52->mUnknown12;
     if (fn_80153328(&pRules->mUnknown44) > limit && pRules->mpUnknown52->mUnknown20[0] == pRules->mpUnknown52->mUnknown20[1]) {
-        fn_8017D7C4("Playoff Round!");
+        HudShowAlert("Playoff Round!");
     }
     if ((unsigned int)fn_80178D70(0) > 1) {
         unsigned int value = fn_8009D990(0);

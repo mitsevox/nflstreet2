@@ -23,7 +23,7 @@ int fn_8011E3F4(Object_80039F5C *);
 int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
 Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
 
-extern float lbl_803EB158, lbl_803EB15C, lbl_803ECB08;
+extern float lbl_803EB158, lbl_803EB15C, gPlyrMoveFwdSpeed;
 unsigned int fn_8011E188(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E1BC(Object_80039F5C *, Object_80039F5C *, int, int);
@@ -240,7 +240,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         reference[1] = location.mY;
     }
     if (other && p->mUnknown1032 == 3 &&
-        (other->mMotion.mUnknown44 > lbl_803ECB08 * 0.5f || other->mMotion.mPos.mY - point[1] > 3.0f ||
+        (other->mMotion.mUnknown44 > gPlyrMoveFwdSpeed * 0.5f || other->mMotion.mPos.mY - point[1] > 3.0f ||
          fabsf(s->mUnknown0 - p->mMotion.mPos.mX) > 1.5f || (short)p->mUnknown1134 > 60)) {
         if (!fn_8011E3F4(p)) {
             fn_8011E240(p);
@@ -287,7 +287,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
                     else s->mUnknown8 = distance * 0.07428571581840515f + 0.14f;
                     goto finish;
                 }
-                if (!(other->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f)) {
+                if (!(other->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f)) {
                     s->mUnknown8 = 0.4f;
                     goto finish;
                 }
@@ -317,7 +317,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         } else s->mUnknown8 = 0.4f;
         if (MathAngleDiff(otherAngle, angle) > 0x4E38E3) s->mUnknownC = toward;
         s->mUnknown10 = s->mUnknownC;
-        if (!(p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.14f) &&
+        if (!(p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.14f) &&
             MathAngleDiff(p->mMotion.mUnknown32, p->mMotion.mFacing) > 0x400000 &&
             MathAngleDiff(p->mMotion.mUnknown32, s->mUnknown10) > 0x400000) {
             s->mUnknown10 = toward;
@@ -434,7 +434,7 @@ int fn_80133C50(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     }
     if (fn_801787A0()) {
         fn_8011E3EC(p, 0);

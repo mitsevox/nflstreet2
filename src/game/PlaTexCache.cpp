@@ -11,7 +11,7 @@
 #include "game/PlyrTex.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 
 /* Per-player texture slot state: the wanted texture id and palette, and the
    progress of its load from the texture archive. */
@@ -593,7 +593,7 @@ void PlaTexCacheSetFace(int player, const char *pName, int force)
     if (id == -1) {
         id = PlaTexCacheFindTexture("PLATEX_TEMPLATE_FACE");
     }
-    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && GameModeTypeGet() == 0) {
         id = PlaTexCacheFindTexture("PLATEX_TEMPLATE_FACE");
     } else {
         PlaTexCacheSetSlot(player, 5, id, -1, force);
@@ -606,7 +606,7 @@ int PlaTexCacheGetCapFaceId(int index)
     char name[32];
     int id;
 
-    if (CheatFlagsIsSet(38) && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(38) && GameModeTypeGet() == 0) {
         id = PlaTexCacheFindTexture("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;

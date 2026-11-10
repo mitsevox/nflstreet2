@@ -32,8 +32,8 @@ public:
     Object_8015005C *mpUnknown1C;
 };
 
-struct Info_80152940 {
-    Info_80152940() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
+struct MiniGameSlotInfo_t {
+    MiniGameSlotInfo_t() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
 
     Object_80039F5C *mpObject;
     int mUnknown4;
@@ -50,7 +50,7 @@ Object_80039F5C *fn_8003AC84(int id);
 int fn_801499A8(Class_80148A58 *p, int kind, int team, int index, Object_80039F5C *pPlayer);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 
-void fn_80152940(Class_802A2918 *p, int index, Info_80152940 *pInfo)
+void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo)
 {
     Entry_8015005C *pEntry = &p->mpUnknown1C->mpUnknown36->mEntries[index];
 
@@ -65,7 +65,7 @@ void fn_80152940(Class_802A2918 *p, int index, Info_80152940 *pInfo)
 
 unsigned char fn_801529C0(Class_802A2918 *p)
 {
-    Info_80152940 info;
+    MiniGameSlotInfo_t info;
     unsigned char result = 0;
     int i;
 
@@ -81,7 +81,7 @@ unsigned char fn_801529C0(Class_802A2918 *p)
 
 int fn_80152A54(Class_802A2918 *p, int kind, int team, int index, Object_80039F5C *pPlayer)
 {
-    Info_80152940 info;
+    MiniGameSlotInfo_t info;
     int result = 0;
 
     fn_80152940(p, index, &info);

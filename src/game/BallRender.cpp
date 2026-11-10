@@ -1,7 +1,7 @@
 /* Football model rendering: loads the ball textures and the BALL model,
    attaches the model to a ball object and draws it with its lighting, fade
    and level of detail, toggling the ball's simple shadow. */
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/ResLoad.h"
 #include "game/Object_80233EAC.h"
 #include "game/LightTracker.h"
@@ -183,7 +183,7 @@ void BallRenderDraw(BallRenderObj *pObject)
         fn_801D04C4();
         fn_801D0664(pObject->mUnknown20);
         if (CheatFlagsIsSet(33) || CheatFlagsIsSet(34)) {
-            if (!fn_8017F584()) {
+            if (!GameModeTypeGet()) {
                 fn_801D0CFC(1.5f);
             }
         }

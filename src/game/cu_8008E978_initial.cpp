@@ -40,8 +40,8 @@ extern void *lbl_803EA8B0;
 extern void *lbl_803EC91C;
 extern void *lbl_803EC920;
 extern const char lbl_802EBDBC[];
-extern float lbl_803ECB0C;
-extern float lbl_803ECB10;
+extern float gPlyrMoveSideSpeed;
+extern float gPlyrMoveBackSpeed;
 int PlayerMoveAnimCheckReverse(Object_80039F5C *, unsigned short);
 int MathAngleDiff(int, int);
 int fn_801BB608(void *, void *);
@@ -115,21 +115,21 @@ extern "C" void fn_8008E978(Object_80039F5C *p)
 extern "C" void fn_8008E9B0(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
-    Object_8016D8B0 *current=&p->mUnknown512;
-    Object_8016D8B0 *next=&p->mUnknown528;
+    PlyrMoveCmd_t *current=&p->mUnknown512;
+    PlyrMoveCmd_t *next=&p->mUnknown528;
     int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
         next->mUnknown0=current->mUnknown0;
-    } else if(difference<=0x56C16B && !(p->mUnknown492>lbl_803ECB0C)) {
+    } else if(difference<=0x56C16B && !(p->mUnknown492>gPlyrMoveSideSpeed)) {
         key=160;
-        float speed=lbl_803ECB0C*0.18f/lbl_803ECB0C;
+        float speed=gPlyrMoveSideSpeed*0.18f/gPlyrMoveSideSpeed;
         next->mUnknown0=current->mUnknown0>=speed?current->mUnknown0:speed;
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;
-    } else if(difference>0x56C16B && !(p->mUnknown492>lbl_803ECB10)) {
+    } else if(difference>0x56C16B && !(p->mUnknown492>gPlyrMoveBackSpeed)) {
         key=74;next->mUnknown0=current->mUnknown0;
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;

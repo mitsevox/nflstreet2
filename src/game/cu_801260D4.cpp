@@ -61,8 +61,8 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 float fn_8016B938(void);
 float fn_8016B974(void);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
-int fn_8016DAA4(Object_80039F5C *p);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
+int PlyrMoveIsFacingHeading(Object_80039F5C *p);
 int fn_80177C38(void);
 int fn_80178308(void);
 int fn_801783AC(int bit);
@@ -107,7 +107,7 @@ extern "C" float lbl_803EB108;
 extern "C" float lbl_803EB10C;
 extern "C" unsigned char lbl_803EB110;
 extern "C" float lbl_803EB114;
-extern "C" float lbl_803ECB08;
+extern "C" float gPlyrMoveFwdSpeed;
 
 extern "C" unsigned int fn_8012623C(Object_80039F5C *p)
 {
@@ -526,7 +526,7 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
     int high = (int)(lbl_803EB0ED * 46603.38f);
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
-    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / lbl_803ECB08 > 0.14f) {
+    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / gPlyrMoveFwdSpeed > 0.14f) {
         int widen;
         int reach;
         int anim;
@@ -764,7 +764,7 @@ extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState, Vector_80
                     pState->mUnknown0 -= (pState->mUnknown0 - 0.4f) * 0.25f;
                 }
             } else {
-                if (pMotion->mUnknown28 > lbl_803ECB08 * 0.2f) {
+                if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.2f) {
                     pState->mUnknown4 = 0.5f;
                 } else {
                     pState->mUnknown4 = 0.0f;
@@ -925,7 +925,7 @@ extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t 
             }
             *pAngle &= 0xFFFFFF;
             if (pOther->mUnknown512.mUnknown0 < 0.4f) {
-                float speed = fn_8016D9F4(pOther, 0.4f, 0.98f);
+                float speed = PlyrMoveGetRatedSpeed(pOther, 0.4f, 0.98f);
                 if (*pSpeed > speed) {
                     *pSpeed = speed;
                     *pAngle = pOther->mUnknown512.mUnknown4;
@@ -962,7 +962,7 @@ extern "C" int fn_80129704(Object_80039F5C *p)
 {
     State_801297F8 *pState = (State_801297F8 *)&p->mUnknown336;
 
-    pState->mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    pState->mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     pState->mUnknown4 = -1.0f;
     pState->mUnknown16 = 0;
     pState->mUnknown8 = p->mMotion.mFacing;
@@ -1100,8 +1100,8 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
                 }
             }
             speed = pMotion->mUnknown28;
-            if (speed < lbl_803ECB08 * 0.4f) {
-                speed = lbl_803ECB08 * 0.4f;
+            if (speed < gPlyrMoveFwdSpeed * 0.4f) {
+                speed = gPlyrMoveFwdSpeed * 0.4f;
             }
             fn_80129360(pMotion, pos, velocity, &dir);
             ok = 1;
@@ -1109,7 +1109,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
             dirAngle = fn_801CFE40(dir.mY, dir.mX);
             if (pOther != 0) {
                 if (fn_801486A0() == 2) {
-                    if (dirLength < fn_8016D9F4(pOther, 0.4f, 1.0f)) {
+                    if (dirLength < PlyrMoveGetRatedSpeed(pOther, 0.4f, 1.0f)) {
                         ok = distance <= 3.0f;
                     }
                 } else if (pOther->mpState->mId == 26 || pOther->mpState->mId == 27) {
@@ -1149,7 +1149,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
             if (fn_80128D50(p, pState, pos) != 0) {
                 p->mUnknown512.mUnknown15 = pState->mUnknown16;
                 if (pState->mUnknown4 > 0.0f) {
-                    if (fn_8016DAA4(p) != 0) {
+                    if (PlyrMoveIsFacingHeading(p) != 0) {
                         p->mUnknown512.mUnknown14 = 10;
                         p->mUnknown512.mUnknown8 = pState->mUnknown8;
                         p->mUnknown512.mUnknown4 = pState->mUnknown8;

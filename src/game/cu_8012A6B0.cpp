@@ -97,7 +97,7 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 float fn_80178A68(void *p);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_8012BB6C(float *pA, float *pB);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
@@ -149,7 +149,7 @@ extern int lbl_803EB118;
 extern float lbl_803EB11C, lbl_803EB120, lbl_803EB124;
 extern unsigned char lbl_802DB05C[21];
 Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 typedef int (*Action_8012F5A0)(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
@@ -284,7 +284,7 @@ extern "C" int fn_8012A6B0(Object_80039F5C *p)
     if (p->mFlags & 0x4000) {
         result = 0;
     }
-    if (!(p->mMotion.mUnknown28 >= fn_8016D9F4(p, 0.14f, 1.0f))) {
+    if (!(p->mMotion.mUnknown28 >= PlyrMoveGetRatedSpeed(p, 0.14f, 1.0f))) {
         Object_80039F5C *pOther = BallGetCurrentHolder();
 
         if (pOther && pOther->mpState->mId == 15) {
@@ -644,7 +644,7 @@ fallback:
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         } else {
-            float speed = p->mMotion.mUnknown28 / lbl_803ECB08;
+            float speed = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             if (!(speed >= 0.14f)) speed = 0.14f;
             p->mUnknown512.mUnknown0 = speed;
             p->mUnknown512.mUnknown14 = 1;
@@ -1131,16 +1131,16 @@ extern "C" float fn_8012CD60(Object_80039F5C *p, float value)
     switch (state->mUnknown2) {
     case 5:
         if (!(fraction < 0.8f)) {
-            value = p->mMotion.mUnknown28 / lbl_803ECB08;
+            value = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
         break;
     case 11:
         if (fraction >= 0.64f) {
-            value = p->mMotion.mUnknown28 / lbl_803ECB08;
+            value = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
         break;
     }
-    return fn_8016D9F4(p, value, 0.72f);
+    return PlyrMoveGetRatedSpeed(p, value, 0.72f);
 }
 #endif
 
@@ -1990,7 +1990,7 @@ extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int
         control->mUnknown52 = 0;
         if (!(fabsf(other->mMotion.mPos.mX) - 0.5f >= fabsf(p->mMotion.mPos.mX))
             && !(other->mMotion.mUnknown28 >= p->mMotion.mUnknown28)) {
-            control->mUnknown40 = other->mMotion.mUnknown28 / lbl_803ECB08;
+            control->mUnknown40 = other->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
             control->mUnknown40 = control->mUnknown40 >= 0.75f ? control->mUnknown40 : 0.75f;
         }
     } else if (control->mUnknown52 == 1) {
@@ -2108,7 +2108,7 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl)
 
         if (pOther && fn_8011E9B4(pOther)
             && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x200000) {
-            result = p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.4f;
+            result = p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.4f;
         }
         if (result) {
             p->mUnknown512.mUnknown15 = 27;

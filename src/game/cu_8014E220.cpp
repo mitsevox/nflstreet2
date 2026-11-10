@@ -56,7 +56,7 @@ void PlayerMoveResetAll(void);
 void fn_800B14E4(void);
 void fn_80044264(void);
 void AudmonEventClear(void);
-void fn_80173614(void);
+void ClockRuleSnap(void);
 void fn_800C9FC0(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
@@ -127,7 +127,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         fn_800B14E4();
         fn_80044264();
         AudmonEventClear();
-        fn_80173614();
+        ClockRuleSnap();
         fn_800C9FC0();
         fn_80148A58()->vfn_15();
     }

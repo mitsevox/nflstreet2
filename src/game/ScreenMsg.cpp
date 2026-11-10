@@ -17,8 +17,8 @@ int MsgTeamDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, 
 int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int fn_80059664(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult);
-int fn_8017F6A8(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int UISGroup2HandleMsg(int group, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 void fn_800AE65C(void);
 void fn_800AE988(void);
 int TutorialScreen13Msg(int id, void *pArgs, int count, int *pResult);
@@ -476,7 +476,7 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
         handled = MsgOptionsDispatch(screen, id, pArgs, count, pResult);
         break;
     case 2:
-        handled = fn_8017F6A8(screen, id, pArgs, count, pResult);
+        handled = UISGroup2HandleMsg(screen, id, pArgs, count, pResult);
         break;
     case 7:
         handled = TutorialScreenMsg(screen, id, pArgs, count, pResult);
@@ -489,6 +489,6 @@ extern "C" void ScreenMsgDispatch(unsigned int id, int group, int screen, int co
         break;
     }
     if (handled == 0) {
-        fn_8017F90C(id, pArgs, count, pResult);
+        UISGameMsgDispatch(id, pArgs, count, pResult);
     }
 }

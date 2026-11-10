@@ -81,7 +81,7 @@ void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Obje
 unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_801486A0(void);
-void fn_80171DB0(Object_80039F5C *p);
+void PossReleaseBall(Object_80039F5C *p);
 float fn_80178A08(void);
 float fn_80178A44(void);
 float fn_801CFB18(int angle);
@@ -197,7 +197,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
         }
         if (p->mFlags & 0x1000) {
             if (BallGetCurrentHolder() == p) {
-                fn_80171DB0(p);
+                PossReleaseBall(p);
             }
             p->mFlags &= ~0x1000;
         }

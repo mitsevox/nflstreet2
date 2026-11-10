@@ -100,11 +100,11 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRec
 void fn_80227248(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
 extern float lbl_803EAF0C;
 void fn_80227690(void *pOut, void *pA, void *pB);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_80109968(Object_80039F5C *p, Point_8017886C *pOut) {
-    return p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.07f;
+    return p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.07f;
 }
 
 extern "C" void fn_80109990(Pair_80109990 *pOut) {
@@ -186,7 +186,7 @@ extern "C" int fn_80109A1C(Object_80039F5C *p, Point_8017886C *pOut) {
 }
 
 extern "C" int fn_80109C7C(Object_80039F5C *p) {
-    return p->mMotion.mUnknown28 > lbl_803ECB08 * 0.4f;
+    return p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.4f;
 }
 
 extern "C" void fn_80109CA0(Object_80039F5C *p, int animation, unsigned char a, unsigned char b, unsigned char c) {
@@ -219,7 +219,7 @@ extern "C" int fn_80109D70(Object_80039F5C *p, Point_8017886C *pOut) {
         result = 3;
     } else if (fn_80109968(p, pOut)) {
         result = 5;
-    } else if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.07f) {
+    } else if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.07f) {
         result = 2;
     } else if (fn_802372EC(0, 5) <= 3) {
         result = 4;
@@ -245,7 +245,7 @@ extern "C" int fn_80109E48(Object_80039F5C *p, int kind, int *pOut) {
         }
         break;
     case 9:
-        if (p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.5f) {
+        if (p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.5f) {
             fn_80178308();
             pBlock->mUnknown52Count = 0;
         } else {
@@ -270,7 +270,7 @@ extern "C" int fn_80109F34(Object_80039F5C *p) {
         fn_80227690(&delta, &pBlock->mUnknown56, &p->mMotion.mPos);
         fn_800FF598(pBlock, p, &pBlock->mUnknown56, delta.Heading() & 0xFFFFFF, -1.0f);
         pBlock->mUnknown28 = -1.0f;
-        rate = p->mMotion.mUnknown28 / lbl_803ECB08;
+        rate = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         if (rate < 0.14f) {
             rate = 0.14f;
         }

@@ -55,7 +55,7 @@
 #include "game/FeatAwards.h"
 #include "game/cu_8018EC68.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Block_801BE60C.h"
@@ -201,7 +201,7 @@ void fn_80094BC4(Entry_80094BC4 *p);
 int fn_80094C4C(Entry_80094BC4 *p);
 void *fn_8023816C(void *pHandle);
 int fn_8009B9BC(void);
-void fn_8017CFB4(int index);
+void BannerClear(int index);
 int fn_800B9B18(void *p);
 int fn_800C0458(void *p);
 int fn_8009B9F0(int index);
@@ -231,7 +231,7 @@ unsigned char fn_80178348(void);
 int fn_80178360(void);
 int fn_8019623C(int id);
 int fn_8009679C(unsigned int index);
-void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
+void BannerShow(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
 int fn_80095284(Object_80039F5C *p, Params_80092E54 *pRequest, unsigned int count);
@@ -341,9 +341,9 @@ void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void fn_8005BF5C(void);
 void fn_8002CFF4(Type_803EA368 *p);
-void fn_8017DC44(void);
+void HudHide(void);
 int fn_800B9B18(void *p);
-void fn_8017DC88(void);
+void HudUnhide(void);
 void CamGameProcess(void);
 void CamGameSetModeAll(int a);
 GameCamera_t *CamGameGetCamera(int index);
@@ -2552,8 +2552,8 @@ extern "C" int fn_80096B1C(int index)
         pPlayback->mUnknown10 = 2;
         fn_80096708(index);
         if (pPlayback->mUnknown2C != 0 && pPlayback->mUnknown28 != 0xFFFF && pPlayback->mUnknown2A != 0xFFFF) {
-            fn_8017CFB4(7);
-            fn_8017CFB0(pPlayback->mUnknown28, pPlayback->mUnknown2A, pPlayback->mUnknown2C, 0);
+            BannerClear(7);
+            BannerShow(pPlayback->mUnknown28, pPlayback->mUnknown2A, pPlayback->mUnknown2C, 0);
         }
         if ((pPlayback->mUnknownC & 2) && fn_8019623C(0x23000)) {
             fn_80195EFC(1, 60, 0x808080, 0);
@@ -2578,7 +2578,7 @@ extern "C" int fn_80096B1C(int index)
             break;
         }
     case 3:
-        fn_8017CFB4(7);
+        BannerClear(7);
         result = 0;
         break;
     default:
@@ -2599,7 +2599,7 @@ extern "C" void fn_80096D14(int index)
             lbl_803EA920->mUnknown10[index].mUnknown0 = -1;
         }
         p->mUnknown10 = 3;
-        fn_8017CFB4(7);
+        BannerClear(7);
     }
 }
 
@@ -3433,7 +3433,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
 extern "C" {
 int fn_800A3E84(Object_80039F5C *p, int a, int b);
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern int (*lbl_802D7E78[11])(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 }
 
@@ -3467,7 +3467,7 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
                     p->mFlags &= ~4;
                     p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
                     p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-                    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+                    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                 } else {
                     p->mUnknown512.mUnknown14 = 0;
                     result = 1;
@@ -3534,7 +3534,7 @@ void fn_8015C114(void);
 int fn_80178308(void);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
-int fn_80170140(Object_80039F5C *p);
+int PossTestCarrierBall(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 void fn_800E9504(Object_80039F5C *p);
 void fn_80178718(Object_80039F5C *p);
@@ -3712,7 +3712,7 @@ extern "C" int fn_800C4E30(Object_80039F5C *p, Object_80039F5C *pOther)
     if (fn_800A851C(fn_80178320(), p) && fn_800A7F30(fn_80178308()) == 0) {
         result = fn_802372EC(0, 100) < 100;
     }
-    if (fn_80170140(pOther)) {
+    if (PossTestCarrierBall(pOther)) {
         result = 0;
     }
     if (result) {
@@ -4732,7 +4732,7 @@ extern "C" void fn_800CA4A8(void)
 
 extern "C" {
 unsigned char CheatFlagsIsSet(int index);
-unsigned int fn_8017F584(void);
+unsigned int GameModeTypeGet(void);
 int fn_800A7F1C(int team);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
@@ -4785,7 +4785,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
         }
         if (fn_800A7EA4(team) == 2
             || (p == BallGetTarget(BallGetCurrent()) && fn_800A7F1C(team) == 2 && BallStateGet(BallGetCurrent(), 0) != 0)
-            || (CheatFlagsIsSet(22) != 0 && fn_8017F584() == 0)) {
+            || (CheatFlagsIsSet(22) != 0 && GameModeTypeGet() == 0)) {
             cost = 0;
         } else {
             cost = fn_800C955C(p, kind);
@@ -4936,7 +4936,7 @@ extern "C" int fn_8009B288(unsigned int *pState)
             }
             fn_8005BF5C();
             fn_8002CFF4(lbl_803EA368);
-            fn_8017DC44();
+            HudHide();
             *pState = 2;
         }
         break;
@@ -4947,7 +4947,7 @@ extern "C" int fn_8009B288(unsigned int *pState)
         if (fn_8002D060(lbl_803EA368) == 0) {
             GameCamera_t *pCamera;
 
-            fn_8017DC88();
+            HudUnhide();
             result = 0;
             CamGameSetModeAll(1);
             pCamera = CamGameGetCamera(0);
@@ -6298,9 +6298,9 @@ extern "C" void fn_800A7274(void)
 }
 
 extern "C" {
-void fn_8017DF6C(int a, int b);
-void fn_8017E328(int a, int b);
-void fn_8017E380(int a);
+void HudSetGameBreakerLevel(int a, int b);
+void HudSetGameBreakerHalf(int a, int b);
+void HudResetGameBreaker(int a);
 void fn_800A65BC(void);
 void fn_800A861C(void);
 
@@ -6322,9 +6322,9 @@ extern "C" void fn_800A7A0C(int team)
     lbl_803EC954[team]->mUnknown68 = 0;
     lbl_803EC954[team]->mUnknown6C = 0;
     lbl_803EC954[team]->mUnknown8 = 3;
-    fn_8017DF6C(team, 0);
-    fn_8017E328(team, 1);
-    fn_8017E380(team);
+    HudSetGameBreakerLevel(team, 0);
+    HudSetGameBreakerHalf(team, 1);
+    HudResetGameBreaker(team);
     args[0] = team;
     args[1] = 0;
     fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
@@ -6625,10 +6625,10 @@ extern "C" int fn_800A8740(void)
     if (lbl_803EAA51 != 0) {
         return 1;
     }
-    if (fn_8017F584() == 11 && fn_801568F0() == 4) {
+    if (GameModeTypeGet() == 11 && fn_801568F0() == 4) {
         return 0;
     }
-    if (fn_8017F584() == 7 || fn_8017F584() == 10) {
+    if (GameModeTypeGet() == 7 || GameModeTypeGet() == 10) {
         switch (fn_801486A0()) {
         case 0:
         case 1:
@@ -6913,7 +6913,7 @@ extern "C" int fn_800A9648(void)
 }
 
 extern "C" {
-void fn_8017DC08(void);
+void HudPost3AOff(void);
 void fn_800B63B0(void);
 void fn_800A9238(void);
 }
@@ -6925,7 +6925,7 @@ extern "C" int fn_800A9680(void)
 
 extern "C" void fn_800A9688(void)
 {
-    fn_8017DC08();
+    HudPost3AOff();
     if (fn_80156704()) {
         fn_801574DC(0);
     }
@@ -7173,15 +7173,15 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
 void fn_800AFE20(void (*pCallback)(int, unsigned int, float));
 void fn_801789F8(void);
-unsigned char fn_801735EC(void);
+unsigned char ClockRuleIsOvertime(void);
 void fn_80177F88(int value);
-void fn_8017EBFC(void);
-int fn_8017ED6C(void);
-void fn_8017EFB4(void);
-void fn_8017EF20(void);
+void CoinTossStart(void);
+int CoinTossUpdate(void);
+void CoinTossApplyResult(void);
+void CoinTossFinish(void);
 void BallResetToSpot(void);
 void fn_800AD910(int a, float b);
-unsigned char fn_8017F2EC(unsigned char value);
+unsigned char GameEventFlagsSetFlag1(unsigned char value);
 void fn_800B1900(Block_800B21D0 *p);
 int fn_800B1F58(Block_800B21D0 *p, float value);
 int fn_8010A254(Object_80039F5C *p, int kind);
@@ -7206,8 +7206,8 @@ void PlayArtStop(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
 unsigned int fn_801765A8(int type);
-void fn_8017F430(int value);
-void fn_8017F3C8(int a, int b, int c);
+void TeamPromptSetResult(int value);
+void TeamPromptStart(int a, int b, int c);
 void PlayArtStart(int mode);
 int PlayBookLoadPlayById(int team, int a, int b);
 void fn_800B4184(int a);
@@ -7336,7 +7336,7 @@ extern "C" void fn_800B17F0(float value)
 {
     switch (*lbl_803EAB1C) {
     case 0:
-        if (fn_801735EC()) {
+        if (ClockRuleIsOvertime()) {
             *lbl_803EAB1C = 1;
         } else {
             *lbl_803EAB1C = 4;
@@ -7344,17 +7344,17 @@ extern "C" void fn_800B17F0(float value)
         break;
     case 1:
         fn_80177F88(1);
-        fn_8017EBFC();
+        CoinTossStart();
         *lbl_803EAB1C = 2;
         break;
     case 2:
-        if (fn_8017ED6C() == 0) {
+        if (CoinTossUpdate() == 0) {
             *lbl_803EAB1C = 3;
         }
         break;
     case 3:
-        fn_8017EFB4();
-        fn_8017EF20();
+        CoinTossApplyResult();
+        CoinTossFinish();
         *lbl_803EAB1C = 4;
         break;
     case 4:
@@ -7391,9 +7391,9 @@ extern "C" int fn_800B1A30(void *p)
     int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pPair->mpSecond);
 
     if ((fn_801765A8(fn_800B232C(0)) & 4) || result != 0) {
-        fn_8017F430(0);
+        TeamPromptSetResult(0);
     } else {
-        fn_8017F3C8(0, (int)pPair->mpFirst, (int)pPair->mpSecond);
+        TeamPromptStart(0, (int)pPair->mpFirst, (int)pPair->mpSecond);
     }
     return 1;
 }
@@ -7401,7 +7401,7 @@ extern "C" int fn_800B1A30(void *p)
 extern "C" void fn_800B1BF8(void *p)
 {
     lbl_803EAB20->mpUnknown0 = 0;
-    fn_8017F2EC(0);
+    GameEventFlagsSetFlag1(0);
 }
 
 extern "C" {
@@ -7553,7 +7553,7 @@ extern "C" void fn_800B2370(Object_80039F5C *pA, int kind, Object_80039F5C *pB, 
                 fn_800B2184(lbl_803EAB20, pA, kind, pB);
             }
         } else {
-            fn_8017F2EC(1);
+            GameEventFlagsSetFlag1(1);
         }
     }
 }
@@ -7757,7 +7757,7 @@ void fn_800B3498(void);
 unsigned char BallGetCurrentIndex(void);
 int fn_8016DD60(void);
 void fn_8009D888(int index, int value);
-void fn_8017D764(void);
+void HudSetDown(void);
 }
 
 extern "C" void fn_800B32A8(float dt)
@@ -7794,7 +7794,7 @@ extern "C" void fn_800B32A8(float dt)
     }
     fn_8009D888(0, 10);
     if (fn_80177F70() == 6) {
-        fn_8017D764();
+        HudSetDown();
     }
 }
 
@@ -8151,7 +8151,7 @@ void Class_80297B50::vfn_05()
     lbl_803EAB34->mUnknown1C = 0;
     fn_800B43AC(0);
     lbl_803EAB34->mUnknown42 = 0;
-    fn_8017CFB4(0);
+    BannerClear(0);
     fn_800B43C8();
 }
 
@@ -9348,7 +9348,7 @@ extern "C" void fn_800BBE98(void)
     BallGetModel(BallGetCurrent())->mUnknown20 &= ~2;
     BallGetModel(BallGetCurrent())->mUnknown20 |= 1;
     fn_800941B8();
-    fn_8017CFB4(7);
+    BannerClear(7);
     lbl_803EC98C->mUnknown0 = 2;
 }
 
@@ -9390,7 +9390,7 @@ extern "C" void fn_800BBF18(void)
             fn_80096D14(lbl_803EC98C->mUnknownC);
             lbl_803EC98C->mUnknownC = -1;
         }
-        fn_8017CFB4(7);
+        BannerClear(7);
         lbl_803EAB94 = 1;
         if (lbl_803EC98C->mUnknown29 == 0) {
             fn_800BBE98();
@@ -9417,7 +9417,7 @@ int fn_80169E68(int mode);
 int fn_80061DE8(void);
 }
 
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/cu_8018EC68.h"
 
 extern "C" {
@@ -9501,7 +9501,7 @@ void Class_80297BF8::vfn_06()
     if (fn_800C1E40() == 0) {
         int show = 1;
 
-        if (fn_8017F584() == 10) {
+        if (GameModeTypeGet() == 10) {
             show = (unsigned int)fn_80061DE8() <= 4;
         }
         if (show) {
@@ -9564,7 +9564,7 @@ void fn_80093348(int handle);
 void CamGameResumeAll(void);
 int SpchIGGetSceneSpeaker(void);
 int ChallengeIsActive(void);
-void fn_8017DC08(void);
+void HudPost3AOff(void);
 int fn_80059004(void);
 void fn_80059014(void);
 void fn_800C1CA0(void);
@@ -9577,7 +9577,7 @@ Object_80039F5C *fn_8005A8AC(int index);
 void fn_800ABA0C(void);
 void fn_800ABAF0(void);
 int fn_80178308(void);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 void fn_800B8608(void);
 int ConUpdateChannel(int a);
 int ConGetChannelInfo(int a, int b);
@@ -9711,13 +9711,13 @@ int fn_8014F448(Class_80148A58 *p);
 int fn_8015264C(void *p);
 int fn_801787DC(int team);
 int fn_80179138(void);
-void fn_80176CC8(int a, short b, int c, int d);
+void ScoringLogAddScore(int a, short b, int c, int d);
 void fn_800A20D0(int team, int delta);
 void fn_800A06F4(Record_800A0624 *pState, Object_8017886C *pResult);
 void fn_800A0EB8(Record_800A0624 *pState, Object_8017886C *pResult);
 void fn_800A1620(Object_8017886C *pResult);
 void fn_800A1738(Object_8017886C *pResult);
-void fn_80173794(void);
+void ClockRuleApplyPlayEvents(void);
 int fn_800A2178(void);
 
 extern char lbl_8031BDD4[];
@@ -9910,7 +9910,7 @@ extern "C" void fn_800AA93C(int a, unsigned int value, float unused)
                 case 13:
                 case 14:
                 case 15:
-                    if (fn_8017F60C() == 0 && lbl_803EAA99 == 0) {
+                    if (GameModeTypeIsSpecial() == 0 && lbl_803EAA99 == 0) {
                         fn_800ABA0C();
                         fn_800A9F64();
                         lbl_803EAA88->mUnknown4 = 16;
@@ -9919,7 +9919,7 @@ extern "C" void fn_800AA93C(int a, unsigned int value, float unused)
                 case 0:
                 case 1:
                 case 2:
-                    if (fn_8017F60C() == 0) {
+                    if (GameModeTypeIsSpecial() == 0) {
                         fn_800ABA0C();
                         fn_800A9F64();
                         lbl_803EAA88->mUnknown4 = 3;
@@ -10144,7 +10144,7 @@ extern "C" int fn_800AAFEC(void *p, float dt)
 {
     if (ChallengeIsActive() != 0) {
         lbl_803EAA88->mUnknown4 = 16;
-        fn_8017DC08();
+        HudPost3AOff();
         if (fn_80059004() != 0) {
             fn_800C1CA0();
             fn_8009D964(4, 1);
@@ -10271,7 +10271,7 @@ void Class_80297B90::vfn_04(float dt)
     lbl_803EAA88->mUnknown10++;
     switch (lbl_803EAA88->mUnknown4) {
     case 0:
-        fn_8017DC08();
+        HudPost3AOff();
         switch (fn_800AAE20(this, dt)) {
         case 0:
             lbl_803EAA88->mUnknown4 = 3;
@@ -10321,7 +10321,7 @@ void Class_80297B90::vfn_04(float dt)
         if (fn_800AB138(this, dt) != 0) {
             break;
         }
-        if (fn_8017F60C() != 0) {
+        if (GameModeTypeIsSpecial() != 0) {
             if (vfn_10() != 0) {
                 lbl_803EAA88->mUnknown4 = 13;
             } else {
@@ -10349,7 +10349,7 @@ void Class_80297B90::vfn_04(float dt)
         if (fn_800AB2FC(this, dt) != 0) {
             break;
         }
-        if (fn_8017F584() != 8) {
+        if (GameModeTypeGet() != 8) {
             lbl_803EAA88->mUnknown4 = 13;
         } else {
             lbl_803EAA88->mUnknown4 = 16;
@@ -10418,7 +10418,7 @@ void Class_80297B90::vfn_04(float dt)
         fn_800AA124();
         fn_8006CAEC();
         if (fn_800C1E40() == 0) {
-            if (fn_8017F584() == 11 && fn_80157080() != 0) {
+            if (GameModeTypeGet() == 11 && fn_80157080() != 0) {
                 break;
             }
             fn_80072C90(250, 0);
@@ -10454,16 +10454,16 @@ extern "C" void fn_800AB944(void *p)
 }
 
 extern "C" {
-void fn_8017D4AC(void);
-void fn_8017DB44(void);
+void HudReset(void);
+void HudStop(void);
 }
 
 void Class_80297B90::vfn_05()
 {
     if (fn_800C1E40() != 0) {
-        fn_8017D4AC();
+        HudReset();
     } else {
-        fn_8017DB44();
+        HudStop();
     }
     fn_800A9F64();
     lbl_803EAA99 = 0;
@@ -11236,7 +11236,7 @@ int fn_80177C38(void);
 int fn_80178308(void);
 int fn_80178360(void);
 int fn_8009679C(unsigned int index);
-void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
+void BannerShow(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
 
@@ -11245,7 +11245,7 @@ void RumbleEnable(unsigned char enabled);
 void RumbleStart(int a, int b, int c);
 int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
-void fn_8017DDDC(int index);
+void HudHideEvent31(int index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011E240(Object_80039F5C *p);
@@ -11280,7 +11280,7 @@ extern "C" void fn_800AE138(unsigned int index)
 {
     int side = -1;
 
-    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0) {
         return;
     }
     switch (lbl_802D82E0[index].mUnknown10) {
@@ -11403,7 +11403,7 @@ extern "C" void fn_800AE380(void)
             || (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
         lbl_803EAAE8 = 0;
     }
-    if (InGameIsDemo() != 0 || fn_8017F60C() != 0) {
+    if (InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0) {
         lbl_803EAAE8 = 0;
     }
     if (lbl_803EAAEC == 3) {
@@ -11646,7 +11646,7 @@ extern "C" void fn_800AEF38(int team)
     if (lbl_803EAAF4->mUnknown268[team] != 0) {
         lbl_803EAAF4->mUnknown268[team] = 0;
     }
-    fn_8017DDDC(team);
+    HudHideEvent31(team);
 }
 
 extern "C" void fn_800AEF74(Object_80039F5C *p, Message_800F01CC *pMessages)
@@ -12771,7 +12771,7 @@ extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle)
 
 
 extern "C" {
-unsigned int fn_801735C8(unsigned int mask);
+unsigned int ClockRuleTestFlags(unsigned int mask);
 void fn_8009D964(int index, int value);
 void fn_8017C25C(int value);
 int fn_80178C24(void);
@@ -12807,8 +12807,8 @@ int fn_800C8774(int team);
 int fn_801787DC(int team);
 void fn_801787FC(int team, short value);
 void fn_800C87CC(int team, int value);
-void fn_8017D6B8(int a, int b);
-unsigned char fn_8017F384(unsigned char value);
+void HudSetScore(int a, int b);
+unsigned char GameEventFlagsSetFlag5(unsigned char value);
 
 extern Block_8009D474 *lbl_803EA9A8;
 extern int lbl_803EA9D0;
@@ -12916,7 +12916,7 @@ extern "C" int fn_8009D558(unsigned int time)
                 fn_800B4184(1);
             }
         }
-        if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && fn_801735C8(0x10) == 0
+        if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && ClockRuleTestFlags(0x10) == 0
             && ChallengeIsDecided(0) != 0) {
             flags |= 1;
         }
@@ -12970,7 +12970,7 @@ extern "C" void fn_8009D8CC(int index)
     Entry_8009D964 *pEntry = &p->mEntries[index];
 
     if (p != 0) {
-        if (index != 1 || fn_801735C8(0x800) == 0) {
+        if (index != 1 || ClockRuleTestFlags(0x800) == 0) {
             pEntry->mUnknown0 = 0;
         }
     }
@@ -13704,9 +13704,9 @@ extern "C" void fn_800A14E4(Object_8017886C *pResult, unsigned char update)
     fn_800A20D0(team, delta);
     if (!update && pResult->mUnknown1D == -2) {
         if (pResult->mUnknown00 == 0) {
-            fn_80176CC8(9, 0, (fn_80178320() & 0xFF) << 8 | 1, 0);
+            ScoringLogAddScore(9, 0, (fn_80178320() & 0xFF) << 8 | 1, 0);
         } else {
-            fn_80176CC8(9, 0, pResult->mUnknown00, 0);
+            ScoringLogAddScore(9, 0, pResult->mUnknown00, 0);
         }
     }
 }
@@ -13757,7 +13757,7 @@ extern "C" void fn_800A1A84(Object_8017886C *pResult, Object_8017886C *pSaved)
         || (fn_80178348() == fn_80178308() && (pResult->mUnknown18 & 4))) {
         pResult->mUnknown18 |= 8;
     }
-    fn_80173794();
+    ClockRuleApplyPlayEvents();
     *pSaved = *pResult;
     fn_800A1738(pResult);
     switch (fn_800A2178()) {
@@ -13801,8 +13801,8 @@ extern "C" void fn_800A20D0(int team, int delta)
     fn_801787FC(team, (short)value);
     fn_800C87CC(team, value);
     if (delta != 0) {
-        fn_8017D6B8(team, value);
-        fn_8017F384(1);
+        HudSetScore(team, value);
+        GameEventFlagsSetFlag5(1);
     }
 }
 
@@ -14749,7 +14749,7 @@ Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801486A0(void);
 Object_800670B4 *PlayBookGetFormation(int team);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int ConGetChannelInfo(int a, int b);
@@ -14774,7 +14774,7 @@ extern unsigned char lbl_803EAB74;
 extern Block_800B95B4 *lbl_803EAB78;
 extern Class_80297C60 lbl_803EC90C;
 extern Pool_800B8544 lbl_803EC930;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" void fn_800B508C(unsigned char team)
@@ -15268,7 +15268,7 @@ int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E8098(Object_80039F5C *p, int a);
 int fn_80111090(Object_80039F5C *p, int a);
-void fn_8016DA98(Object_80039F5C *p);
+void PlyrMoveClearHold(Object_80039F5C *p);
 }
 
 extern "C" int fn_800B76E8(Object_80039F5C *p)
@@ -15289,14 +15289,14 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
                 } else {
                     p->mUnknown512.mUnknown15 = 1;
                 }
-                fn_8016DA98(p);
+                PlyrMoveClearHold(p);
             }
         }
     } else if (input.mUnknown95 & 8) {
         p->mFlags |= 0x4000;
         if (fn_800CA5CC(p, 0, 1) != 0) {
             p->mUnknown512.mUnknown15 = 1;
-            fn_8016DA98(p);
+            PlyrMoveClearHold(p);
         }
     }
     if (BallGetCurrentHolder() == p) {
@@ -15443,7 +15443,7 @@ extern "C" int fn_800B81A4(void)
     for (i = 0; i < lbl_803EAB60->mCount; i++) {
         if (fn_800B6644(i) != 0xFF) {
             value = ConGetChannelInfo(i, 0);
-            if ((fn_8017F60C() == 0 || value < fn_801E1954()) && fn_801E195C(value) != 2) {
+            if ((GameModeTypeIsSpecial() == 0 || value < fn_801E1954()) && fn_801E195C(value) != 2) {
                 return (unsigned char)i;
             }
         }
@@ -15476,7 +15476,7 @@ extern "C" void fn_800B82AC(int team)
             p->mFlags |= 0x4000;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
-            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+            p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         }
     }
 }
@@ -15602,8 +15602,8 @@ extern "C" void fn_800B86A4(int index)
 extern "C" {
 int fn_8002D228(Type_803EA368 *p);
 int fn_8009B9BC(void);
-void fn_8017CFB4(int index);
-int fn_8017D064(int a);
+void BannerClear(int index);
+int BannerIsActive(int a);
 void fn_8009B924(void);
 void fn_80094DF0(void);
 
@@ -15641,7 +15641,7 @@ int CamGameGetCurrentSlot(void);
 void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 void fn_80162780(int a, int b);
-void fn_80173B8C(void);
+void ClockRuleEndPeriod(void);
 void fn_801783D0(int bit, int on);
 int fn_8002E950(int mode);
 
@@ -15713,7 +15713,7 @@ void Class_80297C60::vfn_14(float dt)
             fn_800CC470();
         }
     } else {
-        fn_80173B8C();
+        ClockRuleEndPeriod();
     }
 }
 
@@ -15765,7 +15765,7 @@ int Class_80297C60::vfn_12(float dt)
 
 extern "C" {
 void fn_800AE9A4(void);
-int fn_8017D064(int a);
+int BannerIsActive(int a);
 void fn_800B925C(void *p, char *pText);
 }
 
@@ -15812,7 +15812,7 @@ void fn_800BAAE4(void);
 void fn_800C4460(Sequence_800C4460 *p);
 void fn_800C4568(Sequence_800C4460 *p);
 void fn_80179150(void);
-void fn_8017DBCC(void);
+void HudPost3AOn(void);
 
 extern unsigned char lbl_803EAB7C;
 extern unsigned char lbl_803EAB7D;
@@ -15823,14 +15823,14 @@ extern int lbl_803EAB80;
 extern "C" {
 void SpchIGUpdatePlayResult(void);
 void fn_800C45C0(Sequence_800C4460 *p, float dt);
-void fn_8017D678(void);
+void HudCycleMashPrompt(void);
 }
 
 void Class_80297C60::vfn_04(float dt)
 {
     int finished;
 
-    fn_8017D678();
+    HudCycleMashPrompt();
     SpchIGUpdatePlayResult();
     vfn_10(dt);
     if (fn_8002D060(lbl_803EA368) == 0) {
@@ -15874,10 +15874,10 @@ void Class_80297C60::vfn_05()
     if (fn_800BA6F8()) {
         fn_800BAAE4();
     }
-    fn_8017CFB4(7);
+    BannerClear(7);
     AudmonEventPost(125, 0);
     lbl_803EAB78->mUnknown148 = 0;
-    fn_8017DBCC();
+    HudPost3AOn();
     fn_800A8F70();
     fn_80179150();
 }
@@ -15962,7 +15962,7 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80177F70(void);
 int ResSync(int a);
 void fn_800AD910(int a, float b);
-int fn_8017D064(int a);
+int BannerIsActive(int a);
 void CamGamePushCurrentCamera(void);
 void fn_801789F8(void);
 void fn_800B6B98(void);
@@ -15998,9 +15998,9 @@ int fn_80156704(void);
 int ChallengeHasRecordFlag(void);
 void fn_800AE904(int a);
 int fn_800AE980(void);
-void fn_8017CBFC(int a);
-short fn_8017CD44(unsigned char index);
-void fn_8017CD20(void);
+void SubDepthSetTeam(int a);
+short SubDepthGetEntry(unsigned char index);
+void SubDepthRelease(void);
 QueryCursor fn_800C0698(int index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
@@ -16030,7 +16030,7 @@ extern "C" {
 int SpchIGIsNarratorIdle(void);
 void PlayBookRestoreSelection(int team);
 int fn_80178E4C(void);
-void fn_8017DFA8(int index);
+void HudShowEvent3D(int index);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 void PlayBookSelectAudible(int team, unsigned int index);
 void PlayRealignTeam(int team);
@@ -16126,8 +16126,8 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             if (fn_80178E4C() != 0) {
                 lbl_803EABA8->mSlots[team].mUnknown0 = 3;
                 ConSetChannelInfo(index, 3, lbl_802ED3FC);
-                fn_8017DDDC(team);
-                fn_8017DFA8(team);
+                HudHideEvent31(team);
+                HudShowEvent3D(team);
                 lbl_803EABB4 = 0;
             }
             return;
@@ -16183,7 +16183,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
     if (done) {
         lbl_803EABA8->mSlots[team].mUnknown0 = 2;
         ConSetChannelInfo(index, 3, lbl_802ECD44);
-        fn_8017DDDC(team);
+        HudHideEvent31(team);
         if (team == away) {
             lbl_803EABA8->mUnknownAC = InGameGetFrameCount();
             lbl_803EABA8->mUnknownAB = 1;
@@ -16260,7 +16260,7 @@ int Class_80297CE8::vfn_12()
 }
 
 extern "C" void fn_800BD460(int index, int a);
-extern "C" void fn_8017DA9C(int team);
+extern "C" void HudHidePressPrompt(int team);
 extern "C" char lbl_802ECF88[];
 
 extern "C" void fn_800BE808(int a, unsigned char index)
@@ -16277,10 +16277,10 @@ extern "C" void fn_800BE808(int a, unsigned char index)
     lbl_803EABA8->mSlots[index].mUnknown8 = 30;
     ConSetChannelInfo(a, 3, lbl_802ECF88);
     if (fn_800A8488(0) && !fn_800A8444(0)) {
-        fn_8017DA9C(0);
+        HudHidePressPrompt(0);
     }
     if (fn_800A8488(1) && !fn_800A8444(1)) {
-        fn_8017DA9C(1);
+        HudHidePressPrompt(1);
     }
     fn_800BD460(index, 0);
 }
@@ -16296,7 +16296,7 @@ extern "C" void fn_800BE8E4(int team)
     }
 }
 
-extern "C" void fn_8017D9D8(int team);
+extern "C" void HudShowPressPrompt(int team);
 extern "C" void fn_800BD568(int index);
 
 extern "C" void fn_800BEC1C(int a, int index)
@@ -16305,17 +16305,17 @@ extern "C" void fn_800BEC1C(int a, int index)
     lbl_803EABA8->mSlots[index].mUnknown8 = 0;
     if (fn_80156704() == 0) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
-            fn_8017D9D8(0);
+            HudShowPressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
-            fn_8017D9D8(1);
+            HudShowPressPrompt(1);
         }
     } else if (lbl_803EABA4->vfn_08()) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
-            fn_8017D9D8(0);
+            HudShowPressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
-            fn_8017D9D8(1);
+            HudShowPressPrompt(1);
         }
     }
     ConSetChannelInfo(a, 3, lbl_802ECD44);
@@ -16652,7 +16652,7 @@ extern "C" int fn_800BF824(void)
 
 extern "C" int fn_800A7FE0(void);
 extern "C" int fn_800A82FC(int team);
-extern "C" void fn_8017DBCC(void);
+extern "C" void HudPost3AOn(void);
 extern "C" void fn_8016DB94(int team);
 
 extern "C" int fn_800BF8A8(Class_80297CE8 *p)
@@ -16662,7 +16662,7 @@ extern "C" int fn_800BF8A8(Class_80297CE8 *p)
     if (result != 0 && fn_800A7FE0() == 0) {
         result = 0;
         if (fn_800A937C() == 0) {
-            fn_8017DBCC();
+            HudPost3AOn();
         }
         fn_8016DB94(fn_80178308());
         fn_8016DB94(fn_80178320());
@@ -16674,10 +16674,10 @@ extern "C" int fn_800BF8A8(Class_80297CE8 *p)
             fn_800A7514(fn_80178320());
         }
         if (fn_800A8488(0) && !fn_800A8444(0)) {
-            fn_8017D9D8(0);
+            HudShowPressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
-            fn_8017D9D8(1);
+            HudShowPressPrompt(1);
         }
     }
     if (fn_800A937C() != 0 && result == 0) {
@@ -16804,8 +16804,8 @@ extern "C" int fn_800C0464(void)
 }
 
 extern "C" void fn_800A02FC(void);
-extern "C" void fn_8017DD68(int index);
-extern "C" void fn_8017E01C(int index);
+extern "C" void HudShowEvent31(int index);
+extern "C" void HudHideEvent3D(int index);
 extern "C" char lbl_802ED104[];
 
 extern "C" void fn_800C0488(int a, unsigned int kind, float value)
@@ -16850,11 +16850,11 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
         fn_8009FFD4();
         fn_800A02FC();
         AudmonEventPost(24, 0);
-        fn_8017E01C(team);
+        HudHideEvent3D(team);
         if (kind == 108) {
             lbl_803EABA8->mSlots[team].mUnknown0 = 1;
             ConSetChannelInfo(a, 3, lbl_802ED104);
-            fn_8017DD68(team);
+            HudShowEvent31(team);
         } else {
             lbl_803EABA8->mSlots[team].mUnknown0 = 2;
             ConSetChannelInfo(a, 3, lbl_802ECD44);
@@ -16899,11 +16899,11 @@ extern "C" QueryCursor fn_800C0750(int index, unsigned short *pValues)
 {
     int i;
 
-    fn_8017CBFC(index);
+    SubDepthSetTeam(index);
     for (i = 0; i <= 6; i++) {
-        pValues[i] = fn_8017CD44(i);
+        pValues[i] = SubDepthGetEntry(i);
     }
-    fn_8017CD20();
+    SubDepthRelease();
     return fn_800C0698(index, pValues);
 }
 
@@ -17192,8 +17192,8 @@ extern "C" void fn_800C3610(float value)
         lbl_803EABD4 = 0;
         InGamePause();
     } else {
-        while (fn_8017D064(7) != 0) {
-            fn_8017CFB4(7);
+        while (BannerIsActive(7) != 0) {
+            BannerClear(7);
         }
         fn_800AD910(5, value);
     }
@@ -17375,7 +17375,7 @@ void fn_800BD1C8(Record_800BAE7C *pRecords);
 void fn_800BC3F0(void);
 extern unsigned short lbl_802D9B14[];
 void fn_800BAAE4(void);
-void fn_8017DBCC(void);
+void HudPost3AOn(void);
 int fn_8013C678(GameCamera_t *pCamera);
 void fn_8013C7C4(GameCamera_t *pCamera);
 }
@@ -17390,7 +17390,7 @@ void Class_80297BF8::vfn_10(float dt)
     int state;
 
     if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
-        fn_8017F60C() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
+        GameModeTypeIsSpecial() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
         (state = fn_8007F828(14)) == 1) {
         vfn_07();
         fn_800AE904(14);
@@ -17412,8 +17412,8 @@ void Class_80297BF8::vfn_04(float dt)
 {
     if (fn_800BA71C() == 1) {
         PlayerObjSetDrawReady(1);
-        while (fn_8017D064(7) != 0) {
-            fn_8017CFB4(7);
+        while (BannerIsActive(7) != 0) {
+            BannerClear(7);
         }
         fn_800AD910(5, dt);
     } else {
@@ -17914,7 +17914,7 @@ extern "C" void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord)
 
 extern "C" float fn_800CE73C(Object_800CE674 *p)
 {
-    return lbl_802DA6FC[(signed char)p->mUnknown2 - 1] * (lbl_803ECB08 * 100621.1171875f);
+    return lbl_802DA6FC[(signed char)p->mUnknown2 - 1] * (gPlyrMoveFwdSpeed * 100621.1171875f);
 }
 
 extern "C" void fn_800CE770(Query_800CE770 *p)
@@ -18008,7 +18008,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
     return result;
 }
 
-extern "C" { void fn_80114DF4(Object_80039F5C *); void fn_8017D9B0(int,int); }
+extern "C" { void fn_80114DF4(Object_80039F5C *); void HudClearMashPlayers(int,int); }
 extern "C" void fn_800CD978(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned int index)
 {
     Object_80039F5C *pA = p->mpUnknown0;
@@ -18019,7 +18019,7 @@ extern "C" void fn_800CD978(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         if (fn_80113BCC(pB) == 0) {
             fn_80114DF4(pA);
         } else {
-            fn_8017D9B0(pA->mId, pB->mId);
+            HudClearMashPlayers(pA->mId, pB->mId);
             pB = p->mpUnknown4Entries[1];
         }
     }
@@ -18137,7 +18137,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         pLink->mUnknown15 = 1;
         fn_800F05E4(0, pB->mpState, &message, pB);
         fn_80143EBC(pB, pOther);
-        fn_8017D9B0(pOther->mId, pB->mId);
+        HudClearMashPlayers(pOther->mId, pB->mId);
     } else {
         fn_800F00D4(0, pB->mpState, &message, pB);
     }
@@ -18164,7 +18164,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
             pLink->mUnknown15 = 1;
             fn_800F05E4(0, pC->mpState, &message, pC);
             fn_80143EBC(pC, pOther);
-            fn_8017D9B0(pOther->mId, pC->mId);
+            HudClearMashPlayers(pOther->mId, pC->mId);
         } else {
             fn_800F00D4(0, pC->mpState, &message, pC);
         }
@@ -18567,7 +18567,7 @@ extern "C" void fn_800A02FC(void)
 }
 
 extern "C" {
-void fn_80173D10(void);
+void DriveLogEndDrive(void);
 int ConSetChannelInfo(int a, int b, void *p);
 void fn_8006F0C8(int value);
 void SpchIGSetWallTacklePlayer(int value);
@@ -18589,7 +18589,7 @@ extern char lbl_802EC880[];
 void Class_80297AB8::vfn_03()
 {
     if (!fn_80177F70()) {
-        fn_80173D10();
+        DriveLogEndDrive();
     }
     fn_800B6408();
     fn_800B8608();

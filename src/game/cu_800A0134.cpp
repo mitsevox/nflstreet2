@@ -20,7 +20,7 @@ void fn_8009FF94(unsigned int value);
 int fn_8011F1A4(void);
 int fn_8011F1CC(void);
 int fn_8011F37C(void);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 }
 
 extern unsigned char lbl_803EA9E0;
@@ -38,12 +38,12 @@ extern "C" void fn_8009FFD4(void)
         if (fn_8011F1A4() && !fn_8011F37C()) {
             fn_8009FF94(1);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Correctly Predicted Run");
+                HudShowAlert("Correctly Predicted Run");
             }
         } else {
             fn_8009FF94(2);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Incorrectly Predicted Run");
+                HudShowAlert("Incorrectly Predicted Run");
             }
         }
         break;
@@ -51,12 +51,12 @@ extern "C" void fn_8009FFD4(void)
         if (fn_8011F1CC() && !fn_8011F37C()) {
             fn_8009FF94(4);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Correctly Predicted Pass");
+                HudShowAlert("Correctly Predicted Pass");
             }
         } else {
             fn_8009FF94(5);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Incorrectly Predicted Pass");
+                HudShowAlert("Incorrectly Predicted Pass");
             }
         }
         break;
@@ -64,12 +64,12 @@ extern "C" void fn_8009FFD4(void)
         if (fn_8011F37C()) {
             fn_8009FF94(4);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Correctly Predicted Trick");
+                HudShowAlert("Correctly Predicted Trick");
             }
         } else {
             fn_8009FF94(5);
             if (lbl_803EA9E0) {
-                fn_8017D7C4("Incorrectly Predicted Trick");
+                HudShowAlert("Incorrectly Predicted Trick");
             }
         }
         break;
@@ -84,7 +84,7 @@ int fn_800A9680(void);
 void fn_800A9688(void);
 int fn_800A96D0(void);
 void fn_800A9478(int);
-void fn_8017D678(void);
+void HudCycleMashPrompt(void);
 void fn_8009A6D8(void);
 void fn_80120720(unsigned int);
 void fn_800FB314(void);
@@ -125,7 +125,7 @@ extern "C" void fn_800A02B4(void)
 {
     if(fn_8009FFC4()==1) {
         fn_8009FF94(3);
-        if(lbl_803EA9E0)fn_8017D7C4("QB LOS Run Modif.");
+        if(lbl_803EA9E0)HudShowAlert("QB LOS Run Modif.");
     }
 }
 
@@ -135,7 +135,7 @@ void Class_80297AB8::vfn_04(float dt)
         if(!fn_800A9680())fn_800A9688();
         else if(!fn_800A96D0())fn_800A9478(0);
     } else {
-        fn_8017D678();
+        HudCycleMashPrompt();
         fn_8009A6D8();
         fn_80120720((unsigned int)dt);
         fn_800FB314();
@@ -483,7 +483,7 @@ void fn_80177F88(int);
 void fn_801782B0(void);
 void fn_801782F4(float);
 void fn_800BAAE4(void);
-void fn_80173A50(Object_8017886C *);
+void ClockRuleStopGameClock(Object_8017886C *);
 void fn_800B2304(void);
 void fn_800B9A9C(Class_80297C60 *);
 void fn_801789F8(void);
@@ -494,7 +494,7 @@ void fn_800AE380(void);
 unsigned int fn_800B2314(void);
 void fn_8009BA9C(Object_8017886C *);
 void fn_8002C9A8(void *,int,int);
-void fn_8017D764(void);
+void HudSetDown(void);
 void fn_800A1A84(Object_8017886C *,Object_8017886C *);
 void fn_8017813C(Point_8017886C);
 int fn_800B2320(void);
@@ -552,13 +552,13 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         }
         if(fn_80177F70()==6)fn_801782F4(fn_80178A2C());
         if(fn_800BA6F8())fn_800BAAE4();
-        fn_80173A50(result);fn_800B14E4();fn_800B2304();fn_800B9A9C(lbl_803EAB84);
+        ClockRuleStopGameClock(result);fn_800B14E4();fn_800B2304();fn_800B9A9C(lbl_803EAB84);
         fn_801789F8();fn_8016BAAC();
         if(fn_800539F8())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C(result);
         else fn_8002C9A8(lbl_803EA368,3,0);
-        fn_8017D764();
+        HudSetDown();
         if(fn_801486A0()!=15)fn_80148A58()->vfn_14();
         lbl_802D7C64[0].mUnknown4=1;
     }

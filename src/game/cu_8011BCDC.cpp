@@ -33,7 +33,7 @@ extern float lbl_803EB014;
 extern float lbl_803EB018;
 extern float lbl_803EB01C;
 extern float lbl_803EB094;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
 int MathAngleDiff(int a, int b);
@@ -139,7 +139,7 @@ float fn_8011BCDC(Entry_8011AFCC *pEntry, Entry_8011AFCC *pTarget, Pair_8011BAE0
                             && fabsf(pTarget->mpUnknown60->mMotion.mPos.mX - fn_80177FE0().mX) <= 3.0f;
 
                 if (close) {
-                    if (pOtherMotion->mUnknown28 > lbl_803ECB08 * 0.5f) {
+                    if (pOtherMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.5f) {
                         if (MathAngleDiff(pTarget->mUnknown64, pOtherMotion->mUnknown32) < 0x2AAAAA) {
                             weight *= 1.5f;
                         }

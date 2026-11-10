@@ -2,7 +2,7 @@
 
 #include <string.h>
 #include <math.h>
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/StyleTracker.h"
 #include "game/StyleAwardRule.h"
 #include "game/DbCursor.h"
@@ -15,7 +15,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_80238174.h"
 
@@ -214,7 +214,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned cha
 float fn_80178A2C(void);
 Point_8017886C fn_80178070(void);
 int fn_801787DC(int);
-void fn_8017E3CC(int);
+void HudShowPlayLeader(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
 void UserInfoAddPoints(int, unsigned int);
@@ -605,7 +605,7 @@ extern "C" void StyleTrackerShowMeter(int side, int value, int a, int b) {
         if (value == 0) t = 0.0f;
         else if (value >= _StyleTracker_iMeterThreshold) t = 1.0f;
         else t = (float)value / (float)_StyleTracker_iMeterThreshold;
-        fn_8017DE54((unsigned char)side, t, a, b);
+        HudSetGameBreakerMeter((unsigned char)side, t, a, b);
     }
 }
 
@@ -898,8 +898,8 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
     _StyleTracker_pState->mPlayStyleGain[0] = StyleTrackerGetTotal(0) - _StyleTracker_pState->mPlayStartTotal[0];
     _StyleTracker_pState->mPlayStyleGain[1] = StyleTrackerGetTotal(1) - _StyleTracker_pState->mPlayStartTotal[1];
     if (_StyleTracker_pState->mPlayStyleGain[fn_80178320()] > _StyleTracker_pState->mPlayStyleGain[fn_80178308()]) {
-        if (_StyleTracker_pState->mPlayStyleGain[fn_80178320()] > 0) fn_8017E3CC(fn_80178320());
-    } else if (_StyleTracker_pState->mPlayStyleGain[fn_80178308()] > 0) fn_8017E3CC(fn_80178308());
+        if (_StyleTracker_pState->mPlayStyleGain[fn_80178320()] > 0) HudShowPlayLeader(fn_80178320());
+    } else if (_StyleTracker_pState->mPlayStyleGain[fn_80178308()] > 0) HudShowPlayLeader(fn_80178308());
     fn_8017C5A0(0, _StyleTracker_pState->mPlayStyleGain[0]); fn_8017C5A0(1, _StyleTracker_pState->mPlayStyleGain[1]);
     fn_8017C5CC(0, _StyleTracker_aiPlayStylePoints[0]); fn_8017C5CC(1, _StyleTracker_aiPlayStylePoints[1]);
     fn_8017C5F8(0, _StyleTracker_aiPlayPitches[0]); fn_8017C5F8(1, _StyleTracker_aiPlayPitches[1]);
@@ -2690,7 +2690,7 @@ extern "C" void StyleTrackerInit(void) {
     void *pHandle;
 
     _StyleTracker_iMeterThreshold = 20000;
-    if (fn_8017F584() == 0) {
+    if (GameModeTypeGet() == 0) {
         if (CheatFlagsIsSet(28)) {
             _StyleTracker_iMeterThreshold = 10000;
         } else if (CheatFlagsIsSet(29)) {

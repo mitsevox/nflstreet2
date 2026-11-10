@@ -5,7 +5,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/FEPlyrLoad.h"
 #include "game/PlyrTex.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/GameObjList.h"
 
 #include <dolphin/gx/GXVert.h>
@@ -633,7 +633,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
         fn_802337D4(pPlayer->mUnknown1164[0].mpUnknown12, &pPlayer->mUnknown4064[0], pPose, 0xE0000000);
     }
     fn_802337D4(pPlayer->mUnknown1164[4].mpUnknown12, &pPlayer->mUnknown4064[1], pPose, 0xE0000000);
-    if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+    if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
         for (i = 1; i < pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mUnknown4; i++) {
             if (pPlayer->mUnknown1164[4].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
                 for (j = 0; j < 12; j++) {
@@ -646,7 +646,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     }
     if (pPlayer->mUnknown1164[7].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[7].mpUnknown12, &pPlayer->mUnknown4064[3], pPose, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -668,7 +668,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     }
     if (pPlayer->mUnknown1164[9].mpUnknown12) {
         fn_802337D4(pPlayer->mUnknown1164[9].mpUnknown12, &pPlayer->mUnknown4064[4], pPose, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -733,7 +733,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
         pHat[7] = pPose[61];
         pHat[8] = pPose[62];
         fn_802337D4(pPlayer->mUnknown1164[11].mpUnknown12, &pPlayer->mUnknown4064[5], pHat, 0xE0000000);
-        if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+        if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
             if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                 for (j = 0; j < 12; j++) {
                     if (j != 3 && j != 7 && j != 11) {
@@ -774,7 +774,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
                 apHands[k][1] = pJoint[1];
                 apHands[k][2] = pJoint[2];
                 fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
-                if (CheatFlagsIsSet(0x20) && !fn_8017F584()) {
+                if (CheatFlagsIsSet(0x20) && !GameModeTypeGet()) {
                     if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
                         for (j = 0; j < 12; j++) {
                             if (j != 3 && j != 7 && j != 11) {

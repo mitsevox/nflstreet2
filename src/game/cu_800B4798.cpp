@@ -1,5 +1,5 @@
 #include "game/fn_801FCE10.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/Settings_800B4448.h"
 
 extern "C" {
@@ -46,7 +46,7 @@ extern "C" void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void
         "'KLBP' into \x82 and 'VOCP' into \x82 and 'TFDP' into \x82\n",
         &cursor, &values[0], &values[1], &values[2], &values[3], &values[4],
         &values[5], &values[6], &values[7], &values[8], &values[9]);
-    if (fn_8017F584() == 0) fn_800B4448((Settings_800B4448 *)values);
+    if (GameModeTypeGet() == 0) fn_800B4448((Settings_800B4448 *)values);
     short *pOtherRatings = (short *)pOut;
     for (unsigned short i = 0; i <= 9; i++) {
         int value = ((short)values[i] * 255) / 99;

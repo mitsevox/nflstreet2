@@ -43,7 +43,7 @@ int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
 void FEPlyrLoadReset(int value);
-void fn_8017F670(int a, char *pText);
+void PositionAbbrevFormat(int a, char *pText);
 void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_8018BDFC(int a, int b, int *pIds, int *pCount);
 void fn_8018BF10(int a, int b);
@@ -119,7 +119,7 @@ void MsgPlayerPickupGetRosterRow(int index, int *pId, Arg_8018399C text, Arg_801
         *pId = PlayerDbGetId(&_MsgPlayerPickup_RosterCursor);
         PlayerDbGetShortName(&_MsgPlayerPickup_RosterCursor, name, 27);
         fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
-        fn_8017F670(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
+        PositionAbbrevFormat(PlayerDbGetPbpo(&_MsgPlayerPickup_RosterCursor), label.pParams->mpText);
     } else {
         *pId = -1;
     }
@@ -305,7 +305,7 @@ void MsgPlayerPickupGetPlayerName(char *pBuffer, int size)
 
 void MsgPlayerPickupGetPosition(char *pText, int size)
 {
-    fn_8017F670(PlayerDbGetPbpo(_MsgPlayerPickup_pList), pText);
+    PositionAbbrevFormat(PlayerDbGetPbpo(_MsgPlayerPickup_pList), pText);
 }
 
 void MsgPlayerPickupGetHeight(char *pBuffer, int size)

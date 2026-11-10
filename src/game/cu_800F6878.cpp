@@ -23,7 +23,7 @@ float fn_80178A08(void);
 float fn_80178A44(void);
 int fn_8009E9A4(void);
 void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAE30;
 extern float lbl_803EAE34;
 extern float lbl_803EAE38;
@@ -50,7 +50,7 @@ extern "C" int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther) {
         if (result && (pOther->mpState->mId == 51 || pOther->mpState->mId == 52)) {
             result = 0;
         }
-        if (result && !(pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.72f)) {
+        if (result && !(pOther->mMotion.mUnknown28 >= gPlyrMoveFwdSpeed * 0.72f)) {
             result = 0;
         }
     }

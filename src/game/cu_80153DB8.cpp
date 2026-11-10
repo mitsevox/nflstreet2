@@ -37,7 +37,7 @@ void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
-void fn_8017D7C4(const char *pText);
+void HudShowAlert(const char *pText);
 void fn_80178370(void);
 int fn_80177C38(void);
 void fn_8009D8CC(int index);
@@ -88,7 +88,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
     p->Class_80297AB8::vfn_04(dt);
     if (fn_801787A0() == 0) {
         if (fn_8009D990(5) == 0) {
-            fn_8017D7C4("Time Expired");
+            HudShowAlert("Time Expired");
             fn_80178370();
         } else {
             unsigned int value;

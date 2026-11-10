@@ -1,15 +1,16 @@
-#include "game/cu_8017F90C.h"
+/* Fallback handler for UIStudio game messages: offers each message to twelve game handlers in turn. */
+#include "game/UISGameMsg.h"
 
 // Offers a message to each handler in turn and returns the first nonzero result.
-extern "C" int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+extern "C" int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     int result;
 
-    result = fn_801801F8(id, (Arg_801801F8 *)pArgs, unused, (Arg_801801F8 *)pResult);
+    result = MsgGameHandleMessage(id, (MsgGameArg_t *)pArgs, unused, (MsgGameArg_t *)pResult);
     if (result != 0) {
         return result;
     }
-    result = fn_8017FB90(id, pArgs, unused, pResult);
+    result = UISGameQueryHandleMsg(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
@@ -21,7 +22,7 @@ extern "C" int fn_8017F90C(unsigned int id, Arg_8018399C *pArgs, int unused, int
     if (result != 0) {
         return result;
     }
-    result = fn_8017FAE8(id, (Block_8017FAE8 *)pArgs, unused, pResult);
+    result = ColorPickHandleMsg(id, (ColorPickMsg_t *)pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }

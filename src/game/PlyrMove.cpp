@@ -1,3 +1,5 @@
+/* Per-frame player movement update: latches the movement request, clamps its speed by move type,
+   sets forward, side and backpedal speed and turn rate from the player's ratings, and runs the movement mode handler. */
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -18,16 +20,16 @@ int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 Object_80039F5C *BallGetCurrentHolder(void);
-void fn_8016BDCC(Object_80039F5C *p);
-void fn_8016BE10(Object_80039F5C *p);
-void fn_8016C3FC(Object_80039F5C *p);
-void fn_8016C434(Object_80039F5C *p);
-void fn_8016C550(Object_80039F5C *p);
+void PlyrMoveApplyGroundScale(Object_80039F5C *p);
+void PlyrMoveModeEngage(Object_80039F5C *p);
+void PlyrMoveModeByType(Object_80039F5C *p);
+void PlyrMoveSteerByFacing(Object_80039F5C *p);
+void PlyrMoveSteerScaled(Object_80039F5C *p);
 void fn_8016C70C(Object_80039F5C *p);
 void fn_8016CA50(Object_80039F5C *p);
 int fn_8016CDD4(Object_80039F5C *p);
-void fn_8016CEEC(Object_80039F5C *p);
-void fn_8016CF00(Object_80039F5C *p);
+void PlyrMoveModeStop(Object_80039F5C *p);
+void PlyrMoveModeSpin(Object_80039F5C *p);
 int fn_80178308(void);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
@@ -35,30 +37,30 @@ int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-static unsigned short lbl_803EB428 = 30;
+static unsigned short _PlyrMove_uHoldFrames = 30;
 
-float lbl_803ECB04 = 40.0f / (210.0f / gFrameTimeScale);
-float lbl_803ECB08 = lbl_803ECB04;
-float lbl_803ECB0C = lbl_803ECB04;
-float lbl_803ECB10 = lbl_803ECB04;
-static float lbl_803ECB14 = lbl_803ECB04 * 0.15f;
-static float lbl_803ECB18 = gFrameTimeScale * 0.0125f;
-static float lbl_803ECB1C = gFrameTimeScale * 0.009f;
-static float lbl_803ECB20 = gFrameTimeScale * 0.0036f;
+float gPlyrMoveBaseSpeed = 40.0f / (210.0f / gFrameTimeScale);
+float gPlyrMoveFwdSpeed = gPlyrMoveBaseSpeed;
+float gPlyrMoveSideSpeed = gPlyrMoveBaseSpeed;
+float gPlyrMoveBackSpeed = gPlyrMoveBaseSpeed;
+static float _PlyrMove_fSlowSpeed = gPlyrMoveBaseSpeed * 0.15f;
+static float _PlyrMove_fTurnRateMax = gFrameTimeScale * 0.0125f;
+static float _PlyrMove_fTurnRateMin = gFrameTimeScale * 0.009f;
+static float _PlyrMove_fTurnRateSlow = gFrameTimeScale * 0.0036f;
 
-static void (*const lbl_802A4E08[])(Object_80039F5C *) = {
-    fn_8016CEEC, fn_8016C3FC, fn_8016C434, fn_8016C70C, fn_8016CA50, fn_8016BE10,
-    fn_8016CF00, fn_8016CF00, fn_8016C70C, fn_8016C550, fn_8016C3FC,
+static void (*const _PlyrMove_apModeHandlers[])(Object_80039F5C *) = {
+    PlyrMoveModeStop, PlyrMoveModeByType, PlyrMoveSteerByFacing, fn_8016C70C, fn_8016CA50, PlyrMoveModeEngage,
+    PlyrMoveModeSpin, PlyrMoveModeSpin, fn_8016C70C, PlyrMoveSteerScaled, PlyrMoveModeByType,
 };
 
 extern "C" {
-void fn_8016CEEC(Object_80039F5C *p)
+void PlyrMoveModeStop(Object_80039F5C *p)
 {
     p->mMotion.mUnknown52 = 0.0f;
     p->mUnknown512.mUnknown0 = 0.0f;
 }
 
-void fn_8016CF00(Object_80039F5C *p)
+void PlyrMoveModeSpin(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
@@ -68,10 +70,10 @@ void fn_8016CF00(Object_80039F5C *p)
     }
 }
 
-void fn_8016CF40(Object_80039F5C *p)
+void PlyrMoveCalcSpeed(Object_80039F5C *p)
 {
     int reverse = 0;
-    Object_8016D8B0 *pInput = &p->mUnknown528;
+    PlyrMoveCmd_t *pInput = &p->mUnknown528;
     Object_800B26B0 *pMotion = &p->mMotion;
     int turn = MathAngleDiff(pInput->mUnknown4, pInput->mUnknown8);
     float sign = 1.0f;
@@ -79,11 +81,11 @@ void fn_8016CF40(Object_80039F5C *p)
     float limit;
 
     if (p->mUnknown1032 == 4) {
-        speed = lbl_803ECB14 * p->mUnknown528.mUnknown0;
-        limit = lbl_803ECB14;
+        speed = _PlyrMove_fSlowSpeed * p->mUnknown528.mUnknown0;
+        limit = _PlyrMove_fSlowSpeed;
     } else if (turn <= 0x2E38E2) {
-        speed = lbl_803ECB08 * p->mUnknown528.mUnknown0;
-        limit = lbl_803ECB08 - fn_801CFB18(turn) * (lbl_803ECB08 / 2.0f);
+        speed = gPlyrMoveFwdSpeed * p->mUnknown528.mUnknown0;
+        limit = gPlyrMoveFwdSpeed - fn_801CFB18(turn) * (gPlyrMoveFwdSpeed / 2.0f);
         if (pInput->mUnknown4 != p->mUnknown512.mUnknown4) {
             reverse = 1;
         }
@@ -92,14 +94,14 @@ void fn_8016CF40(Object_80039F5C *p)
         }
     } else if (fn_800DC080(p) == 0) {
         if (turn <= 0x56C16B) {
-            speed = lbl_803ECB0C * p->mUnknown528.mUnknown0;
-            limit = lbl_803ECB0C - fn_801CFB18(0x56C16C - turn) * (lbl_803ECB0C / 2.0f);
+            speed = gPlyrMoveSideSpeed * p->mUnknown528.mUnknown0;
+            limit = gPlyrMoveSideSpeed - fn_801CFB18(0x56C16C - turn) * (gPlyrMoveSideSpeed / 2.0f);
         } else {
-            speed = lbl_803ECB10 * p->mUnknown528.mUnknown0;
-            limit = lbl_803ECB10 - fn_801CFB18(0x80B60C - turn) * (lbl_803ECB10 / 2.0f);
+            speed = gPlyrMoveBackSpeed * p->mUnknown528.mUnknown0;
+            limit = gPlyrMoveBackSpeed - fn_801CFB18(0x80B60C - turn) * (gPlyrMoveBackSpeed / 2.0f);
         }
     } else {
-        limit = speed = lbl_803ECB10 * p->mUnknown528.mUnknown0;
+        limit = speed = gPlyrMoveBackSpeed * p->mUnknown528.mUnknown0;
     }
     if (reverse) {
         sign = -sign;
@@ -108,21 +110,21 @@ void fn_8016CF40(Object_80039F5C *p)
     if (pInput->mUnknown14 == 2 || p->mUnknown1032 == 4) {
         pMotion->mUnknown36 = speed * (191.25f / 255.0f * 0.38f + 0.62f);
         pMotion->mUnknown36 = pMotion->mUnknown36 <= limit ? pMotion->mUnknown36 : limit;
-        pMotion->mUnknown52 = lbl_803ECB20 * (191.25f / 510.0f + 0.5f) * sign;
+        pMotion->mUnknown52 = _PlyrMove_fTurnRateSlow * (191.25f / 510.0f + 0.5f) * sign;
     } else {
         pMotion->mUnknown36 = speed * (((p->mId & 0xFF) == 1 ? p->mRatings[4] : 191.25f) / 255.0f * 0.38f + 0.62f);
         pMotion->mUnknown36 = pMotion->mUnknown36 <= limit ? pMotion->mUnknown36 : limit;
         switch (pInput->mUnknown14) {
         case 9:
-            pMotion->mUnknown52 = lbl_803ECB18 * (((p->mId & 0xFF) == 1 ? p->mRatings[4] : 191.25f) / 510.0f + 0.5f) * sign;
+            pMotion->mUnknown52 = _PlyrMove_fTurnRateMax * (((p->mId & 0xFF) == 1 ? p->mRatings[4] : 191.25f) / 510.0f + 0.5f) * sign;
             break;
         case 10:
-            pMotion->mUnknown36 = lbl_803ECB08;
+            pMotion->mUnknown36 = gPlyrMoveFwdSpeed;
             pMotion->mUnknown52 = 0.0f;
             pMotion->mUnknown60 = pInput->mUnknown0 * 0.0036f;
             break;
         default:
-            pMotion->mUnknown52 = lbl_803ECB1C + (lbl_803ECB18 - lbl_803ECB1C) * pInput->mUnknown0;
+            pMotion->mUnknown52 = _PlyrMove_fTurnRateMin + (_PlyrMove_fTurnRateMax - _PlyrMove_fTurnRateMin) * pInput->mUnknown0;
             pMotion->mUnknown52 = pMotion->mUnknown52 * (((p->mId & 0xFF) == 1 ? p->mRatings[4] : 191.25f) / 510.0f + 0.5f) * sign;
             break;
         }
@@ -130,14 +132,14 @@ void fn_8016CF40(Object_80039F5C *p)
     pMotion->mUnknown36 = fn_800C495C(p, pMotion->mUnknown36);
     pMotion->mUnknown52 = fn_800C4914(p, pMotion->mUnknown52);
     if (fn_8016CDD4(p)) {
-        float cap = lbl_803ECB08 * pInput->mUnknown0;
+        float cap = gPlyrMoveFwdSpeed * pInput->mUnknown0;
 
         pMotion->mUnknown36 = pMotion->mUnknown36 <= cap ? pMotion->mUnknown36 : cap;
-        pMotion->mUnknown52 = lbl_803ECB18;
+        pMotion->mUnknown52 = _PlyrMove_fTurnRateMax;
     }
 }
 
-void fn_8016D344(Object_80039F5C *p)
+void PlyrMovePickSideType(Object_80039F5C *p)
 {
     float delta[2];
     float distance;
@@ -171,17 +173,17 @@ void fn_8016D344(Object_80039F5C *p)
     }
 }
 
-void fn_8016D4D8(Object_80039F5C *p)
+void PlyrMoveLatchRequest(Object_80039F5C *p)
 {
-    Object_8016D8B0 *pRequest = &p->mUnknown512;
-    Object_8016D8B0 *pInput = &p->mUnknown528;
+    PlyrMoveCmd_t *pRequest = &p->mUnknown512;
+    PlyrMoveCmd_t *pInput = &p->mUnknown528;
     Object_800B26B0 *pMotion = &p->mMotion;
     float limit;
 
     p->mUnknown512.mUnknown0 = p->mUnknown512.mUnknown0 >= 0.0f ? p->mUnknown512.mUnknown0 : 0.0f;
     pInput->mUnknown15 = 0;
     fn_800CA8F4(p);
-    if (pRequest->mUnknown15 == 0 || pInput->mUnknown12 == lbl_803EB428) {
+    if (pRequest->mUnknown15 == 0 || pInput->mUnknown12 == _PlyrMove_uHoldFrames) {
         if (p->mFlags & 0x4000) {
             if (pInput->mUnknown12 != 0) {
                 if (MathAngleDiff(pMotion->mUnknown32, pRequest->mUnknown4) <= 0x11C71B) {
@@ -222,7 +224,7 @@ void fn_8016D4D8(Object_80039F5C *p)
             pInput->mUnknown0 = pInput->mUnknown0 <= 0.98f ? pInput->mUnknown0 : 0.98f;
             pRequest->mUnknown0 = pInput->mUnknown0;
             if (pInput->mUnknown15 == 1) {
-                fn_8016D344(p);
+                PlyrMovePickSideType(p);
             }
         }
         break;
@@ -293,7 +295,7 @@ void fn_8016D4D8(Object_80039F5C *p)
         pInput->mUnknown0 = pInput->mUnknown0 <= 0.72f ? pInput->mUnknown0 : 0.72f;
         pRequest->mUnknown0 = pInput->mUnknown0;
         if (pRequest->mUnknown15 == 0) {
-            fn_8016D344(p);
+            PlyrMovePickSideType(p);
         }
         break;
     case 30:
@@ -316,25 +318,25 @@ void fn_8016D4D8(Object_80039F5C *p)
     pRequest->mUnknown15 = 0;
 }
 
-void fn_8016D8B0(Object_8016D8B0 *pObject)
+void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject)
 {
     fn_801C1F94(pObject, 0, sizeof(*pObject));
     pObject->mUnknown14 = 0;
     pObject->mUnknown15 = 0;
 }
 
-void fn_8016D8F0(Object_80039F5C *p)
+void PlyrMoveUpdate(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
     fn_800B26B0(pMotion);
-    fn_8016D4D8(p);
-    if (lbl_802A4E08[p->mUnknown528.mUnknown14] != fn_8016CEEC) {
-        fn_8016CF40(p);
+    PlyrMoveLatchRequest(p);
+    if (_PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14] != PlyrMoveModeStop) {
+        PlyrMoveCalcSpeed(p);
     }
-    lbl_802A4E08[p->mUnknown528.mUnknown14](p);
+    _PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14](p);
     if (p->mUnknown545 == 0) {
-        fn_8016BDCC(p);
+        PlyrMoveApplyGroundScale(p);
         fn_800B26E0(pMotion);
     } else {
         fn_800B2A14(pMotion, &p->mUnknown544);
@@ -348,34 +350,34 @@ void fn_8016D8F0(Object_80039F5C *p)
     p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
 }
 
-void fn_8016D9D0(Object_8016D8B0 *pObject)
+void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject)
 {
     pObject->mUnknown4 = (pObject->mUnknown4 + 0x800000) & 0xFFFFFF;
     pObject->mUnknown8 = (pObject->mUnknown8 + 0x800000) & 0xFFFFFF;
 }
 
-float fn_8016D9F4(Object_80039F5C *p, float a, float b)
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b)
 {
     float speed = a <= b ? a : b;
 
-    speed *= lbl_803ECB08;
+    speed *= gPlyrMoveFwdSpeed;
     return speed * (p->mRatings[4] / 255.0f * 0.38f + 0.62f);
 }
 
-void fn_8016DA5C(Object_80039F5C *p)
+void PlyrMoveStartHold(Object_80039F5C *p)
 {
     if (!(p->mFlags & 0x4000) && (p->mUnknown528.mUnknown15 == 1 || p->mUnknown512.mUnknown15 == 1) &&
         p->mUnknown528.mUnknown12 == 0) {
-        p->mUnknown528.mUnknown12 = lbl_803EB428;
+        p->mUnknown528.mUnknown12 = _PlyrMove_uHoldFrames;
     }
 }
 
-void fn_8016DA98(Object_80039F5C *p)
+void PlyrMoveClearHold(Object_80039F5C *p)
 {
     p->mUnknown528.mUnknown12 = 0;
 }
 
-int fn_8016DAA4(Object_80039F5C *p)
+int PlyrMoveIsFacingHeading(Object_80039F5C *p)
 {
     return MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x200000;
 }

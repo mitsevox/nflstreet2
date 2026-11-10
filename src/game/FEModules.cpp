@@ -26,7 +26,7 @@ void PlaTexCacheShutdown(void);
 void PlayBookAlloc(void);
 void PlayBookClear(void);
 void PlayBookCloseDatabases(int);
-void fn_8017F664(void);
+void GameModeTypeInvalidate(void);
 void LevelLightsSelectFrontEnd(void);
 void ResTrackLabel(const char *);
 }
@@ -122,7 +122,7 @@ int FMMainFEInit::Init()
 {
     static unsigned char sFirstInit = 1;
 
-    fn_8017F664();
+    GameModeTypeInvalidate();
     if (sFirstInit) {
         sFirstInit = 0;
         gSysPreLoad.LoadSystems();

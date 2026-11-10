@@ -70,7 +70,7 @@ int fn_80178C9C(void);
 float fn_801CFB94(int angle);
 int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 /* Updates the player's steering toward pTarget, or along the play when
@@ -234,7 +234,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                 fn_8010DAB4(p, pOut);
                 heading = pMotion->mFacing;
             }
-            if (pMotion->mUnknown28 > lbl_803ECB08 * 0.05f && MathAngleDiff(pMotion->mUnknown32, pMotion->mFacing) > 0x400000 &&
+            if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.05f && MathAngleDiff(pMotion->mUnknown32, pMotion->mFacing) > 0x400000 &&
                 MathAngleDiff(pMotion->mUnknown32, pOut->mFacing) > 0x38E38E) {
                 pOut->mFacing = heading;
                 pOut->mSpeed = 0.0f;

@@ -5,7 +5,7 @@
 #include "game/PadInput.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8017F264.h"
+#include "game/GameEventFlags.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
@@ -98,12 +98,12 @@ void CamGameResumeAll(void);
 void fn_80162780(int a, int b);
 unsigned char fn_8016278C(void);
 void fn_80178370(void);
-void fn_8017CFB4(int a);
-void fn_8017D8D4(void);
-void fn_8017D9D8(int a);
-void fn_8017DA9C(int a);
-void fn_8017EFB0(void);
-unsigned char fn_8017F2EC(unsigned char value);
+void BannerClear(int a);
+void HudHideMashPrompts(void);
+void HudShowPressPrompt(int a);
+void HudHidePressPrompt(int a);
+void CoinTossOnShotStart(void);
+unsigned char GameEventFlagsSetFlag1(unsigned char value);
 void fn_80188014(int a);
 void fn_8018A4B4(int a);
 void fn_8018A798(int value);
@@ -397,8 +397,8 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     fn_8018A4B4(c);
     fn_8018A798(c);
     fn_800C0330(lbl_803EABA4);
-    _Pause_bSavedSwap1 = fn_8017F2EC(0);
-    _Pause_bSavedSwap0 = fn_8017F2DC(2);
+    _Pause_bSavedSwap1 = GameEventFlagsSetFlag1(0);
+    _Pause_bSavedSwap0 = GameEventFlagsSetFlag0(2);
     _Pause_State.mUnknown0 = fn_800AD9B4();
     PadInputSaveHandlers(_Pause_State.mHandlers);
     _Pause_State.mUnknown132 = 1;
@@ -421,17 +421,17 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     }
     if (_Pause_State.mUnknown0 == 2) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
-            fn_8017DA9C(0);
+            HudHidePressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
-            fn_8017DA9C(1);
+            HudHidePressPrompt(1);
         }
     }
     _Pause_bResumeHook = fn_8009BA94();
     if (_Pause_bResumeHook == 1) {
         fn_8009BA10(0);
     }
-    fn_8017D8D4();
+    HudHideMashPrompts();
     fn_8002C9A8(lbl_803EA368, 4, 0);
     PauseBlock();
     _Pause_iValue = c;
@@ -450,7 +450,7 @@ void PauseUpdate(void)
         fn_8002C9A8(lbl_803EA368, 4, 0);
         switch (_Pause_State.mState) {
         case 1:
-            fn_8017CFB4(7);
+            BannerClear(7);
             fn_80218FC4(lbl_803EB688, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow,
                         _Pause_State.mArgCount, _Pause_State.mArgs);
             fn_802195E4(lbl_803EB688, _Pause_State.mPair.mHigh, _Pause_State.mPair.mLow);
@@ -495,7 +495,7 @@ void PauseClose(void)
     RumbleShutdown();
     RumbleInit();
     RumbleEnable(_Pause_bSavedRumble);
-    fn_8017EFB0();
+    CoinTossOnShotStart();
     fn_800ABD80();
     fn_800B22E0();
     fn_80188014(0);
@@ -507,10 +507,10 @@ void PauseClose(void)
     }
     if (_Pause_State.mUnknown0 == 2) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
-            fn_8017D9D8(0);
+            HudShowPressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
-            fn_8017D9D8(1);
+            HudShowPressPrompt(1);
         }
     }
     if (_Pause_State.mUnknown0 != fn_800AD9B4()) {
@@ -519,8 +519,8 @@ void PauseClose(void)
     PauseResetState();
     fn_800BA5B0();
     fn_8002C9A8(lbl_803EA368, 5, 0);
-    fn_8017F2EC(_Pause_bSavedSwap1);
-    fn_8017F2DC(_Pause_bSavedSwap0);
+    GameEventFlagsSetFlag1(_Pause_bSavedSwap1);
+    GameEventFlagsSetFlag0(_Pause_bSavedSwap0);
     PauseCloseHook();
     if (fn_800BF718(1)) {
         int busy = InGameIsStopped() || _Pause_bQuit || _Pause_bAltAction || _Pause_bCallOnClose;

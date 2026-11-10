@@ -120,8 +120,8 @@ int fn_80156704(void);
 void fn_80156C78(int, int);
 int fn_801784C4(void);
 void fn_8017CA3C(int, int);
-void fn_8017D7C4(const char *);
-void fn_80180BE4(int, int *, int *);
+void HudShowAlert(const char *);
+void MsgGameGetPlayerStatus(int, int *, int *);
 int fn_80186F7C(unsigned char);
 int fn_80188DD0(int);
 int fn_801C2FE4(Node_80053674 *, const char *);
@@ -256,7 +256,7 @@ void fn_800530E8(void)
     fn_80083E1C(&cursor, 0);
     for (int i = 0; i <= 1; i++) {
         int id, team;
-        fn_80180BE4(i, &id, &team);
+        MsgGameGetPlayerStatus(i, &id, &team);
         char *pText = 0;
         fn_80084034(&cursor, i, 0);
         int value = fn_80084438(&cursor);
@@ -296,14 +296,14 @@ void fn_80053258(Args_80052F54 *pArgs)
         return;
     }
     switch (pArgs->mKind) {
-    case 1: fn_8017D7C4("Hotspot Tackle!"); break;
-    case 2: fn_8017D7C4("Hotspot Broken Tackle!"); break;
-    case 3: fn_8017D7C4("Hotspot Pass!"); break;
-    case 7: fn_8017D7C4("Hotspot Dive!"); break;
-    case 4: fn_8017D7C4("Hotspot Catch!"); break;
-    case 5: fn_8017D7C4("Hotspot Juke!"); break;
-    case 6: fn_8017D7C4("Hotspot Hurdle!"); break;
-    default: fn_8017D7C4("Hotspot Hit!"); break;
+    case 1: HudShowAlert("Hotspot Tackle!"); break;
+    case 2: HudShowAlert("Hotspot Broken Tackle!"); break;
+    case 3: HudShowAlert("Hotspot Pass!"); break;
+    case 7: HudShowAlert("Hotspot Dive!"); break;
+    case 4: HudShowAlert("Hotspot Catch!"); break;
+    case 5: HudShowAlert("Hotspot Juke!"); break;
+    case 6: HudShowAlert("Hotspot Hurdle!"); break;
+    default: HudShowAlert("Hotspot Hit!"); break;
     }
     if (lbl_80309CEC[i].mValue != 2) {
         changed = 1;

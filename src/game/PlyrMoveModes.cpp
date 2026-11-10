@@ -1,3 +1,5 @@
+/* Steering handlers for player movement modes: turn the facing toward the requested direction at a capped rate and scale the turn speed,
+   keep an engaged player facing and clear of his opponent, and damp a grounded player's motion. */
 #include <math.h>
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
@@ -10,7 +12,7 @@ extern float gFrameTimeScale;
 
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
-void fn_8016C264(Object_80039F5C *pObject);
+void PlyrMoveSteerByHeading(Object_80039F5C *pObject);
 void fn_8016C70C(Object_80039F5C *pObject);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
@@ -22,27 +24,27 @@ int fn_802275D8(void *pA, void *pB, float epsilon);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-static int lbl_803EB418 = 0x5B05B;
-static float lbl_803EB41C = 0.6f;
-static float lbl_803EB420 = 0.4f;
-static float lbl_803EB424 = 0.5f;
-static float lbl_803ECAF8 = 0.6f * gFrameTimeScale;
-static float lbl_803ECAFC = 0.5f * gFrameTimeScale;
-static float lbl_803ECB00 = 1.35f * gFrameTimeScale;
+static int _PlyrMoveModes_iTurnStep = 0x5B05B;
+static float _PlyrMoveModes_fRatingBase = 0.6f;
+static float _PlyrMoveModes_fRatingScale = 0.4f;
+static float _PlyrMoveModes_fMode4Scale = 0.5f;
+static float _PlyrMoveModes_fTurnBrakeMax = 0.6f * gFrameTimeScale;
+static float _PlyrMoveModes_fTurnBrakeMin = 0.5f * gFrameTimeScale;
+static float _PlyrMoveModes_fSpeedScale = 1.35f * gFrameTimeScale;
 
-/* Indexed by the byte +15 of the record at +528 in fn_8016C3FC. */
-static void (*const lbl_802A4C80[31])(Object_80039F5C *) = {
-    fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C70C, fn_8016C70C,
-    fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264,
-    fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264,
-    fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264,
-    fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264, fn_8016C264,
-    fn_8016C264,
+/* Indexed by the byte +15 of the record at +528 in PlyrMoveModeByType. */
+static void (*const _PlyrMoveModes_apTypeHandlers[31])(Object_80039F5C *) = {
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, fn_8016C70C, fn_8016C70C,
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
+    PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading, PlyrMoveSteerByHeading,
+    PlyrMoveSteerByHeading,
 };
 
 extern "C" {
 /* True when flag 0x800 is set and the player is on the ground (height 0). */
-int fn_8016BD54(Object_80039F5C *pObject)
+int PlyrMoveIsFlaggedGrounded(Object_80039F5C *pObject)
 {
     if ((pObject->mFlags & 0x800) && pObject->mMotion.mPos.mZ == 0.0f) {
         return 1;
@@ -50,15 +52,15 @@ int fn_8016BD54(Object_80039F5C *pObject)
     return 0;
 }
 
-float fn_8016BD80(Object_80039F5C *pObject)
+float PlyrMoveGetGroundScale(Object_80039F5C *pObject)
 {
     return fn_802275D8(&pObject->mMotion.mPos, &pObject->mMotion.mUnknown12, 1e-7f) ? 0.9f : 0.7f;
 }
 
-void fn_8016BDCC(Object_80039F5C *pObject)
+void PlyrMoveApplyGroundScale(Object_80039F5C *pObject)
 {
-    if (fn_8016BD54(pObject)) {
-        float scale = fn_8016BD80(pObject);
+    if (PlyrMoveIsFlaggedGrounded(pObject)) {
+        float scale = PlyrMoveGetGroundScale(pObject);
 
         fn_800B2D88(&pObject->mMotion, scale);
     }
@@ -67,11 +69,11 @@ void fn_8016BDCC(Object_80039F5C *pObject)
 /* Keeps the player turned toward and clear of the player referenced at
    +1036, or, while +545 is set, swings him around the point halfway to that
    player. */
-void fn_8016BE10(Object_80039F5C *pObject)
+void PlyrMoveModeEngage(Object_80039F5C *pObject)
 {
     Object_800B26B0 *pMotion = &pObject->mMotion;
     Object_80039F5C *pTarget = fn_8009BCE8(&pObject->mUnknown1036);
-    Object_8016D8B0 *pControl = &pObject->mUnknown528;
+    PlyrMoveCmd_t *pControl = &pObject->mUnknown528;
     Block_8011E240 *pBlock = &pObject->mBlock1032;
     Point_8017886C delta;
     int angle;
@@ -149,7 +151,7 @@ void fn_8016BE10(Object_80039F5C *pObject)
 /* Angles are 24-bit: MathAngleDiff returns the difference of two angles modulo
    0x1000000, folded to at most 0x800000. Moves current toward target by at
    most step. */
-int fn_8016C170(int current, int target, int step)
+int PlyrMoveStepAngle(int current, int target, int step)
 {
     if (MathAngleDiff(target, current) > step) {
         if (((target - current) & 0xFFFFFF) > 0x800000) {
@@ -163,7 +165,7 @@ int fn_8016C170(int current, int target, int step)
 
 /* Turns the facing toward +32 when +28 and +36 are nonzero and +32 is within
    0x2E38E3 of the facing, otherwise toward target. */
-int fn_8016C1DC(Object_80039F5C *pObject, Object_800B26B0 *pMotion, int target, int step)
+int PlyrMoveStepFacing(Object_80039F5C *pObject, Object_800B26B0 *pMotion, int target, int step)
 {
     int direction;
 
@@ -176,17 +178,17 @@ int fn_8016C1DC(Object_80039F5C *pObject, Object_800B26B0 *pMotion, int target, 
     } else {
         direction = target;
     }
-    return fn_8016C170(pMotion->mFacing, direction, step);
+    return PlyrMoveStepAngle(pMotion->mFacing, direction, step);
 }
 
-/* The handlers below scale +52 of the motion block by lbl_803ECB00 - k, where
+/* The handlers below scale +52 of the motion block by _PlyrMoveModes_fSpeedScale - k, where
    k grows with the angle to the direction +4 of the record at +512 and with the
-   ratio of +28 to +36, and then turn the facing through fn_8016C1DC by at most
-   lbl_803EB418. */
-void fn_8016C264(Object_80039F5C *pObject)
+   ratio of +28 to +36, and then turn the facing through PlyrMoveStepFacing by at most
+   _PlyrMoveModes_iTurnStep. */
+void PlyrMoveSteerByHeading(Object_80039F5C *pObject)
 {
     if (pObject->mUnknown545 == 0) {
-        Object_8016D8B0 *pControl = &pObject->mUnknown512;
+        PlyrMoveCmd_t *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
         int angle = MathAngleDiff(pMotion->mUnknown32, pControl->mUnknown4);
         float factor = 0.0f;
@@ -209,31 +211,31 @@ void fn_8016C264(Object_80039F5C *pObject)
             } else {
                 ratio = 0.0f;
             }
-            weight = (lbl_803ECAF8 - lbl_803ECAFC)
-                * (lbl_803EB41C
-                   + lbl_803EB420 * (((pObject->mId & 0xFF) == 1 ? pObject->mRatings[0] : 191.25f) / 255.0f));
-            weight += lbl_803ECAFC;
+            weight = (_PlyrMoveModes_fTurnBrakeMax - _PlyrMoveModes_fTurnBrakeMin)
+                * (_PlyrMoveModes_fRatingBase
+                   + _PlyrMoveModes_fRatingScale * (((pObject->mId & 0xFF) == 1 ? pObject->mRatings[0] : 191.25f) / 255.0f));
+            weight += _PlyrMoveModes_fTurnBrakeMin;
             factor = turn * ratio * weight;
             if (factor > 1.0f) {
                 factor = 1.0f;
             }
         }
-        factor = lbl_803ECB00 - factor;
+        factor = _PlyrMoveModes_fSpeedScale - factor;
         pMotion->mUnknown52 *= factor;
         fn_800B26D0(pMotion, pControl->mUnknown4,
-                    fn_8016C1DC(pObject, pMotion, pControl->mUnknown8, lbl_803EB418), pMotion->mUnknown52);
+                    PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }
 
-void fn_8016C3FC(Object_80039F5C *pObject)
+void PlyrMoveModeByType(Object_80039F5C *pObject)
 {
-    lbl_802A4C80[pObject->mUnknown528.mUnknown15](pObject);
+    _PlyrMoveModes_apTypeHandlers[pObject->mUnknown528.mUnknown15](pObject);
 }
 
-void fn_8016C434(Object_80039F5C *pObject)
+void PlyrMoveSteerByFacing(Object_80039F5C *pObject)
 {
     if (pObject->mUnknown545 == 0) {
-        Object_8016D8B0 *pControl = &pObject->mUnknown512;
+        PlyrMoveCmd_t *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
         int angle = MathAngleDiff(pMotion->mFacing, pControl->mUnknown4);
         float factor = 0.0f;
@@ -255,22 +257,22 @@ void fn_8016C434(Object_80039F5C *pObject)
             } else {
                 ratio = 0.0f;
             }
-            factor = turn * ratio * lbl_803ECAF8;
+            factor = turn * ratio * _PlyrMoveModes_fTurnBrakeMax;
             if (factor > 1.0f) {
                 factor = 1.0f;
             }
         }
-        factor = lbl_803ECB00 - factor;
+        factor = _PlyrMoveModes_fSpeedScale - factor;
         pMotion->mUnknown52 *= factor;
         fn_800B26D0(pMotion, pControl->mUnknown4,
-                    fn_8016C1DC(pObject, pMotion, pControl->mUnknown8, lbl_803EB418), pMotion->mUnknown52);
+                    PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }
 
-void fn_8016C550(Object_80039F5C *pObject)
+void PlyrMoveSteerScaled(Object_80039F5C *pObject)
 {
     if (pObject->mUnknown545 == 0) {
-        Object_8016D8B0 *pControl = &pObject->mUnknown512;
+        PlyrMoveCmd_t *pControl = &pObject->mUnknown512;
         Object_800B26B0 *pMotion = &pObject->mMotion;
         int angle = MathAngleDiff(pMotion->mFacing, pControl->mUnknown4);
         float factor = 0.0f;
@@ -292,18 +294,18 @@ void fn_8016C550(Object_80039F5C *pObject)
             } else {
                 ratio = 0.0f;
             }
-            factor = turn * ratio * lbl_803ECAF8;
+            factor = turn * ratio * _PlyrMoveModes_fTurnBrakeMax;
             if (factor > 1.0f) {
                 factor = 1.0f;
             }
         }
-        factor = lbl_803ECB00 - factor;
+        factor = _PlyrMoveModes_fSpeedScale - factor;
         pMotion->mUnknown52 *= factor;
         if (fn_800AD9B4() == 4) {
-            pMotion->mUnknown52 *= lbl_803EB424 * pControl->mUnknown0;
+            pMotion->mUnknown52 *= _PlyrMoveModes_fMode4Scale * pControl->mUnknown0;
         }
         fn_800B26D0(pMotion, pControl->mUnknown4,
-                    fn_8016C1DC(pObject, pMotion, pControl->mUnknown8, lbl_803EB418), pMotion->mUnknown52);
+                    PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }
 }

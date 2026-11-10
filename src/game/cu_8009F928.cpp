@@ -18,7 +18,7 @@ int fn_80178320(void);
 }
 
 extern float lbl_803ED6CC;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EA9C4;
 extern float lbl_803EA9C8;
 extern float lbl_803EA9CC;
@@ -28,7 +28,7 @@ extern float lbl_803EA9CC;
    fn_8012CAB4 and the move kind picks the scale; without it distance is
    forced to 30 and the move kind picks a fixed angle (or p's motion
    +32 heading). In other states the step follows that heading with a
-   length from rating 4, lbl_803ED6CC and lbl_803ECB08, times distance. */
+   length from rating 4, lbl_803ED6CC and gPlyrMoveFwdSpeed, times distance. */
 extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned int distance, int predict)
 {
     if (p != 0) {
@@ -100,7 +100,7 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
                 float base = lbl_803ED6CC;
 
                 angle = p->mMotion.mUnknown32;
-                length = lbl_803ECB08 * ((1.0f - base) * (p->mRatings[4] / 255.0f) + base) * (float)distance;
+                length = gPlyrMoveFwdSpeed * ((1.0f - base) * (p->mRatings[4] / 255.0f) + base) * (float)distance;
             }
             fn_80227538(&step, angle, length);
             fn_80227638(pOut, pOut, &step);

@@ -78,9 +78,9 @@ int fn_80109E48(Object_80039F5C *p, int kind, int *pOut);
 int fn_80109F34(Object_80039F5C *p);
 int fn_8010A07C(Object_80039F5C *p);
 int fn_8010A0A0(Object_80039F5C *p, int index);
-int fn_8016DAA4(Object_80039F5C *p);
+int PlyrMoveIsFacingHeading(Object_80039F5C *p);
 void fn_8016DBE4(Object_80039F5C *p);
-void fn_80171DB0(Object_80039F5C *p);
+void PossReleaseBall(Object_80039F5C *p);
 int fn_80177F70(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
@@ -89,7 +89,7 @@ extern int lbl_803EAF04;
 extern float lbl_803EAF0C;
 extern unsigned int lbl_803EAF14;
 extern float lbl_803EAF18;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_8010A640(Object_80039F5C *p) {
@@ -117,7 +117,7 @@ extern "C" int fn_8010A640(Object_80039F5C *p) {
                     p->mMotion.mUnknown28 = 0.0f;
                 }
                 if (p->mMotion.mUnknown28 > limit) {
-                    if (fn_8016DAA4(p)) {
+                    if (PlyrMoveIsFacingHeading(p)) {
                         p->mUnknown512.mUnknown14 = 10;
                         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
                         p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
@@ -215,12 +215,12 @@ extern "C" int fn_8010A640(Object_80039F5C *p) {
                         p->mUnknown512.mUnknown14 = 3;
                         p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
                         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-                        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+                        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                         length = fn_802372EC(0, lbl_803EAF14) + 2.0f;
                         fn_80227538(&pBlock->mUnknown56, p->mMotion.mFacing, length);
                         fn_80227638(&pBlock->mUnknown56, &pBlock->mUnknown56, &p->mMotion.mPos);
                         fn_800FF598(pBlock, p, &pBlock->mUnknown56, p->mMotion.mFacing & 0xFFFFFF, 0.0f);
-                        pBlock->mUnknown24 = p->mMotion.mUnknown28 / lbl_803ECB08;
+                        pBlock->mUnknown24 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
                         pBlock->mUnknown52Mode = 2;
                         if (length > 4.0f && fn_802372EC(0, 3) == 0) {
                             pBlock->mUnknown52Mode = 3;
@@ -240,7 +240,7 @@ extern "C" int fn_8010A640(Object_80039F5C *p) {
                     p->mUnknown1008Word = 30;
                     fn_80109CA0(p, 0xCB, 0xFF, 0xFF, 0xFF);
                     if (BallGetCurrentHolder() == p) {
-                        fn_80171DB0(p);
+                        PossReleaseBall(p);
                     }
                     pBlock->mUnknown52Mode = 1;
                     pBlock->mUnknown48 = -9999;

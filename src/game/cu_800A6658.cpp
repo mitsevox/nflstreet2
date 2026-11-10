@@ -41,13 +41,13 @@ int fn_800A8408(int team);
 int fn_800A8444(int team);
 void fn_800A61E8(int value);
 unsigned char fn_80178348(void);
-void fn_8017DE54(int a, float t, int b, int direct);
+void HudSetGameBreakerMeter(int a, float t, int b, int direct);
 int fn_800A6590(int value);
 void fn_800AE798(int index, int team);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_800A7514(int team);
 void fn_800AE750(int index, int team);
-void fn_8017DA9C(int team);
+void HudHidePressPrompt(int team);
 void fn_80156C78(int id, int value);
 void fn_800A9384(int mode);
 void fn_80073210(int frames);
@@ -337,7 +337,7 @@ extern "C" void fn_800A72B4(void)
             } else if (lbl_803EC954[team]->mUnknown54 == 0) {
                 fn_800A7A0C(team);
             } else {
-                fn_8017DE54(team, StyleTrackerGetMeterFraction(team), 0, 0);
+                HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
             }
         }
         if ((lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2)
@@ -361,7 +361,7 @@ extern "C" void fn_800A72B4(void)
                 fn_800A7A0C(team);
             }
             DbCursorClose(&cursor);
-            fn_8017DE54(team, StyleTrackerGetMeterFraction(team), 0, 0);
+            HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
         }
     }
@@ -373,7 +373,7 @@ extern "C" void fn_800A7514(int team)
 
     if (lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2) {
         fn_800AE750(fn_800A6590(fn_800A8408(team)), team);
-        fn_8017DA9C(team);
+        HudHidePressPrompt(team);
         if (lbl_803EC954[team]->mUnknown68 == 0 && lbl_803EC954[other]->mUnknown68 != 2) {
             float mine = StyleTrackerGetMeterFraction(team);
             float theirs = StyleTrackerGetMeterFraction(other);
@@ -410,7 +410,7 @@ extern "C" void fn_800A7514(int team)
                     fn_800A7A0C(other);
                 }
                 if (theirs < 0.5f) {
-                    fn_8017DA9C(other);
+                    HudHidePressPrompt(other);
                 }
             }
             fn_800A6D5C(team);

@@ -74,7 +74,7 @@ static Key_802DB1D4 keys_802DB1D4[43] = {
     {0, 233},
     {0, 243}
 };
-extern "C" float lbl_803EB188, lbl_803EB18C, lbl_803ECB08;
+extern "C" float lbl_803EB188, lbl_803EB18C, gPlyrMoveFwdSpeed;
 extern "C" Queue_800EFE0C lbl_803EB190, lbl_803EB198;
 extern "C" unsigned char lbl_803EB168, lbl_803EB16A;
 extern "C" float lbl_803EB184;
@@ -673,7 +673,7 @@ unsigned char fn_80135F14(Object_80039F5C *p, Object_80039F5C *other, int *count
             float distance;
             Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
-                (p->mMotion.mUnknown28 < lbl_803ECB08 * 0.4f ||
+                (p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.4f ||
                  MathAngleDiff(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {
                 *count = 0;
                 result = 2;

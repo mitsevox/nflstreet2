@@ -8,7 +8,7 @@
 #include "game/LevelWallInfo.h"
 #include "game/Table_80089904.h"
 #include "game/PauseMenu.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_801FCE10.h"
@@ -52,12 +52,12 @@ void CamGameSelectCamera(int a);
 void CamGameSetFocusAll(int a, int b);
 void fn_80162780(int a, int b);
 void fn_8016DDDC(int team);
-void fn_80173BCC(void);
-void fn_80173BF8(void);
+void ClockRuleSetTwoMinuteFlags(void);
+void ClockRuleSetTwoMinuteFlag(void);
 int fn_80178308(void);
 int fn_80178320(void);
-void fn_8017F264(void);
-void fn_8017F284(void);
+void GameEventFlagsInit(void);
+void GameEventFlagsShutdown(void);
 int fn_8019623C(int id);
 Table_800DE51C *fn_801BBD5C(unsigned short key, unsigned short id);
 Table_80089904 *fn_801BE72C(unsigned short type, unsigned short key);
@@ -383,7 +383,7 @@ extern "C" void fn_800C34B0(void)
     unsigned int mitg;
     unsigned int rtqg;
 
-    fn_8017F584();
+    GameModeTypeGet();
     
 
 
@@ -396,10 +396,10 @@ extern "C" void fn_800C34B0(void)
     fn_8009D964(1, mitg);
     fn_8009D818(rtqg);
     if (pnig <= 120) {
-        fn_80173BCC();
+        ClockRuleSetTwoMinuteFlags();
     }
     if (mitg <= 120 && (fn_8009D86C() == 4 || fn_8009D86C() == 2)) {
-        fn_80173BF8();
+        ClockRuleSetTwoMinuteFlag();
     }
     fn_800CC448();
     fn_8016DDDC(fn_80178308());
@@ -411,8 +411,8 @@ extern "C" void fn_800C34B0(void)
     }
     if (lbl_803EABD5 != 0) {
         fn_801FCE10(0, "delete from 'MAGI'\n");
-        fn_8017F284();
-        fn_8017F264();
+        GameEventFlagsShutdown();
+        GameEventFlagsInit();
         InGameStateClearActive();
         InGameStateReset();
         PauseClearSavedFlags();

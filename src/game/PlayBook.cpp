@@ -48,7 +48,7 @@ int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, u
 int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void PlayArtSetFlip(signed char team, int a, int b);
 void PlayBookOffsetSpots(Vec2_t *pPoints, int count);
-int fn_8016BAD8(int team);
+int PlayAutoFlip(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80177F70(void);
@@ -285,7 +285,7 @@ void PlayBookLoadCurrentPlay(int team)
     PlayBookSetLoadFlags(flags);
     if (fn_80178308() == team && fn_800B65A0(team) == 0xFF && !fn_800BA6F8() &&
         (!fn_801485D4() || fn_801486A0() != 2)) {
-        fn_8016BAD8(team);
+        PlayAutoFlip(team);
     }
 }
 

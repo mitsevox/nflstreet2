@@ -32,7 +32,7 @@ int ChalCheckMedalGoal(int side, ChalMedalGoal_t *pInfo);
 int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int fn_800A7E40(unsigned char side);
-unsigned char fn_80174160(void);
+unsigned char DriveLogGetTeam(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178348(void);
@@ -109,7 +109,7 @@ int ChallengeGoalCheckSpstMax(int side, unsigned int value)
 
     fn_8022B7A4(side, 0x73707374, &stat);
     if (stat >= value) {
-        int current = fn_80174160();
+        int current = DriveLogGetTeam();
 
         if (current != side || fn_80178308() != current) {
             return 3;
@@ -202,7 +202,7 @@ int ChallengeGoalCheckSpstReached(int side, unsigned int value, int flag)
 
     fn_8022B7A4(side, 0x73707374, &stat);
     if (stat >= value) {
-        int current = fn_80174160();
+        int current = DriveLogGetTeam();
 
         if (current != side || fn_80178308() != current ||
             (flag && fn_80177F70() == 6)) {
@@ -294,7 +294,7 @@ int ChallengeGoalCheckSpstVsScoreStats(int side, int value)
     if (total >= a) {
         return 0;
     }
-    if (total == a - 1 && fn_80174160() == side && fn_80178308() == side) {
+    if (total == a - 1 && DriveLogGetTeam() == side && fn_80178308() == side) {
         return 2;
     }
     return 1;

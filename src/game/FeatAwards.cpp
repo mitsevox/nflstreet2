@@ -8,7 +8,7 @@
 #include "game/FeatAwards.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801D2B7C.h"
 
 extern "C" {
@@ -110,7 +110,7 @@ void FeatAwardModeFeat(DbCursor *pCursor, DbCursor *pOther, int db)
     int index;
     int key;
 
-    mode = fn_8017F584();
+    mode = GameModeTypeGet();
     switch (mode) {
     case 0:
         key = 13;
@@ -206,7 +206,7 @@ void FeatAwardAfterGame(void)
         UnlockListClose(&cursor);
         UnlockListOpen(&cursor, 0, 0);
         FeatAwardModeFeat(&cursor, &other, db);
-        if (fn_8017F584() == 0) {
+        if (GameModeTypeGet() == 0) {
             fn_80083E1C(&query, 0);
             if (fn_8007F828(14) == 0) {
                 FeatAwardSettingFeats(&cursor, &other, db);
@@ -347,7 +347,7 @@ int FeatAwardCurrentUserModeFeat(FeatAward_t *pEntry)
 
     UnlockListOpen(&cursor, 0, 0);
     UnlockStatusOpenDb(&other, db);
-    mode = fn_8017F584();
+    mode = GameModeTypeGet();
     switch (mode) {
     case 6:
         key = 30;
@@ -396,7 +396,7 @@ int FeatAwardGameCredits(int side)
     unsigned char flag;
 
     flag = 0;
-    if (fn_8017F584() == 0) {
+    if (GameModeTypeGet() == 0) {
         if (fn_80186F7C(0) != -1) {
             fn_80190280(fn_80186F7C(0));
             flag |= fn_80190394() == 0;

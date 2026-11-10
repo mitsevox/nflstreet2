@@ -1,9 +1,10 @@
+/* In-game HUD messages: posts the score and down displays, the per-controller "Mash" and "Press" button prompts, short alert and callout texts, and the HUD show/hide toggles to the UI object. */
 #include <string.h>
 #include "game/Object_80039F5C.h"
 #include "game/Entry_80219044.h"
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
@@ -27,36 +28,36 @@ int fn_80188044(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
 
-unsigned char fn_8017D0E0(int id);
-void fn_8017D670(unsigned char value);
-void fn_8017D678(void);
-void fn_8017D6B8(int a, int b);
+unsigned char HudGetPadSlot(int id);
+void HudEnableMashCycle(unsigned char value);
+void HudCycleMashPrompt(void);
+void HudSetScore(int a, int b);
 }
 
-static unsigned char lbl_803EB468 = 0;
-static char lbl_803EB46C[] = "Mash";
-static char lbl_803EB474[] = "Press";
-static int lbl_803EB47C = 0;
-static int lbl_803EB480 = 0;
-static unsigned char lbl_803EB484 = 4;
-static unsigned char lbl_803EB485 = 4;
-static unsigned char lbl_803EB486 = 0;
-static unsigned char lbl_803EB487 = 0;
-static unsigned char lbl_803EB488 = 0;
+static unsigned char _Hud_bMashCycle = 0;
+static char _Hud_szMash[] = "Mash";
+static char _Hud_szPress[] = "Press";
+static int _Hud_iMashOffenseId = 0;
+static int _Hud_iMashDefenseId = 0;
+static unsigned char _Hud_uMashOffensePad = 4;
+static unsigned char _Hud_uMashDefensePad = 4;
+static unsigned char _Hud_uMashArg = 0;
+static unsigned char _Hud_uMashNextPad = 0;
+static unsigned char _Hud_bHidden = 0;
 
-static char lbl_80362964[0x52];
-static Entry_80219044 lbl_803629B8;
-static Entry_80219044 lbl_803629C4;
-static Entry_80219044 lbl_803629D0;
-static Entry_80219044 lbl_803629DC;
-static char lbl_803ECB3C[4];
+static char _Hud_szMessage[0x52];
+static Entry_80219044 _Hud_ScoreText;
+static Entry_80219044 _Hud_MessageText;
+static Entry_80219044 _Hud_MashText;
+static Entry_80219044 _Hud_PressText;
+static char _Hud_szScore[4];
 
 extern "C" {
 
 /* Returns the slot of controller id: in modes above 1, controllers whose
    fn_800B6644 value is 1 fill the slots from the front and those with 0 from
    the back; otherwise each controller keeps its own index. */
-unsigned char fn_8017D0E0(int id)
+unsigned char HudGetPadSlot(int id)
 {
     char order[4];
     int first = 0;
@@ -92,12 +93,12 @@ unsigned char fn_8017D0E0(int id)
     return 0;
 }
 
-int fn_8017D1D0(unsigned char id)
+int HudIsPadPromptAllowed(unsigned char id)
 {
     return 1;
 }
 
-void fn_8017D1D8(unsigned char id)
+void HudUpdateMashPrompt(unsigned char id)
 {
     int args[4];
     Object_80039F5C *p;
@@ -118,99 +119,99 @@ void fn_8017D1D8(unsigned char id)
         return;
     }
     own = (p->mId >> 8 & 0xFF) == fn_80178308();
-    args[2] = lbl_803EB486;
-    lbl_803629D0.mpText = lbl_803EB46C;
-    args[3] = (int)&lbl_803629D0;
-    lbl_803629D0.mLength = strlen(lbl_803629D0.mpText);
+    args[2] = _Hud_uMashArg;
+    _Hud_MashText.mpText = _Hud_szMash;
+    args[3] = (int)&_Hud_MashText;
+    _Hud_MashText.mLength = strlen(_Hud_MashText.mpText);
     if (p->mUnknown8 != 0xFF) {
         if (!own) {
-            if (lbl_803EB480 == p->mId && lbl_803EB485 != id) {
-                if (lbl_803EB485 != 4) {
-                    args[0] = fn_8017D0E0(lbl_803EB485);
+            if (_Hud_iMashDefenseId == p->mId && _Hud_uMashDefensePad != id) {
+                if (_Hud_uMashDefensePad != 4) {
+                    args[0] = HudGetPadSlot(_Hud_uMashDefensePad);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
                         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                     }
                 }
-                args[0] = fn_8017D0E0(id);
+                args[0] = HudGetPadSlot(id);
                 args[1] = 1;
-                if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
+                if (VptManagerGetPassIcons() && HudIsPadPromptAllowed(id)) {
                     fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                 }
-                lbl_803EB485 = id;
+                _Hud_uMashDefensePad = id;
             }
         }
         if (own) {
-            if (lbl_803EB47C == p->mId && lbl_803EB484 != id) {
-                if (lbl_803EB484 != 4) {
-                    args[0] = fn_8017D0E0(lbl_803EB484);
+            if (_Hud_iMashOffenseId == p->mId && _Hud_uMashOffensePad != id) {
+                if (_Hud_uMashOffensePad != 4) {
+                    args[0] = HudGetPadSlot(_Hud_uMashOffensePad);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
                         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                     }
                 }
-                args[0] = fn_8017D0E0(id);
+                args[0] = HudGetPadSlot(id);
                 args[1] = 1;
-                if (VptManagerGetPassIcons() && fn_8017D1D0(id)) {
+                if (VptManagerGetPassIcons() && HudIsPadPromptAllowed(id)) {
                     fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
                 }
-                lbl_803EB484 = id;
+                _Hud_uMashOffensePad = id;
             }
         }
     }
     if (!own) {
-        if (lbl_803EB485 == id && (lbl_803EB480 == 0 || lbl_803EB480 != p->mId)) {
-            args[0] = fn_8017D0E0(id);
+        if (_Hud_uMashDefensePad == id && (_Hud_iMashDefenseId == 0 || _Hud_iMashDefenseId != p->mId)) {
+            args[0] = HudGetPadSlot(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
                 fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
             }
-            lbl_803EB485 = 4;
+            _Hud_uMashDefensePad = 4;
         }
     }
     if (own) {
-        if (lbl_803EB484 == id && (lbl_803EB47C == 0 || lbl_803EB47C != p->mId)) {
-            args[0] = fn_8017D0E0(id);
+        if (_Hud_uMashOffensePad == id && (_Hud_iMashOffenseId == 0 || _Hud_iMashOffenseId != p->mId)) {
+            args[0] = HudGetPadSlot(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
                 fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
             }
-            lbl_803EB484 = 4;
+            _Hud_uMashOffensePad = 4;
         }
     }
 }
 
-void fn_8017D4AC(void)
+void HudReset(void)
 {
-    lbl_803EB468 = 1;
-    lbl_803EB47C = 0;
-    lbl_803EB480 = 0;
-    lbl_803EB484 = 4;
-    lbl_803EB485 = 4;
-    lbl_803EB487 = 0;
-    lbl_803EB488 = 0;
-    fn_8017DE54(0, 0.0f, 0, 0);
-    fn_8017DE54(1, 0.0f, 0, 0);
-    fn_8017E620(0, 0);
-    fn_8017E620(1, 0);
+    _Hud_bMashCycle = 1;
+    _Hud_iMashOffenseId = 0;
+    _Hud_iMashDefenseId = 0;
+    _Hud_uMashOffensePad = 4;
+    _Hud_uMashDefensePad = 4;
+    _Hud_uMashNextPad = 0;
+    _Hud_bHidden = 0;
+    HudSetGameBreakerMeter(0, 0.0f, 0, 0);
+    HudSetGameBreakerMeter(1, 0.0f, 0, 0);
+    HudSetEvent1A(0, 0);
+    HudSetEvent1A(1, 0);
     if (ChallengeIsActive()) {
-        fn_8017D6B8(0, ChalGetCurrent()->mUnknown1AC);
-        fn_8017D6B8(1, ChalGetCurrent()->mUnknown1A8);
+        HudSetScore(0, ChalGetCurrent()->mUnknown1AC);
+        HudSetScore(1, ChalGetCurrent()->mUnknown1A8);
     } else {
-        fn_8017D6B8(0, 0);
-        fn_8017D6B8(1, 0);
+        HudSetScore(0, 0);
+        HudSetScore(1, 0);
     }
-    fn_8017DE54(1, 0.0f, 0, 0);
-    fn_8017DE54(0, 0.0f, 0, 0);
-    fn_8017DF6C(0, 0);
-    fn_8017DF6C(1, 0);
-    fn_8017E380(0);
-    fn_8017E380(1);
+    HudSetGameBreakerMeter(1, 0.0f, 0, 0);
+    HudSetGameBreakerMeter(0, 0.0f, 0, 0);
+    HudSetGameBreakerLevel(0, 0);
+    HudSetGameBreakerLevel(1, 0);
+    HudResetGameBreaker(0);
+    HudResetGameBreaker(1);
 }
 
-void fn_8017D5D8(void)
+void HudStart(void)
 {
-    fn_8017D4AC();
+    HudReset();
     switch (fn_801486A0()) {
     case 0:
     case 1:
@@ -224,25 +225,25 @@ void fn_8017D5D8(void)
         }
         break;
     }
-    fn_8017D678();
-    fn_8017D670(1);
+    HudCycleMashPrompt();
+    HudEnableMashCycle(1);
 }
 
-void fn_8017D670(unsigned char value)
+void HudEnableMashCycle(unsigned char value)
 {
-    lbl_803EB468 = value;
+    _Hud_bMashCycle = value;
 }
 
-void fn_8017D678(void)
+void HudCycleMashPrompt(void)
 {
-    if (lbl_803EB468) {
-        fn_8017D1D8(lbl_803EB487);
-        lbl_803EB487++;
-        lbl_803EB487 %= 4;
+    if (_Hud_bMashCycle) {
+        HudUpdateMashPrompt(_Hud_uMashNextPad);
+        _Hud_uMashNextPad++;
+        _Hud_uMashNextPad %= 4;
     }
 }
 
-void fn_8017D6B8(int a, int b)
+void HudSetScore(int a, int b)
 {
     int args[2];
 
@@ -252,16 +253,16 @@ void fn_8017D6B8(int a, int b)
         break;
     default:
         args[0] = a != 0;
-        fn_801C2E18(lbl_803ECB3C, "%d", b);
-        lbl_803629B8.mpText = lbl_803ECB3C;
-        args[1] = (int)&lbl_803629B8;
-        lbl_803629B8.mLength = strlen(lbl_803629B8.mpText);
+        fn_801C2E18(_Hud_szScore, "%d", b);
+        _Hud_ScoreText.mpText = _Hud_szScore;
+        args[1] = (int)&_Hud_ScoreText;
+        _Hud_ScoreText.mLength = strlen(_Hud_ScoreText.mpText);
         fn_8021D7B8(lbl_803EB688, 0x8000000B, 2, args);
         break;
     }
 }
 
-void fn_8017D764(void)
+void HudSetDown(void)
 {
     int args[1];
     int count = fn_80177F70();
@@ -273,72 +274,72 @@ void fn_8017D764(void)
     fn_8021D7B8(lbl_803EB688, 0x80000010, 1, args);
 }
 
-void fn_8017D7C4(const char *pText)
+void HudShowAlert(const char *pText)
 {
     Entry_80219044 *args[1];
 
-    strncpy(lbl_80362964, pText, 0x1D);
-    args[0] = &lbl_803629C4;
-    args[0]->mpText = lbl_80362964;
+    strncpy(_Hud_szMessage, pText, 0x1D);
+    args[0] = &_Hud_MessageText;
+    args[0]->mpText = _Hud_szMessage;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x8000000C, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
-void fn_8017D844(const char *pText)
+void HudShowCallout(const char *pText)
 {
     Entry_80219044 *args[1];
 
-    strncpy(lbl_80362964, pText, sizeof(lbl_80362964));
-    args[0] = &lbl_803629C4;
-    args[0]->mpText = lbl_80362964;
+    strncpy(_Hud_szMessage, pText, sizeof(_Hud_szMessage));
+    args[0] = &_Hud_MessageText;
+    args[0]->mpText = _Hud_szMessage;
     args[0]->mLength = strlen(args[0]->mpText);
     fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
-void fn_8017D8C4(int a, int b, unsigned char c)
+void HudSetMashPlayers(int a, int b, unsigned char c)
 {
-    lbl_803EB47C = a;
-    lbl_803EB480 = b;
-    lbl_803EB486 = c;
+    _Hud_iMashOffenseId = a;
+    _Hud_iMashDefenseId = b;
+    _Hud_uMashArg = c;
 }
 
-void fn_8017D8D4(void)
+void HudHideMashPrompts(void)
 {
     int args[4];
 
     args[2] = 0;
-    lbl_803629D0.mpText = lbl_803EB46C;
-    args[3] = (int)&lbl_803629D0;
-    lbl_803629D0.mLength = strlen(lbl_803629D0.mpText);
-    if (lbl_803EB485 != 4) {
-        args[0] = fn_8017D0E0(lbl_803EB485);
+    _Hud_MashText.mpText = _Hud_szMash;
+    args[3] = (int)&_Hud_MashText;
+    _Hud_MashText.mLength = strlen(_Hud_MashText.mpText);
+    if (_Hud_uMashDefensePad != 4) {
+        args[0] = HudGetPadSlot(_Hud_uMashDefensePad);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
             fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
         }
-        lbl_803EB485 = 4;
+        _Hud_uMashDefensePad = 4;
     }
-    if (lbl_803EB484 != 4) {
-        args[0] = fn_8017D0E0(lbl_803EB484);
+    if (_Hud_uMashOffensePad != 4) {
+        args[0] = HudGetPadSlot(_Hud_uMashOffensePad);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
             fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
         }
-        lbl_803EB484 = 4;
+        _Hud_uMashOffensePad = 4;
     }
 }
 
-void fn_8017D9B0(int a, int b)
+void HudClearMashPlayers(int a, int b)
 {
-    if (lbl_803EB47C == a && lbl_803EB480 == b) {
-        lbl_803EB47C = 0;
-        lbl_803EB480 = 0;
+    if (_Hud_iMashOffenseId == a && _Hud_iMashDefenseId == b) {
+        _Hud_iMashOffenseId = 0;
+        _Hud_iMashDefenseId = 0;
     }
 }
 
-void fn_8017D9D8(int team)
+void HudShowPressPrompt(int team)
 {
     int args[4];
 
@@ -352,15 +353,15 @@ void fn_8017D9D8(int team)
     }
     args[1] = 1;
     args[2] = 1;
-    lbl_803629DC.mpText = lbl_803EB474;
-    args[3] = (int)&lbl_803629DC;
-    lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
+    _Hud_PressText.mpText = _Hud_szPress;
+    args[3] = (int)&_Hud_PressText;
+    _Hud_PressText.mLength = strlen(_Hud_PressText.mpText);
     if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
 }
 
-void fn_8017DA9C(int team)
+void HudHidePressPrompt(int team)
 {
     int args[4];
 
@@ -374,17 +375,17 @@ void fn_8017DA9C(int team)
     }
     args[1] = 0;
     args[2] = 1;
-    lbl_803629DC.mpText = lbl_803EB474;
-    args[3] = (int)&lbl_803629DC;
-    lbl_803629DC.mLength = strlen(lbl_803629DC.mpText);
+    _Hud_PressText.mpText = _Hud_szPress;
+    args[3] = (int)&_Hud_PressText;
+    _Hud_PressText.mLength = strlen(_Hud_PressText.mpText);
     if (VptManagerGetPassIcons()) {
         fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
     }
 }
 
-void fn_8017DB44(void)
+void HudStop(void)
 {
-    fn_8017D4AC();
+    HudReset();
     switch (fn_801486A0()) {
     case 0:
     case 1:
@@ -398,10 +399,10 @@ void fn_8017DB44(void)
         }
         break;
     }
-    fn_8017D670(0);
+    HudEnableMashCycle(0);
 }
 
-void fn_8017DBCC(void)
+void HudPost3AOn(void)
 {
     int args[1];
 
@@ -409,7 +410,7 @@ void fn_8017DBCC(void)
     fn_8021D7B8(lbl_803EB688, 0x8000003A, 1, args);
 }
 
-void fn_8017DC08(void)
+void HudPost3AOff(void)
 {
     int args[1];
 
@@ -417,47 +418,47 @@ void fn_8017DC08(void)
     fn_8021D7B8(lbl_803EB688, 0x8000003A, 1, args);
 }
 
-void fn_8017DC44(void)
+void HudHide(void)
 {
     int args[1];
 
-    lbl_803EB488 = 1;
+    _Hud_bHidden = 1;
     args[0] = 0;
     fn_8021D7B8(lbl_803EB688, 0x8000001B, 1, args);
 }
 
-void fn_8017DC88(void)
+void HudUnhide(void)
 {
     int args[1];
 
-    lbl_803EB488 = 0;
+    _Hud_bHidden = 0;
     args[0] = 1;
     fn_8021D7B8(lbl_803EB688, 0x8000001B, 1, args);
 }
 
-void fn_8017DCCC(void)
+void HudHideOverlay(void)
 {
     int args[1];
 
-    lbl_803EB488 = 1;
+    _Hud_bHidden = 1;
     args[0] = 1;
     if (!fn_80156704()) {
         fn_8021D7B8(lbl_803EB688, 0x80000067, 1, args);
     }
 }
 
-void fn_8017DD1C(void)
+void HudShowOverlay(void)
 {
     int args[1];
 
-    lbl_803EB488 = 0;
+    _Hud_bHidden = 0;
     args[0] = 0;
     fn_8021D7B8(lbl_803EB688, 0x80000067, 1, args);
 }
 
-unsigned char fn_8017DD60(void)
+unsigned char HudIsHidden(void)
 {
-    return lbl_803EB488;
+    return _Hud_bHidden;
 }
 
 }

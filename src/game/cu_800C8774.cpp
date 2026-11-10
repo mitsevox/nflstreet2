@@ -126,7 +126,7 @@ extern unsigned char lbl_803EAC65;
 extern float lbl_803EAC68;
 extern float lbl_803EAC6C;
 extern float lbl_803EAC70;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 /* Turn in place towards a move direction; payload that fn_801BE60C returns
@@ -797,7 +797,7 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
         p->mUnknown512.mUnknown14 = 1;
         p->mFlags &= ~4;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         break;
     case 0: {
         unsigned short i;

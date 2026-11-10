@@ -227,13 +227,13 @@ void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80171824(Object_80039F5C *p);
-void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80171E30(void);
-void fn_801720B4(Object_80039F5C *p);
-int fn_8017319C(Object_80039F5C *p);
+void PossFumble(Object_80039F5C *p);
+void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pOther);
+void PossStartFumble(void);
+void PossGrabBall(Object_80039F5C *p);
+int PossCheckDownedBall(Object_80039F5C *p);
 int fn_80176B04(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -283,8 +283,8 @@ extern float lbl_803EAFB4;
 extern float lbl_803EAFB8;
 extern float lbl_803EAFBC;
 extern float lbl_803EAFCC;
-extern float lbl_803ECB04;
-extern float lbl_803ECB08;
+extern float gPlyrMoveBaseSpeed;
+extern float gPlyrMoveFwdSpeed;
 extern const float lbl_803ED6CC;
 int fn_8010FD94(Object_80039F5C *p);
 }
@@ -557,7 +557,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             float ratio;
             float distance;
 
-            speed = lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f));
+            speed = gPlyrMoveFwdSpeed * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f));
             fn_802276B4(&ball, &ball, &from);
             if (fn_802270A4(&velocity) != 0.0f) {
                 ratio = fn_802270A4(&ball) / fn_802270A4(&velocity);
@@ -648,8 +648,8 @@ extern "C" int fn_80112928(Object_80039F5C *p)
         }
         fn_80227690(&delta, &p->mMotion.mPos, &ballPos);
         distance = fn_802270A4(&delta) + 0.5f;
-        targetSpeed = fn_8016D9F4(pTarget, 1.0f, 1.0f);
-        speed = fn_8016D9F4(p, 1.0f, 1.0f);
+        targetSpeed = PlyrMoveGetRatedSpeed(pTarget, 1.0f, 1.0f);
+        speed = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);
         if (targetDistance / targetSpeed > time && distance / speed < time) {
             attempt = 1;
         }
@@ -853,7 +853,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
         fn_80143EBC(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         result = 1;
     }
     return result;
@@ -947,7 +947,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         pOtherState = (Other_80113E74 *)&pOther->mUnknown336;
     }
     if (state->mUnknown68 == 0) {
-        fn_8017319C(p);
+        PossCheckDownedBall(p);
         state->mUnknown68 = 1;
     }
     fn_800DB7A4(state->mUnknown32, p);
@@ -970,19 +970,19 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
             if (state->mUnknown56 == 5) {
                 AudmonEventPostId(61, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
                 StyleTrackerAwardStrip(fn_80178320());
-                fn_80171E30();
-                fn_801720B4(pOther);
+                PossStartFumble();
+                PossGrabBall(pOther);
                 fn_800A8954(26, p->mIdBytes[2], p);
             } else if (fn_801BE648(p->mpUnknown792) == 234 && fn_801BE648(pOther->mpUnknown792) == 234) {
-                fn_80171E30();
-                fn_801720B4(pOther);
+                PossStartFumble();
+                PossGrabBall(pOther);
                 if (fn_801787A0() == 0) {
                     StyleTrackerAwardStrip(fn_80178308());
                     fn_800A8954(26, p->mIdBytes[2], p);
                     fn_80156C78(40, 1);
                 }
             } else {
-                fn_80171824(p);
+                PossFumble(p);
             }
         }
     }
@@ -1024,7 +1024,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                         angle = aim.Heading();
                         pRecord->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
-                        pRecord->mUnknownC = state->mUnknown4 / (lbl_803ECB08 * 100621.12f);
+                        pRecord->mUnknownC = state->mUnknown4 / (gPlyrMoveFwdSpeed * 100621.12f);
                         if (pRecord->mUnknownC == 0.0f) {
                             float spread = pRecord->mUnknown10 / 4194304.0f;
 
@@ -1076,11 +1076,11 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
             state->mUnknown4 = fn_800CE73C(pAnim);
             if (state->mUnknown28 == 1) {
                 if (BallGetCurrentHolder() == p) {
-                    if (state->mUnknown4 >= lbl_803ECB08 * 80496.9f || lbl_803EAF91 != 0) {
+                    if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 80496.9f || lbl_803EAF91 != 0) {
                         fn_801410F4(2);
-                    } else if (state->mUnknown4 >= lbl_803ECB08 * 70434.78f) {
+                    } else if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 70434.78f) {
                         fn_801410F4(1);
-                    } else if (state->mUnknown4 >= lbl_803ECB08 * 60372.67f) {
+                    } else if (state->mUnknown4 >= gPlyrMoveFwdSpeed * 60372.67f) {
                         fn_801410F4(0);
                     }
                 }
@@ -1097,7 +1097,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
 
             if (pHeld != 0 && pHeld == BallGetCurrent() && fn_801BE648(p->mpUnknown792) != 234 &&
                 fn_801BE648(p->mpUnknown792) != 238) {
-                fn_801718E8(p, pOther);
+                PossTryFumble(p, pOther);
             }
         }
         state->mUnknown26--;
@@ -1111,7 +1111,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         state->mUnknown59 = 1;
         fn_800A3B58(p, 1, 1);
         speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
-        if (speed > lbl_803ECB08 * 100621.12f * 0.75 && BallGetCurrentHolder() == p) {
+        if (speed > gPlyrMoveFwdSpeed * 100621.12f * 0.75 && BallGetCurrentHolder() == p) {
             AudmonEventPost(100, 0);
         }
     }
@@ -1144,7 +1144,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         fn_80143EBC(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         StyleTrackerFinishHurdle(p);
     }
     return result;
@@ -1578,7 +1578,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                     int moving = 1;
                     if ((short)fn_8011F4E0()->mUnknown2 < 0
                         && (pOther->mMotion.mUnknown44 <= fabsf(pOther->mMotion.mUnknown40) * 2.0f / 3.0f
-                            || pOther->mMotion.mUnknown44 <= lbl_803ECB04 * 0.25f)) {
+                            || pOther->mMotion.mUnknown44 <= gPlyrMoveBaseSpeed * 0.25f)) {
                         moving = 0;
                     }
                     if (moving == 1) {
@@ -1664,7 +1664,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                     }
                 } else if (dy > -2.0f) {
                     if (pOther->mMotion.mUnknown44 > fabsf(pOther->mMotion.mUnknown40) * 2.0f / 3.0f
-                        && pOther->mMotion.mUnknown44 > lbl_803ECB04 * 0.25f) {
+                        && pOther->mMotion.mUnknown44 > gPlyrMoveBaseSpeed * 0.25f) {
                         pState->mUnknown12 = kSlow;
                     } else {
                         pState->mUnknown12 = 0.4f;

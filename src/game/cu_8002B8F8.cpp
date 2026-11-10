@@ -178,16 +178,16 @@ void fn_801787FC(int which, short value);
 float fn_80178A08(void);
 float fn_80178A44(void);
 unsigned int fn_80178D18(int team);
-void fn_8017CFB4(int a);
-void fn_8017DBCC(void);
-void fn_8017DC44(void);
-void fn_8017DC88(void);
-void fn_8017DCCC(void);
-void fn_8017DD1C(void);
-unsigned char fn_8017DD60(void);
-void fn_8017F814(void);
-unsigned char fn_8017F2DC(unsigned char value);
-unsigned char fn_8017F2EC(unsigned char value);
+void BannerClear(int a);
+void HudPost3AOn(void);
+void HudHide(void);
+void HudUnhide(void);
+void HudHideOverlay(void);
+void HudShowOverlay(void);
+unsigned char HudIsHidden(void);
+void DebugWindowClose(void);
+unsigned char GameEventFlagsSetFlag0(unsigned char value);
+unsigned char GameEventFlagsSetFlag1(unsigned char value);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
 int fn_80190EF0(Type_80190ED4 *pStream);
@@ -413,7 +413,7 @@ extern "C" void fn_8002B8F8(void) {}
 
 extern "C" void fn_8002B8FC(void)
 {
-    fn_8017F814();
+    DebugWindowClose();
     lbl_803EA36C = 0;
 }
 
@@ -698,7 +698,7 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
                 fn_80072F04();
                 fn_80072AEC(0xC);
             }
-            fn_8017DC44();
+            HudHide();
             p->mUnknownD90 = 4;
         }
         if (p->mUnknownD94 & 0x2000000) {
@@ -712,8 +712,8 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             fn_8013C2B4(p->mpUnknownDA0, 0, 0, 0);
             fn_8013C6F0(p->mpUnknownDA0);
         }
-        lbl_803EA35C = fn_8017F2EC(0);
-        lbl_803EA35D = fn_8017F2DC(2);
+        lbl_803EA35C = GameEventFlagsSetFlag1(0);
+        lbl_803EA35D = GameEventFlagsSetFlag0(2);
         fn_800A8644();
         ParticlesStopOnEnter();
         result = 0;
@@ -734,7 +734,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
             p->mUnknownD94 &= ~0x800000;
         } else {
             fn_8002BAF4(&p->mUnknown6B8);
-            fn_8017DC88();
+            HudUnhide();
             if ((p->mUnknownD94 & 0x2000000) && fn_801784C4()) {
                 CamGameResumeAll();
             }
@@ -766,8 +766,8 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
         pCamera = p->mpUnknownDA0;
         fn_8002FA04(pCamera, VptManagerGetCurrentCamera(GameVpt::GetViewport()) == p->mpUnknownDA0);
         p->mpUnknownDA0 = 0;
-        fn_8017F2EC(lbl_803EA35C);
-        fn_8017F2DC(lbl_803EA35D);
+        GameEventFlagsSetFlag1(lbl_803EA35C);
+        GameEventFlagsSetFlag0(lbl_803EA35D);
         fn_800A866C();
         ParticlesStopOnLeave();
         fn_800711E0();
@@ -1046,15 +1046,15 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
         }
         if (id == 0 && lbl_803EA360 > 29) {
             p->mUnknownD94 |= 0x200;
-            fn_8017DBCC();
+            HudPost3AOn();
         }
         switch (id) {
         case 0x50:
             if (value == 1.0f) {
-                if (fn_8017DD60()) {
-                    fn_8017DD1C();
+                if (HudIsHidden()) {
+                    HudShowOverlay();
                 } else {
-                    fn_8017DCCC();
+                    HudHideOverlay();
                 }
             }
             break;
@@ -1238,7 +1238,7 @@ extern "C" void fn_8002D2C8(Type_803EA368 *p, unsigned char value) { p->mUnknown
    no GameCube address for them, the tables are read directly here, as the
    Xbox build does after inlining. State is taken from the lower table as on
    PS2 (Xbox reads the two the other way round). The window calls this slot
-   with three arguments on both platforms (GameCube fn_8017F868 sets r3-r5
+   with three arguments on both platforms (GameCube DebugWindowHandleMsg sets r3-r5
    before the call at 0x8017F8CC; Xbox 0x17C502 pushes three through
    0x623644); the bodies read only the first two. This code is not
    measured. */
@@ -1918,7 +1918,7 @@ extern "C" void fn_8002E890(RecordList_8002E7C0 *pList)
 
 extern "C" void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList)
 {
-    fn_8017CFB4(7);
+    BannerClear(7);
     if (pList->mUnknown584 & 1) {
         fn_8002D2EC();
     }

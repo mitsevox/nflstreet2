@@ -49,7 +49,7 @@ extern void *lbl_803EB688;
 extern const int lbl_802DE95C[];
 
 void fn_8021956C(void *p, int a, int b, int c);
-void fn_801735D8(unsigned int mask);
+void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_800AAD58(void *p, float dt);
@@ -84,7 +84,7 @@ void fn_8014C868(void)
 
 void fn_8014C8AC(void *p, float dt)
 {
-    fn_801735D8(2048);
+    ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_17(lbl_802DE95C);

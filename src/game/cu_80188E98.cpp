@@ -3,7 +3,7 @@
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/viewporttypes.h"
@@ -43,10 +43,10 @@ void ScreenMsgDispatch(void);
 void fn_8006CA84(int a);
 void fn_8013CF98(void);
 float fn_8013D050(void);
-void fn_8017CED4(unsigned int a);
-void fn_8017CFAC(void);
-void fn_8017F264(void);
-void fn_8017F284(void);
+void BannerSetTickMs(unsigned int a);
+void BannerEnd(void);
+void GameEventFlagsInit(void);
+void GameEventFlagsShutdown(void);
 void fn_80188D2C(void);
 int fn_801890F0(int a, int b);
 void fn_80189164(int a, int b);
@@ -635,12 +635,12 @@ void fn_80189F68(void)
         }
         fn_8018AFD8(1);
     } else if (InGameIsPlaying()) {
-        fn_8017F584();
+        GameModeTypeGet();
         fn_80047670(lbl_803EB64C);
-        fn_8017CED4((unsigned int)(gFrameTimeScale * 16.666668f));
+        BannerSetTickMs((unsigned int)(gFrameTimeScale * 16.666668f));
         fn_8018AFD8(0);
         InGameStateReset();
-        fn_8017F264();
+        GameEventFlagsInit();
     }
     fn_80220D04();
     {
@@ -727,9 +727,9 @@ void fn_8018A40C(void)
         }
     } else if (InGameIsPlaying()) {
         fn_80047698();
-        fn_8017CFAC();
+        BannerEnd();
         InGameStateClearActive();
-        fn_8017F284();
+        GameEventFlagsShutdown();
     }
     if (FELoopIsMainFEActive()) {
         fn_8018A390();

@@ -22,7 +22,7 @@ int fn_800BF8A8(Class_80297CE8 *p);
 void fn_800BF9DC(Class_80297CE8 *p);
 void fn_800BE798(Class_80297CE8 *p);
 void SpchIGUpdatePreSnap(void);
-void fn_8017D678(void);
+void HudCycleMashPrompt(void);
 int fn_8016EA68(void);
 void fn_800B0E18(void);
 void fn_8009E01C(void);
@@ -30,9 +30,9 @@ void SpchIGPickTeamPlayer(int side);
 void SpchIGResetPreSnap(void);
 void fn_800ABE00(void);
 unsigned char InGameIsDemo(void);
-unsigned char fn_8017F324(unsigned char value);
-unsigned char fn_8017F334(unsigned char value);
-unsigned char fn_8017F384(unsigned char value);
+unsigned char GameEventFlagsSetFlag3(unsigned char value);
+unsigned char GameEventFlagsSetFlag4(unsigned char value);
+unsigned char GameEventFlagsSetFlag5(unsigned char value);
 void fn_8015C254(int value);
 void PassIconObjSetEnabled(int value);
 void ParticlesResetEvents(void);
@@ -64,7 +64,7 @@ int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B6644(int index);
 void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
-void fn_8017D9D8(int team);
+void HudShowPressPrompt(int team);
 void fn_8017885C(void);
 void fn_800BD958(void);
 void SpchIGEndPreSnap(void);
@@ -75,14 +75,14 @@ void fn_800A87E8(void);
 void fn_80094DF0(void);
 int fn_8009D86C(void);
 unsigned int fn_8009D990(int index);
-unsigned char fn_8017F2DC(unsigned char value);
+unsigned char GameEventFlagsSetFlag0(unsigned char value);
 void fn_800AFE20(void (*pCallback)(int, unsigned int, float));
 void fn_800BE4C8(int a, unsigned int msg, float value);
 void fn_800B0DA4(void);
 void fn_800BD568(int index);
-void fn_8017CFB4(int index);
+void BannerClear(int index);
 void fn_800AEF38(int team);
-void fn_8017E01C(int index);
+void HudHideEvent3D(int index);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 unsigned char fn_801478F0(unsigned char a);
@@ -157,14 +157,14 @@ void Class_80297CE8::vfn_04(float dt)
     InGameStateSetActive(1);
     if ((fn_8009D86C() == 2 || fn_8009D86C() > 3) && fn_8009D990(1) <= 120 && fn_8009D990(1) != 0
         && InGameIsDemo() == 0) {
-        fn_8017F324(0);
-        fn_8017F334(0);
-        fn_8017F384(1);
+        GameEventFlagsSetFlag3(0);
+        GameEventFlagsSetFlag4(0);
+        GameEventFlagsSetFlag5(1);
     } else {
-        fn_8017F334(1);
+        GameEventFlagsSetFlag4(1);
     }
-    if (fn_8017F2DC(1) == 1) {
-        fn_8017F384(1);
+    if (GameEventFlagsSetFlag0(1) == 1) {
+        GameEventFlagsSetFlag5(1);
     }
     PassIconsHide();
     fn_8015C254(1);
@@ -256,7 +256,7 @@ void Class_80297CE8::vfn_04(float dt)
                     RumbleStartPulse(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
                 }
             }
-            fn_8017D9D8(i);
+            HudShowPressPrompt(i);
         }
     }
     ChallengeSendGoalList(1);
@@ -282,7 +282,7 @@ void Class_80297CE8::vfn_05(float dt)
         return;
     }
     SpchIGUpdatePreSnap();
-    fn_8017D678();
+    HudCycleMashPrompt();
     if (fn_800BF8A8(this) == 0 && lbl_803EABA8->mUnknownB8 == -1) {
         fn_800BF9DC(this);
         if (lbl_803EABA8->mUnknownC5 == 0) {
@@ -324,7 +324,7 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800A87E8();
     fn_80094DF0();
     if ((fn_8009D86C() != 2 && fn_8009D86C() <= 3) || fn_8009D990(1) > 120 || fn_8009D990(1) == 0) {
-        fn_8017F2DC(0);
+        GameEventFlagsSetFlag0(0);
     }
     fn_800AFE20(fn_800BE4C8);
     PadInputRestoreHandlers(lbl_803EABA8->mUnknown48);
@@ -334,12 +334,12 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800BD568(1);
     fn_8003A3F4(0, 0);
     fn_8003A3F4(0, 1);
-    fn_8017CFB4(1);
-    fn_8017CFB4(2);
+    BannerClear(1);
+    BannerClear(2);
     fn_800AEF38(0);
     fn_800AEF38(1);
-    fn_8017E01C(0);
-    fn_8017E01C(1);
+    HudHideEvent3D(0);
+    HudHideEvent3D(1);
     PassIconsHide();
     PassIconsClearReplayFlag();
     fn_801478F0(1);

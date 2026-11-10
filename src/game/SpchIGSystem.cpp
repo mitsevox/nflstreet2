@@ -6,7 +6,7 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_802270D4.h"
@@ -358,7 +358,7 @@ extern "C" void SpchIGLoadChatData(SpchIGInitParams_t *pParams, int unused)
 {
     int i;
 
-    _SpchIG_bTutorial = fn_8017F584() == 11;
+    _SpchIG_bTutorial = GameModeTypeGet() == 11;
     _SpchIG_bUseSpeakerPos = 1;
     _SpchIG_sState.mpUnknown4 = ResOpenDevice(lbl_802EBE04, 44);
     _SpchIG_sState.mpUnknown8 = ResOpenRam(_SpchIG_sState.mpUnknown4, 0, 1, 1);

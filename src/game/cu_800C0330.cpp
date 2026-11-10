@@ -7,8 +7,8 @@
 extern "C" {
 void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_8003A3F4(int a, int index);
-void fn_8017DDDC(int index);
-void fn_8017E01C(int index);
+void HudHideEvent31(int index);
+void HudHideEvent3D(int index);
 int ConSetChannelInfo(int a, int b, void *p);
 int fn_800C8744(int team);
 unsigned short fn_800C0660(unsigned short *p, int value);
@@ -36,11 +36,11 @@ extern "C" void fn_800C0330(void *p)
                 break;
             case 1:
                 lbl_803EABA8->mSlots[i].mUnknown0 = 0;
-                fn_8017DDDC((unsigned char)i);
+                HudHideEvent31((unsigned char)i);
                 break;
             case 3:
                 lbl_803EABA8->mSlots[i].mUnknown0 = 0;
-                fn_8017E01C((unsigned char)i);
+                HudHideEvent3D((unsigned char)i);
                 break;
             }
         }

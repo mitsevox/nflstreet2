@@ -4,7 +4,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80181330.h"
-#include "game/cu_8017DD68.h"
+#include "game/HudEvents.h"
 #include "game/Challenge.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_801D2B7C.h"
@@ -14,14 +14,14 @@
 #include <string.h>
 
 /* Filled by fn_80152940 for one index; mpObject points to an object whose
-   halfword at 0xB5C is passed to fn_80180EF8. */
+   halfword at 0xB5C is passed to MsgGameGetPlayerPortrait. */
 struct Object_80056584 {
     char mUnknown0[0xB5C];
     unsigned short mUnknownB5C;
 };
 
-struct Info_80152940 {
-    Info_80152940() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
+struct MiniGameSlotInfo_t {
+    MiniGameSlotInfo_t() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
 
     Object_80056584 *mpObject;
     int mUnknown4;
@@ -145,12 +145,12 @@ extern "C" {
 extern char lbl_8031BDD4[];
 extern void *lbl_803EB688;
 
-void fn_80152940(char *pObject, int index, Info_80152940 *pInfo);
+void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 void fn_80188248(Object_80056584 *pObject, char *pOut, int b);
-int fn_80180EF8(int id);
-int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
+int MsgGameGetPlayerPortrait(int id);
+int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
 void fn_80187D10(void);
 void fn_800C1CA0(void);
 void PauseRequestClose(void);
@@ -215,7 +215,7 @@ void fn_800588F8(int a, int b);
 int PauseGetValue(void);
 int ConGetChannelInfo(int a, int b);
 int fn_800B6644(int index);
-unsigned int fn_8017F584(void);
+unsigned int GameModeTypeGet(void);
 void ChallengeRecordResult(int a, int b);
 void fn_80047874(unsigned char enable);
 void fn_8004730C(unsigned char enabled);
@@ -272,7 +272,7 @@ void fn_80187CAC(int id, char *pText, int size);
 int fn_8007F828(int a);
 int fn_8017881C(int team);
 int fn_80188044(unsigned int index);
-int fn_8017F60C(void);
+int GameModeTypeIsSpecial(void);
 extern void *lbl_803EA368;
 
 State_803EA58C *lbl_803EA58C = 0;
@@ -295,7 +295,7 @@ static unsigned char lbl_803EA5B5 = 0;
 void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pText1, int size1,
                  char *pText2, int size2, int *pColor, int unused, char *pText, int length, int *pId)
 {
-    Info_80152940 info;
+    MiniGameSlotInfo_t info;
 
     fn_80152940(lbl_8031BDD4, index, &info);
     fn_801C2D88(pText0, size0, "%d", info.mUnknown4);
@@ -305,13 +305,13 @@ void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pT
     if (pObject) {
         fn_80188248(pObject, pOut, b);
         fn_80148A58()->vfn_18(1, index, pText, length);
-        *pId = fn_80180EF8(pObject->mUnknownB5C);
+        *pId = MsgGameGetPlayerPortrait(pObject->mUnknownB5C);
     } else {
         *pOut = 0;
         *pId = 0;
     }
     unsigned char red = 0, green = 0, blue = 0;
-    fn_8017E570(info.mUnknown20, &red, &green, &blue);
+    HudLookupColor(info.mUnknown20, &red, &green, &blue);
     pColor[0] = red;
     pColor[1] = green;
     pColor[2] = blue;
@@ -954,9 +954,9 @@ void fn_80057F28(void)
     lbl_803EA58C = (State_803EA58C *)fn_801D2BB0(0x40, sizeof(State_803EA58C), 0, 0);
     memset(lbl_803EA58C, 0, sizeof(State_803EA58C));
     if (fn_800BA6F8() == 0 &&
-        (fn_8017F60C() != 0 || fn_800B65A0(0) == 0xFF || fn_800B65A0(1) == 0xFF || fn_801486A0() == 3)) {
+        (GameModeTypeIsSpecial() != 0 || fn_800B65A0(0) == 0xFF || fn_800B65A0(1) == 0xFF || fn_801486A0() == 3)) {
         lbl_803EA58C->mUnknown4E = 4;
-        if (fn_8017F60C()) {
+        if (GameModeTypeIsSpecial()) {
             if (fn_80057F20()) {
                 lbl_803EA58C->mUnknown4F = 1;
             } else {
@@ -1287,7 +1287,7 @@ void fn_80058DA0(void)
 {
     PauseRequestClose();
     if (lbl_803EA59C) {
-        if (fn_8017F584() == 6) {
+        if (GameModeTypeGet() == 6) {
             ChallengeRecordResult(1, 7);
         }
         fn_80047874(0);
@@ -1299,7 +1299,7 @@ void fn_80058DA0(void)
             int value = 1;
             fn_8021D7B8(lbl_803EB688, 0x8000000E, 1, &value);
         }
-        if (fn_8017F584() == 6 && fn_800AD9B4() == 2) {
+        if (GameModeTypeGet() == 6 && fn_800AD9B4() == 2) {
             ChallengeSendGoalList(1);
         }
     }
@@ -1658,7 +1658,7 @@ int fn_80187C6C(void);
 int fn_801787DC(int team);
 int fn_800A8444(int team);
 int fn_800A8740(void);
-void fn_8017E328(int team,int mode);
+void HudSetGameBreakerHalf(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
 float fn_800C9CF0(int team, int index);
 int fn_80178C24(void);
@@ -1767,9 +1767,9 @@ void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, i
                 if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A4) pModes[i] = 0;
                 else pModes[i] = 1;
             } else pModes[i] = 2;
-            fn_8017DF6C((unsigned char)i, (unsigned char)pModes[i]);
-            if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A4) fn_8017E328((unsigned char)i, 1);
-            else fn_8017E328((unsigned char)i, 2);
+            HudSetGameBreakerLevel((unsigned char)i, (unsigned char)pModes[i]);
+            if (StyleTrackerGetMeterFraction(i) < lbl_803ED6A4) HudSetGameBreakerHalf((unsigned char)i, 1);
+            else HudSetGameBreakerHalf((unsigned char)i, 2);
         }
     }
     pLast[1] = 0; pLast[0] = 0;
@@ -2019,7 +2019,7 @@ void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int la
 void fn_8005AE5C(int index)
 {
     if(lbl_803EA5A0[index]!=1 && lbl_803EA5A0[index]==2) {
-        if(fn_8017F584()==8) {fn_800C1CA0();fn_8017833C(1);fn_80178354(1);}
+        if(GameModeTypeGet()==8) {fn_800C1CA0();fn_8017833C(1);fn_80178354(1);}
         else fn_800C1CA0();
     }
     lbl_803EA5A0[0]=0; lbl_803EA5A0[1]=0;
@@ -2029,9 +2029,9 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
 {
     fn_800C1E50();fn_80059020();
     int enabled=0;
-    if(!fn_8017F60C() && (!ChallengeIsPairingGame() || ChallengeEvaluateGoals())) {
+    if(!GameModeTypeIsSpecial() && (!ChallengeIsPairingGame() || ChallengeEvaluateGoals())) {
         enabled=1;
-        if(fn_8017F584()==7 || fn_8017F584()==10) {
+        if(GameModeTypeGet()==7 || GameModeTypeGet()==10) {
             if(fn_800B65A0(fn_80178AE0())!=255) enabled=0;
         }
     }
@@ -2040,13 +2040,13 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
     if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     *pAllowed=!((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255));
-    if(fn_8017F584()==8) {
+    if(GameModeTypeGet()==8) {
         if(score1>score0) {*pCount=1;fn_801C2EF0(pFirst->mpText,"Continue",pFirst->mLength);lbl_803EA5A0[0]=3;}
         else {*pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
               fn_801C2EF0(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;}
         return;
     }
-    const char *pLabel=fn_8017F584()==11?"Continue":"Exit";
+    const char *pLabel=GameModeTypeGet()==11?"Continue":"Exit";
     if(*pEnabled==1) {
         *pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
         fn_801C2EF0(pSecond->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[1]=1;
@@ -2060,7 +2060,7 @@ void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
     unsigned int score1,score0;
     if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
-    if(fn_8017F584()==8) {
+    if(GameModeTypeGet()==8) {
         if(score1>score0) {
             void *p=fn_80186B38(fn_8022F4BC());
             fn_8018F340(p,GauntletScreenGetSelection());
@@ -2304,13 +2304,13 @@ int fn_8005C0C0(unsigned int id,Arg_8018399C *,int,int *) {
     if(id==0x80000001)return 1;
     if(id!=0x80000002)return 0;
     if(lbl_803EA5B4) {
-        fn_800C1CA0();if(fn_8017F584()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
+        fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
     }
     PauseRequestClose();return 1;
 }
 void fn_8005C144(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
 void fn_8005C1A4(int team,unsigned char index,int *color) {
-    fn_8017E570(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
+    HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
 int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,unsigned char size,char *first,char *second,char *third,char *fourth,unsigned char firstSize,unsigned char secondSize) {
     Object_80039F5C *p=fn_80039F5C(team,index);int result=0;
@@ -2320,7 +2320,7 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
         fn_80148A58()->vfn_20(team,index,0,first,firstSize,second,secondSize);
         fn_80148A58()->vfn_20(team,index,1,third,firstSize,fourth,secondSize);
         fn_80148A58()->vfn_18(team,index,text,size);
-        result=fn_80180EF8(p->mUnknown2908);
+        result=MsgGameGetPlayerPortrait(p->mUnknown2908);
     }
     return result;
 }
@@ -2350,9 +2350,9 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
             if((short)stats.mpPlayer->mUnknown2908==(short)p->mUnknown2908) {found=true;foundTeam=t;foundIndex=i;}
         }
         fn_80148A58()->vfn_18(foundTeam,foundIndex,text,textSize);
-        *result=fn_80180EF8(stats.mpPlayer->mUnknown2908);
+        *result=MsgGameGetPlayerPortrait(stats.mpPlayer->mUnknown2908);
     }
-    unsigned char r=0,g=0,b=0;fn_8017E570(stats.mColor,&r,&g,&b);color[0]=r;color[2]=b;color[1]=g;
+    unsigned char r=0,g=0,b=0;HudLookupColor(stats.mColor,&r,&g,&b);color[0]=r;color[2]=b;color[1]=g;
 }
 int fn_8005C6EC(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {

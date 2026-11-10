@@ -101,7 +101,7 @@ int fn_8009A6EC(Object_80039F5C *p);
 int fn_8009A77C(Object_80039F5C *p);
 void fn_8009A8D4(void *p);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_80178308(void);
 int fn_801783AC(int bit);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -109,7 +109,7 @@ int fn_8009F0B8(Object_80039F5C *p, int angle);
 float fn_800ACB8C(int team);
 void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo);
 int MathAngleDiff(int a, int b);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" void fn_80108A94(Object_80039F5C *p, Points_800F3A6C *pInfo) {
@@ -130,7 +130,7 @@ extern "C" void fn_80108A94(Object_80039F5C *p, Points_800F3A6C *pInfo) {
         p->mUnknown512.mUnknown0 = pBlock->mUnknown44;
     }
     p->mUnknown512.mUnknown15 = pBlock->mUnknown48;
-    if (pBlock->mUnknown40 == pBlock->mUnknown36 && p->mMotion.mUnknown28 > lbl_803ECB08 * 0.05f &&
+    if (pBlock->mUnknown40 == pBlock->mUnknown36 && p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.05f &&
         MathAngleDiff(p->mMotion.mUnknown32, pBlock->mUnknown40) > 0x2E38E3 &&
         MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         pBlock->mUnknown44 = 0.0f;
@@ -207,8 +207,8 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             if (index != 0xFF) {
                 pOther = fn_80039F5C(fn_80178308(), index);
                 float mateTime =
-                    fn_8022781C(&pOther->mMotion.mPos, &pInfo->mUnknown40) / fn_8016D9F4(pOther, 1.0f, 1.0f);
-                float time = fn_8022781C(&p->mMotion.mPos, &pInfo->mUnknown40) / fn_8016D9F4(p, 1.0f, 1.0f);
+                    fn_8022781C(&pOther->mMotion.mPos, &pInfo->mUnknown40) / PlyrMoveGetRatedSpeed(pOther, 1.0f, 1.0f);
+                float time = fn_8022781C(&p->mMotion.mPos, &pInfo->mUnknown40) / PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);
 
                 if (time > mateTime - 45.0f || pInfo->mUnknown48 > mateTime - 45.0f) {
                     break;

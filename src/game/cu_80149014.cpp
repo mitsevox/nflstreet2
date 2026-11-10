@@ -2,7 +2,7 @@
 #include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801FCE10.h"
-#include "game/fn_8017F584.h"
+#include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
 #include <string.h>
 
@@ -41,7 +41,7 @@ void fn_8017833C(int team);
 
 int fn_80149014(void)
 {
-    return fn_8017F584() == 11;
+    return GameModeTypeGet() == 11;
 }
 
 void fn_80149040(Object_80039F5C *p)

@@ -133,7 +133,7 @@ void fn_80156C78(int id, int value);
 float fn_8016B938(void);
 float fn_8016B974(void);
 void fn_8016F6F4(Object_80039F5C *p, int *pValue);
-void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler);
+void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler);
 int fn_80177C38(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -160,7 +160,7 @@ extern float lbl_803EAC1C;
 extern float lbl_803EAC20;
 extern float lbl_803EAC24;
 extern float lbl_803EAC28;
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern float lbl_803ED6B4;
 extern float lbl_803ED6BC;
 }
@@ -528,9 +528,9 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             ratingScore *= 0.5f;
             speedDiff = pTargetStats[1] * pTarget->mMotion.mUnknown28 - pStats[1] * p->mMotion.mUnknown28;
             if (speedDiff > 0.0f) {
-                speedScore = speedDiff * 30.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+                speedScore = speedDiff * 30.0f / (gPlyrMoveFwdSpeed * 415.0f) + 70.0f;
             } else {
-                speedScore = speedDiff * 70.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+                speedScore = speedDiff * 70.0f / (gPlyrMoveFwdSpeed * 415.0f) + 70.0f;
             }
             speedScore *= 0.5f;
             total = ratingScore + speedScore;
@@ -1100,7 +1100,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
             } else {
                 fn_800C561C(p, key);
                 fn_800C51DC(p, pOther);
-                fn_801718E8(p, pOther);
+                PossTryFumble(p, pOther);
                 AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)p->mUnknown560.mUnknown28,
                             p->mUnknown560.mUnknown54, p->mUnknown560.mUnknown55);
                 fn_800A3B58(p, 1, 0);

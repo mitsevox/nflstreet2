@@ -174,7 +174,7 @@ void fn_801D0BCC(int z, int y, int x);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float m[4][4]);
 unsigned char CheatFlagsIsSet(int index);
-unsigned int fn_8017F584(void);
+unsigned int GameModeTypeGet(void);
 
 extern LevelData_t *gLevelData;
 
@@ -342,10 +342,10 @@ extern "C" void fn_800A3170(void)
 
 extern "C" float fn_800A32E4(void)
 {
-    if (CheatFlagsIsSet(27) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(27) != 0 && GameModeTypeGet() == 0) {
         return 10.0f;
     }
-    if (CheatFlagsIsSet(26) != 0 && fn_8017F584() == 0) {
+    if (CheatFlagsIsSet(26) != 0 && GameModeTypeGet() == 0) {
         return lbl_8030E6E8.mUnknown2C * 2.0;
     }
     return lbl_8030E6E8.mFloat38;

@@ -107,7 +107,7 @@ extern "C" {
 float fn_8009F168(Vector_80039F5C *p, void *pVelocity, Vector_80039F5C *pOther, float speed);
 int fn_801783AC(int bit);
 void fn_80227248(void *pOut, void *pIn, float scale);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern const float lbl_803ED6CC;
 float fn_80178A08(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
@@ -289,7 +289,7 @@ extern "C" void fn_80107D48(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
             pBlock->mUnknown61 = 1;
         } else if (pResult->mUnknown32 < 10.0f && pOther->mpState->mId != 28 && pResult->mUnknown36 < 5.0f) {
             float time = fn_8009F168(&pOther->mMotion.mPos, &pOther->mMotion.mUnknown40, &p->mMotion.mPos,
-                                     lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f))) -
+                                     gPlyrMoveFwdSpeed * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f))) -
                          0.25f;
 
             if (time < 0.1f) {

@@ -642,9 +642,9 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
-void fn_8017D9B0(int a, int b);
+void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
@@ -692,7 +692,7 @@ int CarrierMoveStart(Object_80039F5C *p, int a);
 int fn_800AD0E4(int team);
 int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
 int fn_800C53D8(Object_80039F5C *p);
-void fn_8017D8C4(int a, int b, unsigned char c);
+void HudSetMashPlayers(int a, int b, unsigned char c);
 void fn_80178718(Object_80039F5C *p);
 int fn_801787A0(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -884,7 +884,7 @@ extern "C" int fn_800F0B84(Object_80039F5C *p) {
     int result = 0;
 
     if (fn_801BE648(p->mpUnknown792) == 47 || fn_801BE648(p->mpUnknown792) == 32
-        || p->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
+        || p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
         result = 1;
     }
     return result;
@@ -1277,7 +1277,7 @@ extern "C" int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float di
         } else {
             result = fn_802372EC(0, 2) + 2;
         }
-    } else if (pMotion->mUnknown28 > lbl_803ECB08 * 0.72f) {
+    } else if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.72f) {
         result = 2;
     } else if (fn_802372EC(0, 100) < 50) {
         result = 3;
@@ -1511,7 +1511,7 @@ extern "C" int fn_800F2CB4(Table_80089904 *pTable, unsigned short event, void *a
         Vector_80039F5C delta;
         int i;
 
-        if (p->mMotion.mUnknown28 > lbl_803ECB08 * 0.4f) {
+        if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.4f) {
             key.mUnknown0 = 2;
         } else {
             key.mUnknown0 = 1;
@@ -1717,9 +1717,9 @@ extern "C" void fn_800F3344(Object_80039F5C *p, Object_80039F5C *pOther, Block_8
         ballTime = fn_802270A4(&delta) / fn_802270A4(&velocity);
         fn_80227690(&delta, &start, &pOther->mMotion.mPos);
         otherTime = fn_802270A4(&delta)
-            / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
+            / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
         fn_80227690(&delta, &start, &p->mMotion.mPos);
-        time = fn_802270A4(&delta) / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+        time = fn_802270A4(&delta) / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         distance = fn_802270A4(&delta);
         fn_80227690(&apart, &p->mMotion.mPos, &pOther->mMotion.mPos);
@@ -1733,7 +1733,7 @@ extern "C" void fn_800F3344(Object_80039F5C *p, Object_80039F5C *pOther, Block_8
                 ballTime = fn_802270A4(&delta) / fn_802270A4(&velocity);
                 fn_80227690(&delta, &pPass->mUnknown4, &p->mMotion.mPos);
                 time = fn_802270A4(&delta)
-                    / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+                    / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
             }
         }
         switch (pBlock->mUnknown20) {
@@ -2012,12 +2012,12 @@ extern "C" void fn_800F4038(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     fn_80227690(&toBall, pTarget, &pPoints->mUnknown16);
     ballTime = fn_802270A4(&toBall) / fn_802270A4(&pPoints->mUnknown28);
     time = fn_802270A4(&toAim)
-         / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+         / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
     if (pOther != 0) {
         fn_80227690(&toOther, pTarget, &pOther->mMotion.mPos);
         fn_80227690(&apart, &pOther->mMotion.mPos, &p->mMotion.mPos);
         otherTime = fn_802270A4(&toOther)
-                  / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
+                  / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f) + lbl_803ED6CC));
     } else {
         toOther.mY = 0.0f;
         toOther.mX = 0.0f;
@@ -2030,7 +2030,7 @@ extern "C" void fn_800F4038(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         ballTime = pPass->mUnknown16 - pPass->mUnknown0;
         fn_80227690(&passDelta, &pPass->mUnknown4, &p->mMotion.mPos);
         time = fn_802270A4(&passDelta)
-             / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
+             / (gPlyrMoveFwdSpeed * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
     }
     if (pBlock->mUnknown49 == 1) {
         if (time < otherTime && fn_802270A4(&apart) < 2.0f && fn_802270A4(&toAim) < fn_802270A4(&toOther)) {
@@ -2130,7 +2130,7 @@ extern "C" void fn_800F4690(Object_80039F5C *p, Object_80039F5C *pOther, Points_
         p->mUnknown512.mUnknown0 = pBlock->mUnknown44;
     }
     p->mUnknown512.mUnknown15 = pBlock->mUnknown48;
-    if (pBlock->mUnknown40 == pBlock->mUnknown36 && p->mMotion.mUnknown28 > lbl_803ECB08 * 0.05f
+    if (pBlock->mUnknown40 == pBlock->mUnknown36 && p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.05f
         && MathAngleDiff(p->mMotion.mUnknown32, pBlock->mUnknown40) > 0x2E38E3
         && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
         pBlock->mUnknown44 = 0.0f;

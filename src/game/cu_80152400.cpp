@@ -33,8 +33,8 @@ public:
     Object_8015005C *mpUnknown1C;
 };
 
-struct Info_80152940 {
-    Info_80152940() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
+struct MiniGameSlotInfo_t {
+    MiniGameSlotInfo_t() : mpObject(0), mUnknown4(0), mUnknown12(0), mUnknown16(0), mUnknown20(0xFF) {}
 
     Object_80039F5C *mpObject;
     int mUnknown4;
@@ -53,7 +53,7 @@ extern const char lbl_802A0F74[];
 int fn_80188030(int index);
 int fn_80187A78(unsigned char index, char *pText, int count);
 int fn_80187400(int kind, int key, int first, int last);
-void fn_80152940(Class_802A2918 *p, int index, Info_80152940 *pInfo);
+void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo);
 
 void fn_80152400(Class_802A2918 *p, int value, int *list, int *ids)
 {
@@ -94,7 +94,7 @@ void fn_8015247C(Class_802A2918 *p)
         if (cursor.mUnknown0) {
             fn_801FCFA0(&cursor);
         }
-        Info_80152940 info;
+        MiniGameSlotInfo_t info;
         fn_80152940(p, i, &info);
         if (score < (unsigned int)info.mUnknown8) {
             int id = 0;

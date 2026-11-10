@@ -16,7 +16,7 @@ int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
 Object_80039F5C *BallGetCurrentHolder(void);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_80227538(void *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *pV);
@@ -131,14 +131,14 @@ extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
             p->mTarget.mUnknown4 = angle;
         } else {
             Point_8017886C lead;
-            float speed = fn_8016D9F4(pTarget, 1.0f, 1.0f) * p->mTarget.mUnknownC;
+            float speed = PlyrMoveGetRatedSpeed(pTarget, 1.0f, 1.0f) * p->mTarget.mUnknownC;
 
             fn_80227538(&lead, pTarget->mMotion.mUnknown32, speed);
             fn_80227638(&lead, &lead, &pTarget->mMotion.mPos);
             fn_80227690(&delta, &lead, &p->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
             p->mTarget.mUnknown4 = angle;
-            speed = fn_8016D9F4(p, 1.0f, 1.0f) * p->mTarget.mUnknownC;
+            speed = PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f) * p->mTarget.mUnknownC;
             p->mTarget.mUnknown8 = fn_802270A4(&delta) / speed;
             p->mTarget.mUnknown8 = p->mTarget.mUnknown8 > 1.0f ? 1.0f : p->mTarget.mUnknown8;
             p->mTarget.mUnknown8 = p->mTarget.mUnknown8 < 1e-7f ? 1e-7f : p->mTarget.mUnknown8;

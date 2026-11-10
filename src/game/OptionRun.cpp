@@ -59,7 +59,7 @@ float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
 float fn_80237260(int stream);
 }
 
-extern float lbl_803ECB08;
+extern float gPlyrMoveFwdSpeed;
 
 static float _OptionRun_NearSpotCosts[2][8] = {
     {20.0f, 12.0f, 3.0f, 0.0f, -1.0f, 3.0f, 30.0f, 25.0f},
@@ -422,7 +422,7 @@ extern "C" int OptionRunEnter(Object_80039F5C *p)
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown15 = 10;
     p->mUnknown528.mUnknown15 = 10;
-    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
     p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
     return 0;
