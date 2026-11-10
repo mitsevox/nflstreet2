@@ -287,7 +287,7 @@ void fn_800582D0(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void PauseRequestCancel(void);
-void fn_8006BCC8(int type);
+void SndgAmbPostCue(int type);
 void fn_8006EA04(int channel, unsigned int level);
 void fn_8006EC24(void);
 void fn_8006F824(int a);
@@ -1064,9 +1064,9 @@ int fn_80157080(void)
         fn_80057F28();
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
-        fn_8006BCC8(3);
+        SndgAmbPostCue(3);
         fn_80072F04();
-        fn_8006F394(3, 0);
+        SndgCrowdTriggerEvent(3, 0);
         fn_80168264();
     }
     return done;
@@ -1719,7 +1719,7 @@ void fn_80158AA8(void)
         fn_80072F04();
     }
     fn_8006EA04(3, 100);
-    fn_8006F344(0);
+    SndgCrowdSetVolume(0);
     volume = fn_8007F828(5) * 10;
     fn_8006EA04(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {
