@@ -313,7 +313,7 @@ int fn_80071EDC(int mode)
             fn_8006DF2C(0x11000001);
         }
         if (!blocked) {
-            result = fn_8006DE00(0x11000001, id);
+            result = SndgPathPostEvent(0x11000001, id);
         } else if ((unsigned int)(mode - 7) <= 2) {
             result = 1;
         }
@@ -473,8 +473,8 @@ void fn_8007272C(void)
     fn_80083644(&cursor);
     if (fn_801F3E28()) {
         lbl_803EA704->mpUnknown20 = fn_801EEB44(lbl_802EBF88, 44);
-        lbl_803EA704->mUnknown24 = fn_8006DBF8(lbl_803EA704->mpUnknown20, 1);
-        fn_8006DC98(lbl_803EA704->mpUnknown20, 2, 0x11000001, 2.0f);
+        lbl_803EA704->mUnknown24 = SndgPathLoadMap(lbl_803EA704->mpUnknown20, 1);
+        SndgPathCreateTrack(lbl_803EA704->mpUnknown20, 2, 0x11000001, 2.0f);
         fn_8006DFA8(fn_80071C3C);
         fn_80072C54(lbl_803EA700);
         fn_80072424();
@@ -486,8 +486,8 @@ void fn_80072890(void)
 {
     if (fn_801F3E28()) {
         fn_8006E010(fn_80071C3C);
-        fn_8006DD24(0x11000001);
-        fn_8006DC4C(lbl_803EA704->mUnknown24);
+        SndgPathDestroyTrack(0x11000001);
+        SndgPathUnloadMap(lbl_803EA704->mUnknown24);
         fn_801EEFAC(lbl_803EA704->mpUnknown20);
     }
     fn_801D2BD0(lbl_803EA704);
@@ -589,7 +589,7 @@ void fn_80072C54(unsigned int value)
 {
     lbl_803EA700 = value;
     if (lbl_803EA704) {
-        fn_8006DD70(0x11000001, value);
+        SndgPathSetTrackVolume(0x11000001, value);
     }
 }
 

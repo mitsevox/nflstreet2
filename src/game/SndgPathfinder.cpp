@@ -289,7 +289,7 @@ struct Sound3 : SoundObject {
     int mMode;
 };
 
-/* Ambient sound bank state (0x8C bytes), allocated by fn_8006B664. */
+/* Ambient sound bank state (0x8C bytes), allocated by SndgAmbInit. */
 struct Struct_803EA67C {
     void *mpUnknown0;
     void *mpUnknown4;
@@ -487,7 +487,7 @@ void fn_80030490(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
 int ReplayCursorGetPos(float *pValue);
-void fn_8006F344(unsigned char value);
+void SndgCrowdSetVolume(unsigned char value);
 void fn_8006F850(AudmonEvent_t *pEvent);
 void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
@@ -604,57 +604,57 @@ float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 unsigned int fn_802372EC(int a, int b);
 void fn_8006E3F0(Struct_8030A518Entry *pEntry, void *pStream0, void *pStream1, void *pStream2, void *pStream3,
                  float unknown);
-void fn_80068154(void);
-void fn_80068418(void);
-void fn_80068A04(void);
-void fn_80068C1C(void);
-void fn_80068E00(void);
-void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan);
-float fn_80068F70(Vector_80039F5C *pPos);
-int fn_80068FE8(Sound0 *pEntry, void *pObject, int index, int init);
-void fn_800691E8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_80069398(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_800695F0(int index);
-void fn_800696A4(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_80069858(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_800699C8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_80069B4C(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_80069D00(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_80069EB4(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A068(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A38C(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A4D8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A5C8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A6B8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A804(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006A950(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006AA9C(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006ABE8(int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006ACD8(void);
-void fn_8006B1CC(int index);
-void fn_8006B25C(int index);
-void fn_8006B2EC(int index);
-void fn_8006B37C(int index);
-void fn_8006B40C(int index);
-void fn_8006B49C(int index);
-void fn_8006B52C(int index);
-void fn_8006B5BC(int index);
-int fn_8006B64C(void);
-void fn_8006B664(void);
-void fn_8006B790(void);
-int fn_8006B810(int type, unsigned int index);
-void fn_8006B91C(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject);
-void fn_8006B9AC(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject);
-unsigned int fn_8006BA54(int type, int value);
-int fn_8006BB44(int type);
-int fn_8006BBC4(Struct_8006BBC4 *p);
-void fn_8006BC30(int type, unsigned int index);
-void fn_8006BCC8(int type);
-void fn_8006BD24(void);
-void fn_8006BD4C(void);
-void fn_8006BDD8(unsigned int volume);
-float fn_8006BE3C(int type);
+void SndgAmbAllocObjects(void);
+void SndgAmbFreeObjects(void);
+void SndgAmbStartStadiumTrack(void);
+void SndgAmbOpenBanks(void);
+void SndgAmbCloseBanks(void);
+void SndgAmbCalcPan(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan);
+float SndgAmbCameraDistance(Vector_80039F5C *pPos);
+int SndgAmbType4CalcParams(Sound0 *pEntry, void *pObject, int index, int init);
+void SndgAmbType4Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType4Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType4Stop(int index);
+void SndgAmbType5Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType6Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType7Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType8Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType9Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType10Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType11Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType12Create(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType5Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType6Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType7Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType8Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType9Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType10Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType11Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbType12Update(int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbSilenceAll(void);
+void SndgAmbType5Stop(int index);
+void SndgAmbType6Stop(int index);
+void SndgAmbType7Stop(int index);
+void SndgAmbType8Stop(int index);
+void SndgAmbType9Stop(int index);
+void SndgAmbType10Stop(int index);
+void SndgAmbType11Stop(int index);
+void SndgAmbType12Stop(int index);
+int SndgAmbIsActive(void);
+void SndgAmbInit(void);
+void SndgAmbShutdown(void);
+int SndgAmbObjExists(int type, unsigned int index);
+void SndgAmbObjCreate(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject);
+void SndgAmbObjUpdate(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject);
+unsigned int SndgAmbObjFindSlot(int type, int value);
+int SndgAmbTypeUsesPathNodes(int type);
+int SndgAmbIsPathNodeName(Struct_8006BBC4 *p);
+void SndgAmbObjStop(int type, unsigned int index);
+void SndgAmbPostCue(int type);
+void SndgAmbStopAllAndCue(void);
+void SndgAmbStopAllObjs(void);
+void SndgAmbSetVolume(unsigned int volume);
+float SndgAmbGetTypeThreshold(int type);
 Entry_8030A664 *fn_8006BE68(int type, int id);
 int fn_8006BEBC(void *a, void *b);
 void fn_8006BEC4(void);
@@ -782,15 +782,15 @@ const char *lbl_802D50A4[] = {
 unsigned char lbl_802D50F4[13] = { 70, 70, 0, 0, 80, 99, 99, 8, 99, 99, 99, 99, 30 };
 
 Struct_802D5104 lbl_802D5104[9] = {
-    { fn_800691E8, fn_80069398, fn_800695F0 },
-    { fn_800696A4, fn_8006A38C, fn_8006B1CC },
-    { fn_80069858, fn_8006A4D8, fn_8006B25C },
-    { fn_800699C8, fn_8006A5C8, fn_8006B2EC },
-    { fn_80069B4C, fn_8006A6B8, fn_8006B37C },
-    { fn_80069D00, fn_8006A804, fn_8006B40C },
-    { fn_80069EB4, fn_8006A950, fn_8006B49C },
-    { fn_8006A068, fn_8006AA9C, fn_8006B52C },
-    { fn_8006A21C, fn_8006ABE8, fn_8006B5BC },
+    { SndgAmbType4Create, SndgAmbType4Update, SndgAmbType4Stop },
+    { SndgAmbType5Create, SndgAmbType5Update, SndgAmbType5Stop },
+    { SndgAmbType6Create, SndgAmbType6Update, SndgAmbType6Stop },
+    { SndgAmbType7Create, SndgAmbType7Update, SndgAmbType7Stop },
+    { SndgAmbType8Create, SndgAmbType8Update, SndgAmbType8Stop },
+    { SndgAmbType9Create, SndgAmbType9Update, SndgAmbType9Stop },
+    { SndgAmbType10Create, SndgAmbType10Update, SndgAmbType10Stop },
+    { SndgAmbType11Create, SndgAmbType11Update, SndgAmbType11Stop },
+    { SndgAmbType12Create, SndgAmbType12Update, SndgAmbType12Stop },
 };
 
 int lbl_802D5170[4] = { 0x02D2BB24, 0x028C7A9A, 0x02EDEB7B, 0x02F323C1 };
@@ -1075,7 +1075,7 @@ static const Struct_80290788 lbl_80290788[12][9] = {
         memset(lbl_803EA67C->list, 0, lbl_803EA67C->mCounts[slot] * 4);                   \
     }
 
-extern "C" void fn_80068154(void)
+extern "C" void SndgAmbAllocObjects(void)
 {
     int level = fn_800A3444();
     int i;
@@ -1112,7 +1112,7 @@ extern "C" void fn_80068154(void)
         lbl_803EA67C->list = 0;                             \
     }
 
-extern "C" void fn_80068418(void)
+extern "C" void SndgAmbFreeObjects(void)
 {
     FREE_LIST(mSound8, SoundVP, 8);
     FREE_LIST(mSound7, SoundVFP, 7);
@@ -1125,7 +1125,7 @@ extern "C" void fn_80068418(void)
     FREE_LIST(mSound0, Sound0, 0);
 }
 
-extern "C" void fn_80068A04(void)
+extern "C" void SndgAmbStartStadiumTrack(void)
 {
     int level = fn_800A3444();
 
@@ -1172,10 +1172,10 @@ extern "C" void fn_80068A04(void)
     }
     lbl_803EA68C = lbl_80290758[level];
     lbl_803EA67C->mUnknownC = 0x12000001;
-    fn_8006DC98(lbl_803EA67C->mpUnknown4, 2, 0x12000001, 1.0f);
+    SndgPathCreateTrack(lbl_803EA67C->mpUnknown4, 2, 0x12000001, 1.0f);
 }
 
-extern "C" void fn_80068C1C(void)
+extern "C" void SndgAmbOpenBanks(void)
 {
     int level = fn_800A3444();
 
@@ -1217,7 +1217,7 @@ extern "C" void fn_80068C1C(void)
     }
 }
 
-extern "C" void fn_80068E00(void)
+extern "C" void SndgAmbCloseBanks(void)
 {
     if (lbl_803EA67C->mHandles[0] != 0) {
         fn_801F4F28(lbl_803EA67C->mHandles[0]);
@@ -1248,7 +1248,7 @@ extern "C" void fn_80068E00(void)
     }
 }
 
-extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan)
+extern "C" void SndgAmbCalcPan(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan)
 {
     Vector_80039F5C position;
     GameCamera_t *pCamera;
@@ -1267,7 +1267,7 @@ extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *
     fn_8006CB40(&position, pPos, angle, pPan, pSpan);
 }
 
-extern "C" float fn_80068F70(Vector_80039F5C *pPos)
+extern "C" float SndgAmbCameraDistance(Vector_80039F5C *pPos)
 {
     Vector_80039F5C position;
     GameCamera_t *pCamera;
@@ -1295,7 +1295,7 @@ static inline int ClampVolume(int volume)
     return volume;
 }
 
-extern "C" int fn_80068FE8(Sound0 *pEntry, void *pObject, int index, int init)
+extern "C" int SndgAmbType4CalcParams(Sound0 *pEntry, void *pObject, int index, int init)
 {
     Vector_80039F5C position;
     Vector_80039F5C other;
@@ -1335,31 +1335,31 @@ static inline unsigned int SoundVolume(int type)
     return volume;
 }
 
-extern "C" void fn_800691E8(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType4Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound0[index] == 0) {
         unsigned short pan;
         short unk;
-        fn_80068ED0(pPos, &pan, &unk);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA684 = SoundVolume(4);
         if (lbl_803EA684 != 0) {
             lbl_803EA67C->mSound0[index] = new Sound0(lbl_803EA684, pan);
-            fn_80068FE8(lbl_803EA67C->mSound0[index], pObject, index, 1);
+            SndgAmbType4CalcParams(lbl_803EA67C->mSound0[index], pObject, index, 1);
             lbl_803EA67C->mSound0[index]->Commit();
         }
     }
 }
 
-extern "C" void fn_80069398(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType4Update(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound0[index] != 0) {
         int volume = lbl_803EA684;
         unsigned short pan;
         short unk;
-        fn_80068ED0(pPos, &pan, &unk);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound0[index]->SetPan(pan);
         lbl_803EA67C->mSound0[index]->SetVolume(volume);
-        if (fn_80068FE8(lbl_803EA67C->mSound0[index], pObject, index, 0)) {
+        if (SndgAmbType4CalcParams(lbl_803EA67C->mSound0[index], pObject, index, 0)) {
             lbl_803EA67C->mSound0[index]->Commit();
             int v = lbl_803EA67C->mSound0[index]->mUnknown10;
             int cutoff;
@@ -1379,12 +1379,12 @@ extern "C" void fn_80069398(int index, Vector_80039F5C *pPos, void *pObject)
                                                 : (int)(level * (1.0f / 3.0f)))
                                     : (int)level) * 10);
         } else {
-            fn_8006BC30(4, index);
+            SndgAmbObjStop(4, index);
         }
     }
 }
 
-extern "C" void fn_800695F0(int index)
+extern "C" void SndgAmbType4Stop(int index)
 {
     Sound0 *s = lbl_803EA67C->mSound0[index];
     if (s != 0) {
@@ -1395,103 +1395,103 @@ extern "C" void fn_800695F0(int index)
     }
 }
 
-extern "C" void fn_800696A4(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType5Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound1[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(5);
-        float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pan, &unk);
+        float f = SndgAmbCameraDistance(pPos);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound1[index] = new SoundVFP(&gSndgIdleVehicle, &lbl_803EB8C0, volume, (int)f, pan);
         lbl_803EA67C->mSound1[index]->Commit();
     }
 }
 
-extern "C" void fn_80069858(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType6Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound2[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(6);
-        fn_80068ED0(pPos, &pan, &unk);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound2[index] = new SoundVP(&gSndgIdleIdleTruck, &lbl_803EB8B8, volume, pan);
         lbl_803EA67C->mSound2[index]->Commit();
     }
 }
 
-extern "C" void fn_800699C8(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType7Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound3[index] == 0) {
         unsigned int volume = SoundVolume(7);
         unsigned short pan = 0;
         short unk = 0;
         int mode = 2;
-        fn_80068ED0(pPos, &pan, &unk);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound3[index] = new Sound3(volume, pan, mode);
         lbl_803EA67C->mSound3[index]->Commit();
     }
 }
 
-extern "C" void fn_80069B4C(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType8Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound4[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(8);
-        float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pan, &unk);
+        float f = SndgAmbCameraDistance(pPos);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound4[index] = new SoundVFP(&gSndgIdleBus, &lbl_803EB890, volume, (int)f, pan);
         lbl_803EA67C->mSound4[index]->Commit();
     }
 }
 
-extern "C" void fn_80069D00(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType9Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound5[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(9);
-        float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pan, &unk);
+        float f = SndgAmbCameraDistance(pPos);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound5[index] = new SoundVFP(&gSndgIdlePolice, &lbl_803EB8A8, volume, (int)f, pan);
         lbl_803EA67C->mSound5[index]->Commit();
     }
 }
 
-extern "C" void fn_80069EB4(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType10Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound6[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(10);
-        float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pan, &unk);
+        float f = SndgAmbCameraDistance(pPos);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound6[index] = new SoundVFP(&gSndgIdleGolfCart, &lbl_803EB8B0, volume, (int)f, pan);
         lbl_803EA67C->mSound6[index]->Commit();
     }
 }
 
-extern "C" void fn_8006A068(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType11Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound7[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(11);
-        float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pan, &unk);
+        float f = SndgAmbCameraDistance(pPos);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound7[index] = new SoundVFP(&gSndgIdleTruck, &lbl_803EB8A0, volume, (int)f, pan);
         lbl_803EA67C->mSound7[index]->Commit();
     }
 }
 
-extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbType12Create(int index, Vector_80039F5C *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound8[index] == 0) {
         unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(12);
-        fn_80068ED0(pPos, &pan, &unk);
+        SndgAmbCalcPan(pPos, &pan, &unk);
         lbl_803EA67C->mSound8[index] = new SoundVP(&gSndgIdleTrain, &lbl_803EB898, volume, pan);
         lbl_803EA67C->mSound8[index]->Commit();
     }
@@ -1504,8 +1504,8 @@ extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
             unsigned short pan = 0;                                       \
             short unk = 0;                                                \
             unsigned int volume = SoundVolume(type);                      \
-            float f = fn_80068F70(pPos);                                  \
-            fn_80068ED0(pPos, &pan, &unk);                                \
+            float f = SndgAmbCameraDistance(pPos);                                  \
+            SndgAmbCalcPan(pPos, &pan, &unk);                                \
             lbl_803EA67C->list[index]->SetUnknown8((int)f);               \
             lbl_803EA67C->list[index]->SetPan(pan);                       \
             lbl_803EA67C->list[index]->SetVolume(volume);                 \
@@ -1520,21 +1520,21 @@ extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
             unsigned short pan;                                           \
             short unk;                                                    \
             unsigned int volume = SoundVolume(type);                      \
-            fn_80068ED0(pPos, &pan, &unk);                                \
+            SndgAmbCalcPan(pPos, &pan, &unk);                                \
             lbl_803EA67C->list[index]->SetPan(pan);                       \
             lbl_803EA67C->list[index]->SetVolume(volume);                 \
             lbl_803EA67C->list[index]->Commit();                          \
         }                                                                 \
     }
 
-UPDATE_VFP(fn_8006A38C, mSound1, 5)
-UPDATE_VP(fn_8006A4D8, mSound2, 6)
-UPDATE_VP(fn_8006A5C8, mSound3, 7)
-UPDATE_VFP(fn_8006A6B8, mSound4, 8)
-UPDATE_VFP(fn_8006A804, mSound5, 9)
-UPDATE_VFP(fn_8006A950, mSound6, 10)
-UPDATE_VFP(fn_8006AA9C, mSound7, 11)
-UPDATE_VP(fn_8006ABE8, mSound8, 12)
+UPDATE_VFP(SndgAmbType5Update, mSound1, 5)
+UPDATE_VP(SndgAmbType6Update, mSound2, 6)
+UPDATE_VP(SndgAmbType7Update, mSound3, 7)
+UPDATE_VFP(SndgAmbType8Update, mSound4, 8)
+UPDATE_VFP(SndgAmbType9Update, mSound5, 9)
+UPDATE_VFP(SndgAmbType10Update, mSound6, 10)
+UPDATE_VFP(SndgAmbType11Update, mSound7, 11)
+UPDATE_VP(SndgAmbType12Update, mSound8, 12)
 
 #define SILENCE(list, type)                                                   \
     if (lbl_803EA67C->list != 0) {                                            \
@@ -1546,7 +1546,7 @@ UPDATE_VP(fn_8006ABE8, mSound8, 12)
         }                                                                     \
     }
 
-extern "C" void fn_8006ACD8(void)
+extern "C" void SndgAmbSilenceAll(void)
 {
     int level = fn_800A3444();
     SILENCE(mSound0, 0)
@@ -1570,21 +1570,21 @@ extern "C" void fn_8006ACD8(void)
         }                                    \
     }
 
-STOP(fn_8006B1CC, mSound1, SoundVFP)
-STOP(fn_8006B25C, mSound2, SoundVP)
-STOP(fn_8006B2EC, mSound3, Sound3)
-STOP(fn_8006B37C, mSound4, SoundVFP)
-STOP(fn_8006B40C, mSound5, SoundVFP)
-STOP(fn_8006B49C, mSound6, SoundVFP)
-STOP(fn_8006B52C, mSound7, SoundVFP)
-STOP(fn_8006B5BC, mSound8, SoundVP)
+STOP(SndgAmbType5Stop, mSound1, SoundVFP)
+STOP(SndgAmbType6Stop, mSound2, SoundVP)
+STOP(SndgAmbType7Stop, mSound3, Sound3)
+STOP(SndgAmbType8Stop, mSound4, SoundVFP)
+STOP(SndgAmbType9Stop, mSound5, SoundVFP)
+STOP(SndgAmbType10Stop, mSound6, SoundVFP)
+STOP(SndgAmbType11Stop, mSound7, SoundVFP)
+STOP(SndgAmbType12Stop, mSound8, SoundVP)
 
-extern "C" int fn_8006B64C(void)
+extern "C" int SndgAmbIsActive(void)
 {
     return lbl_803EA67C != 0;
 }
 
-extern "C" void fn_8006B664(void)
+extern "C" void SndgAmbInit(void)
 {
     if (fn_801F3E28()) {
         lbl_803EA67C = (Struct_803EA67C *)fn_801D2B7C(sizeof(Struct_803EA67C), 0, 0);
@@ -1596,23 +1596,23 @@ extern "C" void fn_8006B664(void)
         lbl_803EA67C->mpUnknown4 = fn_801EEB44(lbl_802EC00C, 44);
         lbl_803EA67C->mpUnknown10 = fn_801EEB44(lbl_802EC000, 44);
         fn_801F4B88(lbl_803EA67C->mpUnknown0, 1, 0);
-        lbl_803EA67C->mUnknown8 = fn_8006DBF8(lbl_803EA67C->mpUnknown4, 1);
-        fn_80068A04();
-        fn_80068C1C();
-        fn_80068154();
-        fn_8006DD70(lbl_803EA67C->mUnknownC, lbl_803EA680 * lbl_803EA68C / 100);
+        lbl_803EA67C->mUnknown8 = SndgPathLoadMap(lbl_803EA67C->mpUnknown4, 1);
+        SndgAmbStartStadiumTrack();
+        SndgAmbOpenBanks();
+        SndgAmbAllocObjects();
+        SndgPathSetTrackVolume(lbl_803EA67C->mUnknownC, lbl_803EA680 * lbl_803EA68C / 100);
         lbl_803EA684 = (unsigned char)(fn_8007F828(4) * 10);
         lbl_803EA688 = (unsigned char)(fn_8007F828(4) * 10);
     }
 }
 
-extern "C" void fn_8006B790(void)
+extern "C" void SndgAmbShutdown(void)
 {
-    if (fn_8006B64C()) {
-        fn_80068418();
-        fn_8006DD24(lbl_803EA67C->mUnknownC);
-        fn_8006DC4C(lbl_803EA67C->mUnknown8);
-        fn_80068E00();
+    if (SndgAmbIsActive()) {
+        SndgAmbFreeObjects();
+        SndgPathDestroyTrack(lbl_803EA67C->mUnknownC);
+        SndgPathUnloadMap(lbl_803EA67C->mUnknown8);
+        SndgAmbCloseBanks();
         fn_801F4C5C();
         fn_801EEFAC(lbl_803EA67C->mpUnknown0);
         fn_801EEFAC(lbl_803EA67C->mpUnknown4);
@@ -1624,10 +1624,10 @@ extern "C" void fn_8006B790(void)
 
 static inline int IsActive(SoundObject *pSound) { return pSound != 0; }
 
-extern "C" int fn_8006B810(int type, unsigned int index)
+extern "C" int SndgAmbObjExists(int type, unsigned int index)
 {
     int result = 0;
-    if (fn_8006B64C() && index < lbl_803EA67C->mCounts[type - 4]) {
+    if (SndgAmbIsActive() && index < lbl_803EA67C->mCounts[type - 4]) {
         switch (type) {
         case 4:
             result = IsActive(lbl_803EA67C->mSound0[index]);
@@ -1661,25 +1661,25 @@ extern "C" int fn_8006B810(int type, unsigned int index)
     return result;
 }
 
-extern "C" void fn_8006B91C(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbObjCreate(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject)
 {
-    if (fn_8006B64C() && lbl_802D5104[type - 4].mCreate && index < lbl_803EA67C->mCounts[type - 4]) {
+    if (SndgAmbIsActive() && lbl_802D5104[type - 4].mCreate && index < lbl_803EA67C->mCounts[type - 4]) {
         lbl_802D5104[type - 4].mCreate(index, pPos, pObject);
     }
 }
 
-extern "C" void fn_8006B9AC(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject)
+extern "C" void SndgAmbObjUpdate(int type, unsigned int index, Vector_80039F5C *pPos, void *pObject)
 {
-    if (fn_8006B64C() && fn_8006B810(type, index) && lbl_802D5104[type - 4].mUpdate &&
+    if (SndgAmbIsActive() && SndgAmbObjExists(type, index) && lbl_802D5104[type - 4].mUpdate &&
         index < lbl_803EA67C->mCounts[type - 4]) {
         lbl_802D5104[type - 4].mUpdate(index, pPos, pObject);
     }
 }
 
-extern "C" unsigned int fn_8006BA54(int type, int value)
+extern "C" unsigned int SndgAmbObjFindSlot(int type, int value)
 {
     unsigned int result = 0;
-    if (fn_8006B64C() && lbl_803EA67C->mCounts[type - 4] != 0) {
+    if (SndgAmbIsActive() && lbl_803EA67C->mCounts[type - 4] != 0) {
         int found = 0;
         unsigned int i;
         for (i = 0; i <= 5 && !found; i++) {
@@ -1701,7 +1701,7 @@ extern "C" unsigned int fn_8006BA54(int type, int value)
     return result;
 }
 
-extern "C" int fn_8006BB44(int type)
+extern "C" int SndgAmbTypeUsesPathNodes(int type)
 {
     int result = 0;
     int level = fn_800A3444();
@@ -1724,7 +1724,7 @@ extern "C" int fn_8006BB44(int type)
     return result;
 }
 
-extern "C" int fn_8006BBC4(Struct_8006BBC4 *p)
+extern "C" int SndgAmbIsPathNodeName(Struct_8006BBC4 *p)
 {
     const char *str = p->mUnknown8;
     int i;
@@ -1736,53 +1736,53 @@ extern "C" int fn_8006BBC4(Struct_8006BBC4 *p)
     return 0;
 }
 
-extern "C" void fn_8006BC30(int type, unsigned int index)
+extern "C" void SndgAmbObjStop(int type, unsigned int index)
 {
-    if (fn_8006B64C() && fn_8006B810(type, index) && lbl_802D5104[type - 4].mStop &&
+    if (SndgAmbIsActive() && SndgAmbObjExists(type, index) && lbl_802D5104[type - 4].mStop &&
         index < lbl_803EA67C->mCounts[type - 4]) {
         lbl_802D5104[type - 4].mStop(index);
     }
 }
 
-extern "C" void fn_8006BCC8(int type)
+extern "C" void SndgAmbPostCue(int type)
 {
-    if (fn_8006B64C()) {
+    if (SndgAmbIsActive()) {
         if (type == 2) {
-            fn_8006ACD8();
+            SndgAmbSilenceAll();
         }
-        fn_8006DE00(lbl_803EA67C->mUnknownC, lbl_802D5170[type]);
+        SndgPathPostEvent(lbl_803EA67C->mUnknownC, lbl_802D5170[type]);
     }
 }
 
-extern "C" void fn_8006BD24(void)
+extern "C" void SndgAmbStopAllAndCue(void)
 {
-    fn_8006BD4C();
-    fn_8006BCC8(2);
+    SndgAmbStopAllObjs();
+    SndgAmbPostCue(2);
 }
 
-extern "C" void fn_8006BD4C(void)
+extern "C" void SndgAmbStopAllObjs(void)
 {
-    if (fn_8006B64C()) {
+    if (SndgAmbIsActive()) {
         unsigned char type;
         for (type = 4; type <= 12; type++) {
             unsigned char i;
             for (i = 0; i < lbl_803EA67C->mCounts[type - 4]; i++) {
-                fn_8006BC30(type, i);
+                SndgAmbObjStop(type, i);
             }
         }
     }
 }
 
-extern "C" void fn_8006BDD8(unsigned int volume)
+extern "C" void SndgAmbSetVolume(unsigned int volume)
 {
     lbl_803EA680 = volume;
-    if (fn_8006B64C()) {
-        fn_8006DD70(lbl_803EA67C->mUnknownC, volume * lbl_803EA68C / 100);
+    if (SndgAmbIsActive()) {
+        SndgPathSetTrackVolume(lbl_803EA67C->mUnknownC, volume * lbl_803EA68C / 100);
         lbl_803EA684 = lbl_803EA688 = volume;
     }
 }
 
-extern "C" float fn_8006BE3C(int type)
+extern "C" float SndgAmbGetTypeThreshold(int type)
 {
     if (lbl_803EA67C) {
         return lbl_803EA67C->mScales[type - 4];
@@ -2247,21 +2247,21 @@ extern "C" void fn_8006CCD0(AudmonEvent_t *p)
         if (fn_802270D4(&vec) > 0.42f) {
             fn_800717E0(&p->mPos);
         }
-        fn_8006B91C(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
+        SndgAmbObjCreate(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
     }
     case 0x21:
-        fn_8006B9AC(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
+        SndgAmbObjUpdate(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
     case 0x22:
-        fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         break;
     case 0x1D:
-        fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         fn_8006C854(4, &p->mPos);
         break;
     case 0x1C:
-        fn_8006BC30(4, (unsigned char)p->mUnknown18);
+        SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         fn_8006C854(3, &p->mPos);
         break;
     case 0x1E:
@@ -2635,7 +2635,7 @@ int SndgPathfinder::Shutdown()
     return 1;
 }
 
-extern "C" int fn_8006DBF8(void *pData, int unknown)
+extern "C" int SndgPathLoadMap(void *pData, int unknown)
 {
     int result = -1;
     if (PathfinderIsInit()) {
@@ -2644,7 +2644,7 @@ extern "C" int fn_8006DBF8(void *pData, int unknown)
     return result;
 }
 
-extern "C" int fn_8006DC4C(int handle)
+extern "C" int SndgPathUnloadMap(int handle)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2653,7 +2653,7 @@ extern "C" int fn_8006DC4C(int handle)
     return result;
 }
 
-extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
+extern "C" int SndgPathCreateTrack(void *pData, int unknown, int id, float value)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2672,7 +2672,7 @@ extern "C" int fn_8006DC98(void *pData, int unknown, int id, float value)
     return result;
 }
 
-extern "C" int fn_8006DD24(int id)
+extern "C" int SndgPathDestroyTrack(int id)
 {
     int result = 0;
     if (PathfinderIsInit()) {
@@ -2681,7 +2681,7 @@ extern "C" int fn_8006DD24(int id)
     return result;
 }
 
-extern "C" void fn_8006DD70(int id, unsigned int value)
+extern "C" void SndgPathSetTrackVolume(int id, unsigned int value)
 {
     if (PathfinderIsInit()) {
         PathfinderSetVolume(id, value);
@@ -2695,7 +2695,7 @@ extern "C" void fn_8006DDB4(int a, int b, int c)
     }
 }
 
-extern "C" int fn_8006DE00(int id, int unknown)
+extern "C" int SndgPathPostEvent(int id, int unknown)
 {
     int result = 1;
     if (PathfinderIsInit()) {
@@ -3085,8 +3085,8 @@ extern "C" void fn_8006EA04(unsigned int index, unsigned int value)
                            : value * lbl_803EA6A8[index] / 50;
         fn_8006D684(0, value);
         fn_8006D684(1, value);
-        fn_8006BDD8(value * 99 / 100);
-        fn_8006F344(value * 83 / 100);
+        SndgAmbSetVolume(value * 99 / 100);
+        SndgCrowdSetVolume(value * 83 / 100);
         break;
     case 2:
         if (value > 100) {

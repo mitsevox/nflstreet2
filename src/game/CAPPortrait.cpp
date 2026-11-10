@@ -33,7 +33,7 @@ Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *fn_80160C08(void);
-void fn_80199BD4(PortraitJob_t *pObject);
+void PortraitRenderQuantize(PortraitJob_t *pObject);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
@@ -340,7 +340,7 @@ void PortraitJobUnload(PortraitJob_t *pObject)
 
 void PortraitJobQuantize(PortraitJob_t *pObject)
 {
-    fn_80199BD4(pObject);
+    PortraitRenderQuantize(pObject);
 }
 
 int PortraitJobIsDone(PortraitJob_t *pObject)
