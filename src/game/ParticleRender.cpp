@@ -3,6 +3,7 @@
 #include <dolphin/gx/GXPixel.h>
 #include "game/Object_80039F5C.h"
 #include "game/ParticleRender.h"
+#include "engine/animTexLib.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -35,12 +36,6 @@ struct ShaderDescPasses_t {
     ShaderPass_t mPasses[1];
 };
 
-struct ParticleTexture_t {
-    char mUnknown0[124];
-    GXTexObj mTexObj;
-    GXTlutObj mTlutObj;
-};
-
 struct Particle_t {
     char mUnknown0[12];
     Vector_80039F5C mPosition;
@@ -53,7 +48,6 @@ struct Particle_t {
 };
 
 extern "C" {
-void fn_801C0A38(ParticleTexture_t *pTexture, unsigned int a, unsigned int b, unsigned int c, float *pCoords);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -74,8 +68,6 @@ void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
 
 static Vector_80039F5C _ParticleRender_aCorners[4] = {
     { -1.0f, -1.0f, 0.0f },
@@ -158,7 +150,7 @@ void ParticleRenderShutdown(void)
 int ParticleRenderEmitter(Object_80144CE0 *pEmitter, int mode)
 {
     int count;
-    ParticleTexture_t *pTexture;
+    AnimTex_t *pTexture;
     Particle_t *pParticle;
     int i;
 
@@ -172,8 +164,8 @@ int ParticleRenderEmitter(Object_80144CE0 *pEmitter, int mode)
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         ParticleRenderSetBlend(pEmitter->mUnknown60);
         if (pEmitter->mUnknown45 && pTexture) {
-            GXLoadTlut(&pTexture->mTlutObj, 0);
-            GXLoadTexObj(&pTexture->mTexObj, 0);
+            GXLoadTlut(&pTexture->mGX.mTlutObj, 0);
+            GXLoadTexObj(&pTexture->mGX.mTexObj, GX_TEXMAP0);
             TMRenderBindShader(_ParticleRender_iOnePassShader);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -200,7 +192,7 @@ int ParticleRenderEmitter(Object_80144CE0 *pEmitter, int mode)
                 color[0] = CLAMP(color[0] * scale, 0.0f, 1.0f);
                 color[1] = CLAMP(color[1] * scale, 0.0f, 1.0f);
                 color[2] = CLAMP(color[2] * scale, 0.0f, 1.0f);
-                fn_801C0A38(pTexture, pParticle->mUnknown40, pParticle->mUnknown3A, pEmitter->mUnknown48, coords[0]);
+                AnimTexGetCoords(pTexture, pParticle->mUnknown40, pParticle->mUnknown3A, pEmitter->mUnknown48, coords[0]);
                 size = fn_801DF184(pEmitter, pParticle);
                 fn_801D0508();
                 fn_801D0ADC((int)(pParticle->mUnknown50 * 46603.38f));

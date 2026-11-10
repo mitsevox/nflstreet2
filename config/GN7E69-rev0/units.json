@@ -14539,6 +14539,31 @@
           "end": "0x803ED0F8"
         }
       ]
+    },
+    {
+      "source": "src/engine/animTexLib.c",
+      "profile": "engine_c_fastmath",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C06E8",
+          "end": "0x801C0E04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE8",
+          "end": "0x802AEF08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4870",
+          "end": "0x802F4880"
+        }
+      ],
+      "evidence": "evidence.tsv provisional whole-file unit row 0x801C06E8-0x801C0E04, eleven function/name rows, 32-byte literal allocation and exact 16-byte accessed manager prefix. No retained code or excluded original ranges; the following zero word remains unassigned."
     }
   ]
 }
