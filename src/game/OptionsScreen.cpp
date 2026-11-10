@@ -12,15 +12,15 @@
 #include "engine/viewporttypes.h"
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 void RumbleStart(int a, int b, int c);
 int fn_800B6644(int a);
-void fn_80185F4C(int a, int b);
-Viewport_t *fn_8018A854(void);
-void fn_8018A7F8(Viewport_t *pObject, int mode);
+void OptAudioOnOptionChanged(int a, int b);
+Viewport_t *UISGameGetMainViewport(void);
+void UISGameSetAspect(Viewport_t *pObject, int mode);
 
 static int _OptionsScreen_iSavedOption6 = 3;
 static int _OptionsScreen_iStoredArg = -1;
@@ -44,11 +44,11 @@ void OptionsScreenExit(void)
         } else {
             value = 1;
         }
-        fn_8021D7B8(lbl_803EB688, 0x8000000F, 1, &value);
+        fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
         if (fn_8007F828(6) == 1) {
-            fn_8018A7F8(fn_8018A854(), 0);
+            UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {
-            fn_8018A7F8(fn_8018A854(), fn_8007F828(6));
+            UISGameSetAspect(UISGameGetMainViewport(), fn_8007F828(6));
         }
     }
 }
@@ -83,7 +83,7 @@ void OptionsScreenOnChange(int id, int flag)
     case 8:
     case 9:
     case 10:
-        fn_80185F4C(id, flag);
+        OptAudioOnOptionChanged(id, flag);
         break;
     }
 }

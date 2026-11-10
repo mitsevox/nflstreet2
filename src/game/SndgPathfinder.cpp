@@ -749,7 +749,7 @@ int SndgSpchGetPlayFlags(void);
 void fn_80071748(int unknown);
 void SpchIGUpdate(void);
 void SpchIGUpdateFrontEnd(void);
-void fn_801860E4(int unknown);
+void OptAudioUpdate(int unknown);
 
 }
 
@@ -984,7 +984,7 @@ SndgAramRegion_t gSndgAramRegions[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, fn_80071748, SndgReplayUpdate, fn_801860E4, 0 };
+SndgUpdateFn _Sndg_apfnIGUpdate[] = { SndgChannelsUpdate, SndgSituationUpdate, (SndgUpdateFn)SpchIGUpdate, fn_80071748, SndgReplayUpdate, OptAudioUpdate, 0 };
 
 SndgConfig_t gSndgIGConfig = { 18, 1, _Sndg_aSfxTable, gSndgAramRegions, _Sndg_aIGResources, _Sndg_apfnIGUpdate };
 
@@ -993,7 +993,7 @@ SndgResource_t _Sndg_aFEResources[3] = {
     { 1, lbl_802EBFCC, 0, 1, 0, 0, 0 },
     { 0, 0, 0, 0, 3, 0, 0 },
 };
-SndgUpdateFn _Sndg_apfnFEUpdate[] = { (SndgUpdateFn)SpchIGUpdateFrontEnd, fn_801860E4, 0 };
+SndgUpdateFn _Sndg_apfnFEUpdate[] = { (SndgUpdateFn)SpchIGUpdateFrontEnd, OptAudioUpdate, 0 };
 
 SndgConfig_t gSndgFEConfig = { 18, 1, _Sndg_aSfxTable, gSndgAramRegions, _Sndg_aFEResources, _Sndg_apfnFEUpdate };
 

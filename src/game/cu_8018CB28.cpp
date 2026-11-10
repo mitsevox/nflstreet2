@@ -41,8 +41,8 @@ void fn_8018C344(int database, int firstTable, int secondTable,
 void fn_8018C3EC(int firstTable, int secondTable);
 int fn_80186F7C(unsigned char);
 int fn_80186B38(int);
-int fn_8018F228(int);
-void fn_8018F41C(int);
+int GauntletGetCurrentTeam(int);
+void GauntletReset(int);
 int fn_8022EF8C(int, int);
 int fn_8022EFBC(int, int);
 }
@@ -312,8 +312,8 @@ void fn_8018D8EC(int index, int team)
 void fn_8018D918()
 {
     int source = fn_8022F3D4(fn_8022F4BC());
-    if (!fn_8018F228(fn_80186B38(fn_8022F4BC())))
-        fn_8018F41C(fn_80186B38(fn_8022F4BC()));
+    if (!GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())))
+        GauntletReset(fn_80186B38(fn_8022F4BC()));
     QueryResult result;
     DbQueryTable tables[2];
     QueryCursor cursor;

@@ -10,7 +10,7 @@
 #include "game/fn_80061AD4.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
-#include "game/fn_8018BE68.h"
+#include "game/StoryTeam.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
@@ -127,8 +127,8 @@ void PositionAbbrevFormat(int a, char *pText);
 int MsgGameGetSetupState(void);
 int fn_80188030(int a);
 void fn_8018807C(unsigned char a);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-int fn_80188DF0(int a);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+int TeamLogoGetHandle(int a);
 void fn_8018C48C(int tag);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
@@ -160,7 +160,7 @@ int lbl_803EBA14 = 0;
 AutoDepthPlayer_t *lbl_803EBA18 = 0;
 unsigned char lbl_803EBA1C = 0;
 Object_803EBA20 *lbl_803EBA20 = 0;
-VetsRow_8018EC68 *lbl_803EBA24 = 0;
+StevRow_t *lbl_803EBA24 = 0;
 int lbl_803EBA28 = 0;
 int lbl_803EBA2C = -1;
 unsigned char lbl_803EBA30 = 0;
@@ -543,7 +543,7 @@ int fn_80017DF4(void)
     unsigned int j;
 
     index = fn_8022F384(fn_8022F4BC());
-    digt = fn_8018BE68(index, 1, (Result_8018BE68 *)ids);
+    digt = StoryTeamLoadOneToStats(index, 1, (StoryTeamIdBlock_t *)ids);
     if (PlayerDbSeekId(&lbl_8036B168, ids[0], 0)) {
         fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids[0]);
         fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
@@ -607,7 +607,7 @@ int fn_80017DF4(void)
 
 int fn_80018114(void)
 {
-    Result_8018BE68 ids;
+    StoryTeamIdBlock_t ids;
     int index;
     int digt;
     int value8;
@@ -615,7 +615,7 @@ int fn_80018114(void)
     int ok = 0;
 
     index = fn_8022F384(fn_8022F4BC());
-    digt = fn_8018BE68(index, 1, &ids);
+    digt = StoryTeamLoadOneToStats(index, 1, &ids);
     if (PlayerDbSeekId(&lbl_8036B168, ids.mUnknown0, 0)) {
         fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids.mUnknown0);
         ok = 1;
@@ -1901,8 +1901,8 @@ void fn_8001B020(int id, int *pA, int *pB)
             color[0] = fn_800841AC(&lbl_8036B194);
             color[1] = fn_800841D8(&lbl_8036B194);
             color[2] = fn_80084204(&lbl_8036B194);
-            fn_80188CBC(0, 4, fn_80084158(&lbl_8036B194), 0xAC, color);
-            *pB = fn_80188DF0(0);
+            TeamLogoRequestTint(0, 4, fn_80084158(&lbl_8036B194), 0xAC, color);
+            *pB = TeamLogoGetHandle(0);
         }
         if (found) {
             *pA = fn_80084158(&lbl_8036B194);

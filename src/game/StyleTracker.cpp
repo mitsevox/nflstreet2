@@ -199,7 +199,7 @@ extern const char _StyleTracker_aszAwardMessages[][80];
 extern const char _StyleTracker_aszComboLabels[][20];
 extern const char _StyleTracker_szComboSeparator[4], _StyleTracker_szEmptyCombo[1];
 extern float _StyleTracker_fProfilePointScale;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int ChallengeIsActive(void);
 struct Challenge_t;
@@ -218,10 +218,10 @@ void HudShowPlayLeader(int);
 int fn_80186F7C(unsigned char);
 int fn_8022F358(int);
 void UserInfoAddPoints(int, unsigned int);
-void fn_8018FB4C(DbCursor *, int);
-void fn_8018FBC8(DbCursor *);
-int fn_8018FBE8(DbCursor *, int);
-void fn_8018FC1C(DbCursor *, StyleAwardRule_t *);
+void TkTableOpen(DbCursor *, int);
+void TkTableClose(DbCursor *);
+int TkTableFindId(DbCursor *, int);
+void TkTableReadRow(DbCursor *, StyleAwardRule_t *);
 void fn_8017C5A0(unsigned short, int);
 void fn_8017C5CC(unsigned short, int);
 void fn_8017C5F8(unsigned short, int);
@@ -585,7 +585,7 @@ extern "C" void StyleTrackerShowAward(int i, const char *pName, int a, int mode)
         ((Entry_80219044 *)args[1].p)->mLength = strlen(_StyleTracker_pState->mAwardText);
         args[2].i = a;
         args[3].i = mode;
-        fn_8021D7B8(lbl_803EB688, 0x80000013, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000013, 4, args);
     }
 }
 
@@ -595,7 +595,7 @@ extern "C" void StyleTrackerShowTotal(int i, int a) {
     if (_StyleTracker_bEnabled) {
         args[0].i = i;
         args[1].i = a;
-        fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
     }
 }
 
@@ -616,7 +616,7 @@ extern "C" void StyleTrackerShowCombo(int i) {
         args[0] = &_StyleTracker_pState->mTextArg;
         args[0]->mpText = i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText;
         args[0]->mLength = strlen(i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText);
-        fn_8021D7B8(lbl_803EB688, 0x80000018, 1, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
     }
 }
 
@@ -2631,12 +2631,12 @@ extern "C" void StyleTrackerReset(void) {
     } else if (_StyleTracker_iDatabaseVariant != 0) { _StyleTracker_iDatabaseVariant = 0; changed = 1; }
     if (changed) {
         DbCursor cursor;
-        fn_8018FB4C(&cursor, _StyleTracker_iDatabaseVariant);
+        TkTableOpen(&cursor, _StyleTracker_iDatabaseVariant);
         for (int i = 0; i <= 126; i++) {
-            if (fn_8018FBE8(&cursor, i)) fn_8018FC1C(&cursor, &_StyleTracker_pState->mRules[i]);
+            if (TkTableFindId(&cursor, i)) TkTableReadRow(&cursor, &_StyleTracker_pState->mRules[i]);
             else memset(&_StyleTracker_pState->mRules[i], 0, sizeof(StyleAwardRule_t));
         }
-        fn_8018FBC8(&cursor);
+        TkTableClose(&cursor);
     }
     StyleTrackerSetTotal(0, 0); StyleTrackerSetTotal(1, 0);
     StyleTrackerSetMeter(0, 0, 0); StyleTrackerSetMeter(1, 0, 0);

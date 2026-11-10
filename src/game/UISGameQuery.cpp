@@ -1,5 +1,5 @@
 /* Answers the many UIStudio game queries that have fixed or trivial results on this build. */
-#include "game/fn_8018631C.h"
+#include "game/MsgController.h"
 #include "game/UISGameMsg.h"
 #include "game/InGame.h"
 #include "game/PauseMenu.h"
@@ -21,7 +21,7 @@ extern "C" int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int u
         *pResult = 1;
         break;
     case 0x199:
-        *pResult = fn_8018631C();
+        *pResult = CtrlSelIsOpen();
         break;
     case 0x00:
         *pResult = 0;

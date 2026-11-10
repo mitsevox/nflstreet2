@@ -20,7 +20,7 @@ extern unsigned char lbl_803EB615;
 extern unsigned char lbl_803EB616;
 extern unsigned char lbl_803EB61A;
 extern char lbl_803EB628[];
-extern void *lbl_803EB68C;
+extern void *gUISSub2Info;
 extern char lbl_80362BE0[];
 extern Entry_80219044 lbl_80362BBC[3];
 extern Entry_80219044 *lbl_80362BB0[3];
@@ -36,7 +36,7 @@ int fn_80219044(void *p, int a, int b, int c, Entry_80219044 **ppEntries);
 void fn_8021956C(void *p, int a, int b, int c);
 void FileDebugProcess(void);
 void SndgUpdate(int a);
-void fn_8018A7B0(void);
+void UISGamePresentFrame(void);
 void FESndUpdate(int a);
 void fn_80187E08(int show, const char *pText, int a, int b);
 extern unsigned char lbl_803EB61D;
@@ -163,10 +163,10 @@ void fn_80187E08(int show, const char *pText, int a, int b)
             lbl_80362BB0[0] = &lbl_80362BBC[0];
             lbl_80362BB0[1] = &lbl_80362BBC[1];
             lbl_80362BB0[2] = &lbl_80362BBC[2];
-            fn_80219044(lbl_803EB68C, 1, 3, 3, lbl_80362BB0);
+            fn_80219044(gUISSub2Info, 1, 3, 3, lbl_80362BB0);
             FileDebugProcess();
             SndgUpdate(1);
-            fn_8018A7B0();
+            UISGamePresentFrame();
         }
     } else {
         if (lbl_803EB610 != 0) {
@@ -175,7 +175,7 @@ void fn_80187E08(int show, const char *pText, int a, int b)
                 return;
             }
         }
-        fn_8021956C(lbl_803EB68C, 1, 3, 1);
+        fn_8021956C(gUISSub2Info, 1, 3, 1);
     }
 }
 

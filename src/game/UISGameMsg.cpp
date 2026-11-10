@@ -14,11 +14,11 @@ extern "C" int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unus
     if (result != 0) {
         return result;
     }
-    result = fn_8018422C(id, pArgs, unused, pResult);
+    result = MemCardUIEmptyHandler(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
-    result = fn_80185284(id, (Params_80185284 *)pArgs, unused, pResult);
+    result = MemCardUIHandleFunction(id, (MemCardUIArgs_t *)pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
@@ -34,11 +34,11 @@ extern "C" int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unus
     if (result != 0) {
         return result;
     }
-    result = fn_801811C8(id, pArgs, unused, pResult);
+    result = FEMiscHandleStatsFunction(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }
-    result = fn_80181238(id, pArgs, unused, pResult);
+    result = FEMiscHandleFunction(id, pArgs, unused, pResult);
     if (result != 0) {
         return result;
     }

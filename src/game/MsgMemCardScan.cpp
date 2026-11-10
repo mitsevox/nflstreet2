@@ -3,7 +3,7 @@
    of one type. */
 
 #include "game/Callees_801D57E0.h"
-#include "game/cu_8018422C.h"
+#include "game/MemCardUI.h"
 #include "game/MsgGame.h"
 #include "game/fn_801C1F94.h"
 
@@ -22,7 +22,7 @@ union MemCardScanArg_t {
 };
 
 extern "C" {
-int fn_801869F0();
+int UserRecGetCount();
 void fn_80186ED8(signed char);
 void fn_8002A574(int, int);
 void fn_8002A5C4();
@@ -53,7 +53,7 @@ extern "C" void MsgMemCardScanOpen()
     fn_801D65B4(0);
     fn_801D654C(1);
     fn_801D6714(0);
-    fn_801851A4(&_MsgMemCardScan_Callbacks);
+    MemCardUISetCallbacks(&_MsgMemCardScan_Callbacks);
 }
 
 extern "C" int MsgMemCardScanCheckDevices()
@@ -106,8 +106,8 @@ extern "C" void MsgMemCardScanClose()
     fn_801D685C("GN7E-69", 0);
     fn_801D6714(-1);
     fn_801D654C(0);
-    fn_801851D0();
-    for (signed char i = fn_801869F0() - 1; i >= 0; --i) {
+    MemCardUIClearCallbacks();
+    for (signed char i = UserRecGetCount() - 1; i >= 0; --i) {
         fn_80186ED8(i);
     }
 }

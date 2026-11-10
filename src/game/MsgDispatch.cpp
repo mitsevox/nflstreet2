@@ -4,7 +4,7 @@
    the profile-to-controller handler and the unlock list. */
 
 #include "game/OptionsScreenMsg.h"
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 #include "game/cu_80181330.h"
 #include "game/MsgCheatCodes.h"
 
@@ -16,7 +16,7 @@ int MsgTutorialHandleMessage(unsigned int id, void *pArgs, int unused, int *pRes
 int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
 int TournBracketMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
-int fn_80186010(unsigned int id, void *pArgs, int unused, int *pResult);
+int OptAudioHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 signed char fn_80186B38(int a);
 void fn_80186ED8(signed char a);
 void fn_80186F30(signed char a, int b);
@@ -67,7 +67,7 @@ int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unus
     case 2:
         return MsgTutorialHandleMessage(id, pArgs, unused, pResult);
     case 5:
-        return fn_80186010(id, pArgs, unused, pResult);
+        return OptAudioHandleMessage(id, pArgs, unused, pResult);
     case 6:
         return MsgAudioSettingsHandleMessage(id, (OptionsScreenMsg_t *)pArgs, unused, pResult);
     case 7:
@@ -91,14 +91,14 @@ int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused,
         break;
     case 0x80000001: {
         int handle = fn_8022F3D4(fn_8022F4BC());
-        Class_8018FD64 cursor;
+        DbTableCursor cursor;
         int *pA;
         int *pB;
         int base;
         unsigned int mask;
         int i;
 
-        cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
+        cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
         pA = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
         pB = (int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4);
         fn_80186ED8(fn_80186B38(fn_8022F4BC()));
@@ -107,7 +107,7 @@ int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused,
             pA[i] = i + base;
             pB[i] = 0;
         }
-        mask = cursor.fn_8018FF9C(0x504C5555);
+        mask = cursor.GetColumnInt(0x504C5555);
         for (i = base; i <= 9; i++) {
             if (mask & (1 << i)) {
                 pB[i - base] = 0;
@@ -133,12 +133,12 @@ int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused,
         }
         {
             int handle = fn_8022F3D4(fn_8022F4BC());
-            Class_8018FD64 cursor;
+            DbTableCursor cursor;
             unsigned int mask;
             int index;
 
-            cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-            mask = cursor.fn_8018FF9C(0x504C5555);
+            cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+            mask = cursor.GetColumnInt(0x504C5555);
             index = _MsgUnlockList_iSelection;
             if (index >= 0 && index <= 9 && !(mask & (1 << index))) {
                 do {

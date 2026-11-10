@@ -16,7 +16,7 @@ extern void *lbl_803EA368;
 
 int fn_8002D060(void *p);
 int fn_800A9680(void);
-int fn_8018AD34(int a, int b);
+int UISGetFont(int a, int b);
 void fn_801CD2A4(void);
 int fn_801CD308(int index, Quad_801CD308 value);
 void fn_801CD3B0(int a);
@@ -47,7 +47,7 @@ static int lbl_803EC7CC;
 
 void fn_8004732C(void)
 {
-    lbl_803EC7CC = fn_8018AD34(0, 1);
+    lbl_803EC7CC = UISGetFont(0, 1);
 }
 
 void fn_80047358(Item_800476DC *pInstance)

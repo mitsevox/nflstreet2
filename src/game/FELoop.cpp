@@ -20,8 +20,8 @@
 extern "C" {
 extern char gMainFEGroup[];
 extern float gFrameTimeScale;
-extern void *lbl_803EB688;
-extern void *lbl_803EB690;
+extern void *gUISMainInfo;
+extern void *gUISSubInfo;
 
 void fn_80010150(int a);
 int fn_80010194(void);
@@ -55,10 +55,10 @@ void fn_80186EF4(void);
 void fn_80187C0C(void);
 void fn_80187FDC(void);
 void fn_8018807C(int a);
-void fn_80188E14(void);
-void fn_80188E8C(void);
-void fn_8018A4BC(int a, unsigned int id, float value);
-void fn_8018A740(void);
+void TeamLogoInit(void);
+void TeamLogoShutdown(void);
+void UISGameHandleInput(int a, unsigned int id, float value);
+void UISGameRefreshAll(void);
 void RumbleProcess(void);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
@@ -96,7 +96,7 @@ static void _FELoopEnterDefault()
     void *p;
 
     MsgGameSetFEStarted(1);
-    p = lbl_803EB688;
+    p = gUISMainInfo;
     args[0] = 0;
     if (_FELoop_bVisited) {
         args[1] = 100;
@@ -104,7 +104,7 @@ static void _FELoopEnterDefault()
         args[1] = 101;
     }
     fn_80218FC4(p, 0, 2, 2, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode0()
@@ -113,11 +113,11 @@ static void _FELoopEnterMode0()
     void *p;
 
     MsgGameSetFEStarted(1);
-    p = lbl_803EB688;
+    p = gUISMainInfo;
     args[0] = 0;
     args[1] = 100;
     fn_80218FC4(p, 0, 2, 2, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode8()
@@ -127,8 +127,8 @@ static void _FELoopEnterMode8()
     FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(8);
-    fn_80218FC4(lbl_803EB688, 11, 1, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 11, 1, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode6()
@@ -138,8 +138,8 @@ static void _FELoopEnterMode6()
     FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(6);
-    fn_80218FC4(lbl_803EB688, 8, 2, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 8, 2, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode7()
@@ -149,8 +149,8 @@ static void _FELoopEnterMode7()
     FELoopRefreshModeType();
     args[0] = fn_800602E8() ? 401 : 1;
     fn_80010150(7);
-    fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode10()
@@ -160,8 +160,8 @@ static void _FELoopEnterMode10()
     FELoopRefreshModeType();
     args[0] = 123;
     fn_80010150(7);
-    fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode10Alt()
@@ -171,8 +171,8 @@ static void _FELoopEnterMode10Alt()
     FELoopRefreshModeType();
     args[0] = 604;
     fn_80010150(7);
-    fn_80218FC4(lbl_803EB688, 12, 0, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 12, 0, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode11()
@@ -182,8 +182,8 @@ static void _FELoopEnterMode11()
     FELoopRefreshModeType();
     args[0] = 1;
     fn_80010150(11);
-    fn_80218FC4(lbl_803EB688, 7, 17, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 7, 17, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode9()
@@ -193,8 +193,8 @@ static void _FELoopEnterMode9()
     FELoopRefreshModeType();
     args[0] = 700;
     fn_80010150(9);
-    fn_80218FC4(lbl_803EB688, 13, 0, 1, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 13, 0, 1, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterMode2()
@@ -204,8 +204,8 @@ static void _FELoopEnterMode2()
     FELoopRefreshModeType();
     args[0] = 1;
     args[1] = 109;
-    fn_80218FC4(lbl_803EB688, 0, 2, 2, args);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISMainInfo, 0, 2, 2, args);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
 }
 
 static void _FELoopEnterModeScreen(int mode)
@@ -264,9 +264,9 @@ static void _FELoopPadHandler(int a, int b, float c)
     }
     MemCardUtilHandleEvent(a, b, c);
     if (!gFMCAPPORT.IsBusy()) {
-        fn_8018A4BC(a, b, c);
+        UISGameHandleInput(a, b, c);
     }
-    fn_8018A740();
+    UISGameRefreshAll();
     if (b != 0x8F) {
         MemCardScreenSetFlag(0);
         _FELoop_uIdleFrames = 0;
@@ -316,7 +316,7 @@ void FELoopStartGame()
         fn_80232FD4(&record0, &record1);
         fn_800731D0(1);
         GameInfoRead();
-        fn_8021956C(lbl_803EB690, 1, 5, 1);
+        fn_8021956C(gUISSubInfo, 1, 5, 1);
         fn_800731D0(1);
         gGSFlowManager.fn_801CBEF4(2, 12);
     }
@@ -356,7 +356,7 @@ int FELoop::Init()
         FELoopRefreshModeType();
     }
     _FELoop_uModeType = GameModeTypeGet();
-    fn_80188E14();
+    TeamLogoInit();
     _FELoopEnterModeScreen(_FELoop_uModeType);
     _FELoop_uIdleFrames = 0;
     _FELoop_bIdleTimeout = 0;
@@ -370,7 +370,7 @@ unsigned char FELoop::Update()
     int flag = 1;
 
     BootUpdateReset();
-    fn_8018A740();
+    UISGameRefreshAll();
     fn_801D6F58();
     ConUpdateChannel(-1);
     ConProcessChannel(-1);
@@ -378,7 +378,7 @@ unsigned char FELoop::Update()
     fn_8003E1F0();
     FEPlyrLoadUpdate();
     gFMCAPPORT.Update();
-    fn_80219650(lbl_803EB688, &a, &b);
+    fn_80219650(gUISMainInfo, &a, &b);
     if (a == 0 && b == 7) {
         fn_8001442C();
     }
@@ -393,7 +393,7 @@ unsigned char FELoop::Update()
         }
         if (fn_80010194() || fn_80015F2C()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
-                fn_8021D7B8(lbl_803EB688, 0x80000038, 0, 0);
+                fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
                 fn_80072C90(0xFA, 1);
                 _FELoop_bIdleTimeout = 1;
             }
@@ -404,7 +404,7 @@ unsigned char FELoop::Update()
 
 int FELoop::Shutdown()
 {
-    fn_80188E8C();
+    TeamLogoShutdown();
     fn_801CE910();
     fn_80066DC8(0x31544250, 0);
     fn_80066DC8(0x31444250, 0);

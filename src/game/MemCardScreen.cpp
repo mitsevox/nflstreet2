@@ -5,7 +5,7 @@
 #include "game/fn_8007F6F8.h"
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
-#include "game/cu_8018422C.h"
+#include "game/MemCardUI.h"
 #include "game/FMCAPPORT.h"
 
 extern "C" {
@@ -28,7 +28,7 @@ static MemCardListCallbacks_t _MemCardScreen_ListCallbacks = {
 extern "C" void MemCardScreenInstallList()
 {
     fn_801D6714(-1);
-    fn_801851A4(&_MemCardScreen_ListCallbacks);
+    MemCardUISetCallbacks(&_MemCardScreen_ListCallbacks);
 }
 
 extern "C" void MemCardScreenListBegin(int value, int *pCount)
@@ -118,12 +118,12 @@ extern "C" int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult)
         fn_801D65B4(0);
         fn_801D654C(1);
         fn_801D6714(0);
-        fn_801851D0();
+        MemCardUIClearCallbacks();
         break;
     case 0x80000005:
         fn_801D6714(-1);
         fn_801D654C(0);
-        fn_801851D0();
+        MemCardUIClearCallbacks();
         break;
     case 0x80000006:
         _MemCardScreen_iForcedSlot = *p;

@@ -53,7 +53,7 @@ int fn_80082414(int index);
 int fn_801486A0(void);
 void fn_8014F3DC(int ticks);
 int MsgGameGetSetupState(void);
-void fn_8018C230(int a, int b);
+void StoryTeamLoadUserTeams(int a, int b);
 void fn_8018C48C(int handle);
 void fn_8018D7E0(void);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -247,7 +247,7 @@ void MsgStreetEventSetupInit(void)
     _MsgStreetEventSetup_pState = (StreetEventSetup_t *)fn_801D2B7C(sizeof(StreetEventSetup_t), 0, 0);
     fn_801C1F94(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
     fn_8018D7E0();
-    fn_8018C230(0, 1);
+    StoryTeamLoadUserTeams(0, 1);
     {
         DbCursor object;
 

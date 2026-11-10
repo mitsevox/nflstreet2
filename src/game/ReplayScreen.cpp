@@ -15,9 +15,9 @@ int fn_8002CA74(void *p, int a, int b);
 int fn_8002D0D0(void *p);
 int fn_8002D0FC(void *p);
 void HudPost3AOn(void);
-void fn_8018A798(int value);
-int fn_8018A7A0(void);
-unsigned char fn_8018AFD8(unsigned char value);
+void UISGameLockPad(int value);
+int UISGameUnlockPad(void);
+unsigned char UISHeldObjEnable(unsigned char value);
 }
 
 static unsigned char _ReplayScreen_bSavedFlag = 0;
@@ -25,8 +25,8 @@ static int _ReplayScreen_iSavedValue = -1;
 
 extern "C" void ReplayScreenEnter(void)
 {
-    _ReplayScreen_iSavedValue = fn_8018A7A0();
-    _ReplayScreen_bSavedFlag = fn_8018AFD8(0);
+    _ReplayScreen_iSavedValue = UISGameUnlockPad();
+    _ReplayScreen_bSavedFlag = UISHeldObjEnable(0);
     fn_8002CA74(lbl_803EA368, 7, 0);
 }
 
@@ -34,9 +34,9 @@ extern "C" int ReplayScreenGetPosition(void) { return fn_8002D0D0(lbl_803EA368);
 
 extern "C" void ReplayScreenExit(void)
 {
-    fn_8018A798(_ReplayScreen_iSavedValue);
+    UISGameLockPad(_ReplayScreen_iSavedValue);
     _ReplayScreen_iSavedValue = -1;
-    fn_8018AFD8(_ReplayScreen_bSavedFlag);
+    UISHeldObjEnable(_ReplayScreen_bSavedFlag);
     fn_8002CA74(lbl_803EA368, 9, 0);
     HudPost3AOn();
 }

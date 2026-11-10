@@ -53,7 +53,7 @@
 #include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
 #include "game/FeatAwards.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
 #include "game/GameModeType.h"
 #include "game/PauseMenu.h"
@@ -328,7 +328,7 @@ extern unsigned char lbl_803EA98C;
 extern int lbl_803EA990;
 extern char lbl_803EA994[7];
 extern unsigned char lbl_803EA99B;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern Entry_8009B87C lbl_802D7BF8;
 extern Entry_80219044 lbl_8030E6D0;
 extern Block_80099630 *lbl_803EC92C;
@@ -5171,7 +5171,7 @@ extern "C" void fn_8009BA10(int value)
     args[3] = (int)&lbl_8030E6D0;
     lbl_8030E6D0.mLength = fn_801C3180(lbl_803EA994);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
     }
     lbl_803EA99B = value;
 }
@@ -6327,7 +6327,7 @@ extern "C" void fn_800A7A0C(int team)
     HudResetGameBreaker(team);
     args[0] = team;
     args[1] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
     StyleTrackerSetMeter(team, 0, 0);
     fn_800A65BC();
     if (lbl_803EAA4D != 0) {
@@ -7229,7 +7229,7 @@ void fn_80165110(Record_80067338 *pRecord, int a);
 Object_800670B4 *PlayBookGetFormation(int team);
 void fn_800B4250(int enable, int own);
 
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 int fn_800B1AAC(void *p);
 void fn_800B2670(unsigned char value);
 void *fn_800B9A44(Class_80297C60 *p);
@@ -7714,12 +7714,12 @@ extern "C" void fn_800B30C8(void)
 {
     if (fn_800BA6F8() != 0) {
         fn_800B40D8(1);
-        fn_80218FC4(lbl_803EB688, fn_800B30B8(), fn_800B30C0(), 0, 0);
-        fn_802195E4(lbl_803EB688, fn_800B30B8(), fn_800B30C0());
+        fn_80218FC4(gUISMainInfo, fn_800B30B8(), fn_800B30C0(), 0, 0);
+        fn_802195E4(gUISMainInfo, fn_800B30B8(), fn_800B30C0());
     } else if (fn_800B65A0(fn_80178308()) != 255 || fn_800B65A0(fn_80178320()) != 255) {
         fn_800B40D8(1);
-        fn_80218FC4(lbl_803EB688, 3, 2, 0, 0);
-        fn_802195E4(lbl_803EB688, 3, 2);
+        fn_80218FC4(gUISMainInfo, 3, 2, 0, 0);
+        fn_802195E4(gUISMainInfo, 3, 2);
     }
     lbl_803EAB34->mUnknown8 |= 1;
     PauseUnblock();
@@ -7732,7 +7732,7 @@ extern "C" void fn_800B31B0(int a)
         fn_800B3470();
         fn_800B40D8(0);
         if (a != 0) {
-            fn_8021956C(lbl_803EB688, fn_800B30B8(), fn_800B30C0(), 1);
+            fn_8021956C(gUISMainInfo, fn_800B30B8(), fn_800B30C0(), 1);
         }
     } else {
         fn_800B4250(0, 1);
@@ -7740,7 +7740,7 @@ extern "C" void fn_800B31B0(int a)
         if (fn_800B65A0(fn_80178308()) != 255 || fn_800B65A0(fn_80178320()) != 255) {
             fn_800B40D8(0);
             if (a != 0) {
-                fn_8021956C(lbl_803EB688, 3, 2, 1);
+                fn_8021956C(gUISMainInfo, 3, 2, 1);
             }
         }
     }
@@ -8044,7 +8044,7 @@ void Class_80297B50::vfn_04(float dt)
         Arg_8021D7B8 arg;
         lbl_803EAB28 = count;
         arg.i = count;
-        fn_8021D7B8(lbl_803EB688, 0x80000007, 1, &arg);
+        fn_8021D7B8(gUISMainInfo, 0x80000007, 1, &arg);
         if (count <= 5) {
             AudmonEventPost(20, 0);
         }
@@ -9418,10 +9418,10 @@ int fn_80061DE8(void);
 }
 
 #include "game/GameModeType.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 
 extern "C" {
-VetsRow_8018EC68 *fn_8005FC7C(void);
+StevRow_t *fn_8005FC7C(void);
 
 extern Record_800BAE7C lbl_802D9B30[];
 }
@@ -9482,7 +9482,7 @@ extern "C" void fn_800BC190(int index, int value)
 
 extern "C" void fn_800BC3F0(void)
 {
-    VetsRow_8018EC68 *pRow;
+    StevRow_t *pRow;
 
     lbl_803EC98C->mUnknown2A = -1;
     lbl_803EC98C->mUnknown14 = 4;
@@ -9505,7 +9505,7 @@ void Class_80297BF8::vfn_06()
             show = (unsigned int)fn_80061DE8() <= 4;
         }
         if (show) {
-            fn_80218FC4(lbl_803EB688, 3, 8, 0, 0);
+            fn_80218FC4(gUISMainInfo, 3, 8, 0, 0);
         }
     }
 }
@@ -9513,7 +9513,7 @@ void Class_80297BF8::vfn_06()
 void Class_80297BF8::vfn_07()
 {
     if (fn_800C1E40() == 0) {
-        fn_8021956C(lbl_803EB688, 3, 8, 1);
+        fn_8021956C(gUISMainInfo, 3, 8, 1);
     }
 }
 
@@ -9605,7 +9605,7 @@ extern unsigned char lbl_803EAA99;
 extern unsigned int lbl_803EAA9C;
 extern Block_800ABD1C *lbl_803EAAB8;
 extern Block_800AD634 *lbl_803EAAD4;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern char *lbl_803EC960;
 extern char *lbl_803EC964[2];
 extern Table_800AA80C lbl_802D8194;
@@ -9993,8 +9993,8 @@ void Class_80297B90::vfn_06()
 {
     if (ChallengeIsActive() == 0) {
         fn_800731D0(0);
-        fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
-        fn_8021D7B8(lbl_803EB688, 0x80000035, 0, 0);
+        fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
+        fn_8021D7B8(gUISMainInfo, 0x80000035, 0, 0);
     }
 }
 
@@ -10002,8 +10002,8 @@ void Class_80297B90::vfn_07()
 {
     if (ChallengeIsActive() == 0) {
         SndgSfxPlay(119, 0);
-        fn_8021D7B8(lbl_803EB688, 0x80000034, 0, 0);
-        fn_8021956C(lbl_803EB688, 3, 5, 1);
+        fn_8021D7B8(gUISMainInfo, 0x80000034, 0, 0);
+        fn_8021956C(gUISMainInfo, 3, 5, 1);
     }
 }
 
@@ -10014,7 +10014,7 @@ void Class_80297B90::vfn_08()
 
 void Class_80297B90::vfn_09()
 {
-    fn_8021956C(lbl_803EB688, 3, 6, 1);
+    fn_8021956C(gUISMainInfo, 3, 6, 1);
 }
 
 int Class_80297B90::vfn_10()
@@ -10216,15 +10216,15 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         FeatClearAwarded();
         lbl_803EAA9A = 0;
         lbl_803EAA9C = 0;
-        fn_8021956C(lbl_803EB688, 1, 20, 1);
+        fn_8021956C(gUISMainInfo, 1, 20, 1);
     }
     return result;
 }
 
 extern "C" void fn_800AB29C(void *p)
 {
-    fn_80218FC4(lbl_803EB688, 3, 7, 0, 0);
-    fn_802195E4(lbl_803EB688, 3, 7);
+    fn_80218FC4(gUISMainInfo, 3, 7, 0, 0);
+    fn_802195E4(gUISMainInfo, 3, 7);
     fn_80195EFC(1, 20, 0x808080, 0);
     fn_800ABAF0();
 }
@@ -10257,7 +10257,7 @@ extern "C" {
 void fn_8004730C(unsigned char enabled);
 void fn_80072C90(unsigned int delay, int wait);
 void InGameStop(void);
-VetsRow_8018EC68 *fn_8005FC7C(void);
+StevRow_t *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
 int fn_80157080(void);
 int fn_80061D14(void);
@@ -10358,7 +10358,7 @@ void Class_80297B90::vfn_04(float dt)
         if (lbl_803EAA88->mUnknown4 == 13) {
             lbl_803EAA88->mUnknown16 = -1;
             if (fn_80178AE0() == 1) {
-                VetsRow_8018EC68 *pRow = fn_8005FC7C();
+                StevRow_t *pRow = fn_8005FC7C();
 
                 if (pRow == 0) {
                     pRow = fn_80061AD4();

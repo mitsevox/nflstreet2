@@ -166,9 +166,9 @@ void BannerAlloc(void);
 void BannerClearAll(void);
 void CoinTossAllocState(void);
 void CoinTossClearState(void);
-void fn_80188B78(int a, int b);
-void fn_80188E14(void);
-void fn_80188E8C(void);
+void TeamLogoTintMatchup(int a, int b);
+void TeamLogoInit(void);
+void TeamLogoShutdown(void);
 void FldObjAddObjType(int a);
 void LevelLightsInit(void);
 void fn_801A4650(Viewport_t *pObject);
@@ -1399,15 +1399,15 @@ int ColorStyle::Init()
     int b;
 
     fn_800C8704(&a, &b);
-    fn_80188E14();
-    fn_80188B78(a, b);
+    TeamLogoInit();
+    TeamLogoTintMatchup(a, b);
     return 1;
 }
 
 int ColorStyle::Shutdown()
 {
     VptFlushObjectTrashSync();
-    fn_80188E8C();
+    TeamLogoShutdown();
     return 1;
 }
 

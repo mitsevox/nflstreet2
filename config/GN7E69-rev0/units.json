@@ -2120,6 +2120,74 @@
     "_Res_pResourceFileList": {
       "address": "0x803ED668",
       "evidence": "evidence.tsv data/name rows 0x803ED668: open-resource pool returned by DS allocator; original storage remains externally linked for the partial Resource.c reconstruction."
+    },
+    "StevQueryRowCount": {
+      "address": "0x8018EA3C",
+      "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StevQueryDiveCount": {
+      "address": "0x8018EAAC",
+      "evidence": "evidence.tsv function/name rows for 0x8018EAAC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "SstlFetchEntry": {
+      "address": "0x8018EB20",
+      "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryIsEventCompleted": {
+      "address": "0x8018E5F4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E5F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryAddCompletedEvent": {
+      "address": "0x8018E658",
+      "evidence": "evidence.tsv function/name rows for 0x8018E658 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryCountRemainingEvents": {
+      "address": "0x8018E6A4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E6A4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryAreGroupEventsCompleted": {
+      "address": "0x8018E6E0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E6E0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryIsNew": {
+      "address": "0x8018E774",
+      "evidence": "evidence.tsv function/name rows for 0x8018E774 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetNew": {
+      "address": "0x8018E7A0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E7A0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetLkss": {
+      "address": "0x8018E7CC",
+      "evidence": "evidence.tsv function/name rows for 0x8018E7CC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetLkss": {
+      "address": "0x8018E828",
+      "evidence": "evidence.tsv function/name rows for 0x8018E828 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryTestIndexedFlag": {
+      "address": "0x8018E874",
+      "evidence": "evidence.tsv function/name rows for 0x8018E874 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetIndexedFlag": {
+      "address": "0x8018E8B0",
+      "evidence": "evidence.tsv function/name rows for 0x8018E8B0 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetFlag100": {
+      "address": "0x8018E8F4",
+      "evidence": "evidence.tsv function/name rows for 0x8018E8F4 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetFlag100": {
+      "address": "0x8018E920",
+      "evidence": "evidence.tsv function/name rows for 0x8018E920 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StoryGetFlag200": {
+      "address": "0x8018E94C",
+      "evidence": "evidence.tsv function/name rows for 0x8018E94C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "StorySetFlag200": {
+      "address": "0x8018E978",
+      "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     }
   },
   "units": [
@@ -2208,65 +2276,6 @@
           "placement": ".data3",
           "start": "0x80298090",
           "end": "0x80298098"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018B0BC.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018B014-0x8018C344 (src/game/cu_8018B0BC.cpp) and its function rows; every function exact. Whole range linked; the edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
-      "link_roots": {
-        "symbols": [
-          "fn_8018B014",
-          "fn_8018B0BC",
-          "fn_8018B2A8",
-          "fn_8018B5E4",
-          "fn_8018B66C",
-          "fn_8018B6F0",
-          "fn_8018B8B0",
-          "fn_8018B950",
-          "fn_8018B9D4",
-          "fn_8018BA2C",
-          "fn_8018BA4C",
-          "fn_8018BB24",
-          "fn_8018BD9C",
-          "fn_8018BDFC",
-          "fn_8018BE68",
-          "fn_8018BECC",
-          "fn_8018BF10",
-          "fn_8018BF3C",
-          "fn_8018C008",
-          "fn_8018C044",
-          "fn_8018C064",
-          "fn_8018C0E8",
-          "fn_8018C15C",
-          "fn_8018C1A8",
-          "fn_8018C1E0",
-          "fn_8018C230"
-        ],
-        "evidence": "The file defines 27 functions. The target keeps 26 of them at the placed range; the 27th, CopyRdrcPlayersToTeam (Xbox DEFAULT.xbe 0x172FF0), has no code in the target's .init/.text (masked byte search), so the linker drops it. Its literals at 0x802A9E74-0x802A9F80 stay in the placed .rodata, as in the original link.",
-        "discarded": [
-          "CopyRdrcPlayersToTeam"
-        ]
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018B014",
-          "end": "0x8018C344"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A98A0",
-          "end": "0x802AA0D0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EADE4",
-          "end": "0x802EAE74"
         }
       ]
     },
@@ -3537,31 +3546,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AB0C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/cu_8018AB0C.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018A978",
-          "end": "0x8018AC38"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A8738",
-          "end": "0x802A8750"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB6B0",
-          "end": "0x803EB6B4"
-        }
-      ]
-    },
-    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
@@ -4401,37 +4385,6 @@
           "placement": ".data2",
           "start": "0x80289B18",
           "end": "0x80289B1C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018422C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018422C-0x80185AB4 (src/game/cu_8018422C.cpp) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018422C",
-          "end": "0x80185AB4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A6C10",
-          "end": "0x802A6C20"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB590",
-          "end": "0x803EB5B8"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB80",
-          "end": "0x803ECB84"
         }
       ]
     },
@@ -6582,37 +6535,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80188E98.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80188E98-0x8018A908 (src/game/cu_80188E98.cpp) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80188E98",
-          "end": "0x8018A908"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A8340",
-          "end": "0x802A8400"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB640",
-          "end": "0x803EB6A4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362F84",
-          "end": "0x80363180"
-        }
-      ]
-    },
-    {
       "source": "src/game/GameOutcome.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8002B5B0-0x8002B5C0 (src/game/GameOutcome.cpp) and its data row.",
@@ -6785,37 +6707,6 @@
           "placement": ".data2",
           "start": "0x80289C20",
           "end": "0x80289C24"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018E9A4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018E9A4-0x8018EA3C (src/game/cu_8018E9A4.cpp) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018E9A4",
-          "end": "0x8018EA3C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80364D78",
-          "end": "0x80364DA4"
-        },
-        {
-          "section": ".ctors",
-          "placement": ".data2",
-          "start": "0x80289AFC",
-          "end": "0x80289B00"
-        },
-        {
-          "section": ".dtors",
-          "placement": ".data2",
-          "start": "0x80289C28",
-          "end": "0x80289C2C"
         }
       ]
     },
@@ -8079,49 +7970,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018DF98.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/cu_8018DF98.cpp) and its data, linker, compiler and source-form rows.",
-      "link_roots": {
-        "symbols": [
-          "fn_8018DFE4",
-          "fn_8018E02C",
-          "fn_8018E0D8",
-          "fn_8018E11C",
-          "fn_8018E174",
-          "fn_8018E194",
-          "fn_8018E20C",
-          "fn_8018E284",
-          "fn_8018E344",
-          "fn_8018E390",
-          "fn_8018E3DC",
-          "fn_8018E428",
-          "fn_8018E474",
-          "fn_8018E4B4",
-          "fn_8018E55C",
-          "fn_8018E598"
-        ],
-        "discarded": [
-          "ResetYptsTadsCetsTables"
-        ],
-        "evidence": "evidence.tsv linker row 0x802AAE74-0x802AAEA0: the target keeps every listed function, each called from outside the unit or from inside it; the file-static ResetYptsTadsCetsTables has no code in the target, while its query string remains in rodata."
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018DF98",
-          "end": "0x8018E5F4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AAD90",
-          "end": "0x802AAEE8"
-        }
-      ]
-    },
-    {
       "source": "src/game/Ball.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80136B1C-0x80138590 (src/game/Ball.cpp) and its data rows.",
@@ -8468,31 +8316,6 @@
           "placement": ".sbss",
           "start": "0x803ECB38",
           "end": "0x803ECB3C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801861D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801861D0-0x801864E0 (src/game/cu_801861D0.cpp) and its data, compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801861D0",
-          "end": "0x801864E0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A6C20",
-          "end": "0x802A6C24"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB5D8",
-          "end": "0x803EB5DC"
         }
       ]
     },
@@ -9020,71 +8843,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80188A30.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80188A30-0x80188E98 (src/game/cu_80188A30.cpp) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80188A30",
-          "end": "0x80188E98"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB638",
-          "end": "0x803EB640"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362F64",
-          "end": "0x80362F84"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018EC68.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/cu_8018EC68.cpp) and its data rows.",
-      "link_roots": {
-        "symbols": [
-          "fn_8018EC68",
-          "fn_8018ED78",
-          "fn_8018EDF0",
-          "fn_8018EE44",
-          "fn_8018EE78",
-          "fn_8018EEAC",
-          "fn_8018EEF0"
-        ],
-        "discarded": [
-          "SelectTopVetsNets"
-        ],
-        "evidence": "evidence.tsv linker row 0x802AB1B0-0x802AB210: the target keeps every listed function, all reached from outside the unit or from each other; one cursor query function has no code in the target, while its strings remain in the unit's rodata."
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018EC68",
-          "end": "0x8018EF6C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AB08C",
-          "end": "0x802AB254"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB6D0",
-          "end": "0x803EB6D4"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80060948.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/cu_80060948.cpp) and its data rows.",
@@ -9515,31 +9273,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80190208.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80190208",
-          "end": "0x80190A7C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AB5A0",
-          "end": "0x802AB840"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB6D8",
-          "end": "0x803EB6DC"
-        }
-      ]
-    },
-    {
       "source": "src/game/EffectBlend.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801981D8-0x80198378 (src/game/EffectBlend.cpp) and its data, compiler and source-form rows.",
@@ -9819,31 +9552,6 @@
           "placement": ".data2",
           "start": "0x80289C58",
           "end": "0x80289C5C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80185AB4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80185AB4-0x801861D0 (src/game/cu_80185AB4.cpp) and its data, compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80185AB4",
-          "end": "0x801861D0"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB5B8",
-          "end": "0x803EB5D4"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB84",
-          "end": "0x803ECB88"
         }
       ]
     },
@@ -10332,25 +10040,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018A908.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018A908-0x8018A978 (src/game/cu_8018A908.cpp) and its .sdata row.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018A908",
-          "end": "0x8018A978"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB6A8",
-          "end": "0x803EB6AC"
-        }
-      ]
-    },
-    {
       "source": "src/game/FeatsScreen.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80055318-0x800554FC (src/game/FeatsScreen.cpp) and its .rodata and .sbss rows.",
@@ -10704,10 +10393,10 @@
       },
       "folded": {
         "symbols": {
-          "_._14Class_802938C0": "0x80083454",
-          "_vt.14Class_802938C0": "0x802938C0"
+          "_._10FchrCursor": "0x80083454",
+          "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row cu_80005668 Class_802938C0 linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of Class_802938C0 are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+        "evidence": "evidence.tsv source-form row cu_80005668 FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
       }
     },
     {
@@ -11464,57 +11153,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8018AC38.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AC38-0x8018AD34 (src/game/cu_8018AC38.cpp) and its .data row.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018AC38",
-          "end": "0x8018AD34"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EAD64",
-          "end": "0x802EADE4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018AD78.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AD78-0x8018AFD0 (src/game/cu_8018AD78.cpp).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018AD78",
-          "end": "0x8018AFD0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018AFD0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AFD0-0x8018AFF0 (src/game/cu_8018AFD0.cpp) and its .sdata row.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018AFD0",
-          "end": "0x8018AFF0"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB6B8",
-          "end": "0x803EB6C0"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/gx/GXFifo.c",
       "profile": "dolphin_release",
       "evidence": "Complete faithful related SDK source; actual target operands/callers and focused full-DOL proof support retained roots and storage. Original archive boundaries remain provisional.",
@@ -11671,19 +11309,6 @@
       }
     },
     {
-      "source": "src/game/cu_8018AFF0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AFF0-0x8018B014 (src/game/cu_8018AFF0.cpp).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018AFF0",
-          "end": "0x8018B014"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/gba/GBA.c",
       "profile": "dolphin_release",
       "evidence": "sdk.json unit src/dolphin/gba/GBA.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
@@ -11763,89 +11388,6 @@
           "placement": ".data5",
           "start": "0x803EC5C0",
           "end": "0x803EC5C2"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018AD34.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018AD34-0x8018AD78 (src/game/cu_8018AD34.cpp).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018AD34",
-          "end": "0x8018AD78"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801864E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/cu_801864E0.cpp) and its data, compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801864E0",
-          "end": "0x80186A44"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A6C24",
-          "end": "0x802A6EC8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_801882B4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/cu_801882B4.cpp) and its compiler and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801882B4",
-          "end": "0x80188A30"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018FD64.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018FD64-0x80190208 (src/game/cu_8018FD64.cpp) and its compiler, data and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018FD64",
-          "end": "0x80190208"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AB4F8",
-          "end": "0x802AB5A0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018F1F0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018F1F0-0x8018FD64 (src/game/cu_8018F1F0.cpp) and its compiler, data, type and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018F1F0",
-          "end": "0x8018FD64"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AB364",
-          "end": "0x802AB4F8"
         }
       ]
     },
@@ -12052,31 +11594,6 @@
           "placement": ".data4",
           "start": "0x802F3488",
           "end": "0x802F37D0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80180FA4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/cu_80180FA4.cpp), its .data and .bss rows and source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80180FA4",
-          "end": "0x80181330"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802EA934",
-          "end": "0x802EA988"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362A14",
-          "end": "0x80362A20"
         }
       ]
     },
@@ -15157,6 +14674,557 @@
           "placement": ".data5",
           "start": "0x803EA550",
           "end": "0x803EA554"
+        }
+      ]
+    },
+    {
+      "source": "src/game/StoryTeam.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018B014-0x8018C344 (src/game/StoryTeam.cpp) and its function rows; every function exact. Whole range linked; the edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
+      "link_roots": {
+        "symbols": [
+          "StoryTeamClearTables",
+          "StoryTeamStore",
+          "StoryTeamLoad",
+          "StoryTeamLoadAll",
+          "StoryTeamLoadOne",
+          "StoryTeamSyncCreatedPlayer",
+          "StoryPlayerSetDefaults",
+          "StoryPlayerResetById",
+          "StoryTeamCursorOpen",
+          "StoryTeamCursorClose",
+          "StoryTeamCreate",
+          "StoryTeamCreatePlayer",
+          "StoryTeamExists",
+          "StoryTeamLoadToStats",
+          "StoryTeamLoadOneToStats",
+          "StoryTeamAddOneToStats",
+          "StoryTeamStoreFromStats",
+          "StoryTeamClear",
+          "StoryTeamBackup",
+          "StoryTeamFreeBackup",
+          "StoryTeamRestore",
+          "StoryTeamGetId",
+          "StoryPlayerMoveToTeam",
+          "StoryPlayerDelete",
+          "StoryTeamGetLogo",
+          "StoryTeamLoadUserTeams"
+        ],
+        "evidence": "The file defines 27 functions. The target keeps 26 of them at the placed range; the 27th, CopyRdrcPlayersToTeam (Xbox DEFAULT.xbe 0x172FF0), has no code in the target's .init/.text (masked byte search), so the linker drops it. Its literals at 0x802A9E74-0x802A9F80 stay in the placed .rodata, as in the original link.",
+        "discarded": [
+          "CopyRdrcPlayersToTeam"
+        ]
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018B014",
+          "end": "0x8018C344"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A98A0",
+          "end": "0x802AA0D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EADE4",
+          "end": "0x802EAE74"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISModelObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/UISModelObj.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018A978",
+          "end": "0x8018AC38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8738",
+          "end": "0x802A8750"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B0",
+          "end": "0x803EB6B4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MemCardUI.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018422C-0x80185AB4 (src/game/MemCardUI.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018422C",
+          "end": "0x80185AB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C10",
+          "end": "0x802A6C20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB590",
+          "end": "0x803EB5B8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB80",
+          "end": "0x803ECB84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISGame.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80188E98-0x8018A908 (src/game/UISGame.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80188E98",
+          "end": "0x8018A908"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8340",
+          "end": "0x802A8400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB640",
+          "end": "0x803EB6A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362F84",
+          "end": "0x80363180"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UnusedDbCursor.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018E9A4-0x8018EA3C (src/game/UnusedDbCursor.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018E9A4",
+          "end": "0x8018EA3C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364D78",
+          "end": "0x80364DA4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AFC",
+          "end": "0x80289B00"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C28",
+          "end": "0x80289C2C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/StoryData.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/StoryData.cpp) and its data, linker, compiler and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "StoryTestFlag",
+          "StorySetFlag",
+          "StoryGetIndexedFlagMask",
+          "StoryPlayerCursorOpen",
+          "StoryPlayerCursorClose",
+          "StoryPlayerGetFirstName",
+          "StoryPlayerGetLastName",
+          "StoryPlayerGetShortName",
+          "StoryGetExpPoints",
+          "StorySetExpPoints",
+          "StoryGetDevPoints",
+          "StorySetDevPoints",
+          "StoryClearFlags",
+          "StoryStartNew",
+          "StoryClearCompletedEvents",
+          "StoryCountCompletedEvents"
+        ],
+        "discarded": [
+          "ResetYptsTadsCetsTables"
+        ],
+        "evidence": "evidence.tsv linker row 0x802AAE74-0x802AAEA0: the target keeps every listed function, each called from outside the unit or from inside it; the file-static ResetYptsTadsCetsTables has no code in the target, while its query string remains in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018DF98",
+          "end": "0x8018E5F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AAD90",
+          "end": "0x802AAEE8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MsgController.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801861D0-0x801864E0 (src/game/MsgController.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801861D0",
+          "end": "0x801864E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C20",
+          "end": "0x802A6C24"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB5D8",
+          "end": "0x803EB5DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/TeamLogo.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80188A30-0x80188E98 (src/game/TeamLogo.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80188A30",
+          "end": "0x80188E98"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB638",
+          "end": "0x803EB640"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362F64",
+          "end": "0x80362F84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/StevTable.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/StevTable.cpp) and its data rows.",
+      "link_roots": {
+        "symbols": [
+          "StevReadRow",
+          "StevFindNets",
+          "StevGetRow",
+          "StevCountDiveRows",
+          "StevCountRows",
+          "StevClose",
+          "StevOpen"
+        ],
+        "discarded": [
+          "SelectTopVetsNets"
+        ],
+        "evidence": "evidence.tsv linker row 0x802AB1B0-0x802AB210: the target keeps every listed function, all reached from outside the unit or from each other; one cursor query function has no code in the target, while its strings remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018EC68",
+          "end": "0x8018EF6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB08C",
+          "end": "0x802AB254"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6D0",
+          "end": "0x803EB6D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Cheat.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190208",
+          "end": "0x80190A7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB5A0",
+          "end": "0x802AB840"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6D8",
+          "end": "0x803EB6DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MsgAudio.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80185AB4-0x801861D0 (src/game/MsgAudio.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80185AB4",
+          "end": "0x801861D0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB5B8",
+          "end": "0x803EB5D4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB84",
+          "end": "0x803ECB88"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISViewObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018A908-0x8018A978 (src/game/UISViewObj.cpp) and its .sdata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018A908",
+          "end": "0x8018A978"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6A8",
+          "end": "0x803EB6AC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISSoundObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AC38-0x8018AD34 (src/game/UISSoundObj.cpp) and its .data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AC38",
+          "end": "0x8018AD34"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAD64",
+          "end": "0x802EADE4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISTextTable.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AD78-0x8018AFD0 (src/game/UISTextTable.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AD78",
+          "end": "0x8018AFD0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISHeldObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AFD0-0x8018AFF0 (src/game/UISHeldObj.cpp) and its .sdata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AFD0",
+          "end": "0x8018AFF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B8",
+          "end": "0x803EB6C0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DbTextToTag.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AFF0-0x8018B014 (src/game/DbTextToTag.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AFF0",
+          "end": "0x8018B014"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISGetFont.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AD34-0x8018AD78 (src/game/UISGetFont.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AD34",
+          "end": "0x8018AD78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UserRec.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/UserRec.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801864E0",
+          "end": "0x80186A44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C24",
+          "end": "0x802A6EC8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ResBank.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/ResBank.cpp) and its compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801882B4",
+          "end": "0x80188A30"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DbTableCursor.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018FD64-0x80190208 (src/game/DbTableCursor.cpp) and its compiler, data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018FD64",
+          "end": "0x80190208"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB4F8",
+          "end": "0x802AB5A0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Gauntlet.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018F1F0-0x8018FD64 (src/game/Gauntlet.cpp) and its compiler, data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018F1F0",
+          "end": "0x8018FD64"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB364",
+          "end": "0x802AB4F8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/FEMisc.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/FEMisc.cpp), its .data and .bss rows and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80180FA4",
+          "end": "0x80181330"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA934",
+          "end": "0x802EA988"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362A14",
+          "end": "0x80362A20"
         }
       ]
     }

@@ -61,8 +61,8 @@ struct PathfinderStatus_t {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
-extern void *lbl_803EB690;
+extern void *gUISMainInfo;
+extern void *gUISSubInfo;
 extern char lbl_802EBF88[];
 int FELoopIsMainFEActive(void);
 int fn_801486A0(void);
@@ -403,8 +403,8 @@ void fn_800724F4(void)
         lbl_803EA709 = 1;
     } else {
         unsigned short a, b;
-        if (lbl_803EB688) {
-            fn_80219650(lbl_803EB688, &a, &b);
+        if (gUISMainInfo) {
+            fn_80219650(gUISMainInfo, &a, &b);
             if (a == 5 && b == 1) {
                 return;
             }
@@ -431,9 +431,9 @@ void fn_800724F4(void)
         args.records[2] = &lbl_803EA704->mUnknown34[2];
         args.records[2]->mpUnknown8 = lbl_803EA704->mUnknownBE;
         args.records[2]->mUnknown4 = fn_801C3180(lbl_803EA704->mUnknownBE);
-        if (lbl_803EB690) {
+        if (gUISSubInfo) {
             lbl_803EA709 = 0;
-            fn_8021D7B8(lbl_803EB690, 0x80000004, 4, &args);
+            fn_8021D7B8(gUISSubInfo, 0x80000004, 4, &args);
         }
     }
 }
@@ -603,8 +603,8 @@ void fn_80072C90(unsigned int delay, int wait)
         if (lbl_803EA704->mUnknown122 || lbl_803EA704->mUnknown128) {
             SndgPathFadeTrack(0x11000001, 0, delay);
         }
-        if (FELoopIsMainFEActive() && lbl_803EB690) {
-            fn_8021D7B8(lbl_803EB690, 0x80000003, 0, 0);
+        if (FELoopIsMainFEActive() && gUISSubInfo) {
+            fn_8021D7B8(gUISSubInfo, 0x80000003, 0, 0);
         }
         if (wait) {
             while (lbl_803EA704->mUnknown8) {
@@ -704,8 +704,8 @@ void fn_80073094(void)
             }
             lbl_803EA704->mUnknown124 = 0;
             lbl_803EA704->mUnknown123 = 0;
-            if (FELoopIsMainFEActive() && lbl_803EB690) {
-                fn_8021D7B8(lbl_803EB690, 0x80000003, 0, 0);
+            if (FELoopIsMainFEActive() && gUISSubInfo) {
+                fn_8021D7B8(gUISSubInfo, 0x80000003, 0, 0);
             }
         }
         lbl_803EA704->mUnknown125 = 0;

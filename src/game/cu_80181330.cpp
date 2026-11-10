@@ -33,7 +33,7 @@ struct State_80362A84 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 Class_80184190 *fn_800053D0(void);
 Class_80184190 *fn_800088C8(void);
@@ -92,15 +92,15 @@ void ColorPickIndexToCell(int value, int *pQuotient, int *pRemainder);
 int ColorPickGetSelected(void);
 int MsgGameGetSetupState(void);
 int fn_80186B38(int a);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-int fn_80188DF0(int a);
-int fn_8018BD9C(int a);
-int fn_8018BDFC(int a, int b, int c, int *pD);
-void fn_8018BF10(int a, int b);
-void fn_8018BF3C(void);
-void fn_8018C008(int *pA, int *pB, int c);
-void fn_8018C044(int a, int b);
-void fn_8018C064(int a, int b);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+int TeamLogoGetHandle(int a);
+int StoryTeamExists(int a);
+int StoryTeamLoadToStats(int a, int b, int c, int *pD);
+void StoryTeamStoreFromStats(int a, int b);
+void StoryTeamClear(void);
+void StoryTeamBackup(int *pA, int *pB, int c);
+void StoryTeamFreeBackup(int a, int b);
+void StoryTeamRestore(int a, int b);
 void fn_8018C48C(int tag);
 int fn_8018D23C(int a);
 int fn_8018D720(int a);
@@ -110,14 +110,14 @@ void fn_8018D918(void);
 void fn_8018DE40(int *pA, int *pB, int c);
 void fn_8018DE7C(int a, int b);
 void fn_8018DE9C(int a, int b);
-int fn_8018E3DC(int a);
-void fn_8018E428(int a, int b);
-int fn_8018E4B4(void);
-void fn_8018E7A0(int index, int value);
-void fn_8018E8B0(int a, int b, int c);
+int StoryGetDevPoints(int a);
+void StorySetDevPoints(int a, int b);
+int StoryStartNew(void);
+void StorySetNew(int index, int value);
+void StorySetIndexedFlag(int a, int b, int c);
 void fn_8018EF6C(int a);
-int fn_8018F228(int a);
-void fn_8018F41C(int a);
+int GauntletGetCurrentTeam(int a);
+void GauntletReset(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801C302C(const char *s1, const char *s2, int n);
@@ -228,11 +228,11 @@ void fn_80181330(void)
 {
     switch (lbl_803EB548) {
     case 4:
-        lbl_803ECB7C = fn_8018E3DC(lbl_803EB55C);
-        fn_8018C008(&lbl_803ECB74, &lbl_803ECB78, fn_8022F4BC());
+        lbl_803ECB7C = StoryGetDevPoints(lbl_803EB55C);
+        StoryTeamBackup(&lbl_803ECB74, &lbl_803ECB78, fn_8022F4BC());
         break;
     case 3:
-        lbl_803ECB7C = fn_8018E3DC(lbl_803EB55C);
+        lbl_803ECB7C = StoryGetDevPoints(lbl_803EB55C);
         break;
     case 5:
         lbl_803ECB7C = 0;
@@ -252,7 +252,7 @@ void fn_801813F4(void)
 {
     switch (lbl_803EB548) {
     case 4:
-        fn_8018C044(lbl_803ECB74, lbl_803ECB78);
+        StoryTeamFreeBackup(lbl_803ECB74, lbl_803ECB78);
         break;
     case 0:
     case 2:
@@ -272,7 +272,7 @@ void fn_80181458(void)
         return;
     }
     if (fn_80183950()) {
-        fn_8018C064(lbl_803ECB74, lbl_803ECB78);
+        StoryTeamRestore(lbl_803ECB74, lbl_803ECB78);
     } else {
         fn_8018DE9C(lbl_803ECB74, lbl_803ECB78);
     }
@@ -382,14 +382,14 @@ void fn_80181670(int a, int *pCount, int *pValue)
     lbl_803ECB6C[0] = fn_800841AC(fn_80182DBC());
     lbl_803ECB6C[1] = fn_800841D8(fn_80182DBC());
     lbl_803ECB6C[2] = fn_80084204(fn_80182DBC());
-    fn_80188CBC(0, 4, fn_80084158(fn_80182DBC()), 172, lbl_803ECB6C);
+    TeamLogoRequestTint(0, 4, fn_80084158(fn_80182DBC()), 172, lbl_803ECB6C);
     lbl_803EB580 = fn_80084158(fn_80182DBC());
     lbl_803EB584 = 0;
     fn_80083F88(fn_80182DBC(), buffer, 18);
     fn_80182E34(buffer);
     if (!fn_8018397C()) {
         if (fn_80183950()) {
-            fn_8000890C(fn_8018E3DC(lbl_803EB55C));
+            fn_8000890C(StoryGetDevPoints(lbl_803EB55C));
         } else {
             fn_8000890C(ChalGetDevPoints());
         }
@@ -453,8 +453,8 @@ void fn_8018196C(void)
     fn_8008056C(&lbl_80362A58);
     if (fn_80183950()) {
         fn_8018C48C(0x54415453);
-        if (fn_8018BD9C(lbl_803EB55C)) {
-            lbl_803ECB68 = fn_8018BDFC(lbl_803EB55C, 0, 0, &status);
+        if (StoryTeamExists(lbl_803EB55C)) {
+            lbl_803ECB68 = StoryTeamLoadToStats(lbl_803EB55C, 0, 0, &status);
         }
     } else if (fn_8018397C()) {
         fn_80082558(lbl_803ECB68, lbl_803EB55C);
@@ -605,7 +605,7 @@ void fn_80181EAC(int a, int *pA, int *pB, int *pC)
     lbl_803ECB6C[1] = fn_800841D8(fn_80182DBC());
     lbl_803ECB6C[2] = fn_80084204(fn_80182DBC());
     fn_801826FC(colors);
-    fn_80188CBC(0, pState->mUnknown80, pState->mUnknown84, 172, colors);
+    TeamLogoRequestTint(0, pState->mUnknown80, pState->mUnknown84, 172, colors);
     lbl_803EB580 = *pA;
     lbl_803EB584 = *pB;
 }
@@ -855,10 +855,10 @@ void fn_80182964(void)
     if (fn_80183950()) {
         if (fn_80183948() == 3) {
             fn_8018EF6C(lbl_803ECB68);
-            fn_8018E7A0(lbl_803EB55C, 0);
+            StorySetNew(lbl_803EB55C, 0);
         }
-        fn_8018E428(lbl_803EB55C, fn_80008914());
-        fn_8018BF10(lbl_803EB55C, lbl_803ECB68);
+        StorySetDevPoints(lbl_803EB55C, fn_80008914());
+        StoryTeamStoreFromStats(lbl_803EB55C, lbl_803ECB68);
     } else if (fn_8018397C()) {
         fn_80082534(lbl_803ECB68, lbl_803EB55C);
     } else if (fn_80183948() != 2) {
@@ -1054,7 +1054,7 @@ void fn_80182E88(int a, int b)
 
 void fn_80182E9C(int a)
 {
-    lbl_80362A84.mUnknown88 = fn_80188DF0(a);
+    lbl_80362A84.mUnknown88 = TeamLogoGetHandle(a);
 }
 
 void fn_80182EC4(unsigned char a)
@@ -1119,7 +1119,7 @@ void fn_80183034(const char *pText)
             sText.mLength = 27;
             sText.mpText = lbl_802EAA24;
             args[1].pParams = &sText;
-            fn_8021D7B8(lbl_803EB688, 0x80000088, 2, args);
+            fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
         }
     } else {
         Arg_8018399C args[2];
@@ -1130,7 +1130,7 @@ void fn_80183034(const char *pText)
         sText.mLength = 27;
         sText.mpText = lbl_802EAA24;
         args[1].pParams = &sText;
-        fn_8021D7B8(lbl_803EB688, 0x80000088, 2, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
     }
 }
 
@@ -1165,7 +1165,7 @@ void fn_801831F0(unsigned char a)
 
 void fn_801831F8(int a)
 {
-    lbl_80362A84.mUnknown96 = fn_80188DF0(a);
+    lbl_80362A84.mUnknown96 = TeamLogoGetHandle(a);
 }
 
 int fn_80183220(void)
@@ -1244,10 +1244,10 @@ void fn_80183368(int mode, int value)
     lbl_803EB588 = 0;
     switch (lbl_803EB548) {
     case 4:
-        lbl_803ECB68 = fn_8018BDFC(lbl_803EB55C, 0, 0, &status);
+        lbl_803ECB68 = StoryTeamLoadToStats(lbl_803EB55C, 0, 0, &status);
         break;
     case 3:
-        lbl_803ECB68 = fn_8018E4B4();
+        lbl_803ECB68 = StoryStartNew();
         fn_801832A4();
         break;
     case 5:
@@ -1549,26 +1549,26 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         break;
     case 0x126:
         if (pArgs[0].i == 7) {
-            pResult->i = fn_8018BD9C(fn_8022F384(fn_8022F4BC()));
+            pResult->i = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
         } else if (pArgs[0].i == 6) {
             pResult->i = fn_8018D720(fn_8022F384(fn_8022F4BC()));
         } else if (pArgs[0].i == 8) {
-            pResult->i = fn_8018F228(fn_8022F384(fn_8022F4BC())) != 0x3FF;
+            pResult->i = GauntletGetCurrentTeam(fn_8022F384(fn_8022F4BC())) != 0x3FF;
         }
         break;
     case 0x125:
         if (pArgs[0].i == 7) {
-            fn_8018BF3C();
+            StoryTeamClear();
         } else if (pArgs[0].i == 6) {
             int team;
 
             fn_8018D918();
             team = fn_80186B38(fn_8022F4BC());
-            if (fn_8018BD9C(team)) {
-                fn_8018E8B0(team, 1, 0);
+            if (StoryTeamExists(team)) {
+                StorySetIndexedFlag(team, 1, 0);
             }
         } else if (pArgs[0].i == 8) {
-            fn_8018F41C(fn_8022F384(fn_8022F4BC()));
+            GauntletReset(fn_8022F384(fn_8022F4BC()));
         }
         break;
     case 0xF0:

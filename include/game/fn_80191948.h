@@ -9,7 +9,7 @@ struct Object_80191948 {
 
 extern "C" {
 void fn_80191948(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC);
-void fn_80184528(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC);
+void MemCardUIGetMessageText(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC);
 }
 
 #endif

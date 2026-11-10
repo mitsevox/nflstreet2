@@ -19,7 +19,7 @@ struct ChallengeGoalResults_t {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int ChallengeHasGoalType(Challenge_t *pRecord, int type, int *pValue);
 int ChallengeIsActive(void);
@@ -637,7 +637,7 @@ void ChallengeSendGoalList(int flag)
         _Challenge_GoalResults.mUnknown4 = 4;
         args[6].p = &_Challenge_GoalResults;
         if (count > 0 || !flag) {
-            fn_8021D7B8(lbl_803EB688, 0x80000083, 7, args);
+            fn_8021D7B8(gUISMainInfo, 0x80000083, 7, args);
         }
     }
 }
