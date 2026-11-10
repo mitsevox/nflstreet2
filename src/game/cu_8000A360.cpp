@@ -1,7 +1,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
-#include "game/cu_8015C25C.h"
+#include "game/FEPlyrLoad.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 
@@ -760,7 +760,7 @@ void Class_8000DBA0::vfn_01(int a, int *pCount, int *pOut)
     fn_80183740(0);
     if (!lbl_803EB940) {
         FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803ECDDC, 1);
-        fn_8015D38C(0);
+        FEPlyrLoadSetScaleRamp(0);
     }
 }
 
@@ -793,7 +793,7 @@ int Class_8000DBA0::vfn_02(int a, int b, void **pOut)
         }
     }
     if (!lbl_803EB940) {
-        fn_8015D38C(1);
+        FEPlyrLoadSetScaleRamp(1);
     }
     return result;
 }
@@ -1279,7 +1279,7 @@ int Class_8000D980::vfn_02(int a, int b, void **pOut)
         PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
         PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
         PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     fn_801831A4();
@@ -1330,7 +1330,7 @@ void Class_8000D980::vfn_03(int index)
     PlayerLookSetSwitchFlagsA(1, lbl_8036A280.mUnknown00);
     PlayerLookSetSwitchFlagsB(0, lbl_8036A280.mUnknown01);
     PlayerLookSetSwitchFlagsB(1, lbl_8036A280.mUnknown01);
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
@@ -1413,7 +1413,7 @@ int Class_8000D940::vfn_02(int a, int b, void **pOut)
             PlayerLookSetDecalColors(1, lbl_8036A280.mUnknown0C);
             break;
         }
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     fn_80083F68(&lbl_8036A254);
@@ -1436,7 +1436,7 @@ void Class_8000D940::vfn_03(int index)
         PlayerLookSetDecalColors(1, value);
         break;
     }
-    fn_8015D180(FEPlyrGetBackIndex(), 15);
+    FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
@@ -1512,7 +1512,7 @@ int Class_8000D900::vfn_02(int a, int b, void **pOut)
             PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
             break;
         }
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     return -1;
@@ -1526,7 +1526,7 @@ void Class_8000D900::vfn_03(int index)
             lbl_8036A280.mUnknown02 = fn_8000AE0C(index);
             PlayerLookSetHatStyle(0, lbl_8036A280.mUnknown02);
             PlayerLookSetHatStyle(1, lbl_8036A280.mUnknown02);
-            fn_8015D180(FEPlyrGetBackIndex(), 15);
+            FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         }
         break;
@@ -1538,7 +1538,7 @@ void Class_8000D900::vfn_03(int index)
         }
         PlayerLookSetHeadDecalKind(0, lbl_8036A280.mUnknown0B);
         PlayerLookSetHeadDecalKind(1, lbl_8036A280.mUnknown0B);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     }
@@ -1623,7 +1623,7 @@ int Class_8000D8C0::vfn_02(int a, int b, void **pOut)
             PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
             break;
         }
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     return -1;
@@ -1640,7 +1640,7 @@ void Class_8000D8C0::vfn_03(int index)
         }
         PlayerLookSetFrontDecalKind(0, lbl_8036A280.mUnknown09);
         PlayerLookSetFrontDecalKind(1, lbl_8036A280.mUnknown09);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     case 2:
@@ -1651,7 +1651,7 @@ void Class_8000D8C0::vfn_03(int index)
         }
         PlayerLookSetBackDecalKind(0, lbl_8036A280.mUnknown0A);
         PlayerLookSetBackDecalKind(1, lbl_8036A280.mUnknown0A);
-        fn_8015D180(FEPlyrGetBackIndex(), 15);
+        FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
         break;
     }

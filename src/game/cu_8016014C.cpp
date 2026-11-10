@@ -32,7 +32,7 @@ extern "C" {
 void PlaDynClutApplyColors(void *p, int id, unsigned char *pColors);
 int PlayerLookShowsHair(int index);
 unsigned char CheatFlagsIsSet(int index);
-void fn_8015D254(int index);
+void FEPlyrLoadFinish(int index);
 int ResStreamOpen(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
 void ResStreamQueueRead(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
@@ -168,7 +168,7 @@ void fn_80160188(void)
             }
         }
         if (!busy) {
-            fn_8015D254(player);
+            FEPlyrLoadFinish(player);
         }
     }
 }
