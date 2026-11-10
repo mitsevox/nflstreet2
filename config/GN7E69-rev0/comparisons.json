@@ -50541,43 +50541,49 @@
     {
       "source": "src/engine/tdbiomem.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020D388-0x8020D534 (src/engine/tdbiomem.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 6 drafted bodies, partial: 0x8020D3F4, 0x8020D470. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv provisional unit ownership row for src/engine/tdbiomem.c, exact function/data extents, names, type/fields and compiler/source-form rows. Six complete callbacks and the complete 28-byte table are measured. Read/write holdouts omit one mr r5,r31 each (120/124 versus target 124/128 bytes); whole unit remains comparison-only with original bytes linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8020D388",
           "end": "0x8020D534"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B90",
+          "end": "0x802F9BAC"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8020D388",
+          "symbol": "_TDbIOMemOpen",
           "start": "0x8020D388",
           "end": "0x8020D3C0"
         },
         {
-          "symbol": "fn_8020D3C0",
+          "symbol": "_TDbIOMemClose",
           "start": "0x8020D3C0",
           "end": "0x8020D3F4"
         },
         {
-          "symbol": "fn_8020D3F4",
+          "symbol": "_TDbIOMemWrite",
           "start": "0x8020D3F4",
           "end": "0x8020D470"
         },
         {
-          "symbol": "fn_8020D470",
+          "symbol": "_TDbIOMemRead",
           "start": "0x8020D470",
           "end": "0x8020D4F0"
         },
         {
-          "symbol": "fn_8020D4F0",
+          "symbol": "_TDbIOMemSeek",
           "start": "0x8020D4F0",
           "end": "0x8020D52C"
         },
         {
-          "symbol": "fn_8020D52C",
+          "symbol": "_TDbIOMemCalcExtraSize",
           "start": "0x8020D52C",
           "end": "0x8020D534"
         }
