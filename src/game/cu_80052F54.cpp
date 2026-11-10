@@ -1,4 +1,4 @@
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 #include "game/StyleTracker.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
@@ -123,7 +123,7 @@ void fn_8017CA3C(int, int);
 void HudShowAlert(const char *);
 void MsgGameGetPlayerStatus(int, int *, int *);
 int fn_80186F7C(unsigned char);
-int fn_80188DD0(int);
+int TeamLogoGetSlot(int);
 int fn_801C2FE4(Node_80053674 *, const char *);
 void *fn_8021EA44(int);
 char *fn_80220BFC(int, int);
@@ -220,12 +220,12 @@ void fn_80052F54(Args_80052F54 *pArgs)
     if (fn_801485D4() == 0 && fn_80156704() == 0 && db != -1 && index <= 9) {
         int handle = fn_8022F3D4(fn_8022F358(db));
         int bit = 1 << index;
-        Class_8018FD64 cursor;
-        cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-        int value = cursor.Class_8018FD64::fn_8018FF9C(0x504C5555);
+        DbTableCursor cursor;
+        cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+        int value = cursor.DbTableCursor::GetColumnInt(0x504C5555);
         if (!(value & bit)) {
             value |= bit;
-            cursor.Class_8018FD64::fn_8019002C(0x504C5555, value);
+            cursor.DbTableCursor::SetColumnInt(0x504C5555, value);
             lbl_803EA544 = 1;
             lbl_803EA540 = bit;
             if (value == 0x3FF) {
@@ -262,7 +262,7 @@ void fn_800530E8(void)
         int value = fn_80084438(&cursor);
         Record_800530E8 *pRecord = (Record_800530E8 *)fn_80221BAC(fn_8021EA44(1), 4, id);
         if (value == 0) {
-            pText = fn_80220BFC(5, fn_80188DD0(i != 0));
+            pText = fn_80220BFC(5, TeamLogoGetSlot(i != 0));
         }
         lbl_80309CB4[i].mUnknown00 = pRecord->mUnknown00;
         lbl_80309CB4[i].mUnknown02 = pRecord->mUnknown02;

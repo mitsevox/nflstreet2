@@ -17,7 +17,7 @@ union ProfileListArgs_t {
 
 extern "C" {
 int fn_80186DF0(signed char *pIndices, int length);
-int fn_80186A10(int index, char *pText);
+int UserRecGetName(int index, char *pText);
 int fn_8022F358(int index);
 
 void MsgProfileListFill(ProfileListWord_t *pRecords, ProfileListWord_t *pFlags, ProfileListWord_t *pIndices)
@@ -32,7 +32,7 @@ void MsgProfileListFill(ProfileListWord_t *pRecords, ProfileListWord_t *pFlags, 
     }
     for (i = 0; i < 4; ++i) {
         if (indices[i] != -1) {
-            fn_80186A10(indices[i], text);
+            UserRecGetName(indices[i], text);
             TextRecord_t *pRecord = pRecords[count].mpRecord;
             strncpy(pRecord->mUnknown8, text, pRecord->mUnknown4);
             pFlags[count].mUnknown0 = 1;

@@ -25,8 +25,8 @@ extern char lbl_8030716C[];
 extern char lbl_803072C4[];
 extern float gFrameTimeScale;
 extern void *lbl_803EA368;
-extern void *lbl_803EB688;
-extern void *lbl_803EB690;
+extern void *gUISMainInfo;
+extern void *gUISSubInfo;
 
 void VptManagerMarketCamInit(void);
 void fn_8002CBB0(void *p, int a, float c, int b);
@@ -44,7 +44,7 @@ void PauseRequestClose(void);
 int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
 void fn_80066D5C(void);
-void fn_8006CA84(int a);
+void SndgUpdate(int a);
 void fn_800726B8(void);
 void fn_800728F8(void);
 void fn_80072C90(int a, int b);
@@ -86,10 +86,10 @@ void ScoringLogReset(void);
 int BannerUpdate(float a);
 void GameModeTypeInvalidate(void);
 void fn_80187C0C(void);
-void fn_8018A4BC(int a, unsigned int id, float value);
-void fn_8018A6C4(int a, int b);
-void fn_8018A710(int a, int b);
-void fn_8018A740(void);
+void UISGameHandleInput(int a, unsigned int id, float value);
+void UISGameLoadKeyItem(int a, int b);
+void UISGameFreeKeyItem(int a, int b);
+void UISGameRefreshAll(void);
 void MemCardUtilInit(void);
 void MemCardUtilShutdown(void);
 void fn_80194AEC(int a);
@@ -153,14 +153,14 @@ static void _InGamePadHandler(int a, int b, float c)
             fn_800AFD58(a, b, c);
             PauseRequestHandleInput(a, b, c);
             if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
-                fn_8018A4BC(a, b, c);
+                UISGameHandleInput(a, b, c);
             } else {
                 fn_8002CBB0(lbl_803EA368, a, c, b);
             }
         }
     } else if (b != 0x8F) {
         if (!fn_8002D060(lbl_803EA368) || fn_8002D2C0()) {
-            fn_8018A4BC(a, b, c);
+            UISGameHandleInput(a, b, c);
         } else {
             fn_8002CBB0(lbl_803EA368, a, c, b);
         }
@@ -168,7 +168,7 @@ static void _InGamePadHandler(int a, int b, float c)
     if (!PauseIsOpen() || fn_8002D060(lbl_803EA368) || b == 0x8F) {
         PauseIsOpen();
     } else {
-        fn_8018A740();
+        UISGameRefreshAll();
     }
     if (_InGame_bCancelRequest == 1) {
         PauseRequestClose();
@@ -311,10 +311,10 @@ int InGame::Init()
     fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
     EngineParamWords desc = { 4, 14 };
     fn_802345C4(&desc, 2);
-    fn_8018A6C4(1, 3);
-    fn_8018A6C4(1, 0);
+    UISGameLoadKeyItem(1, 3);
+    UISGameLoadKeyItem(1, 0);
     AudmonEventPost(0x6A, 0);
-    fn_80218FC4(lbl_803EB690, 1, 5, 0, 0);
+    fn_80218FC4(gUISSubInfo, 1, 5, 0, 0);
     return _InGame_bRunning;
 }
 
@@ -325,7 +325,7 @@ unsigned char InGame::Update()
 
     fn_80236F34();
     handled = 0;
-    fn_8018A740();
+    UISGameRefreshAll();
     _InGameUpdateHook1();
     _InGameUpdateHook2();
     _InGameUpdateHook3();
@@ -379,7 +379,7 @@ unsigned char InGame::Update()
     fn_800728F8();
     fn_800726B8();
     fn_80195F80();
-    fn_8006CA84(1);
+    SndgUpdate(1);
     fn_801CE82C();
     VptProcessViewports();
     fn_80236F34();
@@ -408,9 +408,9 @@ int InGame::Shutdown()
             RumbleEnable(1);
         }
     }
-    fn_8018A710(1, 0);
-    fn_8018A710(1, 3);
-    fn_8021956C(lbl_803EB690, 1, 5, 0);
+    UISGameFreeKeyItem(1, 0);
+    UISGameFreeKeyItem(1, 3);
+    fn_8021956C(gUISSubInfo, 1, 5, 0);
     EngineParamWords desc = { 6, 14 };
     fn_802345C4(&desc, 2);
     fn_80085A7C();
@@ -436,7 +436,7 @@ void InGamePause()
     InGameSetInputPaused(1);
     if (fn_800AD9B4() == 5) {
         fn_800B410C();
-        fn_8021956C(lbl_803EB688, 3, 2, 1);
+        fn_8021956C(gUISMainInfo, 3, 2, 1);
     }
 }
 

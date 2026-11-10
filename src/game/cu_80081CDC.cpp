@@ -1,7 +1,7 @@
 #include "game/Record_80082B18.h"
 #include "game/FaceFeatures.h"
-#include "game/Class_8018FD64.h"
-#include "game/Class_802938C0.h"
+#include "game/DbTableCursor.h"
+#include "game/FchrCursor.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
@@ -180,11 +180,11 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
 
 void fn_80082138(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
-    Class_802938C0 cursor;
+    FchrCursor cursor;
 
-    cursor.fn_80190098();
-    cursor.fn_801900D4(fn_80082280(pObject), 0);
-    pBlock->mUnknown0[0] = cursor.fn_801901A4();
+    cursor.OpenFchrTable();
+    cursor.FindFchrRow(fn_80082280(pObject), 0);
+    pBlock->mUnknown0[0] = cursor.GetFchrFhstCode();
     pBlock->mUnknown0[1] = DbCursorGetInt(pObject, 0x57424650);
     pBlock->mUnknown0[2] = DbCursorGetInt(pObject, 0x41454650) + 8;
     pBlock->mUnknown0[3] = DbCursorGetInt(pObject, 0x54484C50);
@@ -278,7 +278,7 @@ void fn_80082558(int a, int b)
 
 }
 
-#include "game/Class_8018FD64Inline.h"
+#include "game/DbTableCursorInline.h"
 
 extern "C" {
 
@@ -295,10 +295,10 @@ int fn_8008257C(int count, unsigned int *pOut)
 
         if (db != -1) {
             int handle = fn_8022F3D4(fn_8022F358((signed char)db));
-            Class_8018FD64 cursor;
+            DbTableCursor cursor;
 
-            cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-            *pOut |= cursor.fn_8018FF9C(0x504C5555);
+            cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+            *pOut |= cursor.GetColumnInt(0x504C5555);
         }
     }
     for (i = 0; i < 10; i++) {
@@ -319,10 +319,10 @@ void fn_80082688(int db)
     }
     {
         int handle = fn_8022F3D4(fn_8022F358(db));
-        Class_8018FD64 cursor;
+        DbTableCursor cursor;
 
-        cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-        cursor.fn_8019002C(0x504C5555, mask);
+        cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+        cursor.SetColumnInt(0x504C5555, mask);
     }
 }
 
@@ -330,10 +330,10 @@ void fn_8008274C(int db)
 {
     int mask = 0;
     int handle = fn_8022F3D4(fn_8022F358(db));
-    Class_8018FD64 cursor;
+    DbTableCursor cursor;
 
-    cursor.fn_8018FDEC(0x464E4955, 0x44494755, 0, 0, handle);
-    cursor.fn_8019002C(0x504C5555, mask);
+    cursor.OpenTable(0x464E4955, 0x44494755, 0, 0, handle);
+    cursor.SetColumnInt(0x504C5555, mask);
 }
 
 int fn_800827EC(int id, unsigned int value)

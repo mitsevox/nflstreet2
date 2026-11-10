@@ -136,7 +136,7 @@ int fn_800B7F34(Object_80039F5C *);
 void fn_8003AB08(Object_80039F5C *, int);
 void fn_801360D4(Object_80039F5C *);
 void fn_80136134(Object_80039F5C *, unsigned int);
-void fn_8006F0B8(int);
+void SndgSpchSetPlayFlags(int);
 unsigned int fn_800ABDA4(int);
 Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
 float fn_80124FE0(Object_80039F5C *, int);
@@ -202,7 +202,7 @@ void fn_8013474C(Object_80039F5C *p)
     float a = fn_80124FE0(p, 3);
     float b = fn_80125004(p, 3, 1);
     if (a > 7.0f || (!(a <= 5.0f) && !(b <= 5.0f)))
-        fn_8006F0B8(16);
+        SndgSpchSetPlayFlags(16);
 }
 
 int fn_801347D4(Object_80039F5C *p, State_80134E24 *s,

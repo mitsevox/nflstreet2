@@ -9,7 +9,7 @@ int MsgNameEntryHandleMessage(int id, void *pArgs, int c, int *pResult);
 int MsgMemCardScanHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
 int ProgressivePopupMsg(int id, int *pArgs, int c, int *pResult);
 int PopupScreen20Msg(int id, void *pArgs, int c, int *pResult);
-int fn_80186324(unsigned int id, void *pArgs, int c, int *pResult);
+int CtrlSelHandleMessage(unsigned int id, void *pArgs, int c, int *pResult);
 void fn_801CEB58(int a);
 void fn_8023CFD0(int a);
 }
@@ -44,7 +44,7 @@ extern "C" int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult
 {
     switch (kind) {
     case 2:
-        return fn_80186324(id, pArgs, c, pResult);
+        return CtrlSelHandleMessage(id, pArgs, c, pResult);
     case 4:
         return MsgMemCardScanHandleMessage(id, pArgs, c, pResult);
     case 1:

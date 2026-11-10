@@ -289,8 +289,8 @@ void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void PauseRequestCancel(void);
 void SndgAmbPostCue(int type);
-void fn_8006EA04(int channel, unsigned int level);
-void fn_8006EC24(void);
+void SndgSetVolumeOption(int channel, unsigned int level);
+void SndgApplyVolumeOptions(void);
 void fn_8006F824(int a);
 void fn_80072C90(int a, int b);
 int fn_80072E6C(void);
@@ -430,7 +430,7 @@ void fn_80158A4C(void);
 void fn_80158AA8(void);
 void fn_80158BB4(unsigned int mask);
 
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern const float lbl_803ED6A4;
 extern const float lbl_803ED6A8;
 }
@@ -543,7 +543,7 @@ extern "C" {
 
 void fn_801564DC(int index, int value)
 {
-    fn_8021D7B8(lbl_803EB688, lbl_802DEBD0[index], 1, &value);
+    fn_8021D7B8(gUISMainInfo, lbl_802DEBD0[index], 1, &value);
 }
 
 void fn_8015651C(void)
@@ -671,7 +671,7 @@ void fn_80156854(void)
     fn_80178F20(0);
     fn_8007F6F8(0, lbl_803EB310);
     lbl_803EB310 = 1;
-    fn_8006EC24();
+    SndgApplyVolumeOptions();
     lbl_803EB30C = 0xFFFF;
     lbl_803EB304 = 0xFFFF;
     fn_8015672C(5);
@@ -1000,7 +1000,7 @@ int fn_80157080(void)
             fn_8015651C();
             fn_801485F4();
             fn_80072F04();
-            fn_8006EC24();
+            SndgApplyVolumeOptions();
             fn_80072F04();
             lbl_803ECA58 = 0;
         }
@@ -1042,7 +1042,7 @@ int fn_80157080(void)
         }
     } else {
         fn_80072F04();
-        fn_8006EC24();
+        SndgApplyVolumeOptions();
         fn_80072F04();
     }
 
@@ -1079,7 +1079,7 @@ short fn_80157448(int team, int unused, short value)
 
 void fn_801574DC(int value)
 {
-    fn_8021D7B8(lbl_803EB688, 0x80000072, 1, &value);
+    fn_8021D7B8(gUISMainInfo, 0x80000072, 1, &value);
 }
 
 void fn_80157514(void)
@@ -1692,11 +1692,11 @@ void fn_8015844C(int show)
         lbl_8031BEF0.mpText = lbl_8031C00C;
         lbl_8031BEF0.mSize = fn_801C3180(lbl_8031C00C) + 1;
         lbl_803ECA30 = &lbl_8031BEF0;
-        fn_8021D7B8(lbl_803EB688, 0x80000080, 1, &lbl_803ECA2C);
-        fn_8021D7B8(lbl_803EB688, 0x80000081, 1, &lbl_803ECA30);
+        fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &lbl_803ECA2C);
+        fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &lbl_803ECA30);
     }
     lbl_803ECA34 = show;
-    fn_8021D7B8(lbl_803EB688, 0x8000007F, 1, &lbl_803ECA34);
+    fn_8021D7B8(gUISMainInfo, 0x8000007F, 1, &lbl_803ECA34);
 }
 
 void fn_80158A4C(void)
@@ -1715,10 +1715,10 @@ void fn_80158AA8(void)
     if (fn_80072E6C()) {
         fn_80072F04();
     }
-    fn_8006EA04(3, 100);
+    SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
     volume = fn_8007F828(5) * 10;
-    fn_8006EA04(2, volume * 40u / 100);
+    SndgSetVolumeOption(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {
         QueryCursor cursor;
         int a;
@@ -1799,7 +1799,7 @@ void Class_802A3B80::vfn_04(float dt)
     unsigned short other;
     int busy;
 
-    fn_80219650(lbl_803EB688, &id, &other);
+    fn_80219650(gUISMainInfo, &id, &other);
     busy = 0;
     if (id == 1) {
         busy = other == 2;
@@ -1900,9 +1900,9 @@ void Class_802A3B10::vfn_04(float dt)
     HudSetGameBreakerMeter(0, 0.0f, 0, 0);
     args[0] = 1;
     args[1] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
     args[0] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x8000001A, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
     fn_80156E9C(fn_801568F8()->vfn_07()->mPrompts, 1, 0);
     PauseRequestCancel();
     if (!PauseIsUnblocked()) {
@@ -2045,17 +2045,17 @@ void Class_802A3A48::vfn_04(float dt)
                 args[0] = key;
                 args[1] = 1;
                 lbl_803EB325 = 1;
-                fn_80218FC4(lbl_803EB688, 1, 2, 2, args);
-                fn_802195E4(lbl_803EB688, 1, 2);
+                fn_80218FC4(gUISMainInfo, 1, 2, 2, args);
+                fn_802195E4(gUISMainInfo, 1, 2);
             } else {
                 int busy = 0;
 
-                fn_80219650(lbl_803EB688, &id, &other);
+                fn_80219650(gUISMainInfo, &id, &other);
                 if (id == 1) {
                     busy = other == 2;
                 }
                 if (!busy) {
-                    fn_802195E4(lbl_803EB688, 1, 3);
+                    fn_802195E4(gUISMainInfo, 1, 3);
                     lbl_803EB325 = 0;
                 }
             }

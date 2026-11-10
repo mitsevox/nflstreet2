@@ -20,7 +20,7 @@ struct SysInitParams_t {
 };
 
 extern "C" {
-int fn_80185274(void);
+int MemCardUIIsResetLocked(void);
 int DSInit(void);
 int DSShutdown(void);
 void ArenaSetupInit(void);
@@ -44,7 +44,7 @@ Sys gSys;
 extern "C" {
 static int _SysCanReset()
 {
-    return !fn_80185274();
+    return !MemCardUIIsResetLocked();
 }
 }
 

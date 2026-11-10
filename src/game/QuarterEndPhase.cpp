@@ -49,7 +49,7 @@ struct QuarterEndClipVariant_t {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void PlayerObjSetDrawReady(int a);
 void PauseOpenScreen(int a, int b, int c);
@@ -374,7 +374,7 @@ void QuarterEndPhase::OnUpdate(float f)
     switch (_QuarterEnd_pState->mState) {
     case 0:
         _QuarterEnd_bElementShown = 0;
-        fn_80219650(lbl_803EB688, &a, &b);
+        fn_80219650(gUISMainInfo, &a, &b);
         if (a == 3 && b == 2) {
             break;
         }
@@ -425,11 +425,11 @@ void QuarterEndPhase::OnUpdate(float f)
         _QuarterEnd_pState->mUnknown8++;
         fn_80096B1C(_QuarterEnd_pState->mUnknown12);
         if (_QuarterEnd_bElementShown == 0 && _QuarterEnd_pState->mUnknown8 > 59) {
-            fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
+            fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
             _QuarterEnd_bElementShown = 1;
         }
         if (_QuarterEnd_pState->mUnknown8 > 600) {
-            fn_8021956C(lbl_803EB688, 3, 5, 1);
+            fn_8021956C(gUISMainInfo, 3, 5, 1);
             _QuarterEnd_bElementShown = 0;
             QuarterEndEndWait();
         }
@@ -476,7 +476,7 @@ void QuarterEndPhase::OnUpdate(float f)
             }
         } else {
             if (_QuarterEnd_bElementShown) {
-                fn_8021956C(lbl_803EB688, 3, 5, 1);
+                fn_8021956C(gUISMainInfo, 3, 5, 1);
                 _QuarterEnd_bElementShown = 0;
             }
             fn_800AD910(7, 0.0f);

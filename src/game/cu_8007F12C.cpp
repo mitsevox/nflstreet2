@@ -13,12 +13,12 @@ struct ColumnDefault_802D6798 {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int fn_801FA428(int file, Table_8007F19C *pTables, Expression_8007F19C *pExpression,
                 DbColumnValue *pList, Result_8007F19C *pResult, int a);
-void fn_8006EA04(int channel, unsigned char level);
-void fn_8006EC24(void);
+void SndgSetVolumeOption(int channel, unsigned char level);
+void SndgApplyVolumeOptions(void);
 int fn_8013D0D0(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
@@ -133,7 +133,7 @@ void fn_8007F328(int reset)
     } else {
         fn_8007F298();
     }
-    fn_8006EC24();
+    SndgApplyVolumeOptions();
 }
 
 int fn_8007F374(void)
@@ -226,13 +226,13 @@ void fn_8007F6F8(int id, int value)
     if (id >= 3 && id <= 5) {
         switch (id) {
         case 3:
-            fn_8006EA04(3, value * 10);
+            SndgSetVolumeOption(3, value * 10);
             break;
         case 4:
-            fn_8006EA04(1, value * 10);
+            SndgSetVolumeOption(1, value * 10);
             break;
         case 5:
-            fn_8006EA04(2, value * 10);
+            SndgSetVolumeOption(2, value * 10);
             break;
         }
     }
@@ -247,11 +247,11 @@ int fn_8007F828(int id)
     if ((unsigned int)id <= 22) {
         if (GameModeTypeGet() == 8) {
             override = 1;
-            if (FELoopIsMainFEActive() != 0 && lbl_803EB688 != 0) {
+            if (FELoopIsMainFEActive() != 0 && gUISMainInfo != 0) {
                 unsigned short state;
                 unsigned short other;
 
-                fn_80219650(lbl_803EB688, &state, &other);
+                fn_80219650(gUISMainInfo, &state, &other);
                 if (state == 5 || state == 0) {
                     allowed = 0;
                 }

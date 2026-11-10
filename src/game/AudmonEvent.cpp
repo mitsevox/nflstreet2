@@ -14,7 +14,7 @@
 typedef unsigned int (*AudmonClockFn_t)(int);
 
 extern "C" {
-void fn_8006CE84(AudmonEvent_t *pRecord);
+void SndgHandleEvent(AudmonEvent_t *pRecord);
 int MemFill(void *pDest, int size, int value, int width);
 void fn_802384C4(int handle);
 void *fn_8023850C(int handle);
@@ -41,7 +41,7 @@ extern "C" void AudmonEventShutdown(void)
 extern "C" void AudmonEventStartInGame(void)
 {
     _AudmonEvent_pfnClock = fn_8009D990;
-    fn_80238680(_AudmonEvent_iQueue, fn_8006CE84);
+    fn_80238680(_AudmonEvent_iQueue, SndgHandleEvent);
 }
 
 extern "C" AudmonEvent_t *AudmonEventGetRecord(void)

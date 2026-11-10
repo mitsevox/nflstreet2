@@ -31,7 +31,7 @@ DbCursor *fn_80182DBC(void);
 int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
-void fn_80188CBC(int, int, int, int, char *);
+void TeamLogoRequestTint(int, int, int, int, char *);
 int ChalGetTournamentSlot();
 void ChalSetTournamentSlot(int);
 int MsgGameGetSetupState();
@@ -240,7 +240,7 @@ extern "C" void TournBracketEnter(int *pIndex)
         values[0] = fn_800841AC(fn_80182DBC());
         values[1] = fn_800841D8(fn_80182DBC());
         values[2] = fn_80084204(fn_80182DBC());
-        fn_80188CBC(0, 4, fn_80084158(fn_80182DBC()), 172, values);
+        TeamLogoRequestTint(0, 4, fn_80084158(fn_80182DBC()), 172, values);
     }
     _TournBracket_iUserSeed = ChalGetTournamentSlot();
     if (_TournBracket_iUserSeed == -1) {

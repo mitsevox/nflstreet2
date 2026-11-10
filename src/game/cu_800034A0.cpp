@@ -5,7 +5,7 @@
 
 extern "C" {
 void *fn_801D2B7C(int size, int a, int b);
-int fn_8018A854(void);
+int UISGameGetMainViewport(void);
 void VptSetCallback(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
 int fn_80029890(int type);
@@ -31,7 +31,7 @@ void DbCheckVersion(int handle);
 void fn_80029CE0(int a, int b);
 int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
-void fn_8006EC24(void);
+void SndgApplyVolumeOptions(void);
 void fn_8007F328(int a);
 void fn_8007F374(void);
 int fn_800298E8(int a, int b);
@@ -77,8 +77,8 @@ void fn_800034FC(void)
     lbl_80367580.mFillToEnd = 1;
     lbl_80367580.mPosition = 0;
 
-    if (fn_8018A854()) {
-        VptSetCallback(fn_8018A854(), 2, (void *)fn_8002A804, 31);
+    if (UISGameGetMainViewport()) {
+        VptSetCallback(UISGameGetMainViewport(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -122,8 +122,8 @@ void fn_80003620(void)
     lbl_80367580.mFillToEnd = 1;
     lbl_80367580.mPosition = 0;
 
-    if (fn_8018A854()) {
-        VptSetCallback(fn_8018A854(), 2, (void *)fn_8002A804, 31);
+    if (UISGameGetMainViewport()) {
+        VptSetCallback(UISGameGetMainViewport(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -185,7 +185,7 @@ void fn_800037C0(int a, int *b)
             fn_8007F328(1);
             fn_8007F374();
         } else {
-            fn_8006EC24();
+            SndgApplyVolumeOptions();
             fn_801D6B24(buf + 8, 17);
             fn_80029A40(type, slot, fn_800298E8(type, slot), buf + 8);
         }
@@ -336,8 +336,8 @@ int fn_800039E4(int a, int *b, int *c)
     }
 
     if (*b != 0 && lbl_803EB8D4 != 0) {
-        if (fn_8018A854()) {
-            VptRemoveCallback(fn_8018A854(), (void *)fn_8002A804);
+        if (UISGameGetMainViewport()) {
+            VptRemoveCallback(UISGameGetMainViewport(), (void *)fn_8002A804);
         }
         lbl_803EB8D4 = 0;
     }

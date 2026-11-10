@@ -30,7 +30,7 @@ void fn_80227638(void *, void *, void *);
 float fn_8022781C(void *, void *);
 int fn_801FA0BC(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
-int fn_8018AFF0(const char *);
+int DbTextToTag(const char *);
 int fn_80178308(void);
 unsigned int fn_80178D18(int);
 int fn_80178D70(int);
@@ -275,9 +275,9 @@ int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char
             fn_801C2E18(lt, "lt%02d", j+1);
             fn_801C2E18(ls, "ls%02d", j+1);
             int x, y, u, v, type, speed, link, arrow, color;
-            int axTag = fn_8018AFF0(ax), ayTag = fn_8018AFF0(ay), atTag = fn_8018AFF0(at);
-            int auTag = fn_8018AFF0(au), avTag = fn_8018AFF0(av), ctTag = fn_8018AFF0(ct);
-            int spTag = fn_8018AFF0(sp), ltTag = fn_8018AFF0(lt), lsTag = fn_8018AFF0(ls);
+            int axTag = DbTextToTag(ax), ayTag = DbTextToTag(ay), atTag = DbTextToTag(at);
+            int auTag = DbTextToTag(au), avTag = DbTextToTag(av), ctTag = DbTextToTag(ct);
+            int spTag = DbTextToTag(sp), ltTag = DbTextToTag(lt), lsTag = DbTextToTag(ls);
             int status = fn_801FCE10(0, "use \x8c select \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 from 'LTRA' where 'LTRA' = \x85\n",
                 (int)handle, axTag,&x,ayTag,&y,atTag,&type,auTag,&u,avTag,&v,ctTag,&link,spTag,&speed,ltTag,&arrow,lsTag,&color,record->mUnknown0Word);
             if (!status) {

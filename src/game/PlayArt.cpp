@@ -23,12 +23,12 @@ void fn_80166BE8(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *, int, int,
 int fn_8016631C(PlayArtPlayer_t *, int, void *, void *, void *, void *, int);
 int fn_80165770(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *);
 PlayBookTeam_t *PlayBookGetTeam(int);
-void fn_8018A8C8(int);
+void UISGameSetDrawMode(int);
 int GameModeTypeIsSpecial(void);
 int fn_801486A0(void);
 int fn_800BA6F8(void);
 void PlyrIconQueueAdd(float, float, void *, unsigned char);
-void fn_8018A908(void (*)(int, float, float, float, float));
+void UISViewObjSetDrawFunc(void (*)(int, float, float, float, float));
 void PlyrIconShutdown(void);
 int ResSetMemFlags(int);
 void fn_801A1240(int);
@@ -91,7 +91,7 @@ void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int 
 
 void PlayArtDraw(int code, float x, float y, float, float)
 {
-    fn_8018A8C8(5);
+    UISGameSetDrawMode(5);
     int flag = 1;
     if ((!GameModeTypeIsSpecial() && fn_801486A0() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
         flag = 0;
@@ -128,7 +128,7 @@ void PlayArtStart(void)
     fn_801C1F94(_PlayArt_aFlip[0], PlayBookGetTeam(0)->mUnknown20.mUnknown10, 9);
     fn_801C1F94(_PlayArt_aFlip[1], PlayBookGetTeam(1)->mUnknown20.mUnknown10, 9);
     fn_801C1F94(_PlayArt_aFlip[2], 0, 9);
-    fn_8018A908(PlayArtDraw);
+    UISViewObjSetDrawFunc(PlayArtDraw);
 }
 void PlayArtSetFlip(signed char group, int value, int index)
 {
@@ -140,7 +140,7 @@ void PlayArtSetFlip(signed char group, int value, int index)
 }
 void PlayArtStop(void)
 {
-    fn_8018A908(0);
+    UISViewObjSetDrawFunc(0);
     PlyrIconShutdown();
 }
 void PlayArtMemInit(int value)

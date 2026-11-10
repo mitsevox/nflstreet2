@@ -44,20 +44,20 @@ int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
 void FEPlyrLoadReset(int value);
 void PositionAbbrevFormat(int a, char *pText);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-int fn_8018BDFC(int a, int b, int *pIds, int *pCount);
-void fn_8018BF10(int a, int b);
-void fn_8018C15C(int a, int b);
-void fn_8018C1A8(int a, int b);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+int StoryTeamLoadToStats(int a, int b, int *pIds, int *pCount);
+void StoryTeamStoreFromStats(int a, int b);
+void StoryPlayerMoveToTeam(int a, int b);
+void StoryPlayerDelete(int a, int b);
 void fn_8018C48C(int tag);
 int fn_8018D890(int a, int b);
 void fn_8018D8EC(int a, int b);
 void fn_8018DC18(int a, int b);
 void fn_8018DD4C(int a, int b, int c);
-int fn_8018E8F4(int a);
-void fn_8018E920(int index, int value);
-int fn_8018E94C(int a);
-void fn_8018E978(int index, int value);
+int StoryGetFlag100(int a);
+void StorySetFlag100(int index, int value);
+int StoryGetFlag200(int a);
+void StorySetFlag200(int index, int value);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
@@ -130,7 +130,7 @@ int MsgPlayerPickupGetAddFlag(void)
     int result = 0;
 
     if (_MsgPlayerPickup_bCopyMode != 0) {
-        result = fn_8018E8F4(_MsgPlayerPickup_cProfile);
+        result = StoryGetFlag100(_MsgPlayerPickup_cProfile);
     }
     return result;
 }
@@ -140,7 +140,7 @@ int MsgPlayerPickupGetDropFlag(void)
     int result = 0;
 
     if (_MsgPlayerPickup_bCopyMode != 0) {
-        result = fn_8018E94C(_MsgPlayerPickup_cProfile);
+        result = StoryGetFlag200(_MsgPlayerPickup_cProfile);
     }
     return result;
 }
@@ -179,7 +179,7 @@ void MsgPlayerPickupCopyTeam(int db)
     int rows;
     int value;
 
-    _MsgPlayerPickup_iTeam = fn_8018BDFC(db, 1, ids, &n);
+    _MsgPlayerPickup_iTeam = StoryTeamLoadToStats(db, 1, ids, &n);
     fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", fn_800602E0());
     desc.mUnknown0 = 2;
     desc.mUnknown4 = 4;
@@ -426,8 +426,8 @@ unsigned char MsgPlayerPickupInit(void)
         color[0] = fn_800841AC(&cursor);
         color[1] = fn_800841D8(&cursor);
         color[2] = fn_80084204(&cursor);
-        fn_80188CBC(0, 4, fn_80084158(&cursor), 172, color);
-        fn_80188CBC(1, 4, fn_80084158(&cursor), 172, color);
+        TeamLogoRequestTint(0, 4, fn_80084158(&cursor), 172, color);
+        TeamLogoRequestTint(1, 4, fn_80084158(&cursor), 172, color);
     }
     fn_80083F68(&cursor);
     return _MsgPlayerPickup_bTeamFull;
@@ -437,9 +437,9 @@ void MsgPlayerPickupApplyDrop(void)
 {
     if (_MsgPlayerPickup_iDropPlayer != 0x7FFF) {
         if (_MsgPlayerPickup_bCopyMode != 0) {
-            fn_8018C1A8(_MsgPlayerPickup_iDropPlayer, _MsgPlayerPickup_iTeam);
+            StoryPlayerDelete(_MsgPlayerPickup_iDropPlayer, _MsgPlayerPickup_iTeam);
             if (MsgPlayerPickupGetDropFlag()) {
-                fn_8018E978(_MsgPlayerPickup_cProfile, 0);
+                StorySetFlag200(_MsgPlayerPickup_cProfile, 0);
             }
         } else {
             fn_8018DC18(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iDropPlayer);
@@ -457,9 +457,9 @@ void MsgPlayerPickupApplyAdd(void)
         }
         if (!found) {
             if (_MsgPlayerPickup_bCopyMode != 0) {
-                fn_8018C15C(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iAddPlayer);
+                StoryPlayerMoveToTeam(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iAddPlayer);
                 if (MsgPlayerPickupGetAddFlag()) {
-                    fn_8018E920(_MsgPlayerPickup_cProfile, 0);
+                    StorySetFlag100(_MsgPlayerPickup_cProfile, 0);
                 }
             } else {
                 fn_8018DD4C(_MsgPlayerPickup_iTeam, _MsgPlayerPickup_iAddPlayer, 0);
@@ -479,7 +479,7 @@ void MsgPlayerPickupShutdown(void)
     fn_8008056C(&_MsgPlayerPickup_RosterCursor);
     FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
-        fn_8018BF10(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
+        StoryTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
         fn_8018C48C(0x54415453);
         _MsgPlayerPickup_bCopyMode = 0;
         fn_80060278();

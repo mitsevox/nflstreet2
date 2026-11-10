@@ -40,7 +40,7 @@ int SndgCrowd::Init()
         mpState.mp->mUnknown4 = SndgPathLoadMap(mpState.mp->mpUnknown0, 1);
         SndgPathCreateTrack(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
         SndgPathSetTrackVolume(0x14000001, _SndgCrowd_uVolume);
-        fn_8006DE54(0x14000001, 127);
+        SndgPathControl(0x14000001, 127);
     }
     return 1;
 }

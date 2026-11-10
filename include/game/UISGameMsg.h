@@ -9,7 +9,7 @@
 struct FeatsScreenArgs_t;
 struct ColorPickMsg_t;
 union MsgGameArg_t;
-struct Params_80185284;
+struct MemCardUIArgs_t;
 
 extern "C" {
 int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
@@ -19,11 +19,11 @@ int FeatsScreenHandleMessage(unsigned int id, FeatsScreenArgs_t *pArgs, int a, i
 int ColorPickHandleMsg(int id, ColorPickMsg_t *pBlock, int unused, int *pResult);
 int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGameArg_t *pResult);
-int fn_801811C8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_80181238(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FEMiscHandleStatsFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FEMiscHandleFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *pResult);
-int fn_8018422C(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult);
+int MemCardUIEmptyHandler(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, int *pResult);
 
 int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 }

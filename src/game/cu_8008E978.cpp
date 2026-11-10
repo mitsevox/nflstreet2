@@ -53,7 +53,7 @@
 #include "game/BigObjInst.h"
 #include "game/cu_8003108C.h"
 #include "game/FeatAwards.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
 #include "game/GameModeType.h"
 #include "game/PauseMenu.h"
@@ -328,7 +328,7 @@ extern unsigned char lbl_803EA98C;
 extern int lbl_803EA990;
 extern char lbl_803EA994[7];
 extern unsigned char lbl_803EA99B;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern Entry_8009B87C lbl_802D7BF8;
 extern Entry_80219044 lbl_8030E6D0;
 extern Block_80099630 *lbl_803EC92C;
@@ -2810,7 +2810,7 @@ struct Pair_800A554C {
 
 extern "C" {
 void fn_801469A0(void);
-void fn_800540E0(void);
+void LevelUnload(void);
 int fn_801486A0(void);
 void fn_80146E78(void);
 void LevelUpdate(void);
@@ -2970,7 +2970,7 @@ extern "C" void fn_800A2F3C(int value)
 extern "C" void fn_800A30B8(void)
 {
     fn_801469A0();
-    fn_800540E0();
+    LevelUnload();
     if (lbl_8030E6DC.mpCallback4 != 0) {
         lbl_8030E6DC.mpCallback4();
     }
@@ -5171,7 +5171,7 @@ extern "C" void fn_8009BA10(int value)
     args[3] = (int)&lbl_8030E6D0;
     lbl_8030E6D0.mLength = fn_801C3180(lbl_803EA994);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(lbl_803EB688, 0x80000019, 4, args);
+        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
     }
     lbl_803EA99B = value;
 }
@@ -6327,7 +6327,7 @@ extern "C" void fn_800A7A0C(int team)
     HudResetGameBreaker(team);
     args[0] = team;
     args[1] = 0;
-    fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
+    fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
     StyleTrackerSetMeter(team, 0, 0);
     fn_800A65BC();
     if (lbl_803EAA4D != 0) {
@@ -7229,7 +7229,7 @@ void fn_80165110(Record_80067338 *pRecord, int a);
 Object_800670B4 *PlayBookGetFormation(int team);
 void fn_800B4250(int enable, int own);
 
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 int fn_800B1AAC(void *p);
 void fn_800B2670(unsigned char value);
 void *fn_800B9A44(Class_80297C60 *p);
@@ -7714,12 +7714,12 @@ extern "C" void fn_800B30C8(void)
 {
     if (fn_800BA6F8() != 0) {
         fn_800B40D8(1);
-        fn_80218FC4(lbl_803EB688, fn_800B30B8(), fn_800B30C0(), 0, 0);
-        fn_802195E4(lbl_803EB688, fn_800B30B8(), fn_800B30C0());
+        fn_80218FC4(gUISMainInfo, fn_800B30B8(), fn_800B30C0(), 0, 0);
+        fn_802195E4(gUISMainInfo, fn_800B30B8(), fn_800B30C0());
     } else if (fn_800B65A0(fn_80178308()) != 255 || fn_800B65A0(fn_80178320()) != 255) {
         fn_800B40D8(1);
-        fn_80218FC4(lbl_803EB688, 3, 2, 0, 0);
-        fn_802195E4(lbl_803EB688, 3, 2);
+        fn_80218FC4(gUISMainInfo, 3, 2, 0, 0);
+        fn_802195E4(gUISMainInfo, 3, 2);
     }
     lbl_803EAB34->mUnknown8 |= 1;
     PauseUnblock();
@@ -7732,7 +7732,7 @@ extern "C" void fn_800B31B0(int a)
         fn_800B3470();
         fn_800B40D8(0);
         if (a != 0) {
-            fn_8021956C(lbl_803EB688, fn_800B30B8(), fn_800B30C0(), 1);
+            fn_8021956C(gUISMainInfo, fn_800B30B8(), fn_800B30C0(), 1);
         }
     } else {
         fn_800B4250(0, 1);
@@ -7740,7 +7740,7 @@ extern "C" void fn_800B31B0(int a)
         if (fn_800B65A0(fn_80178308()) != 255 || fn_800B65A0(fn_80178320()) != 255) {
             fn_800B40D8(0);
             if (a != 0) {
-                fn_8021956C(lbl_803EB688, 3, 2, 1);
+                fn_8021956C(gUISMainInfo, 3, 2, 1);
             }
         }
     }
@@ -8044,7 +8044,7 @@ void Class_80297B50::vfn_04(float dt)
         Arg_8021D7B8 arg;
         lbl_803EAB28 = count;
         arg.i = count;
-        fn_8021D7B8(lbl_803EB688, 0x80000007, 1, &arg);
+        fn_8021D7B8(gUISMainInfo, 0x80000007, 1, &arg);
         if (count <= 5) {
             AudmonEventPost(20, 0);
         }
@@ -8103,7 +8103,7 @@ extern "C" void fn_800B3EC0(int a, int b)
 }
 
 extern "C" {
-void fn_8006CAEC(void);
+void SndgNullHook(void);
 void fn_800B50E8(int team);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
@@ -8119,7 +8119,7 @@ extern "C" void fn_800B3EFC(int team)
     unsigned char b;
     int i = 0;
 
-    fn_8006CAEC();
+    SndgNullHook();
     Object_800670B4 *pTeam = PlayBookGetFormation(team);
     int count = fn_80178D18(team);
     for (; i < count; i++) {
@@ -8329,8 +8329,8 @@ int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
-              unsigned int phase);
+int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                                  Object_80039F5C *p, unsigned int phase);
 int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
@@ -8378,7 +8378,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[84] = fn_800DC36C;
     lbl_8030FB60[91] = fn_800DD69C;
     lbl_8030FB60[203] = fn_800DDD24;
-    lbl_8030FB60[193] = fn_800D8A24;
+    lbl_8030FB60[193] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[157] = fn_800DCC14;
     lbl_8030FB60[236] = fn_80102A78;
     lbl_8030FB60[86] = fn_800DD2E8;
@@ -8387,9 +8387,9 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[192] = fn_800D7E9C;
     lbl_8030FB60[204] = fn_8010680C;
     lbl_8030FB60[48] = fn_800EC674;
-    lbl_8030FB60[43] = fn_800D8A24;
-    lbl_8030FB60[44] = fn_800D8A24;
-    lbl_8030FB60[165] = fn_800D8A24;
+    lbl_8030FB60[43] = PlayerLocoHandleMomentumState;
+    lbl_8030FB60[44] = PlayerLocoHandleMomentumState;
+    lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[160] = fn_800DCC14;
     lbl_8030FB60[159] = fn_800DCC14;
     lbl_8030FB60[67] = fn_8009A344;
@@ -8559,7 +8559,7 @@ int fn_800BA94C(void);
 void fn_800BA9C0(int value);
 void fn_800BAA30(int value);
 int fn_800BAAB8(void);
-int fn_8006D884(int idx);
+int SndgChannelIsStreamBusy(int idx);
 GameCamera_t *CamGameGetCamera(int index);
 Object_800670B4 *PlayBookGetFormation(int team);
 void fn_80177F88(int value);
@@ -8833,7 +8833,7 @@ extern "C" void fn_800BACF4(void)
 
 extern "C" int fn_800BACF8(void)
 {
-    return fn_8006D884(4);
+    return SndgChannelIsStreamBusy(4);
 }
 
 extern "C" {
@@ -8881,7 +8881,7 @@ extern "C" void fn_800BADD4(void)
 
 extern "C" int fn_800BAE40(void)
 {
-    return fn_8006D884(4);
+    return SndgChannelIsStreamBusy(4);
 }
 
 extern "C" int fn_800BAE64(void)
@@ -9418,10 +9418,10 @@ int fn_80061DE8(void);
 }
 
 #include "game/GameModeType.h"
-#include "game/cu_8018EC68.h"
+#include "game/StevTable.h"
 
 extern "C" {
-VetsRow_8018EC68 *fn_8005FC7C(void);
+StevRow_t *fn_8005FC7C(void);
 
 extern Record_800BAE7C lbl_802D9B30[];
 }
@@ -9482,7 +9482,7 @@ extern "C" void fn_800BC190(int index, int value)
 
 extern "C" void fn_800BC3F0(void)
 {
-    VetsRow_8018EC68 *pRow;
+    StevRow_t *pRow;
 
     lbl_803EC98C->mUnknown2A = -1;
     lbl_803EC98C->mUnknown14 = 4;
@@ -9505,7 +9505,7 @@ void Class_80297BF8::vfn_06()
             show = (unsigned int)fn_80061DE8() <= 4;
         }
         if (show) {
-            fn_80218FC4(lbl_803EB688, 3, 8, 0, 0);
+            fn_80218FC4(gUISMainInfo, 3, 8, 0, 0);
         }
     }
 }
@@ -9513,7 +9513,7 @@ void Class_80297BF8::vfn_06()
 void Class_80297BF8::vfn_07()
 {
     if (fn_800C1E40() == 0) {
-        fn_8021956C(lbl_803EB688, 3, 8, 1);
+        fn_8021956C(gUISMainInfo, 3, 8, 1);
     }
 }
 
@@ -9605,7 +9605,7 @@ extern unsigned char lbl_803EAA99;
 extern unsigned int lbl_803EAA9C;
 extern Block_800ABD1C *lbl_803EAAB8;
 extern Block_800AD634 *lbl_803EAAD4;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 extern char *lbl_803EC960;
 extern char *lbl_803EC964[2];
 extern Table_800AA80C lbl_802D8194;
@@ -9983,7 +9983,7 @@ extern "C" void fn_800AAAFC(void)
 
 extern "C" {
 void fn_800731D0(int a);
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 void fn_800C1E50(void);
 
 extern Class_80297B90 lbl_803EC904;
@@ -9993,17 +9993,17 @@ void Class_80297B90::vfn_06()
 {
     if (ChallengeIsActive() == 0) {
         fn_800731D0(0);
-        fn_80218FC4(lbl_803EB688, 3, 5, 0, 0);
-        fn_8021D7B8(lbl_803EB688, 0x80000035, 0, 0);
+        fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
+        fn_8021D7B8(gUISMainInfo, 0x80000035, 0, 0);
     }
 }
 
 void Class_80297B90::vfn_07()
 {
     if (ChallengeIsActive() == 0) {
-        fn_8006C854(119, 0);
-        fn_8021D7B8(lbl_803EB688, 0x80000034, 0, 0);
-        fn_8021956C(lbl_803EB688, 3, 5, 1);
+        SndgSfxPlay(119, 0);
+        fn_8021D7B8(gUISMainInfo, 0x80000034, 0, 0);
+        fn_8021956C(gUISMainInfo, 3, 5, 1);
     }
 }
 
@@ -10014,7 +10014,7 @@ void Class_80297B90::vfn_08()
 
 void Class_80297B90::vfn_09()
 {
-    fn_8021956C(lbl_803EB688, 3, 6, 1);
+    fn_8021956C(gUISMainInfo, 3, 6, 1);
 }
 
 int Class_80297B90::vfn_10()
@@ -10216,15 +10216,15 @@ extern "C" int fn_800AB1B8(void *p, float dt)
         FeatClearAwarded();
         lbl_803EAA9A = 0;
         lbl_803EAA9C = 0;
-        fn_8021956C(lbl_803EB688, 1, 20, 1);
+        fn_8021956C(gUISMainInfo, 1, 20, 1);
     }
     return result;
 }
 
 extern "C" void fn_800AB29C(void *p)
 {
-    fn_80218FC4(lbl_803EB688, 3, 7, 0, 0);
-    fn_802195E4(lbl_803EB688, 3, 7);
+    fn_80218FC4(gUISMainInfo, 3, 7, 0, 0);
+    fn_802195E4(gUISMainInfo, 3, 7);
     fn_80195EFC(1, 20, 0x808080, 0);
     fn_800ABAF0();
 }
@@ -10257,7 +10257,7 @@ extern "C" {
 void fn_8004730C(unsigned char enabled);
 void fn_80072C90(unsigned int delay, int wait);
 void InGameStop(void);
-VetsRow_8018EC68 *fn_8005FC7C(void);
+StevRow_t *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
 int fn_80157080(void);
 int fn_80061D14(void);
@@ -10300,7 +10300,7 @@ void Class_80297B90::vfn_04(float dt)
         }
         lbl_803EAA88->mUnknown4 = 4;
     case 4:
-        fn_8006CAEC();
+        SndgNullHook();
         if (InGameIsDemo() != 0) {
             fn_80047874(0);
             fn_8004730C(0);
@@ -10358,7 +10358,7 @@ void Class_80297B90::vfn_04(float dt)
         if (lbl_803EAA88->mUnknown4 == 13) {
             lbl_803EAA88->mUnknown16 = -1;
             if (fn_80178AE0() == 1) {
-                VetsRow_8018EC68 *pRow = fn_8005FC7C();
+                StevRow_t *pRow = fn_8005FC7C();
 
                 if (pRow == 0) {
                     pRow = fn_80061AD4();
@@ -10416,7 +10416,7 @@ void Class_80297B90::vfn_04(float dt)
         lbl_803EAA88->mUnknown16 = -1;
         fn_800AA010(0);
         fn_800AA124();
-        fn_8006CAEC();
+        SndgNullHook();
         if (fn_800C1E40() == 0) {
             if (GameModeTypeGet() == 11 && fn_80157080() != 0) {
                 break;
@@ -15635,7 +15635,7 @@ int ChallengeIsActive(void);
 void fn_8003A450(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
-void fn_8006E134(int flags);
+void SndgSituationSetFlags(int flags);
 void fn_800AD910(int a, float b);
 int CamGameGetCurrentSlot(void);
 void CamGameSetModeAll(int a);
@@ -15705,7 +15705,7 @@ void Class_80297C60::vfn_14(float dt)
             }
         } else {
             fn_801783D0(0x15, 1);
-            fn_8006E134(0x400);
+            SndgSituationSetFlags(0x400);
             fn_80162780(1, 1);
             fn_8013F3FC();
             fn_800AD910(2, dt);
@@ -17367,7 +17367,7 @@ void fn_8016E008(int team);
 void PlayAlignPostStartDelays(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
-int fn_8006D884(int idx);
+int SndgChannelIsStreamBusy(int idx);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA3;
@@ -17452,7 +17452,7 @@ extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
 
     if (lbl_803EABA0 == 0 && lbl_803EAB95 + 1 <= 5 &&
         pRecords[lbl_803EAB95 + 1].mUnknown0 != 9999 &&
-        fn_8006D884(((lbl_803EAB95 + 1) & 1) == 0 ? 4 : 5) == 0) {
+        SndgChannelIsStreamBusy(((lbl_803EAB95 + 1) & 1) == 0 ? 4 : 5) == 0) {
         int handle;
 
         pA = pRecords[lbl_803EAB95 + 1].mSlots[0].mpObject;
@@ -18569,7 +18569,7 @@ extern "C" void fn_800A02FC(void)
 extern "C" {
 void DriveLogEndDrive(void);
 int ConSetChannelInfo(int a, int b, void *p);
-void fn_8006F0C8(int value);
+void SndgSpchClearPlayFlags(int value);
 void SpchIGSetWallTacklePlayer(int value);
 void SpchIGSetReceiverOpenPlayer(int value);
 void SpchIGSetStylingPlayer(int value);
@@ -18598,7 +18598,7 @@ void Class_80297AB8::vfn_03()
     fn_800996FC(PlayBookGetPlay(fn_80178308())->mUnknown14);
     PadInputSaveHandlers(lbl_803EA9E8);
     ConSetChannelInfo(-1, 3, lbl_802EC880);
-    fn_8006F0C8(127);
+    SndgSpchClearPlayFlags(127);
     SpchIGSetWallTacklePlayer(0);
     SpchIGSetReceiverOpenPlayer(0);
     SpchIGSetStylingPlayer(0);

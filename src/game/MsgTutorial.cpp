@@ -24,7 +24,7 @@ struct TutorialArgs_t {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_80010200(int value);
 void fn_80011600(int a, int b, int c);
@@ -114,7 +114,7 @@ void MsgTutorialPostLessonEvent(int value)
     if (value != -1) {
         MsgGameIgnoreValue(value);
     }
-    fn_8021D7B8(lbl_803EB688, 0x80000036, 0, 0);
+    fn_8021D7B8(gUISMainInfo, 0x80000036, 0, 0);
 }
 
 int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unused, int *pResult)

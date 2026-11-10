@@ -34,8 +34,8 @@ struct Group_80146C00 { unsigned int mUnknown0; int mUnknown4; Entry_80146C4C *m
 
 
 extern "C" {
-struct Object_8005406C;
-extern Object_8005406C *gLevelData;
+struct LevelData_t;
+extern LevelData_t *gLevelData;
 extern Vector_80146134 lbl_802A03D0;
 extern int lbl_802DD170[];
 extern char lbl_802DD584[][24];

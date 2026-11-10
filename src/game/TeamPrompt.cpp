@@ -11,8 +11,8 @@ extern "C" {
 void PauseBlock(void);
 void PauseUnblock(void);
 PlayerSideRec_t *fn_800B2340(unsigned char index);
-void fn_8018A798(int value);
-int fn_8018A7A0(void);
+void UISGameLockPad(int value);
+int UISGameUnlockPad(void);
 }
 
 static int _TeamPrompt_iResult = -1;
@@ -31,7 +31,7 @@ void TeamPromptStart(int a, int b, int c)
     _TeamPrompt_iPlayer = a;
     PauseBlock();
     InGameSetInputPaused(1);
-    fn_8018A798(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
+    UISGameLockPad(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
 }
 
 void TeamPromptSetResult(int value)
@@ -42,7 +42,7 @@ void TeamPromptSetResult(int value)
 
 void TeamPromptEnd(void)
 {
-    fn_8018A7A0();
+    UISGameUnlockPad();
     _TeamPrompt_bActive = 0;
     if (_TeamPrompt_iPlayer != 0xFFFF) {
         InGameSetInputPaused(0);

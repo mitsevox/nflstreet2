@@ -6,7 +6,7 @@
 #include "game/StyleTracker.h"
 #include "game/UnlockItem.h"
 #include "game/FeatAwards.h"
-#include "game/cu_80190208.h"
+#include "game/Cheat.h"
 #include "game/fn_8007F828.h"
 #include "game/GameModeType.h"
 #include "game/fn_801D2B7C.h"
@@ -30,15 +30,15 @@ int UnlockListSeek(DbCursor *pObject, int a, int key, int *pResult);
 void UnlockListReadItem(DbCursor *pObject, UnlockItem_t *pRecord);
 unsigned char UnlockListGetIndex(DbCursor *pObject);
 int fn_801486A0(void);
-int fn_801869F0(void);
-int fn_80186A10(int index, char *pText);
+int UserRecGetCount(void);
+int UserRecGetName(int index, char *pText);
 signed char fn_80186B38(int a);
 signed char fn_80186F7C(unsigned char index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int fn_8022F358(signed char index);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
-int fn_80190394(void);
+int CheatIsNoneEnabled(void);
 }
 
 FeatAward_t *_Feat_apAwarded[100];
@@ -65,7 +65,7 @@ int FeatAwardByKey(DbCursor *pCursor, DbCursor *pOther, int key, FeatAward_t *pE
     UnlockListReadItem(pCursor, &record);
     UserInfoAddPoints(db, record.mUnknown148);
     fn_801C2E18(pEntry->mName, record.mName);
-    fn_80186A10(fn_80186B38(db), pEntry->mText);
+    UserRecGetName(fn_80186B38(db), pEntry->mText);
     pEntry->mCredits = record.mUnknown148;
     return 1;
 }
@@ -93,7 +93,7 @@ void FeatAwardStatFeats(DbCursor *pCursor, DbCursor *pOther, signed char pad)
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    fn_80186A10(pad, pEntry->mText);
+                    UserRecGetName(pad, pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -151,7 +151,7 @@ void FeatAwardSettingFeats(DbCursor *pCursor, DbCursor *pOther, int db)
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    fn_80186A10(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(fn_8022F384(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -175,7 +175,7 @@ void FeatAwardValueFeat(DbCursor *pCursor, DbCursor *pOther, int db, int key, in
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    fn_80186A10(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(fn_8022F384(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -237,7 +237,7 @@ void FeatAwardEAGameSaveFeats(void)
     UnlockListOpen(&cursor, 0, 0);
     for (i = 0; i <= 5; i++) {
         if (_Feat_abEAGameSave[i] == 1 && UnlockListSeek(&cursor, 0, _Feat_aiEAGameKey[i], 0) == 1) {
-            for (j = 0; j < fn_801869F0(); j++) {
+            for (j = 0; j < UserRecGetCount(); j++) {
                 db = fn_8022F358(j);
                 index = UnlockListGetIndex(&cursor);
                 UnlockStatusOpenDb(&other, db);
@@ -248,7 +248,7 @@ void FeatAwardEAGameSaveFeats(void)
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
                     fn_801C2E18(pEntry->mName, record.mName);
-                    fn_80186A10(fn_8022F384(db), pEntry->mText);
+                    UserRecGetName(fn_8022F384(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
                 }
@@ -277,7 +277,7 @@ void FeatAwardNewUserFeats(void)
         pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
         fn_801C2E18(pEntry->mName, record.mName);
-        fn_80186A10(fn_8022F384(db), pEntry->mText);
+        UserRecGetName(fn_8022F384(db), pEntry->mText);
         pEntry->mCredits = record.mUnknown148;
         _Feat_uAwardedCount++;
         UnlockStatusClose(&other);
@@ -295,7 +295,7 @@ void FeatAwardAllUsersFeat(void)
     int db;
 
     UnlockListOpen(&cursor, 0, 0);
-    for (i = 0; i < fn_801869F0(); i++) {
+    for (i = 0; i < UserRecGetCount(); i++) {
         db = fn_8022F358(i);
         UnlockStatusOpenDb(&other, db);
         if (FeatAwardByKey(&cursor, &other, 38, &entry, db)) {
@@ -398,14 +398,14 @@ int FeatAwardGameCredits(int side)
     flag = 0;
     if (GameModeTypeGet() == 0) {
         if (fn_80186F7C(0) != -1) {
-            fn_80190280(fn_80186F7C(0));
-            flag |= fn_80190394() == 0;
-            fn_80190288();
+            CheatSelectSlot(fn_80186F7C(0));
+            flag |= CheatIsNoneEnabled() == 0;
+            CheatClearSlot();
         }
         if (fn_80186F7C(1) != -1) {
-            fn_80190280(fn_80186F7C(1));
-            flag |= fn_80190394() == 0;
-            fn_80190288();
+            CheatSelectSlot(fn_80186F7C(1));
+            flag |= CheatIsNoneEnabled() == 0;
+            CheatClearSlot();
         }
     }
     if (flag) {

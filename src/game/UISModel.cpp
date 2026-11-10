@@ -4,11 +4,11 @@
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXCull.h>
 #include "engine/viewport.h"
-#include "game/cu_801882B4.h"
+#include "game/ResBank.h"
 #include "game/UISModel.h"
 
 extern "C" {
-Cache_80188688 *_UISModel_pLibCache = 0;
+ResBank_t *_UISModel_pLibCache = 0;
 extern char *lbl_802EAD10[];
 int FELoopIsMainFEActive(void);
 int ConGetCurrentContext(void);
@@ -45,7 +45,7 @@ int fn_80236B4C(int);
 
 void UISModelBind(UISModel_t *pObject, UISModelDesc_t *pDesc)
 {
-    int data = fn_801889CC(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02);
+    int data = ResBankGetData(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02);
     pObject->mUnknown198 |= 1;
     if (pObject->mUnknown198 & 1) {
         pObject->mUnknown14 = data;
@@ -89,8 +89,8 @@ void UISModelInit(UISModel_t *pObject, UISModelDesc_t *pDesc)
     pObject->mUnknown1DE = 0;
     pObject->mUnknown198 = 0;
     pObject->mUnknown1E4 = 255;
-    fn_80188784(_UISModel_pLibCache, pDesc->mUnknown00);
-    fn_8018897C(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02, 0);
+    ResBankOpenFile(_UISModel_pLibCache, pDesc->mUnknown00);
+    ResBankLoad(_UISModel_pLibCache, pDesc->mUnknown00, pDesc->mUnknown02, 0);
     UISModelBind(pObject, pDesc);
 }
 
@@ -100,8 +100,8 @@ void UISModelFree(UISModel_t *pObject)
         fn_802355E4(&pObject->mUnknown48);
         fn_80234EA0(pObject->mUnknown18, 0);
     }
-    fn_801889A4(_UISModel_pLibCache, pObject->mUnknown1CC, pObject->mUnknown1CE);
-    fn_801888A4(_UISModel_pLibCache, pObject->mUnknown1CC);
+    ResBankUnload(_UISModel_pLibCache, pObject->mUnknown1CC, pObject->mUnknown1CE);
+    ResBankCloseFile(_UISModel_pLibCache, pObject->mUnknown1CC);
 }
 
 int UISModelDraw(UISModel_t *pObject, int value)
@@ -155,8 +155,8 @@ void UISModelApplyTextures(UISModel_t *pObject, void *pData)
     UISModelCopyTexture(pObject, pData, 4, 0);
     UISModelCopyTexture(pObject, pData, 5, 1);
     UISModelCopyTexture(pObject, pData, 3, 2);
-    fn_801889A4(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
-    fn_801888A4(_UISModel_pLibCache, pObject->mUnknown1D8);
+    ResBankUnload(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
+    ResBankCloseFile(_UISModel_pLibCache, pObject->mUnknown1D8);
     pObject->mUnknown1DE &= ~1;
 }
 
@@ -164,7 +164,7 @@ int UISModelUpdateTextures(UISModel_t *pObject)
 {
     int result = 1;
     if (pObject->mUnknown1DE & 1) {
-        void *pData = (void *)fn_801889CC(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
+        void *pData = (void *)ResBankGetData(_UISModel_pLibCache, pObject->mUnknown1D8, pObject->mUnknown1DA);
         if (pData) {
             UISModelApplyTextures(pObject, pData);
         } else {
@@ -181,12 +181,12 @@ int UISModelRegister(void *pHandle, int count)
         result = ObjSetListObjFunc(pHandle, 19, 0, UISModelDraw);
     }
     if (!_UISModel_pLibCache) {
-        Desc_80188688 desc;
+        ResBankDesc_t desc;
         desc.mUnknown0 = 1;
         desc.mUnknown4 = 21;
         desc.mUnknown12 = lbl_802EAD10;
         desc.mUnknown8 = 0;
-        _UISModel_pLibCache = fn_80188688(&desc);
+        _UISModel_pLibCache = ResBankCreate(&desc);
         result = (int)_UISModel_pLibCache;
     }
     return result;
@@ -196,7 +196,7 @@ void UISModelUnregister(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(19);
-    fn_80188728(_UISModel_pLibCache);
+    ResBankDestroy(_UISModel_pLibCache);
     _UISModel_pLibCache = 0;
 }
 

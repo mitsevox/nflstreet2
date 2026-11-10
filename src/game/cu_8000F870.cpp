@@ -125,7 +125,7 @@ void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int GauntletScreenGetSelection(void);
 void MemCardScreenSetFlag(unsigned char a);
-void fn_8006CA18(int index, int a, unsigned char volume);
+void SndgSfxSetVolume(int index, int a, unsigned char volume);
 void fn_80073094(void);
 void fn_800731D0(int a);
 int DbCursorGetRow(DbCursor *pObject);
@@ -197,8 +197,8 @@ void fn_80183368(int mode, int value);
 void fn_801834DC(void);
 int fn_801835A0(void);
 void fn_80183934(void);
-int fn_801869F0(void);
-int fn_80186A10(int index, char *pText);
+int UserRecGetCount(void);
+int UserRecGetName(int index, char *pText);
 signed char fn_80186B38(int a);
 int fn_80186DF0(signed char *pIndices, int length);
 void fn_80186F30(signed char a, unsigned char b);
@@ -211,15 +211,15 @@ void fn_8018801C(int index, int value);
 int fn_80188030(int a);
 int fn_80188044(int index);
 void fn_8018807C(unsigned char a);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-int fn_8018BD9C(int a);
-void fn_8018C230(int a, int b);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+int StoryTeamExists(int a);
+void StoryTeamLoadUserTeams(int a, int b);
 void fn_8018C48C(int tag);
 int fn_8018D720(int a);
 void fn_8018D7E0(void);
-int fn_8018F228(int a);
-int fn_8018F2F4(int a, int b);
-int fn_8018F3D8(int a);
+int GauntletGetCurrentTeam(int a);
+int GauntletSetCurrentTeam(int a, int b);
+int GauntletGetTeamsLeft(int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -251,7 +251,7 @@ int fn_8022F384(int a);
 int fn_8022F4BC(void);
 
 extern char lbl_802EBE24[];
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
 void fn_80010150(int mode);
@@ -408,7 +408,7 @@ void fn_8000FA0C(void)
         if (fn_802294F4()) {
             fn_80229554();
         }
-        if (fn_80187C64() && !fn_801869F0() && !FELoopIsIdleTimedOut()) {
+        if (fn_80187C64() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
         }
     }
@@ -638,7 +638,7 @@ int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         *pResult = 1;
         switch (pArgs[0].i) {
         case 751:
-            *pResult = fn_8018BD9C(fn_8022F384(fn_8022F4BC()));
+            *pResult = StoryTeamExists(fn_8022F384(fn_8022F4BC()));
             break;
         case 752:
             *pResult = fn_8018D720(fn_8022F384(fn_8022F4BC()));
@@ -668,7 +668,7 @@ int fn_80010194(void)
     unsigned short b = 0;
     int result;
 
-    fn_80219650(lbl_803EB688, &a, &b);
+    fn_80219650(gUISMainInfo, &a, &b);
     result = 0;
     if (a == 0 && b == 1 && lbl_803EB951) {
         result = lbl_803EB960 == 0;
@@ -797,7 +797,7 @@ int fn_800103A4(int force)
             int pad = fn_80188044(j);
             if (pad != -1 && lbl_803ECE38[pad] && lbl_803EB96C[j] > 2) {
                 do {
-                    if (k < fn_801869F0() && lbl_803ECE48.mIndex[k] != -1) {
+                    if (k < UserRecGetCount() && lbl_803ECE48.mIndex[k] != -1) {
                         lbl_803EB96C[j] = k++;
                     } else {
                         lbl_803EB96C[j] = 3;
@@ -994,7 +994,7 @@ void fn_80010914(void)
                 switch (lbl_803ECE44[i]) {
                 case 1:
                     if (lbl_803EB96C[i] <= 1) {
-                        fn_80186A10(lbl_803ECE48.mIndex[lbl_803EB96C[i]], text);
+                        UserRecGetName(lbl_803ECE48.mIndex[lbl_803EB96C[i]], text);
                         fn_80187A28(i, text);
                     } else {
                         fn_80187A28(i, 0);
@@ -1017,7 +1017,7 @@ void fn_80010914(void)
         }
     }
     GameInfoSet(2, lbl_803EB96A);
-    fn_8006CA18(0x8F, 0x32, 0);
+    SndgSfxSetVolume(0x8F, 0x32, 0);
     if (MsgGameGetSetupState() == 1) {
         fn_8018807C(1);
     }
@@ -1121,7 +1121,7 @@ int fn_80010CF4(int index)
 void fn_80010DC4(int index, int pad)
 {
     fn_800102D8();
-    if (pad >= 0 && pad < fn_801869F0()) {
+    if (pad >= 0 && pad < UserRecGetCount()) {
         switch (lbl_803ECE44[index]) {
         case 1:
             for (unsigned char j = 0; j <= 1; j++) {
@@ -1154,7 +1154,7 @@ void fn_80010E68(int index, int dir, Arg_8018399C arg)
             } else {
                 lbl_803EB96C[index]++;
             }
-            while (lbl_803EB96C[index] <= 2 && lbl_803EB96C[index] >= fn_801869F0()) {
+            while (lbl_803EB96C[index] <= 2 && lbl_803EB96C[index] >= UserRecGetCount()) {
                 lbl_803EB96C[index]++;
             }
             break;
@@ -1164,7 +1164,7 @@ void fn_80010E68(int index, int dir, Arg_8018399C arg)
             } else {
                 lbl_803EB96C[index]--;
             }
-            while (lbl_803EB96C[index] <= 2 && lbl_803EB96C[index] >= fn_801869F0()) {
+            while (lbl_803EB96C[index] <= 2 && lbl_803EB96C[index] >= UserRecGetCount()) {
                 if (lbl_803EB96C[index] == 0) {
                     lbl_803EB96C[index] = 5;
                 } else {
@@ -1193,7 +1193,7 @@ void fn_80010E68(int index, int dir, Arg_8018399C arg)
                             }
                         } else {
                             lbl_803EB96C[index]++;
-                            if (lbl_803EB96C[index] >= fn_801869F0()) {
+                            if (lbl_803EB96C[index] >= UserRecGetCount()) {
                                 lbl_803EB96C[index] = 3;
                             }
                         }
@@ -1209,7 +1209,7 @@ void fn_80010E68(int index, int dir, Arg_8018399C arg)
             }
         }
         if (lbl_803EB96C[index] <= 1) {
-            fn_80186A10(lbl_803ECE48.mIndex[lbl_803EB96C[index]], pParams->mpText);
+            UserRecGetName(lbl_803ECE48.mIndex[lbl_803EB96C[index]], pParams->mpText);
         } else {
             fn_801C2EF0(pParams->mpText, lbl_802F41BC[lbl_803EB96C[index] - 3], pParams->mLength);
         }
@@ -1411,7 +1411,7 @@ void fn_80011600(int pad0, int pad1, int keep)
         lbl_803ECE44[fn_80188030(pad0)] = 1;
         lbl_803EB96C[fn_80188030(pad0)] = db;
         if (db != -1) {
-            fn_80186A10(db, name);
+            UserRecGetName(db, name);
             fn_80187A28(fn_80188030(pad0), name);
         }
     }
@@ -1424,7 +1424,7 @@ void fn_80011600(int pad0, int pad1, int keep)
         lbl_803ECE44[fn_80188030(pad1)] = 1;
         lbl_803EB96C[fn_80188030(pad1)] = db;
         if (db != -1) {
-            fn_80186A10(db, name);
+            UserRecGetName(db, name);
             fn_80187A28(fn_80188030(pad1), name);
         }
     }
@@ -1680,9 +1680,9 @@ void fn_800120C8(int side, int *pIndex)
     int count = fn_80012244(side);
 
     for (i = 0; i < count; i++) {
-        if (GameModeTypeGet() == 8 && fn_8018F228(fn_80186B38(fn_8022F4BC())) != 0x3FF) {
+        if (GameModeTypeGet() == 8 && GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())) != 0x3FF) {
             if (side == 1) {
-                if (lbl_803EB994[1][i] == fn_8018F228(fn_80186B38(fn_8022F4BC()))) {
+                if (lbl_803EB994[1][i] == GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()))) {
                     *pIndex = i;
                     return;
                 }
@@ -2220,10 +2220,10 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
             break;
         }
         if (GameModeTypeGet() == 8 && MsgGameGetSetupState() == 1) {
-            if (fn_8018F228(fn_80186B38(fn_8022F4BC())) == 0x3FF) {
-                fn_8018F2F4(fn_80186B38(fn_8022F4BC()), pArgs[1].i);
+            if (GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC())) == 0x3FF) {
+                GauntletSetCurrentTeam(fn_80186B38(fn_8022F4BC()), pArgs[1].i);
             } else {
-                pArgs[1].i = fn_8018F228(fn_80186B38(fn_8022F4BC()));
+                pArgs[1].i = GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()));
             }
         }
         if (GameModeTypeGet() == 6 && ChallengeIsActive()) {
@@ -2245,7 +2245,7 @@ int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         *pResult = GauntletScreenGetSelection();
         break;
     case 0x80000017:
-        *pResult = fn_8018F228(fn_80186B38(fn_8022F4BC()));
+        *pResult = GauntletGetCurrentTeam(fn_80186B38(fn_8022F4BC()));
         break;
     case 0x8000000F:
         if (count == 5) {
@@ -2713,13 +2713,13 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         color[0] = fn_800841AC(&lbl_8036ADB0[0]);
         color[1] = fn_800841D8(&lbl_8036ADB0[0]);
         color[2] = fn_80084204(&lbl_8036ADB0[0]);
-        fn_80188CBC(0, 4, fn_80084158(&lbl_8036ADB0[0]), 172, color);
+        TeamLogoRequestTint(0, 4, fn_80084158(&lbl_8036ADB0[0]), 172, color);
     }
     if (fn_8008406C(&lbl_8036ADB0[1], 1, 0)) {
         color[0] = fn_800841AC(&lbl_8036ADB0[1]);
         color[1] = fn_800841D8(&lbl_8036ADB0[1]);
         color[2] = fn_80084204(&lbl_8036ADB0[1]);
-        fn_80188CBC(1, 4, fn_80084158(&lbl_8036ADB0[1]), 172, color);
+        TeamLogoRequestTint(1, 4, fn_80084158(&lbl_8036ADB0[1]), 172, color);
     }
 
     lbl_803ECE4C = (int **)fn_801D2B7C(8, 0, 0);
@@ -3121,7 +3121,7 @@ void fn_800156B4(int index, char *pName, int nameSize, char *pTeam, int teamSize
                 }
             }
             if (GameModeTypeGet() == 8) {
-                int value = fn_8018F3D8(fn_80186F7C(1));
+                int value = GauntletGetTeamsLeft(fn_80186F7C(1));
                 if (value == 0 && lbl_802F43A8[index] == 11) {
                     *pFlag = value;
                 }
@@ -3171,7 +3171,7 @@ void fn_800159A4(int *pCount, int *pCurrent, int *pResult)
     }
     *pCount = 12;
     *pCurrent = lbl_803EB9E0;
-    if (GameModeTypeGet() == 8 && fn_8018F3D8(fn_80186F7C(1)) == 0) {
+    if (GameModeTypeGet() == 8 && GauntletGetTeamsLeft(fn_80186F7C(1)) == 0) {
         *pCurrent = 11;
         lbl_803EB9E0 = 11;
     }
@@ -3316,7 +3316,7 @@ int fn_80015F2C(void)
 {
     unsigned short a = 0;
     unsigned short b = 0;
-    fn_80219650(lbl_803EB688, &a, &b);
+    fn_80219650(gUISMainInfo, &a, &b);
     return a == 0 && b == 3 && lbl_803EB9E6;
 }
 
@@ -3327,7 +3327,7 @@ int fn_80015F90(int control)
         switch (control) {
         case -1:
             if (index == 0) {
-                lbl_803EB9E7 = fn_801869F0() - 1;
+                lbl_803EB9E7 = UserRecGetCount() - 1;
             } else {
                 lbl_803EB9E7--;
             }
@@ -3335,7 +3335,7 @@ int fn_80015F90(int control)
         case 0:
             break;
         case 1:
-            if (index == fn_801869F0() - 1) {
+            if (index == UserRecGetCount() - 1) {
                 lbl_803EB9E7 = 0;
             } else {
                 lbl_803EB9E7++;
@@ -3368,7 +3368,7 @@ void fn_80016038(void)
         lbl_803EB9E8->mUnknown38 = UserStatsGet(&query, 1);
         lbl_803EB9E8->mStreak = UserStatsGet(&query, 2);
         UserStatsClose(&query);
-        fn_80186A10(lbl_803EB9E7, lbl_803EB9E8->mName);
+        UserRecGetName(lbl_803EB9E7, lbl_803EB9E8->mName);
     } else {
         for (unsigned char i = 0; i <= 12; i++) {
             lbl_803EB9E8->mValues[i] = 0;
@@ -3384,7 +3384,7 @@ void fn_80016248(int *pCount)
 {
     signed char indices[4];
     lbl_803EB9E8 = (Stats_803EB9E8 *)fn_801D2B7C(sizeof(Stats_803EB9E8), 0, 0);
-    *pCount = fn_801869F0();
+    *pCount = UserRecGetCount();
     fn_80186DF0(indices, 4);
     if (*pCount > 0) {
         lbl_803EB9E7 = indices[0];
@@ -3549,7 +3549,7 @@ void fn_800167D0(void)
 {
     lbl_803EB9F4 = fn_8007F828(1);
     fn_8018D7E0();
-    fn_8018C230(0, 1);
+    StoryTeamLoadUserTeams(0, 1);
 }
 
 void fn_80016808(void)
@@ -3628,7 +3628,7 @@ int fn_80016950(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 
 void fn_80016A08(int *pCount)
 {
-    lbl_803EB9FE = fn_801869F0();
+    lbl_803EB9FE = UserRecGetCount();
     *pCount = lbl_803EB9FE;
     lbl_803EBA00 = new (0) DbCursor;
     if (lbl_803EB9FE > 0) {
@@ -3683,7 +3683,7 @@ void fn_80016B60(int control, char *pText, int *pResult)
         UnlockStatusClose(lbl_803EBA04);
     }
     UnlockStatusOpen(lbl_803EBA04, lbl_803EB9FC);
-    fn_80186A10(lbl_803EB9FC, pText);
+    UserRecGetName(lbl_803EB9FC, pText);
     *pResult = UserInfoGetPoints(fn_8022F358(lbl_803EB9FC));
 }
 

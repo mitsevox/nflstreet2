@@ -86,8 +86,8 @@ int fn_80178320(void);
 void fn_8017833C(int value);
 int fn_801784C4(void);
 void BannerClear(int a);
-void fn_8018A798(int value);
-int fn_8018A7A0(void);
+void UISGameLockPad(int value);
+int UISGameUnlockPad(void);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
@@ -400,7 +400,7 @@ int CoinTossUpdate(void)
     case 1:
         CoinTossOnShotStart();
         fn_8013F374(_CoinToss_aCamList);
-        fn_8018A798((unsigned char)CoinTossGetCallerPad());
+        UISGameLockPad((unsigned char)CoinTossGetCallerPad());
         _CoinToss_pState->mState = 2;
         break;
     case 2:
@@ -414,16 +414,16 @@ int CoinTossUpdate(void)
         break;
     case 4:
         _CoinToss_pState->mState = 5;
-        fn_8018A7A0();
-        fn_8018A798((unsigned char)CoinTossGetWinnerPad());
+        UISGameUnlockPad();
+        UISGameLockPad((unsigned char)CoinTossGetWinnerPad());
         break;
     case 5:
         if (_CoinToss_pState->mUnknown42 != -1) {
             _CoinToss_pState->mState = 6;
             _CoinToss_pState->mTimer = 0;
             CoinTossOnChoiceMade();
-            fn_8018A7A0();
-            fn_8018A798((unsigned char)CoinTossGetLoserPad());
+            UISGameUnlockPad();
+            UISGameLockPad((unsigned char)CoinTossGetLoserPad());
         }
         break;
     case 6:
@@ -448,7 +448,7 @@ int CoinTossUpdate(void)
     case 10:
         _CoinToss_pState->mState = 0;
         result = 0;
-        fn_8018A7A0();
+        UISGameUnlockPad();
         break;
     }
     return result;

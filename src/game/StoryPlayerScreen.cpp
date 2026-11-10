@@ -5,7 +5,7 @@
 #include "game/DbCursor.h"
 #include "game/PlayerSave.h"
 #include "game/StoryPlayerScreen.h"
-#include "game/fn_8018BE68.h"
+#include "game/StoryTeam.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 
@@ -47,12 +47,12 @@ int fn_800841AC(DbCursor *pObject);
 int fn_800841D8(DbCursor *pObject);
 int fn_80084204(DbCursor *pObject);
 int fn_80183950(void);
-void fn_80185264(unsigned char value);
-unsigned char fn_8018526C(void);
-unsigned char fn_8018527C(void);
-void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
-void fn_8018BF3C(void);
-int fn_8018C0E8(int a, int *p);
+void MemCardUISetScriptFlag(unsigned char value);
+unsigned char MemCardUIGetScriptFlag(void);
+unsigned char MemCardUIGetTeamFlag(void);
+void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
+void StoryTeamClear(void);
+int StoryTeamGetId(int a, int *p);
 void fn_8018C48C(int tag);
 int fn_8018D780(int a);
 int fn_8018D890(int a, int b);
@@ -60,8 +60,8 @@ void fn_8018D8EC(int a, int b);
 void fn_8018DCBC(int a);
 int fn_8018DD04(int a);
 void fn_8018DD4C(int a, int b, int c);
-int fn_8018E874(int a, int b);
-void fn_8018E8B0(int a, int b, int c);
+int StoryTestIndexedFlag(int a, int b);
+void StorySetIndexedFlag(int a, int b, int c);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
 int fn_8022F3D4(int a);
@@ -97,37 +97,37 @@ void StoryPlayerScreenCopyToSlot8(void)
 
 void StoryPlayerScreenLoadModel(void)
 {
-    Result_8018BE68 result;
+    StoryTeamIdBlock_t result;
 
-    _StoryPlayerScreen_iLoadResult = fn_8018BE68(_StoryPlayerScreen_iProfile, 1, &result);
+    _StoryPlayerScreen_iLoadResult = StoryTeamLoadOneToStats(_StoryPlayerScreen_iProfile, 1, &result);
     _StoryPlayerScreen_iPlayerId = result.mUnknown0;
     FEPlyrSetPlayer(0, result.mUnknown0, 1);
 }
 
 void StoryPlayerScreenAccept(void)
 {
-    fn_80185264(1);
+    MemCardUISetScriptFlag(1);
     PlayerSavePrepare(_StoryPlayerScreen_iProfile, _StoryPlayerScreen_iPlayerId);
 }
 
 void StoryPlayerScreenMarkChanged(int enable)
 {
-    if (enable && fn_8018527C()) {
-        fn_8018E8B0(_StoryPlayerScreen_iProfile, 0, 1);
+    if (enable && MemCardUIGetTeamFlag()) {
+        StorySetIndexedFlag(_StoryPlayerScreen_iProfile, 0, 1);
     }
 }
 
 void StoryPlayerScreenRevert(void)
 {
-    Result_8018BE68 result;
+    StoryTeamIdBlock_t result;
     int handle;
 
-    fn_80185264(_StoryPlayerScreen_bSavedFlag);
+    MemCardUISetScriptFlag(_StoryPlayerScreen_bSavedFlag);
     handle = fn_8018D890(_StoryPlayerScreen_iProfile, 0);
     if (fn_8018DD04(handle) > 0) {
         fn_8018DCBC(handle);
     }
-    fn_8018BECC(_StoryPlayerScreen_iProfile, 0, &result);
+    StoryTeamAddOneToStats(_StoryPlayerScreen_iProfile, 0, &result);
     fn_8018DD4C(handle, result.mUnknown0, 1);
     fn_8018D8EC(_StoryPlayerScreen_iProfile, handle);
     fn_8018C48C(0x54415453);
@@ -150,8 +150,8 @@ void StoryPlayerScreenEnter(int *pId)
         FEPlyrSetPriority(0, _StoryPlayerScreen_ModelLayout.mUnknown16);
         FEPlyrPlayAnim(0, 82, 0);
         StoryPlayerScreenLoadModel();
-        _StoryPlayerScreen_bSavedFlag = fn_8018526C();
-        if (fn_8018C0E8(_StoryPlayerScreen_iProfile, pId)) {
+        _StoryPlayerScreen_bSavedFlag = MemCardUIGetScriptFlag();
+        if (StoryTeamGetId(_StoryPlayerScreen_iProfile, pId)) {
             DbCursor cursor;
             fn_80083E40(&cursor, 0, 0x54415453);
             fn_80084034(&cursor, *pId, 0);
@@ -160,8 +160,8 @@ void StoryPlayerScreenEnter(int *pId)
                 values[0] = fn_800841AC(&cursor);
                 values[1] = fn_800841D8(&cursor);
                 values[2] = fn_80084204(&cursor);
-                fn_80188CBC(0, 4, fn_80084158(&cursor), 172, values);
-                fn_80188CBC(1, 4, fn_80084158(&cursor), 172, values);
+                TeamLogoRequestTint(0, 4, fn_80084158(&cursor), 172, values);
+                TeamLogoRequestTint(1, 4, fn_80084158(&cursor), 172, values);
             }
             fn_80083F68(&cursor);
         } else {
@@ -178,7 +178,7 @@ void StoryPlayerScreenExit(void)
         if (fn_80183950() == 0) {
             fn_8018C48C(0x54415453);
         }
-        fn_80185264(_StoryPlayerScreen_bSavedFlag);
+        MemCardUISetScriptFlag(_StoryPlayerScreen_bSavedFlag);
         _StoryPlayerScreen_bActive = 0;
     }
 }
@@ -189,12 +189,12 @@ int StoryPlayerScreenCheckFlags(int which)
 
     switch (which) {
     case 0:
-        if (fn_8018E874(_StoryPlayerScreen_iProfile, 0) == 0) {
+        if (StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 0) == 0) {
             result = 0;
         }
         break;
     case 1:
-        if (fn_8018E874(_StoryPlayerScreen_iProfile, 1) == 0 && fn_8018D780(_StoryPlayerScreen_iProfile) != 0) {
+        if (StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 1) == 0 && fn_8018D780(_StoryPlayerScreen_iProfile) != 0) {
             result = 0;
         }
         break;
@@ -206,11 +206,11 @@ void StoryPlayerScreenIgnore(int a, int b, int c) {}
 
 void StoryPlayerScreenSave(void)
 {
-    int active = fn_8018E874(_StoryPlayerScreen_iProfile, 1);
+    int active = StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 1);
 
-    fn_8018BF3C();
+    StoryTeamClear();
     if (active) {
-        fn_8018E8B0(_StoryPlayerScreen_iProfile, 1, 1);
+        StorySetIndexedFlag(_StoryPlayerScreen_iProfile, 1, 1);
     }
 }
 
@@ -221,9 +221,9 @@ void StoryPlayerScreenConfirm(int which)
         StoryPlayerScreenAccept();
         break;
     case 1:
-        if (fn_8018E874(_StoryPlayerScreen_iProfile, 1) == 0) {
+        if (StoryTestIndexedFlag(_StoryPlayerScreen_iProfile, 1) == 0) {
             StoryPlayerScreenRevert();
-            fn_8018E8B0(_StoryPlayerScreen_iProfile, 1, 1);
+            StorySetIndexedFlag(_StoryPlayerScreen_iProfile, 1, 1);
         }
         break;
     }

@@ -46,7 +46,7 @@ struct FEPlyrPlacement_t {
 
 extern "C" {
 extern float gFrameTimeScale;
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_8003AB40(FEPlyrModel_t *pRecord);
 int fn_8003DA94(unsigned short count, int a, int b);
@@ -84,8 +84,8 @@ struct State_80039F5C;
 void fn_800EFFA0(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
 void PlaTexCacheUpdate(void);
 void PlyrMoveCmdClear(void *pObject);
-void fn_8018A8C8(int a);
-void fn_8018A908(void (*pCallback)(int, float, float, float, float));
+void UISGameSetDrawMode(int a);
+void UISViewObjSetDrawFunc(void (*pCallback)(int, float, float, float, float));
 void fn_801BA03C(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
 int fn_801BC7C0(AnimHeader_t *pObject, void *a, void *b);
 int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
@@ -282,7 +282,7 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     float projection[4][4];
     float view[4][4];
 
-    fn_8018A8C8(3);
+    UISGameSetDrawMode(3);
     fn_801CE9E0(1);
     fn_801D0470(VptGetMatrixStack());
     fn_801D1288(2, projection);
@@ -392,12 +392,12 @@ void FEPlyrShutdown(void)
 
 void FEPlyrShow(void)
 {
-    fn_8018A908(_FEPlyrRender);
+    UISViewObjSetDrawFunc(_FEPlyrRender);
 }
 
 void FEPlyrHide(void)
 {
-    fn_8018A908(0);
+    UISViewObjSetDrawFunc(0);
 }
 
 void FEPlyrSetPosition(int index, float x, float y, float z)
@@ -536,7 +536,7 @@ void FEPlyrMoveTo(int index, float x, float y, float z, float angle, float scale
         _FEPlyr_aMoveTo[index].mUnknown20 = 0.0f;
     }
     value = 16;
-    fn_8021D7B8(lbl_803EB688, 0x8000002B, 1, &value);
+    fn_8021D7B8(gUISMainInfo, 0x8000002B, 1, &value);
 }
 
 static void _FEPlyrStopMove(int index)

@@ -9,7 +9,7 @@ struct DebugWindowMsg_t {
 };
 
 extern "C" {
-extern void *lbl_803EB688;
+extern void *gUISMainInfo;
 
 void fn_8021956C(void *p, int a, int b, int c);
 }
@@ -39,7 +39,7 @@ extern "C" unsigned char DebugWindowIsOpen(void);
 extern "C" void DebugWindowClose(void)
 {
     if (DebugWindowIsOpen()) {
-        fn_8021956C(lbl_803EB688, 2, 3, 1);
+        fn_8021956C(gUISMainInfo, 2, 3, 1);
         _DebugWindow_pPrintLineFn = 0;
         _DebugWindow_pPrintHelpLineFn = 0;
         _DebugWindow_bOpen = 0;

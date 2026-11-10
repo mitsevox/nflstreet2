@@ -73,7 +73,8 @@ struct LevelAreaNode_t {
    LevelMeshRelocate sets each list pointer from the counts, laying the lists out
    consecutively after the header, then relocates the tree. */
 struct LevelData_t {
-    char mUnknown0[16];
+    char mUnknown0[4];
+    Vector_80039F5C mUnknown4;
     unsigned int mUnknown16;
     LevelVertex_t *mUnknown20;
     unsigned int mUnknown24;

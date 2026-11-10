@@ -1,9 +1,9 @@
 #ifndef GAME_APPEARANCENAMETABLE_H
 #define GAME_APPEARANCENAMETABLE_H
 
-#include "game/Class_8018FD64.h"
+#include "game/DbTableCursor.h"
 
-/* Defined in src/game/AppearanceNameTable.cpp: a Class_8018FD64 cursor member with
+/* Defined in src/game/AppearanceNameTable.cpp: a DbTableCursor cursor member with
    the vtable pointer after it (0x34 bytes). */
 class AppearanceNameTable {
 public:
@@ -12,7 +12,7 @@ public:
     void GetItemName(int a, int b, int c);
 
 private:
-    Class_8018FD64 mUnknown0;
+    DbTableCursor mUnknown0;
 };
 
 #endif

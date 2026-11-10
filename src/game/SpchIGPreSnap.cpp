@@ -7,7 +7,7 @@
 #include "engine/spchevnt.h"
 
 extern "C" {
-int fn_8006F0D8(void);
+int SndgSpchGetPlayFlags(void);
 int SpchIGGetTeamPlayer(int side);
 void SpchIGGetScoreSituation(int *pResult);
 void SpchIGGetScoreMargin(int *pResult);
@@ -69,7 +69,7 @@ extern "C" void SpchIGGetLastPlayFlags(int *pResult)
 
     *pResult = 0;
     if (!(p->mUnknown18 & 8)) {
-        if (fn_8006F0D8() & 1) {
+        if (SndgSpchGetPlayFlags() & 1) {
             *pResult |= 1;
         }
         if (p->mUnknown14 < 0.0f) {
