@@ -24,7 +24,7 @@ struct CtrlSelArgs_t {
 };
 
 extern "C" {
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 int MsgGameFindActivePort(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
@@ -43,7 +43,7 @@ void CtrlSelClose(int a, unsigned char b)
     if (_CtrlSel_bAltSounds == 0 && InGameIsStopped() == 0) {
         AudmonEventPost(0x72, 0);
     } else {
-        fn_8006C854(0x78, 0);
+        SndgSfxPlay(0x78, 0);
     }
     if (_CtrlSel_bEndRequest) {
         PauseRequestClose();
@@ -93,7 +93,7 @@ int CtrlSelHandleMessage(unsigned int id, CtrlSelArgs_t *pParams, int c, int *pR
         if (_CtrlSel_bEndRequest == 0) {
             if (FELoopIsMainFEActive() != 0 || PauseIsAudioPaused() != 0) {
                 _CtrlSel_bAltSounds = 1;
-                fn_8006C854(0x77, 0);
+                SndgSfxPlay(0x77, 0);
             } else {
                 _CtrlSel_bAltSounds = 0;
                 AudmonEventPost(0x71, 0);

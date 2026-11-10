@@ -20,11 +20,11 @@ struct OptAudioArgs_t {
 };
 
 extern "C" {
-int fn_8006D65C(int idx);
-void fn_8006D670(int idx, int handle);
-void fn_8006D6F4(int idx, int a, int volume);
-void fn_8006D758(int idx, Vector_80039F5C *pos);
-void fn_8006D8DC(int idx);
+int SndgChannelGetStream(int idx);
+void SndgChannelSetStream(int idx, int handle);
+void SndgChannelFadeStream(int idx, int a, int volume);
+void SndgChannelSetPosition(int idx, Vector_80039F5C *pos);
+void SndgChannelPurgeStream(int idx);
 unsigned char fn_80072ACC(void);
 void fn_80072B84(int a, int b, int c);
 void fn_80072E84(void);
@@ -81,9 +81,9 @@ void OptAudioStartPreview(int mode)
         default:
             return;
         }
-        fn_8006D8DC(_OptAudio_uPreviewChannel);
-        fn_8006D758(_OptAudio_uPreviewChannel, 0);
-        fn_8006D6F4(_OptAudio_uPreviewChannel, 0, 127);
+        SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
+        SndgChannelSetPosition(_OptAudio_uPreviewChannel, 0);
+        SndgChannelFadeStream(_OptAudio_uPreviewChannel, 0, 127);
     }
 }
 
@@ -92,7 +92,7 @@ void OptAudioStopPreview(void)
     if (_OptAudio_bMusicOn == 0) {
         if (_OptAudio_iPreviewSample != -1) {
             _OptAudio_iPreviewSample = -1;
-            fn_8006D8DC(_OptAudio_uPreviewChannel);
+            SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
         }
         if (FELoopIsMainFEActive() != 0 || _OptAudio_iSelOption == 10) {
             if (fn_8007F828(OptionsScreenGetOptionId(10)) > 0) {
@@ -156,7 +156,7 @@ void OptAudioSelectOption(int mode)
     } else {
         if (_OptAudio_iPreviewSample != -1) {
             _OptAudio_iPreviewSample = -1;
-            fn_8006D8DC(_OptAudio_uPreviewChannel);
+            SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
         }
         fn_80072E84();
         _OptAudio_bMusicOn = 0;
@@ -185,7 +185,7 @@ void OptAudioClose(void)
     if (_OptAudio_bHasTracks == 0) {
         fn_80073094();
     }
-    fn_8006D670(1, 0);
+    SndgChannelSetStream(1, 0);
     if (FELoopIsMainFEActive() == 0) {
         SpchIGPauseChannel(_OptAudio_iStreamSet);
         fn_80072E84();
@@ -214,7 +214,7 @@ void OptAudioOpen(void)
     }
     SpchIGPurgeChannel(_OptAudio_iStreamSet);
     SpchIGResumeChannel(_OptAudio_iStreamSet);
-    fn_8006D670(1, SpchIGGetChannelStream(_OptAudio_iStreamSet));
+    SndgChannelSetStream(1, SpchIGGetChannelStream(_OptAudio_iStreamSet));
     _OptAudio_bHasTracks = fn_80072ACC() != 0;
 }
 
@@ -279,15 +279,15 @@ void OptAudioUpdate(int unknown)
     if (_OptAudio_iPreviewSample != -1) {
         fn_80219650(gUISMainInfo, &a, &b);
         if ((a == 5 && b == 5) || (a == 3 && b == 11)) {
-            fn_8006D6F4(_OptAudio_uPreviewChannel, 0, 127);
-            fn_801F4834(fn_8006D65C(_OptAudio_uPreviewChannel), &status);
-            if (status.mUnknown0 <= 0 && fn_801F48B8(fn_8006D65C(_OptAudio_uPreviewChannel)) != 0) {
+            SndgChannelFadeStream(_OptAudio_uPreviewChannel, 0, 127);
+            fn_801F4834(SndgChannelGetStream(_OptAudio_uPreviewChannel), &status);
+            if (status.mUnknown0 <= 0 && fn_801F48B8(SndgChannelGetStream(_OptAudio_uPreviewChannel)) != 0) {
                 pair.mpUnknown0 = _OptAudio_hSoundRes;
                 pair.mUnknown4 = _OptAudio_iPreviewSample;
-                fn_801F4580(fn_8006D65C(_OptAudio_uPreviewChannel), &pair, 0, 0);
+                fn_801F4580(SndgChannelGetStream(_OptAudio_uPreviewChannel), &pair, 0, 0);
             }
         } else {
-            fn_8006D6F4(_OptAudio_uPreviewChannel, 0, 0);
+            SndgChannelFadeStream(_OptAudio_uPreviewChannel, 0, 0);
         }
     }
 }

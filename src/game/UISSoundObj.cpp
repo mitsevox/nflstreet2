@@ -8,7 +8,7 @@ struct UISSoundArgs_t {
 };
 
 extern "C" {
-int fn_8006C854(int index, Vector_80039F5C *pPos);
+int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 
 void UISSoundObjCreate(void *p);
 void UISSoundObjDraw(void *p);
@@ -46,7 +46,7 @@ extern "C" void UISSoundObjPlay(int group, unsigned int index)
             } else {
                 id = _UISSoundObj_aiGroup13Sounds[index];
             }
-            fn_8006C854(id, 0);
+            SndgSfxPlay(id, 0);
         }
     }
 }
