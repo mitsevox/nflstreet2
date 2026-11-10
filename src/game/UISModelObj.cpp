@@ -6,28 +6,13 @@
 #include "game/UISModel.h"
 #include "game/UISModelObj.h"
 
-struct UISModelVec3_t {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
-struct UISModelDesc_t {
-    short mUnknown0;
-    short mUnknown2;
-    UISModelVec3_t mUnknown4;
-    UISModelVec3_t mUnknown16;
-    UISModelVec3_t mUnknown28;
-    UISModelVec3_t mUnknown40;
-};
-
 struct UISModelObj_t {
     short mUnknown0;
     short mUnknown2;
-    UISModelVec3_t mUnknown4;
-    UISModelVec3_t mUnknown16;
-    UISModelVec3_t mUnknown28;
-    UISModelVec3_t mUnknown40;
+    Vector_80039F5C mUnknown4;
+    Vector_80039F5C mUnknown16;
+    Vector_80039F5C mUnknown28;
+    Vector_80039F5C mUnknown40;
     UISModel_t *mpUnknown52;
 };
 
@@ -55,12 +40,12 @@ void UISModelObjCreate(UISModelObj_t *p)
 {
     UISModelDesc_t desc;
 
-    desc.mUnknown0 = p->mUnknown0;
-    desc.mUnknown2 = p->mUnknown2;
-    desc.mUnknown4 = p->mUnknown4;
-    desc.mUnknown16 = p->mUnknown16;
-    desc.mUnknown28 = p->mUnknown28;
-    desc.mUnknown40 = p->mUnknown40;
+    desc.mUnknown00 = p->mUnknown0;
+    desc.mUnknown02 = p->mUnknown2;
+    desc.mUnknown04 = p->mUnknown4;
+    desc.mUnknown10 = p->mUnknown16;
+    desc.mUnknown1C = p->mUnknown28;
+    desc.mUnknown28 = p->mUnknown40;
     p->mpUnknown52 = ObjNew(19, 0, &desc);
 }
 
