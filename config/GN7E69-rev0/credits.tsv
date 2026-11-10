@@ -287,3 +287,7 @@
 0x801E736C	lifewillbeokay	Original body PR #1218 (4838a5f0e12370122d7e277316332a8c37ac23b0); source src/engine/cu_801E7034.cpp blob 68bcfe9a99b18d4a1d0133a0e1e094f0bee4c5a0; merged_via #1220.
 0x801B1A3C	lifewillbeokay	Original body PR #1249, revision d4690694d0dc1a9df02789c75bdb130ccf3f78d7; final source src/engine/spchrand.c blob 98dd32e259ac6c324dc44b421e19ebd6abb8d789; merged_via #1250.
 0x8023ED18	mitsevox	Existing DBPrintf C body at base 1e35a5b8eff2b3fb932a9fea5650f1e1347a8fda; this correction identifies and links it without changing its implementation.
+0x80265D2C	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x80265EA0	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x802661FC	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.
+0x802664F8	adampreddy	New target-exact numeric runtime reconstruction from licensed fdlibm arithmetic, verified and promoted as one complete file.

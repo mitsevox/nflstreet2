@@ -14659,6 +14659,25 @@
           "end": "0x80260FE8"
         }
       ]
+    },
+    {
+      "source": "src/engine/math_support.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv whole-file provisional unit row0x80265D2C-0x80266640, individual function/name/compiler/source-form/type/field rows and exact read-only constant extent0x802B76C8-0x802B77A8. All four functions and all224 constant bytes verified together.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80265D2C",
+          "end": "0x80266640"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B76C8",
+          "end": "0x802B77A8"
+        }
+      ]
     }
   ]
 }
