@@ -2005,7 +2005,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
         if (pValues) {
             int values[10];
 
-            fn_80081788(&lbl_8036AE08[list], values);
+            PlayerGetGearRatings(&lbl_8036AE08[list], values);
             pValues[0] = values[6];
             pValues[1] = values[4];
             pValues[2] = values[7];

@@ -1444,7 +1444,7 @@ void fn_8001A0A4(int row, int *pId, int *pTeam, int *pValues, char *pHeight, int
         } else {
             *pTeam = PlayerDbGetTeamId(&lbl_8036B168);
         }
-        fn_80081788(&lbl_8036B168, values);
+        PlayerGetGearRatings(&lbl_8036B168, values);
         pValues[0] = values[6];
         pValues[1] = values[4];
         pValues[2] = values[7];
