@@ -1,9 +1,9 @@
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/PadInput.h"
 #include "game/Block_800AD634.h"
 
@@ -22,11 +22,11 @@ extern "C" void fn_800AD774(void)
             pExit(1.0f);
         }
     }
-    lbl_803EAB90->vfn_02();
-    lbl_803EABA4->vfn_03();
+    lbl_803EAB90->Shutdown();
+    lbl_803EABA4->Shutdown();
     lbl_803EAB38->vfn_02();
-    lbl_803EA9E4->vfn_02();
-    lbl_803EAB84->vfn_02();
+    lbl_803EA9E4->Shutdown();
+    lbl_803EAB84->Shutdown();
     lbl_803EAA8C->vfn_02();
     ConSetChannelInfo(-1, 2, (void *)PadInputRead);
 }

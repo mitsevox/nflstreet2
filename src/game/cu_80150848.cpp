@@ -1,10 +1,10 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
-#include "game/Class_80297CE8.h"
+#include "game/LivePlayPhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_80177FE0.h"
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
     unsigned char mUnknown4;
     char mUnknown5[3];
@@ -12,7 +12,7 @@ public:
     unsigned char mUnknown9;
 };
 
-class Class_802A1D58 : public Class_80297CE8 {
+class Class_802A1D58 : public PreSnapPhase {
 };
 
 struct Entry_8015005C {
@@ -63,7 +63,7 @@ void fn_80150848(Class_802A1D58 *p, float dt)
     fn_8003A4DC();
     count = fn_801530FC()->mCount;
     fn_801486A8();
-    p->Class_80297CE8::vfn_04(dt);
+    p->PreSnapPhase::OnEnter(dt);
     fn_801530FC()->mUnknown117 = 0;
     fn_801527E0(&lbl_8031BDD4, 1);
     point = fn_80177FE0();
@@ -106,7 +106,7 @@ void fn_80150A70(Class_802A1D58 *p)
 
 void fn_80150A74(Class_802A1D20 *p)
 {
-    p->Class_80297AB8::vfn_03();
+    p->LivePlayPhase::OnEnter();
     fn_80162780(1, 1);
     p->mUnknown8 = 0;
     p->mUnknown9 = 0;

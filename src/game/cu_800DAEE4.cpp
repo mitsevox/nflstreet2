@@ -424,7 +424,7 @@ int fn_8011F2C4(void);
 int PassIconsAreShown(void);
 int PassIconsWereShown(void);
 int fn_801486A0(void);
-void fn_80156C78(int index, int value);
+void TutorialSetMoveDone(int index, int value);
 Object_800670B4 *PlayBookGetFormation(int team);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);
@@ -644,7 +644,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
     if (result && p && !PlayerMoveGetKind(p)) {
         fn_800CABF4(p, &shown, 0);
         if (shown) {
-            fn_80156C78(21, 1);
+            TutorialSetMoveDone(21, 1);
         }
     }
     return result;
@@ -870,7 +870,7 @@ float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC)
 extern float gPlyrMoveFwdSpeed;
 
 #include "game/fn_80177FE0.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/cu_8008E978.h"
 
 struct Block_800DFCEC {
@@ -892,7 +892,7 @@ void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
 float fn_80237260(int a);
 int fn_800DFA00(Object_80039F5C *p, float *pValue);
-int fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(PostPlayPhase *p);
 }
 
 struct Record_800DE19C { int mUnknown0, mUnknown4; };

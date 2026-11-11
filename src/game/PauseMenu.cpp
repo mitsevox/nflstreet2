@@ -13,15 +13,15 @@
 #include "game/fn_80218FC4.h"
 #include "game/fn_802372EC.h"
 #include "game/InGame.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 
 typedef void (*PauseNotifyFn_t)(int value);
 
 /* Camera returned by CamGameGetCamera (defined in src/game/camgame.cpp). */
 struct GameCamera_t;
 
-/* Object at lbl_803EABA4 (declared in include/game/Class_80297CE8.h). */
-class Class_80297CE8;
+/* Object at lbl_803EABA4 (declared in include/game/PreSnapPhase.h). */
+class PreSnapPhase;
 
 /* mId is also read as one word, compared with 0x10002, 0x30001 and 0x30016;
    mArgs holds mArgCount words for fn_80218FC4. */

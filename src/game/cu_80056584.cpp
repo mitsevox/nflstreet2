@@ -74,7 +74,7 @@ struct Slot_803EA590 {
 
 /* Object returned by PlayBookGetTeam; only the byte at 0x30 and the word at
    0x40 are read here. */
-struct Team_80168EBC {
+struct PlaybookTeamView {
     char mUnknown0[0x30];
     unsigned char mUnknown30;
     char mUnknown31[0xF];
@@ -86,7 +86,7 @@ struct State_803EA590 {
     unsigned char mUnknown0[2];
     unsigned char mUnknown2[2];
     int mUnknown4[2];
-    Team_80168EBC *mpTeam[2];
+    PlaybookTeamView *mpTeam[2];
     Slot_803EA590 *mpSlots[2];
     unsigned char mUnknown1C[2];
     unsigned char mUnknown1E;
@@ -158,13 +158,13 @@ int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80179138(void);
 int PlayBookGetDatabase(int team);
-Team_80168EBC *PlayBookGetTeam(int team);
+PlaybookTeamView *PlayBookGetTeam(int team);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned char c);
 void PlayBookLoadCurrentPlay(int team);
 Handle_80168708 *PlayBookGetFormation(int team);
 void PlayBookSetLoadFlags(unsigned int flags);
 void PlayBookClearLoadFlags(unsigned int flags);
-void fn_8006719C(int tag, int handle, int index, Team_80168EBC *pOwner, Info_8006719C *pInfo);
+void fn_8006719C(int tag, int handle, int index, PlaybookTeamView *pOwner, Info_8006719C *pInfo);
 int fn_80067338(int tag, int handle, int index, Record_80067338 *pRecord);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void PlayArtReadPositions(int tag, Info_8006719C *pInfo, Record_80067338 *pRecord, int a, int b, signed char c, int team, int index);
@@ -245,7 +245,7 @@ void PauseSetAltAction(unsigned char value);
 void PauseSetQuitFlag(unsigned char value);
 int fn_8002C9A8(void *p, int msg, int value);
 int fn_8002D228(void *p);
-int fn_80156704(void);
+int TutorialIsActive(void);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
 int fn_80178D70(int team);
@@ -1472,7 +1472,7 @@ int fn_80059034(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         }
         break;
     case 0x8000001C:
-        *pResult = fn_80156704();
+        *pResult = TutorialIsActive();
         break;
     case 0x147:
         *pResult = DepthChartScreenIsSideShown(pArgs[0].i);

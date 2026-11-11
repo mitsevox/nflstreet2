@@ -8817,112 +8817,112 @@
           "end": "0x80177410"
         },
         {
-          "symbol": "vfn_01__14Class_802A56E8",
+          "symbol": "GetScoreLimit__11ScrmRuleSet",
           "start": "0x80177410",
           "end": "0x80177434"
         },
         {
-          "symbol": "vfn_02__14Class_802A56E8",
+          "symbol": "GetWinner__11ScrmRuleSet",
           "start": "0x80177434",
           "end": "0x801774C0"
         },
         {
-          "symbol": "vfn_03__14Class_802A56E8i",
+          "symbol": "AwardWin__11ScrmRuleSeti",
           "start": "0x801774C0",
           "end": "0x8017755C"
         },
         {
-          "symbol": "vfn_04__14Class_802A56E8i",
+          "symbol": "IsNearWin__11ScrmRuleSeti",
           "start": "0x8017755C",
           "end": "0x80177600"
         },
         {
-          "symbol": "vfn_05__14Class_802A56E8i",
+          "symbol": "IsOpponentNearWin__11ScrmRuleSeti",
           "start": "0x80177600",
           "end": "0x80177638"
         },
         {
-          "symbol": "vfn_06__14Class_802A56E8",
+          "symbol": "GetScoreType__11ScrmRuleSet",
           "start": "0x80177638",
           "end": "0x80177640"
         },
         {
-          "symbol": "vfn_07__14Class_802A56E8i",
+          "symbol": "GetScore__11ScrmRuleSeti",
           "start": "0x80177640",
           "end": "0x80177664"
         },
         {
-          "symbol": "vfn_08__14Class_802A56E8",
+          "symbol": "IsTimed__11ScrmRuleSet",
           "start": "0x80177664",
           "end": "0x8017766C"
         },
         {
-          "symbol": "vfn_21__14Class_802A56E8",
+          "symbol": "IsWinAwarded__11ScrmRuleSet",
           "start": "0x8017766C",
           "end": "0x80177674"
         },
         {
-          "symbol": "vfn_09__14Class_802A56E8",
+          "symbol": "GetGameTime__11ScrmRuleSet",
           "start": "0x80177674",
           "end": "0x8017767C"
         },
         {
-          "symbol": "vfn_10__14Class_802A56E8",
+          "symbol": "ResetPlaySpot__11ScrmRuleSet",
           "start": "0x8017767C",
           "end": "0x801776D0"
         },
         {
-          "symbol": "vfn_13__14Class_802A56E8",
+          "symbol": "GetTeamSize__11ScrmRuleSet",
           "start": "0x801776D0",
           "end": "0x801776D8"
         },
         {
-          "symbol": "vfn_14__14Class_802A56E8",
+          "symbol": "AllowsAudibles__11ScrmRuleSet",
           "start": "0x801776D8",
           "end": "0x80177720"
         },
         {
-          "symbol": "vfn_15__14Class_802A56E8",
+          "symbol": "AllowsPrediction__11ScrmRuleSet",
           "start": "0x80177720",
           "end": "0x80177768"
         },
         {
-          "symbol": "vfn_11__14Class_802A56E8i",
+          "symbol": "ResetGame__11ScrmRuleSeti",
           "start": "0x80177768",
           "end": "0x801777F4"
         },
         {
-          "symbol": "vfn_12__14Class_802A56E8",
+          "symbol": "UsesBothTeams__11ScrmRuleSet",
           "start": "0x801777F4",
           "end": "0x801777FC"
         },
         {
-          "symbol": "vfn_19__14Class_802A56E8",
+          "symbol": "EndPlay__11ScrmRuleSet",
           "start": "0x801777FC",
           "end": "0x801778EC"
         },
         {
-          "symbol": "vfn_01__14Class_802A5630",
+          "symbol": "GetScoreLimit__14Class_802A5630",
           "start": "0x801778EC",
           "end": "0x80177910"
         },
         {
-          "symbol": "vfn_02__14Class_802A5630",
+          "symbol": "GetWinner__14Class_802A5630",
           "start": "0x80177910",
           "end": "0x80177930"
         },
         {
-          "symbol": "vfn_04__14Class_802A5630i",
+          "symbol": "IsNearWin__14Class_802A5630i",
           "start": "0x80177930",
           "end": "0x801779AC"
         },
         {
-          "symbol": "vfn_06__14Class_802A5630",
+          "symbol": "GetScoreType__14Class_802A5630",
           "start": "0x801779AC",
           "end": "0x801779B4"
         },
         {
-          "symbol": "vfn_07__14Class_802A5630i",
+          "symbol": "GetScore__14Class_802A5630i",
           "start": "0x801779B4",
           "end": "0x801779D8"
         },
@@ -9192,7 +9192,7 @@
           "end": "0x8017894C"
         },
         {
-          "symbol": "vfn_20__14Class_802A56E8i",
+          "symbol": "PlaceBallForDrive__11ScrmRuleSeti",
           "start": "0x8017894C",
           "end": "0x801789F8"
         },
@@ -9672,17 +9672,17 @@
           "end": "0x8017CAFC"
         },
         {
-          "symbol": "vfn_16__14Class_802A56E8",
+          "symbol": "GetGoalLimit__11ScrmRuleSet",
           "start": "0x8017CAFC",
           "end": "0x8017CB04"
         },
         {
-          "symbol": "vfn_17__14Class_802A56E8i",
+          "symbol": "GetGoalTotal__11ScrmRuleSeti",
           "start": "0x8017CB04",
           "end": "0x8017CB0C"
         },
         {
-          "symbol": "vfn_18__14Class_802A56E8i",
+          "symbol": "GetGoalCount__11ScrmRuleSeti",
           "start": "0x8017CB0C",
           "end": "0x8017CB14"
         },
@@ -11940,7 +11940,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0–0x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names. Static initializer 0x80051D0C and its .ctors/.dtors stubs 0x80051DBC/0x80051DE8 are registered from the file's definition of the Time_801E8C78 object 0x803084B8 (.bss 0x803084B8-0x803084C4) with the .ctors word 0x80289A84 and .dtors word 0x80289BC4.",
       "sections": [
         {
           "section": ".text",
@@ -17562,7 +17562,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -21380,7 +21380,7 @@
           "end": "0x800BC470"
         },
         {
-          "symbol": "vfn_06__14Class_80297BF8",
+          "symbol": "ShowIntroScreen__12PreGamePhase",
           "start": "0x800BC470",
           "end": "0x800BC4E0"
         },
@@ -21390,7 +21390,7 @@
           "end": "0x800BC538"
         },
         {
-          "symbol": "vfn_01__14Class_80297BF8",
+          "symbol": "InitState__12PreGamePhase",
           "start": "0x800BC538",
           "end": "0x800BC5B8"
         },
@@ -22370,12 +22370,12 @@
           "end": "0x800A03B8"
         },
         {
-          "symbol": "vfn_01__14Class_80297AB8",
+          "symbol": "InitState__13LivePlayPhase",
           "start": "0x800A03B8",
           "end": "0x800A0408"
         },
         {
-          "symbol": "vfn_02__14Class_80297AB8",
+          "symbol": "Shutdown__13LivePlayPhase",
           "start": "0x800A0408",
           "end": "0x800A042C"
         },
@@ -22585,12 +22585,12 @@
           "end": "0x800CF2F0"
         },
         {
-          "symbol": "_._14Class_80297CE8",
+          "symbol": "_._12PreSnapPhase",
           "start": "0x800CF2F0",
           "end": "0x800CF324"
         },
         {
-          "symbol": "vfn_08__14Class_80297CE8",
+          "symbol": "AllowsPressPrompts__12PreSnapPhase",
           "start": "0x800CF324",
           "end": "0x800CF32C"
         },
@@ -22995,22 +22995,22 @@
           "end": "0x800B89C8"
         },
         {
-          "symbol": "vfn_08__14Class_80297C60",
+          "symbol": "SetupCamera__13PostPlayPhase",
           "start": "0x800B8A40",
           "end": "0x800B8A6C"
         },
         {
-          "symbol": "vfn_13__14Class_80297C60i",
+          "symbol": "IsFinished__13PostPlayPhasei",
           "start": "0x800B8A6C",
           "end": "0x800B8B54"
         },
         {
-          "symbol": "vfn_14__14Class_80297C60f",
+          "symbol": "Finish__13PostPlayPhasef",
           "start": "0x800B8B54",
           "end": "0x800B8C8C"
         },
         {
-          "symbol": "vfn_15__14Class_80297C60",
+          "symbol": "ForceFinish__13PostPlayPhase",
           "start": "0x800B8C8C",
           "end": "0x800B8C9C"
         },
@@ -23020,22 +23020,22 @@
           "end": "0x800B8D28"
         },
         {
-          "symbol": "vfn_10__14Class_80297C60f",
+          "symbol": "UpdateCue__13PostPlayPhasef",
           "start": "0x800B8D28",
           "end": "0x800B8DB4"
         },
         {
-          "symbol": "vfn_11__14Class_80297C60f",
+          "symbol": "IsHeld__13PostPlayPhasef",
           "start": "0x800B8DB4",
           "end": "0x800B8DF4"
         },
         {
-          "symbol": "vfn_12__14Class_80297C60f",
+          "symbol": "GetBusy__13PostPlayPhasef",
           "start": "0x800B8DF4",
           "end": "0x800B8E18"
         },
         {
-          "symbol": "vfn_07__14Class_80297C60",
+          "symbol": "ShowResultText__13PostPlayPhase",
           "start": "0x800B9540",
           "end": "0x800B9598"
         },
@@ -23045,22 +23045,22 @@
           "end": "0x800B95B4"
         },
         {
-          "symbol": "vfn_01__14Class_80297C60",
+          "symbol": "InitState__13PostPlayPhase",
           "start": "0x800B95B4",
           "end": "0x800B9630"
         },
         {
-          "symbol": "vfn_02__14Class_80297C60",
+          "symbol": "Shutdown__13PostPlayPhase",
           "start": "0x800B9630",
           "end": "0x800B9654"
         },
         {
-          "symbol": "vfn_04__14Class_80297C60f",
+          "symbol": "OnUpdate__13PostPlayPhasef",
           "start": "0x800B9830",
           "end": "0x800B9998"
         },
         {
-          "symbol": "vfn_05__14Class_80297C60",
+          "symbol": "OnExit__13PostPlayPhase",
           "start": "0x800B9998",
           "end": "0x800B9A44"
         },
@@ -23070,7 +23070,7 @@
           "end": "0x800B9A68"
         },
         {
-          "symbol": "vfn_06__14Class_80297C60",
+          "symbol": "OnSequenceStart__13PostPlayPhase",
           "start": "0x800B9A68",
           "end": "0x800B9A6C"
         },
@@ -23130,7 +23130,7 @@
           "end": "0x800BE7BC"
         },
         {
-          "symbol": "vfn_12__14Class_80297CE8",
+          "symbol": "CanSnap__12PreSnapPhase",
           "start": "0x800BE7BC",
           "end": "0x800BE808"
         },
@@ -23170,12 +23170,12 @@
           "end": "0x800BF2EC"
         },
         {
-          "symbol": "vfn_09__14Class_80297CE8",
+          "symbol": "ReleaseHeldBalls__12PreSnapPhase",
           "start": "0x800BF2EC",
           "end": "0x800BF364"
         },
         {
-          "symbol": "vfn_11__14Class_80297CE8",
+          "symbol": "SetupCamera__12PreSnapPhase",
           "start": "0x800BF364",
           "end": "0x800BF3F4"
         },
@@ -23235,67 +23235,67 @@
           "end": "0x800BFAD0"
         },
         {
-          "symbol": "vfn_02__14Class_80297CE8",
+          "symbol": "InitState__12PreSnapPhase",
           "start": "0x800BFAD0",
           "end": "0x800BFB44"
         },
         {
-          "symbol": "vfn_03__14Class_80297CE8",
+          "symbol": "Shutdown__12PreSnapPhase",
           "start": "0x800BFB44",
           "end": "0x800BFB68"
         },
         {
-          "symbol": "vfn_10__14Class_80297CE8",
+          "symbol": "AssignControlledPlayers__12PreSnapPhase",
           "start": "0x800BFB68",
           "end": "0x800BFB88"
         },
         {
-          "symbol": "fn_800C02C8__14Class_80297CE8",
+          "symbol": "fn_800C02C8__12PreSnapPhase",
           "start": "0x800C02C8",
           "end": "0x800C02D4"
         },
         {
-          "symbol": "fn_800C02D4__14Class_80297CE8s",
+          "symbol": "fn_800C02D4__12PreSnapPhases",
           "start": "0x800C02D4",
           "end": "0x800C02E0"
         },
         {
-          "symbol": "fn_800C02E0__14Class_80297CE8",
+          "symbol": "fn_800C02E0__12PreSnapPhase",
           "start": "0x800C02E0",
           "end": "0x800C02EC"
         },
         {
-          "symbol": "fn_800C02EC__14Class_80297CE8s",
+          "symbol": "fn_800C02EC__12PreSnapPhases",
           "start": "0x800C02EC",
           "end": "0x800C02F8"
         },
         {
-          "symbol": "fn_800C02F8__14Class_80297CE8i",
+          "symbol": "fn_800C02F8__12PreSnapPhasei",
           "start": "0x800C02F8",
           "end": "0x800C032C"
         },
         {
-          "symbol": "vfn_07__14Class_80297CE8",
+          "symbol": "UnusedHook__12PreSnapPhase",
           "start": "0x800C032C",
           "end": "0x800C0330"
         },
         {
-          "symbol": "fn_800C0414__14Class_80297CE8",
+          "symbol": "fn_800C0414__12PreSnapPhase",
           "start": "0x800C0414",
           "end": "0x800C0420"
         },
         {
-          "symbol": "fn_800C0420__14Class_80297CE8i",
+          "symbol": "fn_800C0420__12PreSnapPhasei",
           "start": "0x800C0420",
           "end": "0x800C043C"
         },
         {
-          "symbol": "fn_800C043C__14Class_80297CE8i",
+          "symbol": "fn_800C043C__12PreSnapPhasei",
           "start": "0x800C043C",
           "end": "0x800C0458"
         },
         {
-          "symbol": "fn_800C0458__14Class_80297CE8",
+          "symbol": "fn_800C0458__12PreSnapPhase",
           "start": "0x800C0458",
           "end": "0x800C0464"
         },
@@ -23520,27 +23520,27 @@
           "end": "0x800B4DE4"
         },
         {
-          "symbol": "vfn_07__14Class_80297BF8",
+          "symbol": "HideIntroScreen__12PreGamePhase",
           "start": "0x800BC4E0",
           "end": "0x800BC51C"
         },
         {
-          "symbol": "vfn_02__14Class_80297BF8",
+          "symbol": "Shutdown__12PreGamePhase",
           "start": "0x800BC5B8",
           "end": "0x800BC5DC"
         },
         {
-          "symbol": "vfn_10__14Class_80297BF8f",
+          "symbol": "UpdateIntroEnd__12PreGamePhasef",
           "start": "0x800BCA00",
           "end": "0x800BCAF4"
         },
         {
-          "symbol": "vfn_11__14Class_80297BF8f",
+          "symbol": "EnterFirstPhase__12PreGamePhasef",
           "start": "0x800BCAF4",
           "end": "0x800BCB18"
         },
         {
-          "symbol": "vfn_04__14Class_80297BF8f",
+          "symbol": "OnUpdate__12PreGamePhasef",
           "start": "0x800BCB18",
           "end": "0x800BCC30"
         },
@@ -24280,12 +24280,12 @@
           "end": "0x800A039C"
         },
         {
-          "symbol": "vfn_03__14Class_80297AB8",
+          "symbol": "OnEnter__13LivePlayPhase",
           "start": "0x800A042C",
           "end": "0x800A050C"
         },
         {
-          "symbol": "vfn_05__14Class_80297AB8",
+          "symbol": "OnExit__13LivePlayPhase",
           "start": "0x800A05E8",
           "end": "0x800A061C"
         },
@@ -24461,7 +24461,7 @@
           "end": "0x800B8A40"
         },
         {
-          "symbol": "vfn_09__14Class_80297C60Pc",
+          "symbol": "GetResultText__13PostPlayPhasePc",
           "start": "0x800B8E18",
           "end": "0x800B925C"
         },
@@ -24471,7 +24471,7 @@
           "end": "0x800B9540"
         },
         {
-          "symbol": "vfn_03__14Class_80297C60f",
+          "symbol": "OnEnter__13PostPlayPhasef",
           "start": "0x800B9654",
           "end": "0x800B9830"
         },
@@ -24671,7 +24671,7 @@
       ],
       "functions": [
         {
-          "symbol": "vfn_03__14Class_80297BF8",
+          "symbol": "OnEnter__12PreGamePhase",
           "start": "0x800BC5DC",
           "end": "0x800BC83C"
         }
@@ -24697,17 +24697,17 @@
       ],
       "functions": [
         {
-          "symbol": "vfn_08__14Class_80297BF8f",
+          "symbol": "UpdateIntroStart__12PreGamePhasef",
           "start": "0x800BC83C",
           "end": "0x800BC8E0"
         },
         {
-          "symbol": "vfn_09__14Class_80297BF8f",
+          "symbol": "UpdateIntro__12PreGamePhasef",
           "start": "0x800BC8E0",
           "end": "0x800BCA00"
         },
         {
-          "symbol": "vfn_05__14Class_80297BF8",
+          "symbol": "OnExit__12PreGamePhase",
           "start": "0x800BCC30",
           "end": "0x800BCF7C"
         },
@@ -25979,7 +25979,7 @@
     {
       "source": "src/game/cu_8007A9E4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4–8007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -32898,7 +32898,7 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50–802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
@@ -35141,7 +35141,7 @@
     {
       "source": "src/game/cu_801537A0.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #916; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1BC8 of src/game/cu_80153844.cpp (0x801537A0-0x80153844, word 0x802A1BE4), replacing the base entry 0x800BC5DC of the table 0x80297BF8 (include/game/Class_80297BF8.h). Calls the base entry 0x800BC5DC (vfn_03__14Class_80297BF8), entries 14 and 35 of the fn_80148A58 object and the registered functions 0x80178D70, 0x8017E094, 0x8017DC08, 0x800A8738 and 0x80157514. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #916; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1BC8 of src/game/cu_80153844.cpp (0x801537A0-0x80153844, word 0x802A1BE4), replacing the base entry 0x800BC5DC of the table 0x80297BF8 (include/game/Class_80297BF8.h). Calls the base entry 0x800BC5DC (OnEnter__14Class_80297BF8), entries 14 and 35 of the fn_80148A58 object and the registered functions 0x80178D70, 0x8017E094, 0x8017DC08, 0x800A8738 and 0x80157514. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35752,7 +35752,7 @@
           "end": "0x800A02FC"
         },
         {
-          "symbol": "vfn_04__14Class_80297AB8f",
+          "symbol": "OnUpdate__13LivePlayPhasef",
           "start": "0x800A050C",
           "end": "0x800A05E8"
         },
@@ -39046,17 +39046,17 @@
           "end": "0x800BF824"
         },
         {
-          "symbol": "vfn_04__14Class_80297CE8f",
+          "symbol": "OnEnter__12PreSnapPhasef",
           "start": "0x800BFB88",
           "end": "0x800BFFD4"
         },
         {
-          "symbol": "vfn_05__14Class_80297CE8f",
+          "symbol": "OnUpdate__12PreSnapPhasef",
           "start": "0x800BFFD4",
           "end": "0x800C0174"
         },
         {
-          "symbol": "vfn_06__14Class_80297CE8f",
+          "symbol": "OnExit__12PreSnapPhasef",
           "start": "0x800C0174",
           "end": "0x800C02C8"
         }
@@ -50157,7 +50157,7 @@
     {
       "source": "src/game/cu_8014FFC4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC–802A12C8. Partial comparison only; original bytes remain linked.",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -50250,7 +50250,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34–DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",

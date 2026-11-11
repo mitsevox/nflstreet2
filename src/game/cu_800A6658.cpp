@@ -48,11 +48,11 @@ void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_800A7514(int team);
 void fn_800AE750(int index, int team);
 void HudHidePressPrompt(int team);
-void fn_80156C78(int id, int value);
+void TutorialSetMoveDone(int id, int value);
 void fn_800A9384(int mode);
 void fn_80073210(int frames);
 void fn_800A6D5C(int team);
-int fn_80156704(void);
+int TutorialIsActive(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 void PlayBookSelectAudible(int team, unsigned int index);
@@ -378,10 +378,10 @@ extern "C" void fn_800A7514(int team)
             float mine = StyleTrackerGetMeterFraction(team);
             float theirs = StyleTrackerGetMeterFraction(other);
 
-            fn_80156C78(34, 1);
+            TutorialSetMoveDone(34, 1);
             if (lbl_803EC954[team]->mUnknown6C == 2) {
                 fn_800A9384(fn_800A6DD0(team));
-                fn_80156C78(35, 1);
+                TutorialSetMoveDone(35, 1);
                 if (lbl_803EC954[other]->mUnknown68 != 0) {
                     AudmonEventPostArgs(11, 0, 0, 0, 0);
                 } else {
@@ -423,7 +423,7 @@ extern "C" void fn_800A7514(int team)
             args[0] = team;
             args[1] = 1;
             fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
-            if (fn_80156704() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
+            if (TutorialIsActive() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
                 Object_80039F5C *p = fn_80039FE8(fn_80178308(), 0, 0);
                 unsigned char side;
 

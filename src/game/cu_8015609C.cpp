@@ -1,7 +1,7 @@
 #include "game/Class_80297B90.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 
-class Class_802A2560 : public Class_802A56E8 {
+class Class_802A2560 : public ScrmRuleSet {
 };
 
 class Class_802A24F8 : public Class_80297B90 {

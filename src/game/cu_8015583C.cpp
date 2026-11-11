@@ -1,16 +1,16 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 
 void *operator new(unsigned int size, int unknown);
 
-class Class_802A18C8 : public Class_80297BF8 {
+class Class_802A18C8 : public PreGamePhase {
 };
 
-class Class_802A17A8 : public Class_802A56E8 {
+class Class_802A17A8 : public ScrmRuleSet {
 public:
     unsigned char mUnknown4;
 };
@@ -48,9 +48,9 @@ public:
 };
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 void fn_8017CAC0(void (*pCallback)(unsigned int, int, int));
 void fn_80155588(Class_802A17A8 *p, int team);
 void fn_801556D0(unsigned int kind, int value, int flag);

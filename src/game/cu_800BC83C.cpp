@@ -1,5 +1,5 @@
 #include "game/Block_800BFAD0.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Challenge.h"
 #include "game/cu_8002B8F8.h"
 #include "game/PauseMenu.h"
@@ -118,7 +118,7 @@ void CamGamePushCurrentCamera(void);
 GameCamera_t *CamGameGetCamera(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
-int fn_80156704(void);
+int TutorialIsActive(void);
 void fn_8016E498(void);
 int fn_8016E764(void);
 void fn_801780A8(Point_8017886C pos);
@@ -147,7 +147,7 @@ extern unsigned char lbl_803EABB4;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-void Class_80297BF8::vfn_08(float dt)
+void PreGamePhase::UpdateIntroStart(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
@@ -165,7 +165,7 @@ void Class_80297BF8::vfn_08(float dt)
     }
 }
 
-void Class_80297BF8::vfn_09(float dt)
+void PreGamePhase::UpdateIntro(float dt)
 {
     int busy = fn_800BAF30();
 
@@ -193,11 +193,11 @@ void Class_80297BF8::vfn_09(float dt)
     }
 }
 
-void Class_80297BF8::vfn_05()
+void PreGamePhase::OnExit()
 {
     if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
-        fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
-        vfn_07();
+        TutorialIsActive() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
+        HideIntroScreen();
     }
     lbl_803EC98C->mUnknown32 = 0;
     PlayerObjSetDrawReady(1);
@@ -470,7 +470,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (involved && fn_800A8444(side) == 0 && fn_800A8488(side) != 0) {
             int blocked = 0;
 
-            if (fn_80156704() != 0) {
+            if (TutorialIsActive() != 0) {
                 blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {

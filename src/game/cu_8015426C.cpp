@@ -1,11 +1,11 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801D2B7C.h"
@@ -14,14 +14,14 @@
 
 void *operator new(unsigned int size, int unknown);
 
-class Class_802A1BC8 : public Class_80297BF8 {
+class Class_802A1BC8 : public PreGamePhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
 };
 
-class Class_802A1B58 : public Class_80297CE8 {
+class Class_802A1B58 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
     int mUnknown4;
     int mUnknown8;
     int mUnknown12;
@@ -37,20 +37,20 @@ public:
     virtual void vfn_03();
 };
 
-class Class_802A1AE0 : public Class_80297AB8 {
+class Class_802A1AE0 : public LivePlayPhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
     int mUnknown4;
 };
 
-class Class_802A1A58 : public Class_80297C60 {
+class Class_802A1A58 : public PostPlayPhase {
 public:
-    virtual int vfn_09(char *pText);
+    virtual int GetResultText(char *pText);
 };
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
 class Class_802A19F0 : public Class_80297B90 {
@@ -90,13 +90,13 @@ public:
 };
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800B3644(Class_80297B50 *pObject);
-void fn_800BFAB4(Class_80297CE8 *pObject);
-void fn_800A039C(Class_80297AB8 *pObject);
-void fn_800B9598(Class_80297C60 *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(void);
 void *fn_8023816C(void *pHandle);
 float fn_80178A2C(void);

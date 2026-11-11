@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -49,7 +49,7 @@ int fn_80101B7C(Object_80039F5C *p);
 int MathAngleDiff(int a, int b);
 float MathInverse(float value);
 void AnimSeqSetSpeed(void *p, float value);
-void fn_80156C78(int index, int value);
+void TutorialSetMoveDone(int index, int value);
 void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
 }
 
@@ -165,12 +165,12 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
             } else {
                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
                 anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
-                fn_80156C78(0x19, 1);
+                TutorialSetMoveDone(0x19, 1);
             }
         } else {
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
             anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
-            fn_80156C78(0x19, 1);
+            TutorialSetMoveDone(0x19, 1);
         }
         if (anim == 0xFFFF) {
             anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0x45, 0);

@@ -65,13 +65,13 @@
 
 
 
-#include "game/Class_80297CE8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreSnapPhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreGamePhase.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297B50.h"
 #include "game/DefPred.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
@@ -240,7 +240,7 @@ int fn_800B2320(void);
 Object_80039F5C *fn_800B2340(int index);
 Ball_t *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 int AnimSeqCamGetFileFlag(Actor_801C009C *pActor);
-void fn_800B9B64(Class_80297C60 *p, int enable, int value);
+void fn_800B9B64(PostPlayPhase *p, int enable, int value);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800944A4(int kind);
 int fn_800948E4(Object_8017886C *p);
@@ -4030,7 +4030,7 @@ extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, 
 }
 
 extern "C" {
-void fn_80156C78(int id, int value);
+void TutorialSetMoveDone(int id, int value);
 }
 
 extern "C" int fn_800C8694(Object_80039F5C *p)
@@ -4802,7 +4802,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
                         fn_800AE7F0(4, team, 0);
                     }
                     if (PlayerMoveGetKind(p) == 0) {
-                        fn_80156C78(0, 1);
+                        TutorialSetMoveDone(0, 1);
                     }
                 }
                 if (p->mUnknown8 != 255) {
@@ -5858,8 +5858,8 @@ int fn_8011F1CC(void);
 void PassIconsShow(int mode);
 void fn_80162FB8(int index, int ref);
 void fn_80163020(void);
-int fn_80156704(void);
-void fn_801574DC(int value);
+int TutorialIsActive(void);
+void TutorialSetHudVisible(int value);
 void fn_800C0330(void *p);
 void fn_80047874(unsigned char enable);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
@@ -6026,8 +6026,8 @@ extern "C" int fn_800A61E0(void)
 
 extern "C" void fn_800A61E8(int value)
 {
-    if (fn_80156704() && (value == 0 || lbl_803EC954[0]->mUnknown68 != 2 || lbl_803EC954[1]->mUnknown68 != 2)) {
-        fn_801574DC(value);
+    if (TutorialIsActive() && (value == 0 || lbl_803EC954[0]->mUnknown68 != 2 || lbl_803EC954[1]->mUnknown68 != 2)) {
+        TutorialSetHudVisible(value);
     }
 }
 
@@ -6618,14 +6618,14 @@ extern "C" void fn_800A8738(int value)
     lbl_803EAA51 = value;
 }
 
-extern "C" unsigned int fn_801568F0(void);
+extern "C" unsigned int TutorialGetLesson(void);
 
 extern "C" int fn_800A8740(void)
 {
     if (lbl_803EAA51 != 0) {
         return 1;
     }
-    if (GameModeTypeGet() == 11 && fn_801568F0() == 4) {
+    if (GameModeTypeGet() == 11 && TutorialGetLesson() == 4) {
         return 0;
     }
     if (GameModeTypeGet() == 7 || GameModeTypeGet() == 10) {
@@ -6926,8 +6926,8 @@ extern "C" int fn_800A9680(void)
 extern "C" void fn_800A9688(void)
 {
     HudPost3AOff();
-    if (fn_80156704()) {
-        fn_801574DC(0);
+    if (TutorialIsActive()) {
+        TutorialSetHudVisible(0);
     }
     fn_800B63B0();
     fn_800A9238();
@@ -7232,8 +7232,8 @@ void fn_800B4250(int enable, int own);
 extern void *gUISMainInfo;
 int fn_800B1AAC(void *p);
 void fn_800B2670(unsigned char value);
-void *fn_800B9A44(Class_80297C60 *p);
-void fn_800B9A6C(Class_80297C60 *p, void *q);
+void *fn_800B9A44(PostPlayPhase *p);
+void fn_800B9A6C(PostPlayPhase *p, void *q);
 void fn_800B30C8(void);
 void fn_800B44D4(BitStream_t *pStream);
 void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t);
@@ -8915,7 +8915,7 @@ struct Record_800BAE7C {
     unsigned char mUnknown4D[3];
 };
 
-/* Block allocated by 0x800BC538 (entry 1 of the Class_80297BF8 vtable)
+/* Block allocated by 0x800BC538 (entry 1 of the PreGamePhase vtable)
    through fn_80238174 under the id 'preg' (52 bytes); only the fields
    accessed here are declared. */
 struct Block_800BC538 {
@@ -8959,7 +8959,7 @@ extern int lbl_803EC990[2];
 extern unsigned char lbl_803EAB94;
 extern unsigned char lbl_803EAB95;
 extern unsigned char lbl_803EABA1;
-extern Class_80297BF8 lbl_803EC910;
+extern PreGamePhase lbl_803EC910;
 }
 
 extern "C" unsigned char fn_800BB0C4(void);
@@ -9238,7 +9238,7 @@ extern "C" void fn_800BB9A4(int team, int value)
     }
 }
 
-extern "C" void fn_800BBB4C(Class_80297BF8 *pThis)
+extern "C" void fn_800BBB4C(PreGamePhase *pThis)
 {
     fn_800CC560(1);
     lbl_803EC98C->mUnknown0 = 2;
@@ -9496,7 +9496,7 @@ extern "C" void fn_800BC3F0(void)
     }
 }
 
-void Class_80297BF8::vfn_06()
+void PreGamePhase::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         int show = 1;
@@ -9510,14 +9510,14 @@ void Class_80297BF8::vfn_06()
     }
 }
 
-void Class_80297BF8::vfn_07()
+void PreGamePhase::HideIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         fn_8021956C(gUISMainInfo, 3, 8, 1);
     }
 }
 
-extern "C" void fn_800BC51C(Class_80297BF8 *pObject)
+extern "C" void fn_800BC51C(PreGamePhase *pObject)
 {
     if (pObject == 0) {
         lbl_803EAB90 = &lbl_803EC910;
@@ -9526,7 +9526,7 @@ extern "C" void fn_800BC51C(Class_80297BF8 *pObject)
     }
 }
 
-void Class_80297BF8::vfn_01()
+void PreGamePhase::InitState()
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
     Block_800BC538 *p = (Block_800BC538 *)fn_8023816C(pHandle);
@@ -10259,7 +10259,7 @@ void fn_80072C90(unsigned int delay, int wait);
 void InGameStop(void);
 StevRow_t *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
-int fn_80157080(void);
+int TutorialFinishCategory(void);
 int fn_80061D14(void);
 void fn_801CE720(void);
 void fn_801CE774(void);
@@ -10418,7 +10418,7 @@ void Class_80297B90::vfn_04(float dt)
         fn_800AA124();
         SndgNullHook();
         if (fn_800C1E40() == 0) {
-            if (GameModeTypeGet() == 11 && fn_80157080() != 0) {
+            if (GameModeTypeGet() == 11 && TutorialFinishCategory() != 0) {
                 break;
             }
             fn_80072C90(250, 0);
@@ -10915,10 +10915,10 @@ extern "C" void fn_800AD634(float dt)
         pEnter(dt);
     }
     fn_802381E0(pHandle);
-    lbl_803EAB90->vfn_01();
-    lbl_803EABA4->vfn_02();
-    lbl_803EA9E4->vfn_01();
-    lbl_803EAB84->vfn_01();
+    lbl_803EAB90->InitState();
+    lbl_803EABA4->InitState();
+    lbl_803EA9E4->InitState();
+    lbl_803EAB84->InitState();
     lbl_803EAB38->vfn_01();
     gQuarterEndPhase->InitState();
     lbl_803EAA8C->vfn_01();
@@ -12781,7 +12781,7 @@ int ChallengeIsDecided(int *pResult);
 int ChallengeIsPairingGame(void);
 int fn_8005900C(void);
 void ChallengeRecordResult(int a, int b);
-int fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(PostPlayPhase *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
 int fn_80178308(void);
@@ -12814,8 +12814,8 @@ extern Block_8009D474 *lbl_803EA9A8;
 extern int lbl_803EA9D0;
 extern int lbl_803EA9D4;
 extern int lbl_803EA9D8;
-extern Class_80297AB8 *lbl_803EA9E4;
-extern Class_80297AB8 lbl_803EC900;
+extern LivePlayPhase *lbl_803EA9E4;
+extern LivePlayPhase lbl_803EC900;
 extern Block_802D7C64 lbl_802D7C64[];
 extern unsigned int lbl_803EA9EC;
 }
@@ -13595,7 +13595,7 @@ extern "C" void fn_800A0230(void)
     }
 }
 
-extern "C" void fn_800A039C(Class_80297AB8 *pObject)
+extern "C" void fn_800A039C(LivePlayPhase *pObject)
 {
     if (pObject == 0) {
         lbl_803EA9E4 = &lbl_803EC900;
@@ -13610,7 +13610,7 @@ void PassIconsHide(void);
 extern void **lbl_803EA9E8;
 }
 
-void Class_80297AB8::vfn_01()
+void LivePlayPhase::InitState()
 {
     void *handle = fn_80238174(0, (void **)&lbl_803EA9E8, 80, 0, 0x64706C79);
 
@@ -13618,12 +13618,12 @@ void Class_80297AB8::vfn_01()
     fn_802381E0(handle);
 }
 
-void Class_80297AB8::vfn_02()
+void LivePlayPhase::Shutdown()
 {
     fn_800A039C(0);
 }
 
-void Class_80297AB8::vfn_05()
+void LivePlayPhase::OnExit()
 {
     PassIconsHide();
     PadInputRestoreHandlers(lbl_803EA9E8);
@@ -13781,7 +13781,7 @@ extern "C" void fn_800A1A84(Object_8017886C *pResult, Object_8017886C *pSaved)
         break;
     }
     if (fn_800A2178() == 0) {
-        fn_80156C78(33, 1);
+        TutorialSetMoveDone(33, 1);
     }
 }
 
@@ -14593,47 +14593,47 @@ extern "C" int fn_800CF090(Object_80039F5C *p)
 
 extern "C" void fn_800CF35C(float dt)
 {
-    lbl_803EABA4->vfn_04(dt);
+    lbl_803EABA4->OnEnter(dt);
 }
 
 extern "C" void fn_800CF394(float dt)
 {
-    lbl_803EABA4->vfn_05(dt);
+    lbl_803EABA4->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF3CC(float dt)
 {
-    lbl_803EABA4->vfn_06(dt);
+    lbl_803EABA4->OnExit(dt);
 }
 
 extern "C" void fn_800CF404(float dt)
 {
-    lbl_803EAB84->vfn_03(dt);
+    lbl_803EAB84->OnEnter(dt);
 }
 
 extern "C" void fn_800CF43C(float dt)
 {
-    lbl_803EAB84->vfn_04(dt);
+    lbl_803EAB84->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF474(float dt)
 {
-    lbl_803EAB84->vfn_05();
+    lbl_803EAB84->OnExit();
 }
 
 extern "C" void fn_800CF4AC(float dt)
 {
-    lbl_803EAB90->vfn_03();
+    lbl_803EAB90->OnEnter();
 }
 
 extern "C" void fn_800CF4E4(float dt)
 {
-    lbl_803EAB90->vfn_04(dt);
+    lbl_803EAB90->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF51C(float dt)
 {
-    lbl_803EAB90->vfn_05();
+    lbl_803EAB90->OnExit();
 }
 
 extern "C" void fn_800CF554(float dt)
@@ -14668,17 +14668,17 @@ extern "C" void fn_800CF66C(float dt)
 
 extern "C" void fn_800CF6A4(float dt)
 {
-    lbl_803EA9E4->vfn_03();
+    lbl_803EA9E4->OnEnter();
 }
 
 extern "C" void fn_800CF6DC(float dt)
 {
-    lbl_803EA9E4->vfn_04(dt);
+    lbl_803EA9E4->OnUpdate(dt);
 }
 
 extern "C" void fn_800CF714(float dt)
 {
-    lbl_803EA9E4->vfn_05();
+    lbl_803EA9E4->OnExit();
 }
 
 extern "C" void fn_800CF74C(float dt)
@@ -14766,13 +14766,13 @@ void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 void fn_800B6988(int index);
 int fn_800B7F34(Object_80039F5C *p);
-int fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(PostPlayPhase *p);
 
 extern unsigned char lbl_803EAB44;
 extern Block_800B62D8 *lbl_803EAB60;
 extern unsigned char lbl_803EAB74;
 extern Block_800B95B4 *lbl_803EAB78;
-extern Class_80297C60 lbl_803EC90C;
+extern PostPlayPhase lbl_803EC90C;
 extern Pool_800B8544 lbl_803EC930;
 extern float gPlyrMoveFwdSpeed;
 }
@@ -15527,7 +15527,7 @@ extern "C" void fn_800B847C(int index, unsigned char value)
     }
 }
 
-extern "C" void fn_800BD184(Class_80297BF8 *p, int value);
+extern "C" void fn_800BD184(PreGamePhase *p, int value);
 
 extern "C" void fn_800B852C(void)
 {
@@ -15651,13 +15651,13 @@ extern unsigned char lbl_803EAB7E;
 extern int lbl_803EAB80;
 }
 
-void Class_80297C60::vfn_08()
+void PostPlayPhase::SetupCamera()
 {
     CamGameSelectCamera(0);
     CamGameSetModeAll(4);
 }
 
-int Class_80297C60::vfn_13(int busy)
+int PostPlayPhase::IsFinished(int busy)
 {
     int result = 0;
 
@@ -15679,7 +15679,7 @@ int Class_80297C60::vfn_13(int busy)
     return result;
 }
 
-void Class_80297C60::vfn_14(float dt)
+void PostPlayPhase::Finish(float dt)
 {
     fn_8003A450();
     if (fn_8005BFD4() != 4) {
@@ -15717,7 +15717,7 @@ void Class_80297C60::vfn_14(float dt)
     }
 }
 
-void Class_80297C60::vfn_15()
+void PostPlayPhase::ForceFinish()
 {
     lbl_803EAB78->mUnknown148 = 1;
 }
@@ -15736,7 +15736,7 @@ extern "C" void fn_800B8C9C(void)
     }
 }
 
-void Class_80297C60::vfn_10(float dt)
+void PostPlayPhase::UpdateCue(float dt)
 {
     fn_800B8C9C();
     if (fn_8002D228(lbl_803EA368) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
@@ -15750,7 +15750,7 @@ void Class_80297C60::vfn_10(float dt)
     }
 }
 
-int Class_80297C60::vfn_11(float dt)
+int PostPlayPhase::IsHeld(float dt)
 {
     if (fn_800AE978() != 0 && lbl_803EAB78->mUnknown154 > 174) {
         fn_800AE6F0();
@@ -15758,7 +15758,7 @@ int Class_80297C60::vfn_11(float dt)
     return fn_800AE980();
 }
 
-int Class_80297C60::vfn_12(float dt)
+int PostPlayPhase::GetBusy(float dt)
 {
     return fn_8009B4C8(0);
 }
@@ -15769,16 +15769,16 @@ int BannerIsActive(int a);
 void fn_800B925C(void *p, char *pText);
 }
 
-void Class_80297C60::vfn_07()
+void PostPlayPhase::ShowResultText()
 {
     char text[32];
 
-    if (vfn_09(text) != 0) {
+    if (GetResultText(text) != 0) {
         fn_800B925C(this, text);
     }
 }
 
-extern "C" void fn_800B9598(Class_80297C60 *p)
+extern "C" void fn_800B9598(PostPlayPhase *p)
 {
     if (p == 0) {
         lbl_803EAB84 = &lbl_803EC90C;
@@ -15789,7 +15789,7 @@ extern "C" void fn_800B9598(Class_80297C60 *p)
 
 extern "C" void fn_800C4438(Sequence_800C4460 *p);
 
-void Class_80297C60::vfn_01()
+void PostPlayPhase::InitState()
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EAB78, sizeof(Block_800B95B4), 0, 0x70737470);
     Block_800B95B4 *p;
@@ -15801,7 +15801,7 @@ void Class_80297C60::vfn_01()
     fn_802381E0(pHandle);
 }
 
-void Class_80297C60::vfn_02()
+void PostPlayPhase::Shutdown()
 {
     fn_800B9598(0);
 }
@@ -15826,18 +15826,18 @@ void fn_800C45C0(Sequence_800C4460 *p, float dt);
 void HudCycleMashPrompt(void);
 }
 
-void Class_80297C60::vfn_04(float dt)
+void PostPlayPhase::OnUpdate(float dt)
 {
     int finished;
 
     HudCycleMashPrompt();
     SpchIGUpdatePlayResult();
-    vfn_10(dt);
+    UpdateCue(dt);
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800C45C0(&lbl_803EAB78->mSequence, dt);
     }
     if (ChallengeIsActive() != 0 && fn_8009D990(4) == 0) {
-        vfn_15();
+        ForceFinish();
     }
     if (lbl_803EAB78->mUnknown14C != 0) {
         lbl_803EAB78->mUnknown144++;
@@ -15845,19 +15845,19 @@ void Class_80297C60::vfn_04(float dt)
     lbl_803EAB78->mUnknown154++;
     finished = 0;
     fn_800B8940();
-    if (vfn_11(dt) == 0) {
-        int busy = vfn_12(dt);
+    if (IsHeld(dt) == 0) {
+        int busy = GetBusy(dt);
 
-        if (vfn_13(busy) != 0) {
+        if (IsFinished(busy) != 0) {
             finished = 1;
         }
     }
     if (finished == 1) {
-        vfn_14(dt);
+        Finish(dt);
     }
 }
 
-void Class_80297C60::vfn_05()
+void PostPlayPhase::OnExit()
 {
     SpchIGFlushPlayResult();
     fn_800B14E4();
@@ -15882,21 +15882,21 @@ void Class_80297C60::vfn_05()
     fn_80179150();
 }
 
-extern "C" void *fn_800B9A44(Class_80297C60 *p)
+extern "C" void *fn_800B9A44(PostPlayPhase *p)
 {
     return fn_800C4658(&lbl_803EAB78->mSequence);
 }
 
-void Class_80297C60::vfn_06()
+void PostPlayPhase::OnSequenceStart()
 {
 }
 
-extern "C" void fn_800B9A6C(Class_80297C60 *p, void *q)
+extern "C" void fn_800B9A6C(PostPlayPhase *p, void *q)
 {
     fn_800C46A0(&lbl_803EAB78->mSequence);
 }
 
-extern "C" int fn_800B9A90(Class_80297C60 *p)
+extern "C" int fn_800B9A90(PostPlayPhase *p)
 {
     return lbl_803EAB78->mUnknown151;
 }
@@ -15909,7 +15909,7 @@ extern "C" int fn_800B9B18(void *p)
     return 0;
 }
 
-extern "C" void fn_800B9B64(Class_80297C60 *p, int enable, int value)
+extern "C" void fn_800B9B64(PostPlayPhase *p, int enable, int value)
 {
     lbl_803EAB78->mUnknown160 = enable;
     lbl_803EAB78->mUnknown164 = enable != 0 ? value : 2;
@@ -15918,12 +15918,12 @@ extern "C" void fn_800B9B64(Class_80297C60 *p, int enable, int value)
     }
 }
 
-extern "C" void fn_800B9B9C(Class_80297C60 *p)
+extern "C" void fn_800B9B9C(PostPlayPhase *p)
 {
     lbl_803EAB78->mUnknown150 = 1;
 }
 
-extern "C" void fn_800B9BAC(Class_80297C60 *p)
+extern "C" void fn_800B9BAC(PostPlayPhase *p)
 {
     lbl_803EAB78->mUnknown151 = 1;
 }
@@ -15994,7 +15994,7 @@ int fn_800A937C(void);
 int fn_800A9648(void);
 void fn_800BD35C(void);
 void fn_8003A3F4(int a, int index);
-int fn_80156704(void);
+int TutorialIsActive(void);
 int ChallengeHasRecordFlag(void);
 void fn_800AE904(int a);
 int fn_800AE980(void);
@@ -16020,7 +16020,7 @@ extern unsigned char lbl_803EABD4;
 extern unsigned char lbl_803EABD5;
 extern int lbl_803EABE4;
 extern unsigned char lbl_803EABE8;
-extern Class_80297CE8 lbl_803EC914;
+extern PreSnapPhase lbl_803EC914;
 extern int lbl_802D9E90[3];
 extern Entry_800C3130 lbl_8030FF40[3][50];
 extern Record_800C432C lbl_803103F0[10];
@@ -16091,7 +16091,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         if (fn_800A8488(team) != 0) {
             int blocked = 0;
 
-            if (fn_80156704() != 0) {
+            if (TutorialIsActive() != 0) {
                 blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
@@ -16227,10 +16227,10 @@ extern "C" void fn_800BDA00(void);
 extern "C" void fn_800BDA7C(void);
 extern "C" void fn_8016E498(void);
 
-extern "C" void fn_800BE72C(Class_80297CE8 *p)
+extern "C" void fn_800BE72C(PreSnapPhase *p)
 {
     if (fn_800B65A0(fn_80178308()) == 255) {
-        if (p->vfn_12() != 0) {
+        if (p->CanSnap() != 0) {
             fn_8016E498();
         } else {
             fn_800BDA00();
@@ -16243,13 +16243,13 @@ extern "C" void fn_800BE794(void)
 {
 }
 
-extern "C" void fn_800BE798(Class_80297CE8 *p)
+extern "C" void fn_800BE798(PreSnapPhase *p)
 {
     fn_800BE72C(p);
     fn_800BE794();
 }
 
-int Class_80297CE8::vfn_12()
+int PreSnapPhase::CanSnap()
 {
     int result = 0;
 
@@ -16303,14 +16303,14 @@ extern "C" void fn_800BEC1C(int a, int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown0 = 5;
     lbl_803EABA8->mSlots[index].mUnknown8 = 0;
-    if (fn_80156704() == 0) {
+    if (TutorialIsActive() == 0) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
             HudShowPressPrompt(0);
         }
         if (fn_800A8488(1) && !fn_800A8444(1)) {
             HudShowPressPrompt(1);
         }
-    } else if (lbl_803EABA4->vfn_08()) {
+    } else if (lbl_803EABA4->AllowsPressPrompts()) {
         if (fn_800A8488(0) && !fn_800A8444(0)) {
             HudShowPressPrompt(0);
         }
@@ -16508,7 +16508,7 @@ extern "C" void fn_800BF174(void)
     lbl_803EABA4->fn_800C02EC(value);
 }
 
-void Class_80297CE8::vfn_09()
+void PreSnapPhase::ReleaseHeldBalls()
 {
     int count = BallsGetCount();
     int i;
@@ -16523,7 +16523,7 @@ void Class_80297CE8::vfn_09()
     }
 }
 
-void Class_80297CE8::vfn_11()
+void PreSnapPhase::SetupCamera()
 {
     CamGameSetModeAll(1);
     if (fn_800B65A0(0) == 255 && fn_800B65A0(1) == 255 && fn_8019623C(0x23000) != 0) {
@@ -16638,7 +16638,7 @@ extern "C" int fn_800BF824(void)
     int result = 0;
 
     if (lbl_803EABA8->mUnknownB8 > 30) {
-        if (fn_80156704() == 0 && fn_801485D4() == 0 && ChallengeHasRecordFlag() != 0) {
+        if (TutorialIsActive() == 0 && fn_801485D4() == 0 && ChallengeHasRecordFlag() != 0) {
             fn_800AE904(3);
         }
         lbl_803EABA8->mUnknownB8 = -1;
@@ -16655,7 +16655,7 @@ extern "C" int fn_800A82FC(int team);
 extern "C" void HudPost3AOn(void);
 extern "C" void fn_8016DB94(int team);
 
-extern "C" int fn_800BF8A8(Class_80297CE8 *p)
+extern "C" int fn_800BF8A8(PreSnapPhase *p)
 {
     int result = fn_800A7FD8();
 
@@ -16689,7 +16689,7 @@ extern "C" int fn_800BF8A8(Class_80297CE8 *p)
     return result;
 }
 
-extern "C" void fn_800BF9DC(Class_80297CE8 *p)
+extern "C" void fn_800BF9DC(PreSnapPhase *p)
 {
     if (lbl_803EABA8->mUnknownB4 > 60) {
         unsigned int i;
@@ -16711,7 +16711,7 @@ extern "C" void fn_800BF9DC(Class_80297CE8 *p)
     }
 }
 
-extern "C" void fn_800BFAB4(Class_80297CE8 *p)
+extern "C" void fn_800BFAB4(PreSnapPhase *p)
 {
     if (p == 0) {
         lbl_803EABA4 = &lbl_803EC914;
@@ -16720,7 +16720,7 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     }
 }
 
-void Class_80297CE8::vfn_02()
+void PreSnapPhase::InitState()
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
 
@@ -16729,39 +16729,39 @@ void Class_80297CE8::vfn_02()
     fn_802381E0(pHandle);
 }
 
-void Class_80297CE8::vfn_03()
+void PreSnapPhase::Shutdown()
 {
     fn_800BFAB4(0);
 }
 
-void Class_80297CE8::vfn_10()
+void PreSnapPhase::AssignControlledPlayers()
 {
     fn_800B6B98();
 }
 
-int Class_80297CE8::fn_800C02C8()
+int PreSnapPhase::fn_800C02C8()
 {
     return lbl_803EABA8->mUnknownA4;
 }
 
-void Class_80297CE8::fn_800C02D4(short value)
+void PreSnapPhase::fn_800C02D4(short value)
 {
     lbl_803EABA8->mUnknownA4 = value;
 }
 
-short Class_80297CE8::fn_800C02E0()
+short PreSnapPhase::fn_800C02E0()
 {
     return lbl_803EABA8->mUnknownA6;
 }
 
-void Class_80297CE8::fn_800C02EC(short value)
+void PreSnapPhase::fn_800C02EC(short value)
 {
     lbl_803EABA8->mUnknownA6 = value;
 }
 
 extern "C" void fn_800BF174(void);
 
-void Class_80297CE8::fn_800C02F8(int value)
+void PreSnapPhase::fn_800C02F8(int value)
 {
     lbl_803EABA8->mUnknown40 = value;
     if (fn_800AD9B4() == 2) {
@@ -16769,26 +16769,26 @@ void Class_80297CE8::fn_800C02F8(int value)
     }
 }
 
-void Class_80297CE8::vfn_07()
+void PreSnapPhase::UnusedHook()
 {
 }
 
-int Class_80297CE8::fn_800C0414()
+int PreSnapPhase::fn_800C0414()
 {
     return lbl_803EABA8->mUnknown40;
 }
 
-unsigned char Class_80297CE8::fn_800C0420(int index)
+unsigned char PreSnapPhase::fn_800C0420(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown0 == 4;
 }
 
-unsigned char Class_80297CE8::fn_800C043C(int index)
+unsigned char PreSnapPhase::fn_800C043C(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown0 == 8;
 }
 
-unsigned char Class_80297CE8::fn_800C0458()
+unsigned char PreSnapPhase::fn_800C0458()
 {
     return lbl_803EABA8->mUnknownA8;
 }
@@ -17380,35 +17380,35 @@ int fn_8013C678(GameCamera_t *pCamera);
 void fn_8013C7C4(GameCamera_t *pCamera);
 }
 
-void Class_80297BF8::vfn_02()
+void PreGamePhase::Shutdown()
 {
     fn_800BC51C(0);
 }
 
-void Class_80297BF8::vfn_10(float dt)
+void PreGamePhase::UpdateIntroEnd(float dt)
 {
     int state;
 
     if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
-        GameModeTypeIsSpecial() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
+        GameModeTypeIsSpecial() == 0 && TutorialIsActive() == 0 && fn_801485D4() == 0 &&
         (state = fn_8007F828(14)) == 1) {
-        vfn_07();
+        HideIntroScreen();
         fn_800AE904(14);
         lbl_803EABA3 = state;
     } else if (fn_800AE980() == 0) {
         fn_800AE988();
         PlayerObjSetDrawReady(1);
-        vfn_11(dt);
+        EnterFirstPhase(dt);
         fn_800941B8();
     }
 }
 
-void Class_80297BF8::vfn_11(float dt)
+void PreGamePhase::EnterFirstPhase(float dt)
 {
     fn_800AD910(5, dt);
 }
 
-void Class_80297BF8::vfn_04(float dt)
+void PreGamePhase::OnUpdate(float dt)
 {
     if (fn_800BA71C() == 1) {
         PlayerObjSetDrawReady(1);
@@ -17419,23 +17419,23 @@ void Class_80297BF8::vfn_04(float dt)
     } else {
         switch (lbl_803EC98C->mUnknown0) {
         case 0:
-            vfn_08(dt);
+            UpdateIntroStart(dt);
             break;
         case 1:
-            vfn_09(dt);
+            UpdateIntro(dt);
             if (lbl_803EC98C->mUnknown0 != 2) {
                 break;
             }
             /* fall through */
         case 2:
-            vfn_10(dt);
+            UpdateIntroEnd(dt);
             break;
         }
     }
     lbl_803EC98C->mUnknown4++;
 }
 
-extern "C" void fn_800BD184(Class_80297BF8 *p, int value)
+extern "C" void fn_800BD184(PreGamePhase *p, int value)
 {
     lbl_803EAB94 = 1;
 }
@@ -18586,7 +18586,7 @@ void SpchIGSetDownedCarrier(int value);
 extern char lbl_802EC880[];
 }
 
-void Class_80297AB8::vfn_03()
+void LivePlayPhase::OnEnter()
 {
     if (!fn_80177F70()) {
         DriveLogEndDrive();
@@ -18662,12 +18662,12 @@ extern float gFrameTimeScale;
 
 DefPred gDefPred;
 
-Class_80297AB8 lbl_803EC900;
+LivePlayPhase lbl_803EC900;
 Class_80297B90 lbl_803EC904;
 Class_80297B50 lbl_803EC908;
-Class_80297C60 lbl_803EC90C;
-Class_80297BF8 lbl_803EC910;
-Class_80297CE8 lbl_803EC914;
+PostPlayPhase lbl_803EC90C;
+PreGamePhase lbl_803EC910;
+PreSnapPhase lbl_803EC914;
 
 float lbl_803EC918 = 100.0f / gFrameTimeScale;
 

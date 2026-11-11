@@ -1,5 +1,5 @@
 #include "game/Block_800BFAD0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/fn_800B65A0.h"
 #include "game/PadInput.h"
 #include "game/AudmonEvent.h"
@@ -18,9 +18,9 @@ void fn_800BED54(unsigned char index);
 void fn_800BEFAC(int index);
 void fn_800BD830(void);
 int fn_800BF824(void);
-int fn_800BF8A8(Class_80297CE8 *p);
-void fn_800BF9DC(Class_80297CE8 *p);
-void fn_800BE798(Class_80297CE8 *p);
+int fn_800BF8A8(PreSnapPhase *p);
+void fn_800BF9DC(PreSnapPhase *p);
+void fn_800BE798(PreSnapPhase *p);
 void SpchIGUpdatePreSnap(void);
 void HudCycleMashPrompt(void);
 int fn_8016EA68(void);
@@ -109,7 +109,7 @@ extern "C" void fn_800BF658(int index)
     fn_8003A3F4(1, index);
 }
 
-extern "C" void fn_800BF72C(Class_80297CE8 *p, float dt)
+extern "C" void fn_800BF72C(PreSnapPhase *p, float dt)
 {
     unsigned int i;
 
@@ -144,7 +144,7 @@ extern "C" void fn_800BF72C(Class_80297CE8 *p, float dt)
 }
 
 
-void Class_80297CE8::vfn_04(float dt)
+void PreSnapPhase::OnEnter(float dt)
 {
     unsigned char i;
 
@@ -153,7 +153,7 @@ void Class_80297CE8::vfn_04(float dt)
     SpchIGPickTeamPlayer(1);
     SpchIGResetPreSnap();
     fn_800ABE00();
-    vfn_09();
+    ReleaseHeldBalls();
     InGameStateSetActive(1);
     if ((fn_8009D86C() == 2 || fn_8009D86C() > 3) && fn_8009D990(1) <= 120 && fn_8009D990(1) != 0
         && InGameIsDemo() == 0) {
@@ -178,7 +178,7 @@ void Class_80297CE8::vfn_04(float dt)
     }
     fn_8009DEFC(1);
     if (fn_801486A0() != 0) {
-        vfn_11();
+        SetupCamera();
     }
     fn_8011DF90();
     fn_8017840C();
@@ -186,7 +186,7 @@ void Class_80297CE8::vfn_04(float dt)
     fn_800AEEDC(0);
     fn_800AEEDC(1);
     fn_8016F6A4();
-    vfn_10();
+    AssignControlledPlayers();
     fn_8011F3A8();
     fn_800AFDD4(fn_800BE4C8);
     PadInputSaveHandlers(lbl_803EABA8->mUnknown48);
@@ -276,7 +276,7 @@ void Class_80297CE8::vfn_04(float dt)
     }
 }
 
-void Class_80297CE8::vfn_05(float dt)
+void PreSnapPhase::OnUpdate(float dt)
 {
     if (fn_800BF824() != 0) {
         return;
@@ -314,7 +314,7 @@ void Class_80297CE8::vfn_05(float dt)
     }
 }
 
-void Class_80297CE8::vfn_06(float dt)
+void PreSnapPhase::OnExit(float dt)
 {
     SpchIGEndPreSnap();
     lbl_803EABA8->mUnknown40 = 0;

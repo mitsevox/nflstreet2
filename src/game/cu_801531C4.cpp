@@ -1,8 +1,8 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
 struct Score_801531C4 {

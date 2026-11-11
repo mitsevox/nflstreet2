@@ -73,7 +73,7 @@ float fn_80178A2C(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801486A0(void);
-void fn_80156C78(int index, int value);
+void TutorialSetMoveDone(int index, int value);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 void fn_80227264(void *pOut, void *pV, float scale);
@@ -475,7 +475,7 @@ extern "C" void fn_800B6988(int index)
         Object_80039F5C *pCarrier;
         int ballState;
 
-        fn_80156C78(0x24, 1);
+        TutorialSetMoveDone(0x24, 1);
         p = fn_800B6544(index);
         pBall = BallGetCurrent();
         BallStateGet(pBall, &ballState);

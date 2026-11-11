@@ -16,14 +16,14 @@
 #include "engine/vptmanager.h"
 #include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Entry_800B206C.h"
 #include "game/Entry_80219044.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
@@ -129,7 +129,7 @@ int fn_8011E9B4(Object_80039F5C *p);
 int fn_8011F1CC(void);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
 int fn_801486A0(void);
-void fn_80156C78(int id, int value);
+void TutorialSetMoveDone(int id, int value);
 float fn_8016B938(void);
 float fn_8016B974(void);
 void fn_8016F6F4(Object_80039F5C *p, int *pValue);
@@ -1003,7 +1003,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         }
     }
     if (result && p->mUnknown8 != 255 && fn_800CD35C(1, p)) {
-        fn_80156C78(23, 1);
+        TutorialSetMoveDone(23, 1);
     }
 }
 
@@ -1106,7 +1106,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                 fn_800A3B58(p, 1, 0);
             }
             if (pOther->mUnknown8 != 255 && fn_800F06F4(0, pOther->mpState, 12, 0xFFFF) != 0xFFFF) {
-                fn_80156C78(23, 1);
+                TutorialSetMoveDone(23, 1);
             }
         }
     } else {

@@ -141,8 +141,8 @@ void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
 void CamGameResumeAll(void);
 void HudPost3AOn(void);
-int fn_80156704(void);
-void fn_801574DC(int value);
+int TutorialIsActive(void);
+void TutorialSetHudVisible(int value);
 int fn_800A8468(int team);
 void fn_800A981C(void);
 void fn_800A9854(void);
@@ -193,8 +193,8 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             BallsProcessStates(gFrameTimeScale);
             BallsProcessCollision(gFrameTimeScale);
         }
-        if (fn_80156704()) {
-            fn_801574DC(1);
+        if (TutorialIsActive()) {
+            TutorialSetHudVisible(1);
         }
         if (lost) {
             fn_8002C9A8(lbl_803EA368, 2, 0);

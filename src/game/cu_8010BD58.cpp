@@ -42,8 +42,8 @@ extern "C" {
 int fn_800A2178(void);
 int fn_8010B224(Object_80039F5C *p);
 int fn_801485D4(void);
-int fn_80156704(void);
-unsigned char fn_80156D14(void);
+int TutorialIsActive(void);
+unsigned char TutorialIsStepDone(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80237260(int stream);
 extern float lbl_802DAB74[];
@@ -66,8 +66,8 @@ extern "C" int fn_8010BD58(Object_80039F5C *p) {
         chance -= dist * 0.15f;
         index = fn_800A2178();
         limit = lbl_802DAB74[index];
-        if (fn_80156704() && !fn_801485D4()) {
-            if (fn_80156D14()) {
+        if (TutorialIsActive() && !fn_801485D4()) {
+            if (TutorialIsStepDone()) {
                 limit = 1.0f;
             } else {
                 limit = 0.75f;

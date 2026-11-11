@@ -131,9 +131,9 @@ int fn_801485D4(void);
 int fn_801485F4(void);
 void fn_80148644(void);
 int fn_801486A0(void);
-int fn_80156704(void);
-void fn_8015673C(void);
-void fn_80156854(void);
+int TutorialIsActive(void);
+void TutorialLessonStart(void);
+void TutorialLessonStop(void);
 void fn_8015C064(int a);
 void fn_8015C0C0(void);
 void fn_8015E654(int a);
@@ -1462,16 +1462,16 @@ const char *TutorialGame::GetName() { return "TutorialGame"; }
 
 int TutorialGame::Init()
 {
-    if (fn_80156704()) {
-        fn_8015673C();
+    if (TutorialIsActive()) {
+        TutorialLessonStart();
     }
     return 1;
 }
 
 int TutorialGame::Shutdown()
 {
-    if (fn_80156704()) {
-        fn_80156854();
+    if (TutorialIsActive()) {
+        TutorialLessonStop();
     }
     return 1;
 }

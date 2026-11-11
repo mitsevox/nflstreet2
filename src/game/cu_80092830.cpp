@@ -4,7 +4,7 @@
 #include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
 
-struct Class_80297C60;
+struct PostPlayPhase;
 struct AnimSeqCamSample_t;
 
 extern "C" {
@@ -39,7 +39,7 @@ int fn_80096304(int index);
 int fn_8009637C(int index);
 void fn_8009BA10(int value);
 int fn_800B65A0(int team);
-void fn_800B9B64(Class_80297C60 *p, int enable, int value);
+void fn_800B9B64(PostPlayPhase *p, int enable, int value);
 void PassIconObjSetEnabled(int value);
 void fn_8015C254(int a);
 void HudPost3AOff(void);
@@ -54,7 +54,7 @@ extern unsigned char lbl_803EA8C0;
 extern unsigned char lbl_803EA8C8;
 extern unsigned int lbl_803EA8D0;
 extern unsigned char lbl_803EA8D4;
-extern Class_80297C60 *lbl_803EAB84;
+extern PostPlayPhase *lbl_803EAB84;
 extern Type_803EA368 *lbl_803EA368;
 
 /* Steps character index's state machine (+0x38C) once and returns 0 when the

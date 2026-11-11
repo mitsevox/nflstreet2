@@ -1,6 +1,6 @@
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 
-class Class_802A18C8 : public Class_80297BF8 {
+class Class_802A18C8 : public PreGamePhase {
 };
 
 extern "C" {
@@ -14,7 +14,7 @@ int MsgBoxIsClosed(void);
 void fn_80155640(Class_802A18C8 *p, float dt)
 {
     if (MsgBoxIsClosed()) {
-        p->Class_80297BF8::vfn_04(dt);
+        p->PreGamePhase::OnUpdate(dt);
     }
 }
 

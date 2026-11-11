@@ -1,11 +1,11 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/PauseMenu.h"
 #include "game/fn_8021D7B8.h"
 
-class Class_802A1C98 : public Class_80297C60 {
+class Class_802A1C98 : public PostPlayPhase {
 };
 
 class Class_802A1C30 : public Class_80297B90 {
@@ -64,7 +64,7 @@ void fn_8021956C(void *p, int a, int b, int c);
 
 int fn_80151598(Class_802A1C98 *p)
 {
-    p->vfn_15();
+    p->ForceFinish();
     return 1;
 }
 
@@ -72,7 +72,7 @@ void fn_801515D0(Class_802A1C98 *p)
 {
     unsigned char team;
 
-    p->Class_80297C60::vfn_05();
+    p->PostPlayPhase::OnExit();
     if (fn_80177C38() == 1 || fn_80177C38() == 3) {
         fn_80177C50(1);
         fn_80177C44(0);

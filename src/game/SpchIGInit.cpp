@@ -8,7 +8,7 @@ void SpchIGStart(void);
 void SpchIGStop(void);
 void SpchIGSetCommentaryOn(unsigned char value);
 int fn_801486A0(void);
-unsigned int fn_801568F0(void);
+unsigned int TutorialGetLesson(void);
 }
 
 static int _SpchIG_iMode = 0;
@@ -18,7 +18,7 @@ extern "C" void SpchIGInit(void)
     int state;
 
     SpchIGSetCommentaryOn(1);
-    if (GameModeTypeGet() == 11 && fn_801568F0() <= 4) {
+    if (GameModeTypeGet() == 11 && TutorialGetLesson() <= 4) {
         SpchIGStart();
         state = 1;
     } else {

@@ -1,22 +1,22 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreGamePhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802372EC.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/cu_8013BB18.h"
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
-class Class_802A1BC8 : public Class_80297BF8 {
+class Class_802A1BC8 : public PreGamePhase {
 };
 
-class Class_802A1B58 : public Class_80297CE8 {
+class Class_802A1B58 : public PreSnapPhase {
 public:
     Block_80170E64 *mpUnknown4[2][2];
     signed char mUnknown20[2][2];
@@ -84,7 +84,7 @@ void fn_80153844(Class_802A1930 *p, int team)
 
 void fn_801538C8(Class_802A1BC8 *p)
 {
-    p->Class_80297BF8::vfn_05();
+    p->PreGamePhase::OnExit();
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
     fn_8013C6F0(CamGameGetCamera(5));
@@ -94,7 +94,7 @@ void fn_801538C8(Class_802A1BC8 *p)
 void fn_80153910(Class_802A1BC8 *p, float dt)
 {
     if (MsgBoxIsClosed()) {
-        p->Class_80297BF8::vfn_04(dt);
+        p->PreGamePhase::OnUpdate(dt);
     }
 }
 
@@ -115,7 +115,7 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     int team = fn_80178308();
 
     fn_801486A8();
-    p->Class_80297CE8::vfn_04(dt);
+    p->PreSnapPhase::OnEnter(dt);
     fn_801487C0(0, fn_80148A58()->vfn_05(0));
     fn_801487C0(1, fn_80148A58()->vfn_05(1));
     do {
@@ -146,7 +146,7 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
 
 void fn_80153BBC(Class_802A1B58 *p)
 {
-    p->Class_80297CE8::vfn_10();
+    p->PreSnapPhase::AssignControlledPlayers();
     int team = fn_80178308();
     unsigned char kind = fn_8007AFDC(team);
     int first = fn_800B65A0(team);

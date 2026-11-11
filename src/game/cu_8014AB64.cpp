@@ -8,7 +8,7 @@
 #include "game/fn_802372EC.h"
 #include <string.h>
 
-struct Team_80168EBC {
+struct PlaybookTeamView {
     char mUnknown0[0x40];
     int mUnknown40;
 };
@@ -45,7 +45,7 @@ void fn_80178CD8(int a);
 void fn_801790D0(int team, float a, float b);
 void fn_8017833C(int team);
 void HudClearEvent71(void);
-void fn_80157514(void);
+void TutorialReleasePause(void);
 int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
@@ -57,7 +57,7 @@ void PlayBookSetFormationType(int team, int kind);
 int fn_80169E68(int mode);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
-Team_80168EBC *PlayBookGetTeam(int team);
+PlaybookTeamView *PlayBookGetTeam(int team);
 int fn_80085A34(int formation, int team);
 void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
@@ -137,7 +137,7 @@ void fn_8014AC88(void *p)
     fn_8017833C(1);
     lbl_803EB2B5 = 0;
     HudClearEvent71();
-    fn_80157514();
+    TutorialReleasePause();
 }
 
 void fn_8014AD24(void *p, float dt)

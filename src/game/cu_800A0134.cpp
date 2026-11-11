@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/StyleTracker.h"
-#include "game/Class_80297AB8.h"
-#include "game/Class_80297C60.h"
+#include "game/LivePlayPhase.h"
+#include "game/PostPlayPhase.h"
 #include "game/Class_80148A58.h"
 #include "game/Step_800C4460.h"
 #include "game/Record_800B15FC.h"
@@ -129,7 +129,7 @@ extern "C" void fn_800A02B4(void)
     }
 }
 
-void Class_80297AB8::vfn_04(float dt)
+void LivePlayPhase::OnUpdate(float dt)
 {
     if(fn_800A937C()) {
         if(!fn_800A9680())fn_800A9688();
@@ -485,7 +485,7 @@ void fn_801782F4(float);
 void fn_800BAAE4(void);
 void ClockRuleStopGameClock(Object_8017886C *);
 void fn_800B2304(void);
-void fn_800B9A9C(Class_80297C60 *);
+void fn_800B9A9C(PostPlayPhase *);
 void fn_801789F8(void);
 void fn_8016BAAC(void);
 int fn_800539F8(void);
@@ -500,8 +500,8 @@ void fn_8017813C(Point_8017886C);
 int fn_800B2320(void);
 void fn_800B2564(Object_8017886C *,Object_8017886C *);
 unsigned int fn_8009D990(int);
-void *fn_800B9A44(Class_80297C60 *);
-void fn_800B9A6C(Class_80297C60 *,void *);
+void *fn_800B9A44(PostPlayPhase *);
+void fn_800B9A6C(PostPlayPhase *,void *);
 int fn_800A1470(void *);
 int fn_800A1478(void *);
 void fn_800A14A8(void *);

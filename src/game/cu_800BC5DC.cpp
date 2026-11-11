@@ -1,4 +1,4 @@
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/StyleTracker.h"
 #include "game/Challenge.h"
 #include "game/Ball.h"
@@ -66,12 +66,12 @@ int fn_800BA71C(void);
 void fn_800BB24C(void);
 void fn_800BB694(int a, unsigned int b, float c);
 void fn_800BBA2C(void);
-void fn_800BBB4C(Class_80297BF8 *pThis);
+void fn_800BBB4C(PreGamePhase *pThis);
 void fn_800BC3F0(void);
 int fn_800C1E40(void);
 void fn_800C432C(void);
 void fn_800CC448(void);
-unsigned int fn_801568F0(void);
+unsigned int TutorialGetLesson(void);
 void ClockRuleNextPeriod(void);
 void fn_801790D0(int team, float a, float b);
 void HudStart(void);
@@ -85,14 +85,14 @@ extern unsigned int lbl_803EAB9C;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-void Class_80297BF8::vfn_03()
+void PreGamePhase::OnEnter()
 {
     int practice;
     unsigned char i;
 
     PauseRequestCancel();
     lbl_803EC98C->mUnknown32 = 0;
-    practice = fn_801568F0() <= 4;
+    practice = TutorialGetLesson() <= 4;
     fn_800BA674();
     ClockRuleNextPeriod();
     if (fn_800C1E40() != 0) {
@@ -151,7 +151,7 @@ void Class_80297BF8::vfn_03()
         }
     }
     HudPost3AOff();
-    vfn_06();
+    ShowIntroScreen();
     fn_801790D0(0, 0.0f, 0.0f);
     fn_801790D0(1, 0.0f, 0.0f);
     for (i = 0; i < lbl_803EC98C->mUnknown2B; i++) {

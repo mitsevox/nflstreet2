@@ -1,36 +1,36 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_8009D990.h"
 
-class Class_802A1DC8 : public Class_80297BF8 {
+class Class_802A1DC8 : public PreGamePhase {
 public:
-    virtual void vfn_07();
+    virtual void HideIntroScreen();
     unsigned char mUnknown4;
 };
 
-class Class_802A1D58 : public Class_80297CE8 {
+class Class_802A1D58 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
 };
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
     unsigned char mUnknown4;
     char mUnknown5[3];
     unsigned char mUnknown8;
     unsigned char mUnknown9;
 };
 
-class Class_802A1C98 : public Class_80297C60 {
+class Class_802A1C98 : public PostPlayPhase {
 public:
-    virtual void vfn_05();
+    virtual void OnExit();
 };
 
 class Class_802A1C30 : public Class_80297B90 {
@@ -38,9 +38,9 @@ public:
     virtual void vfn_06();
 };
 
-class Class_802A1E38 : public Class_802A56E8 {
+class Class_802A1E38 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
 struct Entry_8015005C {

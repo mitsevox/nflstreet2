@@ -1,9 +1,9 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
 class Class_802A27F0 : public Class_80148A58 {
@@ -46,7 +46,7 @@ void fn_801534D4(Class_802A1930 *p)
         a = 0;
     }
     int kind = fn_800948E4(o);
-    p->Class_802A56E8::vfn_10();
+    p->ScrmRuleSet::ResetPlaySpot();
     if (pRules->mpUnknown52->mUnknown32 == 2) {
         pRules->mpUnknown52->mUnknown20[fn_80178348()]++;
         if (kind == 2) {
