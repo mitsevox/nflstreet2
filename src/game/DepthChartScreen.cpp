@@ -4,8 +4,8 @@
 #include "game/DepthChart.h"
 
 extern "C" {
-void fn_8001ED80(int value);
-int fn_8001ED88(void);
+void MsgChallengeSetFlowState(int value);
+int MsgChallengeGetFlowState(void);
 int TeamFilterGet(void);
 void ChalCloseCursors(void);
 int fn_80082414(int index);
@@ -21,8 +21,8 @@ void FeTeamChooseScreen(int *pResult)
     if (fn_8018D720(fn_8022F384(fn_8022F4BC()))) {
         if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
-        } else if (fn_8001ED88() == 6) {
-            fn_8001ED80(4);
+        } else if (MsgChallengeGetFlowState() == 6) {
+            MsgChallengeSetFlowState(4);
             *pResult = 123;
         } else {
             *pResult = 400;

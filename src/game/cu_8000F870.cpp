@@ -101,7 +101,7 @@ void fn_8001B228(void);
 void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
 void fn_8001B828(void);
-void fn_8001ED90(unsigned char value);
+void MsgChallengeSetResumed(unsigned char value);
 int CreditsFetchLine(void);
 void CreditsOpen(void);
 void CreditsClose(void);
@@ -2900,7 +2900,7 @@ void fn_80014B98(void)
             } else {
                 fn_80015D28(fn_800A3444());
             }
-            fn_8001ED90(1);
+            MsgChallengeSetResumed(1);
         }
         FELoopSetResume(1);
     }

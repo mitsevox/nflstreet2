@@ -10,7 +10,7 @@
 
 extern "C" {
 int MsgPlayerPickupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8001ED98(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int MsgChallengeHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MsgTutorialHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
@@ -45,7 +45,7 @@ int MsgTeamDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, in
     case 2:
         return MsgProfileAssignHandleMessage(id, pArgs, unused, pResult);
     case 0:
-        return fn_8001ED98(id, pArgs, unused, pResult);
+        return MsgChallengeHandleMessage(id, pArgs, unused, pResult);
     case 1:
         return MsgPlayerPickupHandleMessage(id, pArgs, unused, pResult);
     case 4:

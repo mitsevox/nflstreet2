@@ -471,9 +471,9 @@ DbCursor *ChalGetProgressCursor(int id)
     return &_Chal_sProgressCursor;
 }
 
-void ChalFindRecord(DbCursor *pObject, unsigned char id, int *pResult)
+int ChalFindRecord(DbCursor *pObject, unsigned char id, int *pResult)
 {
-    DbCursorFindInt(pObject, 0x44494843, id, 0, pResult);
+    return DbCursorFindInt(pObject, 0x44494843, id, 0, pResult);
 }
 
 void ChalReadRecord(DbCursor *pObject, Challenge_t *pRecord, int level)
