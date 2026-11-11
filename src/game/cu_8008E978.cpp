@@ -83,7 +83,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
@@ -229,7 +229,7 @@ int fn_80094B34(CondTable_t *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
 unsigned char fn_80178348(void);
 int fn_80178360(void);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 int fn_8009679C(unsigned int index);
 void BannerShow(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
@@ -2555,17 +2555,17 @@ extern "C" int fn_80096B1C(int index)
             BannerClear(7);
             BannerShow(pPlayback->mUnknown28, pPlayback->mUnknown2A, pPlayback->mUnknown2C, 0);
         }
-        if ((pPlayback->mUnknownC & 2) && fn_8019623C(0x23000)) {
-            fn_80195EFC(1, 60, 0x808080, 0);
+        if ((pPlayback->mUnknownC & 2) && ScreenTransCanCapture(0x23000)) {
+            ScreenTransStart(1, 60, 0x808080, 0);
         }
-        if ((pPlayback->mUnknownC & 1) && fn_8019623C(0x23000)) {
-            fn_80195EFC(1, 12, 0x808080, 0);
+        if ((pPlayback->mUnknownC & 1) && ScreenTransCanCapture(0x23000)) {
+            ScreenTransStart(1, 12, 0x808080, 0);
         }
         if (pPlayback->mUnknownC & 4) {
-            fn_80195EFC(5, 60, 0xFFFFFF, 0);
+            ScreenTransStart(5, 60, 0xFFFFFF, 0);
         }
-        if ((pPlayback->mUnknownC & 0x40) && fn_8019623C(0x23000)) {
-            fn_80195EFC(7, 60, 0x808080, 0);
+        if ((pPlayback->mUnknownC & 0x40) && ScreenTransCanCapture(0x23000)) {
+            ScreenTransStart(7, 60, 0x808080, 0);
         }
         pPlayback->mUnknown10 = 2;
     case 2:
@@ -7884,7 +7884,7 @@ unsigned int PlayBookGetPlayIndex(int team);
 void fn_8017840C(void);
 void fn_8016DCD4(int team);
 void BallsSetVisible(int on);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 void fn_800B8028(void);
 void fn_8010A220(void);
 }
@@ -7897,8 +7897,8 @@ void Class_80297B50::vfn_03()
     if (ChallengeIsActive() != 0) {
         fn_8009D924(4);
     }
-    if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && fn_8019623C(0x23000) != 0) {
-        fn_80195EFC(1, 20, 0x808080, 0);
+    if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && ScreenTransCanCapture(0x23000) != 0) {
+        ScreenTransStart(1, 20, 0x808080, 0);
     }
     PauseBlock();
     if (fn_800BA6F8() != 0 && fn_800BA71C() == 1) {
@@ -9381,7 +9381,7 @@ extern "C" void fn_800BBF18(void)
         }
     }
     if (playing == 0) {
-        fn_80195EFC(1, 20, 0x808080, 0);
+        ScreenTransStart(1, 20, 0x808080, 0);
         if (lbl_803EC98C->mUnknown8 != -1) {
             fn_80096D14(lbl_803EC98C->mUnknown8);
             lbl_803EC98C->mUnknown8 = -1;
@@ -10150,7 +10150,7 @@ extern "C" int fn_800AAFEC(void *p, float dt)
             fn_8009D964(4, 1);
             fn_80059014();
         } else {
-            fn_80195EFC(1, 30, 0x808080, 0);
+            ScreenTransStart(1, 30, 0x808080, 0);
             fn_8005BC10(4);
         }
         return 1;
@@ -10159,14 +10159,14 @@ extern "C" int fn_800AAFEC(void *p, float dt)
 }
 
 extern "C" {
-int fn_80196278(void);
+int ScreenTransIsActive(void);
 void fn_800AB074(Class_80297B90 *p, float dt);
 }
 
 extern "C" void fn_800AB0DC(Class_80297B90 *p)
 {
     fn_800ABA0C();
-    fn_80195EFC(1, 30, 0x808080, 0);
+    ScreenTransStart(1, 30, 0x808080, 0);
     p->vfn_08();
 }
 
@@ -10225,7 +10225,7 @@ extern "C" void fn_800AB29C(void *p)
 {
     fn_80218FC4(gUISMainInfo, 3, 7, 0, 0);
     fn_802195E4(gUISMainInfo, 3, 7);
-    fn_80195EFC(1, 20, 0x808080, 0);
+    ScreenTransStart(1, 20, 0x808080, 0);
     fn_800ABAF0();
 }
 
@@ -10433,13 +10433,13 @@ void Class_80297B90::vfn_04(float dt)
             break;
         }
         PlayerObjSetDrawReady(1);
-        fn_80195EFC(6, 60, 0, 0);
+        ScreenTransStart(6, 60, 0, 0);
         lbl_803EAA88->mUnknown4 = 17;
     case 17:
         fn_800AB074(this, dt);
         break;
     case 18:
-        if (fn_80196278() == 0) {
+        if (ScreenTransIsActive() == 0) {
             fn_801CE720();
             fn_801CE774();
             fn_80072C90(250, 1);
@@ -16526,8 +16526,8 @@ void Class_80297CE8::vfn_09()
 void Class_80297CE8::vfn_11()
 {
     CamGameSetModeAll(1);
-    if (fn_800B65A0(0) == 255 && fn_800B65A0(1) == 255 && fn_8019623C(0x23000) != 0) {
-        fn_80195EFC(1, 20, 0x808080, 0);
+    if (fn_800B65A0(0) == 255 && fn_800B65A0(1) == 255 && ScreenTransCanCapture(0x23000) != 0) {
+        ScreenTransStart(1, 20, 0x808080, 0);
     }
     if (CamGameGetCurrentSlot() != 3) {
         CamGameSelectCamera(0);

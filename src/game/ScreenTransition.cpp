@@ -1,5 +1,10 @@
+// Screen transitions: the timed fades between screens. A transition either
+// fades a flat colour in or out over the picture, or copies the last frame
+// into a texture and dissolves, wipes or splits it away while the next
+// screen draws underneath. One transition runs at a time; each frame the
+// update steps it and calls an optional notify callback with its progress.
 #include <dolphin/gx/GXFrameBuffer.h>
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "engine/viewport.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801D2B7C.h"
@@ -9,8 +14,10 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/gx/GXManage.h>
+#include <dolphin/gx/GXPixel.h>
+#include <dolphin/gx/GXCull.h>
 
-struct State_80194FE8 {
+struct ScreenTrans_t {
     int mUnknown0;
     unsigned int mUnknown4, mUnknown8;
     Viewport_t *mUnknownC;
@@ -19,10 +26,10 @@ struct State_80194FE8 {
     float mUnknown18, mUnknown1C;
     void (*mUnknown20)(int, float);
 };
-typedef int (*Callback_80195E64)(State_80194FE8 *, int, unsigned int);
+typedef int (*ScreenTransModeFn)(ScreenTrans_t *, unsigned int, unsigned int);
 extern "C" {
-extern State_80194FE8 lbl_802EDCD0;
-extern Callback_80195E64 lbl_802EDCF4[];
+extern ScreenTrans_t lbl_802EDCD0;
+extern ScreenTransModeFn lbl_802EDCF4[];
 extern void *lbl_803EB738;
 extern Mtx44 lbl_80365128;
 extern GXTexObj lbl_80365168;
@@ -34,26 +41,22 @@ int fn_801CEC74(void);
 void fn_8024FC48(int);
 void fn_8024FB58(int, GXColor);
 void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_802520E0(int, int, int);
-void fn_8024EB28(int);
 void fn_802528B0(int);
-void fn_80252034(int, int, int, int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
 void fn_802524D4(float *);
-void fn_8024AC28(Mtx44, float, float, float, float, float, float);
 void fn_802523A4(Mtx44, int);
 void fn_801D03D0(Mtx44);
 void fn_8025251C(Mtx44, int);
 void fn_802525BC(int);
 void *fn_801D2BB0(int, int, int, int);
 extern "C" void GXInitTexObj(GXTexObj *, void *, int, int, int, int, int, int);
-void fn_80195B28(int, unsigned int, float);
-void fn_80195E0C(void);
-void fn_80195F80(void);
-void fn_80196130(void);
-int fn_8019623C(int);
+void _ScreenTransSetupDraw(int, unsigned int, float);
+void _ScreenTransRestoreDraw(void);
+void ScreenTransUpdate(void);
+void ScreenTransFinish(void);
+int ScreenTransCanCapture(int);
 
-int fn_80194FE8(void) {
+int _ScreenTransCaptureFrame(void) {
     if (!lbl_803EB738)
         return 0;
     GXSetTexCopySrc(0, 0, 640, 448);
@@ -64,7 +67,7 @@ int fn_80194FE8(void) {
     fn_801CEA44(1);
     return 1;
 }
-void fn_80195068(State_80194FE8 *state, unsigned int mode) {
+void _ScreenTransDrawFrame(ScreenTrans_t *state, unsigned int mode) {
     float adjust = 0.0f, amount = 1.0f - state->mUnknown18;
     int left = -320, lower = -224, upper = 224;
     switch (mode) {
@@ -87,10 +90,12 @@ void fn_80195068(State_80194FE8 *state, unsigned int mode) {
     default:
         break;
     }
-    if (fn_8007F828(6) == 1)
-        adjust = (float)((448 - fn_801CEC74()) / 2) * 0.002232143f;
+    if (fn_8007F828(6) == 1) {
+        const float height = 448.0f;
+        adjust = (float)((448 - fn_801CEC74()) / 2) / height;
+    }
     if (lbl_803EB738) {
-        fn_80195B28(1, 0, state->mUnknown18);
+        _ScreenTransSetupDraw(1, 0, state->mUnknown18);
         if (mode == 7) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
             GXPosition3f32((float)(left + 320) - state->mUnknown1C, (float)(lower + 224), -1.0f);
@@ -121,25 +126,27 @@ void fn_80195068(State_80194FE8 *state, unsigned int mode) {
             GXPosition3f32(640.0f, 448.0f, -1.0f);
             GXTexCoord2f32(1.0f, 1.0f - adjust);
         }
-        fn_80195E0C();
+        _ScreenTransRestoreDraw();
     }
 }
-void fn_80195558(unsigned int color, float alpha) {
-    fn_80195B28(0, color, alpha);
+void _ScreenTransDrawColor(unsigned int color, float alpha) {
+    _ScreenTransSetupDraw(0, color, alpha);
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
     GXPosition3f32(0.0f, 0.0f, -1.0f);
     GXPosition3f32(640.0f, 0.0f, -1.0f);
     GXPosition3f32(0.0f, 448.0f, -1.0f);
     GXPosition3f32(640.0f, 448.0f, -1.0f);
-    fn_80195E0C();
+    _ScreenTransRestoreDraw();
 }
-int fn_801955E8(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransFadeFromColor(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
-    case 1:
-        state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
+    case 0:
         break;
     case 2:
-        fn_80195558(color, state->mUnknown18);
+        _ScreenTransDrawColor(color, state->mUnknown18);
+        break;
+    case 1:
+        state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
         break;
     case 3:
         state->mUnknown0 = 0;
@@ -149,14 +156,16 @@ int fn_801955E8(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_8019569C(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransFadeToColor(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
+    case 0:
+        break;
+    case 2:
+        _ScreenTransDrawColor(color, state->mUnknown18);
+        break;
     case 1:
         state->mUnknown18 = (float)(state->mUnknown4 + 1) / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195558(color, state->mUnknown18);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -165,18 +174,18 @@ int fn_8019569C(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_80195748(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransDissolve(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
     case 0:
-        if (!fn_80194FE8())
+        if (!_ScreenTransCaptureFrame())
             return 0;
+        break;
+    case 2:
+        _ScreenTransDrawFrame(state, 1);
         break;
     case 1:
         state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195068(state, 1);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -185,18 +194,18 @@ int fn_80195748(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_8019580C(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransGrow(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
     case 0:
-        if (!fn_80194FE8())
+        if (!_ScreenTransCaptureFrame())
             return 0;
+        break;
+    case 2:
+        _ScreenTransDrawFrame(state, 2);
         break;
     case 1:
         state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195068(state, 2);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -205,18 +214,18 @@ int fn_8019580C(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_801958D0(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransSlide(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
     case 0:
-        if (!fn_80194FE8())
+        if (!_ScreenTransCaptureFrame())
             return 0;
+        break;
+    case 2:
+        _ScreenTransDrawFrame(state, 3);
         break;
     case 1:
         state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195068(state, 3);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -225,18 +234,18 @@ int fn_801958D0(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_80195994(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransShrink(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
     case 0:
-        if (!fn_80194FE8())
+        if (!_ScreenTransCaptureFrame())
             return 0;
+        break;
+    case 2:
+        _ScreenTransDrawFrame(state, 4);
         break;
     case 1:
         state->mUnknown18 = 1.0f - (float)state->mUnknown4 / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195068(state, 4);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -245,19 +254,19 @@ int fn_80195994(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-int fn_80195A58(State_80194FE8 *state, int event, unsigned int color) {
+int _ScreenTransSplit(ScreenTrans_t *state, unsigned int event, unsigned int color) {
     switch (event) {
     case 0:
-        if (!fn_80194FE8())
+        if (!_ScreenTransCaptureFrame())
             return 0;
+        break;
+    case 2:
+        _ScreenTransDrawFrame(state, 7);
         break;
     case 1:
         state->mUnknown18 = 1.0f;
         state->mUnknown1C = (float)state->mUnknown4 * 320.0f / (float)state->mUnknown8;
         break;
-    case 2:
-        fn_80195068(state, 7);
-        break;
     case 3:
         state->mUnknown0 = 0;
         break;
@@ -266,7 +275,7 @@ int fn_80195A58(State_80194FE8 *state, int event, unsigned int color) {
     }
     return 1;
 }
-void fn_80195B28(int textured, unsigned int value, float alpha) {
+void _ScreenTransSetupDraw(int textured, unsigned int value, float alpha) {
     Mtx44 view, projection;
     GXColor color = {0, 0, 0, 255};
     if (textured) {
@@ -294,10 +303,10 @@ void fn_80195B28(int textured, unsigned int value, float alpha) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        fn_802520E0(0, 7, 0);
-        fn_8024EB28(0);
+        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+        GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
-        fn_80252034(1, 4, 5, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXLoadTexObj(&lbl_80365168, 0);
     } else {
         GXSetNumTevStages(1);
@@ -308,50 +317,62 @@ void fn_80195B28(int textured, unsigned int value, float alpha) {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
-        fn_802520E0(0, 7, 0);
-        fn_8024EB28(0);
+        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+        GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
-        fn_80252034(1, 4, 5, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     }
     fn_802524D4(lbl_80365128[0]);
-    fn_8024AC28(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
+    C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     fn_802523A4(projection, 1);
     fn_801D03D0(view);
     fn_8025251C(view, 0);
     fn_802525BC(0);
 }
-void fn_80195E0C(void) {
-    fn_80252034(0, 0, 0, 5);
+void _ScreenTransRestoreDraw(void) {
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     fn_802523A4(lbl_80365128, 0);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     fn_802528B0(0);
 }
-void fn_80195E64(Viewport_t *) {
-    Callback_80195E64 callback = lbl_802EDCF4[lbl_802EDCD0.mUnknown0];
+void _ScreenTransDrawCallback(Viewport_t *) {
+    ScreenTransModeFn callback = lbl_802EDCF4[lbl_802EDCD0.mUnknown0];
     if (callback)
         callback(&lbl_802EDCD0, 2, lbl_802EDCD0.mUnknown14);
 }
-void fn_80195EB4(Viewport_t *) {
-    fn_80195558(lbl_803ECBB0, lbl_803ECBB4);
-    VptRemoveCallback(lbl_802EDCD0.mUnknownC, fn_80195EB4);
+void _ScreenTransDrawOnceCallback(Viewport_t *) {
+    ScreenTrans_t *state = &lbl_802EDCD0;
+    _ScreenTransDrawColor(lbl_803ECBB0, lbl_803ECBB4);
+    VptRemoveCallback(state->mUnknownC, _ScreenTransDrawOnceCallback);
 }
-void fn_80195EFC(int mode, unsigned int duration, unsigned int color, void (*notify)(int, float)) {
-    fn_80196130();
-    if ((mode >= 5 && mode <= 6) || fn_8019623C(0x23000)) {
-        lbl_802EDCD0.mUnknown0 = mode;
-        lbl_802EDCD0.mUnknown20 = notify;
-        lbl_802EDCD0.mUnknown4 = 0;
-        lbl_802EDCD0.mUnknown8 = duration;
-        lbl_802EDCD0.mUnknown14 = color;
+void ScreenTransStart(int mode, unsigned int duration, unsigned int color, void (*notify)(int, float)) {
+    ScreenTransFinish();
+    switch (mode) {
+    case 5:
+    case 6:
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    default:
+        if (!ScreenTransCanCapture(0x23000))
+            return;
+        break;
     }
+    lbl_802EDCD0.mUnknown0 = mode;
+    lbl_802EDCD0.mUnknown4 = 0;
+    lbl_802EDCD0.mUnknown8 = duration;
+    lbl_802EDCD0.mUnknown14 = color;
+    lbl_802EDCD0.mUnknown20 = notify;
 }
-void fn_80195F80(void) {
-    State_80194FE8 *state = &lbl_802EDCD0;
+void ScreenTransUpdate(void) {
+    ScreenTrans_t *state = &lbl_802EDCD0;
     if (lbl_803ECBB8) {
-        VptSetCallback(state->mUnknownC, 2, fn_80195EB4, 0);
+        VptSetCallback(state->mUnknownC, 2, _ScreenTransDrawOnceCallback, 0);
         lbl_803ECBB8 = 0;
     }
-    Callback_80195E64 callback = lbl_802EDCF4[state->mUnknown0];
+    ScreenTransModeFn callback = lbl_802EDCF4[state->mUnknown0];
     if (callback) {
         if (!state->mUnknown4) {
             if (!callback(state, 0, state->mUnknown14)) {
@@ -360,7 +381,7 @@ void fn_80195F80(void) {
             }
             if (state->mUnknown20)
                 state->mUnknown20(0, 0.0f);
-            VptSetCallback(state->mUnknownC, 2, fn_80195E64, 0);
+            VptSetCallback(state->mUnknownC, 2, _ScreenTransDrawCallback, 0);
         }
         if (state->mUnknown4 < state->mUnknown8) {
             callback(state, 1, state->mUnknown14);
@@ -368,21 +389,21 @@ void fn_80195F80(void) {
                 state->mUnknown20(1, (float)state->mUnknown4 / (float)state->mUnknown8);
             ++state->mUnknown4;
         } else {
-            VptRemoveCallback(state->mUnknownC, fn_80195E64);
+            VptRemoveCallback(state->mUnknownC, _ScreenTransDrawCallback);
             callback(state, 3, state->mUnknown14);
             if (state->mUnknown20)
                 state->mUnknown20(3, 1.0f);
         }
     }
 }
-void fn_80196130(void) {
+void ScreenTransFinish(void) {
     if (lbl_802EDCD0.mUnknown0) {
         lbl_802EDCD0.mUnknown4 = lbl_802EDCD0.mUnknown8;
-        fn_80195F80();
+        ScreenTransUpdate();
     }
     lbl_803ECBB8 = 0;
 }
-void fn_80196174(Viewport_t *object) {
+void ScreenTransInit(Viewport_t *object) {
     lbl_802EDCD0.mUnknown4 = 0;
     lbl_802EDCD0.mUnknown8 = 0;
     lbl_802EDCD0.mUnknownC = object;
@@ -393,20 +414,20 @@ void fn_80196174(Viewport_t *object) {
         GXInitTexObj(&lbl_80365168, lbl_803EB738, 320, 224, 4, 0, 0, 0);
     }
 }
-void fn_80196204(void) {
-    fn_80196130();
+void ScreenTransShutdown(void) {
+    ScreenTransFinish();
     if (lbl_803EB738) {
         fn_801D2BD0(lbl_803EB738);
         lbl_803EB738 = 0;
     }
 }
-int fn_8019623C(int size) {
+int ScreenTransCanCapture(int size) {
     return lbl_803EB738 && size <= 0x23000;
 }
-int fn_8019626C(void) {
+int ScreenTransGetMode(void) {
     return lbl_802EDCD0.mUnknown0;
 }
-int fn_80196278(void) {
-    return fn_8019626C() != 0 && lbl_802EDCD0.mUnknown4 < lbl_802EDCD0.mUnknown8;
+int ScreenTransIsActive(void) {
+    return ScreenTransGetMode() != 0 && lbl_802EDCD0.mUnknown4 < lbl_802EDCD0.mUnknown8;
 }
 }

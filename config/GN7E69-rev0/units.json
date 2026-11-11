@@ -7743,6 +7743,25 @@
       ]
     },
     {
+      "source": "src/game/ScreenTransition.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, data and source-form rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80194FE8",
+          "end": "0x801962CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD908",
+          "end": "0x802AD9D0"
+        }
+      ]
+    },
+    {
       "source": "src/game/TutorialDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80087F10-0x80088648 (src/game/TutorialDb.cpp) and its data rows.",

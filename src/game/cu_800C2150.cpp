@@ -10,7 +10,7 @@
 #include "game/PauseMenu.h"
 #include "game/GameModeType.h"
 #include "game/fn_801BE60C.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802270D4.h"
 #include "game/Ball.h"
@@ -58,7 +58,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 void GameEventFlagsInit(void);
 void GameEventFlagsShutdown(void);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 Table_800DE51C *fn_801BBD5C(unsigned short key, unsigned short id);
 Table_80089904 *fn_801BE72C(unsigned short type, unsigned short key);
 void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle,
@@ -418,8 +418,8 @@ extern "C" void fn_800C34B0(void)
         PauseClearSavedFlags();
         fn_80162780(0, 0);
     }
-    if (fn_8019623C(0x23000) != 0) {
-        fn_80195EFC(1, 20, 0x808080, 0);
+    if (ScreenTransCanCapture(0x23000) != 0) {
+        ScreenTransStart(1, 20, 0x808080, 0);
     }
     CamGameSelectCamera(0);
     CamGameSetFocusAll(1, BallGetCurrentIndex());

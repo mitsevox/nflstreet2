@@ -1,5 +1,5 @@
 #include "game/fn_8022781C.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_8009D990.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
@@ -193,7 +193,7 @@ void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
 int fn_80190EF0(Type_80190ED4 *pStream);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 void ReplayAuxRamStoreFrame(char *pSrc, int index, int size);
 char *ReplayAuxRamGetScratch(int index, int size);
 char *ReplayAuxRamLoadFrame(int index, int size);
@@ -2399,8 +2399,8 @@ extern "C" void fn_8002FA04(GameCamera_t *pCamera, int detach)
     }
     CamDestroy(pCamera);
     ReplayCursorSetVisible(0);
-    if (fn_8019623C(0x23000)) {
-        fn_80195EFC(1, 15, 0x808080, 0);
+    if (ScreenTransCanCapture(0x23000)) {
+        ScreenTransStart(1, 15, 0x808080, 0);
     }
     lbl_803EA384 = 0;
 }

@@ -1,5 +1,5 @@
 #include "game/fn_80177FE0.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
 #include "game/Interp_8013CC14.h"
 #include "game/EaseVector_8013C9A4.h"
@@ -98,7 +98,7 @@ int fn_801784C4(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
 void fn_80187DD0(unsigned short);
-int fn_8019623C(int);
+int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
@@ -260,8 +260,8 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
             if (fn_801784C4()) { fn_8013CBC4(&b->mPosition); fn_8013CBC4(&b->mTarget); }
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
-            if ((b->mFlags & 0x100) && fn_8019623C(0x23000)) fn_80195EFC(1, 12, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
         }
         case 0: {
@@ -272,7 +272,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
             if (b->mUnknown74) BannerShow(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
             break;
         }
         }

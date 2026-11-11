@@ -97,8 +97,8 @@ void RumbleInit(void);
 void RumbleShutdown(void);
 void RumbleProcess(void);
 void RumbleEnable(int a);
-void fn_80195F80(void);
-void fn_80196130(void);
+void ScreenTransUpdate(void);
+void ScreenTransFinish(void);
 void fn_8019A9A0(int a, int b, float c);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
@@ -378,7 +378,7 @@ unsigned char InGame::Update()
     fn_800A7F6C();
     fn_800728F8();
     fn_800726B8();
-    fn_80195F80();
+    ScreenTransUpdate();
     SndgUpdate(1);
     fn_801CE82C();
     VptProcessViewports();
@@ -416,7 +416,7 @@ int InGame::Shutdown()
     fn_80085A7C();
     fn_8007F394(0);
     PadInputSetAxisCallback(0);
-    fn_80196130();
+    ScreenTransFinish();
     PauseUpdate();
     fn_801CE910();
     fn_800582D0();

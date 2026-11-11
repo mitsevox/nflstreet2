@@ -71,8 +71,8 @@ void UISHeldObjSet(int a);
 unsigned char UISHeldObjEnable(unsigned char value);
 unsigned char UISHeldObjIsEnabled(void);
 void DbgScreenRenderCallback(Viewport_t *pObject);
-void fn_80196174(Viewport_t *pObject, int a);
-void fn_80196204(void);
+void ScreenTransInit(Viewport_t *pObject, int a);
+void ScreenTransShutdown(void);
 void PlyrIconQueueReset(void);
 void UISResListSetup(void);
 void *CamCreate(int a, int b);
@@ -498,7 +498,7 @@ void UISGameCreateMain(void)
     VptSetObjectList(_UISGame_pMainVpt, _UISGame_pMainObjList, 0);
     _UISGame_pMainObj = ObjNewInList(_UISGame_pMainObjList, 21, 0, 0);
     if (!FELoopIsMainFEActive()) {
-        fn_80196174(_UISGame_pMainVpt, 0);
+        ScreenTransInit(_UISGame_pMainVpt, 0);
     }
     gUISMainInfo = fn_801D2B7C(fn_802188A0(12, 9, 160, 7, 640, 160), 0, 0);
     fn_802188D4(gUISMainInfo, 12, 9, 160, 7, 640, 160, (unsigned int)(gFrameTimeScale * 16.666668f));
@@ -673,7 +673,7 @@ void UISGameDestroyMain(void)
     fn_801D2BD0(gUISMainInfo);
     gUISMainInfo = 0;
     if (!FELoopIsMainFEActive()) {
-        fn_80196204();
+        ScreenTransShutdown();
     }
     VptRemoveCallback(_UISGame_pMainVpt, DbgScreenRenderCallback);
     ObjRemoveFromList(_UISGame_pMainObjList, _UISGame_pMainObj);

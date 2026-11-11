@@ -9,7 +9,7 @@
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
@@ -133,7 +133,7 @@ void HudSetDown(void);
 void HudPost3AOn(void);
 void HudShowEvent31(int index);
 int GameModeTypeIsSpecial(void);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 int ConSetChannelInfo(int a, int b, void *p);
 int ResSync(int a);
 
@@ -187,7 +187,7 @@ void Class_80297BF8::vfn_09(float dt)
         float time = fn_80094454(lbl_803EC98C->mUnknown18);
 
         if (time > 0.0f && time <= 61.0f) {
-            fn_80195EFC(6, 60, 0, fn_800BB9A0);
+            ScreenTransStart(6, 60, 0, fn_800BB9A0);
             lbl_803EABA2 = 1;
         }
     }
@@ -262,8 +262,8 @@ void Class_80297BF8::vfn_05()
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
     HudPost3AOn();
-    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
-        fn_80195EFC(5, 100, 0, 0);
+    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && ScreenTransCanCapture(0x23000) != 0) {
+        ScreenTransStart(5, 100, 0, 0);
     }
 }
 
