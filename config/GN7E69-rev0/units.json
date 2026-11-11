@@ -10415,7 +10415,7 @@
         "discarded": [
           "GetRange__20CreatePlayerFaceMenui"
         ],
-        "evidence": "evidence.tsv linker row CreatePlayerMenu GetRange: the target keeps every listed function, all reached from outside the unit or from each other; the out-of-line copy of the inline accessor GetRange of Class_80009F78 has no code in the target."
+        "evidence": "evidence.tsv linker row CreatePlayerMenu GetRange: the target keeps every listed function, all reached from outside the unit or from each other; the out-of-line copy of the inline accessor GetRange of CreatePlayerFaceMenu has no code in the target."
       },
       "folded": {
         "symbols": {
