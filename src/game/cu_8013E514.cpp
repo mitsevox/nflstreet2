@@ -93,7 +93,7 @@ int fn_800AD9B4(void);
 void CamGameSelectCamera(int);
 GameCamera_t *CamGameGetCamera(int);
 void CamGameChangeType(int, int);
-void fn_80142B00(void);
+void CamBallRequestRestart(void);
 int fn_801784C4(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
@@ -347,7 +347,7 @@ extern "C" void fn_8013F298(void)
 {
     if (lbl_803EB1E0) {
         fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1D8 = 0; lbl_803EB1DC = 0;
-        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; fn_80142B00();
+        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; CamBallRequestRestart();
     }
     lbl_803EB1D4 = 0;
 }

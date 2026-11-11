@@ -2192,6 +2192,10 @@
     "StorySetFlag200": {
       "address": "0x8018E978",
       "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "CamBallStart": {
+      "address": "0x801422EC",
+      "evidence": "evidence.tsv function row 0x801422EC-0x801423D0: documented holdout of src/game/camball.cpp, whose original bytes stay linked; CamBallMsgFunc calls it."
     }
   },
   "units": [
@@ -10209,6 +10213,43 @@
           "placement": ".data5",
           "start": "0x803EB1F8",
           "end": "0x803EB1FC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/camball.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801422EC-0x80142B0C (src/game/camball.cpp; the linked unit starts at 0x801423D0) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801423D0",
+          "end": "0x80142B0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A02C0",
+          "end": "0x802A0318"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCF8C",
+          "end": "0x802DCF9C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1FC",
+          "end": "0x803EB21C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6C4",
+          "end": "0x8031B6D0"
         }
       ]
     },
