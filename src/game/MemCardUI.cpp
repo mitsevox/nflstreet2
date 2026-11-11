@@ -82,7 +82,7 @@ static int _MemCardUI_iMarkTime;
 
 extern "C" {
 
-int MemCardUIEmptyHandler(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MemCardUIEmptyHandler(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     return 0;
 }

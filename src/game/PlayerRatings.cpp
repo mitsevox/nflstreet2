@@ -6,7 +6,7 @@
 #include "game/Object_8008044C.h"
 
 extern "C" {
-void fn_800814BC(Info_80307908 *pInfo, short *pValues);
+void fn_800814BC(PlayerGear_t *pInfo, short *pValues);
 
 static int _PlayerDb_aRatingColumns[10] = {
     0x49474150, 0x4D554A50, 0x4B544250, 0x48544350, 0x44505350,
@@ -22,7 +22,7 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index)
 {
     unsigned int value = PlayerDbGetRating(pObject, index);
     short values[10];
-    Info_80307908 info;
+    PlayerGear_t info;
 
     fn_800817CC(pObject, &info);
     fn_800814BC(&info, values);

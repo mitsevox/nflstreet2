@@ -5,7 +5,7 @@
 extern "C" {
 int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult);
 
-int MsgMemCardDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgMemCardDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 4:

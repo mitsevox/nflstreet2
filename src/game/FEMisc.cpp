@@ -15,7 +15,7 @@ extern "C" {
 int fn_80061C44(void);
 int fn_80061CAC(void);
 int fn_8005F910(void);
-int fn_8005F938(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_8005F938(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int fn_80186B38(int a);
 int GauntletGetCurrentTeam(int a);
 void GauntletStatsOpen(DbCursor *pObject, int a);
@@ -34,7 +34,7 @@ void FEMiscSetHelpText(const char *pText)
     static Params_80005284 sText;
 
     if (strncmp(pText, _FEMisc_szHelpText, 81)) {
-        Arg_8018399C args[1];
+        MenuArg_t args[1];
 
         strncpy(_FEMisc_szHelpText, pText, 81);
         sText.mUnknown0 = 0;
@@ -77,7 +77,7 @@ void FEMiscGetStats(int *pValues)
     GauntletStatsClose(&object);
 }
 
-int FEMiscHandleStatsFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FEMiscHandleStatsFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x17A:
@@ -95,7 +95,7 @@ int FEMiscHandleStatsFunction(unsigned int id, Arg_8018399C *pArgs, int unused, 
     return 1;
 }
 
-int FEMiscHandleFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x173:

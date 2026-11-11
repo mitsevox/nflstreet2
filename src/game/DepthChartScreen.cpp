@@ -34,7 +34,7 @@ void FeTeamChooseScreen(int *pResult)
     ChalCloseCursors();
 }
 
-int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeTeamHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 272:
@@ -59,7 +59,7 @@ int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *p
     return 1;
 }
 
-int DepthChartScreenHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int DepthChartScreenHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 270:
@@ -112,7 +112,7 @@ void DepthChartScreenGetSpot(unsigned char side, int unused, int index, float *p
     DepthChartSetSpotSlot(side != 0, index, value);
 }
 
-int FeCountsHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeCountsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 372:

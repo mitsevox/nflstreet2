@@ -9,7 +9,7 @@ int gUISQueryLevel = 0;
 }
 
 // Message handler called in turn by UISGameMsgDispatch: returns nonzero for the ids it handles.
-extern "C" int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+extern "C" int UISGameQueryHandleMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0xC3:

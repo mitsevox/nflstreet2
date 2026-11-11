@@ -349,7 +349,7 @@
       "address": "0x8025278C",
       "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     },
-    "GetItem__14MenuListScreeniP14Entry_80182CC8": {
+    "GetItem__14MenuListScreeniP11MenuEntry_t": {
       "address": "0x80182CC8",
       "evidence": "evidence.tsv external row 0x80182CC8 (GetItem__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
     },
@@ -377,15 +377,15 @@
       "address": "0x80182B40",
       "evidence": "evidence.tsv external row 0x80182B40 (Enter__14Class_802A6B60iPiT2) and type row Class_802A6B60."
     },
-    "BeginSlider__14MenuItemEditoriiiPiT4G12Arg_8018399CN26": {
+    "BeginSlider__14MenuItemEditoriiiPiT4G9MenuArg_tN26": {
       "address": "0x80182A94",
       "evidence": "evidence.tsv external row 0x80182A94 (BeginSlider__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26) and type row Class_802A6BB0."
     },
-    "GetCycleText__14MenuItemEditoriiG12Arg_8018399C": {
+    "GetCycleText__14MenuItemEditoriiG9MenuArg_t": {
       "address": "0x80182A90",
       "evidence": "evidence.tsv external row 0x80182A90 (GetCycleText__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "MoveSlider__14MenuItemEditoriiG12Arg_8018399C": {
+    "MoveSlider__14MenuItemEditoriiG9MenuArg_t": {
       "address": "0x80182A98",
       "evidence": "evidence.tsv external row 0x80182A98 (MoveSlider__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
@@ -709,11 +709,11 @@
       "address": "0x80182A84",
       "evidence": "evidence.tsv external row 0x80182A84 (EndColor__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
-    "GetText__14MenuItemEditoriPiG12Arg_8018399C": {
+    "GetText__14MenuItemEditoriPiG9MenuArg_t": {
       "address": "0x80182AA4",
       "evidence": "evidence.tsv external row 0x80182AA4 (GetText__14Class_802A6BB0iPiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "SetText__14MenuItemEditoriG12Arg_8018399C": {
+    "SetText__14MenuItemEditoriG9MenuArg_t": {
       "address": "0x80182AA8",
       "evidence": "evidence.tsv external row 0x80182AA8 (SetText__14Class_802A6BB0iG12Arg_8018399C) and type row Class_802A6BB0."
     },
@@ -2357,9 +2357,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80004AF0.cpp",
+      "source": "src/game/CreateTeamMenu.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80004AF0-0x80005668 (src/game/cu_80004AF0.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80004AF0-0x80005668 (src/game/CreateTeamMenu.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -9360,9 +9360,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8000A360.cpp",
+      "source": "src/game/CreatePlayerGear.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8000A360-0x8000DCD8 (src/game/cu_8000A360.cpp) and its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8000A360-0x8000DCD8 (src/game/CreatePlayerGear.cpp) and its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -10246,9 +10246,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80005668.cpp",
+      "source": "src/game/CreatePlayerMenu.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_80005668.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A360 (data_80008F10), 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects.",
+      "evidence": "evidence.tsv unit row src/game/CreatePlayerMenu.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A360 (data_80008F10), 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects.",
       "sections": [
         {
           "section": ".text",
@@ -10308,95 +10308,95 @@
       ],
       "link_roots": {
         "symbols": [
-          "Enter__14Class_80009ED8iPiT2",
-          "Leave__14Class_80009ED8iiPPv",
-          "Highlight__14Class_80009ED8i",
-          "GetEditor__14Class_80009ED8",
-          "Leave__14Class_80009E88iiPPv",
-          "Enter__14Class_8000A108iPiT2",
-          "Leave__14Class_8000A108iiPPv",
-          "Highlight__14Class_8000A108i",
-          "GetItemId__14Class_8000A108iPi",
-          "GetItem__14Class_8000A108iP14Entry_80182CC8",
-          "Enter__14Class_8000A0B8iPiT2",
-          "Leave__14Class_8000A0B8iiPPv",
-          "Highlight__14Class_8000A0B8i",
-          "GetItem__14Class_8000A0B8iP14Entry_80182CC8",
-          "Leave__14Class_8000A068iiPPv",
-          "GetEditor__14Class_8000A068",
-          "Leave__14Class_80009FC8iiPPv",
-          "Leave__14Class_80009F78iiPPv",
-          "Enter__14Class_80009F28iPiT2",
-          "Leave__14Class_80009F28iiPPv",
-          "Enter__14Class_8000A018iPiT2",
-          "Leave__14Class_8000A018iiPPv",
-          "Highlight__14Class_8000A018i",
-          "Enter__14Class_80009D88iPiT2",
-          "Leave__14Class_80009D88iiPPv",
-          "Highlight__14Class_80009D88i",
-          "GetItem__14Class_80009D88iP14Entry_80182CC8",
-          "GetText__14Class_80009D28iPiG12Arg_8018399C",
-          "SetText__14Class_80009D28iG12Arg_8018399C",
-          "Enter__14Class_80009E48iPiT2",
-          "Leave__14Class_80009E48iiPPv",
-          "Highlight__14Class_80009E48i",
-          "GetItem__14Class_80009E48iP14Entry_80182CC8",
-          "Enter__14Class_80009E08iPiT2",
-          "Leave__14Class_80009E08iiPPv",
-          "Highlight__14Class_80009E08i",
-          "GetItem__14Class_80009E08iP14Entry_80182CC8",
-          "Enter__14Class_80009DC8iPiT2",
-          "Leave__14Class_80009DC8iiPPv",
-          "Highlight__14Class_80009DC8i",
-          "GetItem__14Class_80009DC8iP14Entry_80182CC8",
-          "Enter__14Class_80009C88iPiT2",
-          "Leave__14Class_80009C88iiPPv",
-          "Highlight__14Class_80009C88i",
-          "GetItem__14Class_80009C88iP14Entry_80182CC8",
-          "BeginSlider__14Class_80009CC8iiiPiT4G12Arg_8018399CN26",
-          "MoveSlider__14Class_80009CC8iiG12Arg_8018399C",
-          "EndSlider__14Class_80009CC8iii",
-          "fn_800088C8",
-          "fn_8000890C",
-          "fn_80008914",
-          "fn_8000891C",
-          "fn_80008924",
-          "fn_800089C0",
-          "fn_800089D8",
-          "fn_800089E0",
-          "GetEntryCount__14Class_8000A0B8",
-          "GetEntries__14Class_8000A0B8",
-          "GetEntryCount__14Class_8000A068",
-          "GetEntries__14Class_8000A068",
-          "GetEntryCount__14Class_8000A018",
-          "GetEntries__14Class_8000A018",
-          "GetEntryCount__14Class_80009FC8",
-          "GetEntries__14Class_80009FC8",
-          "GetEntryCount__14Class_80009F78",
-          "GetEntries__14Class_80009F78",
-          "GetEntryCount__14Class_80009F28",
-          "GetEntries__14Class_80009F28",
-          "GetEntryCount__14Class_80009ED8",
-          "GetEntries__14Class_80009ED8",
-          "GetEntryCount__14Class_80009E88",
-          "GetEntries__14Class_80009E88",
-          "GetItemId__14Class_80009E48iPi",
-          "GetItemId__14Class_80009E08iPi",
-          "GetItemId__14Class_80009DC8iPi",
-          "GetItemId__14Class_80009D88iPi",
-          "GetItemId__14Class_80009C88iPi"
+          "Enter__25CreatePlayerAttributeMenuiPiT2",
+          "Leave__25CreatePlayerAttributeMenuiiPPv",
+          "Highlight__25CreatePlayerAttributeMenui",
+          "GetEditor__25CreatePlayerAttributeMenu",
+          "Leave__25CreatePlayerSignatureMenuiiPPv",
+          "Enter__16CreatePlayerListiPiT2",
+          "Leave__16CreatePlayerListiiPPv",
+          "Highlight__16CreatePlayerListi",
+          "GetItemId__16CreatePlayerListiPi",
+          "GetItem__16CreatePlayerListiP11MenuEntry_t",
+          "Enter__16CreatePlayerMenuiPiT2",
+          "Leave__16CreatePlayerMenuiiPPv",
+          "Highlight__16CreatePlayerMenui",
+          "GetItem__16CreatePlayerMenuiP11MenuEntry_t",
+          "Leave__20CreatePlayerInfoMenuiiPPv",
+          "GetEditor__20CreatePlayerInfoMenu",
+          "Leave__20CreatePlayerHairMenuiiPPv",
+          "Leave__20CreatePlayerFaceMenuiiPPv",
+          "Enter__20CreatePlayerSkinMenuiPiT2",
+          "Leave__20CreatePlayerSkinMenuiiPPv",
+          "Enter__26CreatePlayerAppearanceMenuiPiT2",
+          "Leave__26CreatePlayerAppearanceMenuiiPPv",
+          "Highlight__26CreatePlayerAppearanceMenui",
+          "Enter__26CreatePlayerInfoOptionListiPiT2",
+          "Leave__26CreatePlayerInfoOptionListiiPPv",
+          "Highlight__26CreatePlayerInfoOptionListi",
+          "GetItem__26CreatePlayerInfoOptionListiP11MenuEntry_t",
+          "GetText__22CreatePlayerNameEditoriPiG9MenuArg_t",
+          "SetText__22CreatePlayerNameEditoriG9MenuArg_t",
+          "Enter__26CreatePlayerHairOptionListiPiT2",
+          "Leave__26CreatePlayerHairOptionListiiPPv",
+          "Highlight__26CreatePlayerHairOptionListi",
+          "GetItem__26CreatePlayerHairOptionListiP11MenuEntry_t",
+          "Enter__26CreatePlayerFaceOptionListiPiT2",
+          "Leave__26CreatePlayerFaceOptionListiiPPv",
+          "Highlight__26CreatePlayerFaceOptionListi",
+          "GetItem__26CreatePlayerFaceOptionListiP11MenuEntry_t",
+          "Enter__26CreatePlayerSkinOptionListiPiT2",
+          "Leave__26CreatePlayerSkinOptionListiiPPv",
+          "Highlight__26CreatePlayerSkinOptionListi",
+          "GetItem__26CreatePlayerSkinOptionListiP11MenuEntry_t",
+          "Enter__25CreatePlayerSignatureListiPiT2",
+          "Leave__25CreatePlayerSignatureListiiPPv",
+          "Highlight__25CreatePlayerSignatureListi",
+          "GetItem__25CreatePlayerSignatureListiP11MenuEntry_t",
+          "BeginSlider__27CreatePlayerAttributeSlideriiiPiT4G9MenuArg_tN26",
+          "MoveSlider__27CreatePlayerAttributeSlideriiG9MenuArg_t",
+          "EndSlider__27CreatePlayerAttributeSlideriii",
+          "CreatePlayerGetMenu",
+          "CreatePlayerSetPoints",
+          "CreatePlayerGetPoints",
+          "CreatePlayerGetPendingCost",
+          "CreatePlayerResetOriginals",
+          "CreatePlayerGetNextCost",
+          "CreatePlayerGetPlayerId",
+          "CreatePlayerApplyPreset",
+          "GetEntryCount__16CreatePlayerMenu",
+          "GetEntries__16CreatePlayerMenu",
+          "GetEntryCount__20CreatePlayerInfoMenu",
+          "GetEntries__20CreatePlayerInfoMenu",
+          "GetEntryCount__26CreatePlayerAppearanceMenu",
+          "GetEntries__26CreatePlayerAppearanceMenu",
+          "GetEntryCount__20CreatePlayerHairMenu",
+          "GetEntries__20CreatePlayerHairMenu",
+          "GetEntryCount__20CreatePlayerFaceMenu",
+          "GetEntries__20CreatePlayerFaceMenu",
+          "GetEntryCount__20CreatePlayerSkinMenu",
+          "GetEntries__20CreatePlayerSkinMenu",
+          "GetEntryCount__25CreatePlayerAttributeMenu",
+          "GetEntries__25CreatePlayerAttributeMenu",
+          "GetEntryCount__25CreatePlayerSignatureMenu",
+          "GetEntries__25CreatePlayerSignatureMenu",
+          "GetItemId__26CreatePlayerHairOptionListiPi",
+          "GetItemId__26CreatePlayerFaceOptionListiPi",
+          "GetItemId__26CreatePlayerSkinOptionListiPi",
+          "GetItemId__26CreatePlayerInfoOptionListiPi",
+          "GetItemId__25CreatePlayerSignatureListiPi"
         ],
         "discarded": [
-          "GetRange__14Class_80009F78i"
+          "GetRange__20CreatePlayerFaceMenui"
         ],
-        "evidence": "evidence.tsv linker row cu_80005668 GetRange: the target keeps every listed function, all reached from outside the unit or from each other; the out-of-line copy of the inline accessor GetRange of Class_80009F78 has no code in the target."
+        "evidence": "evidence.tsv linker row CreatePlayerMenu GetRange: the target keeps every listed function, all reached from outside the unit or from each other; the out-of-line copy of the inline accessor GetRange of Class_80009F78 has no code in the target."
       },
       "folded": {
         "symbols": {
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row cu_80005668 FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
       }
     },
     {

@@ -6,7 +6,7 @@ int fn_800619FC(unsigned int id, void *pArgs, int unused, int *pResult);
 int StoryPlayerScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 int GauntletScreenMsg(unsigned int id, void *pArgs, int unused, int *pResult);
 
-int fn_8001D0F4(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int fn_8001D0F4(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 1:
@@ -19,7 +19,7 @@ int fn_8001D0F4(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int
     return 0;
 }
 
-int fn_8001D180(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int fn_8001D180(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 0:

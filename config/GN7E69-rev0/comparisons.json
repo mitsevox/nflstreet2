@@ -4713,17 +4713,17 @@
           "end": "0x80182A90"
         },
         {
-          "symbol": "GetCycleText__14MenuItemEditoriiG12Arg_8018399C",
+          "symbol": "GetCycleText__14MenuItemEditoriiG9MenuArg_t",
           "start": "0x80182A90",
           "end": "0x80182A94"
         },
         {
-          "symbol": "BeginSlider__14MenuItemEditoriiiPiT4G12Arg_8018399CN26",
+          "symbol": "BeginSlider__14MenuItemEditoriiiPiT4G9MenuArg_tN26",
           "start": "0x80182A94",
           "end": "0x80182A98"
         },
         {
-          "symbol": "MoveSlider__14MenuItemEditoriiG12Arg_8018399C",
+          "symbol": "MoveSlider__14MenuItemEditoriiG9MenuArg_t",
           "start": "0x80182A98",
           "end": "0x80182AA0"
         },
@@ -4733,12 +4733,12 @@
           "end": "0x80182AA4"
         },
         {
-          "symbol": "GetText__14MenuItemEditoriPiG12Arg_8018399C",
+          "symbol": "GetText__14MenuItemEditoriPiG9MenuArg_t",
           "start": "0x80182AA4",
           "end": "0x80182AA8"
         },
         {
-          "symbol": "SetText__14MenuItemEditoriG12Arg_8018399C",
+          "symbol": "SetText__14MenuItemEditoriG9MenuArg_t",
           "start": "0x80182AA8",
           "end": "0x80182AAC"
         },
@@ -4773,7 +4773,7 @@
           "end": "0x80182CC8"
         },
         {
-          "symbol": "GetItem__14MenuListScreeniP14Entry_80182CC8",
+          "symbol": "GetItem__14MenuListScreeniP11MenuEntry_t",
           "start": "0x80182CC8",
           "end": "0x80182DBC"
         },
@@ -5312,7 +5312,7 @@
           "end": "0x8000DE2C"
         },
         {
-          "symbol": "GetItem__14Class_8000F500iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F500iP11MenuEntry_t",
           "start": "0x8000DE2C",
           "end": "0x8000DEEC"
         },
@@ -5327,32 +5327,32 @@
           "end": "0x8000E07C"
         },
         {
-          "symbol": "GetItem__14Class_8000F540iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F540iP11MenuEntry_t",
           "start": "0x8000E07C",
           "end": "0x8000E0CC"
         },
         {
-          "symbol": "GetItem__14Class_8000F4B0iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F4B0iP11MenuEntry_t",
           "start": "0x8000E0CC",
           "end": "0x8000E11C"
         },
         {
-          "symbol": "GetItem__14Class_8000F410iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F410iP11MenuEntry_t",
           "start": "0x8000E11C",
           "end": "0x8000E16C"
         },
         {
-          "symbol": "GetItem__14Class_8000F460iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F460iP11MenuEntry_t",
           "start": "0x8000E16C",
           "end": "0x8000E1BC"
         },
         {
-          "symbol": "GetItem__14Class_8000F3C0iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F3C0iP11MenuEntry_t",
           "start": "0x8000E1BC",
           "end": "0x8000E20C"
         },
         {
-          "symbol": "GetItem__14Class_8000F370iP14Entry_80182CC8",
+          "symbol": "GetItem__14Class_8000F370iP11MenuEntry_t",
           "start": "0x8000E20C",
           "end": "0x8000E25C"
         },

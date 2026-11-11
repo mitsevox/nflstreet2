@@ -97,7 +97,7 @@ static unsigned char _MsgPlayerPickup_bCopyMode;
 static unsigned char _MsgPlayerPickup_bSkipTeam;
 
 extern "C" {
-void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, Arg_8018399C text)
+void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, MenuArg_t text)
 {
     DbCursor cursor;
     char name[18];
@@ -111,7 +111,7 @@ void MsgPlayerPickupGetTeamInfo(int *pCount, int *pId, Arg_8018399C text)
     fn_801C3284(text.pParams->mpText, name, text.pParams->mLength + 1);
 }
 
-void MsgPlayerPickupGetRosterRow(int index, int *pId, Arg_8018399C text, Arg_8018399C label)
+void MsgPlayerPickupGetRosterRow(int index, int *pId, MenuArg_t text, MenuArg_t label)
 {
     char name[27];
 
@@ -491,7 +491,7 @@ void MsgPlayerPickupShutdown(void)
     _MsgPlayerPickup_bOpen = 0;
 }
 
-int MsgPlayerPickupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgPlayerPickupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

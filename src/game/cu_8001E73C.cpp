@@ -104,7 +104,7 @@ void fn_8001E894(int value, int *pA, int *pB)
     *pB = lbl_803EBA84;
 }
 
-void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
+void fn_8001E8F4(int index, MenuArg_t text, int *pA, int *pB)
 {
     Challenge_t record;
     int a;
@@ -141,8 +141,8 @@ void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
     }
 }
 
-int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018399C textB,
-                Arg_8018399C textC, Arg_8018399C *pTexts1, Arg_8018399C *pTexts2)
+int fn_8001EA08(int index, int *pValue, MenuArg_t textA, int *pFlag, MenuArg_t textB,
+                MenuArg_t textC, MenuArg_t *pTexts1, MenuArg_t *pTexts2)
 {
     Challenge_t record;
     int result = 0;
@@ -257,7 +257,7 @@ void fn_8001ED90(unsigned char value)
     lbl_803EBA74 = value;
 }
 
-int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int fn_8001ED98(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -273,10 +273,10 @@ int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         fn_8001E8F4(pArgs[0].i, pArgs[1], pArgs[2].pi, pArgs[3].pi);
         break;
     case 0x80000005: {
-        Arg_8018399C texts[3] = { pArgs[6], pArgs[7], pArgs[8] };
+        MenuArg_t texts[3] = { pArgs[6], pArgs[7], pArgs[8] };
 
         *pResult = fn_8001EA08(pArgs[0].i, pArgs[1].pi, pArgs[2], pArgs[3].pi, pArgs[4], pArgs[5],
-                               texts, (Arg_8018399C *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
+                               texts, (MenuArg_t *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
         break;
     }
     case 0x80000006:

@@ -18,7 +18,7 @@ void PositionAbbrevFormat(int slot, char *pText)
     fn_801C2E18(pText, lbl_802EA214[slot]);
 }
 
-int UISGroup2HandleMsg(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int UISGroup2HandleMsg(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 3:

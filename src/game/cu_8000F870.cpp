@@ -96,7 +96,7 @@ void *operator new(unsigned int size, int unknown);
 extern "C" {
 void fn_80004440(int *pId);
 int fn_8000485C(void);
-int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_8001B354(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 void fn_8001B228(void);
 void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
@@ -253,17 +253,17 @@ int fn_8022F4BC(void);
 extern char lbl_802EBE24[];
 extern void *gUISMainInfo;
 
-int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 void fn_80010150(int mode);
 void fn_800102D8(void);
 int fn_800103A4(int force);
 void fn_80010B78(void);
-int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_80011AA8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_80011344(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int fn_80011AA8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 void fn_80011D9C(DbCursor *pObject, int side);
 int fn_80011FA0(int side, int id);
 int fn_80012244(int side);
-int fn_80014260(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_80014260(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag);
 void fn_80014AA8(int team, int id);
 void fn_80014B98(void);
@@ -277,14 +277,14 @@ void fn_800155CC(int team);
 void fn_80015654(unsigned char value);
 void fn_8001565C(int team, int slot, int *pId);
 int fn_80015B68(int *pIndex, int any);
-int fn_80015BF8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_80015BF8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 void fn_80015D28(int id);
 int fn_80015E24(unsigned int index);
-int fn_80015EB8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_8001642C(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_80016730(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_80016950(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-int fn_80016DF4(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+int fn_80015EB8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int fn_8001642C(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int fn_80016730(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int fn_80016950(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+int fn_80016DF4(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 
 extern const char *lbl_802F41BC[];
 extern int lbl_802F41C8[][5];
@@ -358,7 +358,7 @@ Roster_8036AE60 lbl_8036AE60[2];
 Scroll_8036B0E8 lbl_8036B0E8[2];
 Slots_8036B0F8 lbl_8036B0F8[2];
 
-int fn_8000F870(int module, unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_8000F870(int module, unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (module) {
     case 1:
@@ -561,7 +561,7 @@ int fn_8000FCDC(void)
     return found;
 }
 
-int fn_8000FE60(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -1140,7 +1140,7 @@ void fn_80010DC4(int index, int pad)
 
 const char *lbl_802F41BC[] = { "None", "Load", "Create" };
 
-void fn_80010E68(int index, int dir, Arg_8018399C arg)
+void fn_80010E68(int index, int dir, MenuArg_t arg)
 {
     Params_80005284 *pParams = arg.pParams;
 
@@ -1297,7 +1297,7 @@ void fn_800112F8(int a, int *pB, int *pC)
     *pC = fn_80010730(a, 1);
 }
 
-int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80011344(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -1517,7 +1517,7 @@ void fn_800119CC(int type, int value, int column, char *pOut, int size, int *pFo
     memcpy(pOut, text, size);
 }
 
-int fn_80011AA8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80011AA8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -2191,7 +2191,7 @@ void fn_80013438(int team)
 }
 
 /* An array argument points at a header of p[0] + 1 words; its data follows the header. */
-int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80013614(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -2451,7 +2451,7 @@ void fn_80013FA8(int index, int value)
     lbl_803EB9D4[index] = value;
 }
 
-int fn_80013FB8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80013FB8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -2530,7 +2530,7 @@ void fn_80014214(int team)
     }
 }
 
-int fn_80014260(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80014260(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     int result;
 
@@ -3214,7 +3214,7 @@ void fn_80015BF0(int index)
     lbl_803EB9E0 = index;
 }
 
-int fn_80015BF8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80015BF8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -3280,7 +3280,7 @@ int fn_80015E24(unsigned int index)
     return id;
 }
 
-void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
+void fn_80015E48(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 1;
     FELoopSetVisited(0);
@@ -3288,7 +3288,7 @@ void fn_80015E48(Arg_8018399C *pArgs, int count, int *pResult)
     MemCardScreenSetFlag(0);
 }
 
-void fn_80015E80(Arg_8018399C *pArgs, int count, int *pResult)
+void fn_80015E80(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 0;
     if (!InGameIsDemo()) {
@@ -3297,7 +3297,7 @@ void fn_80015E80(Arg_8018399C *pArgs, int count, int *pResult)
     }
 }
 
-int fn_80015EB8(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80015EB8(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -3431,7 +3431,7 @@ void fn_800162E8(int control, Params_80005284 *pName, int *pUnknown34, int *pUnk
     }
 }
 
-int fn_8001642C(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_8001642C(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -3526,7 +3526,7 @@ void fn_8001660C(int *pCount, int *pValue, Params_80005284 *pRecord)
     fn_800164F0(pRecord->mpText);
 }
 
-int fn_80016730(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80016730(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -3605,7 +3605,7 @@ void fn_800168E8(int key, int value)
     }
 }
 
-int fn_80016950(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80016950(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000007:
@@ -3729,7 +3729,7 @@ void fn_80016D14(int control, char *pText, int size, int *pResult)
     *pResult = DbCursorGetRowCount(lbl_803EBA00);
 }
 
-int fn_80016DF4(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_80016DF4(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:

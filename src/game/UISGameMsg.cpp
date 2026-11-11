@@ -2,7 +2,7 @@
 #include "game/UISGameMsg.h"
 
 // Offers a message to each handler in turn and returns the first nonzero result.
-extern "C" int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+extern "C" int UISGameMsgDispatch(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     int result;
 
@@ -46,7 +46,7 @@ extern "C" int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unus
     if (result != 0) {
         return result;
     }
-    result = fn_8018399C(id, pArgs, unused, (Arg_8018399C *)pResult);
+    result = fn_8018399C(id, pArgs, unused, (MenuArg_t *)pResult);
     if (result != 0) {
         return result;
     }

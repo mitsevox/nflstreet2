@@ -12,20 +12,20 @@ union MsgGameArg_t;
 struct MemCardUIArgs_t;
 
 extern "C" {
-int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int DepthChartScreenHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int FeCountsHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FeTeamHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int DepthChartScreenHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int FeCountsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int FeatsScreenHandleMessage(unsigned int id, FeatsScreenArgs_t *pArgs, int a, int *pResult);
 int ColorPickHandleMsg(int id, ColorPickMsg_t *pBlock, int unused, int *pResult);
-int UISGameQueryHandleMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int UISGameQueryHandleMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGameArg_t *pResult);
-int FEMiscHandleStatsFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int FEMiscHandleFunction(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *pResult);
-int MemCardUIEmptyHandler(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int FEMiscHandleStatsFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int FEMiscHandleFunction(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResult);
+int MemCardUIEmptyHandler(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, int *pResult);
 
-int UISGameMsgDispatch(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int UISGameMsgDispatch(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 }
 
 #endif

@@ -11,7 +11,7 @@ static int lbl_802D6898[14] = {
     0x54434A50, 0x44454D50
 };
 
-extern "C" void fn_800817CC(Object_8008044C *object, Info_80307908 *info)
+extern "C" void fn_800817CC(Object_8008044C *object, PlayerGear_t *info)
 {
     DbColumnValue columns[15];
     DbColumnValue *list = columns;
@@ -35,7 +35,7 @@ extern "C" void fn_800817CC(Object_8008044C *object, Info_80307908 *info)
     info->mUnknown0D = DbCursorGetInt(object, 0x4D544850);
 }
 
-extern "C" void fn_8008199C(Object_8008044C *object, Info_80307908 *info)
+extern "C" void fn_8008199C(Object_8008044C *object, PlayerGear_t *info)
 {
     DbColumnValue columns[15];
     DbColumnValue *list = columns;

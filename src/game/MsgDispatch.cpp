@@ -9,9 +9,9 @@
 #include "game/MsgCheatCodes.h"
 
 extern "C" {
-int MsgPlayerPickupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_8001FE10(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int MsgPlayerPickupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int fn_8001ED98(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MsgTutorialHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
 int TournBracketMsg(unsigned int id, void *pArgs, int unused, int *pResult);
@@ -29,7 +29,7 @@ static int _MsgUnlockList_iSelection = 0;
 extern "C" {
 void MsgOptionsStubSelect(int index);
 
-int MsgProfileAssignHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgProfileAssignHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     if (id == 0x80000001) {
         fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
@@ -39,7 +39,7 @@ int MsgProfileAssignHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unus
     return 0;
 }
 
-int MsgTeamDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgTeamDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 2:
@@ -54,10 +54,10 @@ int MsgTeamDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused,
     return 0;
 }
 
-int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int MsgOptionsStubHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int MsgOptionsStubHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 
-int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgOptionsDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 0:
@@ -80,7 +80,7 @@ int MsgOptionsDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unus
     return 0;
 }
 
-int MsgUnlockListHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgUnlockListHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000004:
@@ -170,7 +170,7 @@ void MsgOptionsStubSelect(int index)
 {
 }
 
-int MsgOptionsStubHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgOptionsStubHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
