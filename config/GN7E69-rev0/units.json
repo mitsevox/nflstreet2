@@ -12234,6 +12234,36 @@
       ]
     },
     {
+      "source": "src/game/MemCardMsg.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80191948-0x80193CEC (src/game/MemCardMsg.cpp), its data and linker rows.",
+      "link_roots": {
+        "symbols": [
+          "MemCardMsgGetText",
+          "MemCardMsgFormat"
+        ],
+        "discarded": [
+          "MemCardMsgGetStatusText",
+          "MemCardMsgGetDamagedText"
+        ],
+        "evidence": "evidence.tsv linker row 0x802ABD94-0x802ABDB8."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191948",
+          "end": "0x80193CEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ABD94",
+          "end": "0x802AD7E8"
+        }
+      ]
+    },
+    {
       "source": "src/game/AnimFrameDecode.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C (src/game/AnimFrameDecode.cpp) and its source-form rows.",
