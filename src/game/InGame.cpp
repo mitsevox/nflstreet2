@@ -45,9 +45,9 @@ int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
 void fn_80066D5C(void);
 void SndgUpdate(int a);
-void fn_800726B8(void);
-void fn_800728F8(void);
-void fn_80072C90(int a, int b);
+void SndgMusicFlushSongText(void);
+void SndgMusicUpdate(void);
+void SndgMusicFadeOut(int a, int b);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void PlaybookSideClearAll(void);
@@ -217,7 +217,7 @@ static void _InGameUpdateHook3() {}
 
 static void _InGameEndDemo()
 {
-    fn_80072C90(0xFA, 1);
+    SndgMusicFadeOut(0xFA, 1);
     _InGame_uIdleFrames = 0;
     if (_InGame_bIdle) {
         _InGame_bIdle = 0;
@@ -376,8 +376,8 @@ unsigned char InGame::Update()
     fn_8003E1F0();
     fn_80043F50();
     fn_800A7F6C();
-    fn_800728F8();
-    fn_800726B8();
+    SndgMusicUpdate();
+    SndgMusicFlushSongText();
     ScreenTransUpdate();
     SndgUpdate(1);
     fn_801CE82C();

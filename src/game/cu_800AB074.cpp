@@ -6,7 +6,7 @@ extern "C" {
 int ScreenTransIsActive(void);
 void fn_800AD910(int a, float b);
 void SndgAmbPostCue(int type);
-void fn_80072F04(void);
+void SndgMusicResume(void);
 int SndgCrowdTriggerEvent(int index, int unknown);
 }
 
@@ -17,7 +17,7 @@ extern "C" void fn_800AB074(Class_80297B90 *p, float dt)
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
         SndgAmbPostCue(3);
-        fn_80072F04();
+        SndgMusicResume();
         SndgCrowdTriggerEvent(3, 0);
     }
 }

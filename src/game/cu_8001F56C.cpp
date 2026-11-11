@@ -3,7 +3,7 @@
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_80072AA8.h"
+#include "game/SndgMusic.h"
 #include "game/fn_8007F828.h"
 
 /* One slot of the 21-entry table that lbl_803EBA94 points to. */
@@ -24,11 +24,11 @@ extern char lbl_802EBFCC[];
 
 void SndgPathResumeTrack(int a);
 void SndgSetVolumeOption(unsigned int index, unsigned int value);
-void fn_80072AD8(unsigned char a);
-void fn_80072B84(int a, int b, int c);
-int fn_80072E6C(void);
-void fn_80072F04(void);
-void fn_80073094(void);
+void SndgMusicSetHold(unsigned char a);
+void SndgMusicPlaySong(int a, int b, int c);
+int SndgMusicIsPaused(void);
+void SndgMusicResume(void);
+void SndgMusicStop(void);
 void fn_8007B358(DbCursor *pObject);
 void fn_8007B3AC(DbCursor *pObject);
 void fn_8007B3CC(DbCursor *pObject, int key, int *pResult);
@@ -126,7 +126,7 @@ void fn_8001F704(void)
     fn_8007B3AC(&table);
     fn_80083644(&cursor);
     if (changed) {
-        fn_80072AA8();
+        SndgMusicReshuffle();
     }
 }
 
@@ -222,15 +222,15 @@ void fn_8001FB3C(int mode, int key)
         value = fn_8007B404(&table);
         fn_8007B3AC(&table);
         SndgPathResumeTrack(0x11000001);
-        fn_80072B84(1, 0, value);
+        SndgMusicPlaySong(1, 0, value);
     } else if (mode - 1 < 0) {
-        fn_80072B84(0, 0, 0);
+        SndgMusicPlaySong(0, 0, 0);
     }
 }
 
 void fn_8001FBE8(void)
 {
-    fn_80073094();
+    SndgMusicStop();
 }
 
 int fn_8001FC08(int a, int b)
@@ -280,11 +280,11 @@ void fn_8001FD48(void)
 {
     lbl_803EBA90 = ResOpenDevice(lbl_802EBFCC, 44);
     SndgSetVolumeOption(2, 100);
-    if (fn_80072E6C()) {
-        fn_80072F04();
+    if (SndgMusicIsPaused()) {
+        SndgMusicResume();
     }
-    fn_80073094();
-    fn_80072AD8(1);
+    SndgMusicStop();
+    SndgMusicSetHold(1);
     lbl_803EBA94 = (Table_803EBA94 *)fn_801D2B7C(256, 0, 0);
     fn_8001F56C();
 }
@@ -292,11 +292,11 @@ void fn_8001FD48(void)
 void fn_8001FDB8(void)
 {
     SndgSetVolumeOption(2, (unsigned char)(fn_8007F828(5) * 10));
-    fn_80072AD8(0);
+    SndgMusicSetHold(0);
     ResClose(lbl_803EBA90);
     fn_801D2BD0(lbl_803EBA94);
     lbl_803EBA94 = 0;
-    fn_80072F90();
+    SndgMusicContinue();
 }
 
 int fn_8001FE10(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)

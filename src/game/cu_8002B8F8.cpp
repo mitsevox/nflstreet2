@@ -135,8 +135,8 @@ void fn_800711E0(void);
 void fn_80071344(void);
 void fn_80071348(void);
 void fn_80071794(int a);
-void fn_80072AEC(int a);
-void fn_80072F04(void);
+void SndgMusicSetMode(int a);
+void SndgMusicResume(void);
 void fn_8009BB50(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D818(int state);
@@ -695,8 +695,8 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             fn_800308A4(p);
             if (!(p->mUnknownD94 & 0x10000)) {
                 fn_80030940(p);
-                fn_80072F04();
-                fn_80072AEC(0xC);
+                SndgMusicResume();
+                SndgMusicSetMode(0xC);
             }
             HudHide();
             p->mUnknownD90 = 4;
@@ -740,7 +740,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
             }
             if (!(p->mUnknownD94 & 0x10000)) {
                 SndgSfxPlay(0x78, 0);
-                fn_80072AEC(0xD);
+                SndgMusicSetMode(0xD);
                 PauseSetPollDelay(4);
             }
             if (PauseIsOpen() == 0) {

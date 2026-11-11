@@ -228,7 +228,7 @@ void ChallengeSendGoalList(int flag);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 void AudmonEventPost(int type, void *pPos);
-void fn_80072C90(unsigned int delay, int wait);
+void SndgMusicFadeOut(unsigned int delay, int wait);
 void fn_8009D8CC(int index);
 void fn_800AE988(void);
 void PauseSetSavedRumble(unsigned char value);
@@ -1315,7 +1315,7 @@ void fn_80058E68(void)
     PassIconsHide();
     PassIconsClearReplayFlag();
     AudmonEventPost(0x72, 0);
-    fn_80072C90(250, 0);
+    SndgMusicFadeOut(250, 0);
 }
 
 void fn_80058EAC(void)

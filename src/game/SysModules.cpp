@@ -37,8 +37,8 @@ void fn_8002A1D4(int a, int b, char *pText);
 void fn_8002A5F0(int a, char *pText, int b);
 void PlaDynClutOpen(void);
 void PlaDynClutUnload(void);
-void fn_8007272C(void);
-void fn_80072890(void);
+void SndgMusicInit(void);
+void SndgMusicShutdown(void);
 void PortraitSystemInit(void);
 void PortraitSystemShutdown(void);
 void fn_8008FAA8(void);
@@ -514,12 +514,12 @@ const char *FMSndgMusic::GetName() { return "FMSndgMusic"; }
 
 int FMSndgMusic::Init()
 {
-    fn_8007272C();
+    SndgMusicInit();
     return 1;
 }
 
 int FMSndgMusic::Shutdown()
 {
-    fn_80072890();
+    SndgMusicShutdown();
     return 1;
 }

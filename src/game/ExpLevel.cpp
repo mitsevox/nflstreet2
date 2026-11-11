@@ -5,7 +5,7 @@
 #include "game/QueryStatus.h"
 
 extern "C" {
-void fn_800731D0(int a);
+void SndgMusicPumpFrame(int a);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
@@ -106,11 +106,11 @@ int ExpLevelOpenTable(void)
     int failed;
 
     if (!_ExpLevel_bOpen) {
-        fn_800731D0(1);
-        fn_800731D0(0);
+        SndgMusicPumpFrame(1);
+        SndgMusicPumpFrame(0);
         failed = fn_8022EF8C(0, 0x4C505845);
-        fn_800731D0(1);
-        fn_800731D0(0);
+        SndgMusicPumpFrame(1);
+        SndgMusicPumpFrame(0);
         if (failed) {
             _ExpLevel_bOpen = 0;
             ok = 0;

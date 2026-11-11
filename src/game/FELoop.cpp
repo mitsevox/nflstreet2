@@ -1,7 +1,7 @@
 /* The front-end loop module: boot screens, the per-frame update of the menus, the screen to return to after a game, and the idle timeout. */
 
 #include "game/cu_8007F12C.h"
-#include "game/fn_80072AA8.h"
+#include "game/SndgMusic.h"
 #include "engine/viewport.h"
 #include "game/FlowManagerC.h"
 #include "game/FELoop.h"
@@ -45,8 +45,8 @@ int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
 void SndgUpdate(int a);
 void SndgApplyVolumeOptions(void);
-void fn_80072C90(int a, int b);
-void fn_800731D0(int a);
+void SndgMusicFadeOut(int a, int b);
+void SndgMusicPumpFrame(int a);
 void fn_8009418C(void);
 void fn_8013CF98(void);
 void FEPlyrLoadUpdate(void);
@@ -281,7 +281,7 @@ static void _FELoopBootSetup()
     BootShowStartupScreens();
     fn_8007F328(0);
     SndgApplyVolumeOptions();
-    fn_80072AA8();
+    SndgMusicReshuffle();
     ConSetChannelInfo(-1, 1, 0);
 }
 
@@ -308,16 +308,16 @@ void FELoopStartGame()
 
         _FELoop_bRunning = 0;
         fn_8001B228();
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         DepthChartGetSide(0, &record0);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         DepthChartGetSide(1, &record1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         fn_80232FD4(&record0, &record1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         GameInfoRead();
         fn_8021956C(gUISSubInfo, 1, 5, 1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         gGSFlowManager.fn_801CBEF4(2, 12);
     }
 }
@@ -394,7 +394,7 @@ unsigned char FELoop::Update()
         if (fn_80010194() || fn_80015F2C()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
-                fn_80072C90(0xFA, 1);
+                SndgMusicFadeOut(0xFA, 1);
                 _FELoop_bIdleTimeout = 1;
             }
         }

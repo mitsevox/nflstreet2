@@ -20,7 +20,7 @@ void fn_8003A4DC(void);
 void fn_800406C0(unsigned int flags);
 void fn_800588E0(void);
 void fn_80071C34(int value);
-void fn_80073328(int resume);
+void SndgMusicExitMode(int resume);
 void SpchIGEndSceneLine(void);
 unsigned char SpchIGIsSceneLineActive(void);
 void SpchIGResumeChannel(int index);
@@ -117,7 +117,7 @@ extern "C" void fn_800C1CA0(void)
     HudReset();
     PassIconsHide();
     PassIconsClearReplayFlag();
-    fn_80073328(0);
+    SndgMusicExitMode(0);
     lbl_803EABB9 = 0;
 }
 

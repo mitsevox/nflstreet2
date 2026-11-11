@@ -50,7 +50,7 @@ void fn_800AE750(int index, int team);
 void HudHidePressPrompt(int team);
 void fn_80156C78(int id, int value);
 void fn_800A9384(int mode);
-void fn_80073210(int frames);
+void SndgMusicWaitForStart(int frames);
 void fn_800A6D5C(int team);
 int fn_80156704(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
@@ -389,7 +389,7 @@ extern "C" void fn_800A7514(int team)
                 }
             } else if (lbl_803EC954[other]->mUnknown68 == 0) {
                 AudmonEventPostArgs(8, 0, team, 0, 0);
-                fn_80073210(120);
+                SndgMusicWaitForStart(120);
             }
             lbl_803EC954[team]->mUnknown68 = lbl_803EC954[team]->mUnknown6C;
             lbl_803EC954[team]->mUnknown54 = mine * 2.0f * lbl_803EC954[team]->mUnknown10;

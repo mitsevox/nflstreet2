@@ -490,9 +490,9 @@ void fn_8006F850(AudmonEvent_t *pEvent);
 void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
 int fn_80071BA0(int a, int b);
-void fn_800728F8(void);
-void fn_80072C54(int value);
-void fn_80073144(int a, int b);
+void SndgMusicUpdate(void);
+void SndgMusicSetVolume(int value);
+void SndgMusicRampCutoff(int a, int b);
 void SpchIGSaySceneLine(int a, int b, int c);
 void SpchIGStopSceneLine(void);
 void SpchIGEndSceneLine(void);
@@ -1370,7 +1370,7 @@ extern "C" void SndgAmbType4Update(int index, Vector_80039F5C *pPos, void *pObje
             } else {
                 cutoff = 20000;
             }
-            fn_80073144(cutoff, 0);
+            SndgMusicRampCutoff(cutoff, 0);
             float level = fn_8007F828(4);
             int w = _SndgAmb_pState->mSound0[index]->mUnknown10;
             SndgChannelSetVolume(1, (w >= 0 ? (w <= 127 ? (int)(level / (w * 2.0f * (1.0f / 127.0f) + 1.0f))
@@ -1388,7 +1388,7 @@ extern "C" void SndgAmbType4Stop(int index)
     if (s != 0) {
         delete s;
         _SndgAmb_pState->mSound0[index] = 0;
-        fn_80073144(20000, 0);
+        SndgMusicRampCutoff(20000, 0);
         SndgChannelSetVolume(1, fn_8007F828(4) * 10);
     }
 }
@@ -2160,7 +2160,7 @@ extern "C" void SndgUpdate(int a)
     for (pHandler = _Sndg_sState.m14; *pHandler != 0; pHandler++) {
         (*pHandler)(a);
     }
-    fn_800728F8();
+    SndgMusicUpdate();
     SndgLoadQueueService(1);
     fn_801F4B20();
 }
@@ -3093,7 +3093,7 @@ extern "C" void SndgSetVolumeOption(unsigned int index, unsigned int value)
         value = value > 50 ? (value - 50) * (100 - _Sndg_aVolumeCurveMid[index]) / 50 + _Sndg_aVolumeCurveMid[index]
                            : value * _Sndg_aVolumeCurveMid[index] / 50;
         value = value * 75 / 100;
-        fn_80072C54(value);
+        SndgMusicSetVolume(value);
         SndgChannelSetVolume(8, value);
         break;
     case 3:

@@ -19,7 +19,7 @@ void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
-void fn_800731D0(int a);
+void SndgMusicPumpFrame(int a);
 int fn_80186F7C(unsigned char index);
 int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
@@ -370,11 +370,11 @@ void fn_800828FC(void)
 {
     QueryResult result;
 
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EF8C(0, 0x4D4E4653);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EF8C(0, 0x4D4E4C53);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     lbl_8030BC88.mUnknown0 = 0;
     lbl_8030BC88.mUnknown4 = 0;
     lbl_8030BC88.mUnknown8 = -1;
@@ -398,11 +398,11 @@ void fn_800829D8(void)
     if (lbl_8030BC88.mUnknown0) {
         fn_801FCFA0(&lbl_8030BC88);
     }
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EFBC(0, 0x4D4E4653);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EFBC(0, 0x4D4E4C53);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     lbl_803EA7D8 = 0;
 }
 

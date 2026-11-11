@@ -292,10 +292,10 @@ void SndgAmbPostCue(int type);
 void SndgSetVolumeOption(int channel, unsigned int level);
 void SndgApplyVolumeOptions(void);
 void fn_8006F824(int a);
-void fn_80072C90(int a, int b);
-int fn_80072E6C(void);
-void fn_80072F04(void);
-void fn_800731D0(int a);
+void SndgMusicFadeOut(int a, int b);
+int SndgMusicIsPaused(void);
+void SndgMusicResume(void);
+void SndgMusicPumpFrame(int a);
 void SpchIGSetCommentaryOn(unsigned char value);
 int SpchIGIsNarratorIdle(void);
 int fn_80085A34(int formation, int team);
@@ -999,9 +999,9 @@ int fn_80157080(void)
             }
             fn_8015651C();
             fn_801485F4();
-            fn_80072F04();
+            SndgMusicResume();
             SndgApplyVolumeOptions();
-            fn_80072F04();
+            SndgMusicResume();
             lbl_803ECA58 = 0;
         }
         done = 1;
@@ -1041,9 +1041,9 @@ int fn_80157080(void)
             lbl_803ECA58 = done;
         }
     } else {
-        fn_80072F04();
+        SndgMusicResume();
         SndgApplyVolumeOptions();
-        fn_80072F04();
+        SndgMusicResume();
     }
 
     if (done) {
@@ -1062,7 +1062,7 @@ int fn_80157080(void)
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
         SndgAmbPostCue(3);
-        fn_80072F04();
+        SndgMusicResume();
         SndgCrowdTriggerEvent(3, 0);
         PlayBookLoadAudibleTable();
     }
@@ -1712,8 +1712,8 @@ void fn_80158AA8(void)
 {
     unsigned char volume;
 
-    if (fn_80072E6C()) {
-        fn_80072F04();
+    if (SndgMusicIsPaused()) {
+        SndgMusicResume();
     }
     SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
@@ -1810,7 +1810,7 @@ void Class_802A3B80::vfn_04(float dt)
         if (choice == 2) {
             if (mUnknown4 == 2) {
                 RumbleEnable(1);
-                fn_80072C90(0xFA, 0);
+                SndgMusicFadeOut(0xFA, 0);
                 InGameStop();
             } else {
                 mUnknown4 = choice;
@@ -1874,7 +1874,7 @@ void Class_802A3B10::vfn_04(float dt)
     start.mY = fn_80157000();
     if (fn_801566E4()) {
         AudmonEventPostArgs(0x85, 0, fn_801568F0(), fn_801568E8(), 0);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
     }
     fn_801780A8(start);
     fn_801782B0();
@@ -2075,7 +2075,7 @@ void Class_802A3A48::vfn_04(float dt)
                         MsgBoxShow("Tutorial Results", lbl_802DF120, "|^No|Yes");
                     } else {
                         RumbleEnable(1);
-                        fn_80072C90(0xFA, 0);
+                        SndgMusicFadeOut(0xFA, 0);
                         fn_80047874(0);
                         fn_8004730C(0);
                         InGameStop();
@@ -2175,7 +2175,7 @@ void Class_802A3A48::vfn_14(float dt)
     }
     if (mUnknown4 != 0) {
         if (!fn_80157080()) {
-            fn_80072C90(0xFA, 0);
+            SndgMusicFadeOut(0xFA, 0);
             InGameStop();
         }
     } else {

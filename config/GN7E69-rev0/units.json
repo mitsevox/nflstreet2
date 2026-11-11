@@ -11147,6 +11147,31 @@
       ]
     },
     {
+      "source": "src/game/SndgMusic.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80071C3C-0x8007342C (src/game/SndgMusic.cpp) and its .rodata and .sdata rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80071C3C",
+          "end": "0x8007342C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290BC8",
+          "end": "0x80290BD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA700",
+          "end": "0x803EA70C"
+        }
+      ]
+    },
+    {
       "source": "src/game/SndgIGSystem.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/SndgIGSystem.cpp) and its .rodata and .sbss rows.",

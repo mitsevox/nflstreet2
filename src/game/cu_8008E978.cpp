@@ -9982,7 +9982,7 @@ extern "C" void fn_800AAAFC(void)
 }
 
 extern "C" {
-void fn_800731D0(int a);
+void SndgMusicPumpFrame(int a);
 int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 void fn_800C1E50(void);
 
@@ -9992,7 +9992,7 @@ extern Class_80297B90 lbl_803EC904;
 void Class_80297B90::vfn_06()
 {
     if (ChallengeIsActive() == 0) {
-        fn_800731D0(0);
+        SndgMusicPumpFrame(0);
         fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
         fn_8021D7B8(gUISMainInfo, 0x80000035, 0, 0);
     }
@@ -10255,7 +10255,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 
 extern "C" {
 void fn_8004730C(unsigned char enabled);
-void fn_80072C90(unsigned int delay, int wait);
+void SndgMusicFadeOut(unsigned int delay, int wait);
 void InGameStop(void);
 StevRow_t *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
@@ -10304,7 +10304,7 @@ void Class_80297B90::vfn_04(float dt)
         if (InGameIsDemo() != 0) {
             fn_80047874(0);
             fn_8004730C(0);
-            fn_80072C90(250, 1);
+            SndgMusicFadeOut(250, 1);
             InGameStop();
             break;
         }
@@ -10421,7 +10421,7 @@ void Class_80297B90::vfn_04(float dt)
             if (GameModeTypeGet() == 11 && fn_80157080() != 0) {
                 break;
             }
-            fn_80072C90(250, 0);
+            SndgMusicFadeOut(250, 0);
             fn_8005FC84();
             fn_80061D14();
             fn_80047874(0);
@@ -10442,7 +10442,7 @@ void Class_80297B90::vfn_04(float dt)
         if (ScreenTransIsActive() == 0) {
             fn_801CE720();
             fn_801CE774();
-            fn_80072C90(250, 1);
+            SndgMusicFadeOut(250, 1);
             InGameStop();
         }
         break;
