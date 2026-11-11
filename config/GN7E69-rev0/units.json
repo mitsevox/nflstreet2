@@ -349,49 +349,49 @@
       "address": "0x8025278C",
       "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     },
-    "vfn_05__14Class_802A6B60iP14Entry_80182CC8": {
+    "GetItem__14MenuListScreeniP14Entry_80182CC8": {
       "address": "0x80182CC8",
-      "evidence": "evidence.tsv external row 0x80182CC8 (vfn_05__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
+      "evidence": "evidence.tsv external row 0x80182CC8 (GetItem__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
     },
-    "vfn_03__14Class_802A6BB0iPiT2": {
+    "GetCycle__14MenuItemEditoriPiT2": {
       "address": "0x80182A88",
-      "evidence": "evidence.tsv external row 0x80182A88 (vfn_03__14Class_802A6BB0iPiT2) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A88 (GetCycle__14Class_802A6BB0iPiT2) and type row Class_802A6BB0."
     },
-    "vfn_04__14Class_802A6BB0iii": {
+    "EndCycle__14MenuItemEditoriii": {
       "address": "0x80182A8C",
-      "evidence": "evidence.tsv external row 0x80182A8C (vfn_04__14Class_802A6BB0iii) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A8C (EndCycle__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
-    "vfn_08__14Class_802A6BB0iii": {
+    "EndSlider__14MenuItemEditoriii": {
       "address": "0x80182AA0",
-      "evidence": "evidence.tsv external row 0x80182AA0 (vfn_08__14Class_802A6BB0iii) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182AA0 (EndSlider__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
-    "vfn_02__14Class_802A6B60iiPPv": {
+    "Leave__14MenuListScreeniiPPv": {
       "address": "0x80182B84",
-      "evidence": "evidence.tsv external row 0x80182B84 (vfn_02__14Class_802A6B60iiPPv) and type row Class_802A6B60."
+      "evidence": "evidence.tsv external row 0x80182B84 (Leave__14Class_802A6B60iiPPv) and type row Class_802A6B60."
     },
-    "vfn_06__14Class_80184190": {
+    "GetEditor__10MenuScreen": {
       "address": "0x80184190",
-      "evidence": "evidence.tsv external row 0x80184190 (vfn_06__14Class_80184190) and type row Class_80184190."
+      "evidence": "evidence.tsv external row 0x80184190 (GetEditor__14Class_80184190) and type row Class_80184190."
     },
-    "vfn_01__14Class_802A6B60iPiT2": {
+    "Enter__14MenuListScreeniPiT2": {
       "address": "0x80182B40",
-      "evidence": "evidence.tsv external row 0x80182B40 (vfn_01__14Class_802A6B60iPiT2) and type row Class_802A6B60."
+      "evidence": "evidence.tsv external row 0x80182B40 (Enter__14Class_802A6B60iPiT2) and type row Class_802A6B60."
     },
-    "vfn_06__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26": {
+    "BeginSlider__14MenuItemEditoriiiPiT4G12Arg_8018399CN26": {
       "address": "0x80182A94",
-      "evidence": "evidence.tsv external row 0x80182A94 (vfn_06__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A94 (BeginSlider__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26) and type row Class_802A6BB0."
     },
-    "vfn_05__14Class_802A6BB0iiG12Arg_8018399C": {
+    "GetCycleText__14MenuItemEditoriiG12Arg_8018399C": {
       "address": "0x80182A90",
-      "evidence": "evidence.tsv external row 0x80182A90 (vfn_05__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A90 (GetCycleText__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "vfn_07__14Class_802A6BB0iiG12Arg_8018399C": {
+    "MoveSlider__14MenuItemEditoriiG12Arg_8018399C": {
       "address": "0x80182A98",
-      "evidence": "evidence.tsv external row 0x80182A98 (vfn_07__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A98 (MoveSlider__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "vfn_04__14Class_802A6B60iPi": {
+    "GetItemId__14MenuListScreeniPi": {
       "address": "0x80182C78",
-      "evidence": "evidence.tsv external row 0x80182C78 (vfn_04__14Class_802A6B60iPi) and type row Class_802A6B60."
+      "evidence": "evidence.tsv external row 0x80182C78 (GetItemId__14Class_802A6B60iPi) and type row Class_802A6B60."
     },
     "sprintf": {
       "address": "0x801C2E18",
@@ -405,9 +405,9 @@
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
     },
-    "vfn_03__14Class_802A6B60i": {
+    "Highlight__14MenuListScreeni": {
       "address": "0x80182BC4",
-      "evidence": "evidence.tsv external row 0x80182BC4 (vfn_03__14Class_802A6B60i) and type row Class_802A6B60."
+      "evidence": "evidence.tsv external row 0x80182BC4 (Highlight__14Class_802A6B60i) and type row Class_802A6B60."
     },
     "VMInit": {
       "address": "0x80244F18",
@@ -701,21 +701,21 @@
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8f)."
     },
-    "vfn_01__14Class_802A6BB0iPi": {
+    "GetColor__14MenuItemEditoriPi": {
       "address": "0x80182A80",
-      "evidence": "evidence.tsv external row 0x80182A80 (vfn_01__14Class_802A6BB0iPi) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A80 (GetColor__14Class_802A6BB0iPi) and type row Class_802A6BB0."
     },
-    "vfn_02__14Class_802A6BB0iii": {
+    "EndColor__14MenuItemEditoriii": {
       "address": "0x80182A84",
-      "evidence": "evidence.tsv external row 0x80182A84 (vfn_02__14Class_802A6BB0iii) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A84 (EndColor__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
-    "vfn_09__14Class_802A6BB0iPiG12Arg_8018399C": {
+    "GetText__14MenuItemEditoriPiG12Arg_8018399C": {
       "address": "0x80182AA4",
-      "evidence": "evidence.tsv external row 0x80182AA4 (vfn_09__14Class_802A6BB0iPiG12Arg_8018399C) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182AA4 (GetText__14Class_802A6BB0iPiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "vfn_10__14Class_802A6BB0iG12Arg_8018399C": {
+    "SetText__14MenuItemEditoriG12Arg_8018399C": {
       "address": "0x80182AA8",
-      "evidence": "evidence.tsv external row 0x80182AA8 (vfn_10__14Class_802A6BB0iG12Arg_8018399C) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182AA8 (SetText__14Class_802A6BB0iG12Arg_8018399C) and type row Class_802A6BB0."
     },
     "__fixunssfdi": {
       "address": "0x8025E850",
@@ -10308,54 +10308,54 @@
       ],
       "link_roots": {
         "symbols": [
-          "vfn_01__14Class_80009ED8iPiT2",
-          "vfn_02__14Class_80009ED8iiPPv",
-          "vfn_03__14Class_80009ED8i",
-          "vfn_06__14Class_80009ED8",
-          "vfn_02__14Class_80009E88iiPPv",
-          "vfn_01__14Class_8000A108iPiT2",
-          "vfn_02__14Class_8000A108iiPPv",
-          "vfn_03__14Class_8000A108i",
-          "vfn_04__14Class_8000A108iPi",
-          "vfn_05__14Class_8000A108iP14Entry_80182CC8",
-          "vfn_01__14Class_8000A0B8iPiT2",
-          "vfn_02__14Class_8000A0B8iiPPv",
-          "vfn_03__14Class_8000A0B8i",
-          "vfn_05__14Class_8000A0B8iP14Entry_80182CC8",
-          "vfn_02__14Class_8000A068iiPPv",
-          "vfn_06__14Class_8000A068",
-          "vfn_02__14Class_80009FC8iiPPv",
-          "vfn_02__14Class_80009F78iiPPv",
-          "vfn_01__14Class_80009F28iPiT2",
-          "vfn_02__14Class_80009F28iiPPv",
-          "vfn_01__14Class_8000A018iPiT2",
-          "vfn_02__14Class_8000A018iiPPv",
-          "vfn_03__14Class_8000A018i",
-          "vfn_01__14Class_80009D88iPiT2",
-          "vfn_02__14Class_80009D88iiPPv",
-          "vfn_03__14Class_80009D88i",
-          "vfn_05__14Class_80009D88iP14Entry_80182CC8",
-          "vfn_09__14Class_80009D28iPiG12Arg_8018399C",
-          "vfn_10__14Class_80009D28iG12Arg_8018399C",
-          "vfn_01__14Class_80009E48iPiT2",
-          "vfn_02__14Class_80009E48iiPPv",
-          "vfn_03__14Class_80009E48i",
-          "vfn_05__14Class_80009E48iP14Entry_80182CC8",
-          "vfn_01__14Class_80009E08iPiT2",
-          "vfn_02__14Class_80009E08iiPPv",
-          "vfn_03__14Class_80009E08i",
-          "vfn_05__14Class_80009E08iP14Entry_80182CC8",
-          "vfn_01__14Class_80009DC8iPiT2",
-          "vfn_02__14Class_80009DC8iiPPv",
-          "vfn_03__14Class_80009DC8i",
-          "vfn_05__14Class_80009DC8iP14Entry_80182CC8",
-          "vfn_01__14Class_80009C88iPiT2",
-          "vfn_02__14Class_80009C88iiPPv",
-          "vfn_03__14Class_80009C88i",
-          "vfn_05__14Class_80009C88iP14Entry_80182CC8",
-          "vfn_06__14Class_80009CC8iiiPiT4G12Arg_8018399CN26",
-          "vfn_07__14Class_80009CC8iiG12Arg_8018399C",
-          "vfn_08__14Class_80009CC8iii",
+          "Enter__14Class_80009ED8iPiT2",
+          "Leave__14Class_80009ED8iiPPv",
+          "Highlight__14Class_80009ED8i",
+          "GetEditor__14Class_80009ED8",
+          "Leave__14Class_80009E88iiPPv",
+          "Enter__14Class_8000A108iPiT2",
+          "Leave__14Class_8000A108iiPPv",
+          "Highlight__14Class_8000A108i",
+          "GetItemId__14Class_8000A108iPi",
+          "GetItem__14Class_8000A108iP14Entry_80182CC8",
+          "Enter__14Class_8000A0B8iPiT2",
+          "Leave__14Class_8000A0B8iiPPv",
+          "Highlight__14Class_8000A0B8i",
+          "GetItem__14Class_8000A0B8iP14Entry_80182CC8",
+          "Leave__14Class_8000A068iiPPv",
+          "GetEditor__14Class_8000A068",
+          "Leave__14Class_80009FC8iiPPv",
+          "Leave__14Class_80009F78iiPPv",
+          "Enter__14Class_80009F28iPiT2",
+          "Leave__14Class_80009F28iiPPv",
+          "Enter__14Class_8000A018iPiT2",
+          "Leave__14Class_8000A018iiPPv",
+          "Highlight__14Class_8000A018i",
+          "Enter__14Class_80009D88iPiT2",
+          "Leave__14Class_80009D88iiPPv",
+          "Highlight__14Class_80009D88i",
+          "GetItem__14Class_80009D88iP14Entry_80182CC8",
+          "GetText__14Class_80009D28iPiG12Arg_8018399C",
+          "SetText__14Class_80009D28iG12Arg_8018399C",
+          "Enter__14Class_80009E48iPiT2",
+          "Leave__14Class_80009E48iiPPv",
+          "Highlight__14Class_80009E48i",
+          "GetItem__14Class_80009E48iP14Entry_80182CC8",
+          "Enter__14Class_80009E08iPiT2",
+          "Leave__14Class_80009E08iiPPv",
+          "Highlight__14Class_80009E08i",
+          "GetItem__14Class_80009E08iP14Entry_80182CC8",
+          "Enter__14Class_80009DC8iPiT2",
+          "Leave__14Class_80009DC8iiPPv",
+          "Highlight__14Class_80009DC8i",
+          "GetItem__14Class_80009DC8iP14Entry_80182CC8",
+          "Enter__14Class_80009C88iPiT2",
+          "Leave__14Class_80009C88iiPPv",
+          "Highlight__14Class_80009C88i",
+          "GetItem__14Class_80009C88iP14Entry_80182CC8",
+          "BeginSlider__14Class_80009CC8iiiPiT4G12Arg_8018399CN26",
+          "MoveSlider__14Class_80009CC8iiG12Arg_8018399C",
+          "EndSlider__14Class_80009CC8iii",
           "fn_800088C8",
           "fn_8000890C",
           "fn_80008914",
@@ -10364,27 +10364,27 @@
           "fn_800089C0",
           "fn_800089D8",
           "fn_800089E0",
-          "vfn_07__14Class_8000A0B8",
-          "vfn_08__14Class_8000A0B8",
-          "vfn_07__14Class_8000A068",
-          "vfn_08__14Class_8000A068",
-          "vfn_07__14Class_8000A018",
-          "vfn_08__14Class_8000A018",
-          "vfn_07__14Class_80009FC8",
-          "vfn_08__14Class_80009FC8",
-          "vfn_07__14Class_80009F78",
-          "vfn_08__14Class_80009F78",
-          "vfn_07__14Class_80009F28",
-          "vfn_08__14Class_80009F28",
-          "vfn_07__14Class_80009ED8",
-          "vfn_08__14Class_80009ED8",
-          "vfn_07__14Class_80009E88",
-          "vfn_08__14Class_80009E88",
-          "vfn_04__14Class_80009E48iPi",
-          "vfn_04__14Class_80009E08iPi",
-          "vfn_04__14Class_80009DC8iPi",
-          "vfn_04__14Class_80009D88iPi",
-          "vfn_04__14Class_80009C88iPi"
+          "GetEntryCount__14Class_8000A0B8",
+          "GetEntries__14Class_8000A0B8",
+          "GetEntryCount__14Class_8000A068",
+          "GetEntries__14Class_8000A068",
+          "GetEntryCount__14Class_8000A018",
+          "GetEntries__14Class_8000A018",
+          "GetEntryCount__14Class_80009FC8",
+          "GetEntries__14Class_80009FC8",
+          "GetEntryCount__14Class_80009F78",
+          "GetEntries__14Class_80009F78",
+          "GetEntryCount__14Class_80009F28",
+          "GetEntries__14Class_80009F28",
+          "GetEntryCount__14Class_80009ED8",
+          "GetEntries__14Class_80009ED8",
+          "GetEntryCount__14Class_80009E88",
+          "GetEntries__14Class_80009E88",
+          "GetItemId__14Class_80009E48iPi",
+          "GetItemId__14Class_80009E08iPi",
+          "GetItemId__14Class_80009DC8iPi",
+          "GetItemId__14Class_80009D88iPi",
+          "GetItemId__14Class_80009C88iPi"
         ],
         "discarded": [
           "GetRange__14Class_80009F78i"

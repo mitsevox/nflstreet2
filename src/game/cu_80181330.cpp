@@ -11,7 +11,7 @@
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {
     int mUnknown0;
-    Class_80184190 *mpScreen;
+    MenuScreen *mpScreen;
 };
 
 /* Texts and values shown by the current screen. */
@@ -35,8 +35,8 @@ struct State_80362A84 {
 extern "C" {
 extern void *gUISMainInfo;
 
-Class_80184190 *fn_800053D0(void);
-Class_80184190 *fn_800088C8(void);
+MenuScreen *fn_800053D0(void);
+MenuScreen *fn_800088C8(void);
 void fn_8000890C(int value);
 int fn_80008914(void);
 int fn_8000891C(void);
@@ -44,7 +44,7 @@ void fn_80008924(void);
 int fn_800089C0(void);
 int fn_800089D8(void);
 void fn_800089E0(int a);
-Class_80184190 *fn_8000EB3C(void);
+MenuScreen *fn_8000EB3C(void);
 int fn_8000EB5C(void);
 int fn_8000EB80(void);
 void fn_8000EBA4(int a);
@@ -166,8 +166,8 @@ static StackEntry_80362B14 lbl_80362B14[8];
 static char lbl_80362B54[28];
 static unsigned char lbl_80362B70[10];
 
-extern Class_802A6BB0 lbl_803ECB60;
-static Class_802A6BB0 *lbl_803ECB64;
+extern MenuItemEditor lbl_803ECB60;
+static MenuItemEditor *lbl_803ECB64;
 static int lbl_803ECB68;
 static unsigned char lbl_803ECB6C[3];
 static unsigned char lbl_803ECB70[3];
@@ -204,18 +204,18 @@ int fn_80183968(void);
 int fn_8018397C(void);
 }
 
-inline Class_802A6BB0 *Class_80184190::vfn_06()
+inline MenuItemEditor *MenuScreen::GetEditor()
 {
     return 0;
 }
 
 /* Class of the instance returned by fn_801841AC; vtable 0x802A6B10. */
-class Class_802A6B10 : public Class_802A6B60 {
+class Class_802A6B10 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 2; }
-    virtual Entry_80182CC8 *vfn_08() { return lbl_802EA988; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 2; }
+    virtual Entry_80182CC8 *GetEntries() { return lbl_802EA988; }
 
     char mUnknown4[4];
 };
@@ -284,14 +284,14 @@ void fn_80181458(void)
     fn_80008924();
 }
 
-void fn_801814E0(Class_80184190 *pScreen)
+void fn_801814E0(MenuScreen *pScreen)
 {
     lbl_803EB550++;
     lbl_80362B14[lbl_803EB550].mpScreen = pScreen;
     lbl_80362B14[lbl_803EB550].mUnknown0 = 0;
 }
 
-void fn_8018150C(Class_80184190 *pScreen)
+void fn_8018150C(MenuScreen *pScreen)
 {
     lbl_803EB550 = 0;
     lbl_80362B14[lbl_803EB550].mUnknown0 = 0;
@@ -304,7 +304,7 @@ void fn_8018152C(void)
     lbl_803EB550--;
 }
 
-Class_80184190 *fn_80181554(void)
+MenuScreen *fn_80181554(void)
 {
     return lbl_80362B14[lbl_803EB550].mpScreen;
 }
@@ -333,10 +333,10 @@ int fn_801815A0(int value)
 
 void fn_801815D8(int a, int *pCount, int *pValue)
 {
-    fn_80181554()->vfn_01(a, pCount, pValue);
+    fn_80181554()->Enter(a, pCount, pValue);
     lbl_803EB558 = *pCount;
     fn_80181588(*pValue);
-    lbl_803ECB64 = fn_80181554()->vfn_06();
+    lbl_803ECB64 = fn_80181554()->GetEditor();
     if (lbl_803ECB64 == 0) {
         lbl_803ECB64 = &lbl_803ECB60;
     }
@@ -488,7 +488,7 @@ void fn_80181AD4(unsigned char a)
     void *pResult = 0;
     int done = 0;
 
-    fn_80181554()->vfn_02(lbl_803EB554, 1, &pResult);
+    fn_80181554()->Leave(lbl_803EB554, 1, &pResult);
     lbl_80362B14[lbl_803EB550].mpScreen = 0;
     lbl_803EB588 = done;
     if (!a) {
@@ -525,7 +525,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
 {
     void *pResult = 0;
     int back = a == 0;
-    int result = fn_80181554()->vfn_02(lbl_803EB554, back, &pResult);
+    int result = fn_80181554()->Leave(lbl_803EB554, back, &pResult);
 
     if (result == -1) {
         if (!back) {
@@ -533,7 +533,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
         }
         fn_8018152C();
     } else if (result == 1) {
-        fn_801814E0((Class_80184190 *)pResult);
+        fn_801814E0((MenuScreen *)pResult);
     } else if (result == -2) {
         if (!back) {
             lbl_803EB588 = 1;
@@ -542,7 +542,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
         fn_8018152C();
     } else {
         result = 1;
-        fn_8018150C((Class_80184190 *)pResult);
+        fn_8018150C((MenuScreen *)pResult);
     }
     *pValue = fn_80181570();
     fn_801831F8(-1);
@@ -551,7 +551,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
 
 void fn_80181CF8(int a, int *pId)
 {
-    fn_80181554()->vfn_04(a, pId);
+    fn_80181554()->GetItemId(a, pId);
 }
 
 void fn_80181D48(Entry_80182CC8 *pEntry, int id)
@@ -575,8 +575,8 @@ void fn_80181DA8(int a, int *pResult, Arg_8018399C text0, Arg_8018399C text1, Ar
 
     lbl_803EB554 = a;
     fn_80181D48(&entry, a);
-    fn_80181554()->vfn_03(a);
-    fn_80181554()->vfn_05(a, &entry);
+    fn_80181554()->Highlight(a);
+    fn_80181554()->GetItem(a, &entry);
     if (entry.mUnknown36 < 0 || entry.mUnknown36 >= lbl_803EB558) {
         entry.mUnknown36 = 0;
     }
@@ -643,7 +643,7 @@ void fn_801820A0(int a, int *p1, int *p2, int *p3, Arg_8018399C text, int *p5, i
     Entry_80182CC8 entry;
 
     fn_80181D48(&entry, a);
-    fn_80181554()->vfn_05(a, &entry);
+    fn_80181554()->GetItem(a, &entry);
     *p1 = entry.mUnknown30;
     *p2 = entry.mUnknown4;
     *p7 = entry.mUnknown40;
@@ -662,7 +662,7 @@ void fn_80182170(int a, int *pB, int *pC)
 {
     int value = 0;
 
-    lbl_803ECB64->vfn_01(a, &value);
+    lbl_803ECB64->GetColor(a, &value);
     ColorPickIndexToCell(value, pB, pC);
 }
 
@@ -670,18 +670,18 @@ void fn_801821D8(int a, int b, int c)
 {
     int value = ColorPickCellToIndex(b, c);
 
-    lbl_803ECB64->vfn_02(a, 0, value);
+    lbl_803ECB64->EndColor(a, 0, value);
     lbl_803EB588 = 1;
 }
 
 void fn_8018223C(int a)
 {
-    lbl_803ECB64->vfn_02(a, 1, -1);
+    lbl_803ECB64->EndColor(a, 1, -1);
 }
 
 void fn_80182280(int a)
 {
-    lbl_803ECB64->vfn_04(a, 0, lbl_803EB560);
+    lbl_803ECB64->EndCycle(a, 0, lbl_803EB560);
     if (lbl_803EB564 != lbl_803EB560) {
         lbl_803EB588 = 1;
     }
@@ -689,7 +689,7 @@ void fn_80182280(int a)
 
 void fn_801822DC(int a)
 {
-    lbl_803ECB64->vfn_04(a, 1, -1);
+    lbl_803ECB64->EndCycle(a, 1, -1);
 }
 
 void fn_80182320(int a, int b, Arg_8018399C text)
@@ -708,11 +708,11 @@ void fn_80182320(int a, int b, Arg_8018399C text)
     case -1:
         lbl_803EB560 = 0;
         lbl_803EB568 = 0;
-        lbl_803ECB64->vfn_03(a, &lbl_803EB560, &lbl_803EB568);
+        lbl_803ECB64->GetCycle(a, &lbl_803EB560, &lbl_803EB568);
         lbl_803EB564 = lbl_803EB560;
         break;
     }
-    lbl_803ECB64->vfn_05(a, lbl_803EB560, text);
+    lbl_803ECB64->GetCycleText(a, lbl_803EB560, text);
 }
 
 void fn_8018241C(int a, int b, int c, int *pOut, Arg_8018399C text0, Arg_8018399C text1,
@@ -721,7 +721,7 @@ void fn_8018241C(int a, int b, int c, int *pOut, Arg_8018399C text0, Arg_8018399
     int x;
     int y;
 
-    lbl_803ECB64->vfn_06(a, b, c, &x, &y, text0, text1, text2);
+    lbl_803ECB64->BeginSlider(a, b, c, &x, &y, text0, text1, text2);
     *pOut = y;
     lbl_803EB574 = y;
     lbl_803EB570 = y;
@@ -730,7 +730,7 @@ void fn_8018241C(int a, int b, int c, int *pOut, Arg_8018399C text0, Arg_8018399
 
 int fn_801824BC(int a, int b, Arg_8018399C text)
 {
-    int result = lbl_803ECB64->vfn_07(a, b, text);
+    int result = lbl_803ECB64->MoveSlider(a, b, text);
 
     if (result) {
         lbl_803EB570 = b;
@@ -740,7 +740,7 @@ int fn_801824BC(int a, int b, Arg_8018399C text)
 
 void fn_80182520(int a)
 {
-    lbl_803ECB64->vfn_08(a, 0, lbl_803EB570);
+    lbl_803ECB64->EndSlider(a, 0, lbl_803EB570);
     if (lbl_803EB574 != lbl_803EB570) {
         lbl_803EB588 = 1;
     }
@@ -748,17 +748,17 @@ void fn_80182520(int a)
 
 void fn_8018257C(int a)
 {
-    lbl_803ECB64->vfn_08(a, 1, -1);
+    lbl_803ECB64->EndSlider(a, 1, -1);
 }
 
 void fn_801825C0(int a, int *pResult, Arg_8018399C text)
 {
-    lbl_803ECB64->vfn_09(a, pResult, text);
+    lbl_803ECB64->GetText(a, pResult, text);
 }
 
 void fn_8018260C(int a, Arg_8018399C text)
 {
-    lbl_803ECB64->vfn_10(a, text);
+    lbl_803ECB64->SetText(a, text);
     lbl_803EB588 = 1;
 }
 
@@ -879,59 +879,59 @@ void fn_80182A60(void)
 
 }
 
-void Class_802A6BB0::vfn_01(int a, int *pResult)
+void MenuItemEditor::GetColor(int a, int *pResult)
 {
 }
 
-void Class_802A6BB0::vfn_02(int a, int b, int c)
+void MenuItemEditor::EndColor(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_03(int a, int *pB, int *pC)
+void MenuItemEditor::GetCycle(int a, int *pB, int *pC)
 {
 }
 
-void Class_802A6BB0::vfn_04(int a, int b, int c)
+void MenuItemEditor::EndCycle(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_05(int a, int b, Arg_8018399C text)
+void MenuItemEditor::GetCycleText(int a, int b, Arg_8018399C text)
 {
 }
 
-void Class_802A6BB0::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                            Arg_8018399C textH)
+void MenuItemEditor::BeginSlider(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
+                                 Arg_8018399C textH)
 {
 }
 
-int Class_802A6BB0::vfn_07(int a, int b, Arg_8018399C text)
+int MenuItemEditor::MoveSlider(int a, int b, Arg_8018399C text)
 {
     return 0;
 }
 
-void Class_802A6BB0::vfn_08(int a, int b, int c)
+void MenuItemEditor::EndSlider(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_09(int a, int *pResult, Arg_8018399C text)
+void MenuItemEditor::GetText(int a, int *pResult, Arg_8018399C text)
 {
 }
 
-void Class_802A6BB0::vfn_10(int a, Arg_8018399C text)
+void MenuItemEditor::SetText(int a, Arg_8018399C text)
 {
 }
 
-void Class_802A6B10::vfn_01(int a, int *pCount, int *pValue)
+void Class_802A6B10::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_801835C0(0x70);
 }
 
-int Class_802A6B10::vfn_02(int a, int b, void **ppResult)
+int Class_802A6B10::Leave(int a, int b, void **ppResult)
 {
     int result;
 
-    Class_802A6B60::vfn_02(a, b, ppResult);
+    MenuListScreen::Leave(a, b, ppResult);
     result = -1;
     if (b == 0) {
         result = 1;
@@ -947,22 +947,22 @@ int Class_802A6B10::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_802A6B60::vfn_01(int a, int *pCount, int *pValue)
+void MenuListScreen::Enter(int a, int *pCount, int *pValue)
 {
-    *pCount = vfn_07();
+    *pCount = GetEntryCount();
 }
 
-int Class_802A6B60::vfn_02(int a, int b, void **ppResult)
+int MenuListScreen::Leave(int a, int b, void **ppResult)
 {
     fn_80182E04("");
     *ppResult = 0;
     return -1;
 }
 
-void Class_802A6B60::vfn_03(int id)
+void MenuListScreen::Highlight(int id)
 {
-    Entry_80182CC8 *pEntries = vfn_08();
-    int count = vfn_07();
+    Entry_80182CC8 *pEntries = GetEntries();
+    int count = GetEntryCount();
     int i;
 
     for (i = 0; i < count; i++) {
@@ -976,15 +976,15 @@ void Class_802A6B60::vfn_03(int id)
     fn_80182E04(pEntries[i].mName);
 }
 
-void Class_802A6B60::vfn_04(int index, int *pId)
+void MenuListScreen::GetItemId(int index, int *pId)
 {
-    *pId = vfn_08()[index].mId;
+    *pId = GetEntries()[index].mId;
 }
 
-void Class_802A6B60::vfn_05(int id, Entry_80182CC8 *pEntry)
+void MenuListScreen::GetItem(int id, Entry_80182CC8 *pEntry)
 {
-    Entry_80182CC8 *pEntries = vfn_08();
-    int count = vfn_07();
+    Entry_80182CC8 *pEntries = GetEntries();
+    int count = GetEntryCount();
     int i;
 
     for (i = 0; i < count; i++) {
@@ -1616,7 +1616,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
 
 DbCursor lbl_80362A2C;
 Object_8008044C lbl_80362A58;
-Class_802A6BB0 lbl_803ECB60;
+MenuItemEditor lbl_803ECB60;
 
 static inline Class_802A6B10 *fn_801841AC()
 {

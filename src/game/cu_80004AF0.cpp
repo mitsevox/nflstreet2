@@ -3,7 +3,7 @@
 #include "game/fn_801C3284.h"
 
 extern "C" {
-Class_80184190 *fn_800088C8(void);
+MenuScreen *fn_800088C8(void);
 void fn_8000890C(int value);
 int LogoIsNew(int a);
 void LogoClearNew(int a);
@@ -35,37 +35,37 @@ void fn_8018D358(int a, int b, int c);
 int fn_8018D70C(int a);
 }
 
-class Class_80005618 : public Class_802A6B60 {
+class Class_80005618 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
-    virtual Class_802A6BB0 *vfn_06();
-    virtual int vfn_07();
-    virtual Entry_80182CC8 *vfn_08();
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual void GetItem(int index, Entry_80182CC8 *pEntry);
+    virtual MenuItemEditor *GetEditor();
+    virtual int GetEntryCount();
+    virtual Entry_80182CC8 *GetEntries();
 
     char mUnknown4[4];
 };
 
-class Class_800055D8 : public Class_80184190 {
+class Class_800055D8 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pId) { *pId = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pId) { *pId = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pEntry);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80005578 : public Class_802A6BB0 {
+class Class_80005578 : public MenuItemEditor {
 public:
-    virtual void vfn_01(int a, int *pResult);
-    virtual void vfn_02(int a, int b, int c);
-    virtual void vfn_09(int a, int *pResult, Arg_8018399C text);
-    virtual void vfn_10(int a, Arg_8018399C text);
+    virtual void GetColor(int a, int *pResult);
+    virtual void EndColor(int a, int b, int c);
+    virtual void GetText(int a, int *pResult, Arg_8018399C text);
+    virtual void SetText(int a, Arg_8018399C text);
 
     char mUnknown4[4];
 };
@@ -110,23 +110,23 @@ static void fn_80004AF0()
     fn_80182E34(buffer);
 }
 
-void Class_80005618::vfn_01(int a, int *pCount, int *pValue)
+void Class_80005618::Enter(int a, int *pCount, int *pValue)
 {
     char buffer[24];
 
     if (a == 1) {
         fn_80005344();
     }
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_80083F88(fn_80182DBC(), buffer, 18);
     fn_80182E34(buffer);
     fn_80182DD4("");
     fn_80182E04("");
 }
 
-int Class_80005618::vfn_02(int a, int b, void **ppResult)
+int Class_80005618::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b != 0) {
         result = -1;
@@ -161,14 +161,14 @@ int Class_80005618::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_80005618::vfn_03(int id)
+void Class_80005618::Highlight(int id)
 {
     fn_80182DD4(lbl_802F3E7C[id].mName);
 }
 
-void Class_80005618::vfn_05(int index, Entry_80182CC8 *pEntry)
+void Class_80005618::GetItem(int index, Entry_80182CC8 *pEntry)
 {
-    Class_802A6B60::vfn_05(index, pEntry);
+    MenuListScreen::GetItem(index, pEntry);
     if (index == 1) {
         pEntry->mUnknown40 = 0;
         for (int found = DbCursorFirst(&lbl_80369D70); found; found = DbCursorNext(&lbl_80369D70)) {
@@ -180,12 +180,12 @@ void Class_80005618::vfn_05(int index, Entry_80182CC8 *pEntry)
     }
 }
 
-Class_802A6BB0 *Class_80005618::vfn_06()
+MenuItemEditor *Class_80005618::GetEditor()
 {
     return fn_80005468();
 }
 
-int Class_80005618::vfn_07()
+int Class_80005618::GetEntryCount()
 {
     switch (fn_80183948()) {
     case 3:
@@ -197,7 +197,7 @@ int Class_80005618::vfn_07()
     }
 }
 
-Entry_80182CC8 *Class_80005618::vfn_08()
+Entry_80182CC8 *Class_80005618::GetEntries()
 {
     Entry_80182CC8 *pEntries;
 
@@ -213,7 +213,7 @@ Entry_80182CC8 *Class_80005618::vfn_08()
     return pEntries;
 }
 
-void Class_800055D8::vfn_01(int a, int *pCount, int *pValue)
+void Class_800055D8::Enter(int a, int *pCount, int *pValue)
 {
     switch (mUnknown8) {
     case 6:
@@ -240,7 +240,7 @@ void Class_800055D8::vfn_01(int a, int *pCount, int *pValue)
     }
 }
 
-int Class_800055D8::vfn_02(int a, int b, void **ppResult)
+int Class_800055D8::Leave(int a, int b, void **ppResult)
 {
     int value;
 
@@ -277,7 +277,7 @@ int Class_800055D8::vfn_02(int a, int b, void **ppResult)
     return -1;
 }
 
-void Class_800055D8::vfn_03(int index)
+void Class_800055D8::Highlight(int index)
 {
     switch (mUnknown8) {
     case 6:
@@ -296,7 +296,7 @@ void Class_800055D8::vfn_03(int index)
     }
 }
 
-void Class_800055D8::vfn_05(int index, Entry_80182CC8 *pEntry)
+void Class_800055D8::GetItem(int index, Entry_80182CC8 *pEntry)
 {
     char buffer[24];
 
@@ -316,7 +316,7 @@ void Class_800055D8::vfn_05(int index, Entry_80182CC8 *pEntry)
     }
 }
 
-void Class_80005578::vfn_01(int a, int *pResult)
+void Class_80005578::GetColor(int a, int *pResult)
 {
     switch (a) {
     case 3:
@@ -334,7 +334,7 @@ void Class_80005578::vfn_01(int a, int *pResult)
     }
 }
 
-void Class_80005578::vfn_02(int a, int b, int c)
+void Class_80005578::EndColor(int a, int b, int c)
 {
     fn_8018324C();
     if (b == 0) {
@@ -352,7 +352,7 @@ void Class_80005578::vfn_02(int a, int b, int c)
     }
 }
 
-void Class_80005578::vfn_09(int a, int *pResult, Arg_8018399C text)
+void Class_80005578::GetText(int a, int *pResult, Arg_8018399C text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[24];
@@ -364,7 +364,7 @@ void Class_80005578::vfn_09(int a, int *pResult, Arg_8018399C text)
     }
 }
 
-void Class_80005578::vfn_10(int a, Arg_8018399C text)
+void Class_80005578::SetText(int a, Arg_8018399C text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[24];
@@ -395,7 +395,7 @@ static void fn_800053A8()
     LogoListClose(&lbl_80369D70);
 }
 
-extern "C" Class_80184190 *fn_800053D0()
+extern "C" MenuScreen *fn_800053D0()
 {
     return fn_80005490();
 }

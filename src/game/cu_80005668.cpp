@@ -319,176 +319,176 @@ static unsigned char lbl_803EB934 = 0;
 static int lbl_803EB938 = 15;
 
 /* Player list. */
-class Class_8000A108 : public Class_80184190 {
+class Class_8000A108 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pId);
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pId);
+    virtual void GetItem(int index, Entry_80182CC8 *pEntry);
 
     char mUnknown4[4];
 };
 
 /* Top-level menu of the selected player. */
-class Class_8000A0B8 : public Class_802A6B60 {
+class Class_8000A0B8 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80008F10; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual void GetItem(int index, Entry_80182CC8 *pEntry);
+    virtual int GetEntryCount() { return 4; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_80008F10; }
 
     char mUnknown4[4];
 };
 
-class Class_8000A068 : public Class_802A6B60 {
+class Class_8000A068 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual Class_802A6BB0 *vfn_06();
-    virtual int vfn_07() { return 7; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80008FC0; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual MenuItemEditor *GetEditor();
+    virtual int GetEntryCount() { return 7; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_80008FC0; }
 
     char mUnknown4[4];
 };
 
-class Class_8000A018 : public Class_802A6B60 {
+class Class_8000A018 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual int vfn_07() { return 3; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_800090F4; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual int GetEntryCount() { return 3; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_800090F4; }
 
     char mUnknown4[4];
 };
 
-class Class_80009FC8 : public Class_802A6B60 {
+class Class_80009FC8 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 5; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80009178; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 5; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_80009178; }
 
     char mUnknown4[4];
 };
 
-class Class_80009F78 : public Class_802A6B60 {
+class Class_80009F78 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 9; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80009254; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 9; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_80009254; }
 
     const Range_800093E0 *GetRange(int feature) { return &lbl_800093E0[feature]; }
 
     char mUnknown4[4];
 };
 
-class Class_80009F28 : public Class_802A6B60 {
+class Class_80009F28 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_8000944C; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 4; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_8000944C; }
 
     char mUnknown4[4];
 };
 
-class Class_80009ED8 : public Class_802A6B60 {
+class Class_80009ED8 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual Class_802A6BB0 *vfn_06();
-    virtual int vfn_07() { return 12; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_8000950C; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual MenuItemEditor *GetEditor();
+    virtual int GetEntryCount() { return 12; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_8000950C; }
 
     char mUnknown4[4];
 };
 
-class Class_80009E88 : public Class_802A6B60 {
+class Class_80009E88 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_800098D0; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 4; }
+    virtual Entry_80182CC8 *GetEntries() { return (Entry_80182CC8 *)lbl_800098D0; }
 
     char mUnknown4[4];
 };
 
-class Class_80009E48 : public Class_80184190 {
+class Class_80009E48 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009E08 : public Class_80184190 {
+class Class_80009E08 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
     AppearanceNameTable *mUnknown12;
 };
 
-class Class_80009DC8 : public Class_80184190 {
+class Class_80009DC8 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009D88 : public Class_80184190 {
+class Class_80009D88 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009D28 : public Class_802A6BB0 {
+class Class_80009D28 : public MenuItemEditor {
 public:
-    virtual void vfn_09(int a, int *pResult, Arg_8018399C text);
-    virtual void vfn_10(int a, Arg_8018399C text);
+    virtual void GetText(int a, int *pResult, Arg_8018399C text);
+    virtual void SetText(int a, Arg_8018399C text);
 
     char mUnknown4[4];
 };
 
-class Class_80009CC8 : public Class_802A6BB0 {
+class Class_80009CC8 : public MenuItemEditor {
 public:
-    virtual void vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                        Arg_8018399C textH);
-    virtual int vfn_07(int a, int b, Arg_8018399C text);
-    virtual void vfn_08(int a, int b, int c);
+    virtual void BeginSlider(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
+                             Arg_8018399C textH);
+    virtual int MoveSlider(int a, int b, Arg_8018399C text);
+    virtual void EndSlider(int a, int b, int c);
 
     char mUnknown4[4];
 };
 
-class Class_80009C88 : public Class_80184190 {
+class Class_80009C88 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, Entry_80182CC8 *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
@@ -812,38 +812,38 @@ static void fn_80005EF8(Info_80307908 *pInfo, int part, unsigned char value)
     }
 }
 
-void Class_80009ED8::vfn_01(int a, int *pCount, int *pValue)
+void Class_80009ED8::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_801831F0(1);
 }
 
-int Class_80009ED8::vfn_02(int a, int b, void **ppResult)
+int Class_80009ED8::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     fn_801831F0(0);
     FEMiscSetHelpText("");
     return result;
 }
 
-void Class_80009ED8::vfn_03(int id)
+void Class_80009ED8::Highlight(int id)
 {
-    Class_802A6B60::vfn_03(id);
+    MenuListScreen::Highlight(id);
     FEMiscSetHelpText(lbl_802F4058[id]);
     if (id >= 0 && id <= 9) {
         fn_800056A4(lbl_803EB938, id);
     }
 }
 
-Class_802A6BB0 *Class_80009ED8::vfn_06()
+MenuItemEditor *Class_80009ED8::GetEditor()
 {
     return fn_80008C0C();
 }
 
-int Class_80009E88::vfn_02(int a, int b, void **ppResult)
+int Class_80009E88::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -860,7 +860,7 @@ int Class_80009E88::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
+void Class_8000A108::Enter(int a, int *pCount, int *pValue)
 {
     char buffer[18];
     int index;
@@ -897,7 +897,7 @@ void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
     }
 }
 
-int Class_8000A108::vfn_02(int a, int b, void **ppResult)
+int Class_8000A108::Leave(int a, int b, void **ppResult)
 {
     int result = 1;
 
@@ -915,7 +915,7 @@ int Class_8000A108::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A108::vfn_03(int index)
+void Class_8000A108::Highlight(int index)
 {
     if (index != 0x7FFF) {
         char buffer[27];
@@ -947,7 +947,7 @@ void Class_8000A108::vfn_03(int index)
     fn_80183740(0);
 }
 
-void Class_8000A108::vfn_04(int index, int *pId)
+void Class_8000A108::GetItemId(int index, int *pId)
 {
     if (fn_80005668()) {
         index--;
@@ -960,7 +960,7 @@ void Class_8000A108::vfn_04(int index, int *pId)
     }
 }
 
-void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
+void Class_8000A108::GetItem(int index, Entry_80182CC8 *pEntry)
 {
     char buffer[27] = { 0 };
 
@@ -996,9 +996,9 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
     FEPlyrPlayPairAnim();
 }
 
-void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
+void Class_8000A0B8::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
         *pValue = 3;
     }
@@ -1010,9 +1010,9 @@ void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
     }
 }
 
-int Class_8000A0B8::vfn_02(int a, int b, void **ppResult)
+int Class_8000A0B8::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1041,14 +1041,14 @@ int Class_8000A0B8::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A0B8::vfn_03(int id)
+void Class_8000A0B8::Highlight(int id)
 {
     fn_80182DD4(lbl_80008F10[id].mName);
 }
 
-void Class_8000A0B8::vfn_05(int index, Entry_80182CC8 *pEntry)
+void Class_8000A0B8::GetItem(int index, Entry_80182CC8 *pEntry)
 {
-    Class_802A6B60::vfn_05(index, pEntry);
+    MenuListScreen::GetItem(index, pEntry);
     if (fn_80183950()) {
         if (PlayerDbGetId(fn_80182DC8()) != 0) {
             pEntry->mUnknown30 = lbl_803ED6D4[index];
@@ -1061,9 +1061,9 @@ void Class_8000A0B8::vfn_05(int index, Entry_80182CC8 *pEntry)
     pEntry->mUnknown30 = lbl_80008F10[index].mUnknown30;
 }
 
-int Class_8000A068::vfn_02(int a, int b, void **ppResult)
+int Class_8000A068::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1084,14 +1084,14 @@ int Class_8000A068::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-Class_802A6BB0 *Class_8000A068::vfn_06()
+MenuItemEditor *Class_8000A068::GetEditor()
 {
     return fn_80008D5C();
 }
 
-int Class_80009FC8::vfn_02(int a, int b, void **ppResult)
+int Class_80009FC8::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1109,9 +1109,9 @@ int Class_80009FC8::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-int Class_80009F78::vfn_02(int a, int b, void **ppResult)
+int Class_80009F78::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1133,15 +1133,15 @@ int Class_80009F78::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_80009F28::vfn_01(int a, int *pCount, int *pValue)
+void Class_80009F28::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_80183740(0);
 }
 
-int Class_80009F28::vfn_02(int a, int b, void **ppResult)
+int Class_80009F28::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1172,15 +1172,15 @@ int Class_80009F28::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A018::vfn_01(int a, int *pCount, int *pValue)
+void Class_8000A018::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_80183740(0);
 }
 
-int Class_8000A018::vfn_02(int a, int b, void **ppResult)
+int Class_8000A018::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1205,12 +1205,12 @@ int Class_8000A018::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A018::vfn_03(int id)
+void Class_8000A018::Highlight(int id)
 {
-    Class_802A6B60::vfn_03(id);
+    MenuListScreen::Highlight(id);
 }
 
-void Class_80009D88::vfn_01(int a, int *pCount, int *pOut)
+void Class_80009D88::Enter(int a, int *pCount, int *pOut)
 {
     switch (mUnknown8) {
     case 2:
@@ -1232,7 +1232,7 @@ void Class_80009D88::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009D88::vfn_02(int a, int b, void **pOut)
+int Class_80009D88::Leave(int a, int b, void **pOut)
 {
     fn_80183740(0);
     if (b == 0) {
@@ -1260,7 +1260,7 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009D88::vfn_03(int index)
+void Class_80009D88::Highlight(int index)
 {
     switch (mUnknown8) {
     case 2:
@@ -1280,7 +1280,7 @@ void Class_80009D88::vfn_03(int index)
     }
 }
 
-void Class_80009D88::vfn_05(int index, Entry_80182CC8 *pOut)
+void Class_80009D88::GetItem(int index, Entry_80182CC8 *pOut)
 {
     switch (mUnknown8) {
     case 2:
@@ -1298,7 +1298,7 @@ void Class_80009D88::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
+void Class_80009D28::GetText(int a, int *pResult, Arg_8018399C text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[16];
@@ -1318,7 +1318,7 @@ void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
     }
 }
 
-void Class_80009D28::vfn_10(int a, Arg_8018399C text)
+void Class_80009D28::SetText(int a, Arg_8018399C text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[16];
@@ -1351,7 +1351,7 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
     FEPlyrSetPose(1, 24);
 }
 
-void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
+void Class_80009E48::Enter(int a, int *pCount, int *pOut)
 {
     lbl_80369E34.OpenFchrTable();
     switch (mUnknown8) {
@@ -1378,7 +1378,7 @@ void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009E48::vfn_02(int a, int b, void **pOut)
+int Class_80009E48::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
         switch (mUnknown8) {
@@ -1437,7 +1437,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009E48::vfn_03(int index)
+void Class_80009E48::Highlight(int index)
 {
     switch (mUnknown8) {
     case 0:
@@ -1469,7 +1469,7 @@ void Class_80009E48::vfn_03(int index)
     }
 }
 
-void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
+void Class_80009E48::GetItem(int index, Entry_80182CC8 *pOut)
 {
     char name[32];
 
@@ -1496,7 +1496,7 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009E08::vfn_01(int a, int *pCount, int *pOut)
+void Class_80009E08::Enter(int a, int *pCount, int *pOut)
 {
     mUnknown12 = new (0) AppearanceNameTable;
     if (mUnknown8 == 8) {
@@ -1510,7 +1510,7 @@ void Class_80009E08::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009E08::vfn_02(int a, int b, void **pOut)
+int Class_80009E08::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
         if (mUnknown8 == 8) {
@@ -1542,7 +1542,7 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009E08::vfn_03(int index)
+void Class_80009E08::Highlight(int index)
 {
     if (mUnknown8 == 8) {
         PlayerLookSetPlex(0, index);
@@ -1556,7 +1556,7 @@ void Class_80009E08::vfn_03(int index)
     }
 }
 
-void Class_80009E08::vfn_05(int index, Entry_80182CC8 *pOut)
+void Class_80009E08::GetItem(int index, Entry_80182CC8 *pOut)
 {
     char name[32];
 
@@ -1574,7 +1574,7 @@ void Class_80009E08::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009DC8::vfn_01(int a, int *pCount, int *pOut)
+void Class_80009DC8::Enter(int a, int *pCount, int *pOut)
 {
     int type = lbl_800094FC[mUnknown8];
 
@@ -1595,7 +1595,7 @@ void Class_80009DC8::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009DC8::vfn_02(int a, int b, void **pOut)
+int Class_80009DC8::Leave(int a, int b, void **pOut)
 {
     Info_80307908 info;
 
@@ -1631,7 +1631,7 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009DC8::vfn_03(int index)
+void Class_80009DC8::Highlight(int index)
 {
     int type = lbl_800094FC[mUnknown8];
 
@@ -1655,7 +1655,7 @@ void Class_80009DC8::vfn_03(int index)
     }
 }
 
-void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
+void Class_80009DC8::GetItem(int index, Entry_80182CC8 *pOut)
 {
     int type = lbl_800094FC[mUnknown8];
 
@@ -1673,13 +1673,13 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009C88::vfn_01(int a, int *pCount, int *pOut)
+void Class_80009C88::Enter(int a, int *pCount, int *pOut)
 {
     PoseTableSeek(&lbl_80369E08, PlayerDbGetSgt(fn_80182DC8(), mUnknown8), pOut);
     *pCount = DbCursorGetRowCount(&lbl_80369E08);
 }
 
-int Class_80009C88::vfn_02(int a, int b, void **pOut)
+int Class_80009C88::Leave(int a, int b, void **pOut)
 {
     fn_80183740(0);
     if (b == 0) {
@@ -1689,21 +1689,21 @@ int Class_80009C88::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009C88::vfn_03(int index)
+void Class_80009C88::Highlight(int index)
 {
     DbCursorSeek(&lbl_80369E08, index);
     FEPlyrSetPose(0, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
     FEPlyrSetPose(1, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
 }
 
-void Class_80009C88::vfn_05(int index, Entry_80182CC8 *pOut)
+void Class_80009C88::GetItem(int index, Entry_80182CC8 *pOut)
 {
     DbCursorSeek(&lbl_80369E08, index);
     PoseTableGetName(&lbl_80369E08, pOut->mName, 22);
 }
 
-void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                            Arg_8018399C textH)
+void Class_80009CC8::BeginSlider(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
+                                 Arg_8018399C textH)
 {
     Params_80005284 *pLeft = textF.pParams;
     Params_80005284 *pRight = textG.pParams;
@@ -1774,7 +1774,7 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
     }
 }
 
-int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
+int Class_80009CC8::MoveSlider(int a, int b, Arg_8018399C text)
 {
     Params_80005284 *pParams = text.pParams;
     int result = 0;
@@ -1876,7 +1876,7 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
     return result;
 }
 
-void Class_80009CC8::vfn_08(int a, int b, int c)
+void Class_80009CC8::EndSlider(int a, int b, int c)
 {
     int played = 0;
 
@@ -2035,7 +2035,7 @@ static void fn_80008860()
     lbl_803EB928 = 0x7FFF;
 }
 
-extern "C" Class_80184190 *fn_800088C8(void)
+extern "C" MenuScreen *fn_800088C8(void)
 {
     return fn_80008E8C();
 }
