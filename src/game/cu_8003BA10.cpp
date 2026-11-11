@@ -19,16 +19,16 @@ struct Region_8003BDF0 {
 };
 extern "C" {
 extern void *lbl_803EA410, *lbl_803EA414, *lbl_803EA418;
-extern Skeleton_80041930 *lbl_803EA41C;
-extern Skeleton_80041930 *lbl_803EA420[2];
-extern Skeleton_80041930 *lbl_803EA428, *lbl_803EA42C;
+extern AnimSkeleton_t *lbl_803EA41C;
+extern AnimSkeleton_t *lbl_803EA420[2];
+extern AnimSkeleton_t *lbl_803EA428, *lbl_803EA42C;
 extern Object_8003DEC4 **lbl_803EA430;
 extern unsigned short lbl_803EA434, lbl_803EA436;
 extern unsigned char lbl_803EA438;
 extern int lbl_802CCD8C[3], lbl_802CCD98[3], lbl_802CCDA4[14];
 extern void *lbl_803EAB3C, *lbl_803EAAFC, *lbl_803EAAE0;
 unsigned char PlayerObjIsDrawReady();
-void fn_80042380(Object_8003DEC4 *, int, float *, int *);
+void PlyrPoseGetBoneTransform(Object_8003DEC4 *, int, float *, int *);
 void fn_8022765C(void *, void *, void *);
 void fn_80227690(void *, void *, void *);
 void fn_80227264(void *, void *, float);
@@ -62,8 +62,8 @@ unsigned int fn_80236398(int);
 void fn_801A3FFC();
 void fn_801A42D4();
 void fn_801A45CC();
-void fn_80042A08(Object_8003DEC4 *, BitStream_t *);
-void fn_80042AF4(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
+void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
+void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
 void fn_80190F18(BitStream_t *, int);
 void fn_800B4D7C();
@@ -73,13 +73,13 @@ void fn_800A3D70();
 void fn_800A3C14();
 void fn_800AE10C();
 void fn_800ADE6C();
-Skeleton_80041930 *ResLoad(void *, int, int);
-void CharRelocateSkeleton(Skeleton_80041930 *);
-void CharSkelMirrorRest(Skeleton_80041930 *, Skeleton_80041930 *);
+AnimSkeleton_t *ResLoad(void *, int, int);
+void CharRelocateSkeleton(AnimSkeleton_t *);
+void CharSkelMirrorRest(AnimSkeleton_t *, AnimSkeleton_t *);
 void fn_800AF630(void *, int, int, int);
-void fn_800AF790(int, Skeleton_80041930 *, const char *, const char *, int);
-void fn_8015F484(Skeleton_80041930 *, Skeleton_80041930 **, Skeleton_80041930 *,
-                 Skeleton_80041930 *);
+void fn_800AF790(int, AnimSkeleton_t *, const char *, const char *, int);
+void fn_8015F484(AnimSkeleton_t *, AnimSkeleton_t **, AnimSkeleton_t *,
+                 AnimSkeleton_t *);
 int PlayerDbSeekOriginalId(Object_8008044C *, int, int *);
 int PlayerDbGetId(Object_8008044C *);
 void fn_8003BA00();
@@ -152,7 +152,7 @@ void PlaTexCacheStop();
 void PlayerLookClose();
 int PlaTexCacheGetArchive();
 void fn_8009BD48(int *, int, int, int);
-int fn_800429CC(int);
+int PlyrPoseGetStreamBits(int);
 void fn_80030ACC(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
                           BitStream_t *, float),
@@ -167,11 +167,11 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   p->mUnknown673 =
       PlayerObjIsDrawReady() && (object->mUnknown20 & 1) && !(object->mUnknown20 & 2);
   float first[4], center[4], delta[4], direction[2];
-  fn_80042380(object, 4, first, 0);
-  fn_80042380(object, 8, center, 0);
+  PlyrPoseGetBoneTransform(object, 4, first, 0);
+  PlyrPoseGetBoneTransform(object, 8, center, 0);
   fn_8022765C(center, center, first);
   fn_80227264(center, center, 0.5f);
-  fn_80042380(object, 26, first, 0);
+  PlyrPoseGetBoneTransform(object, 26, first, 0);
   fn_802276B4(delta, first, center);
   fn_80227CC0(center, center);
   fn_80227CC0(delta, delta);
@@ -239,11 +239,11 @@ void fn_8003BDF0(Object_8003DEC4 *object, Point2_t *axis, int angle) {
   if (!regions)
     return;
   float first[4], center[4];
-  fn_80042380(object, 4, first, 0);
-  fn_80042380(object, 8, center, 0);
+  PlyrPoseGetBoneTransform(object, 4, first, 0);
+  PlyrPoseGetBoneTransform(object, 8, center, 0);
   fn_8022765C(center, center, first);
   fn_80227264(center, center, 0.5f);
-  fn_80042380(object, 26, first, 0);
+  PlyrPoseGetBoneTransform(object, 26, first, 0);
   first[2] = (first[2] + center[2]) * 0.5f;
   float radius = fabsf(1.0f / fn_801CFD28(angle)) * first[2];
   Projection_8003BA10 *p = &object->mUnknown4256;
@@ -452,7 +452,7 @@ int fn_8003CC44() {
   fn_801A45CC();
   return 0;
 }
-void fn_8003CC68(Skeleton_80041930 *skeleton) {
+void fn_8003CC68(AnimSkeleton_t *skeleton) {
   unsigned short values[64][3] = {
       {65518, 0, 0},
       {65469, 65453, 65493},
@@ -526,7 +526,7 @@ void fn_8003CC68(Skeleton_80041930 *skeleton) {
   }
 }
 
-void fn_8003CD1C(Skeleton_80041930 *skeleton) {
+void fn_8003CD1C(AnimSkeleton_t *skeleton) {
   unsigned short values[19][3] = {
       {56480, 0, 0}, {8698, 0, 0},          {0, 0, 0}, {62991, 0, 0},
       {0, 0, 0},     {43390, 0, 0},         {0, 0, 0}, {40775, 5152, 0},
@@ -541,7 +541,7 @@ void fn_8003CD1C(Skeleton_80041930 *skeleton) {
   }
 }
 
-void fn_8003CDF8(Skeleton_80041930 *skeleton) {
+void fn_8003CDF8(AnimSkeleton_t *skeleton) {
   unsigned short values[5][3] = {
       {0, 0, 0},           {64403, 64991, 18297},
       {64403, 544, 47238}, {24448, 65257, 65414},
@@ -557,7 +557,7 @@ void fn_8003CDF8(Skeleton_80041930 *skeleton) {
 void fn_8003CEB0(BitStream_t *stream) {
   for (unsigned int i = 0; i < lbl_803EA434; ++i) {
     Object_8003DEC4 *object = lbl_803EA430[i];
-    fn_80042A08(object, stream);
+    PlyrPoseWriteState(object, stream);
     fn_80191068(stream, object->mUnknown5188.mUnknown568, 1);
     fn_80191068(stream, (unsigned long long)object->mUnknown5188.mUnknown56C,
                 4);
@@ -571,7 +571,7 @@ void fn_8003CF88(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
                  float t) {
   for (unsigned int i = 0; i < lbl_803EA434; ++i) {
     Object_8003DEC4 *object = lbl_803EA430[i];
-    fn_80042AF4(object, a, b, c, d, t);
+    PlyrPoseReadState(object, a, b, c, d, t);
     object->mUnknown972 = LevelFindArea(object->mUnknown4);
     fn_80190F18(b, 1);
     fn_80190F18(a, 1);
@@ -647,8 +647,8 @@ int fn_8003D378(int owner, int mode) {
     Creation_8003D378 init;
     init.mInit.mUnknown00 = 1;
     init.mInit.mUnknown04 = (int)lbl_803EA41C;
-    ((Skeleton_80041930 **)init.mInit.mUnknown08)[0] = lbl_803EA420[0];
-    ((Skeleton_80041930 **)init.mInit.mUnknown08)[1] = lbl_803EA420[1];
+    ((AnimSkeleton_t **)init.mInit.mUnknown08)[0] = lbl_803EA420[0];
+    ((AnimSkeleton_t **)init.mInit.mUnknown08)[1] = lbl_803EA420[1];
     init.mInit.mUnknown10 = (int)lbl_803EA428;
     init.mInit.mUnknown14 = (int)lbl_803EA42C;
     fn_8015EE74();
@@ -904,8 +904,8 @@ Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
     *distance = value;
   return result;
 }
-Skeleton_80041930 *fn_8003E028() { return lbl_803EA41C; }
-Skeleton_80041930 *fn_8003E030() { return lbl_803EA428; }
+AnimSkeleton_t *fn_8003E028() { return lbl_803EA41C; }
+AnimSkeleton_t *fn_8003E030() { return lbl_803EA428; }
 void fn_8003E038(Block_80170E64 *object, int *reference) {
   fn_8009BD48(reference, 0, 0, 0);
   if (object)
@@ -926,7 +926,7 @@ Object_80039F5C *fn_8003E0C8(Block_80170E64 *object) {
   return result;
 }
 void fn_8003E118() {
-  int size = fn_800429CC(0) + fn_8003DA8C();
+  int size = PlyrPoseGetStreamBits(0) + fn_8003DA8C();
   fn_80030ACC(fn_8003CEB0, fn_8003CF88, size * lbl_803EA434, "Players");
 }
 void fn_8003E174(int a) { fn_801A4688(a); }

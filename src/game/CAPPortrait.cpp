@@ -29,8 +29,8 @@ struct PortraitImageRequest_t {
 };
 
 extern "C" {
-Skeleton_80041930 *fn_8003E028(void);
-Skeleton_80041930 *fn_8003E030(void);
+AnimSkeleton_t *fn_8003E028(void);
+AnimSkeleton_t *fn_8003E030(void);
 void PlaDynClutApplyColors(void *p, int id, FMCAPPORTText *pText);
 void *PlaTexCacheGetArchive(void);
 void PortraitRenderQuantize(PortraitJob_t *pObject);
@@ -55,7 +55,7 @@ extern char lbl_802EC080[];
 }
 
 static PortraitSlotTable_t *_Portrait_pSlots = 0;
-static Skeleton_80041930 *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
+static AnimSkeleton_t *(*_Portrait_apGetSkeleton[2])(void) = { fn_8003E028, fn_8003E030 };
 static int _Portrait_aiSkeletonParam[2] = { 15, 32 };
 static const char *_Portrait_apszArchives[2] = { lbl_802EC038, lbl_802EC044 };
 static ModelLod_802DF190 _Portrait_aLod0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
@@ -188,7 +188,7 @@ void PortraitLoadModels(PortraitJob_t *pObject)
             }
             pObject->mpUnknown512[i] = fn_801D2B7C(ResGetSize(pArchive, id), 0, 0);
             _Portrait_apLods[i]->mId = id;
-            Skeleton_80041930 *pSkeleton = PortraitGetSkeleton(i);
+            AnimSkeleton_t *pSkeleton = PortraitGetSkeleton(i);
             fn_80233EAC(&_Portrait_aModels[i], _Portrait_apLods[i], "CAPPORT", 0, pArchive, pSkeleton,
                         &pObject->mpUnknown512[i], 1);
         } else {
@@ -240,7 +240,7 @@ void *PortraitGetModel(PortraitJob_t *pObject, int index)
     return pObject->mUnknown520;
 }
 
-Skeleton_80041930 *PortraitGetSkeleton(int index)
+AnimSkeleton_t *PortraitGetSkeleton(int index)
 {
     return _Portrait_apGetSkeleton[index]();
 }

@@ -58,8 +58,8 @@ extern unsigned char lbl_803EA4CA;
 
 int MsgPlayerPickupIsOpen(void);
 int fn_8003DEB4(void);
-void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
-void fn_800428A8(Object_8003DEC4 *pPlayer);
+void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
+void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
 int fn_8005FC7C(void);
 void fn_8007BA48(DbCursor *pObject);
@@ -1142,7 +1142,7 @@ extern "C" void PlayerLookGetFeatures(int index, FaceFeatures_t *pBlock)
 extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit)
 {
     fn_801C1F94(pPlayer, 0x19F0, 0);
-    fn_80042610(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
+    PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);
     fn_801A3588(pPlayer, pInit);
@@ -1151,7 +1151,7 @@ extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit
 extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 {
     fn_801A3F48(pPlayer);
-    fn_800428A8(pPlayer);
+    PlyrPoseFree(pPlayer);
 }
 
 extern "C" void PlayerObjRenderInit(int a, int b)

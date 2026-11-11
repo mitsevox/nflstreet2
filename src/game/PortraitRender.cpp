@@ -61,10 +61,10 @@ void TMRenderSetZRange(float a, float b);
 void TMTexLibRegistryReset(void);
 void TMTexLibRegister(const char *pName, void *p);
 void fn_802337D4(void *a, void *b, SkeletonJointTriple_t *pTriples, unsigned int c);
-void fn_802338D4(PortraitPoseDesc_t *pObject, Skeleton_80041930 *pData, PortraitMtx44_t *pOut);
+void fn_802338D4(PortraitPoseDesc_t *pObject, AnimSkeleton_t *pData, PortraitMtx44_t *pOut);
 void fn_80233BB8(SkeletonPose_t *pObject, int a, int b);
 void fn_80233BD8(SkeletonPose_t *pObject);
-void fn_80233BDC(SkeletonPose_t *pObject, Skeleton_80041930 *pData);
+void fn_80233BDC(SkeletonPose_t *pObject, AnimSkeleton_t *pData);
 void fn_80233CBC(void *pObject, int a, int b);
 void fn_8023465C(ModelPartBinding_t *pObject, Object_8023417C *pModel, ModelTexSlot_t *pDesc);
 void fn_8023488C(ModelPartBinding_t *pObject, int a);
@@ -137,11 +137,11 @@ void PortraitRenderInitPoses(PortraitJob_t *pObject)
 {
     unsigned int i;
     unsigned int j;
-    Skeleton_80041930 *pData0;
-    Skeleton_80041930 *pData1;
+    AnimSkeleton_t *pData0;
+    AnimSkeleton_t *pData1;
 
     for (i = 0; i <= 1; i++) {
-        Skeleton_80041930 *pData = PortraitGetSkeleton(i);
+        AnimSkeleton_t *pData = PortraitGetSkeleton(i);
         int value = PortraitGetSkeletonParam(i);
 
         fn_80233BB8(&pObject->mUnknown588[i], value, 0);
@@ -216,8 +216,8 @@ void PortraitRenderPoseModels(PortraitJob_t *pObject)
     PortraitPoseDesc_t desc;
     PortraitMtx44_t matrices[40];
     SkeletonJointTriple_t triples[19];
-    Skeleton_80041930 *pData0;
-    Skeleton_80041930 *pData1;
+    AnimSkeleton_t *pData0;
+    AnimSkeleton_t *pData1;
     unsigned int i;
     ModelPartBinding_t *pUnknown612 = &pObject->mUnknown612;
 

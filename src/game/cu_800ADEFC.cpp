@@ -11,10 +11,10 @@ extern void *lbl_8030F958[11];
 
 /* Blend between an element's current and next pose, eased over its
    duration. */
-extern "C" AnimBlendList *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index)
+extern "C" AnimBlendList *fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index)
 {
     AnimBlendList *pBlend = &lbl_8030F534;
-    Element_80041BF8 *p = &pElements[index];
+    PlyrPosePart_t *p = &pElements[index];
     unsigned int length = p->mUnknown6 * 16;
     float t = (float)p->mUnknown8 / (float)length;
     t = (1.0f - fn_801CFB94((int)(t * 8388608.0f))) * 0.5f;

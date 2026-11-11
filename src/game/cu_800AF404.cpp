@@ -1,9 +1,9 @@
 #include "game/cu_8008E978.h"
 
 extern "C" {
-void fn_801C4010(Chain_800AF404 *pChain, void *pResult, Pose_80041930 *pPose, Item_800AF82C *pLimits,
+void fn_801C4010(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
                  float *pTarget, int count);
-void fn_801C4550(Chain_800AF404 *pChain, void *pResult, Pose_80041930 *pPose, Item_800AF82C *pLimits,
+void fn_801C4550(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
                  float *pTarget, int *pValue);
 
 extern int lbl_803EAB08;
@@ -25,8 +25,8 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
 }
 
 extern "C" {
-void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource);
-void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource, float t);
+void fn_800AF2AC(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource);
+void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t);
 int CamLerp(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
 
 extern Source_800AF2AC lbl_8030F9FC[];

@@ -3,7 +3,7 @@
 
 #include "game/AnimMomentumActor.h"
 #include "game/Message_800F01CC.h"
-#include "game/Pose_80041930.h"
+#include "game/AnimPose.h"
 
 struct LevelSurface_t;
 
@@ -69,7 +69,7 @@ struct Block_80170E64 {
         };
     };
     union {
-        Pose_80041930 mUnknown44;
+        AnimPose_t mUnknown44;
         Model_800C8860 mModel44;
     };
     void *mpUnknown100;
@@ -332,15 +332,15 @@ struct Object_80039F5C {
        its +40. */
     int mUnknown16;
     char mUnknown20[36];
-    Pose_80041930 *mpUnknown56;
+    AnimPose_t *mpUnknown56;
     char mUnknown60[48];
     int mUnknown108;
     char mUnknown112[36];
-    Pose_80041930 *mpUnknown148;
+    AnimPose_t *mpUnknown148;
     char mUnknown152[48];
     int mUnknown200;
     char mUnknown204[36];
-    Pose_80041930 *mpUnknown240;
+    AnimPose_t *mpUnknown240;
     char mUnknown244[48];
     int mUnknown292;
     int mUnknown296;

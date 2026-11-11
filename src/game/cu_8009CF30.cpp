@@ -3,11 +3,11 @@
 #include "game/Item_80097440.h"
 
 extern "C" {
-void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose);
+void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose);
 extern Block_8009D474 *lbl_803EA9A8;
 }
 
-extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose)
+extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose)
 {
     int *pInts = pBlock->mUnknown1C;
     Vector_80039F5C *pVec = &pBlock->mUnknown10;

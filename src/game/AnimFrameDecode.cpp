@@ -7,7 +7,7 @@
 
 extern "C" {
 
-void AnimCopyRawFrame(Pose_80041930 *pose, AnimBlendEntry *entry, int mirrored)
+void AnimCopyRawFrame(AnimPose_t *pose, AnimBlendEntry *entry, int mirrored)
 {
     unsigned char *encoded = (unsigned char *)entry->mpUnknown40;
     unsigned int count = encoded[0];

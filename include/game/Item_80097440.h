@@ -126,7 +126,7 @@ struct Block_8009C6F4 {
     short mUnknownE;
     Vector_80039F5C mUnknown10;
     int mUnknown1C[3];
-    Pose_80041930 *mpPose;
+    AnimPose_t *mpPose;
     Entry_8009C684 mEntries[2];
 };
 

@@ -177,7 +177,7 @@ int fn_800A3444(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
+void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
 void fn_801A9F98(BigObjPhysics_t *pExtra, Object_80040818 *pItem, int a, int b);
 void fn_801AA124(Object_80040818 *pItem, void *a, int b, void *c);
@@ -196,7 +196,7 @@ float fn_80237260(int stream);
 
 Handler_803084C4 lbl_803084C4[102];
 
-void fn_8004A2F4(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count)
+void fn_8004A2F4(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count)
 {
     short *pValue = pPose->mUnknown48;
     unsigned int groups = count * 3 / 5;
@@ -275,7 +275,7 @@ int fn_8004A5EC(VariantTable_8004A6EC *pTable, unsigned short c, void *a, void *
     return 0;
 }
 
-void fn_8004A680(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton)
+void fn_8004A680(AnimPose_t *pPose, AnimSkeleton_t *pSkeleton)
 {
     unsigned int i;
 
@@ -357,7 +357,7 @@ void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c) { fn_801AA124(
 
 void fn_8004A908(BigObjInst *pObject, int index)
 {
-    Skeleton_80041930 *pSkeleton = fn_800410B8(index);
+    AnimSkeleton_t *pSkeleton = fn_800410B8(index);
 
     if (pSkeleton) {
         Object_80040818 *pPlaced = fn_80040F18(index);
@@ -387,7 +387,7 @@ void fn_8004A9FC(void)
     fn_801BE030(10, &lbl_803EA4D0);
 }
 
-void fn_8004AA34(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count)
+void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count)
 {
     unsigned short *pValue = (unsigned short *)pPose->mUnknown48;
     unsigned int groups = count * 3 / 5;
@@ -419,9 +419,9 @@ void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pSt
     short values1[192];
     short values2[192];
     short values3[192];
-    Pose_80041930 pose1;
-    Pose_80041930 pose3;
-    Pose_80041930 pose2;
+    AnimPose_t pose1;
+    AnimPose_t pose3;
+    AnimPose_t pose2;
     unsigned int count = pObject->mUnknown172.mUnknown4 - 1;
 
     pose1.mUnknown48 = values1;
@@ -1765,7 +1765,7 @@ void DynObjRenderShutdown(DynObj *);
 void DynObjCacheReset(void); void DynObjCacheFree(void); void DynObjFreeAnimPal(DynObj *);
 int DebugPrintf(const char *, ...);
 void CharRelocateSkeleton(int);
-int CharSkelGetJointByName(Skeleton_80041930 *, const char *);
+int CharSkelGetJointByName(AnimSkeleton_t *, const char *);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *);
 Shape_801E2CB4 *fn_801E71D0(Collection_801E7034 *, unsigned int);
 void fn_801E9E18(RigidBody_t *, Vector_80039F5C *, Vector_80039F5C *);
@@ -1891,7 +1891,7 @@ void fn_8004E358(void)
 }
 void fn_8004E3CC(Object_80040818 *pObject, int *pAngles)
 {
-    Skeleton_80041930 *pSkeleton = fn_800410E0(pObject);
+    AnimSkeleton_t *pSkeleton = fn_800410E0(pObject);
     if (pSkeleton) {
         int index = CharSkelGetJointByName(pSkeleton, "main");
         if (index == -1) index = CharSkelGetJointByName(pSkeleton, "Main");

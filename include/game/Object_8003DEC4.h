@@ -5,13 +5,13 @@
 #include "game/ParticleTrail.h"
 #include "game/Point2.h"
 #include "game/LightTracker.h"
-#include "game/Pose_80041930.h"
+#include "game/AnimPose.h"
 
 struct Item_800476DC;
 
 /* Bone table referenced at +100 of the player object: a bone count at +6
    and three base values per bone from +1040. */
-struct Skeleton_80041930 {
+struct AnimSkeleton_t {
     char mUnknown0[6];
     unsigned short mUnknown6;
     char mUnknown8[1032];
@@ -20,7 +20,7 @@ struct Skeleton_80041930 {
 
 /* Element of the two-entry array at +116, passed to fn_800ADDFC,
    fn_800ADD7C and fn_800ADEFC. */
-struct Element_80041BF8 {
+struct PlyrPosePart_t {
     unsigned char mUnknown0;
     char mUnknown1[3];
     unsigned char mUnknown4;
@@ -29,8 +29,8 @@ struct Element_80041BF8 {
     char mUnknown7[1];
     short mUnknown8;
     char mUnknown10[2];
-    Pose_80041930 mUnknown12;
-    Skeleton_80041930 *mUnknown68;
+    AnimPose_t mUnknown12;
+    AnimSkeleton_t *mUnknown68;
 };
 
 /* Block at +280, passed to fn_800C2788. */
@@ -44,8 +44,8 @@ struct Block_800C2788 {
     int mUnknown28[3];
     int mUnknown40[9][3];
     int mUnknown148[9][3];
-    Pose_80041930 mUnknown256;
-    Skeleton_80041930 *mUnknown312;
+    AnimPose_t mUnknown256;
+    AnimSkeleton_t *mUnknown312;
 };
 
 /* Block at +596, passed to fn_800C2EC0. */
@@ -59,11 +59,11 @@ struct Block_800C2EC0 {
     int mUnknown28[3];
     int mUnknown40[5][3];
     int mUnknown100[5][3];
-    Pose_80041930 mUnknown160;
-    Skeleton_80041930 *mUnknown216;
+    AnimPose_t mUnknown160;
+    AnimSkeleton_t *mUnknown216;
 };
 
-/* Weight and two halfwords copied by fn_80042530 from each of the first two
+/* Weight and two halfwords copied by PlyrPoseSetBlend from each of the first two
    entries of its blend argument. */
 struct Weight_80042530 {
     float mUnknown0;
@@ -164,12 +164,12 @@ struct Object_8003DEC4 {
     int mUnknown32;
     int mUnknown36;
     char mUnknown40[4];
-    Pose_80041930 mUnknown44;
-    Skeleton_80041930 *mUnknown100;
-    Skeleton_80041930 *mUnknown104;
-    Skeleton_80041930 *mUnknown108;
+    AnimPose_t mUnknown44;
+    AnimSkeleton_t *mUnknown100;
+    AnimSkeleton_t *mUnknown104;
+    AnimSkeleton_t *mUnknown108;
     float (*mUnknown112)[4][4];
-    Element_80041BF8 mUnknown116[2];
+    PlyrPosePart_t mUnknown116[2];
     unsigned char mUnknown260;
     char mUnknown261[3];
     Weight_80042530 mUnknown264[2];

@@ -55,13 +55,13 @@ void fn_8003E174(int a);
 void fn_8003FAC4(int a);
 void fn_8003FB2C(void);
 int fn_8003FBF0(FEPlyrScene_t *pObject, int a);
-void fn_80042270(FEPlyrModel_t *pRecord);
-void fn_800423F8(Object_8003DEC4 *pObject, void *a, void *b);
-void fn_800424C0(Object_8003DEC4 *pObject, int a);
-void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
-void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int b);
-void fn_80042530(Object_8003DEC4 *pObject, int a);
-void fn_80042928(Object_8003DEC4 *pObject);
+void PlyrPoseSetFromModel(FEPlyrModel_t *pRecord);
+void PlyrPoseGetAttachTransform(Object_8003DEC4 *pObject, void *a, void *b);
+void PlyrPoseBlendEntries(Object_8003DEC4 *pObject, int a);
+void PlyrPoseBlendRootAngles(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
+void PlyrPoseBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int b);
+void PlyrPoseSetBlend(Object_8003DEC4 *pObject, int a);
+void PlyrPoseUpdate(Object_8003DEC4 *pObject);
 void PlayerLookSetGear(int index, int a, int b);
 void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int a);
 void fn_8008A248(void);
@@ -182,9 +182,9 @@ static void _FEPlyrUpdatePartAnims(FEPlyrModel_t *pRecord, Object_8003DEC4 *pObj
         if (pObject->mUnknown20 & 0x20) {
             fn_801BE420(pRecord->mUnknown4528[i], &pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord, step);
             fn_801BA03C(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], step, pRecord);
-            fn_80042508(pObject, fn_801BC7C0(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord->mUnknown4528[i]), i);
+            PlyrPoseBlendRawEntries(pObject, fn_801BC7C0(&pRecord->mUnknown4008[i], pRecord->mUnknown4032[i], pRecord->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pObject->mUnknown116, i)) {
-            fn_80042508(pObject, fn_800ADEFC(pObject->mUnknown116, i), i);
+            PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, i), i);
         }
     }
 }
@@ -199,17 +199,17 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
         fn_801BA03C(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);
         result = fn_801BC7C0(&pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord->mUnknown3604);
-        fn_80042530(pObject, result);
+        PlyrPoseSetBlend(pObject, result);
     }
     _FEPlyrUpdatePartAnims(pRecord, pObject, step);
     fn_801BE420(pRecord->mUnknown2496, &pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord, step);
     fn_801BA03C(&pRecord->mUnknown1244, pRecord->mUnknown1256, step, pRecord);
     result = fn_801BC7C0(&pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord->mUnknown2496);
-    fn_800424C0(pObject, result);
+    PlyrPoseBlendEntries(pObject, result);
     pRecord->mUnknown544 = fn_801BCA74(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown548, 0xFFFF, 1);
     pRecord->mUnknown545 = fn_801BCCAC(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown552,
                                        fn_801BE648(pRecord->mUnknown792), (pRecord->mUnknown12 & 0x200) == 0);
-    fn_800424E8(pObject, pRecord->mUnknown1256, pRecord->mUnknown1244.mUnknown4, pRecord->mUnknown2496);
+    PlyrPoseBlendRootAngles(pObject, pRecord->mUnknown1256, pRecord->mUnknown1244.mUnknown4, pRecord->mUnknown2496);
 }
 
 static void _FEPlyrScreenToWorld(float x, float y, float z, float *pOut)
@@ -251,15 +251,15 @@ static void _FEPlyrUpdateModel(int index, unsigned int step)
         pRecord->mUnknown424.mUnknown4 = pRecord->mUnknown424.mUnknown16;
         pRecord->mUnknown424.mUnknown8 = pRecord->mUnknown424.mUnknown20;
     }
-    fn_80042270(pRecord);
+    PlyrPoseSetFromModel(pRecord);
     fn_8009CDEC(pRecord);
-    fn_80042928(pObject);
+    PlyrPoseUpdate(pObject);
     _FEPlyrBuildTransform(pObject);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
         FEPlyrScene_t *pView = _FEPlyr_pScene;
 
         pObject->mUnknown32 = pRecord->mUnknown776;
-        fn_800423F8(pObject, pView->mUnknown4, pView->mUnknown108);
+        PlyrPoseGetAttachTransform(pObject, pView->mUnknown4, pView->mUnknown108);
     }
 }
 

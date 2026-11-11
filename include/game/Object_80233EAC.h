@@ -1,7 +1,7 @@
 #ifndef GAME_OBJECT_80233EAC_H
 #define GAME_OBJECT_80233EAC_H
 
-typedef struct Skeleton_80041930 Skeleton_80041930;
+typedef struct AnimSkeleton_t AnimSkeleton_t;
 
 /* Per-level model record (0x34 bytes) embedded at +0x1C of ModelLod_802DF190;
    fn_8023417C returns its address. */
@@ -45,7 +45,7 @@ void fn_80233FCC(Object_80233EAC *pObject);
 int fn_80234144(Object_80233EAC *pObject, void *p);
 Object_8023417C *fn_8023417C(Object_80233EAC *pObject, int a);
 void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a,
-                 void *pArchive, Skeleton_80041930 *pSkeleton, void **ppData, int c);
+                 void *pArchive, AnimSkeleton_t *pSkeleton, void **ppData, int c);
 #ifdef __cplusplus
 }
 #endif

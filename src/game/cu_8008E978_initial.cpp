@@ -95,7 +95,7 @@ void fn_800AE0B8(Object_80039F5C *);
 int fn_800DBAF0(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *,int);
 void fn_8009D00C(void *,int *);
-void fn_80042380(Object_8003DEC4 *,int,float *,int *);
+void PlyrPoseGetBoneTransform(Object_8003DEC4 *,int,float *,int *);
 void QuatFromEuler(Quat_801EB488 *,int,int,int);
 void fn_800943D8(void);
 void fn_80147840(Object_8003DEC4 *);
@@ -230,7 +230,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             short bone=(short)(AnimSeqGetOpcodeParameter()-1);
             short effect=(short)(AnimSeqGetOpcodeParameter()-1);
             float position[4];int angles[3];Quat_801EB488 rotation;
-            fn_80042380((Object_8003DEC4 *)p->mpUnknown4,lbl_802D7154[bone],position,angles);
+            PlyrPoseGetBoneTransform((Object_8003DEC4 *)p->mpUnknown4,lbl_802D7154[bone],position,angles);
             QuatFromEuler(&rotation,angles[2],angles[1],angles[0]);
             ParticlesSpawnAt(lbl_802D71CC[effect],position,&rotation.mX,0);
             return 1;

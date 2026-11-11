@@ -23,7 +23,7 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
 void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked);
-void fn_8004AA34(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count);
+void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count);
 void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t);
 void fn_8004AF84(BigObjPhysics_t *pExtra);
@@ -197,7 +197,7 @@ int fn_800404C8(void)
         Object_80040818 *pObject = lbl_803EA480[i];
 
         if (pObject->mUnknown300 != 0) {
-            Skeleton_80041930 *pSkeleton = fn_800410E0(pObject);
+            AnimSkeleton_t *pSkeleton = fn_800410E0(pObject);
 
             if (pSkeleton != 0) {
                 size += pSkeleton->mUnknown6 * 36;
@@ -542,7 +542,7 @@ int fn_80041094(int index)
     return 0;
 }
 
-Skeleton_80041930 *fn_800410B8(int index)
+AnimSkeleton_t *fn_800410B8(int index)
 {
     Object_80040818 *pObject = lbl_803EA480[index];
 
@@ -552,7 +552,7 @@ Skeleton_80041930 *fn_800410B8(int index)
     return 0;
 }
 
-Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject)
+AnimSkeleton_t *fn_800410E0(Object_80040818 *pObject)
 {
     if (pObject->mUnknown304 != 0) {
         return *pObject->mUnknown304;
