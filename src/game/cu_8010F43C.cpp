@@ -149,7 +149,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80156C78(int a, int b);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);

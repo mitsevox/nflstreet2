@@ -1,11 +1,11 @@
 /* Sub module helpers: write a team's seven-player depth chart (position and player pairs) to the game database, read the chart back by position, and release the query. */
 #include "game/fn_80177FE0.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 
 extern "C" {
 int fn_80177F70(void);
 float fn_80178298(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_8022D23C(void);
 int fn_8022D25C(int value);
 int fn_8022D2F4(unsigned short handle, unsigned short a, unsigned char b, unsigned char *pPairs, int c);
@@ -16,7 +16,7 @@ int fn_8022D540(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
 
-void SubDepthWriteTeam(int team, Object_800670B4 *pTeam);
+void SubDepthWriteTeam(int team, PlayBookFormation_t *pTeam);
 
 int SubDepthIsThirdAndLong(void)
 {
@@ -47,7 +47,7 @@ void SubDepthSetTeam(int team)
     SubDepthWriteTeam(team, PlayBookGetFormation(team));
 }
 
-void SubDepthWriteTeam(int team, Object_800670B4 *pTeam)
+void SubDepthWriteTeam(int team, PlayBookFormation_t *pTeam)
 {
     unsigned char pairs[7][2];
     int flag;

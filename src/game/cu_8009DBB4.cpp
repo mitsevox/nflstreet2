@@ -5,7 +5,7 @@
 
 extern "C" {
 int fn_80178308(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_800B0F98(void);
 int fn_8009DBB4(State_8011F4EC *p);
 }
@@ -16,7 +16,7 @@ extern "C" int fn_8009DBB4(State_8011F4EC *p)
     int team = fn_80178308();
     unsigned char behind = 0;
     unsigned char ahead = 0;
-    Object_800670B4 *pTeam = PlayBookGetFormation(team);
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(team);
     unsigned char i = 0;
     float ballX = fn_80177FE0().mX;
     int carrierId = fn_800B0F98();
@@ -28,7 +28,7 @@ extern "C" int fn_8009DBB4(State_8011F4EC *p)
         if ((pObject->mFlags & 0x40000) || carrierId == pObject->mId) {
             pos.mX = pObject->mMotion.mPos.mX;
         } else {
-            Entry_8006719C *pEntry = PlaySetGetEntry(pTeam, p->mUnknown199[i], 0);
+            PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, p->mUnknown199[i], 0);
 
             pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
             pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;

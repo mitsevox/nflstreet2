@@ -9,7 +9,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/GameModeType.h"
@@ -45,7 +45,7 @@ void SndgSituationReset(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_800A9680(void);
 int SndgMusicGetMode(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_80178348(void);
 extern unsigned int lbl_80290B9C[4];
 extern float gPlyrMoveFwdSpeed;
@@ -70,7 +70,7 @@ int fn_80177F70(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *PlayBookGetFormation(int side);
+PlayBookFormation_t *PlayBookGetFormation(int side);
 int SndgSfxIsPlaying(int id);
 void SndgSfxStop(int id);
 int SndgRequestBank(unsigned int channel, int id, void (*callback)(int handle));
@@ -679,7 +679,7 @@ void fn_80070E8C(void)
 void fn_80070F84(void)
 {
     if (!lbl_803EA6FA) return;
-    Object_800670B4 *p = PlayBookGetFormation(fn_80178320());
+    PlayBookFormation_t *p = PlayBookGetFormation(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;

@@ -97,9 +97,9 @@ GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetModeAll(int a);
 int fn_801486A0(void);
 void fn_80162780(int a, int b);
-void fn_80164C4C(Object_800670B4 *pObject, Record_80067338 *pRecord, int team, int a);
-int fn_801650BC(Record_80067338 *pRecord);
-Object_800670B4 *PlayBookGetFormation(int team);
+void fn_80164C4C(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
+int fn_801650BC(PlayBookPlay_t *pRecord);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_8016B0B0(void);
 void ClockRuleSnap(void);
 void DriveLogUpdateTeam(void);
@@ -466,7 +466,7 @@ extern "C" void fn_8016E498(void)
     fn_800DC578();
     if (fn_800B65A0(side) != 0xFF && fn_80177F70() != 0) {
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
-        Record_80067338 *pRecord = PlayBookGetPlay(side);
+        PlayBookPlay_t *pRecord = PlayBookGetPlay(side);
 
         if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             CamGameSetModeAll(2);

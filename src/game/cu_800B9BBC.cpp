@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801F40F4.h"
@@ -18,10 +18,10 @@ struct Event_800B9F50 {
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
    (392 bytes); only the accessed fields are declared. */
 struct Block_800BA3F0 {
-    Object_800670B4 *mpUnknown0;
-    Object_800670B4 *mpUnknown4;
-    Record_80067338 *mpUnknown8;
-    Record_80067338 *mpUnknownC;
+    PlayBookFormation_t *mpUnknown0;
+    PlayBookFormation_t *mpUnknown4;
+    PlayBookPlay_t *mpUnknown8;
+    PlayBookPlay_t *mpUnknownC;
     int mUnknown10;
     unsigned char mUnknown14;
     unsigned char mUnknown15[3];

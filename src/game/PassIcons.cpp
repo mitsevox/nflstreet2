@@ -45,7 +45,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
             for (i = 0; i < 7 && result; i++) {
                 Object_80039F5C *pOther = fn_80039F5C(1, i);
                 if (pOther != 0) {
-                    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
+                    PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                     void *pResult = fn_80164EC8(pRecord, fn_80178308(), i);
                     if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {

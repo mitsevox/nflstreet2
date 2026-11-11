@@ -48,7 +48,7 @@
 #include "game/Ball.h"
 #include "game/cu_8008E978.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"

@@ -70,10 +70,10 @@ void fn_8015A2B4(Object_8015C244 *);
 void fn_8015A354(Object_8015C244 *);
 int fn_801784C4(void);
 int fn_80178308(void);
-Object_800670B4 *PlayBookGetFormation(int);
+PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
 unsigned char fn_800FC014(Object_80039F5C *, void *);
@@ -203,7 +203,7 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
             unsigned int count = fn_80178D18(fn_80178308());
             for (unsigned char i = 0; i < count; ++i) {
                 Object_80039F5C *pCandidate = fn_80039F5C(fn_80178308(), i);
-                Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
+                PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                 void *pCommands = fn_80164EC8(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
                 if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
                     pOther = pCandidate;
@@ -502,7 +502,7 @@ void fn_8015BCAC(Object_8015C244 *p)
         } else more = 0;
     } while (more);
     fn_8015B834(p, command, hasOther);
-    Record_80067338 *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (fn_801650DC(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
             if (pPlayer->mIdBytes[1] == pRecord->mUnknown1C[i][0]) {

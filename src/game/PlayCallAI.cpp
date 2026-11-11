@@ -23,7 +23,7 @@ void PlayRealignTeam(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_800B0DA4(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
 void fn_800A6F04(int team);
@@ -63,7 +63,7 @@ void PlayCallApplyPlay(int team, int value)
         if (team == fn_80178308())
             fn_800B0DA4();
         for (int t = 0; t < 2; ++t) {
-            Object_800670B4 *pBook = PlayBookGetFormation((unsigned char)t);
+            PlayBookFormation_t *pBook = PlayBookGetFormation((unsigned char)t);
             int count = fn_80178D18((unsigned char)t);
             for (int i = 0; i < count; ++i) {
                 Object_80039F5C *p = fn_80039F5C((unsigned char)t, i);

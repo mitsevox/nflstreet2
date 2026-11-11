@@ -15,7 +15,7 @@ void BallGetPosition(Ball_t *pBall, Vector_80039F5C *pOut);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_80178308(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_800AE9F8(unsigned char (*pEntries)[4]);
 }
 

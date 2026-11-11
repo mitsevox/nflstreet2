@@ -1,5 +1,5 @@
 #include <math.h>
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801C1F94.h"
 #include "game/Object_8016B04C.h"
 #include "game/Object_8017886C.h"
@@ -12,7 +12,7 @@ extern float lbl_802E99B8[3];
 
 int fn_800BA6F8(void);
 int fn_8011F1CC(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 int fn_8022DDB4(int tag, void *data);
@@ -21,7 +21,7 @@ void fn_80169FCC(int team, unsigned char *pOut, unsigned int *pFlags);
 unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
 unsigned char fn_8016B7C4(Point_8017886C *pTo);
-void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags);
+void fn_8016B82C(int team, PlayBookPlay_t *pRecord, unsigned char *pOut, unsigned int *pFlags);
 float fn_8016B8C8(int team, int value);
 float fn_8016B938(void);
 float fn_8016B974(void);
@@ -147,7 +147,7 @@ unsigned char fn_8016B7C4(Point_8017886C *pTo)
     return fn_8016AD80(kind, fn_80177FE0(), pTo, 1) & lbl_803EB40C->mUnknown14;
 }
 
-void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags)
+void fn_8016B82C(int team, PlayBookPlay_t *pRecord, unsigned char *pOut, unsigned int *pFlags)
 {
     *pFlags = pRecord->mUnknown18 & 0x3FE;
     if (PlayBookGetFormation(team)->mUnknown8.mUnknownF != 0) {

@@ -1,14 +1,14 @@
 #include "game/State_800E4494.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
 
 extern "C" {
 Point_8017886C fn_80177FFC(int team);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_80178308(void);
 void fn_800E2550(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle);
 
@@ -18,8 +18,8 @@ void fn_800E3CC0(Object_80039F5C *p)
     Object_80039F5C *pOther = state->mpUnknown36;
     Point_8017886C origin = fn_80177FFC(p->mIdBytes[2]);
     if (pOther->mpState->mId == 7) {
-        Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
-        Entry_8006719C *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
+        PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
+        PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
         Point_8017886C point;
         point.mX = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18.mX : pEntry->mUnknown10.mX;
         point.mY = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18.mY : pEntry->mUnknown10.mY;

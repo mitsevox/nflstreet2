@@ -41,8 +41,8 @@ int fn_8005FC7C(void);
 int fn_800602E8(void);
 int fn_80061CAC(void);
 void MemCardScreenSetFlag(unsigned char a);
-int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
-void fn_80066DC8(unsigned int id, int a);
+int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
+void PlayBookDbClose(unsigned int id, int a);
 void SndgUpdate(int a);
 void SndgApplyVolumeOptions(void);
 void SndgMusicFadeOut(int a, int b);
@@ -343,8 +343,8 @@ int FELoop::Init()
     fn_8018807C(0);
     ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
     PadInputSetDefaultHandler();
-    fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
-    fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
+    PlayBookDbOpen(0x31544250, 2, 4, 0, 0, 1);
+    PlayBookDbOpen(0x31444250, 1, 4, 0, 0, 0);
     _FELoop_bRunning = 1;
     fn_80187C0C();
     if (_FELoop_bResume == 1) {
@@ -406,8 +406,8 @@ int FELoop::Shutdown()
 {
     TeamLogoShutdown();
     fn_801CE910();
-    fn_80066DC8(0x31544250, 0);
-    fn_80066DC8(0x31444250, 0);
+    PlayBookDbClose(0x31544250, 0);
+    PlayBookDbClose(0x31444250, 0);
     fn_8009418C();
     ConSetChannelInfo(-1, 1, 0);
     _FELoop_uIdleFrames = 0;

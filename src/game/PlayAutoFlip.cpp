@@ -5,7 +5,7 @@
 #include "game/fn_802372EC.h"
 
 extern "C" {
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_80169F80(int value);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
 float fn_80178A5C(void);
@@ -14,8 +14,8 @@ int PlayAutoFlip(int team)
 {
     int flipped = 0;
     int chance = 50;
-    Record_80067338 *pRecord = PlayBookGetPlay(team);
-    Object_800670B4 *pObject = PlayBookGetFormation(team);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(team);
     float x;
     unsigned char kind;
     unsigned int flags;

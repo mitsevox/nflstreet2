@@ -1,12 +1,12 @@
-#ifndef GAME_FN_800670B4_H
-#define GAME_FN_800670B4_H
+#ifndef GAME_PLAYBOOKDB_H
+#define GAME_PLAYBOOKDB_H
 
 #include "game/Object_8017886C.h"
 
 struct PlayBookTeam_t;
 
-/* One of the 8-byte slots at Object_8006719C +0x1C, filled by fn_80066318. */
-struct Slot_8006719C {
+/* One of the 8-byte slots at PlayBookSet_t +0x1C, filled by PlayBookDbLoadSetSlots. */
+struct PlayBookSlot_t {
     union {
         char mName[6];
         struct {
@@ -20,8 +20,8 @@ struct Slot_8006719C {
     };
 };
 
-/* One 40-byte entry of the 11 x 7 table at Object_8006719C +0x84. */
-struct Entry_8006719C {
+/* One 40-byte entry of the 11 x 7 table at PlayBookSet_t +0x84. */
+struct PlayBookPosition_t {
     unsigned short mUnknown0;
     union {
         unsigned short mUnknown2;
@@ -44,8 +44,8 @@ struct Entry_8006719C {
     int mUnknown24;
 };
 
-/* Filled by fn_8006719C and fn_8006723C, which clear all 0xCA8 bytes first. */
-struct Object_8006719C {
+/* Filled by PlayBookDbLoadSetByOrder and PlayBookDbLoadSet, which clear all 0xCA8 bytes first. */
+struct PlayBookSet_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -55,21 +55,21 @@ struct Object_8006719C {
     int mUnknown10;
     unsigned int mUnknown14;
     int mUnknown18;
-    Slot_8006719C mUnknown1C[13];
-    Entry_8006719C mUnknown84[11][7];
+    PlayBookSlot_t mUnknown1C[13];
+    PlayBookPosition_t mUnknown84[11][7];
     char mUnknownC8C[0x1C];
 };
 
-/* Filled by fn_800670B4, which clears all 0xCE4 bytes first. */
-struct Object_800670B4 {
+/* Filled by PlayBookDbLoadFormation, which clears all 0xCE4 bytes first. */
+struct PlayBookFormation_t {
     int mUnknown0;
     int mUnknown4;
-    Object_8006719C mUnknown8;
+    PlayBookSet_t mUnknown8;
     char mUnknownCB0[0x34];
 };
 
-/* Filled by fn_80067338, which clears all 0x20C bytes first. */
-struct Record_80067338 {
+/* Filled by PlayBookDbLoadPlay, which clears all 0x20C bytes first. */
+struct PlayBookPlay_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -95,13 +95,13 @@ struct Record_80067338 {
 };
 
 extern "C" {
-unsigned short fn_80067038(int tag, int kind);
-int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
-unsigned short fn_80067120(int tag, int key);
-void fn_8006719C(int tag, int key, int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject);
-void fn_8006723C(int tag, int key, PlayBookTeam_t *pTeam, Object_8006719C *pObject);
-unsigned short fn_800672BC(int tag, int key);
-int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord);
+unsigned short PlayBookDbCountFormations(int tag, int kind);
+int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject);
+unsigned short PlayBookDbCountSets(int tag, int key);
+void PlayBookDbLoadSetByOrder(int tag, int key, int index, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject);
+void PlayBookDbLoadSet(int tag, int key, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject);
+unsigned short PlayBookDbCountPlays(int tag, int key);
+int PlayBookDbLoadPlay(int tag, int key, int index, PlayBookPlay_t *pRecord);
 }
 
 #endif

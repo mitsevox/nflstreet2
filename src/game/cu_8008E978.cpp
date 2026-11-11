@@ -73,7 +73,7 @@
 #include "game/DefPred.h"
 #include "game/Class_80297AB8.h"
 #include "game/fn_8007F828.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
 #include "game/Record_8011F4F8.h"
@@ -6051,7 +6051,7 @@ extern "C" Object_80039F5C *fn_800A624C(int team)
     unsigned char i;
 
     if (team == fn_80178308()) {
-        Record_80067338 *pRecord = PlayBookGetPlay(team);
+        PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
 
         for (i = 0; i < count; i++) {
             p = fn_80039F5C(team, i);
@@ -7225,8 +7225,8 @@ void fn_800B3470(void);
 void PlayArtResetAll(void);
 void PlayBookSetLoadFlags(int mode);
 void PlayBookClearLoadFlags(int mode);
-void fn_80165110(Record_80067338 *pRecord, int a);
-Object_800670B4 *PlayBookGetFormation(int team);
+void fn_80165110(PlayBookPlay_t *pRecord, int a);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_800B4250(int enable, int own);
 
 extern void *gUISMainInfo;
@@ -7935,7 +7935,7 @@ void Class_80297B50::vfn_03()
             lbl_803EAB34->mUnknown8 |= 4;
         }
         PlayBookLoadCurrentPlay(team);
-        Record_80067338 *pRecord = PlayBookGetPlay(team);
+        PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
         PlayBookGetFormation(team);
         lbl_803EAB34->mUnknown20 = pRecord->mUnknown4;
         lbl_803EAB34->mUnknown34[0] = PlayBookGetFormationIndex(team);
@@ -8120,7 +8120,7 @@ extern "C" void fn_800B3EFC(int team)
     int i = 0;
 
     SndgNullHook();
-    Object_800670B4 *pTeam = PlayBookGetFormation(team);
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(team);
     int count = fn_80178D18(team);
     for (; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
@@ -8514,10 +8514,10 @@ struct Event_800B9F50 {
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
    (392 bytes); only the accessed fields are declared. */
 struct Block_800BA3F0 {
-    Object_800670B4 *mpUnknown0;
-    Object_800670B4 *mpUnknown4;
-    Record_80067338 *mpUnknown8;
-    Record_80067338 *mpUnknownC;
+    PlayBookFormation_t *mpUnknown0;
+    PlayBookFormation_t *mpUnknown4;
+    PlayBookPlay_t *mpUnknown8;
+    PlayBookPlay_t *mpUnknownC;
     int mUnknown10;
     unsigned char mUnknown14;
     unsigned char mUnknown15[3];
@@ -8561,7 +8561,7 @@ void fn_800BAA30(int value);
 int fn_800BAAB8(void);
 int SndgChannelIsStreamBusy(int idx);
 GameCamera_t *CamGameGetCamera(int index);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_80177F88(int value);
 void fn_801780A8(Point_8017886C pos);
 int fn_80178308(void);
@@ -11745,8 +11745,8 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void Orient3Lerp(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
 void fn_801C4958(unsigned char enable);
 unsigned int ResGetSize(void *pRes, unsigned int index);
-Object_800670B4 *PlayBookGetFormation(int team);
-int fn_80164E30(Record_80067338 *pRecord, Object_800670B4 *pObject, Object_80039F5C *p, int value);
+PlayBookFormation_t *PlayBookGetFormation(int team);
+int fn_80164E30(PlayBookPlay_t *pRecord, PlayBookFormation_t *pObject, Object_80039F5C *p, int value);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_800AF198(void *pItem, void *pContext, void *pResult);
 void fn_800AF264(int key);
@@ -11760,7 +11760,7 @@ int fn_800B0558(Object_80039F5C *p, Point_8017886C *pPoint);
 void fn_800B0DA4(void);
 void fn_800B0EB8(void);
 void fn_800B0F28(void);
-void PlaySetSwapRow(Object_800670B4 *pObject, int row, int index);
+void PlaySetSwapRow(PlayBookFormation_t *pObject, int row, int index);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 
 extern void *lbl_803EAB00;
@@ -12108,8 +12108,8 @@ extern "C" int fn_800AFF20(int group, int index, int ref)
 extern "C" int fn_800AFF88(Object_80039F5C *p)
 {
     unsigned int i = 0;
-    Record_80067338 *pRecord = PlayBookGetPlay(p->mIdBytes[2]);
-    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(p->mIdBytes[2]);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     for (; i <= 3; i++) {
         if (fn_80164E30(pRecord, pObject, p, lbl_803EAB10[i]) == 1) {
@@ -12167,7 +12167,7 @@ extern "C" void fn_800B03A4(int direction)
 {
     int ref;
     int team;
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
     unsigned int count;
     Object_80039F5C *p;
     Entry_800B0CFC *pEntry;
@@ -12276,7 +12276,7 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
 {
     int found = 0;
     int alternate = 0;
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
     Entry_800B0CFC *pEntry;
     unsigned int slot;
     int ref;
@@ -12323,7 +12323,7 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
         for (i = 0; i < pEntry->mUnknown46; i++) {
             p = fn_8009BCE8(&pEntry->mUnknown28[i]);
             if (fn_800AFF88(p)) {
-                Entry_8006719C *pZone;
+                PlayBookPosition_t *pZone;
                 unsigned char row;
                 Point_8017886C *pPoint;
 
@@ -12427,7 +12427,7 @@ extern "C" void fn_800B0DA0(void)
 
 extern "C" void fn_800B0DA4(void)
 {
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
 
     fn_801C1F94(lbl_803EAB14, 0, sizeof(Block_800B0CFC));
     fn_8009BD2C(0, &lbl_803EAB14->mUnknown2D0);
@@ -12442,7 +12442,7 @@ extern "C" void fn_800B0DA4(void)
 
 extern "C" void fn_800B0E18(void)
 {
-    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
+    PlayBookFormation_t *pObject = PlayBookGetFormation(fn_80178308());
 
     fn_800B0BC0();
     fn_800B0A28();
@@ -12491,8 +12491,8 @@ extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
     unsigned char total = 0;
-    Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
-    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
     unsigned int count = fn_80178D18(fn_80178308());
     unsigned int roll = fn_802372EC(0, 100);
 
@@ -12518,7 +12518,7 @@ extern "C" void fn_800B0FA4(void)
                     kind = 0;
                     break;
                 }
-                Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
+                PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
                 Point_8017886C pos = pEntry->mUnknown10;
                 Point_8017886C mirror = pEntry->mUnknown18;
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
@@ -12545,7 +12545,7 @@ extern "C" void fn_800B0FA4(void)
 
 extern "C" int fn_800B119C(void)
 {
-    Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
     unsigned char total = 0;
     unsigned char i;
 
@@ -12786,7 +12786,7 @@ State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 void fn_800C1C34(void);
 void fn_800FBAA8(void);
@@ -13072,7 +13072,7 @@ extern "C" void fn_8009DA90(void)
 extern "C" void fn_8009DB54(int flag)
 {
     unsigned char team;
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
 
     fn_8011F4EC();
     team = fn_80178320();
@@ -13116,8 +13116,8 @@ extern "C" void fn_8009DEFC(int flag)
 {
     State_8011F4EC *p = fn_8011F4EC();
     int team;
-    Object_800670B4 *pObject;
-    Object_800670B4 *pOther;
+    PlayBookFormation_t *pObject;
+    PlayBookFormation_t *pOther;
 
     fn_8009DA90();
     team = fn_80178320();
@@ -13505,7 +13505,7 @@ extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 extern "C" int fn_8009FE24(Object_80039F5C *p)
 {
     int result = 0;
-    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (p->mIdBytes[2] == fn_80178320()) {
         Message_800F01CC *pRecord = fn_800AEE20(p);
@@ -14748,7 +14748,7 @@ void fn_800F1800(int index);
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801486A0(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int GameModeTypeIsSpecial(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -14756,7 +14756,7 @@ int ConGetChannelInfo(int a, int b);
 unsigned int fn_801E1954(void);
 int fn_801E195C(int a);
 void fn_800B5150(Object_80039F5C *p);
-short fn_800B51D8(Object_800670B4 *p, int index, int mode);
+short fn_800B51D8(PlayBookFormation_t *p, int index, int mode);
 void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA, int *pB);
 int fn_800B5FEC(Object_80039F5C *p);
 void fn_800B64C4(void);
@@ -14805,7 +14805,7 @@ extern "C" int fn_800B51D0(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" short fn_800B51D8(Object_800670B4 *p, int index, int mode)
+extern "C" short fn_800B51D8(PlayBookFormation_t *p, int index, int mode)
 {
     if (mode == 0) {
         index = PlaySetGetNextOrder(p, index);
@@ -15115,7 +15115,7 @@ extern "C" void fn_800B67FC(Object_80039F5C *p, Object_80039F5C *pOther)
 
 extern "C" void fn_800B6868(int team, int index, int slot, int mode)
 {
-    Object_800670B4 *pTeam;
+    PlayBookFormation_t *pTeam;
     Object_80039F5C *p;
     Object_80039F5C *pOther;
     short tries;
@@ -16035,7 +16035,7 @@ Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 void PlayBookSelectAudible(int team, unsigned int index);
 void PlayRealignTeam(int team);
 void fn_8011F3A8(void);
-void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800A7514(int team);
 void fn_8009FFD4(void);
 int ConSetChannelInfo(int a, int b, void *p);
@@ -16162,7 +16162,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         fn_8009FFD4();
         AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
-            Object_800670B4 *pTeam = PlayBookGetFormation(t);
+            PlayBookFormation_t *pTeam = PlayBookGetFormation(t);
             unsigned int count = fn_80178D18(t);
             unsigned char i;
 

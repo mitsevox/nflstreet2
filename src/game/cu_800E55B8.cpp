@@ -2,7 +2,7 @@
 #include "game/State_803EB098.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_802372EC.h"
@@ -31,7 +31,7 @@ Object_80039F5C *fn_800FB844(Object_80039F5C *p);
 void fn_800FB824(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E1778(Object_80039F5C *p);
 int fn_800B146C(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 float fn_80237260(int stream);
 extern float gFrameTimeScale;
 int fn_80178320(void);
@@ -65,7 +65,7 @@ void fn_800E55B8(Object_80039F5C *p)
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
-    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     Message_800F01CC *pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
         if (pTeam->mUnknown8.mUnknownF == 0) {

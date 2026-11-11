@@ -14,11 +14,11 @@ extern "C" {
 int fn_80178308(void);
 int fn_80178320(void);
 
-int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames);
+int PlaySetFindRow(PlayBookFormation_t *pObject, int index, const char **ppNames);
 
 /* Returns a pointer to entry index of row 0, first swapping into row 0 the
    entry of the row that ppNames selects. */
-Entry_8006719C *PlaySetGetEntry(Object_800670B4 *pObject, unsigned int index, const char **ppNames)
+PlayBookPosition_t *PlaySetGetEntry(PlayBookFormation_t *pObject, unsigned int index, const char **ppNames)
 {
     if (index > 6) {
         index = 0;
@@ -27,7 +27,7 @@ Entry_8006719C *PlaySetGetEntry(Object_800670B4 *pObject, unsigned int index, co
         int row = PlaySetFindRow(pObject, index, ppNames);
 
         if (row != -1 && row != 0) {
-            Entry_8006719C entry = pObject->mUnknown8.mUnknown84[row][index];
+            PlayBookPosition_t entry = pObject->mUnknown8.mUnknown84[row][index];
 
             pObject->mUnknown8.mUnknown84[row][index] = pObject->mUnknown8.mUnknown84[0][index];
             pObject->mUnknown8.mUnknown84[0][index] = entry;
@@ -36,9 +36,9 @@ Entry_8006719C *PlaySetGetEntry(Object_800670B4 *pObject, unsigned int index, co
     return &pObject->mUnknown8.mUnknown84[0][index];
 }
 
-void PlaySetSwapRow(Object_800670B4 *pObject, int row, int index)
+void PlaySetSwapRow(PlayBookFormation_t *pObject, int row, int index)
 {
-    Entry_8006719C entry = pObject->mUnknown8.mUnknown84[row][index];
+    PlayBookPosition_t entry = pObject->mUnknown8.mUnknown84[row][index];
 
     pObject->mUnknown8.mUnknown84[row][index] = pObject->mUnknown8.mUnknown84[0][index];
     pObject->mUnknown8.mUnknown84[0][index] = entry;
@@ -47,7 +47,7 @@ void PlaySetSwapRow(Object_800670B4 *pObject, int row, int index)
 /* Looks the names of the null-terminated list ppNames up in the name table
    and returns the first row whose entry index carries the id of a name found
    there, or -1. */
-int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames)
+int PlaySetFindRow(PlayBookFormation_t *pObject, int index, const char **ppNames)
 {
     int row = 0;
     int i = 0;
@@ -77,12 +77,12 @@ int PlaySetFindRow(Object_800670B4 *pObject, int index, const char **ppNames)
 
 /* Returns the index of the entry whose mUnknown8 follows that of entry
    index, wrapping to 1 after the team's player count. */
-int PlaySetGetNextOrder(Object_800670B4 *pObject, unsigned char index)
+int PlaySetGetNextOrder(PlayBookFormation_t *pObject, unsigned char index)
 {
     unsigned int count;
     unsigned char next;
     unsigned char i;
-    Entry_8006719C *pEntry;
+    PlayBookPosition_t *pEntry;
 
     if (pObject->mUnknown4) {
         count = fn_80178D70(fn_80178308());
@@ -104,12 +104,12 @@ int PlaySetGetNextOrder(Object_800670B4 *pObject, unsigned char index)
 }
 
 /* As PlaySetGetNextOrder, stepping back and wrapping to the player count. */
-int PlaySetGetPrevOrder(Object_800670B4 *pObject, unsigned char index)
+int PlaySetGetPrevOrder(PlayBookFormation_t *pObject, unsigned char index)
 {
     unsigned int count;
     unsigned char previous;
     unsigned char i;
-    Entry_8006719C *pEntry;
+    PlayBookPosition_t *pEntry;
 
     if (pObject->mUnknown4) {
         count = fn_80178D70(fn_80178308());
@@ -131,13 +131,13 @@ int PlaySetGetPrevOrder(Object_800670B4 *pObject, unsigned char index)
     return i;
 }
 
-void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB)
+void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, unsigned char *pA, unsigned char *pB)
 {
     *pA = pObject->mUnknown8.mUnknown84[0][index].mUnknown0;
     *pB = pObject->mUnknown8.mUnknown84[0][index].mUnknown3;
 }
 
-Object_80039F5C *PlaySetGetKeyPlayer(Object_800670B4 *pObject)
+Object_80039F5C *PlaySetGetKeyPlayer(PlayBookFormation_t *pObject)
 {
     if (PlayBookGetPlay(fn_80178308())->mUnknown18 & 0x20000) {
         return fn_80039F5C(fn_80178308(), 1);

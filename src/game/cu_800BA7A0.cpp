@@ -1,5 +1,5 @@
 #include "game/Object_8017886C.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/cu_8002B8F8.h"
@@ -16,10 +16,10 @@ struct Event_800B9F50 {
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
    (392 bytes); only the accessed fields are declared. */
 struct Block_800BA3F0 {
-    Object_800670B4 *mpUnknown0;
-    Object_800670B4 *mpUnknown4;
-    Record_80067338 *mpUnknown8;
-    Record_80067338 *mpUnknownC;
+    PlayBookFormation_t *mpUnknown0;
+    PlayBookFormation_t *mpUnknown4;
+    PlayBookPlay_t *mpUnknown8;
+    PlayBookPlay_t *mpUnknownC;
     int mUnknown10;
     unsigned char mUnknown14;
     unsigned char mUnknown15[3];
@@ -60,8 +60,8 @@ void fn_8013AD9C(Ball_t *pBall, int a);
 void CamGameSelectCamera(int a);
 void CamGameSetFocusAll(int a, int b);
 void CamGameSetModeAll(int a);
-void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
-Object_800670B4 *PlayBookGetFormation(int team);
+void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void PlayBookRestoreSelection(int team);
 void DriveLogEndDrive(void);
 void ScoringLogReset(void);
@@ -134,7 +134,7 @@ extern "C" void fn_800BAAE4(void)
     PlayBookRestoreSelection(0);
     PlayBookRestoreSelection(1);
     for (int team = 0; team <= 1; team++) {
-        Object_800670B4 *pTeam = PlayBookGetFormation((unsigned char)team);
+        PlayBookFormation_t *pTeam = PlayBookGetFormation((unsigned char)team);
         int count = fn_80178D18((unsigned char)team);
 
         for (int i = 0; i < count; i++) {

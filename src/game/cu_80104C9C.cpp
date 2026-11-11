@@ -23,7 +23,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -124,7 +124,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 extern float gFrameTimeScale;
@@ -664,7 +664,7 @@ extern "C" int fn_80105AF4(Object_80039F5C *p) {
 }
 
 extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
     unsigned int count;
     unsigned char i;
 

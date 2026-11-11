@@ -43,7 +43,7 @@ void PauseUpdate(void);
 void PauseRequestClose(void);
 int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
-void fn_80066D5C(void);
+void PlayBookDbResetState(void);
 void SndgUpdate(int a);
 void SndgMusicFlushSongText(void);
 void SndgMusicUpdate(void);
@@ -265,7 +265,7 @@ int InGame::Init()
     fn_80099568(1);
     CamSetupAspect();
     MemCardUtilInit();
-    fn_80066D5C();
+    PlayBookDbResetState();
     fn_800A216C(1);
     fn_800AE8B4();
     VptManagerMarketCamInit();

@@ -141,7 +141,7 @@ void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 void fn_8016F7F8(void);
 int fn_8016FAD8(float *pOut);
 void ClockRuleInit(void);

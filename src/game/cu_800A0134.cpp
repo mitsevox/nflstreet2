@@ -5,7 +5,7 @@
 #include "game/Class_80148A58.h"
 #include "game/Step_800C4460.h"
 #include "game/Record_800B15FC.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
@@ -158,7 +158,7 @@ int fn_80178360(void);
 int fn_8011F354(void);
 int fn_8011F524(void);
 float fn_8011F4D4(void);
-Record_80067338 *PlayBookGetSavedPlay(int);
+PlayBookPlay_t *PlayBookGetSavedPlay(int);
 void fn_8016B144(int,int);
 void fn_8016B210(int,int);
 void fn_8016B22C(int,signed char);

@@ -220,7 +220,7 @@ void fn_800A5E68(Object_80039F5C *p);
 void fn_8003962C(Object_80039F5C *p, int flag);
 void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
 void *fn_8015C170(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, unsigned char flag);
 void fn_8015C218(void *p);
@@ -965,8 +965,8 @@ extern "C" void fn_8003A1EC(int on, int team, int index)
 
     if (on != 0) {
         if (pBlock->mpUnknown984 == 0) {
-            Object_800670B4 *pPlay = PlayBookGetFormation((unsigned char)team);
-            Entry_8006719C *pEntry = (Entry_8006719C *)PlaySetGetEntry(pPlay, (unsigned char)index, 0);
+            PlayBookFormation_t *pPlay = PlayBookGetFormation((unsigned char)team);
+            PlayBookPosition_t *pEntry = (PlayBookPosition_t *)PlaySetGetEntry(pPlay, (unsigned char)index, 0);
             Point_8017886C offset;
             Point_8017886C pos;
             unsigned char flip;

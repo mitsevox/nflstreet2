@@ -8,14 +8,14 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayAlign.h"
 
 extern "C" {
-void PlayAlignTeamBegin(Object_800670B4 *pObject, int team);
+void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team);
 void PlayAlignResetSetNames(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_8016DF34(Object_80039F5C *p);
 void fn_800E55B8(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -39,7 +39,7 @@ static const char *_PlayAlign_apSetNames[4];
 extern "C" const char *gPlayAlignNormSet[] = { "Norm", 0 };
 
 extern "C" {
-void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
+void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
 {
     Message_800F01CC msg;
     Point_8017886C delta;
@@ -82,11 +82,11 @@ void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
     }
 }
 
-void PlayAlignTeamBegin(Object_800670B4 *pObject, int team)
+void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team)
 {
 }
 
-void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
+void PlayAlignTeam(PlayBookFormation_t *pObject, int team, const char **ppNames)
 {
     unsigned char i;
     unsigned int count;
@@ -99,7 +99,7 @@ void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
     fn_8003977C(team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, ppNames);
+        PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, ppNames);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
@@ -127,13 +127,13 @@ void PlayRealignTeam(int team)
     unsigned char i;
     unsigned int count;
     int home = fn_80178320();
-    Object_800670B4 *pObject = PlayBookGetFormation(team);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
     PlayAlignTeamBegin(pObject, team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
         int update = 1;
-        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
+        PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         if (team != home) {

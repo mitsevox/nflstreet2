@@ -251,7 +251,7 @@ void fn_800AE7F0(int a, int b, Object_80039F5C *p);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_80177C38(void);
 int fn_80177F70(void);
 int fn_80177F7C(void);

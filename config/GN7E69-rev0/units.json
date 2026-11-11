@@ -181,6 +181,66 @@
     }
   },
   "externals": {
+    "PlayBookDbLoadSetHeader": {
+      "address": "0x800659AC",
+      "evidence": "evidence.tsv function and name rows for 0x800659AC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetRecord": {
+      "address": "0x80065B50",
+      "evidence": "evidence.tsv function and name rows for 0x80065B50 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetPositions": {
+      "address": "0x80065CAC",
+      "evidence": "evidence.tsv function and name rows for 0x80065CAC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetSlots": {
+      "address": "0x80066318",
+      "evidence": "evidence.tsv function and name rows for 0x80066318 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHeader": {
+      "address": "0x80066560",
+      "evidence": "evidence.tsv function and name rows for 0x80066560 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayRecord": {
+      "address": "0x80066704",
+      "evidence": "evidence.tsv function and name rows for 0x80066704 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayDetails": {
+      "address": "0x80066844",
+      "evidence": "evidence.tsv function and name rows for 0x80066844 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayScripts": {
+      "address": "0x80066DE8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DE8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPositionSteps": {
+      "address": "0x80066000",
+      "evidence": "evidence.tsv function and name rows for 0x80066000 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHole": {
+      "address": "0x800668E4",
+      "evidence": "evidence.tsv function and name rows for 0x800668E4 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayReceivers": {
+      "address": "0x80066A0C",
+      "evidence": "evidence.tsv function and name rows for 0x80066A0C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayCommands": {
+      "address": "0x80066B6C",
+      "evidence": "evidence.tsv function and name rows for 0x80066B6C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbResetState": {
+      "address": "0x80066D5C",
+      "evidence": "evidence.tsv function and name rows for 0x80066D5C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbOpen": {
+      "address": "0x80066D74",
+      "evidence": "evidence.tsv function and name rows for 0x80066D74 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbClose": {
+      "address": "0x80066DC8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DC8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -8398,6 +8458,58 @@
           "placement": ".sbss",
           "start": "0x803ECB38",
           "end": "0x803ECB3C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayBookDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/PlayBookDb.cpp): the 17 functions 0x80067038-0x80067C10 and .rodata 0x8028FFD0-0x802904C8 are linked from source; the first 15 functions, the position and byte tables and the .sdata words stay comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PlayBookDbCountFormations",
+          "PlayBookDbLoadFormation",
+          "PlayBookDbCountSets",
+          "PlayBookDbLoadSetByOrder",
+          "PlayBookDbLoadSet",
+          "PlayBookDbCountPlays",
+          "PlayBookDbLoadPlay",
+          "PlayBookDbGetPlayOrder",
+          "PlayBookDbGetSetOrder",
+          "PlayBookDbGetFormationOrder",
+          "PlayBookDbGetPlayPath",
+          "PlayBookDbSetAudiblePlay",
+          "_PlayBookDbComparePickWeight",
+          "_PlayBookDbSwapPicks",
+          "PlayBookDbPickAIPlay",
+          "PlayBookDbPickAIPlayPath",
+          "PlayBookDbHasAIPlay"
+        ],
+        "discarded": [
+          "CountRows",
+          "SelectColumnByKey",
+          "UpdateColumnByKey",
+          "SelectUABPRecord",
+          "CountUABPRows",
+          "SelectLTESAndTSBPByOrder",
+          "SelectTSBPPoints",
+          "LoadTSBPObject",
+          "SelectLTESName"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028F778-0x802904C8: the target keeps every listed function; the nine listed file functions have no code in the target while their strings and constants remain in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067038",
+          "end": "0x80067C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028FFD0",
+          "end": "0x802904C8"
         }
       ]
     },

@@ -24,7 +24,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -658,7 +658,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
@@ -669,7 +669,7 @@ int fn_800DC080(Object_80039F5C *p);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -1466,8 +1466,8 @@ extern "C" void fn_800F9440(Object_80039F5C *p, Object_80039F5C *pOther) {
 
 extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
     Point_8017886C base;
-    Object_800670B4 *pTeam;
-    Entry_8006719C *pEntry;
+    PlayBookFormation_t *pTeam;
+    PlayBookPosition_t *pEntry;
     Point_8017886C point;
 
     base = fn_80177FFC(p->mIdBytes[2]);
@@ -1671,8 +1671,8 @@ extern "C" void fn_800FAECC(void) {
     Record_8011F4E0 *pRecord;
     int forward;
     int team;
-    Record_80067338 *pInfoTeam;
-    Object_800670B4 *pTeam;
+    PlayBookPlay_t *pInfoTeam;
+    PlayBookFormation_t *pTeam;
     unsigned char count;
     unsigned int n;
 
@@ -1929,7 +1929,7 @@ extern "C" void fn_800FBB70(void) {
         *pp = fn_80039F5C(fn_80178308(), i);
         state = (*pp)->mUnknown2914;
         if (fn_8011F1CC() && mode != 2) {
-            Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
             void *pInfo = fn_800AEE20(*pp);
 
             if (!pInfo) {
@@ -2303,8 +2303,8 @@ extern "C" int fn_800FC7A0(Object_80039F5C *p, Block_800FCC24 *pBlock) {
 extern "C" int fn_800FCA78(Object_80039F5C *p) {
     Block_800FCC24 *pBlock = (Block_800FCC24 *)&p->mUnknown336;
     Point_8017886C ball;
-    Object_800670B4 *pTeam;
-    Entry_8006719C *pEntry;
+    PlayBookFormation_t *pTeam;
+    PlayBookPosition_t *pEntry;
     Point_8017886C *pOffset;
     Point_8017886C target;
 
@@ -2618,8 +2618,8 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
 
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
-    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
-    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
 
     return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
 }
@@ -4969,10 +4969,10 @@ extern State_803EB098 *lbl_803EB098;
 extern Lookup_8012078C *lbl_803EB09C;
 extern float lbl_802DB004[];
 
-int fn_80165098(Record_80067338 *pRecord);
-int fn_801650BC(Record_80067338 *pRecord);
-int fn_801650DC(Record_80067338 *pRecord);
-int fn_801650FC(Record_80067338 *pRecord);
+int fn_80165098(PlayBookPlay_t *pRecord);
+int fn_801650BC(PlayBookPlay_t *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
+int fn_801650FC(PlayBookPlay_t *pRecord);
 void fn_800A5A88(void *p);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), int b, int c);

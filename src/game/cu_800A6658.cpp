@@ -6,7 +6,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80238174.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
 #include "game/AudmonEvent.h"
@@ -62,8 +62,8 @@ void fn_800AEEDC(int team);
 void fn_8011F3A8(void);
 void PlyrRouteShowTeam(int a, int team);
 void fn_8009FFD4(void);
-Object_800670B4 *PlayBookGetFormation(int team);
-void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+PlayBookFormation_t *PlayBookGetFormation(int team);
+void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 
@@ -439,7 +439,7 @@ extern "C" void fn_800A7514(int team)
                 PlyrRouteShowTeam(0, fn_80178308());
                 fn_8009FFD4();
                 for (side = 0; side <= 1; side++) {
-                    Object_800670B4 *pRoster = PlayBookGetFormation(side);
+                    PlayBookFormation_t *pRoster = PlayBookGetFormation(side);
                     unsigned int count = fn_80178D18(side);
                     unsigned char i;
 

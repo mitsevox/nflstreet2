@@ -8,7 +8,7 @@
 #include "game/Class_80148A58.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -28,12 +28,12 @@ struct PlayBook_t {
 
 
 extern "C" {
-int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
-void fn_80066DC8(unsigned int id, int a);
-void fn_800674E0(int tag, int a, int *pResult);
-void fn_800675B4(int tag, int a, int b);
-void fn_80067A4C(int team, int tag, int kind, int *pResult);
-int fn_80067A8C(int tag, int a, int b);
+int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
+void PlayBookDbClose(unsigned int id, int a);
+void PlayBookDbGetPlayPath(int tag, int a, int *pResult);
+void PlayBookDbSetAudiblePlay(int tag, int a, int b);
+void PlayBookDbPickAIPlayPath(int team, int tag, int kind, int *pResult);
+int PlayBookDbHasAIPlay(int tag, int a, int b);
 void AudibleDbOpen(DbCursor *pCursor);
 void AudibleDbClose(DbCursor *pCursor);
 int AudibleDbSeekFormation(DbCursor *pCursor, int key);
@@ -44,8 +44,8 @@ int fn_800BA6F8(void);
 QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
 void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
-int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
-int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
+int fn_80164ED8(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
+int fn_80165000(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void PlayArtSetFlip(signed char team, int a, int b);
 void PlayBookOffsetSpots(Vec2_t *pPoints, int count);
 int PlayAutoFlip(int team);
@@ -69,8 +69,8 @@ extern "C" {
 void PlayBookPostInit(void);
 int PlayBookCompareData(void *p, void *q);
 void PlayBookSetupTeam(int team, int kind);
-void PlayBookReadFormation(int tag, int team, unsigned char kind, unsigned int index, Object_800670B4 *pObject);
-void PlayBookReadSet(int tag, int handle, unsigned int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject);
+void PlayBookReadFormation(int tag, int team, unsigned char kind, unsigned int index, PlayBookFormation_t *pObject);
+void PlayBookReadSet(int tag, int handle, unsigned int index, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject);
 void PlayBookSelectFormation(int team, unsigned int a, unsigned int b, int c);
 void PlayBookLoadFormation(int team);
 void PlayBookLoadSet(int team, int flag);
@@ -86,8 +86,8 @@ void PlayBookOpenAndRegister(int a, int b, int c, int d, int e, int f, int g, in
 void PlayBookReopen(int a, int b, int c, int d, int e, int f, int g);
 void PlayBookCloseDatabases(int a);
 void PlayBookSetFormationType(int team, int kind);
-Object_800670B4 *PlayBookGetFormation(int team);
-Record_80067338 *PlayBookGetSavedPlay(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
+PlayBookPlay_t *PlayBookGetSavedPlay(int team);
 void PlayBookSetIndices(unsigned char team, unsigned char a, unsigned char b, unsigned char c);
 void PlayBookPickPage(int team, int a, int b, int c);
 unsigned int PlayBookGetSetIndex(int team);
@@ -97,7 +97,7 @@ unsigned int PlayBookGetLoadFlags(void);
 void PlayBookSetLoadFlags(unsigned int flags);
 void PlayBookClearLoadFlags(unsigned int flags);
 void PlayBookSelectAudible(int team, unsigned int index);
-Record_80067338 *PlayBookGetAudiblePlay(int team, int index);
+PlayBookPlay_t *PlayBookGetAudiblePlay(int team, int index);
 void PlayBookSaveSelection(int team);
 void PlayBookRestoreSelection(int team);
 void GetPlayerPosition(unsigned char team, int index, float *pX, float *pY);
@@ -145,14 +145,14 @@ void PlayBookSetupTeam(int team, int kind)
     PlayBookLoadCurrentPlay(index);
 }
 
-void PlayBookReadFormation(int tag, int team, unsigned char kind, unsigned int index, Object_800670B4 *pObject)
+void PlayBookReadFormation(int tag, int team, unsigned char kind, unsigned int index, PlayBookFormation_t *pObject)
 {
-    fn_800670B4(tag, kind, index, pObject);
+    PlayBookDbLoadFormation(tag, kind, index, pObject);
 }
 
-void PlayBookReadSet(int tag, int handle, unsigned int index, PlayBookTeam_t *pTeam, Object_8006719C *pObject)
+void PlayBookReadSet(int tag, int handle, unsigned int index, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject)
 {
-    fn_8006719C(tag, handle, index, pTeam, pObject);
+    PlayBookDbLoadSetByOrder(tag, handle, index, pTeam, pObject);
 }
 
 void PlayBookSelectFormation(int team, unsigned int a, unsigned int b, int c)
@@ -170,12 +170,12 @@ void PlayBookLoadFormation(int team)
     int tag = _PlayBook_pData->mUnknown4[team].mUnknown8;
     PlayBookTeam_t *pTeam = &_PlayBook_pData->mUnknown4[team];
     unsigned int index = pTeam->mUnknown20.mUnknown0;
-    Object_800670B4 *pObject = &pTeam->mUnknown20.mUnknown14;
+    PlayBookFormation_t *pObject = &pTeam->mUnknown20.mUnknown14;
     unsigned int flags = PlayBookGetLoadFlags();
 
     PlayBookSetLoadFlags(3);
     PlayBookReadFormation(tag, team, _PlayBook_pData->mUnknown4[team].mUnknownC, index, pObject);
-    pTeam->mUnknown14 = fn_80067120(tag, pTeam->mUnknown20.mUnknown14.mUnknown0);
+    pTeam->mUnknown14 = PlayBookDbCountSets(tag, pTeam->mUnknown20.mUnknown14.mUnknown0);
     PlayBookClearLoadFlags(3);
     PlayBookSetLoadFlags(flags);
 }
@@ -184,7 +184,7 @@ void PlayBookLoadSet(int team, int flag)
 {
     int tag = _PlayBook_pData->mUnknown4[team].mUnknown8;
     PlayBookTeam_t *pTeam = &_PlayBook_pData->mUnknown4[team];
-    Object_8006719C *pObject = &pTeam->mUnknown20.mUnknown14.mUnknown8;
+    PlayBookSet_t *pObject = &pTeam->mUnknown20.mUnknown14.mUnknown8;
     unsigned int index = pTeam->mUnknown20.mUnknown4;
     unsigned int flags = PlayBookGetLoadFlags();
 
@@ -196,7 +196,7 @@ void PlayBookLoadSet(int team, int flag)
     PlayBookClearLoadFlags(15);
     PlayBookSetLoadFlags(flags);
     PlayBookOffsetSpots(pTeam->mUnknown693C, 7);
-    pTeam->mUnknown18 = fn_800672BC(tag, pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown0);
+    pTeam->mUnknown18 = PlayBookDbCountPlays(tag, pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown0);
 }
 
 void PlayBookReloadSet(int team)
@@ -207,7 +207,7 @@ void PlayBookReloadSet(int team)
     PlayBookReadSet(tag, pTeam->mUnknown20.mUnknown14.mUnknown0, pTeam->mUnknown20.mUnknown4, pTeam,
                 &pTeam->mUnknown20.mUnknown14.mUnknown8);
     PlayBookOffsetSpots(pTeam->mUnknown693C, 7);
-    pTeam->mUnknown18 = fn_800672BC(tag, pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown0);
+    pTeam->mUnknown18 = PlayBookDbCountPlays(tag, pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown0);
 }
 
 void PlayBookClearAudibles(int team, int a, int flag)
@@ -237,8 +237,8 @@ void PlayBookOpenDatabases(int a, int b, int c, int d, int e, int f)
             first = fn_80148A58()->mUnknown0;
             second = fn_80148A58()->mUnknown4;
         }
-        fn_80066D74(0x31544250, first, 4, 0, 0, 1);
-        fn_80066D74(0x31444250, second, 4, 0, 0, 1);
+        PlayBookDbOpen(0x31544250, first, 4, 0, 0, 1);
+        PlayBookDbOpen(0x31444250, second, 4, 0, 0, 1);
     } else {
         _PlayBook_pData->mUnknown4[0].mUnknown4 = _PlayBook_pData->mUnknown4[0].mUnknown0 = -1;
     }
@@ -260,9 +260,9 @@ void PlayBookLoadCurrentPlay(int team)
     int tag;
     PlayBookTeam_t *pTeam;
     PlayBookSel_t *pState;
-    Object_800670B4 *pObject;
-    Object_8006719C *pEntry;
-    Record_80067338 *pRecord;
+    PlayBookFormation_t *pObject;
+    PlayBookSet_t *pEntry;
+    PlayBookPlay_t *pRecord;
 
     PlayBookSetLoadFlags(3);
     tag = _PlayBook_pData->mUnknown4[team].mUnknown8;
@@ -275,7 +275,7 @@ void PlayBookLoadCurrentPlay(int team)
     PlayBookClearLoadFlags(3);
     PlayBookReadSet(tag, pObject->mUnknown0, pState->mUnknown4, &_PlayBook_pData->mUnknown4[team], pEntry);
     PlayBookSetLoadFlags(3);
-    fn_8006723C(tag, fn_80067338(tag, pEntry->mUnknown0, pState->mUnknown8, pRecord), pTeam, pEntry);
+    PlayBookDbLoadSet(tag, PlayBookDbLoadPlay(tag, pEntry->mUnknown0, pState->mUnknown8, pRecord), pTeam, pEntry);
     if ((pObject->mUnknown8.mUnknown14 & 1) && (pRecord->mUnknown18 & 1)) {
         pEntry->mUnknownF = pState->mUnknown10;
     } else {
@@ -328,12 +328,12 @@ void PlayBookLoadAudibles(int team)
         pState->mUnknown0 = 0;
         pState->mUnknown4 = 0;
         pState->mUnknownC = value / 3;
-        fn_800670B4(tag, kind, 0, &pState->mUnknown14);
+        PlayBookDbLoadFormation(tag, kind, 0, &pState->mUnknown14);
         PlayBookClearLoadFlags(3);
         pOwner = PlayBookGetTeam(0);
-        fn_8006719C(tag, pState->mUnknown14.mUnknown0, pState->mUnknown4, pOwner, &pState->mUnknown14.mUnknown8);
+        PlayBookDbLoadSetByOrder(tag, pState->mUnknown14.mUnknown0, pState->mUnknown4, pOwner, &pState->mUnknown14.mUnknown8);
         PlayBookSetLoadFlags(3);
-        fn_8006723C(tag, fn_80067338(tag, pState->mUnknown14.mUnknown8.mUnknown0, pState->mUnknown8, &pState->mUnknownCF8),
+        PlayBookDbLoadSet(tag, PlayBookDbLoadPlay(tag, pState->mUnknown14.mUnknown8.mUnknown0, pState->mUnknown8, &pState->mUnknownCF8),
                     pOwner, &pState->mUnknown14.mUnknown8);
         pState->mUnknown14.mUnknown8.mUnknownF = swap;
         PlayBookClearLoadFlags(3);
@@ -423,11 +423,11 @@ void PlayBookCloseDatabases(int a)
         fn_801F9FA4(0x31444250, 0x53594C50, 0x4C594C50);
     }
     if (_PlayBook_pData->mUnknown4[0].mUnknown4 != -1) {
-        fn_80066DC8(0x31444250, PlaybookSideGetLoaded(1));
+        PlayBookDbClose(0x31444250, PlaybookSideGetLoaded(1));
         _PlayBook_pData->mUnknown4[0].mUnknown4 = -1;
     }
     if (_PlayBook_pData->mUnknown4[0].mUnknown0 != -1) {
-        fn_80066DC8(0x31544250, PlaybookSideGetLoaded(0));
+        PlayBookDbClose(0x31544250, PlaybookSideGetLoaded(0));
         _PlayBook_pData->mUnknown4[0].mUnknown0 = -1;
     }
 }
@@ -447,22 +447,22 @@ void PlayBookSetFormationType(int team, int kind)
     tag = _PlayBook_pData->mUnknown4[team].mUnknown8;
     _PlayBook_pData->mUnknown4[team].mUnknownC = kind;
     _PlayBook_pData->mUnknown4[team].mUnknown20.mUnknown10 = 0;
-    _PlayBook_pData->mUnknown4[team].mUnknown10 = fn_80067038(tag, kind);
+    _PlayBook_pData->mUnknown4[team].mUnknown10 = PlayBookDbCountFormations(tag, kind);
     PlayArtSetFlip(team, 0, -1);
     PlayBookSelectFormation(team, 0, 0, 1);
 }
 
-Object_800670B4 *PlayBookGetFormation(int team)
+PlayBookFormation_t *PlayBookGetFormation(int team)
 {
     return &_PlayBook_pData->mUnknown4[team].mUnknown20.mUnknown14;
 }
 
-Record_80067338 *PlayBookGetPlay(int team)
+PlayBookPlay_t *PlayBookGetPlay(int team)
 {
     return &_PlayBook_pData->mUnknown4[team].mUnknown20.mUnknownCF8;
 }
 
-Record_80067338 *PlayBookGetSavedPlay(int team)
+PlayBookPlay_t *PlayBookGetSavedPlay(int team)
 {
     return &_PlayBook_pData->mUnknown4[team].mUnknown1E28.mUnknownCF8;
 }
@@ -558,7 +558,7 @@ void PlayBookSelectAudible(int team, unsigned int index)
     pTeam->mUnknown20 = *pState;
 }
 
-Record_80067338 *PlayBookGetAudiblePlay(int team, int index)
+PlayBookPlay_t *PlayBookGetAudiblePlay(int team, int index)
 {
     return &_PlayBook_pData->mUnknown4[team].mUnknown2D2C[index].mUnknownCF8;
 }
@@ -610,7 +610,7 @@ void PlayBookSelectPlayById(int team, int a)
 {
     int result[4];
 
-    fn_800674E0(_PlayBook_pData->mUnknown4[team].mUnknown8, a, result);
+    PlayBookDbGetPlayPath(_PlayBook_pData->mUnknown4[team].mUnknown8, a, result);
     PlayBookSetSelection(team, result[3], result[0], result[1], result[2]);
 }
 
@@ -628,14 +628,14 @@ void PlayBookPickPlay(int team, int kind)
             fn_8017916C();
         }
     }
-    fn_80067A4C(team, tag, kind, result);
+    PlayBookDbPickAIPlayPath(team, tag, kind, result);
     _PlayBook_pData->mUnknown4[team].mUnknownC = result[3];
     PlayBookSetSelection(team, result[3], result[0], result[1], result[2]);
 }
 
 int PlayBookIsAiPlay(int team, int a, int b)
 {
-    return fn_80067A8C(_PlayBook_pData->mUnknown4[team].mUnknown8, a, b);
+    return PlayBookDbHasAIPlay(_PlayBook_pData->mUnknown4[team].mUnknown8, a, b);
 }
 
 void PlayBookSetupTeams(void)
@@ -663,7 +663,7 @@ void PlayBookSetAudible(int which, int team, int a, int b, int c)
     } else {
         tag = which ? 0x32544250 : 0x32444250;
     }
-    fn_800675B4(tag, a, b);
+    PlayBookDbSetAudiblePlay(tag, a, b);
 }
 
 void PlayBookToggleFlip(int team)
@@ -687,16 +687,16 @@ unsigned int PlayBookLoadPlayById(int team, int a, int b)
 
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut)
 {
-    Record_80067338 *pRecord = PlayBookGetPlay(team);
-    Object_800670B4 *pObject = PlayBookGetFormation(team);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
     return fn_80164ED8(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
 }
 
 int PlayBookSetReceiverOption(int team, int index, unsigned char *pOut)
 {
-    Record_80067338 *pRecord = PlayBookGetPlay(team);
-    Object_800670B4 *pObject = PlayBookGetFormation(team);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
     return fn_80165000(pObject, pRecord, index, pOut, pObject->mUnknown8.mUnknownF);
 }

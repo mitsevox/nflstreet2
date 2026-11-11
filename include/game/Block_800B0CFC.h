@@ -2,12 +2,12 @@
 #define GAME_BLOCK_800B0CFC_H
 
 #include "game/PlayBookTeam.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 
 /* 72-byte entries of Block_800B0CFC. */
 struct Entry_800B0CFC {
-    Entry_8006719C *mpUnknown0[5];
-    Entry_8006719C *mpUnknown14[5];
+    PlayBookPosition_t *mpUnknown0[5];
+    PlayBookPosition_t *mpUnknown14[5];
     int mUnknown28[5];
     unsigned char mUnknown3C[5];
     unsigned char mUnknown41[5];
