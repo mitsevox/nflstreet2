@@ -275,7 +275,7 @@ struct Text_8031BEE4 {
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
 void BigObjNotifyTypes(int a);
@@ -2169,7 +2169,7 @@ int Class_802A3A48::vfn_12(float dt)
 
 void Class_802A3A48::vfn_14(float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }

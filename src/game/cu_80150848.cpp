@@ -43,10 +43,10 @@ extern "C" {
 extern MiniGameSettings_t lbl_8031BDD4;
 
 Table_8015005C *fn_801530FC(void);
-void fn_8003A4DC(void);
+void PlyrMgrResetAll(void);
 void fn_801486A8(void);
 void fn_801527E0(MiniGameSettings_t *p, int value);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_800AD910(int a, float b);
 void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *pPlayer, int a);
@@ -60,7 +60,7 @@ void fn_80150848(Class_802A1D58 *p, float dt)
     unsigned int count;
     Point_8017886C point;
 
-    fn_8003A4DC();
+    PlyrMgrResetAll();
     count = fn_801530FC()->mCount;
     fn_801486A8();
     p->Class_80297CE8::vfn_04(dt);
@@ -68,7 +68,7 @@ void fn_80150848(Class_802A1D58 *p, float dt)
     fn_801527E0(&lbl_8031BDD4, 1);
     point = fn_80177FE0();
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pPlayer = fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0);
+        Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
         pPlayer->mMotion.mPos.mX = -(float)count * 1.125f + (float)i * 2.25f;
         pPlayer->mMotion.mPos.mY = point.mY + 30.0f;
     }
@@ -87,7 +87,7 @@ void fn_801509D4(Class_802A1D58 *p)
     unsigned char i;
 
     for (i = 0; i <= 3; i++) {
-        Object_80039F5C *pPlayer = fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0);
+        Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
         if (pPlayer) {
             unsigned char value = fn_801530FC()->mEntries[i].mUnknown12[0];
             if (value != 255 && fn_801530FC()->mEntries[i].mUnknown12[1] == 0) {

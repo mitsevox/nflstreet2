@@ -22,7 +22,7 @@ void fn_800B4DE4(QueryCursor cursor, int index, void *pOut);
 void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut);
 void fn_800B4798(short *pRatings, int team, unsigned char index, void *pContext);
 void fn_800B5150(Object_80039F5C *p);
-void fn_8003AE24(Object_80039F5C *p);
+void PlyrAttachModel(Object_80039F5C *p);
 int fn_800C8704(int *pFirst, int *pSecond);
 int fn_800C8744(int team);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
@@ -53,7 +53,7 @@ void fn_80149040(Object_80039F5C *p)
     fn_800B4900(cursor,0,p->mRatings,p->mUnknown3020);
     fn_800B4798(p->mRatings,p->mIdBytes[2],p->mIdBytes[1],&p->mUnknown2900);
     if(cursor.mUnknown0)fn_801FCFA0(&cursor);
-    fn_8003AE24(p);
+    PlyrAttachModel(p);
     fn_800B5150(p);
 }
 

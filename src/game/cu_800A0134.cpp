@@ -94,7 +94,7 @@ void fn_800A615C(void);
 void fn_800718A0(void);
 
 void fn_8016EC40(void);
-void fn_8003A3F4(int,int);
+void PlyrRouteShowTeam(int,int);
 extern float lbl_80297D94[];
 extern float lbl_80297DBC[];
 extern float lbl_80297DE4[];
@@ -146,8 +146,8 @@ void Class_80297AB8::vfn_04(float dt)
         BallGetCurrentHolder();
         fn_8016EC40();
     }
-    fn_8003A3F4(0,0);
-    fn_8003A3F4(0,1);
+    PlyrRouteShowTeam(0,0);
+    PlyrRouteShowTeam(0,1);
 }
 
 

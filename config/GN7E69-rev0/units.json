@@ -8404,18 +8404,18 @@
     {
       "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/cu_8003877C.cpp): the three functions 0x8003AC84-0x8003AEA8 and the .rodata 0x8028D02C-0x8028D06C are linked from source; the rest of the file is comparison-only.",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/cu_8003877C.cpp): the fifteen functions 0x8003A394-0x8003AEA8 and the .rodata 0x8028D000-0x8028D06C are linked from source; the rest of the file is comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8003AC84",
+          "start": "0x8003A394",
           "end": "0x8003AEA8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028D02C",
+          "start": "0x8028D000",
           "end": "0x8028D06C"
         }
       ]

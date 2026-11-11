@@ -12,7 +12,7 @@ struct EngineParamWords {
 extern "C" {
 void fn_800BE808(int a, unsigned char index);
 void fn_800BE944(int index, int a, unsigned int msg, float value);
-void fn_8003A3F4(int a, int index);
+void PlyrRouteShowTeam(int a, int index);
 void fn_800BD774(int index, int kind);
 void fn_800BED54(unsigned char index);
 void fn_800BEFAC(int index);
@@ -106,7 +106,7 @@ extern "C" void fn_800BF658(int index)
     lbl_803EABA8->mSlots[index].mUnknown1C = 1;
     fn_800BE808(team, index);
     fn_800BE944((unsigned char)index, team, 132, 1.0f);
-    fn_8003A3F4(1, index);
+    PlyrRouteShowTeam(1, index);
 }
 
 extern "C" void fn_800BF72C(Class_80297CE8 *p, float dt)
@@ -222,8 +222,8 @@ void Class_80297CE8::vfn_04(float dt)
     lbl_803EABA8->mUnknownA9 = 0;
     lbl_803EABA8->mUnknownAA = 0;
     fn_800BF174();
-    fn_8003A3F4(0, 0);
-    fn_8003A3F4(0, 1);
+    PlyrRouteShowTeam(0, 0);
+    PlyrRouteShowTeam(0, 1);
     PassIconsClearReplayFlag();
     fn_800BF3F4(fn_80178308());
     fn_800BF3F4(fn_80178320());
@@ -332,8 +332,8 @@ void Class_80297CE8::vfn_06(float dt)
     fn_800B0DA4();
     fn_800BD568(0);
     fn_800BD568(1);
-    fn_8003A3F4(0, 0);
-    fn_8003A3F4(0, 1);
+    PlyrRouteShowTeam(0, 0);
+    PlyrRouteShowTeam(0, 1);
     BannerClear(1);
     BannerClear(2);
     fn_800AEF38(0);

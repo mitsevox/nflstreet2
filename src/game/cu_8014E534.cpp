@@ -43,10 +43,10 @@ extern int lbl_803EB2DC;
 extern int lbl_803EB2D8;
 
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_800A042C(void *p);
 void fn_800A050C(void *p, float dt);
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void HudShowCallout(const char *pText);
 void fn_801477F0(Block_80170E64 *p);
@@ -76,7 +76,7 @@ int fn_8005BE5C(int value);
 void fn_800B9654(void *p, float dt);
 void fn_800B9998(void *p);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 void fn_8014D67C(void);
 void fn_8005BF5C(void);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -89,7 +89,7 @@ void fn_8014E534(State_802A2020 *p)
     p->mUnknown4 = 0;
     fn_800A042C(p);
     Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
-    fn_8003AB08(pPlayer, 0);
+    PlyrClearPendingMsg(pPlayer, 0);
     if (fn_800F06F4(0, pPlayer->mpState, 1, 0xFFFF) == 0xFFFF) {
         Message_800F01CC message;
         if (fn_8014F104(fn_80148A58())->mUnknown24) {
@@ -113,7 +113,7 @@ void fn_8014E534(State_802A2020 *p)
     for (unsigned char i = 0; i <= 4; i++) {
         Object_80039F5C *pOther = fn_80039F5C(0, i);
         int position = fn_800F06F4(0, pOther->mpState, 97, 0xFFFF);
-        fn_8003AB08(pOther, 0);
+        PlyrClearPendingMsg(pOther, 0);
         fn_800F0490(0, pOther->mpState, 51);
         fn_800F0490(0, pOther->mpState, 2);
         fn_800F0490(0, pOther->mpState, 97);
@@ -222,7 +222,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
             unsigned int best = 0xFFFFFFFF;
             p->mUnknown12 = 1;
             for (unsigned short i = 0; i <= 5; i++) {
-                Object_80039F5C *pOther = fn_8003AC84(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
+                Object_80039F5C *pOther = PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
                 unsigned int value = fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown4;
                 if (pOther != pPlayer && (value < best || (value == best && fn_802372EC(0, 100) > 50))) {
                     p->mpUnknown4 = pOther;
@@ -265,12 +265,12 @@ void fn_8014EC74(State_802A1F90 *p)
     if (fn_8009D990(1)) {
         fn_801488D4(fn_80039F5C(1, 0), p->mpUnknown4);
         if (p->mUnknown12) {
-            fn_8003A450();
+            PlyrMgrClearStates();
             fn_8014D67C();
             fn_8005BF5C();
         }
     } else {
-        fn_8003A450();
+        PlyrMgrClearStates();
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
                 Object_80039F5C *pPlayer = fn_80039F5C((unsigned char)team, i);

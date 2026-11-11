@@ -191,7 +191,7 @@ float fn_80094454(int handle);
 unsigned char fn_801BC044(unsigned short index);
 unsigned char fn_801BC060(unsigned short index);
 int fn_80094374(int index);
-Object_80039F5C *fn_8003AD2C(int id);
+Object_80039F5C *PlyrFindByPoid(int id);
 int fn_801485D4(void);
 int fn_80178AE0(void);
 int ChallengeIsActive(void);
@@ -1370,12 +1370,12 @@ extern "C" int fn_80094048(int key, Object_80039F5C **ppA, Object_80039F5C **ppB
 
     if (found) {
         if (a != 0x7FFF) {
-            *ppA = fn_8003AD2C(a);
+            *ppA = PlyrFindByPoid(a);
         } else {
             *ppA = 0;
         }
         if (b != 0x7FFF) {
-            *ppB = fn_8003AD2C(b);
+            *ppB = PlyrFindByPoid(b);
         } else {
             *ppB = 0;
         }
@@ -8601,7 +8601,7 @@ struct Object_801618D8 {
 };
 
 extern "C" {
-void fn_8003A3F4(int a, int team);
+void PlyrRouteShowTeam(int a, int team);
 Object_801618D8 *fn_80162DBC(int index);
 }
 
@@ -8838,7 +8838,7 @@ extern "C" int fn_800BACF8(void)
 
 extern "C" {
 void fn_80162780(int a, int b);
-void fn_8003A3F4(int a, int team);
+void PlyrRouteShowTeam(int a, int team);
 }
 
 extern "C" Event_800B9F50 *lbl_802D9A84[];
@@ -8876,7 +8876,7 @@ extern "C" void fn_800BADD4(void)
         p->mUnknown20 &= ~2;
     }
     fn_80162780(0, 0);
-    fn_8003A3F4(0, fn_80178308());
+    PlyrRouteShowTeam(0, fn_80178308());
 }
 
 extern "C" int fn_800BAE40(void)
@@ -9548,7 +9548,7 @@ struct Block_800ABD1C {
 
 extern "C" {
 void PlayerObjSetDrawReady(unsigned char value);
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -9881,10 +9881,10 @@ extern "C" void fn_800AA8B8(void)
     for (i = 0; i <= 6; i++) {
         Object_80039F5C *p = fn_80039F5C(0, i);
 
-        fn_8003AB08(p, 0);
+        PlyrClearPendingMsg(p, 0);
         fn_800EFE1C(0, p->mQueue);
         p = fn_80039F5C(1, i);
-        fn_8003AB08(p, 0);
+        PlyrClearPendingMsg(p, 0);
         fn_800EFE1C(0, p->mQueue);
     }
 }
@@ -13206,7 +13206,7 @@ extern "C" void fn_8009E458(void)
     for (; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, (unsigned char)i);
 
-        fn_8003AB08(p, 0);
+        PlyrClearPendingMsg(p, 0);
         switch (p->mpState->mId) {
         case 32:
         case 94:
@@ -14736,7 +14736,7 @@ struct Block_800B95B4 {
 extern "C" {
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_8023790C(void);
-void fn_8003AE24(Object_80039F5C *p);
+void PlyrAttachModel(Object_80039F5C *p);
 int fn_8009B9A8(int a);
 int fn_800A8444(int team);
 int fn_800BA6F8(void);
@@ -14783,7 +14783,7 @@ extern "C" void fn_800B508C(unsigned char team)
     unsigned int count = fn_80178D18(team);
 
     for (i = 0; i < count; i++) {
-        fn_8003AE24(fn_80039F5C(team, i));
+        PlyrAttachModel(fn_80039F5C(team, i));
     }
 }
 
@@ -14795,7 +14795,7 @@ extern "C" void fn_800B50E8(int team)
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
 
-        fn_8003AE24(p);
+        PlyrAttachModel(p);
         fn_800B5150(p);
     }
 }
@@ -15632,7 +15632,7 @@ extern "C" int fn_800B898C(void *p, void *q)
 
 extern "C" {
 int ChallengeIsActive(void);
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 void fn_8005BF18(void);
 int fn_8005BFD4(void);
 void SndgSituationSetFlags(int flags);
@@ -15681,7 +15681,7 @@ int Class_80297C60::vfn_13(int busy)
 
 void Class_80297C60::vfn_14(float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }
@@ -15993,7 +15993,7 @@ int fn_800B6644(int index);
 int fn_800A937C(void);
 int fn_800A9648(void);
 void fn_800BD35C(void);
-void fn_8003A3F4(int a, int index);
+void PlyrRouteShowTeam(int a, int index);
 int fn_80156704(void);
 int ChallengeHasRecordFlag(void);
 void fn_800AE904(int a);
@@ -16158,7 +16158,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             }
             fn_8011F3A8();
         }
-        fn_8003A3F4(0, team);
+        PlyrRouteShowTeam(0, team);
         fn_8009FFD4();
         AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
@@ -16625,7 +16625,7 @@ extern "C" void fn_800BF6CC(int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown1C = 0;
     fn_800BD35C();
-    fn_8003A3F4(0, index);
+    PlyrRouteShowTeam(0, index);
 }
 
 extern "C" int fn_800BF718(int index)
@@ -17488,7 +17488,7 @@ extern "C" void fn_800BD35C(void)
     for (team = 0; team <= 1; team++) {
         if (fn_800B65A0(team) != 255) {
             fn_800BEC1C(fn_800B65A0(team), team);
-            fn_8003A3F4(0, team);
+            PlyrRouteShowTeam(0, team);
         }
     }
 }

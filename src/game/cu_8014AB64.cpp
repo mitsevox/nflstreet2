@@ -66,7 +66,7 @@ void fn_8016DDDC(int team);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
 void ClockRuleEndPeriod(void);
@@ -287,7 +287,7 @@ void fn_8014B350(void *p, float dt)
 
 void fn_8014B38C(void *p, float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }

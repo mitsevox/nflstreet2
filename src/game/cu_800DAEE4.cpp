@@ -881,7 +881,7 @@ extern "C" {
 float fn_80178A2C(void);
 Point_8017886C fn_80177FFC(int team);
 int fn_801CFE40(float y, float x);
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_8003E174(int a);
 int FELoopIsMainFEActive(void);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
@@ -2349,7 +2349,7 @@ extern "C" void fn_800DFCEC(Object_80039F5C *p)
     pBlock->mUnknown11 = 0;
     p->mpUnknown4->mUnknown20 |= 0x80;
     if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
-        fn_8003AB08(p, 0);
+        PlyrClearPendingMsg(p, 0);
         p->mUnknown512.mUnknown14 = 0;
     }
     fn_800DFA00(p, &pBlock->mUnknown4);

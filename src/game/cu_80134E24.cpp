@@ -133,7 +133,7 @@ void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int fn_801CFE40(float, float);
 int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
-void fn_8003AB08(Object_80039F5C *, int);
+void PlyrClearPendingMsg(Object_80039F5C *, int);
 void fn_801360D4(Object_80039F5C *);
 void fn_80136134(Object_80039F5C *, unsigned int);
 void SndgSpchSetPlayFlags(int);
@@ -933,7 +933,7 @@ int fn_80136A78(Object_80039F5C *p)
 
 int fn_80136AA4(Object_80039F5C *p)
 {
-    fn_8003AB08(p, 0);
+    PlyrClearPendingMsg(p, 0);
     p->mpState[1].mId = 0;
     return 0;
 }

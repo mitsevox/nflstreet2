@@ -53,8 +53,8 @@ struct Block_8010A4E8 {
 };
 
 extern "C" {
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800A5DD0(Object_80039F5C *p);
 int fn_800ABCC0(Class_80297B90 *p);
 int fn_800AD9B4(void);
@@ -76,7 +76,7 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
 
     if (fn_801486A0() != 0 && fn_801486A0() != 1 && (mode == 4 || (mode == 7 && (unsigned char)fn_800ABCC0(lbl_803EAA8C))) &&
         fn_801BE648(p->mpUnknown792) != 0xCB && p->mUnknown9[2] != 0) {
-        if (*fn_8003AB38(p) != 62) {
+        if (*PlyrGetPendingMsg(p) != 62) {
             if (fn_8010BD58(p) != 0) {
                 fn_8010BE54(p);
             } else {
@@ -97,7 +97,7 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
                         b = 0;
                     }
                 }
-                fn_8003AB28(p, &message, b);
+                PlyrSetPendingMsg(p, &message, b);
             }
             result = 1;
         } else {

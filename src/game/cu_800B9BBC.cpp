@@ -169,8 +169,8 @@ struct Position_801F4934 {
 
 extern "C" {
 void fn_8003A1EC(int on, int team, int index);
-void fn_8003A394(int a, int team, int index);
-void fn_8003A3F4(int a, int team);
+void PlyrRouteShowHighlighted(int a, int team, int index);
+void PlyrRouteShowTeam(int a, int team);
 int SndgChannelGetStream(int idx);
 Object_801618D8 *fn_80162DBC(int index);
 void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
@@ -306,13 +306,13 @@ extern "C" int fn_800B9F50(void)
             }
             break;
         case 7:
-            fn_8003A394(1, team, pEvent->mIndex);
+            PlyrRouteShowHighlighted(1, team, pEvent->mIndex);
             break;
         case 8:
             fn_8003A1EC(0, team, pEvent->mIndex);
             break;
         case 9:
-            fn_8003A3F4(pEvent->mIndex, team);
+            PlyrRouteShowTeam(pEvent->mIndex, team);
             break;
         case 10:
             done = 1;

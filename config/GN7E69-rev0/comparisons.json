@@ -28482,7 +28482,7 @@
           "end": "0x80038928"
         },
         {
-          "symbol": "fn_80038928",
+          "symbol": "PlyrMgrSaveSnapshot",
           "start": "0x80038928",
           "end": "0x80038A00"
         },
@@ -28645,66 +28645,6 @@
           "symbol": "fn_8003A1EC",
           "start": "0x8003A1EC",
           "end": "0x8003A394"
-        },
-        {
-          "symbol": "fn_8003A394",
-          "start": "0x8003A394",
-          "end": "0x8003A3F4"
-        },
-        {
-          "symbol": "fn_8003A3F4",
-          "start": "0x8003A3F4",
-          "end": "0x8003A450"
-        },
-        {
-          "symbol": "fn_8003A450",
-          "start": "0x8003A450",
-          "end": "0x8003A4DC"
-        },
-        {
-          "symbol": "fn_8003A4DC",
-          "start": "0x8003A4DC",
-          "end": "0x8003A5A8"
-        },
-        {
-          "symbol": "fn_8003A5A8",
-          "start": "0x8003A5A8",
-          "end": "0x8003A5E8"
-        },
-        {
-          "symbol": "fn_8003A5E8",
-          "start": "0x8003A5E8",
-          "end": "0x8003A628"
-        },
-        {
-          "symbol": "fn_8003A628",
-          "start": "0x8003A628",
-          "end": "0x8003AB08"
-        },
-        {
-          "symbol": "fn_8003AB08",
-          "start": "0x8003AB08",
-          "end": "0x8003AB28"
-        },
-        {
-          "symbol": "fn_8003AB28",
-          "start": "0x8003AB28",
-          "end": "0x8003AB38"
-        },
-        {
-          "symbol": "fn_8003AB38",
-          "start": "0x8003AB38",
-          "end": "0x8003AB40"
-        },
-        {
-          "symbol": "fn_8003AB40",
-          "start": "0x8003AB40",
-          "end": "0x8003AC10"
-        },
-        {
-          "symbol": "fn_8003AC10",
-          "start": "0x8003AC10",
-          "end": "0x8003AC84"
         }
       ]
     },

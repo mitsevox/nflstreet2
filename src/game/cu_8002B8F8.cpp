@@ -112,9 +112,9 @@ void InGameResume(void);
 unsigned char InGameIsDemo(void);
 void ReplayCursorSetPos(const float *pValue, int a);
 void ReplayCursorSetVisible(unsigned char value);
-void fn_8003A5A8(void);
-void fn_8003A5E8(void);
-void fn_8003AC10(void);
+void PlyrMgrSetLeadFlags(void);
+void PlyrMgrClearLeadFlags(void);
+void PlyrMgrRefreshModels(void);
 Block_80170E64 *fn_8003DF7C(Vector_80039F5C *pPos, float *pDist);
 void fn_8003E038(Block_80170E64 *pBlock, int *pOut);
 Block_80170E64 *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist);
@@ -688,7 +688,7 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             }
             fn_800B50E8(0);
             fn_800B50E8(1);
-            fn_8003A5A8();
+            PlyrMgrSetLeadFlags();
             fn_800443B8();
             p->mUnknownD78 = 0;
             p->mUnknownD74 = p->mUnknownD70;
@@ -747,8 +747,8 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
                 fn_800B50E8(0);
                 fn_800B50E8(1);
             }
-            fn_8003A5E8();
-            fn_8003AC10();
+            PlyrMgrClearLeadFlags();
+            PlyrMgrRefreshModels();
             fn_80044460();
             p->mUnknownD94 &= ~0x1000;
             p->mUnknownD94 &= ~0x10000;

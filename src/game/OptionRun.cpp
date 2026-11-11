@@ -18,7 +18,7 @@
 
 
 extern "C" {
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
@@ -528,7 +528,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
     int flag = 0;
 
     if (pControl->mUnknown80 == 0) {
-        if (*fn_8003AB38(p) == 57) {
+        if (*PlyrGetPendingMsg(p) == 57) {
             fn_800B7CA4(p);
         } else {
             fn_800B76E8(p);
@@ -555,7 +555,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
                     p->mFlags |= 0x4000;
                     StyleTrackerBeginPumpInteraction();
                 }
-            } else if (*fn_8003AB38(p) == 57) {
+            } else if (*PlyrGetPendingMsg(p) == 57) {
                 fn_800B7CA4(p);
             } else {
                 fn_800B76E8(p);

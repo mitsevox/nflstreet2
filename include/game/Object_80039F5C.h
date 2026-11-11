@@ -328,7 +328,7 @@ struct Object_80039F5C {
     unsigned char mUnknown9[3];
     unsigned int mFlags;
     /* Three 92-byte blocks at +16, +108 and +200 (filled from the +4
-       object's pose by fn_8003AE24); each holds that pose's address at
+       object's pose by PlyrAttachModel); each holds that pose's address at
        its +40. */
     int mUnknown16;
     char mUnknown20[36];

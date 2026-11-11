@@ -16,7 +16,7 @@ float fn_80178A5C(void);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void GameSetupInit(void);
 void fn_8002D274(Type_803EA368 *p);
-void fn_8003A4DC(void);
+void PlyrMgrResetAll(void);
 void BigObjNotifyTypes(unsigned int flags);
 void fn_800588E0(void);
 void fn_80071C34(int value);
@@ -101,7 +101,7 @@ extern "C" void fn_800C1CA0(void)
     } else {
         fn_800B4184(1);
         fn_800588E0();
-        fn_8003A4DC();
+        PlyrMgrResetAll();
         fn_800B63B0();
         fn_8009D818(0);
         fn_800AD910(1, 0.0f);

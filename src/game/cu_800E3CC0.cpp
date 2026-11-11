@@ -202,7 +202,7 @@ int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_8003A130(void *pPos, float *pExtra, int team);
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int fn_80178360(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
@@ -1854,7 +1854,7 @@ extern "C" void fn_800EBA48(int id) {
             }
             if (pOther->mQueue[0].mId != message.mId && (unsigned char)pOther->mUnknown3044[0] != message.mId) {
                 if (fn_800EAEA4(pOther))
-                    fn_8003AB28(pOther, &message, value);
+                    PlyrSetPendingMsg(pOther, &message, value);
                 else
                     fn_800F01CC(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
             }

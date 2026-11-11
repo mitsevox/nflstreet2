@@ -54,7 +54,7 @@ int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
 void fn_80039AA8(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
-void fn_8003A4DC(void);
+void PlyrMgrResetAll(void);
 void fn_80044264(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
@@ -404,7 +404,7 @@ extern "C" void fn_8016E498(void)
     fn_8011F574();
     PlayerMoveResetAll();
     BallGetPosition(BallGetCurrent(), &ballPos);
-    fn_8003A4DC();
+    PlyrMgrResetAll();
     BannerClear(1);
     BannerClear(2);
     BannerClear(0);

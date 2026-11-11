@@ -79,7 +79,7 @@ void fn_8001B330(int a);
 void fn_8001B828(void);
 void fn_80010150(int a);
 void SndgMusicPumpFrame(int a);
-Object_80039F5C *fn_8003AD2C(int id);
+Object_80039F5C *PlyrFindByPoid(int id);
 int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
 unsigned char fn_8007B090(int a);
 void EnvSelect(int id);
@@ -1761,7 +1761,7 @@ Object_80039F5C *fn_800606CC(int type, int position)
         break;
     }
     if (pList) {
-        pObject = fn_8003AD2C(id);
+        pObject = PlyrFindByPoid(id);
     }
     if (pObject) {
         pResult = pObject;

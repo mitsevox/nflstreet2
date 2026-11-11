@@ -67,7 +67,7 @@ extern float gPlyrMoveFwdSpeed;
 
 double fabs(double);
 
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
 void fn_80053A70(Object_80039F5C *p);
 void SndgSpchSetPlayFlags(int a);
@@ -1338,7 +1338,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         int count;
         for (i = 0, count = fn_80178D70(p->mId >> 8 & 0xFF); i < count; i++) {
             Object_80039F5C *pMate = fn_80039F5C(p->mId >> 8 & 0xFF, i);
-            fn_8003AB08(pMate, 0);
+            PlyrClearPendingMsg(pMate, 0);
             fn_801C1F94(&message, 0, 4);
             if (pMate == p) {
                 message.mId = 1;

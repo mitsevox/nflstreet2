@@ -64,7 +64,7 @@ extern "C" {
 unsigned char InGameIsDemo(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
 int ChallengeIsActive(void);
-void fn_8003A3F4(int a, int index);
+void PlyrRouteShowTeam(int a, int index);
 void fn_8003E174(int a);
 void PlayerObjSetDrawReady(unsigned char value);
 int SpchIGIsNarratorIdle(void);
@@ -396,9 +396,9 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
         }
     }
     if (pStick->mUnknown8 == 0) {
-        fn_8003A3F4(0, team);
+        PlyrRouteShowTeam(0, team);
     } else {
-        fn_8003A3F4(1, team);
+        PlyrRouteShowTeam(1, team);
         result = 1;
     }
     return result;

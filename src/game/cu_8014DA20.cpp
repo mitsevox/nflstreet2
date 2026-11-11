@@ -30,7 +30,7 @@ extern const int lbl_802DE9CC[];
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 void fn_80149040(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
 void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
@@ -62,7 +62,7 @@ void fn_8014DA90(void)
             Object_80039F5C *pPlayer = fn_80039F5C((unsigned char)team, i);
             int id = pBlock->mUnknown40[team][i];
             if (id != pPlayer->mUnknown2908) {
-                fn_801488D4(pPlayer, fn_8003AC84(id));
+                fn_801488D4(pPlayer, PlyrFindById(id));
             }
         }
     }

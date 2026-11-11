@@ -1669,7 +1669,7 @@ int fn_800AEBA0(void);
 int fn_80178E4C(void);
 int fn_800AF078(int team);
 int InGameIsDemo(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
 void PlayerDbGetFirstName(Object_8008044C *pObject,char *pText,int size);
 void fn_8017833C(int enabled);
@@ -1937,7 +1937,7 @@ int fn_8005A860(int team)
 }
 Object_80039F5C *fn_8005A8AC(int team)
 {
-    return fn_8003AC84(fn_8005A860(team));
+    return PlyrFindById(fn_8005A860(team));
 }
 
 void fn_8005A8D0(int team)
@@ -1957,7 +1957,7 @@ void fn_8005A8D0(int team)
                 }
                 scores[i]=value; sum+=value;
             }
-            Object_80039F5C *p=fn_8003AC84(row);
+            Object_80039F5C *p=PlyrFindById(row);
             if(p && p->mUnknown9[2]) sum+=1.0f;
             if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
                 lbl_80309FC4[team].mUnknown0=sum;
@@ -2400,7 +2400,7 @@ void fn_8005CD8C(int team,int *other,char *text,int size) {
 void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
     Record_8005CE10 record;fn_80155C44(fn_80148A58(),team,index,&record);
     unsigned int value=record.mOrdinal;
-    Object_80039F5C *p=fn_8003AC84(record.mPlayer),*other=fn_8003AC84(record.mOther);
+    Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;return;}
     unsigned int rem=value%10;
     if(value-11<9 || rem>3 || rem==0)fn_801C2D88(ordinal,ordinalSize,"%dth Possession",value);

@@ -41,7 +41,7 @@ extern void *gUISMainInfo;
 extern const int lbl_802DEA78[];
 
 Table_8015005C *fn_801530FC(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_80177C38(void);
 void fn_80177C50(int a);
 void fn_80177C44(int value);
@@ -111,7 +111,7 @@ void fn_801516A8(Class_802A1C30 *p, float dt)
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     for (i = 0; i < 4; i++) {
-        fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown9[2] = 1;
+        PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown9[2] = 1;
     }
     fn_80148A58()->vfn_12();
     fn_80148A58()->vfn_16(lbl_802DEA78);

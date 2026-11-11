@@ -577,7 +577,7 @@ struct Plan_80121264 {
 };
 
 extern "C" {
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -646,7 +646,7 @@ void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
@@ -699,7 +699,7 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
 void fn_800FD978(Object_80039F5C *p);
 void fn_800FF868(Object_80039F5C *p, State_800FFDFC *pState, Object_80039F5C *pOther);

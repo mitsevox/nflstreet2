@@ -508,7 +508,7 @@ struct State_801045BC {
 };
 
 extern "C" {
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -579,7 +579,7 @@ void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
@@ -634,7 +634,7 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
 void fn_800FD978(Object_80039F5C *p);
 void fn_800FF868(Object_80039F5C *p, State_800FFDFC *pState, Object_80039F5C *pOther);
@@ -2724,7 +2724,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
     if (fn_8010A2DC(p, 0, -1) != 0) {
         pState->mUnknown0 = 1;
     }
-    if (*fn_8003AB38(p) == 57 && p->mUnknown3040 > 30) {
+    if (*PlyrGetPendingMsg(p) == 57 && p->mUnknown3040 > 30) {
         p->mUnknown3040 = 30;
     }
     if (pOther != 0) {
@@ -3187,7 +3187,7 @@ extern "C" void fn_8010A1C4(int team) {
     int count = fn_80178D18(team);
 
     for (i = 0; i < count; i++) {
-        fn_8003AB08(fn_80039F5C(team, i), 62);
+        PlyrClearPendingMsg(fn_80039F5C(team, i), 62);
     }
 }
 
@@ -3207,7 +3207,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
         message.mId = 62;
         message.mUnknown1[0] = 9;
         message.mUnknown1[2] = kind;
-        fn_8003AB28(p, &message, 1);
+        PlyrSetPendingMsg(p, &message, 1);
     }
     return result;
 }
@@ -3460,7 +3460,7 @@ extern "C" void fn_8010BE54(Object_80039F5C *p)
 
     fn_801C1F94(&message, 0, 4);
     message.mId = 93;
-    fn_8003AB28(p, &message, 0);
+    PlyrSetPendingMsg(p, &message, 0);
 }
 
 extern "C" void fn_8010BEA4(void)

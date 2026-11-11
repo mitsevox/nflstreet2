@@ -34,7 +34,7 @@ public:
 };
 
 extern "C" {
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 Point_8017886C fn_80177FFC(int team);
 
 void fn_80151BCC(Class_802A2918 *p)
@@ -53,7 +53,7 @@ void fn_80151BCC(Class_802A2918 *p)
     }
     count = p->mpUnknown1C->mpUnknown36->mCount;
     for (i = 0; i < count; i++) {
-        pPlayer = fn_8003AC84(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
+        pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
         float limit = fn_80177FFC(1).mY + 5.0f;
         if (pPlayer->mMotion.mPos.mY < limit) {
             pPlayer->mMotion.mPos.mY = limit;

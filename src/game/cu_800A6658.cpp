@@ -60,7 +60,7 @@ void PlayRealignTeam(int team);
 void fn_800B0DA4(void);
 void fn_800AEEDC(int team);
 void fn_8011F3A8(void);
-void fn_8003A3F4(int a, int team);
+void PlyrRouteShowTeam(int a, int team);
 void fn_8009FFD4(void);
 Object_800670B4 *PlayBookGetFormation(int team);
 void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
@@ -436,7 +436,7 @@ extern "C" void fn_800A7514(int team)
                 fn_800B0DA4();
                 fn_800AEEDC(fn_80178308());
                 fn_8011F3A8();
-                fn_8003A3F4(0, fn_80178308());
+                PlyrRouteShowTeam(0, fn_80178308());
                 fn_8009FFD4();
                 for (side = 0; side <= 1; side++) {
                     Object_800670B4 *pRoster = PlayBookGetFormation(side);
