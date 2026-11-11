@@ -43,9 +43,9 @@ struct MiniGameSettings_t {
 };
 
 extern "C" {
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
-void fn_8001B828(void);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
+void MsgTeamPickRequestTeamSave(void);
 void fn_8007AEE8(DbCursor *pObject);
 void fn_8007AF14(DbCursor *pObject);
 unsigned char fn_8007AFDC(int a);
@@ -281,9 +281,9 @@ void MsgStreetEventSetupShutdown(void)
     if (_MsgStreetEventSetup_pState->mOptions[count - 1].mSelection != 0) {
         mode = _MsgStreetEventSetup_pState->mOptions[count - 1].mSelection == 1 ? 2 : 0;
     }
-    fn_8001B330(mask);
-    fn_8001B260(mode, _MsgStreetEventSetup_iMinPool);
-    fn_8001B828();
+    MsgTeamPickSetSources(mask);
+    MsgTeamPickSetMode(mode, _MsgStreetEventSetup_iMinPool);
+    MsgTeamPickRequestTeamSave();
     MsgStreetEventSetupApplyOptions(_MsgStreetEventSetup_pState);
     if (MsgGameGetSetupState() == 0) {
         fn_8018C48C(0x54415453);

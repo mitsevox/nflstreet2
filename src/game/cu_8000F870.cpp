@@ -96,11 +96,11 @@ void *operator new(unsigned int size, int unknown);
 extern "C" {
 void fn_80004440(int *pId);
 int fn_8000485C(void);
-int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
-void fn_8001B228(void);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
-void fn_8001B828(void);
+int MsgTeamPickHandleMessage(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult);
+void MsgTeamPickFreePool(void);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
+void MsgTeamPickRequestTeamSave(void);
 void fn_8001ED90(unsigned char value);
 int CreditsFetchLine(void);
 void CreditsOpen(void);
@@ -372,7 +372,7 @@ int fn_8000F870(int module, unsigned int id, Arg_8018399C *pArgs, int count, int
     case 8:
         return fn_80015BF8(id, pArgs, count, pResult);
     case 9:
-        return fn_8001B354(id, pArgs, count, pResult);
+        return MsgTeamPickHandleMessage(id, pArgs, count, pResult);
     case 12:
         return fn_80011AA8(id, pArgs, count, pResult);
     case 11:
@@ -3193,7 +3193,7 @@ void fn_80015B0C(int id, int unused)
         fn_800A2F3C(id);
         FELoopStartGame();
     } else if (fn_801486A0() != 15) {
-        fn_8001B228();
+        MsgTeamPickFreePool();
     }
     fn_801D2BD0(lbl_803EB9DC);
 }
@@ -3555,10 +3555,10 @@ void fn_800167D0(void)
 void fn_80016808(void)
 {
     fn_8007F6F8(1, lbl_803EB9F4);
-    fn_8001B330(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
+    MsgTeamPickSetSources(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
     if (MsgGameGetSetupState() == 1) {
-        fn_8001B260(lbl_803EB9F0, 14);
-        fn_8001B828();
+        MsgTeamPickSetMode(lbl_803EB9F0, 14);
+        MsgTeamPickRequestTeamSave();
     }
 }
 

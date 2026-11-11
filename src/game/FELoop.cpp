@@ -30,7 +30,7 @@ void fn_80014294(int a, int b);
 void fn_8001442C(void);
 void fn_80015D28(int a);
 int fn_80015F2C(void);
-void fn_8001B228(void);
+void MsgTeamPickFreePool(void);
 void FEPlyrUpdate(void);
 void BootPlayIntroMovies(void);
 void BootShowStartupScreens(void);
@@ -307,7 +307,7 @@ void FELoopStartGame()
         DepthChartSide_t record1;
 
         _FELoop_bRunning = 0;
-        fn_8001B228();
+        MsgTeamPickFreePool();
         fn_800731D0(1);
         DepthChartGetSide(0, &record0);
         fn_800731D0(1);

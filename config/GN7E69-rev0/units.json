@@ -9441,6 +9441,62 @@
       ]
     },
     {
+      "source": "src/game/MsgTeamPick.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800170E0-0x8001BB20 (src/game/MsgTeamPick.cpp) and its function, data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800170E0",
+          "end": "0x8001B8E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001B8E8",
+          "end": "0x8001BB20",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F43F4",
+          "end": "0x802F4504"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA08",
+          "end": "0x803EBA44"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B168",
+          "end": "0x8036B22C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECE58",
+          "end": "0x803ECE64"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B2C",
+          "end": "0x80289B30"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C54",
+          "end": "0x80289C58"
+        }
+      ]
+    },
+    {
       "source": "src/game/MsgStreetEvent.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/MsgStreetEvent.cpp) and its source-form rows.",
