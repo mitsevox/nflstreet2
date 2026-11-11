@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 
 /* 0xD4-byte instance (the size fn_8015BED4 registers with fn_8015A2B4 and
-   fn_8015A354). +20 is the record set up through fn_8003F66C-fn_8003F6E8,
+   fn_8015A354). +20 is the record set up through ArrowInit-ArrowSetEndBrightness,
    which receives the ten points at +88. */
 struct Object_8015C244 {
     char mUnknown0[20];

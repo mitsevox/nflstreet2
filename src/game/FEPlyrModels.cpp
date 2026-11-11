@@ -52,9 +52,9 @@ void fn_8003AB40(FEPlyrModel_t *pRecord);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E174(int a);
-void fn_8003FAC4(int a);
-void fn_8003FB2C(void);
-int fn_8003FBF0(FEPlyrScene_t *pObject, int a);
+void BallModelRegisterType(int a);
+void BallModelUnregisterType(void);
+int BallModelDraw(FEPlyrScene_t *pObject, int a);
 void fn_80042270(FEPlyrModel_t *pRecord);
 void fn_800423F8(Object_8003DEC4 *pObject, void *a, void *b);
 void fn_800424C0(Object_8003DEC4 *pObject, int a);
@@ -297,7 +297,7 @@ static void _FEPlyrDrawModel(int index, float a, float b, float c, float d)
     PlayerObjDraw(pObject, 1);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {
         if (FEPlyrLoadIsShown(pObject)) {
-            fn_8003FBF0(_FEPlyr_pScene, 1);
+            BallModelDraw(_FEPlyr_pScene, 1);
         }
     }
     fn_801D1258(2, projection);
@@ -365,7 +365,7 @@ void FEPlyrInit(int count)
         FEPlyrSetAngle(i, 0.0f);
     }
     FEPlyrLoadInit();
-    fn_8003FAC4(0);
+    BallModelRegisterType(0);
     desc.mUnknown0 = fn_800C47C4();
     desc.mUnknown8 = 0;
     desc.mUnknown12 = 0;
@@ -387,7 +387,7 @@ void FEPlyrShutdown(void)
     _FEPlyr_pScene->mUnknown20 &= ~2;
     VptTrashObject((int)_FEPlyr_pScene);
     _FEPlyr_pScene = 0;
-    fn_8003FB2C();
+    BallModelUnregisterType();
 }
 
 void FEPlyrShow(void)

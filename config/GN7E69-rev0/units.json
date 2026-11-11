@@ -2230,6 +2230,25 @@
       ]
     },
     {
+      "source": "src/game/BallModel.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003F66C-0x800400CC (src/game/BallModel.cpp), its data row 0x8028D358-0x8028D388 and its compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003F66C",
+          "end": "0x800400CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D358",
+          "end": "0x8028D388"
+        }
+      ]
+    },
+    {
       "source": "src/game/OptionRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/OptionRun.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",

@@ -20,7 +20,7 @@ struct Record_801BE648 {
     char mUnknown8[92];
 };
 
-/* Returned by fn_800400C4 for the ball's block. */
+/* Returned by BallModelGetLinkedObj for the ball's block. */
 struct Object_800400C4 {
     int mUnknown0;
     int mUnknown4;
@@ -33,7 +33,7 @@ struct Object_800400C4 {
 extern float gFrameTimeScale;
 
 extern "C" {
-Object_800400C4 *fn_800400C4(Block_80170E64 *pBlock);
+Object_800400C4 *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 Object_80040818 *fn_80040F18(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
@@ -1011,7 +1011,7 @@ void fn_8013B734(Ball_t *pBall, float dt)
     Vector_80039F5C pos;
     int angles[3];
     Quat_801EB488 turn;
-    Object_800400C4 *pPlace = fn_800400C4(BallGetModel(BallGetCurrent()));
+    Object_800400C4 *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
     Object_80040818 *pObject = fn_80040F18(pPlace->mUnknown4);
     short *pRot = pObject->mpUnknown220;
 
