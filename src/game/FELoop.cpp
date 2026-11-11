@@ -48,7 +48,7 @@ void SndgApplyVolumeOptions(void);
 void SndgMusicFadeOut(int a, int b);
 void SndgMusicPumpFrame(int a);
 void fn_8009418C(void);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void FEPlyrLoadUpdate(void);
 void MsgGameSetFEStarted(int a);
 void fn_80186EF4(void);
@@ -293,7 +293,7 @@ void FELoop::Boot()
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
         CamSetDefaultAspect(4.0f / 3.0f);
     } else {
-        fn_8013CF98();
+        CamSetupAspect();
     }
     fn_80186EF4();
     BootPlayIntroMovies();

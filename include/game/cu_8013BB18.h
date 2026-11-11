@@ -3,7 +3,7 @@
 
 #include "game/GameCamera.h"
 #include "game/EaseVector_8013C9A4.h"
-#include "game/Interp_8013CC14.h"
+#include "game/CamInterp.h"
 #include "game/Object_80039F5C.h"
 
 /* Camera type record. lbl_802DBD24 and the replay camera's lbl_802CC83C
@@ -58,12 +58,12 @@ void fn_8013C868(GameCamera_t *pCamera, CameraDesc_t *pDesc);
 void fn_8013C90C(GameCamera_t *pCamera);
 void fn_8013C954(void *p, GameCamera_t *pCamera);
 void fn_8013C9A4(EaseVector_8013C9A4 *pEase, Vector_80039F5C *pBase, Vector_80039F5C *pFrom,
-                 Vector_80039F5C *pTo, InterpFunc_8013CC14 update, float fromScale, float toScale,
+                 Vector_80039F5C *pTo, CamInterpFunc_t update, float fromScale, float toScale,
                  float time);
 void fn_8013CAA4(EaseVector_8013C9A4 *pEase, int steps);
 void fn_8013CBC4(EaseVector_8013C9A4 *pEase);
-void fn_8013CC14(Interp_8013CC14 *pInterp, float value);
-void fn_8013CC40(Interp_8013CC14 *pInterp, InterpFunc_8013CC14 update, float target, float time);
+void fn_8013CC14(CamInterp_t *pInterp, float value);
+void fn_8013CC40(CamInterp_t *pInterp, CamInterpFunc_t update, float target, float time);
 }
 
 #endif

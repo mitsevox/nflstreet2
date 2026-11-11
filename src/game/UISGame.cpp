@@ -46,8 +46,8 @@ void InGameStateReset(void);
 void InGameStateClearActive(void);
 void ScreenMsgDispatch(void);
 void SndgUpdate(int a);
-void fn_8013CF98(void);
-float fn_8013D050(void);
+void CamSetupAspect(void);
+float CamGetAspect(void);
 void BannerSetTickMs(unsigned int a);
 void BannerEnd(void);
 void GameEventFlagsInit(void);
@@ -459,7 +459,7 @@ void UISGameSetProjection(Viewport_t *pObject)
     float near = 0.1f;
     float far = 1500.0f;
 
-    VptSetPerspective(pObject, 45.0f, fn_8013D050(), near, far);
+    VptSetPerspective(pObject, 45.0f, CamGetAspect(), near, far);
 }
 
 void UISGameObjSlot7(void) {}
@@ -611,7 +611,7 @@ void UISGameInit(void)
     }
     _UISGame_pCache = ResBankCreate(&desc);
     if (!FELoopIsMainFEActive()) {
-        fn_8013CF98();
+        CamSetupAspect();
     }
     UISGameCreateSub();
     if (FELoopIsMainFEActive()) {

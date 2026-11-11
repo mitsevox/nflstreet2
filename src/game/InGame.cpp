@@ -74,7 +74,7 @@ int fn_800C1E40(void);
 void fn_800C1E50(void);
 int fn_800C8704(int *pA, int *pB);
 void BallsPark(void);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void CamGameApplyUserCamera(void);
 int CamGameGetSideYaw();
 void fn_80144EDC(float a);
@@ -263,7 +263,7 @@ int InGame::Init()
     fn_8007F394(1);
     fn_8008FE5C(0);
     fn_80099568(1);
-    fn_8013CF98();
+    CamSetupAspect();
     MemCardUtilInit();
     fn_80066D5C();
     fn_800A216C(1);

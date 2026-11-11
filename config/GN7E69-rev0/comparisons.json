@@ -4061,7 +4061,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8013CD58.cpp",
+      "source": "src/game/camreplay.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv function row 0x8013CC7C-0x8013CD58, data row 0x802A00F8-0x802A0108 and the fn_8013CC7C source-form row; the remaining placements are the accepted unit 0x8013CD58-0x8013E514 and its data rows. Draft comparison only; the original bytes of 0x8013CC7C and its pool remain linked.",
       "sections": [
@@ -4104,7 +4104,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8013CC7C",
+          "symbol": "CamInterpUpdateEaseInOut",
           "start": "0x8013CC7C",
           "end": "0x8013CD58"
         }

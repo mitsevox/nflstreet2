@@ -150,7 +150,7 @@ void fn_800A866C(void);
 void fn_800B50E8(int a);
 int fn_800B81A4(void);
 void BallsSetVisible(int on);
-void fn_8013E474(void);
+void CamReplayNextRecord(void);
 void CamGameResumeAll(void);
 void fn_80144EDC(float a);
 void ParticlesProcess(float a);
@@ -589,7 +589,7 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
     if (p->mUnknownD74 >= p->mUnknownD80 && p->mUnknownD88 != 0) {
         fn_80030940(p);
         p->mUnknownD88 = 0;
-        fn_8013E474();
+        CamReplayNextRecord();
     }
     lbl_803EA358 += p->mUnknownD88;
     if (lbl_803EA358 > 60) {

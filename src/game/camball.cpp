@@ -61,7 +61,7 @@ struct BallCameraJoint_t {
 
 extern "C" {
 int BallStateGet(Ball_t *pBall, int *pOut);
-float fn_8013CEF4(float *pFrom, float *pTo, int *pAngles);
+float CamCalcLookAngles(float *pFrom, float *pTo, int *pAngles);
 int fn_80177F70(void);
 Point_8017886C fn_80177FE0(void);
 float fn_80178298(void);
@@ -248,9 +248,9 @@ void CamBallProcess(BallCamera_t *pCamera)
     pCamera->mUnknown04[2] = pState->mUnknown18[2];
     pAngles = pState->mUnknown24;
     pFrom = pState->mUnknown18;
-    pState->mUnknown40 = fn_8013CEF4(pFrom, &mirrored.mX, pAngles);
+    pState->mUnknown40 = CamCalcLookAngles(pFrom, &mirrored.mX, pAngles);
     pState->mUnknown34 = CamBallCalcFov(pCamera, speed, pState->mUnknown40);
-    pState->mUnknown40 = fn_8013CEF4(pFrom, &mirrored.mX, pAngles);
+    pState->mUnknown40 = CamCalcLookAngles(pFrom, &mirrored.mX, pAngles);
     CamBallSetAngles(pCamera, pAngles, !changed);
     if (changed) {
         pState->mUnknown30 = pState->mUnknown34 + lag;

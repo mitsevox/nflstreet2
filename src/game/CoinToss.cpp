@@ -22,7 +22,7 @@ struct CoinTossState_t {
 };
 
 /* Easing value owned by the camera interpolation code. */
-struct Interp_8013CC14;
+struct CamInterp_t;
 
 struct CoinTossXY_t {
     float mX;
@@ -53,9 +53,9 @@ struct CoinTossCamShot_t {
     float mUnknown68;
     float mUnknown6C;
     float mUnknown70;
-    void (*mpUnknown74)(Interp_8013CC14 *pInterp, int steps);
-    void (*mpUnknown78)(Interp_8013CC14 *pInterp, int steps);
-    void (*mpUnknown7C)(Interp_8013CC14 *pInterp, int steps);
+    void (*mpUnknown74)(CamInterp_t *pInterp, int steps);
+    void (*mpUnknown78)(CamInterp_t *pInterp, int steps);
+    void (*mpUnknown7C)(CamInterp_t *pInterp, int steps);
     short mUnknown80;
     short mUnknown82;
     int mUnknown84;
@@ -76,8 +76,8 @@ void fn_800A3B5C(Object_80039F5C *p);
 void InGameSetInputPaused(int unknown);
 int FELoopIsMainFEActive(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
-void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps);
-void fn_8013CD58(Interp_8013CC14 *pInterp, int steps);
+void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps);
+void CamInterpUpdateSine(CamInterp_t *pInterp, int steps);
 void fn_8013F374(CoinTossCamEntry_t *pEntries);
 void fn_8013F3FC(void);
 void fn_80177E6C(int a, int b);
@@ -165,9 +165,9 @@ static CoinTossCamShot_t _CoinToss_CamShot = {
     0.0f,
     350.0f,
     -1.0f,
-    fn_8013CD58,
-    fn_8013CD58,
-    fn_8013CC7C,
+    CamInterpUpdateSine,
+    CamInterpUpdateSine,
+    CamInterpUpdateEaseInOut,
     0,
     0,
     0,

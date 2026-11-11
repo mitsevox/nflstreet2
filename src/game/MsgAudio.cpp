@@ -36,7 +36,7 @@ void SpchIGResumeChannel(int index);
 void SpchIGPurgeChannel(int a);
 int SpchIGIsChannelIdle(int index);
 int SpchIGGetChannelStream(unsigned int index);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void UISGameSetAspect(Viewport_t *pObject, int mode);
 Viewport_t *UISGameGetMainViewport(void);
 int fn_801F48B8(int handle);
@@ -180,7 +180,7 @@ void OptAudioClose(void)
         } else {
             UISGameSetAspect(UISGameGetMainViewport(), fn_8007F828(6));
         }
-        fn_8013CF98();
+        CamSetupAspect();
     }
     if (_OptAudio_bHasTracks == 0) {
         SndgMusicStop();

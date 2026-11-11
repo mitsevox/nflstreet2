@@ -19,7 +19,7 @@ int fn_801FA428(int file, Table_8007F19C *pTables, Expression_8007F19C *pExpress
                 DbColumnValue *pList, Result_8007F19C *pResult, int a);
 void SndgSetVolumeOption(int channel, unsigned char level);
 void SndgApplyVolumeOptions(void);
-int fn_8013D0D0(void);
+int CamGetDisplayModeIndex(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
 }
@@ -168,7 +168,7 @@ static void fn_8007F3D8(void)
 
     WriteRecord(&sCursor, sRecord);
 
-    mode = fn_8013D0D0();
+    mode = CamGetDisplayModeIndex();
     if (mode == 1 || mode == 2) {
         fn_8007F6F8(6, mode);
     }

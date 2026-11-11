@@ -2216,6 +2216,10 @@
     "BigObjLinkGroup": {
       "address": "0x800400D4",
       "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "CamInterpUpdateEaseInOut": {
+      "address": "0x8013CC7C",
+      "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
     }
   },
   "units": [
@@ -6901,9 +6905,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8013CD58.cpp",
+      "source": "src/game/camreplay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/cu_8013CD58.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/camreplay.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
       "sections": [
         {
           "section": ".text",

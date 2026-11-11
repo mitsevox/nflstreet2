@@ -1,7 +1,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
-#include "game/Interp_8013CC14.h"
+#include "game/CamInterp.h"
 #include "game/EaseVector_8013C9A4.h"
 #include "game/cu_8013BB18.h"
 #include "game/Object_80039F5C.h"
@@ -17,9 +17,9 @@ struct Entry_8013F374 {
 
 /* The two record kinds have distinct payloads; their common stride is 0x130. */
 struct Payload0_8013EEE4 {
-    Interp_8013CC14 mX, mY, mZ;
+    CamInterp_t mX, mY, mZ;
     Vector_80039F5C mTarget;
-    Interp_8013CC14 mFov;
+    CamInterp_t mFov;
     float mLimit;
     unsigned short mUnknown70, mUnknown72;
     int mUnknown74, mUnknown78;
@@ -29,7 +29,7 @@ struct Payload0_8013EEE4 {
 };
 struct Payload1_8013F090 {
     EaseVector_8013C9A4 mPosition, mTarget;
-    Interp_8013CC14 mFov;
+    CamInterp_t mFov;
     float mLimit;
     int mUnknown10C;
     int mRef;
@@ -61,7 +61,7 @@ struct ScriptCamera_8013E514 {
 struct Desc0_8013EEE4 {
     Vector_80039F5C mPosition, mEndPosition, mTarget;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModeX, mModeY, mModeZ, mModeFov;
+    CamInterpFunc_t mModeX, mModeY, mModeZ, mModeFov;
     unsigned short mUnknown48, mUnknown4A;
     int mUnknown4C, mUnknown50;
     unsigned int mFlags;
@@ -74,7 +74,7 @@ struct Desc1_8013F090 {
     float mTargetStartScale, mTargetEndScale;
     int mUnknown58, mRef;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModePosition, mModeTarget, mModeFov;
+    CamInterpFunc_t mModePosition, mModeTarget, mModeFov;
     unsigned short mUnknown80, mUnknown82;
     int mUnknown84, mUnknown88;
     unsigned int mFlags;
@@ -140,7 +140,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     State_8013E574 *s = &p->mState;
     Payload1_8013F090 *b = &s->mpCurrent->mData.m1;
     EaseVector_8013C9A4 *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     if (b->mRef) {
         Object_80039F5C *o = fn_8009BCE8(&b->mRef);
@@ -187,7 +187,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     State_8013E574 *s = &p->mState;
     Payload0_8013EEE4 *b = &s->mpCurrent->mData.m0;
     Vector_80039F5C *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     b->mX.mUpdate(&b->mX, done); b->mY.mUpdate(&b->mY, done);
     b->mZ.mUpdate(&b->mZ, done); fov->mUpdate(fov, done);
