@@ -118,7 +118,7 @@ void fn_8012060C(void);
 void CamGameStart(void *pObject);
 void CollTypesRegister(void);
 void CollTypesUnregister(void);
-void fn_80144264(void);
+void StatcollStart(void);
 void fn_80144B50(int a);
 void fn_80144C6C(int a);
 void fn_8014512C(void);
@@ -1258,7 +1258,7 @@ const char *Statcoll::GetName() { return "Statcoll"; }
 
 int Statcoll::Init()
 {
-    fn_80144264();
+    StatcollStart();
     return 1;
 }
 

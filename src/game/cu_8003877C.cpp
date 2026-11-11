@@ -153,7 +153,7 @@ void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void fn_8009D00C(void *p, int *pRecord);
 int fn_8011E8A4(void);
 void fn_8011E8D8(Object_80039F5C *p);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 }
 
 extern "C" {
@@ -793,7 +793,7 @@ extern "C" void fn_80039C64(void)
 {
     CollideSet_t *pSet = (CollideSet_t *)lbl_803EA3F8->mpUnknown4;
     CollideSetTest(pSet, pSet);
-    CollideSetTest(fn_8003A078(), fn_801442F0());
+    CollideSetTest(fn_8003A078(), StatcollGetSet());
 }
 
 extern "C" void fn_80039CB0(void)

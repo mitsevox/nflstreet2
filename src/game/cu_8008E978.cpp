@@ -9592,7 +9592,7 @@ int fn_800BA6F8(void);
 void fn_80039B2C(float dt);
 void fn_80039A38(float dt);
 CollideSet_t *fn_8003A078(void);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 void fn_80039C64(void);
 void fn_8005122C(float dt);
 void fn_80039CB0(float dt);
@@ -10874,7 +10874,7 @@ extern "C" void fn_800AD550(float dt)
 
     if (mode != 5 && mode != 1 && mode != 6 && mode != 7) {
         CollideSetUpdate(fn_8003A078());
-        CollideSetUpdate(fn_801442F0());
+        CollideSetUpdate(StatcollGetSet());
         fn_80039C64();
     }
     fn_8005122C(dt);

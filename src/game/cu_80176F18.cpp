@@ -139,7 +139,7 @@ void fn_8011F574(void);
 void fn_80120618(void);
 void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
 int fn_801650DC(Record_80067338 *pRecord);
 void fn_8016F7F8(void);
@@ -801,7 +801,7 @@ extern "C" void fn_80177E6C(int a, int flip)
     fn_8003A090();
     BallsMirror();
     CollideSetMirror(fn_8003A078());
-    CollideSetMirror(fn_801442F0());
+    CollideSetMirror(StatcollGetSet());
     CollideSetMirror(BallGetCollRecords());
     CamGameSuspendAll();
     if (lbl_803EB444->mUnknown39 == 0) {

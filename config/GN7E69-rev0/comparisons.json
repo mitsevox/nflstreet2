@@ -5482,9 +5482,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80144224.cpp",
+      "source": "src/game/Statcoll.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/cu_80144224.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
+      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/Statcoll.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
       "sections": [
         {
           "section": ".text",
@@ -5507,7 +5507,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80143F40",
+          "symbol": "StatcollBlockInit",
           "start": "0x80143F40",
           "end": "0x80143F8C"
         }

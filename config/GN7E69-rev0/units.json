@@ -2196,6 +2196,10 @@
     "CamBallStart": {
       "address": "0x801422EC",
       "evidence": "evidence.tsv function row 0x801422EC-0x801423D0: documented holdout of src/game/camball.cpp, whose original bytes stay linked; CamBallMsgFunc calls it."
+    },
+    "StatcollBlockInit": {
+      "address": "0x80143F40",
+      "evidence": "evidence.tsv function and name rows for 0x80143F40 (documented holdout of src/game/Statcoll.cpp: draft registered in comparisons.json, original bytes linked)."
     }
   },
   "units": [
@@ -8664,9 +8668,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80144224.cpp",
+      "source": "src/game/Statcoll.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_80144224.cpp unit, data, compiler and source-form rows",
+      "evidence": "evidence.tsv: src/game/Statcoll.cpp unit, data, compiler and source-form rows",
       "sections": [
         {
           "section": ".text",
