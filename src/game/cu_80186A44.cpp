@@ -12,8 +12,8 @@ int UserRecGetName(int, char *);
 int fn_8022F358(int);
 void ChalCloseCursors(void);
 void fn_8022F1BC(int);
-void fn_80029DCC(int, int);
-void fn_80029E90(int, int, int, int);
+void MemCardFilesRemoveSlot(int, int);
+void MemCardFilesCopySlot(int, int, int, int);
 void fn_80011894(int);
 int UserRecGetGameStat(int, int, int, int, int);
 void UserRecAddStat(int, int, int);
@@ -23,8 +23,8 @@ void fn_8022F294(int);
 int fn_8022F0D4(int);
 int fn_8022F794(int, char *);
 int fn_8022F3D4(int);
-void fn_80029C2C(int, int, int);
-void fn_8002A1D4(int, int, char *);
+void MemCardFilesResetSlot(int, int, int);
+void MemCardFilesRenameSlot(int, int, char *);
 int CheatIsNoneEnabled(void);
 int fn_801485D4(void);
 int fn_800A7E40(int);
@@ -78,10 +78,10 @@ void fn_80186A44(signed char index)
     ChalCloseCursors();
     fn_8022F1BC(db);
     for (int i = index; i < count; i = (signed char)(i + 1)) {
-        fn_80029DCC(2, i);
+        MemCardFilesRemoveSlot(2, i);
         int next = i + 1;
         if (next < count) {
-            fn_80029E90(2, i, 2, next);
+            MemCardFilesCopySlot(2, i, 2, next);
             lbl_803ECB8C[i] = lbl_803ECB8C[next];
         }
     }
@@ -177,8 +177,8 @@ void fn_80186F9C(int index, char *pName, int)
     fn_8022F794(db, pName);
     fn_80186ED8(index);
     fn_8022F478(fn_8022F358(index));
-    fn_80029C2C(2, index, 0);
-    fn_8002A1D4(2, index, pName);
+    MemCardFilesResetSlot(2, index, 0);
+    MemCardFilesRenameSlot(2, index, pName);
 }
 int fn_80187038(unsigned char pad, int allowCreate)
 {

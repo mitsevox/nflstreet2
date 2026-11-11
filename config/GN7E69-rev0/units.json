@@ -395,11 +395,11 @@
     },
     "sprintf": {
       "address": "0x801C2E18",
-      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcmp": {
       "address": "0x801C2FE4",
-      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcpy": {
       "address": "0x801C2EB4",
@@ -1773,6 +1773,10 @@
       "address": "0x803EBE80",
       "evidence": "evidence.tsv data/name rows for _tDbMemAllocInfoCallback: optional three-word memory-event callback; original-owned storage."
     },
+    "MemCardFilesFindNameOnPort": {
+      "address": "0x8002A86C",
+      "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
     "MemInitExternHeap": {
       "address": "0x801D3B0C",
       "evidence": "evidence.tsv function/name/source-form rows at 0x801D3B0C: Sys::Init calls the original external-region initializer at 0x8019A7F4; MemExtern.c remains comparison-only."
@@ -2191,6 +2195,37 @@
     }
   },
   "units": [
+    {
+      "source": "src/game/MemCardFiles.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80029500-0x8002A9B8 (src/game/MemCardFiles.cpp), its function, name and data rows; 0x80029500-0x8002A86C and all of the file's data are linked, the documented holdout 0x8002A86C-0x8002A9B8 keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80029500",
+          "end": "0x8002A86C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A360",
+          "end": "0x8028A3C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC780",
+          "end": "0x802CC830"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA320",
+          "end": "0x803EA33C"
+        }
+      ]
+    },
     {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",

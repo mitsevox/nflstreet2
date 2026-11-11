@@ -21,8 +21,8 @@ void fn_801F9718(int, int, DbColumnValue *, int *, int);
 int fn_801F9D70(int, int, DbFilter *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
-int fn_80029D74(int, int);
-void fn_80029CE0(int, int);
+int MemCardFilesNeedsSave(int, int);
+void MemCardFilesStoreChecksum(int, int);
 int PortraitAllocSlot(int, int);
 int PlayerDbGetHairStyle(Object_8008044C *);
 int PlayerDbGetPlht(Object_8008044C *);
@@ -158,7 +158,7 @@ void fn_8018D07C(int index)
     int player, ytrp, oldPxsp;
     int source = fn_8022F3D4(fn_8022F358(index));
     QueryCursor cursor = {0, 0, -1, 0};
-    int hadState = fn_80029D74(2, index);
+    int hadState = MemCardFilesNeedsSave(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
     int code = 0;
@@ -179,7 +179,7 @@ void fn_8018D07C(int index)
             }
         }
     }
-    if (!hadState) fn_80029CE0(2, index);
+    if (!hadState) MemCardFilesStoreChecksum(2, index);
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
 }
 

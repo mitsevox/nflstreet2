@@ -30,11 +30,11 @@ extern char lbl_802EBE34[];
 extern char lbl_802EBE40[];
 extern Driver_801E11E8 lbl_802F94D0;
 
-void fn_800296B0(void);
-void fn_800297D0(void);
-void fn_80029C2C(int a, int b, int c);
-void fn_8002A1D4(int a, int b, char *pText);
-void fn_8002A5F0(int a, char *pText, int b);
+void MemCardFilesInit(void);
+void MemCardFilesShutdown(void);
+void MemCardFilesResetSlot(int a, int b, int c);
+void MemCardFilesRenameSlot(int a, int b, char *pText);
+void MemCardFilesMakeName(int a, char *pText, int b);
 void PlaDynClutOpen(void);
 void PlaDynClutUnload(void);
 void SndgMusicInit(void);
@@ -348,16 +348,16 @@ int MemCard::Init()
 {
     char text[32];
 
-    fn_800296B0();
-    fn_80029C2C(1, 0, 1);
-    fn_8002A5F0(1, text, 0);
-    fn_8002A1D4(1, 0, text);
+    MemCardFilesInit();
+    MemCardFilesResetSlot(1, 0, 1);
+    MemCardFilesMakeName(1, text, 0);
+    MemCardFilesRenameSlot(1, 0, text);
     return 1;
 }
 
 int MemCard::Shutdown()
 {
-    fn_800297D0();
+    MemCardFilesShutdown();
     return 1;
 }
 

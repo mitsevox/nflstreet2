@@ -63,7 +63,7 @@ int FEPlyrUpdateMoves(void);
 float FEPlyrSpin(float a);
 void FEPlyrResetPose(int a);
 unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b);
-void fn_80029CE0(int a, int b);
+void MemCardFilesStoreChecksum(int a, int b);
 void fn_8005F29C(void);
 void ChalCloseCursors(void);
 int ChalGetDevPoints(void);
@@ -517,7 +517,7 @@ void fn_80181AD4(unsigned char a)
         lbl_803EB58D = 1;
     }
     if (done) {
-        fn_80029CE0(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
     }
 }
 
@@ -1585,7 +1585,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         pResult->i = lbl_803EB56C;
         break;
     case 0x197:
-        fn_80029CE0(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
         break;
     case 0x19A:
         pResult->i = lbl_803EB57C;

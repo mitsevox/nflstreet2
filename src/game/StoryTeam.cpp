@@ -29,8 +29,8 @@ int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_80029D74(int type, int index);
-void fn_80029CE0(int type, int index);
+int MemCardFilesNeedsSave(int type, int index);
+void MemCardFilesStoreChecksum(int type, int index);
 int PortraitAllocSlot(int value, int group);
 void StoryTeamSyncCreatedPlayer(int index);
 
@@ -160,7 +160,7 @@ void StoryTeamSyncCreatedPlayer(int index)
     int oldPxsp;
     int handle = fn_8022F3D4(fn_8022F358(index));
     QueryCursor cursor = {0, 0, -1, 0};
-    int state = fn_80029D74(2, index);
+    int state = MemCardFilesNeedsSave(2, index);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -183,7 +183,7 @@ void StoryTeamSyncCreatedPlayer(int index)
             }
         }
     }
-    if (!state) fn_80029CE0(2, index);
+    if (!state) MemCardFilesStoreChecksum(2, index);
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
 }
 

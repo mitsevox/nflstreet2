@@ -31,7 +31,7 @@ struct MemCardLoadArgs_t {
 
 extern "C" {
 int UserRecGetCount();
-void fn_8002A574(int, int);
+void MemCardFilesSetLoadTarget(int, int);
 void MsgMemCardLoadRegisterCallbacks();
 void MsgMemCardLoadResetList(int, int *);
 void MsgMemCardLoadRewind();
@@ -96,7 +96,7 @@ extern "C" int MsgMemCardLoadNextEntry(int *p0, int *p4, int *p8, int *p12)
 
 extern "C" void MsgMemCardLoadSelectEntry(int key, int value)
 {
-    fn_8002A574(key, (key == 2 || key == 3) ? UserRecGetCount() : 0);
+    MemCardFilesSetLoadTarget(key, (key == 2 || key == 3) ? UserRecGetCount() : 0);
     char first[32];
     char second[32];
     fn_801D6B74((signed char)value, key, first, 32, 0, -1, 0);

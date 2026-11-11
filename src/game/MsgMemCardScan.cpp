@@ -24,8 +24,8 @@ union MemCardScanArg_t {
 extern "C" {
 int UserRecGetCount();
 void fn_80186ED8(signed char);
-void fn_8002A574(int, int);
-void fn_8002A5C4();
+void MemCardFilesSetLoadTarget(int, int);
+void MemCardFilesStartLoad();
 int fn_801E15D0(int a);
 unsigned int fn_801E1954();
 int fn_801E195C(int a);
@@ -148,7 +148,7 @@ extern "C" void MsgMemCardScanSelectEntry(int key, int value)
     if (key == 2) {
         index = _MsgMemCardScan_iNext - 2;
     }
-    fn_8002A574(key, index);
+    MemCardFilesSetLoadTarget(key, index);
 }
 
 extern "C" int MsgMemCardScanConsiderFile(int key, int value)
@@ -187,8 +187,8 @@ extern "C" int MsgMemCardScanConsiderFile(int key, int value)
         changed = 0;
     }
     if (changed) {
-        fn_8002A574(key, 0);
-        fn_8002A5C4();
+        MemCardFilesSetLoadTarget(key, 0);
+        MemCardFilesStartLoad();
     }
     return 0;
 }
