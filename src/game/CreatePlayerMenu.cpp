@@ -525,7 +525,7 @@ static int _CreatePlayerGetOriginal(int key, int index);
 
 static DbCursor _CreatePlayer_sHairCursor;
 static DbCursor _CreatePlayer_sPoseCursor;
-static FchrCursor _CreatePlayer_sFaceCursor;
+static FchrCursor _CreatePlayer_sFacialHairCursor;
 static CreatePlayerOriginal_t _CreatePlayer_aOriginals[15];
 static FaceFeatures_t _CreatePlayer_sFace;
 static unsigned short _CreatePlayer_aSkillCosts[21];
@@ -737,14 +737,14 @@ static void _CreatePlayerSetFaceFeature(int index, int value)
     FEPlyrRequestSwap();
 }
 
-static void _CreatePlayerSetFace(int value)
+static void _CreatePlayerSetFacialHair(int value)
 {
     int flag;
 
     PlayerLookSetFace(0, value);
     PlayerLookSetFace(1, value);
-    _CreatePlayer_sFaceCursor.FindFchrRow(value, 0);
-    _CreatePlayer_sFace.mUnknown0[0] = _CreatePlayer_sFaceCursor.GetFchrFhstCode();
+    _CreatePlayer_sFacialHairCursor.FindFchrRow(value, 0);
+    _CreatePlayer_sFace.mUnknown0[0] = _CreatePlayer_sFacialHairCursor.GetFchrFhstCode();
     FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
     FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
     PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
@@ -1359,7 +1359,7 @@ void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
 
 void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
 {
-    _CreatePlayer_sFaceCursor.OpenFchrTable();
+    _CreatePlayer_sFacialHairCursor.OpenFchrTable();
     switch (mUnknown8) {
     case 0:
         fn_80087A78(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
@@ -1370,8 +1370,8 @@ void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
         *pCount = 12;
         break;
     case 2:
-        _CreatePlayer_sFaceCursor.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
-        *pCount = _CreatePlayer_sFaceCursor.GetRowCount();
+        _CreatePlayer_sFacialHairCursor.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
+        *pCount = _CreatePlayer_sFacialHairCursor.GetRowCount();
         break;
     case 3:
         *pOut = PlayerDbGetFacialHairColor(fn_80182DC8());
@@ -1397,8 +1397,8 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             PlayerDbSetHairColor(fn_80182DC8(), a);
             break;
         case 2:
-            _CreatePlayer_sFaceCursor.MoveToRow(a);
-            fn_800822A8(fn_80182DC8(), _CreatePlayer_sFaceCursor.GetFchrPffh());
+            _CreatePlayer_sFacialHairCursor.MoveToRow(a);
+            fn_800822A8(fn_80182DC8(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
@@ -1423,7 +1423,7 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             FEPlyrRequestSwap();
             break;
         case 2:
-            _CreatePlayerSetFace(fn_80082280(fn_80182DC8()));
+            _CreatePlayerSetFacialHair(fn_80082280(fn_80182DC8()));
             break;
         case 3:
             PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(fn_80182DC8()));
@@ -1439,7 +1439,7 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             break;
         }
     }
-    _CreatePlayer_sFaceCursor.CloseTable();
+    _CreatePlayer_sFacialHairCursor.CloseTable();
     return -1;
 }
 
@@ -1457,8 +1457,8 @@ void CreatePlayerHairOptionList::Highlight(int index)
         FEPlyrRequestSwap();
         break;
     case 2:
-        _CreatePlayer_sFaceCursor.MoveToRow(index);
-        _CreatePlayerSetFace(_CreatePlayer_sFaceCursor.GetFchrPffh());
+        _CreatePlayer_sFacialHairCursor.MoveToRow(index);
+        _CreatePlayerSetFacialHair(_CreatePlayer_sFacialHairCursor.GetFchrPffh());
         break;
     case 3:
         PlayerLookSetFacialHairColor(0, index);
@@ -1492,8 +1492,8 @@ void CreatePlayerHairOptionList::GetItem(int index, MenuEntry_t *pOut)
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 2:
-        _CreatePlayer_sFaceCursor.MoveToRow(index);
-        _CreatePlayer_sFaceCursor.GetFchrFhdcText(name, 21);
+        _CreatePlayer_sFacialHairCursor.MoveToRow(index);
+        _CreatePlayer_sFacialHairCursor.GetFchrFhdcText(name, 21);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 4:
