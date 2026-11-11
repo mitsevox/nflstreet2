@@ -17,7 +17,7 @@ void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void GameSetupInit(void);
 void fn_8002D274(Type_803EA368 *p);
 void fn_8003A4DC(void);
-void fn_800406C0(unsigned int flags);
+void BigObjNotifyTypes(unsigned int flags);
 void fn_800588E0(void);
 void fn_80071C34(int value);
 void SndgMusicExitMode(int resume);
@@ -69,7 +69,7 @@ extern "C" void fn_800C1CA0(void)
     ScoringLogInit();
     DriveLogEndDrive();
     ScoringLogReset();
-    fn_800406C0(0x100);
+    BigObjNotifyTypes(0x100);
     fn_8022DD4C(0);
     fn_8022DD80(0);
     if (GameModeTypeGet() == 6) {

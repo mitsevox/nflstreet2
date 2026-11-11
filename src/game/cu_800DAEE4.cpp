@@ -1080,7 +1080,7 @@ void fn_800DEC10(Object_80039F5C *, Block_800DE3B0 *);
 extern "C" int fn_801784C4(void);
 
 extern "C" int fn_801784C4(void);
-extern "C" void *fn_80040FD4(Vector_80039F5C *, int, float *);
+extern "C" void *BigObjFindNearestOfType(Vector_80039F5C *, int, float *);
 extern "C" void fn_800538E0(void *, Object_80039F5C *);
 
 extern "C" int fn_8009F778(Object_80039F5C *);
@@ -2119,7 +2119,7 @@ extern "C" void fn_800DEC10(Object_80039F5C *p, Block_800DE3B0 *pBlock)
             position.mY = -position.mY;
         }
         float distance;
-        void *pSurface = fn_80040FD4(&position, 7, &distance);
+        void *pSurface = BigObjFindNearestOfType(&position, 7, &distance);
         if (pSurface && !(distance >= 1.6f)) fn_800538E0(pSurface, p);
     }
 }

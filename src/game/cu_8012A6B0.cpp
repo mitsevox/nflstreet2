@@ -136,8 +136,8 @@ int fn_801067D8(Object_80039F5C *p);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801787A0(void);
 int fn_801784C4(void);
-struct Object_80040818;
-Object_80040818 *fn_80040FD4(Vector_80039F5C *p, int a, float *pOut);
+struct BigObj_t;
+BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
 float fn_800AD168(int team, float value);
 float fn_80237260(int a);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
@@ -1967,7 +1967,7 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, Opt
         position.mY = -position.mY;
     }
     float nearest;
-    Object_80040818 *found = fn_80040FD4(&position, 7, &nearest);
+    BigObj_t *found = BigObjFindNearestOfType(&position, 7, &nearest);
 
     nearest = fn_800AD168(p->mIdBytes[2], nearest);
     if (found && !(nearest >= 3.0f)) {

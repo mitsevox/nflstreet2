@@ -32,11 +32,11 @@ void fn_80039A1C(void);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E118(void);
-void fn_80040558(int a, int b);
-void fn_800405F0(int a);
-void fn_80040B88(int a);
-void fn_80040C90(int a);
-void fn_800410FC(void);
+void BigObjSetupBigObjects(int a, int b);
+void BigObjShutdownObjects(int a);
+void BigObjCreateAnimBall(int a);
+void BigObjAddAllObjects(int a);
+void BigObjRegisterSave(void);
 void fn_80043AE4(void);
 void fn_80044378(void);
 void fn_80044B2C(int a);
@@ -298,7 +298,7 @@ int Ball::Init()
     BallsStart(mode);
     BallsCreateModels(GameObjList::GetListHandle());
     fn_800502C0();
-    fn_80040B88(GameObjList::GetListHandle());
+    BigObjCreateAnimBall(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -339,7 +339,7 @@ int BigObj::Init()
     unsigned short count = LevelGetObjectCount() + 1;
 
     ResTrackLabel("BigObjSetupBigObjectsStart");
-    fn_80040558(count, GameObjList::GetListHandle());
+    BigObjSetupBigObjects(count, GameObjList::GetListHandle());
     ResTrackLabel("BigObjSetupBigObjectsFinish");
     ResTrackLabel("BObjInfoStateInitStart");
     BigObjInstInit(104, 10);
@@ -348,7 +348,7 @@ int BigObj::Init()
     fn_8004A9FC();
     ResTrackLabel("GenObjSetupAnimationsFinish");
     ResTrackLabel("BigObjAddAllObjectsStart");
-    fn_80040C90(GameObjList::GetListHandle());
+    BigObjAddAllObjects(GameObjList::GetListHandle());
     ResTrackLabel("BigObjAddAllObjectsFinish");
     return 1;
 }
@@ -357,7 +357,7 @@ int BigObj::Shutdown()
 {
     BigObjInstShutdown();
     VptFlushObjectTrashSync();
-    fn_800405F0(GameObjList::GetListHandle());
+    BigObjShutdownObjects(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1123,7 +1123,7 @@ int ReplayFrame::Init()
     BallsReplayRegister();
     fn_80162D78();
     fn_8003E118();
-    fn_800410FC();
+    BigObjRegisterSave();
     fn_80044378();
     SndgReplayRegister();
     fn_8014512C();

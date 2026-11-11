@@ -2208,6 +2208,14 @@
     "PlayerGearGetScaledBonuses": {
       "address": "0x80081440",
       "evidence": "evidence.tsv function and name rows for 0x80081440 (exact in comparisons.json; precedes the holdout 0x800814BC of src/game/PlayerGearRatings.cpp, so its original bytes stay linked)."
+    },
+    "BigObjDefaultUpdate": {
+      "address": "0x800400CC",
+      "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
+    },
+    "BigObjLinkGroup": {
+      "address": "0x800400D4",
+      "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
     }
   },
   "units": [
@@ -10322,9 +10330,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800400CC.cpp",
+      "source": "src/game/BigObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp) and its .rodata, .sdata and .sbss rows.",
+      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/BigObj.cpp) and its .rodata, .sdata and .sbss rows.",
       "sections": [
         {
           "section": ".text",

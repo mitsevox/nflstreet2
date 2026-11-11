@@ -1,10 +1,10 @@
-#ifndef GAME_DESC_800408E4_H
-#define GAME_DESC_800408E4_H
+#ifndef GAME_BIG_OBJ_DESC_H
+#define GAME_BIG_OBJ_DESC_H
 
 #include "game/BigObjInst.h"
 
-/* Placement record that fn_800408E4 turns into an object. */
-struct Desc_800408E4 {
+/* Placement record that BigObjCreate turns into an object. */
+struct BigObjDesc_t {
     int mUnknown0;
     char mName[128];
     BigObjPlacement_t mUnknown132;

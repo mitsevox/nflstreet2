@@ -8,7 +8,7 @@
 #include "game/AnimFileFormat.h"
 #include "engine/animemot.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/cu_801444D8.h"
 #include "game/AudmonEvent.h"
@@ -258,7 +258,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xD001:placed->mUnknown424=AnimSeqGetOpcodeParameter();return 1;
         case 0xD002:placed->mUnknown428->mUnknown1708|=8;return 1;
         case 0xD003: {
-            int value=AnimSeqGetOpcodeParameter();Object_80040818 *owner=fn_80040F18(placed->mUnknown4);
+            int value=AnimSeqGetOpcodeParameter();BigObj_t *owner=BigObjGet(placed->mUnknown4);
             if(value) owner->mUnknown232_31=1;else owner->mUnknown232_31=0;return 1;
         }
         case 0xD005:placed->mUnknown428->mUnknown1708|=0x20;return 1;

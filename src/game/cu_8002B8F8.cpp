@@ -117,7 +117,7 @@ void fn_8003A5E8(void);
 void fn_8003AC10(void);
 Block_80170E64 *fn_8003DF7C(Vector_80039F5C *pPos, float *pDist);
 void fn_8003E038(Block_80170E64 *pBlock, int *pOut);
-Block_80170E64 *fn_80040F28(Vector_80039F5C *pPos, float *pDist);
+Block_80170E64 *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist);
 void fn_80042F4C(int a);
 void fn_800443B8(void);
 void fn_80044460(void);
@@ -2121,7 +2121,7 @@ extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsi
     float dist;
 
     if (lbl_803EC634) {
-        p = fn_80040F28(&lbl_8030660C.mPos, &dist);
+        p = BigObjFindNearest(&lbl_8030660C.mPos, &dist);
         if (p && dist < *pDist) {
             *pDist = dist;
             pBest = p;

@@ -38,7 +38,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_8017886C.h"
 #include "game/Query_800CE770.h"
@@ -9353,8 +9353,8 @@ extern "C" void fn_800BBE98(void)
 }
 
 extern "C" {
-int fn_80040F10(void);
-void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
+int BigObjGetCount(void);
+void fn_80053B4C(BigObj_t *pObject, int index, int apply);
 }
 
 extern "C" void fn_800BBF18(void)
@@ -9372,8 +9372,8 @@ extern "C" void fn_800BBF18(void)
     }
     if (playing != 0 && lbl_803EC98C->mUnknownC == -1 && lbl_803EC98C->mUnknown4 % 60 == 0
         && ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0)) {
-        for (i = 0; i < fn_80040F10(); i++) {
-            Object_80040818 *pObject = fn_80040F18(i);
+        for (i = 0; i < BigObjGetCount(); i++) {
+            BigObj_t *pObject = BigObjGet(i);
 
             if (pObject->mUnknown472->mUnknown188 == 7) {
                 fn_80053B4C(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
@@ -9399,8 +9399,8 @@ extern "C" void fn_800BBF18(void)
         }
         PauseUnblock();
         if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
-            for (i = 0; i < fn_80040F10(); i++) {
-                Object_80040818 *pObject = fn_80040F18(i);
+            for (i = 0; i < BigObjGetCount(); i++) {
+                BigObj_t *pObject = BigObjGet(i);
 
                 if (pObject->mUnknown472->mUnknown188 == 7) {
                     fn_80053B4C(pObject, 2, 0);

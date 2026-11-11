@@ -14242,9 +14242,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800400CC.cpp",
+      "source": "src/game/BigObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp), the cu_800400CC draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/BigObj.cpp), the BigObj draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
@@ -14273,12 +14273,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800400CC",
+          "symbol": "BigObjDefaultUpdate",
           "start": "0x800400CC",
           "end": "0x800400D4"
         },
         {
-          "symbol": "fn_800400D4",
+          "symbol": "BigObjLinkGroup",
           "start": "0x800400D4",
           "end": "0x80040154"
         }

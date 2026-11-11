@@ -1,17 +1,17 @@
-#ifndef GAME_OBJECT_80040818_H
-#define GAME_OBJECT_80040818_H
+#ifndef GAME_BIG_OBJ_H
+#define GAME_BIG_OBJ_H
 
 #include "game/Object_8003DEC4.h"
 #include "game/BigObjInst.h"
 #include "game/Ball.h"
 #include "game/LevelSurface.h"
 
-struct Model_8004E0CC {
+struct BigObjModelState_t {
     char mUnknown0[40];
     unsigned char mUnknown40;
 };
 
-struct Flags_800411C8 {
+struct BigObjFlags_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     char mUnknown4[16];
@@ -19,11 +19,11 @@ struct Flags_800411C8 {
 };
 
 /* 548-byte object of pool type 28, one per placed object. */
-struct Object_80040818 {
+struct BigObj_t {
     int mUnknown0;
     Vector_80039F5C mPos;
     char mUnknown16[4];
-    int (*mUnknown20)(Object_80040818 *pObject);
+    int (*mUnknown20)(BigObj_t *pObject);
     Quat_801EB488 mRot;
     char mUnknown40[132];
     union {
@@ -49,7 +49,7 @@ struct Object_80040818 {
     char mUnknown236[12];
     unsigned int mUnknown248;
     char mUnknown252[48];
-    Model_8004E0CC *mUnknown300;
+    BigObjModelState_t *mUnknown300;
     Skeleton_80041930 **mUnknown304;
     int mUnknown308;
     union {
@@ -62,15 +62,15 @@ struct Object_80040818 {
     float mUnknown340;
     char mName[128];
     BigObjInst *mUnknown472;
-    Flags_800411C8 *mUnknown476;
+    BigObjFlags_t *mUnknown476;
     int mUnknown480;
     char mUnknown484[64];
 };
 
 extern "C" {
-Object_80040818 *fn_80040F18(int index);
-Skeleton_80041930 *fn_800410B8(int index);
-Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject);
+BigObj_t *BigObjGet(int index);
+Skeleton_80041930 *BigObjGetSkeleton(int index);
+Skeleton_80041930 *BigObjGetItemSkeleton(BigObj_t *pObject);
 }
 
 #endif

@@ -1,6 +1,6 @@
 #include "game/AnimFrameHeader.h"
 #include "game/AnimRootItem.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/DynObjRender.h"
 #include "game/bitstream.h"
 #include "game/fn_801D2B7C.h"
@@ -162,7 +162,7 @@ void fn_801A9C44(Pose_80041930 *pose, AnimBlendEntry *entry, AnimQuantContext *c
     entry->mUnknown12[2] = fn_801A9C08(samples[2], 0, 2, context, pair) << 8;
 }
 
-void fn_801A9F98(BigObjPhysics_t *unused, Object_80040818 *pObject, int blend, int unused2)
+void fn_801A9F98(BigObjPhysics_t *unused, BigObj_t *pObject, int blend, int unused2)
 {
     AnimBlendList *pBlend = (AnimBlendList *)blend;
     Pose_80041930 pose;
@@ -208,7 +208,7 @@ void fn_801A9F98(BigObjPhysics_t *unused, Object_80040818 *pObject, int blend, i
     pPose->mUnknown6 = -1;
 }
 
-void fn_801AA124(Object_80040818 *pObject, void *items, int count, void *p)
+void fn_801AA124(BigObj_t *pObject, void *items, int count, void *p)
 {
     AnimRootItem *pItems = (AnimRootItem *)items;
     int angles[3];

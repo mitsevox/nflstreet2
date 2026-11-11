@@ -2,7 +2,7 @@
    hotspots), their creation from placements, per-frame behaviour callbacks, physics steps and
    syncing back to their owning objects. */
 #include "game/BigObjInst.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801D2B7C.h"
@@ -19,10 +19,10 @@ struct BigObjPool_t {
 };
 
 extern "C" {
-int fn_80040A70(BigObjInst *pObject, int index);
-int fn_80041094(int index);
-void fn_8004A8C4(BigObjPhysics_t *pExtra, Object_80040818 *pItem, int a);
-void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c);
+int BigObjSyncFromInst(BigObjInst *pObject, int index);
+int BigObjHasSkeleton(int index);
+void fn_8004A8C4(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a);
+void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c);
 void fn_8004A908(BigObjInst *pObject, int index);
 void fn_8004C684(void *pOwner, BigObjInst *pObject);
 void fn_8004C7B8(BigObjInst *pObject);
@@ -123,7 +123,7 @@ BigObjInst *BigObjInstCreate(void *pOwner, BigObjPlacement_t *pDesc)
 {
     BigObjInst *pObject = &_BigObjInst_pPool->mObjects[_BigObjInst_pPool->mCount];
 
-    if (fn_800410B8(_BigObjInst_pPool->mCount) != 0) {
+    if (BigObjGetSkeleton(_BigObjInst_pPool->mCount) != 0) {
         pObject->mUnknown428 = &_BigObjInst_pPool->mExtras[_BigObjInst_pPool->mExtraCount++];
     } else {
         pObject->mUnknown428 = 0;
@@ -149,7 +149,7 @@ BigObjInst *BigObjInstCreate(void *pOwner, BigObjPlacement_t *pDesc)
     pObject->mUnknown140 = pObject->mUnknown32;
     fn_8004C684(pOwner, pObject);
     if (pObject->mUnknown184 != 0) {
-        pObject->mUnknown184(pObject, fn_80040F18(_BigObjInst_pPool->mCount), 0);
+        pObject->mUnknown184(pObject, BigObjGet(_BigObjInst_pPool->mCount), 0);
     }
     _BigObjInst_pPool->mCount++;
     return pObject;
@@ -160,7 +160,7 @@ int BigObjInstSyncAll(void)
     unsigned short i;
 
     for (i = 0; i < _BigObjInst_pPool->mCount; i++) {
-        fn_80040A70(&_BigObjInst_pPool->mObjects[i], i);
+        BigObjSyncFromInst(&_BigObjInst_pPool->mObjects[i], i);
     }
     return 0;
 }
@@ -170,7 +170,7 @@ int BigObjInstSimulateAll(float dt)
     unsigned short i;
 
     for (i = 0; i < _BigObjInst_pPool->mCount; i++) {
-        if (fn_80041094(i) != 0) {
+        if (BigObjHasSkeleton(i) != 0) {
             BigObjInst *pObject = &_BigObjInst_pPool->mObjects[i];
             BigObjPhysics_t *pExtra = pObject->mUnknown428;
             int a;
@@ -184,11 +184,11 @@ int BigObjInstSimulateAll(float dt)
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             fn_801BA03C(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = fn_801BC7C0(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
-            fn_8004A8C4(pExtra, fn_80040F18(i), a);
+            fn_8004A8C4(pExtra, BigObjGet(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);
             pExtra->mUnknown33 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
                                              fn_801BE648(pObject->mUnknown428->mUnknown1300), 1);
-            fn_8004A8E8(fn_80040F18(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
+            fn_8004A8E8(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
         }
     }
     return 0;
@@ -204,9 +204,9 @@ int BigObjInstTickAll(void)
 
         if (pObject->mUnknown184 != 0) {
             if (fn_800AD9B4() == 5) {
-                pObject->mUnknown184(pObject, fn_80040F18(i), 2);
+                pObject->mUnknown184(pObject, BigObjGet(i), 2);
             } else {
-                pObject->mUnknown184(pObject, fn_80040F18(i), 1);
+                pObject->mUnknown184(pObject, BigObjGet(i), 1);
             }
         }
     }

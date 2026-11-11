@@ -278,7 +278,7 @@ extern "C" {
 void fn_8003A450(void);
 void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
-void fn_800406C0(int a);
+void BigObjNotifyTypes(int a);
 void fn_8004730C(int a);
 void fn_80047874(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
@@ -1192,7 +1192,7 @@ void Class_802A3858::vfn_04(float dt)
     } else {
         fn_800A7A0C(1);
         if (step == 8) {
-            fn_800406C0(0xC0);
+            BigObjNotifyTypes(0xC0);
         }
     }
 }
@@ -1317,7 +1317,7 @@ void Class_802A38C8::vfn_03(float dt)
     } else if (fn_801568E8() == 8) {
         Step_802DEC08 *pStep = fn_801568F8()->vfn_07();
         if (fn_80156C8C(pStep->mMask)) {
-            fn_800406C0(0xC0);
+            BigObjNotifyTypes(0xC0);
         }
     }
     Class_802A3A48::vfn_03(dt);
