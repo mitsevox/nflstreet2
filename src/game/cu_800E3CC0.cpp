@@ -201,7 +201,7 @@ void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
-void fn_8003A130(void *pPos, float *pExtra, int team);
+void PlyrFindNearest(void *pPos, float *pExtra, int team);
 void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int fn_80178360(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
@@ -1825,12 +1825,12 @@ extern "C" void fn_800EBA48(int id) {
     Ball_t *pBall = BallGet(id);
     BallStateGet(pBall, &owner);
     if (BallGetLandingPoint(pBall, &pos))
-        fn_8003A130(&pos, 0, fn_80178360());
+        PlyrFindNearest(&pos, 0, fn_80178360());
     StyleTrackerRefreshUserPlayers();
     for (unsigned char team = 0; team <= 1; team++) {
         int count = fn_80178D70(team);
         for (int i = 0; i < count; i++) {
-            pOther = fn_80039F5C(team, (unsigned char)i);
+            pOther = PlyrGet(team, (unsigned char)i);
             fn_802276B4(&delta, &pos, &pOther->mMotion.mPos);
             fn_801C1F94(&message, 0, 4);
             message.mId = 57;
@@ -2789,7 +2789,7 @@ extern "C" int fn_800EDC68(Object_80039F5C *p) {
     state->mUnknown4 = 0;
     state->mUnknown8 = p->mpState->mUnknown2;
     state->mUnknown6 = p->mpState->mUnknown3[0];
-    Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown1);
+    Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown1);
     fn_8009BD2C(pOther, &state->mUnknown0);
     switch (state->mUnknown8) {
     case 12:

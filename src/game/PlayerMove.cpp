@@ -242,7 +242,7 @@ extern "C" void PlayerMoveTickAll(void)
     for (unsigned char team = 0; team <= 1; team++) {
         unsigned int count = fn_80178D18(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+            Object_80039F5C *pPlayer = PlyrGet(team, i);
             PlayerMove_t *pBlock = &pPlayer->mUnknown1228;
             if (pBlock->mUnknown11 != 0) {
                 if (--pBlock->mUnknown11 == 0 && pBlock->mUnknown0 == 2) {
@@ -264,7 +264,7 @@ extern "C" void PlayerMoveResetAll(void)
     for (unsigned char team = 0; team <= 1; team++) {
         unsigned int count = fn_80178D18(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+            Object_80039F5C *pPlayer = PlyrGet(team, i);
             PlayerMove_t *pBlock = &pPlayer->mUnknown1228;
             pBlock->mUnknown0 = 0;
             pBlock->mUnknown8 = 0;

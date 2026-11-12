@@ -51,9 +51,9 @@ extern float gPlyrMoveFwdSpeed;
 int ChallengeHasGoalType(Challenge_t *pRecord, int a, int b);
 int ChallengeIsActive(void);
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
-void fn_80039AA8(void);
-Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+void PlyrMgrStepStates(void);
+Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 void PlyrMgrResetAll(void);
 void fn_80044264(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -191,7 +191,7 @@ extern "C" void fn_8016DCD4(int team)
     if (fn_80177F70() != 0 || fn_800BA6F8() != 0) {
         count = fn_80178D70(team);
         for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
             fn_8016DBE4(p);
             p->mFlags |= 0x10;
         }
@@ -209,7 +209,7 @@ extern "C" int fn_8016DD60(void)
         unsigned int count = fn_80178D70(team);
 
         for (i = 0; i < count; i++) {
-            if ((fn_80039F5C(team, i)->mFlags & 0x40000) == 0) {
+            if ((PlyrGet(team, i)->mFlags & 0x40000) == 0) {
                 result = 0;
                 break;
             }
@@ -224,7 +224,7 @@ extern "C" void fn_8016DDDC(int team)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Point_8017886C point;
         int facing;
         State_8016DDDC *pState;
@@ -291,7 +291,7 @@ extern "C" void fn_8016E008(int team)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        fn_8016DF34(fn_80039F5C(team, i));
+        fn_8016DF34(PlyrGet(team, i));
     }
 }
 
@@ -309,9 +309,9 @@ extern "C" void fn_8016E064(void)
     pRecord->mUnknown10 = pos.mY;
     pRecord->mUnknown4 = team;
     if (fn_80177F70() != 0) {
-        fn_8009BD2C(fn_80039FE8(team, 7, 0), &pRecord->mUnknown0);
+        fn_8009BD2C(PlyrFindByRole(team, 7, 0), &pRecord->mUnknown0);
         if (pRecord->mUnknown0 == 0) {
-            fn_8009BD2C(fn_80039FE8(team, 24, 0), &pRecord->mUnknown0);
+            fn_8009BD2C(PlyrFindByRole(team, 24, 0), &pRecord->mUnknown0);
         }
     }
     p = fn_8009BCE8(&pRecord->mUnknown0);
@@ -341,7 +341,7 @@ extern "C" void fn_8016E15C(void)
         unsigned char team;
 
         BallGetPosition(pBall, &ballPos);
-        pCarrier = fn_8003A130(&ballPos, 0, fn_80178308());
+        pCarrier = PlyrFindNearest(&ballPos, 0, fn_80178308());
         BallGiveToPlayer(pBall, pCarrier);
         pPasser = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         if (pCarrier->mMotion.mPos.mY - pPasser->mMotion.mPos.mY < 2.5f) {
@@ -369,7 +369,7 @@ extern "C" void fn_8016E15C(void)
             unsigned int count = fn_80178D70(team);
 
             for (i = 0; i < count; i++) {
-                Object_80039F5C *p = fn_80039F5C(team, i);
+                Object_80039F5C *p = PlyrGet(team, i);
 
                 if (p != pCarrier && p != pPasser && p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.1f &&
                     (p->mIdBytes[2] == defense || fabsf(pos.mY - p->mMotion.mPos.mY) < 2.0f ||
@@ -426,7 +426,7 @@ extern "C" void fn_8016E498(void)
 
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         unsigned char j;
 
         for (j = 0; j < 10; j++) {
@@ -443,7 +443,7 @@ extern "C" void fn_8016E498(void)
     ClockRuleSnap();
     fn_8016E15C();
     fn_8011E068();
-    fn_80039AA8();
+    PlyrMgrStepStates();
     fn_8002C9A8(lbl_803EA368, 1, 0);
     if (fn_800A937C() == 0 && fn_800A9680() == 0) {
         fn_8002C9A8(lbl_803EA368, 2, 0);
@@ -526,7 +526,7 @@ extern "C" int fn_8016E928(void)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         if (p->mFlags & 0x40000) {
             continue;
@@ -568,7 +568,7 @@ extern "C" int fn_8016EA68(void)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        if ((fn_80039F5C(team, i)->mFlags & 0x40000) == 0) {
+        if ((PlyrGet(team, i)->mFlags & 0x40000) == 0) {
             return 0;
         }
     }
@@ -582,7 +582,7 @@ extern "C" int fn_8016EADC(void)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        if (fn_80039F5C(team, i)->mFlags & 0x40000) {
+        if (PlyrGet(team, i)->mFlags & 0x40000) {
             return 1;
         }
     }

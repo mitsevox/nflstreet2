@@ -604,7 +604,7 @@ unsigned short PossApplyCoverage(Object_80039F5C *p, float *pChance)
     unsigned int n = fn_80178D18((p->mId >> 8 & 0xFF) ^ 1);
 
     for (; i < n && count <= 3; i++) {
-        Object_80039F5C *pOther = fn_80039F5C((p->mId >> 8 & 0xFF) ^ 1, i);
+        Object_80039F5C *pOther = PlyrGet((p->mId >> 8 & 0xFF) ^ 1, i);
 
         if (fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !fn_8011E9B4(pOther)) {
             short *pRatings = pOther->mRatings;
@@ -1337,7 +1337,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         int i;
         int count;
         for (i = 0, count = fn_80178D70(p->mId >> 8 & 0xFF); i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mId >> 8 & 0xFF, i);
+            Object_80039F5C *pMate = PlyrGet(p->mId >> 8 & 0xFF, i);
             PlyrClearPendingMsg(pMate, 0);
             fn_801C1F94(&message, 0, 4);
             if (pMate == p) {
@@ -2303,7 +2303,7 @@ void DriveLogSetHold(int value)
 int DriveLogGetPlayerNum(int id)
 {
     if (id != 0 && (id & 0xFF) == 1) {
-        return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+        return PlyrGet(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
     }
     return 0xFFFF;
 }

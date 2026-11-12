@@ -61,7 +61,7 @@ int fn_800E705C(Object_80039F5C *p)
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         unsigned short count = fn_80178D70(0);
         for (unsigned short i = 0; i < count; i++) {
-            if (fn_80039F5C(0, i)->mpState->mId == 97) return 1;
+            if (PlyrGet(0, i)->mpState->mId == 97) return 1;
         }
     }
     return 0;

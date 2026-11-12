@@ -809,7 +809,7 @@ void fn_801765C0(void) {
   for (unsigned char team = 0; team <= 1; team++) {
     unsigned int count = fn_80178D18(team);
     for (unsigned short i = 0; i < count; i++)
-      fn_8017678C(fn_80039F5C(team, i));
+      fn_8017678C(PlyrGet(team, i));
   }
 }
 void fn_80176630(void) {
@@ -817,7 +817,7 @@ void fn_80176630(void) {
   line = fn_80177FE0();
   unsigned int count = fn_80178D18(fn_80178320());
   for (unsigned short i = 0; i < count; i++) {
-    Object_80039F5C *player = fn_80039F5C(fn_80178320(), i);
+    Object_80039F5C *player = PlyrGet(fn_80178320(), i);
     if (!(player->mMotion.mPos.mY >= line.mY + 3.0f)) {
       if (!(player->mMotion.mPos.mY >= line.mY + 0.15625f)) {
         fn_800B2370(player, 2, 0, 1.0f);
@@ -868,7 +868,7 @@ void fn_80176838(Object_80039F5C *player) {
     Point2_t delta;
     unsigned short index = PlayBookGetReceiver(player->mIdBytes[2], i, 0);
     fn_80227690(&delta,
-                &fn_80039F5C(player->mIdBytes[2], index)->mMotion.mPos,
+                &PlyrGet(player->mIdBytes[2], index)->mMotion.mPos,
                 &ball);
     if (fn_802270A4(&delta) < 4.0f) {
       near = 1;

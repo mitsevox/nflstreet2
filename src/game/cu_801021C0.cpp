@@ -87,7 +87,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
             pRecord->mUnknownB = 0;
         }
         if ((p->mFlags & 0x2000) && kind == 4) {
-            fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
+            fn_800A5A8C(2, p, PlyrGet(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
             StyleTrackerOnPumpFake(p);
             if (p->mFlags & 0x4000) {
                 PassIconsShow(0);

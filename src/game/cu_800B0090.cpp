@@ -39,7 +39,7 @@ extern "C" void fn_800B0090(void)
                 names[0] = lbl_802D8754[group][slot];
                 row = PlaySetFindRow(pObject, (unsigned char)i, names);
                 if (row != -1 && pEntry->mUnknown46 <= 4) {
-                    Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+                    Object_80039F5C *pPlayer = PlyrGet(team, i);
                     PlayBookPosition_t *pZone;
 
                     pEntry->mUnknown3C[pEntry->mUnknown46] = row;

@@ -48,7 +48,7 @@ extern "C" int fn_800B1200(void)
 
     unsigned int count = fn_80178D18(team);
     for (unsigned short i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         switch (p->mUnknown2914) {
         case 0:
             break;

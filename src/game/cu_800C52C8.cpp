@@ -860,7 +860,7 @@ extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
     unsigned int count = fn_80178D18(p->mIdBytes[2] ^ 1);
 
     for (; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, i);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, i);
         float distance = fn_80227890(&pOther->mMotion.mPos, &p->mMotion.mPos);
 
         if (distance < 16.0f && distance < bestDistance && fn_800C73E0(p, pOther)) {
@@ -1217,7 +1217,7 @@ extern "C" void fn_800C845C(void)
         unsigned int count = fn_80178D18(team);
 
         for (; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
 
             if (fn_80227890(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 16.0f && fn_800C6738(p, pCarrier)
                 && fn_800C5DE4(p, pCarrier) && found < 7) {
@@ -1251,7 +1251,7 @@ extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char
             kind = 175;
             break;
         }
-        pOther = fn_80039F5C((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
+        pOther = PlyrGet((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
         if (pOther->mpState->mId == 17) {
             fn_800CE770(&query);
             query.mpUnknown0 = p;

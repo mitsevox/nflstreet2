@@ -63,7 +63,7 @@ void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
 void PlyrMgrClearStates(void);
@@ -239,7 +239,7 @@ void fn_8014B0D0(void *p, float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
 void fn_8014B178(void *p, float dt)

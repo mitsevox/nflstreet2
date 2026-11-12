@@ -213,7 +213,7 @@ extern "C" void fn_8013E960(int team, int flag)
 {
     int count = fn_80178D18((unsigned char)team);
     for (int i = 0; i < count; ++i) {
-        Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+        Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
         if (p) {
             Block_80170E64 *b = p->mpUnknown4;
             if (flag) b->mUnknown20 |= 1;
@@ -226,7 +226,7 @@ extern "C" void fn_8013E9F0(int team, int flag)
     if (fn_800AD9B4() == 1) {
         int count = fn_80178D18((unsigned char)team);
         for (int i = 0; i < count; ++i) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             if (flag) p->mFlags &= ~0x10;
             else p->mFlags |= 0x10;
         }

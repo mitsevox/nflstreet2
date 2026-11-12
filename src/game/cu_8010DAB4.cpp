@@ -99,7 +99,7 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
             last = (unsigned int)fn_80178D70(fn_80178320()) / 2;
             last--;
             if (last < 0) last = 0;
-            pMate = fn_80039F5C(fn_80178320(), fn_8012078C()->mpUnknown4[last]);
+            pMate = PlyrGet(fn_80178320(), fn_8012078C()->mpUnknown4[last]);
             if (pMate->mMotion.mPos.mY < pCarrierMotion->mPos.mY) {
                 ahead = 0;
                 target.mY = pCarrierMotion->mPos.mY - 2.0f;
@@ -137,7 +137,7 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
         } else {
             pOut->mSpeed = 0.72f;
         }
-        pMate = fn_80039F5C(fn_80178320(), fn_8012078C()->mpUnknown4[0]);
+        pMate = PlyrGet(fn_80178320(), fn_8012078C()->mpUnknown4[0]);
         if (p->mMotion.mPos.mY > pMate->mMotion.mPos.mY && MathAngleDiff(pOut->mHeading, 0x400000) <= 0x3FFFFF) {
             target.mX = pCarrierMotion->mPos.mX;
             target.mX = CLAMP(target.mX, 2.0f - fn_80178A08(), fn_80178A08() - 2.0f);

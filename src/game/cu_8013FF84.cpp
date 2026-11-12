@@ -84,7 +84,7 @@ int fn_801486A0(void);
 void fn_8013C478(GameCamera_t *,void *);
 int fn_801783AC(int);
 int fn_80178308(void);
-void fn_8003A130(void *,float *,int);
+void PlyrFindNearest(void *,float *,int);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void Orient3Add(void *,void *,void *);
@@ -259,7 +259,7 @@ void fn_80140708(GameCamera_t *camera)
             if (special) goto apply;
         }
         if (fn_801783AC(0)) {
-            fn_8003A130(&velocity,&extra,fn_80178308());
+            PlyrFindNearest(&velocity,&extra,fn_80178308());
             extra -= 4.0f;
             if (extra > 0.0f) {
                 blend = extra * 0.16666667f;
@@ -292,7 +292,7 @@ void fn_80140708(GameCamera_t *camera)
             Orient3Add(&angles,&angles,&offset);
         } else if (!fn_8007F828(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
-            Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mpUnknown4);
+            Object_80039F5C *player = PlyrGet(side,*fn_8012078C()->mpUnknown4);
             if (player && velocity.mY > player->mMotion.mPos.mY) {
                 float adjustment = (velocity.mY-player->mMotion.mPos.mY)*0.5f;
                 if (adjustment >= 0.0f) {

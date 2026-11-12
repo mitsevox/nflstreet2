@@ -66,7 +66,7 @@ void PlayCallApplyPlay(int team, int value)
             PlayBookFormation_t *pBook = PlayBookGetFormation((unsigned char)t);
             int count = fn_80178D18((unsigned char)t);
             for (int i = 0; i < count; ++i) {
-                Object_80039F5C *p = fn_80039F5C((unsigned char)t, i);
+                Object_80039F5C *p = PlyrGet((unsigned char)t, i);
                 unsigned char a, b;
                 PlaySetGetEntryRoles(pBook, i, &a, &b);
                 p->mUnknown2914 = a;

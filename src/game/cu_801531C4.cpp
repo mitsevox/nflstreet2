@@ -90,9 +90,9 @@ int fn_80153414(Class_802A1930 *p)
     int i;
 
     for (i = 0; i <= 6; i++) {
-        if (fn_80039F5C(0, i)->mUnknown8 != 255) {
+        if (PlyrGet(0, i)->mUnknown8 != 255) {
             count0++;
-        } else if (fn_80039F5C(1, i)->mUnknown8 != 255) {
+        } else if (PlyrGet(1, i)->mUnknown8 != 255) {
             count1++;
         }
     }

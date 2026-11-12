@@ -92,7 +92,7 @@ int fn_80148CA0(Class_80148A58 *, int team, unsigned int tag)
     int value = 0;
     int result = 0;
     for (unsigned char index = 0; index <= 6; ++index) {
-        Object_80039F5C *p = fn_80039F5C((unsigned char)team, index);
+        Object_80039F5C *p = PlyrGet((unsigned char)team, index);
         if (p->mUnknown9[2]) {
             fn_8022B414(p->mUnknown2908, tag, &value);
             result += value;

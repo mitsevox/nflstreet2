@@ -88,7 +88,7 @@ void fn_8014E534(State_802A2020 *p)
 {
     p->mUnknown4 = 0;
     fn_800A042C(p);
-    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    Object_80039F5C *pPlayer = PlyrGet(1, 0);
     PlyrClearPendingMsg(pPlayer, 0);
     if (fn_800F06F4(0, pPlayer->mpState, 1, 0xFFFF) == 0xFFFF) {
         Message_800F01CC message;
@@ -111,7 +111,7 @@ void fn_8014E534(State_802A2020 *p)
     HudShowCallout(text);
     fn_801477F0(pPlayer->mpUnknown4);
     for (unsigned char i = 0; i <= 4; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(0, i);
+        Object_80039F5C *pOther = PlyrGet(0, i);
         int position = fn_800F06F4(0, pOther->mpState, 97, 0xFFFF);
         PlyrClearPendingMsg(pOther, 0);
         fn_800F0490(0, pOther->mpState, 51);
@@ -213,7 +213,7 @@ void fn_8014E7D4(State_802A2020 *p, float dt)
 
 void fn_8014EA90(State_802A1F90 *p, float dt)
 {
-    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    Object_80039F5C *pPlayer = PlyrGet(1, 0);
     p->mpUnknown4 = BallGetCurrentHolder();
     p->mUnknown12 = 0;
     fn_8009D8CC(1);
@@ -237,7 +237,7 @@ void fn_8014EA90(State_802A1F90 *p, float dt)
                 BallGetPosition(BallGetCurrent(), &pos);
                 float best = 3.4028235e38f;
                 for (unsigned short i = 0; i <= 4; i++) {
-                    Object_80039F5C *pOther = fn_80039F5C(0, i);
+                    Object_80039F5C *pOther = PlyrGet(0, i);
                     float distance = fn_8022785C(&pOther->mMotion.mPos, &pos);
                     if (distance < best) {
                         p->mpUnknown4 = pOther;
@@ -263,7 +263,7 @@ void fn_8014EC74(State_802A1F90 *p)
 {
     fn_800B9998(p);
     if (fn_8009D990(1)) {
-        fn_801488D4(fn_80039F5C(1, 0), p->mpUnknown4);
+        fn_801488D4(PlyrGet(1, 0), p->mpUnknown4);
         if (p->mUnknown12) {
             PlyrMgrClearStates();
             fn_8014D67C();
@@ -273,7 +273,7 @@ void fn_8014EC74(State_802A1F90 *p)
         PlyrMgrClearStates();
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
-                Object_80039F5C *pPlayer = fn_80039F5C((unsigned char)team, i);
+                Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, i);
                 fn_800EFE60(0, pPlayer->mpState, pPlayer);
             }
         }

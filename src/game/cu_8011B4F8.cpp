@@ -106,7 +106,7 @@ extern "C" void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
     unsigned int n = fn_80178D70(team);
 
     for (; i < n; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         int skip = 0;
 
         switch (p->mQueue[0].mId) {
@@ -150,7 +150,7 @@ extern "C" void fn_8011B83C(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
     unsigned int n = fn_80178D70(team);
 
     for (; i < n; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         int mode;
 
         switch (p->mUnknown1052) {

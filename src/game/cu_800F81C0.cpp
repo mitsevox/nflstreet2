@@ -206,7 +206,7 @@ extern "C" void fn_800F88E4(Object_80039F5C *p, Object_80039F5C *pTarget) {
     unsigned int n = fn_80178D18(fn_80178320());
 
     for (i = 0; i < n; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
 
         if (pOther->mpState->mId == 22 && pTarget == fn_8009BCE8(&pOther->mUnknown336) && pOther != p) {
             pFound = pOther;

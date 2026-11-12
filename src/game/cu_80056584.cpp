@@ -2313,7 +2313,7 @@ void fn_8005C1A4(int team,unsigned char index,int *color) {
     HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
 int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,unsigned char size,char *first,char *second,char *third,char *fourth,unsigned char firstSize,unsigned char secondSize) {
-    Object_80039F5C *p=fn_80039F5C(team,index);int result=0;
+    Object_80039F5C *p=PlyrGet(team,index);int result=0;
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
         fn_80188248((Object_80056584 *)p,name,nameSize);
@@ -2346,7 +2346,7 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
         fn_80188248((Object_80056584 *)stats.mpPlayer,name,nameSize);
         unsigned char foundTeam=0,foundIndex=0;bool found=false;
         for(unsigned char t=0;t<2 && !found;t++)for(unsigned char i=0;i<6 && !found;i++) {
-            Object_80039F5C *p=fn_80039F5C(t,i);
+            Object_80039F5C *p=PlyrGet(t,i);
             if((short)stats.mpPlayer->mUnknown2908==(short)p->mUnknown2908) {found=true;foundTeam=t;foundIndex=i;}
         }
         fn_80148A58()->vfn_18(foundTeam,foundIndex,text,textSize);

@@ -767,7 +767,7 @@ void fn_8007134C(void)
     unsigned short index = 0;
     unsigned int count = fn_80178D18(side);
     for (; index < count; ++index) {
-        Object_80039F5C *p = fn_80039F5C(side, index);
+        Object_80039F5C *p = PlyrGet(side, index);
         if (!p->mUnknown2914) { value = p->mUnknown2912; break; }
     }
     lbl_803EA6DC = (lbl_803EA6DC + 1) % 3;

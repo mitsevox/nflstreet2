@@ -13,7 +13,7 @@
 #include "game/fn_80238174.h"
 
 extern "C" {
-CollideSet_t *fn_8003A078(void);
+CollideSet_t *PlyrMgrGetCollideSet(void);
 void fn_8003FAC4(int a);
 void fn_8003FB2C(void);
 Block_80170E64 *fn_8003FB54(int a, Block_80170E64 *pFirst, int b, int c, int d);
@@ -419,7 +419,7 @@ void BallsProcessCollision(float step)
     unsigned int i;
 
     CollideSetUpdate(_Ball_pSet->mHeader.mpRecords);
-    CollideSetTest(fn_8003A078(), _Ball_pSet->mHeader.mpRecords);
+    CollideSetTest(PlyrMgrGetCollideSet(), _Ball_pSet->mHeader.mpRecords);
     pRecords = _Ball_pSet->mHeader.mpRecords;
     CollideSetTest(pRecords, StatcollGetSet());
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {

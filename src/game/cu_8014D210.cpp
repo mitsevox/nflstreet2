@@ -144,14 +144,14 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addValu
             if (pBallPlayer->mpState->mId == 16) {
                 for (unsigned short i = 0; i <= 4; i++) {
                     if (!pFirst) {
-                        pFirst = fn_80039F5C(0, i);
+                        pFirst = PlyrGet(0, i);
                         if (pBallPlayer->mpState->mUnknown3[0] != i && pFirst->mpState->mId != 17) {
                             pFirst = 0;
                         } else {
                             fn_8014F4D8(fn_80148A58(), pFirst, 0, 1);
                         }
                     } else if (!pSecond) {
-                        pSecond = fn_80039F5C(0, i);
+                        pSecond = PlyrGet(0, i);
                         if (pBallPlayer->mpState->mUnknown3[0] != i && pSecond->mpState->mId != 17) {
                             pSecond = 0;
                         } else {
@@ -208,7 +208,7 @@ void PlaceSixPlayerFormation(void)
 {
     unsigned int first = fn_802372EC(0, 6);
     float sectorWidth = lbl_802A0DB8[0];
-    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    Object_80039F5C *pPlayer = PlyrGet(1, 0);
     fn_800EFE60(0, pPlayer->mpState, pPlayer);
     PlyrClearPendingMsg(pPlayer, 0);
     pPlayer->mUnknown512.mUnknown0 = lbl_802A0DC4[0];
@@ -220,7 +220,7 @@ void PlaceSixPlayerFormation(void)
     pPlayer->mUnknown512.mUnknown14 = 1;
 
     for (unsigned char i = 0; i <= 4; i++) {
-        pPlayer = fn_80039F5C(0, i);
+        pPlayer = PlyrGet(0, i);
         fn_800EFE60(0, pPlayer->mpState, pPlayer);
         PlyrClearPendingMsg(pPlayer, 0);
         unsigned int sector = (i + first) % 6;

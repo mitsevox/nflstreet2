@@ -134,7 +134,7 @@ extern "C" int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         count = fn_80178D18(p->mIdBytes[2]);
         for (; slots[i] != 24; i++) {
             for (j = 0; j < count; j++) {
-                pMate = fn_80039F5C(p->mIdBytes[2], j);
+                pMate = PlyrGet(p->mIdBytes[2], j);
                 if (pMate != p && pMate->mpState->mId == 40 && pMate->mpState->mUnknown1 == slots[i]) {
                     fn_8009EAB0(pMate, pMate->mpState->mUnknown1);
                     pCover = fn_8009EC60(0, &spot);
@@ -177,7 +177,7 @@ extern "C" int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         } else {
             for (k = 0; k <= 2; k++) {
                 pRecord = fn_8011F4E0();
-                q = fn_80039F5C(fn_80178308(), pRecord->mUnknown8[k]);
+                q = PlyrGet(fn_80178308(), pRecord->mUnknown8[k]);
                 if (q) {
                     pMark = fn_800FB9D4(q);
                     if (pMark && (fn_8022781C(&pMark->mMotion.mPos, &q->mMotion.mPos) > 5.0f || (pMark->mFlags & 0x20000)) &&

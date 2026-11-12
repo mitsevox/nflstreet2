@@ -1739,7 +1739,7 @@ extern "C" void StyleTrackerRefreshUserPlayers(void) {
         unsigned short i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
 
             if (p->mUnknown8 != 255) {
                 if (_StyleTracker_pState->mUserPlayerCount <= 3) {

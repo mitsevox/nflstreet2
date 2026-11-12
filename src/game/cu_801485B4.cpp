@@ -67,7 +67,7 @@ void fn_801486A8(void)
 {
     for (unsigned short team = 0; team < 2; ++team) {
         for (unsigned short index = 0; index < 7; ++index) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, index);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, index);
             p->mMotion.mPos.mX = 0.0f;
             p->mMotion.mPos.mY = -((float)index * 3.0f);
             p->mpUnknown4->mUnknown20 |= 1;
@@ -84,7 +84,7 @@ void fn_801486A8(void)
 void fn_801487C0(int team, unsigned char begin)
 {
     for (unsigned char index = begin; index < 7; ++index) {
-        fn_80148814(fn_80039F5C(team, index));
+        fn_80148814(PlyrGet(team, index));
     }
 }
 

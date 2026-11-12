@@ -205,7 +205,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             int index = PlayBookGetReceiver(fn_80178308(), i, 0);
 
             if (index != 0xFF) {
-                pOther = fn_80039F5C(fn_80178308(), index);
+                pOther = PlyrGet(fn_80178308(), index);
                 float mateTime =
                     fn_8022781C(&pOther->mMotion.mPos, &pInfo->mUnknown40) / PlyrMoveGetRatedSpeed(pOther, 1.0f, 1.0f);
                 float time = fn_8022781C(&p->mMotion.mPos, &pInfo->mUnknown40) / PlyrMoveGetRatedSpeed(p, 1.0f, 1.0f);

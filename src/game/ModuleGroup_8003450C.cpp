@@ -26,9 +26,9 @@ void *fn_8002C8C0(void);
 void fn_8002C964(void *p);
 void fn_80030B30(void);
 void fn_80030BC0(int a);
-void fn_800397D0(int a);
-void fn_80039890(void);
-void fn_80039A1C(void);
+void PlyrMgrRegister(int a);
+void PlyrMgrReset(void);
+void PlyrMgrEmptyPass(void);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E118(void);
@@ -977,9 +977,9 @@ int Plyr::Init()
     fn_8015E994();
     ResTrackLabel("PlyrObjsInitFinish");
     ResTrackLabel("PlaStateInitStart");
-    fn_800397D0(14);
+    PlyrMgrRegister(14);
     ResTrackLabel("PlaStateInitFinish");
-    fn_80039A1C();
+    PlyrMgrEmptyPass();
     fn_801A4650(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
@@ -987,7 +987,7 @@ int Plyr::Init()
 
 int Plyr::Shutdown()
 {
-    fn_80039890();
+    PlyrMgrReset();
     fn_8003DCC0(GameObjList::GetListHandle());
     fn_8015E6C8();
     PlaTexCacheShutdown();

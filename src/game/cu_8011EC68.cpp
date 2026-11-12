@@ -135,8 +135,8 @@ void fn_8011F0D8(void)
 int fn_8011FA78(void *pA, void *pB)
 {
     int team = fn_80178320();
-    float a = fn_80039F5C(team, *(char *)pA)->mMotion.mPos.mX;
-    float b = fn_80039F5C(team, *(char *)pB)->mMotion.mPos.mX;
+    float a = PlyrGet(team, *(char *)pA)->mMotion.mPos.mX;
+    float b = PlyrGet(team, *(char *)pB)->mMotion.mPos.mX;
 
     if (a - b < 0.0f) {
         return -1;
@@ -147,8 +147,8 @@ int fn_8011FA78(void *pA, void *pB)
 int fn_8011FAFC(void *pA, void *pB)
 {
     int team = fn_80178320();
-    float a = fn_80039F5C(team, *(char *)pA)->mMotion.mPos.mY;
-    float b = fn_80039F5C(team, *(char *)pB)->mMotion.mPos.mY;
+    float a = PlyrGet(team, *(char *)pA)->mMotion.mPos.mY;
+    float b = PlyrGet(team, *(char *)pB)->mMotion.mPos.mY;
 
     if (a - b < 0.0f) {
         return -1;

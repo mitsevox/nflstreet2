@@ -43,7 +43,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
         }
         if (result) {
             for (i = 0; i < 7 && result; i++) {
-                Object_80039F5C *pOther = fn_80039F5C(1, i);
+                Object_80039F5C *pOther = PlyrGet(1, i);
                 if (pOther != 0) {
                     PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                     void *pResult = fn_80164EC8(pRecord, fn_80178308(), i);
@@ -119,7 +119,7 @@ int PassIconGetSlot(int index, int force)
 
     fn_80178308();
     if (slot != 0xFF) {
-        pPlayer = fn_80039F5C(team, slot);
+        pPlayer = PlyrGet(team, slot);
     }
     if (slot == 0xFF || found == 0) {
         int mode = fn_800AD9B4();
@@ -146,7 +146,7 @@ int PassIconGetPosition(int index, Vector_80039F5C *pOut)
     int slot = PassIconGetSlot(index, 0);
 
     if (slot != 0xFF) {
-        Object_80039F5C *pPlayer = fn_80039F5C(fn_80178308(), slot);
+        Object_80039F5C *pPlayer = PlyrGet(fn_80178308(), slot);
         pOut->mX = pPlayer->mMotion.mPos.mX;
         pOut->mY = pPlayer->mMotion.mPos.mY;
         pOut->mZ = pPlayer->mMotion.mPos.mZ;

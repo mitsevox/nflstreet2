@@ -105,8 +105,8 @@ extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
 int ChallengeIsActive(void);
-CollideSet_t *fn_8003A078(void);
-void fn_8003A090(void);
+CollideSet_t *PlyrMgrGetCollideSet(void);
+void PlyrMgrReverseAll(void);
 void fn_800535FC(void);
 void SndgSpchSetPlayFlags(int a);
 void EnvSelect(int id);
@@ -798,9 +798,9 @@ extern "C" void fn_80177E6C(int a, int flip)
     if (flip) {
         FlipSides();
     }
-    fn_8003A090();
+    PlyrMgrReverseAll();
     BallsMirror();
-    CollideSetMirror(fn_8003A078());
+    CollideSetMirror(PlyrMgrGetCollideSet());
     CollideSetMirror(StatcollGetSet());
     CollideSetMirror(BallGetCollRecords());
     CamGameSuspendAll();
@@ -1478,7 +1478,7 @@ extern "C" void fn_8017926C(int handle, int tag, int value, int kind)
 
 extern "C" int fn_8017932C(int id)
 {
-    return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+    return PlyrGet(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
 }
 
 extern "C" int fn_80179358(int id)

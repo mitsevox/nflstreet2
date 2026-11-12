@@ -197,12 +197,12 @@ void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
         return;
     }
     Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
-    if (pOther == fn_80039F5C(pOther->mIdBytes[2], 0)) {
+    if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-        if (pOther == fn_80039F5C(pOther->mIdBytes[2], 0)) {
+        if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
             unsigned int count = fn_80178D18(fn_80178308());
             for (unsigned char i = 0; i < count; ++i) {
-                Object_80039F5C *pCandidate = fn_80039F5C(fn_80178308(), i);
+                Object_80039F5C *pCandidate = PlyrGet(fn_80178308(), i);
                 PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                 void *pCommands = fn_80164EC8(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
                 if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
@@ -273,7 +273,7 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
 void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
 {
     Object_80039F5C *pPlayer = p->mpUnknown208;
-    Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), 0);
+    Object_80039F5C *pOther = PlyrGet(fn_80178308(), 0);
     Point_8017886C origin = fn_80177FE0();
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;

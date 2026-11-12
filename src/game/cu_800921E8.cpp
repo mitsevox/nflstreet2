@@ -39,7 +39,7 @@ extern "C" void fn_800921E8(int index, int active)
             unsigned int i;
 
             for (i = 0; i < count; i++) {
-                Object_80039F5C *p = fn_80039F5C((unsigned char)side, i);
+                Object_80039F5C *p = PlyrGet((unsigned char)side, i);
 
                 if (active != 0 && p->mpState->mId != 50) {
                     if (fn_800921B0(p, pCamera) <= distance + 0.5f) {

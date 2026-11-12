@@ -21,7 +21,7 @@ int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
 void fn_8011E938(Object_80039F5C *p);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 float fn_8011F4D4(void);
 int fn_8011F1CC(void);
 int fn_801783AC(int bit);
@@ -139,7 +139,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
         }
     }
     if (fn_80178C9C() && (!fn_800BA6F8() || !fn_800BAA24())
-        && pMotion->mPos.mY > fn_80039F5C(fn_80178320(), *fn_8012078C()->mpUnknown4)->mMotion.mPos.mY) {
+        && pMotion->mPos.mY > PlyrGet(fn_80178320(), *fn_8012078C()->mpUnknown4)->mMotion.mPos.mY) {
         return 1;
     }
     if (fabsf(pMotion->mPos.mX - pHolderMotion->mPos.mX) > 10.0f
@@ -254,7 +254,7 @@ extern "C" int fn_800F5AD4(Object_80039F5C *p) {
         fn_8011E938(pNear);
         return 0;
     }
-    pOther = fn_8003A130(&pos, &distance, p->mIdBytes[2]);
+    pOther = PlyrFindNearest(&pos, &distance, p->mIdBytes[2]);
     if (!pOther || pOther == p || distance > 4.0f
         || fabsf(pOther->mMotion.mPos.mX - fn_80177FE0().mX) < fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX)) {
         return 1;

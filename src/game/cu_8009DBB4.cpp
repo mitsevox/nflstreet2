@@ -22,7 +22,7 @@ extern "C" int fn_8009DBB4(State_8011F4EC *p)
     int carrierId = fn_800B0F98();
 
     do {
-        Object_80039F5C *pObject = fn_80039F5C(team, p->mUnknown199[i]);
+        Object_80039F5C *pObject = PlyrGet(team, p->mUnknown199[i]);
         Point_8017886C pos;
 
         if ((pObject->mFlags & 0x40000) || carrierId == pObject->mId) {

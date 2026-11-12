@@ -125,7 +125,7 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
                 carrier = 0;
                 pEntry = &pTeam->mUnknown8.mUnknown84[0][i];
                 pPoint = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
-                if (fn_8009FE24(fn_80039F5C(fn_80178320(), i))) {
+                if (fn_8009FE24(PlyrGet(fn_80178320(), i))) {
                     carrier = 1;
                 }
                 if (!carrier) {

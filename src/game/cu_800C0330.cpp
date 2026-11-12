@@ -76,7 +76,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, unsigned char team, unsigned sho
     while (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) == 0) {
         if (i <= 6) {
             unsigned short index = fn_800C0660(pValues, id);
-            Object_80039F5C *p = fn_80039F5C(team, index);
+            Object_80039F5C *p = PlyrGet(team, index);
 
             fn_800B4DE4(cursor, i, &p->mUnknown2900);
             p->mUnknown508 = p->mUnknown2904Float;

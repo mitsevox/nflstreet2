@@ -1,5 +1,5 @@
-#ifndef GAME_PLAYER_8003877C_H
-#define GAME_PLAYER_8003877C_H
+#ifndef GAME_PLYRSLOT_H
+#define GAME_PLYRSLOT_H
 
 #include "engine/Record_800D81C8.h"
 #include "game/Object_80039F5C.h"
@@ -9,7 +9,7 @@
    sequence state (player +808/+812/+804 point at them), then the two
    per-side lists, record pairs and states. Padded to the 5336-byte stride
    used by every walk of the array. */
-struct Player_8003877C {
+struct PlyrSlot_t {
     Object_80039F5C mObject;
     AnimHeader_t mUnknown3096;
     Record_800D81C8 mUnknown3108[4];

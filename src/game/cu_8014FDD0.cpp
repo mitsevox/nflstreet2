@@ -15,7 +15,7 @@ int fn_8014FDD0(Class_802A2B68 *p, int kind, int team, int index,
     bool found = false;
     for (unsigned char t = 0; t <= 1; t++) {
         for (unsigned char i = 0; i < 6; i++) {
-            Object_80039F5C *pCandidate = fn_80039F5C(t, i);
+            Object_80039F5C *pCandidate = PlyrGet(t, i);
             if (pCandidate->mUnknown9[2] != 0) {
                 if (!found) {
                     result = p->vfn_30(kind, t, i, pCandidate);

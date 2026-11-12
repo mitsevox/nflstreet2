@@ -566,13 +566,13 @@ extern "C" void SpchIGFindNearestOpponent(int handle)
         if (team == 0) {
             pNearest = &_SpchIG_iNearestOpponent0;
         }
-        pOther = fn_80039F5C(team, 0);
+        pOther = PlyrGet(team, 0);
         *pNearest = pOther->mId;
         fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
         best = fn_802270D4(&delta);
         count = fn_80178D18(team);
         for (i = 1; i < count; i++) {
-            pOther = fn_80039F5C(team, i);
+            pOther = PlyrGet(team, i);
             fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
             distance = fn_802270D4(&delta);
             if (distance < best) {

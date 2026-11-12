@@ -448,7 +448,7 @@ extern "C" void fn_800A1738(Object_8017886C *out)
         else {
             Vector_80039F5C pos;
             BallGetPosition(BallGetCurrent(),&pos);
-            if(BallGetCurrentHolder()==fn_80039F5C(fn_80178348(),0) && pos.mX>-fn_80178A08() && pos.mX<fn_80178A08() &&
+            if(BallGetCurrentHolder()==PlyrGet(fn_80178348(),0) && pos.mX>-fn_80178A08() && pos.mX<fn_80178A08() &&
                 pos.mY<fn_80177FE0().mY)lbl_802D7C64[0].mUnknown0=8;
             else lbl_802D7C64[0].mUnknown0=7;
         }

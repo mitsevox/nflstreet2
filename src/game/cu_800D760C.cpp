@@ -38,7 +38,7 @@ extern "C" void fn_800D760C(BitStream_t *pStream)
 
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned char i = 0; i <= 6; i++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+            Object_80039F5C *pPlayer = PlyrGet(team, i);
             unsigned int id = fn_801BE648(pPlayer->mpUnknown792);
             for (unsigned char k = 0; k < pPlayer->mpUnknown796->mUnknown4; k++) {
                 if (pPlayer->mpUnknown800[k].mUnknown8 == id) {

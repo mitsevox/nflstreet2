@@ -445,7 +445,7 @@ extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Poin
         if (((p->mId >> 16) & 0xFF) == i) {
             continue;
         }
-        pOther = fn_80039F5C((p->mId >> 8) & 0xFF, i);
+        pOther = PlyrGet((p->mId >> 8) & 0xFF, i);
         if (!anyDepth && pOther->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
             continue;
         }
@@ -542,7 +542,7 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
     Point_8017886C delta;
     State_80105898 *pState = (State_80105898 *)&p->mUnknown336;
     Record_8011F518 *pRecord = fn_8011F518();
-    Object_80039F5C *pTarget = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown1);
+    Object_80039F5C *pTarget = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown1);
     int kind = 3;
 
     BallGetPosition(BallGetCurrent(), &ball);
@@ -1195,7 +1195,7 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], i);
 
             if (pMate != p) {
                 Point_8017886C gap;
@@ -1215,7 +1215,7 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], i);
             Object_80039F5C *pMark = fn_800FB9D4(pOther);
 
             if (pMate != p) {

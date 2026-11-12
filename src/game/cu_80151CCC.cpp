@@ -50,7 +50,7 @@ void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
     pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[index].mUnknown0);
     fn_800B6658(pPlayer);
     if (value) {
-        pOther = fn_80039F5C(1, p->mpUnknown1C->mpUnknown36->mCount);
+        pOther = PlyrGet(1, p->mpUnknown1C->mpUnknown36->mCount);
         if (pOther != pPlayer) {
             fn_801488D4(pPlayer, pOther);
         }

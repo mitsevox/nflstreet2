@@ -37,7 +37,7 @@ extern "C" Object_80039F5C *fn_80117794(int index)
     Record_80117934 *pRecord = (Record_80117934 *)fn_8011F4EC();
 
     for (; i < pRecord->mUnknown408; i++) {
-        Object_80039F5C *p = fn_80039F5C(fn_80178308(), pRecord->mUnknown409[i]);
+        Object_80039F5C *p = PlyrGet(fn_80178308(), pRecord->mUnknown409[i]);
         int covered = 0;
         Object_80039F5C *pOther = fn_800FB9D4(p);
 
@@ -49,7 +49,7 @@ extern "C" Object_80039F5C *fn_80117794(int index)
             unsigned int count = fn_80178D18(fn_80178320());
 
             for (; j < count; j++) {
-                Object_80039F5C *pDefender = fn_80039F5C(fn_80178320(), j);
+                Object_80039F5C *pDefender = PlyrGet(fn_80178320(), j);
                 State_80039F5C *pState = pDefender->mpState;
 
                 if (pState->mId == 40) {
@@ -83,7 +83,7 @@ extern "C" Object_80039F5C *fn_80117934(void)
     Record_80117934 *pRecord = (Record_80117934 *)fn_8011F4EC();
 
     for (; i < pRecord->mUnknown408; i++) {
-        Object_80039F5C *p = fn_80039F5C(fn_80178308(), pRecord->mUnknown409[i]);
+        Object_80039F5C *p = PlyrGet(fn_80178308(), pRecord->mUnknown409[i]);
         int covered = 0;
         Object_80039F5C *pOther = fn_800FB9D4(p);
 
@@ -95,7 +95,7 @@ extern "C" Object_80039F5C *fn_80117934(void)
             unsigned int count = fn_80178D18(fn_80178320());
 
             for (; j < count; j++) {
-                Object_80039F5C *pDefender = fn_80039F5C(fn_80178320(), j);
+                Object_80039F5C *pDefender = PlyrGet(fn_80178320(), j);
                 State_80039F5C *pState = pDefender->mpState;
 
                 if (pState->mId == 40) {

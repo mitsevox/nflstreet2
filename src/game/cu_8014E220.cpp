@@ -110,7 +110,7 @@ void fn_8014E3B4(State_802A2058 *p, float dt)
     pos.mY = -fn_80178A44();
     fn_801780A8(pos);
     fn_8017833C(1);
-    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    Object_80039F5C *pPlayer = PlyrGet(1, 0);
     if (pPlayer != BallGetCurrentHolder()) {
         BallGiveToPlayer(BallGetCurrent(), pPlayer);
         BallSetTransferKind(BallGetCurrent(), 0);

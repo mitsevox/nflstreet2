@@ -10,7 +10,7 @@ extern "C" {
 
 extern Block_803EB028 *lbl_803EB028;
 
-Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
 int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011F1CC(void);
 int fn_80178308(void);
@@ -39,9 +39,9 @@ void fn_8011DBC8(Object_80039F5C *p, Block_8011DBC8 *pBlock)
 void fn_8011DCDC(void)
 {
     if (fn_8011F1CC()) {
-        Object_80039F5C *p = fn_80039FE8(fn_80178308(), 1, 0);
+        Object_80039F5C *p = PlyrFindByRole(fn_80178308(), 1, 0);
         int index = 0xFFFF;
-        Object_80039F5C *pOther = fn_80039FE8(fn_80178308(), 2, 0);
+        Object_80039F5C *pOther = PlyrFindByRole(fn_80178308(), 2, 0);
         int otherIndex = 0xFFFF;
         int hasOther;
 

@@ -184,7 +184,7 @@ void fn_801344F8(Object_80039F5C *p, float *values)
         s->mUnknown6 = 10;
         unsigned int n = fn_80178D18(fn_80178320());
         for (unsigned short i = 0; i < n; ++i) {
-            Object_80039F5C *other = fn_80039F5C(fn_80178320(), i);
+            Object_80039F5C *other = PlyrGet(fn_80178320(), i);
             float delta[2];
             fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (!(fn_802270A4(delta) >= 3.0f)) {
@@ -216,7 +216,7 @@ int fn_801347D4(Object_80039F5C *p, State_80134E24 *s,
             for (;;) {
                 unsigned int n = fn_802372EC(0, 3);
                 if (indexes[n] != 255 && s->mUnknown30[n]) {
-                    *out = fn_80039F5C(p->mIdBytes[2], indexes[n]);
+                    *out = PlyrGet(p->mIdBytes[2], indexes[n]);
                     *choice = s->mUnknown23[n];
                     return 1;
                 }
@@ -278,7 +278,7 @@ void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
     for (unsigned char i = 0; i <= 2; ++i) indexes[i] = PlayBookGetReceiver(p->mIdBytes[2], i, 0);
     for (unsigned char i = 0; i <= 2; ++i) {
         if (!s->mUnknown30[i] || indexes[i] == 255) continue;
-        Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], indexes[i]);
+        Object_80039F5C *other = PlyrGet(p->mIdBytes[2], indexes[i]);
         int disabled = 0;
         switch (other->mpState->mId) {
         case 3: case 51:
@@ -349,7 +349,7 @@ int fn_80134E24(Object_80039F5C *player) {
         Point_8017886C point = fn_80177FE0();
         unsigned int size = fn_80178D18((unsigned char)team);
         for (int i = 0; i < (int)size; ++i) {
-            Object_80039F5C *other = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            Object_80039F5C *other = PlyrGet((unsigned char)team, (unsigned short)i);
             if (other->mUnknown8 != 255 || other->mpState->mId == 2 || other->mpState->mId == 30 ||
                 other->mpState->mId == 32 || other->mpState->mId == 12 || other->mpState->mId == 5)
                 if (other->mMotion.mPos.mY < point.mY + lbl_803EB184)
@@ -454,7 +454,7 @@ int fn_80135200(Object_80039F5C *player) {
         }
         unsigned int size = fn_80178D18(fn_80178320());
         for (unsigned char i = 0; i < size; ++i) {
-            Object_80039F5C *other = fn_80039F5C(fn_80178320(), i);
+            Object_80039F5C *other = PlyrGet(fn_80178320(), i);
             if (other->mUnknown8 != 255 && other->mUnknown2914 >= 13 && other->mUnknown2914 <= 18) {
                 Point_8017886C next = fn_80177FE0();
                 if (other->mMotion.mPos.mY < next.mY)
@@ -473,7 +473,7 @@ int fn_80135200(Object_80039F5C *player) {
                 for (int i = 0; i < 3; ++i) {
                     choice -= state->mUnknown2D[i];
                     if (choice < 0 && indices[i] != 255) {
-                        state->mUnknown28 = fn_80039F5C(player->mIdBytes[2], indices[i]);
+                        state->mUnknown28 = PlyrGet(player->mIdBytes[2], indices[i]);
                         state->mUnknown2C = i;
                         break;
                     }
@@ -488,7 +488,7 @@ int fn_80135200(Object_80039F5C *player) {
             }
             for (int i = 0; i < 3; ++i) {
                 if (indices[i] != 255 && state->mUnknown2D[i]) {
-                    selected = fn_80039F5C(player->mIdBytes[2], indices[i]);
+                    selected = PlyrGet(player->mIdBytes[2], indices[i]);
                     unsigned char a, b = 20;
                     state->mUnknown1D[i] =
                         fn_80135F14(player, selected, &value, state->mUnknown2D[i], &a, &b);
@@ -524,7 +524,7 @@ int fn_80135200(Object_80039F5C *player) {
                         continue;
                     Vec2_t predicted = {0.0f, 0.0f};
                     unsigned int bonus = 0;
-                    candidate = fn_80039F5C(player->mIdBytes[2], indices[i]);
+                    candidate = PlyrGet(player->mIdBytes[2], indices[i]);
                     if (fn_80177F70() != 6) {
                         fn_800C146C(&predicted, player, candidate, 20, 0, 0, 0, 0);
                         if (predicted.mY > point.mY)
@@ -554,14 +554,14 @@ int fn_80135200(Object_80039F5C *player) {
                     float highest = -fn_80178A2C();
                     unsigned char best = 0;
                     for (int i = 0; i < 3; ++i) {
-                        Object_80039F5C *other = fn_80039F5C(player->mIdBytes[2], indices[i]);
+                        Object_80039F5C *other = PlyrGet(player->mIdBytes[2], indices[i]);
                         if (other->mMotion.mPos.mY > highest) {
                             highest = other->mMotion.mPos.mY;
                             best = i;
                         }
                     }
                     found = 1;
-                    selected = fn_80039F5C(player->mIdBytes[2], indices[best]);
+                    selected = PlyrGet(player->mIdBytes[2], indices[best]);
                 }
             }
             if (found == 1) {
@@ -743,7 +743,7 @@ int fn_80136210(Object_80039F5C *p)
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~4;
     m = p->mpState;
-    Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2] ^ 1, m->mUnknown3[0]);
+    Object_80039F5C *other = PlyrGet(p->mIdBytes[2] ^ 1, m->mUnknown3[0]);
     fn_8009BD2C(other, &s->mUnknown0Word);
     fn_80143E14(p, other);
     unsigned short n = 0;

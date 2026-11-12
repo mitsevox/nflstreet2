@@ -109,7 +109,7 @@ void fn_800E586C(Object_80039F5C *p, float *pX)
     unsigned char count = fn_80178D18(team);
 
     for (unsigned char i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther->mMotion.mPos.mY < p->mMotion.mPos.mY) {
             if (*pX > 0.0f) {
                 int inside = pOther->mMotion.mPos.mX > fn_80177FE0().mX &&
@@ -129,7 +129,7 @@ void fn_800E586C(Object_80039F5C *p, float *pX)
         }
     }
     if (found > -1 && best > 0.0f) {
-        Object_80039F5C *pOther = fn_80039F5C(team, found);
+        Object_80039F5C *pOther = PlyrGet(team, found);
         if (*pX > fn_80177FE0().mX) {
             if (*pX > pOther->mMotion.mPos.mX && *pX < pOther->mMotion.mPos.mX + 1.75f) {
                 *pX = pOther->mMotion.mPos.mX + 1.75f;

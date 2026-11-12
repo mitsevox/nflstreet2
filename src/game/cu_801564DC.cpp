@@ -558,7 +558,7 @@ void fn_8015651C(void)
     fn_801FCE10(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            list[i] = fn_80039F5C((unsigned char)team, i)->mUnknown2908;
+            list[i] = PlyrGet((unsigned char)team, i)->mUnknown2908;
         }
         list[7] = 0x7FFF;
         DepthChartAutoFill(team, list, 4);
@@ -571,7 +571,7 @@ void fn_8015651C(void)
     fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
+            Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
             pObject->mUnknown2908 = records[team].mUnknown[i];
             fn_80149040(pObject);
         }
@@ -782,7 +782,7 @@ void fn_80156AB0(void)
 
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
+            Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
             fn_800EFE60(0, pObject->mQueue, pObject);
         }
     }
@@ -1049,7 +1049,7 @@ int fn_80157080(void)
     if (done) {
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
-                Object_80039F5C *pPlayer = fn_80039F5C((unsigned char)team, i);
+                Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, i);
                 pPlayer->mUnknown9[2] = i < (unsigned int)fn_80178D70((unsigned char)team);
             }
         }
@@ -1703,7 +1703,7 @@ void fn_80158A4C(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
-            fn_80149040(fn_80039F5C(team, i));
+            fn_80149040(PlyrGet(team, i));
         }
     }
 }

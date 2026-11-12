@@ -28433,7 +28433,7 @@
       ]
     },
     {
-      "source": "src/game/cu_8003877C.cpp",
+      "source": "src/game/PlyrMgr.cpp",
       "profile": "game_cpp",
       "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
       "sections": [
@@ -28452,32 +28452,32 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8003830C",
+          "symbol": "PlyrFixWristBones",
           "start": "0x8003830C",
           "end": "0x8003845C"
         },
         {
-          "symbol": "fn_8003845C",
+          "symbol": "PlyrAddParticleEvents",
           "start": "0x8003845C",
           "end": "0x800384DC"
         },
         {
-          "symbol": "fn_800384DC",
+          "symbol": "PlyrMgrCreate",
           "start": "0x800384DC",
           "end": "0x800385D4"
         },
         {
-          "symbol": "fn_800385D4",
+          "symbol": "PlyrMgrDestroy",
           "start": "0x800385D4",
           "end": "0x80038650"
         },
         {
-          "symbol": "fn_80038650",
+          "symbol": "PlyrMgrRefreshAll",
           "start": "0x80038650",
           "end": "0x8003877C"
         },
         {
-          "symbol": "fn_8003877C",
+          "symbol": "PlyrMgrCompareSnapshot",
           "start": "0x8003877C",
           "end": "0x80038928"
         },
@@ -28487,162 +28487,162 @@
           "end": "0x80038A00"
         },
         {
-          "symbol": "fn_80038A00",
+          "symbol": "PlyrMgrLoadSnapshot",
           "start": "0x80038A00",
           "end": "0x80038E50"
         },
         {
-          "symbol": "fn_80038E50",
+          "symbol": "PlyrMgrGetSnapshotSize",
           "start": "0x80038E50",
           "end": "0x80038E80"
         },
         {
-          "symbol": "fn_80038E80",
+          "symbol": "PlyrInit",
           "start": "0x80038E80",
           "end": "0x80039044"
         },
         {
-          "symbol": "fn_80039044",
+          "symbol": "PlyrContactCallback",
           "start": "0x80039044",
           "end": "0x8003924C"
         },
         {
-          "symbol": "fn_8003924C",
+          "symbol": "PlyrUpdatePendingMsg",
           "start": "0x8003924C",
           "end": "0x800392DC"
         },
         {
-          "symbol": "fn_800392DC",
+          "symbol": "PlyrAnimUpdateOverlay",
           "start": "0x800392DC",
           "end": "0x80039364"
         },
         {
-          "symbol": "fn_80039364",
+          "symbol": "PlyrAnimUpdateHands",
           "start": "0x80039364",
           "end": "0x80039454"
         },
         {
-          "symbol": "fn_80039454",
+          "symbol": "PlyrAnimPostUpdate",
           "start": "0x80039454",
           "end": "0x80039458"
         },
         {
-          "symbol": "fn_80039458",
+          "symbol": "PlyrClampBehindLine",
           "start": "0x80039458",
           "end": "0x800394F4"
         },
         {
-          "symbol": "fn_800394F4",
+          "symbol": "PlyrKeepInBounds",
           "start": "0x800394F4",
           "end": "0x8003962C"
         },
         {
-          "symbol": "fn_8003962C",
+          "symbol": "PlyrUpdateControlFlag",
           "start": "0x8003962C",
           "end": "0x8003977C"
         },
         {
-          "symbol": "fn_8003977C",
+          "symbol": "PlyrMgrClearTeamFlag",
           "start": "0x8003977C",
           "end": "0x800397D0"
         },
         {
-          "symbol": "fn_800397D0",
+          "symbol": "PlyrMgrRegister",
           "start": "0x800397D0",
           "end": "0x80039890"
         },
         {
-          "symbol": "fn_80039890",
+          "symbol": "PlyrMgrReset",
           "start": "0x80039890",
           "end": "0x8003989C"
         },
         {
-          "symbol": "fn_8003989C",
+          "symbol": "PlyrMgrExists",
           "start": "0x8003989C",
           "end": "0x800398B4"
         },
         {
-          "symbol": "fn_800398B4",
+          "symbol": "PlyrMgrUpdate",
           "start": "0x800398B4",
           "end": "0x80039A1C"
         },
         {
-          "symbol": "fn_80039A1C",
+          "symbol": "PlyrMgrEmptyPass",
           "start": "0x80039A1C",
           "end": "0x80039A38"
         },
         {
-          "symbol": "fn_80039A38",
+          "symbol": "PlyrMgrUpdateSkeletons",
           "start": "0x80039A38",
           "end": "0x80039AA8"
         },
         {
-          "symbol": "fn_80039AA8",
+          "symbol": "PlyrMgrStepStates",
           "start": "0x80039AA8",
           "end": "0x80039B2C"
         },
         {
-          "symbol": "fn_80039B2C",
+          "symbol": "PlyrMgrUpdateMotion",
           "start": "0x80039B2C",
           "end": "0x80039C64"
         },
         {
-          "symbol": "fn_80039C64",
+          "symbol": "PlyrMgrTestCollisions",
           "start": "0x80039C64",
           "end": "0x80039CB0"
         },
         {
-          "symbol": "fn_80039CB0",
+          "symbol": "PlyrMgrRunBrains",
           "start": "0x80039CB0",
           "end": "0x80039D08"
         },
         {
-          "symbol": "fn_80039D08",
+          "symbol": "PlyrMgrUpdatePoses",
           "start": "0x80039D08",
           "end": "0x80039F04"
         },
         {
-          "symbol": "fn_80039F04",
+          "symbol": "PlyrMgrUpdateModels",
           "start": "0x80039F04",
           "end": "0x80039F5C"
         },
         {
-          "symbol": "fn_80039F5C",
+          "symbol": "PlyrGet",
           "start": "0x80039F5C",
           "end": "0x80039F8C"
         },
         {
-          "symbol": "fn_80039F8C",
+          "symbol": "PlyrGetIndex",
           "start": "0x80039F8C",
           "end": "0x80039FE8"
         },
         {
-          "symbol": "fn_80039FE8",
+          "symbol": "PlyrFindByRole",
           "start": "0x80039FE8",
           "end": "0x8003A06C"
         },
         {
-          "symbol": "fn_8003A06C",
+          "symbol": "PlyrMgrGetPerTeam",
           "start": "0x8003A06C",
           "end": "0x8003A078"
         },
         {
-          "symbol": "fn_8003A078",
+          "symbol": "PlyrMgrGetCollideSet",
           "start": "0x8003A078",
           "end": "0x8003A090"
         },
         {
-          "symbol": "fn_8003A090",
+          "symbol": "PlyrMgrReverseAll",
           "start": "0x8003A090",
           "end": "0x8003A130"
         },
         {
-          "symbol": "fn_8003A130",
+          "symbol": "PlyrFindNearest",
           "start": "0x8003A130",
           "end": "0x8003A1EC"
         },
         {
-          "symbol": "fn_8003A1EC",
+          "symbol": "PlyrRouteShow",
           "start": "0x8003A1EC",
           "end": "0x8003A394"
         }
@@ -34336,7 +34336,7 @@
     {
       "source": "src/game/cu_801526EC.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #908; one complete function inside the retained provisional cu_801485B4 survey group: 0x801526EC, called only from 0x80150368 (fn_8015034C of src/game/cu_8015005C.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x80150360/0x80150364), resets the table reached through member +28 and its word +36 of the Class_802A2918 object of src/game/cu_80152FFC.cpp and calls 0x80039F5C (src/game/cu_8003877C.cpp) for team 1, indices 0-3. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801526EC follows fn_8015267C of src/game/cu_8015264C.cpp and 0x801527B8 onward is src/game/cu_801527B8.cpp; original bytes stay linked.",
+      "evidence": "Issue #908; one complete function inside the retained provisional cu_801485B4 survey group: 0x801526EC, called only from 0x80150368 (fn_8015034C of src/game/cu_8015005C.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x80150360/0x80150364), resets the table reached through member +28 and its word +36 of the Class_802A2918 object of src/game/cu_80152FFC.cpp and calls 0x80039F5C (src/game/PlyrMgr.cpp) for team 1, indices 0-3. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801526EC follows fn_8015267C of src/game/cu_8015264C.cpp and 0x801527B8 onward is src/game/cu_801527B8.cpp; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

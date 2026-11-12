@@ -65,7 +65,7 @@ void fn_80149154(Class_80148A58 *p, const int *pKinds)
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char i=0;i<14;i++) {
             unsigned char team=i/7,index=i%7;
-            Object_80039F5C *player=fn_80039F5C(team,index);
+            Object_80039F5C *player=PlyrGet(team,index);
             if(player->mUnknown9[2]) {
                 unsigned int count=p->vfn_25(team,index);
                 if(count<=2 && p->vfn_26(team,index,player,pKinds[k])) {
@@ -229,7 +229,7 @@ int fn_80149DA4(Class_80148A58 *p,int kind,int team,int index,Object_80039F5C *p
     int best=0,found=0,result=0;
     for(unsigned char t=0;t<2;t++) {
         for(unsigned char i=0;i<(unsigned int)count;i++) {
-            Object_80039F5C *other=fn_80039F5C(t,i);
+            Object_80039F5C *other=PlyrGet(t,i);
             if(other->mUnknown9[2]) {
                 if(!found) {
                     best=p->vfn_30(kind,t,i,other);found=1;

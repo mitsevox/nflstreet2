@@ -140,9 +140,9 @@ void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, uns
 Object_80039F5C *PlaySetGetKeyPlayer(PlayBookFormation_t *pObject)
 {
     if (PlayBookGetPlay(fn_80178308())->mUnknown18 & 0x20000) {
-        return fn_80039F5C(fn_80178308(), 1);
+        return PlyrGet(fn_80178308(), 1);
     }
-    return fn_80039F5C(fn_80178308(), pObject->mUnknown8.mUnknownE);
+    return PlyrGet(fn_80178308(), pObject->mUnknown8.mUnknownE);
 }
 
 void PlaySetPointToRoleMate(Object_80039F5C *p)
@@ -157,7 +157,7 @@ void PlaySetPointToRoleMate(Object_80039F5C *p)
         int count = fn_80178D70(p->mIdBytes[2]);
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
 
             if (pOther->mUnknown2914 == 7 || pOther->mUnknown2914 == 24) {
                 msg.mUnknown1[0] = i;

@@ -64,7 +64,7 @@ void fn_801487C0(int team, unsigned char begin);
 unsigned int fn_80153328(Class_802A1930 *p);
 void HudShowAlert(const char *pText);
 void BallResetToSpot(void);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 unsigned char fn_8007AFDC(int team);
 int fn_800B65D0(int team);
 void fn_800B6714(Object_80039F5C *p, int a);
@@ -141,7 +141,7 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
 void fn_80153BBC(Class_802A1B58 *p)
@@ -151,8 +151,8 @@ void fn_80153BBC(Class_802A1B58 *p)
     unsigned char kind = fn_8007AFDC(team);
     int first = fn_800B65A0(team);
     int second = fn_800B65D0(team);
-    Object_80039F5C *p0 = fn_80039F5C(team, 0);
-    Object_80039F5C *p1 = fn_80039F5C(team, 1);
+    Object_80039F5C *p0 = PlyrGet(team, 0);
+    Object_80039F5C *p1 = PlyrGet(team, 1);
 
     if (kind == 2) {
         if (!p->mpUnknown4[team][0]) {
@@ -177,8 +177,8 @@ void fn_80153BBC(Class_802A1B58 *p)
     kind = fn_8007AFDC(team);
     first = fn_800B65A0(team);
     second = fn_800B65D0(team);
-    p0 = fn_80039F5C(team, 0);
-    p1 = fn_80039F5C(team, 1);
+    p0 = PlyrGet(team, 0);
+    p1 = PlyrGet(team, 1);
     if (kind == 2) {
         if (!p->mpUnknown4[team][0]) {
             p->mpUnknown4[team][0] = p0->mpUnknown4;

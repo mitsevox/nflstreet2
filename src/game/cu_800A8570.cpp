@@ -134,11 +134,11 @@ int fn_800927BC(unsigned char index);
 void fn_80094598(int index);
 void fn_80093410(int handle);
 int fn_80178508(Point_8017886C *pPos, float *pOut, int skipFlags);
-void fn_800398B4(void);
-void fn_80039CB0(float dt);
-void fn_80039D08(float dt);
-void fn_80039B2C(float dt);
-void fn_80039A38(float dt);
+void PlyrMgrUpdate(void);
+void PlyrMgrRunBrains(float dt);
+void PlyrMgrUpdatePoses(float dt);
+void PlyrMgrUpdateMotion(float dt);
+void PlyrMgrUpdateSkeletons(float dt);
 void CamGameResumeAll(void);
 void HudPost3AOn(void);
 int fn_80156704(void);
@@ -184,12 +184,12 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             fn_800A9854();
         }
         for (step = 0; step <= 19; step++) {
-            fn_800398B4();
+            PlyrMgrUpdate();
             BallsProcessMotion(1.0f);
-            fn_80039CB0(gFrameTimeScale);
-            fn_80039D08(gFrameTimeScale);
-            fn_80039B2C(gFrameTimeScale);
-            fn_80039A38(gFrameTimeScale);
+            PlyrMgrRunBrains(gFrameTimeScale);
+            PlyrMgrUpdatePoses(gFrameTimeScale);
+            PlyrMgrUpdateMotion(gFrameTimeScale);
+            PlyrMgrUpdateSkeletons(gFrameTimeScale);
             BallsProcessStates(gFrameTimeScale);
             BallsProcessCollision(gFrameTimeScale);
         }

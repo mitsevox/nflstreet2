@@ -274,7 +274,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
     }
     count = fn_80178D18(team);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         float score = 3.4028235e38f;
 
         if (p->mUnknown8 == 0xFF && !(p->mFlags & 0x800) && p->mUnknown9[2] != 0) {

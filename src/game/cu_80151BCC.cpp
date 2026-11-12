@@ -45,7 +45,7 @@ void fn_80151BCC(Class_802A2918 *p)
 
     count = p->mpUnknown1C->mpUnknown36->mUnknown119;
     for (i = 0; i < count; i++) {
-        pPlayer = fn_80039F5C(0, i);
+        pPlayer = PlyrGet(0, i);
         float limit = fn_80177FFC(0).mY;
         if (pPlayer->mMotion.mPos.mY > limit) {
             pPlayer->mMotion.mPos.mY = limit;

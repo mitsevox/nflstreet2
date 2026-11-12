@@ -441,7 +441,7 @@ extern "C" void fn_8002B960(Type_8002B960 *p)
     for (team = 0; team <= 1; team++) {
         count = fn_80178D18(team);
         for (i = 0; i < count; i++) {
-            pObject = fn_80039F5C(team, i);
+            pObject = PlyrGet(team, i);
             p->mUnknown000[team][i] = *(Block_80039F5C_B54 *)((char *)pObject + 0xB54);
             p->mUnknown578[team][i] = *(Block_80039F5C_BB8 *)pObject->mRatings;
         }
@@ -469,7 +469,7 @@ extern "C" void fn_8002BAF4(Type_8002B960 *p)
     for (team = 0; team <= 1; team++) {
         count = fn_80178D18(team);
         for (i = 0; i < count; i++) {
-            pObject = fn_80039F5C(team, i);
+            pObject = PlyrGet(team, i);
             PauseIsOpen();
             *(Block_80039F5C_B54 *)((char *)pObject + 0xB54) = p->mUnknown000[team][i];
             *(Block_80039F5C_BB8 *)pObject->mRatings = p->mUnknown578[team][i];

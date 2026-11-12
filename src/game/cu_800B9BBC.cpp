@@ -104,7 +104,7 @@ extern "C" void fn_800B9D24(void)
     unsigned short i;
 
     for (i = 0; i < 7; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Ball_t *pBall = BallFindHeldBy(p);
 
         if (pBall != 0) {
@@ -130,7 +130,7 @@ extern "C" void fn_800B9E44(void)
     unsigned int count = fn_80178D18(team);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         p->mMotion.mPos.mX = fn_80178A08() + 2.0f;
         p->mMotion.mPos.mY = 12.0f - i * 2.0f;
@@ -168,7 +168,7 @@ struct Position_801F4934 {
 };
 
 extern "C" {
-void fn_8003A1EC(int on, int team, int index);
+void PlyrRouteShow(int on, int team, int index);
 void PlyrRouteShowHighlighted(int a, int team, int index);
 void PlyrRouteShowTeam(int a, int team);
 int SndgChannelGetStream(int idx);
@@ -205,7 +205,7 @@ extern "C" int fn_800B9F50(void)
                 mode = 8;
             }
         case 1:
-            p = fn_80039F5C((unsigned char)team, pEvent->mIndex);
+            p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
                     pItem = fn_80162DBC(i);
@@ -224,7 +224,7 @@ extern "C" int fn_800B9F50(void)
             team = fn_80178320();
             mode = 0;
             for (j = 0; j <= 10; j++) {
-                p = fn_80039F5C((unsigned char)team, j);
+                p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
                         pItem = fn_80162DBC(i);
@@ -244,7 +244,7 @@ extern "C" int fn_800B9F50(void)
             team = fn_80178320();
             mode = 0;
             for (j = 0; j <= 10; j++) {
-                p = fn_80039F5C((unsigned char)team, j);
+                p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
                         pItem = fn_80162DBC(i);
@@ -261,7 +261,7 @@ extern "C" int fn_800B9F50(void)
             }
             break;
         case 2:
-            p = fn_80039F5C((unsigned char)team, pEvent->mIndex);
+            p = PlyrGet((unsigned char)team, pEvent->mIndex);
             if (p != 0) {
                 for (i = 0; i <= 4; i++) {
                     pItem = fn_80162DBC(i);
@@ -276,7 +276,7 @@ extern "C" int fn_800B9F50(void)
         case 4:
             team = fn_80178320();
             for (j = 0; j <= 10; j++) {
-                p = fn_80039F5C((unsigned char)team, j);
+                p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
                     for (i = 0; i <= 4; i++) {
                         pItem = fn_80162DBC(i);
@@ -292,7 +292,7 @@ extern "C" int fn_800B9F50(void)
         case 6:
             team = fn_80178320();
             for (j = 0; j <= 10; j++) {
-                p = fn_80039F5C((unsigned char)team, j);
+                p = PlyrGet((unsigned char)team, j);
                 if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
                     for (i = 0; i <= 4; i++) {
                         pItem = fn_80162DBC(i);
@@ -309,7 +309,7 @@ extern "C" int fn_800B9F50(void)
             PlyrRouteShowHighlighted(1, team, pEvent->mIndex);
             break;
         case 8:
-            fn_8003A1EC(0, team, pEvent->mIndex);
+            PlyrRouteShow(0, team, pEvent->mIndex);
             break;
         case 9:
             PlyrRouteShowTeam(pEvent->mIndex, team);

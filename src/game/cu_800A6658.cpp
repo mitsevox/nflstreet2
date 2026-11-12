@@ -53,7 +53,7 @@ void fn_800A9384(int mode);
 void SndgMusicWaitForStart(int frames);
 void fn_800A6D5C(int team);
 int fn_80156704(void);
-Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 void PlayBookSelectAudible(int team, unsigned int index);
 void PlayRealignTeam(int team);
@@ -300,7 +300,7 @@ extern "C" void fn_800A70F4(void)
         pBlock->mUnknownA0 = 0;
         count = fn_80178D18(team);
         for (index = 0; index < count; index++) {
-            fn_801476C8(fn_80039F5C(team, index));
+            fn_801476C8(PlyrGet(team, index));
         }
         fn_802381E0(pHandle);
     }
@@ -424,11 +424,11 @@ extern "C" void fn_800A7514(int team)
             args[1] = 1;
             fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
             if (fn_80156704() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
-                Object_80039F5C *p = fn_80039FE8(fn_80178308(), 0, 0);
+                Object_80039F5C *p = PlyrFindByRole(fn_80178308(), 0, 0);
                 unsigned char side;
 
                 if (p == 0) {
-                    p = fn_80039F5C(fn_80178308(), 0);
+                    p = PlyrGet(fn_80178308(), 0);
                 }
                 fn_8010B1FC(p, 0, 0);
                 PlayBookSelectAudible(fn_80178308(), 0);
@@ -444,7 +444,7 @@ extern "C" void fn_800A7514(int team)
                     unsigned char i;
 
                     for (i = 0; i < count; i++) {
-                        Object_80039F5C *pPlayer = fn_80039F5C(side, i);
+                        Object_80039F5C *pPlayer = PlyrGet(side, i);
                         unsigned char level;
                         unsigned char secondary;
 

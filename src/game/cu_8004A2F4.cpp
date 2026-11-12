@@ -2322,7 +2322,7 @@ void fn_8004FF8C(void)
     fn_8008040C(&query, 0);
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(team, index);
+            Object_80039F5C *pPlayer = PlyrGet(team, index);
             Block_80170E64 *pBlock = pPlayer->mpUnknown4;
             Object_8003DEC4 *pModel = (Object_8003DEC4 *)pBlock;
             PlayerDbSeekId(&query, pModel->mUnknown4956, 0);

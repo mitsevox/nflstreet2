@@ -46,10 +46,10 @@ void fn_80164CE4(PlayBookPlay_t *, Object_80039F5C *, int);
 unsigned char fn_80164B78(void)
 {
     Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-    if (selected == fn_80039F5C(fn_80178308(), 0)) {
+    if (selected == PlyrGet(fn_80178308(), 0)) {
         unsigned int n = fn_80178D18(fn_80178308());
         for (unsigned char i = 0; i < n; ++i) {
-            Object_80039F5C *p = fn_80039F5C(fn_80178308(), i);
+            Object_80039F5C *p = PlyrGet(fn_80178308(), i);
             PlayBookPlay_t *record = PlayBookGetPlay(fn_80178308());
             void *queue = fn_80164EC8(record, fn_80178308(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
@@ -63,7 +63,7 @@ void fn_80164C4C(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, 
     int remap = object->mUnknown8.mUnknownF == 1 && (object->mUnknown8.mUnknown14 & 1) && (record->mUnknown18 & 1);
     int count = fn_80178D70(team);
     for (int i = 0; i < count; ++i)
-        fn_80164CE4(record, fn_80039F5C(team, (unsigned short)i), remap);
+        fn_80164CE4(record, PlyrGet(team, (unsigned short)i), remap);
 }
 
 void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
@@ -118,7 +118,7 @@ unsigned char fn_80164ED8(PlayBookFormation_t *object, PlayBookPlay_t *record, i
         int mode = fn_800AD9B4();
         slots = record->mUnknown1C;
         index = slots[slot][0];
-        Object_80039F5C *p = fn_80039F5C(fn_80178308(), index);
+        Object_80039F5C *p = PlyrGet(fn_80178308(), index);
         if (mode == 2 && !p->mUnknown2914) {index = fn_80164B78(); override = 1;}
     }
     if (out) {
@@ -160,7 +160,7 @@ void fn_80165110(PlayArtPlay_t *record, int force)
         PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char index = record->mUnknown1C[i][0];
-            fn_80039F5C(fn_80178308(), index);
+            PlyrGet(fn_80178308(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
         if (swap || force) {

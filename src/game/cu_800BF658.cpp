@@ -268,8 +268,8 @@ void Class_80297CE8::vfn_04(float dt)
             unsigned short k;
 
             for (k = 0; k <= 6; k++) {
-                if (fn_80039F5C(i, k)->mUnknown8 != 0xFF) {
-                    fn_80039F5C(i, k)->mMotion.mFacing = 0xC00000;
+                if (PlyrGet(i, k)->mUnknown8 != 0xFF) {
+                    PlyrGet(i, k)->mMotion.mFacing = 0xC00000;
                 }
             }
         }

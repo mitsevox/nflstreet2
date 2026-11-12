@@ -138,7 +138,7 @@ extern "C" void fn_800BAAE4(void)
         int count = fn_80178D18((unsigned char)team);
 
         for (int i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             unsigned char a;
             unsigned char b;
 
