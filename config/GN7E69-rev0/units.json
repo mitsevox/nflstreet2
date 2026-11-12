@@ -15844,7 +15844,7 @@
     {
       "source": "src/game/PlyrStates.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801360D4-0x80136B1C (src/game/PlyrStates.cpp) and its function and data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801360D4-0x80136B1C (src/game/PlyrStates.cpp) and its function and data rows, including the handler tables 0x802DB280-0x802DBBE0; every function exact.",
       "sections": [
         {
           "section": ".text",
@@ -15862,7 +15862,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802DB1D4",
-          "end": "0x802DB280"
+          "end": "0x802DBBE0"
         },
         {
           "section": ".sdata",
