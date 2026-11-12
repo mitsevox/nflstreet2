@@ -69,7 +69,7 @@ double fabs(double);
 
 void fn_8003AB08(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
-void fn_80053A70(Object_80039F5C *p);
+void HotspotResolvePending(Object_80039F5C *p);
 void SndgSpchSetPlayFlags(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
 void fn_80071540(Object_80039F5C *p, void *pBall);
@@ -1466,7 +1466,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 StyleTrackerAwardCatch(p);
                 fn_80156C78(0x2B, 1);
             }
-            fn_80053A70(p);
+            HotspotResolvePending(p);
         }
     }
     if (done) {

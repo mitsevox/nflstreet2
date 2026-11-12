@@ -45,7 +45,7 @@ void fn_800A3B5C(Object_80039F5C *p);
 int ResSync(int a);
 void PlayerObjSetDrawReady(unsigned char value);
 int fn_80040F10(void);
-void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
+void HotspotFramePlayEffect(Object_80040818 *pObject, int index, int apply);
 int PauseIsUnblocked(void);
 void SpchIGPurgeChannel(int index);
 void fn_800941B8(void);
@@ -153,7 +153,7 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
             Object_80040818 *pObject = fn_80040F18(i);
 
             if (pObject->mUnknown472->mUnknown188 == 7) {
-                fn_80053B4C(pObject, 2, 0);
+                HotspotFramePlayEffect(pObject, 2, 0);
             }
         }
     }

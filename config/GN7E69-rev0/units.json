@@ -10500,6 +10500,37 @@
       ]
     },
     {
+      "source": "src/game/BigObjHotspot.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80052D08-0x80053BC8 (src/game/BigObjHotspot.cpp) and its function, name, type, .rodata, .sdata and .bss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80052D08",
+          "end": "0x80053BC8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DDF8",
+          "end": "0x8028DEA4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA540",
+          "end": "0x803EA54C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309CB4",
+          "end": "0x80309E04"
+        }
+      ]
+    },
+    {
       "source": "src/game/LevelLights.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/LevelLights.cpp) and its two .sdata rows.",

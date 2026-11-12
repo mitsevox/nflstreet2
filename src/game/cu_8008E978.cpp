@@ -9354,7 +9354,7 @@ extern "C" void fn_800BBE98(void)
 
 extern "C" {
 int fn_80040F10(void);
-void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
+void HotspotFramePlayEffect(Object_80040818 *pObject, int index, int apply);
 }
 
 extern "C" void fn_800BBF18(void)
@@ -9376,7 +9376,7 @@ extern "C" void fn_800BBF18(void)
             Object_80040818 *pObject = fn_80040F18(i);
 
             if (pObject->mUnknown472->mUnknown188 == 7) {
-                fn_80053B4C(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
+                HotspotFramePlayEffect(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
             }
         }
     }
@@ -9403,7 +9403,7 @@ extern "C" void fn_800BBF18(void)
                 Object_80040818 *pObject = fn_80040F18(i);
 
                 if (pObject->mUnknown472->mUnknown188 == 7) {
-                    fn_80053B4C(pObject, 2, 0);
+                    HotspotFramePlayEffect(pObject, 2, 0);
                 }
             }
         }

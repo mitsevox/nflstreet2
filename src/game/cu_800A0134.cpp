@@ -488,7 +488,7 @@ void fn_800B2304(void);
 void fn_800B9A9C(Class_80297C60 *);
 void fn_801789F8(void);
 void fn_8016BAAC(void);
-int fn_800539F8(void);
+int HotspotPollCaptured(void);
 void PauseOpenScreen(int,int,int);
 void fn_800AE380(void);
 unsigned int fn_800B2314(void);
@@ -554,7 +554,7 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
         if(fn_800BA6F8())fn_800BAAE4();
         ClockRuleStopGameClock(result);fn_800B14E4();fn_800B2304();fn_800B9A9C(lbl_803EAB84);
         fn_801789F8();fn_8016BAAC();
-        if(fn_800539F8())PauseOpenScreen(3,22,-1);
+        if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
         fn_800AE380();
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C(result);
         else fn_8002C9A8(lbl_803EA368,3,0);
