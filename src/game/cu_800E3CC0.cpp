@@ -463,7 +463,7 @@ extern "C" int fn_800E7C84(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" int fn_800E7D80(Object_80039F5C *p) {
+extern "C" int PlayerIsFreeOfBall(Object_80039F5C *p) {
     int result = 1;
     Ball_t *pBall = BallGetCurrent();
 
@@ -477,11 +477,24 @@ extern "C" int fn_800E7D80(Object_80039F5C *p) {
             if (pos.mY <= fn_80177FE0().mY) {
                 ok = !fn_801783AC(11);
             }
-            if (ok && p->mIdBytes[3] == 1 && p->mUnknown2914 <= 18 && p->mUnknown2914 >= 10) {
-                Point_8017886C delta;
+            if (ok && p->mIdBytes[3] == 1) {
+                switch (p->mUnknown2914) {
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                case 16:
+                case 17:
+                case 18: {
+                    Point_8017886C delta;
 
-                fn_80227690(&delta, &p->mMotion, &pos);
-                fn_802270A4(&delta);
+                    fn_80227690(&delta, &p->mMotion, &pos);
+                    fn_802270A4(&delta);
+                    break;
+                }
+                }
             }
         } else if (p == BallGetCurrentHolder() && fn_801486A0() == 0) {
             result = 0;

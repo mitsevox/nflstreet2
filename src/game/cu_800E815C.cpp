@@ -6,7 +6,7 @@
 
 extern "C" {
 int fn_800E7C84(Object_80039F5C *p);
-int fn_800E7D80(Object_80039F5C *p);
+int PlayerIsFreeOfBall(Object_80039F5C *p);
 float fn_80178298(void);
 float fn_80178A2C(void);
 int fn_80178320(void);
@@ -22,7 +22,7 @@ extern unsigned char lbl_803EAD68[5];
 
 int fn_800E815C(Object_80039F5C *p, int unused, int mode)
 {
-    if (!fn_800E7C84(p) || !fn_800E7D80(p)) return 0;
+    if (!fn_800E7C84(p) || !PlayerIsFreeOfBall(p)) return 0;
     Message_800F01CC message;
     fn_801C1F94(&message, 0, 4);
     message.mId = 12;

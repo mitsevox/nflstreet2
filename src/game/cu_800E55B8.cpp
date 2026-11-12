@@ -299,14 +299,17 @@ int fn_800E6984(Object_80039F5C *p)
 
 int fn_800E6F48(Object_80039F5C *p)
 {
-    unsigned char value = p->mpState->mUnknown1;
+    int *pTimer = &p->mUnknown336;
+    int value = p->mpState->mUnknown1;
+    int seconds = value >> 5;
     unsigned int frames = (unsigned int)(60.0f / gFrameTimeScale);
-    p->mUnknown336 = (value >> 5) * frames + (int)((value & 31) * 0.032258063554763794f * 60.0f);
+    float fraction = (value & 31) / 31.0f;
+    *pTimer = seconds * frames + (int)(fraction * 60.0f);
     if (!fn_800B146C()) {
-        p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown0 = 0.0f;
-        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown14 = 1;
     }
     return 0;
 }

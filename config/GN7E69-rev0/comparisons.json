@@ -6161,7 +6161,7 @@
           "end": "0x800E7D80"
         },
         {
-          "symbol": "fn_800E7D80",
+          "symbol": "PlayerIsFreeOfBall",
           "start": "0x800E7D80",
           "end": "0x800E7E78"
         },

@@ -2208,6 +2208,10 @@
     "StorySetFlag200": {
       "address": "0x8018E978",
       "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "PlayerIsFreeOfBall": {
+      "address": "0x800E7D80",
+      "evidence": "evidence.tsv function and name rows at 0x800E7D80: returns 0 only when the player carries the current ball outside ball state 4 and 0x801486A0() is 0. Original bytes remain linked while src/game/cu_800E3CC0.cpp is a registered comparison; src/game/cu_800E815C.cpp calls it."
     }
   },
   "units": [
