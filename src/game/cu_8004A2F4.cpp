@@ -5,7 +5,7 @@
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
 #include "game/Desc_800408E4.h"
-#include "game/Record_8031B6F8.h"
+#include "game/ParticleSys.h"
 #include "game/DynObjRender.h"
 #include "game/Object_80235588.h"
 #include "engine/llquat.h"
@@ -158,7 +158,7 @@ int fn_8004D728(int handle, const char *pKey, float *pValues);
 int fn_8004D84C(int handle);
 void fn_8004D860(int handle, int position);
 int fn_800C47C4(void);
-void fn_80145100(int type, int index);
+void ParticleSysSetEffectFile(int type, int index);
 char *fn_801C2EB4(char *pDst, const char *pSrc);
 int ResFindIndexByName(int set, const char *pName);
 void fn_8004CBEC(void *pData, float t, BigObjInst *pObject, Object_80040818 *pOwner);
@@ -931,7 +931,7 @@ void fn_8004BD20(int handle, BigObjInst *pObject)
                 } else {
                     pEmitter->mUnknown0 = fn_8004C5E0(index);
                     if (pEmitter->mUnknown0 != 21) {
-                        fn_80145100(pEmitter->mUnknown0, index);
+                        ParticleSysSetEffectFile(pEmitter->mUnknown0, index);
                     }
                 }
             }
@@ -1390,8 +1390,8 @@ void fn_8004CBEC(void *pData, float time, BigObjInst *pObject, Object_80040818 *
                 position.mZ = pObject->mUnknown16;
                 fn_8022765C(&position, &position, &offset);
             }
-            ParticlesSpawnAt(p->mUnknown0, &position.mX, &rotation.mX, (Source_80144CE0 *)pOwner->mUnknown332);
-            Record_8031B6F8 record;
+            ParticlesSpawnAt(p->mUnknown0, &position.mX, &rotation.mX, (ParticleSource_t *)pOwner->mUnknown332);
+            ParticleSpawnRecord_t record;
             record.mId = p->mUnknown0;
             record.mPos[0] = position.mX;
             record.mPos[1] = position.mY;
@@ -1400,8 +1400,8 @@ void fn_8004CBEC(void *pData, float time, BigObjInst *pObject, Object_80040818 *
             record.mRot[1] = rotation.mY;
             record.mRot[2] = rotation.mZ;
             record.mRot[3] = rotation.mW;
-            record.mpSource = (Source_80144CE0 *)pOwner->mUnknown332;
-            fn_8014516C(record);
+            record.mpSource = (ParticleSource_t *)pOwner->mUnknown332;
+            ParticleSysReplayRecordSpawn(record);
         }
         p = p->mpNext;
     }

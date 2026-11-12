@@ -3,7 +3,7 @@
    splash records when they wrap, and draws that box tiled over the part of
    the field the camera sees. */
 #include "engine/animTexLib.h"
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "engine/viewport.h"
 #include "engine/vptmanager.h"
 #include "game/Object_80039F5C.h"
@@ -105,7 +105,7 @@ void fn_8024FC84(int, int, int, int, int, int, int);
 
 void WeatherInitParticles(WeatherParticle_t *entry, unsigned int count) {
   unsigned char *color = _Weather_auFlakeColor;
-  _Weather_pAnimTex = fn_80145118(0);
+  _Weather_pAnimTex = ParticleSysGetAnimTex(0);
   if (_Weather_iMode == 2)
     color = _Weather_auStreakColor;
   for (unsigned int i = 0; i < count; ++i, ++entry) {

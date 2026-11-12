@@ -36,7 +36,7 @@ struct Group_80146C00 { unsigned int mUnknown0; int mUnknown4; Entry_80146C4C *m
 extern "C" {
 struct LevelData_t;
 extern LevelData_t *gLevelData;
-extern Vector_80146134 lbl_802A03D0;
+extern Vector_80146134 gParticleSys_vUp;
 extern int lbl_802DD170[];
 extern char lbl_802DD584[][24];
 extern Description_801463D8 lbl_802DD274;
@@ -165,7 +165,7 @@ static inline void InitializeSpecial(void)
 extern "C" {
 void fn_801464D0(void *owner)
 {
-    Vector_80146134 v = lbl_802A03D0;
+    Vector_80146134 v = gParticleSys_vUp;
     lbl_803EB264 = (Entry_80146C4C *)fn_801D2B7C(7840, 0, 0);
     lbl_803EB268 = (Subrecord_80146134 *)fn_801D2B7C(960, 0, 0);
     lbl_803EB258 = 1;

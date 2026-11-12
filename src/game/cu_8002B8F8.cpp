@@ -152,7 +152,7 @@ int fn_800B81A4(void);
 void BallsSetVisible(int on);
 void fn_8013E474(void);
 void CamGameResumeAll(void);
-void fn_80144EDC(float a);
+void ParticleSysUpdate(float a);
 void ParticlesProcess(float a);
 void ParticlesStopOnEnter(void);
 void ParticlesFlush(void);
@@ -598,11 +598,11 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
         lbl_803EA358 = 0;
     }
     if (p->mUnknownD88 < 60) {
-        fn_80144EDC(p->mUnknownD88 / 60.0f);
+        ParticleSysUpdate(p->mUnknownD88 / 60.0f);
         ParticlesProcess(1.0f);
         fn_800A3120(p->mUnknownD88 / 60.0f);
     } else {
-        fn_80144EDC(1.0f);
+        ParticleSysUpdate(1.0f);
         ParticlesProcess(1.0f);
         fn_800A3120(p->mUnknownD88 / 60.0f);
     }
@@ -655,7 +655,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
                 fn_801478A8();
                 lbl_803EA358 = 0;
             }
-            fn_80144EDC(p->mUnknownD88 / 60.0f);
+            ParticleSysUpdate(p->mUnknownD88 / 60.0f);
             ParticlesFlush();
             fn_800A3120(p->mUnknownD88 / 60.0f);
             lbl_803EA366 = 1;

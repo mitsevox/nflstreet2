@@ -2816,7 +2816,7 @@ void fn_80146E78(void);
 void LevelUpdate(void);
 void fn_800A2B40(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
-void fn_80144E38(Object_80144CE0 *pObject);
+void ParticleSysReleaseEmitter(PsysEmitter_t *pObject);
 
 extern unsigned char lbl_803EA9F8;
 extern unsigned char lbl_803EA9F0;
@@ -2929,7 +2929,7 @@ extern "C" void fn_800A29D8(int mode)
 extern "C" {
 void *fn_800C47C4(void);
 int ResFindIndexByName(void *pArchive, char *pName);
-void fn_80145100(int type, int index);
+void ParticleSysSetEffectFile(int type, int index);
 
 extern LevelData_t *gLevelData;
 }
@@ -2958,7 +2958,7 @@ extern "C" void fn_800A2D2C(void)
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
+        ParticleSysSetEffectFile(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -3119,7 +3119,7 @@ extern "C" void fn_800A3450(void)
 
     for (i = 0; i < 30; i++) {
         if (lbl_8030E6E8.mpUnknownBC[i] != 0) {
-            fn_80144E38(lbl_8030E6E8.mpUnknownBC[i]);
+            ParticleSysReleaseEmitter(lbl_8030E6E8.mpUnknownBC[i]);
         }
         lbl_8030E6E8.mpUnknownBC[i] = 0;
     }

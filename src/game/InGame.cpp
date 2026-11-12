@@ -76,7 +76,7 @@ void BallsPark(void);
 void fn_8013CF98(void);
 void CamGameApplyUserCamera(void);
 int CamGameGetSideYaw();
-void fn_80144EDC(float a);
+void ParticleSysUpdate(float a);
 void ParticlesProcess(float a);
 void DriveLogInit(void);
 void DriveLogEndDrive(void);
@@ -368,7 +368,7 @@ unsigned char InGame::Update()
     fn_8002CF34(lbl_803EA368);
     if (!fn_8002D060(lbl_803EA368)) {
         ParticlesProcess(gFrameTimeScale);
-        fn_80144EDC(gFrameTimeScale);
+        ParticleSysUpdate(gFrameTimeScale);
         fn_800A3120(gFrameTimeScale);
     }
     FileDebugProcess();

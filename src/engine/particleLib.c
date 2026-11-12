@@ -14,7 +14,7 @@ typedef struct Pool_801DE1E0 {
     Template_801DE1E0 mTemplate;
 } Pool_801DE1E0;
 
-/* Descriptor passed to fn_801DE1E0 (lbl_802DCFF8 in the game). */
+/* Descriptor passed to fn_801DE1E0 (_ParticleSys_EmitterDesc in the game). */
 typedef struct Desc_801DE1E0 {
     int mUnknown00;
     unsigned short mUnknown04;

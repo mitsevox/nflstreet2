@@ -11455,6 +11455,71 @@
       ]
     },
     {
+      "source": "src/game/ParticleSys.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801444D8-0x80145224 (src/game/ParticleSys.cpp), its function, data, type, field and source-form rows and the linker rows 0x802A03BC-0x802A03C0 and 0x802A03DC-0x802A03EC for the discarded ParticleSysResetEmitter and ParticleSysBuildFrame; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "ParticleSysAllocDrawList",
+          "ParticleSysFreeDrawList",
+          "ParticleSysLoadEffect",
+          "ParticleSysLoadEffects",
+          "ParticleSysReplayGetSize",
+          "ParticleSysReplayWrite",
+          "ParticleSysReplayRead",
+          "ParticleSysInit",
+          "ParticleSysShutdown",
+          "ParticleSysSpawnEmitter",
+          "ParticleSysReleaseEmitter",
+          "ParticleSysDraw",
+          "ParticleSysUpdate",
+          "ParticleSysGetFootstepEffect",
+          "ParticleSysGetImpactEffect",
+          "ParticleSysSetEffectFile",
+          "ParticleSysGetAnimTex",
+          "ParticleSysReplayRegister",
+          "ParticleSysReplayRecordSpawn"
+        ],
+        "discarded": [
+          "ParticleSysResetEmitter",
+          "ParticleSysBuildFrame"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802A03BC-0x802A03C0 and 0x802A03DC-0x802A03EC: the target keeps every listed function, all reached from outside the unit or from each other; ParticleSysResetEmitter and ParticleSysBuildFrame, rebuilt from their Xbox prototype counterparts 0x132F30 and 0x133120, have no code in the target, while their literal pools remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801444D8",
+          "end": "0x80145224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A03A8",
+          "end": "0x802A0400"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCFF8",
+          "end": "0x802DD170"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB228",
+          "end": "0x803EB244"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6D0",
+          "end": "0x8031B7D0"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXFrameBuf.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv GXFrameBuf source-form/native ownership and individual retained function rows; complete original-layout DOL equality.",

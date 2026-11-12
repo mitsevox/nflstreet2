@@ -2,7 +2,7 @@
    the finished ones. */
 
 #include <dolphin/mtx.h>
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "game/ParticleEvent.h"
 #include "game/Ball.h"
 #include "game/fn_801C68FC.h"
@@ -12,7 +12,7 @@
 /* One 0x44-byte entry of the pool at _Particles_pSpawnPool. */
 struct ParticleSpawn_t {
     Mtx44 mMatrix;
-    Object_80144CE0 *mUnknown40;
+    PsysEmitter_t *mUnknown40;
 };
 
 struct ParticleBallTrail_t {
@@ -73,9 +73,9 @@ static int _ParticleEventUpdate(void *pItem, void *pContext)
             ParticleEventBallBounce(pEvent);
             break;
         }
-        Object_80144CE0 *pObject = pEvent->mUnknown18;
+        PsysEmitter_t *pObject = pEvent->mUnknown18;
         if (pObject != 0 && pObject->mUnknown2B4 == 0 && pObject->mUnknown3B8 == 0) {
-            fn_80144E38(pObject);
+            ParticleSysReleaseEmitter(pObject);
             pEvent->mUnknown18 = 0;
         }
     }
@@ -94,7 +94,7 @@ static int _ParticleEventStop(void *pItem, void *pContext)
         case 4:
         case 5:
             if (pEvent->mUnknown18 != 0) {
-                fn_80144E38(pEvent->mUnknown18);
+                ParticleSysReleaseEmitter(pEvent->mUnknown18);
                 pEvent->mUnknown18 = 0;
             }
             break;
@@ -136,11 +136,11 @@ static void _ParticlesFreeFinished(void)
 
     for (pEntry = (ParticleSpawn_t *)fn_801C6B4C(_Particles_pSpawnPool, 0); pEntry != 0;
          pEntry = (ParticleSpawn_t *)fn_801C6C84(_Particles_pSpawnPool, pEntry)) {
-        Object_80144CE0 *pObject = pEntry->mUnknown40;
+        PsysEmitter_t *pObject = pEntry->mUnknown40;
         if (pObject == 0) {
             pDone[count++] = pEntry;
         } else if (pObject->mUnknown2B4 == 0 && pObject->mUnknown3B8 <= 1) {
-            fn_80144E38(pObject);
+            ParticleSysReleaseEmitter(pObject);
             pDone[count++] = pEntry;
         }
     }
@@ -228,9 +228,9 @@ void ParticlesResetEvents(void)
     }
 }
 
-void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
+void ParticlesSpawnAt(int a, float *pPos, float *pRot, ParticleSource_t *pSource)
 {
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
     Mtx44 m;
     ParticleSpawn_t *pEntry;
 
@@ -258,7 +258,7 @@ void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
     args.mUnknown04 = &pEntry->mMatrix;
     args.mUnknown08 = &m;
     args.mUnknown00 = a;
-    pEntry->mUnknown40 = fn_80144CE0(&args, 0, pSource);
+    pEntry->mUnknown40 = ParticleSysSpawnEmitter(&args, 0, pSource);
     fn_801C6AA4(_Particles_pSpawnPool, pEntry, 0);
 }
 
