@@ -371,6 +371,12 @@ struct Object_80039F5C {
             char mUnknown348[4];
             Object_80039F5C *mpUnknown352;
         };
+        /* States 7 and 63 keep a heading at +352 that the discarded
+           PlayerLocoSelectTurnEntry turns towards. */
+        struct {
+            char mUnknown336Heading[16];
+            int mUnknown352Heading;
+        };
     };
     unsigned char mUnknown360;
     char mUnknown361[27];

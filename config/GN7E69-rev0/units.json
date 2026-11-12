@@ -14703,6 +14703,57 @@
       ]
     },
     {
+      "source": "src/game/PlayerLocoAnim.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800D949C-0x800DAEE4 (src/game/PlayerLocoAnim.cpp), its function, data and source-form rows and the linker row 0x8029D848-0x8029D864.",
+      "link_roots": {
+        "symbols": [
+          "PlayerLocoGetSecondaryCategory",
+          "PlayerLocoUpdateCategories",
+          "PlayerLocoGetStartSide",
+          "PlayerLocoNotInState84",
+          "PlayerLocoCyclePhase",
+          "PlayerLocoGetRunCategory",
+          "PlayerLocoMoveCmdPhase",
+          "PlayerLocoTrimBlendEntries",
+          "PlayerLocoFindSampleIndex",
+          "PlayerLocoStartBlendPair",
+          "PlayerLocoSwitchBlendPair",
+          "PlayerLocoUpdateBlendWeights",
+          "PlayerLocoSetFadeFraction",
+          "PlayerLocoFadeOldPair",
+          "PlayerLocoFindTableEntry",
+          "PlayerLocoGetLowerAnkle"
+        ],
+        "discarded": [
+          "PlayerLocoKeyMatches",
+          "PlayerLocoSelectTurnEntry",
+          "PlayerLocoTurnPhase"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029D848-0x8029D864: the target keeps every listed function, all reached from outside the unit or from each other; the turn-state functions PlayerLocoKeyMatches, PlayerLocoSelectTurnEntry and PlayerLocoTurnPhase, rebuilt from their Xbox prototype counterparts 0x92FC0, 0x92FF0 and 0x93280, have no code in the target, while their literal pool remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D949C",
+          "end": "0x800DAEE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D7F8",
+          "end": "0x8029D8A8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DA888",
+          "end": "0x802DA8BC"
+        }
+      ]
+    },
+    {
       "source": "src/game/LevelLoad.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8005406C-0x8005412C (src/game/LevelLoad.cpp) and its data, type and source-form rows.",

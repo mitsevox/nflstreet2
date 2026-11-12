@@ -8313,7 +8313,7 @@ typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void
 extern "C" {
 int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8331,7 +8331,7 @@ int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
                                   Object_80039F5C *p, unsigned int phase);
-int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8372,8 +8372,8 @@ extern Handler_800B4D7C lbl_8030FB60[248];
 extern "C" void fn_800B4A88(void)
 {
     fn_8009C604(lbl_8030FB60, 248);
-    lbl_8030FB60[74] = fn_800D9C80;
-    lbl_8030FB60[77] = fn_800DA54C;
+    lbl_8030FB60[74] = PlayerLocoCyclePhase;
+    lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
     lbl_8030FB60[73] = fn_800DC6F4;
     lbl_8030FB60[84] = fn_800DC36C;
     lbl_8030FB60[91] = fn_800DD69C;
@@ -8499,7 +8499,7 @@ extern "C" void fn_800B4D7C(void)
 {
     fn_8009C604(lbl_8030FB60, 248);
     lbl_8030FB60[82] = fn_800DDD24;
-    lbl_8030FB60[74] = fn_800D9C80;
+    lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[10] = fn_80093D20;
     lbl_8030FB60[214] = fn_80089E70;
 }

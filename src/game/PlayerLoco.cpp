@@ -7,7 +7,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
-#include "game/Object_800DA8D8.h"
+#include "game/LocoBlendSet.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
@@ -25,8 +25,8 @@ void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry)
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_800C0464(void *p);
-int fn_800DA7AC(Object_801BBD5C *pObject, float value);
-float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
+int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
+float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, Record_800D81C8 *pEntries,
                   float value);
 int fn_800DC080(Object_80039F5C *p);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
@@ -210,13 +210,13 @@ extern "C" int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *pObj
     if (value != 0.0f && MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
         value = -value;
     }
-    return fn_800DA7AC(pObject, value);
+    return PlayerLocoFindSampleIndex(pObject, value);
 }
 
-extern "C" void PlayerLocoSetCycleDuration(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pRecords,
-                                           float value)
+extern "C" void PlayerLocoSetCycleDuration(float value, Block_801BE60C *pBlock, LocoBlendSet_t *pObject,
+                                           Record_800D81C8 *pRecords)
 {
-    pBlock->mUnknown20.mUnknown10 = fn_800DAA68(pBlock->mUnknown20.mUnknown14Half, pBlock, pObject, pRecords, value);
+    pBlock->mUnknown20.mUnknown10 = PlayerLocoUpdateBlendWeights(pBlock->mUnknown20.mUnknown14Half, pBlock, pObject, pRecords, value);
     for (unsigned char i = 0; i <= 1; i++) {
         unsigned char index = pBlock->mUnknown20.mUnknown8Bytes[i];
         if (index != 255) {
@@ -263,7 +263,7 @@ extern "C" int PlayerLocoIsEngaged(Object_80039F5C *p, int a)
     return result;
 }
 
-extern "C" int PlayerLocoUseAltCategory(void)
+extern "C" int PlayerLocoUseAltCategory(Object_80039F5C *, Object_80039F5C *, int, int)
 {
     int mode = fn_800AD9B4();
 
@@ -273,7 +273,7 @@ extern "C" int PlayerLocoUseAltCategory(void)
     return 0;
 }
 
-extern "C" int PlayerLocoUseSpecialCategory(void)
+extern "C" int PlayerLocoUseSpecialCategory(Object_80039F5C *)
 {
     return 0;
 }
