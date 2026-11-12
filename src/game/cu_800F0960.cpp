@@ -639,7 +639,7 @@ int fn_8011DC68(unsigned int id);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 void HudClearMashPlayers(int a, int b);

@@ -572,7 +572,7 @@ unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 void HudClearMashPlayers(int a, int b);
@@ -4624,7 +4624,7 @@ extern "C" void fn_80114DF4(Object_80039F5C *p)
         ((State_80113AAC *)&pOther->mUnknown336)->mUnknown15 = kind;
         pOther->mpState->mUnknown3[0] = 255;
         fn_800E98A4(pOther, p);
-        fn_80143EBC(p, pOther);
+        PlyrCollideRemoveExempt(p, pOther);
         AudmonEventPostArgs(102, &p->mMotion.mPos, 0, 0, 0);
         HudClearMashPlayers(p->mId, pOther->mId);
     }
@@ -4852,10 +4852,10 @@ extern "C" void fn_8011893C(void)
             fn_8011DBC0(p);
             switch (p->mUnknown1032) {
             case 4:
-                fn_80143EBC(p, pOther);
+                PlyrCollideRemoveExempt(p, pOther);
                 mode = 2;
                 otherMode = 8;
-                fn_80143EBC(pOther, p);
+                PlyrCollideRemoveExempt(pOther, p);
                 break;
             case 3:
                 if (pOther != 0) {
@@ -5355,8 +5355,8 @@ void fn_8011E240(Object_80039F5C *p)
     pBlock->mUnknown94 = 0;
     pOther = fn_8009BCE8(&pBlock->mUnknown4);
     if (pOther) {
-        fn_80143EBC(p, pOther);
-        fn_80143EBC(pOther, p);
+        PlyrCollideRemoveExempt(p, pOther);
+        PlyrCollideRemoveExempt(pOther, p);
         fn_8009BD2C(p, &ref);
         if (pOther->mUnknown1036 == ref) {
             fn_8011E3A4(pOther);
@@ -5365,8 +5365,8 @@ void fn_8011E240(Object_80039F5C *p)
     fn_8009BD2C(0, &pBlock->mUnknown4);
     pOther = fn_8009BCE8(&pBlock->mUnknown8);
     if (pOther) {
-        fn_80143EBC(p, pOther);
-        fn_80143EBC(pOther, p);
+        PlyrCollideRemoveExempt(p, pOther);
+        PlyrCollideRemoveExempt(pOther, p);
         fn_8009BD2C(p, &ref);
         if (pOther->mUnknown1036 == ref) {
             fn_8011E3A4(pOther);

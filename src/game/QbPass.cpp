@@ -21,7 +21,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Ball.h"
 
 #include "game/PlyrModeState.h"

@@ -20,7 +20,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Ball.h"
 
 #include "game/PlyrModeState.h"
@@ -156,7 +156,7 @@ int PlyrEngageEnter(Object_80039F5C *p)
     m = p->mpState;
     Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2] ^ 1, m->mUnknown3[0]);
     fn_8009BD2C(other, &s->mUnknown0Word);
-    fn_80143E14(p, other);
+    PlyrCollideAddExempt(p, other);
     unsigned short n = 0;
     unsigned short index;
     do {
@@ -209,13 +209,13 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             s->mUnknown8Bytes[2] = 1;
     }
     if (other && other->mpState->mId == 32 && fn_8009BCE8(&other->mUnknown336) == p) {
-        fn_80143E14(p, other);
-        fn_80143E14(other, p);
+        PlyrCollideAddExempt(p, other);
+        PlyrCollideAddExempt(other, p);
     }
     if (p->mUnknown9[0] != 1) {
         p->mUnknown772 = 1.0f;
         PlyrEngageReleaseControl(p);
-        fn_80143EBC(p, other);
+        PlyrCollideRemoveExempt(p, other);
         s->mUnknown8Bytes[0] = 1;
         Message_800F01CC m;
         fn_801C1F94(&m, 0, 4);
@@ -264,7 +264,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         if (fn_801BE648(p->mpUnknown792) == 242 && p->mIdBytes[2] == fn_80178320()) {
             p->mUnknown772 = 1.0f;
             PlyrEngageReleaseControl(p);
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
             s->mUnknown8Bytes[0] = 1;
             if (fn_800E815C(p, 2, 0))
                 fn_800F0490(0, p->mpState, 32);
@@ -275,7 +275,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             p->mUnknown772 = 1.0f;
             PlyrEngageShortenMessages(p, (unsigned short)s->mUnknown4);
             p->mFlags &= ~0x800;
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
             if (p->mUnknown1032 == 5) {
                 p->mUnknown1032 = 6;
                 s->mUnknown8Bytes[0] = 1;
@@ -303,7 +303,7 @@ int PlyrEngageExit(Object_80039F5C *p)
         PlyrEngageReleaseControl(p);
         Object_80039F5C *other = fn_8009BCE8(&s->mUnknown0Word);
         if (other)
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
         result = 1;
     }
     return result;

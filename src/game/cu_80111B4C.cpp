@@ -222,8 +222,8 @@ void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLa
 float fn_8013AB64(Ball_t *pBall, float t);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_801410F4(int a);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
@@ -762,7 +762,7 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
-    fn_80143E14(p, pOther);
+    PlyrCollideAddExempt(p, pOther);
     state->mUnknown4 = 255;
     state->mUnknown8 = 0.0f;
     state->mUnknown12 = 0;
@@ -833,7 +833,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
         Message_800F01CC message;
 
         p->mFlags &= ~8;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown21 = 1;
         if ((unsigned int)state->mUnknown4 <= 10) {
             fn_801C1F94(&message, 0, sizeof(message));
@@ -850,7 +850,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
     if ((p->mFlags & 4) && state->mUnknown14 != 1 && state->mUnknown14 != 4) {
         p->mFlags &= ~0xC;
         p->mFlags &= ~0x800;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
@@ -876,7 +876,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
-    fn_80143E14(p, pOther);
+    PlyrCollideAddExempt(p, pOther);
     state->mUnknown4 = 0.0f;
     state->mUnknown20 = 255;
     state->mUnknown25 = 1;
@@ -1124,7 +1124,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     }
     if (p->mUnknown9[0] != 1) {
         p->mFlags &= ~0x82008;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown31 = 1;
         if (state->mUnknown20 <= 10) {
             fn_801C1F94(&message, 0, 4);
@@ -1141,7 +1141,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
         result = 1;
         p->mFlags &= ~0x0409280C;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;

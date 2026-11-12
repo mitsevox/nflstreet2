@@ -162,7 +162,7 @@ int fn_8011E9D8(State_80039F5C *pState);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787A0(void);
@@ -1294,7 +1294,7 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
                     pBlock->mUnknown1C = 0;
             }
         }
-        fn_80143EBC(p, pOther);
+        PlyrCollideRemoveExempt(p, pOther);
     }
     if (pOther && near) {
         if (!busy && fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) > lbl_803EADAC)
@@ -1327,7 +1327,7 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
                         pBlock->mUnknown1C = 0;
                 }
             }
-            fn_80143EBC(pOther, p);
+            PlyrCollideRemoveExempt(pOther, p);
         }
     }
     return result;

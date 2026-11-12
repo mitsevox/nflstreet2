@@ -135,8 +135,8 @@ union Flags_80170374 {
     unsigned char mBytes[4];
 };
 
-/* 56-byte block at +560 (0x800AEB5C clears 0x38 bytes); fn_80143D3C resets
-   it and fn_80143464 accumulates into it. */
+/* 56-byte block at +560 (0x800AEB5C clears 0x38 bytes); PlyrCollideResetBlock resets
+   it and PlyrCollideAddImpulse accumulates into it. */
 struct Block_80170374 {
     Flags_80170374 mFlags;
     Vector_80039F5C mUnknown4;
@@ -153,9 +153,9 @@ struct Block_80170374 {
     unsigned char mUnknown55;
 };
 
-/* The 68 bytes at +560 as fn_80143668 addresses them: the block followed by
+/* The 68 bytes at +560 as PlyrCollideRecordContact addresses them: the block followed by
    the contact point it copies to +56. */
-struct Contact_80143668 {
+struct PlyrCollideState_t {
     Block_80170374 mBlock;
     Vector_80039F5C mUnknown56;
 };
@@ -397,7 +397,7 @@ struct Object_80039F5C {
        contact point that follows it. */
     union {
         Block_80170374 mUnknown560;
-        Contact_80143668 mContact560;
+        PlyrCollideState_t mContact560;
     };
     int mUnknown628[2];
     char mUnknown636[4];

@@ -118,7 +118,7 @@ void fn_800C82C0(Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
 void fn_800D782C(Object_80039F5C *p);
-void fn_80143DC4(Object_80039F5C *p);
+void PlyrCollideClearExempt(Object_80039F5C *p);
 void fn_8015C244(void *p);
 void PlyrMoveUpdate(Object_80039F5C *p, float f);
 void fn_8016F780(void);
@@ -168,7 +168,7 @@ int fn_80178308(void);
 Object_8003DEC4 *fn_8003DEE4(int value);
 void fn_8009CF30(void *pDst, Pose_80041930 *pPose);
 extern unsigned char lbl_802CCC94[11][2];
-void fn_80143D3C(Block_80170374 *pBlock);
+void PlyrCollideResetBlock(Block_80170374 *pBlock);
 void fn_801D04C4(void);
 void fn_801D06D4(void *p);
 void fn_801D0544(void);
@@ -179,8 +179,8 @@ void fn_80227264(void *pOut, void *pIn, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 extern unsigned char lbl_803EA3F0, lbl_803EA3F1, lbl_803EA3F2;
 extern float lbl_803EA3F4;
-void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
-void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
+void PlyrCollideMotion(Object_80039F5C *pA, Object_80039F5C *pB);
+void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
                  CollideContactList_t *pContacts);
 void RumbleStart(int channel, int level, int duration);
 int fn_8003DEBC(void);
@@ -476,7 +476,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     fn_800C82C0(&pPlayer->mObject);
     fn_800CE674(pReset);
     fn_800CE684(pReset);
-    fn_80143DC4(p);
+    PlyrCollideClearExempt(p);
     fn_800C3130(pObject, 1, team * fn_8003DEBC() + index, 2);
 }
 
@@ -492,9 +492,9 @@ extern "C" void fn_80039044(CollideObject_t *pA, CollideObject_t *pB, CollideCon
         return;
     }
     if (pContacts == 0) {
-        fn_801437FC(a, b);
+        PlyrCollideMotion(a, b);
     } else {
-        fn_801438EC(a, pA, b, pB, pContacts);
+        PlyrCollideContacts(a, pA, b, pB, pContacts);
     }
     if (a->mUnknown560.mUnknown28 > 1e-7f || b->mUnknown560.mUnknown28 > 1e-7f) {
         AudmonEventPostArgs(35, &a->mMotion.mPos, (int)a, (int)b, 0);
@@ -1063,7 +1063,7 @@ extern "C" void fn_8003A4DC(void)
         fn_8009D00C(p, &p->mUnknown108);
         fn_8009D00C(p, &p->mUnknown200);
         fn_8009D00C(p, &p->mUnknown16);
-        fn_80143DC4(p);
+        PlyrCollideClearExempt(p);
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
         p->mUnknown772 = 1.0f;
@@ -1093,7 +1093,7 @@ extern "C" void fn_8003A628(CollideObject_t *pRecord)
     float radius;
     unsigned char i;
 
-    fn_80143D3C(&p->mUnknown560);
+    PlyrCollideResetBlock(&p->mUnknown560);
     pRecord->mUnknown0 = p->mMotion.mPos.mX;
     pRecord->mUnknown4 = p->mMotion.mPos.mY;
     pRecord->mUnknown8 = p->mMotion.mPos.mZ + 1.0f;

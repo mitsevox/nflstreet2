@@ -7073,6 +7073,81 @@
       ]
     },
     {
+      "source": "src/game/CollideBounce.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80142BB4-0x80143220 (src/game/CollideBounce.cpp), its function, data, type and source-form rows and the linker row 0x802A032C-0x802A0334 for the discarded BounceBody2D; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "BounceAxisFixed",
+          "BounceAxisPair",
+          "BounceCheckApproach",
+          "BounceBody3D",
+          "BounceBodyPair2D",
+          "BounceBodyPair3D",
+          "BounceScatterVector"
+        ],
+        "discarded": [
+          "BounceBody2D"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A032C-0x802A0334: the target keeps every listed function, all reached from outside the unit or from each other; BounceBody2D, rebuilt from its Xbox prototype counterpart 0xF6280, has no code in the target, while its two literals remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80142BB4",
+          "end": "0x80143220"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0318",
+          "end": "0x802A035C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrCollide.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80143220-0x80143F40 (src/game/PlyrCollide.cpp), its function, data, type and source-form rows and the linker row 0x802A036C-0x802A0374 for the discarded CollideWithPoint; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PlyrCollideResolve2D",
+          "PlyrCollideRecordImpulse",
+          "PlyrCollideAddImpulse",
+          "PlyrCollidePartWeight",
+          "PlyrCollideSetPartFlags",
+          "PlyrCollideRecordContact",
+          "PlyrCollideIsExempt",
+          "PlyrCollideIsLightContact",
+          "PlyrCollideMotion",
+          "PlyrCollideContacts",
+          "PlyrCollideResetBlock",
+          "PlyrCollideClearExempt",
+          "PlyrCollideAddExempt",
+          "PlyrCollideRemoveExempt"
+        ],
+        "discarded": [
+          "CollideWithPoint"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A036C-0x802A0374: the target keeps every listed function, all reached from outside the unit or from each other; CollideWithPoint, rebuilt from its Xbox prototype counterpart 0xF6930, has no code in the target, while its two literals remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143220",
+          "end": "0x80143F40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0360",
+          "end": "0x802A0398"
+        }
+      ]
+    },
+    {
       "source": "src/game/OptionsScreen.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80063650-0x80063A30 (src/game/OptionsScreen.cpp) and its data rows.",

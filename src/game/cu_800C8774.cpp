@@ -5,7 +5,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/LevelWallInfo.h"
 #include "game/LevelData.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"

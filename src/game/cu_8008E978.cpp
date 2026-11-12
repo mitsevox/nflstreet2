@@ -6,7 +6,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/LevelWallInfo.h"
 #include "game/LevelData.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
@@ -18133,10 +18133,10 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
         pOther->mFlags |= 0x80000;
         fn_800E9528();
-        fn_80143EBC(pOther, pB);
+        PlyrCollideRemoveExempt(pOther, pB);
         pLink->mUnknown15 = 1;
         fn_800F05E4(0, pB->mpState, &message, pB);
-        fn_80143EBC(pB, pOther);
+        PlyrCollideRemoveExempt(pB, pOther);
         HudClearMashPlayers(pOther->mId, pB->mId);
     } else {
         fn_800F00D4(0, pB->mpState, &message, pB);
@@ -18160,10 +18160,10 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
             Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
             pOther->mFlags |= 0x80000;
             fn_800E9528();
-            fn_80143EBC(pOther, pC);
+            PlyrCollideRemoveExempt(pOther, pC);
             pLink->mUnknown15 = 1;
             fn_800F05E4(0, pC->mpState, &message, pC);
-            fn_80143EBC(pC, pOther);
+            PlyrCollideRemoveExempt(pC, pOther);
             HudClearMashPlayers(pOther->mId, pC->mId);
         } else {
             fn_800F00D4(0, pC->mpState, &message, pC);
