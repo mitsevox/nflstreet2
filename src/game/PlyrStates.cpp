@@ -568,10 +568,10 @@ void fn_80125DF0(void);
 void fn_80125E20(void);
 void fn_8012B3EC(void);
 void fn_8012B654(void);
-void fn_8012C7E0(void);
-void fn_8012C874(void);
-void fn_8012CA78(void);
-void fn_8012CA80(void);
+void PlayerCutEnter(void);
+void PlayerCutUpdate(void);
+void PlayerCutExit(void);
+void PlayerCutMirrorMessage(void);
 void fn_8012FEAC(void);
 void fn_8012FF30(void);
 void fn_8012FF5C(void);
@@ -603,7 +603,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_80113680, (void *)fn_80113AAC, (void *)fn_8011380C, (void *)fn_80113B28, (void *)fn_800F0908, 0}},
     {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)fn_8012C7E0, (void *)fn_8012CA78, (void *)fn_8012C874, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_8012CA80}},
+    {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)PlayerCutMirrorMessage}},
     {{(void *)fn_8012B3EC, (void *)fn_800F0900, (void *)fn_8012B654, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FAD10}},
     {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},

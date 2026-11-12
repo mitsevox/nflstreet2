@@ -18,7 +18,7 @@ struct Block_800F8D2C {
 };
 
 extern "C" {
-int fn_8012CAB4(Object_80039F5C *p);
+int PlayerCutGetRunHeading(Object_80039F5C *p);
 int MathAngleDiff(int a, int b);
 int fn_8009E9A4(void);
 float fn_80178A2C(void);
@@ -44,7 +44,7 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
         }
         pBlock->mUnknown12 = 0.5f;
         if (pOther->mpState->mId == 20) {
-            angle = fn_8012CAB4(pOther);
+            angle = PlayerCutGetRunHeading(pOther);
         } else if ((unsigned char)(pOther->mpState->mId - 51) <= 1) {
             angle = pOther->mMotion.mFacing;
         } else {
@@ -130,7 +130,7 @@ extern "C" int fn_800F9024(Object_80039F5C *p) {
 
         fn_802276B4(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         if (pOther->mpState->mId == 20) {
-            angle = fn_8012CAB4(pOther);
+            angle = PlayerCutGetRunHeading(pOther);
             if (angle > 0x800000) {
                 return 0;
             }

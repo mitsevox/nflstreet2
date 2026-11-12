@@ -53,8 +53,8 @@ Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
 void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
-void fn_8012C3A4(Object_80039F5C *p);
-void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
+void PlayerCutStartAnim(Object_80039F5C *p);
+void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
 void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
 void fn_8012CFA0(Object_80039F5C *p);
 void fn_8012D258(Object_80039F5C *p);
@@ -75,11 +75,9 @@ int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227890(void *pA, void *pB);
 float fn_8022710C(void *pV);
-
-extern Table_80089904 lbl_8031AABC;
 }
 
-extern "C" int fn_8012CCA0(Object_80039F5C *p);
+extern "C" int PlayerCutGetAnimTime(Object_80039F5C *p);
 
 #ifdef DECOMP_COMPARE
 extern "C" {
@@ -178,25 +176,25 @@ int fn_8012B654(Object_80039F5C *p);
 void fn_8012BB6C(float *pA, float *pB);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
-void fn_8012C3A4(Object_80039F5C *p);
-Info_80089904 *fn_8012C4B4(int a, int b);
-void fn_8012C548(Object_80039F5C *p);
-void fn_8012C5A8(Object_80039F5C *p, int value);
-void fn_8012C648(Object_80039F5C *p, int angle);
-int fn_8012C7E0(Object_80039F5C *p);
-int fn_8012C874(Object_80039F5C *p);
-int fn_8012CA78();
-void fn_8012CA80(unsigned char *p);
-int fn_8012CAA4(Object_80039F5C *p);
-int fn_8012CAAC(Object_80039F5C *p);
-int fn_8012CAB4(Object_80039F5C *p);
-int fn_8012CB50(Message_800F01CC *pMessage);
-void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
-int fn_8012CC04(unsigned char a);
-int fn_8012CC50(Object_80039F5C *p);
-int fn_8012CCA0(Object_80039F5C *p);
-void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
-float fn_8012CD60(Object_80039F5C *p, float value);
+void PlayerCutStartAnim(Object_80039F5C *p);
+Info_80089904 *PlayerCutFindAnimInfo(int a, int b);
+void PlayerCutInitHeadings(Object_80039F5C *p);
+void PlayerCutPostChainedCut(Object_80039F5C *p, int value);
+void PlayerCutPostTurn(Object_80039F5C *p, int angle);
+int PlayerCutEnter(Object_80039F5C *p);
+int PlayerCutUpdate(Object_80039F5C *p);
+int PlayerCutExit();
+void PlayerCutMirrorMessage(unsigned char *p);
+int PlayerCutGetTargetHeading(Object_80039F5C *p);
+int PlayerCutGetStartHeading(Object_80039F5C *p);
+int PlayerCutGetRunHeading(Object_80039F5C *p);
+int PlayerCutGetMessageTurn(Message_800F01CC *pMessage);
+void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
+int PlayerCutGetAnimLength(unsigned char a);
+int PlayerCutGetTimeLeft(Object_80039F5C *p);
+int PlayerCutGetAnimTime(Object_80039F5C *p);
+void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
+float PlayerCutGetRunSpeed(Object_80039F5C *p, float value);
 int fn_8012CE60(Object_80039F5C *p);
 void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
 void fn_8012CFA0(Object_80039F5C *p);
@@ -601,7 +599,7 @@ extern "C" int fn_8012B654(Object_80039F5C *p)
         Point_8017886C point, delta;
         if (fn_8012AACC(&point, p, b, a)) {
             fn_80227690(&delta, &point, &p->mMotion.mPos);
-            fn_8012C648(p, fn_801CFE40(delta.mY, delta.mX));
+            PlayerCutPostTurn(p, fn_801CFE40(delta.mY, delta.mX));
             fn_801C1F94(&message, 0, 4);
             message.mId = 19;
             fn_800FD68C(&message, &p->mMotion, &point);

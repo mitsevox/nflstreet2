@@ -10929,6 +10929,31 @@
       ]
     },
     {
+      "source": "src/game/PlayerCut.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012C3A4-0x8012CE60 (src/game/PlayerCut.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012C3A4",
+          "end": "0x8012CE60"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F948",
+          "end": "0x8029F9A0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031AABC",
+          "end": "0x8031B6A0"
+        }
+      ]
+    },
+    {
       "source": "src/game/RouteRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/RouteRun.cpp) and its data rows.",

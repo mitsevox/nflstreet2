@@ -196,19 +196,19 @@ extern "C" float fn_801CFB18(int angle);
 
 extern "C" int fn_801CFDD0(float);
 
-extern "C" int fn_8012CAA4(Object_80039F5C *p);
+extern "C" int PlayerCutGetTargetHeading(Object_80039F5C *p);
 
-extern "C" int fn_8012CAAC(Object_80039F5C *p);
+extern "C" int PlayerCutGetStartHeading(Object_80039F5C *p);
 
-extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
+extern "C" int PlayerCutGetMessageTurn(Message_800F01CC *pMessage);
 
-extern "C" void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
+extern "C" void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
 
-extern "C" int fn_8012CC04(unsigned char a);
+extern "C" int PlayerCutGetAnimLength(unsigned char a);
 
-extern "C" int fn_8012CC50(Object_80039F5C *p);
+extern "C" int PlayerCutGetTimeLeft(Object_80039F5C *p);
 
-extern "C" void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
+extern "C" void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
 
 struct State_80104328 {
     Point_8017886C mTarget;
@@ -764,15 +764,15 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
         break;
     }
     case 20:
-        fn_8012CD4C(p, &offset);
+        PlayerCutGetEndPoint(p, &offset);
         pPos->mX = offset.mX;
         pPos->mY = offset.mY;
         if ((unsigned int)(pEntry->mUnknown2 - 8) <= 1) {
-            *pAngle = fn_8012CAAC(p);
+            *pAngle = PlayerCutGetStartHeading(p);
         } else {
-            *pAngle = fn_8012CAA4(p);
+            *pAngle = PlayerCutGetTargetHeading(p);
         }
-        *pTime = fn_8012CC50(p);
+        *pTime = PlayerCutGetTimeLeft(p);
         break;
     default:
         *pTime = 0;
@@ -786,11 +786,11 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
             int type = pEntry->mUnknown1;
 
             if (pPrev->mId == 19) {
-                fn_8012CB98(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
-                *pTime += fn_8012CC04(type);
+                PlayerCutGetAnimOffset(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
+                *pTime += PlayerCutGetAnimLength(type);
                 pPos->mX += offset.mX;
                 pPos->mY += offset.mY;
-                *pAngle += fn_8012CB50((Message_800F01CC *)pEntry);
+                *pAngle += PlayerCutGetMessageTurn((Message_800F01CC *)pEntry);
             }
         } else if (pEntry->mId == 19) {
             float distance = (unsigned int)pEntry->mUnknown1 * 0.125f;

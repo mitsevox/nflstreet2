@@ -51,10 +51,10 @@ void fn_800FE430(Object_80039F5C *,Object_80039F5C *,Point_8017886C *);
 void fn_800FF598(State_800FDA58 *,Object_80039F5C *,Point_8017886C *,int,float);
 
 float PlyrMoveGetRatedSpeed(Object_80039F5C *,float,float);
-int fn_8012CAAC(Object_80039F5C *);
-int fn_8012CAA4(Object_80039F5C *);
-void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
-float fn_8012CD60(Object_80039F5C *,float);
+int PlayerCutGetStartHeading(Object_80039F5C *);
+int PlayerCutGetTargetHeading(Object_80039F5C *);
+void PlayerCutGetEndPoint(Object_80039F5C *,Vector_80039F5C *);
+float PlayerCutGetRunSpeed(Object_80039F5C *,float);
 void fn_80103F80(Ball_t *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
@@ -818,12 +818,12 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
         break;
     case 20:
         if ((unsigned int)(state->mUnknown2 - 8) < 2) {
-            angle = fn_8012CAAC(p);
+            angle = PlayerCutGetStartHeading(p);
         } else {
-            angle = fn_8012CAA4(p);
+            angle = PlayerCutGetTargetHeading(p);
         }
-        fn_8012CD4C(p, &pos);
-        speed = fn_8012CD60(p, 0.5f);
+        PlayerCutGetEndPoint(p, &pos);
+        speed = PlayerCutGetRunSpeed(p, 0.5f);
         fn_80227538((Point_8017886C *)&velocity, angle, speed);
         break;
     case 52:
@@ -861,7 +861,7 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
                     shortened = (float)count;
                     if (shortened < steps) {
                         if (state->mId == 20) {
-                            speed = fn_8012CD60(p, 1.0f - shortened / steps);
+                            speed = PlayerCutGetRunSpeed(p, 1.0f - shortened / steps);
                         } else {
                             speed = PlyrMoveGetRatedSpeed(p, 1.0f - shortened / steps, 1.0f);
                         }

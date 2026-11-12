@@ -92,8 +92,8 @@ void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
-void fn_8012CB98(int, unsigned char, int, void *);
-int fn_8012CB50(void *);
+void PlayerCutGetAnimOffset(int, unsigned char, int, void *);
+int PlayerCutGetMessageTurn(void *);
 int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
 int ObjDelType(int);
 void ObjSetListObjFunc(int, int, int, int (*)(Object_8015C244 *));
@@ -308,12 +308,12 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     Point_8017886C delta;
     switch (pCommand[1]) {
     case 5: case 7: case 11: {
-        fn_8012CB98(pCommand[1], pCommand[0], 0x400000, &delta);
+        PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
         float length = fn_802270A4(&delta) * 0.5f;
         unsigned char command[4];
         fn_801C1F94(command, 0, 4);
         command[0] = 20; command[1] = pCommand[0]; command[2] = pCommand[1];
-        int angle = fn_8012CB50(command);
+        int angle = PlayerCutGetMessageTurn(command);
         if (pCommand[1] != 7) {
             fn_80227538(&delta, fn_801784C4() ? 0xc00000 : 0x400000, length);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
