@@ -5,7 +5,7 @@
 #include "game/GameOptions.h"
 
 extern "C" {
-void fn_80004504(unsigned char id);
+void ChalGameStart(unsigned char id);
 void fn_8000FCD4(int a);
 void ChallengeSetMode(int value);
 void ChalCloseCursors(void);
@@ -222,7 +222,7 @@ void fn_8001ECBC(int index, int a, int *pResult)
     lbl_803EBA84 = index;
     id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
     fn_8000FCD4(a);
-    fn_80004504(id);
+    ChalGameStart(id);
     *pResult = ChalHasReward(ChalGetCurrent(), 4) ? 105 : 107;
 }
 
