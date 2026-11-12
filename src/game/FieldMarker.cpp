@@ -10,27 +10,9 @@
 #include <dolphin/gx/GXCpu2Efb.h>
 #include <dolphin/gx/GXTev.h>
 
+#include "game/FieldMarker.h"
+
 struct Entry_80146C4C;
-
-struct FieldMarkerBeam_t {
-    float mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    unsigned char mUnknownC[8];
-};
-
-struct FieldMarkerBeamSet_t {
-    float mPosition[3];
-    float mUnknownC;
-    FieldMarkerBeam_t mUnknown10[3];
-};
-
-struct FieldMarkerArrow_t {
-    float mPosition[3];
-    float mUnknownC;
-    float mUnknown10;
-    unsigned char mUnknown14[4];
-};
 
 extern "C" {
 void TMRenderReset(void);
@@ -49,15 +31,12 @@ void fn_8022765C(float *pOut, float *pA, float *pB);
 int fn_801CEA08(void);
 int fn_801CEA14(void);
 
-extern FieldMarkerBeamSet_t lbl_802DD7AC[15];
 extern unsigned char lbl_803EB760;
 extern unsigned char lbl_803EB768;
 extern GXTexObj lbl_80365220;
 extern GXTlutObj lbl_80365240;
 extern GXTexObj lbl_8036526C;
 extern GXTlutObj lbl_8036528C;
-extern FieldMarkerArrow_t *lbl_803EB284;
-extern unsigned int lbl_803ECA18;
 }
 
 static float _FieldMarker_aBeamCorners[4][3] = {
@@ -189,7 +168,7 @@ void FieldMarkerDrawBeams(void)
     GXLoadTexObj(&lbl_80365220, GX_TEXMAP0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 180);
     for (unsigned int i = 0; i < 15; i++) {
-        FieldMarkerBeamSet_t *record = &lbl_802DD7AC[i];
+        FieldMarkerBeamSet_t *record = &gFieldMarkerBeamSets[i];
         for (unsigned int j = 0; j < 3; j++) {
             _FieldMarkerDrawBeam(&record->mUnknown10[j], record->mPosition,
                         (int)(record->mUnknownC * 46603.379f));
@@ -229,18 +208,18 @@ void FieldMarkerDrawArrows(void)
     if (lbl_803EB768 == 1)
         GXLoadTlut(&lbl_8036528C, 0);
     GXLoadTexObj(&lbl_8036526C, GX_TEXMAP0);
-    GXBegin(GX_TRIANGLES, GX_VTXFMT0, lbl_803ECA18 * 15);
-    for (unsigned int i = 0; i < lbl_803ECA18; i++) {
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, gFieldMarkerArrowCount * 15);
+    for (unsigned int i = 0; i < gFieldMarkerArrowCount; i++) {
         for (unsigned int j = 0; j < 15; j++) {
             float vertex[3];
-            vertex[0] = lbl_803EB284[i].mUnknownC * _FieldMarker_aArrowVerts[j][0];
-            vertex[1] = lbl_803EB284[i].mUnknownC * _FieldMarker_aArrowVerts[j][1];
+            vertex[0] = gFieldMarkerArrows[i].mUnknownC * _FieldMarker_aArrowVerts[j][0];
+            vertex[1] = gFieldMarkerArrows[i].mUnknownC * _FieldMarker_aArrowVerts[j][1];
             if (j > 5)
-                vertex[2] = lbl_803EB284[i].mUnknownC * _FieldMarker_aArrowVerts[j][2];
+                vertex[2] = gFieldMarkerArrows[i].mUnknownC * _FieldMarker_aArrowVerts[j][2];
             else
                 vertex[2] = _FieldMarker_aArrowVerts[j][2];
-            fn_8022765C(vertex, vertex, lbl_803EB284[i].mPosition);
-            unsigned char alpha = (unsigned char)((unsigned int)color.a * lbl_803EB284[i].mUnknown10);
+            fn_8022765C(vertex, vertex, gFieldMarkerArrows[i].mPosition);
+            unsigned char alpha = (unsigned char)((unsigned int)color.a * gFieldMarkerArrows[i].mUnknown10);
             GXPosition3f32(vertex[0], vertex[1], vertex[2]);
             GXColor4u8(color.r, color.g, color.b, alpha);
             GXTexCoord2f32(_FieldMarker_aArrowUVs[j][0], _FieldMarker_aArrowUVs[j][1]);

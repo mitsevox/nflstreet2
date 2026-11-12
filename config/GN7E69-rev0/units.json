@@ -9729,30 +9729,57 @@
     {
       "source": "src/game/ScreenTint.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/ScreenTint.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80147908-0x80147E94 (src/game/ScreenTint.cpp), its function, data, type, compiler and source-form rows and the linker row for the discarded field marker functions.",
+      "link_roots": {
+        "symbols": [
+          "ScreenTintLerp",
+          "ScreenTintInit",
+          "ScreenTintShutdown",
+          "ScreenTintDraw",
+          "ScreenTintSetActive",
+          "ScreenTintSetMode",
+          "ScreenTintFadeTo",
+          "ScreenTintIsActive"
+        ],
+        "discarded": [
+          "_FieldMarkerInitBeams",
+          "_FieldMarkerUpdateBeams",
+          "_FieldMarkerPlaceArrow",
+          "_FieldMarkerInitArrows",
+          "_FieldMarkerShutdownArrows",
+          "_FieldMarkerUpdateArrows"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A04D8-0x802A052C: the target keeps every listed function, all reached from outside the unit or from each other; the six field marker functions have no code in the target, while their literal pools, beam table, arrow pointer, ready flag and arrow count remain in its .rodata, .data, .sdata and .sbss."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80147AE4",
+          "start": "0x80147908",
           "end": "0x80147E94"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A0540",
+          "start": "0x802A04D8",
           "end": "0x802A0558"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DD7AC",
+          "end": "0x802DDC20"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EB28C",
+          "start": "0x803EB284",
           "end": "0x803EB294"
         },
         {
           "section": ".sbss",
           "placement": ".sbss",
-          "start": "0x803ECA1C",
+          "start": "0x803ECA18",
           "end": "0x803ECA24"
         }
       ]
