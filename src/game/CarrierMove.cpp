@@ -56,7 +56,7 @@ void PlayerMoveSetResult(Object_80039F5C *p, int a);
 static float _CarrierMove_fBaseAnimTime = 0.25f;
 static float _CarrierMove_fRatedAnimScale = 1.15f;
 static float _CarrierMove_fAnimWeight = 1.0f;
-int _CarrierMove_iUnused = 5;
+static int _CarrierMove_iUnused = 5;
 static float _CarrierMove_fPickRange = 9.0f;
 }
 

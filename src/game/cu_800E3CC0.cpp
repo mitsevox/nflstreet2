@@ -96,7 +96,6 @@ struct Block_800E7588 {
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
-extern unsigned char lbl_803EADE8[8];
 extern Table_80089904 lbl_803192F4;
 extern int lbl_803EADC4;
 extern int lbl_803EADC8;
@@ -115,7 +114,6 @@ extern float lbl_803EADB4;
 extern float lbl_803EADB8;
 extern float lbl_803EADBC;
 extern float lbl_803EADC0;
-extern float lbl_803EADE4;
 extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EADD8;
 extern float lbl_803EADDC;

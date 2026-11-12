@@ -5939,7 +5939,7 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp (0x800E3CC0-0x800EC76C), registered whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8 and 0x800EBDCC are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DE70, whose data row grades only its edges: its contents are measured fuzzy (the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 differs), not exact. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/provisional unit row for src/game/cu_800E3CC0.cpp (0x800E3CC0-0x800EC76C), registered whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8 and 0x800EBDCC are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DE70, whose data row grades only its edges: its contents are measured fuzzy (the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 differs), not exact. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
