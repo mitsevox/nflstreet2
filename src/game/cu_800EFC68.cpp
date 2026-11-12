@@ -2988,7 +2988,7 @@ void PassIconsClearReplayFlag(void);
 int PassIconsWereShown(void);
 int fn_800A61E0(void);
 Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle);
-void fn_80136034(Object_80039F5C *p);
+void QbPassRestoreReceiverOptions(Object_80039F5C *p);
 }
 extern unsigned int lbl_802DAB48[];
 
@@ -3019,7 +3019,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
 
                 PassIconsHide();
                 PassIconsClearReplayFlag();
-                fn_80136034(p);
+                QbPassRestoreReceiverOptions(p);
                 if (pTarget != 0) {
                     fn_801024FC(p, 4, pTarget->mIdBytes[1], 0, d);
                 }

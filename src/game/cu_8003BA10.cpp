@@ -101,7 +101,7 @@ int fn_8015E440(int, int);
 void fn_80234A14(void *, int);
 void fn_801A3514();
 void fn_8003D0C8(int);
-void fn_80136AE4(int, int);
+void PlyrStatesRegister(int, int);
 void fn_8003D12C();
 void fn_8003D2E0();
 void PlayerObjRenderInit(int, int);
@@ -801,7 +801,7 @@ int fn_8003DA94(int count, int owner, int mode) {
   lbl_803EA436 = (unsigned int)count >> 1;
   lbl_803EA434 = count;
   fn_8003D0C8(mode);
-  fn_80136AE4(0, mode);
+  PlyrStatesRegister(0, mode);
   fn_8003D12C();
   fn_8003D2E0();
   PlayerObjRenderInit((int)lbl_803EA41C, (int)lbl_803EA420);

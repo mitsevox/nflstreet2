@@ -15728,6 +15728,89 @@
           "end": "0x803EC480"
         }
       ]
+    },
+    {
+      "source": "src/game/QbPass.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801344A0-0x801360D4 (src/game/QbPass.cpp) and its function and data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "QbPassInSpecialMode",
+          "QbPassScoreDirections",
+          "QbPassCheckSpeech",
+          "QbPassPickRandomReceiver",
+          "QbPassShouldRun",
+          "QbPassGetDirectionWeights",
+          "QbPassUpdateReceiverOptions",
+          "QbPassEnter",
+          "QbPassUpdate",
+          "QbPassResetTarget",
+          "QbPassHoldOrRun",
+          "QbPassRateReceiver",
+          "QbPassRestoreReceiverOptions"
+        ],
+        "discarded": [
+          "QbPassCarrierWillCross"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029FDEC-0x8029FDF8: the target keeps every listed function, all reached from outside the unit or from each other; QbPassCarrierWillCross, rebuilt from its Xbox prototype counterpart 0xE90B0, has no code in the target, while its 0.0f, 0.4f and 40.0f constants remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801344A0",
+          "end": "0x801360D4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FD38",
+          "end": "0x8029FDF8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB0F4",
+          "end": "0x802DB1D4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB168",
+          "end": "0x803EB190"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrStates.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801360D4-0x80136B1C (src/game/PlyrStates.cpp) and its function and data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801360D4",
+          "end": "0x80136B1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FDF8",
+          "end": "0x8029FE28"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB1D4",
+          "end": "0x802DB280"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB190",
+          "end": "0x803EB1A0"
+        }
+      ]
     }
   ]
 }
