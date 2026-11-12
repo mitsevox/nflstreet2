@@ -5594,21 +5594,21 @@
       ]
     },
     {
-      "source": "src/game/cu_8012A6B0.cpp",
+      "source": "src/game/GetOpen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row, full 58 function extents with inferred neutral name/source-form records, approved Control byte widths, reconciled local dependency contracts and full natural .rodata 0x8029F858-0x8029FB20 (712 bytes, including seven-pointer action table). All 31 new bodies and 27 existing bodies remain unlinked comparisons; original assembly remains linked. No unsupported source-file boundary or original-name claim.",
+      "evidence": "evidence.tsv provisional unit row src/game/GetOpen.cpp (0x8012A6B0-0x8012BCC8); split from the former comparison grouping src/game/cu_8012A6B0.cpp at the file edges recorded there. 8 function extents with their name and source-form rows; .rodata 0x8029F858-0x8029F928. Comparison only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8012A6B0",
-          "end": "0x80130494"
+          "end": "0x8012BCC8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029F858",
-          "end": "0x8029FB20"
+          "end": "0x8029F928"
         }
       ],
       "functions": [
@@ -5651,7 +5651,28 @@
           "symbol": "fn_8012BB6C",
           "start": "0x8012BB6C",
           "end": "0x8012BCC8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DirectedRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row src/game/DirectedRun.cpp (0x8012BCC8-0x8012C3A4); split from the former comparison grouping src/game/cu_8012A6B0.cpp at the file edges recorded there. 2 function extents with their name and source-form rows; .rodata 0x8029F928-0x8029F948. Comparison only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012BCC8",
+          "end": "0x8012C3A4"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F928",
+          "end": "0x8029F948"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8012BCC8",
           "start": "0x8012BCC8",
@@ -5661,7 +5682,28 @@
           "symbol": "fn_8012BE28",
           "start": "0x8012BE28",
           "end": "0x8012C3A4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerCut.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row src/game/PlayerCut.cpp (0x8012C3A4-0x8012CE60); split from the former comparison grouping src/game/cu_8012A6B0.cpp at the file edges recorded there. 19 function extents with their name and source-form rows; .rodata 0x8029F948-0x8029F9A0. Comparison only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012C3A4",
+          "end": "0x8012CE60"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F948",
+          "end": "0x8029F9A0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8012C3A4",
           "start": "0x8012C3A4",
@@ -5756,7 +5798,28 @@
           "symbol": "fn_8012CD60",
           "start": "0x8012CD60",
           "end": "0x8012CE60"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CarrierRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row src/game/CarrierRun.cpp (0x8012CE60-0x80130494); split from the former comparison grouping src/game/cu_8012A6B0.cpp at the file edges recorded there. 29 function extents with their name and source-form rows; .rodata 0x8029F9A0-0x8029FB20. Comparison only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012CE60",
+          "end": "0x80130494"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F9A0",
+          "end": "0x8029FB20"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8012CE60",
           "start": "0x8012CE60",
