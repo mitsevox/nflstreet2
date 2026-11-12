@@ -745,11 +745,7 @@ int PenaltyIsPlayingBall(Object_80039F5C *a, Object_80039F5C *b, void *) {
   if (MathAngleDiff(toward, a->mMotion.mUnknown32) <= 0x2AAAA9)
     reject = MathAngleDiff(toward, a->mMotion.mFacing) <= 0x2AAAA9;
   if (!reject) {
-    struct View {
-      unsigned char pad[16];
-      float value;
-    };
-    float speed = ((View *)&b->mUnknown488)->value;
+    float speed = b->mUnknown504;
     if (!(speed >= gPlyrMoveFwdSpeed * 0.14f) && b->mUnknown512.mUnknown0 == 0.0f)
       reject = 1;
     if (!reject) {

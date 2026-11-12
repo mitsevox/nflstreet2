@@ -460,7 +460,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
     fn_80227690(&dir, &dir, (Point_8017886C *)&p->mMotion.mPos);
     heading = dir.Heading();
     if (p->mUnknown1008.mUnknown1 == 1 && (p->mpState->mId == 7 || p->mpState->mId == 63)) {
-        heading = p->mUnknown352Heading;
+        heading = *(int *)&p->mpUnknown352;
     }
     *pTurn = 0;
     *pScale = 1.0f;

@@ -5939,19 +5939,19 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp (0x800E3CC0-0x800ECC64), registered whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8, 0x800EBDCC and 0x800EC870 are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DE78, whose data row grades only its edges: its contents are measured fuzzy (the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 differs), not exact. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp (0x800E3CC0-0x800EC76C), registered whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8 and 0x800EBDCC are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DE70, whose data row grades only its edges: its contents are measured fuzzy (the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 differs), not exact. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E3CC0",
-          "end": "0x800ECC64"
+          "end": "0x800EC76C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029DD40",
-          "end": "0x8029DE78"
+          "end": "0x8029DE70"
         }
       ],
       "functions": [
@@ -6111,21 +6111,6 @@
           "end": "0x800EC76C"
         },
         {
-          "symbol": "fn_800EC840",
-          "start": "0x800EC840",
-          "end": "0x800EC870"
-        },
-        {
-          "symbol": "fn_800EC870",
-          "start": "0x800EC870",
-          "end": "0x800EC9E4"
-        },
-        {
-          "symbol": "fn_800EC9E4",
-          "start": "0x800EC9E4",
-          "end": "0x800ECC64"
-        },
-        {
           "symbol": "fn_800E579C",
           "start": "0x800E579C",
           "end": "0x800E586C"
@@ -6211,11 +6196,6 @@
           "end": "0x800EB0C4"
         },
         {
-          "symbol": "fn_800EC76C",
-          "start": "0x800EC76C",
-          "end": "0x800EC840"
-        },
-        {
           "symbol": "fn_800E8BE8",
           "start": "0x800E8BE8",
           "end": "0x800E8E04"
@@ -6259,6 +6239,53 @@
           "symbol": "fn_800EA6F0",
           "start": "0x800EA6F0",
           "end": "0x800EAC9C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Handoff.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224 (src/game/Handoff.cpp) and the source-form rows from 0x800EC76C. Documented holdout at the start of .text: 0x800EC76C-0x800ECC64 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (0x800EC870 is near-miss; 0x800EC76C, 0x800EC840 and 0x800EC9E4 are exact, and 0x800EC9E4 shares the 8-byte pool 0x8029DE70-0x8029DE78 with 0x800EC870); the rest of the file is linked through units.json",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EC76C",
+          "end": "0x800EF224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DE70",
+          "end": "0x8029DF40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EADF4",
+          "end": "0x803EAE00"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "TurnToPlayPickVariant",
+          "start": "0x800EC76C",
+          "end": "0x800EC840"
+        },
+        {
+          "symbol": "TurnToPlayPickAnim",
+          "start": "0x800EC840",
+          "end": "0x800EC870"
+        },
+        {
+          "symbol": "TurnToPlayPickDirection",
+          "start": "0x800EC870",
+          "end": "0x800EC9E4"
+        },
+        {
+          "symbol": "TurnToPlayStartAnim",
+          "start": "0x800EC9E4",
+          "end": "0x800ECC64"
         }
       ]
     },

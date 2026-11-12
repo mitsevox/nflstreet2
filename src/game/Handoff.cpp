@@ -66,8 +66,8 @@ struct HuddleBlock_t {
 };
 
 extern "C" {
-extern unsigned char lbl_803EADF4[8];
-extern float lbl_803EADFC;
+static unsigned char _Handoff_auHuddleSlots[8] = {0, 1, 2, 3, 4, 5, 6, 0};
+static float _Handoff_fHuddleWalkSpeed = 0.3f;
 extern float gPlyrMoveFwdSpeed;
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
@@ -97,7 +97,16 @@ int fn_80178320(void);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 float fn_80237260(int stream);
 void fn_8009BD60(Object_80039F5C *p);
-void fn_800EC9E4(Object_80039F5C *p, int a, int b);
+void TurnToPlayStartAnim(Object_80039F5C *p, int a, int b);
+float fn_80178A68(Point_8017886C *pPos);
+int fn_800A2178(void);
+int fn_80178348(void);
+int fn_801787A0(void);
+int BallStateGet(Ball_t *pBall, int *pOut);
+int fn_801BA6B0(Record_800D81C8 *entry);
+void fn_801BA6BC(Record_800D81C8 *entry, int value);
+extern float _Handoff_fTurnCloseRange;
+extern unsigned char _Handoff_auTurnDirections[8];
 void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState);
 float fn_801CFB94(int angle);
@@ -122,6 +131,170 @@ Object_800670B4 *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 }
 
+#if defined(DECOMP_COMPARE)
+extern "C" int TurnToPlayPickVariant(Object_80039F5C *p) {
+    if (fn_80178A68((Point_8017886C *)&p->mMotion.mPos) < _Handoff_fTurnCloseRange)
+        return 5;
+    int mode = fn_800A2178();
+    if (p->mIdBytes[2] == fn_80178348()) {
+        switch (mode) {
+        case 0:
+        case 1:
+        case 3:
+        case 13:
+            return 2;
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+            return 3;
+        }
+    } else {
+        switch (mode) {
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 16:
+            return 4;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 17:
+            return 3;
+        }
+    }
+    return 3;
+}
+
+extern "C" int TurnToPlayPickAnim(Object_80039F5C *p, int value) {
+    return fn_801787A0() == 0 ? 208 : 209;
+}
+
+extern "C" unsigned char TurnToPlayPickDirection(Object_80039F5C *p) {
+    Point_8017886C delta;
+    int angle;
+    Vector_80039F5C pos;
+    if (fn_801787A0()) {
+        HuddleGetSpot(&delta, &angle, p, 0);
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    } else if (p->mIdBytes[2] == fn_80178320() || p->mpState[1].mId == 33 || p->mpState[1].mId == 31) {
+        Object_80039F5C *pCarrier = BallGetCurrentHolder();
+        if (!pCarrier)
+            goto ball;
+        fn_80227538(&delta, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 15.0f);
+        fn_80227638(&delta, &delta, &pCarrier->mMotion.mPos);
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    } else if (BallStateGet(BallGetCurrent(), 0) == 5) {
+    ball:
+        BallGetPosition(BallGetCurrent(), &pos);
+        fn_80227690(&delta, &pos, &p->mMotion.mPos);
+    } else {
+        goto facing;
+    }
+    angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+    return _Handoff_auTurnDirections[((angle + 0x100000) >> 21) & 7];
+facing:
+    if (!fn_801486A0())
+        angle = (fn_801CFE40(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
+    else
+        angle = (0x400000 - p->mMotion.mFacing) & 0xFFFFFF;
+    return _Handoff_auTurnDirections[((angle + 0x100000) >> 21) & 7];
+}
+
+extern "C" void TurnToPlayStartAnim(Object_80039F5C *p, int kind, int flag) {
+    int mirror = 0;
+    int alternate = 0;
+    fn_8009BD60(p);
+    p->mUnknown512.mUnknown14 = mirror;
+    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792))) {
+        if (fn_801BE648(p->mpUnknown792) == 192) {
+            mirror = p->mUnknown776 == 1;
+        } else {
+            Record_800D81C8 *pEntries = p->mpUnknown800;
+            mirror = fn_801BA6B0(&pEntries[fn_801BA5A8(p->mpUnknown796, pEntries, fn_801BE648(p->mpUnknown792), 0)]);
+        }
+    }
+    if (kind == 3)
+        p->mUnknown1008.mUnknown1 = 3;
+    else
+        p->mUnknown1008.mUnknown1 = 2;
+    int animation = TurnToPlayPickAnim(p, kind);
+    if (animation == 209) {
+        p->mUnknown1008.mUnknown2 = TurnToPlayPickVariant(p);
+        if (p->mUnknown1008.mUnknown2 == 5) {
+            alternate = 1;
+            if (!flag && BallGetCurrentHolder() == p)
+                flag = 1;
+        }
+    }
+    if (animation == 208 || alternate) {
+        int direction = TurnToPlayPickDirection(p);
+        if (mirror) {
+            switch (direction) {
+            case 7:
+                direction = 2;
+                break;
+            case 2:
+                direction = 7;
+                break;
+            case 6:
+                direction = 3;
+                break;
+            case 5:
+                direction = 4;
+                break;
+            case 4:
+                direction = 5;
+                break;
+            case 3:
+                direction = 6;
+                break;
+            }
+        }
+        if (alternate)
+            p->mUnknown1011 = direction;
+        else
+            p->mUnknown1008.mUnknown2 = direction;
+    }
+    if (p == BallGetCurrentHolder() && !flag)
+        p->mUnknown1008.mUnknown0 = 1;
+    else
+        p->mUnknown1008.mUnknown0 = 2;
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
+    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation)) {
+        Record_800D81C8 *pEntries = p->mpUnknown800;
+        int index = fn_801BA5A8(p->mpUnknown796, pEntries, animation, 0);
+        if (mirror) {
+            Record_800D81C8 *pEntry = &pEntries[index];
+            fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+        }
+    }
+    p->mUnknown9[0] = 1;
+    if (flag)
+        p->mFlags |= 0x1000;
+}
+#endif
+
 extern "C" int TurnToPlayEnter(Object_80039F5C *p) {
     TurnToPlayBlock_t *state = (TurnToPlayBlock_t *)&p->mUnknown336;
     int flag = p->mpState->mUnknown1 == 4 || p->mpState->mUnknown1 == 5;
@@ -136,7 +309,7 @@ extern "C" int TurnToPlayEnter(Object_80039F5C *p) {
     }
     if (p->mIdBytes[3] == 1)
         p->mFlags &= ~0x1000;
-    fn_800EC9E4(p, p->mpState->mUnknown1, flag);
+    TurnToPlayStartAnim(p, p->mpState->mUnknown1, flag);
     p->mUnknown772 = 1.0f;
     return 0;
 }
@@ -165,7 +338,7 @@ extern "C" int TurnToPlayUpdate(Object_80039F5C *p) {
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         result = 1;
     } else if (kind != 1) {
-        fn_800EC9E4(p, kind, 0);
+        TurnToPlayStartAnim(p, kind, 0);
     }
     return result;
 }
@@ -1047,8 +1220,8 @@ extern "C" int HuddleMoveUpdate(Object_80039F5C *p) {
             p->mUnknown512.mUnknown14 = 3;
             p->mFlags &= ~4;
             p->mUnknown512.mUnknown8 = p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown0 = lbl_803EADFC;
-            state->mUnknown24 = lbl_803EADFC * 0.5f;
+            p->mUnknown512.mUnknown0 = _Handoff_fHuddleWalkSpeed;
+            state->mUnknown24 = _Handoff_fHuddleWalkSpeed * 0.5f;
             state->mUnknown48 = 0;
             state->mUnknown0 = 0;
         }
@@ -1086,7 +1259,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
             else
                 base = 4.0f;
             fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
-            fn_80227384(pOut, pOut, ((lbl_803EADF4[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             fn_80227690(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);
             if (origin.mY < 3.0f - fn_80178A2C())
@@ -1102,7 +1275,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
             else
                 base = 4.0f;
             fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
-            fn_80227384(pOut, pOut, ((lbl_803EADF4[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            fn_80227384(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             fn_80227690(&offset, &offset, pOut);
             *pFacing = fn_801CFE40(offset.mY, offset.mX);
             pOut->mY += 3.0f;

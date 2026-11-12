@@ -69,7 +69,7 @@ static int _GameOptions_iShadow19 = 1;
 
 extern "C" {
 
-static void GameOptionsResetAll(void);
+static void _GameOptionsResetAll(void);
 
 static inline int WriteRecord(DbCursor *pCursor,
                               DbColumnValue *pList)
@@ -115,7 +115,7 @@ int GameOptionsWriteRecord(void)
 #endif
 
 /* Fills the record with the defaults and replaces them with the stored row. */
-static int GameOptionsReadRecord(void)
+static int _GameOptionsReadRecord(void)
 {
     DbColumnValue *pEnd;
     int i;
@@ -137,9 +137,9 @@ void GameOptionsInit(int reset)
     _GameOptions_bDeferWrites = 0;
     GameOptionsOpenCursor();
     if (reset != 0) {
-        GameOptionsResetAll();
+        _GameOptionsResetAll();
     } else {
-        GameOptionsReadRecord();
+        _GameOptionsReadRecord();
     }
     SndgApplyVolumeOptions();
 }
@@ -158,7 +158,7 @@ void GameOptionsSetDeferWrites(int defer)
 }
 
 /* Resets every option to its default and stores the result. */
-static void GameOptionsResetAll(void)
+static void _GameOptionsResetAll(void)
 {
     DbColumnValue *pEnd;
     int mode;

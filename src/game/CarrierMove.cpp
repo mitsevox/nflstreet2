@@ -53,10 +53,11 @@ int fn_800B83A0(Object_80039F5C *p);
 int fn_800A8444(int team);
 void PlayerMoveSetResult(Object_80039F5C *p, int a);
 
-extern float lbl_803EAE00;
-extern float lbl_803EAE04;
-extern float lbl_803EAE08;
-extern float lbl_803EAE10;
+static float _CarrierMove_fBaseAnimTime = 0.25f;
+static float _CarrierMove_fRatedAnimScale = 1.15f;
+static float _CarrierMove_fAnimWeight = 1.0f;
+int _CarrierMove_iUnused = 5;
+static float _CarrierMove_fPickRange = 9.0f;
 }
 
 
@@ -97,19 +98,19 @@ extern "C" void CarrierMoveStartWallAnim(Object_80039F5C *p) {
             int entry = fn_801BA5A8(p->mpUnknown796, pRecords, 228, 0);
             float speed;
             if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
-                speed = lbl_803EAE00;
+                speed = _CarrierMove_fBaseAnimTime;
             } else {
                 speed = 1.0f;
                 float rating = p->mRatings[4];
                 if (rating < 200.0f)
                     speed = rating * 0.0004999998f + 0.8f;
-                speed *= lbl_803EAE04;
+                speed *= _CarrierMove_fRatedAnimScale;
             }
             if (fn_800CA5CC(p, 11, 1))
                 speed *= fn_800CA9B4(12, p);
             Record_800D81C8 *pEntry = &pRecords[entry];
             AnimSeqSetSpeed(&pEntry->mUnknown4C, MathInverse(speed));
-            pEntry->mUnknown2C = lbl_803EAE08;
+            pEntry->mUnknown2C = _CarrierMove_fAnimWeight;
             PlayerMoveSetResult(p, 0);
         }
         if (kind != 230) {
@@ -182,19 +183,19 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
             index = fn_801BA5A8(p->mpUnknown796, pRecords, 24, 0);
         float speed;
         if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
-            speed = lbl_803EAE00;
+            speed = _CarrierMove_fBaseAnimTime;
         } else {
             float rating = p->mRatings[4];
             speed = 1.0f;
             if (rating < 200.0f)
                 speed = rating * 0.0004999998f + 0.8f;
-            speed *= lbl_803EAE04;
+            speed *= _CarrierMove_fRatedAnimScale;
         }
         if (fn_800CA5CC(p, 11, 1))
             speed *= fn_800CA9B4(12, p);
         Record_800D81C8 *pRecord = &pRecords[index];
         AnimSeqSetSpeed(&pRecord->mUnknown4C, MathInverse(speed));
-        pRecord->mUnknown2C = lbl_803EAE08;
+        pRecord->mUnknown2C = _CarrierMove_fAnimWeight;
     }
 }
 
@@ -344,5 +345,5 @@ extern "C" int CarrierMoveInput(Object_80039F5C *p)
 
 extern "C" int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *a)
 {
-    return fn_801250B8(p, a, 6) < lbl_803EAE10;
+    return fn_801250B8(p, a, 6) < _CarrierMove_fPickRange;
 }
