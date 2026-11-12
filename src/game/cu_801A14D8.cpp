@@ -175,7 +175,7 @@ int InGameIsPlaying(void);
 int FELoopIsMainFEActive(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
-float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
+float MathMapRangeClamped(float x, float hi, float vhi, float lo, float vlo);
 int PlayerLookShowsHair(int index);
 unsigned char PlayerLookHidesHead(int index);
 unsigned char PlayerObjIsDrawReady(void);
@@ -1037,13 +1037,13 @@ void fn_801A32AC(int id, float sx, float sy, float tx, float ty)
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB)
 {
     if (pPlayer->mUnknown20 & 0x80) {
-        pB[0] = fn_80042F54((pPlayer->mUnknown44.mUnknown48[87] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
+        pB[0] = MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[87] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
                             -45.619f, 0.03f);
-        pA[0] = fn_80042F54((pPlayer->mUnknown44.mUnknown48[84] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
+        pA[0] = MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[84] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
                             -45.619f, 0.03f);
-        pB[1] = -fn_80042F54((pPlayer->mUnknown44.mUnknown48[88] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
+        pB[1] = -MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[88] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
                              -47.028f, 0.1f);
-        pA[1] = -fn_80042F54((pPlayer->mUnknown44.mUnknown48[85] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
+        pA[1] = -MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[85] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
                              -47.028f, 0.1f);
     } else {
         pB[0] = 0.0f;

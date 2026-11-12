@@ -37,10 +37,10 @@ void fn_800405F0(int a);
 void fn_80040B88(int a);
 void fn_80040C90(int a);
 void fn_800410FC(void);
-void fn_80043AE4(void);
-void fn_80044378(void);
-void fn_80044B2C(int a);
-void fn_80044B50(void);
+void DivotInit(void);
+void DivotReplayRegister(void);
+void FieldArrowInit(int a);
+void FieldArrowShutdown(void);
 void EnvObjAddObjType(int a);
 void fn_8004787C(void);
 void fn_8004A9FC(void);
@@ -230,14 +230,14 @@ const char *Arrow::GetName() { return "Arrow"; }
 int Arrow::Init()
 {
     fn_8015C064(GameObjList::GetListHandle());
-    fn_80044B2C(GameObjList::GetListHandle());
+    FieldArrowInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Arrow::Shutdown()
 {
     fn_8015C0C0();
-    fn_80044B50();
+    FieldArrowShutdown();
     return 1;
 }
 
@@ -552,7 +552,7 @@ int Env::Init()
     ResTrackLabel("FldObjAddObjTypeStart");
     FldObjAddObjType(GameObjList::GetListHandle());
     ResTrackLabel("FldObjAddObjTypeFinish");
-    fn_80043AE4();
+    DivotInit();
     fn_800C47EC(gLevelData);
     fn_8004787C();
     fn_80178B5C();
@@ -1124,7 +1124,7 @@ int ReplayFrame::Init()
     fn_80162D78();
     fn_8003E118();
     fn_800410FC();
-    fn_80044378();
+    DivotReplayRegister();
     SndgReplayRegister();
     fn_8014512C();
     fn_800B4A4C();

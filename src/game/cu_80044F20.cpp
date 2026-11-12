@@ -125,7 +125,7 @@ void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry)
     }
     pNode = pFirst;
     for (int i = 0; i < pEntry->mCount; i++) {
-        fn_80044C88(pNode, &pEntry->mpEntries[i]);
+        PlaDynClutParseEntry(pNode, &pEntry->mpEntries[i]);
         pNode = fn_80216E34(pNode);
     }
 }

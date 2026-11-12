@@ -54,7 +54,7 @@ void fn_8017833C(int value);
 void CamGameSetFocusAll(int a, int b);
 void PlayerMoveResetAll(void);
 void fn_800B14E4(void);
-void fn_80044264(void);
+void DivotRestartRecords(void);
 void AudmonEventClear(void);
 void ClockRuleSnap(void);
 void fn_800C9FC0(void);
@@ -125,7 +125,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         p->mUnknown4 = 0;
         PlayerMoveResetAll();
         fn_800B14E4();
-        fn_80044264();
+        DivotRestartRecords();
         AudmonEventClear();
         ClockRuleSnap();
         fn_800C9FC0();

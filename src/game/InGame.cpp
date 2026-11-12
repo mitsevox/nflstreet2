@@ -34,7 +34,7 @@ void fn_8002CF34(void *p);
 int fn_8002D060(void *p);
 int fn_8002D2C0(void);
 void fn_8003E1F0(void);
-void fn_80043F50(void);
+void DivotUpdate(void);
 void fn_80057F28(void);
 void fn_800582D0(void);
 void fn_8005BF18(void);
@@ -374,7 +374,7 @@ unsigned char InGame::Update()
     }
     FileDebugProcess();
     fn_8003E1F0();
-    fn_80043F50();
+    DivotUpdate();
     fn_800A7F6C();
     fn_800728F8();
     fn_800726B8();

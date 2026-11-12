@@ -55,7 +55,7 @@ void fn_80039AA8(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 void fn_8003A4DC(void);
-void fn_80044264(void);
+void DivotRestartRecords(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
 int fn_8009D9D8(int index);
@@ -411,7 +411,7 @@ extern "C" void fn_8016E498(void)
     HudHidePressPrompt(fn_80178308());
     HudHidePressPrompt(fn_80178320());
     fn_800B14E4();
-    fn_80044264();
+    DivotRestartRecords();
     AudmonEventClear();
     fn_800AD910(3, 0.0f);
     fn_8011F3A8();

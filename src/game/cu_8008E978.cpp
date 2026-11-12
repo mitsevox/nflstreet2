@@ -3505,7 +3505,7 @@ void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8022E558(void);
 int fn_8022E560(void);
 void fn_800B852C(void);
-void fn_80043DD8(void);
+void DivotScatterRandom(void);
 void fn_801624D0(void *arg);
 void BallMarkerCreate(int handle);
 void ReplayCursorCreate(int handle);
@@ -3513,7 +3513,7 @@ void PassIconsCreate(void *pOwner);
 void fn_800C4410(int value);
 void fn_80046E30(int handle);
 void EffectDrawObjCreate(int handle);
-void fn_80043D68(void);
+void DivotShutdown(void);
 void FldObjRemoveObjType(int handle);
 void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
@@ -3589,7 +3589,7 @@ extern "C" void fn_800C46B0(int handle)
 {
     fn_8022E558();
     fn_800B852C();
-    fn_80043DD8();
+    DivotScatterRandom();
     fn_801624D0((void *)handle);
     BallMarkerCreate(handle);
     ReplayCursorCreate(handle);
@@ -3601,7 +3601,7 @@ extern "C" void fn_800C46B0(int handle)
 
 extern "C" void fn_800C471C(int handle)
 {
-    fn_80043D68();
+    DivotShutdown();
     FldObjRemoveObjType(handle);
     EnvObjRemoveObjType(handle);
     fn_800B8538();
