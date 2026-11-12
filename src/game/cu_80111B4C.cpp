@@ -234,7 +234,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pOther);
 void PossStartFumble(void);
 void PossGrabBall(Object_80039F5C *p);
 int PossCheckDownedBall(Object_80039F5C *p);
-int fn_80176B04(void);
+int PenaltyRollFacemask(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
@@ -815,7 +815,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
                 fn_800B2370(p, 5, pOther, 1.0f);
                 break;
             case 1:
-                if (fn_80176B04() != 0) {
+                if (PenaltyRollFacemask() != 0) {
                     if (fn_802372EC(0, 100) < 75) {
                         fn_800B2370(p, 4, pOther, 1.0f);
                     } else {

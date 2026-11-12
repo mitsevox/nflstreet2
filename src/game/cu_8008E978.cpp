@@ -7205,7 +7205,7 @@ unsigned char CheatFlagsIsSet(int index);
 void PlayArtStop(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
-unsigned int fn_801765A8(int type);
+unsigned int PenaltyGetKindFlags(int type);
 void TeamPromptSetResult(int value);
 void TeamPromptStart(int a, int b, int c);
 void PlayArtStart(int mode);
@@ -7390,7 +7390,7 @@ extern "C" int fn_800B1A30(void *p)
     Pair_800A14A8 *pPair = (Pair_800A14A8 *)p;
     int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pPair->mpSecond);
 
-    if ((fn_801765A8(fn_800B232C(0)) & 4) || result != 0) {
+    if ((PenaltyGetKindFlags(fn_800B232C(0)) & 4) || result != 0) {
         TeamPromptSetResult(0);
     } else {
         TeamPromptStart(0, (int)pPair->mpFirst, (int)pPair->mpSecond);
@@ -7405,7 +7405,7 @@ extern "C" void fn_800B1BF8(void *p)
 }
 
 extern "C" {
-int fn_801763D0(Entry_800B206C *events, int count, unsigned char *result);
+int PenaltyResolveEvents(Entry_800B206C *events, int count, unsigned char *result);
 float fn_80237260(int stream);
 void fn_80178370(void);
 }
@@ -7417,11 +7417,11 @@ extern "C" int fn_800B1F58(Block_800B21D0 *p, float value)
     int result = 0;
     unsigned char order;
 
-    if (fn_801763D0(pState->mUnknown0, count, &order) != -1 && order <= 1) {
+    if (PenaltyResolveEvents(pState->mUnknown0, count, &order) != -1 && order <= 1) {
         Entry_800B206C *pEntry = &pState->mUnknown0[count - 1];
         Object_80039F5C *pPlayer = fn_8009BCE8(&pEntry->mUnknown4);
         int kind = pEntry->mUnknown0;
-        unsigned int flags = fn_801765A8(kind);
+        unsigned int flags = PenaltyGetKindFlags(kind);
 
         if (fn_80237260(0) < value) {
             result = 1;
@@ -10824,7 +10824,7 @@ void fn_800AD550(float dt);
 void fn_800AD5C0(float dt);
 void fn_800AD600(float dt);
 void fn_80177BCC(float value);
-void fn_801765C0(void);
+void PenaltyCheckAllPlayers(void);
 }
 
 extern "C" void fn_800AD418(float dt)
@@ -10843,7 +10843,7 @@ extern "C" void fn_800AD418(float dt)
         fn_800C478C(dt);
         fn_80177BCC(dt);
         CamGameProcess();
-        fn_801765C0();
+        PenaltyCheckAllPlayers();
     }
 }
 

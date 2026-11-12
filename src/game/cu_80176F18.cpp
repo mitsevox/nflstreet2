@@ -151,7 +151,7 @@ void DriveLogEndDrive(void);
 void DriveLogAddPlay(int type, short a, short b, int c, int d);
 int DriveLogHasLongPlay(void);
 void DriveLogSetLongPlay(void);
-void fn_80176984(void);
+void PenaltyCheckPassInterference(void);
 void ScoringLogAddScore(int type, short a, int b, int c);
 void ScoringLogSetConversion(int a, int b, int c, int d);
 int GameModeTypeIsSpecial(void);
@@ -714,7 +714,7 @@ extern "C" void fn_80177BCC(float value)
 {
     fn_8016F7F8();
     ClockRuleUpdate(value);
-    fn_80176984();
+    PenaltyCheckPassInterference();
 }
 
 static inline void FlipSides(void)

@@ -7214,6 +7214,90 @@
       ]
     },
     {
+      "source": "src/game/PenaltyRules.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017419C-0x80176C58 (src/game/PenaltyRules.cpp), its linker row 0x802A5470-0x802A54DC and its data, type and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "PenaltyApplyDiscipline",
+          "PenaltyResolveOutcome",
+          "PenaltyResolvePair",
+          "PenaltyResolvePairOther",
+          "PenaltyResolvePairKind1First",
+          "PenaltyCompareEvents",
+          "PenaltyMarchOff",
+          "PenaltySetupOutcome",
+          "PenaltyEnforceKind0",
+          "PenaltyEnforceKind15",
+          "PenaltyEnforceKind1",
+          "PenaltyEnforceKind2",
+          "PenaltyEnforceKind4",
+          "PenaltyEnforceKind5",
+          "PenaltyEnforceKind7",
+          "PenaltyEnforceKind6",
+          "PenaltyEnforceKind8",
+          "PenaltyEnforceKind9",
+          "PenaltyEnforceKind10",
+          "PenaltyEnforceKind11",
+          "PenaltyEnforceKind12",
+          "PenaltyEnforceKind13",
+          "PenaltyEnforceKind14",
+          "PenaltyEnforceKind17",
+          "PenaltyCanFoulInState",
+          "PenaltyPickInterferenceByFacing",
+          "PenaltyApplyFrequency",
+          "PenaltyGetBaseRate",
+          "PenaltyApplyCallCount",
+          "PenaltyApplyAngleFactor",
+          "PenaltySkipInterference",
+          "PenaltySkipInterferenceAt",
+          "PenaltyIsPlayingBall",
+          "PenaltyHasInterferenceContact",
+          "PenaltyCallInterference",
+          "PenaltyPickInterferenceNear",
+          "PenaltyPickInterferenceFar",
+          "PenaltyCalcLineToGain",
+          "PenaltyNextDown",
+          "PenaltyResolveEvents",
+          "PenaltyEnforce",
+          "PenaltyGetKindFlags",
+          "PenaltyCheckAllPlayers",
+          "PenaltyCheckOffside",
+          "PenaltyCheckDefenderContact",
+          "PenaltyCheckGrounding",
+          "PenaltyCheckPassInterference",
+          "PenaltyRollFacemask",
+          "PenaltyRollRoughing"
+        ],
+        "discarded": [
+          "PenaltyCheckOffenseKind1",
+          "PenaltyRollPassPlayFoul",
+          "PenaltyRollTackleFoul"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A5470-0x802A54DC: the target keeps every listed function, each reached from outside the unit, from this unit's .data table or from each other; the three discarded functions have no code in the target, while their literal pools remain in its .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017419C",
+          "end": "0x80176C58"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5348",
+          "end": "0x802A54D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9A04",
+          "end": "0x802E9ADC"
+        }
+      ]
+    },
+    {
       "source": "src/game/DemoLaunch.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/DemoLaunch.cpp) and its data/source-form rows.",

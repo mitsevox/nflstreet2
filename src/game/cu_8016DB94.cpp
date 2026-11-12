@@ -103,7 +103,7 @@ Object_800670B4 *PlayBookGetFormation(int team);
 void fn_8016B0B0(void);
 void ClockRuleSnap(void);
 void DriveLogUpdateTeam(void);
-void fn_80176630(void);
+void PenaltyCheckOffside(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -457,7 +457,7 @@ extern "C" void fn_8016E498(void)
         fn_8009D888(4, 0);
     }
     fn_800B2630();
-    fn_80176630();
+    PenaltyCheckOffside();
     DriveLogUpdateTeam();
 
     side = fn_80178308();

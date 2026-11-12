@@ -153,7 +153,7 @@ void fn_80152068(int index, Vector_80039F5C *pOut);
 int fn_80156C8C(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void fn_80176838(Object_80039F5C *p);
+void PenaltyCheckGrounding(Object_80039F5C *p);
 float fn_80178A2C(void);
 void fn_80227248(void *pOut, void *p, float scale);
 }
@@ -517,7 +517,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, 0);
         fn_80101064(p);
-        fn_80176838(p);
+        PenaltyCheckGrounding(p);
         fn_801783D0(13, 1);
         break;
     case 2:
