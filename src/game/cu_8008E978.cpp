@@ -5861,7 +5861,7 @@ void fn_80163020(void);
 int fn_80156704(void);
 void fn_801574DC(int value);
 void fn_800C0330(void *p);
-void fn_80047874(unsigned char enable);
+void PlyrNameTagEnable(unsigned char enable);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
 void fn_800A7A0C(int team);
 void fn_800A9330(void);
@@ -6279,7 +6279,7 @@ extern "C" void fn_800A6D5C(int team)
     lbl_803EAA4F = 0;
     fn_800C0330(lbl_803EABA4);
     fn_800A61E8(0);
-    fn_80047874(0);
+    PlyrNameTagEnable(0);
 }
 
 extern "C" void fn_800A6DA4(void)
@@ -6684,7 +6684,7 @@ extern "C" void fn_800A87E8(void)
         if (lbl_803EC954[0]->mUnknown68 != 0 || lbl_803EC954[1]->mUnknown68 != 0) {
             fn_800A8570();
         }
-        fn_80047874(1);
+        PlyrNameTagEnable(1);
     }
 }
 
@@ -10302,7 +10302,7 @@ void Class_80297B90::vfn_04(float dt)
     case 4:
         SndgNullHook();
         if (InGameIsDemo() != 0) {
-            fn_80047874(0);
+            PlyrNameTagEnable(0);
             fn_8004730C(0);
             fn_80072C90(250, 1);
             InGameStop();
@@ -10424,7 +10424,7 @@ void Class_80297B90::vfn_04(float dt)
             fn_80072C90(250, 0);
             fn_8005FC84();
             fn_80061D14();
-            fn_80047874(0);
+            PlyrNameTagEnable(0);
             fn_8004730C(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 PlayerObjSetDrawReady(0);

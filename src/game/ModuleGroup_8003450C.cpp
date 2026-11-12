@@ -42,7 +42,7 @@ void DivotReplayRegister(void);
 void FieldArrowInit(int a);
 void FieldArrowShutdown(void);
 void EnvObjAddObjType(int a);
-void fn_8004787C(void);
+void PlyrNameTagReadTextColor(void);
 void fn_8004A9FC(void);
 void fn_8004FF8C(void);
 void fn_800502C0(void);
@@ -554,7 +554,7 @@ int Env::Init()
     ResTrackLabel("FldObjAddObjTypeFinish");
     DivotInit();
     fn_800C47EC(gLevelData);
-    fn_8004787C();
+    PlyrNameTagReadTextColor();
     fn_80178B5C();
     return 1;
 }

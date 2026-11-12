@@ -217,7 +217,7 @@ int ConGetChannelInfo(int a, int b);
 int fn_800B6644(int index);
 unsigned int GameModeTypeGet(void);
 void ChallengeRecordResult(int a, int b);
-void fn_80047874(unsigned char enable);
+void PlyrNameTagEnable(unsigned char enable);
 void fn_8004730C(unsigned char enabled);
 void InGameStop(void);
 unsigned char PauseGetQuitFlag(void);
@@ -1290,7 +1290,7 @@ void fn_80058DA0(void)
         if (GameModeTypeGet() == 6) {
             ChallengeRecordResult(1, 7);
         }
-        fn_80047874(0);
+        PlyrNameTagEnable(0);
         fn_8004730C(0);
         InGameStop();
     } else {

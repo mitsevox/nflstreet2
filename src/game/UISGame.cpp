@@ -40,8 +40,8 @@ double fabs(double);
 void BootHandleReset(void);
 int MainFEGroupIsFirstStart(void *p);
 void fn_8000FCD4(int a);
-void fn_80047670(int handle);
-void fn_80047698(void);
+void PlyrNameTagInit(int handle);
+void PlyrNameTagShutdown(void);
 void InGameStateReset(void);
 void InGameStateClearActive(void);
 void ScreenMsgDispatch(void);
@@ -641,7 +641,7 @@ void UISGameInit(void)
         UISHeldObjEnable(1);
     } else if (InGameIsPlaying()) {
         GameModeTypeGet();
-        fn_80047670(_UISGame_pMainObjList);
+        PlyrNameTagInit(_UISGame_pMainObjList);
         BannerSetTickMs((unsigned int)(gFrameTimeScale * 16.666668f));
         UISHeldObjEnable(0);
         InGameStateReset();
@@ -731,7 +731,7 @@ void UISGameShutdown(void)
             fn_802363E0(_UISGame_pMainVpt);
         }
     } else if (InGameIsPlaying()) {
-        fn_80047698();
+        PlyrNameTagShutdown();
         BannerEnd();
         InGameStateClearActive();
         GameEventFlagsShutdown();

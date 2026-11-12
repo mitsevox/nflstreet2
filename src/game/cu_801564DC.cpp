@@ -280,7 +280,7 @@ void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
 void fn_800406C0(int a);
 void fn_8004730C(int a);
-void fn_80047874(unsigned char enable);
+void PlyrNameTagEnable(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 int MsgBoxIsClosed(void);
 void fn_80057F28(void);
@@ -966,7 +966,7 @@ int fn_80157080(void)
         fn_800C1E50();
         fn_8004730C(1);
         fn_8015C254(1);
-        fn_80047874(1);
+        PlyrNameTagEnable(1);
         if (mode != 15) {
             fn_801485B4();
             fn_801485EC(mode);
@@ -1032,7 +1032,7 @@ int fn_80157080(void)
             fn_800C1E50();
             fn_8004730C(1);
             fn_8015C254(1);
-            fn_80047874(1);
+            PlyrNameTagEnable(1);
             fn_8015672C(next);
             fn_80156734(0);
             fn_80156724(0);
@@ -2076,7 +2076,7 @@ void Class_802A3A48::vfn_04(float dt)
                     } else {
                         RumbleEnable(1);
                         fn_80072C90(0xFA, 0);
-                        fn_80047874(0);
+                        PlyrNameTagEnable(0);
                         fn_8004730C(0);
                         InGameStop();
                         mUnknown12 = 0;

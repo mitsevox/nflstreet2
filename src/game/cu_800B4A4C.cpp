@@ -4,7 +4,7 @@
 #include "game/GameModeType.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Item_800476DC.h"
+#include "game/PlyrNameTag.h"
 #include "game/Ball.h"
 #include "game/Object_8017886C.h"
 #include "game/Message_800F01CC.h"
@@ -59,7 +59,7 @@ unsigned char CheatFlagsIsSet(int index);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 char *fn_801C32CC(char *pString);
 float fn_80237260(int stream);
-void fn_800476CC(Item_800476DC *p, const char *name);
+void PlyrNameTagSetText(PlyrNameTag_t *p, const char *name);
 void fn_8009BD88(Object_80039F5C *p, float scale);
 void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
@@ -162,7 +162,7 @@ extern "C" void fn_800B5150(Object_80039F5C *p)
         char name[48];
         fn_801C2EB4(name, p->mUnknown2927 + 21);
         fn_801C32CC(name);
-        fn_800476CC(model->mUnknown988, p->mUnknown2927 + 42);
+        PlyrNameTagSetText(model->mUnknown988, p->mUnknown2927 + 42);
         float scale = p->mUnknown2900;
         scale *= 0.013888889f;
         if (scale == 0.0f) {
