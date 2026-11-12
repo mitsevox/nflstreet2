@@ -29692,7 +29692,7 @@
     {
       "source": "src/game/cu_80148424.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form rows; one complete body with measured register and stack-layout differences, original assembly remains linked.",
+      "evidence": "evidence.tsv unit/source-form rows; one complete byte-identical body, kept comparison-only because its file is probably a fragment of the unresolved cu_801485B4 grouping; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -29703,7 +29703,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80148424",
+          "symbol": "PlyrSwapStateData",
           "start": "0x80148424",
           "end": "0x801485B4"
         }
