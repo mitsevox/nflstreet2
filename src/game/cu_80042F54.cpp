@@ -31,7 +31,8 @@
 /* How a grown divot goes away (mMode). */
 enum DivotMode {
     DIVOT_MODE_FADE,
-    DIVOT_MODE_TIMED
+    DIVOT_MODE_TIMED,
+    DIVOT_MODE_2
 };
 
 /* One divot of a pool (0x74 bytes). The +0x30 angle is a 24-bit word. */
@@ -70,6 +71,33 @@ struct DivotHandlers {
     void (*mpPlace)(Divot *p);
     void (*mpRemove)(Divot *p);
     void (*mpUpdate)(Divot *p);
+};
+
+#define FIELD_ARROW_MAX 40
+
+/* Path of a field arrow as drawn by ArrowDraw (0x30 bytes). */
+struct FieldArrowPath {
+    unsigned int mCount;
+    int mUnknown4;
+    Vector_80039F5C *mpPoints;
+    int mType;
+    float mRadiusX;
+    float mRadiusY;
+    int mAngleOffset;
+    float mWidth;
+    unsigned char mColor[3];
+    float mEndWidth;
+    float mEndBrightness;
+    unsigned char mDashed;
+};
+
+/* One field arrow object of object type 16 (0x60 bytes): its path and the two points the path
+   draws through. */
+struct FieldArrow {
+    char mUnknown0[0x14];
+    FieldArrowPath mPath;
+    Vector_80039F5C mPoints[2];
+    unsigned char mVisible;
 };
 
 /* Last stepped position of each of the two feet of one player. */
@@ -120,6 +148,10 @@ void *fn_801D2BB0(int a, int size, int c, int d);
 int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
+int ObjNewInList(int handle, int type, int a, void *pInit);
+void ObjRemoveFromList(int handle, int item);
+void VptTrashObject(int handle);
+double fabs(double x);
 int ResFindIndexByName(void *pData, char *pName);
 void *fn_80216860(int handle, const char *pName);
 void *fn_80216BFC(void *pNode, const char *pName);
@@ -151,6 +183,7 @@ static float lbl_803EA498[DIVOT_NUM_TYPES] = { 0.2f };
 static int lbl_803EA49C[DIVOT_NUM_TYPES] = { 0 };
 static unsigned char lbl_803EA4A0 = 1;
 static int lbl_803EA4A4 = 0;
+static unsigned int _FieldArrow_nCount = 0;
 
 static int lbl_803EC790[DIVOT_NUM_TYPES];
 static Divot *lbl_803EC794[DIVOT_NUM_TYPES];
@@ -170,6 +203,8 @@ static unsigned char lbl_803078B8[DIVOT_NUM_PLAYERS][2];
 static DivotHandlers lbl_802CCF30[DIVOT_NUM_TYPES] = {
     { fn_800435B4, fn_800435B0, fn_800436D8 },
 };
+
+static FieldArrow *_FieldArrow_apItems[FIELD_ARROW_MAX] = { 0 };
 
 static char lbl_802CCFDC[25][15] = {
     "HATC1", "HATC2", "EYEC1", "EYEC2", "SHIRTC1", "SHIRTC2", "SHIRTC3",
@@ -421,6 +456,8 @@ void fn_8004389C(Divot *p)
         return;
     }
     switch (p->mMode) {
+    case DIVOT_MODE_2:
+        break;
     case DIVOT_MODE_FADE:
         if (p->mFlags & DIVOT_GROWN) {
             p->mAlpha += -0.00007f;
@@ -672,7 +709,7 @@ void fn_80044264(void)
     }
     i = lbl_803EC7A0;
     pBase = lbl_803EC794[0];
-    p = &pBase[i];
+    p = (Divot *)(i * sizeof(Divot) + (int)pBase);
     for (j = 0; j < fn_80044518(0); j++) {
         lbl_803EC798[j].mPos[0] = p->mPos.mX;
         lbl_803EC798[j].mPos[1] = p->mPos.mY;
@@ -782,13 +819,11 @@ Divot *fn_80044580(int type)
         p->mType = type;
         p->mVariant = -1;
         p->mActive = 0;
-        p->mSurface = DIVOT_SURFACE_NONE;
-        p->mpOwner = 0;
-        p->mAlpha = 0.0f;
-        p->mAlphaRate = 1.0f;
         p->mMode = DIVOT_MODE_FADE;
         p->mTimer = 0.0f;
+        p->mSurface = DIVOT_SURFACE_NONE;
         p->mFlags = 0;
+        p->mpOwner = 0;
         p->mScale[0] = 0.0f;
         p->mScale[1] = 0.0f;
         p->mScale[2] = 0.0f;
@@ -798,7 +833,9 @@ Divot *fn_80044580(int type)
         p->mScaleRate[0] = 1.0f;
         p->mScaleRate[1] = 1.0f;
         p->mScaleRate[2] = 1.0f;
+        p->mAlpha = 0.0f;
         p->mAlphaMax = 1.0f;
+        p->mAlphaRate = 1.0f;
         return p;
     }
     return 0;
@@ -913,6 +950,29 @@ int fn_80044A7C(void *p)
     return 0;
 }
 
+/* Creates the _FieldArrow_nCount arrow objects in the list lbl_803EA4A4. */
+static void _FieldArrowCreateAll(void)
+{
+    for (unsigned int i = 0; i < _FieldArrow_nCount; i++) {
+        _FieldArrow_apItems[i] = (FieldArrow *)ObjNewInList(lbl_803EA4A4, 16, 0, 0);
+    }
+}
+
+/* Removes and trashes every arrow object and clears the count. */
+static void _FieldArrowDeleteAll(void)
+{
+    unsigned int i;
+
+    for (i = 0; i < _FieldArrow_nCount; i++) {
+        FieldArrow *p = _FieldArrow_apItems[i];
+
+        ObjRemoveFromList(lbl_803EA4A4, (int)p);
+        VptTrashObject((int)p);
+        _FieldArrow_apItems[i] = 0;
+    }
+    _FieldArrow_nCount = 0;
+}
+
 void fn_80044AB0(void)
 {
     ObjNewType_(16, 0x60, 40, fn_800449EC, fn_80044A38);
@@ -925,6 +985,19 @@ void fn_80044B04(void)
     ObjDelType(16);
 }
 
+/* Creates one arrow object in the list lbl_803EA4A4. */
+static FieldArrow *_FieldArrowCreate(void)
+{
+    return (FieldArrow *)ObjNewInList(lbl_803EA4A4, 16, 0, 0);
+}
+
+/* Removes one arrow object from the list and trashes it. */
+static void _FieldArrowDelete(FieldArrow *p)
+{
+    ObjRemoveFromList(lbl_803EA4A4, (int)p);
+    VptTrashObject((int)p);
+}
+
 void fn_80044B2C(int handle)
 {
     lbl_803EA4A4 = handle;
@@ -935,6 +1008,92 @@ void fn_80044B50(void)
 {
     fn_80044B04();
     lbl_803EA4A4 = 0;
+}
+
+/* Replaces the arrow objects by count new ones, at most FIELD_ARROW_MAX. */
+static void _FieldArrowSetCount(unsigned int count)
+{
+    _FieldArrowDeleteAll();
+    if (count > FIELD_ARROW_MAX) {
+        count = FIELD_ARROW_MAX;
+    }
+    _FieldArrow_nCount = count;
+    _FieldArrowCreateAll();
+}
+
+/* Shows arrow index as a two-point path from pPos to length above it in y, with the given width
+   and one of five colours. */
+static void _FieldArrowSet(unsigned int index, Vector_80039F5C *pPos, float length, float width, int color)
+{
+    if (index < _FieldArrow_nCount) {
+        FieldArrow *p = _FieldArrow_apItems[index];
+        float y = pPos->mY;
+        float top = y + length;
+        float x = pPos->mX;
+        float z = pPos->mZ;
+
+        p->mPath.mCount = 0;
+        p->mPath.mDashed = 0;
+        p->mPoints[0].mX = x;
+        p->mPoints[0].mY = y;
+        p->mPoints[0].mZ = z;
+        p->mPath.mpPoints[p->mPath.mCount] = p->mPoints[0];
+        p->mPath.mCount++;
+        p->mPoints[1].mX = x;
+        p->mPath.mType = 0;
+        p->mPath.mRadiusX = 0.0f;
+        p->mPath.mRadiusY = 0.0f;
+        p->mPath.mAngleOffset = 0;
+        if ((float)fabs(y - top) < 0.1f) {
+            p->mPath.mType = 4;
+            p->mPath.mRadiusX = 0.0f;
+            p->mPath.mRadiusY = 0.0f;
+            p->mPath.mAngleOffset = 0;
+        }
+        p->mPoints[1].mY = top;
+        p->mPoints[1].mZ = z;
+        p->mPath.mpPoints[p->mPath.mCount] = p->mPoints[1];
+        p->mPath.mCount++;
+        p->mPath.mWidth = width;
+        p->mPath.mEndWidth = 1.0f;
+        p->mPath.mEndBrightness = 1.0f;
+        switch (color) {
+        case 0:
+            p->mPath.mColor[0] = 2;
+            p->mPath.mColor[1] = 130;
+            p->mPath.mColor[2] = 0;
+            break;
+        case 1:
+            p->mPath.mColor[0] = 0;
+            p->mPath.mColor[1] = 0;
+            p->mPath.mColor[2] = 255;
+            break;
+        case 2:
+            p->mPath.mColor[0] = 183;
+            p->mPath.mColor[1] = 176;
+            p->mPath.mColor[2] = 0;
+            break;
+        case 3:
+            p->mPath.mColor[0] = 181;
+            p->mPath.mColor[1] = 0;
+            p->mPath.mColor[2] = 0;
+            break;
+        case 4:
+            p->mPath.mColor[0] = 221;
+            p->mPath.mColor[1] = 221;
+            p->mPath.mColor[2] = 221;
+            break;
+        }
+        p->mVisible = 1;
+    }
+}
+
+/* Hides arrow index. */
+static void _FieldArrowHide(unsigned int index)
+{
+    if (index < _FieldArrow_nCount) {
+        _FieldArrow_apItems[index]->mVisible = 0;
+    }
 }
 
 unsigned char fn_80044B78(void *pNode)

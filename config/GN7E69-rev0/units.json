@@ -4253,6 +4253,109 @@
       ]
     },
     {
+      "source": "src/game/cu_80042F54.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80042F54-0x80044F20 (src/game/cu_80042F54.cpp), its function, data, type and source-form rows and the linker row for the discarded field arrow functions; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "fn_80042F54",
+          "fn_80042FA8",
+          "fn_80043028",
+          "fn_80043130",
+          "fn_80043158",
+          "fn_800431DC",
+          "fn_800433D4",
+          "fn_80043464",
+          "fn_800434B0",
+          "fn_800434FC",
+          "fn_800435B0",
+          "fn_800435B4",
+          "fn_800436D8",
+          "fn_800436DC",
+          "fn_800437A8",
+          "fn_8004389C",
+          "fn_80043954",
+          "fn_80043AE4",
+          "fn_80043D68",
+          "fn_80043DD8",
+          "fn_80043F50",
+          "fn_80044114",
+          "fn_800441F0",
+          "fn_80044264",
+          "fn_80044378",
+          "fn_800443B8",
+          "fn_80044460",
+          "fn_80044518",
+          "fn_80044528",
+          "fn_80044544",
+          "fn_80044564",
+          "fn_80044580",
+          "fn_800446E0",
+          "fn_80044854",
+          "fn_80044858",
+          "fn_800449B4",
+          "fn_800449EC",
+          "fn_80044A38",
+          "fn_80044A7C",
+          "fn_80044AB0",
+          "fn_80044B04",
+          "fn_80044B2C",
+          "fn_80044B50",
+          "fn_80044B78",
+          "fn_80044C00",
+          "fn_80044C88"
+        ],
+        "discarded": [
+          "_FieldArrowCreateAll",
+          "_FieldArrowDeleteAll",
+          "_FieldArrowCreate",
+          "_FieldArrowDelete",
+          "_FieldArrowSetCount",
+          "_FieldArrowSet",
+          "_FieldArrowHide"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028D4F4-0x8028D500: the target keeps every listed function, all reached from outside the unit or from each other; the seven field arrow functions have no code in the target, while their literals, item array and count remain in its .rodata, .data and .sdata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80042F54",
+          "end": "0x80044F20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D438",
+          "end": "0x8028D568"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCF30",
+          "end": "0x802CD190"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA494",
+          "end": "0x803EA4AC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC790",
+          "end": "0x803EC7B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80307778",
+          "end": "0x803078D4"
+        }
+      ]
+    },
+    {
       "source": "src/game/gsflowman.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/gsflowman.cpp) and its data rows.",
