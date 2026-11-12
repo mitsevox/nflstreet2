@@ -11,6 +11,7 @@
 #include "game/Object_8017886C.h"
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
+#include "engine/AnimStateAnimList.h"
 #include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 #include "game/Ball.h"
@@ -76,14 +77,10 @@ struct PlayerCutState_t {
     int mUnknown20;
 };
 
-/* The list fn_801BBC3C fills with the cut animations (object type 1, state 153):
-   the count and first entry of a Table_80089904, then room for 379 more. */
-struct PlayerCutAnimList_t {
-    Table_80089904 mTable;
-    Entry_80089904 mMoreEntries[379];
-};
-
-static PlayerCutAnimList_t _PlayerCut_sAnimList;
+/* The list fn_801BBC3C fills with the cut animations (object type 1, state 153). The game
+   declaration of fn_801BBC3C takes the Table_80089904 view, and the entries' +4 words are
+   Info_80089904 pointers. */
+static AnimStateAnimList_t _PlayerCut_sAnimList;
 
 extern "C" void PlayerCutStartAnim(Object_80039F5C *p)
 {
@@ -114,15 +111,15 @@ extern "C" Info_80089904 *PlayerCutFindAnimInfo(int a, int b)
 {
     unsigned int i;
 
-    fn_801BBC3C(1, 153, &_PlayerCut_sAnimList.mTable);
-    for (i = 0; i < _PlayerCut_sAnimList.mTable.mCount; i++) {
-        Info_80089904 *pInfo = _PlayerCut_sAnimList.mTable.mEntries[i].mpInfo;
+    fn_801BBC3C(1, 153, (Table_80089904 *)&_PlayerCut_sAnimList);
+    for (i = 0; i < _PlayerCut_sAnimList.mCount; i++) {
+        Info_80089904 *pInfo = (Info_80089904 *)_PlayerCut_sAnimList.mEntries[i].mpUnknown4;
 
         if (pInfo->mType == a && pInfo->mValue == b) {
             return pInfo;
         }
     }
-    return _PlayerCut_sAnimList.mTable.mEntries[0].mpInfo;
+    return (Info_80089904 *)_PlayerCut_sAnimList.mEntries[0].mpUnknown4;
 }
 
 extern "C" void PlayerCutInitHeadings(Object_80039F5C *p)

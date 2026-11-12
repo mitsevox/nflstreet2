@@ -3,7 +3,7 @@
 
 /* One beam of a marker set: drawn by FieldMarkerDrawBeams with width mUnknown0, alpha
    mUnknown4 and offset mUnknown8; mUnknownC and mUnknown10 are the time and phase that
-   FieldMarkerUpdateBeams advances. */
+   _FieldMarkerUpdateBeams advances. */
 struct FieldMarkerBeam_t {
     float mUnknown0;
     float mUnknown4;
@@ -20,7 +20,7 @@ struct FieldMarkerBeamSet_t {
 };
 
 /* One of the small arrows drawn by FieldMarkerDrawArrows: scale mUnknownC, alpha mUnknown10
-   and the fade phase mUnknown14 of FieldMarkerUpdateArrows. */
+   and the fade phase mUnknown14 of _FieldMarkerUpdateArrows. */
 struct FieldMarkerArrow_t {
     float mPosition[3];
     float mUnknownC;

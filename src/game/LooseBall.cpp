@@ -25,6 +25,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Table_80089904.h"
+#include "engine/AnimStateAnimList.h"
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -46,14 +47,6 @@ struct LooseBallBlock_t {
     char mUnknown48[12];
 };
 
-/* The loose-ball animation table: an entry count and room for 380 entries,
-   filled by fn_801BBC3C. */
-struct LooseBallAnimTable_t {
-    unsigned short mCount;
-    unsigned char mUnknown2[2];
-    Entry_80089904 mEntries[380];
-};
-
 extern "C" {
 static int _LooseBall_aiTrimKeys[4] = {74, 160, 159, 157};
 static float _LooseBall_fEngageAngle = 90.0f;
@@ -67,7 +60,7 @@ static int _LooseBall_iPriorityRandom = 10;
 static float _LooseBall_fLeadScale = 4.0f;
 static float _LooseBall_fThreatRange = 2.0f;
 static float _LooseBall_fThreatAngle = 15.0f;
-static LooseBallAnimTable_t _LooseBall_AnimTable;
+static AnimStateAnimList_t _LooseBall_AnimTable;
 extern float gPlyrMoveFwdSpeed;
 int fn_8009A77C(Object_80039F5C *p);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -272,7 +265,7 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
             goto done;
         fn_801BBC3C(1, 48, (Table_80089904 *)&_LooseBall_AnimTable);
         for (signed char i = 0; i < _LooseBall_AnimTable.mCount; i++) {
-            Info_80089904 *pInfo = _LooseBall_AnimTable.mEntries[i].mpInfo;
+            Info_80089904 *pInfo = (Info_80089904 *)_LooseBall_AnimTable.mEntries[i].mpUnknown4;
             if (type != pInfo->mType)
                 continue;
             float time = pInfo->mUnknown32;

@@ -30,14 +30,27 @@ void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 int fn_801CEA08(void);
 int fn_801CEA14(void);
-
-extern unsigned char lbl_803EB760;
-extern unsigned char lbl_803EB768;
-extern GXTexObj lbl_80365220;
-extern GXTlutObj lbl_80365240;
-extern GXTexObj lbl_8036526C;
-extern GXTlutObj lbl_8036528C;
 }
+
+/* The texture of one marker kind: 0x4C bytes of .bss, of which the draw code uses only the
+   texture object at +0x20 and the palette object at +0x40. No GameCube code initialises them. */
+struct FieldMarkerTexture_t {
+    unsigned char mUnknown0[0x20];
+    GXTexObj mTexObj;
+    GXTlutObj mTlutObj;
+};
+
+/* 8 bytes of .sdata per marker kind: the draw code reads only byte +0, which selects the
+   palette load when it is 1. */
+struct FieldMarkerTextureInfo_t {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1[7];
+};
+
+static FieldMarkerTextureInfo_t _FieldMarker_BeamTextureInfo = {0};
+static FieldMarkerTextureInfo_t _FieldMarker_ArrowTextureInfo = {0};
+static FieldMarkerTexture_t _FieldMarker_BeamTexture;
+static FieldMarkerTexture_t _FieldMarker_ArrowTexture;
 
 static float _FieldMarker_aBeamCorners[4][3] = {
     {-0.5f, 4.0f, 0.0f},
@@ -163,9 +176,9 @@ void FieldMarkerDrawBeams(void)
     fn_801D131C(3);
     fn_8025251C(fn_801D0444(), 0);
     fn_801D0544();
-    if (lbl_803EB760 == 1)
-        GXLoadTlut(&lbl_80365240, 0);
-    GXLoadTexObj(&lbl_80365220, GX_TEXMAP0);
+    if (_FieldMarker_BeamTextureInfo.mUnknown0 == 1)
+        GXLoadTlut(&_FieldMarker_BeamTexture.mTlutObj, 0);
+    GXLoadTexObj(&_FieldMarker_BeamTexture.mTexObj, GX_TEXMAP0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 180);
     for (unsigned int i = 0; i < 15; i++) {
         FieldMarkerBeamSet_t *record = &gFieldMarkerBeamSets[i];
@@ -205,9 +218,9 @@ void FieldMarkerDrawArrows(void)
     fn_801D131C(3);
     fn_8025251C(fn_801D0444(), 0);
     fn_801D0544();
-    if (lbl_803EB768 == 1)
-        GXLoadTlut(&lbl_8036528C, 0);
-    GXLoadTexObj(&lbl_8036526C, GX_TEXMAP0);
+    if (_FieldMarker_ArrowTextureInfo.mUnknown0 == 1)
+        GXLoadTlut(&_FieldMarker_ArrowTexture.mTlutObj, 0);
+    GXLoadTexObj(&_FieldMarker_ArrowTexture.mTexObj, GX_TEXMAP0);
     GXBegin(GX_TRIANGLES, GX_VTXFMT0, gFieldMarkerArrowCount * 15);
     for (unsigned int i = 0; i < gFieldMarkerArrowCount; i++) {
         for (unsigned int j = 0; j < 15; j++) {

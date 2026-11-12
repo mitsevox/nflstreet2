@@ -8544,7 +8544,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802DD170",
-          "end": "0x802DD72C"
+          "end": "0x802DD7AC"
         },
         {
           "section": ".sdata",
@@ -13170,6 +13170,18 @@
           "placement": ".data4",
           "start": "0x802EDE10",
           "end": "0x802EDF8C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB760",
+          "end": "0x803EB770"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365200",
+          "end": "0x80365298"
         }
       ]
     },

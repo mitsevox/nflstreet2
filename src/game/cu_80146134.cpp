@@ -371,6 +371,20 @@ static Color_802DD68C lbl_802DD68C[10] = {
     { 0.25f, 0.25f, 1.0f, 0.45f },
 };
 
+/* Eight trail colours, read by the trail draw of src/game/cu_80196F48.cpp. */
+extern "C" {
+Color_802DD68C lbl_802DD72C[8] = {
+    { 1.0f, 0.0f, 0.0f, 0.4f },
+    { 1.0f, 0.0f, 0.0f, 0.4f },
+    { 1.0f, 0.59215f, 0.03137f, 0.4f },
+    { 1.0f, 0.83137f, 0.04705f, 0.4f },
+    { 1.0f, 0.91764f, 0.0549f, 0.4f },
+    { 1.0f, 0.98882f, 0.05882f, 0.2f },
+    { 1.0f, 0.98882f, 0.05882f, 0.2f },
+    { 1.0f, 0.98882f, 0.05882f, 0.1f },
+};
+}
+
 static unsigned char lbl_803EB27C = 1;
 static float lbl_803EB280 = 0.45f;
 
