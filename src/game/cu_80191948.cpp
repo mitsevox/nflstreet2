@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdio.h>
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/Callees_801D57E0.h"
 #include "game/fn_80191948.h"
 
@@ -89,7 +89,7 @@ void fn_80191C70(int value, int index, char *pA, char *pB, int flag, char *pC, c
     memcpy(pC, lbl_802ABDB8, 1);
     memcpy(pD, lbl_802ABDB8, 1);
     memcpy(pE, lbl_802ABDB8, 1);
-    if (fn_8007F828(12) != 1) {
+    if (GameOptionsGet(12) != 1) {
         memcpy(textF, lbl_802ABDB8, 1);
     }
     int key = fn_801D673C(index);

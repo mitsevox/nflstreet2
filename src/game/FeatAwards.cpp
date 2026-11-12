@@ -7,7 +7,7 @@
 #include "game/UnlockItem.h"
 #include "game/FeatAwards.h"
 #include "game/Cheat.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/fn_801D2B7C.h"
 
@@ -140,7 +140,7 @@ void FeatAwardSettingFeats(DbCursor *pCursor, DbCursor *pOther, int db)
     FeatAward_t *pEntry;
     unsigned int value;
 
-    value = fn_8007F828(1);
+    value = GameOptionsGet(1);
     if (UnlockListSeek(pCursor, 0, 37, 0)) {
         do {
             if (UnlockStatusGet(pOther, UnlockListGetIndex(pCursor)) == 0) {
@@ -208,7 +208,7 @@ void FeatAwardAfterGame(void)
         FeatAwardModeFeat(&cursor, &other, db);
         if (GameModeTypeGet() == 0) {
             fn_80083E1C(&query, 0);
-            if (fn_8007F828(14) == 0) {
+            if (GameOptionsGet(14) == 0) {
                 FeatAwardSettingFeats(&cursor, &other, db);
             }
             fn_80084034(&query, i, 0);

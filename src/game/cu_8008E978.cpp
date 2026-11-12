@@ -72,7 +72,7 @@
 #include "game/Class_80297B50.h"
 #include "game/DefPred.h"
 #include "game/Class_80297AB8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
@@ -4872,7 +4872,7 @@ extern "C" void fn_8009ABC0(void)
 
 extern "C" void fn_8009ABC4(void)
 {
-    if (fn_8007F828(8) != 0 && fn_800BA6F8() == 0) {
+    if (GameOptionsGet(8) != 0 && fn_800BA6F8() == 0) {
         lbl_803EA948->mUnknown8 = 1;
     } else {
         lbl_803EA948->mUnknown8 = 0;
@@ -6638,10 +6638,10 @@ extern "C" int fn_800A8740(void)
         }
         return 0;
     }
-    if (fn_8007F828(19) == 0) {
+    if (GameOptionsGet(19) == 0) {
         return 1;
     }
-    return fn_8007F828(14) == 1;
+    return GameOptionsGet(14) == 1;
 }
 
 extern "C" {
@@ -8235,7 +8235,7 @@ extern "C" void fn_800B4300(int mode)
         lbl_803EAB34->mUnknown30 = 240;
         break;
     }
-    lbl_803EAB34->mUnknown30 += (4 - fn_8007F828(0)) * 60;
+    lbl_803EAB34->mUnknown30 += (4 - GameOptionsGet(0)) * 60;
     lbl_803EAB34->mUnknown30 += fn_802372EC(0, 4) * 60;
 }
 
@@ -10524,7 +10524,7 @@ extern "C" int fn_800ABCDC(void)
 
 extern "C" void fn_800ABCE8(Block_800ABD1C *p)
 {
-    p->mUnknown0 = fn_8007F828(0);
+    p->mUnknown0 = GameOptionsGet(0);
 }
 
 extern "C" void fn_800ABD1C(void)
@@ -11351,7 +11351,7 @@ extern "C" void fn_800AE380(void)
     unsigned int i = 0;
     int found = 0;
 
-    if (fn_8007F828(15) != 0) {
+    if (GameOptionsGet(15) != 0) {
         /* Whether the fn_80178308 / fn_80178320 team has a human controller. */
         int humanA = 1;
         int humanB;
@@ -11423,7 +11423,7 @@ extern "C" void fn_800AE65C(void)
     unsigned char saved = RumbleIsEnabled();
 
     RumbleEnable(1);
-    if (fn_8007F828(9) != 0) {
+    if (GameOptionsGet(9) != 0) {
         unsigned int i;
 
         for (i = 0; i <= 9; i++) {
@@ -11500,7 +11500,7 @@ extern "C" void fn_800AE8B4(void)
 
 extern "C" void fn_800AE904(int index)
 {
-    if ((fn_8007F828(15) != 0 || index == 14) && lbl_8030F9DC[index] == 0) {
+    if ((GameOptionsGet(15) != 0 || index == 14) && lbl_8030F9DC[index] == 0) {
         lbl_803EAAEC = index;
         lbl_803EAAE8 = 1;
         fn_800AE6F0();
@@ -17391,7 +17391,7 @@ void Class_80297BF8::vfn_10(float dt)
 
     if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
         GameModeTypeIsSpecial() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
-        (state = fn_8007F828(14)) == 1) {
+        (state = GameOptionsGet(14)) == 1) {
         vfn_07();
         fn_800AE904(14);
         lbl_803EABA3 = state;

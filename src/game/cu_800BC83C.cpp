@@ -5,7 +5,7 @@
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
@@ -196,7 +196,7 @@ void Class_80297BF8::vfn_09(float dt)
 void Class_80297BF8::vfn_05()
 {
     if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
-        fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
+        fn_80156704() != 0 || fn_801485D4() != 0 || GameOptionsGet(14) != 1) {
         vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;

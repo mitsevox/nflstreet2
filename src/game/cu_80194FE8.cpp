@@ -1,7 +1,7 @@
 #include <dolphin/gx/GXFrameBuffer.h>
 #include "game/fn_80195EFC.h"
 #include "engine/viewport.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -87,7 +87,7 @@ void fn_80195068(State_80194FE8 *state, unsigned int mode) {
     default:
         break;
     }
-    if (fn_8007F828(6) == 1)
+    if (GameOptionsGet(6) == 1)
         adjust = (float)((448 - fn_801CEC74()) / 2) * 0.002232143f;
     if (lbl_803EB738) {
         fn_80195B28(1, 0, state->mUnknown18);

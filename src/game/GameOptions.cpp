@@ -1,13 +1,15 @@
-#include "game/Query_8007F19C.h"
+/* Game options record: opens the options table, keeps one record of the
+   23 option values (volumes and play settings) in memory, resets them to
+   their defaults and writes changes back to the table. */
+#include "game/DbQuery.h"
 #include "game/FELoop.h"
 #include "game/DbCursor.h"
-#include "game/cu_8007F12C.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 
 /* One row of the option table: the column tag and the value to store when the
    options are reset. */
-struct ColumnDefault_802D6798 {
+struct GameOptionsDefault_t {
     int mColumnTag;
     int mValue;
 };
@@ -15,8 +17,8 @@ struct ColumnDefault_802D6798 {
 extern "C" {
 extern void *gUISMainInfo;
 
-int fn_801FA428(int file, Table_8007F19C *pTables, Expression_8007F19C *pExpression,
-                DbColumnValue *pList, Result_8007F19C *pResult, int a);
+int fn_801FA428(int file, DbTableRef *pTables, DbExpression *pExpression,
+                DbColumnValue *pList, DbQueryResult *pResult, int a);
 void SndgSetVolumeOption(int channel, unsigned char level);
 void SndgApplyVolumeOptions(void);
 int fn_8013D0D0(void);
@@ -24,7 +26,7 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
 }
 
-static ColumnDefault_802D6798 sColumnDefaults[23] = {
+static GameOptionsDefault_t _GameOptions_aDefaults[23] = {
     { 0x454C534F, 0 },
     { 0x414C504F, 36 },
     { 0x544C504F, 200000 },
@@ -50,31 +52,31 @@ static ColumnDefault_802D6798 sColumnDefaults[23] = {
     { 0x5447504F, 0 },
 };
 
-static DbCursor sCursor;
-static DbColumnValue sRecord[24];
+static DbCursor _GameOptions_sCursor;
+static DbColumnValue _GameOptions_aRecord[24];
 
-/* While set, fn_8007F6F8 updates only the record and skips the per-column
-   store; fn_8007F394 writes the whole record back when it clears. */
-static unsigned char sDeferWrites = 0;
+/* While set, GameOptionsSet updates only the record and skips the per-column
+   store; GameOptionsSetDeferWrites writes the whole record back when it clears. */
+static unsigned char _GameOptions_bDeferWrites = 0;
 
 /* Columns 1, 2, 14, 8 and 19 keep a separate value that GameModeTypeGet() == 6
    selects instead of the record value. */
-static int sShadow1 = 36;
-static int sShadow2 = 100000;
-static int sShadow14 = 0;
-static int sShadow8 = 1;
-static int sShadow19 = 1;
+static int _GameOptions_iShadow1 = 36;
+static int _GameOptions_iShadow2 = 100000;
+static int _GameOptions_iShadow14 = 0;
+static int _GameOptions_iShadow8 = 1;
+static int _GameOptions_iShadow19 = 1;
 
 extern "C" {
 
-static void fn_8007F3D8(void);
+static void GameOptionsResetAll(void);
 
 static inline int WriteRecord(DbCursor *pCursor,
                               DbColumnValue *pList)
 {
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
 
     key[0].Set(-1, pCursor->mUnknown12, 0);
@@ -90,92 +92,98 @@ static inline int WriteRecord(DbCursor *pCursor,
     return fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
-static void fn_8007F12C(void)
+void GameOptionsOpenCursor(void);
+int GameOptionsCloseCursor(void);
+int GameOptionsWriteRecord(void);
+
+#if defined(DECOMP_COMPARE)
+void GameOptionsOpenCursor(void)
 {
-    DbCursorOpen(&sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
+    DbCursorOpen(&_GameOptions_sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
 }
 
-static int fn_8007F174(void)
+int GameOptionsCloseCursor(void)
 {
-    return DbCursorClose(&sCursor);
+    return DbCursorClose(&_GameOptions_sCursor);
 }
 
 /* Writes the whole record back to the row the cursor's key column selects. */
-static int fn_8007F19C(void)
+int GameOptionsWriteRecord(void)
 {
-    return WriteRecord(&sCursor, sRecord);
+    return WriteRecord(&_GameOptions_sCursor, _GameOptions_aRecord);
 }
+#endif
 
 /* Fills the record with the defaults and replaces them with the stored row. */
-static int fn_8007F298(void)
+static int GameOptionsReadRecord(void)
 {
     DbColumnValue *pEnd;
     int i;
 
     for (i = 0; i < 23; i++) {
-        sRecord[i].mTableTag = 0x5354504F;
-        sRecord[i].mColumnTag = sColumnDefaults[i].mColumnTag;
-        sRecord[i].mValue = sColumnDefaults[i].mValue;
+        _GameOptions_aRecord[i].mTableTag = 0x5354504F;
+        _GameOptions_aRecord[i].mColumnTag = _GameOptions_aDefaults[i].mColumnTag;
+        _GameOptions_aRecord[i].mValue = _GameOptions_aDefaults[i].mValue;
     }
-    pEnd = &sRecord[23];
+    pEnd = &_GameOptions_aRecord[23];
     pEnd->mValue = 0;
     pEnd->mColumnTag = -1;
     pEnd->mTableTag = -1;
-    return sCursor.Read(sRecord);
+    return _GameOptions_sCursor.Read(_GameOptions_aRecord);
 }
 
-void fn_8007F328(int reset)
+void GameOptionsInit(int reset)
 {
-    sDeferWrites = 0;
-    fn_8007F12C();
+    _GameOptions_bDeferWrites = 0;
+    GameOptionsOpenCursor();
     if (reset != 0) {
-        fn_8007F3D8();
+        GameOptionsResetAll();
     } else {
-        fn_8007F298();
+        GameOptionsReadRecord();
     }
     SndgApplyVolumeOptions();
 }
 
-int fn_8007F374(void)
+int GameOptionsShutdown(void)
 {
-    return fn_8007F174();
+    return GameOptionsCloseCursor();
 }
 
-void fn_8007F394(int defer)
+void GameOptionsSetDeferWrites(int defer)
 {
-    if (sDeferWrites != 0 && defer == 0) {
-        fn_8007F19C();
+    if (_GameOptions_bDeferWrites != 0 && defer == 0) {
+        GameOptionsWriteRecord();
     }
-    sDeferWrites = defer;
+    _GameOptions_bDeferWrites = defer;
 }
 
 /* Resets every option to its default and stores the result. */
-static void fn_8007F3D8(void)
+static void GameOptionsResetAll(void)
 {
     DbColumnValue *pEnd;
     int mode;
     int i;
 
     for (i = 0; i < 23; i++) {
-        sRecord[i].mTableTag = 0x5354504F;
-        sRecord[i].mColumnTag = sColumnDefaults[i].mColumnTag;
-        sRecord[i].mValue = sColumnDefaults[i].mValue;
+        _GameOptions_aRecord[i].mTableTag = 0x5354504F;
+        _GameOptions_aRecord[i].mColumnTag = _GameOptions_aDefaults[i].mColumnTag;
+        _GameOptions_aRecord[i].mValue = _GameOptions_aDefaults[i].mValue;
     }
-    pEnd = &sRecord[23];
+    pEnd = &_GameOptions_aRecord[23];
     pEnd->mValue = 0;
     pEnd->mColumnTag = -1;
     pEnd->mTableTag = -1;
 
-    WriteRecord(&sCursor, sRecord);
+    WriteRecord(&_GameOptions_sCursor, _GameOptions_aRecord);
 
     mode = fn_8013D0D0();
     if (mode == 1 || mode == 2) {
-        fn_8007F6F8(6, mode);
+        GameOptionsSet(6, mode);
     }
 }
 
 /* Resets the marked options to their defaults and stores the result. */
-int fn_8007F548(void)
+int GameOptionsResetMarked(void)
 {
     unsigned char reset[23] = {
         1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -184,45 +192,45 @@ int fn_8007F548(void)
     int i;
 
     for (i = 0; i < 23; i++) {
-        sRecord[i].mTableTag = 0x5354504F;
-        sRecord[i].mColumnTag = sColumnDefaults[i].mColumnTag;
+        _GameOptions_aRecord[i].mTableTag = 0x5354504F;
+        _GameOptions_aRecord[i].mColumnTag = _GameOptions_aDefaults[i].mColumnTag;
         if (reset[i] != 0) {
-            sRecord[i].mValue = sColumnDefaults[i].mValue;
+            _GameOptions_aRecord[i].mValue = _GameOptions_aDefaults[i].mValue;
         }
     }
-    pEnd = &sRecord[23];
+    pEnd = &_GameOptions_aRecord[23];
     pEnd->mValue = 0;
     pEnd->mColumnTag = -1;
     pEnd->mTableTag = -1;
 
-    return WriteRecord(&sCursor, sRecord);
+    return WriteRecord(&_GameOptions_sCursor, _GameOptions_aRecord);
 }
 
-void fn_8007F6F8(int id, int value)
+void GameOptionsSet(int id, int value)
 {
     if (GameModeTypeGet() == 6) {
         switch (id) {
         case 1:
-            sShadow1 = value;
+            _GameOptions_iShadow1 = value;
             return;
         case 2:
-            sShadow2 = value;
+            _GameOptions_iShadow2 = value;
             return;
         case 14:
-            sShadow14 = value;
+            _GameOptions_iShadow14 = value;
             return;
         case 8:
-            sShadow8 = value;
+            _GameOptions_iShadow8 = value;
             return;
         case 19:
-            sShadow19 = value;
+            _GameOptions_iShadow19 = value;
             return;
         }
     }
-    if (sDeferWrites == 0) {
-        fn_8007AA90(&sCursor, sColumnDefaults[id].mColumnTag, value);
+    if (_GameOptions_bDeferWrites == 0) {
+        fn_8007AA90(&_GameOptions_sCursor, _GameOptions_aDefaults[id].mColumnTag, value);
     }
-    sRecord[id].mValue = value;
+    _GameOptions_aRecord[id].mValue = value;
     if (id >= 3 && id <= 5) {
         switch (id) {
         case 3:
@@ -238,7 +246,7 @@ void fn_8007F6F8(int id, int value)
     }
 }
 
-int fn_8007F828(int id)
+int GameOptionsGet(int id)
 {
     int allowed = 1;
     int result = 0;
@@ -260,15 +268,15 @@ int fn_8007F828(int id)
         if (GameModeTypeGet() == 6) {
             switch (id) {
             case 1:
-                return sShadow1;
+                return _GameOptions_iShadow1;
             case 2:
-                return sShadow2;
+                return _GameOptions_iShadow2;
             case 14:
-                return sShadow14;
+                return _GameOptions_iShadow14;
             case 8:
-                return sShadow8;
+                return _GameOptions_iShadow8;
             case 19:
-                return sShadow19;
+                return _GameOptions_iShadow19;
             }
         } else if (override != 0 && allowed != 0) {
             switch (id) {
@@ -282,17 +290,17 @@ int fn_8007F828(int id)
                 return 1;
             }
         }
-        result = sRecord[id].mValue;
+        result = _GameOptions_aRecord[id].mValue;
     }
     return result;
 }
 
-void fn_8007F97C(void)
+void GameOptionsCopyShadow(void)
 {
-    sShadow1 = sRecord[1].mValue;
-    sShadow2 = sRecord[2].mValue;
-    sShadow14 = sRecord[14].mValue;
-    sShadow8 = sRecord[8].mValue;
-    sShadow19 = sRecord[19].mValue;
+    _GameOptions_iShadow1 = _GameOptions_aRecord[1].mValue;
+    _GameOptions_iShadow2 = _GameOptions_aRecord[2].mValue;
+    _GameOptions_iShadow14 = _GameOptions_aRecord[14].mValue;
+    _GameOptions_iShadow8 = _GameOptions_aRecord[8].mValue;
+    _GameOptions_iShadow19 = _GameOptions_aRecord[19].mValue;
 }
 }

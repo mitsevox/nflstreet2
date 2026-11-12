@@ -2,7 +2,7 @@
    files, and answers the screen's messages (an option, a forced slot, whether
    the card is busy). */
 
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
 #include "game/MemCardUI.h"
@@ -108,7 +108,7 @@ extern "C" int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult)
 {
     switch (id) {
     case 0x80000003:
-        fn_8007F6F8(12, *p);
+        GameOptionsSet(12, *p);
         break;
     case 0x80000004:
         MemCardScreenInstallList();

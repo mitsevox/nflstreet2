@@ -181,6 +181,18 @@
     }
   },
   "externals": {
+    "GameOptionsCloseCursor": {
+      "address": "0x8007F174",
+      "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsOpenCursor": {
+      "address": "0x8007F12C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F12C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsWriteRecord": {
+      "address": "0x8007F19C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
     "GameStatsGather": {
       "address": "0x80055584",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80055584; the documented holdout of src/game/GameStats.cpp keeps its original bytes until its draft in comparisons.json is linked."
@@ -2199,6 +2211,55 @@
     }
   },
   "units": [
+    {
+      "source": "src/game/GameOptions.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; 0x8007F298-0x8007FA48 and all of the file's data are linked, the documented holdout 0x8007F12C-0x8007F298 (the cursor open/close wrappers and the record writer) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F298",
+          "end": "0x8007FA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292930",
+          "end": "0x80292948"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6798",
+          "end": "0x802D6850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7B8",
+          "end": "0x803EA7D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA80",
+          "end": "0x8030BC2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AAC",
+          "end": "0x80289AB0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BEC",
+          "end": "0x80289BF0"
+        }
+      ]
+    },
     {
       "source": "src/game/PlyrNameTag.cpp",
       "profile": "game_cpp",

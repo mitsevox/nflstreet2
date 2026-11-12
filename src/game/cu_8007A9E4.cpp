@@ -1,5 +1,5 @@
 #include "game/DbCursor.h"
-#include "game/Query_8007F19C.h"
+#include "game/DbQuery.h"
 
 extern "C" {
 
@@ -28,9 +28,9 @@ void fn_8007AA90(DbCursor *pCursor, int column, int value)
 {
     DbColumnValue columns[2];
     DbColumnValue *pList = columns;
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
 
     columns[0].mColumnTag = column;
@@ -54,9 +54,9 @@ void fn_8007ABA4(void *pObject, int column, int value)
     DbCursor *pCursor = (DbCursor *)pObject;
     DbColumnValue columns[2];
     DbColumnValue *pList = columns;
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
 
     columns[0].mColumnTag = column;
@@ -79,9 +79,9 @@ void fn_8007ACB8(DbCursor *pCursor, int column, float value)
 {
     DbColumnValue columns[2];
     DbColumnValue *pList = columns;
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
 
     columns[0].mColumnTag = column;
@@ -105,9 +105,9 @@ void fn_8007ADD4(void *pObject, int column, char *pText, int length)
     DbCursor *pCursor = (DbCursor *)pObject;
     DbColumnValue columns[2];
     DbColumnValue *pList = columns;
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
 
     columns[0].mColumnTag = column;

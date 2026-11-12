@@ -6,8 +6,7 @@
 #include "game/Class_80297CE8.h"
 #include "game/Class_802A56E8.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include <string.h>
 
 void *operator new(unsigned int size, int unknown);
@@ -113,9 +112,9 @@ void fn_8014EE1C(Class_802A2B68 *p)
     fn_800A039C(&p->mpUnknown1C->mUnknown10);
     fn_800B9598(&p->mpUnknown1C->mUnknown18);
     fn_800AACB8(&p->mpUnknown1C->mUnknown28);
-    p->mpUnknown1C->mUnknown2C = fn_8007F828(14);
+    p->mpUnknown1C->mUnknown2C = GameOptionsGet(14);
     if (p->mpUnknown1C->mUnknown2C != 1) {
-        fn_8007F6F8(14, 1);
+        GameOptionsSet(14, 1);
     }
 }
 }

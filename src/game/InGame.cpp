@@ -1,12 +1,11 @@
 /* The in-game loop module: the per-frame game update, pausing, the idle state and the attract-mode demo. */
 
-#include "game/cu_8007F12C.h"
+#include "game/GameOptions.h"
 #include "engine/viewport.h"
 #include "game/PadInput.h"
 #include "game/FlowManagerC.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
-#include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameModeType.h"
 #include "game/fn_801FCE10.h"
@@ -221,7 +220,7 @@ static void _InGameEndDemo()
     _InGame_uIdleFrames = 0;
     if (_InGame_bIdle) {
         _InGame_bIdle = 0;
-        fn_8007F6F8(9, 1);
+        GameOptionsSet(9, 1);
         RumbleShutdown();
         RumbleInit();
         RumbleEnable(1);
@@ -260,7 +259,7 @@ int InGame::Init()
     _InGame_iFrameCount = 0;
     _InGame_uIdleFrames = 0;
     _InGame_bIdle = 0;
-    fn_8007F394(1);
+    GameOptionsSetDeferWrites(1);
     fn_8008FE5C(0);
     fn_80099568(1);
     fn_8013CF98();
@@ -331,9 +330,9 @@ unsigned char InGame::Update()
     _InGameUpdateHook3();
     fn_801D6F58();
     if (_InGame_uIdleFrames > 10800) {
-        if (fn_8007F828(9)) {
+        if (GameOptionsGet(9)) {
             _InGame_bIdle = 1;
-            fn_8007F6F8(9, 0);
+            GameOptionsSet(9, 0);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(0);
@@ -341,7 +340,7 @@ unsigned char InGame::Update()
     } else {
         if (_InGame_bIdle) {
             _InGame_bIdle = 0;
-            fn_8007F6F8(9, 1);
+            GameOptionsSet(9, 1);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(1);
@@ -402,7 +401,7 @@ int InGame::Shutdown()
         _InGame_uIdleFrames = 0;
         if (_InGame_bIdle) {
             _InGame_bIdle = 0;
-            fn_8007F6F8(9, 1);
+            GameOptionsSet(9, 1);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(1);
@@ -414,7 +413,7 @@ int InGame::Shutdown()
     EngineParamWords desc = { 6, 14 };
     fn_802345C4(&desc, 2);
     fn_80085A7C();
-    fn_8007F394(0);
+    GameOptionsSetDeferWrites(0);
     PadInputSetAxisCallback(0);
     fn_80196130();
     PauseUpdate();

@@ -6,7 +6,7 @@
 #include "engine/dbtats.h"
 #include "engine/dbteams.h"
 #include "engine/cu_80229270.h"
-#include "game/cu_8007F12C.h"
+#include "game/GameOptions.h"
 #include "game/DbgFont.h"
 #include "game/ResOpenDevice.h"
 #include "game/SysModules.h"
@@ -237,14 +237,14 @@ int DbGame::Init()
     fn_8022F4C4();
     DbTeamsInit(lbl_802EBE40);
     fn_801F9430(0x54415453, _DbGame_aOptionTables, _DbGame_aSaveTags);
-    fn_8007F328(1);
+    GameOptionsInit(1);
     ResClose(data);
     return 1;
 }
 
 int DbGame::Shutdown()
 {
-    fn_8007F374();
+    GameOptionsShutdown();
     fn_801F9574();
     DbTeamsShutdown();
     fn_8022F744();

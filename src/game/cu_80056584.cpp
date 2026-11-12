@@ -269,7 +269,7 @@ int fn_8005D2D0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005BFDC(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_800C8744(int team);
 void fn_80187CAC(int id, char *pText, int size);
-int fn_8007F828(int a);
+int GameOptionsGet(int a);
 int fn_8017881C(int team);
 int fn_80188044(unsigned int index);
 int GameModeTypeIsSpecial(void);
@@ -1584,7 +1584,7 @@ int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int
     fn_80187CAC(id0, name0, 16);
     name1[16] = 0;
     name0[16] = 0;
-    if (fn_8007F828(14) == 1) {
+    if (GameOptionsGet(14) == 1) {
         ok = 0;
     }
     int value0 = fn_8017881C(0);
@@ -1747,7 +1747,7 @@ void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, i
     fn_800B823C(0); fn_800B823C(1);
     fn_80059A9C(pList);
     pValues[0] = fn_80187C8C(); pValues[1] = fn_80187C6C();
-    if (fn_8007F828(14) != 1) {
+    if (GameOptionsGet(14) != 1) {
         Params_80005284 *pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1];
         fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(0));
         pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2];
@@ -2037,7 +2037,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
     }
     *pEnabled=enabled;
     unsigned int score1,score0;
-    if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
+    if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     *pAllowed=!((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255));
     if(GameModeTypeGet()==8) {
@@ -2058,7 +2058,7 @@ void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_800052
 void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
 {
     unsigned int score1,score0;
-    if(fn_8007F828(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
+    if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
     if(GameModeTypeGet()==8) {
         if(score1>score0) {
@@ -2093,9 +2093,9 @@ void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue
 {
     EnvSelect(fn_800A3444());EnvGetUIName(pFirst,firstSize);EnvGetEVLO(pLast,lastSize);EnvRelease();
     fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
-    int mode=fn_8007F828(14);
-    if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=fn_8007F828(1);}
-    else if(mode==1) {fn_801C2E18(pLabel,"Style Points");*pResult=fn_8007F828(2);}
+    int mode=GameOptionsGet(14);
+    if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);}
+    else if(mode==1) {fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);}
 }
 int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
 {

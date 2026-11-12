@@ -3471,9 +3471,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007F12C.cpp",
+      "source": "src/game/GameOptions.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. Documented holdout at the start of .text: 0x8007F12C-0x8007F298 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (0x8007F19C is near-miss; 0x8007F12C and 0x8007F174 are exact and precede it); the rest of the file is linked through units.json",
       "sections": [
         {
           "section": ".text",
@@ -3520,79 +3520,19 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8007F12C",
+          "symbol": "GameOptionsOpenCursor",
           "start": "0x8007F12C",
           "end": "0x8007F174"
         },
         {
-          "symbol": "fn_8007F174",
+          "symbol": "GameOptionsCloseCursor",
           "start": "0x8007F174",
           "end": "0x8007F19C"
         },
         {
-          "symbol": "fn_8007F19C",
+          "symbol": "GameOptionsWriteRecord",
           "start": "0x8007F19C",
           "end": "0x8007F298"
-        },
-        {
-          "symbol": "fn_8007F298",
-          "start": "0x8007F298",
-          "end": "0x8007F328"
-        },
-        {
-          "symbol": "fn_8007F328",
-          "start": "0x8007F328",
-          "end": "0x8007F374"
-        },
-        {
-          "symbol": "fn_8007F374",
-          "start": "0x8007F374",
-          "end": "0x8007F394"
-        },
-        {
-          "symbol": "fn_8007F394",
-          "start": "0x8007F394",
-          "end": "0x8007F3D8"
-        },
-        {
-          "symbol": "fn_8007F3D8",
-          "start": "0x8007F3D8",
-          "end": "0x8007F548"
-        },
-        {
-          "symbol": "fn_8007F548",
-          "start": "0x8007F548",
-          "end": "0x8007F6F8"
-        },
-        {
-          "symbol": "fn_8007F6F8",
-          "start": "0x8007F6F8",
-          "end": "0x8007F828"
-        },
-        {
-          "symbol": "fn_8007F828",
-          "start": "0x8007F828",
-          "end": "0x8007F97C"
-        },
-        {
-          "symbol": "fn_8007F97C",
-          "start": "0x8007F97C",
-          "end": "0x8007F9B0"
-        },
-        {
-          "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x8007F9B0",
-          "end": "0x8007F9F0"
-        },
-        {
-          "symbol": "_GLOBAL_.I.fn_8007F328",
-          "start": "0x8007F9F0",
-          "end": "0x8007FA1C"
-        },
-        {
-          "symbol": "_GLOBAL_.D.fn_8007F328",
-          "start": "0x8007FA1C",
-          "end": "0x8007FA48"
         }
       ]
     },
@@ -34258,7 +34198,7 @@
     {
       "source": "src/game/cu_8014B7D4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #929; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2DB8 (0x8014B7D4-0x8014B890, word 0x802A2DCC), which releases the block that the pointer at +28 of the object points to. Calls 0x8007F6F8 (include/game/fn_8007F6F8.h), 0x800BC51C, 0x800B3644, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20 and __builtin_delete; the table 0x80297CE8 is referenced through the existing _vt.14Class_80297CE8 external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #929; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2DB8 (0x8014B7D4-0x8014B890, word 0x802A2DCC), which releases the block that the pointer at +28 of the object points to. Calls 0x8007F6F8 (include/game/GameOptions.h), 0x800BC51C, 0x800B3644, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20 and __builtin_delete; the table 0x80297CE8 is referenced through the existing _vt.14Class_80297CE8 external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34384,7 +34324,7 @@
     {
       "source": "src/game/cu_80154468.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #956; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A27F0 (0x80154468-0x80154520, word 0x802A2804), which releases the block that the pointer at +28 of the object points to and its score block. Calls 0x800BC51C, 0x800BFAB4, 0x800B3644, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8007F6F8 (include/game/fn_8007F6F8.h), 0x80178F20, 0x80149014, 0x801D2BD0 (include/game/fn_801D2B7C.h), __builtin_delete and 0x800A8738; the table 0x80297CE8 is referenced through the existing _vt.14Class_80297CE8 external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #956; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A27F0 (0x80154468-0x80154520, word 0x802A2804), which releases the block that the pointer at +28 of the object points to and its score block. Calls 0x800BC51C, 0x800BFAB4, 0x800B3644, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8007F6F8 (include/game/GameOptions.h), 0x80178F20, 0x80149014, 0x801D2BD0 (include/game/fn_801D2B7C.h), __builtin_delete and 0x800A8738; the table 0x80297CE8 is referenced through the existing _vt.14Class_80297CE8 external. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34429,7 +34369,7 @@
     {
       "source": "src/game/cu_8014EFC0.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #963; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2B68 (0x8014EFC0-0x8014F104, word 0x802A2B7C), which releases the record array and the 124-byte block that the pointer at +28 of the object points to, both through their virtual destructors. Calls 0x800A8738, 0x8007F6F8 (include/game/fn_8007F6F8.h), 0x8005FC7C, 0x8014FF34, 0x8006088C, 0x80149014, 0x8014DA90, 0x800D7604, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and the new __builtin_vec_delete external (0x801D3C40). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #963; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2B68 (0x8014EFC0-0x8014F104, word 0x802A2B7C), which releases the record array and the 124-byte block that the pointer at +28 of the object points to, both through their virtual destructors. Calls 0x800A8738, 0x8007F6F8 (include/game/GameOptions.h), 0x8005FC7C, 0x8014FF34, 0x8006088C, 0x80149014, 0x8014DA90, 0x800D7604, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and the new __builtin_vec_delete external (0x801D3C40). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

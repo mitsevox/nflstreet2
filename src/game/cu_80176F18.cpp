@@ -15,7 +15,7 @@
 #include "game/GameInfo.h"
 #include "game/Ball.h"
 #include "game/cu_8003108C.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
@@ -438,7 +438,7 @@ extern "C" Point_8017886C fn_801772F4(Point_8017886C point)
 
 int Class_802A56E8::vfn_01()
 {
-    return fn_8007F828(1);
+    return GameOptionsGet(1);
 }
 
 int Class_802A56E8::vfn_02()
@@ -612,7 +612,7 @@ void Class_802A56E8::vfn_19()
 
 int Class_802A5630::vfn_01()
 {
-    return fn_8007F828(2);
+    return GameOptionsGet(2);
 }
 
 int Class_802A5630::vfn_02()
@@ -1347,7 +1347,7 @@ extern "C" int fn_80178EE0(int a)
 extern "C" void fn_80178F20(Class_802A56E8 *pRule)
 {
     if (pRule == 0) {
-        switch (fn_8007F828(14)) {
+        switch (GameOptionsGet(14)) {
         case 0:
             lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
             break;

@@ -1,12 +1,11 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
 #include "game/AutoDepth.h"
 #include "game/fn_8021D7B8.h"
 #include "game/PauseMenu.h"
-#include "game/fn_8007F6F8.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
@@ -111,10 +110,10 @@ void fn_8014C9B0(Class_802A2C90 *p)
     fn_800B9598(0);
     fn_800AACB8(0);
     if (p->mpUnknown1C->mUnknown20 != 0) {
-        fn_8007F6F8(14, p->mpUnknown1C->mUnknown20);
+        GameOptionsSet(14, p->mpUnknown1C->mUnknown20);
     }
     if (p->mpUnknown1C->mUnknown24 != -1) {
-        fn_8007F6F8(1, p->mpUnknown1C->mUnknown24);
+        GameOptionsSet(1, p->mpUnknown1C->mUnknown24);
     }
     p->mUnknown20 = -1;
     fn_80178F20(0);
@@ -244,7 +243,7 @@ void fn_8014C808(void *p)
     char text[300];
 
     if (fn_800C1E40() == 0) {
-        int value = fn_8007F828(1);
+        int value = GameOptionsGet(1);
         fn_801C2D88(text, sizeof(text), lbl_803EB2B8, value);
         MsgBoxShow(lbl_802A0CEC, text, lbl_802A0B74);
     }

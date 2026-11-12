@@ -9,7 +9,7 @@
 #include "game/FEPlyrModel.h"
 #include "game/Object_8008044C.h"
 #include "game/FEPlyrLoad.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_801BE60C.h"
 #include <string.h>
@@ -494,7 +494,7 @@ void FEPlyrSetHeight(int index, unsigned int value)
 void FEPlyrUpdate(void)
 {
     if (_FEPlyr_bActive) {
-        if (fn_8007F828(6) == 2) {
+        if (GameOptionsGet(6) == 2) {
             VptPerspective(_FEPlyr_Projection, 45.0f, 16.0f / 9.0f, 1.0f, 200.0f);
         } else {
             VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);

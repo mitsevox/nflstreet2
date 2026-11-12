@@ -5,7 +5,7 @@
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
 #include "game/HudEvents.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
@@ -247,7 +247,7 @@ void HudSetScore(int a, int b)
 {
     int args[2];
 
-    switch (fn_8007F828(14)) {
+    switch (GameOptionsGet(14)) {
     case 1:
     case 2:
         break;

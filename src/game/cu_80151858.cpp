@@ -5,8 +5,7 @@
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
 #include "game/Class_802A56E8.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include <string.h>
@@ -116,9 +115,9 @@ void fn_80151858(Class_802A2918 *p)
     pTable->mUnknown125 = 2;
     pTable->mUnknown124 = 0;
     pTable->mUnknown126 = 0;
-    pTable->mUnknown120 = fn_8007F828(14);
+    pTable->mUnknown120 = GameOptionsGet(14);
     if (pTable->mUnknown120 != 0) {
-        fn_8007F6F8(14, 0);
+        GameOptionsSet(14, 0);
     }
     if (allocate) {
         fn_802381E0(pHandle);
@@ -129,9 +128,9 @@ void fn_80151858(Class_802A2918 *p)
     fn_800A039C(&p->mpUnknown1C->mUnknown12);
     fn_800B9598(&p->mpUnknown1C->mUnknown24);
     fn_800AACB8(&p->mpUnknown1C->mUnknown28);
-    p->mpUnknown1C->mpUnknown36->mUnknown116 = fn_8007F828(19);
+    p->mpUnknown1C->mpUnknown36->mUnknown116 = GameOptionsGet(19);
     if (p->mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
-        fn_8007F6F8(19, 0);
+        GameOptionsSet(19, 0);
     }
     fn_8016306C(0);
 }

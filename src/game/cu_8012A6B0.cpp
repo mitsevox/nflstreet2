@@ -11,7 +11,7 @@
 #include "game/cu_8003108C.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
@@ -1232,7 +1232,7 @@ extern "C" int fn_8012D1E4(Object_80039F5C *p)
     int result = 1;
 
     if (fn_800A8444(p->mIdBytes[2])) {
-        result = fn_8007F828(14) == 1;
+        result = GameOptionsGet(14) == 1;
     }
     switch (fn_801486A0()) {
     case 0:
@@ -1250,7 +1250,7 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
     OptionRunControl_t *control = (OptionRunControl_t *)&p->mUnknown336;
     float distance = 0.0f;
 
-    if (fn_8012D1E4(p) && (!fn_80178BA4(p->mIdBytes[2]) || fn_8007F828(14) == 1)
+    if (fn_8012D1E4(p) && (!fn_80178BA4(p->mIdBytes[2]) || GameOptionsGet(14) == 1)
         && PlayerMoveGetKind(p)) {
         Point_8017886C delta;
         int team = fn_80178320();

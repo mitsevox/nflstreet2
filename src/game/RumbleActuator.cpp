@@ -1,6 +1,6 @@
 /* Controller rumble: per-port motor state, starting steady or pulsing rumble on a controller,
    stopping it, and the per-frame update that sends motor levels to the controllers. */
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 extern "C" {
 int ConGetChannelInfo(int a, int b);
@@ -96,7 +96,7 @@ void RumbleInit(void)
     unsigned int i;
 
     for (i = 0; i < 4; i++) {
-        _Rumble_abPortActive[i] = fn_8007F828(9);
+        _Rumble_abPortActive[i] = GameOptionsGet(9);
     }
     _Rumble_bEnabled = 0;
     _RumbleSetup();

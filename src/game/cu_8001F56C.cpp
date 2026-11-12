@@ -4,7 +4,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_80072AA8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 /* One slot of the 21-entry table that lbl_803EBA94 points to. */
 struct Entry_803EBA94 {
@@ -291,7 +291,7 @@ void fn_8001FD48(void)
 
 void fn_8001FDB8(void)
 {
-    SndgSetVolumeOption(2, (unsigned char)(fn_8007F828(5) * 10));
+    SndgSetVolumeOption(2, (unsigned char)(GameOptionsGet(5) * 10));
     fn_80072AD8(0);
     ResClose(lbl_803EBA90);
     fn_801D2BD0(lbl_803EBA94);

@@ -10,8 +10,7 @@
 #include "game/StevTable.h"
 #include "game/FELoop.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 
 /* Index returned by fn_8022F384 and values read for it by fn_8005D6EC. */
@@ -29,7 +28,7 @@ struct State_802D4D40 {
     int mUnknown20;
 };
 
-/* Values returned by fn_8007F828 and restored through fn_8007F6F8. */
+/* Values returned by GameOptionsGet and restored through GameOptionsSet. */
 struct Saved_802D4D64 {
     int mValue0;
     int mValue1;
@@ -327,10 +326,10 @@ void fn_8005D990(int *pTotal)
 void fn_8005DA10(void)
 {
     if (lbl_802D4D64.mSaved) {
-        fn_8007F6F8(14, lbl_802D4D64.mValue14);
-        fn_8007F6F8(1, lbl_802D4D64.mValue1);
+        GameOptionsSet(14, lbl_802D4D64.mValue14);
+        GameOptionsSet(1, lbl_802D4D64.mValue1);
         if (lbl_802D4D64.mValue0 > -1) {
-            fn_8007F6F8(0, lbl_802D4D64.mValue0);
+            GameOptionsSet(0, lbl_802D4D64.mValue0);
         }
         lbl_802D4D64.mSaved = 0;
     }
@@ -340,18 +339,18 @@ void fn_8005DA7C(int value14, int value1)
 {
     if (!lbl_802D4D64.mSaved) {
         lbl_802D4D64.mSaved = 1;
-        lbl_802D4D64.mValue14 = fn_8007F828(14);
-        lbl_802D4D64.mValue1 = fn_8007F828(1);
+        lbl_802D4D64.mValue14 = GameOptionsGet(14);
+        lbl_802D4D64.mValue1 = GameOptionsGet(1);
         if (lbl_802D4D40.mUnknown1 > -1) {
-            lbl_802D4D64.mValue0 = fn_8007F828(0);
+            lbl_802D4D64.mValue0 = GameOptionsGet(0);
         } else {
             lbl_802D4D64.mValue0 = lbl_802D4D40.mUnknown1;
         }
     }
-    fn_8007F6F8(14, value14);
-    fn_8007F6F8(1, value1);
+    GameOptionsSet(14, value14);
+    GameOptionsSet(1, value1);
     if (lbl_802D4D40.mUnknown1 > -1) {
-        fn_8007F6F8(0, lbl_802D4D40.mUnknown1);
+        GameOptionsSet(0, lbl_802D4D40.mUnknown1);
     }
 }
 
@@ -695,7 +694,7 @@ int fn_8005E728(void)
 
 void fn_8005E798(void)
 {
-    int value = fn_8007F828(0);
+    int value = GameOptionsGet(0);
 
     StorySetLkss(lbl_802D4D40.mIndex, value);
     lbl_802D4D40.mUnknown1 = value;

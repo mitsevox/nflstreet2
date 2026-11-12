@@ -1,6 +1,6 @@
 #include "game/fn_80177FE0.h"
 #include "game/GameCamera.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -290,7 +290,7 @@ void fn_80140708(GameCamera_t *camera)
             offset.mY = (int)(mode->mUnknown60.mY*46603.37890625f);
             offset.mZ = (int)(mode->mUnknown60.mZ*46603.37890625f);
             Orient3Add(&angles,&angles,&offset);
-        } else if (!fn_8007F828(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
+        } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
             Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mpUnknown4);
             if (player && velocity.mY > player->mMotion.mPos.mY) {
@@ -375,7 +375,7 @@ void fn_8014106C(int index, unsigned int mode, float *a, float *b)
 }
 void fn_801410F4(unsigned int index)
 {
-    if (!lbl_802DBEBC.mUnknown0 && fn_8007F828(10)) {
+    if (!lbl_802DBEBC.mUnknown0 && GameOptionsGet(10)) {
         lbl_802DBEBC.mUnknown0 = 1;
         lbl_802DBEBC.mUnknownC = 0;
         lbl_802DBEBC.mUnknown4 = index;

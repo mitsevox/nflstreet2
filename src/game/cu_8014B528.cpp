@@ -7,8 +7,7 @@
 #include "game/Class_80297CE8.h"
 #include "game/Class_802A56E8.h"
 #include "game/Object_8008044C.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -87,9 +86,9 @@ void fn_8014B528(Class_802A2DB8 *p)
     p->mUnknown4 = 12;
     p->mState.mUnknownC = 0;
     p->mpUnknown1C = new (0) States_802A2DB8;
-    p->mpUnknown1C->mUnknown1C = fn_8007F828(14);
+    p->mpUnknown1C->mUnknown1C = GameOptionsGet(14);
     if (p->mpUnknown1C->mUnknown1C != 0) {
-        fn_8007F6F8(14, 0);
+        GameOptionsSet(14, 0);
     }
     fn_800BC51C(&p->mpUnknown1C->mUnknown0);
     fn_800B3644(&p->mpUnknown1C->mUnknown4);
@@ -99,9 +98,9 @@ void fn_8014B528(Class_802A2DB8 *p)
     fn_800AACB8(&p->mpUnknown1C->mUnknown14);
     fn_8014ABE4(&p->mpUnknown1C->mUnknown18, 2);
     fn_80178F20(&p->mpUnknown1C->mUnknown18);
-    p->mpUnknown1C->mUnknown38 = fn_8007F828(19);
+    p->mpUnknown1C->mUnknown38 = GameOptionsGet(19);
     if (p->mpUnknown1C->mUnknown38 != 0) {
-        fn_8007F6F8(19, 0);
+        GameOptionsSet(19, 0);
     }
     id = 0;
     for (i = 0; i < 2; i++) {

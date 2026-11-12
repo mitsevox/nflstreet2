@@ -5,8 +5,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_8007F828.h"
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/GameModeType.h"
 #include "game/MsgGame.h"
@@ -649,13 +648,13 @@ void fn_8015673C(void)
         lbl_803EB300 = &lbl_8031BF2C;
         break;
     }
-    lbl_803EB314 = fn_8007F828(14);
-    fn_8007F6F8(14, 0);
+    lbl_803EB314 = GameOptionsGet(14);
+    GameOptionsSet(14, 0);
     fn_80178F20(0);
     lbl_803EB300->mUnknown0 = step;
     lbl_803EB300->vfn_01();
-    lbl_803EB310 = fn_8007F828(0);
-    fn_8007F6F8(0, 0);
+    lbl_803EB310 = GameOptionsGet(0);
+    GameOptionsSet(0, 0);
     TutorialDbOpenPlays();
     fn_80156734(step);
     fn_801566DC(1);
@@ -666,10 +665,10 @@ void fn_80156854(void)
     lbl_803EB300->vfn_02();
     lbl_803EB300 = 0;
     TutorialDbClosePlays();
-    fn_8007F6F8(14, lbl_803EB314);
+    GameOptionsSet(14, lbl_803EB314);
     lbl_803EB314 = 0;
     fn_80178F20(0);
-    fn_8007F6F8(0, lbl_803EB310);
+    GameOptionsSet(0, lbl_803EB310);
     lbl_803EB310 = 1;
     SndgApplyVolumeOptions();
     lbl_803EB30C = 0xFFFF;
@@ -1717,7 +1716,7 @@ void fn_80158AA8(void)
     }
     SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
-    volume = fn_8007F828(5) * 10;
+    volume = GameOptionsGet(5) * 10;
     SndgSetVolumeOption(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {
         QueryCursor cursor;

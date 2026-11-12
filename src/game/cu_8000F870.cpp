@@ -11,8 +11,7 @@
 #include "game/cu_80181330.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_80072AA8.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
@@ -3547,14 +3546,14 @@ int fn_80016730(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 
 void fn_800167D0(void)
 {
-    lbl_803EB9F4 = fn_8007F828(1);
+    lbl_803EB9F4 = GameOptionsGet(1);
     fn_8018D7E0();
     StoryTeamLoadUserTeams(0, 1);
 }
 
 void fn_80016808(void)
 {
-    fn_8007F6F8(1, lbl_803EB9F4);
+    GameOptionsSet(1, lbl_803EB9F4);
     fn_8001B330(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
     if (MsgGameGetSetupState() == 1) {
         fn_8001B260(lbl_803EB9F0, 14);

@@ -1,7 +1,7 @@
 #include <dolphin/vi.h>
 #include "game/ResLoad.h"
 #include "game/ResOpenDevice.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "engine/rand.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -260,7 +260,7 @@ void fn_80194858(int mode)
         int index = lbl_803EB72C[2] + 1;
         lbl_803EB72C[2] = index;
         if (lbl_803EB72C[2] == 2) lbl_803EB72C[2] = 0;
-        if (fn_8007F828(6) == 1) {
+        if (GameOptionsGet(6) == 1) {
             int a = fn_801CEA08();
             int b = fn_801CEA14();
             fn_801CEC48(0,a,0,b);

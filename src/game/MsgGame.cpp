@@ -9,7 +9,7 @@
 #include "game/cu_80181330.h"
 #include "game/GameInfo.h"
 #include "game/MsgGame.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/fn_801C3284.h"
 #include "game/UISGameMsg.h"
@@ -143,7 +143,7 @@ void MsgGameSetSetup(int a, int b, int c)
 
 int MsgGameCheckSetting6(void)
 {
-    int value = fn_8007F828(6);
+    int value = GameOptionsGet(6);
 
     return value == 1 || value == 2;
 }
@@ -386,7 +386,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         fn_80186F8C(pArgs[0].i != 0);
         break;
     case 0x21: {
-        int value = fn_8007F828(12);
+        int value = GameOptionsGet(12);
 
         if (value == 1 && FELoopIsMainFEActive() != 0) {
             pResult->i = value;
@@ -484,7 +484,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         FELoopConfigureEntry(0, -1, -1, -2, -2, -2);
         break;
     case 0x134:
-        pResult->i = fn_8007F828(20) != 0;
+        pResult->i = GameOptionsGet(20) != 0;
         break;
     case 0x144: {
         void *pObject = fn_8021EA44(1);

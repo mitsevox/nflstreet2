@@ -8,7 +8,7 @@
 #include "game/fn_8022F478.h"
 #include "game/Cheat.h"
 #include "game/DbCursor.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 extern "C" unsigned char lbl_803EA588;
 
@@ -309,7 +309,7 @@ extern "C" void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pM
         unsigned int score0;
 
         GauntletStatsOpen(&cursor, (signed char)fn_8022F384(fn_8022F4BC()));
-        if (fn_8007F828(14) == 1) {
+        if (GameOptionsGet(14) == 1) {
             score1 = StyleTrackerGetTotal(1);
             score0 = StyleTrackerGetTotal(0);
         } else {

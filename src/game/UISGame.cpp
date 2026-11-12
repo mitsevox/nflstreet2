@@ -7,7 +7,7 @@
 #include "game/ResBank.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
@@ -475,7 +475,7 @@ void UISGameCreateMain(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -517,7 +517,7 @@ void UISGameCreateSub(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -551,7 +551,7 @@ void UISGameCreateSub2(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }

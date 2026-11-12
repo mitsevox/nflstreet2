@@ -5,8 +5,7 @@
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
 #include "game/StoryTeam.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 #include "game/FELoop.h"
 
@@ -401,10 +400,10 @@ void fn_80061088(int *pDit1, int *pDit2, int *pLvlt)
 void fn_80061154(void)
 {
     if (lbl_802D4E28.mSaved) {
-        fn_8007F6F8(14, lbl_802D4E28.mValue14);
-        fn_8007F6F8(1, lbl_802D4E28.mValue1);
+        GameOptionsSet(14, lbl_802D4E28.mValue14);
+        GameOptionsSet(1, lbl_802D4E28.mValue1);
         if (lbl_802D4E28.mValue0 > -1) {
-            fn_8007F6F8(0, lbl_802D4E28.mValue0);
+            GameOptionsSet(0, lbl_802D4E28.mValue0);
         }
         lbl_802D4E28.mSaved = 0;
     }
@@ -414,18 +413,18 @@ void fn_800611C0(int value14, int value1)
 {
     if (!lbl_802D4E28.mSaved) {
         lbl_802D4E28.mSaved = 1;
-        lbl_802D4E28.mValue14 = fn_8007F828(14);
-        lbl_802D4E28.mValue1 = fn_8007F828(1);
+        lbl_802D4E28.mValue14 = GameOptionsGet(14);
+        lbl_802D4E28.mValue1 = GameOptionsGet(1);
         if (lbl_803EA5F8.mUnknown1 > -1) {
-            lbl_802D4E28.mValue0 = fn_8007F828(0);
+            lbl_802D4E28.mValue0 = GameOptionsGet(0);
         } else {
             lbl_802D4E28.mValue0 = lbl_803EA5F8.mUnknown1;
         }
     }
-    fn_8007F6F8(14, value14);
-    fn_8007F6F8(1, value1);
+    GameOptionsSet(14, value14);
+    GameOptionsSet(1, value1);
     if (lbl_803EA5F8.mUnknown1 > -1) {
-        fn_8007F6F8(0, lbl_803EA5F8.mUnknown1);
+        GameOptionsSet(0, lbl_803EA5F8.mUnknown1);
     }
 }
 

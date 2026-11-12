@@ -2,7 +2,7 @@
    position to the screen each frame and draws the player's name above it. */
 #include "engine/viewport.h"
 #include "game/PauseMenu.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
 #include "game/PlyrNameTag.h"
@@ -76,7 +76,7 @@ void PlyrNameTagDestroy(PlyrNameTag_t *pInstance)
 
 int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
 {
-    if (_PlyrNameTag_bEnabled && fn_8007F828(17)) {
+    if (_PlyrNameTag_bEnabled && GameOptionsGet(17)) {
         int mode = fn_800AD9B4();
         if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
             mode != 7 && !PauseIsOpen() && !fn_800A9680()) {

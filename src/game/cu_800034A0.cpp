@@ -32,8 +32,8 @@ void fn_80029CE0(int a, int b);
 int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
 void SndgApplyVolumeOptions(void);
-void fn_8007F328(int a);
-void fn_8007F374(void);
+void GameOptionsInit(int a);
+void GameOptionsShutdown(void);
 int fn_800298E8(int a, int b);
 
 int fn_801D6620(void *p);
@@ -182,8 +182,8 @@ void fn_800037C0(int a, int *b)
             }
             fn_8022EBC8();
             fn_8022EB10();
-            fn_8007F328(1);
-            fn_8007F374();
+            GameOptionsInit(1);
+            GameOptionsShutdown();
         } else {
             SndgApplyVolumeOptions();
             fn_801D6B24(buf + 8, 17);

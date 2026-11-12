@@ -2,7 +2,7 @@
 #include "game/Challenge.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 extern "C" {
 void fn_80004504(unsigned char id);
@@ -116,7 +116,7 @@ void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
         int kind;
 
         ChalFindRecord(pObject, id, 0);
-        ChalReadRecord(pObject, &record, fn_8007F828(0));
+        ChalReadRecord(pObject, &record, GameOptionsGet(0));
         kind = ChalGetProgress(record.mUnknown0, &a, &b);
         fn_801C3284(text.pParams->mpText, record.mUnknown1, text.pParams->mLength);
         switch (kind) {
@@ -160,7 +160,7 @@ int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018
         ChalFindRecord(pObject, id, 0);
         kind = ChalGetProgress(id, &a, &b);
         if (kind != 2) {
-            b = fn_8007F828(0);
+            b = GameOptionsGet(0);
         }
         ChalReadRecord(pObject, &record, b);
         pInfo = &record.mUnknown20C;
