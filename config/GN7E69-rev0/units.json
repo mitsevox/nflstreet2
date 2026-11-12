@@ -2236,6 +2236,34 @@
     "TurnToPlayStartAnim": {
       "address": "0x800EC9E4",
       "evidence": "evidence.tsv function and name rows for 0x800EC9E4 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "CarrierRunHasDefenderAhead": {
+      "address": "0x8012CE60",
+      "evidence": "evidence.tsv function and name rows for 0x8012CE60 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunCountRetreat": {
+      "address": "0x8012CEF4",
+      "evidence": "evidence.tsv function and name rows for 0x8012CEF4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunAddSideCosts": {
+      "address": "0x8012CFA0",
+      "evidence": "evidence.tsv function and name rows for 0x8012CFA0 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunCanUseSideline": {
+      "address": "0x8012D1E4",
+      "evidence": "evidence.tsv function and name rows for 0x8012D1E4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunSteerToSideline": {
+      "address": "0x8012D258",
+      "evidence": "evidence.tsv function and name rows for 0x8012D258 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunPickHeading": {
+      "address": "0x8012D4FC",
+      "evidence": "evidence.tsv function and name rows for 0x8012D4FC (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunAvoidPlayer": {
+      "address": "0x8012D8A8",
+      "evidence": "evidence.tsv function and name rows for 0x8012D8A8 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
     }
   },
   "units": [
@@ -11080,6 +11108,37 @@
           "placement": ".data3",
           "start": "0x8029F928",
           "end": "0x8029F948"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CarrierRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp), its function, name and data rows; 0x8012DDCC-0x80130494 is linked with the .rodata 0x8029FA20-0x8029FB20, the .data 0x802DB05C-0x802DB074 and the .sdata 0x803EB118-0x803EB128; the documented holdout 0x8012CE60-0x8012DDCC (with its pool 0x8029F9A0-0x8029FA20) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012DDCC",
+          "end": "0x80130494"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FA20",
+          "end": "0x8029FB20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB05C",
+          "end": "0x802DB074"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB118",
+          "end": "0x803EB128"
         }
       ]
     },

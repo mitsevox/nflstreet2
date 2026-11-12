@@ -5532,166 +5532,68 @@
     {
       "source": "src/game/CarrierRun.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row src/game/CarrierRun.cpp (0x8012CE60-0x80130494); split from the former comparison grouping src/game/cu_8012A6B0.cpp at the file edges recorded there. 29 function extents with their name and source-form rows; .rodata 0x8029F9A0-0x8029FB20. Comparison only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp) and the source-form rows from 0x8012CE60. Documented holdout at the start of .text: 0x8012CE60-0x8012DDCC is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its pool 0x8029F9A0-0x8029FA20 (0x8012D8A8 is near-miss; the six functions before it are exact); the rest of the file is linked through units.json",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8012CE60",
-          "end": "0x80130494"
+          "end": "0x8012DDCC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029F9A0",
-          "end": "0x8029FB20"
+          "end": "0x8029FA20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB05C",
+          "end": "0x802DB074"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB118",
+          "end": "0x803EB128"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8012CE60",
+          "symbol": "CarrierRunHasDefenderAhead",
           "start": "0x8012CE60",
           "end": "0x8012CEF4"
         },
         {
-          "symbol": "fn_8012CEF4",
+          "symbol": "CarrierRunCountRetreat",
           "start": "0x8012CEF4",
           "end": "0x8012CFA0"
         },
         {
-          "symbol": "fn_8012CFA0",
+          "symbol": "CarrierRunAddSideCosts",
           "start": "0x8012CFA0",
           "end": "0x8012D1E4"
         },
         {
-          "symbol": "fn_8012D1E4",
+          "symbol": "CarrierRunCanUseSideline",
           "start": "0x8012D1E4",
           "end": "0x8012D258"
         },
         {
-          "symbol": "fn_8012D258",
+          "symbol": "CarrierRunSteerToSideline",
           "start": "0x8012D258",
           "end": "0x8012D4FC"
         },
         {
-          "symbol": "fn_8012D4FC",
+          "symbol": "CarrierRunPickHeading",
           "start": "0x8012D4FC",
           "end": "0x8012D8A8"
         },
         {
-          "symbol": "fn_8012D8A8",
+          "symbol": "CarrierRunAvoidPlayer",
           "start": "0x8012D8A8",
           "end": "0x8012DDCC"
-        },
-        {
-          "symbol": "fn_8012DDCC",
-          "start": "0x8012DDCC",
-          "end": "0x8012E590"
-        },
-        {
-          "symbol": "fn_8012E590",
-          "start": "0x8012E590",
-          "end": "0x8012E670"
-        },
-        {
-          "symbol": "fn_8012E670",
-          "start": "0x8012E670",
-          "end": "0x8012EA14"
-        },
-        {
-          "symbol": "fn_8012EA14",
-          "start": "0x8012EA14",
-          "end": "0x8012EAF8"
-        },
-        {
-          "symbol": "fn_8012EAF8",
-          "start": "0x8012EAF8",
-          "end": "0x8012EE90"
-        },
-        {
-          "symbol": "fn_8012EE90",
-          "start": "0x8012EE90",
-          "end": "0x8012EF94"
-        },
-        {
-          "symbol": "fn_8012EF94",
-          "start": "0x8012EF94",
-          "end": "0x8012F11C"
-        },
-        {
-          "symbol": "fn_8012F11C",
-          "start": "0x8012F11C",
-          "end": "0x8012F2E0"
-        },
-        {
-          "symbol": "fn_8012F2E0",
-          "start": "0x8012F2E0",
-          "end": "0x8012F2E8"
-        },
-        {
-          "symbol": "fn_8012F2E8",
-          "start": "0x8012F2E8",
-          "end": "0x8012F524"
-        },
-        {
-          "symbol": "fn_8012F524",
-          "start": "0x8012F524",
-          "end": "0x8012F5A0"
-        },
-        {
-          "symbol": "fn_8012F5A0",
-          "start": "0x8012F5A0",
-          "end": "0x8012F89C"
-        },
-        {
-          "symbol": "fn_8012F89C",
-          "start": "0x8012F89C",
-          "end": "0x8012FA64"
-        },
-        {
-          "symbol": "fn_8012FA64",
-          "start": "0x8012FA64",
-          "end": "0x8012FC08"
-        },
-        {
-          "symbol": "fn_8012FC08",
-          "start": "0x8012FC08",
-          "end": "0x8012FDDC"
-        },
-        {
-          "symbol": "fn_8012FDDC",
-          "start": "0x8012FDDC",
-          "end": "0x8012FEAC"
-        },
-        {
-          "symbol": "fn_8012FEAC",
-          "start": "0x8012FEAC",
-          "end": "0x8012FF30"
-        },
-        {
-          "symbol": "fn_8012FF30",
-          "start": "0x8012FF30",
-          "end": "0x8012FF5C"
-        },
-        {
-          "symbol": "fn_8012FF5C",
-          "start": "0x8012FF5C",
-          "end": "0x8013028C"
-        },
-        {
-          "symbol": "fn_8013028C",
-          "start": "0x8013028C",
-          "end": "0x80130318"
-        },
-        {
-          "symbol": "fn_80130318",
-          "start": "0x80130318",
-          "end": "0x80130338"
-        },
-        {
-          "symbol": "fn_80130338",
-          "start": "0x80130338",
-          "end": "0x80130494"
         }
       ]
     },

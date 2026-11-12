@@ -572,11 +572,11 @@ void PlayerCutEnter(void);
 void PlayerCutUpdate(void);
 void PlayerCutExit(void);
 void PlayerCutMirrorMessage(void);
-void fn_8012FEAC(void);
-void fn_8012FF30(void);
-void fn_8012FF5C(void);
-void fn_8013028C(void);
-void fn_80130318(void);
+void CarrierRunEnter(void);
+void CarrierRunExit(void);
+void CarrierRunUpdate(void);
+void CarrierRunNotify(void);
+void CarrierRunInput(void);
 void fn_80133C50(void);
 void fn_80133EE8(void);
 void fn_80134370(void);
@@ -584,7 +584,7 @@ void fn_801343AC(void);
 
 PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8012FEAC, (void *)fn_8012FF30, (void *)fn_8012FF5C, (void *)fn_80130318, (void *)fn_8013028C, 0}},
+    {{(void *)CarrierRunEnter, (void *)CarrierRunExit, (void *)CarrierRunUpdate, (void *)CarrierRunInput, (void *)CarrierRunNotify, 0}},
     {{(void *)PursueEnter, (void *)PursueExit, (void *)PursueUpdate, (void *)fn_800A5E20, (void *)PursueNotify, 0}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD580, (void *)fn_800B76E8, (void *)fn_800FD650, (void *)fn_800FD708}},
