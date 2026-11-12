@@ -113,7 +113,7 @@ int fn_800C1E40(void);
 void fn_800CC560(int a);
 void fn_8010A220(void);
 void BallResetToSpot(void);
-void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 void CamGamePushCurrentCamera(void);
 GameCamera_t *CamGameGetCamera(int index);
 int fn_801485D4(void);
@@ -369,24 +369,24 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
 
     if (fn_802270A4(pStick) == 0.0f) {
         if (pStick->mUnknown9 == 1) {
-            fn_8013C824(pCamera, 10, 0);
+            CamMainMsg(pCamera, 10, 0);
         }
     } else {
         result = 1;
         if (pStick->mUnknown9 == 1) {
-            fn_8013C824(pCamera, 10, 0);
+            CamMainMsg(pCamera, 10, 0);
             value = pStick->mX;
             if (value != 0.0f) {
                 if (value < 0.0f) {
                     value = -value;
-                    fn_8013C824(pCamera, 9, (int)&value);
+                    CamMainMsg(pCamera, 9, (int)&value);
                 } else {
-                    fn_8013C824(pCamera, 8, (int)&value);
+                    CamMainMsg(pCamera, 8, (int)&value);
                 }
             }
             value = pStick->mY;
             if (value != 0.0f) {
-                fn_8013C824(pCamera, 7, (int)&value);
+                CamMainMsg(pCamera, 7, (int)&value);
             } else {
                 result = 0;
             }

@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/GameCamera.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 #include "game/Ball.h"
 
 struct State_802A2058 {
@@ -72,7 +72,7 @@ void fn_8014E244(void *p)
     fn_800BCC30(p);
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     fn_80141164(2.5f);
     fn_8014D67C();
 }

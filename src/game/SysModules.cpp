@@ -24,7 +24,7 @@ struct DbInitDesc_t {
 };
 
 extern "C" {
-extern char lbl_802DBD7C[];
+extern char _CamMainTypeDefs[];
 extern char lbl_802EBE24[];
 extern char lbl_802EBE34[];
 extern char lbl_802EBE40[];
@@ -118,7 +118,7 @@ const char *Cam::GetName() { return "Cam"; }
 
 int Cam::Init()
 {
-    CamInit(12, 5, lbl_802DBD7C, 2);
+    CamInit(12, 5, _CamMainTypeDefs, 2);
     return 1;
 }
 

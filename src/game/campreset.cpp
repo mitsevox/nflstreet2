@@ -2,14 +2,14 @@
    player's camera setting and report a camera's heading. */
 
 #include "game/GameCamera.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 
 struct CamPresetAngles_t {
     int mUnknown0;
     int mUnknown4;
 };
 
-/* Read by fn_8013C478 (the float) and fn_8013C4BC (the two words from +4
+/* Read by CamMainSetOffset (the float) and CamMainSetAngle (the two words from +4
    and the shift +0xC). */
 struct CamPresetView_t {
     float mUnknown0;
@@ -60,7 +60,7 @@ static CamPresetAngles_t _CamPreset_Angles[6] = {
 };
 
 extern "C" {
-Mode_8013FD8C CamPresetMode = { CamPresetInit, CamPresetUninit, 0 };
+CamMode_t CamPresetMode = { CamPresetInit, CamPresetUninit, 0 };
 }
 
 static CamPresetEase_t _CamPreset_EaseRates[4] = {
@@ -89,7 +89,7 @@ void CamGameApplyUserCamera(void)
         CamGameSetModeAll(b);
     }
     CamGameProcess();
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
 }
 
 int CamGameGetSideYaw(void)
@@ -125,8 +125,8 @@ void CamPresetProcess(GameCamera_t *pCamera)
 {
     int *pState = (int *)pCamera->mPadF8;
 
-    fn_8013C540(pCamera, pState[0]);
-    fn_8013C57C(pCamera, pState[1]);
+    CamMainRotate(pCamera, pState[0]);
+    CamMainPitch(pCamera, pState[1]);
 }
 
 void CamPresetMsgFunc(GameCamera_t *pCamera, int msg, int arg)
@@ -150,8 +150,8 @@ void CamPresetStart(GameCamera_t *pCamera)
     int *pState = (int *)pCamera->mPadF8;
 
     if (pCamera->mUnknownA0 <= 5) {
-        fn_8013C478(pCamera, (Vector_80039F5C *)&_CamPreset_Views[pCamera->mUnknownA0]);
-        fn_8013C4BC(pCamera, (int *)&_CamPreset_Views[pCamera->mUnknownA0].mUnknown4, _CamPreset_Views[pCamera->mUnknownA0].mUnknownC);
+        CamMainSetOffset(pCamera, (Vector_80039F5C *)&_CamPreset_Views[pCamera->mUnknownA0]);
+        CamMainSetAngle(pCamera, (int *)&_CamPreset_Views[pCamera->mUnknownA0].mUnknown4, _CamPreset_Views[pCamera->mUnknownA0].mUnknownC);
         pState[0] = _CamPreset_Angles[pCamera->mUnknownA0].mUnknown0;
         pState[1] = _CamPreset_Angles[pCamera->mUnknownA0].mUnknown4;
     }
@@ -162,8 +162,8 @@ void CamPresetStart(GameCamera_t *pCamera)
         angles.mUnknown0 = pSrc->mUnknown0;
         angles.mUnknown4 = pSrc->mUnknown4;
         angles.mUnknown4 = fn_801784C4() ? 0x800000 : 0;
-        fn_8013C478(pCamera, (Vector_80039F5C *)&_CamPreset_Views[0]);
-        fn_8013C4BC(pCamera, (int *)&angles, _CamPreset_Views[0].mUnknownC);
+        CamMainSetOffset(pCamera, (Vector_80039F5C *)&_CamPreset_Views[0]);
+        CamMainSetAngle(pCamera, (int *)&angles, _CamPreset_Views[0].mUnknownC);
         pState[0] = 0;
         pState[1] = 0;
     }

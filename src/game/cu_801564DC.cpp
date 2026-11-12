@@ -338,7 +338,7 @@ void BallPrimeKickUp(Ball_t *pBall);
 void fn_8013A910(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int a);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetFocusAll(int a, int b);
@@ -1964,7 +1964,7 @@ void Class_802A3AD8::vfn_03()
 
     Class_80297AB8::vfn_03();
     fn_80156D1C(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     pEntry = fn_801568F8()->vfn_07();
     if (pEntry->mUnknown24 != 1) {
         fn_80156900(pEntry->mUnknown20, 60);

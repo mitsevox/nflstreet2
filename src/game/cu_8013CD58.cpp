@@ -4,7 +4,7 @@
 #include "game/fn_80227638.h"
 #include "game/RecordList_8002E7C0.h"
 
-#include "game/Interp_8013CC14.h"
+#include "game/CamInterp.h"
 
 struct CameraState_8013D1C0 {
     float mUnknown00[3];
@@ -81,7 +81,7 @@ void fn_80042380(Block_80170E64 *pBlock, int id, float *pOut, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
 Target_8013825C *BallGetModel(void *p);
-void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
+void CamMainSetMode(Camera_8013D1C0 *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
 void BannerClear(int a);
@@ -127,7 +127,7 @@ static float lbl_8031B6A0[3];
 
 #if defined(DECOMP_COMPARE)
 /* accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
-extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
+extern "C" void fn_8013CC7C(CamInterp_t *pInterp, int steps)
 {
     float split = 0.5f;
     float speed = 2.0f;
@@ -154,7 +154,7 @@ extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
 }
 #endif
 
-extern "C" void fn_8013CD58(Interp_8013CC14 *pInterp, int steps)
+extern "C" void fn_8013CD58(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -170,7 +170,7 @@ extern "C" void fn_8013CD58(Interp_8013CC14 *pInterp, int steps)
     }
 }
 
-extern "C" void fn_8013CE44(Interp_8013CC14 *pInterp, int steps)
+extern "C" void fn_8013CE44(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -185,7 +185,7 @@ extern "C" void fn_8013CE44(Interp_8013CC14 *pInterp, int steps)
     }
 }
 
-extern "C" void fn_8013CEB8(Interp_8013CC14 *pInterp, int steps)
+extern "C" void fn_8013CEB8(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -769,9 +769,9 @@ extern "C" void fn_8013E474(void)
 
     if (fn_8002E7D0(pList)) {
         fn_8002E7EC(p, pList);
-        fn_8013C624(lbl_803EB1C8, 8, 0, 0);
+        CamMainSetMode(lbl_803EB1C8, 8, 0, 0);
     } else if (lbl_803EB1CC) {
-        fn_8013C624(lbl_803EB1C8, 8, 0, 0);
+        CamMainSetMode(lbl_803EB1C8, 8, 0, 0);
         fn_8002CFF4(lbl_803EA368);
     } else {
         fn_8002D198(p);

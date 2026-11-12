@@ -8152,6 +8152,76 @@
       ]
     },
     {
+      "source": "src/game/cammain.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013BB18-0x8013CC7C (src/game/cammain.cpp), its data rows and linker row 0x802A00D4-0x802A00D8.",
+      "link_roots": {
+        "symbols": [
+          "CamMainIsFlipped",
+          "CamMainFlipPos",
+          "CamMainFlipOrient",
+          "_CamMainProcessFollow",
+          "_CamMainCalcFollowPos",
+          "_CamMainGetCameraPos",
+          "_CamMainGetFocusPos",
+          "_CamMainGetFocusOrient",
+          "_CamMainGetAngleToFocus",
+          "_CamMainBaseInit",
+          "_CamMainBaseUninit",
+          "_CamMainBaseProcess",
+          "_CamMainBaseMoveAngle",
+          "CamMainProcess",
+          "CamMainSetFocus",
+          "CamMainInitDesc",
+          "CamMainFollow",
+          "CamMainFollowBall",
+          "CamMainSetOffset",
+          "CamMainSetAngle",
+          "CamMainRotate",
+          "CamMainPitch",
+          "CamMainSetMode",
+          "CamMainGetMode",
+          "CamMainSetActive",
+          "CamMainWarpToDest",
+          "CamMainStop",
+          "CamMainMsg",
+          "CamMainGetBaseType",
+          "CamMainInit",
+          "CamMainUninit",
+          "CamMainUpdate",
+          "CamEaseVecStart",
+          "CamEaseVecUpdate",
+          "CamEaseVecFlip",
+          "CamInterpInit",
+          "CamInterpSetTarget"
+        ],
+        "discarded": [
+          "CamMainZoom"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A00D4-0x802A00D8: the target keeps every listed function, each reached from outside the unit, from its .data records or from each other; CamMainZoom, rebuilt from its Xbox prototype counterpart 0xEF650, has no code in the target, while its 0.5f constant remains in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013BB18",
+          "end": "0x8013CC7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A00B8",
+          "end": "0x802A00F4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBD24",
+          "end": "0x802DBDB8"
+        }
+      ]
+    },
+    {
       "source": "src/game/TournamentDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/TournamentDb.cpp) and its data rows.",

@@ -8,7 +8,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802372EC.h"
 #include "game/Class_802A56E8.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 
 class Class_802A1930 : public Class_802A56E8 {
 };
@@ -87,7 +87,7 @@ void fn_801538C8(Class_802A1BC8 *p)
     p->Class_80297BF8::vfn_05();
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     fn_80141164(2.5f);
 }
 
