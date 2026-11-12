@@ -11046,6 +11046,25 @@
       }
     },
     {
+      "source": "src/game/GetOpen.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012A6B0-0x8012BCC8 (src/game/GetOpen.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012A6B0",
+          "end": "0x8012BCC8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F858",
+          "end": "0x8029F928"
+        }
+      ]
+    },
+    {
       "source": "src/game/DirectedRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8012BCC8-0x8012C3A4 (src/game/DirectedRun.cpp) and its data row.",

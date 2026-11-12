@@ -566,8 +566,8 @@ void fn_801254C8(void);
 void fn_80125508(void);
 void fn_80125DF0(void);
 void fn_80125E20(void);
-void fn_8012B3EC(void);
-void fn_8012B654(void);
+void GetOpenEnter(void);
+void GetOpenUpdate(void);
 void PlayerCutEnter(void);
 void PlayerCutUpdate(void);
 void PlayerCutExit(void);
@@ -604,7 +604,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)PlayerCutMirrorMessage}},
-    {{(void *)fn_8012B3EC, (void *)fn_800F0900, (void *)fn_8012B654, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
+    {{(void *)GetOpenEnter, (void *)fn_800F0900, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FAD10}},
     {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
