@@ -14707,9 +14707,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80055584.cpp",
+      "source": "src/game/GameStats.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv record comparison target/type/query rows, the unit row 0x80055584-0x80056584 with its handler source-form row and the exact .rodata row 0x8028E008-0x8028E16C. Source is unlinked; table and shared flags remain original.",
+      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp) and the source-form row 0x80055584-0x80055B2C. Documented holdout: 0x80055584 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; the rest of the file is linked through units.json",
       "sections": [
         {
           "section": ".text",
@@ -14726,39 +14726,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80055584",
+          "symbol": "GameStatsGather",
           "start": "0x80055584",
           "end": "0x80055B2C"
-        },
-        {
-          "symbol": "fn_80055B2C",
-          "start": "0x80055B2C",
-          "end": "0x80055E8C"
-        },
-        {
-          "symbol": "fn_80055E8C",
-          "start": "0x80055E8C",
-          "end": "0x80055F24"
-        },
-        {
-          "symbol": "fn_80055F24",
-          "start": "0x80055F24",
-          "end": "0x80055F4C"
-        },
-        {
-          "symbol": "fn_80055F4C",
-          "start": "0x80055F4C",
-          "end": "0x80056444"
-        },
-        {
-          "symbol": "fn_80056444",
-          "start": "0x80056444",
-          "end": "0x80056560"
-        },
-        {
-          "symbol": "fn_80056560",
-          "start": "0x80056560",
-          "end": "0x80056584"
         }
       ]
     },

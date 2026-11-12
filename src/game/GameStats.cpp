@@ -1,3 +1,6 @@
+/* Game stats screen: gathers both sides' game stats, compares them with the
+   saved records to flag records broken, and answers the stats screen's
+   messages (team stat lines, game clock text, record snapshot). */
 #include "game/fn_801FCE10.h"
 #include "game/StyleTracker.h"
 #include "game/fn_801C1F94.h"
@@ -9,7 +12,7 @@
 
 extern "C" unsigned char lbl_803EA588;
 
-struct Record_80055584 {
+struct GameStatsRecord {
     int type;
     int column;
     int value[2];
@@ -27,7 +30,7 @@ struct Record_80055584 {
 };
 
 extern "C" {
-extern Record_80055584 lbl_802D4B14[];
+extern GameStatsRecord lbl_802D4B14[];
 extern unsigned char lbl_803EC7EC[2];
 int fn_80186F7C(unsigned char index);
 int fn_8022F358(int index);
@@ -63,9 +66,11 @@ int fn_80178AE0(void);
 unsigned int fn_8009D990(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void PauseRequestClose(void);
+void GameStatsGather(void);
 }
 
-extern "C" void fn_80055584(void)
+#if defined(DECOMP_COMPARE)
+extern "C" void GameStatsGather(void)
 {
     for (int i = 0; i <= 20; ++i) {
         fn_801C1F94(lbl_802D4B14[i].value, 0, 8);
@@ -110,8 +115,9 @@ extern "C" void fn_80055584(void)
         }
     }
 }
+#endif
 
-extern "C" void fn_80055B2C(unsigned char *anyExceeded)
+extern "C" void GameStatsCheckRecords(unsigned char *anyExceeded)
 {
     char holder[32];
     char names[2][32];
@@ -150,7 +156,7 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
                 else
                     names[side][0] = 0;
             }
-            fn_80055584();
+            GameStatsGather();
             RecordsBegin();
             for (i = 0; i <= 20; ++i) {
                 row = 0;
@@ -190,7 +196,7 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
     }
 }
 
-extern "C" void fn_80055E8C(int *values, int *exceeded)
+extern "C" void GameStatsGetRecords(int *values, int *exceeded)
 {
     RecordsBegin();
     for (int i = 0; i < 16; i++) {
@@ -211,20 +217,20 @@ extern "C" void fn_80055E8C(int *values, int *exceeded)
 #define SECONDS_OF(seconds) ((seconds) - MINUTES_OF(seconds) * 60)
 
 /* Text buffer argument of message 0x80000001. */
-struct Text_80056444 {
+struct GameStatsText_t {
     int mUnknown0;
     int mSize;
     char *mpBuffer;
 };
 
-/* Arguments of fn_80056444. The handlers receive each array from the
+/* Arguments of GameStatsMsg. The handlers receive each array from the
    element after the one its first word indexes. */
-struct Args_80056444 {
+struct GameStatsArgs_t {
     int *mpArray0;
     int *mpArray1;
     int *mpArray2;
     int *mpMode;
-    Text_80056444 *mpText;
+    GameStatsText_t *mpText;
 };
 
 static inline int *ArgData(int *pArray)
@@ -234,7 +240,7 @@ static inline int *ArgData(int *pArray)
     return &pArray[index];
 }
 
-extern "C" int fn_80055F24(int handle, int tag)
+extern "C" int GameStatsReadTag(int handle, int tag)
 {
     int value;
 
@@ -242,7 +248,7 @@ extern "C" int fn_80055F24(int handle, int tag)
     return value;
 }
 
-extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *pBuffer, int size)
+extern "C" void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *pBuffer, int size)
 {
     int *pStats[2];
     int value;
@@ -275,22 +281,22 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
             pStats[side][0] = fn_801787DC(side);
             break;
         }
-        int a = fn_80055F24(pHandles[index], 0x74727374);
-        int b = fn_80055F24(pHandles[index], 0x74507374);
-        int c = fn_80055F24(pHandles[index], 0x64647374);
+        int a = GameStatsReadTag(pHandles[index], 0x74727374);
+        int b = GameStatsReadTag(pHandles[index], 0x74507374);
+        int c = GameStatsReadTag(pHandles[index], 0x64647374);
         pStats[side][2] = a + b + c;
         pStats[side][3] = a;
         pStats[side][4] = b;
         pStats[side][5] = c;
-        pStats[side][7] = fn_80055F24(pHandles[index], 0x74737374);
-        pStats[side][10] = fn_80055F24(pHandles[index], 0x64317374);
-        pStats[side][9] = fn_80055F24(pHandles[index], 0x66667374);
-        pStats[side][8] = fn_80055F24(pHandles[index], 0x69447374);
+        pStats[side][7] = GameStatsReadTag(pHandles[index], 0x74737374);
+        pStats[side][10] = GameStatsReadTag(pHandles[index], 0x64317374);
+        pStats[side][9] = GameStatsReadTag(pHandles[index], 0x66667374);
+        pStats[side][8] = GameStatsReadTag(pHandles[index], 0x69447374);
         pStats[side][1] = StyleTrackerGetTotal(side);
         pStats[side][11] = fn_800A7E40(side);
         pStats[side][12] = fn_800A7E54(side);
-        pStats[side][6] = fn_80055F24(pHandles[index], 0x6B737374);
-        pStats[side][13] = fn_80055F24(pHandles[index], 0x73687374);
+        pStats[side][6] = GameStatsReadTag(pHandles[index], 0x6B737374);
+        pStats[side][13] = GameStatsReadTag(pHandles[index], 0x73687374);
         if (GameModeTypeIsSpecial()) {
             pStats[side][14] = 0;
         } else {
@@ -336,20 +342,20 @@ extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMod
     fn_801C2D88(pBuffer, size, "%d:%02d", MINUTES_OF(fn_8009D990(2)), SECONDS_OF(fn_8009D990(2)));
 }
 
-extern "C" int fn_80056444(unsigned int id, Args_80056444 *pArgs)
+extern "C" int GameStatsMsg(unsigned int id, GameStatsArgs_t *pArgs)
 {
     switch (id) {
     case 0x80000002:
-        fn_80055B2C((unsigned char *)pArgs->mpArray0);
+        GameStatsCheckRecords((unsigned char *)pArgs->mpArray0);
         break;
     case 0x80000003:
         PauseRequestClose();
         break;
     case 0x80000004:
-        fn_80055E8C(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1));
+        GameStatsGetRecords(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1));
         break;
     case 0x80000001:
-        fn_80055F4C(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1),
+        GameStatsFill(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1),
                     ArgData(pArgs->mpArray2), pArgs->mpMode, pArgs->mpText->mpBuffer,
                     pArgs->mpText->mSize);
         break;
@@ -359,9 +365,9 @@ extern "C" int fn_80056444(unsigned int id, Args_80056444 *pArgs)
     return 1;
 }
 
-extern "C" void fn_80056560(void)
+extern "C" void GameStatsUpdateRecords(void)
 {
     unsigned char anyExceeded;
 
-    fn_80055B2C(&anyExceeded);
+    GameStatsCheckRecords(&anyExceeded);
 }

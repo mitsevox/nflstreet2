@@ -181,6 +181,10 @@
     }
   },
   "externals": {
+    "GameStatsGather": {
+      "address": "0x80055584",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80055584; the documented holdout of src/game/GameStats.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -188,6 +192,10 @@
     "gPlayerLookBonuses": {
       "address": "0x80308368",
       "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
+    },
+    "PlyrSwapStateData": {
+      "address": "0x80148424",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
     },
     "RuntimeErrorFnc": {
       "address": "0x803EBF30",
@@ -2191,6 +2199,25 @@
     }
   },
   "units": [
+    {
+      "source": "src/game/GameStats.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp), its function, name and data rows; 0x80055B2C-0x80056584 and its .rodata literal are linked, the documented holdout 0x80055584-0x80055B2C (with its query literal 0x8028E008-0x8028E164) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055B2C",
+          "end": "0x80056584"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028E164",
+          "end": "0x8028E16C"
+        }
+      ]
+    },
     {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",

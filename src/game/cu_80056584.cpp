@@ -252,7 +252,7 @@ int fn_80178D70(int team);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int OptAudioHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_80056444(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int GameStatsMsg(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80059A24(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
@@ -1535,7 +1535,7 @@ int fn_80059664(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int
     case 5:
         return fn_80059A24(id, pArgs, unused, pResult);
     case 6:
-        return fn_80056444(id, pArgs, unused, pResult);
+        return GameStatsMsg(id, pArgs, unused, pResult);
     case 7:
         return fn_8005B2BC(id, pArgs, unused, pResult);
     case 0xA:
