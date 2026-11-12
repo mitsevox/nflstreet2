@@ -12814,6 +12814,43 @@
       ]
     },
     {
+      "source": "src/game/LooseBall.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EAD44-0x800EC76C (src/game/LooseBall.cpp), its function, name and data rows: the .rodata data row 0x8029DDD8-0x8029DE70, the .data row 0x802DAAB4-0x802DAAC4, the .sdata rows 0x803EADB8-0x803EADE4 and the .bss row 0x803192F4-0x80319ED8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EAD44",
+          "end": "0x800EC76C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DDD8",
+          "end": "0x8029DE70"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DAAB4",
+          "end": "0x802DAAC4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EADB8",
+          "end": "0x803EADE4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192F4",
+          "end": "0x80319ED8"
+        }
+      ]
+    },
+    {
       "source": "src/game/Handoff.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224 (src/game/Handoff.cpp), its function, name and data rows, the .rodata data row 0x8029DE78-0x8029DF40, the .sdata data rows 0x803EADF4-0x803EAE00 and the linker row 0x8029DED0-0x8029DEE4 of the discarded HandoffSteerClear; 0x800ECC64-0x800EF224 is linked, the documented holdout 0x800EC76C-0x800ECC64 (TurnToPlayPickVariant, TurnToPlayPickAnim, TurnToPlayPickDirection and TurnToPlayStartAnim, with the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4) keeps its original bytes and stays a comparison.",

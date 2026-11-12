@@ -34,7 +34,7 @@ float fn_80237260(int stream);
 int fn_800A851C(int team, Object_80039F5C *p);
 int fn_800CE4A8(Query_800CE770 *pQuery);
 int fn_800CD2B4(int mode, Object_80039F5C *p);
-int fn_800EC758(Object_80039F5C *p);
+int LooseBallIsIdle(Object_80039F5C *p);
 int fn_801CFE40(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -183,7 +183,7 @@ extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther)
     case 91:
         return 0;
     case 57:
-        return fn_800EC758(pOther);
+        return LooseBallIsIdle(pOther);
     }
     return 1;
 }

@@ -436,10 +436,10 @@ void fn_800E9FC0(void);
 void fn_800E9FD8(void);
 void fn_800EA1D0(void);
 void fn_800EA1D8(void);
-void fn_800EBCE0(void);
-void fn_800EBD8C(void);
-void fn_800EBDCC(void);
-void fn_800EC6DC(void);
+void LooseBallEnter(void);
+void LooseBallExit(void);
+void LooseBallUpdate(void);
+void LooseBallInput(void);
 void fn_800F08F8(void);
 void fn_800F0900(void);
 void fn_800F0908(void);
@@ -640,7 +640,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010D6D4, (void *)fn_800F0900, (void *)fn_8010D734, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800EBCE0, (void *)fn_800EBD8C, (void *)fn_800EBDCC, (void *)fn_800EC6DC, (void *)fn_800F0908, 0}},
+    {{(void *)LooseBallEnter, (void *)LooseBallExit, (void *)LooseBallUpdate, (void *)LooseBallInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_801113DC, (void *)fn_80111580, (void *)fn_800E9FD8, (void *)fn_80111528, (void *)fn_800EA1D0, 0}},
     {{(void *)fn_80111794, (void *)fn_80111964, (void *)fn_801117F8, (void *)fn_80111974, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},

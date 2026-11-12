@@ -8351,7 +8351,7 @@ int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8386,7 +8386,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[68] = fn_800F2CB4;
     lbl_8030FB60[192] = fn_800D7E9C;
     lbl_8030FB60[204] = fn_8010680C;
-    lbl_8030FB60[48] = fn_800EC674;
+    lbl_8030FB60[48] = LooseBallAnimEvent;
     lbl_8030FB60[43] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[44] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
@@ -13896,7 +13896,7 @@ void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 int fn_80113BCC(Object_80039F5C *p);
 int fn_80114DE0(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-int fn_800EC758(Object_80039F5C *p);
+int LooseBallIsIdle(Object_80039F5C *p);
 int fn_800C76C0(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
@@ -14322,7 +14322,7 @@ extern "C" int fn_800CC800(Object_80039F5C *p)
     case 16:
         break;
     case 57:
-        result = fn_800EC758(p);
+        result = LooseBallIsIdle(p);
         break;
     case 17:
         if (fn_80114E7C(p) != 0) {

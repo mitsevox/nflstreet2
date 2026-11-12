@@ -117,7 +117,7 @@ int fn_800CF090(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800EC640(Object_80039F5C *p);
+int LooseBallIsIdleOrKind2(Object_80039F5C *p);
 int fn_801045BC(Object_80039F5C *p);
 int fn_80104610(Object_80039F5C *p);
 int fn_8010CE2C(Object_80039F5C *p);
@@ -406,7 +406,7 @@ extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
             result = (p->mFlags & 0x80000) != 0;
             break;
         case 57:
-            result = fn_800EC640(p);
+            result = LooseBallIsIdleOrKind2(p);
             break;
         case 26:
             if (value == 7 || value == 24) {

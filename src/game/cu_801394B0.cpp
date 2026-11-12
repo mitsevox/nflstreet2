@@ -41,7 +41,7 @@ void fn_800B1508(void);
 int fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D782C(Object_80039F5C *p);
-void fn_800EBA48(int index);
+void LooseBallBroadcast(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
 int PossIsWristNearJoint(Ball_t *pBall, Object_80039F5C *p, int a);
@@ -827,7 +827,7 @@ void fn_8013B024(Ball_t *pBall)
 void fn_8013B068(Ball_t *pBall)
 {
     if (pBall == BallGetCurrent() && pBall->mState.mStateArg != 0) {
-        fn_800EBA48(BallGetIndex(pBall));
+        LooseBallBroadcast(BallGetIndex(pBall));
     }
 }
 
