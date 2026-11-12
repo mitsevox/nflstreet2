@@ -10737,6 +10737,25 @@
       }
     },
     {
+      "source": "src/game/DirectedRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012BCC8-0x8012C3A4 (src/game/DirectedRun.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012BCC8",
+          "end": "0x8012C3A4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F928",
+          "end": "0x8029F948"
+        }
+      ]
+    },
+    {
       "source": "src/game/RouteRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/RouteRun.cpp) and its data rows.",
