@@ -8455,6 +8455,84 @@
       ]
     },
     {
+      "source": "src/game/cu_80146134.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80146134-0x80147908 (src/game/cu_80146134.cpp) and its data, linker, compiler and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_80146134",
+          "fn_80146150",
+          "fn_8014619C",
+          "fn_80146374",
+          "fn_801463D8",
+          "fn_801464D0",
+          "fn_801469A0",
+          "fn_80146A6C",
+          "fn_80146B40",
+          "fn_80146BA8",
+          "fn_80146BF8",
+          "fn_80146C00",
+          "fn_80146C4C",
+          "fn_80146DC4",
+          "fn_80146E64",
+          "fn_80146E78",
+          "fn_80146EDC",
+          "fn_80146F0C",
+          "fn_80146F40",
+          "fn_80146F74",
+          "fn_80146FCC",
+          "fn_80146FD8",
+          "fn_80146FDC",
+          "fn_801470F0",
+          "fn_80147598",
+          "fn_801475F4",
+          "fn_801476C8",
+          "fn_801477F0",
+          "fn_80147840",
+          "fn_80147860",
+          "fn_801478A8",
+          "fn_801478F0",
+          "fn_80147900"
+        ],
+        "discarded": [
+          "ParticleTrailStartFlash"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A0450-0x802A0454: the target keeps every listed function, all reached from outside the unit or from each other; ParticleTrailStartFlash, rebuilt from its Xbox prototype counterpart 0x134660, has no code in the target, while its 8.0f literal remains first in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80146134",
+          "end": "0x80147908"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0450",
+          "end": "0x802A04D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DD170",
+          "end": "0x802DD72C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB258",
+          "end": "0x803EB284"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B7DC",
+          "end": "0x8031BD04"
+        }
+      ]
+    },
+    {
       "source": "src/game/PassIcons.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80147F2C-0x80148424 (src/game/PassIcons.cpp) and its data, compiler and source-form rows.",
