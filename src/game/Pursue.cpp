@@ -1,6 +1,10 @@
-#include "game/State_801297F8.h"
+/* Player state that pursues the ball: the player runs at the ball carrier (or the pass target or
+   the landing ball), leads the target and keeps its heading inside the field, steers by its
+   pursuit assignment, avoids other players, plays for a ball in the air and rolls for moves
+   against the target when it is close. */
+
+#include "game/PursueState.h"
 #include "engine/cu_801B9F00.h"
-#include "game/cu_80125F3C.h"
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/PlayBookTeam.h"
@@ -15,6 +19,8 @@
 #include "game/Message_800F01CC.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_800B65A0.h"
+#include "game/Record_8011F4F8.h"
+#include "game/Record_8011F518.h"
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
@@ -52,11 +58,11 @@ unsigned int fn_8011F4C8(void);
 int fn_80120794(Object_800B26B0 *pMotion, Vector_80039F5C *pTarget, Vector_80039F5C *pDir, float speed, float length,
                 int angle, float distance);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
-int fn_801260D4(Object_80039F5C *p);
-void fn_801262B8(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int forced);
-void fn_801269B8(Object_80039F5C *p, State_801297F8 *pState, float distance);
-Object_80039F5C *fn_80128B60(void);
-int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
+int PursueShouldPlayBall(Object_80039F5C *p);
+void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int forced);
+void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *pState, float distance);
+Object_80039F5C *PursueGetTarget(void);
+int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 float fn_8016B938(void);
@@ -78,44 +84,143 @@ void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-extern "C" unsigned int lbl_802DB04C[4];
-extern "C" float lbl_803EB0B0;
-extern "C" float lbl_803EB0B4;
-extern "C" float lbl_803EB0B8;
-extern "C" unsigned int lbl_803EB0BC;
-extern "C" unsigned int lbl_803EB0C0;
-extern "C" unsigned int lbl_803EB0C4;
-extern "C" int lbl_803EB0C8;
-extern "C" int lbl_803EB0CC;
-extern "C" int lbl_803EB0D0;
-extern "C" unsigned int lbl_803EB0D4;
-extern "C" unsigned char lbl_803EB0D8;
-extern "C" float lbl_803EB0E0;
-extern "C" float lbl_803EB0E4;
-extern "C" float lbl_803EB0E8;
-extern "C" unsigned char lbl_803EB0EC;
-extern "C" unsigned char lbl_803EB0ED;
-extern "C" short lbl_803EB0EE;
-extern "C" short lbl_803EB0F0;
-extern "C" short lbl_803EB0F2;
-extern "C" short lbl_803EB0F4;
-extern "C" float lbl_803EB0F8;
-extern "C" float lbl_803EB0FC;
-extern "C" float lbl_803EB100;
-extern "C" float lbl_803EB104;
-extern "C" float lbl_803EB108;
-extern "C" float lbl_803EB10C;
-extern "C" unsigned char lbl_803EB110;
-extern "C" float lbl_803EB114;
 extern "C" float gPlyrMoveFwdSpeed;
 
-extern "C" unsigned int fn_8012623C(Object_80039F5C *p)
+extern "C" {
+int BallStateGet(Ball_t *ball, int *pOut);
+void fn_80227690(void *pOut, void *pA, void *pB);
+float fn_802270A4(void *p);
+int fn_801CFE40(float y, float x);
+int MathAngleDiff(int a, int b);
+float fn_801CFB94(int angle);
+int fn_801787A0(void);
+int fn_800A7F30(int team);
+int fn_800A851C(int team, Object_80039F5C *p);
+int fn_801783AC(int bit);
+float fn_80178A2C(void);
+int fn_800ABDA4(int team);
+int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos, float distance, int *pOut);
+int fn_800E815C(Object_80039F5C *p, int a, int b);
+int fn_8011E88C(Object_80039F5C *p);
+int fn_8011F1A4(void);
+unsigned int fn_8011F4C8(void);
+Object_80039F5C *PursueGetTarget(void);
+int fn_800E6AC8(Object_80039F5C *p, int mode);
+int fn_800F2C1C(Object_80039F5C *p, int a);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
+int fn_8011E9B4(Object_80039F5C *p);
+void fn_8011E240(Object_80039F5C *p);
+float fn_80237260(int stream);
+}
+
+extern "C" {
+int fn_800A8444(int team);
+int fn_800A8408(int team);
+float fn_80237260(int stream);
+int fn_801486A0(void);
+}
+
+static unsigned int _Pursue_auCloseTargetIds[4] = {96, 93, 174, 186};
+
+static float _Pursue_fTackleRange = 5.0f;
+static float _Pursue_fNoTackleRange = 4.0f;
+static float _Pursue_fBehindTackleRange = 3.0f;
+static unsigned int _Pursue_uTackleOdds = 60;
+static unsigned int _Pursue_uLaneLineOdds = 100;
+static unsigned int _Pursue_uLaneOdds = 60;
+static int _Pursue_iTackleChance = 35;
+static int _Pursue_iAheadTackleChance = 40;
+static int _Pursue_iLaneTackleChance = 50;
+static unsigned int _Pursue_uCloseTackleChance = 55;
+static unsigned char _Pursue_bLeadTarget = 1;
+static float _Pursue_fPlayBallAngleDeg = 90.0f;
+static float _Pursue_fKind3SidelineTime = 60.0f;
+static float _Pursue_fKind3LeftHeadingDeg = 270.0f;
+static float _Pursue_fKind3RightHeadingDeg = 270.0f;
+static unsigned char _Pursue_uWindowMinDeg = 60;
+static unsigned char _Pursue_uWindowMaxDeg = 120;
+static short _Pursue_sWindowMinDist = 4;
+static short _Pursue_sWindowMaxDist = 100;
+static short _Pursue_sWindowWidenDeg = 10;
+static short _Pursue_sWindowReach = 0;
+static float _Pursue_fWindowSkewNearDeg = 15.0f;
+static float _Pursue_fWindowSkewFarDeg = 30.0f;
+static float _Pursue_fSidelineMargin = 1.0f;
+static float _Pursue_fLeadScale = 8.0f;
+static float _Pursue_fLeadWidth = 20.0f;
+static float _Pursue_fLeadMinGap = 5.0f;
+static unsigned char _Pursue_bLeadByAngle = 1;
+static float _Pursue_fLinkedRange = 4.0f;
+
+static inline short PursueClampRating(const short &value, short low, short high)
 {
-    unsigned int value = lbl_803EB0D4;
+    return value < low ? low : (value > high ? high : value);
+}
+
+static inline short PursueScaleRating(short from, short to, short t, short range)
+{
+    return from + (to - from) * t / range;
+}
+
+extern "C" signed char PursueGetMoveDelay(short *pRatings)
+{
+    short value = PursueScaleRating(15, 0, PursueClampRating(pRatings[9], 0, 255), 255);
+    return value < 0 ? 0 : (value > 15 ? 15 : value);
+}
+
+extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
+{
+    short *pRatings = p->mRatings;
+    short value;
+
+    if (fn_800A8444(p->mIdBytes[2]) && fn_800A8408(p->mIdBytes[2]) == 1) {
+        value = (int)(fn_80237260(0) * 45.0f);
+    } else {
+        value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
+    }
+    if (fn_801486A0() == 2 && fn_80178D70(p->mIdBytes[2]) == 1) {
+        value = (int)(value / 10.0f);
+    }
+    return value < 0 ? 0 : (value > 126 ? 126 : value);
+}
+
+extern "C" int PursueShouldPlayBall(Object_80039F5C *p)
+{
+    int result = 0;
+    Vector_80039F5C position;
+    int info;
+    float ballDelta[2];
+    float playerDelta[2];
+    Ball_t *ball = BallGetCurrent();
+    if (BallStateGet(ball, &info) == 3) {
+        Record_8011F518 *record = fn_8011F518();
+        if (record->mUnknown4 == 11 || record->mUnknown4 == 9) {
+            Object_80039F5C *other = fn_8009BCE8(&record->mUnknown0);
+            BallGetPosition(ball, &position);
+            fn_80227690(ballDelta, &position, &other->mMotion.mPos);
+            fn_80227690(playerDelta, &p->mMotion.mPos, &other->mMotion.mPos);
+            int ballAngle = fn_801CFE40(ballDelta[1], ballDelta[0]);
+            float ballDistance = fn_802270A4(ballDelta);
+            int playerAngle = fn_801CFE40(playerDelta[1], playerDelta[0]);
+            float playerDistance = fn_8022781C(&p->mMotion.mPos, &position);
+            short rating = p->mRatings[5] >= p->mRatings[8] ? p->mRatings[5] : p->mRatings[8];
+            unsigned int threshold = rating;
+            if (fn_802372EC(0, 255) < threshold >> 2 &&
+                MathAngleDiff(ballAngle, playerAngle) < (int)(_Pursue_fPlayBallAngleDeg * 46603.37890625f) &&
+                !(playerDistance >= ballDistance))
+                result = 1;
+        }
+    }
+    return result;
+}
+
+extern "C" unsigned int PursueGetCloseTackleChance(Object_80039F5C *p)
+{
+    unsigned int value = _Pursue_uCloseTackleChance;
     unsigned int i;
 
     for (i = 0; i < 4; i++) {
-        if (fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, lbl_802DB04C[i], 0) != 0xFFFF) {
+        if (fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, _Pursue_auCloseTargetIds[i], 0) != 0xFFFF) {
             value >>= 1;
             break;
         }
@@ -123,7 +228,190 @@ extern "C" unsigned int fn_8012623C(Object_80039F5C *p)
     return value;
 }
 
-extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float distance, Object_80039F5C *pOther)
+extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C position, float distance, int forced)
+{
+    int chance = 0;
+    int attempt = 0;
+    if (fn_801787A0()) return;
+    Object_800B26B0 *motion = &p->mMotion;
+    Block_8011E240 *block = &p->mBlock1032;
+    float delta[2];
+    fn_80227690(delta, &position, &motion->mPos);
+    int heading = fn_801CFE40(delta[1], delta[0]);
+    PursueState_t *state = (PursueState_t *)&p->mUnknown336;
+    if (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
+        state->mUnknown13 = 0;
+    else state->mUnknown13--;
+    state->mUnknown14--;
+    int done = 0;
+    if (other && ((other->mFlags & 0x8000) || fn_801783AC(0)) &&
+        !(fn_8022781C(&motion->mPos, &position) >= 5.0f) &&
+        !(fn_80178A2C() - position.mY >= 7.0f)) {
+        attempt = 1;
+        chance = 100;
+    }
+    if (state->mUnknown14 <= 0) {
+        done = 0;
+        state->mUnknown14 = PursueGetTackleDelay(p);
+        if (other && !(fn_8022781C(&motion->mPos, &position) >= 5.0f) &&
+            (unsigned int)(MathAngleDiff(motion->mFacing, other->mMotion.mUnknown32) - 0x2AAAAB) <= 0x2AAAA9) {
+            attempt = 1;
+            chance = !fn_800ABDA4(other->mIdBytes[2] == 0) ? 10 : 50;
+        }
+        if (!attempt) {
+            if (MathAngleDiff(heading, motion->mFacing) <= 0x18E38D)
+                attempt = PursueGetTackleChance(p, other, position, distance, &chance);
+            else chance = 0;
+        }
+    }
+    if (attempt && fn_802372EC(0, 100) < (unsigned int)chance && fn_800E815C(p, 0, 0)) done = 1;
+    if (done) return;
+    float offset[2];
+    Object_80039F5C *reference;
+    if (state->mUnknown13 <= 0) {
+        state->mUnknown13 = PursueGetMoveDelay(p->mRatings);
+        if (block->mUnknown0 == 4 && !fn_8011E88C(p)) {
+            int odds = 35;
+            if (!fn_801783AC(0)) {
+                if (fn_8011F1A4()) {
+                    if (!forced) {
+                        if (distance < 10.0f || (fn_8011F1A4() && fn_8011F4C8() > 3)) {
+                            odds = 80;
+                            if (PursueGetTarget() != BallGetCurrentHolder()) odds = 0;
+                        } else odds = 0;
+                    }
+                } else {
+                    odds = 70;
+                    if (other && (other->mFlags & 0x8000) &&
+                        !(fabsf(other->mMotion.mPos.mX) <= fabsf(motion->mPos.mX))) odds = 80;
+                }
+            } else if (!(distance >= 10.0f) && PursueGetTarget() == BallGetCurrentHolder()) odds = 80;
+            if (fn_802372EC(0, 100) < (unsigned int)odds ||
+                (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
+                reference = fn_8009BCE8(&block->mUnknown4);
+                int mode;
+                if (reference->mUnknown1052 == 1) mode = 8;
+                else {
+                    fn_80227690(offset, &reference->mMotion.mPos, &motion->mPos);
+                    mode = !(fn_80237260(0) >= 0.8f) ? 4 : 8;
+                }
+                if (fn_800E6AC8(p, mode)) done = 1;
+                else state->mUnknown13 += 10;
+            }
+        }
+    }
+    if (done) return;
+    Ball_t *ball = BallGetCurrent();
+    if (BallStateGet(ball, 0) == 4) {
+        Record_8011F4F8 *record = fn_8011F4F8(BallGetIndex(ball));
+        int ballAngle;
+        if (other && (fn_801BE648(other->mpUnknown792) == 69 || fn_801BE648(other->mpUnknown792) == 178) &&
+            (record->mUnknown1D <= 1 || record->mUnknown1D == 6 || record->mUnknown1D == 7)) {
+            position = other->mMotion.mPos;
+            position.mZ = 6.0f;
+            Object_80039F5C *target = fn_80039F5C(other->mIdBytes[2], record->mUnknownAByte);
+            fn_80227690(offset, &target->mMotion.mPos, &other->mMotion.mPos);
+            ballAngle = fn_801CFE40(offset[1], offset[0]);
+        } else {
+            BallGetPosition(ball, &position);
+            Vector_80039F5C velocity;
+            BallGetVelocity(ball, &velocity);
+            ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
+        }
+        if (!(position.mZ >= 7.0f) && !(position.mZ <= 1.5f) &&
+            !(position.mY >= fn_80177FE0().mY + 2.0f)) {
+            if (block->mUnknown0 != 4 && motion->mPos.mY >= fn_80177FE0().mY) return;
+            fn_80227690(offset, &position, &motion->mPos);
+            if (MathAngleDiff(ballAngle, fn_801CFE40(offset[1], offset[0])) > 0x78E38E) {
+                int facing = motion->mFacing;
+                if (MathAngleDiff(facing, fn_801CFE40(offset[1], offset[0])) <= 0x3FFFFF &&
+                    !(fn_802270A4(offset) >= 6.0f) && fn_802372EC(0, 100) <= 49) fn_800F2C1C(p, 0);
+            }
+        }
+    } else if (block->mUnknown0 == 4 && other) {
+        reference = fn_8009BCE8(&block->mUnknown4);
+        fn_80227690(delta, &reference->mMotion.mPos, &motion->mPos);
+        int angle = MathAngleDiff(heading, fn_801CFE40(delta[1], delta[0]));
+        if (angle > 0x471C72) {
+            int mode = ((state->mUnknown8 - motion->mFacing) & 0xFFFFFF) > 0x800000;
+            if (angle <= 0x5FFFFF) fn_800E6AC8(p, mode);
+            else fn_8011E240(reference);
+        }
+    }
+}
+
+extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, float unusedDistance)
+{
+    Object_800B26B0 *motion = &p->mMotion;
+    Vector_80039F5C target;
+    int b = 0;
+    int a = 0;
+    int step = 0;
+    target.mX = target.mY = target.mZ = 0.0f;
+    if (p->mUnknown1032 == 4) return;
+    float distance;
+    Object_80039F5C *other = fn_80124C28(p, &distance, 0x38E38E, 3.0f, 0.5f, state->mUnknown8);
+    if (!other) return;
+    float limit = 3.0f;
+    if (distance >= limit) return;
+    if (other == BallGetCurrentHolder() && !fn_801787A0()) return;
+    int inside = 0;
+    int mode = fn_8011E9B4(other);
+    if (other->mIdBytes[2] == p->mIdBytes[2] && !mode) limit *= 0.5f;
+    if (distance >= limit) return;
+    float delta[2];
+    if (mode) {
+        Object_80039F5C *reference = fn_8009BCE8(&other->mUnknown1036);
+        target.mX = (other->mMotion.mPos.mX + reference->mMotion.mPos.mX) * 0.5f;
+        target.mY = (other->mMotion.mPos.mY + reference->mMotion.mPos.mY) * 0.5f;
+        fn_80227690(delta, &other->mMotion.mPos, &motion->mPos);
+        a = fn_801CFE40(delta[1], delta[0]);
+        fn_80227690(delta, &reference->mMotion.mPos, &motion->mPos);
+        b = fn_801CFE40(delta[1], delta[0]);
+        int span = (a - b) & 0xFFFFFF;
+        if ((span <= 0x7FFFFF && ((state->mUnknown8 - b) & 0xFFFFFF) <= 0x7FFFFF) ||
+            (span > 0x800000 && ((state->mUnknown8 - b) & 0xFFFFFF) > 0x800000)) {
+            if (MathAngleDiff(a - b, 0) > MathAngleDiff(state->mUnknown8 - b, 0)) inside = 1;
+        }
+    } else {
+        target.mX = other->mMotion.mPos.mX;
+        target.mY = other->mMotion.mPos.mY;
+        target.mZ = other->mMotion.mPos.mZ;
+        target.mX += other->mMotion.mUnknown40 * 15.0f;
+        target.mY += other->mMotion.mUnknown44 * 15.0f;
+    }
+    fn_80227690(delta, &target, &motion->mPos);
+    int heading = fn_801CFE40(delta[1], delta[0]);
+    float weight = distance * 0.4f;
+    if (!(weight <= 1.0f)) weight = 1.0f;
+    BallGetCurrentHolder();
+    if (MathAngleDiff(heading, state->mUnknown8) <= 0x271C70) {
+        if (((heading - state->mUnknown8) & 0xFFFFFF) > 0x800000) {
+            step = (int)((1.0f - weight) * 3728270.0f);
+            if (mode && inside) {
+                if (((a - heading) & 0xFFFFFF) <= 0x7FFFFF) step += MathAngleDiff(a, state->mUnknown8);
+                else step += MathAngleDiff(b, state->mUnknown8);
+            }
+        } else {
+            step = (int)(-((1.0f - weight) * 3728270.0f));
+            if (mode && inside) {
+                if (((a - heading) & 0xFFFFFF) > 0x800000) step -= MathAngleDiff(a, state->mUnknown8);
+                else step -= MathAngleDiff(b, state->mUnknown8);
+            }
+        }
+        int difference = MathAngleDiff(state->mUnknown8 + step, motion->mFacing);
+        if (difference > 0x11C71C) {
+            float scale = fn_801CFB94(difference / 2);
+            state->mUnknown16 = 0;
+            state->mUnknown0 = scale * 0.72f;
+        } else if (!(distance >= 2.1f) && MathAngleDiff(heading, motion->mFacing) <= 0x1FFFFF) {
+            state->mUnknown16 = 0;
+        }
+    }
+    state->mUnknown8 = (state->mUnknown8 + step) & 0xFFFFFF;
+}
+
+extern "C" void PursueCloseOnTarget(Object_80039F5C *p, PursueState_t *pState, float distance, Object_80039F5C *pOther)
 {
     if (p->mUnknown1032 != 4 && pOther != 0 && distance < 4.0f && fn_801BE648(pOther->mpUnknown792) != 69
         && fn_801BE648(pOther->mpUnknown792) != 178
@@ -163,7 +451,7 @@ extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float di
     }
 }
 
-extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
+extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -238,7 +526,7 @@ extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" void fn_80127324(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos, int angle2)
+extern "C" void PursueSquareHeading(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos, int angle2)
 {
     if (fn_801783AC(0) == 0 && fn_8011F1A4() != 0 && fn_8011F4C8() > 3
         && ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && MathAngleDiff(*pAngle, 0) <= 0x3FFFFF)
@@ -259,7 +547,7 @@ extern "C" void fn_80127324(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos
     }
 }
 
-extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
+extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     int mode = fn_801486A0();
@@ -286,7 +574,7 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
             if (pos.mY < fn_80177FE0().mY + 3.0f) {
                 if (pContext->mpUnknown4[0] != p->mIdBytes[1]
                     && pContext->mpUnknown4[pContext->mUnknown16 - 1] != p->mIdBytes[1]) {
-                    fn_80127324(p, &angle, pos, angle2);
+                    PursueSquareHeading(p, &angle, pos, angle2);
                 }
             }
             if (pMotion->mPos.mY < pos.mY || distance > 5.5f || pOther->mUnknown528.mUnknown15 == 1
@@ -303,7 +591,7 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
+extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -363,20 +651,20 @@ extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_80
             }
         }
     }
-    if (done == 0 && fn_8011E188() < lbl_803EB0E0) {
+    if (done == 0 && fn_8011E188() < _Pursue_fKind3SidelineTime) {
         if ((pMotion->mPos.mX > 0.0f && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)
             || (pMotion->mPos.mX < 0.0f && MathAngleDiff(angle, 0) <= 0x3FFFFF)) {
             if (pMotion->mPos.mX > 0.0f) {
-                angle = (int)(lbl_803EB0E8 * 46603.38f);
+                angle = (int)(_Pursue_fKind3RightHeadingDeg * 46603.38f);
             } else {
-                angle = (int)(lbl_803EB0E4 * 46603.38f);
+                angle = (int)(_Pursue_fKind3LeftHeadingDeg * 46603.38f);
             }
         }
     }
     return angle;
 }
 
-extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
+extern "C" int PursueSteerKind4(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -417,7 +705,7 @@ extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
+extern "C" int PursueSteerKind6(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -458,7 +746,7 @@ extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_80039F5C *pOther, Lookup_8012078C *pContext,
+extern "C" void PursueAdjustHeading(Object_80039F5C *p, PursueState_t *pState, Object_80039F5C *pOther, Lookup_8012078C *pContext,
                             int *pAngle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -519,11 +807,11 @@ extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_8
     }
 }
 
-extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int PursueIsInCarrierWindow(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int found = 0;
-    int low = (int)(lbl_803EB0EC * 46603.38f);
-    int high = (int)(lbl_803EB0ED * 46603.38f);
+    int low = (int)(_Pursue_uWindowMinDeg * 46603.38f);
+    int high = (int)(_Pursue_uWindowMaxDeg * 46603.38f);
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
     if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / gPlyrMoveFwdSpeed > 0.14f) {
@@ -532,12 +820,12 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
         int anim;
 
         if (p->mUnknown528.mUnknown15 == 4 || p->mUnknown528.mUnknown15 == 5) {
-            widen = (int)(lbl_803EB0F2 * 46603.38f);
+            widen = (int)(_Pursue_sWindowWidenDeg * 46603.38f);
         } else {
             widen = 0;
         }
         if (p->mUnknown528.mUnknown15 == 4 || p->mUnknown528.mUnknown15 == 5) {
-            reach = lbl_803EB0F4;
+            reach = _Pursue_sWindowReach;
         } else {
             reach = 0;
         }
@@ -551,15 +839,15 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
             fn_80227690(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX);
             if (MathAngleDiff(pCarrier->mMotion.mUnknown32, 0) <= 0x3FFFFF) {
-                low = (int)(low - (int)(lbl_803EB0F8 * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
-                high = (int)(high - (int)(lbl_803EB0FC * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                low = (int)(low - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                high = (int)(high - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
             } else {
-                low = (int)(low - (int)(lbl_803EB0FC * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
-                high = (int)(high - (int)(lbl_803EB0F8 * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                low = (int)(low - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                high = (int)(high - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
             }
             distance = fn_8022710C(&delta);
-            if (angle >= low - widen && angle <= high + widen && distance >= lbl_803EB0EE - reach
-                && distance <= lbl_803EB0F0 + reach) {
+            if (angle >= low - widen && angle <= high + widen && distance >= _Pursue_sWindowMinDist - reach
+                && distance <= _Pursue_sWindowMaxDist + reach) {
                 found = 1;
             }
         }
@@ -567,7 +855,7 @@ extern "C" int fn_801281A8(Object_80039F5C *p, Object_80039F5C *pOther)
     return found;
 }
 
-extern "C" void fn_80128590(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState)
+extern "C" void PursueSetCloseGait(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState)
 {
     if (pState->mUnknown0 > 0.72f || pState->mUnknown16 == 1) {
         pState->mUnknown16 = 5;
@@ -576,16 +864,16 @@ extern "C" void fn_80128590(Object_80039F5C *p, Object_80039F5C *pOther, State_8
     }
 }
 
-extern "C" int fn_801285C8(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState)
+extern "C" int PursueCheckCarrierWindow(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState)
 {
-    if (pOther != 0 && fn_801281A8(p, pOther) == 1) {
-        fn_80128590(p, pOther, pState);
+    if (pOther != 0 && PursueIsInCarrierWindow(p, pOther) == 1) {
+        PursueSetCloseGait(p, pOther, pState);
         return 1;
     }
     return 0;
 }
 
-extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_80039F5C *pOther, int angle, int angle2,
+extern "C" void PursueUpdateSpeed(Object_80039F5C *p, PursueState_t *pState, Object_80039F5C *pOther, int angle, int angle2,
                             float distance)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -620,16 +908,16 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
     }
 }
 
-extern "C" void fn_8012886C(Object_80039F5C *p, State_801297F8 *pState, Lookup_8012078C *pContext, int angle,
+extern "C" void PursueChooseHeading(Object_80039F5C *p, PursueState_t *pState, Lookup_8012078C *pContext, int angle,
                             Vector_80039F5C pos, float distance, int angle2)
 {
-    Object_80039F5C *pOther = fn_80128B60();
+    Object_80039F5C *pOther = PursueGetTarget();
     int kind = pContext->mpUnknown12[p->mIdBytes[1]];
     Ball_t *pBall = BallGetCurrent();
 
     pState->mUnknown16 = 0;
     pState->mUnknown0 = 1.0f;
-    pState->mUnknown41 = fn_801260D4(p);
+    pState->mUnknown41 = PursueShouldPlayBall(p);
     switch (pState->mUnknown41) {
     case 1: {
         int newAngle;
@@ -643,19 +931,19 @@ extern "C" void fn_8012886C(Object_80039F5C *p, State_801297F8 *pState, Lookup_8
         switch (kind) {
         case 0:
         case 5:
-            angle = fn_80126FD8(p, pOther, pState, pContext, angle, pos, distance, angle2);
+            angle = PursueSteerKind0(p, pOther, pState, pContext, angle, pos, distance, angle2);
             break;
         case 2:
-            angle = fn_801274D4(p, pOther, pState, pContext, angle, pos, distance, angle2);
+            angle = PursueSteerKind2(p, pOther, pState, pContext, angle, pos, distance, angle2);
             break;
         case 3:
-            angle = fn_80127758(p, pOther, pState, pContext, angle, pos, distance, angle2);
+            angle = PursueSteerKind3(p, pOther, pState, pContext, angle, pos, distance, angle2);
             break;
         case 4:
-            angle = fn_80127AD0(p, pOther, pState, pContext, angle, pos, distance, angle2);
+            angle = PursueSteerKind4(p, pOther, pState, pContext, angle, pos, distance, angle2);
             break;
         case 6:
-            angle = fn_80127CD4(p, pOther, pState, pContext, angle, pos, distance, angle2);
+            angle = PursueSteerKind6(p, pOther, pState, pContext, angle, pos, distance, angle2);
             break;
         case 7:
             pState->mUnknown0 = 0.4f;
@@ -666,13 +954,13 @@ extern "C" void fn_8012886C(Object_80039F5C *p, State_801297F8 *pState, Lookup_8
         break;
     }
     if (pState->mUnknown41 != 1) {
-        fn_80127EFC(p, pState, pOther, pContext, &angle, pos, distance, angle2);
+        PursueAdjustHeading(p, pState, pOther, pContext, &angle, pos, distance, angle2);
         pState->mUnknown8 = angle & 0xFFFFFF;
-        fn_80128628(p, pState, pOther, angle, angle2, distance);
+        PursueUpdateSpeed(p, pState, pOther, angle, angle2, distance);
     }
 }
 
-extern "C" Object_80039F5C *fn_80128B60(void)
+extern "C" Object_80039F5C *PursueGetTarget(void)
 {
     Object_80039F5C *p = BallGetCurrentHolder();
 
@@ -689,7 +977,7 @@ extern "C" Object_80039F5C *fn_80128B60(void)
     return p;
 }
 
-extern "C" void fn_80128BE0(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" void PursueTryBlockReaction(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Block_80170374 *pBlock = &p->mUnknown560;
     int found = 0;
@@ -735,7 +1023,7 @@ extern "C" void fn_80128BE0(Object_80039F5C *p, Object_80039F5C *pOther)
     }
 }
 
-extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState, Vector_80039F5C target)
+extern "C" int PursueUpdateHold(Object_80039F5C *p, PursueState_t *pState, Vector_80039F5C target)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
@@ -784,7 +1072,7 @@ extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState, Vector_80
     return found;
 }
 
-extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float distance)
+extern "C" void PursueAimAtTarget(Object_80039F5C *p, Object_80039F5C *pOther, float distance)
 {
     Object_800B26B0 *pMotion;
     Vec2_t delta;
@@ -830,19 +1118,22 @@ extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float d
     }
 }
 
-extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C target, Vector_80039F5C offset)
+extern "C" int PursueClipHeading(Object_800B26B0 *pMotion, int angle, Vector_80039F5C target, Vector_80039F5C offset)
 {
     Vec2_t dir;
+    float d;
+    float s;
 
     fn_80227538(&dir, angle, pMotion->mUnknown28);
     if (pMotion->mPos.mY > target.mY) {
         if (fabsf(target.mX) < fn_80178A08()) {
-            float dy = pMotion->mPos.mY - target.mY;
+            d = pMotion->mPos.mY - target.mY;
             if (dir.mY < 0.0f) {
                 dir.mY = -dir.mY;
-                dir.mX = dir.mX * (dy / fabsf(dir.mY + offset.mY)) + pMotion->mPos.mX;
-                if (fabsf(dir.mX) > fn_80178A08() - lbl_803EB100) {
-                    dir.mX = CLAMP(dir.mX, lbl_803EB100 - fn_80178A08(), fn_80178A08() - lbl_803EB100);
+                s = d / fabsf(dir.mY + offset.mY);
+                dir.mX = dir.mX * s + pMotion->mPos.mX;
+                if (fabsf(dir.mX) > fn_80178A08() - _Pursue_fSidelineMargin) {
+                    dir.mX = CLAMP(dir.mX, _Pursue_fSidelineMargin - fn_80178A08(), fn_80178A08() - _Pursue_fSidelineMargin);
                     dir.mY = target.mY;
                     fn_80227690(&dir, &dir, pMotion);
                     angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
@@ -851,7 +1142,10 @@ extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C 
             if (target.mY < fn_80178A2C() && BallGetCurrentHolder() != 0) {
                 fn_80227538(&dir, angle, pMotion->mUnknown28);
                 if (dir.mX != 0.0f) {
-                    dir.mY = dir.mY * fabsf((pMotion->mPos.mX - target.mX) / dir.mX) + pMotion->mPos.mY;
+                    d = pMotion->mPos.mX - target.mX;
+                    s = d / dir.mX;
+                    s = fabsf(s);
+                    dir.mY = dir.mY * s + pMotion->mPos.mY;
                     if (dir.mY > fn_80178A2C()) {
                         dir.mX = target.mX;
                         dir.mY = fn_80178A2C();
@@ -863,7 +1157,10 @@ extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C 
         }
     } else if (target.mY < fn_80178A2C() && BallGetCurrentHolder() != 0 && pMotion->mPos.mY < fn_80178A2C()
                && dir.mX != 0.0f && dir.mY > 0.0f) {
-        dir.mY = dir.mY * fabsf((pMotion->mPos.mX - target.mX) / dir.mX) + pMotion->mPos.mY;
+        d = pMotion->mPos.mX - target.mX;
+        s = d / dir.mX;
+        s = fabsf(s);
+        dir.mY = dir.mY * s + pMotion->mPos.mY;
         if (dir.mY > fn_80178A2C()) {
             dir.mX = target.mX;
             dir.mY = fn_80178A2C();
@@ -874,7 +1171,7 @@ extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C 
     return angle;
 }
 
-extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Vector_80039F5C dir,
+extern "C" void PursueLeadTarget(Object_800B26B0 *pMotion, Vector_80039F5C target, Vector_80039F5C dir,
                             Vector_80039F5C *pOut)
 {
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
@@ -884,8 +1181,8 @@ extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Ve
     pOut->mY = dir.mY;
     pOut->mZ = dir.mZ;
     dx = fabsf(target.mX - pMotion->mPos.mX);
-    if (pCarrier != 0 && lbl_803EB0D8 != 0 && PlayerMoveGetKind(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
-        && dx > lbl_803EB10C) {
+    if (pCarrier != 0 && _Pursue_bLeadTarget != 0 && PlayerMoveGetKind(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
+        && dx > _Pursue_fLeadMinGap) {
         int angle = MathAngleDiff(fn_801CFE40(dir.mY, dir.mX), 0x400000);
         float scale;
         float length;
@@ -895,14 +1192,14 @@ extern "C" void fn_80129360(Object_800B26B0 *pMotion, Vector_80039F5C target, Ve
         }
         scale = angle / 4194304.0f;
         length = fn_802270A4(&dir);
-        if (lbl_803EB110 == 0) {
+        if (_Pursue_bLeadByAngle == 0) {
             scale = 1.0f;
         }
-        pOut->mY += length * (dx / lbl_803EB108 * (scale * lbl_803EB104));
+        pOut->mY += length * (dx / _Pursue_fLeadWidth * (scale * _Pursue_fLeadScale));
     }
 }
 
-extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t *pVelocity, int *pAngle,
+extern "C" void PursueMatchTarget(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t *pVelocity, int *pAngle,
                             float *pSpeed, Vector_80039F5C *pTarget, float distance)
 {
     if (fn_801BE648(pOther->mpUnknown792) == 74) {
@@ -947,7 +1244,7 @@ extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t 
         } else if (id == 26) {
             if (p->mMotion.mPos.mY > fn_80177FE0().mY) {
                 Object_80039F5C *pLinked = fn_8009BCE8(&pOther->mUnknown336);
-                if (pLinked != 0 && fn_8022781C(&pLinked->mMotion.mPos, &pOther->mMotion.mPos) < lbl_803EB114) {
+                if (pLinked != 0 && fn_8022781C(&pLinked->mMotion.mPos, &pOther->mMotion.mPos) < _Pursue_fLinkedRange) {
                     pVelocity->mX = pLinked->mMotion.mUnknown40;
                     pVelocity->mX = pLinked->mMotion.mUnknown44;
                     *pAngle = pLinked->mMotion.mUnknown32;
@@ -958,17 +1255,17 @@ extern "C" void fn_801294A8(Object_80039F5C *p, Object_80039F5C *pOther, Vec2_t 
     }
 }
 
-extern "C" int fn_80129704(Object_80039F5C *p)
+extern "C" int PursueEnter(Object_80039F5C *p)
 {
-    State_801297F8 *pState = (State_801297F8 *)&p->mUnknown336;
+    PursueState_t *pState = (PursueState_t *)&p->mUnknown336;
 
     pState->mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     pState->mUnknown4 = -1.0f;
     pState->mUnknown16 = 0;
     pState->mUnknown8 = p->mMotion.mFacing;
     pState->mUnknown12 = 0;
-    pState->mUnknown13 = fn_80125F3C(p->mRatings);
-    pState->mUnknown14 = fn_80125FA0(p);
+    pState->mUnknown13 = PursueGetMoveDelay(p->mRatings);
+    pState->mUnknown14 = PursueGetTackleDelay(p);
     pState->mUnknown15 = (int)(p->mRatings[5] / 255.0f * 15.0f + 3.0f);
     pState->mUnknown40 = 0;
     pState->mUnknown42 = p->mpState->mUnknown1;
@@ -977,10 +1274,10 @@ extern "C" int fn_80129704(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_801297F8(Object_80039F5C *p)
+extern "C" int PursueUpdate(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion;
-    State_801297F8 *pState;
+    PursueState_t *pState;
     Object_80039F5C *pOther;
     Ball_t *pBall;
     Lookup_8012078C *pLookup;
@@ -994,7 +1291,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
     int result = 0;
 
     pMotion = &p->mMotion;
-    pState = (State_801297F8 *)&p->mUnknown336;
+    pState = (PursueState_t *)&p->mUnknown336;
     if (fn_801486A0() == 0) {
         fn_801C1F94(&message, 0, sizeof(message));
         message.mId = 97;
@@ -1005,7 +1302,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
         return 1;
     }
     fn_8010A2DC(p, 0, -1);
-    pOther = fn_80128B60();
+    pOther = PursueGetTarget();
     pBall = BallGetCurrent();
     if (pOther != 0) {
         Object_800B26B0 *pOtherMotion = &pOther->mMotion;
@@ -1018,7 +1315,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
         speed = pOtherMotion->mUnknown28;
         angle = pOtherMotion->mUnknown32;
         distance = fn_8022781C(pMotion, &pos);
-        fn_801294A8(p, pOther, (Vec2_t *)&velocity, &angle, &speed, &pos, distance);
+        PursueMatchTarget(p, pOther, (Vec2_t *)&velocity, &angle, &speed, &pos, distance);
     } else {
         if (BallGetLandingPoint(pBall, &pos) != 0) {
             Vector_80039F5C ballPos;
@@ -1103,7 +1400,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
             if (speed < gPlyrMoveFwdSpeed * 0.4f) {
                 speed = gPlyrMoveFwdSpeed * 0.4f;
             }
-            fn_80129360(pMotion, pos, velocity, &dir);
+            PursueLeadTarget(pMotion, pos, velocity, &dir);
             ok = 1;
             dirLength = fn_802270A4(&dir);
             dirAngle = fn_801CFE40(dir.mY, dir.mX);
@@ -1124,9 +1421,9 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
                 fn_80227690(&delta, pMotion, &pOther->mMotion.mPos);
                 facing = (fn_801CFE40(delta.mY, delta.mX) - 0x800000) & 0xFFFFFF;
             }
-            fn_8012886C(p, pState, pLookup, facing, pos, distance, angle & 0xFFFFFF);
-            fn_801269B8(p, pState, distance);
-            pState->mUnknown8 = fn_80129098(pMotion, pState->mUnknown8, pos, dir);
+            PursueChooseHeading(p, pState, pLookup, facing, pos, distance, angle & 0xFFFFFF);
+            PursueAvoidPlayers(p, pState, distance);
+            pState->mUnknown8 = PursueClipHeading(pMotion, pState->mUnknown8, pos, dir);
             if (pState->mUnknown41 == 1 && BallStateGet(pBall, 0) == 3) {
                 int handle = fn_80099734(p, pBall, 0, 2, pState->mUnknown20, 1, 0, 0, fn_8009A77C(p), 120.0f);
 
@@ -1140,13 +1437,13 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
         }
         pState->mUnknown0 = MAX(pState->mUnknown0, 0.0f);
         pState->mUnknown4 = MAX(pState->mUnknown4, 0.0f);
-        fn_801285C8(p, pOther, pState);
+        PursueCheckCarrierWindow(p, pOther, pState);
     }
     if (fn_800A5C04(p, pState->mUnknown8, pState->mUnknown8) != 0) {
         result = 0;
     } else {
         if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
-            if (fn_80128D50(p, pState, pos) != 0) {
+            if (PursueUpdateHold(p, pState, pos) != 0) {
                 p->mUnknown512.mUnknown15 = pState->mUnknown16;
                 if (pState->mUnknown4 > 0.0f) {
                     if (PlyrMoveIsFacingHeading(p) != 0) {
@@ -1167,64 +1464,64 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
                     p->mUnknown512.mUnknown0 = pState->mUnknown0;
                 }
             } else {
-                fn_80126DD4(p, pState, distance, pOther);
+                PursueCloseOnTarget(p, pState, distance, pOther);
                 p->mUnknown512.mUnknown15 = pState->mUnknown16;
                 p->mUnknown512.mUnknown14 = 1;
                 p->mUnknown512.mUnknown8 = pState->mUnknown8;
                 p->mUnknown512.mUnknown4 = pState->mUnknown8;
                 p->mUnknown512.mUnknown0 = pState->mUnknown0;
             }
-            fn_801262B8(p, pOther, pos, distance, pLookup->mpUnknown12[p->mIdBytes[1]]);
+            PursueTryMoves(p, pOther, pos, distance, pLookup->mpUnknown12[p->mIdBytes[1]]);
         } else if (p->mUnknown512.mUnknown15 != 1 && p->mUnknown512.mUnknown15 != 4
                    && p->mUnknown512.mUnknown15 != 5) {
             pState->mUnknown16 = 0;
-            fn_80126DD4(p, pState, distance, pOther);
+            PursueCloseOnTarget(p, pState, distance, pOther);
             p->mUnknown512.mUnknown15 = pState->mUnknown16;
         }
         if (p->mpState->mId == 2) {
-            fn_80128EF8(p, pOther, distance);
-            fn_80128BE0(p, pOther);
+            PursueAimAtTarget(p, pOther, distance);
+            PursueTryBlockReaction(p, pOther);
         }
     }
     return result;
 }
 
-extern "C" int fn_8012A384(void)
+extern "C" int PursueExit(void)
 {
     return 1;
 }
 
-extern "C" int fn_8012A38C(Object_80039F5C *p, int message)
+extern "C" int PursueNotify(Object_80039F5C *p, int message)
 {
     if (message == 1) {
-        State_801297F8 *pState = (State_801297F8 *)&p->mUnknown336;
+        PursueState_t *pState = (PursueState_t *)&p->mUnknown336;
         pState->mUnknown8 = (pState->mUnknown8 + 0x800000) & 0xFFFFFF;
     }
     return 0;
 }
 
-extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance,
+extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance,
                            int *pOut)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     int result = 0;
 
-    *pOut = lbl_803EB0C8;
+    *pOut = _Pursue_iTackleChance;
     if (pOther == 0 || fn_80124714(p, pOther, 0) != 0) {
         if (pOther != 0 && pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
-            && distance < lbl_803EB0B0 * 0.5f && fn_801486A0() != 0) {
+            && distance < _Pursue_fTackleRange * 0.5f && fn_801486A0() != 0) {
             result = 1;
-            *pOut = fn_8012623C(pOther);
+            *pOut = PursueGetCloseTackleChance(pOther);
         } else if (pOther == 0 || pOther->mIdBytes[2] == p->mIdBytes[2]) {
             result = 0;
         } else {
-            float range = lbl_803EB0B0;
+            float range = _Pursue_fTackleRange;
 
             if (MathAngleDiff(pOther->mMotion.mFacing, pMotion->mFacing) <= 0x1FFFFF) {
-                range = lbl_803EB0B8;
+                range = _Pursue_fBehindTackleRange;
             }
             if (distance < range) {
-                unsigned int odds = lbl_803EB0BC;
+                unsigned int odds = _Pursue_uTackleOdds;
                 int boosted = 0;
 
                 if (fn_8011F1CC() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
@@ -1235,13 +1532,13 @@ extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_8
                     result = 1;
                 }
                 if (pMotion->mPos.mY < pos.mY) {
-                    *pOut = lbl_803EB0CC;
+                    *pOut = _Pursue_iAheadTackleChance;
                     if (fabsf(pMotion->mPos.mX - pos.mX) < fabsf(pMotion->mPos.mY - pos.mY) * 0.5f) {
-                        *pOut = lbl_803EB0D0;
+                        *pOut = _Pursue_iLaneTackleChance;
                         if (pMotion->mPos.mY > fn_80178A2C() - 5.0f) {
-                            odds = lbl_803EB0C0;
+                            odds = _Pursue_uLaneLineOdds;
                         } else {
-                            odds = lbl_803EB0C4;
+                            odds = _Pursue_uLaneOdds;
                         }
                         if (boosted) {
                             odds += (unsigned int)(odds * fn_8016B974());
@@ -1251,7 +1548,7 @@ extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_8
                         }
                     }
                 }
-                if ((pOther->mFlags & 0x800) != 0 && distance < lbl_803EB0B4) {
+                if ((pOther->mFlags & 0x800) != 0 && distance < _Pursue_fNoTackleRange) {
                     result = 0;
                 }
             }

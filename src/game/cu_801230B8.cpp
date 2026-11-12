@@ -82,7 +82,7 @@ float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801208C8(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
 float fn_80237260(int a);
 unsigned int fn_802372EC(int a, int b);
-int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C target, unsigned int *pOut, float distance);
+int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C target, unsigned int *pOut, float distance);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 
 void fn_80123E2C(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *);
@@ -1068,7 +1068,7 @@ int fn_80125C28(Object_80039F5C *p, State_80125594 *)
     if (MathAngleDiff(angle, pMotion->mFacing) <= 0x18E38D) {
         Object_80039F5C *pOther = BallGetCurrentHolder();
         float distance = fn_802270A4(&delta);
-        result = fn_8012A3B0(p, pOther, target, &value, distance);
+        result = PursueGetTackleChance(p, pOther, target, &value, distance);
     }
     if (result) {
         value = (unsigned int)(value * 0.1f);

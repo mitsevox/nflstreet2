@@ -1,8 +1,8 @@
-#ifndef GAME_STATE_801297F8_H
-#define GAME_STATE_801297F8_H
+#ifndef GAME_PURSUESTATE_H
+#define GAME_PURSUESTATE_H
 
-/* Partial overlay of the opaque player block at +336. */
-struct State_801297F8 {
+/* Pursuit state block at player +336 (partial overlay; other bytes opaque). */
+struct PursueState_t {
     float mUnknown0;
     float mUnknown4;
     int mUnknown8;
