@@ -38,7 +38,7 @@ struct PlyrMgrCollideSet_t {
     void *mpUnknown20[2];
 };
 
-/* The player manager that lbl_803EA3F8 points to (12 bytes). */
+/* The player manager that _PlyrMgr_pManager points to (12 bytes). */
 struct PlyrMgr_t {
     PlyrSlot_t *mpPlayers;
     PlyrMgrCollideSet_t *mpUnknown4;
@@ -98,7 +98,7 @@ struct PlyrSaveView_t {
 };
 
 extern "C" {
-extern PlyrMgr_t *lbl_803EA3F8;
+extern PlyrMgr_t *_PlyrMgr_pManager;
 
 Point_8017886C fn_80177FFC(int team);
 int fn_800A7FD8(void);
@@ -172,7 +172,7 @@ void PlyrInitAnimChannels(Object_80039F5C *p);
 int fn_80178308(void);
 Object_8003DEC4 *fn_8003DEE4(int value);
 void fn_8009CF30(void *pDst, Pose_80041930 *pPose);
-extern unsigned char lbl_802CCC94[11][2];
+extern unsigned char _PlyrMgr_aCapsuleBonePairs[11][2];
 void fn_80143D3C(Block_80170374 *pBlock);
 void fn_801D04C4(void);
 void fn_801D06D4(void *p);
@@ -182,8 +182,8 @@ float fn_8022785C(void *pA, void *pB);
 void fn_80227CC0(void *pOut, void *pIn);
 void fn_80227264(void *pOut, void *pIn, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
-extern unsigned char lbl_803EA3F0, lbl_803EA3F1, lbl_803EA3F2;
-extern float lbl_803EA3F4;
+extern unsigned char _PlyrMgr_uRumbleMax, _PlyrMgr_uRumbleBase, _PlyrMgr_uRumbleDuration;
+extern float _PlyrMgr_fRumbleScale;
 void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_801438EC(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_80039F5C *pB, CollideObject_t *pRecordB,
                  CollideContactList_t *pContacts);
@@ -344,12 +344,12 @@ extern "C" int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB)
         result = pA->mCount != pB->mCount;
         result |= pA->mPerTeam != pB->mPerTeam;
         for (i = 0; i < pA->mCount; i++) {
-            a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)lbl_803EA3F8));
-            b = (Object_80039F5C *)((char *)&pB->mpPlayers[i] + ((char *)pB - (char *)lbl_803EA3F8));
+            a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)_PlyrMgr_pManager));
+            b = (Object_80039F5C *)((char *)&pB->mpPlayers[i] + ((char *)pB - (char *)_PlyrMgr_pManager));
 
             result |= fn_8009C328(a, b);
-            result |= CollideCompareObjects((CollideObject_t *)((char *)a->mpUnknown3092 + ((char *)pA - (char *)lbl_803EA3F8)),
-                                  (CollideObject_t *)((char *)b->mpUnknown3092 + ((char *)pB - (char *)lbl_803EA3F8)),
+            result |= CollideCompareObjects((CollideObject_t *)((char *)a->mpUnknown3092 + ((char *)pA - (char *)_PlyrMgr_pManager)),
+                                  (CollideObject_t *)((char *)b->mpUnknown3092 + ((char *)pB - (char *)_PlyrMgr_pManager)),
                                   (CollideObject_t *)a->mpUnknown3092);
             result |= fn_80238258(&a->mBlock1032, &b->mBlock1032, 0x80C);
         }
@@ -358,7 +358,7 @@ extern "C" int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB)
 
         result = fn_80238278(pA, sizeof(PlyrMgr_t), 0);
         for (i = 0; i < pA->mCount; i++) {
-            a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)lbl_803EA3F8));
+            a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)_PlyrMgr_pManager));
 
             result = fn_80238278(&a->mUnknown2900, 0xC0, result);
         }
@@ -440,9 +440,9 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
 
 extern "C" int PlyrMgrGetSnapshotSize(void)
 {
-    return sizeof(PlyrMgr_t) + lbl_803EA3F8->mCount * sizeof(PlyrSlot_t)
-        + sizeof(PlyrMgrCollideSet_t) + lbl_803EA3F8->mpUnknown4->mUnknown4 * 48
-        + lbl_803EA3F8->mpUnknown4->mUnknown12 * 48 * 2;
+    return sizeof(PlyrMgr_t) + _PlyrMgr_pManager->mCount * sizeof(PlyrSlot_t)
+        + sizeof(PlyrMgrCollideSet_t) + _PlyrMgr_pManager->mpUnknown4->mUnknown4 * 48
+        + _PlyrMgr_pManager->mpUnknown4->mUnknown12 * 48 * 2;
 }
 
 extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsigned char index)
@@ -504,22 +504,22 @@ extern "C" void PlyrContactCallback(CollideObject_t *pA, CollideObject_t *pB, Co
     if (a->mUnknown560.mUnknown28 > 1e-7f || b->mUnknown560.mUnknown28 > 1e-7f) {
         AudmonEventPostArgs(35, &a->mMotion.mPos, (int)a, (int)b, 0);
         if (a->mUnknown8 != 0xFF) {
-            unsigned int limit = lbl_803EA3F0;
-            unsigned int level = (unsigned int)(lbl_803EA3F4 * a->mUnknown560.mUnknown28 + lbl_803EA3F1);
+            unsigned int limit = _PlyrMgr_uRumbleMax;
+            unsigned int level = (unsigned int)(_PlyrMgr_fRumbleScale * a->mUnknown560.mUnknown28 + _PlyrMgr_uRumbleBase);
 
             if (level > limit) {
                 level = limit;
             }
-            RumbleStart(a->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(a->mUnknown8, (unsigned char)level, _PlyrMgr_uRumbleDuration);
         }
         if (b->mUnknown8 != 0xFF) {
-            unsigned int limit = lbl_803EA3F0;
-            unsigned int level = (unsigned int)(lbl_803EA3F4 * b->mUnknown560.mUnknown28 + lbl_803EA3F1);
+            unsigned int limit = _PlyrMgr_uRumbleMax;
+            unsigned int level = (unsigned int)(_PlyrMgr_fRumbleScale * b->mUnknown560.mUnknown28 + _PlyrMgr_uRumbleBase);
 
             if (level > limit) {
                 level = limit;
             }
-            RumbleStart(b->mUnknown8, (unsigned char)level, lbl_803EA3F2);
+            RumbleStart(b->mUnknown8, (unsigned char)level, _PlyrMgr_uRumbleDuration);
         }
     }
 }
@@ -654,7 +654,7 @@ extern "C" void PlyrMgrRegister(unsigned int count)
     PlyrMgr_t *pManager;
 
     CollideSetPairCallback(0, 0, PlyrContactCallback);
-    pHandle = fn_80238174(0, (void **)&lbl_803EA3F8, sizeof(PlyrMgr_t), 1, 0x706C7972);
+    pHandle = fn_80238174(0, (void **)&_PlyrMgr_pManager, sizeof(PlyrMgr_t), 1, 0x706C7972);
     fn_80238234(pHandle, (Callback_80238234)PlyrMgrCreate, (Callback_80238234)PlyrMgrDestroy,
                 (Callback_80238234)PlyrMgrRefreshAll, (Callback1C_80238234)PlyrMgrCompareSnapshot);
     fn_80238248(pHandle, (Callback28_80238248)PlyrMgrSaveSnapshot, (Callback24_80238248)PlyrMgrGetSnapshotSize,
@@ -667,12 +667,12 @@ extern "C" void PlyrMgrRegister(unsigned int count)
 
 extern "C" void PlyrMgrReset(void)
 {
-    lbl_803EA3F8 = 0;
+    _PlyrMgr_pManager = 0;
 }
 
 extern "C" int PlyrMgrExists(void)
 {
-    if (lbl_803EA3F8 != 0) {
+    if (_PlyrMgr_pManager != 0) {
         return 1;
     }
     return 0;
@@ -680,7 +680,7 @@ extern "C" int PlyrMgrExists(void)
 
 extern "C" void PlyrMgrUpdate(void)
 {
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
     int replay = fn_801787A0();
     int team = fn_80178320();
     int i;
@@ -690,7 +690,7 @@ extern "C" void PlyrMgrUpdate(void)
     fn_800C845C();
     PlayerMoveTickAll();
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         int active;
 
         if (p->mFlags & 0x800) {
@@ -725,7 +725,7 @@ extern "C" void PlyrMgrUpdate(void)
 extern "C" void PlyrMgrEmptyPass(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
     }
@@ -734,10 +734,10 @@ extern "C" void PlyrMgrEmptyPass(void)
 extern "C" void PlyrMgrUpdateSkeletons(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         void *pBlock = p->mpUnknown4;
         fn_8009CDEC(p);
         PlyrFixWristBones(p);
@@ -748,10 +748,10 @@ extern "C" void PlyrMgrUpdateSkeletons(void)
 extern "C" void PlyrMgrStepStates(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         fn_8009CE88(p, &p->mUnknown108, 6);
         fn_8009CE88(p, &p->mUnknown200, 6);
         fn_8009CE88(p, &p->mUnknown16, 6);
@@ -765,9 +765,9 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
     Object_80039F5C *p;
 
     fn_8016F780();
-    count = lbl_803EA3F8->mCount;
+    count = _PlyrMgr_pManager->mCount;
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
 
         PlyrMoveUpdate(p, dt);
         PlyrClampBehindLine(p);
@@ -779,7 +779,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
     for (i = 0; i < count; i++) {
     }
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         Vector_80039F5C pos;
 
         fn_8009BEA8(p);
@@ -796,7 +796,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
 
 extern "C" void PlyrMgrTestCollisions(void)
 {
-    CollideSet_t *pSet = (CollideSet_t *)lbl_803EA3F8->mpUnknown4;
+    CollideSet_t *pSet = (CollideSet_t *)_PlyrMgr_pManager->mpUnknown4;
     CollideSetTest(pSet, pSet);
     CollideSetTest(PlyrMgrGetCollideSet(), StatcollGetSet());
 }
@@ -804,22 +804,22 @@ extern "C" void PlyrMgrTestCollisions(void)
 extern "C" void PlyrMgrRunBrains(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        fn_8008E978(&lbl_803EA3F8->mpPlayers[i].mObject);
+        fn_8008E978(&_PlyrMgr_pManager->mpPlayers[i].mObject);
     }
 }
 
 extern "C" void PlyrMgrUpdatePoses(float dt)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
     Object_80039F5C *p;
     PlyrModelView_t *pBlock;
 
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         pBlock = (PlyrModelView_t *)p->mpUnknown4;
 
         if (pBlock->mFlags & 0x10) {
@@ -828,17 +828,17 @@ extern "C" void PlyrMgrUpdatePoses(float dt)
         PlyrAnimUpdateHands(p, pBlock, dt);
     }
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
 
         fn_801BE420(p->mUnknown1244 + 1252, p->mUnknown1244, p->mUnknown1244 + 12, p, dt);
     }
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
 
         fn_801BA03C(p->mUnknown1244, p->mUnknown1244 + 12, dt, p);
     }
     for (i = 0; i < count; i++) {
-        p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         pBlock = (PlyrModelView_t *)p->mpUnknown4;
         int texture;
 
@@ -858,16 +858,16 @@ extern "C" void PlyrMgrUpdatePoses(float dt)
 extern "C" void PlyrMgrUpdateModels(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        fn_80042270(&lbl_803EA3F8->mpPlayers[i].mObject);
+        fn_80042270(&_PlyrMgr_pManager->mpPlayers[i].mObject);
     }
 }
 
 extern "C" Object_80039F5C *PlyrGet(int team, unsigned short index)
 {
-    PlyrMgr_t *pManager = lbl_803EA3F8;
+    PlyrMgr_t *pManager = _PlyrMgr_pManager;
 
     Object_80039F5C *p = 0;
 
@@ -879,11 +879,11 @@ extern "C" Object_80039F5C *PlyrGet(int team, unsigned short index)
 
 extern "C" int PlyrGetIndex(Object_80039F5C *p)
 {
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
     int i;
 
     for (i = 0; i < count; i++) {
-        if (p == &lbl_803EA3F8->mpPlayers[i].mObject) {
+        if (p == &_PlyrMgr_pManager->mpPlayers[i].mObject) {
             break;
         }
     }
@@ -914,23 +914,23 @@ extern "C" Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n)
 
 extern "C" int PlyrMgrGetPerTeam(void)
 {
-    return lbl_803EA3F8->mPerTeam;
+    return _PlyrMgr_pManager->mPerTeam;
 }
 
 extern "C" CollideSet_t *PlyrMgrGetCollideSet(void)
 {
-    if (lbl_803EA3F8 == 0) {
+    if (_PlyrMgr_pManager == 0) {
         return 0;
     }
-    return (CollideSet_t *)lbl_803EA3F8->mpUnknown4;
+    return (CollideSet_t *)_PlyrMgr_pManager->mpUnknown4;
 }
 
 extern "C" void PlyrMgrReverseAll(void)
 {
     unsigned short i;
 
-    for (i = 0; i < lbl_803EA3F8->mCount; i++) {
-        PlyrSlot_t *pPlayer = &lbl_803EA3F8->mpPlayers[i];
+    for (i = 0; i < _PlyrMgr_pManager->mCount; i++) {
+        PlyrSlot_t *pPlayer = &_PlyrMgr_pManager->mpPlayers[i];
         Object_80039F5C *p = &pPlayer->mObject;
         fn_800B2BC0(&p->mMotion);
         fn_801BCEEC(p->mUnknown1244, p->mUnknown1244 + 12);
@@ -947,8 +947,8 @@ extern "C" Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, 
     float best = 10000.0f;
     unsigned short i;
 
-    for (i = 0; i < lbl_803EA3F8->mCount; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+    for (i = 0; i < _PlyrMgr_pManager->mCount; i++) {
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         if (((p->mId >> 8) & 0xFF) == (unsigned char)team) {
             float d = fn_8022781C(&p->mMotion.mPos, pPos);
             if (d < best) {
@@ -965,7 +965,7 @@ extern "C" Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, 
 
 extern "C" void PlyrRouteShow(int on, int team, int index)
 {
-    Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[index + team * lbl_803EA3F8->mPerTeam].mObject;
+    Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[index + team * _PlyrMgr_pManager->mPerTeam].mObject;
     PlyrModelView_t *pBlock = (PlyrModelView_t *)p->mpUnknown4;
 
     if (on != 0) {
@@ -1016,7 +1016,7 @@ extern "C" void PlyrRouteShowHighlighted(int a, int team, int index)
     PlyrModelView_t *pBlock;
 
     PlyrRouteShow(a, team, index);
-    p = &lbl_803EA3F8->mpPlayers[index + team * lbl_803EA3F8->mPerTeam].mObject;
+    p = &_PlyrMgr_pManager->mpPlayers[index + team * _PlyrMgr_pManager->mPerTeam].mObject;
     pBlock = (PlyrModelView_t *)p->mpUnknown4;
     if (pBlock->mpUnknown984 != 0) {
         fn_8015C244(pBlock->mpUnknown984);
@@ -1026,7 +1026,7 @@ extern "C" void PlyrRouteShowHighlighted(int a, int team, int index)
 extern "C" void PlyrRouteShowTeam(int a, int team)
 {
     int i;
-    int count = lbl_803EA3F8->mPerTeam;
+    int count = _PlyrMgr_pManager->mPerTeam;
 
     for (i = 0; i < count; i++) {
         PlyrRouteShow(a, team, i);
@@ -1036,10 +1036,10 @@ extern "C" void PlyrRouteShowTeam(int a, int team)
 extern "C" void PlyrMgrClearStates(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         fn_8009D00C(p, &p->mUnknown108);
         fn_8009D00C(p, &p->mUnknown200);
         fn_8009D00C(p, &p->mUnknown16);
@@ -1054,10 +1054,10 @@ extern "C" void PlyrMgrClearStates(void)
 extern "C" void PlyrMgrResetAll(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         p->mFlags &= ~0x80000000;
         p->mFlags &= ~0x10000000;
         p->mFlags &= ~0x04000000;
@@ -1079,14 +1079,14 @@ extern "C" void PlyrMgrResetAll(void)
 
 extern "C" void PlyrMgrSetLeadFlags(void)
 {
-    PlyrMgr_t *pManager = lbl_803EA3F8;
+    PlyrMgr_t *pManager = _PlyrMgr_pManager;
     ((PlyrModelView_t *)pManager->mpPlayers[0].mObject.mpUnknown4)->mFlags |= 0x4000;
     ((PlyrModelView_t *)pManager->mpPlayers[pManager->mCount / 2].mObject.mpUnknown4)->mFlags |= 0x4000;
 }
 
 extern "C" void PlyrMgrClearLeadFlags(void)
 {
-    PlyrMgr_t *pManager = lbl_803EA3F8;
+    PlyrMgr_t *pManager = _PlyrMgr_pManager;
     ((PlyrModelView_t *)pManager->mpPlayers[0].mObject.mpUnknown4)->mFlags &= ~0x4000;
     ((PlyrModelView_t *)pManager->mpPlayers[pManager->mCount / 2].mObject.mpUnknown4)->mFlags &= ~0x4000;
 }
@@ -1171,8 +1171,8 @@ extern "C" void PlyrUpdateCollRecord(CollideObject_t *pRecord)
             float (*pB)[4];
 
             pSub = &pRecord->mpUnknown20[i];
-            pA = pMatrices[lbl_802CCC94[i][0]];
-            pB = pMatrices[lbl_802CCC94[i][1]];
+            pA = pMatrices[_PlyrMgr_aCapsuleBonePairs[i][0]];
+            pB = pMatrices[_PlyrMgr_aCapsuleBonePairs[i][1]];
             a.mX = pA[0][3];
             a.mY = pA[1][3];
             a.mZ = pA[2][3];
@@ -1298,10 +1298,10 @@ extern "C" void PlyrInitAnimChannels(Object_80039F5C *p)
 extern "C" void PlyrMgrRefreshModels(void)
 {
     int i;
-    int count = lbl_803EA3F8->mCount;
+    int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
+        Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         PlyrModelView_t *pBlock = (PlyrModelView_t *)p->mpUnknown4;
         fn_8009C370(p);
         fn_80042270(p);

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int SndgMusicReshuffle(void);
+void SndgMusicReshuffle(void);
 void SndgMusicContinue(void);
 
 #ifdef __cplusplus

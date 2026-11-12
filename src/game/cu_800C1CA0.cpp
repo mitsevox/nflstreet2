@@ -20,7 +20,7 @@ void PlyrMgrResetAll(void);
 void BigObjNotifyTypes(unsigned int flags);
 void fn_800588E0(void);
 void fn_80071C34(int value);
-void SndgMusicExitMode(int resume);
+void SndgMusicExitMode(int pauseAfter);
 void SpchIGEndSceneLine(void);
 unsigned char SpchIGIsSceneLineActive(void);
 void SpchIGResumeChannel(int index);

@@ -138,7 +138,7 @@ void SndgMusicRampCutoff(int value, unsigned int duration);
 void SndgMusicPumpFrame(int draw);
 void SndgMusicWaitForStart(int frames);
 int SndgMusicGetMode(void);
-void SndgMusicExitMode(int resume);
+void SndgMusicExitMode(int pauseAfter);
 
 void SndgMusicTrackCallback(int flags, int event)
 {
@@ -776,7 +776,7 @@ int SndgMusicGetMode(void)
     return _SndgMusic_pState->mUnknown11C;
 }
 
-void SndgMusicExitMode(int resume)
+void SndgMusicExitMode(int pauseAfter)
 {
     int handled = 1;
     switch (_SndgMusic_pState->mUnknown11C) {
@@ -797,7 +797,7 @@ void SndgMusicExitMode(int resume)
         break;
     default: handled = 0; break;
     }
-    if (handled && resume) {
+    if (handled && pauseAfter) {
         SndgMusicPumpFrame(1);
         SndgMusicPause();
     }

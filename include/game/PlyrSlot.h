@@ -4,7 +4,7 @@
 #include "engine/Record_800D81C8.h"
 #include "game/Object_80039F5C.h"
 
-/* Player slot of the array that lbl_803EA3F8 points to: the shared player
+/* Player slot of the array that _PlyrMgr_pManager points to: the shared player
    object, then the main channel list and records with its 404-byte
    sequence state (player +808/+812/+804 point at them), then the two
    per-side lists, record pairs and states. Padded to the 5336-byte stride

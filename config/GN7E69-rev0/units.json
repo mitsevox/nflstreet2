@@ -2432,6 +2432,30 @@
     "CamInterpUpdateEaseInOut": {
       "address": "0x8013CC7C",
       "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
+    },
+    "_PlyrMgr_pManager": {
+      "address": "0x803EA3F8",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F8 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleMax": {
+      "address": "0x803EA3F0",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F0 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleBase": {
+      "address": "0x803EA3F1",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F1 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleDuration": {
+      "address": "0x803EA3F2",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F2 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_fRumbleScale": {
+      "address": "0x803EA3F4",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F4 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_aCapsuleBonePairs": {
+      "address": "0x802CCC94",
+      "evidence": "evidence.tsv data and name rows for 0x802CCC94 (.data data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
     }
   },
   "units": [
@@ -8020,7 +8044,7 @@
     {
       "source": "src/game/ScreenTransition.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, data and source-form rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, name, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",
       "sections": [
         {
           "section": ".text",
@@ -8033,6 +8057,30 @@
           "placement": ".data3",
           "start": "0x802AD908",
           "end": "0x802AD9D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDCD0",
+          "end": "0x802EDD14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB738",
+          "end": "0x803EB740"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365128",
+          "end": "0x80365188"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBB0",
+          "end": "0x803ECBBC"
         }
       ]
     },
@@ -10600,7 +10648,7 @@
     {
       "source": "src/game/BigObj.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/BigObj.cpp) and its .rodata, .sdata and .sbss rows.",
+      "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp) and its .rodata, .sdata and .sbss rows.",
       "sections": [
         {
           "section": ".text",
