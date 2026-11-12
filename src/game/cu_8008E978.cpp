@@ -3551,7 +3551,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
-int fn_800EE7C8(Object_80039F5C *p);
+int HandoffIsStarting(Object_80039F5C *p);
 unsigned int fn_8011E188(void);
 int MathAngleDiff(int a, int b);
 unsigned short fn_801BE648(void *p);
@@ -3881,7 +3881,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
         }
         break;
     case 26:
-        if (fn_800EE7C8(pOther)) {
+        if (HandoffIsStarting(pOther)) {
             return 0;
         }
         break;

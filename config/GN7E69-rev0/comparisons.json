@@ -5939,19 +5939,19 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8, 0x800EBDCC and 0x800EC870 are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DF7C, whose data row grades only its edges: its contents are measured fuzzy (566/572; the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 and a 4-byte alignment tail differ), not exact. The unreferenced literals 0x8029DED0-0x8029DEE3 come only from the discarded Stripped_8029DED0, recovered from the Xbox prototype NFLBig.xbe at VA 0xAA0E0 (linker row 0x8029DED0-0x8029DEE4); it has no GC extent and is compiled but not registered or measured. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp (0x800E3CC0-0x800ECC64), registered whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8, 0x800EBDCC and 0x800EC870 are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DE78, whose data row grades only its edges: its contents are measured fuzzy (the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 differs), not exact. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E3CC0",
-          "end": "0x800EF834"
+          "end": "0x800ECC64"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029DD40",
-          "end": "0x8029DF7C"
+          "end": "0x8029DE78"
         }
       ],
       "functions": [
@@ -6126,136 +6126,6 @@
           "end": "0x800ECC64"
         },
         {
-          "symbol": "fn_800ECC64",
-          "start": "0x800ECC64",
-          "end": "0x800ECD14"
-        },
-        {
-          "symbol": "fn_800ECD14",
-          "start": "0x800ECD14",
-          "end": "0x800ECE28"
-        },
-        {
-          "symbol": "fn_800ECE28",
-          "start": "0x800ECE28",
-          "end": "0x800ECE30"
-        },
-        {
-          "symbol": "fn_800ECE30",
-          "start": "0x800ECE30",
-          "end": "0x800ECE38"
-        },
-        {
-          "symbol": "fn_800ECE38",
-          "start": "0x800ECE38",
-          "end": "0x800ECEBC"
-        },
-        {
-          "symbol": "fn_800ECEBC",
-          "start": "0x800ECEBC",
-          "end": "0x800ED0F4"
-        },
-        {
-          "symbol": "fn_800ED0F4",
-          "start": "0x800ED0F4",
-          "end": "0x800ED208"
-        },
-        {
-          "symbol": "fn_800ED208",
-          "start": "0x800ED208",
-          "end": "0x800ED484"
-        },
-        {
-          "symbol": "fn_800ED484",
-          "start": "0x800ED484",
-          "end": "0x800ED670"
-        },
-        {
-          "symbol": "fn_800ED670",
-          "start": "0x800ED670",
-          "end": "0x800EDB48"
-        },
-        {
-          "symbol": "fn_800EDB48",
-          "start": "0x800EDB48",
-          "end": "0x800EDC68"
-        },
-        {
-          "symbol": "fn_800EDC68",
-          "start": "0x800EDC68",
-          "end": "0x800EDDEC"
-        },
-        {
-          "symbol": "fn_800EDDEC",
-          "start": "0x800EDDEC",
-          "end": "0x800EE61C"
-        },
-        {
-          "symbol": "fn_800EE61C",
-          "start": "0x800EE61C",
-          "end": "0x800EE694"
-        },
-        {
-          "symbol": "fn_800EE7C8",
-          "start": "0x800EE7C8",
-          "end": "0x800EE7DC"
-        },
-        {
-          "symbol": "fn_800EE7DC",
-          "start": "0x800EE7DC",
-          "end": "0x800EE964"
-        },
-        {
-          "symbol": "fn_800EE964",
-          "start": "0x800EE964",
-          "end": "0x800EE9AC"
-        },
-        {
-          "symbol": "fn_800EE9AC",
-          "start": "0x800EE9AC",
-          "end": "0x800EEA20"
-        },
-        {
-          "symbol": "fn_800EEA20",
-          "start": "0x800EEA20",
-          "end": "0x800EEDC8"
-        },
-        {
-          "symbol": "fn_800EEDC8",
-          "start": "0x800EEDC8",
-          "end": "0x800EEE3C"
-        },
-        {
-          "symbol": "fn_800EEE3C",
-          "start": "0x800EEE3C",
-          "end": "0x800EF0DC"
-        },
-        {
-          "symbol": "fn_800EF0DC",
-          "start": "0x800EF0DC",
-          "end": "0x800EF0FC"
-        },
-        {
-          "symbol": "fn_800EF0FC",
-          "start": "0x800EF0FC",
-          "end": "0x800EF1C8"
-        },
-        {
-          "symbol": "fn_800EF1C8",
-          "start": "0x800EF1C8",
-          "end": "0x800EF224"
-        },
-        {
-          "symbol": "fn_800EF224",
-          "start": "0x800EF224",
-          "end": "0x800EF538"
-        },
-        {
-          "symbol": "fn_800EF538",
-          "start": "0x800EF538",
-          "end": "0x800EF834"
-        },
-        {
           "symbol": "fn_800E579C",
           "start": "0x800E579C",
           "end": "0x800E586C"
@@ -6346,11 +6216,6 @@
           "end": "0x800EC840"
         },
         {
-          "symbol": "fn_800EE694",
-          "start": "0x800EE694",
-          "end": "0x800EE7C8"
-        },
-        {
           "symbol": "fn_800E8BE8",
           "start": "0x800E8BE8",
           "end": "0x800E8E04"
@@ -6395,9 +6260,6 @@
           "start": "0x800EA6F0",
           "end": "0x800EAC9C"
         }
-      ],
-      "discarded": [
-        "Stripped_8029DED0"
       ]
     },
     {

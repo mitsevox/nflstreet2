@@ -25,7 +25,7 @@
 #include "game/Possession.h"
 #include "game/Info_ScrmState.h"
 
-/* Player block at +336 as written after fn_800EEE3C: the point and facing it
+/* Player block at +336 as written after HuddleGetSpot: the point and facing it
    returned and two flag bytes. */
 struct State_8016DDDC {
     char mUnknown0[8];
@@ -77,7 +77,7 @@ void fn_800C9FC0(void);
 void fn_800CA3C4(void);
 void PlayerMoveResetAll(void);
 void fn_800DC578(void);
-void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
+void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FAD2C(void);
@@ -232,7 +232,7 @@ extern "C" void fn_8016DDDC(int team)
         switch (p->mpState->mId) {
         case 13:
         case 14:
-            fn_800EEE3C(&point, &facing, p, 1);
+            HuddleGetSpot(&point, &facing, p, 1);
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
@@ -247,7 +247,7 @@ extern "C" void fn_8016DDDC(int team)
             }
             fn_800EFE60(0, p->mpState, p);
             fn_8016DBE4(p);
-            fn_800EEE3C(&point, &facing, p, 1);
+            HuddleGetSpot(&point, &facing, p, 1);
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;

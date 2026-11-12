@@ -12496,20 +12496,72 @@
       ]
     },
     {
-      "source": "src/game/CarrierMove.cpp",
+      "source": "src/game/Handoff.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "evidence": "evidence.tsv unit row 0x800ECC64-0x800EF224 (src/game/Handoff.cpp), its function rows, the .rodata data row 0x8029DE78-0x8029DF40 and the linker row 0x8029DED0-0x8029DEE4 of the discarded HandoffSteerClear.",
+      "link_roots": {
+        "symbols": [
+          "TurnToPlayEnter",
+          "TurnToPlayUpdate",
+          "TurnToPlayExit",
+          "TurnToPlayNotify",
+          "TurnToPlayInput",
+          "HandoffPickSide",
+          "HandoffIsMirrored",
+          "HandoffStartAnim",
+          "HandoffTryPairAnim",
+          "HandoffSteer",
+          "HandoffGiveBall",
+          "HandoffEnter",
+          "HandoffUpdate",
+          "HandoffExit",
+          "HandoffMirrorMessage",
+          "HandoffIsStarting",
+          "HuddleArrive",
+          "HuddleSetSpot",
+          "HuddleMoveEnter",
+          "HuddleMoveUpdate",
+          "HuddleMoveAltEnter",
+          "HuddleGetSpot",
+          "HuddleMoveAltUpdate",
+          "HuddleHoldUpdate",
+          "HuddleHoldExit"
+        ],
+        "discarded": [
+          "HandoffSteerClear"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029DED0-0x8029DEE4: the target keeps every listed function, all reached from the state handler table or from each other; HandoffSteerClear has no code in the target, while its literal pool remains in the unit's rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800EF834",
+          "start": "0x800ECC64",
+          "end": "0x800EF224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DE78",
+          "end": "0x8029DF40"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CarrierMove.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EF224-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF40-0x8029DF88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EF224",
           "end": "0x800EFC68"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DF7C",
+          "start": "0x8029DF40",
           "end": "0x8029DF88"
         }
       ]
