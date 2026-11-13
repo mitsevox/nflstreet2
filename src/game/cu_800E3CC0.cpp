@@ -879,28 +879,38 @@ extern "C" void fn_800E954C(Object_80039F5C *p, int id, int *pAngle, int value, 
         if (pHeading) {
             heading = *pHeading;
             difference = MathAngleDiff(p->mMotion.mFacing, heading);
+            message.mUnknown1[0] = fn_800E9010(heading, difference);
         } else {
             heading = (heading - p->mMotion.mFacing) & 0xFFFFFF;
             difference = MathAngleDiff(p->mMotion.mFacing, heading);
             if (BallFindHeldBy(p) && p->mUnknown776 == 1)
                 heading = 0x1000000 - heading;
+            message.mUnknown1[0] = fn_800E9010(heading, difference);
         }
-        message.mUnknown1[0] = fn_800E9010(heading, difference);
         message.mUnknown1[0] |= lbl_803EAD9C[((heading + 0x100000) >> 21) & 7] << 4;
         message.mUnknown1[2] = value;
         switch (p->mpState->mId) {
-        case 16:
-            ((State_800E954C *)&p->mUnknown336)->mUnknown31 = 1;
+        case 16: {
+            State_800E954C *pState = (State_800E954C *)&p->mUnknown336;
+
+            pState->mUnknown31 = 1;
             fn_800F05E4(0, p->mpState, &message, p);
             break;
-        case 17:
-            ((State_800E954C *)&p->mUnknown336)->mUnknown15 = 1;
+        }
+        case 17: {
+            State_800E954C *pState = (State_800E954C *)&p->mUnknown336;
+
+            pState->mUnknown15 = 1;
             fn_800F05E4(0, p->mpState, &message, p);
             break;
-        case 32:
-            ((State_800E954C *)&p->mUnknown336)->mUnknown8 = 1;
+        }
+        case 32: {
+            State_800E954C *pState = (State_800E954C *)&p->mUnknown336;
+
+            pState->mUnknown8 = 1;
             fn_800F05E4(0, p->mpState, &message, p);
             break;
+        }
         case 34:
         case 35:
         case 36:
