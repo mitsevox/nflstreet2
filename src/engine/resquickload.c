@@ -228,10 +228,10 @@ int fn_801F2CD4(char *pName)
 
     for (pQuickload = fn_801C6B4C(lbl_803EBDD8, 0); pQuickload != 0; pQuickload = fn_801C6C84(lbl_803EBDD8, pQuickload)) {
         if (strcmp(pQuickload->pName, pName) == 0) {
-            result = 1;
             fn_801D2BD0(pQuickload->pData);
             fn_801C97F0(pQuickload->mHandle);
             fn_801C6C0C(lbl_803EBDD8, pQuickload);
+            result = 1;
             break;
         }
     }
