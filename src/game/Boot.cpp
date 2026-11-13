@@ -41,8 +41,8 @@ void fn_801CEA84(void);
 void fn_801CEADC(int a);
 int fn_801CEC84(void);
 void fn_801D6F58(void);
-void fn_801D9360(int a, int b, int c, int (*pCallback)(int), int d);
-int fn_801D9494(void (*pCallback)(void));
+void MovieRcmpPlay(int a, int b, int c, int (*pCallback)(int), int d);
+int MovieRcmpInstallMADCOWCodec(void (*pCallback)(void));
 void fn_801DA46C(void);
 int fn_801E15D0(int a);
 int fn_801E17D0(int a, struct PerDeviceData_t *pState);
@@ -326,7 +326,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     int frameBuffer;
     int height;
 
-    fn_801D9494(fn_801DA46C);
+    MovieRcmpInstallMADCOWCodec(fn_801DA46C);
     if (pBuffer == 0) {
         pBuffer = fn_801D2B7C(0x100000, 0, 0);
     }
@@ -346,7 +346,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     height = fn_801CEC84();
     DCFlushRange((void *)frameBuffer, height * (unsigned short)((fn_801CEA08() + 15) & ~15) * 4);
     _Boot_bMovieAbort = 0;
-    fn_801D9360(handle, unknown0, unknown1, _BootMovieCallback, a == 1);
+    MovieRcmpPlay(handle, unknown0, unknown1, _BootMovieCallback, a == 1);
     fn_801CEA84();
     fn_801F6B84(handle);
     fn_801D2BD0(pBuffer);

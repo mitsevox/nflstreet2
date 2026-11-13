@@ -2591,6 +2591,31 @@
       ]
     },
     {
+      "source": "src/engine/moviercmp.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D86B4-0x801D94A0 (src/engine/moviercmp.cpp), its function rows and its data rows (.rodata pool 0x802AFF40-0x802AFF68, .sdata codec hooks 0x803EBD44-0x803EBD4C); every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D86B4",
+          "end": "0x801D94A0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFF40",
+          "end": "0x802AFF68"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD44",
+          "end": "0x803EBD4C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/llmoviercmp.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801D94A0-0x801D9634 (src/engine/llmoviercmp.cpp) and its function rows; every function exact, promoted from comparison-only.",

@@ -38452,132 +38452,6 @@
       ]
     },
     {
-      "source": "src/engine/moviercmp.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/moviercmp.cpp), its function rows and the exact .rodata data row 0x802AFF40-0x802AFF68. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C divide 64-bit tick counts through the libgcc helper __divdi3 (units.json external 0x8025E290). The allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D86B4",
-          "end": "0x801D94A0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AFF40",
-          "end": "0x802AFF68"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801D86B4__FPCciiii",
-          "start": "0x801D86B4",
-          "end": "0x801D86E0"
-        },
-        {
-          "symbol": "fn_801D86E0__FPv",
-          "start": "0x801D86E0",
-          "end": "0x801D8704"
-        },
-        {
-          "symbol": "fn_801D8704__FP14Audio_801D86B4",
-          "start": "0x801D8704",
-          "end": "0x801D8770"
-        },
-        {
-          "symbol": "fn_801D8770__FPv",
-          "start": "0x801D8770",
-          "end": "0x801D8778"
-        },
-        {
-          "symbol": "fn_801D8778__FP16Decoder_801D86B4PP13Info_801D86B4PP14Chunk_801D86B4",
-          "start": "0x801D8778",
-          "end": "0x801D89D4"
-        },
-        {
-          "symbol": "fn_801D89D4__FP16Decoder_801D86B4PP13Info_801D86B4P14Chunk_801D86B4",
-          "start": "0x801D89D4",
-          "end": "0x801D8A2C"
-        },
-        {
-          "symbol": "fn_801D8A2C",
-          "start": "0x801D8A2C",
-          "end": "0x801D8B54"
-        },
-        {
-          "symbol": "fn_801D8B54",
-          "start": "0x801D8B54",
-          "end": "0x801D8BC8"
-        },
-        {
-          "symbol": "fn_801D8BC8",
-          "start": "0x801D8BC8",
-          "end": "0x801D8C84"
-        },
-        {
-          "symbol": "fn_801D8C84",
-          "start": "0x801D8C84",
-          "end": "0x801D8CD8"
-        },
-        {
-          "symbol": "fn_801D8CD8",
-          "start": "0x801D8CD8",
-          "end": "0x801D8DE8"
-        },
-        {
-          "symbol": "fn_801D8DE8",
-          "start": "0x801D8DE8",
-          "end": "0x801D900C"
-        },
-        {
-          "symbol": "fn_801D900C",
-          "start": "0x801D900C",
-          "end": "0x801D9224"
-        },
-        {
-          "symbol": "fn_801D9224",
-          "start": "0x801D9224",
-          "end": "0x801D9230"
-        },
-        {
-          "symbol": "fn_801D9230",
-          "start": "0x801D9230",
-          "end": "0x801D923C"
-        },
-        {
-          "symbol": "fn_801D923C",
-          "start": "0x801D923C",
-          "end": "0x801D9290"
-        },
-        {
-          "symbol": "fn_801D9290",
-          "start": "0x801D9290",
-          "end": "0x801D92B8"
-        },
-        {
-          "symbol": "fn_801D92B8",
-          "start": "0x801D92B8",
-          "end": "0x801D9320"
-        },
-        {
-          "symbol": "fn_801D9320",
-          "start": "0x801D9320",
-          "end": "0x801D9360"
-        },
-        {
-          "symbol": "fn_801D9360",
-          "start": "0x801D9360",
-          "end": "0x801D9494"
-        },
-        {
-          "symbol": "fn_801D9494",
-          "start": "0x801D9494",
-          "end": "0x801D94A0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801D9634.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv compiler row 0x801D9634-0x801D9A88 (src/engine/cu_801D9634.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file rcmpbase.cpp (RCMP::DECODER, RCMP::CHUNK, RCMP::CODEC_IDATA, RCMP::RCMP_SYSTEM). The decoder methods are drafted as C functions taking the decoder explicitly and the two record constructors as C functions returning the object; the RCMP_SYSTEM and DECODER constructors/destructors and the static initialisers (0x801D9634, 0x801D9654, 0x801D96C8, 0x801D99A8-0x801D9A88) have no draft because they store the virtual table addresses 0x802AFF78/0x802AFF90.",
@@ -38662,7 +38536,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D9A88__FP14Chunk_801D86B4",
+          "symbol": "fn_801D9A88__FP11RcmpChunk_t",
           "start": "0x801D9A88",
           "end": "0x801D9AA8"
         },
@@ -38672,7 +38546,7 @@
           "end": "0x801D9B5C"
         },
         {
-          "symbol": "fn_801D9DA4__17MadCodec_801D9A88P16Decoder_801D86B4P14Chunk_801D86B4",
+          "symbol": "fn_801D9DA4__17MadCodec_801D9A88P11RcmpDecoderP11RcmpChunk_t",
           "start": "0x801D9DA4",
           "end": "0x801D9DC0"
         },
@@ -38687,17 +38561,17 @@
           "end": "0x801D9DD0"
         },
         {
-          "symbol": "fn_801D9DD0__17MadCodec_801D9A88PP14Chunk_801D86B4",
+          "symbol": "fn_801D9DD0__17MadCodec_801D9A88PP11RcmpChunk_t",
           "start": "0x801D9DD0",
           "end": "0x801D9E14"
         },
         {
-          "symbol": "fn_801D9E14__17MadCodec_801D9A88P14Chunk_801D86B4",
+          "symbol": "fn_801D9E14__17MadCodec_801D9A88P11RcmpChunk_t",
           "start": "0x801D9E14",
           "end": "0x801D9E40"
         },
         {
-          "symbol": "fn_801D9E40__17MadCodec_801D9A88P14Chunk_801D86B4",
+          "symbol": "fn_801D9E40__17MadCodec_801D9A88P11RcmpChunk_t",
           "start": "0x801D9E40",
           "end": "0x801DA20C"
         },
@@ -38717,7 +38591,7 @@
           "end": "0x801DA418"
         },
         {
-          "symbol": "fn_801DA418__17MadCodec_801D9A88P14Frame_801D86B4",
+          "symbol": "fn_801DA418__17MadCodec_801D9A88P11RcmpFrame_t",
           "start": "0x801DA418",
           "end": "0x801DA46C"
         },

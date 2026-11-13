@@ -1,3 +1,7 @@
+/* Movie playback for the RCMP movie format (the start-up movies of src/game/Boot.cpp): opens
+   the video and audio streams of a movie, feeds the frame decoder its chunks, keeps the picture
+   in step with the sound or the clock, and plays a whole movie frame by frame. */
+
 #include <dolphin/os.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/moviercmp.h"
@@ -20,29 +24,29 @@ void fn_8026D0AC(void);
 void fn_8026EF88(int handle, void *pStatus);
 void fn_8026D0EC(void);
 int fn_8026CAA8(void);
-Decoder_801D86B4 *fn_801D9654(void *pMem, CodecIData_801D9634 *pIData);
+RcmpDecoder *fn_801D9654(void *pMem, RcmpCodecIData_t *pIData);
 }
 
 
-extern Alloc_801D86B4 lbl_80399100;
-extern Codec_801D9634 *(*lbl_803EBD44)(void);
-extern Codec_801D9634 *(*lbl_803EBD48)(void);
+extern RcmpAllocator_t lbl_80399100;
+static RcmpCodec *(*_MovieRcmp_pfnMadCodecCreate)(void) = 0;
+static RcmpCodec *(*_MovieRcmp_pfnVp6CodecCreate)(void) = 0;
 
-extern "C" void fn_801D8CD8(Audio_801D86B4 *pAudio);
+extern "C" void MovieRcmpResetTime(MovieRcmpAudioInfo_t *pAudio);
 
 
-void *fn_801D86B4(const char *pName, int size, int a, int b, int flags)
+void *_MovieRcmpAllocMem(const char *pName, int size, int a, int b, int flags)
 {
     return fn_801D2B7C(size, 0, 0);
 }
 
-int fn_801D86E0(void *pAddr)
+int _MovieRcmpFreeMem(void *pAddr)
 {
     fn_801D2BD0(pAddr);
     return 1;
 }
 
-void fn_801D8704(Audio_801D86B4 *pAudio)
+void _MovieRcmpProcessAudio(MovieRcmpAudioInfo_t *pAudio)
 {
     void *pHeader;
 
@@ -58,18 +62,18 @@ void fn_801D8704(Audio_801D86B4 *pAudio)
     }
 }
 
-Shape_t *fn_801D8770(void *pFrame)
+Shape_t *_MovieRcmpGetShapeFromFrame(void *pFrame)
 {
-    return ((Frame_801D86B4 *)pFrame)->mpShape;
+    return ((RcmpFrame_t *)pFrame)->mpShape;
 }
 
-void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_801D86B4 **ppChunk)
+void _MovieRcmpGetChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, RcmpChunk_t **ppChunk)
 {
-    Info_801D86B4 *pInfo = *ppStreamer;
+    MovieRcmpInfo_t *pInfo = *ppStreamer;
     void *pStream = pInfo->mpVideo->mpStream;
     int codec = 0;
     unsigned char *pHeader;
-    Chunk_801D86B4 *pChunk;
+    RcmpChunk_t *pChunk;
 
     *ppChunk = 0;
     do {
@@ -77,7 +81,7 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
         if (MovieRcmpHandleChunk(pInfo, pHeader) == 0) {
             return;
         }
-        fn_801D8704(pInfo->mpAudio);
+        _MovieRcmpProcessAudio(pInfo->mpAudio);
         if (pHeader != 0) {
             int id = *(int *)pHeader;
 
@@ -92,29 +96,37 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
             }
             pInfo->mCodec = codec;
             if (codec != 0) {
-                pChunk = fn_801D9958((Chunk_801D86B4 *)lbl_80399100.mAlloc("", sizeof(Chunk_801D86B4), 0, 0, lbl_80399100.mFlags));
+                pChunk = fn_801D9958((RcmpChunk_t *)lbl_80399100.Alloc(sizeof(RcmpChunk_t), ""));
                 *ppChunk = pChunk;
                 pChunk->mpHeader = pHeader;
                 if (codec == 2) {
-                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
+                    unsigned char *pSize = pHeader + 4;
+
+                    pChunk->mSize = (pSize[3] << 24 | pSize[2] << 16 | pSize[1] << 8 | pSize[0]);
                     pChunk->mpData = pHeader;
                 } else if (codec == 4 || codec == 5) {
-                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
+                    unsigned char *pSize = pHeader + 4;
+
+                    pChunk->mSize = (pSize[3] << 24 | pSize[2] << 16 | pSize[1] << 8 | pSize[0]);
                     pChunk->mpData = pHeader;
                 } else {
-                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
+                    unsigned char *pSize = pHeader + 4;
+
+                    pChunk->mSize = (pSize[3] << 24 | pSize[2] << 16 | pSize[1] << 8 | pSize[0]);
                     pChunk->mpData = pHeader + 8;
                 }
-                if (pDecoder->mpCodec != 0) {
+                bool hasCodec = pDecoder->mpCodec != 0;
+
+                if (hasCodec) {
                     return;
                 }
-                if (codec == 2 && lbl_803EBD44 != 0) {
-                    if (fn_801D9720(pDecoder, lbl_803EBD44(), pChunk) != 2) {
+                if (codec == 2 && _MovieRcmp_pfnMadCodecCreate != 0) {
+                    if (fn_801D9720(pDecoder, _MovieRcmp_pfnMadCodecCreate(), pChunk) != 2) {
                         fn_801D9768(pDecoder);
                     }
                 }
-                if (codec == 4 && lbl_803EBD48 != 0) {
-                    if (fn_801D9720(pDecoder, lbl_803EBD48(), pChunk) != 2) {
+                if (codec == 4 && _MovieRcmp_pfnVp6CodecCreate != 0) {
+                    if (fn_801D9720(pDecoder, _MovieRcmp_pfnVp6CodecCreate(), pChunk) != 2) {
                         fn_801D9768(pDecoder);
                     }
                 }
@@ -125,7 +137,7 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
     } while (fn_801F7644(pStream) == 0);
 }
 
-void fn_801D89D4(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_801D86B4 *pChunk)
+void _MovieRcmpReleaseChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, RcmpChunk_t *pChunk)
 {
     fn_801F74D4((*ppStreamer)->mpVideo->mpStream, pChunk->mpHeader);
     if (pChunk != 0) {
@@ -135,36 +147,36 @@ void fn_801D89D4(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
 
 extern "C" {
 
-void fn_801D8A2C(Info_801D86B4 *pInfo, void *pStream)
+void MovieRcmpInitVideo(MovieRcmpInfo_t *pInfo, void *pStream)
 {
-    Video_801D86B4 *pVideo;
-    Audio_801D86B4 *pAudio;
-    CodecIData_801D9634 iData;
+    MovieRcmpVideoInfo_t *pVideo;
+    MovieRcmpAudioInfo_t *pAudio;
+    RcmpCodecIData_t iData;
 
-    lbl_80399100.mAlloc = fn_801D86B4;
-    lbl_80399100.mFree = fn_801D86E0;
+    lbl_80399100.mAlloc = _MovieRcmpAllocMem;
+    lbl_80399100.mFree = _MovieRcmpFreeMem;
     lbl_80399100.mFlags = 1;
-    pVideo = (Video_801D86B4 *)fn_801D2B7C(sizeof(Video_801D86B4), 0, 0);
-    pAudio = (Audio_801D86B4 *)fn_801D2B7C(sizeof(Audio_801D86B4), 0, 0);
+    pVideo = (MovieRcmpVideoInfo_t *)fn_801D2B7C(sizeof(MovieRcmpVideoInfo_t), 0, 0);
+    pAudio = (MovieRcmpAudioInfo_t *)fn_801D2B7C(sizeof(MovieRcmpAudioInfo_t), 0, 0);
     pInfo->mpVideo = pVideo;
     pInfo->mpAudio = pAudio;
-    MemFill((char *)pVideo, sizeof(Video_801D86B4), 0, 4);
+    MemFill((char *)pVideo, sizeof(MovieRcmpVideoInfo_t), 0, 4);
     pVideo->mpStream = pStream;
     pVideo->mCurFrame = 0;
     pVideo->mGoalFrame = 0;
-    MemFill((char *)pAudio, sizeof(Audio_801D86B4), 0, 4);
+    MemFill((char *)pAudio, sizeof(MovieRcmpAudioInfo_t), 0, 4);
     pAudio->mSync = 0;
     pAudio->mActive = 0;
     pAudio->mHandle = -1;
-    fn_801D8CD8(pAudio);
+    MovieRcmpResetTime(pAudio);
     pVideo->mpInfo = pInfo;
-    fn_801D9990(&iData, &pVideo->mpInfo, (GetChunkFunc_801D9634)fn_801D8778, (ReleaseChunkFunc_801D9634)fn_801D89D4, 2);
+    fn_801D9990(&iData, &pVideo->mpInfo, (RcmpGetChunkFunc_t)_MovieRcmpGetChunk, (RcmpReleaseChunkFunc_t)_MovieRcmpReleaseChunk, 2);
     pVideo->mpDecoder = fn_801D9654(lbl_80399100.mAlloc("", 0x1C, 0, 0, lbl_80399100.mFlags), &iData);
 }
 
-void fn_801D8B54(Info_801D86B4 *pInfo)
+void MovieRcmpShutdownVideo(MovieRcmpInfo_t *pInfo)
 {
-    Video_801D86B4 *pVideo = pInfo->mpVideo;
+    MovieRcmpVideoInfo_t *pVideo = pInfo->mpVideo;
 
     delete pVideo->mpDecoder;
     pVideo->mpDecoder = 0;
@@ -174,9 +186,9 @@ void fn_801D8B54(Info_801D86B4 *pInfo)
     pInfo->mpVideo = 0;
 }
 
-int fn_801D8BC8(Info_801D86B4 *pInfo, void *pStream, int volume)
+int MovieRcmpInitAudio(MovieRcmpInfo_t *pInfo, void *pStream, int volume)
 {
-    Audio_801D86B4 *pAudio = pInfo->mpAudio;
+    MovieRcmpAudioInfo_t *pAudio = pInfo->mpAudio;
     int handle;
     int config[6];
 
@@ -194,13 +206,13 @@ int fn_801D8BC8(Info_801D86B4 *pInfo, void *pStream, int volume)
     }
     pAudio->mHandle = handle;
     pAudio->mActive = 1;
-    fn_801D8CD8(pAudio);
+    MovieRcmpResetTime(pAudio);
     return handle;
 }
 
-void fn_801D8C84(Info_801D86B4 *pInfo)
+void MovieRcmpShutdownAudio(MovieRcmpInfo_t *pInfo)
 {
-    Audio_801D86B4 *pAudio = pInfo->mpAudio;
+    MovieRcmpAudioInfo_t *pAudio = pInfo->mpAudio;
 
     if (pAudio->mHandle >= 0) {
         fn_8026E2A8(pAudio->mVoice);
@@ -211,7 +223,7 @@ void fn_801D8C84(Info_801D86B4 *pInfo)
     }
 }
 
-void fn_801D8CD8(Audio_801D86B4 *pAudio)
+void MovieRcmpResetTime(MovieRcmpAudioInfo_t *pAudio)
 {
     pAudio->mSync = pAudio->mHandle >= 0;
     switch (GlibGetTvMode()) {
@@ -226,9 +238,9 @@ void fn_801D8CD8(Audio_801D86B4 *pAudio)
     pAudio->mDrift = pAudio->mLastTime = 0;
 }
 
-int fn_801D8DE8(Info_801D86B4 *pInfo)
+int MovieRcmpGetTime(MovieRcmpInfo_t *pInfo)
 {
-    Audio_801D86B4 *pAudio = pInfo->mpAudio;
+    MovieRcmpAudioInfo_t *pAudio = pInfo->mpAudio;
     int now;
     int time;
     int status[4];
@@ -272,9 +284,9 @@ int fn_801D8DE8(Info_801D86B4 *pInfo)
     }
 }
 
-int fn_801D900C(Info_801D86B4 *pInfo)
+int MovieRcmpIsDecodeTime(MovieRcmpInfo_t *pInfo)
 {
-    unsigned int goal = fn_801D8DE8(pInfo);
+    unsigned int goal = MovieRcmpGetTime(pInfo);
 
     if (pInfo->mpAudio->mSync != 0) {
         if (goal > pInfo->mpVideo->mCurFrame + 2) {
@@ -287,7 +299,7 @@ int fn_801D900C(Info_801D86B4 *pInfo)
                 pInfo->mpAudio->mStartTime = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 60 - pInfo->mpAudio->mLastTime;
                 break;
             }
-            goal = fn_801D8DE8(pInfo);
+            goal = MovieRcmpGetTime(pInfo);
         }
     } else {
         if (goal > pInfo->mpVideo->mCurFrame + 2) {
@@ -300,26 +312,26 @@ int fn_801D900C(Info_801D86B4 *pInfo)
                 pInfo->mpAudio->mStartTime += (int)((goal - (pInfo->mpVideo->mCurFrame + 2)) * 33.3667f);
                 break;
             }
-            goal = fn_801D8DE8(pInfo);
+            goal = MovieRcmpGetTime(pInfo);
         }
     }
     pInfo->mpVideo->mGoalFrame = goal;
     return goal >= pInfo->mpVideo->mCurFrame + 1;
 }
 
-unsigned int fn_801D9224(Info_801D86B4 *pInfo)
+unsigned int MovieRcmpGetGoalFrame(MovieRcmpInfo_t *pInfo)
 {
     return pInfo->mpVideo->mGoalFrame;
 }
 
-unsigned int fn_801D9230(Info_801D86B4 *pInfo)
+unsigned int MovieRcmpGetCurFrame(MovieRcmpInfo_t *pInfo)
 {
     return pInfo->mpVideo->mCurFrame;
 }
 
-Frame_801D86B4 *fn_801D923C(Info_801D86B4 *pInfo, unsigned int frame)
+RcmpFrame_t *MovieRcmpGetFrame(MovieRcmpInfo_t *pInfo, unsigned int frame)
 {
-    Frame_801D86B4 *pFrame = fn_801D9808(pInfo->mpVideo->mpDecoder, frame);
+    RcmpFrame_t *pFrame = fn_801D9808(pInfo->mpVideo->mpDecoder, frame);
 
     if (pFrame != 0) {
         pInfo->mpVideo->mCurFrame = fn_801D97C0(pInfo->mpVideo->mpDecoder);
@@ -327,12 +339,12 @@ Frame_801D86B4 *fn_801D923C(Info_801D86B4 *pInfo, unsigned int frame)
     return pFrame;
 }
 
-void fn_801D9290(Info_801D86B4 *pInfo, Frame_801D86B4 *pFrame)
+void MovieRcmpReleaseFrame(MovieRcmpInfo_t *pInfo, RcmpFrame_t *pFrame)
 {
     fn_801D9894(pInfo->mpVideo->mpDecoder, pFrame);
 }
 
-void fn_801D92B8(Frame_801D86B4 *pFrame, unsigned char **ppY, unsigned char **ppU, unsigned char **ppV)
+void MovieRcmpGetDataFromFrame(RcmpFrame_t *pFrame, unsigned char **ppY, unsigned char **ppU, unsigned char **ppV)
 {
     Shape_t *pShape = pFrame->mpShape;
     unsigned char *pData;
@@ -347,50 +359,50 @@ void fn_801D92B8(Frame_801D86B4 *pFrame, unsigned char **ppY, unsigned char **pp
     *ppV = *ppU + (pShape->mWidth / 2) * (pShape->mHeight / 2);
 }
 
-void fn_801D9320(Frame_801D86B4 *pFrame, int *pWidth, int *pHeight)
+void MovieRcmpGetSizeFromFrame(RcmpFrame_t *pFrame, int *pWidth, int *pHeight)
 {
-    Shape_t *pShape = fn_801D8770(pFrame);
+    Shape_t *pShape = _MovieRcmpGetShapeFromFrame(pFrame);
 
     *pWidth = pShape->mWidth;
     *pHeight = pShape->mHeight;
 }
 
-void fn_801D9360(void *pStream, void *pAudioStream, int volume, int (*pCallback)(void *), void *pContext)
+void MovieRcmpPlay(void *pStream, void *pAudioStream, int volume, int (*pCallback)(void *), void *pContext)
 {
-    Info_801D86B4 info;
-    Frame_801D86B4 *pFrame;
+    MovieRcmpInfo_t info;
+    RcmpFrame_t *pFrame;
 
-    fn_801D8A2C(&info, pStream);
-    pFrame = fn_801D923C(&info, 0);
+    MovieRcmpInitVideo(&info, pStream);
+    pFrame = MovieRcmpGetFrame(&info, 0);
     if (pFrame != 0) {
-        Shape_t *pShape = fn_801D8770(pFrame);
+        Shape_t *pShape = _MovieRcmpGetShapeFromFrame(pFrame);
 
         MovieRcmpRenderInit(pShape);
         MovieRcmpRenderShape(pShape, info.mCodec);
-        fn_801D9290(&info, pFrame);
-        fn_801D8BC8(&info, pAudioStream, volume);
+        MovieRcmpReleaseFrame(&info, pFrame);
+        MovieRcmpInitAudio(&info, pAudioStream, volume);
         do {
-            if (fn_801D900C(&info) != 0) {
-                pFrame = fn_801D923C(&info, fn_801D9224(&info));
+            if (MovieRcmpIsDecodeTime(&info) != 0) {
+                pFrame = MovieRcmpGetFrame(&info, MovieRcmpGetGoalFrame(&info));
                 if (pFrame != 0) {
-                    MovieRcmpRenderShape(fn_801D8770(pFrame), info.mCodec);
-                    fn_801D9290(&info, pFrame);
+                    MovieRcmpRenderShape(_MovieRcmpGetShapeFromFrame(pFrame), info.mCodec);
+                    MovieRcmpReleaseFrame(&info, pFrame);
                 }
             }
             if (pCallback != 0 && pCallback(pContext) == 0) {
                 pFrame = 0;
             }
         } while (pFrame != 0);
-        fn_801D8C84(&info);
+        MovieRcmpShutdownAudio(&info);
     } else if (pCallback != 0) {
         pCallback(pContext);
     }
-    fn_801D8B54(&info);
+    MovieRcmpShutdownVideo(&info);
 }
 
-int fn_801D9494(Codec_801D9634 *(*pCodec)(void))
+int MovieRcmpInstallMADCOWCodec(RcmpCodec *(*pCodec)(void))
 {
-    lbl_803EBD44 = pCodec;
+    _MovieRcmp_pfnMadCodecCreate = pCodec;
     return 1;
 }
 

@@ -53,7 +53,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801D34C4	0x801D36E8	llmemory.c	3	3	3	3	0	-	-
 0x801D36E8	0x801D3BD0	MemExtern.c	10	10	10	0	10	-	-
 0x801D3BD0	0x801D3C68	TibNew.cpp	4	4	8	2	2	-	-
-0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	0	18	-	-
+0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	16	2	-	-
 0x801D9A88	0x801DA4B8	rcmp_mad_codec.cpp	13	13	17	0	11	-	-
 0x801DA52C	0x801DB058	maddec.cpp	10	8	10	0	8	-	-
 0x801DB058	0x801DB21C	maddeca.cpp	2	2	2	1	1	-	-
