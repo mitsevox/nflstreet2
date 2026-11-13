@@ -1,49 +1,12 @@
-/* Partial source for the engine range 0x80226F9C-0x80227F14 (neutral file name). */
+/* Low-level vector math: 2D/3D vector length, normalise, scale, rotate, compare, add, subtract, dot and
+   cross products, distance, interpolation and matrix transforms on float arrays. */
 
-extern void fn_801F7BD4(int err);
 extern float fn_80260B1C(float x);
 extern float MathInvSqrt(float x);
-extern int fn_801CFD78(float x);
 extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
 extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
 extern void fn_801D0F80(float m[4][4]);
 extern double fabs(double x);
-
-float fn_8022716C(float *p);
-float fn_80227704(float *pA, float *pB);
-
-static unsigned char lbl_803EBF88 = 0;
-
-int fn_80226F9C(void)
-{
-    int err = 0;
-
-    if (lbl_803EBF88 == 0) {
-        lbl_803EBF88 = 1;
-    } else {
-        err = 0x60001;
-    }
-    fn_801F7BD4(err);
-    return err;
-}
-
-int fn_80226FF0(void)
-{
-    int err = 0;
-
-    if (lbl_803EBF88) {
-        lbl_803EBF88 = 0;
-    } else {
-        err = 0x60002;
-    }
-    fn_801F7BD4(err);
-    return err;
-}
-
-int fn_80227040(float *pA, float *pB)
-{
-    return fn_801CFD78(fn_80227704(pA, pB) * fn_8022716C(pA) * fn_8022716C(pB));
-}
 
 float fn_802270A4(float *p)
 {

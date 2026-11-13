@@ -6851,6 +6851,25 @@
       ]
     },
     {
+      "source": "src/engine/vector.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80226F9C-0x802270A4 (src/engine/vector.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata byte 0x803EBF88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80226F9C",
+          "end": "0x802270A4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF88",
+          "end": "0x803EBF8C"
+        }
+      ]
+    },
+    {
       "source": "src/engine/viewport.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80227F14-0x802287D4 (src/engine/viewport.c) and its data rows.",

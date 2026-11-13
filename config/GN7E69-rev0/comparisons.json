@@ -19879,39 +19879,18 @@
       ]
     },
     {
-      "source": "src/engine/cu_80226F9C.c",
+      "source": "src/engine/llvector.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80226F9C-0x80227F14 (src/engine/cu_80226F9C.c), its function and name rows and the exact .sdata data row 0x803EBF88-0x803EBF8C. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants have no draft body and no .rodata is registered.",
+      "evidence": "evidence.tsv provisional unit row 0x802270A4-0x80227F14 (src/engine/llvector.c), its function and name rows. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants are drafted in the comparison fragments src/engine/cu_8022772C.c, cu_80227970.c, cu_80227B04.c and cu_80227D6C.c; no .rodata is registered here.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80226F9C",
+          "start": "0x802270A4",
           "end": "0x80227F14"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBF88",
-          "end": "0x803EBF8C"
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80226F9C",
-          "start": "0x80226F9C",
-          "end": "0x80226FF0"
-        },
-        {
-          "symbol": "fn_80226FF0",
-          "start": "0x80226FF0",
-          "end": "0x80227040"
-        },
-        {
-          "symbol": "fn_80227040",
-          "start": "0x80227040",
-          "end": "0x802270A4"
-        },
         {
           "symbol": "fn_802270A4",
           "start": "0x802270A4",
@@ -20097,7 +20076,7 @@
     {
       "source": "src/engine/cu_8022772C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x8022772C-0x802277DC and its literal-pool slice 0x802B2078-0x802B207C (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x8022772C-0x802277DC and its literal-pool slice 0x802B2078-0x802B207C (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20123,7 +20102,7 @@
     {
       "source": "src/engine/cu_80227970.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227970-0x80227B04 and its literal-pool slice 0x802B2098-0x802B20A0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227970-0x80227B04 and its literal-pool slice 0x802B2098-0x802B20A0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20149,7 +20128,7 @@
     {
       "source": "src/engine/cu_80227B04.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227B04-0x80227C2C and its literal-pool slice 0x802B20A0-0x802B20A8 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227B04-0x80227C2C and its literal-pool slice 0x802B20A0-0x802B20A8 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -20175,7 +20154,7 @@
     {
       "source": "src/engine/cu_80227D6C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "Comparison source fragment of src/engine/cu_80226F9C.c (evidence.tsv unit row 0x80226F9C-0x80227F14): the target function extent 0x80227D6C-0x80227E40 and its literal-pool slice 0x802B20BC-0x802B20C0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
+      "evidence": "Comparison source fragment of src/engine/llvector.c (evidence.tsv unit row 0x802270A4-0x80227F14): the target function extent 0x80227D6C-0x80227E40 and its literal-pool slice 0x802B20BC-0x802B20C0 (exact data row). The constants of that file's range are interleaved with words no instruction loads, so each constant-loading function is compiled with its own pool; the split does not claim an original file boundary. Original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
