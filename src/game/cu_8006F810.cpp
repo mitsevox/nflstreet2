@@ -9,7 +9,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/GameModeType.h"
@@ -26,13 +26,13 @@ struct Record_80071594 {
 
 extern "C" {
 
-int fn_8007F828(int id);
+int GameOptionsGet(int id);
 int fn_800A8444(int index);
 void SndgSetVolumeOption(unsigned int index, unsigned int value);
 void SndgAmbStopAllAndCue(void);
-void fn_80072AEC(int mode);
-void fn_80072E84(void);
-void fn_80072F04(void);
+void SndgMusicSetMode(int mode);
+void SndgMusicPause(void);
+void SndgMusicResume(void);
 void SndgAmbObjStop(int type, unsigned int index);
 void SndgAmbPostCue(int type);
 int SndgAmbObjExists(int type, unsigned int index);
@@ -44,8 +44,8 @@ void SndgSpchSetPlayFlags(int flags);
 void SndgSituationReset(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_800A9680(void);
-int fn_80073310(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int SndgMusicGetMode(void);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_80178348(void);
 extern unsigned int lbl_80290B9C[4];
 extern float gPlyrMoveFwdSpeed;
@@ -70,7 +70,7 @@ int fn_80177F70(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
-Object_800670B4 *PlayBookGetFormation(int side);
+PlayBookFormation_t *PlayBookGetFormation(int side);
 int SndgSfxIsPlaying(int id);
 void SndgSfxStop(int id);
 int SndgRequestBank(unsigned int channel, int id, void (*callback)(int handle));
@@ -251,12 +251,12 @@ void fn_8006F850(AudmonEvent_t *p)
         SndgSfxPlay(53, &p->mPos);
         break;
     case 132: SndgAmbStopAllAndCue(); SndgCrowdTriggerEvent(2, 0); break;
-    case 126: fn_80072AEC(10); break;
-    case 127: fn_80072AEC(11); break;
+    case 126: SndgMusicSetMode(10); break;
+    case 127: SndgMusicSetMode(11); break;
     case 107: case 128:
-        if ((unsigned char)(fn_8007F828(5) * 10) > 52 && !fn_800A8444(0) && !fn_800A8444(1)) SndgSetVolumeOption(2, 52);
+        if ((unsigned char)(GameOptionsGet(5) * 10) > 52 && !fn_800A8444(0) && !fn_800A8444(1)) SndgSetVolumeOption(2, 52);
         break;
-    case 109: case 130: SndgSetVolumeOption(2, (unsigned char)(fn_8007F828(5) * 10) & ~1U); break;
+    case 109: case 130: SndgSetVolumeOption(2, (unsigned char)(GameOptionsGet(5) * 10) & ~1U); break;
     case 88: {
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
@@ -436,12 +436,12 @@ void fn_8006F850(AudmonEvent_t *p)
     case 96: if (p->mUnknown10.mValue <= 4) fn_800717E0(&p->mPos); break;
     case 22: SndgSfxPlay(132, 0); break;
     case 23: SndgSfxPlay(133, 0); break;
-    case 8: fn_80072AEC(3); break;
-    case 9: fn_80072AEC(4); break;
-    case 11: fn_80072AEC(14); break;
-    case 10: fn_80072AEC(15); break;
-    case 13: fn_80072AEC(16); break;
-    case 12: fn_80072AEC(17); break;
+    case 8: SndgMusicSetMode(3); break;
+    case 9: SndgMusicSetMode(4); break;
+    case 11: SndgMusicSetMode(14); break;
+    case 10: SndgMusicSetMode(15); break;
+    case 13: SndgMusicSetMode(16); break;
+    case 12: SndgMusicSetMode(17); break;
     case 15:
         if (p->mUnknown10.mValue && !fn_8002D060(lbl_803EA368) && !SndgSfxIsPlaying(62)) SndgSfxPlay(62, 0);
         break;
@@ -464,12 +464,12 @@ void fn_8006F850(AudmonEvent_t *p)
     case 113:
         SndgSfxPlay(130, 0);
         SndgAmbPostCue(2);
-        fn_80072E84();
+        SndgMusicPause();
         SndgCrowdTriggerEvent(2, 0);
         break;
     case 114:
         SndgAmbPostCue(3);
-        if (!p->mUnknown10.mValue) fn_80072F04();
+        if (!p->mUnknown10.mValue) SndgMusicResume();
         SndgCrowdTriggerEvent(3, 0);
         break;
     case 95: if (fn_801486A0()) SndgSfxPlay(63, 0); break;
@@ -515,7 +515,7 @@ void fn_8006F850(AudmonEvent_t *p)
     case 157: {
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         if (fn_801486A0() != 1) {
-            if (!lbl_803EA6F9) fn_80072AEC(9);
+            if (!lbl_803EA6F9) SndgMusicSetMode(9);
             else lbl_803EA6F9 = 0;
             SndgCrowdTriggerEvent(5, player->mIdBytes[2]);
         } else if (lbl_803EA6CE) {
@@ -529,7 +529,7 @@ void fn_8006F850(AudmonEvent_t *p)
         SndgSfxPlay(64, &p->mPos);
         if (fn_801486A0()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
-            if (!lbl_803EA6F9) fn_80072AEC(7);
+            if (!lbl_803EA6F9) SndgMusicSetMode(7);
             SndgCrowdTriggerEvent(6, player->mIdBytes[2]);
             lbl_803EA6F8 = 1;
         }
@@ -537,7 +537,7 @@ void fn_8006F850(AudmonEvent_t *p)
     case 105:
         if (fn_801486A0()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
-            if (!lbl_803EA6F9 || fn_80073310() == 7) fn_80072AEC(8);
+            if (!lbl_803EA6F9 || SndgMusicGetMode() == 7) SndgMusicSetMode(8);
             lbl_803EA6F9 = 0;
             SndgCrowdTriggerEvent(7, player->mIdBytes[2]);
             lbl_803EA6F8 = 0;
@@ -598,7 +598,7 @@ void fn_8006F850(AudmonEvent_t *p)
         fn_8006F824(50);
         SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         if (lbl_803EA6F8) {
-            fn_80072AEC(8);
+            SndgMusicSetMode(8);
             lbl_803EA6F8 = 0;
         }
         break;
@@ -679,7 +679,7 @@ void fn_80070E8C(void)
 void fn_80070F84(void)
 {
     if (!lbl_803EA6FA) return;
-    Object_800670B4 *p = PlayBookGetFormation(fn_80178320());
+    PlayBookFormation_t *p = PlayBookGetFormation(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
@@ -767,7 +767,7 @@ void fn_8007134C(void)
     unsigned short index = 0;
     unsigned int count = fn_80178D18(side);
     for (; index < count; ++index) {
-        Object_80039F5C *p = fn_80039F5C(side, index);
+        Object_80039F5C *p = PlyrGet(side, index);
         if (!p->mUnknown2914) { value = p->mUnknown2912; break; }
     }
     lbl_803EA6DC = (lbl_803EA6DC + 1) % 3;

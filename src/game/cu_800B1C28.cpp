@@ -1,6 +1,6 @@
 #include "game/Block_800B21D0.h"
 #include "game/Object_8017886C.h"
-#include "game/Input_80174868.h"
+#include "game/PenaltySituation.h"
 #include "game/fn_80177FE0.h"
 
 extern "C" {
@@ -9,8 +9,8 @@ float fn_80178298(void);
 Point_8017886C fn_8017808C(void);
 int fn_801784E8(void);
 int fn_80178308(void);
-int fn_80176378(int value);
-float fn_80176328(float value);
+int PenaltyNextDown(int value);
+float PenaltyCalcLineToGain(float value);
 
 extern Block_800B21D0 *lbl_803EAB20;
 }
@@ -27,8 +27,8 @@ extern "C" int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_80
     pPlay->mUnknown1D = 0;
 
     for (; i < count; i++) {
-        Input_80174868 in;
-        Output_80174868 out;
+        PenaltySituation_t in;
+        PenaltyOutcome_t out;
 
         in.mUnknown22 = pState->mUnknown0[0].mUnknown20;
         in.mUnknown23 = pState->mUnknown0[0].mUnknown21;
@@ -48,7 +48,7 @@ extern "C" int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_80
             in.mUnknown0 = -in.mUnknown0;
         }
         out.mUnknownC = 0.0f;
-        fn_801764A0(pState->mUnknown0[0].mUnknown0, &in, &out);
+        PenaltyEnforce(pState->mUnknown0[0].mUnknown0, &in, &out);
         lbl_803EAB20->mUnknown4.mUnknown48 = out.mUnknownC;
         pPlay->mUnknown10 = out.mUnknown8;
         pPlay->mUnknown08.mX = fn_8017808C().mX;
@@ -74,14 +74,14 @@ extern "C" int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_80
             }
             break;
         case 0:
-            pPlay->mUnknown04 = fn_80176378(in.mUnknown14);
+            pPlay->mUnknown04 = PenaltyNextDown(in.mUnknown14);
             if (pPlay->mUnknown04 == 5 || pPlay->mUnknown04 == 7) {
                 pPlay->mUnknown04 = 1;
                 result = 1;
                 pPlay->mUnknown18 |= 4;
             }
             if (pPlay->mUnknown04 == 1) {
-                out.mUnknown4 = fn_80176328(out.mUnknown0);
+                out.mUnknown4 = PenaltyCalcLineToGain(out.mUnknown0);
                 pPlay->mUnknown18 |= 0x40;
             }
             break;
@@ -93,7 +93,7 @@ extern "C" int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_80
             }
             /* fall through */
         case 2:
-            out.mUnknown4 = fn_80176328(out.mUnknown0);
+            out.mUnknown4 = PenaltyCalcLineToGain(out.mUnknown0);
             pPlay->mUnknown18 |= 0x40;
             pPlay->mUnknown04 = 1;
             break;

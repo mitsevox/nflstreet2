@@ -1,7 +1,7 @@
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_8017886C.h"
 
-class Class_802A17A8 : public Class_802A56E8 {
+class Class_802A17A8 : public ScrmRuleSet {
 public:
     unsigned char mUnknown4;
 };
@@ -29,7 +29,7 @@ void fn_8015539C(Class_802A17A8 *p)
     unsigned int score1 = fn_801787DC(1);
     unsigned short flags = fn_80178E94();
     lbl_803EB2FC = 0;
-    p->Class_802A56E8::vfn_10();
+    p->ScrmRuleSet::ResetPlaySpot();
     if (p->mUnknown4 == 2) {
         if (o->mUnknown1D == -2) {
             int team = fn_80178320();

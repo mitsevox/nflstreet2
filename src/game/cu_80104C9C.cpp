@@ -7,7 +7,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -23,7 +23,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -124,7 +124,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 extern float gFrameTimeScale;
@@ -445,7 +445,7 @@ extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Poin
         if (((p->mId >> 16) & 0xFF) == i) {
             continue;
         }
-        pOther = fn_80039F5C((p->mId >> 8) & 0xFF, i);
+        pOther = PlyrGet((p->mId >> 8) & 0xFF, i);
         if (!anyDepth && pOther->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
             continue;
         }
@@ -542,7 +542,7 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
     Point_8017886C delta;
     State_80105898 *pState = (State_80105898 *)&p->mUnknown336;
     Record_8011F518 *pRecord = fn_8011F518();
-    Object_80039F5C *pTarget = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown1);
+    Object_80039F5C *pTarget = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown1);
     int kind = 3;
 
     BallGetPosition(BallGetCurrent(), &ball);
@@ -664,7 +664,7 @@ extern "C" int fn_80105AF4(Object_80039F5C *p) {
 }
 
 extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
     unsigned int count;
     unsigned char i;
 
@@ -1195,7 +1195,7 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], i);
 
             if (pMate != p) {
                 Point_8017886C gap;
@@ -1215,7 +1215,7 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], i);
             Object_80039F5C *pMark = fn_800FB9D4(pOther);
 
             if (pMate != p) {

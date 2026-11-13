@@ -12,10 +12,10 @@ int fn_8011F37C(void);
 int fn_801486A0(void);
 Ball_t *BallGetCurrent(void);
 void BallGetPosition(Ball_t *pBall, Vector_80039F5C *pOut);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_80178308(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_800AE9F8(unsigned char (*pEntries)[4]);
 }
 
@@ -28,7 +28,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
             Vector_80039F5C pos;
 
             BallGetPosition(BallGetCurrent(), &pos);
-            return fn_8003A130(&pos, 0, fn_80178308());
+            return PlyrFindNearest(&pos, 0, fn_80178308());
         } else {
             int team = fn_80178308();
             unsigned char count = 0;
@@ -39,7 +39,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
             unsigned char lookup;
 
             for (i = 0; i <= 2; i++) {
-                p = fn_80039F5C(team, PlayBookGetReceiver(team, i, 0));
+                p = PlyrGet(team, PlayBookGetReceiver(team, i, 0));
                 if (spot.mY - p->mMotion.mPos.mY > 1.5f && fabsf(p->mMotion.mPos.mX - spot.mX) < 4.0f) {
                     pCandidates[count] = p;
                     count++;

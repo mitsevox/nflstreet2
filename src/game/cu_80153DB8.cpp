@@ -1,4 +1,4 @@
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
@@ -9,12 +9,12 @@
 class Class_802A1B18 : public Class_80297B50 {
 };
 
-class Class_802A1AE0 : public Class_80297AB8 {
+class Class_802A1AE0 : public LivePlayPhase {
 public:
     int mUnknown4;
 };
 
-struct Team_80168EBC {
+struct PlaybookTeamView {
     char mUnknown0[0x40];
     int mUnknown40;
 };
@@ -27,7 +27,7 @@ int fn_80178320(void);
 void PlayBookSetFormationType(int team, int kind);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
 void PlayBookLoadCurrentPlay(int team);
-Team_80168EBC *PlayBookGetTeam(int team);
+PlaybookTeamView *PlayBookGetTeam(int team);
 int fn_80085A34(int formation, int team);
 void fn_800B3EFC(int team);
 void PlayBookLoadAudibles(int team);
@@ -78,14 +78,14 @@ void fn_80153EA8(Class_802A1B18 *p)
 
 void fn_80153F14(Class_802A1AE0 *p)
 {
-    p->Class_80297AB8::vfn_03();
+    p->LivePlayPhase::OnEnter();
     p->mUnknown4 = 0;
     fn_8009D888(5, 0);
 }
 
 void fn_80153F54(Class_802A1AE0 *p, float dt)
 {
-    p->Class_80297AB8::vfn_04(dt);
+    p->LivePlayPhase::OnUpdate(dt);
     if (fn_801787A0() == 0) {
         if (fn_8009D990(5) == 0) {
             HudShowAlert("Time Expired");
@@ -112,7 +112,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
 
 void fn_80154028(Class_802A1AE0 *p)
 {
-    p->Class_80297AB8::vfn_05();
+    p->LivePlayPhase::OnExit();
     fn_8009D8CC(5);
 }
 }

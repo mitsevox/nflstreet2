@@ -19,11 +19,11 @@ extern const char lbl_802A0F34[];
 extern const char lbl_802A0F74[];
 extern const char lbl_802A1074[];
 
-int fn_80188030(int index);
+int GameTextGetPadPlayer(int index);
 int fn_80187A78(unsigned char index, char *pText, int count);
 int fn_80187400(int kind, int key, int first, int last);
 
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int GameModeTypeGet(void);
 int fn_8014FF34(Class_802A2B68 *p);
 unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
@@ -60,7 +60,7 @@ void fn_8014F19C(Class_802A2B68 *p)
             continue;
         }
         char name[32];
-        if (!fn_80187A78(fn_80188030(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
+        if (!fn_80187A78(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
             continue;
         }
         QueryResult result;
@@ -115,13 +115,13 @@ void fn_8014F3E4(Class_80148A58 *p, int index, Info_8014F3E4 *pInfo)
     pInfo->mUnknown4 = pRecord->mUnknown4;
     pInfo->mUnknown8 = pRecord->mUnknown12[8];
     pInfo->mUnknown12 = pRecord->mUnknown12[0];
-    pInfo->mpUnknown0 = fn_8003AC84(pRecord->mUnknown0);
+    pInfo->mpUnknown0 = PlyrFindById(pRecord->mUnknown0);
     pInfo->mUnknown16 = pRecord->mUnknown8;
 }
 
 Object_80039F5C *fn_8014F448(Class_80148A58 *p)
 {
-    return fn_8003AC84(static_cast<Class_802A2B68 *>(p)->mpUnknown1C->mpUnknown34[0].mUnknown0);
+    return PlyrFindById(static_cast<Class_802A2B68 *>(p)->mpUnknown1C->mpUnknown34[0].mUnknown0);
 }
 
 unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer)

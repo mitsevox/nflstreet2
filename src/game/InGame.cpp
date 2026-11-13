@@ -1,12 +1,11 @@
 /* The in-game loop module: the per-frame game update, pausing, the idle state and the attract-mode demo. */
 
-#include "game/cu_8007F12C.h"
+#include "game/GameOptions.h"
 #include "engine/viewport.h"
 #include "game/PadInput.h"
 #include "game/FlowManagerC.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/fn_8007F828.h"
+#include "game/PreGamePhase.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameModeType.h"
 #include "game/fn_801FCE10.h"
@@ -34,7 +33,7 @@ void fn_8002CF34(void *p);
 int fn_8002D060(void *p);
 int fn_8002D2C0(void);
 void fn_8003E1F0(void);
-void fn_80043F50(void);
+void DivotUpdate(void);
 void fn_80057F28(void);
 void fn_800582D0(void);
 void fn_8005BF18(void);
@@ -43,11 +42,11 @@ void PauseUpdate(void);
 void PauseRequestClose(void);
 int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
-void fn_80066D5C(void);
+void PlayBookDbResetState(void);
 void SndgUpdate(int a);
-void fn_800726B8(void);
-void fn_800728F8(void);
-void fn_80072C90(int a, int b);
+void SndgMusicFlushSongText(void);
+void SndgMusicUpdate(void);
+void SndgMusicFadeOut(int a, int b);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void PlaybookSideClearAll(void);
@@ -74,10 +73,10 @@ int fn_800C1E40(void);
 void fn_800C1E50(void);
 int fn_800C8704(int *pA, int *pB);
 void BallsPark(void);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void CamGameApplyUserCamera(void);
 int CamGameGetSideYaw();
-void fn_80144EDC(float a);
+void ParticleSysUpdate(float a);
 void ParticlesProcess(float a);
 void DriveLogInit(void);
 void DriveLogEndDrive(void);
@@ -85,7 +84,7 @@ void ScoringLogInit(void);
 void ScoringLogReset(void);
 int BannerUpdate(float a);
 void GameModeTypeInvalidate(void);
-void fn_80187C0C(void);
+void GameTextReset(void);
 void UISGameHandleInput(int a, unsigned int id, float value);
 void UISGameLoadKeyItem(int a, int b);
 void UISGameFreeKeyItem(int a, int b);
@@ -97,8 +96,8 @@ void RumbleInit(void);
 void RumbleShutdown(void);
 void RumbleProcess(void);
 void RumbleEnable(int a);
-void fn_80195F80(void);
-void fn_80196130(void);
+void ScreenTransUpdate(void);
+void ScreenTransFinish(void);
 void PadStateSetValue(int a, int b, float c);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
@@ -217,11 +216,11 @@ static void _InGameUpdateHook3() {}
 
 static void _InGameEndDemo()
 {
-    fn_80072C90(0xFA, 1);
+    SndgMusicFadeOut(0xFA, 1);
     _InGame_uIdleFrames = 0;
     if (_InGame_bIdle) {
         _InGame_bIdle = 0;
-        fn_8007F6F8(9, 1);
+        GameOptionsSet(9, 1);
         RumbleShutdown();
         RumbleInit();
         RumbleEnable(1);
@@ -260,12 +259,12 @@ int InGame::Init()
     _InGame_iFrameCount = 0;
     _InGame_uIdleFrames = 0;
     _InGame_bIdle = 0;
-    fn_8007F394(1);
+    GameOptionsSetDeferWrites(1);
     fn_8008FE5C(0);
     fn_80099568(1);
-    fn_8013CF98();
+    CamSetupAspect();
     MemCardUtilInit();
-    fn_80066D5C();
+    PlayBookDbResetState();
     fn_800A216C(1);
     fn_800AE8B4();
     VptManagerMarketCamInit();
@@ -294,7 +293,7 @@ int InGame::Init()
             fn_800AD910(1, 0.0f);
         }
     }
-    fn_80187C0C();
+    GameTextReset();
     fn_8005BF18();
     if (!fn_800BA6F8()) {
         CamGameApplyUserCamera();
@@ -331,9 +330,9 @@ unsigned char InGame::Update()
     _InGameUpdateHook3();
     fn_801D6F58();
     if (_InGame_uIdleFrames > 10800) {
-        if (fn_8007F828(9)) {
+        if (GameOptionsGet(9)) {
             _InGame_bIdle = 1;
-            fn_8007F6F8(9, 0);
+            GameOptionsSet(9, 0);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(0);
@@ -341,7 +340,7 @@ unsigned char InGame::Update()
     } else {
         if (_InGame_bIdle) {
             _InGame_bIdle = 0;
-            fn_8007F6F8(9, 1);
+            GameOptionsSet(9, 1);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(1);
@@ -369,16 +368,16 @@ unsigned char InGame::Update()
     fn_8002CF34(lbl_803EA368);
     if (!fn_8002D060(lbl_803EA368)) {
         ParticlesProcess(gFrameTimeScale);
-        fn_80144EDC(gFrameTimeScale);
+        ParticleSysUpdate(gFrameTimeScale);
         fn_800A3120(gFrameTimeScale);
     }
     FileDebugProcess();
     fn_8003E1F0();
-    fn_80043F50();
+    DivotUpdate();
     fn_800A7F6C();
-    fn_800728F8();
-    fn_800726B8();
-    fn_80195F80();
+    SndgMusicUpdate();
+    SndgMusicFlushSongText();
+    ScreenTransUpdate();
     SndgUpdate(1);
     fn_801CE82C();
     VptProcessViewports();
@@ -402,7 +401,7 @@ int InGame::Shutdown()
         _InGame_uIdleFrames = 0;
         if (_InGame_bIdle) {
             _InGame_bIdle = 0;
-            fn_8007F6F8(9, 1);
+            GameOptionsSet(9, 1);
             RumbleShutdown();
             RumbleInit();
             RumbleEnable(1);
@@ -414,9 +413,9 @@ int InGame::Shutdown()
     EngineParamWords desc = { 6, 14 };
     fn_802345C4(&desc, 2);
     fn_80085A7C();
-    fn_8007F394(0);
+    GameOptionsSetDeferWrites(0);
     PadInputSetAxisCallback(0);
-    fn_80196130();
+    ScreenTransFinish();
     PauseUpdate();
     fn_801CE910();
     fn_800582D0();

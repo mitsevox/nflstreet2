@@ -58,7 +58,7 @@ void LogoListClose(DbCursor *pObject)
 
 void LogoListGetName(DbCursor *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C(pObject, 0x4D4E474C, (int)pBuffer, size);
+    DbCursorGetString(pObject, 0x4D4E474C, (int)pBuffer, size);
 }
 
 int LogoListGetId(DbCursor *pObject)

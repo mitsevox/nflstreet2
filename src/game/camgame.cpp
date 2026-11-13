@@ -5,7 +5,7 @@
 #include "engine/viewporttypes.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameCamera.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"
 
@@ -139,8 +139,8 @@ void _CamGameSetCurrent(CamGameState_t *pState, int index)
     if (index != pState->mSet.mCurrent) {
         VptManagerReplaceCamera(pState->mpObject, _CamGame_pState->mSet.mpCameras[_CamGame_pState->mSet.mCurrent], _CamGame_pState->mSet.mpCameras[index]);
         pState->mSet.mCurrent = index;
-        fn_8013C824(pState->mSet.mpCameras[index], 4, index);
-        fn_8013C2B4(pState->mSet.mpCameras[index], 0, 0, 0);
+        CamMainMsg(pState->mSet.mpCameras[index], 4, index);
+        CamMainProcess(pState->mSet.mpCameras[index], 0, 0, 0);
     }
 }
 
@@ -148,8 +148,8 @@ void _CamGameAdd(CamGameState_t *pState, int index, int id)
 {
     CameraDesc_t desc;
 
-    fn_8013C340(&desc);
-    desc.mUnknown00 = fn_8013C854(id);
+    CamMainInitDesc(&desc);
+    desc.mUnknown00 = CamMainGetBaseType(id);
     desc.mUnknown04 = id;
     pState->mSet.mpCameras[index] = (GameCamera_t *)CamCreate(2, &desc);
 }
@@ -212,17 +212,17 @@ GameCamera_t *CamGameGetCamera(int index)
 
 void CamGameProcess(void)
 {
-    _CamGameForAllCamerasDo(fn_8013C2B4, 0, 0, 0);
+    _CamGameForAllCamerasDo(CamMainProcess, 0, 0, 0);
 }
 
 void CamGameSetFocusAll(int a, int b)
 {
-    _CamGameForAllCamerasDo((CamGameForAllFunc_t)fn_8013C384, a, b, 0);
+    _CamGameForAllCamerasDo((CamGameForAllFunc_t)CamMainFollow, a, b, 0);
 }
 
 void CamGameSetModeAll(int a)
 {
-    _CamGameForAllCamerasDo(fn_8013C624, a, 0, 0);
+    _CamGameForAllCamerasDo(CamMainSetMode, a, 0, 0);
 }
 
 void CamGameSuspendAll(void)
@@ -236,7 +236,7 @@ void CamGameSuspendAll(void)
     if (!unassigned && fn_800AD9B4() == 3) {
         pState->mSet.mUnknown14 = 1;
     }
-    _CamGameForAllCamerasDo(fn_8013C680, 0, 0, 0);
+    _CamGameForAllCamerasDo(CamMainSetActive, 0, 0, 0);
 }
 
 void CamGameResumeAll(void)
@@ -247,7 +247,7 @@ void CamGameResumeAll(void)
         fn_800AD9C0(gFrameTimeScale * 30.0f);
         pState->mSet.mUnknown14 = 0;
     }
-    _CamGameForAllCamerasDo(fn_8013C680, 1, 0, 0);
+    _CamGameForAllCamerasDo(CamMainSetActive, 1, 0, 0);
 }
 
 /* Replaces camera index with a new camera of the given id, keeping its settings. */
@@ -266,6 +266,6 @@ void CamGameChangeType(int index, int id)
         VptManagerReplaceCamera(_CamGame_pState->mpObject, pOld, pNew);
     }
     pNew->mUnknown94 = flags;
-    fn_8013C384(pNew, a8, b0, b4);
+    CamMainFollow(pNew, a8, b0, b4);
 }
 }

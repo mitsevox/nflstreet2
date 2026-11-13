@@ -1,0 +1,242 @@
+/* Animation for big world objects: decodes a compressed animation frame into
+   a placed object's pose, blends several animation entries into it, blends
+   the root angles of its items and allocates its channel buffer; also lets a
+   child object refresh its frame from its owner. */
+#include "game/AnimFrameHeader.h"
+#include "game/AnimRootItem.h"
+#include "game/BigObj.h"
+#include "game/DynObjRender.h"
+#include "game/bitstream.h"
+#include "game/fn_801D2B7C.h"
+#include <string.h>
+
+extern "C" {
+void AnimLerpFixed(short *pOut, short *pA, short *pB, int weight, int count);
+void AnimLerpFixedScaled(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
+void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pScale);
+float fn_801BE5D0(void *p, unsigned short index);
+void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
+void OrientLerpAngle(int *pOut, int a, int b, float t);
+void fn_80227930(float *pOut, float *pA, float *pB, float t);
+
+void DynObjChildRefreshFrame(DynObjChild *p)
+{
+    DynObj *owner = p->mpUnknown50;
+    if (owner->mUnknownE8.mWord & 0x10) {
+        DynObjChildPickFrame(p, owner);
+    }
+}
+
+short *BigObjAnimReadFrameHeader(AnimFrameHeader *header, void *encoded)
+{
+    unsigned char *bytes = (unsigned char *)encoded;
+    header->count = bytes[0] & 0x3F;
+    header->flags = bytes[1];
+    AnimFrameHeaderCopy aligned;
+    short *read;
+    if ((unsigned int)encoded & 1) {
+        aligned = *(AnimFrameHeaderCopy *)encoded;
+        read = (short *)&aligned;
+    } else {
+        read = (short *)encoded;
+    }
+    short *start = read;
+    header->word2 = read[1];
+    header->word4 = read[2];
+    header->word6 = read[3];
+    header->word8 = read[4];
+    read += 5;
+    memset(header->vectorA, 0, 6);
+    memset(header->vector10, 0, 6);
+    return (short *)(bytes + ((char *)read - (char *)start));
+}
+
+void BigObjAnimUnpackFrameBits(short *destination, short *source, AnimQuantContext *context, int mirrored)
+{
+    BitStream_t stream;
+    OpenBitStream(&stream, source, kBitStreamRead);
+    unsigned char *channels = context->mpUnknown14;
+    int i = 0;
+    unsigned int bits0, bits1, bits2, bits3, bits4;
+    for (; i < context->mUnknown0 - 5; i += 5) {
+        unsigned char *channel = &channels[i * 2];
+        bits0 = channel[1];
+        bits1 = channel[3];
+        bits2 = channel[5];
+        bits3 = channel[7];
+        bits4 = channel[9];
+        unsigned long long value = ReadBitStream(&stream, bits0 + bits1 + bits2 + bits3 + bits4);
+        if (mirrored) {
+            destination[channel[8]] = value << (16 - bits4);
+            value >>= bits4;
+            destination[channel[6]] = value << (16 - bits3);
+            value >>= bits3;
+            destination[channel[4]] = value << (16 - bits2);
+            value >>= bits2;
+            destination[channel[2]] = value << (16 - bits1);
+            value >>= bits1;
+            destination[channel[0]] = value << (16 - bits0);
+        } else {
+            destination[i + 4] = value << (16 - bits4);
+            value >>= bits4;
+            destination[i + 3] = value << (16 - bits3);
+            value >>= bits3;
+            destination[i + 2] = value << (16 - bits2);
+            value >>= bits2;
+            destination[i + 1] = value << (16 - bits1);
+            value >>= bits1;
+            destination[i] = value << (16 - bits0);
+        }
+    }
+    for (; i < context->mUnknown0; i++) {
+        if (mirrored) {
+            bits0 = channels[i * 2 + 1];
+            destination[channels[i * 2]] = ReadBitStream(&stream, bits0) << (16 - bits0);
+        } else {
+            bits0 = channels[i * 2 + 1];
+            destination[i] = ReadBitStream(&stream, bits0) << (16 - bits0);
+        }
+    }
+    CloseBitStream(&stream);
+}
+
+int BigObjAnimDequantize(int value, int index, int component, void *pContext, AnimQuantTables *pPair)
+{
+    if (pContext) {
+        component += index * 3;
+        value = (value * pPair->mUnknown4[component] >> 15) + pPair->mUnknown0[component];
+    }
+    return (short)value;
+}
+
+void BigObjAnimDecodeFrame(AnimPose_t *pose, AnimBlendEntry *entry, AnimQuantContext *context, int unused)
+{
+    AnimFrameHeader frame;
+    int special = entry->mUnknown8 & 4;
+    short *samples;
+    if (context) {
+        short *encodedSamples = BigObjAnimReadFrameHeader(&frame, entry->mpUnknown40);
+        BigObjAnimUnpackFrameBits(pose->mUnknown48, encodedSamples, context, 0);
+        samples = pose->mUnknown48;
+    } else {
+        samples = BigObjAnimReadFrameHeader(&frame, entry->mpUnknown40);
+    }
+    unsigned int count = frame.count;
+    AnimFrameHeader *pFrame = &frame;
+    if (count > 64)
+        count = 64;
+    if (special) {
+        pose->mUnknown8[0] = pose->mUnknown8[2] = 0.0f;
+        pose->mUnknown8[1] = pFrame->word6 * 0.000244140625f;
+        if (pFrame->flags & 0x80) {
+            int x = (unsigned short)pFrame->word4 | ((pFrame->flags & 3) << 16);
+            int z = (unsigned short)pFrame->word8 | ((pFrame->flags & 0x18) << 13);
+            if ((pFrame->flags & 4) && x)
+                x |= 0xFFFC0000;
+            if ((pFrame->flags & 0x20) && z)
+                z |= 0xFFFC0000;
+            entry->mUnknown24[0] = z * 0.000244140625f;
+            entry->mUnknown24[1] = x * 0.000244140625f;
+        } else {
+            entry->mUnknown24[0] = pFrame->word8 * 0.000244140625f;
+            entry->mUnknown24[1] = pFrame->word4 * 0.000244140625f;
+        }
+    } else {
+        if (pFrame->flags & 0x80) {
+            int x = (unsigned short)pFrame->word4 | ((pFrame->flags & 3) << 16);
+            int z = (unsigned short)pFrame->word8 | ((pFrame->flags & 0x18) << 13);
+            if ((pFrame->flags & 4) && x)
+                x |= 0xFFFC0000;
+            if ((pFrame->flags & 0x20) && z)
+                z |= 0xFFFC0000;
+            pose->mUnknown8[0] = x * 0.000244140625f;
+            pose->mUnknown8[2] = z * 0.000244140625f;
+        } else {
+            pose->mUnknown8[0] = pFrame->word4 * 0.000244140625f;
+            pose->mUnknown8[2] = pFrame->word8 * 0.000244140625f;
+        }
+        pose->mUnknown8[1] = pFrame->word6 * 0.000244140625f;
+        pose->mUnknown32 = pFrame->word2 << 8;
+    }
+    if (!context)
+        memcpy(pose->mUnknown48, samples, count * 6);
+    AnimQuantTables *pair = &context->mUnknown4;
+    entry->mUnknown12[0] = BigObjAnimDequantize(samples[0], 0, 0, context, pair) << 8;
+    entry->mUnknown12[1] = pFrame->word2 << 8;
+    entry->mUnknown12[2] = BigObjAnimDequantize(samples[2], 0, 2, context, pair) << 8;
+}
+
+void BigObjAnimBlendPose(BigObjPhysics_t *unused, BigObj_t *pObject, int blend, int unused2)
+{
+    AnimBlendList *pBlend = (AnimBlendList *)blend;
+    AnimPose_t pose;
+    short samples[64 * 3];
+    AnimPose_t *pPose = &pObject->mUnknown172;
+    unsigned int entries = pBlend->mUnknown0;
+    AnimBlendEntry *pEntry;
+    AnimQuantContext *pContext;
+    AnimQuantTables *pPair = 0;
+    unsigned int values;
+    float weight;
+    unsigned int i;
+
+    pose.mUnknown48 = samples;
+    if (entries == 0) {
+        return;
+    }
+    values = pPose->mUnknown4 * 3;
+    pEntry = &pBlend->mUnknown4[0];
+    pContext = pEntry->mpUnknown36;
+    BigObjAnimDecodeFrame(pPose, pEntry, pContext, 0);
+    if (pContext != 0) {
+        pPair = &pContext->mUnknown4;
+        AnimScaleFixed(pPose->mUnknown48, pPose->mUnknown48, values, pPair->mUnknown0, pPair->mUnknown4);
+    }
+    for (i = 1; i < entries; i++) {
+        pEntry = &pBlend->mUnknown4[i];
+        weight = pEntry->mUnknown4;
+        pContext = pEntry->mpUnknown36;
+        BigObjAnimDecodeFrame(&pose, pEntry, pContext, 0);
+        if (pContext != 0) {
+            pPair = &pContext->mUnknown4;
+        }
+        fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
+        OrientLerpAngle(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
+        if (pContext != 0) {
+            AnimLerpFixedScaled(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,
+                        pPair->mUnknown0, pPair->mUnknown4);
+        } else {
+            AnimLerpFixed(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values);
+        }
+    }
+    pPose->mUnknown6 = -1;
+}
+
+void BigObjAnimBlendRootAngles(BigObj_t *pObject, void *items, int count, void *p)
+{
+    AnimRootItem *pItems = (AnimRootItem *)items;
+    int angles[3];
+    float total = 0.0f;
+    float weight;
+    unsigned int i;
+
+    angles[0] = angles[1] = angles[2] = 0;
+    for (i = 0; i < (unsigned int)count; i++) {
+        if (pItems[i].mUnknown1 != 0 && pItems[i].mUnknown48 == 0.0f) {
+            weight = fn_801BE5D0(p, pItems[i].mUnknown8) * pItems[i].mUnknown30;
+            total += weight;
+            Orient3Lerp(angles, pItems[i].mUnknown10, angles, weight / total);
+        }
+    }
+    pObject->mUnknown172.mUnknown32 = angles[1];
+    pObject->mUnknown172.mUnknown48[0] = angles[0] >> 8;
+    pObject->mUnknown172.mUnknown48[1] = 0;
+    pObject->mUnknown172.mUnknown48[2] = angles[2] >> 8;
+}
+
+short *BigObjAnimAllocSamples(int count)
+{
+    return (short *)fn_801D2B7C(64 * 3 * sizeof(short), 0, 0);
+}
+
+}

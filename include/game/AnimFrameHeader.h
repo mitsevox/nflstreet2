@@ -10,7 +10,9 @@ struct AnimFrameHeaderCopy {
     unsigned int mWords[7];
 };
 
-/* Frame header decoded by AnimReadFrameHeader from an encoded sample block. */
+/* Frame header decoded by AnimReadFrameHeader from an encoded sample block.
+   It is 28 bytes, the size of the AnimFrameHeaderCopy staging copy; the
+   decoders never touch the last six. */
 struct AnimFrameHeader {
     unsigned char count;
     unsigned char flags;
@@ -20,6 +22,7 @@ struct AnimFrameHeader {
     short word8;
     short vectorA[3];
     short vector10[3];
+    char mUnknown22[6];
 };
 
 /* 44-byte entry of a blend description: a weight, flags (bit 0 selects

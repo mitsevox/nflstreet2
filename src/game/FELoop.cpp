@@ -1,7 +1,7 @@
 /* The front-end loop module: boot screens, the per-frame update of the menus, the screen to return to after a game, and the idle timeout. */
 
-#include "game/cu_8007F12C.h"
-#include "game/fn_80072AA8.h"
+#include "game/GameOptions.h"
+#include "game/SndgMusic.h"
 #include "engine/viewport.h"
 #include "game/FlowManagerC.h"
 #include "game/FELoop.h"
@@ -11,7 +11,6 @@
 #include "game/GameInfo.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8007F828.h"
 #include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
@@ -30,7 +29,7 @@ void fn_80014294(int a, int b);
 void fn_8001442C(void);
 void fn_80015D28(int a);
 int fn_80015F2C(void);
-void fn_8001B228(void);
+void MsgTeamPickFreePool(void);
 void FEPlyrUpdate(void);
 void BootPlayIntroMovies(void);
 void BootShowStartupScreens(void);
@@ -41,20 +40,20 @@ int fn_8005FC7C(void);
 int fn_800602E8(void);
 int fn_80061CAC(void);
 void MemCardScreenSetFlag(unsigned char a);
-int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
-void fn_80066DC8(unsigned int id, int a);
+int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e);
+void PlayBookDbClose(unsigned int id, int a);
 void SndgUpdate(int a);
 void SndgApplyVolumeOptions(void);
-void fn_80072C90(int a, int b);
-void fn_800731D0(int a);
+void SndgMusicFadeOut(int a, int b);
+void SndgMusicPumpFrame(int a);
 void fn_8009418C(void);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void FEPlyrLoadUpdate(void);
 void MsgGameSetFEStarted(int a);
 void fn_80186EF4(void);
-void fn_80187C0C(void);
-void fn_80187FDC(void);
-void fn_8018807C(int a);
+void GameTextReset(void);
+void GameTextServiceReset(void);
+void GameTextSetSetupActive(int a);
 void TeamLogoInit(void);
 void TeamLogoShutdown(void);
 void UISGameHandleInput(int a, unsigned int id, float value);
@@ -277,11 +276,11 @@ static void _FELoopBootSetup()
 {
     ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
     PadInputSetDefaultHandler();
-    fn_8007F374();
+    GameOptionsShutdown();
     BootShowStartupScreens();
-    fn_8007F328(0);
+    GameOptionsInit(0);
     SndgApplyVolumeOptions();
-    fn_80072AA8();
+    SndgMusicReshuffle();
     ConSetChannelInfo(-1, 1, 0);
 }
 
@@ -289,11 +288,11 @@ void FELoop::Boot()
 {
     ResTrackLabel("FELoopBootStart");
     _FELoopBootSetup();
-    fn_80187FDC();
-    if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
+    GameTextServiceReset();
+    if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
         CamSetDefaultAspect(4.0f / 3.0f);
     } else {
-        fn_8013CF98();
+        CamSetupAspect();
     }
     fn_80186EF4();
     BootPlayIntroMovies();
@@ -307,17 +306,17 @@ void FELoopStartGame()
         DepthChartSide_t record1;
 
         _FELoop_bRunning = 0;
-        fn_8001B228();
-        fn_800731D0(1);
+        MsgTeamPickFreePool();
+        SndgMusicPumpFrame(1);
         DepthChartGetSide(0, &record0);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         DepthChartGetSide(1, &record1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         fn_80232FD4(&record0, &record1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         GameInfoRead();
         fn_8021956C(gUISSubInfo, 1, 5, 1);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         gGSFlowManager.fn_801CBEF4(2, 12);
     }
 }
@@ -340,13 +339,13 @@ const char *FELoop::GetName() { return "FELoop"; }
 
 int FELoop::Init()
 {
-    fn_8018807C(0);
+    GameTextSetSetupActive(0);
     ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
     PadInputSetDefaultHandler();
-    fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
-    fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
+    PlayBookDbOpen(0x31544250, 2, 4, 0, 0, 1);
+    PlayBookDbOpen(0x31444250, 1, 4, 0, 0, 0);
     _FELoop_bRunning = 1;
-    fn_80187C0C();
+    GameTextReset();
     if (_FELoop_bResume == 1) {
         if (_FELoop_uResumeMode != 3) {
             fn_802297B0();
@@ -394,7 +393,7 @@ unsigned char FELoop::Update()
         if (fn_80010194() || fn_80015F2C()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
                 fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
-                fn_80072C90(0xFA, 1);
+                SndgMusicFadeOut(0xFA, 1);
                 _FELoop_bIdleTimeout = 1;
             }
         }
@@ -406,8 +405,8 @@ int FELoop::Shutdown()
 {
     TeamLogoShutdown();
     fn_801CE910();
-    fn_80066DC8(0x31544250, 0);
-    fn_80066DC8(0x31444250, 0);
+    PlayBookDbClose(0x31544250, 0);
+    PlayBookDbClose(0x31444250, 0);
     fn_8009418C();
     ConSetChannelInfo(-1, 1, 0);
     _FELoop_uIdleFrames = 0;

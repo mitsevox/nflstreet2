@@ -490,9 +490,9 @@ void fn_8006F850(AudmonEvent_t *pEvent);
 void fn_80070C40(AudmonEvent_t *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
 int fn_80071BA0(int a, int b);
-void fn_800728F8(void);
-void fn_80072C54(int value);
-void fn_80073144(int a, int b);
+void SndgMusicUpdate(void);
+void SndgMusicSetVolume(int value);
+void SndgMusicRampCutoff(int a, int b);
 void SpchIGSaySceneLine(int a, int b, int c);
 void SpchIGStopSceneLine(void);
 void SpchIGEndSceneLine(void);
@@ -534,7 +534,7 @@ void SpchIGSayDownAndDistance(void);
 void SpchIGSayPreSnap(int a);
 void SpchIGSayDefenseShift(void);
 void SpchIGSayOffenseMotion(void);
-int fn_8007F828(int a);
+int GameOptionsGet(int a);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 int fn_800A8444(int a);
@@ -543,7 +543,7 @@ int fn_800BA6F8(void);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
 int CamGameGetHeading(int index);
-unsigned int fn_801568F0(void);
+unsigned int TutorialGetLesson(void);
 int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
 Point_8017886C fn_80178070(void);
@@ -1370,8 +1370,8 @@ extern "C" void SndgAmbType4Update(int index, Vector_80039F5C *pPos, void *pObje
             } else {
                 cutoff = 20000;
             }
-            fn_80073144(cutoff, 0);
-            float level = fn_8007F828(4);
+            SndgMusicRampCutoff(cutoff, 0);
+            float level = GameOptionsGet(4);
             int w = _SndgAmb_pState->mSound0[index]->mUnknown10;
             SndgChannelSetVolume(1, (w >= 0 ? (w <= 127 ? (int)(level / (w * 2.0f * (1.0f / 127.0f) + 1.0f))
                                                 : (int)(level * (1.0f / 3.0f)))
@@ -1388,8 +1388,8 @@ extern "C" void SndgAmbType4Stop(int index)
     if (s != 0) {
         delete s;
         _SndgAmb_pState->mSound0[index] = 0;
-        fn_80073144(20000, 0);
-        SndgChannelSetVolume(1, fn_8007F828(4) * 10);
+        SndgMusicRampCutoff(20000, 0);
+        SndgChannelSetVolume(1, GameOptionsGet(4) * 10);
     }
 }
 
@@ -1599,8 +1599,8 @@ extern "C" void SndgAmbInit(void)
         SndgAmbOpenBanks();
         SndgAmbAllocObjects();
         SndgPathSetTrackVolume(_SndgAmb_pState->mUnknownC, _SndgAmb_uVolume * _SndgAmb_uTrackLevel / 100);
-        _SndgAmb_iType4Volume = (unsigned char)(fn_8007F828(4) * 10);
-        _SndgAmb_uObjVolume = (unsigned char)(fn_8007F828(4) * 10);
+        _SndgAmb_iType4Volume = (unsigned char)(GameOptionsGet(4) * 10);
+        _SndgAmb_uObjVolume = (unsigned char)(GameOptionsGet(4) * 10);
     }
 }
 
@@ -2160,7 +2160,7 @@ extern "C" void SndgUpdate(int a)
     for (pHandler = _Sndg_sState.m14; *pHandler != 0; pHandler++) {
         (*pHandler)(a);
     }
-    fn_800728F8();
+    SndgMusicUpdate();
     SndgLoadQueueService(1);
     fn_801F4B20();
 }
@@ -3093,7 +3093,7 @@ extern "C" void SndgSetVolumeOption(unsigned int index, unsigned int value)
         value = value > 50 ? (value - 50) * (100 - _Sndg_aVolumeCurveMid[index]) / 50 + _Sndg_aVolumeCurveMid[index]
                            : value * _Sndg_aVolumeCurveMid[index] / 50;
         value = value * 75 / 100;
-        fn_80072C54(value);
+        SndgMusicSetVolume(value);
         SndgChannelSetVolume(8, value);
         break;
     case 3:
@@ -3114,10 +3114,10 @@ extern "C" void SndgApplyVolumeOptions(void)
     unsigned int values[4];
     unsigned int i;
 
-    values[0] = fn_8007F828(11);
-    values[1] = (unsigned char)(fn_8007F828(4) * 10);
-    values[2] = (unsigned char)(fn_8007F828(5) * 10);
-    values[3] = (unsigned char)(fn_8007F828(3) * 10);
+    values[0] = GameOptionsGet(11);
+    values[1] = (unsigned char)(GameOptionsGet(4) * 10);
+    values[2] = (unsigned char)(GameOptionsGet(5) * 10);
+    values[3] = (unsigned char)(GameOptionsGet(3) * 10);
     for (i = 0; i < 4; i++) {
         SndgSetVolumeOption(i, values[i]);
     }
@@ -3126,7 +3126,7 @@ extern "C" void SndgApplyVolumeOptions(void)
 extern "C" void SndgSpchHandleEvent(AudmonEvent_t *pEvent)
 {
     if (!fn_800BA6F8() && SpchIGIsEnabled()) {
-        if (GameModeTypeGet() == 11 && fn_801568F0() <= 4) {
+        if (GameModeTypeGet() == 11 && TutorialGetLesson() <= 4) {
             switch (pEvent->mType) {
             case 0x85:
                 SpchIGSayTutorialIntro(pEvent->mUnknown10.mValue, pEvent->mUnknown14);

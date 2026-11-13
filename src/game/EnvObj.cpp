@@ -25,9 +25,9 @@ struct EnvObjOverlay {
 extern "C" {
 void *fn_800A336C(void);
 int fn_800A3374(void);
-int fn_80146EDC(unsigned int index);
-float fn_80146F0C(unsigned int index);
-float fn_80146F40(unsigned int index);
+int GlowGetFlickerState(unsigned int index);
+float GlowGetFlickerTime(unsigned int index);
+float GlowGetFlickerDuration(unsigned int index);
 void EnvLayersInit(EnvObj *pObject);
 void EnvLayersFree(EnvObj *pObject);
 int EnvDrawOverlay(void *pObject);
@@ -121,9 +121,9 @@ void EnvObjUpdateFades(void)
 
     for (i = 0; i < 10; i++) {
         pElement = _EnvObj_pMain->mUnknown6E4[i];
-        a = fn_80146F0C(i);
-        b = fn_80146F40(i);
-        state = fn_80146EDC(i);
+        a = GlowGetFlickerTime(i);
+        b = GlowGetFlickerDuration(i);
+        state = GlowGetFlickerState(i);
         if (a == b) {
             if (state == 1) {
                 value = 0.5f;

@@ -20,7 +20,7 @@
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -37,7 +37,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/Record_800DB60C.h"
 #include "game/fn_8022781C.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80227638.h"
 #include "game/PlayBookGetPlay.h"
 /* Views of the block at player +336. Only the accessed fields
@@ -577,7 +577,7 @@ struct Plan_80121264 {
 };
 
 extern "C" {
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -639,14 +639,14 @@ int fn_8011DC68(unsigned int id);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
@@ -658,8 +658,8 @@ void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 void fn_8010CEB8(Object_80039F5C *p, int kind);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_801485D4(void);
-int fn_80156704(void);
-unsigned char fn_80156D14(void);
+int TutorialIsActive(void);
+unsigned char TutorialIsStepDone(void);
 int fn_80178348(void);
 int fn_80178360(void);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -699,7 +699,7 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
 void fn_800FD978(Object_80039F5C *p);
 void fn_800FF868(Object_80039F5C *p, State_800FFDFC *pState, Object_80039F5C *pOther);
@@ -723,7 +723,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
@@ -734,7 +734,7 @@ int fn_800DC080(Object_80039F5C *p);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);

@@ -1,6 +1,6 @@
 #include "game/AnimFrameHeader.h"
 #include "game/fn_801BE60C.h"
-#include "game/Player_8003877C.h"
+#include "game/PlyrSlot.h"
 
 extern "C" {
 float fn_801CFB94(int angle);
@@ -29,7 +29,7 @@ extern "C" AnimBlendList *fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int in
     return pBlend;
 }
 
-extern "C" void fn_800AE018(Player_8003877C *p, int side, unsigned short key)
+extern "C" void fn_800AE018(PlyrSlot_t *p, int side, unsigned short key)
 {
     if (p->mObject.mIdBytes[3] == 1) {
         p->mObject.mUnknown1008.mUnknown0 = key;

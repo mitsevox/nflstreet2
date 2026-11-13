@@ -1,15 +1,15 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Step_800C4460.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/Block_800B21D0.h"
 
 extern "C" {
 int fn_800B1A30(void *p);
 int fn_800B1AAC(void *p);
 void fn_800B1BF8(void *p);
-void *fn_800B9A44(Class_80297C60 *p);
-void fn_800B9A6C(Class_80297C60 *p, void *q);
+void *fn_800B9A44(PostPlayPhase *p);
+void fn_800B9A6C(PostPlayPhase *p, void *q);
 
 extern Block_800B21D0 *lbl_803EAB20;
 }

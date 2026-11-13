@@ -5,7 +5,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/LevelWallInfo.h"
 #include "game/LevelData.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
@@ -16,14 +16,14 @@
 #include "engine/vptmanager.h"
 #include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Entry_800B206C.h"
 #include "game/Entry_80219044.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
@@ -47,14 +47,14 @@
 #include "game/Record_8011F518.h"
 #include "game/Ball.h"
 #include "game/cu_8008E978.h"
-#include "game/fn_8007F828.h"
-#include "game/fn_800670B4.h"
+#include "game/GameOptions.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
@@ -211,7 +211,7 @@ extern "C" Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         int valid = 1;
         int ref;
         unsigned char j;

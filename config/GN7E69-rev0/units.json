@@ -59,7 +59,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while fn_801470F0 divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
+      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while ParticleTrailUpdate divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
     },
     "engine_c": {
       "flags": [
@@ -395,11 +395,11 @@
     },
     "sprintf": {
       "address": "0x801C2E18",
-      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcmp": {
       "address": "0x801C2FE4",
-      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcpy": {
       "address": "0x801C2EB4",
@@ -481,225 +481,225 @@
       "address": "0x800B3C68",
       "evidence": "evidence.tsv external row for 0x800B3C68 (vfn_04__14Class_80297B50f)."
     },
-    "_vt.14Class_80297C60": {
+    "_vt.13PostPlayPhase": {
       "address": "0x80297C60",
-      "evidence": "evidence.tsv external row for 0x80297C60 (_vt.14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x80297C60 (_vt.13PostPlayPhase)."
     },
-    "_vt.14Class_80297AB8": {
+    "_vt.13LivePlayPhase": {
       "address": "0x80297AB8",
-      "evidence": "evidence.tsv external row for 0x80297AB8 (_vt.14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x80297AB8 (_vt.13LivePlayPhase)."
     },
-    "_vt.14Class_80297BF8": {
+    "_vt.12PreGamePhase": {
       "address": "0x80297BF8",
-      "evidence": "evidence.tsv external row for 0x80297BF8 (_vt.14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x80297BF8 (_vt.12PreGamePhase)."
     },
-    "_vt.14Class_80297CE8": {
+    "_vt.12PreSnapPhase": {
       "address": "0x80297CE8",
-      "evidence": "evidence.tsv external row for 0x80297CE8 (_vt.14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x80297CE8 (_vt.12PreSnapPhase)."
     },
-    "vfn_04__14Class_80297AB8f": {
+    "OnUpdate__13LivePlayPhasef": {
       "address": "0x800A050C",
-      "evidence": "evidence.tsv external row for 0x800A050C (vfn_04__14Class_80297AB8f)."
+      "evidence": "evidence.tsv external row for 0x800A050C (OnUpdate__13LivePlayPhasef)."
     },
-    "vfn_03__14Class_80297AB8": {
+    "OnEnter__13LivePlayPhase": {
       "address": "0x800A042C",
-      "evidence": "evidence.tsv external row for 0x800A042C (vfn_03__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A042C (OnEnter__13LivePlayPhase)."
     },
-    "vfn_03__14Class_80297BF8": {
+    "OnEnter__12PreGamePhase": {
       "address": "0x800BC5DC",
-      "evidence": "evidence.tsv external row for 0x800BC5DC (vfn_03__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC5DC (OnEnter__12PreGamePhase)."
     },
-    "vfn_04__14Class_80297BF8f": {
+    "OnUpdate__12PreGamePhasef": {
       "address": "0x800BCB18",
-      "evidence": "evidence.tsv external row for 0x800BCB18 (vfn_04__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BCB18 (OnUpdate__12PreGamePhasef)."
     },
-    "vfn_04__14Class_80297CE8f": {
+    "OnEnter__12PreSnapPhasef": {
       "address": "0x800BFB88",
-      "evidence": "evidence.tsv external row for 0x800BFB88 (vfn_04__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800BFB88 (OnEnter__12PreSnapPhasef)."
     },
-    "vfn_05__14Class_80297CE8f": {
+    "OnUpdate__12PreSnapPhasef": {
       "address": "0x800BFFD4",
-      "evidence": "evidence.tsv external row for 0x800BFFD4 (vfn_05__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800BFFD4 (OnUpdate__12PreSnapPhasef)."
     },
-    "vfn_06__14Class_80297CE8f": {
+    "OnExit__12PreSnapPhasef": {
       "address": "0x800C0174",
-      "evidence": "evidence.tsv external row for 0x800C0174 (vfn_06__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800C0174 (OnExit__12PreSnapPhasef)."
     },
-    "vfn_12__14Class_80297CE8": {
+    "CanSnap__12PreSnapPhase": {
       "address": "0x800BE7BC",
-      "evidence": "evidence.tsv external row for 0x800BE7BC (vfn_12__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BE7BC (CanSnap__12PreSnapPhase)."
     },
-    "fn_800C0420__14Class_80297CE8i": {
+    "fn_800C0420__12PreSnapPhasei": {
       "address": "0x800C0420",
-      "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__14Class_80297CE8i)."
+      "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__12PreSnapPhasei)."
     },
-    "fn_800C043C__14Class_80297CE8i": {
+    "fn_800C043C__12PreSnapPhasei": {
       "address": "0x800C043C",
-      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__14Class_80297CE8i)."
+      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__12PreSnapPhasei)."
     },
-    "vfn_03__14Class_80297C60f": {
+    "OnEnter__13PostPlayPhasef": {
       "address": "0x800B9654",
-      "evidence": "evidence.tsv external row for 0x800B9654 (vfn_03__14Class_80297C60f)."
+      "evidence": "evidence.tsv external row for 0x800B9654 (OnEnter__13PostPlayPhasef)."
     },
-    "vfn_04__14Class_80297C60f": {
+    "OnUpdate__13PostPlayPhasef": {
       "address": "0x800B9830",
-      "evidence": "evidence.tsv external row for 0x800B9830 (vfn_04__14Class_80297C60f)."
+      "evidence": "evidence.tsv external row for 0x800B9830 (OnUpdate__13PostPlayPhasef)."
     },
-    "vfn_05__14Class_80297C60": {
+    "OnExit__13PostPlayPhase": {
       "address": "0x800B9998",
-      "evidence": "evidence.tsv external row for 0x800B9998 (vfn_05__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B9998 (OnExit__13PostPlayPhase)."
     },
-    "vfn_10__14Class_802A56E8": {
+    "ResetPlaySpot__11ScrmRuleSet": {
       "address": "0x8017767C",
-      "evidence": "evidence.tsv external row for 0x8017767C (vfn_10__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017767C (ResetPlaySpot__11ScrmRuleSet)."
     },
-    "vfn_11__14Class_802A56E8i": {
+    "ResetGame__11ScrmRuleSeti": {
       "address": "0x80177768",
-      "evidence": "evidence.tsv external row for 0x80177768 (vfn_11__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177768 (ResetGame__11ScrmRuleSeti)."
     },
-    "vfn_01__14Class_80297AB8": {
+    "InitState__13LivePlayPhase": {
       "address": "0x800A03B8",
-      "evidence": "evidence.tsv external row for 0x800A03B8 (vfn_01__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A03B8 (InitState__13LivePlayPhase)."
     },
-    "vfn_02__14Class_80297AB8": {
+    "Shutdown__13LivePlayPhase": {
       "address": "0x800A0408",
-      "evidence": "evidence.tsv external row for 0x800A0408 (vfn_02__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A0408 (Shutdown__13LivePlayPhase)."
     },
-    "vfn_05__14Class_80297AB8": {
+    "OnExit__13LivePlayPhase": {
       "address": "0x800A05E8",
-      "evidence": "evidence.tsv external row for 0x800A05E8 (vfn_05__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A05E8 (OnExit__13LivePlayPhase)."
     },
-    "vfn_02__14Class_80297CE8": {
+    "InitState__12PreSnapPhase": {
       "address": "0x800BFAD0",
-      "evidence": "evidence.tsv external row for 0x800BFAD0 (vfn_02__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFAD0 (InitState__12PreSnapPhase)."
     },
-    "vfn_03__14Class_80297CE8": {
+    "Shutdown__12PreSnapPhase": {
       "address": "0x800BFB44",
-      "evidence": "evidence.tsv external row for 0x800BFB44 (vfn_03__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFB44 (Shutdown__12PreSnapPhase)."
     },
-    "vfn_07__14Class_80297CE8": {
+    "UnusedHook__12PreSnapPhase": {
       "address": "0x800C032C",
-      "evidence": "evidence.tsv external row for 0x800C032C (vfn_07__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800C032C (UnusedHook__12PreSnapPhase)."
     },
-    "vfn_09__14Class_80297CE8": {
+    "ReleaseHeldBalls__12PreSnapPhase": {
       "address": "0x800BF2EC",
-      "evidence": "evidence.tsv external row for 0x800BF2EC (vfn_09__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BF2EC (ReleaseHeldBalls__12PreSnapPhase)."
     },
-    "vfn_10__14Class_80297CE8": {
+    "AssignControlledPlayers__12PreSnapPhase": {
       "address": "0x800BFB68",
-      "evidence": "evidence.tsv external row for 0x800BFB68 (vfn_10__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFB68 (AssignControlledPlayers__12PreSnapPhase)."
     },
-    "vfn_11__14Class_80297CE8": {
+    "SetupCamera__12PreSnapPhase": {
       "address": "0x800BF364",
-      "evidence": "evidence.tsv external row for 0x800BF364 (vfn_11__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BF364 (SetupCamera__12PreSnapPhase)."
     },
-    "vfn_01__14Class_80297C60": {
+    "InitState__13PostPlayPhase": {
       "address": "0x800B95B4",
-      "evidence": "evidence.tsv external row for 0x800B95B4 (vfn_01__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B95B4 (InitState__13PostPlayPhase)."
     },
-    "vfn_02__14Class_80297C60": {
+    "Shutdown__13PostPlayPhase": {
       "address": "0x800B9630",
-      "evidence": "evidence.tsv external row for 0x800B9630 (vfn_02__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B9630 (Shutdown__13PostPlayPhase)."
     },
-    "vfn_08__14Class_80297C60": {
+    "SetupCamera__13PostPlayPhase": {
       "address": "0x800B8A40",
-      "evidence": "evidence.tsv external row for 0x800B8A40 (vfn_08__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8A40 (SetupCamera__13PostPlayPhase)."
     },
-    "vfn_09__14Class_80297C60Pc": {
+    "GetResultText__13PostPlayPhasePc": {
       "address": "0x800B8E18",
-      "evidence": "evidence.tsv external row for 0x800B8E18 (vfn_09__14Class_80297C60Pc)."
+      "evidence": "evidence.tsv external row for 0x800B8E18 (GetResultText__13PostPlayPhasePc)."
     },
-    "vfn_13__14Class_80297C60i": {
+    "IsFinished__13PostPlayPhasei": {
       "address": "0x800B8A6C",
-      "evidence": "evidence.tsv external row for 0x800B8A6C (vfn_13__14Class_80297C60i)."
+      "evidence": "evidence.tsv external row for 0x800B8A6C (IsFinished__13PostPlayPhasei)."
     },
-    "vfn_15__14Class_80297C60": {
+    "ForceFinish__13PostPlayPhase": {
       "address": "0x800B8C8C",
-      "evidence": "evidence.tsv external row for 0x800B8C8C (vfn_15__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8C8C (ForceFinish__13PostPlayPhase)."
     },
-    "vfn_01__14Class_802A56E8": {
+    "GetScoreLimit__11ScrmRuleSet": {
       "address": "0x80177410",
-      "evidence": "evidence.tsv external row for 0x80177410 (vfn_01__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177410 (GetScoreLimit__11ScrmRuleSet)."
     },
-    "vfn_03__14Class_802A56E8i": {
+    "AwardWin__11ScrmRuleSeti": {
       "address": "0x801774C0",
-      "evidence": "evidence.tsv external row for 0x801774C0 (vfn_03__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x801774C0 (AwardWin__11ScrmRuleSeti)."
     },
-    "vfn_04__14Class_802A56E8i": {
+    "IsNearWin__11ScrmRuleSeti": {
       "address": "0x8017755C",
-      "evidence": "evidence.tsv external row for 0x8017755C (vfn_04__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017755C (IsNearWin__11ScrmRuleSeti)."
     },
-    "vfn_05__14Class_802A56E8i": {
+    "IsOpponentNearWin__11ScrmRuleSeti": {
       "address": "0x80177600",
-      "evidence": "evidence.tsv external row for 0x80177600 (vfn_05__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177600 (IsOpponentNearWin__11ScrmRuleSeti)."
     },
-    "vfn_06__14Class_802A56E8": {
+    "GetScoreType__11ScrmRuleSet": {
       "address": "0x80177638",
-      "evidence": "evidence.tsv external row for 0x80177638 (vfn_06__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177638 (GetScoreType__11ScrmRuleSet)."
     },
-    "vfn_07__14Class_802A56E8i": {
+    "GetScore__11ScrmRuleSeti": {
       "address": "0x80177640",
-      "evidence": "evidence.tsv external row for 0x80177640 (vfn_07__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177640 (GetScore__11ScrmRuleSeti)."
     },
-    "vfn_09__14Class_802A56E8": {
+    "GetGameTime__11ScrmRuleSet": {
       "address": "0x80177674",
-      "evidence": "evidence.tsv external row for 0x80177674 (vfn_09__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177674 (GetGameTime__11ScrmRuleSet)."
     },
-    "vfn_13__14Class_802A56E8": {
+    "GetTeamSize__11ScrmRuleSet": {
       "address": "0x801776D0",
-      "evidence": "evidence.tsv external row for 0x801776D0 (vfn_13__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x801776D0 (GetTeamSize__11ScrmRuleSet)."
     },
-    "vfn_15__14Class_802A56E8": {
+    "AllowsPrediction__11ScrmRuleSet": {
       "address": "0x80177720",
-      "evidence": "evidence.tsv external row for 0x80177720 (vfn_15__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177720 (AllowsPrediction__11ScrmRuleSet)."
     },
-    "vfn_16__14Class_802A56E8": {
+    "GetGoalLimit__11ScrmRuleSet": {
       "address": "0x8017CAFC",
-      "evidence": "evidence.tsv external row for 0x8017CAFC (vfn_16__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017CAFC (GetGoalLimit__11ScrmRuleSet)."
     },
-    "vfn_17__14Class_802A56E8i": {
+    "GetGoalTotal__11ScrmRuleSeti": {
       "address": "0x8017CB04",
-      "evidence": "evidence.tsv external row for 0x8017CB04 (vfn_17__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017CB04 (GetGoalTotal__11ScrmRuleSeti)."
     },
-    "vfn_18__14Class_802A56E8i": {
+    "GetGoalCount__11ScrmRuleSeti": {
       "address": "0x8017CB0C",
-      "evidence": "evidence.tsv external row for 0x8017CB0C (vfn_18__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017CB0C (GetGoalCount__11ScrmRuleSeti)."
     },
-    "vfn_19__14Class_802A56E8": {
+    "EndPlay__11ScrmRuleSet": {
       "address": "0x801777FC",
-      "evidence": "evidence.tsv external row for 0x801777FC (vfn_19__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x801777FC (EndPlay__11ScrmRuleSet)."
     },
-    "vfn_20__14Class_802A56E8i": {
+    "PlaceBallForDrive__11ScrmRuleSeti": {
       "address": "0x8017894C",
-      "evidence": "evidence.tsv external row for 0x8017894C (vfn_20__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017894C (PlaceBallForDrive__11ScrmRuleSeti)."
     },
-    "vfn_21__14Class_802A56E8": {
+    "IsWinAwarded__11ScrmRuleSet": {
       "address": "0x8017766C",
-      "evidence": "evidence.tsv external row for 0x8017766C (vfn_21__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017766C (IsWinAwarded__11ScrmRuleSet)."
     },
-    "vfn_01__14Class_80297BF8": {
+    "InitState__12PreGamePhase": {
       "address": "0x800BC538",
-      "evidence": "evidence.tsv external row for 0x800BC538 (vfn_01__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC538 (InitState__12PreGamePhase)."
     },
-    "vfn_02__14Class_80297BF8": {
+    "Shutdown__12PreGamePhase": {
       "address": "0x800BC5B8",
-      "evidence": "evidence.tsv external row for 0x800BC5B8 (vfn_02__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC5B8 (Shutdown__12PreGamePhase)."
     },
-    "vfn_05__14Class_80297BF8": {
+    "OnExit__12PreGamePhase": {
       "address": "0x800BCC30",
-      "evidence": "evidence.tsv external row for 0x800BCC30 (vfn_05__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BCC30 (OnExit__12PreGamePhase)."
     },
-    "vfn_08__14Class_80297BF8f": {
+    "UpdateIntroStart__12PreGamePhasef": {
       "address": "0x800BC83C",
-      "evidence": "evidence.tsv external row for 0x800BC83C (vfn_08__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BC83C (UpdateIntroStart__12PreGamePhasef)."
     },
-    "vfn_09__14Class_80297BF8f": {
+    "UpdateIntro__12PreGamePhasef": {
       "address": "0x800BC8E0",
-      "evidence": "evidence.tsv external row for 0x800BC8E0 (vfn_09__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BC8E0 (UpdateIntro__12PreGamePhasef)."
     },
-    "vfn_10__14Class_80297BF8f": {
+    "UpdateIntroEnd__12PreGamePhasef": {
       "address": "0x800BCA00",
-      "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BCA00 (UpdateIntroEnd__12PreGamePhasef)."
     },
     "GetColor__14MenuItemEditoriPi": {
       "address": "0x80182A80",
@@ -1109,17 +1109,17 @@
       "address": "0x80190ED4",
       "evidence": "evidence.tsv external row 0x80190ED4 (OpenBitStream__FP11BitStream_tPv15BitStreamMode_t), name row 0x80190ED4 and type row BitStream_t."
     },
-    "fn_800C0414__14Class_80297CE8": {
+    "fn_800C0414__12PreSnapPhase": {
       "address": "0x800C0414",
-      "evidence": "evidence.tsv external row for 0x800C0414 (fn_800C0414__14Class_80297CE8); descriptive mangled member name."
+      "evidence": "evidence.tsv external row for 0x800C0414 (fn_800C0414__12PreSnapPhase); descriptive mangled member name."
     },
     "CloseBitStream__FP11BitStream_t": {
       "address": "0x80190EF0",
       "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
     },
-    "fn_800C02E0__14Class_80297CE8": {
+    "fn_800C02E0__12PreSnapPhase": {
       "address": "0x800C02E0",
-      "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
+      "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__12PreSnapPhase); descriptive mangled member name."
     },
     "fn_801CBD80__12FlowManagerCii": {
       "address": "0x801CBD80",
@@ -1625,13 +1625,13 @@
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
     },
-    "fn_800C02D4__14Class_80297CE8s": {
+    "fn_800C02D4__12PreSnapPhases": {
       "address": "0x800C02D4",
-      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02D4."
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical PreSnapPhase short setter at 0x800C02D4."
     },
-    "fn_800C02EC__14Class_80297CE8s": {
+    "fn_800C02EC__12PreSnapPhases": {
       "address": "0x800C02EC",
-      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical PreSnapPhase short setter at 0x800C02EC."
     },
     "GXLoadLightObjImm": {
       "address": "0x8024F9EC",
@@ -2188,6 +2188,354 @@
     "StorySetFlag200": {
       "address": "0x8018E978",
       "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "PlyrFixWristBones": {
+      "address": "0x8003830C",
+      "evidence": "evidence.tsv function and name rows for 0x8003830C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAddParticleEvents": {
+      "address": "0x8003845C",
+      "evidence": "evidence.tsv function and name rows for 0x8003845C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrCreate": {
+      "address": "0x800384DC",
+      "evidence": "evidence.tsv function and name rows for 0x800384DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrDestroy": {
+      "address": "0x800385D4",
+      "evidence": "evidence.tsv function and name rows for 0x800385D4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRefreshAll": {
+      "address": "0x80038650",
+      "evidence": "evidence.tsv function and name rows for 0x80038650 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrCompareSnapshot": {
+      "address": "0x8003877C",
+      "evidence": "evidence.tsv function and name rows for 0x8003877C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrLoadSnapshot": {
+      "address": "0x80038A00",
+      "evidence": "evidence.tsv function and name rows for 0x80038A00 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetSnapshotSize": {
+      "address": "0x80038E50",
+      "evidence": "evidence.tsv function and name rows for 0x80038E50 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrInit": {
+      "address": "0x80038E80",
+      "evidence": "evidence.tsv function and name rows for 0x80038E80 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrContactCallback": {
+      "address": "0x80039044",
+      "evidence": "evidence.tsv function and name rows for 0x80039044 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrUpdatePendingMsg": {
+      "address": "0x8003924C",
+      "evidence": "evidence.tsv function and name rows for 0x8003924C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimUpdateOverlay": {
+      "address": "0x800392DC",
+      "evidence": "evidence.tsv function and name rows for 0x800392DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimUpdateHands": {
+      "address": "0x80039364",
+      "evidence": "evidence.tsv function and name rows for 0x80039364 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimPostUpdate": {
+      "address": "0x80039454",
+      "evidence": "evidence.tsv function and name rows for 0x80039454 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrClampBehindLine": {
+      "address": "0x80039458",
+      "evidence": "evidence.tsv function and name rows for 0x80039458 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrKeepInBounds": {
+      "address": "0x800394F4",
+      "evidence": "evidence.tsv function and name rows for 0x800394F4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrUpdateControlFlag": {
+      "address": "0x8003962C",
+      "evidence": "evidence.tsv function and name rows for 0x8003962C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrClearTeamFlag": {
+      "address": "0x8003977C",
+      "evidence": "evidence.tsv function and name rows for 0x8003977C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRegister": {
+      "address": "0x800397D0",
+      "evidence": "evidence.tsv function and name rows for 0x800397D0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrReset": {
+      "address": "0x80039890",
+      "evidence": "evidence.tsv function and name rows for 0x80039890 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrExists": {
+      "address": "0x8003989C",
+      "evidence": "evidence.tsv function and name rows for 0x8003989C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdate": {
+      "address": "0x800398B4",
+      "evidence": "evidence.tsv function and name rows for 0x800398B4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrEmptyPass": {
+      "address": "0x80039A1C",
+      "evidence": "evidence.tsv function and name rows for 0x80039A1C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateSkeletons": {
+      "address": "0x80039A38",
+      "evidence": "evidence.tsv function and name rows for 0x80039A38 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrStepStates": {
+      "address": "0x80039AA8",
+      "evidence": "evidence.tsv function and name rows for 0x80039AA8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateMotion": {
+      "address": "0x80039B2C",
+      "evidence": "evidence.tsv function and name rows for 0x80039B2C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrTestCollisions": {
+      "address": "0x80039C64",
+      "evidence": "evidence.tsv function and name rows for 0x80039C64 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRunBrains": {
+      "address": "0x80039CB0",
+      "evidence": "evidence.tsv function and name rows for 0x80039CB0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdatePoses": {
+      "address": "0x80039D08",
+      "evidence": "evidence.tsv function and name rows for 0x80039D08 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateModels": {
+      "address": "0x80039F04",
+      "evidence": "evidence.tsv function and name rows for 0x80039F04 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrGet": {
+      "address": "0x80039F5C",
+      "evidence": "evidence.tsv function and name rows for 0x80039F5C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrGetIndex": {
+      "address": "0x80039F8C",
+      "evidence": "evidence.tsv function and name rows for 0x80039F8C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrFindByRole": {
+      "address": "0x80039FE8",
+      "evidence": "evidence.tsv function and name rows for 0x80039FE8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetPerTeam": {
+      "address": "0x8003A06C",
+      "evidence": "evidence.tsv function and name rows for 0x8003A06C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetCollideSet": {
+      "address": "0x8003A078",
+      "evidence": "evidence.tsv function and name rows for 0x8003A078 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrReverseAll": {
+      "address": "0x8003A090",
+      "evidence": "evidence.tsv function and name rows for 0x8003A090 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrFindNearest": {
+      "address": "0x8003A130",
+      "evidence": "evidence.tsv function and name rows for 0x8003A130 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrRouteShow": {
+      "address": "0x8003A1EC",
+      "evidence": "evidence.tsv function and name rows for 0x8003A1EC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetHeader": {
+      "address": "0x800659AC",
+      "evidence": "evidence.tsv function and name rows for 0x800659AC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetRecord": {
+      "address": "0x80065B50",
+      "evidence": "evidence.tsv function and name rows for 0x80065B50 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetPositions": {
+      "address": "0x80065CAC",
+      "evidence": "evidence.tsv function and name rows for 0x80065CAC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetSlots": {
+      "address": "0x80066318",
+      "evidence": "evidence.tsv function and name rows for 0x80066318 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHeader": {
+      "address": "0x80066560",
+      "evidence": "evidence.tsv function and name rows for 0x80066560 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayRecord": {
+      "address": "0x80066704",
+      "evidence": "evidence.tsv function and name rows for 0x80066704 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayDetails": {
+      "address": "0x80066844",
+      "evidence": "evidence.tsv function and name rows for 0x80066844 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayScripts": {
+      "address": "0x80066DE8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DE8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPositionSteps": {
+      "address": "0x80066000",
+      "evidence": "evidence.tsv function and name rows for 0x80066000 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHole": {
+      "address": "0x800668E4",
+      "evidence": "evidence.tsv function and name rows for 0x800668E4 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayReceivers": {
+      "address": "0x80066A0C",
+      "evidence": "evidence.tsv function and name rows for 0x80066A0C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayCommands": {
+      "address": "0x80066B6C",
+      "evidence": "evidence.tsv function and name rows for 0x80066B6C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbResetState": {
+      "address": "0x80066D5C",
+      "evidence": "evidence.tsv function and name rows for 0x80066D5C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbOpen": {
+      "address": "0x80066D74",
+      "evidence": "evidence.tsv function and name rows for 0x80066D74 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbClose": {
+      "address": "0x80066DC8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DC8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "MemCardFilesFindNameOnPort": {
+      "address": "0x8002A86C",
+      "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "CamBallStart": {
+      "address": "0x801422EC",
+      "evidence": "evidence.tsv function row 0x801422EC-0x801423D0: documented holdout of src/game/camball.cpp, whose original bytes stay linked; CamBallMsgFunc calls it."
+    },
+    "StatcollBlockInit": {
+      "address": "0x80143F40",
+      "evidence": "evidence.tsv function and name rows for 0x80143F40 (documented holdout of src/game/Statcoll.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "PlayerGearSumBonuses": {
+      "address": "0x800814BC",
+      "evidence": "evidence.tsv function and name rows for 0x800814BC (documented holdout of src/game/PlayerGearRatings.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "PlayerGearGetScaledBonuses": {
+      "address": "0x80081440",
+      "evidence": "evidence.tsv function and name rows for 0x80081440 (exact in comparisons.json; precedes the holdout 0x800814BC of src/game/PlayerGearRatings.cpp, so its original bytes stay linked)."
+    },
+    "BigObjDefaultUpdate": {
+      "address": "0x800400CC",
+      "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
+    },
+    "BigObjLinkGroup": {
+      "address": "0x800400D4",
+      "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "CamInterpUpdateEaseInOut": {
+      "address": "0x8013CC7C",
+      "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
+    },
+    "_PlyrMgr_pManager": {
+      "address": "0x803EA3F8",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F8 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleMax": {
+      "address": "0x803EA3F0",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F0 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleBase": {
+      "address": "0x803EA3F1",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F1 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleDuration": {
+      "address": "0x803EA3F2",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F2 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_fRumbleScale": {
+      "address": "0x803EA3F4",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F4 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_aCapsuleBonePairs": {
+      "address": "0x802CCC94",
+      "evidence": "evidence.tsv data and name rows for 0x802CCC94 (.data data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "GameOptionsCloseCursor": {
+      "address": "0x8007F174",
+      "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsOpenCursor": {
+      "address": "0x8007F12C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F12C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsWriteRecord": {
+      "address": "0x8007F19C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameStatsGather": {
+      "address": "0x80055584",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80055584; the documented holdout of src/game/GameStats.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "PlyrSwapStateData": {
+      "address": "0x80148424",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
+    },
+    "PlayerIsFreeOfBall": {
+      "address": "0x800E7D80",
+      "evidence": "evidence.tsv function and name rows at 0x800E7D80: returns 0 only when the player carries the current ball outside ball state 4 and 0x801486A0() is 0. Original bytes remain linked while src/game/cu_800E3CC0.cpp is a registered comparison; src/game/cu_800E815C.cpp calls it."
+    },
+    "_Handoff_fTurnCloseRange": {
+      "address": "0x803EADE4",
+      "evidence": "evidence.tsv data and name rows for 0x803EADE4 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_Handoff_auTurnDirections": {
+      "address": "0x803EADE8",
+      "evidence": "evidence.tsv data and name rows for 0x803EADE8 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "TurnToPlayPickVariant": {
+      "address": "0x800EC76C",
+      "evidence": "evidence.tsv function and name rows for 0x800EC76C (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayPickAnim": {
+      "address": "0x800EC840",
+      "evidence": "evidence.tsv function and name rows for 0x800EC840 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayPickDirection": {
+      "address": "0x800EC870",
+      "evidence": "evidence.tsv function and name rows for 0x800EC870 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayStartAnim": {
+      "address": "0x800EC9E4",
+      "evidence": "evidence.tsv function and name rows for 0x800EC9E4 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "CarrierRunHasDefenderAhead": {
+      "address": "0x8012CE60",
+      "evidence": "evidence.tsv function and name rows for 0x8012CE60 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunCountRetreat": {
+      "address": "0x8012CEF4",
+      "evidence": "evidence.tsv function and name rows for 0x8012CEF4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunAddSideCosts": {
+      "address": "0x8012CFA0",
+      "evidence": "evidence.tsv function and name rows for 0x8012CFA0 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunCanUseSideline": {
+      "address": "0x8012D1E4",
+      "evidence": "evidence.tsv function and name rows for 0x8012D1E4 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunSteerToSideline": {
+      "address": "0x8012D258",
+      "evidence": "evidence.tsv function and name rows for 0x8012D258 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunPickHeading": {
+      "address": "0x8012D4FC",
+      "evidence": "evidence.tsv function and name rows for 0x8012D4FC (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "CarrierRunAvoidPlayer": {
+      "address": "0x8012D8A8",
+      "evidence": "evidence.tsv function and name rows for 0x8012D8A8 (documented holdout 0x8012CE60-0x8012DDCC of src/game/CarrierRun.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029F9A0-0x8029FA20 stays original bytes with it)."
+    },
+    "gPlayerPositionAbbrevs": {
+      "address": "0x802EA294",
+      "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
     }
   },
   "units": [
@@ -6949,49 +7297,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8013CD58.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/cu_8013CD58.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8013CD58",
-          "end": "0x8013E514"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0108",
-          "end": "0x802A01C0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802DBDB8",
-          "end": "0x802DBDD4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB1C8",
-          "end": "0x803EB1D0"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803EC9F8",
-          "end": "0x803ECA00"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031B6A0",
-          "end": "0x8031B6AC"
-        }
-      ]
-    },
-    {
       "source": "src/game/camgame.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013F460-0x8013FC58 (src/game/camgame.cpp) and its data rows.",
@@ -8427,25 +8732,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8003877C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/cu_8003877C.cpp): the three functions 0x8003AC84-0x8003AEA8 and the .rodata 0x8028D02C-0x8028D06C are linked from source; the rest of the file is comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8003AC84",
-          "end": "0x8003AEA8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028D02C",
-          "end": "0x8028D06C"
-        }
-      ]
-    },
-    {
       "source": "src/game/DepthChart.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8003AEA8-0x8003BA00 (src/game/DepthChart.cpp) and its data, compiler and source-form rows.",
@@ -8709,31 +8995,6 @@
           "placement": ".bss",
           "start": "0x8030A50C",
           "end": "0x8030A518"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80144224.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_80144224.cpp unit, data, compiler and source-form rows",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80143F8C",
-          "end": "0x801442FC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB220",
-          "end": "0x803EB224"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECA0C",
-          "end": "0x803ECA10"
         }
       ]
     },
@@ -9326,30 +9587,57 @@
     {
       "source": "src/game/ScreenTint.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/ScreenTint.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80147908-0x80147E94 (src/game/ScreenTint.cpp), its function, data, type, compiler and source-form rows and the linker row for the discarded field marker functions.",
+      "link_roots": {
+        "symbols": [
+          "ScreenTintLerp",
+          "ScreenTintInit",
+          "ScreenTintShutdown",
+          "ScreenTintDraw",
+          "ScreenTintSetActive",
+          "ScreenTintSetMode",
+          "ScreenTintFadeTo",
+          "ScreenTintIsActive"
+        ],
+        "discarded": [
+          "_FieldMarkerInitBeams",
+          "_FieldMarkerUpdateBeams",
+          "_FieldMarkerPlaceArrow",
+          "_FieldMarkerInitArrows",
+          "_FieldMarkerShutdownArrows",
+          "_FieldMarkerUpdateArrows"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A04D8-0x802A052C: the target keeps every listed function, all reached from outside the unit or from each other; the six field marker functions have no code in the target, while their literal pools, beam table, arrow pointer, ready flag and arrow count remain in its .rodata, .data, .sdata and .sbss."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80147AE4",
+          "start": "0x80147908",
           "end": "0x80147E94"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A0540",
+          "start": "0x802A04D8",
           "end": "0x802A0558"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DD7AC",
+          "end": "0x802DDC20"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EB28C",
+          "start": "0x803EB284",
           "end": "0x803EB294"
         },
         {
           "section": ".sbss",
           "placement": ".sbss",
-          "start": "0x803ECA1C",
+          "start": "0x803ECA18",
           "end": "0x803ECA24"
         }
       ]
@@ -10318,37 +10606,6 @@
           "placement": ".data3",
           "start": "0x802ADA20",
           "end": "0x802ADA3C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800400CC.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp) and its .rodata, .sdata and .sbss rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80040154",
-          "end": "0x80041210"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028D38C",
-          "end": "0x8028D400"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EA480",
-          "end": "0x803EA488"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803EC784",
-          "end": "0x803EC790"
         }
       ]
     },
@@ -11641,19 +11898,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80081440.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800816C4",
-          "end": "0x800817CC"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlyrModelParts.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801A13A8-0x801A14D8 (src/game/PlyrModelParts.cpp) and its type and source-form rows.",
@@ -12042,9 +12286,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801564DC.cpp",
+      "source": "src/game/TutorialLesson.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_801564DC.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
+      "evidence": "evidence.tsv provisional unit row for src/game/TutorialLesson.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
       "sections": [
         {
           "section": ".text",
@@ -12097,115 +12341,115 @@
       ],
       "link_roots": {
         "symbols": [
-          "fn_801564DC",
-          "fn_8015651C",
-          "fn_801566DC",
-          "fn_801566E4",
-          "fn_801566EC",
-          "fn_801566F8",
-          "fn_80156704",
-          "fn_80156724",
-          "fn_8015672C",
-          "fn_80156734",
-          "fn_8015673C",
-          "fn_80156854",
-          "fn_801568E8",
-          "fn_801568F0",
-          "fn_801568F8",
-          "fn_80156900",
-          "fn_80156928",
-          "fn_80156960",
-          "fn_801569B4",
-          "fn_801569BC",
-          "fn_801569C8",
-          "fn_80156AB0",
-          "fn_80156C48",
-          "fn_80156C78",
-          "fn_80156C8C",
-          "fn_80156D14",
-          "fn_80156D1C",
-          "fn_80156D24",
-          "fn_80156DC4",
-          "fn_80156E74",
-          "fn_80156E9C",
-          "fn_80156F30",
-          "fn_80157000",
-          "vfn_03__15Lesson_802A3DC8",
-          "vfn_04__15Lesson_802A3DC8",
-          "vfn_05__15Lesson_802A3DC8",
-          "vfn_06__15Lesson_802A3DC8",
-          "fn_80157080",
-          "fn_80157448",
-          "fn_801574DC",
-          "fn_80157514",
-          "fn_80157550",
-          "vfn_01__15Lesson_802A3BE8",
-          "vfn_02__15Lesson_802A3BE8",
-          "vfn_07__15Lesson_802A3BE8",
-          "vfn_08__15Lesson_802A3BE8",
-          "vfn_09__15Lesson_802A3BE8",
-          "vfn_01__15Lesson_802A3D08",
-          "vfn_02__15Lesson_802A3D08",
-          "vfn_07__15Lesson_802A3D08",
-          "vfn_08__15Lesson_802A3D08",
-          "vfn_09__15Lesson_802A3D08",
-          "vfn_04__14Class_802A3858f",
-          "vfn_05__14Class_802A3858f",
-          "vfn_04__14Class_802A3958f",
-          "vfn_03__14Class_802A38C8f",
-          "vfn_01__15Lesson_802A3CA8",
-          "vfn_02__15Lesson_802A3CA8",
-          "vfn_07__15Lesson_802A3CA8",
-          "vfn_08__15Lesson_802A3CA8",
-          "vfn_09__15Lesson_802A3CA8",
-          "vfn_01__15Lesson_802A3D68",
-          "vfn_02__15Lesson_802A3D68",
-          "vfn_07__15Lesson_802A3D68",
-          "vfn_08__15Lesson_802A3D68",
-          "vfn_09__15Lesson_802A3D68",
-          "vfn_04__14Class_802A3820f",
-          "vfn_01__15Lesson_802A3C48",
-          "vfn_02__15Lesson_802A3C48",
-          "vfn_07__15Lesson_802A3C48",
-          "vfn_08__15Lesson_802A3C48",
-          "vfn_09__15Lesson_802A3C48",
-          "fn_8015844C",
-          "fn_80158A4C",
-          "fn_80158AA8",
-          "fn_80158BB4",
-          "fn_80158C04__14Class_802A3A48",
-          "vfn_03__14Class_802A3B80",
-          "vfn_04__14Class_802A3B80f",
-          "vfn_11__14Class_802A3B80f",
-          "vfn_06__14Class_802A3B80",
-          "vfn_07__14Class_802A3B80",
-          "vfn_04__14Class_802A3B10f",
-          "vfn_06__14Class_802A3B10f",
-          "vfn_05__14Class_802A3B10f",
-          "vfn_12__14Class_802A3B10",
-          "vfn_03__14Class_802A3AD8",
-          "vfn_04__14Class_802A3AD8f",
-          "vfn_03__14Class_802A3A48f",
-          "vfn_04__14Class_802A3A48f",
-          "vfn_06__14Class_802A3A48",
-          "vfn_05__14Class_802A3A48",
-          "vfn_07__14Class_802A3A48",
-          "vfn_10__14Class_802A3A48f",
-          "vfn_11__14Class_802A3A48f",
-          "vfn_12__14Class_802A3A48f",
-          "vfn_14__14Class_802A3A48f",
-          "vfn_11__14Class_802A3990i",
-          "vfn_12__14Class_802A3990",
-          "vfn_10__14Class_802A3990",
-          "vfn_02__14Class_802A3990",
-          "vfn_08__14Class_802A3990",
-          "vfn_08__14Class_802A3B10",
-          "vfn_14__14Class_802A3990"
+          "TutorialPostPrompt",
+          "TutorialSetupRosters",
+          "TutorialSetAnnounceStep",
+          "TutorialGetAnnounceStep",
+          "TutorialInit",
+          "TutorialShutdown",
+          "TutorialIsActive",
+          "TutorialSetStep",
+          "TutorialSetLesson",
+          "TutorialSetActiveStep",
+          "TutorialLessonStart",
+          "TutorialLessonStop",
+          "TutorialGetStep",
+          "TutorialGetLesson",
+          "TutorialGetLessonObject",
+          "TutorialBlinkInit",
+          "TutorialBlinkRestart",
+          "TutorialBlinkUpdate",
+          "TutorialBlinkGetShown",
+          "TutorialBlinkSetShown",
+          "TutorialCompleteStep",
+          "TutorialSetupPlays",
+          "TutorialClearMoves",
+          "TutorialSetMoveDone",
+          "TutorialAreMovesDone",
+          "TutorialIsStepDone",
+          "TutorialSetStepDone",
+          "TutorialTimerStart",
+          "TutorialTimerIsDone",
+          "TutorialGetHudPosition",
+          "TutorialShowPrompts",
+          "TutorialHidePrompts",
+          "TutorialGetStartLine",
+          "GetPromptCount__14TutorialLesson",
+          "GetTeamSize__14TutorialLesson",
+          "GetOffenseSize__14TutorialLesson",
+          "GetDefenseSize__14TutorialLesson",
+          "TutorialFinishCategory",
+          "TutorialScaleCpuRating",
+          "TutorialSetHudVisible",
+          "TutorialReleasePause",
+          "TutorialIsContinuing",
+          "Begin__21TutorialLessonDefense",
+          "End__21TutorialLessonDefense",
+          "GetStep__21TutorialLessonDefense",
+          "GetIntroText__21TutorialLessonDefense",
+          "GetDoneText__21TutorialLessonDefense",
+          "Begin__22TutorialLessonNewStuff",
+          "End__22TutorialLessonNewStuff",
+          "GetStep__22TutorialLessonNewStuff",
+          "GetIntroText__22TutorialLessonNewStuff",
+          "GetDoneText__22TutorialLessonNewStuff",
+          "OnEnter__23TutorialPreSnapNewStufff",
+          "OnUpdate__23TutorialPreSnapNewStufff",
+          "OnUpdate__24TutorialLivePlayNewStufff",
+          "OnEnter__24TutorialPostPlayNewStufff",
+          "Begin__21TutorialLessonPassing",
+          "End__21TutorialLessonPassing",
+          "GetStep__21TutorialLessonPassing",
+          "GetIntroText__21TutorialLessonPassing",
+          "GetDoneText__21TutorialLessonPassing",
+          "Begin__21TutorialLessonRunning",
+          "End__21TutorialLessonRunning",
+          "GetStep__21TutorialLessonRunning",
+          "GetIntroText__21TutorialLessonRunning",
+          "GetDoneText__21TutorialLessonRunning",
+          "OnUpdate__23TutorialLivePlayStylingf",
+          "Begin__21TutorialLessonStyling",
+          "End__21TutorialLessonStyling",
+          "GetStep__21TutorialLessonStyling",
+          "GetIntroText__21TutorialLessonStyling",
+          "GetDoneText__21TutorialLessonStyling",
+          "TutorialShowTitles",
+          "TutorialReloadRatings",
+          "TutorialSetupSession",
+          "TutorialBlinkPrompts",
+          "ShowResults__16TutorialPostPlay",
+          "OnEnter__15TutorialPreGame",
+          "OnUpdate__15TutorialPreGamef",
+          "EnterFirstPhase__15TutorialPreGamef",
+          "ShowIntroScreen__15TutorialPreGame",
+          "HideIntroScreen__15TutorialPreGame",
+          "OnEnter__15TutorialPreSnapf",
+          "OnExit__15TutorialPreSnapf",
+          "OnUpdate__15TutorialPreSnapf",
+          "CanSnap__15TutorialPreSnap",
+          "OnEnter__16TutorialLivePlay",
+          "OnUpdate__16TutorialLivePlayf",
+          "OnEnter__16TutorialPostPlayf",
+          "OnUpdate__16TutorialPostPlayf",
+          "OnSequenceStart__16TutorialPostPlay",
+          "OnExit__16TutorialPostPlay",
+          "ShowResultText__16TutorialPostPlay",
+          "UpdateCue__16TutorialPostPlayf",
+          "IsHeld__16TutorialPostPlayf",
+          "GetBusy__16TutorialPostPlayf",
+          "Finish__16TutorialPostPlayf",
+          "ResetGame__15TutorialRuleSeti",
+          "UsesBothTeams__15TutorialRuleSet",
+          "ResetPlaySpot__15TutorialRuleSet",
+          "GetWinner__15TutorialRuleSet",
+          "IsTimed__15TutorialRuleSet",
+          "AllowsPressPrompts__15TutorialPreSnap",
+          "AllowsAudibles__15TutorialRuleSet"
         ],
         "discarded": [
-          "__14Class_802A3A48"
+          "__16TutorialPostPlay"
         ],
-        "evidence": "evidence.tsv linker row cu_801564DC Class_802A3A48 constructor: the target keeps every listed function, all reached from outside the unit, from its vtables or from each other; the out-of-line copy of the inline constructor of Class_802A3A48 has no code in the target."
+        "evidence": "evidence.tsv linker row TutorialLesson TutorialPostPlay constructor: the target keeps every listed function, all reached from outside the unit, from its vtables or from each other; the out-of-line copy of the inline constructor of Class_802A3A48 has no code in the target."
       }
     },
     {
@@ -12230,19 +12474,25 @@
     {
       "source": "src/game/CarrierMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "evidence": "evidence.tsv unit row 0x800EF224-0x800EFC68 (src/game/CarrierMove.cpp), its .rodata data row 0x8029DF40-0x8029DF88 and its .sdata data rows 0x803EAE00-0x803EAE14.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800EF834",
+          "start": "0x800EF224",
           "end": "0x800EFC68"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DF7C",
+          "start": "0x8029DF40",
           "end": "0x8029DF88"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAE00",
+          "end": "0x803EAE14"
         }
       ]
     },
@@ -12300,6 +12550,18 @@
           "placement": ".data4",
           "start": "0x802EDE10",
           "end": "0x802EDF8C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB760",
+          "end": "0x803EB770"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365200",
+          "end": "0x80365298"
         }
       ]
     },
@@ -15351,6 +15613,1617 @@
           "placement": ".data5",
           "start": "0x803EC470",
           "end": "0x803EC480"
+        }
+      ]
+    },
+    {
+      "source": "src/game/BallModel.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003F66C-0x800400CC (src/game/BallModel.cpp), its data row 0x8028D358-0x8028D388 and its compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003F66C",
+          "end": "0x800400CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D358",
+          "end": "0x8028D388"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MsgTeamPick.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800170E0-0x8001BB20 (src/game/MsgTeamPick.cpp) and its function, data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800170E0",
+          "end": "0x8001B8E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001B8E8",
+          "end": "0x8001BB20",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F43F4",
+          "end": "0x802F4504"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA08",
+          "end": "0x803EBA44"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B168",
+          "end": "0x8036B22C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECE58",
+          "end": "0x803ECE64"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B2C",
+          "end": "0x80289B30"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C54",
+          "end": "0x80289C58"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MemCardMsg.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80191948-0x80193CEC (src/game/MemCardMsg.cpp), its data and linker rows.",
+      "link_roots": {
+        "symbols": [
+          "MemCardMsgGetText",
+          "MemCardMsgFormat"
+        ],
+        "discarded": [
+          "MemCardMsgGetStatusText",
+          "MemCardMsgGetDamagedText"
+        ],
+        "evidence": "evidence.tsv linker row 0x802ABD94-0x802ABDB8."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191948",
+          "end": "0x80193CEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ABD94",
+          "end": "0x802AD7E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MemCardFiles.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80029500-0x8002A9B8 (src/game/MemCardFiles.cpp), its function, name and data rows; 0x80029500-0x8002A86C and all of the file's data are linked, the documented holdout 0x8002A86C-0x8002A9B8 keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80029500",
+          "end": "0x8002A86C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A360",
+          "end": "0x8028A3C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC780",
+          "end": "0x802CC830"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA320",
+          "end": "0x803EA33C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/camreplay.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/camreplay.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013CD58",
+          "end": "0x8013E514"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0108",
+          "end": "0x802A01C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBDB8",
+          "end": "0x802DBDD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1C8",
+          "end": "0x803EB1D0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9F8",
+          "end": "0x803ECA00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6A0",
+          "end": "0x8031B6AC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ScreenTransition.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, name, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80194FE8",
+          "end": "0x801962CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD908",
+          "end": "0x802AD9D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDCD0",
+          "end": "0x802EDD14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB738",
+          "end": "0x803EB740"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365128",
+          "end": "0x80365188"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBB0",
+          "end": "0x803ECBBC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayBookDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/PlayBookDb.cpp): the 17 functions 0x80067038-0x80067C10 and .rodata 0x8028FFD0-0x802904C8 are linked from source; the first 15 functions, the position and byte tables and the .sdata words stay comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PlayBookDbCountFormations",
+          "PlayBookDbLoadFormation",
+          "PlayBookDbCountSets",
+          "PlayBookDbLoadSetByOrder",
+          "PlayBookDbLoadSet",
+          "PlayBookDbCountPlays",
+          "PlayBookDbLoadPlay",
+          "PlayBookDbGetPlayOrder",
+          "PlayBookDbGetSetOrder",
+          "PlayBookDbGetFormationOrder",
+          "PlayBookDbGetPlayPath",
+          "PlayBookDbSetAudiblePlay",
+          "_PlayBookDbComparePickWeight",
+          "_PlayBookDbSwapPicks",
+          "PlayBookDbPickAIPlay",
+          "PlayBookDbPickAIPlayPath",
+          "PlayBookDbHasAIPlay"
+        ],
+        "discarded": [
+          "CountRows",
+          "SelectColumnByKey",
+          "UpdateColumnByKey",
+          "SelectUABPRecord",
+          "CountUABPRows",
+          "SelectLTESAndTSBPByOrder",
+          "SelectTSBPPoints",
+          "LoadTSBPObject",
+          "SelectLTESName"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028F778-0x802904C8: the target keeps every listed function; the nine listed file functions have no code in the target while their strings and constants remain in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067038",
+          "end": "0x80067C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028FFD0",
+          "end": "0x802904C8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrMgr.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/PlyrMgr.cpp): the fifteen functions 0x8003A394-0x8003AEA8 and the .rodata 0x8028D000-0x8028D06C are linked from source; the rest of the file is comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003A394",
+          "end": "0x8003AEA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D000",
+          "end": "0x8028D06C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Statcoll.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/Statcoll.cpp unit, data, compiler and source-form rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143F8C",
+          "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA0C",
+          "end": "0x803ECA10"
+        }
+      ]
+    },
+    {
+      "source": "src/game/camball.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801422EC-0x80142B0C (src/game/camball.cpp; the linked unit starts at 0x801423D0) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801423D0",
+          "end": "0x80142B0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A02C0",
+          "end": "0x802A0318"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCF8C",
+          "end": "0x802DCF9C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1FC",
+          "end": "0x803EB21C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6C4",
+          "end": "0x8031B6D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/BigObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp) and its .rodata, .sdata and .sbss rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80040154",
+          "end": "0x80041210"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D38C",
+          "end": "0x8028D400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA480",
+          "end": "0x803EA488"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC784",
+          "end": "0x803EC790"
+        }
+      ]
+    },
+    {
+      "source": "src/game/SndgMusic.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80071C3C-0x8007342C (src/game/SndgMusic.cpp) and its .rodata and .sdata rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80071C3C",
+          "end": "0x8007342C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290BC8",
+          "end": "0x80290BD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA700",
+          "end": "0x803EA70C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerGearRatings.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/PlayerGearRatings.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800816C4",
+          "end": "0x800817CC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameOptions.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; 0x8007F298-0x8007FA48 and all of the file's data are linked, the documented holdout 0x8007F12C-0x8007F298 (the cursor open/close wrappers and the record writer) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F298",
+          "end": "0x8007FA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292930",
+          "end": "0x80292948"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6798",
+          "end": "0x802D6850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7B8",
+          "end": "0x803EA7D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA80",
+          "end": "0x8030BC2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AAC",
+          "end": "0x80289AB0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BEC",
+          "end": "0x80289BF0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrNameTag.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8004732C-0x800478DC (src/game/PlyrNameTag.cpp) with its function, name and data rows; wholly linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004732C",
+          "end": "0x800478DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D600",
+          "end": "0x8028D654"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4C0",
+          "end": "0x803EA4CC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7CC",
+          "end": "0x803EC7D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameStats.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp), its function, name and data rows; 0x80055B2C-0x80056584 and its .rodata literal are linked, the documented holdout 0x80055584-0x80055B2C (with its query literal 0x8028E008-0x8028E164) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055B2C",
+          "end": "0x80056584"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028E164",
+          "end": "0x8028E16C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Pursue.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80125F3C-0x8012A6B0 (src/game/Pursue.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80125F3C",
+          "end": "0x8012A6B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F660",
+          "end": "0x8029F858"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB04C",
+          "end": "0x802DB05C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB0B0",
+          "end": "0x803EB118"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Divot.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80042F54-0x80044F20 (src/game/Divot.cpp), its function, data, type and source-form rows and the linker row for the discarded field arrow functions; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "MathMapRangeClamped",
+          "DivotReplayWriteOne",
+          "DivotReplayReadOne",
+          "DivotReplayGetSize",
+          "DivotReplayWrite",
+          "DivotReplayRead",
+          "DivotRemove",
+          "DivotRelease",
+          "DivotUpdateFading",
+          "DivotFlushFading",
+          "DivotStepRemove",
+          "DivotStepPlace",
+          "DivotStepUpdate",
+          "DivotIsAreaFree",
+          "DivotCheckPlacement",
+          "DivotUpdateDecay",
+          "DivotLoadVariants",
+          "DivotInit",
+          "DivotShutdown",
+          "DivotScatterRandom",
+          "DivotUpdate",
+          "DivotDraw",
+          "DivotReleaseAll",
+          "DivotRestartRecords",
+          "DivotReplayRegister",
+          "DivotSaveState",
+          "DivotRestoreState",
+          "DivotGetPoolSize",
+          "DivotGetVariantCount",
+          "DivotGetLevelResource",
+          "DivotGetTextureRef",
+          "DivotAlloc",
+          "DivotPlace",
+          "DivotOnMomentum",
+          "DivotOnFootstep",
+          "DivotSkipNextSteps",
+          "FieldArrowObjInit",
+          "FieldArrowObjRelease",
+          "FieldArrowObjDraw",
+          "FieldArrowAddObjType",
+          "FieldArrowRemoveObjType",
+          "FieldArrowInit",
+          "FieldArrowShutdown",
+          "PlaDynClutFindColorName",
+          "PlaDynClutFindLevelName",
+          "PlaDynClutParseEntry"
+        ],
+        "discarded": [
+          "_FieldArrowCreateAll",
+          "_FieldArrowDeleteAll",
+          "_FieldArrowCreate",
+          "_FieldArrowDelete",
+          "_FieldArrowSetCount",
+          "_FieldArrowSet",
+          "_FieldArrowHide"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028D4F4-0x8028D500: the target keeps every listed function, all reached from outside the unit or from each other; the seven field arrow functions have no code in the target, while their literals, item array and count remain in its .rodata, .data and .sdata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80042F54",
+          "end": "0x80044F20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D438",
+          "end": "0x8028D568"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCF30",
+          "end": "0x802CD190"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA494",
+          "end": "0x803EA4AC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC790",
+          "end": "0x803EC7B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80307778",
+          "end": "0x803078D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PenaltyRules.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017419C-0x80176C58 (src/game/PenaltyRules.cpp), its linker row 0x802A5470-0x802A54D8 and its data, type and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "PenaltyApplyDiscipline",
+          "PenaltyResolveOutcome",
+          "PenaltyResolvePair",
+          "PenaltyResolvePairOther",
+          "PenaltyResolvePairKind1First",
+          "PenaltyCompareEvents",
+          "PenaltyMarchOff",
+          "PenaltySetupOutcome",
+          "PenaltyEnforceKind0",
+          "PenaltyEnforceKind15",
+          "PenaltyEnforceKind1",
+          "PenaltyEnforceKind2",
+          "PenaltyEnforceKind4",
+          "PenaltyEnforceKind5",
+          "PenaltyEnforceKind7",
+          "PenaltyEnforceKind6",
+          "PenaltyEnforceKind8",
+          "PenaltyEnforceKind9",
+          "PenaltyEnforceKind10",
+          "PenaltyEnforceKind11",
+          "PenaltyEnforceKind12",
+          "PenaltyEnforceKind13",
+          "PenaltyEnforceKind14",
+          "PenaltyEnforceKind17",
+          "PenaltyCanFoulInState",
+          "PenaltyPickInterferenceByFacing",
+          "PenaltyApplyFrequency",
+          "PenaltyGetBaseRate",
+          "PenaltyApplyCallCount",
+          "PenaltyApplyAngleFactor",
+          "PenaltySkipInterference",
+          "PenaltySkipInterferenceAt",
+          "PenaltyIsPlayingBall",
+          "PenaltyHasInterferenceContact",
+          "PenaltyCallInterference",
+          "PenaltyPickInterferenceNear",
+          "PenaltyPickInterferenceFar",
+          "PenaltyCalcLineToGain",
+          "PenaltyNextDown",
+          "PenaltyResolveEvents",
+          "PenaltyEnforce",
+          "PenaltyGetKindFlags",
+          "PenaltyCheckAllPlayers",
+          "PenaltyCheckOffside",
+          "PenaltyCheckDefenderContact",
+          "PenaltyCheckGrounding",
+          "PenaltyCheckPassInterference",
+          "PenaltyRollFacemask",
+          "PenaltyRollRoughing"
+        ],
+        "discarded": [
+          "PenaltyCheckOffenseKind1",
+          "PenaltyRollPassPlayFoul",
+          "PenaltyRollTackleFoul"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A5470-0x802A54D8: the target keeps every listed function, each reached from outside the unit, from this unit's .data table or from each other; the three discarded functions have no code in the target, while their literal pools remain in its .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017419C",
+          "end": "0x80176C58"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5348",
+          "end": "0x802A54D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9A04",
+          "end": "0x802E9ADC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DirectedRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012BCC8-0x8012C3A4 (src/game/DirectedRun.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012BCC8",
+          "end": "0x8012C3A4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F928",
+          "end": "0x8029F948"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Weather.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A69A8-0x801A7C20 (src/game/Weather.cpp) and its function, name, type, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A69A8",
+          "end": "0x801A7C20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE810",
+          "end": "0x802AE898"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3A7C",
+          "end": "0x802F3B20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB850",
+          "end": "0x803EB864"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80366780",
+          "end": "0x803673E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC28",
+          "end": "0x803ECC54"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Handoff.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224 (src/game/Handoff.cpp), its function, name and data rows, the .rodata data row 0x8029DE78-0x8029DF40, the .sdata data rows 0x803EADF4-0x803EAE00 and the linker row 0x8029DED0-0x8029DEE4 of the discarded HandoffSteerClear; 0x800ECC64-0x800EF224 is linked, the documented holdout 0x800EC76C-0x800ECC64 (TurnToPlayPickVariant, TurnToPlayPickAnim, TurnToPlayPickDirection and TurnToPlayStartAnim, with the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4) keeps its original bytes and stays a comparison.",
+      "link_roots": {
+        "symbols": [
+          "TurnToPlayEnter",
+          "TurnToPlayUpdate",
+          "TurnToPlayExit",
+          "TurnToPlayNotify",
+          "TurnToPlayInput",
+          "HandoffPickSide",
+          "HandoffIsMirrored",
+          "HandoffStartAnim",
+          "HandoffTryPairAnim",
+          "HandoffSteer",
+          "HandoffGiveBall",
+          "HandoffEnter",
+          "HandoffUpdate",
+          "HandoffExit",
+          "HandoffMirrorMessage",
+          "HandoffIsStarting",
+          "HuddleArrive",
+          "HuddleSetSpot",
+          "HuddleMoveEnter",
+          "HuddleMoveUpdate",
+          "HuddleMoveAltEnter",
+          "HuddleGetSpot",
+          "HuddleMoveAltUpdate",
+          "HuddleHoldUpdate",
+          "HuddleHoldExit"
+        ],
+        "discarded": [
+          "HandoffSteerClear"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029DED0-0x8029DEE4: the target keeps every listed function, all reached from the state handler table or from each other; HandoffSteerClear has no code in the target, while its literal pool remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800ECC64",
+          "end": "0x800EF224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DE78",
+          "end": "0x8029DF40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EADF4",
+          "end": "0x803EAE00"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerLocoAnim.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800D949C-0x800DAEE4 (src/game/PlayerLocoAnim.cpp), its function, data and source-form rows and the linker row 0x8029D848-0x8029D864.",
+      "link_roots": {
+        "symbols": [
+          "PlayerLocoGetSecondaryCategory",
+          "PlayerLocoUpdateCategories",
+          "PlayerLocoGetStartSide",
+          "PlayerLocoNotInState84",
+          "PlayerLocoCyclePhase",
+          "PlayerLocoGetRunCategory",
+          "PlayerLocoMoveCmdPhase",
+          "PlayerLocoTrimBlendEntries",
+          "PlayerLocoFindSampleIndex",
+          "PlayerLocoStartBlendPair",
+          "PlayerLocoSwitchBlendPair",
+          "PlayerLocoUpdateBlendWeights",
+          "PlayerLocoSetFadeFraction",
+          "PlayerLocoFadeOldPair",
+          "PlayerLocoFindTableEntry",
+          "PlayerLocoGetLowerAnkle"
+        ],
+        "discarded": [
+          "PlayerLocoKeyMatches",
+          "PlayerLocoSelectTurnEntry",
+          "PlayerLocoTurnPhase"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029D848-0x8029D864: the target keeps every listed function, all reached from outside the unit or from each other; the turn-state functions PlayerLocoKeyMatches, PlayerLocoSelectTurnEntry and PlayerLocoTurnPhase, rebuilt from their Xbox prototype counterparts 0x92FC0, 0x92FF0 and 0x93280, have no code in the target, while their literal pool remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D949C",
+          "end": "0x800DAEE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D7F8",
+          "end": "0x8029D8A8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DA888",
+          "end": "0x802DA8BC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/QbPass.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801344A0-0x801360D4 (src/game/QbPass.cpp) and its function and data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "QbPassInSpecialMode",
+          "QbPassScoreDirections",
+          "QbPassCheckSpeech",
+          "QbPassPickRandomReceiver",
+          "QbPassShouldRun",
+          "QbPassGetDirectionWeights",
+          "QbPassUpdateReceiverOptions",
+          "QbPassEnter",
+          "QbPassUpdate",
+          "QbPassResetTarget",
+          "QbPassHoldOrRun",
+          "QbPassRateReceiver",
+          "QbPassRestoreReceiverOptions"
+        ],
+        "discarded": [
+          "QbPassCarrierWillCross"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029FDEC-0x8029FDF8: the target keeps every listed function, all reached from outside the unit or from each other; QbPassCarrierWillCross, rebuilt from its Xbox prototype counterpart 0xE90B0, has no code in the target, while its 0.0f, 0.4f and 40.0f constants remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801344A0",
+          "end": "0x801360D4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FD38",
+          "end": "0x8029FDF8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB0F4",
+          "end": "0x802DB1D4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB168",
+          "end": "0x803EB190"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrStates.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801360D4-0x80136B1C (src/game/PlyrStates.cpp) and its function and data rows, including the handler tables 0x802DB280-0x802DBBE0; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801360D4",
+          "end": "0x80136B1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FDF8",
+          "end": "0x8029FE28"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB1D4",
+          "end": "0x802DBBE0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB190",
+          "end": "0x803EB1A0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CollideBounce.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80142BB4-0x80143220 (src/game/CollideBounce.cpp), its function, data, type and source-form rows and the linker row 0x802A032C-0x802A0334 for the discarded BounceBody2D; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "BounceAxisFixed",
+          "BounceAxisPair",
+          "BounceCheckApproach",
+          "BounceBody3D",
+          "BounceBodyPair2D",
+          "BounceBodyPair3D",
+          "BounceScatterVector"
+        ],
+        "discarded": [
+          "BounceBody2D"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A032C-0x802A0334: the target keeps every listed function, all reached from outside the unit or from each other; BounceBody2D, rebuilt from its Xbox prototype counterpart 0xF6280, has no code in the target, while its two literals remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80142BB4",
+          "end": "0x80143220"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0318",
+          "end": "0x802A035C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrCollide.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80143220-0x80143F40 (src/game/PlyrCollide.cpp), its function, data, type and source-form rows and the linker row 0x802A036C-0x802A0374 for the discarded CollideWithPoint; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PlyrCollideResolve2D",
+          "PlyrCollideRecordImpulse",
+          "PlyrCollideAddImpulse",
+          "PlyrCollidePartWeight",
+          "PlyrCollideSetPartFlags",
+          "PlyrCollideRecordContact",
+          "PlyrCollideIsExempt",
+          "PlyrCollideIsLightContact",
+          "PlyrCollideMotion",
+          "PlyrCollideContacts",
+          "PlyrCollideResetBlock",
+          "PlyrCollideClearExempt",
+          "PlyrCollideAddExempt",
+          "PlyrCollideRemoveExempt"
+        ],
+        "discarded": [
+          "CollideWithPoint"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A036C-0x802A0374: the target keeps every listed function, all reached from outside the unit or from each other; CollideWithPoint, rebuilt from its Xbox prototype counterpart 0xF6930, has no code in the target, while its two literals remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143220",
+          "end": "0x80143F40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0360",
+          "end": "0x802A0398"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cammain.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013BB18-0x8013CC7C (src/game/cammain.cpp), its data rows and linker row 0x802A00D4-0x802A00D8.",
+      "link_roots": {
+        "symbols": [
+          "CamMainIsFlipped",
+          "CamMainFlipPos",
+          "CamMainFlipOrient",
+          "_CamMainProcessFollow",
+          "_CamMainCalcFollowPos",
+          "_CamMainGetCameraPos",
+          "_CamMainGetFocusPos",
+          "_CamMainGetFocusOrient",
+          "_CamMainGetAngleToFocus",
+          "_CamMainBaseInit",
+          "_CamMainBaseUninit",
+          "_CamMainBaseProcess",
+          "_CamMainBaseMoveAngle",
+          "CamMainProcess",
+          "CamMainSetFocus",
+          "CamMainInitDesc",
+          "CamMainFollow",
+          "CamMainFollowBall",
+          "CamMainSetOffset",
+          "CamMainSetAngle",
+          "CamMainRotate",
+          "CamMainPitch",
+          "CamMainSetMode",
+          "CamMainGetMode",
+          "CamMainSetActive",
+          "CamMainWarpToDest",
+          "CamMainStop",
+          "CamMainMsg",
+          "CamMainGetBaseType",
+          "CamMainInit",
+          "CamMainUninit",
+          "CamMainUpdate",
+          "CamEaseVecStart",
+          "CamEaseVecUpdate",
+          "CamEaseVecFlip",
+          "CamInterpInit",
+          "CamInterpSetTarget"
+        ],
+        "discarded": [
+          "CamMainZoom"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A00D4-0x802A00D8: the target keeps every listed function, each reached from outside the unit, from its .data records or from each other; CamMainZoom, rebuilt from its Xbox prototype counterpart 0xEF650, has no code in the target, while its 0.5f constant remains in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013BB18",
+          "end": "0x8013CC7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A00B8",
+          "end": "0x802A00F4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBD24",
+          "end": "0x802DBDB8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/BigObjHotspot.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80052D08-0x80053BC8 (src/game/BigObjHotspot.cpp) and its function, name, type, .rodata, .sdata and .bss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80052D08",
+          "end": "0x80053BC8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DDF8",
+          "end": "0x8028DEA4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA540",
+          "end": "0x803EA54C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309CB4",
+          "end": "0x80309E04"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GetOpen.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012A6B0-0x8012BCC8 (src/game/GetOpen.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012A6B0",
+          "end": "0x8012BCC8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F858",
+          "end": "0x8029F928"
+        }
+      ]
+    },
+    {
+      "source": "src/game/CarrierRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012CE60-0x80130494 (src/game/CarrierRun.cpp), its function, name and data rows; 0x8012DDCC-0x80130494 is linked with the .rodata 0x8029FA20-0x8029FB20, the .data 0x802DB05C-0x802DB074 and the .sdata 0x803EB118-0x803EB128; the documented holdout 0x8012CE60-0x8012DDCC (with its pool 0x8029F9A0-0x8029FA20) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012DDCC",
+          "end": "0x80130494"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FA20",
+          "end": "0x8029FB20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB05C",
+          "end": "0x802DB074"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB118",
+          "end": "0x803EB128"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerCut.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012C3A4-0x8012CE60 (src/game/PlayerCut.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012C3A4",
+          "end": "0x8012CE60"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F948",
+          "end": "0x8029F9A0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031AABC",
+          "end": "0x8031B6A0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ParticleSys.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801444D8-0x80145224 (src/game/ParticleSys.cpp), its function, data, type, field and source-form rows and the linker rows 0x802A03BC-0x802A03C0 and 0x802A03DC-0x802A03EC for the discarded ParticleSysResetEmitter and ParticleSysBuildFrame; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "ParticleSysAllocDrawList",
+          "ParticleSysFreeDrawList",
+          "ParticleSysLoadEffect",
+          "ParticleSysLoadEffects",
+          "ParticleSysReplayGetSize",
+          "ParticleSysReplayWrite",
+          "ParticleSysReplayRead",
+          "ParticleSysInit",
+          "ParticleSysShutdown",
+          "ParticleSysSpawnEmitter",
+          "ParticleSysReleaseEmitter",
+          "ParticleSysDraw",
+          "ParticleSysUpdate",
+          "ParticleSysGetFootstepEffect",
+          "ParticleSysGetImpactEffect",
+          "ParticleSysSetEffectFile",
+          "ParticleSysGetAnimTex",
+          "ParticleSysReplayRegister",
+          "ParticleSysReplayRecordSpawn"
+        ],
+        "discarded": [
+          "ParticleSysResetEmitter",
+          "ParticleSysBuildFrame"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802A03BC-0x802A03C0 and 0x802A03DC-0x802A03EC: the target keeps every listed function, all reached from outside the unit or from each other; ParticleSysResetEmitter and ParticleSysBuildFrame, rebuilt from their Xbox prototype counterparts 0x132F30 and 0x133120, have no code in the target, while their literal pools remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801444D8",
+          "end": "0x80145224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A03A8",
+          "end": "0x802A0400"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCFF8",
+          "end": "0x802DD170"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB228",
+          "end": "0x803EB244"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6D0",
+          "end": "0x8031B7D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/LooseBall.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EAD44-0x800EC76C (src/game/LooseBall.cpp), its function, name and data rows: the .rodata data row 0x8029DDD8-0x8029DE70, the .data row 0x802DAAB4-0x802DAAC4, the .sdata rows 0x803EADB8-0x803EADE4 and the .bss row 0x803192F4-0x80319ED8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EAD44",
+          "end": "0x800EC76C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DDD8",
+          "end": "0x8029DE70"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DAAB4",
+          "end": "0x802DAAC4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EADB8",
+          "end": "0x803EADE4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192F4",
+          "end": "0x80319ED8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ChalGameSetup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80003FF8-0x80004AF0 (src/game/ChalGameSetup.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003FF8",
+          "end": "0x80004864"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80004868",
+          "end": "0x80004AF0",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3E60",
+          "end": "0x802F3E7C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8F0",
+          "end": "0x803EB900"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DbCursorColumn.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007A9E4-0x8007AEE8 (src/game/DbCursorColumn.cpp) and its type, source-form, compiler and function rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A9E4",
+          "end": "0x8007AEE8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GlowTrail.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80146134-0x80147908 (src/game/GlowTrail.cpp) and its data, linker, compiler and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "GlowAllocElement",
+          "GlowFlickerInit",
+          "GlowFlickerUpdate",
+          "GlowFindPreset",
+          "GlowGetPreset",
+          "GlowInit",
+          "GlowShutdown",
+          "GlowAddGhost",
+          "GlowTransformPoint",
+          "GlowIsOnScreen",
+          "GlowSetScale",
+          "GlowInitGroup",
+          "GlowCreate",
+          "GlowDrawGroup",
+          "GlowGetTexture",
+          "GlowUpdateFlickers",
+          "GlowGetFlickerState",
+          "GlowGetFlickerTime",
+          "GlowGetFlickerDuration",
+          "ParticleTrailGetJointPoint",
+          "ParticleTrailStartup",
+          "ParticleTrailShutdown",
+          "ParticleTrailInit",
+          "ParticleTrailUpdate",
+          "ParticleTrailStart",
+          "ParticleTrailResetAll",
+          "ParticleTrailSetTeamColor",
+          "ParticleTrailStartAfterimage",
+          "ParticleTrailStopAfterimage",
+          "ParticleTrailUpdateAfterimage",
+          "ParticleTrailUpdateAll",
+          "ParticleTrailSetEnabled",
+          "ParticleTrailIsEnabled"
+        ],
+        "discarded": [
+          "ParticleTrailStartFlash"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A0450-0x802A0454: the target keeps every listed function, all reached from outside the unit or from each other; ParticleTrailStartFlash, rebuilt from its Xbox prototype counterpart 0x134660, has no code in the target, while its 8.0f literal remains first in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80146134",
+          "end": "0x80147908"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0450",
+          "end": "0x802A04D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DD170",
+          "end": "0x802DD7AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB258",
+          "end": "0x803EB284"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B7DC",
+          "end": "0x8031BD04"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayCallScript.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801695D4-0x80169F80 (src/game/PlayCallScript.cpp), its function rows, data rows 0x802A4BF8-0x802A4C14 and 0x8036167C-0x80361694, and its type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801695D4",
+          "end": "0x80169F80"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4BF8",
+          "end": "0x802A4C14"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036167C",
+          "end": "0x80361694"
+        }
+      ]
+    },
+    {
+      "source": "src/game/BigObjAnim.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A980C-0x801AA24C (src/game/BigObjAnim.cpp), its 8 exact function extents and its .rodata data row 0x802AE958-0x802AE978; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A980C",
+          "end": "0x801AA24C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE958",
+          "end": "0x802AE978"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameText.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80187AD4-0x801882B4 (src/game/GameText.cpp), its function, name and data rows and the linker rows of the discarded functions; every retained function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "GameTextLoadTeam",
+          "GameTextReset",
+          "GameTextSetBootFinished",
+          "GameTextGetBootFinished",
+          "GameTextGetAwayTeam",
+          "GameTextGetHomeTeam",
+          "GameTextGetTeamDisplayName",
+          "GameTextQueuePlayerPortraits",
+          "GameTextSetLastPlayer",
+          "GameTextShowPleaseWait",
+          "GameTextShowBusyDialog",
+          "GameTextGetMemCardNames",
+          "GameTextRequestReset",
+          "GameTextServiceReset",
+          "GameTextSetPauseState",
+          "GameTextSetPadPlayer",
+          "GameTextGetPadPlayer",
+          "GameTextFindPlayerPad",
+          "GameTextSetSetupActive",
+          "GameTextGetEnteredName",
+          "GameTextFormatWithCommas",
+          "GameTextFormatInitialAndName"
+        ],
+        "discarded": [
+          "GameTextPickRandomTeam",
+          "GameTextLoadPlayer",
+          "GameTextGetTeamFont",
+          "GameTextFindTeamByCity",
+          "GameTextFormatScore",
+          "GameTextFormatTeamRecord",
+          "GameTextGetQuarter",
+          "GameTextFormatDown",
+          "GameTextFormatDistance",
+          "GameTextFormatYardsToGo",
+          "GameTextFormatBallOn",
+          "GameTextFormatDownAndDistance",
+          "GameTextFormatGameClock",
+          "GameTextFormatPlayClock",
+          "GameTextGetUnknownName",
+          "GameTextGetPlayerTeam",
+          "GameTextGetEditTeam",
+          "GameTextFormatPlayerName",
+          "GameTextFormatTenths",
+          "GameTextGetMatchupTeams",
+          "GameTextFormatControllerPort",
+          "GameTextFormatPlayerAge",
+          "GameTextFormatPlayerWeight",
+          "GameTextFormatPlayerHeight",
+          "GameTextFormatPlayerYearsPro",
+          "GameTextGetControllerNames",
+          "GameTextGetSeasonYear",
+          "GameTextShowRosterFill",
+          "GameTextGetTeamPlaybook",
+          "GameTextGetSelectedTeamName"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802A7910-0x802A8314: the target keeps every listed function, each called from outside the file except GameTextLoadTeam, which GameTextGetTeamDisplayName calls; the discarded functions have no code in the target, while their strings and literals remain in the file's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80187AD4",
+          "end": "0x801882B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A7910",
+          "end": "0x802A8340"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAB80",
+          "end": "0x802EACD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB5E8",
+          "end": "0x803EB62C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362BB0",
+          "end": "0x80362F64"
         }
       ]
     }

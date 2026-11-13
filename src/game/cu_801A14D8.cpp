@@ -175,7 +175,7 @@ int InGameIsPlaying(void);
 int FELoopIsMainFEActive(void);
 int fn_8003DEB4(void);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
-float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
+float MathMapRangeClamped(float x, float hi, float vhi, float lo, float vlo);
 int PlayerLookShowsHair(int index);
 unsigned char PlayerLookHidesHead(int index);
 unsigned char PlayerObjIsDrawReady(void);
@@ -186,7 +186,7 @@ int fn_800ADDD8(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
-void fn_80147860(Object_8003DEC4 *pPlayer, float f);
+void ParticleTrailUpdateAfterimage(Object_8003DEC4 *pPlayer, float f);
 void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
@@ -575,7 +575,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
         index++;
         index &= 1;
     }
-    fn_80147860(pPlayer, gFrameTimeScale);
+    ParticleTrailUpdateAfterimage(pPlayer, gFrameTimeScale);
     TMRenderSetBlendMode(1);
     TMRenderSetZRange(0.0f, 1.0f);
     fn_8024EB28(0);
@@ -619,7 +619,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     fn_80233BE0();
     if (!(pPlayer->mUnknown20 & 0x2000)) {
         if (pTrail) {
-            fn_801D0C58(&pTrail->mUnknown448[index].x);
+            fn_801D0C58(&pTrail->mUnknown448[index].mX);
             fn_801D09EC(pTrail->mUnknown460[index]);
         } else {
             fn_801D0C58(pPlayer->mUnknown44.mUnknown8);
@@ -1037,13 +1037,13 @@ void fn_801A32AC(int id, float sx, float sy, float tx, float ty)
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB)
 {
     if (pPlayer->mUnknown20 & 0x80) {
-        pB[0] = fn_80042F54((pPlayer->mUnknown44.mUnknown48[87] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
+        pB[0] = MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[87] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
                             -45.619f, 0.03f);
-        pA[0] = fn_80042F54((pPlayer->mUnknown44.mUnknown48[84] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
+        pA[0] = MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[84] << 8) * (360.0f / 16777216.0f), 45.619f, -0.03f,
                             -45.619f, 0.03f);
-        pB[1] = -fn_80042F54((pPlayer->mUnknown44.mUnknown48[88] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
+        pB[1] = -MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[88] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
                              -47.028f, 0.1f);
-        pA[1] = -fn_80042F54((pPlayer->mUnknown44.mUnknown48[85] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
+        pA[1] = -MathMapRangeClamped((pPlayer->mUnknown44.mUnknown48[85] << 8) * (360.0f / 16777216.0f), 47.028f, -0.1f,
                              -47.028f, 0.1f);
     } else {
         pB[0] = 0.0f;

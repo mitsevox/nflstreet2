@@ -9,7 +9,7 @@
 #include <string.h>
 
 extern "C" {
-void fn_800731D0(int a);
+void SndgMusicPumpFrame(int a);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
@@ -203,11 +203,11 @@ int StevOpen(void)
     int ok = 1;
     int failed;
 
-    fn_800731D0(1);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(1);
+    SndgMusicPumpFrame(0);
     failed = fn_8022EF8C(0, 0x56455453);
-    fn_800731D0(1);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(1);
+    SndgMusicPumpFrame(0);
     if (failed == 0) {
         _Stev_bOpen = ok;
     } else {

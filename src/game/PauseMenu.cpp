@@ -13,15 +13,15 @@
 #include "game/fn_80218FC4.h"
 #include "game/fn_802372EC.h"
 #include "game/InGame.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 
 typedef void (*PauseNotifyFn_t)(int value);
 
 /* Camera returned by CamGameGetCamera (defined in src/game/camgame.cpp). */
 struct GameCamera_t;
 
-/* Object at lbl_803EABA4 (declared in include/game/Class_80297CE8.h). */
-class Class_80297CE8;
+/* Object at lbl_803EABA4 (declared in include/game/PreSnapPhase.h). */
+class PreSnapPhase;
 
 /* mId is also read as one word, compared with 0x10002, 0x30001 and 0x30016;
    mArgs holds mArgCount words for fn_80218FC4. */
@@ -87,8 +87,8 @@ int fn_800BF718(int a);
 void fn_800C0330(void *p);
 void fn_800C1CA0(void);
 int fn_800C1E40(void);
-int fn_8013C678(GameCamera_t *pCamera);
-void fn_8013C6F0(GameCamera_t *pCamera);
+int CamMainGetMode(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 void CamGameSelectCamera(int a);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
@@ -104,7 +104,7 @@ void HudShowPressPrompt(int a);
 void HudHidePressPrompt(int a);
 void CoinTossOnShotStart(void);
 unsigned char GameEventFlagsSetFlag1(unsigned char value);
-void fn_80188014(int a);
+void GameTextSetPauseState(int a);
 void UISGameSetLastPad(int a);
 void UISGameLockPad(int value);
 void UISGameUnlockPad(void);
@@ -115,7 +115,7 @@ void RumbleInitAllPorts(void);
 void RumbleShutdown(void);
 void RumbleEnable(int a);
 unsigned char RumbleIsEnabled(void);
-int fn_8019626C(void);
+int ScreenTransGetMode(void);
 void fn_801F5D0C(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 }
@@ -197,7 +197,7 @@ void PauseCameraStart(void)
     fn_800B43C8();
     _Pause_State.mUnknown136 = -1;
     _Pause_State.mUnknown140 = CamGameGetCurrentSlot();
-    _Pause_State.mUnknown144 = fn_8013C678(CamGameGetCamera(5));
+    _Pause_State.mUnknown144 = CamMainGetMode(CamGameGetCamera(5));
     fn_801C1F94(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
@@ -243,7 +243,7 @@ void PauseCameraStart(void)
     params.mUnknown28 = fn_802372EC(1, 3);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
-    if (_Pause_State.mPair.mHigh != 7 && fn_8019626C() != 5 && !fn_8002D0AC(lbl_803EA368)
+    if (_Pause_State.mPair.mHigh != 7 && ScreenTransGetMode() != 5 && !fn_8002D0AC(lbl_803EA368)
         && fn_800AD9B4() != 7) {
         params.mUnknown12 |= 2;
     }
@@ -278,7 +278,7 @@ int PauseCameraRestore(void)
             fn_80162780(_Pause_bSavedViewFlag, _Pause_bSavedViewFlag);
             CamGameSelectCamera(_Pause_State.mUnknown140);
             CamGameSetModeAll(_Pause_State.mUnknown144);
-            fn_8013C6F0(CamGameGetCamera(_Pause_State.mUnknown140));
+            CamMainWarpToDest(CamGameGetCamera(_Pause_State.mUnknown140));
         }
         if (fn_800AD9B4() == 5 && !fn_80059004() && !fn_8005900C()) {
             fn_800B4408();
@@ -498,7 +498,7 @@ void PauseClose(void)
     CoinTossOnShotStart();
     fn_800ABD80();
     fn_800B22E0();
-    fn_80188014(0);
+    GameTextSetPauseState(0);
     if (PauseIsAudioPaused()) {
         PauseExitAudio();
     }

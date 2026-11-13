@@ -3,15 +3,14 @@
 
 #include "game/OptionsScreenMsg.h"
 #include "game/OptionsScreen.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
-#include "game/fn_80072AA8.h"
+#include "game/GameOptions.h"
+#include "game/SndgMusic.h"
 
 extern "C" {
 void MsgAudioSettingsApply(void)
 {
-    fn_80072AA8();
-    fn_80072F90();
+    SndgMusicReshuffle();
+    SndgMusicContinue();
 }
 
 void MsgAudioSettingsSetValue(unsigned int index, int value)
@@ -19,7 +18,7 @@ void MsgAudioSettingsSetValue(unsigned int index, int value)
     int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
-        fn_8007F6F8(id, value);
+        GameOptionsSet(id, value);
     }
 }
 
@@ -29,7 +28,7 @@ int MsgAudioSettingsGetValue(unsigned int index)
     int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
-        result = fn_8007F828(id);
+        result = GameOptionsGet(id);
     }
     return result;
 }

@@ -2,19 +2,7 @@
 #define ENGINE_ANIMEMOT_H
 
 #include "game/AnimFileFormat.h"
-
-typedef struct AnimListEntry_t {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    void *mpUnknown4;
-} AnimListEntry_t;
-
-/* State animation list filled by fn_801BBC3C. */
-typedef struct AnimStateAnimList_t {
-    unsigned short mCount;
-    unsigned short mMax;
-    AnimListEntry_t mEntries[380];
-} AnimStateAnimList_t;
+#include "engine/AnimStateAnimList.h"
 
 /* State transition list filled by fn_801BBDCC. */
 typedef struct AnimStateTransList_t {

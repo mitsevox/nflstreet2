@@ -1,9 +1,9 @@
 #include "game/fn_80177FE0.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
-#include "game/Interp_8013CC14.h"
-#include "game/EaseVector_8013C9A4.h"
-#include "game/cu_8013BB18.h"
+#include "game/CamInterp.h"
+#include "game/CamEaseVec.h"
+#include "game/cammain.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
@@ -17,9 +17,9 @@ struct Entry_8013F374 {
 
 /* The two record kinds have distinct payloads; their common stride is 0x130. */
 struct Payload0_8013EEE4 {
-    Interp_8013CC14 mX, mY, mZ;
+    CamInterp_t mX, mY, mZ;
     Vector_80039F5C mTarget;
-    Interp_8013CC14 mFov;
+    CamInterp_t mFov;
     float mLimit;
     unsigned short mUnknown70, mUnknown72;
     int mUnknown74, mUnknown78;
@@ -28,8 +28,8 @@ struct Payload0_8013EEE4 {
     char mUnknown84[0xA4];
 };
 struct Payload1_8013F090 {
-    EaseVector_8013C9A4 mPosition, mTarget;
-    Interp_8013CC14 mFov;
+    CamEaseVec_t mPosition, mTarget;
+    CamInterp_t mFov;
     float mLimit;
     int mUnknown10C;
     int mRef;
@@ -61,7 +61,7 @@ struct ScriptCamera_8013E514 {
 struct Desc0_8013EEE4 {
     Vector_80039F5C mPosition, mEndPosition, mTarget;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModeX, mModeY, mModeZ, mModeFov;
+    CamInterpFunc_t mModeX, mModeY, mModeZ, mModeFov;
     unsigned short mUnknown48, mUnknown4A;
     int mUnknown4C, mUnknown50;
     unsigned int mFlags;
@@ -74,7 +74,7 @@ struct Desc1_8013F090 {
     float mTargetStartScale, mTargetEndScale;
     int mUnknown58, mRef;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModePosition, mModeTarget, mModeFov;
+    CamInterpFunc_t mModePosition, mModeTarget, mModeFov;
     unsigned short mUnknown80, mUnknown82;
     int mUnknown84, mUnknown88;
     unsigned int mFlags;
@@ -93,12 +93,12 @@ int fn_800AD9B4(void);
 void CamGameSelectCamera(int);
 GameCamera_t *CamGameGetCamera(int);
 void CamGameChangeType(int, int);
-void fn_80142B00(void);
+void CamBallRequestRestart(void);
 int fn_801784C4(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
-void fn_80187DD0(unsigned short);
-int fn_8019623C(int);
+void GameTextSetLastPlayer(unsigned short);
+int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
@@ -122,8 +122,8 @@ extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
 extern "C" void fn_8013E538(void)
 {
     if (InGameIsStopped() == 0) fn_8013F300();
-    lbl_803EB1D8 = 0;
     lbl_803EB1E0 = 0;
+    lbl_803EB1D8 = 0;
     lbl_803EB1DC = 0;
 }
 extern "C" State_8013E574 *fn_8013E574(void)
@@ -131,7 +131,10 @@ extern "C" State_8013E574 *fn_8013E574(void)
     CamGameChangeType(3, 17);
     CamGameSelectCamera(3);
     State_8013E574 *p = lbl_803EB1DC;
-    p->mFrame = 0; p->mRead = 0; p->mpCurrent = 0; p->mWrite = 0;
+    p->mRead = 0;
+    p->mpCurrent = 0;
+    p->mWrite = 0;
+    p->mFrame = 0;
     lbl_803EB1E0 = 1;
     return p;
 }
@@ -139,8 +142,8 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
 {
     State_8013E574 *s = &p->mState;
     Payload1_8013F090 *b = &s->mpCurrent->mData.m1;
-    EaseVector_8013C9A4 *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamEaseVec_t *target = &b->mTarget;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     if (b->mRef) {
         Object_80039F5C *o = fn_8009BCE8(&b->mRef);
@@ -151,8 +154,8 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
             b->mPosition.mBase.mY = o->mpUnknown4->mUnknown4.mY;
         }
     }
-    fn_8013CAA4(&b->mPosition, done);
-    fn_8013CAA4(target, done);
+    CamEaseVecUpdate(&b->mPosition, done);
+    CamEaseVecUpdate(target, done);
     fov->mUpdate(fov, done);
     p->mHeader.mUnknown04[0] = b->mPosition.mResult.mX;
     p->mHeader.mUnknown04[1] = b->mPosition.mResult.mY;
@@ -162,7 +165,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     s->mTarget.mX = target->mResult.mX;
     s->mTarget.mY = target->mResult.mY;
     s->mTarget.mZ = target->mResult.mZ;
-    int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
+    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
@@ -187,7 +190,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     State_8013E574 *s = &p->mState;
     Payload0_8013EEE4 *b = &s->mpCurrent->mData.m0;
     Vector_80039F5C *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     b->mX.mUpdate(&b->mX, done); b->mY.mUpdate(&b->mY, done);
     b->mZ.mUpdate(&b->mZ, done); fov->mUpdate(fov, done);
@@ -197,7 +200,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     Vector_80039F5C v;
     fn_802276B4(&v, target, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mX; s->mTarget.mY = target->mY; s->mTarget.mZ = target->mZ;
-    int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
+    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
@@ -213,7 +216,7 @@ extern "C" void fn_8013E960(int team, int flag)
 {
     int count = fn_80178D18((unsigned char)team);
     for (int i = 0; i < count; ++i) {
-        Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+        Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
         if (p) {
             Block_80170E64 *b = p->mpUnknown4;
             if (flag) b->mUnknown20 |= 1;
@@ -226,7 +229,7 @@ extern "C" void fn_8013E9F0(int team, int flag)
     if (fn_800AD9B4() == 1) {
         int count = fn_80178D18((unsigned char)team);
         for (int i = 0; i < count; ++i) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             if (flag) p->mFlags &= ~0x10;
             else p->mFlags |= 0x10;
         }
@@ -244,7 +247,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
             if (b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
                 if (p && p->mIdBytes[3] == 1) {
-                    fn_80187DD0(p->mUnknown2908);
+                    GameTextSetLastPlayer(p->mUnknown2908);
                     if (b->mFlags & 0x20) { fn_8013E960(p->mIdBytes[2], 0); fn_8013E9F0(p->mIdBytes[2], 0); }
                     p->mpUnknown4->mUnknown20 |= 1;
                 }
@@ -259,9 +262,9 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 while (b->mPosition.mZ.mStart > 360.0f) b->mPosition.mZ.mStart -= 360.0f;
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
-            if (fn_801784C4()) { fn_8013CBC4(&b->mPosition); fn_8013CBC4(&b->mTarget); }
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
-            if ((b->mFlags & 0x100) && fn_8019623C(0x23000)) fn_80195EFC(1, 12, 0x808080, 0);
+            if (fn_801784C4()) { CamEaseVecFlip(&b->mPosition); CamEaseVecFlip(&b->mTarget); }
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
         }
         case 0: {
@@ -272,7 +275,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
             if (b->mUnknown74) BannerShow(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
             break;
         }
         }
@@ -305,49 +308,51 @@ extern "C" void fn_8013EEE4(State_8013E574 *s, Desc0_8013EEE4 *d)
 {
     Record_8013E944 *r = fn_8013E944(s); r->mType = 0; r->mDuration = (int)d->mDuration;
     Payload0_8013EEE4 *b = &r->mData.m0;
+    Vector_80039F5C *pTarget = &b->mTarget;
     Vector_80039F5C pos, end;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     end.mX = d->mEndPosition.mX; end.mY = d->mEndPosition.mY; end.mZ = d->mEndPosition.mZ;
-    if (d->mFlags & 1) { Point_8017886C point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&end, &end, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&end, &end, &point); }
     b->mCallback = d->mCallback;
-    b->mTarget.mX = d->mTarget.mX; b->mTarget.mY = d->mTarget.mY; b->mTarget.mZ = d->mTarget.mZ;
+    pTarget->mX = d->mTarget.mX; pTarget->mY = d->mTarget.mY; pTarget->mZ = d->mTarget.mZ;
     b->mUnknown70 = d->mUnknown48; b->mUnknown72 = d->mUnknown4A;
     b->mUnknown74 = d->mUnknown4C; b->mUnknown78 = d->mUnknown50;
     b->mLimit = d->mLimit; b->mFlags = d->mFlags;
-    fn_8013CC14(&b->mX, pos.mX); fn_8013CC14(&b->mY, pos.mY); fn_8013CC14(&b->mZ, pos.mZ);
-    fn_8013CC40(&b->mX, d->mModeX, end.mX, d->mRate);
-    fn_8013CC40(&b->mY, d->mModeY, end.mY, d->mRate);
-    fn_8013CC40(&b->mZ, d->mModeZ, end.mZ, d->mRate);
-    fn_8013CC14(&b->mFov, d->mFov); fn_8013CC40(&b->mFov, d->mModeFov, d->mEndFov, d->mRate);
+    CamInterpInit(&b->mX, pos.mX); CamInterpInit(&b->mY, pos.mY); CamInterpInit(&b->mZ, pos.mZ);
+    CamInterpSetTarget(&b->mX, end.mX, d->mModeX, d->mRate);
+    CamInterpSetTarget(&b->mY, end.mY, d->mModeY, d->mRate);
+    CamInterpSetTarget(&b->mZ, end.mZ, d->mModeZ, d->mRate);
+    CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
 extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
 {
     Record_8013E944 *r = fn_8013E944(s); r->mType = 1; r->mDuration = (int)d->mDuration;
     Payload1_8013F090 *b = &r->mData.m1;
-    Vector_80039F5C a, z, pos, target;
+    CamEaseVec_t *pTarget = &b->mTarget;
+    Vector_80039F5C pos, target, a, z;
     a.mX = d->mStartAngles.mX; a.mY = d->mStartAngles.mY; a.mZ = d->mStartAngles.mZ;
     z.mX = d->mEndAngles.mX; z.mY = d->mEndAngles.mY; z.mZ = d->mEndAngles.mZ;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     target.mX = d->mTarget.mX; target.mY = d->mTarget.mY; target.mZ = d->mTarget.mZ;
-    if (d->mFlags & 1) { Point_8017886C point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&target, &target, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&target, &target, &point); }
     if (d->mRef) {
         Object_80039F5C *p = fn_8009BCE8(&d->mRef);
         if (p->mIdBytes[3] == 1) target.mZ += p->mUnknown2900 * 0.027777778f - 2.03f;
         p->mpUnknown4->mUnknown20 |= 0x410;
     }
-    fn_8013C9A4(&b->mPosition, &pos, &a, &z, d->mModePosition, d->mStartScale, d->mEndScale, d->mRate);
-    fn_8013C9A4(&b->mTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mModeTarget, d->mTargetStartScale, d->mTargetEndScale, d->mRate);
+    CamEaseVecStart(&b->mPosition, &pos, &a, &z, d->mStartScale, d->mEndScale, d->mModePosition, d->mRate);
+    CamEaseVecStart(pTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mTargetStartScale, d->mTargetEndScale, d->mModeTarget, d->mRate);
     b->mUnknown10C = d->mUnknown58; b->mRef = d->mRef; b->mLimit = d->mLimit;
     b->mFlags = d->mFlags; b->mCallback = d->mCallback;
     b->mUnknown114 = d->mUnknown80; b->mUnknown116 = d->mUnknown82;
     b->mUnknown118 = d->mUnknown84; b->mUnknown11C = d->mUnknown88;
-    fn_8013CC14(&b->mFov, d->mFov); fn_8013CC40(&b->mFov, d->mModeFov, d->mEndFov, d->mRate);
+    CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
 extern "C" void fn_8013F298(void)
 {
     if (lbl_803EB1E0) {
-        fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1D8 = 0; lbl_803EB1DC = 0;
-        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; fn_80142B00();
+        fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1DC = 0; lbl_803EB1D8 = 0;
+        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; CamBallRequestRestart();
     }
     lbl_803EB1D4 = 0;
 }
@@ -362,7 +367,7 @@ extern "C" void fn_8013F374(Entry_8013F374 *list)
 {
     fn_8013F300(); State_8013E574 *s = fn_8013E574(); s->mpList = list;
     for (Entry_8013F374 *e = list; e->mpData; ++e) {
-        switch (e->mType) { case 0: fn_8013EEE4(s, (Desc0_8013EEE4 *)e->mpData); break; case 1: fn_8013F090(s, (Desc1_8013F090 *)e->mpData); break; }
+        switch (e->mType) { case 1: fn_8013F090(s, (Desc1_8013F090 *)e->mpData); break; case 0: fn_8013EEE4(s, (Desc0_8013EEE4 *)e->mpData); break; }
     }
     fn_8013EA8C(s);
 }

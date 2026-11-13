@@ -18,7 +18,7 @@ int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011DCA8(unsigned int id);
 void AudmonEventPostArgs(int type, Vector_80039F5C *pPos, int a, int b, int c);
 unsigned short fn_801BE648(void *p);
@@ -59,7 +59,7 @@ extern "C" void fn_8011AB38(void)
     fn_8011BAE0(&spot);
     count = fn_80178D70(team);
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Block_8011AB38 *pState = (Block_8011AB38 *)&p->mUnknown1032;
         int done = 0;
 
@@ -88,8 +88,8 @@ extern "C" void fn_8011AB38(void)
                                 query.mUnknown36 = pMoves[j].mUnknown8;
                                 query.mUnknown44 = pMoves[j].mUnknown4;
                                 if (fn_800CE590(&query, &result, &otherResult)) {
-                                    fn_80143E14(p, pOther);
-                                    fn_80143E14(pOther, p);
+                                    PlyrCollideAddExempt(p, pOther);
+                                    PlyrCollideAddExempt(pOther, p);
                                     if (pState->mUnknown24.mUnknown8 != pMoves[j].mKey) {
                                         pState->mUnknown24 = result;
                                         pOtherState->mUnknown24 = otherResult;
@@ -130,8 +130,8 @@ extern "C" void fn_8011AB38(void)
                         SetMove_8011AB38(pOther, pOtherState);
                         fn_800CE608(p, &result);
                         fn_800CE608(pOther, &otherResult);
-                        fn_80143E14(p, pOther);
-                        fn_80143E14(pOther, p);
+                        PlyrCollideAddExempt(p, pOther);
+                        PlyrCollideAddExempt(pOther, p);
                     } else {
                         if (fn_801BE648(p->mpUnknown792) != 74) {
                             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);

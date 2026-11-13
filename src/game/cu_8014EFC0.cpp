@@ -1,39 +1,39 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 
-class Class_802A2130 : public Class_802A56E8 {
+class Class_802A2130 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
-class Class_802A20C8 : public Class_80297BF8 {
+class Class_802A20C8 : public PreGamePhase {
 public:
-    virtual void vfn_07();
+    virtual void HideIntroScreen();
 };
 
-class Class_802A2058 : public Class_80297CE8 {
+class Class_802A2058 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
     unsigned char mUnknown4;
 };
 
-class Class_802A2020 : public Class_80297AB8 {
+class Class_802A2020 : public LivePlayPhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
     unsigned char mUnknown4;
 };
 
-class Class_802A1F90 : public Class_80297C60 {
+class Class_802A1F90 : public PostPlayPhase {
 public:
-    virtual void vfn_03(float dt);
+    virtual void OnEnter(float dt);
     Object_80039F5C *mpUnknown4;
     Object_80039F5C *mpUnknown8;
     unsigned char mUnknownC;
@@ -80,12 +80,12 @@ public:
 
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
-void fn_800BFAB4(Class_80297CE8 *pObject);
-void fn_800A039C(Class_80297AB8 *pObject);
-void fn_800B9598(Class_80297C60 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 void fn_800A8738(int value);
 int fn_8005FC7C(void);
 void fn_8006088C(int value);
@@ -97,7 +97,7 @@ void fn_8014EFC0(Class_802A2B68 *p)
 {
     fn_800A8738(0);
     if (p->mpUnknown1C->mUnknown2C != 1) {
-        fn_8007F6F8(14, p->mpUnknown1C->mUnknown2C);
+        GameOptionsSet(14, p->mpUnknown1C->mUnknown2C);
     }
     if (fn_8005FC7C()) {
         fn_8006088C(fn_8014FF34(p));

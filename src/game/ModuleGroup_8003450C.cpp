@@ -26,23 +26,23 @@ void *fn_8002C8C0(void);
 void fn_8002C964(void *p);
 void fn_80030B30(void);
 void fn_80030BC0(int a);
-void fn_800397D0(int a);
-void fn_80039890(void);
-void fn_80039A1C(void);
+void PlyrMgrRegister(int a);
+void PlyrMgrReset(void);
+void PlyrMgrEmptyPass(void);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E118(void);
-void fn_80040558(int a, int b);
-void fn_800405F0(int a);
-void fn_80040B88(int a);
-void fn_80040C90(int a);
-void fn_800410FC(void);
-void fn_80043AE4(void);
-void fn_80044378(void);
-void fn_80044B2C(int a);
-void fn_80044B50(void);
+void BigObjSetupBigObjects(int a, int b);
+void BigObjShutdownObjects(int a);
+void BigObjCreateAnimBall(int a);
+void BigObjAddAllObjects(int a);
+void BigObjRegisterSave(void);
+void DivotInit(void);
+void DivotReplayRegister(void);
+void FieldArrowInit(int a);
+void FieldArrowShutdown(void);
 void EnvObjAddObjType(int a);
-void fn_8004787C(void);
+void PlyrNameTagReadTextColor(void);
 void fn_8004A9FC(void);
 void fn_8004FF8C(void);
 void fn_800502C0(void);
@@ -118,10 +118,10 @@ void fn_8012060C(void);
 void CamGameStart(void *pObject);
 void CollTypesRegister(void);
 void CollTypesUnregister(void);
-void fn_80144264(void);
-void fn_80144B50(int a);
-void fn_80144C6C(int a);
-void fn_8014512C(void);
+void StatcollStart(void);
+void ParticleSysInit(int a);
+void ParticleSysShutdown(int a);
+void ParticleSysReplayRegister(void);
 void ParticlesInit(void);
 void ParticlesShutdown(void);
 void ScreenTintInit(int a);
@@ -131,9 +131,9 @@ int fn_801485D4(void);
 int fn_801485F4(void);
 void fn_80148644(void);
 int fn_801486A0(void);
-int fn_80156704(void);
-void fn_8015673C(void);
-void fn_80156854(void);
+int TutorialIsActive(void);
+void TutorialLessonStart(void);
+void TutorialLessonStop(void);
 void fn_8015C064(int a);
 void fn_8015C0C0(void);
 void fn_8015E654(int a);
@@ -230,14 +230,14 @@ const char *Arrow::GetName() { return "Arrow"; }
 int Arrow::Init()
 {
     fn_8015C064(GameObjList::GetListHandle());
-    fn_80044B2C(GameObjList::GetListHandle());
+    FieldArrowInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Arrow::Shutdown()
 {
     fn_8015C0C0();
-    fn_80044B50();
+    FieldArrowShutdown();
     return 1;
 }
 
@@ -298,7 +298,7 @@ int Ball::Init()
     BallsStart(mode);
     BallsCreateModels(GameObjList::GetListHandle());
     fn_800502C0();
-    fn_80040B88(GameObjList::GetListHandle());
+    BigObjCreateAnimBall(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -339,7 +339,7 @@ int BigObj::Init()
     unsigned short count = LevelGetObjectCount() + 1;
 
     ResTrackLabel("BigObjSetupBigObjectsStart");
-    fn_80040558(count, GameObjList::GetListHandle());
+    BigObjSetupBigObjects(count, GameObjList::GetListHandle());
     ResTrackLabel("BigObjSetupBigObjectsFinish");
     ResTrackLabel("BObjInfoStateInitStart");
     BigObjInstInit(104, 10);
@@ -348,7 +348,7 @@ int BigObj::Init()
     fn_8004A9FC();
     ResTrackLabel("GenObjSetupAnimationsFinish");
     ResTrackLabel("BigObjAddAllObjectsStart");
-    fn_80040C90(GameObjList::GetListHandle());
+    BigObjAddAllObjects(GameObjList::GetListHandle());
     ResTrackLabel("BigObjAddAllObjectsFinish");
     return 1;
 }
@@ -357,7 +357,7 @@ int BigObj::Shutdown()
 {
     BigObjInstShutdown();
     VptFlushObjectTrashSync();
-    fn_800405F0(GameObjList::GetListHandle());
+    BigObjShutdownObjects(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -552,9 +552,9 @@ int Env::Init()
     ResTrackLabel("FldObjAddObjTypeStart");
     FldObjAddObjType(GameObjList::GetListHandle());
     ResTrackLabel("FldObjAddObjTypeFinish");
-    fn_80043AE4();
+    DivotInit();
     fn_800C47EC(gLevelData);
-    fn_8004787C();
+    PlyrNameTagReadTextColor();
     fn_80178B5C();
     return 1;
 }
@@ -799,13 +799,13 @@ const char *Particles::GetName() { return "Particles"; }
 
 int Particles::Init()
 {
-    fn_80144B50(GameObjList::GetListHandle());
+    ParticleSysInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Particles::Shutdown()
 {
-    fn_80144C6C(GameObjList::GetListHandle());
+    ParticleSysShutdown(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -977,9 +977,9 @@ int Plyr::Init()
     fn_8015E994();
     ResTrackLabel("PlyrObjsInitFinish");
     ResTrackLabel("PlaStateInitStart");
-    fn_800397D0(14);
+    PlyrMgrRegister(14);
     ResTrackLabel("PlaStateInitFinish");
-    fn_80039A1C();
+    PlyrMgrEmptyPass();
     fn_801A4650(GameVpt::GetViewport());
     fn_8004FF8C();
     return 1;
@@ -987,7 +987,7 @@ int Plyr::Init()
 
 int Plyr::Shutdown()
 {
-    fn_80039890();
+    PlyrMgrReset();
     fn_8003DCC0(GameObjList::GetListHandle());
     fn_8015E6C8();
     PlaTexCacheShutdown();
@@ -1123,10 +1123,10 @@ int ReplayFrame::Init()
     BallsReplayRegister();
     fn_80162D78();
     fn_8003E118();
-    fn_800410FC();
-    fn_80044378();
+    BigObjRegisterSave();
+    DivotReplayRegister();
     SndgReplayRegister();
-    fn_8014512C();
+    ParticleSysReplayRegister();
     fn_800B4A4C();
     fn_800D77F0();
     fn_80030B30();
@@ -1258,7 +1258,7 @@ const char *Statcoll::GetName() { return "Statcoll"; }
 
 int Statcoll::Init()
 {
-    fn_80144264();
+    StatcollStart();
     return 1;
 }
 
@@ -1462,16 +1462,16 @@ const char *TutorialGame::GetName() { return "TutorialGame"; }
 
 int TutorialGame::Init()
 {
-    if (fn_80156704()) {
-        fn_8015673C();
+    if (TutorialIsActive()) {
+        TutorialLessonStart();
     }
     return 1;
 }
 
 int TutorialGame::Shutdown()
 {
-    if (fn_80156704()) {
-        fn_80156854();
+    if (TutorialIsActive()) {
+        TutorialLessonStop();
     }
     return 1;
 }

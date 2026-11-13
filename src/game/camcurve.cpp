@@ -2,9 +2,9 @@
    playback clip. */
 
 #include "game/GameCamera.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8008E978.h"
 #include "game/fn_802270D4.h"
@@ -157,7 +157,7 @@ extern "C" void CamCurveApplyActorCurves(GameCamera_t *camera, Actor_801C009C *a
     CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
     if (_CamCurve_bNarrowFov && FELoopIsMainFEActive()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); CamCurveSetProjection(camera);
+    CamMainSetOffset(camera,&result); CamMainSetAngle(camera,&resultAngles.mX,5); CamMainWarpToDest(camera); CamCurveSetProjection(camera);
 }
 
 /* Build the camera view from the playback sample, applying the optional
@@ -215,7 +215,7 @@ extern "C" void CamCurveApplyPlaybackCurves(GameCamera_t *camera, Actor_801C009C
     CamCurveConvertAngles(&resultAngles,reinterpret_cast<CamCurveState_t *>(camera->mPadF8),actor,angles.mX,angles.mY,angles.mZ);
     if (_CamCurve_bNarrowFov && FELoopIsMainFEActive()==0) CamSetFieldOfView(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else CamSetFieldOfView(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); CamCurveSetProjection(camera);
+    CamMainSetOffset(camera,&result); CamMainSetAngle(camera,&resultAngles.mX,5); CamMainWarpToDest(camera); CamCurveSetProjection(camera);
 }
 
 /* Update the selected-character or playback view for modes 10 and 11;
@@ -253,13 +253,13 @@ extern "C" void CamCurveProcess(GameCamera_t *camera)
 extern "C" void CamCurveStart(GameCamera_t *camera)
 {
     if (camera->mUnknownA0 <= 5) {
-        fn_8013C478(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknown0);
-        fn_8013C4BC(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknownC.mX, _CamCurve_Views[camera->mUnknownA0].mUnknown18);
+        CamMainSetOffset(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknown0);
+        CamMainSetAngle(camera, &_CamCurve_Views[camera->mUnknownA0].mUnknownC.mX, _CamCurve_Views[camera->mUnknownA0].mUnknown18);
     }
     switch (camera->mUnknownA0) {
     case 7:
-        fn_8013C478(camera, &_CamCurve_SideView.mUnknown0);
-        fn_8013C4BC(camera, &_CamCurve_SideView.mUnknownC.mX, _CamCurve_SideView.mUnknown18);
+        CamMainSetOffset(camera, &_CamCurve_SideView.mUnknown0);
+        CamMainSetAngle(camera, &_CamCurve_SideView.mUnknownC.mX, _CamCurve_SideView.mUnknown18);
         break;
     case 10: {
         CamCurveActorEntry_t *entry = CamCurveGetActorEntry(camera);
@@ -295,7 +295,7 @@ extern "C" void CamCurveMsgFunc(GameCamera_t *camera, int event, int argument)
             float *position = other->mHeader.mUnknown04;
             CamFreeSetPos(camera, position[0], position[1], position[2]);
             CamFreeSetAngle(camera, other->mHeader.mUnknown14[0], other->mHeader.mUnknown14[1], other->mHeader.mUnknown14[2]);
-            fn_8013C384(camera, 0, 0, 0);
+            CamMainFollow(camera, 0, 0, 0);
         }
         break;
     case 3: CamCurveProcess(camera); break;
@@ -314,7 +314,7 @@ extern "C" void CamCurveInit(GameCamera_t *camera, CameraDesc_t *)
 }
 extern "C" void CamCurveUninit(GameCamera_t *) {}
 extern "C" {
-Mode_8013FD8C CamCurveMode = { CamCurveInit, CamCurveUninit, 0 };
+CamMode_t CamCurveMode = { CamCurveInit, CamCurveUninit, 0 };
 }
 extern "C" void CamCurveSetProjection(GameCamera_t *camera)
 {

@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/GameCamera.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 #include "game/Ball.h"
 
 struct State_802A2058 {
@@ -32,7 +32,7 @@ int fn_800C1E40(void);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_800AD910(int a, float b);
 void fn_800BCC30(void *p);
 void CamGameSetModeAll(int a);
@@ -54,7 +54,7 @@ void fn_8017833C(int value);
 void CamGameSetFocusAll(int a, int b);
 void PlayerMoveResetAll(void);
 void fn_800B14E4(void);
-void fn_80044264(void);
+void DivotRestartRecords(void);
 void AudmonEventClear(void);
 void ClockRuleSnap(void);
 void fn_800C9FC0(void);
@@ -72,7 +72,7 @@ void fn_8014E244(void *p)
     fn_800BCC30(p);
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     fn_80141164(2.5f);
     fn_8014D67C();
 }
@@ -87,7 +87,7 @@ void fn_8014E290(void *p, float dt)
 void fn_8014E31C(void)
 {
     for (unsigned char i = 0; i <= 5; i++) {
-        Object_80039F5C *pPlayer = fn_8003AC84(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
+        Object_80039F5C *pPlayer = PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
         if (pPlayer) {
             unsigned char port = fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown8;
             if (port != 255) {
@@ -110,7 +110,7 @@ void fn_8014E3B4(State_802A2058 *p, float dt)
     pos.mY = -fn_80178A44();
     fn_801780A8(pos);
     fn_8017833C(1);
-    Object_80039F5C *pPlayer = fn_80039F5C(1, 0);
+    Object_80039F5C *pPlayer = PlyrGet(1, 0);
     if (pPlayer != BallGetCurrentHolder()) {
         BallGiveToPlayer(BallGetCurrent(), pPlayer);
         BallSetTransferKind(BallGetCurrent(), 0);
@@ -125,7 +125,7 @@ void fn_8014E48C(State_802A2058 *p, float dt)
         p->mUnknown4 = 0;
         PlayerMoveResetAll();
         fn_800B14E4();
-        fn_80044264();
+        DivotRestartRecords();
         AudmonEventClear();
         ClockRuleSnap();
         fn_800C9FC0();

@@ -5,8 +5,8 @@
 #include "game/Ball.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8022781C.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
 #include "game/Step_800C4460.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_8003108C.h"
@@ -89,13 +89,13 @@ void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B7248(Input_800B6D34 *pInput, Ball_t *pBall, Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_800B7370(Object_80039F5C *p, Input_800B6D34 *pInput);
 void fn_800B86A4(int index);
-void *fn_800B9A44(Class_80297C60 *p);
-void fn_800B9A6C(Class_80297C60 *p, void *q);
+void *fn_800B9A44(PostPlayPhase *p);
+void fn_800B9A6C(PostPlayPhase *p, void *q);
 int fn_800B9B18(void *p);
 void fn_800B24C8(void);
 int fn_800BA6F8(void);
 void fn_800BAAC4(void);
-void fn_800BD184(Class_80297BF8 *p, int value);
+void fn_800BD184(PreGamePhase *p, int value);
 void fn_800C4438(Sequence_800C4460 *p);
 void fn_800C4460(Sequence_800C4460 *p);
 int fn_800C8704(int *pA, int *pB);
@@ -110,7 +110,7 @@ int fn_8011F1CC(void);
 int fn_80125510(Object_80039F5C *p, int a);
 int BallStateGet(Ball_t *p, int *pOut);
 void fn_8013F3FC(void);
-unsigned char fn_801478F0(unsigned char a);
+unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 int fn_801486A0(void);
@@ -413,7 +413,7 @@ extern "C" int fn_800B89C8(void *pData)
     return 1;
 }
 
-int Class_80297C60::vfn_09(char *pText)
+int PostPlayPhase::GetResultText(char *pText)
 {
     char firstDown[] = "1st Down";
     char turnover[] = "Turnover On Downs";
@@ -543,7 +543,7 @@ extern "C" void fn_800B925C(void *p, char *pText)
     }
 }
 
-void Class_80297C60::vfn_03(float dt)
+void PostPlayPhase::OnEnter(float dt)
 {
     Vector_80039F5C pos;
 
@@ -551,11 +551,11 @@ void Class_80297C60::vfn_03(float dt)
     SpchIGResetPlayResult();
     fn_800C9FC0();
     fn_800AE9EC();
-    fn_801478F0(0);
+    ParticleTrailSetEnabled(0);
     fn_801783D0(21, 0);
     fn_800C4438(&lbl_803EAB78->mSequence);
     if (fn_801486A0()) {
-        vfn_08();
+        SetupCamera();
     }
     fn_800B24C8();
     if (fn_800BA6F8()) {
@@ -563,7 +563,7 @@ void Class_80297C60::vfn_03(float dt)
     }
     fn_800A1FEC(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
     lbl_803EAB78->mUnknown151 = 0;
-    vfn_06();
+    OnSequenceStart();
     fn_800C4460(&lbl_803EAB78->mSequence);
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800AFDD4(fn_800B876C);
@@ -583,7 +583,7 @@ void Class_80297C60::vfn_03(float dt)
     lbl_803EAB78->mUnknown154 = 0;
     lbl_803EAB78->mUnknown160 = 1;
     lbl_803EAB78->mUnknown164 = 2;
-    vfn_07();
+    ShowResultText();
     EngineParamWords desc = { 3, 14 };
     fn_802345C4(&desc, 2);
     fn_801789F8();

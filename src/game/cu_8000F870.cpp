@@ -10,9 +10,8 @@
 #include "game/AutoDepth.h"
 #include "game/cu_80181330.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80072AA8.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/SndgMusic.h"
+#include "game/GameOptions.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
 #include "game/fn_801C1F94.h"
@@ -94,13 +93,13 @@ struct DepthChartText_t;
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-void fn_80004440(int *pId);
-int fn_8000485C(void);
-int fn_8001B354(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
-void fn_8001B228(void);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
-void fn_8001B828(void);
+void ChalGameGenerateTeam(int *pId);
+int ChalGameHasGeneratedOpponent(void);
+int MsgTeamPickHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
+void MsgTeamPickFreePool(void);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
+void MsgTeamPickRequestTeamSave(void);
 void MsgChallengeSetResumed(unsigned char value);
 int CreditsFetchLine(void);
 void CreditsOpen(void);
@@ -126,8 +125,8 @@ void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pL
 int GauntletScreenGetSelection(void);
 void MemCardScreenSetFlag(unsigned char a);
 void SndgSfxSetVolume(int index, int a, unsigned char volume);
-void fn_80073094(void);
-void fn_800731D0(int a);
+void SndgMusicStop(void);
+void SndgMusicPumpFrame(int a);
 int DbCursorGetRow(DbCursor *pObject);
 int DbCursorLast(DbCursor *pObject);
 int DbCursorPrev(DbCursor *pObject);
@@ -206,11 +205,11 @@ int fn_80186F7C(unsigned char index);
 void fn_80186F8C(int a);
 void fn_80187A28(unsigned char index, char *pText);
 int fn_80187A78(unsigned char index, char *pText, int length);
-unsigned char fn_80187C64(void);
-void fn_8018801C(int index, int value);
-int fn_80188030(int a);
-int fn_80188044(int index);
-void fn_8018807C(unsigned char a);
+unsigned char GameTextGetBootFinished(void);
+void GameTextSetPadPlayer(int index, int value);
+int GameTextGetPadPlayer(int a);
+int GameTextFindPlayerPad(int index);
+void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int StoryTeamExists(int a);
 void StoryTeamLoadUserTeams(int a, int b);
@@ -372,7 +371,7 @@ int fn_8000F870(int module, unsigned int id, MenuArg_t *pArgs, int count, int *p
     case 8:
         return fn_80015BF8(id, pArgs, count, pResult);
     case 9:
-        return fn_8001B354(id, pArgs, count, pResult);
+        return MsgTeamPickHandleMessage(id, pArgs, count, pResult);
     case 12:
         return fn_80011AA8(id, pArgs, count, pResult);
     case 11:
@@ -408,7 +407,7 @@ void fn_8000FA0C(void)
         if (fn_802294F4()) {
             fn_80229554();
         }
-        if (fn_80187C64() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
+        if (GameTextGetBootFinished() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
         }
     }
@@ -458,7 +457,7 @@ void fn_8000FAD0(int mode)
             request.mpName = lbl_802EBE24;
             request.mCount = 1;
             if (fn_802294F4()) {
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_80229554();
             }
             switch (mode) {
@@ -479,15 +478,15 @@ void fn_8000FAD0(int mode)
             case 10:
             case 11:
             case 12:
-                fn_800731D0(1);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(1);
+                SndgMusicPumpFrame(0);
                 fn_802329F0(&request);
-                fn_800731D0(1);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(1);
+                SndgMusicPumpFrame(0);
                 GameInfoInit();
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_80229438(0x544E464F, 2);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_8022A490(2);
                 break;
             }
@@ -515,7 +514,7 @@ int fn_8000FCDC(void)
     int count = 0;
     int first = 8;
     int found = 0;
-    int assigned = fn_80188030(current);
+    int assigned = GameTextGetPadPlayer(current);
     int limit;
     int i;
 
@@ -532,14 +531,14 @@ int fn_8000FCDC(void)
     }
     for (i = 0; i <= 7; i++) {
         if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
-            fn_8018801C(i, count);
+            GameTextSetPadPlayer(i, count);
             count++;
             found = 1;
             if (first == 8) {
                 first = i;
             }
         } else {
-            fn_8018801C(i, -1);
+            GameTextSetPadPlayer(i, -1);
         }
     }
     int connected = fn_801E195C(ConGetChannelInfo(current, 0)) == 2;
@@ -548,14 +547,14 @@ int fn_8000FCDC(void)
         if (assigned != -1 && assigned <= 3) {
             value = assigned;
         }
-        fn_8018801C(current, value);
+        GameTextSetPadPlayer(current, value);
     } else if (assigned == -1 && connected) {
         found = 0;
     } else if (assigned == -1 || assigned > 3) {
         found = 0;
         fn_8000FCD4(first);
     } else if (!connected) {
-        fn_8018801C(current, assigned);
+        GameTextSetPadPlayer(current, assigned);
         found = 0;
     }
     return found;
@@ -618,8 +617,8 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         lbl_803EB960 = pArgs[0].i;
         break;
     case 0x8000000C:
-        fn_800731D0(1);
-        fn_800731D0(0);
+        SndgMusicPumpFrame(1);
+        SndgMusicPumpFrame(0);
         break;
     case 0x8000000D:
         *pResult = 0;
@@ -683,7 +682,7 @@ void fn_80010200(int value)
 
 void fn_80010208(void)
 {
-    fn_8018807C(0);
+    GameTextSetSetupActive(0);
     switch (fn_801486A0()) {
     case 0:
     case 1:
@@ -764,12 +763,12 @@ int fn_800103A4(int force)
         lbl_803ECE38[i] = present;
     }
     for (j = 0; j <= 9; j++) {
-        fn_8018801C(j, -1);
+        GameTextSetPadPlayer(j, -1);
     }
     j = 0;
     for (i = 0; i <= 7; i++) {
         if (lbl_803ECE38[i] && j <= 3) {
-            fn_8018801C(i, j);
+            GameTextSetPadPlayer(i, j);
             j++;
         }
     }
@@ -788,13 +787,13 @@ int fn_800103A4(int force)
             }
         }
         k = 0;
-        start = fn_80188030(fn_8000FCCC());
+        start = GameTextGetPadPlayer(fn_8000FCCC());
         if (start == -1) {
             start = 0;
         }
         for (i = 0; i <= 3; i++) {
             j = (i + start) % 4;
-            int pad = fn_80188044(j);
+            int pad = GameTextFindPlayerPad(j);
             if (pad != -1 && lbl_803ECE38[pad] && lbl_803EB96C[j] > 2) {
                 do {
                     if (k < UserRecGetCount() && lbl_803ECE48.mIndex[k] != -1) {
@@ -816,7 +815,7 @@ int fn_800103A4(int force)
                     lbl_803EB96C[j] = 3;
                 }
             }
-            j = fn_80188030(fn_8000FCCC());
+            j = GameTextGetPadPlayer(fn_8000FCCC());
             if (j != -1) {
                 if (lbl_803EB968) {
                     lbl_803ECE40[j] = 0;
@@ -961,7 +960,7 @@ void fn_80010914(void)
 
     fn_802293FC();
     for (i = 0; i <= 3; i++) {
-        int pad = fn_80188044(i);
+        int pad = GameTextFindPlayerPad(i);
         if (pad != -1) {
             if (lbl_803ECE40[i] == 2) {
                 if (lbl_803EB968) {
@@ -1019,7 +1018,7 @@ void fn_80010914(void)
     GameInfoSet(2, lbl_803EB96A);
     SndgSfxSetVolume(0x8F, 0x32, 0);
     if (MsgGameGetSetupState() == 1) {
-        fn_8018807C(1);
+        GameTextSetSetupActive(1);
     }
 }
 
@@ -1280,13 +1279,13 @@ int fn_80011224(int *pA, int *pB, int *pC, int *pD)
     int result = fn_800103A4(0);
     int index;
 
-    index = fn_80188044(0);
+    index = GameTextFindPlayerPad(0);
     *pA = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(1);
+    index = GameTextFindPlayerPad(1);
     *pB = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(2);
+    index = GameTextFindPlayerPad(2);
     *pC = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(3);
+    index = GameTextFindPlayerPad(3);
     *pD = index != -1 ? lbl_803ECE38[index] : 0;
     return result;
 }
@@ -1365,7 +1364,7 @@ int fn_80011344(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         fn_800112F8(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
         break;
     case 0x80000011:
-        fn_8018807C(pArgs[0].i);
+        GameTextSetSetupActive(pArgs[0].i);
         break;
     case 0x8000000B:
         break;
@@ -1388,44 +1387,44 @@ void fn_80011600(int pad0, int pad1, int keep)
             lbl_803EB96C[i] = 3;
         }
         if (pad0 != -1) {
-            if (fn_80188030(pad0) == -1 || fn_80188030(pad0) > 3) {
+            if (GameTextGetPadPlayer(pad0) == -1 || GameTextGetPadPlayer(pad0) > 3) {
                 pad0 = fn_8000FCCC();
             }
-            lbl_803ECE40[fn_80188030(pad0)] = 2;
-            lbl_803ECE44[fn_80188030(pad0)] = 1;
+            lbl_803ECE40[GameTextGetPadPlayer(pad0)] = 2;
+            lbl_803ECE44[GameTextGetPadPlayer(pad0)] = 1;
         }
         if (pad1 != -1) {
-            if (fn_80188030(pad1) == -1 || fn_80188030(pad1) > 3) {
+            if (GameTextGetPadPlayer(pad1) == -1 || GameTextGetPadPlayer(pad1) > 3) {
                 pad1 = fn_8000FCCC();
             }
-            lbl_803ECE40[fn_80188030(pad1)] = 0;
-            lbl_803ECE44[fn_80188030(pad1)] = 1;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 0;
+            lbl_803ECE44[GameTextGetPadPlayer(pad1)] = 1;
         }
         lbl_803EB96A = 1;
     }
     char name[13] = {0};
     int db = fn_8022F384(fn_8022F4BC());
-    if (pad0 != -1 && fn_80188030(pad0) != -1) {
-        lbl_803ECE40[fn_80188030(pad0)] = 2;
+    if (pad0 != -1 && GameTextGetPadPlayer(pad0) != -1) {
+        lbl_803ECE40[GameTextGetPadPlayer(pad0)] = 2;
         GameModeTypeIsSpecial();
-        lbl_803ECE44[fn_80188030(pad0)] = 1;
-        lbl_803EB96C[fn_80188030(pad0)] = db;
+        lbl_803ECE44[GameTextGetPadPlayer(pad0)] = 1;
+        lbl_803EB96C[GameTextGetPadPlayer(pad0)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(fn_80188030(pad0), name);
+            fn_80187A28(GameTextGetPadPlayer(pad0), name);
         }
     }
-    if (pad1 != -1 && fn_80188030(pad1) != -1) {
+    if (pad1 != -1 && GameTextGetPadPlayer(pad1) != -1) {
         if (lbl_803EB968) {
-            lbl_803ECE40[fn_80188030(pad1)] = 0;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 0;
         } else {
-            lbl_803ECE40[fn_80188030(pad1)] = 2;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 2;
         }
-        lbl_803ECE44[fn_80188030(pad1)] = 1;
-        lbl_803EB96C[fn_80188030(pad1)] = db;
+        lbl_803ECE44[GameTextGetPadPlayer(pad1)] = 1;
+        lbl_803EB96C[GameTextGetPadPlayer(pad1)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(fn_80188030(pad1), name);
+            fn_80187A28(GameTextGetPadPlayer(pad1), name);
         }
     }
     fn_80010914();
@@ -2005,7 +2004,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
         if (pValues) {
             int values[10];
 
-            fn_80081788(&lbl_8036AE08[list], values);
+            PlayerGetGearRatings(&lbl_8036AE08[list], values);
             pValues[0] = values[6];
             pValues[1] = values[4];
             pValues[2] = values[7];
@@ -2648,7 +2647,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 
     if (MsgGameGetSetupState() == 1) {
         if (GameModeTypeGet() == 6) {
-            if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
+            if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
                 fn_8018D7E0();
             }
         } else {
@@ -2664,7 +2663,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         if (lbl_803EB9A8 == 0x6B) {
             if (lbl_803EB97C[0] == 63) {
                 int id;
-                fn_80004440(&id);
+                ChalGameGenerateTeam(&id);
                 lbl_803EB97C[0] = id;
             }
             query.mUnknown4 = 0;
@@ -2905,9 +2904,9 @@ void fn_80014B98(void)
         FELoopSetResume(1);
     }
     if (MsgGameGetSetupState() == 0) {
-        fn_8018807C(0);
+        GameTextSetSetupActive(0);
         if (GameModeTypeGet() == 6) {
-            if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
+            if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
                 fn_8018C48C(0x454D4147);
                 fn_8018C48C(0x54415453);
             }
@@ -2920,7 +2919,7 @@ void fn_80014B98(void)
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
     if (GameModeTypeGet() == 6) {
-        if (fn_8000485C() && MsgGameGetSetupState() == 1 && lbl_803EB9A8 != 0x6B) {
+        if (ChalGameHasGeneratedOpponent() && MsgGameGetSetupState() == 1 && lbl_803EB9A8 != 0x6B) {
             lbl_803EB98C[0] = lbl_803EB97C[0];
         }
         lbl_803EB97C[0] = lbl_803EB984[0];
@@ -3193,7 +3192,7 @@ void fn_80015B0C(int id, int unused)
         fn_800A2F3C(id);
         FELoopStartGame();
     } else if (fn_801486A0() != 15) {
-        fn_8001B228();
+        MsgTeamPickFreePool();
     }
     fn_801D2BD0(lbl_803EB9DC);
 }
@@ -3284,7 +3283,7 @@ void fn_80015E48(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 1;
     FELoopSetVisited(0);
-    fn_80073094();
+    SndgMusicStop();
     MemCardScreenSetFlag(0);
 }
 
@@ -3292,8 +3291,8 @@ void fn_80015E80(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 0;
     if (!InGameIsDemo()) {
-        fn_80072AA8();
-        fn_80072F90();
+        SndgMusicReshuffle();
+        SndgMusicContinue();
     }
 }
 
@@ -3547,18 +3546,18 @@ int fn_80016730(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 
 void fn_800167D0(void)
 {
-    lbl_803EB9F4 = fn_8007F828(1);
+    lbl_803EB9F4 = GameOptionsGet(1);
     fn_8018D7E0();
     StoryTeamLoadUserTeams(0, 1);
 }
 
 void fn_80016808(void)
 {
-    fn_8007F6F8(1, lbl_803EB9F4);
-    fn_8001B330(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
+    GameOptionsSet(1, lbl_803EB9F4);
+    MsgTeamPickSetSources(lbl_803EB9F8 + lbl_803EB9F9 * 2 + lbl_803EB9FA * 4 + lbl_803EB9FB * 8);
     if (MsgGameGetSetupState() == 1) {
-        fn_8001B260(lbl_803EB9F0, 14);
-        fn_8001B828();
+        MsgTeamPickSetMode(lbl_803EB9F0, 14);
+        MsgTeamPickRequestTeamSave();
     }
 }
 

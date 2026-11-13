@@ -1,6 +1,6 @@
 #include <math.h>
 #include "engine/vec.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"

@@ -6,7 +6,7 @@
 #include "game/Object_8008044C.h"
 
 extern "C" {
-void fn_800814BC(PlayerGear_t *pInfo, short *pValues);
+void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues);
 
 static int _PlayerDb_aRatingColumns[10] = {
     0x49474150, 0x4D554A50, 0x4B544250, 0x48544350, 0x44505350,
@@ -25,14 +25,14 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index)
     PlayerGear_t info;
 
     fn_800817CC(pObject, &info);
-    fn_800814BC(&info, values);
+    PlayerGearSumBonuses(&info, values);
     value += values[index];
     return value == 0 ? 1 : (value > 99 ? 99 : value);
 }
 
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value)
 {
-    fn_8007ABA4(pObject, _PlayerDb_aRatingColumns[index], value);
+    DbCursorSetInt(pObject, _PlayerDb_aRatingColumns[index], value);
 }
 
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues)

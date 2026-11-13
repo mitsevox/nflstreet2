@@ -1,5 +1,5 @@
 #include "engine/cu_801C2EB4.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
@@ -28,7 +28,7 @@ struct Table_8015005C {
     unsigned char mUnknown125;
 };
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
     unsigned char mUnknown4;
     char mUnknown5[3];
@@ -38,7 +38,7 @@ public:
 
 extern "C" {
 Table_8015005C *fn_801530FC(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
@@ -53,7 +53,7 @@ extern const float lbl_802A1350[];
 
 void fn_80150DFC(Class_802A1D20 *p)
 {
-    p->Class_80297AB8::vfn_05();
+    p->LivePlayPhase::OnExit();
 }
 
 // Reset the balls and keep the three random field positions at least four units apart.
@@ -109,7 +109,7 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
         if (fn_801530FC()->mEntries[i].mUnknown13 == 0) {
             char score[16];
             char name[20];
-            fn_801C2EF0(name, fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
+            fn_801C2EF0(name, PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
             Entry_8015005C *pEntries = fn_801530FC()->mEntries;
             fn_801C2D88(score, sizeof(score), lbl_802A0DDC,
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);

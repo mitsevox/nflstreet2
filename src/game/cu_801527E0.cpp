@@ -30,7 +30,7 @@ public:
 
 extern "C" {
 Table_8015005C *fn_801530FC(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_801487C0(int team, unsigned char begin);
 void fn_80148814(Object_80039F5C *p);
 
@@ -44,7 +44,7 @@ void fn_801527E0(Class_802A2918 *p, int value)
 
         for (i = 0; i < 4; i++) {
             if (fn_801530FC()->mEntries[i].mUnknown12[1]) {
-                fn_80148814(fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0));
+                fn_80148814(PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0));
             }
         }
     }
@@ -53,6 +53,6 @@ void fn_801527E0(Class_802A2918 *p, int value)
 
 Object_80039F5C *fn_8015286C(Class_802A2918 *p, int index)
 {
-    return fn_8003AC84(p->mpUnknown1C->mpUnknown36->mEntries[index].mUnknown0);
+    return PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[index].mUnknown0);
 }
 }

@@ -29,8 +29,8 @@ int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_80029D74(int type, int index);
-void fn_80029CE0(int type, int index);
+int MemCardFilesNeedsSave(int type, int index);
+void MemCardFilesStoreChecksum(int type, int index);
 int PortraitAllocSlot(int value, int group);
 void StoryTeamSyncCreatedPlayer(int index);
 
@@ -160,7 +160,7 @@ void StoryTeamSyncCreatedPlayer(int index)
     int oldPxsp;
     int handle = fn_8022F3D4(fn_8022F358(index));
     QueryCursor cursor = {0, 0, -1, 0};
-    int state = fn_80029D74(2, index);
+    int state = MemCardFilesNeedsSave(2, index);
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -183,7 +183,7 @@ void StoryTeamSyncCreatedPlayer(int index)
             }
         }
     }
-    if (!state) fn_80029CE0(2, index);
+    if (!state) MemCardFilesStoreChecksum(2, index);
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
 }
 
@@ -224,10 +224,10 @@ void StoryPlayerSetDefaults(Object_8008044C *pObject)
     for (int i = 0; i < 10; i++) {
         PlayerDbSetRating(pObject, _StoryTeam_aDefaultAttrs[i], 1);
     }
-    fn_8007AA90((DbCursor *)pObject, 0x44494F50, -1);
-    fn_8007AA90((DbCursor *)pObject, 0x54474850, 0x41);
-    fn_8007AA90((DbCursor *)pObject, 0x54475750, 0);
-    fn_8007AA90((DbCursor *)pObject, 0x54425950, 2);
+    DbCursorSetValue((DbCursor *)pObject, 0x44494F50, -1);
+    DbCursorSetValue((DbCursor *)pObject, 0x54474850, 0x41);
+    DbCursorSetValue((DbCursor *)pObject, 0x54475750, 0);
+    DbCursorSetValue((DbCursor *)pObject, 0x54425950, 2);
 }
 
 extern char lbl_802EBE24[];
@@ -259,7 +259,7 @@ int StoryTeamCreate(void)
         for (int i = 0; i < 3; i++) {
             char *pText = _StoryTeam_apNames[i];
             int length = fn_801C3180(pText);
-            fn_8007ADD4(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
+            DbCursorSetString(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
         }
     }
     fn_80083F68(&cursor);

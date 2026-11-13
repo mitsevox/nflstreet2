@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -22,7 +22,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -98,7 +98,7 @@ struct State_80102664 {
     unsigned char mUnknown3;
 };
 
-extern "C" void fn_80156C78(int a, int b);
+extern "C" void TutorialSetMoveDone(int a, int b);
 extern "C" {
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
@@ -139,7 +139,7 @@ extern Type_803EA368 *lbl_803EA368;
 
 extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 extern "C" {
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, int a, int team);
 void SpchIGSetPassTarget(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
@@ -150,10 +150,10 @@ void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, f
                  float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
 void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
-int fn_80156C8C(unsigned long long mask);
+int TutorialAreMovesDone(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void fn_80176838(Object_80039F5C *p);
+void PenaltyCheckGrounding(Object_80039F5C *p);
 float fn_80178A2C(void);
 void fn_80227248(void *pOut, void *p, float scale);
 }
@@ -196,19 +196,19 @@ extern "C" float fn_801CFB18(int angle);
 
 extern "C" int fn_801CFDD0(float);
 
-extern "C" int fn_8012CAA4(Object_80039F5C *p);
+extern "C" int PlayerCutGetTargetHeading(Object_80039F5C *p);
 
-extern "C" int fn_8012CAAC(Object_80039F5C *p);
+extern "C" int PlayerCutGetStartHeading(Object_80039F5C *p);
 
-extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
+extern "C" int PlayerCutGetMessageTurn(Message_800F01CC *pMessage);
 
-extern "C" void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
+extern "C" void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
 
-extern "C" int fn_8012CC04(unsigned char a);
+extern "C" int PlayerCutGetAnimLength(unsigned char a);
 
-extern "C" int fn_8012CC50(Object_80039F5C *p);
+extern "C" int PlayerCutGetTimeLeft(Object_80039F5C *p);
 
-extern "C" void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
+extern "C" void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
 
 struct State_80104328 {
     Point_8017886C mTarget;
@@ -319,8 +319,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     fn_800B260C(0);
     BallReleaseStill(pBall, 4, 0);
     pEvent = fn_800B15FC();
-    if (fn_80156C8C(0x20000000) == 0) {
-        fn_80156C78(42, 1);
+    if (TutorialAreMovesDone(0x20000000) == 0) {
+        TutorialSetMoveDone(42, 1);
     }
     fn_8009BD2C(p, &pEvent->mUnknown0);
     pEvent->mUnknownC = p->mMotion.mPos.mX;
@@ -331,7 +331,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+        pTarget = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
         if (!(p->mFlags & 0x4000)) {
             fn_80101130(pTarget, p, &pRecord->mUnknown8);
         }
@@ -449,7 +449,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
             }
         }
         {
-            Object_80039F5C *pNearest = fn_8003A130(&pTarget->mMotion.mPos, 0, fn_80178320());
+            Object_80039F5C *pNearest = PlyrFindNearest(&pTarget->mMotion.mPos, 0, fn_80178320());
 
             fn_800310C0(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
         }
@@ -490,7 +490,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 3:
         speed = gFrameTimeScale * 0.37f;
         if (pRecord->mUnknownAByte != 15) {
-            Object_80039F5C *pReceiver = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+            Object_80039F5C *pReceiver = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
 
             if (pReceiver->mMotion.mPos.mX > fn_80178A08() - 8.0f) {
                 target.mX = pReceiver->mMotion.mPos.mX + 14.0f;
@@ -517,7 +517,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         fn_8013AC28(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, 0);
         fn_80101064(p);
-        fn_80176838(p);
+        PenaltyCheckGrounding(p);
         fn_801783D0(13, 1);
         break;
     case 2:
@@ -562,7 +562,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+        pTarget = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
         pEvent->mUnknown8 = (int)pTarget;
         if (PlayerMoveGetKind(p) != 0) {
             AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -610,7 +610,7 @@ extern "C" int fn_80103CB0(Object_80039F5C *p)
 
     switch (pRecord->mUnknown1D) {
     case 4:
-        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte));
+        fn_800A5A8C(2, p, PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte));
         if (fn_801BE648(p->mpUnknown792) == 69 || fn_801BE648(p->mpUnknown792) == 178) {
             p->mFlags |= 4;
         }
@@ -764,15 +764,15 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
         break;
     }
     case 20:
-        fn_8012CD4C(p, &offset);
+        PlayerCutGetEndPoint(p, &offset);
         pPos->mX = offset.mX;
         pPos->mY = offset.mY;
         if ((unsigned int)(pEntry->mUnknown2 - 8) <= 1) {
-            *pAngle = fn_8012CAAC(p);
+            *pAngle = PlayerCutGetStartHeading(p);
         } else {
-            *pAngle = fn_8012CAA4(p);
+            *pAngle = PlayerCutGetTargetHeading(p);
         }
-        *pTime = fn_8012CC50(p);
+        *pTime = PlayerCutGetTimeLeft(p);
         break;
     default:
         *pTime = 0;
@@ -786,11 +786,11 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
             int type = pEntry->mUnknown1;
 
             if (pPrev->mId == 19) {
-                fn_8012CB98(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
-                *pTime += fn_8012CC04(type);
+                PlayerCutGetAnimOffset(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
+                *pTime += PlayerCutGetAnimLength(type);
                 pPos->mX += offset.mX;
                 pPos->mY += offset.mY;
-                *pAngle += fn_8012CB50((Message_800F01CC *)pEntry);
+                *pAngle += PlayerCutGetMessageTurn((Message_800F01CC *)pEntry);
             }
         } else if (pEntry->mId == 19) {
             float distance = (unsigned int)pEntry->mUnknown1 * 0.125f;

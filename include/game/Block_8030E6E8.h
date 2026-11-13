@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/EnvFogSettings.h"
 
-struct Object_80144CE0;
+struct PsysEmitter_t;
 
 /* Three code pointers at 0x8030E6DC. */
 struct Callbacks_8030E6DC {
@@ -49,7 +49,7 @@ struct Block_8030E6E8 {
     int mUnknown64;
     float mUnknown68;
     int mUnknown6C[20];
-    Object_80144CE0 *mpUnknownBC[30];
+    PsysEmitter_t *mpUnknownBC[30];
     float mUnknown134[30][4][4];
     unsigned char mUnknown8B4[8];
     unsigned char mUnknown8BC;

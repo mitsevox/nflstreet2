@@ -32,7 +32,7 @@ Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index)
     Object_80039F5C *result = 0;
 
     if (p->mUnknown24 > 1) {
-        result = fn_80039F5C(team, index == 0);
+        result = PlyrGet(team, index == 0);
     }
     return result;
 }
@@ -40,7 +40,7 @@ Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index)
 void fn_80155004(Class_802A27F0 *p, int team, int index, int kind,
                  char *pFirst, int firstLength, char *pSecond, int secondLength)
 {
-    Object_80039F5C *pPlayer = fn_80039F5C(team, index);
+    Object_80039F5C *pPlayer = PlyrGet(team, index);
     switch (kind) {
     case 0:
         fn_801C2D88(pFirst, firstLength, "TDs");

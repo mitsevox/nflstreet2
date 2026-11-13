@@ -7,7 +7,7 @@
 #include "game/LightTracker.h"
 #include "game/AnimPose.h"
 
-struct Item_800476DC;
+struct PlyrNameTag_t;
 
 /* Bone table referenced at +100 of the player object: a bone count at +6
    and three base values per bone from +1040. */
@@ -186,7 +186,7 @@ struct Object_8003DEC4 {
     unsigned int mUnknown976;
     char mUnknown980[4];
     int mUnknown984;
-    Item_800476DC *mUnknown988;
+    PlyrNameTag_t *mUnknown988;
     union {
         char mBytes992[3192];
         struct {
@@ -229,7 +229,7 @@ Object_8003DEC4 *fn_8003DEC4(int index);
 /* The callers zero-extend the index to 8 bits (clrlwi r4,r31,24 at
    0x800A926C). */
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
-void fn_801477F0(Object_8003DEC4 *pObject);
+void ParticleTrailStartAfterimage(Object_8003DEC4 *pObject);
 /* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */
 int PlayerObjDraw(Object_8003DEC4 *pObject, int unused);

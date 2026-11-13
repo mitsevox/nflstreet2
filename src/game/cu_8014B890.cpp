@@ -21,7 +21,7 @@ extern "C" {
 int fn_80178308(void);
 int fn_801787DC(int team);
 int fn_800C8744(int team);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
 int fn_8014A1B8(Class_80148A58 *p, int kind, int team);
@@ -81,7 +81,7 @@ void fn_8014BA20(Class_802A2DB8 *p, int team, Stats_8005C844 *pStats)
     int value = 0;
     int handle = fn_800C8744(team);
     for (unsigned char i = 0; i < 3; i++) {
-        pStats->mpPlayers[i] = fn_8003AC84(p->mpUnknown1C->mUnknown20[team][i]);
+        pStats->mpPlayers[i] = PlyrFindById(p->mpUnknown1C->mUnknown20[team][i]);
     }
     pStats->mValues[0] = fn_801787DC((unsigned char)team);
     fn_8022B7A4(handle, 0x74727374, &value);

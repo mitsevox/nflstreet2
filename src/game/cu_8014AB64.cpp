@@ -8,7 +8,7 @@
 #include "game/fn_802372EC.h"
 #include <string.h>
 
-struct Team_80168EBC {
+struct PlaybookTeamView {
     char mUnknown0[0x40];
     int mUnknown40;
 };
@@ -45,7 +45,7 @@ void fn_80178CD8(int a);
 void fn_801790D0(int team, float a, float b);
 void fn_8017833C(int team);
 void HudClearEvent71(void);
-void fn_80157514(void);
+void TutorialReleasePause(void);
 int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
@@ -54,19 +54,19 @@ void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
 void BallResetToSpot(void);
 void PlayBookSetFormationType(int team, int kind);
-int fn_80169E68(int mode);
+int PlayCallScriptRunOffense(int mode);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
-Team_80168EBC *PlayBookGetTeam(int team);
+PlaybookTeamView *PlayBookGetTeam(int team);
 int fn_80085A34(int formation, int team);
 void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
 void ClockRuleEndPeriod(void);
@@ -137,7 +137,7 @@ void fn_8014AC88(void *p)
     fn_8017833C(1);
     lbl_803EB2B5 = 0;
     HudClearEvent71();
-    fn_80157514();
+    TutorialReleasePause();
 }
 
 void fn_8014AD24(void *p, float dt)
@@ -194,7 +194,7 @@ void fn_8014AF24(void *p, float dt)
         int other = team == 0;
         PlayBookSetFormationType(team, 1);
         PlayBookSetFormationType(other, 11);
-        fn_80169E68(0);
+        PlayCallScriptRunOffense(0);
         PlayBookLoadCurrentPlay(team);
         PlayBookSetIndices(other, 0, 0, 0);
         PlayBookLoadCurrentPlay(other);
@@ -239,7 +239,7 @@ void fn_8014B0D0(void *p, float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
 void fn_8014B178(void *p, float dt)
@@ -287,7 +287,7 @@ void fn_8014B350(void *p, float dt)
 
 void fn_8014B38C(void *p, float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }

@@ -2,7 +2,7 @@
 #include "game/StyleTracker.h"
 #include <math.h>
 #include <string.h>
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
@@ -15,7 +15,7 @@
 #include "game/GameInfo.h"
 #include "game/Ball.h"
 #include "game/cu_8003108C.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
@@ -29,13 +29,13 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
-class Class_802A5630 : public Class_802A56E8 {
+class Class_802A5630 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
-    virtual int vfn_02();
-    virtual int vfn_04(int team);
-    virtual int vfn_06();
-    virtual int vfn_07(int team);
+    virtual int GetScoreLimit();
+    virtual int GetWinner();
+    virtual int IsNearWin(int team);
+    virtual int GetScoreType();
+    virtual int GetScore(int team);
 };
 
 struct Segment_ScrmState {
@@ -80,7 +80,7 @@ struct ScrmState {
     unsigned short mUnknownB2;
     Segment_ScrmState mUnknownB4[50];
     float mUnknown3D4;
-    Class_802A56E8 *mUnknown3D8;
+    ScrmRuleSet *mUnknown3D8;
     int mUnknown3DC;
     unsigned char mUnknown3E0;
 };
@@ -105,9 +105,9 @@ extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
 int ChallengeIsActive(void);
-CollideSet_t *fn_8003A078(void);
-void fn_8003A090(void);
-void fn_800535FC(void);
+CollideSet_t *PlyrMgrGetCollideSet(void);
+void PlyrMgrReverseAll(void);
+void HotspotClearQueue(void);
 void SndgSpchSetPlayFlags(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
@@ -139,9 +139,9 @@ void fn_8011F574(void);
 void fn_80120618(void);
 void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 void fn_8016F7F8(void);
 int fn_8016FAD8(float *pOut);
 void ClockRuleInit(void);
@@ -151,7 +151,7 @@ void DriveLogEndDrive(void);
 void DriveLogAddPlay(int type, short a, short b, int c, int d);
 int DriveLogHasLongPlay(void);
 void DriveLogSetLongPlay(void);
-void fn_80176984(void);
+void PenaltyCheckPassInterference(void);
 void ScoringLogAddScore(int type, short a, int b, int c);
 void ScoringLogSetConversion(int a, int b, int c, int d);
 int GameModeTypeIsSpecial(void);
@@ -249,7 +249,7 @@ void fn_80178E88(float v);
 unsigned short fn_80178E94(void);
 int fn_80178EA0(int a);
 int fn_80178EE0(int a);
-void fn_80178F20(Class_802A56E8 *pRule);
+void fn_80178F20(ScrmRuleSet *pRule);
 void fn_80178F90(void);
 float fn_80178FCC(int team);
 void fn_801790D0(int team, float a, float b);
@@ -324,7 +324,7 @@ static void (*lbl_803EB450)(int kind, int a, int b) = 0;
 static unsigned char lbl_803EB454 = 0;
 static int lbl_803EB458 = 0;
 
-static Class_802A56E8 lbl_803ECB24;
+static ScrmRuleSet lbl_803ECB24;
 static Class_802A5630 lbl_803ECB28;
 static Object_8017886C *lbl_803ECB34;
 
@@ -436,16 +436,16 @@ extern "C" Point_8017886C fn_801772F4(Point_8017886C point)
     return result;
 }
 
-int Class_802A56E8::vfn_01()
+int ScrmRuleSet::GetScoreLimit()
 {
-    return fn_8007F828(1);
+    return GameOptionsGet(1);
 }
 
-int Class_802A56E8::vfn_02()
+int ScrmRuleSet::GetWinner()
 {
     unsigned short score0 = fn_801787DC(0);
     unsigned short score1 = fn_801787DC(1);
-    unsigned int limit = vfn_01();
+    unsigned int limit = GetScoreLimit();
     int result;
 
     if (score0 > score1 && score0 >= limit) {
@@ -458,7 +458,7 @@ int Class_802A56E8::vfn_02()
     return result;
 }
 
-void Class_802A56E8::vfn_03(int team)
+void ScrmRuleSet::AwardWin(int team)
 {
     if (ChallengeIsActive()) {
         fn_8009D8CC(4);
@@ -478,10 +478,10 @@ void Class_802A56E8::vfn_03(int team)
     }
 }
 
-int Class_802A56E8::vfn_04(int team)
+int ScrmRuleSet::IsNearWin(int team)
 {
     int result = 0;
-    unsigned int limit = vfn_01();
+    unsigned int limit = GetScoreLimit();
 
     if (fn_80177F70() != 6) {
         if (fn_80178308() == team && limit - fn_801787DC(team) <= 8) {
@@ -495,37 +495,37 @@ int Class_802A56E8::vfn_04(int team)
     return result;
 }
 
-int Class_802A56E8::vfn_05(int team)
+int ScrmRuleSet::IsOpponentNearWin(int team)
 {
-    return vfn_04(team ^ 1);
+    return IsNearWin(team ^ 1);
 }
 
-int Class_802A56E8::vfn_06()
+int ScrmRuleSet::GetScoreType()
 {
     return 0;
 }
 
-int Class_802A56E8::vfn_07(int team)
+int ScrmRuleSet::GetScore(int team)
 {
     return fn_801787DC(team);
 }
 
-int Class_802A56E8::vfn_08()
+int ScrmRuleSet::IsTimed()
 {
     return 0;
 }
 
-int Class_802A56E8::vfn_21()
+int ScrmRuleSet::IsWinAwarded()
 {
     return 0;
 }
 
-int Class_802A56E8::vfn_09()
+int ScrmRuleSet::GetGameTime()
 {
     return 900;
 }
 
-void Class_802A56E8::vfn_10()
+void ScrmRuleSet::ResetPlaySpot()
 {
     Object_8017886C *p = fn_8017886C();
 
@@ -534,12 +534,12 @@ void Class_802A56E8::vfn_10()
     fn_801780A8(p->mUnknown08);
 }
 
-int Class_802A56E8::vfn_13()
+int ScrmRuleSet::GetTeamSize()
 {
     return 7;
 }
 
-int Class_802A56E8::vfn_14()
+int ScrmRuleSet::AllowsAudibles()
 {
     int result = 1;
 
@@ -549,7 +549,7 @@ int Class_802A56E8::vfn_14()
     return result;
 }
 
-int Class_802A56E8::vfn_15()
+int ScrmRuleSet::AllowsPrediction()
 {
     int result = 1;
 
@@ -559,7 +559,7 @@ int Class_802A56E8::vfn_15()
     return result;
 }
 
-void Class_802A56E8::vfn_11(int team)
+void ScrmRuleSet::ResetGame(int team)
 {
     Object_8017886C info;
 
@@ -577,13 +577,13 @@ void Class_802A56E8::vfn_11(int team)
     }
 }
 
-int Class_802A56E8::vfn_12()
+int ScrmRuleSet::UsesBothTeams()
 {
     return 1;
 }
 
 
-void Class_802A56E8::vfn_19()
+void ScrmRuleSet::EndPlay()
 {
     int mode = fn_800AD9B4();
 
@@ -601,7 +601,7 @@ void Class_802A56E8::vfn_19()
         p->mUnknown10 = p->mUnknownC = 0.0f;
         fn_800B1508();
         fn_800A8954(0x16, fn_80178308(), 0);
-        fn_800535FC();
+        HotspotClearQueue();
         pPlayer = BallGetCurrentHolder();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
             StyleTrackerAwardDive(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);
@@ -610,20 +610,20 @@ void Class_802A56E8::vfn_19()
     }
 }
 
-int Class_802A5630::vfn_01()
+int Class_802A5630::GetScoreLimit()
 {
-    return fn_8007F828(2);
+    return GameOptionsGet(2);
 }
 
-int Class_802A5630::vfn_02()
+int Class_802A5630::GetWinner()
 {
     return StyleTrackerGetWinner();
 }
 
-int Class_802A5630::vfn_04(int team)
+int Class_802A5630::IsNearWin(int team)
 {
     int result = 0;
-    unsigned int limit = vfn_01();
+    unsigned int limit = GetScoreLimit();
 
     if (fn_80177F70() != 6 && limit - StyleTrackerGetTotal(team) <= 50000) {
         result = 1;
@@ -631,12 +631,12 @@ int Class_802A5630::vfn_04(int team)
     return result;
 }
 
-int Class_802A5630::vfn_06()
+int Class_802A5630::GetScoreType()
 {
     return 1;
 }
 
-int Class_802A5630::vfn_07(int team)
+int Class_802A5630::GetScore(int team)
 {
     return StyleTrackerGetTotal(team);
 }
@@ -706,7 +706,7 @@ extern "C" void fn_80177B54(void)
 extern "C" void fn_80177B7C(int a)
 {
     fn_800C9FC0();
-    lbl_803EB444->mUnknown3D8->vfn_11(a);
+    lbl_803EB444->mUnknown3D8->ResetGame(a);
 }
 
 
@@ -714,7 +714,7 @@ extern "C" void fn_80177BCC(float value)
 {
     fn_8016F7F8();
     ClockRuleUpdate(value);
-    fn_80176984();
+    PenaltyCheckPassInterference();
 }
 
 static inline void FlipSides(void)
@@ -798,10 +798,10 @@ extern "C" void fn_80177E6C(int a, int flip)
     if (flip) {
         FlipSides();
     }
-    fn_8003A090();
+    PlyrMgrReverseAll();
     BallsMirror();
-    CollideSetMirror(fn_8003A078());
-    CollideSetMirror(fn_801442F0());
+    CollideSetMirror(PlyrMgrGetCollideSet());
+    CollideSetMirror(StatcollGetSet());
     CollideSetMirror(BallGetCollRecords());
     CamGameSuspendAll();
     if (lbl_803EB444->mUnknown39 == 0) {
@@ -978,7 +978,7 @@ extern "C" int fn_80178360(void)
 
 extern "C" void fn_80178370(void)
 {
-    lbl_803EB444->mUnknown3D8->vfn_19();
+    lbl_803EB444->mUnknown3D8->EndPlay();
 }
 
 extern "C" int fn_801783AC(int bit)
@@ -1132,7 +1132,7 @@ extern "C" void fn_801787FC(int team, short value)
 
 extern "C" int fn_8017881C(int a)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_07(a);
+    return lbl_803EB444->mUnknown3D8->GetScore(a);
 }
 
 extern "C" void fn_8017885C(void)
@@ -1160,12 +1160,12 @@ extern "C" int RoundToNearestInt(float value)
 
 extern "C" int fn_801788D8(int *pValue)
 {
-    int result = lbl_803EB444->mUnknown3D8->vfn_06();
-    *pValue = lbl_803EB444->mUnknown3D8->vfn_01();
+    int result = lbl_803EB444->mUnknown3D8->GetScoreType();
+    *pValue = lbl_803EB444->mUnknown3D8->GetScoreLimit();
     return result;
 }
 
-void Class_802A56E8::vfn_20(int flip)
+void ScrmRuleSet::PlaceBallForDrive(int flip)
 {
     Point_8017886C pos = { 0.0f, 0.0f };
     lbl_803EB444->mUnknown40 = 1;
@@ -1239,12 +1239,12 @@ extern "C" float fn_80178A68(Point_8017886C *pPos)
 
 extern "C" int fn_80178AE0(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_02();
+    return lbl_803EB444->mUnknown3D8->GetWinner();
 }
 
 extern "C" void fn_80178B1C(int a)
 {
-    lbl_803EB444->mUnknown3D8->vfn_03(a);
+    lbl_803EB444->mUnknown3D8->AwardWin(a);
 }
 
 extern "C" void fn_80178B5C(void)
@@ -1259,32 +1259,32 @@ extern "C" void fn_80178B5C(void)
 
 extern "C" int fn_80178BA4(int a)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_04(a);
+    return lbl_803EB444->mUnknown3D8->IsNearWin(a);
 }
 
 extern "C" int fn_80178BE4(int a)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_05(a);
+    return lbl_803EB444->mUnknown3D8->IsOpponentNearWin(a);
 }
 
 extern "C" int fn_80178C24(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_08();
+    return lbl_803EB444->mUnknown3D8->IsTimed();
 }
 
 extern "C" int fn_80178C60(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_09();
+    return lbl_803EB444->mUnknown3D8->GetGameTime();
 }
 
 extern "C" int fn_80178C9C(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_12();
+    return lbl_803EB444->mUnknown3D8->UsesBothTeams();
 }
 
 extern "C" void fn_80178CD8(int a)
 {
-    lbl_803EB444->mUnknown3D8->vfn_20(a);
+    lbl_803EB444->mUnknown3D8->PlaceBallForDrive(a);
 }
 
 extern "C" unsigned int fn_80178D18(int team)
@@ -1316,12 +1316,12 @@ extern "C" unsigned int fn_80178DC8(void)
 
 extern "C" int fn_80178E10(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_14();
+    return lbl_803EB444->mUnknown3D8->AllowsAudibles();
 }
 
 extern "C" int fn_80178E4C(void)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_15();
+    return lbl_803EB444->mUnknown3D8->AllowsPrediction();
 }
 
 extern "C" void fn_80178E88(float v)
@@ -1336,18 +1336,18 @@ extern "C" unsigned short fn_80178E94(void)
 
 extern "C" int fn_80178EA0(int a)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_17(a);
+    return lbl_803EB444->mUnknown3D8->GetGoalTotal(a);
 }
 
 extern "C" int fn_80178EE0(int a)
 {
-    return lbl_803EB444->mUnknown3D8->vfn_18(a);
+    return lbl_803EB444->mUnknown3D8->GetGoalCount(a);
 }
 
-extern "C" void fn_80178F20(Class_802A56E8 *pRule)
+extern "C" void fn_80178F20(ScrmRuleSet *pRule)
 {
     if (pRule == 0) {
-        switch (fn_8007F828(14)) {
+        switch (GameOptionsGet(14)) {
         case 0:
             lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
             break;
@@ -1368,7 +1368,7 @@ extern "C" void fn_80178F20(Class_802A56E8 *pRule)
 
 extern "C" void fn_80178F90(void)
 {
-    lbl_803EB444->mUnknown3D8->vfn_10();
+    lbl_803EB444->mUnknown3D8->ResetPlaySpot();
 }
 
 extern "C" float fn_80178FCC(int team)
@@ -1478,7 +1478,7 @@ extern "C" void fn_8017926C(int handle, int tag, int value, int kind)
 
 extern "C" int fn_8017932C(int id)
 {
-    return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+    return PlyrGet(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
 }
 
 extern "C" int fn_80179358(int id)

@@ -65,7 +65,7 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex)
             unsigned char closer = 0;
             unsigned char j;
             for (j = 0; j < players; j++) {
-                Object_80039F5C *pOther = fn_80039F5C(1, j);
+                Object_80039F5C *pOther = PlyrGet(1, j);
                 if (pOther != p && !(fn_8022781C(&position, &pOther->mMotion.mPos) >= distance)) {
                     closer++;
                 }

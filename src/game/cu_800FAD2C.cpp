@@ -50,17 +50,17 @@ extern "C" void fn_800FAD2C(void) {
     mode = fn_800AD9B4();
     for (; i <= 2; i++) {
         pRecord->mUnknown8[i] = ((Block_800FAD2C *)fn_8011F4EC())->mUnknown409[i];
-        if (mode == 2 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[i])->mUnknown2914 == 0) {
+        if (mode == 2 && PlyrGet(fn_80178308(), pRecord->mUnknown8[i])->mUnknown2914 == 0) {
             pRecord->mUnknown8[i] = fn_80164B78();
         }
     }
     do {
         swapped = 0;
         for (i = 0; i <= 1; i++) {
-            float x0 = fn_80039F5C(team, pRecord->mUnknown8[i])->mMotion.mPos.mX;
-            float x1 = fn_80039F5C(team, pRecord->mUnknown8[i + 1])->mMotion.mPos.mX;
-            float y0 = fn_80039F5C(team, pRecord->mUnknown8[i])->mMotion.mPos.mY;
-            float y1 = fn_80039F5C(team, pRecord->mUnknown8[i + 1])->mMotion.mPos.mY;
+            float x0 = PlyrGet(team, pRecord->mUnknown8[i])->mMotion.mPos.mX;
+            float x1 = PlyrGet(team, pRecord->mUnknown8[i + 1])->mMotion.mPos.mX;
+            float y0 = PlyrGet(team, pRecord->mUnknown8[i])->mMotion.mPos.mY;
+            float y1 = PlyrGet(team, pRecord->mUnknown8[i + 1])->mMotion.mPos.mY;
 
             if (x0 < x1 + 0.5f && (fabsf(x1 - x0) > 0.5f || y0 < y1)) {
                 unsigned char slot = pRecord->mUnknown8[i];
@@ -96,7 +96,7 @@ extern "C" void fn_800FB314(void) {
             team = fn_80178308();
             n = fn_80178D18(fn_80178320());
             for (i = 0; i < 3; i++) {
-                if (!(fn_80039F5C(fn_80178308(), pRecord->mUnknown8[i])->mFlags & 0x20000000)) {
+                if (!(PlyrGet(fn_80178308(), pRecord->mUnknown8[i])->mFlags & 0x20000000)) {
                     order[count++] = pRecord->mUnknown8[i];
                 } else {
                     unsigned char j;
@@ -104,7 +104,7 @@ extern "C" void fn_800FB314(void) {
                     blocked = i + 1;
                     for (j = 0; j < n; j++) {
                         if (pRecord->mUnknown32[j] == blocked) {
-                            pBlocked = fn_80039F5C(fn_80178320(), j);
+                            pBlocked = PlyrGet(fn_80178320(), j);
                         }
                     }
                 }
@@ -116,8 +116,8 @@ extern "C" void fn_800FB314(void) {
                 for (i = 0; i <= last - 1; i++) {
                     Vector_80039F5C posA;
                     Vector_80039F5C posB;
-                    Object_80039F5C *pA = fn_80039F5C(team, order[i]);
-                    Object_80039F5C *pB = fn_80039F5C(team, order[i + 1]);
+                    Object_80039F5C *pA = PlyrGet(team, order[i]);
+                    Object_80039F5C *pB = PlyrGet(team, order[i + 1]);
                     float xA;
                     float xB;
 
@@ -151,7 +151,7 @@ extern "C" void fn_800FB314(void) {
             } while (swapped == 1);
             total = fn_80178D18(fn_80178320());
             for (i = 0; i < total; i++) {
-                Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
+                Object_80039F5C *p = PlyrGet(fn_80178320(), i);
                 unsigned short route = fn_800F06F4(0, p->mpState, 0x16, 0xFFFF);
 
                 if (route != 0xFFFF && pRecord->mUnknown32[p->mIdBytes[1]] != blocked) {
@@ -180,7 +180,7 @@ extern "C" void fn_800FB314(void) {
                     }
                     pRecord->mUnknown32[(p->mId >> 16) & 0xFF] = slot;
                     if (route == 0) {
-                        fn_8009BD2C(fn_80039F5C(team, pRecord->mUnknown8[slot - 1]), &p->mUnknown336);
+                        fn_8009BD2C(PlyrGet(team, pRecord->mUnknown8[slot - 1]), &p->mUnknown336);
                     }
                 }
             }

@@ -44,9 +44,9 @@ struct DivotOwnerView {
 };
 
 extern "C" {
-int fn_80044528(int index);
-int fn_80044544(void);
-int fn_80044564(int index, int i);
+int DivotGetVariantCount(int index);
+int DivotGetLevelResource(void);
+int DivotGetTextureRef(int index, int i);
 void TMTexLibLoad(DivotTexLib *pElement, int a);
 void TMTexLibUnload(DivotTexLib *pElement);
 int TMTexLibGetTexture(DivotTexLib *pElement, int a);
@@ -74,15 +74,15 @@ static unsigned char _DivotRender_bSavedFog;
 extern "C" {
 void DivotRenderLoadType(int index)
 {
-    if (fn_80044528(index) > 0) {
+    if (DivotGetVariantCount(index) > 0) {
         int i = 0;
         DivotTexLib *pElement;
         int handle;
 
-        pElement = _DivotRender_apTexLibs[index] = (DivotTexLib *)fn_801D2B7C(fn_80044528(index) * sizeof(DivotTexLib), 0, 0);
-        handle = fn_80044544();
-        for (; i < fn_80044528(index); i++) {
-            TMTexLibLoad(pElement, ResLoad((void *)handle, fn_80044564(index, i), 1));
+        pElement = _DivotRender_apTexLibs[index] = (DivotTexLib *)fn_801D2B7C(DivotGetVariantCount(index) * sizeof(DivotTexLib), 0, 0);
+        handle = DivotGetLevelResource();
+        for (; i < DivotGetVariantCount(index); i++) {
+            TMTexLibLoad(pElement, ResLoad((void *)handle, DivotGetTextureRef(index, i), 1));
             pElement->mUnknown28 = TMTexLibGetTexture(pElement, 0xFF000000);
             pElement->mUnknown2C = TMTexLibGetClut(pElement, 0xFF000000, 0);
             pElement++;
@@ -92,13 +92,13 @@ void DivotRenderLoadType(int index)
 
 void DivotRenderFreeType(int index)
 {
-    if (fn_80044528(index) > 0) {
+    if (DivotGetVariantCount(index) > 0) {
         DivotTexLib *pElements = _DivotRender_apTexLibs[index];
         int i;
 
-        for (i = 0; i < fn_80044528(index); i++) {
+        for (i = 0; i < DivotGetVariantCount(index); i++) {
             TMTexLibUnload(&pElements[i]);
-            ResUnLoad((void *)fn_80044544(), fn_80044564(index, i));
+            ResUnLoad((void *)DivotGetLevelResource(), DivotGetTextureRef(index, i));
         }
         fn_801D2BD0(pElements);
         _DivotRender_apTexLibs[index] = 0;

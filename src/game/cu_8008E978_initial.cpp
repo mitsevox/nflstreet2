@@ -8,9 +8,9 @@
 #include "game/AnimFileFormat.h"
 #include "engine/animemot.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/BigObjInst.h"
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 
@@ -82,7 +82,7 @@ int ResGetSize(void *, int);
 extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
-BigObjInst *fn_800400C4(Block_80170E64 *);
+BigObjInst *BallModelGetLinkedObj(Block_80170E64 *);
 int fn_801BA5A8(AnimHeader_t *,Record_800D81C8 *,unsigned short,int);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_800518E0(Object_80039F5C *);
@@ -98,7 +98,7 @@ void fn_8009D00C(void *,int *);
 void PlyrPoseGetBoneTransform(Object_8003DEC4 *,int,float *,int *);
 void QuatFromEuler(Quat_801EB488 *,int,int,int);
 void fn_800943D8(void);
-void fn_80147840(Object_8003DEC4 *);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *);
 void PlayerMoveClear(Object_80039F5C *);
 void fn_800A9B54(unsigned int,Object_80039F5C *);
 void fn_80028DF8(float,float);
@@ -157,7 +157,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
     Object_80039F5C *p=(Object_80039F5C *)object;
     BigObjInst *placed=(BigObjInst *)object;
     int mode=0;
-    if(!FELoopIsMainFEActive() && object==fn_800400C4(BallGetModel(BallGetCurrent()))) return 1;
+    if(!FELoopIsMainFEActive() && object==BallModelGetLinkedObj(BallGetModel(BallGetCurrent()))) return 1;
     void *collection;
     if(event>=0xD000 && event<=0xD005) collection=placed->mUnknown428->mUnknown1300;
     else collection=p->mpUnknown792;
@@ -243,7 +243,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
             return 1;
         case 0xC020:fn_800943D8();return 1;
-        case 0xC022:fn_80147840((Object_8003DEC4 *)p->mpUnknown4);return 1;
+        case 0xC022:ParticleTrailStopAfterimage((Object_8003DEC4 *)p->mpUnknown4);return 1;
         case 0xC023:if(AnimSeqGetOpcodeParameter()==1) PlayerMoveClear(p);return 1;
         case 0xC024: {
             unsigned int effect=(unsigned int)AnimSeqGetOpcodeParameter()-1;
@@ -258,7 +258,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xD001:placed->mUnknown424=AnimSeqGetOpcodeParameter();return 1;
         case 0xD002:placed->mUnknown428->mUnknown1708|=8;return 1;
         case 0xD003: {
-            int value=AnimSeqGetOpcodeParameter();Object_80040818 *owner=fn_80040F18(placed->mUnknown4);
+            int value=AnimSeqGetOpcodeParameter();BigObj_t *owner=BigObjGet(placed->mUnknown4);
             if(value) owner->mUnknown232_31=1;else owner->mUnknown232_31=0;return 1;
         }
         case 0xD005:placed->mUnknown428->mUnknown1708|=0x20;return 1;

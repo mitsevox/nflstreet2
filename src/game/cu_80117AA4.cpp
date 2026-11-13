@@ -107,7 +107,7 @@ extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSp
                         int index = PlayBookGetReceiver(fn_80178308(), i, 0);
                         if (index != 0xFF) {
                             numPlayers++;
-                            pMark = fn_80039F5C(fn_80178308(), index);
+                            pMark = PlyrGet(fn_80178308(), index);
                             if (pMark->mMotion.mPos.mX > high) {
                                 numAbove++;
                             } else if (pMark->mMotion.mPos.mX < low) {

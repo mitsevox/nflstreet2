@@ -39,7 +39,7 @@ extern Object_80039F5C *lbl_803EB398;
 extern int lbl_803ECAEC;
 Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
-int fn_80188030(int);
+int GameTextGetPadPlayer(int);
 int ConGetCurrentContext(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
@@ -67,7 +67,7 @@ void fn_80235C48(void *, int);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235D74(void *, int);
 void fn_80235DB8(int);
-int fn_80039F8C(Object_80039F5C *);
+int PlyrGetIndex(Object_80039F5C *);
 int fn_801784C4(void);
 int ObjNewType_(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
 int ObjDelType(int);
@@ -128,7 +128,7 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
         item->mUnknown2C = -1;
     } else {
         item->mUnknown2C = desc->mUnknown8;
-        item->mUnknown30 = fn_80188030(desc->mUnknown8) % 10;
+        item->mUnknown30 = GameTextGetPadPlayer(desc->mUnknown8) % 10;
     }
     item->mUnknown100 = 0;
     item->mUnknown24 = desc->mUnknown0;
@@ -281,7 +281,7 @@ void fn_80161EDC(Object_801618D8 *item, BitStream_t *stream) {
     if (item) {
         unsigned char active = (item->mUnknown20 >> 1) & 1;
         fn_80191068(stream, active, 1);
-        fn_80191068(stream, fn_80039F8C(item->mUnknown100), 5);
+        fn_80191068(stream, PlyrGetIndex(item->mUnknown100), 5);
     } else
         fn_80191068(stream, 0, 6);
 }
@@ -300,7 +300,7 @@ void fn_80161F5C(Object_801618D8 *item, BitStream_t *a, BitStream_t *b, BitStrea
             item->mUnknown20 &= ~2;
         int id = (int)ReadBitStream(b, 5);
         if (active && id <= 13) {
-            Object_80039F5C *player = fn_80039F5C((unsigned char)(id / 7), (unsigned short)(id % 7));
+            Object_80039F5C *player = PlyrGet((unsigned char)(id / 7), (unsigned short)(id % 7));
             fn_80161E7C(item, (Vec2_t *)&player->mpUnknown4->mUnknown4, 0);
         }
     } else

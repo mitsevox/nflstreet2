@@ -5,7 +5,7 @@
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
 #include "game/HudEvents.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
@@ -20,11 +20,11 @@ int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);
 int fn_800B6644(int index);
 int fn_801486A0(void);
-int fn_80156704(void);
+int TutorialIsActive(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80179138(void);
-int fn_80188044(int index);
+int GameTextFindPlayerPad(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
 
@@ -68,7 +68,7 @@ unsigned char HudGetPadSlot(int id)
         order[i] = -1;
     }
     for (i = 0; i <= 3; i++) {
-        int index = fn_80188044(i);
+        int index = GameTextFindPlayerPad(i);
 
         if (index != -1) {
             int side = fn_800B6644(index);
@@ -104,12 +104,12 @@ void HudUpdateMashPrompt(unsigned char id)
     Object_80039F5C *p;
     unsigned char own;
 
-    if (fn_80156704()) {
+    if (TutorialIsActive()) {
         return;
     }
     p = 0;
     {
-        int index = fn_80188044(id);
+        int index = GameTextFindPlayerPad(id);
 
         if (index != -1) {
             p = fn_800B6544(index);
@@ -220,7 +220,7 @@ void HudStart(void)
         break;
     default:
         fn_80218FC4(gUISMainInfo, 3, 3, 0, 0);
-        if (fn_80156704()) {
+        if (TutorialIsActive()) {
             fn_80218FC4(gUISMainInfo, 7, 0x10, 0, 0);
         }
         break;
@@ -247,7 +247,7 @@ void HudSetScore(int a, int b)
 {
     int args[2];
 
-    switch (fn_8007F828(14)) {
+    switch (GameOptionsGet(14)) {
     case 1:
     case 2:
         break;
@@ -394,7 +394,7 @@ void HudStop(void)
         break;
     default:
         fn_8021956C(gUISMainInfo, 3, 3, 1);
-        if (fn_80156704()) {
+        if (TutorialIsActive()) {
             fn_8021956C(gUISMainInfo, 7, 0x10, 1);
         }
         break;
@@ -442,7 +442,7 @@ void HudHideOverlay(void)
 
     _Hud_bHidden = 1;
     args[0] = 1;
-    if (!fn_80156704()) {
+    if (!TutorialIsActive()) {
         fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
     }
 }

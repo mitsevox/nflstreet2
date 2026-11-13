@@ -1,11 +1,11 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/PauseMenu.h"
 #include "game/fn_8021D7B8.h"
 
-class Class_802A1A58 : public Class_80297C60 {
+class Class_802A1A58 : public PostPlayPhase {
 };
 
 class Class_802A19F0 : public Class_80297B90 {

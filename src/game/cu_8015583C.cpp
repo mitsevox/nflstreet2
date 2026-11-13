@@ -1,16 +1,15 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_802A56E8.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/PreGamePhase.h"
+#include "game/ScrmRuleSet.h"
+#include "game/GameOptions.h"
 
 void *operator new(unsigned int size, int unknown);
 
-class Class_802A18C8 : public Class_80297BF8 {
+class Class_802A18C8 : public PreGamePhase {
 };
 
-class Class_802A17A8 : public Class_802A56E8 {
+class Class_802A17A8 : public ScrmRuleSet {
 public:
     unsigned char mUnknown4;
 };
@@ -48,9 +47,9 @@ public:
 };
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 void fn_8017CAC0(void (*pCallback)(unsigned int, int, int));
 void fn_80155588(Class_802A17A8 *p, int team);
 void fn_801556D0(unsigned int kind, int value, int flag);
@@ -61,9 +60,9 @@ void fn_8015583C(Class_802A2A40 *p)
     p->mpUnknown1C->mUnknown188 = 2;
     p->mpUnknown1C->mUnknown189[0] = 0;
     p->mpUnknown1C->mUnknown189[1] = 0;
-    p->mpUnknown1C->mUnknown16 = fn_8007F828(14);
+    p->mpUnknown1C->mUnknown16 = GameOptionsGet(14);
     if (p->mpUnknown1C->mUnknown16 != 0) {
-        fn_8007F6F8(14, 0);
+        GameOptionsSet(14, 0);
     }
     fn_800BC51C(&p->mpUnknown1C->mObject0);
     fn_800AACB8(&p->mpUnknown1C->mObject12);
@@ -77,7 +76,7 @@ void fn_801558FC(Class_802A2A40 *p)
     fn_800BC51C(0);
     fn_800AACB8(0);
     if (p->mpUnknown1C->mUnknown16 != 0) {
-        fn_8007F6F8(14, p->mpUnknown1C->mUnknown16);
+        GameOptionsSet(14, p->mpUnknown1C->mUnknown16);
     }
     fn_80178F20(0);
     fn_8017CAC0(0);

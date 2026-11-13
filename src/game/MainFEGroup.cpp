@@ -14,9 +14,9 @@
 extern "C" {
 void BootInstallResetCallback(void);
 void BootRemoveResetCallback(void);
-void fn_80072C90(unsigned int delay, int wait);
-void fn_80072D98(unsigned int delay);
-void fn_80187C5C(unsigned char a);
+void SndgMusicFadeOut(unsigned int delay, int wait);
+void SndgMusicFadeIn(unsigned int delay);
+void GameTextSetBootFinished(unsigned char a);
 extern const char _MainFEGroup_szName[];
 extern FlowStageEntry_t _MainFEGroup_aStages[];
 extern FlowTransitionEntry_t _MainFEGroup_aTransitions[];
@@ -189,7 +189,7 @@ void MainFEGroup::GSProcess()
             p->fn_801CBEF4(2, 8);
             break;
         case 8:
-            fn_80187C5C(1);
+            GameTextSetBootFinished(1);
             p->fn_801CBEF4(2, 9);
             break;
         case 9:
@@ -219,10 +219,10 @@ int MainFEGroup::GSTransition(int a, int b)
 {
     switch (b) {
     case 12:
-        fn_80072C90(250, 1);
+        SndgMusicFadeOut(250, 1);
         break;
     case 10:
-        fn_80072D98(250);
+        SndgMusicFadeIn(250);
         break;
     }
     return 1;

@@ -1,6 +1,6 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/PlaySet.h"
 #include "game/fn_800F06F4.h"
@@ -34,23 +34,23 @@ int DbTextToTag(const char *);
 int fn_80178308(void);
 unsigned int fn_80178D18(int);
 int fn_80178D70(int);
-Object_800670B4 *PlayBookGetFormation(int);
+PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
 void fn_800F0910(int, Message_800F01CC *);
 int fn_800AD9B4(void);
-int fn_801650DC(Record_80067338 *);
-void fn_80164CE4(Record_80067338 *, Object_80039F5C *, int);
+int fn_801650DC(PlayBookPlay_t *);
+void fn_80164CE4(PlayBookPlay_t *, Object_80039F5C *, int);
 
 unsigned char fn_80164B78(void)
 {
     Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-    if (selected == fn_80039F5C(fn_80178308(), 0)) {
+    if (selected == PlyrGet(fn_80178308(), 0)) {
         unsigned int n = fn_80178D18(fn_80178308());
         for (unsigned char i = 0; i < n; ++i) {
-            Object_80039F5C *p = fn_80039F5C(fn_80178308(), i);
-            Record_80067338 *record = PlayBookGetPlay(fn_80178308());
+            Object_80039F5C *p = PlyrGet(fn_80178308(), i);
+            PlayBookPlay_t *record = PlayBookGetPlay(fn_80178308());
             void *queue = fn_80164EC8(record, fn_80178308(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
         }
@@ -58,15 +58,15 @@ unsigned char fn_80164B78(void)
     return selected->mIdBytes[1];
 }
 
-void fn_80164C4C(Object_800670B4 *object, Record_80067338 *record, int team, int)
+void fn_80164C4C(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, int)
 {
     int remap = object->mUnknown8.mUnknownF == 1 && (object->mUnknown8.mUnknown14 & 1) && (record->mUnknown18 & 1);
     int count = fn_80178D70(team);
     for (int i = 0; i < count; ++i)
-        fn_80164CE4(record, fn_80039F5C(team, (unsigned short)i), remap);
+        fn_80164CE4(record, PlyrGet(team, (unsigned short)i), remap);
 }
 
-void fn_80164CE4(Record_80067338 *record, Object_80039F5C *p, int remap)
+void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
     if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
     unsigned char index = p->mIdBytes[1];
@@ -89,7 +89,7 @@ void fn_80164CE4(Record_80067338 *record, Object_80039F5C *p, int remap)
     }
 }
 
-int fn_80164E30(Record_80067338 *record, Object_800670B4 *object, Object_80039F5C *p, int kind)
+int fn_80164E30(PlayBookPlay_t *record, PlayBookFormation_t *object, Object_80039F5C *p, int kind)
 {
     unsigned char index = p->mIdBytes[1];
     if (object->mUnknown8.mUnknownF) index = PlaySetGetEntry(object, p->mIdBytes[1], 0)->mUnknownB;
@@ -109,7 +109,7 @@ void *fn_80164EC8(void *record, int, unsigned short index)
     return (unsigned char *)record + 56 + index * 40;
 }
 
-unsigned char fn_80164ED8(Object_800670B4 *object, Record_80067338 *record, int slot, unsigned char *out, int remap)
+unsigned char fn_80164ED8(PlayBookFormation_t *object, PlayBookPlay_t *record, int slot, unsigned char *out, int remap)
 {
     unsigned char index = 255;
     unsigned char (*slots)[4] = 0;
@@ -118,7 +118,7 @@ unsigned char fn_80164ED8(Object_800670B4 *object, Record_80067338 *record, int 
         int mode = fn_800AD9B4();
         slots = record->mUnknown1C;
         index = slots[slot][0];
-        Object_80039F5C *p = fn_80039F5C(fn_80178308(), index);
+        Object_80039F5C *p = PlyrGet(fn_80178308(), index);
         if (mode == 2 && !p->mUnknown2914) {index = fn_80164B78(); override = 1;}
     }
     if (out) {
@@ -136,7 +136,7 @@ unsigned char fn_80164ED8(Object_800670B4 *object, Record_80067338 *record, int 
     return index;
 }
 
-void fn_80165000(Object_800670B4 *object, Record_80067338 *record, unsigned int index, unsigned char value, int remap)
+void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, unsigned int index, unsigned char value, int remap)
 {
     if (fn_801650DC(record)) {
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
@@ -145,22 +145,22 @@ void fn_80165000(Object_800670B4 *object, Record_80067338 *record, unsigned int 
     }
 }
 
-int fn_80165098(Record_80067338 *record) {return record->mUnknown14 == 2 || record->mUnknown14 == 17;}
+int fn_80165098(PlayBookPlay_t *record) {return record->mUnknown14 == 2 || record->mUnknown14 == 17;}
 
-int fn_801650BC(Record_80067338 *record) {unsigned int n = record->mUnknown14; return n >= 11 && n <= 18;}
+int fn_801650BC(PlayBookPlay_t *record) {unsigned int n = record->mUnknown14; return n >= 11 && n <= 18;}
 
-int fn_801650DC(Record_80067338 *record) {unsigned int n = record->mUnknown14; return n >= 1 && n <= 5;}
+int fn_801650DC(PlayBookPlay_t *record) {unsigned int n = record->mUnknown14; return n >= 1 && n <= 5;}
 
-int fn_801650FC(Record_80067338 *record) {return record->mUnknown14 == 21;}
+int fn_801650FC(PlayBookPlay_t *record) {return record->mUnknown14 == 21;}
 
 void fn_80165110(PlayArtPlay_t *record, int force)
 {
     int swap = 0;
     if (record->mUnknown14 >= 1 && record->mUnknown14 <= 5) {
-        Object_800670B4 *object = PlayBookGetFormation(fn_80178308());
+        PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
             unsigned char index = record->mUnknown1C[i][0];
-            fn_80039F5C(fn_80178308(), index);
+            PlyrGet(fn_80178308(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
         if (swap || force) {

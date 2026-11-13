@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -48,7 +48,7 @@ void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_800FF598(State_800FDA58 *pState, Object_80039F5C *p, Point_8017886C *pPoint, int angle, float value);
 unsigned char fn_800C0658(void);
 void fn_800FF6D8(Object_80039F5C *p);
-void fn_800449B4(Object_80039F5C *p);
+void DivotSkipNextSteps(Object_80039F5C *p);
 void fn_80051B88(Object_800B26B0 *pMotion, float value);
 void fn_8009BD60(Object_80039F5C *p);
 }
@@ -104,6 +104,6 @@ extern "C" void fn_800FD978(Object_80039F5C *p)
     if (fn_800C0658() == 0) {
         fn_800FF6D8(p);
     }
-    fn_800449B4(p);
+    DivotSkipNextSteps(p);
     fn_80051B88(&p->mMotion, 1.25f);
 }

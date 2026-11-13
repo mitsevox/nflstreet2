@@ -33,12 +33,12 @@ public:
 extern "C" {
 extern Class_802A2918 lbl_8031BDD4;
 
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_801529C0(Class_802A2918 *p);
 
 Object_80039F5C *fn_8015264C(void)
 {
-    return fn_8003AC84(lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
+    return PlyrFindById(lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
 }
 
 int fn_8015267C(Class_802A2918 *p)

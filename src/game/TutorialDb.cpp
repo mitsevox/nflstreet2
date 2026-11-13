@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -177,9 +177,9 @@ void TutorialGetDescription(int id, char *pDest, int count)
 
 unsigned int TutorialGetPlayIndex(int a, int b, int flag)
 {
-    Object_800670B4 table;
+    PlayBookFormation_t table;
     char key[3];
-    Record_80067338 record;
+    PlayBookPlay_t record;
     int id;
     int handle;
     int tag;
@@ -195,13 +195,13 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
         tag = 0x31444250;
         kind = 11;
     }
-    fn_800670B4(tag, kind, 0, &table);
+    PlayBookDbLoadFormation(tag, kind, 0, &table);
     fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
-    count = fn_800672BC(tag, handle);
+    count = PlayBookDbCountPlays(tag, handle);
     fn_801C2E18(key, "%02d", id);
     for (i = 0; i < count; i++) {
-        fn_80067338(tag, handle, i, &record);
+        PlayBookDbLoadPlay(tag, handle, i, &record);
         if (fn_801C302C(record.mUnknown1F0, key, 2) == 0) {
             break;
         }
@@ -211,9 +211,9 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
 
 unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
 {
-    Object_800670B4 table;
+    PlayBookFormation_t table;
     char key[3];
-    Record_80067338 record;
+    PlayBookPlay_t record;
     int id;
     int handle;
     int tag;
@@ -229,13 +229,13 @@ unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
         tag = 0x31544250;
         kind = 1;
     }
-    fn_800670B4(tag, kind, 0, &table);
+    PlayBookDbLoadFormation(tag, kind, 0, &table);
     fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
-    count = fn_800672BC(tag, handle);
+    count = PlayBookDbCountPlays(tag, handle);
     fn_801C2E18(key, "%02d", id);
     for (i = 0; i < count; i++) {
-        fn_80067338(tag, handle, i, &record);
+        PlayBookDbLoadPlay(tag, handle, i, &record);
         if (fn_801C302C(record.mUnknown1F0, key, 2) == 0) {
             break;
         }

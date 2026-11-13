@@ -47,7 +47,7 @@ void fn_801526EC(Class_802A2918 *p)
         pEntries[i].mUnknown4 = pEntries[i].mUnknown8 = pEntries[i].mUnknown10 =
             pEntries[i].mUnknown14 = pEntries[i].mUnknown16 = 0;
         p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown13 = 0;
-        fn_80039F5C(1, i)->mUnknown9[2] = 1;
+        PlyrGet(1, i)->mUnknown9[2] = 1;
     }
 }
 }

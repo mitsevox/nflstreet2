@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "game/Ball.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/AudmonEvent.h"
@@ -20,7 +20,7 @@ struct Record_801BE648 {
     char mUnknown8[92];
 };
 
-/* Returned by fn_800400C4 for the ball's block. */
+/* Returned by BallModelGetLinkedObj for the ball's block. */
 struct Object_800400C4 {
     int mUnknown0;
     int mUnknown4;
@@ -33,15 +33,15 @@ struct Object_800400C4 {
 extern float gFrameTimeScale;
 
 extern "C" {
-Object_800400C4 *fn_800400C4(Block_80170E64 *pBlock);
-Object_80040818 *fn_80040F18(int index);
+Object_800400C4 *BallModelGetLinkedObj(Block_80170E64 *pBlock);
+BigObj_t *BigObjGet(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
 void fn_800B1508(void);
 int fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D782C(Object_80039F5C *p);
-void fn_800EBA48(int index);
+void LooseBallBroadcast(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
 int PossIsWristNearJoint(Ball_t *pBall, Object_80039F5C *p, int a);
@@ -827,7 +827,7 @@ void fn_8013B024(Ball_t *pBall)
 void fn_8013B068(Ball_t *pBall)
 {
     if (pBall == BallGetCurrent() && pBall->mState.mStateArg != 0) {
-        fn_800EBA48(BallGetIndex(pBall));
+        LooseBallBroadcast(BallGetIndex(pBall));
     }
 }
 
@@ -1011,8 +1011,8 @@ void fn_8013B734(Ball_t *pBall, float dt)
     Vector_80039F5C pos;
     int angles[3];
     Quat_801EB488 turn;
-    Object_800400C4 *pPlace = fn_800400C4(BallGetModel(BallGetCurrent()));
-    Object_80040818 *pObject = fn_80040F18(pPlace->mUnknown4);
+    Object_800400C4 *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
+    BigObj_t *pObject = BigObjGet(pPlace->mUnknown4);
     short *pRot = pObject->mpUnknown220;
 
     angles[0] = pRot[0] << 8;

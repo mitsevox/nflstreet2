@@ -29,12 +29,12 @@ int LessonTableGetDIRM(DbCursor *pObject)
 
 void LessonTableGetTitle(DbCursor *pObject, char *pData, int size)
 {
-    fn_8007AA3C(pObject, 0x5449544D, (int)pData, size);
+    DbCursorGetString(pObject, 0x5449544D, (int)pData, size);
 }
 
 void LessonTableGetDescription(DbCursor *pObject, char *pData, int size)
 {
-    fn_8007AA3C(pObject, 0x4353444D, (int)pData, size);
+    DbCursorGetString(pObject, 0x4353444D, (int)pData, size);
 }
 
 void PoseTableOpen(DbCursor *pObject)
@@ -58,7 +58,7 @@ void PoseTableSeek(DbCursor *pCursor, int value, int *pResult)
 
 void PoseTableGetName(DbCursor *pCursor, char *pBuffer, int size)
 {
-    fn_8007AA3C(pCursor, 0x414E5753, (int)pBuffer, size);
+    DbCursorGetString(pCursor, 0x414E5753, (int)pBuffer, size);
 }
 
 int PoseTableGetNumber(DbCursor *pCursor)
@@ -84,7 +84,7 @@ void TattooTableClose(DbCursor *pCursor)
 
 void TattooTableGetName(DbCursor *pCursor, char *pBuffer, int size)
 {
-    fn_8007AA3C(pCursor, 0x4E544154, (int)pBuffer, size);
+    DbCursorGetString(pCursor, 0x4E544154, (int)pBuffer, size);
 }
 
 int TattooTableGetId(DbCursor *pCursor)

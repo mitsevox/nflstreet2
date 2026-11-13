@@ -1,15 +1,13 @@
 // Memory card screens: the UI script functions behind the save, load, delete,
 // format and card-check screens. They pick the card slot, select save files,
 // start card operations and hand the results back to the screen scripts.
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/FELoop.h"
-#include "game/cu_8007F12C.h"
 #include "game/Callees_801D57E0.h"
 #include "game/MemCardUI.h"
 #include "game/Callees_8002A138.h"
-#include "game/fn_8007F828.h"
 #include "game/TextRecord.h"
-#include "game/fn_80191948.h"
+#include "game/MemCardMsg.h"
 #include "game/UISGameMsg.h"
 
 struct MemCardUIName_t {
@@ -42,24 +40,24 @@ void fn_801F8838(void);
 void FeatClearEAGameSaves(void);
 void FeatSetEAGameSave(short a);
 void FeatGetEAGameCode(short a, char *pBuf);
-unsigned int fn_80029838(int a);
-int fn_80029B48(int a);
-void fn_80029E6C(int a, int b);
-void fn_8002A238(int a, int b, int slot, int index);
-void fn_8002A260(int a, int b, char *pBuf, int size);
-void fn_8002A44C(int a, int b);
-void fn_8002A49C(int a);
-void fn_8002A5C4(void);
-void fn_8002A5F0(int a, char *pBuf, int b);
-int fn_8002A824(void);
-void fn_80187FD0(void);
-void fn_80187FDC(void);
-int fn_80029D74(int type, int index);
-void fn_80029CE0(int type, int index);
-void fn_80029D28(int type, int index);
-int fn_8002A130(int a, int b);
-int fn_8002A2A4(int type, int index);
-int fn_8002A86C(int value, int type, const char *name, unsigned int *pIndex);
+unsigned int MemCardFilesGetFileSize(int a);
+int MemCardFilesPollOperation(int a);
+void MemCardFilesClearSlotPort(int a, int b);
+void MemCardFilesSetSlotLocation(int a, int b, int slot, int index);
+void MemCardFilesGetSlotName(int a, int b, char *pBuf, int size);
+void MemCardFilesSetSaveTarget(int a, int b);
+void MemCardFilesStartSave(int a);
+void MemCardFilesStartLoad(void);
+void MemCardFilesMakeName(int a, char *pBuf, int b);
+int MemCardFilesGetTotalSize(void);
+void GameTextRequestReset(void);
+void GameTextServiceReset(void);
+int MemCardFilesNeedsSave(int type, int index);
+void MemCardFilesStoreChecksum(int type, int index);
+void MemCardFilesInvalidateChecksum(int type, int index);
+int MemCardFilesQuerySlot(int a, int b);
+int MemCardFilesIsUsed(int type, int index);
+int MemCardFilesFindNameOnPort(int value, int type, const char *name, unsigned int *pIndex);
 int MemCardUtilGetSaveType(int a);
 void MemCardGetNewSaveSpace(int *pA, int *pB);
 int fn_801D6850(void);
@@ -98,7 +96,7 @@ void MemCardUIStart(int a, int *pB, int *pC)
     if (_MemCardUI_pEnterCallback != 0) {
         _MemCardUI_pEnterCallback(a, &unused);
     }
-    *pB = fn_8002A824();
+    *pB = MemCardFilesGetTotalSize();
     *pC = 3;
 }
 
@@ -185,9 +183,9 @@ int MemCardUIProbeNextPort(int a)
     return 1;
 }
 
-void MemCardUIGetMessageText(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC)
+void MemCardUIGetMessageText(int value, MemCardMsgText_t *pA, MemCardMsgText_t *pB, MemCardMsgText_t *pC)
 {
-    fn_80191948(value, pA, pB, pC);
+    MemCardMsgGetText(value, pA, pB, pC);
 }
 
 void MemCardUIUnmountAndClearChanges(void)
@@ -278,7 +276,7 @@ int MemCardUILoadFile(int a, int index)
         if (_MemCardUI_pLoadCallback != 0) {
             _MemCardUI_pLoadCallback(a, index);
         }
-        fn_8002A5C4();
+        MemCardFilesStartLoad();
         return 1;
     }
     return 0;
@@ -303,7 +301,7 @@ int MemCardUISelectFile(int a, int index)
 
 int MemCardUIPollResult(int a)
 {
-    return fn_80029B48(a);
+    return MemCardFilesPollOperation(a);
 }
 
 int MemCardUISelectMarkedFile(int a, int index)
@@ -367,8 +365,8 @@ void MemCardUIMarkOtherGameFound(int a, int b)
 
 void MemCardUIResetGame(void)
 {
-    fn_80187FD0();
-    fn_80187FDC();
+    GameTextRequestReset();
+    GameTextServiceReset();
 }
 
 void MemCardUIReturnToMenu(void)
@@ -390,19 +388,19 @@ int MemCardUISaveFile(int a, int index, int b)
     int ok = 0;
     unsigned char flag = 0;
 
-    fn_8002A44C(a, b);
-    fn_8002A260(a, b, path, 32);
+    MemCardFilesSetSaveTarget(a, b);
+    MemCardFilesGetSlotName(a, b, path, 32);
     if (a == 1) {
         ok = fn_801D6CF4("Options", 1, &flag) >= 0;
-    } else if (fn_8002A138(a, b) != 0) {
+    } else if (MemCardFilesIsSlotSaved(a, b) != 0) {
         ok = fn_801D6CF4(path, a, &flag) >= 0;
     } else if (fn_801D6B74((signed char)index, a, 0, 0, 0, -1, &flag) == 0 || flag != 0) {
-        fn_8002A5F0(a, path, 0);
+        MemCardFilesMakeName(a, path, 0);
     }
     fn_801D689C(path, "GN7E-69", (signed char)index, a, name, 32);
     fn_801D67E4(path, name);
     fn_801D6838(index);
-    fn_8002A49C(ok);
+    MemCardFilesStartSave(ok);
     return 1;
 }
 
@@ -412,13 +410,13 @@ int MemCardUISaveOverFile(int a, int index, int b)
     char other[32];
     int result;
 
-    fn_8002A44C(a, b);
+    MemCardFilesSetSaveTarget(a, b);
     result = fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
     if (result != 0) {
         fn_801D6C70((signed char)index, a, other, 32);
         fn_801D67E4(name, other);
         fn_801D6838(index);
-        fn_8002A49C(result);
+        MemCardFilesStartSave(result);
     }
     return result;
 }
@@ -444,7 +442,7 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
         *pError = 0x73;
         ok = 0;
     }
-    if (fn_801D6724() < fn_80029838(a)) {
+    if (fn_801D6724() < MemCardFilesGetFileSize(a)) {
         *pError = 0x40;
         ok = 0;
     }
@@ -461,7 +459,7 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
             ok = 0;
         }
         if (ok) {
-            fn_8002A238(a, b, fn_801D671C(), index);
+            MemCardFilesSetSlotLocation(a, b, fn_801D671C(), index);
         }
     }
     return ok;
@@ -469,9 +467,9 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
 
 void MemCardUIReleaseSlot(int a, int b)
 {
-    if (fn_8007F828(12) == 1) {
-        fn_8007F6F8(12, 0);
-        fn_80029E6C(a, b);
+    if (GameOptionsGet(12) == 1) {
+        GameOptionsSet(12, 0);
+        MemCardFilesClearSlotPort(a, b);
     }
 }
 
@@ -550,7 +548,7 @@ void MemCardUIGetSlotName(int a, TextRecord_t *pRecord)
 
 void MemCardUIGetSavePort(int a, int b, int *pOut)
 {
-    int result = fn_8002A190(a, b);
+    int result = MemCardFilesGetSlotPort(a, b);
 
     if (result == -1) {
         result = 0;
@@ -572,7 +570,7 @@ void MemCardUISetTitleFromSlot(int a, int b)
 {
     char name[24];
 
-    fn_8002A260(a, b, name, 32);
+    MemCardFilesGetSlotName(a, b, name, 32);
     fn_801D67E4(name, 0);
 }
 
@@ -662,8 +660,8 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         *pResult = MemCardUIProbePort(pParams->mUnknown0);
         break;
     case 339:
-        MemCardUIGetMessageText(pParams->mUnknown0, (Object_80191948 *)pParams->mUnknown4,
-                     (Object_80191948 *)pParams->mUnknown8, (Object_80191948 *)pParams->mUnknownC);
+        MemCardUIGetMessageText(pParams->mUnknown0, (MemCardMsgText_t *)pParams->mUnknown4,
+                     (MemCardMsgText_t *)pParams->mUnknown8, (MemCardMsgText_t *)pParams->mUnknownC);
         break;
     case 341:
         *pResult = MemCardUIRunCheckCallback((int *)pParams->mUnknown0, (int *)pParams->mUnknown4, (int *)pParams->mUnknown8,
@@ -770,12 +768,12 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
             char name[17];
 
             fn_801D6754(type);
-            *pResult = fn_80029D74(type, index);
+            *pResult = MemCardFilesNeedsSave(type, index);
             if (*pResult != 0) {
-                fn_8002A44C(type, index);
-                fn_8002A260(type, index, name, sizeof(name));
-                if (fn_8002A138(type, index) == 0) {
-                    fn_8002A5F0(type, name, 0);
+                MemCardFilesSetSaveTarget(type, index);
+                MemCardFilesGetSlotName(type, index, name, sizeof(name));
+                if (MemCardFilesIsSlotSaved(type, index) == 0) {
+                    MemCardFilesMakeName(type, name, 0);
                 }
                 fn_801D67E4(name, 0);
             }
@@ -797,11 +795,11 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         *pResult = 1;
         break;
     case 513:
-        fn_80029CE0(pParams->mUnknown0, pParams->mUnknown4);
+        MemCardFilesStoreChecksum(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 524:
         MemCardUIGetSavePort(pParams->mUnknown0, pParams->mUnknown4, &_MemCardUI_iSavePort);
-        *pResult = fn_8002A130(pParams->mUnknown0, pParams->mUnknown4);
+        *pResult = MemCardFilesQuerySlot(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 530:
         MemCardGetNewSaveSpace((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
@@ -812,13 +810,13 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         }
         fn_801D6714(-1);
         if (fn_801D6850() == 1) {
-            fn_8007F374();
+            GameOptionsShutdown();
         }
         break;
     case 532:
         fn_801D654C(0);
         if (fn_801D6850() == 1) {
-            fn_8007F328(0);
+            GameOptionsInit(0);
         }
         break;
     case 316:
@@ -831,10 +829,10 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         *pResult = 0;
         break;
     case 323:
-        *pResult = fn_8002A2A4(pParams->mUnknown0, pParams->mUnknown4);
+        *pResult = MemCardFilesIsUsed(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 533:
-        fn_80029D28(pParams->mUnknown0, pParams->mUnknown4);
+        MemCardFilesInvalidateChecksum(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 34:
         MemCardUIGetTitle((TextRecord_t *)pParams->mUnknown0);
@@ -843,7 +841,7 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         MemCardUISetTitleFromSlot(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 39:
-        *pResult = fn_8002A86C(pParams->mUnknown0, pParams->mUnknown4, ((MemCardUIName_t *)pParams->mUnknown8)->mpUnknown8,
+        *pResult = MemCardFilesFindNameOnPort(pParams->mUnknown0, pParams->mUnknown4, ((MemCardUIName_t *)pParams->mUnknown8)->mpUnknown8,
                                (unsigned int *)pParams->mUnknownC);
         break;
     case 92:

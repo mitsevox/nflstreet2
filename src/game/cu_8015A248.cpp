@@ -1,13 +1,13 @@
 #include "game/Object_8015C244.h"
 
 extern "C" {
-void fn_8003F66C(void *p);
-void fn_8003F6B0(void *p);
-void fn_8003F6B4(void *p, float (*pData)[3], int a);
-void fn_8003F6C8(void *p, unsigned char a, unsigned char b, unsigned char c);
-void fn_8003F6D8(void *p, float value);
-void fn_8003F6E0(void *p, float value);
-void fn_8003F6E8(void *p, float value);
+void ArrowInit(void *p);
+void ArrowShutdown(void *p);
+void ArrowSetPointBuffer(void *p, float (*pData)[3], int a);
+void ArrowSetColor(void *p, unsigned char a, unsigned char b, unsigned char c);
+void ArrowSetWidth(void *p, float value);
+void ArrowSetEndWidth(void *p, float value);
+void ArrowSetEndBrightness(void *p, float value);
 int fn_801784C4(void);
 
 void fn_8015A248(Object_8015C244 *p, float *pOut)
@@ -27,12 +27,12 @@ void fn_8015A248(Object_8015C244 *p, float *pOut)
 void fn_8015A2B4(Object_8015C244 *p)
 {
     p->mpUnknown208 = 0;
-    fn_8003F66C(p->mUnknown20);
-    fn_8003F6B4(p->mUnknown20, p->mUnknown88, 10);
-    fn_8003F6D8(p->mUnknown20, 0.1f);
-    fn_8003F6C8(p->mUnknown20, 0x80, 0x80, 0);
-    fn_8003F6E0(p->mUnknown20, 4.0f);
-    fn_8003F6E8(p->mUnknown20, 1.0f);
+    ArrowInit(p->mUnknown20);
+    ArrowSetPointBuffer(p->mUnknown20, p->mUnknown88, 10);
+    ArrowSetWidth(p->mUnknown20, 0.1f);
+    ArrowSetColor(p->mUnknown20, 0x80, 0x80, 0);
+    ArrowSetEndWidth(p->mUnknown20, 4.0f);
+    ArrowSetEndBrightness(p->mUnknown20, 1.0f);
     p->mUnknown80 = 0;
     p->mUnknown81 = 0;
     p->mUnknown84 = 10;
@@ -40,7 +40,7 @@ void fn_8015A2B4(Object_8015C244 *p)
 
 void fn_8015A354(Object_8015C244 *p)
 {
-    fn_8003F6B0(p->mUnknown20);
+    ArrowShutdown(p->mUnknown20);
     p->mpUnknown208 = 0;
     p->mUnknown80 = 0;
     p->mUnknown81 = 0;
@@ -70,10 +70,10 @@ void fn_8015A2B4(Object_8015C244 *);
 void fn_8015A354(Object_8015C244 *);
 int fn_801784C4(void);
 int fn_80178308(void);
-Object_800670B4 *PlayBookGetFormation(int);
+PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
 unsigned char fn_800FC014(Object_80039F5C *, void *);
@@ -81,10 +81,10 @@ Object_80039F5C *fn_800FC070(Object_80039F5C *, void *);
 void fn_8009E9EC(int, int, Point_8017886C *);
 float fn_80178A08(void);
 float fn_80178A44(void);
-void fn_8003F6F0(void *, void *);
-void fn_8003F6C8(void *, unsigned char, unsigned char, unsigned char);
-void fn_8003F744(void *);
-void fn_8003F754(void *, int, int, float, float);
+void ArrowAddPoint(void *, void *);
+void ArrowSetColor(void *, unsigned char, unsigned char, unsigned char);
+void ArrowReset(void *);
+void ArrowSetEnd(void *, int, int, float, float);
 void ArrowDraw(void *);
 void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
@@ -92,8 +92,8 @@ void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
 int MathAngleDiff(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
-void fn_8012CB98(int, unsigned char, int, void *);
-int fn_8012CB50(void *);
+void PlayerCutGetAnimOffset(int, unsigned char, int, void *);
+int PlayerCutGetMessageTurn(void *);
 int ObjNewType_(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
 int ObjDelType(int);
 void ObjSetListObjFunc(int, int, int, int (*)(Object_8015C244 *));
@@ -135,13 +135,14 @@ void fn_8015A3EC(Object_8015C244 *p, Vector_80039F5C *pPoint, int angle)
         break;
     case 8: turn = 0xc00000; length = 1.5f; break;
     case 9: turn = 0xc00000; length = 3.0f; break;
+    case 5: case 6: break;
     }
     if (length != 0.0f) {
         if (fn_801784C4()) turn += 0x800000;
         Point_8017886C delta;
         fn_80227538(&delta, turn, length);
         fn_80227638(pPoint, pPoint, &delta);
-        fn_8003F6F0(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mUnknown20, pPoint);
     }
     p->mUnknown84 = 10;
 }
@@ -162,15 +163,16 @@ void fn_8015A588(Object_8015C244 *p, unsigned char *pCommand,
                 pPoint->mX > fn_80178A08() ? fn_80178A08() : pPoint->mX;
     pPoint->mY = pPoint->mY < -fn_80178A44() ? -fn_80178A44() :
                 pPoint->mY > fn_80178A44() ? fn_80178A44() : pPoint->mY;
-    fn_8003F6F0(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mUnknown20, pPoint);
 }
 
 void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
     unsigned char index = pCommand[1];
     if (pCommand[0] == 92) index += 14;
-    Point_8017886C origin = fn_80177FE0();
+    Point_8017886C origin;
     Point_8017886C target;
+    origin = fn_80177FE0();
     fn_8009E9EC(0, index, &target);
     if (pCommand[0] == 40 && target.mY - origin.mY > 25.0f)
         target.mY = origin.mY + 25.0f;
@@ -184,26 +186,34 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
 
 void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
+    unsigned char command[4];
     Object_80039F5C *pPlayer = p->mpUnknown208;
-    Point_8017886C origin = fn_80177FE0();
+    Point_8017886C origin;
+    origin = fn_80177FE0();
     fn_8011F4E0();
     unsigned char code = fn_800FC014(pPlayer, pCommand);
-    if (code == 254) return;
-    if (code == 253 || code == 0) {
-        unsigned char command[4];
+    switch (code) {
+    case 254:
+        return;
+    case 253:
         fn_801C1F94(command, 0, 4);
-        command[0] = 3; command[1] = 24; command[2] = code == 253 ? 96 : 32;
+        command[0] = 3; command[1] = 24; command[2] = 96;
+        fn_8015A588(p, command, pPoint, 0, 0);
+        return;
+    case 0:
+        fn_801C1F94(command, 0, 4);
+        command[0] = 3; command[1] = 24; command[2] = 32;
         fn_8015A588(p, command, pPoint, 0, 0);
         return;
     }
     Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
-    if (pOther == fn_80039F5C(pOther->mIdBytes[2], 0)) {
+    if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-        if (pOther == fn_80039F5C(pOther->mIdBytes[2], 0)) {
+        if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
             unsigned int count = fn_80178D18(fn_80178308());
             for (unsigned char i = 0; i < count; ++i) {
-                Object_80039F5C *pCandidate = fn_80039F5C(fn_80178308(), i);
-                Record_80067338 *pRecord = PlayBookGetPlay(fn_80178308());
+                Object_80039F5C *pCandidate = PlyrGet(fn_80178308(), i);
+                PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                 void *pCommands = fn_80164EC8(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
                 if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
                     pOther = pCandidate;
@@ -246,7 +256,7 @@ void fn_8015AB84(Object_8015C244 *p, float distance,
 {
     if (fn_801784C4()) distance = -distance;
     pPoint->mY += distance;
-    fn_8003F6F0(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mUnknown20, pPoint);
 }
 
 void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
@@ -263,17 +273,17 @@ void fn_8015ABE4(Object_8015C244 *p, Vector_80039F5C *pPoint)
     fn_80227538(point, turn, length);
     point[2] = 0.0f;
     fn_8022765C(point, point, pPoint);
-    fn_8003F6F0(p->mUnknown20, point);
+    ArrowAddPoint(p->mUnknown20, point);
     fn_80227538(point, angle, length);
     point[2] = 0.0f;
     fn_8022765C(pPoint, pPoint, point);
-    fn_8003F6F0(p->mUnknown20, pPoint);
+    ArrowAddPoint(p->mUnknown20, pPoint);
 }
 
 void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
 {
     Object_80039F5C *pPlayer = p->mpUnknown208;
-    Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), 0);
+    Object_80039F5C *pOther = PlyrGet(fn_80178308(), 0);
     Point_8017886C origin = fn_80177FE0();
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;
@@ -308,42 +318,42 @@ void fn_8015AF48(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
     Point_8017886C delta;
     switch (pCommand[1]) {
     case 5: case 7: case 11: {
-        fn_8012CB98(pCommand[1], pCommand[0], 0x400000, &delta);
+        PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
         float length = fn_802270A4(&delta) * 0.5f;
         unsigned char command[4];
         fn_801C1F94(command, 0, 4);
         command[0] = 20; command[1] = pCommand[0]; command[2] = pCommand[1];
-        int angle = fn_8012CB50(command);
+        int angle = PlayerCutGetMessageTurn(command);
         if (pCommand[1] != 7) {
             fn_80227538(&delta, fn_801784C4() ? 0xc00000 : 0x400000, length);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            fn_8003F6F0(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mUnknown20, pPoint);
         }
         fn_80227538(&delta, angle + (fn_801784C4() ? 0xc00000 : 0x400000), length);
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-        fn_8003F6F0(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mUnknown20, pPoint);
         break;
     }
     case 8:
         if (pCommand[0] == 2) fn_80227538(&delta, fn_801784C4() ? 0x200000 : 0xa00000, 1.5f);
         else fn_80227538(&delta, fn_801784C4() ? 0x600000 : 0xe00000, 1.5f);
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-        fn_8003F6F0(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mUnknown20, pPoint);
         break;
     case 9:
         if (pCommand[0] == 2) {
             fn_80227538(&delta, fn_801784C4() ? 0 : 0x800000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            fn_8003F6F0(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mUnknown20, pPoint);
             fn_80227538(&delta, fn_801784C4() ? 0xa00000 : 0x200000, 1.5f);
         } else {
             fn_80227538(&delta, fn_801784C4() ? 0x800000 : 0, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-            fn_8003F6F0(p->mUnknown20, pPoint);
+            ArrowAddPoint(p->mUnknown20, pPoint);
             fn_80227538(&delta, fn_801784C4() ? 0xe00000 : 0x600000, 1.5f);
         }
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
-        fn_8003F6F0(p->mUnknown20, pPoint);
+        ArrowAddPoint(p->mUnknown20, pPoint);
         break;
     }
 }
@@ -436,57 +446,57 @@ void fn_8015B834(Object_8015C244 *p, unsigned char *pCommand, int hasOther)
     int style = 4;
     switch (pCommand[0]) {
     case 1: case 2: case 3: case 4: case 6: case 27: case 68: case 91:
-        if (hasOther) fn_8003F6C8(p->mUnknown20, 250, 250, 250);
-        else fn_8003F6C8(p->mUnknown20, 224, 141, 18);
+        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
+        else ArrowSetColor(p->mUnknown20, 224, 141, 18);
         style = 0; break;
     case 90:
-        if (hasOther) fn_8003F6C8(p->mUnknown20, 250, 250, 250);
-        else fn_8003F6C8(p->mUnknown20, 250, 250, 250);
+        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
+        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
         style = 0; break;
     case 18: case 25: case 26:
-        fn_8003F6C8(p->mUnknown20, 250, 250, 250);
+        ArrowSetColor(p->mUnknown20, 250, 250, 250);
         style = 0; break;
     case 19: case 20: case 21:
-        if (hasOther) fn_8003F6C8(p->mUnknown20, 250, 250, 250);
-        else fn_8003F6C8(p->mUnknown20, 250, 250, 250);
+        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
+        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
         style = 0; break;
     case 31: case 33: case 47: case 72:
-        if (hasOther) fn_8003F6C8(p->mUnknown20, 250, 250, 250);
-        else fn_8003F6C8(p->mUnknown20, 250, 250, 250);
+        if (hasOther) ArrowSetColor(p->mUnknown20, 250, 250, 250);
+        else ArrowSetColor(p->mUnknown20, 250, 250, 250);
         style = 1; break;
     case 30:
-        fn_8003F6C8(p->mUnknown20, 224, 141, 18);
+        ArrowSetColor(p->mUnknown20, 224, 141, 18);
         style = 0; break;
     case 40: case 92: {
-        fn_8003F6C8(p->mUnknown20, 224, 141, 18);
+        ArrowSetColor(p->mUnknown20, 224, 141, 18);
         int index = pCommand[1];
         if (pCommand[0] == 92) index += 14;
         int origin = pCommand[0] == 92 ? 14 : 0;
         switch (index - origin) {
-        case 0: fn_8003F754(p->mUnknown20, 2, 0, 8.0f, fn_80178A08()); break;
-        case 1: case 2: fn_8003F754(p->mUnknown20, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
-        case 3: case 4: case 5: fn_8003F754(p->mUnknown20, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
-        case 6: case 7: case 8: case 9: fn_8003F754(p->mUnknown20, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
+        case 0: ArrowSetEnd(p->mUnknown20, 2, 0, 8.0f, fn_80178A08()); break;
+        case 1: case 2: ArrowSetEnd(p->mUnknown20, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
+        case 3: case 4: case 5: ArrowSetEnd(p->mUnknown20, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
+        case 6: case 7: case 8: case 9: ArrowSetEnd(p->mUnknown20, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
         }
         return;
     }
-    case 22: fn_8003F6C8(p->mUnknown20, 250, 250, 250); break;
-    case 85: fn_8003F6C8(p->mUnknown20, 224, 141, 18); break;
+    case 22: ArrowSetColor(p->mUnknown20, 250, 250, 250); break;
+    case 85: ArrowSetColor(p->mUnknown20, 224, 141, 18); break;
     case 52: return;
     }
-    fn_8003F754(p->mUnknown20, style, 0, length, length);
+    ArrowSetEnd(p->mUnknown20, style, 0, length, length);
 }
 
 void fn_8015BCAC(Object_8015C244 *p)
 {
     Object_80039F5C *pPlayer = p->mpUnknown208;
-    fn_8003F744(p->mUnknown20);
+    ArrowReset(p->mUnknown20);
     Vector_80039F5C point;
     point.mX = p->mUnknown68;
     point.mY = p->mUnknown72;
     point.mZ = 0.0f;
     if (fn_801784C4()) { point.mY = -point.mY; point.mX = -point.mX; }
-    fn_8003F6F0(p->mUnknown20, &point);
+    ArrowAddPoint(p->mUnknown20, &point);
     unsigned char *pCommand = p->mpUnknown76;
     int hasOther = fn_8011E9D8(pCommand);
     unsigned char command[4];
@@ -502,16 +512,16 @@ void fn_8015BCAC(Object_8015C244 *p)
         } else more = 0;
     } while (more);
     fn_8015B834(p, command, hasOther);
-    Record_80067338 *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (fn_801650DC(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
             if (pPlayer->mIdBytes[1] == pRecord->mUnknown1C[i][0]) {
                 unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
                 if (index == 0xffff && fn_800F06F4(0, p->mpUnknown76, 21, 0xffff) == index) continue;
                 switch (i) {
-                case 0: fn_8003F6C8(p->mUnknown20, 205, 8, 16); break;
-                case 1: fn_8003F6C8(p->mUnknown20, 0, 169, 95); break;
-                case 2: fn_8003F6C8(p->mUnknown20, 160, 160, 160); break;
+                case 0: ArrowSetColor(p->mUnknown20, 205, 8, 16); break;
+                case 1: ArrowSetColor(p->mUnknown20, 0, 169, 95); break;
+                case 2: ArrowSetColor(p->mUnknown20, 160, 160, 160); break;
                 }
             }
         }
@@ -534,10 +544,10 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
         if (code == 255) code = 253;
     } else code = pCommand[1];
     switch (code) {
-    case 253: return 2;
     case 254: return 85;
-    default: return 22;
+    case 253: return 2;
     }
+    return 22;
 }
 
 void fn_8015BFAC(void)
@@ -604,7 +614,7 @@ Object_8015C244 *fn_8015C170(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
             lbl_8031C02C[i]->mUnknown81 = flag;
             lbl_8031C02C[i]->mUnknown84 = 10;
             lbl_8031C02C[i]->mpUnknown208 = pPlayer;
-            __builtin_memcpy(&lbl_8031C02C[i]->mUnknown68, pPoint, sizeof(*pPoint));
+            *(Point_8017886C *)&lbl_8031C02C[i]->mUnknown68 = *pPoint;
             lbl_8031C02C[i]->mpUnknown76 = pCommands;
             p = lbl_8031C02C[i];
             break;

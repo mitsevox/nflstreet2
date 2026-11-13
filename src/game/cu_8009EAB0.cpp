@@ -37,7 +37,7 @@ extern "C" unsigned char fn_8009EAB0(Object_80039F5C *p, unsigned int index)
     pState->mUnknown1A3 = 0;
     pState->mUnknown1A4 = 0;
     for (i = 0; i < pState->mUnknown198; i++) {
-        Object_80039F5C *pPlayer = fn_80039F5C(team, pState->mUnknown199[i]);
+        Object_80039F5C *pPlayer = PlyrGet(team, pState->mUnknown199[i]);
 
         if (pPlayer->mpState->mId != 31 && pPlayer->mpState->mId != 32 && pState->mUnknown19C[i] != 0) {
             Point_8017886C at;

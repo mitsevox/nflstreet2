@@ -2,7 +2,7 @@
 #include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800F06F4.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/fn_80218FC4.h"
 #include <string.h>
 
@@ -33,7 +33,7 @@ int fn_80178348(void);
 void fn_80178370(void);
 int fn_801783AC(int bit);
 void fn_801790D0(int team, float a, float b);
-void fn_80157514(void);
+void TutorialReleasePause(void);
 int MsgBoxIsClosed(void);
 int fn_800C1E40(void);
 void fn_801486A8(void);
@@ -45,7 +45,7 @@ int fn_800A937C(void);
 int fn_800A8444(int team);
 int fn_800A8EA4(int team);
 int fn_8014BC90(void);
-int fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(PostPlayPhase *p);
 
 void fn_800BC5DC(void *p);
 void fn_800BCB18(void *p, float dt);
@@ -316,7 +316,7 @@ void fn_8014C308(State_802A23A8 *p, float dt)
     if (fn_800A937C() == 0) {
         unsigned char i;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(fn_80178308(), i);
+            Object_80039F5C *pPlayer = PlyrGet(fn_80178308(), i);
             if (fn_800F06F4(0, pPlayer->mpState, 18, 0xFFFF) != 0xFFFF) {
                 clear = 0;
             }
@@ -364,7 +364,7 @@ void fn_8014C528(void *p)
     fn_8009D964(5, 5);
     lbl_803EB2D0 = 1;
     lbl_803EB2D1 = 0;
-    fn_80157514();
+    TutorialReleasePause();
 }
 
 void fn_8014C5AC(void *p, float dt)

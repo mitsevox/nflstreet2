@@ -66,7 +66,7 @@ int GearIsLocked(int key)
 void GearLockClearNew(DbCursor *pObject, int id)
 {
     if (DbCursorFindInt(pObject, 0x594B5047, id, 0, 0)) {
-        fn_8007ABA4(pObject, 0x574E5247, 0);
+        DbCursorSetInt(pObject, 0x574E5247, 0);
     }
 }
 
@@ -125,8 +125,8 @@ void GearUnlock(int key)
 
     GearLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
     if (DbCursorFindInt(&cursor, 0x594B5047, key, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x4B434C47, 0);
-        fn_8007ABA4(&cursor, 0x574E5247, 1);
+        DbCursorSetInt(&cursor, 0x4B434C47, 0);
+        DbCursorSetInt(&cursor, 0x574E5247, 1);
     }
     GearLockClose(&cursor);
 }
@@ -137,8 +137,8 @@ void GearLock(int key)
 
     GearLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
     if (DbCursorFindInt(&cursor, 0x594B5047, key, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x4B434C47, 1);
-        fn_8007ABA4(&cursor, 0x574E5247, 0);
+        DbCursorSetInt(&cursor, 0x4B434C47, 1);
+        DbCursorSetInt(&cursor, 0x574E5247, 0);
     }
     GearLockClose(&cursor);
 }
@@ -150,8 +150,8 @@ void GearUnlockAll(signed char db)
     GearLockOpen(&cursor, db);
     if (DbCursorFirst(&cursor)) {
         do {
-            fn_8007ABA4(&cursor, 0x4B434C47, 0);
-            fn_8007ABA4(&cursor, 0x574E5247, 1);
+            DbCursorSetInt(&cursor, 0x4B434C47, 0);
+            DbCursorSetInt(&cursor, 0x574E5247, 1);
         } while (DbCursorNext(&cursor));
     }
     GearLockClose(&cursor);
@@ -164,8 +164,8 @@ void GearLockAll(signed char db)
     GearLockOpen(&cursor, db);
     if (DbCursorFirst(&cursor)) {
         do {
-            fn_8007ABA4(&cursor, 0x4B434C47, 1);
-            fn_8007ABA4(&cursor, 0x574E5247, 0);
+            DbCursorSetInt(&cursor, 0x4B434C47, 1);
+            DbCursorSetInt(&cursor, 0x574E5247, 0);
         } while (DbCursorNext(&cursor));
     }
     GearLockClose(&cursor);

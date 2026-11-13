@@ -1,8 +1,8 @@
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 
-class Class_802A23E0 : public Class_80297CE8 {
+class Class_802A23E0 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
     virtual ~Class_802A23E0();
 };
 

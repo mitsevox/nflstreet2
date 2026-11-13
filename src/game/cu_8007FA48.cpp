@@ -1,7 +1,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Record_80082B18.h"
-#include "game/Query_8007F19C.h"
+#include "game/DbQuery.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -21,7 +21,7 @@ void fn_80082D30(Record_80082B18 *);
 void fn_80082E48(Record_80082B18 *);
 void fn_80083070(Record_80082B18 *);
 void fn_8008318C(int, Record_80082B18 *, int, int);
-void fn_800731D0(int);
+void SndgMusicPumpFrame(int);
 }
 
 /* These fast cursors are also accessed by the selector, fetch and close
@@ -90,13 +90,13 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
     record.mUnknown14 = value;
     record.mUnknown10 = value;
     fn_80082C64(&record);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_80082D30(&record);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_80082E48(&record);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_80083070(&record);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     if (reset) {
         record.mUnknown10C = 0x41;
         record.mUnknown118 = 2;
@@ -131,9 +131,9 @@ extern "C" int fn_8007FC70(int source, int value, int reset, int start)
         record.mUnknown98 = 0;
         record.mUnknown9C = 0;
     }
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8008318C(0x59414C50, &record, source, 0x1AD);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     return record.mUnknown00;
 }
 
@@ -172,9 +172,9 @@ extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int val
 }
 extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *columns)
 {
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
-    Expression_8007F19C node;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbExpression node;
     tables[0].Set(table, 2, &node);
     tables[1].Set(-1);
     node.Set((static_cast<unsigned long long>(static_cast<unsigned int>(table)) << 32) | 0x44494750, 0x10003, value);
@@ -202,8 +202,8 @@ extern "C" void fn_80080138(int selector, int index, int mode)
         from = 0x59414C50;
         to = 0x52475250;
     }
-    Table_8007F19C tables[2];
-    Expression_8007F19C node;
+    DbTableRef tables[2];
+    DbExpression node;
     DbColumnValue columns[24];
     for (int i = 0; i < 22; ++i) columns[i].Set(from, lbl_802D68D0[i], 0);
     columns[22].Set(from, 0x44494750, 0);

@@ -81,32 +81,32 @@ int DbTableCursor::GetColumnInt(int column)
 
 float DbTableCursor::GetColumnFloat(int column)
 {
-    return fn_8007A9E4(&mObject, column);
+    return DbCursorGetFloat(&mObject, column);
 }
 
 void DbTableCursor::GetColumnString(int a, int b, int c)
 {
-    fn_8007AA3C(&mObject, a, b, c);
+    DbCursorGetString(&mObject, a, b, c);
 }
 
 void DbTableCursor::SetColumnValue(int column, int value)
 {
-    fn_8007AA90(&mObject, column, value);
+    DbCursorSetValue(&mObject, column, value);
 }
 
 void DbTableCursor::SetColumnInt(int column, int value)
 {
-    fn_8007ABA4(&mObject, column, value);
+    DbCursorSetInt(&mObject, column, value);
 }
 
 void DbTableCursor::SetColumnFloat(int column, float value)
 {
-    fn_8007ACB8(&mObject, column, value);
+    DbCursorSetFloat(&mObject, column, value);
 }
 
 void DbTableCursor::SetColumnString(int column, char *pText, int length)
 {
-    fn_8007ADD4(&mObject, column, pText, length);
+    DbCursorSetString(&mObject, column, pText, length);
 }
 
 void FchrCursor::OpenFchrTable()

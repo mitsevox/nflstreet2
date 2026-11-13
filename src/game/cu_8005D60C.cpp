@@ -10,8 +10,7 @@
 #include "game/StevTable.h"
 #include "game/FELoop.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 
 /* Index returned by fn_8022F384 and values read for it by fn_8005D6EC. */
@@ -29,7 +28,7 @@ struct State_802D4D40 {
     int mUnknown20;
 };
 
-/* Values returned by fn_8007F828 and restored through fn_8007F6F8. */
+/* Values returned by GameOptionsGet and restored through GameOptionsSet. */
 struct Saved_802D4D64 {
     int mValue0;
     int mValue1;
@@ -74,19 +73,19 @@ int fn_8000FCCC(void);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
 void fn_80015D28(int a);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
-void fn_8001B828(void);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
+void MsgTeamPickRequestTeamSave(void);
 void fn_80010150(int a);
-void fn_800731D0(int a);
-Object_80039F5C *fn_8003AD2C(int id);
+void SndgMusicPumpFrame(int a);
+Object_80039F5C *PlyrFindByPoid(int id);
 int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
 unsigned char fn_8007B090(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
 void EnvGetUIName(char *pDest, int count);
 void fn_8007B14C(int pad, int id);
-void fn_80073210(int frames);
+void SndgMusicWaitForStart(int frames);
 void GameInfoSet(int index, int value);
 int GameInfoGet(int index);
 int PlayerDbGetPrty(Object_8008044C *pObject);
@@ -228,7 +227,7 @@ void fn_8005D660(void)
     ExpLevelOpen();
     lbl_802D4D40.mUnknown2 = 0x7FFF;
     lbl_803EA5D0 = &lbl_8030A110;
-    fn_800731D0(1);
+    SndgMusicPumpFrame(1);
     UserStatsOpen(lbl_803EA5D0, lbl_802D4D40.mIndex);
 }
 
@@ -268,12 +267,12 @@ int fn_8005D804(int index)
 
 void fn_8005D818(void)
 {
-    fn_800731D0(1);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(1);
+    SndgMusicPumpFrame(0);
     fn_8018C48C(0x54415453);
-    fn_800731D0(1);
+    SndgMusicPumpFrame(1);
     fn_8018C48C(0x454D4147);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
 }
 
 int fn_8005D86C(void)
@@ -283,7 +282,7 @@ int fn_8005D86C(void)
     int i;
 
     for (i = 0; i <= 11; i++) {
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         int done = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, i);
         lbl_8030A2AC.mDone[i] = done;
         if (complete && !done) {
@@ -327,10 +326,10 @@ void fn_8005D990(int *pTotal)
 void fn_8005DA10(void)
 {
     if (lbl_802D4D64.mSaved) {
-        fn_8007F6F8(14, lbl_802D4D64.mValue14);
-        fn_8007F6F8(1, lbl_802D4D64.mValue1);
+        GameOptionsSet(14, lbl_802D4D64.mValue14);
+        GameOptionsSet(1, lbl_802D4D64.mValue1);
         if (lbl_802D4D64.mValue0 > -1) {
-            fn_8007F6F8(0, lbl_802D4D64.mValue0);
+            GameOptionsSet(0, lbl_802D4D64.mValue0);
         }
         lbl_802D4D64.mSaved = 0;
     }
@@ -340,18 +339,18 @@ void fn_8005DA7C(int value14, int value1)
 {
     if (!lbl_802D4D64.mSaved) {
         lbl_802D4D64.mSaved = 1;
-        lbl_802D4D64.mValue14 = fn_8007F828(14);
-        lbl_802D4D64.mValue1 = fn_8007F828(1);
+        lbl_802D4D64.mValue14 = GameOptionsGet(14);
+        lbl_802D4D64.mValue1 = GameOptionsGet(1);
         if (lbl_802D4D40.mUnknown1 > -1) {
-            lbl_802D4D64.mValue0 = fn_8007F828(0);
+            lbl_802D4D64.mValue0 = GameOptionsGet(0);
         } else {
             lbl_802D4D64.mValue0 = lbl_802D4D40.mUnknown1;
         }
     }
-    fn_8007F6F8(14, value14);
-    fn_8007F6F8(1, value1);
+    GameOptionsSet(14, value14);
+    GameOptionsSet(1, value1);
     if (lbl_802D4D40.mUnknown1 > -1) {
-        fn_8007F6F8(0, lbl_802D4D40.mUnknown1);
+        GameOptionsSet(0, lbl_802D4D40.mUnknown1);
     }
 }
 
@@ -500,8 +499,8 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
     if (count > 0) {
         for (i = 0; i < count; i++) {
             if (PlayerDbSeekId(lbl_803EA5CC, ids[i], 0)) {
-                fn_8007ABA4(lbl_803EA5CC, 0x44494F50, ids[i]);
-                fn_8007ABA4(lbl_803EA5CC, 0x44494754, *pTeam);
+                DbCursorSetInt(lbl_803EA5CC, 0x44494F50, ids[i]);
+                DbCursorSetInt(lbl_803EA5CC, 0x44494754, *pTeam);
             }
         }
         int counts[7] = {1, 1, 1, 1, 1, 1, 1};
@@ -590,12 +589,12 @@ void fn_8005E4A8(void)
     fn_80186F30(lbl_802D4D40.mIndex, 1);
     GameInfoSet(2, 1);
     fn_8005DA7C(0, lbl_803EA5C8->mPes[1] >= 0 ? lbl_803EA5C8->mPes[1] : 2);
-    fn_80073210(90);
+    SndgMusicWaitForStart(90);
     int ites = lbl_803EA5C8->mItes;
     switch (ites) {
     case 0:
-        fn_8001B260(0, 0);
-        fn_8001B330(4);
+        MsgTeamPickSetMode(0, 0);
+        MsgTeamPickSetSources(4);
         lbl_8030A1A0.mAway = 0;
         lbl_8030A1A0.mUnknown8 = 0;
         lbl_8030A1A0.mHome = 1;
@@ -695,7 +694,7 @@ int fn_8005E728(void)
 
 void fn_8005E798(void)
 {
-    int value = fn_8007F828(0);
+    int value = GameOptionsGet(0);
 
     StorySetLkss(lbl_802D4D40.mIndex, value);
     lbl_802D4D40.mUnknown1 = value;
@@ -1083,7 +1082,7 @@ void fn_8005F324(int id)
     case 603:
         fn_80061AE8();
     case 109:
-        fn_8001B828();
+        MsgTeamPickRequestTeamSave();
         break;
     }
 }
@@ -1172,7 +1171,7 @@ void fn_8005F664(char *pName, int size)
     StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
         DbCursorSeek(&cursor, 0);
-        fn_8007AA3C(&cursor, 0x414E4454, (int)pName, last);
+        DbCursorGetString(&cursor, 0x414E4454, (int)pName, last);
     }
     StoryTeamCursorClose(&cursor);
 }
@@ -1761,7 +1760,7 @@ Object_80039F5C *fn_800606CC(int type, int position)
         break;
     }
     if (pList) {
-        pObject = fn_8003AD2C(id);
+        pObject = PlyrFindByPoid(id);
     }
     if (pObject) {
         pResult = pObject;

@@ -5,8 +5,7 @@
 #include "game/StevTable.h"
 #include "game/fn_80061AD4.h"
 #include "game/StoryTeam.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 #include "game/FELoop.h"
 
@@ -51,8 +50,8 @@ int fn_8000FCDC(void);
 void fn_80010150(int a);
 void fn_80011600(int a, int b, int c);
 void fn_80015D28(int a);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
 void fn_8005BE54(unsigned char value);
 int fn_80060354(StevRow_t *pRow, int *pList);
 void fn_80060410(int index, int *pList);
@@ -138,7 +137,7 @@ void fn_80060948(int id, char *pName, int size)
     if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
         fn_801C2EF0(pName, "NFL Draft Team", size);
     } else {
-        fn_8007AA3C(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
+        DbCursorGetString(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
         name[17] = 0;
         fn_801C2EF0(pName, name, size);
     }
@@ -401,10 +400,10 @@ void fn_80061088(int *pDit1, int *pDit2, int *pLvlt)
 void fn_80061154(void)
 {
     if (lbl_802D4E28.mSaved) {
-        fn_8007F6F8(14, lbl_802D4E28.mValue14);
-        fn_8007F6F8(1, lbl_802D4E28.mValue1);
+        GameOptionsSet(14, lbl_802D4E28.mValue14);
+        GameOptionsSet(1, lbl_802D4E28.mValue1);
         if (lbl_802D4E28.mValue0 > -1) {
-            fn_8007F6F8(0, lbl_802D4E28.mValue0);
+            GameOptionsSet(0, lbl_802D4E28.mValue0);
         }
         lbl_802D4E28.mSaved = 0;
     }
@@ -414,18 +413,18 @@ void fn_800611C0(int value14, int value1)
 {
     if (!lbl_802D4E28.mSaved) {
         lbl_802D4E28.mSaved = 1;
-        lbl_802D4E28.mValue14 = fn_8007F828(14);
-        lbl_802D4E28.mValue1 = fn_8007F828(1);
+        lbl_802D4E28.mValue14 = GameOptionsGet(14);
+        lbl_802D4E28.mValue1 = GameOptionsGet(1);
         if (lbl_803EA5F8.mUnknown1 > -1) {
-            lbl_802D4E28.mValue0 = fn_8007F828(0);
+            lbl_802D4E28.mValue0 = GameOptionsGet(0);
         } else {
             lbl_802D4E28.mValue0 = lbl_803EA5F8.mUnknown1;
         }
     }
-    fn_8007F6F8(14, value14);
-    fn_8007F6F8(1, value1);
+    GameOptionsSet(14, value14);
+    GameOptionsSet(1, value1);
     if (lbl_803EA5F8.mUnknown1 > -1) {
-        fn_8007F6F8(0, lbl_803EA5F8.mUnknown1);
+        GameOptionsSet(0, lbl_803EA5F8.mUnknown1);
     }
 }
 
@@ -500,8 +499,8 @@ int fn_80061408(int digt)
 
     digt2 = StoryTeamLoadOneToStats(lbl_803EA5F8.mIndex, 1, &picks);
     if (PlayerDbSeekId(lbl_803EA5F0, picks.mUnknown0, 0)) {
-        fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
-        fn_8007ABA4(lbl_803EA5F0, 0x44494754, digt2);
+        DbCursorSetInt(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
+        DbCursorSetInt(lbl_803EA5F0, 0x44494754, digt2);
     }
     count = TournamentGetTeamPlayers(digt, list);
     for (i = 0; i < count && list[i] != picks.mUnknown0; i++) {
@@ -735,8 +734,8 @@ void fn_80061AE8(void)
     if (lbl_803EA5F8.mOpen == 0) {
         TournamentClose();
     }
-    fn_8001B260(2, 0);
-    fn_8001B330(1);
+    MsgTeamPickSetMode(2, 0);
+    MsgTeamPickSetSources(1);
 }
 
 void fn_80061B90(int team, int *pDigp)

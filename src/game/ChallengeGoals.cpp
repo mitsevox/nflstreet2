@@ -4,7 +4,7 @@
 #include "game/StyleTracker.h"
 #include "game/Challenge.h"
 #include "game/AudmonEvent.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
@@ -75,7 +75,7 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag)
                 result = 1;
             }
         } else if (result == 2) {
-            if (fn_8007F828(14) == 0 && value + 5 - limit < other) {
+            if (GameOptionsGet(14) == 0 && value + 5 - limit < other) {
                 result = 1;
             }
         }

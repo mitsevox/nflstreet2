@@ -147,9 +147,9 @@ void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011F1CC(void);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80156C78(int a, int b);
-Object_800670B4 *PlayBookGetFormation(int team);
+void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
+void TutorialSetMoveDone(int a, int b);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
@@ -368,8 +368,8 @@ extern "C" int fn_8010FC40(Object_80039F5C *p)
     }
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-        fn_80143E14(p, pOther);
-        fn_80143E14(pOther, p);
+        PlyrCollideAddExempt(p, pOther);
+        PlyrCollideAddExempt(pOther, p);
     }
     return 0;
 }
@@ -388,8 +388,8 @@ extern "C" int fn_8010FD94(Object_80039F5C *p)
     pTimer->mUnknown8 = 0;
     if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 7) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-        fn_80143E14(p, pOther);
-        fn_80143E14(pOther, p);
+        PlyrCollideAddExempt(p, pOther);
+        PlyrCollideAddExempt(pOther, p);
     }
     return 0;
 }
@@ -469,7 +469,7 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     if (PlayerMoveGetKind(p)) {
         p->mUnknown1008.mUnknown2 = 1;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 188, 1.0f, p);
-        fn_80156C78(8, 1);
+        TutorialSetMoveDone(8, 1);
     } else {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 154, 1.0f, p);
     }

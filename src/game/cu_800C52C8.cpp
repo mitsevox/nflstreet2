@@ -5,7 +5,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/LevelWallInfo.h"
 #include "game/LevelData.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
@@ -16,14 +16,14 @@
 #include "engine/vptmanager.h"
 #include "game/GameCamera.h"
 #include "game/Class_80148A58.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Entry_800B206C.h"
 #include "game/Entry_80219044.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/QuarterEndPhase.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
@@ -47,14 +47,14 @@
 #include "game/Record_8011F518.h"
 #include "game/Ball.h"
 #include "game/cu_8008E978.h"
-#include "game/fn_8007F828.h"
-#include "game/fn_800670B4.h"
+#include "game/GameOptions.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
@@ -117,7 +117,7 @@ int fn_800CF090(Object_80039F5C *p);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800EC640(Object_80039F5C *p);
+int LooseBallIsIdleOrKind2(Object_80039F5C *p);
 int fn_801045BC(Object_80039F5C *p);
 int fn_80104610(Object_80039F5C *p);
 int fn_8010CE2C(Object_80039F5C *p);
@@ -129,7 +129,7 @@ int fn_8011E9B4(Object_80039F5C *p);
 int fn_8011F1CC(void);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
 int fn_801486A0(void);
-void fn_80156C78(int id, int value);
+void TutorialSetMoveDone(int id, int value);
 float fn_8016B938(void);
 float fn_8016B974(void);
 void fn_8016F6F4(Object_80039F5C *p, int *pValue);
@@ -406,7 +406,7 @@ extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
             result = (p->mFlags & 0x80000) != 0;
             break;
         case 57:
-            result = fn_800EC640(p);
+            result = LooseBallIsIdleOrKind2(p);
             break;
         case 26:
             if (value == 7 || value == 24) {
@@ -860,7 +860,7 @@ extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
     unsigned int count = fn_80178D18(p->mIdBytes[2] ^ 1);
 
     for (; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, i);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, i);
         float distance = fn_80227890(&pOther->mMotion.mPos, &p->mMotion.mPos);
 
         if (distance < 16.0f && distance < bestDistance && fn_800C73E0(p, pOther)) {
@@ -1003,7 +1003,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         }
     }
     if (result && p->mUnknown8 != 255 && fn_800CD35C(1, p)) {
-        fn_80156C78(23, 1);
+        TutorialSetMoveDone(23, 1);
     }
 }
 
@@ -1106,7 +1106,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                 fn_800A3B58(p, 1, 0);
             }
             if (pOther->mUnknown8 != 255 && fn_800F06F4(0, pOther->mpState, 12, 0xFFFF) != 0xFFFF) {
-                fn_80156C78(23, 1);
+                TutorialSetMoveDone(23, 1);
             }
         }
     } else {
@@ -1217,7 +1217,7 @@ extern "C" void fn_800C845C(void)
         unsigned int count = fn_80178D18(team);
 
         for (; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
 
             if (fn_80227890(&p->mMotion.mPos, &pCarrier->mMotion.mPos) < 16.0f && fn_800C6738(p, pCarrier)
                 && fn_800C5DE4(p, pCarrier) && found < 7) {
@@ -1251,7 +1251,7 @@ extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char
             kind = 175;
             break;
         }
-        pOther = fn_80039F5C((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
+        pOther = PlyrGet((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
         if (pOther->mpState->mId == 17) {
             fn_800CE770(&query);
             query.mpUnknown0 = p;

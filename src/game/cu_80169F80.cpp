@@ -2,7 +2,7 @@
 #include "game/Candidate_8016B364.h"
 #include "game/Class_80148A58.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -21,8 +21,8 @@ int PlayBookGetDatabase(int team);
 int fn_80177F70(void);
 int fn_80178308(void);
 float fn_80178A5C(void);
-int fn_80187C6C(void);
-int fn_80187C8C(void);
+int GameTextGetAwayTeam(void);
+int GameTextGetHomeTeam(void);
 void *fn_8023816C(void);
 }
 
@@ -67,7 +67,7 @@ void fn_8016B32C(int team, unsigned char value);
 void fn_8016B348(int team, unsigned char value);
 void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
-void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags);
+void fn_8016B82C(int team, PlayBookPlay_t *pRecord, unsigned char *pOut, unsigned int *pFlags);
 float fn_8016B8C8(int team, int value);
 void fn_8016BAAC(void);
 }
@@ -363,7 +363,7 @@ void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count)
 void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
 {
     int opponent = team ^ 1;
-    Record_80067338 *pRecord = PlayBookGetPlay(opponent);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(opponent);
     unsigned char kind;
     unsigned char trend;
     unsigned int mask;
@@ -377,7 +377,7 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
     float result5Rate = fn_8016A334(opponent);
     float result6Rate = fn_8016A408(opponent);
 
-    int key = team == 0 ? fn_80187C8C() : fn_80187C6C();
+    int key = team == 0 ? GameTextGetHomeTeam() : GameTextGetAwayTeam();
     if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
         rating = 50;
     PlayBookGetDatabase(team);
@@ -439,8 +439,9 @@ void fn_8016ACD8(int team, Candidate_8016B364 *pList, unsigned int count, int mo
 unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
 {
     unsigned int result = 0;
+    float distance = fabsf(pTo->mX - from.mX);
 
-    if (fabsf(pTo->mX - from.mX) > 4.5f) {
+    if (distance > 4.5f) {
         if (pTo->mX > from.mX) {
             if (kind == 2)
                 result |= 0x200;
@@ -460,7 +461,7 @@ unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int
     }
 
     if (kind == 2) {
-        float distance = pTo->mY - from.mY;
+        distance = pTo->mY - from.mY;
         if (distance < 7.0f)
             result |= 0x10;
         else if (distance < 15.0f)
@@ -518,7 +519,7 @@ void fn_8016B0AC(void)
 void fn_8016B0B0(void)
 {
     int team = fn_80178308();
-    Record_80067338 *pRecord = PlayBookGetPlay(team);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
 
     lbl_803EB40C->mUnknown0 = fn_8016B8C8(team, pRecord->mUnknown4);
     lbl_803EB40C->mUnknown4 = fn_8016A334(team);

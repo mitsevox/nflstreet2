@@ -1,5 +1,5 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Ball.h"
 
 struct Entry_8015005C {
@@ -33,7 +33,7 @@ public:
     unsigned char mUnknown44[4];
 };
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
 extern "C" {

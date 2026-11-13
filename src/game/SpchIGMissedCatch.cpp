@@ -26,7 +26,7 @@ extern "C" void SpchIGSayMissedCatch(Vector_80039F5C *pOther)
     a = fn_80178308();
     count = fn_80178D18(a);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pObject = fn_80039F5C(a, i);
+        Object_80039F5C *pObject = PlyrGet(a, i);
         if (pObject->mFlags & 0x10000000) {
             position.mX = pObject->mMotion.mPos.mX;
             position.mY = pObject->mMotion.mPos.mY;

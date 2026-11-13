@@ -7,7 +7,7 @@
 #include "game/ResBank.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
@@ -40,14 +40,14 @@ double fabs(double);
 void BootHandleReset(void);
 int MainFEGroupIsFirstStart(void *p);
 void fn_8000FCD4(int a);
-void fn_80047670(int handle);
-void fn_80047698(void);
+void PlyrNameTagInit(int handle);
+void PlyrNameTagShutdown(void);
 void InGameStateReset(void);
 void InGameStateClearActive(void);
 void ScreenMsgDispatch(void);
 void SndgUpdate(int a);
-void fn_8013CF98(void);
-float fn_8013D050(void);
+void CamSetupAspect(void);
+float CamGetAspect(void);
 void BannerSetTickMs(unsigned int a);
 void BannerEnd(void);
 void GameEventFlagsInit(void);
@@ -71,8 +71,8 @@ void UISHeldObjSet(int a);
 unsigned char UISHeldObjEnable(unsigned char value);
 unsigned char UISHeldObjIsEnabled(void);
 void DbgScreenRenderCallback(Viewport_t *pObject);
-void fn_80196174(Viewport_t *pObject, int a);
-void fn_80196204(void);
+void ScreenTransInit(Viewport_t *pObject, int a);
+void ScreenTransShutdown(void);
 void PlyrIconQueueReset(void);
 void UISResListSetup(void);
 void *CamCreate(int a, int b);
@@ -459,7 +459,7 @@ void UISGameSetProjection(Viewport_t *pObject)
     float near = 0.1f;
     float far = 1500.0f;
 
-    VptSetPerspective(pObject, 45.0f, fn_8013D050(), near, far);
+    VptSetPerspective(pObject, 45.0f, CamGetAspect(), near, far);
 }
 
 void UISGameObjSlot7(void) {}
@@ -475,7 +475,7 @@ void UISGameCreateMain(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -498,7 +498,7 @@ void UISGameCreateMain(void)
     VptSetObjectList(_UISGame_pMainVpt, _UISGame_pMainObjList, 0);
     _UISGame_pMainObj = ObjNewInList(_UISGame_pMainObjList, 21, 0, 0);
     if (!FELoopIsMainFEActive()) {
-        fn_80196174(_UISGame_pMainVpt, 0);
+        ScreenTransInit(_UISGame_pMainVpt, 0);
     }
     gUISMainInfo = fn_801D2B7C(fn_802188A0(12, 9, 160, 7, 640, 160), 0, 0);
     fn_802188D4(gUISMainInfo, 12, 9, 160, 7, 640, 160, (unsigned int)(gFrameTimeScale * 16.666668f));
@@ -517,7 +517,7 @@ void UISGameCreateSub(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -551,7 +551,7 @@ void UISGameCreateSub2(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -611,7 +611,7 @@ void UISGameInit(void)
     }
     _UISGame_pCache = ResBankCreate(&desc);
     if (!FELoopIsMainFEActive()) {
-        fn_8013CF98();
+        CamSetupAspect();
     }
     UISGameCreateSub();
     if (FELoopIsMainFEActive()) {
@@ -641,7 +641,7 @@ void UISGameInit(void)
         UISHeldObjEnable(1);
     } else if (InGameIsPlaying()) {
         GameModeTypeGet();
-        fn_80047670(_UISGame_pMainObjList);
+        PlyrNameTagInit(_UISGame_pMainObjList);
         BannerSetTickMs((unsigned int)(gFrameTimeScale * 16.666668f));
         UISHeldObjEnable(0);
         InGameStateReset();
@@ -673,7 +673,7 @@ void UISGameDestroyMain(void)
     fn_801D2BD0(gUISMainInfo);
     gUISMainInfo = 0;
     if (!FELoopIsMainFEActive()) {
-        fn_80196204();
+        ScreenTransShutdown();
     }
     VptRemoveCallback(_UISGame_pMainVpt, DbgScreenRenderCallback);
     ObjRemoveFromList(_UISGame_pMainObjList, _UISGame_pMainObj);
@@ -731,7 +731,7 @@ void UISGameShutdown(void)
             fn_802363E0(_UISGame_pMainVpt);
         }
     } else if (InGameIsPlaying()) {
-        fn_80047698();
+        PlyrNameTagShutdown();
         BannerEnd();
         InGameStateClearActive();
         GameEventFlagsShutdown();

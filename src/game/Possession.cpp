@@ -10,7 +10,7 @@
 #include "game/AudmonEvent.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/Point2.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
@@ -67,9 +67,9 @@ extern float gPlyrMoveFwdSpeed;
 
 double fabs(double);
 
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 unsigned char CheatFlagsIsSet(int index);
-void fn_80053A70(Object_80039F5C *p);
+void HotspotResolvePending(Object_80039F5C *p);
 void SndgSpchSetPlayFlags(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
 void fn_80071540(Object_80039F5C *p, void *pBall);
@@ -140,8 +140,8 @@ void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 int fn_801485D4(void);
 int fn_801486A0(void);
-int fn_80156704(void);
-void fn_80156C78(int a, int b);
+int TutorialIsActive(void);
+void TutorialSetMoveDone(int a, int b);
 float fn_8016FAB4(void);
 void DriveLogEndDrive(void);
 void DriveLogAddPlay(int a, short b, short c, int d, int e);
@@ -604,7 +604,7 @@ unsigned short PossApplyCoverage(Object_80039F5C *p, float *pChance)
     unsigned int n = fn_80178D18((p->mId >> 8 & 0xFF) ^ 1);
 
     for (; i < n && count <= 3; i++) {
-        Object_80039F5C *pOther = fn_80039F5C((p->mId >> 8 & 0xFF) ^ 1, i);
+        Object_80039F5C *pOther = PlyrGet((p->mId >> 8 & 0xFF) ^ 1, i);
 
         if (fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !fn_8011E9B4(pOther)) {
             short *pRatings = pOther->mRatings;
@@ -713,7 +713,7 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
     } else {
         chance = fn_800AC44C(p, chance);
     }
-    if (fn_800B65A0(p->mId >> 8 & 0xFF) != 0xFF && fn_80156704() && !fn_801485D4()) {
+    if (fn_800B65A0(p->mId >> 8 & 0xFF) != 0xFF && TutorialIsActive() && !fn_801485D4()) {
         chance = 1.0f;
     }
     chance = chance < 0.0f ? 0.0f : (chance > 1.0f ? 1.0f : chance);
@@ -1088,7 +1088,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
                     chance += 30;
                 }
                 if (pTackler->mFlags & 0x400) {
-                    fn_80156C78(0x29, 1);
+                    TutorialSetMoveDone(0x29, 1);
                 }
                 pBlock->mUnknown52 = 0;
             }
@@ -1337,8 +1337,8 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         int i;
         int count;
         for (i = 0, count = fn_80178D70(p->mId >> 8 & 0xFF); i < count; i++) {
-            Object_80039F5C *pMate = fn_80039F5C(p->mId >> 8 & 0xFF, i);
-            fn_8003AB08(pMate, 0);
+            Object_80039F5C *pMate = PlyrGet(p->mId >> 8 & 0xFF, i);
+            PlyrClearPendingMsg(pMate, 0);
             fn_801C1F94(&message, 0, 4);
             if (pMate == p) {
                 message.mId = 1;
@@ -1464,9 +1464,9 @@ void PossLogBallResult(Object_80039F5C *p)
             fn_800B1508();
             if (pRecord->mUnknown14 == 6) {
                 StyleTrackerAwardCatch(p);
-                fn_80156C78(0x2B, 1);
+                TutorialSetMoveDone(0x2B, 1);
             }
-            fn_80053A70(p);
+            HotspotResolvePending(p);
         }
     }
     if (done) {
@@ -2303,7 +2303,7 @@ void DriveLogSetHold(int value)
 int DriveLogGetPlayerNum(int id)
 {
     if (id != 0 && (id & 0xFF) == 1) {
-        return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+        return PlyrGet(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
     }
     return 0xFFFF;
 }

@@ -8,14 +8,14 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayAlign.h"
 
 extern "C" {
-void PlayAlignTeamBegin(Object_800670B4 *pObject, int team);
+void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team);
 void PlayAlignResetSetNames(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_8016DF34(Object_80039F5C *p);
 void fn_800E55B8(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -23,8 +23,8 @@ void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FF6D8(Object_80039F5C *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
-void fn_8003977C(int team);
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrMgrClearTeamFlag(int team);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
@@ -39,7 +39,7 @@ static const char *_PlayAlign_apSetNames[4];
 extern "C" const char *gPlayAlignNormSet[] = { "Norm", 0 };
 
 extern "C" {
-void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
+void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
 {
     Message_800F01CC msg;
     Point_8017886C delta;
@@ -82,11 +82,11 @@ void PlayAlignPlayer(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
     }
 }
 
-void PlayAlignTeamBegin(Object_800670B4 *pObject, int team)
+void PlayAlignTeamBegin(PlayBookFormation_t *pObject, int team)
 {
 }
 
-void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
+void PlayAlignTeam(PlayBookFormation_t *pObject, int team, const char **ppNames)
 {
     unsigned char i;
     unsigned int count;
@@ -96,15 +96,15 @@ void PlayAlignTeam(Object_800670B4 *pObject, int team, const char **ppNames)
         PlayAlignResetSetNames();
     }
     PlayAlignTeamBegin(pObject, team);
-    fn_8003977C(team);
+    PlyrMgrClearTeamFlag(team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, ppNames);
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, ppNames);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
         fn_800EFE60(0, p->mpState, p);
-        fn_8003AB08(p, 0);
+        PlyrClearPendingMsg(p, 0);
         if (p == BallGetCurrentHolder()) {
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 49;
@@ -127,14 +127,14 @@ void PlayRealignTeam(int team)
     unsigned char i;
     unsigned int count;
     int home = fn_80178320();
-    Object_800670B4 *pObject = PlayBookGetFormation(team);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
     PlayAlignTeamBegin(pObject, team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
         int update = 1;
-        Entry_8006719C *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         if (team != home) {
             if (fn_80177F70() != 0) {
@@ -168,7 +168,7 @@ void PlayAlignPostStartDelays(int team)
     unsigned int count = fn_80178D70(team);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         if (p->mQueue[0].mId != 0) {
             if (p->mQueue[0].mId == 7) {

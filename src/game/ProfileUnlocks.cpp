@@ -57,7 +57,7 @@ void LogoClearNew(int a)
 
     LogoLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
     if (DbCursorFindInt(&cursor, 0x4C474C54, a, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x574E5247, 0);
+        DbCursorSetInt(&cursor, 0x574E5247, 0);
     }
     LogoLockClose(&cursor);
 }
@@ -68,7 +68,7 @@ void LogoUnlock(int a)
 
     LogoLockOpen(&cursor, fn_8022F384(fn_8022F4BC()));
     if (DbCursorFindInt(&cursor, 0x4C474C54, a, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x4B4C474C, 0);
+        DbCursorSetInt(&cursor, 0x4B4C474C, 0);
     }
     LogoLockClose(&cursor);
 }
@@ -101,7 +101,7 @@ void PlaybookUnlockPlay(int index, int a)
 
     PlaybookOpen(&cursor, fn_8022F384(fn_8022F4BC()), index);
     if (DbCursorFindValue(&cursor, 0x44505355, a, 0, 0)) {
-        fn_8007AA90(&cursor, 0x58505355, PlaybookGetMaxOrder(&cursor) + 1);
+        DbCursorSetValue(&cursor, 0x58505355, PlaybookGetMaxOrder(&cursor) + 1);
     }
     PlaybookClose(&cursor);
 }
@@ -114,7 +114,7 @@ void PlaybookUnlockAll(signed char db, int index)
     if (DbCursorFirst(&cursor)) {
         do {
             if (DbCursorGetValue(&cursor, 0x58505355) == -1) {
-                fn_8007AA90(&cursor, 0x58505355, PlaybookGetMaxOrder(&cursor) + 1);
+                DbCursorSetValue(&cursor, 0x58505355, PlaybookGetMaxOrder(&cursor) + 1);
             }
         } while (DbCursorNext(&cursor));
     }
@@ -148,7 +148,7 @@ void PlaybookResetOrder(signed char db, int index)
             if (query.mUnknown0 && QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
                 status = fn_801FCE10(0, "fetch from \x8a\n", &query);
                 if (QUERY_STATUS_ACCEPTED(status) == 1 && status != 0x15) {
-                    fn_8007AA90(&cursor, 0x58505355, value);
+                    DbCursorSetValue(&cursor, 0x58505355, value);
                     row = DbCursorNext(&cursor);
                 } else {
                     fetched = 0;
@@ -190,7 +190,7 @@ void TeamUnlock(int db, int id)
 
     TeamLockOpen(&cursor, db);
     if (DbCursorFindInt(&cursor, 0x44494754, id, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x53495654, 1);
+        DbCursorSetInt(&cursor, 0x53495654, 1);
     }
     TeamLockClose(&cursor);
 }
@@ -201,7 +201,7 @@ void TeamLock(int db, int id)
 
     TeamLockOpen(&cursor, db);
     if (DbCursorFindInt(&cursor, 0x44494754, id, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x53495654, 0);
+        DbCursorSetInt(&cursor, 0x53495654, 0);
     }
     TeamLockClose(&cursor);
 }
@@ -213,7 +213,7 @@ void TeamUnlockAll(int db)
     TeamLockOpen(&cursor, db);
     if (DbCursorFirst(&cursor)) {
         do {
-            fn_8007ABA4(&cursor, 0x53495654, 1);
+            DbCursorSetInt(&cursor, 0x53495654, 1);
         } while (DbCursorNext(&cursor));
     }
     TeamLockClose(&cursor);
@@ -226,7 +226,7 @@ void TeamLockAll(int db)
     TeamLockOpen(&cursor, db);
     if (DbCursorFirst(&cursor)) {
         do {
-            fn_8007ABA4(&cursor, 0x53495654, 0);
+            DbCursorSetInt(&cursor, 0x53495654, 0);
         } while (DbCursorNext(&cursor));
     }
     TeamLockClose(&cursor);

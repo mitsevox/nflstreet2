@@ -46,7 +46,7 @@ struct MiniGameSlotInfo_t {
 
 extern "C" {
 Table_8015005C *fn_801530FC(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_801499A8(Class_80148A58 *p, int kind, int team, int index, Object_80039F5C *pPlayer);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 
@@ -58,7 +58,7 @@ void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo)
     pInfo->mUnknown8 = pEntry->mUnknown4;
     pInfo->mUnknown12 = pEntry->mUnknown14;
     pInfo->mUnknown16 = pEntry->mUnknown16;
-    pInfo->mpObject = fn_8003AC84(pEntry->mUnknown0);
+    pInfo->mpObject = PlyrFindById(pEntry->mUnknown0);
     pInfo->mUnknown20 = pEntry->mUnknown12;
     pInfo->mUnknown21 = index;
 }

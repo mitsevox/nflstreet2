@@ -27,7 +27,7 @@ void HairListFind(DbCursor *pObject, int id, int *pResult)
 
 void HairListGetName(DbCursor *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C(pObject, 0x4D4E5248, (int)pBuffer, size);
+    DbCursorGetString(pObject, 0x4D4E5248, (int)pBuffer, size);
 }
 
 int HairListGetId(DbCursor *pObject)

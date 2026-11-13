@@ -98,7 +98,7 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
     pBlock = (Block_800FAD2C *)fn_8011F4EC();
     n = fn_80178D18(p->mIdBytes[2]);
     for (i = 0; i <= 2; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, pBlock->mUnknown415[i]);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, pBlock->mUnknown415[i]);
 
         if (pOther->mUnknown1032 == 0 && fabsf(p->mMotion.mPos.mX - pOther->mMotion.mPos.mX) < 20.0f) {
             unsigned int count = 0;
@@ -106,7 +106,7 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
 
             for (j = 0; j < n; j++) {
                 int valid = 1;
-                Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], j);
+                Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], j);
                 int slot = fn_800F06F4(0, pMate->mpState, 22, 0xFFFF);
 
                 if (slot != 0xFFFF) {
@@ -116,7 +116,7 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
                         State_80039F5C *pState = &pOther->mpState[slot];
 
                         if (pState->mUnknown1 >= 1 && pState->mUnknown1 <= 5) {
-                            fn_80039F5C(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[pState->mUnknown1 - 1]);
+                            PlyrGet(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[pState->mUnknown1 - 1]);
                             fn_8009BD2C(pOther, &ref);
                         } else {
                             valid = 0;
@@ -148,14 +148,14 @@ extern "C" Object_80039F5C *fn_800F9688(Object_80039F5C *p) {
     int i;
 
     for (i = 0; i <= 2; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[i]);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[i]);
 
         if (pOther->mUnknown1032 == 0 && fabsf(p->mMotion.mPos.mX - pOther->mMotion.mPos.mX) < 10.0f) {
             int count = 0;
             int j;
 
             for (j = 0; j < n; j++) {
-                Object_80039F5C *pMate = fn_80039F5C(p->mIdBytes[2], j);
+                Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], j);
                 int index = fn_800F06F4(0, pMate->mpState, 22, 0xFFFF);
 
                 if (index != 0xFFFF && pMate->mpState[index].mUnknown1 == i + 1) {
@@ -184,7 +184,7 @@ extern "C" int fn_800F9CB4(void) {
 
     origin = fn_80177FE0();
     for (i = 0; i <= 2; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, pRecord->mUnknown8[i]);
+        Object_80039F5C *pOther = PlyrGet(team, pRecord->mUnknown8[i]);
         float x = pOther->mMotion.mPos.mX;
         unsigned char kind = pOther->mUnknown2914;
 
@@ -238,7 +238,7 @@ extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag) {
         int index = PlayBookGetReceiver(team, i, &valid);
 
         if (valid && index != 0xFF) {
-            Object_80039F5C *pTarget = fn_80039F5C(team, index);
+            Object_80039F5C *pTarget = PlyrGet(team, index);
             unsigned char kind = pTarget->mUnknown2914;
 
             if (((kind == 1 || kind == 2) && !flag) || kind == 4) {
@@ -246,7 +246,7 @@ extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag) {
                 unsigned char j;
 
                 for (j = 0; j < n; j++) {
-                    Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), j);
+                    Object_80039F5C *pOther = PlyrGet(fn_80178320(), j);
                     int slot = fn_800F06F4(0, pOther->mpState, 22, 0xFFFF);
 
                     if (slot != 0xFFFF && pOther->mpState[slot].mUnknown1 == fn_800FC0C4(pTarget)) {
@@ -302,7 +302,7 @@ extern "C" int fn_800FA0DC(Object_80039F5C *p) {
         return 1;
     }
     if (slot) {
-        pTarget = fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot - 1]);
+        pTarget = PlyrGet(fn_80178308(), pRecord->mUnknown8[slot - 1]);
         p->mpState->mUnknown1 = slot;
         if (pTarget->mUnknown2914 == 3 && p->mpState->mUnknown3[0] == 0) {
             float distance = fabsf(p->mMotion.mPos.mX - pTarget->mMotion.mPos.mX);

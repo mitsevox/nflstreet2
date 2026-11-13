@@ -222,10 +222,10 @@ void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLa
 float fn_8013AB64(Ball_t *pBall, float t);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_801410F4(int a);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
-void fn_80156C78(int a, int b);
+void TutorialSetMoveDone(int a, int b);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -234,7 +234,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pOther);
 void PossStartFumble(void);
 void PossGrabBall(Object_80039F5C *p);
 int PossCheckDownedBall(Object_80039F5C *p);
-int fn_80176B04(void);
+int PenaltyRollFacemask(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
@@ -759,10 +759,10 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     }
     p->mUnknown9[0] = 1;
     state->mUnknown21 = 0;
-    pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
+    pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
-    fn_80143E14(p, pOther);
+    PlyrCollideAddExempt(p, pOther);
     state->mUnknown4 = 255;
     state->mUnknown8 = 0.0f;
     state->mUnknown12 = 0;
@@ -815,7 +815,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
                 fn_800B2370(p, 5, pOther, 1.0f);
                 break;
             case 1:
-                if (fn_80176B04() != 0) {
+                if (PenaltyRollFacemask() != 0) {
                     if (fn_802372EC(0, 100) < 75) {
                         fn_800B2370(p, 4, pOther, 1.0f);
                     } else {
@@ -833,7 +833,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
         Message_800F01CC message;
 
         p->mFlags &= ~8;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown21 = 1;
         if ((unsigned int)state->mUnknown4 <= 10) {
             fn_801C1F94(&message, 0, sizeof(message));
@@ -850,7 +850,7 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
     if ((p->mFlags & 4) && state->mUnknown14 != 1 && state->mUnknown14 != 4) {
         p->mFlags &= ~0xC;
         p->mFlags &= ~0x800;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
@@ -873,10 +873,10 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     } else {
         state->mUnknown24 = 0;
     }
-    pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
+    pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
-    fn_80143E14(p, pOther);
+    PlyrCollideAddExempt(p, pOther);
     state->mUnknown4 = 0.0f;
     state->mUnknown20 = 255;
     state->mUnknown25 = 1;
@@ -979,7 +979,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 if (fn_801787A0() == 0) {
                     StyleTrackerAwardStrip(fn_80178308());
                     fn_800A8954(26, p->mIdBytes[2], p);
-                    fn_80156C78(40, 1);
+                    TutorialSetMoveDone(40, 1);
                 }
             } else {
                 PossFumble(p);
@@ -1124,7 +1124,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     }
     if (p->mUnknown9[0] != 1) {
         p->mFlags &= ~0x82008;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         state->mUnknown31 = 1;
         if (state->mUnknown20 <= 10) {
             fn_801C1F94(&message, 0, 4);
@@ -1141,7 +1141,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
         result = 1;
         p->mFlags &= ~0x0409280C;
-        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
@@ -1325,7 +1325,7 @@ extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsig
     part = 0.0f;
     count = fn_80178D18(p->mIdBytes[2]);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
         float distance;
 
         fn_80227690(&delta, &pOther->mMotion.mPos, &pTarget->mMotion.mPos);
@@ -1459,7 +1459,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
             int index = PlayBookGetReceiver(fn_80178308(), i, 0);
             if (index != 0xFF) {
                 numPlayers++;
-                Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), index);
+                Object_80039F5C *pOther = PlyrGet(fn_80178308(), index);
                 if (pOther->mMotion.mPos.mX > high) {
                     numAbove++;
                 } else if (pOther->mMotion.mPos.mX < low) {

@@ -7,10 +7,10 @@
 #include "game/Challenge.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 extern "C" {
-void fn_80004504(unsigned char id);
+void ChalGameStart(unsigned char id);
 void fn_8000FCD4(int a);
 void ChallengeSetMode(int value);
 void ChalCloseCursors(void);
@@ -121,7 +121,7 @@ void MsgChallengeGetEntryStatus(int index, MenuArg_t text, int *pA, int *pB)
         int kind;
 
         ChalFindRecord(pObject, id, 0);
-        ChalReadRecord(pObject, &record, fn_8007F828(0));
+        ChalReadRecord(pObject, &record, GameOptionsGet(0));
         kind = ChalGetProgress(record.mUnknown0, &a, &b);
         fn_801C3284(text.pParams->mpText, record.mUnknown1, text.pParams->mLength);
         switch (kind) {
@@ -165,7 +165,7 @@ int MsgChallengeGetEntryInfo(int index, int *pValue, MenuArg_t textA, int *pFlag
         ChalFindRecord(pObject, id, 0);
         kind = ChalGetProgress(id, &a, &b);
         if (kind != 2) {
-            b = fn_8007F828(0);
+            b = GameOptionsGet(0);
         }
         ChalReadRecord(pObject, &record, b);
         pInfo = &record.mUnknown20C;
@@ -227,7 +227,7 @@ void MsgChallengeStartEntry(int index, int a, int *pResult)
     _MsgChallenge_iEntry = index;
     id = ChalGetIdInGroup(_MsgChallenge_iGroup, index + 1);
     fn_8000FCD4(a);
-    fn_80004504(id);
+    ChalGameStart(id);
     *pResult = ChalHasReward(ChalGetCurrent(), 4) ? 105 : 107;
 }
 

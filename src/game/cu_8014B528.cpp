@@ -1,20 +1,19 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_8008044C.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 void *operator new(unsigned int size, int unknown);
 
-class Class_802A2788 : public Class_80297BF8 {
+class Class_802A2788 : public PreGamePhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
 };
 
 class Class_802A2748 : public Class_80297B50 {
@@ -22,19 +21,19 @@ public:
     virtual void vfn_04(float dt);
 };
 
-class Class_802A26D8 : public Class_80297CE8 {
+class Class_802A26D8 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
 };
 
-class Class_802A26A0 : public Class_80297AB8 {
+class Class_802A26A0 : public LivePlayPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnUpdate(float dt);
 };
 
-class Class_802A2618 : public Class_80297C60 {
+class Class_802A2618 : public PostPlayPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnUpdate(float dt);
 };
 
 class Class_802A24F8 : public Class_80297B90 {
@@ -42,9 +41,9 @@ public:
     virtual void vfn_06();
 };
 
-class Class_802A2560 : public Class_802A56E8 {
+class Class_802A2560 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
 struct States_802A2DB8 {
@@ -66,13 +65,13 @@ public:
 };
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800B3644(Class_80297B50 *pObject);
-void fn_800BFAB4(Class_80297CE8 *pObject);
-void fn_800A039C(Class_80297AB8 *pObject);
-void fn_800B9598(Class_80297C60 *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 void fn_8014ABE4(void *p, int team);
 unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
@@ -87,9 +86,9 @@ void fn_8014B528(Class_802A2DB8 *p)
     p->mUnknown4 = 12;
     p->mState.mUnknownC = 0;
     p->mpUnknown1C = new (0) States_802A2DB8;
-    p->mpUnknown1C->mUnknown1C = fn_8007F828(14);
+    p->mpUnknown1C->mUnknown1C = GameOptionsGet(14);
     if (p->mpUnknown1C->mUnknown1C != 0) {
-        fn_8007F6F8(14, 0);
+        GameOptionsSet(14, 0);
     }
     fn_800BC51C(&p->mpUnknown1C->mUnknown0);
     fn_800B3644(&p->mpUnknown1C->mUnknown4);
@@ -99,9 +98,9 @@ void fn_8014B528(Class_802A2DB8 *p)
     fn_800AACB8(&p->mpUnknown1C->mUnknown14);
     fn_8014ABE4(&p->mpUnknown1C->mUnknown18, 2);
     fn_80178F20(&p->mpUnknown1C->mUnknown18);
-    p->mpUnknown1C->mUnknown38 = fn_8007F828(19);
+    p->mpUnknown1C->mUnknown38 = GameOptionsGet(19);
     if (p->mpUnknown1C->mUnknown38 != 0) {
-        fn_8007F6F8(19, 0);
+        GameOptionsSet(19, 0);
     }
     id = 0;
     for (i = 0; i < 2; i++) {

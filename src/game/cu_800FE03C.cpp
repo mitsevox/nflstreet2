@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -40,7 +40,7 @@
 extern "C" {
 int fn_80178320(void);
 int fn_8009FE24(Object_80039F5C *p);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
 Point_8017886C fn_80177FFC(int team);
@@ -53,9 +53,9 @@ extern float lbl_803EAE6C;
 extern float lbl_803EAE70;
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
-static inline void GetFormationPoint(Object_800670B4 *pTeam, int index, Point_8017886C *pOut)
+static inline void GetFormationPoint(PlayBookFormation_t *pTeam, int index, Point_8017886C *pOut)
 {
-    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
+    PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
 
     pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
@@ -72,7 +72,7 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p);
 extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
 {
     Point_8017886C base;
-    Object_800670B4 *pTeam;
+    PlayBookFormation_t *pTeam;
 
     base = fn_80177FFC(p->mIdBytes[2]);
     pTeam = PlayBookGetFormation(p->mIdBytes[2]);
@@ -81,7 +81,7 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
         Object_80039F5C *pOther = fn_800FB844(p);
 
         if (pOther) {
-            Object_800670B4 *pOtherTeam = PlayBookGetFormation(pOther->mIdBytes[2]);
+            PlayBookFormation_t *pOtherTeam = PlayBookGetFormation(pOther->mIdBytes[2]);
             Point_8017886C other;
             unsigned char i;
             unsigned int count;
@@ -113,7 +113,7 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
             }
             count = fn_80178D18(fn_80178320());
             for (i = 0; i < count; i++) {
-                Entry_8006719C *pEntry;
+                PlayBookPosition_t *pEntry;
                 Point_8017886C *pPoint;
                 int carrier;
                 int open;
@@ -125,7 +125,7 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
                 carrier = 0;
                 pEntry = &pTeam->mUnknown8.mUnknown84[0][i];
                 pPoint = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
-                if (fn_8009FE24(fn_80039F5C(fn_80178320(), i))) {
+                if (fn_8009FE24(PlyrGet(fn_80178320(), i))) {
                     carrier = 1;
                 }
                 if (!carrier) {

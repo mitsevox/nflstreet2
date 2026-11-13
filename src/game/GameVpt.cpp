@@ -1,6 +1,6 @@
 /* The GameVpt module: creates the game's 3D viewport and sets its projection. */
 
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameObjList.h"
 #include "game/GameVpt.h"
 #include "engine/viewport.h"
@@ -34,7 +34,7 @@ int GameVpt::Init()
     desc.mUnknown3 = 2;
     desc.mUnknown4[0] = 0;
     desc.mUnknown4[1] = 0;
-    if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
+    if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
         CamCurveSetNarrowFov(1);

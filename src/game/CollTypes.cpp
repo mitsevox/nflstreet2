@@ -10,11 +10,11 @@ struct CollTypeDef_t {
 };
 
 extern "C" {
-void fn_8003A628(CollideObject_t *pRecord);
+void PlyrUpdateCollRecord(CollideObject_t *pRecord);
 void BallUpdateCollRecord(CollideObject_t *pRecord);
 
 static CollTypeDef_t _CollTypes_Defs[6] = {
-    { 0, 11, fn_8003A628 },
+    { 0, 11, PlyrUpdateCollRecord },
     { 1, 1, BallUpdateCollRecord },
     { 2, 4, 0 },
     { 3, 1, 0 },

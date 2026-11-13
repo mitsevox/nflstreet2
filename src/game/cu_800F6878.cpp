@@ -68,7 +68,7 @@ extern "C" int fn_800F69C0(int angle, Object_80039F5C *p) {
         unsigned int n = fn_80178D18(team);
 
         for (i = 0; i < n; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
+            Object_80039F5C *pOther = PlyrGet(team, i);
 
             if (fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) <= lbl_803EAE34) {
                 Point_8017886C delta;

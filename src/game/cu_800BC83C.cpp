@@ -1,15 +1,15 @@
 #include "game/Block_800BFAD0.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Challenge.h"
 #include "game/cu_8002B8F8.h"
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
@@ -64,7 +64,7 @@ extern "C" {
 unsigned char InGameIsDemo(void);
 unsigned char fn_8002D060(Type_803EA368 *p);
 int ChallengeIsActive(void);
-void fn_8003A3F4(int a, int index);
+void PlyrRouteShowTeam(int a, int index);
 void fn_8003E174(int a);
 void PlayerObjSetDrawReady(unsigned char value);
 int SpchIGIsNarratorIdle(void);
@@ -113,12 +113,12 @@ int fn_800C1E40(void);
 void fn_800CC560(int a);
 void fn_8010A220(void);
 void BallResetToSpot(void);
-void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 void CamGamePushCurrentCamera(void);
 GameCamera_t *CamGameGetCamera(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
-int fn_80156704(void);
+int TutorialIsActive(void);
 void fn_8016E498(void);
 int fn_8016E764(void);
 void fn_801780A8(Point_8017886C pos);
@@ -133,7 +133,7 @@ void HudSetDown(void);
 void HudPost3AOn(void);
 void HudShowEvent31(int index);
 int GameModeTypeIsSpecial(void);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 int ConSetChannelInfo(int a, int b, void *p);
 int ResSync(int a);
 
@@ -147,7 +147,7 @@ extern unsigned char lbl_803EABB4;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-void Class_80297BF8::vfn_08(float dt)
+void PreGamePhase::UpdateIntroStart(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
@@ -165,7 +165,7 @@ void Class_80297BF8::vfn_08(float dt)
     }
 }
 
-void Class_80297BF8::vfn_09(float dt)
+void PreGamePhase::UpdateIntro(float dt)
 {
     int busy = fn_800BAF30();
 
@@ -187,17 +187,17 @@ void Class_80297BF8::vfn_09(float dt)
         float time = fn_80094454(lbl_803EC98C->mUnknown18);
 
         if (time > 0.0f && time <= 61.0f) {
-            fn_80195EFC(6, 60, 0, fn_800BB9A0);
+            ScreenTransStart(6, 60, 0, fn_800BB9A0);
             lbl_803EABA2 = 1;
         }
     }
 }
 
-void Class_80297BF8::vfn_05()
+void PreGamePhase::OnExit()
 {
     if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
-        fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
-        vfn_07();
+        TutorialIsActive() != 0 || fn_801485D4() != 0 || GameOptionsGet(14) != 1) {
+        HideIntroScreen();
     }
     lbl_803EC98C->mUnknown32 = 0;
     PlayerObjSetDrawReady(1);
@@ -262,8 +262,8 @@ void Class_80297BF8::vfn_05()
         fn_80096D14(lbl_803EC98C->mUnknown8);
     }
     HudPost3AOn();
-    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && fn_8019623C(0x23000) != 0) {
-        fn_80195EFC(5, 100, 0, 0);
+    if (fn_800C1E40() == 0 && ChallengeIsActive() == 0 && ScreenTransCanCapture(0x23000) != 0) {
+        ScreenTransStart(5, 100, 0, 0);
     }
 }
 
@@ -369,24 +369,24 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
 
     if (fn_802270A4(pStick) == 0.0f) {
         if (pStick->mUnknown9 == 1) {
-            fn_8013C824(pCamera, 10, 0);
+            CamMainMsg(pCamera, 10, 0);
         }
     } else {
         result = 1;
         if (pStick->mUnknown9 == 1) {
-            fn_8013C824(pCamera, 10, 0);
+            CamMainMsg(pCamera, 10, 0);
             value = pStick->mX;
             if (value != 0.0f) {
                 if (value < 0.0f) {
                     value = -value;
-                    fn_8013C824(pCamera, 9, (int)&value);
+                    CamMainMsg(pCamera, 9, (int)&value);
                 } else {
-                    fn_8013C824(pCamera, 8, (int)&value);
+                    CamMainMsg(pCamera, 8, (int)&value);
                 }
             }
             value = pStick->mY;
             if (value != 0.0f) {
-                fn_8013C824(pCamera, 7, (int)&value);
+                CamMainMsg(pCamera, 7, (int)&value);
             } else {
                 result = 0;
             }
@@ -396,9 +396,9 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
         }
     }
     if (pStick->mUnknown8 == 0) {
-        fn_8003A3F4(0, team);
+        PlyrRouteShowTeam(0, team);
     } else {
-        fn_8003A3F4(1, team);
+        PlyrRouteShowTeam(1, team);
         result = 1;
     }
     return result;
@@ -470,7 +470,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (involved && fn_800A8444(side) == 0 && fn_800A8488(side) != 0) {
             int blocked = 0;
 
-            if (fn_80156704() != 0) {
+            if (TutorialIsActive() != 0) {
                 blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {

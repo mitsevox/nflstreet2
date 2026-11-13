@@ -1,0 +1,135 @@
+/* Column accessors of the game's database cursor: read a float or a text
+   column of the current row, and write one column of the current row back by
+   looking up the row's key and running an update on the cursor's table. The
+   table cursor class calls these for its column get/set members. */
+
+#include "game/DbCursor.h"
+#include "game/DbQuery.h"
+
+extern "C" {
+
+float DbCursorGetFloat(DbCursor *pCursor, int column)
+{
+    DbColumnValue columns[2];
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = 0;
+    columns[1].SetEnd();
+    pCursor->Read(columns);
+    return *(float *)&columns[0].mValue;
+}
+
+void DbCursorGetString(DbCursor *pCursor, int column, int buffer, int length)
+{
+    DbColumnValue columns[2];
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = buffer;
+    columns[1].SetEnd();
+    pCursor->Read(columns);
+}
+
+void DbCursorSetValue(DbCursor *pCursor, int column, int value)
+{
+    DbColumnValue columns[2];
+    DbColumnValue *pList = columns;
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbColumnValue key[2];
+
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = value;
+    columns[1].SetEnd();
+    key[0].Set(-1, pCursor->mUnknown12, 0);
+    key[1].SetEnd();
+    pCursor->Read(key);
+    unsigned int table = pCursor->mUnknown8;
+    unsigned int keyColumn = pCursor->mUnknown12;
+    expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
+    tables[0].Set(pCursor->mUnknown8);
+    tables[1].Set(-1);
+    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+}
+
+void DbCursorSetInt(void *pObject, int column, int value)
+{
+    DbCursor *pCursor = (DbCursor *)pObject;
+    DbColumnValue columns[2];
+    DbColumnValue *pList = columns;
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbColumnValue key[2];
+
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = value;
+    columns[1].SetEnd();
+    key[0].Set(-1, pCursor->mUnknown12, 0);
+    key[1].SetEnd();
+    pCursor->Read(key);
+    unsigned int table = pCursor->mUnknown8;
+    unsigned int keyColumn = pCursor->mUnknown12;
+    expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
+    tables[0].Set(pCursor->mUnknown8);
+    tables[1].Set(-1);
+    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+}
+
+void DbCursorSetFloat(DbCursor *pCursor, int column, float value)
+{
+    DbColumnValue columns[2];
+    DbColumnValue *pList = columns;
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbColumnValue key[2];
+
+    union {
+        float f;
+        int i;
+    } bits;
+    bits.f = value;
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = bits.i;
+    columns[1].SetEnd();
+    key[0].Set(-1, pCursor->mUnknown12, 0);
+    key[1].SetEnd();
+    pCursor->Read(key);
+    unsigned int table = pCursor->mUnknown8;
+    unsigned int keyColumn = pCursor->mUnknown12;
+    expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
+    tables[0].Set(pCursor->mUnknown8);
+    tables[1].Set(-1);
+    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+}
+
+void DbCursorSetString(void *pObject, int column, char *pText, int length)
+{
+    DbCursor *pCursor = (DbCursor *)pObject;
+    DbColumnValue columns[2];
+    DbColumnValue *pList = columns;
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbColumnValue key[2];
+
+    columns[0].mColumnTag = column;
+    columns[0].mTableTag = -1;
+    columns[0].mValue = (int)pText;
+    columns[1].SetEnd();
+    key[0].Set(-1, pCursor->mUnknown12, 0);
+    key[1].SetEnd();
+    pCursor->Read(key);
+    unsigned int table = pCursor->mUnknown8;
+    unsigned int keyColumn = pCursor->mUnknown12;
+    expression.Set(6, ((unsigned long long)table << 32) | keyColumn, 3, key[0].mValue);
+    tables[0].Set(pCursor->mUnknown8);
+    tables[1].Set(-1);
+    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+}
+
+}

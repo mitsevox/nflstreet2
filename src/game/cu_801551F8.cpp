@@ -1,6 +1,6 @@
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 
-class Class_802A17A8 : public Class_802A56E8 {
+class Class_802A17A8 : public ScrmRuleSet {
 public:
     unsigned char mUnknown4;
 };
@@ -52,6 +52,6 @@ void fn_801552C4(Class_802A17A8 *p, int flip)
         lbl_803EB2FC = 1;
         ++lbl_803EB2FD;
     }
-    p->Class_802A56E8::vfn_20(flip);
+    p->ScrmRuleSet::PlaceBallForDrive(flip);
 }
 }

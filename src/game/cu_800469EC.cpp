@@ -147,13 +147,13 @@ int fn_800469EC(Item_800469EC *p)
             fn_802525BC(0);
             fn_801D0544();
             fn_8024E908(0x98, 0, 4);
-            GXPosition3f32(fn_80178A08(), scale * ((1.0f - lbl_803EA4B8) * 0.55556f), zero);
+            GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);
             GXTexCoord2f32(0.9f, 1.0f - lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(fn_80178A08(), scale * ((1.0f - lbl_803EA4B8) * -0.55556f), zero);
+            GXPosition3f32(fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * -0.55556f, zero);
             GXTexCoord2f32(0.9f, lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(-fn_80178A08(), scale * ((1.0f - lbl_803EA4B8) * 0.55556f), zero);
+            GXPosition3f32(-fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * 0.55556f, zero);
             GXTexCoord2f32(0.1f, 1.0f - lbl_803EA4B8 * 0.5f);
-            GXPosition3f32(-fn_80178A08(), scale * ((1.0f - lbl_803EA4B8) * -0.55556f), zero);
+            GXPosition3f32(-fn_80178A08(), scale * (1.0f - lbl_803EA4B8) * -0.55556f, zero);
             GXTexCoord2f32(0.1f, lbl_803EA4B8 * 0.5f);
             fn_80236EC0(state);
         }
@@ -172,9 +172,9 @@ void fn_80046DEC(Item_800469EC *p, int enabled)
         p->mUnknownEC = 0.5f;
         p->mUnknownF0 = 0.8f;
     } else {
-        p->mUnknownF0 = -0.1f;
-        p->mUnknownE4 = 0.0f;
         p->mUnknownEC = -0.1f;
+        p->mUnknownE4 = 0.0f;
+        p->mUnknownF0 = -0.1f;
     }
 }
 
@@ -183,7 +183,7 @@ void fn_80046E30(int handle)
     lbl_803EC7B8 = handle;
     ObjNewType_(17, 0x128, 5, 0, 0);
     ObjSetListObjFunc(lbl_803EC7B8, 17, 0, fn_800469EC);
-    for (int i = 0; i <= 4; ++i) {
+    for (unsigned int i = 0; i <= 4; ++i) {
         lbl_803EC7C4[i] = 1;
         Item_800469EC *p = ObjNewInList(lbl_803EC7B8, 17, 0, 0);
         lbl_803078D4[i] = p;
@@ -194,18 +194,27 @@ void fn_80046E30(int handle)
             p->mUnknownE0 = 0.0f;
             break;
         case 1:
+            p->mUnknownD8 = 1.0f;
+            p->mUnknownDC = 0.0f;
+            p->mUnknownE0 = 0.0f;
+            break;
         case 2:
             p->mUnknownD8 = 1.0f;
             p->mUnknownDC = 0.0f;
             p->mUnknownE0 = 0.0f;
             break;
         case 3:
+            p->mUnknownD8 = 0.0f;
+            p->mUnknownDC = 0.0f;
+            p->mUnknownE0 = 1.0f;
+            break;
         case 4:
             p->mUnknownD8 = 0.0f;
             p->mUnknownDC = 0.0f;
             p->mUnknownE0 = 1.0f;
             break;
         }
+
         p->mUnknownF4 = i;
         p->mUnknownE8 = 0.005f;
         p->mUnknownE4 = 0.0f;
@@ -246,7 +255,7 @@ void fn_80047050(void)
             ready = !fn_8002D060(lbl_803EA368);
         }
         int enabled = ready;
-        switch (p->mUnknownF4) {
+        switch ((unsigned int)p->mUnknownF4) {
         case 0: {
             lbl_803078D4[i]->mUnknown4.mX = 0.0f;
             Item_800469EC *q0 = lbl_803078D4[i];

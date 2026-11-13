@@ -20,7 +20,7 @@ void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int 
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9A90(int a, int tag);
 int MemFill(void *pDest, int size, int value, int width);
-void fn_801F9BB4(int handle, int table, int column, int *pInfo);
+int fn_801F9BB4(int handle, int table, int column, int *pInfo);
 void FESndUpdate(int a);
 int DbCursorGetRow(DbCursor *pObject);
 int DbCursorGetValue(DbCursor *pObject, int key);
@@ -179,6 +179,25 @@ int fn_8008382C(DbCursor *pObject)
     return DbCursorGetInt(pObject, 0x44494E53);
 }
 
+static inline void _FilterSetNodes(DbFilter *pFilter, int kind, DbFilter *pLeft, DbFilter *pRight, int op)
+{
+    pFilter->mUnknown32 = op;
+    pFilter->mUnknown0.mKind = kind;
+    pFilter->mUnknown0.mValue.mNode = pLeft;
+    pFilter->mUnknown16.mKind = 11;
+    pFilter->mUnknown16.mValue.mNode = pRight;
+}
+
+static inline void _FilterSetColumn(DbFilter *pFilter, int kind, unsigned int table, unsigned int column,
+                                    int valueKind, int value)
+{
+    pFilter->mUnknown32 = 0x10003;
+    pFilter->mUnknown0.mKind = kind;
+    pFilter->mUnknown0.mValue.mLong = ((long long)table << 32) | column;
+    pFilter->mUnknown16.mKind = valueKind;
+    pFilter->mUnknown16.mValue.mInt = value;
+}
+
 void fn_80083854(DbCursor *pObject)
 {
     int info[4];
@@ -187,15 +206,13 @@ void fn_80083854(DbCursor *pObject)
     DbColumnValue list[2];
 
     fn_801F9BB4(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown12, info);
-    list[0].Set(-1, pObject->mUnknown12);
-    list[0].mValue = 0;
+    int column = pObject->mUnknown12;
+    list[0].Set(-1, column, 0);
     list[1].SetEnd();
     pObject->Read(list);
     int value = list[0].mValue;
 
-    unsigned int table = pObject->mUnknown8;
-    unsigned int column = pObject->mUnknown12;
-    arg.Set(6, ((unsigned long long)table << 32) | column, info[0], value);
+    _FilterSetColumn(&arg, 6, pObject->mUnknown8, pObject->mUnknown12, info[0], value);
     fn_801F9908(pObject->mUnknown4, (DbQueryTable *)pObject->mUnknown20, &arg, &result, 0);
 }
 
@@ -228,15 +245,16 @@ void fn_80083A10(DbCursor *pObject, void *pColumns, int tag, int value)
 {
     DbFilter arg;
 
-    arg.Set(6, 0x4D41455444494744LL, 3, value);
+    _FilterSetColumn(&arg, 6, 0x4D414554, 0x44494744, 3, value);
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
 void fn_80083A88(DbCursor *pObject, void *pColumns, int tag)
 {
     DbFilter arg;
+    int value = 0;
 
-    arg.Set(6, 0x4D41455450595454LL, 3, 0);
+    _FilterSetColumn(&arg, 6, 0x4D414554, 0x50595454, 3, value);
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &arg, tag);
 }
 
@@ -246,11 +264,7 @@ void fn_80083B00(DbCursor *pObject, void *pColumns, int tag)
     DbFilter left;
     DbFilter right;
 
-    root.mUnknown32 = 0x2000A;
-    root.mUnknown0.mKind = 11;
-    root.mUnknown0.mValue.mNode = &left;
-    root.mUnknown16.mKind = 11;
-    root.mUnknown16.mValue.mNode = &right;
+    _FilterSetNodes(&root, 11, &left, &right, 0x2000A);
     left.Set(6, 0x4D41455450595454LL, 3);
     left.mUnknown16.mValue.mInt = 0;
     right.Set(6, 0x4D41455450595454LL, 3);
@@ -353,7 +367,7 @@ void fn_80083F68(DbCursor *pObject)
 
 void fn_80083F88(DbCursor *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C(pObject, 0x414E4454, (int)pBuffer, size);
+    DbCursorGetString(pObject, 0x414E4454, (int)pBuffer, size);
 }
 
 int fn_80083FBC(DbCursor *pObject)
@@ -403,7 +417,7 @@ int fn_80084158(DbCursor *pObject)
 
 void fn_80084180(DbCursor *pObject, int value)
 {
-    fn_8007AA90(pObject, 0x4C474C54, value);
+    DbCursorSetValue(pObject, 0x4C474C54, value);
 }
 
 unsigned char fn_800841AC(DbCursor *pObject)
@@ -423,22 +437,22 @@ unsigned char fn_80084204(DbCursor *pObject)
 
 void fn_80084230(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x31434D54, value);
+    DbCursorSetInt(pObject, 0x31434D54, value);
 }
 
 void fn_8008425C(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x32434D54, value);
+    DbCursorSetInt(pObject, 0x32434D54, value);
 }
 
 void fn_80084288(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x33434D54, value);
+    DbCursorSetInt(pObject, 0x33434D54, value);
 }
 
 void fn_800842B4(DbCursor *pObject, char *pText, int length)
 {
-    fn_8007ADD4(pObject, 0x414E4454, pText, length);
+    DbCursorSetString(pObject, 0x414E4454, pText, length);
 }
 
 int fn_800842E8(DbCursor *pObject)
@@ -483,9 +497,9 @@ int fn_80084438(DbCursor *pObject)
 void fn_80084470(DbCursor *pObject, int value)
 {
     if (value) {
-        fn_8007ABA4(pObject, 0x4C445443, 1);
+        DbCursorSetInt(pObject, 0x4C445443, 1);
     } else {
-        fn_8007ABA4(pObject, 0x4C445443, 0);
+        DbCursorSetInt(pObject, 0x4C445443, 0);
     }
 }
 

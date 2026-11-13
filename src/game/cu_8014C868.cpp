@@ -1,19 +1,18 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
 #include "game/AutoDepth.h"
 #include "game/fn_8021D7B8.h"
 #include "game/PauseMenu.h"
-#include "game/fn_8007F6F8.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 
 class Block_802A21E8 {
 public:
@@ -53,20 +52,20 @@ void ClockRuleClearFlags(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_800AAD58(void *p, float dt);
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800B3644(Class_80297B50 *pObject);
-void fn_800BFAB4(Class_80297CE8 *pObject);
-void fn_800A039C(Class_80297AB8 *pObject);
-void fn_800B9598(Class_80297C60 *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 int fn_8014BC90(void);
 void fn_8014BC98(const int *pValues, int *pOrder, unsigned int count);
 void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count);
 int fn_801486A0(void);
 int fn_801787DC(int team);
 int fn_800C8744(int team);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
@@ -111,10 +110,10 @@ void fn_8014C9B0(Class_802A2C90 *p)
     fn_800B9598(0);
     fn_800AACB8(0);
     if (p->mpUnknown1C->mUnknown20 != 0) {
-        fn_8007F6F8(14, p->mpUnknown1C->mUnknown20);
+        GameOptionsSet(14, p->mpUnknown1C->mUnknown20);
     }
     if (p->mpUnknown1C->mUnknown24 != -1) {
-        fn_8007F6F8(1, p->mpUnknown1C->mUnknown24);
+        GameOptionsSet(1, p->mpUnknown1C->mUnknown24);
     }
     p->mUnknown20 = -1;
     fn_80178F20(0);
@@ -188,7 +187,7 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
     ids[3] = id;
     fn_8008056C(&cursor);
     for (unsigned char i = 0; i < 4; i++) {
-        pStats->mpPlayers[i] = fn_8003AC84(ids[i]);
+        pStats->mpPlayers[i] = PlyrFindById(ids[i]);
     }
     pStats->mValues[0] = fn_801787DC((unsigned char)team);
     fn_8022B7A4(handle, 0x74727374, &value);
@@ -244,7 +243,7 @@ void fn_8014C808(void *p)
     char text[300];
 
     if (fn_800C1E40() == 0) {
-        int value = fn_8007F828(1);
+        int value = GameOptionsGet(1);
         fn_801C2D88(text, sizeof(text), lbl_803EB2B8, value);
         MsgBoxShow(lbl_802A0CEC, text, lbl_802A0B74);
     }

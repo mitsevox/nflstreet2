@@ -225,7 +225,7 @@ extern "C" void fn_80119020(void)
     int team = fn_80178308();
     unsigned int count = fn_80178D70(team);
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Block_80119020 *pBlock = (Block_80119020 *)&p->mBlock1032;
         if (BallFindHeldBy(p)) continue;
         if (p->mUnknown1032 != 4 && p->mUnknown1032 != 2 && p->mUnknown1032 != 3) continue;
@@ -331,7 +331,7 @@ extern "C" void fn_801194F0(void)
     fn_8011BAE0(&pair);
     unsigned int count = fn_80178D70(team);
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         fn_800CA5CC(p, 8, 0);
         Block_801194F0 *pBlock = (Block_801194F0 *)&p->mBlock1032;
         if (BallFindHeldBy(p)) continue;

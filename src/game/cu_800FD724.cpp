@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"

@@ -53,7 +53,7 @@ void fn_8018C7B8(int index, int *pFirst, int *pSecond, int *pThird)
             float first;
             float second;
             float third;
-            fn_80081788((Object_8008044C *)&cursor, values);
+            PlayerGetGearRatings((Object_8008044C *)&cursor, values);
             fn_8018C688(values, &first, &second, &third);
             firstTotal += first;
             secondTotal += second;

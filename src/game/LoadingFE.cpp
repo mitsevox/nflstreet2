@@ -1,8 +1,8 @@
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/SysModules.h"
 
 extern "C" {
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void LoadingBegin(int);
 void LoadingEnd(int);
 void CamSetDefaultAspect(float);
@@ -23,10 +23,10 @@ int LoadingFE::Init()
         sFirstInit = 0;
         LoadingBegin(1);
     } else {
-        if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
+        if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
             CamSetDefaultAspect(4.0f / 3.0f);
         } else {
-            fn_8013CF98();
+            CamSetupAspect();
         }
         LoadingBegin(4);
     }

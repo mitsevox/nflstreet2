@@ -3,8 +3,6 @@
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
 
-struct Record_80148424;
-
 extern "C" {
 extern int lbl_803EB2A8;
 extern int lbl_803EB2AC;
@@ -12,7 +10,7 @@ extern Class_80148A58 *lbl_8031BDBC[];
 
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_801D31F0(void *pDest, const void *pSource, int size);
-void fn_80148424(Record_80148424 *pA, Record_80148424 *pB);
+void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_80149040(Object_80039F5C *p);
 void fn_800B6474(int index, unsigned char team);
 void fn_800B6658(Object_80039F5C *p);
@@ -67,7 +65,7 @@ void fn_801486A8(void)
 {
     for (unsigned short team = 0; team < 2; ++team) {
         for (unsigned short index = 0; index < 7; ++index) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, index);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, index);
             p->mMotion.mPos.mX = 0.0f;
             p->mMotion.mPos.mY = -((float)index * 3.0f);
             p->mpUnknown4->mUnknown20 |= 1;
@@ -84,7 +82,7 @@ void fn_801486A8(void)
 void fn_801487C0(int team, unsigned char begin)
 {
     for (unsigned char index = begin; index < 7; ++index) {
-        fn_80148814(fn_80039F5C(team, index));
+        fn_80148814(PlyrGet(team, index));
     }
 }
 
@@ -134,7 +132,7 @@ void fn_801488D4(Object_80039F5C *pA, Object_80039F5C *pB)
     unsigned int flags = pA->mFlags;
     pA->mFlags = pB->mFlags;
     pB->mFlags = flags;
-    fn_80148424((Record_80148424 *)pA, (Record_80148424 *)pB);
+    PlyrSwapStateData(pA, pB);
     fn_80149040(pA);
     fn_80149040(pB);
 

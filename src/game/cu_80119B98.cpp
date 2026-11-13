@@ -32,7 +32,7 @@ extern "C" void fn_80119B98(void)
     fn_8011BAE0(&pair);
     count = fn_80178D70(team);
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Ball_t *pBall;
 
         fn_800CA5CC(p, 8, 0);

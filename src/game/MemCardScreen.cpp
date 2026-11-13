@@ -2,16 +2,16 @@
    files, and answers the screen's messages (an option, a forced slot, whether
    the card is busy). */
 
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
 #include "game/MemCardUI.h"
 #include "game/FMCAPPORT.h"
 
 extern "C" {
-int fn_8002A1B0(int, int);
-void fn_8002A330(int, int, int *, int *, int);
-void fn_8002A478(int *, int *);
+int MemCardFilesGetSlotFileNumber(int, int);
+void MemCardFilesGetListedSlot(int, int, int *, int *, int);
+void MemCardFilesGetSaveTarget(int *, int *);
 void MemCardScreenListBegin(int, int *);
 void MemCardScreenListReset();
 int MemCardScreenListGetItem(int *, int *, int *, int *);
@@ -38,8 +38,8 @@ extern "C" void MemCardScreenListBegin(int value, int *pCount)
     int index;
 
     *pCount = 9999;
-    fn_8002A478(&a, &b);
-    index = fn_8002A190(a, b);
+    MemCardFilesGetSaveTarget(&a, &b);
+    index = MemCardFilesGetSlotPort(a, b);
     if (index == -1) {
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
             fn_801D6680(fn_801D671C());
@@ -71,15 +71,15 @@ extern "C" int MemCardScreenListGetItem(int *p0, int *p4, int *p8, int *p12)
     int a;
     int b;
 
-    fn_8002A478(&a, &b);
+    MemCardFilesGetSaveTarget(&a, &b);
     _MemCardScreen_iListPos = 0;
     do {
-        fn_8002A330(0, _MemCardScreen_iListPos, p4, p12, 0);
+        MemCardFilesGetListedSlot(0, _MemCardScreen_iListPos, p4, p12, 0);
         _MemCardScreen_iListPos++;
     } while (*p4 != a || *p12 != b);
-    *p0 = fn_8002A190(*p4, *p12);
-    *p8 = fn_8002A1B0(a, b);
-    if (a == 1 || ((a == 2 || a == 3) && fn_8002A138(a, b))) {
+    *p0 = MemCardFilesGetSlotPort(*p4, *p12);
+    *p8 = MemCardFilesGetSlotFileNumber(a, b);
+    if (a == 1 || ((a == 2 || a == 3) && MemCardFilesIsSlotSaved(a, b))) {
         char text[32];
         fn_801D6B24(text, 32);
         *p8 = fn_801D6CF4(text, a, &flag);
@@ -88,7 +88,7 @@ extern "C" int MemCardScreenListGetItem(int *p0, int *p4, int *p8, int *p12)
             *p4 += 256;
         }
     }
-    if (fn_8002A190(a, b) == -1) {
+    if (MemCardFilesGetSlotPort(a, b) == -1) {
         *p4 += 512;
     }
     return 1;
@@ -108,7 +108,7 @@ extern "C" int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult)
 {
     switch (id) {
     case 0x80000003:
-        fn_8007F6F8(12, *p);
+        GameOptionsSet(12, *p);
         break;
     case 0x80000004:
         MemCardScreenInstallList();

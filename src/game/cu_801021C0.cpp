@@ -5,7 +5,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -21,7 +21,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -57,7 +57,7 @@ struct State_801021C0 {
 extern "C" {
 int fn_80103CB0(Object_80039F5C *p);
 int fn_80104610(Object_80039F5C *p);
-void fn_80176B8C(Object_80039F5C *p);
+void PenaltyRollRoughing(Object_80039F5C *p);
 }
 
 struct State_80102470 {
@@ -87,7 +87,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
             pRecord->mUnknownB = 0;
         }
         if ((p->mFlags & 0x2000) && kind == 4) {
-            fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
+            fn_800A5A8C(2, p, PlyrGet(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
             StyleTrackerOnPumpFake(p);
             if (p->mFlags & 0x4000) {
                 PassIconsShow(0);
@@ -124,7 +124,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
             case 5:
             case 7:
                 if (pState->mUnknown4 > fn_80104610(p)) {
-                    fn_80176B8C(pOther);
+                    PenaltyRollRoughing(pOther);
                 }
                 pState->mUnknown2 = 1;
                 if (fn_800E96EC(p, pOther) == 1) {

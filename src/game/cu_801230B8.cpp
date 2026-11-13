@@ -82,7 +82,7 @@ float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int fn_801208C8(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
 float fn_80237260(int a);
 unsigned int fn_802372EC(int a, int b);
-int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C target, unsigned int *pOut, float distance);
+int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C target, unsigned int *pOut, float distance);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 
 void fn_80123E2C(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *);
@@ -369,7 +369,7 @@ void fn_80123594(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     for (unsigned char team = 0; team < 2; team++) {
         unsigned int count = fn_80178D70(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
+            Object_80039F5C *pOther = PlyrGet(team, i);
             Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
             float distance = fn_8022781C(&pos, pOtherPos);
             if (!(distance >= 15.0f)) {
@@ -391,7 +391,7 @@ void fn_8012368C(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     unsigned int count = fn_80178D70(team);
     for (unsigned char i = 0; i < count; i++) {
         int valid = 1;
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         switch (pOther->mpState->mId) {
         case 10:
         case 11:
@@ -430,7 +430,7 @@ void fn_801237F4(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     for (unsigned char team = 0; team < 2; team++) {
         unsigned int count = fn_80178D70(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
+            Object_80039F5C *pOther = PlyrGet(team, i);
             if (pOther == p) continue;
             Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
             float distance = fn_8022781C(&pos, pOtherPos);
@@ -471,7 +471,7 @@ void fn_801237F4(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
         }
     }
     if (fn_801486A0()) fn_8012327C(pValues, p);
-    else if (fn_800F06F4(0, fn_80039F5C(fn_80178320(), 0)->mpState, 51, 65535) != 65535) {
+    else if (fn_800F06F4(0, PlyrGet(fn_80178320(), 0)->mpState, 51, 65535) != 65535) {
         pValues->mCost[(p->mMotion.mFacing + 0x100000) >> 21 & 7] = 0.0f;
     }
 }
@@ -488,7 +488,7 @@ void fn_80123C2C(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     unsigned int count = fn_80178D70(team);
     for (unsigned char i = 0; i < count; i++) {
         float value = 0.0f;
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther == pExclude) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         float distance = fn_8022781C(&pos, pOtherPos);
@@ -518,7 +518,7 @@ void fn_80123E30(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     pos.mY = p->mMotion.mPos.mY;
     int team = p->mIdBytes[2] ^ 1;
     for (unsigned char i = 0; i < 7; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         float distance = fn_8022781C(&pos, pOtherPos);
         if (!(distance >= 8.0f)) {
@@ -542,7 +542,7 @@ void fn_80123F48(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     unsigned int count = fn_80178D70(team);
     for (unsigned char i = 0; i < count; i++) {
         float value = 0.0f;
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther == p) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         float distance = fn_8022781C(&pos, pOtherPos);
@@ -634,7 +634,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
     float minimum = 3.4028234663852886e38f;
     Object_80039F5C *pBest = 0;
     for (unsigned char i = a; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther != p && (!b || !fn_8011E9B4(pOther))) {
             Point_8017886C delta;
             fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, pPos);
@@ -653,7 +653,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
     float minimum = 32767.0f;
     Object_80039F5C *pBest = 0;
     for (unsigned char i = a; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther == p || (b && (pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6))) continue;
         Point_8017886C delta;
         fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, pPos);
@@ -679,7 +679,7 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
     for (unsigned char team = 0; team < 2; team++) {
         unsigned int count = fn_80178D70(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pCandidate = fn_80039F5C(team, i);
+            Object_80039F5C *pCandidate = PlyrGet(team, i);
             if (pCandidate == p || pCandidate == pOther) continue;
             Point_8017886C *pCandidatePos = (Point_8017886C *)&pCandidate->mMotion.mPos;
             fn_80227690(&delta, pCandidatePos, (Point_8017886C *)&pMotion->mPos);
@@ -717,7 +717,7 @@ int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTar
         unsigned int count = fn_80178D70(team);
         for (unsigned char i = 0; i < count; i++) {
             int valid = 1;
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
+            Object_80039F5C *pOther = PlyrGet(team, i);
             if (pFilter) {
                 for (unsigned char j = 0; j < pFilter->mCount; j++) {
                     if (pOther->mpState->mId == *(pFilter->mValues + j)) {valid = 0; break;}
@@ -787,7 +787,7 @@ Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angl
     unsigned int count = fn_80178D70(team);
     Vector_80039F5C *pPos = &p->mMotion.mPos;
     for (unsigned char i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther == p) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         Point_8017886C delta;
@@ -818,7 +818,7 @@ Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angl
     unsigned int count = fn_80178D70(team);
     Vector_80039F5C *pPos = &p->mMotion.mPos;
     for (unsigned char i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther == p || pOther->mUnknown1032 == 4) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         Point_8017886C delta;
@@ -1068,7 +1068,7 @@ int fn_80125C28(Object_80039F5C *p, State_80125594 *)
     if (MathAngleDiff(angle, pMotion->mFacing) <= 0x18E38D) {
         Object_80039F5C *pOther = BallGetCurrentHolder();
         float distance = fn_802270A4(&delta);
-        result = fn_8012A3B0(p, pOther, target, &value, distance);
+        result = PursueGetTackleChance(p, pOther, target, &value, distance);
     }
     if (result) {
         value = (unsigned int)(value * 0.1f);

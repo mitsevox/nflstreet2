@@ -6,9 +6,8 @@
 #include "game/Object_80039F5C.h"
 #include "engine/viewporttypes.h"
 #include "game/OptionsScreen.h"
-#include "game/fn_80072AA8.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/SndgMusic.h"
+#include "game/GameOptions.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_8021D7B8.h"
@@ -25,18 +24,18 @@ void SndgChannelSetStream(int idx, int handle);
 void SndgChannelFadeStream(int idx, int a, int volume);
 void SndgChannelSetPosition(int idx, Vector_80039F5C *pos);
 void SndgChannelPurgeStream(int idx);
-unsigned char fn_80072ACC(void);
-void fn_80072B84(int a, int b, int c);
-void fn_80072E84(void);
-void fn_80072F04(void);
-unsigned char fn_80072F84(void);
-void fn_80073094(void);
+unsigned char SndgMusicGetSongCount(void);
+void SndgMusicPlaySong(int a, int b, int c);
+void SndgMusicPause(void);
+void SndgMusicResume(void);
+unsigned char SndgMusicIsPlaying(void);
+void SndgMusicStop(void);
 void SpchIGPauseChannel(int index);
 void SpchIGResumeChannel(int index);
 void SpchIGPurgeChannel(int a);
 int SpchIGIsChannelIdle(int index);
 int SpchIGGetChannelStream(unsigned int index);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void UISGameSetAspect(Viewport_t *pObject, int mode);
 Viewport_t *UISGameGetMainViewport(void);
 int fn_801F48B8(int handle);
@@ -62,7 +61,7 @@ void OptAudioStartPreview(int mode)
 {
     if (mode != 10) {
         if (_OptAudio_bMusicOn != 0) {
-            fn_80072E84();
+            SndgMusicPause();
             _OptAudio_bMusicOn = 0;
         }
         switch (mode) {
@@ -95,8 +94,8 @@ void OptAudioStopPreview(void)
             SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
         }
         if (FELoopIsMainFEActive() != 0 || _OptAudio_iSelOption == 10) {
-            if (fn_8007F828(OptionsScreenGetOptionId(10)) > 0) {
-                fn_80072F04();
+            if (GameOptionsGet(OptionsScreenGetOptionId(10)) > 0) {
+                SndgMusicResume();
                 _OptAudio_bMusicOn = 1;
             }
         }
@@ -109,10 +108,10 @@ void OptAudioSetOption(int mode, int value, int notify)
     int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
-        if (fn_8007F828(index) == 0 && value != 0) {
+        if (GameOptionsGet(index) == 0 && value != 0) {
             flag = 1;
         }
-        fn_8007F6F8(index, value);
+        GameOptionsSet(index, value);
         if (notify == 1) {
             OptAudioOnOptionChanged(mode, flag);
         }
@@ -125,7 +124,7 @@ int OptAudioGetOption(int mode)
     int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
-        result = fn_8007F828(index);
+        result = GameOptionsGet(index);
     }
     return result;
 }
@@ -138,7 +137,7 @@ void OptAudioSelectOption(int mode)
             if (mode == 10) {
                 OptAudioStopPreview();
                 if (_OptAudio_bHasTracks == 0) {
-                    fn_80072B84(1, 0, 1);
+                    SndgMusicPlaySong(1, 0, 1);
                 }
             } else {
                 OptAudioStartPreview(mode);
@@ -146,11 +145,11 @@ void OptAudioSelectOption(int mode)
         } else {
             OptAudioStopPreview();
             if (FELoopIsMainFEActive() == 0) {
-                fn_80072E84();
+                SndgMusicPause();
                 _OptAudio_bMusicOn = 0;
             }
             if (_OptAudio_bHasTracks == 0) {
-                fn_80073094();
+                SndgMusicStop();
             }
         }
     } else {
@@ -158,7 +157,7 @@ void OptAudioSelectOption(int mode)
             _OptAudio_iPreviewSample = -1;
             SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
         }
-        fn_80072E84();
+        SndgMusicPause();
         _OptAudio_bMusicOn = 0;
     }
 }
@@ -168,29 +167,29 @@ void OptAudioClose(void)
     int value;
 
     OptAudioStopPreview();
-    if (_OptAudio_iSavedOption6 != fn_8007F828(6)) {
-        if (fn_8007F828(6) == 0) {
+    if (_OptAudio_iSavedOption6 != GameOptionsGet(6)) {
+        if (GameOptionsGet(6) == 0) {
             value = 0;
         } else {
             value = 1;
         }
         fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
-        if (fn_8007F828(6) == 1) {
+        if (GameOptionsGet(6) == 1) {
             UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {
-            UISGameSetAspect(UISGameGetMainViewport(), fn_8007F828(6));
+            UISGameSetAspect(UISGameGetMainViewport(), GameOptionsGet(6));
         }
-        fn_8013CF98();
+        CamSetupAspect();
     }
     if (_OptAudio_bHasTracks == 0) {
-        fn_80073094();
+        SndgMusicStop();
     }
     SndgChannelSetStream(1, 0);
     if (FELoopIsMainFEActive() == 0) {
         SpchIGPauseChannel(_OptAudio_iStreamSet);
-        fn_80072E84();
+        SndgMusicPause();
     } else if (_OptAudio_bHasTracks != 0) {
-        fn_80072F04();
+        SndgMusicResume();
     }
     ResClose(_OptAudio_hSoundRes);
     _OptAudio_hSoundRes = (void *)-1;
@@ -204,8 +203,8 @@ void OptAudioOpen(void)
     _OptAudio_iPreviewSample = -1;
     result = FELoopIsMainFEActive();
     _OptAudio_bMusicOn = 0;
-    fn_80072E84();
-    _OptAudio_iSavedOption6 = fn_8007F828(6);
+    SndgMusicPause();
+    _OptAudio_iSavedOption6 = GameOptionsGet(6);
     _OptAudio_hSoundRes = ResOpenDevice(lbl_802EBFCC, 44);
     if (result != 0 || SpchIGIsChannelIdle(0) != 0) {
         _OptAudio_iStreamSet = 0;
@@ -215,7 +214,7 @@ void OptAudioOpen(void)
     SpchIGPurgeChannel(_OptAudio_iStreamSet);
     SpchIGResumeChannel(_OptAudio_iStreamSet);
     SndgChannelSetStream(1, SpchIGGetChannelStream(_OptAudio_iStreamSet));
-    _OptAudio_bHasTracks = fn_80072ACC() != 0;
+    _OptAudio_bHasTracks = SndgMusicGetSongCount() != 0;
 }
 
 void OptAudioOnOptionChanged(int mode, int flag)
@@ -224,22 +223,22 @@ void OptAudioOnOptionChanged(int mode, int flag)
         if (flag != 0) {
             if (mode == 10) {
                 if (_OptAudio_bHasTracks != 0) {
-                    if (fn_80072F84() != 0) {
-                        fn_80072F04();
+                    if (SndgMusicIsPlaying() != 0) {
+                        SndgMusicResume();
                     } else {
-                        fn_80072F90();
+                        SndgMusicContinue();
                     }
                 } else {
-                    fn_80072B84(1, 0, 1);
+                    SndgMusicPlaySong(1, 0, 1);
                 }
             }
             _OptAudio_bMusicOn = 1;
             OptAudioStartPreview(mode);
-        } else if (fn_8007F828(OptionsScreenGetOptionId(mode)) == 0 && mode == 10) {
+        } else if (GameOptionsGet(OptionsScreenGetOptionId(mode)) == 0 && mode == 10) {
             if (_OptAudio_bHasTracks == 0) {
-                fn_80073094();
+                SndgMusicStop();
             } else {
-                fn_80072E84();
+                SndgMusicPause();
             }
         }
     }

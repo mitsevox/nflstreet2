@@ -3,7 +3,7 @@
    speaking player and pauses, stops or purges them on request. */
 
 #include "game/AudmonEvent.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
@@ -427,7 +427,7 @@ extern "C" void SpchIGUpdate(void)
             }
         }
     }
-    SndgSetVolumeOption(3, fn_8007F828(3) * 10);
+    SndgSetVolumeOption(3, GameOptionsGet(3) * 10);
     if (first != 0) {
         SndgChannelSetVolume(4, 95);
     }
@@ -566,13 +566,13 @@ extern "C" void SpchIGFindNearestOpponent(int handle)
         if (team == 0) {
             pNearest = &_SpchIG_iNearestOpponent0;
         }
-        pOther = fn_80039F5C(team, 0);
+        pOther = PlyrGet(team, 0);
         *pNearest = pOther->mId;
         fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
         best = fn_802270D4(&delta);
         count = fn_80178D18(team);
         for (i = 1; i < count; i++) {
-            pOther = fn_80039F5C(team, i);
+            pOther = PlyrGet(team, i);
             fn_802276B4(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
             distance = fn_802270D4(&delta);
             if (distance < best) {

@@ -2,7 +2,7 @@
 #include "game/State_803EB098.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_802372EC.h"
@@ -31,7 +31,7 @@ Object_80039F5C *fn_800FB844(Object_80039F5C *p);
 void fn_800FB824(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E1778(Object_80039F5C *p);
 int fn_800B146C(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 float fn_80237260(int stream);
 extern float gFrameTimeScale;
 int fn_80178320(void);
@@ -65,7 +65,7 @@ void fn_800E55B8(Object_80039F5C *p)
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
-    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     Message_800F01CC *pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
         if (pTeam->mUnknown8.mUnknownF == 0) {
@@ -109,7 +109,7 @@ void fn_800E586C(Object_80039F5C *p, float *pX)
     unsigned char count = fn_80178D18(team);
 
     for (unsigned char i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther->mMotion.mPos.mY < p->mMotion.mPos.mY) {
             if (*pX > 0.0f) {
                 int inside = pOther->mMotion.mPos.mX > fn_80177FE0().mX &&
@@ -129,7 +129,7 @@ void fn_800E586C(Object_80039F5C *p, float *pX)
         }
     }
     if (found > -1 && best > 0.0f) {
-        Object_80039F5C *pOther = fn_80039F5C(team, found);
+        Object_80039F5C *pOther = PlyrGet(team, found);
         if (*pX > fn_80177FE0().mX) {
             if (*pX > pOther->mMotion.mPos.mX && *pX < pOther->mMotion.mPos.mX + 1.75f) {
                 *pX = pOther->mMotion.mPos.mX + 1.75f;
@@ -299,14 +299,17 @@ int fn_800E6984(Object_80039F5C *p)
 
 int fn_800E6F48(Object_80039F5C *p)
 {
-    unsigned char value = p->mpState->mUnknown1;
+    int *pTimer = &p->mUnknown336;
+    int value = p->mpState->mUnknown1;
+    int seconds = value >> 5;
     unsigned int frames = (unsigned int)(60.0f / gFrameTimeScale);
-    p->mUnknown336 = (value >> 5) * frames + (int)((value & 31) * 0.032258063554763794f * 60.0f);
+    float fraction = (value & 31) / 31.0f;
+    *pTimer = seconds * frames + (int)(fraction * 60.0f);
     if (!fn_800B146C()) {
-        p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown0 = 0.0f;
-        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown14 = 1;
     }
     return 0;
 }

@@ -59,7 +59,7 @@ void GameInfoSet(int index, int value)
     } else if (index == 1) {
         fn_8022DC38(value);
     } else {
-        fn_8007AA90(&_GameInfo_sCursor, _GameInfo_aColumnTags[index], value);
+        DbCursorSetValue(&_GameInfo_sCursor, _GameInfo_aColumnTags[index], value);
         _GameInfo_aRecord[index].mValue = value;
     }
 }

@@ -166,20 +166,20 @@ static void *lbl_8031C714[14][2];
 static void *lbl_8031C784[14][2];
 static void *lbl_8031C7F4[14][2];
 
-static Callback_8015F958 lbl_803ECA6C;
-static Object_8003DEC4 *lbl_803ECA70;
-static int lbl_803ECA74;
-static Callback_8015F958 lbl_803ECA78;
-static Object_8003DEC4 *lbl_803ECA7C;
-static int lbl_803ECA80;
-static Callback_8015F958 lbl_803ECA84;
-static Object_8003DEC4 *lbl_803ECA88;
-static int lbl_803ECA8C;
-static Callback_8015F958 lbl_803ECA90;
-static Object_8003DEC4 *lbl_803ECA94;
-static int lbl_803ECA98;
-static Callback_8015F958 lbl_803ECA9C;
-static Object_8003DEC4 *lbl_803ECAA0;
+static Callback_8015F958 lbl_803ECA6C[1];
+static Object_8003DEC4 *lbl_803ECA70[1];
+static int lbl_803ECA74[1];
+static Callback_8015F958 lbl_803ECA78[1];
+static Object_8003DEC4 *lbl_803ECA7C[1];
+static int lbl_803ECA80[1];
+static Callback_8015F958 lbl_803ECA84[1];
+static Object_8003DEC4 *lbl_803ECA88[1];
+static int lbl_803ECA8C[1];
+static Callback_8015F958 lbl_803ECA90[1];
+static Object_8003DEC4 *lbl_803ECA94[1];
+static int lbl_803ECA98[1];
+static Callback_8015F958 lbl_803ECA9C[1];
+static Object_8003DEC4 *lbl_803ECAA0[1];
 static void *lbl_803ECAA4[2];
 static char *lbl_803ECAAC[2];
 static void *lbl_803ECAB4[2];
@@ -1191,8 +1191,8 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
     int size0;
     int size1;
 
-    lbl_803ECA6C = pCallback;
-    lbl_803ECA70 = pPlayer;
+    lbl_803ECA6C[0] = pCallback;
+    lbl_803ECA70[0] = pPlayer;
     if (id != NO_MODEL) {
         lbl_803EB330 = 1;
         lbl_803EB338[0].mId = id;
@@ -1217,9 +1217,9 @@ void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Cal
     ModelLod_802DF190 *pLods;
 
     lbl_803EB331 = 1;
-    lbl_803ECA78 = pCallback;
-    lbl_803ECA7C = pPlayer;
-    lbl_803ECA74 = index;
+    lbl_803ECA78[0] = pCallback;
+    lbl_803ECA7C[0] = pPlayer;
+    lbl_803ECA74[0] = index;
     if (pIds->mUnknown0 != NO_MODEL) {
         pLods = lbl_802E31D0[index];
         if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
@@ -1238,7 +1238,7 @@ void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Cal
         }
     }
     lbl_803EB331 = 0;
-    lbl_803ECA78(lbl_803ECA7C);
+    lbl_803ECA78[0](lbl_803ECA7C[0]);
 }
 
 void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
@@ -1246,9 +1246,9 @@ void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     ModelLod_802DF190 *pLods;
 
     lbl_803EB332 = 1;
-    lbl_803ECA84 = pCallback;
-    lbl_803ECA88 = pPlayer;
-    lbl_803ECA80 = index;
+    lbl_803ECA84[0] = pCallback;
+    lbl_803ECA88[0] = pPlayer;
+    lbl_803ECA80[0] = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3208[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
@@ -1266,7 +1266,7 @@ void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
         }
     }
     lbl_803EB332 = 0;
-    lbl_803ECA84(lbl_803ECA88);
+    lbl_803ECA84[0](lbl_803ECA88[0]);
 }
 
 void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
@@ -1274,9 +1274,9 @@ void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     ModelLod_802DF190 *pLods;
 
     lbl_803EB333 = 1;
-    lbl_803ECA90 = pCallback;
-    lbl_803ECA94 = pPlayer;
-    lbl_803ECA8C = index;
+    lbl_803ECA90[0] = pCallback;
+    lbl_803ECA94[0] = pPlayer;
+    lbl_803ECA8C[0] = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3240[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
@@ -1294,7 +1294,7 @@ void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
         }
     }
     lbl_803EB333 = 0;
-    lbl_803ECA90(lbl_803ECA94);
+    lbl_803ECA90[0](lbl_803ECA94[0]);
 }
 
 void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
@@ -1302,9 +1302,9 @@ void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     ModelLod_802DF190 *pLods;
 
     lbl_803EB334 = 1;
-    lbl_803ECA9C = pCallback;
-    lbl_803ECAA0 = pPlayer;
-    lbl_803ECA98 = index;
+    lbl_803ECA9C[0] = pCallback;
+    lbl_803ECAA0[0] = pPlayer;
+    lbl_803ECA98[0] = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3278[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
@@ -1317,7 +1317,7 @@ void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
         }
     }
     lbl_803EB334 = 0;
-    lbl_803ECA9C(lbl_803ECAA0);
+    lbl_803ECA9C[0](lbl_803ECAA0[0]);
 }
 
 /* Finishes the asynchronous loads started above once only the initial
@@ -1328,35 +1328,35 @@ void fn_8015FE4C(void)
         lbl_803EB330 = 0;
         fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
                     (void **)lbl_803ECAAC, 0);
-        lbl_803ECA6C(lbl_803ECA70);
+        lbl_803ECA6C[0](lbl_803ECA70[0]);
     }
     if (lbl_803EB331 == 1) {
         lbl_803EB331 = 0;
         fn_801A4690(0);
-        fn_8015DA80(lbl_803ECA74, 0);
+        fn_8015DA80(lbl_803ECA74[0], 0);
         fn_801A46BC();
-        lbl_803ECA78(lbl_803ECA7C);
+        lbl_803ECA78[0](lbl_803ECA7C[0]);
     }
     if (lbl_803EB332 == 1) {
         lbl_803EB332 = 0;
         fn_801A4690(0);
-        fn_8015DD3C(lbl_803ECA80, 0);
+        fn_8015DD3C(lbl_803ECA80[0], 0);
         fn_801A46BC();
-        lbl_803ECA84(lbl_803ECA88);
+        lbl_803ECA84[0](lbl_803ECA88[0]);
     }
     if (lbl_803EB333 == 1) {
         lbl_803EB333 = 0;
         fn_801A4690(0);
-        fn_8015DE3C(lbl_803ECA8C, 0);
+        fn_8015DE3C(lbl_803ECA8C[0], 0);
         fn_801A46BC();
-        lbl_803ECA90(lbl_803ECA94);
+        lbl_803ECA90[0](lbl_803ECA94[0]);
     }
     if (lbl_803EB334 == 1) {
         lbl_803EB334 = 0;
         fn_801A4690(0);
-        fn_8015DF3C(lbl_803ECA98, 0);
+        fn_8015DF3C(lbl_803ECA98[0], 0);
         fn_801A46BC();
-        lbl_803ECA9C(lbl_803ECAA0);
+        lbl_803ECA9C[0](lbl_803ECAA0[0]);
     }
 }
 

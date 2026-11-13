@@ -6,7 +6,7 @@
 
 extern "C" {
 void fn_800BE944(int index, int a, unsigned int msg, float value);
-void fn_8003A3F4(int a, int index);
+void PlyrRouteShowTeam(int a, int index);
 void HudHideEvent31(int index);
 void HudHideEvent3D(int index);
 int ConSetChannelInfo(int a, int b, void *p);
@@ -32,7 +32,7 @@ extern "C" void fn_800C0330(void *p)
             case 4:
                 fn_800BE944((unsigned char)i, fn_800B65A0(i), 133, 0.0f);
                 fn_800BEC1C(fn_800B65A0(i), (unsigned char)i);
-                fn_8003A3F4(0, i);
+                PlyrRouteShowTeam(0, i);
                 break;
             case 1:
                 lbl_803EABA8->mSlots[i].mUnknown0 = 0;
@@ -76,7 +76,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, unsigned char team, unsigned sho
     while (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", &cursor, &id) == 0) {
         if (i <= 6) {
             unsigned short index = fn_800C0660(pValues, id);
-            Object_80039F5C *p = fn_80039F5C(team, index);
+            Object_80039F5C *p = PlyrGet(team, index);
 
             fn_800B4DE4(cursor, i, &p->mUnknown2900);
             p->mUnknown508 = p->mUnknown2904Float;

@@ -8,11 +8,11 @@ struct CamBallCamera_t {
 static unsigned char _CamBall_bActive = 0;
 
 extern "C" {
-void fn_80142A64(CamBallCamera_t *pCamera, int msg);
+void CamBallMsgFunc(CamBallCamera_t *pCamera, int msg);
 
 void CamBallInit(CamBallCamera_t *pCamera)
 {
-    pCamera->mUnknownDC = fn_80142A64;
+    pCamera->mUnknownDC = CamBallMsgFunc;
     _CamBall_bActive = 1;
 }
 

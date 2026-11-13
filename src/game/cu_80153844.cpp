@@ -1,22 +1,22 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreGamePhase.h"
+#include "game/PreSnapPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/Ball.h"
 #include "game/fn_8009D990.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802372EC.h"
-#include "game/Class_802A56E8.h"
-#include "game/cu_8013BB18.h"
+#include "game/ScrmRuleSet.h"
+#include "game/cammain.h"
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
-class Class_802A1BC8 : public Class_80297BF8 {
+class Class_802A1BC8 : public PreGamePhase {
 };
 
-class Class_802A1B58 : public Class_80297CE8 {
+class Class_802A1B58 : public PreSnapPhase {
 public:
     Block_80170E64 *mpUnknown4[2][2];
     signed char mUnknown20[2][2];
@@ -64,7 +64,7 @@ void fn_801487C0(int team, unsigned char begin);
 unsigned int fn_80153328(Class_802A1930 *p);
 void HudShowAlert(const char *pText);
 void BallResetToSpot(void);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 unsigned char fn_8007AFDC(int team);
 int fn_800B65D0(int team);
 void fn_800B6714(Object_80039F5C *p, int a);
@@ -84,17 +84,17 @@ void fn_80153844(Class_802A1930 *p, int team)
 
 void fn_801538C8(Class_802A1BC8 *p)
 {
-    p->Class_80297BF8::vfn_05();
+    p->PreGamePhase::OnExit();
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     fn_80141164(2.5f);
 }
 
 void fn_80153910(Class_802A1BC8 *p, float dt)
 {
     if (MsgBoxIsClosed()) {
-        p->Class_80297BF8::vfn_04(dt);
+        p->PreGamePhase::OnUpdate(dt);
     }
 }
 
@@ -115,7 +115,7 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     int team = fn_80178308();
 
     fn_801486A8();
-    p->Class_80297CE8::vfn_04(dt);
+    p->PreSnapPhase::OnEnter(dt);
     fn_801487C0(0, fn_80148A58()->vfn_05(0));
     fn_801487C0(1, fn_80148A58()->vfn_05(1));
     do {
@@ -141,18 +141,18 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
 void fn_80153BBC(Class_802A1B58 *p)
 {
-    p->Class_80297CE8::vfn_10();
+    p->PreSnapPhase::AssignControlledPlayers();
     int team = fn_80178308();
     unsigned char kind = fn_8007AFDC(team);
     int first = fn_800B65A0(team);
     int second = fn_800B65D0(team);
-    Object_80039F5C *p0 = fn_80039F5C(team, 0);
-    Object_80039F5C *p1 = fn_80039F5C(team, 1);
+    Object_80039F5C *p0 = PlyrGet(team, 0);
+    Object_80039F5C *p1 = PlyrGet(team, 1);
 
     if (kind == 2) {
         if (!p->mpUnknown4[team][0]) {
@@ -177,8 +177,8 @@ void fn_80153BBC(Class_802A1B58 *p)
     kind = fn_8007AFDC(team);
     first = fn_800B65A0(team);
     second = fn_800B65D0(team);
-    p0 = fn_80039F5C(team, 0);
-    p1 = fn_80039F5C(team, 1);
+    p0 = PlyrGet(team, 0);
+    p1 = PlyrGet(team, 1);
     if (kind == 2) {
         if (!p->mpUnknown4[team][0]) {
             p->mpUnknown4[team][0] = p0->mpUnknown4;

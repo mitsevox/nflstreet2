@@ -50,7 +50,7 @@ extern "C" void fn_800ABAF0(void)
         unsigned int index;
 
         for (index = 0; index < count; index++) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)i, index);
+            Object_80039F5C *p = PlyrGet((unsigned char)i, index);
 
             fn_800EFE60(0, p->mpState, p);
             if (p != pObject0 && p != pObject1) {

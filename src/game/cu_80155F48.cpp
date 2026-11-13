@@ -1,7 +1,7 @@
 #include "game/Class_80148A58.h"
 
 extern "C" {
-void fn_80056560(void);
+void GameStatsUpdateRecords(void);
 
 void fn_80155F48(Class_80148A58 *p, int a, int b)
 {
@@ -14,7 +14,7 @@ float *fn_80155F4C(Class_80148A58 *p, int a)
 
 void fn_80155F54(Class_80148A58 *p)
 {
-    fn_80056560();
+    GameStatsUpdateRecords();
 }
 
 void fn_80155F74(Class_80148A58 *p)

@@ -39,7 +39,7 @@ struct FldObjLinePass_t {
 };
 
 extern "C" {
-void fn_80044114(void);
+void DivotDraw(void);
 void *fn_800A336C(void);
 int fn_800A3398(void);
 void SimpShadowDrawAll(void);
@@ -198,7 +198,7 @@ int FldObjRender(FldObj_t *pObject)
         FldObjDrawLayer(pObject, 2, &_FldObj_aLinePasses[i], scale);
     }
     FldObjDrawLayer(pObject, 3, 0, _FldObj_fDegradeScale);
-    fn_80044114();
+    DivotDraw();
     FldObjDrawLayer(pObject, 4, 0, 1.0f);
     FldObjDrawShadowPass(pObject, 1.0f, 0);
     fn_801D0544();

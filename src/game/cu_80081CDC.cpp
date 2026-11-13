@@ -19,7 +19,7 @@ void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
-void fn_800731D0(int a);
+void SndgMusicPumpFrame(int a);
 int fn_80186F7C(unsigned char index);
 int toupper(int c);
 unsigned int fn_80229CFC(int category, int *pValues, int a);
@@ -84,12 +84,12 @@ int fn_80081E3C(Object_8008044C *pObject)
 
 void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007ADD4(pObject, 0x414E4650, pBuffer, size);
+    DbCursorSetString(pObject, 0x414E4650, pBuffer, size);
 }
 
 void fn_80081E98(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007ADD4(pObject, 0x414E4C50, pBuffer, size);
+    DbCursorSetString(pObject, 0x414E4C50, pBuffer, size);
 }
 
 unsigned int fn_80081ECC(int category, int *pValues)
@@ -126,7 +126,7 @@ void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
             flags &= ~2;
         }
     }
-    fn_8007ABA4(pObject, 0x47494C50, flags);
+    DbCursorSetInt(pObject, 0x47494C50, flags);
 }
 
 int fn_80081FD4(Object_8008044C *pObject, int a)
@@ -203,7 +203,7 @@ int fn_80082280(Object_8008044C *pObject)
 
 void fn_800822A8(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x48464650, value);
+    DbCursorSetInt(pObject, 0x48464650, value);
 }
 
 int fn_800822D4(Object_8008044C *pObject)
@@ -218,19 +218,19 @@ int fn_800822D4(Object_8008044C *pObject)
 
 void fn_80082308(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x42454650, value);
+    DbCursorSetInt(pObject, 0x42454650, value);
 }
 
 void fn_80082334(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
-    fn_8007ABA4(pObject, 0x57424650, pBlock->mUnknown0[1]);
-    fn_8007ABA4(pObject, 0x41454650, pBlock->mUnknown0[2] - 8);
-    fn_8007ABA4(pObject, 0x54484C50, pBlock->mUnknown0[3]);
-    fn_8007ABA4(pObject, 0x4F4D4650, pBlock->mUnknown0[4] - 0x15);
-    fn_8007ABA4(pObject, 0x504C4650, pBlock->mUnknown0[5] - 0x1E);
-    fn_8007ABA4(pObject, 0x434A4650, pBlock->mUnknown0[6] - 0x22);
-    fn_8007ABA4(pObject, 0x59454650, pBlock->mUnknown0[7] - 0x30);
-    fn_8007ABA4(pObject, 0x4F4E4650, pBlock->mUnknown0[8] - 0x48);
+    DbCursorSetInt(pObject, 0x57424650, pBlock->mUnknown0[1]);
+    DbCursorSetInt(pObject, 0x41454650, pBlock->mUnknown0[2] - 8);
+    DbCursorSetInt(pObject, 0x54484C50, pBlock->mUnknown0[3]);
+    DbCursorSetInt(pObject, 0x4F4D4650, pBlock->mUnknown0[4] - 0x15);
+    DbCursorSetInt(pObject, 0x504C4650, pBlock->mUnknown0[5] - 0x1E);
+    DbCursorSetInt(pObject, 0x434A4650, pBlock->mUnknown0[6] - 0x22);
+    DbCursorSetInt(pObject, 0x59454650, pBlock->mUnknown0[7] - 0x30);
+    DbCursorSetInt(pObject, 0x4F4E4650, pBlock->mUnknown0[8] - 0x48);
 }
 
 int fn_80082414(int index)
@@ -370,11 +370,11 @@ void fn_800828FC(void)
 {
     QueryResult result;
 
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EF8C(0, 0x4D4E4653);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EF8C(0, 0x4D4E4C53);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     lbl_8030BC88.mUnknown0 = 0;
     lbl_8030BC88.mUnknown4 = 0;
     lbl_8030BC88.mUnknown8 = -1;
@@ -398,11 +398,11 @@ void fn_800829D8(void)
     if (lbl_8030BC88.mUnknown0) {
         fn_801FCFA0(&lbl_8030BC88);
     }
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EFBC(0, 0x4D4E4653);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     fn_8022EFBC(0, 0x4D4E4C53);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
     lbl_803EA7D8 = 0;
 }
 

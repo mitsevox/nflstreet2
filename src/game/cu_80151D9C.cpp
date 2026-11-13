@@ -1,36 +1,36 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_8009D990.h"
 
-class Class_802A1DC8 : public Class_80297BF8 {
+class Class_802A1DC8 : public PreGamePhase {
 public:
-    virtual void vfn_07();
+    virtual void HideIntroScreen();
     unsigned char mUnknown4;
 };
 
-class Class_802A1D58 : public Class_80297CE8 {
+class Class_802A1D58 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
 };
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
     unsigned char mUnknown4;
     char mUnknown5[3];
     unsigned char mUnknown8;
     unsigned char mUnknown9;
 };
 
-class Class_802A1C98 : public Class_80297C60 {
+class Class_802A1C98 : public PostPlayPhase {
 public:
-    virtual void vfn_05();
+    virtual void OnExit();
 };
 
 class Class_802A1C30 : public Class_80297B90 {
@@ -38,9 +38,9 @@ public:
     virtual void vfn_06();
 };
 
-class Class_802A1E38 : public Class_802A56E8 {
+class Class_802A1E38 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
 struct Entry_8015005C {
@@ -92,7 +92,7 @@ char *fn_801C2EF0(char *pDest, const char *pSource, unsigned int count);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C3180(const char *pString);
 char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value);
 void fn_801502B4(void *p);
 void ClockRuleClearFlags(unsigned int mask);
@@ -144,7 +144,7 @@ void fn_80151D9C(Class_802A2918 *p)
     fn_801C2EF0(text, "Starting next round.\n", sizeof(text));
     for (i = 3; i != 0; i--) {
         if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
-            pPlayer = fn_8003AC84(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
+            pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
             fn_801C2D88(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
                         pPlayer->mUnknown2927 + 21);
             fn_801C2F88(text, line, sizeof(text) - fn_801C3180(text));

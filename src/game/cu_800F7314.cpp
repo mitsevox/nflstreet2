@@ -39,8 +39,8 @@ void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pT
 void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
-int fn_8012CAB4(Object_80039F5C *p);
-void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
+int PlayerCutGetRunHeading(Object_80039F5C *p);
+void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
 int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, float f, int d, float g);
 void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
@@ -238,8 +238,8 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             Point_8017886C spot;
             int angle;
 
-            fn_8012CD4C(pOther, &spot);
-            angle = fn_8012CAB4(pOther) & 0xFFFFFF;
+            PlayerCutGetEndPoint(pOther, &spot);
+            angle = PlayerCutGetRunHeading(pOther) & 0xFFFFFF;
             if (MathAngleDiff(angle, 0) < 0x200000) {
                 side = 1.0f;
             } else if (MathAngleDiff(angle, 0x800000) < 0x200000) {

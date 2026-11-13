@@ -2,7 +2,7 @@
 #include "game/GameCamera.h"
 #include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "game/LevelData.h"
 
 extern "C" {
@@ -165,8 +165,8 @@ void fn_800A2D2C(void);
 EnvFogSettings *EnvGetFogSettings(int index);
 void LevelLoad(void);
 void *fn_800C47C4(void);
-void fn_801464D0(void *owner);
-void fn_80146BF8(float value);
+void GlowInit(void *owner);
+void GlowSetScale(float value);
 void fn_801D03D0(float *pMatrix);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -293,8 +293,8 @@ extern "C" void fn_800A2F48(void)
     lbl_8030E6E8.mUnknown1C = lbl_802D7D00[lbl_8030E6E8.mUnknown0];
     lbl_803EA9F4 = ResOpenDevice(lbl_802EBFB4, 44);
     LevelLoad();
-    fn_801464D0(fn_800C47C4());
-    fn_80146BF8(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);
+    GlowInit(fn_800C47C4());
+    GlowSetScale(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);
     fn_800A2D2C();
     fn_800A29D8(lbl_8030E6E8.mUnknown0);
     lbl_8030E6E8.mUnknown28 = 10.0f;
@@ -314,7 +314,7 @@ extern "C" void fn_800A2F48(void)
 extern "C" void fn_800A3170(void)
 {
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
     unsigned char i;
 
     for (i = 0; i < gLevelData->mUnknown96; i++) {
@@ -335,8 +335,8 @@ extern "C" void fn_800A3170(void)
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
         args.mUnknown00 = pEntry->mUnknown24 + 8;
-        Source_80144CE0 *pSource = (Source_80144CE0 *)LevelFindArea(pEntry->mUnknown0);
-        lbl_8030E6E8.mpUnknownBC[i] = fn_80144CE0(&args, 0, pSource);
+        ParticleSource_t *pSource = (ParticleSource_t *)LevelFindArea(pEntry->mUnknown0);
+        lbl_8030E6E8.mpUnknownBC[i] = ParticleSysSpawnEmitter(&args, 0, pSource);
     }
 }
 

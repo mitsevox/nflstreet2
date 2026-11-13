@@ -9,7 +9,7 @@
 #include "game/cu_80181330.h"
 #include "game/GameInfo.h"
 #include "game/MsgGame.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/fn_801C3284.h"
 #include "game/UISGameMsg.h"
@@ -58,12 +58,12 @@ int ConGetChannelInfo(int a, int b);
 int fn_801E195C(int a);
 int fn_800B81A4(void);
 float fn_80237260(int stream);
-int fn_80188030(int a);
-int fn_80188044(int a);
+int GameTextGetPadPlayer(int a);
+int GameTextFindPlayerPad(int a);
 void FEPlyrSetPlayer(int index, int a, int b);
-int fn_80187F44(char *pText0, int length0, char *pText1, int length1, char *pText2, int length2, char *pText3, int length3);
+int GameTextGetMemCardNames(char *pText0, int length0, char *pText1, int length1, char *pText2, int length2, char *pText3, int length3);
 int fn_801D6850(void);
-void fn_801880B4(char *pText, int length);
+void GameTextGetEnteredName(char *pText, int length);
 void fn_801410F4(int a);
 void fn_80186A44(signed char a);
 int fn_8022F358(int index);
@@ -92,9 +92,9 @@ void *fn_8021EA44(int index);
 void *fn_8021E984(void *p, int a);
 void fn_8000FCD4(int a);
 int fn_8000FCCC(void);
-unsigned char fn_80187C64(void);
-void fn_80187C5C(unsigned char a);
-void fn_80156E74(float *pX, float *pY, float *pZ);
+unsigned char GameTextGetBootFinished(void);
+void GameTextSetBootFinished(unsigned char a);
+void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
 int fn_8005902C(void);
 int fn_8007B324(void);
 int TeamLogoGetHandle(int a);
@@ -143,7 +143,7 @@ void MsgGameSetSetup(int a, int b, int c)
 
 int MsgGameCheckSetting6(void)
 {
-    int value = fn_8007F828(6);
+    int value = GameOptionsGet(6);
 
     return value == 1 || value == 2;
 }
@@ -315,10 +315,10 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->f = MsgGameRandRange(pArgs[0].f, pArgs[1].f);
         break;
     case 0xA:
-        *pArgs[0].pi = fn_80188030(*pArgs[0].pi);
+        *pArgs[0].pi = GameTextGetPadPlayer(*pArgs[0].pi);
         break;
     case 0x139:
-        pResult->i = fn_80188044(pArgs[0].i);
+        pResult->i = GameTextFindPlayerPad(pArgs[0].i);
         break;
     case 0xB:
         MsgGameSetSetup(pArgs[0].i, pArgs[1].i, pArgs[2].i);
@@ -346,7 +346,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = _MsgGame_bMemCardActive;
         break;
     case 0x114:
-        pResult->i = fn_80187F44(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength,
+        pResult->i = GameTextGetMemCardNames(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength,
                                  pArgs[1].pParams->mpText, pArgs[1].pParams->mLength,
                                  pArgs[2].pParams->mpText, pArgs[2].pParams->mLength,
                                  pArgs[3].pParams->mpText, pArgs[3].pParams->mLength);
@@ -355,7 +355,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = fn_801D6850();
         break;
     case 6:
-        fn_801880B4(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
+        GameTextGetEnteredName(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);
         break;
     case 0x10:
         fn_801410F4(2);
@@ -386,7 +386,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         fn_80186F8C(pArgs[0].i != 0);
         break;
     case 0x21: {
-        int value = fn_8007F828(12);
+        int value = GameOptionsGet(12);
 
         if (value == 1 && FELoopIsMainFEActive() != 0) {
             pResult->i = value;
@@ -484,7 +484,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         FELoopConfigureEntry(0, -1, -1, -2, -2, -2);
         break;
     case 0x134:
-        pResult->i = fn_8007F828(20) != 0;
+        pResult->i = GameOptionsGet(20) != 0;
         break;
     case 0x144: {
         void *pObject = fn_8021EA44(1);
@@ -508,17 +508,17 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
     case 0x91: {
         int result = 0;
 
-        if (fn_80187C64()) {
+        if (GameTextGetBootFinished()) {
             result = UserRecGetCount() == 0;
         }
         pResult->i = result;
-        fn_80187C5C(0);
+        GameTextSetBootFinished(0);
         break;
     }
     case 0x181: {
         float position[3];
 
-        fn_80156E74(&position[0], &position[1], &position[2]);
+        TutorialGetHudPosition(&position[0], &position[1], &position[2]);
         *pArgs[0].pf = position[0];
         *pArgs[1].pf = position[1];
         *pArgs[2].pf = position[2];
@@ -575,7 +575,7 @@ void MsgGameFillPortStates(int *pValues)
             do {
                 int key = fn_8007AF34(&cursor);
                 int value = fn_8007AF5C(&cursor);
-                int index = fn_80188030(key);
+                int index = GameTextGetPadPlayer(key);
 
                 if (index != -1) {
                     pValues[index] = value == 0 ? 0 : value == 1 ? 1 : -1;

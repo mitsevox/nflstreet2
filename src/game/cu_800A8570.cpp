@@ -72,7 +72,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (p != 0 && lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
+                ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
@@ -101,7 +101,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
+                ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
@@ -134,15 +134,15 @@ int fn_800927BC(unsigned char index);
 void fn_80094598(int index);
 void fn_80093410(int handle);
 int fn_80178508(Point_8017886C *pPos, float *pOut, int skipFlags);
-void fn_800398B4(void);
-void fn_80039CB0(float dt);
-void fn_80039D08(float dt);
-void fn_80039B2C(float dt);
-void fn_80039A38(float dt);
+void PlyrMgrUpdate(void);
+void PlyrMgrRunBrains(float dt);
+void PlyrMgrUpdatePoses(float dt);
+void PlyrMgrUpdateMotion(float dt);
+void PlyrMgrUpdateSkeletons(float dt);
 void CamGameResumeAll(void);
 void HudPost3AOn(void);
-int fn_80156704(void);
-void fn_801574DC(int value);
+int TutorialIsActive(void);
+void TutorialSetHudVisible(int value);
 int fn_800A8468(int team);
 void fn_800A981C(void);
 void fn_800A9854(void);
@@ -184,17 +184,17 @@ extern "C" void fn_800A9478(int skipPlayerReset)
             fn_800A9854();
         }
         for (step = 0; step <= 19; step++) {
-            fn_800398B4();
+            PlyrMgrUpdate();
             BallsProcessMotion(1.0f);
-            fn_80039CB0(gFrameTimeScale);
-            fn_80039D08(gFrameTimeScale);
-            fn_80039B2C(gFrameTimeScale);
-            fn_80039A38(gFrameTimeScale);
+            PlyrMgrRunBrains(gFrameTimeScale);
+            PlyrMgrUpdatePoses(gFrameTimeScale);
+            PlyrMgrUpdateMotion(gFrameTimeScale);
+            PlyrMgrUpdateSkeletons(gFrameTimeScale);
             BallsProcessStates(gFrameTimeScale);
             BallsProcessCollision(gFrameTimeScale);
         }
-        if (fn_80156704()) {
-            fn_801574DC(1);
+        if (TutorialIsActive()) {
+            TutorialSetHudVisible(1);
         }
         if (lost) {
             fn_8002C9A8(lbl_803EA368, 2, 0);
