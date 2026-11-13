@@ -11,7 +11,7 @@
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {
     int mUnknown0;
-    Class_80184190 *mpScreen;
+    MenuScreen *mpScreen;
 };
 
 /* Texts and values shown by the current screen. */
@@ -35,16 +35,16 @@ struct State_80362A84 {
 extern "C" {
 extern void *gUISMainInfo;
 
-Class_80184190 *fn_800053D0(void);
-Class_80184190 *fn_800088C8(void);
-void fn_8000890C(int value);
-int fn_80008914(void);
-int fn_8000891C(void);
-void fn_80008924(void);
-int fn_800089C0(void);
-int fn_800089D8(void);
-void fn_800089E0(int a);
-Class_80184190 *fn_8000EB3C(void);
+MenuScreen *CreateTeamGetMenu(void);
+MenuScreen *CreatePlayerGetMenu(void);
+void CreatePlayerSetPoints(int value);
+int CreatePlayerGetPoints(void);
+int CreatePlayerGetPendingCost(void);
+void CreatePlayerResetOriginals(void);
+int CreatePlayerGetNextCost(void);
+int CreatePlayerGetPlayerId(void);
+void CreatePlayerApplyPreset(int a);
+MenuScreen *fn_8000EB3C(void);
 int fn_8000EB5C(void);
 int fn_8000EB80(void);
 void fn_8000EBA4(int a);
@@ -80,7 +80,7 @@ int fn_8007BF14(int a);
 int fn_8007C690(DbCursor *pCursor, short *pOut);
 void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues);
+void fn_800816C4(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues);
 void fn_8008174C(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
@@ -151,7 +151,7 @@ static unsigned char lbl_803EB58B = 0;
 static unsigned char lbl_803EB58C = 0;
 static unsigned char lbl_803EB58D = 0;
 
-static Entry_80182CC8 lbl_802EA988[2] = {
+static MenuEntry_t lbl_802EA988[2] = {
     {0, 0, "Edit Team", 1, 0, 0, 0},
     {1, 0, "Edit Player", 1, 0, 0, 0},
 };
@@ -166,8 +166,8 @@ static StackEntry_80362B14 lbl_80362B14[8];
 static char lbl_80362B54[28];
 static unsigned char lbl_80362B70[10];
 
-extern Class_802A6BB0 lbl_803ECB60;
-static Class_802A6BB0 *lbl_803ECB64;
+extern MenuItemEditor lbl_803ECB60;
+static MenuItemEditor *lbl_803ECB64;
 static int lbl_803ECB68;
 static unsigned char lbl_803ECB6C[3];
 static unsigned char lbl_803ECB70[3];
@@ -204,18 +204,18 @@ int fn_80183968(void);
 int fn_8018397C(void);
 }
 
-inline Class_802A6BB0 *Class_80184190::vfn_06()
+inline MenuItemEditor *MenuScreen::GetEditor()
 {
     return 0;
 }
 
 /* Class of the instance returned by fn_801841AC; vtable 0x802A6B10. */
-class Class_802A6B10 : public Class_802A6B60 {
+class Class_802A6B10 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 2; }
-    virtual Entry_80182CC8 *vfn_08() { return lbl_802EA988; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 2; }
+    virtual MenuEntry_t *GetEntries() { return lbl_802EA988; }
 
     char mUnknown4[4];
 };
@@ -277,21 +277,21 @@ void fn_80181458(void)
         fn_8018DE9C(lbl_803ECB74, lbl_803ECB78);
     }
     fn_8018196C();
-    fn_8000890C(lbl_803ECB7C);
+    CreatePlayerSetPoints(lbl_803ECB7C);
     if (!fn_80183950()) {
         ChalSetDevPoints(lbl_803ECB7C);
     }
-    fn_80008924();
+    CreatePlayerResetOriginals();
 }
 
-void fn_801814E0(Class_80184190 *pScreen)
+void fn_801814E0(MenuScreen *pScreen)
 {
     lbl_803EB550++;
     lbl_80362B14[lbl_803EB550].mpScreen = pScreen;
     lbl_80362B14[lbl_803EB550].mUnknown0 = 0;
 }
 
-void fn_8018150C(Class_80184190 *pScreen)
+void fn_8018150C(MenuScreen *pScreen)
 {
     lbl_803EB550 = 0;
     lbl_80362B14[lbl_803EB550].mUnknown0 = 0;
@@ -304,7 +304,7 @@ void fn_8018152C(void)
     lbl_803EB550--;
 }
 
-Class_80184190 *fn_80181554(void)
+MenuScreen *fn_80181554(void)
 {
     return lbl_80362B14[lbl_803EB550].mpScreen;
 }
@@ -333,10 +333,10 @@ int fn_801815A0(int value)
 
 void fn_801815D8(int a, int *pCount, int *pValue)
 {
-    fn_80181554()->vfn_01(a, pCount, pValue);
+    fn_80181554()->Enter(a, pCount, pValue);
     lbl_803EB558 = *pCount;
     fn_80181588(*pValue);
-    lbl_803ECB64 = fn_80181554()->vfn_06();
+    lbl_803ECB64 = fn_80181554()->GetEditor();
     if (lbl_803ECB64 == 0) {
         lbl_803ECB64 = &lbl_803ECB60;
     }
@@ -355,10 +355,10 @@ void fn_80181670(int a, int *pCount, int *pValue)
         switch (lbl_803EB548) {
         case 0:
         case 3:
-            fn_801814E0(fn_800053D0());
+            fn_801814E0(CreateTeamGetMenu());
             break;
         case 5:
-            fn_801814E0(fn_800088C8());
+            fn_801814E0(CreatePlayerGetMenu());
             break;
         default:
             fn_801814E0(fn_801841AC());
@@ -389,9 +389,9 @@ void fn_80181670(int a, int *pCount, int *pValue)
     fn_80182E34(buffer);
     if (!fn_8018397C()) {
         if (fn_80183950()) {
-            fn_8000890C(StoryGetDevPoints(lbl_803EB55C));
+            CreatePlayerSetPoints(StoryGetDevPoints(lbl_803EB55C));
         } else {
-            fn_8000890C(ChalGetDevPoints());
+            CreatePlayerSetPoints(ChalGetDevPoints());
         }
     }
 }
@@ -488,7 +488,7 @@ void fn_80181AD4(unsigned char a)
     void *pResult = 0;
     int done = 0;
 
-    fn_80181554()->vfn_02(lbl_803EB554, 1, &pResult);
+    fn_80181554()->Leave(lbl_803EB554, 1, &pResult);
     lbl_80362B14[lbl_803EB550].mpScreen = 0;
     lbl_803EB588 = done;
     if (!a) {
@@ -525,7 +525,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
 {
     void *pResult = 0;
     int back = a == 0;
-    int result = fn_80181554()->vfn_02(lbl_803EB554, back, &pResult);
+    int result = fn_80181554()->Leave(lbl_803EB554, back, &pResult);
 
     if (result == -1) {
         if (!back) {
@@ -533,7 +533,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
         }
         fn_8018152C();
     } else if (result == 1) {
-        fn_801814E0((Class_80184190 *)pResult);
+        fn_801814E0((MenuScreen *)pResult);
     } else if (result == -2) {
         if (!back) {
             lbl_803EB588 = 1;
@@ -542,7 +542,7 @@ void fn_80181C10(int a, int *pCount, int *pValue)
         fn_8018152C();
     } else {
         result = 1;
-        fn_8018150C((Class_80184190 *)pResult);
+        fn_8018150C((MenuScreen *)pResult);
     }
     *pValue = fn_80181570();
     fn_801831F8(-1);
@@ -551,10 +551,10 @@ void fn_80181C10(int a, int *pCount, int *pValue)
 
 void fn_80181CF8(int a, int *pId)
 {
-    fn_80181554()->vfn_04(a, pId);
+    fn_80181554()->GetItemId(a, pId);
 }
 
-void fn_80181D48(Entry_80182CC8 *pEntry, int id)
+void fn_80181D48(MenuEntry_t *pEntry, int id)
 {
     pEntry->mId = id;
     pEntry->mUnknown36 = id;
@@ -566,17 +566,17 @@ void fn_80181D48(Entry_80182CC8 *pEntry, int id)
     fn_801C3284(pEntry->mName, "NO TEXT!", 22);
 }
 
-void fn_80181DA8(int a, int *pResult, Arg_8018399C text0, Arg_8018399C text1, Arg_8018399C text2)
+void fn_80181DA8(int a, int *pResult, MenuArg_t text0, MenuArg_t text1, MenuArg_t text2)
 {
     Params_80005284 *p0 = text0.pParams;
     Params_80005284 *p1 = text1.pParams;
     Params_80005284 *p2 = text2.pParams;
-    Entry_80182CC8 entry;
+    MenuEntry_t entry;
 
     lbl_803EB554 = a;
     fn_80181D48(&entry, a);
-    fn_80181554()->vfn_03(a);
-    fn_80181554()->vfn_05(a, &entry);
+    fn_80181554()->Highlight(a);
+    fn_80181554()->GetItem(a, &entry);
     if (entry.mUnknown36 < 0 || entry.mUnknown36 >= lbl_803EB558) {
         entry.mUnknown36 = 0;
     }
@@ -610,8 +610,8 @@ void fn_80181EAC(int a, int *pA, int *pB, int *pC)
     lbl_803EB584 = *pB;
 }
 
-void fn_80181F60(int a, int *pValues, int *pResult, Arg_8018399C text0, Arg_8018399C text1,
-                 Arg_8018399C text2)
+void fn_80181F60(int a, int *pValues, int *pResult, MenuArg_t text0, MenuArg_t text1,
+                 MenuArg_t text2)
 {
     Params_80005284 *p0 = text0.pParams;
     Params_80005284 *p1 = text1.pParams;
@@ -636,14 +636,14 @@ void fn_80181F60(int a, int *pValues, int *pResult, Arg_8018399C text0, Arg_8018
     }
 }
 
-void fn_801820A0(int a, int *p1, int *p2, int *p3, Arg_8018399C text, int *p5, int *p6, int *p7,
+void fn_801820A0(int a, int *p1, int *p2, int *p3, MenuArg_t text, int *p5, int *p6, int *p7,
                  int *p8)
 {
     Params_80005284 *p4 = text.pParams;
-    Entry_80182CC8 entry;
+    MenuEntry_t entry;
 
     fn_80181D48(&entry, a);
-    fn_80181554()->vfn_05(a, &entry);
+    fn_80181554()->GetItem(a, &entry);
     *p1 = entry.mUnknown30;
     *p2 = entry.mUnknown4;
     *p7 = entry.mUnknown40;
@@ -662,7 +662,7 @@ void fn_80182170(int a, int *pB, int *pC)
 {
     int value = 0;
 
-    lbl_803ECB64->vfn_01(a, &value);
+    lbl_803ECB64->GetColor(a, &value);
     ColorPickIndexToCell(value, pB, pC);
 }
 
@@ -670,18 +670,18 @@ void fn_801821D8(int a, int b, int c)
 {
     int value = ColorPickCellToIndex(b, c);
 
-    lbl_803ECB64->vfn_02(a, 0, value);
+    lbl_803ECB64->EndColor(a, 0, value);
     lbl_803EB588 = 1;
 }
 
 void fn_8018223C(int a)
 {
-    lbl_803ECB64->vfn_02(a, 1, -1);
+    lbl_803ECB64->EndColor(a, 1, -1);
 }
 
 void fn_80182280(int a)
 {
-    lbl_803ECB64->vfn_04(a, 0, lbl_803EB560);
+    lbl_803ECB64->EndCycle(a, 0, lbl_803EB560);
     if (lbl_803EB564 != lbl_803EB560) {
         lbl_803EB588 = 1;
     }
@@ -689,10 +689,10 @@ void fn_80182280(int a)
 
 void fn_801822DC(int a)
 {
-    lbl_803ECB64->vfn_04(a, 1, -1);
+    lbl_803ECB64->EndCycle(a, 1, -1);
 }
 
-void fn_80182320(int a, int b, Arg_8018399C text)
+void fn_80182320(int a, int b, MenuArg_t text)
 {
     switch (b) {
     case 3:
@@ -708,29 +708,29 @@ void fn_80182320(int a, int b, Arg_8018399C text)
     case -1:
         lbl_803EB560 = 0;
         lbl_803EB568 = 0;
-        lbl_803ECB64->vfn_03(a, &lbl_803EB560, &lbl_803EB568);
+        lbl_803ECB64->GetCycle(a, &lbl_803EB560, &lbl_803EB568);
         lbl_803EB564 = lbl_803EB560;
         break;
     }
-    lbl_803ECB64->vfn_05(a, lbl_803EB560, text);
+    lbl_803ECB64->GetCycleText(a, lbl_803EB560, text);
 }
 
-void fn_8018241C(int a, int b, int c, int *pOut, Arg_8018399C text0, Arg_8018399C text1,
-                 Arg_8018399C text2)
+void fn_8018241C(int a, int b, int c, int *pOut, MenuArg_t text0, MenuArg_t text1,
+                 MenuArg_t text2)
 {
     int x;
     int y;
 
-    lbl_803ECB64->vfn_06(a, b, c, &x, &y, text0, text1, text2);
+    lbl_803ECB64->BeginSlider(a, b, c, &x, &y, text0, text1, text2);
     *pOut = y;
     lbl_803EB574 = y;
     lbl_803EB570 = y;
     lbl_803EB578 = x;
 }
 
-int fn_801824BC(int a, int b, Arg_8018399C text)
+int fn_801824BC(int a, int b, MenuArg_t text)
 {
-    int result = lbl_803ECB64->vfn_07(a, b, text);
+    int result = lbl_803ECB64->MoveSlider(a, b, text);
 
     if (result) {
         lbl_803EB570 = b;
@@ -740,7 +740,7 @@ int fn_801824BC(int a, int b, Arg_8018399C text)
 
 void fn_80182520(int a)
 {
-    lbl_803ECB64->vfn_08(a, 0, lbl_803EB570);
+    lbl_803ECB64->EndSlider(a, 0, lbl_803EB570);
     if (lbl_803EB574 != lbl_803EB570) {
         lbl_803EB588 = 1;
     }
@@ -748,17 +748,17 @@ void fn_80182520(int a)
 
 void fn_8018257C(int a)
 {
-    lbl_803ECB64->vfn_08(a, 1, -1);
+    lbl_803ECB64->EndSlider(a, 1, -1);
 }
 
-void fn_801825C0(int a, int *pResult, Arg_8018399C text)
+void fn_801825C0(int a, int *pResult, MenuArg_t text)
 {
-    lbl_803ECB64->vfn_09(a, pResult, text);
+    lbl_803ECB64->GetText(a, pResult, text);
 }
 
-void fn_8018260C(int a, Arg_8018399C text)
+void fn_8018260C(int a, MenuArg_t text)
 {
-    lbl_803ECB64->vfn_10(a, text);
+    lbl_803ECB64->SetText(a, text);
     lbl_803EB588 = 1;
 }
 
@@ -795,7 +795,7 @@ void fn_801826FC(unsigned char *pOut)
     }
 }
 
-void fn_8018275C(int *pCount, Arg_8018399C *pList)
+void fn_8018275C(int *pCount, MenuArg_t *pList)
 {
     int i;
 
@@ -803,8 +803,8 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
     for (i = 0; i < 10; i++) {
         fn_801C3284(pList[i].pParams->mpText, "", pList[i].pParams->mLength);
     }
-    if (fn_800089D8() != 0x7FFF) {
-        Info_80307908 info;
+    if (CreatePlayerGetPlayerId() != 0x7FFF) {
+        PlayerGear_t info;
         DbCursor query;
         char buffer[32];
         int type;
@@ -812,7 +812,7 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
 
         fn_8007BA48(&query);
         seen = 0;
-        PlayerDbSeekId(fn_80182DC8(), fn_800089D8(), 0);
+        PlayerDbSeekId(fn_80182DC8(), CreatePlayerGetPlayerId(), 0);
         fn_800817CC(fn_80182DC8(), &info);
         for (i = 0; i < 14; i++) {
             type = fn_8007BF14(i);
@@ -832,7 +832,7 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
     }
 }
 
-void fn_801828E0(int a, int *pFlag, Arg_8018399C text, int *pOut)
+void fn_801828E0(int a, int *pFlag, MenuArg_t text, int *pOut)
 {
     Params_80005284 *pParams = text.pParams;
 
@@ -857,14 +857,14 @@ void fn_80182964(void)
             fn_8018EF6C(lbl_803ECB68);
             StorySetNew(lbl_803EB55C, 0);
         }
-        StorySetDevPoints(lbl_803EB55C, fn_80008914());
+        StorySetDevPoints(lbl_803EB55C, CreatePlayerGetPoints());
         StoryTeamStoreFromStats(lbl_803EB55C, lbl_803ECB68);
     } else if (fn_8018397C()) {
         fn_80082534(lbl_803ECB68, lbl_803EB55C);
     } else if (fn_80183948() != 2) {
         fn_8018D8EC(lbl_803EB55C, lbl_803ECB68);
-        if (ChalGetDevPoints() != fn_80008914()) {
-            ChalSetDevPoints(fn_80008914());
+        if (ChalGetDevPoints() != CreatePlayerGetPoints()) {
+            ChalSetDevPoints(CreatePlayerGetPoints());
         }
     }
     if (fn_80183950() || fn_80183968()) {
@@ -879,90 +879,90 @@ void fn_80182A60(void)
 
 }
 
-void Class_802A6BB0::vfn_01(int a, int *pResult)
+void MenuItemEditor::GetColor(int a, int *pResult)
 {
 }
 
-void Class_802A6BB0::vfn_02(int a, int b, int c)
+void MenuItemEditor::EndColor(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_03(int a, int *pB, int *pC)
+void MenuItemEditor::GetCycle(int a, int *pB, int *pC)
 {
 }
 
-void Class_802A6BB0::vfn_04(int a, int b, int c)
+void MenuItemEditor::EndCycle(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_05(int a, int b, Arg_8018399C text)
+void MenuItemEditor::GetCycleText(int a, int b, MenuArg_t text)
 {
 }
 
-void Class_802A6BB0::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                            Arg_8018399C textH)
+void MenuItemEditor::BeginSlider(int a, int b, int c, int *pD, int *pE, MenuArg_t textF, MenuArg_t textG,
+                                 MenuArg_t textH)
 {
 }
 
-int Class_802A6BB0::vfn_07(int a, int b, Arg_8018399C text)
+int MenuItemEditor::MoveSlider(int a, int b, MenuArg_t text)
 {
     return 0;
 }
 
-void Class_802A6BB0::vfn_08(int a, int b, int c)
+void MenuItemEditor::EndSlider(int a, int b, int c)
 {
 }
 
-void Class_802A6BB0::vfn_09(int a, int *pResult, Arg_8018399C text)
+void MenuItemEditor::GetText(int a, int *pResult, MenuArg_t text)
 {
 }
 
-void Class_802A6BB0::vfn_10(int a, Arg_8018399C text)
+void MenuItemEditor::SetText(int a, MenuArg_t text)
 {
 }
 
-void Class_802A6B10::vfn_01(int a, int *pCount, int *pValue)
+void Class_802A6B10::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_801835C0(0x70);
 }
 
-int Class_802A6B10::vfn_02(int a, int b, void **ppResult)
+int Class_802A6B10::Leave(int a, int b, void **ppResult)
 {
     int result;
 
-    Class_802A6B60::vfn_02(a, b, ppResult);
+    MenuListScreen::Leave(a, b, ppResult);
     result = -1;
     if (b == 0) {
         result = 1;
         switch (a) {
         case 0:
-            *ppResult = fn_800053D0();
+            *ppResult = CreateTeamGetMenu();
             break;
         case 1:
-            *ppResult = fn_800088C8();
+            *ppResult = CreatePlayerGetMenu();
             break;
         }
     }
     return result;
 }
 
-void Class_802A6B60::vfn_01(int a, int *pCount, int *pValue)
+void MenuListScreen::Enter(int a, int *pCount, int *pValue)
 {
-    *pCount = vfn_07();
+    *pCount = GetEntryCount();
 }
 
-int Class_802A6B60::vfn_02(int a, int b, void **ppResult)
+int MenuListScreen::Leave(int a, int b, void **ppResult)
 {
     fn_80182E04("");
     *ppResult = 0;
     return -1;
 }
 
-void Class_802A6B60::vfn_03(int id)
+void MenuListScreen::Highlight(int id)
 {
-    Entry_80182CC8 *pEntries = vfn_08();
-    int count = vfn_07();
+    MenuEntry_t *pEntries = GetEntries();
+    int count = GetEntryCount();
     int i;
 
     for (i = 0; i < count; i++) {
@@ -976,15 +976,15 @@ void Class_802A6B60::vfn_03(int id)
     fn_80182E04(pEntries[i].mName);
 }
 
-void Class_802A6B60::vfn_04(int index, int *pId)
+void MenuListScreen::GetItemId(int index, int *pId)
 {
-    *pId = vfn_08()[index].mId;
+    *pId = GetEntries()[index].mId;
 }
 
-void Class_802A6B60::vfn_05(int id, Entry_80182CC8 *pEntry)
+void MenuListScreen::GetItem(int id, MenuEntry_t *pEntry)
 {
-    Entry_80182CC8 *pEntries = vfn_08();
-    int count = vfn_07();
+    MenuEntry_t *pEntries = GetEntries();
+    int count = GetEntryCount();
     int i;
 
     for (i = 0; i < count; i++) {
@@ -1076,7 +1076,7 @@ void fn_80182EFC(void)
     }
 }
 
-void fn_80182F24(Info_80307908 *pInfo)
+void fn_80182F24(PlayerGear_t *pInfo)
 {
     fn_800816C4(fn_80182DC8(), pInfo, lbl_80362A84.mValues);
 }
@@ -1111,7 +1111,7 @@ void fn_80183034(const char *pText)
 
     if (pText) {
         if (fn_801C302C(pText, lbl_802EAA24, 28)) {
-            Arg_8018399C args[2];
+            MenuArg_t args[2];
 
             fn_801C2EF0(lbl_802EAA24, pText, 28);
             args[0].i = 1;
@@ -1122,7 +1122,7 @@ void fn_80183034(const char *pText)
             fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
         }
     } else {
-        Arg_8018399C args[2];
+        MenuArg_t args[2];
 
         fn_801C2EF0(lbl_802EAA24, "", 28);
         args[0].i = 0;
@@ -1274,7 +1274,7 @@ void fn_80183368(int mode, int value)
     desc.mUnknown0 = 1;
     fn_8008044C(&lbl_80362A58, &desc, 0x54415453);
     fn_8021EA44(1);
-    fn_80008924();
+    CreatePlayerResetOriginals();
 }
 
 void fn_801834DC(void)
@@ -1412,7 +1412,7 @@ void fn_80183990(void)
 
 extern "C" {
 
-int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *pResult)
+int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResult)
 {
     switch (id) {
     case 0x1E:
@@ -1502,8 +1502,8 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
             *pArgs[0].pi = 0;
             break;
         default:
-            pResult->i = fn_80008914() - fn_8000891C();
-            *pArgs[0].pi = fn_800089C0();
+            pResult->i = CreatePlayerGetPoints() - CreatePlayerGetPendingCost();
+            *pArgs[0].pi = CreatePlayerGetNextCost();
             break;
         }
         break;
@@ -1516,7 +1516,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
     case 0x117: {
         int index = pArgs[1].pi[0] + 1;
 
-        fn_8018275C(pArgs[0].pi, (Arg_8018399C *)&pArgs[1].pi[index]);
+        fn_8018275C(pArgs[0].pi, (MenuArg_t *)&pArgs[1].pi[index]);
         break;
     }
     case 0x116:
@@ -1591,7 +1591,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         pResult->i = lbl_803EB57C;
         break;
     case 0x19B:
-        fn_800089E0(pArgs[0].i);
+        CreatePlayerApplyPreset(pArgs[0].i);
         lbl_803EB57C = 0;
         break;
     case 0x19E:
@@ -1616,7 +1616,7 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
 
 DbCursor lbl_80362A2C;
 Object_8008044C lbl_80362A58;
-Class_802A6BB0 lbl_803ECB60;
+MenuItemEditor lbl_803ECB60;
 
 static inline Class_802A6B10 *fn_801841AC()
 {

@@ -1,3 +1,9 @@
+/* Create-a-player menu: the list of the team's players and, for the chosen
+   player, the Attributes, Info, Appearance and Gear menus. Ratings, height
+   and weight are bought with development points on sliders; info, hair,
+   face and skin choices are previewed on the player model as they are
+   highlighted. */
+
 #include "game/FaceFeatures.h"
 #include "game/AppearanceNameTable.h"
 #include "game/FchrCursor.h"
@@ -13,8 +19,8 @@
 #include "game/fn_801FCE10.h"
 
 /* Range of one face feature: its values start at mOffset in the
-   lbl_8036A170 slot mSlot, and the menu shows mCount of them. */
-struct Range_800093E0 {
+   _CreatePlayer_sFace slot mSlot, and the menu shows mCount of them. */
+struct FaceFeatureRange_t {
     int mOffset;
     int mCount;
     int mSlot;
@@ -22,7 +28,7 @@ struct Range_800093E0 {
 
 /* Per-row record of the table at 0x80369E64: a key (mKey, -1 when the
    slot is free) and twelve values indexed by attribute (-1 when unset). */
-struct Entry_80369E64 {
+struct CreatePlayerOriginal_t {
     int mKey;
     int mValues[12];
 };
@@ -86,7 +92,7 @@ int PlayerDbGetPjen(Object_8008044C *pObject);
 void PlayerDbSetPjen(Object_8008044C *pObject, int value);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
-void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
+void fn_8008199C(Object_8008044C *pObject, PlayerGear_t *pInfo);
 int fn_80081E3C(Object_8008044C *pObject);
 void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_80081E98(Object_8008044C *pObject, char *pBuffer, int size);
@@ -133,41 +139,41 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 
-int fn_80008914(void);
+int CreatePlayerGetPoints(void);
 }
 
-class Class_8000DBA0;
+class GearAreaMenu;
 
-void fn_8000CEB4(int a);
-void fn_8000CF24();
-Class_8000DBA0 *fn_8000CF5C();
+void GearMenuOpen(int a);
+void GearMenuClose();
+GearAreaMenu *GearMenuGetRoot();
 
-extern const Entry_80182CC8 lbl_80008F10[];
-extern const Entry_80182CC8 lbl_80008FC0[];
-extern const Entry_80182CC8 lbl_800090F4[];
-extern const Entry_80182CC8 lbl_80009178[];
-extern const Entry_80182CC8 lbl_80009254[];
-extern const Range_800093E0 lbl_800093E0[];
-extern const Entry_80182CC8 lbl_8000944C[];
-extern const int lbl_800094FC[];
-extern const Entry_80182CC8 lbl_8000950C[];
-extern const Entry_80182CC8 lbl_800098D0[];
+extern const MenuEntry_t _CreatePlayer_aMenuEntries[];
+extern const MenuEntry_t _CreatePlayer_aInfoEntries[];
+extern const MenuEntry_t _CreatePlayer_aAppearanceEntries[];
+extern const MenuEntry_t _CreatePlayer_aHairEntries[];
+extern const MenuEntry_t _CreatePlayer_aFaceEntries[];
+extern const FaceFeatureRange_t _CreatePlayer_aFaceRanges[];
+extern const MenuEntry_t _CreatePlayer_aSkinEntries[];
+extern const int _CreatePlayer_aSkinParts[];
+extern const MenuEntry_t _CreatePlayer_aAttributeEntries[];
+extern const MenuEntry_t _CreatePlayer_aSignatureEntries[];
 
-static unsigned short lbl_802F400C[21] = {
+static unsigned short _CreatePlayer_aDefaultSkillCosts[21] = {
     0, 5, 5, 5, 10, 10, 15, 20, 25, 30, 35, 45, 60, 75, 100, 175, 300, 450, 650, 900, 1000,
 };
-static unsigned short lbl_802F4036[6] = { 15, 20, 25, 75, 150, 250 };
-static unsigned short lbl_802F4042[11] = { 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5 };
+static unsigned short _CreatePlayer_aHeightCosts[6] = { 15, 20, 25, 75, 150, 250 };
+static unsigned short _CreatePlayer_aWeightCosts[11] = { 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5 };
 
 /* Top level of the create-a-player menu. */
-const Entry_80182CC8 lbl_80008F10[] = {
+const MenuEntry_t _CreatePlayer_aMenuEntries[] = {
     { 0, 0, "Attributes", 1, 2 },
     { 1, 0, "Info", 1 },
     { 2, 0, "Appearance", 1 },
     { 3, 0, "Gear", 1, 14 },
 };
 
-const Entry_80182CC8 lbl_80008FC0[] = {
+const MenuEntry_t _CreatePlayer_aInfoEntries[] = {
     { 0, 5, "First Name", 1, 12 },
     { 1, 5, "Last Name", 1, 24 },
     { 2, 0, "Position", 1, 29 },
@@ -177,13 +183,13 @@ const Entry_80182CC8 lbl_80008FC0[] = {
     { 6, 0, "Signature Style", 1, 37 },
 };
 
-const Entry_80182CC8 lbl_800090F4[] = {
+const MenuEntry_t _CreatePlayer_aAppearanceEntries[] = {
     { 0, 0, "Hair", 1 },
     { 1, 0, "Face", 1 },
     { 2, 0, "Skin", 1 },
 };
 
-const Entry_80182CC8 lbl_80009178[] = {
+const MenuEntry_t _CreatePlayer_aHairEntries[] = {
     { 0, 0, "Hair Style", 1 },
     { 1, 0, "Hair Color", 1 },
     { 2, 0, "Facial Hair Style", 1 },
@@ -191,7 +197,7 @@ const Entry_80182CC8 lbl_80009178[] = {
     { 4, 0, "Eyebrows", 1 },
 };
 
-const Entry_80182CC8 lbl_80009254[] = {
+const MenuEntry_t _CreatePlayer_aFaceEntries[] = {
     { 0, 0, "Head Shape", 1 },
     { 1, 0, "Brow", 1 },
     { 2, 0, "Eyes", 1 },
@@ -203,7 +209,7 @@ const Entry_80182CC8 lbl_80009254[] = {
     { 8, 0, "Expression", 1 },
 };
 
-const Range_800093E0 lbl_800093E0[] = {
+const FaceFeatureRange_t _CreatePlayer_aFaceRanges[] = {
     { 0, 7, 3 },
     { 0, 8, 1 },
     { 48, 24, 7 },
@@ -215,18 +221,18 @@ const Range_800093E0 lbl_800093E0[] = {
     { -1, -1, -1 },
 };
 
-const Entry_80182CC8 lbl_8000944C[] = {
+const MenuEntry_t _CreatePlayer_aSkinEntries[] = {
     { 0, 0, "Skin Tone", 1 },
     { 1, 0, "Back Tattoo", 1 },
     { 2, 0, "Left Arm Tattoo", 1 },
     { 3, 0, "Right Arm Tattoo", 1 },
 };
 
-/* Part of each Class_80009DC8 entry: 3 selects the skin tone; 0-2 are the
+/* Part of each CreatePlayerSkinOptionList entry: 3 selects the skin tone; 0-2 are the
    TattooTableOpen tattoo types (right arm, left arm, back). */
-const int lbl_800094FC[] = { 3, 2, 1, 0 };
+const int _CreatePlayer_aSkinParts[] = { 3, 2, 1, 0 };
 
-const Entry_80182CC8 lbl_8000950C[] = {
+const MenuEntry_t _CreatePlayer_aAttributeEntries[] = {
     { 0, 2, "Passing", 1, 27 },
     { 1, 2, "Speed", 1, 44 },
     { 2, 2, "Blocking", 1, 4 },
@@ -242,7 +248,7 @@ const Entry_80182CC8 lbl_8000950C[] = {
 };
 
 /* Help line of each attribute. */
-static const char *lbl_802F4058[] = {
+static const char *_CreatePlayer_aAttributeHelp[] = {
     "Increases throwing power and accuracy.",
     "Makes player faster.",
     "Increases ability to block effectively.",
@@ -257,49 +263,49 @@ static const char *lbl_802F4058[] = {
     "Makes player heavier.",
 };
 
-const Entry_80182CC8 lbl_800098D0[] = {
+const MenuEntry_t _CreatePlayer_aSignatureEntries[] = {
     { 0, 0, "Style+Up", 1, 41 },
     { 1, 0, "Style+Right", 1, 40 },
     { 2, 0, "Style+Down", 1, 38 },
     { 3, 0, "Style+Left", 1, 39 },
 };
 
-static const char *lbl_802F4088[] = { "Athlete", "Rap", "Rock" };
-static int lbl_802F4094[] = { 2, 1, 3 };
-static const char *lbl_802F40A0[] = {
+static const char *_CreatePlayer_aCelebrationNames[] = { "Athlete", "Rap", "Rock" };
+static int _CreatePlayer_aCelebrationStyles[] = { 2, 1, 3 };
+static const char *_CreatePlayer_aHeadShapeNames[] = {
     "Lid", "Big Fathead", "Fathead", "Pill", "Big Pinhead", "Pinhead", "Meatball",
 };
-static const char *lbl_802F40BC[] = { "Crazed", "Determined", "Growl", "Pensive", "Smirk" };
-static unsigned short lbl_803EB910[] = { 1, 10, 13 };
-static const char *lbl_803EB918[] = { "Right", "Left" };
-static const char *lbl_802F40D0[] = { "QB", "RB", "WR", "OL", "DL", "LB", "DB" };
-static int lbl_802F40EC[7] = { 0, 1, 2, 4, 7, 9, 11 };
+static const char *_CreatePlayer_aExpressionNames[] = { "Crazed", "Determined", "Growl", "Pensive", "Smirk" };
+static unsigned short _CreatePlayer_aCelebrationPoses[] = { 1, 10, 13 };
+static const char *_CreatePlayer_aHandNames[] = { "Right", "Left" };
+static const char *_CreatePlayer_aPositionNames[] = { "QB", "RB", "WR", "OL", "DL", "LB", "DB" };
+static int _CreatePlayer_aPositionCodes[7] = { 0, 1, 2, 4, 7, 9, 11 };
 
-/* Value stored to lbl_803EB938 for each result of PlayerDbGetPbpo. */
-static int lbl_802F4108[] = { 0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6 };
+/* Value stored to _CreatePlayer_iSkillGroup for each result of PlayerDbGetPbpo. */
+static int _CreatePlayer_aSkillGroups[] = { 0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6 };
 
-/* Enabled byte of each top-level entry: lbl_803ED6D4 while fn_80183950 is
-   nonzero and the player id is nonzero, lbl_803ED6D0 while it is zero and a
+/* Enabled byte of each top-level entry: _CreatePlayer_aStoryEnabled while fn_80183950 is
+   nonzero and the player id is nonzero, _CreatePlayer_aExistingEnabled while it is zero and a
    player is selected. */
-static const unsigned char lbl_803ED6D0[] = { 0, 0, 0, 1 };
-static const unsigned char lbl_803ED6D4[] = { 0, 0, 0, 1 };
+static const unsigned char _CreatePlayer_aExistingEnabled[] = { 0, 0, 0, 1 };
+static const unsigned char _CreatePlayer_aStoryEnabled[] = { 0, 0, 0, 1 };
 
-static const Layout_802EA9E0 lbl_8000A148[] = {
+static const Layout_802EA9E0 _CreatePlayer_aAppearanceLayouts[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
 };
 
-static const Layout_802EA9E0 lbl_8000A19C[] = {
+static const Layout_802EA9E0 _CreatePlayer_aSkinLayouts[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
     { 0.0f, 300.0f, 0.0f, 180.0f, 1.1f, 15, 0 },
     { 0.0f, 205.0f, 0.0f, 300.0f, 0.8f, 15, 0 },
     { 0.0f, 205.0f, 0.0f, 60.0f, 0.8f, 15, 0 },
 };
 
-/* Presets applied by fn_800089E0: one value for each of the twelve
+/* Presets applied by CreatePlayerApplyPreset: one value for each of the twelve
    attributes. */
-static const short lbl_8000A20C[7][12] = {
+static const short _CreatePlayer_aPresets[7][12] = {
     { 50, 25, 1, 25, 1, 15, 15, 10, 5, 1, 65, 160 },
     { 10, 35, 1, 35, 25, 25, 5, 10, 1, 1, 65, 160 },
     { 1, 50, 1, 25, 35, 1, 25, 10, 1, 1, 65, 160 },
@@ -309,235 +315,235 @@ static const short lbl_8000A20C[7][12] = {
     { 1, 35, 1, 15, 15, 1, 15, 15, 50, 1, 65, 160 },
 };
 
-static int lbl_803EB920 = 0;
-static int lbl_803EB924 = 0;
-static int lbl_803EB928 = 0x7FFF;
-static unsigned char lbl_803EB92C = 0;
-static unsigned char lbl_803EB92D = 0;
-static int lbl_803EB930 = 0;
-static unsigned char lbl_803EB934 = 0;
-static int lbl_803EB938 = 15;
+static int _CreatePlayer_iPoints = 0;
+static int _CreatePlayer_iPendingCost = 0;
+static int _CreatePlayer_iPlayerId = 0x7FFF;
+static unsigned char _CreatePlayer_bGearOpen = 0;
+static unsigned char _CreatePlayer_bSliderOpen = 0;
+static int _CreatePlayer_iNextCost = 0;
+static unsigned char _CreatePlayer_bSkillTable = 0;
+static int _CreatePlayer_iSkillGroup = 15;
 
 /* Player list. */
-class Class_8000A108 : public Class_80184190 {
+class CreatePlayerList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pId);
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pId);
+    virtual void GetItem(int index, MenuEntry_t *pEntry);
 
     char mUnknown4[4];
 };
 
 /* Top-level menu of the selected player. */
-class Class_8000A0B8 : public Class_802A6B60 {
+class CreatePlayerMenu : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80008F10; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual void GetItem(int index, MenuEntry_t *pEntry);
+    virtual int GetEntryCount() { return 4; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aMenuEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_8000A068 : public Class_802A6B60 {
+class CreatePlayerInfoMenu : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual Class_802A6BB0 *vfn_06();
-    virtual int vfn_07() { return 7; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80008FC0; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual MenuItemEditor *GetEditor();
+    virtual int GetEntryCount() { return 7; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aInfoEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_8000A018 : public Class_802A6B60 {
+class CreatePlayerAppearanceMenu : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual int vfn_07() { return 3; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_800090F4; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual int GetEntryCount() { return 3; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aAppearanceEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_80009FC8 : public Class_802A6B60 {
+class CreatePlayerHairMenu : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 5; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80009178; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 5; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aHairEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_80009F78 : public Class_802A6B60 {
+class CreatePlayerFaceMenu : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 9; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_80009254; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 9; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aFaceEntries; }
 
-    const Range_800093E0 *GetRange(int feature) { return &lbl_800093E0[feature]; }
+    const FaceFeatureRange_t *GetRange(int feature) { return &_CreatePlayer_aFaceRanges[feature]; }
 
     char mUnknown4[4];
 };
 
-class Class_80009F28 : public Class_802A6B60 {
+class CreatePlayerSkinMenu : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_8000944C; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 4; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aSkinEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_80009ED8 : public Class_802A6B60 {
+class CreatePlayerAttributeMenu : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual void vfn_03(int id);
-    virtual Class_802A6BB0 *vfn_06();
-    virtual int vfn_07() { return 12; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_8000950C; }
+    virtual void Enter(int a, int *pCount, int *pValue);
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual void Highlight(int id);
+    virtual MenuItemEditor *GetEditor();
+    virtual int GetEntryCount() { return 12; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aAttributeEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_80009E88 : public Class_802A6B60 {
+class CreatePlayerSignatureMenu : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **ppResult);
-    virtual int vfn_07() { return 4; }
-    virtual Entry_80182CC8 *vfn_08() { return (Entry_80182CC8 *)lbl_800098D0; }
+    virtual int Leave(int a, int b, void **ppResult);
+    virtual int GetEntryCount() { return 4; }
+    virtual MenuEntry_t *GetEntries() { return (MenuEntry_t *)_CreatePlayer_aSignatureEntries; }
 
     char mUnknown4[4];
 };
 
-class Class_80009E48 : public Class_80184190 {
+class CreatePlayerHairOptionList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009E08 : public Class_80184190 {
+class CreatePlayerFaceOptionList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
     AppearanceNameTable *mUnknown12;
 };
 
-class Class_80009DC8 : public Class_80184190 {
+class CreatePlayerSkinOptionList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009D88 : public Class_80184190 {
+class CreatePlayerInfoOptionList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-class Class_80009D28 : public Class_802A6BB0 {
+class CreatePlayerNameEditor : public MenuItemEditor {
 public:
-    virtual void vfn_09(int a, int *pResult, Arg_8018399C text);
-    virtual void vfn_10(int a, Arg_8018399C text);
+    virtual void GetText(int a, int *pResult, MenuArg_t text);
+    virtual void SetText(int a, MenuArg_t text);
 
     char mUnknown4[4];
 };
 
-class Class_80009CC8 : public Class_802A6BB0 {
+class CreatePlayerAttributeSlider : public MenuItemEditor {
 public:
-    virtual void vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                        Arg_8018399C textH);
-    virtual int vfn_07(int a, int b, Arg_8018399C text);
-    virtual void vfn_08(int a, int b, int c);
+    virtual void BeginSlider(int a, int b, int c, int *pD, int *pE, MenuArg_t textF, MenuArg_t textG,
+                             MenuArg_t textH);
+    virtual int MoveSlider(int a, int b, MenuArg_t text);
+    virtual void EndSlider(int a, int b, int c);
 
     char mUnknown4[4];
 };
 
-class Class_80009C88 : public Class_80184190 {
+class CreatePlayerSignatureList : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int index);
-    virtual void vfn_04(int index, int *pOut) { *pOut = index; }
-    virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int index);
+    virtual void GetItemId(int index, int *pOut) { *pOut = index; }
+    virtual void GetItem(int index, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
 };
 
-static inline Class_80009CC8 *fn_80008C0C();
-static inline Class_80009C88 *fn_80008C34();
-static inline Class_8000A0B8 *fn_80008C64();
-static inline Class_8000A068 *fn_80008C8C();
-static inline Class_8000A018 *fn_80008CB4();
-static inline Class_80009ED8 *fn_80008CDC();
-static inline Class_80009E88 *fn_80008D04();
-static inline Class_80009D88 *fn_80008D2C();
-static inline Class_80009D28 *fn_80008D5C();
-static inline Class_80009E48 *fn_80008D84();
-static inline Class_80009E08 *fn_80008DB4();
-static inline Class_80009DC8 *fn_80008DE4();
-static inline Class_80009FC8 *fn_80008E14();
-static inline Class_80009F78 *fn_80008E3C();
-static inline Class_80009F28 *fn_80008E64();
-static inline Class_8000A108 *fn_80008E8C();
+static inline CreatePlayerAttributeSlider *_CreatePlayerGetSlider();
+static inline CreatePlayerSignatureList *_CreatePlayerGetSignatureList();
+static inline CreatePlayerMenu *_CreatePlayerGetPlayerMenu();
+static inline CreatePlayerInfoMenu *_CreatePlayerGetInfoMenu();
+static inline CreatePlayerAppearanceMenu *_CreatePlayerGetAppearanceMenu();
+static inline CreatePlayerAttributeMenu *_CreatePlayerGetAttributeMenu();
+static inline CreatePlayerSignatureMenu *_CreatePlayerGetSignatureMenu();
+static inline CreatePlayerInfoOptionList *_CreatePlayerGetInfoOptionList();
+static inline CreatePlayerNameEditor *_CreatePlayerGetNameEditor();
+static inline CreatePlayerHairOptionList *_CreatePlayerGetHairOptionList();
+static inline CreatePlayerFaceOptionList *_CreatePlayerGetFaceOptionList();
+static inline CreatePlayerSkinOptionList *_CreatePlayerGetSkinOptionList();
+static inline CreatePlayerHairMenu *_CreatePlayerGetHairMenu();
+static inline CreatePlayerFaceMenu *_CreatePlayerGetFaceMenu();
+static inline CreatePlayerSkinMenu *_CreatePlayerGetSkinMenu();
+static inline CreatePlayerList *_CreatePlayerGetPlayerList();
 
-static void fn_80008750(int key, int index, int value);
-static void fn_800087BC();
-static void fn_80008860();
-static void fn_800088E8(int value);
-static int fn_80008978(int key, int index);
+static void _CreatePlayerSaveOriginal(int key, int index, int value);
+static void _CreatePlayerOpen();
+static void _CreatePlayerClose();
+static void _CreatePlayerSpendPoints(int value);
+static int _CreatePlayerGetOriginal(int key, int index);
 
-static DbCursor lbl_80369DDC;
-static DbCursor lbl_80369E08;
-static FchrCursor lbl_80369E34;
-static Entry_80369E64 lbl_80369E64[15];
-static FaceFeatures_t lbl_8036A170;
-static unsigned short lbl_8036A198[21];
-static int lbl_803ECD5C;
+static DbCursor _CreatePlayer_sHairCursor;
+static DbCursor _CreatePlayer_sPoseCursor;
+static FchrCursor _CreatePlayer_sFacialHairCursor;
+static CreatePlayerOriginal_t _CreatePlayer_aOriginals[15];
+static FaceFeatures_t _CreatePlayer_sFace;
+static unsigned short _CreatePlayer_aSkillCosts[21];
+static int _CreatePlayer_iBodyType;
 
-static int fn_80005668()
+static int _CreatePlayerHasContinue()
 {
     int mode = fn_80183948();
 
     return mode == 0 || mode == 3;
 }
 
-static void fn_800056A4(int position, int skill)
+static void _CreatePlayerLoadSkillCosts(int position, int skill)
 {
     int i;
     int loaded = 0;
 
-    if (lbl_803EB934) {
+    if (_CreatePlayer_bSkillTable) {
         loaded = fn_801FCE10(0,
                        "select '10VL' into \x84 and '20VL' into \x84 and '30VL' into \x84 and '40VL' into \x84 and "
                        "'50VL' into \x84 and '60VL' into \x84 and '70VL' into \x84 and '80VL' into \x84 and "
@@ -545,21 +551,21 @@ static void fn_800056A4(int position, int skill)
                        "'31VL' into \x84 and '41VL' into \x84 and '51VL' into \x84 and '61VL' into \x84 and "
                        "'71VL' into \x84 and '81VL' into \x84 and '91VL' into \x84 and '02VL' into \x84 "
                        "from 'CLKS' where 'SOPB' = \x85 and 'DIKS' = \x85\n",
-                       &lbl_8036A198[1], &lbl_8036A198[2], &lbl_8036A198[3], &lbl_8036A198[4],
-                       &lbl_8036A198[5], &lbl_8036A198[6], &lbl_8036A198[7], &lbl_8036A198[8],
-                       &lbl_8036A198[9], &lbl_8036A198[10], &lbl_8036A198[11], &lbl_8036A198[12],
-                       &lbl_8036A198[13], &lbl_8036A198[14], &lbl_8036A198[15], &lbl_8036A198[16],
-                       &lbl_8036A198[17], &lbl_8036A198[18], &lbl_8036A198[19], &lbl_8036A198[20],
+                       &_CreatePlayer_aSkillCosts[1], &_CreatePlayer_aSkillCosts[2], &_CreatePlayer_aSkillCosts[3], &_CreatePlayer_aSkillCosts[4],
+                       &_CreatePlayer_aSkillCosts[5], &_CreatePlayer_aSkillCosts[6], &_CreatePlayer_aSkillCosts[7], &_CreatePlayer_aSkillCosts[8],
+                       &_CreatePlayer_aSkillCosts[9], &_CreatePlayer_aSkillCosts[10], &_CreatePlayer_aSkillCosts[11], &_CreatePlayer_aSkillCosts[12],
+                       &_CreatePlayer_aSkillCosts[13], &_CreatePlayer_aSkillCosts[14], &_CreatePlayer_aSkillCosts[15], &_CreatePlayer_aSkillCosts[16],
+                       &_CreatePlayer_aSkillCosts[17], &_CreatePlayer_aSkillCosts[18], &_CreatePlayer_aSkillCosts[19], &_CreatePlayer_aSkillCosts[20],
                        position, skill) == 0;
     }
     if (!loaded) {
         for (i = 0; i < 21; i++) {
-            lbl_8036A198[i] = lbl_802F400C[i];
+            _CreatePlayer_aSkillCosts[i] = _CreatePlayer_aDefaultSkillCosts[i];
         }
     }
 }
 
-static int fn_800057C0(int value)
+static int _CreatePlayerPositionIndex(int value)
 {
     int i;
 
@@ -583,37 +589,37 @@ static int fn_800057C0(int value)
         break;
     }
     for (i = 0; i < 7; i++) {
-        if (lbl_802F40EC[i] == value) {
+        if (_CreatePlayer_aPositionCodes[i] == value) {
             break;
         }
     }
     return i;
 }
 
-static int fn_80005868(int index)
+static int _CreatePlayerPositionAt(int index)
 {
-    return lbl_802F40EC[index];
+    return _CreatePlayer_aPositionCodes[index];
 }
 
-static unsigned short fn_8000587C(int index)
+static unsigned short _CreatePlayerSkillCostAt(int index)
 {
-    return lbl_8036A198[index];
+    return _CreatePlayer_aSkillCosts[index];
 }
 
-static int fn_80005890(int from, int to)
+static int _CreatePlayerRatingCost(int from, int to)
 {
     int total = 0;
     int i = from / 5;
     int end = to / 5;
 
     while (i < end) {
-        total += fn_8000587C(i + 1);
+        total += _CreatePlayerSkillCostAt(i + 1);
         i++;
     }
     return total;
 }
 
-static int fn_80005904(int from, int to)
+static int _CreatePlayerHeightCost(int from, int to)
 {
     int sign = 1;
     int total = 0;
@@ -627,12 +633,12 @@ static int fn_80005904(int from, int to)
     }
     for (i = from; i < to; i++) {
         int index = (i - 65) * 6 / 19;
-        total += lbl_802F4036[index];
+        total += _CreatePlayer_aHeightCosts[index];
     }
     return total * sign;
 }
 
-static int fn_80005980(int from, int to)
+static int _CreatePlayerWeightCost(int from, int to)
 {
     int sign = 1;
     int total = 0;
@@ -646,12 +652,12 @@ static int fn_80005980(int from, int to)
     }
     for (i = from; i < to; i++) {
         int index = (i - 160) / 20;
-        total += lbl_802F4042[index];
+        total += _CreatePlayer_aWeightCosts[index];
     }
     return total * sign;
 }
 
-static unsigned int fn_800059EC(int value, int *pTable, unsigned int count)
+static unsigned int _CreatePlayerFindValue(int value, int *pTable, unsigned int count)
 {
     unsigned int i;
 
@@ -663,7 +669,7 @@ static unsigned int fn_800059EC(int value, int *pTable, unsigned int count)
     return i;
 }
 
-static void fn_80005A24(int id)
+static void _CreatePlayerQueuePortrait(int id)
 {
     Object_8008044C object;
     FaceFeatures_t block;
@@ -711,46 +717,46 @@ static void fn_80005A24(int id)
     fn_8008056C(&object);
 }
 
-static void fn_80005BE4(int index, int value)
+static void _CreatePlayerSetFaceFeature(int index, int value)
 {
     int flag;
 
-    lbl_8036A170.mUnknown0[index] = value;
+    _CreatePlayer_sFace.mUnknown0[index] = value;
     if (index == 3) {
-        PlayerLookSetHeadType(0, lbl_8036A170.mUnknown0[index]);
-        PlayerLookSetHeadType(1, lbl_8036A170.mUnknown0[index]);
+        PlayerLookSetHeadType(0, _CreatePlayer_sFace.mUnknown0[index]);
+        PlayerLookSetHeadType(1, _CreatePlayer_sFace.mUnknown0[index]);
     }
-    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-    PlayerLookSetFeatures(0, &lbl_8036A170);
-    PlayerLookSetFeatures(1, &lbl_8036A170);
-    flag = FaceMorphIsAllowed(&lbl_8036A170);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
+    PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
+    flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
     PlayerLookSetFaceFlag(0, flag);
     PlayerLookSetFaceFlag(1, flag);
     FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
-static void fn_80005CAC(int value)
+static void _CreatePlayerSetFacialHair(int value)
 {
     int flag;
 
     PlayerLookSetFace(0, value);
     PlayerLookSetFace(1, value);
-    lbl_80369E34.FindFchrRow(value, 0);
-    lbl_8036A170.mUnknown0[0] = lbl_80369E34.GetFchrFhstCode();
-    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-    FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-    PlayerLookSetFeatures(0, &lbl_8036A170);
-    PlayerLookSetFeatures(1, &lbl_8036A170);
-    flag = FaceMorphIsAllowed(&lbl_8036A170);
+    _CreatePlayer_sFacialHairCursor.FindFchrRow(value, 0);
+    _CreatePlayer_sFace.mUnknown0[0] = _CreatePlayer_sFacialHairCursor.GetFchrFhstCode();
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
+    FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+    PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
+    PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
+    flag = FaceMorphIsAllowed(&_CreatePlayer_sFace);
     PlayerLookSetFaceFlag(0, flag);
     PlayerLookSetFaceFlag(1, flag);
     FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
 }
 
-static int fn_80005D88(unsigned int value)
+static int _CreatePlayerUpdateBodyType(unsigned int value)
 {
     int mode = 2;
 
@@ -761,22 +767,22 @@ static int fn_80005D88(unsigned int value)
     } else if (value > 199) {
         mode = 3;
     }
-    if (lbl_803ECD5C != mode) {
-        lbl_803ECD5C = mode;
-        lbl_8036A170.mUnknown0[9] = mode;
+    if (_CreatePlayer_iBodyType != mode) {
+        _CreatePlayer_iBodyType = mode;
+        _CreatePlayer_sFace.mUnknown0[9] = mode;
         PlayerLookSetBodyType(1, mode);
         PlayerLookSetBodyType(0, mode);
-        FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(0)->mUnknown4976);
-        FaceMorphBuildWeights(&lbl_8036A170, &fn_8003DEC4(1)->mUnknown4976);
-        PlayerLookSetFeatures(0, &lbl_8036A170);
-        PlayerLookSetFeatures(1, &lbl_8036A170);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(0)->mUnknown4976);
+        FaceMorphBuildWeights(&_CreatePlayer_sFace, &fn_8003DEC4(1)->mUnknown4976);
+        PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
+        PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     }
     return mode;
 }
 
-static void fn_80005E64(int value)
+static void _CreatePlayerSetHair(int value)
 {
     PlayerLookSetHair(0, value);
     PlayerLookSetHair(1, value);
@@ -784,7 +790,7 @@ static void fn_80005E64(int value)
     FEPlyrRequestSwap();
 }
 
-static unsigned char fn_80005EB4(Info_80307908 *pInfo, int part)
+static unsigned char _CreatePlayerGetTattoo(PlayerGear_t *pInfo, int part)
 {
     switch (part) {
     case 1:
@@ -797,7 +803,7 @@ static unsigned char fn_80005EB4(Info_80307908 *pInfo, int part)
     return pInfo->mUnknown05;
 }
 
-static void fn_80005EF8(Info_80307908 *pInfo, int part, unsigned char value)
+static void _CreatePlayerSetTattoo(PlayerGear_t *pInfo, int part, unsigned char value)
 {
     switch (part) {
     case 1:
@@ -812,38 +818,38 @@ static void fn_80005EF8(Info_80307908 *pInfo, int part, unsigned char value)
     }
 }
 
-void Class_80009ED8::vfn_01(int a, int *pCount, int *pValue)
+void CreatePlayerAttributeMenu::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_801831F0(1);
 }
 
-int Class_80009ED8::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerAttributeMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     fn_801831F0(0);
     FEMiscSetHelpText("");
     return result;
 }
 
-void Class_80009ED8::vfn_03(int id)
+void CreatePlayerAttributeMenu::Highlight(int id)
 {
-    Class_802A6B60::vfn_03(id);
-    FEMiscSetHelpText(lbl_802F4058[id]);
+    MenuListScreen::Highlight(id);
+    FEMiscSetHelpText(_CreatePlayer_aAttributeHelp[id]);
     if (id >= 0 && id <= 9) {
-        fn_800056A4(lbl_803EB938, id);
+        _CreatePlayerLoadSkillCosts(_CreatePlayer_iSkillGroup, id);
     }
 }
 
-Class_802A6BB0 *Class_80009ED8::vfn_06()
+MenuItemEditor *CreatePlayerAttributeMenu::GetEditor()
 {
-    return fn_80008C0C();
+    return _CreatePlayerGetSlider();
 }
 
-int Class_80009E88::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerSignatureMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -851,63 +857,63 @@ int Class_80009E88::vfn_02(int a, int b, void **ppResult)
         case 1:
         case 2:
         case 3:
-            fn_80008C34()->mUnknown8 = a;
+            _CreatePlayerGetSignatureList()->mUnknown8 = a;
             result = 1;
-            *ppResult = fn_80008C34();
+            *ppResult = _CreatePlayerGetSignatureList();
             break;
         }
     }
     return result;
 }
 
-void Class_8000A108::vfn_01(int a, int *pCount, int *pValue)
+void CreatePlayerList::Enter(int a, int *pCount, int *pValue)
 {
     char buffer[18];
     int index;
 
     if (a == 1) {
-        fn_800087BC();
+        _CreatePlayerOpen();
     }
     fn_80083F88(fn_80182DBC(), buffer, 18);
     fn_80182E34(buffer);
     fn_80182DD4("");
     fn_80182E04("");
     *pCount = DbCursorGetRowCount((DbCursor *)fn_80182DC8());
-    if (fn_80005668()) {
+    if (_CreatePlayerHasContinue()) {
         (*pCount)++;
     }
     index = *pValue;
-    if (fn_80005668()) {
+    if (_CreatePlayerHasContinue()) {
         index--;
     }
     if (index >= 0) {
         DbCursorSeek((DbCursor *)fn_80182DC8(), index);
         int id = PlayerDbGetId(fn_80182DC8());
 
-        if (lbl_803EB928 != id || a == 1) {
-            if (lbl_803EB928 != 0x7FFF) {
-                PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, pValue);
+        if (_CreatePlayer_iPlayerId != id || a == 1) {
+            if (_CreatePlayer_iPlayerId != 0x7FFF) {
+                PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, pValue);
             } else {
-                lbl_803EB928 = id;
+                _CreatePlayer_iPlayerId = id;
             }
-            FEPlyrSetPlayer(FEPlyrGetFrontIndex(), lbl_803EB928, 1);
+            FEPlyrSetPlayer(FEPlyrGetFrontIndex(), _CreatePlayer_iPlayerId, 1);
         }
     } else {
-        lbl_803EB928 = 0x7FFF;
+        _CreatePlayer_iPlayerId = 0x7FFF;
     }
 }
 
-int Class_8000A108::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerList::Leave(int a, int b, void **ppResult)
 {
     int result = 1;
 
     if (b != 0) {
         result = -1;
-        fn_80008860();
+        _CreatePlayerClose();
     } else {
         char buffer[27];
 
-        *ppResult = fn_80008C64();
+        *ppResult = _CreatePlayerGetPlayerMenu();
         PlayerDbSeekId(fn_80182DC8(), a, 0);
         fn_801832B0(buffer, 27);
         fn_80182E34(buffer);
@@ -915,7 +921,7 @@ int Class_8000A108::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A108::vfn_03(int index)
+void CreatePlayerList::Highlight(int index)
 {
     if (index != 0x7FFF) {
         char buffer[27];
@@ -923,19 +929,19 @@ void Class_8000A108::vfn_03(int index)
 
         PlayerDbSeekId(fn_80182DC8(), index, 0);
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), index, 0);
-        lbl_803EB928 = index;
+        _CreatePlayer_iPlayerId = index;
         position = PlayerDbGetPbpo(fn_80182DC8());
-        lbl_803EB938 = lbl_802F4108[position];
+        _CreatePlayer_iSkillGroup = _CreatePlayer_aSkillGroups[position];
         fn_80182E64(position);
         fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
         fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
         fn_801832B0(buffer, 27);
         fn_80182DD4(buffer);
         fn_80182ED0();
-        fn_80082138(fn_80182DC8(), &lbl_8036A170);
+        fn_80082138(fn_80182DC8(), &_CreatePlayer_sFace);
     } else {
-        lbl_803EB928 = index;
-        if (fn_80005668()) {
+        _CreatePlayer_iPlayerId = index;
+        if (_CreatePlayerHasContinue()) {
             fn_80182DD4("Continue");
         }
         fn_80182EFC();
@@ -947,9 +953,9 @@ void Class_8000A108::vfn_03(int index)
     fn_80183740(0);
 }
 
-void Class_8000A108::vfn_04(int index, int *pId)
+void CreatePlayerList::GetItemId(int index, int *pId)
 {
-    if (fn_80005668()) {
+    if (_CreatePlayerHasContinue()) {
         index--;
     }
     if (index >= 0) {
@@ -960,7 +966,7 @@ void Class_8000A108::vfn_04(int index, int *pId)
     }
 }
 
-void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
+void CreatePlayerList::GetItem(int index, MenuEntry_t *pEntry)
 {
     char buffer[27] = { 0 };
 
@@ -974,7 +980,7 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
         }
         value = PlayerDbGetPortraitId(fn_80182DC8());
         pEntry->mUnknown36 = DbCursorGetRow((DbCursor *)fn_80182DC8());
-        if (fn_80005668()) {
+        if (_CreatePlayerHasContinue()) {
             pEntry->mUnknown36++;
         }
         pEntry->mId = index;
@@ -988,7 +994,7 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
         pEntry->mUnknown36 = 0;
         pEntry->mUnknown30 = 1;
         pEntry->mUnknown32 = 0xC0000;
-        if (fn_80005668()) {
+        if (_CreatePlayerHasContinue()) {
             pEntry->mUnknown4 = 8;
             fn_801C3284(pEntry->mName, "Continue", 22);
         }
@@ -996,43 +1002,43 @@ void Class_8000A108::vfn_05(int index, Entry_80182CC8 *pEntry)
     FEPlyrPlayPairAnim();
 }
 
-void Class_8000A0B8::vfn_01(int a, int *pCount, int *pValue)
+void CreatePlayerMenu::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
         *pValue = 3;
     }
-    FEPlyrSetPlayer(FEPlyrGetBackIndex(), lbl_803EB928, 1);
+    FEPlyrSetPlayer(FEPlyrGetBackIndex(), _CreatePlayer_iPlayerId, 1);
     FEPlyrLoadSetScaleRamp(0);
-    if (lbl_803EB92C) {
-        fn_8000CF24();
-        lbl_803EB92C = 0;
+    if (_CreatePlayer_bGearOpen) {
+        GearMenuClose();
+        _CreatePlayer_bGearOpen = 0;
     }
 }
 
-int Class_8000A0B8::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
         case 1:
-            *ppResult = fn_80008C8C();
+            *ppResult = _CreatePlayerGetInfoMenu();
             result = 1;
             break;
         case 2:
-            *ppResult = fn_80008CB4();
+            *ppResult = _CreatePlayerGetAppearanceMenu();
             result = 1;
             break;
         case 0:
-            *ppResult = fn_80008CDC();
+            *ppResult = _CreatePlayerGetAttributeMenu();
             result = 1;
             break;
         case 3:
-            fn_8000CEB4(1);
-            lbl_803EB92C = 1;
+            GearMenuOpen(1);
+            _CreatePlayer_bGearOpen = 1;
             result = 1;
-            *ppResult = fn_8000CF5C();
+            *ppResult = GearMenuGetRoot();
             break;
         }
     } else {
@@ -1041,57 +1047,57 @@ int Class_8000A0B8::vfn_02(int a, int b, void **ppResult)
     return result;
 }
 
-void Class_8000A0B8::vfn_03(int id)
+void CreatePlayerMenu::Highlight(int id)
 {
-    fn_80182DD4(lbl_80008F10[id].mName);
+    fn_80182DD4(_CreatePlayer_aMenuEntries[id].mName);
 }
 
-void Class_8000A0B8::vfn_05(int index, Entry_80182CC8 *pEntry)
+void CreatePlayerMenu::GetItem(int index, MenuEntry_t *pEntry)
 {
-    Class_802A6B60::vfn_05(index, pEntry);
+    MenuListScreen::GetItem(index, pEntry);
     if (fn_80183950()) {
         if (PlayerDbGetId(fn_80182DC8()) != 0) {
-            pEntry->mUnknown30 = lbl_803ED6D4[index];
+            pEntry->mUnknown30 = _CreatePlayer_aStoryEnabled[index];
             return;
         }
     } else if (PlayerDbGetOriginalId(fn_80182DC8()) != 0x7FFF) {
-        pEntry->mUnknown30 = lbl_803ED6D0[index];
+        pEntry->mUnknown30 = _CreatePlayer_aExistingEnabled[index];
         return;
     }
-    pEntry->mUnknown30 = lbl_80008F10[index].mUnknown30;
+    pEntry->mUnknown30 = _CreatePlayer_aMenuEntries[index].mUnknown30;
 }
 
-int Class_8000A068::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerInfoMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
         case 6:
-            *ppResult = fn_80008D04();
+            *ppResult = _CreatePlayerGetSignatureMenu();
             result = 1;
             break;
         case 2:
         case 3:
         case 4:
         case 5:
-            fn_80008D2C()->mUnknown8 = a;
+            _CreatePlayerGetInfoOptionList()->mUnknown8 = a;
             result = 1;
-            *ppResult = fn_80008D2C();
+            *ppResult = _CreatePlayerGetInfoOptionList();
             break;
         }
     }
     return result;
 }
 
-Class_802A6BB0 *Class_8000A068::vfn_06()
+MenuItemEditor *CreatePlayerInfoMenu::GetEditor()
 {
-    return fn_80008D5C();
+    return _CreatePlayerGetNameEditor();
 }
 
-int Class_80009FC8::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerHairMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1100,18 +1106,18 @@ int Class_80009FC8::vfn_02(int a, int b, void **ppResult)
         case 2:
         case 3:
         case 4:
-            fn_80008D84()->mUnknown8 = a;
+            _CreatePlayerGetHairOptionList()->mUnknown8 = a;
             result = 1;
-            *ppResult = fn_80008D84();
+            *ppResult = _CreatePlayerGetHairOptionList();
             break;
         }
     }
     return result;
 }
 
-int Class_80009F78::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerFaceMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1124,24 +1130,24 @@ int Class_80009F78::vfn_02(int a, int b, void **ppResult)
         case 6:
         case 7:
         case 8:
-            fn_80008DB4()->mUnknown8 = a;
+            _CreatePlayerGetFaceOptionList()->mUnknown8 = a;
             result = 1;
-            *ppResult = fn_80008DB4();
+            *ppResult = _CreatePlayerGetFaceOptionList();
             break;
         }
     }
     return result;
 }
 
-void Class_80009F28::vfn_01(int a, int *pCount, int *pValue)
+void CreatePlayerSkinMenu::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_80183740(0);
 }
 
-int Class_80009F28::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerSkinMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
@@ -1149,76 +1155,76 @@ int Class_80009F28::vfn_02(int a, int b, void **ppResult)
         case 1:
         case 2:
         case 3:
-            fn_80008DE4()->mUnknown8 = a;
+            _CreatePlayerGetSkinOptionList()->mUnknown8 = a;
             result = 1;
-            *ppResult = fn_80008DE4();
+            *ppResult = _CreatePlayerGetSkinOptionList();
             break;
         }
         switch (a) {
         case 0:
-            fn_80183740(&lbl_8000A19C[0]);
+            fn_80183740(&_CreatePlayer_aSkinLayouts[0]);
             break;
         case 1:
-            fn_80183740(&lbl_8000A19C[1]);
+            fn_80183740(&_CreatePlayer_aSkinLayouts[1]);
             break;
         case 2:
-            fn_80183740(&lbl_8000A19C[2]);
+            fn_80183740(&_CreatePlayer_aSkinLayouts[2]);
             break;
         case 3:
-            fn_80183740(&lbl_8000A19C[3]);
+            fn_80183740(&_CreatePlayer_aSkinLayouts[3]);
             break;
         }
     }
     return result;
 }
 
-void Class_8000A018::vfn_01(int a, int *pCount, int *pValue)
+void CreatePlayerAppearanceMenu::Enter(int a, int *pCount, int *pValue)
 {
-    Class_802A6B60::vfn_01(a, pCount, pValue);
+    MenuListScreen::Enter(a, pCount, pValue);
     fn_80183740(0);
 }
 
-int Class_8000A018::vfn_02(int a, int b, void **ppResult)
+int CreatePlayerAppearanceMenu::Leave(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppResult);
+    int result = MenuListScreen::Leave(a, b, ppResult);
 
     if (b == 0) {
         switch (a) {
         case 0:
             result = 1;
-            fn_80183740(&lbl_8000A148[1]);
-            *ppResult = fn_80008E14();
+            fn_80183740(&_CreatePlayer_aAppearanceLayouts[1]);
+            *ppResult = _CreatePlayerGetHairMenu();
             break;
         case 1:
             result = 1;
-            fn_80183740(&lbl_8000A148[2]);
-            *ppResult = fn_80008E3C();
+            fn_80183740(&_CreatePlayer_aAppearanceLayouts[2]);
+            *ppResult = _CreatePlayerGetFaceMenu();
             break;
         case 2:
-            *ppResult = fn_80008E64();
+            *ppResult = _CreatePlayerGetSkinMenu();
             result = 1;
             break;
         }
     } else {
-        fn_80005A24(lbl_803EB928);
+        _CreatePlayerQueuePortrait(_CreatePlayer_iPlayerId);
     }
     return result;
 }
 
-void Class_8000A018::vfn_03(int id)
+void CreatePlayerAppearanceMenu::Highlight(int id)
 {
-    Class_802A6B60::vfn_03(id);
+    MenuListScreen::Highlight(id);
 }
 
-void Class_80009D88::vfn_01(int a, int *pCount, int *pOut)
+void CreatePlayerInfoOptionList::Enter(int a, int *pCount, int *pOut)
 {
     switch (mUnknown8) {
     case 2:
-        *pOut = fn_800057C0(PlayerDbGetPbpo(fn_80182DC8()));
+        *pOut = _CreatePlayerPositionIndex(PlayerDbGetPbpo(fn_80182DC8()));
         *pCount = 7;
         break;
     case 5:
-        *pOut = fn_800059EC(PlayerDbGetPpsn(fn_80182DC8()), lbl_802F4094, 3);
+        *pOut = _CreatePlayerFindValue(PlayerDbGetPpsn(fn_80182DC8()), _CreatePlayer_aCelebrationStyles, 3);
         *pCount = 3;
         break;
     case 3:
@@ -1232,20 +1238,20 @@ void Class_80009D88::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009D88::vfn_02(int a, int b, void **pOut)
+int CreatePlayerInfoOptionList::Leave(int a, int b, void **pOut)
 {
     fn_80183740(0);
     if (b == 0) {
         switch (mUnknown8) {
         case 2:
-            PlayerDbSetPbpo(fn_80182DC8(), fn_80005868(a));
-            fn_80182E64(fn_80005868(a));
+            PlayerDbSetPbpo(fn_80182DC8(), _CreatePlayerPositionAt(a));
+            fn_80182E64(_CreatePlayerPositionAt(a));
             break;
         case 3:
             PlayerDbSetPjen(fn_80182DC8(), a);
             break;
         case 5:
-            PlayerDbSetPpsn(fn_80182DC8(), lbl_802F4094[a]);
+            PlayerDbSetPpsn(fn_80182DC8(), _CreatePlayer_aCelebrationStyles[a]);
             break;
         case 4:
             PlayerDbSetPhan(fn_80182DC8(), a);
@@ -1260,7 +1266,7 @@ int Class_80009D88::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009D88::vfn_03(int index)
+void CreatePlayerInfoOptionList::Highlight(int index)
 {
     switch (mUnknown8) {
     case 2:
@@ -1274,31 +1280,31 @@ void Class_80009D88::vfn_03(int index)
     case 4:
         break;
     case 5:
-        FEPlyrSetPose(0, lbl_803EB910[index]);
-        FEPlyrSetPose(1, lbl_803EB910[index]);
+        FEPlyrSetPose(0, _CreatePlayer_aCelebrationPoses[index]);
+        FEPlyrSetPose(1, _CreatePlayer_aCelebrationPoses[index]);
         break;
     }
 }
 
-void Class_80009D88::vfn_05(int index, Entry_80182CC8 *pOut)
+void CreatePlayerInfoOptionList::GetItem(int index, MenuEntry_t *pOut)
 {
     switch (mUnknown8) {
     case 2:
-        fn_801C3284(pOut->mName, lbl_802F40D0[index], 22);
+        fn_801C3284(pOut->mName, _CreatePlayer_aPositionNames[index], 22);
         break;
     case 3:
         fn_801C2D88(pOut->mName, 22, "%02d", index);
         break;
     case 5:
-        fn_801C3284(pOut->mName, lbl_802F4088[index], 22);
+        fn_801C3284(pOut->mName, _CreatePlayer_aCelebrationNames[index], 22);
         break;
     case 4:
-        fn_801C3284(pOut->mName, lbl_803EB918[index], 22);
+        fn_801C3284(pOut->mName, _CreatePlayer_aHandNames[index], 22);
         break;
     }
 }
 
-void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
+void CreatePlayerNameEditor::GetText(int a, int *pResult, MenuArg_t text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[16];
@@ -1318,7 +1324,7 @@ void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
     }
 }
 
-void Class_80009D28::vfn_10(int a, Arg_8018399C text)
+void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
 {
     Params_80005284 *pParams = text.pParams;
     char buffer[16];
@@ -1332,14 +1338,14 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
         fn_80081E64(fn_80182DC8(), buffer, 12);
         fn_801832B0(label, 27);
         fn_80182E34(label);
-        PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, 0);
+        PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, 0);
         break;
     case 1:
         fn_801C3284(buffer, pParams->mpText, 15);
         fn_80081E98(fn_80182DC8(), buffer, 15);
         fn_801832B0(label2, 27);
         fn_80182E34(label2);
-        PlayerDbSeekId(fn_80182DC8(), lbl_803EB928, 0);
+        PlayerDbSeekId(fn_80182DC8(), _CreatePlayer_iPlayerId, 0);
         PlayerDbGetNickname(fn_80182DC8(), name, 31);
         PlayerLookSetName(0, name);
         PlayerLookSetName(1, name);
@@ -1351,21 +1357,21 @@ void Class_80009D28::vfn_10(int a, Arg_8018399C text)
     FEPlyrSetPose(1, 24);
 }
 
-void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
+void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
 {
-    lbl_80369E34.OpenFchrTable();
+    _CreatePlayer_sFacialHairCursor.OpenFchrTable();
     switch (mUnknown8) {
     case 0:
-        fn_80087A78(0x12, &lbl_80369DDC, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
-        *pCount = fn_80087B00(0x12, &lbl_80369DDC);
+        fn_80087A78(0x12, &_CreatePlayer_sHairCursor, PlayerDbGetHairStyle(fn_80182DC8()), pOut);
+        *pCount = fn_80087B00(0x12, &_CreatePlayer_sHairCursor);
         break;
     case 1:
         *pOut = PlayerDbGetHairColor(fn_80182DC8());
         *pCount = 12;
         break;
     case 2:
-        lbl_80369E34.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
-        *pCount = lbl_80369E34.GetRowCount();
+        _CreatePlayer_sFacialHairCursor.FindFchrRow(fn_80082280(fn_80182DC8()), pOut);
+        *pCount = _CreatePlayer_sFacialHairCursor.GetRowCount();
         break;
     case 3:
         *pOut = PlayerDbGetFacialHairColor(fn_80182DC8());
@@ -1378,21 +1384,21 @@ void Class_80009E48::vfn_01(int a, int *pCount, int *pOut)
     }
 }
 
-int Class_80009E48::vfn_02(int a, int b, void **pOut)
+int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
         switch (mUnknown8) {
         case 0:
-            fn_80087938(0x12, &lbl_80369DDC, a, 0);
-            fn_80087A30(0x12, &lbl_80369DDC);
-            PlayerDbSetHairStyle(fn_80182DC8(), HairListGetId(&lbl_80369DDC));
+            fn_80087938(0x12, &_CreatePlayer_sHairCursor, a, 0);
+            fn_80087A30(0x12, &_CreatePlayer_sHairCursor);
+            PlayerDbSetHairStyle(fn_80182DC8(), HairListGetId(&_CreatePlayer_sHairCursor));
             break;
         case 1:
             PlayerDbSetHairColor(fn_80182DC8(), a);
             break;
         case 2:
-            lbl_80369E34.MoveToRow(a);
-            fn_800822A8(fn_80182DC8(), lbl_80369E34.GetFchrPffh());
+            _CreatePlayer_sFacialHairCursor.MoveToRow(a);
+            fn_800822A8(fn_80182DC8(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
@@ -1408,7 +1414,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
     } else {
         switch (mUnknown8) {
         case 0:
-            fn_80005E64(PlayerDbGetHairStyle(fn_80182DC8()));
+            _CreatePlayerSetHair(PlayerDbGetHairStyle(fn_80182DC8()));
             break;
         case 1:
             PlayerLookSetHairColor(0, PlayerDbGetHairColor(fn_80182DC8()));
@@ -1417,7 +1423,7 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             FEPlyrRequestSwap();
             break;
         case 2:
-            fn_80005CAC(fn_80082280(fn_80182DC8()));
+            _CreatePlayerSetFacialHair(fn_80082280(fn_80182DC8()));
             break;
         case 3:
             PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(fn_80182DC8()));
@@ -1433,16 +1439,16 @@ int Class_80009E48::vfn_02(int a, int b, void **pOut)
             break;
         }
     }
-    lbl_80369E34.CloseTable();
+    _CreatePlayer_sFacialHairCursor.CloseTable();
     return -1;
 }
 
-void Class_80009E48::vfn_03(int index)
+void CreatePlayerHairOptionList::Highlight(int index)
 {
     switch (mUnknown8) {
     case 0:
-        fn_80087938(0x12, &lbl_80369DDC, index, 0);
-        fn_80005E64(HairListGetId(&lbl_80369DDC));
+        fn_80087938(0x12, &_CreatePlayer_sHairCursor, index, 0);
+        _CreatePlayerSetHair(HairListGetId(&_CreatePlayer_sHairCursor));
         break;
     case 1:
         PlayerLookSetHairColor(0, index);
@@ -1451,8 +1457,8 @@ void Class_80009E48::vfn_03(int index)
         FEPlyrRequestSwap();
         break;
     case 2:
-        lbl_80369E34.MoveToRow(index);
-        fn_80005CAC(lbl_80369E34.GetFchrPffh());
+        _CreatePlayer_sFacialHairCursor.MoveToRow(index);
+        _CreatePlayerSetFacialHair(_CreatePlayer_sFacialHairCursor.GetFchrPffh());
         break;
     case 3:
         PlayerLookSetFacialHairColor(0, index);
@@ -1469,15 +1475,15 @@ void Class_80009E48::vfn_03(int index)
     }
 }
 
-void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
+void CreatePlayerHairOptionList::GetItem(int index, MenuEntry_t *pOut)
 {
     char name[32];
 
     switch (mUnknown8) {
     case 0:
-        fn_80087938(0x12, &lbl_80369DDC, index, 0);
-        pOut->mUnknown40 = fn_800879E8(0x12, &lbl_80369DDC);
-        HairListGetName(&lbl_80369DDC, name, 26);
+        fn_80087938(0x12, &_CreatePlayer_sHairCursor, index, 0);
+        pOut->mUnknown40 = fn_800879E8(0x12, &_CreatePlayer_sHairCursor);
+        HairListGetName(&_CreatePlayer_sHairCursor, name, 26);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 1:
@@ -1486,8 +1492,8 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 2:
-        lbl_80369E34.MoveToRow(index);
-        lbl_80369E34.GetFchrFhdcText(name, 21);
+        _CreatePlayer_sFacialHairCursor.MoveToRow(index);
+        _CreatePlayer_sFacialHairCursor.GetFchrFhdcText(name, 21);
         fn_801C3284(pOut->mName, name, 22);
         break;
     case 4:
@@ -1496,32 +1502,32 @@ void Class_80009E48::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009E08::vfn_01(int a, int *pCount, int *pOut)
+void CreatePlayerFaceOptionList::Enter(int a, int *pCount, int *pOut)
 {
     mUnknown12 = new (0) AppearanceNameTable;
     if (mUnknown8 == 8) {
         *pOut = PlayerDbGetPlex(fn_80182DC8());
         *pCount = 5;
     } else {
-        const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
+        const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
-        *pOut = lbl_8036A170.mUnknown0[pRange->mSlot] - pRange->mOffset;
+        *pOut = _CreatePlayer_sFace.mUnknown0[pRange->mSlot] - pRange->mOffset;
         *pCount = pRange->mCount;
     }
 }
 
-int Class_80009E08::vfn_02(int a, int b, void **pOut)
+int CreatePlayerFaceOptionList::Leave(int a, int b, void **pOut)
 {
     if (b == 0) {
         if (mUnknown8 == 8) {
             PlayerDbSetPlex(fn_80182DC8(), a);
         } else {
-            const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
+            const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
-            lbl_8036A170.mUnknown0[pRange->mSlot] = a + pRange->mOffset;
-            fn_80082334(fn_80182DC8(), &lbl_8036A170);
-            PlayerLookSetFeatures(0, &lbl_8036A170);
-            PlayerLookSetFeatures(1, &lbl_8036A170);
+            _CreatePlayer_sFace.mUnknown0[pRange->mSlot] = a + pRange->mOffset;
+            fn_80082334(fn_80182DC8(), &_CreatePlayer_sFace);
+            PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
+            PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         }
     } else {
         if (mUnknown8 == 8) {
@@ -1530,19 +1536,19 @@ int Class_80009E08::vfn_02(int a, int b, void **pOut)
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
-            fn_80082138(fn_80182DC8(), &lbl_8036A170);
-            PlayerLookSetFeatures(0, &lbl_8036A170);
-            PlayerLookSetFeatures(1, &lbl_8036A170);
-            int slot = fn_80008E3C()->GetRange(mUnknown8)->mSlot;
+            fn_80082138(fn_80182DC8(), &_CreatePlayer_sFace);
+            PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
+            PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
+            int slot = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8)->mSlot;
 
-            fn_80005BE4(slot, lbl_8036A170.mUnknown0[slot]);
+            _CreatePlayerSetFaceFeature(slot, _CreatePlayer_sFace.mUnknown0[slot]);
         }
     }
     delete mUnknown12;
     return -1;
 }
 
-void Class_80009E08::vfn_03(int index)
+void CreatePlayerFaceOptionList::Highlight(int index)
 {
     if (mUnknown8 == 8) {
         PlayerLookSetPlex(0, index);
@@ -1550,23 +1556,23 @@ void Class_80009E08::vfn_03(int index)
         FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
         FEPlyrRequestSwap();
     } else {
-        const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
+        const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
-        fn_80005BE4(pRange->mSlot, index + pRange->mOffset);
+        _CreatePlayerSetFaceFeature(pRange->mSlot, index + pRange->mOffset);
     }
 }
 
-void Class_80009E08::vfn_05(int index, Entry_80182CC8 *pOut)
+void CreatePlayerFaceOptionList::GetItem(int index, MenuEntry_t *pOut)
 {
     char name[32];
 
     if (mUnknown8 == 8) {
-        fn_801C3284(pOut->mName, lbl_802F40BC[index], 22);
+        fn_801C3284(pOut->mName, _CreatePlayer_aExpressionNames[index], 22);
     } else {
-        const Range_800093E0 *pRange = fn_80008E3C()->GetRange(mUnknown8);
+        const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
         if (mUnknown8 == 0) {
-            fn_801C3284(pOut->mName, lbl_802F40A0[index + pRange->mOffset], 22);
+            fn_801C3284(pOut->mName, _CreatePlayer_aHeadShapeNames[index + pRange->mOffset], 22);
         } else {
             mUnknown12->GetItemName(index + pRange->mOffset, (int)name, 31);
             fn_801C3284(pOut->mName, name, 22);
@@ -1574,33 +1580,33 @@ void Class_80009E08::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009DC8::vfn_01(int a, int *pCount, int *pOut)
+void CreatePlayerSkinOptionList::Enter(int a, int *pCount, int *pOut)
 {
-    int type = lbl_800094FC[mUnknown8];
+    int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (type == 3) {
         *pCount = 12;
         *pOut = fn_80081E3C(fn_80182DC8());
     } else {
         DbCursor cursor;
-        Info_80307908 info;
+        PlayerGear_t info;
         int key;
 
         fn_800817CC(fn_80182DC8(), &info);
         TattooTableOpen(&cursor, type);
         key = fn_80087B5C(type);
-        fn_80087A78(key, &cursor, fn_80005EB4(&info, type), pOut);
+        fn_80087A78(key, &cursor, _CreatePlayerGetTattoo(&info, type), pOut);
         *pCount = fn_80087B00(fn_80087B5C(type), &cursor);
         TattooTableClose(&cursor);
     }
 }
 
-int Class_80009DC8::vfn_02(int a, int b, void **pOut)
+int CreatePlayerSkinOptionList::Leave(int a, int b, void **pOut)
 {
-    Info_80307908 info;
+    PlayerGear_t info;
 
     fn_800817CC(fn_80182DC8(), &info);
-    int type = lbl_800094FC[mUnknown8];
+    int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (b == 0) {
         if (type == 3) {
@@ -1611,7 +1617,7 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
             TattooTableOpen(&cursor, type);
             fn_80087938(fn_80087B5C(type), &cursor, a, 0);
             fn_80087A30(fn_80087B5C(type), &cursor);
-            fn_80005EF8(&info, type, TattooTableGetId(&cursor));
+            _CreatePlayerSetTattoo(&info, type, TattooTableGetId(&cursor));
             TattooTableClose(&cursor);
             fn_8008199C(fn_80182DC8(), &info);
         }
@@ -1622,8 +1628,8 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
-            PlayerLookSetPartVariant(0, type, fn_80005EB4(&info, type));
-            PlayerLookSetPartVariant(1, type, fn_80005EB4(&info, type));
+            PlayerLookSetPartVariant(0, type, _CreatePlayerGetTattoo(&info, type));
+            PlayerLookSetPartVariant(1, type, _CreatePlayerGetTattoo(&info, type));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         }
@@ -1631,9 +1637,9 @@ int Class_80009DC8::vfn_02(int a, int b, void **pOut)
     return -1;
 }
 
-void Class_80009DC8::vfn_03(int index)
+void CreatePlayerSkinOptionList::Highlight(int index)
 {
-    int type = lbl_800094FC[mUnknown8];
+    int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (type == 3) {
         PlayerLookSetSkin(0, index + 1);
@@ -1655,9 +1661,9 @@ void Class_80009DC8::vfn_03(int index)
     }
 }
 
-void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
+void CreatePlayerSkinOptionList::GetItem(int index, MenuEntry_t *pOut)
 {
-    int type = lbl_800094FC[mUnknown8];
+    int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (type == 3) {
         fn_801C2D88(pOut->mName, 22, "Skin Tone %d", index + 1);
@@ -1673,37 +1679,37 @@ void Class_80009DC8::vfn_05(int index, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_80009C88::vfn_01(int a, int *pCount, int *pOut)
+void CreatePlayerSignatureList::Enter(int a, int *pCount, int *pOut)
 {
-    PoseTableSeek(&lbl_80369E08, PlayerDbGetSgt(fn_80182DC8(), mUnknown8), pOut);
-    *pCount = DbCursorGetRowCount(&lbl_80369E08);
+    PoseTableSeek(&_CreatePlayer_sPoseCursor, PlayerDbGetSgt(fn_80182DC8(), mUnknown8), pOut);
+    *pCount = DbCursorGetRowCount(&_CreatePlayer_sPoseCursor);
 }
 
-int Class_80009C88::vfn_02(int a, int b, void **pOut)
+int CreatePlayerSignatureList::Leave(int a, int b, void **pOut)
 {
     fn_80183740(0);
     if (b == 0) {
-        DbCursorSeek(&lbl_80369E08, a);
-        PlayerDbSetSgt(fn_80182DC8(), mUnknown8, PoseTableGetNumber(&lbl_80369E08));
+        DbCursorSeek(&_CreatePlayer_sPoseCursor, a);
+        PlayerDbSetSgt(fn_80182DC8(), mUnknown8, PoseTableGetNumber(&_CreatePlayer_sPoseCursor));
     }
     return -1;
 }
 
-void Class_80009C88::vfn_03(int index)
+void CreatePlayerSignatureList::Highlight(int index)
 {
-    DbCursorSeek(&lbl_80369E08, index);
-    FEPlyrSetPose(0, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
-    FEPlyrSetPose(1, (unsigned short)(PoseTableGetNumber(&lbl_80369E08) + 31));
+    DbCursorSeek(&_CreatePlayer_sPoseCursor, index);
+    FEPlyrSetPose(0, (unsigned short)(PoseTableGetNumber(&_CreatePlayer_sPoseCursor) + 31));
+    FEPlyrSetPose(1, (unsigned short)(PoseTableGetNumber(&_CreatePlayer_sPoseCursor) + 31));
 }
 
-void Class_80009C88::vfn_05(int index, Entry_80182CC8 *pOut)
+void CreatePlayerSignatureList::GetItem(int index, MenuEntry_t *pOut)
 {
-    DbCursorSeek(&lbl_80369E08, index);
-    PoseTableGetName(&lbl_80369E08, pOut->mName, 22);
+    DbCursorSeek(&_CreatePlayer_sPoseCursor, index);
+    PoseTableGetName(&_CreatePlayer_sPoseCursor, pOut->mName, 22);
 }
 
-void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF, Arg_8018399C textG,
-                            Arg_8018399C textH)
+void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int *pE, MenuArg_t textF, MenuArg_t textG,
+                                 MenuArg_t textH)
 {
     Params_80005284 *pLeft = textF.pParams;
     Params_80005284 *pRight = textG.pParams;
@@ -1711,40 +1717,40 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
     int *pMin = (int *)b;
     int *pMax = (int *)c;
 
-    lbl_803EB924 = 0;
+    _CreatePlayer_iPendingCost = 0;
     fn_801C2D88(pValue->mpText, pValue->mLength, "");
     fn_80183740(0);
-    lbl_803EB92D = 1;
+    _CreatePlayer_bSliderOpen = 1;
     switch (a) {
     case 10:
         *pMin = 65;
         *pMax = 84;
         *pE = PlayerDbGetHeight(fn_80182DC8());
-        fn_80008750(PlayerDbGetId(fn_80182DC8()), 10, *pE);
-        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), 10);
+        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), 10, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), 10);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Shorter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Taller");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d ft %d in", *pE / 12, *pE % 12);
         if (*pE < 84) {
-            lbl_803EB930 = fn_80005904(*pE, *pE + 1);
+            _CreatePlayer_iNextCost = _CreatePlayerHeightCost(*pE, *pE + 1);
         } else {
-            lbl_803EB930 = 0;
+            _CreatePlayer_iNextCost = 0;
         }
         break;
     case 11:
         *pMin = 160;
         *pMax = 380;
         *pE = PlayerDbGetWeight(fn_80182DC8());
-        fn_80008750(PlayerDbGetId(fn_80182DC8()), 11, *pE);
-        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), 11);
-        lbl_803ECD5C = PlayerDbGetPybt(fn_80182DC8());
+        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), 11, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), 11);
+        _CreatePlayer_iBodyType = PlayerDbGetPybt(fn_80182DC8());
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Lighter");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Heavier");
         fn_801C2D88(pValue->mpText, pValue->mLength, "%d lbs", *pE);
         if (*pE < 380) {
-            lbl_803EB930 = fn_80005980(*pE, *pE + 1);
+            _CreatePlayer_iNextCost = _CreatePlayerWeightCost(*pE, *pE + 1);
         } else {
-            lbl_803EB930 = 0;
+            _CreatePlayer_iNextCost = 0;
         }
         break;
     default: {
@@ -1756,15 +1762,15 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
         *pE = level / 5;
         if (level < 100) {
             if (level == 1) {
-                lbl_803EB930 = fn_80005890(1, 5);
+                _CreatePlayer_iNextCost = _CreatePlayerRatingCost(1, 5);
             } else {
-                lbl_803EB930 = fn_80005890(level, level + 5);
+                _CreatePlayer_iNextCost = _CreatePlayerRatingCost(level, level + 5);
             }
         } else {
-            lbl_803EB930 = 0;
+            _CreatePlayer_iNextCost = 0;
         }
-        fn_80008750(PlayerDbGetId(fn_80182DC8()), a, *pE);
-        *pD = fn_80008978(PlayerDbGetId(fn_80182DC8()), a);
+        _CreatePlayerSaveOriginal(PlayerDbGetId(fn_80182DC8()), a, *pE);
+        *pD = _CreatePlayerGetOriginal(PlayerDbGetId(fn_80182DC8()), a);
         fn_801C2D88(pLeft->mpText, pLeft->mLength, "Worse");
         fn_801C2D88(pRight->mpText, pRight->mLength, "Better");
         fn_801C2D88(pValue->mpText, pValue->mLength, "Level %d", *pE);
@@ -1774,7 +1780,7 @@ void Class_80009CC8::vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C 
     }
 }
 
-int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
+int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
 {
     Params_80005284 *pParams = text.pParams;
     int result = 0;
@@ -1784,9 +1790,9 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
     switch (a) {
     case 10:
         if (b >= 65 && b <= 84 && b >= fn_80183230()) {
-            cost = fn_80005904(fn_80183228(), b);
+            cost = _CreatePlayerHeightCost(fn_80183228(), b);
 
-            if (cost <= fn_80008914()) {
+            if (cost <= CreatePlayerGetPoints()) {
                 if (b > fn_80183220()) {
                     FEPlyrSetPose(0, 6);
                     FEPlyrSetPose(1, 6);
@@ -1797,11 +1803,11 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
                 FEPlyrSetHeight(0, b);
                 result = 1;
                 FEPlyrSetHeight(1, b);
-                lbl_803EB924 = cost;
+                _CreatePlayer_iPendingCost = cost;
                 if (b < 84) {
-                    lbl_803EB930 = fn_80005904(b, b + 1);
+                    _CreatePlayer_iNextCost = _CreatePlayerHeightCost(b, b + 1);
                 } else {
-                    lbl_803EB930 = 0;
+                    _CreatePlayer_iNextCost = 0;
                 }
             }
         }
@@ -1813,18 +1819,18 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
         break;
     case 11:
         if (b >= 160 && b <= 380 && b >= fn_80183230()) {
-            cost = fn_80005980(fn_80183228(), b);
+            cost = _CreatePlayerWeightCost(fn_80183228(), b);
 
-            if (cost <= fn_80008914()) {
+            if (cost <= CreatePlayerGetPoints()) {
                 FEPlyrSetPose(0, 3);
                 result = 1;
                 FEPlyrSetPose(1, 3);
-                fn_80005D88(b);
-                lbl_803EB924 = cost;
+                _CreatePlayerUpdateBodyType(b);
+                _CreatePlayer_iPendingCost = cost;
                 if (b < 380) {
-                    lbl_803EB930 = fn_80005980(b, b + 1);
+                    _CreatePlayer_iNextCost = _CreatePlayerWeightCost(b, b + 1);
                 } else {
-                    lbl_803EB930 = 0;
+                    _CreatePlayer_iNextCost = 0;
                 }
             }
         }
@@ -1847,22 +1853,22 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
         }
         if (level >= 1 && level <= 100 && b >= fn_80183230()) {
             if (b > fn_80183228()) {
-                cost = fn_80005890(previous, level);
+                cost = _CreatePlayerRatingCost(previous, level);
             } else {
-                cost = -fn_80005890(level, previous);
+                cost = -_CreatePlayerRatingCost(level, previous);
             }
-            if (cost <= fn_80008914()) {
+            if (cost <= CreatePlayerGetPoints()) {
                 result = 1;
                 fn_80182F60(fn_80183238(a), level);
-                lbl_803EB924 = cost;
+                _CreatePlayer_iPendingCost = cost;
                 if (level < 100) {
                     if (level == 1) {
-                        lbl_803EB930 = fn_80005890(1, 5);
+                        _CreatePlayer_iNextCost = _CreatePlayerRatingCost(1, 5);
                     } else {
-                        lbl_803EB930 = fn_80005890(level, level + 5);
+                        _CreatePlayer_iNextCost = _CreatePlayerRatingCost(level, level + 5);
                     }
                 } else {
-                    lbl_803EB930 = 0;
+                    _CreatePlayer_iNextCost = 0;
                 }
             }
         }
@@ -1876,16 +1882,16 @@ int Class_80009CC8::vfn_07(int a, int b, Arg_8018399C text)
     return result;
 }
 
-void Class_80009CC8::vfn_08(int a, int b, int c)
+void CreatePlayerAttributeSlider::EndSlider(int a, int b, int c)
 {
     int played = 0;
 
-    lbl_803EB92D = 0;
+    _CreatePlayer_bSliderOpen = 0;
     if (b == 0) {
         switch (a) {
         case 10:
-            fn_80008914();
-            fn_800088E8(lbl_803EB924);
+            CreatePlayerGetPoints();
+            _CreatePlayerSpendPoints(_CreatePlayer_iPendingCost);
             FEPlyrSetHeight(0, c);
             FEPlyrSetHeight(1, c);
             PlayerDbSetHeight(fn_80182DC8(), c);
@@ -1902,9 +1908,9 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
         case 11: {
             int build;
 
-            fn_80008914();
-            fn_800088E8(lbl_803EB924);
-            build = fn_80005D88(c);
+            CreatePlayerGetPoints();
+            _CreatePlayerSpendPoints(_CreatePlayer_iPendingCost);
+            build = _CreatePlayerUpdateBodyType(c);
             PlayerDbSetPybt(fn_80182DC8(), build);
             PlayerDbSetWeight(fn_80182DC8(), c);
             if (c > 379) {
@@ -1942,8 +1948,8 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
                     FEPlyrSetPose(1, 19);
                 }
             }
-            fn_80008914();
-            fn_800088E8(lbl_803EB924);
+            CreatePlayerGetPoints();
+            _CreatePlayerSpendPoints(_CreatePlayer_iPendingCost);
             level = c * 5;
             if (level == 0) {
                 level = 1;
@@ -1959,7 +1965,7 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
             FEPlyrSetHeight(1, PlayerDbGetHeight(fn_80182DC8()));
             break;
         case 11:
-            fn_80005D88(PlayerDbGetWeight(fn_80182DC8()));
+            _CreatePlayerUpdateBodyType(PlayerDbGetWeight(fn_80182DC8()));
             break;
         default: {
             int index = fn_80183238(a);
@@ -1975,246 +1981,246 @@ void Class_80009CC8::vfn_08(int a, int b, int c)
     fn_80182E70(PlayerDbGetHeight(fn_80182DC8()));
     fn_80182E7C(PlayerDbGetWeight(fn_80182DC8()));
     fn_8018300C();
-    lbl_803EB924 = 0;
+    _CreatePlayer_iPendingCost = 0;
     if (!played) {
         fn_80183740(0);
     }
 }
 
-static void fn_80008750(int key, int index, int value)
+static void _CreatePlayerSaveOriginal(int key, int index, int value)
 {
     signed char i;
 
     for (i = 0; i <= 14; i++) {
-        if (lbl_80369E64[i].mKey != -1) {
-            if (lbl_80369E64[i].mKey == key) {
-                if (lbl_80369E64[i].mValues[index] == -1) {
-                    lbl_80369E64[i].mValues[index] = value;
+        if (_CreatePlayer_aOriginals[i].mKey != -1) {
+            if (_CreatePlayer_aOriginals[i].mKey == key) {
+                if (_CreatePlayer_aOriginals[i].mValues[index] == -1) {
+                    _CreatePlayer_aOriginals[i].mValues[index] = value;
                 }
                 return;
             }
         } else {
-            lbl_80369E64[i].mKey = key;
-            lbl_80369E64[i].mValues[index] = value;
+            _CreatePlayer_aOriginals[i].mKey = key;
+            _CreatePlayer_aOriginals[i].mValues[index] = value;
             return;
         }
     }
 }
 
-static void fn_800087BC()
+static void _CreatePlayerOpen()
 {
     fn_801835C0(0x71);
-    lbl_803EB928 = 0x7FFF;
+    _CreatePlayer_iPlayerId = 0x7FFF;
     fn_801835C8();
     FaceTableOpen();
-    HairListOpen(&lbl_80369DDC);
-    PoseTableOpen(&lbl_80369E08);
+    HairListOpen(&_CreatePlayer_sHairCursor);
+    PoseTableOpen(&_CreatePlayer_sPoseCursor);
     DbCursorFirst((DbCursor *)fn_80182DC8());
     if (fn_80183950()) {
         if (fn_80183948() != 3) {
-            lbl_803EB928 = 0;
+            _CreatePlayer_iPlayerId = 0;
         }
         if (fn_8022EF8C(0, 0x434C4B53) == 0) {
-            lbl_803EB934 = 1;
-            lbl_8036A198[0] = 0;
-            lbl_803EB938 = 15;
+            _CreatePlayer_bSkillTable = 1;
+            _CreatePlayer_aSkillCosts[0] = 0;
+            _CreatePlayer_iSkillGroup = 15;
         }
     }
 }
 
-static void fn_80008860()
+static void _CreatePlayerClose()
 {
     fn_80183704();
     FaceTableClose();
-    HairListClose(&lbl_80369DDC);
-    PoseTableClose(&lbl_80369E08);
-    if (lbl_803EB934) {
+    HairListClose(&_CreatePlayer_sHairCursor);
+    PoseTableClose(&_CreatePlayer_sPoseCursor);
+    if (_CreatePlayer_bSkillTable) {
         fn_8022EFBC(0, 0x434C4B53);
-        lbl_803EB934 = 0;
+        _CreatePlayer_bSkillTable = 0;
     }
-    lbl_803EB928 = 0x7FFF;
+    _CreatePlayer_iPlayerId = 0x7FFF;
 }
 
-extern "C" Class_80184190 *fn_800088C8(void)
+extern "C" MenuScreen *CreatePlayerGetMenu(void)
 {
-    return fn_80008E8C();
+    return _CreatePlayerGetPlayerList();
 }
 
-static void fn_800088E8(int value)
+static void _CreatePlayerSpendPoints(int value)
 {
-    if (lbl_803EB920 >= value) {
-        lbl_803EB920 -= value;
+    if (_CreatePlayer_iPoints >= value) {
+        _CreatePlayer_iPoints -= value;
     } else {
-        lbl_803EB920 = 0;
+        _CreatePlayer_iPoints = 0;
     }
 }
 
-extern "C" void fn_8000890C(int value)
+extern "C" void CreatePlayerSetPoints(int value)
 {
-    lbl_803EB920 = value;
+    _CreatePlayer_iPoints = value;
 }
 
-extern "C" int fn_80008914(void)
+extern "C" int CreatePlayerGetPoints(void)
 {
-    return lbl_803EB920;
+    return _CreatePlayer_iPoints;
 }
 
-extern "C" int fn_8000891C(void)
+extern "C" int CreatePlayerGetPendingCost(void)
 {
-    return lbl_803EB924;
+    return _CreatePlayer_iPendingCost;
 }
 
-extern "C" void fn_80008924(void)
+extern "C" void CreatePlayerResetOriginals(void)
 {
     unsigned char i;
     unsigned char j;
 
     for (i = 0; i <= 14; i++) {
-        lbl_80369E64[i].mKey = -1;
+        _CreatePlayer_aOriginals[i].mKey = -1;
         for (j = 0; j <= 11; j++) {
-            lbl_80369E64[i].mValues[j] = -1;
+            _CreatePlayer_aOriginals[i].mValues[j] = -1;
         }
     }
 }
 
-static int fn_80008978(int key, int index)
+static int _CreatePlayerGetOriginal(int key, int index)
 {
     signed char i;
 
     for (i = 0; i <= 14; i++) {
-        if (lbl_80369E64[i].mKey == key) {
-            return lbl_80369E64[i].mValues[index];
+        if (_CreatePlayer_aOriginals[i].mKey == key) {
+            return _CreatePlayer_aOriginals[i].mValues[index];
         }
     }
     return -1;
 }
 
-extern "C" int fn_800089C0(void)
+extern "C" int CreatePlayerGetNextCost(void)
 {
-    if (!lbl_803EB92D) {
+    if (!_CreatePlayer_bSliderOpen) {
         return 0;
     }
-    return lbl_803EB930;
+    return _CreatePlayer_iNextCost;
 }
 
-extern "C" int fn_800089D8(void)
+extern "C" int CreatePlayerGetPlayerId(void)
 {
-    return lbl_803EB928;
+    return _CreatePlayer_iPlayerId;
 }
 
-extern "C" void fn_800089E0(int a)
+extern "C" void CreatePlayerApplyPreset(int a)
 {
     int i;
-    int value = fn_80005868(a);
+    int value = _CreatePlayerPositionAt(a);
 
     PlayerDbSetPbpo(fn_80182DC8(), value);
     for (i = 0; i <= 11; i++) {
         switch (i) {
         case 10:
-            PlayerDbSetHeight(fn_80182DC8(), lbl_8000A20C[a][i]);
+            PlayerDbSetHeight(fn_80182DC8(), _CreatePlayer_aPresets[a][i]);
             break;
         case 11:
-            PlayerDbSetWeight(fn_80182DC8(), lbl_8000A20C[a][i]);
+            PlayerDbSetWeight(fn_80182DC8(), _CreatePlayer_aPresets[a][i]);
             break;
         default:
-            PlayerDbSetRating(fn_80182DC8(), fn_80183238(i), lbl_8000A20C[a][i]);
+            PlayerDbSetRating(fn_80182DC8(), fn_80183238(i), _CreatePlayer_aPresets[a][i]);
             break;
         }
     }
 }
 
-static inline Class_80009CC8 *fn_80008C0C()
+static inline CreatePlayerAttributeSlider *_CreatePlayerGetSlider()
 {
-    static Class_80009CC8 sInstance;
+    static CreatePlayerAttributeSlider sInstance;
     return &sInstance;
 }
 
-static inline Class_80009C88 *fn_80008C34()
+static inline CreatePlayerSignatureList *_CreatePlayerGetSignatureList()
 {
-    static Class_80009C88 sInstance;
+    static CreatePlayerSignatureList sInstance;
     return &sInstance;
 }
 
-static inline Class_8000A0B8 *fn_80008C64()
+static inline CreatePlayerMenu *_CreatePlayerGetPlayerMenu()
 {
-    static Class_8000A0B8 sInstance;
+    static CreatePlayerMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_8000A068 *fn_80008C8C()
+static inline CreatePlayerInfoMenu *_CreatePlayerGetInfoMenu()
 {
-    static Class_8000A068 sInstance;
+    static CreatePlayerInfoMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_8000A018 *fn_80008CB4()
+static inline CreatePlayerAppearanceMenu *_CreatePlayerGetAppearanceMenu()
 {
-    static Class_8000A018 sInstance;
+    static CreatePlayerAppearanceMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_80009ED8 *fn_80008CDC()
+static inline CreatePlayerAttributeMenu *_CreatePlayerGetAttributeMenu()
 {
-    static Class_80009ED8 sInstance;
+    static CreatePlayerAttributeMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_80009E88 *fn_80008D04()
+static inline CreatePlayerSignatureMenu *_CreatePlayerGetSignatureMenu()
 {
-    static Class_80009E88 sInstance;
+    static CreatePlayerSignatureMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_80009D88 *fn_80008D2C()
+static inline CreatePlayerInfoOptionList *_CreatePlayerGetInfoOptionList()
 {
-    static Class_80009D88 sInstance;
+    static CreatePlayerInfoOptionList sInstance;
     return &sInstance;
 }
 
-static inline Class_80009D28 *fn_80008D5C()
+static inline CreatePlayerNameEditor *_CreatePlayerGetNameEditor()
 {
-    static Class_80009D28 sInstance;
+    static CreatePlayerNameEditor sInstance;
     return &sInstance;
 }
 
-static inline Class_80009E48 *fn_80008D84()
+static inline CreatePlayerHairOptionList *_CreatePlayerGetHairOptionList()
 {
-    static Class_80009E48 sInstance;
+    static CreatePlayerHairOptionList sInstance;
     return &sInstance;
 }
 
-static inline Class_80009E08 *fn_80008DB4()
+static inline CreatePlayerFaceOptionList *_CreatePlayerGetFaceOptionList()
 {
-    static Class_80009E08 sInstance;
+    static CreatePlayerFaceOptionList sInstance;
     return &sInstance;
 }
 
-static inline Class_80009DC8 *fn_80008DE4()
+static inline CreatePlayerSkinOptionList *_CreatePlayerGetSkinOptionList()
 {
-    static Class_80009DC8 sInstance;
+    static CreatePlayerSkinOptionList sInstance;
     return &sInstance;
 }
 
-static inline Class_80009FC8 *fn_80008E14()
+static inline CreatePlayerHairMenu *_CreatePlayerGetHairMenu()
 {
-    static Class_80009FC8 sInstance;
+    static CreatePlayerHairMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_80009F78 *fn_80008E3C()
+static inline CreatePlayerFaceMenu *_CreatePlayerGetFaceMenu()
 {
-    static Class_80009F78 sInstance;
+    static CreatePlayerFaceMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_80009F28 *fn_80008E64()
+static inline CreatePlayerSkinMenu *_CreatePlayerGetSkinMenu()
 {
-    static Class_80009F28 sInstance;
+    static CreatePlayerSkinMenu sInstance;
     return &sInstance;
 }
 
-static inline Class_8000A108 *fn_80008E8C()
+static inline CreatePlayerList *_CreatePlayerGetPlayerList()
 {
-    static Class_8000A108 sInstance;
+    static CreatePlayerList sInstance;
     return &sInstance;
 }

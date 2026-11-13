@@ -1,7 +1,7 @@
 #include "game/SysModules.h"
 
 extern "C" {
-void fn_80194858(int);
+void LoadingBegin(int);
 }
 
 static ModuleDependency sDependencies[] = { &gLoading, &gGRender, 0 };
@@ -13,7 +13,7 @@ const char *LoadingFEToInGame::GetName() { return "LoadingFEToInGame"; }
 
 int LoadingFEToInGame::Init()
 {
-    fn_80194858(2);
+    LoadingBegin(2);
     return 1;
 }
 

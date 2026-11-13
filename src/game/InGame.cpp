@@ -92,14 +92,14 @@ void UISGameFreeKeyItem(int a, int b);
 void UISGameRefreshAll(void);
 void MemCardUtilInit(void);
 void MemCardUtilShutdown(void);
-void fn_80194AEC(int a);
+void LoadingEnd(int a);
 void RumbleInit(void);
 void RumbleShutdown(void);
 void RumbleProcess(void);
 void RumbleEnable(int a);
 void fn_80195F80(void);
 void fn_80196130(void);
-void fn_8019A9A0(int a, int b, float c);
+void PadStateSetValue(int a, int b, float c);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
 int ConSetChannelInfo(int a, int b, void *pValue);
@@ -148,7 +148,7 @@ static void _InGamePadHandler(int a, int b, float c)
         _InGame_uIdleFrames = 0;
     }
     if (_InGame_bInputPaused == 0) {
-        fn_8019A9A0(a, b, c);
+        PadStateSetValue(a, b, c);
         if (b != 0x8F) {
             fn_800AFD58(a, b, c);
             PauseRequestHandleInput(a, b, c);
@@ -307,7 +307,7 @@ int InGame::Init()
     if (InGameIsDemo()) {
         ConSetChannelInfo(-1, 2, (void *)_InGameDemoPadRead);
     }
-    fn_80194AEC(0);
+    LoadingEnd(0);
     fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
     EngineParamWords desc = { 4, 14 };
     fn_802345C4(&desc, 2);

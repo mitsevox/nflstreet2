@@ -31,15 +31,15 @@ inline Record_8036AD28 *fn_8000EC44()
 inline Record_8036AD28::Record_8036AD28() {}
 inline Record_8036AD28::~Record_8036AD28() {}
 
-class Class_8000F540 : public Class_802A6B60 {
+class Class_8000F540 : public MenuListScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 7; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 7; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Reebok Store", 1 },
             { 1, 0, "Barbershop", 1 },
             { 2, 0, "Department Store", 1 },
@@ -48,19 +48,19 @@ public:
             { 5, 0, "Sporting Goods", 1 },
             { 6, 0, "Tattoo Parlor", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
 };
 
-class Class_8000F500 : public Class_80184190 {
+class Class_8000F500 : public MenuScreen {
 public:
-    virtual void vfn_01(int a, int *pCount, int *pOut);
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_03(int id);
-    virtual void vfn_04(int index, int *pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
+    virtual void Enter(int a, int *pCount, int *pOut);
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void Highlight(int id);
+    virtual void GetItemId(int index, int *pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
 
     char mUnknown4[4];
     int mUnknown8;
@@ -68,14 +68,14 @@ public:
     unsigned char mUnknown16;
 };
 
-class Class_8000F4B0 : public Class_802A6B60 {
+class Class_8000F4B0 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 7; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 7; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Headwear", 1 },
             { 1, 0, "Glasses", 1 },
             { 2, 0, "Short Sleeve Shirts", 1 },
@@ -84,20 +84,20 @@ public:
             { 5, 0, "Shorts", 1 },
             { 6, 0, "Socks", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
 };
 
-class Class_8000F460 : public Class_802A6B60 {
+class Class_8000F460 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 7; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 7; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Throwback Jerseys", 1 },
             { 1, 0, "Shoulder Pads", 1 },
             { 2, 0, "Arm Bands", 1 },
@@ -106,59 +106,59 @@ public:
             { 5, 0, "Gloves", 1 },
             { 6, 0, "Shoes", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
 };
 
-class Class_8000F410 : public Class_802A6B60 {
+class Class_8000F410 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 2; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 2; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Decals", 1 },
             { 1, 0, "Team Logos", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
 };
 
-class Class_8000F3C0 : public Class_802A6B60 {
+class Class_8000F3C0 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 3; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 3; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Back Tattoos", 1 },
             { 1, 0, "Left Arm Tattoos", 1 },
             { 2, 0, "Right Arm Tattoos", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
 };
 
-class Class_8000F370 : public Class_802A6B60 {
+class Class_8000F370 : public MenuListScreen {
 public:
-    virtual int vfn_02(int a, int b, void **pOut);
-    virtual void vfn_05(int id, Entry_80182CC8 *pOut);
-    virtual int vfn_07() { return 2; }
-    virtual Entry_80182CC8 *vfn_08()
+    virtual int Leave(int a, int b, void **pOut);
+    virtual void GetItem(int id, MenuEntry_t *pOut);
+    virtual int GetEntryCount() { return 2; }
+    virtual MenuEntry_t *GetEntries()
     {
-        static const Entry_80182CC8 sEntries[] = {
+        static const MenuEntry_t sEntries[] = {
             { 0, 0, "Necklaces", 1 },
             { 1, 0, "Medallions", 1 },
         };
-        return (Entry_80182CC8 *)sEntries;
+        return (MenuEntry_t *)sEntries;
     }
 
     char mUnknown4[4];
@@ -292,7 +292,7 @@ static void fn_8000E784(Record_8036AD78 *pOut);
 static void fn_8000E834(Record_8036AD78 *pRecord);
 static void fn_8000E8FC(int index, int value);
 
-void Class_8000F500::vfn_01(int a, int *pCount, int *pOut)
+void Class_8000F500::Enter(int a, int *pCount, int *pOut)
 {
     fn_8000EC44()->mUnknown0 = -1;
     fn_80087704();
@@ -311,7 +311,7 @@ void Class_8000F500::vfn_01(int a, int *pCount, int *pOut)
     fn_80183740(&lbl_8000F5EC[mUnknown8]);
 }
 
-int Class_8000F500::vfn_02(int a, int b, void **pOut)
+int Class_8000F500::Leave(int a, int b, void **pOut)
 {
     int result = -1;
 
@@ -325,12 +325,12 @@ int Class_8000F500::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-void Class_8000F500::vfn_04(int index, int *pOut)
+void Class_8000F500::GetItemId(int index, int *pOut)
 {
     *pOut = index;
 }
 
-void Class_8000F500::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
 {
     pOut->mUnknown36 = id;
     pOut->mUnknown4 = 6;
@@ -353,7 +353,7 @@ void Class_8000F500::vfn_05(int id, Entry_80182CC8 *pOut)
     }
 }
 
-void Class_8000F500::vfn_03(int id)
+void Class_8000F500::Highlight(int id)
 {
     if (mUnknown16) {
         fn_8000EC44()->mUnknown0 = -1;
@@ -376,9 +376,9 @@ void Class_8000F500::vfn_03(int id)
     }
 }
 
-void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
+void Class_8000F540::Enter(int a, int *pCount, int *pOut)
 {
-    Class_802A6B60::vfn_01(a, pCount, pOut);
+    MenuListScreen::Enter(a, pCount, pOut);
     fn_8000EC44()->mUnknown0 = 0;
     fn_80087704();
     if (a == 1) {
@@ -399,57 +399,57 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
     *pOut = lbl_803ECE34;
 }
 
-void Class_8000F540::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F540::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-void Class_8000F4B0::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F4B0::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-void Class_8000F410::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F410::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-void Class_8000F460::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F460::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-void Class_8000F3C0::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F3C0::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-void Class_8000F370::vfn_05(int id, Entry_80182CC8 *pOut)
+void Class_8000F370::GetItem(int id, MenuEntry_t *pOut)
 {
-    Class_802A6B60::vfn_05(id, pOut);
+    MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
     fn_8000E744("", "", "");
 }
 
-int Class_8000F540::vfn_02(int a, int b, void **pOut)
+int Class_8000F540::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b) {
         fn_80183704();
@@ -507,9 +507,9 @@ int Class_8000F540::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-int Class_8000F4B0::vfn_02(int a, int b, void **pOut)
+int Class_8000F4B0::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
         Class_8000F500 *pItems;
@@ -562,9 +562,9 @@ int Class_8000F4B0::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-int Class_8000F460::vfn_02(int a, int b, void **pOut)
+int Class_8000F460::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
         Class_8000F500 *pItems;
@@ -628,9 +628,9 @@ int Class_8000F460::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-int Class_8000F410::vfn_02(int a, int b, void **pOut)
+int Class_8000F410::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
         Class_8000F500 *pItems;
@@ -653,9 +653,9 @@ int Class_8000F410::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-int Class_8000F3C0::vfn_02(int a, int b, void **pOut)
+int Class_8000F3C0::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
         Class_8000F500 *pItems;
@@ -684,9 +684,9 @@ int Class_8000F3C0::vfn_02(int a, int b, void **pOut)
     return result;
 }
 
-int Class_8000F370::vfn_02(int a, int b, void **pOut)
+int Class_8000F370::Leave(int a, int b, void **pOut)
 {
-    int result = Class_802A6B60::vfn_02(a, b, pOut);
+    int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
         Class_8000F500 *pItems;
@@ -724,7 +724,7 @@ static void fn_8000E744(char *a, const char *b, const char *c)
 
 static void fn_8000E784(Record_8036AD78 *pOut)
 {
-    Info_80307908 record;
+    PlayerGear_t record;
 
     fn_800817CC(fn_80182DC8(), &record);
     pOut->mUnknown0[0] = record.mValues[0];

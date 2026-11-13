@@ -88,7 +88,7 @@ int MsgStreetEventSelectSetChoice(int value)
     return value;
 }
 
-int MsgStreetEventSelectHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgStreetEventSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

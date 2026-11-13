@@ -27,7 +27,7 @@ int fn_8022F4BC(void);
 int fn_80186B38(int db);
 void fn_80186F30(signed char index, unsigned char pad);
 void TeamFilterSet(int value);
-void fn_8001ED80(int value);
+void MsgChallengeSetFlowState(int value);
 void ChalLoadCurrent(unsigned char id, int level);
 void fn_80083E1C(DbCursor *pObject, TeamQuery *pQuery);
 int ChalHasReward(Challenge_t *pRecord, int id);
@@ -122,7 +122,7 @@ void fn_80004504(unsigned char id)
     fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
     fn_80186F30(-1, 0);
     TeamFilterSet(1023);
-    fn_8001ED80(5);
+    MsgChallengeSetFlowState(5);
     ChalLoadCurrent(id, fn_8007F828(0));
     Challenge_t *pRecord = ChalGetCurrent();
     fn_8007F97C();
@@ -179,7 +179,7 @@ void fn_8000473C(int team, int value)
     ChallengeSetMode(1);
     GameOutcomeSet(2);
     TeamFilterSet(1023);
-    fn_8001ED80(6);
+    MsgChallengeSetFlowState(6);
     fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
     fn_80186F30(-1, 0);
     fn_8018D7E0();

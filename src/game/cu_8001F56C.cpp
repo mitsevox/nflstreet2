@@ -299,7 +299,7 @@ void fn_8001FDB8(void)
     fn_80072F90();
 }
 
-int fn_8001FE10(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

@@ -23,7 +23,7 @@ char *fn_801C3084(const char *pString, int c);
 }
 
 extern "C" {
-void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
+void fn_8008199C(Object_8008044C *pObject, PlayerGear_t *pInfo);
 }
 
 static int sColumnTags[33] = {
@@ -257,7 +257,7 @@ void fn_8007BF60(int id)
         }
         {
             DbCursor teams;
-            Info_80307908 record;
+            PlayerGear_t record;
 
             fn_8018DF20(&teams, index);
             if (DbCursorFirst(&teams)) {

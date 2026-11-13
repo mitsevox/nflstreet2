@@ -292,7 +292,7 @@ void MsgStreetEventSetupShutdown(void)
     _MsgStreetEventSetup_pState = 0;
 }
 
-void MsgStreetEventSetupGetRow(int index, int *pEnabled, Arg_8018399C text, int *pState)
+void MsgStreetEventSetupGetRow(int index, int *pEnabled, MenuArg_t text, int *pState)
 {
     int selectable = 1;
 
@@ -320,7 +320,7 @@ void MsgStreetEventSetupGetRow(int index, int *pEnabled, Arg_8018399C text, int 
     }
 }
 
-int MsgStreetEventSetupChangeRow(int index, int direction, Arg_8018399C text)
+int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
 {
     int changed = 0;
     Params_80005284 *pText = text.pParams;
@@ -380,7 +380,7 @@ int MsgStreetEventSetupChangeRow(int index, int direction, Arg_8018399C text)
     return changed;
 }
 
-void MsgStreetEventSetupGetHelp(int index, Arg_8018399C text)
+void MsgStreetEventSetupGetHelp(int index, MenuArg_t text)
 {
     if (index >= 1 && index <= 3) {
         fn_801C2EF0(text.pParams->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mDescription, text.pParams->mLength);
@@ -478,7 +478,7 @@ int MsgStreetEventSetupHasEnoughPlayers(void)
     return total;
 }
 
-int MsgStreetEventSetupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgStreetEventSetupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

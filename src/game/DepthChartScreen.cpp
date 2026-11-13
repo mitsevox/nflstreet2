@@ -4,8 +4,8 @@
 #include "game/DepthChart.h"
 
 extern "C" {
-void fn_8001ED80(int value);
-int fn_8001ED88(void);
+void MsgChallengeSetFlowState(int value);
+int MsgChallengeGetFlowState(void);
 int TeamFilterGet(void);
 void ChalCloseCursors(void);
 int fn_80082414(int index);
@@ -21,8 +21,8 @@ void FeTeamChooseScreen(int *pResult)
     if (fn_8018D720(fn_8022F384(fn_8022F4BC()))) {
         if (TeamFilterGet() != 0x3FF) {
             *pResult = 401;
-        } else if (fn_8001ED88() == 6) {
-            fn_8001ED80(4);
+        } else if (MsgChallengeGetFlowState() == 6) {
+            MsgChallengeSetFlowState(4);
             *pResult = 123;
         } else {
             *pResult = 400;
@@ -34,7 +34,7 @@ void FeTeamChooseScreen(int *pResult)
     ChalCloseCursors();
 }
 
-int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeTeamHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 272:
@@ -59,7 +59,7 @@ int FeTeamHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *p
     return 1;
 }
 
-int DepthChartScreenHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int DepthChartScreenHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 270:
@@ -112,7 +112,7 @@ void DepthChartScreenGetSpot(unsigned char side, int unused, int index, float *p
     DepthChartSetSpotSlot(side != 0, index, value);
 }
 
-int FeCountsHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int FeCountsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 372:
