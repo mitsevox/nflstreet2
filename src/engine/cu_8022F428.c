@@ -318,11 +318,11 @@ extern void TMClusterObjAllocMatrices(Joints_802337D4 *pJoints, int a);
 extern void TMClusterObjSynthesizeMatrices(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
 extern void TMClusterObjSynthesizeMatricesSlerp(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
 extern void TMTevSetTevOp(int a, int b, int c);
-extern void fn_80214140(int a);
-extern void fn_80214184(int a);
-extern void fn_802141C4(int a, void *p, void *q);
-extern unsigned int fn_8021445C(void *p, void *q, int a);
-extern void fn_802144AC(void *p);
+extern void TMClipProjection(int a);
+extern void TMClipMatrix(int a);
+extern void TMClipMatrixWorld(int a, void *p, void *q);
+extern unsigned int TMClipBBox(void *p, void *q, int a);
+extern void TMClipResetExtent(void *p);
 extern void TMBufferNew(void *p, int a, int b);
 extern void TMBufferDelete(void *p);
 extern void TMBufferReset(void *p);
@@ -391,7 +391,7 @@ int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
 unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
-extern int fn_802142B0(float *pNdc, float *pClip, float *pPos);
+extern int TMClipVertex(float *pNdc, float *pClip, float *pPos);
 void fn_80234094(Box_80234070 *pBox);
 int fn_80234098(Object_80233EAC *pObject, float value);
 Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
@@ -1444,7 +1444,7 @@ void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip)
     p->mUnknown12 = 0.0f;
     if (p->mpUnknown28 != 0 && p->mpUnknown32 != 0) {
         p->mUnknown20 = fn_80234D4C(p->mpUnknown28, p->mpUnknown32, p->mpUnknown36, &box);
-        fn_802142B0(ndc, 0, 0);
+        TMClipVertex(ndc, 0, 0);
         p->mUnknown16 = ndc[2];
         if (pClip != 0
             && (box.mUnknown0 > pClip->mUnknown16 || box.mUnknown16 < pClip->mUnknown0
@@ -1721,9 +1721,9 @@ void fn_80234CF0(Part_80234A30 *pPart, int index, void *p)
 
 void fn_80234D00(void *pIn, void *pOut)
 {
-    fn_80214140(0);
-    fn_80214184(0);
-    fn_8021445C(pIn, pOut, 0);
+    TMClipProjection(0);
+    TMClipMatrix(0);
+    TMClipBBox(pIn, pOut, 0);
 }
 
 unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q)
@@ -1732,9 +1732,9 @@ unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q)
 
     fn_801D0508();
     fn_801D12BC(3);
-    fn_80214140(0);
-    fn_802141C4(0, p, m);
-    result = fn_8021445C(pBox, q, 0);
+    TMClipProjection(0);
+    TMClipMatrixWorld(0, p, m);
+    result = TMClipBBox(pBox, q, 0);
     fn_801D0544();
     return result;
 }
@@ -1889,7 +1889,7 @@ void fn_802353F8(Object_80235588 *p, int flags)
         p->mUnknown4 = 19;
     }
     if (old != p->mUnknown4) {
-        fn_802144AC(p->mUnknown152);
+        TMClipResetExtent(p->mUnknown152);
         if (p->mUnknown4 == -1) {
             TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {
@@ -1904,7 +1904,7 @@ void fn_80235510(Object_80235588 *p, int mode)
 
     p->mUnknown4 = mode;
     if (old != mode) {
-        fn_802144AC(p->mUnknown152);
+        TMClipResetExtent(p->mUnknown152);
         if (p->mUnknown4 == -1) {
             TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {

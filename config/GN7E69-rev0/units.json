@@ -13579,6 +13579,53 @@
       ]
     },
     {
+      "source": "src/engine/tmclip.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c), its compiler, function, name, data and type rows and the linker row 0x802B1C78-0x802B1C88 for the discarded TMClipVertexList; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "TMClipProjection",
+          "TMClipMatrix",
+          "TMClipMatrixWorld",
+          "TMClipProjVertexList",
+          "TMClipVertex",
+          "TMClipBBox",
+          "TMClipResetExtent",
+          "TMClipExtentAddPoint"
+        ],
+        "discarded": [
+          "TMClipVertexList"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B1C78-0x802B1C88: the target keeps every listed function, all reached from outside the unit, and the file-static helpers they call; TMClipVertexList, rebuilt from its Xbox prototype counterpart 0x2244B0, has no code in the target, while its three constants remain in the unit's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213BCC",
+          "end": "0x80214554"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C58",
+          "end": "0x802B1C98"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9D8C",
+          "end": "0x802F9D98"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039B580",
+          "end": "0x8039B600"
+        }
+      ]
+    },
+    {
       "source": "src/engine/tmbuffer.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80214554-0x802146C8 (src/engine/tmbuffer.c) and its data rows; every function exact, promoted from comparison-only.",

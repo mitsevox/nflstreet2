@@ -9,20 +9,20 @@ unsigned char *_TMGeom_ChannelBuffer = 0;
 unsigned char *_TMGeom_BufferPosition = 0;
 unsigned char *_TMGeom_BufferEnd = 0;
 
-void TMGeomExtentAddS16Points(Extent_802144AC *pExtent, short *pPoints, int count)
+void TMGeomExtentAddS16Points(TMClipExtent_t *pExtent, short *pPoints, int count)
 {
     float scale = 1.0f / 32768.0f;
 
     for (; count > 0; count--) {
-        fn_802144D8(pExtent, pPoints[0] * scale, pPoints[1] * scale, pPoints[2] * scale);
+        TMClipExtentAddPoint(pExtent, pPoints[0] * scale, pPoints[1] * scale, pPoints[2] * scale);
         pPoints += 3;
     }
 }
 
-void TMGeomExtentAddF32Points(Extent_802144AC *pExtent, float *pPoints, int count)
+void TMGeomExtentAddF32Points(TMClipExtent_t *pExtent, float *pPoints, int count)
 {
     for (; count > 0; count--) {
-        fn_802144D8(pExtent, pPoints[0], pPoints[1], pPoints[2]);
+        TMClipExtentAddPoint(pExtent, pPoints[0], pPoints[1], pPoints[2]);
         pPoints += 3;
     }
 }
@@ -156,7 +156,7 @@ void TMGeometryRemapMaterials(TMGeom_t *pPart, unsigned short *pRemap, int numMa
     }
 }
 
-void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, Extent_802144AC *pExtent)
+void TMGeomAddNodeExtent(TMGeom_t *pPart, int nodeIndex, TMClipExtent_t *pExtent)
 {
     TMGeomNode_t *pNode;
     TMGeomAttr_t *pAttr;

@@ -205,7 +205,7 @@ extern void TMMaterialListSetMatDefs(void *p, void *q);
 extern int TMShaderLibGetShader(const char *pName);
 extern void TMTexLibRegistryReset(void);
 extern void TMTexLibRegister(const char *pName, void *p);
-extern void fn_802144AC(void *p);
+extern void TMClipResetExtent(void *p);
 extern void *fn_8023816C(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
 extern float lbl_803EC100;
@@ -263,7 +263,7 @@ void fn_80235630(Object_80235588 *p, void *pData)
             if (p->mUnknown100.mpUnknown8->mUnknown16 & 4) {
                 fn_802353D8(p, 0x10000);
             }
-            fn_802144AC(p->mUnknown152);
+            TMClipResetExtent(p->mUnknown152);
             TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
         }
     }
