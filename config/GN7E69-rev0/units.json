@@ -2360,6 +2360,38 @@
     "SetVerboseFlags__12FlowManagerCi": {
       "address": "0x801CC054",
       "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
+    },
+    "g_hHandle": {
+      "address": "0x802CC5A0",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5A0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_pBuffer": {
+      "address": "0x802CC5A4",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5A4: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_nBlockCnt": {
+      "address": "0x802CC5A8",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5A8: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_nRemainderCnt": {
+      "address": "0x802CC5AC",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5AC: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_nTotalBytesRemaining": {
+      "address": "0x802CC5B0",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5B0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_bDoFSACK": {
+      "address": "0x802CC5B4",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5B4: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_nFSLastError": {
+      "address": "0x802CC5B8",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5B8: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "g_FsResult": {
+      "address": "0x802CC5C0",
+      "evidence": "evidence.tsv data and name rows for 0x802CC5C0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
     }
   },
   "units": [
@@ -17508,6 +17540,25 @@
           "placement": ".bss",
           "start": "0x803D4780",
           "end": "0x803D4F50"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/FSasync.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801ADDB4 (src/engine/FSasync.c), its function, name, data, compiler and source-form rows; every function exact, promoted from comparison-only. The .data range 0x802CC580-0x802CC590 holds the four initialized state words; the zero-filled storage 0x802CC5A0-0x802CC5CC is the file's uninitialized (COMMON) globals, which keep their original bytes and are named externals.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD57C",
+          "end": "0x801ADDB4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC580",
+          "end": "0x802CC590"
         }
       ]
     }
