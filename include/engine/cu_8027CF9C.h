@@ -35,7 +35,7 @@ extern "C" {
 
 Codec_8027CF9C *fn_8027CF9C(void *memory);
 int fn_8027CFCC(Codec_8027CF9C *p, unsigned char *data, int size, int count);
-int fn_8027D05C(Codec_8027CF9C *p, float **dst, int count);
+int CodecReadSamples(Codec_8027CF9C *p, float **dst, int count);
 Format_8027D284 fn_8027D284(Codec_8027CF9C *p);
 void fn_8027D2C4(Codec_8027CF9C *p, Format_8027D284 *format, int flags);
 void fn_8027D2E0(Codec_8027CF9C *p, int mode);

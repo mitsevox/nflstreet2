@@ -43,7 +43,7 @@ int fn_8027CFCC(Codec_8027CF9C *p, unsigned char *data, int size, int count)
     return 0;
 }
 
-int fn_8027D05C(Codec_8027CF9C *p, float **dst, int count)
+int CodecReadSamples(Codec_8027CF9C *p, float **dst, int count)
 {
     int total;
     int left;
@@ -82,14 +82,16 @@ int fn_8027D05C(Codec_8027CF9C *p, float **dst, int count)
         n = 432;
         if (p->mD64 == 1) {
             p->mD48 = p->m0 - 1;
+            src = p->mD48;
             if (p->mD60 != 0) {
-                src = p->mD48;
                 d = (unsigned char *)&p->mD52;
-                d[0] = *src++;
-                d[1] = *src++;
+                d[0] = src[0];
+                d[1] = src[1];
+                src += 2;
                 e = (unsigned char *)&p->mD50;
-                e[0] = *src++;
-                e[1] = *src++;
+                e[0] = src[0];
+                e[1] = src[1];
+                src += 2;
                 p->mD48 = p->mD48 + p->mD50 * 2 + 4;
                 p->m0 = p->mD48 + 1;
                 out = &p->m684[p->mD52];

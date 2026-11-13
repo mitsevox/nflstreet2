@@ -2388,6 +2388,10 @@
     "_CDVDAlignedBuffer": {
       "address": "0x803D5600",
       "evidence": "evidence.tsv data/name rows for 0x803D5600: the 32 KB disc read buffer of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
+    },
+    "CodecReadSamples": {
+      "address": "0x8027D05C",
+      "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
     }
   },
   "units": [

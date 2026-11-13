@@ -20,7 +20,7 @@ int SFILTER_unpackmtpf(Node_80279D90 *node, int count, float *a, float *b, int f
         decoder->mPendingCount = 0;
     }
     while (count > 0) {
-        n = fn_8027D05C(decoder->mpCodec, &b, count);
+        n = CodecReadSamples(decoder->mpCodec, &b, count);
         decoder->mPacketPosition += n;
         b += n;
         decoder->mPendingCount += n;
