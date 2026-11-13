@@ -5,7 +5,7 @@
 
 void DSListInitLinkedModule(void);
 void fn_801C7EE4(void);
-void fn_801C8E88(void);
+void DSListInitBinTreeModule(void);
 
 static int fn_801C665C(int type, int size)
 {
@@ -35,7 +35,7 @@ void fn_801C6760(void)
         lbl_803D4FB8[i].mActive = 0;
     }
     DSListInitLinkedModule();
-    fn_801C8E88();
+    DSListInitBinTreeModule();
     fn_801C7EE4();
 }
 

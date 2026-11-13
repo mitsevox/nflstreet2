@@ -6851,6 +6851,31 @@
       ]
     },
     {
+      "source": "src/engine/bintree.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C7F70-0x801C8F14 (src/engine/bintree.c), its compiler, source-form, type, function, name and data rows; every function exact, promoted from comparison-only together with its .rodata pool 0x802AF188-0x802AF198 and its .bss parent node 0x8037F880-0x8037F894.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C7F70",
+          "end": "0x801C8F14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF188",
+          "end": "0x802AF198"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037F880",
+          "end": "0x8037F894"
+        }
+      ]
+    },
+    {
       "source": "src/engine/vector.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80226F9C-0x802270A4 (src/engine/vector.c), its compiler, function, name and data rows; every function exact, promoted from comparison-only together with its .sdata byte 0x803EBF88.",

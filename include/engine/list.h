@@ -69,24 +69,24 @@ typedef struct SplayTree_801C7684 {
 
 /* Threaded binary tree node: flag bits 0x1/0x2 mark the left/right link as a thread,
    0x4/0x8 first/last in order, 0x10/0x20 left/right child of the parent. */
-typedef struct BinNode_801C7F70 {
+typedef struct BinNode_t {
     unsigned int mFlags;
     int mUnused;
     unsigned char mDepth;
-    struct BinNode_801C7F70 *mpLeft;
-    struct BinNode_801C7F70 *mpRight;
-} BinNode_801C7F70;
+    struct BinNode_t *mpLeft;
+    struct BinNode_t *mpRight;
+} BinNode_t;
 
-typedef struct BinTree_801C7F70 {
+typedef struct BinTree_t {
     List_801C68FC mBase;
     unsigned int mMaxDepth;
     unsigned int mTotalDepth;
     unsigned char mAutoOptimize;
     float mAvgLimit;
     float mDepthLimit;
-    BinNode_801C7F70 **mppScratch;
-    BinNode_801C7F70 *mpRoot;
-} BinTree_801C7F70;
+    BinNode_t **mppScratch;
+    BinNode_t *mpRoot;
+} BinTree_t;
 
 typedef struct NodePool_t {
     unsigned int mCount;

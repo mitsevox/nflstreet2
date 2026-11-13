@@ -30,7 +30,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801C6E5C	0x801C735C	linklist.c	14	14	14	14	0	-	-
 0x801C735C	0x801C7684	node.c	10	10	10	10	0	-	-
 0x801C7684	0x801C7F70	splytree.c	15	15	15	0	15	-	-
-0x801C7F70	0x801C8F14	bintree.c	25	25	25	0	25	-	-
+0x801C7F70	0x801C8F14	bintree.c	25	25	25	25	0	-	-
 0x801C8F14	0x801C9DD8	fileio.c	28	27	28	0	27	-	-
 0x801C9DD8	0x801CB1BC	llfileio.c	24	23	24	23	0	-	-
 0x801CB1BC	0x801CB5D4	fs_cli.c	8	8	8	0	8	-	-
