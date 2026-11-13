@@ -5327,6 +5327,35 @@
       ]
     },
     {
+      "source": "src/dolphin/odemuexi2/DebuggerDriver.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name, type, data and source-form rows for src/dolphin/odemuexi2/DebuggerDriver.c; the eleven functions 0x8025D930-0x8025E148 are exact and linked with the file's .sbss; the start holdout 0x8025D6C8-0x8025D930 is registered in comparisons.json.",
+      "link_roots": {
+        "symbols": [
+          "DBRead",
+          "DBQueryData",
+          "DBInitInterrupts",
+          "DBInitComm",
+          "DBGWrite"
+        ],
+        "evidence": "DBRead, DBQueryData, DBInitInterrupts and DBInitComm are the linked entries of the .data table 0x802C2A8C-0x802C2AA8 (words at 0x802C2A98, 0x802C2A94, 0x802C2A90 and 0x802C2A8C); no instruction calls them. DBGWrite's only caller is the holdout DBWrite (bl at 0x8025D7AC), which stays original bytes, so it is a root too. The other six linked functions stay through their callers in this file."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D930",
+          "end": "0x8025E148"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F8",
+          "end": "0x803ED40D"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/os/OSSync.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit and assembly provenance rows; CREDITS.md upstream OSSync.c and partial __os.h declarations.",
