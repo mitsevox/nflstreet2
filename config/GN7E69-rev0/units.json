@@ -15212,6 +15212,25 @@
       ]
     },
     {
+      "source": "src/game/BigObjAnim.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A980C-0x801AA24C (src/game/BigObjAnim.cpp), its 8 exact function extents and its .rodata data row 0x802AE958-0x802AE978; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A980C",
+          "end": "0x801AA24C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE958",
+          "end": "0x802AE978"
+        }
+      ]
+    },
+    {
       "source": "src/game/UVScroll.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801A7C20-0x801A8620 (src/game/UVScroll.cpp), its compiler row, the four exact function rows 0x801A7C20-0x801A8620, the exact data row 0x802AE898-0x802AE8E0 (.rodata) and the UVScrollFixed source-form rows.",
