@@ -24,8 +24,10 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801C3A44	0x801C3A44	0x801C3A44	data	0	3	camera.c	camfocus.c
 .text	0x801C3CE8	0x801C3CE8	0x801C3CE8	alignment	0	0	camfocus.c	camfree.c
 .text	-	0x801C3EFC	0x801C4960	open	-	-	camfree.c	skeleton.c
-.text	-	0x801C4F10	0x801C5B9C	open	-	-	skeleton.c	context.c
-.text	-	0x801C657C	0x801C6584	open	-	-	context.c	ds.c
+.text	-	0x801C4F10	0x801C4F64	open	-	-	skeleton.c	Curve.c
+.text	0x801C5008	0x801C5008	0x801C5008	alignment	0	0	Curve.c	CurveList.c
+.text	0x801C53A8	0x801C53A8	0x801C53A8	alignment	0	1	CurveList.c	polynomial.c
+.text	-	0x801C5B9C	0x801C6584	open	-	-	polynomial.c	ds.c
 .text	0x801C665C	0x801C665C	0x801C665C	alignment	0	5	ds.c	list.c
 .text	0x801C6E5C	0x801C6E5C	0x801C6E5C	alignment	1	2	list.c	linklist.c
 .text	0x801C735C	0x801C735C	0x801C735C	alignment	0	0	linklist.c	node.c
@@ -174,6 +176,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802AEEA4	0x802AEEA8	data	0	11/9	animtran.c	animwgt.c
 .rodata	-	0x802AF0C4	0x802AF0C4	data	0	3/6	camera.c	camfocus.c
 .rodata	-	0x802AF0DC	0x802AF0DC	data	0	6/4	camfocus.c	camfree.c
+.rodata	-	0x802AF130	0x802AF130	data	0	7/11	CurveList.c	polynomial.c
 .rodata	-	0x802AF19C	0x802AF19C	thin	0	1/13	fileio.c	llfileio.c
 .rodata	-	0x802AF4E8	0x802AF4E8	data	0	3/3	llglib.c	llrender.c
 .rodata	-	0x802AF540	0x802AF540	thin	0	12/1	rand.c	orient.c

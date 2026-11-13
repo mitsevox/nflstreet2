@@ -1,51 +1,21 @@
+/* Curve lists: keyed Hermite and Bezier curves evaluated over a time range, with clamp or wrap past the end.
+   Camera samples use them for animated camera moves. */
+
 #include "engine/polynomial.h"
-/* Curve lists: keyed Hermite and Bezier curves evaluated over a time range, with clamp or wrap past the end. */
+#include "engine/CurveList.h"
 
-typedef struct CurveKey_801C5008 {
-    unsigned int mFlags;
-    float mValue;
-    float mTime;
-} CurveKey_801C5008;
-
-typedef struct HermiteKey_801C5008 {
-    unsigned int mFlags;
-    float mValue;
-    float mTime;
-    float mCoef[4];
-} HermiteKey_801C5008;
-
-typedef struct BezierKey_801C5008 {
-    unsigned int mFlags;
-    float mValue;
-    float mTime;
-    float mEndTime;
-    float mX[4];
-    float mY[4];
-} BezierKey_801C5008;
-
-typedef struct CurveList_801C5008 {
-    unsigned short mType;
-    unsigned short mCount;
-    float mStart;
-    float mEnd;
-    void *mpKeys;
-} CurveList_801C5008;
-
-
-float fn_801C52CC(float t, float t0, float a, float b, float c, float d);
-float fn_801C52E0(float t, float t0, float t1, float x0, float x1, float x2, float x3, float y0, float y1, float y2,
-                  float y3);
-
-static float fn_801C5008(CurveList_801C5008 *pList, float t, int mode)
+/* Mode 0 holds the last key's value past the end; mode 1 wraps the time into the range. */
+static float _CurveListEvaluateHermiteCurve(float t, CurveList_t *pList, int mode)
 {
-    HermiteKey_801C5008 *pKeys = pList->mpKeys;
-    HermiteKey_801C5008 *pKey = pKeys;
+    CurveHermiteKey_t *pKeys = pList->mpKeys;
+    CurveHermiteKey_t *pKey = pKeys;
+    float result = 0.0f;
     float start;
     float end;
     unsigned int i = 0;
 
     if (pList->mCount == 0) {
-        return 0.0f;
+        return result;
     }
     start = pList->mStart;
     if (t < start) {
@@ -55,29 +25,39 @@ static float fn_801C5008(CurveList_801C5008 *pList, float t, int mode)
     if (!(t <= end) && mode == 0) {
         return pKeys[pList->mCount - 1].mValue;
     } else if (!(t <= end) && mode == 1) {
-        end -= start;
-        t -= (float)(int)(t / end) * end;
+        float range = end - start;
+
+        t -= (float)(int)(t / range) * range;
     }
-    while (i < pList->mCount && !(t < pKeys[i].mTime)) {
+    /* Find the last key at or before t. */
+    for (;;) {
+        if (i >= pList->mCount) {
+            goto found;
+        }
+        if (t < pKeys[i].mTime) {
+            goto found;
+        }
         pKey = &pKeys[i];
         i++;
     }
+found:
     if (pKey->mFlags & 0xFFFF0000) {
         return pKey->mValue;
     }
-    return fn_801C52CC(t, pKey->mTime, pKey->mCoef[0], pKey->mCoef[1], pKey->mCoef[2], pKey->mCoef[3]);
+    return CurveListCalculateHermite(t, pKey->mTime, pKey->mCoef[0], pKey->mCoef[1], pKey->mCoef[2], pKey->mCoef[3]);
 }
 
-static float fn_801C5130(CurveList_801C5008 *pList, float t, int mode)
+static float _CurveListEvaluateBezierCurve(float t, CurveList_t *pList, int mode)
 {
-    BezierKey_801C5008 *pKeys = pList->mpKeys;
-    BezierKey_801C5008 *pKey = pKeys;
+    CurveBezierKey_t *pKeys = pList->mpKeys;
+    CurveBezierKey_t *pKey = pKeys;
+    float result = 0.0f;
     float start;
     float end;
     unsigned int i = 0;
 
     if (pList->mCount == 0) {
-        return 0.0f;
+        return result;
     }
     start = pList->mStart;
     if (t < start) {
@@ -87,44 +67,55 @@ static float fn_801C5130(CurveList_801C5008 *pList, float t, int mode)
     if (!(t <= end) && mode == 0) {
         return pKeys[pList->mCount - 1].mValue;
     } else if (!(t <= end) && mode == 1) {
-        end -= start;
-        t -= (float)(int)(t / end) * end;
+        float range = end - start;
+
+        t -= (float)(int)(t / range) * range;
     }
-    while (i < pList->mCount && !(t < pKeys[i].mTime)) {
+    /* Find the last key at or before t. */
+    for (;;) {
+        if (i >= pList->mCount) {
+            goto found;
+        }
+        if (t < pKeys[i].mTime) {
+            goto found;
+        }
         pKey = &pKeys[i];
         i++;
     }
+found:
     if (pKey->mFlags & 0xFFFF0000) {
         return pKey->mValue;
     }
-    return fn_801C52E0(t, pKey->mTime, pKey->mEndTime, pKey->mX[0], pKey->mX[1], pKey->mX[2], pKey->mX[3], pKey->mY[0],
-                       pKey->mY[1], pKey->mY[2], pKey->mY[3]);
+    return CurveListCalculateBezier(t, pKey->mTime, pKey->mEndTime, pKey->mX[0], pKey->mX[1], pKey->mX[2], pKey->mX[3],
+                                    pKey->mY[0], pKey->mY[1], pKey->mY[2], pKey->mY[3]);
 }
 
-float fn_801C5278(CurveList_801C5008 *pList, float t, int mode)
+float CurveListEvaluate(float t, CurveList_t *pList, int mode)
 {
     float result = 0.0f;
 
     switch (pList->mType) {
     case 0:
-        result = fn_801C5008(pList, t, mode);
+        result = _CurveListEvaluateHermiteCurve(t, pList, mode);
         break;
     case 1:
-        result = fn_801C5130(pList, t, mode);
+        result = _CurveListEvaluateBezierCurve(t, pList, mode);
         break;
     }
     return result;
 }
 
-float fn_801C52CC(float t, float t0, float a, float b, float c, float d)
+/* The cubic with coefficients a..d in the time since t0. */
+float CurveListCalculateHermite(float t, float t0, float a, float b, float c, float d)
 {
     float dt = t - t0;
 
     return dt * (dt * (dt * a + b) + c) + d;
 }
 
-float fn_801C52E0(float t, float t0, float t1, float x0, float x1, float x2, float x3, float y0, float y1, float y2,
-                  float y3)
+/* Solves x(s) = u for the segment parameter s, where u is t's position between t0 and t1, then returns y(s). */
+float CurveListCalculateBezier(float t, float t0, float t1, float x0, float x1, float x2, float x3, float y0, float y1,
+                               float y2, float y3)
 {
     float coef[4];
     float roots[6];
