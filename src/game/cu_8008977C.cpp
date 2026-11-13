@@ -145,31 +145,31 @@ void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int value)
                 sTop[index] = 0;
             } else {
                 sTransitions[index][1] = previous;
+                sTransitions[index][0].mType = 3;
                 sTransitions[index][0].mValue = value;
                 sTop[index] = 1;
-                sTransitions[index][0].mType = 3;
             }
             break;
         case 3:
             if (value == 2) {
                 sTransitions[index][1] = previous;
+                sTransitions[index][0].mType = 1;
                 sTransitions[index][0].mValue = previous.mValue;
                 sTop[index] = 1;
-                sTransitions[index][0].mType = 1;
             } else if (fn_8008A20C(value)) {
                 sTransitions[index][2] = previous;
-                sTransitions[index][0].mValue = value;
-                sTop[index] = 2;
                 sTransitions[index][1].mType = 1;
                 sTransitions[index][1].mValue = previous.mValue;
                 sTransitions[index][0].mType = 4;
-            } else {
-                sTransitions[index][2] = previous;
                 sTransitions[index][0].mValue = value;
                 sTop[index] = 2;
+            } else {
+                sTransitions[index][2] = previous;
                 sTransitions[index][1].mType = 1;
                 sTransitions[index][1].mValue = previous.mValue;
+                sTop[index] = 2;
                 sTransitions[index][0].mType = 3;
+                sTransitions[index][0].mValue = value;
             }
             break;
         case 4:
@@ -180,9 +180,9 @@ void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int value)
                 sPending[index] = 1;
             } else {
                 sTransitions[index][1] = previous;
+                sTransitions[index][0].mType = 3;
                 sTransitions[index][0].mValue = value;
                 sTop[index] = 1;
-                sTransitions[index][0].mType = 3;
             }
             break;
         }
@@ -190,30 +190,30 @@ void fn_80089A84(FEPlyrModel_t *pRecord, unsigned int value)
         if (sCurrent[index] == 2) {
             if (fn_8008A20C(value)) {
                 sCurrent[index] = value;
+                sTransitions[index][0].mType = 4;
                 sTop[index] = 0;
                 sTransitions[index][0].mValue = value;
-                sTransitions[index][0].mType = 4;
             } else {
                 sTop[index] = 0;
-                sTransitions[index][0].mValue = value;
                 sTransitions[index][0].mType = 3;
+                sTransitions[index][0].mValue = value;
             }
         } else if (value == 2) {
+            sTransitions[index][0].mType = 1;
             sTransitions[index][0].mValue = sCurrent[index];
             sTop[index] = 0;
-            sTransitions[index][0].mType = 1;
         } else if (fn_8008A20C(value)) {
-            sTransitions[index][0].mValue = value;
-            sTop[index] = 1;
             sTransitions[index][1].mType = 1;
             sTransitions[index][1].mValue = sCurrent[index];
             sTransitions[index][0].mType = 4;
-        } else {
             sTransitions[index][0].mValue = value;
             sTop[index] = 1;
+        } else {
             sTransitions[index][1].mType = 1;
             sTransitions[index][1].mValue = sCurrent[index];
             sTransitions[index][0].mType = 3;
+            sTransitions[index][0].mValue = value;
+            sTop[index] = 1;
         }
         fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796,
                    pRecord->mUnknown800, 214, 1.0f, pRecord);
