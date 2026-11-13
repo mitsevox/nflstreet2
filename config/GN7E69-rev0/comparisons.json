@@ -13930,6 +13930,30 @@
           "placement": ".data3",
           "start": "0x802A44EC",
           "end": "0x802A4598"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9780",
+          "end": "0x802E988C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D2A4",
+          "end": "0x8031D2B8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB388",
+          "end": "0x803EB39C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECAEC",
+          "end": "0x803ECAF0"
         }
       ],
       "functions": [
