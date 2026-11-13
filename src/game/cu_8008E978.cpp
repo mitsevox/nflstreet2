@@ -7194,7 +7194,7 @@ int fn_80177F70(void);
 void fn_8016DDDC(int team);
 GameCamera_t *CamGameGetCamera(int index);
 void CamMainWarpToDest(GameCamera_t *pCamera);
-int fn_80169EF4(int mode);
+int PlayCallScriptRunDefense(int mode);
 void PlayBookLoadCurrentPlay(int team);
 void fn_800B3EFC(int team);
 void PlayBookSetFormationType(int team, int kind);
@@ -7217,7 +7217,7 @@ void fn_800BA72C(void);
 void PlayBookSaveSelection(int team);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 void fn_8021956C(void *p, int a, int b, int c);
-int fn_80169E68(int mode);
+int PlayCallScriptRunOffense(int mode);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void fn_800B40D8(unsigned char value);
@@ -7640,7 +7640,7 @@ extern "C" void fn_800B2E54(void)
     PlayBookSetLoadFlags(3);
     team = fn_80178308();
     if (fn_800BA6F8() == 0 && !(lbl_803EAB34->mUnknown8 & 2)) {
-        fn_80169E68(0);
+        PlayCallScriptRunOffense(0);
     }
     PlayBookLoadCurrentPlay((unsigned char)team);
     if (PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknownF != 0) {
@@ -7649,10 +7649,10 @@ extern "C" void fn_800B2E54(void)
     team = fn_80178320();
     if (fn_800BA6F8() != 0) {
         if (fn_800BAA24() != 0) {
-            fn_80169EF4(0);
+            PlayCallScriptRunDefense(0);
         }
     } else if (fn_800B65A0(team) == 255 || !(lbl_803EAB34->mUnknown8 & 4)) {
-        fn_80169EF4(0);
+        PlayCallScriptRunDefense(0);
     }
     PlayBookLoadCurrentPlay((unsigned char)team);
     PlayBookClearLoadFlags(3);
@@ -7802,7 +7802,7 @@ extern "C" void fn_800B3420(void)
 {
     int team = fn_80178320();
 
-    fn_80169EF4(0);
+    PlayCallScriptRunDefense(0);
     PlayBookLoadCurrentPlay(team);
     lbl_803EAB34->mUnknown24 = PlayBookGetPlay(team)->mUnknown4;
 }
@@ -7918,7 +7918,7 @@ void Class_80297B50::vfn_03()
         PlayBookSetLoadFlags(3);
         fn_800B3EC0(team, other);
         fn_800B43AC(0);
-        fn_80169E68(0);
+        PlayCallScriptRunOffense(0);
         lbl_803EAB34->mUnknown8 |= 0x20;
         if (fn_800B65A0(team) == 0xFF) {
             lbl_803EAB34->mUnknown1C = 1;
@@ -9413,7 +9413,7 @@ extern "C" void fn_800BBF18(void)
 extern "C" {
 int fn_800C1E40(void);
 void fn_8021956C(void *p, int a, int b, int c);
-int fn_80169E68(int mode);
+int PlayCallScriptRunOffense(int mode);
 int fn_80061DE8(void);
 }
 
@@ -17627,9 +17627,9 @@ extern "C" void fn_800BD99C(int team)
 {
     if (fn_800BA6F8() == 0 && fn_800B65A0(team) == 255) {
         if (team == fn_80178320()) {
-            fn_80169EF4(2);
+            PlayCallScriptRunDefense(2);
         } else {
-            fn_80169E68(2);
+            PlayCallScriptRunOffense(2);
         }
     }
 }

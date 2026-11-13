@@ -4,7 +4,7 @@
    the game's questions about the chosen play. */
 
 #include "game/ResLoad.h"
-#include "game/Desc_80169DF8.h"
+#include "game/PlayCallScript.h"
 #include "game/Class_80148A58.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
@@ -388,13 +388,13 @@ void PlayBookOpenAndRegister(int a, int b, int c, int d, int e, int f, int g, in
     PlayBookClearAudibles(0, f, 0);
     PlayBookClearAudibles(1, g, 0);
     if (h) {
-        Desc_80169DF8 desc;
+        PlayCallScriptDesc_t desc;
 
         desc.mUnknown0 = ResLoad((void *)a, 4, 1);
         desc.mUnknown4 = (short *)_PlayBook_pData->mUnknownD2EC;
         desc.mUnknown8 = PlayCallOffenseCommand;
         desc.mUnknownC = PlayCallDefenseCommand;
-        fn_80169DF8(&desc);
+        PlayCallScriptInit(&desc);
     }
 }
 

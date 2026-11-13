@@ -54,7 +54,7 @@ void fn_801486A8(void);
 void fn_801487C0(int team, unsigned char begin);
 void BallResetToSpot(void);
 void PlayBookSetFormationType(int team, int kind);
-int fn_80169E68(int mode);
+int PlayCallScriptRunOffense(int mode);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
 Team_80168EBC *PlayBookGetTeam(int team);
@@ -194,7 +194,7 @@ void fn_8014AF24(void *p, float dt)
         int other = team == 0;
         PlayBookSetFormationType(team, 1);
         PlayBookSetFormationType(other, 11);
-        fn_80169E68(0);
+        PlayCallScriptRunOffense(0);
         PlayBookLoadCurrentPlay(team);
         PlayBookSetIndices(other, 0, 0, 0);
         PlayBookLoadCurrentPlay(other);

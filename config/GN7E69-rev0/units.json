@@ -12824,6 +12824,31 @@
       ]
     },
     {
+      "source": "src/game/PlayCallScript.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801695D4-0x80169F80 (src/game/PlayCallScript.cpp), its function rows, data rows 0x802A4BF8-0x802A4C14 and 0x8036167C-0x80361694, and its type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801695D4",
+          "end": "0x80169F80"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4BF8",
+          "end": "0x802A4C14"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036167C",
+          "end": "0x80361694"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_801564DC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row for src/game/cu_801564DC.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
