@@ -50,8 +50,8 @@ void fn_8002A49C(int a);
 void fn_8002A5C4(void);
 void fn_8002A5F0(int a, char *pBuf, int b);
 int fn_8002A824(void);
-void fn_80187FD0(void);
-void fn_80187FDC(void);
+void GameTextRequestReset(void);
+void GameTextServiceReset(void);
 int fn_80029D74(int type, int index);
 void fn_80029CE0(int type, int index);
 void fn_80029D28(int type, int index);
@@ -365,8 +365,8 @@ void MemCardUIMarkOtherGameFound(int a, int b)
 
 void MemCardUIResetGame(void)
 {
-    fn_80187FD0();
-    fn_80187FDC();
+    GameTextRequestReset();
+    GameTextServiceReset();
 }
 
 void MemCardUIReturnToMenu(void)

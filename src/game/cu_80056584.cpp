@@ -148,10 +148,10 @@ extern void *gUISMainInfo;
 void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-void fn_80188248(Object_80056584 *pObject, char *pOut, int b);
+void GameTextFormatInitialAndName(Object_80056584 *pObject, char *pOut, int b);
 int MsgGameGetPlayerPortrait(int id);
 int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
-void fn_80187D10(void);
+void GameTextQueuePlayerPortraits(void);
 void fn_800C1CA0(void);
 void PauseRequestClose(void);
 int fn_801486A0(void);
@@ -184,7 +184,7 @@ int fn_8009D990(int index);
 int GameInfoGet(int index);
 void fn_800B4434(void);
 void fn_800B3C54(void);
-int fn_80188030(int value);
+int GameTextGetPadPlayer(int value);
 void PlayBookToggleFlip(unsigned char team);
 int ChallengeIsActive(void);
 int fn_801485D4(void);
@@ -268,10 +268,10 @@ int fn_8005D1E4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005D2D0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8005BFDC(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_800C8744(int team);
-void fn_80187CAC(int id, char *pText, int size);
+void GameTextGetTeamDisplayName(int id, char *pText, int size);
 int GameOptionsGet(int a);
 int fn_8017881C(int team);
-int fn_80188044(unsigned int index);
+int GameTextFindPlayerPad(unsigned int index);
 int GameModeTypeIsSpecial(void);
 extern void *lbl_803EA368;
 
@@ -303,7 +303,7 @@ void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pT
     fn_801C2D88(pText2, size2, "%d", info.mUnknown16);
     Object_80056584 *pObject = info.mpObject;
     if (pObject) {
-        fn_80188248(pObject, pOut, b);
+        GameTextFormatInitialAndName(pObject, pOut, b);
         fn_80148A58()->vfn_18(1, index, pText, length);
         *pId = MsgGameGetPlayerPortrait(pObject->mUnknownB5C);
     } else {
@@ -333,7 +333,7 @@ int fn_800566F0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         *pResult = 4;
         break;
     case 0x80000003:
-        fn_80187D10();
+        GameTextQueuePlayerPortraits();
         if (pArgs[0].i == 1) {
             fn_800C1CA0();
         }
@@ -569,13 +569,13 @@ void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, in
         if (id == 0xFF) {
             lbl_803EA58C->mUnknown4 = -1;
         } else {
-            lbl_803EA58C->mUnknown4 = fn_80188030(id);
+            lbl_803EA58C->mUnknown4 = GameTextGetPadPlayer(id);
         }
         id = fn_800B65A0(0);
         if (id == 0xFF) {
             lbl_803EA58C->mUnknown0 = -1;
         } else {
-            lbl_803EA58C->mUnknown0 = fn_80188030(id);
+            lbl_803EA58C->mUnknown0 = GameTextGetPadPlayer(id);
         }
         lbl_803EA590->mUnknown0[0] = 0;
         lbl_803EA590->mUnknown0[1] = 0;
@@ -1580,8 +1580,8 @@ int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int
     int id0 = fn_800C8744(0);
     int id1 = fn_800C8744(1);
 
-    fn_80187CAC(id1, name1, 16);
-    fn_80187CAC(id0, name0, 16);
+    GameTextGetTeamDisplayName(id1, name1, 16);
+    GameTextGetTeamDisplayName(id0, name0, 16);
     name1[16] = 0;
     name0[16] = 0;
     if (GameOptionsGet(14) == 1) {
@@ -1618,7 +1618,7 @@ void fn_80059A9C(int *pList)
         pList[i] = -1;
     }
     for (i = 0; i <= 3; i++) {
-        int id = fn_80188044(i);
+        int id = GameTextFindPlayerPad(i);
         if (id != -1) {
             unsigned int side = fn_800B6644(id);
             if ((unsigned int)fn_801486A0() > 1) {
@@ -1653,8 +1653,8 @@ extern const char *lbl_802D4D1C[9];
 extern const float lbl_803ED6A4,lbl_803ED6A8;
 void fn_800A7B5C(void);
 void fn_800B823C(int side);
-int fn_80187C8C(void);
-int fn_80187C6C(void);
+int GameTextGetHomeTeam(void);
+int GameTextGetAwayTeam(void);
 int fn_801787DC(int team);
 int fn_800A8444(int team);
 int fn_800A8740(void);
@@ -1746,7 +1746,7 @@ void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, i
     }
     fn_800B823C(0); fn_800B823C(1);
     fn_80059A9C(pList);
-    pValues[0] = fn_80187C8C(); pValues[1] = fn_80187C6C();
+    pValues[0] = GameTextGetHomeTeam(); pValues[1] = GameTextGetAwayTeam();
     if (GameOptionsGet(14) != 1) {
         Params_80005284 *pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1];
         fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(0));
@@ -1781,7 +1781,7 @@ void fn_80059E24(float *pValues)
     float *pLow = pValues, *pHigh = pValues + 3;
     int index1 = 0, index0 = 0;
     for (unsigned int i = 0; i < 4; i++) {
-        int id = fn_80188044(i);
+        int id = GameTextFindPlayerPad(i);
         if (id != -1) {
             int team = fn_800B6644(id);
             if (team != 255) {
@@ -2316,7 +2316,7 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
     Object_80039F5C *p=fn_80039F5C(team,index);int result=0;
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
-        fn_80188248((Object_80056584 *)p,name,nameSize);
+        GameTextFormatInitialAndName((Object_80056584 *)p,name,nameSize);
         fn_80148A58()->vfn_20(team,index,0,first,firstSize,second,secondSize);
         fn_80148A58()->vfn_20(team,index,1,third,firstSize,fourth,secondSize);
         fn_80148A58()->vfn_18(team,index,text,size);
@@ -2326,7 +2326,7 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
 }
 int fn_8005C338(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
+    case 0x80000001:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000002:fn_8005C144((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
     case 0x80000003:fn_8005C1A4((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
     case 0x80000004:*result=fn_8005C1F4((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,(unsigned char)p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,(unsigned char)p[4].pParams->mLength,(unsigned char)p[5].pParams->mLength);break;
@@ -2343,7 +2343,7 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
     fn_801C2D88(last,lastSize,"%d",stats.mUnknown12);
     if(!stats.mpPlayer) {*name=0;*result=0;}
     else {
-        fn_80188248((Object_80056584 *)stats.mpPlayer,name,nameSize);
+        GameTextFormatInitialAndName((Object_80056584 *)stats.mpPlayer,name,nameSize);
         unsigned char foundTeam=0,foundIndex=0;bool found=false;
         for(unsigned char t=0;t<2 && !found;t++)for(unsigned char i=0;i<6 && !found;i++) {
             Object_80039F5C *p=fn_80039F5C(t,i);
@@ -2358,7 +2358,7 @@ int fn_8005C6EC(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
     case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,(unsigned char)p[8].pParams->mLength,result);fn_801C2EF0(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);fn_801C2EF0(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
     case 0x80000002:*result=6;break;
-    case 0x80000003:fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
+    case 0x80000003:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000004:break;
     default:return 0;
     }return 1;
@@ -2375,7 +2375,7 @@ int fn_8005C994(unsigned int id,Arg_8018399C *p,int unused,int *result) {
         fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[n+1]->mpText,texts[n+2]->mpText,texts[n+3]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[n+1]->mLength);
         n=*p[5].pi;texts=(Params_80005284 **)p[5].pi;
         fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
+    }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }
 void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
@@ -2391,7 +2391,7 @@ int fn_8005CC50(unsigned int id,Arg_8018399C *p,int unused,int *result) {
         fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
         int n=*p[7].pi;Params_80005284 **texts=(Params_80005284 **)p[7].pi;
         fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {fn_80187D10();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
+    }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
     return 1;
 }
 void fn_8005CD8C(int team,int *other,char *text,int size) {

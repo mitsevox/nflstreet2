@@ -97,7 +97,7 @@ void fn_80142B00(void);
 int fn_801784C4(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
-void fn_80187DD0(unsigned short);
+void GameTextSetLastPlayer(unsigned short);
 int fn_8019623C(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
@@ -244,7 +244,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
             if (b->mRef) {
                 Object_80039F5C *p = fn_8009BCE8(&b->mRef);
                 if (p && p->mIdBytes[3] == 1) {
-                    fn_80187DD0(p->mUnknown2908);
+                    GameTextSetLastPlayer(p->mUnknown2908);
                     if (b->mFlags & 0x20) { fn_8013E960(p->mIdBytes[2], 0); fn_8013E9F0(p->mIdBytes[2], 0); }
                     p->mpUnknown4->mUnknown20 |= 1;
                 }

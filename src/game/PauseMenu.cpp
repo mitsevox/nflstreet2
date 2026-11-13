@@ -104,7 +104,7 @@ void HudShowPressPrompt(int a);
 void HudHidePressPrompt(int a);
 void CoinTossOnShotStart(void);
 unsigned char GameEventFlagsSetFlag1(unsigned char value);
-void fn_80188014(int a);
+void GameTextSetPauseState(int a);
 void UISGameSetLastPad(int a);
 void UISGameLockPad(int value);
 void UISGameUnlockPad(void);
@@ -498,7 +498,7 @@ void PauseClose(void)
     CoinTossOnShotStart();
     fn_800ABD80();
     fn_800B22E0();
-    fn_80188014(0);
+    GameTextSetPauseState(0);
     if (PauseIsAudioPaused()) {
         PauseExitAudio();
     }

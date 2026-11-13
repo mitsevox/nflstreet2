@@ -21,8 +21,8 @@ int PlayBookGetDatabase(int team);
 int fn_80177F70(void);
 int fn_80178308(void);
 float fn_80178A5C(void);
-int fn_80187C6C(void);
-int fn_80187C8C(void);
+int GameTextGetAwayTeam(void);
+int GameTextGetHomeTeam(void);
 void *fn_8023816C(void);
 }
 
@@ -377,7 +377,7 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
     float result5Rate = fn_8016A334(opponent);
     float result6Rate = fn_8016A408(opponent);
 
-    int key = team == 0 ? fn_80187C8C() : fn_80187C6C();
+    int key = team == 0 ? GameTextGetHomeTeam() : GameTextGetAwayTeam();
     if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
         rating = 50;
     PlayBookGetDatabase(team);

@@ -205,11 +205,11 @@ int fn_80186F7C(unsigned char index);
 void fn_80186F8C(int a);
 void fn_80187A28(unsigned char index, char *pText);
 int fn_80187A78(unsigned char index, char *pText, int length);
-unsigned char fn_80187C64(void);
-void fn_8018801C(int index, int value);
-int fn_80188030(int a);
-int fn_80188044(int index);
-void fn_8018807C(unsigned char a);
+unsigned char GameTextGetBootFinished(void);
+void GameTextSetPadPlayer(int index, int value);
+int GameTextGetPadPlayer(int a);
+int GameTextFindPlayerPad(int index);
+void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int StoryTeamExists(int a);
 void StoryTeamLoadUserTeams(int a, int b);
@@ -407,7 +407,7 @@ void fn_8000FA0C(void)
         if (fn_802294F4()) {
             fn_80229554();
         }
-        if (fn_80187C64() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
+        if (GameTextGetBootFinished() && !UserRecGetCount() && !FELoopIsIdleTimedOut()) {
             fn_80010150(11);
         }
     }
@@ -514,7 +514,7 @@ int fn_8000FCDC(void)
     int count = 0;
     int first = 8;
     int found = 0;
-    int assigned = fn_80188030(current);
+    int assigned = GameTextGetPadPlayer(current);
     int limit;
     int i;
 
@@ -531,14 +531,14 @@ int fn_8000FCDC(void)
     }
     for (i = 0; i <= 7; i++) {
         if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
-            fn_8018801C(i, count);
+            GameTextSetPadPlayer(i, count);
             count++;
             found = 1;
             if (first == 8) {
                 first = i;
             }
         } else {
-            fn_8018801C(i, -1);
+            GameTextSetPadPlayer(i, -1);
         }
     }
     int connected = fn_801E195C(ConGetChannelInfo(current, 0)) == 2;
@@ -547,14 +547,14 @@ int fn_8000FCDC(void)
         if (assigned != -1 && assigned <= 3) {
             value = assigned;
         }
-        fn_8018801C(current, value);
+        GameTextSetPadPlayer(current, value);
     } else if (assigned == -1 && connected) {
         found = 0;
     } else if (assigned == -1 || assigned > 3) {
         found = 0;
         fn_8000FCD4(first);
     } else if (!connected) {
-        fn_8018801C(current, assigned);
+        GameTextSetPadPlayer(current, assigned);
         found = 0;
     }
     return found;
@@ -682,7 +682,7 @@ void fn_80010200(int value)
 
 void fn_80010208(void)
 {
-    fn_8018807C(0);
+    GameTextSetSetupActive(0);
     switch (fn_801486A0()) {
     case 0:
     case 1:
@@ -763,12 +763,12 @@ int fn_800103A4(int force)
         lbl_803ECE38[i] = present;
     }
     for (j = 0; j <= 9; j++) {
-        fn_8018801C(j, -1);
+        GameTextSetPadPlayer(j, -1);
     }
     j = 0;
     for (i = 0; i <= 7; i++) {
         if (lbl_803ECE38[i] && j <= 3) {
-            fn_8018801C(i, j);
+            GameTextSetPadPlayer(i, j);
             j++;
         }
     }
@@ -787,13 +787,13 @@ int fn_800103A4(int force)
             }
         }
         k = 0;
-        start = fn_80188030(fn_8000FCCC());
+        start = GameTextGetPadPlayer(fn_8000FCCC());
         if (start == -1) {
             start = 0;
         }
         for (i = 0; i <= 3; i++) {
             j = (i + start) % 4;
-            int pad = fn_80188044(j);
+            int pad = GameTextFindPlayerPad(j);
             if (pad != -1 && lbl_803ECE38[pad] && lbl_803EB96C[j] > 2) {
                 do {
                     if (k < UserRecGetCount() && lbl_803ECE48.mIndex[k] != -1) {
@@ -815,7 +815,7 @@ int fn_800103A4(int force)
                     lbl_803EB96C[j] = 3;
                 }
             }
-            j = fn_80188030(fn_8000FCCC());
+            j = GameTextGetPadPlayer(fn_8000FCCC());
             if (j != -1) {
                 if (lbl_803EB968) {
                     lbl_803ECE40[j] = 0;
@@ -960,7 +960,7 @@ void fn_80010914(void)
 
     fn_802293FC();
     for (i = 0; i <= 3; i++) {
-        int pad = fn_80188044(i);
+        int pad = GameTextFindPlayerPad(i);
         if (pad != -1) {
             if (lbl_803ECE40[i] == 2) {
                 if (lbl_803EB968) {
@@ -1018,7 +1018,7 @@ void fn_80010914(void)
     GameInfoSet(2, lbl_803EB96A);
     SndgSfxSetVolume(0x8F, 0x32, 0);
     if (MsgGameGetSetupState() == 1) {
-        fn_8018807C(1);
+        GameTextSetSetupActive(1);
     }
 }
 
@@ -1279,13 +1279,13 @@ int fn_80011224(int *pA, int *pB, int *pC, int *pD)
     int result = fn_800103A4(0);
     int index;
 
-    index = fn_80188044(0);
+    index = GameTextFindPlayerPad(0);
     *pA = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(1);
+    index = GameTextFindPlayerPad(1);
     *pB = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(2);
+    index = GameTextFindPlayerPad(2);
     *pC = index != -1 ? lbl_803ECE38[index] : 0;
-    index = fn_80188044(3);
+    index = GameTextFindPlayerPad(3);
     *pD = index != -1 ? lbl_803ECE38[index] : 0;
     return result;
 }
@@ -1364,7 +1364,7 @@ int fn_80011344(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         fn_800112F8(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
         break;
     case 0x80000011:
-        fn_8018807C(pArgs[0].i);
+        GameTextSetSetupActive(pArgs[0].i);
         break;
     case 0x8000000B:
         break;
@@ -1387,44 +1387,44 @@ void fn_80011600(int pad0, int pad1, int keep)
             lbl_803EB96C[i] = 3;
         }
         if (pad0 != -1) {
-            if (fn_80188030(pad0) == -1 || fn_80188030(pad0) > 3) {
+            if (GameTextGetPadPlayer(pad0) == -1 || GameTextGetPadPlayer(pad0) > 3) {
                 pad0 = fn_8000FCCC();
             }
-            lbl_803ECE40[fn_80188030(pad0)] = 2;
-            lbl_803ECE44[fn_80188030(pad0)] = 1;
+            lbl_803ECE40[GameTextGetPadPlayer(pad0)] = 2;
+            lbl_803ECE44[GameTextGetPadPlayer(pad0)] = 1;
         }
         if (pad1 != -1) {
-            if (fn_80188030(pad1) == -1 || fn_80188030(pad1) > 3) {
+            if (GameTextGetPadPlayer(pad1) == -1 || GameTextGetPadPlayer(pad1) > 3) {
                 pad1 = fn_8000FCCC();
             }
-            lbl_803ECE40[fn_80188030(pad1)] = 0;
-            lbl_803ECE44[fn_80188030(pad1)] = 1;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 0;
+            lbl_803ECE44[GameTextGetPadPlayer(pad1)] = 1;
         }
         lbl_803EB96A = 1;
     }
     char name[13] = {0};
     int db = fn_8022F384(fn_8022F4BC());
-    if (pad0 != -1 && fn_80188030(pad0) != -1) {
-        lbl_803ECE40[fn_80188030(pad0)] = 2;
+    if (pad0 != -1 && GameTextGetPadPlayer(pad0) != -1) {
+        lbl_803ECE40[GameTextGetPadPlayer(pad0)] = 2;
         GameModeTypeIsSpecial();
-        lbl_803ECE44[fn_80188030(pad0)] = 1;
-        lbl_803EB96C[fn_80188030(pad0)] = db;
+        lbl_803ECE44[GameTextGetPadPlayer(pad0)] = 1;
+        lbl_803EB96C[GameTextGetPadPlayer(pad0)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(fn_80188030(pad0), name);
+            fn_80187A28(GameTextGetPadPlayer(pad0), name);
         }
     }
-    if (pad1 != -1 && fn_80188030(pad1) != -1) {
+    if (pad1 != -1 && GameTextGetPadPlayer(pad1) != -1) {
         if (lbl_803EB968) {
-            lbl_803ECE40[fn_80188030(pad1)] = 0;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 0;
         } else {
-            lbl_803ECE40[fn_80188030(pad1)] = 2;
+            lbl_803ECE40[GameTextGetPadPlayer(pad1)] = 2;
         }
-        lbl_803ECE44[fn_80188030(pad1)] = 1;
-        lbl_803EB96C[fn_80188030(pad1)] = db;
+        lbl_803ECE44[GameTextGetPadPlayer(pad1)] = 1;
+        lbl_803EB96C[GameTextGetPadPlayer(pad1)] = db;
         if (db != -1) {
             UserRecGetName(db, name);
-            fn_80187A28(fn_80188030(pad1), name);
+            fn_80187A28(GameTextGetPadPlayer(pad1), name);
         }
     }
     fn_80010914();
@@ -2904,7 +2904,7 @@ void fn_80014B98(void)
         FELoopSetResume(1);
     }
     if (MsgGameGetSetupState() == 0) {
-        fn_8018807C(0);
+        GameTextSetSetupActive(0);
         if (GameModeTypeGet() == 6) {
             if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
                 fn_8018C48C(0x454D4147);

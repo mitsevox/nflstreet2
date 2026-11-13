@@ -343,7 +343,7 @@ void fn_80083E1C(DbCursor *pObject, int a);
 void fn_800840A4(DbCursor *pObject, void *pBuffer);
 int fn_800A7EF4(unsigned char a);
 int fn_800C8744(int team);
-int fn_80188030(int a);
+int GameTextGetPadPlayer(int a);
 void fn_801D0424(void *p, float (*m)[4]);
 void fn_801D04C4(void);
 void fn_801D0544(void);
@@ -535,7 +535,7 @@ void ParticleTrailStart(Object_8003DEC4 *pObject, int bit, unsigned int slot, un
     pObject->mUnknown20 |= 1 << bit;
     index = -1;
     if (slot <= 8) {
-        index = fn_80188030(slot);
+        index = GameTextGetPadPlayer(slot);
     }
     pData->mUnknown238 = index;
     pData->mUnknown23C = flag;

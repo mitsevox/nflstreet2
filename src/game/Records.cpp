@@ -40,7 +40,7 @@ void fn_80029CE0(int type, int index);
 void EnvSelect(int id);
 void EnvGetUIName(char *pDest, int count);
 void EnvRelease(void);
-void fn_801880D4(int value, char *pText, int size);
+void GameTextFormatWithCommas(int value, char *pText, int size);
 
 void RecordsSumColumns(int type);
 void RecordsOpenCategory(int type);
@@ -270,7 +270,7 @@ int RecordsFormatColumn(int column, int row, char *pText, int size)
     case 20:
     case 22:
     case 23:
-        fn_801880D4(value, pText, size);
+        GameTextFormatWithCommas(value, pText, size);
         break;
     case 21:
         sprintf(pText, "%d%%", value);

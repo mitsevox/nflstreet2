@@ -23,8 +23,8 @@ int fn_80085C94(int a, int *values);
 int fn_80085D54(void);
 int fn_800B4A18(int a, int b, int c);
 int fn_801485D4(void);
-int fn_80187C6C(void);
-int fn_80187C8C(void);
+int GameTextGetAwayTeam(void);
+int GameTextGetHomeTeam(void);
 int fn_8022D874(int tag, int a, int b, int c);
 }
 
@@ -286,8 +286,8 @@ void DepthChartLoad(int reset)
             unsigned char group;
             int i;
 
-            ids[0] = fn_80187C8C();
-            ids[1] = fn_80187C6C();
+            ids[0] = GameTextGetHomeTeam();
+            ids[1] = GameTextGetAwayTeam();
             for (group = 0; group <= 1; group++) {
                 desc.mUnknown0 = 1;
                 desc.mUnknown4 = 1;
@@ -315,8 +315,8 @@ void DepthChartSave(void)
         unsigned char group;
         int i;
 
-        ids[0] = fn_80187C8C();
-        ids[1] = fn_80187C6C();
+        ids[0] = GameTextGetHomeTeam();
+        ids[1] = GameTextGetAwayTeam();
         for (group = 0; group <= 1; group++) {
             for (i = 0; i <= 13; i++) {
                 fn_8022D874(0x54484344, ids[group], _DepthChart_aCommitted[group][i], i);

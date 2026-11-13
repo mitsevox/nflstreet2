@@ -4,7 +4,7 @@
 extern "C" {
 unsigned char fn_8007AFDC(int team);
 int fn_8007B324(void);
-int fn_80188030(int value);
+int GameTextGetPadPlayer(int value);
 void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9A90(int handle, int table);
 }
@@ -59,7 +59,7 @@ unsigned char fn_8007AFDC(int team)
     int valid = DbCursorFirst(&cursor);
     while (valid) {
         int value = fn_8007AF34(&cursor);
-        if (fn_8007AF5C(&cursor) == team && fn_80188030(value) != -1) {
+        if (fn_8007AF5C(&cursor) == team && GameTextGetPadPlayer(value) != -1) {
             count++;
         }
         valid = DbCursorNext(&cursor);

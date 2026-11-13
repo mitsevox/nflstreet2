@@ -50,7 +50,7 @@ extern const char lbl_802A0F24[];
 extern const char lbl_802A0F34[];
 extern const char lbl_802A0F74[];
 
-int fn_80188030(int index);
+int GameTextGetPadPlayer(int index);
 int fn_80187A78(unsigned char index, char *pText, int count);
 int fn_80187400(int kind, int key, int first, int last);
 void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo);
@@ -76,7 +76,7 @@ void fn_8015247C(Class_802A2918 *p)
             continue;
         }
         char name[32];
-        if (!fn_80187A78(fn_80188030(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12), name, 31)) {
+        if (!fn_80187A78(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12), name, 31)) {
             continue;
         }
         QueryResult result;

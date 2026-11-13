@@ -51,9 +51,9 @@ void fn_8013CF98(void);
 void FEPlyrLoadUpdate(void);
 void MsgGameSetFEStarted(int a);
 void fn_80186EF4(void);
-void fn_80187C0C(void);
-void fn_80187FDC(void);
-void fn_8018807C(int a);
+void GameTextReset(void);
+void GameTextServiceReset(void);
+void GameTextSetSetupActive(int a);
 void TeamLogoInit(void);
 void TeamLogoShutdown(void);
 void UISGameHandleInput(int a, unsigned int id, float value);
@@ -288,7 +288,7 @@ void FELoop::Boot()
 {
     ResTrackLabel("FELoopBootStart");
     _FELoopBootSetup();
-    fn_80187FDC();
+    GameTextServiceReset();
     if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
         CamSetDefaultAspect(4.0f / 3.0f);
     } else {
@@ -339,13 +339,13 @@ const char *FELoop::GetName() { return "FELoop"; }
 
 int FELoop::Init()
 {
-    fn_8018807C(0);
+    GameTextSetSetupActive(0);
     ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
     PadInputSetDefaultHandler();
     fn_80066D74(0x31544250, 2, 4, 0, 0, 1);
     fn_80066D74(0x31444250, 1, 4, 0, 0, 0);
     _FELoop_bRunning = 1;
-    fn_80187C0C();
+    GameTextReset();
     if (_FELoop_bResume == 1) {
         if (_FELoop_uResumeMode != 3) {
             fn_802297B0();

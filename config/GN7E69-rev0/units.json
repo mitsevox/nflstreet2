@@ -16225,6 +16225,102 @@
       ]
     },
     {
+      "source": "src/game/GameText.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80187AD4-0x801882B4 (src/game/GameText.cpp), its function, name and data rows and the linker rows of the discarded functions; every retained function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "GameTextLoadTeam",
+          "GameTextReset",
+          "GameTextSetBootFinished",
+          "GameTextGetBootFinished",
+          "GameTextGetAwayTeam",
+          "GameTextGetHomeTeam",
+          "GameTextGetTeamDisplayName",
+          "GameTextQueuePlayerPortraits",
+          "GameTextSetLastPlayer",
+          "GameTextShowPleaseWait",
+          "GameTextShowBusyDialog",
+          "GameTextGetMemCardNames",
+          "GameTextRequestReset",
+          "GameTextServiceReset",
+          "GameTextSetPauseState",
+          "GameTextSetPadPlayer",
+          "GameTextGetPadPlayer",
+          "GameTextFindPlayerPad",
+          "GameTextSetSetupActive",
+          "GameTextGetEnteredName",
+          "GameTextFormatWithCommas",
+          "GameTextFormatInitialAndName"
+        ],
+        "discarded": [
+          "GameTextPickRandomTeam",
+          "GameTextLoadPlayer",
+          "GameTextGetTeamFont",
+          "GameTextFindTeamByCity",
+          "GameTextFormatScore",
+          "GameTextFormatTeamRecord",
+          "GameTextGetQuarter",
+          "GameTextFormatDown",
+          "GameTextFormatDistance",
+          "GameTextFormatYardsToGo",
+          "GameTextFormatBallOn",
+          "GameTextFormatDownAndDistance",
+          "GameTextFormatGameClock",
+          "GameTextFormatPlayClock",
+          "GameTextGetUnknownName",
+          "GameTextGetPlayerTeam",
+          "GameTextGetEditTeam",
+          "GameTextFormatPlayerName",
+          "GameTextFormatTenths",
+          "GameTextGetMatchupTeams",
+          "GameTextFormatControllerPort",
+          "GameTextFormatPlayerAge",
+          "GameTextFormatPlayerWeight",
+          "GameTextFormatPlayerHeight",
+          "GameTextFormatPlayerYearsPro",
+          "GameTextGetControllerNames",
+          "GameTextGetSeasonYear",
+          "GameTextShowRosterFill",
+          "GameTextGetTeamPlaybook",
+          "GameTextGetSelectedTeamName"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802A7910-0x802A8314: the target keeps every listed function, each called from outside the file except GameTextLoadTeam, which GameTextGetTeamDisplayName calls; the discarded functions have no code in the target, while their strings and literals remain in the file's .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80187AD4",
+          "end": "0x801882B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A7910",
+          "end": "0x802A8340"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAB80",
+          "end": "0x802EACD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB5E8",
+          "end": "0x803EB62C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362BB0",
+          "end": "0x80362F64"
+        }
+      ]
+    },
+    {
       "source": "src/game/ResBank.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/ResBank.cpp) and its compiler and source-form rows.",

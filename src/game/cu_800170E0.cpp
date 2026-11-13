@@ -125,8 +125,8 @@ int fn_80178320(void);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
 int MsgGameGetSetupState(void);
-int fn_80188030(int a);
-void fn_8018807C(unsigned char a);
+int GameTextGetPadPlayer(int a);
+void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
 void fn_8018C48C(int tag);
@@ -1202,7 +1202,7 @@ int fn_80019848(int *pController, int *pCount)
     lbl_803EBA24 = fn_80061AD4();
     fn_80019724();
     if (lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15] != 0xFF) {
-        *pController = fn_80188030(lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15]);
+        *pController = GameTextGetPadPlayer(lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15]);
     } else {
         *pController = -1;
     }
@@ -1342,7 +1342,7 @@ void fn_80019AD4(void)
             fn_80015D28(lbl_803EBA20->mUnknown48);
         }
     } else {
-        fn_8018807C(0);
+        GameTextSetSetupActive(0);
     }
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
@@ -1507,7 +1507,7 @@ void fn_8001A34C(int slot, int *pId, int *pController)
             if (lbl_803EBA08->mpUnknown08[slot] == 0xFF) {
                 *pController = -1;
             } else {
-                *pController = fn_80188030(lbl_803EBA08->mpUnknown08[slot]);
+                *pController = GameTextGetPadPlayer(lbl_803EBA08->mpUnknown08[slot]);
             }
             return;
         }
@@ -1526,7 +1526,7 @@ void fn_8001A34C(int slot, int *pId, int *pController)
                     if (lbl_803EBA08->mpUnknown08[j] == 0xFF) {
                         *pController = -1;
                     } else {
-                        *pController = fn_80188030(lbl_803EBA08->mpUnknown08[j]);
+                        *pController = GameTextGetPadPlayer(lbl_803EBA08->mpUnknown08[j]);
                     }
                     return;
                 }
@@ -1540,7 +1540,7 @@ void fn_8001A34C(int slot, int *pId, int *pController)
             if (lbl_803EBA08->mpUnknown08[team] == 0xFF) {
                 *pController = -1;
             } else {
-                *pController = fn_80188030(lbl_803EBA08->mpUnknown08[team]);
+                *pController = GameTextGetPadPlayer(lbl_803EBA08->mpUnknown08[team]);
             }
             return;
         }
@@ -1686,7 +1686,7 @@ int fn_8001A948(int *pController)
     unsigned char controller = lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15];
 
     if (controller != 0xFF) {
-        *pController = fn_80188030(controller);
+        *pController = GameTextGetPadPlayer(controller);
     } else {
         *pController = -1;
     }
@@ -2035,7 +2035,7 @@ int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
         break;
     case 0xA:
         if (*pArgs[0].pi != -1) {
-            *pArgs[0].pi = fn_80188030(*pArgs[0].pi);
+            *pArgs[0].pi = GameTextGetPadPlayer(*pArgs[0].pi);
         }
         break;
     case 8:
