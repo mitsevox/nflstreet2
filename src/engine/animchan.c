@@ -1,8 +1,109 @@
+/*
+ * Animation channels: the fixed set of 0x7C-byte channel records an animated object blends.
+ * Finds a free channel (or the weakest blending one) for a new animation, starts animations
+ * per state, stops, counts and delays channels by state, and steps each channel's sequence
+ * and weight every frame.
+ */
 #include "engine/cu_801B9F00.h"
 #include "engine/animemot.h"
 
 float fn_80260260(float x, float y);
+void fn_801BA360(Record_800D81C8 *pChannel, int type, float a, void *pSource, float b);
 int fn_801BA720(Record_800D81C8 *pChannel, AnimScript_t *pAnim, void *pUser);
+
+int fn_801B9F00(AnimHeader_t *pList, Record_800D81C8 *pChannels)
+{
+    unsigned char pass;
+    int i;
+    float best;
+    int selected;
+
+    for (pass = 0; pass <= 1; pass++) {
+        for (i = 0; i < pList->mUnknown4; i++) {
+            if (pChannels[i].mUnknown1 == pass)
+                return i;
+        }
+    }
+    best = 1.0f;
+    selected = -1;
+    for (i = 0; i < pList->mUnknown4; i++) {
+        if ((pChannels[i].mUnknown8 & 0x8000) && pChannels[i].mUnknown30.mUnknown0 <= best) {
+            best = pChannels[i].mUnknown30.mUnknown0;
+            selected = i;
+        }
+    }
+    if (selected == -1)
+        return -1;
+    fn_801BA384(pList, pChannels, selected);
+    return selected;
+}
+
+void fn_801B9FEC(AnimHeader_t *pList, Record_800D81C8 *pChannels)
+{
+    unsigned char state = 4;
+    int i;
+
+    if (pList->mUnknown0 == 0)
+        state = 1;
+    for (i = 0; i < pList->mUnknown4; i++) {
+        pChannels[i].mUnknown0 = state;
+        pChannels[i].mUnknown1 = 0;
+        pChannels[i].mUnknown4C.mpUnknown0 = 0;
+    }
+}
+
+void fn_801BA03C(AnimHeader_t *pList, Record_800D81C8 *pChannels, float time, void *pUser)
+{
+    int i;
+    int active;
+
+    for (i = 0; i < pList->mUnknown4; i++) {
+        if (pChannels[i].mUnknown1 == 1)
+            pChannels[i].mUnknown1 = 0;
+        if (pChannels[i].mUnknown1 != 0) {
+            pChannels[i].mUnknown48 -= time;
+            if (pChannels[i].mUnknown48 < 0.0f) {
+                pChannels[i].mUnknown48 = 0.0f;
+                active = pChannels[i].mUnknown30.mUnknown8;
+                fn_801BF46C(&pChannels[i].mUnknown30, time);
+                if (pChannels[i].mUnknown30.mUnknown0 < 1e-7f && active != 0)
+                    pChannels[i].mUnknown1 = 1;
+                if (pChannels[i].mUnknown1 != 0 && fn_801BA650(&pChannels[i], time, pUser) == 1)
+                    pChannels[i].mUnknown1 = 1;
+            }
+        }
+    }
+}
+
+int fn_801BA154(AnimHeader_t *pList, Record_800D81C8 *pChannels, int slot, int anim, float weight, int state,
+                void *pUser, unsigned short stateRef)
+{
+    int index = fn_801B9F00(pList, pChannels);
+
+    if (index != -1) {
+        fn_801BA360(&pChannels[index], 0, weight, 0, weight);
+        pChannels[index].mUnknown4 = AnimFileGetFileNum(fn_801BC084(slot));
+        pChannels[index].mUnknown6 = slot;
+        pChannels[index].mUnknown2 = anim;
+        pChannels[index].mUnknown8 = state;
+        if (stateRef != 0xFFFF)
+            pChannels[index].mUnknownA = AnimFileGetStateRef(fn_801BC084(pChannels[index].mUnknown6), stateRef);
+        else if (!(state & 0x8000))
+            pChannels[index].mUnknownA = AnimFileGetStateRef(fn_801BC084(pChannels[index].mUnknown6), state);
+        else
+            pChannels[index].mUnknownA = stateRef;
+        pChannels[index].mUnknownC = pList->mUnknown8;
+        pChannels[index].mUnknown1C = 0;
+        pChannels[index].mUnknown24.mUnknown4 = 0.0f;
+        pChannels[index].mUnknown24.mUnknown0 = 0.0f;
+        pChannels[index].mUnknown2C = 1.0f;
+        pChannels[index].mUnknown20 = 0x01000000;
+        pChannels[index].mUnknown48 = 0.0f;
+        if (fn_801BA720(&pChannels[index], AnimFileGetAnimation(fn_801BC084(slot), anim), pUser) == 0)
+            pChannels[index].mUnknown1 = 2;
+    }
+    return index;
+}
 
 int fn_801BA2A8(AnimHeader_t *pList, Record_800D81C8 *pChannels, unsigned short slot, int anim, int state,
                 void *pUser, float weight)

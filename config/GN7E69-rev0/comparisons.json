@@ -33905,21 +33905,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_801B9F00.c",
+      "source": "src/engine/animchan.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA2A8 (src/engine/cu_801B9F00.c, head of animchan.c), function rows, data row 0x802AED98-0x802AEDA4, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154 (not reconstructed; it owns .rodata 0x802AEDA4-0x802AEDB0, so this file and cu_801BA2A8.c cannot be one comparison unit). Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA818 (src/engine/animchan.c), function rows, data row 0x802AED98-0x802AEDB8 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B9F00",
-          "end": "0x801BA154"
+          "end": "0x801BA818"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AED98",
-          "end": "0x802AEDA4"
+          "end": "0x802AEDB8"
         }
       ],
       "functions": [
@@ -33937,28 +33937,12 @@
           "symbol": "fn_801BA03C",
           "start": "0x801BA03C",
           "end": "0x801BA154"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801BA2A8.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BA2A8-0x801BA818 (src/engine/cu_801BA2A8.c, tail of animchan.c), function rows, data row 0x802AEDB0-0x802AEDB8, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BA2A8",
-          "end": "0x801BA818"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDB0",
-          "end": "0x802AEDB8"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_801BA154",
+          "start": "0x801BA154",
+          "end": "0x801BA2A8"
+        },
         {
           "symbol": "fn_801BA2A8",
           "start": "0x801BA2A8",
