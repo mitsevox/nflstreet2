@@ -135,6 +135,7 @@ void fn_8015A3EC(Object_8015C244 *p, Vector_80039F5C *pPoint, int angle)
         break;
     case 8: turn = 0xc00000; length = 1.5f; break;
     case 9: turn = 0xc00000; length = 3.0f; break;
+    case 5: case 6: break;
     }
     if (length != 0.0f) {
         if (fn_801784C4()) turn += 0x800000;
@@ -169,8 +170,9 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
 {
     unsigned char index = pCommand[1];
     if (pCommand[0] == 92) index += 14;
-    Point_8017886C origin = fn_80177FE0();
+    Point_8017886C origin;
     Point_8017886C target;
+    origin = fn_80177FE0();
     fn_8009E9EC(0, index, &target);
     if (pCommand[0] == 40 && target.mY - origin.mY > 25.0f)
         target.mY = origin.mY + 25.0f;
@@ -184,15 +186,23 @@ void fn_8015A6E0(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *p
 
 void fn_8015A818(Object_8015C244 *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
+    unsigned char command[4];
     Object_80039F5C *pPlayer = p->mpUnknown208;
-    Point_8017886C origin = fn_80177FE0();
+    Point_8017886C origin;
+    origin = fn_80177FE0();
     fn_8011F4E0();
     unsigned char code = fn_800FC014(pPlayer, pCommand);
-    if (code == 254) return;
-    if (code == 253 || code == 0) {
-        unsigned char command[4];
+    switch (code) {
+    case 254:
+        return;
+    case 253:
         fn_801C1F94(command, 0, 4);
-        command[0] = 3; command[1] = 24; command[2] = code == 253 ? 96 : 32;
+        command[0] = 3; command[1] = 24; command[2] = 96;
+        fn_8015A588(p, command, pPoint, 0, 0);
+        return;
+    case 0:
+        fn_801C1F94(command, 0, 4);
+        command[0] = 3; command[1] = 24; command[2] = 32;
         fn_8015A588(p, command, pPoint, 0, 0);
         return;
     }
@@ -534,10 +544,10 @@ int fn_8015BF28(Object_8015C244 *p, unsigned char *pCommand)
         if (code == 255) code = 253;
     } else code = pCommand[1];
     switch (code) {
-    case 253: return 2;
     case 254: return 85;
-    default: return 22;
+    case 253: return 2;
     }
+    return 22;
 }
 
 void fn_8015BFAC(void)
@@ -604,7 +614,7 @@ Object_8015C244 *fn_8015C170(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
             lbl_8031C02C[i]->mUnknown81 = flag;
             lbl_8031C02C[i]->mUnknown84 = 10;
             lbl_8031C02C[i]->mpUnknown208 = pPlayer;
-            __builtin_memcpy(&lbl_8031C02C[i]->mUnknown68, pPoint, sizeof(*pPoint));
+            *(Point_8017886C *)&lbl_8031C02C[i]->mUnknown68 = *pPoint;
             lbl_8031C02C[i]->mpUnknown76 = pCommands;
             p = lbl_8031C02C[i];
             break;
