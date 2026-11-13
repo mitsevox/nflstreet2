@@ -236,7 +236,7 @@ void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
     s->mUnknown0 = lbl_803EAE76;
     s->mUnknown40 = 180.0f;
     s->mUnknown44 = 1000.0f;
-    direction->mX = direction->mY = 0.0f;
+    s->mUnknown32.mX = direction->mY = 0.0f;
     if (*speed == 0.0f) {
         return;
     }
