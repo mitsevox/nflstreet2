@@ -183,13 +183,13 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(RcmpChunk_t *pChunk)
         }
         mpLast = 0;
         pFrame = fn_801DA338();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 0, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 0, (signed char)pHeader[0x15]);
     } else if (fn_801D9A88(pChunk) == 0x4D41446D) {
         pFrame = fn_801DA338();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
     } else if (fn_801D9A88(pChunk) == 0x4D414465) {
         pFrame = fn_801DA3A8();
-        fn_801DABE0((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
+        MAD_initdecode((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
     }
     if (pFrame->mpShape->mFlags & 0x10000000) {
         pY = (unsigned char *)pFrame->mpShape + pFrame->mpShape->mOffset;
@@ -203,7 +203,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(RcmpChunk_t *pChunk)
             int offset = y * mWidth + x;
             int chroma = y * mWidth / 4 + x / 2;
 
-            fn_801DAD20(pRefY + offset, pRefU + chroma, pRefV + chroma, pY + offset, pU + chroma, pV + chroma, mWidth);
+            MAD_decodemacroblock(pRefY + offset, pRefU + chroma, pRefV + chroma, pY + offset, pU + chroma, pV + chroma, mWidth);
         }
     }
     if (fn_801D9A88(pChunk) == 0x4D41446D) {

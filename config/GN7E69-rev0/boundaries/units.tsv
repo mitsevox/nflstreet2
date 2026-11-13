@@ -55,7 +55,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801D3BD0	0x801D3C68	TibNew.cpp	4	4	8	2	2	-	-
 0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	16	2	-	-
 0x801D9A88	0x801DA4B8	rcmp_mad_codec.cpp	13	13	17	0	11	-	-
-0x801DA52C	0x801DB058	maddec.cpp	10	8	10	0	8	-	-
+0x801DA52C	0x801DB058	maddec.cpp	10	8	10	7	1	-	-
 0x801DB058	0x801DB21C	maddeca.cpp	2	2	2	1	1	-	-
 0x801DB7D4	0x801DB89C	render.c	3	3	3	3	0	-	-
 0x801DCA10	0x801DD474	object.c	24	22	23	22	0	-	-

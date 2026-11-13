@@ -38605,65 +38605,44 @@
     {
       "source": "src/engine/maddec.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file maddec.cpp (C++ linkage: madinit__Fv, discardbits__Fi, getluma__FPCUciPii, MAD_initdecode__FPCUsii, MAD_decodemacroblock__FPCUcN20PUcN23i ...). The bit-reader words 0x803ECF1C-0x803ECF2C, the tables 0x80399110-0x8039A910 and the code tables 0x802B0060/0x802B0650/0x802B0E50/0x802F7BA0 stay extern (lbl_).",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp) and the source-form rows from 0x801DA52C. Documented holdout at the start of .text: the table initializer 0x801DA52C-0x801DA7E8 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; the rest of the file and all of its data are linked through units.json.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DA52C",
           "end": "0x801DB058"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B0060",
+          "end": "0x802B0F50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7BA0",
+          "end": "0x802F7CA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80399110",
+          "end": "0x8039AC10"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF1C",
+          "end": "0x803ECF30"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801DA52C__Fv",
+          "symbol": "madinit__Fv",
           "start": "0x801DA52C",
           "end": "0x801DA7E8"
-        },
-        {
-          "symbol": "fn_801DA7E8__Fi",
-          "start": "0x801DA7E8",
-          "end": "0x801DA840"
-        },
-        {
-          "symbol": "fn_801DA840__Fv",
-          "start": "0x801DA840",
-          "end": "0x801DA884"
-        },
-        {
-          "symbol": "fn_801DA884__FPii",
-          "start": "0x801DA884",
-          "end": "0x801DA8E0"
-        },
-        {
-          "symbol": "fn_801DA8E0__FPCUciPii",
-          "start": "0x801DA8E0",
-          "end": "0x801DA980"
-        },
-        {
-          "symbol": "fn_801DA980__FPCUciPii",
-          "start": "0x801DA980",
-          "end": "0x801DAA20"
-        },
-        {
-          "symbol": "fn_801DAA20__FPCiPUci",
-          "start": "0x801DAA20",
-          "end": "0x801DAB40"
-        },
-        {
-          "symbol": "fn_801DAB40__FPCiPUci",
-          "start": "0x801DAB40",
-          "end": "0x801DABE0"
-        },
-        {
-          "symbol": "fn_801DABE0__FPCUsii",
-          "start": "0x801DABE0",
-          "end": "0x801DAD20"
-        },
-        {
-          "symbol": "fn_801DAD20__FPCUcN20PUcN23i",
-          "start": "0x801DAD20",
-          "end": "0x801DB058"
         }
       ]
     },

@@ -3,24 +3,24 @@
 
 #include "engine/maddec.h"
 
-extern unsigned char *lbl_803ECF1C;
-extern unsigned int lbl_803ECF20;
-extern int lbl_803ECF24;
-extern int lbl_80399110[512];
-extern int lbl_80399910[256];
-extern int lbl_80399D10[256];
-extern int lbl_8039A210[64];
-extern int lbl_8039AB10[64];
+extern unsigned char *maddataptr;
+extern unsigned int madshiftreg;
+extern int madbitcount;
+extern int madvlctbl1[512];
+extern int madvlctbl2[256];
+extern int madvlctbl3[256];
+extern int madquant[64];
+extern int idctinput[64];
 extern const int lbl_802B0F50[64];
 
 void discardbits(int count)
 {
-    lbl_803ECF20 <<= count;
-    lbl_803ECF24 -= count;
-    if (lbl_803ECF24 < 16) {
-        lbl_803ECF20 |= ((lbl_803ECF1C[1] << 8) | lbl_803ECF1C[0]) << (16 - lbl_803ECF24);
-        lbl_803ECF24 += 16;
-        lbl_803ECF1C += 2;
+    madshiftreg <<= count;
+    madbitcount -= count;
+    if (madbitcount < 16) {
+        madshiftreg |= ((maddataptr[1] << 8) | maddataptr[0]) << (16 - madbitcount);
+        madbitcount += 16;
+        maddataptr += 2;
     }
 }
 
@@ -32,9 +32,9 @@ int madvlcdecode(void)
     int index;
     int *p;
 
-    lbl_8039AB10[0] = ((int)lbl_803ECF20 >> 24) * lbl_8039A210[0];
+    idctinput[0] = ((int)madshiftreg >> 24) * madquant[0];
     discardbits(8);
-    p = &lbl_8039AB10[1];
+    p = &idctinput[1];
     for (i = 0; i < 9; i++) {
         p[0] = 0;
         p[1] = 0;
@@ -47,17 +47,17 @@ int madvlcdecode(void)
     }
     i = 1;
     for (;;) {
-        code = lbl_80399110[lbl_803ECF20 >> 23];
+        code = madvlctbl1[madshiftreg >> 23];
         length = code & 0xFF;
         if (length > 9) {
             if (!(code & 0x20)) {
                 if (!(code & 0x10)) {
                     discardbits(9);
-                    code = lbl_80399910[lbl_803ECF20 >> 24];
+                    code = madvlctbl2[madshiftreg >> 24];
                     length = code & 0xFF;
                 } else {
                     discardbits(6);
-                    code = lbl_80399D10[lbl_803ECF20 >> 24];
+                    code = madvlctbl3[madshiftreg >> 24];
                     length = code & 0xFF;
                 }
             } else if (code & 0x10) {
@@ -65,13 +65,13 @@ int madvlcdecode(void)
                 return i;
             } else {
                 discardbits(6);
-                code = lbl_803ECF20;
+                code = madshiftreg;
                 length = 16;
             }
         }
         discardbits(length);
         i += (code >> 16) & 0x3F;
-        lbl_8039AB10[lbl_802B0F50[i]] = (code >> 22) * lbl_8039A210[lbl_802B0F50[i]];
+        idctinput[lbl_802B0F50[i]] = (code >> 22) * madquant[lbl_802B0F50[i]];
         i++;
     }
 }

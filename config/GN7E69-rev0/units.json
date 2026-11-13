@@ -389,14 +389,6 @@
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
     },
-    "fn_801DABE0__FPCUsii": {
-      "address": "0x801DABE0",
-      "evidence": "evidence.tsv external row for 0x801DABE0 (fn_801DABE0__FPCUsii)."
-    },
-    "fn_801DAD20__FPCUcN20PUcN23i": {
-      "address": "0x801DAD20",
-      "evidence": "evidence.tsv external row for 0x801DAD20 (fn_801DAD20__FPCUcN20PUcN23i)."
-    },
     "__lshrdi3": {
       "address": "0x8025EB14",
       "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
@@ -2392,6 +2384,10 @@
     "g_FsResult": {
       "address": "0x802CC5C0",
       "evidence": "evidence.tsv data and name rows for 0x802CC5C0: an uninitialized global of src/engine/FSasync.c. The compiler emits it as a COMMON symbol, which the source build cannot place, so its zero storage in .data keeps the original bytes and the linked code reaches it at this address."
+    },
+    "madinit__Fv": {
+      "address": "0x801DA52C",
+      "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
     }
   },
   "units": [
@@ -17584,6 +17580,43 @@
           "placement": ".data4",
           "start": "0x802CC580",
           "end": "0x802CC590"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/maddec.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801DA52C-0x801DB058 (src/engine/maddec.cpp), its function, name and data rows; 0x801DA7E8-0x801DB058 and the file's data are linked except the two code tables 0x802B0060-0x802B0E50, which only the holdout reads, the documented holdout 0x801DA52C-0x801DA7E8 (the table initializer) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DA7E8",
+          "end": "0x801DB058"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B0E50",
+          "end": "0x802B0F50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7BA0",
+          "end": "0x802F7CA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80399110",
+          "end": "0x8039AC10"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF1C",
+          "end": "0x803ECF30"
         }
       ]
     }
