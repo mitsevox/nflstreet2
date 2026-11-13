@@ -1,8 +1,13 @@
+/* Pad state: during a game the pad handler passes every controller input
+   here, and the latest value of each button or stick input is kept in a
+   per-slot record that gameplay reads back when it builds a player's
+   controls. */
+
 #include "game/PadInput.h"
 
-/* 196-byte record of the array described as Pool_800B8544 in
-   cu_8008E978.cpp. */
-struct Record_8019A9A0 {
+/* One slot's record of the pad state table (the array described as
+   Pool_800B8544 in cu_8008E978.cpp). */
+struct PadState_t {
     float mUnknown00;
     float mUnknown04;
     float mUnknown08;
@@ -48,17 +53,18 @@ struct Record_8019A9A0 {
     unsigned char mUnknownC1[3];
 };
 
-struct Pool_8019A9A0 {
-    Record_8019A9A0 *mpRecords;
+/* The record array and its count. */
+struct PadStateTable_t {
+    PadState_t *mpRecords;
     unsigned char mCount;
 };
 
-extern Pool_8019A9A0 lbl_803EC930;
+extern PadStateTable_t lbl_803EC930;
 
-extern "C" void fn_8019A9A0(unsigned int index, unsigned int id, float value)
+extern "C" void PadStateSetValue(unsigned int index, unsigned int id, float value)
 {
     if (index >= lbl_803EC930.mCount) return;
-    Record_8019A9A0 *pRecord = &lbl_803EC930.mpRecords[index];
+    PadState_t *pRecord = &lbl_803EC930.mpRecords[index];
     if (pRecord->mActive != 1) return;
     switch (id) {
     case 0x33:
