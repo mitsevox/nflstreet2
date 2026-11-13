@@ -1135,6 +1135,15 @@ int fn_8015F5BC(const char *pName)
     return id;
 }
 
+int HeadGetCapModel(int cap, const char *pName)
+{
+    char name[43];
+
+    return NO_MODEL;
+    fn_801C2D88(name, sizeof(name), "HEAD_MODEL_CAP%02d_%s_2700", cap, pName);
+    return ResFindIndexByName(lbl_803ECAD8, name);
+}
+
 void fn_8015F638(int style, int shape, int hat, int *pIds)
 {
     DbCursor cursor;

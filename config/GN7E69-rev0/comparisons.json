@@ -27597,7 +27597,7 @@
     {
       "source": "src/game/cu_8015D3EC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. Comparison only: the .rodata holds a string no code references whose user is not recovered, and six functions do not compile exactly; the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. Comparison only: the unreferenced .rodata string HEAD_MODEL_CAP%02d_%s_2700 (0x802A3F9C) comes from HeadGetCapModel, a function the target linker discarded whose Xbox prototype NFLBig.xbe counterpart 0x10A280 returns 0xFFFF; it is listed as discarded here (compiled, not registered or measured). Five functions do not compile exactly; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -27937,6 +27937,9 @@
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
+      ],
+      "discarded": [
+        "HeadGetCapModel"
       ]
     },
     {
