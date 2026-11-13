@@ -26,7 +26,7 @@ extern Object_8003DEC4 **lbl_803EA430;
 extern unsigned short lbl_803EA434, lbl_803EA436;
 extern unsigned char lbl_803EA438;
 extern int lbl_802CCD8C[3], lbl_802CCD98[3], lbl_802CCDA4[14];
-extern void *lbl_803EAB3C, *lbl_803EAAFC, *lbl_803EAAE0;
+extern void *lbl_803EAB3C, *lbl_803EA9FC, *lbl_803EAAE0;
 unsigned char PlayerObjIsDrawReady();
 void fn_80042380(Object_8003DEC4 *, int, float *, int *);
 void fn_8022765C(void *, void *, void *);
@@ -163,10 +163,13 @@ void fn_8003BA08() {}
 void fn_8003BA0C() {}
 void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
                  int angle) {
-  Projection_8003BA10 *p = &object->mUnknown4256;
-  p->mUnknown673 =
-      PlayerObjIsDrawReady() && (object->mUnknown20 & 1) && !(object->mUnknown20 & 2);
-  float first[4], center[4], delta[4], direction[2];
+  if (PlayerObjIsDrawReady() && (object->mUnknown20 & 1) &&
+      !(object->mUnknown20 & 2))
+    object->mUnknown4256.mUnknown673 = 1;
+  else
+    object->mUnknown4256.mUnknown673 = 0;
+  float first[4], center[4], delta[4];
+  Point2_t direction;
   fn_80042380(object, 4, first, 0);
   fn_80042380(object, 8, center, 0);
   fn_8022765C(center, center, first);
@@ -176,8 +179,8 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   fn_80227CC0(center, center);
   fn_80227CC0(delta, delta);
   delta[2] = 0.0f;
-  fn_801CFC14(object->mUnknown36, &direction[1], &direction[0]);
-  float width = fabsf(fn_802276E8(direction, axis));
+  fn_801CFC14(object->mUnknown36, &direction.mY, &direction.mX);
+  float width = fabsf(fn_802276E8(&direction, axis));
   if (!(width >= 0.65f))
     width = 0.65f;
   float length = fn_802270D4(delta);
@@ -185,9 +188,9 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
   if (!(length >= 0.4f)) {
     if (!(length <= 0.2f)) {
       fn_80227264(delta, delta, 1.0f / length);
-      float t = (length - 0.2f) * 5.0f;
-      float f = t * (-width) + width + t * 0.4f;
-      float b = t * (0.85f - width) + width;
+      length = (length - 0.2f) * 5.0f;
+      float f = width + length * -width + length * 0.4f;
+      float b = width + length * (0.85f - width);
       forward.mX = delta[0] * f;
       forward.mY = delta[1] * f;
       backward.mX = -delta[0] * b;
@@ -210,26 +213,27 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Point2_t *axis,
     backward.mX = -(delta[0] * 0.85f);
     backward.mY = -(delta[1] * 0.85f);
   }
-  Point2_t side;
-  side.mX = delta[1];
-  side.mY = -delta[0];
-  fn_80227248(&side, &side, width);
-  for (int i = 0; i < 4; ++i)
-    p->mColor[i] = color[i];
-  p->mPoints[0][0] = center[0] - side.mX + forward.mX;
-  p->mPoints[0][1] = center[1] - side.mY + forward.mY;
-  p->mPoints[1][0] = center[0] + side.mX + forward.mX;
-  p->mPoints[1][1] = center[1] + side.mY + forward.mY;
-  p->mPoints[2][0] = center[0] + side.mX + backward.mX;
-  p->mPoints[2][1] = center[1] + side.mY + backward.mY;
-  p->mPoints[3][0] = center[0] - side.mX + backward.mX;
-  p->mPoints[3][1] = center[1] - side.mY + backward.mY;
+  direction.mX = delta[1];
+  direction.mY = -delta[0];
+  fn_80227248(&direction, &direction, width);
+  object->mUnknown4256.mColor[0] = color[0];
+  object->mUnknown4256.mColor[1] = color[1];
+  object->mUnknown4256.mColor[2] = color[2];
+  object->mUnknown4256.mColor[3] = color[3];
+  object->mUnknown4256.mPoints[0][0] = center[0] - direction.mX + forward.mX;
+  object->mUnknown4256.mPoints[0][1] = center[1] - direction.mY + forward.mY;
+  object->mUnknown4256.mPoints[1][0] = center[0] + direction.mX + forward.mX;
+  object->mUnknown4256.mPoints[1][1] = center[1] + direction.mY + forward.mY;
+  object->mUnknown4256.mPoints[2][0] = center[0] + direction.mX + backward.mX;
+  object->mUnknown4256.mPoints[2][1] = center[1] + direction.mY + backward.mY;
+  object->mUnknown4256.mPoints[3][0] = center[0] - direction.mX + backward.mX;
+  object->mUnknown4256.mPoints[3][1] = center[1] - direction.mY + backward.mY;
   if (LevelGetData()) {
     unsigned int value =
         object->mUnknown4968 * lbl_803EA436 + object->mUnknown4969;
     int enabled = (value & 1) ? lbl_803EA438 : !lbl_803EA438;
     if (enabled) {
-      p->mUnknown672 = 0;
+      object->mUnknown4256.mUnknown672 = 0;
       fn_8003BDF0(object, axis, angle);
     }
   }
@@ -261,25 +265,40 @@ void fn_8003BDF0(Object_8003DEC4 *object, Point2_t *axis, int angle) {
 }
 void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
                  Point2_t *a, Point2_t *b, int angle, float scale) {
-  Projection_8003BA10 *p = &object->mUnknown4256;
-  if (p->mUnknown672 > 3)
-    return;
-  Point2_t original = {center[0], center[1]}, shifted;
+  float position[3];
+  float points[3][3];
+  Point2_t pairs[3];
+  float parameters[3];
+  Point2_t original, shifted;
   float t, u;
+  Point2_t shiftedA, shiftedB;
+  Point2_t startA, endA, startB, endB;
+  if (object->mUnknown4256.mUnknown672 > 3)
+    return;
+  position[0] = center[0];
+  position[1] = center[1];
+  position[2] = center[2];
+  original.mX = position[0];
+  original.mY = position[1];
   fn_80227690(&shifted, &original, axis);
   if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && t > 0.0f)
     return;
+  unsigned char i = 0;
   float height = fn_801CFD28(angle);
+  Projection_8003BA10 *p = &object->mUnknown4256;
   scale *= 0.7142857313156128f;
   float shift = scale / height;
+  int accepted = 0;
   Clip_8003BFCC *out = &p->mRecords[p->mUnknown672];
   out->mCount = 0;
-  int accepted = 0;
-  Point2_t shiftedA = *a, shiftedB = *b;
+  shiftedA.mX = a->mX;
+  shiftedA.mY = a->mY;
+  shiftedB.mX = b->mX;
+  shiftedB.mY = b->mY;
   fn_8022732C(&shiftedA, axis, shift);
   fn_8022732C(&shiftedB, axis, shift);
-  float minimum = 1000000.0f, maximum = -1000000.0f;
-  for (unsigned char i = 0; i < 4; ++i) {
+  float maximum = -1000000.0f, minimum = 1000000.0f;
+  for (; i < 4; ++i) {
     if (fn_8003C97C(&shiftedA, &shiftedB, (Point2_t *)p->mPoints[i],
                     (Point2_t *)p->mPoints[(i + 1) % 4], &t, &u) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
@@ -289,43 +308,51 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
         maximum = t;
     }
   }
-  for (unsigned char i = 0; i < 4; ++i) {
+  startA.mX = a->mX;
+  startA.mY = a->mY;
+  endA.mX = shiftedA.mX;
+  endA.mY = shiftedA.mY;
+  startB.mX = b->mX;
+  startB.mY = b->mY;
+  endB.mX = shiftedB.mX;
+  endB.mY = shiftedB.mY;
+  for (i = 0; i < 4; ++i) {
     original.mX = p->mPoints[i][0];
     original.mY = p->mPoints[i][1];
-    shifted = original;
+    shifted.mX = p->mPoints[i][0];
+    shifted.mY = p->mPoints[i][1];
     fn_8022732C(&shifted, axis, -scale / height);
+    unsigned char count = 0;
     if (fn_8003C97C(&original, &shifted, a, b, &t, &u) && !(t >= 1.0f) &&
         !(u <= 0.0f) && !(u >= 1.0f)) {
       if (!(t <= 0.0f))
         accepted = 1;
-      for (int j = 0; j < 3; ++j)
-        out->mPoints[out->mCount][j] = p->mPoints[i][j];
-      out->mPairs[out->mCount] = p->mPairs[i];
+      out->mPoints[out->mCount][0] = p->mPoints[i][0];
+      out->mPoints[out->mCount][1] = p->mPoints[i][1];
+      out->mPoints[out->mCount][2] = p->mPoints[i][2];
+      out->mPairs[out->mCount].mX = p->mPairs[i].mX;
+      out->mPairs[out->mCount].mY = p->mPairs[i].mY;
       ++out->mCount;
     }
-    unsigned char next = (i + 1) % 4;
-    float points[3][3];
-    Point2_t pairs[3];
-    float parameters[3];
-    unsigned char count = 0;
     if (fn_8003C97C((Point2_t *)p->mPoints[i],
-                    (Point2_t *)p->mPoints[next], &shiftedA, &shiftedB, &t,
-                    &u) &&
+                    (Point2_t *)p->mPoints[(i + 1) % 4], &shiftedA, &shiftedB,
+                    &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f) && !(u <= 0.0f) && !(u >= 1.0f)) {
       accepted = 1;
-      fn_80227930(points[count], p->mPoints[next], p->mPoints[i], t);
-      fn_80227904(&pairs[count], &p->mPairs[next], &p->mPairs[i], t);
+      fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+      fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
       parameters[count] = t;
       count = 1;
     }
     if (fn_8003C97C((Point2_t *)p->mPoints[i],
-                    (Point2_t *)p->mPoints[next], a, &shiftedA, &t, &u) &&
+                    (Point2_t *)p->mPoints[(i + 1) % 4], &startA, &endA,
+                    &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[next], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[next], &p->mPairs[i], t);
+        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(minimum > 0.0f)) {
@@ -337,13 +364,14 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
       }
     }
     if (fn_8003C97C((Point2_t *)p->mPoints[i],
-                    (Point2_t *)p->mPoints[next], b, &shiftedB, &t, &u) &&
+                    (Point2_t *)p->mPoints[(i + 1) % 4], &startB, &endB,
+                    &t, &u) &&
         !(t <= 0.0f) && !(t >= 1.0f)) {
       if (!(u <= 0.0f))
         accepted = 1;
       if (u < 1.0f) {
-        fn_80227930(points[count], p->mPoints[next], p->mPoints[i], t);
-        fn_80227904(&pairs[count], &p->mPairs[next], &p->mPairs[i], t);
+        fn_80227930(points[count], p->mPoints[(i + 1) % 4], p->mPoints[i], t);
+        fn_80227904(&pairs[count], &p->mPairs[(i + 1) % 4], &p->mPairs[i], t);
         parameters[count] = t;
         ++count;
       } else if (!(maximum < 1.0f)) {
@@ -362,22 +390,24 @@ void fn_8003BFCC(Object_8003DEC4 *object, float *center, Point2_t *axis,
           least = parameters[k];
           index = k;
         }
-      for (int k = 0; k < 3; ++k)
-        out->mPoints[out->mCount][k] = points[index][k];
-      out->mPairs[out->mCount] = pairs[index];
+      out->mPoints[out->mCount][0] = points[index][0];
+      out->mPoints[out->mCount][1] = points[index][1];
+      out->mPoints[out->mCount][2] = points[index][2];
+      out->mPairs[out->mCount].mX = pairs[index].mX;
+      out->mPairs[out->mCount].mY = pairs[index].mY;
       parameters[index] = 1000000.0f;
       ++out->mCount;
     }
   }
   if (!accepted)
     return;
-  for (unsigned char i = 0; i < out->mCount; ++i) {
+  for (i = 0; i < out->mCount; ++i) {
     original.mX = out->mPoints[i][0];
     original.mY = out->mPoints[i][1];
     fn_80227690(&shifted, out->mPoints[i], axis);
     if (fn_8003C97C(&original, &shifted, a, b, &t, &u)) {
       fn_80227904(out->mPoints[i], &shifted, &original, t);
-      out->mPoints[i][2] = (t * height) * 1.4f;
+      out->mPoints[i][2] = t * height * 1.4f;
     }
   }
   ++p->mUnknown672;
@@ -400,26 +430,28 @@ void fn_8003C8C8(void *record, Point2_t *offset, float *parameters) {
 }
 int fn_8003C97C(Point2_t *a, Point2_t *b, Point2_t *c,
                 Point2_t *d, float *t, float *u) {
-  float dy = b->mY - a->mY, dx = b->mX - a->mX;
-  float cx = d->mX - c->mX, cy = d->mY - c->mY;
+  float ax = a->mX, ay = a->mY, cx0 = c->mX, cy0 = c->mY;
+  float dy = b->mY - ay, cx = d->mX - cx0;
+  float cy = d->mY - cy0, dx = b->mX - ax;
   float determinant = cy * dx - cx * dy;
   if (!(fabsf(determinant) >= 0.0000001f))
     return 0;
   if (t)
-    *t = ((a->mY - c->mY) * cx + (c->mX - a->mX) * cy) / determinant;
+    *t = ((cx0 - ax) * cy + (ay - cy0) * cx) / determinant;
   if (u)
-    *u = ((a->mX - c->mX) * dy + (c->mY - a->mY) * dx) / -determinant;
+    *u = ((ax - cx0) * dy + (cy0 - ay) * dx) / -determinant;
   return 1;
 }
-void fn_8003CA20() {
+int fn_8003CA20() {
   fn_801D04C4();
   fn_80236384(0);
   fn_801D06D4();
   unsigned int value = fn_80236398(0);
-  float color[4] = {(float)(value & 255) * 0.0078125f,
-                    (float)((value >> 8) & 255) * 0.0078125f,
-                    (float)((value >> 16) & 255) * 0.0078125f,
-                    (float)(value >> 24) * 0.0078125f};
+  float color[4];
+  color[0] = (float)(value & 255) * 0.0078125f;
+  color[1] = (float)((value >> 8) & 255) * 0.0078125f;
+  color[2] = (float)((value >> 16) & 255) * 0.0078125f;
+  color[3] = (float)(value >> 24) * 0.0078125f;
   float vector[4];
   vector[0] = 0.0f;
   vector[1] = 0.0f;
@@ -432,13 +464,17 @@ void fn_8003CA20() {
     vector[1] = 1.0f;
     length = 1.0f;
   }
-  float angleVector[4] = {vector[0], vector[1], 1.0f};
+  float angleVector[3];
+  angleVector[0] = vector[0];
+  angleVector[1] = vector[1];
+  angleVector[2] = 1.0f;
   int angle = fn_80227040(angleVector, vector);
   fn_80227264(vector, vector, 1.0f / length);
   for (int i = 0; i < lbl_803EA434; ++i)
     fn_8003BA10(lbl_803EA430[i], color, (Point2_t *)vector, angle);
   fn_801D0544();
   lbl_803EA438 = !lbl_803EA438;
+  return 0;
 }
 int fn_8003CBFC() {
   fn_801A3FFC();
@@ -596,39 +632,42 @@ void fn_8003D0C8(int mode) {
     fn_800B4A88();
   fn_801BE030(1, &lbl_803EAB3C);
   fn_800A3D70();
-  fn_801BE030(3, &lbl_803EAAFC);
+  fn_801BE030(3, &lbl_803EA9FC);
   fn_800A3C14();
   fn_800AE10C();
   fn_801BE030(4, &lbl_803EAAE0);
   fn_800ADE6C();
 }
+static inline void ZeroRoot(Skeleton_80041930 *skeleton) {
+  float *root = (float *)((char *)skeleton + 16);
+  root[0] = root[1] = root[2] = 0.0f;
+}
 void fn_8003D12C() {
-  lbl_803EA41C = ResLoad(gAnimData.GetArchive(), 57, 1);
+  AnimData *anim = &gAnimData;
+  lbl_803EA41C = ResLoad(anim->GetArchive(), 57, 1);
   CharRelocateSkeleton(lbl_803EA41C);
   fn_8003CC68(lbl_803EA41C);
-  for (int i = 0; i < 3; ++i) {
-    lbl_802CCD98[i] = (short)lbl_803EA41C->mUnknown1040[15][i] * 16;
-    lbl_802CCD8C[i] = (short)lbl_803EA41C->mUnknown1040[21][i] * 16;
-  }
-  lbl_803EA420[0] = ResLoad(gAnimData.GetArchive(), 58, 1);
+  lbl_802CCD98[0] = (short)lbl_803EA41C->mUnknown1040[15][0] * 16;
+  lbl_802CCD98[1] = (short)lbl_803EA41C->mUnknown1040[15][1] * 16;
+  lbl_802CCD98[2] = (short)lbl_803EA41C->mUnknown1040[15][2] * 16;
+  lbl_802CCD8C[0] = (short)lbl_803EA41C->mUnknown1040[21][0] * 16;
+  lbl_802CCD8C[1] = (short)lbl_803EA41C->mUnknown1040[21][1] * 16;
+  lbl_802CCD8C[2] = (short)lbl_803EA41C->mUnknown1040[21][2] * 16;
+  lbl_803EA420[0] = ResLoad(anim->GetArchive(), 58, 1);
   CharRelocateSkeleton(lbl_803EA420[0]);
-  for (int i = 0; i < 3; ++i)
-    ((float *)((char *)lbl_803EA420[0] + 16))[i] = 0.0f;
-  lbl_803EA420[1] = ResLoad(gAnimData.GetArchive(), 59, 1);
+  ZeroRoot(lbl_803EA420[0]);
+  lbl_803EA420[1] = ResLoad(anim->GetArchive(), 59, 1);
   CharRelocateSkeleton(lbl_803EA420[1]);
-  for (int i = 0; i < 3; ++i)
-    ((float *)((char *)lbl_803EA420[1] + 16))[i] = 0.0f;
+  ZeroRoot(lbl_803EA420[1]);
   CharSkelMirrorRest(lbl_803EA420[0], lbl_803EA420[1]);
-  lbl_803EA428 = ResLoad(gAnimData.GetArchive(), 61, 1);
+  lbl_803EA428 = ResLoad(anim->GetArchive(), 61, 1);
   CharRelocateSkeleton(lbl_803EA428);
   fn_8003CD1C(lbl_803EA428);
-  for (int i = 0; i < 3; ++i)
-    ((float *)((char *)lbl_803EA428 + 16))[i] = 0.0f;
-  lbl_803EA42C = ResLoad(gAnimData.GetArchive(), 62, 1);
+  ZeroRoot(lbl_803EA428);
+  lbl_803EA42C = ResLoad(anim->GetArchive(), 62, 1);
   CharRelocateSkeleton(lbl_803EA42C);
   fn_8003CDF8(lbl_803EA42C);
-  for (int i = 0; i < 3; ++i)
-    ((float *)((char *)lbl_803EA42C + 16))[i] = 0.0f;
+  ZeroRoot(lbl_803EA42C);
 }
 void fn_8003D2E0() {
   fn_800AF630(gAnimData.GetArchive(), 60, 1, 32);
@@ -637,24 +676,31 @@ void fn_8003D2E0() {
   fn_800AF790(2, lbl_803EA41C, "rshoulder", "rwrist", 1);
 }
 int fn_8003D378(int owner, int mode) {
+  int result = 0;
   Object_8008044C object;
   ResTrackPause();
   lbl_803EA430 = (Object_8003DEC4 **)fn_801D2B7C(lbl_803EA434 * 4, 0, 0);
-  int result = fn_801F7C88();
+  result = fn_801F7C88();
   if (lbl_803EA430) {
-    fn_8008044C(&object, 0, mode ? 0x54414D53 : 0x454D4147);
+    fn_8008044C(&object, 0, mode ? 0x54415453 : 0x454D4147);
     fn_8003D958();
+    unsigned int order[14], keys[14];
     Creation_8003D378 init;
-    init.mInit.mUnknown00 = 1;
+    init.mInit.mUnknown00 = 0;
+    init.mInit.mUnknown02 = 1;
     init.mInit.mUnknown04 = (int)lbl_803EA41C;
     ((Skeleton_80041930 **)init.mInit.mUnknown08)[0] = lbl_803EA420[0];
     ((Skeleton_80041930 **)init.mInit.mUnknown08)[1] = lbl_803EA420[1];
     init.mInit.mUnknown10 = (int)lbl_803EA428;
     init.mInit.mUnknown14 = (int)lbl_803EA42C;
     fn_8015EE74();
-    unsigned int order[14], keys[14];
-    for (unsigned int i = 0; i < lbl_803EA434; ++i) {
-      unsigned char team = mode ? 0 : (unsigned char)(i / lbl_803EA436);
+    unsigned int i, j;
+    for (i = 0; i < lbl_803EA434; ++i) {
+      unsigned char team;
+      if (mode)
+        team = 27;
+      else
+        team = i / lbl_803EA436;
       PlayerDbSeekId(&object, lbl_802CCDA4[i], 0);
       char name[28];
       int hasName = PlayerDbGetNameKey(&object, name, 27);
@@ -676,8 +722,8 @@ int fn_8003D378(int owner, int mode) {
       fn_8015F298(i, c);
     }
     fn_8015EF10();
-    for (unsigned int i = 0; i < lbl_803EA434; ++i)
-      for (unsigned int j = i + 1; j < lbl_803EA434; ++j) {
+    for (i = 0; i < lbl_803EA434; ++i)
+      for (j = i + 1; j < lbl_803EA434; ++j) {
         if (keys[i] > keys[j]) {
           unsigned int key = keys[i];
           keys[i] = keys[j];
@@ -687,13 +733,16 @@ int fn_8003D378(int owner, int mode) {
           order[j] = index;
         }
       }
-    for (unsigned int rank = 0; rank < lbl_803EA434; ++rank) {
-      unsigned int index = order[rank];
-      init.mUnknown57 = mode ? rank : index / lbl_803EA436;
-      init.mUnknown58 = index % lbl_803EA436;
-      init.mUnknown59 = index;
-      init.mUnknown5A = index;
-      init.mInit.mUnknown18 = lbl_802CCDA4[index];
+    for (j = 0; j < lbl_803EA434; ++j) {
+      i = order[j];
+      if (mode)
+        init.mUnknown57 = 27;
+      else
+        init.mUnknown57 = i / lbl_803EA436;
+      init.mUnknown58 = i % lbl_803EA436;
+      init.mUnknown59 = i;
+      init.mUnknown5A = i;
+      init.mInit.mUnknown18 = lbl_802CCDA4[i];
       PlayerDbSeekId(&object, init.mInit.mUnknown18, 0);
       PlayerDbGetNickname(&object, init.mUnknown38, 31);
       if (!mode)
@@ -701,56 +750,64 @@ int fn_8003D378(int owner, int mode) {
       char name[28];
       int hasName = PlayerDbGetNameKey(&object, name, 27);
       int value = PlayerDbGetPybt(&object);
+      int key;
+      PlayerHeadIds_t ids;
       if (hasName) {
-        init.mUnknown1C = fn_8015F5BC(name);
-        PlayerLookGetHeadIds(init.mUnknown5A, init.mUnknown1C == 65535 ? 0 : name,
-                    &init.mUnknown20);
+        key = fn_8015F5BC(name);
+        if (key == 65535)
+          PlayerLookGetHeadIds(init.mUnknown5A, 0, &ids);
+        else
+          PlayerLookGetHeadIds(init.mUnknown5A, name, &ids);
       } else {
-        PlayerLookGetHeadIds(init.mUnknown5A, 0, &init.mUnknown20);
-        init.mUnknown1C = 65535;
+        PlayerLookGetHeadIds(init.mUnknown5A, 0, &ids);
+        key = 65535;
       }
-      init.mUnknown30 = PlayerLookGetAccessoryModel(index);
-      init.mUnknown28 = PlayerLookGetHatModel(init.mUnknown5A);
-      init.mUnknown2C = PlayerLookGetSlot1Model(init.mUnknown5A);
+      int accessory = PlayerLookGetAccessoryModel(i);
+      int hat = PlayerLookGetHatModel(init.mUnknown5A);
+      int slot1 = PlayerLookGetSlot1Model(init.mUnknown5A);
+      init.mUnknown1C = key;
+      init.mUnknown20 = ids;
+      init.mUnknown28 = hat;
+      init.mUnknown2C = slot1;
+      init.mUnknown30 = accessory;
       init.mUnknown34 = value;
       init.mUnknown5B = PlayerDbGetPlex(&object);
       FaceFeatures_t block;
       fn_80082138(&object, &block);
       FaceMorphBuildWeights(&block, &init.mUnknown5C);
       if (owner) {
-        lbl_803EA430[index] =
+        lbl_803EA430[i] =
             (Object_8003DEC4 *)ObjNewInList(owner, 0, 0, &init);
-        ObjSetPriority(owner, lbl_803EA430[index], 10);
-        lbl_803EA430[index]->mUnknown988 =
+        ObjSetPriority(owner, lbl_803EA430[i], 10);
+        lbl_803EA430[i]->mUnknown988 =
             PlyrNameTagNew(init.mUnknown57 * 7 + init.mUnknown58);
-        PlyrNameTagSetText(lbl_803EA430[index]->mUnknown988, " ");
+        PlyrNameTagSetText(lbl_803EA430[i]->mUnknown988, " ");
       } else {
-        lbl_803EA430[index] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
-        lbl_803EA430[index]->mUnknown988 = 0;
+        lbl_803EA430[i] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
+        lbl_803EA430[i]->mUnknown988 = 0;
       }
       if (lbl_803EA410 && lbl_803EA414) {
-        Projection_8003BA10 *p =
-            &lbl_803EA430[index]->mUnknown4256;
-        p->mUnknown672 = 0;
-        p->mPairs[0].mX = 0.0f;
-        p->mPairs[0].mY = 0.0f;
-        p->mPairs[1].mX = 1.0f;
-        p->mPairs[1].mY = 0.0f;
-        p->mPairs[2].mX = 1.0f;
-        p->mPairs[2].mY = 1.0f;
-        p->mPairs[3].mX = 0.0f;
-        p->mPairs[3].mY = 1.0f;
-        for (int k = 0; k < 4; ++k)
-          p->mPoints[k][2] = 0.0f;
+        Object_8003DEC4 *player = lbl_803EA430[i];
+        player->mUnknown4256.mUnknown672 = 0;
+        player->mUnknown4256.mPairs[0].mX = 0.0f;
+        player->mUnknown4256.mPairs[0].mY = 0.0f;
+        player->mUnknown4256.mPairs[1].mX = 1.0f;
+        player->mUnknown4256.mPairs[1].mY = 0.0f;
+        player->mUnknown4256.mPairs[2].mX = 1.0f;
+        player->mUnknown4256.mPairs[2].mY = 1.0f;
+        player->mUnknown4256.mPairs[3].mX = 0.0f;
+        player->mUnknown4256.mPairs[3].mY = 1.0f;
+        player->mUnknown4256.mPoints[0][2] = 0.0f;
+        player->mUnknown4256.mPoints[1][2] = 0.0f;
+        player->mUnknown4256.mPoints[2][2] = 0.0f;
+        player->mUnknown4256.mPoints[3][2] = 0.0f;
       }
-      PlayerLookApply(index);
+      PlayerLookApply(i);
       if (hasName)
         PlaTexCacheSetFace(init.mUnknown5A, name, 0);
-      else {
-        int a = fn_80081E3C(&object) + 1, b = fn_80082280(&object),
-            c = fn_800822D4(&object);
-        PlaTexCacheSetCapFace(init.mUnknown5A, a, b, c, 0);
-      }
+      else
+        PlaTexCacheSetCapFace(init.mUnknown5A, fn_80081E3C(&object) + 1,
+                              fn_80082280(&object), fn_800822D4(&object), 0);
     }
     fn_8008056C(&object);
   }
@@ -763,17 +820,18 @@ void fn_8003D958() {
 void fn_8003D988(int value, int *out, int mode) {
   Object_8008044C object;
   Desc_8008044C desc;
+  unsigned int i;
   if (!mode) {
     desc.mUnknown4 = 1;
     desc.mUnknown8 = value;
     fn_8008044C(&object, &desc, 0x454D4147);
-    for (unsigned int i = 0; i < lbl_803EA436; ++i) {
+    for (i = 0; i < lbl_803EA436; ++i) {
       PlayerDbSeekOriginalId(&object, out[i], 0);
       out[i] = PlayerDbGetId(&object);
     }
     fn_8008056C(&object);
   } else {
-    for (unsigned int i = 0; i < lbl_803EA436; ++i)
+    for (i = 0; i < lbl_803EA436; ++i)
       out[i] = 332;
   }
 }
@@ -821,6 +879,7 @@ int fn_8003DA94(int count, int owner, int mode) {
   return result;
 }
 int fn_8003DCC0(int owner) {
+  int result = 0;
   if (lbl_803EA410) {
     ObjRemoveFromList(owner, lbl_803EA410);
     VptTrashObject(lbl_803EA410);
@@ -853,13 +912,14 @@ int fn_8003DCC0(int owner) {
   }
   PlayerObjRenderShutdown();
   fn_800AF71C();
-  ResUnLoad(gAnimData.GetArchive(), 57);
-  ResUnLoad(gAnimData.GetArchive(), 58);
-  ResUnLoad(gAnimData.GetArchive(), 59);
+  AnimData *anim = &gAnimData;
+  ResUnLoad(anim->GetArchive(), 57);
+  ResUnLoad(anim->GetArchive(), 58);
+  ResUnLoad(anim->GetArchive(), 59);
   PlayerObjRemoveObjType(0);
   ObjDelType(29);
   ObjDelType(30);
-  int result = ObjDelType(27);
+  result = ObjDelType(27);
   lbl_803EA434 = 0;
   PlaTexCacheStop();
   PlayerLookClose();
@@ -868,14 +928,17 @@ int fn_8003DCC0(int owner) {
   return result;
 }
 void fn_8003DE74(int side, int *values) {
-  int *out = lbl_802CCDA4 + (side ? 7 : 0);
+  int offset = side ? 7 : 0;
   for (int i = 0; i < 7; ++i)
-    out[i] = values[i];
+    lbl_802CCDA4[offset + i] = values[i];
 }
 int fn_8003DEB4() { return lbl_803EA434; }
 int fn_8003DEBC() { return 7; }
 Object_8003DEC4 *fn_8003DEC4(int index) {
-  return lbl_803EA430 ? lbl_803EA430[index] : 0;
+  Object_8003DEC4 *result = 0;
+  if (lbl_803EA430)
+    result = lbl_803EA430[index];
+  return result;
 }
 Object_8003DEC4 *fn_8003DEE4(int value) {
   Object_8003DEC4 *result = 0;
@@ -887,17 +950,21 @@ Object_8003DEC4 *fn_8003DEE4(int value) {
   return result;
 }
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index) {
-  return lbl_803EA430 ? fn_8003DEC4(side * 7 + index) : 0;
+  Object_8003DEC4 *result = 0;
+  if (lbl_803EA430)
+    result = fn_8003DEC4(side * 7 + index);
+  return result;
 }
 Object_8003DEC4 *fn_8003DF7C(Point2_t *point, float *distance) {
   float value = 10000.0f;
   Object_8003DEC4 *result = 0;
   if (lbl_803EA430)
     for (unsigned int i = 0; i < lbl_803EA434; ++i) {
-      float current = fn_8022781C(lbl_803EA430[i]->mUnknown4, point);
+      Object_8003DEC4 *player = lbl_803EA430[i];
+      float current = fn_8022781C(player->mUnknown4, point);
       if (!(current >= value)) {
+        result = player;
         value = current;
-        result = lbl_803EA430[i];
       }
     }
   if (distance)
@@ -918,11 +985,15 @@ void fn_8003E038(Block_80170E64 *object, int *reference) {
       }
 }
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object) {
-  int reference;
+  struct {
+    unsigned char mBytes[3];
+    unsigned char mKind;
+  } reference;
+  int *key = (int *)&reference;
   Object_80039F5C *result = 0;
-  fn_8003E038(object, &reference);
-  if (((unsigned char *)&reference)[3] == 1)
-    result = fn_8009BCE8(&reference);
+  fn_8003E038(object, key);
+  if (reference.mKind == 1)
+    result = fn_8009BCE8(key);
   return result;
 }
 void fn_8003E118() {
