@@ -70,11 +70,11 @@ void *fn_801BB570(int, int, int, int);
 void fn_801BB480(void);
 int AnimSequencerShutdown(void);
 int AnimShutdown(void);
-void fn_801BF2B0(int);
+void AnimWgtInit(int);
 int fn_801BDF90(int count);
 int fn_801BDFF8(void);
 void AnimCacheShutdown(void);
-int fn_801BF384(void);
+int AnimWgtShutdown(void);
 void fn_8004AD3C(void *);
 void *fn_801D2BB0(int, int, int, int);
 int ResGetSize(void *, int);
@@ -372,14 +372,14 @@ extern "C" void fn_8008FCB4(int flag)
     AnimInit(1);AnimSequencerInit(60.0f);
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
     AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
-    fn_8008F978();fn_801BF2B0(4);
+    fn_8008F978();AnimWgtInit(4);
     if(flag) fn_801BB2D8(&lbl_802D713C);else fn_801BB2D8(&lbl_802D70D0);
     fn_801BDF90(11);fn_8008F940();
 }
 extern "C" void fn_8008FD88(void)
 {
     fn_801BDFF8();AnimCacheShutdown();fn_8008F9C0();fn_801BB480();
-    fn_801BF384();AnimShutdown();AnimSequencerShutdown();
+    AnimWgtShutdown();AnimShutdown();AnimSequencerShutdown();
 }
 extern "C" void fn_8008FDC0(void)
 {

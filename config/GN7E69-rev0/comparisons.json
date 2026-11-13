@@ -34338,9 +34338,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BF090.c",
+      "source": "src/engine/animwgt.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/cu_801BF090.c, animwgt.c), function rows, data row 0x802AEEA8-0x802AEEE0 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/animwgt.c) and the source-form row at 0x801BF530. Documented holdout at the end of .text: AnimWgtSetLinearInAndOut 0x801BF530-0x801BF5E8 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes with its pool 0x802AEED0-0x802AEEE0; the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -34353,61 +34353,29 @@
           "placement": ".data3",
           "start": "0x802AEEA8",
           "end": "0x802AEEE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F484C",
+          "end": "0x802F485C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB9C",
+          "end": "0x803EBBA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED614",
+          "end": "0x803ED618"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801BF090",
-          "start": "0x801BF090",
-          "end": "0x801BF094"
-        },
-        {
-          "symbol": "fn_801BF094",
-          "start": "0x801BF094",
-          "end": "0x801BF11C"
-        },
-        {
-          "symbol": "fn_801BF11C",
-          "start": "0x801BF11C",
-          "end": "0x801BF140"
-        },
-        {
-          "symbol": "fn_801BF140",
-          "start": "0x801BF140",
-          "end": "0x801BF2B0"
-        },
-        {
-          "symbol": "fn_801BF2B0",
-          "start": "0x801BF2B0",
-          "end": "0x801BF384"
-        },
-        {
-          "symbol": "fn_801BF384",
-          "start": "0x801BF384",
-          "end": "0x801BF3C8"
-        },
-        {
-          "symbol": "fn_801BF3C8",
-          "start": "0x801BF3C8",
-          "end": "0x801BF434"
-        },
-        {
-          "symbol": "fn_801BF434",
-          "start": "0x801BF434",
-          "end": "0x801BF46C"
-        },
-        {
-          "symbol": "fn_801BF46C",
-          "start": "0x801BF46C",
-          "end": "0x801BF4A8"
-        },
-        {
-          "symbol": "fn_801BF4A8",
-          "start": "0x801BF4A8",
-          "end": "0x801BF530"
-        },
-        {
-          "symbol": "fn_801BF530",
+          "symbol": "AnimWgtSetLinearInAndOut",
           "start": "0x801BF530",
           "end": "0x801BF5E8"
         }

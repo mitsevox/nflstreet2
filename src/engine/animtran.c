@@ -36,7 +36,7 @@ void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
     for (i = 0; i < 4; i++) {
         if (p->mUnknown4[i].mUnknown0 == key
             || ((p->mUnknown4[i].mUnknown0 & 0x8000) && p->mUnknown4[i].mUnknown0 != 0xFFFF)) {
-            fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, frames, -1.0f, 0.0f);
+            AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, frames, -1.0f, 0.0f);
         }
     }
 }
@@ -86,7 +86,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                 if (pTransition != 0) {
                     switch (pTransition->mUnknown4) {
                     case 0:
-                        fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
+                        AnimWgtSet(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
                         fallback = 0;
                         break;
                     case 1: {
@@ -95,13 +95,13 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                                        pTransition->mUnknown6 * pRecords[to].mUnknown4C.mUnknown4 * pTransition->mUnknown8;
 
                         fn_801BE910(p, slotKey, (unsigned int)frames);
-                        fn_801BF4A8(&p->mUnknown4[i + 2].mUnknown4C, (unsigned int)frames, 0.0f,
+                        AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, (unsigned int)frames, 0.0f,
                                     p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
                         fallback = 0;
                         break;
                     }
                     case 2:
-                        fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
+                        AnimWgtSet(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
                         fallback = 0;
                         break;
                     case 3: {
@@ -118,9 +118,9 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
                             unsigned int hold = (unsigned int)duration - fade * 2;
                             float delay;
 
-                            fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, fade, -1.0f, 0.0f);
-                            fn_801BF530(&p->mUnknown4[i + 1].mUnknown4C, fade, hold, -1.0f, 1.0f);
-                            fn_801BF4A8(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f,
+                            AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, fade, -1.0f, 0.0f);
+                            AnimWgtSetLinearInAndOut(&p->mUnknown4[i + 1].mUnknown4C, fade, hold, -1.0f, 1.0f);
+                            AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f,
                                         p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
                             delay = (float)hold + (float)fade;
                             fn_801BE798(p, key, delay);
@@ -136,7 +136,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, Record_800D81C8 
             }
         }
         if (fallback == 1) {
-            fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
+            AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
         }
     }
 }

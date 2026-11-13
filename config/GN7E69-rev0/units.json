@@ -2388,6 +2388,10 @@
     "madinit__Fv": {
       "address": "0x801DA52C",
       "evidence": "evidence.tsv function/name rows for 0x801DA52C; the documented holdout 0x801DA52C-0x801DA7E8 at the start of src/engine/maddec.cpp, which keeps its original bytes until its draft in comparisons.json is linked; called by 0x801DABE0."
+    },
+    "AnimWgtSetLinearInAndOut": {
+      "address": "0x801BF530",
+      "evidence": "evidence.tsv function and name rows for 0x801BF530 (documented holdout 0x801BF530-0x801BF5E8 at the end of src/engine/animwgt.c: draft registered in comparisons.json, original bytes; its pool 0x802AEED0-0x802AEEE0 stays original bytes with it). Called by animtran.c."
     }
   },
   "units": [
@@ -17617,6 +17621,43 @@
           "placement": ".sbss",
           "start": "0x803ECF1C",
           "end": "0x803ECF30"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/animwgt.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/animwgt.c), its function, name and data rows; 0x801BF090-0x801BF530 is linked with the .rodata 0x802AEEA8-0x802AEED0, the .data 0x802F484C-0x802F485C, the .sdata 0x803EBB9C-0x803EBBA8 and the .sbss 0x803ED614-0x803ED618; the documented holdout AnimWgtSetLinearInAndOut 0x801BF530-0x801BF5E8 at the end of .text (with its pool 0x802AEED0-0x802AEEE0) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF090",
+          "end": "0x801BF530"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEA8",
+          "end": "0x802AEED0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F484C",
+          "end": "0x802F485C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB9C",
+          "end": "0x803EBBA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED614",
+          "end": "0x803ED618"
         }
       ]
     }

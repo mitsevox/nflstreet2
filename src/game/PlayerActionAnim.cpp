@@ -675,7 +675,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
             }
             int next = fn_801BA2D0(pA, pEntries, &pEntries[pRecord->mUnknown0]);
             pRecord->mUnknown4 = pRecord->mUnknown0;
-            fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 0.0f);
+            AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 0.0f);
             pRecord->mUnknown0 = next;
             unsigned char value = pEntries[next].mUnknown4C.mUnknown1E;
             pRecord->mUnknown8 = direction;
@@ -684,8 +684,8 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
             p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
             int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
             fn_801BA418(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
-            fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
-            fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 1.0f);
+            AnimWgtSet(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
+            AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 1.0f);
             pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4 = -pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4;
             pEntries[pRecord->mUnknown0].mUnknown4C.mUnknown1E = value;
             float speed = p->mUnknown528.mUnknown0;
@@ -707,7 +707,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
                 }
                 int next = fn_801BA2D0(pA, pEntries, &pEntries[pRecord->mUnknown0]);
                 pRecord->mUnknown4 = pRecord->mUnknown0;
-                fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 0.0f);
+                AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 0.0f);
                 pRecord->mUnknown9 = category;
                 pRecord->mUnknown0 = next;
                 p->mUnknown1008.mUnknown0 = pRecord->mUnknown8;
@@ -715,8 +715,8 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
                 p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
                 int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
                 fn_801BA418(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
-                fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
-                fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 1.0f);
+                AnimWgtSet(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
+                AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 1.0f);
             }
         }
         float rate = p->mUnknown528.mUnknown0;
@@ -945,7 +945,7 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
         int blend = pRecord->mUnknown6 ? 20 : 10;
         unsigned short old = pRecord->mUnknown2;
         if (old != 0xFFFF && pEntries[old].mUnknown1 == 2 && pEntries[old].mUnknown8 == key) {
-            fn_801BF4A8(&pEntries[old].mUnknown30, blend, -1.0f, 0.0f);
+            AnimWgtSetLinear(&pEntries[old].mUnknown30, blend, -1.0f, 0.0f);
         }
         unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
         pRecord->mUnknown6 = pInfo[5] == 2;
@@ -953,7 +953,7 @@ extern "C" int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA,
         p->mFlags &= ~4;
         pRecord->mUnknown2 = fn_801BA2A8(pA, pEntries, pTable->mEntries[chosen].mUnknown0, pTable->mEntries[chosen].mUnknown2, key, p, 1.0f);
         if (old != 0xFFFF) {
-            fn_801BF4A8(&pEntries[pRecord->mUnknown2].mUnknown30, blend, 0.0f, 1.0f);
+            AnimWgtSetLinear(&pEntries[pRecord->mUnknown2].mUnknown30, blend, 0.0f, 1.0f);
         }
     }
     return 0;
@@ -1121,7 +1121,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
     unsigned short old = pRecord->mUnknown14;
     Record_800D81C8 *pEntries = (Record_800D81C8 *)pB;
     if (old != 0xFFFF && !FELoopIsMainFEActive()) {
-        fn_801BF4A8(&pEntries[old].mUnknown30, 10, -1.0f, 0.0f);
+        AnimWgtSetLinear(&pEntries[old].mUnknown30, 10, -1.0f, 0.0f);
     }
     p->mFlags &= ~4;
     pRecord->mUnknown14 = fn_801BA2A8(pA, pB, pTable->mEntries[chosen].mUnknown0, pTable->mEntries[chosen].mUnknown2, key, pOther, 1.0f);
@@ -1131,7 +1131,7 @@ extern "C" void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned
     unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
     pRecord->mUnknown10 = pInfo[6];
     if (old != 0xFFFF && !FELoopIsMainFEActive()) {
-        fn_801BF4A8(&pEntries[(unsigned short)pRecord->mUnknown14].mUnknown30, 16, 0.0f, 1.0f);
+        AnimWgtSetLinear(&pEntries[(unsigned short)pRecord->mUnknown14].mUnknown30, 16, 0.0f, 1.0f);
     }
 }
 

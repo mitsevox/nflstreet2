@@ -122,7 +122,7 @@ int fn_801BA2D0(AnimHeader_t *pList, Record_800D81C8 *pChannels, Record_800D81C8
 
 void fn_801BA360(Record_800D81C8 *pChannel, int type, float a, void *pSource, float b)
 {
-    fn_801BF3C8(&pChannel->mUnknown30, type, a, pSource, b);
+    AnimWgtSet(&pChannel->mUnknown30, type, a, pSource, b);
 }
 
 void fn_801BA384(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index)

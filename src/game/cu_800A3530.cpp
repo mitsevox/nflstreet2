@@ -48,7 +48,7 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
         break;
     case 1:
         if (block->mUnknown8Byte == 1 && fn_801BE648(p->mpUnknown804) == key) {
-            Data1_801BF4A8 data;
+            AnimWgtLinear_t data;
             data.mUnknown4 = 1;
             data.mUnknown0 = 1.0f;
             fn_801BE3C0(p->mpUnknown804, 1.0f, 0.0f, key, 1, &data);
@@ -59,7 +59,7 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
         if (block->mUnknown8Byte == 1 && fn_801BE648(p->mpUnknown804) == key
             && (unsigned int)((float)block->mUnknown4Unsigned
                               - AnimSeqGetTime(&p->mpUnknown812[block->mUnknown0Word].mUnknown4C)) <= 7) {
-            Data1_801BF4A8 data;
+            AnimWgtLinear_t data;
             data.mUnknown4 = 8;
             data.mUnknown0 = 1.0f;
             fn_801BE3C0(p->mpUnknown804, 1.0f, 0.0f, key, 1, &data);
@@ -121,7 +121,7 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
             p->mpUnknown4->mUnknown20 |= 0x40000;
             if (block->mUnknown4Unsigned
                     - (unsigned int)AnimSeqGetTime(&p->mpUnknown812[block->mUnknown0Word].mUnknown4C) <= 7) {
-            Data1_801BF4A8 data;
+            AnimWgtLinear_t data;
                 data.mUnknown4 = 8;
                 data.mUnknown0 = 1.0f;
                 fn_801BE3C0(p->mpUnknown804, 1.0f, 0.0f, key, 1, &data);
@@ -131,7 +131,7 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
         break;
     case 1:
         if (fn_801BE648(p->mpUnknown804) == key) {
-            Data1_801BF4A8 data;
+            AnimWgtLinear_t data;
             data.mUnknown4 = 1;
             data.mUnknown0 = 1.0f;
             fn_801BE3C0(p->mpUnknown804, 1.0f, 0.0f, key, 1, &data);
