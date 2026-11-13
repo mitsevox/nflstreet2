@@ -1528,16 +1528,19 @@ int fn_8004D3A8(void *pData, char *pName)
 
 void fn_8004D498(int handle) { lbl_803EA4F8[handle].mpCursor = lbl_803EA4F8[handle].mpData; }
 int fn_8004D4B0(int handle, const char *pKey) {
-    void *p = fn_80216860(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = fn_80216860(lbl_803EA4F8[handle].mpCursor, pKey);
+    if (lbl_803EA4F8[handle].mpCursor) return 1;
+    return 0;
 }
 int fn_8004D508(int handle, const char *pKey) {
-    void *p = fn_80216BFC(lbl_803EA4F8[handle].mpCursor, pKey);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = fn_80216BFC(lbl_803EA4F8[handle].mpCursor, pKey);
+    if (lbl_803EA4F8[handle].mpCursor) return 1;
+    return 0;
 }
 int fn_8004D560(int handle) {
-    void *p = fn_80216E34(lbl_803EA4F8[handle].mpCursor);
-    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+    lbl_803EA4F8[handle].mpCursor = fn_80216E34(lbl_803EA4F8[handle].mpCursor);
+    if (lbl_803EA4F8[handle].mpCursor) return 1;
+    return 0;
 }
 int fn_8004D5B8(int handle, const char *pKey, char *pText, int size) {
     return fn_80216F3C(lbl_803EA4F8[handle].mpCursor, pKey, pText, size, "");
@@ -1546,17 +1549,25 @@ int fn_8004D5F0(int handle, const char *pKey) { return fn_80217070(lbl_803EA4F8[
 float fn_8004D624(int handle, const char *pKey) { return fn_802171DC(lbl_803EA4F8[handle].mpCursor, pKey, 0.0f); }
 int fn_8004D65C(int handle, const char *pKey, float *pValues) {
     float values[9];
-    if (!fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) return 0;
-    for (int i = 0; i < 9; i++) pValues[i + i / 3] = values[i];
-    return 1;
+    int i = 0;
+    if (fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) {
+        for (; i < 9; i++) pValues[i + i / 3] = values[i];
+        return 1;
+    }
+    return 0;
 }
 unsigned char fn_8004D6F4(int handle, const char *pKey, float *pValues, int count) {
     return fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, pValues, count);
 }
 int fn_8004D728(int handle, const char *pKey, float *pValues) {
     float values[3];
-    if (!fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) return 0;
-    pValues[0] = values[0]; pValues[2] = values[2]; pValues[1] = values[1]; return 1;
+    if (fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) {
+        pValues[0] = values[0];
+        pValues[1] = values[1];
+        pValues[2] = values[2];
+        return 1;
+    }
+    return 0;
 }
 void fn_8004D798(void) {
     lbl_803EC7D4 = 0;
@@ -1691,7 +1702,10 @@ void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
         fn_8004D5B8(handle, "tideRef", name, 128);
         p->mUnknownF4 = ResFindIndexByName((int)pData, name);
         DynObjLoadAnimPal(pData, p);
-    } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
+    } else {
+        p->mUnknownF8 = 0;
+        p->mFlagF0 = 0;
+    }
 }
 }
 
@@ -2095,7 +2109,8 @@ void fn_8004F20C(void)
         RigidBody_t *p = lbl_80308D0C[i];
         if (p->mKind == 2) {
             Vector_80039F5C force;
-            force.mX = force.mY = 0.0f;
+            force.mX = 0.0f;
+            force.mY = 0.0f;
             force.mZ = -((1.0f / p->mUnknown68) * 10.73f);
             fn_801E9CC4(p);
             fn_801E9CF0(p, &force, &p->mUnknown100);
