@@ -50,7 +50,7 @@ void fn_8004E358(void);
 void fn_8004F754(int model, BigObj_t *pObject, int index);
 void fn_800504EC(void);
 void fn_80051308(void);
-void fn_80053A1C(void);
+void HotspotReset(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
@@ -275,7 +275,7 @@ void BigObjNotifyTypes(unsigned int flags)
         }
     }
     if (all || (flags & 0xC0)) {
-        fn_80053A1C();
+        HotspotReset();
     }
 }
 

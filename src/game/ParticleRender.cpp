@@ -52,8 +52,8 @@ void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0ADC(int a);
-void fn_801DF064(float *pColor, Object_80144CE0 *pEmitter, Particle_t *pParticle);
-float fn_801DF184(Object_80144CE0 *pEmitter, Particle_t *pParticle);
+void fn_801DF064(float *pColor, PsysEmitter_t *pEmitter, Particle_t *pParticle);
+float fn_801DF184(PsysEmitter_t *pEmitter, Particle_t *pParticle);
 void TMRenderBindShader(int a);
 void TMRenderSetBlendMode(int a);
 void TMShaderLibAlloc(ShaderTable_t *pTable, int count);
@@ -147,7 +147,7 @@ void ParticleRenderShutdown(void)
     _ParticleRender_iFlatShader = 0;
 }
 
-int ParticleRenderEmitter(Object_80144CE0 *pEmitter, int mode)
+int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
 {
     int count;
     AnimTex_t *pTexture;

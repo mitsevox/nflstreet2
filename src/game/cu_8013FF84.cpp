@@ -64,10 +64,10 @@ int fn_801CFDD0(float);
 void CamFreeClearVelocity(GameCamera_t *);
 int fn_800AD9B4(void);
 int fn_801784C4(void);
-void fn_8013C2B4(void *,int,int,int);
-void fn_8013C6F0(GameCamera_t *);
+void CamMainProcess(void *,int,int,int);
+void CamMainWarpToDest(GameCamera_t *);
 void Orient3Lerp(void *,void *,void *,float);
-void fn_8013C4BC(GameCamera_t *,void *,int);
+void CamMainSetAngle(GameCamera_t *,void *,int);
 void fn_80227930(void *,void *,void *,float);
 void fn_801D0470(int);
 void fn_801D0508(void);
@@ -81,7 +81,7 @@ int BallsExist(void);
 void *BallGetCurrent(void);
 void BallGetPosition(void *,void *);
 int fn_801486A0(void);
-void fn_8013C478(GameCamera_t *,void *);
+void CamMainSetOffset(GameCamera_t *,void *);
 int fn_801783AC(int);
 int fn_80178308(void);
 void PlyrFindNearest(void *,float *,int);
@@ -89,8 +89,8 @@ int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void Orient3Add(void *,void *,void *);
 int fn_80178320(void);
-void fn_8013C438(GameCamera_t *);
-void fn_8013C384(void *,int,int,int);
+void CamMainFollowBall(GameCamera_t *);
+void CamMainFollow(void *,int,int,int);
 void AudmonEventPost(int,int);
 void fn_80140DBC(GameCamera_t *,int,int);
 void fn_80140EA0(GameCamera_t *);
@@ -177,8 +177,8 @@ void fn_801403CC(GameCamera_t *camera)
         camera->mUnknownF0 = camera->mHeader.mUnknown04[2];
         fn_80227638(&camera->mUnknownE8,&camera->mUnknownE8,&camera->mUnknownC4);
     } else {
-        fn_8013C2B4(camera,0,0,0);
-        fn_8013C6F0(camera);
+        CamMainProcess(camera,0,0,0);
+        CamMainWarpToDest(camera);
     }
 }
 unsigned char fn_80140504(GameCamera_t *camera)
@@ -193,7 +193,7 @@ unsigned char fn_80140504(GameCamera_t *camera)
         Angles_8013FF84 angles;
         Orient3Lerp(&angles,&lbl_803ECA04[1].mUnknownC,&state->mUnknown2C,blend);
         angles.mZ = (int)(camera->mUnknownE0*46603.37890625f);
-        fn_8013C4BC(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetAngle(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         Vector_8013FF84 point;
         fn_80227930(&point,&lbl_803ECA04[1],&state->mUnknown20,blend);
         float z = point.mZ;
@@ -206,7 +206,7 @@ unsigned char fn_80140504(GameCamera_t *camera)
         camera->mUnknownCC = z;
         camera->mUnknownC4 = point.mX;
         camera->mUnknownC8 = point.mY;
-        fn_8013C6F0(camera);
+        CamMainWarpToDest(camera);
     } else {
         camera->mUnknownE4 = 0;
         CamFreeClearVelocity(camera);
@@ -236,8 +236,8 @@ void fn_80140708(GameCamera_t *camera)
             angles.mX = (int)(mode->mUnknown48.mX * 46603.37890625f);
             angles.mY = (int)(mode->mUnknown48.mY * 46603.37890625f);
             angles.mZ = (int)(mode->mUnknown48.mZ * 46603.37890625f);
-            fn_8013C478(camera,&mode->mUnknown3C);
-            fn_8013C4BC(camera,&angles,5);
+            CamMainSetOffset(camera,&mode->mUnknown3C);
+            CamMainSetAngle(camera,&angles,5);
         }
         break;
     case 3: CamPresetSetEaseRates(camera,1);
@@ -303,8 +303,8 @@ void fn_80140708(GameCamera_t *camera)
         }
         fn_8013FF84(camera,&point);
         point.mY -= lbl_803ECA08;
-        fn_8013C478(camera,&point);
-        fn_8013C4BC(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetOffset(camera,&point);
+        CamMainSetAngle(camera,&angles,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         break;
     }
     case 5: state->mUnknownC = 0; break;
@@ -340,20 +340,20 @@ void fn_80140EA0(GameCamera_t *camera)
     lbl_802DBEBC.mUnknown0 = 0;
     switch (camera->mUnknownA0) {
     case 1:
-        if (BallsExist()) fn_8013C438(camera);
+        if (BallsExist()) CamMainFollowBall(camera);
         if (camera->mUnknownA4 == 0 || camera->mUnknownA4 == 5) break;
-        fn_8013C478(camera,&lbl_803ECA04[camera->mUnknownA0]);
-        fn_8013C4BC(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        CamMainSetOffset(camera,&lbl_803ECA04[camera->mUnknownA0]);
+        CamMainSetAngle(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         break;
     case 4:
-        fn_8013C384(camera,6,0,0);
+        CamMainFollow(camera,6,0,0);
         state->mUnknown38 = 1.0f;
         break;
     case 5: state->mUnknownC = 0;
     default:
-        if (BallsExist()) fn_8013C438(camera);
-        fn_8013C478(camera,&lbl_803ECA04[camera->mUnknownA0]);
-        fn_8013C4BC(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
+        if (BallsExist()) CamMainFollowBall(camera);
+        CamMainSetOffset(camera,&lbl_803ECA04[camera->mUnknownA0]);
+        CamMainSetAngle(camera,&lbl_803ECA04[camera->mUnknownA0].mUnknownC,lbl_803ECA04[camera->mUnknownA0].mUnknown18);
         break;
     case 10: case 11: case 12: break;
     }

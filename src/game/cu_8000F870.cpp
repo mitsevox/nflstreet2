@@ -93,8 +93,8 @@ struct DepthChartText_t;
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-void fn_80004440(int *pId);
-int fn_8000485C(void);
+void ChalGameGenerateTeam(int *pId);
+int ChalGameHasGeneratedOpponent(void);
 int MsgTeamPickHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 void MsgTeamPickFreePool(void);
 void MsgTeamPickSetMode(int a, int b);
@@ -2647,7 +2647,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 
     if (MsgGameGetSetupState() == 1) {
         if (GameModeTypeGet() == 6) {
-            if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
+            if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
                 fn_8018D7E0();
             }
         } else {
@@ -2663,7 +2663,7 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         if (lbl_803EB9A8 == 0x6B) {
             if (lbl_803EB97C[0] == 63) {
                 int id;
-                fn_80004440(&id);
+                ChalGameGenerateTeam(&id);
                 lbl_803EB97C[0] = id;
             }
             query.mUnknown4 = 0;
@@ -2906,7 +2906,7 @@ void fn_80014B98(void)
     if (MsgGameGetSetupState() == 0) {
         fn_8018807C(0);
         if (GameModeTypeGet() == 6) {
-            if (!fn_8000485C() || lbl_803EB9A8 != 0x6B) {
+            if (!ChalGameHasGeneratedOpponent() || lbl_803EB9A8 != 0x6B) {
                 fn_8018C48C(0x454D4147);
                 fn_8018C48C(0x54415453);
             }
@@ -2919,7 +2919,7 @@ void fn_80014B98(void)
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
     if (GameModeTypeGet() == 6) {
-        if (fn_8000485C() && MsgGameGetSetupState() == 1 && lbl_803EB9A8 != 0x6B) {
+        if (ChalGameHasGeneratedOpponent() && MsgGameGetSetupState() == 1 && lbl_803EB9A8 != 0x6B) {
             lbl_803EB98C[0] = lbl_803EB97C[0];
         }
         lbl_803EB97C[0] = lbl_803EB984[0];

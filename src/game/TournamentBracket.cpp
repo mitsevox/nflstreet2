@@ -38,7 +38,7 @@ int MsgGameGetSetupState();
 int MsgGameGetSetupArg();
 void ChalCloseCursors();
 void fn_8000FCD4(int a);
-void fn_8000473C(int, int);
+void ChalGameStartTournament(int, int);
 int ChalGetTournamentWon();
 int fn_801787DC(int a);
 }
@@ -280,7 +280,7 @@ extern "C" void TournBracketPlayNext(int value)
     fn_801834DC();
     if (active) {
         fn_8000FCD4(value);
-        fn_8000473C(team, 11);
+        ChalGameStartTournament(team, 11);
     }
 }
 

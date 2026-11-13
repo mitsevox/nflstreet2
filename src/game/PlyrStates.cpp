@@ -20,7 +20,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Ball.h"
 
 #include "game/PlyrModeState.h"
@@ -156,7 +156,7 @@ int PlyrEngageEnter(Object_80039F5C *p)
     m = p->mpState;
     Object_80039F5C *other = PlyrGet(p->mIdBytes[2] ^ 1, m->mUnknown3[0]);
     fn_8009BD2C(other, &s->mUnknown0Word);
-    fn_80143E14(p, other);
+    PlyrCollideAddExempt(p, other);
     unsigned short n = 0;
     unsigned short index;
     do {
@@ -209,13 +209,13 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             s->mUnknown8Bytes[2] = 1;
     }
     if (other && other->mpState->mId == 32 && fn_8009BCE8(&other->mUnknown336) == p) {
-        fn_80143E14(p, other);
-        fn_80143E14(other, p);
+        PlyrCollideAddExempt(p, other);
+        PlyrCollideAddExempt(other, p);
     }
     if (p->mUnknown9[0] != 1) {
         p->mUnknown772 = 1.0f;
         PlyrEngageReleaseControl(p);
-        fn_80143EBC(p, other);
+        PlyrCollideRemoveExempt(p, other);
         s->mUnknown8Bytes[0] = 1;
         Message_800F01CC m;
         fn_801C1F94(&m, 0, 4);
@@ -264,7 +264,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         if (fn_801BE648(p->mpUnknown792) == 242 && p->mIdBytes[2] == fn_80178320()) {
             p->mUnknown772 = 1.0f;
             PlyrEngageReleaseControl(p);
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
             s->mUnknown8Bytes[0] = 1;
             if (fn_800E815C(p, 2, 0))
                 fn_800F0490(0, p->mpState, 32);
@@ -275,7 +275,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             p->mUnknown772 = 1.0f;
             PlyrEngageShortenMessages(p, (unsigned short)s->mUnknown4);
             p->mFlags &= ~0x800;
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
             if (p->mUnknown1032 == 5) {
                 p->mUnknown1032 = 6;
                 s->mUnknown8Bytes[0] = 1;
@@ -303,7 +303,7 @@ int PlyrEngageExit(Object_80039F5C *p)
         PlyrEngageReleaseControl(p);
         Object_80039F5C *other = fn_8009BCE8(&s->mUnknown0Word);
         if (other)
-            fn_80143EBC(p, other);
+            PlyrCollideRemoveExempt(p, other);
         result = 1;
     }
     return result;
@@ -436,10 +436,10 @@ void fn_800E9FC0(void);
 void fn_800E9FD8(void);
 void fn_800EA1D0(void);
 void fn_800EA1D8(void);
-void fn_800EBCE0(void);
-void fn_800EBD8C(void);
-void fn_800EBDCC(void);
-void fn_800EC6DC(void);
+void LooseBallEnter(void);
+void LooseBallExit(void);
+void LooseBallUpdate(void);
+void LooseBallInput(void);
 void fn_800F08F8(void);
 void fn_800F0900(void);
 void fn_800F0908(void);
@@ -566,17 +566,17 @@ void fn_801254C8(void);
 void fn_80125508(void);
 void fn_80125DF0(void);
 void fn_80125E20(void);
-void fn_8012B3EC(void);
-void fn_8012B654(void);
-void fn_8012C7E0(void);
-void fn_8012C874(void);
-void fn_8012CA78(void);
-void fn_8012CA80(void);
-void fn_8012FEAC(void);
-void fn_8012FF30(void);
-void fn_8012FF5C(void);
-void fn_8013028C(void);
-void fn_80130318(void);
+void GetOpenEnter(void);
+void GetOpenUpdate(void);
+void PlayerCutEnter(void);
+void PlayerCutUpdate(void);
+void PlayerCutExit(void);
+void PlayerCutMirrorMessage(void);
+void CarrierRunEnter(void);
+void CarrierRunExit(void);
+void CarrierRunUpdate(void);
+void CarrierRunNotify(void);
+void CarrierRunInput(void);
 void fn_80133C50(void);
 void fn_80133EE8(void);
 void fn_80134370(void);
@@ -584,7 +584,7 @@ void fn_801343AC(void);
 
 PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8012FEAC, (void *)fn_8012FF30, (void *)fn_8012FF5C, (void *)fn_80130318, (void *)fn_8013028C, 0}},
+    {{(void *)CarrierRunEnter, (void *)CarrierRunExit, (void *)CarrierRunUpdate, (void *)CarrierRunInput, (void *)CarrierRunNotify, 0}},
     {{(void *)PursueEnter, (void *)PursueExit, (void *)PursueUpdate, (void *)fn_800A5E20, (void *)PursueNotify, 0}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD580, (void *)fn_800B76E8, (void *)fn_800FD650, (void *)fn_800FD708}},
@@ -603,8 +603,8 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_80113680, (void *)fn_80113AAC, (void *)fn_8011380C, (void *)fn_80113B28, (void *)fn_800F0908, 0}},
     {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)fn_8012C7E0, (void *)fn_8012CA78, (void *)fn_8012C874, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_8012CA80}},
-    {{(void *)fn_8012B3EC, (void *)fn_800F0900, (void *)fn_8012B654, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)PlayerCutMirrorMessage}},
+    {{(void *)GetOpenEnter, (void *)fn_800F0900, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FAD10}},
     {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
@@ -640,7 +640,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010D6D4, (void *)fn_800F0900, (void *)fn_8010D734, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800EBCE0, (void *)fn_800EBD8C, (void *)fn_800EBDCC, (void *)fn_800EC6DC, (void *)fn_800F0908, 0}},
+    {{(void *)LooseBallEnter, (void *)LooseBallExit, (void *)LooseBallUpdate, (void *)LooseBallInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_801113DC, (void *)fn_80111580, (void *)fn_800E9FD8, (void *)fn_80111528, (void *)fn_800EA1D0, 0}},
     {{(void *)fn_80111794, (void *)fn_80111964, (void *)fn_801117F8, (void *)fn_80111974, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},

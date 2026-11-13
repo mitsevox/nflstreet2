@@ -2,7 +2,7 @@
 #include "game/GameCamera.h"
 #include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "game/LevelData.h"
 
 extern "C" {
@@ -314,7 +314,7 @@ extern "C" void fn_800A2F48(void)
 extern "C" void fn_800A3170(void)
 {
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
     unsigned char i;
 
     for (i = 0; i < gLevelData->mUnknown96; i++) {
@@ -335,8 +335,8 @@ extern "C" void fn_800A3170(void)
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
         args.mUnknown00 = pEntry->mUnknown24 + 8;
-        Source_80144CE0 *pSource = (Source_80144CE0 *)LevelFindArea(pEntry->mUnknown0);
-        lbl_8030E6E8.mpUnknownBC[i] = fn_80144CE0(&args, 0, pSource);
+        ParticleSource_t *pSource = (ParticleSource_t *)LevelFindArea(pEntry->mUnknown0);
+        lbl_8030E6E8.mpUnknownBC[i] = ParticleSysSpawnEmitter(&args, 0, pSource);
     }
 }
 

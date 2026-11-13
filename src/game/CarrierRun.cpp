@@ -51,16 +51,16 @@ void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
 void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
-void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
-void fn_8012C3A4(Object_80039F5C *p);
-void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
-void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
-void fn_8012CFA0(Object_80039F5C *p);
-void fn_8012D258(Object_80039F5C *p);
-void fn_8012D4FC(Object_80039F5C *p, int mode);
-void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *pControl, int *pMode, Entry_801230B8 *pEntry);
-int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *pControl);
-int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl);
+void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut);
+void PlayerCutStartAnim(Object_80039F5C *p);
+void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
+void CarrierRunCountRetreat(Object_80039F5C *p, OptionRunControl_t *pControl);
+void CarrierRunAddSideCosts(Object_80039F5C *p);
+void CarrierRunSteerToSideline(Object_80039F5C *p);
+void CarrierRunPickHeading(Object_80039F5C *p, int mode);
+void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *pControl, int *pMode, Entry_801230B8 *pEntry);
+int CarrierRunCheckRunOut(Object_80039F5C *p, OptionRunControl_t *pControl);
+int CarrierRunCheckBlocked(Object_80039F5C *p, OptionRunControl_t *pControl);
 void CamGameSetModeAll(int a);
 void PassIconsHide(void);
 int PassIconsAreShown(void);
@@ -75,12 +75,10 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80227890(void *pA, void *pB);
 float fn_8022710C(void *pV);
 
-extern Table_80089904 lbl_8031AABC;
 }
 
-extern "C" int fn_8012CCA0(Object_80039F5C *p);
+extern "C" int PlayerCutGetAnimTime(Object_80039F5C *p);
 
-#ifdef DECOMP_COMPARE
 extern "C" {
 int fn_80177F70(void);
 float fn_80178298(void);
@@ -89,7 +87,7 @@ float fn_80178A2C(void);
 float fn_80178A44(void);
 float fn_80178A68(void *p);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void fn_8012BB6C(float *pA, float *pB);
+void GetOpenGetDepthRange(float *pA, float *pB);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_8009BD60(Object_80039F5C *p);
@@ -117,8 +115,8 @@ int fn_80178308(void);
 int fn_80178BA4(int team);
 int PlayerMoveGetKind(Object_80039F5C *p);
 float fn_801CFB94(int angle);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, Vector_80039F5C *pOut);
-int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pOut, Object_80039F5C *pOther);
+Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, Point_8017886C *pOut);
+int OptionRunCanPitchTo(Object_80039F5C *p, Point_8017886C *pOut, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8011F59C(int a);
@@ -134,11 +132,15 @@ float fn_80237260(int a);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 float fn_8011F4D4(void);
 int fn_801783AC(int a);
-int fn_8012E670(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
-int fn_8012EAF8(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
-extern int lbl_803EB118;
-extern float lbl_803EB11C, lbl_803EB120, lbl_803EB124;
-extern unsigned char lbl_802DB05C[21];
+int CarrierRunTryJuke(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
+int CarrierRunTrySpin(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
+static int _CarrierRun_iMoveSearchAngle = 0x38E38E;
+static float _CarrierRun_fPitchRatingScale = 1.2f;
+static float _CarrierRun_fPitchNearRange = 3.0f;
+static float _CarrierRun_fPitchFarRange = 7.0f;
+static unsigned char _CarrierRun_aucMoveOrder[3][7] = {
+    {3, 4, 2, 0, 1, 6, 5}, {0, 1, 3, 4, 2, 6, 5}, {0, 1, 2, 3, 4, 6, 5}
+};
 Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
 extern float gPlyrMoveFwdSpeed;
 }
@@ -164,75 +166,85 @@ extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int ang
 
 extern "C" int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 
-#endif
 
 extern "C" {
-int fn_8012A6B0(Object_80039F5C *p);
-int fn_8012A824(Object_80039F5C *p, float a, float b);
-int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower, float upper);
-void fn_8012B268(Object_80039F5C *p);
-void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
-int fn_8012B3EC(Object_80039F5C *p);
-int fn_8012B654(Object_80039F5C *p);
-void fn_8012BB6C(float *pA, float *pB);
+int GetOpenShouldRunOn(Object_80039F5C *p);
+int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b);
+int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, float lower, float upper);
+void GetOpenRunOn(Object_80039F5C *p);
+void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut);
+int GetOpenEnter(Object_80039F5C *p);
+int GetOpenUpdate(Object_80039F5C *p);
+void GetOpenGetDepthRange(float *pA, float *pB);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
-void fn_8012C3A4(Object_80039F5C *p);
-Info_80089904 *fn_8012C4B4(int a, int b);
-void fn_8012C548(Object_80039F5C *p);
-void fn_8012C5A8(Object_80039F5C *p, int value);
-void fn_8012C648(Object_80039F5C *p, int angle);
-int fn_8012C7E0(Object_80039F5C *p);
-int fn_8012C874(Object_80039F5C *p);
-int fn_8012CA78();
-void fn_8012CA80(unsigned char *p);
-int fn_8012CAA4(Object_80039F5C *p);
-int fn_8012CAAC(Object_80039F5C *p);
-int fn_8012CAB4(Object_80039F5C *p);
-int fn_8012CB50(Message_800F01CC *pMessage);
-void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
-int fn_8012CC04(unsigned char a);
-int fn_8012CC50(Object_80039F5C *p);
-int fn_8012CCA0(Object_80039F5C *p);
-void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
-float fn_8012CD60(Object_80039F5C *p, float value);
-int fn_8012CE60(Object_80039F5C *p);
-void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl);
-void fn_8012CFA0(Object_80039F5C *p);
-int fn_8012D1E4(Object_80039F5C *p);
-void fn_8012D258(Object_80039F5C *p);
-void fn_8012D4FC(Object_80039F5C *p, int mode);
-void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry);
-void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *control, int);
-int fn_8012E590(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn, int, float distance);
-int fn_8012EA14(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8012EAF8(Object_80039F5C *p, Object_80039F5C *pOther, int angle, int turn, int, float distance);
-int fn_8012EE90(Object_80039F5C *p, Object_80039F5C *pOther, int a, int angle, int b, float distance);
-int fn_8012EF94(Object_80039F5C *p, Object_80039F5C *pOther, int a, int angle, int b, float distance);
-int fn_8012F11C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, int a, int b, float distance);
-int fn_8012F2E0(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b, int c, float d);
-int fn_8012F2E8(Object_80039F5C *p, Object_80039F5C *pUnused, int a, int b, int c, float d);
-int fn_8012F524(Object_80039F5C *p);
-void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block);
-void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int mode);
-int fn_8012FA64(Object_80039F5C *p);
-int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *control);
-int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl);
-int fn_8012FEAC(Object_80039F5C *p);
-int fn_8012FF30(Object_80039F5C *p);
-int fn_8012FF5C(Object_80039F5C *p);
-int fn_8013028C(Object_80039F5C *p);
-int fn_80130318(Object_80039F5C *p);
-void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl);
+void PlayerCutStartAnim(Object_80039F5C *p);
+Info_80089904 *PlayerCutFindAnimInfo(int a, int b);
+void PlayerCutInitHeadings(Object_80039F5C *p);
+void PlayerCutPostChainedCut(Object_80039F5C *p, int value);
+void PlayerCutPostTurn(Object_80039F5C *p, int angle);
+int PlayerCutEnter(Object_80039F5C *p);
+int PlayerCutUpdate(Object_80039F5C *p);
+int PlayerCutExit();
+void PlayerCutMirrorMessage(unsigned char *p);
+int PlayerCutGetTargetHeading(Object_80039F5C *p);
+int PlayerCutGetStartHeading(Object_80039F5C *p);
+int PlayerCutGetRunHeading(Object_80039F5C *p);
+int PlayerCutGetMessageTurn(Message_800F01CC *pMessage);
+void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
+int PlayerCutGetAnimLength(unsigned char a);
+int PlayerCutGetTimeLeft(Object_80039F5C *p);
+int PlayerCutGetAnimTime(Object_80039F5C *p);
+void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
+float PlayerCutGetRunSpeed(Object_80039F5C *p, float value);
+int CarrierRunHasDefenderAhead(Object_80039F5C *p);
+void CarrierRunCountRetreat(Object_80039F5C *p, OptionRunControl_t *pControl);
+void CarrierRunAddSideCosts(Object_80039F5C *p);
+int CarrierRunCanUseSideline(Object_80039F5C *p);
+void CarrierRunSteerToSideline(Object_80039F5C *p);
+void CarrierRunPickHeading(Object_80039F5C *p, int mode);
+void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry);
+void CarrierRunKeepInBounds(Object_80039F5C *p, OptionRunControl_t *control, int);
+int CarrierRunIsShielded(Object_80039F5C *p, Object_80039F5C *pOther);
+int CarrierRunTryJuke(Object_80039F5C *p, Object_80039F5C *, float distance, int, int turn, int);
+int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pOther);
+int CarrierRunTrySpin(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int);
+int CarrierRunTryHurdle(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int opposed);
+int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int opposed);
+int CarrierRunTryStiffArm(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int opposed);
+int CarrierRunTryNoMove(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int opposed);
+int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int opposed);
+int CarrierRunGetMoveRow(Object_80039F5C *p);
+void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block);
+void CarrierRunSetSpeed(Object_80039F5C *p, OptionRunControl_t *control, int mode);
+int CarrierRunFindLeadBlocker(Object_80039F5C *p);
+int CarrierRunCheckRunOut(Object_80039F5C *p, OptionRunControl_t *control);
+int CarrierRunCheckBlocked(Object_80039F5C *p, OptionRunControl_t *pControl);
+int CarrierRunEnter(Object_80039F5C *p);
+int CarrierRunExit(Object_80039F5C *p);
+int CarrierRunUpdate(Object_80039F5C *p);
+int CarrierRunNotify(Object_80039F5C *p);
+int CarrierRunInput(Object_80039F5C *p);
+void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *pControl);
 }
 
-#ifdef DECOMP_COMPARE
-typedef int (*Action_8012F5A0)(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
-extern const Action_8012F5A0 actions_8012F5A0[7];
-#endif
+template <class T>
+static inline T _CarrierRunMap(T value, T inLow, T inHigh, T outLow, T outHigh)
+{
+    return (value - inLow) * (outHigh - outLow) / (inHigh - inLow) + outLow;
+}
 
-extern "C" int fn_8012CE60(Object_80039F5C *p)
+template <class T>
+static inline T _CarrierRunClamp(T value, T low, T high)
+{
+    return !(value < low) ? (value <= high ? value : high) : low;
+}
+
+typedef int (*CarrierRunMoveTest_t)(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
+extern const CarrierRunMoveTest_t _CarrierRun_apMoveTests[7];
+
+#if defined(DECOMP_COMPARE)
+extern "C" int CarrierRunHasDefenderAhead(Object_80039F5C *p)
 {
     int result = fn_800ABDA4(p->mIdBytes[2]) == 0;
     unsigned char i;
@@ -251,8 +263,7 @@ extern "C" int fn_8012CE60(Object_80039F5C *p)
     return result;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl)
+extern "C" void CarrierRunCountRetreat(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     Vector_80039F5C position = p->mMotion.mPos;
     Vector_80039F5C previous = p->mMotion.mUnknown12;
@@ -260,17 +271,18 @@ extern "C" void fn_8012CEF4(Object_80039F5C *p, OptionRunControl_t *pControl)
     fn_80178A2C();
     fn_80178A2C();
     fn_80177FE0();
-    if (!(previous.mY <= position.mY) && pControl->mUnknown50 <= 120) {
+    float y = position.mY;
+
+    if (!(previous.mY <= y) && pControl->mUnknown50 <= 120) {
         pControl->mUnknown50++;
     } else {
         pControl->mUnknown50 = 0;
     }
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012CFA0(Object_80039F5C *p)
+extern "C" void CarrierRunAddSideCosts(Object_80039F5C *p)
 {
+    Object_800B26B0 *motion = &p->mMotion;
     float *values = ((OptionRunControl_t *)&p->mUnknown336)->mValues.mCost;
 
     if (fn_80177F70() == 0) {
@@ -290,14 +302,14 @@ extern "C" void fn_8012CFA0(Object_80039F5C *p)
                     }
                 }
                 if (remaining < 0) {
-                    if (!(p->mMotion.mPos.mX <= 12.0f - fn_80178A08())) {
+                    if (!(motion->mPos.mX <= 12.0f - fn_80178A08())) {
                         values[2] += 3.0f;
                         values[1] += 2.0f;
                     }
-                } else if (!(p->mMotion.mPos.mX >= -4.0f)) {
+                } else if (!(motion->mPos.mX >= -4.0f)) {
                     values[2] += 3.0f;
                     values[3] += 2.0f;
-                } else if (!(p->mMotion.mPos.mX <= 4.0f)) {
+                } else if (!(motion->mPos.mX <= 4.0f)) {
                     values[2] += 3.0f;
                     values[1] += 2.0f;
                 }
@@ -313,9 +325,8 @@ extern "C" void fn_8012CFA0(Object_80039F5C *p)
         }
     }
 }
-#endif
 
-extern "C" int fn_8012D1E4(Object_80039F5C *p)
+extern "C" int CarrierRunCanUseSideline(Object_80039F5C *p)
 {
     int result = 1;
 
@@ -332,13 +343,12 @@ extern "C" int fn_8012D1E4(Object_80039F5C *p)
     return result;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012D258(Object_80039F5C *p)
+extern "C" void CarrierRunSteerToSideline(Object_80039F5C *p)
 {
     OptionRunControl_t *control = (OptionRunControl_t *)&p->mUnknown336;
     float distance = 0.0f;
 
-    if (fn_8012D1E4(p) && (!fn_80178BA4(p->mIdBytes[2]) || GameOptionsGet(14) == 1)
+    if (CarrierRunCanUseSideline(p) && (!fn_80178BA4(p->mIdBytes[2]) || GameOptionsGet(14) == 1)
         && PlayerMoveGetKind(p)) {
         Point_8017886C delta;
         int team = fn_80178320();
@@ -349,7 +359,11 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
 
         if (!(p->mMotion.mPos.mY <= fn_80178A2C() - 10.0f)) {
             if (!control->mUnknown56.mUnknown4) {
-                control->mUnknown56.mUnknown5 = !side;
+                if (side) {
+                    control->mUnknown56.mUnknown5 = 0;
+                } else {
+                    control->mUnknown56.mUnknown5 = 1;
+                }
                 control->mUnknown56.mUnknown4 = 1;
             }
             if (!(p->mMotion.mPos.mX >= 4.0f - fn_80178A08())) {
@@ -363,7 +377,7 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
             }
             float near, far;
 
-            if (fn_8012CE60(p)) {
+            if (CarrierRunHasDefenderAhead(p)) {
                 near = 6.0f;
                 far = 10.0f;
             } else {
@@ -371,48 +385,48 @@ extern "C" void fn_8012D258(Object_80039F5C *p)
                 far = 8.0f;
             }
             int angle = control->mUnknown56.mUnknown5 ? 0 : 0x800000;
-            int limit = (int)((unsigned int)((int)(fn_80178A2C() - p->mMotion.mPos.mY) - 4) << 22) / 6;
+            int limit = _CarrierRunClamp(
+                _CarrierRunMap((int)(fn_80178A2C() - p->mMotion.mPos.mY), 4, 10, 0, 0x400000), 0, 0x400000);
+            int extra = (int)_CarrierRunMap(distance, near, far, 4194304.0f, 0.0f);
 
-            if (limit < 0) limit = 0;
-            else if (limit > 0x400000) limit = 0x400000;
-            int extra = (int)((distance - near) * (0.0f - 4194304.0f) / (far - near) + 4194304.0f);
+            extra = !(extra < 0) ? (extra <= 0x400000 - limit ? extra : 0x400000 - limit) : 0;
 
-            if (extra < 0) extra = 0;
-            else if (extra > 0x400000 - limit) extra = 0x400000 - limit;
             control->mUnknown44 = angle <= 0x400000 ? angle + limit + extra : angle - limit - extra;
         }
     }
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
+extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
 {
     OptionRunControl_t *control = (OptionRunControl_t *)&p->mUnknown336;
     Object_80039F5C *other = (Object_80039F5C *)mode;
     unsigned char index = control->mUnknown48;
+    Object_800B26B0 *motion = &p->mMotion;
     int angle = control->mUnknown44;
-    Point_8017886C ball = fn_80177FE0();
+    Directions_8012430C *values = &control->mValues;
+    Point_8017886C ball;
     Point_8017886C point;
-    point.mX = fn_8011F4D4();
-    float offset = fabsf(p->mMotion.mPos.mX - point.mX);
     int change = 0;
 
+    ball = fn_80177FE0();
+    point.mX = fn_8011F4D4();
+    float offset = fabsf(motion->mPos.mX - point.mX);
+
     if (fn_8011F1A4() && fn_8011F1A4() && (unsigned int)fn_8011F4C8() > 3
-        && !(p->mMotion.mPos.mY >= ball.mY - 1.0f)
-        && !(fabsf(point.mX) <= fabsf(p->mMotion.mPos.mX)) && !(offset <= 3.0f)) {
-        float distance = ball.mY - p->mMotion.mPos.mY;
+        && !(motion->mPos.mY >= ball.mY - 1.0f)
+        && !(fabsf(point.mX) <= fabsf(motion->mPos.mX)) && !(offset <= 3.0f)) {
+        float distance = ball.mY - motion->mPos.mY;
         float projected = distance * (offset / fabsf(ball.mX - point.mX));
 
         point.mY = ball.mY - (projected <= distance ? projected : distance);
-        fn_80227690(&point, &point, &p->mMotion.mPos);
+        fn_80227690(&point, &point, motion);
         angle = fn_801CFE40(point.mY, point.mX);
     } else {
         float threshold = fn_801783AC(0) ? -8.0f : 0.0f;
 
-        if (!(control->mValues.mCost[index] < threshold)) {
-            float right = control->mValues.mCost[(index + 1) & 7];
-            float left = control->mValues.mCost[(index - 1) & 7];
+        if (!(values->mCost[index] < threshold)) {
+            float right = values->mCost[(index + 1) & 7];
+            float left = values->mCost[(index - 1) & 7];
 
             if (right == left) {
                 float distance;
@@ -421,25 +435,34 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
                                                      0x600000, &distance, 1);
 
                 if (nearest && !(distance >= 4.0f)) {
-                    fn_80227690(&point, &nearest->mMotion.mPos, &p->mMotion.mPos);
-                    if (((fn_801CFE40(point.mY, point.mX) - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+                    fn_80227690(&point, &nearest->mMotion.mPos, motion);
+                    if (((fn_801CFE40(point.mY, point.mX) - motion->mFacing) & 0xFFFFFF) > 0x800000) {
                         right -= 1.0f;
                     } else {
                         left -= 1.0f;
                     }
                 }
             }
+            float sine;
+
             if (!(right >= left)) {
-                float degrees = (right - control->mValues.mCost[index]) * 5.0f;
+                float degrees = right - values->mCost[index];
+
+                degrees *= 5.0f;
 
                 if (!(degrees >= 90.0f)) {
-                    change = (int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
+                    sine = fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f;
+                    change = (int)(sine * 2097152.0f);
                 }
             } else if (!(left >= right)) {
-                float degrees = (left - control->mValues.mCost[index]) * 5.0f;
+                float degrees = left - values->mCost[index];
+
+                degrees *= 5.0f;
 
                 if (!(degrees >= 90.0f)) {
-                    change = -(int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
+                    sine = fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f;
+                    change = (int)(sine * 2097152.0f);
+                    change = -change;
                 }
             }
         }
@@ -451,7 +474,7 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
             int toward = fn_801CFE40(point.mY, point.mX);
             int candidate = MathAngleDiff(toward, angle);
 
-            if (candidate <= MathAngleDiff(toward, control->mUnknown44)) {
+            if (candidate > MathAngleDiff(toward, control->mUnknown44)) {
                 control->mUnknown44 = angle;
             }
         } else {
@@ -460,12 +483,12 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
         control->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
     }
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry)
+extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *control, int *pMode, Entry_801230B8 *entry)
 {
-    int firstAngle = 0, secondAngle = 0;
+    Object_800B26B0 *motion = &p->mMotion;
+    int secondAngle = 0;
+    int firstAngle = 0;
     float limit;
     if (entry) {
         float value = entry->mUnknown20;
@@ -488,41 +511,41 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int
     }
     int blocked = 0;
     int linked = fn_8011E9B4(other);
-    Vector_80039F5C point, delta;
+    Vector_80039F5C point;
+    Point_8017886C delta;
     int direction;
     if (linked) {
         Object_80039F5C *partner = fn_8009BCE8(&other->mUnknown1036);
         point.mX = (other->mMotion.mPos.mX + partner->mMotion.mPos.mX) * 0.5f;
         point.mY = (other->mMotion.mPos.mY + partner->mMotion.mPos.mY) * 0.5f;
-        fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
+        fn_80227690(&delta, &other->mMotion.mPos, motion);
         firstAngle = fn_801CFE40(delta.mY, delta.mX);
-        fn_80227690(&delta, &partner->mMotion.mPos, &p->mMotion.mPos);
+        fn_80227690(&delta, &partner->mMotion.mPos, motion);
         secondAngle = fn_801CFE40(delta.mY, delta.mX);
         int sector = (firstAngle - secondAngle) & 0xFFFFFF;
-        int heading = (control->mUnknown44 - secondAngle) & 0xFFFFFF;
-        if ((sector <= 0x7FFFFF && heading <= 0x7FFFFF)
-            || (sector > 0x800000 && heading > 0x800000)) {
+        if ((sector <= 0x7FFFFF && ((control->mUnknown44 - secondAngle) & 0xFFFFFF) <= 0x7FFFFF)
+            || (sector > 0x800000 && ((control->mUnknown44 - secondAngle) & 0xFFFFFF) > 0x800000)) {
             if (MathAngleDiff(firstAngle - secondAngle, 0)
                 > MathAngleDiff(control->mUnknown44 - secondAngle, 0)) {
                 blocked = 1;
             }
         }
-        fn_80227690(&delta, &point, &p->mMotion.mPos);
+        fn_80227690(&delta, &point, motion);
         direction = fn_801CFE40(delta.mY, delta.mX);
         distance = fn_802270A4(&delta);
-        if (!(fn_8022781C(&other->mMotion.mPos, &p->mMotion.mPos) >= distance)) {
-            distance = fn_8022781C(&other->mMotion.mPos, &p->mMotion.mPos);
+        if (!(fn_8022781C(&other->mMotion.mPos, motion) >= distance)) {
+            distance = fn_8022781C(&other->mMotion.mPos, motion);
             direction = firstAngle;
         }
-        if (!(fn_8022781C(&partner->mMotion.mPos, &p->mMotion.mPos) >= distance)) {
-            distance = fn_8022781C(&partner->mMotion.mPos, &p->mMotion.mPos);
+        if (!(fn_8022781C(&partner->mMotion.mPos, motion) >= distance)) {
+            distance = fn_8022781C(&partner->mMotion.mPos, motion);
             direction = secondAngle;
         }
     } else {
         point = other->mMotion.mPos;
         point.mX += other->mMotion.mUnknown40 * 10.0f;
         point.mY += other->mMotion.mUnknown44 * 10.0f;
-        fn_80227690(&delta, &point, &p->mMotion.mPos);
+        fn_80227690(&delta, &point, motion);
         direction = fn_801CFE40(delta.mY, delta.mX);
         distance = fn_802270A4(&delta);
     }
@@ -533,156 +556,170 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, OptionRunControl_t *control, int
     if (!(fraction <= 1.0f)) {
         fraction = 1.0f;
     }
-    int change;
+    int angle;
     if (((direction - control->mUnknown44) & 0xFFFFFF) > 0x800000) {
-        change = (int)((1.0f - fraction) * 3495253.0f);
+        angle = (int)((1.0f - fraction) * 3495253.0f);
         if (linked && blocked) {
-            int boundary = ((firstAngle - direction) & 0xFFFFFF) <= 0x7FFFFF ? firstAngle : secondAngle;
-            change += MathAngleDiff(boundary, control->mUnknown44);
+            if (((firstAngle - direction) & 0xFFFFFF) <= 0x7FFFFF) {
+                angle += MathAngleDiff(firstAngle, control->mUnknown44);
+            } else {
+                angle += MathAngleDiff(secondAngle, control->mUnknown44);
+            }
         }
     } else {
-        change = (int)(-((1.0f - fraction) * 3495253.0f));
+        angle = (int)(-((1.0f - fraction) * 3495253.0f));
         if (linked && blocked) {
-            int boundary = ((firstAngle - direction) & 0xFFFFFF) > 0x800000 ? firstAngle : secondAngle;
-            change -= MathAngleDiff(boundary, control->mUnknown44);
+            if (((firstAngle - direction) & 0xFFFFFF) > 0x800000) {
+                angle -= MathAngleDiff(firstAngle, control->mUnknown44);
+            } else {
+                angle -= MathAngleDiff(secondAngle, control->mUnknown44);
+            }
         }
     }
-    int candidate = (control->mUnknown44 + change) & 0xFFFFFF;
-    int threshold = other->mIdBytes[2] == p->mIdBytes[2] ? 0x18E38E : 0x3C71C7;
-    if (MathAngleDiff(candidate, 0xC00000) < threshold) {
+    angle = (control->mUnknown44 + angle) & 0xFFFFFF;
+    int threshold = 0x3C71C7;
+    if (((other->mId >> 8) & 0xFF) == p->mIdBytes[2]) {
+        threshold = 0x18E38E;
+    }
+    if (MathAngleDiff(angle, 0xC00000) < threshold) {
         int difference = MathAngleDiff(direction, control->mUnknown44);
         if (difference <= 0x2E38E2) {
-            change = (int)((1.0f - fraction) * 3495253.0f);
-            if (difference > change) {
-                change = 0;
+            angle = (int)((1.0f - fraction) * 3495253.0f);
+            if (difference > angle) {
+                angle = 0;
             } else {
-                change = MathAngleDiff(change, difference);
+                angle = MathAngleDiff(angle, difference);
             }
             if (((direction - control->mUnknown44) & 0xFFFFFF) <= 0x7FFFFF) {
-                change = -change;
+                angle = -angle;
             }
-            candidate = (control->mUnknown44 + change) & 0xFFFFFF;
+            angle = (control->mUnknown44 + angle) & 0xFFFFFF;
         }
     }
-    control->mUnknown44 = candidate;
-    int turn = MathAngleDiff(p->mMotion.mUnknown32, direction);
-    if (turn > 0x400000) {
-        turn = 0x400000;
+    control->mUnknown44 = angle;
+    angle = MathAngleDiff(motion->mUnknown32, direction);
+    if (angle > 0x400000) {
+        angle = 0x400000;
     }
-    fn_801CFB18(turn);
+    fn_801CFB18(angle);
     if (control->mUnknown40 < 0.72f
-        || (MathAngleDiff(direction, p->mMotion.mFacing) <= 0xE38E2
-            && other->mIdBytes[2] == p->mIdBytes[2] && other->mId == p->mUnknown560.mUnknown44)) {
+        || (MathAngleDiff(direction, motion->mFacing) <= 0xE38E2
+            && ((other->mId >> 8) & 0xFF) == p->mIdBytes[2] && other->mId == p->mUnknown560.mUnknown44)) {
         control->mUnknown52 = 0;
     }
 }
+
 #endif
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *control, int)
+extern "C" void CarrierRunKeepInBounds(Object_80039F5C *p, OptionRunControl_t *control, int)
 {
+    Object_800B26B0 *motion = &p->mMotion;
     int angle = control->mUnknown44;
     if (fn_801486A0()) {
-        if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x3FFFFF) {
-            int direction;
-            if (!(p->mMotion.mPos.mX >= 3.0f - fn_80178A08())) {
-                direction = 0x800000;
-            } else if (!(p->mMotion.mPos.mX <= fn_80178A08() - 3.0f)) {
-                direction = 0;
-            } else {
-                goto finish;
+        if (MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF) {
+            if (!(motion->mPos.mX >= 3.0f - fn_80178A08())) {
+                if (MathAngleDiff(motion->mFacing, 0x800000) <= 0x438E38) angle = 0x400000;
+            } else if (!(motion->mPos.mX <= fn_80178A08() - 3.0f)) {
+                if (MathAngleDiff(motion->mFacing, 0) <= 0x438E38) angle = 0x400000;
             }
-            if (MathAngleDiff(p->mMotion.mFacing, direction) <= 0x438E38) angle = 0x400000;
         }
         goto finish;
     }
-    if (!(p->mMotion.mPos.mY <= fn_80178A44() - 5.0f)) {
-        if ((MathAngleDiff(p->mMotion.mFacing, 0) <= 0x3FFFFF
-             && p->mMotion.mPos.mX < fn_80178A08() - 3.5f)
-            || p->mMotion.mPos.mX < 3.5f - fn_80178A08()) angle = 0;
+    if (!(motion->mPos.mY <= fn_80178A44() - 5.0f)) {
+        if ((MathAngleDiff(motion->mFacing, 0) <= 0x3FFFFF
+             && motion->mPos.mX < fn_80178A08() - 3.5f)
+            || motion->mPos.mX < 3.5f - fn_80178A08()) angle = 0;
         else angle = 0x800000;
-    } else if (!(p->mMotion.mPos.mY >= 5.0f - fn_80178A44())) {
-        if ((MathAngleDiff(p->mMotion.mFacing, 0) <= 0x3FFFFF
-             && p->mMotion.mPos.mX < fn_80178A08() - 3.5f)
-            || !(p->mMotion.mPos.mX >= 3.5f - fn_80178A08())) angle = 0;
+    } else if (!(motion->mPos.mY >= 5.0f - fn_80178A44())) {
+        if ((MathAngleDiff(motion->mFacing, 0) <= 0x3FFFFF
+             && motion->mPos.mX < fn_80178A08() - 3.5f)
+            || !(motion->mPos.mX >= 3.5f - fn_80178A08())) angle = 0;
         else angle = 0x800000;
     }
-    if (!(p->mMotion.mPos.mX <= fn_80178A08() - 3.5f)) {
-        if ((MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x3FFFFF
-             && p->mMotion.mPos.mY < fn_80178A44() - 5.0f)
-            || p->mMotion.mPos.mY < 5.0f - fn_80178A44()) angle = 0x400000;
+    if (!(motion->mPos.mX <= fn_80178A08() - 3.5f)) {
+        if ((MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF
+             && motion->mPos.mY < fn_80178A44() - 5.0f)
+            || motion->mPos.mY < 5.0f - fn_80178A44()) angle = 0x400000;
         else angle = 0xC00000;
-    } else if (!(p->mMotion.mPos.mX >= 3.5f - fn_80178A08())) {
-        if ((MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x3FFFFF
-             && p->mMotion.mPos.mY < fn_80178A44() - 5.0f)
-            || !(p->mMotion.mPos.mY >= 5.0f - fn_80178A44())) angle = 0x400000;
+    } else if (!(motion->mPos.mX >= 3.5f - fn_80178A08())) {
+        if ((MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF
+             && motion->mPos.mY < fn_80178A44() - 5.0f)
+            || !(motion->mPos.mY >= 5.0f - fn_80178A44())) angle = 0x400000;
         else angle = 0xC00000;
     }
-    if (!(p->mMotion.mPos.mY <= fn_80178A44() * 0.5f)) {
-        if (!(p->mMotion.mPos.mX <= fn_80178A08() * 0.2f)) {
+    if (!(motion->mPos.mY <= fn_80178A44() * 0.5f)) {
+        if (!(motion->mPos.mX <= fn_80178A08() * 0.2f)) {
             Point_8017886C corner, delta;
             corner.mX = fn_80178A08() * 0.2f;
             corner.mY = fn_80178A44() * 0.5f;
-            fn_80227690(&delta, &p->mMotion.mPos, &corner);
-            Point_8017886C direction = {-fabsf(delta.mY), fabsf(delta.mX)};
-            int first = fn_801CFE40(direction.mY, direction.mX);
+            fn_80227690(&delta, motion, &corner);
+            Point_8017886C direction;
+            direction.mX = -fabsf(delta.mY);
+            direction.mY = fabsf(delta.mX);
+            int first = direction.Heading();
             int back = (first + 0x800000) & 0xFFFFFF;
-            if (MathAngleDiff(p->mMotion.mFacing, 0x600000) <= 0x3FFFFF) {
-                if (((first - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
-            } else if (((p->mMotion.mFacing - back) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
-        } else if (!(p->mMotion.mPos.mX >= -(fn_80178A08() * 0.2f))) {
+            if (MathAngleDiff(motion->mFacing, 0x600000) <= 0x3FFFFF) {
+                if (((first - motion->mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
+            } else if (((motion->mFacing - back) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
+        } else if (!(motion->mPos.mX >= -(fn_80178A08() * 0.2f))) {
             Point_8017886C corner, delta;
             corner.mX = -(fn_80178A08() * 0.2f);
             corner.mY = fn_80178A44() * 0.5f;
-            fn_80227690(&delta, &p->mMotion.mPos, &corner);
-            Point_8017886C direction = {fabsf(delta.mY), fabsf(delta.mX)};
-            int first = fn_801CFE40(direction.mY, direction.mX);
+            fn_80227690(&delta, motion, &corner);
+            Point_8017886C direction;
+            direction.mX = fabsf(delta.mY);
+            direction.mY = fabsf(delta.mX);
+            int first = direction.Heading();
             int back = (first + 0x800000) & 0xFFFFFF;
-            if (MathAngleDiff(p->mMotion.mFacing, 0x200000) <= 0x3FFFFF) {
-                if (((p->mMotion.mFacing - first) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
-            } else if (((back - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
+            if (MathAngleDiff(motion->mFacing, 0x200000) <= 0x3FFFFF) {
+                if (((motion->mFacing - first) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
+            } else if (((back - motion->mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
         }
-    } else if (!(p->mMotion.mPos.mY >= -(fn_80178A44() * 0.5f))) {
-        if (!(p->mMotion.mPos.mX <= fn_80178A08() * 0.2f)) {
+    } else if (!(motion->mPos.mY >= -(fn_80178A44() * 0.5f))) {
+        if (!(motion->mPos.mX <= fn_80178A08() * 0.2f)) {
             Point_8017886C corner, delta;
             corner.mX = fn_80178A08() * 0.2f;
             corner.mY = -(fn_80178A44() * 0.5f);
-            fn_80227690(&delta, &p->mMotion.mPos, &corner);
-            Point_8017886C direction = {fabsf(delta.mY), fabsf(delta.mX)};
-            int first = fn_801CFE40(direction.mY, direction.mX);
+            fn_80227690(&delta, motion, &corner);
+            Point_8017886C direction;
+            direction.mX = fabsf(delta.mY);
+            direction.mY = fabsf(delta.mX);
+            int first = direction.Heading();
             int back = (first + 0x800000) & 0xFFFFFF;
-            if (MathAngleDiff(p->mMotion.mFacing, 0x200000) <= 0x3FFFFF) {
-                if (((first - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
-            } else if (((p->mMotion.mFacing - back) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
-        } else if (!(p->mMotion.mPos.mX >= -(fn_80178A08() * 0.2f))) {
+            if (MathAngleDiff(motion->mFacing, 0x200000) <= 0x3FFFFF) {
+                if (((first - motion->mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
+            } else if (((motion->mFacing - back) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
+        } else if (!(motion->mPos.mX >= -(fn_80178A08() * 0.2f))) {
             Point_8017886C corner, delta;
             corner.mX = -(fn_80178A08() * 0.2f);
             corner.mY = -(fn_80178A44() * 0.5f);
-            fn_80227690(&delta, &p->mMotion.mPos, &corner);
-            Point_8017886C direction = {-fabsf(delta.mY), fabsf(delta.mX)};
-            int first = fn_801CFE40(direction.mY, direction.mX);
+            fn_80227690(&delta, motion, &corner);
+            Point_8017886C direction;
+            direction.mX = -fabsf(delta.mY);
+            direction.mY = fabsf(delta.mX);
+            int first = direction.Heading();
             int back = (first + 0x800000) & 0xFFFFFF;
-            if (MathAngleDiff(p->mMotion.mFacing, 0x600000) <= 0x3FFFFF) {
-                if (((p->mMotion.mFacing - first) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
-            } else if (((back - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
+            if (MathAngleDiff(motion->mFacing, 0x600000) <= 0x3FFFFF) {
+                if (((motion->mFacing - first) & 0xFFFFFF) <= 0x7FFFFF) angle = first;
+            } else if (((back - motion->mFacing) & 0xFFFFFF) <= 0x7FFFFF) angle = back;
         }
     }
-    if (!(p->mMotion.mPos.mY <= fn_80178A44() - 5.0f)) {
-        if (!(p->mMotion.mPos.mY <= fn_80178A44() - 2.5f)) {
-            angle = MathAngleDiff(p->mMotion.mFacing, 0) <= 0x3FFFFF ? 0xF77778 : 0x888889;
+    if (!(motion->mPos.mY <= fn_80178A44() - 5.0f)) {
+        if (!(motion->mPos.mY <= fn_80178A44() - 2.5f)) {
+            angle = MathAngleDiff(motion->mFacing, 0) <= 0x3FFFFF ? 0xF77778 : 0x888889;
         }
-    } else if (!(p->mMotion.mPos.mY >= 5.0f - fn_80178A44())) {
-        if (!(p->mMotion.mPos.mY >= 2.5f - fn_80178A44())) {
-            angle = MathAngleDiff(p->mMotion.mFacing, 0) <= 0x3FFFFF ? 0x88888 : 0x777777;
+    } else if (!(motion->mPos.mY >= 5.0f - fn_80178A44())) {
+        if (!(motion->mPos.mY >= 2.5f - fn_80178A44())) {
+            angle = MathAngleDiff(motion->mFacing, 0) <= 0x3FFFFF ? 0x88888 : 0x777777;
         }
     }
-    if (!(p->mMotion.mPos.mX <= fn_80178A08() - 3.5f)) {
-        if (!(p->mMotion.mPos.mX <= fn_80178A08() - 2.5f)) {
-            angle = MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x3FFFFF ? 0x488888 : 0xB77778;
+    if (!(motion->mPos.mX <= fn_80178A08() - 3.5f)) {
+        if (!(motion->mPos.mX <= fn_80178A08() - 2.5f)) {
+            angle = MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF ? 0x488888 : 0xB77778;
         }
-    } else if (!(p->mMotion.mPos.mX >= 3.5f - fn_80178A08())) {
-        if (!(p->mMotion.mPos.mX >= 2.5f - fn_80178A08())) {
-            angle = MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x3FFFFF ? 0x377777 : 0xC88889;
+    } else if (!(motion->mPos.mX >= 3.5f - fn_80178A08())) {
+        if (!(motion->mPos.mX >= 2.5f - fn_80178A08())) {
+            angle = MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF ? 0x377777 : 0xC88889;
         }
     }
 finish:
@@ -690,9 +727,8 @@ finish:
     control->mUnknown44 = angle;
     control->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
 }
-#endif
 
-extern "C" int fn_8012E590(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int CarrierRunIsShielded(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     OptionRunControl_t *state = (OptionRunControl_t *)&p->mUnknown336;
     int result = 0;
@@ -719,29 +755,34 @@ extern "C" int fn_8012E590(Object_80039F5C *p, Object_80039F5C *pOther)
     return result;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn, int, float distance)
+extern "C" int CarrierRunTryJuke(Object_80039F5C *p, Object_80039F5C *, float distance, int, int turn, int)
 {
+    Object_800B26B0 *motion = &p->mMotion;
     int kind = 1;
     int side = 0;
-    int facing = p->mMotion.mFacing;
     if ((float)p->mRatings[0] < 165.75f || distance > 10.0f || turn > 0x271C70) {
         return 0;
     }
-    int facingDifference = MathAngleDiff(facing, 0x400000);
+    int facingDifference = MathAngleDiff(motion->mFacing, 0x400000);
     if (facingDifference > 0x31C71B) {
         return 0;
     }
-    unsigned char chance = ((p->mRatings[0] >> 2) + (p->mRatings[0] >> 3)) >> 1;
-    chance = (unsigned char)(int)((float)chance
-        - (float)facingDifference * 3.06538225913755e-7f * 0.8f * (float)chance);
-    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, facing, 1.0f);
-    if (pOther && pOther->mIdBytes[2] != p->mIdBytes[2] && !fn_8011E9B4(pOther)) {
-        Vector_80039F5C delta;
-        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
-        turn = MathAngleDiff(angle, p->mMotion.mFacing);
-        int right = ((p->mMotion.mFacing - angle) & 0xFFFFFF) > 0x800000;
+    int chance = (unsigned char)(((p->mRatings[0] >> 2) + (p->mRatings[0] >> 3)) >> 1);
+    float scale = (float)facingDifference / (float)0x31C71C;
+    float reduction = scale * 0.8f;
+
+    chance = (unsigned char)(int)((float)chance - reduction * (float)chance);
+    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, motion->mFacing, 1.0f);
+    if (pOther && p->mIdBytes[2] != pOther->mIdBytes[2] && !fn_8011E9B4(pOther)) {
+        Point_8017886C delta;
+        fn_80227690(&delta, &pOther->mMotion.mPos, motion);
+        int threshold = 0xAAAAA;
+        int angle = delta.Heading();
+        turn = MathAngleDiff(angle, motion->mFacing);
+        int right = 0;
+        if (((p->mMotion.mFacing - angle) & 0xFFFFFF) > 0x800000) {
+            right = 1;
+        }
         int difference = MathAngleDiff(p->mMotion.mFacing, pOther->mMotion.mFacing);
         angle = (angle + 0x800000) & 0xFFFFFF;
         int otherDifference = MathAngleDiff(pOther->mMotion.mFacing, angle);
@@ -749,7 +790,7 @@ extern "C" int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn,
         if (difference + otherDifference > ownDifference) {
             chance = 0;
         } else {
-            int threshold = (int)((float)otherDifference / (float)ownDifference * 2330169.0f + (float)0xAAAAA);
+            threshold = (int)((float)otherDifference / (float)ownDifference * 2330169.0f + (float)threshold);
             if (turn < threshold) {
                 side = right ? 2 : 1;
             } else {
@@ -765,17 +806,19 @@ extern "C" int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn,
     } else {
         chance = 0;
     }
-    if (!chance || fn_802372EC(0, 100) >= chance) {
-        return 0;
+    if (chance && fn_802372EC(0, 100) < chance) {
+        if (!(fn_80178A68(&p->mMotion.mPos) >= 5.0f)) {
+            if (fn_800F22D8(p, kind, side, 4)) {
+                return 1;
+            }
+        } else if (fn_800F22D8(p, kind, side, fn_800F2828(p, pOther))) {
+            return 1;
+        }
     }
-    if (!(fn_80178A68(&p->mMotion.mPos) >= 5.0f)) {
-        return fn_800F22D8(p, kind, side, 4) != 0;
-    }
-    return fn_800F22D8(p, kind, side, fn_800F2828(p, pOther)) != 0;
+    return 0;
 }
-#endif
 
-extern "C" int fn_8012EA14(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
@@ -799,18 +842,20 @@ extern "C" int fn_8012EA14(Object_80039F5C *p, Object_80039F5C *pOther)
     return 0;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012EAF8(Object_80039F5C *p, Object_80039F5C *pOther, int angle, int turn, int, float distance)
+extern "C" int CarrierRunTrySpin(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int turn, int)
 {
-    if ((float)p->mRatings[0] < 165.75f || p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
-        return 0;
-    }
+    Object_800B26B0 *motion = &p->mMotion;
+    short *pRatings = p->mRatings;
     int kind = 1;
     int side = 0;
-    if (pOther->mIdBytes[2] != p->mIdBytes[2] && !(pOther->mFlags & 0x800)
+
+    if ((float)pRatings[0] < 165.75f || p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
+        return 0;
+    }
+    if (p->mIdBytes[2] != pOther->mIdBytes[2] && !(pOther->mFlags & 0x800)
         && (MathAngleDiff(pOther->mMotion.mUnknown32, 0) <= 0x31C71B
             || MathAngleDiff(pOther->mMotion.mUnknown32, 0x800000) <= 0x31C71B)
-        && !fn_8012E590(p, pOther) && fn_80124714(p, pOther, 0) == 1) {
+        && !CarrierRunIsShielded(p, pOther) && fn_80124714(p, pOther, 0) == 1) {
         int threshold = 0x438E39;
         int difference = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pOther->mMotion.mFacing);
         if (difference > 0x200000) {
@@ -819,36 +864,36 @@ extern "C" int fn_8012EAF8(Object_80039F5C *p, Object_80039F5C *pOther, int angl
         if (MathAngleDiff(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x555555) {
             threshold = 0x21C71C;
         } else {
-            threshold = (difference - 0x200000 + threshold) & 0xFFFFFF;
+            int offset = difference - 0x200000;
+
+            threshold = (offset + threshold) & 0xFFFFFF;
             int limit;
             if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x400000) {
                 limit = MathAngleDiff(p->mMotion.mFacing, 0x400000);
             } else {
                 limit = 0x400000;
             }
-            threshold = (threshold - (int)((float)(0x400000 - limit)
-                * 2.384185791015625e-7f * 0.5f * (float)threshold)) & 0xFFFFFF;
-            if (threshold <= 0x11C71B) {
-                threshold = 0x11C71C;
-            } else if (threshold > 0x438E39) {
-                threshold = 0x438E39;
-            }
+            float scale = (float)(0x400000 - limit) / (float)0x400000;
+            float reduction = scale * 0.5f;
+
+            threshold = (threshold - (int)(reduction * (float)threshold)) & 0xFFFFFF;
+            threshold = threshold > 0x11C71B ? (threshold <= 0x438E39 ? threshold : 0x438E39) : 0x11C71C;
         }
         if (!(distance > 6.0f) && turn < threshold) {
-            if (MathAngleDiff(p->mMotion.mFacing, 0x400000) > 0xE38E3) {
+            if (MathAngleDiff(motion->mFacing, 0x400000) > 0xE38E3) {
                 kind = 2;
                 side = 1;
-                if (((p->mMotion.mFacing - 0x400000) & 0xFFFFFF) <= 0x7FFFFF) {
+                if (((motion->mFacing - 0x400000) & 0xFFFFFF) <= 0x7FFFFF) {
                     side = 2;
                 }
             } else if (turn <= 0x11C71B) {
                 kind = 2;
                 side = 2;
-                if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+                if (((angle - motion->mFacing) & 0xFFFFFF) > 0x800000) {
                     side = 1;
                 }
             }
-            if (kind != 1 && fn_802372EC(0, 100) < ((unsigned int)(p->mRatings[0] >> 3) & 0x7FFFFFFF)
+            if (kind != 1 && fn_802372EC(0, 100) < ((unsigned int)(pRatings[0] >> 3) & 0x7FFFFFFF)
                 && fn_80110824(p, kind, side, fn_80110EB0(p, pOther))) {
                 return 1;
             }
@@ -856,48 +901,51 @@ extern "C" int fn_8012EAF8(Object_80039F5C *p, Object_80039F5C *pOther, int angl
     }
     if (p->mUnknown560.mFlags.mBytes[0]) {
         Object_80039F5C *pRef = fn_8009BCE8(&p->mUnknown560.mUnknown44);
-        if (pRef && fn_8012EA14(p, pRef)) {
+        if (pRef && CarrierRunTrySpinOffBlock(p, pRef)) {
             return 1;
         }
         pRef = fn_8009BCE8(&p->mUnknown560.mUnknown40);
-        if (pRef && fn_8012EA14(p, pRef)) {
+        if (pRef && CarrierRunTrySpinOffBlock(p, pRef)) {
             return 1;
         }
     }
     return 0;
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012EE90(Object_80039F5C *p, Object_80039F5C *pOther, int a, int angle, int b, float distance)
+extern "C" int CarrierRunTryHurdle(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int, int turn, int)
 {
     if (!(fn_80178A68(&p->mMotion.mPos) >= 4.0f)) {
-        if (!(distance > 5.0f) && angle <= 0x3FFFFF
+        if (!(distance > 5.0f) && turn <= 0x3FFFFF
             && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x38E38D
             && CarrierMoveStart(p, 4)) {
             return 1;
         }
-    } else if (!(distance > 2.5f) && angle <= 0x11C71B && (pOther->mFlags & 0x800)
+    } else if (!(distance > 2.5f) && turn <= 0x11C71B && (pOther->mFlags & 0x800)
                && CarrierMoveStart(p, CarrierMovePickKind(p, pOther))) {
         return 1;
     }
     return 0;
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012EF94(Object_80039F5C *p, Object_80039F5C *pOther, int a, int angle, int b, float distance)
+extern "C" int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int, int turn, int)
 {
     Object_800B26B0 *motion = &p->mMotion;
-    unsigned int chance = (unsigned int)(((p->mRatings[0] >> 3) * 2) + (p->mRatings[2] >> 4)) >> 1;
+    short *pRatings = p->mRatings;
 
-    if (!(motion->mUnknown44 <= 0.0f) && !(distance > 4.0f) && angle <= 0x2AAAA9
+    if (motion->mUnknown44 <= 0.0f) {
+        return 0;
+    }
+    unsigned int chance = (unsigned int)(((pRatings[0] >> 3) * 2) + (pRatings[2] >> 4)) >> 1;
+
+    if (!(distance > 4.0f) && turn <= 0x2AAAA9
         && !fn_8011E9B4(pOther) && p->mIdBytes[2] != pOther->mIdBytes[2]) {
         float remaining = fn_80178A2C() - motion->mPos.mY;
-        float limit = fn_801CFB18(motion->mFacing) * 4.2f;
+        float limit = 4.2f;
+
+        limit = fn_801CFB18(p->mMotion.mFacing) * limit;
 
         if (!(remaining <= 0.0f) && !(remaining >= limit)) {
-            if (MathAngleDiff(motion->mFacing, 0x400000) <= 0xAAAA9
+            if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0xAAAA9
                 && !(fn_80178A08() - fabsf(p->mMotion.mPos.mX) >= 4.0f)) {
                 chance = chance * 3 >> 1;
             }
@@ -909,24 +957,35 @@ extern "C" int fn_8012EF94(Object_80039F5C *p, Object_80039F5C *pOther, int a, i
     }
     return 0;
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012F11C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, int a, int b, float distance)
+extern "C" int CarrierRunTryStiffArm(Object_80039F5C *p, Object_80039F5C *pOther, float distance, int angle, int, int)
 {
+    Object_800B26B0 *motion = &p->mMotion;
+    short *pRatings = p->mRatings;
+
     if (!(pOther->mFlags & 0x800) && !fn_8011E9B4(pOther) && !(distance > 4.5f)
         && p->mIdBytes[2] != pOther->mIdBytes[2]) {
-        int delta = (angle - p->mMotion.mFacing) & 0xFFFFFF;
-        int side = delta > 0x800000 ? 1 : 2;
+        int delta = (angle - motion->mFacing) & 0xFFFFFF;
+        int side;
+        int toward;
 
-        if (MathAngleDiff(delta, side == 1 ? 0xC00000 : 0x400000) <= 0x3FFFFF
+        if (delta > 0x800000) {
+            toward = 0xC00000;
+            side = 1;
+        } else {
+            toward = 0x400000;
+            side = 2;
+        }
+        if (MathAngleDiff(delta, toward) <= 0x3FFFFF
             && MathAngleDiff(pOther->mMotion.mUnknown32, angle) > 0x4E38E3) {
-            int chance = (unsigned int)(((p->mRatings[2] >> 3) * 2) + (p->mRatings[2] >> 4)) >> 1;
-            int facing = MathAngleDiff(p->mMotion.mFacing, 0x400000);
+            int chance = (unsigned int)(((pRatings[2] >> 3) * 2) + (pRatings[2] >> 4)) >> 1;
+            int facing = MathAngleDiff(motion->mFacing, 0x400000);
 
             if (facing > 0x31C71B) {
                 if (facing <= 0x400000) {
-                    chance = (int)(chance - chance * 0.0000010728831512096804f * (facing - 0x31C71C));
+                    float scaled = chance;
+
+                    chance = (int)(scaled - scaled * ((facing - 0x31C71C) / (float)(0x400000 - 0x31C71C)));
                 } else {
                     chance = 0;
                 }
@@ -938,34 +997,38 @@ extern "C" int fn_8012F11C(Object_80039F5C *p, Object_80039F5C *pOther, int angl
     }
     return 0;
 }
-#endif
 
-extern "C" int fn_8012F2E0(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b, int c, float d)
+extern "C" int CarrierRunTryNoMove(Object_80039F5C *, Object_80039F5C *, float, int, int, int)
 {
     return 0;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012F2E8(Object_80039F5C *p, Object_80039F5C *pUnused, int a, int b, int c, float d)
+extern "C" int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *, float, int, int, int)
 {
-    Point_8017886C ball = fn_80177FE0();
-    Vector_80039F5C aim;
+    Point_8017886C ball;
+    Point_8017886C aim;
     int result = 0;
+
+    ball = fn_80177FE0();
     Object_80039F5C *other = fn_80105384(p, 1, &aim);
     int valid = OptionRunCanPitchTo(p, &aim, other);
 
-    if (other && valid && fn_801066D0(p, other, 9) && !(p->mMotion.mPos.mY <= ball.mY)) {
-        if (!(other->mRatings[4] <= p->mRatings[4] * lbl_803EB11C)) {
-            float target = fn_8012506C(other, 6);
-            float own = fn_8012506C(p, 6);
+    if (other) {
+        int open = valid && fn_801066D0(p, other, 9);
 
-            if (!(own <= target) && !(own <= lbl_803EB124) && !(target >= lbl_803EB124)) {
-                result = 1;
-            }
-        } else {
-            if (!(fn_8012506C(p, 6) >= lbl_803EB120)
-                && !(fn_8012506C(other, 6) >= lbl_803EB120)) {
-                result = 1;
+        if (open && !(p->mMotion.mPos.mY <= ball.mY)) {
+            if (!(other->mRatings[4] <= p->mRatings[4] * _CarrierRun_fPitchRatingScale)) {
+                float target = fn_8012506C(other, 6);
+                float own = fn_8012506C(p, 6);
+
+                if (!(own <= target) && !(own <= _CarrierRun_fPitchFarRange) && !(target >= _CarrierRun_fPitchFarRange)) {
+                    result = 1;
+                }
+            } else {
+                if (!(fn_8012506C(p, 6) >= _CarrierRun_fPitchNearRange)
+                    && !(fn_8012506C(other, 6) >= _CarrierRun_fPitchNearRange)) {
+                    result = 1;
+                }
             }
         }
     }
@@ -983,9 +1046,8 @@ extern "C" int fn_8012F2E8(Object_80039F5C *p, Object_80039F5C *pUnused, int a, 
     }
     return result;
 }
-#endif
 
-extern "C" int fn_8012F524(Object_80039F5C *p)
+extern "C" int CarrierRunGetMoveRow(Object_80039F5C *p)
 {
     unsigned int value = p->mUnknown2914;
 
@@ -1010,10 +1072,11 @@ extern "C" int fn_8012F524(Object_80039F5C *p)
     return 0;
 }
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block)
+extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *control, OptionRunMove_t *block)
 {
     if (fn_801787A0()) return;
+    Object_800B26B0 *motion = &p->mMotion;
+
     block->mUnknown0 = (signed char)(((unsigned char *)&block->mUnknown0)[1] - 1);
     if (block->mUnknown0 > 0) return;
     block->mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
@@ -1022,33 +1085,37 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, Opt
     if (control) control->mUnknown51[0] = 7;
     float distance;
     int team = fn_80178320();
-    Object_80039F5C *other = fn_801245DC(p, team, 0, fn_80178D18(fn_80178320()), lbl_803EB118, &distance, 0);
+    Object_80039F5C *other = fn_801245DC(p, team, 0, fn_80178D18(fn_80178320()), _CarrierRun_iMoveSearchAngle, &distance, 0);
 
     if (!other) {
         team = fn_80178308();
-        other = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), lbl_803EB118, &distance, 0);
+        other = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), _CarrierRun_iMoveSearchAngle, &distance, 0);
     }
     if (other && !(distance > 10.0f)) {
         Point_8017886C delta;
 
-        fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
+        fn_80227690(&delta, &other->mMotion.mPos, motion);
         int angle = fn_801CFE40(delta.mY, delta.mX);
-        int turn = MathAngleDiff(angle, p->mMotion.mFacing);
+        int turn = MathAngleDiff(angle, motion->mFacing);
         int opposed = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, other->mMotion.mFacing) <= 0x1FFFFF;
-        unsigned char *order = &lbl_802DB05C[fn_8012F524(p) * 7];
+        unsigned char *order = _CarrierRun_aucMoveOrder[CarrierRunGetMoveRow(p)];
         unsigned char i;
 
         for (i = 0; i <= 6; i++) {
-            if (actions_8012F5A0[order[i]](p, other, angle, turn, opposed, distance)) {
+            if (_CarrierRun_apMoveTests[order[i]](p, other, distance, angle, turn, opposed)) {
                 if (control) control->mUnknown51[0] = order[i];
                 return;
             }
         }
     }
-    switch (fn_801486A0()) {
-    case 0: case 1: case 2: case 3: return;
-    }
-    Vector_80039F5C position = p->mMotion.mPos;
+    int mode = fn_801486A0();
+
+    if (mode == 0 || mode == 2 || mode == 3 || mode == 1) return;
+    Vector_80039F5C position;
+
+    position.mX = motion->mPos.mX;
+    position.mY = motion->mPos.mY;
+    position.mZ = motion->mPos.mZ;
 
     if (fn_801784C4()) {
         position.mX = -position.mX;
@@ -1066,10 +1133,8 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, Opt
         }
     }
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int mode)
+extern "C" void CarrierRunSetSpeed(Object_80039F5C *p, OptionRunControl_t *control, int mode)
 {
     float distance = 0.0f;
     Object_80039F5C *other = (Object_80039F5C *)control->mUnknown0;
@@ -1085,20 +1150,9 @@ extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int
         int turn = MathAngleDiff(control->mUnknown44, p->mMotion.mFacing);
 
         if (turn > 0x177777) {
-            int found = 0;
-
-            if (turn <= 0x355555) {
-                int team = p->mIdBytes[2];
-
-                found = fn_801245DC(p, team, 0, fn_80178D18(team), turn, &distance, 0) != 0;
-                if (!found) {
-                    team = p->mIdBytes[2] ^ 1;
-                    found = fn_801245DC(p, team, 0, fn_80178D18(team), turn, &distance, 0) != 0;
-                }
-            } else {
-                found = 1;
-            }
-            if (found) {
+            if (turn > 0x355555
+                || fn_801245DC(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]), turn, &distance, 0)
+                || fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), turn, &distance, 0)) {
                 control->mUnknown52 = 0;
                 if (!(distance >= 3.0f)) {
                     control->mUnknown40 = fn_801CFB94(turn / 2) * 0.72f;
@@ -1108,16 +1162,19 @@ extern "C" void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *control, int
         }
     }
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012FA64(Object_80039F5C *p)
+extern "C" int CarrierRunFindLeadBlocker(Object_80039F5C *p)
 {
     int enabled = 0;
 
-    if (!fn_80177C38() && !(fn_80177FE0().mY - p->mMotion.mPos.mY <= 4.0f)
-        && !(fabsf(fn_80177FE0().mX - p->mMotion.mPos.mX) >= 8.0f) && fn_8011F1A4()) {
-        enabled = (unsigned int)fn_8011F4C8() > 3;
+    if (!fn_80177C38()) {
+        if (!(fn_80177FE0().mY - p->mMotion.mPos.mY <= 4.0f)) {
+            if (!(fabsf(fn_80177FE0().mX - p->mMotion.mPos.mX) >= 8.0f)) {
+                if (fn_8011F1A4()) {
+                    enabled = (unsigned int)fn_8011F4C8() > 3;
+                }
+            }
+        }
     }
     if (enabled) {
         unsigned char team = p->mIdBytes[2];
@@ -1138,10 +1195,8 @@ extern "C" int fn_8012FA64(Object_80039F5C *p)
     }
     return 0;
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *control)
+extern "C" int CarrierRunCheckRunOut(Object_80039F5C *p, OptionRunControl_t *control)
 {
     int result = 0;
 
@@ -1166,26 +1221,22 @@ extern "C" int fn_8012FC08(Object_80039F5C *p, OptionRunControl_t *control)
                     result = 1;
                     control->mUnknown55++;
                 }
-                if (result) {
-                    if (control->mUnknown55 > 20) {
-                        result = 0;
-                    }
-                    if (result) {
-                        control->mUnknown56.mUnknown3 = 1;
-                        p->mUnknown512.mUnknown15 = 26;
-                        return result;
-                    }
+                if (result && control->mUnknown55 > 20) {
+                    result = 0;
                 }
-                control->mUnknown56.mUnknown3 = 0;
+                if (result) {
+                    control->mUnknown56.mUnknown3 = 1;
+                    p->mUnknown512.mUnknown15 = 26;
+                } else {
+                    control->mUnknown56.mUnknown3 = 0;
+                }
             }
         }
     }
     return result;
 }
-#endif
 
-#ifdef DECOMP_COMPARE
-extern "C" int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl)
+extern "C" int CarrierRunCheckBlocked(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     int result = 0;
 
@@ -1204,16 +1255,15 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, OptionRunControl_t *pControl)
     }
     return result;
 }
-#endif
 
-extern "C" int fn_8012FEAC(Object_80039F5C *p)
+extern "C" int CarrierRunEnter(Object_80039F5C *p)
 {
     OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
-    fn_80130338(p, pControl);
+    CarrierRunResetControl(p, pControl);
     fn_80031404(p);
     if (fn_800AD9B4() == 3) {
-        pControl->mUnknown0 = fn_8012FA64(p);
+        pControl->mUnknown0 = CarrierRunFindLeadBlocker(p);
         if (BallGetCurrentHolder() == p) {
             if (PassIconsAreShown()) {
                 CamGameSetModeAll(1);
@@ -1226,13 +1276,13 @@ extern "C" int fn_8012FEAC(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_8012FF30(Object_80039F5C *p)
+extern "C" int CarrierRunExit(Object_80039F5C *p)
 {
     fn_800A3B58(p, 2, 0);
     return 1;
 }
 
-extern "C" int fn_8012FF5C(Object_80039F5C *p)
+extern "C" int CarrierRunUpdate(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
@@ -1242,7 +1292,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
 
     fn_800B8344(p);
     if (p == BallGetCurrentHolder()) {
-        fn_8012CEF4(p, pControl);
+        CarrierRunCountRetreat(p, pControl);
         StyleTrackerUpdateRun(0, 0, 0);
         fn_800A3B58(p, 2, 0);
     } else {
@@ -1269,10 +1319,10 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
             pControl->mUnknown40 = 1.0f;
             pControl->mUnknown52 = 1;
             fn_8012430C(pValues, 1, p);
-            fn_8012CFA0(p);
+            CarrierRunAddSideCosts(p);
             pControl->mUnknown48 = fn_801243E0(pValues, pMotion->mFacing);
             pControl->mUnknown44 = pControl->mUnknown48 << 21;
-            fn_8012D4FC(p, mode);
+            CarrierRunPickHeading(p, mode);
             fn_8012311C(p, &plan, pControl->mUnknown44);
             pEntry = fn_80123174(&plan);
             if (pEntry) {
@@ -1281,11 +1331,11 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
                 pControl->mUnknown44 = angle;
                 pControl->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
             }
-            fn_8012D8A8(p, pControl, &mode, pEntry);
-            fn_8012DDCC(p, pControl, mode);
-            fn_8012D258(p);
-            pControl->mUnknown0 = fn_8012FA64(p);
-            fn_8012F89C(p, pControl, mode);
+            CarrierRunAvoidPlayer(p, pControl, &mode, pEntry);
+            CarrierRunKeepInBounds(p, pControl, mode);
+            CarrierRunSteerToSideline(p);
+            pControl->mUnknown0 = CarrierRunFindLeadBlocker(p);
+            CarrierRunSetSpeed(p, pControl, mode);
             if (pControl->mUnknown56.mUnknown6) {
                 PlayerMoveTryStartRun(p);
             }
@@ -1303,7 +1353,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
             p->mUnknown512.mUnknown4 = pMotion->mFacing;
             p->mUnknown512.mUnknown0 = 0.5f;
         }
-        fn_8012F5A0(p, pControl, &pControl->mUnknown56);
+        CarrierRunTryMoves(p, pControl, &pControl->mUnknown56);
     } else {
         if (PlayerMoveTryStartRun(p)) {
             PlayerMoveUpdateRun(p);
@@ -1318,14 +1368,14 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
         }
     }
     if (p->mpState->mId == 1) {
-        fn_8012FDDC(p, pControl);
-        fn_8012FC08(p, pControl);
+        CarrierRunCheckBlocked(p, pControl);
+        CarrierRunCheckRunOut(p, pControl);
         fn_8011168C(p);
     }
     return 0;
 }
 
-extern "C" int fn_8013028C(Object_80039F5C *p)
+extern "C" int CarrierRunNotify(Object_80039F5C *p)
 {
     OptionRunControl_t *pControl = (OptionRunControl_t *)&p->mUnknown336;
 
@@ -1338,12 +1388,12 @@ extern "C" int fn_8013028C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80130318(Object_80039F5C *p)
+extern "C" int CarrierRunInput(Object_80039F5C *p)
 {
     return fn_800B76E8(p);
 }
 
-extern "C" void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl)
+extern "C" void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *pControl)
 {
     pControl->mUnknown36 = fn_80177FE0().mY;
     pControl->mUnknown44 = 0;
@@ -1373,14 +1423,12 @@ extern "C" void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl)
         pControl->mUnknown56.mUnknown6 = 1;
     }
     if (fn_800AD9B4() == 3) {
-        pControl->mUnknown0 = fn_8012FA64(p);
+        pControl->mUnknown0 = CarrierRunFindLeadBlocker(p);
     }
     pControl->mUnknown56.mUnknown2 = 0;
 }
 
-#ifdef DECOMP_COMPARE
-const Action_8012F5A0 actions_8012F5A0[7] = {
-    fn_8012E670, fn_8012EAF8, fn_8012EE90, fn_8012EF94,
-    fn_8012F11C, fn_8012F2E0, fn_8012F2E8
+const CarrierRunMoveTest_t _CarrierRun_apMoveTests[7] = {
+    CarrierRunTryJuke, CarrierRunTrySpin, CarrierRunTryHurdle, CarrierRunTryDive,
+    CarrierRunTryStiffArm, CarrierRunTryNoMove, CarrierRunTryPitch
 };
-#endif

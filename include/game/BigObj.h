@@ -6,8 +6,11 @@
 #include "game/Ball.h"
 #include "game/LevelSurface.h"
 
+struct BigObjModelData_t;
+
 struct BigObjModelState_t {
-    char mUnknown0[40];
+    BigObjModelData_t *mpUnknown0;
+    char mUnknown4[36];
     unsigned char mUnknown40;
 };
 

@@ -344,7 +344,7 @@ void BallPrimeKickUp(Ball_t *pBall);
 void fn_8013A910(Ball_t *pBall, int *pAngles);
 void fn_8013AD9C(Ball_t *pBall, int a);
 int BallStateGet(Ball_t *pBall, int *pOut);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetFocusAll(int a, int b);
@@ -1970,7 +1970,7 @@ void TutorialLivePlay::OnEnter()
 
     LivePlayPhase::OnEnter();
     TutorialSetStepDone(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     pEntry = TutorialGetLessonObject()->GetStep();
     if (pEntry->mUnknown24 != 1) {
         TutorialBlinkInit(pEntry->mUnknown20, 60);

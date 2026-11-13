@@ -2,8 +2,8 @@
 #include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
 #include "game/CamInterp.h"
-#include "game/EaseVector_8013C9A4.h"
-#include "game/cu_8013BB18.h"
+#include "game/CamEaseVec.h"
+#include "game/cammain.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
@@ -28,7 +28,7 @@ struct Payload0_8013EEE4 {
     char mUnknown84[0xA4];
 };
 struct Payload1_8013F090 {
-    EaseVector_8013C9A4 mPosition, mTarget;
+    CamEaseVec_t mPosition, mTarget;
     CamInterp_t mFov;
     float mLimit;
     int mUnknown10C;
@@ -139,7 +139,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
 {
     State_8013E574 *s = &p->mState;
     Payload1_8013F090 *b = &s->mpCurrent->mData.m1;
-    EaseVector_8013C9A4 *target = &b->mTarget;
+    CamEaseVec_t *target = &b->mTarget;
     CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     if (b->mRef) {
@@ -151,8 +151,8 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
             b->mPosition.mBase.mY = o->mpUnknown4->mUnknown4.mY;
         }
     }
-    fn_8013CAA4(&b->mPosition, done);
-    fn_8013CAA4(target, done);
+    CamEaseVecUpdate(&b->mPosition, done);
+    CamEaseVecUpdate(target, done);
     fov->mUpdate(fov, done);
     p->mHeader.mUnknown04[0] = b->mPosition.mResult.mX;
     p->mHeader.mUnknown04[1] = b->mPosition.mResult.mY;
@@ -259,7 +259,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 while (b->mPosition.mZ.mStart > 360.0f) b->mPosition.mZ.mStart -= 360.0f;
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
-            if (fn_801784C4()) { fn_8013CBC4(&b->mPosition); fn_8013CBC4(&b->mTarget); }
+            if (fn_801784C4()) { CamEaseVecFlip(&b->mPosition); CamEaseVecFlip(&b->mTarget); }
             if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
             if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
@@ -314,11 +314,11 @@ extern "C" void fn_8013EEE4(State_8013E574 *s, Desc0_8013EEE4 *d)
     b->mUnknown70 = d->mUnknown48; b->mUnknown72 = d->mUnknown4A;
     b->mUnknown74 = d->mUnknown4C; b->mUnknown78 = d->mUnknown50;
     b->mLimit = d->mLimit; b->mFlags = d->mFlags;
-    fn_8013CC14(&b->mX, pos.mX); fn_8013CC14(&b->mY, pos.mY); fn_8013CC14(&b->mZ, pos.mZ);
-    fn_8013CC40(&b->mX, d->mModeX, end.mX, d->mRate);
-    fn_8013CC40(&b->mY, d->mModeY, end.mY, d->mRate);
-    fn_8013CC40(&b->mZ, d->mModeZ, end.mZ, d->mRate);
-    fn_8013CC14(&b->mFov, d->mFov); fn_8013CC40(&b->mFov, d->mModeFov, d->mEndFov, d->mRate);
+    CamInterpInit(&b->mX, pos.mX); CamInterpInit(&b->mY, pos.mY); CamInterpInit(&b->mZ, pos.mZ);
+    CamInterpSetTarget(&b->mX, end.mX, d->mModeX, d->mRate);
+    CamInterpSetTarget(&b->mY, end.mY, d->mModeY, d->mRate);
+    CamInterpSetTarget(&b->mZ, end.mZ, d->mModeZ, d->mRate);
+    CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
 extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
 {
@@ -335,13 +335,13 @@ extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
         if (p->mIdBytes[3] == 1) target.mZ += p->mUnknown2900 * 0.027777778f - 2.03f;
         p->mpUnknown4->mUnknown20 |= 0x410;
     }
-    fn_8013C9A4(&b->mPosition, &pos, &a, &z, d->mModePosition, d->mStartScale, d->mEndScale, d->mRate);
-    fn_8013C9A4(&b->mTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mModeTarget, d->mTargetStartScale, d->mTargetEndScale, d->mRate);
+    CamEaseVecStart(&b->mPosition, &pos, &a, &z, d->mModePosition, d->mStartScale, d->mEndScale, d->mRate);
+    CamEaseVecStart(&b->mTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mModeTarget, d->mTargetStartScale, d->mTargetEndScale, d->mRate);
     b->mUnknown10C = d->mUnknown58; b->mRef = d->mRef; b->mLimit = d->mLimit;
     b->mFlags = d->mFlags; b->mCallback = d->mCallback;
     b->mUnknown114 = d->mUnknown80; b->mUnknown116 = d->mUnknown82;
     b->mUnknown118 = d->mUnknown84; b->mUnknown11C = d->mUnknown88;
-    fn_8013CC14(&b->mFov, d->mFov); fn_8013CC40(&b->mFov, d->mModeFov, d->mEndFov, d->mRate);
+    CamInterpInit(&b->mFov, d->mFov); CamInterpSetTarget(&b->mFov, d->mEndFov, d->mModeFov, d->mRate);
 }
 extern "C" void fn_8013F298(void)
 {

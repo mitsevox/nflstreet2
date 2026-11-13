@@ -16,7 +16,7 @@
 #include "game/Object_8017886C.h"
 #include "game/RecordList_8002E7C0.h"
 #include "game/Ball.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_800AD9B4.h"
@@ -152,7 +152,7 @@ int fn_800B81A4(void);
 void BallsSetVisible(int on);
 void CamReplayNextRecord(void);
 void CamGameResumeAll(void);
-void fn_80144EDC(float a);
+void ParticleSysUpdate(float a);
 void ParticlesProcess(float a);
 void ParticlesStopOnEnter(void);
 void ParticlesFlush(void);
@@ -362,7 +362,7 @@ static Type_8030660C lbl_8030660C;
 static char lbl_802CC830[] = "REPLAY.C";
 
 /* The replay camera's callbacks; 0x802DBDA0 points to this table. */
-static Type_802DBD24 lbl_802CC83C = { fn_8002EA18, fn_8002EA38, fn_8002EA58 };
+CamTypeDef_t lbl_802CC83C = { fn_8002EA18, fn_8002EA38, fn_8002EA58 };
 
 static Command_8002DC00 lbl_802CC848[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 14 }, { 0x1A, 0 }, { 0x1B, -6 }, { 0x1C, 4 }, { -1, 0 },
@@ -598,11 +598,11 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
         lbl_803EA358 = 0;
     }
     if (p->mUnknownD88 < 60) {
-        fn_80144EDC(p->mUnknownD88 / 60.0f);
+        ParticleSysUpdate(p->mUnknownD88 / 60.0f);
         ParticlesProcess(1.0f);
         fn_800A3120(p->mUnknownD88 / 60.0f);
     } else {
-        fn_80144EDC(1.0f);
+        ParticleSysUpdate(1.0f);
         ParticlesProcess(1.0f);
         fn_800A3120(p->mUnknownD88 / 60.0f);
     }
@@ -655,7 +655,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
                 fn_801478A8();
                 lbl_803EA358 = 0;
             }
-            fn_80144EDC(p->mUnknownD88 / 60.0f);
+            ParticleSysUpdate(p->mUnknownD88 / 60.0f);
             ParticlesFlush();
             fn_800A3120(p->mUnknownD88 / 60.0f);
             lbl_803EA366 = 1;
@@ -708,9 +708,9 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
         p->mpUnknownDA0 = fn_8002F61C(pDesc);
         fn_8002F74C(p->mpUnknownDA0);
         if (p->mUnknown14B4 && !(p->mUnknownD94 & 0x400000)) {
-            fn_8013C540(p->mpUnknownDA0, 0x800000);
-            fn_8013C2B4(p->mpUnknownDA0, 0, 0, 0);
-            fn_8013C6F0(p->mpUnknownDA0);
+            CamMainRotate(p->mpUnknownDA0, 0x800000);
+            CamMainProcess(p->mpUnknownDA0, 0, 0, 0);
+            CamMainWarpToDest(p->mpUnknownDA0);
         }
         lbl_803EA35C = GameEventFlagsSetFlag1(0);
         lbl_803EA35D = GameEventFlagsSetFlag0(2);
@@ -1010,7 +1010,7 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
                         fn_8002E8B8(p, pList);
                         p->mUnknownD74 = p->mUnknownD70;
                         p->mUnknownD78 = 0;
-                        fn_8013C624(p->mpUnknownDA0, 8, 0, 0);
+                        CamMainSetMode(p->mpUnknownDA0, 8, 0, 0);
                     }
                     break;
                 case 10: /* placeholder values: the compare tree needs two */
@@ -1971,17 +1971,17 @@ extern "C" int fn_8002E950(int mode)
 
 extern "C" void fn_8002EA18(GameCamera_t *pCamera, CameraDesc_t *pDesc)
 {
-    fn_8013C868(pCamera, pDesc);
+    CamMainInit(pCamera, pDesc);
 }
 
 extern "C" void fn_8002EA38(GameCamera_t *pCamera)
 {
-    fn_8013C90C(pCamera);
+    CamMainUninit(pCamera);
 }
 
 extern "C" void fn_8002EA58(void *p, GameCamera_t *pCamera)
 {
-    fn_8013C954(p, pCamera);
+    CamMainUpdate(p, pCamera);
 }
 
 extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
@@ -1990,7 +1990,7 @@ extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
     Object_80039F5C *pObject;
     GameCamera_t *pCamera;
 
-    fn_8013C340(&desc);
+    CamMainInitDesc(&desc);
     pObject = fn_8009BCE8(&pDesc->mUnknown04);
     if (pObject) {
         desc.mUnknown08 = pDesc->mUnknown04;
@@ -2022,7 +2022,7 @@ extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
         fn_8002DC00(p, pList);
         fn_8002E8B8(p, pList);
     }
-    fn_8013C624(pCamera, 8, 0, 0);
+    CamMainSetMode(pCamera, 8, 0, 0);
     if (pObject == 0) {
         if (BallsExist()) {
             lbl_803EC620 = BallGetModel(BallGetCurrent());
@@ -2032,7 +2032,7 @@ extern "C" GameCamera_t *fn_8002EA78(Type_8002FDB4 *pDesc)
     } else {
         lbl_803EC620 = pObject->mpUnknown4;
     }
-    fn_8013C384(pCamera, 5, (int)&lbl_8030660C, 0);
+    CamMainFollow(pCamera, 5, (int)&lbl_8030660C, 0);
     return pCamera;
 }
 
@@ -2287,7 +2287,7 @@ extern "C" void fn_8002F26C(GameCamera_t *pCamera, unsigned int input, float amo
 
 extern "C" void fn_8002F510(GameCamera_t *pCamera, float amount)
 {
-    fn_8013C540(pCamera, -(int)((amount + amount) * 46603.37890625f));
+    CamMainRotate(pCamera, -(int)((amount + amount) * 46603.37890625f));
 }
 
 extern "C" void fn_8002F550(GameCamera_t *pCamera, float amount)
@@ -2298,7 +2298,7 @@ extern "C" void fn_8002F550(GameCamera_t *pCamera, float amount)
     if (!lbl_803EC634) {
         angle = CLAMP(angle, 0xC00000, 0xFF49F5);
     }
-    fn_8013C57C(pCamera, angle - base);
+    CamMainPitch(pCamera, angle - base);
 }
 
 extern "C" void fn_8002F5D4(GameCamera_t *pCamera, float amount)
@@ -2372,14 +2372,14 @@ extern "C" void fn_8002F74C(GameCamera_t *pCamera)
         lbl_803EC62C = 16.0f;
         fn_8002F1E0(pCamera);
         pCamera->mUnknown94 |= 4;
-        fn_8013C2B4(pCamera, 0, 0, 0);
+        CamMainProcess(pCamera, 0, 0, 0);
         fn_8002F01C(pCamera, &lbl_8030660C);
         pCamera->mUnknown94 |= 4;
     }
     fn_8002F1E0(pCamera);
     fn_8002D2E4(&lbl_8030660C, &lbl_803EC620);
     ReplayCursorSetPos(&lbl_8030660C.mPos.mX, 0);
-    fn_8013C2B4(pCamera, 0, 0, 0);
+    CamMainProcess(pCamera, 0, 0, 0);
     lbl_803EC61C = pCamera->mUnknown38;
     if (!lbl_803EC634) {
         pCamera->mHeader.mUnknown04[0] = CLAMP(pCamera->mHeader.mUnknown04[0], -fn_80178A08() - lbl_803EC63C, fn_80178A08() + lbl_803EC63C);
@@ -2389,7 +2389,7 @@ extern "C" void fn_8002F74C(GameCamera_t *pCamera)
 
 extern "C" void fn_8002F9D8(GameCamera_t *pCamera)
 {
-    fn_8013C2B4(pCamera, 0, 0, 0);
+    CamMainProcess(pCamera, 0, 0, 0);
 }
 
 extern "C" void fn_8002FA04(GameCamera_t *pCamera, int detach)

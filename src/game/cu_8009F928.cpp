@@ -8,8 +8,8 @@
 #include "game/fn_802372EC.h"
 
 extern "C" {
-int fn_8012CAB4(Object_80039F5C *p);
-float fn_8012CD60(Object_80039F5C *p, float scale);
+int PlayerCutGetRunHeading(Object_80039F5C *p);
+float PlayerCutGetRunSpeed(Object_80039F5C *p, float scale);
 void fn_80227538(Vec2_t *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 int BallStateGet(Ball_t *pBall, int *pOut);
@@ -24,8 +24,8 @@ extern float lbl_803EA9C8;
 extern float lbl_803EA9CC;
 
 /* p's spot projected ahead. In state 20 the step length is
-   fn_8012CD60(p, scale) * distance: with predict set the angle comes from
-   fn_8012CAB4 and the move kind picks the scale; without it distance is
+   PlayerCutGetRunSpeed(p, scale) * distance: with predict set the angle comes from
+   PlayerCutGetRunHeading and the move kind picks the scale; without it distance is
    forced to 30 and the move kind picks a fixed angle (or p's motion
    +32 heading). In other states the step follows that heading with a
    length from rating 4, lbl_803ED6CC and gPlyrMoveFwdSpeed, times distance. */
@@ -43,7 +43,7 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
                 float scale;
 
                 if (predict != 0) {
-                    angle = fn_8012CAB4(p);
+                    angle = PlayerCutGetRunHeading(p);
                     switch (p->mpState->mUnknown2) {
                     case 8:
                     case 9:
@@ -95,7 +95,7 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
                         break;
                     }
                 }
-                length = fn_8012CD60(p, scale) * (float)distance;
+                length = PlayerCutGetRunSpeed(p, scale) * (float)distance;
             } else {
                 float base = lbl_803ED6CC;
 

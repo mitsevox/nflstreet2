@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Directions_8012430C.h"
 
-/* Eight bytes at +56 of OptionRunControl_t, passed to fn_8012F5A0 as one
+/* Eight bytes at +56 of OptionRunControl_t, passed to CarrierRunTryMoves as one
    block. */
 struct OptionRunMove_t {
     short mUnknown0;
@@ -41,11 +41,11 @@ struct OptionRunControl_t {
 };
 
 extern "C" {
-int fn_8012FA64(Object_80039F5C *p);
-void fn_8012DDCC(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
-void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *pControl, OptionRunMove_t *pBlock);
-void fn_8012F89C(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
-void fn_80130338(Object_80039F5C *p, OptionRunControl_t *pControl);
+int CarrierRunFindLeadBlocker(Object_80039F5C *p);
+void CarrierRunKeepInBounds(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
+void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *pControl, OptionRunMove_t *pBlock);
+void CarrierRunSetSpeed(Object_80039F5C *p, OptionRunControl_t *pControl, int a);
+void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *pControl);
 }
 
 #endif

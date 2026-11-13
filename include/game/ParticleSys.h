@@ -1,9 +1,9 @@
-#ifndef GAME_CU_801444D8_H
-#define GAME_CU_801444D8_H
+#ifndef GAME_PARTICLESYS_H
+#define GAME_PARTICLESYS_H
 
-/* Object whose three floats +0xC..+0x14 fn_80144CE0 averages into the
+/* Object whose three floats +0xC..+0x14 ParticleSysSpawnEmitter averages into the
    emitter byte +0x35B. */
-struct Source_80144CE0 {
+struct ParticleSource_t {
     char mPad00[8];
     int mUnknown08;
     float mUnknown0C;
@@ -14,17 +14,21 @@ struct Source_80144CE0 {
 struct AnimTex_t;
 struct Particle_t;
 
-/* Object returned by fn_80144CE0 (from fn_801DEEF8), drawn by ParticleRenderEmitter
-   (the callback of its descriptor lbl_802DCFF8) and released by
-   fn_80144E38. */
-struct Object_80144CE0 {
+/* Object returned by ParticleSysSpawnEmitter (from fn_801DEEF8), drawn by ParticleRenderEmitter
+   (the callback of its descriptor _ParticleSys_EmitterDesc) and released by
+   ParticleSysReleaseEmitter. */
+struct PsysEmitter_t {
     char mPad000[0x3C];
     unsigned char mUnknown03C;
     char mPad03D[0x45 - 0x3D];
     unsigned char mUnknown45;
     char mPad046[2];
     unsigned short mUnknown48;
-    char mPad04A[0x60 - 0x4A];
+    char mPad04A[2];
+    int mUnknown4C;
+    int mUnknown50;
+    float mUnknown54;
+    char mPad058[0x60 - 0x58];
     int mUnknown60;
     char mPad064[0x7C - 0x64];
     float mUnknown7C;
@@ -34,7 +38,8 @@ struct Object_80144CE0 {
     char mPad08C[0xA8 - 0x8C];
     float mUnknownA8;
     float mUnknownAC;
-    char mPad0B0[0xF0 - 0xB0];
+    float mUnknownB0;
+    char mPad0B4[0xF0 - 0xB4];
     int mUnknown0F0;
     char mPad0F4[0x2AC - 0xF4];
     AnimTex_t *mpUnknown2AC;
@@ -60,8 +65,8 @@ struct Object_80144CE0 {
     float mUnknown3D0;
 };
 
-/* Arguments block passed to fn_80144CE0. */
-struct Args_80144CE0 {
+/* Arguments block passed to ParticleSysSpawnEmitter. */
+struct ParticleSpawnArgs_t {
     int mUnknown00;
     float (*mUnknown04)[4][4];
     float (*mUnknown08)[4][4];
@@ -70,10 +75,20 @@ struct Args_80144CE0 {
 };
 
 extern "C" {
-AnimTex_t *fn_80145118(int index);
-Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, Source_80144CE0 *pSource);
-void fn_80144E38(Object_80144CE0 *pObject);
-void ParticlesSpawnAt(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
+AnimTex_t *ParticleSysGetAnimTex(int index);
+PsysEmitter_t *ParticleSysSpawnEmitter(ParticleSpawnArgs_t *pArgs, int b, ParticleSource_t *pSource);
+void ParticleSysReleaseEmitter(PsysEmitter_t *pObject);
+void ParticlesSpawnAt(int a, float *pPos, float *pRot, ParticleSource_t *pSource);
 }
+
+/* One 0x24-byte record of the six-entry table written to the replay stream. */
+struct ParticleSpawnRecord_t {
+    int mId;
+    float mPos[3];
+    float mRot[4];
+    ParticleSource_t *mpSource;
+};
+
+extern "C" void ParticleSysReplayRecordSpawn(ParticleSpawnRecord_t record);
 
 #endif

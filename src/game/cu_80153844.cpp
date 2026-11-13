@@ -8,7 +8,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802372EC.h"
 #include "game/ScrmRuleSet.h"
-#include "game/cu_8013BB18.h"
+#include "game/cammain.h"
 
 class Class_802A1930 : public ScrmRuleSet {
 };
@@ -87,7 +87,7 @@ void fn_801538C8(Class_802A1BC8 *p)
     p->PreGamePhase::OnExit();
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
     fn_80141164(2.5f);
 }
 

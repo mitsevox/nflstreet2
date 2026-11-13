@@ -42,8 +42,8 @@ int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
 int fn_8011E9D8(State_80039F5C *pState);
 unsigned int fn_800F67E8(Object_80039F5C *pTarget);
-int fn_8012CC04(unsigned char a);
-int fn_8012CCA0(Object_80039F5C *p);
+int PlayerCutGetAnimLength(unsigned char a);
+int PlayerCutGetAnimTime(Object_80039F5C *p);
 float fn_80178A2C(void);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
 void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
@@ -162,8 +162,8 @@ extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther) {
                    && (p->mMotion.mPos.mY > origin.mY + 4.0f || pOther->mMotion.mPos.mY < origin.mY - 1.0f)) {
             pBlock->mUnknown26 = 3;
         } else if (pOther->mpState->mId == 20) {
-            float total = fn_8012CC04(pOther->mpState->mUnknown2);
-            float done = fn_8012CCA0(pOther);
+            float total = PlayerCutGetAnimLength(pOther->mpState->mUnknown2);
+            float done = PlayerCutGetAnimTime(pOther);
 
             if (done / total > (1.0f - p->mRatings[8] * 0.003921569f) * 0.75f) {
                 pBlock->mUnknown26 = 2;

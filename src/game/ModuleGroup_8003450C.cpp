@@ -119,9 +119,9 @@ void CamGameStart(void *pObject);
 void CollTypesRegister(void);
 void CollTypesUnregister(void);
 void StatcollStart(void);
-void fn_80144B50(int a);
-void fn_80144C6C(int a);
-void fn_8014512C(void);
+void ParticleSysInit(int a);
+void ParticleSysShutdown(int a);
+void ParticleSysReplayRegister(void);
 void ParticlesInit(void);
 void ParticlesShutdown(void);
 void ScreenTintInit(int a);
@@ -799,13 +799,13 @@ const char *Particles::GetName() { return "Particles"; }
 
 int Particles::Init()
 {
-    fn_80144B50(GameObjList::GetListHandle());
+    ParticleSysInit(GameObjList::GetListHandle());
     return 1;
 }
 
 int Particles::Shutdown()
 {
-    fn_80144C6C(GameObjList::GetListHandle());
+    ParticleSysShutdown(GameObjList::GetListHandle());
     return 1;
 }
 
@@ -1126,7 +1126,7 @@ int ReplayFrame::Init()
     BigObjRegisterSave();
     DivotReplayRegister();
     SndgReplayRegister();
-    fn_8014512C();
+    ParticleSysReplayRegister();
     fn_800B4A4C();
     fn_800D77F0();
     fn_80030B30();

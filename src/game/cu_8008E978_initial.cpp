@@ -10,7 +10,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 #include "game/AudmonEvent.h"
 #include "game/cu_8003108C.h"
 

@@ -1,7 +1,7 @@
 #ifndef GAME_PARTICLE_EVENT_H
 #define GAME_PARTICLE_EVENT_H
 
-#include "game/cu_801444D8.h"
+#include "game/ParticleSys.h"
 
 struct Object_80039F5C;
 
@@ -13,7 +13,7 @@ struct ParticleEvent_t {
     Object_80039F5C *mUnknown0C;
     void *mUnknown10;
     int mUnknown14;
-    Object_80144CE0 *mUnknown18;
+    PsysEmitter_t *mUnknown18;
     int mUnknown1C;
     float mUnknown20[4][4];
 };

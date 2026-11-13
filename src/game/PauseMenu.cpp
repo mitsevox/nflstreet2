@@ -87,8 +87,8 @@ int fn_800BF718(int a);
 void fn_800C0330(void *p);
 void fn_800C1CA0(void);
 int fn_800C1E40(void);
-int fn_8013C678(GameCamera_t *pCamera);
-void fn_8013C6F0(GameCamera_t *pCamera);
+int CamMainGetMode(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 void CamGameSelectCamera(int a);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
@@ -197,7 +197,7 @@ void PauseCameraStart(void)
     fn_800B43C8();
     _Pause_State.mUnknown136 = -1;
     _Pause_State.mUnknown140 = CamGameGetCurrentSlot();
-    _Pause_State.mUnknown144 = fn_8013C678(CamGameGetCamera(5));
+    _Pause_State.mUnknown144 = CamMainGetMode(CamGameGetCamera(5));
     fn_801C1F94(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
@@ -278,7 +278,7 @@ int PauseCameraRestore(void)
             fn_80162780(_Pause_bSavedViewFlag, _Pause_bSavedViewFlag);
             CamGameSelectCamera(_Pause_State.mUnknown140);
             CamGameSetModeAll(_Pause_State.mUnknown144);
-            fn_8013C6F0(CamGameGetCamera(_Pause_State.mUnknown140));
+            CamMainWarpToDest(CamGameGetCamera(_Pause_State.mUnknown140));
         }
         if (fn_800AD9B4() == 5 && !fn_80059004() && !fn_8005900C()) {
             fn_800B4408();

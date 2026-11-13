@@ -296,9 +296,9 @@ extern "C" void OptionRunSteerCarrier(Object_80039F5C *p, Directions_8012430C *p
             pControl->mUnknown44 = angle;
             pControl->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
         }
-        fn_8012DDCC(p, pControl, 0);
-        pControl->mUnknown0 = fn_8012FA64(p);
-        fn_8012F89C(p, pControl, 0);
+        CarrierRunKeepInBounds(p, pControl, 0);
+        pControl->mUnknown0 = CarrierRunFindLeadBlocker(p);
+        CarrierRunSetSpeed(p, pControl, 0);
         PlayerMoveTryStartRun(p);
     }
     PlayerMoveUpdateRun(p);
@@ -308,7 +308,7 @@ extern "C" void OptionRunSteerCarrier(Object_80039F5C *p, Directions_8012430C *p
     p->mUnknown512.mUnknown8 = pControl->mUnknown44;
     p->mUnknown512.mUnknown4 = pControl->mUnknown44;
     p->mUnknown512.mUnknown0 = pControl->mUnknown40;
-    fn_8012F5A0(p, 0, &pControl->mUnknown56);
+    CarrierRunTryMoves(p, 0, &pControl->mUnknown56);
 }
 
 extern "C" void OptionRunSteerTrailer(Object_80039F5C *p, Directions_8012430C *pValues, OptionRunControl_t *pControl)
@@ -412,7 +412,7 @@ extern "C" int OptionRunEnter(Object_80039F5C *p)
     pControl->mUnknown80 = 1;
     pControl->mUnknown72 = 0;
     pControl->mUnknown81 = p->mpState->mUnknown3[0];
-    fn_80130338(p, pControl);
+    CarrierRunResetControl(p, pControl);
     if (p == BallGetCurrentHolder()) {
         pControl->mUnknown76 = 10;
         _OptionRun_iCount = 0;

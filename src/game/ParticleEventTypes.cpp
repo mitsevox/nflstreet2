@@ -11,8 +11,8 @@ extern "C" {
 void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0);
 int fn_800A33DC(void);
 int fn_800A8444(int team);
-int fn_80144FE8(int a);
-int fn_80145074(int a);
+int ParticleSysGetFootstepEffect(int a);
+int ParticleSysGetImpactEffect(int a);
 void fn_801D03D0(float m[4][4]);
 void fn_801D04C4(void);
 void fn_801D0508(void);
@@ -47,7 +47,7 @@ extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pPlayer->mpUnknown4;
     Vector_80039F5C pos;
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
     float speed;
 
     ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, 0);
@@ -78,8 +78,8 @@ extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
             args.mUnknown10 = 0;
             args.mUnknown08 = &m;
             args.mUnknown04 = &pEvent->mUnknown20;
-            args.mUnknown00 = fn_80144FE8(((Source_80144CE0 *)pBody->mUnknown972)->mUnknown08);
-            pEvent->mUnknown18 = fn_80144CE0(&args, 0, (Source_80144CE0 *)pBody->mUnknown972);
+            args.mUnknown00 = ParticleSysGetFootstepEffect(((ParticleSource_t *)pBody->mUnknown972)->mUnknown08);
+            pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, (ParticleSource_t *)pBody->mUnknown972);
         }
     }
 }
@@ -90,7 +90,7 @@ extern "C" void ParticleEventAttached(ParticleEvent_t *pEvent)
     Vector_80039F5C pos;
     QuatEulerAngles_t angles;
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
 
     ParticleEventGetJoint((Object_8003DEC4 *)pPlayer->mpUnknown4, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
@@ -108,7 +108,7 @@ extern "C" void ParticleEventAttached(ParticleEvent_t *pEvent)
         args.mUnknown08 = &m;
         args.mUnknown04 = &pEvent->mUnknown20;
         args.mUnknown00 = pEvent->mUnknown1C;
-        pEvent->mUnknown18 = fn_80144CE0(&args, 0, 0);
+        pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, 0);
     } else {
         fn_801D0508();
         fn_801D0C58(&pos);
@@ -130,7 +130,7 @@ extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
     Vector_80039F5C pos;
     QuatEulerAngles_t angles;
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
 
     if (fn_800A33DC() != 0 && fn_800A33DC() != 1 && pTrail->mUnknown57C != 1) {
         return;
@@ -152,7 +152,7 @@ extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
         args.mUnknown08 = &m;
         args.mUnknown04 = &pEvent->mUnknown20;
         args.mUnknown00 = 0;
-        pEvent->mUnknown18 = fn_80144CE0(&args, 0, (Source_80144CE0 *)pBody->mUnknown972);
+        pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, (ParticleSource_t *)pBody->mUnknown972);
         if (pEvent->mUnknown18 && pTrail->mUnknown57C == 1) {
             pEvent->mUnknown18->mUnknown7C *= 1.35f;
             pEvent->mUnknown18->mUnknown80 *= 1.35f;
@@ -176,7 +176,7 @@ extern "C" void ParticleEventBodyImpact(ParticleEvent_t *pEvent)
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
     Vector_80039F5C pos;
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
 
     ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, 0);
     if (fn_800A8444(0) || fn_800A8444(1) || pos.mZ >= 0.25f || pEvent->mUnknown18 != 0 || pEvent->mUnknown04 != 0) {
@@ -197,8 +197,8 @@ extern "C" void ParticleEventBodyImpact(ParticleEvent_t *pEvent)
         args.mUnknown10 = 0;
         args.mUnknown08 = &m;
         args.mUnknown04 = &pEvent->mUnknown20;
-        args.mUnknown00 = fn_80145074(((Source_80144CE0 *)pBody->mUnknown972)->mUnknown08);
-        pEvent->mUnknown18 = fn_80144CE0(&args, 0, (Source_80144CE0 *)pBody->mUnknown972);
+        args.mUnknown00 = ParticleSysGetImpactEffect(((ParticleSource_t *)pBody->mUnknown972)->mUnknown08);
+        pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, (ParticleSource_t *)pBody->mUnknown972);
         pEvent->mUnknown04 = 1;
     }
 }
@@ -206,11 +206,11 @@ extern "C" void ParticleEventBodyImpact(ParticleEvent_t *pEvent)
 extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
 {
     float m[4][4];
-    Args_80144CE0 args;
+    ParticleSpawnArgs_t args;
     Vector_80039F5C pos;
     Vector_80039F5C velocity;
     float (*pMatrix)[4][4] = pEvent->mUnknown08;
-    Source_80144CE0 *pSource;
+    ParticleSource_t *pSource;
     float speed;
 
     pos.mX = (*pMatrix)[0][3];
@@ -220,7 +220,7 @@ extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
     speed = fn_802270D4(&velocity);
     if (pos.mZ < 0.15f && ((Ball_t *)pEvent->mUnknown10)->mState.mState == 5 && speed > 0.06f
         && pEvent->mUnknown18 == 0) {
-        pSource = (Source_80144CE0 *)((Ball_t *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
+        pSource = (ParticleSource_t *)((Ball_t *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
         if (pSource != 0) {
             fn_801D03D0(m);
             m[0][3] = 0.0f;
@@ -234,8 +234,8 @@ extern "C" void ParticleEventBallBounce(ParticleEvent_t *pEvent)
             args.mUnknown10 = 0;
             args.mUnknown08 = &m;
             args.mUnknown04 = &pEvent->mUnknown20;
-            args.mUnknown00 = fn_80144FE8(pSource->mUnknown08);
-            pEvent->mUnknown18 = fn_80144CE0(&args, 0, pSource);
+            args.mUnknown00 = ParticleSysGetFootstepEffect(pSource->mUnknown08);
+            pEvent->mUnknown18 = ParticleSysSpawnEmitter(&args, 0, pSource);
         }
     }
 }

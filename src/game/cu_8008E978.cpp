@@ -6,7 +6,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/LevelWallInfo.h"
 #include "game/LevelData.h"
-#include "game/cu_80142BB4.h"
+#include "game/PlyrCollide.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
@@ -347,7 +347,7 @@ void HudUnhide(void);
 void CamGameProcess(void);
 void CamGameSetModeAll(int a);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 void fn_801D0508(void);
 void fn_801D0C58(void *p);
 void fn_801D0ADC(int a);
@@ -646,7 +646,7 @@ extern "C" void fn_80162780(int a, int b);
 extern "C" void CamGameSelectCamera(int a);
 extern "C" void CamGameResumeAll(void);
 extern "C" void CamGameSetFocusAll(int a, int b);
-extern "C" void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+extern "C" void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 
 extern "C" void fn_8009126C(int index)
@@ -675,7 +675,7 @@ extern "C" void fn_8009126C(int index)
         CamGameResumeAll();
         CamGameSetModeAll(10);
         CamGameSetFocusAll(0, 0);
-        fn_8013C824(pCamera, 3, 0);
+        CamMainMsg(pCamera, 3, 0);
     }
 }
 
@@ -2816,7 +2816,7 @@ void fn_80146E78(void);
 void LevelUpdate(void);
 void fn_800A2B40(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
-void fn_80144E38(Object_80144CE0 *pObject);
+void ParticleSysReleaseEmitter(PsysEmitter_t *pObject);
 
 extern unsigned char lbl_803EA9F8;
 extern unsigned char lbl_803EA9F0;
@@ -2929,7 +2929,7 @@ extern "C" void fn_800A29D8(int mode)
 extern "C" {
 void *fn_800C47C4(void);
 int ResFindIndexByName(void *pArchive, char *pName);
-void fn_80145100(int type, int index);
+void ParticleSysSetEffectFile(int type, int index);
 
 extern LevelData_t *gLevelData;
 }
@@ -2958,7 +2958,7 @@ extern "C" void fn_800A2D2C(void)
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        fn_80145100(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
+        ParticleSysSetEffectFile(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -3119,7 +3119,7 @@ extern "C" void fn_800A3450(void)
 
     for (i = 0; i < 30; i++) {
         if (lbl_8030E6E8.mpUnknownBC[i] != 0) {
-            fn_80144E38(lbl_8030E6E8.mpUnknownBC[i]);
+            ParticleSysReleaseEmitter(lbl_8030E6E8.mpUnknownBC[i]);
         }
         lbl_8030E6E8.mpUnknownBC[i] = 0;
     }
@@ -4952,7 +4952,7 @@ extern "C" int fn_8009B288(unsigned int *pState)
             CamGameSetModeAll(1);
             pCamera = CamGameGetCamera(0);
             if (pCamera != 0) {
-                fn_8013C6F0(pCamera);
+                CamMainWarpToDest(pCamera);
             }
             CamGameProcess();
         }
@@ -5849,11 +5849,11 @@ int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7E60(Object_80039F5C *p);
 int fn_80178308(void);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_8013C438(GameCamera_t *pCamera);
+void CamMainFollowBall(GameCamera_t *pCamera);
 void CamGameSetModeAll(int a);
-void fn_8013C384(void *pCamera, int a, int b, int c);
+void CamMainFollow(void *pCamera, int a, int b, int c);
 void CamGameSelectCamera(int a);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 int fn_8011F1CC(void);
 void PassIconsShow(int mode);
 void fn_80162FB8(int index, int ref);
@@ -5975,7 +5975,7 @@ extern "C" void fn_800A6044(void)
     int team;
 
     fn_800A61A8();
-    fn_8013C438(CamGameGetCamera(5));
+    CamMainFollowBall(CamGameGetCamera(5));
     p = BallGetCurrentHolder();
     team = fn_80178308();
     if (p == 0) {
@@ -5994,7 +5994,7 @@ extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
         lbl_803EC94C.mUnknown5 = 1;
         lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
         fn_80162FB8(fn_800B65A0(b->mIdBytes[2]), b->mId);
-        fn_8013C384(CamGameGetCamera(5), 2, b->mId, 0);
+        CamMainFollow(CamGameGetCamera(5), 2, b->mId, 0);
     }
 }
 
@@ -6675,7 +6675,7 @@ extern "C" void fn_800A87E8(void)
         lbl_803EAA4F = 0;
         CamGameSelectCamera(0);
         CamGameSetModeAll(1);
-        fn_8013C6F0(CamGameGetCamera(5));
+        CamMainWarpToDest(CamGameGetCamera(5));
         fn_8003E174(1);
         if (fn_8005BFD4() != 4) {
             fn_8005BF18();
@@ -6971,7 +6971,7 @@ extern "C" void fn_800A981C(void)
 {
     CamGameSelectCamera(0);
     CamGameSetModeAll(1);
-    fn_8013C6F0(CamGameGetCamera(5));
+    CamMainWarpToDest(CamGameGetCamera(5));
 }
 
 extern "C" {
@@ -7193,7 +7193,7 @@ void fn_80227538(void *pOut, int angle, float length);
 int fn_80177F70(void);
 void fn_8016DDDC(int team);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 int fn_80169EF4(int mode);
 void PlayBookLoadCurrentPlay(int team);
 void fn_800B3EFC(int team);
@@ -7627,7 +7627,7 @@ extern "C" void fn_800B2DF4(void)
         if (fn_80177F70() != 0) {
             fn_8016DDDC(fn_80178308());
             fn_8016DDDC(fn_80178320());
-            fn_8013C6F0(CamGameGetCamera(5));
+            CamMainWarpToDest(CamGameGetCamera(5));
         }
         lbl_803EAB34->mUnknown1F = 1;
     }
@@ -7787,7 +7787,7 @@ extern "C" void fn_800B32A8(float dt)
     if (fn_800B65A0(other) != 0xFF || fn_800B65A0(team) != 0xFF) {
         CamGameSelectCamera(0);
         CamGameSetFocusAll(1, BallGetCurrentIndex());
-        fn_8013C6F0(CamGameGetCamera(5));
+        CamMainWarpToDest(CamGameGetCamera(5));
     }
     if (fn_8016DD60() != 0) {
         fn_800AD910(2, dt);
@@ -8351,7 +8351,7 @@ int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int LooseBallAnimEvent(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8386,7 +8386,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[68] = fn_800F2CB4;
     lbl_8030FB60[192] = fn_800D7E9C;
     lbl_8030FB60[204] = fn_8010680C;
-    lbl_8030FB60[48] = fn_800EC674;
+    lbl_8030FB60[48] = LooseBallAnimEvent;
     lbl_8030FB60[43] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[44] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
@@ -9354,7 +9354,7 @@ extern "C" void fn_800BBE98(void)
 
 extern "C" {
 int BigObjGetCount(void);
-void fn_80053B4C(BigObj_t *pObject, int index, int apply);
+void HotspotFramePlayEffect(BigObj_t *pObject, int index, int apply);
 }
 
 extern "C" void fn_800BBF18(void)
@@ -9376,7 +9376,7 @@ extern "C" void fn_800BBF18(void)
             BigObj_t *pObject = BigObjGet(i);
 
             if (pObject->mUnknown472->mUnknown188 == 7) {
-                fn_80053B4C(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
+                HotspotFramePlayEffect(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
             }
         }
     }
@@ -9403,7 +9403,7 @@ extern "C" void fn_800BBF18(void)
                 BigObj_t *pObject = BigObjGet(i);
 
                 if (pObject->mUnknown472->mUnknown188 == 7) {
-                    fn_80053B4C(pObject, 2, 0);
+                    HotspotFramePlayEffect(pObject, 2, 0);
                 }
             }
         }
@@ -13896,7 +13896,7 @@ void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 int fn_80113BCC(Object_80039F5C *p);
 int fn_80114DE0(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-int fn_800EC758(Object_80039F5C *p);
+int LooseBallIsIdle(Object_80039F5C *p);
 int fn_800C76C0(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
@@ -14322,7 +14322,7 @@ extern "C" int fn_800CC800(Object_80039F5C *p)
     case 16:
         break;
     case 57:
-        result = fn_800EC758(p);
+        result = LooseBallIsIdle(p);
         break;
     case 17:
         if (fn_80114E7C(p) != 0) {
@@ -15988,7 +15988,7 @@ int fn_800B119C(void);
 int fn_800BA6F8(void);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
-void fn_8013C6F0(GameCamera_t *pCamera);
+void CamMainWarpToDest(GameCamera_t *pCamera);
 int fn_800B6644(int index);
 int fn_800A937C(void);
 int fn_800A9648(void);
@@ -16328,7 +16328,7 @@ extern "C" void SpchIGPurgeChannel(int index);
 extern "C" int fn_8016EA68(void);
 extern "C" void fn_8016E008(int team);
 extern "C" void fn_800BD958(void);
-extern "C" void fn_8013C824(GameCamera_t *pCamera, int msg, int arg);
+extern "C" void CamMainMsg(GameCamera_t *pCamera, int msg, int arg);
 
 extern "C" void fn_800BED54(unsigned char index)
 {
@@ -16368,7 +16368,7 @@ extern "C" void fn_800BED54(unsigned char index)
             SpchIGPurgeChannel(i);
         }
         fn_800BADD4();
-        fn_8013C824(CamGameGetCamera(5), 10, 0);
+        CamMainMsg(CamGameGetCamera(5), 10, 0);
         CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknownBC = 6;
         lbl_803EABA8->mSlots[index].mUnknown8 = 30;
@@ -16531,7 +16531,7 @@ void PreSnapPhase::SetupCamera()
     }
     if (CamGameGetCurrentSlot() != 3) {
         CamGameSelectCamera(0);
-        fn_8013C6F0(CamGameGetCamera(5));
+        CamMainWarpToDest(CamGameGetCamera(5));
     }
 }
 
@@ -17376,8 +17376,8 @@ void fn_800BC3F0(void);
 extern unsigned short lbl_802D9B14[];
 void fn_800BAAE4(void);
 void HudPost3AOn(void);
-int fn_8013C678(GameCamera_t *pCamera);
-void fn_8013C7C4(GameCamera_t *pCamera);
+int CamMainGetMode(GameCamera_t *pCamera);
+void CamMainStop(GameCamera_t *pCamera);
 }
 
 void PreGamePhase::Shutdown()
@@ -17500,11 +17500,11 @@ extern "C" int fn_800BD3C0(int team)
     if (lbl_803EABA8->mUnknown44 != -1) {
         return 0;
     }
-    if (fn_8013C678(pCamera) == 5) {
+    if (CamMainGetMode(pCamera) == 5) {
         return 0;
     }
-    lbl_803EABA8->mUnknown44 = fn_8013C678(pCamera);
-    fn_8013C7C4(pCamera);
+    lbl_803EABA8->mUnknown44 = CamMainGetMode(pCamera);
+    CamMainStop(pCamera);
     CamGameSetModeAll(5);
     if (team == fn_80178308()) {
         PassIconsShow(0);
@@ -17596,7 +17596,7 @@ extern "C" void fn_800BD830(void)
                 CamGameSetModeAll(id);
             }
             CamGameSelectCamera(0);
-            fn_8013C6F0(pCamera);
+            CamMainWarpToDest(pCamera);
         }
     }
 }
@@ -18133,10 +18133,10 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
         pOther->mFlags |= 0x80000;
         fn_800E9528();
-        fn_80143EBC(pOther, pB);
+        PlyrCollideRemoveExempt(pOther, pB);
         pLink->mUnknown15 = 1;
         fn_800F05E4(0, pB->mpState, &message, pB);
-        fn_80143EBC(pB, pOther);
+        PlyrCollideRemoveExempt(pB, pOther);
         HudClearMashPlayers(pOther->mId, pB->mId);
     } else {
         fn_800F00D4(0, pB->mpState, &message, pB);
@@ -18160,10 +18160,10 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
             Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
             pOther->mFlags |= 0x80000;
             fn_800E9528();
-            fn_80143EBC(pOther, pC);
+            PlyrCollideRemoveExempt(pOther, pC);
             pLink->mUnknown15 = 1;
             fn_800F05E4(0, pC->mpState, &message, pC);
-            fn_80143EBC(pC, pOther);
+            PlyrCollideRemoveExempt(pC, pOther);
             HudClearMashPlayers(pOther->mId, pC->mId);
         } else {
             fn_800F00D4(0, pC->mpState, &message, pC);

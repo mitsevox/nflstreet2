@@ -1,14 +1,20 @@
+// Challenge and tournament game set-up. Starting a challenge loads it, picks the
+// opponent team (remembered per challenge and user) and copies the challenge's
+// game options; starting a tournament game puts the bracket opponent against the
+// user's team. Some challenges play against a generated team: it is created in
+// the stat database, its player ratings are scaled down, and it is copied with
+// its players into the game database.
 #include "game/Challenge.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 
-static int lbl_802F3E60[7] = {0, 1, 2, 4, 8, 9, 13};
-static int lbl_803EB8F0 = -1;
-static int lbl_803EB8F4 = -1;
-static int lbl_803EB8F8 = -1;
-static unsigned char lbl_803EB8FC = 0;
+static int _ChalGame_aiGeneratedPositions[7] = {0, 1, 2, 4, 8, 9, 13};
+static int _ChalGame_iCachedChallenge = -1;
+static int _ChalGame_iCachedTeam = -1;
+static int _ChalGame_iCachedUser = -1;
+static unsigned char _ChalGame_bGeneratedOpponent = 0;
 
 extern "C" {
 int fn_801F9980(int handle, int *pTable);
@@ -23,7 +29,7 @@ void fn_80083DE4(int id);
 void ChallengeSetMode(int mode);
 void GameOutcomeSet(int value);
 int fn_8022F4BC(void);
-int fn_80186B38(int db);
+signed char fn_80186B38(int db);
 void fn_80186F30(signed char index, unsigned char pad);
 void TeamFilterSet(int value);
 void MsgChallengeSetFlowState(int value);
@@ -39,15 +45,15 @@ void GameInfoSet(int index, int value);
 float fn_80237260(int stream);
 void fn_800A2F3C(int value);
 
-int fn_80003FF8(int sourceTeam)
+int ChalGameCopyTeam(int sourceTeam)
 {
     QueryResult result;
     int ids[10];
-    QueryCursor cursor = {0, 0, -1, 0};
     unsigned short teamCount = 1;
     unsigned short count;
     int team;
     int table = -1;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player;
 
     fn_8022C628(0x454D4147, 0x4D414554, &team, &teamCount);
@@ -61,17 +67,21 @@ int fn_80003FF8(int sourceTeam)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where ('DIGT' = \x85) order by 'DIGP'\n", 0x54415453, &cursor, &player, 0x59414C50, sourceTeam);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         count = result.mUnknown0;
         fn_80229AA4(0x454D4147, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             fn_801FCE10(0, "fetch from \x8a\n", &cursor);
             fn_801F9980(0x454D4147, &table);
-            fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
-            fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
-            fn_801FCE10(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
-            fn_801FCE10(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
+            status = fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGP' = \x82)\n", 0x54415453, 0x454D4147, table, 0x59414C50, player);
+            status = fn_801FCE10(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIGP' = \x85 and 'DIOP' = \x85 where ('DIGP' = \x82)\n", 0x454D4147, table, sourceTeam, ids[i], player, player);
+            status = fn_801FCE10(&result, "use \x8c insert into 'YALP' * select * from \x8c\n", 0x454D4147, table);
+            status = fn_801FCE10(&result, "use \x8c update 'YALP' set 'ITGT' = \x85 where 'DIGP' = \x82\n", 0x454D4147, sourceTeam, ids[i]);
             fn_801F967C(0x454D4147, table);
         }
     }
@@ -79,7 +89,7 @@ int fn_80003FF8(int sourceTeam)
     return team;
 }
 
-void fn_800042D8(int team)
+void ChalGameScaleTeamRatings(int team)
 {
     Object_8008044C cursor;
     Desc_8008044C desc;
@@ -99,23 +109,23 @@ void fn_800042D8(int team)
     fn_8008056C(&cursor);
 }
 
-int fn_80004440(int *pTeam)
+int ChalGameGenerateTeam(int *pTeam)
 {
     int players[10];
     int team = fn_8008454C(6, -1, 0);
     int counts[7] = {1, 1, 1, 1, 1, 1, 1};
-    fn_80084808(team, lbl_802F3E60, counts, 7, players, 10);
-    fn_800042D8(team);
+    fn_80084808(team, _ChalGame_aiGeneratedPositions, counts, 7, players, 10);
+    ChalGameScaleTeamRatings(team);
     fn_80083DE4(team);
-    int gameTeam = fn_80003FF8(team);
+    int gameTeam = ChalGameCopyTeam(team);
     if (pTeam) *pTeam = gameTeam;
     return team;
 }
 
-void fn_80004504(unsigned char id)
+void ChalGameStart(unsigned char id)
 {
     DbCursor cursor;
-    lbl_803EB8FC = 0;
+    _ChalGame_bGeneratedOpponent = 0;
     ChallengeSetMode(0);
     GameOutcomeSet(2);
     fn_80186F30(fn_80186B38(fn_8022F4BC()), 1);
@@ -128,17 +138,17 @@ void fn_80004504(unsigned char id)
     fn_80083E1C(&cursor, 0);
     int team;
     if (ChalHasReward(pRecord, 4)) {
-        lbl_803EB8FC = 1;
+        _ChalGame_bGeneratedOpponent = 1;
         team = 0;
     } else if (pRecord->mUnknown198) {
         team = pRecord->mUnknown198;
-    } else if (lbl_803EB8F0 == pRecord->mUnknown0 && lbl_803EB8F4 != -1 && lbl_803EB8F8 == fn_8022F4BC()) {
-        team = lbl_803EB8F4;
+    } else if (_ChalGame_iCachedChallenge == pRecord->mUnknown0 && _ChalGame_iCachedTeam != -1 && _ChalGame_iCachedUser == fn_8022F4BC()) {
+        team = _ChalGame_iCachedTeam;
     } else {
         team = fn_80084388();
-        lbl_803EB8F4 = team;
-        lbl_803EB8F0 = pRecord->mUnknown0;
-        lbl_803EB8F8 = fn_8022F4BC();
+        _ChalGame_iCachedChallenge = pRecord->mUnknown0;
+        _ChalGame_iCachedTeam = team;
+        _ChalGame_iCachedUser = fn_8022F4BC();
     }
     fn_8018D7E0();
     fn_8008406C(&cursor, 1, 0);
@@ -170,10 +180,10 @@ void fn_80004504(unsigned char id)
     GameOptionsSet(19, 1);
 }
 
-void fn_8000473C(int team, int value)
+void ChalGameStartTournament(int team, int value)
 {
     DbCursor cursor;
-    lbl_803EB8FC = 0;
+    _ChalGame_bGeneratedOpponent = 0;
     GameOptionsCopyShadow();
     ChallengeSetMode(1);
     GameOutcomeSet(2);
@@ -198,7 +208,7 @@ void fn_8000473C(int team, int value)
 
 }
 
-extern "C" int fn_8000485C(void)
+extern "C" int ChalGameHasGeneratedOpponent(void)
 {
-    return lbl_803EB8FC;
+    return _ChalGame_bGeneratedOpponent;
 }

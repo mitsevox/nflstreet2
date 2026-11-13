@@ -85,13 +85,13 @@ int fn_8011F4C8(void);
 float fn_8011F4D4(void);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_801486A0(void);
-void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
@@ -586,8 +586,8 @@ extern "C" int HandoffTryPairAnim(Object_80039F5C *p, Object_80039F5C *pOther, H
         query.mpUnknown0 = p;
         query.mpUnknown4 = pOther;
         if (fn_800CE590(&query, &a, &b)) {
-            fn_80143E14(p, pOther);
-            fn_80143E14(pOther, p);
+            PlyrCollideAddExempt(p, pOther);
+            PlyrCollideAddExempt(pOther, p);
             fn_800CE608(p, &a);
             fn_800CE608(pOther, &b);
             p->mUnknown512.mUnknown14 = 0;
@@ -698,8 +698,8 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
                 scale *= fn_801CFB94(turn - 0x400000);
                 speed -= scale;
             }
-            fn_80143E14(p, pOther);
-            fn_80143E14(pOther, p);
+            PlyrCollideAddExempt(p, pOther);
+            PlyrCollideAddExempt(pOther, p);
         }
         if (speed < 0.0f)
             speed = 0.0f;
@@ -960,8 +960,8 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                     result = 1;
                     break;
                 }
-                fn_80143EBC(p, pOther);
-                fn_80143EBC(pOther, p);
+                PlyrCollideRemoveExempt(p, pOther);
+                PlyrCollideRemoveExempt(pOther, p);
             }
         }
         if (state->mUnknown4 == 3) {
@@ -988,8 +988,8 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
             }
         }
         if (p->mFlags & 4) {
-            fn_80143EBC(p, pOther);
-            fn_80143EBC(pOther, p);
+            PlyrCollideRemoveExempt(p, pOther);
+            PlyrCollideRemoveExempt(pOther, p);
             p->mFlags &= ~4;
             switch (state->mUnknown8) {
             case 0:
@@ -1042,9 +1042,9 @@ extern "C" int HandoffExit(Object_80039F5C *p) {
     Object_80039F5C *pOther = fn_8009BCE8(&state->mUnknown0);
     if (BallFindHeldBy(p) == BallGetCurrent())
         BallSetCurrentTarget(0);
-    fn_80143EBC(p, pOther);
+    PlyrCollideRemoveExempt(p, pOther);
     if (pOther)
-        fn_80143EBC(pOther, p);
+        PlyrCollideRemoveExempt(pOther, p);
     return 1;
 }
 

@@ -1,6 +1,9 @@
 #include "game/Effects_80146134.h"
 #include "engine/viewport.h"
 #include "game/Record_803EB25C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/DbCursor.h"
+#include "game/PaletteColor.h"
 
 /* Local access views. Preset and input identities remain unknown. */
 
@@ -36,28 +39,7 @@ struct Group_80146C00 { unsigned int mUnknown0; int mUnknown4; Entry_80146C4C *m
 extern "C" {
 struct LevelData_t;
 extern LevelData_t *gLevelData;
-extern Vector_80146134 lbl_802A03D0;
-extern int lbl_802DD170[];
-extern char lbl_802DD584[][24];
-extern Description_801463D8 lbl_802DD274;
-extern Description_801463D8 lbl_802DD304;
-extern Description_801463D8 lbl_802DD53C;
-extern Description_801463D8 lbl_802DD34C;
-extern Description_801463D8 lbl_802DD2BC;
-extern Description_801463D8 lbl_802DD19C;
-extern Description_801463D8 lbl_802DD1E4;
-extern Description_801463D8 lbl_802DD22C;
-extern Description_801463D8 lbl_802DD3DC;
-extern SlotDescription_80146A6C lbl_802DD424;
-extern SlotDescription_80146A6C lbl_802DD440;
-extern SlotDescription_80146A6C lbl_802DD45C;
-extern SlotDescription_80146A6C lbl_802DD478;
-extern SlotDescription_80146A6C lbl_802DD494;
-extern SlotDescription_80146A6C lbl_802DD4B0;
-extern SlotDescription_80146A6C lbl_802DD4CC;
-extern SlotDescription_80146A6C lbl_802DD4E8;
-extern SlotDescription_80146A6C lbl_802DD504;
-extern SlotDescription_80146A6C lbl_802DD520;
+extern Vector_80146134 gParticleSys_vUp;
 unsigned int fn_802372EC(int, unsigned int);
 int fn_801C2FE4(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
@@ -90,6 +72,32 @@ void fn_80146A6C(Entry_80146C4C *, SlotDescription_80146A6C *);
 void FieldMarkerInitEffect(Entry_80146C4C *);
 }
 
+static int lbl_802DD170[11] = { 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114 };
+static Description_801463D8 lbl_802DD19C = { { 10, 9.5f, 0.59f, 0.95f, 0.97f, 1.0f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD1E4 = { { 10, 6.5f, 0.874f, 0.99f, 1.0f, 1.0f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD22C = { { 10, 4.5f, 1.0f, 1.0f, 1.0f, 1.0f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD274 = { { 6, 7.0f, 1.0f, 1.0f, 1.0f, 1.0f }, 1, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD2BC = { { 6, 5.5f, 1.0f, 1.0f, 1.0f, 1.0f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD304 = { { 6, 9.0f, 1.0f, 1.0f, 1.0f, 1.0f }, 1, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD34C = { { 7, 2.0f, 1.0f, 0.9f, 0.9f, 0.3f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD394 = { { 0, 300.0f, 1.0f, 1.0f, 1.0f, 1.0f }, 0, 0, 1, -550.0f, -2000.0f, 900.0f, 0.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static Description_801463D8 lbl_802DD3DC = { { 1, 300.0f, 1.0f, 0.7f, 0.6f, 1.0f }, 0, 0, 1, -700.0f, -2000.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static SlotDescription_80146A6C lbl_802DD424 = { { 2, 76.0f, 0.04f, 0.023f, 0.04f, 1.0f }, 1.71f };
+static SlotDescription_80146A6C lbl_802DD440 = { { 4, 37.0f, 0.046f, 0.08f, 0.08f, 1.0f }, 1.49f };
+static SlotDescription_80146A6C lbl_802DD45C = { { 2, 11.0f, 0.13f, 0.06f, 0.13f, 1.0f }, 0.62f };
+static SlotDescription_80146A6C lbl_802DD478 = { { 4, 40.0f, 0.092f, 0.031f, 0.085f, 1.0f }, 0.52f };
+static SlotDescription_80146A6C lbl_802DD494 = { { 3, 36.0f, 0.03f, 0.082f, 0.046f, 1.0f }, 0.42f };
+static SlotDescription_80146A6C lbl_802DD4B0 = { { 4, 30.0f, 0.164f, 0.12f, 0.12f, 1.0f }, 0.3f };
+static SlotDescription_80146A6C lbl_802DD4CC = { { 3, 20.0f, 0.082f, 0.04f, 0.036f, 1.0f }, 0.2f };
+static SlotDescription_80146A6C lbl_802DD4E8 = { { 2, 60.0f, 0.092f, 0.04f, 0.04f, 1.0f }, -0.17f };
+static SlotDescription_80146A6C lbl_802DD504 = { { 3, 16.0f, 0.08f, 0.046f, 0.092f, 1.0f }, -0.32f };
+static SlotDescription_80146A6C lbl_802DD520 = { { 5, 150.0f, 0.125f, 0.125f, 0.125f, 1.0f }, -0.48f };
+static Description_801463D8 lbl_802DD53C = { { 6, 5.5f, 1.0f, 1.0f, 1.0f, 1.0f }, 0, 1, 2, 108.0f, -22.0f, 70.0f, 1.0f, 0.0f, 0.0f, 0.042f, 4, {0}, 0.1f };
+static char lbl_802DD584[11][24] = {
+    "JUNKYARD_GLOW01", "JUNKYARD_GLOW02", "JUNKYARD_GLOW03", "BRONX_GLOW02", "ROOFTOP_GLOW01", "LEGE_GLOW02",
+    "BEACH_GLOW01", "BLOOM01", "BLOOM02", "BLOOM03", "DIRECTIONAL",
+};
+
 static unsigned char lbl_803EB258 = 0;
 extern "C" { Record_803EB25C *lbl_803EB25C = 0; unsigned int lbl_803EB260 = 0; }
 static Entry_80146C4C *lbl_803EB264 = 0;
@@ -102,7 +110,15 @@ static Group_80146C00 lbl_8031B87C; /* Only group zero storage established here.
 static Resource_80146E64 lbl_8031B88C[11];
 
 extern "C" {
-Subrecord_80146134 *fn_80146134(void) { return &lbl_803EB268[lbl_803EB26C++]; }
+void ParticleTrailStartFlash(ParticleTrailSet_t *pObject)
+{
+    pObject->mUnknown56C = 8.0f;
+    pObject->mUnknown570 = 8.0f;
+    pObject->mUnknown574 = 8.0f;
+    pObject->mUnknown5A8 = 0;
+    pObject->mUnknown5A4 = 1;
+}
+Subrecord_80146134 *fn_80146134(void) { Subrecord_80146134 *p = &lbl_803EB268[lbl_803EB26C]; lbl_803EB26C++; return p; }
 void fn_80146150(Record_803EB25C *p, Input_80146150 *q)
 {
     p->mUnknown4 = 0; p->mUnknown0 = 2; p->mUnknown8 = q->mUnknown26;
@@ -117,11 +133,13 @@ void fn_8014619C(Record_803EB25C *p)
             unsigned int range, base;
             p->mUnknown1C = 0.0f;
             if (p->mUnknown4 == 0) {
+                p->mUnknown4 = 1;
                 range = (unsigned int)((p->mUnknown18 - p->mUnknown14) * 100.0f);
-                p->mUnknown4 = 1; base = (unsigned int)(p->mUnknown14 * 100.0f);
+                base = (unsigned int)(p->mUnknown14 * 100.0f);
             } else {
+                p->mUnknown4 = 0;
                 range = (unsigned int)((p->mUnknown10 - p->mUnknownC) * 100.0f);
-                p->mUnknown4 = 0; base = (unsigned int)(p->mUnknownC * 100.0f);
+                base = (unsigned int)(p->mUnknownC * 100.0f);
             }
             p->mUnknown20 = (float)(fn_802372EC(1, range) + base) * 0.01f;
         } else p->mUnknown1C += 0.01666666753590107f;
@@ -144,6 +162,7 @@ Description_801463D8 *fn_801463D8(const char *name)
     case 7: p = &lbl_802DD19C; break;
     case 8: p = &lbl_802DD1E4; break;
     case 9: p = &lbl_802DD22C; break;
+    case 10: break;
     }
     return p;
 }
@@ -165,7 +184,8 @@ static inline void InitializeSpecial(void)
 extern "C" {
 void fn_801464D0(void *owner)
 {
-    Vector_80146134 v = lbl_802A03D0;
+    Vector_80146134 out;
+    Vector_80146134 v = gParticleSys_vUp;
     lbl_803EB264 = (Entry_80146C4C *)fn_801D2B7C(7840, 0, 0);
     lbl_803EB268 = (Subrecord_80146134 *)fn_801D2B7C(960, 0, 0);
     lbl_803EB258 = 1;
@@ -174,7 +194,7 @@ void fn_801464D0(void *owner)
         lbl_8031B88C[i].mUnknown0 = owner; lbl_8031B88C[i].mUnknown4 = lbl_802DD170[i];
         lbl_8031B88C[i].mUnknownC = 0; lbl_8031B88C[i].mUnknown8 = 0;
     }
-    for (int i = 0; i < 40; ++i) lbl_8031B7DC[i] = 0;
+    for (unsigned int i = 0; i < 40; ++i) lbl_8031B7DC[i] = 0;
     fn_80146C00(0, ((Config_803EA554 *)gLevelData)->mUnknown50 + 17);
     lbl_803EB26C = 0; lbl_803EB270 = 0; fn_80197E64(); lbl_803EB260 = 0;
     if (fn_800A33B0()) {
@@ -189,20 +209,25 @@ void fn_801464D0(void *owner)
     if (((Config_803EA554 *)gLevelData)->mUnknown50 != 0) {
         lbl_803EB25C = (Record_803EB25C *)fn_801D2B7C(((Config_803EA554 *)gLevelData)->mUnknown50 * 36, 0, 0);
         lbl_803EB260 = ((Config_803EA554 *)gLevelData)->mUnknown50;
-        for (unsigned int i = 0; i < ((Config_803EA554 *)gLevelData)->mUnknown50 && i <= 39; ++i) {
+        for (unsigned int i = 0; i < lbl_803EB260 && i <= 39; ++i) {
             Input_80146150 *input = &((Config_803EA554 *)gLevelData)->mUnknown54[i];
             fn_80146150(&lbl_803EB25C[i], input);
             Description_801463D8 *desc = fn_801463D8(((Config_803EA554 *)gLevelData)->mUnknown24[input->mUnknown18]);
             if (desc) {
+                int angle[3];
                 lbl_8031B7DC[i] = fn_80146C4C(0, desc);
                 fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D0558();
-                int x = (int)(input->mUnknownC.x * 46603.37890625f);
-                int y = (int)(input->mUnknownC.y * 46603.37890625f);
-                int z = (int)((input->mUnknownC.z + 90.0f) * 46603.37890625f);
-                fn_801D0ADC(-z); fn_801D09EC(-y); fn_801D08FC(-x);
-                Vector_80146134 out; fn_80227C2C(&out, &v); fn_801D0544();
-                lbl_8031B7DC[i]->mUnknown18 = input->mUnknown0;
-                lbl_8031B7DC[i]->mUnknown24 = out;
+                angle[0] = (int)(input->mUnknownC.x * 46603.37890625f);
+                angle[1] = (int)(input->mUnknownC.y * 46603.37890625f);
+                angle[2] = (int)((input->mUnknownC.z + 90.0f) * 46603.37890625f);
+                fn_801D0ADC(-angle[2]); fn_801D09EC(-angle[1]); fn_801D08FC(-angle[0]);
+                fn_80227C2C(&out, &v); fn_801D0544();
+                lbl_8031B7DC[i]->mUnknown18.x = input->mUnknown0.x;
+                lbl_8031B7DC[i]->mUnknown18.y = input->mUnknown0.y;
+                lbl_8031B7DC[i]->mUnknown18.z = input->mUnknown0.z;
+                lbl_8031B7DC[i]->mUnknown24.x = out.x;
+                lbl_8031B7DC[i]->mUnknown24.y = out.y;
+                lbl_8031B7DC[i]->mUnknown24.z = out.z;
             }
         }
     }
@@ -210,8 +235,10 @@ void fn_801464D0(void *owner)
 void fn_801469A0(void)
 {
     fn_80197E68();
-    lbl_8031B87C.mUnknown0 = 0; lbl_8031B87C.mUnknown4 = 0;
-    lbl_8031B87C.mUnknown8 = 0; lbl_8031B87C.mUnknownC = 0;
+    for (unsigned int i = 0; i < 1; ++i) {
+        (&lbl_8031B87C)[i].mUnknown0 = 0; (&lbl_8031B87C)[i].mUnknown4 = 0;
+        (&lbl_8031B87C)[i].mUnknown8 = 0; (&lbl_8031B87C)[i].mUnknownC = 0;
+    }
     Resource_80146E64 *p = lbl_8031B88C;
     do {
         if (p->mUnknownC) { fn_80197F84(p); p->mUnknownC = 0; }
@@ -220,7 +247,7 @@ void fn_801469A0(void)
     lbl_803EB278 = 0; fn_801D2BD0(lbl_803EB264); lbl_803EB264 = 0;
     fn_801D2BD0(lbl_803EB268); lbl_803EB268 = 0; lbl_803EB26C = 0; lbl_803EB270 = 0;
     if (lbl_803EB25C) fn_801D2BD0(lbl_803EB25C);
-    lbl_803EB258 = 0; lbl_803EB25C = 0; lbl_803EB260 = 0;
+    lbl_803EB25C = 0; lbl_803EB260 = 0; lbl_803EB258 = 0;
 }
 void fn_80146A6C(Entry_80146C4C *p, SlotDescription_80146A6C *q)
 {
@@ -243,9 +270,13 @@ void fn_80146B40(Vector_80146134 *out, Vector_80146134 *in)
 {
     Vector_80146134 v;
     fn_801D0470(VptGetMatrixStack()); fn_801D04C4(); fn_801D12BC(3);
-    fn_80227D6C(&v, in); out->x = v.x; out->z = v.z; out->y = v.y; fn_801D0544();
+    fn_80227D6C(&v, in); out->x = v.x; out->y = v.y; out->z = v.z; fn_801D0544();
 }
-int fn_80146BA8(Vector_80146134 *p) { return p->x > -1.0f && p->x < 1.0f && p->y > -1.0f && p->y < 1.0f; }
+int fn_80146BA8(Vector_80146134 *p)
+{
+    if (p->x > -1.0f && p->x < 1.0f && p->y > -1.0f && p->y < 1.0f) return 1;
+    return 0;
+}
 void fn_80146BF8(float value) { lbl_803EB274 = value; }
 void fn_80146C00(int index, int count)
 {
@@ -273,20 +304,343 @@ Entry_80146C4C *fn_80146C4C(int index, Description_801463D8 *q)
         fn_80197E6C(&lbl_8031B88C[p->mUnknown0->mUnknown0]);
         lbl_8031B88C[p->mUnknown0->mUnknown0].mUnknownC = 1;
     }
-    p->mUnknown10 = 1; p->mUnknown11 = 0; p->mUnknown14 = 0.0f; p->mUnknown36 = 0; p->mUnknown35 = 0;
+    p->mUnknown36 = 0; p->mUnknown35 = 0; p->mUnknown10 = 1; p->mUnknown11 = 0; p->mUnknown14 = 0.0f;
     FieldMarkerInitEffect(p); return p;
 }
+struct EffectBlendScope_t {
+    void Begin(int main) { EffectBlendBegin(this, main); }
+    void Draw(Entry_80146C4C *p) { fn_80197FDC(this, p); }
+    void End(int main) { EffectBlendEnd(this, main); }
+};
 void fn_80146DC4(int index)
 {
-    char state[12]; EffectBlendBegin(state, index == 0);
     Group_80146C00 *group = &(&lbl_8031B87C)[index];
+    EffectBlendScope_t scope;
+    scope.Begin(index == 0);
     for (unsigned short i = 0; i < group->mUnknown0; ++i) {
-        Entry_80146C4C *p = &group->mUnknown8[i]; if (p->mUnknown10) fn_80197FDC(state, p);
+        Entry_80146C4C *p = &group->mUnknown8[i];
+        if (p->mUnknown10) scope.Draw(p);
     }
-    EffectBlendEnd(state, index == 0);
+    scope.End(index == 0);
 }
 Resource_80146E64 *fn_80146E64(int index) { return &lbl_8031B88C[index]; }
 void fn_80146E78(void) { if (lbl_803EB25C) for (unsigned int i = 0; i < lbl_803EB260; ++i) fn_8014619C(&lbl_803EB25C[i]); }
 int fn_80146EDC(unsigned int index) { if (lbl_803EB25C && index < lbl_803EB260) return lbl_803EB25C[index].mUnknown4; return 1; }
 float fn_80146F0C(unsigned int index) { if (lbl_803EB25C && index < lbl_803EB260) return lbl_803EB25C[index].mUnknown1C; return 0.0f; }
+}
+/* Three bytes read by fn_800840A4. */
+struct TeamRgb_t {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
+};
+
+/* Argument of fn_801476C8. */
+struct Args_801476C8 {
+    char mUnknown0[2];
+    unsigned char mUnknown2;
+    Object_8003DEC4 *mUnknown4;
+};
+
+extern "C" {
+int fn_8003DEB4(void);
+void fn_80083E1C(DbCursor *pObject, int a);
+void fn_800840A4(DbCursor *pObject, void *pBuffer);
+int fn_800A7EF4(unsigned char a);
+int fn_800C8744(int team);
+int fn_80188030(int a);
+void fn_801D0424(void *p, float (*m)[4]);
+void fn_801D04C4(void);
+void fn_801D0544(void);
+void fn_801D0664(float (*m)[4]);
+void fn_801D06D4(void *p);
+void fn_801D0FB8(Point_80146FDC *pOut);
+
+}
+
+static Color_802DD68C lbl_802DD68C[10] = {
+    { 1.0f, 0.0f, 0.0f, 0.25f },
+    { 0.0f, 0.0f, 1.0f, 0.25f },
+    { 0.0f, 1.0f, 0.0f, 0.25f },
+    { 1.0f, 0.8f, 0.0f, 0.25f },
+    { 1.0f, 1.0f, 1.0f, 0.25f },
+    { 1.0f, 1.0f, 1.0f, 0.25f },
+    { 1.0f, 1.0f, 1.0f, 0.25f },
+    { 1.0f, 1.0f, 1.0f, 0.25f },
+    { 1.0f, 1.0f, 1.0f, 0.25f },
+    { 0.25f, 0.25f, 1.0f, 0.45f },
+};
+
+/* Eight trail colours, read by the trail draw of src/game/cu_80196F48.cpp. */
+extern "C" {
+Color_802DD68C lbl_802DD72C[8] = {
+    { 1.0f, 0.0f, 0.0f, 0.4f },
+    { 1.0f, 0.0f, 0.0f, 0.4f },
+    { 1.0f, 0.59215f, 0.03137f, 0.4f },
+    { 1.0f, 0.83137f, 0.04705f, 0.4f },
+    { 1.0f, 0.91764f, 0.0549f, 0.4f },
+    { 1.0f, 0.98882f, 0.05882f, 0.2f },
+    { 1.0f, 0.98882f, 0.05882f, 0.2f },
+    { 1.0f, 0.98882f, 0.05882f, 0.1f },
+};
+}
+
+static unsigned char lbl_803EB27C = 1;
+static float lbl_803EB280 = 0.45f;
+
+/* Maps x in x0..x1 linearly onto y0..y1. */
+static inline float RangeMap(float x, float x0, float x1, float y0, float y1)
+{
+    return (x - x0) * (y1 - y0) / (x1 - x0) + y0;
+}
+
+extern "C" {
+
+float fn_80146F40(unsigned int index)
+{
+    if (lbl_803EB25C != 0 && index < lbl_803EB260) {
+        return lbl_803EB25C[index].mUnknown20;
+    }
+    return 0.0f;
+}
+
+void fn_80146F74(Object_8003DEC4 *pObject, int index, Point_80146FDC *pOut)
+{
+    fn_801D04C4();
+    fn_801D06D4(pObject->mUnknown908);
+    fn_801D0664(pObject->mUnknown44.mUnknown52[index]);
+    fn_801D0FB8(pOut);
+    fn_801D0544();
+}
+
+void fn_80146FCC(void)
+{
+    lbl_803EB27C = 1;
+}
+
+void fn_80146FD8(void)
+{
+}
+
+void fn_80146FDC(ParticleTrailSet_t *pObject)
+{
+    unsigned int i;
+
+    pObject->mUnknown230 = 1.0f;
+    pObject->mUnknown234 = 0;
+    pObject->mUnknown238 = -1;
+    pObject->mUnknown240 = lbl_802DD68C[8];
+    pObject->mUnknown23C = 0;
+    pObject->mUnknown554 = 1;
+    pObject->mUnknown558 = 0;
+    pObject->mUnknown560 = 0;
+    for (i = 0; i < 4; i++) {
+        Trail_80146FDC *pTrail = &pObject->mTrails[i];
+
+        pTrail->mCount = 0;
+        pTrail->mHead = 7;
+        pTrail->mToggle = 0;
+        switch (i) {
+        case 0:
+            pTrail->mIndex[0] = 18;
+            pTrail->mIndex[1] = 16;
+            break;
+        case 1:
+            pTrail->mIndex[0] = 3;
+            pTrail->mIndex[1] = 2;
+            break;
+        case 2:
+            pTrail->mIndex[0] = 24;
+            pTrail->mIndex[1] = 22;
+            break;
+        case 3:
+            pTrail->mIndex[0] = 7;
+            pTrail->mIndex[1] = 6;
+            break;
+        }
+    }
+}
+
+void fn_801470F0(Object_8003DEC4 *pObject)
+{
+    ParticleTrailSet_t *pData = &pObject->mUnknown5188;
+    unsigned int i;
+
+    if (--pData->mUnknown55C < 0) {
+        pData->mUnknown55C = 3;
+        if (--pData->mUnknown554 < 0) {
+            pData->mUnknown554 = 1;
+        }
+        fn_801D0424(pData->mUnknown260[pData->mUnknown554], pObject->mUnknown908);
+        pData->mUnknown2E0[pData->mUnknown554] = *(Block_801470F0 *)pObject->mUnknown44.mUnknown48;
+        (pData->mUnknown448 + pData->mUnknown554)->x = pObject->mUnknown44.mUnknown8[0];
+        (pData->mUnknown448 + pData->mUnknown554)->y = pObject->mUnknown44.mUnknown8[1];
+        (pData->mUnknown448 + pData->mUnknown554)->z = pObject->mUnknown44.mUnknown8[2];
+        pData->mUnknown460[pData->mUnknown554] = pObject->mUnknown44.mUnknown32;
+        pData->mUnknown468[pData->mUnknown554] = *(Half_801470F0 *)pObject->mUnknown280.mUnknown256.mUnknown48;
+        fn_801D0424(pData->mUnknown4D4[pData->mUnknown554], pObject->mUnknown44.mUnknown52[13]);
+        if (pData->mUnknown560 == 0) {
+            if (pData->mUnknown558 != 0) {
+                pData->mUnknown558--;
+            } else {
+                pObject->mUnknown20 &= ~0x20000;
+            }
+        } else if (pData->mUnknown558 <= 1) {
+            pData->mUnknown558++;
+        }
+    }
+
+    if (fn_800A7EF4(pObject->mUnknown4968) == 0) {
+        pData->mUnknown240 = lbl_802DD68C[9];
+    } else if (pData->mUnknown238 == -1) {
+        pData->mUnknown240 = lbl_802DD68C[8];
+    } else {
+        pData->mUnknown240 = lbl_802DD68C[pData->mUnknown238];
+    }
+
+    if (pObject->mUnknown20 & 0x10000) {
+        float count = pData->mUnknown234 + 1;
+
+        if (count > 35.0f) {
+            count = 35.0f;
+        }
+        pData->mUnknown234 = (unsigned int)count;
+        pData->mUnknown230 = RangeMap(pData->mUnknown234, 0.0f, 35.0f, 0.05f, 1.0f);
+    } else if (pData->mUnknown234 != 0) {
+        pObject->mUnknown20 |= 0x10000;
+        pData->mUnknown234--;
+        pData->mUnknown230 = RangeMap(pData->mUnknown234, 0.0f, 35.0f, 0.05f, 1.0f);
+    } else {
+        pData->mUnknown234 = 0;
+        pData->mUnknown230 = 0.0f;
+    }
+
+    for (i = 0; i < 4; i++) {
+        Trail_80146FDC *pTrail = &pData->mTrails[i];
+
+        if (pTrail->mCount < 8) {
+            pTrail->mCount++;
+        }
+        fn_80146F74(pObject, pTrail->mIndex[0], &pTrail->mSource[0]);
+        fn_80146F74(pObject, pTrail->mIndex[1], &pTrail->mSource[1]);
+        if (--pTrail->mHead < 0) {
+            pTrail->mHead = 7;
+        }
+        pTrail->mToggle = pTrail->mToggle == 1 ? 0 : 1;
+        pTrail->mPoints[pTrail->mHead] = pTrail->mSource[pTrail->mToggle];
+    }
+}
+
+void fn_80147598(Object_8003DEC4 *pObject, int bit, unsigned int slot, unsigned char flag)
+{
+    ParticleTrailSet_t *pData = &pObject->mUnknown5188;
+    int index;
+
+    pObject->mUnknown20 |= 1 << bit;
+    index = -1;
+    if (slot <= 8) {
+        index = fn_80188030(slot);
+    }
+    pData->mUnknown238 = index;
+    pData->mUnknown23C = flag;
+}
+
+void fn_801475F4(void)
+{
+    unsigned int i;
+
+    for (i = 0; i < fn_8003DEB4(); i++) {
+        Object_8003DEC4 *pObject = fn_8003DEC4(i);
+        ParticleTrailSet_t *pData = &pObject->mUnknown5188;
+        Trail_80146FDC *pTrail;
+        int j;
+
+        pData->mUnknown230 = 1.0f;
+        pData->mUnknown234 = 0;
+        pData->mUnknown238 = -1;
+        pData->mUnknown240 = lbl_802DD68C[8];
+        pData->mUnknown554 = 1;
+        pData->mUnknown558 = 0;
+        pData->mUnknown560 = 0;
+        pTrail = pData->mTrails;
+        for (j = 0; j < 4; j++) {
+            pTrail->mCount = 0;
+            pTrail->mHead = 7;
+            pTrail->mToggle = 0;
+            pTrail++;
+        }
+    }
+}
+
+void fn_801476C8(Args_801476C8 *pArgs)
+{
+    DbCursor cursor;
+    TeamRgb_t rgb;
+    PaletteColor color;
+    Object_8003DEC4 *pObject = pArgs->mUnknown4;
+    int id = fn_800C8744(pArgs->mUnknown2);
+
+    fn_80083E1C(&cursor, 0);
+    fn_80084034(&cursor, id, 0);
+    fn_800840A4(&cursor, &rgb);
+    fn_80083F68(&cursor);
+    DbColPalGetPrimaryColor(rgb.mUnknown0, &color);
+    pObject->mUnknown5188.mUnknown250.mUnknown0 = color.r / 255.0f;
+    pObject->mUnknown5188.mUnknown250.mUnknown4 = color.g / 255.0f;
+    pObject->mUnknown5188.mUnknown250.mUnknown8 = color.b / 255.0f;
+    pObject->mUnknown5188.mUnknown250.mUnknownC = lbl_803EB280;
+}
+
+void fn_801477F0(Object_8003DEC4 *pObject)
+{
+    if (pObject->mUnknown5188.mUnknown560 == 0) {
+        pObject->mUnknown20 |= 0x20000;
+        pObject->mUnknown5188.mUnknown560 = 1;
+        pObject->mUnknown5188.mUnknown558 = 1;
+        pObject->mUnknown5188.mUnknown55C = 3;
+        pObject->mUnknown5188.mUnknown564 = 0.0f;
+    } else {
+        pObject->mUnknown5188.mUnknown564 = 0.0f;
+    }
+}
+
+void fn_80147840(Object_8003DEC4 *pObject)
+{
+    pObject->mUnknown5188.mUnknown560 = 0;
+    pObject->mUnknown5188.mUnknown558 = 0;
+    pObject->mUnknown20 &= ~0x20000;
+}
+
+void fn_80147860(Object_8003DEC4 *pObject, float step)
+{
+    if (pObject->mUnknown5188.mUnknown560 == 1) {
+        pObject->mUnknown5188.mUnknown564 += step;
+        if (pObject->mUnknown5188.mUnknown564 >= 30.0f) {
+            fn_80147840(pObject);
+        }
+    }
+}
+
+void fn_801478A8(void)
+{
+    unsigned int i;
+
+    for (i = 0; i < fn_8003DEB4(); i++) {
+        fn_801470F0(fn_8003DEC4(i));
+    }
+}
+
+unsigned char fn_801478F0(unsigned char a)
+{
+    unsigned char previous = lbl_803EB27C;
+
+    lbl_803EB27C = a;
+    return previous;
+}
+
+unsigned char fn_80147900(void)
+{
+    return lbl_803EB27C;
+}
+
 }

@@ -5,7 +5,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/CollideContacts.h"
 #include "game/Ball.h"
-#include "game/cu_80142BB4.h"
+#include "game/CollideBounce.h"
 #include "game/fn_802270D4.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -63,7 +63,7 @@ extern "C" void BallDeflect(Ball_t *pBall, Vector_80039F5C *pCenter, Vector_8003
     float x = pBall->mState.mUnknown54.mX;
     float y = pBall->mState.mUnknown54.mY;
     float z = pBall->mState.mUnknown54.mZ;
-    Body_80142D98 motion;
+    BounceBody_t motion;
     float length;
     float scale;
 
@@ -71,11 +71,11 @@ extern "C" void BallDeflect(Ball_t *pBall, Vector_80039F5C *pCenter, Vector_8003
     motion.mUnknown0.mY = y - pCenter->mY;
     motion.mUnknown0.mZ = z - pCenter->mZ;
     motion.mUnknown36 = 0.875f;
-    fn_80142D98(&motion, pDir, value);
+    BounceBody3D(&motion, pDir, value);
     if (push && fn_802270D4(&motion.mUnknown12) < 0.040000003f) {
         Vector_80039F5C step;
 
-        fn_80143150(&step, pDir, 0.040000003f);
+        BounceScatterVector(&step, pDir, 0.040000003f);
         if (step.mZ >= 0.0f) {
             step.mZ = 0.0f;
         }
@@ -145,8 +145,8 @@ extern "C" void BallGetDeflectNormal(Vector_80039F5C *pOut, Object_80039F5C *p, 
 extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub,
                             Vector_80039F5C *pPos)
 {
-    Segment_80142C5C ball;
-    Segment_80142C5C target;
+    BounceSegment_t ball;
+    BounceSegment_t target;
     Vector_80039F5C dir;
     Vector_80039F5C span;
     unsigned char hitA;
@@ -166,7 +166,7 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
     target.mUnknown12.mX = p->mpUnknown3092->mpUnknown36[sub].mUnknown0;
     target.mUnknown12.mY = p->mpUnknown3092->mpUnknown36[sub].mUnknown4;
     target.mUnknown12.mZ = p->mpUnknown3092->mpUnknown36[sub].mUnknown8;
-    if (fn_80142C5C(&ball, &target, &hitA, &hitB) && !BallStateCheckPlayerHit(pBall, p, sub)) {
+    if (BounceCheckApproach(&ball, &target, &hitA, &hitB) && !BallStateCheckPlayerHit(pBall, p, sub)) {
         fn_8009BD2C(p, &pBall->mState.mUnknownCC);
         BallGetDeflectNormal(&dir, p, &pBall->mState.mUnknown28, sub);
         if (hitA) {

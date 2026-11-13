@@ -107,7 +107,7 @@ extern Baseline_802E9ADC lbl_802E9ADC[2];
 int ChallengeIsActive(void);
 CollideSet_t *PlyrMgrGetCollideSet(void);
 void PlyrMgrReverseAll(void);
-void fn_800535FC(void);
+void HotspotClearQueue(void);
 void SndgSpchSetPlayFlags(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
@@ -601,7 +601,7 @@ void ScrmRuleSet::EndPlay()
         p->mUnknown10 = p->mUnknownC = 0.0f;
         fn_800B1508();
         fn_800A8954(0x16, fn_80178308(), 0);
-        fn_800535FC();
+        HotspotClearQueue();
         pPlayer = BallGetCurrentHolder();
         if (pPlayer && fn_801BE648(pPlayer->mpUnknown792) == 0xED) {
             StyleTrackerAwardDive(pPlayer, PlayerMoveGetKind(pPlayer), 0xFF);

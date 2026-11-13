@@ -87,7 +87,7 @@ void PlyrPoseGetBoneTransform(Block_80170E64 *pBlock, int id, float *pOut, int b
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
 CamReplayBallModel_t *BallGetModel(void *p);
-void fn_8013C624(CamReplayCamera_t *pCamera, int mode, int a, int b);
+void CamMainSetMode(CamReplayCamera_t *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
 void BannerClear(int a);
@@ -775,9 +775,9 @@ extern "C" void CamReplayNextRecord(void)
 
     if (fn_8002E7D0(pList)) {
         fn_8002E7EC(p, pList);
-        fn_8013C624(_CamReplay_pCamera, 8, 0, 0);
+        CamMainSetMode(_CamReplay_pCamera, 8, 0, 0);
     } else if (_CamReplay_bRepeat) {
-        fn_8013C624(_CamReplay_pCamera, 8, 0, 0);
+        CamMainSetMode(_CamReplay_pCamera, 8, 0, 0);
         fn_8002CFF4(lbl_803EA368);
     } else {
         fn_8002D198(p);
