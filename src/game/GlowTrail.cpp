@@ -251,7 +251,7 @@ void GlowShutdown(void)
 }
 void GlowAddGhost(Glow_t *p, GlowGhostDesc_t *q)
 {
-    GlowGhost_t *slot = &((GlowGhost_t *)p->mUnknown3C)[p->mUnknown36];
+    GlowGhost_t *slot = &p->mUnknown3C[p->mUnknown36];
     slot->mUnknown0 = GlowAllocElement();
     slot->mUnknown0->mUnknown0 = q->mUnknown0.mUnknown0;
     slot->mUnknown0->mUnknown4 = q->mUnknown0.mUnknown4;

@@ -22,7 +22,16 @@ struct Glow_t {
     unsigned char mUnknown34, mUnknown35, mUnknown36;
     char mUnknown37;
     float mUnknown38;
-    char mUnknown3C[136]; /* Indexed as 8-byte slots; original capacity unknown. */
+    GlowGhost_t mUnknown3C[17];
+};
+
+/* The GX side of a glow texture: the TM texture and palette objects and
+   whether the palette was created. */
+struct GlowTexImage_t {
+    unsigned char mUnknown0[44];
+    unsigned char mUnknown2C[40];
+    unsigned char mUnknown54;
+    char mUnknown55[3];
 };
 
 /* One glow texture: the resource it is loaded from and its GX texture and palette. */
@@ -31,10 +40,7 @@ struct GlowTexture_t {
     int mUnknown4, mUnknown8;
     unsigned char mUnknownC;
     char mUnknownD[3];
-    unsigned char mUnknown10[44];
-    unsigned char mUnknown3C[40];
-    unsigned char mUnknown64;
-    char mUnknown65[3];
+    GlowTexImage_t mUnknown10;
 };
 
 /* On/off flicker state of one level glow (0x24 bytes). */
