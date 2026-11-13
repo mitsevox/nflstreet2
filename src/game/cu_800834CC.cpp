@@ -353,7 +353,7 @@ void fn_80083F68(DbCursor *pObject)
 
 void fn_80083F88(DbCursor *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C(pObject, 0x414E4454, (int)pBuffer, size);
+    DbCursorGetString(pObject, 0x414E4454, (int)pBuffer, size);
 }
 
 int fn_80083FBC(DbCursor *pObject)
@@ -403,7 +403,7 @@ int fn_80084158(DbCursor *pObject)
 
 void fn_80084180(DbCursor *pObject, int value)
 {
-    fn_8007AA90(pObject, 0x4C474C54, value);
+    DbCursorSetValue(pObject, 0x4C474C54, value);
 }
 
 unsigned char fn_800841AC(DbCursor *pObject)
@@ -423,22 +423,22 @@ unsigned char fn_80084204(DbCursor *pObject)
 
 void fn_80084230(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x31434D54, value);
+    DbCursorSetInt(pObject, 0x31434D54, value);
 }
 
 void fn_8008425C(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x32434D54, value);
+    DbCursorSetInt(pObject, 0x32434D54, value);
 }
 
 void fn_80084288(DbCursor *pObject, unsigned char value)
 {
-    fn_8007ABA4(pObject, 0x33434D54, value);
+    DbCursorSetInt(pObject, 0x33434D54, value);
 }
 
 void fn_800842B4(DbCursor *pObject, char *pText, int length)
 {
-    fn_8007ADD4(pObject, 0x414E4454, pText, length);
+    DbCursorSetString(pObject, 0x414E4454, pText, length);
 }
 
 int fn_800842E8(DbCursor *pObject)
@@ -483,9 +483,9 @@ int fn_80084438(DbCursor *pObject)
 void fn_80084470(DbCursor *pObject, int value)
 {
     if (value) {
-        fn_8007ABA4(pObject, 0x4C445443, 1);
+        DbCursorSetInt(pObject, 0x4C445443, 1);
     } else {
-        fn_8007ABA4(pObject, 0x4C445443, 0);
+        DbCursorSetInt(pObject, 0x4C445443, 0);
     }
 }
 

@@ -32,7 +32,7 @@ int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index)
 
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value)
 {
-    fn_8007ABA4(pObject, _PlayerDb_aRatingColumns[index], value);
+    DbCursorSetInt(pObject, _PlayerDb_aRatingColumns[index], value);
 }
 
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues)

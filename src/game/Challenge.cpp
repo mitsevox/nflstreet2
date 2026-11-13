@@ -678,12 +678,12 @@ void ChalSetProgress(int id, int a, int b, int c)
         DbCursor *pObject = ChalGetProgressCursor(handle);
 
         if (DbCursorFindInt(pObject, 0x44494843, id, 0, 0)) {
-            fn_8007ABA4(pObject, 0x534C4843, a);
-            fn_8007AA90(pObject, 0x444D4843, b);
+            DbCursorSetInt(pObject, 0x534C4843, a);
+            DbCursorSetValue(pObject, 0x444D4843, b);
             if (a == 2) {
-                fn_8007ABA4(pObject, 0x4C534843, c);
+                DbCursorSetInt(pObject, 0x4C534843, c);
             } else {
-                fn_8007ABA4(pObject, 0x4C534843, 3);
+                DbCursorSetInt(pObject, 0x4C534843, 3);
             }
         }
     }
@@ -709,7 +709,7 @@ void ChalAddPoints(int value)
     if (handle != -1) {
         DbCursor *pObject = ChalGetInfoCursor(handle);
 
-        fn_8007ABA4(pObject, 0x50434943, DbCursorGetInt(pObject, 0x50434943) + value);
+        DbCursorSetInt(pObject, 0x50434943, DbCursorGetInt(pObject, 0x50434943) + value);
     }
 }
 
@@ -731,7 +731,7 @@ void ChalSetTournamentSlot(int value)
     int handle = fn_8022F3D4(fn_8022F4BC());
 
     if (handle != -1) {
-        fn_8007ABA4(ChalGetInfoCursor(handle), 0x54524943, value);
+        DbCursorSetInt(ChalGetInfoCursor(handle), 0x54524943, value);
     }
 }
 
@@ -754,7 +754,7 @@ void ChalSetTournamentWon(int value)
     int handle = fn_8022F3D4(index);
 
     if (handle != -1) {
-        fn_8007ABA4(ChalGetInfoCursor(handle), 0x4D574943, value);
+        DbCursorSetInt(ChalGetInfoCursor(handle), 0x4D574943, value);
         if (value) {
             fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
             GameOptionsSet(20, 1);
@@ -819,7 +819,7 @@ void ChalSetDevPoints(int value)
     int handle = fn_8022F3D4(fn_8022F4BC());
 
     if (handle != -1) {
-        fn_8007ABA4(ChalGetInfoCursor(handle), 0x50444943, value);
+        DbCursorSetInt(ChalGetInfoCursor(handle), 0x50444943, value);
     }
 }
 
@@ -828,7 +828,7 @@ void ChalSetDevPointsForSlot(int index, int value)
     int handle = fn_8022F3D4(fn_8022F358(index));
 
     if (handle != -1) {
-        fn_8007ABA4(ChalGetInfoCursor(handle), 0x50444943, value);
+        DbCursorSetInt(ChalGetInfoCursor(handle), 0x50444943, value);
     }
 }
 

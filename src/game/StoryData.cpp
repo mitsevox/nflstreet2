@@ -95,7 +95,7 @@ int StoryPlayerGetFirstName(DbCursor *pCursor, int row, char *pBuffer, int size)
         ok = 0;
     } else {
         DbCursorSeek(pCursor, row);
-        fn_8007AA3C(pCursor, 0x414E4650, (int)pBuffer, size);
+        DbCursorGetString(pCursor, 0x414E4650, (int)pBuffer, size);
         ok = 1;
     }
     return ok;
@@ -110,7 +110,7 @@ int StoryPlayerGetLastName(DbCursor *pCursor, int row, char *pBuffer, int size)
         ok = 0;
     } else {
         DbCursorSeek(pCursor, row);
-        fn_8007AA3C(pCursor, 0x414E4C50, (int)pBuffer, size);
+        DbCursorGetString(pCursor, 0x414E4C50, (int)pBuffer, size);
         ok = 1;
     }
     return ok;

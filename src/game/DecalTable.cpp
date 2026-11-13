@@ -45,7 +45,7 @@ void DecalGetName(int a, char *pBuffer, int size)
 
     DbCursorOpen(&cursor, 0x4C414344, 0x494C4344, 0, 0, 0x54415453);
     DbCursorFindValue(&cursor, 0x494C4344, a, 0, 0);
-    fn_8007AA3C(&cursor, 0x4E4C4344, (int)pBuffer, size);
+    DbCursorGetString(&cursor, 0x4E4C4344, (int)pBuffer, size);
     DbCursorClose(&cursor);
 }
 
@@ -68,7 +68,7 @@ void DecalClearNew(int index, int a)
 
     DbCursorOpen(&cursor, 0x4C43444C, 0x494C4344, 0, 0, fn_8022F3D4(fn_8022F358(index)));
     if (DbCursorFindValue(&cursor, 0x494C4344, a, 0, 0)) {
-        fn_8007ABA4(&cursor, 0x574E5247, 0);
+        DbCursorSetInt(&cursor, 0x574E5247, 0);
     }
     DbCursorClose(&cursor);
 }

@@ -545,9 +545,9 @@ int fn_80017DF4(void)
     index = fn_8022F384(fn_8022F4BC());
     digt = StoryTeamLoadOneToStats(index, 1, (StoryTeamIdBlock_t *)ids);
     if (PlayerDbSeekId(&lbl_8036B168, ids[0], 0)) {
-        fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids[0]);
-        fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
-        fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
+        DbCursorSetInt(&lbl_8036B168, 0x44494F50, ids[0]);
+        DbCursorSetInt(&lbl_8036B168, 0x44494754, digt);
+        DbCursorSetInt(&lbl_8036B168, 0x49544754, digt);
         lbl_802F43F4[0].mValue = ids[0];
         DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
         DbCursorGetInt(&lbl_8036B168, 0x4F504250);
@@ -617,10 +617,10 @@ int fn_80018114(void)
     index = fn_8022F384(fn_8022F4BC());
     digt = StoryTeamLoadOneToStats(index, 1, &ids);
     if (PlayerDbSeekId(&lbl_8036B168, ids.mUnknown0, 0)) {
-        fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids.mUnknown0);
+        DbCursorSetInt(&lbl_8036B168, 0x44494F50, ids.mUnknown0);
         ok = 1;
-        fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
-        fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
+        DbCursorSetInt(&lbl_8036B168, 0x44494754, digt);
+        DbCursorSetInt(&lbl_8036B168, 0x49544754, digt);
         value8 = DbCursorGetValue((DbCursor *)&lbl_8036B168, 0x50585350);
         valueC = DbCursorGetInt(&lbl_8036B168, 0x4F504250);
         lbl_803EBA0C[0].mId = ids.mUnknown0;

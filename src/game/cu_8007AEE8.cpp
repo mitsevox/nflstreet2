@@ -100,7 +100,7 @@ void fn_8007B14C(int key, int value)
         columns[3].SetEnd();
         fn_801F9718(pCursor->mUnknown4, pCursor->mUnknown8, columns, result, 0);
     } else {
-        fn_8007AA90(pCursor, 0x44494750, value);
+        DbCursorSetValue(pCursor, 0x44494750, value);
     }
     DbCursorClose(&cursor);
 }
@@ -144,17 +144,17 @@ int fn_8007B404(DbCursor *pCursor)
 
 void fn_8007B42C(DbCursor *pCursor, char *pText, int length)
 {
-    fn_8007AA3C(pCursor, 0x52414E53, (int)pText, length);
+    DbCursorGetString(pCursor, 0x52414E53, (int)pText, length);
 }
 
 void fn_8007B460(DbCursor *pCursor, char *pText, int length)
 {
-    fn_8007AA3C(pCursor, 0x49544E53, (int)pText, length);
+    DbCursorGetString(pCursor, 0x49544E53, (int)pText, length);
 }
 
 void fn_8007B494(DbCursor *pCursor, char *pText, int length)
 {
-    fn_8007AA3C(pCursor, 0x4C414E53, (int)pText, length);
+    DbCursorGetString(pCursor, 0x4C414E53, (int)pText, length);
 }
 
 }

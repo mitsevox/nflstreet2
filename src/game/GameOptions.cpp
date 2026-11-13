@@ -228,7 +228,7 @@ void GameOptionsSet(int id, int value)
         }
     }
     if (_GameOptions_bDeferWrites == 0) {
-        fn_8007AA90(&_GameOptions_sCursor, _GameOptions_aDefaults[id].mColumnTag, value);
+        DbCursorSetValue(&_GameOptions_sCursor, _GameOptions_aDefaults[id].mColumnTag, value);
     }
     _GameOptions_aRecord[id].mValue = value;
     if (id >= 3 && id <= 5) {

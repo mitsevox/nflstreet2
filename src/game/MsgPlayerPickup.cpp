@@ -204,10 +204,10 @@ void MsgPlayerPickupCopyTeam(int db)
     fn_8022C628(0x54415453, 0x4D414554, &_MsgPlayerPickup_iCopyTeam, &teamCount);
     for (i = 0; i < n; i++) {
         if (DbCursorSeek(&cursor, i)) {
-            fn_8007ABA4(&cursor, 0x44494F50, ids[i]);
-            fn_8007AA90(&cursor, 0x44494F50, -1);
-            fn_8007ABA4(&cursor, 0x44494750, ids[i]);
-            fn_8007ABA4(&cursor, 0x44494754, _MsgPlayerPickup_iCopyTeam);
+            DbCursorSetInt(&cursor, 0x44494F50, ids[i]);
+            DbCursorSetValue(&cursor, 0x44494F50, -1);
+            DbCursorSetInt(&cursor, 0x44494750, ids[i]);
+            DbCursorSetInt(&cursor, 0x44494754, _MsgPlayerPickup_iCopyTeam);
         }
     }
     fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
