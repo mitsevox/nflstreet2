@@ -8,7 +8,7 @@
 extern void *lbl_803ED664;
 
 void fn_801CE234(void (*pCallback)(void));
-void fn_80247134(void);
+int PADInit(void);
 void fn_802856D8(void);
 int PerRegisterSingleDevice(unsigned char port);
 int PerUnRegisterDevices(void);
@@ -17,7 +17,7 @@ unsigned int PerSystemGetDriverDataSize(void);
 
 int PerSystemInit(void *pData)
 {
-    fn_80247134();
+    PADInit();
     fn_802856D8();
     lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
     lbl_803ED660 = 4;

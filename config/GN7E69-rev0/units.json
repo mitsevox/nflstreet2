@@ -805,10 +805,6 @@
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
-    "__PADSpec": {
-      "address": "0x803ED2B0",
-      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
-    },
     "RealMode": {
       "address": "0x8023BC20",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
@@ -860,10 +856,6 @@
     "__OSStopAudioSystem": {
       "address": "0x80239BD4",
       "evidence": "Original complete OSResetSystem call instruction0x8023C118 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__PADDisableRecalibration": {
-      "address": "0x80248124",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C398 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "__OSSyncSram": {
       "address": "0x8023CED0",
@@ -1476,14 +1468,6 @@
     "OSResetSystem": {
       "address": "0x8023C0F8",
       "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
-    },
-    "PADRecalibrate": {
-      "address": "0x80247030",
-      "evidence": "evidence.tsv function row for 0x80247030 (target extent, related SDK name)."
-    },
-    "PADControlMotor": {
-      "address": "0x802476F8",
-      "evidence": "evidence.tsv function row for 0x802476F8 (target extent, related SDK name). evidence.tsv external row PADControlMotor: target REL24 calls at 0x801CABC0, 0x801CABD0, 0x801CABE0, 0x801CABEC and the SDK Pad.c comparison unit."
     },
     "GXInit": {
       "address": "0x8024AF70",
@@ -5850,6 +5834,43 @@
           "placement": ".data6",
           "start": "0x803ED718",
           "end": "0x803ED738"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit row 0x802466D0-0x802481A0 (src/dolphin/pad/Pad.c) and its function, name, data and source-form rows; CREDITS.md for the source; all 19 functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802466D0",
+          "end": "0x802481A0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC218",
+          "end": "0x803EC238"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5880",
+          "end": "0x803A58D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDD00",
+          "end": "0x802FDD58"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED288",
+          "end": "0x803ED2B4"
         }
       ]
     },

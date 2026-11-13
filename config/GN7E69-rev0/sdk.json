@@ -1459,7 +1459,7 @@
       "name": "src/dolphin/pad/Pad.c",
       "source": "src/dolphin/pad/Pad.c",
       "library": "PAD",
-      "evidence": "Coherent pinned BFBB April 2003 C source: nineteen complete target functions and observed typed storage; source unit attribution remains related and archive edges provisional. Native tail-SDA packing differences remain measured partial; original bytes remain linked.",
+      "evidence": "Coherent pinned BFBB April 2003 C source: nineteen complete target functions and observed typed storage; source unit attribution remains related and archive edges provisional. Linked from source with its complete native static sections.",
       "sections": [
         {
           "section": ".data5",
@@ -1491,20 +1491,11 @@
         {
           "section": ".sbss",
           "start": "0x803ED288",
-          "end": "0x803ED2A4",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED2A8",
           "end": "0x803ED2B4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
+          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. The unreferenced word 0x803ED2A4 is the SDK static CmdTypeAndStatus (NASCAR 2005 symbols.tsv Pad.c row order), so the native .sbss is 44 bytes in definition order."
         },
         {
           "section": ".text",

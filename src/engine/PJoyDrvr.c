@@ -20,9 +20,9 @@ int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
 void *PerSystemGetLLDriverData(unsigned int port);
 unsigned long fn_801E194C(void);
-void fn_8024734C(void *pStatus);
+unsigned long PADRead(void *pStatus);
 void fn_802465BC(void *pStatus);
-void fn_802476F8(int port, int command);
+void PADControlMotor(int port, unsigned long command);
 void fn_802857D8(void);
 
 int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
@@ -92,7 +92,7 @@ int fn_801E2658(Device_801E12F8 *pDevice, unsigned char *pBuffer)
             } else {
                 lbl_8039ADE4[port] = 0;
             }
-            fn_802476F8(port, lbl_8039ADE4[port]);
+            PADControlMotor(port, lbl_8039ADE4[port]);
         }
         result = 1;
     }
@@ -102,7 +102,7 @@ int fn_801E2658(Device_801E12F8 *pDevice, unsigned char *pBuffer)
 void fn_801E26FC(void)
 {
     MemFill(lbl_803E92CC, sizeof(lbl_803E92CC), 0, 1);
-    fn_8024734C(lbl_803E92CC);
+    PADRead(lbl_803E92CC);
     fn_802465BC(lbl_803E92CC);
     fn_802857D8();
 }
