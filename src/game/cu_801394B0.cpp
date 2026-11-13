@@ -95,7 +95,7 @@ void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 int fn_8013AD78(Ball_t *pBall);
 void fn_8013AD9C(Ball_t *pBall, int a);
 void fn_8013AB24(Ball_t *pBall);
-void fn_800423F8(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
+void PlyrPoseGetAttachTransform(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void fn_802272DC(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float length);
 int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
@@ -582,7 +582,7 @@ void fn_8013A72C(Ball_t *pBall, float dt)
     QuatFromEuler(&turn, 0xFFC00000, 0, 0);
     QuatMultiply(&pBall->mState.mUnknown18, &rot, &turn);
     QuatNormalize(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18);
-    fn_800423F8(pHolderBlock, &pBlock->mUnknown4, &pBlock->mUnknown108);
+    PlyrPoseGetAttachTransform(pHolderBlock, &pBlock->mUnknown4, &pBlock->mUnknown108);
     fn_802276B4(&pBall->mState.mUnknown54, &pBall->mState.mPos, &pBall->mState.mUnknown28);
     if (dt != 0.0f) {
         fn_80227264(&pBall->mState.mUnknown54, &pBall->mState.mUnknown54, 1.0f / dt);

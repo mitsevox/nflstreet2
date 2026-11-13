@@ -9,7 +9,7 @@ extern int lbl_802F2708[];
 void fn_8019DF38(int *output, short *input, int index, AnimQuantContext *context);
 }
 
-extern "C" void fn_8019D994(Pose_80041930 *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
+extern "C" void fn_8019D994(AnimPose_t *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
 {
     AnimFrameHeader frame;
     int special = entry->mUnknown8 & 4;
@@ -109,7 +109,7 @@ extern "C" void fn_8019DF38(int *output, short *input, int index, AnimQuantConte
     }
 }
 
-extern "C" void fn_8019E00C(Pose_80041930 *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
+extern "C" void fn_8019E00C(AnimPose_t *pose, AnimBlendEntry *entry, int mode, float scale, AnimQuantContext *context, int unused)
 {
     AnimFrameHeader frame;
     int special = entry->mUnknown8 & 4;

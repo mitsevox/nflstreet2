@@ -27,7 +27,7 @@ void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot,
 void fn_800B267C(Object_800B26B0 *pMotion);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800AF804(Entry_800AF82C *p);
-void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose);
+void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 }
 

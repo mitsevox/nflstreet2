@@ -105,7 +105,7 @@ int fn_801A9C08(int value, int index, int component, void *pContext, AnimQuantTa
     return (short)value;
 }
 
-void fn_801A9C44(Pose_80041930 *pose, AnimBlendEntry *entry, AnimQuantContext *context, int unused)
+void fn_801A9C44(AnimPose_t *pose, AnimBlendEntry *entry, AnimQuantContext *context, int unused)
 {
     AnimFrameHeader frame;
     int special = entry->mUnknown8 & 4;
@@ -165,9 +165,9 @@ void fn_801A9C44(Pose_80041930 *pose, AnimBlendEntry *entry, AnimQuantContext *c
 void fn_801A9F98(BigObjPhysics_t *unused, Object_80040818 *pObject, int blend, int unused2)
 {
     AnimBlendList *pBlend = (AnimBlendList *)blend;
-    Pose_80041930 pose;
+    AnimPose_t pose;
     short samples[64 * 3];
-    Pose_80041930 *pPose = &pObject->mUnknown172;
+    AnimPose_t *pPose = &pObject->mUnknown172;
     unsigned int entries = pBlend->mUnknown0;
     AnimBlendEntry *pEntry;
     AnimQuantContext *pContext;

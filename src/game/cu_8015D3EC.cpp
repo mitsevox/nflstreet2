@@ -23,8 +23,8 @@ void HairListClose(DbCursor *pObject);
 void HairListFind(DbCursor *pObject, int id, int *pResult);
 int HairListGetModel(DbCursor *pObject);
 void PlyrModelLodClear(ModelLod_802DF190 *pLod);
-void PlyrModelLodInit(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, Skeleton_80041930 *pSkeleton);
-void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, Skeleton_80041930 *pSkeleton);
+void PlyrModelLodInit(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, AnimSkeleton_t *pSkeleton);
+void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, AnimSkeleton_t *pSkeleton);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -138,10 +138,10 @@ static ModelLod_802DF190 *lbl_803EB338 = lbl_802DFA50;
 static ModelLod_802DF190 *lbl_803EB33C = lbl_802DFB40;
 static ModelLod_802DF190 *lbl_803EB340 = lbl_802DFC30;
 static unsigned char lbl_803EB344 = 0;
-static Skeleton_80041930 *lbl_803EB348 = 0;
-static Skeleton_80041930 *lbl_803EB34C[2] = { 0 };
-static Skeleton_80041930 *lbl_803EB354 = 0;
-static Skeleton_80041930 *lbl_803EB358 = 0;
+static AnimSkeleton_t *lbl_803EB348 = 0;
+static AnimSkeleton_t *lbl_803EB34C[2] = { 0 };
+static AnimSkeleton_t *lbl_803EB354 = 0;
+static AnimSkeleton_t *lbl_803EB358 = 0;
 static unsigned char lbl_803EB35C = 0;
 static unsigned char lbl_803EB35D = 1;
 static int lbl_803EB360 = 0;
@@ -1074,8 +1074,8 @@ void fn_8015F3FC(int a)
     }
 }
 
-void fn_8015F484(Skeleton_80041930 *pSkeleton, Skeleton_80041930 **ppHandSkeletons,
-                 Skeleton_80041930 *pHairSkeleton, Skeleton_80041930 *pSkeleton3)
+void fn_8015F484(AnimSkeleton_t *pSkeleton, AnimSkeleton_t **ppHandSkeletons,
+                 AnimSkeleton_t *pHairSkeleton, AnimSkeleton_t *pSkeleton3)
 {
     unsigned int i;
     unsigned int j;

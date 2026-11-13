@@ -27,7 +27,7 @@ struct Object_80040818 {
     Quat_801EB488 mRot;
     char mUnknown40[132];
     union {
-        Pose_80041930 mUnknown172;
+        AnimPose_t mUnknown172;
         struct {
             char mUnknown172Head[8];
             /* Its start is passed to fn_801D0C58 as a position vector. */
@@ -50,7 +50,7 @@ struct Object_80040818 {
     unsigned int mUnknown248;
     char mUnknown252[48];
     Model_8004E0CC *mUnknown300;
-    Skeleton_80041930 **mUnknown304;
+    AnimSkeleton_t **mUnknown304;
     int mUnknown308;
     union {
         char mUnknown312[16];
@@ -69,8 +69,8 @@ struct Object_80040818 {
 
 extern "C" {
 Object_80040818 *fn_80040F18(int index);
-Skeleton_80041930 *fn_800410B8(int index);
-Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject);
+AnimSkeleton_t *fn_800410B8(int index);
+AnimSkeleton_t *fn_800410E0(Object_80040818 *pObject);
 }
 
 #endif

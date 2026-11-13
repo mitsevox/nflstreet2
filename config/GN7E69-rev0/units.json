@@ -2256,6 +2256,37 @@
       ]
     },
     {
+      "source": "src/game/PlyrPose.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80041930-0x80042F54 (src/game/PlyrPose.cpp), its function, data, type and source-form rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80041930",
+          "end": "0x80042F54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D408",
+          "end": "0x8028D438"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCDDC",
+          "end": "0x802CCF30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA490",
+          "end": "0x803EA494"
+        }
+      ]
+    },
+    {
       "source": "src/game/OptionRun.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/OptionRun.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",

@@ -1305,7 +1305,7 @@ void fn_80233D64(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char 
 }
 
 void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pArchive,
-                 Skeleton_80041930 *pSkeleton, void **ppData, int load)
+                 AnimSkeleton_t *pSkeleton, void **ppData, int load)
 {
     int n = 0;
 

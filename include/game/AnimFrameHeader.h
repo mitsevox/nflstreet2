@@ -24,7 +24,7 @@ struct AnimFrameHeader {
 
 /* 44-byte entry of a blend description: a weight, flags (bit 0 selects
    fn_8019D994 over fn_8019E00C), the vector and planar values those two
-   decoders write back, two halfwords copied by fn_80042530, the
+   decoders write back, two halfwords copied by PlyrPoseSetBlend, the
    frame-decoding context and the entry's data (an encoded frame for the
    pose decoders, a halfword list for AnimReadWeights). */
 struct AnimBlendEntry {
@@ -49,13 +49,13 @@ struct AnimBlendList {
 };
 
 extern "C" {
-void AnimCopyRawFrame(Pose_80041930 *pPose, AnimBlendEntry *pEntry, int mirrored);
+void AnimCopyRawFrame(AnimPose_t *pPose, AnimBlendEntry *pEntry, int mirrored);
 short *AnimReadFrameHeader(AnimFrameHeader *header, void *encoded);
 int AnimGetFrameHeaderSize(unsigned char *encoded);
 void AnimUnpackFrameBits(short *destination, short *source, AnimQuantContext *context, int mirrored);
-void fn_8019D994(Pose_80041930 *pPose, AnimBlendEntry *pEntry, int mode, float scale, AnimQuantContext *pContext,
+void fn_8019D994(AnimPose_t *pPose, AnimBlendEntry *pEntry, int mode, float scale, AnimQuantContext *pContext,
                  int unused);
-void fn_8019E00C(Pose_80041930 *pPose, AnimBlendEntry *pEntry, int mode, float scale, AnimQuantContext *pContext,
+void fn_8019E00C(AnimPose_t *pPose, AnimBlendEntry *pEntry, int mode, float scale, AnimQuantContext *pContext,
                  int unused);
 void AnimDecompressFrame(unsigned char *pDestination, unsigned char *pSource, AnimQuantContext *pContext, int mirrored);
 void AnimBlendWeights(float *pValues, AnimBlendList *pBlend);

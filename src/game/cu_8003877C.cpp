@@ -109,8 +109,8 @@ void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f);
 void fn_80039454(Object_80039F5C *p, Block_8003A1EC *pBlock);
 void fn_80039458(Object_80039F5C *p);
 void fn_800394F4(Object_80039F5C *p);
-void fn_800424C0(void *pBlock, int a);
-void fn_800424E8(void *pBlock, void *a, unsigned short b, void *c);
+void PlyrPoseBlendEntries(void *pBlock, int a);
+void PlyrPoseBlendRootAngles(void *pBlock, void *a, unsigned short b, void *c);
 void fn_800B2B90(Object_800B26B0 *pMotion);
 void fn_800C3404(Object_80039F5C *p);
 void fn_800C8270(Object_80039F5C *p);
@@ -126,8 +126,8 @@ int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 unsigned short fn_801BE648(void *p);
 
-void fn_80042508(void *pBlock, int a, unsigned int index);
-void fn_80042530(void *pBlock, int a);
+void PlyrPoseBlendRawEntries(void *pBlock, int a, unsigned int index);
+void PlyrPoseSetBlend(void *pBlock, int a);
 int fn_800ADD7C(void *pElements, unsigned int index);
 int fn_800ADEFC(void *pElements, unsigned int index);
 void fn_800B2BC0(Object_800B26B0 *pMotion);
@@ -144,8 +144,8 @@ void fn_801BE420(void *a, void *b, void *c, Object_80039F5C *p, float f);
 
 void fn_8003AB08(Object_80039F5C *p, int a);
 CollideSet_t *fn_8003A078(void);
-void fn_80042270(Object_80039F5C *p);
-void fn_80042928(void *p);
+void PlyrPoseSetFromModel(Object_80039F5C *p);
+void PlyrPoseUpdate(void *p);
 void fn_8008E978(Object_80039F5C *p);
 void fn_8009C370(Object_80039F5C *p);
 void fn_8009CDEC(Object_80039F5C *p);
@@ -166,7 +166,7 @@ void fn_8009C158(Object_80039F5C *p, int a);
 void fn_8003AB40(Object_80039F5C *p);
 int fn_80178308(void);
 Object_8003DEC4 *fn_8003DEE4(int value);
-void fn_8009CF30(void *pDst, Pose_80041930 *pPose);
+void fn_8009CF30(void *pDst, AnimPose_t *pPose);
 extern unsigned char lbl_802CCC94[11][2];
 void fn_80143D3C(Block_80170374 *pBlock);
 void fn_801D04C4(void);
@@ -312,14 +312,14 @@ extern "C" int fn_80038650(Manager_803EA3F8 *pManager, int flags)
 
                 for (j = 0; j <= 1; j++) {
                     if (pObject->mUnknown20 & 32) {
-                        fn_80042508(pObject, fn_801BC7C0(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
+                        PlyrPoseBlendRawEntries(pObject, fn_801BC7C0(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
                                                          pPlayer->mUnknown4528[j]), j);
                     } else {
-                        fn_80042508(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
+                        PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
                     }
                 }
                 fn_8009C370(p);
-                fn_80042270(p);
+                PlyrPoseSetFromModel(p);
                 LightTrackerSnap(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
                             (LightSource_t *)pObject->mUnknown972);
             }
@@ -541,7 +541,7 @@ extern "C" void fn_800392DC(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
 
     fn_801BE420(pPlayer->mUnknown3604, &pPlayer->mUnknown3096, pPlayer->mUnknown3108, p, f);
     fn_801BA03C(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
-    fn_80042530(pBlock, fn_801BC7C0(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
+    PlyrPoseSetBlend(pBlock, fn_801BC7C0(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
 }
 
 extern "C" void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
@@ -553,9 +553,9 @@ extern "C" void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
         if (pBlock->mFlags & 32) {
             fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
             fn_801BA03C(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
-            fn_80042508(pBlock, fn_801BC7C0(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
+            PlyrPoseBlendRawEntries(pBlock, fn_801BC7C0(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
-            fn_80042508(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
+            PlyrPoseBlendRawEntries(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
         }
     }
 }
@@ -736,7 +736,7 @@ extern "C" void fn_80039A38(void)
         void *pBlock = p->mpUnknown4;
         fn_8009CDEC(p);
         fn_8003830C(p);
-        fn_80042928(pBlock);
+        PlyrPoseUpdate(pBlock);
     }
 }
 
@@ -840,12 +840,12 @@ extern "C" void fn_80039D08(float dt)
         pBlock->mUnknown28 = p->mUnknown772;
         pBlock->mUnknown32 = p->mUnknown776;
         texture = fn_801BC7C0(p->mUnknown1244, p->mUnknown1244 + 12, p->mUnknown1244 + 1252);
-        fn_800424C0(pBlock, texture);
+        PlyrPoseBlendEntries(pBlock, texture);
         p->mUnknown544 = fn_801BCA74(p->mUnknown1244, p->mUnknown1244 + 12, texture, &p->mUnknown548,
                                      fn_801BE648(p->mpUnknown792), (p->mFlags & 0x200) == 0);
         p->mUnknown545 = fn_801BCCAC(p->mUnknown1244, p->mUnknown1244 + 12, texture, p->mUnknown552,
                                      fn_801BE648(p->mpUnknown792), (p->mFlags & 0x200) == 0);
-        fn_800424E8(pBlock, p->mUnknown1244 + 12, *(unsigned short *)(p->mUnknown1244 + 4), p->mUnknown1244 + 1252);
+        PlyrPoseBlendRootAngles(pBlock, p->mUnknown1244 + 12, *(unsigned short *)(p->mUnknown1244 + 4), p->mUnknown1244 + 1252);
         fn_80039454(p, pBlock);
     }
 }
@@ -856,7 +856,7 @@ extern "C" void fn_80039F04(void)
     int count = lbl_803EA3F8->mCount;
 
     for (i = 0; i < count; i++) {
-        fn_80042270(&lbl_803EA3F8->mpPlayers[i].mObject);
+        PlyrPoseSetFromModel(&lbl_803EA3F8->mpPlayers[i].mObject);
     }
 }
 
@@ -1286,7 +1286,7 @@ extern "C" void fn_8003AC10(void)
         Object_80039F5C *p = &lbl_803EA3F8->mpPlayers[i].mObject;
         Block_8003A1EC *pBlock = (Block_8003A1EC *)p->mpUnknown4;
         fn_8009C370(p);
-        fn_80042270(p);
+        PlyrPoseSetFromModel(p);
         pBlock->mFlags |= 1;
     }
 }

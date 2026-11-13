@@ -994,7 +994,7 @@ void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
 int fn_8009A68C(Object_80039F5C *p);
 unsigned char *fn_8009CC2C(Object_80039F5C *p, void (*callback)(int, Vector_80039F5C *, unsigned char *), int a, int b);
-void fn_80042998(Block_80170E64 *p);
+void PlyrPoseDelayBlink(Block_80170E64 *p);
 int fn_800C4B6C(Object_80039F5C *p);
 }
 extern unsigned char lbl_803EAD34;
@@ -2674,7 +2674,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
     } else if ((p->mFlags & 4) || !((float)pBlock->mUnknown0 <= time)) {
         fn_8009CE88(p, &p->mUnknown16, 8);
     }
-    if (!((float)pBlock->mUnknown0 <= time - 30.0f)) fn_80042998(p->mpUnknown4);
+    if (!((float)pBlock->mUnknown0 <= time - 30.0f)) PlyrPoseDelayBlink(p->mpUnknown4);
     Ball_t *pBall = BallGet(index);
     unsigned short key = fn_801BE648(p->mpUnknown792);
     if (BallGetHolder(pBall) && BallGetHolder(pBall) != p && !fn_8009A68C(p) && key != 70) return 1;

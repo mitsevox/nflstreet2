@@ -366,11 +366,11 @@ void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot,
 int fn_800ACF40(Object_80039F5C *p, signed char value);
 void fn_800AF804(Entry_800AF82C *p);
 void fn_8009C370(Object_80039F5C *p);
-void fn_80042270(Object_80039F5C *p);
+void PlyrPoseSetFromModel(Object_80039F5C *p);
 int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 void fn_800AF87C(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count);
-void fn_800AF82C(Entry_800AF82C *pEntries, int b, Pose_80041930 *pPose, int d, int e);
+void fn_800AF82C(Entry_800AF82C *pEntries, int b, AnimPose_t *pPose, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
 void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
@@ -383,11 +383,11 @@ void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 int fn_800AF9E4(Entry_800AF82C *p, int index);
 void fn_800AF95C(Entry_800AF82C *p, int index, int a);
 void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
-void fn_800429C0(Object_8003DEC4 *pObject);
+void PlyrPoseStartBlink(Object_8003DEC4 *pObject);
 int fn_801BC7C0(void *a, void *b, void *c);
-void fn_800424C0(Object_8003DEC4 *pObject, int a);
-void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
-void fn_80042928(Object_8003DEC4 *pObject);
+void PlyrPoseBlendEntries(Object_8003DEC4 *pObject, int a);
+void PlyrPoseBlendRootAngles(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
+void PlyrPoseUpdate(Object_8003DEC4 *pObject);
 void fn_800C8A98(Object_80039F5C *p);
 void fn_800C8AF0(Object_80039F5C *p);
 void fn_800AF9F4(Entry_800AF82C *p);
@@ -5325,14 +5325,14 @@ extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
             fn_8009C370(p);
-            fn_80042270(p);
+            PlyrPoseSetFromModel(p);
             p->mpUnknown240 = p->mpUnknown148 = p->mpUnknown56 = &pBlock->mUnknown44;
         }
     } else {
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
             fn_8009C370(p);
-            fn_80042270(p);
+            PlyrPoseSetFromModel(p);
         }
     }
 }
@@ -5351,10 +5351,10 @@ extern "C" void fn_8009C370(Object_80039F5C *p)
     pObject->mUnknown24 = p->mUnknown768;
     pObject->mUnknown28 = p->mUnknown772;
     pObject->mUnknown32 = p->mUnknown776;
-    fn_800424C0(pObject, fn_801BC7C0(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
-    fn_800424E8(pObject, p->mpUnknown800, p->mpUnknown796->mUnknown4, p->mpUnknown792);
+    PlyrPoseBlendEntries(pObject, fn_801BC7C0(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
+    PlyrPoseBlendRootAngles(pObject, p->mpUnknown800, p->mpUnknown796->mUnknown4, p->mpUnknown792);
     fn_800C8A98(p);
-    fn_80042928(pObject);
+    PlyrPoseUpdate(pObject);
 }
 
 extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord,
@@ -5618,7 +5618,7 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
     } else {
         fn_800AF9C0(pEntries, 0, lbl_802D7C14);
     }
-    fn_800429C0((Object_8003DEC4 *)p->mpUnknown4);
+    PlyrPoseStartBlink((Object_8003DEC4 *)p->mpUnknown4);
     pBlock->mUnknownE = pBlock->mUnknownC = pBlock->mUnknown8 = 0;
     return pEntry->mUnknown10;
 }
@@ -10973,9 +10973,9 @@ extern "C" unsigned char lbl_802D82BC[11][2];
 /* Element value for each key; entry 0 is 0xFF, which fn_800ADB34 rejects. */
 extern "C" unsigned char lbl_802D82D4[12];
 
-extern "C" void fn_800ADB34(Element_80041BF8 *pElements, int value, unsigned int duration, int index)
+extern "C" void fn_800ADB34(PlyrPosePart_t *pElements, int value, unsigned int duration, int index)
 {
-    Element_80041BF8 *p;
+    PlyrPosePart_t *p;
 
     duration = duration == 0 ? 1 : duration;
     duration = duration > 255 ? 255 : duration;
@@ -11058,16 +11058,16 @@ extern "C" void fn_800ADD04(Object_80039F5C *p)
     unsigned char duration = AnimSeqGetOpcodeParameter();
 
     if (p != 0) {
-        Element_80041BF8 *pElements = ((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116;
+        PlyrPosePart_t *pElements = ((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116;
 
         fn_800ADB34(pElements, value, duration, 0);
         fn_800ADB34(pElements, value, duration, 1);
     }
 }
 
-extern "C" int fn_800ADD7C(Element_80041BF8 *pElements, unsigned int index)
+extern "C" int fn_800ADD7C(PlyrPosePart_t *pElements, unsigned int index)
 {
-    Element_80041BF8 *p = &pElements[index];
+    PlyrPosePart_t *p = &pElements[index];
     int result = 0;
 
     if (p->mUnknown6 == 0) {
@@ -11085,14 +11085,14 @@ extern "C" int fn_800ADD7C(Element_80041BF8 *pElements, unsigned int index)
     return result;
 }
 
-extern "C" int fn_800ADDD8(Element_80041BF8 *pElements, unsigned int index)
+extern "C" int fn_800ADDD8(PlyrPosePart_t *pElements, unsigned int index)
 {
     return lbl_802D82BC[pElements[index].mUnknown4][index];
 }
 
-extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement, int a)
+extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a)
 {
-    fn_801C1F94(pElement, 0, sizeof(Element_80041BF8));
+    fn_801C1F94(pElement, 0, sizeof(PlyrPosePart_t));
     if (a != 0) {
         pElement->mUnknown1[0] = pObject->mUnknown0[0];
         pElement->mUnknown4 = 0;
@@ -11826,7 +11826,7 @@ extern "C" void fn_800AF264(int key)
     }
 }
 
-extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource)
+extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource)
 {
     unsigned int count = pChain->mUnknown8;
     unsigned int i;
@@ -11841,7 +11841,7 @@ extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source
     }
 }
 
-extern "C" void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource, float t)
+extern "C" void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t)
 {
     unsigned int count = pChain->mUnknown8;
     unsigned int i;
@@ -11911,7 +11911,7 @@ extern "C" void fn_800AF804(Entry_800AF82C *p)
     fn_801C1F94(p, 0, 3 * sizeof(Entry_800AF82C));
 }
 
-extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, Pose_80041930 *pPose, int b, int c)
+extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c)
 {
     Entry_800AF82C *pEntry = p + index;
 

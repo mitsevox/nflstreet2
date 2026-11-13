@@ -12,7 +12,7 @@ extern "C" {
 void fn_801BE3C0(void *p, float from, float to, unsigned short key, int type, void *pSource);
 float AnimSeqGetOpcodeTime(void *pScript, int key);
 float AnimSeqGetTime(AnimSeq_t *p);
-void fn_800425D4(Object_8003DEC4 *pObject);
+void PlyrPoseClearBlend(Object_8003DEC4 *pObject);
 void fn_801BA384(AnimHeader_t *pList, Record_800D81C8 *pChannels, int index);
 void fn_801BE420(void *p, AnimHeader_t *pObject, Record_800D81C8 *pRecords, void *pOwner, float step);
 void fn_800A3D68(int value);
@@ -70,7 +70,7 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
         if (block->mUnknown8Byte == 1) {
             fn_800A3D68(0);
             if (!fn_800A3B10(p))
-                fn_800425D4((Object_8003DEC4 *)p->mpUnknown4);
+                PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         }
         break;
     }
@@ -87,13 +87,13 @@ extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *reco
         break;
     case 1:
         if (!fn_800A3B10(p))
-            fn_800425D4((Object_8003DEC4 *)p->mpUnknown4);
+            PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     case 2:
         break;
     case 3:
         if (!fn_800A3B10(p))
-            fn_800425D4((Object_8003DEC4 *)p->mpUnknown4);
+            PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     }
     return 0;
@@ -140,7 +140,7 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
         break;
     case 3:
         if (fn_801BE648(p->mpUnknown804) == key && !fn_800A3B10(p))
-            fn_800425D4((Object_8003DEC4 *)p->mpUnknown4);
+            PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     }
     return 0;
@@ -164,7 +164,7 @@ extern "C" void fn_800A3B5C(Object_80039F5C *p)
         fn_801BE420(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, p, 1.0f);
         fn_801BE420(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, p, 1.0f);
     }
-    fn_800425D4((Object_8003DEC4 *)p->mpUnknown4);
+    PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
 }
 
 struct Keys_800A3C14;

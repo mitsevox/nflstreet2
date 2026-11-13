@@ -1,10 +1,10 @@
-#ifndef GAME_POSE_80041930_H
-#define GAME_POSE_80041930_H
+#ifndef GAME_ANIMPOSE_H
+#define GAME_ANIMPOSE_H
 
-/* Pose block copied, serialized and blended by src/game/cu_80041930.cpp:
+/* Pose block copied, serialized and blended by src/game/PlyrPose.cpp:
    three shorts per bone in mUnknown48 and, for the main pose, one 64-byte
    matrix per bone in mUnknown52. */
-struct Pose_80041930 {
+struct AnimPose_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     unsigned short mUnknown4;

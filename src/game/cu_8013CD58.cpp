@@ -77,7 +77,7 @@ Record_8002E7C0 *fn_8002E7C0(RecordList_8002E7C0 *pList);
 int fn_8002E7D0(RecordList_8002E7C0 *pList);
 void fn_8002E7EC(void *p, RecordList_8002E7C0 *pList);
 Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
-void fn_80042380(Block_80170E64 *pBlock, int id, float *pOut, int b);
+void PlyrPoseGetBoneTransform(Block_80170E64 *pBlock, int id, float *pOut, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
 Target_8013825C *BallGetModel(void *p);
@@ -696,8 +696,8 @@ extern "C" void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t)
     float a[3];
     float b[3];
 
-    fn_80042380(pObject->mpUnknown4, pFirst->mUnknown04, a, 0);
-    fn_80042380(pObject->mpUnknown4, pSecond->mUnknown04, b, 0);
+    PlyrPoseGetBoneTransform(pObject->mpUnknown4, pFirst->mUnknown04, a, 0);
+    PlyrPoseGetBoneTransform(pObject->mpUnknown4, pSecond->mUnknown04, b, 0);
     fn_80227930(pOut, b, a, 0.5f);
 }
 

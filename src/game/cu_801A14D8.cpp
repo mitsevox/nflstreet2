@@ -182,7 +182,7 @@ unsigned char PlayerObjIsDrawReady(void);
 unsigned char CheatFlagsIsSet(int index);
 int fn_800A2624(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-int fn_800ADDD8(Element_80041BF8 *pElements, int index);
+int fn_800ADDD8(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);

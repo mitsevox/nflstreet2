@@ -118,12 +118,12 @@ struct Item_800AF82C {
 };
 
 /* 64-byte entries; fn_800AF804 clears three of them. */
-struct Pose_80041930;
+struct AnimPose_t;
 
 struct Entry_800AF82C {
     union {
         int mUnknown0;
-        Pose_80041930 *mpUnknown0;
+        AnimPose_t *mpUnknown0;
     };
     Item_800AF82C *mpUnknown4;
     void *mpUnknown8;

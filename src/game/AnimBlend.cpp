@@ -24,7 +24,7 @@ void QuatToEulerYZX(int *pAngles, Quat_801EB488 *pRot);
 void QuatFromEulerYZX(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
-void fn_802338D4(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton, unsigned int flags);
+void fn_802338D4(AnimPose_t *pPose, AnimSkeleton_t *pSkeleton, unsigned int flags);
 }
 
 static unsigned char _AnimBlend_bInterpBones = 1;
@@ -132,7 +132,7 @@ void AnimInterpAngles(short *pPrev, short *pFrom, short *pTo, short *pNext, floa
     }
 }
 
-void AnimBlendPoseAngles(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
+void AnimBlendPoseAngles(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pPrev, AnimPose_t *pNext, float t,
                  unsigned char a)
 {
     Quat_801EB488 rotA;
@@ -171,7 +171,7 @@ void AnimBlendPoseAngles(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *
     pOut->mUnknown48[2] = angles[2] >> 8;
 }
 
-void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, Pose_80041930 *pNext, float t,
+void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pPrev, AnimPose_t *pNext, float t,
                  unsigned char a)
 {
     fn_80227930(pOut->mUnknown8, pOut->mUnknown8, pA->mUnknown8, t);
@@ -205,9 +205,9 @@ void AnimDecompressFrame(unsigned char *pDestination, unsigned char *pSource, An
 
 void AnimBlendEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, int count)
 {
-    Pose_80041930 pose;
+    AnimPose_t pose;
     short samples[64 * 3];
-    Pose_80041930 *pPose = &pObject->mUnknown44;
+    AnimPose_t *pPose = &pObject->mUnknown44;
     unsigned int entries = pBlend->mUnknown0;
     AnimBlendEntry *pEntry;
     AnimQuantContext *pContext;
@@ -310,9 +310,9 @@ void AnimBlendRootAngles(Object_8003DEC4 *pObject, AnimRootItem *pItems, unsigne
 
 void AnimBlendRawEntries(Object_8003DEC4 *pObject, AnimBlendList *pBlend, unsigned int index, int count)
 {
-    Pose_80041930 pose;
+    AnimPose_t pose;
     short samples[32 * 3];
-    Pose_80041930 *pPose = &pObject->mUnknown116[index].mUnknown12;
+    AnimPose_t *pPose = &pObject->mUnknown116[index].mUnknown12;
     unsigned int entries = pBlend->mUnknown0;
     AnimBlendEntry *pEntry;
     unsigned int values;

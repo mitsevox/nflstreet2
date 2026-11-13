@@ -118,7 +118,7 @@ void fn_8003AC10(void);
 Block_80170E64 *fn_8003DF7C(Vector_80039F5C *pPos, float *pDist);
 void fn_8003E038(Block_80170E64 *pBlock, int *pOut);
 Block_80170E64 *fn_80040F28(Vector_80039F5C *pPos, float *pDist);
-void fn_80042F4C(int a);
+void PlyrPoseSetBlendFlag(int a);
 void fn_800443B8(void);
 void fn_80044460(void);
 void EnvObjUpdateFades(void);
@@ -1200,9 +1200,9 @@ extern "C" int fn_8002D1B8(Type_803EA368 *p, int value)
         value = p->mUnknownD7C - 1;
     }
     p->mUnknownD74 = value;
-    fn_80042F4C(0);
+    PlyrPoseSetBlendFlag(0);
     fn_80030940(p);
-    fn_80042F4C(1);
+    PlyrPoseSetBlendFlag(1);
     return 0;
 }
 

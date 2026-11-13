@@ -1,3 +1,8 @@
+/* Player pose: sets up a player model's animated pose from its skeletons,
+   builds its world and bone matrices, runs the periodic weight pulse
+   (blink) counter, and packs the pose into a bit stream or reads two
+   recorded poses back and blends between them. */
+
 #include "game/AnimFrameHeader.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_801BC084.h"
@@ -9,7 +14,7 @@
 #include "game/fn_802372EC.h"
 
 /* Quantization of one pose value: a base offset and a bit width. */
-struct Quant_802CCDF8 {
+struct PlyrPoseQuant_t {
     unsigned short mUnknown0;
     unsigned char mUnknown2;
 };
@@ -17,14 +22,14 @@ struct Quant_802CCDF8 {
 extern "C" {
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement, int a);
-int fn_800ADD7C(Element_80041BF8 *pElements, unsigned int index);
-int fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index);
+void fn_800ADDFC(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a);
+int fn_800ADD7C(PlyrPosePart_t *pElements, unsigned int index);
+int fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index);
 void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
 void fn_80147840(Object_8003DEC4 *pObject);
 int fn_801784C4(void);
-void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
+void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
 short *AnimAllocPoseChannels(int count);
 void AnimBlendEntries(Object_8003DEC4 *pObject, int a, int count);
@@ -55,9 +60,9 @@ void QuatIdentity(Quat_801EB488 *pRot);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 
-float lbl_802CCDDC[7] = {0.75f, 0.9f, 0.95f, 1.0f, 0.95f, 0.9f, 0.75f};
+float _PlyrPose_afBlinkWeights[7] = {0.75f, 0.9f, 0.95f, 1.0f, 0.95f, 0.9f, 0.75f};
 
-Quant_802CCDF8 lbl_802CCDF8[78] = {
+PlyrPoseQuant_t _PlyrPose_aChannelQuant[78] = {
     {0x0804, 12}, {0x0000, 0}, {0x0406, 11}, {0x09CD, 12}, {0x0500, 11}, {0x0956, 12},
     {0x00AF, 11}, {0x0000, 0}, {0x0000, 0}, {0x080A, 12}, {0x0758, 12}, {0x07F6, 12},
     {0x067B, 11}, {0x0000, 0}, {0x0000, 0}, {0x09BB, 12}, {0x0371, 11}, {0x0455, 12},
@@ -73,9 +78,9 @@ Quant_802CCDF8 lbl_802CCDF8[78] = {
     {0x081D, 12}, {0x0000, 0}, {0x0669, 12}, {0x0000, 0}, {0x06EE, 12}, {0x0000, 0},
 };
 
-unsigned char lbl_803EA490 = 0;
+unsigned char _PlyrPose_bBlendFlag = 0;
 
-void fn_80041930(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton)
+void PlyrPoseInitFromSkeleton(AnimPose_t *pPose, AnimSkeleton_t *pSkeleton)
 {
     unsigned int i;
 
@@ -86,7 +91,7 @@ void fn_80041930(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton)
     }
 }
 
-void fn_8004199C(Pose_80041930 *pPose, BitStream_t *pStream)
+void PlyrPoseWrite(AnimPose_t *pPose, BitStream_t *pStream)
 {
     short saved75[3];
     short saved57[3];
@@ -107,18 +112,15 @@ void fn_8004199C(Pose_80041930 *pPose, BitStream_t *pStream)
     pPose->mUnknown48[59] = pPose->mUnknown48[86];
     pValues = pPose->mUnknown48;
     for (i = 0; i < 78; i++) {
-        int bits = lbl_802CCDF8[i].mUnknown2;
+        int bits = _PlyrPose_aChannelQuant[i].mUnknown2;
 
         if (bits) {
-            int value = (pValues[i] + (lbl_802CCDF8[i].mUnknown0 << 4)) >> 4;
+            int value = (pValues[i] + (_PlyrPose_aChannelQuant[i].mUnknown0 << 4)) >> 4;
 
             if (value >= 0) {
                 int max = (1 << bits) - 1;
 
-                if (value > max) {
-                    value = max;
-                }
-                value <<= 4;
+                value = (value > max ? max : value) << 4;
             } else {
                 value = 0;
             }
@@ -135,10 +137,10 @@ void fn_8004199C(Pose_80041930 *pPose, BitStream_t *pStream)
     fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
-void fn_80041B48(Pose_80041930 *pPose, BitStream_t *pStream)
+void PlyrPoseRead(AnimPose_t *pPose, BitStream_t *pStream)
 {
     short *pValue = pPose->mUnknown48;
-    Quant_802CCDF8 *pQuant = lbl_802CCDF8;
+    PlyrPoseQuant_t *pQuant = _PlyrPose_aChannelQuant;
     unsigned int i;
 
     for (i = 0; i < 78; i++, pQuant++, pValue++) {
@@ -147,13 +149,14 @@ void fn_80041B48(Pose_80041930 *pPose, BitStream_t *pStream)
         if (pQuant->mUnknown2) {
             value = ReadBitStream(pStream, pQuant->mUnknown2);
         }
-        *pValue = value * 16 - pQuant->mUnknown0 * 16;
+        value *= 16;
+        *pValue = value - pQuant->mUnknown0 * 16;
     }
     fn_800301C4(pStream, pPose->mUnknown8, 16, 2048.0f);
     pPose->mUnknown32 = (int)ReadBitStream(pStream, 16) << 8;
 }
 
-void fn_80041BF8(Object_8003DEC4 *pObject, unsigned int index, BitStream_t *pStream)
+void PlyrPoseWritePart(Object_8003DEC4 *pObject, unsigned int index, BitStream_t *pStream)
 {
     unsigned long long bits = 1;
 
@@ -168,7 +171,7 @@ void fn_80041BF8(Object_8003DEC4 *pObject, unsigned int index, BitStream_t *pStr
     fn_80191068(pStream, bits, 22);
 }
 
-int fn_80041CEC(Element_80041BF8 *pElement, BitStream_t *pStream)
+int PlyrPoseReadPart(PlyrPosePart_t *pElement, BitStream_t *pStream)
 {
     unsigned long long bits = ReadBitStream(pStream, 22);
 
@@ -180,13 +183,19 @@ int fn_80041CEC(Element_80041BF8 *pElement, BitStream_t *pStream)
     return bits & 1;
 }
 
-void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int index);
+void PlyrPoseBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int index);
 
-void fn_80041D88(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, unsigned int index,
+/* 4.12 fixed-point lerp of two halfwords. */
+static inline short _PlyrPoseLerp12(short a, short b, short t)
+{
+    return a + (((b - a) * t) >> 12);
+}
+
+void PlyrPoseLerpPart(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, unsigned int index,
                  int skip)
 {
-    Element_80041BF8 from;
-    Element_80041BF8 to;
+    PlyrPosePart_t from;
+    PlyrPosePart_t to;
 
     if (skip) {
         if (pStreamA) {
@@ -197,20 +206,20 @@ void fn_80041D88(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         }
         return;
     }
-    fn_80041CEC(&from, pStreamB);
-    fn_80041CEC(&to, pStreamA);
+    PlyrPoseReadPart(&from, pStreamB);
+    PlyrPoseReadPart(&to, pStreamA);
+    pObject->mUnknown116[index].mUnknown8 = to.mUnknown8 =
+        _PlyrPoseLerp12(from.mUnknown8, to.mUnknown8, (short)(int)(t * 4096.0f));
     pObject->mUnknown116[index].mUnknown4 = to.mUnknown4;
-    pObject->mUnknown116[index].mUnknown0 = to.mUnknown0;
     pObject->mUnknown116[index].mUnknown5 = to.mUnknown5;
     pObject->mUnknown116[index].mUnknown6 = to.mUnknown6;
-    pObject->mUnknown116[index].mUnknown8 = to.mUnknown8 =
-        from.mUnknown8 + (((to.mUnknown8 - from.mUnknown8) * (short)(int)(t * 4096.0f)) >> 12);
+    pObject->mUnknown116[index].mUnknown0 = to.mUnknown0;
     if (fn_800ADD7C(pObject->mUnknown116, index)) {
-        fn_80042508(pObject, fn_800ADEFC(pObject->mUnknown116, index), index);
+        PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, index), index);
     }
 }
 
-void fn_80041EB0(Object_8003DEC4 *pObject, BitStream_t *pStream)
+void PlyrPoseWriteBlend(Object_8003DEC4 *pObject, BitStream_t *pStream)
 {
     unsigned int count = pObject->mUnknown828 > 7 ? 7 : pObject->mUnknown828;
     unsigned int blends = pObject->mUnknown260 > 2 ? 2 : pObject->mUnknown260;
@@ -222,16 +231,16 @@ void fn_80041EB0(Object_8003DEC4 *pObject, BitStream_t *pStream)
     fn_80191068(pStream, pObject->mUnknown264[1].mUnknown6, 16);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, AnimBlendList *pBlend);
-void fn_800425D4(Object_8003DEC4 *pObject);
+void PlyrPoseSetBlend(Object_8003DEC4 *pObject, AnimBlendList *pBlend);
+void PlyrPoseClearBlend(Object_8003DEC4 *pObject);
 
-void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, int skip)
+void PlyrPoseLerpBlend(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, int skip)
 {
     AnimBlendList blend;
     float from;
     float to;
-    long long value;
     int count;
+    int max;
     int handle;
     float weight;
 
@@ -248,27 +257,28 @@ void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
     }
     from = (int)ReadBitStream(pStreamB, 3);
     to = (int)ReadBitStream(pStreamA, 3);
-    pObject->mUnknown828 = (int)((to - from) * t + from);
-    value = ReadBitStream(pStreamB, 2);
+    to = (to - from) * t + from;
+    pObject->mUnknown828 = (int)to;
+    max = ReadBitStream(pStreamB, 2);
     count = ReadBitStream(pStreamA, 2);
-    if (count > (int)value) {
-        count = value;
+    if (count > max) {
+        count = max;
     }
     blend.mUnknown0 = count;
     pObject->mUnknown260 = blend.mUnknown0;
     if (blend.mUnknown0) {
         handle = fn_801BBE5C(3, 0);
         ReadBitStream(pStreamA, 16);
-        value = ReadBitStream(pStreamB, 16);
+        long long frame = ReadBitStream(pStreamB, 16);
         ReadBitStream(pStreamA, 32);
         weight = ReadBitStream(pStreamB, 32);
-        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
+        blend.mUnknown4[0].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, frame);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
             ReadBitStream(pStreamA, 16);
-            value = ReadBitStream(pStreamB, 16);
-            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, value);
+            long long nextFrame = ReadBitStream(pStreamB, 16);
+            blend.mUnknown4[1].mpUnknown40 = AnimFileGetFrame(fn_801BC084(handle), 0, handle, nextFrame);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
             ReadBitStream(pStreamA, 16);
@@ -279,14 +289,14 @@ void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         ReadBitStream(pStreamB, 64);
     }
     if ((pObject->mUnknown828 >= 0 && pObject->mUnknown828 <= 6) || pObject->mUnknown260) {
-        fn_80042530(pObject, &blend);
+        PlyrPoseSetBlend(pObject, &blend);
         pObject->mUnknown20 |= 0x10;
     } else {
-        fn_800425D4(pObject);
+        PlyrPoseClearBlend(pObject);
     }
 }
 
-void fn_80042208(Object_8003DEC4 *pObject)
+void PlyrPoseApplyBlink(Object_8003DEC4 *pObject)
 {
     short index;
     float *pValues;
@@ -303,15 +313,15 @@ void fn_80042208(Object_8003DEC4 *pObject)
         return;
     }
     if (pObject->mUnknown828 >= 0 && pObject->mUnknown828 <= 6) {
-        pValues[index] = lbl_802CCDDC[pObject->mUnknown828];
+        pValues[index] = _PlyrPose_afBlinkWeights[pObject->mUnknown828];
     } else {
         pValues[index] = 0.0f;
     }
 }
 
-void fn_80042310(Object_8003DEC4 *pObject);
+void PlyrPoseBuildWorldMatrix(Object_8003DEC4 *pObject);
 
-void fn_80042270(FEPlyrModel_t *pRecord)
+void PlyrPoseSetFromModel(FEPlyrModel_t *pRecord)
 {
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     Object_800B267C *pMotion = &pRecord->mUnknown424;
@@ -328,10 +338,10 @@ void fn_80042270(FEPlyrModel_t *pRecord)
         pObject->mUnknown36 = (pMotion->mUnknown24 - 0x800000) & 0xFFFFFF;
     }
     pObject->mUnknown972 = pRecord->mUnknown780;
-    fn_80042310(pObject);
+    PlyrPoseBuildWorldMatrix(pObject);
 }
 
-void fn_80042310(Object_8003DEC4 *pObject)
+void PlyrPoseBuildWorldMatrix(Object_8003DEC4 *pObject)
 {
     fn_801D0508();
     fn_801D0C58(pObject->mUnknown4);
@@ -345,7 +355,7 @@ void fn_80042310(Object_8003DEC4 *pObject)
     fn_801D0544();
 }
 
-void fn_80042380(Object_8003DEC4 *pObject, int bone, float *pOut, int *pAngles)
+void PlyrPoseGetBoneTransform(Object_8003DEC4 *pObject, int bone, float *pOut, int *pAngles)
 {
     fn_801D04C4();
     fn_801D06D4(pObject->mUnknown908);
@@ -358,7 +368,7 @@ void fn_80042380(Object_8003DEC4 *pObject, int bone, float *pOut, int *pAngles)
     fn_801D0544();
 }
 
-void fn_800423F8(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
+void PlyrPoseGetAttachTransform(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
 {
     short bone = pObject->mUnknown44.mUnknown6;
 
@@ -382,22 +392,22 @@ void fn_800423F8(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
     }
 }
 
-void fn_800424C0(Object_8003DEC4 *pObject, int a)
+void PlyrPoseBlendEntries(Object_8003DEC4 *pObject, int a)
 {
     AnimBlendEntries(pObject, a, pObject->mUnknown100->mUnknown6);
 }
 
-void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c)
+void PlyrPoseBlendRootAngles(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c)
 {
     AnimBlendRootAngles(pObject, a, b, c);
 }
 
-void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int index)
+void PlyrPoseBlendRawEntries(Object_8003DEC4 *pObject, int a, unsigned int index)
 {
     AnimBlendRawEntries(pObject, a, index, pObject->mUnknown100->mUnknown6);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, AnimBlendList *pBlend)
+void PlyrPoseSetBlend(Object_8003DEC4 *pObject, AnimBlendList *pBlend)
 {
     pObject->mUnknown260 = pBlend->mUnknown0;
     if (pObject->mUnknown816 && pBlend->mUnknown0) {
@@ -413,10 +423,10 @@ void fn_80042530(Object_8003DEC4 *pObject, AnimBlendList *pBlend)
             }
         }
     }
-    fn_80042208(pObject);
+    PlyrPoseApplyBlink(pObject);
 }
 
-void fn_800425D4(Object_8003DEC4 *pObject)
+void PlyrPoseClearBlend(Object_8003DEC4 *pObject)
 {
     pObject->mUnknown20 &= ~0x10;
     if (pObject->mUnknown820) {
@@ -424,8 +434,8 @@ void fn_800425D4(Object_8003DEC4 *pObject)
     }
 }
 
-void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleton_80041930 **ppExtra,
-                 Skeleton_80041930 *pSkeleton280, Skeleton_80041930 *pSkeleton596)
+void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkeleton_t **ppExtra,
+                 AnimSkeleton_t *pSkeleton280, AnimSkeleton_t *pSkeleton596)
 {
     unsigned int i;
     unsigned short count;
@@ -443,7 +453,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown44.mUnknown2 = 0x202;
         pObject->mUnknown44.mUnknown48 = AnimAllocPoseChannels(count);
         pObject->mUnknown44.mUnknown52 = pObject->mUnknown112;
-        fn_80041930(&pObject->mUnknown44, pObject->mUnknown100);
+        PlyrPoseInitFromSkeleton(&pObject->mUnknown44, pObject->mUnknown100);
     }
     for (i = 0; i < 2; i++) {
         if (ppExtra && ppExtra[i]) {
@@ -455,7 +465,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
             pObject->mUnknown116[i].mUnknown12.mUnknown2 = 0x202;
             pObject->mUnknown116[i].mUnknown12.mUnknown48 = AnimAllocPoseChannels(count);
             pObject->mUnknown116[i].mUnknown12.mUnknown52 = 0;
-            fn_80041930(&pObject->mUnknown116[i].mUnknown12, pObject->mUnknown116[i].mUnknown68);
+            PlyrPoseInitFromSkeleton(&pObject->mUnknown116[i].mUnknown12, pObject->mUnknown116[i].mUnknown68);
         } else {
             fn_800ADDFC(pObject, &pObject->mUnknown116[i], 0);
             pObject->mUnknown116[i].mUnknown12.mUnknown48 = 0;
@@ -472,7 +482,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown280.mUnknown256.mUnknown2 = 0x202;
         pObject->mUnknown280.mUnknown256.mUnknown48 = AnimAllocPoseChannels(pSkeleton280->mUnknown6);
         pObject->mUnknown280.mUnknown256.mUnknown52 = 0;
-        fn_80041930(&pObject->mUnknown280.mUnknown256, pObject->mUnknown280.mUnknown312);
+        PlyrPoseInitFromSkeleton(&pObject->mUnknown280.mUnknown256, pObject->mUnknown280.mUnknown312);
         fn_800C2788(pObject, &pObject->mUnknown280, 1);
     } else {
         fn_800C2788(pObject, &pObject->mUnknown280, 0);
@@ -487,7 +497,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
         pObject->mUnknown596.mUnknown160.mUnknown2 = 0x202;
         pObject->mUnknown596.mUnknown160.mUnknown48 = AnimAllocPoseChannels(pSkeleton596->mUnknown6);
         pObject->mUnknown596.mUnknown160.mUnknown52 = 0;
-        fn_80041930(&pObject->mUnknown596.mUnknown160, pObject->mUnknown596.mUnknown216);
+        PlyrPoseInitFromSkeleton(&pObject->mUnknown596.mUnknown160, pObject->mUnknown596.mUnknown216);
         fn_800C2EC0(pObject, &pObject->mUnknown596, 1);
     } else {
         fn_800C2EC0(pObject, &pObject->mUnknown596, 0);
@@ -495,7 +505,7 @@ void fn_80042610(Object_8003DEC4 *pObject, Skeleton_80041930 *pSkeleton, Skeleto
     pObject->mUnknown972 = 0;
 }
 
-void fn_800428A8(Object_8003DEC4 *pObject)
+void PlyrPoseFree(Object_8003DEC4 *pObject)
 {
     unsigned int i;
 
@@ -514,7 +524,7 @@ void fn_800428A8(Object_8003DEC4 *pObject)
     }
 }
 
-void fn_80042928(Object_8003DEC4 *pObject)
+void PlyrPoseUpdate(Object_8003DEC4 *pObject)
 {
     fn_801D0470(1);
     fn_801D0494();
@@ -526,7 +536,7 @@ void fn_80042928(Object_8003DEC4 *pObject)
     AnimBuildPoseMatrices(pObject);
 }
 
-void fn_80042998(Object_8003DEC4 *pObject)
+void PlyrPoseDelayBlink(Object_8003DEC4 *pObject)
 {
     if (pObject->mUnknown828 > 8) {
         pObject->mUnknown828++;
@@ -535,12 +545,12 @@ void fn_80042998(Object_8003DEC4 *pObject)
     }
 }
 
-void fn_800429C0(Object_8003DEC4 *pObject)
+void PlyrPoseStartBlink(Object_8003DEC4 *pObject)
 {
     pObject->mUnknown828 = 6;
 }
 
-int fn_800429CC(int skip)
+int PlyrPoseGetStreamBits(int skip)
 {
     int bits = 3;
 
@@ -548,40 +558,46 @@ int fn_800429CC(int skip)
         int i;
 
         for (i = 0; i < 78; i++) {
-            bits += lbl_802CCDF8[i].mUnknown2;
+            bits += _PlyrPose_aChannelQuant[i].mUnknown2;
         }
         bits += 113;
     }
     return bits + 124;
 }
 
-void fn_80042A08(Object_8003DEC4 *pObject, BitStream_t *pStream)
+/* One flag bit of the player word +20 as a byte. */
+static inline unsigned char _PlyrPoseFlagBit(unsigned int flags, int shift)
+{
+    return (flags >> shift) & 1;
+}
+
+void PlyrPoseWriteState(Object_8003DEC4 *pObject, BitStream_t *pStream)
 {
     unsigned int bit11;
 
-    fn_80191068(pStream, pObject->mUnknown20 & 1, 1);
-    fn_80191068(pStream, (pObject->mUnknown20 >> 17) & 1, 1);
+    fn_80191068(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 0), 1);
+    fn_80191068(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 17), 1);
     bit11 = (pObject->mUnknown20 >> 11) & 1;
     fn_80191068(pStream, bit11, 1);
     if (!bit11) {
-        fn_8004199C(&pObject->mUnknown44, pStream);
-        fn_80041BF8(pObject, 0, pStream);
-        fn_80041BF8(pObject, 1, pStream);
-        fn_80041EB0(pObject, pStream);
+        PlyrPoseWrite(&pObject->mUnknown44, pStream);
+        PlyrPoseWritePart(pObject, 0, pStream);
+        PlyrPoseWritePart(pObject, 1, pStream);
+        PlyrPoseWriteBlend(pObject, pStream);
     }
     fn_80030554(pStream, pObject->mUnknown4, 16, 256.0f);
     fn_80191068(pStream, (pObject->mUnknown36 >> 12) & 0xFFF, 12);
 }
 
-void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, BitStream_t *pStreamC,
+void PlyrPoseReadState(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, BitStream_t *pStreamC,
                  BitStream_t *pStreamD, float t)
 {
     short valuesB[192];
     short valuesC[192];
     short valuesD[192];
-    Pose_80041930 poseB;
-    Pose_80041930 poseD;
-    Pose_80041930 poseC;
+    AnimPose_t poseB;
+    AnimPose_t poseD;
+    AnimPose_t poseC;
     float posA[3];
     float posB[3];
     unsigned char flag;
@@ -629,27 +645,27 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         ReadBitStream(pStreamD, 1);
     }
     if (flag == 0) {
-        fn_80041B48(&poseB, pStreamB);
-        fn_80041B48(&pObject->mUnknown44, pStreamA);
+        PlyrPoseRead(&poseB, pStreamB);
+        PlyrPoseRead(&pObject->mUnknown44, pStreamA);
         if (pStreamC) {
-            fn_80041B48(&poseC, pStreamC);
+            PlyrPoseRead(&poseC, pStreamC);
         }
         if (pStreamD) {
-            fn_80041B48(&poseD, pStreamD);
+            PlyrPoseRead(&poseD, pStreamD);
         }
         if (pStreamC) {
-            fn_80041D88(pObject, pStreamC, 0, t, 0, 1);
-            fn_80041D88(pObject, pStreamC, 0, t, 0, 1);
-            fn_80041F74(pObject, pStreamC, 0, t, 1);
+            PlyrPoseLerpPart(pObject, pStreamC, 0, t, 0, 1);
+            PlyrPoseLerpPart(pObject, pStreamC, 0, t, 0, 1);
+            PlyrPoseLerpBlend(pObject, pStreamC, 0, t, 1);
         }
         if (pStreamD) {
-            fn_80041D88(pObject, pStreamD, 0, t, 0, 1);
-            fn_80041D88(pObject, pStreamD, 0, t, 0, 1);
-            fn_80041F74(pObject, pStreamD, 0, t, 1);
+            PlyrPoseLerpPart(pObject, pStreamD, 0, t, 0, 1);
+            PlyrPoseLerpPart(pObject, pStreamD, 0, t, 0, 1);
+            PlyrPoseLerpBlend(pObject, pStreamD, 0, t, 1);
         }
-        fn_80041D88(pObject, pStreamA, pStreamB, t, 0, 0);
-        fn_80041D88(pObject, pStreamA, pStreamB, t, 1, 0);
-        fn_80041F74(pObject, pStreamA, pStreamB, t, 0);
+        PlyrPoseLerpPart(pObject, pStreamA, pStreamB, t, 0, 0);
+        PlyrPoseLerpPart(pObject, pStreamA, pStreamB, t, 1, 0);
+        PlyrPoseLerpBlend(pObject, pStreamA, pStreamB, t, 0);
     }
 
     if (pStreamC) {
@@ -669,14 +685,14 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
 
     if (!pStreamC) {
         if (!pStreamD) {
-            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, 0, t, lbl_803EA490);
+            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, 0, t, _PlyrPose_bBlendFlag);
         } else {
-            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, &poseD, t, lbl_803EA490);
+            AnimBlendPose(&pObject->mUnknown44, &poseB, 0, &poseD, t, _PlyrPose_bBlendFlag);
         }
     } else if (!pStreamD) {
-        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, 0, t, lbl_803EA490);
+        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, 0, t, _PlyrPose_bBlendFlag);
     } else {
-        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, &poseD, t, lbl_803EA490);
+        AnimBlendPose(&pObject->mUnknown44, &poseB, &poseC, &poseD, t, _PlyrPose_bBlendFlag);
     }
 
     pObject->mUnknown44.mUnknown48[87] = pObject->mUnknown44.mUnknown48[75];
@@ -685,12 +701,12 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
     pObject->mUnknown44.mUnknown48[84] = pObject->mUnknown44.mUnknown48[57];
     pObject->mUnknown44.mUnknown48[85] = pObject->mUnknown44.mUnknown48[58];
     pObject->mUnknown44.mUnknown48[86] = pObject->mUnknown44.mUnknown48[59];
-    fn_80042310(pObject);
-    fn_80042928(pObject);
+    PlyrPoseBuildWorldMatrix(pObject);
+    PlyrPoseUpdate(pObject);
 }
 
-void fn_80042F4C(unsigned char value)
+void PlyrPoseSetBlendFlag(unsigned char value)
 {
-    lbl_803EA490 = value;
+    _PlyrPose_bBlendFlag = value;
 }
 }
