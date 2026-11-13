@@ -219,7 +219,7 @@ int fn_8009A298(int handle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-unsigned char fn_801478F0(unsigned char a);
+unsigned char ParticleTrailSetEnabled(unsigned char a);
 void fn_8003E174(int a);
 int fn_80178308(void);
 int fn_8009313C(Params_80092E54 *pRequest);
@@ -498,7 +498,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                     }
                     started = 1;
                     fn_8003E174(0);
-                    lbl_803EA8BC = fn_801478F0(0);
+                    lbl_803EA8BC = ParticleTrailSetEnabled(0);
                 }
             }
         }
@@ -541,7 +541,7 @@ extern "C" void fn_80090284(int *pData)
         }
     }
     fn_8003E174(1);
-    fn_801478F0(lbl_803EA8BC);
+    ParticleTrailSetEnabled(lbl_803EA8BC);
     lbl_803EA8C4 = 0;
 }
 
@@ -2809,10 +2809,10 @@ struct Pair_800A554C {
 };
 
 extern "C" {
-void fn_801469A0(void);
+void GlowShutdown(void);
 void LevelUnload(void);
 int fn_801486A0(void);
-void fn_80146E78(void);
+void GlowUpdateFlickers(void);
 void LevelUpdate(void);
 void fn_800A2B40(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
@@ -2969,7 +2969,7 @@ extern "C" void fn_800A2F3C(int value)
 
 extern "C" void fn_800A30B8(void)
 {
-    fn_801469A0();
+    GlowShutdown();
     LevelUnload();
     if (lbl_8030E6DC.mpCallback4 != 0) {
         lbl_8030E6DC.mpCallback4();
@@ -2984,7 +2984,7 @@ extern "C" void fn_800A30B8(void)
 
 extern "C" void fn_800A3120(float value)
 {
-    fn_80146E78();
+    GlowUpdateFlickers();
     LevelUpdate();
     fn_800A2B40();
     if (lbl_8030E6DC.mpCallback8 != 0) {
@@ -4736,7 +4736,7 @@ unsigned int GameModeTypeGet(void);
 int fn_800A7F1C(int team);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
-void fn_80147598(void *pObject, int bit, unsigned int slot, unsigned char flag);
+void ParticleTrailStart(void *pObject, int bit, unsigned int slot, unsigned char flag);
 void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 
 extern unsigned char lbl_803EAC40;
@@ -4808,7 +4808,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
                 if (p->mUnknown8 != 255) {
                     fn_800A8954(0, p->mIdBytes[2], p);
                 }
-                fn_80147598(p->mpUnknown4, 16, lbl_803EAC3C->mEntries[team][i].mUnknown8, 0);
+                ParticleTrailStart(p->mpUnknown4, 16, lbl_803EAC3C->mEntries[team][i].mUnknown8, 0);
             }
             found = 1;
         } else if (apply != 0 && lbl_803EAC3C->mEntries[team][i].mUnknown12 == 0) {
@@ -6166,7 +6166,7 @@ void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 void fn_800A6F04(int team);
 void ParticleTrailClearTint(ParticleTrailSet_t *p);
-void fn_80147840(Object_8003DEC4 *p);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *p);
 }
 
 extern "C" void fn_800A65BC(void)
@@ -6225,7 +6225,7 @@ extern "C" void fn_800A6B6C(int team)
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
 
         ParticleTrailClearTint(&pObject->mUnknown5188);
-        fn_80147840(pObject);
+        ParticleTrailStopAfterimage(pObject);
     }
 }
 
@@ -6244,7 +6244,7 @@ extern "C" void fn_800A6C10(int team)
         Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
 
         ParticleTrailClearTint(&pObject->mUnknown5188);
-        fn_80147840(pObject);
+        ParticleTrailStopAfterimage(pObject);
     }
 }
 
@@ -6502,7 +6502,7 @@ extern "C" int fn_800A7FE0(void)
             p = pCharacter->mUnknown14[1];
             AudmonEventPostId(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
         }
-        lbl_803EAA4E = fn_801478F0(0);
+        lbl_803EAA4E = ParticleTrailSetEnabled(0);
     } else {
         pCharacter = fn_80093BCC(lbl_803EC95C);
         if (fn_80092830(lbl_803EC95C) == 0) {
@@ -6645,7 +6645,7 @@ extern "C" int fn_800A8740(void)
 }
 
 extern "C" {
-void fn_80147840(Object_8003DEC4 *pObject);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
 void fn_800A8570(void);
 int SpchIGGetSceneSpeaker(void);
 }
@@ -6655,8 +6655,8 @@ extern "C" void fn_800A87E8(void)
     if (fn_800A7FD8() != 0) {
         Character_80093BCC *pCharacter = fn_80093BCC(lbl_803EC95C);
 
-        fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[0])->mpUnknown4);
-        fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
+        ParticleTrailStopAfterimage((Object_8003DEC4 *)(pCharacter->mUnknown14[0])->mpUnknown4);
+        ParticleTrailStopAfterimage((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
         fn_80093410(lbl_803EC95C);
         if (SpchIGGetSceneSpeaker() != 0) {
             AudmonEventPostId(130, 0, 0, 0, 0, 0);
@@ -6680,7 +6680,7 @@ extern "C" void fn_800A87E8(void)
         if (fn_8005BFD4() != 4) {
             fn_8005BF18();
         }
-        fn_801478F0(lbl_803EAA4E);
+        ParticleTrailSetEnabled(lbl_803EAA4E);
         if (lbl_803EC954[0]->mUnknown68 != 0 || lbl_803EC954[1]->mUnknown68 != 0) {
             fn_800A8570();
         }

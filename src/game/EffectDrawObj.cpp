@@ -4,7 +4,7 @@
 #include "engine/viewport.h"
 
 extern "C" {
-void fn_80146DC4(int a);
+void GlowDrawGroup(int a);
 int ObjNewType_(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(void *));
@@ -20,7 +20,7 @@ extern "C" {
 int EffectDrawObjDraw(void *pItem)
 {
     if (_EffectDrawObj_bEnabled != 0) {
-        fn_80146DC4(0);
+        GlowDrawGroup(0);
     }
     return 0;
 }

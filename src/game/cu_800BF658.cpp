@@ -85,7 +85,7 @@ void fn_800AEF38(int team);
 void HudHideEvent3D(int index);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
-unsigned char fn_801478F0(unsigned char a);
+unsigned char ParticleTrailSetEnabled(unsigned char a);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_800BD2F8(int team);
@@ -342,7 +342,7 @@ void Class_80297CE8::vfn_06(float dt)
     HudHideEvent3D(1);
     PassIconsHide();
     PassIconsClearReplayFlag();
-    fn_801478F0(1);
+    ParticleTrailSetEnabled(1);
     fn_800BD2F8(fn_80178308());
     fn_800BD2F8(fn_80178320());
     lbl_803EABA8->mUnknownC5 = 0;

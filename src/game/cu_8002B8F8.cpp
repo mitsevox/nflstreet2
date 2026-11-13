@@ -157,8 +157,8 @@ void ParticlesProcess(float a);
 void ParticlesStopOnEnter(void);
 void ParticlesFlush(void);
 void ParticlesStopOnLeave(void);
-void fn_801478A8(void);
-unsigned char fn_801478F0(unsigned char a);
+void ParticleTrailUpdateAll(void);
+unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconObjSetEnabled(int value);
 void fn_80162780(int a, int b);
 void fn_80177E6C(int a, int b);
@@ -594,7 +594,7 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
     lbl_803EA358 += p->mUnknownD88;
     if (lbl_803EA358 > 60) {
         EnvObjUpdateFades();
-        fn_801478A8();
+        ParticleTrailUpdateAll();
         lbl_803EA358 = 0;
     }
     if (p->mUnknownD88 < 60) {
@@ -652,7 +652,7 @@ extern "C" void fn_8002C13C(Type_803EA368 *p)
             }
             if (lbl_803EA358 > 60) {
                 EnvObjUpdateFades();
-                fn_801478A8();
+                ParticleTrailUpdateAll();
                 lbl_803EA358 = 0;
             }
             ParticleSysUpdate(p->mUnknownD88 / 60.0f);
@@ -718,7 +718,7 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
         ParticlesStopOnEnter();
         result = 0;
     }
-    lbl_803EA365 = fn_801478F0(0);
+    lbl_803EA365 = ParticleTrailSetEnabled(0);
     fn_8002B8F8();
     return result;
 }
@@ -728,7 +728,7 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
     int result = -1;
     GameCamera_t *pCamera;
 
-    fn_801478F0(lbl_803EA365);
+    ParticleTrailSetEnabled(lbl_803EA365);
     if (p->mUnknownD90 == 4 || (p->mUnknownD94 & 0x1000000)) {
         if (p->mUnknownD94 & 0x1000000) {
             p->mUnknownD94 &= ~0x800000;

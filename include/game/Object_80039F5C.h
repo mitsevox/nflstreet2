@@ -4,6 +4,7 @@
 #include "game/AnimMomentumActor.h"
 #include "game/Message_800F01CC.h"
 #include "game/Pose_80041930.h"
+#include "game/Vector_80039F5C.h"
 
 struct LevelSurface_t;
 
@@ -25,12 +26,6 @@ struct Link_800CDE50 {
 
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
-
-struct Vector_80039F5C {
-    float mX;
-    float mY;
-    float mZ;
-};
 
 /* Rotation built by QuatFromEuler from three angles and reset by QuatIdentity. */
 struct Quat_801EB488 {

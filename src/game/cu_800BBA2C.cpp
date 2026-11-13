@@ -4,7 +4,7 @@
 extern "C" {
 int fn_800BA6F8(void);
 void fn_8016DDDC(int team);
-void fn_801475F4(void);
+void ParticleTrailResetAll(void);
 }
 
 extern "C" void fn_800BBA2C(void)
@@ -40,6 +40,6 @@ extern "C" void fn_800BBA2C(void)
     } else {
         fn_8016DDDC(0);
         fn_8016DDDC(1);
-        fn_801475F4();
+        ParticleTrailResetAll();
     }
 }

@@ -24,11 +24,11 @@ struct ParticleBallTrail_t {
 
 extern "C" {
 void GroundPulseUpdate(void);
-void fn_80146FCC(void);
-void fn_80146FD8(void);
-void fn_80146FDC(ParticleTrailSet_t *pObject);
-void fn_801475F4(void);
-void fn_801478A8(void);
+void ParticleTrailStartup(void);
+void ParticleTrailShutdown(void);
+void ParticleTrailInit(ParticleTrailSet_t *pObject);
+void ParticleTrailResetAll(void);
+void ParticleTrailUpdateAll(void);
 void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
@@ -158,7 +158,7 @@ void ParticlesInit(void)
     }
     _Particles_pEventPool = fn_801C68FC(1, 0, 75, sizeof(ParticleEvent_t), 0, 0);
     _Particles_pSpawnPool = fn_801C68FC(1, 0, 64, sizeof(ParticleSpawn_t), 0, 0);
-    fn_80146FCC();
+    ParticleTrailStartup();
     gParticles_bInit = 1;
 }
 
@@ -172,7 +172,7 @@ void ParticlesShutdown(void)
         fn_801C69E4(_Particles_pSpawnPool);
         _Particles_pSpawnPool = 0;
     }
-    fn_80146FD8();
+    ParticleTrailShutdown();
     gParticles_bInit = 0;
 }
 
@@ -217,7 +217,7 @@ void ParticlesProcess(void)
     }
     _ParticlesFreeFinished();
     _ParticlesFollowBall();
-    fn_801478A8();
+    ParticleTrailUpdateAll();
     GroundPulseUpdate();
 }
 
@@ -267,7 +267,7 @@ void ParticlesStopOnEnter(void)
     if (_Particles_pEventPool != 0) {
         fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventStop, 1);
     }
-    fn_801475F4();
+    ParticleTrailResetAll();
 }
 
 void ParticlesFlush(void)
@@ -280,7 +280,7 @@ void ParticlesStopOnLeave(void)
     if (_Particles_pEventPool != 0) {
         fn_801C6D34(_Particles_pEventPool, 0, 0, 0, _ParticleEventStop, 1);
     }
-    fn_801475F4();
+    ParticleTrailResetAll();
 }
 
 void ParticleTrailReset(ParticleTrailSet_t *pObject)
@@ -289,7 +289,7 @@ void ParticleTrailReset(ParticleTrailSet_t *pObject)
     pObject->mUnknown57C = 0;
     pObject->mUnknown5A4 = 0;
     pObject->mUnknown5A8 = 0;
-    fn_80146FDC(pObject);
+    ParticleTrailInit(pObject);
     pObject->mUnknown5A0 = 0;
     pObject->mUnknown580 = 1.0f;
     pObject->mUnknown588 = 1.0f;

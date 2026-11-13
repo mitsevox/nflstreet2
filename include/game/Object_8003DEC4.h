@@ -229,7 +229,7 @@ Object_8003DEC4 *fn_8003DEC4(int index);
 /* The callers zero-extend the index to 8 bits (clrlwi r4,r31,24 at
    0x800A926C). */
 Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
-void fn_801477F0(Object_8003DEC4 *pObject);
+void ParticleTrailStartAfterimage(Object_8003DEC4 *pObject);
 /* Callback registered by PlayerObjAddObjType through ObjSetListObjFunc; its second
    argument is not read. */
 int PlayerObjDraw(Object_8003DEC4 *pObject, int unused);

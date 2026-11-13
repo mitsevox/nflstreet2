@@ -22,7 +22,7 @@ int fn_800ADD7C(Element_80041BF8 *pElements, unsigned int index);
 int fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index);
 void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
-void fn_80147840(Object_8003DEC4 *pObject);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
 int fn_801784C4(void);
 void AnimBlendPose(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
                  unsigned char a);
@@ -615,9 +615,9 @@ void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         ReadBitStream(pStreamC, 1);
     }
     if (flag == 1) {
-        fn_801477F0(pObject);
+        ParticleTrailStartAfterimage(pObject);
     } else {
-        fn_80147840(pObject);
+        ParticleTrailStopAfterimage(pObject);
     }
 
     flag = ReadBitStream(pStreamB, 1);

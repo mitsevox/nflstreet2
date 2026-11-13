@@ -110,7 +110,7 @@ int fn_8011F1CC(void);
 int fn_80125510(Object_80039F5C *p, int a);
 int BallStateGet(Ball_t *p, int *pOut);
 void fn_8013F3FC(void);
-unsigned char fn_801478F0(unsigned char a);
+unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 int fn_801486A0(void);
@@ -551,7 +551,7 @@ void Class_80297C60::vfn_03(float dt)
     SpchIGResetPlayResult();
     fn_800C9FC0();
     fn_800AE9EC();
-    fn_801478F0(0);
+    ParticleTrailSetEnabled(0);
     fn_801783D0(21, 0);
     fn_800C4438(&lbl_803EAB78->mSequence);
     if (fn_801486A0()) {

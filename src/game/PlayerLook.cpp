@@ -28,7 +28,7 @@ struct PlayerLookColors_t {
 };
 
 /* Three bytes read by fn_800840A4. */
-struct TeamRgb_t {
+struct TeamColorRow_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
@@ -459,7 +459,7 @@ extern "C" void PlayerLookLoadDecalColors(int index, unsigned char *pColors, uns
 {
     DbCursor cursor;
     TeamQuery query;
-    TeamRgb_t rgb;
+    TeamColorRow_t rgb;
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;
@@ -476,7 +476,7 @@ extern "C" void PlayerLookLoadHeadDecalColors(int index, unsigned char *pColors,
 {
     DbCursor cursor;
     TeamQuery query;
-    TeamRgb_t rgb;
+    TeamColorRow_t rgb;
 
     query.mUnknown8 = index + 1;
     query.mUnknown4 = 5;

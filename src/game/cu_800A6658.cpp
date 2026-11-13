@@ -22,13 +22,13 @@ int fn_8011F37C(void);
 int fn_8011F1CC(void);
 int fn_8011F1A4(void);
 void *fn_8023816C(void *pHandle);
-void fn_801476C8(Object_80039F5C *p);
+void ParticleTrailSetTeamColor(Object_80039F5C *p);
 void fn_800A8F70(void);
 void fn_800940D8(unsigned short index, unsigned char value);
 void fn_800A92E4(void);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
 void ParticleTrailClearTint(ParticleTrailSet_t *p);
-void fn_80147840(Object_8003DEC4 *p);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *p);
 void ParticleTrailSetTint(ParticleTrailSet_t *p, float a, float b, float c);
 int fn_80178320(void);
 int GamebreakerFind(DbCursor *pCursor, int key, int *pResult);
@@ -135,7 +135,7 @@ extern "C" void fn_800A680C(int team)
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
                 ParticleTrailClearTint(&pObject->mUnknown5188);
-                fn_80147840(pObject);
+                ParticleTrailStopAfterimage(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
@@ -179,7 +179,7 @@ extern "C" void fn_800A69BC(int team)
             if (lbl_8030F404[team][i] != 0) {
                 pObject = (Object_8003DEC4 *)lbl_8030F404[team][i]->mpUnknown4;
                 ParticleTrailClearTint(&pObject->mUnknown5188);
-                fn_80147840(pObject);
+                ParticleTrailStopAfterimage(pObject);
             }
             lbl_8030F404[team][i] = pair[i];
             if (lbl_8030F404[team][i] != 0) {
@@ -300,7 +300,7 @@ extern "C" void fn_800A70F4(void)
         pBlock->mUnknownA0 = 0;
         count = fn_80178D18(team);
         for (index = 0; index < count; index++) {
-            fn_801476C8(fn_80039F5C(team, index));
+            ParticleTrailSetTeamColor(fn_80039F5C(team, index));
         }
         fn_802381E0(pHandle);
     }
