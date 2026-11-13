@@ -805,18 +805,6 @@
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
-    "RealMode": {
-      "address": "0x8023BC20",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "Config24MB": {
-      "address": "0x8023BB20",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
-    "Config48MB": {
-      "address": "0x8023BBA0",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
-    },
     "DVDInit": {
       "address": "0x8023F498",
       "evidence": "Original complete OSInit call instruction0x80238E88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -853,10 +841,6 @@
       "address": "0x8023C040",
       "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
     },
-    "__OSStopAudioSystem": {
-      "address": "0x80239BD4",
-      "evidence": "Original complete OSResetSystem call instruction0x8023C118 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "__OSSyncSram": {
       "address": "0x8023CED0",
       "evidence": "Original complete OSResetSystem call instruction0x8023C240 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -868,14 +852,6 @@
     "__OSInitSram": {
       "address": "0x8023C958",
       "evidence": "Original complete OSInit call instruction0x80238CC0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSInitAudioSystem": {
-      "address": "0x80239A18",
-      "evidence": "Original complete OSInit call instruction0x80238CC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSInitMemoryProtection": {
-      "address": "0x8023BC38",
-      "evidence": "Original complete OSInit call instruction0x80238CE4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "EnableMetroTRKInterrupts": {
       "address": "0x801AA7B8",
@@ -17297,6 +17273,53 @@
           "placement": ".bss",
           "start": "0x80362BB0",
           "end": "0x80362F64"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSAudioSystem.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name and data rows for src/dolphin/os/OSAudioSystem.c; both functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239A18",
+          "end": "0x80239CAC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBC48",
+          "end": "0x802FBCC8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit, function, name, data and source-form rows for src/dolphin/os/OSMemory.c; every retained function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__OSInitMemoryProtection",
+          "Config24MB",
+          "Config48MB",
+          "RealMode"
+        ],
+        "evidence": "The target keeps this file's 6 exact functions at the placed range; the global ones are the roots and the file-local OnReset and MEMIntrruptHandler stay through their references. The accessors OSGetPhysicalMemSize and OSGetConsoleSimulatedMemSize are inlined into __OSInitMemoryProtection and have no standalone code in the target (byte search of main.dol for lis r3,0x8000 followed by lwz r3,0x28(r3) or lwz r3,0xF0(r3) finds none), so the linker drops them as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA78",
+          "end": "0x8023BD50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC470",
+          "end": "0x802FC480"
         }
       ]
     }

@@ -1,3 +1,7 @@
+/* Audio DSP start and stop for the operating system layer: at boot OSInit runs a short
+   start-up program on the sound DSP and waits for its ready message, and OSResetSystem halts
+   the DSP before the console resets or restarts. */
+
 #include <libc/string.h>
 #include <dolphin/os.h>
 
@@ -75,7 +79,7 @@ void __OSInitAudioSystem(void) {
         reg16 = __DSPRegs[2];
     }
 
-    if(((u32)((reg16 << 16) | __DSPRegs[3]) + 0x7FAC0000U) != 0x4348) {
+    if (((reg16 << 16) | __DSPRegs[3]) != 0x80544348) {
         ASSERTMSGLINE(193, 0, "__OSInitAudioSystem(): DSP returns invalid message");
     }
 

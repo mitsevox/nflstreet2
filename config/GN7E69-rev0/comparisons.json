@@ -12815,37 +12815,6 @@
       ]
     },
     {
-      "source": "src/dolphin/os/OSAudioSystem.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80239A18",
-          "end": "0x80239CAC"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FBC48",
-          "end": "0x802FBCC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__OSInitAudioSystem",
-          "start": "0x80239A18",
-          "end": "0x80239BD4"
-        },
-        {
-          "symbol": "__OSStopAudioSystem",
-          "start": "0x80239BD4",
-          "end": "0x80239CAC"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/dsp/dsp_task.c",
       "profile": "dolphin_release",
       "evidence": "Full coherent BFBB handler already imported clean; fixed comparison guard registers complete original extent; existing4 linkedhelpers unchanged.",
@@ -13144,57 +13113,6 @@
         "DVDSeekAbsAsyncPrio",
         "DVDCancelAllAsync",
         "DVDCancelAll"
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSMemory.c",
-      "profile": "dolphin_release",
-      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023BA78",
-          "end": "0x8023BD50"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FC470",
-          "end": "0x802FC480"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "OnReset",
-          "start": "0x8023BA78",
-          "end": "0x8023BAB4"
-        },
-        {
-          "symbol": "MEMIntrruptHandler",
-          "start": "0x8023BAB4",
-          "end": "0x8023BB20"
-        },
-        {
-          "symbol": "__OSInitMemoryProtection",
-          "start": "0x8023BC38",
-          "end": "0x8023BD50"
-        },
-        {
-          "symbol": "Config24MB",
-          "start": "0x8023BB20",
-          "end": "0x8023BBA0"
-        },
-        {
-          "symbol": "Config48MB",
-          "start": "0x8023BBA0",
-          "end": "0x8023BC20"
-        },
-        {
-          "symbol": "RealMode",
-          "start": "0x8023BC20",
-          "end": "0x8023BC38"
-        }
       ]
     },
     {
