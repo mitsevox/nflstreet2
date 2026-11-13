@@ -50,7 +50,7 @@ void PlaTexCacheOpenArchive(int a);
 void DbgPrintEnable(void);
 void DbgPrintDisable(void);
 void DbgScreenClear(void);
-void fn_80194794(void);
+void LoadingInit(void);
 void ResStreamInit(int a);
 void ResStreamShutdown(void);
 int CamInit(int a, int b, void *p, int c);
@@ -309,7 +309,7 @@ const char *Loading::GetName() { return "Loading"; }
 
 int Loading::Init()
 {
-    fn_80194794();
+    LoadingInit();
     return 1;
 }
 
