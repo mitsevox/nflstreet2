@@ -4,7 +4,7 @@
 #include "game/GameCamera.h"
 #include "game/cu_8013BB18.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8008E978.h"
 #include "game/fn_802270D4.h"

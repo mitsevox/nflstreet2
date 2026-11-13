@@ -3,7 +3,7 @@
 #include "game/fn_801248D4.h"
 #include "game/Directions_8012430C.h"
 #include "game/Object_80039F5C.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Object_8017886C.h"
 #include "game/State_800FDA58.h"
 #include "game/Command_800CEE74.h"

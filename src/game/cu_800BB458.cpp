@@ -9,7 +9,7 @@
 
 struct Record_800BAE7C;
 
-/* Block allocated by 0x800BC538 (entry 1 of the Class_80297BF8 vtable)
+/* Block allocated by 0x800BC538 (entry 1 of the PreGamePhase vtable)
    through fn_80238174 under the id 'preg' (52 bytes); only the fields
    accessed here are declared. */
 struct Block_800BC538 {

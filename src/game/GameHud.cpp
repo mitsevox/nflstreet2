@@ -20,7 +20,7 @@ int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);
 int fn_800B6644(int index);
 int fn_801486A0(void);
-int fn_80156704(void);
+int TutorialIsActive(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80179138(void);
@@ -104,7 +104,7 @@ void HudUpdateMashPrompt(unsigned char id)
     Object_80039F5C *p;
     unsigned char own;
 
-    if (fn_80156704()) {
+    if (TutorialIsActive()) {
         return;
     }
     p = 0;
@@ -220,7 +220,7 @@ void HudStart(void)
         break;
     default:
         fn_80218FC4(gUISMainInfo, 3, 3, 0, 0);
-        if (fn_80156704()) {
+        if (TutorialIsActive()) {
             fn_80218FC4(gUISMainInfo, 7, 0x10, 0, 0);
         }
         break;
@@ -394,7 +394,7 @@ void HudStop(void)
         break;
     default:
         fn_8021956C(gUISMainInfo, 3, 3, 1);
-        if (fn_80156704()) {
+        if (TutorialIsActive()) {
             fn_8021956C(gUISMainInfo, 7, 0x10, 1);
         }
         break;
@@ -442,7 +442,7 @@ void HudHideOverlay(void)
 
     _Hud_bHidden = 1;
     args[0] = 1;
-    if (!fn_80156704()) {
+    if (!TutorialIsActive()) {
         fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
     }
 }

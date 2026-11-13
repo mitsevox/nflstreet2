@@ -50,12 +50,12 @@ void TutorialGetDescription(int id, char *pDest, int count);
 unsigned char TutorialTakeAllCompleteFlag(void);
 void TutorialSetProfileDb(int db);
 int TutorialGetProfileDb(void);
-void fn_801566EC(void);
-void fn_801566F8(void);
-void fn_80156724(int value);
-void fn_8015672C(int value);
-void fn_80156734(int value);
-unsigned int fn_801568F0(void);
+void TutorialInit(void);
+void TutorialShutdown(void);
+void TutorialSetStep(int value);
+void TutorialSetLesson(int value);
+void TutorialSetActiveStep(int value);
+unsigned int TutorialGetLesson(void);
 int MsgGameGetSetupState(void);
 void MsgGameIgnoreValue(int a);
 void fn_80186F30(signed char a, int b);
@@ -76,7 +76,7 @@ static unsigned char _MsgTutorial_bDatabaseSet = 0;
 extern "C" {
 void MsgTutorialInit(void)
 {
-    fn_801566EC();
+    TutorialInit();
     TutorialDbOpenInfo();
     if (!_MsgTutorial_bDatabaseSet) {
         if (fn_8022F4BC() != -1) {
@@ -90,7 +90,7 @@ void MsgTutorialInit(void)
 
 void MsgTutorialShutdown(void)
 {
-    fn_801566F8();
+    TutorialShutdown();
     TutorialDbCloseInfo();
 }
 
@@ -138,7 +138,7 @@ int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unuse
         MsgTutorialPostLessonEvent(pParams->mUnknown0);
         break;
     case 0x80000007:
-        fn_8015672C(pParams->mUnknown0);
+        TutorialSetLesson(pParams->mUnknown0);
         break;
     case 0x80000006:
         TutorialGetDescription(pParams->mUnknown0, pParams->mUnknown4.mUnknown0->mUnknown8, pParams->mUnknown4.mUnknown0->mUnknown4);
@@ -174,13 +174,13 @@ void MsgTutorialBeginLesson(void)
         fn_80186F30(fn_8022F384(TutorialGetProfileDb()), 1);
         fn_80014294(0x36, 0x21);
         FELoopSetResume(1);
-        unsigned int id = fn_801568F0();
+        unsigned int id = TutorialGetLesson();
         if (TutorialIsComplete(id)) {
-            fn_80156734(0);
-            fn_80156724(0);
+            TutorialSetActiveStep(0);
+            TutorialSetStep(0);
         } else {
-            fn_80156734(TutorialGetStepCount(id));
-            fn_80156724(TutorialGetStepCount(id));
+            TutorialSetActiveStep(TutorialGetStepCount(id));
+            TutorialSetStep(TutorialGetStepCount(id));
         }
         fn_80015D28(4);
     } else {

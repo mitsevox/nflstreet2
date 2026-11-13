@@ -225,7 +225,7 @@ void fn_801410F4(int a);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
-void fn_80156C78(int a, int b);
+void TutorialSetMoveDone(int a, int b);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -979,7 +979,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 if (fn_801787A0() == 0) {
                     StyleTrackerAwardStrip(fn_80178308());
                     fn_800A8954(26, p->mIdBytes[2], p);
-                    fn_80156C78(40, 1);
+                    TutorialSetMoveDone(40, 1);
                 }
             } else {
                 PossFumble(p);

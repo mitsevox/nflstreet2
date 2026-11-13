@@ -1,5 +1,5 @@
 #include "engine/cu_801C2EB4.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
@@ -28,7 +28,7 @@ struct Table_8015005C {
     unsigned char mUnknown125;
 };
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
     unsigned char mUnknown4;
     char mUnknown5[3];
@@ -53,7 +53,7 @@ extern const float lbl_802A1350[];
 
 void fn_80150DFC(Class_802A1D20 *p)
 {
-    p->Class_80297AB8::vfn_05();
+    p->LivePlayPhase::OnExit();
 }
 
 // Reset the balls and keep the three random field positions at least four units apart.

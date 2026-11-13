@@ -1,6 +1,6 @@
 #include <math.h>
 #include "game/StyleTracker.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Challenge.h"

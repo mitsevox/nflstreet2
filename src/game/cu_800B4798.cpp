@@ -4,7 +4,7 @@
 
 extern "C" {
 void PlayerLookGetBonuses(int unused, int id, unsigned short *pValues);
-short fn_80157448(int team, int unused, short value);
+short TutorialScaleCpuRating(int team, int unused, short value);
 short fn_80148698(int team, int index, short value);
 short fn_800ABE10(int team, int index, short value);
 short fn_8009AC18(int team, int index, short value);
@@ -27,7 +27,7 @@ extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
         } else if (value > 255) {
             value = 255;
         }
-        value = fn_80157448(team, i, value);
+        value = TutorialScaleCpuRating(team, i, value);
         value = fn_80148698(team, i, value);
         value = fn_800ABE10(team, i, value);
         value = fn_8009AC18(team, i, value);

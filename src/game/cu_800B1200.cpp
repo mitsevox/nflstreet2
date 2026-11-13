@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Block_800B0CFC.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8009D990.h"

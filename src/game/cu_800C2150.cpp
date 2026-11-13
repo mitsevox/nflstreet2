@@ -1,7 +1,7 @@
 #include "engine/llmatrix.h"
 #include "engine/vec.h"
 #include "game/Block_800DE3B0.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Object_8003DEC4.h"
 #include "game/LevelData.h"
@@ -43,7 +43,7 @@ void fn_8009D818(int state);
 int fn_8009D86C(void);
 void fn_8009D888(int index, int value);
 void fn_8009D964(int index, int value);
-void fn_800B9BAC(Class_80297C60 *p);
+void fn_800B9BAC(PostPlayPhase *p);
 void fn_800CC448(void);
 void InGameStateReset(void);
 void InGameStateClearActive(void);

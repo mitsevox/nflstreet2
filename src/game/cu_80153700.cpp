@@ -1,9 +1,9 @@
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 #include "game/fn_801C1F94.h"
 
-class Class_802A1930 : public Class_802A56E8 {
+class Class_802A1930 : public ScrmRuleSet {
 };
 
 struct Score_801531C4 {
@@ -28,7 +28,7 @@ void fn_80153700(Class_802A1930 *p, int team)
 {
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
 
-    p->Class_802A56E8::vfn_11(team);
+    p->ScrmRuleSet::ResetGame(team);
     fn_801C1F94(pRules->mpUnknown52->mUnknown20, 0, sizeof(pRules->mpUnknown52->mUnknown20));
     fn_801C1F94(pRules->mpUnknown52->mUnknown24, 0, sizeof(pRules->mpUnknown52->mUnknown24));
     fn_801C1F94(pRules->mpUnknown52->mUnknown28, 0, sizeof(pRules->mpUnknown52->mUnknown28));

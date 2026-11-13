@@ -1,6 +1,6 @@
-#include "game/Class_802A56E8.h"
+#include "game/ScrmRuleSet.h"
 
-class Class_802A2130 : public Class_802A56E8 {
+class Class_802A2130 : public ScrmRuleSet {
 };
 
 extern "C" {

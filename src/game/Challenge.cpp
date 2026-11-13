@@ -7,7 +7,7 @@
 #include <string.h>
 #include "game/StyleTracker.h"
 #include "game/DbTableCursorInline.h"
-#include "game/Class_80297C60.h"
+#include "game/PostPlayPhase.h"
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
 #include "game/Object_8017886C.h"
@@ -178,7 +178,7 @@ int fn_800A2178(void);
 int fn_800A7E40(unsigned char side);
 int fn_800AD9B4(void);
 void fn_800B4A18(int index, char *pDest, int size);
-int fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(PostPlayPhase *p);
 int fn_80178308(void);
 int fn_801787DC(int team);
 int fn_80186B38(int a);

@@ -1,7 +1,7 @@
 #include "game/Object_80039F5C.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 
-class Class_802A1DC8 : public Class_80297BF8 {
+class Class_802A1DC8 : public PreGamePhase {
 };
 
 extern "C" {
@@ -11,7 +11,7 @@ void fn_800AD910(int a, float b);
 void fn_80150710(Class_802A1DC8 *p, float value)
 {
     if (MsgBoxIsClosed()) {
-        p->vfn_11(value);
+        p->EnterFirstPhase(value);
     }
 }
 
@@ -26,7 +26,7 @@ void fn_80150824(Class_802A1DC8 *p, float value)
 }
 
 extern "C" {
-void fn_800BCC30(Class_80297BF8 *p);
+void fn_800BCC30(PreGamePhase *p);
 void fn_80149040(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
 

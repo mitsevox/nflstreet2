@@ -94,7 +94,7 @@ void fn_8000FCD4(int a);
 int fn_8000FCCC(void);
 unsigned char fn_80187C64(void);
 void fn_80187C5C(unsigned char a);
-void fn_80156E74(float *pX, float *pY, float *pZ);
+void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
 int fn_8005902C(void);
 int fn_8007B324(void);
 int TeamLogoGetHandle(int a);
@@ -518,7 +518,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
     case 0x181: {
         float position[3];
 
-        fn_80156E74(&position[0], &position[1], &position[2]);
+        TutorialGetHudPosition(&position[0], &position[1], &position[2]);
         *pArgs[0].pf = position[0];
         *pArgs[1].pf = position[1];
         *pArgs[2].pf = position[2];

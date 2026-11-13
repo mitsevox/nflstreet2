@@ -481,225 +481,225 @@
       "address": "0x800B3C68",
       "evidence": "evidence.tsv external row for 0x800B3C68 (vfn_04__14Class_80297B50f)."
     },
-    "_vt.14Class_80297C60": {
+    "_vt.13PostPlayPhase": {
       "address": "0x80297C60",
-      "evidence": "evidence.tsv external row for 0x80297C60 (_vt.14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x80297C60 (_vt.13PostPlayPhase)."
     },
-    "_vt.14Class_80297AB8": {
+    "_vt.13LivePlayPhase": {
       "address": "0x80297AB8",
-      "evidence": "evidence.tsv external row for 0x80297AB8 (_vt.14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x80297AB8 (_vt.13LivePlayPhase)."
     },
-    "_vt.14Class_80297BF8": {
+    "_vt.12PreGamePhase": {
       "address": "0x80297BF8",
-      "evidence": "evidence.tsv external row for 0x80297BF8 (_vt.14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x80297BF8 (_vt.12PreGamePhase)."
     },
-    "_vt.14Class_80297CE8": {
+    "_vt.12PreSnapPhase": {
       "address": "0x80297CE8",
-      "evidence": "evidence.tsv external row for 0x80297CE8 (_vt.14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x80297CE8 (_vt.12PreSnapPhase)."
     },
-    "vfn_04__14Class_80297AB8f": {
+    "OnUpdate__13LivePlayPhasef": {
       "address": "0x800A050C",
-      "evidence": "evidence.tsv external row for 0x800A050C (vfn_04__14Class_80297AB8f)."
+      "evidence": "evidence.tsv external row for 0x800A050C (OnUpdate__13LivePlayPhasef)."
     },
-    "vfn_03__14Class_80297AB8": {
+    "OnEnter__13LivePlayPhase": {
       "address": "0x800A042C",
-      "evidence": "evidence.tsv external row for 0x800A042C (vfn_03__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A042C (OnEnter__13LivePlayPhase)."
     },
-    "vfn_03__14Class_80297BF8": {
+    "OnEnter__12PreGamePhase": {
       "address": "0x800BC5DC",
-      "evidence": "evidence.tsv external row for 0x800BC5DC (vfn_03__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC5DC (OnEnter__12PreGamePhase)."
     },
-    "vfn_04__14Class_80297BF8f": {
+    "OnUpdate__12PreGamePhasef": {
       "address": "0x800BCB18",
-      "evidence": "evidence.tsv external row for 0x800BCB18 (vfn_04__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BCB18 (OnUpdate__12PreGamePhasef)."
     },
-    "vfn_04__14Class_80297CE8f": {
+    "OnEnter__12PreSnapPhasef": {
       "address": "0x800BFB88",
-      "evidence": "evidence.tsv external row for 0x800BFB88 (vfn_04__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800BFB88 (OnEnter__12PreSnapPhasef)."
     },
-    "vfn_05__14Class_80297CE8f": {
+    "OnUpdate__12PreSnapPhasef": {
       "address": "0x800BFFD4",
-      "evidence": "evidence.tsv external row for 0x800BFFD4 (vfn_05__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800BFFD4 (OnUpdate__12PreSnapPhasef)."
     },
-    "vfn_06__14Class_80297CE8f": {
+    "OnExit__12PreSnapPhasef": {
       "address": "0x800C0174",
-      "evidence": "evidence.tsv external row for 0x800C0174 (vfn_06__14Class_80297CE8f)."
+      "evidence": "evidence.tsv external row for 0x800C0174 (OnExit__12PreSnapPhasef)."
     },
-    "vfn_12__14Class_80297CE8": {
+    "CanSnap__12PreSnapPhase": {
       "address": "0x800BE7BC",
-      "evidence": "evidence.tsv external row for 0x800BE7BC (vfn_12__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BE7BC (CanSnap__12PreSnapPhase)."
     },
-    "fn_800C0420__14Class_80297CE8i": {
+    "fn_800C0420__12PreSnapPhasei": {
       "address": "0x800C0420",
-      "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__14Class_80297CE8i)."
+      "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__12PreSnapPhasei)."
     },
-    "fn_800C043C__14Class_80297CE8i": {
+    "fn_800C043C__12PreSnapPhasei": {
       "address": "0x800C043C",
-      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__14Class_80297CE8i)."
+      "evidence": "evidence.tsv external row for 0x800C043C (fn_800C043C__12PreSnapPhasei)."
     },
-    "vfn_03__14Class_80297C60f": {
+    "OnEnter__13PostPlayPhasef": {
       "address": "0x800B9654",
-      "evidence": "evidence.tsv external row for 0x800B9654 (vfn_03__14Class_80297C60f)."
+      "evidence": "evidence.tsv external row for 0x800B9654 (OnEnter__13PostPlayPhasef)."
     },
-    "vfn_04__14Class_80297C60f": {
+    "OnUpdate__13PostPlayPhasef": {
       "address": "0x800B9830",
-      "evidence": "evidence.tsv external row for 0x800B9830 (vfn_04__14Class_80297C60f)."
+      "evidence": "evidence.tsv external row for 0x800B9830 (OnUpdate__13PostPlayPhasef)."
     },
-    "vfn_05__14Class_80297C60": {
+    "OnExit__13PostPlayPhase": {
       "address": "0x800B9998",
-      "evidence": "evidence.tsv external row for 0x800B9998 (vfn_05__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B9998 (OnExit__13PostPlayPhase)."
     },
-    "vfn_10__14Class_802A56E8": {
+    "ResetPlaySpot__11ScrmRuleSet": {
       "address": "0x8017767C",
-      "evidence": "evidence.tsv external row for 0x8017767C (vfn_10__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017767C (ResetPlaySpot__11ScrmRuleSet)."
     },
-    "vfn_11__14Class_802A56E8i": {
+    "ResetGame__11ScrmRuleSeti": {
       "address": "0x80177768",
-      "evidence": "evidence.tsv external row for 0x80177768 (vfn_11__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177768 (ResetGame__11ScrmRuleSeti)."
     },
-    "vfn_01__14Class_80297AB8": {
+    "InitState__13LivePlayPhase": {
       "address": "0x800A03B8",
-      "evidence": "evidence.tsv external row for 0x800A03B8 (vfn_01__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A03B8 (InitState__13LivePlayPhase)."
     },
-    "vfn_02__14Class_80297AB8": {
+    "Shutdown__13LivePlayPhase": {
       "address": "0x800A0408",
-      "evidence": "evidence.tsv external row for 0x800A0408 (vfn_02__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A0408 (Shutdown__13LivePlayPhase)."
     },
-    "vfn_05__14Class_80297AB8": {
+    "OnExit__13LivePlayPhase": {
       "address": "0x800A05E8",
-      "evidence": "evidence.tsv external row for 0x800A05E8 (vfn_05__14Class_80297AB8)."
+      "evidence": "evidence.tsv external row for 0x800A05E8 (OnExit__13LivePlayPhase)."
     },
-    "vfn_02__14Class_80297CE8": {
+    "InitState__12PreSnapPhase": {
       "address": "0x800BFAD0",
-      "evidence": "evidence.tsv external row for 0x800BFAD0 (vfn_02__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFAD0 (InitState__12PreSnapPhase)."
     },
-    "vfn_03__14Class_80297CE8": {
+    "Shutdown__12PreSnapPhase": {
       "address": "0x800BFB44",
-      "evidence": "evidence.tsv external row for 0x800BFB44 (vfn_03__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFB44 (Shutdown__12PreSnapPhase)."
     },
-    "vfn_07__14Class_80297CE8": {
+    "UnusedHook__12PreSnapPhase": {
       "address": "0x800C032C",
-      "evidence": "evidence.tsv external row for 0x800C032C (vfn_07__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800C032C (UnusedHook__12PreSnapPhase)."
     },
-    "vfn_09__14Class_80297CE8": {
+    "ReleaseHeldBalls__12PreSnapPhase": {
       "address": "0x800BF2EC",
-      "evidence": "evidence.tsv external row for 0x800BF2EC (vfn_09__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BF2EC (ReleaseHeldBalls__12PreSnapPhase)."
     },
-    "vfn_10__14Class_80297CE8": {
+    "AssignControlledPlayers__12PreSnapPhase": {
       "address": "0x800BFB68",
-      "evidence": "evidence.tsv external row for 0x800BFB68 (vfn_10__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BFB68 (AssignControlledPlayers__12PreSnapPhase)."
     },
-    "vfn_11__14Class_80297CE8": {
+    "SetupCamera__12PreSnapPhase": {
       "address": "0x800BF364",
-      "evidence": "evidence.tsv external row for 0x800BF364 (vfn_11__14Class_80297CE8)."
+      "evidence": "evidence.tsv external row for 0x800BF364 (SetupCamera__12PreSnapPhase)."
     },
-    "vfn_01__14Class_80297C60": {
+    "InitState__13PostPlayPhase": {
       "address": "0x800B95B4",
-      "evidence": "evidence.tsv external row for 0x800B95B4 (vfn_01__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B95B4 (InitState__13PostPlayPhase)."
     },
-    "vfn_02__14Class_80297C60": {
+    "Shutdown__13PostPlayPhase": {
       "address": "0x800B9630",
-      "evidence": "evidence.tsv external row for 0x800B9630 (vfn_02__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B9630 (Shutdown__13PostPlayPhase)."
     },
-    "vfn_08__14Class_80297C60": {
+    "SetupCamera__13PostPlayPhase": {
       "address": "0x800B8A40",
-      "evidence": "evidence.tsv external row for 0x800B8A40 (vfn_08__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8A40 (SetupCamera__13PostPlayPhase)."
     },
-    "vfn_09__14Class_80297C60Pc": {
+    "GetResultText__13PostPlayPhasePc": {
       "address": "0x800B8E18",
-      "evidence": "evidence.tsv external row for 0x800B8E18 (vfn_09__14Class_80297C60Pc)."
+      "evidence": "evidence.tsv external row for 0x800B8E18 (GetResultText__13PostPlayPhasePc)."
     },
-    "vfn_13__14Class_80297C60i": {
+    "IsFinished__13PostPlayPhasei": {
       "address": "0x800B8A6C",
-      "evidence": "evidence.tsv external row for 0x800B8A6C (vfn_13__14Class_80297C60i)."
+      "evidence": "evidence.tsv external row for 0x800B8A6C (IsFinished__13PostPlayPhasei)."
     },
-    "vfn_15__14Class_80297C60": {
+    "ForceFinish__13PostPlayPhase": {
       "address": "0x800B8C8C",
-      "evidence": "evidence.tsv external row for 0x800B8C8C (vfn_15__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8C8C (ForceFinish__13PostPlayPhase)."
     },
-    "vfn_01__14Class_802A56E8": {
+    "GetScoreLimit__11ScrmRuleSet": {
       "address": "0x80177410",
-      "evidence": "evidence.tsv external row for 0x80177410 (vfn_01__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177410 (GetScoreLimit__11ScrmRuleSet)."
     },
-    "vfn_03__14Class_802A56E8i": {
+    "AwardWin__11ScrmRuleSeti": {
       "address": "0x801774C0",
-      "evidence": "evidence.tsv external row for 0x801774C0 (vfn_03__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x801774C0 (AwardWin__11ScrmRuleSeti)."
     },
-    "vfn_04__14Class_802A56E8i": {
+    "IsNearWin__11ScrmRuleSeti": {
       "address": "0x8017755C",
-      "evidence": "evidence.tsv external row for 0x8017755C (vfn_04__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017755C (IsNearWin__11ScrmRuleSeti)."
     },
-    "vfn_05__14Class_802A56E8i": {
+    "IsOpponentNearWin__11ScrmRuleSeti": {
       "address": "0x80177600",
-      "evidence": "evidence.tsv external row for 0x80177600 (vfn_05__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177600 (IsOpponentNearWin__11ScrmRuleSeti)."
     },
-    "vfn_06__14Class_802A56E8": {
+    "GetScoreType__11ScrmRuleSet": {
       "address": "0x80177638",
-      "evidence": "evidence.tsv external row for 0x80177638 (vfn_06__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177638 (GetScoreType__11ScrmRuleSet)."
     },
-    "vfn_07__14Class_802A56E8i": {
+    "GetScore__11ScrmRuleSeti": {
       "address": "0x80177640",
-      "evidence": "evidence.tsv external row for 0x80177640 (vfn_07__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x80177640 (GetScore__11ScrmRuleSeti)."
     },
-    "vfn_09__14Class_802A56E8": {
+    "GetGameTime__11ScrmRuleSet": {
       "address": "0x80177674",
-      "evidence": "evidence.tsv external row for 0x80177674 (vfn_09__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177674 (GetGameTime__11ScrmRuleSet)."
     },
-    "vfn_13__14Class_802A56E8": {
+    "GetTeamSize__11ScrmRuleSet": {
       "address": "0x801776D0",
-      "evidence": "evidence.tsv external row for 0x801776D0 (vfn_13__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x801776D0 (GetTeamSize__11ScrmRuleSet)."
     },
-    "vfn_15__14Class_802A56E8": {
+    "AllowsPrediction__11ScrmRuleSet": {
       "address": "0x80177720",
-      "evidence": "evidence.tsv external row for 0x80177720 (vfn_15__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177720 (AllowsPrediction__11ScrmRuleSet)."
     },
-    "vfn_16__14Class_802A56E8": {
+    "GetGoalLimit__11ScrmRuleSet": {
       "address": "0x8017CAFC",
-      "evidence": "evidence.tsv external row for 0x8017CAFC (vfn_16__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017CAFC (GetGoalLimit__11ScrmRuleSet)."
     },
-    "vfn_17__14Class_802A56E8i": {
+    "GetGoalTotal__11ScrmRuleSeti": {
       "address": "0x8017CB04",
-      "evidence": "evidence.tsv external row for 0x8017CB04 (vfn_17__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017CB04 (GetGoalTotal__11ScrmRuleSeti)."
     },
-    "vfn_18__14Class_802A56E8i": {
+    "GetGoalCount__11ScrmRuleSeti": {
       "address": "0x8017CB0C",
-      "evidence": "evidence.tsv external row for 0x8017CB0C (vfn_18__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017CB0C (GetGoalCount__11ScrmRuleSeti)."
     },
-    "vfn_19__14Class_802A56E8": {
+    "EndPlay__11ScrmRuleSet": {
       "address": "0x801777FC",
-      "evidence": "evidence.tsv external row for 0x801777FC (vfn_19__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x801777FC (EndPlay__11ScrmRuleSet)."
     },
-    "vfn_20__14Class_802A56E8i": {
+    "PlaceBallForDrive__11ScrmRuleSeti": {
       "address": "0x8017894C",
-      "evidence": "evidence.tsv external row for 0x8017894C (vfn_20__14Class_802A56E8i)."
+      "evidence": "evidence.tsv external row for 0x8017894C (PlaceBallForDrive__11ScrmRuleSeti)."
     },
-    "vfn_21__14Class_802A56E8": {
+    "IsWinAwarded__11ScrmRuleSet": {
       "address": "0x8017766C",
-      "evidence": "evidence.tsv external row for 0x8017766C (vfn_21__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017766C (IsWinAwarded__11ScrmRuleSet)."
     },
-    "vfn_01__14Class_80297BF8": {
+    "InitState__12PreGamePhase": {
       "address": "0x800BC538",
-      "evidence": "evidence.tsv external row for 0x800BC538 (vfn_01__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC538 (InitState__12PreGamePhase)."
     },
-    "vfn_02__14Class_80297BF8": {
+    "Shutdown__12PreGamePhase": {
       "address": "0x800BC5B8",
-      "evidence": "evidence.tsv external row for 0x800BC5B8 (vfn_02__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC5B8 (Shutdown__12PreGamePhase)."
     },
-    "vfn_05__14Class_80297BF8": {
+    "OnExit__12PreGamePhase": {
       "address": "0x800BCC30",
-      "evidence": "evidence.tsv external row for 0x800BCC30 (vfn_05__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BCC30 (OnExit__12PreGamePhase)."
     },
-    "vfn_08__14Class_80297BF8f": {
+    "UpdateIntroStart__12PreGamePhasef": {
       "address": "0x800BC83C",
-      "evidence": "evidence.tsv external row for 0x800BC83C (vfn_08__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BC83C (UpdateIntroStart__12PreGamePhasef)."
     },
-    "vfn_09__14Class_80297BF8f": {
+    "UpdateIntro__12PreGamePhasef": {
       "address": "0x800BC8E0",
-      "evidence": "evidence.tsv external row for 0x800BC8E0 (vfn_09__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BC8E0 (UpdateIntro__12PreGamePhasef)."
     },
-    "vfn_10__14Class_80297BF8f": {
+    "UpdateIntroEnd__12PreGamePhasef": {
       "address": "0x800BCA00",
-      "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8f)."
+      "evidence": "evidence.tsv external row for 0x800BCA00 (UpdateIntroEnd__12PreGamePhasef)."
     },
     "GetColor__14MenuItemEditoriPi": {
       "address": "0x80182A80",
@@ -1109,17 +1109,17 @@
       "address": "0x80190ED4",
       "evidence": "evidence.tsv external row 0x80190ED4 (OpenBitStream__FP11BitStream_tPv15BitStreamMode_t), name row 0x80190ED4 and type row BitStream_t."
     },
-    "fn_800C0414__14Class_80297CE8": {
+    "fn_800C0414__12PreSnapPhase": {
       "address": "0x800C0414",
-      "evidence": "evidence.tsv external row for 0x800C0414 (fn_800C0414__14Class_80297CE8); descriptive mangled member name."
+      "evidence": "evidence.tsv external row for 0x800C0414 (fn_800C0414__12PreSnapPhase); descriptive mangled member name."
     },
     "CloseBitStream__FP11BitStream_t": {
       "address": "0x80190EF0",
       "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
     },
-    "fn_800C02E0__14Class_80297CE8": {
+    "fn_800C02E0__12PreSnapPhase": {
       "address": "0x800C02E0",
-      "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
+      "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__12PreSnapPhase); descriptive mangled member name."
     },
     "fn_801CBD80__12FlowManagerCii": {
       "address": "0x801CBD80",
@@ -1625,13 +1625,13 @@
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
     },
-    "fn_800C02D4__14Class_80297CE8s": {
+    "fn_800C02D4__12PreSnapPhases": {
       "address": "0x800C02D4",
-      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02D4."
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical PreSnapPhase short setter at 0x800C02D4."
     },
-    "fn_800C02EC__14Class_80297CE8s": {
+    "fn_800C02EC__12PreSnapPhases": {
       "address": "0x800C02EC",
-      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical PreSnapPhase short setter at 0x800C02EC."
     },
     "GXLoadLightObjImm": {
       "address": "0x8024F9EC",
@@ -12042,9 +12042,9 @@
       ]
     },
     {
-      "source": "src/game/cu_801564DC.cpp",
+      "source": "src/game/TutorialLesson.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_801564DC.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
+      "evidence": "evidence.tsv provisional unit row for src/game/TutorialLesson.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
       "sections": [
         {
           "section": ".text",
@@ -12097,115 +12097,115 @@
       ],
       "link_roots": {
         "symbols": [
-          "fn_801564DC",
-          "fn_8015651C",
-          "fn_801566DC",
-          "fn_801566E4",
-          "fn_801566EC",
-          "fn_801566F8",
-          "fn_80156704",
-          "fn_80156724",
-          "fn_8015672C",
-          "fn_80156734",
-          "fn_8015673C",
-          "fn_80156854",
-          "fn_801568E8",
-          "fn_801568F0",
-          "fn_801568F8",
-          "fn_80156900",
-          "fn_80156928",
-          "fn_80156960",
-          "fn_801569B4",
-          "fn_801569BC",
-          "fn_801569C8",
-          "fn_80156AB0",
-          "fn_80156C48",
-          "fn_80156C78",
-          "fn_80156C8C",
-          "fn_80156D14",
-          "fn_80156D1C",
-          "fn_80156D24",
-          "fn_80156DC4",
-          "fn_80156E74",
-          "fn_80156E9C",
-          "fn_80156F30",
-          "fn_80157000",
-          "vfn_03__15Lesson_802A3DC8",
-          "vfn_04__15Lesson_802A3DC8",
-          "vfn_05__15Lesson_802A3DC8",
-          "vfn_06__15Lesson_802A3DC8",
-          "fn_80157080",
-          "fn_80157448",
-          "fn_801574DC",
-          "fn_80157514",
-          "fn_80157550",
-          "vfn_01__15Lesson_802A3BE8",
-          "vfn_02__15Lesson_802A3BE8",
-          "vfn_07__15Lesson_802A3BE8",
-          "vfn_08__15Lesson_802A3BE8",
-          "vfn_09__15Lesson_802A3BE8",
-          "vfn_01__15Lesson_802A3D08",
-          "vfn_02__15Lesson_802A3D08",
-          "vfn_07__15Lesson_802A3D08",
-          "vfn_08__15Lesson_802A3D08",
-          "vfn_09__15Lesson_802A3D08",
-          "vfn_04__14Class_802A3858f",
-          "vfn_05__14Class_802A3858f",
-          "vfn_04__14Class_802A3958f",
-          "vfn_03__14Class_802A38C8f",
-          "vfn_01__15Lesson_802A3CA8",
-          "vfn_02__15Lesson_802A3CA8",
-          "vfn_07__15Lesson_802A3CA8",
-          "vfn_08__15Lesson_802A3CA8",
-          "vfn_09__15Lesson_802A3CA8",
-          "vfn_01__15Lesson_802A3D68",
-          "vfn_02__15Lesson_802A3D68",
-          "vfn_07__15Lesson_802A3D68",
-          "vfn_08__15Lesson_802A3D68",
-          "vfn_09__15Lesson_802A3D68",
-          "vfn_04__14Class_802A3820f",
-          "vfn_01__15Lesson_802A3C48",
-          "vfn_02__15Lesson_802A3C48",
-          "vfn_07__15Lesson_802A3C48",
-          "vfn_08__15Lesson_802A3C48",
-          "vfn_09__15Lesson_802A3C48",
-          "fn_8015844C",
-          "fn_80158A4C",
-          "fn_80158AA8",
-          "fn_80158BB4",
-          "fn_80158C04__14Class_802A3A48",
-          "vfn_03__14Class_802A3B80",
-          "vfn_04__14Class_802A3B80f",
-          "vfn_11__14Class_802A3B80f",
-          "vfn_06__14Class_802A3B80",
-          "vfn_07__14Class_802A3B80",
-          "vfn_04__14Class_802A3B10f",
-          "vfn_06__14Class_802A3B10f",
-          "vfn_05__14Class_802A3B10f",
-          "vfn_12__14Class_802A3B10",
-          "vfn_03__14Class_802A3AD8",
-          "vfn_04__14Class_802A3AD8f",
-          "vfn_03__14Class_802A3A48f",
-          "vfn_04__14Class_802A3A48f",
-          "vfn_06__14Class_802A3A48",
-          "vfn_05__14Class_802A3A48",
-          "vfn_07__14Class_802A3A48",
-          "vfn_10__14Class_802A3A48f",
-          "vfn_11__14Class_802A3A48f",
-          "vfn_12__14Class_802A3A48f",
-          "vfn_14__14Class_802A3A48f",
-          "vfn_11__14Class_802A3990i",
-          "vfn_12__14Class_802A3990",
-          "vfn_10__14Class_802A3990",
-          "vfn_02__14Class_802A3990",
-          "vfn_08__14Class_802A3990",
-          "vfn_08__14Class_802A3B10",
-          "vfn_14__14Class_802A3990"
+          "TutorialPostPrompt",
+          "TutorialSetupRosters",
+          "TutorialSetAnnounceStep",
+          "TutorialGetAnnounceStep",
+          "TutorialInit",
+          "TutorialShutdown",
+          "TutorialIsActive",
+          "TutorialSetStep",
+          "TutorialSetLesson",
+          "TutorialSetActiveStep",
+          "TutorialLessonStart",
+          "TutorialLessonStop",
+          "TutorialGetStep",
+          "TutorialGetLesson",
+          "TutorialGetLessonObject",
+          "TutorialBlinkInit",
+          "TutorialBlinkRestart",
+          "TutorialBlinkUpdate",
+          "TutorialBlinkGetShown",
+          "TutorialBlinkSetShown",
+          "TutorialCompleteStep",
+          "TutorialSetupPlays",
+          "TutorialClearMoves",
+          "TutorialSetMoveDone",
+          "TutorialAreMovesDone",
+          "TutorialIsStepDone",
+          "TutorialSetStepDone",
+          "TutorialTimerStart",
+          "TutorialTimerIsDone",
+          "TutorialGetHudPosition",
+          "TutorialShowPrompts",
+          "TutorialHidePrompts",
+          "TutorialGetStartLine",
+          "GetPromptCount__14TutorialLesson",
+          "GetTeamSize__14TutorialLesson",
+          "GetOffenseSize__14TutorialLesson",
+          "GetDefenseSize__14TutorialLesson",
+          "TutorialFinishCategory",
+          "TutorialScaleCpuRating",
+          "TutorialSetHudVisible",
+          "TutorialReleasePause",
+          "TutorialIsContinuing",
+          "Begin__21TutorialLessonDefense",
+          "End__21TutorialLessonDefense",
+          "GetStep__21TutorialLessonDefense",
+          "GetIntroText__21TutorialLessonDefense",
+          "GetDoneText__21TutorialLessonDefense",
+          "Begin__22TutorialLessonNewStuff",
+          "End__22TutorialLessonNewStuff",
+          "GetStep__22TutorialLessonNewStuff",
+          "GetIntroText__22TutorialLessonNewStuff",
+          "GetDoneText__22TutorialLessonNewStuff",
+          "OnEnter__23TutorialPreSnapNewStufff",
+          "OnUpdate__23TutorialPreSnapNewStufff",
+          "OnUpdate__24TutorialLivePlayNewStufff",
+          "OnEnter__24TutorialPostPlayNewStufff",
+          "Begin__21TutorialLessonPassing",
+          "End__21TutorialLessonPassing",
+          "GetStep__21TutorialLessonPassing",
+          "GetIntroText__21TutorialLessonPassing",
+          "GetDoneText__21TutorialLessonPassing",
+          "Begin__21TutorialLessonRunning",
+          "End__21TutorialLessonRunning",
+          "GetStep__21TutorialLessonRunning",
+          "GetIntroText__21TutorialLessonRunning",
+          "GetDoneText__21TutorialLessonRunning",
+          "OnUpdate__23TutorialLivePlayStylingf",
+          "Begin__21TutorialLessonStyling",
+          "End__21TutorialLessonStyling",
+          "GetStep__21TutorialLessonStyling",
+          "GetIntroText__21TutorialLessonStyling",
+          "GetDoneText__21TutorialLessonStyling",
+          "TutorialShowTitles",
+          "TutorialReloadRatings",
+          "TutorialSetupSession",
+          "TutorialBlinkPrompts",
+          "ShowResults__16TutorialPostPlay",
+          "OnEnter__15TutorialPreGame",
+          "OnUpdate__15TutorialPreGamef",
+          "EnterFirstPhase__15TutorialPreGamef",
+          "ShowIntroScreen__15TutorialPreGame",
+          "HideIntroScreen__15TutorialPreGame",
+          "OnEnter__15TutorialPreSnapf",
+          "OnExit__15TutorialPreSnapf",
+          "OnUpdate__15TutorialPreSnapf",
+          "CanSnap__15TutorialPreSnap",
+          "OnEnter__16TutorialLivePlay",
+          "OnUpdate__16TutorialLivePlayf",
+          "OnEnter__16TutorialPostPlayf",
+          "OnUpdate__16TutorialPostPlayf",
+          "OnSequenceStart__16TutorialPostPlay",
+          "OnExit__16TutorialPostPlay",
+          "ShowResultText__16TutorialPostPlay",
+          "UpdateCue__16TutorialPostPlayf",
+          "IsHeld__16TutorialPostPlayf",
+          "GetBusy__16TutorialPostPlayf",
+          "Finish__16TutorialPostPlayf",
+          "ResetGame__15TutorialRuleSeti",
+          "UsesBothTeams__15TutorialRuleSet",
+          "ResetPlaySpot__15TutorialRuleSet",
+          "GetWinner__15TutorialRuleSet",
+          "IsTimed__15TutorialRuleSet",
+          "AllowsPressPrompts__15TutorialPreSnap",
+          "AllowsAudibles__15TutorialRuleSet"
         ],
         "discarded": [
-          "__14Class_802A3A48"
+          "__16TutorialPostPlay"
         ],
-        "evidence": "evidence.tsv linker row cu_801564DC Class_802A3A48 constructor: the target keeps every listed function, all reached from outside the unit, from its vtables or from each other; the out-of-line copy of the inline constructor of Class_802A3A48 has no code in the target."
+        "evidence": "evidence.tsv linker row TutorialLesson TutorialPostPlay constructor: the target keeps every listed function, all reached from outside the unit, from its vtables or from each other; the out-of-line copy of the inline constructor of Class_802A3A48 has no code in the target."
       }
     },
     {

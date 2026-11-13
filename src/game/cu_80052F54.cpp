@@ -116,8 +116,8 @@ void fn_80083E1C(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int fn_800A3444(void);
 int fn_801485D4(void);
-int fn_80156704(void);
-void fn_80156C78(int, int);
+int TutorialIsActive(void);
+void TutorialSetMoveDone(int, int);
 int fn_801784C4(void);
 void fn_8017CA3C(int, int);
 void HudShowAlert(const char *);
@@ -217,7 +217,7 @@ void fn_80052F54(Args_80052F54 *pArgs)
 {
     unsigned int index = fn_800A3444();
     int db = fn_80186F7C(pArgs->mRefBytes[2]);
-    if (fn_801485D4() == 0 && fn_80156704() == 0 && db != -1 && index <= 9) {
+    if (fn_801485D4() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
         int handle = fn_8022F3D4(fn_8022F358(db));
         int bit = 1 << index;
         DbTableCursor cursor;
@@ -432,7 +432,7 @@ int fn_80053674(Object_80053674 *pContext, Object_80053674 *pObject, int event)
                     if (fn_800B65A0(pContext->mUnknown178Bytes[2]) != 255) {
                         Object_80039F5C *pPlayer = fn_8009BCE8(&pContext->mUnknown178);
                         if (fn_801BE648(pPlayer->mpUnknown792) == 228 || fn_801BE648(pPlayer->mpUnknown792) == 229) {
-                            fn_80156C78(44, 1);
+                            TutorialSetMoveDone(44, 1);
                         }
                     }
                     if ((unsigned int)(args.mKind - 3) > 1) {
@@ -463,7 +463,7 @@ void fn_800538E0(Object_80053674 *pObject, Object_80039F5C *pPlayer)
     if (fn_80052D08(&args) && fn_80053084(&args)) {
         if (fn_800B65A0(((unsigned char *)&ref)[2]) != 255) {
             if (fn_801BE648(pPlayer->mpUnknown792) == 228 || fn_801BE648(pPlayer->mpUnknown792) == 229) {
-                fn_80156C78(44, 1);
+                TutorialSetMoveDone(44, 1);
             }
         }
         fn_8004CBEC(pNode->mpUnknown80, pObject->mpUnknown1D8, pObject, 1.0f);

@@ -99,7 +99,7 @@ int MathAngleDiff(int, int);
 unsigned char fn_80135F14(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int fn_80177F70(void);
 void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
-int fn_80156704(void);
+int TutorialIsActive(void);
 float fn_80178A2C(void);
 void fn_80227538(Vec2_t *, int, float);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
@@ -154,7 +154,7 @@ int fn_801344A0(void)
 {
     int mode = fn_801486A0();
     int result = mode <= 4 && mode >= 3;
-    if (fn_80156704()) result = 1;
+    if (TutorialIsActive()) result = 1;
     return result;
 }
 
@@ -550,7 +550,7 @@ int fn_80135200(Object_80039F5C *player) {
                     found = 1;
                     if (!fn_801347D4(player, state, &selected, &action, indices))
                         selected = candidate;
-                } else if (fn_80177F70() == 4 || fn_80156704()) {
+                } else if (fn_80177F70() == 4 || TutorialIsActive()) {
                     float highest = -fn_80178A2C();
                     unsigned char best = 0;
                     for (int i = 0; i < 3; ++i) {
@@ -581,7 +581,7 @@ int fn_80135200(Object_80039F5C *player) {
                     Vector_80039F5C diff;
                     fn_80227690(&diff, &selected->mMotion.mPos, &player->mMotion.mPos);
                     fn_802270A4(&diff);
-                    if (fn_80156704())
+                    if (TutorialIsActive())
                         action = 5;
                     int id = selected->mIdBytes[1];
                     int result = fn_80104688(player);

@@ -1,10 +1,10 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297AB8.h"
+#include "game/LivePlayPhase.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801D2B7C.h"
@@ -13,30 +13,30 @@
 
 void *operator new(unsigned int size, int unknown);
 
-class Class_802A1DC8 : public Class_80297BF8 {
+class Class_802A1DC8 : public PreGamePhase {
 public:
     Class_802A1DC8() : mUnknown4(1) {}
-    virtual void vfn_07();
+    virtual void HideIntroScreen();
     unsigned char mUnknown4;
 };
 
-class Class_802A1D58 : public Class_80297CE8 {
+class Class_802A1D58 : public PreSnapPhase {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnEnter(float dt);
 };
 
-class Class_802A1D20 : public Class_80297AB8 {
+class Class_802A1D20 : public LivePlayPhase {
 public:
-    virtual void vfn_03();
+    virtual void OnEnter();
     unsigned char mUnknown4;
     char mUnknown5[3];
     unsigned char mUnknown8;
     unsigned char mUnknown9;
 };
 
-class Class_802A1C98 : public Class_80297C60 {
+class Class_802A1C98 : public PostPlayPhase {
 public:
-    virtual void vfn_05();
+    virtual void OnExit();
 };
 
 class Class_802A1C30 : public Class_80297B90 {
@@ -44,9 +44,9 @@ public:
     virtual void vfn_06();
 };
 
-class Class_802A1E38 : public Class_802A56E8 {
+class Class_802A1E38 : public ScrmRuleSet {
 public:
-    virtual int vfn_01();
+    virtual int GetScoreLimit();
 };
 
 struct Entry_8015005C {
@@ -86,12 +86,12 @@ public:
 };
 
 extern "C" {
-void fn_800BC51C(Class_80297BF8 *pObject);
-void fn_800BFAB4(Class_80297CE8 *pObject);
-void fn_800A039C(Class_80297AB8 *pObject);
-void fn_800B9598(Class_80297C60 *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 int fn_80149014(void);
 void *fn_8023816C(void *pHandle);
 void fn_8016306C(unsigned char value);

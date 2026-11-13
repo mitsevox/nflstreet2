@@ -1,3 +1,9 @@
+/* The in-game tutorial: five lessons (Running the Ball, Passing, Styling, Defense, New Stuff),
+   each a list of steps. For every step the tutorial sets up the plays and the ball, shows the
+   step title and the button prompts, watches for the moves the step asks for, then shows the
+   results popup with Retry, Quit or the next step, and at the end of a category sends the
+   player to the matching game mode. */
+
 #include "engine/cu_80229270.h"
 #include "game/StyleTracker.h"
 #include "game/fn_8021D7B8.h"
@@ -21,16 +27,16 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_80218FC4.h"
 #include "game/HudEvents.h"
-#include "game/Class_80297AB8.h"
-#include "game/Class_80297BF8.h"
-#include "game/Class_80297C60.h"
-#include "game/Class_80297CE8.h"
-#include "game/Class_802A56E8.h"
+#include "game/LivePlayPhase.h"
+#include "game/PreGamePhase.h"
+#include "game/PostPlayPhase.h"
+#include "game/PreSnapPhase.h"
+#include "game/ScrmRuleSet.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 
 /* One step of a tutorial lesson (32-byte records of the step tables). */
-struct Step_802DEC08 {
+struct TutorialStep_t {
     unsigned long long mMask;
     unsigned int mDuration;
     float mUnknown12;
@@ -42,144 +48,144 @@ struct Step_802DEC08 {
 
 /* Base of the five tutorial lessons; the vtable pointer follows the one word
    of data. */
-class Lesson_802A3DC8 {
+class TutorialLesson {
 public:
-    virtual void vfn_01() = 0;
-    virtual int vfn_02() = 0;
-    virtual int vfn_03();
-    virtual int vfn_04();
-    virtual int vfn_05();
-    virtual int vfn_06();
-    virtual Step_802DEC08 *vfn_07() = 0;
-    virtual const char *vfn_08() = 0;
-    virtual const char *vfn_09() = 0;
+    virtual void Begin() = 0;
+    virtual int End() = 0;
+    virtual int GetPromptCount();
+    virtual int GetTeamSize();
+    virtual int GetOffenseSize();
+    virtual int GetDefenseSize();
+    virtual TutorialStep_t *GetStep() = 0;
+    virtual const char *GetIntroText() = 0;
+    virtual const char *GetDoneText() = 0;
 
     int mUnknown0;
 };
 
-struct Game_80157558;
-struct Game_801576F0;
-struct Game_801582C4;
+struct TutorialObjects;
+struct TutorialNewStuffObjects;
+struct TutorialStylingObjects;
 
-struct GamePtr_80157558 {
-    GamePtr_80157558() : mp(0) {}
-    Game_80157558 *mp;
+struct TutorialObjectsPtr {
+    TutorialObjectsPtr() : mp(0) {}
+    TutorialObjects *mp;
 };
 
-struct GamePtr_801576F0 {
-    GamePtr_801576F0() : mp(0) {}
-    Game_801576F0 *mp;
+struct TutorialNewStuffObjectsPtr {
+    TutorialNewStuffObjectsPtr() : mp(0) {}
+    TutorialNewStuffObjects *mp;
 };
 
-struct GamePtr_801582C4 {
-    GamePtr_801582C4() : mp(0) {}
-    Game_801582C4 *mp;
+struct TutorialStylingObjectsPtr {
+    TutorialStylingObjectsPtr() : mp(0) {}
+    TutorialStylingObjects *mp;
 };
 
-class Lesson_802A3D68 : public Lesson_802A3DC8 {
+class TutorialLessonRunning : public TutorialLesson {
 public:
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual Step_802DEC08 *vfn_07();
-    virtual const char *vfn_08();
-    virtual const char *vfn_09();
-    virtual ~Lesson_802A3D68() {}
+    virtual void Begin();
+    virtual int End();
+    virtual TutorialStep_t *GetStep();
+    virtual const char *GetIntroText();
+    virtual const char *GetDoneText();
+    virtual ~TutorialLessonRunning() {}
 
-    GamePtr_80157558 mpGame;
+    TutorialObjectsPtr mpGame;
 };
 
-class Lesson_802A3D08 : public Lesson_802A3DC8 {
+class TutorialLessonNewStuff : public TutorialLesson {
 public:
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual Step_802DEC08 *vfn_07();
-    virtual const char *vfn_08();
-    virtual const char *vfn_09();
-    virtual ~Lesson_802A3D08() {}
+    virtual void Begin();
+    virtual int End();
+    virtual TutorialStep_t *GetStep();
+    virtual const char *GetIntroText();
+    virtual const char *GetDoneText();
+    virtual ~TutorialLessonNewStuff() {}
 
     int mUnknown8;
-    GamePtr_801576F0 mpGame;
+    TutorialNewStuffObjectsPtr mpGame;
 };
 
-class Lesson_802A3CA8 : public Lesson_802A3DC8 {
+class TutorialLessonPassing : public TutorialLesson {
 public:
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual Step_802DEC08 *vfn_07();
-    virtual const char *vfn_08();
-    virtual const char *vfn_09();
-    virtual ~Lesson_802A3CA8() {}
+    virtual void Begin();
+    virtual int End();
+    virtual TutorialStep_t *GetStep();
+    virtual const char *GetIntroText();
+    virtual const char *GetDoneText();
+    virtual ~TutorialLessonPassing() {}
 
-    GamePtr_80157558 mpGame;
+    TutorialObjectsPtr mpGame;
 };
 
-class Lesson_802A3C48 : public Lesson_802A3DC8 {
+class TutorialLessonStyling : public TutorialLesson {
 public:
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual Step_802DEC08 *vfn_07();
-    virtual const char *vfn_08();
-    virtual const char *vfn_09();
-    virtual ~Lesson_802A3C48() {}
+    virtual void Begin();
+    virtual int End();
+    virtual TutorialStep_t *GetStep();
+    virtual const char *GetIntroText();
+    virtual const char *GetDoneText();
+    virtual ~TutorialLessonStyling() {}
 
-    GamePtr_801582C4 mpGame;
+    TutorialStylingObjectsPtr mpGame;
 };
 
-class Lesson_802A3BE8 : public Lesson_802A3DC8 {
+class TutorialLessonDefense : public TutorialLesson {
 public:
-    virtual void vfn_01();
-    virtual int vfn_02();
-    virtual Step_802DEC08 *vfn_07();
-    virtual const char *vfn_08();
-    virtual const char *vfn_09();
-    virtual ~Lesson_802A3BE8() {}
+    virtual void Begin();
+    virtual int End();
+    virtual TutorialStep_t *GetStep();
+    virtual const char *GetIntroText();
+    virtual const char *GetDoneText();
+    virtual ~TutorialLessonDefense() {}
 
-    GamePtr_80157558 mpGame;
+    TutorialObjectsPtr mpGame;
 };
 
-class Class_802A3B80 : public Class_80297BF8 {
+class TutorialPreGame : public PreGamePhase {
 public:
-    virtual void vfn_03();
-    virtual void vfn_04(float dt);
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_11(float dt);
+    virtual void OnEnter();
+    virtual void OnUpdate(float dt);
+    virtual void ShowIntroScreen();
+    virtual void HideIntroScreen();
+    virtual void EnterFirstPhase(float dt);
 
     int mUnknown4;
 };
 
-class Class_802A3B10 : public Class_80297CE8 {
+class TutorialPreSnap : public PreSnapPhase {
 public:
-    virtual ~Class_802A3B10() {}
-    virtual void vfn_04(float dt);
-    virtual void vfn_05(float dt);
-    virtual void vfn_06(float dt);
-    virtual unsigned char vfn_08() { return mUnknown4; }
-    virtual int vfn_12();
+    virtual ~TutorialPreSnap() {}
+    virtual void OnEnter(float dt);
+    virtual void OnUpdate(float dt);
+    virtual void OnExit(float dt);
+    virtual unsigned char AllowsPressPrompts() { return mUnknown4; }
+    virtual int CanSnap();
 
     unsigned char mUnknown4;
 };
 
-class Class_802A3AD8 : public Class_80297AB8 {
+class TutorialLivePlay : public LivePlayPhase {
 public:
-    virtual void vfn_03();
-    virtual void vfn_04(float dt);
+    virtual void OnEnter();
+    virtual void OnUpdate(float dt);
 };
 
-class Class_802A3A48 : public Class_80297C60 {
+class TutorialPostPlay : public PostPlayPhase {
 public:
-    virtual void vfn_03(float dt);
-    virtual void vfn_04(float dt);
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_10(float dt);
-    virtual int vfn_11(float dt);
-    virtual int vfn_12(float dt);
-    virtual void vfn_14(float dt);
-    Class_802A3A48() : mUnknown8(0) {}
-    virtual ~Class_802A3A48() {}
-    void fn_80158C04();
+    virtual void OnEnter(float dt);
+    virtual void OnUpdate(float dt);
+    virtual void OnExit();
+    virtual void OnSequenceStart();
+    virtual void ShowResultText();
+    virtual void UpdateCue(float dt);
+    virtual int IsHeld(float dt);
+    virtual int GetBusy(float dt);
+    virtual void Finish(float dt);
+    TutorialPostPlay() : mUnknown8(0) {}
+    virtual ~TutorialPostPlay() {}
+    void ShowResults();
 
     unsigned char mUnknown4;
     unsigned char mUnknown5;
@@ -188,85 +194,85 @@ public:
     int mUnknown12;
 };
 
-class Class_802A3990 : public Class_802A56E8 {
+class TutorialRuleSet : public ScrmRuleSet {
 public:
-    virtual int vfn_02();
-    virtual int vfn_08();
-    virtual void vfn_10();
-    virtual void vfn_11(int a);
-    virtual int vfn_12();
-    virtual int vfn_14() { return 0; }
+    virtual int GetWinner();
+    virtual int IsTimed();
+    virtual void ResetPlaySpot();
+    virtual void ResetGame(int a);
+    virtual int UsesBothTeams();
+    virtual int AllowsAudibles() { return 0; }
 };
 
-class Class_802A3958 : public Class_802A3AD8 {
+class TutorialLivePlayNewStuff : public TutorialLivePlay {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnUpdate(float dt);
 };
 
-class Class_802A38C8 : public Class_802A3A48 {
+class TutorialPostPlayNewStuff : public TutorialPostPlay {
 public:
-    virtual void vfn_03(float dt);
+    virtual void OnEnter(float dt);
 };
 
-/* Flag member of Class_802A3858, cleared on construction. */
-struct Flag_802A3858 {
-    Flag_802A3858() : m(0) {}
+/* Flag member of TutorialPreSnapNewStuff, cleared on construction. */
+struct TutorialOnceFlag {
+    TutorialOnceFlag() : m(0) {}
     unsigned char m;
 };
 
-class Class_802A3858 : public Class_802A3B10 {
+class TutorialPreSnapNewStuff : public TutorialPreSnap {
 public:
-    virtual void vfn_04(float dt);
-    virtual void vfn_05(float dt);
+    virtual void OnEnter(float dt);
+    virtual void OnUpdate(float dt);
 
-    Flag_802A3858 mUnknown8;
+    TutorialOnceFlag mUnknown8;
 };
 
-class Class_802A3820 : public Class_802A3AD8 {
+class TutorialLivePlayStyling : public TutorialLivePlay {
 public:
-    virtual void vfn_04(float dt);
+    virtual void OnUpdate(float dt);
 };
 
 /* The game objects a lesson creates in its first entry. */
-struct Game_80157558 {
-    Class_802A3B80 mObject0;
-    Class_802A3B10 mObject8;
-    Class_802A3AD8 mObject16;
-    Class_802A3A48 mObject20;
-    Class_802A3990 mObject36;
+struct TutorialObjects {
+    TutorialPreGame mObject0;
+    TutorialPreSnap mObject8;
+    TutorialLivePlay mObject16;
+    TutorialPostPlay mObject20;
+    TutorialRuleSet mObject36;
 };
 
-struct Game_801582C4 {
-    Class_802A3B80 mObject0;
-    Class_802A3B10 mObject8;
-    Class_802A3820 mObject16;
-    Class_802A3A48 mObject20;
-    Class_802A3990 mObject36;
+struct TutorialStylingObjects {
+    TutorialPreGame mObject0;
+    TutorialPreSnap mObject8;
+    TutorialLivePlayStyling mObject16;
+    TutorialPostPlay mObject20;
+    TutorialRuleSet mObject36;
 };
 
-struct Game_801576F0 {
-    Class_802A3B80 mObject0;
-    Class_802A3858 mObject8;
-    Class_802A3958 mObject20;
-    Class_802A38C8 mObject24;
-    Class_802A3990 mObject40;
+struct TutorialNewStuffObjects {
+    TutorialPreGame mObject0;
+    TutorialPreSnapNewStuff mObject8;
+    TutorialLivePlayNewStuff mObject20;
+    TutorialPostPlayNewStuff mObject24;
+    TutorialRuleSet mObject40;
 };
 
 
 /* Two floats returned in memory by fn_80177FE0. */
-struct Pair_80177FE0 {
+struct FieldSpot_t {
     float mX;
     float mY;
 };
 
-struct Team_80168EBC {
+struct PlaybookTeamView {
     char mUnknown0[0x40];
     int mUnknown40;
 };
 
 /* Text block posted with messages 0x80000080 and 0x80000081. */
-struct Text_8031BEE4 {
-    Text_8031BEE4() {}
+struct TutorialTitleText_t {
+    TutorialTitleText_t() {}
     int mUnknown0;
     int mSize;
     char *mpText;
@@ -315,7 +321,7 @@ void fn_8009D944(int index);
 void fn_8009D964(int index, int value);
 void fn_8009D984(int a);
 void fn_8009E01C(void);
-void fn_800A039C(Class_80297AB8 *pObject);
+void fn_800A039C(LivePlayPhase *pObject);
 void fn_800A7A0C(int a);
 void fn_800A7B5C(void);
 void fn_800A8F08(void);
@@ -325,11 +331,11 @@ void fn_800B3EFC(int team);
 void fn_800B63B0(void);
 int fn_800B81A4(void);
 void fn_800B847C(int a, int b);
-void fn_800B9598(Class_80297C60 *pObject);
-void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800B9598(PostPlayPhase *pObject);
+void fn_800BC51C(PreGamePhase *pObject);
 void fn_800BF658(int a);
 void fn_800BF6CC(int a);
-void fn_800BFAB4(Class_80297CE8 *pObject);
+void fn_800BFAB4(PreSnapPhase *pObject);
 void fn_800C1CA0(void);
 void fn_800C1E50(void);
 void fn_800C87CC(int a, int b);
@@ -357,14 +363,14 @@ void PlayBookLoadCurrentPlay(int team);
 void PlayBookLoadAudibleTable(void);
 void PlayBookSetFormationType(int team, int kind);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
-Team_80168EBC * PlayBookGetTeam(int team);
+PlaybookTeamView * PlayBookGetTeam(int team);
 void ClockRuleClearFlags(unsigned int mask);
 void fn_80177C50(int a);
 void fn_80177E6C(int a, int b);
 int fn_80177F70(void);
 void fn_80177F88(int a);
-Pair_80177FE0 fn_80177FE0(void);
-void fn_801780A8(Pair_80177FE0 pos);
+FieldSpot_t fn_80177FE0(void);
+void fn_801780A8(FieldSpot_t pos);
 void fn_801782B0(void);
 int fn_80178320(void);
 void fn_8017833C(int value);
@@ -374,7 +380,7 @@ void fn_801787FC(int which, short value);
 float fn_80178A2C(void);
 int fn_80178C60(void);
 void fn_80178CD8(int a);
-void fn_80178F20(Class_802A56E8 *pObject);
+void fn_80178F20(ScrmRuleSet *pObject);
 void HudSetScore(int a, int b);
 void HudShowPressPrompt(int a);
 void HudStop(void);
@@ -387,48 +393,48 @@ char * fn_801C2EF0(char *pDest, const char *pSource, int count);
 unsigned int fn_801C3180(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_801564DC(int index, int value);
-void fn_8015651C(void);
-void fn_801566DC(unsigned char value);
-unsigned char fn_801566E4(void);
-void fn_801566EC(void);
-void fn_801566F8(void);
-int fn_80156704(void);
-void fn_80156724(unsigned int value);
-void fn_8015672C(unsigned int value);
-void fn_80156734(unsigned int value);
-void fn_8015673C(void);
-void fn_80156854(void);
-unsigned int fn_801568E8(void);
-unsigned int fn_801568F0(void);
-Lesson_802A3DC8 * fn_801568F8(void);
-void fn_80156900(unsigned int count, unsigned int total);
-void fn_80156928(void);
-unsigned char fn_80156960(void);
-unsigned char fn_801569B4(void);
-void fn_801569BC(void);
-int fn_801569C8(unsigned int lesson);
-void fn_80156AB0(void);
-void fn_80156C48(void);
-void fn_80156C78(int index, int value);
-int fn_80156C8C(unsigned long long mask);
-unsigned char fn_80156D14(void);
-void fn_80156D1C(unsigned char value);
-void fn_80156D24(unsigned int duration);
-int fn_80156DC4(void);
-void fn_80156E74(float *pX, float *pY, float *pZ);
-void fn_80156E9C(unsigned int mask, int value, int flag);
-void fn_80156F30(void);
-float fn_80157000(void);
-int fn_80157080(void);
-short fn_80157448(int team, int unused, short value);
-void fn_801574DC(int value);
-void fn_80157514(void);
-unsigned char fn_80157550(void);
-void fn_8015844C(int show);
-void fn_80158A4C(void);
-void fn_80158AA8(void);
-void fn_80158BB4(unsigned int mask);
+void TutorialPostPrompt(int index, int value);
+void TutorialSetupRosters(void);
+void TutorialSetAnnounceStep(unsigned char value);
+unsigned char TutorialGetAnnounceStep(void);
+void TutorialInit(void);
+void TutorialShutdown(void);
+int TutorialIsActive(void);
+void TutorialSetStep(unsigned int value);
+void TutorialSetLesson(unsigned int value);
+void TutorialSetActiveStep(unsigned int value);
+void TutorialLessonStart(void);
+void TutorialLessonStop(void);
+unsigned int TutorialGetStep(void);
+unsigned int TutorialGetLesson(void);
+TutorialLesson * TutorialGetLessonObject(void);
+void TutorialBlinkInit(unsigned int count, unsigned int total);
+void TutorialBlinkRestart(void);
+unsigned char TutorialBlinkUpdate(void);
+unsigned char TutorialBlinkGetShown(void);
+void TutorialBlinkSetShown(void);
+int TutorialCompleteStep(unsigned int lesson);
+void TutorialSetupPlays(void);
+void TutorialClearMoves(void);
+void TutorialSetMoveDone(int index, int value);
+int TutorialAreMovesDone(unsigned long long mask);
+unsigned char TutorialIsStepDone(void);
+void TutorialSetStepDone(unsigned char value);
+void TutorialTimerStart(unsigned int duration);
+int TutorialTimerIsDone(void);
+void TutorialGetHudPosition(float *pX, float *pY, float *pZ);
+void TutorialShowPrompts(unsigned int mask, int value, int flag);
+void TutorialHidePrompts(void);
+float TutorialGetStartLine(void);
+int TutorialFinishCategory(void);
+short TutorialScaleCpuRating(int team, int unused, short value);
+void TutorialSetHudVisible(int value);
+void TutorialReleasePause(void);
+unsigned char TutorialIsContinuing(void);
+void TutorialShowTitles(int show);
+void TutorialReloadRatings(void);
+void TutorialSetupSession(void);
+void TutorialBlinkPrompts(unsigned int mask);
 
 extern void *gUISMainInfo;
 extern const float lbl_803ED6A4;
@@ -440,45 +446,45 @@ extern const float lbl_803ED6A8;
 #define TIME_SECONDS(t) ((t) - (TIME_HOURS(t) * 60 + TIME_MINUTES(t)) * 60)
 
 extern "C" {
-Text_8031BEE4 lbl_8031BEE4;
-Text_8031BEE4 lbl_8031BEF0;
-Lesson_802A3D68 lbl_8031BEFC;
-Lesson_802A3CA8 lbl_8031BF08;
-Lesson_802A3C48 lbl_8031BF14;
-Lesson_802A3BE8 lbl_8031BF20;
-Lesson_802A3D08 lbl_8031BF2C;
-int lbl_8031BF3C[45];
-char lbl_8031BFF0[0x1C];
-char lbl_8031C00C[0x20];
+TutorialTitleText_t _Tutorial_CategoryText;
+TutorialTitleText_t _Tutorial_StepText;
+TutorialLessonRunning _Tutorial_LessonRunning;
+TutorialLessonPassing _Tutorial_LessonPassing;
+TutorialLessonStyling _Tutorial_LessonStyling;
+TutorialLessonDefense _Tutorial_LessonDefense;
+TutorialLessonNewStuff _Tutorial_LessonNewStuff;
+int _Tutorial_aMoveDone[45];
+char _Tutorial_szCategoryTitle[0x1C];
+char _Tutorial_szStepTitle[0x20];
 
-int lbl_802DEBD0[] = {
+int _Tutorial_aPromptMsgIds[] = {
     0x8000005A, 0x8000005B, 0x8000005A, 0x80000060, 0x8000005E, 0x8000005C, 0x8000005D,
     0x8000005F, 0x80000066, 0x80000065, 0x80000061, 0x80000062, 0x80000063, 0x80000064,
 };
 
-Lesson_802A3DC8 *lbl_803EB300 = 0;
-unsigned int lbl_803EB304 = 0xFFFF;
-unsigned int lbl_803EB308 = 0xFFFF;
-unsigned int lbl_803EB30C = 0xFFFF;
-int lbl_803EB310 = 1;
-int lbl_803EB314 = 0;
-unsigned char lbl_803EB318 = 1;
+TutorialLesson *_Tutorial_pLesson = 0;
+unsigned int _Tutorial_uStep = 0xFFFF;
+unsigned int _Tutorial_uLesson = 0xFFFF;
+unsigned int _Tutorial_uActiveStep = 0xFFFF;
+int _Tutorial_iSavedSetting0 = 1;
+int _Tutorial_iSavedSetting14 = 0;
+unsigned char _Tutorial_bAnnounceStep = 1;
 
-Text_8031BEE4 *lbl_803ECA2C;
-Text_8031BEE4 *lbl_803ECA30;
-int lbl_803ECA34;
-unsigned char lbl_803ECA38;
-unsigned int lbl_803ECA3C;
-unsigned int lbl_803ECA40;
-unsigned int lbl_803ECA44;
-unsigned int lbl_803ECA48;
-unsigned char lbl_803ECA4C;
-unsigned char lbl_803ECA4D;
-unsigned int lbl_803ECA50;
-unsigned int lbl_803ECA54;
-unsigned char lbl_803ECA58;
+TutorialTitleText_t *_Tutorial_pCategoryText;
+TutorialTitleText_t *_Tutorial_pStepText;
+int _Tutorial_iTitlesShown;
+unsigned char _Tutorial_bStepDone;
+unsigned int _Tutorial_uStartStep;
+unsigned int _Tutorial_uBlinkStart;
+unsigned int _Tutorial_uBlinkNext;
+unsigned int _Tutorial_uBlinkPeriod;
+unsigned char _Tutorial_bBlinkOn;
+unsigned char _Tutorial_bBlinkShown;
+unsigned int _Tutorial_uTimerStart;
+unsigned int _Tutorial_uTimerEnd;
+unsigned char _Tutorial_bContinuing;
 
-Step_802DEC08 lbl_802DEC08[] = {
+TutorialStep_t _Tutorial_aDefenseSteps[] = {
     { 0x1ULL, 3, 1.0f, 0x2, 5, 0, 0 },
     { 0x1000000000ULL, 3, 1.0f, 0x20, 15, 0, 0 },
     { 0x8000000000ULL, 3, 1.0f, 0x10, 5, 0, 0 },
@@ -487,7 +493,7 @@ Step_802DEC08 lbl_802DEC08[] = {
     { 0x20000000000ULL, 3, 1.0f, 0x81, 5, 0, 0 },
 };
 
-Step_802DEC08 lbl_802DECC8[] = {
+TutorialStep_t _Tutorial_aNewStuffSteps[] = {
     { 0x40ULL, 3, 1.0f, 0x21, 5, 0, 0 },
     { 0x800ULL, 3, 1.0f, 0x81, 5, 0, 0 },
     { 0x4000ULL, 6, 1.0f, 0x81, 5, 0, 0 },
@@ -499,7 +505,7 @@ Step_802DEC08 lbl_802DECC8[] = {
     { 0x100000000000ULL, 3, 1.0f, 0xA1, 5, 0, 0 },
 };
 
-Step_802DEC08 lbl_802DEDE8[] = {
+TutorialStep_t _Tutorial_aPassingSteps[] = {
     { 0x200000ULL, 3, 1.0f, 0x2, 0, 0, 0 },
     { 0x80024000000ULL, 3, 1.0f, 0x80, 15, 0, 0 },
     { 0x80030000000ULL, 3, 1.0f, 0x20, 15, 0, 0 },
@@ -511,7 +517,7 @@ Step_802DEC08 lbl_802DEDE8[] = {
     { 0x80000ULL, 3, 1.0f, 0x8, 5, 0, 0 },
 };
 
-Step_802DEC08 lbl_802DEF08[] = {
+TutorialStep_t _Tutorial_aRunningSteps[] = {
     { 0x1ULL, 3, 1.0f, 0x2, 0, 0, 0 },
     { 0x10000ULL, 3, 1.0f, 0x10, 5, 0, 0 },
     { 0x10ULL, 3, 1.0f, 0x20, 15, 0, 0 },
@@ -521,7 +527,7 @@ Step_802DEC08 lbl_802DEF08[] = {
     { 0x20000ULL, 5, 1.0f, 0x40, 5, 0, 0 },
 };
 
-Step_802DEC08 lbl_802DEFE8[] = {
+TutorialStep_t _Tutorial_aStylingSteps[] = {
     { 0x8000ULL, 3, 1.0f, 0x1, 0, 0, 0 },
     { 0x100000ULL, 3, 1.0f, 0x201, 5, 0, 0 },
     { 0x20ULL, 3, 1.0f, 0x21, 15, 0, 0 },
@@ -531,22 +537,22 @@ Step_802DEC08 lbl_802DEFE8[] = {
     { 0x80002000000ULL, 3, 1.0f, 0xB1, 5, 0, 0 },
     { 0x2000000000ULL, 3, 1.0f, 0x41, 5, 0, 0 },
 };
-char lbl_802DF0E8[] = "You Passed.  Awesome!";
-char lbl_802DF100[] = "You need more practice at this.";
-char lbl_802DF120[] = "Are you sure you want to quit?";
-char lbl_802DF140[] = "Congratulations! You have completed this tutorial category.";
+char _Tutorial_szPassed[] = "You Passed.  Awesome!";
+char _Tutorial_szNeedPractice[] = "You need more practice at this.";
+char _Tutorial_szQuitConfirm[] = "Are you sure you want to quit?";
+char _Tutorial_szCategoryDone[] = "Congratulations! You have completed this tutorial category.";
 
 }
 
 
 extern "C" {
 
-void fn_801564DC(int index, int value)
+void TutorialPostPrompt(int index, int value)
 {
-    fn_8021D7B8(gUISMainInfo, lbl_802DEBD0[index], 1, &value);
+    fn_8021D7B8(gUISMainInfo, _Tutorial_aPromptMsgIds[index], 1, &value);
 }
 
-void fn_8015651C(void)
+void TutorialSetupRosters(void)
 {
     DepthChartSide_t records[2];
     int list[8];
@@ -586,162 +592,162 @@ void fn_8015651C(void)
     DepthChartSetSide(1, records[1].mUnknown);
 }
 
-void fn_801566DC(unsigned char value)
+void TutorialSetAnnounceStep(unsigned char value)
 {
-    lbl_803EB318 = value;
+    _Tutorial_bAnnounceStep = value;
 }
 
-unsigned char fn_801566E4(void)
+unsigned char TutorialGetAnnounceStep(void)
 {
-    return lbl_803EB318;
+    return _Tutorial_bAnnounceStep;
 }
 
-void fn_801566EC(void)
+void TutorialInit(void)
 {
-    lbl_803ECA58 = 0;
+    _Tutorial_bContinuing = 0;
 }
 
-void fn_801566F8(void)
+void TutorialShutdown(void)
 {
-    lbl_803ECA58 = 0;
+    _Tutorial_bContinuing = 0;
 }
 
-int fn_80156704(void)
+int TutorialIsActive(void)
 {
-    return lbl_803EB30C != 0xFFFF;
+    return _Tutorial_uActiveStep != 0xFFFF;
 }
 
-void fn_80156724(unsigned int value)
+void TutorialSetStep(unsigned int value)
 {
-    lbl_803EB304 = value;
+    _Tutorial_uStep = value;
 }
 
-void fn_8015672C(unsigned int value)
+void TutorialSetLesson(unsigned int value)
 {
-    lbl_803EB308 = value;
+    _Tutorial_uLesson = value;
 }
 
-void fn_80156734(unsigned int value)
+void TutorialSetActiveStep(unsigned int value)
 {
-    lbl_803EB30C = value;
+    _Tutorial_uActiveStep = value;
 }
 
-void fn_8015673C(void)
+void TutorialLessonStart(void)
 {
-    unsigned int lesson = fn_801568F0();
-    unsigned int step = fn_801568E8();
+    unsigned int lesson = TutorialGetLesson();
+    unsigned int step = TutorialGetStep();
 
-    lbl_803ECA3C = step;
+    _Tutorial_uStartStep = step;
     switch (lesson) {
     case 0:
-        lbl_803EB300 = &lbl_8031BEFC;
+        _Tutorial_pLesson = &_Tutorial_LessonRunning;
         break;
     case 1:
-        lbl_803EB300 = &lbl_8031BF08;
+        _Tutorial_pLesson = &_Tutorial_LessonPassing;
         break;
     case 2:
-        lbl_803EB300 = &lbl_8031BF14;
+        _Tutorial_pLesson = &_Tutorial_LessonStyling;
         break;
     case 3:
-        lbl_803EB300 = &lbl_8031BF20;
+        _Tutorial_pLesson = &_Tutorial_LessonDefense;
         break;
     case 4:
-        lbl_803EB300 = &lbl_8031BF2C;
+        _Tutorial_pLesson = &_Tutorial_LessonNewStuff;
         break;
     }
-    lbl_803EB314 = fn_8007F828(14);
+    _Tutorial_iSavedSetting14 = fn_8007F828(14);
     fn_8007F6F8(14, 0);
     fn_80178F20(0);
-    lbl_803EB300->mUnknown0 = step;
-    lbl_803EB300->vfn_01();
-    lbl_803EB310 = fn_8007F828(0);
+    _Tutorial_pLesson->mUnknown0 = step;
+    _Tutorial_pLesson->Begin();
+    _Tutorial_iSavedSetting0 = fn_8007F828(0);
     fn_8007F6F8(0, 0);
     TutorialDbOpenPlays();
-    fn_80156734(step);
-    fn_801566DC(1);
+    TutorialSetActiveStep(step);
+    TutorialSetAnnounceStep(1);
 }
 
-void fn_80156854(void)
+void TutorialLessonStop(void)
 {
-    lbl_803EB300->vfn_02();
-    lbl_803EB300 = 0;
+    _Tutorial_pLesson->End();
+    _Tutorial_pLesson = 0;
     TutorialDbClosePlays();
-    fn_8007F6F8(14, lbl_803EB314);
-    lbl_803EB314 = 0;
+    fn_8007F6F8(14, _Tutorial_iSavedSetting14);
+    _Tutorial_iSavedSetting14 = 0;
     fn_80178F20(0);
-    fn_8007F6F8(0, lbl_803EB310);
-    lbl_803EB310 = 1;
+    fn_8007F6F8(0, _Tutorial_iSavedSetting0);
+    _Tutorial_iSavedSetting0 = 1;
     SndgApplyVolumeOptions();
-    lbl_803EB30C = 0xFFFF;
-    lbl_803EB304 = 0xFFFF;
-    fn_8015672C(5);
+    _Tutorial_uActiveStep = 0xFFFF;
+    _Tutorial_uStep = 0xFFFF;
+    TutorialSetLesson(5);
 }
 
-unsigned int fn_801568E8(void)
+unsigned int TutorialGetStep(void)
 {
-    return lbl_803EB304;
+    return _Tutorial_uStep;
 }
 
-unsigned int fn_801568F0(void)
+unsigned int TutorialGetLesson(void)
 {
-    return lbl_803EB308;
+    return _Tutorial_uLesson;
 }
 
-Lesson_802A3DC8 *fn_801568F8(void)
+TutorialLesson *TutorialGetLessonObject(void)
 {
-    return lbl_803EB300;
+    return _Tutorial_pLesson;
 }
 
-void fn_80156900(unsigned int count, unsigned int total)
+void TutorialBlinkInit(unsigned int count, unsigned int total)
 {
     if (count != 0) {
-        lbl_803ECA48 = total / count;
+        _Tutorial_uBlinkPeriod = total / count;
     } else {
-        lbl_803ECA48 = 0;
+        _Tutorial_uBlinkPeriod = 0;
     }
-    lbl_803ECA4C = 0;
-    lbl_803ECA4D = 0;
+    _Tutorial_bBlinkOn = 0;
+    _Tutorial_bBlinkShown = 0;
 }
 
-void fn_80156928(void)
+void TutorialBlinkRestart(void)
 {
     unsigned int time = InGameGetFrameCount();
 
-    lbl_803ECA40 = time;
-    if (lbl_803ECA48 != 0) {
-        lbl_803ECA44 = time + lbl_803ECA48;
+    _Tutorial_uBlinkStart = time;
+    if (_Tutorial_uBlinkPeriod != 0) {
+        _Tutorial_uBlinkNext = time + _Tutorial_uBlinkPeriod;
     } else {
-        lbl_803ECA44 = 0;
+        _Tutorial_uBlinkNext = 0;
     }
 }
 
-unsigned char fn_80156960(void)
+unsigned char TutorialBlinkUpdate(void)
 {
-    if (lbl_803ECA44 != 0) {
-        if (InGameGetFrameCount() >= lbl_803ECA44) {
-            fn_80156928();
-            lbl_803ECA4C ^= 1;
+    if (_Tutorial_uBlinkNext != 0) {
+        if (InGameGetFrameCount() >= _Tutorial_uBlinkNext) {
+            TutorialBlinkRestart();
+            _Tutorial_bBlinkOn ^= 1;
         }
     } else {
-        lbl_803ECA4C = 1;
+        _Tutorial_bBlinkOn = 1;
     }
-    return lbl_803ECA4C;
+    return _Tutorial_bBlinkOn;
 }
 
-unsigned char fn_801569B4(void)
+unsigned char TutorialBlinkGetShown(void)
 {
-    return lbl_803ECA4D;
+    return _Tutorial_bBlinkShown;
 }
 
-void fn_801569BC(void)
+void TutorialBlinkSetShown(void)
 {
-    lbl_803ECA4D = lbl_803ECA4C;
+    _Tutorial_bBlinkShown = _Tutorial_bBlinkOn;
 }
 
-int fn_801569C8(unsigned int lesson)
+int TutorialCompleteStep(unsigned int lesson)
 {
     int done = 0;
-    unsigned int step = fn_801568E8() + 1;
+    unsigned int step = TutorialGetStep() + 1;
     unsigned int count = 0;
 
     TutorialSetStepCount(lesson, step);
@@ -762,17 +768,17 @@ int fn_801569C8(unsigned int lesson)
         break;
     }
     if (step == 0 && TutorialIsComplete(lesson) != 0) {
-        if (fn_801568E8() + 1 >= count) {
+        if (TutorialGetStep() + 1 >= count) {
             done = 1;
         } else {
-            step = fn_801568E8() + 1;
+            step = TutorialGetStep() + 1;
         }
     }
-    fn_80156724(step);
+    TutorialSetStep(step);
     return done;
 }
 
-void fn_80156AB0(void)
+void TutorialSetupPlays(void)
 {
     unsigned int team;
     unsigned short i;
@@ -786,9 +792,9 @@ void fn_80156AB0(void)
             fn_800EFE60(0, pObject->mQueue, pObject);
         }
     }
-    side = TutorialGetStepSide(fn_801568F0(), fn_801568E8());
-    b = TutorialGetOtherPlayIndex(fn_801568F0(), fn_801568E8(), side);
-    a = TutorialGetPlayIndex(fn_801568F0(), fn_801568E8(), side);
+    side = TutorialGetStepSide(TutorialGetLesson(), TutorialGetStep());
+    b = TutorialGetOtherPlayIndex(TutorialGetLesson(), TutorialGetStep(), side);
+    a = TutorialGetPlayIndex(TutorialGetLesson(), TutorialGetStep(), side);
     if (side == 1) {
         fn_8017833C(0);
         PlayBookSetFormationType(0, 1);
@@ -810,23 +816,23 @@ void fn_80156AB0(void)
     fn_800B3EFC(1);
 }
 
-void fn_80156C48(void)
+void TutorialClearMoves(void)
 {
-    fn_801C1F94(lbl_8031BF3C, 0, sizeof(lbl_8031BF3C));
+    fn_801C1F94(_Tutorial_aMoveDone, 0, sizeof(_Tutorial_aMoveDone));
 }
 
-void fn_80156C78(int index, int value)
+void TutorialSetMoveDone(int index, int value)
 {
-    lbl_8031BF3C[index] = value;
+    _Tutorial_aMoveDone[index] = value;
 }
 
-int fn_80156C8C(unsigned long long mask)
+int TutorialAreMovesDone(unsigned long long mask)
 {
     int result = 1;
     unsigned char i;
 
     for (i = 0; i <= 44; i++) {
-        if ((mask >> i & 1) && lbl_8031BF3C[i] == 0) {
+        if ((mask >> i & 1) && _Tutorial_aMoveDone[i] == 0) {
             result = 0;
             break;
         }
@@ -834,46 +840,46 @@ int fn_80156C8C(unsigned long long mask)
     return result;
 }
 
-unsigned char fn_80156D14(void)
+unsigned char TutorialIsStepDone(void)
 {
-    return lbl_803ECA38;
+    return _Tutorial_bStepDone;
 }
 
-void fn_80156D1C(unsigned char value)
+void TutorialSetStepDone(unsigned char value)
 {
-    lbl_803ECA38 = value;
+    _Tutorial_bStepDone = value;
 }
 
-void fn_80156D24(unsigned int duration)
+void TutorialTimerStart(unsigned int duration)
 {
     unsigned int seconds = TIME_SECONDS(fn_8009D990(2));
 
-    lbl_803ECA50 = seconds;
-    lbl_803ECA54 = seconds + duration;
+    _Tutorial_uTimerStart = seconds;
+    _Tutorial_uTimerEnd = seconds + duration;
 }
 
-int fn_80156DC4(void)
+int TutorialTimerIsDone(void)
 {
     unsigned int seconds = TIME_SECONDS(fn_8009D990(2));
 
-    if (seconds < lbl_803ECA50) {
+    if (seconds < _Tutorial_uTimerStart) {
         seconds += 60;
     }
-    return seconds >= lbl_803ECA54;
+    return seconds >= _Tutorial_uTimerEnd;
 }
 
-void fn_80156E74(float *pX, float *pY, float *pZ)
+void TutorialGetHudPosition(float *pX, float *pY, float *pZ)
 {
     *pX = 620.0f;
     *pY = 408.0f;
     *pZ = 1.0f;
 }
 
-void fn_80156E9C(unsigned int mask, int value, int flag)
+void TutorialShowPrompts(unsigned int mask, int value, int flag)
 {
     unsigned int i;
 
-    fn_80156F30();
+    TutorialHidePrompts();
     for (i = 0; i <= 13; i++) {
         if (mask & 1 << i) {
             int arg;
@@ -888,35 +894,35 @@ void fn_80156E9C(unsigned int mask, int value, int flag)
                 arg = value;
             }
             if (arg != 0) {
-                fn_801564DC(i, arg);
+                TutorialPostPrompt(i, arg);
             }
         }
     }
 }
 
-void fn_80156F30(void)
+void TutorialHidePrompts(void)
 {
-    fn_801564DC(1, 0);
-    fn_801564DC(0, 0);
-    fn_801564DC(3, 0);
-    fn_801564DC(2, 0);
-    fn_801564DC(5, 0);
-    fn_801564DC(7, 0);
-    fn_801564DC(7, 0);
-    fn_801564DC(4, 0);
-    fn_801564DC(6, 0);
-    fn_801564DC(8, 0);
-    fn_801564DC(9, 0);
-    fn_801564DC(10, 0);
-    fn_801564DC(11, 0);
-    fn_801564DC(12, 0);
-    fn_801564DC(13, 0);
+    TutorialPostPrompt(1, 0);
+    TutorialPostPrompt(0, 0);
+    TutorialPostPrompt(3, 0);
+    TutorialPostPrompt(2, 0);
+    TutorialPostPrompt(5, 0);
+    TutorialPostPrompt(7, 0);
+    TutorialPostPrompt(7, 0);
+    TutorialPostPrompt(4, 0);
+    TutorialPostPrompt(6, 0);
+    TutorialPostPrompt(8, 0);
+    TutorialPostPrompt(9, 0);
+    TutorialPostPrompt(10, 0);
+    TutorialPostPrompt(11, 0);
+    TutorialPostPrompt(12, 0);
+    TutorialPostPrompt(13, 0);
 }
 
-float fn_80157000(void)
+float TutorialGetStartLine(void)
 {
     float base = fn_80178A2C();
-    float offset = TutorialGetStepOffset(fn_801568F0(), fn_801568E8());
+    float offset = TutorialGetStepOffset(TutorialGetLesson(), TutorialGetStep());
 
     if (offset >= base + base) {
         offset = base + base;
@@ -926,32 +932,32 @@ float fn_80157000(void)
 
 }
 
-int Lesson_802A3DC8::vfn_03()
+int TutorialLesson::GetPromptCount()
 {
     return 14;
 }
 
-int Lesson_802A3DC8::vfn_04()
+int TutorialLesson::GetTeamSize()
 {
     return 7;
 }
 
-int Lesson_802A3DC8::vfn_05()
+int TutorialLesson::GetOffenseSize()
 {
     return 7;
 }
 
-int Lesson_802A3DC8::vfn_06()
+int TutorialLesson::GetDefenseSize()
 {
     return 7;
 }
 
 extern "C" {
 
-int fn_80157080(void)
+int TutorialFinishCategory(void)
 {
     int done = 0;
-    unsigned int lesson = fn_801568F0();
+    unsigned int lesson = TutorialGetLesson();
     int mode = fn_801486A0();
 
     if (lesson != 5) {
@@ -960,8 +966,8 @@ int fn_80157080(void)
         fn_800AD910(0, 0.0f);
         HudStop();
         fn_800582D0();
-        fn_80156854();
-        fn_8015672C(5);
+        TutorialLessonStop();
+        TutorialSetLesson(5);
         fn_800C1CA0();
         fn_800C1E50();
         fn_8004730C(1);
@@ -997,12 +1003,12 @@ int fn_80157080(void)
                 fn_800B847C(fn_800B65A0(1), 0);
                 break;
             }
-            fn_8015651C();
+            TutorialSetupRosters();
             fn_801485F4();
             fn_80072F04();
             SndgApplyVolumeOptions();
             fn_80072F04();
-            lbl_803ECA58 = 0;
+            _Tutorial_bContinuing = 0;
         }
         done = 1;
     } else if (mode != 15) {
@@ -1033,12 +1039,12 @@ int fn_80157080(void)
             fn_8004730C(1);
             fn_8015C254(1);
             fn_80047874(1);
-            fn_8015672C(next);
-            fn_80156734(0);
-            fn_80156724(0);
-            fn_8015651C();
-            fn_8015673C();
-            lbl_803ECA58 = done;
+            TutorialSetLesson(next);
+            TutorialSetActiveStep(0);
+            TutorialSetStep(0);
+            TutorialSetupRosters();
+            TutorialLessonStart();
+            _Tutorial_bContinuing = done;
         }
     } else {
         fn_80072F04();
@@ -1069,7 +1075,7 @@ int fn_80157080(void)
     return done;
 }
 
-short fn_80157448(int team, int unused, short value)
+short TutorialScaleCpuRating(int team, int unused, short value)
 {
     if (GameModeTypeGet() == 11 && fn_800B65A0(team) == 0xFF) {
         value = (short)(value * 0.75f);
@@ -1077,12 +1083,12 @@ short fn_80157448(int team, int unused, short value)
     return value;
 }
 
-void fn_801574DC(int value)
+void TutorialSetHudVisible(int value)
 {
     fn_8021D7B8(gUISMainInfo, 0x80000072, 1, &value);
 }
 
-void fn_80157514(void)
+void TutorialReleasePause(void)
 {
     if (GameModeTypeGet() == 11) {
         PauseRequestCancel();
@@ -1092,26 +1098,26 @@ void fn_80157514(void)
     }
 }
 
-unsigned char fn_80157550(void)
+unsigned char TutorialIsContinuing(void)
 {
-    return lbl_803ECA58;
+    return _Tutorial_bContinuing;
 }
 
 }
 
-void Lesson_802A3BE8::vfn_01()
+void TutorialLessonDefense::Begin()
 {
-    mpGame.mp = new (0) Game_80157558;
+    mpGame.mp = new (0) TutorialObjects;
     fn_800BC51C(&mpGame.mp->mObject0);
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
-    mpGame.mp->mObject36.vfn_11(2);
+    mpGame.mp->mObject36.ResetGame(2);
     fn_80178F20(&mpGame.mp->mObject36);
-    fn_801568E8();
+    TutorialGetStep();
 }
 
-int Lesson_802A3BE8::vfn_02()
+int TutorialLessonDefense::End()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -1123,24 +1129,24 @@ int Lesson_802A3BE8::vfn_02()
     return 0;
 }
 
-Step_802DEC08 *Lesson_802A3BE8::vfn_07()
+TutorialStep_t *TutorialLessonDefense::GetStep()
 {
-    return &lbl_802DEC08[fn_801568E8()];
+    return &_Tutorial_aDefenseSteps[TutorialGetStep()];
 }
 
-const char *Lesson_802A3BE8::vfn_08()
+const char *TutorialLessonDefense::GetIntroText()
 {
     return "Defense, defense, defense.  You need to stop the other team to win.";
 }
 
-const char *Lesson_802A3BE8::vfn_09()
+const char *TutorialLessonDefense::GetDoneText()
 {
     return "You now have the skills to make the big stop!  Try them out in the 4 on 4 Street Event to 21 points.";
 }
 
-void Lesson_802A3D08::vfn_01()
+void TutorialLessonNewStuff::Begin()
 {
-    mpGame.mp = new (0) Game_801576F0;
+    mpGame.mp = new (0) TutorialNewStuffObjects;
     fn_800BC51C(&mpGame.mp->mObject0);
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject20);
@@ -1148,7 +1154,7 @@ void Lesson_802A3D08::vfn_01()
     fn_80178F20(&mpGame.mp->mObject40);
 }
 
-int Lesson_802A3D08::vfn_02()
+int TutorialLessonNewStuff::End()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -1160,26 +1166,26 @@ int Lesson_802A3D08::vfn_02()
     return 0;
 }
 
-Step_802DEC08 *Lesson_802A3D08::vfn_07()
+TutorialStep_t *TutorialLessonNewStuff::GetStep()
 {
-    return &lbl_802DECC8[fn_801568E8()];
+    return &_Tutorial_aNewStuffSteps[TutorialGetStep()];
 }
 
-const char *Lesson_802A3D08::vfn_08()
+const char *TutorialLessonNewStuff::GetIntroText()
 {
     return "There are a lot of new skills to learn in NFL STREET 2, and you are going to need to master them all.";
 }
 
-const char *Lesson_802A3D08::vfn_09()
+const char *TutorialLessonNewStuff::GetDoneText()
 {
     return "Now that you know how to use the walls and GameBreakers, you are ready for a full game of 7-on-7 to 36 points.";
 }
 
-void Class_802A3858::vfn_04(float dt)
+void TutorialPreSnapNewStuff::OnEnter(float dt)
 {
-    Class_802A3B10::vfn_04(dt);
+    TutorialPreSnap::OnEnter(dt);
     mUnknown8.m = 0;
-    unsigned int step = fn_801568E8();
+    unsigned int step = TutorialGetStep();
     if (step >= 5 && step <= 7) {
         fn_800A7A0C(1);
         fn_800A8F08();
@@ -1197,36 +1203,36 @@ void Class_802A3858::vfn_04(float dt)
     }
 }
 
-void Class_802A3858::vfn_05(float dt)
+void TutorialPreSnapNewStuff::OnUpdate(float dt)
 {
-    unsigned int step = fn_801568E8();
+    unsigned int step = TutorialGetStep();
     if (step >= 5 && step <= 7 && mUnknown4 && !mUnknown8.m) {
         HudShowPressPrompt(1);
         mUnknown8.m = 1;
     }
-    Class_802A3B10::vfn_05(dt);
+    TutorialPreSnap::OnUpdate(dt);
 }
 
-void Class_802A3958::vfn_04(float dt)
+void TutorialLivePlayNewStuff::OnUpdate(float dt)
 {
-    static unsigned int lbl_803EB31C = 0;
-    unsigned int step = fn_801568E8();
-    Step_802DEC08 *pStep;
+    static unsigned int _TutorialLivePlayNewStuff_uPromptCycle = 0;
+    unsigned int step = TutorialGetStep();
+    TutorialStep_t *pStep;
 
     if (step == 3) {
-        Class_80297AB8::vfn_04(dt);
-        unsigned char done = fn_80156D14();
+        LivePlayPhase::OnUpdate(dt);
+        unsigned char done = TutorialIsStepDone();
         if (done == 0) {
-            unsigned char button = fn_80156960();
-            pStep = fn_801568F8()->vfn_07();
+            unsigned char button = TutorialBlinkUpdate();
+            pStep = TutorialGetLessonObject()->GetStep();
             unsigned int prompts = pStep->mPrompts;
             if (BallStateGet(BallGetCurrent(), 0) != 4) {
-                if (button != fn_801569B4()) {
-                    fn_80156E9C(pStep->mPrompts, 0, 1);
-                    if (++lbl_803EB31C > 2) {
-                        lbl_803EB31C = done;
+                if (button != TutorialBlinkGetShown()) {
+                    TutorialShowPrompts(pStep->mPrompts, 0, 1);
+                    if (++_TutorialLivePlayNewStuff_uPromptCycle > 2) {
+                        _TutorialLivePlayNewStuff_uPromptCycle = done;
                     }
-                    switch (lbl_803EB31C) {
+                    switch (_TutorialLivePlayNewStuff_uPromptCycle) {
                     case 0:
                         prompts = 0x20;
                         break;
@@ -1237,41 +1243,41 @@ void Class_802A3958::vfn_04(float dt)
                         prompts = 0x80;
                         break;
                     }
-                    fn_80156E9C(prompts | 1, 1, 1);
-                    fn_801569BC();
+                    TutorialShowPrompts(prompts | 1, 1, 1);
+                    TutorialBlinkSetShown();
                 }
             } else {
-                fn_80156F30();
+                TutorialHidePrompts();
                 pStep->mPrompts = 1;
-                fn_80156E9C(1, 1, 1);
+                TutorialShowPrompts(1, 1, 1);
             }
-            if (fn_80156C8C(pStep->mMask)) {
-                fn_80156E9C(pStep->mPrompts, 1, 1);
-                fn_80156D1C(1);
-                fn_80156D24(pStep->mDuration);
+            if (TutorialAreMovesDone(pStep->mMask)) {
+                TutorialShowPrompts(pStep->mPrompts, 1, 1);
+                TutorialSetStepDone(1);
+                TutorialTimerStart(pStep->mDuration);
             }
         } else {
-            if (fn_80156DC4()) {
+            if (TutorialTimerIsDone()) {
                 fn_80178370();
             }
             return;
         }
     } else if (step == 4) {
-        Class_80297AB8::vfn_04(dt);
-        unsigned char done = fn_80156D14();
+        LivePlayPhase::OnUpdate(dt);
+        unsigned char done = TutorialIsStepDone();
         if (done != 0) {
             return;
         }
-        unsigned char button = fn_80156960();
-        pStep = fn_801568F8()->vfn_07();
+        unsigned char button = TutorialBlinkUpdate();
+        pStep = TutorialGetLessonObject()->GetStep();
         unsigned int prompts = pStep->mPrompts;
         if (BallStateGet(BallGetCurrent(), 0) != 4) {
-            if (button != fn_801569B4()) {
-                fn_80156E9C(pStep->mPrompts, 0, 0);
-                if (++lbl_803EB31C > 1) {
-                    lbl_803EB31C = done;
+            if (button != TutorialBlinkGetShown()) {
+                TutorialShowPrompts(pStep->mPrompts, 0, 0);
+                if (++_TutorialLivePlayNewStuff_uPromptCycle > 1) {
+                    _TutorialLivePlayNewStuff_uPromptCycle = done;
                 }
-                switch (lbl_803EB31C) {
+                switch (_TutorialLivePlayNewStuff_uPromptCycle) {
                 case 0:
                     prompts = 0x20;
                     break;
@@ -1279,8 +1285,8 @@ void Class_802A3958::vfn_04(float dt)
                     prompts = 0x80;
                     break;
                 }
-                fn_80156E9C(prompts, 1, 0);
-                fn_801569BC();
+                TutorialShowPrompts(prompts, 1, 0);
+                TutorialBlinkSetShown();
             }
         } else {
             Object_80039F5C *pPlayer = BallGetTarget(BallGetCurrent());
@@ -1292,49 +1298,49 @@ void Class_802A3958::vfn_04(float dt)
                     on = 1;
                     prompts = 0x41;
                 }
-                if (button != fn_801569B4()) {
-                    fn_80156E9C(prompts, button, on);
-                    fn_801569BC();
+                if (button != TutorialBlinkGetShown()) {
+                    TutorialShowPrompts(prompts, button, on);
+                    TutorialBlinkSetShown();
                 }
             } else {
-                fn_80156F30();
+                TutorialHidePrompts();
             }
         }
-        if (fn_80156C8C(pStep->mMask)) {
-            fn_80156E9C(pStep->mPrompts, 1, 1);
-            fn_80156D1C(1);
-            fn_80156D24(pStep->mDuration);
+        if (TutorialAreMovesDone(pStep->mMask)) {
+            TutorialShowPrompts(pStep->mPrompts, 1, 1);
+            TutorialSetStepDone(1);
+            TutorialTimerStart(pStep->mDuration);
         }
     } else {
-        Class_802A3AD8::vfn_04(dt);
+        TutorialLivePlay::OnUpdate(dt);
     }
 }
 
-void Class_802A38C8::vfn_03(float dt)
+void TutorialPostPlayNewStuff::OnEnter(float dt)
 {
-    if (fn_801568E8() == 3) {
-        fn_801568F8()->vfn_07()->mPrompts = 0xB1;
-    } else if (fn_801568E8() == 8) {
-        Step_802DEC08 *pStep = fn_801568F8()->vfn_07();
-        if (fn_80156C8C(pStep->mMask)) {
+    if (TutorialGetStep() == 3) {
+        TutorialGetLessonObject()->GetStep()->mPrompts = 0xB1;
+    } else if (TutorialGetStep() == 8) {
+        TutorialStep_t *pStep = TutorialGetLessonObject()->GetStep();
+        if (TutorialAreMovesDone(pStep->mMask)) {
             fn_800406C0(0xC0);
         }
     }
-    Class_802A3A48::vfn_03(dt);
+    TutorialPostPlay::OnEnter(dt);
 }
 
-void Lesson_802A3CA8::vfn_01()
+void TutorialLessonPassing::Begin()
 {
-    mpGame.mp = new (0) Game_80157558;
+    mpGame.mp = new (0) TutorialObjects;
     fn_800BC51C(&mpGame.mp->mObject0);
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
     fn_80178F20(&mpGame.mp->mObject36);
-    fn_801568E8();
+    TutorialGetStep();
 }
 
-int Lesson_802A3CA8::vfn_02()
+int TutorialLessonPassing::End()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -1346,33 +1352,33 @@ int Lesson_802A3CA8::vfn_02()
     return 0;
 }
 
-Step_802DEC08 *Lesson_802A3CA8::vfn_07()
+TutorialStep_t *TutorialLessonPassing::GetStep()
 {
-    return &lbl_802DEDE8[fn_801568E8()];
+    return &_Tutorial_aPassingSteps[TutorialGetStep()];
 }
 
-const char *Lesson_802A3CA8::vfn_08()
+const char *TutorialLessonPassing::GetIntroText()
 {
     return "Learn how to be the quarterback and lead your team to victory.";
 }
 
-const char *Lesson_802A3CA8::vfn_09()
+const char *TutorialLessonPassing::GetDoneText()
 {
     return "Now that you know how to pass the ball, see how you do in a game of 2 Minute Challenge.";
 }
 
-void Lesson_802A3D68::vfn_01()
+void TutorialLessonRunning::Begin()
 {
-    mpGame.mp = new (0) Game_80157558;
+    mpGame.mp = new (0) TutorialObjects;
     fn_800BC51C(&mpGame.mp->mObject0);
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
     fn_80178F20(&mpGame.mp->mObject36);
-    fn_801568E8();
+    TutorialGetStep();
 }
 
-int Lesson_802A3D68::vfn_02()
+int TutorialLessonRunning::End()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -1384,42 +1390,42 @@ int Lesson_802A3D68::vfn_02()
     return 0;
 }
 
-Step_802DEC08 *Lesson_802A3D68::vfn_07()
+TutorialStep_t *TutorialLessonRunning::GetStep()
 {
-    return &lbl_802DEF08[fn_801568E8()];
+    return &_Tutorial_aRunningSteps[TutorialGetStep()];
 }
 
-const char *Lesson_802A3D68::vfn_08()
+const char *TutorialLessonRunning::GetIntroText()
 {
     return "It's time to learn how to run with the rock.";
 }
 
-const char *Lesson_802A3D68::vfn_09()
+const char *TutorialLessonRunning::GetDoneText()
 {
     return "Now that you have some running skills, try a 5 round game of Open Field Showdown.";
 }
 
-void Class_802A3820::vfn_04(float dt)
+void TutorialLivePlayStyling::OnUpdate(float dt)
 {
-    static unsigned int lbl_803EB320 = 0;
-    Step_802DEC08 *pStep;
+    static unsigned int _TutorialLivePlayStyling_uPromptCycle = 0;
+    TutorialStep_t *pStep;
 
-    if (fn_801568E8() == 6) {
-        Class_80297AB8::vfn_04(dt);
-        unsigned char done = fn_80156D14();
+    if (TutorialGetStep() == 6) {
+        LivePlayPhase::OnUpdate(dt);
+        unsigned char done = TutorialIsStepDone();
         if (done != 0) {
             return;
         }
-        unsigned char button = fn_80156960();
-        pStep = fn_801568F8()->vfn_07();
+        unsigned char button = TutorialBlinkUpdate();
+        pStep = TutorialGetLessonObject()->GetStep();
         unsigned int prompts = pStep->mPrompts;
         if (BallStateGet(BallGetCurrent(), 0) != 4) {
-            if (button != fn_801569B4()) {
-                fn_80156E9C(pStep->mPrompts, 0, 1);
-                if (++lbl_803EB320 > 2) {
-                    lbl_803EB320 = done;
+            if (button != TutorialBlinkGetShown()) {
+                TutorialShowPrompts(pStep->mPrompts, 0, 1);
+                if (++_TutorialLivePlayStyling_uPromptCycle > 2) {
+                    _TutorialLivePlayStyling_uPromptCycle = done;
                 }
-                switch (lbl_803EB320) {
+                switch (_TutorialLivePlayStyling_uPromptCycle) {
                 case 0:
                     prompts = 0x20;
                     break;
@@ -1430,32 +1436,32 @@ void Class_802A3820::vfn_04(float dt)
                     prompts = 0x80;
                     break;
                 }
-                fn_80156E9C(prompts | 1, 1, 1);
-                fn_801569BC();
+                TutorialShowPrompts(prompts | 1, 1, 1);
+                TutorialBlinkSetShown();
             }
         } else {
-            fn_80156F30();
-            fn_80156E9C(pStep->mPrompts, 1, 1);
+            TutorialHidePrompts();
+            TutorialShowPrompts(pStep->mPrompts, 1, 1);
         }
-        if (fn_80156C8C(pStep->mMask)) {
-            fn_80156E9C(pStep->mPrompts, 1, 1);
-            fn_80156D1C(1);
-            fn_80156D24(pStep->mDuration);
+        if (TutorialAreMovesDone(pStep->mMask)) {
+            TutorialShowPrompts(pStep->mPrompts, 1, 1);
+            TutorialSetStepDone(1);
+            TutorialTimerStart(pStep->mDuration);
         }
-    } else if (fn_801568E8() == 7) {
-        Class_80297AB8::vfn_04(dt);
-        unsigned char done = fn_80156D14();
+    } else if (TutorialGetStep() == 7) {
+        LivePlayPhase::OnUpdate(dt);
+        unsigned char done = TutorialIsStepDone();
         if (done == 0) {
-            unsigned char button = fn_80156960();
-            pStep = fn_801568F8()->vfn_07();
+            unsigned char button = TutorialBlinkUpdate();
+            pStep = TutorialGetLessonObject()->GetStep();
             unsigned int prompts = pStep->mPrompts;
             if (BallStateGet(BallGetCurrent(), 0) != 4) {
-                if (button != fn_801569B4()) {
-                    fn_80156E9C(pStep->mPrompts, 0, 0);
-                    if (++lbl_803EB320 > 2) {
-                        lbl_803EB320 = done;
+                if (button != TutorialBlinkGetShown()) {
+                    TutorialShowPrompts(pStep->mPrompts, 0, 0);
+                    if (++_TutorialLivePlayStyling_uPromptCycle > 2) {
+                        _TutorialLivePlayStyling_uPromptCycle = done;
                     }
-                    switch (lbl_803EB320) {
+                    switch (_TutorialLivePlayStyling_uPromptCycle) {
                     case 0:
                         prompts = 0x20;
                         break;
@@ -1466,8 +1472,8 @@ void Class_802A3820::vfn_04(float dt)
                         prompts = 0x80;
                         break;
                     }
-                    fn_80156E9C(prompts, 1, 0);
-                    fn_801569BC();
+                    TutorialShowPrompts(prompts, 1, 0);
+                    TutorialBlinkSetShown();
                 }
             } else {
                 Object_80039F5C *pPlayer = BallGetTarget(BallGetCurrent());
@@ -1479,42 +1485,42 @@ void Class_802A3820::vfn_04(float dt)
                         on = 1;
                         prompts = 0x41;
                     }
-                    if (button != fn_801569B4()) {
-                        fn_80156E9C(prompts, button, on);
-                        fn_801569BC();
+                    if (button != TutorialBlinkGetShown()) {
+                        TutorialShowPrompts(prompts, button, on);
+                        TutorialBlinkSetShown();
                     }
                 } else {
-                    fn_80156F30();
+                    TutorialHidePrompts();
                 }
             }
-            if (fn_80156C8C(pStep->mMask)) {
-                fn_80156E9C(pStep->mPrompts, 1, 1);
-                fn_80156D1C(1);
-                fn_80156D24(pStep->mDuration);
+            if (TutorialAreMovesDone(pStep->mMask)) {
+                TutorialShowPrompts(pStep->mPrompts, 1, 1);
+                TutorialSetStepDone(1);
+                TutorialTimerStart(pStep->mDuration);
             }
         } else {
-            if (fn_80156DC4()) {
+            if (TutorialTimerIsDone()) {
                 fn_80178370();
             }
             return;
         }
     } else {
-        Class_802A3AD8::vfn_04(dt);
+        TutorialLivePlay::OnUpdate(dt);
     }
 }
 
-void Lesson_802A3C48::vfn_01()
+void TutorialLessonStyling::Begin()
 {
-    mpGame.mp = new (0) Game_801582C4;
+    mpGame.mp = new (0) TutorialStylingObjects;
     fn_800BC51C(&mpGame.mp->mObject0);
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
     fn_80178F20(&mpGame.mp->mObject36);
-    fn_801568E8();
+    TutorialGetStep();
 }
 
-int Lesson_802A3C48::vfn_02()
+int TutorialLessonStyling::End()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -1526,180 +1532,180 @@ int Lesson_802A3C48::vfn_02()
     return 0;
 }
 
-Step_802DEC08 *Lesson_802A3C48::vfn_07()
+TutorialStep_t *TutorialLessonStyling::GetStep()
 {
-    return &lbl_802DEFE8[fn_801568E8()];
+    return &_Tutorial_aStylingSteps[TutorialGetStep()];
 }
 
-const char *Lesson_802A3C48::vfn_08()
+const char *TutorialLessonStyling::GetIntroText()
 {
     return "You are going to need to learn to show your Style and earn GameBreakers in order to be great.";
 }
 
-const char *Lesson_802A3C48::vfn_09()
+const char *TutorialLessonStyling::GetDoneText()
 {
     return "Showcase your Style in a game of Crush the Carrier. To get the big points, stop Styling before you get tackled.";
 }
 
 extern "C" {
 
-void fn_8015844C(int show)
+void TutorialShowTitles(int show)
 {
     if (show) {
-        if (fn_801568F0() == 0) {
-            fn_801C2EF0(lbl_8031BFF0, "Running the Ball", 25);
-            switch (fn_801568E8()) {
+        if (TutorialGetLesson() == 0) {
+            fn_801C2EF0(_Tutorial_szCategoryTitle, "Running the Ball", 25);
+            switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(lbl_8031C00C, "Turbo", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo", 30);
                 break;
             case 1:
-                fn_801C2EF0(lbl_8031C00C, "Stiff Arm", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Stiff Arm", 30);
                 break;
             case 2:
-                fn_801C2EF0(lbl_8031C00C, "Juke", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Juke", 30);
                 break;
             case 3:
-                fn_801C2EF0(lbl_8031C00C, "Spin", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Spin", 30);
                 break;
             case 4:
-                fn_801C2EF0(lbl_8031C00C, "Hurdle", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Hurdle", 30);
                 break;
             case 5:
-                fn_801C2EF0(lbl_8031C00C, "Dive", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Dive", 30);
                 break;
             case 6:
-                fn_801C2EF0(lbl_8031C00C, "Pitch", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Pitch", 30);
                 break;
             }
-        } else if (fn_801568F0() == 1) {
-            fn_801C2EF0(lbl_8031BFF0, "Passing", 25);
-            switch (fn_801568E8()) {
+        } else if (TutorialGetLesson() == 1) {
+            fn_801C2EF0(_Tutorial_szCategoryTitle, "Passing", 25);
+            switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(lbl_8031C00C, "Turbo Roll Out", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo Roll Out", 30);
                 break;
             case 1:
-                fn_801C2EF0(lbl_8031C00C, "Touch Pass to B Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to B Button", 30);
                 break;
             case 2:
-                fn_801C2EF0(lbl_8031C00C, "Touch Pass to X Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to X Button", 30);
                 break;
             case 3:
-                fn_801C2EF0(lbl_8031C00C, "Touch Pass to A Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Touch Pass to A Button", 30);
                 break;
             case 4:
-                fn_801C2EF0(lbl_8031C00C, "Bullet Pass to B Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to B Button", 30);
                 break;
             case 5:
-                fn_801C2EF0(lbl_8031C00C, "Bullet Pass to X Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to X Button", 30);
                 break;
             case 6:
-                fn_801C2EF0(lbl_8031C00C, "Bullet Pass to A Button", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Bullet Pass to A Button", 30);
                 break;
             case 7:
-                fn_801C2EF0(lbl_8031C00C, "Pump Fake", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Pump Fake", 30);
                 break;
             case 8:
-                fn_801C2EF0(lbl_8031C00C, "Drop Passing Icons", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Drop Passing Icons", 30);
                 break;
             }
-        } else if (fn_801568F0() == 2) {
-            fn_801C2EF0(lbl_8031BFF0, "Styling", 25);
-            switch (fn_801568E8()) {
+        } else if (TutorialGetLesson() == 2) {
+            fn_801C2EF0(_Tutorial_szCategoryTitle, "Styling", 25);
+            switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(lbl_8031C00C, "Styling", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Styling", 30);
                 break;
             case 1:
-                fn_801C2EF0(lbl_8031C00C, "Signature Style", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Signature Style", 30);
                 break;
             case 2:
-                fn_801C2EF0(lbl_8031C00C, "Juke", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Juke", 30);
                 break;
             case 3:
-                fn_801C2EF0(lbl_8031C00C, "Spin", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Spin", 30);
                 break;
             case 4:
-                fn_801C2EF0(lbl_8031C00C, "Hurdle", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Hurdle", 30);
                 break;
             case 5:
-                fn_801C2EF0(lbl_8031C00C, "Dive", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Dive", 30);
                 break;
             case 6:
-                fn_801C2EF0(lbl_8031C00C, "Pass", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Pass", 30);
                 break;
             case 7:
-                fn_801C2EF0(lbl_8031C00C, "Catch", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Catch", 30);
                 break;
             }
-        } else if (fn_801568F0() == 3) {
-            fn_801C2EF0(lbl_8031BFF0, "Defense", 25);
-            switch (fn_801568E8()) {
+        } else if (TutorialGetLesson() == 3) {
+            fn_801C2EF0(_Tutorial_szCategoryTitle, "Defense", 25);
+            switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(lbl_8031C00C, "Turbo", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Turbo", 30);
                 break;
             case 1:
-                fn_801C2EF0(lbl_8031C00C, "Switch Players", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Switch Players", 30);
                 break;
             case 2:
-                fn_801C2EF0(lbl_8031C00C, "Line Moves", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Line Moves", 30);
                 break;
             case 3:
-                fn_801C2EF0(lbl_8031C00C, "Dive Tackle", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Dive Tackle", 30);
                 break;
             case 4:
-                fn_801C2EF0(lbl_8031C00C, "Interception", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Interception", 30);
                 break;
             case 5:
-                fn_801C2EF0(lbl_8031C00C, "Power Tackle", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Power Tackle", 30);
                 break;
             }
-        } else if (fn_801568F0() == 4) {
-            fn_801C2EF0(lbl_8031BFF0, "New Stuff", 25);
-            switch (fn_801568E8()) {
+        } else if (TutorialGetLesson() == 4) {
+            fn_801C2EF0(_Tutorial_szCategoryTitle, "New Stuff", 25);
+            switch (TutorialGetStep()) {
             case 0:
-                fn_801C2EF0(lbl_8031C00C, "Wall Juke", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Juke", 30);
                 break;
             case 1:
-                fn_801C2EF0(lbl_8031C00C, "Wall Hurdle", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Hurdle", 30);
                 break;
             case 2:
-                fn_801C2EF0(lbl_8031C00C, "Wall Dive", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Dive", 30);
                 break;
             case 3:
-                fn_801C2EF0(lbl_8031C00C, "Wall Pass", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Pass", 30);
                 break;
             case 4:
-                fn_801C2EF0(lbl_8031C00C, "Wall Catch", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Wall Catch", 30);
                 break;
             case 5:
-                fn_801C2EF0(lbl_8031C00C, "GameBreaker on Offense", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker on Offense", 30);
                 break;
             case 6:
-                fn_801C2EF0(lbl_8031C00C, "GameBreaker on Defense", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker on Defense", 30);
                 break;
             case 7:
-                fn_801C2EF0(lbl_8031C00C, "GameBreaker 2", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "GameBreaker 2", 30);
                 break;
             case 8:
-                fn_801C2EF0(lbl_8031C00C, "Hot Spots", 30);
+                fn_801C2EF0(_Tutorial_szStepTitle, "Hot Spots", 30);
                 break;
             }
         }
-        lbl_8031BEE4.mUnknown0 = 0;
-        lbl_8031BEE4.mpText = lbl_8031BFF0;
-        lbl_8031BEE4.mSize = fn_801C3180(lbl_8031BFF0) + 1;
-        lbl_803ECA2C = &lbl_8031BEE4;
-        lbl_8031BEF0.mUnknown0 = 0;
-        lbl_8031BEF0.mpText = lbl_8031C00C;
-        lbl_8031BEF0.mSize = fn_801C3180(lbl_8031C00C) + 1;
-        lbl_803ECA30 = &lbl_8031BEF0;
-        fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &lbl_803ECA2C);
-        fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &lbl_803ECA30);
+        _Tutorial_CategoryText.mUnknown0 = 0;
+        _Tutorial_CategoryText.mpText = _Tutorial_szCategoryTitle;
+        _Tutorial_CategoryText.mSize = fn_801C3180(_Tutorial_szCategoryTitle) + 1;
+        _Tutorial_pCategoryText = &_Tutorial_CategoryText;
+        _Tutorial_StepText.mUnknown0 = 0;
+        _Tutorial_StepText.mpText = _Tutorial_szStepTitle;
+        _Tutorial_StepText.mSize = fn_801C3180(_Tutorial_szStepTitle) + 1;
+        _Tutorial_pStepText = &_Tutorial_StepText;
+        fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
+        fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);
     }
-    lbl_803ECA34 = show;
-    fn_8021D7B8(gUISMainInfo, 0x8000007F, 1, &lbl_803ECA34);
+    _Tutorial_iTitlesShown = show;
+    fn_8021D7B8(gUISMainInfo, 0x8000007F, 1, &_Tutorial_iTitlesShown);
 }
 
-void fn_80158A4C(void)
+void TutorialReloadRatings(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
@@ -1708,7 +1714,7 @@ void fn_80158A4C(void)
     }
 }
 
-void fn_80158AA8(void)
+void TutorialSetupSession(void)
 {
     unsigned char volume;
 
@@ -1735,65 +1741,65 @@ void fn_80158AA8(void)
     }
 }
 
-void fn_80158BB4(unsigned int mask)
+void TutorialBlinkPrompts(unsigned int mask)
 {
-    unsigned char state = fn_80156960();
-    if (state != fn_801569B4()) {
-        fn_80156E9C(mask, state, 1);
-        fn_801569BC();
+    unsigned char state = TutorialBlinkUpdate();
+    if (state != TutorialBlinkGetShown()) {
+        TutorialShowPrompts(mask, state, 1);
+        TutorialBlinkSetShown();
     }
 }
 
 }
 
-void Class_802A3A48::fn_80158C04()
+void TutorialPostPlay::ShowResults()
 {
     PauseBlock();
-    Step_802DEC08 *pRecord = fn_801568F8()->vfn_07();
+    TutorialStep_t *pRecord = TutorialGetLessonObject()->GetStep();
     MsgGameSetMemCardActive(1);
-    if (fn_80156C8C(pRecord->mMask)) {
-        fn_80156E9C(pRecord->mPrompts, 1, 1);
-        fn_80156D1C(1);
+    if (TutorialAreMovesDone(pRecord->mMask)) {
+        TutorialShowPrompts(pRecord->mPrompts, 1, 1);
+        TutorialSetStepDone(1);
     }
-    if (fn_80156D14()) {
-        if (fn_801569C8(fn_801568F0()) == 0) {
-            MsgBoxShow("Tutorial Results", lbl_802DF0E8, "|^Done");
+    if (TutorialIsStepDone()) {
+        if (TutorialCompleteStep(TutorialGetLesson()) == 0) {
+            MsgBoxShow("Tutorial Results", _Tutorial_szPassed, "|^Done");
             mUnknown12 = 0;
         } else {
             char text[256];
             const char *pName;
             mUnknown4 = 1;
             mUnknown12 = 0;
-            pName = fn_801568F8()->vfn_09();
+            pName = TutorialGetLessonObject()->GetDoneText();
             if (pName == 0) pName = "";
-            fn_801C2D88(text, 255, "%s\n\n%s", lbl_802DF140, pName);
+            fn_801C2D88(text, 255, "%s\n\n%s", _Tutorial_szCategoryDone, pName);
             MsgBoxShow("Tutorial Results", text, "|^Done");
         }
         mUnknown8 = 0;
-        fn_801566DC(1);
+        TutorialSetAnnounceStep(1);
     } else {
         mUnknown12 = 1;
         if (mUnknown8 > 2) {
-            MsgBoxShow("Tutorial Results", lbl_802DF100, "|^Retry|Quit|Skip to Next Section");
+            MsgBoxShow("Tutorial Results", _Tutorial_szNeedPractice, "|^Retry|Quit|Skip to Next Section");
         } else {
-            MsgBoxShow("Tutorial Results", lbl_802DF100, "|^Retry|Quit");
+            MsgBoxShow("Tutorial Results", _Tutorial_szNeedPractice, "|^Retry|Quit");
         }
     }
 }
 
-static unsigned char lbl_803EB324 = 0;
-static unsigned char lbl_803EB325 = 0;
+static unsigned char _Tutorial_bAwaitCamera = 0;
+static unsigned char _Tutorial_bKeyPromptShown = 0;
 
-void Class_802A3B80::vfn_03()
+void TutorialPreGame::OnEnter()
 {
-    Class_80297BF8::vfn_03();
+    PreGamePhase::OnEnter();
     StyleTrackerSetEnabled(1);
     mUnknown4 = 1;
-    fn_80158AA8();
+    TutorialSetupSession();
     PauseBlock();
 }
 
-void Class_802A3B80::vfn_04(float dt)
+void TutorialPreGame::OnUpdate(float dt)
 {
     unsigned short id;
     unsigned short other;
@@ -1814,29 +1820,29 @@ void Class_802A3B80::vfn_04(float dt)
                 InGameStop();
             } else {
                 mUnknown4 = choice;
-                MsgBoxShow("Tutorial Results", lbl_802DF120, "|^No|Yes");
+                MsgBoxShow("Tutorial Results", _Tutorial_szQuitConfirm, "|^No|Yes");
             }
         } else {
-            Class_80297BF8::vfn_04(dt);
+            PreGamePhase::OnUpdate(dt);
         }
     }
 }
 
-void Class_802A3B80::vfn_11(float dt)
+void TutorialPreGame::EnterFirstPhase(float dt)
 {
     fn_800AD910(2, dt);
 }
 
-void Class_802A3B80::vfn_06()
+void TutorialPreGame::ShowIntroScreen()
 {
     char text[256];
 
-    if (fn_801568E8() == 0) {
-        const char *pInfo = fn_801568F8()->vfn_08();
+    if (TutorialGetStep() == 0) {
+        const char *pInfo = TutorialGetLessonObject()->GetIntroText();
 
         if (pInfo != 0) {
-            fn_801574DC(0);
-            if (fn_80157550()) {
+            TutorialSetHudVisible(0);
+            if (TutorialIsContinuing()) {
                 fn_801C2E18(text, "%s\n\nDo you want to continue?", pInfo);
                 MsgBoxShow("Tutorial Information", text, "|^Continue|Quit");
             } else {
@@ -1844,36 +1850,36 @@ void Class_802A3B80::vfn_06()
             }
         }
     } else {
-        fn_801574DC(0);
+        TutorialSetHudVisible(0);
         MsgBoxShow("Tutorial Information", "Back for more?", "|^Done");
     }
 }
 
-void Class_802A3B80::vfn_07()
+void TutorialPreGame::HideIntroScreen()
 {
-    fn_801574DC(1);
+    TutorialSetHudVisible(1);
 }
 
-void Class_802A3B10::vfn_04(float dt)
+void TutorialPreSnap::OnEnter(float dt)
 {
-    Pair_80177FE0 start;
-    Pair_80177FE0 point;
+    FieldSpot_t start;
+    FieldSpot_t point;
     Vector_80039F5C pos;
     int angles[3];
     int args[2];
     Ball_t *pBall;
 
-    fn_80156C48();
-    fn_80156AB0();
-    fn_80158A4C();
+    TutorialClearMoves();
+    TutorialSetupPlays();
+    TutorialReloadRatings();
     fn_8009D8CC(1);
     mUnknown4 = 0;
-    fn_80156D24(3);
-    lbl_803EB324 = 1;
+    TutorialTimerStart(3);
+    _Tutorial_bAwaitCamera = 1;
     start.mX = 0.0f;
-    start.mY = fn_80157000();
-    if (fn_801566E4()) {
-        AudmonEventPostArgs(0x85, 0, fn_801568F0(), fn_801568E8(), 0);
+    start.mY = TutorialGetStartLine();
+    if (TutorialGetAnnounceStep()) {
+        AudmonEventPostArgs(0x85, 0, TutorialGetLesson(), TutorialGetStep(), 0);
         fn_800731D0(1);
     }
     fn_801780A8(start);
@@ -1891,7 +1897,7 @@ void Class_802A3B10::vfn_04(float dt)
     fn_8013A910(pBall, angles);
     fn_8013AD9C(pBall, 0);
     BallPrimeKickUp(pBall);
-    Class_80297CE8::vfn_04(dt);
+    PreSnapPhase::OnEnter(dt);
     fn_8009E01C();
     fn_800BF658(1);
     StyleTrackerSetMeterFraction(1, 0.0f, 0);
@@ -1903,41 +1909,41 @@ void Class_802A3B10::vfn_04(float dt)
     fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
     args[0] = 0;
     fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
-    fn_80156E9C(fn_801568F8()->vfn_07()->mPrompts, 1, 0);
+    TutorialShowPrompts(TutorialGetLessonObject()->GetStep()->mPrompts, 1, 0);
     PauseRequestCancel();
     if (!PauseIsUnblocked()) {
         PauseUnblock();
     }
-    fn_8015844C(1);
+    TutorialShowTitles(1);
 }
 
-void Class_802A3B10::vfn_06(float dt)
+void TutorialPreSnap::OnExit(float dt)
 {
-    fn_8015844C(0);
-    Class_80297CE8::vfn_06(dt);
+    TutorialShowTitles(0);
+    PreSnapPhase::OnExit(dt);
 }
 
-void Class_802A3B10::vfn_05(float dt)
+void TutorialPreSnap::OnUpdate(float dt)
 {
-    if (fn_80156DC4()) {
+    if (TutorialTimerIsDone()) {
         GameCamera_t *pCamera = CamGameGetCamera(5);
-        Step_802DEC08 *pEntry = fn_801568F8()->vfn_07();
+        TutorialStep_t *pEntry = TutorialGetLessonObject()->GetStep();
 
-        if (pCamera->mUnknownA0 == 5 && lbl_803EB324 != 0) {
+        if (pCamera->mUnknownA0 == 5 && _Tutorial_bAwaitCamera != 0) {
             fn_800BF6CC(1);
             if (pEntry->mUnknown24 != 1) {
-                fn_80156F30();
+                TutorialHidePrompts();
             } else {
-                fn_80156900(pEntry->mUnknown20, 60);
-                fn_80156928();
+                TutorialBlinkInit(pEntry->mUnknown20, 60);
+                TutorialBlinkRestart();
             }
-            lbl_803EB324 = 0;
+            _Tutorial_bAwaitCamera = 0;
         }
-        if (lbl_803EB324 == 0 && pEntry->mUnknown24 == 1) {
-            if (fn_80156C8C(0x400000000ULL)) {
-                fn_80156F30();
+        if (_Tutorial_bAwaitCamera == 0 && pEntry->mUnknown24 == 1) {
+            if (TutorialAreMovesDone(0x400000000ULL)) {
+                TutorialHidePrompts();
             } else {
-                fn_80158BB4(pEntry->mPrompts);
+                TutorialBlinkPrompts(pEntry->mPrompts);
             }
         }
         if (mUnknown4 == 0 && SpchIGIsNarratorIdle()) {
@@ -1945,68 +1951,68 @@ void Class_802A3B10::vfn_05(float dt)
             fn_8009D944(0);
             mUnknown4 = 1;
         }
-        Class_80297CE8::vfn_05(dt);
+        PreSnapPhase::OnUpdate(dt);
     }
 }
 
-int Class_802A3B10::vfn_12()
+int TutorialPreSnap::CanSnap()
 {
     int result = 0;
 
     if (mUnknown4 != 0 && (unsigned int)fn_8009D990(0) <= 2) {
-        result = Class_80297CE8::vfn_12();
+        result = PreSnapPhase::CanSnap();
     }
     return result;
 }
 
-void Class_802A3AD8::vfn_03()
+void TutorialLivePlay::OnEnter()
 {
-    Step_802DEC08 *pEntry;
+    TutorialStep_t *pEntry;
 
-    Class_80297AB8::vfn_03();
-    fn_80156D1C(0);
+    LivePlayPhase::OnEnter();
+    TutorialSetStepDone(0);
     fn_8013C6F0(CamGameGetCamera(5));
-    pEntry = fn_801568F8()->vfn_07();
+    pEntry = TutorialGetLessonObject()->GetStep();
     if (pEntry->mUnknown24 != 1) {
-        fn_80156900(pEntry->mUnknown20, 60);
-        fn_80156928();
+        TutorialBlinkInit(pEntry->mUnknown20, 60);
+        TutorialBlinkRestart();
     } else {
-        fn_80156F30();
+        TutorialHidePrompts();
     }
 }
 
-void Class_802A3AD8::vfn_04(float dt)
+void TutorialLivePlay::OnUpdate(float dt)
 {
-    Class_80297AB8::vfn_04(dt);
-    if (fn_80156D14() == 0) {
-        Step_802DEC08 *pEntry = fn_801568F8()->vfn_07();
+    LivePlayPhase::OnUpdate(dt);
+    if (TutorialIsStepDone() == 0) {
+        TutorialStep_t *pEntry = TutorialGetLessonObject()->GetStep();
 
         if (pEntry->mUnknown24 != 1) {
-            fn_80158BB4(pEntry->mPrompts);
+            TutorialBlinkPrompts(pEntry->mPrompts);
         }
-        if (fn_80156C8C(pEntry->mMask)) {
-            fn_80156E9C(pEntry->mPrompts, 1, 1);
-            fn_80156D1C(1);
-            fn_80156D24(pEntry->mDuration);
+        if (TutorialAreMovesDone(pEntry->mMask)) {
+            TutorialShowPrompts(pEntry->mPrompts, 1, 1);
+            TutorialSetStepDone(1);
+            TutorialTimerStart(pEntry->mDuration);
         }
-    } else if (fn_80156DC4()) {
+    } else if (TutorialTimerIsDone()) {
         fn_80178370();
     }
 }
 
-void Class_802A3A48::vfn_03(float dt)
+void TutorialPostPlay::OnEnter(float dt)
 {
-    Step_802DEC08 *pEntry = fn_801568F8()->vfn_07();
+    TutorialStep_t *pEntry = TutorialGetLessonObject()->GetStep();
 
     mUnknown5 = 0;
     mUnknown6 = pEntry->mUnknown12 * 60.0f;
     mUnknown4 = 0;
     mUnknown12 = 0;
-    Class_80297C60::vfn_03(dt);
-    fn_80156F30();
+    PostPlayPhase::OnEnter(dt);
+    TutorialHidePrompts();
 }
 
-void Class_802A3A48::vfn_04(float dt)
+void TutorialPostPlay::OnUpdate(float dt)
 {
     unsigned short id;
     unsigned short other;
@@ -2014,16 +2020,16 @@ void Class_802A3A48::vfn_04(float dt)
     if (mUnknown5 == 0) {
         if (mUnknown6 > 0) {
             if (mUnknown6 == 2) {
-                if (fn_80156D14()) {
+                if (TutorialIsStepDone()) {
                     AudmonEventPostArgs(0x86, 0, 0, 0, 0);
                 } else {
                     AudmonEventPostArgs(0x87, 0, 0, 0, 0);
                 }
                 mUnknown6--;
             } else if (mUnknown6 == 1) {
-                if (SpchIGIsNarratorIdle() || !fn_80156D14()) {
+                if (SpchIGIsNarratorIdle() || !TutorialIsStepDone()) {
                     mUnknown6--;
-                    lbl_803EB325 = 0;
+                    _Tutorial_bKeyPromptShown = 0;
                 }
             } else {
                 mUnknown6--;
@@ -2032,19 +2038,19 @@ void Class_802A3A48::vfn_04(float dt)
             RumbleEnable(0);
             RumbleStopAll();
             fn_8006F824(1);
-            fn_80158C04();
+            ShowResults();
             mUnknown5 = 1;
         }
     } else {
         int key = fn_800B81A4();
 
-        if (key != 0xFF || lbl_803EB325 != 0) {
-            if (lbl_803EB325 == 0) {
+        if (key != 0xFF || _Tutorial_bKeyPromptShown != 0) {
+            if (_Tutorial_bKeyPromptShown == 0) {
                 int args[2];
 
                 args[0] = key;
                 args[1] = 1;
-                lbl_803EB325 = 1;
+                _Tutorial_bKeyPromptShown = 1;
                 fn_80218FC4(gUISMainInfo, 1, 2, 2, args);
                 fn_802195E4(gUISMainInfo, 1, 2);
             } else {
@@ -2056,7 +2062,7 @@ void Class_802A3A48::vfn_04(float dt)
                 }
                 if (!busy) {
                     fn_802195E4(gUISMainInfo, 1, 3);
-                    lbl_803EB325 = 0;
+                    _Tutorial_bKeyPromptShown = 0;
                 }
             }
         } else if (MsgBoxIsClosed()) {
@@ -2064,15 +2070,15 @@ void Class_802A3A48::vfn_04(float dt)
                 switch (MsgGameTakePendingChoice()) {
                 case 1:
                     mUnknown8++;
-                    fn_801566DC(0);
+                    TutorialSetAnnounceStep(0);
                     mUnknown12 = 0;
                     RumbleEnable(1);
-                    vfn_15();
+                    ForceFinish();
                     break;
                 case 2:
                     if (mUnknown12 == 1) {
                         mUnknown12 = 2;
-                        MsgBoxShow("Tutorial Results", lbl_802DF120, "|^No|Yes");
+                        MsgBoxShow("Tutorial Results", _Tutorial_szQuitConfirm, "|^No|Yes");
                     } else {
                         RumbleEnable(1);
                         fn_80072C90(0xFA, 0);
@@ -2085,8 +2091,8 @@ void Class_802A3A48::vfn_04(float dt)
                 case 3:
                     AudmonEventPostArgs(0x88, 0, 0, 0, 0);
                     mUnknown8 = 0;
-                    fn_801566DC(1);
-                    if (!fn_801569C8(fn_801568F0())) {
+                    TutorialSetAnnounceStep(1);
+                    if (!TutorialCompleteStep(TutorialGetLesson())) {
                         mUnknown12 = 0;
                     } else {
                         char text[256];
@@ -2094,34 +2100,34 @@ void Class_802A3A48::vfn_04(float dt)
 
                         mUnknown12 = 0;
                         mUnknown4 = 1;
-                        pInfo = fn_801568F8()->vfn_09();
+                        pInfo = TutorialGetLessonObject()->GetDoneText();
                         if (pInfo == 0) {
                             pInfo = "";
                         }
-                        fn_801C2D88(text, 0xFF, "%s\n\n%s", lbl_802DF140, pInfo);
+                        fn_801C2D88(text, 0xFF, "%s\n\n%s", _Tutorial_szCategoryDone, pInfo);
                         MsgBoxShow("Tutorial Results", text, "|^Done");
                     }
                     break;
                 }
                 StyleTrackerEndPlay();
             }
-            Class_80297C60::vfn_04(dt);
+            PostPlayPhase::OnUpdate(dt);
         }
     }
 }
 
-void Class_802A3A48::vfn_06()
+void TutorialPostPlay::OnSequenceStart()
 {
 }
 
-void Class_802A3A48::vfn_05()
+void TutorialPostPlay::OnExit()
 {
     Ball_t *pBall;
-    Pair_80177FE0 point;
+    FieldSpot_t point;
     Vector_80039F5C pos;
     int angles[3];
 
-    Class_80297C60::vfn_05();
+    PostPlayPhase::OnExit();
     fn_8011DF90();
     if (BallGetCurrentHolder()) {
         BallReleaseStill(BallGetCurrent(), 5, 0);
@@ -2147,34 +2153,34 @@ void Class_802A3A48::vfn_05()
     CamGameSetFocusAll(1, BallGetCurrentIndex());
 }
 
-void Class_802A3A48::vfn_07()
+void TutorialPostPlay::ShowResultText()
 {
 }
 
-void Class_802A3A48::vfn_10(float dt)
+void TutorialPostPlay::UpdateCue(float dt)
 {
 }
 
-int Class_802A3A48::vfn_11(float dt)
+int TutorialPostPlay::IsHeld(float dt)
 {
     fn_800AE988();
     return 0;
 }
 
-int Class_802A3A48::vfn_12(float dt)
+int TutorialPostPlay::GetBusy(float dt)
 {
     fn_8009B924();
     return 0;
 }
 
-void Class_802A3A48::vfn_14(float dt)
+void TutorialPostPlay::Finish(float dt)
 {
     fn_8003A450();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }
     if (mUnknown4 != 0) {
-        if (!fn_80157080()) {
+        if (!TutorialFinishCategory()) {
             fn_80072C90(0xFA, 0);
             InGameStop();
         }
@@ -2183,20 +2189,20 @@ void Class_802A3A48::vfn_14(float dt)
     }
 }
 
-void Class_802A3990::vfn_11(int a)
+void TutorialRuleSet::ResetGame(int a)
 {
-    Class_802A56E8::vfn_11(a);
+    ScrmRuleSet::ResetGame(a);
 }
 
-int Class_802A3990::vfn_12()
+int TutorialRuleSet::UsesBothTeams()
 {
     return 1;
 }
 
-void Class_802A3990::vfn_10()
+void TutorialRuleSet::ResetPlaySpot()
 {
     fn_80177F88(1);
-    Class_802A56E8::vfn_10();
+    ScrmRuleSet::ResetPlaySpot();
     if (fn_80177F70() == 6) {
         fn_801787FC(1, 0);
         fn_801787FC(0, 0);
@@ -2209,12 +2215,12 @@ void Class_802A3990::vfn_10()
     fn_80178CD8(0);
 }
 
-int Class_802A3990::vfn_02()
+int TutorialRuleSet::GetWinner()
 {
     return 2;
 }
 
-int Class_802A3990::vfn_08()
+int TutorialRuleSet::IsTimed()
 {
     return 0;
 }

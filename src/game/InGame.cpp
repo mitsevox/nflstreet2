@@ -5,7 +5,7 @@
 #include "game/PadInput.h"
 #include "game/FlowManagerC.h"
 #include "game/Class_80297B90.h"
-#include "game/Class_80297BF8.h"
+#include "game/PreGamePhase.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameModeType.h"

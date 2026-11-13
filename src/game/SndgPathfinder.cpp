@@ -543,7 +543,7 @@ int fn_800BA6F8(void);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
 int CamGameGetHeading(int index);
-unsigned int fn_801568F0(void);
+unsigned int TutorialGetLesson(void);
 int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
 Point_8017886C fn_80178070(void);
@@ -3126,7 +3126,7 @@ extern "C" void SndgApplyVolumeOptions(void)
 extern "C" void SndgSpchHandleEvent(AudmonEvent_t *pEvent)
 {
     if (!fn_800BA6F8() && SpchIGIsEnabled()) {
-        if (GameModeTypeGet() == 11 && fn_801568F0() <= 4) {
+        if (GameModeTypeGet() == 11 && TutorialGetLesson() <= 4) {
             switch (pEvent->mType) {
             case 0x85:
                 SpchIGSayTutorialIntro(pEvent->mUnknown10.mValue, pEvent->mUnknown14);

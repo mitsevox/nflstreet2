@@ -23,7 +23,7 @@ int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
-void fn_80156C78(int a, int b);
+void TutorialSetMoveDone(int a, int b);
 int fn_801783AC(int bit);
 int MathAngleDiff(int a, int b);
 
@@ -53,11 +53,11 @@ extern "C" unsigned char PlayerMoveStickVariant(Object_80039F5C *p)
         if (ax > ay) {
             if (ax > lbl_803EACB0) {
                 result = p->mUnknown2923[x > 0.0f ? 1 : 3];
-                fn_80156C78(20, 1);
+                TutorialSetMoveDone(20, 1);
             }
         } else if (ay > lbl_803EACB0) {
             result = p->mUnknown2923[y > 0.0f ? 0 : 2];
-            fn_80156C78(20, 1);
+            TutorialSetMoveDone(20, 1);
         }
     }
     return result;

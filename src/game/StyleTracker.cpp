@@ -250,7 +250,7 @@ int fn_800A8F84(unsigned char index);
 void fn_800AE7F0(int a, int b, Object_80039F5C *p);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
-void fn_80156C78(int a, int b);
+void TutorialSetMoveDone(int a, int b);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_80177C38(void);
 int fn_80177F70(void);
@@ -965,7 +965,7 @@ extern "C" void StyleTrackerFinishStylePass(void) {
         if (_StyleTracker_pState->mNinjaPass) {
             StyleTrackerProcessEvent(11, fn_80178348(), 1);
             _StyleTracker_pState->mNinjaPass = 0;
-            fn_80156C78(24, 1);
+            TutorialSetMoveDone(24, 1);
         } else {
             StyleTrackerProcessEvent(10, fn_80178348(), 1);
         }
@@ -1754,7 +1754,7 @@ extern "C" void StyleTrackerRefreshUserPlayers(void) {
 extern "C" void StyleTrackerOnPumpFake(Object_80039F5C *p) {
     StyleTrackerTraceEvent(28);
     if (fn_801787A0() == 0) {
-        if (PlayerMoveGetKind(p) == 0) fn_80156C78(3, 1);
+        if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(3, 1);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
         fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
@@ -1811,7 +1811,7 @@ extern "C" void StyleTrackerResolveStiffArm(Object_80039F5C *p, int flag) {
             _StyleTracker_pState->mStiffArmSucceeded = 1;
             _StyleTracker_pState->mpStiffArmPlayer = p;
             StyleTrackerFinishStiffArm(1);
-            fn_80156C78(16, 1);
+            TutorialSetMoveDone(16, 1);
         } else {
             StyleTrackerFinishStiffArm(0);
         }
@@ -1845,7 +1845,7 @@ extern "C" void StyleTrackerBeginJuke(Object_80039F5C *p, int kind) {
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0 && kind != 0) {
-            if (PlayerMoveGetKind(p) == 0) fn_80156C78(4, 1);
+            if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(4, 1);
             _StyleTracker_pState->mMoveFallback = 1;
             accept = 1;
         }
@@ -1877,15 +1877,15 @@ extern "C" void StyleTrackerFinishJuke(Object_80039F5C *p) {
         if (_StyleTracker_pState->mWallMove != 0) {
             id = 42;
             b = 4;
-            fn_80156C78(6, 1);
+            TutorialSetMoveDone(6, 1);
         } else if (_StyleTracker_pState->mStyleMove != 0) {
             id = 38;
             b = 1;
-            fn_80156C78(5, 1);
+            TutorialSetMoveDone(5, 1);
         } else {
             id = 34;
             if (PlayerMoveGetKind(p) == 0) {
-                fn_80156C78(4, 1);
+                TutorialSetMoveDone(4, 1);
             }
         }
         if (_StyleTracker_pState->mFakeout != 0) {
@@ -1896,10 +1896,10 @@ extern "C" void StyleTrackerFinishJuke(Object_80039F5C *p) {
                 b = 0;
                 if (id == 42) {
                     id = 110;
-                    fn_80156C78(6, 1);
+                    TutorialSetMoveDone(6, 1);
                 } else if (id == 38) {
                     id = 109;
-                    fn_80156C78(5, 1);
+                    TutorialSetMoveDone(5, 1);
                 }
             }
             a = 0;
@@ -1947,7 +1947,7 @@ extern "C" void StyleTrackerBeginSpin(Object_80039F5C *p, int kind, unsigned cha
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0) {
-            if (PlayerMoveGetKind(p) == 0) fn_80156C78(7, 1);
+            if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(7, 1);
             if (kind != 0) { _StyleTracker_pState->mMoveFallback = accept = 1; }
         }
         Vector_80039F5C position;
@@ -1975,11 +1975,11 @@ extern "C" void StyleTrackerFinishSpin(Object_80039F5C *p) {
             if (_StyleTracker_pState->mStyleMove != 0) {
                 b = 1;
                 StyleTrackerProcessEvent(51, fn_80178308(), 1);
-                fn_80156C78(8, 1);
+                TutorialSetMoveDone(8, 1);
             } else {
                 StyleTrackerProcessEvent(47, fn_80178308(), 1);
                 if (PlayerMoveGetKind(p) == 0) {
-                    fn_80156C78(7, 1);
+                    TutorialSetMoveDone(7, 1);
                 }
             }
             pRecord = fn_800B15FC();
@@ -1994,16 +1994,16 @@ extern "C" void StyleTrackerFinishSpin(Object_80039F5C *p) {
             if (_StyleTracker_pState->mStyleMove != 0) {
                 if (_StyleTracker_pState->mMoveFallback != 0) {
                     StyleTrackerProcessEvent(111, fn_80178308(), 1);
-                    fn_80156C78(8, 1);
+                    TutorialSetMoveDone(8, 1);
                 } else {
                     b = 1;
                     StyleTrackerProcessEvent(50, fn_80178308(), 1);
-                    fn_80156C78(8, 1);
+                    TutorialSetMoveDone(8, 1);
                 }
             } else {
                 StyleTrackerProcessEvent(46, fn_80178308(), 1);
                 if (PlayerMoveGetKind(p) == 0) {
-                    fn_80156C78(7, 1);
+                    TutorialSetMoveDone(7, 1);
                 }
             }
             pRecord = fn_800B15FC();
@@ -2063,7 +2063,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
     if (active != 0) {
         if (fn_801787A0() != 0) active = 0;
         if (active != 0) {
-            fn_80156C78(15, 1);
+            TutorialSetMoveDone(15, 1);
             if (fn_801787A0() == 0 && _StyleTracker_pState->mRunActive == 0) {
                 StyleTrackerTraceEvent(53); StyleTrackerFinishOtherMoves(11);
             }
@@ -2165,9 +2165,9 @@ extern "C" void StyleTrackerAwardDive(Object_80039F5C *p, int kind, unsigned cha
         StyleTrackerFinishOtherMoves(0);
         int id = 52;
         switch (kind) {
-        case 0: if (PlayerMoveGetKind(p) == 0) fn_80156C78(12, 1); break;
-        case 1: id = 53; fn_80156C78(13, 1); break;
-        case 4: id = 54; fn_80156C78(14, 1); break;
+        case 0: if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(12, 1); break;
+        case 1: id = 53; TutorialSetMoveDone(13, 1); break;
+        case 4: id = 54; TutorialSetMoveDone(14, 1); break;
         }
         _StyleTracker_pState->mDiveSubtype = flag;
         fn_800AE7F0(12, p->mIdBytes[2], p);
@@ -2220,7 +2220,7 @@ extern "C" void StyleTrackerBeginHurdle(Object_80039F5C *p, int kind, unsigned c
         }
     }
     if (accept == 0) {
-        if (PlayerMoveGetKind(p) == 0) fn_80156C78(9, 1);
+        if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(9, 1);
         if (kind != 0) { _StyleTracker_pState->mMoveFallback = accept = 1; }
     }
     Vector_80039F5C position;
@@ -2252,7 +2252,7 @@ extern "C" void StyleTrackerFinishHurdle(Object_80039F5C *p) {
                 a = 4;
                 StyleTrackerProcessEvent(63, fn_80178308(), 1);
             }
-            fn_80156C78(11, 1);
+            TutorialSetMoveDone(11, 1);
         } else if (_StyleTracker_pState->mStyleMove != 0) {
             if (_StyleTracker_pState->mMoveFallback != 0) {
                 StyleTrackerProcessEvent(112, fn_80178308(), 1);
@@ -2260,11 +2260,11 @@ extern "C" void StyleTrackerFinishHurdle(Object_80039F5C *p) {
                 a = 1;
                 StyleTrackerProcessEvent(60, fn_80178308(), 1);
             }
-            fn_80156C78(10, 1);
+            TutorialSetMoveDone(10, 1);
         } else {
             StyleTrackerProcessEvent(57, fn_80178308(), 1);
             if (PlayerMoveGetKind(p) == 0) {
-                fn_80156C78(9, 1);
+                TutorialSetMoveDone(9, 1);
             }
         }
         pRecord = fn_800B15FC();
@@ -2306,11 +2306,11 @@ extern "C" void StyleTrackerAwardCatch(Object_80039F5C *p) {
                     id = 22;
                 }
                 fn_8017C9E4(p->mIdBytes[2], 1);
-                fn_80156C78(38, 1);
+                TutorialSetMoveDone(38, 1);
             } else if (_StyleTracker_pState->mCatchVariant != 0) {
                 id = 24;
                 fn_8017C674(p->mIdBytes[2], 1);
-                fn_80156C78(37, 1);
+                TutorialSetMoveDone(37, 1);
             } else {
                 id = 20;
             }
@@ -2319,7 +2319,7 @@ extern "C" void StyleTrackerAwardCatch(Object_80039F5C *p) {
             if (_StyleTracker_pState->mNinjaPass != 0) {
                 id = 114;
             }
-            fn_80156C78(38, 1);
+            TutorialSetMoveDone(38, 1);
         } else {
             id = 19;
             if (_StyleTracker_pState->mCatchVariant != 0) {
@@ -2357,18 +2357,18 @@ extern "C" void StyleTrackerOnInterception(int a, Object_80039F5C *p) {
     if (a != 0) {
         if (_StyleTracker_pState->mCatchVariant != 0) {
             StyleTrackerAwardImmediateEvent(75, fn_80178360());
-            fn_80156C78(22, 1);
+            TutorialSetMoveDone(22, 1);
         } else {
             StyleTrackerAwardImmediateEvent(74, fn_80178360());
-            fn_80156C78(22, 1);
+            TutorialSetMoveDone(22, 1);
         }
         fn_8017C9B8(p->mIdBytes[2], 1);
     } else if (_StyleTracker_pState->mCatchVariant != 0) {
         StyleTrackerAwardImmediateEvent(73, fn_80178360());
-        fn_80156C78(22, 1);
+        TutorialSetMoveDone(22, 1);
     } else {
         StyleTrackerAwardImmediateEvent(72, fn_80178360());
-        fn_80156C78(22, 1);
+        TutorialSetMoveDone(22, 1);
     }
     fn_800AE7F0(11, fn_80178360(), p);
     BallGetPosition(BallGetCurrent(), &pos);
@@ -2401,10 +2401,10 @@ extern "C" void StyleTrackerFinishPitch(int team, int a, int b) {
 
             if (_StyleTracker_pState->mStylePitch != 0) {
                 StyleTrackerProcessEvent(18, team, count);
-                fn_80156C78(18, 1);
+                TutorialSetMoveDone(18, 1);
             } else {
                 StyleTrackerProcessEvent(15, team, count);
-                fn_80156C78(17, 1);
+                TutorialSetMoveDone(17, 1);
             }
         } else {
             Vector_80039F5C pos;
@@ -2446,7 +2446,7 @@ extern "C" void StyleTrackerBeginDefensiveMove(Object_80039F5C *p, int flag) {
             _StyleTracker_pState->mDefensiveMoveActive = 1;
             _StyleTracker_pState->mStyleDefensiveMove = flag;
             if (flag != 0 && fn_801BE648(p->mpUnknown792) != 246 && fn_801BE648(p->mpUnknown792) != 242) {
-                fn_80156C78(39, 1);
+                TutorialSetMoveDone(39, 1);
             }
             StyleTrackerProcessEvent(81, p->mIdBytes[2], 1);
         }

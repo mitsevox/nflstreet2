@@ -590,8 +590,8 @@ void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 void fn_8010CEB8(Object_80039F5C *p, int kind);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_801485D4(void);
-int fn_80156704(void);
-unsigned char fn_80156D14(void);
+int TutorialIsActive(void);
+unsigned char TutorialIsStepDone(void);
 int fn_80178348(void);
 int fn_80178360(void);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -2947,7 +2947,7 @@ struct State_80102664 {
 };
 
 extern "C" int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-extern "C" void fn_80156C78(int a, int b);
+extern "C" void TutorialSetMoveDone(int a, int b);
 extern unsigned int lbl_802DAB54[];
 
 extern "C" int fn_80102664(Object_80039F5C *p)
@@ -2973,7 +2973,7 @@ extern "C" int fn_80102664(Object_80039F5C *p)
         if (((&input.mUnknown92)[bit >> 3] & (1 << (bit & 7))) != (1 << (bit & 7))) {
             pState->mUnknown0 = 0;
             if (fn_800FFFB0(p) != 0 && (pRecord->mUnknown1D != 4 && pRecord->mUnknown1D != 5)) {
-                fn_80156C78(29, 1);
+                TutorialSetMoveDone(29, 1);
             }
         }
     } else if (pRecord->mUnknown1D != 4 && pRecord->mUnknown1D != 5 && fn_800FFFB0(p) == 0) {
@@ -3038,13 +3038,13 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
                         if (PlayerMoveGetKind(p) == 0) {
                             switch (i) {
                             case 0:
-                                fn_80156C78(26, 1);
+                                TutorialSetMoveDone(26, 1);
                                 break;
                             case 1:
-                                fn_80156C78(27, 1);
+                                TutorialSetMoveDone(27, 1);
                                 break;
                             case 2:
-                                fn_80156C78(28, 1);
+                                TutorialSetMoveDone(28, 1);
                                 break;
                             }
                         }
@@ -3060,7 +3060,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
         if (input.mUnknown93 & 0x80) {
             PassIconsHide();
             CamGameSetModeAll(1);
-            fn_80156C78(19, 1);
+            TutorialSetMoveDone(19, 1);
         }
         if ((input.mUnknown95 & 8) && fn_800CA5CC(p, 0, 1) != 0) {
             p->mUnknown512.mUnknown15 = 1;
@@ -3333,7 +3333,7 @@ extern "C" unsigned char fn_8010B5B0(Object_80039F5C *p, unsigned char *pOut) {
                 break;
             }
         }
-    } else if (!fn_80156704() || fn_801485D4()) {
+    } else if (!TutorialIsActive() || fn_801485D4()) {
         switch (mode) {
         case 0:
         case 1:
@@ -3348,7 +3348,7 @@ extern "C" unsigned char fn_8010B5B0(Object_80039F5C *p, unsigned char *pOut) {
             pOut[count++] = 9;
             break;
         }
-    } else if (fn_80156D14()) {
+    } else if (TutorialIsStepDone()) {
         pOut[count++] = 8;
     } else {
         pOut[count++] = 9;
@@ -3392,7 +3392,7 @@ extern "C" unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable)
 extern "C" int fn_8010B924(Object_80039F5C *p) {
     int kind;
 
-    if (!fn_80156704() || fn_801485D4()) {
+    if (!TutorialIsActive() || fn_801485D4()) {
         int mode = fn_800A2178();
         int team = p->mIdBytes[2];
 
@@ -3413,7 +3413,7 @@ extern "C" int fn_8010B924(Object_80039F5C *p) {
                 break;
             }
         }
-    } else if (fn_80156D14()) {
+    } else if (TutorialIsStepDone()) {
         kind = 1;
         if (fn_800B65A0(p->mIdBytes[2]) != 255) {
             kind = 4;

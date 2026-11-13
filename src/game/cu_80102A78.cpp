@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
-#include "game/Class_80297CE8.h"
+#include "game/PreSnapPhase.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -98,7 +98,7 @@ struct State_80102664 {
     unsigned char mUnknown3;
 };
 
-extern "C" void fn_80156C78(int a, int b);
+extern "C" void TutorialSetMoveDone(int a, int b);
 extern "C" {
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
@@ -150,7 +150,7 @@ void fn_80103F80(Ball_t *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, f
                  float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
 void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
-int fn_80156C8C(unsigned long long mask);
+int TutorialAreMovesDone(unsigned long long mask);
 float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void fn_80176838(Object_80039F5C *p);
@@ -319,8 +319,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     fn_800B260C(0);
     BallReleaseStill(pBall, 4, 0);
     pEvent = fn_800B15FC();
-    if (fn_80156C8C(0x20000000) == 0) {
-        fn_80156C78(42, 1);
+    if (TutorialAreMovesDone(0x20000000) == 0) {
+        TutorialSetMoveDone(42, 1);
     }
     fn_8009BD2C(p, &pEvent->mUnknown0);
     pEvent->mUnknownC = p->mMotion.mPos.mX;
