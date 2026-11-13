@@ -12872,6 +12872,25 @@
       ]
     },
     {
+      "source": "src/engine/auxram.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional whole-file unit row 0x801C1D54-0x801C1F54 (auxram.c), five function/name rows, compiler rows engine_c_fastmath 0x801B9D00-0x801C1D84, 0x801C1D84-0x801C1D98 and 0x801C1D98-0x801C1F54, the transfer-function source-form row, and data/name rows for its two .sbss words 0x803ECEC4-0x803ECECC. Complete native text and small data.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1D54",
+          "end": "0x801C1F54"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEC4",
+          "end": "0x803ECECC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/ctype.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801C1F54-0x801C1F94 (src/engine/ctype.c) and its data rows; every function exact, promoted from comparison-only.",

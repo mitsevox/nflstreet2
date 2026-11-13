@@ -77,11 +77,11 @@ extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9D2C(int handle);
 extern int fn_801C9D18(int handle);
 extern int FileGetSize(int handle);
-extern void fn_801C1D98(unsigned int dest, void *pSrc, unsigned int size);
+extern void AuxRamUpload(unsigned int dest, void *pSrc, unsigned int size);
 extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 
 extern int ResLooseFileOpen(ResFile_t *pRes, int index);
-extern void fn_801C1E78(void *pDest, unsigned int source, unsigned int length);
+extern void AuxRamDownload(void *pDest, unsigned int source, unsigned int length);
 extern int fn_801C2D88(char *pBuffer, unsigned int size, const char *pFormat, ...);
 extern char _Res_szDiskLabelByHandle[];
 extern char _Res_szDiskLabelByName[];
@@ -626,7 +626,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                 flags = (_Res_uMemAllocFlags & ~2) | 4;
             }
             src.pData = fn_801D2BB0(1, alignedSize, flags, 0);
-            fn_801C1E78(src.pData, pRes->mBaseOffset + _ResGetBlockOffset(pRes, index), alignedSize);
+            AuxRamDownload(src.pData, pRes->mBaseOffset + _ResGetBlockOffset(pRes, index), alignedSize);
             src.mSize = compressedSize;
             src.mPos = 0;
             dst.mSize = size;
@@ -655,7 +655,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             unsigned int alignedSize = (size + 31) & ~31;
             void *pData = fn_801D2BB0(1, alignedSize, _Res_uMemAllocFlags, 0);
 
-            fn_801C1E78(pData, pRes->mBaseOffset + _ResGetBlockOffset(pRes, index), alignedSize);
+            AuxRamDownload(pData, pRes->mBaseOffset + _ResGetBlockOffset(pRes, index), alignedSize);
             if (address != *pBuffer) {
                 memcpy((void *)*pBuffer, pData, size);
                 fn_801D2BD0(pData);
@@ -1157,7 +1157,7 @@ static int _ResInitRamResourceFile(ResFile_t *pRes, char *pName, unsigned int fi
                 pRes->mDataSize = block.mSize;
                 if (pRes->mState == 3) {
                     pCopy = fn_801D2BB0(pRes->mMode, block.mSize, _Res_uMemAllocFlags, 0);
-                    fn_801C1D98((unsigned int)pCopy, (void *)(pRes->mBaseAddr + position), block.mSize);
+                    AuxRamUpload((unsigned int)pCopy, (void *)(pRes->mBaseAddr + position), block.mSize);
                     fn_801D310C((void *)pRes->mBaseAddr, position, 0, 0);
                     pRes->mBaseOffset = (unsigned int)pCopy;
                 } else {

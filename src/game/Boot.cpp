@@ -28,8 +28,8 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int ProgressivePopupIsOn(void);
 int MemCardUIIsResetLocked(void);
 void UISGameRefreshAll(void);
-int fn_801C1D54(void);
-void fn_801C1D84(void);
+int AuxRamInit(void);
+void AuxRamShutdown(void);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
 void FileDebugProcess(void);
@@ -271,13 +271,13 @@ void BootSetupMemPools(void)
     }
     pUnload->mUnknownC = (int)lbl_800034A0;
     pUnload->mUnknown10 = (char *)ChallengeGoalCheckMargin - lbl_800034A0;
-    pAuxRam->mUnknownC = fn_801C1D54();
+    pAuxRam->mUnknownC = AuxRamInit();
     pAuxRam->mUnknown10 = 0xAFC000 - pAuxRam->mUnknownC;
 }
 
 void BootShutdownMemPools(void)
 {
-    fn_801C1D84();
+    AuxRamShutdown();
 }
 
 static void _BootCheckMovieAbort(int a)

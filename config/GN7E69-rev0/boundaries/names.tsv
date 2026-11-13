@@ -380,10 +380,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x801C10A4	52	LLAnimTexUnbindTexture	name	llanimtexlib.c	llanimtexlib.c
 0x801C10D8	4	LLAnimTexLibInit	name	llanimtexlib.c	llanimtexlib.c
 0x801C10DC	4	LLAnimTexLibShutdown	name	llanimtexlib.c	llanimtexlib.c
-0x801C1D54	48	AuxRamInit	gap	auxram.c	-
-0x801C1D88	16	AuxRamARQCallback	size	auxram.c	-
-0x801C1D98	224	AuxRamUpload	size	auxram.c	-
-0x801C1E78	220	AuxRamDownload	size	auxram.c	-
+0x801C1D54	48	AuxRamInit	name	auxram.c	auxram.c
+0x801C1D88	16	AuxRamARQCallback	name	auxram.c	auxram.c
+0x801C1D98	224	AuxRamUpload	name	auxram.c	auxram.c
+0x801C1E78	220	AuxRamDownload	name	auxram.c	auxram.c
 0x801C1F54	32	toupper	name	ctype.c	ctype.c
 0x801C1F74	32	tolower	name	ctype.c	ctype.c
 0x801C1F94	40	memset	size	memory.c	memory.c

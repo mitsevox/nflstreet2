@@ -17,7 +17,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x801BF8DC	0x801BFEF8	open	-	-	animwgt.c	AnimSequencer.c
 .text	-	0x801C00F8	0x801C06E8	open	-	-	AnimSequencer.c	animTexLib.c
 .text	0x801C0E04	0x801C0E04	0x801C0E04	alignment	0	9	animTexLib.c	llanimtexlib.c
-.text	-	0x801C10E0	0x801C1F54	open	-	-	llanimtexlib.c	ctype.c
+.text	-	0x801C10E0	0x801C1D54	open	-	-	llanimtexlib.c	auxram.c
+.text	0x801C1F54	0x801C1F54	0x801C1F54	data	0	0	auxram.c	ctype.c
 .text	0x801C1F94	0x801C1F94	0x801C1F94	alignment	0	0	ctype.c	memory.c
 .text	-	0x801C20A0	0x801C2EB4	open	-	-	memory.c	string.c
 .text	-	0x801C32CC	0x801C33E8	open	-	-	string.c	camera.c

@@ -34347,46 +34347,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C1D54.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1F54 (src/engine/cu_801C1D54.c, auxram.c), function rows and compiler rows engine_c_fastmath (0x801B9D00-0x801C1D84 and 0x801C1D84-0x801C1F54). Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1D54",
-          "end": "0x801C1F54"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C1D54",
-          "start": "0x801C1D54",
-          "end": "0x801C1D84"
-        },
-        {
-          "symbol": "fn_801C1D84",
-          "start": "0x801C1D84",
-          "end": "0x801C1D88"
-        },
-        {
-          "symbol": "fn_801C1D88",
-          "start": "0x801C1D88",
-          "end": "0x801C1D98"
-        },
-        {
-          "symbol": "fn_801C1D98",
-          "start": "0x801C1D98",
-          "end": "0x801C1E78"
-        },
-        {
-          "symbol": "fn_801C1E78",
-          "start": "0x801C1E78",
-          "end": "0x801C1F54"
-        }
-      ]
-    },
-    {
       "source": "src/engine/spchevnt.c",
       "profile": "speech_cxx",
       "evidence": "evidence.tsv provisional unit row 0x801AE3E4-0x801AF60C (src/engine/spchevnt.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
