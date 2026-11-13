@@ -1,3 +1,8 @@
+/* The in-game screens: message handlers and the text they fill for the play
+   call screen (street balls and normal balls, audibles, flips, Max Protect and
+   Prediction), the pause screen, the game clock, the end-of-game choices
+   (Continue, Rematch, Exit), team stat leaders, the scoring summary of each
+   possession, challenge rewards and the NFL Legends unlock message. */
 #include "game/Class_80148A58.h"
 #include "game/StyleTracker.h"
 #include "game/Object_8008044C.h"
@@ -1646,8 +1651,25 @@ struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
 struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
 Object_8008044C lbl_80309F98;
 extern Stats_8005A7EC lbl_80309FC4[2];
-extern const Weight_8005A8D0 lbl_8028EAE8[12];
-extern const Category_8005AB04 lbl_8028EB78[11];
+static const Weight_8005A8D0 lbl_8028EAE8[12] = {
+    {0x464F4750, 0x64746167, 6.0f}, {0x464F4750, 0x64747567, 6.0f}, {0x464F4750, 0x64746367, 6.0f},
+    {0x464F4750, 0x6E696167, 0.0f}, {0x464F4750, 0x75667567, 0.0f}, {0x45444750, 0x6E697367, 6.0f},
+    {0x45444750, 0x66666C67, 3.0f}, {0x45444750, 0x72666C67, 3.0f}, {0x45444750, 0x6B736C67, 3.0f},
+    {0x45444750, 0x61746467, 1.0f}, {0x45444750, 0x74697367, 6.0f}, {0x45444750, 0x74666C67, 6.0f},
+};
+static const Category_8005AB04 lbl_8028EB78[11] = {
+    {"Tackles", 1, 1, {9, 13}},
+    {"Rushing TDs", 1, 1, {1, 13}},
+    {"Receiving TDs", 1, 1, {2, 13}},
+    {"Forced Fumbles", 1, 1, {6, 13}},
+    {"Interceptions", 1, 1, {5, 13}},
+    {"Fumble Recoveries", 0, 1, {7, 13}},
+    {"Sacks", 1, 1, {8, 13}},
+    {"Defensive TDs", 1, 2, {10, 11}},
+    {"Passing TDs", 1, 1, {0, 13}},
+    {"Thrown INTs", 0, 1, {3, 13}},
+    {"Fumbles", 0, 1, {4, 13}},
+};
 extern int lbl_802D4D0C[4];
 extern const char *lbl_802D4D1C[9];
 extern const float lbl_803ED6A4,lbl_803ED6A8;
@@ -2097,6 +2119,11 @@ void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue
     if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);}
     else if(mode==1) {fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);}
 }
+int lbl_802D4D0C[4] = {0, 0, 0x40, 0x40};
+const char *lbl_802D4D1C[9] = {
+    "", "", "", "The %s offensive play", "A new NFL player", "The %s logo", "A new NFL Legend player",
+    "The %s defensive play", "Impact Gear Modifier",
+};
 int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
 {
     switch(id) {

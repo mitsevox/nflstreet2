@@ -2181,7 +2181,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80056584.cpp",
+      "source": "src/game/InGameScreens.cpp",
       "profile": "game_cpp",
       "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked. The static initializer 0x8005D540 constructs lbl_80309F98 (Object_8008044C) and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 close the range.",
       "sections": [
@@ -2196,6 +2196,12 @@
           "placement": ".data3",
           "start": "0x8028E16C",
           "end": "0x8028ED08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4D0C",
+          "end": "0x802D4D40"
         },
         {
           "section": ".sdata",
