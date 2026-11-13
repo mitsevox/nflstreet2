@@ -265,16 +265,19 @@ extern "C" void fn_8016DF34(Object_80039F5C *p)
 {
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
         if (fn_80178308() == (p->mId >> 8 & 0xFF)) {
-            Message_800F01CC message;
-
             if ((p->mId >> 16 & 0xFF) == 0) {
+                Message_800F01CC message;
+
                 fn_801C1F94(&message, 0, 4);
                 message.mId = 70;
+                fn_800F03D8(0, p->mpState, &message, p);
             } else {
+                Message_800F01CC message;
+
                 fn_801C1F94(&message, 0, 4);
                 message.mId = 69;
+                fn_800F03D8(0, p->mpState, &message, p);
             }
-            fn_800F03D8(0, p->mpState, &message, p);
         } else {
             Message_800F01CC message;
 
@@ -484,8 +487,11 @@ extern "C" int fn_8016E764(void)
     int mode = fn_801486A0();
     int result;
 
-    if (mode <= 3) {
-        allowed = mode < 2;
+    switch (mode) {
+    case 2:
+    case 3:
+        allowed = false;
+        break;
     }
     result = 0;
     if (fn_800B65A0(fn_80178308()) != 0xFF) {
@@ -501,7 +507,7 @@ extern "C" int fn_8016E764(void)
             fn_801787DC(0) < fn_801787DC(1)) {
             result = 1;
         }
-        if (result == 0 && (short)fn_8009D990(0) <= lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 &&
+        if (result == 0 && (short)fn_8009D990(0) <= (short)lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 &&
             fn_8016E928() != 0) {
             result = 1;
         }
@@ -589,6 +595,49 @@ extern "C" int fn_8016EADC(void)
     return 0;
 }
 
+extern "C" int ScrmDefenseIsStill(void)
+{
+    int team = fn_80178320();
+    int still = 1;
+    unsigned short i;
+    unsigned int count = fn_80178D70(team);
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+
+        if (p->mFlags & 0x40000) {
+            continue;
+        }
+        if (p->mMotion.mUnknown40 != 0.0f || p->mMotion.mUnknown44 != 0.0f) {
+            still = 0;
+        }
+    }
+    return still;
+}
+
+extern "C" int ScrmDefenseIsStillNearLine(void)
+{
+    int team = fn_80178320();
+    Point_8017886C los = fn_80177FE0();
+    int still = 1;
+    unsigned short i;
+    unsigned int count = fn_80178D70(team);
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+
+        if (p->mFlags & 0x40000) {
+            continue;
+        }
+        if (fabsf(p->mMotion.mPos.mX - los.mX) < 4.0f && fabsf(p->mMotion.mPos.mY - los.mY) < 3.0f) {
+            if (p->mMotion.mUnknown40 != 0.0f || p->mMotion.mUnknown44 != 0.0f) {
+                still = 0;
+            }
+        }
+    }
+    return still;
+}
+
 extern "C" int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos)
 {
     Ball_t *pBall;
@@ -655,6 +704,8 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                     if (fn_8011F518()->mUnknown4 == 8) {
                         crossed = 0;
                     }
+                    break;
+                case 15:
                     break;
                 }
             }
@@ -728,9 +779,8 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             return;
         }
         if (fn_80177F70() != 6) {
-            unsigned char id = p->mpState->mId;
 
-            if (id == 12) {
+            if (p->mpState->mId == 12) {
                 int kind;
 
                 fn_8017C858(p->mIdBytes[2], 1);
@@ -749,7 +799,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                         break;
                     }
                 }
-            } else if (id >= 34 && id <= 36) {
+            } else if (p->mpState->mId >= 34 && p->mpState->mId <= 36) {
                 if (PlayerMoveGetKind(p) != 0) {
                     fn_8017C8DC(p->mIdBytes[2], 1);
                 }
@@ -800,8 +850,8 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
         pRecord->mUnknownC = ballPos.mX < 0.5f - fn_80178A08()
                                  ? 0.5f - fn_80178A08()
                                  : (ballPos.mX > fn_80178A08() - 0.5f ? fn_80178A08() - 0.5f : ballPos.mX);
-        pRecord->mUnknown14 = 22;
         pRecord->mUnknown10 = ballPos.mY;
+        pRecord->mUnknown14 = 22;
         fn_8009BD2C(p, &pRecord->mUnknown4);
         fn_800B1508();
         fn_80178370();
@@ -819,6 +869,8 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             ((pOwner->mFlags & 0x10000) || p->mUnknown560.mUnknown53 != 0)) {
             float x;
             float line;
+            Object_80039F5C *pOther;
+            int skip = 0;
 
             if (BallGetTransferKind(pBall) != 0) {
                 PossLogBallResult(p);
@@ -829,10 +881,9 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             x = p->mMotion.mPos.mX;
             line = fn_8016FAB4();
             if (line > fn_80178A2C()) {
-                Object_80039F5C *pOther;
-                float clamped = x >= 0.5f - fn_80178A08()
-                                    ? (x > fn_80178A08() - 0.5f ? fn_80178A08() - 0.5f : x)
-                                    : 0.5f - fn_80178A08();
+                if (x < 0.5f - fn_80178A08() || x > fn_80178A08() - 0.5f) {
+                    x = fn_80178A08() - 0.5f;
+                }
 
                 fn_801783D0(9, 1);
                 AudmonEventPostId(95, &ballPos, p->mId, 0, 0, 0);
@@ -863,14 +914,18 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
                         }
                     }
                     break;
+                case 2:
+                    break;
                 }
                 fn_800310C0(lbl_803EA368, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
-                pOther = fn_8017876C();
-                fn_800B1698(p, pOther);
-                if (pOther != 0) {
-                    fn_800310C0(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
-                    fn_800310C0(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
-                }
+            }
+            pOther = fn_8017876C();
+            fn_800B1698(p, pOther);
+            if (pOther != 0) {
+                fn_800310C0(lbl_803EA368, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
+                fn_800310C0(lbl_803EA368, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
+            }
+            if (!skip) {
                 StyleTrackerOnTackle(p, line);
                 fn_800310C0(lbl_803EA368, 6, p, &p->mMotion.mPos, &p->mMotion.mFacing);
                 fn_80178370();
@@ -880,15 +935,16 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
         }
         if (p->mUnknown2914 == 0 || (fn_8011F2C4() != 0 && (p->mUnknown2914 == 1 || p->mUnknown2914 == 3))) {
             if (!(p->mFlags & 0x8000)) {
-                Point_8017886C los = pos;
+                Point_8017886C los;
 
+                los = pos;
                 if (p->mMotion.mPos.mY > los.mY || fabsf(p->mMotion.mPos.mX - los.mX) > 3.0f) {
                     p->mFlags |= 0x8000;
                 }
             }
         }
         if (BallGetTransferKind(pBall) == 4) {
-            if (BallGetStateFrames(pBall) > 20) {
+            if ((unsigned int)BallGetStateFrames(pBall) > 20) {
                 PossLogBallResult(p);
             } else {
                 PossTryJarBall(p);

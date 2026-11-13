@@ -21,7 +21,7 @@ public:
 
     int fn_800C02C8();
     void fn_800C02D4(short value);
-    short fn_800C02E0();
+    int fn_800C02E0();
     void fn_800C02EC(short value);
     void fn_800C02F8(int value);
     int fn_800C0414();

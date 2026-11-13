@@ -16749,7 +16749,7 @@ void Class_80297CE8::fn_800C02D4(short value)
     lbl_803EABA8->mUnknownA4 = value;
 }
 
-short Class_80297CE8::fn_800C02E0()
+int Class_80297CE8::fn_800C02E0()
 {
     return lbl_803EABA8->mUnknownA6;
 }
