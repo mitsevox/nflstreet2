@@ -2380,6 +2380,14 @@
     "LLTexPadToPow2": {
       "address": "0x8020E7EC",
       "evidence": "evidence.tsv function and name rows for 0x8020E7EC (documented holdout 0x8020E7EC-0x8020E9D0 at the start of src/engine/lltextur.c: draft registered in comparisons.json, original bytes). Called by ResTexture.cpp."
+    },
+    "Cdinfo": {
+      "address": "0x803D55E0",
+      "evidence": "evidence.tsv data/name rows for 0x803D55E0: the 28-byte disc client record of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
+    },
+    "_CDVDAlignedBuffer": {
+      "address": "0x803D5600",
+      "evidence": "evidence.tsv data/name rows for 0x803D5600: the 32 KB disc read buffer of src/engine/fs_cli.c, a public uninitialized definition the original linker allocated as COMMON after the .bss of every file; the source build rejects common symbols, so the storage stays in the original bytes."
     }
   },
   "units": [
@@ -17672,6 +17680,44 @@
           "placement": ".text",
           "start": "0x801AD46C",
           "end": "0x801AD488"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/fs_cli.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler, type, function, name, data and source-form rows; all eight functions and the 0x2380-byte .bss (reader thread, its stack and the two semaphores) match the target under unchanged engine_c, promoted from comparison-only. The two public globals Cdinfo and _CDVDAlignedBuffer are uninitialized definitions the original linker allocated as COMMON; they stay externals because the source build rejects common symbols.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CB1BC",
+          "end": "0x801CB5D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037F8C0",
+          "end": "0x80381C40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiomem.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8020D388-0x8020D534 (src/engine/tdbiomem.c), its compiler, function, name, type/field, data and source-form rows; all six callbacks and the 28-byte callback table match the target under unchanged engine_c, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D388",
+          "end": "0x8020D534"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9B90",
+          "end": "0x802F9BAC"
         }
       ]
     }

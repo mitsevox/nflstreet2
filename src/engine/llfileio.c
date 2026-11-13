@@ -53,11 +53,11 @@ int fn_801F7ABC(void);
 void fn_801F7AD4(int level);
 void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags);
 FileDevTable_801C8F14 *fn_801C9D64(void);
-int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int));
-int fn_801CB3D0(const char *pName, int unused, int *pHandle);
-int fn_801CB4A0(int handle);
-int fn_801CB4EC(int handle, void *pDst, int offset, int size);
-unsigned int fn_801CB5A8(int handle, int unused, unsigned int *pSize);
+int CDVD_init(int unused, int numFiles, int unused2, void (*pReadDone)(int));
+int CDVD_open(const char *pName, int unused, int *pHandle);
+int CDVD_close(int handle);
+int CDVD_read(int handle, void *pDst, int offset, int size);
+unsigned int CDVD_getattrfromhandle(int handle, int unused, unsigned int *pSize);
 void fn_801CB61C(void);
 void fn_801CB648(void);
 int fn_801CB64C(int device);
@@ -111,10 +111,10 @@ static int _FileOpenStream(int device, const char *pName, int mode)
         }
         break;
     case 1:
-        if (fn_801CB3D0(pName, 0, &handle) == 0) {
+        if (CDVD_open(pName, 0, &handle) == 0) {
             error = 0xA0003;
         } else {
-            fn_801CB5A8(handle, 0, &size);
+            CDVD_getattrfromhandle(handle, 0, &size);
         }
         break;
     case 2:
@@ -309,7 +309,7 @@ int FileCloseStream(int handle)
         FileHostClose(lbl_803EBC24[handle].mDevHandle);
         break;
     case 1:
-        fn_801CB4A0(lbl_803EBC24[handle].mDevHandle);
+        CDVD_close(lbl_803EBC24[handle].mDevHandle);
         break;
     case 2:
         fn_801CB8C8(handle);
@@ -337,7 +337,7 @@ int FilePerformRead(int handle, int pos, void *pBuffer, int size)
     switch (lbl_803EBC24[handle].mDevType) {
     case 1:
         lbl_803EBC40 = 0;
-        result = fn_801CB4EC(lbl_803EBC24[handle].mDevHandle, pBuffer, pos, size);
+        result = CDVD_read(lbl_803EBC24[handle].mDevHandle, pBuffer, pos, size);
         if (result != size) {
             error = 0xA0007;
         }
@@ -621,7 +621,7 @@ void FileLLInit(FileConfig_801C8F14 *pConfig)
         for (j = 0; j < pList->mCount; j++) {
             if (pList->mDevice[j] == 1) {
                 done = 1;
-                fn_801CB2E0(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
+                CDVD_init(pConfig->mNumFiles, pConfig->mUnk400, lbl_803ECEF4, _FileCDVDCallback);
                 lbl_803EBC41 = 0;
                 break;
             }
@@ -657,7 +657,7 @@ int FileGetSize(int handle)
 
     switch (lbl_803EBC24[handle].mDevType) {
     case 1:
-        fn_801CB5A8(lbl_803EBC24[handle].mDevHandle, 0, &size);
+        CDVD_getattrfromhandle(lbl_803EBC24[handle].mDevHandle, 0, &size);
         break;
     case 4:
         size = FileHostGetSize(lbl_803EBC24[handle].mDevHandle);

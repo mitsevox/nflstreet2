@@ -40646,61 +40646,6 @@
       ]
     },
     {
-      "source": "src/engine/fs_cli.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CB1BC-0x801CB5D4 (src/engine/fs_cli.c), its compiler and type rows and exact function rows. Draft comparisons only; the client record 0x803D55E0, the read buffer 0x803D5600, the heap word 0x803EBC34, the thread 0x8037F8C0, its stack 0x8037FC00 and the semaphores 0x80381C00/0x80381C0C stay external; OS semaphore calls use their accepted SDK names, other callees their addresses; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CB1BC",
-          "end": "0x801CB5D4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801CB1BC",
-          "start": "0x801CB1BC",
-          "end": "0x801CB240"
-        },
-        {
-          "symbol": "fn_801CB240",
-          "start": "0x801CB240",
-          "end": "0x801CB270"
-        },
-        {
-          "symbol": "fn_801CB270",
-          "start": "0x801CB270",
-          "end": "0x801CB2E0"
-        },
-        {
-          "symbol": "fn_801CB2E0",
-          "start": "0x801CB2E0",
-          "end": "0x801CB3D0"
-        },
-        {
-          "symbol": "fn_801CB3D0",
-          "start": "0x801CB3D0",
-          "end": "0x801CB4A0"
-        },
-        {
-          "symbol": "fn_801CB4A0",
-          "start": "0x801CB4A0",
-          "end": "0x801CB4EC"
-        },
-        {
-          "symbol": "fn_801CB4EC",
-          "start": "0x801CB4EC",
-          "end": "0x801CB5A8"
-        },
-        {
-          "symbol": "fn_801CB5A8",
-          "start": "0x801CB5A8",
-          "end": "0x801CB5D4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/filemc.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801CB5D4-0x801CBC1C (src/engine/filemc.c), its compiler and type rows and exact function rows. Draft comparisons only; the file record 0x80381C40, the CARD work area 0x803DD600 and all callees stay external (CARD functions by their accepted SDK names where the accepted SDK source defines them, by address otherwise); original assembly remains linked.",
@@ -41562,57 +41507,6 @@
           "symbol": "_TDbTblFillColHeader",
           "start": "0x8020B564",
           "end": "0x8020B710"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tdbiomem.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit ownership row for src/engine/tdbiomem.c, exact function/data extents, names, type/fields and compiler/source-form rows. Six complete callbacks and the complete 28-byte table are measured. Read/write holdouts omit one mr r5,r31 each (120/124 versus target 124/128 bytes); whole unit remains comparison-only with original bytes linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8020D388",
-          "end": "0x8020D534"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F9B90",
-          "end": "0x802F9BAC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_TDbIOMemOpen",
-          "start": "0x8020D388",
-          "end": "0x8020D3C0"
-        },
-        {
-          "symbol": "_TDbIOMemClose",
-          "start": "0x8020D3C0",
-          "end": "0x8020D3F4"
-        },
-        {
-          "symbol": "_TDbIOMemWrite",
-          "start": "0x8020D3F4",
-          "end": "0x8020D470"
-        },
-        {
-          "symbol": "_TDbIOMemRead",
-          "start": "0x8020D470",
-          "end": "0x8020D4F0"
-        },
-        {
-          "symbol": "_TDbIOMemSeek",
-          "start": "0x8020D4F0",
-          "end": "0x8020D52C"
-        },
-        {
-          "symbol": "_TDbIOMemCalcExtraSize",
-          "start": "0x8020D52C",
-          "end": "0x8020D534"
         }
       ]
     },
