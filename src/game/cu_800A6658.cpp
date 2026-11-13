@@ -6,7 +6,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80238174.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_800B65A0.h"
 #include "game/AudmonEvent.h"
@@ -50,20 +50,20 @@ void fn_800AE750(int index, int team);
 void HudHidePressPrompt(int team);
 void TutorialSetMoveDone(int id, int value);
 void fn_800A9384(int mode);
-void fn_80073210(int frames);
+void SndgMusicWaitForStart(int frames);
 void fn_800A6D5C(int team);
 int TutorialIsActive(void);
-Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
 void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 void PlayBookSelectAudible(int team, unsigned int index);
 void PlayRealignTeam(int team);
 void fn_800B0DA4(void);
 void fn_800AEEDC(int team);
 void fn_8011F3A8(void);
-void fn_8003A3F4(int a, int team);
+void PlyrRouteShowTeam(int a, int team);
 void fn_8009FFD4(void);
-Object_800670B4 *PlayBookGetFormation(int team);
-void PlaySetGetEntryRoles(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+PlayBookFormation_t *PlayBookGetFormation(int team);
+void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 
@@ -300,7 +300,7 @@ extern "C" void fn_800A70F4(void)
         pBlock->mUnknownA0 = 0;
         count = fn_80178D18(team);
         for (index = 0; index < count; index++) {
-            fn_801476C8(fn_80039F5C(team, index));
+            fn_801476C8(PlyrGet(team, index));
         }
         fn_802381E0(pHandle);
     }
@@ -389,7 +389,7 @@ extern "C" void fn_800A7514(int team)
                 }
             } else if (lbl_803EC954[other]->mUnknown68 == 0) {
                 AudmonEventPostArgs(8, 0, team, 0, 0);
-                fn_80073210(120);
+                SndgMusicWaitForStart(120);
             }
             lbl_803EC954[team]->mUnknown68 = lbl_803EC954[team]->mUnknown6C;
             lbl_803EC954[team]->mUnknown54 = mine * 2.0f * lbl_803EC954[team]->mUnknown10;
@@ -424,11 +424,11 @@ extern "C" void fn_800A7514(int team)
             args[1] = 1;
             fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
             if (TutorialIsActive() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
-                Object_80039F5C *p = fn_80039FE8(fn_80178308(), 0, 0);
+                Object_80039F5C *p = PlyrFindByRole(fn_80178308(), 0, 0);
                 unsigned char side;
 
                 if (p == 0) {
-                    p = fn_80039F5C(fn_80178308(), 0);
+                    p = PlyrGet(fn_80178308(), 0);
                 }
                 fn_8010B1FC(p, 0, 0);
                 PlayBookSelectAudible(fn_80178308(), 0);
@@ -436,15 +436,15 @@ extern "C" void fn_800A7514(int team)
                 fn_800B0DA4();
                 fn_800AEEDC(fn_80178308());
                 fn_8011F3A8();
-                fn_8003A3F4(0, fn_80178308());
+                PlyrRouteShowTeam(0, fn_80178308());
                 fn_8009FFD4();
                 for (side = 0; side <= 1; side++) {
-                    Object_800670B4 *pRoster = PlayBookGetFormation(side);
+                    PlayBookFormation_t *pRoster = PlayBookGetFormation(side);
                     unsigned int count = fn_80178D18(side);
                     unsigned char i;
 
                     for (i = 0; i < count; i++) {
-                        Object_80039F5C *pPlayer = fn_80039F5C(side, i);
+                        Object_80039F5C *pPlayer = PlyrGet(side, i);
                         unsigned char level;
                         unsigned char secondary;
 

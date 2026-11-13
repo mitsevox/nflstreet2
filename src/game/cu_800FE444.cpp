@@ -257,7 +257,7 @@ void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
             int i;
 
             for (i = 0; i < count; i++) {
-                Object_80039F5C *other = fn_80039F5C((unsigned char)team, (unsigned short)i);
+                Object_80039F5C *other = PlyrGet((unsigned char)team, (unsigned short)i);
 
                 if (other != p) {
                     fn_800FE564(p, other, (Object_80039F5C *)point, distance);
@@ -764,7 +764,7 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     team = fn_80178320();
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *candidate = fn_80039F5C(team, (unsigned short)i);
+        Object_80039F5C *candidate = PlyrGet(team, (unsigned short)i);
         Point_8017886C pos;
         Point_8017886C offset;
         Point_8017886C future;
@@ -1024,7 +1024,7 @@ Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle)
         unsigned int index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
 
         if (index != 255 && active) {
-            Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned short)index);
+            Object_80039F5C *other = PlyrGet(p->mIdBytes[2], (unsigned short)index);
             Vector_80039F5C *pos = &other->mMotion.mPos;
 
             players[i] = other;
@@ -1067,7 +1067,7 @@ void fn_80101064(Object_80039F5C *p)
 {
     int team=fn_80178320(),n=fn_80178D18(team);
     for(unsigned int i=0;(int)i<n;++i) {
-        Object_80039F5C *other=fn_80039F5C(team,(unsigned char)i);
+        Object_80039F5C *other=PlyrGet(team,(unsigned char)i);
         Point_8017886C delta;fn_80227690(&delta,&other->mMotion.mPos,&p->mMotion.mPos);
         if(!(fn_802270A4(&delta)>=2.5f)) {
             Record_800B15FC *record=fn_800B15FC();fn_8009BD2C(other,&record->mUnknown0);
@@ -1096,7 +1096,7 @@ void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out
     best = fn_801243E0(&values, -1);
     facing = ((unsigned int)p->mMotion.mUnknown32 + 0x100000) >> 21 & 7;
     lookup = fn_8012078C();
-    receiver = fn_80039F5C(fn_80178320(), lookup->mpUnknown4[1]);
+    receiver = PlyrGet(fn_80178320(), lookup->mpUnknown4[1]);
     fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
     octant = ((unsigned int)fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
     difference = MathAngleDiff(p->mMotion.mUnknown32, 0x400000);
@@ -1160,7 +1160,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
         State_800FDA58 *state = (State_800FDA58 *)&p->mUnknown336;
         Ball_t *ball = BallFindHeldBy(p);
         Record_8011F4F8 *record = fn_8011F4F8(state->mUnknown3Byte);
-        Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
+        Object_80039F5C *other = PlyrGet(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
         float speed;
 
         if (state->mUnknown0Bytes[0]) {
@@ -1237,7 +1237,7 @@ void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *point)
         float distance;
 
         if (record && (unsigned char)record->mUnknownA[0] != 15) {
-            other = fn_80039F5C(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
+            other = PlyrGet(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
         }
         if (other) {
             int near = other->mMotion.mPos.mY < fn_80177FE0().mY + 24.0f && fn_802270A4(point) < 32.0f;

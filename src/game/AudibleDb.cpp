@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "game/DbCursor.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -53,8 +53,8 @@ int AudibleDbGetPlaybookId(DbCursor *pCursor)
 
 unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column)
 {
-    Object_800670B4 object;
-    Record_80067338 record;
+    PlayBookFormation_t object;
+    PlayBookPlay_t record;
     char text[8];
     int handle;
     int match = 0;
@@ -81,12 +81,12 @@ unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column)
         signed char number = DbCursorGetValue(pCursor, _AudibleDb_aDirectionColumns[column]);
 
         sprintf(text, "%02d", number);
-        fn_800670B4(tag, mode, 0, &object);
+        PlayBookDbLoadFormation(tag, mode, 0, &object);
         fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n",
                     tag, &handle, 1, object.mUnknown0);
-        count = fn_800672BC(tag, handle);
+        count = PlayBookDbCountPlays(tag, handle);
         for (i = 0; i < count; i++) {
-            fn_80067338(tag, handle, i, &record);
+            PlayBookDbLoadPlay(tag, handle, i, &record);
             if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
                 break;
             }

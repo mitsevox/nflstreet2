@@ -198,14 +198,14 @@ int fn_801170E8(Object_80039F5C *p)
     int blocked;
     unsigned int count = fn_80178D70(fn_80178320());
     for (unsigned char i = 0; i < count && !found; i++) {
-        if (fn_80039F5C(fn_80178320(), i)->mpState->mId == 85) found = 1;
+        if (PlyrGet(fn_80178320(), i)->mpState->mId == 85) found = 1;
     }
     Point_8017886C origin;
     origin = fn_80177FE0();
     for (unsigned char i = 0; i <= 2; i++) {
         int index = PlayBookGetReceiver(fn_80178308(), i, 0);
         if (index == 255) continue;
-        Object_80039F5C *other = fn_80039F5C(fn_80178308(), (unsigned short)index);
+        Object_80039F5C *other = PlyrGet(fn_80178308(), (unsigned short)index);
         if (!other) continue;
         switch (side) {
         case 15: case 17: case 20:

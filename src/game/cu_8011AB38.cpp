@@ -59,7 +59,7 @@ extern "C" void fn_8011AB38(void)
     fn_8011BAE0(&spot);
     count = fn_80178D70(team);
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Block_8011AB38 *pState = (Block_8011AB38 *)&p->mUnknown1032;
         int done = 0;
 

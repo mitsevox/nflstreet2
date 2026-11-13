@@ -63,10 +63,10 @@ void fn_800B3EFC(int team);
 void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
 void fn_8016DDDC(int team);
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 int fn_8011F1CC(void);
 void HudShowAlert(const char *pText);
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
 void ClockRuleEndPeriod(void);
@@ -239,7 +239,7 @@ void fn_8014B0D0(void *p, float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, fn_8003A130(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
 void fn_8014B178(void *p, float dt)
@@ -287,7 +287,7 @@ void fn_8014B350(void *p, float dt)
 
 void fn_8014B38C(void *p, float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }

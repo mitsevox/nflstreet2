@@ -22,7 +22,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -139,7 +139,7 @@ extern Type_803EA368 *lbl_803EA368;
 
 extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 extern "C" {
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
+Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, int a, int team);
 void SpchIGSetPassTarget(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
@@ -331,7 +331,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+        pTarget = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
         if (!(p->mFlags & 0x4000)) {
             fn_80101130(pTarget, p, &pRecord->mUnknown8);
         }
@@ -449,7 +449,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
             }
         }
         {
-            Object_80039F5C *pNearest = fn_8003A130(&pTarget->mMotion.mPos, 0, fn_80178320());
+            Object_80039F5C *pNearest = PlyrFindNearest(&pTarget->mMotion.mPos, 0, fn_80178320());
 
             fn_800310C0(lbl_803EA368, 5, pNearest, &pNearest->mMotion.mPos, &pNearest->mMotion.mFacing);
         }
@@ -490,7 +490,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 3:
         speed = gFrameTimeScale * 0.37f;
         if (pRecord->mUnknownAByte != 15) {
-            Object_80039F5C *pReceiver = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+            Object_80039F5C *pReceiver = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
 
             if (pReceiver->mMotion.mPos.mX > fn_80178A08() - 8.0f) {
                 target.mX = pReceiver->mMotion.mPos.mX + 14.0f;
@@ -562,7 +562,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
+        pTarget = PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte);
         pEvent->mUnknown8 = (int)pTarget;
         if (PlayerMoveGetKind(p) != 0) {
             AudmonEventPostId(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -610,7 +610,7 @@ extern "C" int fn_80103CB0(Object_80039F5C *p)
 
     switch (pRecord->mUnknown1D) {
     case 4:
-        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte));
+        fn_800A5A8C(2, p, PlyrGet(p->mIdBytes[2], pRecord->mUnknownAByte));
         if (fn_801BE648(p->mpUnknown792) == 69 || fn_801BE648(p->mpUnknown792) == 178) {
             p->mFlags |= 4;
         }

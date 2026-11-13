@@ -38,7 +38,7 @@ public:
 
 extern "C" {
 Table_8015005C *fn_801530FC(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 extern const char lbl_802A0DDC[];
@@ -109,7 +109,7 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
         if (fn_801530FC()->mEntries[i].mUnknown13 == 0) {
             char score[16];
             char name[20];
-            fn_801C2EF0(name, fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
+            fn_801C2EF0(name, PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
             Entry_8015005C *pEntries = fn_801530FC()->mEntries;
             fn_801C2D88(score, sizeof(score), lbl_802A0DDC,
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);

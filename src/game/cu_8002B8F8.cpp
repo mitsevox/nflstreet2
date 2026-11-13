@@ -1,5 +1,5 @@
 #include "game/fn_8022781C.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_8009D990.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
@@ -112,12 +112,12 @@ void InGameResume(void);
 unsigned char InGameIsDemo(void);
 void ReplayCursorSetPos(const float *pValue, int a);
 void ReplayCursorSetVisible(unsigned char value);
-void fn_8003A5A8(void);
-void fn_8003A5E8(void);
-void fn_8003AC10(void);
+void PlyrMgrSetLeadFlags(void);
+void PlyrMgrClearLeadFlags(void);
+void PlyrMgrRefreshModels(void);
 Block_80170E64 *fn_8003DF7C(Vector_80039F5C *pPos, float *pDist);
 void fn_8003E038(Block_80170E64 *pBlock, int *pOut);
-Block_80170E64 *fn_80040F28(Vector_80039F5C *pPos, float *pDist);
+Block_80170E64 *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist);
 void PlyrPoseSetBlendFlag(int a);
 void fn_800443B8(void);
 void fn_80044460(void);
@@ -135,8 +135,8 @@ void fn_800711E0(void);
 void fn_80071344(void);
 void fn_80071348(void);
 void fn_80071794(int a);
-void fn_80072AEC(int a);
-void fn_80072F04(void);
+void SndgMusicSetMode(int a);
+void SndgMusicResume(void);
 void fn_8009BB50(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D818(int state);
@@ -150,7 +150,7 @@ void fn_800A866C(void);
 void fn_800B50E8(int a);
 int fn_800B81A4(void);
 void BallsSetVisible(int on);
-void fn_8013E474(void);
+void CamReplayNextRecord(void);
 void CamGameResumeAll(void);
 void fn_80144EDC(float a);
 void ParticlesProcess(float a);
@@ -193,7 +193,7 @@ void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
 int fn_80190EF0(Type_80190ED4 *pStream);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
-int fn_8019623C(int id);
+int ScreenTransCanCapture(int id);
 void ReplayAuxRamStoreFrame(char *pSrc, int index, int size);
 char *ReplayAuxRamGetScratch(int index, int size);
 char *ReplayAuxRamLoadFrame(int index, int size);
@@ -441,7 +441,7 @@ extern "C" void fn_8002B960(Type_8002B960 *p)
     for (team = 0; team <= 1; team++) {
         count = fn_80178D18(team);
         for (i = 0; i < count; i++) {
-            pObject = fn_80039F5C(team, i);
+            pObject = PlyrGet(team, i);
             p->mUnknown000[team][i] = *(Block_80039F5C_B54 *)((char *)pObject + 0xB54);
             p->mUnknown578[team][i] = *(Block_80039F5C_BB8 *)pObject->mRatings;
         }
@@ -469,7 +469,7 @@ extern "C" void fn_8002BAF4(Type_8002B960 *p)
     for (team = 0; team <= 1; team++) {
         count = fn_80178D18(team);
         for (i = 0; i < count; i++) {
-            pObject = fn_80039F5C(team, i);
+            pObject = PlyrGet(team, i);
             PauseIsOpen();
             *(Block_80039F5C_B54 *)((char *)pObject + 0xB54) = p->mUnknown000[team][i];
             *(Block_80039F5C_BB8 *)pObject->mRatings = p->mUnknown578[team][i];
@@ -589,7 +589,7 @@ extern "C" void fn_8002BEF0(Type_803EA368 *p)
     if (p->mUnknownD74 >= p->mUnknownD80 && p->mUnknownD88 != 0) {
         fn_80030940(p);
         p->mUnknownD88 = 0;
-        fn_8013E474();
+        CamReplayNextRecord();
     }
     lbl_803EA358 += p->mUnknownD88;
     if (lbl_803EA358 > 60) {
@@ -688,15 +688,15 @@ extern "C" int fn_8002C300(Type_803EA368 *p, Type_8002FDB4 *pDesc)
             }
             fn_800B50E8(0);
             fn_800B50E8(1);
-            fn_8003A5A8();
+            PlyrMgrSetLeadFlags();
             fn_800443B8();
             p->mUnknownD78 = 0;
             p->mUnknownD74 = p->mUnknownD70;
             fn_800308A4(p);
             if (!(p->mUnknownD94 & 0x10000)) {
                 fn_80030940(p);
-                fn_80072F04();
-                fn_80072AEC(0xC);
+                SndgMusicResume();
+                SndgMusicSetMode(0xC);
             }
             HudHide();
             p->mUnknownD90 = 4;
@@ -740,15 +740,15 @@ extern "C" int fn_8002C4B0(Type_803EA368 *p)
             }
             if (!(p->mUnknownD94 & 0x10000)) {
                 SndgSfxPlay(0x78, 0);
-                fn_80072AEC(0xD);
+                SndgMusicSetMode(0xD);
                 PauseSetPollDelay(4);
             }
             if (PauseIsOpen() == 0) {
                 fn_800B50E8(0);
                 fn_800B50E8(1);
             }
-            fn_8003A5E8();
-            fn_8003AC10();
+            PlyrMgrClearLeadFlags();
+            PlyrMgrRefreshModels();
             fn_80044460();
             p->mUnknownD94 &= ~0x1000;
             p->mUnknownD94 &= ~0x10000;
@@ -2121,7 +2121,7 @@ extern "C" Block_80170E64 *fn_8002EDE8(GameCamera_t *pCamera, float *pDist, unsi
     float dist;
 
     if (lbl_803EC634) {
-        p = fn_80040F28(&lbl_8030660C.mPos, &dist);
+        p = BigObjFindNearest(&lbl_8030660C.mPos, &dist);
         if (p && dist < *pDist) {
             *pDist = dist;
             pBest = p;
@@ -2399,8 +2399,8 @@ extern "C" void fn_8002FA04(GameCamera_t *pCamera, int detach)
     }
     CamDestroy(pCamera);
     ReplayCursorSetVisible(0);
-    if (fn_8019623C(0x23000)) {
-        fn_80195EFC(1, 15, 0x808080, 0);
+    if (ScreenTransCanCapture(0x23000)) {
+        ScreenTransStart(1, 15, 0x808080, 0);
     }
     lbl_803EA384 = 0;
 }

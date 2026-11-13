@@ -316,7 +316,7 @@ void fn_8014C308(State_802A23A8 *p, float dt)
     if (fn_800A937C() == 0) {
         unsigned char i;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pPlayer = fn_80039F5C(fn_80178308(), i);
+            Object_80039F5C *pPlayer = PlyrGet(fn_80178308(), i);
             if (fn_800F06F4(0, pPlayer->mpState, 18, 0xFFFF) != 0xFFFF) {
                 clear = 0;
             }

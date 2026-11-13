@@ -66,7 +66,7 @@ void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count);
 int fn_801486A0(void);
 int fn_801787DC(int team);
 int fn_800C8744(int team);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int fn_80149F40(Class_80148A58 *p, int team, int kind);
@@ -188,7 +188,7 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
     ids[3] = id;
     fn_8008056C(&cursor);
     for (unsigned char i = 0; i < 4; i++) {
-        pStats->mpPlayers[i] = fn_8003AC84(ids[i]);
+        pStats->mpPlayers[i] = PlyrFindById(ids[i]);
     }
     pStats->mValues[0] = fn_801787DC((unsigned char)team);
     fn_8022B7A4(handle, 0x74727374, &value);

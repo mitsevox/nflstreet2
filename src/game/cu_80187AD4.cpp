@@ -117,7 +117,7 @@ void fn_80187D10(void)
     void *pList = fn_8021EA44(1);
     for (unsigned char team = 0; team < 2; ++team) {
         for (unsigned char index = 0; index < 7; ++index) {
-            Object_80039F5C *p = fn_80039F5C(team, index);
+            Object_80039F5C *p = PlyrGet(team, index);
             if (p->mUnknown9[2] != 0) {
                 int id = MsgGameGetPlayerPortrait(p->mUnknown2908);
                 if (id > 630) {

@@ -22,7 +22,7 @@ extern "C" int fn_800B0A2C(Object_80039F5C *p, int value)
     unsigned int count = fn_80178D18(team);
 
     for (; i < count; i++) {
-        Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+        Object_80039F5C *pPlayer = PlyrGet(team, i);
         if (pPlayer->mpState->mId != 61 && pPlayer->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.14f) {
             result = 0;
             break;

@@ -6,13 +6,13 @@
 #include "game/FlowManagerC.h"
 #include "game/InGame.h"
 #include "game/FELoop.h"
-#include "game/fn_80072AA8.h"
+#include "game/SndgMusic.h"
 
 
 extern "C" {
 void MemPoolRelease(int a);
-void fn_80072D98(unsigned int delay);
-void fn_80073094(void);
+void SndgMusicFadeIn(unsigned int delay);
+void SndgMusicStop(void);
 extern const char lbl_8028AD04[];
 extern char lbl_8030C070[];
 extern FlowStageEntry_t lbl_802CCBBC[];
@@ -232,15 +232,15 @@ int Class_800325E8::GSTransition(int a, int id)
     switch (id) {
     case 5:
         if (!FELoopWasVisited()) {
-            fn_80072AA8();
-            fn_80072F90();
+            SndgMusicReshuffle();
+            SndgMusicContinue();
         } else {
-            fn_80072D98(250);
+            SndgMusicFadeIn(250);
         }
         break;
     case 6:
         if (!FELoopWasVisited()) {
-            fn_80073094();
+            SndgMusicStop();
         }
         break;
     }

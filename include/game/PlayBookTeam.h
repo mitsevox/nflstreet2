@@ -1,7 +1,7 @@
 #ifndef GAME_PLAYBOOKTEAM_H
 #define GAME_PLAYBOOKTEAM_H
 
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 
 struct Vec2_t {
     float mX;
@@ -16,8 +16,8 @@ struct PlayBookSel_t {
     unsigned int mUnknown8;
     unsigned int mUnknownC;
     unsigned char mUnknown10;
-    Object_800670B4 mUnknown14;
-    Record_80067338 mUnknownCF8;
+    PlayBookFormation_t mUnknown14;
+    PlayBookPlay_t mUnknownCF8;
 };
 
 /* One of the two 0x6974-byte entries indexed by the team argument. */

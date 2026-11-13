@@ -4,7 +4,7 @@
    next one loads, may wait on a request, and then moves the game on
    to the next phase, chosen by the game period. */
 
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801D2B7C.h"
@@ -152,7 +152,7 @@ void QuarterEndStopClips(void)
     PlayerObjSetDrawReady(1);
     BallsSetVisible(1);
     QuarterEndFreeBuffers();
-    fn_80195EFC(1, 20, 0x808080, 0);
+    ScreenTransStart(1, 20, 0x808080, 0);
 }
 
 void QuarterEndClearClipHandles(void)

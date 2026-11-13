@@ -39,7 +39,7 @@ void fn_80121264(Object_80039F5C *p, Plan_80121264 *pPlan)
         unsigned int n = fn_80178D70(team);
 
         for (i = 0; i < n; i++) {
-            pPlayer = fn_80039F5C(team, i);
+            pPlayer = PlyrGet(team, i);
 
             if (pPlayer->mMotion.mPos.mY > pPos->mY && pPlayer->mMotion.mPos.mY - pPos->mY < range) {
                 players[count] = pPlayer;

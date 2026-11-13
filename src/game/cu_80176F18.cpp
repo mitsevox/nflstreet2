@@ -105,8 +105,8 @@ extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
 
 int ChallengeIsActive(void);
-CollideSet_t *fn_8003A078(void);
-void fn_8003A090(void);
+CollideSet_t *PlyrMgrGetCollideSet(void);
+void PlyrMgrReverseAll(void);
 void fn_800535FC(void);
 void SndgSpchSetPlayFlags(int a);
 void EnvSelect(int id);
@@ -139,9 +139,9 @@ void fn_8011F574(void);
 void fn_80120618(void);
 void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 int fn_801486A0(void);
-int fn_801650DC(Record_80067338 *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
 void fn_8016F7F8(void);
 int fn_8016FAD8(float *pOut);
 void ClockRuleInit(void);
@@ -798,10 +798,10 @@ extern "C" void fn_80177E6C(int a, int flip)
     if (flip) {
         FlipSides();
     }
-    fn_8003A090();
+    PlyrMgrReverseAll();
     BallsMirror();
-    CollideSetMirror(fn_8003A078());
-    CollideSetMirror(fn_801442F0());
+    CollideSetMirror(PlyrMgrGetCollideSet());
+    CollideSetMirror(StatcollGetSet());
     CollideSetMirror(BallGetCollRecords());
     CamGameSuspendAll();
     if (lbl_803EB444->mUnknown39 == 0) {
@@ -1478,7 +1478,7 @@ extern "C" void fn_8017926C(int handle, int tag, int value, int kind)
 
 extern "C" int fn_8017932C(int id)
 {
-    return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+    return PlyrGet(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
 }
 
 extern "C" int fn_80179358(int id)

@@ -3,7 +3,7 @@
 #include "game/fn_80178D18.h"
 #include "engine/viewport.h"
 #include "game/Class_80148A58.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800B65A0.h"
 
@@ -44,8 +44,8 @@ void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
 int ResSync(int a);
 void PlayerObjSetDrawReady(unsigned char value);
-int fn_80040F10(void);
-void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
+int BigObjGetCount(void);
+void fn_80053B4C(BigObj_t *pObject, int index, int apply);
 int PauseIsUnblocked(void);
 void SpchIGPurgeChannel(int index);
 void fn_800941B8(void);
@@ -69,7 +69,7 @@ extern "C" void fn_800BB458(void)
         unsigned int i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
 
             fn_8009BD60(p);
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
@@ -149,8 +149,8 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
         lbl_803EAB94 = 1;
     }
     if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
-        for (i = 0; i < fn_80040F10(); i++) {
-            Object_80040818 *pObject = fn_80040F18(i);
+        for (i = 0; i < BigObjGetCount(); i++) {
+            BigObj_t *pObject = BigObjGet(i);
 
             if (pObject->mUnknown472->mUnknown188 == 7) {
                 fn_80053B4C(pObject, 2, 0);

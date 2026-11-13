@@ -25,7 +25,7 @@ extern "C" void fn_80092380(Character_80093BCC *pCharacter, int enable)
                 unsigned int count = fn_80178D18((unsigned char)side);
 
                 for (i = 0; i < count; i++) {
-                    Object_80039F5C *p = fn_80039F5C((unsigned char)side, i);
+                    Object_80039F5C *p = PlyrGet((unsigned char)side, i);
 
                     float scale = p->mUnknown768;
 
@@ -43,7 +43,7 @@ extern "C" void fn_80092380(Character_80093BCC *pCharacter, int enable)
             unsigned int count = fn_80178D18((unsigned char)side);
 
             for (i = 0; i < count; i++) {
-                fn_8009BD88(fn_80039F5C((unsigned char)side, i), lbl_8030C12C[side * 7 + i]);
+                fn_8009BD88(PlyrGet((unsigned char)side, i), lbl_8030C12C[side * 7 + i]);
             }
         }
         lbl_803EA8D5 = 0;

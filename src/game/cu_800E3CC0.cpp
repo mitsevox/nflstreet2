@@ -17,7 +17,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801C1F94.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
@@ -201,8 +201,8 @@ void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
-void fn_8003A130(void *pPos, float *pExtra, int team);
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrFindNearest(void *pPos, float *pExtra, int team);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int fn_80178360(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
@@ -302,7 +302,7 @@ unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_8011F1A4(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80177F70(void);
 int fn_801783AC(int bit);
@@ -334,7 +334,7 @@ extern "C" int fn_800E4494(Object_80039F5C *p) {
     state->mUnknown55 = 0;
     state->mUnknown32 = 0;
     state->mUnknown33 = 0;
-    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
+    PlayBookFormation_t *pObject = PlayBookGetFormation(fn_80178308());
     switch (p->mUnknown2914) {
     case 17:
     case 18:
@@ -359,7 +359,7 @@ extern "C" int fn_800E4494(Object_80039F5C *p) {
 extern "C" int fn_800E579C(Object_80039F5C *p) {
     int result = 1;
     void *pRecord;
-    Object_800670B4 *pObject = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookFormation_t *pObject = PlayBookGetFormation(p->mIdBytes[2]);
 
     if (pObject->mUnknown8.mUnknownF == 0) {
         pRecord = fn_80164EC8(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
@@ -1825,12 +1825,12 @@ extern "C" void fn_800EBA48(int id) {
     Ball_t *pBall = BallGet(id);
     BallStateGet(pBall, &owner);
     if (BallGetLandingPoint(pBall, &pos))
-        fn_8003A130(&pos, 0, fn_80178360());
+        PlyrFindNearest(&pos, 0, fn_80178360());
     StyleTrackerRefreshUserPlayers();
     for (unsigned char team = 0; team <= 1; team++) {
         int count = fn_80178D70(team);
         for (int i = 0; i < count; i++) {
-            pOther = fn_80039F5C(team, (unsigned char)i);
+            pOther = PlyrGet(team, (unsigned char)i);
             fn_802276B4(&delta, &pos, &pOther->mMotion.mPos);
             fn_801C1F94(&message, 0, 4);
             message.mId = 57;
@@ -1854,7 +1854,7 @@ extern "C" void fn_800EBA48(int id) {
             }
             if (pOther->mQueue[0].mId != message.mId && (unsigned char)pOther->mUnknown3044[0] != message.mId) {
                 if (fn_800EAEA4(pOther))
-                    fn_8003AB28(pOther, &message, value);
+                    PlyrSetPendingMsg(pOther, &message, value);
                 else
                     fn_800F01CC(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
             }
@@ -2789,7 +2789,7 @@ extern "C" int fn_800EDC68(Object_80039F5C *p) {
     state->mUnknown4 = 0;
     state->mUnknown8 = p->mpState->mUnknown2;
     state->mUnknown6 = p->mpState->mUnknown3[0];
-    Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown1);
+    Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown1);
     fn_8009BD2C(pOther, &state->mUnknown0);
     switch (state->mUnknown8) {
     case 12:
@@ -3065,7 +3065,7 @@ extern "C" void fn_800EE694(Object_80039F5C *p) {
         p->mIdBytes[2] = 9;
         break;
     }
-    Object_800670B4 *pObject = PlayBookGetFormation(fn_80178308());
+    PlayBookFormation_t *pObject = PlayBookGetFormation(fn_80178308());
     unsigned int count = fn_80178D18(fn_80178308());
     for (unsigned char i = 0; i < count; i++) {
         if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == p->mIdBytes[1]) {

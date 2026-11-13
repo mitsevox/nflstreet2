@@ -48,7 +48,7 @@ extern "C" {
 extern float gFrameTimeScale;
 extern void *gUISMainInfo;
 
-void fn_8003AB40(FEPlyrModel_t *pRecord);
+void PlyrInitAnimChannels(FEPlyrModel_t *pRecord);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E174(int a);
@@ -152,7 +152,7 @@ static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
     pRecord = &_FEPlyr_aModels[index];
     memset(pRecord, 0, sizeof(FEPlyrModel_t));
     pRecord->mUnknown4 = pObject;
-    fn_8003AB40(pRecord);
+    PlyrInitAnimChannels(pRecord);
     fn_800B267C(&pRecord->mUnknown424);
     PlyrMoveCmdClear(pRecord->mUnknown512);
     PlyrMoveCmdClear(pRecord->mUnknown528);

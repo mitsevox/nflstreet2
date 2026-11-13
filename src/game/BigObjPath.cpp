@@ -2,29 +2,29 @@
    travel from node to node at each node's speed. */
 #include <string.h>
 
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801D2B7C.h"
 
 struct BigObjPathNode_t {
-    Object_80040818 *mUnknown0;
+    BigObj_t *mUnknown0;
     float mUnknown4;
     char mUnknown8[32];
     char mUnknown40[32];
 };
 
 struct BigObjPathed_t {
-    Object_80040818 *mUnknown0;
-    Object_80040818 *mUnknown4;
-    Object_80040818 *mUnknown8;
+    BigObj_t *mUnknown0;
+    BigObj_t *mUnknown4;
+    BigObj_t *mUnknown8;
     int mUnknown12;
     int mUnknown16;
 };
 
 extern "C" {
-int fn_80040F10(void);
+int BigObjGetCount(void);
 void fn_8004D498(int handle);
 int fn_8004D4B0(int handle, const char *pName);
 int fn_8004D508(int handle, const char *pName);
@@ -32,7 +32,7 @@ int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
 float fn_8004D624(int handle, const char *pKey);
 int fn_8004D84C(int handle);
 void fn_8004D860(int handle, int value);
-int BigObjGetNameNumber(Object_80040818 *pObject);
+int BigObjGetNameNumber(BigObj_t *pObject);
 int fn_801784C4(void);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 void fn_80227264(void *pOut, void *pV, float scale);
@@ -43,7 +43,7 @@ extern float gFrameTimeScale;
 void BigObjPathNodeLoad(int handle, BigObjInst *pObject);
 int BigObjPathNodeUpdate(BigObjInst *pObject, int a, int mode);
 void BigObjPathedLoad(int handle, BigObjInst *pObject);
-int BigObjPathedUpdate(BigObjInst *pObject, Object_80040818 *pOwner, int mode);
+int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode);
 }
 
 extern "C" {
@@ -68,17 +68,17 @@ int BigObjPathNodeUpdate(BigObjInst *pObject, int a, int mode)
     BigObjPathNode_t *pData = (BigObjPathNode_t *)pObject->mUnknown420;
     int i;
     if (mode == 0) {
-        for (i = 0; i < fn_80040F10(); i++) {
+        for (i = 0; i < BigObjGetCount(); i++) {
             BigObjInst *pOther = BigObjInstGet(i);
             if (pOther->mUnknown188 == 3 && strcmp(((BigObjPathNode_t *)pOther->mUnknown420)->mUnknown8, pData->mUnknown40) == 0) {
-                pData->mUnknown0 = fn_80040F18(i);
+                pData->mUnknown0 = BigObjGet(i);
             }
         }
     } else if (mode != 3 && pData->mUnknown0 == 0) {
-        for (i = 0; i < fn_80040F10(); i++) {
+        for (i = 0; i < BigObjGetCount(); i++) {
             BigObjInst *pOther = BigObjInstGet(i);
             if (pOther->mUnknown188 == 3 && strcmp(((BigObjPathNode_t *)pOther->mUnknown420)->mUnknown8, pData->mUnknown40) == 0) {
-                pData->mUnknown0 = fn_80040F18(i);
+                pData->mUnknown0 = BigObjGet(i);
             }
         }
     }
@@ -94,10 +94,10 @@ void BigObjPathedLoad(int handle, BigObjInst *pObject)
     int saved = fn_8004D84C(handle);
     fn_8004D508(handle, "pathnode");
     fn_8004D5B8(handle, "name", name, 32);
-    for (i = 0; i < fn_80040F10(); i++) {
+    for (i = 0; i < BigObjGetCount(); i++) {
         BigObjInst *pOther = BigObjInstGet(i);
         if (pOther->mUnknown188 == 3 && strcmp(((BigObjPathNode_t *)pOther->mUnknown420)->mUnknown8, name) == 0) {
-            pData->mUnknown8 = fn_80040F18(i);
+            pData->mUnknown8 = BigObjGet(i);
         }
     }
     fn_8004D860(handle, saved);
@@ -106,7 +106,7 @@ void BigObjPathedLoad(int handle, BigObjInst *pObject)
     pData->mUnknown4 = 0;
 }
 
-int BigObjPathedUpdate(BigObjInst *pObject, Object_80040818 *pOwner, int mode)
+int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
 {
     Vector_80039F5C pos;
     BigObjPathed_t *pData = (BigObjPathed_t *)pObject->mUnknown420;

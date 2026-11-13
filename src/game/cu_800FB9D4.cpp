@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -53,7 +53,7 @@ extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p)
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+            Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
 
             if (pOther->mpState->mId == 22) {
                 Object_80039F5C *pTarget = fn_8009BCE8(&pOther->mUnknown336);

@@ -60,7 +60,7 @@ int PlayerDbGetNameKey(Object_8008044C *pObject, char *pBuffer, int size);
 int PlayerDbGetPybt(Object_8008044C *pObject);
 int PlayerDbGetHeight(Object_8008044C *pObject);
 int PlayerDbGetPbpo(Object_8008044C *pObject);
-void fn_80081788(Object_8008044C *pObject, int *pValues);
+void PlayerGetGearRatings(Object_8008044C *pObject, int *pValues);
 void fn_800817CC(Object_8008044C *pObject, PlayerGear_t *pInfo);
 void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a);
 }

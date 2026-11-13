@@ -24,7 +24,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -508,7 +508,7 @@ struct State_801045BC {
 };
 
 extern "C" {
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 void fn_800B6714(Object_80039F5C *p, int port);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -579,7 +579,7 @@ void HudClearMashPlayers(int a, int b);
 void *fn_8023816C(void *pHandle);
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char *lbl_803EC9F0;
-void fn_8003AB08(Object_80039F5C *p, int a);
+void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
@@ -634,7 +634,7 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 int fn_800C8BAC(Object_80039F5C *p, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800FD828(Object_80039F5C *p);
 void fn_800FD978(Object_80039F5C *p);
 void fn_800FF868(Object_80039F5C *p, State_800FFDFC *pState, Object_80039F5C *pOther);
@@ -658,7 +658,7 @@ void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 void fn_8011F5AC(int index);
 void PassIconsShow(int mode);
 int PassIconsAreShown(void);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
@@ -669,7 +669,7 @@ int fn_800DC080(Object_80039F5C *p);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -1398,7 +1398,7 @@ extern "C" unsigned int fn_800F67E8(Object_80039F5C *pTarget) {
         unsigned int i = 0;
         unsigned int n = fn_80178D18(fn_80178320());
         for (; i < n; i++) {
-            Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
+            Object_80039F5C *p = PlyrGet(fn_80178320(), i);
             if (p->mpState->mId == 22) {
                 Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown336);
                 if (pOther && pOther == pTarget) {
@@ -1453,7 +1453,7 @@ extern "C" Object_80039F5C *fn_800F93D0(Object_80039F5C *p) {
 
     for (i = 0; i < 7; i++) {
         if (pRecord->mUnknown16[i] == p->mIdBytes[1]) {
-            pResult = fn_80039F5C(fn_80178320(), i);
+            pResult = PlyrGet(fn_80178320(), i);
             break;
         }
     }
@@ -1466,8 +1466,8 @@ extern "C" void fn_800F9440(Object_80039F5C *p, Object_80039F5C *pOther) {
 
 extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
     Point_8017886C base;
-    Object_800670B4 *pTeam;
-    Entry_8006719C *pEntry;
+    PlayBookFormation_t *pTeam;
+    PlayBookPosition_t *pEntry;
     Point_8017886C point;
 
     base = fn_80177FFC(p->mIdBytes[2]);
@@ -1492,7 +1492,7 @@ extern "C" int fn_800F986C(Object_80039F5C *p) {
     base = fn_80177FFC(p->mIdBytes[2]);
     n = fn_80178D18(fn_80178320());
     for (; i < n; i++) {
-        if (fn_80039F5C(fn_80178320(), i)->mUnknown2914 == 14) {
+        if (PlyrGet(fn_80178320(), i)->mUnknown2914 == 14) {
             count++;
         }
     }
@@ -1568,7 +1568,7 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i = 0;
     unsigned char index = pRecord->mUnknown8[slot];
-    Object_80039F5C *p = fn_80039F5C(fn_80178308(), index);
+    Object_80039F5C *p = PlyrGet(fn_80178308(), index);
 
     do {
         if (pRecord->mUnknown32[i] == fn_800FC0C4(p)) {
@@ -1614,7 +1614,7 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
                 pResult = pSlot;
                 break;
             }
-        } else if (fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == (unsigned char)id) {
+        } else if (PlyrGet(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == (unsigned char)id) {
             found = 1;
         }
     }
@@ -1671,8 +1671,8 @@ extern "C" void fn_800FAECC(void) {
     Record_8011F4E0 *pRecord;
     int forward;
     int team;
-    Record_80067338 *pInfoTeam;
-    Object_800670B4 *pTeam;
+    PlayBookPlay_t *pInfoTeam;
+    PlayBookFormation_t *pTeam;
     unsigned char count;
     unsigned int n;
 
@@ -1700,7 +1700,7 @@ extern "C" void fn_800FAECC(void) {
     count = 0;
     n = fn_80178D18(team);
     for (unsigned char i = 0; i < n; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         unsigned short index;
         Message_800F01CC *pRoutes;
         int slot;
@@ -1710,7 +1710,7 @@ extern "C" void fn_800FAECC(void) {
         } else {
             index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
         }
-        pRoutes = (Message_800F01CC *)fn_800AEE20(fn_80039F5C(team, index));
+        pRoutes = (Message_800F01CC *)fn_800AEE20(PlyrGet(team, index));
         if (!pRoutes) {
             pRoutes = (Message_800F01CC *)fn_80164EC8(pInfoTeam, team, index);
         }
@@ -1741,7 +1741,7 @@ extern "C" void fn_800FAECC(void) {
         }
     }
     for (unsigned int i = 0; i < 3; i++) {
-        Object_80039F5C *pReceiver = fn_800F93D0(fn_80039F5C(fn_80178308(), pRecord->mUnknown8[i]));
+        Object_80039F5C *pReceiver = fn_800F93D0(PlyrGet(fn_80178308(), pRecord->mUnknown8[i]));
         if (pReceiver) {
             pRecord->mUnknown32[pReceiver->mIdBytes[1]] = i + 1;
             taken[pReceiver->mIdBytes[1]] = 1;
@@ -1795,8 +1795,8 @@ extern "C" void fn_800FB768(void) {
                 swapped = 0;
                 for (i = 0; i < 2; i++) {
 
-                    Object_80039F5C *pA = fn_80039F5C(team, pRecord->mUnknown12[i]);
-                    Object_80039F5C *pB = fn_80039F5C(team, pRecord->mUnknown12[i + 1]);
+                    Object_80039F5C *pA = PlyrGet(team, pRecord->mUnknown12[i]);
+                    Object_80039F5C *pB = PlyrGet(team, pRecord->mUnknown12[i + 1]);
                     if (pA->mMotion.mPos.mX < pB->mMotion.mPos.mX) {
                         unsigned char t = pRecord->mUnknown12[i];
                         pRecord->mUnknown12[i] = pRecord->mUnknown12[i + 1];
@@ -1832,7 +1832,7 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
         behind = 1;
         n = fn_80178D18(fn_80178320());
         for (i = 0; i < n; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+            Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
             if (pOther != p && fn_8009FE24(pOther)) {
                 Point_8017886C otherPos = fn_800F97A8(pOther);
                 if (otherPos.mX > pos.mX) {
@@ -1848,7 +1848,7 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
                     ahead--;
                 }
                 if (ahead == 0) {
-                    pResult = fn_80039F5C(fn_80178308(), pRecord->mUnknown24[i]);
+                    pResult = PlyrGet(fn_80178308(), pRecord->mUnknown24[i]);
                     break;
                 }
             }
@@ -1858,7 +1858,7 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
                     behind--;
                 }
                 if (behind == 0) {
-                    pResult = fn_80039F5C(fn_80178308(), pRecord->mUnknown24[i]);
+                    pResult = PlyrGet(fn_80178308(), pRecord->mUnknown24[i]);
                     break;
                 }
             }
@@ -1883,7 +1883,7 @@ extern "C" void fn_800FBAA8(void) {
     pRecord->mUnknown6 = 0;
     n = fn_80178D18(fn_80178320());
     for (i = 0; i < n; i++) {
-        Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *p = PlyrGet(fn_80178320(), i);
         if (p->mpState->mId == 42) {
             Block_800FBAA8 *pBlock = (Block_800FBAA8 *)&p->mUnknown336;
             pBlock->mUnknown36 = 0;
@@ -1926,10 +1926,10 @@ extern "C" void fn_800FBB70(void) {
     for (; i < n; i++) {
         int state;
 
-        *pp = fn_80039F5C(fn_80178308(), i);
+        *pp = PlyrGet(fn_80178308(), i);
         state = (*pp)->mUnknown2914;
         if (fn_8011F1CC() && mode != 2) {
-            Object_800670B4 *pTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
             void *pInfo = fn_800AEE20(*pp);
 
             if (!pInfo) {
@@ -2038,9 +2038,9 @@ extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5
     unsigned int n = fn_80178D18(fn_80178320());
 
     for (i = 0; i < n; i++) {
-        Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *p = PlyrGet(fn_80178320(), i);
         unsigned short kind = fn_800FC014(p, pOther);
-        if (kind >= 1 && kind <= 5 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[kind - 1]) == pTarget) {
+        if (kind >= 1 && kind <= 5 && PlyrGet(fn_80178308(), pRecord->mUnknown8[kind - 1]) == pTarget) {
             pResult = p;
             break;
         }
@@ -2066,7 +2066,7 @@ extern "C" unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther
 extern "C" Object_80039F5C *fn_800FC070(Object_80039F5C *p, Object_80039F5C *pOther) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char slot = fn_800FC014(p, pOther);
-    return fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot - 1]);
+    return PlyrGet(fn_80178308(), pRecord->mUnknown8[slot - 1]);
 }
 
 extern "C" unsigned char fn_800FC0C4(Object_80039F5C *p) {
@@ -2088,7 +2088,7 @@ extern "C" unsigned char fn_800FC128(Object_80039F5C *p) {
     unsigned int n = fn_80178D18(fn_80178320());
 
     for (; i < n; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
         if (fn_800F06F4(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
             && pOther->mMotion.mPos.mX > p->mMotion.mPos.mX) {
             count++;
@@ -2103,7 +2103,7 @@ extern "C" unsigned char fn_800FC1DC(Object_80039F5C *p) {
     unsigned int n = fn_80178D18(fn_80178320());
 
     for (; i < n; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
         if (fn_800F06F4(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
             && pOther->mMotion.mPos.mX < p->mMotion.mPos.mX) {
             count++;
@@ -2303,8 +2303,8 @@ extern "C" int fn_800FC7A0(Object_80039F5C *p, Block_800FCC24 *pBlock) {
 extern "C" int fn_800FCA78(Object_80039F5C *p) {
     Block_800FCC24 *pBlock = (Block_800FCC24 *)&p->mUnknown336;
     Point_8017886C ball;
-    Object_800670B4 *pTeam;
-    Entry_8006719C *pEntry;
+    PlayBookFormation_t *pTeam;
+    PlayBookPosition_t *pEntry;
     Point_8017886C *pOffset;
     Point_8017886C target;
 
@@ -2440,7 +2440,7 @@ extern "C" int fn_800FCFC0(Object_80039F5C *p) {
         ball = fn_80177FE0();
         limit = ball.mY - 1.0f;
         for (; i < 7; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
+            Object_80039F5C *pOther = PlyrGet(team, i);
             if (pOther && pOther->mMotion.mPos.mY < limit
                 && fabsf(pOther->mMotion.mPos.mX - ball.mX) < 6.0f) {
                 if (pOther->mUnknown1032 == 0) {
@@ -2558,7 +2558,7 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
         unsigned int n = fn_80178D18(fn_80178308());
 
         for (; i < n; i++) {
-            if (fn_80039F5C(fn_80178308(), i)->mpState->mId == 56) {
+            if (PlyrGet(fn_80178308(), i)->mpState->mId == 56) {
                 found = 1;
             }
         }
@@ -2618,8 +2618,8 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
 
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
-    Object_800670B4 *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
-    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
 
     return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
 }
@@ -2724,7 +2724,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
     if (fn_8010A2DC(p, 0, -1) != 0) {
         pState->mUnknown0 = 1;
     }
-    if (*fn_8003AB38(p) == 57 && p->mUnknown3040 > 30) {
+    if (*PlyrGetPendingMsg(p) == 57 && p->mUnknown3040 > 30) {
         p->mUnknown3040 = 30;
     }
     if (pOther != 0) {
@@ -3030,7 +3030,7 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
                 unsigned char valid;
                 int index = PlayBookGetReceiver(p->mIdBytes[2], i, &valid);
 
-                if (valid != 0 && index != 255 && fn_801000EC(fn_80039F5C(fn_80178308(), index)) == 0) {
+                if (valid != 0 && index != 255 && fn_801000EC(PlyrGet(fn_80178308(), index)) == 0) {
                     if (input.mUnknown94 & 4) {
                         fn_801024FC(p, 4, index, 0, d);
                     } else {
@@ -3187,7 +3187,7 @@ extern "C" void fn_8010A1C4(int team) {
     int count = fn_80178D18(team);
 
     for (i = 0; i < count; i++) {
-        fn_8003AB08(fn_80039F5C(team, i), 62);
+        PlyrClearPendingMsg(PlyrGet(team, i), 62);
     }
 }
 
@@ -3207,7 +3207,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
         message.mId = 62;
         message.mUnknown1[0] = 9;
         message.mUnknown1[2] = kind;
-        fn_8003AB28(p, &message, 1);
+        PlyrSetPendingMsg(p, &message, 1);
     }
     return result;
 }
@@ -3246,14 +3246,14 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     case 5: {
         unsigned int count = fn_80178D18(0);
         for (i = 0; i < count; i++) {
-            result |= fn_8010B87C(p, fn_80039F5C(0, i));
+            result |= fn_8010B87C(p, PlyrGet(0, i));
             if (result) {
                 break;
             }
         }
         count = fn_80178D18(1);
         for (i = 0; i < count; i++) {
-            result |= fn_8010B87C(p, fn_80039F5C(1, i));
+            result |= fn_8010B87C(p, PlyrGet(1, i));
             if (result) {
                 break;
             }
@@ -3270,7 +3270,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     case 3: {
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
-            pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, i);
+            pOther = PlyrGet(p->mIdBytes[2] ^ 1, i);
             if (pOther->mFlags & 0x800) {
                 result = fn_8010B87C(p, pOther);
             }
@@ -3283,7 +3283,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     case 1: {
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
-            result = fn_8010B87C(p, fn_80039F5C(p->mIdBytes[2], i));
+            result = fn_8010B87C(p, PlyrGet(p->mIdBytes[2], i));
             if (result) {
                 break;
             }
@@ -3293,7 +3293,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     case 2: {
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
-            result = fn_8010B87C(p, fn_80039F5C(p->mIdBytes[2] ^ 1, i));
+            result = fn_8010B87C(p, PlyrGet(p->mIdBytes[2] ^ 1, i));
             if (result) {
                 break;
             }
@@ -3460,7 +3460,7 @@ extern "C" void fn_8010BE54(Object_80039F5C *p)
 
     fn_801C1F94(&message, 0, 4);
     message.mId = 93;
-    fn_8003AB28(p, &message, 0);
+    PlyrSetPendingMsg(p, &message, 0);
 }
 
 extern "C" void fn_8010BEA4(void)
@@ -3490,7 +3490,7 @@ extern "C" int fn_8010C864(Object_80039F5C *p)
     unsigned int count = fn_80178D18(fn_80178308());
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178308(), i);
 
         if (pOther != p && fn_800F06F4(0, pOther->mpState, 26, 0xFFFF) != 0xFFFF) {
             found = 1;
@@ -3645,7 +3645,7 @@ extern "C" Object_80039F5C *fn_8010DA38(Object_80039F5C *p, Object_80039F5C *pEx
     unsigned int count = fn_80178D18(p->mIdBytes[2]);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
 
         if (pOther != pExclude && pOther->mpState->mId == 90) {
             return pOther;
@@ -4387,7 +4387,7 @@ extern "C" int fn_801135E4(Object_80039F5C *p)
 extern "C" int fn_80113604(Object_80039F5C *p)
 {
     State_80039F5C *pState = p->mpState;
-    Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], pState->mUnknown1);
+    Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], pState->mUnknown1);
     unsigned int bit = 1 << pState->mUnknown2;
 
     if ((pOther->mFlags & bit) == bit) {
@@ -4463,7 +4463,7 @@ extern "C" int fn_801147D4(Object_80039F5C *p)
 extern "C" int fn_80114A30(Object_80039F5C *p, int a)
 {
     State_80114DF4 *state = (State_80114DF4 *)&p->mUnknown336;
-    Object_80039F5C *pOther = fn_80039F5C((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
+    Object_80039F5C *pOther = PlyrGet((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
     State_80113AAC *pOtherState = (State_80113AAC *)&pOther->mUnknown336;
     Input_800B6D34 input;
     int flag;
@@ -4673,7 +4673,7 @@ extern "C" int fn_801167C4(void *pTarget, Object_80039F5C *p)
         unsigned int i = 0;
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (; i < count && found == 0; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+            Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
             if (pOther != p) {
                 unsigned char id = pOther->mpState->mId;
                 if (id == 40 || id == 92) {
@@ -4741,7 +4741,7 @@ extern "C" int fn_80116AB8(Object_80039F5C *p)
             unsigned int i = 0;
             unsigned int count = fn_80178D18(p->mIdBytes[2]);
             for (; i < count && result != 0; i++) {
-                Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+                Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
                 if (pOther != p && pOther->mpState->mId == 40) {
                     result = 0;
                 }
@@ -4820,7 +4820,7 @@ extern "C" void fn_8011893C(void)
     unsigned int count = fn_80178D70(team);
 
     for (; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         Object_80039F5C *pOther;
         unsigned short value;
         int mode;
@@ -4916,7 +4916,7 @@ extern "C" void fn_80119478(void)
     fn_8011BAE0(&pair);
     count = fn_80178D70(team);
     for (; i < count; i++) {
-        fn_80118B4C(fn_80039F5C(team, i), &pair);
+        fn_80118B4C(PlyrGet(team, i), &pair);
     }
 }
 
@@ -4969,10 +4969,10 @@ extern State_803EB098 *lbl_803EB098;
 extern Lookup_8012078C *lbl_803EB09C;
 extern float lbl_802DB004[];
 
-int fn_80165098(Record_80067338 *pRecord);
-int fn_801650BC(Record_80067338 *pRecord);
-int fn_801650DC(Record_80067338 *pRecord);
-int fn_801650FC(Record_80067338 *pRecord);
+int fn_80165098(PlayBookPlay_t *pRecord);
+int fn_801650BC(PlayBookPlay_t *pRecord);
+int fn_801650DC(PlayBookPlay_t *pRecord);
+int fn_801650FC(PlayBookPlay_t *pRecord);
 void fn_800A5A88(void *p);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), int b, int c);
@@ -5125,7 +5125,7 @@ void fn_8011DA40(void)
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(side, i);
+            Object_80039F5C *p = PlyrGet(side, i);
             Block_8011DBC8 *pBlock40 = &p->mUnknown1072;
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
 
@@ -5252,7 +5252,7 @@ void fn_8011DF90(void)
         unsigned char i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+            Object_80039F5C *p = PlyrGet(team, i);
 
             fn_801C1F94(&p->mBlock1032, 0, sizeof(p->mBlock1032));
             fn_8011DBC8(p, &p->mUnknown1072);
@@ -5272,7 +5272,7 @@ void fn_8011E068(void)
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
 
         if (p->mpState->mId == 51) {
             if (p->mpState[1].mId == 33) {
@@ -5842,7 +5842,7 @@ void fn_8011FBE0(void)
     for (i = 0; i < count; i++) {
         Entry_8011FBE0 *pEntry = &lbl_803EB09C->mpUnknown8[i];
 
-        pEntry->mUnknown0 = fn_8022781C(&fn_80039F5C(team, i)->mMotion.mPos, &pos);
+        pEntry->mUnknown0 = fn_8022781C(&PlyrGet(team, i)->mMotion.mPos, &pos);
         pEntry->mUnknown4 = i;
     }
 }
@@ -5861,7 +5861,7 @@ int fn_8011FD64(unsigned short index)
 {
     int result;
 
-    switch (fn_80039F5C(fn_80178320(), index)->mUnknown2914) {
+    switch (PlyrGet(fn_80178320(), index)->mUnknown2914) {
     case 0:
     case 7:
     case 13:

@@ -43,11 +43,11 @@ void PauseUpdate(void);
 void PauseRequestClose(void);
 int PauseIsOpen(void);
 void PauseRequestHandleInput(int a, int b, float c);
-void fn_80066D5C(void);
+void PlayBookDbResetState(void);
 void SndgUpdate(int a);
-void fn_800726B8(void);
-void fn_800728F8(void);
-void fn_80072C90(int a, int b);
+void SndgMusicFlushSongText(void);
+void SndgMusicUpdate(void);
+void SndgMusicFadeOut(int a, int b);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void PlaybookSideClearAll(void);
@@ -74,7 +74,7 @@ int fn_800C1E40(void);
 void fn_800C1E50(void);
 int fn_800C8704(int *pA, int *pB);
 void BallsPark(void);
-void fn_8013CF98(void);
+void CamSetupAspect(void);
 void CamGameApplyUserCamera(void);
 int CamGameGetSideYaw();
 void fn_80144EDC(float a);
@@ -97,8 +97,8 @@ void RumbleInit(void);
 void RumbleShutdown(void);
 void RumbleProcess(void);
 void RumbleEnable(int a);
-void fn_80195F80(void);
-void fn_80196130(void);
+void ScreenTransUpdate(void);
+void ScreenTransFinish(void);
 void PadStateSetValue(int a, int b, float c);
 int ConUpdateChannel(int a);
 int ConProcessChannel(int a);
@@ -217,7 +217,7 @@ static void _InGameUpdateHook3() {}
 
 static void _InGameEndDemo()
 {
-    fn_80072C90(0xFA, 1);
+    SndgMusicFadeOut(0xFA, 1);
     _InGame_uIdleFrames = 0;
     if (_InGame_bIdle) {
         _InGame_bIdle = 0;
@@ -263,9 +263,9 @@ int InGame::Init()
     fn_8007F394(1);
     fn_8008FE5C(0);
     fn_80099568(1);
-    fn_8013CF98();
+    CamSetupAspect();
     MemCardUtilInit();
-    fn_80066D5C();
+    PlayBookDbResetState();
     fn_800A216C(1);
     fn_800AE8B4();
     VptManagerMarketCamInit();
@@ -376,9 +376,9 @@ unsigned char InGame::Update()
     fn_8003E1F0();
     fn_80043F50();
     fn_800A7F6C();
-    fn_800728F8();
-    fn_800726B8();
-    fn_80195F80();
+    SndgMusicUpdate();
+    SndgMusicFlushSongText();
+    ScreenTransUpdate();
     SndgUpdate(1);
     fn_801CE82C();
     VptProcessViewports();
@@ -416,7 +416,7 @@ int InGame::Shutdown()
     fn_80085A7C();
     fn_8007F394(0);
     PadInputSetAxisCallback(0);
-    fn_80196130();
+    ScreenTransFinish();
     PauseUpdate();
     fn_801CE910();
     fn_800582D0();

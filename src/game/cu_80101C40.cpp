@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -101,7 +101,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
     pRequest->mUnknownC = 0.0f;
     pRequest->mUnknown10 = 0;
     if (pRequest->mUnknownAByte != 15) {
-        pOther = fn_80039F5C(p->mIdBytes[2], pRequest->mUnknownAByte);
+        pOther = PlyrGet(p->mIdBytes[2], pRequest->mUnknownAByte);
         pRequest->mUnknown14 = pOther->mMotion.mUnknown40;
         pRequest->mUnknown18 = pOther->mMotion.mUnknown44;
         pRequest->mUnknown1C[0] = pOther->mpState->mId == 20;

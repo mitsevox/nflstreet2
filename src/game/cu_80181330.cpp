@@ -63,7 +63,7 @@ int FEPlyrUpdateMoves(void);
 float FEPlyrSpin(float a);
 void FEPlyrResetPose(int a);
 unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b);
-void fn_80029CE0(int a, int b);
+void MemCardFilesStoreChecksum(int a, int b);
 void fn_8005F29C(void);
 void ChalCloseCursors(void);
 int ChalGetDevPoints(void);
@@ -80,8 +80,8 @@ int fn_8007BF14(int a);
 int fn_8007C690(DbCursor *pCursor, short *pOut);
 void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_800816C4(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues);
-void fn_8008174C(Object_8008044C *pObject, short *pValues);
+void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues);
+void PlayerGetGearBonuses(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
 int fn_8008775C(void);
@@ -517,7 +517,7 @@ void fn_80181AD4(unsigned char a)
         lbl_803EB58D = 1;
     }
     if (done) {
-        fn_80029CE0(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
     }
 }
 
@@ -1064,7 +1064,7 @@ void fn_80182EC4(unsigned char a)
 
 void fn_80182ED0(void)
 {
-    fn_80081788(fn_80182DC8(), lbl_80362A84.mValues);
+    PlayerGetGearRatings(fn_80182DC8(), lbl_80362A84.mValues);
 }
 
 void fn_80182EFC(void)
@@ -1078,7 +1078,7 @@ void fn_80182EFC(void)
 
 void fn_80182F24(PlayerGear_t *pInfo)
 {
-    fn_800816C4(fn_80182DC8(), pInfo, lbl_80362A84.mValues);
+    PlayerAddGearRatings(fn_80182DC8(), pInfo, lbl_80362A84.mValues);
 }
 
 void fn_80182F60(int index, int delta)
@@ -1086,7 +1086,7 @@ void fn_80182F60(int index, int delta)
     short values[10];
     int value;
 
-    fn_8008174C(fn_80182DC8(), values);
+    PlayerGetGearBonuses(fn_80182DC8(), values);
     value = values[index] + delta;
     lbl_80362A84.mValues[index] = value > 0 ? (value > 99 ? 99 : value) : 1;
 }
@@ -1585,7 +1585,7 @@ int fn_8018399C(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg_t *pResul
         pResult->i = lbl_803EB56C;
         break;
     case 0x197:
-        fn_80029CE0(2, fn_8022F384(fn_8022F4BC()));
+        MemCardFilesStoreChecksum(2, fn_8022F384(fn_8022F4BC()));
         break;
     case 0x19A:
         pResult->i = lbl_803EB57C;

@@ -20,7 +20,7 @@
 #include "game/Query_800CE770.h"
 #include "game/Table_80089904.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
@@ -63,7 +63,7 @@ int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_8010CE90(Object_80039F5C *p, Ball_t *pBall);
 void fn_8010CFD4(Object_80039F5C *p);
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
 extern float gPlyrMoveFwdSpeed;
 }
@@ -78,7 +78,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
     fn_800B8344(p);
     pCarrier = BallGetCurrentHolder();
     fn_8010A2DC(p, 0, 0);
-    if (*fn_8003AB38(p) == 0x39) {
+    if (*PlyrGetPendingMsg(p) == 0x39) {
         p->mUnknown3040 = 0;
     }
     if (pCarrier == p) {

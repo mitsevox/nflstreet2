@@ -75,7 +75,7 @@ int PlayerDbGetPlex(Object_8008044C *pObject);
 int PlayerDbGetPlht(Object_8008044C *pObject);
 int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int PlayerDbGetPjen(Object_8008044C *pObject);
-void fn_80081440(Object_8008044C *pObject, short *pValues);
+void PlayerGearGetScaledBonuses(Object_8008044C *pObject, short *pValues);
 void PlayerDbReadHairColors(Object_8008044C *pObject, unsigned char *p);
 void fn_80081CDC(void);
 void fn_80081D24(void);
@@ -661,7 +661,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
     fn_8008040C(&cursor, 0);
     gPlayerLookBonuses[index].mId = id;
     if (PlayerDbSeekId(&cursor, id, 0)) {
-        fn_80081440(&cursor, gPlayerLookBonuses[index].mValues);
+        PlayerGearGetScaledBonuses(&cursor, gPlayerLookBonuses[index].mValues);
     } else {
         for (i = 9; i >= 0; i--) {
             gPlayerLookBonuses[index].mValues[i] = 0;

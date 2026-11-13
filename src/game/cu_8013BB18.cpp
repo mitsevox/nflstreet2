@@ -63,7 +63,7 @@ void fn_801D0C58(Vector_80039F5C *pPos);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
-void fn_8013CEB8(Interp_8013CC14 *pInterp, int steps);
+void CamInterpUpdateSnap(CamInterp_t *pInterp, int steps);
 }
 
 extern "C" {
@@ -602,7 +602,7 @@ void fn_8013C954(void *p, GameCamera_t *pCamera)
 }
 
 void fn_8013C9A4(EaseVector_8013C9A4 *pEase, Vector_80039F5C *pBase, Vector_80039F5C *pFrom,
-                 Vector_80039F5C *pTo, InterpFunc_8013CC14 update, float fromScale, float toScale,
+                 Vector_80039F5C *pTo, CamInterpFunc_t update, float fromScale, float toScale,
                  float time)
 {
     pEase->mBase.mX = pBase->mX;
@@ -654,14 +654,14 @@ void fn_8013CBC4(EaseVector_8013C9A4 *pEase)
     }
 }
 
-void fn_8013CC14(Interp_8013CC14 *pInterp, float value)
+void fn_8013CC14(CamInterp_t *pInterp, float value)
 {
     pInterp->mStart = pInterp->mValue = pInterp->mTarget = value;
     pInterp->mTime = pInterp->mRate = 0.0f;
-    pInterp->mUpdate = fn_8013CEB8;
+    pInterp->mUpdate = CamInterpUpdateSnap;
 }
 
-void fn_8013CC40(Interp_8013CC14 *pInterp, InterpFunc_8013CC14 update, float target, float time)
+void fn_8013CC40(CamInterp_t *pInterp, CamInterpFunc_t update, float target, float time)
 {
     if (target != pInterp->mStart) {
         pInterp->mUpdate = update;

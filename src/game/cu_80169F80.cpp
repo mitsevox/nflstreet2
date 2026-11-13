@@ -2,7 +2,7 @@
 #include "game/Candidate_8016B364.h"
 #include "game/Class_80148A58.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -67,7 +67,7 @@ void fn_8016B32C(int team, unsigned char value);
 void fn_8016B348(int team, unsigned char value);
 void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
-void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags);
+void fn_8016B82C(int team, PlayBookPlay_t *pRecord, unsigned char *pOut, unsigned int *pFlags);
 float fn_8016B8C8(int team, int value);
 void fn_8016BAAC(void);
 }
@@ -363,7 +363,7 @@ void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count)
 void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
 {
     int opponent = team ^ 1;
-    Record_80067338 *pRecord = PlayBookGetPlay(opponent);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(opponent);
     unsigned char kind;
     unsigned char trend;
     unsigned int mask;
@@ -518,7 +518,7 @@ void fn_8016B0AC(void)
 void fn_8016B0B0(void)
 {
     int team = fn_80178308();
-    Record_80067338 *pRecord = PlayBookGetPlay(team);
+    PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
 
     lbl_803EB40C->mUnknown0 = fn_8016B8C8(team, pRecord->mUnknown4);
     lbl_803EB40C->mUnknown4 = fn_8016A334(team);

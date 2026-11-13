@@ -1459,7 +1459,7 @@ void MsgTeamPickGetPlayerInfo(int row, int *pId, int *pTeam, int *pValues, char 
         } else {
             *pTeam = PlayerDbGetTeamId(&_MsgTeamPick_PlayerCursor);
         }
-        fn_80081788(&_MsgTeamPick_PlayerCursor, values);
+        PlayerGetGearRatings(&_MsgTeamPick_PlayerCursor, values);
         pValues[0] = values[6];
         pValues[1] = values[4];
         pValues[2] = values[7];

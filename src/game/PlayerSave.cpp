@@ -5,9 +5,9 @@
 #include "game/fn_801D2B7C.h"
 
 extern "C" {
-void fn_80029C2C(int a, int b, int c);
-void fn_8002A1D4(int a, int b, char *pBuf);
-void fn_8002A260(int a, int b, char *pBuf, int size);
+void MemCardFilesResetSlot(int a, int b, int c);
+void MemCardFilesRenameSlot(int a, int b, char *pBuf);
+void MemCardFilesGetSlotName(int a, int b, char *pBuf, int size);
 int PlayerRecordRead(int a, void *pBuffer);
 
 static void *_PlayerSave_pBuffer = 0;
@@ -70,9 +70,9 @@ int PlayerSavePrepare(int a, int b)
         _PlayerSave_pRecord = _PlayerSave_pBuffer;
         result = PlayerRecordRead(b, _PlayerSave_pBuffer);
         if (result != 0) {
-            fn_80029C2C(3, a, 0);
-            fn_8002A260(2, a, name, 32);
-            fn_8002A1D4(3, a, name);
+            MemCardFilesResetSlot(3, a, 0);
+            MemCardFilesGetSlotName(2, a, name, 32);
+            MemCardFilesRenameSlot(3, a, name);
         }
     }
     return result;

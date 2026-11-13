@@ -23,7 +23,7 @@ struct Link_800CDE50 {
     char mUnknown16[8];
 };
 
-/* The player object returned by fn_80039F5C, with the blocks it contains or
+/* The player object returned by PlyrGet, with the blocks it contains or
    points to. */
 
 struct Vector_80039F5C {
@@ -328,7 +328,7 @@ struct Object_80039F5C {
     unsigned char mUnknown9[3];
     unsigned int mFlags;
     /* Three 92-byte blocks at +16, +108 and +200 (filled from the +4
-       object's pose by fn_8003AE24); each holds that pose's address at
+       object's pose by PlyrAttachModel); each holds that pose's address at
        its +40. */
     int mUnknown16;
     char mUnknown20[36];
@@ -505,7 +505,7 @@ struct Object_80039F5C {
 };
 
 extern "C" {
-Object_80039F5C *fn_80039F5C(int team, unsigned short index);
+Object_80039F5C *PlyrGet(int team, unsigned short index);
 Object_80039F5C *fn_8009BCE8(int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
 }

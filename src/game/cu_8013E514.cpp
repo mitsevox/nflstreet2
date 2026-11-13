@@ -1,7 +1,7 @@
 #include "game/fn_80177FE0.h"
-#include "game/fn_80195EFC.h"
+#include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
-#include "game/Interp_8013CC14.h"
+#include "game/CamInterp.h"
 #include "game/EaseVector_8013C9A4.h"
 #include "game/cu_8013BB18.h"
 #include "game/Object_80039F5C.h"
@@ -17,9 +17,9 @@ struct Entry_8013F374 {
 
 /* The two record kinds have distinct payloads; their common stride is 0x130. */
 struct Payload0_8013EEE4 {
-    Interp_8013CC14 mX, mY, mZ;
+    CamInterp_t mX, mY, mZ;
     Vector_80039F5C mTarget;
-    Interp_8013CC14 mFov;
+    CamInterp_t mFov;
     float mLimit;
     unsigned short mUnknown70, mUnknown72;
     int mUnknown74, mUnknown78;
@@ -29,7 +29,7 @@ struct Payload0_8013EEE4 {
 };
 struct Payload1_8013F090 {
     EaseVector_8013C9A4 mPosition, mTarget;
-    Interp_8013CC14 mFov;
+    CamInterp_t mFov;
     float mLimit;
     int mUnknown10C;
     int mRef;
@@ -61,7 +61,7 @@ struct ScriptCamera_8013E514 {
 struct Desc0_8013EEE4 {
     Vector_80039F5C mPosition, mEndPosition, mTarget;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModeX, mModeY, mModeZ, mModeFov;
+    CamInterpFunc_t mModeX, mModeY, mModeZ, mModeFov;
     unsigned short mUnknown48, mUnknown4A;
     int mUnknown4C, mUnknown50;
     unsigned int mFlags;
@@ -74,7 +74,7 @@ struct Desc1_8013F090 {
     float mTargetStartScale, mTargetEndScale;
     int mUnknown58, mRef;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    InterpFunc_8013CC14 mModePosition, mModeTarget, mModeFov;
+    CamInterpFunc_t mModePosition, mModeTarget, mModeFov;
     unsigned short mUnknown80, mUnknown82;
     int mUnknown84, mUnknown88;
     unsigned int mFlags;
@@ -93,12 +93,12 @@ int fn_800AD9B4(void);
 void CamGameSelectCamera(int);
 GameCamera_t *CamGameGetCamera(int);
 void CamGameChangeType(int, int);
-void fn_80142B00(void);
+void CamBallRequestRestart(void);
 int fn_801784C4(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
 void fn_80187DD0(unsigned short);
-int fn_8019623C(int);
+int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
 int fn_801CFE40(float, float);
 void fn_80227490(void *, void *, int, int, int);
@@ -140,7 +140,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     State_8013E574 *s = &p->mState;
     Payload1_8013F090 *b = &s->mpCurrent->mData.m1;
     EaseVector_8013C9A4 *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     if (b->mRef) {
         Object_80039F5C *o = fn_8009BCE8(&b->mRef);
@@ -187,7 +187,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     State_8013E574 *s = &p->mState;
     Payload0_8013EEE4 *b = &s->mpCurrent->mData.m0;
     Vector_80039F5C *target = &b->mTarget;
-    Interp_8013CC14 *fov = &b->mFov;
+    CamInterp_t *fov = &b->mFov;
     int done = (float)s->mFrame >= b->mLimit;
     b->mX.mUpdate(&b->mX, done); b->mY.mUpdate(&b->mY, done);
     b->mZ.mUpdate(&b->mZ, done); fov->mUpdate(fov, done);
@@ -213,7 +213,7 @@ extern "C" void fn_8013E960(int team, int flag)
 {
     int count = fn_80178D18((unsigned char)team);
     for (int i = 0; i < count; ++i) {
-        Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+        Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
         if (p) {
             Block_80170E64 *b = p->mpUnknown4;
             if (flag) b->mUnknown20 |= 1;
@@ -226,7 +226,7 @@ extern "C" void fn_8013E9F0(int team, int flag)
     if (fn_800AD9B4() == 1) {
         int count = fn_80178D18((unsigned char)team);
         for (int i = 0; i < count; ++i) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             if (flag) p->mFlags &= ~0x10;
             else p->mFlags |= 0x10;
         }
@@ -260,8 +260,8 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
             if (fn_801784C4()) { fn_8013CBC4(&b->mPosition); fn_8013CBC4(&b->mTarget); }
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
-            if ((b->mFlags & 0x100) && fn_8019623C(0x23000)) fn_80195EFC(1, 12, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
         }
         case 0: {
@@ -272,7 +272,7 @@ extern "C" void fn_8013EA8C(State_8013E574 *s)
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
             if (b->mUnknown74) BannerShow(b->mUnknown70, b->mUnknown72, b->mUnknown74, b->mUnknown78);
-            if ((b->mFlags & 2) && fn_8019623C(0x23000)) fn_80195EFC(1, lbl_803EB1D0, 0x808080, 0);
+            if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, lbl_803EB1D0, 0x808080, 0);
             break;
         }
         }
@@ -347,7 +347,7 @@ extern "C" void fn_8013F298(void)
 {
     if (lbl_803EB1E0) {
         fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1D8 = 0; lbl_803EB1DC = 0;
-        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; fn_80142B00();
+        CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; CamBallRequestRestart();
     }
     lbl_803EB1D4 = 0;
 }

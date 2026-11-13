@@ -1,12 +1,18 @@
+/* Replay camera mode and camera helpers. The update functions of the camera
+   easing values (ease in-out, sine, linear, snap), look-angle and screen
+   aspect helpers, and camera mode 8, which follows the replay script's
+   records: each frame it places the camera by the record's view mode,
+   aims it at the ball, a tracked player or a script point, and eases its
+   angles and field of view; at the end of a record it moves to the next. */
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/RecordList_8002E7C0.h"
 
-#include "game/Interp_8013CC14.h"
+#include "game/CamInterp.h"
 
-struct CameraState_8013D1C0 {
+struct CamReplayState_t {
     float mUnknown00[3];
     float mUnknown0C[3];
     float mUnknown18;
@@ -19,7 +25,7 @@ struct CameraState_8013D1C0 {
     float mUnknown2C;
 };
 
-struct Camera_8013D1C0 {
+struct CamReplayCamera_t {
     char mPad00[4];
     float mUnknown04[3];
     char mPad10[4];
@@ -43,25 +49,25 @@ struct Camera_8013D1C0 {
     int mUnknown9C;
     int mUnknownA0;
     char mPadA4[0x38];
-    void (*mUnknownDC)(Camera_8013D1C0 *pCamera, int msg);
+    void (*mUnknownDC)(CamReplayCamera_t *pCamera, int msg);
     char mPadE0[0x18];
-    CameraState_8013D1C0 mUnknownF8;
+    CamReplayState_t mUnknownF8;
     RecordList_8002E7C0 mUnknown128;
 };
 
 /* Object returned by BallGetModel. */
-struct Target_8013825C {
+struct CamReplayBallModel_t {
     char mPad00[4];
     float mUnknown04[3];
 };
 
-struct Mode_8013D1C0 {
-    void (*mUnknown00)(Camera_8013D1C0 *pCamera);
-    void (*mUnknown04)(Camera_8013D1C0 *pCamera);
+struct CamReplayModeTable_t {
+    void (*mUnknown00)(CamReplayCamera_t *pCamera);
+    void (*mUnknown04)(CamReplayCamera_t *pCamera);
     int mUnknown08;
 };
 
-struct Entry_8013E168 {
+struct CamReplayPart_t {
     float mUnknown00;
     int mUnknown04;
 };
@@ -80,15 +86,15 @@ Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
 void PlyrPoseGetBoneTransform(Block_80170E64 *pBlock, int id, float *pOut, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
-Target_8013825C *BallGetModel(void *p);
-void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
+CamReplayBallModel_t *BallGetModel(void *p);
+void fn_8013C624(CamReplayCamera_t *pCamera, int mode, int a, int b);
 int fn_801784C4(void);
 int fn_801784E8(void);
 void BannerClear(int a);
 void CamSetDefaultAspect(float aspect);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
-void CamSetFieldOfView(Camera_8013D1C0 *pCamera, float a, float b);
+void CamSetFieldOfView(CamReplayCamera_t *pCamera, float a, float b);
 int fn_801CEB40(void);
 int fn_801CEB4C(void);
 float fn_801CFB74(float x);
@@ -100,34 +106,34 @@ void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 float fn_80260B1C(float x);
 
-void fn_8013D1C0(Camera_8013D1C0 *pCamera);
-void fn_8013D1F0(Camera_8013D1C0 *pCamera);
-void fn_8013D1F4(Camera_8013D1C0 *pCamera);
-void fn_8013D2A8(Camera_8013D1C0 *pCamera);
-void fn_8013DA60(Record_8002E7C0 *pRecord, float *pOrigin, float *pOut);
-void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, float *pOut);
-void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth);
-void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t);
-void fn_8013E1E4(Camera_8013D1C0 *pCamera, int *pAngles, int smooth);
-float fn_8013E298(float *pFrom, float *pTo, int *pAngles);
-void fn_8013E33C(float *pPos);
-void fn_8013E434(Camera_8013D1C0 *pCamera, int msg);
+void CamReplayInit(CamReplayCamera_t *pCamera);
+void CamReplayUninit(CamReplayCamera_t *pCamera);
+void CamReplayStart(CamReplayCamera_t *pCamera);
+void CamReplayUpdate(CamReplayCamera_t *pCamera);
+void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, float *pOut);
+void CamReplayGetTarget(CamReplayCamera_t *pCamera, Record_8002E7C0 *pRecord, float *pOut);
+void CamReplayUpdateFov(CamReplayCamera_t *pCamera, int smooth);
+void CamReplayObjectCenter(Object_80039F5C *pObject, float *pOut, float t);
+void CamReplaySetAngles(CamReplayCamera_t *pCamera, int *pAngles, int smooth);
+float CamReplayCalcAngles(float *pFrom, float *pTo, int *pAngles);
+void CamReplayClampPos(float *pPos);
+void CamReplayHandleMsg(CamReplayCamera_t *pCamera, int msg);
 }
 
 extern "C" {
-Mode_8013D1C0 lbl_802DBDB8 = { fn_8013D1C0, fn_8013D1F0, 0 };
+CamReplayModeTable_t gCamReplayMode = { CamReplayInit, CamReplayUninit, 0 };
 }
 
-static Entry_8013E168 lbl_802DBDC4[2] = { { 10.0f, 0 }, { 0.0f, 26 } };
-static Camera_8013D1C0 *lbl_803EB1C8 = 0;
-static int lbl_803EB1CC = 0;
-static unsigned char lbl_803EC9F8;
-static int lbl_803EC9FC;
-static float lbl_8031B6A0[3];
+static CamReplayPart_t _CamReplay_aCenterParts[2] = { { 10.0f, 0 }, { 0.0f, 26 } };
+static CamReplayCamera_t *_CamReplay_pCamera = 0;
+static int _CamReplay_bRepeat = 0;
+static unsigned char _CamReplay_bTrackedPlayer;
+static int _CamReplay_iTrackedId;
+static float _CamReplay_vTarget[3];
 
 #if defined(DECOMP_COMPARE)
 /* accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
-extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
+extern "C" void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps)
 {
     float split = 0.5f;
     float speed = 2.0f;
@@ -154,7 +160,7 @@ extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
 }
 #endif
 
-extern "C" void fn_8013CD58(Interp_8013CC14 *pInterp, int steps)
+extern "C" void CamInterpUpdateSine(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -170,7 +176,7 @@ extern "C" void fn_8013CD58(Interp_8013CC14 *pInterp, int steps)
     }
 }
 
-extern "C" void fn_8013CE44(Interp_8013CC14 *pInterp, int steps)
+extern "C" void CamInterpUpdateLinear(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -185,7 +191,7 @@ extern "C" void fn_8013CE44(Interp_8013CC14 *pInterp, int steps)
     }
 }
 
-extern "C" void fn_8013CEB8(Interp_8013CC14 *pInterp, int steps)
+extern "C" void CamInterpUpdateSnap(CamInterp_t *pInterp, int steps)
 {
     while (steps--) {
         if (pInterp->mValue != pInterp->mTarget) {
@@ -195,7 +201,7 @@ extern "C" void fn_8013CEB8(Interp_8013CC14 *pInterp, int steps)
     }
 }
 
-extern "C" float fn_8013CEF4(float *pFrom, float *pTo, int *pAngles)
+extern "C" float CamCalcLookAngles(float *pFrom, float *pTo, int *pAngles)
 {
     float v[3];
     int yaw;
@@ -212,7 +218,7 @@ extern "C" float fn_8013CEF4(float *pFrom, float *pTo, int *pAngles)
     return fabs(v[2]);
 }
 
-extern "C" void fn_8013CF98(void)
+extern "C" void CamSetupAspect(void)
 {
     int a = fn_801CEB40();
     int b = fn_801CEB4C();
@@ -236,7 +242,7 @@ extern "C" void fn_8013CF98(void)
     }
 }
 
-extern "C" float fn_8013D050(void)
+extern "C" float CamGetAspect(void)
 {
     int a = fn_801CEB40();
     int b = fn_801CEB4C();
@@ -256,7 +262,7 @@ extern "C" float fn_8013D050(void)
     return aspect;
 }
 
-extern "C" int fn_8013D0D0(void)
+extern "C" int CamGetDisplayModeIndex(void)
 {
     int a = fn_801CEB40();
     int b = fn_801CEB4C();
@@ -267,27 +273,27 @@ extern "C" int fn_8013D0D0(void)
     return a == 1 ? 2 : 3;
 }
 
-extern "C" float fn_8013D120(unsigned int a, unsigned int b, unsigned int c)
+extern "C" float CamReplayGetProgress(unsigned int a, unsigned int b, unsigned int c)
 {
     float ratio = (float)a / ((float)b / (float)c * 60.0f);
 
     return ratio < 0.0f ? 0.0f : (ratio > 1.0f ? 1.0f : ratio);
 }
 
-extern "C" void fn_8013D1C0(Camera_8013D1C0 *pCamera)
+extern "C" void CamReplayInit(CamReplayCamera_t *pCamera)
 {
-    pCamera->mUnknownDC = fn_8013E434;
-    lbl_803EB1C8 = pCamera;
-    lbl_8031B6A0[0] = lbl_8031B6A0[1] = lbl_8031B6A0[2] = 0.0f;
+    pCamera->mUnknownDC = CamReplayHandleMsg;
+    _CamReplay_pCamera = pCamera;
+    _CamReplay_vTarget[0] = _CamReplay_vTarget[1] = _CamReplay_vTarget[2] = 0.0f;
 }
 
-extern "C" void fn_8013D1F0(Camera_8013D1C0 *pCamera)
+extern "C" void CamReplayUninit(CamReplayCamera_t *pCamera)
 {
 }
 
-extern "C" void fn_8013D1F4(Camera_8013D1C0 *pCamera)
+extern "C" void CamReplayStart(CamReplayCamera_t *pCamera)
 {
-    CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
+    CamReplayState_t *pState = &pCamera->mUnknownF8;
     RecordList_8002E7C0 *pList = &pCamera->mUnknown128;
     Object_80039F5C *p;
 
@@ -302,16 +308,16 @@ extern "C" void fn_8013D1F4(Camera_8013D1C0 *pCamera)
         pState->mUnknown00[1] = pRecord->mUnknown1C.mUnknown00[1];
         pState->mUnknown00[2] = pRecord->mUnknown1C.mUnknown00[2];
         if (p) {
-            lbl_803EC9F8 = 1;
-            fn_8009BD2C(p, &lbl_803EC9FC);
+            _CamReplay_bTrackedPlayer = 1;
+            fn_8009BD2C(p, &_CamReplay_iTrackedId);
         } else {
-            lbl_803EC9F8 = 0;
+            _CamReplay_bTrackedPlayer = 0;
         }
         pState->mUnknown2C = 1.0f;
     }
 }
 
-extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
+extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
 {
     int angles[3];
     Timer_8002E7C0 timer;
@@ -321,7 +327,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     float pos[3];
     float dir4[3];
     float dir0[3];
-    CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
+    CamReplayState_t *pState = &pCamera->mUnknownF8;
     Record_8002E7C0 *pRecord;
     View_8002E7C0 *pView;
     float *pFrom;
@@ -330,7 +336,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     int duration;
     Object_80039F5C *p;
     int smooth;
-    Target_8013825C *pTarget;
+    CamReplayBallModel_t *pTarget;
     float dist;
 
     out[0] = out[1] = out[2] = 0.0f;
@@ -359,7 +365,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     }
     if (pRecord->mUnknown18 & 0x20) {
         pRecord->mUnknown18 &= ~0x20;
-        fn_8013E168(pRecord->mUnknown1C.mUnknown38, pRecord->mUnknown1C.mUnknown1C, 0.5f);
+        CamReplayObjectCenter(pRecord->mUnknown1C.mUnknown38, pRecord->mUnknown1C.mUnknown1C, 0.5f);
     }
     fn_802276B4(diff, pState->mUnknown00, target);
     dist = fn_802270D4(diff);
@@ -373,7 +379,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pos[0] = pState->mUnknown00[0];
         pos[1] = pState->mUnknown00[1];
         pos[2] = pState->mUnknown00[2];
-        fn_8013E33C(pos);
+        CamReplayClampPos(pos);
         if (p == 0 && target[2] > 2.0f) {
             target[2] = 0.0f;
             dir0[0] = pFrom[0];
@@ -389,26 +395,26 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        fn_8013DDF4(pCamera, pRecord, out);
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        CamReplayGetTarget(pCamera, pRecord, out);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, smooth);
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        CamReplayUpdateFov(pCamera, smooth);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         break;
     case 2:
     case 3:
         pos[0] = pState->mUnknown00[0];
         pos[1] = pState->mUnknown00[1];
         pos[2] = pState->mUnknown00[2];
-        fn_8013E33C(pos);
+        CamReplayClampPos(pos);
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        fn_8013DDF4(pCamera, pRecord, out);
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        CamReplayGetTarget(pCamera, pRecord, out);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, smooth);
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        CamReplayUpdateFov(pCamera, smooth);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         break;
     case 4:
         dir4[0] = pPoint[0];
@@ -421,19 +427,19 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pos[0] = pState->mUnknown00[0];
         pos[1] = pState->mUnknown00[1];
         pos[2] = pState->mUnknown00[2];
-        fn_8013E33C(pos);
+        CamReplayClampPos(pos);
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        pState->mUnknown24 = fn_8013E298(pos, dir4, angles);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, dir4, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, smooth);
-        pState->mUnknown24 = fn_8013E298(pos, dir4, angles);
+        CamReplayUpdateFov(pCamera, smooth);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, dir4, angles);
         break;
     case 7:
     case 8:
     case 14:
-        fn_8013DDF4(pCamera, pRecord, out);
+        CamReplayGetTarget(pCamera, pRecord, out);
         smooth = 0;
         pos[0] = out[0];
         pos[1] = out[1];
@@ -452,34 +458,34 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, 0);
+        CamReplayUpdateFov(pCamera, 0);
         break;
     case 5:
     case 6:
-        fn_8013DDF4(pCamera, pRecord, out);
+        CamReplayGetTarget(pCamera, pRecord, out);
         smooth = 0;
-        fn_8013DA60(pRecord, out, pos);
+        CamReplayOrbitPos(pRecord, out, pos);
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, 0);
+        CamReplayUpdateFov(pCamera, 0);
         break;
     case 9:
     case 10:
-        fn_8013DDF4(pCamera, pRecord, out);
+        CamReplayGetTarget(pCamera, pRecord, out);
         pos[0] = out[0];
         pos[1] = out[1];
         pos[2] = out[2];
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
         pCamera->mUnknown04[2] = pos[2];
-        pState->mUnknown24 = fn_8013E298(pos, out, angles);
+        pState->mUnknown24 = CamReplayCalcAngles(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, 0);
+        CamReplayUpdateFov(pCamera, 0);
         break;
     case 11:
     case 12:
@@ -487,9 +493,9 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         float t;
 
         if (duration == 0) {
-            t = fn_8013D120(timer.mUnknown10, timer.mUnknown08, timer.mUnknown0C);
+            t = CamReplayGetProgress(timer.mUnknown10, timer.mUnknown08, timer.mUnknown0C);
         } else {
-            t = fn_8013D120(timer.mUnknown10, duration, timer.mUnknown0C);
+            t = CamReplayGetProgress(timer.mUnknown10, duration, timer.mUnknown0C);
         }
         pCamera->mUnknown04[0] = pState->mUnknown00[0];
         pCamera->mUnknown04[1] = pState->mUnknown00[1];
@@ -497,7 +503,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         smooth = 0;
         switch (mode) {
         case 12:
-            fn_8013E168(pRecord->mUnknown1C.mUnknown38, out, 0.0f);
+            CamReplayObjectCenter(pRecord->mUnknown1C.mUnknown38, out, 0.0f);
             fn_8022765C(out, out, pPoint);
             break;
         case 13:
@@ -516,23 +522,23 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         out[0] = pFrom[0] * (1.0f - t) + out[0] * t;
         out[1] = pFrom[1] * (1.0f - t) + out[1] * t;
         out[2] = pFrom[2] * (1.0f - t) + out[2] * t;
-        pState->mUnknown24 = fn_8013E298(pCamera->mUnknown04, out, angles);
+        pState->mUnknown24 = CamReplayCalcAngles(pCamera->mUnknown04, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, 0);
-        pState->mUnknown24 = fn_8013E298(pCamera->mUnknown04, out, angles);
+        CamReplayUpdateFov(pCamera, 0);
+        pState->mUnknown24 = CamReplayCalcAngles(pCamera->mUnknown04, out, angles);
         break;
     }
     default:
         fn_801C1F94(out, 0, sizeof(out));
         break;
     }
-    fn_8013E1E4(pCamera, angles, smooth);
+    CamReplaySetAngles(pCamera, angles, smooth);
     pView->mUnknown0C[0] = out[0];
     pView->mUnknown0C[1] = out[1];
     pView->mUnknown0C[2] = out[2];
 }
 
-extern "C" void fn_8013DA60(Record_8002E7C0 *pRecord, float *pOrigin, float *pOut)
+extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, float *pOut)
 {
     Timer_8002E7C0 timer = pRecord->mUnknown04;
     float t = (float)timer.mUnknown10 / ((float)timer.mUnknown08 / (float)timer.mUnknown0C * 60.0f);
@@ -586,15 +592,15 @@ extern "C" void fn_8013DA60(Record_8002E7C0 *pRecord, float *pOrigin, float *pOu
     pOut[2] = v[2];
 }
 
-extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, float *pOut)
+extern "C" void CamReplayGetTarget(CamReplayCamera_t *pCamera, Record_8002E7C0 *pRecord, float *pOut)
 {
-    CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
+    CamReplayState_t *pState = &pCamera->mUnknownF8;
     Object_80039F5C *pObject = fn_80030C70(0, 0);
     float target[3];
     float tracked[3];
     int id;
     float blend;
-    Target_8013825C *pTarget;
+    CamReplayBallModel_t *pTarget;
 
     pTarget = BallGetModel(BallGetCurrent());
     tracked[0] = pTarget->mUnknown04[0];
@@ -608,56 +614,56 @@ extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, 
     case 14:
         if (pObject) {
             fn_8009BD2C(pObject, &id);
-            if (!lbl_803EC9F8 || id != lbl_803EC9FC) {
+            if (!_CamReplay_bTrackedPlayer || id != _CamReplay_iTrackedId) {
                 pState->mUnknown2C = 0.0f;
             }
-            fn_8013E168(pObject, target, 0.0f);
+            CamReplayObjectCenter(pObject, target, 0.0f);
             if (pState->mUnknown2C < 1.0f) {
                 blend = pState->mUnknown2C + 1.0f / 90.0f;
                 blend = blend > 1.0f ? 1.0f : blend;
                 pState->mUnknown2C = blend;
-                fn_80227930(pOut, target, lbl_8031B6A0, blend);
-                lbl_8031B6A0[0] = pOut[0];
-                lbl_8031B6A0[1] = pOut[1];
-                lbl_8031B6A0[2] = pOut[2];
+                fn_80227930(pOut, target, _CamReplay_vTarget, blend);
+                _CamReplay_vTarget[0] = pOut[0];
+                _CamReplay_vTarget[1] = pOut[1];
+                _CamReplay_vTarget[2] = pOut[2];
             } else {
                 pOut[0] = target[0];
                 pOut[1] = target[1];
                 pOut[2] = target[2];
-                lbl_8031B6A0[0] = pOut[0];
-                lbl_8031B6A0[1] = pOut[1];
-                lbl_8031B6A0[2] = pOut[2];
+                _CamReplay_vTarget[0] = pOut[0];
+                _CamReplay_vTarget[1] = pOut[1];
+                _CamReplay_vTarget[2] = pOut[2];
             }
-            lbl_803EC9F8 = 1;
-            fn_8009BD2C(pObject, &lbl_803EC9FC);
+            _CamReplay_bTrackedPlayer = 1;
+            fn_8009BD2C(pObject, &_CamReplay_iTrackedId);
         } else {
-            if (lbl_803EC9F8) {
+            if (_CamReplay_bTrackedPlayer) {
                 pState->mUnknown2C = 0.0f;
             }
             if (pState->mUnknown2C < 1.0f) {
                 blend = pState->mUnknown2C + 1.0f / 90.0f;
                 blend = blend > 1.0f ? 1.0f : blend;
                 pState->mUnknown2C = blend;
-                fn_80227930(pOut, tracked, lbl_8031B6A0, blend);
-                lbl_8031B6A0[0] = pOut[0];
-                lbl_8031B6A0[1] = pOut[1];
-                lbl_8031B6A0[2] = pOut[2];
+                fn_80227930(pOut, tracked, _CamReplay_vTarget, blend);
+                _CamReplay_vTarget[0] = pOut[0];
+                _CamReplay_vTarget[1] = pOut[1];
+                _CamReplay_vTarget[2] = pOut[2];
             } else {
                 pOut[0] = tracked[0];
                 pOut[1] = tracked[1];
                 pOut[2] = tracked[2];
-                lbl_8031B6A0[0] = pOut[0];
-                lbl_8031B6A0[1] = pOut[1];
-                lbl_8031B6A0[2] = pOut[2];
+                _CamReplay_vTarget[0] = pOut[0];
+                _CamReplay_vTarget[1] = pOut[1];
+                _CamReplay_vTarget[2] = pOut[2];
             }
-            lbl_803EC9F8 = 0;
+            _CamReplay_bTrackedPlayer = 0;
         }
         break;
     case 2:
     case 6:
     case 7:
     case 10:
-        fn_8013E168(pRecord->mUnknown1C.mUnknown38, target, 0.0f);
+        CamReplayObjectCenter(pRecord->mUnknown1C.mUnknown38, target, 0.0f);
         pOut[0] = target[0];
         pOut[1] = target[1];
         pOut[2] = target[2];
@@ -675,11 +681,11 @@ extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, 
     pState->mUnknown0C[2] = pOut[2];
 }
 
-extern "C" void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth)
+extern "C" void CamReplayUpdateFov(CamReplayCamera_t *pCamera, int smooth)
 {
     float argA = 0.02f;
     float argB = 0.01f;
-    CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
+    CamReplayState_t *pState = &pCamera->mUnknownF8;
 
     if (!smooth
         || (pState->mUnknown18 != pState->mUnknown1C
@@ -689,10 +695,10 @@ extern "C" void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth)
     CamSetFieldOfView(pCamera, pState->mUnknown18 > 2796202.0f ? 2796202.0f : pState->mUnknown18, pCamera->mUnknown24);
 }
 
-extern "C" void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t)
+extern "C" void CamReplayObjectCenter(Object_80039F5C *pObject, float *pOut, float t)
 {
-    Entry_8013E168 *pFirst = lbl_802DBDC4;
-    Entry_8013E168 *pSecond = pFirst + 1;
+    CamReplayPart_t *pFirst = _CamReplay_aCenterParts;
+    CamReplayPart_t *pSecond = pFirst + 1;
     float a[3];
     float b[3];
 
@@ -701,7 +707,7 @@ extern "C" void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t)
     fn_80227930(pOut, b, a, 0.5f);
 }
 
-extern "C" void fn_8013E1E4(Camera_8013D1C0 *pCamera, int *pAngles, int smooth)
+extern "C" void CamReplaySetAngles(CamReplayCamera_t *pCamera, int *pAngles, int smooth)
 {
     pAngles[0] &= 0xffffff;
     pAngles[1] &= 0xffffff;
@@ -717,7 +723,7 @@ extern "C" void fn_8013E1E4(Camera_8013D1C0 *pCamera, int *pAngles, int smooth)
     }
 }
 
-extern "C" float fn_8013E298(float *pFrom, float *pTo, int *pAngles)
+extern "C" float CamReplayCalcAngles(float *pFrom, float *pTo, int *pAngles)
 {
     float d[3];
     int yaw, pitch;
@@ -733,7 +739,7 @@ extern "C" float fn_8013E298(float *pFrom, float *pTo, int *pAngles)
     return fabs(d[2]);
 }
 
-extern "C" void fn_8013E33C(float *pPos)
+extern "C" void CamReplayClampPos(float *pPos)
 {
     if (fn_801784C4()) {
         pPos[0] = -pPos[0];
@@ -748,30 +754,30 @@ extern "C" void fn_8013E33C(float *pPos)
     pPos[2] = pPos[2] < 0.0f ? 0.0f : pPos[2];
 }
 
-extern "C" void fn_8013E434(Camera_8013D1C0 *pCamera, int msg)
+extern "C" void CamReplayHandleMsg(CamReplayCamera_t *pCamera, int msg)
 {
     switch (msg) {
     case 3:
-        fn_8013D2A8(pCamera);
+        CamReplayUpdate(pCamera);
         break;
     case 1:
-        fn_8013D1F4(pCamera);
+        CamReplayStart(pCamera);
         break;
     case 4:
         break;
     }
 }
 
-extern "C" void fn_8013E474(void)
+extern "C" void CamReplayNextRecord(void)
 {
     void *p = lbl_803EA368;
-    RecordList_8002E7C0 *pList = &lbl_803EB1C8->mUnknown128;
+    RecordList_8002E7C0 *pList = &_CamReplay_pCamera->mUnknown128;
 
     if (fn_8002E7D0(pList)) {
         fn_8002E7EC(p, pList);
-        fn_8013C624(lbl_803EB1C8, 8, 0, 0);
-    } else if (lbl_803EB1CC) {
-        fn_8013C624(lbl_803EB1C8, 8, 0, 0);
+        fn_8013C624(_CamReplay_pCamera, 8, 0, 0);
+    } else if (_CamReplay_bRepeat) {
+        fn_8013C624(_CamReplay_pCamera, 8, 0, 0);
         fn_8002CFF4(lbl_803EA368);
     } else {
         fn_8002D198(p);

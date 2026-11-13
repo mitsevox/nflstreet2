@@ -99,7 +99,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
     fn_801C2E18(text, "%d / %d", first, second);
     if (p->mUnknown24 == 1) {
         int slot = team == 1 ? 1 : 2;
-        Object_80039F5C *pPlayer = fn_80039F5C(team, 0);
+        Object_80039F5C *pPlayer = PlyrGet(team, 0);
 
         if (showColors) {
             color = fn_80155130(p, team, 0);
@@ -110,7 +110,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
         HudSetScoreTableRow(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
     } else {
         int slot = team == 1 ? 1 : 3;
-        Object_80039F5C *pPlayer = fn_80039F5C(team, 0);
+        Object_80039F5C *pPlayer = PlyrGet(team, 0);
 
         if (showColors) {
             color = fn_80155130(p, team, 0);
@@ -119,7 +119,7 @@ void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
             }
         }
         HudSetScoreTableRow(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
-        pPlayer = fn_80039F5C(team, 1);
+        pPlayer = PlyrGet(team, 1);
         if (showColors) {
             color = fn_80155130(p, team, 1);
             if (color == 255) {

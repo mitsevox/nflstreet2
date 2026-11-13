@@ -1,10 +1,16 @@
-#include "game/Desc_800408E4.h"
+/* Animated big objects: the placed level objects (crowd stands, fences,
+   birds, the animated ball and the like). Sets up their object pool and
+   model file, creates one object per level placement with its BigObjInst
+   state, links grouped objects, copies instance positions back each frame,
+   registers their save and load streams as "Animated Big Objects", and finds
+   objects by index, key, group or distance. */
+#include "game/BigObjDesc.h"
 #include "game/fn_8022781C.h"
 #include <string.h>
 
 #include "game/bitstream.h"
 #include "game/LevelData.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/Ball.h"
 #include "game/fn_801C1F94.h"
@@ -24,37 +30,37 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                  int size, const char *pName);
 void BallModelSetLinkedObj(Block_80170E64 *pBlock, BigObjInst *pLinked);
 void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count);
-void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
+void fn_8004ABF4(BigObj_t *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t);
 void fn_8004AF84(BigObjPhysics_t *pExtra);
 void fn_8004CBE8(void);
 void fn_8004D0F4(int handle);
 void fn_8004D118(int handle);
-void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first);
+void fn_8004D144(BigObjDesc_t *pDesc, int handle, int first);
 int fn_8004D3A8(void *pData, char *pName);
 void fn_8004D798(void);
 void fn_8004D818(void);
-void fn_8004DC88(void *pData, int model, Object_80040818 *pObject);
-void fn_8004DF68(Object_80040818 *pObject);
+void fn_8004DC88(void *pData, int model, BigObj_t *pObject);
+void fn_8004DF68(BigObj_t *pObject);
 void fn_8004DFDC(void);
 void fn_8004E018(void);
-void fn_8004E0CC(Object_80040818 *pObject, int a, int b);
+void fn_8004E0CC(BigObj_t *pObject, int a, int b);
 void fn_8004E320(void);
 void fn_8004E358(void);
-void fn_8004F754(int model, Object_80040818 *pObject, int index);
+void fn_8004F754(int model, BigObj_t *pObject, int index);
 void fn_800504EC(void);
 void fn_80051308(void);
 void fn_80053A1C(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
-int ObjNewType_(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
-                void (*pRelease)(Object_80040818 *));
+int ObjNewType_(int type, int size, int count, void (*pInit)(BigObj_t *, BigObjDesc_t *),
+                void (*pRelease)(BigObj_t *));
 int ObjDelType(int type);
-void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
-Object_80040818 *ObjNewInList(int handle, int type, int a, Desc_800408E4 *pDesc);
-void ObjRemoveFromList(int handle, Object_80040818 *pObject);
-void ObjSetPriority(int handle, Object_80040818 *pObject, int a);
+void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(BigObj_t *));
+BigObj_t *ObjNewInList(int handle, int type, int a, BigObjDesc_t *pDesc);
+void ObjRemoveFromList(int handle, BigObj_t *pObject);
+void ObjSetPriority(int handle, BigObj_t *pObject, int a);
 void QuatFromEuler(Quat_801EB488 *pOut, int a, int b, int c);
 void QuatSlerp(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int ResSetMemFlags(int value);
@@ -62,46 +68,46 @@ int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
-void VptTrashObject(Object_80040818 *pObject);
+void VptTrashObject(BigObj_t *pObject);
 void VptFlushObjectTrash(void);
 void VptFlushObjectTrashSync(void);
 
-int fn_800400CC(Object_80040818 *pObject);
-void fn_800400D4(Object_80040818 *pObject, unsigned int count);
-void fn_80040788(int handle, int count);
-void fn_800407F0(void);
-void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc);
-void fn_80040884(Object_80040818 *pObject);
-int fn_800408A4(Object_80040818 *pObject);
+int BigObjDefaultUpdate(BigObj_t *pObject);
+void BigObjLinkGroup(BigObj_t *pObject, unsigned int count);
+void BigObjRegisterPool(int handle, int count);
+void BigObjReleasePool(void);
+void BigObjItemInit(BigObj_t *pObject, BigObjDesc_t *pDesc);
+void BigObjItemRelease(BigObj_t *pObject);
+int BigObjItemUpdate(BigObj_t *pObject);
 }
 
-static Object_80040818 **lbl_803EA480 = 0;
-static unsigned char lbl_803EA484 = 1;
-static unsigned short lbl_803EC784;
-static unsigned short lbl_803EC786;
-static unsigned short lbl_803EC788;
-static void *lbl_803EC78C;
+static BigObj_t **_BigObj_apObjects = 0;
+static unsigned char _BigObj_bUpdate = 1;
+static unsigned short _BigObj_uCount;
+static unsigned short _BigObj_uMax;
+static unsigned short _BigObj_uLinkedStart;
+static void *_BigObj_pModelFile;
 
 extern "C" {
 #if defined(DECOMP_COMPARE)
-int fn_800400CC(Object_80040818 *pObject)
+int BigObjDefaultUpdate(BigObj_t *pObject)
 {
     return 0;
 }
 
 /* Links the newest object to up to eight earlier objects that share its
    group id, and points each of them back at it. */
-void fn_800400D4(Object_80040818 *pObject, unsigned int count)
+void BigObjLinkGroup(BigObj_t *pObject, unsigned int count)
 {
     BigObjInst *pLinked = pObject->mUnknown472;
     unsigned int n = 0;
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        if (lbl_803EA480[i]->mUnknown472->mUnknown144 == pLinked->mUnknown144) {
+        if (_BigObj_apObjects[i]->mUnknown472->mUnknown144 == pLinked->mUnknown144) {
             if (n < 8) {
-                pLinked->mUnknown152[n++] = lbl_803EA480[i];
-                lbl_803EA480[i]->mUnknown472->mUnknown152[0] = pObject;
+                pLinked->mUnknown152[n++] = _BigObj_apObjects[i];
+                _BigObj_apObjects[i]->mUnknown472->mUnknown152[0] = pObject;
             } else {
                 break;
             }
@@ -110,15 +116,15 @@ void fn_800400D4(Object_80040818 *pObject, unsigned int count)
 }
 #endif
 
-void fn_80040154(BitStream_t *pStream)
+void BigObjSave(BitStream_t *pStream)
 {
     unsigned int i;
 
-    for (i = 0; i < lbl_803EC784; i++) {
-        Object_80040818 *pObject = lbl_803EA480[i];
+    for (i = 0; i < _BigObj_uCount; i++) {
+        BigObj_t *pObject = _BigObj_apObjects[i];
 
         if (pObject->mUnknown300 != 0) {
-            if (fn_800410E0(pObject) != 0) {
+            if (BigObjGetItemSkeleton(pObject) != 0) {
                 fn_8004AA34(&pObject->mUnknown172, pStream, pObject->mUnknown172.mUnknown4 - 1);
             }
             fn_80191068(pStream, pObject->mUnknown232_31, 1);
@@ -131,12 +137,12 @@ void fn_80040154(BitStream_t *pStream)
 
 /* Load callback: reads each object back from two saved streams and blends
    position and rotation by t; the last two streams are read and skipped. */
-void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)
+void BigObjLoad(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     unsigned int i;
 
-    for (i = 0; i < lbl_803EC784; i++) {
-        Object_80040818 *pObject = lbl_803EA480[i];
+    for (i = 0; i < _BigObj_uCount; i++) {
+        BigObj_t *pObject = _BigObj_apObjects[i];
 
         if (pObject->mUnknown300 != 0) {
             Vector_80039F5C pos0;
@@ -146,7 +152,7 @@ void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
             unsigned char bit;
             unsigned char value;
 
-            if (fn_800410E0(pObject) != 0) {
+            if (BigObjGetItemSkeleton(pObject) != 0) {
                 fn_8004AF84(pObject->mUnknown472->mUnknown428);
                 fn_8004ABF4(pObject, BigObjInstGet(i), pStream0, pStream1, pStream2, pStream3, t);
             }
@@ -188,16 +194,16 @@ void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStr
     }
 }
 
-int fn_800404C8(void)
+int BigObjGetSaveSize(void)
 {
     int size = 0;
     unsigned int i;
 
-    for (i = 0; i < lbl_803EC784; i++) {
-        Object_80040818 *pObject = lbl_803EA480[i];
+    for (i = 0; i < _BigObj_uCount; i++) {
+        BigObj_t *pObject = _BigObj_apObjects[i];
 
         if (pObject->mUnknown300 != 0) {
-            AnimSkeleton_t *pSkeleton = fn_800410E0(pObject);
+            AnimSkeleton_t *pSkeleton = BigObjGetItemSkeleton(pObject);
 
             if (pSkeleton != 0) {
                 size += pSkeleton->mUnknown6 * 36;
@@ -209,55 +215,55 @@ int fn_800404C8(void)
     return size;
 }
 
-void fn_80040558(int count, int handle)
+void BigObjSetupBigObjects(int count, int handle)
 {
-    fn_80040788(handle, count);
-    lbl_803EA480 = (Object_80040818 **)fn_801D2B7C(count * 4, 0, 0);
-    memset(lbl_803EA480, 0, count * 4);
+    BigObjRegisterPool(handle, count);
+    _BigObj_apObjects = (BigObj_t **)fn_801D2B7C(count * 4, 0, 0);
+    memset(_BigObj_apObjects, 0, count * 4);
     fn_801F7C88();
-    lbl_803EC786 = count;
-    lbl_803EC784 = 0;
-    lbl_803EC78C = ResOpenDevice("objmodel.dat", 44);
+    _BigObj_uMax = count;
+    _BigObj_uCount = 0;
+    _BigObj_pModelFile = ResOpenDevice("objmodel.dat", 44);
     fn_8004DFDC();
     fn_8004E320();
     fn_800504EC();
     fn_8004D0F4(handle);
 }
 
-void fn_800405F0(int handle)
+void BigObjShutdownObjects(int handle)
 {
     unsigned int i;
 
-    if (lbl_803EA480 != 0) {
-        for (i = 0; i < lbl_803EC784; i++) {
-            BigObjInst *pLinked = lbl_803EA480[i]->mUnknown472;
+    if (_BigObj_apObjects != 0) {
+        for (i = 0; i < _BigObj_uCount; i++) {
+            BigObjInst *pLinked = _BigObj_apObjects[i]->mUnknown472;
 
             if (pLinked->mUnknown184 != 0) {
-                pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
+                pLinked->mUnknown184(pLinked, _BigObj_apObjects[i], 3);
             }
-            ObjRemoveFromList(handle, lbl_803EA480[i]);
-            VptTrashObject(lbl_803EA480[i]);
+            ObjRemoveFromList(handle, _BigObj_apObjects[i]);
+            VptTrashObject(_BigObj_apObjects[i]);
         }
         VptFlushObjectTrash();
-        fn_801D2BD0(lbl_803EA480);
-        lbl_803EA480 = 0;
+        fn_801D2BD0(_BigObj_apObjects);
+        _BigObj_apObjects = 0;
     }
-    fn_800407F0();
+    BigObjReleasePool();
     fn_8004E018();
     fn_8004E358();
     fn_80051308();
     fn_8004D118(handle);
-    ResClose(lbl_803EC78C);
+    ResClose(_BigObj_pModelFile);
 }
 
-void fn_800406C0(unsigned int flags)
+void BigObjNotifyTypes(unsigned int flags)
 {
     int all = (flags >> 8) & 1;
     unsigned int i;
 
-    if (lbl_803EA480 != 0) {
-        for (i = 0; i < lbl_803EC784; i++) {
-            Object_80040818 *pObject = lbl_803EA480[i];
+    if (_BigObj_apObjects != 0) {
+        for (i = 0; i < _BigObj_uCount; i++) {
+            BigObj_t *pObject = _BigObj_apObjects[i];
 
             if (all || ((1 << pObject->mUnknown472->mUnknown188) & flags)) {
                 BigObjInst *pLinked = pObject->mUnknown472;
@@ -273,25 +279,25 @@ void fn_800406C0(unsigned int flags)
     }
 }
 
-void fn_80040788(int handle, int count)
+void BigObjRegisterPool(int handle, int count)
 {
-    ObjNewType_(28, sizeof(Object_80040818), count, fn_80040818, fn_80040884);
+    ObjNewType_(28, sizeof(BigObj_t), count, BigObjItemInit, BigObjItemRelease);
     if (handle != 0) {
-        ObjSetListObjFunc(handle, 28, 0, fn_800408A4);
+        ObjSetListObjFunc(handle, 28, 0, BigObjItemUpdate);
     }
 }
 
-void fn_800407F0(void)
+void BigObjReleasePool(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(28);
 }
 
-void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc)
+void BigObjItemInit(BigObj_t *pObject, BigObjDesc_t *pDesc)
 {
     pObject->mUnknown328 = pDesc->mUnknown0;
     strcpy(pObject->mName, pDesc->mName);
-    pObject->mUnknown20 = fn_800400CC;
+    pObject->mUnknown20 = BigObjDefaultUpdate;
     pObject->mUnknown304 = 0;
     pObject->mUnknown336 = -100000.0f;
     pObject->mUnknown340 = -100000.0f;
@@ -300,22 +306,22 @@ void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc)
     pObject->mUnknown480 = 0;
 }
 
-void fn_80040884(Object_80040818 *pObject)
+void BigObjItemRelease(BigObj_t *pObject)
 {
     fn_8004DF68(pObject);
 }
 
-int fn_800408A4(Object_80040818 *pObject)
+int BigObjItemUpdate(BigObj_t *pObject)
 {
     int result = 0;
 
-    if (lbl_803EA484) {
+    if (_BigObj_bUpdate) {
         result = pObject->mUnknown20(pObject);
     }
     return result;
 }
 
-void fn_800408E4(Desc_800408E4 *pDesc, int handle)
+void BigObjCreate(BigObjDesc_t *pDesc, int handle)
 {
     BigObjInst *pLinked;
 
@@ -323,26 +329,26 @@ void fn_800408E4(Desc_800408E4 *pDesc, int handle)
     if (pDesc->mUnknown168 == -1) {
         return;
     }
-    lbl_803EA480[lbl_803EC784] = ObjNewInList(handle, 28, 0, pDesc);
-    ObjSetPriority(handle, lbl_803EA480[lbl_803EC784], 6);
-    fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, lbl_803EA480[lbl_803EC784]);
+    _BigObj_apObjects[_BigObj_uCount] = ObjNewInList(handle, 28, 0, pDesc);
+    ObjSetPriority(handle, _BigObj_apObjects[_BigObj_uCount], 6);
+    fn_8004DC88(pDesc->mUnknown164, pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount]);
     if (fn_801C310C(pDesc->mName, "CROWD") != 0) {
-        lbl_803EA480[lbl_803EC784]->mUnknown232_27 = 1;
+        _BigObj_apObjects[_BigObj_uCount]->mUnknown232_27 = 1;
     }
-    lbl_803EA480[lbl_803EC784]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
-    lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown4 = lbl_803EC784;
-    fn_8004F754(pDesc->mUnknown168, lbl_803EA480[lbl_803EC784], lbl_803EC784);
-    lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown144 = pDesc->mUnknown172;
-    lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown148 = pDesc->mUnknown180;
-    memset(lbl_803EA480[lbl_803EC784]->mUnknown472->mUnknown152, 0, 32);
-    lbl_803EA480[lbl_803EC784]->mUnknown308 = pDesc->mUnknown176;
-    lbl_803EA480[lbl_803EC784]->mUnknown332 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
-    lbl_803EC784++;
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown472 = BigObjInstCreate((void *)pDesc->mUnknown168, &pDesc->mUnknown132);
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown4 = _BigObj_uCount;
+    fn_8004F754(pDesc->mUnknown168, _BigObj_apObjects[_BigObj_uCount], _BigObj_uCount);
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown144 = pDesc->mUnknown172;
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown148 = pDesc->mUnknown180;
+    memset(_BigObj_apObjects[_BigObj_uCount]->mUnknown472->mUnknown152, 0, 32);
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown308 = pDesc->mUnknown176;
+    _BigObj_apObjects[_BigObj_uCount]->mUnknown332 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
+    _BigObj_uCount++;
 }
 
-void fn_80040A70(BigObjInst *pLinked, int index)
+void BigObjSyncFromInst(BigObjInst *pLinked, int index)
 {
-    Object_80040818 *pObject = lbl_803EA480[index];
+    BigObj_t *pObject = _BigObj_apObjects[index];
 
     if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mUnknown32 != 0 || pLinked->mUnknown428->mUnknown33 != 0)) {
         fn_800B2A14(&pLinked->mUnknown8, &pLinked->mUnknown428->mUnknown32);
@@ -369,9 +375,9 @@ void fn_80040A70(BigObjInst *pLinked, int index)
     }
 }
 
-void fn_80040B88(int handle)
+void BigObjCreateAnimBall(int handle)
 {
-    Desc_800408E4 desc;
+    BigObjDesc_t desc;
     unsigned short index;
 
     {
@@ -382,7 +388,7 @@ void fn_80040B88(int handle)
         ResSetMemFlags(saved0);
         fn_801C9DC8(saved1);
     }
-    desc.mUnknown164 = lbl_803EC78C;
+    desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();
     strcpy(desc.mName, "OBJDEF_ANIMBALL");
     desc.mUnknown132.mUnknown12 = 0.0f;
@@ -394,16 +400,16 @@ void fn_80040B88(int handle)
     desc.mUnknown172 = 0;
     desc.mUnknown176 = 0;
     desc.mUnknown180 = 0;
-    index = lbl_803EC784;
-    fn_800408E4(&desc, handle);
-    BallModelSetLinkedObj(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
+    index = _BigObj_uCount;
+    BigObjCreate(&desc, handle);
+    BallModelSetLinkedObj(BallGetModel(BallGetCurrent()), BigObjGet(index)->mUnknown472);
     fn_8004D818();
     ResClose(desc.mUnknown160);
 }
 
-void fn_80040C90(int handle)
+void BigObjAddAllObjects(int handle)
 {
-    Desc_800408E4 desc;
+    BigObjDesc_t desc;
     LevelData_t *pLevel;
     LevelPlacement_t *pEntry;
     unsigned int i;
@@ -417,7 +423,7 @@ void fn_80040C90(int handle)
         ResSetMemFlags(saved0);
         fn_801C9DC8(saved1);
     }
-    desc.mUnknown164 = lbl_803EC78C;
+    desc.mUnknown164 = _BigObj_pModelFile;
     fn_8004D798();
     pLevel = LevelGetData();
     for (i = 0; i < pLevel->mUnknown88; i++) {
@@ -433,10 +439,10 @@ void fn_80040C90(int handle)
         desc.mUnknown172 = pEntry->mUnknown28;
         desc.mUnknown176 = pEntry->mUnknown32;
         desc.mUnknown180 = pEntry->mUnknown24;
-        fn_800408E4(&desc, handle);
+        BigObjCreate(&desc, handle);
     }
-    first = lbl_803EC784;
-    lbl_803EC788 = first;
+    first = _BigObj_uCount;
+    _BigObj_uLinkedStart = first;
     for (i = 0; i < pLevel->mUnknown104; i++) {
         LevelPlacement_t *pLinked = &pLevel->mUnknown108[i];
         unsigned short count;
@@ -451,10 +457,10 @@ void fn_80040C90(int handle)
         desc.mUnknown172 = pLinked->mUnknown28;
         desc.mUnknown180 = pLinked->mUnknown24;
         desc.mUnknown176 = pLinked->mUnknown32;
-        count = lbl_803EC784;
-        fn_800408E4(&desc, handle);
-        if (count != lbl_803EC784) {
-            fn_800400D4(lbl_803EA480[lbl_803EC784 - 1], first);
+        count = _BigObj_uCount;
+        BigObjCreate(&desc, handle);
+        if (count != _BigObj_uCount) {
+            BigObjLinkGroup(_BigObj_apObjects[_BigObj_uCount - 1], first);
         }
     }
     for (i = 0; i < pLevel->mUnknown112; i++) {
@@ -475,25 +481,25 @@ void fn_80040C90(int handle)
     fn_8004CBE8();
 }
 
-unsigned short fn_80040F10(void)
+unsigned short BigObjGetCount(void)
 {
-    return lbl_803EC784;
+    return _BigObj_uCount;
 }
 
-Object_80040818 *fn_80040F18(int index)
+BigObj_t *BigObjGet(int index)
 {
-    return lbl_803EA480[index];
+    return _BigObj_apObjects[index];
 }
 
-Object_80040818 *fn_80040F28(Vector_80039F5C *pPos, float *pDist)
+BigObj_t *BigObjFindNearest(Vector_80039F5C *pPos, float *pDist)
 {
     float best = 10000.0f;
-    Object_80040818 *pBest = 0;
+    BigObj_t *pBest = 0;
     unsigned int i;
 
-    if (lbl_803EA480 != 0) {
-        for (i = 0; i < lbl_803EC784; i++) {
-            Object_80040818 *pObject = lbl_803EA480[i];
+    if (_BigObj_apObjects != 0) {
+        for (i = 0; i < _BigObj_uCount; i++) {
+            BigObj_t *pObject = _BigObj_apObjects[i];
             float dist = fn_8022781C(&pObject->mPos, pPos);
 
             if (dist < best) {
@@ -508,15 +514,15 @@ Object_80040818 *fn_80040F28(Vector_80039F5C *pPos, float *pDist)
     return pBest;
 }
 
-Object_80040818 *fn_80040FD4(Vector_80039F5C *pPos, int type, float *pDist)
+BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *pPos, int type, float *pDist)
 {
     float best = 10000.0f;
-    Object_80040818 *pBest = 0;
+    BigObj_t *pBest = 0;
     unsigned int i;
 
-    if (lbl_803EA480 != 0) {
-        for (i = 0; i < lbl_803EC784; i++) {
-            Object_80040818 *pObject = lbl_803EA480[i];
+    if (_BigObj_apObjects != 0) {
+        for (i = 0; i < _BigObj_uCount; i++) {
+            BigObj_t *pObject = _BigObj_apObjects[i];
 
             if (pObject->mUnknown472->mUnknown188 == type) {
                 float dist = fn_8022781C(&pObject->mPos, pPos);
@@ -534,17 +540,17 @@ Object_80040818 *fn_80040FD4(Vector_80039F5C *pPos, int type, float *pDist)
     return pBest;
 }
 
-int fn_80041094(int index)
+int BigObjHasSkeleton(int index)
 {
-    if (lbl_803EA480[index]->mUnknown304 != 0) {
+    if (_BigObj_apObjects[index]->mUnknown304 != 0) {
         return 1;
     }
     return 0;
 }
 
-AnimSkeleton_t *fn_800410B8(int index)
+AnimSkeleton_t *BigObjGetSkeleton(int index)
 {
-    Object_80040818 *pObject = lbl_803EA480[index];
+    BigObj_t *pObject = _BigObj_apObjects[index];
 
     if (pObject->mUnknown304 != 0) {
         return *pObject->mUnknown304;
@@ -552,7 +558,7 @@ AnimSkeleton_t *fn_800410B8(int index)
     return 0;
 }
 
-AnimSkeleton_t *fn_800410E0(Object_80040818 *pObject)
+AnimSkeleton_t *BigObjGetItemSkeleton(BigObj_t *pObject)
 {
     if (pObject->mUnknown304 != 0) {
         return *pObject->mUnknown304;
@@ -560,17 +566,17 @@ AnimSkeleton_t *fn_800410E0(Object_80040818 *pObject)
     return 0;
 }
 
-void fn_800410FC(void)
+void BigObjRegisterSave(void)
 {
-    fn_80030ACC(fn_80040154, fn_8004023C, fn_800404C8(), "Animated Big Objects");
+    fn_80030ACC(BigObjSave, BigObjLoad, BigObjGetSaveSize(), "Animated Big Objects");
 }
 
-Object_80040818 *fn_8004113C(int key, unsigned int count)
+BigObj_t *BigObjFindByKey(int key, unsigned int count)
 {
     unsigned short i;
 
     for (i = 0; i < count; i++) {
-        Object_80040818 *pObject = lbl_803EA480[i];
+        BigObj_t *pObject = _BigObj_apObjects[i];
 
         if (pObject->mUnknown308 == key) {
             return pObject;
@@ -579,12 +585,12 @@ Object_80040818 *fn_8004113C(int key, unsigned int count)
     return 0;
 }
 
-Object_80040818 *fn_8004117C(int key)
+BigObj_t *BigObjFindLinkedByGroup(int key)
 {
     unsigned short i;
 
-    for (i = lbl_803EC788; i < lbl_803EC784; i++) {
-        Object_80040818 *pObject = lbl_803EA480[i];
+    for (i = _BigObj_uLinkedStart; i < _BigObj_uCount; i++) {
+        BigObj_t *pObject = _BigObj_apObjects[i];
 
         if (pObject->mUnknown472->mUnknown144 == key) {
             return pObject;
@@ -593,7 +599,7 @@ Object_80040818 *fn_8004117C(int key)
     return 0;
 }
 
-void fn_800411C8(Object_80040818 *pObject)
+void BigObjClearFlag(BigObj_t *pObject)
 {
     if (pObject == 0) {
         return;
@@ -604,7 +610,7 @@ void fn_800411C8(Object_80040818 *pObject)
     pObject->mUnknown476->mUnknown2 &= ~1;
 }
 
-void fn_800411EC(Object_80040818 *pObject)
+void BigObjSetFlag(BigObj_t *pObject)
 {
     if (pObject == 0) {
         return;

@@ -10,7 +10,7 @@
 #include "game/AutoDepth.h"
 #include "game/cu_80181330.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_80072AA8.h"
+#include "game/SndgMusic.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80178D18.h"
@@ -126,8 +126,8 @@ void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pL
 int GauntletScreenGetSelection(void);
 void MemCardScreenSetFlag(unsigned char a);
 void SndgSfxSetVolume(int index, int a, unsigned char volume);
-void fn_80073094(void);
-void fn_800731D0(int a);
+void SndgMusicStop(void);
+void SndgMusicPumpFrame(int a);
 int DbCursorGetRow(DbCursor *pObject);
 int DbCursorLast(DbCursor *pObject);
 int DbCursorPrev(DbCursor *pObject);
@@ -458,7 +458,7 @@ void fn_8000FAD0(int mode)
             request.mpName = lbl_802EBE24;
             request.mCount = 1;
             if (fn_802294F4()) {
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_80229554();
             }
             switch (mode) {
@@ -479,15 +479,15 @@ void fn_8000FAD0(int mode)
             case 10:
             case 11:
             case 12:
-                fn_800731D0(1);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(1);
+                SndgMusicPumpFrame(0);
                 fn_802329F0(&request);
-                fn_800731D0(1);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(1);
+                SndgMusicPumpFrame(0);
                 GameInfoInit();
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_80229438(0x544E464F, 2);
-                fn_800731D0(0);
+                SndgMusicPumpFrame(0);
                 fn_8022A490(2);
                 break;
             }
@@ -618,8 +618,8 @@ int fn_8000FE60(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
         lbl_803EB960 = pArgs[0].i;
         break;
     case 0x8000000C:
-        fn_800731D0(1);
-        fn_800731D0(0);
+        SndgMusicPumpFrame(1);
+        SndgMusicPumpFrame(0);
         break;
     case 0x8000000D:
         *pResult = 0;
@@ -2005,7 +2005,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, in
         if (pValues) {
             int values[10];
 
-            fn_80081788(&lbl_8036AE08[list], values);
+            PlayerGetGearRatings(&lbl_8036AE08[list], values);
             pValues[0] = values[6];
             pValues[1] = values[4];
             pValues[2] = values[7];
@@ -3284,7 +3284,7 @@ void fn_80015E48(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 1;
     FELoopSetVisited(0);
-    fn_80073094();
+    SndgMusicStop();
     MemCardScreenSetFlag(0);
 }
 
@@ -3292,8 +3292,8 @@ void fn_80015E80(MenuArg_t *pArgs, int count, int *pResult)
 {
     lbl_803EB9E6 = 0;
     if (!InGameIsDemo()) {
-        fn_80072AA8();
-        fn_80072F90();
+        SndgMusicReshuffle();
+        SndgMusicContinue();
     }
 }
 

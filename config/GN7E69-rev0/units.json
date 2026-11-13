@@ -395,11 +395,11 @@
     },
     "sprintf": {
       "address": "0x801C2E18",
-      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcmp": {
       "address": "0x801C2FE4",
-      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
     "strcpy": {
       "address": "0x801C2EB4",
@@ -2188,6 +2188,274 @@
     "StorySetFlag200": {
       "address": "0x8018E978",
       "evidence": "evidence.tsv function/name rows for 0x8018E978 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "PlyrFixWristBones": {
+      "address": "0x8003830C",
+      "evidence": "evidence.tsv function and name rows for 0x8003830C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAddParticleEvents": {
+      "address": "0x8003845C",
+      "evidence": "evidence.tsv function and name rows for 0x8003845C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrCreate": {
+      "address": "0x800384DC",
+      "evidence": "evidence.tsv function and name rows for 0x800384DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrDestroy": {
+      "address": "0x800385D4",
+      "evidence": "evidence.tsv function and name rows for 0x800385D4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRefreshAll": {
+      "address": "0x80038650",
+      "evidence": "evidence.tsv function and name rows for 0x80038650 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrCompareSnapshot": {
+      "address": "0x8003877C",
+      "evidence": "evidence.tsv function and name rows for 0x8003877C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrLoadSnapshot": {
+      "address": "0x80038A00",
+      "evidence": "evidence.tsv function and name rows for 0x80038A00 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetSnapshotSize": {
+      "address": "0x80038E50",
+      "evidence": "evidence.tsv function and name rows for 0x80038E50 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrInit": {
+      "address": "0x80038E80",
+      "evidence": "evidence.tsv function and name rows for 0x80038E80 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrContactCallback": {
+      "address": "0x80039044",
+      "evidence": "evidence.tsv function and name rows for 0x80039044 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrUpdatePendingMsg": {
+      "address": "0x8003924C",
+      "evidence": "evidence.tsv function and name rows for 0x8003924C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimUpdateOverlay": {
+      "address": "0x800392DC",
+      "evidence": "evidence.tsv function and name rows for 0x800392DC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimUpdateHands": {
+      "address": "0x80039364",
+      "evidence": "evidence.tsv function and name rows for 0x80039364 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrAnimPostUpdate": {
+      "address": "0x80039454",
+      "evidence": "evidence.tsv function and name rows for 0x80039454 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrClampBehindLine": {
+      "address": "0x80039458",
+      "evidence": "evidence.tsv function and name rows for 0x80039458 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrKeepInBounds": {
+      "address": "0x800394F4",
+      "evidence": "evidence.tsv function and name rows for 0x800394F4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrUpdateControlFlag": {
+      "address": "0x8003962C",
+      "evidence": "evidence.tsv function and name rows for 0x8003962C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrClearTeamFlag": {
+      "address": "0x8003977C",
+      "evidence": "evidence.tsv function and name rows for 0x8003977C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRegister": {
+      "address": "0x800397D0",
+      "evidence": "evidence.tsv function and name rows for 0x800397D0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrReset": {
+      "address": "0x80039890",
+      "evidence": "evidence.tsv function and name rows for 0x80039890 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrExists": {
+      "address": "0x8003989C",
+      "evidence": "evidence.tsv function and name rows for 0x8003989C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdate": {
+      "address": "0x800398B4",
+      "evidence": "evidence.tsv function and name rows for 0x800398B4 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrEmptyPass": {
+      "address": "0x80039A1C",
+      "evidence": "evidence.tsv function and name rows for 0x80039A1C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateSkeletons": {
+      "address": "0x80039A38",
+      "evidence": "evidence.tsv function and name rows for 0x80039A38 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrStepStates": {
+      "address": "0x80039AA8",
+      "evidence": "evidence.tsv function and name rows for 0x80039AA8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateMotion": {
+      "address": "0x80039B2C",
+      "evidence": "evidence.tsv function and name rows for 0x80039B2C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrTestCollisions": {
+      "address": "0x80039C64",
+      "evidence": "evidence.tsv function and name rows for 0x80039C64 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrRunBrains": {
+      "address": "0x80039CB0",
+      "evidence": "evidence.tsv function and name rows for 0x80039CB0 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdatePoses": {
+      "address": "0x80039D08",
+      "evidence": "evidence.tsv function and name rows for 0x80039D08 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrUpdateModels": {
+      "address": "0x80039F04",
+      "evidence": "evidence.tsv function and name rows for 0x80039F04 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrGet": {
+      "address": "0x80039F5C",
+      "evidence": "evidence.tsv function and name rows for 0x80039F5C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrGetIndex": {
+      "address": "0x80039F8C",
+      "evidence": "evidence.tsv function and name rows for 0x80039F8C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrFindByRole": {
+      "address": "0x80039FE8",
+      "evidence": "evidence.tsv function and name rows for 0x80039FE8 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetPerTeam": {
+      "address": "0x8003A06C",
+      "evidence": "evidence.tsv function and name rows for 0x8003A06C (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrGetCollideSet": {
+      "address": "0x8003A078",
+      "evidence": "evidence.tsv function and name rows for 0x8003A078 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrMgrReverseAll": {
+      "address": "0x8003A090",
+      "evidence": "evidence.tsv function and name rows for 0x8003A090 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrFindNearest": {
+      "address": "0x8003A130",
+      "evidence": "evidence.tsv function and name rows for 0x8003A130 (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlyrRouteShow": {
+      "address": "0x8003A1EC",
+      "evidence": "evidence.tsv function and name rows for 0x8003A1EC (comparison-only function of src/game/PlyrMgr.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetHeader": {
+      "address": "0x800659AC",
+      "evidence": "evidence.tsv function and name rows for 0x800659AC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetRecord": {
+      "address": "0x80065B50",
+      "evidence": "evidence.tsv function and name rows for 0x80065B50 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetPositions": {
+      "address": "0x80065CAC",
+      "evidence": "evidence.tsv function and name rows for 0x80065CAC (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadSetSlots": {
+      "address": "0x80066318",
+      "evidence": "evidence.tsv function and name rows for 0x80066318 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHeader": {
+      "address": "0x80066560",
+      "evidence": "evidence.tsv function and name rows for 0x80066560 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayRecord": {
+      "address": "0x80066704",
+      "evidence": "evidence.tsv function and name rows for 0x80066704 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayDetails": {
+      "address": "0x80066844",
+      "evidence": "evidence.tsv function and name rows for 0x80066844 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayScripts": {
+      "address": "0x80066DE8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DE8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPositionSteps": {
+      "address": "0x80066000",
+      "evidence": "evidence.tsv function and name rows for 0x80066000 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayHole": {
+      "address": "0x800668E4",
+      "evidence": "evidence.tsv function and name rows for 0x800668E4 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayReceivers": {
+      "address": "0x80066A0C",
+      "evidence": "evidence.tsv function and name rows for 0x80066A0C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbLoadPlayCommands": {
+      "address": "0x80066B6C",
+      "evidence": "evidence.tsv function and name rows for 0x80066B6C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbResetState": {
+      "address": "0x80066D5C",
+      "evidence": "evidence.tsv function and name rows for 0x80066D5C (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbOpen": {
+      "address": "0x80066D74",
+      "evidence": "evidence.tsv function and name rows for 0x80066D74 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "PlayBookDbClose": {
+      "address": "0x80066DC8",
+      "evidence": "evidence.tsv function and name rows for 0x80066DC8 (comparison-only function of src/game/PlayBookDb.cpp, original bytes)."
+    },
+    "MemCardFilesFindNameOnPort": {
+      "address": "0x8002A86C",
+      "evidence": "evidence.tsv function/name rows for 0x8002A86C (target extent, inferred name); the documented holdout of src/game/MemCardFiles.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "CamBallStart": {
+      "address": "0x801422EC",
+      "evidence": "evidence.tsv function row 0x801422EC-0x801423D0: documented holdout of src/game/camball.cpp, whose original bytes stay linked; CamBallMsgFunc calls it."
+    },
+    "StatcollBlockInit": {
+      "address": "0x80143F40",
+      "evidence": "evidence.tsv function and name rows for 0x80143F40 (documented holdout of src/game/Statcoll.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "PlayerGearSumBonuses": {
+      "address": "0x800814BC",
+      "evidence": "evidence.tsv function and name rows for 0x800814BC (documented holdout of src/game/PlayerGearRatings.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "PlayerGearGetScaledBonuses": {
+      "address": "0x80081440",
+      "evidence": "evidence.tsv function and name rows for 0x80081440 (exact in comparisons.json; precedes the holdout 0x800814BC of src/game/PlayerGearRatings.cpp, so its original bytes stay linked)."
+    },
+    "BigObjDefaultUpdate": {
+      "address": "0x800400CC",
+      "evidence": "evidence.tsv function and name rows for 0x800400CC (exact in comparisons.json; precedes the holdout 0x800400D4 of src/game/BigObj.cpp, so its original bytes stay linked)."
+    },
+    "BigObjLinkGroup": {
+      "address": "0x800400D4",
+      "evidence": "evidence.tsv function and name rows for 0x800400D4 (documented holdout of src/game/BigObj.cpp: draft registered in comparisons.json, original bytes linked)."
+    },
+    "CamInterpUpdateEaseInOut": {
+      "address": "0x8013CC7C",
+      "evidence": "evidence.tsv function and name rows for 0x8013CC7C (documented holdout of src/game/camreplay.cpp: draft registered in comparisons.json, original bytes and pool 0x802A00F8-0x802A0108 linked)."
+    },
+    "_PlyrMgr_pManager": {
+      "address": "0x803EA3F8",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F8 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleMax": {
+      "address": "0x803EA3F0",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F0 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleBase": {
+      "address": "0x803EA3F1",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F1 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_uRumbleDuration": {
+      "address": "0x803EA3F2",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F2 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_fRumbleScale": {
+      "address": "0x803EA3F4",
+      "evidence": "evidence.tsv data and name rows for 0x803EA3F4 (.sdata data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_PlyrMgr_aCapsuleBonePairs": {
+      "address": "0x802CCC94",
+      "evidence": "evidence.tsv data and name rows for 0x802CCC94 (.data data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
     }
   },
   "units": [
@@ -6949,49 +7217,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8013CD58.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/cu_8013CD58.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8013CD58",
-          "end": "0x8013E514"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0108",
-          "end": "0x802A01C0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802DBDB8",
-          "end": "0x802DBDD4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB1C8",
-          "end": "0x803EB1D0"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803EC9F8",
-          "end": "0x803ECA00"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031B6A0",
-          "end": "0x8031B6AC"
-        }
-      ]
-    },
-    {
       "source": "src/game/camgame.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013F460-0x8013FC58 (src/game/camgame.cpp) and its data rows.",
@@ -8427,25 +8652,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8003877C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/cu_8003877C.cpp): the three functions 0x8003AC84-0x8003AEA8 and the .rodata 0x8028D02C-0x8028D06C are linked from source; the rest of the file is comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8003AC84",
-          "end": "0x8003AEA8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028D02C",
-          "end": "0x8028D06C"
-        }
-      ]
-    },
-    {
       "source": "src/game/DepthChart.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8003AEA8-0x8003BA00 (src/game/DepthChart.cpp) and its data, compiler and source-form rows.",
@@ -8709,31 +8915,6 @@
           "placement": ".bss",
           "start": "0x8030A50C",
           "end": "0x8030A518"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80144224.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv: src/game/cu_80144224.cpp unit, data, compiler and source-form rows",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80143F8C",
-          "end": "0x801442FC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB220",
-          "end": "0x803EB224"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECA0C",
-          "end": "0x803ECA10"
         }
       ]
     },
@@ -10322,37 +10503,6 @@
       ]
     },
     {
-      "source": "src/game/cu_800400CC.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp) and its .rodata, .sdata and .sbss rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80040154",
-          "end": "0x80041210"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028D38C",
-          "end": "0x8028D400"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EA480",
-          "end": "0x803EA488"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803EC784",
-          "end": "0x803EC790"
-        }
-      ]
-    },
-    {
       "source": "src/game/CreatePlayerMenu.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row src/game/CreatePlayerMenu.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A360 (data_80008F10), 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects.",
@@ -11637,19 +11787,6 @@
           "placement": ".text",
           "start": "0x80088F78",
           "end": "0x80088FFC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80081440.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800816C4",
-          "end": "0x800817CC"
         }
       ]
     },
@@ -15456,6 +15593,325 @@
           "placement": ".data3",
           "start": "0x802ABD94",
           "end": "0x802AD7E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MemCardFiles.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80029500-0x8002A9B8 (src/game/MemCardFiles.cpp), its function, name and data rows; 0x80029500-0x8002A86C and all of the file's data are linked, the documented holdout 0x8002A86C-0x8002A9B8 keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80029500",
+          "end": "0x8002A86C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A360",
+          "end": "0x8028A3C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC780",
+          "end": "0x802CC830"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA320",
+          "end": "0x803EA33C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/camreplay.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/camreplay.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013CD58",
+          "end": "0x8013E514"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0108",
+          "end": "0x802A01C0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBDB8",
+          "end": "0x802DBDD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1C8",
+          "end": "0x803EB1D0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9F8",
+          "end": "0x803ECA00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6A0",
+          "end": "0x8031B6AC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/ScreenTransition.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80194FE8-0x801962CC (src/game/ScreenTransition.cpp) and its function, name, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80194FE8",
+          "end": "0x801962CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD908",
+          "end": "0x802AD9D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDCD0",
+          "end": "0x802EDD14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB738",
+          "end": "0x803EB740"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365128",
+          "end": "0x80365188"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBB0",
+          "end": "0x803ECBBC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayBookDb.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/PlayBookDb.cpp): the 17 functions 0x80067038-0x80067C10 and .rodata 0x8028FFD0-0x802904C8 are linked from source; the first 15 functions, the position and byte tables and the .sdata words stay comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "PlayBookDbCountFormations",
+          "PlayBookDbLoadFormation",
+          "PlayBookDbCountSets",
+          "PlayBookDbLoadSetByOrder",
+          "PlayBookDbLoadSet",
+          "PlayBookDbCountPlays",
+          "PlayBookDbLoadPlay",
+          "PlayBookDbGetPlayOrder",
+          "PlayBookDbGetSetOrder",
+          "PlayBookDbGetFormationOrder",
+          "PlayBookDbGetPlayPath",
+          "PlayBookDbSetAudiblePlay",
+          "_PlayBookDbComparePickWeight",
+          "_PlayBookDbSwapPicks",
+          "PlayBookDbPickAIPlay",
+          "PlayBookDbPickAIPlayPath",
+          "PlayBookDbHasAIPlay"
+        ],
+        "discarded": [
+          "CountRows",
+          "SelectColumnByKey",
+          "UpdateColumnByKey",
+          "SelectUABPRecord",
+          "CountUABPRows",
+          "SelectLTESAndTSBPByOrder",
+          "SelectTSBPPoints",
+          "LoadTSBPObject",
+          "SelectLTESName"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028F778-0x802904C8: the target keeps every listed function; the nine listed file functions have no code in the target while their strings and constants remain in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067038",
+          "end": "0x80067C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028FFD0",
+          "end": "0x802904C8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrMgr.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/PlyrMgr.cpp): the fifteen functions 0x8003A394-0x8003AEA8 and the .rodata 0x8028D000-0x8028D06C are linked from source; the rest of the file is comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003A394",
+          "end": "0x8003AEA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D000",
+          "end": "0x8028D06C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Statcoll.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/Statcoll.cpp unit, data, compiler and source-form rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143F8C",
+          "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA0C",
+          "end": "0x803ECA10"
+        }
+      ]
+    },
+    {
+      "source": "src/game/camball.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801422EC-0x80142B0C (src/game/camball.cpp; the linked unit starts at 0x801423D0) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801423D0",
+          "end": "0x80142B0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A02C0",
+          "end": "0x802A0318"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCF8C",
+          "end": "0x802DCF9C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1FC",
+          "end": "0x803EB21C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6C4",
+          "end": "0x8031B6D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/BigObj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800400CC-0x80041210 (src/game/BigObj.cpp) and its .rodata, .sdata and .sbss rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80040154",
+          "end": "0x80041210"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D38C",
+          "end": "0x8028D400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA480",
+          "end": "0x803EA488"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC784",
+          "end": "0x803EC790"
+        }
+      ]
+    },
+    {
+      "source": "src/game/SndgMusic.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80071C3C-0x8007342C (src/game/SndgMusic.cpp) and its .rodata and .sdata rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80071C3C",
+          "end": "0x8007342C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290BC8",
+          "end": "0x80290BD4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA700",
+          "end": "0x803EA70C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerGearRatings.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/PlayerGearRatings.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69-rev0/comparisons.json) whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800816C4",
+          "end": "0x800817CC"
         }
       ]
     }

@@ -175,7 +175,7 @@ void AutoDepthBuild(int value, int *list, AutoDepthPlayer_t **pRecords)
         (*records)[i].id = list[i];
         (*records)[i].excluded = 0;
         (*records)[i].category = PlayerDbGetPbpo(&second);
-        fn_80081788(&second, values);
+        PlayerGetGearRatings(&second, values);
         _AutoDepth_pRateFunc(&(*records)[i], values, &first);
         fn_801F4B20();
     }

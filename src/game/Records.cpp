@@ -35,8 +35,8 @@ struct RecordsRow_t {
 };
 
 extern "C" {
-int fn_80029D74(int type, int index);
-void fn_80029CE0(int type, int index);
+int MemCardFilesNeedsSave(int type, int index);
+void MemCardFilesStoreChecksum(int type, int index);
 void EnvSelect(int id);
 void EnvGetUIName(char *pDest, int count);
 void EnvRelease(void);
@@ -308,7 +308,7 @@ int RecordsGetRank(int row)
 
 void RecordsBegin(void)
 {
-    _Records_bSaveChanged = fn_80029D74(1, 0);
+    _Records_bSaveChanged = MemCardFilesNeedsSave(1, 0);
     _Records_bSharedRanks = 0;
     _Records_iRankValue = 0;
     _Records_iRank = 1;
@@ -322,8 +322,8 @@ void RecordsEnd(void)
         }
         _Records_iCategory = -1;
     }
-    if (_Records_bSaveChanged == 0 && fn_80029D74(1, 0) != 0) {
-        fn_80029CE0(1, 0);
+    if (_Records_bSaveChanged == 0 && MemCardFilesNeedsSave(1, 0) != 0) {
+        MemCardFilesStoreChecksum(1, 0);
     }
 }
 

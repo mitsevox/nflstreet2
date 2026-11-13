@@ -78,7 +78,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801783AC(int bit);
 void fn_80227264(void *pOut, void *pV, float scale);
 void fn_80227350(void *pOut, void *pV, float scale);
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
+void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
@@ -274,7 +274,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
     }
     count = fn_80178D18(team);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80039F5C *p = PlyrGet(team, i);
         float score = 3.4028235e38f;
 
         if (p->mUnknown8 == 0xFF && !(p->mFlags & 0x800) && p->mUnknown9[2] != 0) {
@@ -515,7 +515,7 @@ extern "C" void fn_800B6988(int index)
                 memset(&message, 0, sizeof(message));
                 message.mId = 0x39;
                 message.mUnknown1[0] = BallGetIndex(BallGetCurrent());
-                fn_8003AB28(pNew, &message, 0);
+                PlyrSetPendingMsg(pNew, &message, 0);
             }
         }
     }

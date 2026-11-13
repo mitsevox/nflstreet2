@@ -139,7 +139,7 @@ void fn_801262B8(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos
             (record->mUnknown1D <= 1 || record->mUnknown1D == 6 || record->mUnknown1D == 7)) {
             position = other->mMotion.mPos;
             position.mZ = 6.0f;
-            Object_80039F5C *target = fn_80039F5C(other->mIdBytes[2], record->mUnknownAByte);
+            Object_80039F5C *target = PlyrGet(other->mIdBytes[2], record->mUnknownAByte);
             Vector_80039F5C direction;
             fn_80227690(&direction, &target->mMotion.mPos, &other->mMotion.mPos);
             ballAngle = fn_801CFE40(direction.mY, direction.mX);

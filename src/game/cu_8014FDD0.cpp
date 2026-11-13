@@ -2,7 +2,7 @@
 #include "game/Object_80039F5C.h"
 
 extern "C" {
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
 
@@ -15,7 +15,7 @@ int fn_8014FDD0(Class_802A2B68 *p, int kind, int team, int index,
     bool found = false;
     for (unsigned char t = 0; t <= 1; t++) {
         for (unsigned char i = 0; i < 6; i++) {
-            Object_80039F5C *pCandidate = fn_80039F5C(t, i);
+            Object_80039F5C *pCandidate = PlyrGet(t, i);
             if (pCandidate->mUnknown9[2] != 0) {
                 if (!found) {
                     result = p->vfn_30(kind, t, i, pCandidate);
@@ -40,7 +40,7 @@ int fn_8014FF34(Class_802A2B68 *p)
     int result = 0;
     for (unsigned int i = 0; i <= 5; i++) {
         if (fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown8 != 255) {
-            result = fn_8014F474(p, fn_8003AC84(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0));
+            result = fn_8014F474(p, PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0));
             break;
         }
     }

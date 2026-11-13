@@ -30,7 +30,7 @@ extern "C" int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pTarget
     int count = fn_80178D18(team);
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther != p && fabsf(pOther->mMotion.mPos.mX - pTarget->mX) < 0.7f
             && p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
             return 0;

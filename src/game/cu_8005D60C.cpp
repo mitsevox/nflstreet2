@@ -78,15 +78,15 @@ void MsgTeamPickSetMode(int a, int b);
 void MsgTeamPickSetSources(int a);
 void MsgTeamPickRequestTeamSave(void);
 void fn_80010150(int a);
-void fn_800731D0(int a);
-Object_80039F5C *fn_8003AD2C(int id);
+void SndgMusicPumpFrame(int a);
+Object_80039F5C *PlyrFindByPoid(int id);
 int DepthChartAutoFillEx(int group, int *list, int value, int a, int b);
 unsigned char fn_8007B090(int a);
 void EnvSelect(int id);
 void EnvRelease(void);
 void EnvGetUIName(char *pDest, int count);
 void fn_8007B14C(int pad, int id);
-void fn_80073210(int frames);
+void SndgMusicWaitForStart(int frames);
 void GameInfoSet(int index, int value);
 int GameInfoGet(int index);
 int PlayerDbGetPrty(Object_8008044C *pObject);
@@ -228,7 +228,7 @@ void fn_8005D660(void)
     ExpLevelOpen();
     lbl_802D4D40.mUnknown2 = 0x7FFF;
     lbl_803EA5D0 = &lbl_8030A110;
-    fn_800731D0(1);
+    SndgMusicPumpFrame(1);
     UserStatsOpen(lbl_803EA5D0, lbl_802D4D40.mIndex);
 }
 
@@ -268,12 +268,12 @@ int fn_8005D804(int index)
 
 void fn_8005D818(void)
 {
-    fn_800731D0(1);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(1);
+    SndgMusicPumpFrame(0);
     fn_8018C48C(0x54415453);
-    fn_800731D0(1);
+    SndgMusicPumpFrame(1);
     fn_8018C48C(0x454D4147);
-    fn_800731D0(0);
+    SndgMusicPumpFrame(0);
 }
 
 int fn_8005D86C(void)
@@ -283,7 +283,7 @@ int fn_8005D86C(void)
     int i;
 
     for (i = 0; i <= 11; i++) {
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
         int done = StoryAreGroupEventsCompleted(lbl_802D4D40.mIndex, i);
         lbl_8030A2AC.mDone[i] = done;
         if (complete && !done) {
@@ -590,7 +590,7 @@ void fn_8005E4A8(void)
     fn_80186F30(lbl_802D4D40.mIndex, 1);
     GameInfoSet(2, 1);
     fn_8005DA7C(0, lbl_803EA5C8->mPes[1] >= 0 ? lbl_803EA5C8->mPes[1] : 2);
-    fn_80073210(90);
+    SndgMusicWaitForStart(90);
     int ites = lbl_803EA5C8->mItes;
     switch (ites) {
     case 0:
@@ -1761,7 +1761,7 @@ Object_80039F5C *fn_800606CC(int type, int position)
         break;
     }
     if (pList) {
-        pObject = fn_8003AD2C(id);
+        pObject = PlyrFindByPoid(id);
     }
     if (pObject) {
         pResult = pObject;

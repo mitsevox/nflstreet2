@@ -759,7 +759,7 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     }
     p->mUnknown9[0] = 1;
     state->mUnknown21 = 0;
-    pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
+    pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
     fn_80143E14(p, pOther);
@@ -873,7 +873,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     } else {
         state->mUnknown24 = 0;
     }
-    pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
+    pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
     fn_8009BD2C(pOther, &state->mRef);
     p->mFlags |= 8;
     fn_80143E14(p, pOther);
@@ -1325,7 +1325,7 @@ extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsig
     part = 0.0f;
     count = fn_80178D18(p->mIdBytes[2]);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], i);
+        Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
         float distance;
 
         fn_80227690(&delta, &pOther->mMotion.mPos, &pTarget->mMotion.mPos);
@@ -1459,7 +1459,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
             int index = PlayBookGetReceiver(fn_80178308(), i, 0);
             if (index != 0xFF) {
                 numPlayers++;
-                Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), index);
+                Object_80039F5C *pOther = PlyrGet(fn_80178308(), index);
                 if (pOther->mMotion.mPos.mX > high) {
                     numAbove++;
                 } else if (pOther->mMotion.mPos.mX < low) {

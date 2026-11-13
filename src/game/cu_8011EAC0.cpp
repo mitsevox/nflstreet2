@@ -39,7 +39,7 @@ int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther)
             unsigned int count = fn_80178D70(team);
 
             for (i = 0; i < count; i++) {
-                Object_80039F5C *pPlayer = fn_80039F5C(team, i);
+                Object_80039F5C *pPlayer = PlyrGet(team, i);
 
                 if (pPlayer != p && pOther != pPlayer) {
                     Block_8011E240 *pPlayerBlock = &pPlayer->mBlock1032;

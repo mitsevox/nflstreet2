@@ -24,7 +24,7 @@ struct BigObjPhysics_t {
     int mUnknown1708;
 };
 
-struct Object_80040818;
+struct BigObj_t;
 struct BigObjInst;
 struct BigObjNode_t;
 /* Timed cycle at +200 that fn_8004B354 advances: an active flag, two
@@ -47,7 +47,7 @@ struct BigObjHit_t {
     char mUnknown6[2];
 };
 
-typedef int (*BigObjBehaviorFunc)(BigObjInst *pObject, Object_80040818 *pOwner, int mode);
+typedef int (*BigObjBehaviorFunc)(BigObjInst *pObject, BigObj_t *pOwner, int mode);
 
 struct BigObjInst {
     int mUnknown0;
@@ -77,10 +77,10 @@ struct BigObjInst {
     int mUnknown144;
     unsigned short mUnknown148;
     char mUnknown150[2];
-    Object_80040818 *mUnknown152[8];
+    BigObj_t *mUnknown152[8];
     BigObjBehaviorFunc mUnknown184;
     int mUnknown188;
-    void (*mUnknown192)(Object_80040818 *pOwner);
+    void (*mUnknown192)(BigObj_t *pOwner);
     int mUnknown196;
     BigObjCycle_t mUnknown200;
     unsigned char mUnknown224;

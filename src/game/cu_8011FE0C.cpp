@@ -39,7 +39,7 @@ void fn_8011FE0C(void)
     if (count <= 1) return;
     for (i = 0; i < (int)count; i++) {
         if (fn_8011FD64(lbl_803EB09C->mpUnknown0[i]) == 2 || fn_801486A0() == 2) {
-            Object_80039F5C *p = fn_80039F5C(team, lbl_803EB09C->mpUnknown0[i]);
+            Object_80039F5C *p = PlyrGet(team, lbl_803EB09C->mpUnknown0[i]);
             if (!(p->mFlags & 0x800) &&
                 (!pCarrier || !(p->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) &&
                 (p->mUnknown1032 == 0 || p->mUnknown1032 == 8)) {
@@ -50,7 +50,7 @@ void fn_8011FE0C(void)
     }
     for (i = count - 1; i >= 0; i--) {
         if (fn_8011FD64(lbl_803EB09C->mpUnknown0[i]) == 2 || fn_801486A0() == 2) {
-            Object_80039F5C *p = fn_80039F5C(team, lbl_803EB09C->mpUnknown0[i]);
+            Object_80039F5C *p = PlyrGet(team, lbl_803EB09C->mpUnknown0[i]);
             if (!(p->mFlags & 0x800) &&
                 (!pCarrier || !(p->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) &&
                 (p->mUnknown1032 == 0 || p->mUnknown1032 == 8)) {
@@ -70,7 +70,7 @@ void fn_8011FE0C(void)
             lbl_803EB09C->mUnknown19 = 1;
         }
         middle = ((count + 1) >> 1) - 1;
-        pMiddle = fn_80039F5C(team, lbl_803EB09C->mpUnknown4[middle]);
+        pMiddle = PlyrGet(team, lbl_803EB09C->mpUnknown4[middle]);
         if (!(pPos->mY >= pMiddle->mMotion.mPos.mY)) {
             if (lbl_803EB09C->mUnknown19 == 0) {
                 if (low != 255) {
@@ -122,11 +122,11 @@ void fn_8011FE0C(void)
                 lbl_803EB09C->mpUnknown12[i] = 5;
             }
             if (lbl_803EB09C->mUnknown19 == 0) {
-                if (low != 255 && !(fn_80039F5C(team, low)->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) {
+                if (low != 255 && !(PlyrGet(team, low)->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) {
                     lbl_803EB09C->mpUnknown12[low] = 3;
                 }
             } else {
-                if (high != 255 && !(fn_80039F5C(team, high)->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) {
+                if (high != 255 && !(PlyrGet(team, high)->mMotion.mPos.mY <= pCarrier->mMotion.mPos.mY)) {
                     lbl_803EB09C->mpUnknown12[high] = 3;
                 }
             }
@@ -171,7 +171,7 @@ void fn_80120384(void)
     }
     angle = fn_801CFE40(velocity.mY, velocity.mX);
     for (i = 0; i < count; i++) {
-        fn_80227690(&delta, &fn_80039F5C(fn_80178320(), i)->mMotion.mPos, &pos);
+        fn_80227690(&delta, &PlyrGet(fn_80178320(), i)->mMotion.mPos, &pos);
         if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), angle) <= 0x238E38) {
             lbl_803EB09C->mpUnknown12[i] = 0;
         }

@@ -80,7 +80,7 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
 
     for (i = 0; i < count; i++) {
         int check = 0;
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
 
         switch (pOther->mpState->mId) {
         case 10:
@@ -150,7 +150,7 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
 
         switch (pOther->mUnknown2914) {
         case 10:

@@ -136,8 +136,8 @@ int fn_801067D8(Object_80039F5C *p);
 int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801787A0(void);
 int fn_801784C4(void);
-struct Object_80040818;
-Object_80040818 *fn_80040FD4(Vector_80039F5C *p, int a, float *pOut);
+struct BigObj_t;
+BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
 float fn_800AD168(int team, float value);
 float fn_80237260(int a);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
@@ -316,7 +316,7 @@ extern "C" int fn_8012A824(Object_80039F5C *p, float a, float b)
     }
     unsigned int total = fn_80178D18(fn_80178320());
     for (unsigned char i = 0; i < total; ++i) {
-        Object_80039F5C *other = fn_80039F5C(fn_80178320(), i);
+        Object_80039F5C *other = PlyrGet(fn_80178320(), i);
         Point_8017886C offset;
         fn_80227690(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
         int otherAngle = fn_801CFE40(offset.mY, offset.mX);
@@ -335,7 +335,7 @@ extern "C" int fn_8012A824(Object_80039F5C *p, float a, float b)
     }
     total = fn_80178D18(fn_80178308());
     for (unsigned char i = 0; i < total; ++i) {
-        Object_80039F5C *other = fn_80039F5C(fn_80178308(), i);
+        Object_80039F5C *other = PlyrGet(fn_80178308(), i);
         if (other != p) {
             Point_8017886C offset;
             fn_80227690(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
@@ -366,7 +366,7 @@ extern "C" int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower,
     int team = fn_80178320();
     unsigned int total = fn_80178D70(team);
     for (unsigned char i = 0; i < total; ++i) {
-        Object_80039F5C *other = fn_80039F5C(team, i);
+        Object_80039F5C *other = PlyrGet(team, i);
         Point_8017886C point;
         if (other->mpState->mId == 22 && fn_8009BCE8((int *)&other->mUnknown336)
             && other->mpState->mId == 19) {
@@ -389,7 +389,7 @@ extern "C" int fn_8012AACC(Point_8017886C *out, Object_80039F5C *p, float lower,
         unsigned char valid;
         unsigned short index = PlayBookGetReceiver(team, i, &valid);
         if (valid) {
-            Object_80039F5C *other = fn_80039F5C(team, index);
+            Object_80039F5C *other = PlyrGet(team, index);
             if (other != p) {
                 Point_8017886C point;
                 if (other->mpState->mId == 19) {
@@ -1155,7 +1155,7 @@ extern "C" int fn_8012CE60(Object_80039F5C *p)
     }
     count = fn_80178D18(fn_80178320());
     for (i = 0; i < count; i++) {
-        if (fn_80039F5C(fn_80178320(), i)->mMotion.mPos.mY > p->mMotion.mPos.mY) {
+        if (PlyrGet(fn_80178320(), i)->mMotion.mPos.mY > p->mMotion.mPos.mY) {
             result = 1;
             break;
         }
@@ -1197,7 +1197,7 @@ extern "C" void fn_8012CFA0(Object_80039F5C *p)
                 signed char remaining = 6;
 
                 for (i = 0; i < count; i++) {
-                    if (!(fabsf(fn_80039F5C(fn_80178308(), i)->mMotion.mPos.mX) <= 6.0f)) {
+                    if (!(fabsf(PlyrGet(fn_80178308(), i)->mMotion.mPos.mX) <= 6.0f)) {
                         remaining--;
                     }
                 }
@@ -1967,7 +1967,7 @@ extern "C" void fn_8012F5A0(Object_80039F5C *p, OptionRunControl_t *control, Opt
         position.mY = -position.mY;
     }
     float nearest;
-    Object_80040818 *found = fn_80040FD4(&position, 7, &nearest);
+    BigObj_t *found = BigObjFindNearestOfType(&position, 7, &nearest);
 
     nearest = fn_800AD168(p->mIdBytes[2], nearest);
     if (found && !(nearest >= 3.0f)) {
@@ -2037,7 +2037,7 @@ extern "C" int fn_8012FA64(Object_80039F5C *p)
         unsigned short i;
 
         for (i = 0; i < count; i++) {
-            Object_80039F5C *other = fn_80039F5C(team, i);
+            Object_80039F5C *other = PlyrGet(team, i);
 
             if ((unsigned int)(other->mUnknown1032 - 1) <= 1 || other->mQueue[0].mId == 47) {
                 if (!(fn_80177FE0().mY - other->mMotion.mPos.mY <= 2.25f)

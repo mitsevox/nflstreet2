@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "game/Ball.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/AudmonEvent.h"
@@ -34,7 +34,7 @@ extern float gFrameTimeScale;
 
 extern "C" {
 Object_800400C4 *BallModelGetLinkedObj(Block_80170E64 *pBlock);
-Object_80040818 *fn_80040F18(int index);
+BigObj_t *BigObjGet(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
 void fn_800B1508(void);
@@ -1012,7 +1012,7 @@ void fn_8013B734(Ball_t *pBall, float dt)
     int angles[3];
     Quat_801EB488 turn;
     Object_800400C4 *pPlace = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
-    Object_80040818 *pObject = fn_80040F18(pPlace->mUnknown4);
+    BigObj_t *pObject = BigObjGet(pPlace->mUnknown4);
     short *pRot = pObject->mpUnknown220;
 
     angles[0] = pRot[0] << 8;

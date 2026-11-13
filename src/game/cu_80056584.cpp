@@ -42,14 +42,14 @@ struct Handle_80168708 {
     int mUnknown0;
 };
 
-/* Block filled by fn_8006719C (0xCA8 bytes). */
+/* Block filled by PlayBookDbLoadSetByOrder (0xCA8 bytes). */
 struct Info_8006719C {
     int mUnknown0;
     char mUnknown4[0xCA4];
 };
 
-/* Block filled by fn_80067338 (0x20C bytes); a name string starts at 0x1F3. */
-struct Record_80067338 {
+/* Block filled by PlayBookDbLoadPlay (0x20C bytes); a name string starts at 0x1F3. */
+struct PlayBookPlay_t {
     int mUnknown0;
     int mUnknown4;
     char mUnknown8[0x1E8];
@@ -57,8 +57,8 @@ struct Record_80067338 {
     char mUnknown1F3[0x19];
 };
 
-/* Block filled by fn_800670B4 (0xCE4 bytes). */
-struct Object_800670B4 {
+/* Block filled by PlayBookDbLoadFormation (0xCE4 bytes). */
+struct PlayBookFormation_t {
     int mUnknown0;
     char mUnknown4[0xCE0];
 };
@@ -68,7 +68,7 @@ struct Slot_803EA590 {
     Handle_80168708 *mpHandle;
     int mUnknown4;
     Info_8006719C mUnknown8;
-    Record_80067338 mUnknownCB0;
+    PlayBookPlay_t mUnknownCB0;
     signed char mUnknownEBC;
 };
 
@@ -164,12 +164,12 @@ void PlayBookLoadCurrentPlay(int team);
 Handle_80168708 *PlayBookGetFormation(int team);
 void PlayBookSetLoadFlags(unsigned int flags);
 void PlayBookClearLoadFlags(unsigned int flags);
-void fn_8006719C(int tag, int handle, int index, PlaybookTeamView *pOwner, Info_8006719C *pInfo);
-int fn_80067338(int tag, int handle, int index, Record_80067338 *pRecord);
+void PlayBookDbLoadSetByOrder(int tag, int handle, int index, PlaybookTeamView *pOwner, Info_8006719C *pInfo);
+int PlayBookDbLoadPlay(int tag, int handle, int index, PlayBookPlay_t *pRecord);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-void PlayArtReadPositions(int tag, Info_8006719C *pInfo, Record_80067338 *pRecord, int a, int b, signed char c, int team, int index);
-void PlayArtReadRoutes(int tag, Record_80067338 *pRecord, int a, int b, int team, int index);
-void PlayArtBuild(int tag, Record_80067338 *pRecord, int a, int b, int c, int team, int index, int first,
+void PlayArtReadPositions(int tag, Info_8006719C *pInfo, PlayBookPlay_t *pRecord, int a, int b, signed char c, int team, int index);
+void PlayArtReadRoutes(int tag, PlayBookPlay_t *pRecord, int a, int b, int team, int index);
+void PlayArtBuild(int tag, PlayBookPlay_t *pRecord, int a, int b, int c, int team, int index, int first,
                  unsigned char count, Info_8006719C *pInfo);
 void PlayArtSetFlip(signed char team, int value, int index);
 int fn_801C3180(const char *pString);
@@ -202,8 +202,8 @@ unsigned char RumbleIsEnabled(void);
 void RumbleEnable(unsigned char enabled);
 void RumbleStart(int a, int b, int c);
 void PlayArtResetTeam(int group);
-int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
-unsigned short fn_800672BC(int tag, int handle);
+int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject);
+unsigned short PlayBookDbCountPlays(int tag, int handle);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int fn_80186F7C(int index);
 int fn_8022F358(int index);
@@ -228,7 +228,7 @@ void ChallengeSendGoalList(int flag);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 void AudmonEventPost(int type, void *pPos);
-void fn_80072C90(unsigned int delay, int wait);
+void SndgMusicFadeOut(unsigned int delay, int wait);
 void fn_8009D8CC(int index);
 void fn_800AE988(void);
 void PauseSetSavedRumble(unsigned char value);
@@ -474,13 +474,13 @@ void fn_80056B2C(int team, unsigned int a, int b)
         PlayBookLoadCurrentPlay(team);
         lbl_803EA590->mpSlots[team][b].mpHandle = PlayBookGetFormation(team);
         PlayBookSetLoadFlags(5);
-        fn_8006719C(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mpHandle->mUnknown0,
+        PlayBookDbLoadSetByOrder(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mpHandle->mUnknown0,
                     lbl_803EA58C->mUnknown46[team], lbl_803EA590->mpTeam[team],
                     &lbl_803EA590->mpSlots[team][b].mUnknown8);
         PlayBookClearLoadFlags(5);
         PlayBookSetLoadFlags(2);
         lbl_803EA590->mpSlots[team][b].mUnknown4 =
-            fn_80067338(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mUnknown8.mUnknown0,
+            PlayBookDbLoadPlay(lbl_803EA590->mUnknown4[team], lbl_803EA590->mpSlots[team][b].mUnknown8.mUnknown0,
                         lbl_803EA590->mpSlots[team][b].mUnknownEBC, &lbl_803EA590->mpSlots[team][b].mUnknownCB0);
         PlayBookClearLoadFlags(2);
         fn_801C2E18(lbl_803EA58C->mpTexts[team][b], "%s",
@@ -862,10 +862,10 @@ void fn_800579C4(int side, int mode, int *pPages)
 
 void fn_80057C58(unsigned char team, int index, int flag)
 {
-    Object_800670B4 object;
+    PlayBookFormation_t object;
     QueryCursor cursor;
     char text[3];
-    Record_80067338 record;
+    PlayBookPlay_t record;
     signed char number;
     int handle;
     unsigned char i;
@@ -876,10 +876,10 @@ void fn_80057C58(unsigned char team, int index, int flag)
     int kind = flag ? 1 : 11;
     int tag = flag ? 0x31544250 : 0x31444250;
 
-    fn_800670B4(tag, kind, 0, &object);
+    PlayBookDbLoadFormation(tag, kind, 0, &object);
     fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, index + 1, object.mUnknown0);
-    unsigned short count = fn_800672BC(tag, handle);
+    unsigned short count = PlayBookDbCountPlays(tag, handle);
     if (flag) {
         pList = (signed char *)fn_801D2BB0(0x40, count, 0, 0);
         table = 0x504F5355;
@@ -911,7 +911,7 @@ void fn_80057C58(unsigned char team, int index, int flag)
         while (i < count && fn_801FCE10(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
             fn_801C2E18(text, "%02d", number);
             for (unsigned int j = 0; j < count; j++) {
-                fn_80067338(tag, handle, j, &record);
+                PlayBookDbLoadPlay(tag, handle, j, &record);
                 if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
                     pList[i] = j;
                     i++;
@@ -1124,23 +1124,23 @@ int fn_80058688(void)
 
 void fn_80058798(char *pDest, int size, int number, int flag)
 {
-    Object_800670B4 object;
-    Record_80067338 record;
+    PlayBookFormation_t object;
+    PlayBookPlay_t record;
     char text[3];
     int handle;
     int found = 0;
     int kind = flag ? 1 : 11;
     int tag = flag ? 0x31544250 : 0x31444250;
 
-    fn_800670B4(tag, kind, 0, &object);
+    PlayBookDbLoadFormation(tag, kind, 0, &object);
     for (unsigned char index = 0; index <= 3; index++) {
         unsigned int j = 0;
         fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                     &handle, index + 1, object.mUnknown0);
-        unsigned short count = fn_800672BC(tag, handle);
+        unsigned short count = PlayBookDbCountPlays(tag, handle);
         fn_801C2E18(text, "%02d", number);
         for (; j < count; j++) {
-            fn_80067338(tag, handle, j, &record);
+            PlayBookDbLoadPlay(tag, handle, j, &record);
             if (fn_801C302C(record.mUnknown1F0, text, 2) == 0) {
                 found = 1;
                 break;
@@ -1315,7 +1315,7 @@ void fn_80058E68(void)
     PassIconsHide();
     PassIconsClearReplayFlag();
     AudmonEventPost(0x72, 0);
-    fn_80072C90(250, 0);
+    SndgMusicFadeOut(250, 0);
 }
 
 void fn_80058EAC(void)
@@ -1664,12 +1664,12 @@ float fn_800C9CF0(int team, int index);
 int fn_80178C24(void);
 unsigned int fn_8009D9F8(int key);
 int fn_8009D9C0(int key);
-Record_80067338 *PlayBookGetAudiblePlay(int team,int index);
+PlayBookPlay_t *PlayBookGetAudiblePlay(int team,int index);
 int fn_800AEBA0(void);
 int fn_80178E4C(void);
 int fn_800AF078(int team);
 int InGameIsDemo(void);
-Object_80039F5C *fn_8003AC84(int id);
+Object_80039F5C *PlyrFindById(int id);
 int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
 void PlayerDbGetFirstName(Object_8008044C *pObject,char *pText,int size);
 void fn_8017833C(int enabled);
@@ -1834,7 +1834,7 @@ void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int
     for (unsigned int i = 0; i < 4; i++) {
         pEnabled[i] = fn_801486A0() != 2 || i < 2;
         if (pEnabled[i] == 1) {
-            Record_80067338 *pRecord = PlayBookGetAudiblePlay((unsigned char)team, i);
+            PlayBookPlay_t *pRecord = PlayBookGetAudiblePlay((unsigned char)team, i);
             fn_801C2EF0(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
         }
     }
@@ -1937,7 +1937,7 @@ int fn_8005A860(int team)
 }
 Object_80039F5C *fn_8005A8AC(int team)
 {
-    return fn_8003AC84(fn_8005A860(team));
+    return PlyrFindById(fn_8005A860(team));
 }
 
 void fn_8005A8D0(int team)
@@ -1957,7 +1957,7 @@ void fn_8005A8D0(int team)
                 }
                 scores[i]=value; sum+=value;
             }
-            Object_80039F5C *p=fn_8003AC84(row);
+            Object_80039F5C *p=PlyrFindById(row);
             if(p && p->mUnknown9[2]) sum+=1.0f;
             if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
                 lbl_80309FC4[team].mUnknown0=sum;
@@ -2313,7 +2313,7 @@ void fn_8005C1A4(int team,unsigned char index,int *color) {
     HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
 int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,unsigned char size,char *first,char *second,char *third,char *fourth,unsigned char firstSize,unsigned char secondSize) {
-    Object_80039F5C *p=fn_80039F5C(team,index);int result=0;
+    Object_80039F5C *p=PlyrGet(team,index);int result=0;
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
         fn_80188248((Object_80056584 *)p,name,nameSize);
@@ -2346,7 +2346,7 @@ void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char
         fn_80188248((Object_80056584 *)stats.mpPlayer,name,nameSize);
         unsigned char foundTeam=0,foundIndex=0;bool found=false;
         for(unsigned char t=0;t<2 && !found;t++)for(unsigned char i=0;i<6 && !found;i++) {
-            Object_80039F5C *p=fn_80039F5C(t,i);
+            Object_80039F5C *p=PlyrGet(t,i);
             if((short)stats.mpPlayer->mUnknown2908==(short)p->mUnknown2908) {found=true;foundTeam=t;foundIndex=i;}
         }
         fn_80148A58()->vfn_18(foundTeam,foundIndex,text,textSize);
@@ -2400,7 +2400,7 @@ void fn_8005CD8C(int team,int *other,char *text,int size) {
 void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
     Record_8005CE10 record;fn_80155C44(fn_80148A58(),team,index,&record);
     unsigned int value=record.mOrdinal;
-    Object_80039F5C *p=fn_8003AC84(record.mPlayer),*other=fn_8003AC84(record.mOther);
+    Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;return;}
     unsigned int rem=value%10;
     if(value-11<9 || rem>3 || rem==0)fn_801C2D88(ordinal,ordinalSize,"%dth Possession",value);

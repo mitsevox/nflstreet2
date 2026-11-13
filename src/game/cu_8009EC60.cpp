@@ -34,8 +34,8 @@ extern "C" Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut
                     Point_8017886C a;
                     Point_8017886C b;
 
-                    p = fn_80039F5C(team, pState->mUnknown1A5[i]);
-                    pB = fn_80039F5C(team, pState->mUnknown1A5[i + 1]);
+                    p = PlyrGet(team, pState->mUnknown1A5[i]);
+                    pB = PlyrGet(team, pState->mUnknown1A5[i + 1]);
                     fn_8009F928(p, &a, 5, 1);
                     fn_8009F928(pB, &b, 5, 1);
                     if (a.mY < b.mY) {
@@ -48,7 +48,7 @@ extern "C" Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut
                 }
             } while (swapped == 1);
         }
-        p = fn_80039F5C(team, pState->mUnknown1A5[index]);
+        p = PlyrGet(team, pState->mUnknown1A5[index]);
         if (pOut != 0) {
             fn_8009F928(p, pOut, 5, 1);
         }

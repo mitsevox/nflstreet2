@@ -592,7 +592,7 @@ extern "C" void SpchIGSayPlayResult(void)
                     unsigned int count = fn_80178D18(0);
 
                     for (i = 0; i < count; i++) {
-                        Object_80039F5C *player = fn_80039F5C(0, i);
+                        Object_80039F5C *player = PlyrGet(0, i);
 
                         if (player->mFlags & 0x10000000) {
                             SpchIGSetPassTarget(player->mId);
@@ -626,7 +626,7 @@ extern "C" void SpchIGSayPlayResult(void)
                     unsigned int count = fn_80178D18(1);
 
                     for (i = 0; i < count; i++) {
-                        Object_80039F5C *player = fn_80039F5C(1, i);
+                        Object_80039F5C *player = PlyrGet(1, i);
 
                         if (player->mFlags & 0x10000000) {
                             SpchIGSetPassTarget(player->mId);

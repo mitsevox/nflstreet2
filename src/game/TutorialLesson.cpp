@@ -281,10 +281,10 @@ struct TutorialTitleText_t {
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-void fn_8003A450(void);
+void PlyrMgrClearStates(void);
 void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
-void fn_800406C0(int a);
+void BigObjNotifyTypes(int a);
 void fn_8004730C(int a);
 void fn_80047874(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
@@ -298,10 +298,10 @@ void SndgAmbPostCue(int type);
 void SndgSetVolumeOption(int channel, unsigned int level);
 void SndgApplyVolumeOptions(void);
 void fn_8006F824(int a);
-void fn_80072C90(int a, int b);
-int fn_80072E6C(void);
-void fn_80072F04(void);
-void fn_800731D0(int a);
+void SndgMusicFadeOut(int a, int b);
+int SndgMusicIsPaused(void);
+void SndgMusicResume(void);
+void SndgMusicPumpFrame(int a);
 void SpchIGSetCommentaryOn(unsigned char value);
 int SpchIGIsNarratorIdle(void);
 int fn_80085A34(int formation, int team);
@@ -564,7 +564,7 @@ void TutorialSetupRosters(void)
     fn_801FCE10(0, "select 'GTHG' into \x82 and 'GTAG' into \x82 from 'FNIG'\n", &home, &away);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            list[i] = fn_80039F5C((unsigned char)team, i)->mUnknown2908;
+            list[i] = PlyrGet((unsigned char)team, i)->mUnknown2908;
         }
         list[7] = 0x7FFF;
         DepthChartAutoFill(team, list, 4);
@@ -577,7 +577,7 @@ void TutorialSetupRosters(void)
     fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
+            Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
             pObject->mUnknown2908 = records[team].mUnknown[i];
             fn_80149040(pObject);
         }
@@ -788,7 +788,7 @@ void TutorialSetupPlays(void)
 
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
+            Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
             fn_800EFE60(0, pObject->mQueue, pObject);
         }
     }
@@ -1005,9 +1005,9 @@ int TutorialFinishCategory(void)
             }
             TutorialSetupRosters();
             fn_801485F4();
-            fn_80072F04();
+            SndgMusicResume();
             SndgApplyVolumeOptions();
-            fn_80072F04();
+            SndgMusicResume();
             _Tutorial_bContinuing = 0;
         }
         done = 1;
@@ -1047,15 +1047,15 @@ int TutorialFinishCategory(void)
             _Tutorial_bContinuing = done;
         }
     } else {
-        fn_80072F04();
+        SndgMusicResume();
         SndgApplyVolumeOptions();
-        fn_80072F04();
+        SndgMusicResume();
     }
 
     if (done) {
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
-                Object_80039F5C *pPlayer = fn_80039F5C((unsigned char)team, i);
+                Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, i);
                 pPlayer->mUnknown9[2] = i < (unsigned int)fn_80178D70((unsigned char)team);
             }
         }
@@ -1068,7 +1068,7 @@ int TutorialFinishCategory(void)
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();
         SndgAmbPostCue(3);
-        fn_80072F04();
+        SndgMusicResume();
         SndgCrowdTriggerEvent(3, 0);
         PlayBookLoadAudibleTable();
     }
@@ -1198,7 +1198,7 @@ void TutorialPreSnapNewStuff::OnEnter(float dt)
     } else {
         fn_800A7A0C(1);
         if (step == 8) {
-            fn_800406C0(0xC0);
+            BigObjNotifyTypes(0xC0);
         }
     }
 }
@@ -1323,7 +1323,7 @@ void TutorialPostPlayNewStuff::OnEnter(float dt)
     } else if (TutorialGetStep() == 8) {
         TutorialStep_t *pStep = TutorialGetLessonObject()->GetStep();
         if (TutorialAreMovesDone(pStep->mMask)) {
-            fn_800406C0(0xC0);
+            BigObjNotifyTypes(0xC0);
         }
     }
     TutorialPostPlay::OnEnter(dt);
@@ -1709,7 +1709,7 @@ void TutorialReloadRatings(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
-            fn_80149040(fn_80039F5C(team, i));
+            fn_80149040(PlyrGet(team, i));
         }
     }
 }
@@ -1718,8 +1718,8 @@ void TutorialSetupSession(void)
 {
     unsigned char volume;
 
-    if (fn_80072E6C()) {
-        fn_80072F04();
+    if (SndgMusicIsPaused()) {
+        SndgMusicResume();
     }
     SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
@@ -1816,7 +1816,7 @@ void TutorialPreGame::OnUpdate(float dt)
         if (choice == 2) {
             if (mUnknown4 == 2) {
                 RumbleEnable(1);
-                fn_80072C90(0xFA, 0);
+                SndgMusicFadeOut(0xFA, 0);
                 InGameStop();
             } else {
                 mUnknown4 = choice;
@@ -1880,7 +1880,7 @@ void TutorialPreSnap::OnEnter(float dt)
     start.mY = TutorialGetStartLine();
     if (TutorialGetAnnounceStep()) {
         AudmonEventPostArgs(0x85, 0, TutorialGetLesson(), TutorialGetStep(), 0);
-        fn_800731D0(1);
+        SndgMusicPumpFrame(1);
     }
     fn_801780A8(start);
     fn_801782B0();
@@ -2081,7 +2081,7 @@ void TutorialPostPlay::OnUpdate(float dt)
                         MsgBoxShow("Tutorial Results", _Tutorial_szQuitConfirm, "|^No|Yes");
                     } else {
                         RumbleEnable(1);
-                        fn_80072C90(0xFA, 0);
+                        SndgMusicFadeOut(0xFA, 0);
                         fn_80047874(0);
                         fn_8004730C(0);
                         InGameStop();
@@ -2175,13 +2175,13 @@ int TutorialPostPlay::GetBusy(float dt)
 
 void TutorialPostPlay::Finish(float dt)
 {
-    fn_8003A450();
+    PlyrMgrClearStates();
     if (fn_8005BFD4() != 4) {
         fn_8005BF18();
     }
     if (mUnknown4 != 0) {
         if (!TutorialFinishCategory()) {
-            fn_80072C90(0xFA, 0);
+            SndgMusicFadeOut(0xFA, 0);
             InGameStop();
         }
     } else {

@@ -207,7 +207,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             unsigned char active;
             unsigned char index = PlayBookGetReceiver(p->mIdBytes[2], i, &active);
             if (index != 255 && active) {
-                Object_80039F5C *candidate = fn_80039F5C(p->mIdBytes[2], index);
+                Object_80039F5C *candidate = PlyrGet(p->mIdBytes[2], index);
                 if (candidate->mMotion.mPos.mY < point[1] + 2.5f || candidate == ball) {
                     float distance = fn_8022781C(&p->mMotion.mPos, &candidate->mMotion.mPos);
                     if (!(distance >= nearest)) {

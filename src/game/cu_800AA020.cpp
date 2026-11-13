@@ -10,7 +10,7 @@ extern "C" void fn_800AA020(void)
 
     count = fn_80178D18(0);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(0, i);
+        Object_80039F5C *p = PlyrGet(0, i);
         Block_80170E64 *pBlock;
 
         p->mMotion.mPos.mX = 55.0f;
@@ -22,7 +22,7 @@ extern "C" void fn_800AA020(void)
     }
     count = fn_80178D18(1);
     for (i = 0; i < count; i++) {
-        Object_80039F5C *p = fn_80039F5C(1, i);
+        Object_80039F5C *p = PlyrGet(1, i);
         Block_80170E64 *pBlock;
 
         p->mMotion.mPos.mX = 55.0f;

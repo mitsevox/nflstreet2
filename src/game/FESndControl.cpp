@@ -10,7 +10,7 @@ void SndgShutdown(void);
 void SndgChannelsInitFE(void);
 void SndgChannelsShutdownFE(void);
 void SndgApplyVolumeOptions(void);
-void fn_800728F8(void);
+void SndgMusicUpdate(void);
 void SpchIGInitFrontEnd(void);
 void fn_801F4B20(void);
 
@@ -24,7 +24,7 @@ void FESndInit(void)
 
 void FESndUpdate(int a)
 {
-    fn_800728F8();
+    SndgMusicUpdate();
     fn_801F4B20();
 }
 

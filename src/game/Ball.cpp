@@ -13,7 +13,7 @@
 #include "game/fn_80238174.h"
 
 extern "C" {
-CollideSet_t *fn_8003A078(void);
+CollideSet_t *PlyrMgrGetCollideSet(void);
 void BallModelRegisterType(int a);
 void BallModelUnregisterType(void);
 Block_80170E64 *BallModelNew(int a, Block_80170E64 *pFirst, int b, int c, int d);
@@ -37,7 +37,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideContact_t *pContact, unsigned char sub, Vector_80039F5C *pPos);
 void fn_80227538(Vector_80039F5C *pVector, int angle, float length);
 float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
-CollideSet_t *fn_801442F0(void);
+CollideSet_t *StatcollGetSet(void);
 void ParticlesAddBallEvent(int a, Ball_t *pBall);
 int fn_801486A0(void);
 void fn_801D0470(int a);
@@ -419,9 +419,9 @@ void BallsProcessCollision(float step)
     unsigned int i;
 
     CollideSetUpdate(_Ball_pSet->mHeader.mpRecords);
-    CollideSetTest(fn_8003A078(), _Ball_pSet->mHeader.mpRecords);
+    CollideSetTest(PlyrMgrGetCollideSet(), _Ball_pSet->mHeader.mpRecords);
     pRecords = _Ball_pSet->mHeader.mpRecords;
-    CollideSetTest(pRecords, fn_801442F0());
+    CollideSetTest(pRecords, StatcollGetSet());
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
         fn_8013A6A8(&_Ball_pSet->mEntries[i], step);
     }

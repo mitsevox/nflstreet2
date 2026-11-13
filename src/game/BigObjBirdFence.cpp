@@ -3,21 +3,21 @@
    match, and a chain of "RIGHT"/"LEFT" linked objects that start their
    animations in turn. */
 #include "game/BigObjNode.h"
-#include "game/Object_80040818.h"
+#include "game/BigObj.h"
 
 /* The two linked objects at BigObjInst +420 of a chained object. */
 struct BigObjFenceLinks_t {
-    Object_80040818 *mpLeft;
-    Object_80040818 *mpRight;
+    BigObj_t *mpLeft;
+    BigObj_t *mpRight;
 };
 
 extern "C" {
 void fn_8004AF84(BigObjPhysics_t *pExtra);
-void fn_8004CBEC(void *p, float value, BigObjInst *pObject, Object_80040818 *pItem);
-void fn_8004E090(Object_80040818 *pItem, int a, int b);
-Object_80040818 *fn_8004117C(int key);
-void fn_800411C8(Object_80040818 *pItem);
-void fn_800411EC(Object_80040818 *pItem);
+void fn_8004CBEC(void *p, float value, BigObjInst *pObject, BigObj_t *pItem);
+void fn_8004E090(BigObj_t *pItem, int a, int b);
+BigObj_t *BigObjFindLinkedByGroup(int key);
+void BigObjClearFlag(BigObj_t *pItem);
+void BigObjSetFlag(BigObj_t *pItem);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_801784C4(void);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
@@ -38,7 +38,7 @@ static inline void StartAnim(BigObjInst *pObject, unsigned short key, float valu
 }
 
 extern "C" {
-int BigObjBirdUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
+int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
 {
     BigObjPhysics_t *pExtra = pObject->mUnknown428;
 
@@ -63,9 +63,9 @@ int BigObjBirdUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
         fn_8004E090(pItem, 0, 0);
         pItem->mUnknown232_31 = 1;
         if (pObject->mUnknown144 != -1) {
-            fn_800411EC(fn_8004117C(pObject->mUnknown144));
+            BigObjSetFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
         } else {
-            fn_800411EC(pItem);
+            BigObjSetFlag(pItem);
         }
         pObject->mUnknown380 = 0;
     } else {
@@ -76,9 +76,9 @@ int BigObjBirdUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
         if (pObject->mUnknown380 &&
             fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
             if (pObject->mUnknown144 != -1) {
-                fn_800411C8(fn_8004117C(pObject->mUnknown144));
+                BigObjClearFlag(BigObjFindLinkedByGroup(pObject->mUnknown144));
             } else {
-                fn_800411C8(pItem);
+                BigObjClearFlag(pItem);
             }
             Vector_80039F5C pos;
             pos.mX = pObject->mUnknown360.mX;
@@ -112,7 +112,7 @@ int BigObjBirdUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
     return 1;
 }
 
-void BigObjFenceSwing(Object_80040818 *pItem, BigObjNode_t *pNode)
+void BigObjFenceSwing(BigObj_t *pItem, BigObjNode_t *pNode)
 {
     BigObjPhysics_t *pExtra = pItem->mUnknown472->mUnknown428;
     BigObjFenceLinks_t *pPair = (BigObjFenceLinks_t *)pItem->mUnknown472->mUnknown420;
@@ -173,7 +173,7 @@ void BigObjFenceSwing(Object_80040818 *pItem, BigObjNode_t *pNode)
     }
 }
 
-int BigObjFenceUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
+int BigObjFenceUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
 {
     BigObjPhysics_t *pExtra = pObject->mUnknown428;
 
@@ -227,7 +227,7 @@ int BigObjFenceUpdate(BigObjInst *pObject, Object_80040818 *pItem, int mode)
     return 1;
 }
 
-int BigObjGetNameNumber(Object_80040818 *pItem)
+int BigObjGetNameNumber(BigObj_t *pItem)
 {
     int value = 0;
     unsigned int i = 0;

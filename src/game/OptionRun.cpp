@@ -9,7 +9,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Ball.h"
-#include "game/fn_800670B4.h"
+#include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022781C.h"
@@ -18,7 +18,7 @@
 
 
 extern "C" {
-unsigned char *fn_8003AB38(Object_80039F5C *p);
+unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
@@ -44,7 +44,7 @@ float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
 void PassIconsShow(int mode);
-Object_800670B4 *PlayBookGetFormation(int team);
+PlayBookFormation_t *PlayBookGetFormation(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 int fn_80177F70(void);
@@ -528,7 +528,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
     int flag = 0;
 
     if (pControl->mUnknown80 == 0) {
-        if (*fn_8003AB38(p) == 57) {
+        if (*PlyrGetPendingMsg(p) == 57) {
             fn_800B7CA4(p);
         } else {
             fn_800B76E8(p);
@@ -555,7 +555,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
                     p->mFlags |= 0x4000;
                     StyleTrackerBeginPumpInteraction();
                 }
-            } else if (*fn_8003AB38(p) == 57) {
+            } else if (*PlyrGetPendingMsg(p) == 57) {
                 fn_800B7CA4(p);
             } else {
                 fn_800B76E8(p);
@@ -568,7 +568,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
 extern "C" void OptionRunMirror(Object_80039F5C *p)
 {
     unsigned char i;
-    Object_800670B4 *pObject;
+    PlayBookFormation_t *pObject;
     unsigned int count;
 
     switch (p->mIdBytes[1]) {

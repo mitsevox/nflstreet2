@@ -912,7 +912,7 @@ void fn_8003E038(Block_80170E64 *object, int *reference) {
     for (unsigned int team = 0; team < 2; ++team)
       for (unsigned int i = 0; i < 7; ++i) {
         Object_80039F5C *player =
-            fn_80039F5C((unsigned char)team, (unsigned short)i);
+            PlyrGet((unsigned char)team, (unsigned short)i);
         if (player->mpUnknown4 == object)
           *reference = player->mId;
       }

@@ -115,7 +115,7 @@ void RumbleInitAllPorts(void);
 void RumbleShutdown(void);
 void RumbleEnable(int a);
 unsigned char RumbleIsEnabled(void);
-int fn_8019626C(void);
+int ScreenTransGetMode(void);
 void fn_801F5D0C(void);
 void fn_802195E4(void *p, unsigned short a, unsigned short b);
 }
@@ -243,7 +243,7 @@ void PauseCameraStart(void)
     params.mUnknown28 = fn_802372EC(1, 3);
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
-    if (_Pause_State.mPair.mHigh != 7 && fn_8019626C() != 5 && !fn_8002D0AC(lbl_803EA368)
+    if (_Pause_State.mPair.mHigh != 7 && ScreenTransGetMode() != 5 && !fn_8002D0AC(lbl_803EA368)
         && fn_800AD9B4() != 7) {
         params.mUnknown12 |= 2;
     }

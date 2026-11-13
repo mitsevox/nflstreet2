@@ -1,11 +1,16 @@
+/* Statcoll: the collision-set block of the Statcoll game module. On start it
+   allocates a small state holding a collision set and a value array and
+   registers the callbacks that clear, free, compare, save and size that
+   state with the game-state block manager. The ball code and the per-frame
+   collision update test other sets against the set it returns. */
 #include <string.h>
 
 #include "game/Collide.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 
-/* Eight-byte state allocated through fn_80238174 under the id 'scol'. */
-struct State_803ECA0C {
+/* Eight-byte state allocated through the block manager under the id 'scol'. */
+struct StatcollState_t {
     CollideSet_t *mpSet;
     int *mpValues;
 };
@@ -14,48 +19,48 @@ extern "C" {
 int MemFill(void *pDest, int size, int value, int width);
 int fn_80238278(const void *p, int size, int seed);
 
-int fn_80143F40(void *p, int value);
+int StatcollBlockInit(void *p, int value);
 
-static int lbl_803EB220 = 0;
-static State_803ECA0C *lbl_803ECA0C;
+static int _Statcoll_iUnused = 0;
+static StatcollState_t *_Statcoll_pState;
 
 #if defined(DECOMP_COMPARE)
-int fn_80143F40(void *p, int value)
+int StatcollBlockInit(void *p, int value)
 {
-    State_803ECA0C *pState = (State_803ECA0C *)p;
+    StatcollState_t *pState = (StatcollState_t *)p;
 
-    MemFill(pState, sizeof(State_803ECA0C), 0, 4);
-    lbl_803EB220 = 0;
+    MemFill(pState, sizeof(StatcollState_t), 0, 4);
+    _Statcoll_iUnused = 0;
     pState->mpSet = 0;
     pState->mpValues = 0;
     return 0;
 }
 #endif
 
-int fn_80143F8C(void *p, int value)
+int StatcollBlockShutdown(void *p, int value)
 {
-    State_803ECA0C *pState = (State_803ECA0C *)p;
+    StatcollState_t *pState = (StatcollState_t *)p;
 
     if (pState->mpValues != 0) {
         CollideSetDestroy(pState->mpSet);
         fn_801D2BD0(pState->mpValues);
     }
     pState->mpValues = 0;
-    lbl_803EB220 = 0;
+    _Statcoll_iUnused = 0;
     return 0;
 }
 
-int fn_80143FE0(void *p, void *q)
+int StatcollBlockCompare(void *p, void *q)
 {
-    State_803ECA0C *pState = (State_803ECA0C *)p;
-    State_803ECA0C *pOther = (State_803ECA0C *)q;
+    StatcollState_t *pState = (StatcollState_t *)p;
+    StatcollState_t *pOther = (StatcollState_t *)q;
     CollideSet_t *pSet = pState->mpSet;
     int result;
 
     if (pOther != 0) {
         CollideSet_t *pOtherSet = pOther->mpSet;
 
-        result = memcmp(pState, pOther, sizeof(State_803ECA0C));
+        result = memcmp(pState, pOther, sizeof(StatcollState_t));
         if (pState->mpValues != 0) {
             result |= memcmp(pSet, pOtherSet, sizeof(CollideSet_t));
             result |= memcmp(pSet->mpUnknown0, pOtherSet->mpUnknown0, pSet->mUnknown4 * sizeof(CollideObject_t));
@@ -64,7 +69,7 @@ int fn_80143FE0(void *p, void *q)
             result |= memcmp(pState->mpValues, pOther->mpValues, pSet->mUnknown4 * 4);
         }
     } else {
-        result = fn_80238278(pState, sizeof(State_803ECA0C), 0);
+        result = fn_80238278(pState, sizeof(StatcollState_t), 0);
         if (pState->mpValues != 0) {
             result = fn_80238278(pSet, sizeof(CollideSet_t), result);
             result = fn_80238278(pSet->mpUnknown0, pSet->mUnknown4 * sizeof(CollideObject_t), result);
@@ -76,13 +81,13 @@ int fn_80143FE0(void *p, void *q)
     return result;
 }
 
-int fn_80144144(void *p, void *pBuffer)
+int StatcollBlockSave(void *p, void *pBuffer)
 {
-    State_803ECA0C *pState = (State_803ECA0C *)p;
+    StatcollState_t *pState = (StatcollState_t *)p;
     CollideSet_t *pSet = pState->mpSet;
 
-    memcpy(pBuffer, p, sizeof(State_803ECA0C));
-    pBuffer = (char *)pBuffer + sizeof(State_803ECA0C);
+    memcpy(pBuffer, p, sizeof(StatcollState_t));
+    pBuffer = (char *)pBuffer + sizeof(StatcollState_t);
     if (pState->mpValues != 0) {
         memcpy(pBuffer, pSet, sizeof(CollideSet_t));
         pBuffer = (char *)pBuffer + sizeof(CollideSet_t);
@@ -97,34 +102,34 @@ int fn_80144144(void *p, void *pBuffer)
     return 1;
 }
 
-int fn_8014421C(void *p, void *pBuffer)
+int StatcollBlockRestore(void *p, void *pBuffer)
 {
     return 1;
 }
 
 /* Size of the saved image: the state, then the record pool, its records, both sub-record arrays and the values. */
-int fn_80144224(void *p)
+int StatcollBlockGetSaveSize(void *p)
 {
-    if (lbl_803ECA0C->mpValues != 0) {
-        CollideSet_t *pSet = lbl_803ECA0C->mpSet;
+    if (_Statcoll_pState->mpValues != 0) {
+        CollideSet_t *pSet = _Statcoll_pState->mpSet;
 
-        return sizeof(State_803ECA0C) + sizeof(CollideSet_t) + pSet->mUnknown4 * sizeof(CollideObject_t) +
+        return sizeof(StatcollState_t) + sizeof(CollideSet_t) + pSet->mUnknown4 * sizeof(CollideObject_t) +
                pSet->mUnknownC * sizeof(CollideShape_t) * 2 + pSet->mUnknown4 * 4;
     }
-    return sizeof(State_803ECA0C);
+    return sizeof(StatcollState_t);
 }
 
-void fn_80144264(void)
+void StatcollStart(void)
 {
-    void *pHandle = fn_80238174(0, (void **)&lbl_803ECA0C, sizeof(State_803ECA0C), 0, 0x73636F6C);
+    void *pHandle = fn_80238174(0, (void **)&_Statcoll_pState, sizeof(StatcollState_t), 0, 0x73636F6C);
 
-    fn_80238234(pHandle, fn_80143F40, fn_80143F8C, 0, fn_80143FE0);
-    fn_80238248(pHandle, fn_80144144, fn_80144224, fn_8014421C);
+    fn_80238234(pHandle, StatcollBlockInit, StatcollBlockShutdown, 0, StatcollBlockCompare);
+    fn_80238248(pHandle, StatcollBlockSave, StatcollBlockGetSaveSize, StatcollBlockRestore);
     fn_802381E0(pHandle);
 }
 
-CollideSet_t *fn_801442F0(void)
+CollideSet_t *StatcollGetSet(void)
 {
-    return lbl_803ECA0C->mpSet;
+    return _Statcoll_pState->mpSet;
 }
 }
