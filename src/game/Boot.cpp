@@ -17,12 +17,8 @@ extern "C" {
 extern char lbl_800034A0[];
 extern char lbl_802EC09C[];
 extern void *gUISMainInfo;
-extern unsigned char lbl_803EBD6C;
-extern unsigned char lbl_803EBD6D;
-extern unsigned char lbl_803EBD6E;
-extern unsigned char lbl_803EBD6F;
-extern unsigned char lbl_803EBD70;
-extern int lbl_803ED5EC;
+extern unsigned char Per_BtnMask[8];
+extern int Per_MaxAxis;
 
 int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int ProgressivePopupIsOn(void);
@@ -44,11 +40,11 @@ void fn_801D6F58(void);
 void MovieRcmpPlay(int a, int b, int c, int (*pCallback)(int), int d);
 int MovieRcmpInstallMADCOWCodec(void (*pCallback)(void));
 void fn_801DA46C(void);
-int fn_801E15D0(int a);
-int fn_801E17D0(int a, struct PerDeviceData_t *pState);
-int fn_801E194C(void);
-int fn_801E195C(int a);
-unsigned int fn_801E19B4(int a);
+int PerPollSingleDevice(int a);
+int PerGetDeviceData(int a, struct PerDeviceData_t *pState);
+int PerSizeofPerDataT(void);
+int PerGetDeviceStatus(int a);
+unsigned int PerGetDeviceTypeT(int a);
 void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
 int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
@@ -67,7 +63,7 @@ void fn_8023CFD0(int a);
 int fn_8024151C(void);
 }
 
-/* Filled by fn_801E17D0; the byte array at +8 is indexed by lbl_803ED5EC + 1. */
+/* Filled by PerGetDeviceData; the byte array at +8 is indexed by Per_MaxAxis + 1. */
 struct PerDeviceData_t {
     unsigned char mUnknown0[8];
     unsigned char mUnknown8[24];
@@ -126,14 +122,14 @@ static void _BootDelay(void)
 static void _BootProgressiveCheck(void)
 {
     unsigned int i = 0;
-    PerDeviceData_t *pState = (PerDeviceData_t *)fn_801D2B7C(fn_801E194C(), 0, 0);
+    PerDeviceData_t *pState = (PerDeviceData_t *)fn_801D2B7C(PerSizeofPerDataT(), 0, 0);
     int found = fn_8023CF60() == 1;
 
     for (; !found && i < 4; i++) {
-        if (fn_801E195C(i) == 2) {
-            fn_801E15D0(i);
-            fn_801E17D0(i, pState);
-            if (lbl_803EBD6D & pState->mUnknown8[lbl_803ED5EC + 1]) {
+        if (PerGetDeviceStatus(i) == 2) {
+            PerPollSingleDevice(i);
+            PerGetDeviceData(i, pState);
+            if (Per_BtnMask[1] & pState->mUnknown8[Per_MaxAxis + 1]) {
                 found = 1;
             }
         }
@@ -290,14 +286,14 @@ static void _BootCheckMovieAbort(int a)
     for (i = 0; i < 4; i++) {
         PerCheckConnectSingle(i);
         if (PerIsDeviceConnected(i)) {
-            fn_801E15D0(i);
-            if (fn_801E19B4(i) >> 16 && fn_801E195C(i) == 2 && a == 1) {
-                fn_801E17D0(i, pState);
-                if (lbl_803EBD70 & pState->mUnknown8[lbl_803ED5EC + 1]
-                    || lbl_803EBD6C & pState->mUnknown8[lbl_803ED5EC + 1]
-                    || lbl_803EBD6D & pState->mUnknown8[lbl_803ED5EC + 1]
-                    || lbl_803EBD6E & pState->mUnknown8[lbl_803ED5EC + 1]
-                    || lbl_803EBD6F & pState->mUnknown8[lbl_803ED5EC + 1]) {
+            PerPollSingleDevice(i);
+            if (PerGetDeviceTypeT(i) >> 16 && PerGetDeviceStatus(i) == 2 && a == 1) {
+                PerGetDeviceData(i, pState);
+                if (Per_BtnMask[4] & pState->mUnknown8[Per_MaxAxis + 1]
+                    || Per_BtnMask[0] & pState->mUnknown8[Per_MaxAxis + 1]
+                    || Per_BtnMask[1] & pState->mUnknown8[Per_MaxAxis + 1]
+                    || Per_BtnMask[2] & pState->mUnknown8[Per_MaxAxis + 1]
+                    || Per_BtnMask[3] & pState->mUnknown8[Per_MaxAxis + 1]) {
                     _Boot_bMovieAbort = 1;
                 }
             }

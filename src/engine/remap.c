@@ -14,8 +14,8 @@ extern unsigned int lbl_803ECF60;
 extern unsigned int lbl_803ECF64;
 extern unsigned int lbl_803ECF68;
 extern unsigned char *lbl_803ECF6C;
-extern unsigned int lbl_803ED5EC;
-extern unsigned char lbl_803EBD6C[8];
+extern unsigned int Per_MaxAxis;
+extern unsigned char Per_BtnMask[8];
 
 void *fn_801C1FBC();
 int MemFill(void *p, unsigned int size, int value, int flags);
@@ -119,7 +119,7 @@ float RemapCheckEntry(unsigned int table, unsigned int entry, unsigned char *pIn
                 value = (float)(signed char)pInputs[code & 0xFF] * (1.0f / 127.0f);
             } else {
                 index = code & 0xFF;
-                if (lbl_803EBD6C[index & 7] & pInputs[lbl_803ED5EC + (index >> 3)]) {
+                if (Per_BtnMask[index & 7] & pInputs[Per_MaxAxis + (index >> 3)]) {
                     value = 1.0f;
                 } else {
                     value = 0.0f;

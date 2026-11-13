@@ -225,9 +225,9 @@ char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 char *fn_801C3084(const char *pString, int c);
 unsigned int fn_801C3180(const char *pText);
 int ConGetChannelInfo(int a, int b);
-int fn_801E15D0(int a);
-unsigned int fn_801E1954(void);
-int fn_801E195C(int a);
+int PerPollSingleDevice(int a);
+unsigned int PerGetNumDevices(void);
+int PerGetDeviceStatus(int a);
 void PerCheckConnectAll(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_8021E2B4(void *pObject, int a, int b);
@@ -519,18 +519,18 @@ int fn_8000FCDC(void)
     int i;
 
     PerCheckConnectAll();
-    if (fn_801E1954() < 8) {
-        limit = fn_801E1954();
+    if (PerGetNumDevices() < 8) {
+        limit = PerGetNumDevices();
     } else {
         limit = 8;
     }
     for (i = 0; i < limit; i++) {
-        if (fn_801E195C(i)) {
-            fn_801E15D0(i);
+        if (PerGetDeviceStatus(i)) {
+            PerPollSingleDevice(i);
         }
     }
     for (i = 0; i <= 7; i++) {
-        if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
+        if (PerGetDeviceStatus(ConGetChannelInfo(i, 0)) == 2) {
             GameTextSetPadPlayer(i, count);
             count++;
             found = 1;
@@ -541,7 +541,7 @@ int fn_8000FCDC(void)
             GameTextSetPadPlayer(i, -1);
         }
     }
-    int connected = fn_801E195C(ConGetChannelInfo(current, 0)) == 2;
+    int connected = PerGetDeviceStatus(ConGetChannelInfo(current, 0)) == 2;
     if (!found) {
         int value = 0;
         if (assigned != -1 && assigned <= 3) {
@@ -751,7 +751,7 @@ int fn_800103A4(int force)
     PerCheckConnectAll();
     count = 0;
     for (i = 0; i <= 7; i++) {
-        unsigned char present = fn_801E195C(ConGetChannelInfo(i, 0)) == 2;
+        unsigned char present = PerGetDeviceStatus(ConGetChannelInfo(i, 0)) == 2;
         if (present && count <= 3) {
             count++;
         } else {

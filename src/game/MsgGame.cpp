@@ -55,7 +55,7 @@ void PortDbCloseSides(DbCursor *pObject);
 int PortDbGetPort(DbCursor *pObject);
 int PortDbGetSide(DbCursor *pObject);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 int fn_800B81A4(void);
 float fn_80237260(int stream);
 int GameTextGetPadPlayer(int a);
@@ -234,7 +234,7 @@ int MsgGameFindActivePort(void)
         for (int found = DbCursorFirst(&cursor); found && searching; found = DbCursorNext(&cursor)) {
             result = PortDbGetPort(&cursor);
             PortDbGetSide(&cursor);
-            searching = fn_801E195C(ConGetChannelInfo(result, 0)) == 2;
+            searching = PerGetDeviceStatus(ConGetChannelInfo(result, 0)) == 2;
         }
         PortDbCloseSides(&cursor);
         if (searching) {
@@ -474,7 +474,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
         pResult->i = MsgGameFindActivePort();
         break;
     case 0x13A:
-        pResult->i = fn_801E195C(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
+        pResult->i = PerGetDeviceStatus(ConGetChannelInfo(pArgs[0].i, 0)) == 2;
         break;
     case 0x19C:
         pResult->i = 0xFF;

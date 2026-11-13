@@ -1,21 +1,21 @@
 #ifndef ENGINE_PERIPH_H
 #define ENGINE_PERIPH_H
 
-struct Device_801E12F8;
+struct PerDevice_t;
 
 /* Low-level driver entry points (0x14 bytes). */
-typedef struct Driver_801E11E8 {
-    int (*mpInit)(struct Device_801E12F8 *pDevice, unsigned char *pPort);
-    int (*mpRelease)(struct Device_801E12F8 *pDevice);
-    int (*mpPoll)(struct Device_801E12F8 *pDevice, int (*pCounter)());
-    int (*mpGetData)(struct Device_801E12F8 *pDevice, void *pBuffer);
-    int (*mpSendData)(struct Device_801E12F8 *pDevice, void *pBuffer);
-} Driver_801E11E8;
+typedef struct PerDriver_t {
+    int (*mpInit)(struct PerDevice_t *pDevice, unsigned char *pPort);
+    int (*mpRelease)(struct PerDevice_t *pDevice);
+    int (*mpPoll)(struct PerDevice_t *pDevice, int (*pCounter)());
+    int (*mpGetData)(struct PerDevice_t *pDevice, void *pBuffer);
+    int (*mpSendData)(struct PerDevice_t *pDevice, void *pBuffer);
+} PerDriver_t;
 
 /* Device slot (0x20 bytes). */
-typedef struct Device_801E12F8 {
+typedef struct PerDevice_t {
     unsigned int mIndex;
-    Driver_801E11E8 *mpDriver;
+    PerDriver_t *mpDriver;
     void *mpUnknown08;
     int mStatus;
     int mType;
@@ -23,31 +23,43 @@ typedef struct Device_801E12F8 {
     unsigned short mUnknown16;
     char mPad18[4];
     void *mpData;
-} Device_801E12F8;
+} PerDevice_t;
 
-/* Descriptor passed to fn_801E1478 (sPeriphDesc, 0x18 bytes). */
-typedef struct Desc_801E1478 {
+/* Start of a device's data record (PerSizeofPerDataT bytes): the slot index, then the
+   axis bytes and button bits from +8. */
+typedef struct PerData_t {
+    unsigned int mIndex;
+} PerData_t;
+
+/* Descriptor passed to PerInit (sPeriphDesc, 0x18 bytes). */
+typedef struct PerInitParms_t {
     unsigned int mNumDevices;
     unsigned int mUnknown04;
     unsigned int mUnknown08;
     int (*mpUnknown0C)();
-    Driver_801E11E8 **mppDrivers;
+    PerDriver_t **mppDrivers;
     int *mpUnknown14;
-} Desc_801E1478;
+} PerInitParms_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern unsigned int lbl_803ED648;
-extern Driver_801E11E8 *lbl_803ED64C;
-extern Device_801E12F8 *lbl_803ED658;
-extern unsigned int lbl_803ED660;
+extern unsigned char Per_ModuleActive;
+extern unsigned char Per_BtnMask[8];
+extern unsigned int Per_MaxAxis;
+extern unsigned int Per_NumDrivers;
+extern PerDriver_t *Per_DriverArray;
+extern unsigned int Per_MaxButtons;
+extern unsigned int Per_MaxDevices;
+extern PerDevice_t *Per_DeviceArray;
+extern unsigned char *Per_DeviceDataBuffer;
+extern unsigned int Per_NumDevices;
 
-int fn_801E1478(Desc_801E1478 *pDesc);
-int fn_801E153C(void);
-int fn_801E1688(unsigned int index);
-unsigned int fn_801E19B4(unsigned int index);
+int PerInit(PerInitParms_t *pDesc);
+int PerShutdown(void);
+int PerReleaseSingleDevice(unsigned int index);
+unsigned int PerGetDeviceTypeT(unsigned int index);
 int PerSystemInit(void *pData);
 int PerSystemShutdown(void);
 int PerRegisterDevices(void);

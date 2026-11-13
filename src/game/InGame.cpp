@@ -107,8 +107,8 @@ void FileDebugProcess(void);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 void fn_801D6F58(void);
-int fn_801E15D0(int a);
-int fn_801E17D0(int a, char *p);
+int PerPollSingleDevice(int a);
+int PerGetDeviceData(int a, char *p);
 void PerCheckConnectSingle(unsigned char a);
 int PerIsDeviceConnected(unsigned char a);
 float RemapCheckEntry(int a, int b, char *p);
@@ -191,8 +191,8 @@ static void _InGameDemoPadRead(int a, InputValues *pPrevious, InputValues *pCurr
     handle = ConGetChannelInfo(a, 0);
     PerCheckConnectSingle(handle);
     if (PerIsDeviceConnected(handle)) {
-        fn_801E15D0(handle);
-        fn_801E17D0(handle, p);
+        PerPollSingleDevice(handle);
+        PerGetDeviceData(handle, p);
         _InGameDemoPadHook();
         if (_InGame_bDemo && PadInputIsDeviceReady(handle)) {
             done = 0;

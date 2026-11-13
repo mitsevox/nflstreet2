@@ -61,7 +61,7 @@ void fn_800C9BB0(void);
 int fn_800A8488(int team);
 int fn_800A8444(int team);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 int fn_800B6644(int index);
 void RumbleStartPulse(int channel, int onTime, int offTime, int duration, int force);
 void HudShowPressPrompt(int team);
@@ -252,7 +252,7 @@ void PreSnapPhase::OnEnter(float dt)
             unsigned int j;
 
             for (j = 0; j <= 9; j++) {
-                if (fn_801E195C(ConGetChannelInfo(j, 0)) == 2 && fn_800B6644(j) == i) {
+                if (PerGetDeviceStatus(ConGetChannelInfo(j, 0)) == 2 && fn_800B6644(j) == i) {
                     RumbleStartPulse(j, lbl_803EABB5, lbl_803EABB6, lbl_803EABB7, 1);
                 }
             }

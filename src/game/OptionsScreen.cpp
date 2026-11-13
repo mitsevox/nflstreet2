@@ -14,7 +14,7 @@ extern "C" {
 extern void *gUISMainInfo;
 
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 void RumbleStart(int a, int b, int c);
 int fn_800B6644(int a);
 void OptAudioOnOptionChanged(int a, int b);
@@ -66,13 +66,13 @@ void OptionsScreenOnChange(int id, int flag)
         if (flag != 0 && GameOptionsGet(9) != 0) {
             if (FELoopIsMainFEActive() != 0) {
                 for (i = 0; i < 8; i++) {
-                    if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
+                    if (PerGetDeviceStatus(ConGetChannelInfo(i, 0)) == 2) {
                         RumbleStart(i, 127, 20);
                     }
                 }
             } else {
                 for (i = 0; i < 10; i++) {
-                    if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
+                    if (PerGetDeviceStatus(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
                         RumbleStart(i, 127, 20);
                     }
                 }

@@ -2392,6 +2392,38 @@
     "CodecReadSamples": {
       "address": "0x8027D05C",
       "evidence": "evidence.tsv function/name rows for 0x8027D05C; exact but unlinked in the comparison-only src/engine/cu_8027CF9C.cpp, which keeps its original bytes until the whole file can be linked; called here by name."
+    },
+    "Per_MaxAxis": {
+      "address": "0x803ED5EC",
+      "evidence": "evidence.tsv data/name rows for 0x803ED5EC (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_NumDrivers": {
+      "address": "0x803ED648",
+      "evidence": "evidence.tsv data/name rows for 0x803ED648 (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_DriverArray": {
+      "address": "0x803ED64C",
+      "evidence": "evidence.tsv data/name rows for 0x803ED64C (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_MaxButtons": {
+      "address": "0x803ED650",
+      "evidence": "evidence.tsv data/name rows for 0x803ED650 (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_MaxDevices": {
+      "address": "0x803ED654",
+      "evidence": "evidence.tsv data/name rows for 0x803ED654 (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_DeviceArray": {
+      "address": "0x803ED658",
+      "evidence": "evidence.tsv data/name rows for 0x803ED658 (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_DeviceDataBuffer": {
+      "address": "0x803ED65C",
+      "evidence": "evidence.tsv data/name rows for 0x803ED65C (linker-allocated COMMON word of periph.c; storage not in a unit)."
+    },
+    "Per_NumDevices": {
+      "address": "0x803ED660",
+      "evidence": "evidence.tsv data/name rows for 0x803ED660 (linker-allocated COMMON word of periph.c; storage not in a unit)."
     }
   },
   "units": [
@@ -17760,6 +17792,37 @@
           "placement": ".data4",
           "start": "0x802F9B90",
           "end": "0x802F9BAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/periph.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801E11D0-0x801E1A20 (src/engine/periph.c), its compiler, function, name, data and type rows; every function exact and the file-owned .sdata, .sbss and .bss linked; the Per_ COMMON globals resolve through externals.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E11D0",
+          "end": "0x801E1A20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD68",
+          "end": "0x803EBD74"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF50",
+          "end": "0x803ECF58"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADC4",
+          "end": "0x8039ADE4"
         }
       ]
     }

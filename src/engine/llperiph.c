@@ -20,7 +20,7 @@ int PerSystemInit(void *pData)
     PADInit();
     fn_802856D8();
     lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
-    lbl_803ED660 = 4;
+    Per_NumDevices = 4;
     PerRegisterDevices();
     fn_801E26FC();
     fn_801CE234(fn_801E26FC);
@@ -39,7 +39,7 @@ int PerRegisterDevices(void)
 {
     unsigned char port;
 
-    for (port = 0; port < lbl_803ED660; port++) {
+    for (port = 0; port < Per_NumDevices; port++) {
         PerRegisterSingleDevice(port);
     }
     return 0;
@@ -50,10 +50,10 @@ int PerRegisterSingleDevice(unsigned char port)
     unsigned char i;
     unsigned char arg;
 
-    for (i = 0; i < lbl_803ED648; i++) {
+    for (i = 0; i < Per_NumDrivers; i++) {
         arg = port;
-        if (lbl_803ED64C[i].mpInit(&lbl_803ED658[port], &arg) == 1) {
-            lbl_803ED658[port].mpDriver = &lbl_803ED64C[i];
+        if (Per_DriverArray[i].mpInit(&Per_DeviceArray[port], &arg) == 1) {
+            Per_DeviceArray[port].mpDriver = &Per_DriverArray[i];
             break;
         }
     }
@@ -64,7 +64,7 @@ int PerUnRegisterDevices(void)
 {
     unsigned char port;
 
-    for (port = 0; port < lbl_803ED660; port++) {
+    for (port = 0; port < Per_NumDevices; port++) {
         PerRegisterSingleDevice(port);
     }
     return 0;
@@ -74,7 +74,7 @@ void PerCheckConnectAll(void)
 {
     unsigned char port;
 
-    for (port = 0; port < lbl_803ED660; port++) {
+    for (port = 0; port < Per_NumDevices; port++) {
         PerCheckConnectSingle(port);
     }
 }
@@ -88,22 +88,22 @@ void PerCheckConnectSingle(unsigned char port)
     if (status == 0x80) {
         return;
     }
-    type = fn_801E19B4(port);
+    type = PerGetDeviceTypeT(port);
     if (status == 8) {
-        if (lbl_803ED658[port].mStatus != 0 && !(type & 0x800)) {
-            fn_801E1688(port);
-            lbl_803ED658[port].mpDriver = 0;
-            lbl_803ED658[port].mStatus = 0;
-            lbl_803ED658[port].mType = 0;
+        if (Per_DeviceArray[port].mStatus != 0 && !(type & 0x800)) {
+            PerReleaseSingleDevice(port);
+            Per_DeviceArray[port].mpDriver = 0;
+            Per_DeviceArray[port].mStatus = 0;
+            Per_DeviceArray[port].mType = 0;
         }
-    } else if (lbl_803ED658[port].mStatus == 0) {
+    } else if (Per_DeviceArray[port].mStatus == 0) {
         PerRegisterSingleDevice(port);
     }
 }
 
 int PerIsDeviceConnected(unsigned int port)
 {
-    if (lbl_803ED658[port].mStatus == 0) {
+    if (Per_DeviceArray[port].mStatus == 0) {
         return 0;
     }
     return 1;

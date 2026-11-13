@@ -308,8 +308,8 @@ void fn_8002CF34(Type_803EA368 *p);
 unsigned char fn_8002D060(Type_803EA368 *p);
 void fn_8002E890(RecordList_8002E7C0 *pList);
 int ConGetChannelInfo(int a, int b);
-int fn_801E15D0(int a);
-int fn_801E195C(int a);
+int PerPollSingleDevice(int a);
+int PerGetDeviceStatus(int a);
 void fn_80093684(void *p);
 void fn_800937CC(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -4904,9 +4904,9 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     if (result) {
         fn_8002C9A8(lbl_803EA368, 3, 0);
         if (InGameIsDemo() == 0) {
-            fn_801E15D0(ConGetChannelInfo(lbl_803EA990, 0));
+            PerPollSingleDevice(ConGetChannelInfo(lbl_803EA990, 0));
         }
-        if (fn_801E195C(ConGetChannelInfo(lbl_803EA990, 0)) == 2) {
+        if (PerGetDeviceStatus(ConGetChannelInfo(lbl_803EA990, 0)) == 2) {
             fn_8002CA74(lbl_803EA368, 10, lbl_803EA990);
         }
         *pState = 0;
@@ -9581,7 +9581,7 @@ int GameModeTypeIsSpecial(void);
 void fn_800B8608(void);
 int ConUpdateChannel(int a);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 int ConProcessChannel(int a);
 void fn_800BA574(void);
 void fn_800C3170(void);
@@ -10809,7 +10809,7 @@ extern "C" void fn_800AD3A8(float dt)
     for (i = 0; i < count; i++) {
         int handle = ConGetChannelInfo(i, 0);
 
-        if (handle != -1 && fn_801E195C(handle) == 2) {
+        if (handle != -1 && PerGetDeviceStatus(handle) == 2) {
             ConProcessChannel(i);
         }
     }
@@ -11244,7 +11244,7 @@ unsigned char RumbleIsEnabled(void);
 void RumbleEnable(unsigned char enabled);
 void RumbleStart(int a, int b, int c);
 int ConGetChannelInfo(int a, int b);
-int fn_801E195C(int a);
+int PerGetDeviceStatus(int a);
 void HudHideEvent31(int index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8011E3EC(Object_80039F5C *p, int a);
@@ -11427,7 +11427,7 @@ extern "C" void fn_800AE65C(void)
         unsigned int i;
 
         for (i = 0; i <= 9; i++) {
-            if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
+            if (PerGetDeviceStatus(ConGetChannelInfo(i, 0)) == 2 && fn_800B6644(i) != 255) {
                 RumbleStart(i, 127, 20);
             }
         }
@@ -14753,8 +14753,8 @@ int GameModeTypeIsSpecial(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int ConGetChannelInfo(int a, int b);
-unsigned int fn_801E1954(void);
-int fn_801E195C(int a);
+unsigned int PerGetNumDevices(void);
+int PerGetDeviceStatus(int a);
 void fn_800B5150(Object_80039F5C *p);
 short fn_800B51D8(PlayBookFormation_t *p, int index, int mode);
 void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA, int *pB);
@@ -15443,7 +15443,7 @@ extern "C" int fn_800B81A4(void)
     for (i = 0; i < lbl_803EAB60->mCount; i++) {
         if (fn_800B6644(i) != 0xFF) {
             value = ConGetChannelInfo(i, 0);
-            if ((GameModeTypeIsSpecial() == 0 || value < fn_801E1954()) && fn_801E195C(value) != 2) {
+            if ((GameModeTypeIsSpecial() == 0 || value < PerGetNumDevices()) && PerGetDeviceStatus(value) != 2) {
                 return (unsigned char)i;
             }
         }

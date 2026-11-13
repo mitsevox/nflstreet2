@@ -26,10 +26,10 @@ int UserRecGetCount();
 void fn_80186ED8(signed char);
 void MemCardFilesSetLoadTarget(int, int);
 void MemCardFilesStartLoad();
-int fn_801E15D0(int a);
-unsigned int fn_801E1954();
-int fn_801E195C(int a);
-unsigned int fn_801E19B4(int a);
+int PerPollSingleDevice(int a);
+unsigned int PerGetNumDevices();
+int PerGetDeviceStatus(int a);
+unsigned int PerGetDeviceTypeT(int a);
 void PerCheckConnectSingle(unsigned char a);
 unsigned int fn_801D6CB8(int, int);
 void MsgMemCardScanResetList(int, int *);
@@ -59,8 +59,8 @@ extern "C" void MsgMemCardScanOpen()
 extern "C" int MsgMemCardScanCheckDevices()
 {
     int stop = 1;
-    for (unsigned char i = 0; !stop && i < fn_801E1954(); ++i) {
-        fn_801E195C(i);
+    for (unsigned char i = 0; !stop && i < PerGetNumDevices(); ++i) {
+        PerGetDeviceStatus(i);
     }
     return !stop;
 }
@@ -68,12 +68,12 @@ extern "C" int MsgMemCardScanCheckDevices()
 extern "C" void MsgMemCardScanFindDevice(int *pFound)
 {
     int found = 0;
-    unsigned int count = fn_801E1954();
+    unsigned int count = PerGetNumDevices();
     for (unsigned int i = 0; i < count; ++i) {
         PerCheckConnectSingle(i);
-        if (fn_801E19B4(i) >> 16) {
-            fn_801E15D0(i);
-            if (fn_801E19B4(i) & 0x800) {
+        if (PerGetDeviceTypeT(i) >> 16) {
+            PerPollSingleDevice(i);
+            if (PerGetDeviceTypeT(i) & 0x800) {
                 _MsgMemCardScan_iDevice = i;
                 found = 1;
                 break;

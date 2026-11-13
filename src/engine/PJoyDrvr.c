@@ -19,13 +19,13 @@ void *fn_801C1FBC();
 int MemFill(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
 void *PerSystemGetLLDriverData(unsigned int port);
-unsigned long fn_801E194C(void);
+unsigned long PerSizeofPerDataT(void);
 unsigned long PADRead(void *pStatus);
 void fn_802465BC(void *pStatus);
 void PADControlMotor(int port, unsigned long command);
 void fn_802857D8(void);
 
-int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
+int fn_801E1D44(PerDevice_t *pDevice, unsigned char *pPort)
 {
     JoyData_801E1D44 *pJoy;
     unsigned char port;
@@ -57,7 +57,7 @@ int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
     return result;
 }
 
-int fn_801E1E34(Device_801E12F8 *pDevice)
+int fn_801E1E34(PerDevice_t *pDevice)
 {
     pDevice->mpUnknown08 = 0;
     pDevice->mStatus = 0;
@@ -65,20 +65,20 @@ int fn_801E1E34(Device_801E12F8 *pDevice)
     return 1;
 }
 
-int fn_801E25DC(Device_801E12F8 *pDevice, void *pBuffer)
+int fn_801E25DC(PerDevice_t *pDevice, void *pBuffer)
 {
     int result = 0;
 
     if ((unsigned int)pDevice->mStatus <= 1) {
-        MemFill(pDevice->mpData, fn_801E194C(), 0, 4);
+        MemFill(pDevice->mpData, PerSizeofPerDataT(), 0, 4);
     } else {
         result = 1;
-        fn_801C1FBC(pBuffer, pDevice->mpData, fn_801E194C());
+        fn_801C1FBC(pBuffer, pDevice->mpData, PerSizeofPerDataT());
     }
     return result;
 }
 
-int fn_801E2658(Device_801E12F8 *pDevice, unsigned char *pBuffer)
+int fn_801E2658(PerDevice_t *pDevice, unsigned char *pBuffer)
 {
     JoyData_801E1D44 *pJoy = pDevice->mpUnknown08;
     int result = 0;
