@@ -47,7 +47,7 @@ Tiburon's shared engine, written mostly in C with lowercase file names; NASCAR 2
 
 | Range | What it does in the game | Known files | Rungs 0/1/2/3/4 | Unlinked | Held |
 | --- | --- | --- | --- | --- | --- |
-| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers; one CodeWarrior runtime file (`__va_arg.c`, the va_arg helper) | `cu_801AA640` (libsn runtime), `cu_801AD424`, `__va_arg.c` (CodeWarrior runtime), `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
+| 0x801AA640-0x801AE3E4 | SN Systems runtime: debugger stub, exception vectors, DVD helpers; one CodeWarrior runtime file (`__va_arg.c`, the va_arg helper) | `cu_801AA640` (libsn runtime), `sn_cwhelpers.c` (CodeWarrior runtime-name helpers; partly linked, holdout __cvt_fp2unsigned), `__va_arg.c` (CodeWarrior runtime), `FSasync.c`, `sndvd.c` | 0/1/1/1/1 | 15 KiB | no |
 | 0x801AE3E4-0x801B2AD4 | Speech playback runtime (`SPCHAUTHOR` block); `spchrand.c` seeds choices and tracks recent category choices (seed linked; history search and initialization remain holdouts) | `spchevnt.c`, `cu_801AF60C`, `spchpick.c`, `spchrand.c`, `cu_801B1CFC` | 0/0/0/0/1 | 18 KiB | no |
 | 0x801B2AD4-0x801B9D00 | Interactive music runtime (`PATHAUTHOR` block) | `cu_801B2AD4`, `cu_801B8C18` | 0/0/0/1/1 | 29 KiB | no |
 | 0x801B9D00-0x801C1D84 | Animation C library; buffered resource streaming | `anim.c`, `animemot.c`, `animseq.c`, `animtran.c`, `animcache.c`, `animframecache.c`, `AnimSequencer.c`, `AnimSeqCamera.c`, `animseqncr.c`, `animTexLib.c` (linked animated texture manager), `llanimtexlib.c`, `resstream.c`, `animchan.c`, `cu_801BC65C`, `animwgt.c` (blend weights; partly linked, holdout AnimWgtSetLinearInAndOut) ... | 1/3/4/2/0 | 20 KiB | no |
