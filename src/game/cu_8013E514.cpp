@@ -122,8 +122,8 @@ extern "C" void fn_8013E514(ScriptCamera_8013E514 *p)
 extern "C" void fn_8013E538(void)
 {
     if (InGameIsStopped() == 0) fn_8013F300();
-    lbl_803EB1D8 = 0;
     lbl_803EB1E0 = 0;
+    lbl_803EB1D8 = 0;
     lbl_803EB1DC = 0;
 }
 extern "C" State_8013E574 *fn_8013E574(void)
@@ -131,7 +131,10 @@ extern "C" State_8013E574 *fn_8013E574(void)
     CamGameChangeType(3, 17);
     CamGameSelectCamera(3);
     State_8013E574 *p = lbl_803EB1DC;
-    p->mFrame = 0; p->mRead = 0; p->mpCurrent = 0; p->mWrite = 0;
+    p->mRead = 0;
+    p->mpCurrent = 0;
+    p->mWrite = 0;
+    p->mFrame = 0;
     lbl_803EB1E0 = 1;
     return p;
 }
@@ -162,7 +165,7 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     s->mTarget.mX = target->mResult.mX;
     s->mTarget.mY = target->mResult.mY;
     s->mTarget.mZ = target->mResult.mZ;
-    int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
+    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
@@ -197,7 +200,7 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     Vector_80039F5C v;
     fn_802276B4(&v, target, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mX; s->mTarget.mY = target->mY; s->mTarget.mZ = target->mZ;
-    int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
+    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
     p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
@@ -305,12 +308,13 @@ extern "C" void fn_8013EEE4(State_8013E574 *s, Desc0_8013EEE4 *d)
 {
     Record_8013E944 *r = fn_8013E944(s); r->mType = 0; r->mDuration = (int)d->mDuration;
     Payload0_8013EEE4 *b = &r->mData.m0;
+    Vector_80039F5C *pTarget = &b->mTarget;
     Vector_80039F5C pos, end;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     end.mX = d->mEndPosition.mX; end.mY = d->mEndPosition.mY; end.mZ = d->mEndPosition.mZ;
-    if (d->mFlags & 1) { Point_8017886C point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&end, &end, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&end, &end, &point); }
     b->mCallback = d->mCallback;
-    b->mTarget.mX = d->mTarget.mX; b->mTarget.mY = d->mTarget.mY; b->mTarget.mZ = d->mTarget.mZ;
+    pTarget->mX = d->mTarget.mX; pTarget->mY = d->mTarget.mY; pTarget->mZ = d->mTarget.mZ;
     b->mUnknown70 = d->mUnknown48; b->mUnknown72 = d->mUnknown4A;
     b->mUnknown74 = d->mUnknown4C; b->mUnknown78 = d->mUnknown50;
     b->mLimit = d->mLimit; b->mFlags = d->mFlags;
@@ -324,19 +328,20 @@ extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
 {
     Record_8013E944 *r = fn_8013E944(s); r->mType = 1; r->mDuration = (int)d->mDuration;
     Payload1_8013F090 *b = &r->mData.m1;
-    Vector_80039F5C a, z, pos, target;
+    CamEaseVec_t *pTarget = &b->mTarget;
+    Vector_80039F5C pos, target, a, z;
     a.mX = d->mStartAngles.mX; a.mY = d->mStartAngles.mY; a.mZ = d->mStartAngles.mZ;
     z.mX = d->mEndAngles.mX; z.mY = d->mEndAngles.mY; z.mZ = d->mEndAngles.mZ;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     target.mX = d->mTarget.mX; target.mY = d->mTarget.mY; target.mZ = d->mTarget.mZ;
-    if (d->mFlags & 1) { Point_8017886C point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&target, &target, &point); }
+    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); fn_80227638(&pos, &pos, &point); fn_80227638(&target, &target, &point); }
     if (d->mRef) {
         Object_80039F5C *p = fn_8009BCE8(&d->mRef);
         if (p->mIdBytes[3] == 1) target.mZ += p->mUnknown2900 * 0.027777778f - 2.03f;
         p->mpUnknown4->mUnknown20 |= 0x410;
     }
-    CamEaseVecStart(&b->mPosition, &pos, &a, &z, d->mModePosition, d->mStartScale, d->mEndScale, d->mRate);
-    CamEaseVecStart(&b->mTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mModeTarget, d->mTargetStartScale, d->mTargetEndScale, d->mRate);
+    CamEaseVecStart(&b->mPosition, &pos, &a, &z, d->mStartScale, d->mEndScale, d->mModePosition, d->mRate);
+    CamEaseVecStart(pTarget, &target, &d->mTargetStartAngles, &d->mTargetEndAngles, d->mTargetStartScale, d->mTargetEndScale, d->mModeTarget, d->mRate);
     b->mUnknown10C = d->mUnknown58; b->mRef = d->mRef; b->mLimit = d->mLimit;
     b->mFlags = d->mFlags; b->mCallback = d->mCallback;
     b->mUnknown114 = d->mUnknown80; b->mUnknown116 = d->mUnknown82;
@@ -346,7 +351,7 @@ extern "C" void fn_8013F090(State_8013E574 *s, Desc1_8013F090 *d)
 extern "C" void fn_8013F298(void)
 {
     if (lbl_803EB1E0) {
-        fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1D8 = 0; lbl_803EB1DC = 0;
+        fn_8013F300(); lbl_803EB1E0 = 0; lbl_803EB1DC = 0; lbl_803EB1D8 = 0;
         CamGameSelectCamera(0); CamGameGetCamera(5)->mUnknown94 |= 4; fn_80142B00();
     }
     lbl_803EB1D4 = 0;
@@ -362,7 +367,7 @@ extern "C" void fn_8013F374(Entry_8013F374 *list)
 {
     fn_8013F300(); State_8013E574 *s = fn_8013E574(); s->mpList = list;
     for (Entry_8013F374 *e = list; e->mpData; ++e) {
-        switch (e->mType) { case 0: fn_8013EEE4(s, (Desc0_8013EEE4 *)e->mpData); break; case 1: fn_8013F090(s, (Desc1_8013F090 *)e->mpData); break; }
+        switch (e->mType) { case 1: fn_8013F090(s, (Desc1_8013F090 *)e->mpData); break; case 0: fn_8013EEE4(s, (Desc0_8013EEE4 *)e->mpData); break; }
     }
     fn_8013EA8C(s);
 }
