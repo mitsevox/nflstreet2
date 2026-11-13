@@ -186,7 +186,7 @@ int fn_800ADDD8(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
-void fn_80147860(Object_8003DEC4 *pPlayer, float f);
+void ParticleTrailUpdateAfterimage(Object_8003DEC4 *pPlayer, float f);
 void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
@@ -575,7 +575,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
         index++;
         index &= 1;
     }
-    fn_80147860(pPlayer, gFrameTimeScale);
+    ParticleTrailUpdateAfterimage(pPlayer, gFrameTimeScale);
     TMRenderSetBlendMode(1);
     TMRenderSetZRange(0.0f, 1.0f);
     fn_8024EB28(0);
@@ -619,7 +619,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], P
     fn_80233BE0();
     if (!(pPlayer->mUnknown20 & 0x2000)) {
         if (pTrail) {
-            fn_801D0C58(&pTrail->mUnknown448[index].x);
+            fn_801D0C58(&pTrail->mUnknown448[index].mX);
             fn_801D09EC(pTrail->mUnknown460[index]);
         } else {
             fn_801D0C58(pPlayer->mUnknown44.mUnknown8);

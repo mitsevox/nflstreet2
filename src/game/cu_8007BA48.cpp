@@ -143,7 +143,7 @@ unsigned int fn_8007BDF8(DbCursor *pCursor)
 
 void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size)
 {
-    fn_8007AA3C(pCursor, 0x4D4E5247, (int)pBuffer, size);
+    DbCursorGetString(pCursor, 0x4D4E5247, (int)pBuffer, size);
 }
 
 int fn_8007BE54(DbCursor *pCursor)

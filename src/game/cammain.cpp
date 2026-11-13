@@ -617,7 +617,7 @@ void CamMainUpdate(void *p, GameCamera_t *pCamera)
 }
 
 void CamEaseVecStart(CamEaseVec_t *pEase, Vector_80039F5C *pBase, Vector_80039F5C *pFrom,
-                 Vector_80039F5C *pTo, CamInterpFunc_t update, float fromScale, float toScale,
+                 Vector_80039F5C *pTo, float fromScale, float toScale, CamInterpFunc_t update,
                  float time)
 {
     pEase->mBase.mX = pBase->mX;

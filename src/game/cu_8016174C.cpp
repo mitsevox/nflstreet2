@@ -39,7 +39,7 @@ extern Object_80039F5C *lbl_803EB398;
 extern int lbl_803ECAEC;
 Object_80039F5C *BallGetCurrentHolder(void);
 Object_80039F5C *fn_800B6544(int);
-int fn_80188030(int);
+int GameTextGetPadPlayer(int);
 int ConGetCurrentContext(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
@@ -128,7 +128,7 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
         item->mUnknown2C = -1;
     } else {
         item->mUnknown2C = desc->mUnknown8;
-        item->mUnknown30 = fn_80188030(desc->mUnknown8) % 10;
+        item->mUnknown30 = GameTextGetPadPlayer(desc->mUnknown8) % 10;
     }
     item->mUnknown100 = 0;
     item->mUnknown24 = desc->mUnknown0;

@@ -3,29 +3,23 @@
 
 #include "game/DbCursor.h"
 
-/* Left operand, right operand and the comparison fn_801FA428 applies. */
-struct DbExpression {
-    int mLeftType;
-    int mUnknown4;
-    union {
-        unsigned long long mColumnId;
-        int mLeftValue;
-    };
-    int mRightType;
-    int mUnknown20;
-    union {
-        int mValue;
-        unsigned long long mUnknown24;
-    };
-    int mOperator;
-
+/* Condition fn_801FA428 applies: the same 40-byte DbFilter node that
+   DbCursorOpen takes (left operand +0, right operand +0x10, operator word
+   +0x20). This setter stores a table/column pair compared with an integer
+   under a caller-given operator word. */
+struct DbExpression : DbFilter {
+    void Set(int a, long long b, int type, int c)
+    {
+        SetFilter(a, b, type);
+        mUnknown16.mValue.mInt = c;
+    }
     void Set(unsigned long long column, int op, int value)
     {
-        mOperator = op;
-        mColumnId = column;
-        mLeftType = 6;
-        mRightType = 3;
-        mValue = value;
+        mUnknown32 = op;
+        mUnknown0.mValue.mLong = column;
+        mUnknown0.mKind = 6;
+        mUnknown16.mKind = 3;
+        mUnknown16.mValue.mInt = value;
     }
 };
 

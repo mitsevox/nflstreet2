@@ -4,7 +4,7 @@ extern "C" {
 extern char lbl_8031B7D0[];
 extern unsigned char gParticles_bInit;
 
-void fn_80196F48(void *pObject, float value);
+void fn_80196F48(float scale, void *pObject);
 
 void GroundPulseUpdate(void);
 void GroundPulseDraw(void);
@@ -26,6 +26,6 @@ void GroundPulseUpdate(void)
 void GroundPulseDraw(void)
 {
     if (_GroundPulse_bActive == 1) {
-        fn_80196F48(lbl_8031B7D0, _GroundPulse_fScale);
+        fn_80196F48(_GroundPulse_fScale, lbl_8031B7D0);
     }
 }

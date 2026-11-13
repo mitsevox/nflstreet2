@@ -82,22 +82,22 @@ int EnvGetEVTL(void)
 
 float EnvGetEVPL(void)
 {
-    return fn_8007A9E4(&_Env_sCursor, 0x4C505645);
+    return DbCursorGetFloat(&_Env_sCursor, 0x4C505645);
 }
 
 float EnvGetEVPF(void)
 {
-    return fn_8007A9E4(&_Env_sCursor, 0x46505645);
+    return DbCursorGetFloat(&_Env_sCursor, 0x46505645);
 }
 
 float EnvGetEVWD(void)
 {
-    return fn_8007A9E4(&_Env_sCursor, 0x44575645);
+    return DbCursorGetFloat(&_Env_sCursor, 0x44575645);
 }
 
 float EnvGetEVWL(void)
 {
-    return fn_8007A9E4(&_Env_sCursor, 0x4C575645);
+    return DbCursorGetFloat(&_Env_sCursor, 0x4C575645);
 }
 
 int EnvGetEVDS(void)
@@ -107,7 +107,7 @@ int EnvGetEVDS(void)
 
 float EnvGetEVED(void)
 {
-    return fn_8007A9E4(&_Env_sCursor, 0x44455645);
+    return DbCursorGetFloat(&_Env_sCursor, 0x44455645);
 }
 
 void EnvGetUIName(char *pDest, int count)
@@ -115,18 +115,18 @@ void EnvGetUIName(char *pDest, int count)
     char buffer[33];
 
     buffer[0] = 0;
-    fn_8007AA3C(&_Env_sCursor, 0x49554E45, (int)buffer, sizeof(buffer));
+    DbCursorGetString(&_Env_sCursor, 0x49554E45, (int)buffer, sizeof(buffer));
     strncpy(pDest, buffer, count);
 }
 
 void EnvGetEVLO(int a, int b)
 {
-    fn_8007AA3C(&_Env_sCursor, 0x4F4C5645, a, b);
+    DbCursorGetString(&_Env_sCursor, 0x4F4C5645, a, b);
 }
 
 void EnvGetEVDE(int a, int b)
 {
-    fn_8007AA3C(&_Env_sCursor, 0x45445645, a, b);
+    DbCursorGetString(&_Env_sCursor, 0x45445645, a, b);
 }
 
 int EnvIsENVFSet(void)

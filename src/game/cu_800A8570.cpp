@@ -72,7 +72,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (p != 0 && lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
+                ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
             }
         }
@@ -101,7 +101,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
+                ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
             }
         }

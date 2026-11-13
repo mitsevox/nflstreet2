@@ -33,6 +33,7 @@ struct Sort_80086D0C {
 
 extern "C" {
 int fn_80087BA0(int index);
+char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
@@ -172,6 +173,17 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     }
     if (pBuffer) {
         fn_801D2BD0(pBuffer);
+    }
+    return result;
+}
+
+int StoreGetStringById(int id, char *pName, int nameSize)
+{
+    char name[36];
+    int result = 0;
+    if (fn_801FCE10(0, "select 'IUNS' into \x88 from 'MNTS' where 'IRTS' = \x85\n", name, id) == 0) {
+        fn_801C2EF0(pName, name, nameSize);
+        result = 1;
     }
     return result;
 }

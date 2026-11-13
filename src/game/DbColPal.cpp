@@ -111,7 +111,7 @@ void DbColPalGetPaletteName(int index, char *pBuffer, int size)
 
     DbCursorOpen(&cursor, 0x52485043, 0x494C5043, 0, 0, 0x54415453);
     DbCursorFindInt(&cursor, 0x494C5043, index, 0, 0);
-    fn_8007AA3C(&cursor, 0x44435043, (int)pBuffer, size);
+    DbCursorGetString(&cursor, 0x44435043, (int)pBuffer, size);
     DbCursorClose(&cursor);
 }
 }

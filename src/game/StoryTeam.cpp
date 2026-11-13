@@ -224,10 +224,10 @@ void StoryPlayerSetDefaults(Object_8008044C *pObject)
     for (int i = 0; i < 10; i++) {
         PlayerDbSetRating(pObject, _StoryTeam_aDefaultAttrs[i], 1);
     }
-    fn_8007AA90((DbCursor *)pObject, 0x44494F50, -1);
-    fn_8007AA90((DbCursor *)pObject, 0x54474850, 0x41);
-    fn_8007AA90((DbCursor *)pObject, 0x54475750, 0);
-    fn_8007AA90((DbCursor *)pObject, 0x54425950, 2);
+    DbCursorSetValue((DbCursor *)pObject, 0x44494F50, -1);
+    DbCursorSetValue((DbCursor *)pObject, 0x54474850, 0x41);
+    DbCursorSetValue((DbCursor *)pObject, 0x54475750, 0);
+    DbCursorSetValue((DbCursor *)pObject, 0x54425950, 2);
 }
 
 extern char lbl_802EBE24[];
@@ -259,7 +259,7 @@ int StoryTeamCreate(void)
         for (int i = 0; i < 3; i++) {
             char *pText = _StoryTeam_apNames[i];
             int length = fn_801C3180(pText);
-            fn_8007ADD4(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
+            DbCursorSetString(&cursor, _StoryTeam_aTeamTags[i + 13], pText, length);
         }
     }
     fn_80083F68(&cursor);

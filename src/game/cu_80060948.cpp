@@ -137,7 +137,7 @@ void fn_80060948(int id, char *pName, int size)
     if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
         fn_801C2EF0(pName, "NFL Draft Team", size);
     } else {
-        fn_8007AA3C(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
+        DbCursorGetString(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
         name[17] = 0;
         fn_801C2EF0(pName, name, size);
     }
@@ -499,8 +499,8 @@ int fn_80061408(int digt)
 
     digt2 = StoryTeamLoadOneToStats(lbl_803EA5F8.mIndex, 1, &picks);
     if (PlayerDbSeekId(lbl_803EA5F0, picks.mUnknown0, 0)) {
-        fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
-        fn_8007ABA4(lbl_803EA5F0, 0x44494754, digt2);
+        DbCursorSetInt(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
+        DbCursorSetInt(lbl_803EA5F0, 0x44494754, digt2);
     }
     count = TournamentGetTeamPlayers(digt, list);
     for (i = 0; i < count && list[i] != picks.mUnknown0; i++) {

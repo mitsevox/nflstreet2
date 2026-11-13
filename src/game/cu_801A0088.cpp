@@ -84,11 +84,12 @@ extern "C" int fn_801A0108(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, GXCo
 extern "C" int fn_801A0270(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, GXColor *c)
 {
     float z = 0.0f;
+    PlayArtVertex_t *p2 = &p[2];
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
     GXPosition3f32(p[0].mX,p[0].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[0].mX,z);
     GXPosition3f32(p[1].mX,p[1].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[1].mX,z);
-    float length = fn_8022781C(&p[0],&p[2]) * 0.09f;
-    GXPosition3f32(p[2].mX,p[2].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[2].mX,length);
+    float length = fn_8022781C(p,p2) * 0.09f;
+    GXPosition3f32(p2->mX,p2->mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[2].mX,length);
     GXPosition3f32(p[3].mX,p[3].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[3].mX,length);
     return 0;
 }
@@ -99,28 +100,28 @@ extern "C" int fn_801A03E4(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, unsi
         if (i > 1) i -= 2;
         int n = count - i; if (n > 16) n = 16;
         GXBegin(GX_TRIANGLESTRIP,GX_VTXFMT0,(unsigned short)n);
-        PlayArtVertex_t *current = p+i;
         while (n > 0) {
-            unsigned int j = i & 3;
-            GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[j].mX,uv[j].mY);
-            ++i; ++current; --n;
+            PlayArtVertex_t *current = &p[i];
+            QuadPoint_801A0614 *t = &uv[i & 3];
+            GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(t->mX,t->mY);
+            ++i; --n;
         }
     }
     return 0;
 }
 extern "C" int fn_801A04D4(int, PlayArtVertex_t *p, QuadPoint_801A0614 *uv, unsigned int count, GXColor *c)
 {
-    unsigned int i = 0; float length = 0.0f;
+    float length = 0.0f; unsigned int i = 0;
     while (i < count) {
         if (i > 1) i -= 2;
         int n = count - i; if (n > 16) n = 16;
         GXBegin(GX_TRIANGLESTRIP,GX_VTXFMT0,(unsigned short)n);
-        PlayArtVertex_t *current = p+i;
         while (n > 0) {
-            unsigned int j = i & 3;
-            if (j == 2) length += fn_8022781C(&p[i-2],&p[i]) * 0.09f;
-            GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[j].mX,length);
-            ++i; ++current; --n;
+            PlayArtVertex_t *current = &p[i];
+            QuadPoint_801A0614 *t = &uv[i & 3];
+            if ((i & 3) == 2) length += fn_8022781C(&p[i-2],current) * 0.09f;
+            GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(t->mX,length);
+            ++i; --n;
         }
     }
     return 0;
@@ -145,23 +146,23 @@ extern "C" int fn_801A07A8(int a,Point_8017886C *)
     PlayArtVertex_t uv[4];
     uv[0].mX=0.0f;uv[0].mY=0.0f;uv[1].mX=0.0f;uv[1].mY=1.0f;
     uv[2].mX=1.0f;uv[2].mY=0.0f;uv[3].mX=1.0f;uv[3].mY=1.0f;
-    GXColor c; c.r=255;c.a=255;c.g=255;c.b=255;
     p[0].mX = 0.0f; p[0].mY = 0.0f;
     p[1].mX = 0.0f; p[1].mY = 100.0f;
     p[2].mX = 120.0f; p[2].mY = 0.0f;
     p[3].mX = 120.0f; p[3].mY = 100.0f;
+    GXColor c; c.r=255;c.g=255;c.b=255;c.a=255;
     return fn_801A0788(a,p,uv,&c,7);
 }
 extern "C" int fn_801A085C(int a,PlayArtState_t *s,int)
 {
-    int team = s->mUnknown2083 ? fn_80178308() : fn_80178320();
-    int count = fn_80178D70(team);
+    int count;
+    if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
     for (int i = 0; i < count; ++i) {
         for (int j = 0; j <= 11; ++j) {
             int kind = s->mUnknown19F0[i][j];
             if (kind) {
                 int texture;
-                switch (kind) {case 1:texture=2;break;case 3:case 4:case 5:texture=4;break;default:texture=3;break;}
+                switch (kind) {case 1:texture=2;break;case 2:texture=3;break;case 3:case 4:case 5:texture=4;break;default:texture=3;break;}
                 QuadPoint_801A0614 p[4];
                 for (signed char k = 0; k <= 3; ++k) {p[k].mX = s->mUnknown970[i][j][k].mX;p[k].mY = s->mUnknown970[i][j][k].mY;}
                 a = fn_801A0614(a,p,lbl_802F2754,&s->mUnknown2020[i],texture);
@@ -205,16 +206,17 @@ extern "C" void fn_801A0B1C(int a,PlayArtState_t *s,int mirror)
 }
 extern "C" int fn_801A0CA0(int a,PlayArtState_t *s,int)
 {
-    int mode=-1, tiled=0;
-    int team=s->mUnknown2083?fn_80178308():fn_80178320();int count=fn_80178D70(team);
+    int tiled=0;
+    int count;
+    if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
+    int mode=-1;
     for (int i=0;i<count;++i) {
         int start=s->mUnknown940[i];int n=s->mUnknown940[i+1]-start;
         if (n) {
             int next=s->mUnknown1E10[i][0];
             if(mode!=next){mode=next;if(!mode){tiled=0;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP5, GX_COLOR0A0);}else{tiled=1;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP6, GX_COLOR0A0);}}
-            PlayArtVertex_t *p=(PlayArtVertex_t *)s+start;
-            if(n==4){if(tiled)a=fn_801A0270(a,p,lbl_802F2894,&s->mUnknown2020[i]);else a=fn_801A0108(a,p,lbl_802F2894,&s->mUnknown2020[i]);}
-            else {if(tiled)a=fn_801A04D4(a,p,lbl_802F2894,n,&s->mUnknown2020[i]);else a=fn_801A03E4(a,p,lbl_802F2894,n,&s->mUnknown2020[i]);}
+            if(n==4){if(tiled)a=fn_801A0270(a,(PlayArtVertex_t *)s+start,lbl_802F2894,&s->mUnknown2020[i]);else a=fn_801A0108(a,(PlayArtVertex_t *)s+start,lbl_802F2894,&s->mUnknown2020[i]);}
+            else {if(tiled)a=fn_801A04D4(a,(PlayArtVertex_t *)s+start,lbl_802F2894,n,&s->mUnknown2020[i]);else a=fn_801A03E4(a,(PlayArtVertex_t *)s+start,lbl_802F2894,n,&s->mUnknown2020[i]);}
         }
     }
     return a;
@@ -245,8 +247,7 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 extern "C" void fn_801A1240(int resource)
 {
     TMTexLibLoad(&lbl_8036550C,ResLoad((void *)resource,0,1));
-    Entry_801A0088 *p=lbl_80365534;
-    for(unsigned int i=0;i<=7;++i,++p){Descriptor_801A1240 *d=TMTexLibGetTexNode(&lbl_8036550C,lbl_802F2734[i]);if(d->mUnknownC)p->mpPalette=TMTexLibGetClutByTexNode(d,0);else p->mpPalette=0;p->mpTexture=TMTexLibGetTextureByTexNode(d);}
+    for(unsigned int i=0;i<=7;++i){Descriptor_801A1240 *d=TMTexLibGetTexNode(&lbl_8036550C,lbl_802F2734[i]);if(d->mUnknownC)lbl_80365534[i].mpPalette=TMTexLibGetClutByTexNode(d,0);else lbl_80365534[i].mpPalette=0;lbl_80365534[i].mpTexture=TMTexLibGetTextureByTexNode(d);}
 }
 extern "C" void fn_801A12E8(void)
 {

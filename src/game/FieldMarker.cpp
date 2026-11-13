@@ -12,7 +12,7 @@
 
 #include "game/FieldMarker.h"
 
-struct Entry_80146C4C;
+struct Glow_t;
 
 extern "C" {
 void TMRenderReset(void);
@@ -104,7 +104,7 @@ static float _FieldMarker_aArrowUVs[15][2] = {
 
 extern "C" {
 
-void FieldMarkerInitEffect(Entry_80146C4C *p)
+void FieldMarkerInitEffect(Glow_t *p)
 {
 }
 

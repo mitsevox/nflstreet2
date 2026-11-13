@@ -61,34 +61,35 @@ int fn_80178320(void);
 unsigned int fn_802372EC(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
-void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, float *values)
+void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, Point_8017886C *pTarget)
 {
-    float point[2] = {values[0], values[1]};
+    Object_800B26B0 *motion = &p->mMotion;
+    Point_8017886C point = *pTarget;
     float delta[2];
     aim->mUnknown8 = 0.4f;
     int fallback = 1;
     if (other) {
-        fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+        fn_80227690(delta, &other->mMotion.mPos, &motion->mPos);
         float distance = fn_802270A4(delta);
         if (!(distance >= 3.25f)) {
             fallback = 0;
             aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
-            int angle = fn_80120794(&p->mMotion, &other->mMotion,
-                &other->mMotion.mUnknown40, p->mMotion.mUnknown28,
+            int angle = fn_80120794(motion, &other->mMotion,
+                &other->mMotion.mUnknown40, motion->mUnknown28,
                 other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
-            if (((p->mMotion.mFacing - angle) & 0xFFFFFF) > 0x800000)
-                aim->mUnknownC = (0xC00000 - (int)((float)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
+            if (((motion->mFacing - angle) & 0xFFFFFF) > 0x800000)
+                aim->mUnknownC = (0xC00000 - (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
             else
-                aim->mUnknownC = (0xC00000 + (int)((float)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
+                aim->mUnknownC = (0xC00000 + (int)((float)(int)lbl_803EB160 * 46603.37890625f)) & 0xFFFFFF;
             aim->mUnknown8 = other->mMotion.mUnknown28 != 0.0f ? 1.25f : 0.4f;
         }
     }
     if (fallback) {
-        delta[0] = point[0];
+        delta[0] = point.mX;
         if (p->mUnknown2914 <= 2)
-            delta[0] = !(p->mMotion.mPos.mX >= point[0]) ? point[0] - 2.0f : point[0] + 2.0f;
-        delta[1] = point[1] - 9.0f;
-        fn_80227690(delta, &p->mMotion.mPos, delta);
+            delta[0] = !(motion->mPos.mX >= point.mX) ? point.mX - 2.0f : point.mX + 2.0f;
+        delta[1] = point.mY - 9.0f;
+        fn_80227690(delta, &motion->mPos, delta);
         aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
         aim->mUnknownC = (aim->mUnknown10 - 0x800000) & 0xFFFFFF;
     }
@@ -350,17 +351,21 @@ void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
 
 void fn_801339E4(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
 {
+    Object_80039F5C *target;
     Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
     if (other) {
-        Object_80039F5C *target;
-        if (!fn_80124714(p, other, &target)) {
+        int blocked = fn_80124714(p, other, &target);
+        Vector_80039F5C *pos = &p->mMotion.mPos;
+        if (!blocked) {
             float delta[2];
-            fn_80227690(delta, &target->mMotion.mPos, &p->mMotion.mPos);
+            fn_80227690(delta, &target->mMotion.mPos, pos);
             float distance = fn_802270A4(delta);
             if (!(distance >= 2.25f)) {
                 Vector_80039F5C point;
                 if (target->mUnknown1032 != 4) {
-                    point = target->mMotion.mPos;
+                    point.mX = target->mMotion.mPos.mX;
+                    point.mY = target->mMotion.mPos.mY;
+                    point.mZ = target->mMotion.mPos.mZ;
                     point.mX += target->mMotion.mUnknown40 * 5.0f;
                     point.mY += target->mMotion.mUnknown44 * 5.0f;
                 } else {
@@ -368,16 +373,16 @@ void fn_801339E4(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
                     point.mX = (target->mMotion.mPos.mX + linked->mMotion.mPos.mX) * 0.5f;
                     point.mY = (target->mMotion.mPos.mY + linked->mMotion.mPos.mY) * 0.5f;
                 }
-                fn_80227690(delta, &point, &p->mMotion.mPos);
+                fn_80227690(delta, &point, pos);
                 int angle = fn_801CFE40(delta[1], delta[0]);
                 if (MathAngleDiff(angle, aim->mUnknownC) <= 0x271C70) {
                     float amount = distance * 0.4444444477558136f;
-                    float turn = (1.0f - amount) * 3495253.0f;
-                    if (((angle - aim->mUnknownC) & 0xFFFFFF) <= 0x800000)
-                        turn = -turn;
-                    int next = (aim->mUnknownC + (int)turn) & 0xFFFFFF;
-                    aim->mUnknown10 = next;
-                    aim->mUnknownC = next;
+                    int turn;
+                    if (((angle - aim->mUnknownC) & 0xFFFFFF) > 0x800000)
+                        turn = (int)((1.0f - amount) * 3495253.0f);
+                    else
+                        turn = (int)-((1.0f - amount) * 3495253.0f);
+                    aim->mUnknown10 = aim->mUnknownC = (aim->mUnknownC + turn) & 0xFFFFFF;
                 }
             }
         }
@@ -387,8 +392,7 @@ void fn_801339E4(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
 void fn_80133BB4(Object_80039F5C *p, Object_80039F5C *other)
 {
     if (other && fn_801783AC(13) && !fn_801783AC(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
-        Point_8017886C point = fn_80177FE0();
-        if (!(other->mMotion.mPos.mY - point.mY >= 2.5f))
+        if (!(other->mMotion.mPos.mY - fn_80177FE0().mY >= 2.5f))
             p->mUnknown1137 = 1;
     }
 }
@@ -396,30 +400,39 @@ void fn_80133BB4(Object_80039F5C *p, Object_80039F5C *other)
 int fn_80133C50(Object_80039F5C *p)
 {
     Mode_80133C50 *s = (Mode_80133C50 *)&p->mUnknown336;
-    unsigned int count = p->mpState->mUnknown1;
-    s->mUnknown14 = (count >> 5) * 60 + (int)((float)(count & 31) * 0.032258063554763794f * 60.0f);
-    s->mUnknown18 = s->mUnknown14 != 0;
-    Point_8017886C point = fn_80177FE0();
-    float values[2] = {point.mX, point.mY};
+    int *pRole = &p->mUnknown1032;
+    int count = p->mpState->mUnknown1;
+    float fraction = (float)(count & 31) * 0.032258063554763794f;
+    s->mUnknown14 = (int)(fraction * 60.0f) + (count >> 5) * 60;
+    if (s->mUnknown14 == 0)
+        s->mUnknown18 = 0;
+    else
+        s->mUnknown18 = 1;
+    Point_8017886C values;
+    values = fn_80177FE0();
     s->mUnknown0 = p->mMotion.mPos.mX;
     s->mUnknown4 = 99999.0f;
     s->mUnknown8 = p->mUnknown528.mUnknown0;
     s->mUnknownC = p->mMotion.mFacing;
     s->mUnknown10 = p->mMotion.mFacing;
-    s->mUnknown1A = 0;
     s->mUnknown19 = 0;
+    s->mUnknown1A = 0;
     s->mUnknown1B = p->mpState->mUnknown2;
     if (fn_8011E188() <= 14) {
         s->mUnknown1A = 1;
-        if (!(values[1] - p->mMotion.mPos.mY >= 2.0f)) {
+        if (!(values.mY - p->mMotion.mPos.mY >= 2.0f)) {
             float limit = p->mMotion.mPos.mY - lbl_803EB158;
             Point_8017886C current = fn_80177FE0();
-            limit -= fabsf(p->mMotion.mPos.mX - current.mX) * lbl_803EB15C;
+            float side = fabsf(p->mMotion.mPos.mX - current.mX);
+            limit -= side * lbl_803EB15C;
             s->mUnknown4 = limit;
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = (p->mMotion.mFacing - 0x800000) & 0xFFFFFF;
         } else {
-            s->mUnknown4 = fn_8011F32C() ? p->mMotion.mPos.mY : values[1] - 4.0f;
+            if (fn_8011F32C())
+                s->mUnknown4 = p->mMotion.mPos.mY;
+            else
+                s->mUnknown4 = values.mY - 4.0f;
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = p->mMotion.mFacing;
         }
@@ -432,8 +445,8 @@ int fn_80133C50(Object_80039F5C *p)
         }
     } else if (!(p->mFlags & 0x4000)) {
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     }
     if (fn_801787A0()) {
@@ -441,7 +454,7 @@ int fn_80133C50(Object_80039F5C *p)
         fn_8011E240(p);
         return 1;
     }
-    if (p->mUnknown1032 != 3) fn_8011E1BC(p, 0, 0, 1);
+    if (*pRole != 3) fn_8011E1BC(p, 0, 0, 1);
     fn_8011E3EC(p, 1);
     return 0;
 }
@@ -495,7 +508,7 @@ int fn_80133EE8(Object_80039F5C *p)
         if (p->mUnknown1032 != 4 && p->mUnknown1032 != 7) {
             if (ball && (ball->mFlags & 0x8000)) s->mUnknown1A = 0;
             if (s->mUnknown1A && !(p->mMotion.mPos.mY <= s->mUnknown4))
-                fn_801327F4(p, other, (Aim_801327F4 *)s, values);
+                fn_801327F4(p, other, (Aim_801327F4 *)s, &point);
             else if (!fn_80178C9C() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
                 s->mUnknown8 = 0.0f;
                 s->mUnknown10 = p->mMotion.mFacing;
@@ -547,21 +560,28 @@ int fn_80134370(Object_80039F5C *p)
 
 int fn_801343AC(Object_80039F5C *p)
 {
-    if (fn_8011E8A4(p)) return fn_800B7E60(p);
-    if (p->mUnknown1032 == 4 || p->mUnknown1032 == 7) {
-        Input_800B6D34 input;
-        fn_800B6D34(p, &input);
-        fn_800B6E68(p, &input);
-        Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
-        float delta[2];
-        fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-        if (MathAngleDiff(p->mUnknown512.mUnknown4, fn_801CFE40(delta[1], delta[0])) > 0x600000) {
-            fn_8011E3EC(p, 0);
-            fn_8011E240(p);
-            return 0;
+    int result = 0;
+    if (fn_8011E8A4(p))
+        result = fn_800B7E60(p);
+    else {
+        Block_8011E240 *block = &p->mBlock1032;
+        if (p->mUnknown1032 == 4 || p->mUnknown1032 == 7) {
+            Input_800B6D34 input;
+            fn_800B6D34(p, &input);
+            fn_800B6E68(p, &input);
+            Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
+            float delta[2];
+            fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+            if (MathAngleDiff(p->mUnknown512.mUnknown4, fn_801CFE40(delta[1], delta[0])) > 0x600000) {
+                fn_8011E3EC(p, 0);
+                fn_8011E240(p);
+                goto done;
+            }
+            if (input.mUnknown92 & 1) block->mUnknown105 = 1;
         }
-        if (input.mUnknown92 & 1) p->mUnknown1137 = 1;
+        result = fn_800B7F34(p);
     }
-    return fn_800B7F34(p);
+done:
+    return result;
 }
 }

@@ -49,7 +49,7 @@ void fn_800A050C(void *p, float dt);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 void HudShowCallout(const char *pText);
-void fn_801477F0(Block_80170E64 *p);
+void ParticleTrailStartAfterimage(Block_80170E64 *p);
 void fn_800F0490(int a, State_80039F5C *pQueue, int id);
 void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p,
                  unsigned char position);
@@ -109,7 +109,7 @@ void fn_8014E534(State_802A2020 *p)
     char text[64];
     fn_801C2D88(text, 64, "Catch %s %s", pPlayer->mUnknown2927, pPlayer->mUnknown2927 + 21);
     HudShowCallout(text);
-    fn_801477F0(pPlayer->mpUnknown4);
+    ParticleTrailStartAfterimage(pPlayer->mpUnknown4);
     for (unsigned char i = 0; i <= 4; i++) {
         Object_80039F5C *pOther = PlyrGet(0, i);
         int position = fn_800F06F4(0, pOther->mpState, 97, 0xFFFF);

@@ -50,8 +50,8 @@ void MemCardFilesStartSave(int a);
 void MemCardFilesStartLoad(void);
 void MemCardFilesMakeName(int a, char *pBuf, int b);
 int MemCardFilesGetTotalSize(void);
-void fn_80187FD0(void);
-void fn_80187FDC(void);
+void GameTextRequestReset(void);
+void GameTextServiceReset(void);
 int MemCardFilesNeedsSave(int type, int index);
 void MemCardFilesStoreChecksum(int type, int index);
 void MemCardFilesInvalidateChecksum(int type, int index);
@@ -365,8 +365,8 @@ void MemCardUIMarkOtherGameFound(int a, int b)
 
 void MemCardUIResetGame(void)
 {
-    fn_80187FD0();
-    fn_80187FDC();
+    GameTextRequestReset();
+    GameTextServiceReset();
 }
 
 void MemCardUIReturnToMenu(void)

@@ -79,7 +79,7 @@ void UserInfoSetPoints(int db, int value)
     DbCursor cursor;
 
     UserInfoOpen(&cursor, db);
-    fn_8007ABA4(&cursor, 0x41434955, value);
+    DbCursorSetInt(&cursor, 0x41434955, value);
     UserInfoClose(&cursor);
 }
 
@@ -97,8 +97,8 @@ void UserInfoAddPoints(int db, int value)
     if (total + value > 9999999) {
         value = 9999999 - total;
     }
-    fn_8007ABA4(&cursor, 0x41434955, current + value);
-    fn_8007ABA4(&cursor, 0x54434955, total + value);
+    DbCursorSetInt(&cursor, 0x41434955, current + value);
+    DbCursorSetInt(&cursor, 0x54434955, total + value);
     UserInfoClose(&cursor);
 }
 
@@ -107,7 +107,7 @@ void UserInfoSpendPoints(int db, int value)
     DbCursor cursor;
 
     UserInfoOpen(&cursor, db);
-    fn_8007ABA4(&cursor, 0x41434955, DbCursorGetInt(&cursor, 0x41434955) - value);
+    DbCursorSetInt(&cursor, 0x41434955, DbCursorGetInt(&cursor, 0x41434955) - value);
     UserInfoClose(&cursor);
 }
 
@@ -132,7 +132,7 @@ void UnlockStatusClose(DbCursor *pCursor)
 
 void UnlockStatusSetCurrent(DbCursor *pCursor, int set)
 {
-    fn_8007AA90(pCursor, 0x43434655, set != 0);
+    DbCursorSetValue(pCursor, 0x43434655, set != 0);
 }
 
 unsigned char UnlockStatusGet(DbCursor *pCursor, int index)
@@ -144,7 +144,7 @@ unsigned char UnlockStatusGet(DbCursor *pCursor, int index)
 void UnlockStatusSet(DbCursor *pCursor, int index, int value)
 {
     DbCursorFindInt(pCursor, 0x49434655, index, 0, 0);
-    fn_8007AA90(pCursor, 0x43434655, value);
+    DbCursorSetValue(pCursor, 0x43434655, value);
 }
 
 void UnlockListOpen(DbCursor *pCursor, int mode, unsigned char value)
@@ -192,7 +192,7 @@ int UnlockListSeek(DbCursor *pCursor, int a, int key, int *pResult)
 void UnlockListReadItem(DbCursor *pCursor, UnlockItem_t *pRecord)
 {
     pRecord->mIndex = DbCursorGetInt(pCursor, 0x49464653);
-    fn_8007AA3C(pCursor, 0x44464653, (int)pRecord->mName, sizeof(pRecord->mName));
+    DbCursorGetString(pCursor, 0x44464653, (int)pRecord->mName, sizeof(pRecord->mName));
     pRecord->mUnknown136 = DbCursorGetInt(pCursor, 0x54464653);
     pRecord->mUnknown140 = DbCursorGetInt(pCursor, 0x51464653);
     pRecord->mUnknown144 = DbCursorGetInt(pCursor, 0x50464653);

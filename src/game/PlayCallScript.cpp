@@ -1,16 +1,20 @@
-#include "game/Desc_80169DF8.h"
+/* Play-call script interpreter: installs the AI play-call script loaded with the playbook, runs
+   its offense or defense stream for a game mode, and hands the commands it reaches (fill the
+   situation, pick a play by kind or id, signal the end of the call) to the command callbacks. */
 
-struct State_80169DF8 {
-    Desc_80169DF8 mUnknown0;
+#include "game/PlayCallScript.h"
+
+struct PlayCallScriptState_t {
+    PlayCallScriptDesc_t mUnknown0;
     unsigned char **mUnknown16;
     unsigned char **mUnknown20;
 };
 
-static State_80169DF8 lbl_8036167C;
+static PlayCallScriptState_t _PlayCallScript_sState;
 
 extern "C" {
 
-int fn_801695D4(unsigned char **pp, short *pRecord)
+int PlayCallScriptReadValue(unsigned char **pp, short *pRecord)
 {
     unsigned char first = *(*pp)++;
     if ((first & 0xC0) == 0x80)
@@ -22,34 +26,34 @@ int fn_801695D4(unsigned char **pp, short *pRecord)
     return value;
 }
 
-unsigned char *fn_80169628(unsigned char **pTable, int index)
+unsigned char *PlayCallScriptGetStream(unsigned char **pTable, int index)
 {
     return pTable[index];
 }
 
-void fn_80169634(int *pTable, int count)
+void PlayCallScriptRelocate(int *pTable, int count)
 {
     for (int i = 0; i < count; ++i)
         pTable[i] = (int)pTable + pTable[i];
 }
 
-int fn_8016965C(int a, int b) { return a == b; }
-int fn_8016966C(int a, int b) { return a < b; }
-int fn_8016967C(int a, int b) { return a > b; }
-int fn_8016968C(int a, int b) { return a <= b; }
-int fn_801696A0(int a, int b) { return a >= b; }
-int fn_801696B4(int a, int b) { return a != b; }
+int PlayCallScriptIsEqual(int a, int b) { return a == b; }
+int PlayCallScriptIsLess(int a, int b) { return a < b; }
+int PlayCallScriptIsGreater(int a, int b) { return a > b; }
+int PlayCallScriptIsLessEqual(int a, int b) { return a <= b; }
+int PlayCallScriptIsGreaterEqual(int a, int b) { return a >= b; }
+int PlayCallScriptIsNotEqual(int a, int b) { return a != b; }
 
 }
 
-static int (*const lbl_802A4BF8[])(int, int) = {
-    fn_8016965C, fn_8016965C, fn_8016966C, fn_8016967C,
-    fn_8016968C, fn_801696A0, fn_801696B4
+static int (*const _PlayCallScript_apfnCompare[])(int, int) = {
+    PlayCallScriptIsEqual, PlayCallScriptIsEqual, PlayCallScriptIsLess, PlayCallScriptIsGreater,
+    PlayCallScriptIsLessEqual, PlayCallScriptIsGreaterEqual, PlayCallScriptIsNotEqual
 };
 
 extern "C" {
 
-void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
+void PlayCallScriptExecute(unsigned char *p, short *pRecord, PlayCallScriptCallback_t callback)
 {
     unsigned char *stack[10];
     int result = 0;
@@ -57,7 +61,8 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
 
     do {
         unsigned char *base;
-        int offset, i, a, b;
+        short offset;
+        int i, a, b;
         unsigned char instruction = *p++;
         int count = instruction & 15;
         switch (instruction >> 4) {
@@ -67,14 +72,17 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
                 break;
             }
             unsigned char *saved = stack[--depth];
-            while (saved <= p) {
+            for (;;) {
+                if (saved > p) {
+                    p = saved - 1;
+                    break;
+                }
                 if (depth == 0) {
                     result = 3;
                     goto next;
                 }
                 saved = stack[--depth];
             }
-            p = saved - 1;
             break;
         }
         case 1: {
@@ -82,10 +90,10 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
             offset = (short)(*p++ << 8);
             offset |= *p++;
             for (i = count; i > 0; --i) {
-                a = fn_801695D4(&p, pRecord);
+                a = PlayCallScriptReadValue(&p, pRecord);
                 unsigned char comparison = *p++;
-                b = fn_801695D4(&p, pRecord);
-                if (!lbl_802A4BF8[comparison](a, b)) {
+                b = PlayCallScriptReadValue(&p, pRecord);
+                if (!_PlayCallScript_apfnCompare[comparison](a, b)) {
                     p = base + offset - 1;
                     break;
                 }
@@ -94,7 +102,7 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
         }
         case 2: {
             base = p;
-            a = fn_801695D4(&p, pRecord);
+            a = PlayCallScriptReadValue(&p, pRecord);
             stack[depth] = base + (*p++ << 8);
             stack[depth] += *p++;
             ++depth;
@@ -110,7 +118,7 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
                         b = a + 1;
                     ++p;
                 } else {
-                    b = fn_801695D4(&p, pRecord);
+                    b = PlayCallScriptReadValue(&p, pRecord);
                 }
                 offset = (short)(*p++ << 8);
                 offset |= *p++;
@@ -139,7 +147,7 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
             if ((*p & 0xC0) == 0x40 || (*p & 0xC0) == 0xC0)
                 ++p;
             else
-                fn_801695D4(&p, pRecord);
+                PlayCallScriptReadValue(&p, pRecord);
             p += 2;
             break;
         case 7:
@@ -153,7 +161,7 @@ next:
     pRecord[17] = result;
 }
 
-int fn_80169A7C(short *pRecord, Callback_80169DF8 callback)
+int PlayCallScriptHandleEndCode(short *pRecord, PlayCallScriptCallback_t callback)
 {
     int result = -1;
     switch (pRecord[19]) {
@@ -178,7 +186,7 @@ int fn_80169A7C(short *pRecord, Callback_80169DF8 callback)
     return result;
 }
 
-int fn_80169B20(short *pRecord, Callback_80169DF8 callback, int mode)
+int PlayCallScriptApplyOffenseResult(short *pRecord, PlayCallScriptCallback_t callback, int mode)
 {
     int result = -1;
     switch (mode) {
@@ -244,13 +252,13 @@ int fn_80169B20(short *pRecord, Callback_80169DF8 callback, int mode)
         }
         break;
     case 4:
-        result = fn_80169A7C(pRecord, callback);
+        result = PlayCallScriptHandleEndCode(pRecord, callback);
         break;
     }
     return result;
 }
 
-int fn_80169CE0(short *pRecord, Callback_80169DF8 callback, int mode)
+int PlayCallScriptApplyDefenseResult(short *pRecord, PlayCallScriptCallback_t callback, int mode)
 {
     int result = 1;
     switch (mode) {
@@ -282,40 +290,40 @@ int fn_80169CE0(short *pRecord, Callback_80169DF8 callback, int mode)
             callback(1, pRecord, 0);
         break;
     case 4:
-        result = fn_80169A7C(pRecord, callback);
+        result = PlayCallScriptHandleEndCode(pRecord, callback);
         break;
     }
     return result;
 }
 
-void fn_80169DF8(Desc_80169DF8 *pDesc)
+void PlayCallScriptInit(PlayCallScriptDesc_t *pDesc)
 {
-    lbl_8036167C.mUnknown0 = *pDesc;
-    fn_80169634((int *)pDesc->mUnknown0, 10);
-    lbl_8036167C.mUnknown16 = (unsigned char **)pDesc->mUnknown0;
-    lbl_8036167C.mUnknown20 = (unsigned char **)(pDesc->mUnknown0 + 20);
+    _PlayCallScript_sState.mUnknown0 = *pDesc;
+    PlayCallScriptRelocate((int *)pDesc->mUnknown0, 10);
+    _PlayCallScript_sState.mUnknown16 = (unsigned char **)pDesc->mUnknown0;
+    _PlayCallScript_sState.mUnknown20 = (unsigned char **)(pDesc->mUnknown0 + 20);
 }
 
-int fn_80169E68(int mode)
+int PlayCallScriptRunOffense(int mode)
 {
-    if (lbl_8036167C.mUnknown0.mUnknown8)
-        lbl_8036167C.mUnknown0.mUnknown8(0, lbl_8036167C.mUnknown0.mUnknown4, mode);
-    unsigned char *p = fn_80169628(lbl_8036167C.mUnknown16, mode);
-    lbl_8036167C.mUnknown0.mUnknown4[18] = -1;
-    fn_801696C8(p, lbl_8036167C.mUnknown0.mUnknown4, lbl_8036167C.mUnknown0.mUnknown8);
-    fn_80169B20(lbl_8036167C.mUnknown0.mUnknown4, lbl_8036167C.mUnknown0.mUnknown8, mode);
-    return lbl_8036167C.mUnknown0.mUnknown4[19];
+    if (_PlayCallScript_sState.mUnknown0.mUnknown8)
+        _PlayCallScript_sState.mUnknown0.mUnknown8(0, _PlayCallScript_sState.mUnknown0.mUnknown4, mode);
+    unsigned char *p = PlayCallScriptGetStream(_PlayCallScript_sState.mUnknown16, mode);
+    _PlayCallScript_sState.mUnknown0.mUnknown4[18] = -1;
+    PlayCallScriptExecute(p, _PlayCallScript_sState.mUnknown0.mUnknown4, _PlayCallScript_sState.mUnknown0.mUnknown8);
+    PlayCallScriptApplyOffenseResult(_PlayCallScript_sState.mUnknown0.mUnknown4, _PlayCallScript_sState.mUnknown0.mUnknown8, mode);
+    return _PlayCallScript_sState.mUnknown0.mUnknown4[19];
 }
 
-int fn_80169EF4(int mode)
+int PlayCallScriptRunDefense(int mode)
 {
-    if (lbl_8036167C.mUnknown0.mUnknownC)
-        lbl_8036167C.mUnknown0.mUnknownC(0, lbl_8036167C.mUnknown0.mUnknown4, mode);
-    unsigned char *p = fn_80169628(lbl_8036167C.mUnknown20, mode);
-    lbl_8036167C.mUnknown0.mUnknown4[18] = -1;
-    fn_801696C8(p, lbl_8036167C.mUnknown0.mUnknown4, lbl_8036167C.mUnknown0.mUnknownC);
-    fn_80169CE0(lbl_8036167C.mUnknown0.mUnknown4, lbl_8036167C.mUnknown0.mUnknownC, mode);
-    return lbl_8036167C.mUnknown0.mUnknown4[19];
+    if (_PlayCallScript_sState.mUnknown0.mUnknownC)
+        _PlayCallScript_sState.mUnknown0.mUnknownC(0, _PlayCallScript_sState.mUnknown0.mUnknown4, mode);
+    unsigned char *p = PlayCallScriptGetStream(_PlayCallScript_sState.mUnknown20, mode);
+    _PlayCallScript_sState.mUnknown0.mUnknown4[18] = -1;
+    PlayCallScriptExecute(p, _PlayCallScript_sState.mUnknown0.mUnknown4, _PlayCallScript_sState.mUnknown0.mUnknownC);
+    PlayCallScriptApplyDefenseResult(_PlayCallScript_sState.mUnknown0.mUnknown4, _PlayCallScript_sState.mUnknown0.mUnknownC, mode);
+    return _PlayCallScript_sState.mUnknown0.mUnknown4[19];
 }
 
 }

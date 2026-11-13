@@ -1,5 +1,5 @@
 #include "engine/viewport.h"
-#include "game/Effects_80146134.h"
+#include "game/Glow.h"
 #include "game/ParticleTrail.h"
 #include "engine/texfile.h"
 #include "game/ResLoad.h"
@@ -32,12 +32,12 @@ void fn_802524D4(float *);
 void fn_8022765C(void *, void *, void *);
 float fn_80227704(void *, void *);
 void fn_80227904(float *, float *, float *, float);
-void fn_80227C2C(Vector_80146134 *, Vector_80146134 *);
+void fn_80227C2C(Vector_80039F5C *, Vector_80039F5C *);
 void fn_80227E40(float *, float *);
 float fn_80237260(int);
-unsigned char fn_80147900(void);
-Resource_80146E64 *fn_80146E64(int);
-void fn_80146B40(Vector_80146134 *, Vector_80146134 *);
+unsigned char ParticleTrailIsEnabled(void);
+GlowTexture_t *GlowGetTexture(int);
+void GlowTransformPoint(Vector_80039F5C *, Vector_80039F5C *);
 int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEA14(void);
@@ -48,22 +48,27 @@ void TMTextureTexNew(void *, void *, int, int, int, int, int, int);
 void TMTextureClutNew(void *, void *, int, int, int);
 void TMTextureTexDelete(void *);
 void TMTextureClutDelete(void *);
-float fn_80197D08(float *, Vector_80146134 *);
+float fn_80197D08(float *, Vector_80039F5C *);
 extern unsigned char lbl_803EB750;
 extern float lbl_803EB758[2];
 extern GXTexObj lbl_803651B8;
 extern GXTlutObj lbl_803651D8;
-extern Color_802DD68C lbl_802DD72C[];
+extern ParticleTrailColor_t gParticleTrail_aPointColors[];
 extern float lbl_802EDDF0[][2];
 }
 
-extern "C" {
-void fn_80196F48(void *position, float scale)
+static inline float _FxRemap(float x, float x0, float x1, float y0, float y1)
 {
-    Vector_80146134 offset;
-    Vector_80146134 vertex;
+    return (x - x0) * (y1 - y0) / (x1 - x0) + y0;
+}
+
+extern "C" {
+void fn_80196F48(float scale, void *position)
+{
+    Vector_80039F5C offset;
+    Vector_80039F5C vertex;
     unsigned char color[3] = {255, 125, 25};
-    Vector_80146134 corners[4] = {
+    Vector_80039F5C corners[4] = {
         {-3.0f, 3.0f, 0.15f}, {-3.0f, -3.0f, 0.15f},
         {3.0f, -3.0f, 0.15f}, {3.0f, 3.0f, 0.15f}
     };
@@ -90,14 +95,14 @@ void fn_80196F48(void *position, float scale)
     fn_801D0544();
     if (lbl_803EB750 == 1) GXLoadTlut(&lbl_803651D8, 0);
     GXLoadTexObj(&lbl_803651B8, GX_TEXMAP0);
-    unsigned char alpha = (unsigned char)(((scale - 0.05f) * (0.0f - 255.0f)) / (3.0f - 0.05f) + 255.0f);
+    unsigned char alpha = (unsigned char)_FxRemap(scale, 0.05f, 3.0f, 255.0f, 0.0f);
     for (unsigned char i = 0; i <= 3; ++i) {
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         for (unsigned char j = 0; j <= 3; ++j) {
-            offset.x = corners[j].x * scale;
-            offset.y = corners[j].y * scale;
+            offset.mX = corners[j].mX * scale;
+            offset.mY = corners[j].mY * scale;
             fn_8022765C(&vertex, position, &offset);
-            GXPosition3f32(vertex.x, vertex.y, vertex.z);
+            GXPosition3f32(vertex.mX, vertex.mY, vertex.mZ);
             GXColor4u8(color[0], color[1], color[2], alpha);
             GXTexCoord2f32(lbl_802EDDF0[j][0], lbl_802EDDF0[j][1]);
         }
@@ -107,7 +112,8 @@ void fn_80196F48(void *position, float scale)
 
 void fn_8019723C(ParticleTrailSet_t *p)
 {
-    if (!fn_80147900()) return;
+    if (!ParticleTrailIsEnabled()) return;
+    ParticleTrailColor_t color;
     Mtx44 matrix;
     TMRenderReset();
     GXClearVtxDesc();
@@ -129,37 +135,40 @@ void fn_8019723C(ParticleTrailSet_t *p)
     else TMRenderSetBlendMode(2);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_NONE);
-    Color_802DD68C color = p->mUnknown240;
+    color = p->mUnknown240;
     for (unsigned int i = 0; i <= 3; ++i) {
-        Trail_80146FDC *trail = &p->mTrails[i];
+        ParticleTrail_t *trail = &p->mTrails[i];
         if (trail->mCount > 1) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (unsigned short)(trail->mCount + 2));
             color.mUnknownC = p->mUnknown240.mUnknownC;
-            GXColor rgba = {(unsigned char)(color.mUnknown0 * 255.0f),
-                            (unsigned char)(color.mUnknown4 * 255.0f),
-                            (unsigned char)(color.mUnknown8 * 255.0f),
-                            (unsigned char)(color.mUnknownC * 255.0f)};
-            Point_80146FDC *point = &trail->mSource[trail->mToggle];
-            GXPosition3f32(point->x, point->y, point->z);
-            GXColor4u8(rgba.r, rgba.g, rgba.b, rgba.a);
-            point = &trail->mSource[!trail->mToggle];
-            GXPosition3f32(point->x, point->y, point->z);
-            GXColor4u8(rgba.r, rgba.g, rgba.b, rgba.a);
+            unsigned char r = (unsigned char)(color.mUnknown0 * 255.0f);
+            unsigned char g = (unsigned char)(color.mUnknown4 * 255.0f);
+            unsigned char b = (unsigned char)(color.mUnknown8 * 255.0f);
+            unsigned char a = (unsigned char)(color.mUnknownC * 255.0f);
+            int toggle = trail->mToggle;
+            int other = !toggle;
+            GXPosition3f32(trail->mSource[toggle].mX, trail->mSource[toggle].mY, trail->mSource[toggle].mZ);
+            GXColor4u8(r, g, b, a);
+            GXPosition3f32(trail->mSource[other].mX, trail->mSource[other].mY, trail->mSource[other].mZ);
+            GXColor4u8(r, g, b, a);
             for (unsigned int j = 0; j < trail->mCount; ++j) {
                 if (p->mUnknown23C) {
-                    color = lbl_802DD72C[j];
-                    color.mUnknownC = (color.mUnknownC - j * (color.mUnknownC / trail->mCount)) * p->mUnknown230;
+                    ParticleTrailColor_t *entry = &gParticleTrail_aPointColors[j];
+                    color.mUnknown0 = entry->mUnknown0;
+                    color.mUnknown4 = entry->mUnknown4;
+                    color.mUnknown8 = entry->mUnknown8;
+                    color.mUnknownC = (entry->mUnknownC - j * (entry->mUnknownC / trail->mCount)) * p->mUnknown230;
                 } else {
                     float alpha = p->mUnknown240.mUnknownC;
                     color.mUnknownC = (alpha - j * (alpha / trail->mCount)) * p->mUnknown230;
                 }
-                point = &trail->mPoints[trail->mHead];
-                GXPosition3f32(point->x, point->y, point->z);
+                GXPosition3f32(trail->mPoints[trail->mHead].mX, trail->mPoints[trail->mHead].mY, trail->mPoints[trail->mHead].mZ);
                 GXColor4u8((unsigned char)(color.mUnknown0 * 255.0f),
                            (unsigned char)(color.mUnknown4 * 255.0f),
                            (unsigned char)(color.mUnknown8 * 255.0f),
                            (unsigned char)(color.mUnknownC * 255.0f));
-                trail->mHead = (trail->mHead + 1) % 8;
+                trail->mHead++;
+                trail->mHead %= 8;
             }
         }
     }
@@ -167,14 +176,19 @@ void fn_8019723C(ParticleTrailSet_t *p)
     TMRenderSetBlendMode(1);
 }
 
-void fn_80197680(Entry_80146C4C *p)
+static inline void _FxPosition(Vector_80039F5C *v)
+{
+    GXPosition3f32(v->mX, v->mY, v->mZ);
+}
+
+void fn_80197680(Glow_t *p)
 {
     float projected[4];
     float saved[7];
-    Vector_80146134 corners[4];
-    Vector_80146134 facing;
-    Vector_80146134 axis = {0.0f, 0.0f, -1.0f};
-    Vector_80146134 position;
+    Vector_80039F5C corners[4];
+    Vector_80039F5C facing;
+    Vector_80039F5C axis = {0.0f, 0.0f, -1.0f};
+    Vector_80039F5C position;
     Mtx44 projection;
     float screen[2], center[2];
     float angle = 1.0f;
@@ -195,7 +209,7 @@ void fn_80197680(Entry_80146C4C *p)
     if (p->mUnknown34) {
         if (++p->mUnknown35 >= p->mUnknown34) {
             p->mUnknown35 = 0;
-            Subrecord_80146134 *record = p->mUnknown0;
+            GlowElement_t *record = p->mUnknown0;
             float value = fn_80237260(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
             if (value > p->mUnknown0->mUnknown14) value = p->mUnknown0->mUnknown14;
             else value = fn_80237260(1) * (p->mUnknown30 + p->mUnknown30) - p->mUnknown30 + 1.0f;
@@ -210,32 +224,31 @@ void fn_80197680(Entry_80146C4C *p)
         alpha = alpha < 0.0f ? 0.0f : (alpha > 1.0f ? 1.0f : alpha);
         int previous = -1;
         for (unsigned int i = 0; i <= p->mUnknown36; ++i) {
-            Subrecord_80146134 *record;
+            GlowElement_t *record;
             if (i == p->mUnknown36) {
                 record = p->mUnknown0;
                 fn_80227904(center, screen, lbl_803EB758, 1.0f);
             } else {
-                Slot_80146A6C *slot = &((Slot_80146A6C *)p->mUnknown3C)[i];
-                record = slot->mUnknown0;
-                fn_80227904(center, screen, lbl_803EB758, slot->mUnknown4);
+                record = p->mUnknown3C[i].mUnknown0;
+                fn_80227904(center, screen, lbl_803EB758, p->mUnknown3C[i].mUnknown4);
             }
-            Resource_80146E64 *resource = fn_80146E64(record->mUnknown0);
+            GlowTexImage_t *image = &GlowGetTexture(record->mUnknown0)->mUnknown10;
             if (record->mUnknown0 != previous) {
-                if (resource->mUnknown64) {
-                    GXLoadTlut((GXTlutObj *)(resource->mUnknown3C + 4), 0);
-                    GXInitTexObjTlut((GXTexObj *)resource->mUnknown10, 0);
+                if (image->mUnknown54) {
+                    GXLoadTlut((GXTlutObj *)(image->mUnknown2C + 4), 0);
+                    GXInitTexObjTlut((GXTexObj *)image->mUnknown0, 0);
                 }
-                GXLoadTexObj((GXTexObj *)resource->mUnknown10, GX_TEXMAP0);
+                GXLoadTexObj((GXTexObj *)image->mUnknown0, GX_TEXMAP0);
             }
             previous = record->mUnknown0;
             switch (p->mUnknownC) {
-            case 1:
-                GXSetZCompLoc(GX_DISABLE);
-                GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
-                break;
             case 2:
                 GXSetZCompLoc(GX_DISABLE);
                 GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
+                break;
+            case 1:
+                GXSetZCompLoc(GX_DISABLE);
+                GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
                 break;
             default:
                 GXSetZCompLoc(GX_DISABLE);
@@ -246,51 +259,54 @@ void fn_80197680(Entry_80146C4C *p)
             float halfSize = size * 0.5f;
             if (p->mUnknown8 == 1 && i == p->mUnknown36) {
                 GXSetProjectionv(saved);
-                fn_80146B40(&position, &p->mUnknown18);
-                corners[3].x = position.x + halfSize;
-                corners[3].y = position.y + halfSize;
-                corners[3].z = position.z;
-                corners[0].x = position.x - halfSize;
-                corners[0].y = position.y - halfSize;
-                corners[0].z = position.z;
-                corners[1].x = position.x - halfSize;
-                corners[1].y = position.y + halfSize;
-                corners[1].z = position.z;
-                corners[2].x = position.x + halfSize;
-                corners[2].y = position.y - halfSize;
-                corners[2].z = position.z;
+                GlowTransformPoint(&position, &p->mUnknown18);
+                corners[3].mX = position.mX + halfSize;
+                corners[3].mY = position.mY + halfSize;
+                corners[3].mZ = position.mZ;
+                corners[0].mX = position.mX - halfSize;
+                corners[0].mY = position.mY - halfSize;
+                corners[0].mZ = position.mZ;
+                corners[1].mX = position.mX - halfSize;
+                corners[1].mY = position.mY + halfSize;
+                corners[1].mZ = position.mZ;
+                corners[2].mX = position.mX + halfSize;
+                corners[2].mY = position.mY - halfSize;
+                corners[2].mZ = position.mZ;
             } else {
                 C_MTXOrtho(projection, 240.0f, -240.0f, -320.0f, 320.0f, 1.0f, 1250.0f);
-                projection[0][3] = projection[1][3] = projection[2][3] = 0.0f;
+                projection[0][3] = 0.0f;
+                projection[1][3] = 0.0f;
+                projection[2][3] = 0.0f;
                 fn_802523A4(projection, 1);
                 center[0] *= 320.0f;
                 center[1] *= 240.0f;
-                corners[0].x = center[0] - size;
-                corners[0].y = center[1] - size;
-                corners[0].z = 250.0f;
-                corners[1].x = center[0] - size;
-                corners[1].y = center[1] + size;
-                corners[1].z = 250.0f;
-                corners[2].x = center[0] + size;
-                corners[2].y = center[1] - size;
-                corners[2].z = 250.0f;
-                corners[3].x = center[0] + size;
-                corners[3].y = center[1] + size;
-                corners[3].z = 250.0f;
+                corners[0].mX = center[0] - size;
+                corners[0].mY = center[1] - size;
+                corners[0].mZ = 250.0f;
+                corners[1].mX = center[0] - size;
+                corners[1].mY = center[1] + size;
+                corners[1].mZ = 250.0f;
+                corners[2].mX = center[0] + size;
+                corners[2].mY = center[1] - size;
+                corners[2].mZ = 250.0f;
+                corners[3].mX = center[0] + size;
+                corners[3].mY = center[1] + size;
+                corners[3].mZ = 250.0f;
             }
-            GXColor color = {(unsigned char)(record->mUnknown8 * 255.0f),
-                             (unsigned char)(record->mUnknownC * 255.0f),
-                             (unsigned char)(record->mUnknown10 * 255.0f),
-                             (unsigned char)(alpha * 255.0f)};
+            GXColor color;
+            color.r = (unsigned char)(record->mUnknown8 * 255.0f);
+            color.g = (unsigned char)(record->mUnknownC * 255.0f);
+            color.b = (unsigned char)(record->mUnknown10 * 255.0f);
+            color.a = (unsigned char)(alpha * 255.0f);
             GXSetChanMatColor(GX_COLOR0A0, color);
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
-            GXPosition3f32(corners[0].x, corners[0].y, corners[0].z);
+            _FxPosition(&corners[0]);
             GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(corners[1].x, corners[1].y, corners[1].z);
+            _FxPosition(&corners[1]);
             GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(corners[2].x, corners[2].y, corners[2].z);
+            _FxPosition(&corners[2]);
             GXTexCoord2f32(0.0f, 1.0f);
-            GXPosition3f32(corners[3].x, corners[3].y, corners[3].z);
+            _FxPosition(&corners[3]);
             GXTexCoord2f32(1.0f, 1.0f);
         }
     }
@@ -298,7 +314,7 @@ void fn_80197680(Entry_80146C4C *p)
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
 }
 
-float fn_80197D08(float *out, Vector_80146134 *position)
+float fn_80197D08(float *out, Vector_80039F5C *position)
 {
     float clip[4];
     float normalized[3];
@@ -307,9 +323,9 @@ float fn_80197D08(float *out, Vector_80146134 *position)
     fn_801D0470(VptGetMatrixStack());
     fn_801D04C4();
     fn_801D12BC(4);
-    point[0] = position->x;
-    point[1] = position->y;
-    point[2] = position->z;
+    point[0] = position->mX;
+    point[1] = position->mY;
+    point[2] = position->mZ;
     point[3] = result = 1.0f;
     fn_80227E40(clip, point);
     float reciprocal = 1.0f / clip[3];
@@ -339,8 +355,9 @@ float fn_80197D08(float *out, Vector_80146134 *position)
 void fn_80197E64(void) {}
 void fn_80197E68(void) {}
 
-void fn_80197E6C(Resource_80146E64 *p)
+void fn_80197E6C(GlowTexture_t *p)
 {
+    GlowTexImage_t *texture = &p->mUnknown10;
     void *data = (void *)ResLoad(p->mUnknown0, p->mUnknown4, 1);
     p->mUnknown8 = (int)data;
     TexMipmapRelocate(data);
@@ -349,29 +366,29 @@ void fn_80197E6C(Resource_80146E64 *p)
     TexFileImage_t *image = TexGetTextureByIndex(data, 0);
     GXInvalidateTexAll();
     DCFlushRange(image->mpUnknownC, image->mWidth * image->mHeight * 4);
-    TMTextureTexNew(p->mUnknown10, image->mpUnknownC, image->mWidth, image->mHeight, image->mFormat, 0, image->mWidth * image->mHeight * 4, 0);
+    TMTextureTexNew(texture->mUnknown0, image->mpUnknownC, image->mWidth, image->mHeight, image->mFormat, 0, image->mWidth * image->mHeight * 4, 0);
     if (count > 0) {
         int entries = 16;
         if (image->mFormat == 9) entries = 256;
         TexFilePalette_t *palette = TexGetPaletteByIndex(data, 0);
         int bytes = entries + entries;
         DCFlushRange(palette->mpUnknown8, bytes);
-        TMTextureClutNew(p->mUnknown3C, palette->mpUnknown8, palette->mUnknown2, entries, bytes);
-        p->mUnknown64 = 1;
-    } else p->mUnknown64 = 0;
+        TMTextureClutNew(p->mUnknown10.mUnknown2C, palette->mpUnknown8, palette->mUnknown2, entries, bytes);
+        texture->mUnknown54 = 1;
+    } else texture->mUnknown54 = 0;
 }
 
-void fn_80197F84(Resource_80146E64 *p)
+void fn_80197F84(GlowTexture_t *p)
 {
-    TMTextureTexDelete(p->mUnknown10);
-    if (p->mUnknown64) {
-        TMTextureClutDelete(p->mUnknown3C);
-        p->mUnknown64 = 0;
+    TMTextureTexDelete(p->mUnknown10.mUnknown0);
+    if (p->mUnknown10.mUnknown54) {
+        TMTextureClutDelete(p->mUnknown10.mUnknown2C);
+        p->mUnknown10.mUnknown54 = 0;
     }
     ResUnLoad(p->mUnknown0, p->mUnknown4);
 }
 
-void fn_80197FDC(void *unused, Entry_80146C4C *p)
+void fn_80197FDC(void *unused, Glow_t *p)
 {
     float projected[4];
     float visibility = fn_80197D08(projected, &p->mUnknown18);
@@ -384,7 +401,7 @@ void fn_80197FDC(void *unused, Entry_80146C4C *p)
                 int height = fn_801CEC74();
                 projected[1] *= (float)height / (float)fn_801CEA14();
             }
-            if (value > FieldMarkerReadDepth(projected[0], projected[1]) || !fn_80146BA8((Vector_80146134 *)projected)) p->mUnknown11 = 0;
+            if (value > FieldMarkerReadDepth(projected[0], projected[1]) || !GlowIsOnScreen((Vector_80039F5C *)projected)) p->mUnknown11 = 0;
             else p->mUnknown11 = 1;
         } else {
             p->mUnknown11 = 0;

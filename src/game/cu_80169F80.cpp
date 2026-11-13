@@ -21,8 +21,8 @@ int PlayBookGetDatabase(int team);
 int fn_80177F70(void);
 int fn_80178308(void);
 float fn_80178A5C(void);
-int fn_80187C6C(void);
-int fn_80187C8C(void);
+int GameTextGetAwayTeam(void);
+int GameTextGetHomeTeam(void);
 void *fn_8023816C(void);
 }
 
@@ -377,7 +377,7 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
     float result5Rate = fn_8016A334(opponent);
     float result6Rate = fn_8016A408(opponent);
 
-    int key = team == 0 ? fn_80187C8C() : fn_80187C6C();
+    int key = team == 0 ? GameTextGetHomeTeam() : GameTextGetAwayTeam();
     if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
         rating = 50;
     PlayBookGetDatabase(team);
@@ -439,8 +439,9 @@ void fn_8016ACD8(int team, Candidate_8016B364 *pList, unsigned int count, int mo
 unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
 {
     unsigned int result = 0;
+    float distance = fabsf(pTo->mX - from.mX);
 
-    if (fabsf(pTo->mX - from.mX) > 4.5f) {
+    if (distance > 4.5f) {
         if (pTo->mX > from.mX) {
             if (kind == 2)
                 result |= 0x200;
@@ -460,7 +461,7 @@ unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int
     }
 
     if (kind == 2) {
-        float distance = pTo->mY - from.mY;
+        distance = pTo->mY - from.mY;
         if (distance < 7.0f)
             result |= 0x10;
         else if (distance < 15.0f)

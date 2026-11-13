@@ -18,8 +18,8 @@ int ObjNewInList(int handle, int a, int b, int c);
 void ObjRemoveFromList(int handle, int a);
 void ObjSetPriority(int handle, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
-void fn_80187DD8(int a);
-void fn_80187E08(int a, const char *pText, int b, int c);
+void GameTextShowPleaseWait(int a);
+void GameTextShowBusyDialog(int a, const char *pText, int b, int c);
 void PortraitJobAllocImage(PortraitJob_t *pObject);
 void PortraitJobLoad(PortraitJob_t *pObject);
 int PortraitJobIsLoaded(PortraitJob_t *pObject);
@@ -134,7 +134,7 @@ int FMCAPPORT::IsBusy()
 void FMCAPPORT::Start()
 {
     mpState.mp->mState = 2;
-    fn_80187E08(1, "Updating Players...", 1, 1);
+    GameTextShowBusyDialog(1, "Updating Players...", 1, 1);
     mpState.mp->mDelay = 20;
 }
 
@@ -152,7 +152,7 @@ void FMCAPPORT::Update()
         } else if (state->mCount != 0) {
             state->mState = 1;
         } else {
-            fn_80187DD8(0);
+            GameTextShowPleaseWait(0);
             mpState.mp->mState = 0;
         }
         break;

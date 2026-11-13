@@ -16,7 +16,7 @@ static int _UserStats_aColumns[15] = {
 
 extern "C" void UserStatsSet(DbCursor *pObject, unsigned int index, int value)
 {
-    fn_8007AA90(pObject, _UserStats_aColumns[index], value);
+    DbCursorSetValue(pObject, _UserStats_aColumns[index], value);
 }
 
 extern "C" int UserStatsGet(DbCursor *pObject, unsigned int index)

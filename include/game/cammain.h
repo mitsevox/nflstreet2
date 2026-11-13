@@ -58,7 +58,7 @@ void CamMainInit(GameCamera_t *pCamera, CameraDesc_t *pDesc);
 void CamMainUninit(GameCamera_t *pCamera);
 void CamMainUpdate(void *p, GameCamera_t *pCamera);
 void CamEaseVecStart(CamEaseVec_t *pEase, Vector_80039F5C *pBase, Vector_80039F5C *pFrom,
-                 Vector_80039F5C *pTo, CamInterpFunc_t update, float fromScale, float toScale,
+                 Vector_80039F5C *pTo, float fromScale, float toScale, CamInterpFunc_t update,
                  float time);
 void CamEaseVecUpdate(CamEaseVec_t *pEase, int steps);
 void CamEaseVecFlip(CamEaseVec_t *pEase);

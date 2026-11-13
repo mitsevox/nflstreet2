@@ -499,8 +499,8 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
     if (count > 0) {
         for (i = 0; i < count; i++) {
             if (PlayerDbSeekId(lbl_803EA5CC, ids[i], 0)) {
-                fn_8007ABA4(lbl_803EA5CC, 0x44494F50, ids[i]);
-                fn_8007ABA4(lbl_803EA5CC, 0x44494754, *pTeam);
+                DbCursorSetInt(lbl_803EA5CC, 0x44494F50, ids[i]);
+                DbCursorSetInt(lbl_803EA5CC, 0x44494754, *pTeam);
             }
         }
         int counts[7] = {1, 1, 1, 1, 1, 1, 1};
@@ -1171,7 +1171,7 @@ void fn_8005F664(char *pName, int size)
     StoryTeamCursorOpen(&cursor, lbl_802D4D40.mIndex);
     if (DbCursorGetRowCount(&cursor) > 0) {
         DbCursorSeek(&cursor, 0);
-        fn_8007AA3C(&cursor, 0x414E4454, (int)pName, last);
+        DbCursorGetString(&cursor, 0x414E4454, (int)pName, last);
     }
     StoryTeamCursorClose(&cursor);
 }

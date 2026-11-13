@@ -27,7 +27,7 @@ int fn_800ADD7C(PlyrPosePart_t *pElements, unsigned int index);
 int fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index);
 void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
-void fn_80147840(Object_8003DEC4 *pObject);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
 int fn_801784C4(void);
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
@@ -631,9 +631,9 @@ void PlyrPoseReadState(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStrea
         ReadBitStream(pStreamC, 1);
     }
     if (flag == 1) {
-        fn_801477F0(pObject);
+        ParticleTrailStartAfterimage(pObject);
     } else {
-        fn_80147840(pObject);
+        ParticleTrailStopAfterimage(pObject);
     }
 
     flag = ReadBitStream(pStreamB, 1);

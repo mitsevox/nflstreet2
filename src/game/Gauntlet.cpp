@@ -162,56 +162,56 @@ void GauntletStatsAdd(DbCursor *pObject, int index, int delta)
     switch (index) {
     case 0:
         if (delta) {
-            fn_8007ABA4(pObject, 0x4E575347, DbCursorGetInt(pObject, 0x4E575347) + 1);
+            DbCursorSetInt(pObject, 0x4E575347, DbCursorGetInt(pObject, 0x4E575347) + 1);
             if (DbCursorGetValue(pObject, 0x54535347) < 0) {
-                fn_8007AA90(pObject, 0x54535347, 1);
+                DbCursorSetValue(pObject, 0x54535347, 1);
             } else {
-                fn_8007AA90(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) + 1);
+                DbCursorSetValue(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) + 1);
             }
         } else {
-            fn_8007ABA4(pObject, 0x534C5347, DbCursorGetInt(pObject, 0x534C5347) + 1);
+            DbCursorSetInt(pObject, 0x534C5347, DbCursorGetInt(pObject, 0x534C5347) + 1);
             if (DbCursorGetValue(pObject, 0x54535347) > 0) {
-                fn_8007AA90(pObject, 0x54535347, -1);
+                DbCursorSetValue(pObject, 0x54535347, -1);
             } else {
-                fn_8007AA90(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) - 1);
+                DbCursorSetValue(pObject, 0x54535347, DbCursorGetValue(pObject, 0x54535347) - 1);
             }
         }
         break;
     case 13:
-        fn_8007ABA4(pObject, 0x46505347, DbCursorGetInt(pObject, 0x46505347) + delta);
+        DbCursorSetInt(pObject, 0x46505347, DbCursorGetInt(pObject, 0x46505347) + delta);
         break;
     case 2:
-        fn_8007ABA4(pObject, 0x50545347, DbCursorGetInt(pObject, 0x50545347) + delta);
+        DbCursorSetInt(pObject, 0x50545347, DbCursorGetInt(pObject, 0x50545347) + delta);
         break;
     case 3:
-        fn_8007ABA4(pObject, 0x54525347, DbCursorGetInt(pObject, 0x54525347) + delta);
+        DbCursorSetInt(pObject, 0x54525347, DbCursorGetInt(pObject, 0x54525347) + delta);
         break;
     case 4:
-        fn_8007ABA4(pObject, 0x54505347, DbCursorGetInt(pObject, 0x54505347) + delta);
+        DbCursorSetInt(pObject, 0x54505347, DbCursorGetInt(pObject, 0x54505347) + delta);
         break;
     case 5:
-        fn_8007ABA4(pObject, 0x54445347, DbCursorGetInt(pObject, 0x54445347) + delta);
+        DbCursorSetInt(pObject, 0x54445347, DbCursorGetInt(pObject, 0x54445347) + delta);
         break;
     case 6:
-        fn_8007ABA4(pObject, 0x53445347, DbCursorGetInt(pObject, 0x53445347) + delta);
+        DbCursorSetInt(pObject, 0x53445347, DbCursorGetInt(pObject, 0x53445347) + delta);
         break;
     case 7:
-        fn_8007ABA4(pObject, 0x41535347, DbCursorGetInt(pObject, 0x41535347) + delta);
+        DbCursorSetInt(pObject, 0x41535347, DbCursorGetInt(pObject, 0x41535347) + delta);
         break;
     case 8:
-        fn_8007ABA4(pObject, 0x49445347, DbCursorGetInt(pObject, 0x49445347) + delta);
+        DbCursorSetInt(pObject, 0x49445347, DbCursorGetInt(pObject, 0x49445347) + delta);
         break;
     case 9:
-        fn_8007ABA4(pObject, 0x46465347, DbCursorGetInt(pObject, 0x46465347) + delta);
+        DbCursorSetInt(pObject, 0x46465347, DbCursorGetInt(pObject, 0x46465347) + delta);
         break;
     case 11:
-        fn_8007ABA4(pObject, 0x42475347, DbCursorGetInt(pObject, 0x42475347) + delta);
+        DbCursorSetInt(pObject, 0x42475347, DbCursorGetInt(pObject, 0x42475347) + delta);
         break;
     case 12:
-        fn_8007ABA4(pObject, 0x32475347, DbCursorGetInt(pObject, 0x32475347) + delta);
+        DbCursorSetInt(pObject, 0x32475347, DbCursorGetInt(pObject, 0x32475347) + delta);
         break;
     case 10:
-        fn_8007ABA4(pObject, 0x44465347, DbCursorGetInt(pObject, 0x44465347) + delta);
+        DbCursorSetInt(pObject, 0x44465347, DbCursorGetInt(pObject, 0x44465347) + delta);
         break;
     }
 }
@@ -221,22 +221,22 @@ void GauntletStatsReset(int a)
     DbCursor object;
 
     GauntletStatsOpen(&object, a);
-    fn_8007ABA4(&object, 0x4E575347, 0);
-    fn_8007AA90(&object, 0x54535347, 0);
-    fn_8007ABA4(&object, 0x534C5347, 0);
-    fn_8007AA90(&object, 0x54535347, 0);
-    fn_8007ABA4(&object, 0x46505347, 0);
-    fn_8007ABA4(&object, 0x50545347, 0);
-    fn_8007ABA4(&object, 0x54525347, 0);
-    fn_8007ABA4(&object, 0x54505347, 0);
-    fn_8007ABA4(&object, 0x54445347, 0);
-    fn_8007ABA4(&object, 0x53445347, 0);
-    fn_8007ABA4(&object, 0x41535347, 0);
-    fn_8007ABA4(&object, 0x49445347, 0);
-    fn_8007ABA4(&object, 0x46465347, 0);
-    fn_8007ABA4(&object, 0x42475347, 0);
-    fn_8007ABA4(&object, 0x32475347, 0);
-    fn_8007ABA4(&object, 0x44465347, 0);
+    DbCursorSetInt(&object, 0x4E575347, 0);
+    DbCursorSetValue(&object, 0x54535347, 0);
+    DbCursorSetInt(&object, 0x534C5347, 0);
+    DbCursorSetValue(&object, 0x54535347, 0);
+    DbCursorSetInt(&object, 0x46505347, 0);
+    DbCursorSetInt(&object, 0x50545347, 0);
+    DbCursorSetInt(&object, 0x54525347, 0);
+    DbCursorSetInt(&object, 0x54505347, 0);
+    DbCursorSetInt(&object, 0x54445347, 0);
+    DbCursorSetInt(&object, 0x53445347, 0);
+    DbCursorSetInt(&object, 0x41535347, 0);
+    DbCursorSetInt(&object, 0x49445347, 0);
+    DbCursorSetInt(&object, 0x46465347, 0);
+    DbCursorSetInt(&object, 0x42475347, 0);
+    DbCursorSetInt(&object, 0x32475347, 0);
+    DbCursorSetInt(&object, 0x44465347, 0);
     GauntletStatsClose(&object);
 }
 
@@ -272,7 +272,7 @@ void TkTableReadRow(DbCursor *pObject, StyleAwardRule_t *pRecord)
     pRecord->mMeterSteal = DbCursorGetInt(pObject, 0x47534B54);
     pRecord->mScoreDelta = DbCursorGetValue(pObject, 0x43534B54);
     pRecord->mTableIndex = DbCursorGetInt(pObject, 0x54534B54);
-    pRecord->mOpponentDistance = fn_8007A9E4(pObject, 0x49444B54);
+    pRecord->mOpponentDistance = DbCursorGetFloat(pObject, 0x49444B54);
     pRecord->mOpponentAngle = DbCursorGetInt(pObject, 0x4E414B54);
     pRecord->mComboWeight = DbCursorGetInt(pObject, 0x4F434B54);
     pRecord->mAllowBehindLine = DbCursorGetInt(pObject, 0x4C424B54);

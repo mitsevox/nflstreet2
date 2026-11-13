@@ -24,7 +24,7 @@ int TutorialIsActive(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80179138(void);
-int fn_80188044(int index);
+int GameTextFindPlayerPad(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
 
@@ -68,7 +68,7 @@ unsigned char HudGetPadSlot(int id)
         order[i] = -1;
     }
     for (i = 0; i <= 3; i++) {
-        int index = fn_80188044(i);
+        int index = GameTextFindPlayerPad(i);
 
         if (index != -1) {
             int side = fn_800B6644(index);
@@ -109,7 +109,7 @@ void HudUpdateMashPrompt(unsigned char id)
     }
     p = 0;
     {
-        int index = fn_80188044(id);
+        int index = GameTextFindPlayerPad(id);
 
         if (index != -1) {
             p = fn_800B6544(index);

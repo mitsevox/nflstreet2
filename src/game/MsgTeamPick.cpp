@@ -130,8 +130,8 @@ int fn_80178320(void);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
 int MsgGameGetSetupState(void);
-int fn_80188030(int a);
-void fn_8018807C(unsigned char a);
+int GameTextGetPadPlayer(int a);
+void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
 void fn_8018C48C(int tag);
@@ -551,9 +551,9 @@ int MsgTeamPickBuildTournamentPool(void)
     index = fn_8022F384(fn_8022F4BC());
     digt = StoryTeamLoadOneToStats(index, 1, (StoryTeamIdBlock_t *)ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids[0], 0)) {
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids[0]);
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x44494754, digt);
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x49544754, digt);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids[0]);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494754, digt);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x49544754, digt);
         _MsgTeamPick_aCaptain[0].mValue = ids[0];
         DbCursorGetValue((DbCursor *)&_MsgTeamPick_PlayerCursor, 0x50585350);
         DbCursorGetInt(&_MsgTeamPick_PlayerCursor, 0x4F504250);
@@ -623,10 +623,10 @@ int MsgTeamPickAddEventPlayer(void)
     index = fn_8022F384(fn_8022F4BC());
     digt = StoryTeamLoadOneToStats(index, 1, &ids);
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, ids.mUnknown0, 0)) {
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids.mUnknown0);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494F50, ids.mUnknown0);
         ok = 1;
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x44494754, digt);
-        fn_8007ABA4(&_MsgTeamPick_PlayerCursor, 0x49544754, digt);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x44494754, digt);
+        DbCursorSetInt(&_MsgTeamPick_PlayerCursor, 0x49544754, digt);
         value8 = DbCursorGetValue((DbCursor *)&_MsgTeamPick_PlayerCursor, 0x50585350);
         valueC = DbCursorGetInt(&_MsgTeamPick_PlayerCursor, 0x4F504250);
         _MsgTeamPick_pPool[0].mId = ids.mUnknown0;
@@ -1217,7 +1217,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     _MsgTeamPick_pTournamentRow = fn_80061AD4();
     MsgTeamPickInitState();
     if (_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15] != 0xFF) {
-        *pController = fn_80188030(_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15]);
+        *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15]);
     } else {
         *pController = -1;
     }
@@ -1357,7 +1357,7 @@ void MsgTeamPickShutdown(void)
             fn_80015D28(_MsgTeamPick_pEventRow->mDive);
         }
     } else {
-        fn_8018807C(0);
+        GameTextSetSetupActive(0);
     }
     AutoDepthSetRateCallback(0);
     AutoDepthSetSelectCallback(0);
@@ -1522,7 +1522,7 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
             if (_MsgTeamPick_pState->mpUnknown08[slot] == 0xFF) {
                 *pController = -1;
             } else {
-                *pController = fn_80188030(_MsgTeamPick_pState->mpUnknown08[slot]);
+                *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[slot]);
             }
             return;
         }
@@ -1541,7 +1541,7 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
                     if (_MsgTeamPick_pState->mpUnknown08[j] == 0xFF) {
                         *pController = -1;
                     } else {
-                        *pController = fn_80188030(_MsgTeamPick_pState->mpUnknown08[j]);
+                        *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[j]);
                     }
                     return;
                 }
@@ -1555,7 +1555,7 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
             if (_MsgTeamPick_pState->mpUnknown08[team] == 0xFF) {
                 *pController = -1;
             } else {
-                *pController = fn_80188030(_MsgTeamPick_pState->mpUnknown08[team]);
+                *pController = GameTextGetPadPlayer(_MsgTeamPick_pState->mpUnknown08[team]);
             }
             return;
         }
@@ -1701,7 +1701,7 @@ int MsgTeamPickGetTurn(int *pController)
     unsigned char controller = _MsgTeamPick_pState->mpUnknown08[_MsgTeamPick_pState->mUnknown15];
 
     if (controller != 0xFF) {
-        *pController = fn_80188030(controller);
+        *pController = GameTextGetPadPlayer(controller);
     } else {
         *pController = -1;
     }
@@ -2050,7 +2050,7 @@ int MsgTeamPickHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int *
         break;
     case 0xA:
         if (*pArgs[0].pi != -1) {
-            *pArgs[0].pi = fn_80188030(*pArgs[0].pi);
+            *pArgs[0].pi = GameTextGetPadPlayer(*pArgs[0].pi);
         }
         break;
     case 8:

@@ -49,8 +49,8 @@ int fn_800A3444(void);
 int fn_801C31B0(char *first, char *second);
 int fn_801485D4(void);
 int fn_8022B7A4(int handle, int tag, void *pValue);
-int fn_80187C6C(void);
-int fn_80187C8C(void);
+int GameTextGetAwayTeam(void);
+int GameTextGetHomeTeam(void);
 int fn_801788D8(int *pValue);
 int fn_80178EE0(unsigned char side);
 unsigned int fn_801787DC(unsigned char side);
@@ -253,8 +253,8 @@ extern "C" void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pM
     int *pStats[2];
     int value;
 
-    pHandles[1] = fn_80187C6C();
-    pHandles[0] = fn_80187C8C();
+    pHandles[1] = GameTextGetAwayTeam();
+    pHandles[0] = GameTextGetHomeTeam();
     for (unsigned char i = 1; i <= 14; i++) {
         pStats0[i] = 9999;
         pStats1[i] = 9999;

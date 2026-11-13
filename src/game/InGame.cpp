@@ -84,7 +84,7 @@ void ScoringLogInit(void);
 void ScoringLogReset(void);
 int BannerUpdate(float a);
 void GameModeTypeInvalidate(void);
-void fn_80187C0C(void);
+void GameTextReset(void);
 void UISGameHandleInput(int a, unsigned int id, float value);
 void UISGameLoadKeyItem(int a, int b);
 void UISGameFreeKeyItem(int a, int b);
@@ -293,7 +293,7 @@ int InGame::Init()
             fn_800AD910(1, 0.0f);
         }
     }
-    fn_80187C0C();
+    GameTextReset();
     fn_8005BF18();
     if (!fn_800BA6F8()) {
         CamGameApplyUserCamera();

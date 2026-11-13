@@ -98,7 +98,7 @@ void fn_8009D00C(void *,int *);
 void PlyrPoseGetBoneTransform(Object_8003DEC4 *,int,float *,int *);
 void QuatFromEuler(Quat_801EB488 *,int,int,int);
 void fn_800943D8(void);
-void fn_80147840(Object_8003DEC4 *);
+void ParticleTrailStopAfterimage(Object_8003DEC4 *);
 void PlayerMoveClear(Object_80039F5C *);
 void fn_800A9B54(unsigned int,Object_80039F5C *);
 void fn_80028DF8(float,float);
@@ -243,7 +243,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
             return 1;
         case 0xC020:fn_800943D8();return 1;
-        case 0xC022:fn_80147840((Object_8003DEC4 *)p->mpUnknown4);return 1;
+        case 0xC022:ParticleTrailStopAfterimage((Object_8003DEC4 *)p->mpUnknown4);return 1;
         case 0xC023:if(AnimSeqGetOpcodeParameter()==1) PlayerMoveClear(p);return 1;
         case 0xC024: {
             unsigned int effect=(unsigned int)AnimSeqGetOpcodeParameter()-1;

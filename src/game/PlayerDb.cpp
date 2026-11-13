@@ -36,7 +36,7 @@ int PlayerDbGetTeamIndex(Object_8008044C *pObject)
 
 void PlayerDbSetTeamIndex(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x49544754, value);
+    DbCursorSetInt(pObject, 0x49544754, value);
 }
 
 int PlayerDbSeekId(Object_8008044C *pObject, int a, int *pResult)
@@ -51,18 +51,18 @@ int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult)
 
 void PlayerDbGetFirstName(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((DbCursor *)pObject, 0x414E4650, (int)pBuffer, size);
+    DbCursorGetString((DbCursor *)pObject, 0x414E4650, (int)pBuffer, size);
 }
 
 void PlayerDbGetLastName(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((DbCursor *)pObject, 0x414E4C50, (int)pBuffer, size);
+    DbCursorGetString((DbCursor *)pObject, 0x414E4C50, (int)pBuffer, size);
 }
 
 /* The 0x4E4B4E50 text, or the upper-cased PlayerDbGetLastName text when it is empty. */
 void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size)
 {
-    fn_8007AA3C((DbCursor *)pObject, 0x4E4B4E50, (int)pBuffer, size);
+    DbCursorGetString((DbCursor *)pObject, 0x4E4B4E50, (int)pBuffer, size);
     if (strlen(pBuffer) == 0) {
         PlayerDbGetLastName(pObject, pBuffer, size);
         fn_801C32CC(pBuffer);
@@ -203,7 +203,7 @@ int PlayerDbGetPbpo(Object_8008044C *pObject)
 
 void PlayerDbSetPbpo(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x4F504250, value);
+    DbCursorSetInt(pObject, 0x4F504250, value);
 }
 
 int PlayerDbGetPpsn(void *pObject)
@@ -218,38 +218,38 @@ int PlayerDbGetSgt(void *pObject, int index)
 
 void PlayerDbSetPpsn(void *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x4E535050, value);
+    DbCursorSetInt(pObject, 0x4E535050, value);
 }
 
 void PlayerDbSetSgt(void *pObject, int index, int value)
 {
-    fn_8007ABA4(pObject, _PlayerDb_aSgtColumns[index], value);
+    DbCursorSetInt(pObject, _PlayerDb_aSgtColumns[index], value);
 }
 
 void PlayerDbSetHairStyle(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x52414850, value);
+    DbCursorSetInt(pObject, 0x52414850, value);
 }
 
 void PlayerDbSetPybt(DbCursor *pObject, int index)
 {
-    fn_8007ABA4(pObject, 0x54425950, index);
-    fn_8007AA90(pObject, 0x544C4650, lbl_80293968[index]);
+    DbCursorSetInt(pObject, 0x54425950, index);
+    DbCursorSetValue(pObject, 0x544C4650, lbl_80293968[index]);
 }
 
 void PlayerDbSetSkinTone(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x494B5350, value);
+    DbCursorSetInt(pObject, 0x494B5350, value);
 }
 
 void PlayerDbSetPlex(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x58454C50, value);
+    DbCursorSetInt(pObject, 0x58454C50, value);
 }
 
 void PlayerDbSetHairColor(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x31414850, value);
+    DbCursorSetInt(pObject, 0x31414850, value);
 }
 
 int PlayerDbGetHairColor(Object_8008044C *pObject)
@@ -259,7 +259,7 @@ int PlayerDbGetHairColor(Object_8008044C *pObject)
 
 void PlayerDbSetFacialHairColor(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x43484650, value);
+    DbCursorSetInt(pObject, 0x43484650, value);
 }
 
 int PlayerDbGetFacialHairColor(Object_8008044C *pObject)
@@ -269,7 +269,7 @@ int PlayerDbGetFacialHairColor(Object_8008044C *pObject)
 
 void PlayerDbSetWeight(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x54475750, value - 160);
+    DbCursorSetInt(pObject, 0x54475750, value - 160);
 }
 
 int PlayerDbGetWeight(Object_8008044C *pObject)
@@ -279,7 +279,7 @@ int PlayerDbGetWeight(Object_8008044C *pObject)
 
 void PlayerDbSetHeight(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x54474850, value);
+    DbCursorSetInt(pObject, 0x54474850, value);
 }
 
 int PlayerDbGetHeight(Object_8008044C *pObject)
@@ -294,7 +294,7 @@ int PlayerDbGetPhan(Object_8008044C *pObject)
 
 void PlayerDbSetPhan(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x4E414850, value);
+    DbCursorSetInt(pObject, 0x4E414850, value);
 }
 
 int PlayerDbGetPjen(Object_8008044C *pObject)
@@ -304,6 +304,6 @@ int PlayerDbGetPjen(Object_8008044C *pObject)
 
 void PlayerDbSetPjen(Object_8008044C *pObject, int value)
 {
-    fn_8007ABA4(pObject, 0x4E454A50, value);
+    DbCursorSetInt(pObject, 0x4E454A50, value);
 }
 }

@@ -179,9 +179,9 @@ float fn_80178A08(void);
 float fn_80178A44(void);
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
-void fn_801A9F98(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b);
-void fn_801AA124(BigObj_t *pItem, void *a, int b, void *c);
-short *fn_801AA220(int count);
+void BigObjAnimBlendPose(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b);
+void BigObjAnimBlendRootAngles(BigObj_t *pItem, void *a, int b, void *c);
+short *BigObjAnimAllocSamples(int count);
 void fn_801B9FEC(void *p, void *q);
 int fn_801BB638(int id, int a);
 int fn_801BBE5C(int a, int b);
@@ -351,9 +351,9 @@ void fn_8004A870(Handler_803084C4 *pHandlers, unsigned int count)
     pHandlers[101] = fn_8004A5EC;
 }
 
-void fn_8004A8C4(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a) { fn_801A9F98(pExtra, pItem, a, 0); }
+void fn_8004A8C4(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a) { BigObjAnimBlendPose(pExtra, pItem, a, 0); }
 
-void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c) { fn_801AA124(pItem, a, b, c); }
+void fn_8004A8E8(BigObj_t *pItem, void *a, int b, void *c) { BigObjAnimBlendRootAngles(pItem, a, b, c); }
 
 void fn_8004A908(BigObjInst *pObject, int index)
 {
@@ -370,7 +370,7 @@ void fn_8004A908(BigObjInst *pObject, int index)
             pPlaced->mUnknown172.mUnknown4 = count + 1;
             pPlaced->mUnknown172.mUnknown0 = 0x100;
             pPlaced->mUnknown172.mUnknown2 = 0x202;
-            pPlaced->mUnknown172.mUnknown48 = fn_801AA220(count);
+            pPlaced->mUnknown172.mUnknown48 = BigObjAnimAllocSamples(count);
             pPlaced->mUnknown172.mUnknown52 = (float (*)[4][4])pPlaced->mUnknown228;
             fn_8004A680(&pPlaced->mUnknown172, pSkeleton);
         }
@@ -1326,7 +1326,7 @@ void ObjRemoveFromList(int, DynObjChild *);
 void VptTrashObject(DynObjChild *); void VptFlushObjectTrash(void); void VptFlushObjectTrashSync(void);
 int fn_801F7C88(void);
 BigObj_t *BigObjFindByKey(int, unsigned int);
-void fn_801A980C(DynObjChild *);
+void DynObjChildRefreshFrame(DynObjChild *);
 void *ResLoadToBuffer(void *, int, char *);
 int ResGetSize(void *, int);
 void *fn_80216860(void *, const char *);
@@ -1497,7 +1497,7 @@ void fn_8004D144(BigObjDesc_t *pDesc, int handle, int first)
     p->mpUnknown58 = LevelFindArea(&pDesc->mUnknown132.mUnknown4);
     lbl_803EC7D0++;
     p->mUnknown6C = 0;
-    fn_801A980C(p);
+    DynObjChildRefreshFrame(p);
 }
 
 int fn_8004D2F8(DynObjChild *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }

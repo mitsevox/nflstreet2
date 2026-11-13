@@ -19,7 +19,7 @@ extern const char lbl_802A0F34[];
 extern const char lbl_802A0F74[];
 extern const char lbl_802A1074[];
 
-int fn_80188030(int index);
+int GameTextGetPadPlayer(int index);
 int fn_80187A78(unsigned char index, char *pText, int count);
 int fn_80187400(int kind, int key, int first, int last);
 
@@ -60,7 +60,7 @@ void fn_8014F19C(Class_802A2B68 *p)
             continue;
         }
         char name[32];
-        if (!fn_80187A78(fn_80188030(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
+        if (!fn_80187A78(GameTextGetPadPlayer(p->mpUnknown1C->mpUnknown34[i].mUnknown8), name, 31)) {
             continue;
         }
         QueryResult result;

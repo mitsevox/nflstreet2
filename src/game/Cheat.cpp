@@ -157,7 +157,7 @@ int CheatUnlock(int id)
     DbCursor cursor;
     CheatOpenCursor(&cursor, _Cheat_iSlot);
     if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
-        fn_8007AA90(&cursor, 0x4C554843, 1);
+        DbCursorSetValue(&cursor, 0x4C554843, 1);
     }
     return CheatCloseCursor(&cursor);
 }
@@ -180,7 +180,7 @@ int CheatEnable(int id)
     DbCursor cursor;
     CheatOpenCursor(&cursor, _Cheat_iSlot);
     if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
-        fn_8007AA90(&cursor, 0x4E454843, 1);
+        DbCursorSetValue(&cursor, 0x4E454843, 1);
     }
     return CheatCloseCursor(&cursor);
 }
@@ -190,7 +190,7 @@ int CheatDisable(int id)
     DbCursor cursor;
     CheatOpenCursor(&cursor, _Cheat_iSlot);
     if (DbCursorFindValue(&cursor, 0x58494843, id, 0, 0)) {
-        fn_8007AA90(&cursor, 0x4E454843, 0);
+        DbCursorSetValue(&cursor, 0x4E454843, 0);
     }
     return CheatCloseCursor(&cursor);
 }
