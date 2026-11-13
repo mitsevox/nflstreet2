@@ -1,8 +1,14 @@
+/* Low-level texture helpers: widen a texture whose sides are not powers of two to
+   the next power-of-two size (the image is copied into a zero-filled buffer row by
+   row), and copy image data into memory the graphics hardware reads, flushing it
+   from the data cache. */
+
 #include <dolphin/os/OSCache.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/tmlib.h"
 
-void fn_8020E7EC(Texture_t *pTex)
+#if defined(DECOMP_COMPARE)
+void LLTexPadToPow2(Texture_t *pTex)
 {
     int bpp;
     int size;
@@ -60,8 +66,9 @@ void fn_8020E7EC(Texture_t *pTex)
     pTex->mpImage = pDst;
     pTex->mHeight = height;
 }
+#endif
 
-void fn_8020E9D0(void *pDst, void *pSrc, unsigned int size)
+void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size)
 {
     if (size != 0) {
         memcpy(pDst, pSrc, size);

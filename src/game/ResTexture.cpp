@@ -13,7 +13,7 @@ void ResTextureLoad(ResTexture *p)
 
     ResSetMemFlags(previous);
     TexCreate((void *)data, &p->mTexture);
-    fn_8020E7EC(&p->mTexture);
+    LLTexPadToPow2(&p->mTexture);
     ResUnLoad((void *)p->mUnknown0, p->mUnknown4);
 }
 

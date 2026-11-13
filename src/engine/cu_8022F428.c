@@ -286,7 +286,7 @@ extern int fn_801F9A90(int handle, int table);
 extern int fn_801F9D0C(int handle, int table, int a);
 extern int fn_801FA68C(void *pCallback, int tag);
 extern int fn_801FA740(int tag);
-extern void fn_8020E9D0(void *pDst, void *pSrc, unsigned int size);
+extern void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size);
 extern void TMModelResRelocate(void *p);
 extern void *TMModelResGetChunk(void *p, unsigned int tag, void *pOut);
 extern void TMModelReset(void *p);
@@ -1764,7 +1764,7 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
     if (pText != 0) {
         if (e == 0) {
             pSprite->mpUnknown40 = fn_801D2B7C(pHeader->mUnknown8, 0, 0);
-            fn_8020E9D0(pSprite->mpUnknown40, pText, pHeader->mUnknown8);
+            LLTexCopyFlush(pSprite->mpUnknown40, pText, pHeader->mUnknown8);
         } else {
             pSprite->mpUnknown40 = pText;
         }
@@ -1796,7 +1796,7 @@ void fn_80234EEC(Holder_80234EEC *pHolder, int index, void *pData, unsigned char
     pSrc = TexGetMaterialByIndex(pData, sourceIndex);
     pDstImage = TexGetTextureByIndex(pSprite->mpUnknown40, pDst->mUnknown4);
     pSrcImage = TexGetTextureByIndex(pData, pSrc->mUnknown4);
-    fn_8020E9D0(pDstImage->mpUnknownC, pSrcImage->mpUnknownC, pDstImage->mUnknown8);
+    LLTexCopyFlush(pDstImage->mpUnknownC, pSrcImage->mpUnknownC, pDstImage->mUnknown8);
 }
 
 void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char sourceIndex, int offset)
@@ -1811,7 +1811,7 @@ void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char
     pSrc = TexGetMaterialByIndex(pData, sourceIndex);
     pDstImage = TexGetPaletteByIndex(pSprite->mpUnknown40, pDst->mUnknown8 + offset);
     pSrcImage = TexGetPaletteByIndex(pData, pSrc->mUnknown8 + offset);
-    fn_8020E9D0(pDstImage->mpUnknown8, pSrcImage->mpUnknown8, pDstImage->mUnknown4);
+    LLTexCopyFlush(pDstImage->mpUnknown8, pSrcImage->mpUnknown8, pDstImage->mUnknown4);
 }
 
 void fn_80235328(Owner_80235328 *pOwner, int key)
