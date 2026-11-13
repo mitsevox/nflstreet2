@@ -36,7 +36,7 @@ struct GameTextTeam_t {
 
 extern "C" {
 extern void *gUISSub2Info;
-extern const char *lbl_802EA294[];
+extern const char *gPlayerPositionAbbrevs[];
 
 static GameTextPlayer_t _GameText_sPlayer = {0x7FFF};
 static GameTextTeam_t _GameText_sTeam = {0x3FF};
@@ -105,8 +105,8 @@ int RoundToNearestInt(float value);
 unsigned int fn_8009D990(int index);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 unsigned short GameTextPickRandomTeam(int type);
-unsigned char FlowIsRunning(void);
-unsigned short TeamRegistryFindIndex(int team);
+unsigned char CurrentIdIsSet(void);
+unsigned short TeamRecordFindIndex(int team);
 
 void GameTextLoadPlayer(int id, unsigned char reload)
 {
@@ -428,10 +428,10 @@ int GameTextGetPlayerTeam(int id)
 unsigned short GameTextGetEditTeam(unsigned short fallback, int base)
 {
     int team = 0x3FF;
-    if (FlowIsRunning()) {
+    if (CurrentIdIsSet()) {
         fn_801FCE10(0, "select 'DIGT' into \x82 from 'DIED'\n", &team);
         if (team != 0x3FF) {
-            unsigned short index = TeamRegistryFindIndex(team);
+            unsigned short index = TeamRecordFindIndex(team);
             if (index != 0xFFFF) {
                 return index + base;
             }
@@ -727,7 +727,7 @@ int GameTextShowRosterFill(int player, int team, int stage)
             && fn_801FCE10(0, "select 'ANFP' into \x88 and 'ANLP' into \x88 and 'SOPP' into \x82 from 'YALP' "
                               "where ('DIGP' = \x82)\n",
                            first, last, &slot, player) == 0) {
-            sprintf(position, lbl_802EA294[slot]);
+            sprintf(position, gPlayerPositionAbbrevs[slot]);
             sprintf(text, "Filling Team Rosters\n%s signed %s %c.%s", teamName, position, first[0], last);
         } else {
             sprintf(text, "Filling team rosters");

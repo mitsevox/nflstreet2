@@ -179,7 +179,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
 
 int StoreGetStringById(int id, char *pName, int nameSize)
 {
-    char name[32];
+    char name[36];
     int result = 0;
     if (fn_801FCE10(0, "select 'IUNS' into \x88 from 'MNTS' where 'IRTS' = \x85\n", name, id) == 0) {
         fn_801C2EF0(pName, name, nameSize);

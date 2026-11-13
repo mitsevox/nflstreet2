@@ -181,6 +181,10 @@
     }
   },
   "externals": {
+    "gPlayerPositionAbbrevs": {
+      "address": "0x802EA294",
+      "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
+    },
     "GameOptionsCloseCursor": {
       "address": "0x8007F174",
       "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
