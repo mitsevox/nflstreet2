@@ -146,19 +146,23 @@ extern "C" int fn_800DFD90(Object_80039F5C *p)
         return 0;
     }
     if (!(pActor->mUnknown8 & 0x40)) {
-        if (p->mIdBytes[3] == 3) {
+        switch (p->mIdBytes[3]) {
+        case 3:
             fn_8009BD60(p);
             p->mUnknown1008.mUnknown0 = 1;
             p->mUnknown1008Word = 6;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
-        } else if (p->mIdBytes[3] == 1) {
+            break;
+        case 1: {
             int mode = fn_800AD9B4();
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             if (mode == 4) {
                 fn_8010A2DC(p, 0, -1);
             }
+            break;
+        }
         }
     }
     return 1;
@@ -266,7 +270,11 @@ extern "C" void fn_800E034C(Object_80039F5C *p, Block_800E0230 *pBlock)
         pBlock->mUnknown4 = p->mMotion.mFacing;
         float y = fabsf(p->mMotion.mPos.mY);
         if (!(y <= fn_80178A2C())) {
-            pBlock->mUnknown4 = MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000 ? 0x800000 : 0;
+            if (MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000) {
+                pBlock->mUnknown4 = 0x800000;
+            } else {
+                pBlock->mUnknown4 = 0;
+            }
         }
         p->mUnknown512.mUnknown14 = 10;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown4;
@@ -435,7 +443,7 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
     if (p->mFlags & 0x4000) {
         Input_800B6D34 input;
         fn_800B6D34(p, &input);
-        pBlock->mUnknown29 = (input.mUnknown96 & 0x11) != 0;
+        pBlock->mUnknown29 = (input.mUnknown96 & 1) || (input.mUnknown96 & 0x10);
     }
     float time = fn_8009A270(handle);
     if (--pBlock->mUnknown24 >= 0) {
@@ -447,15 +455,15 @@ extern "C" int fn_800E0AD8(Object_80039F5C *p)
         }
     }
     if (!pBlock->mUnknown2) {
-        if (!(p->mFlags & 4) && !((float)pBlock->mUnknown0 <= time - 90.0f) &&
-            !((float)pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
+        if (!(p->mFlags & 4) && !((float)(int)pBlock->mUnknown0 <= time - 90.0f) &&
+            !((float)(int)pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
             *fn_8009CC2C(p, fn_800E0818, 15, 2) = index;
         }
         pBlock->mUnknown2 = 1;
-    } else if ((p->mFlags & 4) || !((float)pBlock->mUnknown0 <= time)) {
+    } else if ((p->mFlags & 4) || !((float)(int)pBlock->mUnknown0 <= time)) {
         fn_8009CE88(p, &p->mUnknown16, 8);
     }
-    if (!((float)pBlock->mUnknown0 <= time - 30.0f)) fn_80042998(p->mpUnknown4);
+    if (!((float)(int)pBlock->mUnknown0 <= time - 30.0f)) fn_80042998(p->mpUnknown4);
     Ball_t *pBall = BallGet(index);
     unsigned short key = fn_801BE648(p->mpUnknown792);
     if (BallGetHolder(pBall) && BallGetHolder(pBall) != p && !fn_8009A68C(p) && key != 70) return 1;
@@ -688,13 +696,9 @@ extern "C" int fn_800E1584(Object_80039F5C *p)
     int result = 0;
     Object_80039F5C *pOther = BallGetCurrentHolder();
     if (pOther && MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
-        int special = 0;
         fn_800ACDE4(p, &chance, &angle);
         if (fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
             (pOther->mpState->mId == 1 || pOther->mpState->mId == 18)) {
-            special = 1;
-        }
-        if (special) {
             if (!(fn_8022781C(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
                 MathAngleDiff(fn_800E1248(p, pOther), p->mMotion.mUnknown32) < (int)(angle * 46603.37890625f) &&
                 !(fn_80237260(0) >= chance) && fn_800E1350(p)) {
@@ -745,12 +749,14 @@ extern "C" int fn_800E1778(Object_80039F5C *p)
 
 extern "C" int fn_800E1870(Object_80039F5C *p)
 {
-    int result = 0;
     int inArea = 0;
-    if (!(p->mMotion.mPos.mY >= fn_80177FFC(p->mIdBytes[2]).mY + 2.0f) &&
-        !(p->mMotion.mPos.mY <= fn_80177FFC(p->mIdBytes[2]).mY + 1.0f) &&
-        !(fabsf(p->mMotion.mPos.mX) >= 8.0f)) {
-        inArea = (unsigned int)(p->mUnknown2914 - 4) <= 8;
+    int result = 0;
+    if (!(p->mMotion.mPos.mY >= fn_80177FFC(p->mIdBytes[2]).mY + 2.0f)) {
+        if (!(p->mMotion.mPos.mY <= fn_80177FFC(p->mIdBytes[2]).mY + 1.0f)) {
+            if (!(fabsf(p->mMotion.mPos.mX) >= 8.0f)) {
+                inArea = (unsigned int)(p->mUnknown2914 - 4) <= 8;
+            }
+        }
     }
     if (inArea) {
         result = 1;
