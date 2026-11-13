@@ -1,3 +1,8 @@
+/* Challenge screen: lists the challenges of the chosen group with their names,
+   lock and completion state, shows a challenge's description, rewards, medal
+   goals and skill level, starts the chosen challenge, and reports once when
+   the tournament has been won or the challenge points run low. */
+
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
 #include "game/cu_80181330.h"
@@ -10,7 +15,7 @@ void fn_8000FCD4(int a);
 void ChallengeSetMode(int value);
 void ChalCloseCursors(void);
 DbCursor *ChalGetTableCursor(void);
-void ChalFindRecord(DbCursor *pObject, unsigned char id, int *pResult);
+int ChalFindRecord(DbCursor *pObject, unsigned char id, int *pResult);
 void ChalReadRecord(DbCursor *pObject, Challenge_t *pRecord, int a);
 int ChalGetProgress(int id, int *pA, int *pB);
 unsigned int ChalGetPoints(void);
@@ -27,28 +32,28 @@ void fn_801834DC(void);
 int fn_801835A0(void);
 }
 
-static const int lbl_8001EFF0[12] = { 12, 10, 11, 13, 9, 4, 8, 5, 7, 6, 14, 14 };
+static const int _MsgChallenge_aGroupIds[12] = { 12, 10, 11, 13, 9, 4, 8, 5, 7, 6, 14, 14 };
 
-static int lbl_803EBA70 = 0;
-static unsigned char lbl_803EBA74 = 0;
-static unsigned char lbl_803EBA75 = 0;
-static unsigned char lbl_803EBA76 = 0;
-static int lbl_803EBA78 = 2;
-static int lbl_803EBA7C = 4;
-static int lbl_803EBA80 = 12;
-static signed char lbl_803EBA84 = 0;
+static int _MsgChallenge_iFlowState = 0;
+static unsigned char _MsgChallenge_bResumed = 0;
+static unsigned char _MsgChallenge_bLowPointsShown = 0;
+static unsigned char _MsgChallenge_bTournamentWonShown = 0;
+static int _MsgChallenge_iSaved0 = 2;
+static int _MsgChallenge_iSaved1 = 4;
+static int _MsgChallenge_iGroup = 12;
+static signed char _MsgChallenge_iEntry = 0;
 
 extern "C" {
-int fn_8001ED88(void);
-void fn_8001ED80(int value);
-void fn_8001ED90(unsigned char value);
+int MsgChallengeGetFlowState(void);
+void MsgChallengeSetFlowState(int value);
+void MsgChallengeSetResumed(unsigned char value);
 
-int fn_8001E73C(int value)
+int MsgChallengeFindGroup(int value)
 {
     int i;
 
     for (i = 0; i < 12; i++) {
-        if (lbl_8001EFF0[i] == value) {
+        if (_MsgChallenge_aGroupIds[i] == value) {
             break;
         }
     }
@@ -58,59 +63,59 @@ int fn_8001E73C(int value)
     return i;
 }
 
-void fn_8001E780(int *pA, int *pB, int *pC)
+void MsgChallengeOpen(int *pA, int *pB, int *pC)
 {
     *pC = 50;
-    *pA = lbl_803EBA78;
-    *pB = lbl_803EBA7C;
+    *pA = _MsgChallenge_iSaved0;
+    *pB = _MsgChallenge_iSaved1;
     ChallengeSetMode(3);
     MsgGameSetFEStarted(1);
     if (fn_801835A0()) {
         fn_801834DC();
     }
-    if (fn_8001ED88() == 5) {
+    if (MsgChallengeGetFlowState() == 5) {
         ChalCloseCursors();
         *pA = 3;
-        *pB = lbl_8001EFF0[lbl_803EBA80];
+        *pB = _MsgChallenge_aGroupIds[_MsgChallenge_iGroup];
     } else {
-        lbl_803EBA84 = 0;
+        _MsgChallenge_iEntry = 0;
     }
     *pC = ChalGetPoints();
-    fn_8001ED80(3);
-    fn_8001ED90(0);
+    MsgChallengeSetFlowState(3);
+    MsgChallengeSetResumed(0);
 }
 
-void fn_8001E83C(int a, int b)
+void MsgChallengeClose(int a, int b)
 {
     if (MsgGameGetSetupState() == 0) {
-        lbl_803EBA78 = 2;
-        lbl_803EBA7C = 4;
+        _MsgChallenge_iSaved0 = 2;
+        _MsgChallenge_iSaved1 = 4;
     } else {
-        lbl_803EBA78 = a;
-        lbl_803EBA7C = b;
+        _MsgChallenge_iSaved0 = a;
+        _MsgChallenge_iSaved1 = b;
     }
     ChalCloseCursors();
 }
 
-void fn_8001E894(int value, int *pA, int *pB)
+void MsgChallengeSelectGroup(int value, int *pA, int *pB)
 {
-    int index = fn_8001E73C(value);
+    int index = MsgChallengeFindGroup(value);
 
-    if (index != lbl_803EBA80) {
-        lbl_803EBA80 = index;
-        lbl_803EBA84 = 0;
+    if (index != _MsgChallenge_iGroup) {
+        _MsgChallenge_iGroup = index;
+        _MsgChallenge_iEntry = 0;
     }
-    *pA = ChalCountInGroup(lbl_803EBA80);
-    *pB = lbl_803EBA84;
+    *pA = ChalCountInGroup(_MsgChallenge_iGroup);
+    *pB = _MsgChallenge_iEntry;
 }
 
-void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
+void MsgChallengeGetEntryStatus(int index, MenuArg_t text, int *pA, int *pB)
 {
     Challenge_t record;
     int a;
     int b;
     DbCursor *pObject = ChalGetTableCursor();
-    int id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
+    int id = ChalGetIdInGroup(_MsgChallenge_iGroup, index + 1);
 
     if (id) {
         int kind;
@@ -141,15 +146,15 @@ void fn_8001E8F4(int index, Arg_8018399C text, int *pA, int *pB)
     }
 }
 
-int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018399C textB,
-                Arg_8018399C textC, Arg_8018399C *pTexts1, Arg_8018399C *pTexts2)
+int MsgChallengeGetEntryInfo(int index, int *pValue, MenuArg_t textA, int *pFlag, MenuArg_t textB,
+                MenuArg_t textC, MenuArg_t *pTexts1, MenuArg_t *pTexts2)
 {
     Challenge_t record;
     int result = 0;
     DbCursor *pObject = ChalGetTableCursor();
-    int id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
+    int id = ChalGetIdInGroup(_MsgChallenge_iGroup, index + 1);
 
-    lbl_803EBA84 = index;
+    _MsgChallenge_iEntry = index;
     if (id) {
         int a;
         int b = 1;
@@ -215,75 +220,75 @@ int fn_8001EA08(int index, int *pValue, Arg_8018399C textA, int *pFlag, Arg_8018
     return result;
 }
 
-void fn_8001ECBC(int index, int a, int *pResult)
+void MsgChallengeStartEntry(int index, int a, int *pResult)
 {
     int id;
 
-    lbl_803EBA84 = index;
-    id = ChalGetIdInGroup(lbl_803EBA80, index + 1);
+    _MsgChallenge_iEntry = index;
+    id = ChalGetIdInGroup(_MsgChallenge_iGroup, index + 1);
     fn_8000FCD4(a);
     fn_80004504(id);
     *pResult = ChalHasReward(ChalGetCurrent(), 4) ? 105 : 107;
 }
 
-int fn_8001ED34(void)
+int MsgChallengeCheckTournamentWon(void)
 {
     int state = ChalGetTournamentWon();
     int result = 0;
 
     if (state) {
-        if (lbl_803EBA76 == 0) {
-            lbl_803EBA76 = 1;
+        if (_MsgChallenge_bTournamentWonShown == 0) {
+            _MsgChallenge_bTournamentWonShown = 1;
             result = 1;
         }
     } else {
-        lbl_803EBA76 = 0;
+        _MsgChallenge_bTournamentWonShown = 0;
     }
     return result;
 }
 
-void fn_8001ED80(int value)
+void MsgChallengeSetFlowState(int value)
 {
-    lbl_803EBA70 = value;
+    _MsgChallenge_iFlowState = value;
 }
 
-int fn_8001ED88(void)
+int MsgChallengeGetFlowState(void)
 {
-    return lbl_803EBA70;
+    return _MsgChallenge_iFlowState;
 }
 
-void fn_8001ED90(unsigned char value)
+void MsgChallengeSetResumed(unsigned char value)
 {
-    lbl_803EBA74 = value;
+    _MsgChallenge_bResumed = value;
 }
 
-int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgChallengeHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_8001E780(pArgs[0].pi, pArgs[1].pi, pArgs[2].pi);
+        MsgChallengeOpen(pArgs[0].pi, pArgs[1].pi, pArgs[2].pi);
         break;
     case 0x80000002:
-        fn_8001E83C(pArgs[0].i, pArgs[1].i);
+        MsgChallengeClose(pArgs[0].i, pArgs[1].i);
         break;
     case 0x80000003:
-        fn_8001E894(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
+        MsgChallengeSelectGroup(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
         break;
     case 0x80000004:
-        fn_8001E8F4(pArgs[0].i, pArgs[1], pArgs[2].pi, pArgs[3].pi);
+        MsgChallengeGetEntryStatus(pArgs[0].i, pArgs[1], pArgs[2].pi, pArgs[3].pi);
         break;
     case 0x80000005: {
-        Arg_8018399C texts[3] = { pArgs[6], pArgs[7], pArgs[8] };
+        MenuArg_t texts[3] = { pArgs[6], pArgs[7], pArgs[8] };
 
-        *pResult = fn_8001EA08(pArgs[0].i, pArgs[1].pi, pArgs[2], pArgs[3].pi, pArgs[4], pArgs[5],
-                               texts, (Arg_8018399C *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
+        *pResult = MsgChallengeGetEntryInfo(pArgs[0].i, pArgs[1].pi, pArgs[2], pArgs[3].pi, pArgs[4], pArgs[5],
+                               texts, (MenuArg_t *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
         break;
     }
     case 0x80000006:
-        fn_8001ECBC(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
+        MsgChallengeStartEntry(pArgs[0].i, pArgs[1].i, pArgs[2].pi);
         break;
     case 0x80000007:
-        *pResult = fn_8001ED34();
+        *pResult = MsgChallengeCheckTournamentWon();
         break;
     case 0x8000000A: {
         int state;
@@ -291,12 +296,12 @@ int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         *pResult = 0;
         state = ChalGetTournamentWon();
         if (ChalGetPoints() <= 5) {
-            if (lbl_803EBA75 == 0 && state == 0) {
-                lbl_803EBA75 = 1;
+            if (_MsgChallenge_bLowPointsShown == 0 && state == 0) {
+                _MsgChallenge_bLowPointsShown = 1;
                 *pResult = 1;
             }
         } else {
-            lbl_803EBA75 = 0;
+            _MsgChallenge_bLowPointsShown = 0;
         }
         break;
     }

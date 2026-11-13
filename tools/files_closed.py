@@ -55,7 +55,7 @@ def unit_labels(index, unit):
     placed = {}
     for placement in unit['sections']:
         start, end = int(placement['start'], 16), int(placement['end'], 16)
-        if placement.get('compiled') == end - start and not placement.get('follows'):
+        if placement.get("compiled") == end - start:
             placed[placement['section']] = start
     found = []
     for symbol in symbols:

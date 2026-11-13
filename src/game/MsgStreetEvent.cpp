@@ -5,10 +5,10 @@
 #include "game/cu_80181330.h"
 
 extern "C" {
-int MsgStreetEventSelectHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int MsgStreetEventSetupHandleMessage(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int MsgStreetEventSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int MsgStreetEventSetupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 
-int MsgStreetEventDispatch(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+int MsgStreetEventDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (group) {
     case 1:

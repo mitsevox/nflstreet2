@@ -7,7 +7,7 @@
 /* Element of gPlayerLooks (14 records of 0xC0 bytes). */
 struct PlayerLook_t {
     char mName[32];
-    Info_80307908 mInfo;
+    PlayerGear_t mInfo;
     unsigned char mUnknown68;
     char mUnknown69;
     unsigned short mUnknown6A;

@@ -1463,7 +1463,7 @@ void fn_8001A0A4(int row, int *pId, int *pTeam, int *pValues, char *pHeight, int
     }
 }
 
-void fn_8001A220(int message, Arg_8018399C text, int *pCount)
+void fn_8001A220(int message, MenuArg_t text, int *pCount)
 {
     Params_80005284 *pParams = text.pParams;
 
@@ -1549,7 +1549,7 @@ void fn_8001A34C(int slot, int *pId, int *pController)
     *pController = -1;
 }
 
-void fn_8001A508(int slot, int *pId, Arg_8018399C name, Arg_8018399C position)
+void fn_8001A508(int slot, int *pId, MenuArg_t name, MenuArg_t position)
 {
     unsigned char team = lbl_803EBA08->mUnknown1A;
     Params_80005284 *pName = name.pParams;
@@ -1670,7 +1670,7 @@ void fn_8001A620(int dir, int *pResult, char *pText, int length)
     }
 }
 
-void fn_8001A8C8(int index, Arg_8018399C text)
+void fn_8001A8C8(int index, MenuArg_t text)
 {
     Params_80005284 *pParams = text.pParams;
     int pick = fn_80019F88(lbl_803EBA08->mUnknown17, index);
@@ -1814,7 +1814,7 @@ int fn_8001AC48(int *pGroupDelta, int *pResult)
     return id;
 }
 
-void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C groupText, Arg_8018399C nextText)
+void fn_8001ADD4(int dir, int *pResult, MenuArg_t prevText, MenuArg_t groupText, MenuArg_t nextText)
 {
     Params_80005284 *pPrev = prevText.pParams;
     Params_80005284 *pGroup = groupText.pParams;
@@ -1859,7 +1859,7 @@ void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C grou
     PositionAbbrevFormat(lbl_802F4488[next][0], pNext->mpText);
 }
 
-void fn_8001AF08(int index, int team, int *pValid, int *pId, Arg_8018399C name, Arg_8018399C text)
+void fn_8001AF08(int index, int team, int *pValid, int *pId, MenuArg_t name, MenuArg_t text)
 {
     if (index < lbl_803EBA08->mpCounts[team]) {
         *pValid = 1;
@@ -1967,7 +1967,7 @@ void fn_8001B330(int mask)
     lbl_803EBA38[3] = (mask >> 3) & 1;
 }
 
-int fn_8001B354(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
+int fn_8001B354(unsigned int id, MenuArg_t *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:

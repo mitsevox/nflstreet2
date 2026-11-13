@@ -144,7 +144,7 @@ extern "C" void PlayerLookApplySwitchList(int player, int index)
     }
 }
 
-extern "C" void PlayerLookApplyItemSwitches(Row_8007BC34 *pRow, Info_80307908 *pInfo, int player, int slot)
+extern "C" void PlayerLookApplyItemSwitches(Row_8007BC34 *pRow, PlayerGear_t *pInfo, int player, int slot)
 {
     int type = pRow->mUnknown64;
 
@@ -433,7 +433,7 @@ extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors,
     }
 }
 
-extern "C" void PlayerLookSetJerseyDecals(Row_8007BC34 *pRow, Info_80307908 *pInfo, unsigned char number, int index,
+extern "C" void PlayerLookSetJerseyDecals(Row_8007BC34 *pRow, PlayerGear_t *pInfo, unsigned char number, int index,
                             unsigned char flag, unsigned char home, int player, int *pIds, int *pPalettes)
 {
     if (PlaTexIsNumberItem(pRow)) {

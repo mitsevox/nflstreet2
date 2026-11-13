@@ -9,7 +9,7 @@ int fn_8007BF14(int index);
 int fn_801FA290(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 DbColumnValue *pColumns);
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues);
-void fn_800814BC(Info_80307908 *pInfo, short *pValues);
+void fn_800814BC(PlayerGear_t *pInfo, short *pValues);
 
 #if defined(DECOMP_COMPARE)
 static DbColumnValue lbl_802D6A28[11] = {
@@ -28,7 +28,7 @@ static DbColumnValue lbl_802D6A28[11] = {
 
 void fn_80081440(Object_8008044C *pObject, short *pValues)
 {
-    Info_80307908 info;
+    PlayerGear_t info;
     int i;
 
     fn_800817CC(pObject, &info);
@@ -38,7 +38,7 @@ void fn_80081440(Object_8008044C *pObject, short *pValues)
     }
 }
 
-void fn_800814BC(Info_80307908 *pInfo, short *pValues)
+void fn_800814BC(PlayerGear_t *pInfo, short *pValues)
 {
     DbQueryTable tables[3];
     DbFilter filter;
@@ -75,7 +75,7 @@ void fn_800814BC(Info_80307908 *pInfo, short *pValues)
 
 #endif
 
-void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues)
+void fn_800816C4(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues)
 {
     short sums[10];
     int i;
@@ -90,7 +90,7 @@ void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues)
 
 void fn_8008174C(Object_8008044C *pObject, short *pValues)
 {
-    Info_80307908 info;
+    PlayerGear_t info;
 
     fn_800817CC(pObject, &info);
     fn_800814BC(&info, pValues);
@@ -98,7 +98,7 @@ void fn_8008174C(Object_8008044C *pObject, short *pValues)
 
 void fn_80081788(Object_8008044C *pObject, int *pValues)
 {
-    Info_80307908 info;
+    PlayerGear_t info;
 
     fn_800817CC(pObject, &info);
     fn_800816C4(pObject, &info, pValues);
