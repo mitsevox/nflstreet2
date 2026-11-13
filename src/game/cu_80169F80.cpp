@@ -439,8 +439,9 @@ void fn_8016ACD8(int team, Candidate_8016B364 *pList, unsigned int count, int mo
 unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
 {
     unsigned int result = 0;
+    float distance = fabsf(pTo->mX - from.mX);
 
-    if (fabsf(pTo->mX - from.mX) > 4.5f) {
+    if (distance > 4.5f) {
         if (pTo->mX > from.mX) {
             if (kind == 2)
                 result |= 0x200;
@@ -460,7 +461,7 @@ unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int
     }
 
     if (kind == 2) {
-        float distance = pTo->mY - from.mY;
+        distance = pTo->mY - from.mY;
         if (distance < 7.0f)
             result |= 0x10;
         else if (distance < 15.0f)
