@@ -22802,21 +22802,21 @@
       ]
     },
     {
-      "source": "src/game/cu_800DAEE4.cpp",
+      "source": "src/game/PlayerActionAnim.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/open combined contributor group 0x800DAEE4-0x800E2FE4: 94 complete functions across three earlier provisional groups, complete .rodata context 0x8029D8A8-0x8029DB28, and initialized word 0x803EAD1C-0x803EAD20. Contiguous code, ordered literal users and cross-group animation/player-state calls support this provisional grouping, not an original-file claim. The complete pool begins at its natural eight-byte alignment; unknown or absent native literals remain measured mismatches. Eight older exact classifications become partial through literal-reference relocation; existing source attribution is preserved. Original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is not rebuilt, so the literals after it compare 4 bytes low. Draft comparisons only; the original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DAEE4",
-          "end": "0x800E2FE4"
+          "end": "0x800DF6EC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029D8A8",
-          "end": "0x8029DB28"
+          "end": "0x8029D9F0"
         },
         {
           "section": ".sdata",
@@ -23075,7 +23075,28 @@
           "symbol": "fn_800DF654",
           "start": "0x800DF654",
           "end": "0x800DF6EC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerActionStates.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800DF6EC-0x800E2FE4 for src/game/PlayerActionStates.cpp (the second part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents and .rodata 0x8029D9F0-0x8029DB28. The unreferenced strings \"LB_L\" and \"LB_R\" at 0x8029DA9C-0x8029DAAC have no GameCube user and no Xbox prototype code reference, so the source does not form them and the pools of fn_800E1954 onward stay shifted. Draft comparisons only; the original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DF6EC",
+          "end": "0x800E2FE4"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D9F0",
+          "end": "0x8029DB28"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_800DF6EC",
           "start": "0x800DF6EC",
