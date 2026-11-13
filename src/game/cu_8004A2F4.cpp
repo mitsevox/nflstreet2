@@ -1500,7 +1500,12 @@ void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
     DynObjChildRefreshFrame(p);
 }
 
-int fn_8004D2F8(DynObjChild *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
+int fn_8004D2F8(DynObjChild *p)
+{
+    if (!p->mpOwner50) return 0;
+    fn_8004CEE8(p);
+    return 0;
+}
 
 int fn_8004D334(const char *pName)
 {
@@ -1517,12 +1522,14 @@ int fn_8004D3A8(void *pData, char *pName)
     if (index == -1) {
         fn_801C2EB4(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
         void *p = ResLoadToBuffer(pData, id, lbl_803EC7DC);
-        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
         lbl_803EA4F8[lbl_803EC7D4].mpData = p;
-        lbl_803EC7DC += ResGetSize(pData, id) + 4;
+        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
+        lbl_803EC7DC = lbl_803EC7DC + ResGetSize(pData, id) + 4;
         lbl_803EA4F8[lbl_803EC7D4].mId = id;
         index = lbl_803EC7D4++;
-    } else lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
+    } else {
+        lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
+    }
     return index;
 }
 
@@ -1590,9 +1597,10 @@ int fn_8004D874(DynObj *p, int mode)
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
         int context = ConGetCurrentContext();
-        BigObjInst *pPose = (BigObjInst *)p->mpUnknown1D8;
-        if (p->mFlagF0) DynObjSetAnimPalFrame(p, (int)pPose->mUnknown200.mStep);
-        if (pPose->mUnknown224 == 1) DynObjScrollUVs(p, &pPose->mUnknown224);
+        if (p->mFlagF0)
+            DynObjSetAnimPalFrame(p, (int)((BigObjInst *)p->mpUnknown1D8)->mUnknown200.mStep);
+        if (((BigObjInst *)p->mpUnknown1D8)->mUnknown224 == 1)
+            DynObjScrollUVs(p, &((BigObjInst *)p->mpUnknown1D8)->mUnknown224);
         int index = VptGetMatrixStack();
         Object_80235588 *pRender = &pInstance->mRender;
         fn_801D0470(index); fn_801D04C4();
@@ -1909,15 +1917,16 @@ void fn_8004E3CC(Object_80040818 *pObject, int *pAngles)
     if (pSkeleton) {
         int index = CharSkelGetJointByName(pSkeleton, "main");
         if (index == -1) index = CharSkelGetJointByName(pSkeleton, "Main");
-        short *p = &pObject->mpUnknown220[index * 3];
-        pAngles[0] = p[0] << 8;
-        pAngles[1] = p[1] << 8;
-        pAngles[2] = p[2] << 8;
+        pAngles[0] = pObject->mpUnknown220[index * 3] << 8;
+        pAngles[1] = pObject->mpUnknown220[index * 3 + 1] << 8;
+        pAngles[2] = pObject->mpUnknown220[index * 3 + 2] << 8;
     }
 }
 int fn_8004E468(void *unused, RigidBody_t *pA, RigidBody_t *pB)
 {
-    if (!(pA->mpMetadata->mUnknown2 & 1) || !(pB->mpMetadata->mUnknown2 & 1)) return 1;
+    Metadata_8004ED44 *pMetaA = pA->mpMetadata;
+    Metadata_8004ED44 *pMetaB = pB->mpMetadata;
+    if (!(pMetaA->mUnknown2 & 1) || !(pMetaB->mUnknown2 & 1)) return 1;
     if (pA->mKind == 2 || pB->mKind == 2 || pA->mKind == 1 || pB->mKind == 1) return 0;
     return 1;
 }
@@ -2157,8 +2166,7 @@ void fn_8004F4B4(int handle, Collection_801E7034 *pSet, BigObjInst *pObject,
 void fn_8004F56C(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int count)
 {
     p->mCount = count;
-    if (!count) p->mNames = 0;
-    else {
+    if (count) {
         unsigned char map[20];
         char *unique[20];
         unsigned char names = 1;
@@ -2186,14 +2194,16 @@ void fn_8004F56C(Metadata_8004ED44 *p, char (*pNames)[32], unsigned int count)
             pText += fn_801C3180(unique[i]) + 1;
         }
         for (i = 0; i < count; i++) p->mNames[i] = unique[map[i]];
+    } else {
+        p->mNames = 0;
     }
 }
 void fn_8004F710(Metadata_8004ED44 *p)
 {
     if (p->mNames) {
         fn_801D2BD0(p->mNames);
-        p->mCount = 0;
         p->mNames = 0;
+        p->mCount = 0;
     }
 }
 void fn_8004F754(int handle, Object_80040818 *pObject, int objectIndex)
