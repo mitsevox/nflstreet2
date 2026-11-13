@@ -5375,12 +5375,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.72",
+          "symbol": "_.tmp_0.69",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.127",
+          "symbol": "_.tmp_1.124",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -5390,7 +5390,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.137",
+          "symbol": "_.tmp_2.134",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -5400,7 +5400,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.147",
+          "symbol": "_.tmp_3.144",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -5410,7 +5410,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.154",
+          "symbol": "_.tmp_4.151",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -5420,7 +5420,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.161",
+          "symbol": "_.tmp_5.158",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -5430,7 +5430,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.168",
+          "symbol": "_.tmp_6.165",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -5440,7 +5440,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.175",
+          "symbol": "_.tmp_7.172",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },
@@ -23754,7 +23754,7 @@
     {
       "source": "src/game/cu_8007A9E4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies, all byte-identical. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",

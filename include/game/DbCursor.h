@@ -48,9 +48,6 @@ struct DbColumnValue {
 
 /* Eight-byte slot written either as a long long or as an int. */
 union DbFilterValue {
-    DbFilterValue() {}
-    DbFilterValue(long long value) : mLong(value) {}
-
     int mInt;
     long long mLong;
     struct DbFilter *mNode;
@@ -83,23 +80,32 @@ struct DbFilterOperand {
 /* Fifth argument of DbCursorOpen; it is stored at +28 of the cursor. Two
    operands and the operator word. */
 struct DbFilter {
-    void Set(int a, long long b, int type)
+    /* Operator word 0x10003, the left operand (kind a, 64-bit value b) and
+       the kind of the right operand. The Set overloads below take b by value
+       and pass it on here. */
+    void SetFilter(int a, const long long &b, int type)
     {
         mUnknown32 = 0x10003;
         mUnknown0.mKind = a;
-        mUnknown0.mValue = b;
+        mUnknown0.mValue.mLong = b;
         mUnknown16.mKind = type;
+    }
+    void Set(int a, long long b, int type)
+    {
+        SetFilter(a, b, type);
     }
     void Set(int a, long long b, int type, int c)
     {
-        Set(a, b, type);
+        SetFilter(a, b, type);
         mUnknown16.mValue.mInt = c;
     }
     void SetUnknown32(int a, long long b, int type, int unknown32)
     {
         mUnknown32 = unknown32;
         mUnknown0.mKind = a;
-        mUnknown0.mValue = b;
+        DbFilterValue value;
+        value.mLong = b;
+        mUnknown0.mValue = value;
         mUnknown16.mKind = type;
     }
     void Set(int a, DbFilter *pLeft, DbFilter *pRight)
