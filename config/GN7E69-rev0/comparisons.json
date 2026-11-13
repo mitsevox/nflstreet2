@@ -27938,7 +27938,7 @@
     {
       "source": "src/game/cu_801394B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the source does not reproduce the four unreferenced literal runs, so the compiled .rodata is 0x38 bytes shorter than the target and literal references after 0x8029FFF8 resolve to shifted addresses; the original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. The four unreferenced literal runs come from six functions the target linker discarded, recovered from their Xbox prototype NFLBig.xbe counterparts 0xED200, 0xED270, 0xED350, 0xED5E0, 0xEDB30 and 0xEDFC0 and listed as discarded here (compiled, not registered or measured), so the compiled .rodata matches 0x8029FF28-0x802A00B8 byte for byte. Wholly unlinked draft source: 0x8013ABE0 (register choice of its two constant loads) still differs; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -28245,6 +28245,14 @@
           "start": "0x8013B86C",
           "end": "0x8013B874"
         }
+      ],
+      "discarded": [
+        "BallGetWindDrift",
+        "BallApplyWind",
+        "BallApplyTailWind",
+        "BallRandomHop",
+        "BallAddSideSpin",
+        "BallIsAtRest"
       ]
     },
     {

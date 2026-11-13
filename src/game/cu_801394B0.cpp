@@ -105,6 +105,7 @@ void BallApplyImpulse(Ball_t *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void BallTransformShapePoint(Vector_80039F5C *pPos, Quat_801EB488 *pRot, int index, Vector_80039F5C *pOut);
 void BallUpdateGroundPoint(Ball_t *pBall);
 void BallFindLowestPoint(Ball_t *pBall, Vector_80039F5C *pOut, int *pIndex);
+void WindGetVector(Vector_80039F5C *pOut);
 }
 
 float lbl_803EB1B0 = 0.35f;
@@ -518,6 +519,51 @@ void fn_8013A440(Ball_t *pBall)
     fn_8013A048(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
 }
 
+void BallGetWindDrift(Vector_80039F5C *pAccel, Vector_80039F5C *pOffset, float t)
+{
+    Vector_80039F5C wind;
+
+    WindGetVector(&wind);
+    fn_80227264(pAccel, &wind, 0.0f);
+    fn_80227264(pOffset, pAccel, 0.5f * t * t);
+}
+
+void BallApplyWind(Ball_t *pBall, float dt)
+{
+    Vector_80039F5C wind;
+    Vector_80039F5C push;
+    Vector_80039F5C force;
+
+    WindGetVector(&wind);
+    if (wind.mY > 0.0f) {
+        wind.mY *= lbl_803EB1B4;
+    } else {
+        wind.mY *= lbl_803EB1B8;
+    }
+    push.mX = wind.mX;
+    push.mY = wind.mY;
+    push.mZ = 0.0f;
+    fn_80227264(&force, &push, dt * 0.93913037f);
+    BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
+}
+
+void BallApplyTailWind(Ball_t *pBall, float dt)
+{
+    Vector_80039F5C wind;
+    Vector_80039F5C push;
+    Vector_80039F5C force;
+
+    WindGetVector(&wind);
+    if (wind.mY > 0.0f) {
+        wind.mY *= lbl_803EB1B4;
+    }
+    push.mX = wind.mX;
+    push.mY = wind.mY;
+    push.mZ = 0.0f;
+    fn_80227264(&force, &push, dt * 0.93913037f);
+    BallApplyImpulse(pBall, &force, &pBall->mState.mPos);
+}
+
 void fn_8013A494(Ball_t *pBall, float dt)
 {
     Vector_80039F5C force;
@@ -545,6 +591,32 @@ void fn_8013A494(Ball_t *pBall, float dt)
     pBall->mState.mPos.mZ -= pBall->mState.mUnknown94.mZ;
     pBall->mState.mUnknownE0 = 0.0f;
     AudmonEventPostArgs(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
+}
+
+void BallRandomHop(Ball_t *pBall)
+{
+    Vector_80039F5C force;
+    Vector_80039F5C point;
+
+    pBall->mState.mUnknownE4++;
+    if ((pBall->mState.mFlags & 0x20) && pBall->mState.mUnknownE4 == 3) {
+        pBall->mState.mUnknownE4 = 0;
+        if (pBall->mState.mUnknown54.mZ + pBall->mState.mUnknown54.mZ < fn_802270A4(&pBall->mState.mUnknown54) &&
+            fn_80237260(0) < 0.6f) {
+            force.mX = -pBall->mState.mUnknown54.mX * 440.21735f;
+            force.mY = -pBall->mState.mUnknown54.mY * 440.21735f;
+            force.mZ = (fn_802270D4(&pBall->mState.mUnknown54) - pBall->mState.mUnknown54.mZ) * lbl_803EB1BC *
+                       293.47824f;
+            fn_80227264(&force, &force, fn_8013A2A4(pBall, pBall->mState.mUnknownA0));
+            fn_802276B4(&point, &pBall->mState.mPos, &pBall->mState.mUnknown94);
+            fn_8022765C(&point, &point, &pBall->mState.mPos);
+            if (force.mZ > 20.543476f) {
+                pBall->mState.mFlags |= 8;
+            }
+            BallApplyImpulse(pBall, &force, &point);
+            pBall->mState.mFlags &= ~0x20;
+        }
+    }
 }
 
 void fn_8013A64C(Ball_t *pBall, float dt)
@@ -627,6 +699,16 @@ void fn_8013A910(Ball_t *pBall, int *pAngles)
     pBall->mState.mUnknown34 = pBall->mState.mUnknown18;
 }
 
+void BallAddSideSpin(Ball_t *pBall, float spin)
+{
+    pBall->mState.mUnknownE0 += spin;
+    if (pBall->mState.mUnknownE0 < -1.0f) {
+        pBall->mState.mUnknownE0 = -1.0f;
+    } else if (pBall->mState.mUnknownE0 > 1.0f) {
+        pBall->mState.mUnknownE0 = 1.0f;
+    }
+}
+
 void fn_8013A9F0(Ball_t *pBall)
 {
     pBall->mState.mFlags &= ~8;
@@ -706,6 +788,17 @@ void fn_8013AD04(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin
     pBall->mState.mUnknown54.mZ = pVelocity->mZ;
     fn_8013AB24(pBall);
     fn_8013A2F4(pBall, mode, spin, rate);
+}
+
+int BallIsAtRest(Ball_t *pBall)
+{
+    int result = 0;
+
+    if (!BallGetHolder(pBall) && pBall->mState.mUnknown94.mZ <= 0.0f && pBall->mState.mUnknown54.mZ <= 0.0f &&
+        fn_802270D4(&pBall->mState.mUnknown54) <= 0.01f) {
+        result = 1;
+    }
+    return result;
 }
 
 int fn_8013AD78(Ball_t *pBall)
@@ -990,7 +1083,7 @@ int fn_8013B5EC(Ball_t *pBall, void *pData, unsigned int type)
 int fn_8013B6A0(Ball_t *pBall, void *pData, unsigned int type)
 {
     Object_80039F5C *p = (Object_80039F5C *)pData;
-    int result;
+    int result = 0;
 
     if (fn_8009BCE8(&pBall->mState.mUnknownB8) == p && pBall->mState.mUnknownC0 + 5 >= fn_8023790C()) {
         result = 1;
