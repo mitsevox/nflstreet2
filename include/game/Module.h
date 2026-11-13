@@ -2,10 +2,10 @@
 #define GAME_MODULE_H
 
 /* Abstract base: its constructor registers the object in a global table. */
-class ModuleNode {
+class FlowModuleC {
 public:
-    ModuleNode();
-    virtual ~ModuleNode();
+    FlowModuleC();
+    virtual ~FlowModuleC();
     virtual void GSPreModuleStart(void *pArg) = 0;
     virtual void GSPostModuleStart(void *pArg) = 0;
     virtual void GSPreModuleStop(void *pArg) = 0;
@@ -16,16 +16,22 @@ public:
     virtual struct ModuleDependency *GetLinks() = 0;
     virtual const char *GetName() = 0;
 
-    int fn_801CC96C();
-    struct ModuleDependency *fn_801CC974();
-    const char *fn_801CC9A8();
+    int IsStarted();
+    struct ModuleDependency *GetDependencyList();
+    const char *GetModuleName();
+    static void LockModuleList(unsigned char bLock);
+    static void CheckDependencyLists();
+    static void CheckAntiDependencyLists();
+
+    static unsigned char s_bLockModuleList;
+    static unsigned int s_uNumModules;
 
     int mUnknown0;
     int mUnknown4;
     unsigned char mUnknown8;
 };
 
-class Module : public ModuleNode {
+class Module : public FlowModuleC {
 public:
     virtual ~Module() {}
     virtual void GSPreModuleStart(void *pArg);
@@ -38,13 +44,13 @@ public:
    (entry 1 0x801CCA20, entry 2 the destructor 0x801CC9EC). */
 class ModuleVisitor {
 public:
-    virtual void fn_801CCA20(ModuleNode *pNode) = 0;
+    virtual void Visit(FlowModuleC *pNode) = 0;
 };
 
-class ModuleCounter : public ModuleVisitor {
+class FlowModuleCounterC : public ModuleVisitor {
 public:
-    virtual void fn_801CCA20(ModuleNode *pNode);
-    virtual ~ModuleCounter();
+    virtual void Visit(FlowModuleC *pNode);
+    virtual ~FlowModuleCounterC();
 
     int mCount;
 };

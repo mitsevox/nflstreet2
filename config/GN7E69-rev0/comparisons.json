@@ -40779,257 +40779,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CBC50.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CCA64 (src/engine/cu_801CBC50.cpp), its compiler, source-form and type rows, its function rows and the virtual-table data row 0x802AF388-0x802AF490. Draft comparisons only; original assembly remains linked. The .sdata/.sbss words 0x803EBC50/0x803EBC54 and the node table 0x803D4780 stay extern.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CBC50",
-          "end": "0x801CCA64"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF388",
-          "end": "0x802AF490"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__12FlowManagerC",
-          "start": "0x801CBC50",
-          "end": "0x801CBC9C"
-        },
-        {
-          "symbol": "_._12FlowManagerC",
-          "start": "0x801CBC9C",
-          "end": "0x801CBCD0"
-        },
-        {
-          "symbol": "fn_801CBCD0",
-          "start": "0x801CBCD0",
-          "end": "0x801CBD80"
-        },
-        {
-          "symbol": "fn_801CBD80__12FlowManagerCii",
-          "start": "0x801CBD80",
-          "end": "0x801CBE24"
-        },
-        {
-          "symbol": "fn_801CBE24__12FlowManagerCi",
-          "start": "0x801CBE24",
-          "end": "0x801CBE9C"
-        },
-        {
-          "symbol": "fn_801CBE9C__12FlowManagerCi",
-          "start": "0x801CBE9C",
-          "end": "0x801CBEC8"
-        },
-        {
-          "symbol": "fn_801CBEC8__12FlowManagerCi",
-          "start": "0x801CBEC8",
-          "end": "0x801CBEF4"
-        },
-        {
-          "symbol": "fn_801CBEF4__12FlowManagerCii",
-          "start": "0x801CBEF4",
-          "end": "0x801CBFA0"
-        },
-        {
-          "symbol": "fn_801CBFA0",
-          "start": "0x801CBFA0",
-          "end": "0x801CBFA8"
-        },
-        {
-          "symbol": "fn_801CBFA8",
-          "start": "0x801CBFA8",
-          "end": "0x801CC054"
-        },
-        {
-          "symbol": "fn_801CC054",
-          "start": "0x801CC054",
-          "end": "0x801CC05C"
-        },
-        {
-          "symbol": "fn_801CC05C__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC05C",
-          "end": "0x801CC0D0"
-        },
-        {
-          "symbol": "fn_801CC0D0__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC0D0",
-          "end": "0x801CC168"
-        },
-        {
-          "symbol": "fn_801CC168__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC168",
-          "end": "0x801CC1DC"
-        },
-        {
-          "symbol": "fn_801CC1DC__12FlowManagerCiii",
-          "start": "0x801CC1DC",
-          "end": "0x801CC280"
-        },
-        {
-          "symbol": "fn_801CC280__12FlowManagerCP10ModuleNode",
-          "start": "0x801CC280",
-          "end": "0x801CC2E8"
-        },
-        {
-          "symbol": "fn_801CC2E8__12FlowManagerCP10ModuleNode",
-          "start": "0x801CC2E8",
-          "end": "0x801CC350"
-        },
-        {
-          "symbol": "__10FlowGroupC",
-          "start": "0x801CC350",
-          "end": "0x801CC38C"
-        },
-        {
-          "symbol": "_._10FlowGroupC",
-          "start": "0x801CC38C",
-          "end": "0x801CC3C0"
-        },
-        {
-          "symbol": "fn_801CC3C0__10FlowGroupC",
-          "start": "0x801CC3C0",
-          "end": "0x801CC490"
-        },
-        {
-          "symbol": "fn_801CC490__10FlowGroupCi",
-          "start": "0x801CC490",
-          "end": "0x801CC4DC"
-        },
-        {
-          "symbol": "fn_801CC4DC__10FlowGroupC",
-          "start": "0x801CC4DC",
-          "end": "0x801CC4F4"
-        },
-        {
-          "symbol": "fn_801CC4F4",
-          "start": "0x801CC4F4",
-          "end": "0x801CC4FC"
-        },
-        {
-          "symbol": "fn_801CC4FC",
-          "start": "0x801CC4FC",
-          "end": "0x801CC518"
-        },
-        {
-          "symbol": "fn_801CC518__10FlowGroupC",
-          "start": "0x801CC518",
-          "end": "0x801CC524"
-        },
-        {
-          "symbol": "fn_801CC524__10FlowGroupCi",
-          "start": "0x801CC524",
-          "end": "0x801CC558"
-        },
-        {
-          "symbol": "fn_801CC558__10FlowGroupC",
-          "start": "0x801CC558",
-          "end": "0x801CC5B4"
-        },
-        {
-          "symbol": "fn_801CC5B4__10FlowGroupCi",
-          "start": "0x801CC5B4",
-          "end": "0x801CC604"
-        },
-        {
-          "symbol": "fn_801CC604__10FlowGroupCi",
-          "start": "0x801CC604",
-          "end": "0x801CC654"
-        },
-        {
-          "symbol": "fn_801CC654__10FlowGroupCi",
-          "start": "0x801CC654",
-          "end": "0x801CC6C4"
-        },
-        {
-          "symbol": "fn_801CC6C4__10FlowGroupC",
-          "start": "0x801CC6C4",
-          "end": "0x801CC6F8"
-        },
-        {
-          "symbol": "fn_801CC6F8__10FlowGroupC",
-          "start": "0x801CC6F8",
-          "end": "0x801CC6FC"
-        },
-        {
-          "symbol": "fn_801CC6FC__10FlowGroupCi",
-          "start": "0x801CC6FC",
-          "end": "0x801CC700"
-        },
-        {
-          "symbol": "__10ModuleNode",
-          "start": "0x801CC700",
-          "end": "0x801CC740"
-        },
-        {
-          "symbol": "_._10ModuleNode",
-          "start": "0x801CC740",
-          "end": "0x801CC7FC"
-        },
-        {
-          "symbol": "fn_801CC7FC",
-          "start": "0x801CC7FC",
-          "end": "0x801CC820"
-        },
-        {
-          "symbol": "fn_801CC820",
-          "start": "0x801CC820",
-          "end": "0x801CC8AC"
-        },
-        {
-          "symbol": "fn_801CC8AC",
-          "start": "0x801CC8AC",
-          "end": "0x801CC96C"
-        },
-        {
-          "symbol": "fn_801CC96C__10ModuleNode",
-          "start": "0x801CC96C",
-          "end": "0x801CC974"
-        },
-        {
-          "symbol": "fn_801CC974__10ModuleNode",
-          "start": "0x801CC974",
-          "end": "0x801CC9A8"
-        },
-        {
-          "symbol": "fn_801CC9A8__10ModuleNode",
-          "start": "0x801CC9A8",
-          "end": "0x801CC9DC"
-        },
-        {
-          "symbol": "fn_801CC9DC__Fi",
-          "start": "0x801CC9DC",
-          "end": "0x801CC9E4"
-        },
-        {
-          "symbol": "fn_801CC9E4__Fv",
-          "start": "0x801CC9E4",
-          "end": "0x801CC9E8"
-        },
-        {
-          "symbol": "fn_801CC9E8__Fv",
-          "start": "0x801CC9E8",
-          "end": "0x801CC9EC"
-        },
-        {
-          "symbol": "_._13ModuleCounter",
-          "start": "0x801CC9EC",
-          "end": "0x801CCA20"
-        },
-        {
-          "symbol": "fn_801CCA20__13ModuleCounterP10ModuleNode",
-          "start": "0x801CCA20",
-          "end": "0x801CCA64"
-        }
-      ]
-    },
-    {
       "source": "src/engine/fileio.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801C8F14-0x801C9DD8 (src/engine/fileio.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF198-0x802AF19C. Draft comparisons only; the open-file table, mutex array, configuration block 0x803D51A8, request/async pools, the device table 0x802F4A50 and the llfileio/OS/DS helpers stay external; original assembly remains linked.",
@@ -46436,6 +46185,112 @@
           "symbol": "DBWrite",
           "start": "0x8025D6D0",
           "end": "0x8025D930"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowman.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CBC50-0x801CC350 (src/engine/flowman.cpp), its compiler, source-form, type, function and name rows and the FlowManagerC virtual-table data row 0x802AF388-0x802AF3B8. Comparison only; 0x801CC168 differs, so the original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CBC50",
+          "end": "0x801CC350"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF388",
+          "end": "0x802AF3B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__12FlowManagerC",
+          "start": "0x801CBC50",
+          "end": "0x801CBC9C"
+        },
+        {
+          "symbol": "_._12FlowManagerC",
+          "start": "0x801CBC9C",
+          "end": "0x801CBCD0"
+        },
+        {
+          "symbol": "Init__12FlowManagerC",
+          "start": "0x801CBCD0",
+          "end": "0x801CBD80"
+        },
+        {
+          "symbol": "StartGroup__12FlowManagerCii",
+          "start": "0x801CBD80",
+          "end": "0x801CBE24"
+        },
+        {
+          "symbol": "StopGroup__12FlowManagerCi",
+          "start": "0x801CBE24",
+          "end": "0x801CBE9C"
+        },
+        {
+          "symbol": "IsGroupStarted__12FlowManagerCi",
+          "start": "0x801CBE9C",
+          "end": "0x801CBEC8"
+        },
+        {
+          "symbol": "GetActiveStage__12FlowManagerCi",
+          "start": "0x801CBEC8",
+          "end": "0x801CBEF4"
+        },
+        {
+          "symbol": "QueueTransition__12FlowManagerCii",
+          "start": "0x801CBEF4",
+          "end": "0x801CBFA0"
+        },
+        {
+          "symbol": "GetNumQueuedTransitions__12FlowManagerC",
+          "start": "0x801CBFA0",
+          "end": "0x801CBFA8"
+        },
+        {
+          "symbol": "Process__12FlowManagerC",
+          "start": "0x801CBFA8",
+          "end": "0x801CC054"
+        },
+        {
+          "symbol": "SetVerboseFlags__12FlowManagerCi",
+          "start": "0x801CC054",
+          "end": "0x801CC05C"
+        },
+        {
+          "symbol": "PreStartModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC05C",
+          "end": "0x801CC0D0"
+        },
+        {
+          "symbol": "StartModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC0D0",
+          "end": "0x801CC168"
+        },
+        {
+          "symbol": "StopModuleList__12FlowManagerCP16ModuleDependency",
+          "start": "0x801CC168",
+          "end": "0x801CC1DC"
+        },
+        {
+          "symbol": "Transition__12FlowManagerCiii",
+          "start": "0x801CC1DC",
+          "end": "0x801CC280"
+        },
+        {
+          "symbol": "StartModule__12FlowManagerCP11FlowModuleC",
+          "start": "0x801CC280",
+          "end": "0x801CC2E8"
+        },
+        {
+          "symbol": "StopModule__12FlowManagerCP11FlowModuleC",
+          "start": "0x801CC2E8",
+          "end": "0x801CC350"
         }
       ]
     }

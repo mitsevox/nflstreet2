@@ -60,7 +60,7 @@ int SndgCrowd::Shutdown()
 void SndgCrowdSetVolume(unsigned char value)
 {
     _SndgCrowd_uVolume = value;
-    if (gSndgCrowd.fn_801CC96C() && fn_801F3E28()) {
+    if (gSndgCrowd.IsStarted() && fn_801F3E28()) {
         SndgPathSetTrackVolume(0x14000001, _SndgCrowd_uVolume);
     }
 }

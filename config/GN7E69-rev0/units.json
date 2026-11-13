@@ -253,14 +253,6 @@
       "address": "0x803ED500",
       "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
     },
-    "__10ModuleNode": {
-      "address": "0x801CC700",
-      "evidence": "evidence.tsv external row for 0x801CC700 (__10ModuleNode); descriptive name."
-    },
-    "_._10ModuleNode": {
-      "address": "0x801CC740",
-      "evidence": "evidence.tsv external row for 0x801CC740 (_._10ModuleNode); descriptive name."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -284,26 +276,6 @@
     "__DSP_rude_task_pending": {
       "address": "0x803ED4F4",
       "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
-    },
-    "fn_801CC96C__10ModuleNode": {
-      "address": "0x801CC96C",
-      "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
-    },
-    "fn_801CC6FC__10FlowGroupCi": {
-      "address": "0x801CC6FC",
-      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__10FlowGroupCi); descriptive name."
-    },
-    "_._10FlowGroupC": {
-      "address": "0x801CC38C",
-      "evidence": "evidence.tsv external row for 0x801CC38C (_._10FlowGroupC); descriptive name."
-    },
-    "fn_801CC6F8__10FlowGroupC": {
-      "address": "0x801CC6F8",
-      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__10FlowGroupC); descriptive name."
-    },
-    "__10FlowGroupC": {
-      "address": "0x801CC350",
-      "evidence": "evidence.tsv external row for 0x801CC350 (__10FlowGroupC); descriptive name."
     },
     "_._12FlowManagerC": {
       "address": "0x801CBC9C",
@@ -992,26 +964,6 @@
     "fn_800C02E0__12PreSnapPhase": {
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__12PreSnapPhase); descriptive mangled member name."
-    },
-    "fn_801CBD80__12FlowManagerCii": {
-      "address": "0x801CBD80",
-      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
-    },
-    "fn_801CBE24__12FlowManagerCi": {
-      "address": "0x801CBE24",
-      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBE9C__12FlowManagerCi": {
-      "address": "0x801CBE9C",
-      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBEC8__12FlowManagerCi": {
-      "address": "0x801CBEC8",
-      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
-    },
-    "fn_801CBEF4__12FlowManagerCii": {
-      "address": "0x801CBEF4",
-      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
     },
     "__14Block_80156400": {
       "address": "0x80156400",
@@ -2372,6 +2324,42 @@
     "_TDbTblFillColHeader": {
       "address": "0x8020B564",
       "evidence": "evidence.tsv function/name/source-form rows for 0x8020B564; the documented holdout at the start of src/engine/t3db_table.c keeps its original bytes until its draft in comparisons.json is linked; _TDbTblCreate calls it (bl at 0x8020BCD4)."
+    },
+    "StartGroup__12FlowManagerCii": {
+      "address": "0x801CBD80",
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__12FlowManagerCii) and FlowManagerC type row."
+    },
+    "StopGroup__12FlowManagerCi": {
+      "address": "0x801CBE24",
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "IsGroupStarted__12FlowManagerCi": {
+      "address": "0x801CBE9C",
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "GetActiveStage__12FlowManagerCi": {
+      "address": "0x801CBEC8",
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__12FlowManagerCi) and FlowManagerC type row."
+    },
+    "QueueTransition__12FlowManagerCii": {
+      "address": "0x801CBEF4",
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__12FlowManagerCii) and FlowManagerC type row."
+    },
+    "Init__12FlowManagerC": {
+      "address": "0x801CBCD0",
+      "evidence": "evidence.tsv external row for 0x801CBCD0 (Init__12FlowManagerC) and the name row of FlowManagerC::Init."
+    },
+    "GetNumQueuedTransitions__12FlowManagerC": {
+      "address": "0x801CBFA0",
+      "evidence": "evidence.tsv external row for 0x801CBFA0 (GetNumQueuedTransitions__12FlowManagerC) and the name row of FlowManagerC::GetNumQueuedTransitions."
+    },
+    "Process__12FlowManagerC": {
+      "address": "0x801CBFA8",
+      "evidence": "evidence.tsv external row for 0x801CBFA8 (Process__12FlowManagerC) and the name row of FlowManagerC::Process."
+    },
+    "SetVerboseFlags__12FlowManagerCi": {
+      "address": "0x801CC054",
+      "evidence": "evidence.tsv external row for 0x801CC054 (SetVerboseFlags__12FlowManagerCi) and the name row of FlowManagerC::SetVerboseFlags."
     }
   },
   "units": [
@@ -17470,6 +17458,56 @@
           "placement": ".text",
           "start": "0x8020B710",
           "end": "0x8020CCBC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowgroup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CC350-0x801CC700 (src/engine/flowgroup.cpp), its compiler, function and name rows and the FlowGroupC virtual-table data row 0x802AF3B8-0x802AF410. All 16 functions and the table are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CC350",
+          "end": "0x801CC700"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF3B8",
+          "end": "0x802AF410"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/flowmodule.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801CC700-0x801CCA64 (src/engine/flowmodule.cpp), its compiler, function and name rows, the virtual-table rows 0x802AF410-0x802AF490 and the static data rows 0x803EBC50-0x803EBC58 and 0x803D4780-0x803D4F50. All 13 functions and the file's data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CC700",
+          "end": "0x801CCA64"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF410",
+          "end": "0x802AF490"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBC50",
+          "end": "0x803EBC58"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803D4780",
+          "end": "0x803D4F50"
         }
       ]
     }

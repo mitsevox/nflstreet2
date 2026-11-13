@@ -2741,7 +2741,7 @@ extern "C" void SndgPathStopTrack(int a)
 
 extern "C" void SndgPathAddCallback(int value)
 {
-    if (gSndgPathfinder.fn_801CC96C()) {
+    if (gSndgPathfinder.IsStarted()) {
         SndgPathCallbackKey_t *pItem = (SndgPathCallbackKey_t *)fn_801C6A20(_SndgPathfinder_pState->mpPool[0]);
         if (pItem) {
             pItem->mKey = value;
@@ -2752,7 +2752,7 @@ extern "C" void SndgPathAddCallback(int value)
 
 extern "C" void SndgPathRemoveCallback(int value)
 {
-    if (gSndgPathfinder.fn_801CC96C()) {
+    if (gSndgPathfinder.IsStarted()) {
         SndgPathCallbackKey_t *pFound = 0;
         fn_801C6DCC(_SndgPathfinder_pState->mpPool[0], 0, value, &pFound, SndgPathMatchCallback);
         if (pFound) {

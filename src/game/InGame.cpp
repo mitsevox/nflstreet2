@@ -475,8 +475,8 @@ int InGameIsPlaying()
     int result = 0;
     GSFlowManagerC *p = &gGSFlowManager;
 
-    if (p->fn_801CBE9C(1)) {
-        result = !p->fn_801CBE9C(3);
+    if (p->IsGroupStarted(1)) {
+        result = !p->IsGroupStarted(3);
     }
     return result;
 }

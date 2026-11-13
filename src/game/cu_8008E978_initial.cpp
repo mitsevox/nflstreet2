@@ -59,9 +59,9 @@ void AnimExtnReadMotion(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsi
 void AnimExtnFreeFile(AnimFileFormat_t *);
 int AnimInit(unsigned int mode);
 int AnimSequencerInit(float rate);
-void fn_801CC7FC(void *);
-void fn_801CC820(void *, int);
-void fn_801CC8AC(void *, int);
+void FlowModulePreStart(void *);
+void FlowModuleStart(void *, int);
+void FlowModuleStop(void *, int);
 void AnimSetUserOpcodeCallbacks(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void AnimFileSetCustomRelocateFunc(void (*)(AnimFileFormat_t *));
 void fn_801BAEA4(void (*)(AnimFileFormat_t *));
@@ -355,7 +355,7 @@ extern "C" void fn_8008FBA0(void)
 {
     AnimInit(1);AnimSequencerInit(60.0f);
     AnimData *pModule=&gAnimData;
-    fn_801CC7FC(pModule);fn_801CC820(pModule,0);
+    FlowModulePreStart(pModule);FlowModuleStart(pModule,0);
     lbl_802D713C.mpArchive=pModule->GetArchive();
     AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
     AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);fn_801BAEA4(AnimExtnFreeFile);
@@ -363,7 +363,7 @@ extern "C" void fn_8008FBA0(void)
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
     for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
         lbl_802D71D8[i].mHandle=fn_801BB570(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
-    fn_801BB480();AnimSequencerShutdown();AnimShutdown();fn_801CC8AC(&gAnimData,0);
+    fn_801BB480();AnimSequencerShutdown();AnimShutdown();FlowModuleStop(&gAnimData,0);
 }
 extern "C" void fn_8008FCB4(int flag)
 {
