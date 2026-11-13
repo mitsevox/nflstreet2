@@ -20199,31 +20199,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80229084.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/cu_80229084.c), its compiler row and function and name rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80229084",
-          "end": "0x80229094"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80229084",
-          "start": "0x80229084",
-          "end": "0x8022908C"
-        },
-        {
-          "symbol": "fn_8022908C",
-          "start": "0x8022908C",
-          "end": "0x80229094"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_80229270.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022F428 (src/engine/cu_80229270.c), its function and name rows and the cu_80229270 compiler and source-form rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",

@@ -14352,6 +14352,19 @@
       ]
     },
     {
+      "source": "src/engine/dblock.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/dblock.c), its compiler, function and name rows; both functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229084",
+          "end": "0x80229094"
+        }
+      ]
+    },
+    {
       "source": "src/engine/physconstraint.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row for src/engine/physconstraint.cpp, individual target function extents, exact literal/vtable data 0x802B1548-0x802B1570 and compiler/source-form/type records. Complete class source and native sections; original file edges remain provisional.",
