@@ -1216,17 +1216,16 @@ void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
         pObject->mUnknown372 = fn_802270D4(pDir);
     }
     if (pHitter) {
-        float scale;
-
         pObject->mUnknown376 = pHitter->mId;
-        scale = pObject->mUnknown372 * (1.0f / 70.0f);
         if (pHitter->mChannel != 0xFF) {
+            float scale = pObject->mUnknown372 * (1.0f / 70.0f);
             int hi = lbl_803EA4D8;
             int lo = lbl_803EA4D9;
+            float max = hi;
             float volume = (hi - lo) * scale + lo;
 
-            if (volume > hi) {
-                volume = hi;
+            if (volume > max) {
+                volume = max;
             }
             RumbleStart(pHitter->mChannel, (unsigned char)(int)volume, lbl_803EA4DA);
         }
