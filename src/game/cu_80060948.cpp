@@ -51,8 +51,8 @@ int fn_8000FCDC(void);
 void fn_80010150(int a);
 void fn_80011600(int a, int b, int c);
 void fn_80015D28(int a);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
 void fn_8005BE54(unsigned char value);
 int fn_80060354(StevRow_t *pRow, int *pList);
 void fn_80060410(int index, int *pList);
@@ -735,8 +735,8 @@ void fn_80061AE8(void)
     if (lbl_803EA5F8.mOpen == 0) {
         TournamentClose();
     }
-    fn_8001B260(2, 0);
-    fn_8001B330(1);
+    MsgTeamPickSetMode(2, 0);
+    MsgTeamPickSetSources(1);
 }
 
 void fn_80061B90(int team, int *pDigp)

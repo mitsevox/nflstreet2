@@ -703,7 +703,7 @@ extern "C" void fn_8009134C(int index)
 extern "C" void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p, Vector_80039F5C *pOut, int *pAngle);
 extern "C" void fn_800B267C(Object_800B26B0 *pMotion);
 extern "C" int fn_801784C4(void);
-extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock);
+extern "C" BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 
 extern "C" void fn_80091578(Character_80093BCC *pCharacter, Entry_80091644 *pEntry, BigObjInst *pBall)
 {
@@ -737,7 +737,7 @@ extern "C" void fn_80091644(int index)
 
     for (; i < pActor->mUnknown6; i++) {
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
-            BigObjInst *pBall = fn_800400C4(BallGetModel(BallGetCurrent()));
+            BigObjInst *pBall = BallModelGetLinkedObj(BallGetModel(BallGetCurrent()));
 
             fn_80091578(pCharacter, &pActor->mpUnknown20[i], pBall);
         }
@@ -757,7 +757,7 @@ extern "C" int fn_800916E0(int index)
         if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
             Block_80170E64 *pBlock = BallGetModel(BallGetCurrent());
 
-            pBlock->mUnknown680 = fn_8004AF94(fn_800400C4(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
+            pBlock->mUnknown680 = fn_8004AF94(BallModelGetLinkedObj(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
             BallSetVisible(BallGetCurrent(), 1);
             BallStateChange(BallGetCurrent(), 8, 0);
         }

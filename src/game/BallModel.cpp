@@ -1,14 +1,18 @@
+/* The ball model: the display object each ball in play gets, and the set-up of
+   the on-field arrows that ArrowDraw draws.
+
+   The Arrow functions fill the record an arrow is drawn from: its point
+   buffer, width, colour and the shape of its end. The BallModel functions
+   register the ball-model object type, create, draw and delete the models, and
+   write and read each ball's position and holder for replays, blending two
+   recorded frames during playback. */
 #include "game/Object_80039F5C.h"
 #include "game/LightTracker.h"
 #include "game/Ball.h"
 
-/* Partial comparison source for the inferred grouping 0x8003F66C-0x800400CC.
-   Not a recovered original file. The original assembly stays linked; only the
-   bodies below are compiled and measured. */
-
-/* Record reached through the first argument of fn_8003F66C-fn_8003F754.
-   Only the accessed fields are declared; the size is unknown. */
-struct Object_8003F66C {
+/* Arrow path record, drawn by ArrowDraw. Only the accessed fields are
+   declared; the size is unknown. */
+struct ArrowPath_t {
     int mUnknown0;
     int mUnknown4;
     float (*mpUnknown8)[3];
@@ -26,8 +30,8 @@ struct Object_8003F66C {
     unsigned char mUnknown44;
 };
 
-/* Callback record requested as 0x2B8 bytes by fn_8003FAC4. */
-struct Object_8003F768 {
+/* Ball model object, 0x2B8 bytes as registered by BallModelRegisterType. */
+struct BallModel_t {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown16[4];
@@ -54,16 +58,16 @@ struct Object_8003F768 {
     int mUnknown692;
 };
 
-struct Init_8003F768 {
+struct BallModelInit_t {
     int mUnknown0;
     int mUnknown4;
-    Object_8003F768 *mpUnknown8;
+    BallModel_t *mpUnknown8;
     int mUnknown12;
 };
 
 extern "C" {
-void BallRenderShutdown(Object_8003F768 *p);
-void BallRenderDetach(Object_8003F768 *p);
+void BallRenderShutdown(BallModel_t *p);
+void BallRenderDetach(BallModel_t *p);
 int ObjDelType(int type);
 void ObjRemoveFromList(int handle, int item);
 }
@@ -75,7 +79,7 @@ void ObjRemoveFromList(int handle, int item);
 #include "game/LevelSurface.h"
 
 extern "C" {
-unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
+unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
                           Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot, Object_80039F5C **ppObject,
                           int *pIndex, unsigned char *pFlag);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
@@ -86,9 +90,9 @@ void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
 extern "C" {
 int FELoopIsMainFEActive(void);
 unsigned int fn_80236398(int a);
-void BallRenderInit(Object_8003F768 *p);
-void BallRenderAttach(Object_8003F768 *p, int index);
-void BallRenderDraw(Object_8003F768 *p);
+void BallRenderInit(BallModel_t *p);
+void BallRenderAttach(BallModel_t *p, int index);
+void BallRenderDraw(BallModel_t *p);
 void SimpShadowAdd(int a, Vector_80039F5C *pPos, float value, float *pColor);
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
@@ -105,19 +109,19 @@ void fn_801D0860(Quat_801EB488 *p);
 void fn_801D0F80(float (*p)[4]);
 void fn_801D0544(void);
 void ObjNewType_(int type, int size, int count,
-                 void (*pInit)(Object_8003F768 *, Init_8003F768 *),
-                 void (*pDestroy)(Object_8003F768 *));
-void ObjSetListObjFunc(int owner, int type, int a, int (*pCallback)(Object_8003F768 *));
-Object_8003F768 *ObjNewInList(int owner, int type, int a, Init_8003F768 *pInit);
-void ObjSetPriority(int owner, Object_8003F768 *p, int flags);
-int fn_8003FBF0(Object_8003F768 *p);
+                 void (*pInit)(BallModel_t *, BallModelInit_t *),
+                 void (*pDestroy)(BallModel_t *));
+void ObjSetListObjFunc(int owner, int type, int a, int (*pCallback)(BallModel_t *));
+BallModel_t *ObjNewInList(int owner, int type, int a, BallModelInit_t *pInit);
+void ObjSetPriority(int owner, BallModel_t *p, int flags);
+int BallModelDraw(BallModel_t *p);
 }
 
-extern "C" void fn_8003F66C(Object_8003F66C *p)
+extern "C" void ArrowInit(ArrowPath_t *p)
 {
-    p->mUnknown0 = 0;
-    p->mUnknown4 = 0;
     p->mpUnknown8 = 0;
+    p->mUnknown4 = 0;
+    p->mUnknown0 = 0;
     p->mUnknown12 = 4;
     p->mUnknown28 = 1.0f;
     p->mUnknown32 = 255;
@@ -128,40 +132,40 @@ extern "C" void fn_8003F66C(Object_8003F66C *p)
     p->mUnknown44 = 0;
 }
 
-extern "C" void fn_8003F6B0(Object_8003F66C *p)
+extern "C" void ArrowShutdown(ArrowPath_t *p)
 {
 }
 
-extern "C" void fn_8003F6B4(Object_8003F66C *p, float (*pData)[3], int a)
+extern "C" void ArrowSetPointBuffer(ArrowPath_t *p, float (*pData)[3], int a)
 {
     p->mpUnknown8 = pData;
     p->mUnknown0 = 0;
     p->mUnknown4 = a;
 }
 
-extern "C" void fn_8003F6C8(Object_8003F66C *p, unsigned char a, unsigned char b, unsigned char c)
+extern "C" void ArrowSetColor(ArrowPath_t *p, unsigned char a, unsigned char b, unsigned char c)
 {
     p->mUnknown32 = a;
     p->mUnknown33 = b;
     p->mUnknown34 = c;
 }
 
-extern "C" void fn_8003F6D8(Object_8003F66C *p, float value)
+extern "C" void ArrowSetWidth(ArrowPath_t *p, float value)
 {
     p->mUnknown28 = value;
 }
 
-extern "C" void fn_8003F6E0(Object_8003F66C *p, float value)
+extern "C" void ArrowSetEndWidth(ArrowPath_t *p, float value)
 {
     p->mUnknown36 = value;
 }
 
-extern "C" void fn_8003F6E8(Object_8003F66C *p, float value)
+extern "C" void ArrowSetEndBrightness(ArrowPath_t *p, float value)
 {
     p->mUnknown40 = value;
 }
 
-extern "C" void fn_8003F6F0(Object_8003F66C *p, float *pValue)
+extern "C" void ArrowAddPoint(ArrowPath_t *p, float *pValue)
 {
     p->mpUnknown8[p->mUnknown0][0] = pValue[0];
     p->mpUnknown8[p->mUnknown0][1] = pValue[1];
@@ -169,13 +173,13 @@ extern "C" void fn_8003F6F0(Object_8003F66C *p, float *pValue)
     p->mUnknown0++;
 }
 
-extern "C" void fn_8003F744(Object_8003F66C *p)
+extern "C" void ArrowReset(ArrowPath_t *p)
 {
     p->mUnknown0 = 0;
     p->mUnknown44 = 0;
 }
 
-extern "C" void fn_8003F754(Object_8003F66C *p, int a, int b, float c, float d)
+extern "C" void ArrowSetEnd(ArrowPath_t *p, int a, int b, float c, float d)
 {
     p->mUnknown12 = a;
     p->mUnknown16 = c;
@@ -183,7 +187,7 @@ extern "C" void fn_8003F754(Object_8003F66C *p, int a, int b, float c, float d)
     p->mUnknown24 = b;
 }
 
-extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
+extern "C" void BallModelInit(BallModel_t *p, BallModelInit_t *pInit)
 {
     float color[4];
     p->mUnknown4.mX = 0.0f;
@@ -192,12 +196,12 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
     p->mUnknown96 = 0;
     p->mUnknown100 = 0;
     p->mUnknown104 = 0;
-    p->mpUnknown660 = 0;
     p->mUnknown676 = 0;
     p->mUnknown680 = 0xFFFF;
+    p->mpUnknown660 = 0;
     LightTrackerReset(&p->mUnknown684);
-    p->mUnknown20 |= 1;
     p->mUnknown652 = 1.0f;
+    p->mUnknown20 |= 1;
     if (pInit->mpUnknown8 == 0) {
         p->mUnknown24 = pInit->mUnknown0;
         p->mUnknown28 = pInit->mUnknown4;
@@ -218,10 +222,10 @@ extern "C" void fn_8003F768(Object_8003F768 *p, Init_8003F768 *pInit)
         SimpShadowAdd(1, &p->mUnknown4, 0.4f, color);
     }
     p->mUnknown692 = pInit->mUnknown12;
-    BallRenderAttach(p, pInit->mUnknown12);
+    BallRenderAttach(p, p->mUnknown692);
 }
 
-extern "C" void fn_8003F91C(Object_8003F768 *p)
+extern "C" void BallModelDestroy(BallModel_t *p)
 {
     BallRenderDetach(p);
     if (!(p->mUnknown20 & 4)) {
@@ -229,7 +233,7 @@ extern "C" void fn_8003F91C(Object_8003F768 *p)
     }
 }
 
-extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos,
+extern "C" unsigned char BallModelReplayReadFrame(BitStream_t *pStream, Vector_80039F5C *pPos,
         Quat_801EB488 *pRot, Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot,
         Object_80039F5C **ppObject, int *pIndex, unsigned char *pFlag)
 {
@@ -242,9 +246,9 @@ extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos
         pPose->mUnknown44.mUnknown6 = index;
         *pIndex = index;
         fn_800301C4(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
-        pPose->mUnknown44.mUnknown36[0] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
-        pPose->mUnknown44.mUnknown36[1] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
-        pPose->mUnknown44.mUnknown36[2] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
+        pPose->mUnknown44.mUnknown36[0] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
+        pPose->mUnknown44.mUnknown36[1] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
+        pPose->mUnknown44.mUnknown36[2] = (int)((ReadBitStream(pStream, 12) << 52) >> 40);
         PlyrPoseGetAttachTransform(pPose, &pLinkPos->mX, pLinkRot);
     } else {
         ReadBitStream(pStream, 39);
@@ -257,34 +261,34 @@ extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos
     return changed;
 }
 
-extern "C" void fn_8003FAC4(int owner)
+extern "C" void BallModelRegisterType(int owner)
 {
-    ObjNewType_(3, 0x2B8, 3, fn_8003F768, fn_8003F91C);
+    ObjNewType_(3, 0x2B8, 3, BallModelInit, BallModelDestroy);
     if (owner != 0) {
-        ObjSetListObjFunc(owner, 3, 0, fn_8003FBF0);
+        ObjSetListObjFunc(owner, 3, 0, BallModelDraw);
     }
 }
 
-extern "C" void fn_8003FB2C(void)
+extern "C" void BallModelUnregisterType(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(3);
 }
 
-extern "C" Block_80170E64 *fn_8003FB54(int owner, Block_80170E64 *pFirst,
+extern "C" Block_80170E64 *BallModelNew(int owner, Block_80170E64 *pFirst,
                                               int a, int b, int index)
 {
-    Init_8003F768 init;
+    BallModelInit_t init;
     init.mUnknown0 = a;
     init.mUnknown4 = b;
-    init.mpUnknown8 = (Object_8003F768 *)pFirst;
+    init.mpUnknown8 = (BallModel_t *)pFirst;
     init.mUnknown12 = index;
-    Object_8003F768 *p = ObjNewInList(owner, 3, 0, &init);
+    BallModel_t *p = ObjNewInList(owner, 3, 0, &init);
     ObjSetPriority(owner, p, 8);
     return (Block_80170E64 *)p;
 }
 
-extern "C" void fn_8003FBB4(int handle, int item)
+extern "C" void BallModelDelete(int handle, int item)
 {
     if (item) {
         ObjRemoveFromList(handle, item);
@@ -292,7 +296,7 @@ extern "C" void fn_8003FBB4(int handle, int item)
     }
 }
 
-extern "C" int fn_8003FBF0(Object_8003F768 *p)
+extern "C" int BallModelDraw(BallModel_t *p)
 {
     if (p->mUnknown20 & 1) {
         fn_801D0470(VptGetMatrixStack());
@@ -309,12 +313,12 @@ extern "C" int fn_8003FBF0(Object_8003F768 *p)
     return 0;
 }
 
-extern "C" int fn_8003FC68(void)
+extern "C" int BallModelGetReplayBits(void)
 {
     return 212;
 }
 
-extern "C" void fn_8003FC70(Block_80170E64 *pBlock, BitStream_t *pStream)
+extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStream)
 {
     int index = BallFindByModel(pBlock);
     Object_80039F5C *pObject = BallGetHolder(BallGet(index));
@@ -325,7 +329,7 @@ extern "C" void fn_8003FC70(Block_80170E64 *pBlock, BitStream_t *pStream)
         int reference;
         fn_8009BD2C(pObject, &reference);
         fn_80191068(pStream, (unsigned int)reference, 32);
-        fn_80191068(pStream, pPose->mUnknown44.mUnknown6, 7);
+        fn_80191068(pStream, (unsigned int)pPose->mUnknown44.mUnknown6, 7);
         fn_80030554(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
         fn_80191068(pStream, pPose->mUnknown44.mUnknown36[0] >> 12, 12);
         fn_80191068(pStream, pPose->mUnknown44.mUnknown36[1] >> 12, 12);
@@ -351,7 +355,7 @@ extern "C" void fn_8003FC70(Block_80170E64 *pBlock, BitStream_t *pStream)
     }
 }
 
-extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitStream_t *pStream0,
+extern "C" void BallModelReplayPlayback(Block_80170E64 *pBlock, BitStream_t *pStream1, BitStream_t *pStream0,
                             BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     Vector_80039F5C pos0;
@@ -371,13 +375,13 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
     unsigned char changed1;
 
     if (pStream2) {
-        fn_8003F95C(pStream2, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+        BallModelReplayReadFrame(pStream2, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
     }
     if (pStream3) {
-        fn_8003F95C(pStream3, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+        BallModelReplayReadFrame(pStream3, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
     }
-    changed0 = fn_8003F95C(pStream0, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
-    changed1 = fn_8003F95C(pStream1, &pos1, &rot1, &linkPos1, &linkRot1, &pObject1, &index1, &flag);
+    changed0 = BallModelReplayReadFrame(pStream0, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+    changed1 = BallModelReplayReadFrame(pStream1, &pos1, &rot1, &linkPos1, &linkRot1, &pObject1, &index1, &flag);
     if (pObject0 != 0 && pObject1 != 0) {
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject0->mpUnknown4;
 
@@ -409,12 +413,12 @@ extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitSt
     }
 }
 
-extern "C" void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked)
+extern "C" void BallModelSetLinkedObj(Block_80170E64 *pBlock, BigObjInst *pLinked)
 {
     pBlock->mpUnknown676 = pLinked;
 }
 
-extern "C" BigObjInst *fn_800400C4(Block_80170E64 *pBlock)
+extern "C" BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock)
 {
     return pBlock->mpUnknown676;
 }

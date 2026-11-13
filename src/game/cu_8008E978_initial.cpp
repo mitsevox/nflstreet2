@@ -82,7 +82,7 @@ int ResGetSize(void *, int);
 extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
-BigObjInst *fn_800400C4(Block_80170E64 *);
+BigObjInst *BallModelGetLinkedObj(Block_80170E64 *);
 int fn_801BA5A8(AnimHeader_t *,Record_800D81C8 *,unsigned short,int);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_800518E0(Object_80039F5C *);
@@ -157,7 +157,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
     Object_80039F5C *p=(Object_80039F5C *)object;
     BigObjInst *placed=(BigObjInst *)object;
     int mode=0;
-    if(!FELoopIsMainFEActive() && object==fn_800400C4(BallGetModel(BallGetCurrent()))) return 1;
+    if(!FELoopIsMainFEActive() && object==BallModelGetLinkedObj(BallGetModel(BallGetCurrent()))) return 1;
     void *collection;
     if(event>=0xD000 && event<=0xD005) collection=placed->mUnknown428->mUnknown1300;
     else collection=p->mpUnknown792;

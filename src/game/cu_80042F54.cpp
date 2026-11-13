@@ -89,10 +89,10 @@ void fn_80030ACC(void (*pWrite)(BitStream_t *),
 int InGameIsPaused(void);
 int InGameIsPlaying(void);
 int fn_8002D060(void *p);
-void fn_8003F66C(void *p);
-void fn_8003F6B0(void *p);
-void fn_8003F6B4(void *p, void *pData, int a);
-void fn_8003F744(void *p);
+void ArrowInit(void *p);
+void ArrowShutdown(void *p);
+void ArrowSetPointBuffer(void *p, void *pData, int a);
+void ArrowReset(void *p);
 int PauseIsOpen(void);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *fn_800A336C(void);
@@ -889,8 +889,8 @@ void fn_800449EC(void *p)
 {
     char *pObject = (char *)p;
 
-    fn_8003F66C(pObject + 0x14);
-    fn_8003F6B4(pObject + 0x14, pObject + 0x44, 2);
+    ArrowInit(pObject + 0x14);
+    ArrowSetPointBuffer(pObject + 0x14, pObject + 0x44, 2);
     pObject[0x5C] = 0;
 }
 
@@ -898,8 +898,8 @@ void fn_80044A38(void *p)
 {
     char *pObject = (char *)p;
 
-    fn_8003F744(pObject + 0x14);
-    fn_8003F6B0(pObject + 0x14);
+    ArrowReset(pObject + 0x14);
+    ArrowShutdown(pObject + 0x14);
     pObject[0x5C] = 0;
 }
 

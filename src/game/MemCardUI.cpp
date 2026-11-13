@@ -9,7 +9,7 @@
 #include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
 #include "game/TextRecord.h"
-#include "game/fn_80191948.h"
+#include "game/MemCardMsg.h"
 #include "game/UISGameMsg.h"
 
 struct MemCardUIName_t {
@@ -185,9 +185,9 @@ int MemCardUIProbeNextPort(int a)
     return 1;
 }
 
-void MemCardUIGetMessageText(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC)
+void MemCardUIGetMessageText(int value, MemCardMsgText_t *pA, MemCardMsgText_t *pB, MemCardMsgText_t *pC)
 {
-    fn_80191948(value, pA, pB, pC);
+    MemCardMsgGetText(value, pA, pB, pC);
 }
 
 void MemCardUIUnmountAndClearChanges(void)
@@ -662,8 +662,8 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         *pResult = MemCardUIProbePort(pParams->mUnknown0);
         break;
     case 339:
-        MemCardUIGetMessageText(pParams->mUnknown0, (Object_80191948 *)pParams->mUnknown4,
-                     (Object_80191948 *)pParams->mUnknown8, (Object_80191948 *)pParams->mUnknownC);
+        MemCardUIGetMessageText(pParams->mUnknown0, (MemCardMsgText_t *)pParams->mUnknown4,
+                     (MemCardMsgText_t *)pParams->mUnknown8, (MemCardMsgText_t *)pParams->mUnknownC);
         break;
     case 341:
         *pResult = MemCardUIRunCheckCallback((int *)pParams->mUnknown0, (int *)pParams->mUnknown4, (int *)pParams->mUnknown8,

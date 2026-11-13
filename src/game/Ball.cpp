@@ -14,13 +14,13 @@
 
 extern "C" {
 CollideSet_t *fn_8003A078(void);
-void fn_8003FAC4(int a);
-void fn_8003FB2C(void);
-Block_80170E64 *fn_8003FB54(int a, Block_80170E64 *pFirst, int b, int c, int d);
-void fn_8003FBB4(int a, Block_80170E64 *pBlock);
-int fn_8003FC68(void);
-void fn_8003FC70(Block_80170E64 *pBlock, int a);
-void fn_8003FE90(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
+void BallModelRegisterType(int a);
+void BallModelUnregisterType(void);
+Block_80170E64 *BallModelNew(int a, Block_80170E64 *pFirst, int b, int c, int d);
+void BallModelDelete(int a, Block_80170E64 *pBlock);
+int BallModelGetReplayBits(void);
+void BallModelReplayRecord(Block_80170E64 *pBlock, int a);
+void BallModelReplayPlayback(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
 void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
 void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -290,7 +290,7 @@ void BallsReplayRecord(int a)
     unsigned int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8003FC70(_Ball_pSet->mEntries[i].mpUnknown00, a);
+        BallModelReplayRecord(_Ball_pSet->mEntries[i].mpUnknown00, a);
     }
 }
 
@@ -299,13 +299,13 @@ void BallsReplayPlayback(int a, int b, int c, int d, float e)
     unsigned int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8003FE90(_Ball_pSet->mEntries[i].mpUnknown00, a, b, c, d, e);
+        BallModelReplayPlayback(_Ball_pSet->mEntries[i].mpUnknown00, a, b, c, d, e);
     }
 }
 
 void BallsReplayRegister(void)
 {
-    _Ball_iEntrySize = fn_8003FC68();
+    _Ball_iEntrySize = BallModelGetReplayBits();
     fn_80030ACC(BallsReplayRecord, BallsReplayPlayback, _Ball_iEntrySize * _Ball_pSet->mHeader.mCount, "Balls");
 }
 
@@ -360,7 +360,7 @@ void BallsCreateModels(int a)
     Block_80170E64 *pFirst = 0;
     unsigned int i;
 
-    fn_8003FAC4(a);
+    BallModelRegisterType(a);
     pBalls = _Ball_pSet->mEntries;
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
         int notFirst;
@@ -371,7 +371,7 @@ void BallsCreateModels(int a)
             notFirst = 1;
         }
 
-        pBalls[i].mpUnknown00 = fn_8003FB54(a, pFirst, fn_800C47C4(), 0xD, notFirst);
+        pBalls[i].mpUnknown00 = BallModelNew(a, pFirst, fn_800C47C4(), 0xD, notFirst);
         if (i == 0) {
             pFirst = pBalls->mpUnknown00;
         }
@@ -385,9 +385,9 @@ void BallsDestroyModels(int a)
     unsigned int i;
 
     for (i = 0; i < _Ball_pSet->mHeader.mCount; i++) {
-        fn_8003FBB4(a, _Ball_pSet->mEntries[_Ball_pSet->mHeader.mCount - i - 1].mpUnknown00);
+        BallModelDelete(a, _Ball_pSet->mEntries[_Ball_pSet->mHeader.mCount - i - 1].mpUnknown00);
     }
-    fn_8003FB2C();
+    BallModelUnregisterType();
 }
 
 void BallsProcessMotion(float step)

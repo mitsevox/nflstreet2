@@ -22,7 +22,7 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                  void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
-void fn_800400BC(Block_80170E64 *pBlock, BigObjInst *pLinked);
+void BallModelSetLinkedObj(Block_80170E64 *pBlock, BigObjInst *pLinked);
 void fn_8004AA34(AnimPose_t *pPose, BitStream_t *pStream, unsigned int count);
 void fn_8004ABF4(Object_80040818 *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
                  BitStream_t *pStream2, BitStream_t *pStream3, float t);
@@ -396,7 +396,7 @@ void fn_80040B88(int handle)
     desc.mUnknown180 = 0;
     index = lbl_803EC784;
     fn_800408E4(&desc, handle);
-    fn_800400BC(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
+    BallModelSetLinkedObj(BallGetModel(BallGetCurrent()), fn_80040F18(index)->mUnknown472);
     fn_8004D818();
     ResClose(desc.mUnknown160);
 }

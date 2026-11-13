@@ -74,9 +74,9 @@ int fn_8000FCCC(void);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);
 void fn_80015D28(int a);
-void fn_8001B260(int a, int b);
-void fn_8001B330(int a);
-void fn_8001B828(void);
+void MsgTeamPickSetMode(int a, int b);
+void MsgTeamPickSetSources(int a);
+void MsgTeamPickRequestTeamSave(void);
 void fn_80010150(int a);
 void fn_800731D0(int a);
 Object_80039F5C *fn_8003AD2C(int id);
@@ -594,8 +594,8 @@ void fn_8005E4A8(void)
     int ites = lbl_803EA5C8->mItes;
     switch (ites) {
     case 0:
-        fn_8001B260(0, 0);
-        fn_8001B330(4);
+        MsgTeamPickSetMode(0, 0);
+        MsgTeamPickSetSources(4);
         lbl_8030A1A0.mAway = 0;
         lbl_8030A1A0.mUnknown8 = 0;
         lbl_8030A1A0.mHome = 1;
@@ -1083,7 +1083,7 @@ void fn_8005F324(int id)
     case 603:
         fn_80061AE8();
     case 109:
-        fn_8001B828();
+        MsgTeamPickRequestTeamSave();
         break;
     }
 }
