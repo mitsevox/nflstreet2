@@ -2059,16 +2059,18 @@ void fn_8004EA80(Vector_80039F5C *pImpulse)
 int fn_8004ED44(void *unused, RigidBody_t *pA, RigidBody_t *pB, unsigned int count,
                 Contact_8004ED44 *pContacts, float step)
 {
-    unsigned char a = pA->mpMetadata->mKind;
-    unsigned char b = pB->mpMetadata->mKind;
-    if (a == 1 && b == 1) return 3;
-    if (a != 6 && b != 6) {
-        if (a == 1) {
-            if (b == 2 || b == 4) fn_8004E4D0(pA, 0, pB, pContacts[0].mIndexB, count, pContacts, step);
+    Metadata_8004ED44 *pMetaA = pA->mpMetadata;
+    Metadata_8004ED44 *pMetaB = pB->mpMetadata;
+    if (pMetaA->mKind == 1 && pMetaB->mKind == 1) return 3;
+    if (pMetaA->mKind != 6 && pMetaB->mKind != 6) {
+        if (pMetaA->mKind == 1) {
+            if (pMetaB->mKind == 2 || pMetaB->mKind == 4)
+                fn_8004E4D0(pA, 0, pB, pContacts[0].mIndexB, count, pContacts, step);
             return 2;
         }
-        if (b == 1) {
-            if (a == 2 || a == 4) fn_8004E4D0(pB, 0, pA, pContacts[0].mIndexA, count, pContacts, step);
+        if (pMetaB->mKind == 1) {
+            if (pMetaA->mKind == 2 || pMetaA->mKind == 4)
+                fn_8004E4D0(pB, 0, pA, pContacts[0].mIndexA, count, pContacts, step);
             return 1;
         }
     }
@@ -2598,14 +2600,16 @@ void fn_80050DA0(void)
         if (!pBody) continue;
         Metadata_8004ED44 *pMetadata = pBody->mpMetadata;
         if (pMetadata->mKind == 3) {
-            lbl_80308B0C[i]->mX = pBody->mUnknown100.mX;
-            lbl_80308B0C[i]->mY = pBody->mUnknown100.mY;
-            lbl_80308B0C[i]->mZ = pBody->mUnknown100.mZ;
+            Vector_80039F5C *pPosition = &pBody->mUnknown100;
+            lbl_80308B0C[i]->mX = pPosition->mX;
+            lbl_80308B0C[i]->mY = pPosition->mY;
+            lbl_80308B0C[i]->mZ = pPosition->mZ;
             fn_801E9BB4(pBody, (Quat_801EB488 *)((char *)lbl_80308B0C[i] + 88));
         } else if (fn_800410E0(pMetadata->mpObject)) {
             int angles[3];
-            Quat_801EB488 rotation, oldRotation;
+            Quat_801EB488 rotation;
             Vector_80039F5C position;
+            Quat_801EB488 oldRotation;
             fn_8004E3CC(pMetadata->mpObject, angles);
             angles[2] = (*(int *)((char *)lbl_80308B0C[i] + 24) + 0x400000) & 0xFFFFFF;
             QuatFromEuler(&rotation, angles[2], angles[1], angles[0]);
@@ -2629,8 +2633,8 @@ void fn_80050F14(void)
     fn_801D0508();
     lbl_803EBD78 = fn_80050960;
     void *cursor = fn_801E2C3C(lbl_803EA514);
-    RigidBody_t *pBody;
-    while ((pBody = fn_801E2C64(lbl_803EA514, &cursor)) != 0) {
+    for (RigidBody_t *pBody = fn_801E2C64(lbl_803EA514, &cursor); pBody;
+         pBody = fn_801E2C64(lbl_803EA514, &cursor)) {
         Collection_801E7034 *pShapes = pBody->mpShapes;
         if (!pShapes) continue;
         if ((unsigned int)pBody->mKind <= 1) {
