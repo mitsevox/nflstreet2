@@ -1069,7 +1069,8 @@ void fn_8004C518(int handle, BigObjInst *pObject)
     char text[32];
 
     fn_8004D508(handle, "event");
-    while (fn_8004D5B8(handle, "type", text, 32)) {
+    for (int found = fn_8004D5B8(handle, "type", text, 32); found;
+         found = fn_8004D5B8(handle, "type", text, 32)) {
         switch (fn_8004C440(text)) {
         case 1:
             fn_8004BA44(handle, pObject);
