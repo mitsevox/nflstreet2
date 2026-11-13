@@ -1,6 +1,6 @@
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
-#include "game/Query_8007F19C.h"
+#include "game/DbQuery.h"
 
 /* Fourteen column tags read in this order by both functions. The source
    grouping and original declaration remain provisional. */
@@ -39,9 +39,9 @@ extern "C" void fn_8008199C(Object_8008044C *object, PlayerGear_t *info)
 {
     DbColumnValue columns[15];
     DbColumnValue *list = columns;
-    Expression_8007F19C expression;
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
+    DbExpression expression;
+    DbQueryResult result;
+    DbTableRef tables[2];
     DbColumnValue key[2];
     for (int i = 0; i < 14; ++i) list[i].Set(0x59414C50, lbl_802D6898[i], info->mValues[i]);
     columns[14].SetEnd();

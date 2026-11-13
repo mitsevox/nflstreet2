@@ -7,7 +7,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/PlayBookDb.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
@@ -333,13 +333,13 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                         if(previous==4) {
                             fn_80093C3C(1,4,0);out->mUnknown04=1;out->mUnknown18|=0x844;
                             if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5D,0,fn_80178348(),0,0);
-                            if(fn_8007F828(14)==1)out->mUnknown18|=0x80;
+                            if(GameOptionsGet(14)==1)out->mUnknown18|=0x80;
                             if(fn_801486A0()==4)out->mUnknown18|=0x80;
                         } else out->mUnknown04=previous+1;
                     }
                 } else {
                     out->mUnknown04=1;out->mUnknown18|=0x40;
-                    if(fn_8007F828(14)==1 && fn_80178348()!=fn_80178308() && out->mUnknown1D!=6)out->mUnknown18|=0x80;
+                    if(GameOptionsGet(14)==1 && fn_80178348()!=fn_80178308() && out->mUnknown1D!=6)out->mUnknown18|=0x80;
                 }
                 if(fn_80177C38()>1) {
                     out->mUnknown18|=0x40;
@@ -521,9 +521,9 @@ extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
             if(result->mUnknown18&0x2000 || result==input)fn_80178878(result);
         }
         fn_800A14E4(result,update);
-        if(result->mUnknown18&8 && result->mUnknown1D==2 && fn_801486A0()!=4 && fn_8007F828(14)==0) {
+        if(result->mUnknown18&8 && result->mUnknown1D==2 && fn_801486A0()!=4 && GameOptionsGet(14)==0) {
             int score=fn_800C8774(fn_80178308());
-            if(score>=fn_8007F828(1)) {
+            if(score>=GameOptionsGet(1)) {
                 Vector_80039F5C pos={0};
                 BallGetPosition(BallGetCurrent(),&pos);
                 AudmonEventPostArgs(0x5E,&pos,fn_80178308(),0,0);

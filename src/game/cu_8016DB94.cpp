@@ -25,7 +25,7 @@
 #include "game/Possession.h"
 #include "game/Info_ScrmState.h"
 
-/* Player block at +336 as written after fn_800EEE3C: the point and facing it
+/* Player block at +336 as written after HuddleGetSpot: the point and facing it
    returned and two flag bytes. */
 struct State_8016DDDC {
     char mUnknown0[8];
@@ -55,7 +55,7 @@ void PlyrMgrStepStates(void);
 Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
 void PlyrMgrResetAll(void);
-void fn_80044264(void);
+void DivotRestartRecords(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
 int fn_8009D9D8(int index);
@@ -77,7 +77,7 @@ void fn_800C9FC0(void);
 void fn_800CA3C4(void);
 void PlayerMoveResetAll(void);
 void fn_800DC578(void);
-void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
+void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FAD2C(void);
@@ -103,7 +103,7 @@ PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_8016B0B0(void);
 void ClockRuleSnap(void);
 void DriveLogUpdateTeam(void);
-void fn_80176630(void);
+void PenaltyCheckOffside(void);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -232,7 +232,7 @@ extern "C" void fn_8016DDDC(int team)
         switch (p->mpState->mId) {
         case 13:
         case 14:
-            fn_800EEE3C(&point, &facing, p, 1);
+            HuddleGetSpot(&point, &facing, p, 1);
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
@@ -247,7 +247,7 @@ extern "C" void fn_8016DDDC(int team)
             }
             fn_800EFE60(0, p->mpState, p);
             fn_8016DBE4(p);
-            fn_800EEE3C(&point, &facing, p, 1);
+            HuddleGetSpot(&point, &facing, p, 1);
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
@@ -411,7 +411,7 @@ extern "C" void fn_8016E498(void)
     HudHidePressPrompt(fn_80178308());
     HudHidePressPrompt(fn_80178320());
     fn_800B14E4();
-    fn_80044264();
+    DivotRestartRecords();
     AudmonEventClear();
     fn_800AD910(3, 0.0f);
     fn_8011F3A8();
@@ -457,7 +457,7 @@ extern "C" void fn_8016E498(void)
         fn_8009D888(4, 0);
     }
     fn_800B2630();
-    fn_80176630();
+    PenaltyCheckOffside();
     DriveLogUpdateTeam();
 
     side = fn_80178308();

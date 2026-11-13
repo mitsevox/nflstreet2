@@ -173,7 +173,7 @@ void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
 int fn_8007C46C(int key);
 int fn_8007C538(int id);
 int fn_8007C690(DbCursor *pCursor, short *pOut);
-void fn_8007F6F8(int a, int b);
+void GameOptionsSet(int a, int b);
 int fn_800A2178(void);
 int fn_800A7E40(unsigned char side);
 int fn_800AD9B4(void);
@@ -757,7 +757,7 @@ void ChalSetTournamentWon(int value)
         fn_8007ABA4(ChalGetInfoCursor(handle), 0x4D574943, value);
         if (value) {
             fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
-            fn_8007F6F8(20, 1);
+            GameOptionsSet(20, 1);
             fn_8018787C(fn_80186B38(index));
         }
     }

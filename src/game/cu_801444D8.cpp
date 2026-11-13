@@ -75,10 +75,10 @@ void FxParticleDrawEnd(void);
 void FxAnimTexLoadAll(AnimTexFile_t *pEntries, AnimTex_t **pValues, void *pData);
 void FxAnimTexFreeAll(AnimTex_t **pValues);
 void GroundPulseDraw(void);
-void fn_801A762C(void);
-void fn_801A7778(void);
-void fn_801A7784(float rate);
-void fn_801A7880(void);
+void WeatherInit(void);
+void WeatherShutdown(void);
+void WeatherUpdate(float rate);
+void WeatherRender(void);
 void *fn_801C6B4C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
 void fn_801D0508(void);
@@ -331,7 +331,7 @@ void fn_80144B50(int handle)
     lbl_803EB238 = ObjNewInList(handle, 22, 0, 0);
     ObjSetPriority(handle, lbl_803EB238, 12);
     lbl_803EB228 = 1;
-    fn_801A762C();
+    WeatherInit();
     fn_800A3170();
     lbl_803EB23D = 0;
     memset(lbl_8031B6F8, 0, sizeof(lbl_8031B6F8));
@@ -340,7 +340,7 @@ void fn_80144B50(int handle)
 void fn_80144C6C(int handle)
 {
     fn_800A3450();
-    fn_801A7778();
+    WeatherShutdown();
     FxAnimTexFreeAll(lbl_802DD150);
     fn_801DE410();
     AnimTexLibShutdown();
@@ -414,7 +414,7 @@ int fn_80144E64(void *pContext)
         }
         FxParticleDrawEnd();
         GroundPulseDraw();
-        fn_801A7880();
+        WeatherRender();
     }
     return 0;
 }
@@ -437,7 +437,7 @@ void fn_80144EDC(float rate)
         }
     }
     pList->mCount = count;
-    fn_801A7784(rate);
+    WeatherUpdate(rate);
     fn_801DE4F8(60);
 }
 

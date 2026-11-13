@@ -4,7 +4,7 @@
 // the space it needs.
 #include <string.h>
 #include <stdio.h>
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/MemCardMsg.h"
 
 extern "C" {
@@ -123,7 +123,7 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
     strcpy(pC, "");
     strcpy(pD, "");
     strcpy(pE, "");
-    if (fn_8007F828(12) != 1) {
+    if (GameOptionsGet(12) != 1) {
         strcpy(textF, "");
     }
     int key = fn_801D673C(index);

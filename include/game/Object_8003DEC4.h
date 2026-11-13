@@ -7,7 +7,7 @@
 #include "game/LightTracker.h"
 #include "game/AnimPose.h"
 
-struct Item_800476DC;
+struct PlyrNameTag_t;
 
 /* Bone table referenced at +100 of the player object: a bone count at +6
    and three base values per bone from +1040. */
@@ -186,7 +186,7 @@ struct Object_8003DEC4 {
     unsigned int mUnknown976;
     char mUnknown980[4];
     int mUnknown984;
-    Item_800476DC *mUnknown988;
+    PlyrNameTag_t *mUnknown988;
     union {
         char mBytes992[3192];
         struct {

@@ -11,8 +11,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
 #include "game/DepthChartSide.h"
-#include "game/fn_8007F828.h"
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/GameModeType.h"
 #include "game/MsgGame.h"
@@ -286,7 +285,7 @@ void DepthChartRevertSide(int group);
 void DepthChartSetSide(int group, int *values);
 void BigObjNotifyTypes(int a);
 void fn_8004730C(int a);
-void fn_80047874(unsigned char enable);
+void PlyrNameTagEnable(unsigned char enable);
 void MsgBoxShow(const char *pTitle, const char *pText, const char *pButtons);
 int MsgBoxIsClosed(void);
 void fn_80057F28(void);
@@ -655,13 +654,13 @@ void TutorialLessonStart(void)
         _Tutorial_pLesson = &_Tutorial_LessonNewStuff;
         break;
     }
-    _Tutorial_iSavedSetting14 = fn_8007F828(14);
-    fn_8007F6F8(14, 0);
+    _Tutorial_iSavedSetting14 = GameOptionsGet(14);
+    GameOptionsSet(14, 0);
     fn_80178F20(0);
     _Tutorial_pLesson->mUnknown0 = step;
     _Tutorial_pLesson->Begin();
-    _Tutorial_iSavedSetting0 = fn_8007F828(0);
-    fn_8007F6F8(0, 0);
+    _Tutorial_iSavedSetting0 = GameOptionsGet(0);
+    GameOptionsSet(0, 0);
     TutorialDbOpenPlays();
     TutorialSetActiveStep(step);
     TutorialSetAnnounceStep(1);
@@ -672,10 +671,10 @@ void TutorialLessonStop(void)
     _Tutorial_pLesson->End();
     _Tutorial_pLesson = 0;
     TutorialDbClosePlays();
-    fn_8007F6F8(14, _Tutorial_iSavedSetting14);
+    GameOptionsSet(14, _Tutorial_iSavedSetting14);
     _Tutorial_iSavedSetting14 = 0;
     fn_80178F20(0);
-    fn_8007F6F8(0, _Tutorial_iSavedSetting0);
+    GameOptionsSet(0, _Tutorial_iSavedSetting0);
     _Tutorial_iSavedSetting0 = 1;
     SndgApplyVolumeOptions();
     _Tutorial_uActiveStep = 0xFFFF;
@@ -972,7 +971,7 @@ int TutorialFinishCategory(void)
         fn_800C1E50();
         fn_8004730C(1);
         fn_8015C254(1);
-        fn_80047874(1);
+        PlyrNameTagEnable(1);
         if (mode != 15) {
             fn_801485B4();
             fn_801485EC(mode);
@@ -1038,7 +1037,7 @@ int TutorialFinishCategory(void)
             fn_800C1E50();
             fn_8004730C(1);
             fn_8015C254(1);
-            fn_80047874(1);
+            PlyrNameTagEnable(1);
             TutorialSetLesson(next);
             TutorialSetActiveStep(0);
             TutorialSetStep(0);
@@ -1723,7 +1722,7 @@ void TutorialSetupSession(void)
     }
     SndgSetVolumeOption(3, 100);
     SndgCrowdSetVolume(0);
-    volume = fn_8007F828(5) * 10;
+    volume = GameOptionsGet(5) * 10;
     SndgSetVolumeOption(2, volume * 40u / 100);
     for (unsigned char team = 0; team <= 1; team++) {
         QueryCursor cursor;
@@ -2082,7 +2081,7 @@ void TutorialPostPlay::OnUpdate(float dt)
                     } else {
                         RumbleEnable(1);
                         SndgMusicFadeOut(0xFA, 0);
-                        fn_80047874(0);
+                        PlyrNameTagEnable(0);
                         fn_8004730C(0);
                         InGameStop();
                         mUnknown12 = 0;

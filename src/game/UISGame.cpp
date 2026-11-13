@@ -7,7 +7,7 @@
 #include "game/ResBank.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/GameModeType.h"
 #include "game/CamAddCameraToViewport.h"
 #include "game/fn_801D2B7C.h"
@@ -40,8 +40,8 @@ double fabs(double);
 void BootHandleReset(void);
 int MainFEGroupIsFirstStart(void *p);
 void fn_8000FCD4(int a);
-void fn_80047670(int handle);
-void fn_80047698(void);
+void PlyrNameTagInit(int handle);
+void PlyrNameTagShutdown(void);
 void InGameStateReset(void);
 void InGameStateClearActive(void);
 void ScreenMsgDispatch(void);
@@ -475,7 +475,7 @@ void UISGameCreateMain(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -517,7 +517,7 @@ void UISGameCreateSub(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -551,7 +551,7 @@ void UISGameCreateSub2(void)
     desc.mUnknown4[1] = 0;
     desc.mUnknown16 = fn_801CEA14();
     desc.mUnknown18 = fn_801CEA08();
-    if (!FELoopIsMainFEActive() && (fn_8007F828(6) == 1 || fn_801CEB4C() == 1)) {
+    if (!FELoopIsMainFEActive() && (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1)) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
     }
@@ -641,7 +641,7 @@ void UISGameInit(void)
         UISHeldObjEnable(1);
     } else if (InGameIsPlaying()) {
         GameModeTypeGet();
-        fn_80047670(_UISGame_pMainObjList);
+        PlyrNameTagInit(_UISGame_pMainObjList);
         BannerSetTickMs((unsigned int)(gFrameTimeScale * 16.666668f));
         UISHeldObjEnable(0);
         InGameStateReset();
@@ -731,7 +731,7 @@ void UISGameShutdown(void)
             fn_802363E0(_UISGame_pMainVpt);
         }
     } else if (InGameIsPlaying()) {
-        fn_80047698();
+        PlyrNameTagShutdown();
         BannerEnd();
         InGameStateClearActive();
         GameEventFlagsShutdown();

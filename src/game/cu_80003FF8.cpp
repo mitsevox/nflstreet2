@@ -1,8 +1,7 @@
 #include "game/Challenge.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/cu_8007F12C.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801FCE10.h"
 
 static int lbl_802F3E60[7] = {0, 1, 2, 4, 8, 9, 13};
@@ -123,9 +122,9 @@ void fn_80004504(unsigned char id)
     fn_80186F30(-1, 0);
     TeamFilterSet(1023);
     MsgChallengeSetFlowState(5);
-    ChalLoadCurrent(id, fn_8007F828(0));
+    ChalLoadCurrent(id, GameOptionsGet(0));
     Challenge_t *pRecord = ChalGetCurrent();
-    fn_8007F97C();
+    GameOptionsCopyShadow();
     fn_80083E1C(&cursor, 0);
     int team;
     if (ChalHasReward(pRecord, 4)) {
@@ -161,21 +160,21 @@ void fn_80004504(unsigned char id)
     }
     fn_800A2F3C(pRecord->mUnknown1BC);
     if (pRecord->mUnknown19C == 0) {
-        fn_8007F6F8(14, 0);
-        fn_8007F6F8(1, pRecord->mUnknown1A0);
+        GameOptionsSet(14, 0);
+        GameOptionsSet(1, pRecord->mUnknown1A0);
     } else {
-        fn_8007F6F8(14, 1);
-        fn_8007F6F8(2, pRecord->mUnknown1A0);
+        GameOptionsSet(14, 1);
+        GameOptionsSet(2, pRecord->mUnknown1A0);
     }
-    fn_8007F6F8(8, pRecord->mUnknown1A7);
-    fn_8007F6F8(19, 1);
+    GameOptionsSet(8, pRecord->mUnknown1A7);
+    GameOptionsSet(19, 1);
 }
 
 void fn_8000473C(int team, int value)
 {
     DbCursor cursor;
     lbl_803EB8FC = 0;
-    fn_8007F97C();
+    GameOptionsCopyShadow();
     ChallengeSetMode(1);
     GameOutcomeSet(2);
     TeamFilterSet(1023);
@@ -191,10 +190,10 @@ void fn_8000473C(int team, int value)
     fn_8001441C(1, otherTeam);
     GameInfoSet(2, 1);
     fn_800A2F3C(value);
-    fn_8007F6F8(14, 0);
-    fn_8007F6F8(1, 36);
-    fn_8007F6F8(8, 1);
-    fn_8007F6F8(19, 1);
+    GameOptionsSet(14, 0);
+    GameOptionsSet(1, 36);
+    GameOptionsSet(8, 1);
+    GameOptionsSet(19, 1);
 }
 
 }

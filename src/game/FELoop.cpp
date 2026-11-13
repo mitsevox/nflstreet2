@@ -1,6 +1,6 @@
 /* The front-end loop module: boot screens, the per-frame update of the menus, the screen to return to after a game, and the idle timeout. */
 
-#include "game/cu_8007F12C.h"
+#include "game/GameOptions.h"
 #include "game/SndgMusic.h"
 #include "engine/viewport.h"
 #include "game/FlowManagerC.h"
@@ -11,7 +11,6 @@
 #include "game/GameInfo.h"
 #include "game/DepthChartSide.h"
 #include "game/fn_80061AD4.h"
-#include "game/fn_8007F828.h"
 #include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
@@ -277,9 +276,9 @@ static void _FELoopBootSetup()
 {
     ConSetChannelInfo(-1, 1, (void *)_FELoopPadHandler);
     PadInputSetDefaultHandler();
-    fn_8007F374();
+    GameOptionsShutdown();
     BootShowStartupScreens();
-    fn_8007F328(0);
+    GameOptionsInit(0);
     SndgApplyVolumeOptions();
     SndgMusicReshuffle();
     ConSetChannelInfo(-1, 1, 0);
@@ -290,7 +289,7 @@ void FELoop::Boot()
     ResTrackLabel("FELoopBootStart");
     _FELoopBootSetup();
     fn_80187FDC();
-    if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
+    if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
         CamSetDefaultAspect(4.0f / 3.0f);
     } else {
         CamSetupAspect();

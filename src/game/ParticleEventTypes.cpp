@@ -8,7 +8,7 @@
 #include "game/fn_802270D4.h"
 
 extern "C" {
-void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0);
+void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0);
 int fn_800A33DC(void);
 int fn_800A8444(int team);
 int fn_80144FE8(int a);
@@ -52,7 +52,7 @@ extern "C" void ParticleEventFootstep(ParticleEvent_t *pEvent)
 
     ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, 0);
     speed = pPlayer->mMotion.mUnknown28;
-    fn_80044858(pPlayer, &pos, pEvent->mUnknown14 == 8);
+    DivotOnFootstep(pPlayer, &pos, pEvent->mUnknown14 == 8);
     if (fn_800A8444(0) || fn_800A8444(1) || pos.mZ >= 0.09f || speed <= 0.05f) {
         return;
     }

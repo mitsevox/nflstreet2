@@ -21,8 +21,8 @@ extern float gPlyrMoveFwdSpeed;
 extern float lbl_803EAD14;
 extern unsigned char lbl_803EAD18;
 extern unsigned char lbl_803EAD19;
-int fn_800DAE4C(Object_80039F5C *p);
-int fn_800DAD90(Table_80089904 *pTable, int value, int a, unsigned char b);
+int PlayerLocoGetLowerAnkle(Object_80039F5C *p);
+int PlayerLocoFindTableEntry(Table_80089904 *pTable, int value, int a, unsigned char b);
 float fn_8012506C(Object_80039F5C *p, int value);
 int fn_800ACFA8(Object_80039F5C *p);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, Point_8017886C *pOut);
@@ -78,9 +78,9 @@ extern "C" int fn_800DAF5C(Table_80089904 *pTable, int key, void *pContext,
     direction.mX = (signed char)p->mUnknown1008.mUnknown1 * 0.1f;
     direction.mY = (signed char)p->mUnknown1008.mUnknown2 * 0.1f;
     int angle = (fn_801CFE40(direction.mY, direction.mX) - p->mMotion.mFacing) & 0xFFFFFF;
-    int foot = fn_800DAE4C(p);
+    int foot = PlayerLocoGetLowerAnkle(p);
     unsigned char side = (unsigned char)fn_800DAEE4(p);
-    int index = fn_800DAD90(pTable, angle, foot, side);
+    int index = PlayerLocoFindTableEntry(pTable, angle, foot, side);
     fn_801BA2A8(pContext, pEntries, pTable->mEntries[index].mUnknown0,
         pTable->mEntries[index].mUnknown2, key, p, 1.0f);
     return 0;
@@ -834,8 +834,8 @@ typedef Record_800EA284 Block_800E11C0;
 extern "C" {
 void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
-int fn_800DA7AC(Object_801BBD5C *pObject, float value);
-float fn_800DAA68(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
+int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
+float PlayerLocoUpdateBlendWeights(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
 void fn_8009A260(Object_80039F5C *p);
 int fn_8009B9A8(int a);
 float fn_8009BB54(int a);
@@ -936,7 +936,7 @@ void fn_80227384(void *pOut, void *p, int angle);
 }
 extern float lbl_803EAD20;
 
-#include "game/Object_800DA8D8.h"
+#include "game/LocoBlendSet.h"
 #include "game/FEPlyrModel.h"
 struct Record_800DC6F4 {
     int mUnknown0, mUnknown4;
@@ -953,10 +953,10 @@ extern "C" {
 Object_801BBD5C *fn_801BBD5C(unsigned short key, unsigned short id);
 int fn_801BA2D0(void *pA, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
 void fn_801BA418(void *pA, Record_800D81C8 *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
-void fn_800DA814(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, Record_800D81C8 *pEntries);
-void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, Record_800D81C8 *pEntries, unsigned char flag);
-void fn_800DAC78(Block_801BE60C *p, float a, float b);
-void fn_800DAC88(Block_801BE60C *p, void *pA, Record_800D81C8 *pEntries);
+void PlayerLocoStartBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, FEPlyrModel_t *pA, Record_800D81C8 *pEntries);
+void PlayerLocoSwitchBlendPair(LocoBlendSet_t *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, Record_800D81C8 *pEntries, unsigned char flag);
+void PlayerLocoSetFadeFraction(Block_801BE60C *p, float a, float b);
+void PlayerLocoFadeOldPair(Block_801BE60C *p, void *pA, Record_800D81C8 *pEntries);
 }
 
 extern "C" {
@@ -1195,12 +1195,12 @@ extern "C" float fn_800DC61C(Object_801BBD5C *pObject, Object_80039F5C *p)
 
 extern "C" int fn_800DC674(Object_801BBD5C *pObject, Object_80039F5C *p)
 {
-    return fn_800DA7AC(pObject, fn_800DC61C(pObject, p));
+    return PlayerLocoFindSampleIndex(pObject, fn_800DC61C(pObject, p));
 }
 
 extern "C" float fn_800DC6A8(Object_801BBD5C *pObject, Object_80039F5C *p, int index, void *pA, int b)
 {
-    return fn_800DAA68(index, pA, pObject, b, fn_800DC61C(pObject, p));
+    return PlayerLocoUpdateBlendWeights(index, pA, pObject, b, fn_800DC61C(pObject, p));
 }
 
 extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int mode)
@@ -1318,7 +1318,7 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
         int index = fn_800DC674(pObject, p);
         pRecord->mUnknown4 = 1.0f;
         unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
-        fn_800DA814((Object_800DA8D8 *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
+        PlayerLocoStartBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, (FEPlyrModel_t *)pA, pEntries);
         pRecord->mUnknown12 = index;
         fn_800DC6A8(pObject, p, index, pRecord, (int)pEntries);
         pRecord->mUnknown16 = 0;
@@ -1335,13 +1335,13 @@ extern "C" int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA,
                 pRecord->mUnknown12 = index;
                 pRecord->mUnknown16 = 8;
                 unsigned char *pEntry = (unsigned char *)&pTable->mEntries[index];
-                fn_800DA8D8((Object_800DA8D8 *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, pA, pEntries, 8);
+                PlayerLocoSwitchBlendPair((LocoBlendSet_t *)pObject, (Block_801BE60C *)pRecord, p, pEntry[1], (signed char)index, key, pA, pEntries, 8);
             }
         }
         if (pRecord->mUnknown16 > 0) {
             --pRecord->mUnknown16;
-            fn_800DAC78((Block_801BE60C *)pRecord, 8.0f, pRecord->mUnknown16);
-            fn_800DAC88((Block_801BE60C *)pRecord, pA, pEntries);
+            PlayerLocoSetFadeFraction((Block_801BE60C *)pRecord, 8.0f, pRecord->mUnknown16);
+            PlayerLocoFadeOldPair((Block_801BE60C *)pRecord, pA, pEntries);
         } else {
             pRecord->mUnknown16 = 0;
             pRecord->mUnknown4 = 1.0f;

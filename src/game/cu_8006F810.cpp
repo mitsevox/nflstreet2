@@ -26,7 +26,7 @@ struct Record_80071594 {
 
 extern "C" {
 
-int fn_8007F828(int id);
+int GameOptionsGet(int id);
 int fn_800A8444(int index);
 void SndgSetVolumeOption(unsigned int index, unsigned int value);
 void SndgAmbStopAllAndCue(void);
@@ -254,9 +254,9 @@ void fn_8006F850(AudmonEvent_t *p)
     case 126: SndgMusicSetMode(10); break;
     case 127: SndgMusicSetMode(11); break;
     case 107: case 128:
-        if ((unsigned char)(fn_8007F828(5) * 10) > 52 && !fn_800A8444(0) && !fn_800A8444(1)) SndgSetVolumeOption(2, 52);
+        if ((unsigned char)(GameOptionsGet(5) * 10) > 52 && !fn_800A8444(0) && !fn_800A8444(1)) SndgSetVolumeOption(2, 52);
         break;
-    case 109: case 130: SndgSetVolumeOption(2, (unsigned char)(fn_8007F828(5) * 10) & ~1U); break;
+    case 109: case 130: SndgSetVolumeOption(2, (unsigned char)(GameOptionsGet(5) * 10) & ~1U); break;
     case 88: {
         int surface = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);

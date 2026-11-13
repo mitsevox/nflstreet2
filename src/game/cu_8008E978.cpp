@@ -72,7 +72,7 @@
 #include "game/Class_80297B50.h"
 #include "game/DefPred.h"
 #include "game/LivePlayPhase.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/PlayBookDb.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
@@ -3505,7 +3505,7 @@ void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8022E558(void);
 int fn_8022E560(void);
 void fn_800B852C(void);
-void fn_80043DD8(void);
+void DivotScatterRandom(void);
 void fn_801624D0(void *arg);
 void BallMarkerCreate(int handle);
 void ReplayCursorCreate(int handle);
@@ -3513,7 +3513,7 @@ void PassIconsCreate(void *pOwner);
 void fn_800C4410(int value);
 void fn_80046E30(int handle);
 void EffectDrawObjCreate(int handle);
-void fn_80043D68(void);
+void DivotShutdown(void);
 void FldObjRemoveObjType(int handle);
 void EnvObjRemoveObjType(int handle);
 void fn_800B8538(void);
@@ -3551,7 +3551,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int fn_800E1554(Object_80039F5C *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
-int fn_800EE7C8(Object_80039F5C *p);
+int HandoffIsStarting(Object_80039F5C *p);
 unsigned int fn_8011E188(void);
 int MathAngleDiff(int a, int b);
 unsigned short fn_801BE648(void *p);
@@ -3589,7 +3589,7 @@ extern "C" void fn_800C46B0(int handle)
 {
     fn_8022E558();
     fn_800B852C();
-    fn_80043DD8();
+    DivotScatterRandom();
     fn_801624D0((void *)handle);
     BallMarkerCreate(handle);
     ReplayCursorCreate(handle);
@@ -3601,7 +3601,7 @@ extern "C" void fn_800C46B0(int handle)
 
 extern "C" void fn_800C471C(int handle)
 {
-    fn_80043D68();
+    DivotShutdown();
     FldObjRemoveObjType(handle);
     EnvObjRemoveObjType(handle);
     fn_800B8538();
@@ -3881,7 +3881,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
         }
         break;
     case 26:
-        if (fn_800EE7C8(pOther)) {
+        if (HandoffIsStarting(pOther)) {
             return 0;
         }
         break;
@@ -4872,7 +4872,7 @@ extern "C" void fn_8009ABC0(void)
 
 extern "C" void fn_8009ABC4(void)
 {
-    if (fn_8007F828(8) != 0 && fn_800BA6F8() == 0) {
+    if (GameOptionsGet(8) != 0 && fn_800BA6F8() == 0) {
         lbl_803EA948->mUnknown8 = 1;
     } else {
         lbl_803EA948->mUnknown8 = 0;
@@ -5861,7 +5861,7 @@ void fn_80163020(void);
 int TutorialIsActive(void);
 void TutorialSetHudVisible(int value);
 void fn_800C0330(void *p);
-void fn_80047874(unsigned char enable);
+void PlyrNameTagEnable(unsigned char enable);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
 void fn_800A7A0C(int team);
 void fn_800A9330(void);
@@ -6279,7 +6279,7 @@ extern "C" void fn_800A6D5C(int team)
     lbl_803EAA4F = 0;
     fn_800C0330(lbl_803EABA4);
     fn_800A61E8(0);
-    fn_80047874(0);
+    PlyrNameTagEnable(0);
 }
 
 extern "C" void fn_800A6DA4(void)
@@ -6638,10 +6638,10 @@ extern "C" int fn_800A8740(void)
         }
         return 0;
     }
-    if (fn_8007F828(19) == 0) {
+    if (GameOptionsGet(19) == 0) {
         return 1;
     }
-    return fn_8007F828(14) == 1;
+    return GameOptionsGet(14) == 1;
 }
 
 extern "C" {
@@ -6684,7 +6684,7 @@ extern "C" void fn_800A87E8(void)
         if (lbl_803EC954[0]->mUnknown68 != 0 || lbl_803EC954[1]->mUnknown68 != 0) {
             fn_800A8570();
         }
-        fn_80047874(1);
+        PlyrNameTagEnable(1);
     }
 }
 
@@ -7205,7 +7205,7 @@ unsigned char CheatFlagsIsSet(int index);
 void PlayArtStop(void);
 int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
-unsigned int fn_801765A8(int type);
+unsigned int PenaltyGetKindFlags(int type);
 void TeamPromptSetResult(int value);
 void TeamPromptStart(int a, int b, int c);
 void PlayArtStart(int mode);
@@ -7390,7 +7390,7 @@ extern "C" int fn_800B1A30(void *p)
     Pair_800A14A8 *pPair = (Pair_800A14A8 *)p;
     int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pPair->mpSecond);
 
-    if ((fn_801765A8(fn_800B232C(0)) & 4) || result != 0) {
+    if ((PenaltyGetKindFlags(fn_800B232C(0)) & 4) || result != 0) {
         TeamPromptSetResult(0);
     } else {
         TeamPromptStart(0, (int)pPair->mpFirst, (int)pPair->mpSecond);
@@ -7405,7 +7405,7 @@ extern "C" void fn_800B1BF8(void *p)
 }
 
 extern "C" {
-int fn_801763D0(Entry_800B206C *events, int count, unsigned char *result);
+int PenaltyResolveEvents(Entry_800B206C *events, int count, unsigned char *result);
 float fn_80237260(int stream);
 void fn_80178370(void);
 }
@@ -7417,11 +7417,11 @@ extern "C" int fn_800B1F58(Block_800B21D0 *p, float value)
     int result = 0;
     unsigned char order;
 
-    if (fn_801763D0(pState->mUnknown0, count, &order) != -1 && order <= 1) {
+    if (PenaltyResolveEvents(pState->mUnknown0, count, &order) != -1 && order <= 1) {
         Entry_800B206C *pEntry = &pState->mUnknown0[count - 1];
         Object_80039F5C *pPlayer = fn_8009BCE8(&pEntry->mUnknown4);
         int kind = pEntry->mUnknown0;
-        unsigned int flags = fn_801765A8(kind);
+        unsigned int flags = PenaltyGetKindFlags(kind);
 
         if (fn_80237260(0) < value) {
             result = 1;
@@ -8235,7 +8235,7 @@ extern "C" void fn_800B4300(int mode)
         lbl_803EAB34->mUnknown30 = 240;
         break;
     }
-    lbl_803EAB34->mUnknown30 += (4 - fn_8007F828(0)) * 60;
+    lbl_803EAB34->mUnknown30 += (4 - GameOptionsGet(0)) * 60;
     lbl_803EAB34->mUnknown30 += fn_802372EC(0, 4) * 60;
 }
 
@@ -8313,7 +8313,7 @@ typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void
 extern "C" {
 int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
-int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoCyclePhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8331,7 +8331,7 @@ int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Recor
               unsigned int phase);
 int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
                                   Object_80039F5C *p, unsigned int phase);
-int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+int PlayerLocoMoveCmdPhase(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
 int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
               unsigned int phase);
@@ -8372,8 +8372,8 @@ extern Handler_800B4D7C lbl_8030FB60[248];
 extern "C" void fn_800B4A88(void)
 {
     fn_8009C604(lbl_8030FB60, 248);
-    lbl_8030FB60[74] = fn_800D9C80;
-    lbl_8030FB60[77] = fn_800DA54C;
+    lbl_8030FB60[74] = PlayerLocoCyclePhase;
+    lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
     lbl_8030FB60[73] = fn_800DC6F4;
     lbl_8030FB60[84] = fn_800DC36C;
     lbl_8030FB60[91] = fn_800DD69C;
@@ -8499,7 +8499,7 @@ extern "C" void fn_800B4D7C(void)
 {
     fn_8009C604(lbl_8030FB60, 248);
     lbl_8030FB60[82] = fn_800DDD24;
-    lbl_8030FB60[74] = fn_800D9C80;
+    lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[10] = fn_80093D20;
     lbl_8030FB60[214] = fn_80089E70;
 }
@@ -10302,7 +10302,7 @@ void Class_80297B90::vfn_04(float dt)
     case 4:
         SndgNullHook();
         if (InGameIsDemo() != 0) {
-            fn_80047874(0);
+            PlyrNameTagEnable(0);
             fn_8004730C(0);
             SndgMusicFadeOut(250, 1);
             InGameStop();
@@ -10424,7 +10424,7 @@ void Class_80297B90::vfn_04(float dt)
             SndgMusicFadeOut(250, 0);
             fn_8005FC84();
             fn_80061D14();
-            fn_80047874(0);
+            PlyrNameTagEnable(0);
             fn_8004730C(0);
             if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 PlayerObjSetDrawReady(0);
@@ -10524,7 +10524,7 @@ extern "C" int fn_800ABCDC(void)
 
 extern "C" void fn_800ABCE8(Block_800ABD1C *p)
 {
-    p->mUnknown0 = fn_8007F828(0);
+    p->mUnknown0 = GameOptionsGet(0);
 }
 
 extern "C" void fn_800ABD1C(void)
@@ -10824,7 +10824,7 @@ void fn_800AD550(float dt);
 void fn_800AD5C0(float dt);
 void fn_800AD600(float dt);
 void fn_80177BCC(float value);
-void fn_801765C0(void);
+void PenaltyCheckAllPlayers(void);
 }
 
 extern "C" void fn_800AD418(float dt)
@@ -10843,7 +10843,7 @@ extern "C" void fn_800AD418(float dt)
         fn_800C478C(dt);
         fn_80177BCC(dt);
         CamGameProcess();
-        fn_801765C0();
+        PenaltyCheckAllPlayers();
     }
 }
 
@@ -11351,7 +11351,7 @@ extern "C" void fn_800AE380(void)
     unsigned int i = 0;
     int found = 0;
 
-    if (fn_8007F828(15) != 0) {
+    if (GameOptionsGet(15) != 0) {
         /* Whether the fn_80178308 / fn_80178320 team has a human controller. */
         int humanA = 1;
         int humanB;
@@ -11423,7 +11423,7 @@ extern "C" void fn_800AE65C(void)
     unsigned char saved = RumbleIsEnabled();
 
     RumbleEnable(1);
-    if (fn_8007F828(9) != 0) {
+    if (GameOptionsGet(9) != 0) {
         unsigned int i;
 
         for (i = 0; i <= 9; i++) {
@@ -11500,7 +11500,7 @@ extern "C" void fn_800AE8B4(void)
 
 extern "C" void fn_800AE904(int index)
 {
-    if ((fn_8007F828(15) != 0 || index == 14) && lbl_8030F9DC[index] == 0) {
+    if ((GameOptionsGet(15) != 0 || index == 14) && lbl_8030F9DC[index] == 0) {
         lbl_803EAAEC = index;
         lbl_803EAAE8 = 1;
         fn_800AE6F0();
@@ -17391,7 +17391,7 @@ void PreGamePhase::UpdateIntroEnd(float dt)
 
     if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && InGameIsDemo() == 0 &&
         GameModeTypeIsSpecial() == 0 && TutorialIsActive() == 0 && fn_801485D4() == 0 &&
-        (state = fn_8007F828(14)) == 1) {
+        (state = GameOptionsGet(14)) == 1) {
         HideIntroScreen();
         fn_800AE904(14);
         lbl_803EABA3 = state;

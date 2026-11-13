@@ -5,7 +5,7 @@
 #include "game/PauseMenu.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
@@ -196,7 +196,7 @@ void PreGamePhase::UpdateIntro(float dt)
 void PreGamePhase::OnExit()
 {
     if (fn_800AE968(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
-        TutorialIsActive() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
+        TutorialIsActive() != 0 || fn_801485D4() != 0 || GameOptionsGet(14) != 1) {
         HideIntroScreen();
     }
     lbl_803EC98C->mUnknown32 = 0;

@@ -7,8 +7,7 @@
 #include "engine/viewporttypes.h"
 #include "game/OptionsScreen.h"
 #include "game/SndgMusic.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
 #include "game/fn_8021D7B8.h"
@@ -95,7 +94,7 @@ void OptAudioStopPreview(void)
             SndgChannelPurgeStream(_OptAudio_uPreviewChannel);
         }
         if (FELoopIsMainFEActive() != 0 || _OptAudio_iSelOption == 10) {
-            if (fn_8007F828(OptionsScreenGetOptionId(10)) > 0) {
+            if (GameOptionsGet(OptionsScreenGetOptionId(10)) > 0) {
                 SndgMusicResume();
                 _OptAudio_bMusicOn = 1;
             }
@@ -109,10 +108,10 @@ void OptAudioSetOption(int mode, int value, int notify)
     int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
-        if (fn_8007F828(index) == 0 && value != 0) {
+        if (GameOptionsGet(index) == 0 && value != 0) {
             flag = 1;
         }
-        fn_8007F6F8(index, value);
+        GameOptionsSet(index, value);
         if (notify == 1) {
             OptAudioOnOptionChanged(mode, flag);
         }
@@ -125,7 +124,7 @@ int OptAudioGetOption(int mode)
     int index = OptionsScreenGetOptionId(mode);
 
     if (index != 24) {
-        result = fn_8007F828(index);
+        result = GameOptionsGet(index);
     }
     return result;
 }
@@ -168,17 +167,17 @@ void OptAudioClose(void)
     int value;
 
     OptAudioStopPreview();
-    if (_OptAudio_iSavedOption6 != fn_8007F828(6)) {
-        if (fn_8007F828(6) == 0) {
+    if (_OptAudio_iSavedOption6 != GameOptionsGet(6)) {
+        if (GameOptionsGet(6) == 0) {
             value = 0;
         } else {
             value = 1;
         }
         fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
-        if (fn_8007F828(6) == 1) {
+        if (GameOptionsGet(6) == 1) {
             UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {
-            UISGameSetAspect(UISGameGetMainViewport(), fn_8007F828(6));
+            UISGameSetAspect(UISGameGetMainViewport(), GameOptionsGet(6));
         }
         CamSetupAspect();
     }
@@ -205,7 +204,7 @@ void OptAudioOpen(void)
     result = FELoopIsMainFEActive();
     _OptAudio_bMusicOn = 0;
     SndgMusicPause();
-    _OptAudio_iSavedOption6 = fn_8007F828(6);
+    _OptAudio_iSavedOption6 = GameOptionsGet(6);
     _OptAudio_hSoundRes = ResOpenDevice(lbl_802EBFCC, 44);
     if (result != 0 || SpchIGIsChannelIdle(0) != 0) {
         _OptAudio_iStreamSet = 0;
@@ -235,7 +234,7 @@ void OptAudioOnOptionChanged(int mode, int flag)
             }
             _OptAudio_bMusicOn = 1;
             OptAudioStartPreview(mode);
-        } else if (fn_8007F828(OptionsScreenGetOptionId(mode)) == 0 && mode == 10) {
+        } else if (GameOptionsGet(OptionsScreenGetOptionId(mode)) == 0 && mode == 10) {
             if (_OptAudio_bHasTracks == 0) {
                 SndgMusicStop();
             } else {

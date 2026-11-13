@@ -2,11 +2,10 @@
    reacts to changes (a rumble test pulse, sound modes, and option 6 when the
    screen closes). */
 
-#include "game/cu_8007F12C.h"
+#include "game/GameOptions.h"
 #include "game/OptionsScreenMsg.h"
 #include "game/OptionsScreen.h"
 #include "game/FELoop.h"
-#include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
 #include "game/GameModeType.h"
 #include "engine/viewporttypes.h"
@@ -31,24 +30,24 @@ static int _OptionsScreen_aiOptionIds[21] = {
 void OptionsScreenEnter(void)
 {
     FELoopIsMainFEActive();
-    _OptionsScreen_iSavedOption6 = fn_8007F828(6);
+    _OptionsScreen_iSavedOption6 = GameOptionsGet(6);
 }
 
 void OptionsScreenExit(void)
 {
     int value;
 
-    if (_OptionsScreen_iSavedOption6 != fn_8007F828(6)) {
-        if (fn_8007F828(6) == 0) {
+    if (_OptionsScreen_iSavedOption6 != GameOptionsGet(6)) {
+        if (GameOptionsGet(6) == 0) {
             value = 0;
         } else {
             value = 1;
         }
         fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
-        if (fn_8007F828(6) == 1) {
+        if (GameOptionsGet(6) == 1) {
             UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {
-            UISGameSetAspect(UISGameGetMainViewport(), fn_8007F828(6));
+            UISGameSetAspect(UISGameGetMainViewport(), GameOptionsGet(6));
         }
     }
 }
@@ -64,7 +63,7 @@ void OptionsScreenOnChange(int id, int flag)
 
     switch (id) {
     case 5:
-        if (flag != 0 && fn_8007F828(9) != 0) {
+        if (flag != 0 && GameOptionsGet(9) != 0) {
             if (FELoopIsMainFEActive() != 0) {
                 for (i = 0; i < 8; i++) {
                     if (fn_801E195C(ConGetChannelInfo(i, 0)) == 2) {
@@ -98,10 +97,10 @@ void OptionsScreenSetOption(int index, int value, int notify)
     if (GameModeTypeGet() == 8 && _OptionsScreen_aiOptionIds[index] == 8) {
         return;
     }
-    if (fn_8007F828(_OptionsScreen_aiOptionIds[index]) == 0 && value != 0) {
+    if (GameOptionsGet(_OptionsScreen_aiOptionIds[index]) == 0 && value != 0) {
         flag = 1;
     }
-    fn_8007F6F8(_OptionsScreen_aiOptionIds[index], value);
+    GameOptionsSet(_OptionsScreen_aiOptionIds[index], value);
     if (notify == 1) {
         OptionsScreenOnChange(index, flag);
     }
@@ -113,7 +112,7 @@ int OptionsScreenGetOption(unsigned int index)
     int id = OptionsScreenGetOptionId(index);
 
     if (id != 24) {
-        result = fn_8007F828(id);
+        result = GameOptionsGet(id);
     }
     return result;
 }
@@ -131,7 +130,7 @@ int OptionsScreenMsg(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, in
         *pResult = OptionsScreenGetOption(pBlock->mUnknown0);
         break;
     case 0x80000007:
-        fn_8007F548();
+        GameOptionsResetMarked();
         OptionsScreenSetOption(5, 1, 0);
         break;
     case 0x80000001:

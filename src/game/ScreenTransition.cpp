@@ -8,7 +8,7 @@
 #include <dolphin/gx/GXFrameBuffer.h>
 #include "game/ScreenTransition.h"
 #include "engine/viewport.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -110,7 +110,7 @@ void _ScreenTransDrawFrame(ScreenTrans_t *state, unsigned int mode) {
     default:
         break;
     }
-    if (fn_8007F828(6) == 1) {
+    if (GameOptionsGet(6) == 1) {
         const float height = 448.0f;
         adjust = (float)((448 - fn_801CEC74()) / 2) / height;
     }

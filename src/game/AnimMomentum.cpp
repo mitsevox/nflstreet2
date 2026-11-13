@@ -13,7 +13,7 @@
 
 extern "C" {
 float fn_800C4A2C(AnimMomentumActor_t *p);
-void fn_80044854(AnimMomentumActor_t *p, AnimMomentum_t *pState);
+void DivotOnMomentum(AnimMomentumActor_t *p, AnimMomentum_t *pState);
 AnimMomentumActor_t *BallGetCurrentHolder(void);
 int fn_801784C4(void);
 int fn_801787A0(void);
@@ -72,7 +72,7 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
                 p->mUnknownC /= pBlock->mUnknown4;
                 p->mUnknown14 = 1;
                 p->mUnknown15 = fn_801784C4();
-                fn_80044854(pOther, p);
+                DivotOnMomentum(pOther, p);
             } else if (value < p->mUnknownC) {
                 float alpha = (value - p->mUnknown8) / (p->mUnknownC - p->mUnknown8);
                 alpha = alpha < 0.0f ? 0.0f : alpha > 1.0f ? 1.0f : alpha;
@@ -157,7 +157,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
             p->mUnknownC /= pBlock->mUnknown4;
             p->mUnknown14 = 1;
             p->mUnknown15 = fn_801784C4();
-            fn_80044854(pOther, p);
+            DivotOnMomentum(pOther, p);
         } else if (value < p->mUnknownC) {
             float alpha = (value - p->mUnknown8) / (p->mUnknownC - p->mUnknown8);
             alpha = alpha < 0.0f ? 0.0f : alpha > 1.0f ? 1.0f : alpha;

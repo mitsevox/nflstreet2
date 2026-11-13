@@ -1,10 +1,10 @@
-#ifndef GAME_STATE_80134E24_H
-#define GAME_STATE_80134E24_H
+#ifndef GAME_PLYRMODESTATE_H
+#define GAME_PLYRMODESTATE_H
 
 #include "game/Object_80039F5C.h"
 
 /* This mode overlays the opaque block at player+0x150. */
-struct State_80134E24 {
+struct PlyrModeState_t {
     union {
         int mUnknown0Word;
         struct {

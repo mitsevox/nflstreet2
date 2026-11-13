@@ -15,7 +15,7 @@
 #include "game/GameInfo.h"
 #include "game/Ball.h"
 #include "game/cu_8003108C.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
@@ -151,7 +151,7 @@ void DriveLogEndDrive(void);
 void DriveLogAddPlay(int type, short a, short b, int c, int d);
 int DriveLogHasLongPlay(void);
 void DriveLogSetLongPlay(void);
-void fn_80176984(void);
+void PenaltyCheckPassInterference(void);
 void ScoringLogAddScore(int type, short a, int b, int c);
 void ScoringLogSetConversion(int a, int b, int c, int d);
 int GameModeTypeIsSpecial(void);
@@ -438,7 +438,7 @@ extern "C" Point_8017886C fn_801772F4(Point_8017886C point)
 
 int ScrmRuleSet::GetScoreLimit()
 {
-    return fn_8007F828(1);
+    return GameOptionsGet(1);
 }
 
 int ScrmRuleSet::GetWinner()
@@ -612,7 +612,7 @@ void ScrmRuleSet::EndPlay()
 
 int Class_802A5630::GetScoreLimit()
 {
-    return fn_8007F828(2);
+    return GameOptionsGet(2);
 }
 
 int Class_802A5630::GetWinner()
@@ -714,7 +714,7 @@ extern "C" void fn_80177BCC(float value)
 {
     fn_8016F7F8();
     ClockRuleUpdate(value);
-    fn_80176984();
+    PenaltyCheckPassInterference();
 }
 
 static inline void FlipSides(void)
@@ -1347,7 +1347,7 @@ extern "C" int fn_80178EE0(int a)
 extern "C" void fn_80178F20(ScrmRuleSet *pRule)
 {
     if (pRule == 0) {
-        switch (fn_8007F828(14)) {
+        switch (GameOptionsGet(14)) {
         case 0:
             lbl_803EB444->mUnknown3D8 = &lbl_803ECB24;
             break;

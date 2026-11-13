@@ -1,7 +1,7 @@
 /* Records the result of a finished challenge or pairing game. */
 
 #include "game/Challenge.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 
 extern "C" {
 int GameOutcomeGet(void);
@@ -48,7 +48,7 @@ void ChallengeRecordResult(int a, int b)
                 if (ChalHasReward(pRecord, 4)) {
                     result = 3;
                 }
-                ChalSetProgress(pRecord->mUnknown0, result, b, fn_8007F828(0));
+                ChalSetProgress(pRecord->mUnknown0, result, b, GameOptionsGet(0));
             }
             break;
         }

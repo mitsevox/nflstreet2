@@ -3,7 +3,7 @@
    speaking player and pauses, stops or purges them on request. */
 
 #include "game/AudmonEvent.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
@@ -427,7 +427,7 @@ extern "C" void SpchIGUpdate(void)
             }
         }
     }
-    SndgSetVolumeOption(3, fn_8007F828(3) * 10);
+    SndgSetVolumeOption(3, GameOptionsGet(3) * 10);
     if (first != 0) {
         SndgChannelSetVolume(4, 95);
     }

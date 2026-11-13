@@ -1,13 +1,15 @@
+/* Player name tags: one small object per player that projects the player's
+   position to the screen each frame and draws the player's name above it. */
 #include "engine/viewport.h"
 #include "game/PauseMenu.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
-#include "game/Item_800476DC.h"
+#include "game/PlyrNameTag.h"
 
 /* Four floats passed by value to fn_801CD308, which copies them into one of
    two slots selected by its first argument. */
-struct Quad_801CD308 {
+struct NameTagColor_t {
     float mValues[4];
 };
 
@@ -18,9 +20,9 @@ int fn_8002D060(void *p);
 int fn_800A9680(void);
 int UISGetFont(int a, int b);
 void fn_801CD2A4(void);
-int fn_801CD308(int index, Quad_801CD308 value);
+int fn_801CD308(int index, NameTagColor_t value);
 void fn_801CD3B0(int a);
-void fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
+int fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
 void fn_801CDD18(void);
 int GlibRenderGetBin(int index);
 void GlibRenderSelectBin(int a);
@@ -31,62 +33,63 @@ void fn_801D0C58(void *a);
 void fn_801D1258(int which, float (*pMatrix)[4]);
 void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
-int ObjNewType_(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
+int ObjNewType_(int a, int b, int c, void (*pA)(PlyrNameTag_t *), void (*pB)(PlyrNameTag_t *));
 int ObjDelType(int a);
-void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
+void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(PlyrNameTag_t *));
 int ObjNewInList(int handle, int a, int b, int *pInit);
-void ObjRemoveFromList(int handle, Item_800476DC *pInstance);
+void ObjRemoveFromList(int handle, PlyrNameTag_t *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
 int fn_80236EC0(int a);
 
-static int lbl_803EA4C0 = 0;
-static float lbl_803EA4C4 = 1.3f;
-static unsigned char lbl_803EA4C8 = 1;
-static unsigned char lbl_803EA4C9 = 0;
-static int lbl_803EC7CC;
+static int _PlyrNameTag_iObjList = 0;
+static float _PlyrNameTag_fDepthScale = 1.3f;
+static unsigned char _PlyrNameTag_bEnabled = 1;
+static unsigned char _PlyrNameTag_bBlackText = 0;
+unsigned char gPlayerObjDrawReady = 0;
+static int _PlyrNameTag_iFont;
 
-void fn_8004732C(void)
+void PlyrNameTagLoadFont(void)
 {
-    lbl_803EC7CC = UISGetFont(0, 1);
+    _PlyrNameTag_iFont = UISGetFont(0, 1);
 }
 
-void fn_80047358(Item_800476DC *pInstance)
+void PlyrNameTagCreate(PlyrNameTag_t *pInstance)
 {
     pInstance->mUnknown4[0] = 0.0f;
     pInstance->mUnknown4[1] = 0.0f;
     pInstance->mUnknown4[2] = 0.02f;
     pInstance->mpUnknown24 = "DEFAULT";
-    if (lbl_803EC7CC) {
-        pInstance->mUnknown20 = lbl_803EC7CC;
+    if (_PlyrNameTag_iFont) {
+        pInstance->mUnknown20 = _PlyrNameTag_iFont;
     } else {
         pInstance->mUnknown20 = 0;
     }
     pInstance->mUnknown28 = 0;
 }
 
-void fn_80047398(Item_800476DC *pInstance)
+void PlyrNameTagDestroy(PlyrNameTag_t *pInstance)
 {
     pInstance->mUnknown20 = 0;
     pInstance->mpUnknown24 = 0;
     pInstance->mUnknown28 = 0;
 }
 
-int fn_800473AC(Item_800476DC *pInstance)
+int PlyrNameTagDraw(PlyrNameTag_t *pInstance)
 {
-    if (lbl_803EA4C8 && fn_8007F828(17)) {
+    if (_PlyrNameTag_bEnabled && GameOptionsGet(17)) {
         int mode = fn_800AD9B4();
         if (pInstance->mUnknown28 && pInstance->mUnknown20 && !fn_8002D060(lbl_803EA368) && mode != 4 &&
             mode != 7 && !PauseIsOpen() && !fn_800A9680()) {
             float matrix[4][4];
             float saved[4][4];
-            Quad_801CD308 value;
+            NameTagColor_t value;
             float offset[3];
             int state;
 
             GlibRenderSelectBin(GlibRenderGetBin(14));
             state = fn_80236EC0(0);
             fn_801CD2A4();
-            if (lbl_803EA4C9) {
+            if (_PlyrNameTag_bBlackText) {
                 value.mValues[0] = 0.0f;
                 value.mValues[1] = 0.0f;
                 value.mValues[2] = 0.0f;
@@ -117,54 +120,54 @@ int fn_800473AC(Item_800476DC *pInstance)
     return 0;
 }
 
-void fn_80047578(void)
+void PlyrNameTagAddObjType(void)
 {
-    ObjNewType_(11, 36, 27, fn_80047358, fn_80047398);
-    ObjSetListObjFunc(lbl_803EA4C0, 11, 0, fn_800473AC);
-    lbl_803EA4C8 = 1;
+    ObjNewType_(11, 36, 27, PlyrNameTagCreate, PlyrNameTagDestroy);
+    ObjSetListObjFunc(_PlyrNameTag_iObjList, 11, 0, PlyrNameTagDraw);
+    _PlyrNameTag_bEnabled = 1;
 }
 
-void fn_800475D4(void)
+void PlyrNameTagRemoveObjType(void)
 {
     VptFlushObjectTrashSync();
     ObjDelType(11);
 }
 
-Item_800476DC *fn_800475FC(int value)
+PlyrNameTag_t *PlyrNameTagNew(int value)
 {
-    return (Item_800476DC *)ObjNewInList(lbl_803EA4C0, 11, 0, &value);
+    return (PlyrNameTag_t *)ObjNewInList(_PlyrNameTag_iObjList, 11, 0, &value);
 }
 
-void fn_80047630(Item_800476DC *pInstance)
+void PlyrNameTagDelete(PlyrNameTag_t *pInstance)
 {
     if (pInstance) {
-        ObjRemoveFromList(lbl_803EA4C0, pInstance);
+        ObjRemoveFromList(_PlyrNameTag_iObjList, pInstance);
         VptTrashObject((int)pInstance);
     }
 }
 
-void fn_80047670(int handle)
+void PlyrNameTagInit(int handle)
 {
-    lbl_803EA4C0 = handle;
-    fn_80047578();
-    fn_8004732C();
+    _PlyrNameTag_iObjList = handle;
+    PlyrNameTagAddObjType();
+    PlyrNameTagLoadFont();
 }
 
-void fn_80047698(void)
+void PlyrNameTagShutdown(void)
 {
-    lbl_803EA4C0 = 0;
-    fn_800475D4();
-    lbl_803EA4C9 = 0;
+    _PlyrNameTag_iObjList = 0;
+    PlyrNameTagRemoveObjType();
+    _PlyrNameTag_bBlackText = 0;
 }
 
-void fn_800476CC(Item_800476DC *pInstance, const char *pName)
+void PlyrNameTagSetText(PlyrNameTag_t *pInstance, const char *pName)
 {
     if (pInstance) {
         pInstance->mpUnknown24 = pName;
     }
 }
 
-void fn_800476DC(Item_800476DC *pInstance, void *p)
+void PlyrNameTagUpdatePosition(PlyrNameTag_t *pInstance, void *p)
 {
     float *pPosition = (float *)p;
     float clip[4];
@@ -197,7 +200,7 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
         pInstance->mUnknown4[0] = width * clip[0] + 320.0f;
         pInstance->mUnknown4[1] = 224.0f - clip[1] * 224.0f;
         pInstance->mUnknown4[1] += 25.0f;
-        pInstance->mUnknown32 = view[2] * lbl_803EA4C4;
+        pInstance->mUnknown32 = view[2] * _PlyrNameTag_fDepthScale;
         pInstance->mUnknown28 = 1;
     } else {
         pInstance->mUnknown28 = 0;
@@ -205,20 +208,20 @@ void fn_800476DC(Item_800476DC *pInstance, void *p)
     fn_801D0544();
 }
 
-void fn_80047874(unsigned char enable)
+void PlyrNameTagEnable(unsigned char enable)
 {
-    lbl_803EA4C8 = enable;
+    _PlyrNameTag_bEnabled = enable;
 }
 
-void fn_8004787C(void)
+void PlyrNameTagReadTextColor(void)
 {
     int value = 0;
 
     fn_801FCE10(0, "select 'HTWG' into \x85 from 'FNIG'\n", &value);
     if (value == 3) {
-        lbl_803EA4C9 = 1;
+        _PlyrNameTag_bBlackText = 1;
     } else {
-        lbl_803EA4C9 = 0;
+        _PlyrNameTag_bBlackText = 0;
     }
 }
 }

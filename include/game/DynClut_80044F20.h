@@ -4,7 +4,7 @@
 #include "game/PaletteColor.h"
 
 /* One colour-table operation of a "dynclut" data block, parsed by
-   fn_80044C88 and applied by fn_80045F64 according to mMode. */
+   PlaDynClutParseEntry and applied by fn_80045F64 according to mMode. */
 struct ColorEntry {
     int mMode;
     unsigned char mFrom;
@@ -37,7 +37,7 @@ struct PlaDynClutPalettes_t {
 };
 
 extern "C" {
-void fn_80044C88(void *pNode, ColorEntry *pEntry);
+void PlaDynClutParseEntry(void *pNode, ColorEntry *pEntry);
 void fn_80044F20(void *pData, PlaDynClutEntry_t *pEntry);
 void fn_80045084(void *p, State_80045084 *pState);
 void fn_800450A8(void *p, State_80045084 *pState);

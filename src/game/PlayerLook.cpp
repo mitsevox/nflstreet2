@@ -4,7 +4,7 @@
 #include "engine/viewport.h"
 #include "game/FaceFeatures.h"
 #include "game/FELoop.h"
-#include "game/Item_800476DC.h"
+#include "game/PlyrNameTag.h"
 #include "game/DbCursor.h"
 #include "game/Object_8003DEC4.h"
 #include "game/PlayerObjInit.h"
@@ -54,7 +54,7 @@ extern PlayerLookSwitch_t lbl_802CF3EE[45][9];
 extern int lbl_802CFA44[54];
 extern PlayerLookColors_t lbl_802CFB1C[22];
 extern int lbl_802CFB74[22];
-extern unsigned char lbl_803EA4CA;
+extern unsigned char gPlayerObjDrawReady;
 
 int MsgPlayerPickupIsOpen(void);
 int fn_8003DEB4(void);
@@ -1156,13 +1156,13 @@ extern "C" void PlayerObjDestroy(Object_8003DEC4 *pPlayer)
 
 extern "C" void PlayerObjRenderInit(int a, int b)
 {
-    lbl_803EA4CA = 1;
+    gPlayerObjDrawReady = 1;
     fn_801A34B0(0, 0, a, b);
 }
 
 extern "C" void PlayerObjRenderShutdown(void)
 {
-    lbl_803EA4CA = 0;
+    gPlayerObjDrawReady = 0;
     fn_801A3520();
 }
 
@@ -1176,10 +1176,10 @@ extern "C" void PlayerObjAddObjType(int owner, int type, int count)
 
 extern "C" int PlayerObjDraw(Object_8003DEC4 *pPlayer, int unused)
 {
-    Item_800476DC *pItem = pPlayer->mUnknown988;
+    PlyrNameTag_t *pItem = pPlayer->mUnknown988;
 
     if (pItem && pItem->mUnknown28) {
-        fn_800476DC(pItem, pPlayer->mUnknown4);
+        PlyrNameTagUpdatePosition(pItem, pPlayer->mUnknown4);
     }
     fn_801A3C40(pPlayer);
     return 0;
@@ -1193,10 +1193,10 @@ extern "C" void PlayerObjRemoveObjType(int type)
 
 extern "C" void PlayerObjSetDrawReady(unsigned char value)
 {
-    lbl_803EA4CA = value;
+    gPlayerObjDrawReady = value;
 }
 
 extern "C" unsigned char PlayerObjIsDrawReady(void)
 {
-    return lbl_803EA4CA;
+    return gPlayerObjDrawReady;
 }

@@ -7,7 +7,7 @@
 #include "game/PreSnapPhase.h"
 #include "game/ScrmRuleSet.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 
 class Class_802A2130 : public ScrmRuleSet {
 public:
@@ -97,7 +97,7 @@ void fn_8014EFC0(Class_802A2B68 *p)
 {
     fn_800A8738(0);
     if (p->mpUnknown1C->mUnknown2C != 1) {
-        fn_8007F6F8(14, p->mpUnknown1C->mUnknown2C);
+        GameOptionsSet(14, p->mpUnknown1C->mUnknown2C);
     }
     if (fn_8005FC7C()) {
         fn_8006088C(fn_8014FF34(p));

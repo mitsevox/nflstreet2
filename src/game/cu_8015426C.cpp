@@ -6,8 +6,7 @@
 #include "game/PostPlayPhase.h"
 #include "game/PreSnapPhase.h"
 #include "game/ScrmRuleSet.h"
-#include "game/fn_8007F6F8.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include <string.h>
@@ -141,7 +140,7 @@ void fn_8015426C(Class_802A27F0 *p)
     fn_800AACB8(&p->mpUnknown1C->mUnknown48);
     fn_80178F20(&p->mpUnknown1C->mUnknown44);
     fn_80178E88(fn_80178A2C() * 2.0f - 18.0f);
-    p->mUnknown20 = fn_8007F828(14);
-    fn_8007F6F8(14, 2);
+    p->mUnknown20 = GameOptionsGet(14);
+    GameOptionsSet(14, 2);
 }
 }

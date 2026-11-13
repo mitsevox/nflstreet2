@@ -1,7 +1,7 @@
 #include "game/Command_800CEE74.h"
 #include "game/StyleTracker.h"
 #include "game/Ball.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_80178D18.h"
 #include "game/Block_801BE60C.h"
 #include "game/fn_802372EC.h"
@@ -139,7 +139,7 @@ extern "C" void fn_8009A8F0(void)
     if (lbl_803EA948->mUnknown8 == 0) {
         return;
     }
-    switch (fn_8007F828(14)) {
+    switch (GameOptionsGet(14)) {
     case 0:
         score0 = fn_801787DC(0);
         score1 = fn_801787DC(1);
@@ -190,7 +190,7 @@ extern "C" void fn_8009AB34(void)
     Block_8009AB34 *p = (Block_8009AB34 *)fn_8023816C(pHandle);
 
     p->mUnknown0[1] = p->mUnknown0[0] = 0.0f;
-    if (fn_800BA6F8() == 0 && fn_8007F828(8) != 0) {
+    if (fn_800BA6F8() == 0 && GameOptionsGet(8) != 0) {
         p->mUnknown8 = 1;
     } else {
         p->mUnknown8 = 0;

@@ -3,7 +3,7 @@
 #include "game/ParticleTrail.h"
 #include "engine/texfile.h"
 #include "game/ResLoad.h"
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXTev.h>
@@ -380,7 +380,7 @@ void fn_80197FDC(void *unused, Entry_80146C4C *p)
         depth = depth < 0.0f ? 0.0f : (depth > 1.0f ? 1.0f : depth);
         unsigned int value = (unsigned int)(depth * 16777215.0f);
         if (!(projected[0] <= -1.0f || projected[0] >= 1.0f || projected[1] <= -1.0f || projected[1] >= 1.0f)) {
-            if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
+            if (GameOptionsGet(6) == 1 || fn_801CEB4C() == 1) {
                 int height = fn_801CEC74();
                 projected[1] *= (float)height / (float)fn_801CEA14();
             }

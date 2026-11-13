@@ -4,7 +4,7 @@
    records: each frame it places the camera by the record's view mode,
    aims it at the ball, a tracked player or a script point, and eases its
    angles and field of view; at the end of a record it moves to the next. */
-#include "game/fn_8007F828.h"
+#include "game/GameOptions.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -224,13 +224,13 @@ extern "C" void CamSetupAspect(void)
     int b = fn_801CEB4C();
 
     if (a == 0xFFFF && b == 0xFFFF) {
-        if (fn_8007F828(6) == 0) {
+        if (GameOptionsGet(6) == 0) {
             CamSetDefaultAspect(4.0f / 3.0f);
         } else {
             CamSetDefaultAspect(16.0f / 9.0f);
         }
     } else if (b == 0xFFFF) {
-        if (a == 0 && fn_8007F828(6) == 0) {
+        if (a == 0 && GameOptionsGet(6) == 0) {
             CamSetDefaultAspect(4.0f / 3.0f);
         } else {
             CamSetDefaultAspect(16.0f / 9.0f);
@@ -249,7 +249,7 @@ extern "C" float CamGetAspect(void)
     float aspect;
 
     if (a == 0xFFFF && b == 0xFFFF) {
-        if (fn_8007F828(6) == 0) {
+        if (GameOptionsGet(6) == 0) {
             aspect = 4.0f / 3.0f;
         } else {
             aspect = 16.0f / 9.0f;

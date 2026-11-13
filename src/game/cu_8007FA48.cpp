@@ -1,7 +1,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Record_80082B18.h"
-#include "game/Query_8007F19C.h"
+#include "game/DbQuery.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
@@ -172,9 +172,9 @@ extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int val
 }
 extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *columns)
 {
-    Result_8007F19C result;
-    Table_8007F19C tables[2];
-    Expression_8007F19C node;
+    DbQueryResult result;
+    DbTableRef tables[2];
+    DbExpression node;
     tables[0].Set(table, 2, &node);
     tables[1].Set(-1);
     node.Set((static_cast<unsigned long long>(static_cast<unsigned int>(table)) << 32) | 0x44494750, 0x10003, value);
@@ -202,8 +202,8 @@ extern "C" void fn_80080138(int selector, int index, int mode)
         from = 0x59414C50;
         to = 0x52475250;
     }
-    Table_8007F19C tables[2];
-    Expression_8007F19C node;
+    DbTableRef tables[2];
+    DbExpression node;
     DbColumnValue columns[24];
     for (int i = 0; i < 22; ++i) columns[i].Set(from, lbl_802D68D0[i], 0);
     columns[22].Set(from, 0x44494750, 0);

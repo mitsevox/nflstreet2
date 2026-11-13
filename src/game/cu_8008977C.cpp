@@ -19,7 +19,7 @@ struct Transition_80089A84 {
 
 extern "C" {
 void FEPlyrSetPose(int index, unsigned int value);
-unsigned char fn_800DA53C(unsigned short index);
+unsigned char PlayerLocoGetRunCategory(unsigned short index);
 Object_8008044C *fn_80182DC8(void);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 int fn_8008A20C(unsigned int value);
@@ -51,7 +51,7 @@ int fn_8008977C(FEPlyrModel_t *pRecord, Table_80089904 *pTable, unsigned int val
     id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
     fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
     memset(values, 255, sizeof(values));
-    values[0] = fn_800DA53C(value - 31);
+    values[0] = PlayerLocoGetRunCategory(value - 31);
     id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
     fn_801BBC3C(((Header_8008977C *)pRecord->mUnknown796)->mUnknown2, id, pTable);
     memset(values, 255, sizeof(values));

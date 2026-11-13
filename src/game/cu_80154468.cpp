@@ -6,7 +6,7 @@
 #include "game/PostPlayPhase.h"
 #include "game/PreSnapPhase.h"
 #include "game/ScrmRuleSet.h"
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/fn_801D2B7C.h"
 
 class Class_802A1BC8 : public PreGamePhase {
@@ -93,7 +93,7 @@ void fn_80154468(Class_802A27F0 *p)
     fn_800A039C(0);
     fn_800B9598(0);
     fn_800AACB8(0);
-    fn_8007F6F8(14, p->mUnknown20);
+    GameOptionsSet(14, p->mUnknown20);
     fn_80178F20(0);
     if (fn_80149014(p)) {
         fn_801D2BD0(p->mpUnknown1C->mpUnknown52);

@@ -2456,6 +2456,54 @@
     "_PlyrMgr_aCapsuleBonePairs": {
       "address": "0x802CCC94",
       "evidence": "evidence.tsv data and name rows for 0x802CCC94 (.data data of src/game/PlyrMgr.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "GameOptionsCloseCursor": {
+      "address": "0x8007F174",
+      "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsOpenCursor": {
+      "address": "0x8007F12C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F12C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameOptionsWriteRecord": {
+      "address": "0x8007F19C",
+      "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "GameStatsGather": {
+      "address": "0x80055584",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80055584; the documented holdout of src/game/GameStats.cpp keeps its original bytes until its draft in comparisons.json is linked."
+    },
+    "PlyrSwapStateData": {
+      "address": "0x80148424",
+      "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
+    },
+    "PlayerIsFreeOfBall": {
+      "address": "0x800E7D80",
+      "evidence": "evidence.tsv function and name rows at 0x800E7D80: returns 0 only when the player carries the current ball outside ball state 4 and 0x801486A0() is 0. Original bytes remain linked while src/game/cu_800E3CC0.cpp is a registered comparison; src/game/cu_800E815C.cpp calls it."
+    },
+    "_Handoff_fTurnCloseRange": {
+      "address": "0x803EADE4",
+      "evidence": "evidence.tsv data and name rows for 0x803EADE4 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "_Handoff_auTurnDirections": {
+      "address": "0x803EADE8",
+      "evidence": "evidence.tsv data and name rows for 0x803EADE8 (.sdata data of the holdout of src/game/Handoff.cpp; storage not claimed by the unit, original bytes)."
+    },
+    "TurnToPlayPickVariant": {
+      "address": "0x800EC76C",
+      "evidence": "evidence.tsv function and name rows for 0x800EC76C (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayPickAnim": {
+      "address": "0x800EC840",
+      "evidence": "evidence.tsv function and name rows for 0x800EC840 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayPickDirection": {
+      "address": "0x800EC870",
+      "evidence": "evidence.tsv function and name rows for 0x800EC870 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
+    },
+    "TurnToPlayStartAnim": {
+      "address": "0x800EC9E4",
+      "evidence": "evidence.tsv function and name rows for 0x800EC9E4 (documented holdout of src/game/Handoff.cpp: draft registered in comparisons.json, original bytes; the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4 stay original bytes with it)."
     }
   },
   "units": [
@@ -12367,19 +12415,25 @@
     {
       "source": "src/game/CarrierMove.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/CarrierMove.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "evidence": "evidence.tsv unit row 0x800EF224-0x800EFC68 (src/game/CarrierMove.cpp), its .rodata data row 0x8029DF40-0x8029DF88 and its .sdata data rows 0x803EAE00-0x803EAE14.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800EF834",
+          "start": "0x800EF224",
           "end": "0x800EFC68"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DF7C",
+          "start": "0x8029DF40",
           "end": "0x8029DF88"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAE00",
+          "end": "0x803EAE14"
         }
       ]
     },
@@ -15912,6 +15966,577 @@
           "placement": ".text",
           "start": "0x800816C4",
           "end": "0x800817CC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameOptions.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; 0x8007F298-0x8007FA48 and all of the file's data are linked, the documented holdout 0x8007F12C-0x8007F298 (the cursor open/close wrappers and the record writer) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F298",
+          "end": "0x8007FA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292930",
+          "end": "0x80292948"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6798",
+          "end": "0x802D6850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7B8",
+          "end": "0x803EA7D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA80",
+          "end": "0x8030BC2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AAC",
+          "end": "0x80289AB0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BEC",
+          "end": "0x80289BF0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrNameTag.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8004732C-0x800478DC (src/game/PlyrNameTag.cpp) with its function, name and data rows; wholly linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004732C",
+          "end": "0x800478DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D600",
+          "end": "0x8028D654"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4C0",
+          "end": "0x803EA4CC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7CC",
+          "end": "0x803EC7D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameStats.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp), its function, name and data rows; 0x80055B2C-0x80056584 and its .rodata literal are linked, the documented holdout 0x80055584-0x80055B2C (with its query literal 0x8028E008-0x8028E164) keeps its original bytes and stays a comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055B2C",
+          "end": "0x80056584"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028E164",
+          "end": "0x8028E16C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Pursue.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80125F3C-0x8012A6B0 (src/game/Pursue.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80125F3C",
+          "end": "0x8012A6B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F660",
+          "end": "0x8029F858"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB04C",
+          "end": "0x802DB05C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB0B0",
+          "end": "0x803EB118"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Divot.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80042F54-0x80044F20 (src/game/Divot.cpp), its function, data, type and source-form rows and the linker row for the discarded field arrow functions; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "MathMapRangeClamped",
+          "DivotReplayWriteOne",
+          "DivotReplayReadOne",
+          "DivotReplayGetSize",
+          "DivotReplayWrite",
+          "DivotReplayRead",
+          "DivotRemove",
+          "DivotRelease",
+          "DivotUpdateFading",
+          "DivotFlushFading",
+          "DivotStepRemove",
+          "DivotStepPlace",
+          "DivotStepUpdate",
+          "DivotIsAreaFree",
+          "DivotCheckPlacement",
+          "DivotUpdateDecay",
+          "DivotLoadVariants",
+          "DivotInit",
+          "DivotShutdown",
+          "DivotScatterRandom",
+          "DivotUpdate",
+          "DivotDraw",
+          "DivotReleaseAll",
+          "DivotRestartRecords",
+          "DivotReplayRegister",
+          "DivotSaveState",
+          "DivotRestoreState",
+          "DivotGetPoolSize",
+          "DivotGetVariantCount",
+          "DivotGetLevelResource",
+          "DivotGetTextureRef",
+          "DivotAlloc",
+          "DivotPlace",
+          "DivotOnMomentum",
+          "DivotOnFootstep",
+          "DivotSkipNextSteps",
+          "FieldArrowObjInit",
+          "FieldArrowObjRelease",
+          "FieldArrowObjDraw",
+          "FieldArrowAddObjType",
+          "FieldArrowRemoveObjType",
+          "FieldArrowInit",
+          "FieldArrowShutdown",
+          "PlaDynClutFindColorName",
+          "PlaDynClutFindLevelName",
+          "PlaDynClutParseEntry"
+        ],
+        "discarded": [
+          "_FieldArrowCreateAll",
+          "_FieldArrowDeleteAll",
+          "_FieldArrowCreate",
+          "_FieldArrowDelete",
+          "_FieldArrowSetCount",
+          "_FieldArrowSet",
+          "_FieldArrowHide"
+        ],
+        "evidence": "evidence.tsv linker row 0x8028D4F4-0x8028D500: the target keeps every listed function, all reached from outside the unit or from each other; the seven field arrow functions have no code in the target, while their literals, item array and count remain in its .rodata, .data and .sdata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80042F54",
+          "end": "0x80044F20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D438",
+          "end": "0x8028D568"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCF30",
+          "end": "0x802CD190"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA494",
+          "end": "0x803EA4AC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC790",
+          "end": "0x803EC7B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80307778",
+          "end": "0x803078D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PenaltyRules.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017419C-0x80176C58 (src/game/PenaltyRules.cpp), its linker row 0x802A5470-0x802A54D8 and its data, type and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "PenaltyApplyDiscipline",
+          "PenaltyResolveOutcome",
+          "PenaltyResolvePair",
+          "PenaltyResolvePairOther",
+          "PenaltyResolvePairKind1First",
+          "PenaltyCompareEvents",
+          "PenaltyMarchOff",
+          "PenaltySetupOutcome",
+          "PenaltyEnforceKind0",
+          "PenaltyEnforceKind15",
+          "PenaltyEnforceKind1",
+          "PenaltyEnforceKind2",
+          "PenaltyEnforceKind4",
+          "PenaltyEnforceKind5",
+          "PenaltyEnforceKind7",
+          "PenaltyEnforceKind6",
+          "PenaltyEnforceKind8",
+          "PenaltyEnforceKind9",
+          "PenaltyEnforceKind10",
+          "PenaltyEnforceKind11",
+          "PenaltyEnforceKind12",
+          "PenaltyEnforceKind13",
+          "PenaltyEnforceKind14",
+          "PenaltyEnforceKind17",
+          "PenaltyCanFoulInState",
+          "PenaltyPickInterferenceByFacing",
+          "PenaltyApplyFrequency",
+          "PenaltyGetBaseRate",
+          "PenaltyApplyCallCount",
+          "PenaltyApplyAngleFactor",
+          "PenaltySkipInterference",
+          "PenaltySkipInterferenceAt",
+          "PenaltyIsPlayingBall",
+          "PenaltyHasInterferenceContact",
+          "PenaltyCallInterference",
+          "PenaltyPickInterferenceNear",
+          "PenaltyPickInterferenceFar",
+          "PenaltyCalcLineToGain",
+          "PenaltyNextDown",
+          "PenaltyResolveEvents",
+          "PenaltyEnforce",
+          "PenaltyGetKindFlags",
+          "PenaltyCheckAllPlayers",
+          "PenaltyCheckOffside",
+          "PenaltyCheckDefenderContact",
+          "PenaltyCheckGrounding",
+          "PenaltyCheckPassInterference",
+          "PenaltyRollFacemask",
+          "PenaltyRollRoughing"
+        ],
+        "discarded": [
+          "PenaltyCheckOffenseKind1",
+          "PenaltyRollPassPlayFoul",
+          "PenaltyRollTackleFoul"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A5470-0x802A54D8: the target keeps every listed function, each reached from outside the unit, from this unit's .data table or from each other; the three discarded functions have no code in the target, while their literal pools remain in its .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017419C",
+          "end": "0x80176C58"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5348",
+          "end": "0x802A54D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9A04",
+          "end": "0x802E9ADC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DirectedRun.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8012BCC8-0x8012C3A4 (src/game/DirectedRun.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012BCC8",
+          "end": "0x8012C3A4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F928",
+          "end": "0x8029F948"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Weather.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A69A8-0x801A7C20 (src/game/Weather.cpp) and its function, name, type, .rodata, .data, .sdata, .bss and .sbss data rows; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A69A8",
+          "end": "0x801A7C20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE810",
+          "end": "0x802AE898"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3A7C",
+          "end": "0x802F3B20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB850",
+          "end": "0x803EB864"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80366780",
+          "end": "0x803673E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC28",
+          "end": "0x803ECC54"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Handoff.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EC76C-0x800EF224 (src/game/Handoff.cpp), its function, name and data rows, the .rodata data row 0x8029DE78-0x8029DF40, the .sdata data rows 0x803EADF4-0x803EAE00 and the linker row 0x8029DED0-0x8029DEE4 of the discarded HandoffSteerClear; 0x800ECC64-0x800EF224 is linked, the documented holdout 0x800EC76C-0x800ECC64 (TurnToPlayPickVariant, TurnToPlayPickAnim, TurnToPlayPickDirection and TurnToPlayStartAnim, with the pool 0x8029DE70-0x8029DE78 and the .sdata 0x803EADE4-0x803EADF4) keeps its original bytes and stays a comparison.",
+      "link_roots": {
+        "symbols": [
+          "TurnToPlayEnter",
+          "TurnToPlayUpdate",
+          "TurnToPlayExit",
+          "TurnToPlayNotify",
+          "TurnToPlayInput",
+          "HandoffPickSide",
+          "HandoffIsMirrored",
+          "HandoffStartAnim",
+          "HandoffTryPairAnim",
+          "HandoffSteer",
+          "HandoffGiveBall",
+          "HandoffEnter",
+          "HandoffUpdate",
+          "HandoffExit",
+          "HandoffMirrorMessage",
+          "HandoffIsStarting",
+          "HuddleArrive",
+          "HuddleSetSpot",
+          "HuddleMoveEnter",
+          "HuddleMoveUpdate",
+          "HuddleMoveAltEnter",
+          "HuddleGetSpot",
+          "HuddleMoveAltUpdate",
+          "HuddleHoldUpdate",
+          "HuddleHoldExit"
+        ],
+        "discarded": [
+          "HandoffSteerClear"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029DED0-0x8029DEE4: the target keeps every listed function, all reached from the state handler table or from each other; HandoffSteerClear has no code in the target, while its literal pool remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800ECC64",
+          "end": "0x800EF224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DE78",
+          "end": "0x8029DF40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EADF4",
+          "end": "0x803EAE00"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerLocoAnim.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800D949C-0x800DAEE4 (src/game/PlayerLocoAnim.cpp), its function, data and source-form rows and the linker row 0x8029D848-0x8029D864.",
+      "link_roots": {
+        "symbols": [
+          "PlayerLocoGetSecondaryCategory",
+          "PlayerLocoUpdateCategories",
+          "PlayerLocoGetStartSide",
+          "PlayerLocoNotInState84",
+          "PlayerLocoCyclePhase",
+          "PlayerLocoGetRunCategory",
+          "PlayerLocoMoveCmdPhase",
+          "PlayerLocoTrimBlendEntries",
+          "PlayerLocoFindSampleIndex",
+          "PlayerLocoStartBlendPair",
+          "PlayerLocoSwitchBlendPair",
+          "PlayerLocoUpdateBlendWeights",
+          "PlayerLocoSetFadeFraction",
+          "PlayerLocoFadeOldPair",
+          "PlayerLocoFindTableEntry",
+          "PlayerLocoGetLowerAnkle"
+        ],
+        "discarded": [
+          "PlayerLocoKeyMatches",
+          "PlayerLocoSelectTurnEntry",
+          "PlayerLocoTurnPhase"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029D848-0x8029D864: the target keeps every listed function, all reached from outside the unit or from each other; the turn-state functions PlayerLocoKeyMatches, PlayerLocoSelectTurnEntry and PlayerLocoTurnPhase, rebuilt from their Xbox prototype counterparts 0x92FC0, 0x92FF0 and 0x93280, have no code in the target, while their literal pool remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D949C",
+          "end": "0x800DAEE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D7F8",
+          "end": "0x8029D8A8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DA888",
+          "end": "0x802DA8BC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/QbPass.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801344A0-0x801360D4 (src/game/QbPass.cpp) and its function and data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "QbPassInSpecialMode",
+          "QbPassScoreDirections",
+          "QbPassCheckSpeech",
+          "QbPassPickRandomReceiver",
+          "QbPassShouldRun",
+          "QbPassGetDirectionWeights",
+          "QbPassUpdateReceiverOptions",
+          "QbPassEnter",
+          "QbPassUpdate",
+          "QbPassResetTarget",
+          "QbPassHoldOrRun",
+          "QbPassRateReceiver",
+          "QbPassRestoreReceiverOptions"
+        ],
+        "discarded": [
+          "QbPassCarrierWillCross"
+        ],
+        "evidence": "evidence.tsv linker row 0x8029FDEC-0x8029FDF8: the target keeps every listed function, all reached from outside the unit or from each other; QbPassCarrierWillCross, rebuilt from its Xbox prototype counterpart 0xE90B0, has no code in the target, while its 0.0f, 0.4f and 40.0f constants remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801344A0",
+          "end": "0x801360D4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FD38",
+          "end": "0x8029FDF8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB0F4",
+          "end": "0x802DB1D4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB168",
+          "end": "0x803EB190"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlyrStates.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801360D4-0x80136B1C (src/game/PlyrStates.cpp) and its function and data rows, including the handler tables 0x802DB280-0x802DBBE0; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801360D4",
+          "end": "0x80136B1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FDF8",
+          "end": "0x8029FE28"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB1D4",
+          "end": "0x802DBBE0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB190",
+          "end": "0x803EB1A0"
         }
       ]
     }

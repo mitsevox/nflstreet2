@@ -1,7 +1,7 @@
 #include "game/fn_8022781C.h"
 #include "game/FaceFeatures.h"
 #include "game/PlayerObjInit.h"
-#include "game/Item_800476DC.h"
+#include "game/PlyrNameTag.h"
 #include "game/GameModules.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
@@ -101,7 +101,7 @@ int fn_8015E440(int, int);
 void fn_80234A14(void *, int);
 void fn_801A3514();
 void fn_8003D0C8(int);
-void fn_80136AE4(int, int);
+void PlyrStatesRegister(int, int);
 void fn_8003D12C();
 void fn_8003D2E0();
 void PlayerObjRenderInit(int, int);
@@ -127,8 +127,8 @@ int PlayerDbGetPlex(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
 int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);
-Item_800476DC *fn_800475FC(int);
-void fn_800476CC(Item_800476DC *, const char *);
+PlyrNameTag_t *PlyrNameTagNew(int);
+void PlyrNameTagSetText(PlyrNameTag_t *, const char *);
 void PlaTexCacheSetFace(int, const char *, int);
 void PlaTexCacheSetCapFace(int, int, int, int, int);
 void fn_8003D958();
@@ -141,7 +141,7 @@ int FELoopIsMainFEActive();
 void PlaTexCacheCloseArchive();
 void VptTrashObject(void *);
 void VptFlushObjectTrash();
-void fn_80047630(Item_800476DC *);
+void PlyrNameTagDelete(PlyrNameTag_t *);
 void fn_801D2BD0(void *);
 void PlayerObjRenderShutdown();
 void fn_800AF71C();
@@ -722,8 +722,8 @@ int fn_8003D378(int owner, int mode) {
             (Object_8003DEC4 *)ObjNewInList(owner, 0, 0, &init);
         ObjSetPriority(owner, lbl_803EA430[index], 10);
         lbl_803EA430[index]->mUnknown988 =
-            fn_800475FC(init.mUnknown57 * 7 + init.mUnknown58);
-        fn_800476CC(lbl_803EA430[index]->mUnknown988, " ");
+            PlyrNameTagNew(init.mUnknown57 * 7 + init.mUnknown58);
+        PlyrNameTagSetText(lbl_803EA430[index]->mUnknown988, " ");
       } else {
         lbl_803EA430[index] = (Object_8003DEC4 *)ObjNew(0, 0, &init);
         lbl_803EA430[index]->mUnknown988 = 0;
@@ -801,7 +801,7 @@ int fn_8003DA94(int count, int owner, int mode) {
   lbl_803EA436 = (unsigned int)count >> 1;
   lbl_803EA434 = count;
   fn_8003D0C8(mode);
-  fn_80136AE4(0, mode);
+  PlyrStatesRegister(0, mode);
   fn_8003D12C();
   fn_8003D2E0();
   PlayerObjRenderInit((int)lbl_803EA41C, (int)lbl_803EA420);
@@ -842,7 +842,7 @@ int fn_8003DCC0(int owner) {
   if (lbl_803EA430) {
     for (int i = 0; i < lbl_803EA434; ++i) {
       if (owner) {
-        fn_80047630(lbl_803EA430[i]->mUnknown988);
+        PlyrNameTagDelete(lbl_803EA430[i]->mUnknown988);
         ObjRemoveFromList(owner, lbl_803EA430[i]);
       }
       VptTrashObject(lbl_803EA430[i]);

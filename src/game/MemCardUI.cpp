@@ -1,13 +1,11 @@
 // Memory card screens: the UI script functions behind the save, load, delete,
 // format and card-check screens. They pick the card slot, select save files,
 // start card operations and hand the results back to the screen scripts.
-#include "game/fn_8007F6F8.h"
+#include "game/GameOptions.h"
 #include "game/FELoop.h"
-#include "game/cu_8007F12C.h"
 #include "game/Callees_801D57E0.h"
 #include "game/MemCardUI.h"
 #include "game/Callees_8002A138.h"
-#include "game/fn_8007F828.h"
 #include "game/TextRecord.h"
 #include "game/MemCardMsg.h"
 #include "game/UISGameMsg.h"
@@ -469,8 +467,8 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
 
 void MemCardUIReleaseSlot(int a, int b)
 {
-    if (fn_8007F828(12) == 1) {
-        fn_8007F6F8(12, 0);
+    if (GameOptionsGet(12) == 1) {
+        GameOptionsSet(12, 0);
         MemCardFilesClearSlotPort(a, b);
     }
 }
@@ -812,13 +810,13 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         }
         fn_801D6714(-1);
         if (fn_801D6850() == 1) {
-            fn_8007F374();
+            GameOptionsShutdown();
         }
         break;
     case 532:
         fn_801D654C(0);
         if (fn_801D6850() == 1) {
-            fn_8007F328(0);
+            GameOptionsInit(0);
         }
         break;
     case 316:

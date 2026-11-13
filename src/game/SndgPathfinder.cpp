@@ -534,7 +534,7 @@ void SpchIGSayDownAndDistance(void);
 void SpchIGSayPreSnap(int a);
 void SpchIGSayDefenseShift(void);
 void SpchIGSayOffenseMotion(void);
-int fn_8007F828(int a);
+int GameOptionsGet(int a);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 int fn_800A8444(int a);
@@ -1371,7 +1371,7 @@ extern "C" void SndgAmbType4Update(int index, Vector_80039F5C *pPos, void *pObje
                 cutoff = 20000;
             }
             SndgMusicRampCutoff(cutoff, 0);
-            float level = fn_8007F828(4);
+            float level = GameOptionsGet(4);
             int w = _SndgAmb_pState->mSound0[index]->mUnknown10;
             SndgChannelSetVolume(1, (w >= 0 ? (w <= 127 ? (int)(level / (w * 2.0f * (1.0f / 127.0f) + 1.0f))
                                                 : (int)(level * (1.0f / 3.0f)))
@@ -1389,7 +1389,7 @@ extern "C" void SndgAmbType4Stop(int index)
         delete s;
         _SndgAmb_pState->mSound0[index] = 0;
         SndgMusicRampCutoff(20000, 0);
-        SndgChannelSetVolume(1, fn_8007F828(4) * 10);
+        SndgChannelSetVolume(1, GameOptionsGet(4) * 10);
     }
 }
 
@@ -1599,8 +1599,8 @@ extern "C" void SndgAmbInit(void)
         SndgAmbOpenBanks();
         SndgAmbAllocObjects();
         SndgPathSetTrackVolume(_SndgAmb_pState->mUnknownC, _SndgAmb_uVolume * _SndgAmb_uTrackLevel / 100);
-        _SndgAmb_iType4Volume = (unsigned char)(fn_8007F828(4) * 10);
-        _SndgAmb_uObjVolume = (unsigned char)(fn_8007F828(4) * 10);
+        _SndgAmb_iType4Volume = (unsigned char)(GameOptionsGet(4) * 10);
+        _SndgAmb_uObjVolume = (unsigned char)(GameOptionsGet(4) * 10);
     }
 }
 
@@ -3114,10 +3114,10 @@ extern "C" void SndgApplyVolumeOptions(void)
     unsigned int values[4];
     unsigned int i;
 
-    values[0] = fn_8007F828(11);
-    values[1] = (unsigned char)(fn_8007F828(4) * 10);
-    values[2] = (unsigned char)(fn_8007F828(5) * 10);
-    values[3] = (unsigned char)(fn_8007F828(3) * 10);
+    values[0] = GameOptionsGet(11);
+    values[1] = (unsigned char)(GameOptionsGet(4) * 10);
+    values[2] = (unsigned char)(GameOptionsGet(5) * 10);
+    values[3] = (unsigned char)(GameOptionsGet(3) * 10);
     for (i = 0; i < 4; i++) {
         SndgSetVolumeOption(i, values[i]);
     }
