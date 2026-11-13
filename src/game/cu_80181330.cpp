@@ -523,10 +523,11 @@ void fn_80181AD4(unsigned char a)
 
 void fn_80181C10(int a, int *pCount, int *pValue)
 {
+    int result;
     void *pResult = 0;
     int back = a == 0;
-    int result = fn_80181554()->vfn_02(lbl_803EB554, back, &pResult);
 
+    result = fn_80181554()->vfn_02(lbl_803EB554, back, &pResult);
     if (result == -1) {
         if (!back) {
             lbl_803EB588 = 1;
@@ -541,8 +542,8 @@ void fn_80181C10(int a, int *pCount, int *pValue)
         fn_8018152C();
         fn_8018152C();
     } else {
-        result = 1;
         fn_8018150C((Class_80184190 *)pResult);
+        result = 1;
     }
     *pValue = fn_80181570();
     fn_801831F8(-1);
