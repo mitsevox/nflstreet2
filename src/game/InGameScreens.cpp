@@ -325,6 +325,8 @@ void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pT
 int fn_800566F0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {
+    case 0x80000004:
+        break;
     case 0x80000001:
         fn_80056584(pArgs[0].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength, pArgs[3].pParams->mpText,
                     pArgs[3].pParams->mLength, pArgs[5].pParams->mpText, pArgs[5].pParams->mLength,
@@ -343,8 +345,6 @@ int fn_800566F0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
             fn_800C1CA0();
         }
         PauseRequestClose();
-        break;
-    case 0x80000004:
         break;
     default:
         return 0;
@@ -1754,7 +1754,7 @@ void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue
 int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult);
 void fn_8005B55C(int *pResult);
 void fn_8005B610(char *pText,int size,int id);
-void fn_8005B6AC(char *pText,int size,unsigned char id,int defensive);
+void fn_8005B6AC(char *pText,int size,int id,int defensive);
 int fn_8005B730(char *pText,int size,int kind,int value);
 void fn_8005B838(int kind,int value);
 int fn_8005B908(Params_80005284 **pText);
@@ -1879,32 +1879,37 @@ int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
                    (int *)(pArgs[7].i + (*pArgs[7].pi + 1) * 4), pArgs[8].pi,
                    (int *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
         break;
-    case 0x80000002: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000005: fn_80059F54(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
-    case 0x80000006: fn_80059F80(pArgs[0].pParams->mpText,0,0,0); break;
-    case 0x80000007:
-        if (ChallengeIsActive()) *pResult = ChalGetCurrent()->mUnknown1A4;
-        else {int mode = fn_801486A0(); *pResult = mode == 2 || mode == 4 ? 1 : fn_80178C24();}
-        break;
     case 0x80000008:
         ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[0] = fn_800AF078(0);
         ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[1] = fn_800AF078(1);
-        *pArgs[1].pi = InGameIsDemo() != 0;
+        if (InGameIsDemo()) *pArgs[1].pi = 1;
+        else *pArgs[1].pi = 0;
         ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[0] = 0;
         ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[1] = 0;
-        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[0] = 1.0f;
-        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[1] = 1.0f;
-        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[0] = 1.0f;
-        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[1] = 1.0f;
+        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[0] = 0.0f;
+        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[1] = 0.0f;
+        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[0] = 0.0f;
+        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[1] = 0.0f;
         ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[0] = 0;
         ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[1] = 0;
         break;
+    case 0x80000002: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000005: fn_80059F54(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
+    case 0x80000007:
+        if (ChallengeIsActive()) *pResult = ChalGetCurrent()->mUnknown1A4;
+        else {
+            int mode = fn_801486A0();
+            if (mode == 2 || mode == 4) *pResult = 1;
+            else *pResult = fn_80178C24();
+        }
+        break;
+    case 0x80000006: fn_80059F80(pArgs[0].pParams->mpText,0,0,0); break;
     case 0x80000009:
         {Params_80005284 *pText = pArgs[4].pParams;
         fn_8005A1C0(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4),
                    (Params_80005284 **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4), pArgs[3].pi, &pText);}
         break;
+    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     default: return 0;
     }
     return 1;
@@ -1913,14 +1918,19 @@ int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch(id) {
-    case 0x80000001: break;
-    case 0x80000002: {int mode=fn_801486A0(); *pResult=mode==2||mode==4?1:fn_80178C24();} break;
     case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000004: fn_80059F80(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000005: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000002: {
+        int mode=fn_801486A0();
+        if(mode==2||mode==4) *pResult=1;
+        else *pResult=fn_80178C24();
+        break;
+    }
+    case 0x80000004: fn_80059F80(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000006: {Params_80005284 *pText=pArgs[4].pParams;
         fn_8005A1C0(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
                    (Params_80005284 **)(pArgs[2].i+(*pArgs[2].pi+1)*4),pArgs[3].pi,&pText);} break;
+    case 0x80000001: break;
     default:return 0;
     }
     return 1;
@@ -1949,7 +1959,7 @@ void fn_8005A7EC(int team)
                 swapped=1;
             }
         }
-    } while(swapped);
+    } while(swapped==1);
 }
 
 int fn_8005A860(int team)
@@ -1965,8 +1975,8 @@ Object_80039F5C *fn_8005A8AC(int team)
 void fn_8005A8D0(int team)
 {
     int row;
-    int values[12];
     float scores[11];
+    int values[12];
     if (fn_8008201C(&lbl_80309F98,0,team,&row,0)) {
         do {
             for (int i=0;i<12;i++) values[i]=fn_8005A794(lbl_8028EAE8[i].mTag,lbl_8028EAE8[i].mColumn,row);
@@ -2026,10 +2036,9 @@ void fn_8005ACF0(int team)
     Desc_8008044C desc;
     desc.mUnknown4=1; desc.mUnknown8=team;
     fn_8008044C(&lbl_80309F98,&desc,0x454D4147);
-    Stats_8005A7EC *p=&lbl_80309FC4[team];
-    p->mUnknown4=0; p->mUnknown0=-3.4028234663852886e38f;
-    for(int i=11;i>=0;i--) p->mStats[i]=0;
-    for(int i=0;i<11;i++) {p->mIndices[i]=i;p->mValues[i]=0.0f;}
+    lbl_80309FC4[team].mUnknown4=0; lbl_80309FC4[team].mUnknown0=-3.4028234663852886e38f;
+    for(int i=11;i>=0;i--) lbl_80309FC4[team].mStats[i]=0;
+    for(int i=0;i<11;i++) {lbl_80309FC4[team].mIndices[i]=i;lbl_80309FC4[team].mValues[i]=0.0f;}
 }
 void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,Arg_8018399C *pNames,int *pValues)
 {
@@ -2093,7 +2102,7 @@ void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
         } else *pResult=0;
         DbCursor query;
         fn_80083E40(&query,0,0x54415453);
-        if(fn_80084034(&query,*pId,0)) {char name[36];fn_80083F88(&query,name,32);fn_801C3284(pText->mpText,name,pText->mLength);}
+        if(fn_80084034(&query,*pId,0)) {char name[32];fn_80083F88(&query,name,32);fn_801C3284(pText->mpText,name,pText->mLength);}
         else fn_801C3284(pText->mpText,"",pText->mLength);
         fn_80083F68(&query);
     } else *pResult=-1;
@@ -2102,9 +2111,9 @@ int fn_8005B2BC(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
 {
     switch(id) {
     case 0x80000001:lbl_803EA59F=1;fn_8005AEC8(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams,pArgs[3].pParams,pArgs[4].pi);break;
-    case 0x80000002:fn_8005AE5C(pArgs[0].i);lbl_803EA59F=0;break;
     case 0x80000003:fn_8005ADCC(pArgs[0].i,pArgs[1].pi,pArgs[2].pParams->mpText,pArgs[2].pParams->mLength,
         pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,&pArgs[4],(int *)(pArgs[5].i+(*pArgs[5].pi+1)*4));break;
+    case 0x80000002:fn_8005AE5C(pArgs[0].i);lbl_803EA59F=0;break;
     case 0x80000004:fn_8005B128(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams);break;
     default:return 0;
     }
@@ -2115,9 +2124,10 @@ void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue
 {
     EnvSelect(fn_800A3444());EnvGetUIName(pFirst,firstSize);EnvGetEVLO(pLast,lastSize);EnvRelease();
     fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
-    int mode=GameOptionsGet(14);
-    if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);}
-    else if(mode==1) {fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);}
+    switch(GameOptionsGet(14)) {
+    case 0:fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);break;
+    case 1:fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);break;
+    }
 }
 int lbl_802D4D0C[4] = {0, 0, 0x40, 0x40};
 const char *lbl_802D4D1C[9] = {
@@ -2142,24 +2152,25 @@ void fn_8005B55C(int *pResult)
 void fn_8005B5D8(int clear) {PauseRequestClose();if(clear) fn_800C1CA0();}
 void fn_8005B610(char *pText,int size,int id)
 {
-    DbCursor query;char name[24];
+    char name[24];DbCursor query;
     LogoListOpen(&query);LogoListFind(&query,id+45,0);LogoListGetName(&query,name,21);LogoListClose(&query);
     fn_801C2D88(pText,size,lbl_802D4D1C[5],name);
 }
-void fn_8005B6AC(char *pText,int size,unsigned char id,int defensive)
+void fn_8005B6AC(char *pText,int size,int id,int defensive)
 {
-    char name[68];fn_80058798(name,64,id,defensive);
-    fn_801C2D88(pText,size,defensive?lbl_802D4D1C[3]:lbl_802D4D1C[7],name);
+    char name[64];fn_80058798(name,64,id,defensive);
+    if(defensive) fn_801C2D88(pText,size,lbl_802D4D1C[3],name);
+    else fn_801C2D88(pText,size,lbl_802D4D1C[7],name);
 }
 int fn_8005B730(char *pText,int size,int kind,int value)
 {
-    int result=0;char text[260];text[0]=0;
+    int result=0;char text[256];text[0]=0;
     switch(kind) {
     case 1:result=value;break;
     case 2:ChalFormatGearReward(text,255,value);break;
     case 3:fn_8005B6AC(text,255,value,1);break;
-    case 5:fn_8005B610(text,255,value);break;
     case 7:fn_8005B6AC(text,255,value,0);break;
+    case 5:fn_8005B610(text,255,value);break;
     default:fn_801C3284(text,lbl_802D4D1C[kind],255);break;
     }
     if(fn_801C3180(text)>0) fn_801C2EF0(pText,text,size);
@@ -2170,30 +2181,32 @@ void fn_8005B838(int kind,int value)
     switch(kind) {
     case 1:ChalSetDevPoints(ChalGetDevPoints()+value);break;
     case 2:GearUnlock(ChalGetGearReward(value));break;
-    case 3:PlaybookUnlockPlay(0,value);break;
-    case 4:fn_800C8818(0);TeamFilterSet();break;
-    case 5:LogoUnlock(value);break;
-    case 6:break;
-    case 7:PlaybookUnlockPlay(1,value);break;
     case 8:fn_8007BF60(value);break;
+    case 7:PlaybookUnlockPlay(1,value);break;
+    case 3:PlaybookUnlockPlay(0,value);break;
+    case 5:LogoUnlock(value);break;
+    case 4:fn_800C8818(0);TeamFilterSet();break;
+    case 6:break;
     }
 }
 int fn_8005B908(Params_80005284 **pText)
 {
     int result=0;Challenge_t *p=ChalGetCurrent();
-    if(!ChalHasMedalGoal(p)) {
-        for(int i=0;i<2;i++) {
-            if(p->mUnknown1F4[i].mId) {
-                result+=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
-                fn_8005B838(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
-                if(fn_801C3180((*pText)->mpText)) pText++;
-            }
+    if(ChalHasMedalGoal(p)) {
+        int index=ChallengeBonusGet();
+        ChalMedalGoal_t *pBonus=&p->mUnknown20C;
+        if(index<3) {
+            result=fn_8005B730(pText[0]->mpText,pText[0]->mLength,pBonus->mUnknown1C,pBonus->mUnknown20[index]);
+            fn_8005B838(pBonus->mUnknown1C,pBonus->mUnknown20[index]);
         }
     } else {
-        int index=ChallengeBonusGet();
-        if(index<3) {
-            result=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
-            fn_8005B838(p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
+        int n=0;
+        for(int i=0;i<2;i++) {
+            if(p->mUnknown1F4[i].mId) {
+                result+=fn_8005B730(pText[n]->mpText,pText[n]->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                fn_8005B838(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                if(fn_801C3180(pText[n]->mpText)) n++;
+            }
         }
     }
     return result;
@@ -2224,7 +2237,7 @@ struct Stats_8005C4A4 {
     unsigned int mTime;
     int mUnknown12;
     unsigned char mColor;
-    Stats_8005C4A4() : mpPlayer(0), mUnknown4(0), mTime(0), mUnknown12(0), mColor(255) {}
+    Stats_8005C4A4() : mpPlayer(0), mUnknown4(0), mTime(0), mColor(255) {}
 };
 struct Stats_8005C844 {
     Stats_8005C844() {
@@ -2245,14 +2258,14 @@ struct Stats_8005CAE4 {
 struct Args_8005F8B4;
 extern "C" {
 void fn_8005F8B4(Args_8005F8B4 *p);
-void fn_8005F8F0(void);
+void fn_8005F8F0(int clear);
 void fn_8005F900(int *pHome);
 int ChallengeEvaluateBonus(void);
 int GameOutcomeGet(void);
 int fn_800A8F94(void);
 int fn_800A8EA4(int team);
 struct TeamPairArgs_t;
-int TeamPairHandleMessage(int,TeamPairArgs_t *);
+int TeamPairHandleMessage(int,TeamPairArgs_t *,int,int *);
 void PauseOpenScreenArgs(unsigned short,unsigned short,int,unsigned int,int *,int);
 int fn_80178EE0(int team);
 int fn_80178EA0(int team);
@@ -2279,67 +2292,80 @@ int fn_8005BB8C(void) {
     return value;
 }
 void fn_8005BC10(int value) {
-    if(!fn_8005900C()) {int a=ChallengeEvaluateGoals();int b=ChallengeEvaluateBonus();ChallengeRecordResult(a,b);}
-    else {ChallengeRecordResult(0,0);fn_80059020();}
-    int args[2];args[0]=GameOutcomeGet()==0;args[1]=value;
+    int win=0;
+    if(fn_8005900C()) {ChallengeRecordResult(0,0);fn_80059020();}
+    else {int a=ChallengeEvaluateGoals();int b=ChallengeEvaluateBonus();ChallengeRecordResult(a,b);}
+    if(!GameOutcomeGet()) win=1;
+    int args[2];args[0]=win;args[1]=value;
     PauseOpenScreenArgs(3,10,-1,2,args,0);
 }
 int fn_8005BCA8(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:if(!lbl_803EA5A8)fn_8005B55C(p[0].pi);else fn_8005F900(p[0].pi);break;
-    case 0x80000002:if(!lbl_803EA5A8)fn_8005B5D8(p[0].i);else fn_8005F8F0();break;
+    case 0x80000001:if(lbl_803EA5A8)fn_8005F900(p[0].pi);else fn_8005B55C(p[0].pi);break;
+    case 0x80000002:if(lbl_803EA5A8)fn_8005F8F0(p[0].i);else fn_8005B5D8(p[0].i);break;
     case 0x80000003:if(!lbl_803EA5A8)fn_8005B9FC(p[0].pi,(Params_80005284 **)(p[1].i+(*p[1].pi+1)*4));break;
+    case 0x80000007:if(lbl_803EA5A8)fn_8005F8B4((Args_8005F8B4 *)p);break;
     case 0x80000004:if(!lbl_803EA5A8)fn_8005BACC(p,p[1].pi,p+2);break;
+    case 0x80000008:*result=fn_8005BB8C();break;
     case 0x80000005:if(!lbl_803EA5A8)fn_8005BB0C(p,p[1].pi,p[2].pi,p[3].pi);break;
     case 0x80000006:if(!lbl_803EA5A8)fn_8005BB50(p+1,p[1].pi,p[2].pi);break;
-    case 0x80000007:if(lbl_803EA5A8)fn_8005F8B4((Args_8005F8B4 *)p);break;
-    case 0x80000008:*result=fn_8005BB8C();break;
     default:return 0;
     }
     return 1;
 }
 void fn_8005BE54(unsigned char value) {lbl_803EA5A8=value;}
 int fn_8005BE5C(int value) {
+    int result=1;
     if(lbl_803EA5B0==3) {
         lbl_803EA5B0=value;
         switch(value) {
-        case 0:fn_80218FC4(gUISMainInfo,3,9,0,0);lbl_803EA5AC=0;return 1;
-        case 1:fn_80218FC4(gUISMainInfo,3,12,0,0);lbl_803EA5AC=0;return 1;
-        case 2:fn_80218FC4(gUISMainInfo,3,23,0,0);lbl_803EA5AC=0;return 1;
+        case 0:fn_80218FC4(gUISMainInfo,3,9,0,0);lbl_803EA5AC=0;break;
+        case 1:fn_80218FC4(gUISMainInfo,3,12,0,0);lbl_803EA5AC=0;break;
+        case 2:fn_80218FC4(gUISMainInfo,3,23,0,0);lbl_803EA5AC=0;break;
+        default:result=0;break;
         }
-    }
-    return 0;
+    } else result=0;
+    return result;
 }
 void fn_8005BF18(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);lbl_803EA5AC=4;lbl_803EA5B0=3;}
 void fn_8005BF5C(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);lbl_803EA5AC=2;}
 void fn_8005BF98(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);lbl_803EA5AC=0;}
 int fn_8005BFD4(void) {return lbl_803EA5AC;}
-int fn_8005BFDC(int group,unsigned int id,Arg_8018399C *p,int unused,int *result) {
+int fn_8005BFDC(int group,unsigned int id,Arg_8018399C *p,int unused,int *pResult) {
+    int result=1;
     if(id==0x80000002) {
-        if(lbl_803EA5AC==0) {lbl_803EA5AC=1;return 1;}
-        if(lbl_803EA5AC==2) {lbl_803EA5AC=3;return 1;}
+        switch(lbl_803EA5AC) {
+        case 0:lbl_803EA5AC=1;break;
+        case 2:lbl_803EA5AC=3;break;
+        default:result=0;break;
+        }
     } else {
         switch(group) {
-        case 9:return TeamPairHandleMessage(id,(TeamPairArgs_t *)p);
-        case 12:if(id==0x80000003) {*result=fn_800A8EA4(fn_800A8F94())==2;}return 1;
-        case 23:return 1;
+        case 9:result=TeamPairHandleMessage(id,(TeamPairArgs_t *)p,unused,pResult);break;
+        case 12:if(id==0x80000003) {if(fn_800A8EA4(fn_800A8F94())==2)*pResult=1;else *pResult=0;}break;
+        case 23:break;
+        default:result=0;break;
         }
     }
-    return 0;
+    return result;
 }
 int fn_8005C0C0(unsigned int id,Arg_8018399C *,int,int *) {
-    if(id==0x80000001)return 1;
-    if(id!=0x80000002)return 0;
-    if(lbl_803EA5B4) {
-        fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
+    switch(id) {
+    case 0x80000001:break;
+    case 0x80000002:
+        if(lbl_803EA5B4) {
+            fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}lbl_803EA5B4=0;
+        }
+        PauseRequestClose();break;
+    default:return 0;
     }
-    PauseRequestClose();return 1;
+    return 1;
 }
 void fn_8005C144(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
 void fn_8005C1A4(int team,unsigned char index,int *color) {
     HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
-int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,unsigned char size,char *first,char *second,char *third,char *fourth,unsigned char firstSize,unsigned char secondSize) {
+int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,int size,char *first,char *second,char *third,char *fourth,int firstSize,int secondSize) {
     Object_80039F5C *p=fn_80039F5C(team,index);int result=0;
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
@@ -2353,40 +2379,40 @@ int fn_8005C1F4(int team,unsigned char index,char *name,int nameSize,char *text,
 }
 int fn_8005C338(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
+    case 0x80000006:break;
     case 0x80000001:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000002:fn_8005C144((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
     case 0x80000003:fn_8005C1A4((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
-    case 0x80000004:*result=fn_8005C1F4((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,(unsigned char)p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,(unsigned char)p[4].pParams->mLength,(unsigned char)p[5].pParams->mLength);break;
+    case 0x80000004:*result=fn_8005C1F4((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,p[4].pParams->mLength,p[5].pParams->mLength);break;
     case 0x80000005:*result=fn_80178D70((unsigned char)p[0].i);break;
-    case 0x80000006:break;
     default:return 0;
     }return 1;
 }
-void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,unsigned char textSize,int *result) {
+void fn_8005C4A4(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,int textSize,int *result) {
+    unsigned char foundTeam=0,foundIndex=0;int found=0;
     Stats_8005C4A4 stats;fn_8014F3E4(fn_80148A58(),team,&stats);
     unsigned int minutes=stats.mTime/60,seconds=stats.mTime%60;
     fn_801C2D88(first,firstSize,"%d",stats.mUnknown4);
     if(seconds<10)fn_801C2D88(time,timeSize,"%d:0%d",minutes,seconds);else fn_801C2D88(time,timeSize,"%d:%d",minutes,seconds);
     fn_801C2D88(last,lastSize,"%d",stats.mUnknown12);
-    if(!stats.mpPlayer) {*name=0;*result=0;}
-    else {
-        GameTextFormatInitialAndName((Object_80056584 *)stats.mpPlayer,name,nameSize);
-        unsigned char foundTeam=0,foundIndex=0;bool found=false;
+    Object_80039F5C *pPlayer=stats.mpPlayer;
+    if(pPlayer) {
+        GameTextFormatInitialAndName((Object_80056584 *)pPlayer,name,nameSize);
         for(unsigned char t=0;t<2 && !found;t++)for(unsigned char i=0;i<6 && !found;i++) {
             Object_80039F5C *p=fn_80039F5C(t,i);
-            if((short)stats.mpPlayer->mUnknown2908==(short)p->mUnknown2908) {found=true;foundTeam=t;foundIndex=i;}
+            if(pPlayer->mUnknown2908==p->mUnknown2908) {found=1;foundIndex=i;foundTeam=t;}
         }
         fn_80148A58()->vfn_18(foundTeam,foundIndex,text,textSize);
-        *result=MsgGameGetPlayerPortrait(stats.mpPlayer->mUnknown2908);
-    }
-    unsigned char r=0,g=0,b=0;HudLookupColor(stats.mColor,&r,&g,&b);color[0]=r;color[2]=b;color[1]=g;
+        *result=MsgGameGetPlayerPortrait(pPlayer->mUnknown2908);
+    } else {*name=0;*result=0;}
+    unsigned char r=0,g=0,b=0;HudLookupColor(stats.mColor,&r,&g,&b);color[0]=r;color[1]=g;color[2]=b;
 }
 int fn_8005C6EC(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,(unsigned char)p[8].pParams->mLength,result);fn_801C2EF0(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);fn_801C2EF0(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
+    case 0x80000004:break;
+    case 0x80000001:fn_8005C4A4((unsigned char)p[0].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[5].pParams->mpText,p[5].pParams->mLength,p[7].pParams->mpText,p[7].pParams->mLength,(int *)(p[1].i+(*p[1].pi+1)*4),p[1].pi[1],p[8].pParams->mpText,p[8].pParams->mLength,result);fn_801C2EF0(p[4].pParams->mpText,"Time of Possession",p[4].pParams->mLength);fn_801C2EF0(p[6].pParams->mpText,"Tackles",p[6].pParams->mLength);break;
     case 0x80000002:*result=6;break;
     case 0x80000003:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
-    case 0x80000004:break;
     default:return 0;
     }return 1;
 }
@@ -2397,12 +2423,18 @@ void fn_8005C844(int team,int *value,char *score,char *first,char *second,char *
     fn_80148A58()->vfn_19(team,0,first,textSize);fn_80148A58()->vfn_19(team,1,second,textSize);fn_80148A58()->vfn_19(team,2,third,textSize);
 }
 int fn_8005C994(unsigned int id,Arg_8018399C *p,int unused,int *result) {
-    if(id==0x80000003) {
-        int n=*p[3].pi;Params_80005284 **texts=(Params_80005284 **)p[3].pi;
-        fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[n+1]->mpText,texts[n+2]->mpText,texts[n+3]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[n+1]->mLength);
-        n=*p[5].pi;texts=(Params_80005284 **)p[5].pi;
-        fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Fumble Recs",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
+    switch(id) {
+    case 0x80000003: {
+        Params_80005284 **texts=(Params_80005284 **)(p[3].i+(*p[3].pi+1)*4);
+        fn_8005C844((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,texts[0]->mpText,texts[1]->mpText,texts[2]->mpText,(int *)(p[4].i+(*p[4].pi+1)*4),(unsigned char)p[2].pParams->mLength,(unsigned char)texts[0]->mLength);
+        Params_80005284 **labels=(Params_80005284 **)(p[5].i+(*p[5].pi+1)*4);
+        fn_801C2EF0(labels[0]->mpText,"TDs",labels[0]->mLength);fn_801C2EF0(labels[1]->mpText,"Fumble Recs",labels[1]->mLength);fn_801C2EF0(labels[2]->mpText,"INTs",labels[2]->mLength);
+        break;
+    }
+    case 0x80000004:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
+    case 0x80000001:break;
+    default:return 0;
+    }
     return 1;
 }
 void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
@@ -2414,41 +2446,48 @@ void fn_8005CAE4(int team,int *value,char *score,char *first,char *second,char *
     values[0]=stats.mValues[1];values[2]=stats.mValues[3];values[1]=stats.mValues[2];
 }
 int fn_8005CC50(unsigned int id,Arg_8018399C *p,int unused,int *result) {
-    if(id==0x80000003) {
+    switch(id) {
+    case 0x80000003: {
         fn_8005CAE4((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[3].pParams->mpText,p[4].pParams->mpText,p[5].pParams->mpText,(unsigned char)p[2].pParams->mLength,(unsigned char)p[3].pParams->mLength,(int *)(p[6].i+(*p[6].pi+1)*4));
-        int n=*p[7].pi;Params_80005284 **texts=(Params_80005284 **)p[7].pi;
-        fn_801C2EF0(texts[n+1]->mpText,"TDs",texts[n+1]->mLength);fn_801C2EF0(texts[n+2]->mpText,"Tackles",texts[n+2]->mLength);fn_801C2EF0(texts[n+3]->mpText,"INTs",texts[n+3]->mLength);
-    }else if(id==0x80000004) {GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();}else if(id!=0x80000001)return 0;
+        Params_80005284 **texts=(Params_80005284 **)(p[7].i+(*p[7].pi+1)*4);
+        fn_801C2EF0(texts[0]->mpText,"TDs",texts[0]->mLength);fn_801C2EF0(texts[1]->mpText,"Tackles",texts[1]->mLength);fn_801C2EF0(texts[2]->mpText,"INTs",texts[2]->mLength);
+        break;
+    }
+    case 0x80000004:GameTextQueuePlayerPortraits();if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
+    case 0x80000001:break;
+    default:return 0;
+    }
     return 1;
 }
 void fn_8005CD8C(int team,int *other,char *text,int size) {
-    int value;fn_80155CF0(fn_80148A58(),team,other,&value);fn_801C2D88(text,size,"%d",value);
+    DbCursor cursor;int value;fn_80155CF0(fn_80148A58(),team,other,&value);fn_801C2D88(text,size,"%d",value);
 }
 void fn_8005CE10(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
     Record_8005CE10 record;fn_80155C44(fn_80148A58(),team,index,&record);
     unsigned int value=record.mOrdinal;
     Object_80039F5C *p=fn_8003AC84(record.mPlayer),*other=fn_8003AC84(record.mOther);
-    if(record.mEvent==11) {*ordinal=0;*text=0;return;}
-    unsigned int rem=value%10;
-    if(value-11<9 || rem>3 || rem==0)fn_801C2D88(ordinal,ordinalSize,"%dth Possession",value);
-    else if(rem==1)fn_801C2D88(ordinal,ordinalSize,"%dst Possession",value);
-    else if(rem==2)fn_801C2D88(ordinal,ordinalSize,"%dnd Possession",value);
-    else if(rem==3)fn_801C2D88(ordinal,ordinalSize,"%drd Possession",value);
-    char event[32],player[32],conversion[32],outcome[32];
-    switch(record.mEvent) {case 0:fn_801C2E18(event,"Receiving TD ");break;case 1:fn_801C2E18(event,"Rushing TD ");break;case 5:fn_801C2E18(event,"Safety ");break;case 6:fn_801C2E18(event,"Interception ");break;case 7:fn_801C2E18(event,"Fumble Recovered ");break;case 8:fn_801C2E18(event,"Turnover On Downs");break;}
-    if(!p)*player=0;else fn_801C2E18(player,"by %s",p->mUnknown2927+21);
-    if(record.mConversion==9) {*conversion=0;*outcome=0;}
+    if(record.mEvent==11) {*ordinal=0;*text=0;}
     else {
-        switch(record.mConversion) {case 2:if(!record.mFlag)fn_801C2E18(conversion,"Defensive TD ");else fn_801C2E18(conversion,"Defensive Conversion ");break;case 3:fn_801C2E18(conversion,"One Point Conversion ");break;case 4:fn_801C2E18(conversion,"Two Point Conversion ");break;}
-        if(!record.mFlag && record.mConversion!=2)fn_801C2E18(outcome,"Failed");else fn_801C2E18(outcome,"by %s",other->mUnknown2927+21);
+    if(value-11<9 || value%10>3 || value%10==0)fn_801C2D88(ordinal,ordinalSize,"%dth Possession",value);
+    else if(value%10==1)fn_801C2D88(ordinal,ordinalSize,"%dst Possession",value);
+    else if(value%10==2)fn_801C2D88(ordinal,ordinalSize,"%dnd Possession",value);
+    else if(value%10==3)fn_801C2D88(ordinal,ordinalSize,"%drd Possession",value);
+    char event[32],player[32],conversion[32],outcome[32];
+    switch(record.mEvent) {case 0:fn_801C2E18(event,"Receiving TD ");break;case 1:fn_801C2E18(event,"Rushing TD ");break;case 6:fn_801C2E18(event,"Interception ");break;case 5:fn_801C2E18(event,"Safety ");break;case 7:fn_801C2E18(event,"Fumble Recovered ");break;case 8:fn_801C2E18(event,"Turnover On Downs");break;}
+    if(!p)*player=0;else fn_801C2E18(player,"by %s",p->mUnknown2927+21);
+    if(record.mConversion==9) {*outcome=0;*conversion=0;}
+    else {
+        switch(record.mConversion) {case 4:fn_801C2E18(conversion,"Two Point Conversion ");break;case 3:fn_801C2E18(conversion,"One Point Conversion ");break;case 2:if(record.mFlag)fn_801C2E18(conversion,"Defensive Conversion ");else fn_801C2E18(conversion,"Defensive TD ");break;}
+        if(record.mFlag || record.mConversion==2)fn_801C2E18(outcome,"by %s",other->mUnknown2927+21);else fn_801C2E18(outcome,"Failed");
     }
     fn_801C2D88(text,size,"%s%s\n%s%s",event,player,conversion,outcome);
+    }
 }
 int fn_8005D1E4(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
-    case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     case 0x80000002:fn_8005CD8C((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(fn_80148A58(),(unsigned char)p[0].i);break;
     case 0x80000003:fn_8005CE10((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
+    case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     default:return 0;
     }return 1;
 }
@@ -2456,7 +2495,7 @@ void fn_8005D2C8(unsigned char value) {lbl_803EA5B5=value;}
 int fn_8005D2D0(unsigned int id,Arg_8018399C *p,int unused,int *result) {
     switch(id) {
     case 0x80000001: {
-        char name[20]={0};const char *extra="";int size=p[1].pParams->mLength;char *text=p[1].pParams->mpText;
+        char name[20]="";const char *extra="";char *text=p[1].pParams->mpText;int size=p[1].pParams->mLength;
         *p[0].pi=fn_800A3444();
         switch(fn_800A3444()) {case 0:fn_801C2E18(name,"Randall Cunningham");break;case 1:fn_801C2E18(name,"Mike Singletary");break;case 2:fn_801C2E18(name,"Cris Carter");break;case 3:fn_801C2E18(name,"Jack Lambert");break;case 4:fn_801C2E18(name,"Anthony Munoz");break;case 5:fn_801C2E18(name,"Darrell Green");break;case 6:fn_801C2E18(name,"Mean Joe Greene");break;case 7:fn_801C2E18(name,"Bo Jackson");break;case 8:fn_801C2E18(name,"Joey Browner");break;case 9:fn_801C2E18(name,"Sterling Sharpe");break;default:fn_801C2E18(name,"Super Secret");break;}
         if(lbl_803EA5B5) {lbl_803EA5B5=0;extra="\n\nYou have unlocked the NFL Legends Team!";}

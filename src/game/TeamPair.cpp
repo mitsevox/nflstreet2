@@ -8,7 +8,7 @@ extern "C" {
 int fn_800C8744(int team);
 
 void TeamPairGetIds(int *pFirst, int *pSecond);
-int TeamPairHandleMessage(int id, TeamPairArgs_t *pArgs);
+int TeamPairHandleMessage(int id, TeamPairArgs_t *pArgs, int unused, int *pResult);
 }
 
 extern "C" {
@@ -19,7 +19,7 @@ void TeamPairGetIds(int *pFirst, int *pSecond)
     *pSecond = fn_800C8744(0);
 }
 
-int TeamPairHandleMessage(int id, TeamPairArgs_t *pArgs)
+int TeamPairHandleMessage(int id, TeamPairArgs_t *pArgs, int unused, int *pResult)
 {
     if (id == 0x80000001) {
         TeamPairGetIds(pArgs->mpUnknown0, pArgs->mpUnknown4);

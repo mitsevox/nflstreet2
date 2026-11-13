@@ -43,8 +43,8 @@ public:
     virtual void vfn_17(const int *pKinds);
     virtual void vfn_18(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19(int team, int column, char *pText, int length);
-    virtual void vfn_20(int team, int index, int kind, char *pFirst, int firstLength,
-                        char *pSecond, int secondLength);
+    virtual void vfn_20(int team, int index, int kind, char *pFirst, unsigned char firstLength,
+                        char *pSecond, unsigned char secondLength);
     virtual int vfn_21();
     virtual int vfn_22(int a);
 
