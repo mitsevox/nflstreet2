@@ -194,31 +194,36 @@ extern "C" unsigned char TurnToPlayPickDirection(Object_80039F5C *p) {
     Point_8017886C delta;
     int angle;
     Vector_80039F5C pos;
+    int sector;
+    Object_80039F5C *pCarrier;
     if (fn_801787A0()) {
         HuddleGetSpot(&delta, &angle, p, 0);
         fn_80227690(&delta, &delta, &p->mMotion.mPos);
     } else if (p->mIdBytes[2] == fn_80178320() || p->mpState[1].mId == 33 || p->mpState[1].mId == 31) {
-        Object_80039F5C *pCarrier = BallGetCurrentHolder();
+        pCarrier = BallGetCurrentHolder();
         if (!pCarrier)
             goto ball;
         fn_80227538(&delta, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 15.0f);
         fn_80227638(&delta, &delta, &pCarrier->mMotion.mPos);
         fn_80227690(&delta, &delta, &p->mMotion.mPos);
-    } else if (BallStateGet(BallGetCurrent(), 0) == 5) {
+    } else if (BallStateGet(BallGetCurrent(), 0) != 5) {
+        goto facing;
+    } else {
     ball:
         BallGetPosition(BallGetCurrent(), &pos);
         fn_80227690(&delta, &pos, &p->mMotion.mPos);
-    } else {
-        goto facing;
     }
     angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
-    return _Handoff_auTurnDirections[((angle + 0x100000) >> 21) & 7];
+    sector = ((angle + 0x100000) >> 21) & 7;
+    goto lookup;
 facing:
     if (!fn_801486A0())
         angle = (fn_801CFE40(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
     else
         angle = (0x400000 - p->mMotion.mFacing) & 0xFFFFFF;
-    return _Handoff_auTurnDirections[((angle + 0x100000) >> 21) & 7];
+    sector = ((angle + 0x100000) >> 21) & 7;
+lookup:
+    return _Handoff_auTurnDirections[sector];
 }
 
 extern "C" void TurnToPlayStartAnim(Object_80039F5C *p, int kind, int flag) {
