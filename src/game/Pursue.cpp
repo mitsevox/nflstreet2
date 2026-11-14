@@ -65,8 +65,8 @@ Object_80039F5C *PursueGetTarget(void);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int PlyrMoveIsFacingHeading(Object_80039F5C *p);
 int fn_80177C38(void);
@@ -1391,9 +1391,9 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             }
             if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
                 && fn_80177C38() == 0) {
-                pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B938());
+                pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetPlayIdRate());
                 if (fn_8011F1CC() != 0 && (pOther->mFlags & 0x8000) != 0) {
-                    pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B974());
+                    pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetResult5Rate());
                 }
             }
             speed = pMotion->mUnknown28;
@@ -1525,7 +1525,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                 int boosted = 0;
 
                 if (fn_8011F1CC() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
-                    odds += (unsigned int)(odds * fn_8016B974());
+                    odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                     boosted = 1;
                 }
                 if (fn_802372EC(0, 100) < odds) {
@@ -1541,7 +1541,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                             odds = _Pursue_uLaneOdds;
                         }
                         if (boosted) {
-                            odds += (unsigned int)(odds * fn_8016B974());
+                            odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                         }
                         if (fn_802372EC(0, 100) < odds) {
                             result = 1;

@@ -18,7 +18,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
 float fn_802270A4(void *pV);
 int MathAngleDiff(int a, int b);
-float fn_8016B9EC(void);
+float PlayTrackGetFlag11Rate(void);
 int fn_800A7ECC(int team);
 int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 }
@@ -98,7 +98,7 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
             }
         }
         chance = pPair->mUnknown0 * 0.33333334f;
-        chance += fn_8016B9EC();
+        chance += PlayTrackGetFlag11Rate();
         if (fn_80237260(0) < chance) {
             result = 0;
         }

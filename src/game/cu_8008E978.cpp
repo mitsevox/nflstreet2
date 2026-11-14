@@ -3393,7 +3393,7 @@ extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 }
 
 extern "C" {
-void fn_8016BA28(unsigned char *pOut);
+void PlayTrackGetOffenseTendency(unsigned char *pOut);
 int fn_80178320(void);
 int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
 }
@@ -3406,7 +3406,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
     unsigned char level;
     unsigned int count;
 
-    fn_8016BA28(&level);
+    PlayTrackGetOffenseTendency(&level);
     count = fn_80178D18(team);
     for (; i < count; i++) {
         Object_80039F5C *p = PlyrGet(team, i);

@@ -34,7 +34,7 @@ void fn_800B63B0(void);
 void fn_8013F3FC(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
-void fn_8016BA80(void);
+void PlayTrackReset(void);
 void ClockRuleClearFlags(unsigned int mask);
 void ClockRuleResetFlags(void);
 void DriveLogInit(void);
@@ -78,7 +78,7 @@ extern "C" void fn_800C1CA0(void)
         fn_80177B7C(team);
     }
     fn_8002D274(lbl_803EA368);
-    fn_8016BA80();
+    PlayTrackReset();
     fn_8022BF68();
     StyleTrackerEndPlay();
     StyleTrackerReset();

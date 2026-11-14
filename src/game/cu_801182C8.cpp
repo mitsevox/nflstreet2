@@ -28,8 +28,8 @@ signed char fn_8009AF00(int team, signed char value);
 int MathAngleDiff(int a, int b);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_8009E180(Object_80039F5C *p);
-float fn_8016B938(void);
-float fn_8016B974(void);
+float PlayTrackGetPlayIdRate(void);
+float PlayTrackGetResult5Rate(void);
 int fn_8009F258(Object_80039F5C *p);
 int fn_801783AC(int value);
 void fn_801180FC(Object_80039F5C *p);
@@ -87,13 +87,13 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
             if (kind != 4) {
                 unsigned short odds = p->mRatings[8];
                 if (fn_800B65A0(p->mIdBytes[2]) == 255) {
-                    odds += (int)(odds * fn_8016B938());
+                    odds += (int)(odds * PlayTrackGetPlayIdRate());
                 }
                 if ((kind == 5 || kind == 2) && pCarrier) {
                     if (fn_801783AC(7) == 1 || fn_801783AC(8) == 1) {
                         odds += pCarrier->mRatings[4] / lbl_803EB008;
                     }
-                    odds += (int)(fn_8016B974() * lbl_803EB00C);
+                    odds += (int)(PlayTrackGetResult5Rate() * lbl_803EB00C);
                     if (fn_80177FE0().mY - pCarrier->mMotion.mPos.mY < lbl_803EB004) odds = 255;
                 }
                 if (kind == 6 || kind == 2 || fn_802372EC(0, 255) <= odds) {
