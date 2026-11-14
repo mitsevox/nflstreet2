@@ -1,5 +1,6 @@
 #include "game/DbCursor.h"
 #include "game/DbSortKey.h"
+#include "game/Query_8008352C.h"
 
 extern "C" {
 unsigned char fn_8007AFDC(int team);
@@ -124,6 +125,11 @@ int fn_8007B324(void)
 
 void fn_8007B358(DbCursor *pCursor)
 {
+    Query_8008352C query;
+
+    query.mUnknown0 = 0;
+    query.mUnknown4 = 0;
+    query.mUnknown8 = 0;
     DbCursorOpen(pCursor, 0x58544145, 0x58494E53, sColumns_802D6538, 0, 0x54415453);
 }
 

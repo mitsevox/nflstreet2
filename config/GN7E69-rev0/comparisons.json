@@ -20251,8 +20251,14 @@
     {
       "source": "src/dolphin/os/__ppc_eabi_init.c",
       "profile": "dolphin_release",
-      "evidence": "Provisional mapped startup unit from frozen52fd scope; coherent OOT complete pure C wrappers independently resolved with actual target ctor/PPCHalt callees. Original names and exact whole-object boundaries unproven; original hardware/ctor/dtor bytes retained.",
+      "evidence": "sdk.json unit src/dolphin/os/__ppc_eabi_init.c and its evidence.tsv unit, function, name and source-form rows. All six functions are exact (__init_hardware in .init, the C runtime glue in .text); comparison-only because the linked build's retained-layout step does not take a .init section in a file whose dead static __fini_cpp must be dropped, so the original bytes stay linked.",
       "sections": [
+        {
+          "section": ".init",
+          "placement": ".init",
+          "start": "0x80003468",
+          "end": "0x8000348C"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -20261,6 +20267,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "__init_hardware",
+          "start": "0x80003468",
+          "end": "0x8000348C"
+        },
         {
           "symbol": "__init_user",
           "start": "0x8023E818",
