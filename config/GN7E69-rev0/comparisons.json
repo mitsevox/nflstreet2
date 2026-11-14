@@ -43682,58 +43682,32 @@
       ]
     },
     {
-      "source": "src/game/GameStats.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80055584-0x80056584 (src/game/GameStats.cpp) and the source-form row 0x80055584-0x80055B2C. Documented holdout: 0x80055584 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes; the rest of the file is linked through units.json",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80055584",
-          "end": "0x80056584"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8028E008",
-          "end": "0x8028E16C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GameStatsGather",
-          "start": "0x80055584",
-          "end": "0x80055B2C"
-        }
-      ]
-    },
-    {
       "source": "src/game/InGameScreens.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked. The static initializer 0x8005D540 constructs lbl_80309F98 (Object_8008044C) and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 close the range.",
+      "evidence": "evidence.tsv unit row 0x80055584-0x8005D60C (src/game/InGameScreens.cpp, merged with the former src/game/GameStats.cpp), its function, name, data and source-form rows. Comparison-only: the file is rung 4, so the original assembly stays linked. The .rodata starts at 0x8028E008 with the GameStats query literal, which puts the file's 8-aligned double pool 0x8028E6D0 at its target offset. The static initializer 0x8005D540 and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 stay unregistered and original-linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80056584",
+          "start": "0x80055584",
           "end": "0x8005D60C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028E16C",
+          "start": "0x8028E008",
           "end": "0x8028ED08"
         },
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x802D4D0C",
+          "start": "0x802D4B14",
           "end": "0x802D4D40"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EA58C",
+          "start": "0x803EA588",
           "end": "0x803EA5B8"
         },
         {
@@ -43741,6 +43715,12 @@
           "placement": ".bss",
           "start": "0x80309F98",
           "end": "0x80309FC4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7EC",
+          "end": "0x803EC7F0"
         },
         {
           "section": ".ctors",
@@ -43756,6 +43736,41 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "GameStatsGather",
+          "start": "0x80055584",
+          "end": "0x80055B2C"
+        },
+        {
+          "symbol": "GameStatsCheckRecords",
+          "start": "0x80055B2C",
+          "end": "0x80055E8C"
+        },
+        {
+          "symbol": "GameStatsGetRecords",
+          "start": "0x80055E8C",
+          "end": "0x80055F24"
+        },
+        {
+          "symbol": "GameStatsReadTag",
+          "start": "0x80055F24",
+          "end": "0x80055F4C"
+        },
+        {
+          "symbol": "GameStatsFill",
+          "start": "0x80055F4C",
+          "end": "0x80056444"
+        },
+        {
+          "symbol": "GameStatsMsg",
+          "start": "0x80056444",
+          "end": "0x80056560"
+        },
+        {
+          "symbol": "GameStatsUpdateRecords",
+          "start": "0x80056560",
+          "end": "0x80056584"
+        },
         {
           "symbol": "fn_80056584",
           "start": "0x80056584",
@@ -44312,12 +44327,12 @@
           "end": "0x8005D5B4"
         },
         {
-          "symbol": "_GLOBAL_.I.lbl_803EA58C",
+          "symbol": "_GLOBAL_.I.lbl_802D4B14",
           "start": "0x8005D5B4",
           "end": "0x8005D5E0"
         },
         {
-          "symbol": "_GLOBAL_.D.lbl_803EA58C",
+          "symbol": "_GLOBAL_.D.lbl_802D4B14",
           "start": "0x8005D5E0",
           "end": "0x8005D60C"
         }
