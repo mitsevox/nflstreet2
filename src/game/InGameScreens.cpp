@@ -22,7 +22,7 @@
 #include "game/fn_801D2B7C.h"
 
 #include "game/fn_80218FC4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 
 /* Filled by fn_80152940 for one index; mpObject points to an object whose
@@ -370,7 +370,7 @@ static unsigned char lbl_803EA5B5 = 0;
 void GameStatsGather(void)
 {
     for (int i = 0; i <= 20; ++i) {
-        fn_801C1F94(lbl_802D4B14[i].value, 0, 8);
+        memset(lbl_802D4B14[i].value, 0, 8);
         lbl_802D4B14[i].side = 2;
         lbl_802D4B14[i].exceeded = 0;
     }
@@ -444,7 +444,7 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
     if (!unavailable) {
         if (update)
             fn_80186BAC();
-        fn_801C1F94(lbl_803EC7EC, 0, 2);
+        memset(lbl_803EC7EC, 0, 2);
         if (update && (fn_80186F7C(0) != -1 || fn_80186F7C(1) != -1)) {
             for (side = 0; side <= 1; ++side) {
                 if (fn_80186F7C((unsigned char)side) != -1)
@@ -2585,7 +2585,7 @@ struct Stats_8005C4A4 {
 struct Stats_8005C844 {
     Stats_8005C844() {
         mValues[0]=0; mValues[1]=0; mValues[2]=0; mValues[3]=0;
-        fn_801C1F94(mpPlayers,0,sizeof(mpPlayers));
+        memset(mpPlayers,0,sizeof(mpPlayers));
     }
     Object_80039F5C *mpPlayers[3];
     int mValues[4];
@@ -2593,7 +2593,7 @@ struct Stats_8005C844 {
 struct Stats_8005CAE4 {
     Stats_8005CAE4() {
         mValues[0]=0; mValues[1]=0; mValues[2]=0; mValues[3]=0;
-        fn_801C1F94(mpPlayers,0,sizeof(mpPlayers));
+        memset(mpPlayers,0,sizeof(mpPlayers));
     }
     Object_80039F5C *mpPlayers[4];
     int mValues[4];

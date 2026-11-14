@@ -1,6 +1,6 @@
 #include "game/Block_800B3660.h"
 #include "game/fn_80096A58.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 #include "game/fn_800B65A0.h"
 
@@ -17,7 +17,7 @@ extern "C" void fn_800B34BC(void)
     int pick = lbl_803EAB30;
 
     lbl_803EAB34->mUnknown14 = -1;
-    fn_801C1F94(&params, 0, sizeof(params));
+    memset(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
     params.mUnknown20 = 2;

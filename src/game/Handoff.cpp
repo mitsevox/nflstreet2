@@ -19,7 +19,7 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/fn_80178D18.h"
@@ -855,7 +855,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
     case 13:
     case 15:
         if ((p->mUnknown560.mUnknown40 || pOther->mUnknown560.mUnknown40) && state->mUnknown4 != 3) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
             return 0;
@@ -863,10 +863,10 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
         break;
     }
     if (fn_800F06F4(0, pOther->mpState, 27, 0xFFFF) == 0xFFFF && state->mUnknown8 != 14 && state->mUnknown4 != 3) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 1;
         fn_800F053C(0, p->mpState, &message, p);
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, pOther->mpState, &message, p);
         return 0;
@@ -890,7 +890,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                 if (none == 0xFFFF && fn_800F06F4(0, pOther->mpState, 21, 0xFFFF) == none) {
                     if (fn_800B65A0(p->mIdBytes[2]) != 255 && !fn_8011F1A4())
                         PassIconsAreShown();
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 3;
                     message.mUnknown1[0] = 20;
                     message.mUnknown1[1] = 96;
@@ -950,7 +950,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                 case 14:
                     if (fn_800F06F4(0, pOther->mpState, 18, 0xFFFF) != 0xFFFF)
                         return 1;
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 1;
                     fn_800F053C(0, p->mpState, &message, p);
                     break;
@@ -1004,7 +1004,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
             case 13:
             case 15:
                 if (p->mpState[1].mId == 0) {
-                    fn_801C1F94(&message, 0, 4);
+                    memset(&message, 0, 4);
                     message.mId = 3;
                     message.mUnknown1[0] = 16;
                     message.mUnknown1[1] = p->mMotion.mUnknown32 >> 17;
@@ -1100,18 +1100,18 @@ extern "C" int HandoffIsStarting(Object_80039F5C *p) {
 
 extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
     Message_800F01CC message;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 64;
     message.mUnknown1[0] = 18;
     message.mUnknown1[1] = 1;
     fn_800F03D8(0, p->mpState, &message, p);
     if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203)
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 51;
     message.mUnknown1[0] = (int)(fn_80237260(0) * 32.0f);
     fn_800F03D8(0, p->mpState, &message, p);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 9;
     message.mUnknown1[0] = 203;
     message.mUnknown1[1] = 0;
@@ -1123,7 +1123,7 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
     else
         index = 5;
     if (p->mIdBytes[1] == index) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 71;
         fn_800F03D8(0, p->mpState, &message, p);
     }
@@ -1301,7 +1301,7 @@ extern "C" int HuddleHoldUpdate(Object_80039F5C *p) {
     if (fn_800AD9B4() != 5) {
         if (p->mUnknown9[0] != 1) {
             Message_800F01CC message;
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F00D4(0, p->mpState, &message, p);

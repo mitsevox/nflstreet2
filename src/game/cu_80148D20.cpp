@@ -5,7 +5,7 @@
 extern "C" {
 int fn_801486A0(void);
 int EditMenuIsStoryTeam(void);
-void *fn_801C2030(void *dst, const void *src, unsigned int n);
+void *memmove(void *dst, const void *src, unsigned int n);
 
 void fn_80148D20(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor *)
 {
@@ -48,9 +48,9 @@ void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *p
             for (k = 0; k <= 3; k++) {
                 if (pRecords[i].values[p->mState.mpRecords[index].mUnknown0] > values[k]) {
                     found++;
-                    fn_801C2030(&values[k] + 1, &values[k], (3 - k) * 4);
-                    fn_801C2030(&ids[k] + 1, &ids[k], (3 - k) * 4);
-                    fn_801C2030(&categories[k] + 1, &categories[k], (3 - k) * 4);
+                    memmove(&values[k] + 1, &values[k], (3 - k) * 4);
+                    memmove(&ids[k] + 1, &ids[k], (3 - k) * 4);
+                    memmove(&categories[k] + 1, &categories[k], (3 - k) * 4);
                     ids[k] = pRecords[i].id;
                     values[k] = pRecords[i].values[p->mState.mpRecords[index].mUnknown0];
                     categories[k] = p->mState.mpRecords[index].mUnknown0;

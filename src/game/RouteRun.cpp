@@ -9,7 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_800F06F4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
@@ -347,7 +347,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
     if (!(p->mFlags & 0x4000) && BallGetCurrentHolder() && fn_801783AC(0)) {
         Message_800F01CC message;
 
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;

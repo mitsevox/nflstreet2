@@ -3,7 +3,7 @@
 #include "game/Ball.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 
 struct State_80116C34 {
@@ -100,7 +100,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
                     if (fn_801170E8(p)) return 0;
                 }
             } else if (fn_8009F258(p) == 1) {
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mId = 24;
                 message.mUnknown1[0] = 2;
                 fn_800F053C(0, p->mpState, &message, p);

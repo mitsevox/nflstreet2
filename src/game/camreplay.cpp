@@ -5,7 +5,7 @@
    aims it at the ball, a tracked player or a script point, and eases its
    angles and field of view; at the end of a record it moves to the next. */
 #include "game/GameOptions.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/RecordList_8002E7C0.h"
@@ -529,7 +529,7 @@ extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
         break;
     }
     default:
-        fn_801C1F94(out, 0, sizeof(out));
+        memset(out, 0, sizeof(out));
         break;
     }
     CamReplaySetAngles(pCamera, angles, smooth);

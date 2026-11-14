@@ -86,7 +86,7 @@
 #include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801C68FC.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
@@ -207,8 +207,6 @@ int fn_800C0458(void *p);
 int fn_8009B9F0(int index);
 int fn_800BD1BC(void *p);
 int fn_800ABCDC(void);
-void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
-void *fn_801C2030(void *pDest, const void *pSrc, unsigned int size);
 void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
@@ -427,10 +425,10 @@ extern "C" int fn_8008FF44(int value, int *pData)
     int id;
 
     lbl_803EA8D5 = 0;
-    fn_801C1F94(rows, 0, sizeof(rows));
+    memset(rows, 0, sizeof(rows));
     lbl_803EC924->mUnknown80.mUnknownE4E = 0;
     if (!fn_800BA6F8()) {
-        fn_801C1F94(pRequest, 0, 0xFF);
+        memset(pRequest, 0, 0xFF);
         pRequest->mRequest.mUnknown4 = 3;
         kind = fn_800948E4((Object_8017886C *)value);
         count = fn_80094AE0(lbl_803EC924->mUnknown80.mUnknownE40, (Object_8017886C *)value,
@@ -530,7 +528,7 @@ extern "C" void fn_80090284(int *pData)
         if (p->mIdBytes[3] == 1 && p->mUnknown9[2] != 0) {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             if (p->mIdBytes[2] == fn_80178308()) {
                 message.mId = 13;
             } else {
@@ -618,7 +616,7 @@ extern "C" void fn_80091144(int index)
         if (p != 0 && p->mUnknown9[2] != 0) {
             Message_800F01CC message;
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mUnknown1[0] = index;
             message.mUnknown1[1] = i;
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
@@ -1061,7 +1059,7 @@ extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
         }
         if (started) {
             *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pParams;
-            fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+            memset(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
             lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
         } else {
             slot = -1;
@@ -1082,12 +1080,12 @@ extern "C" void fn_80092F98(int handle)
             if (found == 0) {
                 lbl_803EC924->mUnknown80.mUnknownE4E = 0;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[handle] = *pCharacter;
-                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
+                memset(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
                 lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown38C = 0;
             } else if (lbl_803EC924->mUnknown80.mUnknownE4E == 0) {
                 lbl_803EC924->mUnknown80.mUnknownE4E = 1;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[handle] = *pCharacter;
-                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
+                memset(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
                 lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown38C = 0;
             }
         }
@@ -1108,12 +1106,12 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest)
             if (!found) {
                 lbl_803EC924->mUnknown80.mUnknownE4E = 0;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pRequest;
-                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+                memset(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
                 lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
             } else if (lbl_803EC924->mUnknown80.mUnknownE4E == 0) {
                 lbl_803EC924->mUnknown80.mUnknownE4E = 1;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pRequest;
-                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+                memset(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
                 lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
             } else {
                 slot = invalid;
@@ -1138,7 +1136,7 @@ extern "C" void fn_80093684(void *p)
     }
     pBlock->mpUnknown7C = p;
     for (i = 0; i < 4; i++) {
-        fn_801C1F94(&pBlock->mUnknown80.mCharacters[i], 0, sizeof(Character_80093BCC));
+        memset(&pBlock->mUnknown80.mCharacters[i], 0, sizeof(Character_80093BCC));
         pBlock->mUnknown80.mCharacters[i].mUnknown0 = -1;
     }
     pBlock->mpUnknown0 = (CondTable_t *)ResLoad(p, 2, 1);
@@ -1571,7 +1569,7 @@ extern "C" Object_80039F5C *fn_80094610(unsigned short id)
     Object_80039F5C *result = 0;
 
     if (fn_800926F4() != -1) {
-        fn_801C1F94(&lbl_8030C184, 0, sizeof(lbl_8030C184));
+        memset(&lbl_8030C184, 0, sizeof(lbl_8030C184));
         lbl_8030C184.mUnknown0 = id;
         lbl_8030C184.mUnknown4 = 3;
         if (fn_80096074(&lbl_8030C184, 1) && lbl_8030C184.mUnknown14[0]->mIdBytes[3] == 1) {
@@ -1705,7 +1703,7 @@ extern "C" int fn_80094B34(CondTable_t *pTable, int index)
 
 extern "C" void fn_80094B78(Header_80094B78 *p)
 {
-    fn_801C1F94(p, 0, sizeof(Header_80094B78));
+    memset(p, 0, sizeof(Header_80094B78));
     lbl_803EC928 = 0;
     p->mUnknown2 = sizeof(Header_80094B78);
 }
@@ -2036,7 +2034,7 @@ extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_
     int result;
     Frame_800DF7CC *pFrame;
 
-    fn_801C1F94(ppOut, 0, 24 * sizeof(Object_80039F5C *));
+    memset(ppOut, 0, 24 * sizeof(Object_80039F5C *));
     result = 1;
     pFrame = AnimSeqncrGetPlayerPtr(pActor, index);
     switch (pFrame->mUnknown0) {
@@ -2306,7 +2304,7 @@ extern "C" int fn_80095FD8(Object_80039F5C *p)
 
 extern "C" void fn_8009601C(void)
 {
-    fn_801C1F94(lbl_8030C270, 0, sizeof(lbl_8030C270));
+    memset(lbl_8030C270, 0, sizeof(lbl_8030C270));
 }
 
 extern "C" void fn_8009604C(int index, int value)
@@ -2501,7 +2499,7 @@ extern "C" void fn_80096954(void *pData)
     AnimSeqncrRelocateSeqFile();
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
-        fn_801C1F94(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
+        memset(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
         lbl_803EA920->mUnknown10[i].mUnknown2A = 0xFFFF;
         lbl_803EA920->mUnknown10[i].mUnknown28 = 0xFFFF;
         lbl_803EA920->mUnknown10[i].mUnknown0 = -1;
@@ -2594,7 +2592,7 @@ extern "C" void fn_80096D14(int index)
     if (p != 0) {
         if (lbl_8030C2A8[index].mUnknown4 != 0) {
             lbl_8030C2A8[index].mUnknown4--;
-            fn_801C1F94(&lbl_803EA920->mUnknown10[index], 0, sizeof(Playback_80096DA8));
+            memset(&lbl_803EA920->mUnknown10[index], 0, sizeof(Playback_80096DA8));
             lbl_803EA920->mUnknown10[index].mUnknown0 = -1;
         }
         p->mUnknown10 = 3;
@@ -2723,7 +2721,9 @@ extern "C" void fn_80097440(unsigned short count, int index)
     for (i = 0; i < count; i++) {
         Item_80097440 *p = &lbl_8030C2B8[index].mpUnknownBE8[i];
 
-        fn_801C1FBC(p, lbl_8030C2B8[index].mUnknown8[i].mpUnknown4, sizeof(Item_80097440));
+        // FAKEMATCH: a cast keeps this an ordinary call instead of the inline builtin copy
+        ((void (*)(void *, void *, unsigned int))memcpy)(p, lbl_8030C2B8[index].mUnknown8[i].mpUnknown4,
+                                                         sizeof(Item_80097440));
         fn_800973AC(&p->mUnknown8, &p->mUnknown8);
         fn_800973AC(&p->mUnknown14, &p->mUnknown14);
         p->mUnknown28 = fn_80097430(p->mUnknown28);
@@ -2785,7 +2785,7 @@ extern "C" void fn_800975EC(int id, int flag, int index)
                     Slot_80097440 slot = lbl_8030C2B8[index].mUnknown8[i];
                     unsigned short start = lbl_8030C2B8[index].mUnknownBEC[group];
 
-                    fn_801C2030(&lbl_8030C2B8[index].mUnknown8[start + 1], &lbl_8030C2B8[index].mUnknown8[start],
+                    memmove(&lbl_8030C2B8[index].mUnknown8[start + 1], &lbl_8030C2B8[index].mUnknown8[start],
                                 (i - start) * sizeof(Slot_80097440));
                     lbl_8030C2B8[index].mUnknown8[lbl_8030C2B8[index].mUnknownBEC[group]] = slot;
                 }
@@ -5316,10 +5316,10 @@ extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
     Block_80170E64 *pBlock;
 
     if (reset) {
-        fn_801C1F94(&p->mUnknown16, 0, 92);
-        fn_801C1F94(&p->mUnknown108, 0, 92);
-        fn_801C1F94(&p->mUnknown200, 0, 92);
-        fn_801C1F94(p->mUnknown816, 0, sizeof(p->mUnknown816));
+        memset(&p->mUnknown16, 0, 92);
+        memset(&p->mUnknown108, 0, 92);
+        memset(&p->mUnknown200, 0, 92);
+        memset(p->mUnknown816, 0, sizeof(p->mUnknown816));
         fn_800AF804((Entry_800AF82C *)p->mUnknown816);
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
@@ -5428,7 +5428,7 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
 extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
                            void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c)
 {
-    fn_801C1F94(pEntry->mUnknown10, 0, 8);
+    memset(pEntry->mUnknown10, 0, 8);
     pEntry->mpCallback0 = pCallback;
     if (c == 0) {
         c = 6;
@@ -6253,7 +6253,7 @@ extern "C" void fn_800A6CB0(int team)
     int none = 0;
 
     if (lbl_803EC95C == -1) {
-        fn_801C1F94(&request, 0, sizeof(request));
+        memset(&request, 0, sizeof(request));
         request.mUnknown0 = team;
         request.mUnknown8 = 100;
         request.mUnknownE0.mUnknown0 = 1;
@@ -6746,7 +6746,7 @@ extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
 {
     Params_80092E54 request;
 
-    fn_801C1F94(&request, 0, sizeof(request));
+    memset(&request, 0, sizeof(request));
     request.mUnknown0 = b;
     request.mUnknown8 = 0x24;
     request.mUnknownE0.mUnknown0 = 1;
@@ -6843,7 +6843,7 @@ extern "C" void fn_800A9238(void)
             Message_800F01CC message;
 
             fn_800EFE60(0, p->mpState, p);
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 0;
             fn_800F053C(0, p->mpState, &message, p);
         }
@@ -7003,16 +7003,16 @@ extern "C" void fn_800A9854(void)
             p->mFlags &= ~4;
             if (p->mUnknown9[2] != 0) {
                 if (p->mUnknown9[0] != 1) {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 11;
                     message.mUnknown1[0] = p->mUnknown9[0];
                     message.mUnknown1[1] = 15;
                     fn_800F053C(0, p->mpState, &message, p);
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 2;
                     fn_800F01CC(0, p->mpState, &message, p);
                 } else {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 2;
                     fn_800F053C(0, p->mpState, &message, p);
                 }
@@ -7030,16 +7030,16 @@ extern "C" void fn_800A9854(void)
             p->mFlags &= ~4;
             if (p->mUnknown9[2] != 0) {
                 if (p->mUnknown9[0] != 1) {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 11;
                     message.mUnknown1[0] = p->mUnknown9[0];
                     message.mUnknown1[1] = 15;
                     fn_800F053C(0, p->mpState, &message, p);
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 33;
                     fn_800F01CC(0, p->mpState, &message, p);
                 } else {
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 33;
                     fn_800F053C(0, p->mpState, &message, p);
                 }
@@ -7049,7 +7049,7 @@ extern "C" void fn_800A9854(void)
         }
     }
 
-    fn_801C1F94(&message, 0, sizeof(message));
+    memset(&message, 0, sizeof(message));
     message.mId = 1;
     fn_800F03D8(0, pCarrier->mpState, &message, pCarrier);
     fn_800B6B98();
@@ -7295,7 +7295,7 @@ extern "C" Record_800B15FC *fn_800B15FC(void)
 {
     Record_800B15FC *pRecord = (Record_800B15FC *)fn_8023850C(lbl_803EAB18);
 
-    fn_801C1F94(pRecord, 0, sizeof(Record_800B15FC));
+    memset(pRecord, 0, sizeof(Record_800B15FC));
     fn_8009BD2C(0, &pRecord->mUnknown0);
     return pRecord;
 }
@@ -9181,7 +9181,7 @@ extern "C" void fn_800BB840(int a, int b, int c)
 {
     Params_80092E54 params;
 
-    fn_801C1F94(&params, 0, sizeof(params));
+    memset(&params, 0, sizeof(params));
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
     params.mUnknownE0.mUnknown0 = 1;
@@ -9530,7 +9530,7 @@ void PreGamePhase::InitState()
     void *pHandle = fn_80238174(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
     Block_800BC538 *p = (Block_800BC538 *)fn_8023816C(pHandle);
 
-    fn_801C1F94(p, 0, sizeof(Block_800BC538));
+    memset(p, 0, sizeof(Block_800BC538));
     p->mUnknown0 = 0;
     p->mUnknown4 = 0;
     p->mUnknown29 = 2;
@@ -9670,7 +9670,7 @@ extern "C" void fn_800AA1B0(int a, int b)
             }
         }
     }
-    fn_801C1F94(&request, 0, sizeof(request));
+    memset(&request, 0, sizeof(request));
     request.mUnknown0 = a;
     request.mUnknown8 = 0x24;
     request.mUnknownE0.mUnknown0 = 1;
@@ -10237,7 +10237,7 @@ extern "C" int fn_800AB2FC(void *p, float dt)
             Message_800F01CC message;
             Object_80039F5C *pObject;
 
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 9;
             message.mUnknown1[0] = 203;
             message.mUnknown1[1] = 0;
@@ -11091,7 +11091,7 @@ extern "C" int fn_800ADDD8(PlyrPosePart_t *pElements, unsigned int index)
 
 extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a)
 {
-    fn_801C1F94(pElement, 0, sizeof(PlyrPosePart_t));
+    memset(pElement, 0, sizeof(PlyrPosePart_t));
     if (a != 0) {
         pElement->mUnknown1[0] = pObject->mUnknown0[0];
         pElement->mUnknown4 = 0;
@@ -11570,20 +11570,20 @@ extern "C" void fn_800AEA70(Object_80039F5C *p, Message_800F01CC *pMessages)
 {
     int count = 0;
 
-    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    memset(&pMessages[count], 0, sizeof(Message_800F01CC));
     pMessages[count].mId = 31;
     pMessages[count].mUnknown1[0] = 48;
     count++;
-    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    memset(&pMessages[count], 0, sizeof(Message_800F01CC));
     pMessages[count].mId = 19;
     pMessages[count].mUnknown1[0] = 40;
     pMessages[count].mUnknown1[1] = 32;
     pMessages[count].mUnknown1[2] = 255;
     count++;
-    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    memset(&pMessages[count], 0, sizeof(Message_800F01CC));
     pMessages[count].mId = 21;
     count++;
-    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    memset(&pMessages[count], 0, sizeof(Message_800F01CC));
     pMessages[count].mId = 0;
 }
 
@@ -11592,8 +11592,8 @@ extern "C" void fn_800AEB1C(void)
     void *pHandle = fn_80238174(0, (void **)&lbl_803EAAF4, sizeof(Block_800AEB1C), 0, 0x68727465);
     Block_800AEB1C *pBlock = (Block_800AEB1C *)fn_8023816C(pHandle);
 
-    fn_801C1F94(pBlock->mpObjects, 0, sizeof(pBlock->mpObjects));
-    fn_801C1F94(pBlock->mMessages, 0, sizeof(pBlock->mMessages));
+    memset(pBlock->mpObjects, 0, sizeof(pBlock->mpObjects));
+    memset(pBlock->mMessages, 0, sizeof(pBlock->mMessages));
     pBlock->mUnknown268[0] = 0;
     pBlock->mUnknown268[1] = 0;
     fn_802381E0(pHandle);
@@ -11636,8 +11636,8 @@ extern "C" Message_800F01CC *fn_800AEE20(Object_80039F5C *p)
 
 extern "C" void fn_800AEEDC(int team)
 {
-    fn_801C1F94(lbl_803EAAF4->mpObjects[team], 0, sizeof(lbl_803EAAF4->mpObjects[team]));
-    fn_801C1F94(lbl_803EAAF4->mMessages[team], 0, sizeof(lbl_803EAAF4->mMessages[team]));
+    memset(lbl_803EAAF4->mpObjects[team], 0, sizeof(lbl_803EAAF4->mpObjects[team]));
+    memset(lbl_803EAAF4->mMessages[team], 0, sizeof(lbl_803EAAF4->mMessages[team]));
 }
 
 extern "C" void fn_800AEF38(int team)
@@ -11685,7 +11685,7 @@ extern "C" void fn_800AF088(void)
         if (lbl_803EAAF4->mpObjects[team][i] != 0
             && (lbl_803EAAF4->mMessages[team][i][0].mId == 31 || lbl_803EAAF4->mMessages[team][i][1].mId == 31)) {
             lbl_803EAAF4->mpObjects[team][i] = 0;
-            fn_801C1F94(lbl_803EAAF4->mMessages[team][i], 0, sizeof(lbl_803EAAF4->mMessages[team][i]));
+            memset(lbl_803EAAF4->mMessages[team][i], 0, sizeof(lbl_803EAAF4->mMessages[team][i]));
         }
     }
 }
@@ -11730,8 +11730,6 @@ typedef Desc_80238424 Args_800B1478;
 extern "C" {
 int fn_801D27A0(void);
 int fn_801C6858(int a, int b, int c);
-int fn_801C1FEC(const void *pA, const void *pB, int size);
-void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
@@ -11871,7 +11869,7 @@ extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
 
     lbl_803EAB04 = 1;
     lbl_803EC978 = (Table_800AF71C *)fn_801D2B7C(sizeof(Table_800AF71C), 0, 0);
-    fn_801C1F94(lbl_803EC978, 0, sizeof(Table_800AF71C));
+    memset(lbl_803EC978, 0, sizeof(Table_800AF71C));
     lbl_803EC978->mCount = 3;
     size = ResGetSize(pRes, index);
     lbl_803EC97C = (Item_800AF82C *)fn_801D2B7C(size * count, 0, 0);
@@ -11907,7 +11905,7 @@ extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *
 
 extern "C" void fn_800AF804(Entry_800AF82C *p)
 {
-    fn_801C1F94(p, 0, 3 * sizeof(Entry_800AF82C));
+    memset(p, 0, 3 * sizeof(Entry_800AF82C));
 }
 
 extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c)
@@ -11972,7 +11970,7 @@ extern "C" int fn_800AFAD4(void *p, void *q)
     int result;
 
     if (pOther != 0) {
-        result = fn_801C1FEC(pBlock->mpUnknown4, pOther->mpUnknown4, fn_801C6858(0, pBlock->mUnknown0, 4));
+        result = memcmp(pBlock->mpUnknown4, pOther->mpUnknown4, fn_801C6858(0, pBlock->mUnknown0, 4));
     } else {
         result = fn_80238278(pBlock, 4, 0);
         result = fn_80238278(pBlock->mpUnknown4, fn_801C6858(0, pBlock->mUnknown0, 4), result);
@@ -11985,9 +11983,10 @@ extern "C" int fn_800AFB70(void *p, void *pBuffer)
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
     char *pDest = (char *)pBuffer;
 
-    fn_801C1FBC(pDest, pBlock, sizeof(Block_800AFCB8));
+    // FAKEMATCH: a cast keeps this an ordinary call instead of the inline builtin copy
+    ((void (*)(void *, void *, unsigned int))memcpy)(pDest, pBlock, sizeof(Block_800AFCB8));
     pDest += sizeof(Block_800AFCB8);
-    fn_801C1FBC(pDest, pBlock->mpUnknown4, fn_801C6858(0, pBlock->mUnknown0, 4));
+    memcpy(pDest, pBlock->mpUnknown4, fn_801C6858(0, pBlock->mUnknown0, 4));
     return 1;
 }
 
@@ -11995,7 +11994,7 @@ extern "C" int fn_800AFBD8(void *p, void *pBuffer)
 {
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
 
-    fn_801C1FBC(pBlock->mpUnknown4, (char *)pBuffer + sizeof(Block_800AFCB8), fn_801C6858(0, pBlock->mUnknown0, 4));
+    memcpy(pBlock->mpUnknown4, (char *)pBuffer + sizeof(Block_800AFCB8), fn_801C6858(0, pBlock->mUnknown0, 4));
     return 1;
 }
 
@@ -12129,7 +12128,7 @@ extern "C" void fn_800B0004(void)
             Object_80039F5C *p = fn_8009BCE8(&pEntry->mUnknown28[0]);
 
             if (p != 0 && fn_800AFF88(p) == 0) {
-                fn_801C1F94(pEntry, 0, sizeof(Entry_800B0CFC));
+                memset(pEntry, 0, sizeof(Entry_800B0CFC));
             }
         }
     }
@@ -12346,12 +12345,12 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
                     lbl_803EAB14->mUnknown2E5 = 1;
                     if (p->mFlags & 0x40000) {
                         fn_8010B1FC(PlyrGet(p->mIdBytes[2], 0), 1, 0);
-                        fn_801C1F94(&message, 0, sizeof(message));
+                        memset(&message, 0, sizeof(message));
                         message.mId = 51;
                         message.mUnknown1[0] = 16;
                         fn_800F03D8(0, p->mpState, &message, p);
                     }
-                    fn_801C1F94(&message, 0, sizeof(message));
+                    memset(&message, 0, sizeof(message));
                     message.mId = 61;
                     fn_800F03D8(0, p->mpState, &message, p);
                 }
@@ -12411,7 +12410,7 @@ extern "C" void fn_800B0CFC(void)
 
     fn_80238234(pHandle, 0, 0, 0, fn_800B0C70);
     pBlock = (Block_800B0CFC *)fn_8023816C(pHandle);
-    fn_801C1F94(pBlock, 0, sizeof(Block_800B0CFC));
+    memset(pBlock, 0, sizeof(Block_800B0CFC));
     fn_8009BD2C(0, &pBlock->mUnknown2D0);
     pBlock->mUnknown2E4 = 1;
     pBlock->mUnknown2D4 = 0;
@@ -12428,7 +12427,7 @@ extern "C" void fn_800B0DA4(void)
 {
     PlayBookFormation_t *pObject;
 
-    fn_801C1F94(lbl_803EAB14, 0, sizeof(Block_800B0CFC));
+    memset(lbl_803EAB14, 0, sizeof(Block_800B0CFC));
     fn_8009BD2C(0, &lbl_803EAB14->mUnknown2D0);
     lbl_803EAB14->mUnknown2D4 = 0;
     lbl_803EAB14->mUnknown2E4 = 1;
@@ -12694,7 +12693,7 @@ extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kin
         p->mUnknown512.mUnknown14 = 0;
         p->mFlags &= ~4;
         fn_800C39E0(p, 224, b, c, handle < 0);
-        fn_801C1F94(&message, 0, sizeof(Message_800F01CC));
+        memset(&message, 0, sizeof(Message_800F01CC));
         message.mId = 28;
         fn_800975A4(kind, handle, &high, &low);
         message.mUnknown1[0] = high;
@@ -13041,10 +13040,10 @@ extern "C" void fn_8009DA10(Object_80039F5C *p)
 {
     Message_800F01CC message;
 
-    fn_801C1F94(&message, 0, sizeof(message));
+    memset(&message, 0, sizeof(message));
     message.mId = 11;
     fn_800F053C(0, p->mpState, &message, p);
-    fn_801C1F94(&message, 0, sizeof(message));
+    memset(&message, 0, sizeof(message));
     message.mId = 2;
     fn_800F01CC(0, p->mpState, &message, p);
 }
@@ -13086,7 +13085,7 @@ extern "C" void fn_8009DD10(State_8011F4EC *p)
 {
     unsigned int i;
 
-    fn_801C1F94(p, 0, 20);
+    memset(p, 0, 20);
     p->mUnknown0 = 0;
     for (i = 0; i <= 1; i++) {
         p->mUnknown4[i] = 0;
@@ -13199,7 +13198,7 @@ extern "C" void fn_8009E458(void)
     Message_800F01CC message;
     int count;
 
-    fn_801C1F94(&message, 0, sizeof(message));
+    memset(&message, 0, sizeof(message));
     message.mId = 2;
     count = fn_80178D70(team);
     for (; i < count; i++) {
@@ -14091,7 +14090,7 @@ extern "C" void fn_800CBFA8(Object_80039F5C *p, Vector_80039F5C *pPos, int angle
         if (angle > 360) angle -= 360;
     }
     Message_800F01CC message;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mUnknown1[0] = (int)(pPos->mX * 4.0f);
     message.mUnknown1[1] = (int)(pPos->mY * 2.0f);
     message.mId = 63;
@@ -14145,7 +14144,7 @@ extern "C" void fn_800CC2D4(void)
         for (int i = 0; i < count; i++) {
             Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             Message_800F01CC message;
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 9;
             message.mUnknown1[0] = 203;
             message.mUnknown1[1] = 0;
@@ -16563,7 +16562,7 @@ extern "C" void fn_800BF4B8(void)
         int mode = fn_80177F70();
 
         if (mode == 0) {
-            fn_801C1F94(&params, 0, sizeof(params));
+            memset(&params, 0, sizeof(params));
             params.mUnknown40 = 0xFFFF;
             params.mUnknown42 = 0xFFFF;
             params.mUnknown0 = 27;
@@ -17299,7 +17298,7 @@ extern "C" void fn_800C442C(void)
 
 extern "C" void fn_800C4438(Sequence_800C4460 *p)
 {
-    fn_801C1F94(p, 0, sizeof(Sequence_800C4460));
+    memset(p, 0, sizeof(Sequence_800C4460));
 }
 
 extern "C" void fn_800C4460(Sequence_800C4460 *p)
@@ -17350,7 +17349,7 @@ extern "C" Step_800C4460 *fn_800C4658(Sequence_800C4460 *p)
 {
     Step_800C4460 *pStep = &p->mSteps[p->mUnknown100];
 
-    fn_801C1F94(pStep, 0, sizeof(Step_800C4460));
+    memset(pStep, 0, sizeof(Step_800C4460));
     return pStep;
 }
 
@@ -17917,7 +17916,7 @@ extern "C" float fn_800CE73C(Object_800CE674 *p)
 
 extern "C" void fn_800CE770(Query_800CE770 *p)
 {
-    fn_801C1F94(p, 0, 64);
+    memset(p, 0, 64);
     p->mUnknown32 = 0x800000;
     p->mUnknown36 = 0x44444;
     p->mUnknown40 = 0x155555;
@@ -18024,7 +18023,7 @@ extern "C" void fn_800CD978(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     if (fn_800F06F4(0, pA->mpState, 18, 0xFFFF) != 0xFFFF || pA->mpState->mId == 15) hadMessage = 1;
     if (carrier) fn_800EFE60(0, pA->mpState, pA);
     Message_800F01CC message;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 16;
     message.mUnknown1[0] = p->mUnknown52Unsigned >> 8;
     message.mUnknown1[1] = p->mBytes52[1];
@@ -18040,7 +18039,7 @@ extern "C" void fn_800CD978(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     if (carrier) fn_800F053C(0, pA->mpState, &message, pA);
     else fn_800F00D4(0, pA->mpState, &message, pA);
     if (carrier) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = hadMessage ? 18 : 1;
         fn_800F03D8(0, pA->mpState, &message, pA);
     }
@@ -18064,7 +18063,7 @@ extern "C" void fn_800CDB5C(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         }
         if (carrier || !hadMessage) fn_800EFE60(0, pB->mpState, pB);
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 17;
         message.mUnknown1[0] = p->mUnknown52Unsigned >> 8;
         message.mUnknown1[1] = p->mBytes52[1];
@@ -18081,13 +18080,13 @@ extern "C" void fn_800CDB5C(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
             fn_800F053C(0, pB->mpState, &message, pB);
         } else {
             Message_800F01CC oldMessage;
-            fn_801C1F94(&oldMessage, 0, 4);
+            memset(&oldMessage, 0, 4);
             oldMessage = *(Message_800F01CC *)pB->mpState;
             fn_800F067C(0, pB->mpState, &message, pB);
             if (oldIndex == 0) fn_800F01CC(0, pB->mpState, &oldMessage, pB);
         }
         if (carrier || !hadMessage) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 2;
             fn_800F03D8(0, pB->mpState, &message, pB);
         }
@@ -18100,7 +18099,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     Object_80039F5C *pC = p->mpUnknown4Entries[1];
     Message_800F01CC message;
     Entry_800CCBA0 *pEntry;
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 32;
     message.mUnknown1[0] = p->mUnknown52Unsigned >> 8;
     message.mUnknown1[1] = p->mBytes52[1];
@@ -18113,7 +18112,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     pA->mUnknown1011 = index >> 8;
     if (pA->mpState->mId == 32 || pA->mpState->mId == 96) fn_800F05E4(0, pA->mpState, &message, pA);
     else fn_800F00D4(0, pA->mpState, &message, pA);
-    fn_801C1F94(&message, 0, 4);
+    memset(&message, 0, 4);
     message.mId = 32;
     message.mUnknown1[0] = p->mUnknown52Unsigned >> 8;
     message.mUnknown1[1] = p->mBytes52[1];
@@ -18140,7 +18139,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         fn_800F00D4(0, pB->mpState, &message, pB);
     }
     if (pC != 0) {
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 32;
         message.mUnknown1[0] = p->mUnknown52Unsigned >> 8;
         message.mUnknown1[1] = p->mBytes52[1];
@@ -18225,7 +18224,7 @@ extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, un
         } else {
             fn_800CCA40(&pPlay->mSet, &pOut->mpUnknown16, 1, 0);
         }
-        fn_801C1F94(&selected, 0, sizeof(selected));
+        memset(&selected, 0, sizeof(selected));
         available = *(Players_800CD3C0 *)p->mpUnknown4Entries;
         for (slot = 0; slot < size; slot++) {
             unsigned short n;

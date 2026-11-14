@@ -4,7 +4,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Ball.h"
 
 struct State_802A2020 {
@@ -93,15 +93,15 @@ void fn_8014E534(State_802A2020 *p)
     if (fn_800F06F4(0, pPlayer->mpState, 1, 0xFFFF) == 0xFFFF) {
         Message_800F01CC message;
         if (fn_8014F104(fn_80148A58())->mUnknown24) {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 51;
             message.mUnknown1[0] = 16;
             fn_800F053C(0, pPlayer->mpState, &message, pPlayer);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
             fn_800F01CC(0, pPlayer->mpState, &message, pPlayer);
         } else {
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
             fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
         }
@@ -118,7 +118,7 @@ void fn_8014E534(State_802A2020 *p)
         fn_800F0490(0, pOther->mpState, 2);
         fn_800F0490(0, pOther->mpState, 97);
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 51;
         if (fn_8014F104(fn_80148A58())->mUnknown24) {
             message.mUnknown1[0] = 48;
@@ -127,12 +127,12 @@ void fn_8014E534(State_802A2020 *p)
         }
         if (position == 0xFFFF) {
             fn_800F03D8(0, pOther->mpState, &message, pOther);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 97;
             fn_800F03D8(0, pOther->mpState, &message, pOther);
         } else {
             fn_800F0278(0, pOther->mpState, &message, pOther, position);
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 97;
             fn_800F0278(0, pOther->mpState, &message, pOther, position + 1);
         }

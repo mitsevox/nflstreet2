@@ -1,6 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/LevelData.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 extern "C" {
 int fn_800C4E18(Object_80039F5C *p);
@@ -24,7 +24,7 @@ extern "C" void fn_800C47EC(LevelData_t *pLevel)
     unsigned int i;
     int kind;
 
-    fn_801C1F94(counts, 0, sizeof(counts));
+    memset(counts, 0, sizeof(counts));
     for (i = 0; i < pLevel->mUnknown24; i++) {
         counts[pLevel->mUnknown28[i].mUnknown8]++;
     }

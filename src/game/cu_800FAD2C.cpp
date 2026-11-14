@@ -9,7 +9,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"

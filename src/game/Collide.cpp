@@ -3,7 +3,7 @@
    mirroring for a flipped field. */
 #include "game/Collide.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/Object_80039F5C.h"
 
@@ -108,20 +108,20 @@ extern "C" CollideSet_t *CollideSetCreate(int count, int subCount)
 {
     CollideSet_t *pSet = (CollideSet_t *)fn_801D2B7C(sizeof(CollideSet_t), 0, 0);
 
-    fn_801C1F94(pSet, 0, sizeof(CollideSet_t));
+    memset(pSet, 0, sizeof(CollideSet_t));
     pSet->mUnknown4 = count;
     pSet->mUnknown8 = 0;
     pSet->mpUnknown0 = (CollideObject_t *)fn_801D2B7C(count * sizeof(CollideObject_t), 0, 0);
-    fn_801C1F94(pSet->mpUnknown0, 0, pSet->mUnknown4 * sizeof(CollideObject_t));
+    memset(pSet->mpUnknown0, 0, pSet->mUnknown4 * sizeof(CollideObject_t));
     pSet->mUnknownC = subCount;
     pSet->mUnknown10 = 0;
     pSet->mpUnknown14[0] = 0;
     pSet->mpUnknown14[1] = 0;
     if (subCount) {
         pSet->mpUnknown14[0] = (CollideShape_t *)fn_801D2B7C(subCount * sizeof(CollideShape_t), 0, 0);
-        fn_801C1F94(pSet->mpUnknown14[0], 0, pSet->mUnknownC * sizeof(CollideShape_t));
+        memset(pSet->mpUnknown14[0], 0, pSet->mUnknownC * sizeof(CollideShape_t));
         pSet->mpUnknown14[1] = (CollideShape_t *)fn_801D2B7C(pSet->mUnknownC * sizeof(CollideShape_t), 0, 0);
-        fn_801C1F94(pSet->mpUnknown14[1], 0, pSet->mUnknownC * sizeof(CollideShape_t));
+        memset(pSet->mpUnknown14[1], 0, pSet->mUnknownC * sizeof(CollideShape_t));
     }
     return pSet;
 }

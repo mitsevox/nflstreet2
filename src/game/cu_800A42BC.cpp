@@ -14,7 +14,7 @@ extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801BA2A8.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Message_800F01CC.h"
 #include "engine/Record_800D81C8.h"
 
@@ -56,7 +56,7 @@ extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *reco
                 (entries[block->mUnknown0Word].mUnknownC + block->mUnknown10Word) & 0xFFFFFF;
             if (p->mUnknown9[0] != 1 && (p->mFlags & 0x800)) {
                 Message_800F01CC message;
-                fn_801C1F94(&message, 0, sizeof(message));
+                memset(&message, 0, sizeof(message));
                 message.mId = 11;
                 message.mUnknown1[0] = p->mUnknown9[0];
                 fn_800F00D4(0, p->mpState, &message, p);

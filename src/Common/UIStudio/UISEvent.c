@@ -114,7 +114,7 @@ void UISRemoveUnNessaryRateFncs(UISInfoT *pInfo)
         if (pInfo->RateFncs[nRateFnc].State == UISRATE_UNLOAD) {
             pInfo->NumRateFncs--;
             for (nSlideFnc = nRateFnc; nSlideFnc < pInfo->NumRateFncs; nSlideFnc++) {
-                fn_801C2030(&pInfo->RateFncs[nSlideFnc], &pInfo->RateFncs[nSlideFnc + 1],
+                memmove(&pInfo->RateFncs[nSlideFnc], &pInfo->RateFncs[nSlideFnc + 1],
                             sizeof(UISRateFncT));
             }
         } else if (pInfo->RateFncs[nRateFnc].State == UISRATE_LOAD) {

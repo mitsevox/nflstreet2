@@ -5,7 +5,7 @@
 #include "game/Callees_801D57E0.h"
 #include "game/MemCardUI.h"
 #include "game/MsgGame.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 struct MemCardScanEntry_t {
     int mUnknown0;
@@ -115,7 +115,7 @@ extern "C" void MsgMemCardScanClose()
 extern "C" void MsgMemCardScanResetList(int value, int *pCount)
 {
     *pCount = 9999;
-    fn_801C1F94(_MsgMemCardScan_aBest, 0, sizeof(_MsgMemCardScan_aBest));
+    memset(_MsgMemCardScan_aBest, 0, sizeof(_MsgMemCardScan_aBest));
 }
 
 extern "C" void MsgMemCardScanRewind()

@@ -13,7 +13,7 @@
 #include "game/DbQueryTable.h"
 #include "game/PlayBookTeam.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
 
@@ -365,7 +365,7 @@ int PlayBookDbLoadPlayRecord(int tag, int key, PlayBookPlay_t *pRecord)
 
 void PlayBookDbLoadPlayDetails(int tag, int key, unsigned int kind, PlayBookPlay_t *pRecord)
 {
-    fn_801C1F94(pRecord->mUnknown1C, 0, sizeof(pRecord->mUnknown1C));
+    memset(pRecord->mUnknown1C, 0, sizeof(pRecord->mUnknown1C));
     switch (kind) {
     case 1:
     case 2:
@@ -636,7 +636,7 @@ int UpdateColumnByKey(int tag, int table, int column, int value, int keyColumn, 
 
 int PlayBookDbLoadFormation(int tag, int a, int b, PlayBookFormation_t *pObject)
 {
-    fn_801C1F94(pObject, 0, sizeof(*pObject));
+    memset(pObject, 0, sizeof(*pObject));
     return fn_801FCE10(0,
                        "use \x8c select 'MFBP' into \x85 and 'eman' into \x88 from 'MFBP' where 'PYTF' = \x82 and "
                        "'_dro' = \x82\n",
@@ -661,7 +661,7 @@ unsigned short PlayBookDbCountSets(int tag, int key)
 
 void PlayBookDbLoadSetByOrder(int tag, int key, int index, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject)
 {
-    fn_801C1F94(pObject, 0, sizeof(*pObject));
+    memset(pObject, 0, sizeof(*pObject));
     PlayBookDbLoadSetHeader(tag, key, index, pTeam, pObject);
     if (pObject->mUnknown4) {
         PlayBookDbLoadSetRecord(tag, pObject->mUnknown4, pObject);
@@ -673,7 +673,7 @@ void PlayBookDbLoadSetByOrder(int tag, int key, int index, PlayBookTeam_t *pTeam
 
 void PlayBookDbLoadSet(int tag, int key, PlayBookTeam_t *pTeam, PlayBookSet_t *pObject)
 {
-    fn_801C1F94(pObject, 0, sizeof(*pObject));
+    memset(pObject, 0, sizeof(*pObject));
     pObject->mUnknown4 = key;
     PlayBookDbLoadSetRecord(tag, key, pObject);
     PlayBookGetLoadFlags();
@@ -703,7 +703,7 @@ int PlayBookDbLoadPlay(int tag, int key, int index, PlayBookPlay_t *pRecord)
     int result;
     unsigned int flags;
 
-    fn_801C1F94(pRecord, 0, sizeof(*pRecord));
+    memset(pRecord, 0, sizeof(*pRecord));
     PlayBookDbLoadPlayHeader(tag, key, index, pRecord);
     result = PlayBookDbLoadPlayRecord(tag, pRecord->mUnknown0, pRecord);
     flags = PlayBookGetLoadFlags();
@@ -827,7 +827,7 @@ void LoadTSBPObject(int tag, int key, PlayBookTeam_t *pTeam, PlayBookSet_t *pObj
     int formation;
     int order;
 
-    fn_801C1F94(pObject, 0, sizeof(*pObject));
+    memset(pObject, 0, sizeof(*pObject));
     flags = PlayBookGetLoadFlags();
     fn_801FCE10(0, "use \x8c select 'MFBP' into \x85 and '_dro' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
                 &formation, &order, key);
@@ -895,7 +895,7 @@ int PlayBookDbPickAIPlay(int team, int tag, int kind)
     tables[3].Set(-1, 0, 0);
     count = 0;
     opened = 0;
-    fn_801C1F94(list, 0, sizeof(list));
+    memset(list, 0, sizeof(list));
     status = fn_801FA0BC(tag, tables, 0, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;

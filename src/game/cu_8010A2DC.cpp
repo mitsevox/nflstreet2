@@ -27,7 +27,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -83,7 +83,7 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
                 Message_800F01CC message;
                 Vector_80039F5C toBall;
 
-                fn_801C1F94(&message, 0, 4);
+                memset(&message, 0, 4);
                 message.mUnknown1[0] = a;
                 message.mId = 62;
                 BallGetPosition(BallGetCurrent(), &toBall);
@@ -116,7 +116,7 @@ extern "C" int fn_8010A4E8(Object_80039F5C *p) {
     Block_8010A4E8 *pBlock = (Block_8010A4E8 *)&p->mUnknown336;
     int mode = fn_800AD9B4();
 
-    fn_801C1F94(pBlock, 0, 64);
+    memset(pBlock, 0, 64);
     pBlock->mUnknown50 = -1;
     if (p->mpUnknown800 != (Record_800D81C8 *)(p->mUnknown1244 + 12)) {
         p->mpUnknown800 = (Record_800D81C8 *)(p->mUnknown1244 + 12);

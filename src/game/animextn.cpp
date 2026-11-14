@@ -12,7 +12,6 @@ int fn_801D3148(int a, void *allocation);
 void *fn_801D310C(void *allocation, int size, int c, int d);
 void fn_801D2BD0(void *allocation);
 void AuxRamDownload(char *pDst, void *pSrc, int size);
-void fn_801C1FBC(void *destination, void *source, unsigned int size);
 }
 
 /* Two 0xC0-byte staging buffers for reads from ARAM, used alternately. */
@@ -110,6 +109,6 @@ extern "C" void AnimExtnReadMotion(AnimFileFormat_t *file, int a, unsigned char 
         else
             AnimDecompressFrame(destination, (unsigned char *)buffer + offset, file->compress, 0);
     } else {
-        fn_801C1FBC(destination, buffer + offset, size);
+        memcpy(destination, buffer + offset, size);
     }
 }

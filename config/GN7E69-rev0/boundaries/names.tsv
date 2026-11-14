@@ -386,10 +386,10 @@ address	size	sibling_name	how	sibling_file	unit
 0x801C1E78	220	AuxRamDownload	name	auxram.c	auxram.c
 0x801C1F54	32	toupper	name	ctype.c	ctype.c
 0x801C1F74	32	tolower	name	ctype.c	ctype.c
-0x801C1F94	40	memset	size	memory.c	memory.c
-0x801C1FBC	48	memcpy	size	memory.c	memory.c
-0x801C1FEC	68	memcmp	size	memory.c	memory.c
-0x801C2030	112	memmove	size	memory.c	memory.c
+0x801C1F94	40	memset	name	memory.c	memory.c
+0x801C1FBC	48	memcpy	name	memory.c	memory.c
+0x801C1FEC	68	memcmp	name	memory.c	memory.c
+0x801C2030	112	memmove	name	memory.c	memory.c
 0x801C20F0	224	_WriteInt	size	sprintf.c	-
 0x801C21D0	600	_WriteFloat	size	sprintf.c	-
 0x801C2428	768	_WriteSci	size	sprintf.c	-

@@ -57,7 +57,7 @@
 #include "game/ScreenTransition.h"
 #include "game/fn_800F06F4.h"
 #include "game/PlaySet.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801C68FC.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
@@ -1208,7 +1208,7 @@ extern "C" void fn_800C845C(void)
 {
     Object_80039F5C *pCarrier;
 
-    fn_801C1F94(lbl_80317AD8, 0, sizeof(lbl_80317AD8));
+    memset(lbl_80317AD8, 0, sizeof(lbl_80317AD8));
     pCarrier = BallGetCurrentHolder();
     if (pCarrier != 0) {
         unsigned short i = 0;

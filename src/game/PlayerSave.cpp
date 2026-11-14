@@ -1,7 +1,7 @@
 /* Player save: prepares a player's record for a memory-card slot and writes it through the card stream table. */
 
 #include "game/PlayerSave.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 
 extern "C" {
@@ -66,7 +66,7 @@ int PlayerSavePrepare(int a, int b)
     result = 0;
     _PlayerSave_pBuffer = fn_801D2B7C(0x100, 0, 0);
     if (_PlayerSave_pBuffer != 0) {
-        fn_801C1F94(_PlayerSave_pBuffer, 0, 0x100);
+        memset(_PlayerSave_pBuffer, 0, 0x100);
         _PlayerSave_pRecord = _PlayerSave_pBuffer;
         result = PlayerRecordRead(b, _PlayerSave_pBuffer);
         if (result != 0) {

@@ -7,7 +7,7 @@
 #include "game/Class_80148A58.h"
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 
 struct StreetEventPoolToggle_t {
@@ -56,7 +56,6 @@ int MsgGameGetSetupState(void);
 void StoryTeamLoadUserTeams(int a, int b);
 void fn_8018C48C(int handle);
 void CreateTeamLoadUserTeams(void);
-char *strncpy(char *pDest, const char *pSource, int count);
 char *strchr(const char *pString, int c);
 
 extern MiniGameSettings_t lbl_8031BDD4;
@@ -245,7 +244,7 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
 void MsgStreetEventSetupInit(void)
 {
     _MsgStreetEventSetup_pState = (StreetEventSetup_t *)fn_801D2B7C(sizeof(StreetEventSetup_t), 0, 0);
-    fn_801C1F94(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
+    memset(_MsgStreetEventSetup_pState, 0, sizeof(StreetEventSetup_t));
     CreateTeamLoadUserTeams();
     StoryTeamLoadUserTeams(0, 1);
     {

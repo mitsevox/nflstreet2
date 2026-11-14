@@ -4,7 +4,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_802372EC.h"
 #include <math.h>
 
@@ -150,7 +150,7 @@ int fn_80116C34(Object_80039F5C *p)
                     Vector_80039F5C ball;
                     BallGetPosition(BallGetCurrent(), &ball);
                     if (fn_802372EC(0, 255) < odds || IsBallAway(ball)) {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 2;
                         fn_800F053C(0, p->mpState, &message, p);
                         return 1;
@@ -158,7 +158,7 @@ int fn_80116C34(Object_80039F5C *p)
                 } else {
                     BallGetLandingPoint(BallGetCurrent(), &target);
                     if (fn_8009F258(p)) {
-                        fn_801C1F94(&message, 0, 4);
+                        memset(&message, 0, 4);
                         message.mId = 24;
                         if (!BallGetTarget(BallGetCurrent())) {
                             message.mUnknown1[0] = 0;
@@ -251,7 +251,7 @@ int fn_801170E8(Object_80039F5C *p)
     else if (found || blocked) result = 0;
     if (result) {
         Message_800F01CC message;
-        fn_801C1F94(&message, 0, 4);
+        memset(&message, 0, 4);
         message.mId = 2;
         fn_800F053C(0, p->mpState, &message, p);
         *lbl_803EC9F0 = 1;

@@ -12,7 +12,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/PlayBookTeam.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_800B65A0.h"
@@ -218,7 +218,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         PlyrCollideRemoveExempt(p, other);
         s->mUnknown8Bytes[0] = 1;
         Message_800F01CC m;
-        fn_801C1F94(&m, 0, 4);
+        memset(&m, 0, 4);
         m.mId = 11;
         m.mUnknown1[0] = p->mUnknown9[0];
         fn_800F05E4(0, p->mpState, &m, p);

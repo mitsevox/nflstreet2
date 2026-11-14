@@ -5,7 +5,7 @@
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
 #include <string.h>
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
 
@@ -196,7 +196,7 @@ extern "C" void TournBracketSimRound()
 extern "C" void TournBracketCreate()
 {
     _TournBracket_pGames = (BracketGame_t *)fn_801D2B7C(256, 0, 0);
-    fn_801C1F94(_TournBracket_pGames, 0, 256);
+    memset(_TournBracket_pGames, 0, 256);
     TournBracketBuild();
 }
 

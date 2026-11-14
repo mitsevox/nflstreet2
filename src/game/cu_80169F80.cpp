@@ -3,7 +3,7 @@
 #include "game/Class_80148A58.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Challenge.h"
@@ -507,7 +507,7 @@ void fn_8016AF34(int team, float *pA, float *pB)
 void fn_8016B04C(void)
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EB40C, sizeof(Object_8016B04C), 0, 0x7074726B);
-    fn_801C1F94(fn_8023816C(), 0, sizeof(Object_8016B04C));
+    memset(fn_8023816C(), 0, sizeof(Object_8016B04C));
     fn_802381E0(pHandle);
     fn_8016BAAC();
 }
@@ -535,7 +535,7 @@ void fn_8016B144(int team, int value)
 
     for (unsigned char i = 23; i != 0; i--)
         pEntries[i] = pEntries[i - 1];
-    fn_801C1F94(pEntries, 0, sizeof(Entry_8016B144));
+    memset(pEntries, 0, sizeof(Entry_8016B144));
     pEntries[0].mUnknown0 = value;
     pEntries[0].mUnknownC = -1;
 

@@ -27,7 +27,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -86,7 +86,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
 
         if (id == 0xFFFF && fn_800F06F4(0, p->mpState, 0x12, 0xFFFF) == id) {
 
-            fn_801C1F94(&message, 0, 4);
+            memset(&message, 0, 4);
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
         } else {
@@ -125,7 +125,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
                     case 0:
                     case 0x12:
                     case 0x1A:
-                        fn_801C1F94(&message2, 0, 4);
+                        memset(&message2, 0, 4);
                         message2.mId = 0x5A;
                         message2.mUnknown1[0] = 0;
                         message2.mUnknown1[1] = 0xE0;

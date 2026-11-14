@@ -14,7 +14,7 @@
 #include "game/GameOptions.h"
 #include "game/fn_80178D18.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
@@ -3150,7 +3150,7 @@ void fn_800159A4(int *pCount, int *pCurrent, int *pResult)
     int current = lbl_803EB9E0;
     int flag;
     lbl_803EB9DC = (Entry_803EB9DC *)fn_801D2B7C(12 * sizeof(Entry_803EB9DC), 0, 0);
-    fn_801C1F94(lbl_803EB9DC, 0, 12 * sizeof(Entry_803EB9DC));
+    memset(lbl_803EB9DC, 0, 12 * sizeof(Entry_803EB9DC));
     for (unsigned char i = 0; i <= 11; i++) {
         Entry_803EB9DC *pEntry = &lbl_803EB9DC[i];
         fn_800156B4(i, pEntry->mText0, 32, pEntry->mText21, 32, &pEntry->mUnknownA8, pEntry->mText42,

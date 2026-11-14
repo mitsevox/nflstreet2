@@ -1,6 +1,6 @@
 #include <math.h>
 #include "game/PlayBookDb.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/Object_8016B04C.h"
 #include "game/Object_8017886C.h"
 
@@ -261,7 +261,7 @@ void fn_8016BA28(unsigned char *pOut)
 
 void fn_8016BA80(void)
 {
-    fn_801C1F94(lbl_803EB40C, 0, sizeof(Object_8016B04C));
+    memset(lbl_803EB40C, 0, sizeof(Object_8016B04C));
 }
 
 void fn_8016BAAC(void)

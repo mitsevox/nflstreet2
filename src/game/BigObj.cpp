@@ -13,7 +13,7 @@
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 #include "game/LevelSurface.h"

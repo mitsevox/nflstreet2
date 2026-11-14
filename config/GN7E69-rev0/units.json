@@ -61,6 +61,18 @@
       ],
       "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while ParticleTrailUpdate divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
     },
+    "game_cpp_nobuiltin": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-ffast-math",
+        "-fno-builtin"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler rows for src/game/animextn.cpp (0x80190A7C-0x80190ED4) and src/game/PlaTexCache.cpp (0x8016014C-0x801614D0) (game_cpp_nobuiltin): game_cpp's ProDG 3.9.3 cc1plus -O2 -fno-weak -ffast-math plus the per-file flag -fno-builtin, so their memcpy calls compile as the ordinary calls of the target instead of the builtin copy (an inline copy for a constant size, a block move with crclr for a variable one). Per-file flag, owner ruling of 2026-11-14."
+    },
     "engine_c": {
       "flags": [
         "-O2"
@@ -196,18 +208,6 @@
     "UISGetActionPtrValue": {
       "address": "0x8021C8B4",
       "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."
-    },
-    "memcpy": {
-      "address": "0x801C1FBC",
-      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
-    },
-    "memcmp": {
-      "address": "0x801C1FEC",
-      "evidence": "evidence.tsv CARD external row memcmp: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "memset": {
-      "address": "0x801C1F94",
-      "evidence": "evidence.tsv CARD external row memset: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
@@ -580,10 +580,6 @@
     "__cvt_fp2unsigned": {
       "address": "0x801AD424",
       "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
-    },
-    "memmove": {
-      "address": "0x801C2030",
-      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
     },
     "_stack_addr": {
       "address": "0x803FE4C0",
@@ -9187,7 +9183,7 @@
     },
     {
       "source": "src/game/PlaTexCache.cpp",
-      "profile": "game_cpp",
+      "profile": "game_cpp_nobuiltin",
       "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/PlaTexCache.cpp) and its data, type, compiler and source-form rows.",
       "sections": [
         {
@@ -12722,7 +12718,7 @@
     },
     {
       "source": "src/game/animextn.cpp",
-      "profile": "game_cpp",
+      "profile": "game_cpp_nobuiltin",
       "evidence": "evidence.tsv unit row 0x80190A7C-0x80190ED4 (animextn.cpp), its storage and source-form rows, and the related NASCAR 2005 name rows.",
       "sections": [
         {
@@ -12909,6 +12905,19 @@
           "placement": ".text",
           "start": "0x801C1F54",
           "end": "0x801C1F94"
+        }
+      ]
+    },
+    {
+      "source": "src/Common/c/memory.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C1F94-0x801C20A0 (src/Common/c/memory.c), its compiler, function and name rows; all four functions exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1F94",
+          "end": "0x801C20A0"
         }
       ]
     },

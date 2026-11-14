@@ -17,7 +17,7 @@
 #include "game/fn_801BE60C.h"
 #include "game/Lookup_8012078C.h"
 #include "game/Message_800F01CC.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
@@ -1293,7 +1293,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     pMotion = &p->mMotion;
     pState = (PursueState_t *)&p->mUnknown336;
     if (fn_801486A0() == 0) {
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 97;
         fn_800F053C(0, p->mpState, &message, p);
         return 0;
@@ -1347,7 +1347,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                             intercept = fn_802372EC(0, 255) < (unsigned int)p->mRatings[8];
                         }
                         if (intercept) {
-                            fn_801C1F94(&message, 0, sizeof(message));
+                            memset(&message, 0, sizeof(message));
                             message.mId = 57;
                             message.mUnknown1[0] = BallGetIndex(pBall);
                             fn_800F053C(0, p->mpState, &message, p);
@@ -1367,7 +1367,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     pLookup = fn_8012078C();
     if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
         if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == fn_80178308()) {
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             message.mId = 33;
             fn_800F053C(0, p->mpState, &message, p);
             return 0;

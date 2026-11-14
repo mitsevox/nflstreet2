@@ -3,7 +3,7 @@
 
 #include "engine/list.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 
 typedef int (*LinkSearchFn_t)(void *, void *, void *);
@@ -100,7 +100,7 @@ static LinkNode_t *_DSListAddLinkedNode(LinkList_t *pList, LinkNode_t *pNode, in
 
 static void _DSListInitLinkedNode(LinkNode_t *pNode, int size)
 {
-    fn_801C1F94(pNode, 0, size);
+    memset(pNode, 0, size);
 }
 
 static LinkNode_t *_DSListGetLinkedNode(LinkList_t *pList, LinkNode_t *pNode, unsigned int mode)

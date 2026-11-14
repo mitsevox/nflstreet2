@@ -3,7 +3,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Ball.h"
 #include "game/fn_800F06F4.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 /* Record at player +336 passed to fn_800F4E88, fn_800F4F08, fn_800F5208
    and fn_800F5CBC. Only the accessed members are declared. */
@@ -44,7 +44,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
     if (p == BallGetCurrentHolder()) {
         fn_8011E3EC(p, 0);
         fn_8011E240(p);
-        fn_801C1F94(&message, 0, sizeof(message));
+        memset(&message, 0, sizeof(message));
         message.mId = 1;
         fn_800F053C(0, p->mpState, &message, p);
         result = 1;
@@ -62,7 +62,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                 p->mUnknown512.mUnknown4 = direction;
                 p->mUnknown512.mUnknown8 = direction;
                 p->mUnknown512.mUnknown0 = pRecord->mUnknown12;
-                fn_801C1F94(&message, 0, sizeof(message));
+                memset(&message, 0, sizeof(message));
                 if (fn_801783AC(13) == 0 && BallStateGet(BallGetCurrent(), 0) != 4
                     && fn_801783AC(0) == 0 && fn_8011F1CC() != 0) {
                     message.mId = 31;
@@ -120,7 +120,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
         } else {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
-            fn_801C1F94(&message, 0, sizeof(message));
+            memset(&message, 0, sizeof(message));
             if (fn_801783AC(13) == 0 && BallStateGet(BallGetCurrent(), 0) != 4
                 && fn_801783AC(0) == 0 && fn_8011F1CC() != 0) {
                 message.mId = 31;

@@ -9,7 +9,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"

@@ -9,7 +9,7 @@
 #include "game/FEPlyrModel.h"
 #include "game/bitstream.h"
 #include "game/Ball.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
 
@@ -474,7 +474,7 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
     }
     pObject->mUnknown104 = pSkeleton280;
     if (pSkeleton280) {
-        fn_801C1F94(&pObject->mUnknown280, 0, sizeof(Block_800C2788));
+        memset(&pObject->mUnknown280, 0, sizeof(Block_800C2788));
         pObject->mUnknown280.mUnknown312 = pSkeleton280;
         pObject->mUnknown280.mUnknown1 = 13;
         pObject->mUnknown280.mUnknown256.mUnknown4 = pSkeleton280->mUnknown6;
@@ -489,7 +489,7 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
     }
     pObject->mUnknown108 = pSkeleton596;
     if (pSkeleton596) {
-        fn_801C1F94(&pObject->mUnknown596, 0, sizeof(Block_800C2EC0));
+        memset(&pObject->mUnknown596, 0, sizeof(Block_800C2EC0));
         pObject->mUnknown596.mUnknown216 = pSkeleton596;
         pObject->mUnknown596.mUnknown1 = 11;
         pObject->mUnknown596.mUnknown160.mUnknown4 = pSkeleton596->mUnknown6;

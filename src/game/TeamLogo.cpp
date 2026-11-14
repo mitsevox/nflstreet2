@@ -4,7 +4,7 @@
 
 #include "game/FMCAPPORT.h"
 #include "game/DbCursor.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 #include <string.h>
 #include <dolphin/gx/GXManage.h>
@@ -90,7 +90,7 @@ void TeamLogoTintPalette(int id, int a, int b, int c, const unsigned char *pColo
     desc.mUnknown4 = count * bytes;
     memcpy(buffer, pRecord->mpUnknown20, desc.mUnknown4);
     desc.mpUnknown8 = buffer;
-    fn_801C1F94(&text, 0, sizeof(text));
+    memset(&text, 0, sizeof(text));
     text.mChars[20] = pColor[0];
     text.mChars[21] = pColor[1];
     text.mChars[22] = pColor[2];
@@ -191,7 +191,7 @@ void TeamLogoInit(void)
     int i;
 
     for (i = 0; i < 2; i++) {
-        fn_801C1F94(&_TeamLogo_aPending[i], 0, sizeof(TeamLogoPending_t));
+        memset(&_TeamLogo_aPending[i], 0, sizeof(TeamLogoPending_t));
         _TeamLogo_aPending[i].mUnknown4 = -1;
     }
     if (!_TeamLogo_bReady) {

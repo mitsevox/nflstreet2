@@ -15,7 +15,7 @@
 #include "game/PlaTex.h"
 #include "game/StoryPlayerScreen.h"
 #include "game/GameModeType.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include <string.h>
 #include "game/fn_802372EC.h"
 
@@ -1129,7 +1129,7 @@ extern "C" void PlayerLookSetFeatures(int index, FaceFeatures_t *pBlock)
     if (pBlock) {
         gPlayerLooks[index].mBlock = *pBlock;
     } else {
-        fn_801C1F94(&gPlayerLooks[index].mBlock, 0, sizeof(FaceFeatures_t));
+        memset(&gPlayerLooks[index].mBlock, 0, sizeof(FaceFeatures_t));
     }
 }
 
@@ -1140,7 +1140,7 @@ extern "C" void PlayerLookGetFeatures(int index, FaceFeatures_t *pBlock)
 
 extern "C" void PlayerObjCreate(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit)
 {
-    fn_801C1F94(pPlayer, 0x19F0, 0);
+    memset(pPlayer, 0x19F0, 0);
     PlyrPoseInit(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
     ParticleTrailReset(&pPlayer->mUnknown5188);

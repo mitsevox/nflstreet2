@@ -8,7 +8,7 @@
 #include "game/PlayBookDb.h"
 #include "game/fn_80177FE0.h"
 #include "game/GameOptions.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/Record_800A0624.h"

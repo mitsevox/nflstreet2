@@ -12,7 +12,7 @@
 #include "game/DepthChart.h"
 #include "game/DepthChartSide.h"
 #include "game/GameOptions.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/GameModeType.h"
 #include "game/MsgGame.h"
 #include "game/ModuleGroup_8003450C.h"
@@ -388,7 +388,6 @@ void RumbleStopAll(void);
 void RumbleEnable(unsigned char enabled);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-char * strncpy(char *pDest, const char *pSource, int count);
 unsigned int strlen(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
@@ -817,7 +816,7 @@ void TutorialSetupPlays(void)
 
 void TutorialClearMoves(void)
 {
-    fn_801C1F94(_Tutorial_aMoveDone, 0, sizeof(_Tutorial_aMoveDone));
+    memset(_Tutorial_aMoveDone, 0, sizeof(_Tutorial_aMoveDone));
 }
 
 void TutorialSetMoveDone(int index, int value)

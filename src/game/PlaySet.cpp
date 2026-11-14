@@ -4,7 +4,7 @@
 #include <string.h>
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/fn_80178D18.h"
@@ -150,7 +150,7 @@ void PlaySetPointToRoleMate(Object_80039F5C *p)
     Message_800F01CC msg;
     int post = 0;
 
-    fn_801C1F94(&msg, 0, 4);
+    memset(&msg, 0, 4);
     msg.mId = 84;
     if (p->mUnknown2914 == 0) {
         int i;

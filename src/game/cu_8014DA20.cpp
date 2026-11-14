@@ -3,7 +3,7 @@
 #include "game/fn_8009D990.h"
 #include "game/fn_8021D7B8.h"
 #include "game/PauseMenu.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 struct Record_8014F104 {
     int mUnknown0;
@@ -106,7 +106,7 @@ void fn_8014DC7C(void *p, int team)
     fn_80177768(p, 2);
     for (unsigned char i = 0; i <= 5; i++) {
         fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown4 = 0;
-        fn_801C1F94(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown12, 0, 40);
+        memset(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown12, 0, 40);
     }
     lbl_803EB2DC = 0;
     lbl_803EB2E0 = 0;
