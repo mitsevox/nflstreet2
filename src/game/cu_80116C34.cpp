@@ -55,7 +55,7 @@ int fn_801783AC(int value);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int fn_8011E9D8(State_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8009EFDC(int index);
 float fn_80178A2C(void);
 extern unsigned char *lbl_803EC9F0;
@@ -276,7 +276,7 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
         if (!(distance >= lbl_803EAFE8) &&
             (carrier->mMotion.mUnknown32 & 0xFFFFFF) <= 0x7FFFFF) {
             int first = fn_800DC21C(carrier);
-            int second = fn_800DC080(carrier);
+            int second = PlayerActionAnimIsPassReady(carrier);
             if (first || second || fn_801783AC(0)) {
                 if (fn_801783AC(7) == 1 || fn_801783AC(8) == 1) state->mUnknown24 = 1;
                 if (!(distance >= lbl_803EAFEC)) {

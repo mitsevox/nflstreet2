@@ -169,7 +169,7 @@ int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, void *pBlock, in
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
 int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_8009A6EC(Object_80039F5C *p);
-int fn_8009A77C(Object_80039F5C *p);
+int PlyrRollContestedCatch(Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_8009E9A4(void);
 void fn_8009E9EC(Object_80039F5C *p, int side, Point_8017886C *pOut);
@@ -198,7 +198,7 @@ void fn_800D7A18(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
 void fn_800DB8B4(void *pBlock, Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_800DC21C(Object_80039F5C *p);
 void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
 int fn_800E1554(Object_80039F5C *p);
@@ -218,8 +218,8 @@ int fn_80116AB8(Object_80039F5C *p);
 void fn_8011E8D8(Object_80039F5C *p);
 Record_8011F4E0 *fn_8011F4E0(void);
 void *fn_8011F4EC(void);
-void fn_8013AA00(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
-float fn_8013AB64(Ball_t *pBall, float t);
+void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+float BallGetHeightAtTime(Ball_t *pBall, float t);
 int BallStateGet(Ball_t *pBall, int *pOut);
 void fn_801410F4(int a);
 void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -343,7 +343,7 @@ extern "C" int fn_80111B4C(Object_80039F5C *p)
             if (distance < maxDistance) {
                 distance = fn_8022781C(&target, &closest);
                 BallGetVelocity(pBall, &velocity);
-                height = fn_8013AB64(pBall, distance / fn_802270A4(&velocity));
+                height = BallGetHeightAtTime(pBall, distance / fn_802270A4(&velocity));
                 if (height < maxHeight * p->mUnknown768 && height > minHeight * p->mUnknown768) {
                     result = 0;
                     pState->mUnknown20 = 1;
@@ -509,7 +509,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
     }
     if (target == 0x1FFFFFFF) {
-        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, fn_8009A77C(p));
+        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, PlyrRollContestedCatch(p));
     }
     if (target != 0x1FFFFFFF) {
         int result;
@@ -539,7 +539,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             }
             if (flag) {
                 found = 1;
-                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, fn_8009A77C(p));
+                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, PlyrRollContestedCatch(p));
                 if (target == 0x1FFFFFFF) {
                     found = 0;
                 }
@@ -638,7 +638,7 @@ extern "C" int fn_80112928(Object_80039F5C *p)
         float targetSpeed;
         float speed;
 
-        fn_8013AA00(pBall, 2.0f, 0, (Vector_80039F5C *)&landing);
+        BallSolveFallToHeight(pBall, 2.0f, 0, (Vector_80039F5C *)&landing);
         fn_80227690(&delta, &pTarget->mMotion.mPos, &landing);
         targetDistance = fn_802270A4(&delta) - 2.0f;
         fn_80227690(&delta, &pTarget->mMotion.mPos, &ballPos);
@@ -702,8 +702,8 @@ extern "C" int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float
     playerVelocity.mX = p->mMotion.mUnknown40;
     playerVelocity.mY = p->mMotion.mUnknown44;
     playerVelocity.mZ = p->mMotion.mUnknown48;
-    fn_8013AA00(pBall, 0.8f, &lowTime, (Vector_80039F5C *)&lowLanding);
-    fn_8013AA00(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
+    BallSolveFallToHeight(pBall, 0.8f, &lowTime, (Vector_80039F5C *)&lowLanding);
+    BallSolveFallToHeight(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
     fn_80227690(&lowLanding, &lowLanding, &p->mMotion.mPos);
     lowAngle = fn_801CFE40(lowLanding.mY, lowLanding.mX);
     fn_80111A28(p, lowAngle, lowTime, (Vector_80039F5C *)&lowReach);
@@ -1504,7 +1504,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                     || (pCarrier->mMotion.mPos.mX > ball.mX && p->mMotion.mPos.mX > ball.mX))) {
                 float gap = ball.mY - pCarrier->mMotion.mPos.mY;
                 int a = fn_800DC21C(pCarrier);
-                int b = fn_800DC080(pCarrier);
+                int b = PlayerActionAnimIsPassReady(pCarrier);
                 if ((a != 0 || b != 0 || fn_801783AC(0) != 0) && gap < 8.0f) {
                     pState->mUnknown20 = 1;
                 }

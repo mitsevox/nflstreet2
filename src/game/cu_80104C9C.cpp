@@ -132,7 +132,7 @@ int fn_8011E9B4(Object_80039F5C *p);
 float fn_801CFB94(int angle);
 void fn_801783D0(int bit, int on);
 void fn_80099568(int kind);
-void fn_8013AC28(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
+void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 }
 
 extern "C" float fn_801CFB18(int angle);
@@ -759,9 +759,9 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
         speed = fn_8010D82C(pTarget);
         speed = fn_801050DC(pBall, &target, speed);
         if (fn_8011F32C()) {
-            fn_8013AC28(pBall, &target, 2, speed, 0.0f, 1.0f);
+            BallLaunchToTarget(pBall, &target, 2, speed, 0.0f, 1.0f);
         } else {
-            fn_8013AC28(pBall, &target, 2, speed, 0.0f, 1.0f);
+            BallLaunchToTarget(pBall, &target, 2, speed, 0.0f, 1.0f);
         }
         BallSetTarget(pBall, pTarget);
     } else if (!(pRecord->mUnknown4 == 10 || pRecord->mUnknown4 == 1 || pRecord->mUnknown4 == 13 ||
@@ -784,7 +784,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
             fn_80104A08(p, pRecord->mUnknown8, pRecord->mUnknown12, (Point_8017886C *)&target, &speed);
         }
         fn_80104814(p, pTarget, pBall, &target);
-        fn_8013AC28(pBall, &target, 3, speed, 1.0f, 4.0f);
+        BallLaunchToTarget(pBall, &target, 3, speed, 1.0f, 4.0f);
         BallSetTarget(pBall, pTarget);
         BallGetVelocity(pBall, &velocity);
         pEvent = fn_800B15FC();

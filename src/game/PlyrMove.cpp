@@ -15,7 +15,7 @@ void fn_800B2D9C(Object_800B26B0 *pObject);
 float fn_800C4914(Object_80039F5C *p, float value);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
-int fn_800DC080(Object_80039F5C *p);
+int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
@@ -92,7 +92,7 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
         if (fn_800AD9B4() == 3 && p->mUnknown528.mUnknown0 == 0.0f) {
             reverse = 1;
         }
-    } else if (fn_800DC080(p) == 0) {
+    } else if (PlayerActionAnimIsPassReady(p) == 0) {
         if (turn <= 0x56C16B) {
             speed = gPlyrMoveSideSpeed * p->mUnknown528.mUnknown0;
             limit = gPlyrMoveSideSpeed - fn_801CFB18(0x56C16C - turn) * (gPlyrMoveSideSpeed / 2.0f);

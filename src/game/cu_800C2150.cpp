@@ -17,7 +17,7 @@
 #include "game/fn_800AD9B4.h"
 
 /* 8-byte records of the three 50-entry lists at 0x8030FF40 (one per side
-   plus a shared list), as fn_800C3130 fills them. */
+   plus a shared list), as SortListAdd fills them. */
 struct Entry_800C3130 {
     Block_80170E64 *mpUnknown0;
     short mUnknown4;

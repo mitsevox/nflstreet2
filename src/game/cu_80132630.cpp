@@ -18,7 +18,7 @@ struct Mode_80133C50 {
 };
 
 extern "C" {
-void fn_801339E4(Object_80039F5C *, Object_80039F5C *, Aim_801327F4 *);
+void PlyrSteerAroundBlocker(Object_80039F5C *, Object_80039F5C *, Aim_801327F4 *);
 int fn_8011E3F4(Object_80039F5C *);
 int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
 Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
@@ -330,7 +330,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
         fn_80132C84(p, ball, s, location2, point);
     }
 finish:
-    fn_801339E4(p, ball, (Aim_801327F4 *)s);
+    PlyrSteerAroundBlocker(p, ball, (Aim_801327F4 *)s);
 }
 
 void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
@@ -349,14 +349,14 @@ void fn_80133920(Object_80039F5C *p, Object_80039F5C *other)
     }
 }
 
-void fn_801339E4(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
+void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, Aim_801327F4 *aim)
 {
     Object_80039F5C *target;
     Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
     if (other) {
-        int blocked = fn_80124714(p, other, &target);
         Vector_80039F5C *pos = &p->mMotion.mPos;
-        if (!blocked) {
+        int clear = fn_80124714(p, other, &target);
+        if (!clear) {
             float delta[2];
             fn_80227690(delta, &target->mMotion.mPos, pos);
             float distance = fn_802270A4(delta);

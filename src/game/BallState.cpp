@@ -16,15 +16,15 @@ struct BallStateFuncs_t {
 
 extern "C" {
 void fn_8013A3BC(Ball_t *p);
-void fn_8013A494(Ball_t *p, float dt);
+void BallApplyContactForce(Ball_t *p, float dt);
 void fn_8013A64C(Ball_t *p, float dt);
-void fn_8013A844(Ball_t *p, float dt);
+void BallStepMotion(Ball_t *p, float dt);
 void fn_8013AF88(Ball_t *p);
 void fn_8013AFE8(Ball_t *p);
 void fn_8013B024(Ball_t *p);
 void fn_8013B068(Ball_t *p);
-void fn_8013B0B4(Ball_t *p, float dt);
-void fn_8013B198(Ball_t *p, float dt);
+void BallStateStepTimed(Ball_t *p, float dt);
+void BallStateStopVelocity(Ball_t *p, float dt);
 void fn_8013B1E4(Ball_t *p, float dt);
 void fn_8013B230(Ball_t *p);
 void fn_8013B250(Ball_t *p);
@@ -36,21 +36,21 @@ int fn_8013B52C(Ball_t *p, void *pData, unsigned int type);
 int fn_8013B5EC(Ball_t *p, void *pData, unsigned int type);
 int fn_8013B6A0(Ball_t *p, void *pData, unsigned int type);
 void fn_8013B730(Ball_t *p, float dt);
-void fn_8013B734(Ball_t *p, float dt);
+void BallStatePlacedUpdate(Ball_t *p, float dt);
 int fn_8013B86C(Ball_t *p, void *pData, unsigned int type);
 int BallStateIsCurrent(Ball_t *p, void *pData, unsigned int type);
 }
 
 static BallStateFuncs_t _BallState_Handlers[9] = {
-    { 0, fn_8013A494, 0, 0, 0, BallStateIsCurrent, fn_8013A844 },
-    { 0, 0, fn_8013B0B4, fn_8013AF88, fn_8013B250, fn_8013B3EC, fn_8013A844 },
-    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, fn_8013A844 },
-    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, fn_8013A844 },
-    { 0, fn_8013B2A0, fn_8013B1E4, fn_8013AFE8, fn_8013B024, fn_8013B5EC, fn_8013A844 },
-    { 0, fn_8013B330, 0, fn_8013B068, 0, fn_8013B52C, fn_8013A844 },
-    { 0, fn_8013A494, fn_8013B198, fn_8013B230, 0, fn_8013B3EC, 0 },
-    { 0, fn_8013A494, 0, 0, 0, fn_8013B6A0, fn_8013A844 },
-    { 0, 0, fn_8013B730, 0, 0, fn_8013B86C, fn_8013B734 },
+    { 0, BallApplyContactForce, 0, 0, 0, BallStateIsCurrent, BallStepMotion },
+    { 0, 0, BallStateStepTimed, fn_8013AF88, fn_8013B250, fn_8013B3EC, BallStepMotion },
+    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, BallStepMotion },
+    { 0, fn_8013B350, 0, 0, 0, fn_8013B6A0, BallStepMotion },
+    { 0, fn_8013B2A0, fn_8013B1E4, fn_8013AFE8, fn_8013B024, fn_8013B5EC, BallStepMotion },
+    { 0, fn_8013B330, 0, fn_8013B068, 0, fn_8013B52C, BallStepMotion },
+    { 0, BallApplyContactForce, BallStateStopVelocity, fn_8013B230, 0, fn_8013B3EC, 0 },
+    { 0, BallApplyContactForce, 0, 0, 0, fn_8013B6A0, BallStepMotion },
+    { 0, 0, fn_8013B730, 0, 0, fn_8013B86C, BallStatePlacedUpdate },
 };
 
 extern "C" {

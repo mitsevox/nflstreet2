@@ -14990,7 +14990,7 @@
           "end": "0x8009B720"
         },
         {
-          "symbol": "fn_8009B720",
+          "symbol": "CelebrationBlocksInit",
           "start": "0x8009B720",
           "end": "0x8009B7E0"
         },
@@ -18150,7 +18150,7 @@
           "end": "0x800C3130"
         },
         {
-          "symbol": "fn_800C3130",
+          "symbol": "SortListAdd",
           "start": "0x800C3130",
           "end": "0x800C3170"
         },
@@ -19648,7 +19648,7 @@
           "end": "0x8009A77C"
         },
         {
-          "symbol": "fn_8009A77C",
+          "symbol": "PlyrRollContestedCatch",
           "start": "0x8009A77C",
           "end": "0x8009A8D4"
         },
@@ -23723,7 +23723,7 @@
     {
       "source": "src/game/cu_801394B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the source does not reproduce the four unreferenced literal runs, so the compiled .rodata is 0x38 bytes shorter than the target and literal references after 0x8029FFF8 resolve to shifted addresses; the original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the four unreferenced literal runs are the pools of six functions the target linker discarded, rebuilt from their Xbox prototype counterparts and listed as discarded (linker rows 0x8029FFF8, 0x802A0038, 0x802A005C, 0x802A0094), so the compiled .rodata equals the target; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -23846,7 +23846,7 @@
           "end": "0x8013A494"
         },
         {
-          "symbol": "fn_8013A494",
+          "symbol": "BallApplyContactForce",
           "start": "0x8013A494",
           "end": "0x8013A64C"
         },
@@ -23856,22 +23856,22 @@
           "end": "0x8013A6A8"
         },
         {
-          "symbol": "fn_8013A6A8",
+          "symbol": "BallStepGroundContact",
           "start": "0x8013A6A8",
           "end": "0x8013A72C"
         },
         {
-          "symbol": "fn_8013A72C",
+          "symbol": "BallFollowHolder",
           "start": "0x8013A72C",
           "end": "0x8013A844"
         },
         {
-          "symbol": "fn_8013A844",
+          "symbol": "BallStepMotion",
           "start": "0x8013A844",
           "end": "0x8013A910"
         },
         {
-          "symbol": "fn_8013A910",
+          "symbol": "BallRestAtAngles",
           "start": "0x8013A910",
           "end": "0x8013A9F0"
         },
@@ -23881,7 +23881,7 @@
           "end": "0x8013AA00"
         },
         {
-          "symbol": "fn_8013AA00",
+          "symbol": "BallSolveFallToHeight",
           "start": "0x8013AA00",
           "end": "0x8013AB24"
         },
@@ -23891,7 +23891,7 @@
           "end": "0x8013AB64"
         },
         {
-          "symbol": "fn_8013AB64",
+          "symbol": "BallGetHeightAtTime",
           "start": "0x8013AB64",
           "end": "0x8013ABE0"
         },
@@ -23901,7 +23901,7 @@
           "end": "0x8013AC28"
         },
         {
-          "symbol": "fn_8013AC28",
+          "symbol": "BallLaunchToTarget",
           "start": "0x8013AC28",
           "end": "0x8013AD04"
         },
@@ -23911,7 +23911,7 @@
           "end": "0x8013AD78"
         },
         {
-          "symbol": "fn_8013AD78",
+          "symbol": "BallIsContactRaised",
           "start": "0x8013AD78",
           "end": "0x8013AD94"
         },
@@ -23956,12 +23956,12 @@
           "end": "0x8013B0B4"
         },
         {
-          "symbol": "fn_8013B0B4",
+          "symbol": "BallStateStepTimed",
           "start": "0x8013B0B4",
           "end": "0x8013B198"
         },
         {
-          "symbol": "fn_8013B198",
+          "symbol": "BallStateStopVelocity",
           "start": "0x8013B198",
           "end": "0x8013B1E4"
         },
@@ -24021,7 +24021,7 @@
           "end": "0x8013B734"
         },
         {
-          "symbol": "fn_8013B734",
+          "symbol": "BallStatePlacedUpdate",
           "start": "0x8013B734",
           "end": "0x8013B86C"
         },
@@ -24030,6 +24030,14 @@
           "start": "0x8013B86C",
           "end": "0x8013B874"
         }
+      ],
+      "discarded": [
+        "BallGetWindDrift",
+        "BallApplyWindForce",
+        "BallApplyWindForceDamped",
+        "BallApplyWobble",
+        "BallAddClampedE0",
+        "BallIsSettled"
       ]
     },
     {
@@ -24953,7 +24961,7 @@
           "end": "0x801339E4"
         },
         {
-          "symbol": "fn_801339E4",
+          "symbol": "PlyrSteerAroundBlocker",
           "start": "0x801339E4",
           "end": "0x80133BB4"
         },
@@ -46571,7 +46579,7 @@
     {
       "source": "src/game/PlayerActionAnim.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is not rebuilt, so the literals after it compare 4 bytes low. Draft comparisons only; the original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x800DAEE4-0x800DF6EC for src/game/PlayerActionAnim.cpp (the first part of the former cu_800DAEE4.cpp, split at 0x800DF6EC), its function extents, .rodata 0x8029D8A8-0x8029D9F0 and the initialized word 0x803EAD1C-0x803EAD20. The unreferenced 100621.12f word at 0x8029D908 belongs to a function the GameCube linker discarded (Xbox prototype 0x94410); it is rebuilt from that body as the discarded PlayerActionAnimSetSpeedRatio (evidence.tsv linker row 0x8029D908), so the literals after it compare at their native offsets. Draft comparisons only; the original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -46664,12 +46672,12 @@
           "end": "0x800DBC4C"
         },
         {
-          "symbol": "fn_800DBC4C",
+          "symbol": "PlayerActionAnimSteerPassReady",
           "start": "0x800DBC4C",
           "end": "0x800DC080"
         },
         {
-          "symbol": "fn_800DC080",
+          "symbol": "PlayerActionAnimIsPassReady",
           "start": "0x800DC080",
           "end": "0x800DC21C"
         },
@@ -46679,7 +46687,7 @@
           "end": "0x800DC36C"
         },
         {
-          "symbol": "fn_800DC36C",
+          "symbol": "PlayerActionAnimFacingCallback",
           "start": "0x800DC36C",
           "end": "0x800DC578"
         },
@@ -46843,6 +46851,9 @@
           "start": "0x800DF654",
           "end": "0x800DF6EC"
         }
+      ],
+      "discarded": [
+        "PlayerActionAnimSetSpeedRatio"
       ]
     },
     {

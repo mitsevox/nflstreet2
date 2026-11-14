@@ -25,7 +25,7 @@ struct AnimMomentum_t {
 
 /* Payload returned by fn_801BE60C. */
 struct Block_801BE60C {
-    /* fn_800DC36C reads and writes +0 and +4 as words for its key; the
+    /* PlayerActionAnimFacingCallback reads and writes +0 and +4 as words for its key; the
        other callers use the byte and float views. */
     union {
         struct {
