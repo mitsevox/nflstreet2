@@ -18558,7 +18558,7 @@
     {
       "source": "src/engine/llvector.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x802270A4-0x80227F14 (src/engine/llvector.c), its function and name rows. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants are drafted in the comparison fragments src/engine/cu_8022772C.c, cu_80227970.c, cu_80227B04.c and cu_80227D6C.c; no .rodata is registered here.",
+      "evidence": "evidence.tsv provisional whole-file row 0x802270A4-0x80227F14 (src/engine/llvector.c), function/name rows and linker row 0x802270A4-0x8022772C. The first 26 functions are linked from the unchanged native code section. Ten later bodies stay behind DECOMP_COMPARE, and the four constant-loading functions remain in their existing comparison fragments. Original file boundaries and unresolved literal-pool ownership are unchanged; the file is not closed.",
       "sections": [
         {
           "section": ".text",
@@ -32768,36 +32768,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BC65C.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BC65C-0x801BC7C0 (src/engine/cu_801BC65C.c, head of animmot.c), function rows, compiler row engine_c_fastmath and source-form row for the split at 0x801BC7C0 (not reconstructed; it owns .rodata 0x802AEDB8-0x802AEDC0). Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BC65C",
-          "end": "0x801BC7C0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801BC65C",
-          "start": "0x801BC65C",
-          "end": "0x801BC67C"
-        },
-        {
-          "symbol": "fn_801BC67C",
-          "start": "0x801BC67C",
-          "end": "0x801BC780"
-        },
-        {
-          "symbol": "fn_801BC780",
-          "start": "0x801BC780",
-          "end": "0x801BC7C0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801BCA74.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/cu_801BCA74.c, tail of animmot.c), function rows, data row 0x802AEDC0-0x802AEDC8, compiler row engine_c_fastmath and source-form row for the split at 0x801BC7C0. Comparison only; original bytes stay linked.",
@@ -35295,51 +35265,6 @@
       ]
     },
     {
-      "source": "src/engine/t3db_query.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c): first six functions of the original t3db_query.c (NASCAR 2005 symbol table); 0x80205DB8 has no source yet. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80205754",
-          "end": "0x80205DB8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80205754",
-          "start": "0x80205754",
-          "end": "0x80205880"
-        },
-        {
-          "symbol": "fn_80205880",
-          "start": "0x80205880",
-          "end": "0x80205A10"
-        },
-        {
-          "symbol": "fn_80205A10",
-          "start": "0x80205A10",
-          "end": "0x80205B88"
-        },
-        {
-          "symbol": "fn_80205B88",
-          "start": "0x80205B88",
-          "end": "0x80205C08"
-        },
-        {
-          "symbol": "fn_80205C08",
-          "start": "0x80205C08",
-          "end": "0x80205C44"
-        },
-        {
-          "symbol": "fn_80205C44",
-          "start": "0x80205C44",
-          "end": "0x80205DB8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_8020651C.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x8020651C-0x802075F4 as src/engine/cu_8020651C.c): eleven functions of the original t3db_query.c (NASCAR 2005 symbol table) after _TDbQryPrepComplexFilter 0x80205DB8, which has no source yet, through _TDbQryFindJoinColumn 0x80207448, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
@@ -35412,56 +35337,6 @@
           "symbol": "fn_80207448",
           "start": "0x80207448",
           "end": "0x802075F4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_802075F4.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x802075F4-0x8020840C as src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448 (compared in src/engine/cu_8020651C.c); the file continues into the E6 range. Comparison only; original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802075F4",
-          "end": "0x8020840C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_802075F4",
-          "start": "0x802075F4",
-          "end": "0x80207988"
-        },
-        {
-          "symbol": "fn_80207988",
-          "start": "0x80207988",
-          "end": "0x80207B8C"
-        },
-        {
-          "symbol": "fn_80207B8C",
-          "start": "0x80207B8C",
-          "end": "0x80207DB4"
-        },
-        {
-          "symbol": "fn_80207DB4",
-          "start": "0x80207DB4",
-          "end": "0x80207E24"
-        },
-        {
-          "symbol": "fn_80207E24",
-          "start": "0x80207E24",
-          "end": "0x80208094"
-        },
-        {
-          "symbol": "fn_80208094",
-          "start": "0x80208094",
-          "end": "0x80208204"
-        },
-        {
-          "symbol": "fn_80208204",
-          "start": "0x80208204",
-          "end": "0x8020840C"
         }
       ]
     },
@@ -35890,77 +35765,6 @@
           "symbol": "fn_801E2C64__14Class_801E27A4PP13Node_801E2878",
           "start": "0x801E2C64",
           "end": "0x801E2CB4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801E8E04.cpp",
-      "profile": "game_cpp",
-      "evidence": "E3 lane draft of cu_801E8E04.cpp over 0x801E8E04-0x801E92D0 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1660-0x802B1678. The next function 0x801E92D0 is not drafted (it stores the vtable 0x8028DD58 of a class defined in game code). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E8E04",
-          "end": "0x801E92D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1660",
-          "end": "0x802B1678"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__14Class_801E8E04iiP14Class_801E90F0P14Class_801E9114",
-          "start": "0x801E8E04",
-          "end": "0x801E8EA4"
-        },
-        {
-          "symbol": "_._14Class_801E8E04",
-          "start": "0x801E8EA4",
-          "end": "0x801E8F1C"
-        },
-        {
-          "symbol": "fn_801E8F1C__14Class_801E8E04P14Class_801E27A4",
-          "start": "0x801E8F1C",
-          "end": "0x801E8FD4"
-        },
-        {
-          "symbol": "fn_801E8FD4__14Class_801E8E04P14Class_801E27A4",
-          "start": "0x801E8FD4",
-          "end": "0x801E90A8"
-        },
-        {
-          "symbol": "fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878",
-          "start": "0x801E90A8",
-          "end": "0x801E90CC"
-        },
-        {
-          "symbol": "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878",
-          "start": "0x801E90CC",
-          "end": "0x801E90F0"
-        },
-        {
-          "symbol": "fn_801E90F0__14Class_801E8E04P14Class_801E2878",
-          "start": "0x801E90F0",
-          "end": "0x801E9168"
-        },
-        {
-          "symbol": "fn_801E9168__14Class_801E8E04P14Class_801E2878",
-          "start": "0x801E9168",
-          "end": "0x801E91E0"
-        },
-        {
-          "symbol": "fn_801E91E0__14Class_801E8E04Pv",
-          "start": "0x801E91E0",
-          "end": "0x801E9248"
-        },
-        {
-          "symbol": "fn_801E9248__14Class_801E8E04Pv",
-          "start": "0x801E9248",
-          "end": "0x801E92D0"
         }
       ]
     },
