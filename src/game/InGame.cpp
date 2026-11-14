@@ -47,8 +47,8 @@ void SndgUpdate(int a);
 void SndgMusicFlushSongText(void);
 void SndgMusicUpdate(void);
 void SndgMusicFadeOut(int a, int b);
-void fn_80085A7C(void);
-void fn_80085AA0(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
+void FormationLineupClearAll(void);
+void FormationLineupRemapTeams(int a, DepthChartSide_t *pRecord0, int b, DepthChartSide_t *pRecord1);
 void PlaybookSideClearAll(void);
 void fn_8008FE5C(int a);
 void fn_80099568(int a);
@@ -272,7 +272,7 @@ int InGame::Init()
     fn_800C8704(&a, &b);
     DepthChartGetSide(0, &record0);
     DepthChartGetSide(1, &record1);
-    fn_80085AA0(a, &record0, b, &record1);
+    FormationLineupRemapTeams(a, &record0, b, &record1);
     DriveLogInit();
     DriveLogEndDrive();
     ScoringLogInit();
@@ -411,7 +411,7 @@ int InGame::Shutdown()
     fn_8021956C(gUISSubInfo, 1, 5, 0);
     EngineParamWords desc = { 6, 14 };
     fn_802345C4(&desc, 2);
-    fn_80085A7C();
+    FormationLineupClearAll();
     GameOptionsSetDeferWrites(0);
     PadInputSetAxisCallback(0);
     ScreenTransFinish();

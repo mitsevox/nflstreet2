@@ -59,7 +59,7 @@ void GameInfoSet(int index, int value);
 void fn_80084A8C(int a, int *pList, int b, int c);
 int FormationGetByIndex(int a, int b);
 int *FormationLineupFetchUser(int a, int b);
-int fn_80085C94(int a, int *pList);
+int FormationLineupFillTeam(int a, int *pList);
 int ExpLevelClose(void);
 int ExpLevelOpen(void);
 int TournamentSetPlayersTeam(int *pDigp, int count, int munt, int digt);
@@ -472,7 +472,7 @@ void fn_80061274(int a, int *pList, int count, Object_8008044C *pObject)
                 }
             }
         }
-        fn_80085C94(a, pSlots);
+        FormationLineupFillTeam(a, pSlots);
     }
 }
 

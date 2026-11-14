@@ -266,7 +266,7 @@ void fn_80179144(int a);
 void fn_8017916C(void);
 unsigned int fn_802372EC(int stream, int count);
 void fn_800B41BC(int a, int b, int c);
-int fn_80085A34(int formation, int team);
+int FormationLineupApplyUser(int formation, int team);
 void fn_800B4184(int a);
 int fn_800B65D0(int team);
 unsigned char RumbleIsEnabled(void);
@@ -1047,7 +1047,7 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
                 PlayBookLoadCurrentPlay(0);
                 fn_800B41BC(0, 0, 0);
             }
-            fn_80085A34(PlayBookGetTeam(0)->mUnknown40, 0);
+            FormationLineupApplyUser(PlayBookGetTeam(0)->mUnknown40, 0);
             if (lbl_803EA58C->mUnknown42[1]) {
                 if (fn_80178308() == 1) {
                     PlayBookSetIndices(1, 0, lbl_803EA58C->mUnknown48[1],
@@ -1069,7 +1069,7 @@ void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int 
                 PlayBookLoadCurrentPlay(1);
                 fn_800B41BC(1, 0, 0);
             }
-            fn_80085A34(PlayBookGetTeam(1)->mUnknown40, 1);
+            FormationLineupApplyUser(PlayBookGetTeam(1)->mUnknown40, 1);
         } else {
             lbl_803EA58C->mUnknown50 = 1;
             lbl_803EA58C->mUnknown8[0] = word0;

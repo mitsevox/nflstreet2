@@ -2336,6 +2336,42 @@
     "GameStatsUpdateRecords": {
       "address": "0x80056560",
       "evidence": "evidence.tsv function/name rows for 0x80056560; GameStatsUpdateRecords is defined in src/game/InGameScreens.cpp, which is comparison-only, and is called by the comparison src/game/cu_80155F48.cpp (bl at 0x80155F60)."
+    },
+    "_MainInitFastCast": {
+      "address": "0x80088F2C",
+      "evidence": "evidence.tsv function and name rows for 0x80088F2C (comparison-only function of src/game/Main.cpp, inline asm start holdout, original bytes)."
+    },
+    "FormationLineupSwapAllUser": {
+      "address": "0x8008593C",
+      "evidence": "evidence.tsv function and name rows for 0x8008593C (comparison-only function of src/game/FormationLineupEdit.cpp, documented partial, original bytes)."
+    },
+    "FormationLineupApplyUser": {
+      "address": "0x80085A34",
+      "evidence": "evidence.tsv function and name rows for 0x80085A34 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupClearAll": {
+      "address": "0x80085A7C",
+      "evidence": "evidence.tsv function and name rows for 0x80085A7C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupRemapTeams": {
+      "address": "0x80085AA0",
+      "evidence": "evidence.tsv function and name rows for 0x80085AA0 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupCommitTeam": {
+      "address": "0x80085BE4",
+      "evidence": "evidence.tsv function and name rows for 0x80085BE4 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupRevertTeam": {
+      "address": "0x80085C3C",
+      "evidence": "evidence.tsv function and name rows for 0x80085C3C (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupFillTeam": {
+      "address": "0x80085C94",
+      "evidence": "evidence.tsv function and name rows for 0x80085C94 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
+    },
+    "FormationLineupReset": {
+      "address": "0x80085D54",
+      "evidence": "evidence.tsv function and name rows for 0x80085D54 (comparison-only function of src/game/FormationLineupEdit.cpp, exact, original bytes)."
     }
   },
   "units": [
@@ -9551,25 +9587,6 @@
       ]
     },
     {
-      "source": "src/game/cu_800857D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800857D0",
-          "end": "0x8008593C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80294150",
-          "end": "0x802943DC"
-        }
-      ]
-    },
-    {
       "source": "src/game/BallRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019CE3C-0x8019D2EC (src/game/BallRender.cpp) and its data, type, compiler and source-form rows.",
@@ -11990,19 +12007,6 @@
           "placement": ".text",
           "start": "0x8008AC40",
           "end": "0x8008B32C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80088F2C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links 0x80088F78-0x80088FFC, fn_80088F2C (inline asm) and fn_80088FFC are comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80088F78",
-          "end": "0x80088FFC"
         }
       ]
     },
@@ -17916,6 +17920,38 @@
           "placement": ".text",
           "start": "0x8023E818",
           "end": "0x8023E920"
+        }
+      ]
+    },
+    {
+      "source": "src/game/FormationLineupEdit.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800857D0",
+          "end": "0x8008593C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294150",
+          "end": "0x802943DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Main.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80088FFC (src/game/Main.cpp) and its source-form row; .text links 0x80088F78-0x80088FFC, and the inline-asm start function 0x80088F2C is a comparison-only holdout.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088F78",
+          "end": "0x80088FFC"
         }
       ]
     }

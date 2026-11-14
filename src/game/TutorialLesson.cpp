@@ -303,7 +303,7 @@ void SndgMusicResume(void);
 void SndgMusicPumpFrame(int a);
 void SpchIGSetCommentaryOn(unsigned char value);
 int SpchIGIsNarratorIdle(void);
-int fn_80085A34(int formation, int team);
+int FormationLineupApplyUser(int formation, int team);
 unsigned char TutorialDbOpenPlays(void);
 unsigned char TutorialDbClosePlays(void);
 int TutorialGetStepCount(int id);
@@ -996,7 +996,7 @@ int TutorialFinishCategory(void)
                 PlayBookSetFormationType(1, 1);
                 PlayBookSetIndices(1, 0, 0, 0);
                 PlayBookLoadCurrentPlay(1);
-                fn_80085A34(PlayBookGetTeam(1)->mUnknown40, 1);
+                FormationLineupApplyUser(PlayBookGetTeam(1)->mUnknown40, 1);
                 fn_800B3EFC(1);
                 fn_800B63B0();
                 fn_800B847C(fn_800B65A0(1), 0);
