@@ -207,6 +207,35 @@ typedef struct Struct_803B4E34 {
     void (*m1E4)(int count, short *src, float *dst);
 } Struct_803B4E34;
 
+/* A client of the variable-rate timer of sserver.c (a stream volume fade of sstautov.c and
+   sstvol.c): linked on Snd::gVariableTimerList and called with its context on every new tick. */
+typedef struct SndStreamFader_t SndStreamFader_t;
+
+struct SndStreamFader_t {
+    SndStreamFader_t *mpNext;
+    SndStreamFader_t *mpPrev;
+    void (*mpCallback)(void *context);
+    void *mpContext;
+};
+
+#ifdef __cplusplus
+/* The head of the variable-rate timer's client list; sserver.c's static initializer clears it. */
+struct SndTimerClientList_t {
+    SndStreamFader_t *mpHead;
+
+    SndTimerClientList_t() : mpHead(0) {}
+};
+
+/* The variable-rate timer and the critical-section vector of sserver.c. */
+namespace Snd {
+extern SndTimerClientList_t gVariableTimerList;
+extern int gVariableTimerTick;
+extern float gVariableTimerPeriod;
+extern void (*gMutexLockFn)(void);
+extern void (*gMutexUnlockFn)(void);
+}
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

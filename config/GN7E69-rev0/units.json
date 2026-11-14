@@ -238,6 +238,10 @@
     }
   },
   "externals": {
+    "gExtVecs": {
+      "address": "0x802F4750",
+      "evidence": "evidence.tsv data and name rows for 0x802F4750 (12 .data bytes whose address SPCH_GetExtVecs of src/engine/sputil.c returns; they sit in the speech library's .data run, not at sputil.c's position, so the linked sputil.c does not define them and their owner file is open)."
+    },
     "gPlayerLooks": {
       "address": "0x803078E8",
       "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
@@ -18983,19 +18987,13 @@
     {
       "source": "src/engine/sputil.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x80266D00-0x80266D0C (src/engine/sputil.c), its compiler, function, name and data rows; SPCH_GetExtVecs matches the target and the file defines its 12-byte .data object gExtVecs (data row 0x802F4750). Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "evidence": "evidence.tsv unit row 0x80266D00-0x80266D0C (src/engine/sputil.c), its compiler, function, name and data rows; SPCH_GetExtVecs matches the target; the file is linked as .text only, and the 12-byte .data object gExtVecs it returns (data row 0x802F4750) lies in the speech library's .data run, so it stays an external. Split from the former src/engine/cu_80266A2C.c by c16a.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80266D00",
           "end": "0x80266D0C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802F4750",
-          "end": "0x802F475C"
         }
       ]
     },
@@ -19015,7 +19013,7 @@
     {
       "source": "src/engine/saemsstr.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x802699F4-0x80269C70 (src/engine/saemsstr.c), its compiler, function, name and data rows; all nine functions match the target and the file defines its .rodata constants (data row 0x802B78A0) and its .data table SNDAEMSI_streamfuncs (data row 0x802FFC90). Split from the former src/engine/cu_80266A2C.c by c16a.",
+      "evidence": "evidence.tsv unit row 0x802699F4-0x80269C70 (src/engine/saemsstr.c), its compiler, function, name and data rows; all nine functions match the target and the file defines its .rodata constants (data row 0x802B78A0) and its .data table SNDAEMSstreaminputfn (data row 0x802FFC90). Split from the former src/engine/cu_80266A2C.c by c16a.",
       "sections": [
         {
           "section": ".text",
@@ -19279,7 +19277,7 @@
     {
       "source": "src/engine/sserver.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026CDA0-0x8026D180 (src/engine/sserver.c), its function and name rows, the data rows of its .rodata 0x802B790C-0x802B7910, .data 0x802FFDEC-0x802FFDF8, .bss 0x803A763C-0x803A7644, .ctors 0x80289B50-0x80289B54, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x8026CDA0-0x8026D180 (src/engine/sserver.c), its function and name rows, the data rows of its .rodata 0x802B790C-0x802B7910, .data 0x802FFDEC-0x802FFDF8, .bss 0x803A763C-0x803A7648, .ctors 0x80289B50-0x80289B54, and the sound_cxx compiler row 0x8026A664-0x8026D200; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
@@ -19303,7 +19301,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803A763C",
-          "end": "0x803A7644"
+          "end": "0x803A7648"
         },
         {
           "section": ".ctors",

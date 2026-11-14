@@ -12,11 +12,11 @@ typedef struct SndBankAsyncMem_t {
     int m10;
 } SndBankAsyncMem_t;
 
-static SndBankAsyncMem_t SNDBANKI_asyncmemstate;
+static SndBankAsyncMem_t sndbams;
 
 void SNDBANKI_asyncloadmemresolve(void)
 {
-    SndBankSlot_t *slot = &lbl_803A6C24.m1D0[SNDBANKI_asyncmemstate.m2];
+    SndBankSlot_t *slot = &lbl_803A6C24.m1D0[sndbams.m2];
     BankVer_t *bank = slot->m0;
     int count;
     int i;
@@ -32,12 +32,12 @@ void SNDBANKI_asyncloadmemresolve(void)
         }
     }
     slot->m8 = 0;
-    SNDBANKI_asyncmemstate.m0 = 0;
+    sndbams.m0 = 0;
 }
 
 void SNDBANKI_asyncloadmem100hz(void)
 {
-    SndBankAsyncMem_t *state = &SNDBANKI_asyncmemstate;
+    SndBankAsyncMem_t *state = &sndbams;
 
     if (fn_80275288(state->m4) != 0 || state->m4 <= 0) {
         SndBankSlot_t *slot = &lbl_803A6C24.m1D0[state->m2];
@@ -66,7 +66,7 @@ int SNDBANK_asyncloadmem(int *handle, BankVer_t *bank)
     lbl_803A6C24.m1C0 = SNDbankremove;
     SNDSYS_entercritical();
     *handle = SNDBANKI_alloc();
-    SNDBANKI_asyncmemstate.m2 = *handle;
+    sndbams.m2 = *handle;
     slot = &lbl_803A6C24.m1D0[*handle];
     slot->m0 = bank;
     slot->m4 = 0;
@@ -79,8 +79,8 @@ int SNDBANK_asyncloadmem(int *handle, BankVer_t *bank)
     }
     if (bank->mC != 0 || bank->m10 != 0) {
         slot->m8 = 1;
-        SNDBANKI_asyncmemstate.m0 = 1;
-        SNDBANKI_asyncmemstate.m10 = 0;
+        sndbams.m0 = 1;
+        sndbams.m10 = 0;
         result = 7;
         SNDSYS_add100hzclient(SNDBANKI_asyncloadmem100hz);
     } else {
@@ -94,5 +94,5 @@ out:
 
 int SNDBANK_asyncloadmemdone(void)
 {
-    return SNDBANKI_asyncmemstate.m0 == 0;
+    return sndbams.m0 == 0;
 }

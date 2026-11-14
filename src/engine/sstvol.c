@@ -36,8 +36,8 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
             sp = &channel->mSpeakers[i];
             sp->mVolume = vol;
             if (sp->mStep != 0.0f) {
-                if (&sp->mFader == SNDSYSI_timerclients) {
-                    SNDSYSI_timerclients = sp->mFader.mpNext;
+                if (&sp->mFader == Snd::gVariableTimerList.mpHead) {
+                    Snd::gVariableTimerList.mpHead = sp->mFader.mpNext;
                 }
                 if (sp->mFader.mpPrev != 0) {
                     sp->mFader.mpPrev->mpNext = sp->mFader.mpNext;
@@ -52,8 +52,8 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
         sp = &channel->mSpeakers[speaker];
         sp->mVolume = vol;
         if (sp->mStep != 0.0f) {
-            if (&sp->mFader == SNDSYSI_timerclients) {
-                SNDSYSI_timerclients = sp->mFader.mpNext;
+            if (&sp->mFader == Snd::gVariableTimerList.mpHead) {
+                Snd::gVariableTimerList.mpHead = sp->mFader.mpNext;
             }
             if (sp->mFader.mpPrev != 0) {
                 sp->mFader.mpPrev->mpNext = sp->mFader.mpNext;

@@ -4,13 +4,6 @@
 #include "engine/sndstrm.h"
 #include "engine/csis.h"
 
-extern "C" {
-
-extern void (*SNDSYSI_mutexlockfn)(void);
-extern void (*SNDSYSI_mutexunlockfn)(void);
-
-}
-
 namespace Snd {
 
 void CsisMutexLock(void)
@@ -30,11 +23,11 @@ public:
 
 int System::VectorToCsisMutex(void)
 {
-    if (SNDSYSI_mutexlockfn == CsisMutexLock) {
+    if (gMutexLockFn == CsisMutexLock) {
         return 0;
     }
-    SNDSYSI_mutexlockfn = CsisMutexLock;
-    SNDSYSI_mutexunlockfn = CsisMutexUnlock;
+    gMutexLockFn = CsisMutexLock;
+    gMutexUnlockFn = CsisMutexUnlock;
     return 0;
 }
 

@@ -4,48 +4,35 @@
 
 #include "engine/sndbank.h"
 
-typedef struct SndTimerClient_t {
-    struct SndTimerClient_t *m0;
-    unsigned char unk_0x4[4];
-    void (*m8)(void *context);
-    void *mC;
-} SndTimerClient_t;
-
-typedef struct SndTimerClientList_t {
-    SndTimerClient_t *m0;
-
-    SndTimerClientList_t() : m0(0) {}
-} SndTimerClientList_t;
-
 namespace Snd {
 void DefaultMutexLockFn(void);
 void DefaultMutexUnlockFn(void);
 }
 
-extern SndTimerClientList_t SNDSYSI_timerclients;
-extern int SNDSYSI_timertick;
-
 void SNDSYSI_variabletimerservice(void)
 {
     static int lastTick = 0;
-    SndTimerClient_t *client;
+    SndStreamFader_t *client;
 
-    if (SNDSYSI_timertick != lastTick) {
-        lastTick = SNDSYSI_timertick;
-        client = SNDSYSI_timerclients.m0;
+    if (Snd::gVariableTimerTick != lastTick) {
+        lastTick = Snd::gVariableTimerTick;
+        client = Snd::gVariableTimerList.mpHead;
         while (client != 0) {
-            SndTimerClient_t *next = client->m0;
+            SndStreamFader_t *next = client->mpNext;
 
-            client->m8(client->mC);
+            client->mpCallback(client->mpContext);
             client = next;
         }
     }
 }
 
-SndTimerClientList_t SNDSYSI_timerclients;
-int SNDSYSI_timertick;
-void (*SNDSYSI_mutexlockfn)(void) = Snd::DefaultMutexLockFn;
-void (*SNDSYSI_mutexunlockfn)(void) = Snd::DefaultMutexUnlockFn;
+namespace Snd {
+SndTimerClientList_t gVariableTimerList;
+int gVariableTimerTick;
+float gVariableTimerPeriod;
+void (*gMutexLockFn)(void) = DefaultMutexLockFn;
+void (*gMutexUnlockFn)(void) = DefaultMutexUnlockFn;
+}
 
 void SNDSYSI_100hzserver(void)
 {
@@ -138,12 +125,12 @@ void DefaultMutexUnlockFn(void)
 
 void SNDSYS_entercritical(void)
 {
-    SNDSYSI_mutexlockfn();
+    Snd::gMutexLockFn();
     lbl_803A6C24.m169++;
 }
 
 void SNDSYS_leavecritical(void)
 {
     lbl_803A6C24.m169--;
-    SNDSYSI_mutexunlockfn();
+    Snd::gMutexUnlockFn();
 }

@@ -105,7 +105,7 @@ void SNDAEMSI_streamstub(int handle, int value)
 {
 }
 
-void (*SNDAEMSI_streamfuncs[12])(int handle, int value) = {
+void (*SNDAEMSstreaminputfn[12])(int handle, int value) = {
     SNDAEMSI_streampitchmult, SNDAEMSI_streamtimemult, SNDAEMSI_streamvol,
     SNDAEMSI_streamazimuth, SNDAEMSI_streamstub, SNDAEMSI_streamfxwet0,
     SNDAEMSI_streamlowpass, SNDAEMSI_streamhighpass, SNDAEMSI_streamdrylevel,

@@ -51,8 +51,8 @@ void StreamFader(void *context)
     }
     if (sp->mStep == 0.0f) {
         fader = &sp->mFader;
-        if (fader == SNDSYSI_timerclients) {
-            SNDSYSI_timerclients = fader->mpNext;
+        if (fader == Snd::gVariableTimerList.mpHead) {
+            Snd::gVariableTimerList.mpHead = fader->mpNext;
         }
         if (fader->mpPrev != 0) {
             fader->mpPrev->mpNext = fader->mpNext;
@@ -87,8 +87,8 @@ int SNDSTRM_autovol(int stream, int time, int vol)
         sp = &channel->mSpeakers[i];
         if (sp->mStep != 0.0f) {
             fader = &sp->mFader;
-            if (fader == SNDSYSI_timerclients) {
-                SNDSYSI_timerclients = fader->mpNext;
+            if (fader == Snd::gVariableTimerList.mpHead) {
+                Snd::gVariableTimerList.mpHead = fader->mpNext;
             }
             if (fader->mpPrev != 0) {
                 fader->mpPrev->mpNext = fader->mpNext;
@@ -98,17 +98,17 @@ int SNDSTRM_autovol(int stream, int time, int vol)
             }
         }
         sp->mTarget = target;
-        sp->mStep = (target - sp->mVolume) * lbl_803A7644 / (float)time;
+        sp->mStep = (target - sp->mVolume) * Snd::gVariableTimerPeriod / (float)time;
         if (sp->mStep != 0.0f) {
             sp->mFader.mpCallback = Snd::StreamFader;
             sp->mFader.mpContext = sp;
             fader = &sp->mFader;
-            fader->mpNext = SNDSYSI_timerclients;
+            fader->mpNext = Snd::gVariableTimerList.mpHead;
             fader->mpPrev = 0;
-            if (SNDSYSI_timerclients != 0) {
-                SNDSYSI_timerclients->mpPrev = fader;
+            if (Snd::gVariableTimerList.mpHead != 0) {
+                Snd::gVariableTimerList.mpHead->mpPrev = fader;
             }
-            SNDSYSI_timerclients = fader;
+            Snd::gVariableTimerList.mpHead = fader;
         }
     }
     return 0;

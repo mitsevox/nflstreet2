@@ -22,16 +22,6 @@ typedef struct SndStreamRequest_t {
     unsigned char unk_0x25[3];
 } SndStreamRequest_t;
 
-/* A volume fade in progress: linked on the stream fader list and called on every service. */
-typedef struct SndStreamFader_t SndStreamFader_t;
-
-struct SndStreamFader_t {
-    SndStreamFader_t *mpNext;
-    SndStreamFader_t *mpPrev;
-    void (*mpCallback)(void *context);
-    void *mpContext;
-};
-
 /* The azimuth and volume state of one speaker slot of a stream channel. */
 typedef struct SndStreamSpeaker_t {
     float mAzimuth;
@@ -93,8 +83,6 @@ extern "C" {
 
 extern int lbl_8030002C;
 extern float lbl_80300028;
-extern SndStreamFader_t *SNDSYSI_timerclients;
-extern float lbl_803A7644;
 extern const signed char lbl_802B79A0[6][6];
 
 int SNDSTRM_setvol(int stream, int speaker, float vol);

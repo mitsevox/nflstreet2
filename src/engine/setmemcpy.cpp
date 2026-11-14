@@ -7,13 +7,14 @@
 
 namespace Snd {
 namespace Coda {
-namespace System {
 
-void *(*gMemCpy)(void *dst, const void *src, unsigned int size) = memcpy;
+void *(*gpMemCpy)(void *dst, const void *src, unsigned int size) = memcpy;
+
+namespace System {
 
 int SetMemCpy(void *(*copy)(void *dst, const void *src, unsigned int size))
 {
-    gMemCpy = copy;
+    gpMemCpy = copy;
     return 0;
 }
 

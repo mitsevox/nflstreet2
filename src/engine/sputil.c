@@ -4,7 +4,7 @@
 
 extern "C" {
 
-SpchExtVecs_t gExtVecs = {0};
+extern SpchExtVecs_t gExtVecs;
 
 SpchExtVecs_t *SPCH_GetExtVecs(void)
 {

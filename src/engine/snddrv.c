@@ -369,7 +369,7 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
 void *fn_80273264(void *arg)
 {
     for (;;) {
-        SNDSYSI_mutexlockfn();
+        Snd::gMutexLockFn();
         if (lbl_803A6C24.m220 != 0) {
             lbl_803A6C24.m220();
         }
@@ -380,7 +380,7 @@ void *fn_80273264(void *arg)
         if (lbl_80300850 & 1) {
             SNDSYSI_100hzserver();
             lbl_80300854 += lbl_803A8D60.m1400;
-            SNDSYSI_timertick = (int)(lbl_80300854 < 0.0f ? lbl_80300854 - 0.5f : lbl_80300854 + 0.5f);
+            Snd::gVariableTimerTick = (int)(lbl_80300854 < 0.0f ? lbl_80300854 - 0.5f : lbl_80300854 + 0.5f);
             if (lbl_80300854 > 30.0f) {
                 lbl_80300854 -= 30.0f;
             }
@@ -389,7 +389,7 @@ void *fn_80273264(void *arg)
         if (lbl_803A6C24.m224 != 0) {
             lbl_803A6C24.m224();
         }
-        SNDSYSI_mutexunlockfn();
+        Snd::gMutexUnlockFn();
         OSSleepThread(&lbl_803A8D60.m1DE0);
     }
 }
@@ -431,12 +431,12 @@ int fn_80273648(int mode)
     int i;
 
     SNDDRV_DSPMixerInit(lbl_803A6C24.m1C.m23);
-    lbl_803A7644 = lbl_803A6C24.m1C.m14;
-    if (lbl_803A7644 == -1.0f) {
-        lbl_803A7644 = 20.0f;
+    Snd::gVariableTimerPeriod = lbl_803A6C24.m1C.m14;
+    if (Snd::gVariableTimerPeriod == -1.0f) {
+        Snd::gVariableTimerPeriod = 20.0f;
     }
-    rate = lbl_803A7644 < 10.0f ? 10.0f : (lbl_803A7644 <= 100.0f ? lbl_803A7644 : 100.0f);
-    lbl_803A7644 = rate;
+    rate = Snd::gVariableTimerPeriod < 10.0f ? 10.0f : (Snd::gVariableTimerPeriod <= 100.0f ? Snd::gVariableTimerPeriod : 100.0f);
+    Snd::gVariableTimerPeriod = rate;
     lbl_803A8D60.m1400 = 10.0f / rate;
     if (lbl_803A6C24.m1C.m21 != 0 && lbl_80300858 == 0) {
         ARInit(0, 0);

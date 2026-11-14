@@ -19,9 +19,10 @@ void ReallocBuf(void **buffer, int *capacity, int size, int elementSize);
 }
 
 namespace Coda {
-namespace System {
 
-extern void *(*gMemCpy)(void *dst, const void *src, unsigned int size);
+extern void *(*gpMemCpy)(void *dst, const void *src, unsigned int size);
+
+namespace System {
 
 int SetMemCpy(void *(*copy)(void *dst, const void *src, unsigned int size));
 
